@@ -18,10 +18,10 @@ INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7FW','Po',0,'','35.8279341224978'
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7FW','To',0,'','273.011380780064');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7FW','So',0,'','0.00785');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7FW','lo',0,'','10');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7FW','S_kl1',0,'','0.004');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7FW','S_kl2',0,'','0');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7FW','l_kl1',0,'','0');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7FW','l_kl2',0,'','0');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7FW','S_v1',0,'','0.004');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7FW','S_v2',0,'','0');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7FW','l_v1',0,'','0');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7FW','l_v2',0,'','0');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7FW','Q0',0,'','1000');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7FW','Kpr',0,'','0.001');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7FW','Ct',0,'','20');
@@ -116,10 +116,10 @@ INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3FW','Po',0,'','36.1866254793117'
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3FW','To',0,'','292.415005104323');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3FW','So',0,'','0.017');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3FW','lo',0,'','10');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3FW','S_kl1',0,'','0.004');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3FW','S_kl2',0,'','0.004');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3FW','l_kl1',0,'','38.4434355630288');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3FW','l_kl2',1,'3FW.l_kl1','38.4434355630288');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3FW','S_v1',0,'','0.004');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3FW','S_v2',0,'','0.004');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3FW','l_v1',0,'','38.4434355630288');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3FW','l_v2',1,'3FW.l_v1','38.4434355630288');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3FW','Q0',0,'','1000');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3FW','Kpr',0,'','0.001');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3FW','Ct',0,'','20');
@@ -179,10 +179,10 @@ INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('9GBF','Po',0,'','1.33560768055864
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('9GBF','To',0,'','312.392625705022');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('9GBF','So',0,'','0.5');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('9GBF','lo',0,'','10');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('9GBF','S_kl1',0,'','0.25');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('9GBF','S_kl2',0,'','0');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('9GBF','l_kl1',0,'','100');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('9GBF','l_kl2',0,'','0');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('9GBF','S_v1',0,'','0.25');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('9GBF','S_v2',0,'','0');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('9GBF','l_v1',0,'','100');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('9GBF','l_v2',0,'','0');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('9GBF','Q0',0,'','1.2');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('9GBF','Kpr',0,'','0.95');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('9GBF','Ct',0,'','20');
@@ -219,10 +219,10 @@ INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GC','Po',0,'','1.0793279218454')
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GC','To',0,'','299.5298873584');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GC','So',0,'','0.1');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GC','lo',0,'','10');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GC','S_kl1',0,'','0.1');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GC','S_kl2',0,'','0');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GC','l_kl1',0,'','100');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GC','l_kl2',0,'','0');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GC','S_v1',0,'','0.1');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GC','S_v2',0,'','0');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GC','l_v1',0,'','100');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GC','l_v2',0,'','0');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GC','Q0',0,'','1.33');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GC','Kpr',0,'','0.95');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GC','Ct',0,'','20');
@@ -239,10 +239,10 @@ INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('2G','Po',0,'','0.966959210122029'
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('2G','To',0,'','474.306702867234');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('2G','So',0,'','5');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('2G','lo',0,'','10');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('2G','S_kl1',0,'','5');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('2G','S_kl2',0,'','0');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('2G','l_kl1',0,'','100');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('2G','l_kl2',0,'','0');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('2G','S_v1',0,'','5');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('2G','S_v2',0,'','0');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('2G','l_v1',0,'','100');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('2G','l_v2',0,'','0');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('2G','Q0',0,'','1.2');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('2G','Kpr',0,'','0.95');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('2G','Ct',0,'','20');
@@ -299,10 +299,10 @@ INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('11G','Po',0,'','1.13443407023852'
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('11G','To',0,'','599.187753428399');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('11G','So',0,'','1');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('11G','lo',0,'','10');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('11G','S_kl1',0,'','0.7');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('11G','S_kl2',0,'','0.3');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('11G','l_kl1',0,'','80');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('11G','l_kl2',0,'','80');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('11G','S_v1',0,'','0.7');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('11G','S_v2',0,'','0.3');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('11G','l_v1',0,'','80');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('11G','l_v2',0,'','80');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('11G','Q0',0,'','1.293');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('11G','Kpr',0,'','0.95');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('11G','Ct',0,'','1');
@@ -369,10 +369,10 @@ INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GN','Po',0,'','1.44999018997985'
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GN','To',0,'','281.706734035223');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GN','So',0,'','0.05');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GN','lo',0,'','30');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GN','S_kl1',0,'','0.05');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GN','S_kl2',0,'','0.05');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GN','l_kl1',0,'','100');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GN','l_kl2',0,'','0');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GN','S_v1',0,'','0.05');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GN','S_v2',0,'','0.05');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GN','l_v1',0,'','100');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GN','l_v2',0,'','0');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GN','Q0',0,'','0.7');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GN','Kpr',0,'','0.95');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GN','Ct',0,'','20');
@@ -389,10 +389,10 @@ INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GC','Po',0,'','1.07223576711843'
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GC','To',0,'','299.066844766832');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GC','So',0,'','0.1');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GC','lo',0,'','10');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GC','S_kl1',0,'','0.1');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GC','S_kl2',0,'','0');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GC','l_kl1',0,'','100');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GC','l_kl2',0,'','0');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GC','S_v1',0,'','0.1');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GC','S_v2',0,'','0');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GC','l_v1',0,'','100');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GC','l_v2',0,'','0');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GC','Q0',0,'','1.33');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GC','Kpr',0,'','0.95');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GC','Ct',0,'','20');
@@ -437,7 +437,7 @@ INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('SEA','Po',0,'','1.0030724574977')
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('SEA','To',0,'','479.692046371551');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('SEA','So',0,'','5');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('SEA','lo',0,'','2');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('SEA','Kzp',0,'','0.267249449349907');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('SEA','Kmrg',0,'','0.267249449349907');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('SEA','N',0,'','83.4570378547403');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('SEA','V',0,'','1.4');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('SEA','Kpmp',0,'','2e-06');
@@ -485,7 +485,7 @@ INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('SEB','Po',0,'','1.0030724574977')
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('SEB','To',0,'','479.692046276683');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('SEB','So',0,'','5');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('SEB','lo',0,'','2');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('SEB','Kzp',0,'','0.267249449349907');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('SEB','Kmrg',0,'','0.267249449349907');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('SEB','N',1,'SEA.N','83.4570378547403');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('SEB','V',0,'','1.4');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('SEB','Kpmp',0,'','2e-06');
@@ -505,10 +505,10 @@ INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GBF','Po',0,'','1.41924762322943
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GBF','To',0,'','312.912123359316');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GBF','So',0,'','1.13');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GBF','lo',0,'','10');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GBF','S_kl1',0,'','1.13');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GBF','S_kl2',0,'','0');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GBF','l_kl1',0,'','100');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GBF','l_kl2',0,'','0');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GBF','S_v1',0,'','1.13');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GBF','S_v2',0,'','0');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GBF','l_v1',0,'','100');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GBF','l_v2',0,'','0');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GBF','Q0',0,'','1.2');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GBF','Kpr',0,'','0.95');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GBF','Ct',0,'','20');
@@ -525,10 +525,10 @@ INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN3','Po',0,'','33.6056931578351
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN3','To',0,'','745.458480154905');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN3','So',0,'','0.5');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN3','lo',0,'','10');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN3','S_kl1',0,'','0.3');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN3','S_kl2',0,'','0');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN3','l_kl1',0,'','90');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN3','l_kl2',0,'','0');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN3','S_v1',0,'','0.3');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN3','S_v2',0,'','0');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN3','l_v1',0,'','90');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN3','l_v2',0,'','0');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN3','Q0',0,'','0.8');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN3','Kpr',0,'','0.95');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN3','Ct',0,'','20');
@@ -545,10 +545,10 @@ INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('10GBF','Po',0,'','1.3356076805586
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('10GBF','To',0,'','312.392625705022');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('10GBF','So',0,'','0.5');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('10GBF','lo',0,'','10');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('10GBF','S_kl1',0,'','0.25');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('10GBF','S_kl2',0,'','0');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('10GBF','l_kl1',0,'','100');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('10GBF','l_kl2',0,'','0');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('10GBF','S_v1',0,'','0.25');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('10GBF','S_v2',0,'','0');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('10GBF','l_v1',0,'','100');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('10GBF','l_v2',0,'','0');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('10GBF','Q0',0,'','1.2');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('10GBF','Kpr',0,'','0.95');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('10GBF','Ct',0,'','20');
@@ -593,7 +593,7 @@ INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('BFA','Po',0,'','1.18622985347462'
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('BFA','To',0,'','405.008513768293');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('BFA','So',0,'','1.766');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('BFA','lo',0,'','20');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('BFA','Kzp',0,'','0.400570283060486');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('BFA','Kmrg',0,'','0.400570283060486');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('BFA','N',0,'','58.2671070875674');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('BFA','V',0,'','1');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('BFA','Kpmp',0,'','2e-05');
@@ -622,7 +622,7 @@ INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('BFB','Po',0,'','1.18622985347462'
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('BFB','To',0,'','405.008513768293');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('BFB','So',0,'','1.766');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('BFB','lo',0,'','20');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('BFB','Kzp',0,'','0.400570283060486');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('BFB','Kmrg',0,'','0.400570283060486');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('BFB','N',1,'BFA.N','58.2671070875674');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('BFB','V',0,'','1');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('BFB','Kpmp',0,'','2e-05');
@@ -642,10 +642,10 @@ INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN','Po',0,'','1.44998631539862'
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN','To',0,'','276.158630864187');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN','So',0,'','0.05');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN','lo',0,'','20');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN','S_kl1',0,'','0.05');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN','S_kl2',0,'','0');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN','l_kl1',0,'','100');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN','l_kl2',0,'','0');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN','S_v1',0,'','0.05');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN','S_v2',0,'','0');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN','l_v1',0,'','100');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN','l_v2',0,'','0');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN','Q0',0,'','0.7');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN','Kpr',0,'','0.95');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN','Ct',0,'','20');
@@ -662,10 +662,10 @@ INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('13G','Po',0,'','1.13443407023852'
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('13G','To',0,'','599.187753428399');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('13G','So',0,'','1');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('13G','lo',0,'','10');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('13G','S_kl1',0,'','0.7');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('13G','S_kl2',0,'','0.3');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('13G','l_kl1',0,'','80');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('13G','l_kl2',0,'','80');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('13G','S_v1',0,'','0.7');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('13G','S_v2',0,'','0.3');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('13G','l_v1',0,'','80');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('13G','l_v2',0,'','80');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('13G','Q0',0,'','1.293');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('13G','Kpr',0,'','0.95');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('13G','Ct',0,'','1');
@@ -682,10 +682,10 @@ INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('1G','Po',0,'','0.966959210122029'
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('1G','To',0,'','474.306702867234');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('1G','So',0,'','5');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('1G','lo',0,'','10');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('1G','S_kl1',0,'','5');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('1G','S_kl2',0,'','0');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('1G','l_kl1',0,'','100');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('1G','l_kl2',0,'','0');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('1G','S_v1',0,'','5');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('1G','S_v2',0,'','0');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('1G','l_v1',0,'','100');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('1G','l_v2',0,'','0');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('1G','Q0',0,'','1.2');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('1G','Kpr',0,'','0.95');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('1G','Ct',0,'','20');
@@ -702,10 +702,10 @@ INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5FW','Po',0,'','35.9571176864555'
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5FW','To',0,'','292.381283068631');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5FW','So',0,'','0.017');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5FW','lo',0,'','10');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5FW','S_kl1',0,'','0.009');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5FW','S_kl2',0,'','0.009');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5FW','l_kl1',0,'','100');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5FW','l_kl2',1,'5FW.l_kl1','100');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5FW','S_v1',0,'','0.009');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5FW','S_v2',0,'','0.009');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5FW','l_v1',0,'','100');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5FW','l_v2',1,'5FW.l_v1','100');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5FW','Q0',0,'','1000');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5FW','Kpr',0,'','0.001');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5FW','Ct',0,'','20');
@@ -731,10 +731,10 @@ INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GC','Po',0,'','1.02619294497065'
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GC','To',0,'','298.391853986037');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GC','So',0,'','0.1');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GC','lo',0,'','10');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GC','S_kl1',0,'','0.04');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GC','S_kl2',0,'','0');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GC','l_kl1',0,'','96.6192762757215');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GC','l_kl2',0,'','0');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GC','S_v1',0,'','0.04');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GC','S_v2',0,'','0');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GC','l_v1',0,'','96.6192762757215');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GC','l_v2',0,'','0');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GC','Q0',0,'','1.33');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GC','Kpr',0,'','0.95');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GC','Ct',0,'','20');
@@ -751,10 +751,10 @@ INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GBF','Po',0,'','1.41924762322943
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GBF','To',0,'','312.912123359316');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GBF','So',0,'','1.13');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GBF','lo',0,'','10');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GBF','S_kl1',0,'','1.13');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GBF','S_kl2',0,'','0');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GBF','l_kl1',0,'','100');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GBF','l_kl2',0,'','0');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GBF','S_v1',0,'','1.13');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GBF','S_v2',0,'','0');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GBF','l_v1',0,'','100');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GBF','l_v2',0,'','0');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GBF','Q0',0,'','1.2');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GBF','Kpr',0,'','0.95');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GBF','Ct',0,'','20');
@@ -780,10 +780,10 @@ INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GN','Po',0,'','0.980374473017035
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GN','To',0,'','273.364753798238');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GN','So',0,'','0.05');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GN','lo',0,'','15');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GN','S_kl1',0,'','0.025');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GN','S_kl2',0,'','0');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GN','l_kl1',0,'','0.527772271659435');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GN','l_kl2',0,'','0');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GN','S_v1',0,'','0.025');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GN','S_v2',0,'','0');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GN','l_v1',0,'','0.527772271659435');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GN','l_v2',0,'','0');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GN','Q0',0,'','0.7');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GN','Kpr',0,'','0.95');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GN','Ct',0,'','20');
@@ -800,10 +800,10 @@ INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GC','Po',0,'','1.02420773045494'
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GC','To',0,'','297.974495531498');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GC','So',0,'','0.1');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GC','lo',0,'','10');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GC','S_kl1',0,'','0.1');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GC','S_kl2',0,'','0.1');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GC','l_kl1',0,'','100');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GC','l_kl2',0,'','100');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GC','S_v1',0,'','0.1');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GC','S_v2',0,'','0.1');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GC','l_v1',0,'','100');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GC','l_v2',0,'','100');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GC','Q0',0,'','1.33');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GC','Kpr',0,'','0.95');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GC','Ct',0,'','20');
@@ -876,10 +876,10 @@ INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7GBF','Po',0,'','1.41515987451424
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7GBF','To',0,'','312.823852141096');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7GBF','So',0,'','1.13');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7GBF','lo',0,'','15');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7GBF','S_kl1',0,'','1.13');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7GBF','S_kl2',0,'','0');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7GBF','l_kl1',0,'','100');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7GBF','l_kl2',0,'','0');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7GBF','S_v1',0,'','1.13');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7GBF','S_v2',0,'','0');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7GBF','l_v1',0,'','100');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7GBF','l_v2',0,'','0');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7GBF','Q0',0,'','1.2');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7GBF','Kpr',0,'','0.95');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7GBF','Ct',0,'','20');
@@ -934,7 +934,7 @@ INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('Drum','Pi2',1,'FireChamber.Po','0
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('Drum','Ti2',1,'FireChamber.To','1102.36695424166');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('Drum','Si2',0,'','10');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('Drum','Vi1',0,'','16.8');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('Drum','Fpara',0,'','120.002026543886');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('Drum','Fstm',0,'','120.002026543886');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('Drum','Po1',0,'','33.6366303717586');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('Drum','Lo',0,'','50.5528984322313');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('Drum','To1',0,'','511.325286818708');
@@ -956,10 +956,10 @@ INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GN','Po',0,'','0.980373026187967
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GN','To',0,'','273.132322763635');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GN','So',0,'','0.05');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GN','lo',0,'','8');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GN','S_kl1',0,'','0.05');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GN','S_kl2',0,'','0.05');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GN','l_kl1',0,'','100');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GN','l_kl2',0,'','100');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GN','S_v1',0,'','0.05');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GN','S_v2',0,'','0.05');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GN','l_v1',0,'','100');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GN','l_v2',0,'','100');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GN','Q0',0,'','0.7');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GN','Kpr',0,'','0.95');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GN','Ct',0,'','20');
@@ -985,10 +985,10 @@ INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('8GBF','Po',0,'','1.41515987451424
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('8GBF','To',0,'','312.823852141096');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('8GBF','So',0,'','1.13');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('8GBF','lo',0,'','15');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('8GBF','S_kl1',0,'','1.13');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('8GBF','S_kl2',0,'','0');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('8GBF','l_kl1',0,'','100');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('8GBF','l_kl2',0,'','0');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('8GBF','S_v1',0,'','1.13');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('8GBF','S_v2',0,'','0');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('8GBF','l_v1',0,'','100');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('8GBF','l_v2',0,'','0');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('8GBF','Q0',0,'','1.2');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('8GBF','Kpr',0,'','0.95');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('8GBF','Ct',0,'','20');
@@ -1143,92 +1143,92 @@ INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('SEB','Kpr',0,'','0.95');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('BFB','Kpr',0,'','0.95');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('FireChamber','So',0,'','2');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('FireChamber','V',0,'','830');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7FW','t_kl1',0,'','10');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7FW','t_kl2',0,'','3');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7FW','t_v1',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7FW','t_v2',0,'','3');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7FW','tmp_l1',0,'','4.94065645841247e-321');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7FW','tmp_l2',0,'','1.48219693752374e-321');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3FW','t_kl1',0,'','3');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3FW','t_kl2',0,'','3');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3FW','t_v1',0,'','3');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3FW','t_v2',0,'','3');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3FW','tmp_l1',0,'','38.4434357563499');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3FW','tmp_l2',0,'','38.4434357563499');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('9GBF','t_kl1',0,'','10');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('9GBF','t_kl2',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('9GBF','t_v1',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('9GBF','t_v2',0,'','10');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('9GBF','tmp_l1',0,'','99.9999999999858');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('9GBF','tmp_l2',0,'','4.94065645841247e-321');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GC','t_kl1',0,'','10');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GC','t_kl2',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GC','t_v1',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GC','t_v2',0,'','10');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GC','tmp_l1',0,'','100.000000000014');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GC','tmp_l2',0,'','4.94065645841247e-321');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('2G','t_kl1',0,'','10');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('2G','t_kl2',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('2G','t_v1',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('2G','t_v2',0,'','10');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('2G','tmp_l1',0,'','100.000000000014');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('2G','tmp_l2',0,'','4.94065645841247e-321');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('11G','t_kl1',0,'','10');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('11G','t_kl2',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('11G','t_v1',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('11G','t_v2',0,'','10');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('11G','tmp_l1',0,'','80.0000000000142');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('11G','tmp_l2',0,'','80.0000000000142');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GN','t_kl1',0,'','10');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GN','t_kl2',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GN','t_v1',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GN','t_v2',0,'','10');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GN','tmp_l1',0,'','100.000000000014');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('3GN','tmp_l2',0,'','4.94065645841247e-321');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GC','t_kl1',0,'','10');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GC','t_kl2',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GC','t_v1',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GC','t_v2',0,'','10');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GC','tmp_l1',0,'','100.000000000014');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GC','tmp_l2',0,'','4.94065645841247e-321');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GBF','t_kl1',0,'','10');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GBF','t_kl2',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GBF','t_v1',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GBF','t_v2',0,'','10');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GBF','tmp_l1',0,'','100.000000000014');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GBF','tmp_l2',0,'','4.94065645841247e-321');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN3','t_kl1',0,'','10');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN3','t_kl2',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN3','t_v1',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN3','t_v2',0,'','10');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN3','tmp_l1',0,'','90.0000000000142');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN3','tmp_l2',0,'','4.94065645841247e-321');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('10GBF','t_kl1',0,'','10');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('10GBF','t_kl2',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('10GBF','t_v1',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('10GBF','t_v2',0,'','10');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('10GBF','tmp_l1',0,'','99.9999999999858');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('10GBF','tmp_l2',0,'','4.94065645841247e-321');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN','t_kl1',0,'','10');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN','t_kl2',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN','t_v1',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN','t_v2',0,'','10');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN','tmp_l1',0,'','100.000000000014');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('4GN','tmp_l2',0,'','4.94065645841247e-321');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('13G','t_kl1',0,'','10');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('13G','t_kl2',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('13G','t_v1',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('13G','t_v2',0,'','10');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('13G','tmp_l1',0,'','80.0000000000142');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('13G','tmp_l2',0,'','80.0000000000142');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('1G','t_kl1',0,'','10');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('1G','t_kl2',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('1G','t_v1',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('1G','t_v2',0,'','10');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('1G','tmp_l1',0,'','100.000000000014');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('1G','tmp_l2',0,'','4.94065645841247e-321');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5FW','t_kl1',0,'','3');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5FW','t_kl2',0,'','3');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5FW','t_v1',0,'','3');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5FW','t_v2',0,'','3');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5FW','tmp_l1',0,'','99.9999999999957');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5FW','tmp_l2',0,'','99.9999999999957');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GC','t_kl1',0,'','3');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GC','t_kl2',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GC','t_v1',0,'','3');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GC','t_v2',0,'','10');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GC','tmp_l1',0,'','96.6192762757173');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GC','tmp_l2',0,'','4.94065645841247e-321');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GBF','t_kl1',0,'','10');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GBF','t_kl2',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GBF','t_v1',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GBF','t_v2',0,'','10');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GBF','tmp_l1',0,'','100.000000000014');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GBF','tmp_l2',0,'','4.94065645841247e-321');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GN','t_kl1',0,'','3');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GN','t_kl2',0,'','3');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GN','t_v1',0,'','3');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GN','t_v2',0,'','3');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GN','tmp_l1',0,'','0.527772271659402');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('5GN','tmp_l2',0,'','1.48219693752374e-321');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GC','t_kl1',0,'','10');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GC','t_kl2',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GC','t_v1',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GC','t_v2',0,'','10');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GC','tmp_l1',0,'','100.000000000014');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GC','tmp_l2',0,'','100.000000000014');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7GBF','t_kl1',0,'','10');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7GBF','t_kl2',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7GBF','t_v1',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7GBF','t_v2',0,'','10');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7GBF','tmp_l1',0,'','100.000000000014');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('7GBF','tmp_l2',0,'','4.94065645841247e-321');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GN','t_kl1',0,'','10');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GN','t_kl2',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GN','t_v1',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GN','t_v2',0,'','10');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GN','tmp_l1',0,'','100.000000000014');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('6GN','tmp_l2',0,'','100.000000000014');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('8GBF','t_kl1',0,'','10');
-INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('8GBF','t_kl2',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('8GBF','t_v1',0,'','10');
+INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('8GBF','t_v2',0,'','10');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('8GBF','tmp_l1',0,'','100.000000000014');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('8GBF','tmp_l2',0,'','4.94065645841247e-321');
 INSERT INTO "BlckCalcBlcks_boiler9_io" VALUES('Node5','Pot1',0,'','1');
@@ -1248,7 +1248,7 @@ INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('LC121','var',2,'boiler9.Drum
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('LC121','sp',0,'','50.5529135014202');
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('LC121','max',0,'','100');
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('LC121','min',0,'','0');
-INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('LC121','out',6,'boiler9.3FW.l_kl1','38.4434355630288');
+INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('LC121','out',6,'boiler9.3FW.l_v1','38.4434355630288');
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('LC121','auto',0,'','1');
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('LC121','casc',0,'','0');
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('LC121','Kp',0,'','2');
@@ -1274,7 +1274,7 @@ INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('TCA1','var',2,'boiler9.4GN3.
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('TCA1','sp',0,'','745.458480094361');
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('TCA1','max',0,'','800');
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('TCA1','min',0,'','273');
-INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('TCA1','out',6,'boiler9.7FW.l_kl1','0');
+INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('TCA1','out',6,'boiler9.7FW.l_v1','0');
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('TCA1','auto',0,'','0');
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('TCA1','casc',0,'','0');
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('TCA1','Kp',0,'','1');
@@ -1326,7 +1326,7 @@ INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC102','var',2,'boiler9.3GN.
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC102','sp',1,'Fsum.S_f_p','0.0376613934972674');
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC102','max',0,'','6');
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC102','min',0,'','0');
-INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC102','out',6,'boiler9.5GN.l_kl1','0.527772271659435');
+INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC102','out',6,'boiler9.5GN.l_v1','0.527772271659435');
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC102','auto',0,'','1');
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC102','casc',0,'','1');
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC102','Kp',0,'','0.25');
@@ -1352,7 +1352,7 @@ INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC105','var',2,'boiler9.3GC.
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC105','sp',1,'Fsum.S_f_k','6.23146419829144');
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC105','max',0,'','10');
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC105','min',0,'','0');
-INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC105','out',6,'boiler9.5GC.l_kl1','96.6192762757215');
+INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC105','out',6,'boiler9.5GC.l_v1','96.6192762757215');
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC105','auto',0,'','1');
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC105','casc',0,'','1');
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC105','Kp',0,'','0.25');
@@ -1378,7 +1378,7 @@ INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC103','var',2,'boiler9.5GBF
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC103','sp',1,'Fsum.S_f_dl','63.2555286609093');
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC103','max',0,'','70');
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC103','min',0,'','0');
-INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC103','out',6,'boiler9.9GBF.l_kl1','100');
+INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC103','out',6,'boiler9.9GBF.l_v1','100');
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC103','auto',0,'','1');
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC103','casc',0,'','1');
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC103','Kp',0,'','1');
@@ -1404,7 +1404,7 @@ INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC104','var',2,'boiler9.6GBF
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC104','sp',1,'Fsum.S_f_dp','63.2555286609093');
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC104','max',0,'','70');
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC104','min',0,'','0');
-INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC104','out',6,'boiler9.10GBF.l_kl1','100');
+INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC104','out',6,'boiler9.10GBF.l_v1','100');
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC104','auto',0,'','1');
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC104','casc',0,'','1');
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC104','Kp',0,'','1');
@@ -1427,7 +1427,7 @@ INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC104','int',0,'','90.652803
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC104','dif',0,'','81.017844646719');
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('FC104','lag',0,'','0');
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('5FW_inv','IVar',1,'TCA1.out','0');
-INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('5FW_inv','OVar',6,'boiler9.5FW.l_kl1','100');
+INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('5FW_inv','OVar',6,'boiler9.5FW.l_v1','100');
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('Fsum','F_sum',1,'FC101.out','74.4182149752745');
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('Fsum','F_d_l',1,'FC103.var','56.7124912527033');
 INSERT INTO "BlckCalcBlcks_boiler9_cntr_io" VALUES('Fsum','F_d_p',1,'FC104.var','56.7124912527033');
@@ -1932,25 +1932,25 @@ INSERT INTO "BlckCalcPrm_boiler9" VALUES('FC102_1','FC102 1','','','Natural gas 
 INSERT INTO "BlckCalcPrm_boiler9" VALUES('FC102_2','FC102 2','','','Natural gas flow after 5GN','Расход природного газа после 5ГП','Витрати природного газу після 5ГП',1,'5GN.Fo:var:Value','5GN.Fo:var:Значение','5GN.Fo:var:Значення');
 INSERT INTO "BlckCalcPrm_boiler9" VALUES('FC102_3','FC102 3','','','Natural gas flow after 6GN','Расход природного газа после 6ГП','Витрати природного газу після 6ГП',1,'6GN.Fo:var:Value','6GN.Fo:var:Значение','6GN.Fo:var:Значення');
 INSERT INTO "BlckCalcPrm_boiler9" VALUES('FC102_0','FC102 0','','','Natural gas flow after the source','Расход природного газа после источника','Витрати природного газу після джерела',1,'SrcNG.Fo:var:Value','SrcNG.Fo:var:Значение','SrcNG.Fo:var:Значення');
-INSERT INTO "BlckCalcPrm_boiler9" VALUES('l_3GN','l 3GN','','','3GN position','Положение 3ГП','Положення 3ГП',1,'3GN.l_kl1:var:Value','3GN.l_kl1:var:Значение','3GN.l_kl1:var:Значення');
-INSERT INTO "BlckCalcPrm_boiler9" VALUES('l_4GN','l 4GN','','','4GN position','Положение 4ГП','Положення 4ГП',1,'4GN.l_kl1:var:Value','4GN.l_kl1:var:Значение','4GN.l_kl1:var:Значення');
-INSERT INTO "BlckCalcPrm_boiler9" VALUES('l_5GN','l 5GN','','','5GN position','Положение 5ГП','Положення 5ГП',1,'5GN.l_kl1:var:Value','5GN.l_kl1:var:Значение','5GN.l_kl1:var:Значення');
-INSERT INTO "BlckCalcPrm_boiler9" VALUES('l_6GN_1','l 6GN 1','','','6GN_1 position','Положение 6ГП_1','Положення 6ГП_1',1,'6GN.l_kl1:var:Value','6GN.l_kl1:var:Значение','6GN.l_kl1:var:Значення');
-INSERT INTO "BlckCalcPrm_boiler9" VALUES('l_6GN_2','l 6GN 2','','','6GN_2 position','Положение 6ГП_2','Положення 6ГП_2',1,'6GN.l_kl2:var:Value','6GN.l_kl2:var:Значение','6GN.l_kl2:var:Значення');
+INSERT INTO "BlckCalcPrm_boiler9" VALUES('l_3GN','l 3GN','','','3GN position','Положение 3ГП','Положення 3ГП',1,'3GN.l_v1:var:Value','3GN.l_v1:var:Значение','3GN.l_v1:var:Значення');
+INSERT INTO "BlckCalcPrm_boiler9" VALUES('l_4GN','l 4GN','','','4GN position','Положение 4ГП','Положення 4ГП',1,'4GN.l_v1:var:Value','4GN.l_v1:var:Значение','4GN.l_v1:var:Значення');
+INSERT INTO "BlckCalcPrm_boiler9" VALUES('l_5GN','l 5GN','','','5GN position','Положение 5ГП','Положення 5ГП',1,'5GN.l_v1:var:Value','5GN.l_v1:var:Значение','5GN.l_v1:var:Значення');
+INSERT INTO "BlckCalcPrm_boiler9" VALUES('l_6GN_1','l 6GN 1','','','6GN_1 position','Положение 6ГП_1','Положення 6ГП_1',1,'6GN.l_v1:var:Value','6GN.l_v1:var:Значение','6GN.l_v1:var:Значення');
+INSERT INTO "BlckCalcPrm_boiler9" VALUES('l_6GN_2','l 6GN 2','','','6GN_2 position','Положение 6ГП_2','Положення 6ГП_2',1,'6GN.l_v2:var:Value','6GN.l_v2:var:Значение','6GN.l_v2:var:Значення');
 INSERT INTO "BlckCalcPrm_boiler9" VALUES('P_GN_S','P GN S','','','GN pressure after the source','Давление ГП после источника','Тиск ГП після джерела',1,'SrcNG.Po:var:Value','SrcNG.Po:var:Значение','SrcNG.Po:var:Значення');
 INSERT INTO "BlckCalcPrm_boiler9" VALUES('P_4GN','P 4GN','','','GN pressure after 4GN','Давление ГП после 4ГП','Тиск ГП після 4ГП',1,'4GN.Po:var:Value','4GN.Po:var:Значение','4GN.Po:var:Значення');
 INSERT INTO "BlckCalcPrm_boiler9" VALUES('Src_GN_Pi','Src GN Pi','','','Input pressure at the source of GN','Входное давление на источнике ГП','Вхідний тиск на джерелі ГП',1,'SrcNG.Pi:var:Value','SrcNG.Pi:var:Значение','SrcNG.Pi:var:Значення');
-INSERT INTO "BlckCalcPrm_boiler9" VALUES('l_3FW_1','l 3FW 1','','','3FW(1) position','Положение 3ВП(1)','Положення 3ВП(1)',1,'3FW.l_kl1:var:Value','3FW.l_kl1:var:Значение','3FW.l_kl1:var:Значення');
-INSERT INTO "BlckCalcPrm_boiler9" VALUES('l_5FW','l 5FW','','','5FW(1) position','Положение 5ВП(1)','Положення 5ВП(1)',1,'5FW.l_kl1:var:Value','5FW.l_kl1:var:Значение','5FW.l_kl1:var:Значення');
-INSERT INTO "BlckCalcPrm_boiler9" VALUES('l_5FW_2','l 5FW 2','','','5FW(2) position','Положение 5ВП(2)','Положення 5ВП(2)',1,'5FW.l_kl2:var:Value','5FW.l_kl2:var:Значение','5FW.l_kl2:var:Значення');
-INSERT INTO "BlckCalcPrm_boiler9" VALUES('l_7FW','l 7FW','','','7FW position','Положение 7ВП','Положення 7ВП',1,'7FW.l_kl1:var:Value','7FW.l_kl1:var:Значение','7FW.l_kl1:var:Значення');
+INSERT INTO "BlckCalcPrm_boiler9" VALUES('l_3FW_1','l 3FW 1','','','3FW(1) position','Положение 3ВП(1)','Положення 3ВП(1)',1,'3FW.l_v1:var:Value','3FW.l_v1:var:Значение','3FW.l_v1:var:Значення');
+INSERT INTO "BlckCalcPrm_boiler9" VALUES('l_5FW','l 5FW','','','5FW(1) position','Положение 5ВП(1)','Положення 5ВП(1)',1,'5FW.l_v1:var:Value','5FW.l_v1:var:Значение','5FW.l_v1:var:Значення');
+INSERT INTO "BlckCalcPrm_boiler9" VALUES('l_5FW_2','l 5FW 2','','','5FW(2) position','Положение 5ВП(2)','Положення 5ВП(2)',1,'5FW.l_v2:var:Value','5FW.l_v2:var:Значение','5FW.l_v2:var:Значення');
+INSERT INTO "BlckCalcPrm_boiler9" VALUES('l_7FW','l 7FW','','','7FW position','Положение 7ВП','Положення 7ВП',1,'7FW.l_v1:var:Value','7FW.l_v1:var:Значение','7FW.l_v1:var:Значення');
 INSERT INTO "BlckCalcPrm_boiler9" VALUES('F_3FW','F 3FW','','','Water flow after 3FW','Расход воды после 3ВП','Витрати води після 3ВП',1,'3FW.Fo:var:Value','3FW.Fo:var:Значение','3FW.Fo:var:Значення');
 INSERT INTO "BlckCalcPrm_boiler9" VALUES('F_7FW','F 7FW','','','Water flow after 7FW','Расход воды после 7ВП','Витрати води після 7ВП',1,'7FW.Fo:var:Value','7FW.Fo:var:Значение','7FW.Fo:var:Значення');
 INSERT INTO "BlckCalcPrm_boiler9" VALUES('F_Node8','F Node8','','','Water flow after Node8','Расход воды после Уз8','Витрати води після Вуз8',1,'Node8.Fo:var:Value','Node8.Fo:var:Значение','Node8.Fo:var:Значення');
 INSERT INTO "BlckCalcPrm_boiler9" VALUES('F_5FW','F 5FW','','','Water flow after 5FW','Расход воды после 5ВП','Витрати води після 5ВП',1,'5FW.Fo:var:Value','5FW.Fo:var:Значение','5FW.Fo:var:Значення');
-INSERT INTO "BlckCalcPrm_boiler9" VALUES('l_7GBF','l 7GBF','','','7GBF position','Положение 7ГД','Положення 7ГД',1,'7GBF.l_kl1:var:Value','7GBF.l_kl1:var:Значение','7GBF.l_kl1:var:Значення');
-INSERT INTO "BlckCalcPrm_boiler9" VALUES('l_8GBF','l 8GBF','','','8GBF position','Положение 8ГД','Положення 8ГД',1,'8GBF.l_kl1:var:Value','8GBF.l_kl1:var:Значение','8GBF.l_kl1:var:Значення');
-INSERT INTO "BlckCalcPrm_boiler9" VALUES('l_5GC','l 5GC','','','5GC position','Положение 5ГК','Положення 5ГК',1,'5GC.l_kl1:var:Value','5GC.l_kl1:var:Значение','5GC.l_kl1:var:Значення');
+INSERT INTO "BlckCalcPrm_boiler9" VALUES('l_7GBF','l 7GBF','','','7GBF position','Положение 7ГД','Положення 7ГД',1,'7GBF.l_v1:var:Value','7GBF.l_v1:var:Значение','7GBF.l_v1:var:Значення');
+INSERT INTO "BlckCalcPrm_boiler9" VALUES('l_8GBF','l 8GBF','','','8GBF position','Положение 8ГД','Положення 8ГД',1,'8GBF.l_v1:var:Value','8GBF.l_v1:var:Значение','8GBF.l_v1:var:Значення');
+INSERT INTO "BlckCalcPrm_boiler9" VALUES('l_5GC','l 5GC','','','5GC position','Положение 5ГК','Положення 5ГК',1,'5GC.l_v1:var:Value','5GC.l_v1:var:Значение','5GC.l_v1:var:Значення');
 INSERT INTO "BlckCalcPrm_boiler9" VALUES('LСA122','LСA122','','','Level of water in the clean slot of the drum, in the right','Уровень воды в чистом отсеке барабана, справа','Рівень води у чистому відсіку барабану, праворуч',1,'Drum.Lo:var:Value
 *r.0:prec:Precision
 *s.%:ed:Unit of measure
@@ -2068,15 +2068,15 @@ INSERT INTO "BlckCalcPrm_boiler9" VALUES('P75','P75','','','Air pressure on the 
 *s.ат:ed:Одиниця виміру
 *r.0:min:Мінімум
 *r.1.16:max:Максимум');
-INSERT INTO "BlckCalcPrm_boiler9" VALUES('LCVG121','LCVG121','','','3FWL position','Положение 3ВПл','Положення 3ВПл',1,'3FW.l_kl1:var:Value
+INSERT INTO "BlckCalcPrm_boiler9" VALUES('LCVG121','LCVG121','','','3FWL position','Положение 3ВПл','Положення 3ВПл',1,'3FW.l_v1:var:Value
 *r.0:prec:Precision
 *s.%:ed:Unit of measure
 *r.0:min:Minimum
-*r.100:max:Maximum','3FW.l_kl1:var:Значение
+*r.100:max:Maximum','3FW.l_v1:var:Значение
 *r.0:prec:Точноcть
 *s.%:ed:Единица измерения
 *r.0:min:Минимум
-*r.100:max:Максимум','3FW.l_kl1:var:Значення
+*r.100:max:Максимум','3FW.l_v1:var:Значення
 *r.0:prec:Точність
 *s.%:ed:Одиниця виміру
 *r.0:min:Мінімум
@@ -2094,15 +2094,15 @@ INSERT INTO "BlckCalcPrm_boiler9" VALUES('P78','P78','','','Vacuum in the "SE-A"
 *s.ат:ed:Одиниця виміру
 *r.0.9:min:Мінімум
 *r.1:max:Максимум');
-INSERT INTO "BlckCalcPrm_boiler9" VALUES('LCVG122','LCVG122','','','3FWR position','Положение 3ВПп','Положення 3ВПп',1,'3FW.l_kl2:var:Value
+INSERT INTO "BlckCalcPrm_boiler9" VALUES('LCVG122','LCVG122','','','3FWR position','Положение 3ВПп','Положення 3ВПп',1,'3FW.l_v2:var:Value
 *r.0:prec:Precision
 *s.%:ed:Unit of measure
 *r.0:min:Minimum
-*r.100:max:Maximum','3FW.l_kl2:var:Значение
+*r.100:max:Maximum','3FW.l_v2:var:Значение
 *r.0:prec:Точноcть
 *s.%:ed:Единица измерения
 *r.0:min:Минимум
-*r.100:max:Максимум','3FW.l_kl2:var:Значення
+*r.100:max:Максимум','3FW.l_v2:var:Значення
 *r.0:prec:Точність
 *s.%:ed:Одиниця виміру
 *r.0:min:Мінімум
@@ -2120,7 +2120,7 @@ INSERT INTO "BlckCalcPrm_boiler9" VALUES('P79','P79','','','Vacuum in the "SE-B"
 *s.ат:ed:Одиниця виміру
 *r.0.9:min:Мінімум
 *r.1:max:Максимум');
-INSERT INTO "BlckCalcPrm_boiler9" VALUES('G_13SH','G 13SH','','','13G position','Положение 13Ш','Положення 13Ш',1,'13G.l_kl1:var:Value','13G.l_kl1:var:Значение','13G.l_kl1:var:Значення');
+INSERT INTO "BlckCalcPrm_boiler9" VALUES('G_13SH','G 13SH','','','13G position','Положение 13Ш','Положення 13Ш',1,'13G.l_v1:var:Value','13G.l_v1:var:Значение','13G.l_v1:var:Значення');
 INSERT INTO "BlckCalcPrm_boiler9" VALUES('PCSA77','PCSA77','','','Vacuum in the fire chamber on the right','Разрежение в топке справа','Розрідження у топці праворуч',1,'FireChamber.Po:var:Value
 *r.3:prec:Precision
 *s.at:ed:Unit of measure
@@ -2147,7 +2147,7 @@ INSERT INTO "BlckCalcPrm_boiler9" VALUES('F109','F109','','','Water flow for the
 *s.т/год:ed:Одиниця виміру
 *r.0:min:Мінімум
 *r.200:max:Максимум');
-INSERT INTO "BlckCalcPrm_boiler9" VALUES('G_14SH','G 14SH','','','14G position','Положение 14Ш','Положення 14Ш',1,'13G.l_kl2:var:Value','13G.l_kl2:var:Значение','13G.l_kl2:var:Значення');
+INSERT INTO "BlckCalcPrm_boiler9" VALUES('G_14SH','G 14SH','','','14G position','Положение 14Ш','Положення 14Ш',1,'13G.l_v2:var:Value','13G.l_v2:var:Значение','13G.l_v2:var:Значення');
 INSERT INTO "BlckCalcPrm_boiler9" VALUES('PSA57_1','PSA57 1','','','GBF pressure on the general pipeline','Давление ГД на общем трубопроводе','Тиск ГД на загальному трубопроводі',1,'Node3.Pi:var:Value
 *r.2:prec:Precision
 *s.at:ed:Unit of measure
@@ -2174,9 +2174,9 @@ INSERT INTO "BlckCalcPrm_boiler9" VALUES('PSA57_2','PSA57 2','','','GBF pressure
 *s.ат:ed:Одиниця виміру
 *r.0:min:Мінімум
 *r.2:max:Максимум');
-INSERT INTO "BlckCalcPrm_boiler9" VALUES('FCVG102','FCVG102','','','5GN position','Положение 5ГП','Положення 5ГП',1,'5GN.l_kl1:var:Value','5GN.l_kl1:var:Значение','5GN.l_kl1:var:Значення');
-INSERT INTO "BlckCalcPrm_boiler9" VALUES('FCVG104','FCVG104','','','8GBF position','Положение 8ГД','Положення 8ГД',1,'8GBF.l_kl1:var:Value','8GBF.l_kl1:var:Значение','8GBF.l_kl1:var:Значення');
-INSERT INTO "BlckCalcPrm_boiler9" VALUES('FCVG105','FCVG105','','','4GC position','Положение 4ГК','Положення 4ГК',1,'4GC.l_kl1:var:Value','4GC.l_kl1:var:Значение','4GC.l_kl1:var:Значення');
+INSERT INTO "BlckCalcPrm_boiler9" VALUES('FCVG102','FCVG102','','','5GN position','Положение 5ГП','Положення 5ГП',1,'5GN.l_v1:var:Value','5GN.l_v1:var:Значение','5GN.l_v1:var:Значення');
+INSERT INTO "BlckCalcPrm_boiler9" VALUES('FCVG104','FCVG104','','','8GBF position','Положение 8ГД','Положення 8ГД',1,'8GBF.l_v1:var:Value','8GBF.l_v1:var:Значение','8GBF.l_v1:var:Значення');
+INSERT INTO "BlckCalcPrm_boiler9" VALUES('FCVG105','FCVG105','','','4GC position','Положение 4ГК','Положення 4ГК',1,'4GC.l_v1:var:Value','4GC.l_v1:var:Значение','4GC.l_v1:var:Значення');
 INSERT INTO "BlckCalcPrm_boiler9" VALUES('LSA123','LSA123','','','Level of water in the clean slot of the drum, in the left','Уровень воды в чистом отсеке барабана, слева','Рівень води у чистому відсіку барабану, ліворуч',1,'Drum.Lo:var:Value
 *r.0:prec:Precision
 *s.%:ed:Unit of measure
@@ -2450,7 +2450,7 @@ INSERT INTO "BlckCalcPrm_boiler9" VALUES('PSA80','PSA80','','','FW pressure on t
 *s.ат:ed:Одиниця виміру
 *r.0:min:Мінімум
 *r.60:max:Максимум');
-INSERT INTO "BlckCalcPrm_boiler9" VALUES('FCVG103','FCVG103','','','7GBF position','Положение 7ГД','Положення 7ГД',1,'7GBF.l_kl1:var:Value','7GBF.l_kl1:var:Значение','7GBF.l_kl1:var:Значення');
+INSERT INTO "BlckCalcPrm_boiler9" VALUES('FCVG103','FCVG103','','','7GBF position','Положение 7ГД','Положення 7ГД',1,'7GBF.l_v1:var:Value','7GBF.l_v1:var:Значение','7GBF.l_v1:var:Значення');
 INSERT INTO "BlckCalcPrm_boiler9" VALUES('T24','T24','','','FG temperature before the first stage of the economizer on the right','Температура ДГ перед первой ступенью экономайзера справа','Температура ДГ перед першим ступенем економайзеру праворуч',1,'AH2.To1:var:Value
 *r.2:prec:Precision
 *s.deg.K:ed:Unit of measure
@@ -2649,8 +2649,8 @@ INSERT INTO "BlckCalcPrm_boiler9" VALUES('P104','P104','','','GBF pressure on th
 *s.ат:ed:Одиниця виміру
 *r.0:min:Мінімум
 *r.2:max:Максимум');
-INSERT INTO "BlckCalcPrm_boiler9" VALUES('G_11SH','G 11SH','','','11G position','Положение 11Ш','Положення 11Ш',1,'11G.l_kl1:var:Value','11G.l_kl1:var:Значение','11G.l_kl1:var:Значення');
-INSERT INTO "BlckCalcPrm_boiler9" VALUES('TCVG1_1','TCVG1 1','','','7FW position','Положение 7ВП','Положення 7ВП',1,'7FW.l_kl1:var:Value','7FW.l_kl1:var:Значение','7FW.l_kl1:var:Значення');
+INSERT INTO "BlckCalcPrm_boiler9" VALUES('G_11SH','G 11SH','','','11G position','Положение 11Ш','Положення 11Ш',1,'11G.l_v1:var:Value','11G.l_v1:var:Значение','11G.l_v1:var:Значення');
+INSERT INTO "BlckCalcPrm_boiler9" VALUES('TCVG1_1','TCVG1 1','','','7FW position','Положение 7ВП','Положення 7ВП',1,'7FW.l_v1:var:Value','7FW.l_v1:var:Значение','7FW.l_v1:var:Значення');
 INSERT INTO "BlckCalcPrm_boiler9" VALUES('PCVG76','PCVG76','','','SEA productivity','Производительность ДСА','Продуктивність ДСА',1,'SEA.N:var:Value
 *r.1:prec:Precision
 *s.rpm:ed:Unit of measure
@@ -2664,7 +2664,7 @@ INSERT INTO "BlckCalcPrm_boiler9" VALUES('PCVG76','PCVG76','','','SEA productivi
 *s.об/хвил:ed:Одиниця виміру
 *r.0:min:Мінімум
 *r.100:max:Максимум');
-INSERT INTO "BlckCalcPrm_boiler9" VALUES('TCVG1_2','TCVG1 2','','','5FWL position','Положение 5ВПл','Положення 5ВПл',1,'5FW.l_kl1:var:Value','5FW.l_kl1:var:Значение','5FW.l_kl1:var:Значення');
+INSERT INTO "BlckCalcPrm_boiler9" VALUES('TCVG1_2','TCVG1 2','','','5FWL position','Положение 5ВПл','Положення 5ВПл',1,'5FW.l_v1:var:Value','5FW.l_v1:var:Значение','5FW.l_v1:var:Значення');
 INSERT INTO "BlckCalcPrm_boiler9" VALUES('PCVG77','PCVG77','','','SEB productivity','Производительность ДСБ','Продуктивність ДСБ',1,'SEB.N:var:Value
 *r.1:prec:Precision
 *s.rpm:ed:Unit of measure
@@ -2678,7 +2678,7 @@ INSERT INTO "BlckCalcPrm_boiler9" VALUES('PCVG77','PCVG77','','','SEB productivi
 *s.об/хвил:ed:Одиниця виміру
 *r.0:min:Мінімум
 *r.100:max:Максимум');
-INSERT INTO "BlckCalcPrm_boiler9" VALUES('G_12SH','G 12SH','','','12G position','Положение 12Ш','Положення 12Ш',1,'11G.l_kl2:var:Value','11G.l_kl2:var:Значение','11G.l_kl2:var:Значення');
+INSERT INTO "BlckCalcPrm_boiler9" VALUES('G_12SH','G 12SH','','','12G position','Положение 12Ш','Положення 12Ш',1,'11G.l_v2:var:Value','11G.l_v2:var:Значение','11G.l_v2:var:Значення');
 INSERT INTO "BlckCalcPrm_boiler9" VALUES('FCV106','FCV106','','','BFA productivity','Производительность ДВА','Продуктивність ДВА',1,'BFA.N:var:Value
 *r.1:prec:Precision
 *s.rpm:ed:Unit of measure
@@ -3337,57 +3337,57 @@ INSERT INTO "flb_boiler9_io" VALUES('Fsum','f_frq','Calculate frequency (Hz)','�
 INSERT INTO "flb_boiler9_io" VALUES('Fsum','FsumW','Work flow','Рабочий расход','Робочі витрати',2,1,'0','','',0,20);
 CREATE TABLE 'BlckCalcBlcks_boiler9' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"FUNC" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PROC" INTEGER DEFAULT '0' ,"PRIOR" TEXT DEFAULT '' ,"LNK_OUT_WR_CH" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 INSERT INTO "BlckCalcBlcks_boiler9" VALUES('SrcGBF','','','','Source of blast furnace gas','Источник доменного газа','Джерело доменного газу','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_src_press',1,1,'',0);
-INSERT INTO "BlckCalcBlcks_boiler9" VALUES('7FW','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_klap',1,1,'',0);
+INSERT INTO "BlckCalcBlcks_boiler9" VALUES('7FW','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
 INSERT INTO "BlckCalcBlcks_boiler9" VALUES('SrcGC','','','','Source of coke oven gas','Источник коксового газа','Джерело коксового газу','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_src_press',1,1,'',0);
 INSERT INTO "BlckCalcBlcks_boiler9" VALUES('Node5','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_pipe1_2',1,1,'',0);
 INSERT INTO "BlckCalcBlcks_boiler9" VALUES('Node6','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_pipe1_2',1,1,'',0);
 INSERT INTO "BlckCalcBlcks_boiler9" VALUES('Node7','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_pipe1_2',1,1,'',0);
 INSERT INTO "BlckCalcBlcks_boiler9" VALUES('Node8','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_pipe3_1',1,1,'',0);
-INSERT INTO "BlckCalcBlcks_boiler9" VALUES('3FW','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_klap',1,1,'',0);
+INSERT INTO "BlckCalcBlcks_boiler9" VALUES('3FW','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
 INSERT INTO "BlckCalcBlcks_boiler9" VALUES('OhS','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_heatExch',1,1,'',0);
 INSERT INTO "BlckCalcBlcks_boiler9" VALUES('Node10','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_pipe1_2',1,1,'',0);
-INSERT INTO "BlckCalcBlcks_boiler9" VALUES('9GBF','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_klap',1,1,'',0);
+INSERT INTO "BlckCalcBlcks_boiler9" VALUES('9GBF','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
 INSERT INTO "BlckCalcBlcks_boiler9" VALUES('Node12','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_pipe2_1',1,1,'',0);
-INSERT INTO "BlckCalcBlcks_boiler9" VALUES('3GC','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_klap',1,1,'',0);
-INSERT INTO "BlckCalcBlcks_boiler9" VALUES('2G','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_klap',1,1,'',0);
+INSERT INTO "BlckCalcBlcks_boiler9" VALUES('3GC','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
+INSERT INTO "BlckCalcBlcks_boiler9" VALUES('2G','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
 INSERT INTO "BlckCalcBlcks_boiler9" VALUES('Node1','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_pipe2_1',1,1,'',0);
 INSERT INTO "BlckCalcBlcks_boiler9" VALUES('Node2','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_pipe2_1',1,1,'',0);
-INSERT INTO "BlckCalcBlcks_boiler9" VALUES('11G','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_klap',1,1,'',0);
+INSERT INTO "BlckCalcBlcks_boiler9" VALUES('11G','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
 INSERT INTO "BlckCalcBlcks_boiler9" VALUES('Node3','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_pipe1_2',1,1,'',0);
 INSERT INTO "BlckCalcBlcks_boiler9" VALUES('Node4','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_pipe1_2',1,1,'',0);
 INSERT INTO "BlckCalcBlcks_boiler9" VALUES('Node9','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_pipe2_1',1,1,'',0);
-INSERT INTO "BlckCalcBlcks_boiler9" VALUES('3GN','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_klap',1,1,'',0);
-INSERT INTO "BlckCalcBlcks_boiler9" VALUES('4GC','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_klap',1,1,'',0);
+INSERT INTO "BlckCalcBlcks_boiler9" VALUES('3GN','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
+INSERT INTO "BlckCalcBlcks_boiler9" VALUES('4GC','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
 INSERT INTO "BlckCalcBlcks_boiler9" VALUES('AH1','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_heatExch',1,1,'',0);
 INSERT INTO "BlckCalcBlcks_boiler9" VALUES('SEA','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_compressor',1,1,'',0);
 INSERT INTO "BlckCalcBlcks_boiler9" VALUES('AH2','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_heatExch',1,1,'',0);
 INSERT INTO "BlckCalcBlcks_boiler9" VALUES('SEB','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_compressor',1,1,'',0);
-INSERT INTO "BlckCalcBlcks_boiler9" VALUES('5GBF','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_klap',1,1,'',0);
-INSERT INTO "BlckCalcBlcks_boiler9" VALUES('4GN3','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_klap',1,1,'',0);
-INSERT INTO "BlckCalcBlcks_boiler9" VALUES('10GBF','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_klap',1,1,'',0);
+INSERT INTO "BlckCalcBlcks_boiler9" VALUES('5GBF','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
+INSERT INTO "BlckCalcBlcks_boiler9" VALUES('4GN3','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
+INSERT INTO "BlckCalcBlcks_boiler9" VALUES('10GBF','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
 INSERT INTO "BlckCalcBlcks_boiler9" VALUES('DS','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_heatExch',1,1,'',0);
 INSERT INTO "BlckCalcBlcks_boiler9" VALUES('BFA','','','','Blow fan А','Дутьевой вентилятор А','Дуттьовий вентилятор А','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_compressor',1,1,'',0);
 INSERT INTO "BlckCalcBlcks_boiler9" VALUES('SrcWater','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_src_press',1,1,'',0);
 INSERT INTO "BlckCalcBlcks_boiler9" VALUES('BFB','','','','Blow fan B','Дутьевой вентилятор Б','Дуттьовий вентилятор Б','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_compressor',1,1,'',0);
-INSERT INTO "BlckCalcBlcks_boiler9" VALUES('4GN','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_klap',1,1,'',0);
-INSERT INTO "BlckCalcBlcks_boiler9" VALUES('13G','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_klap',1,1,'',0);
-INSERT INTO "BlckCalcBlcks_boiler9" VALUES('1G','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_klap',1,1,'',0);
-INSERT INTO "BlckCalcBlcks_boiler9" VALUES('5FW','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_klap',1,1,'',0);
+INSERT INTO "BlckCalcBlcks_boiler9" VALUES('4GN','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
+INSERT INTO "BlckCalcBlcks_boiler9" VALUES('13G','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
+INSERT INTO "BlckCalcBlcks_boiler9" VALUES('1G','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
+INSERT INTO "BlckCalcBlcks_boiler9" VALUES('5FW','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
 INSERT INTO "BlckCalcBlcks_boiler9" VALUES('SrcNG','','','','Source of natural gas','Источник природного газа','Джерело природнього газу','DAQ.JavaLikeCalc.lib_techApp.src_press',1,1,'',0);
-INSERT INTO "BlckCalcBlcks_boiler9" VALUES('5GC','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_klap',1,1,'',0);
-INSERT INTO "BlckCalcBlcks_boiler9" VALUES('6GBF','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_klap',1,1,'',0);
+INSERT INTO "BlckCalcBlcks_boiler9" VALUES('5GC','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
+INSERT INTO "BlckCalcBlcks_boiler9" VALUES('6GBF','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
 INSERT INTO "BlckCalcBlcks_boiler9" VALUES('ParNet','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_net',1,1,'',0);
-INSERT INTO "BlckCalcBlcks_boiler9" VALUES('5GN','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_klap',1,1,'',0);
-INSERT INTO "BlckCalcBlcks_boiler9" VALUES('6GC','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_klap',1,1,'',0);
+INSERT INTO "BlckCalcBlcks_boiler9" VALUES('5GN','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
+INSERT INTO "BlckCalcBlcks_boiler9" VALUES('6GC','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
 INSERT INTO "BlckCalcBlcks_boiler9" VALUES('EC1','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_heatExch',1,1,'',0);
 INSERT INTO "BlckCalcBlcks_boiler9" VALUES('EC2','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_heatExch',1,1,'',0);
-INSERT INTO "BlckCalcBlcks_boiler9" VALUES('7GBF','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_klap',1,1,'',0);
+INSERT INTO "BlckCalcBlcks_boiler9" VALUES('7GBF','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
 INSERT INTO "BlckCalcBlcks_boiler9" VALUES('SrcAir','','','','Air source','Источник воздуха','Джерело повітря','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_src_press',1,1,'',0);
 INSERT INTO "BlckCalcBlcks_boiler9" VALUES('FireChamber','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_boilerBurner',1,1,'',0);
 INSERT INTO "BlckCalcBlcks_boiler9" VALUES('Drum','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_boilerBarrel',1,1,'',0);
-INSERT INTO "BlckCalcBlcks_boiler9" VALUES('6GN','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_klap',1,1,'',0);
+INSERT INTO "BlckCalcBlcks_boiler9" VALUES('6GN','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
 INSERT INTO "BlckCalcBlcks_boiler9" VALUES('Atmosph','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_net',1,1,'',0);
-INSERT INTO "BlckCalcBlcks_boiler9" VALUES('8GBF','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_klap',1,1,'',0);
+INSERT INTO "BlckCalcBlcks_boiler9" VALUES('8GBF','','','','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
 CREATE TABLE 'BlckCalcBlcks_boiler9_cntr' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"FUNC" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PROC" INTEGER DEFAULT '0' ,"PRIOR" TEXT DEFAULT '' ,"LNK_OUT_WR_CH" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 INSERT INTO "BlckCalcBlcks_boiler9_cntr" VALUES('LC121','','','','','','','sub_Special.mod_FLibComplex1.fnc_pid',1,1,'',0);
 INSERT INTO "BlckCalcBlcks_boiler9_cntr" VALUES('TCA1','','','','','','','sub_Special.mod_FLibComplex1.fnc_pid',1,1,'',0);

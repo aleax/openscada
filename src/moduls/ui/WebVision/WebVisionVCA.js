@@ -1412,15 +1412,21 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		case 2:	//Chek box
 		    var toInit = !this.place.childNodes.length;
 		    var tblCell = toInit ? this.place.ownerDocument.createElement('div') : this.place.childNodes[0];
-		    if(toInit || this.attrsMdf['geomH'] || this.attrsMdf['geomW'] || this.attrsMdf['font'])
+		    if(toInit || this.attrsMdf['geomH'] || this.attrsMdf['geomW'] || this.attrsMdf['font']) {
+			tblCell.className = 'vertalign';
 			tblCell.style.cssText = 'position: absolute; top: '+((geomH-15)/2)+'px; width: '+geomW+'px; '+
 					    'height: '+Math.min(geomH,15)+'px; text-align: left; font: '+this.place.fontCfg+'; ';
+		    }
 		    var formObj = tblCell.childNodes.length ? tblCell.childNodes[0] : this.place.ownerDocument.createElement('input');
+		    var spanObj = tblCell.childNodes.length > 1 ? tblCell.childNodes[1] : this.place.ownerDocument.createElement('span');
+		    spanObj.style.cssText = 'display: table-cell; white-space: pre-line; word-break: break-word; height: '+geomH+'px; ';
+
 		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 		    if(toInit || this.attrsMdf['value']) formObj.checked = parseInt(this.attrs['value']);
 		    if(toInit) {
 			formObj.type = 'checkbox';
 			formObj.disabled = !elWr;
+			formObj.style.cssText = 'width: '+Math.min(geomW,geomH)+'px; height: '+Math.min(geomW,geomH)+'px;';
 			formObj.wdgLnk = this;
 			formObj.onclick = function( ) {
 			    var attrs = new Object();
@@ -1429,10 +1435,11 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    return true;
 			}
 			tblCell.appendChild(formObj);
-			tblCell.appendChild(this.place.ownerDocument.createTextNode(this.attrs['name']));
+			tblCell.appendChild(spanObj);
+			spanObj.textContent = this.attrs['name'];
 			this.place.appendChild(tblCell);
 		    }
-		    if(this.attrsMdf['name'])	tblCell.childNodes[1].textContent = this.attrs['name'];
+		    if(this.attrsMdf['name'])	spanObj.textContent = this.attrs['name'];
 		    break;
 		case 3:	//Button
 		    var formObj;

@@ -558,12 +558,12 @@ To = 100*ToCod/65536;
 <li> порушення та інші повідомлення формуються на першоджерелі — ПЛК;</li>
 <li> передбачається механізм тримання архівів-історії на ПЛК як повністю, так і як частка компенсації втрати зв'язку зі SCADA, особливо для поганого та бездротового зв'язку.</li></ul>
 <p>З метою демонстрації та ознайомлення, створимо тут об'єкт контролеру модуля "DAQGate", для шлюзування даних нашого віртуального ПЛК. Створюється він ідентично до раніш створених об'єктів контролеру у модулі "ModBus" та "LogicLev", на сторінці: "Start"-&gt;"Збір даних"-&gt;"Модуль"-&gt;"Шлюз джерел даних" та назвемо його <b>AGLKS</b>.
-</p><p>Об'єкт контролера модуля "DAQGate" (Рис.4.4.1) має наступні специфічні налаштування, які ми маємо здійснити:
+</p><p>Controller object of the module "DAQGate" (Fig.4.4.1) has the following specific settings that we must accomplish:
 </p>
-<ul><li> "Перелік віддалених станцій" — у полі "Додання станції" <b>оберемо раніш створене підключення</b> віддаленої станції "AGLKS".</li>
-<li> <b>Ввімкнемо</b> об'єкт контролера.</li>
-<li> "Перелік віддалених контролерів та параметрів" — у полі "Дерево параметрів" оберемо <b>LogicLev.experiment</b>, а потім пункт <b>&lt;&lt;Додати поточний&gt;&gt;</b> нагорі цього переліку.</li>
-<li> <b>Запустимо</b> виконання об'єкту контролера.</li></ul>
+<ul><li> "Remote stations list" — in the "Append station" field, we will <b>select the previously established connection</b> of the remote station "AGLKS".</li>
+<li> <b>Enable</b> the controller object.</li>
+<li> "List of the remote controllers and parameters" — in the "Parameters tree" field select <b>LogicLev.gen</b> and then <b>&lt;&lt;Append current&gt;&gt;</b> above this list.</li>
+<li> <b>Start up</b> the controller object.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:895px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_DAQGate_cntr_uk.png"><img class="thumbimage" height="885" src="files/QuickStart_DAQGate_cntr_uk.png" width="893" /></a>  <div class="thumbcaption">Рис. 4.4.1. Головна вкладка налаштування об'єкту контролера модуля "DAQGate".</div></div></div></div>
 <p>Якщо все зроблено правильно то автоматично створяться параметри обраного контролера та ми зможемо поглянути на дані по них у вкладці "Атрибути" (Рис.4.4.2).
 </p>

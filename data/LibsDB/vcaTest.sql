@@ -441,7 +441,7 @@ INSERT INTO "wlb_test_io" VALUES('kompr','prm0color','blue',32,'','','tr1','',''
 INSERT INTO "wlb_test_io" VALUES('kompr','prm1addr','/DAQ/BlockCalc/KM101/F102/Fi',0,'','','tr1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('kompr','prm1bordU','100',0,'','','tr1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('kompr','prm1color','lightblue',0,'','','tr1','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('kompr','prm2addr','/DAQ/BlockCalc/KM101/MKPP101/l_kl1',0,'','','tr1','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('kompr','prm2addr','/DAQ/BlockCalc/KM101/MKPP101/l_v1',0,'','','tr1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('kompr','prm2bordU','100',0,'','','tr1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('kompr','prm2color','lightgreen',0,'','','tr1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('protTest','geomW','735',32,'','','prt2','','','','','','');

@@ -107,6 +107,8 @@ INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_doc_pa
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_doc_panel','prev1','/wlb_Main/wdg_doc_panel/wdg_prev1','owner;value;');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_doc_panel','size','/wlb_Main/wdg_doc_panel/wdg_size','owner;value;');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_doc_panel','tmTp','/wlb_Main/wdg_doc_panel/wdg_tmTp','owner;');
+INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_doc_panel','Text2','/wlb_Main/wdg_doc_panel/wdg_Text2','');
+INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_grph_panel','Text2','/wlb_Main/wdg_grph_panel/wdg_Text2','');
 CREATE TABLE 'prj_archBrowser_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO "prj_archBrowser_io" VALUES('/prj_archBrowser/pg_control','name','','Control panels',0,'','','Панели управления','','','Панелі керування','','');
 INSERT INTO "prj_archBrowser_io" VALUES('/prj_archBrowser/pg_control/pg_graphSelPrm','value','color','',8,'','','','','','','','');
@@ -501,6 +503,8 @@ INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1',
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e8','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e8','owner;','');
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e9','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e9','owner;','');
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','name','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_name','owner;','');
+INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_doc_panel','Text2','/wlb_Main/wdg_doc_panel/wdg_Text2','','');
+INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','Text2','/wlb_Main/wdg_grph_panel/wdg_Text2','','');
 CREATE TABLE 'prj_tmplSO_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so','evProc','ws_BtPress:/prev:prev:/pg_so/*/*/$
 ws_BtPress:/next:next:/pg_so/*/*/$
@@ -1258,7 +1262,7 @@ INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','name'
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM101/F101','el2','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM101/F101','el2','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM101/F101/var','el2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','ed',NULL,34,'Parameter|ed','val:tone/h','el2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','ed',NULL,34,'Parameter|ed','val:ton/h','el2','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','max',NULL,42,'Parameter|max','val:100','el2','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','min',NULL,42,'Parameter|min','val:0','el2','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM101/F101','el2','','','','','','');
@@ -1839,6 +1843,8 @@ INSERT INTO "wlb_Main_incl" VALUES('RootPgSo','go_view5','/wlb_originals/wdg_For
 INSERT INTO "wlb_Main_incl" VALUES('RootPgSo','go_view6','/wlb_originals/wdg_FormEl','owner;perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;img;','');
 INSERT INTO "wlb_Main_incl" VALUES('doc_panel','dateBeg','/wlb_originals/wdg_FormEl','owner;perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;value;view;cfg;','');
 INSERT INTO "wlb_Main_incl" VALUES('grph_panel','dateBeg','/wlb_originals/wdg_FormEl','owner;perm;name;active;geomY;geomW;geomH;geomZ;tipTool;tipStatus;value;view;cfg;','');
+INSERT INTO "wlb_Main_incl" VALUES('grph_panel','Text2','/wlb_originals/wdg_Text','owner;geomX;geomY;geomW;geomH;geomZ;geomMargin;font;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('doc_panel','Text2','/wlb_originals/wdg_Text','owner;en;geomX;geomY;geomW;geomH;geomZ;geomMargin;font;alignment;text;','');
 CREATE TABLE 'wlb_Main_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','name','Element cadr',32,'','','','Елемент кадр','','Элемент кадр','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomW','110',32,'','','','','','','','','');
@@ -2942,14 +2948,14 @@ INSERT INTO "wlb_Main_io" VALUES('doc_panel','value','0',8,'','','size','','',''
 INSERT INTO "wlb_Main_io" VALUES('doc_panel','geomZ','10',32,'','','size','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('doc_panel','tipStatus','Change for setting need document''s depth',32,'','','size','Змінити для встановлення потрібної глибини документа','','Изменить для установки нужной глубины документа','','','');
 INSERT INTO "wlb_Main_io" VALUES('doc_panel','tipTool','Document depth',32,'','','size','Глибина документа','','Глубина документа','','','');
-INSERT INTO "wlb_Main_io" VALUES('doc_panel','geomW','108',32,'','','size','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('doc_panel','geomW','70',32,'','','size','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('doc_panel','geomH','20',32,'','','size','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('doc_panel','active','1',32,'','','curtime','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('doc_panel','geomX','1',32,'','','size','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('doc_panel','geomX','0',32,'','','size','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('doc_panel','name','Size',32,'','','size','Розмір','','Размер','','','');
 INSERT INTO "wlb_Main_io" VALUES('doc_panel','en','1',40,'','','size','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('doc_panel','elType','3',32,'','','curtime','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('doc_panel','geomY','60',32,'','','size','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('doc_panel','geomY','75',32,'','','size','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('doc_panel','geomX','28',32,'','','prev','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('doc_panel','geomW','28',32,'','','prev','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('doc_panel','geomH','28',32,'','','prev','','','','','','');
@@ -3044,20 +3050,20 @@ INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomH','28',32,'','','next1','','
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomZ','10',32,'','','next1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','tipTool','More forward',32,'','','next1','Далеко вперед','','Далеко вперёд','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','tipStatus','Press for going to forward to five graphic''s sizes',32,'','','next1','Натиснути для переходу вперед на п''ять розмірів вікна графіку','','Нажать для перехода вперёд на пять размеров окна графика','','','');
-INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomX','1',32,'','','tmTp','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomX','70',32,'','','tmTp','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomZ','3',32,'','','tmTp','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','tipTool','Dimension',32,'','','tmTp','Од. виміру','','Ед. измерения','','','');
-INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomY','184',32,'','','tmTp','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomW','108',32,'','','tmTp','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomY','179',32,'','','tmTp','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomW','40',32,'','','tmTp','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomH','20',32,'','','tmTp','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','name','Dimension type',32,'','','tmTp','Тип вимірювання','','Тип измерения','','','');
 INSERT INTO "wlb_Main_io" VALUES('doc_panel','name','Date',32,'','','date','Дата','','Дата','','','');
 INSERT INTO "wlb_Main_io" VALUES('doc_panel','cfg','0.1:100:0.1:::1',32,'','','size','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomH','20',32,'','','size','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomW','108',32,'','','size','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomW','70',32,'','','size','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','name','Size',32,'','','size','Розмір','','Размер','','','');
-INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomX','1',32,'','','size','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomY','164',32,'','','size','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomX','0',32,'','','size','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomY','179',32,'','','size','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','value','All',8,'','','arch','Всі','','Все','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','items','All
 FSArch.1s
@@ -3093,9 +3099,9 @@ INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomW','45',32,'','','next','','','
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomH','34',32,'','','next','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomZ','18',32,'','','next','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('doc_panel','en','1',40,'','','tmTp','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('doc_panel','geomX','1',32,'','','tmTp','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('doc_panel','geomY','80',32,'','','tmTp','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('doc_panel','geomW','108',32,'','','tmTp','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('doc_panel','geomX','70',32,'','','tmTp','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('doc_panel','geomY','75',32,'','','tmTp','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('doc_panel','geomW','40',32,'','','tmTp','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('doc_panel','geomH','20',32,'','','tmTp','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('doc_panel','geomZ','5',32,'','','tmTp','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('doc_panel','tipTool','Depth dimensions',32,'','','tmTp','Розмірність глибини','','Размерность глубины','','','');
@@ -6543,7 +6549,7 @@ Version: 1.4.0',32,'','','','Кадр "Обрання параметрів гр�
 Версия: 1.4.0','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','dscr','The cadre "Graph control panel".
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.3.0',32,'','','','Кадр "Панель контролю графіків".
+Version: 1.4.0',32,'','','','Кадр "Панель контролю графіків".
 Автор: Роман Савоченко<rom_as@oscada.org>
 Версія: 1.3.0','','Кадр "Панель контроля графиков".
 Автор: Роман Савоченко<rom_as@oscada.org>
@@ -7382,7 +7388,7 @@ Author: Roman Savochenko <rom_as@oscada.org>
 Version: 1.1.0',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('doc_panel','dscr','The cadre "Document control panel".
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.2.0',32,'','','','','','','','','');
+Version: 1.2.1',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('terminator','dscr','The cadre "Terminator panel".
 Author: Roman Savochenko <rom_as@oscada.org>
 Version: 1.1.0',32,'','','','','','','','','');
@@ -7399,7 +7405,7 @@ INSERT INTO "wlb_Main_io" VALUES('doc_panel','perm','438',32,'','','dateBeg','',
 INSERT INTO "wlb_Main_io" VALUES('doc_panel','name','Date',32,'','','dateBeg','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('doc_panel','en','1',40,'','','dateBeg','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('doc_panel','geomX','0',32,'','','dateBeg','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('doc_panel','geomY','40',32,'','','dateBeg','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('doc_panel','geomY','55',32,'','','dateBeg','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('doc_panel','geomW','110',32,'','','dateBeg','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('doc_panel','geomH','20',32,'','','dateBeg','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('doc_panel','geomZ','10',32,'','','dateBeg','','','','','','');
@@ -7412,7 +7418,7 @@ INSERT INTO "wlb_Main_io" VALUES('doc_panel','cfg','dd.MM.yy hh:mm:ss',32,'','',
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','owner','root:UI',32,'','','dateBeg','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','perm','438',32,'','','dateBeg','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','name','Date',32,'','','dateBeg','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomY','144',32,'','','dateBeg','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomY','159',32,'','','dateBeg','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomW','110',32,'','','dateBeg','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomH','20',32,'','','dateBeg','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomZ','27',32,'','','dateBeg','','','','','','');
@@ -7428,6 +7434,27 @@ INSERT INTO "wlb_Main_io" VALUES('cntrRegul','prm2width','2',0,'','','trnd','','
 INSERT INTO "wlb_Main_io" VALUES('cntrRegul','prm3width','1',0,'','','trnd','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrRegul','prm4width','2',0,'','','trnd','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrRegul','prm5width','2',0,'','','trnd','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grph_panel','owner','root:UI',32,'','','Text2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomX','1',32,'','','Text2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomY','145',32,'','','Text2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomW','108',32,'','','Text2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomH','15',32,'','','Text2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomZ','28',32,'','','Text2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomMargin','2',32,'','','Text2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grph_panel','font','Arial 12 0 1 1 0',32,'','','Text2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grph_panel','alignment','10',32,'','','Text2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grph_panel','text','Begin and depth',32,'','','Text2','Початок і глиб.','','Начало и глуб.','','','');
+INSERT INTO "wlb_Main_io" VALUES('doc_panel','owner','root:UI',32,'','','Text2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('doc_panel','en','1',40,'','','Text2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('doc_panel','geomX','1',32,'','','Text2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('doc_panel','geomY','40',32,'','','Text2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('doc_panel','geomW','108',32,'','','Text2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('doc_panel','geomH','15',32,'','','Text2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('doc_panel','geomZ','11',32,'','','Text2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('doc_panel','geomMargin','2',32,'','','Text2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('doc_panel','font','Arial 12 0 1',32,'','','Text2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('doc_panel','alignment','10',32,'','','Text2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('doc_panel','text','Begin and depth',32,'','','Text2','Початок і глиб.','','Начало и глуб.','','','');
 CREATE TABLE 'wlb_Main_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "wlb_Main_mime" VALUES('pg_next','image/png;6.00684','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAAZiS0dEACwA
 RADxQFue7AAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9gDBQghJ2VBTzAAAAAddEVYdENv
@@ -19648,35 +19675,37 @@ trnd_prm2addr = p3_addr; trnd_prm2bordL = p3_min; trnd_prm2bordU = p3_max; trnd_
 trnd_prm3addr = p4_addr; trnd_prm3bordL = p4_min; trnd_prm3bordU = p4_max; trnd_prm3color = p4_clr;
 trnd_prm4addr = p5_addr; trnd_prm4bordL = p5_min; trnd_prm4bordU = p5_max; trnd_prm4color = p5_clr;','','',1000,'name;dscr;en;geomW;geomH;backColor;bordWidth;bordColor;bordStyle;',1554061756);
 INSERT INTO "wlb_Main" VALUES('doc_panel','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
-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
-aNXr9X8DZ4o6zJziigMAAAAASUVORK5CYII=','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
+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
+pX4L5CsAAAAASUVORK5CYII=','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
 curTm = SYS.time();
 if(n == 0 && !time) { time = curTm; bTime = time - 30; }
 size_en = tmTp_en = Text1_en = Text2_en = prev1_en = next1_en = date_en = dateBeg_en = !n;
@@ -19732,54 +19761,57 @@ if(szVal < 60)						{ tmTp_value = tr("s"); size_value = szVal; }
 else if(szVal < 60*60)			{ tmTp_value = tr("m"); size_value = szVal/60; }
 else if(szVal < 24*60*60)	{ tmTp_value = tr("h"); size_value = szVal/(60*60); }
 else									{ tmTp_value = tr("d"); size_value = szVal/(24*60*60); }
-dateBeg_value = date_value - szVal;','','',200,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;bordColor;',1555160485);
+dateBeg_value = date_value - szVal;','','',200,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;bordColor;',1556612053);
 INSERT INTO "wlb_Main" VALUES('terminator','iVBORw0KGgoAAAANSUhEUgAAABcAAABACAIAAAB+w3u4AAAACXBIWXMAAAx1AAAMdQEteJR1AAAA
 2UlEQVRYhe3QsWrFMAwFUDlVsGWDDa/ZAvn5138K+QEPITVkiSEJ8hvcoUPpUG9Fd5NAh4vU8/mR
 UoKGOOcwpZTSZ4sCAF3jvSiiiCLKb0rOOcbIzH9WEAC2bTPGzPPMzESUc3bOXdfVdd00TcuyWGvv
 +9Zan+cJAIhIROu6aq2ttY/HOwJACAERvfdKKe/9cRwAQET7vjPzMAylFCLq+56ZY4whhFLKOI6l
 FGPMVxfvPQBYa2u9Ola9ct/L1+UPf2mPKKKIIooooogiiiii/GcFnXNKtRXp3l7PPUhJwkNfYgAA
 AABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'','','',-1,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1552226019);
-INSERT INTO "wlb_Main" VALUES('grph_panel','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','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
+INSERT INTO "wlb_Main" VALUES('grph_panel','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
+QmCC','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
 curTm = SYS.time();
 tSek = tSek ? tSek : curTm;
 
@@ -19857,12 +19889,12 @@ dateBeg_value = date_value - tSize;
 
 arch_value = valArch.length ? valArch : tr("All");
 cursor_en = !curSek.isEVal() && type != 2;
-if(cursor_en && type == 0) cursor_arg0val = SYS.strftime(curSek,"%d.%m.%Y %H:%M:%S")+"."+curUSek;
+if(cursor_en && type == 0) cursor_arg0val = SYS.strftime(curSek,"%d.%m.%Y %H:%M:%S")+(curUSek?"."+curUSek:"");
 if(cursor_en && type == 1) cursor_arg0val = tr("Frequency")+":\n"+(1e6/(1e6*curSek+curUSek)).toFixed(2)+" "+tr("Hz");
 type_value = (type==1)?tr("Spectrum"):((type==2)?tr("XY"):tr("Graph"));
 xScaleInfo_en = xZoomIn_en = xZoomOut_en = xZoomOffRight_en = xZoomOffLeft_en = xZoomDef_en = (type==2);
 selWin_en = (type == 0 && !sclWin.isEVal());
-if(selWin_en)	selWin_value = sclWin;','','',200,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1555160507);
+if(selWin_en)	selWin_value = sclWin;','','',200,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1556612049);
 INSERT INTO "wlb_Main" VALUES('cntrPasp','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAAYElEQVRoge3PQQ0AIBDAMMC/50MEj4ZkVbDtmVk/OzrgVQNaA1oDWgNa
 A1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgPaBXKq
@@ -23635,10 +23667,10 @@ CREATE TABLE 'prj_archBrowser' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser','control','','root',1,'
 ','
 ','
-',-1,5,'name;',1555160350);
+',-1,5,'name;',1556612062);
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/control','graphSelPrm','','/wlb_Main/wdg_graphSelPrm',1,'','','',-1,0,'',1472585019);
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/control','ElCadr','','/wlb_Main/wdg_ElCadr',1,'','','',-1,0,'pgGrp;digComs;digStts;max;min;prmAMax;prmAMin;prmAnalog;prmAuto;prmCasc;prmClose;prmCloseSt;prmColor;prmCom;prmComText;prmDemention;prmDescr;prmId;prmImpQdwnTm;prmImpQupTm;prmManIn;prmOpenSt;prmOut;prmPrec;prmShifr;prmSp;prmStText;prmStop;prmVar;prmVarIn;prmWMax;prmWMin;',1426000648);
-INSERT INTO "prj_archBrowser" VALUES('/archBrowser/control','grph_panel','','/wlb_Main/wdg_grph_panel',1,'','','',-1,0,'',1555160350);
+INSERT INTO "prj_archBrowser" VALUES('/archBrowser/control','grph_panel','','/wlb_Main/wdg_grph_panel',1,'','','',-1,0,'',1556612062);
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/control','terminator','','/wlb_Main/wdg_terminator',1,'','','',-1,0,'','');
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser','so','','/wlb_Main/wdg_RootPgSo',0,'','','',-1,1,'pgOpen;',1554015998);
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/so/1/ggraph','5','','..',1,'','','',-1,0,'name;',1495717615);
@@ -23653,7 +23685,7 @@ INSERT INTO "prj_archBrowser" VALUES('/archBrowser/so/1/ggraph','3','','..',1,''
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/so/1/ggraph','4','','..',1,'','','',-1,0,'name;',1495717615);
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/control','cntrPasp','','/wlb_Main/wdg_cntrPaspExt',0,'','','',-1,0,'owner;perm;name;geomZ;pName;',1494598746);
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/control','cntrPaspOld','','/wlb_Main/wdg_cntrPasp',0,'','','',-1,0,'owner;perm;geomZ;pName;',1494596433);
-INSERT INTO "prj_archBrowser" VALUES('/archBrowser/control','doc_panel','','/wlb_Main/wdg_doc_panel',0,'','','',-1,0,'owner;perm;geomZ;',1555160350);
+INSERT INTO "prj_archBrowser" VALUES('/archBrowser/control','doc_panel','','/wlb_Main/wdg_doc_panel',0,'','','',-1,0,'owner;perm;geomZ;',1556612062);
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/so/1','doc','','root',0,'
 ','','',-1,5,'owner;perm;name;dscr;geomZ;',1495719828);
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/so/1/doc','messRep','','/wlb_doc/wdg_docMessRep',0,'','','',-1,0,'owner;geomYsc;archLs;messCat;',1495719828);
@@ -23669,11 +23701,11 @@ INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so','2','','root',1,'
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO','control','','root',1,'
 ','
 ','
-',-1,5,'name;',1555160350);
+',-1,5,'name;',1556612062);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','ElCadr','','/wlb_Main/wdg_ElCadr',1,'','','',-1,0,'pgGrp;digComs;digStts;max;min;prmAMax;prmAMin;prmAnalog;prmAuto;prmCasc;prmClose;prmCloseSt;prmColor;prmCom;prmComText;prmDemention;prmDescr;prmId;prmImpQdwnTm;prmImpQupTm;prmManIn;prmOpenSt;prmOut;prmPrec;prmShifr;prmSp;prmStText;prmStop;prmVar;prmVarIn;prmWMax;prmWMin;',1426000648);
-INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','doc_panel','','/wlb_Main/wdg_doc_panel',1,'','','',-1,0,'',1555160350);
+INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','doc_panel','','/wlb_Main/wdg_doc_panel',1,'','','',-1,0,'',1556612062);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','cntrRegul','','/wlb_Main/wdg_cntrRegul',1,'','','',-1,0,'DESCR;Hdwn;Hup;K1;K2;K3;K4;Kp;NAME;SHIFR;Td;Ti;Zi;ed;max;min;out;out_addr;sp;sp_addr;var;var_addr;KImpRfact;Kd;Ki;TImpMin;TImpPer;Tzd;auto_addr;impQdwn_addr;impQup_addr;prec;','');
-INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','grph_panel','','/wlb_Main/wdg_grph_panel',0,'','','',-1,0,'',1555160350);
+INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','grph_panel','','/wlb_Main/wdg_grph_panel',0,'','','',-1,0,'',1556612062);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','terminator','','/wlb_Main/wdg_terminator',1,'','','',-1,0,'','');
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','accept','','/wlb_Main/wdg_accept',1,'','','',-1,0,'','');
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','graphSelPrm','','/wlb_Main/wdg_graphSelPrm',1,'','','',-1,0,'',1546876596);

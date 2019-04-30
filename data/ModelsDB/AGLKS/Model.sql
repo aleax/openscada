@@ -48,10 +48,10 @@ INSERT INTO "gen_blcks_io" VALUES('BC21','Po',0,'','23.9360385267862');
 INSERT INTO "gen_blcks_io" VALUES('BC21','To',0,'','305.049382589841');
 INSERT INTO "gen_blcks_io" VALUES('BC21','So',0,'','0.071');
 INSERT INTO "gen_blcks_io" VALUES('BC21','lo',0,'','7');
-INSERT INTO "gen_blcks_io" VALUES('BC21','S_kl1',0,'','0.071');
-INSERT INTO "gen_blcks_io" VALUES('BC21','S_kl2',0,'','0.002');
-INSERT INTO "gen_blcks_io" VALUES('BC21','l_kl1',1,'G_BC21.pos','100');
-INSERT INTO "gen_blcks_io" VALUES('BC21','l_kl2',1,'G_BC22.pos','0');
+INSERT INTO "gen_blcks_io" VALUES('BC21','S_v1',0,'','0.071');
+INSERT INTO "gen_blcks_io" VALUES('BC21','S_v2',0,'','0.002');
+INSERT INTO "gen_blcks_io" VALUES('BC21','l_v1',1,'G_BC21.pos','100');
+INSERT INTO "gen_blcks_io" VALUES('BC21','l_v2',1,'G_BC22.pos','0');
 INSERT INTO "gen_blcks_io" VALUES('BC21','Q0',0,'','1');
 INSERT INTO "gen_blcks_io" VALUES('BC21','Kln',0,'','1');
 INSERT INTO "gen_blcks_io" VALUES('BC21','Kpr',0,'','0.95');
@@ -119,10 +119,10 @@ INSERT INTO "gen_blcks_io" VALUES('PCV1','Po',0,'','5.80065325135806');
 INSERT INTO "gen_blcks_io" VALUES('PCV1','To',0,'','290.373859678644');
 INSERT INTO "gen_blcks_io" VALUES('PCV1','So',0,'','0.385');
 INSERT INTO "gen_blcks_io" VALUES('PCV1','lo',0,'','10');
-INSERT INTO "gen_blcks_io" VALUES('PCV1','S_kl1',0,'','0.2');
-INSERT INTO "gen_blcks_io" VALUES('PCV1','S_kl2',0,'','0.05');
-INSERT INTO "gen_blcks_io" VALUES('PCV1','l_kl1',2,'gen_cntr.PC_PCV1.out','39.302204328147');
-INSERT INTO "gen_blcks_io" VALUES('PCV1','l_kl2',0,'','0');
+INSERT INTO "gen_blcks_io" VALUES('PCV1','S_v1',0,'','0.2');
+INSERT INTO "gen_blcks_io" VALUES('PCV1','S_v2',0,'','0.05');
+INSERT INTO "gen_blcks_io" VALUES('PCV1','l_v1',2,'gen_cntr.PC_PCV1.out','39.302204328147');
+INSERT INTO "gen_blcks_io" VALUES('PCV1','l_v2',0,'','0');
 INSERT INTO "gen_blcks_io" VALUES('PCV1','Q0',0,'','1');
 INSERT INTO "gen_blcks_io" VALUES('PCV1','Kln',0,'','2');
 INSERT INTO "gen_blcks_io" VALUES('PCV1','Kpr',0,'','0.95');
@@ -154,10 +154,10 @@ INSERT INTO "gen_blcks_io" VALUES('PCV2','Po',0,'','22.9207210217478');
 INSERT INTO "gen_blcks_io" VALUES('PCV2','To',0,'','272.74607447027');
 INSERT INTO "gen_blcks_io" VALUES('PCV2','So',0,'','0.071');
 INSERT INTO "gen_blcks_io" VALUES('PCV2','lo',0,'','10');
-INSERT INTO "gen_blcks_io" VALUES('PCV2','S_kl1',0,'','0.05');
-INSERT INTO "gen_blcks_io" VALUES('PCV2','S_kl2',0,'','0');
-INSERT INTO "gen_blcks_io" VALUES('PCV2','l_kl1',1,'G_PCV2.out','53.6012444516293');
-INSERT INTO "gen_blcks_io" VALUES('PCV2','l_kl2',0,'','0');
+INSERT INTO "gen_blcks_io" VALUES('PCV2','S_v1',0,'','0.05');
+INSERT INTO "gen_blcks_io" VALUES('PCV2','S_v2',0,'','0');
+INSERT INTO "gen_blcks_io" VALUES('PCV2','l_v1',1,'G_PCV2.out','53.6012444516293');
+INSERT INTO "gen_blcks_io" VALUES('PCV2','l_v2',0,'','0');
 INSERT INTO "gen_blcks_io" VALUES('PCV2','Q0',0,'','1');
 INSERT INTO "gen_blcks_io" VALUES('PCV2','Kln',0,'','2');
 INSERT INTO "gen_blcks_io" VALUES('PCV2','Kpr',0,'','0.95');
@@ -177,10 +177,10 @@ INSERT INTO "gen_blcks_io" VALUES('PCV4','Po',0,'','90.2695970422966');
 INSERT INTO "gen_blcks_io" VALUES('PCV4','To',0,'','302.261250315868');
 INSERT INTO "gen_blcks_io" VALUES('PCV4','So',0,'','0.017');
 INSERT INTO "gen_blcks_io" VALUES('PCV4','lo',0,'','10');
-INSERT INTO "gen_blcks_io" VALUES('PCV4','S_kl1',0,'','0.014');
-INSERT INTO "gen_blcks_io" VALUES('PCV4','S_kl2',0,'','0.014');
-INSERT INTO "gen_blcks_io" VALUES('PCV4','l_kl1',0,'','48.1299650661653');
-INSERT INTO "gen_blcks_io" VALUES('PCV4','l_kl2',0,'','0');
+INSERT INTO "gen_blcks_io" VALUES('PCV4','S_v1',0,'','0.014');
+INSERT INTO "gen_blcks_io" VALUES('PCV4','S_v2',0,'','0.014');
+INSERT INTO "gen_blcks_io" VALUES('PCV4','l_v1',0,'','48.1299650661653');
+INSERT INTO "gen_blcks_io" VALUES('PCV4','l_v2',0,'','0');
 INSERT INTO "gen_blcks_io" VALUES('PCV4','Q0',0,'','1');
 INSERT INTO "gen_blcks_io" VALUES('PCV4','Kln',0,'','1');
 INSERT INTO "gen_blcks_io" VALUES('PCV4','Kpr',0,'','0.95');
@@ -265,10 +265,10 @@ INSERT INTO "gen_blcks_io" VALUES('BC1','Po',0,'','9.02681275422002');
 INSERT INTO "gen_blcks_io" VALUES('BC1','To',0,'','292.967043155462');
 INSERT INTO "gen_blcks_io" VALUES('BC1','So',0,'','0.385');
 INSERT INTO "gen_blcks_io" VALUES('BC1','lo',0,'','5');
-INSERT INTO "gen_blcks_io" VALUES('BC1','S_kl1',0,'','0.385');
-INSERT INTO "gen_blcks_io" VALUES('BC1','S_kl2',0,'','0.02');
-INSERT INTO "gen_blcks_io" VALUES('BC1','l_kl1',1,'G_BC1.pos','100');
-INSERT INTO "gen_blcks_io" VALUES('BC1','l_kl2',1,'G_BC2.pos','0');
+INSERT INTO "gen_blcks_io" VALUES('BC1','S_v1',0,'','0.385');
+INSERT INTO "gen_blcks_io" VALUES('BC1','S_v2',0,'','0.02');
+INSERT INTO "gen_blcks_io" VALUES('BC1','l_v1',1,'G_BC1.pos','100');
+INSERT INTO "gen_blcks_io" VALUES('BC1','l_v2',1,'G_BC2.pos','0');
 INSERT INTO "gen_blcks_io" VALUES('BC1','Q0',0,'','1');
 INSERT INTO "gen_blcks_io" VALUES('BC1','Kln',0,'','1');
 INSERT INTO "gen_blcks_io" VALUES('BC1','Kpr',0,'','0.95');
@@ -297,10 +297,10 @@ INSERT INTO "gen_blcks_io" VALUES('BC5','Po',0,'','0.999999999997951');
 INSERT INTO "gen_blcks_io" VALUES('BC5','To',0,'','272.999999994003');
 INSERT INTO "gen_blcks_io" VALUES('BC5','So',0,'','0.2');
 INSERT INTO "gen_blcks_io" VALUES('BC5','lo',0,'','10');
-INSERT INTO "gen_blcks_io" VALUES('BC5','S_kl1',0,'','0.002');
-INSERT INTO "gen_blcks_io" VALUES('BC5','S_kl2',0,'','0.001');
-INSERT INTO "gen_blcks_io" VALUES('BC5','l_kl1',1,'G_BC5.pos','0');
-INSERT INTO "gen_blcks_io" VALUES('BC5','l_kl2',0,'','0');
+INSERT INTO "gen_blcks_io" VALUES('BC5','S_v1',0,'','0.002');
+INSERT INTO "gen_blcks_io" VALUES('BC5','S_v2',0,'','0.001');
+INSERT INTO "gen_blcks_io" VALUES('BC5','l_v1',1,'G_BC5.pos','0');
+INSERT INTO "gen_blcks_io" VALUES('BC5','l_v2',0,'','0');
 INSERT INTO "gen_blcks_io" VALUES('BC5','Q0',0,'','1');
 INSERT INTO "gen_blcks_io" VALUES('BC5','Kln',0,'','1');
 INSERT INTO "gen_blcks_io" VALUES('BC5','Kpr',0,'','0.95');
@@ -320,10 +320,10 @@ INSERT INTO "gen_blcks_io" VALUES('BC6','Po',0,'','24.061576778519');
 INSERT INTO "gen_blcks_io" VALUES('BC6','To',0,'','305.125415787498');
 INSERT INTO "gen_blcks_io" VALUES('BC6','So',0,'','0.071');
 INSERT INTO "gen_blcks_io" VALUES('BC6','lo',0,'','5');
-INSERT INTO "gen_blcks_io" VALUES('BC6','S_kl1',0,'','0.07');
-INSERT INTO "gen_blcks_io" VALUES('BC6','S_kl2',0,'','0.002');
-INSERT INTO "gen_blcks_io" VALUES('BC6','l_kl1',1,'G_BC6.pos','100');
-INSERT INTO "gen_blcks_io" VALUES('BC6','l_kl2',1,'G_BC7.pos','0');
+INSERT INTO "gen_blcks_io" VALUES('BC6','S_v1',0,'','0.07');
+INSERT INTO "gen_blcks_io" VALUES('BC6','S_v2',0,'','0.002');
+INSERT INTO "gen_blcks_io" VALUES('BC6','l_v1',1,'G_BC6.pos','100');
+INSERT INTO "gen_blcks_io" VALUES('BC6','l_v2',1,'G_BC7.pos','0');
 INSERT INTO "gen_blcks_io" VALUES('BC6','Q0',0,'','1');
 INSERT INTO "gen_blcks_io" VALUES('BC6','Kln',0,'','1');
 INSERT INTO "gen_blcks_io" VALUES('BC6','Kpr',0,'','0.95');
@@ -448,13 +448,13 @@ INSERT INTO "gen_blcks_io" VALUES('C1','Fo',1,'PP1.Fi','101.639617309051');
 INSERT INTO "gen_blcks_io" VALUES('C1','Po',0,'','5.76808590306495');
 INSERT INTO "gen_blcks_io" VALUES('C1','So',0,'','0.283');
 INSERT INTO "gen_blcks_io" VALUES('C1','lo',0,'','5');
-INSERT INTO "gen_blcks_io" VALUES('C1','Fo_ж',0,'','0');
-INSERT INTO "gen_blcks_io" VALUES('C1','Po_ж',0,'','5.8671541772125');
-INSERT INTO "gen_blcks_io" VALUES('C1','Lж',0,'','1.23835342684432');
-INSERT INTO "gen_blcks_io" VALUES('C1','ProcЖ',0,'','0.01');
+INSERT INTO "gen_blcks_io" VALUES('C1','Fo_lq',0,'','0');
+INSERT INTO "gen_blcks_io" VALUES('C1','Po_lq',0,'','5.8671541772125');
+INSERT INTO "gen_blcks_io" VALUES('C1','Llq',0,'','1.23835342684432');
+INSERT INTO "gen_blcks_io" VALUES('C1','PercLq',0,'','0.01');
 INSERT INTO "gen_blcks_io" VALUES('C1','Vap',0,'','80');
 INSERT INTO "gen_blcks_io" VALUES('C1','Q0',0,'','1');
-INSERT INTO "gen_blcks_io" VALUES('C1','Qж',0,'','1000');
+INSERT INTO "gen_blcks_io" VALUES('C1','Qlq',0,'','1000');
 INSERT INTO "gen_blcks_io" VALUES('C1','f_frq',0,'','100');
 INSERT INTO "gen_blcks_io" VALUES('C1','Pot',0,'','5.74237264252839');
 INSERT INTO "gen_blcks_io" VALUES('C1','Fit',0,'','73.6939262990129');
@@ -465,13 +465,13 @@ INSERT INTO "gen_blcks_io" VALUES('C2','Fo',1,'PP5.Fi','53.0087614391216');
 INSERT INTO "gen_blcks_io" VALUES('C2','Po',0,'','23.8730247718798');
 INSERT INTO "gen_blcks_io" VALUES('C2','So',0,'','0.071');
 INSERT INTO "gen_blcks_io" VALUES('C2','lo',0,'','5');
-INSERT INTO "gen_blcks_io" VALUES('C2','Fo_ж',0,'','0');
-INSERT INTO "gen_blcks_io" VALUES('C2','Po_ж',0,'','23.9322897749853');
-INSERT INTO "gen_blcks_io" VALUES('C2','Lж',0,'','1.69328580301329');
-INSERT INTO "gen_blcks_io" VALUES('C2','ProcЖ',0,'','0.01');
+INSERT INTO "gen_blcks_io" VALUES('C2','Fo_lq',0,'','0');
+INSERT INTO "gen_blcks_io" VALUES('C2','Po_lq',0,'','23.9322897749853');
+INSERT INTO "gen_blcks_io" VALUES('C2','Llq',0,'','1.69328580301329');
+INSERT INTO "gen_blcks_io" VALUES('C2','PercLq',0,'','0.01');
 INSERT INTO "gen_blcks_io" VALUES('C2','Vap',0,'','35');
 INSERT INTO "gen_blcks_io" VALUES('C2','Q0',0,'','1');
-INSERT INTO "gen_blcks_io" VALUES('C2','Qж',0,'','1000');
+INSERT INTO "gen_blcks_io" VALUES('C2','Qlq',0,'','1000');
 INSERT INTO "gen_blcks_io" VALUES('C2','f_frq',0,'','100');
 INSERT INTO "gen_blcks_io" VALUES('C2','Pot',0,'','23.7347401295504');
 INSERT INTO "gen_blcks_io" VALUES('C2','Fit',0,'','38.4665359341126');
@@ -502,39 +502,39 @@ INSERT INTO "gen_blcks_io" VALUES('G_BC5','t_up',0,'','0.5');
 INSERT INTO "gen_blcks_io" VALUES('G_BC5','f_frq',0,'','100');
 INSERT INTO "gen_blcks_io" VALUES('G_BC5','tmp_up',0,'','0');
 INSERT INTO "gen_blcks_io" VALUES('G_BC5','lst_com',0,'','0');
-INSERT INTO "gen_blcks_io" VALUES('PCV1','t_kl1',0,'','5');
-INSERT INTO "gen_blcks_io" VALUES('PCV1','t_kl2',0,'','5');
+INSERT INTO "gen_blcks_io" VALUES('PCV1','t_v1',0,'','5');
+INSERT INTO "gen_blcks_io" VALUES('PCV1','t_v2',0,'','5');
 INSERT INTO "gen_blcks_io" VALUES('PCV1','tmp_l1',0,'','39.3087096097981');
 INSERT INTO "gen_blcks_io" VALUES('PCV1','tmp_l2',0,'','0');
 INSERT INTO "gen_blcks_io" VALUES('node1_1','Kpr',0,'','0.95');
-INSERT INTO "gen_blcks_io" VALUES('BC21','t_kl1',0,'','10');
-INSERT INTO "gen_blcks_io" VALUES('BC21','t_kl2',0,'','5');
+INSERT INTO "gen_blcks_io" VALUES('BC21','t_v1',0,'','10');
+INSERT INTO "gen_blcks_io" VALUES('BC21','t_v2',0,'','5');
 INSERT INTO "gen_blcks_io" VALUES('BC21','tmp_l1',0,'','99.9999999999929');
 INSERT INTO "gen_blcks_io" VALUES('BC21','tmp_l2',0,'','0');
 INSERT INTO "gen_blcks_io" VALUES('SrcGas','Kpr',0,'','0.95');
-INSERT INTO "gen_blcks_io" VALUES('PCV2','t_kl1',0,'','3');
-INSERT INTO "gen_blcks_io" VALUES('PCV2','t_kl2',0,'','5');
+INSERT INTO "gen_blcks_io" VALUES('PCV2','t_v1',0,'','3');
+INSERT INTO "gen_blcks_io" VALUES('PCV2','t_v2',0,'','5');
 INSERT INTO "gen_blcks_io" VALUES('PCV2','tmp_l1',0,'','53.5979377087787');
 INSERT INTO "gen_blcks_io" VALUES('PCV2','tmp_l2',0,'','0');
 INSERT INTO "gen_blcks_io" VALUES('pipeGlinsk','Kpr',0,'','0.95');
-INSERT INTO "gen_blcks_io" VALUES('PCV4','t_kl1',0,'','10');
-INSERT INTO "gen_blcks_io" VALUES('PCV4','t_kl2',0,'','5');
+INSERT INTO "gen_blcks_io" VALUES('PCV4','t_v1',0,'','10');
+INSERT INTO "gen_blcks_io" VALUES('PCV4','t_v2',0,'','5');
 INSERT INTO "gen_blcks_io" VALUES('PCV4','tmp_l1',0,'','48.1306331796677');
 INSERT INTO "gen_blcks_io" VALUES('PCV4','tmp_l2',0,'','0');
 INSERT INTO "gen_blcks_io" VALUES('PP1','Kpr',0,'','0.95');
 INSERT INTO "gen_blcks_io" VALUES('PP3','Kpr',0,'','0.95');
 INSERT INTO "gen_blcks_io" VALUES('PP5','Kpr',0,'','0.95');
 INSERT INTO "gen_blcks_io" VALUES('PP7','Kpr',0,'','0.95');
-INSERT INTO "gen_blcks_io" VALUES('BC1','t_kl1',0,'','10');
-INSERT INTO "gen_blcks_io" VALUES('BC1','t_kl2',0,'','5');
+INSERT INTO "gen_blcks_io" VALUES('BC1','t_v1',0,'','10');
+INSERT INTO "gen_blcks_io" VALUES('BC1','t_v2',0,'','5');
 INSERT INTO "gen_blcks_io" VALUES('BC1','tmp_l1',0,'','99.9999999999929');
 INSERT INTO "gen_blcks_io" VALUES('BC1','tmp_l2',0,'','1.23516411460312e-321');
-INSERT INTO "gen_blcks_io" VALUES('BC5','t_kl1',0,'','10');
-INSERT INTO "gen_blcks_io" VALUES('BC5','t_kl2',0,'','5');
+INSERT INTO "gen_blcks_io" VALUES('BC5','t_v1',0,'','10');
+INSERT INTO "gen_blcks_io" VALUES('BC5','t_v2',0,'','5');
 INSERT INTO "gen_blcks_io" VALUES('BC5','tmp_l1',0,'','0');
 INSERT INTO "gen_blcks_io" VALUES('BC5','tmp_l2',0,'','0');
-INSERT INTO "gen_blcks_io" VALUES('BC6','t_kl1',0,'','10');
-INSERT INTO "gen_blcks_io" VALUES('BC6','t_kl2',0,'','5');
+INSERT INTO "gen_blcks_io" VALUES('BC6','t_v1',0,'','10');
+INSERT INTO "gen_blcks_io" VALUES('BC6','t_v2',0,'','5');
 INSERT INTO "gen_blcks_io" VALUES('BC6','tmp_l1',0,'','99.9999999999929');
 INSERT INTO "gen_blcks_io" VALUES('BC6','tmp_l2',0,'','0');
 INSERT INTO "gen_blcks_io" VALUES('node1','Kpr',0,'','0.95');
@@ -599,7 +599,7 @@ INSERT INTO "gen_cntr_blocks_io" VALUES('PC_PCV3','var',2,'gen.PCV4.Pi','91.9531
 INSERT INTO "gen_cntr_blocks_io" VALUES('PC_PCV3','sp',0,'','91.9539072904281');
 INSERT INTO "gen_cntr_blocks_io" VALUES('PC_PCV3','max',0,'','120');
 INSERT INTO "gen_cntr_blocks_io" VALUES('PC_PCV3','min',0,'','0');
-INSERT INTO "gen_cntr_blocks_io" VALUES('PC_PCV3','out',6,'gen.PCV4.l_kl1','48.1299650661653');
+INSERT INTO "gen_cntr_blocks_io" VALUES('PC_PCV3','out',6,'gen.PCV4.l_v1','48.1299650661653');
 INSERT INTO "gen_cntr_blocks_io" VALUES('PC_PCV3','auto',0,'','1');
 INSERT INTO "gen_cntr_blocks_io" VALUES('PC_PCV3','casc',0,'','0');
 INSERT INTO "gen_cntr_blocks_io" VALUES('PC_PCV3','Kp',0,'','-3');
@@ -636,7 +636,7 @@ INSERT INTO "gen_cntr_blocks_io" VALUES('PC_PCV1','followSp',0,'','1');
 INSERT INTO "gen_cntr_blocks_io" VALUES('PC_PCV3','Kd',0,'','1');
 INSERT INTO "gen_cntr_blocks_io" VALUES('PC_PCV3','Tzd',0,'','0');
 INSERT INTO "gen_cntr_blocks_io" VALUES('PC_PCV3','followSp',0,'','1');
-INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM101','var',2,'CM101.CM101_2.Kzp','0.884521502705757');
+INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM101','var',2,'CM101.CM101_2.Kmrg','0.884521502705757');
 INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM101','sp',0,'','0.9');
 INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM101','max',0,'','2');
 INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM101','min',0,'','0');
@@ -665,7 +665,7 @@ INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM101','f_frq',0,'','5');
 INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM101','int',0,'','0.773924864712129');
 INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM101','dif',0,'','44.2260751352879');
 INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM101','lag',0,'','0');
-INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM201','var',2,'CM201.CM101_2.Kzp','0.886553812492069');
+INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM201','var',2,'CM201.CM101_2.Kmrg','0.886553812492069');
 INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM201','sp',0,'','0.9');
 INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM201','max',0,'','2');
 INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM201','min',0,'','0');
@@ -694,7 +694,7 @@ INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM201','f_frq',0,'','5');
 INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM201','int',0,'','0.672309375396544');
 INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM201','dif',0,'','44.3276906246035');
 INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM201','lag',0,'','0');
-INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM301','var',2,'CM301.CM101_2.Kzp','0');
+INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM301','var',2,'CM301.CM101_2.Kmrg','0');
 INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM301','sp',0,'','0.9');
 INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM301','max',0,'','2');
 INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM301','min',0,'','0');
@@ -723,7 +723,7 @@ INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM301','f_frq',0,'','5');
 INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM301','int',0,'','45');
 INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM301','dif',0,'','0');
 INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM301','lag',0,'','0');
-INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM102','var',2,'CM102.CM102_2.Kzp','0.499172347825233');
+INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM102','var',2,'CM102.CM102_2.Kmrg','0.499172347825233');
 INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM102','sp',0,'','0.9');
 INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM102','max',0,'','2');
 INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM102','min',0,'','0');
@@ -752,7 +752,7 @@ INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM102','f_frq',0,'','5');
 INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM102','int',0,'','20.0413826087383');
 INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM102','dif',0,'','24.9586173912617');
 INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM102','lag',0,'','0');
-INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM202','var',2,'CM202.CM102_2.Kzp','0');
+INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM202','var',2,'CM202.CM102_2.Kmrg','0');
 INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM202','sp',0,'','0.9');
 INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM202','max',0,'','2');
 INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM202','min',0,'','0');
@@ -781,7 +781,7 @@ INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM202','f_frq',0,'','5');
 INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM202','int',0,'','45');
 INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM202','dif',0,'','0');
 INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM202','lag',0,'','0');
-INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM302','var',2,'CM302.CM102_2.Kzp','0');
+INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM302','var',2,'CM302.CM102_2.Kmrg','0');
 INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM302','sp',0,'','0.9');
 INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM302','max',0,'','2');
 INSERT INTO "gen_cntr_blocks_io" VALUES('SurgeCM302','min',0,'','0');
@@ -1291,7 +1291,7 @@ G_BC22.st_open:st_open
 G_BC22.st_close:st_close','КК22','Блок керування кульовим краном КК22','КШ22','Блок управления шарового крана КШ22','','');
 INSERT INTO "gen_prm" VALUES('PT0804','PT0804','Gas pressure in the pipe to Glinsk',1,'pipeGlinsk.Pi:var:Variable','','Тиск газу у трубі на Глінск','','Давление в трубе на Глинск','pipeGlinsk.Pi:var:Переменная','pipeGlinsk.Pi:var:Змінна');
 INSERT INTO "gen_prm" VALUES('F7_8','F7_8','Gas flow through the diaphragm PP7',1,'PP7.Fi:var:Variable','','Витрати газу через діафрагму PP7','','Расход газа через диафрагму PP7','PP7.Fi:var:Переменная','PP7.Fi:var:Змінна');
-INSERT INTO "gen_prm" VALUES('L1','L1','Liquid level in the separator C2',1,'C2.Lж:var:Variable','L1','Рівень рідини у сепараторі C2','L1','Уровень жидкости в сепараторе C2','C2.Lж:var:Переменная','C2.Lж:var:Змінна');
+INSERT INTO "gen_prm" VALUES('L1','L1','Liquid level in the separator C2',1,'C2.Llq:var:Variable','L1','Рівень рідини у сепараторі C2','L1','Уровень жидкости в сепараторе C2','C2.Llq:var:Переменная','C2.Llq:var:Змінна');
 INSERT INTO "gen_prm" VALUES('T_PP1','T_PP1','Gas temperature at the diaphragm PP1',1,'PCV1.To:var:Variable','','Температура газу на діафрагмі PP1','','Температура газа на диафрагме PP1','PCV1.To:var:Переменная','PCV1.To:var:Змінна');
 INSERT INTO "gen_prm" VALUES('T_PP3','T_PP3','Gas temperature at the diaphragm PP3',1,'node19.To:var:Variable','','Температура газу на діафрагмі PP3','','Температура газа на диафрагме PP3','node19.To:var:Переменная','node19.To:var:Змінна');
 INSERT INTO "gen_prm" VALUES('T_PP5','T_PP5','Gas temperature at the diaphragm PP5',1,'BC21.To:var:Variable','','Температура газу на діафрагмі PP5','','Температура газа на диафрагме PP5','BC21.To:var:Переменная','BC21.To:var:Змінна');
@@ -1336,7 +1336,7 @@ INSERT INTO "CM101_blocks_io" VALUES('CM101_1','Po',0,'','10.2758263247369');
 INSERT INTO "CM101_blocks_io" VALUES('CM101_1','To',0,'','331.141751228544');
 INSERT INTO "CM101_blocks_io" VALUES('CM101_1','So',0,'','0.071');
 INSERT INTO "CM101_blocks_io" VALUES('CM101_1','lo',0,'','55');
-INSERT INTO "CM101_blocks_io" VALUES('CM101_1','Kzp',0,'','0.683671258405473');
+INSERT INTO "CM101_blocks_io" VALUES('CM101_1','Kmrg',0,'','0.683671258405473');
 INSERT INTO "CM101_blocks_io" VALUES('CM101_1','N',0,'','8.2');
 INSERT INTO "CM101_blocks_io" VALUES('CM101_1','V',0,'','1.5');
 INSERT INTO "CM101_blocks_io" VALUES('CM101_1','Kpmp',0,'','0.025');
@@ -1357,7 +1357,7 @@ INSERT INTO "CM101_blocks_io" VALUES('CM101_2','Po',0,'','25.9164808674262');
 INSERT INTO "CM101_blocks_io" VALUES('CM101_2','To',0,'','398.638141414934');
 INSERT INTO "CM101_blocks_io" VALUES('CM101_2','So',0,'','0.0314');
 INSERT INTO "CM101_blocks_io" VALUES('CM101_2','lo',0,'','55');
-INSERT INTO "CM101_blocks_io" VALUES('CM101_2','Kzp',0,'','0.88452154508133');
+INSERT INTO "CM101_blocks_io" VALUES('CM101_2','Kmrg',0,'','0.88452154508133');
 INSERT INTO "CM101_blocks_io" VALUES('CM101_2','N',1,'CM101_1.N','8.2');
 INSERT INTO "CM101_blocks_io" VALUES('CM101_2','V',0,'','1');
 INSERT INTO "CM101_blocks_io" VALUES('CM101_2','Kpmp',0,'','0.035');
@@ -1378,10 +1378,10 @@ INSERT INTO "CM101_blocks_io" VALUES('KPP101','Po',0,'','5.48467107999885');
 INSERT INTO "CM101_blocks_io" VALUES('KPP101','To',0,'','273.326568051629');
 INSERT INTO "CM101_blocks_io" VALUES('KPP101','So',0,'','0.071');
 INSERT INTO "CM101_blocks_io" VALUES('KPP101','lo',0,'','10');
-INSERT INTO "CM101_blocks_io" VALUES('KPP101','S_kl1',0,'','0.04');
-INSERT INTO "CM101_blocks_io" VALUES('KPP101','S_kl2',0,'','0.001');
-INSERT INTO "CM101_blocks_io" VALUES('KPP101','l_kl1',2,'gen_cntr.SurgeCM101.out','0');
-INSERT INTO "CM101_blocks_io" VALUES('KPP101','l_kl2',0,'','0');
+INSERT INTO "CM101_blocks_io" VALUES('KPP101','S_v1',0,'','0.04');
+INSERT INTO "CM101_blocks_io" VALUES('KPP101','S_v2',0,'','0.001');
+INSERT INTO "CM101_blocks_io" VALUES('KPP101','l_v1',2,'gen_cntr.SurgeCM101.out','0');
+INSERT INTO "CM101_blocks_io" VALUES('KPP101','l_v2',0,'','0');
 INSERT INTO "CM101_blocks_io" VALUES('KPP101','Q0',0,'','1');
 INSERT INTO "CM101_blocks_io" VALUES('KPP101','Kln',0,'','2');
 INSERT INTO "CM101_blocks_io" VALUES('KPP101','Kpr',0,'','0.95');
@@ -1401,10 +1401,10 @@ INSERT INTO "CM101_blocks_io" VALUES('DR100','Po',0,'','5.48467146393197');
 INSERT INTO "CM101_blocks_io" VALUES('DR100','To',0,'','272.999999974204');
 INSERT INTO "CM101_blocks_io" VALUES('DR100','So',0,'','0.2');
 INSERT INTO "CM101_blocks_io" VALUES('DR100','lo',0,'','10');
-INSERT INTO "CM101_blocks_io" VALUES('DR100','S_kl1',0,'','0.05');
-INSERT INTO "CM101_blocks_io" VALUES('DR100','S_kl2',0,'','0.01');
-INSERT INTO "CM101_blocks_io" VALUES('DR100','l_kl1',0,'','50');
-INSERT INTO "CM101_blocks_io" VALUES('DR100','l_kl2',0,'','0');
+INSERT INTO "CM101_blocks_io" VALUES('DR100','S_v1',0,'','0.05');
+INSERT INTO "CM101_blocks_io" VALUES('DR100','S_v2',0,'','0.01');
+INSERT INTO "CM101_blocks_io" VALUES('DR100','l_v1',0,'','50');
+INSERT INTO "CM101_blocks_io" VALUES('DR100','l_v2',0,'','0');
 INSERT INTO "CM101_blocks_io" VALUES('DR100','Q0',0,'','1');
 INSERT INTO "CM101_blocks_io" VALUES('DR100','Kln',0,'','1');
 INSERT INTO "CM101_blocks_io" VALUES('DR100','Kpr',0,'','0.95');
@@ -1486,10 +1486,10 @@ INSERT INTO "CM101_blocks_io" VALUES('BC101','Po',0,'','5.51818246161582');
 INSERT INTO "CM101_blocks_io" VALUES('BC101','To',0,'','290.308850447735');
 INSERT INTO "CM101_blocks_io" VALUES('BC101','So',0,'','0.2');
 INSERT INTO "CM101_blocks_io" VALUES('BC101','lo',0,'','5');
-INSERT INTO "CM101_blocks_io" VALUES('BC101','S_kl1',0,'','0.2');
-INSERT INTO "CM101_blocks_io" VALUES('BC101','S_kl2',0,'','0.05');
-INSERT INTO "CM101_blocks_io" VALUES('BC101','l_kl1',1,'G_BC101.pos','100');
-INSERT INTO "CM101_blocks_io" VALUES('BC101','l_kl2',1,'G_BC102.pos','0');
+INSERT INTO "CM101_blocks_io" VALUES('BC101','S_v1',0,'','0.2');
+INSERT INTO "CM101_blocks_io" VALUES('BC101','S_v2',0,'','0.05');
+INSERT INTO "CM101_blocks_io" VALUES('BC101','l_v1',1,'G_BC101.pos','100');
+INSERT INTO "CM101_blocks_io" VALUES('BC101','l_v2',1,'G_BC102.pos','0');
 INSERT INTO "CM101_blocks_io" VALUES('BC101','Q0',0,'','1');
 INSERT INTO "CM101_blocks_io" VALUES('BC101','Kln',0,'','1');
 INSERT INTO "CM101_blocks_io" VALUES('BC101','Kpr',0,'','0.95');
@@ -1509,10 +1509,10 @@ INSERT INTO "CM101_blocks_io" VALUES('BC104','Po',0,'','24.8400932626254');
 INSERT INTO "CM101_blocks_io" VALUES('BC104','To',0,'','305.973243407765');
 INSERT INTO "CM101_blocks_io" VALUES('BC104','So',0,'','0.03');
 INSERT INTO "CM101_blocks_io" VALUES('BC104','lo',0,'','100');
-INSERT INTO "CM101_blocks_io" VALUES('BC104','S_kl1',0,'','0.03');
-INSERT INTO "CM101_blocks_io" VALUES('BC104','S_kl2',0,'','0.01');
-INSERT INTO "CM101_blocks_io" VALUES('BC104','l_kl1',1,'G_BC104.pos','100');
-INSERT INTO "CM101_blocks_io" VALUES('BC104','l_kl2',1,'G_BC105.pos','0');
+INSERT INTO "CM101_blocks_io" VALUES('BC104','S_v1',0,'','0.03');
+INSERT INTO "CM101_blocks_io" VALUES('BC104','S_v2',0,'','0.01');
+INSERT INTO "CM101_blocks_io" VALUES('BC104','l_v1',1,'G_BC104.pos','100');
+INSERT INTO "CM101_blocks_io" VALUES('BC104','l_v2',1,'G_BC105.pos','0');
 INSERT INTO "CM101_blocks_io" VALUES('BC104','Q0',0,'','1');
 INSERT INTO "CM101_blocks_io" VALUES('BC104','Kln',0,'','1');
 INSERT INTO "CM101_blocks_io" VALUES('BC104','Kpr',0,'','0.95');
@@ -1554,10 +1554,10 @@ INSERT INTO "CM101_blocks_io" VALUES('BC106','Po',0,'','5.48467355179591');
 INSERT INTO "CM101_blocks_io" VALUES('BC106','To',0,'','273');
 INSERT INTO "CM101_blocks_io" VALUES('BC106','So',0,'','0.0314');
 INSERT INTO "CM101_blocks_io" VALUES('BC106','lo',0,'','10');
-INSERT INTO "CM101_blocks_io" VALUES('BC106','S_kl1',0,'','0.0314');
-INSERT INTO "CM101_blocks_io" VALUES('BC106','S_kl2',0,'','0.01');
-INSERT INTO "CM101_blocks_io" VALUES('BC106','l_kl1',1,'G_BC106.pos','0');
-INSERT INTO "CM101_blocks_io" VALUES('BC106','l_kl2',0,'','0');
+INSERT INTO "CM101_blocks_io" VALUES('BC106','S_v1',0,'','0.0314');
+INSERT INTO "CM101_blocks_io" VALUES('BC106','S_v2',0,'','0.01');
+INSERT INTO "CM101_blocks_io" VALUES('BC106','l_v1',1,'G_BC106.pos','0');
+INSERT INTO "CM101_blocks_io" VALUES('BC106','l_v2',0,'','0');
 INSERT INTO "CM101_blocks_io" VALUES('BC106','Q0',0,'','1');
 INSERT INTO "CM101_blocks_io" VALUES('BC106','Kln',0,'','1');
 INSERT INTO "CM101_blocks_io" VALUES('BC106','Kpr',0,'','0.95');
@@ -1576,13 +1576,13 @@ INSERT INTO "CM101_blocks_io" VALUES('C101_1','Fo',1,'PP101.Fi','50.436322233439
 INSERT INTO "CM101_blocks_io" VALUES('C101_1','Po',0,'','5.45147186925162');
 INSERT INTO "CM101_blocks_io" VALUES('C101_1','So',0,'','0.2');
 INSERT INTO "CM101_blocks_io" VALUES('C101_1','lo',0,'','40');
-INSERT INTO "CM101_blocks_io" VALUES('C101_1','Fo_ж',0,'','0');
-INSERT INTO "CM101_blocks_io" VALUES('C101_1','Po_ж',0,'','5.5118335133369');
-INSERT INTO "CM101_blocks_io" VALUES('C101_1','Lж',0,'','6.35385727213562');
-INSERT INTO "CM101_blocks_io" VALUES('C101_1','ProcЖ',0,'','0.01');
+INSERT INTO "CM101_blocks_io" VALUES('C101_1','Fo_lq',0,'','0');
+INSERT INTO "CM101_blocks_io" VALUES('C101_1','Po_lq',0,'','5.5118335133369');
+INSERT INTO "CM101_blocks_io" VALUES('C101_1','Llq',0,'','6.35385727213562');
+INSERT INTO "CM101_blocks_io" VALUES('C101_1','PercLq',0,'','0.01');
 INSERT INTO "CM101_blocks_io" VALUES('C101_1','Vap',0,'','9.5');
 INSERT INTO "CM101_blocks_io" VALUES('C101_1','Q0',0,'','1');
-INSERT INTO "CM101_blocks_io" VALUES('C101_1','Qж',0,'','1000');
+INSERT INTO "CM101_blocks_io" VALUES('C101_1','Qlq',0,'','1000');
 INSERT INTO "CM101_blocks_io" VALUES('C101_1','f_frq',0,'','100');
 INSERT INTO "CM101_blocks_io" VALUES('C101_1','Pot',0,'','5.14948874023436');
 INSERT INTO "CM101_blocks_io" VALUES('C101_1','Fit',0,'','37.7880580203515');
@@ -1593,13 +1593,13 @@ INSERT INTO "CM101_blocks_io" VALUES('C101_2','Fo',1,'PP102.Fi','49.942369149157
 INSERT INTO "CM101_blocks_io" VALUES('C101_2','Po',0,'','10.0086568000144');
 INSERT INTO "CM101_blocks_io" VALUES('C101_2','So',0,'','0.071');
 INSERT INTO "CM101_blocks_io" VALUES('C101_2','lo',0,'','50');
-INSERT INTO "CM101_blocks_io" VALUES('C101_2','Fo_ж',0,'','0');
-INSERT INTO "CM101_blocks_io" VALUES('C101_2','Po_ж',0,'','10.0658436222925');
-INSERT INTO "CM101_blocks_io" VALUES('C101_2','Lж',0,'','6.01966550295802');
-INSERT INTO "CM101_blocks_io" VALUES('C101_2','ProcЖ',0,'','0.01');
+INSERT INTO "CM101_blocks_io" VALUES('C101_2','Fo_lq',0,'','0');
+INSERT INTO "CM101_blocks_io" VALUES('C101_2','Po_lq',0,'','10.0658436222925');
+INSERT INTO "CM101_blocks_io" VALUES('C101_2','Llq',0,'','6.01966550295802');
+INSERT INTO "CM101_blocks_io" VALUES('C101_2','PercLq',0,'','0.01');
 INSERT INTO "CM101_blocks_io" VALUES('C101_2','Vap',0,'','9.5');
 INSERT INTO "CM101_blocks_io" VALUES('C101_2','Q0',0,'','1');
-INSERT INTO "CM101_blocks_io" VALUES('C101_2','Qж',0,'','1000');
+INSERT INTO "CM101_blocks_io" VALUES('C101_2','Qlq',0,'','1000');
 INSERT INTO "CM101_blocks_io" VALUES('C101_2','f_frq',0,'','100');
 INSERT INTO "CM101_blocks_io" VALUES('C101_2','Pot',0,'','10.3103302826744');
 INSERT INTO "CM101_blocks_io" VALUES('C101_2','Fit',0,'','37.4280342569487');
@@ -1610,13 +1610,13 @@ INSERT INTO "CM101_blocks_io" VALUES('C101_3','Fo',1,'node4_1.Fi','49.4503135551
 INSERT INTO "CM101_blocks_io" VALUES('C101_3','Po',0,'','25.3958077910808');
 INSERT INTO "CM101_blocks_io" VALUES('C101_3','So',0,'','0.0314');
 INSERT INTO "CM101_blocks_io" VALUES('C101_3','lo',0,'','8');
-INSERT INTO "CM101_blocks_io" VALUES('C101_3','Fo_ж',0,'','0');
-INSERT INTO "CM101_blocks_io" VALUES('C101_3','Po_ж',0,'','25.4512515175788');
-INSERT INTO "CM101_blocks_io" VALUES('C101_3','Lж',0,'','18.4812421659864');
-INSERT INTO "CM101_blocks_io" VALUES('C101_3','ProcЖ',0,'','0.01');
+INSERT INTO "CM101_blocks_io" VALUES('C101_3','Fo_lq',0,'','0');
+INSERT INTO "CM101_blocks_io" VALUES('C101_3','Po_lq',0,'','25.4512515175788');
+INSERT INTO "CM101_blocks_io" VALUES('C101_3','Llq',0,'','18.4812421659864');
+INSERT INTO "CM101_blocks_io" VALUES('C101_3','PercLq',0,'','0.01');
 INSERT INTO "CM101_blocks_io" VALUES('C101_3','Vap',0,'','3');
 INSERT INTO "CM101_blocks_io" VALUES('C101_3','Q0',0,'','1');
-INSERT INTO "CM101_blocks_io" VALUES('C101_3','Qж',0,'','1000');
+INSERT INTO "CM101_blocks_io" VALUES('C101_3','Qlq',0,'','1000');
 INSERT INTO "CM101_blocks_io" VALUES('C101_3','f_frq',0,'','100');
 INSERT INTO "CM101_blocks_io" VALUES('C101_3','Pot',0,'','26.5861090936371');
 INSERT INTO "CM101_blocks_io" VALUES('C101_3','Fit',0,'','37.0601681024761');
@@ -1691,26 +1691,26 @@ INSERT INTO "CM101_blocks_io" VALUES('G_BC106','tmp_up',0,'','0');
 INSERT INTO "CM101_blocks_io" VALUES('G_BC106','lst_com',0,'','0');
 INSERT INTO "CM101_blocks_io" VALUES('CM101_1','Kpr',0,'','0.95');
 INSERT INTO "CM101_blocks_io" VALUES('CM101_2','Kpr',0,'','0.95');
-INSERT INTO "CM101_blocks_io" VALUES('KPP101','t_kl1',0,'','3');
-INSERT INTO "CM101_blocks_io" VALUES('KPP101','t_kl2',0,'','5');
+INSERT INTO "CM101_blocks_io" VALUES('KPP101','t_v1',0,'','3');
+INSERT INTO "CM101_blocks_io" VALUES('KPP101','t_v2',0,'','5');
 INSERT INTO "CM101_blocks_io" VALUES('KPP101','tmp_l1',0,'','7.4109846876187e-322');
 INSERT INTO "CM101_blocks_io" VALUES('KPP101','tmp_l2',0,'','0');
-INSERT INTO "CM101_blocks_io" VALUES('DR100','t_kl1',0,'','10');
-INSERT INTO "CM101_blocks_io" VALUES('DR100','t_kl2',0,'','5');
+INSERT INTO "CM101_blocks_io" VALUES('DR100','t_v1',0,'','10');
+INSERT INTO "CM101_blocks_io" VALUES('DR100','t_v2',0,'','5');
 INSERT INTO "CM101_blocks_io" VALUES('DR100','tmp_l1',0,'','49.9999999999964');
 INSERT INTO "CM101_blocks_io" VALUES('DR100','tmp_l2',0,'','0');
 INSERT INTO "CM101_blocks_io" VALUES('node3_1','Kpr',0,'','0.95');
-INSERT INTO "CM101_blocks_io" VALUES('BC101','t_kl1',0,'','10');
-INSERT INTO "CM101_blocks_io" VALUES('BC101','t_kl2',0,'','5');
+INSERT INTO "CM101_blocks_io" VALUES('BC101','t_v1',0,'','10');
+INSERT INTO "CM101_blocks_io" VALUES('BC101','t_v2',0,'','5');
 INSERT INTO "CM101_blocks_io" VALUES('BC101','tmp_l1',0,'','99.9999999999929');
 INSERT INTO "CM101_blocks_io" VALUES('BC101','tmp_l2',0,'','0');
-INSERT INTO "CM101_blocks_io" VALUES('BC104','t_kl1',0,'','10');
-INSERT INTO "CM101_blocks_io" VALUES('BC104','t_kl2',0,'','5');
+INSERT INTO "CM101_blocks_io" VALUES('BC104','t_v1',0,'','10');
+INSERT INTO "CM101_blocks_io" VALUES('BC104','t_v2',0,'','5');
 INSERT INTO "CM101_blocks_io" VALUES('BC104','tmp_l1',0,'','99.9999999999929');
 INSERT INTO "CM101_blocks_io" VALUES('BC104','tmp_l2',0,'','0');
 INSERT INTO "CM101_blocks_io" VALUES('node4_1','Kpr',0,'','0.95');
-INSERT INTO "CM101_blocks_io" VALUES('BC106','t_kl1',0,'','10');
-INSERT INTO "CM101_blocks_io" VALUES('BC106','t_kl2',0,'','5');
+INSERT INTO "CM101_blocks_io" VALUES('BC106','t_v1',0,'','10');
+INSERT INTO "CM101_blocks_io" VALUES('BC106','t_v2',0,'','5');
 INSERT INTO "CM101_blocks_io" VALUES('BC106','tmp_l1',0,'','0');
 INSERT INTO "CM101_blocks_io" VALUES('BC106','tmp_l2',0,'','0');
 INSERT INTO "CM101_blocks_io" VALUES('PP101','Kpr',0,'','0.95');
@@ -1718,7 +1718,7 @@ INSERT INTO "CM101_blocks_io" VALUES('PP102','Kpr',0,'','0.95');
 CREATE TABLE 'CM101_prm' ("SHIFR" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '' ,"IO" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR"));
 INSERT INTO "CM101_prm" VALUES('FN101','FN101','Flow at the output of the compressor',1,'BC104.Fi:var:Variable','Витрати на виході компресора','Расход на выходе компрессора','','BC104.Fi:var:Переменная','','BC104.Fi:var:Змінна');
 INSERT INTO "CM101_prm" VALUES('F101','F101','Flow on the diaphragm PP101',1,'PP101.Fi:var:Variable
-*s.tone/h:ed:Dimension
+*s.ton/h:ed:Dimension
 *i.1:prec:Precision
 *r.0:min:Minimum
 *r.100:max:Maximum','Витрати на діафрагмі PP101','Расход на диафрагме PP101','','PP101.Fi:var:Переменная
@@ -1731,7 +1731,7 @@ INSERT INTO "CM101_prm" VALUES('F101','F101','Flow on the diaphragm PP101',1,'PP
 *r.0:min:Мінімум
 *r.100:max:Максимум');
 INSERT INTO "CM101_prm" VALUES('F102','F102','Flow on the diaphragm PP102',1,'PP102.Fi:var:Variable
-*s.tone/h:ed:Dimension
+*s.ton/h:ed:Dimension
 *i.1:prec:Precision
 *r.0:min:Minimum
 *r.100:max:Maximum','Витрати на діафрагмі PP102','Расход на диафрагме PP102','','PP102.Fi:var:Переменная
@@ -1824,21 +1824,21 @@ CM101_1.N:varIn:Ввід змінної
 *i.1:prec:Точність
 *r.0:min:Мінімум
 *r.10:max:Максимум');
-INSERT INTO "CM101_prm" VALUES('KPP101','KPP101','Anti-surge control valve of the compressor',1,'KPP101.l_kl1:out:Output
-KPP101.l_kl1:var:Variable
-KPP101.l_kl1:varIn:Variable input
+INSERT INTO "CM101_prm" VALUES('KPP101','KPP101','Anti-surge control valve of the compressor',1,'KPP101.l_v1:out:Output
+KPP101.l_v1:var:Variable
+KPP101.l_v1:varIn:Variable input
 *s.%:ed:Dimension
 *i.0:prec:Precision
 *r.0:min:Minimum
-*r.100:max:Maximum','Антипомпажний регулюючий клапан компресору','Антипомпажный регулирующий клапан компрессора','','KPP101.l_kl1:out:Выход
-KPP101.l_kl1:var:Переменная
-KPP101.l_kl1:varIn:Ввод переменной
+*r.100:max:Maximum','Антипомпажний регулюючий клапан компресору','Антипомпажный регулирующий клапан компрессора','','KPP101.l_v1:out:Выход
+KPP101.l_v1:var:Переменная
+KPP101.l_v1:varIn:Ввод переменной
 *s.%:ed:Ед.измерения
 *i.0:prec:Точность
 *r.0:min:Минимум
-*r.100:max:Максимум','','KPP101.l_kl1:out:Вихід
-KPP101.l_kl1:var:Змінна
-KPP101.l_kl1:varIn:Ввід змінної
+*r.100:max:Максимум','','KPP101.l_v1:out:Вихід
+KPP101.l_v1:var:Змінна
+KPP101.l_v1:varIn:Ввід змінної
 *s.%:ed:Од.виміру
 *i.0:prec:Точність
 *r.0:min:Мінімум
@@ -1925,10 +1925,10 @@ INSERT INTO "CM102_blocks_io" VALUES('KPP102','Po',0,'','97.0145409390343');
 INSERT INTO "CM102_blocks_io" VALUES('KPP102','To',0,'','273.000000008736');
 INSERT INTO "CM102_blocks_io" VALUES('KPP102','So',0,'','0.017');
 INSERT INTO "CM102_blocks_io" VALUES('KPP102','lo',0,'','10');
-INSERT INTO "CM102_blocks_io" VALUES('KPP102','S_kl1',0,'','0.015');
-INSERT INTO "CM102_blocks_io" VALUES('KPP102','S_kl2',0,'','0.015');
-INSERT INTO "CM102_blocks_io" VALUES('KPP102','l_kl1',2,'gen_cntr.SurgeCM102.out','0');
-INSERT INTO "CM102_blocks_io" VALUES('KPP102','l_kl2',0,'','0');
+INSERT INTO "CM102_blocks_io" VALUES('KPP102','S_v1',0,'','0.015');
+INSERT INTO "CM102_blocks_io" VALUES('KPP102','S_v2',0,'','0.015');
+INSERT INTO "CM102_blocks_io" VALUES('KPP102','l_v1',2,'gen_cntr.SurgeCM102.out','0');
+INSERT INTO "CM102_blocks_io" VALUES('KPP102','l_v2',0,'','0');
 INSERT INTO "CM102_blocks_io" VALUES('KPP102','Q0',0,'','1');
 INSERT INTO "CM102_blocks_io" VALUES('KPP102','Kln',0,'','2');
 INSERT INTO "CM102_blocks_io" VALUES('KPP102','Kpr',0,'','0.95');
@@ -1956,10 +1956,10 @@ INSERT INTO "CM102_blocks_io" VALUES('DR101','Po',0,'','22.2861342435703');
 INSERT INTO "CM102_blocks_io" VALUES('DR101','To',0,'','272.999999999466');
 INSERT INTO "CM102_blocks_io" VALUES('DR101','So',0,'','0.0314');
 INSERT INTO "CM102_blocks_io" VALUES('DR101','lo',0,'','3');
-INSERT INTO "CM102_blocks_io" VALUES('DR101','S_kl1',0,'','0.00314');
-INSERT INTO "CM102_blocks_io" VALUES('DR101','S_kl2',0,'','0.00314');
-INSERT INTO "CM102_blocks_io" VALUES('DR101','l_kl1',0,'','50');
-INSERT INTO "CM102_blocks_io" VALUES('DR101','l_kl2',0,'','0');
+INSERT INTO "CM102_blocks_io" VALUES('DR101','S_v1',0,'','0.00314');
+INSERT INTO "CM102_blocks_io" VALUES('DR101','S_v2',0,'','0.00314');
+INSERT INTO "CM102_blocks_io" VALUES('DR101','l_v1',0,'','50');
+INSERT INTO "CM102_blocks_io" VALUES('DR101','l_v2',0,'','0');
 INSERT INTO "CM102_blocks_io" VALUES('DR101','Q0',0,'','1');
 INSERT INTO "CM102_blocks_io" VALUES('DR101','Kln',0,'','1');
 INSERT INTO "CM102_blocks_io" VALUES('DR101','Kpr',0,'','0.95');
@@ -1978,13 +1978,13 @@ INSERT INTO "CM102_blocks_io" VALUES('С102_1','Fo',1,'PP103.Fi','52.51939618255
 INSERT INTO "CM102_blocks_io" VALUES('С102_1','Po',0,'','21.9416193527301');
 INSERT INTO "CM102_blocks_io" VALUES('С102_1','So',0,'','0.0314');
 INSERT INTO "CM102_blocks_io" VALUES('С102_1','lo',0,'','40');
-INSERT INTO "CM102_blocks_io" VALUES('С102_1','Fo_ж',0,'','0');
-INSERT INTO "CM102_blocks_io" VALUES('С102_1','Po_ж',0,'','21.9924166981321');
-INSERT INTO "CM102_blocks_io" VALUES('С102_1','Lж',0,'','21.1655605841649');
-INSERT INTO "CM102_blocks_io" VALUES('С102_1','ProcЖ',0,'','0.01');
+INSERT INTO "CM102_blocks_io" VALUES('С102_1','Fo_lq',0,'','0');
+INSERT INTO "CM102_blocks_io" VALUES('С102_1','Po_lq',0,'','21.9924166981321');
+INSERT INTO "CM102_blocks_io" VALUES('С102_1','Llq',0,'','21.1655605841649');
+INSERT INTO "CM102_blocks_io" VALUES('С102_1','PercLq',0,'','0.01');
 INSERT INTO "CM102_blocks_io" VALUES('С102_1','Vap',0,'','2.4');
 INSERT INTO "CM102_blocks_io" VALUES('С102_1','Q0',0,'','1');
-INSERT INTO "CM102_blocks_io" VALUES('С102_1','Qж',0,'','1000');
+INSERT INTO "CM102_blocks_io" VALUES('С102_1','Qlq',0,'','1000');
 INSERT INTO "CM102_blocks_io" VALUES('С102_1','f_frq',0,'','100');
 INSERT INTO "CM102_blocks_io" VALUES('С102_1','Pot',0,'','20.0205661668655');
 INSERT INTO "CM102_blocks_io" VALUES('С102_1','Fit',0,'','38.0815151265775');
@@ -2032,10 +2032,10 @@ INSERT INTO "CM102_blocks_io" VALUES('BC111','Po',0,'','22.6206068217592');
 INSERT INTO "CM102_blocks_io" VALUES('BC111','To',0,'','304.900957893137');
 INSERT INTO "CM102_blocks_io" VALUES('BC111','So',0,'','0.0314');
 INSERT INTO "CM102_blocks_io" VALUES('BC111','lo',0,'','5');
-INSERT INTO "CM102_blocks_io" VALUES('BC111','S_kl1',0,'','0.0314');
-INSERT INTO "CM102_blocks_io" VALUES('BC111','S_kl2',0,'','0.002');
-INSERT INTO "CM102_blocks_io" VALUES('BC111','l_kl1',1,'G_BC111.pos','100');
-INSERT INTO "CM102_blocks_io" VALUES('BC111','l_kl2',1,'G_BC112.pos','0');
+INSERT INTO "CM102_blocks_io" VALUES('BC111','S_v1',0,'','0.0314');
+INSERT INTO "CM102_blocks_io" VALUES('BC111','S_v2',0,'','0.002');
+INSERT INTO "CM102_blocks_io" VALUES('BC111','l_v1',1,'G_BC111.pos','100');
+INSERT INTO "CM102_blocks_io" VALUES('BC111','l_v2',1,'G_BC112.pos','0');
 INSERT INTO "CM102_blocks_io" VALUES('BC111','Q0',0,'','1');
 INSERT INTO "CM102_blocks_io" VALUES('BC111','Kln',0,'','1');
 INSERT INTO "CM102_blocks_io" VALUES('BC111','Kpr',0,'','0.95');
@@ -2055,10 +2055,10 @@ INSERT INTO "CM102_blocks_io" VALUES('BC113','Po',0,'','0.999999988049924');
 INSERT INTO "CM102_blocks_io" VALUES('BC113','To',0,'','272.999999995966');
 INSERT INTO "CM102_blocks_io" VALUES('BC113','So',0,'','0.00785');
 INSERT INTO "CM102_blocks_io" VALUES('BC113','lo',0,'','10');
-INSERT INTO "CM102_blocks_io" VALUES('BC113','S_kl1',0,'','0.00785');
-INSERT INTO "CM102_blocks_io" VALUES('BC113','S_kl2',0,'','0.002');
-INSERT INTO "CM102_blocks_io" VALUES('BC113','l_kl1',0,'','0');
-INSERT INTO "CM102_blocks_io" VALUES('BC113','l_kl2',0,'','0');
+INSERT INTO "CM102_blocks_io" VALUES('BC113','S_v1',0,'','0.00785');
+INSERT INTO "CM102_blocks_io" VALUES('BC113','S_v2',0,'','0.002');
+INSERT INTO "CM102_blocks_io" VALUES('BC113','l_v1',0,'','0');
+INSERT INTO "CM102_blocks_io" VALUES('BC113','l_v2',0,'','0');
 INSERT INTO "CM102_blocks_io" VALUES('BC113','Q0',0,'','1');
 INSERT INTO "CM102_blocks_io" VALUES('BC113','Kln',0,'','1');
 INSERT INTO "CM102_blocks_io" VALUES('BC113','Kpr',0,'','0.95');
@@ -2078,10 +2078,10 @@ INSERT INTO "CM102_blocks_io" VALUES('BC114','Po',0,'','93.8216489202126');
 INSERT INTO "CM102_blocks_io" VALUES('BC114','To',0,'','302.486618546291');
 INSERT INTO "CM102_blocks_io" VALUES('BC114','So',0,'','0.00785');
 INSERT INTO "CM102_blocks_io" VALUES('BC114','lo',0,'','100');
-INSERT INTO "CM102_blocks_io" VALUES('BC114','S_kl1',0,'','0.00785');
-INSERT INTO "CM102_blocks_io" VALUES('BC114','S_kl2',0,'','0.002');
-INSERT INTO "CM102_blocks_io" VALUES('BC114','l_kl1',1,'G_BC114.pos','100');
-INSERT INTO "CM102_blocks_io" VALUES('BC114','l_kl2',1,'G_BC115.pos','0');
+INSERT INTO "CM102_blocks_io" VALUES('BC114','S_v1',0,'','0.00785');
+INSERT INTO "CM102_blocks_io" VALUES('BC114','S_v2',0,'','0.002');
+INSERT INTO "CM102_blocks_io" VALUES('BC114','l_v1',1,'G_BC114.pos','100');
+INSERT INTO "CM102_blocks_io" VALUES('BC114','l_v2',1,'G_BC115.pos','0');
 INSERT INTO "CM102_blocks_io" VALUES('BC114','Q0',0,'','1');
 INSERT INTO "CM102_blocks_io" VALUES('BC114','Kln',0,'','1');
 INSERT INTO "CM102_blocks_io" VALUES('BC114','Kpr',0,'','0.95');
@@ -2101,10 +2101,10 @@ INSERT INTO "CM102_blocks_io" VALUES('BC116','Po',0,'','22.286117361549');
 INSERT INTO "CM102_blocks_io" VALUES('BC116','To',0,'','273');
 INSERT INTO "CM102_blocks_io" VALUES('BC116','So',0,'','0.0078');
 INSERT INTO "CM102_blocks_io" VALUES('BC116','lo',0,'','1');
-INSERT INTO "CM102_blocks_io" VALUES('BC116','S_kl1',0,'','0.0078');
-INSERT INTO "CM102_blocks_io" VALUES('BC116','S_kl2',0,'','0.0078');
-INSERT INTO "CM102_blocks_io" VALUES('BC116','l_kl1',1,'G_BC116.pos','0');
-INSERT INTO "CM102_blocks_io" VALUES('BC116','l_kl2',0,'','0');
+INSERT INTO "CM102_blocks_io" VALUES('BC116','S_v1',0,'','0.0078');
+INSERT INTO "CM102_blocks_io" VALUES('BC116','S_v2',0,'','0.0078');
+INSERT INTO "CM102_blocks_io" VALUES('BC116','l_v1',1,'G_BC116.pos','0');
+INSERT INTO "CM102_blocks_io" VALUES('BC116','l_v2',0,'','0');
 INSERT INTO "CM102_blocks_io" VALUES('BC116','Q0',0,'','1');
 INSERT INTO "CM102_blocks_io" VALUES('BC116','Kln',0,'','1');
 INSERT INTO "CM102_blocks_io" VALUES('BC116','Kpr',0,'','0.95');
@@ -2150,7 +2150,7 @@ INSERT INTO "CM102_blocks_io" VALUES('CM102_1','Po',0,'','46.0194601750365');
 INSERT INTO "CM102_blocks_io" VALUES('CM102_1','To',0,'','344.874218346709');
 INSERT INTO "CM102_blocks_io" VALUES('CM102_1','So',0,'','0.017');
 INSERT INTO "CM102_blocks_io" VALUES('CM102_1','lo',0,'','55');
-INSERT INTO "CM102_blocks_io" VALUES('CM102_1','Kzp',0,'','0.465463090734943');
+INSERT INTO "CM102_blocks_io" VALUES('CM102_1','Kmrg',0,'','0.465463090734943');
 INSERT INTO "CM102_blocks_io" VALUES('CM102_1','N',0,'','11');
 INSERT INTO "CM102_blocks_io" VALUES('CM102_1','V',0,'','0.27');
 INSERT INTO "CM102_blocks_io" VALUES('CM102_1','Kpmp',0,'','0.02');
@@ -2171,7 +2171,7 @@ INSERT INTO "CM102_blocks_io" VALUES('CM102_2','Po',0,'','99.6983457920425');
 INSERT INTO "CM102_blocks_io" VALUES('CM102_2','To',0,'','378.034473291198');
 INSERT INTO "CM102_blocks_io" VALUES('CM102_2','So',0,'','0.00785');
 INSERT INTO "CM102_blocks_io" VALUES('CM102_2','lo',0,'','55');
-INSERT INTO "CM102_blocks_io" VALUES('CM102_2','Kzp',0,'','0.499171086382358');
+INSERT INTO "CM102_blocks_io" VALUES('CM102_2','Kmrg',0,'','0.499171086382358');
 INSERT INTO "CM102_blocks_io" VALUES('CM102_2','N',1,'CM102_1.N','11');
 INSERT INTO "CM102_blocks_io" VALUES('CM102_2','V',0,'','0.13');
 INSERT INTO "CM102_blocks_io" VALUES('CM102_2','Kpmp',0,'','0.02');
@@ -2243,13 +2243,13 @@ INSERT INTO "CM102_blocks_io" VALUES('C102_2','Fo',1,'PP104.Fi','52.002482091882
 INSERT INTO "CM102_blocks_io" VALUES('C102_2','Po',0,'','44.7495908931815');
 INSERT INTO "CM102_blocks_io" VALUES('C102_2','So',0,'','0.017');
 INSERT INTO "CM102_blocks_io" VALUES('C102_2','lo',0,'','50');
-INSERT INTO "CM102_blocks_io" VALUES('C102_2','Fo_ж',0,'','0');
-INSERT INTO "CM102_blocks_io" VALUES('C102_2','Po_ж',0,'','44.7994193856207');
-INSERT INTO "CM102_blocks_io" VALUES('C102_2','Lж',0,'','24.914246219606');
-INSERT INTO "CM102_blocks_io" VALUES('C102_2','ProcЖ',0,'','0.01');
+INSERT INTO "CM102_blocks_io" VALUES('C102_2','Fo_lq',0,'','0');
+INSERT INTO "CM102_blocks_io" VALUES('C102_2','Po_lq',0,'','44.7994193856207');
+INSERT INTO "CM102_blocks_io" VALUES('C102_2','Llq',0,'','24.914246219606');
+INSERT INTO "CM102_blocks_io" VALUES('C102_2','PercLq',0,'','0.01');
 INSERT INTO "CM102_blocks_io" VALUES('C102_2','Vap',0,'','2');
 INSERT INTO "CM102_blocks_io" VALUES('C102_2','Q0',0,'','1');
-INSERT INTO "CM102_blocks_io" VALUES('C102_2','Qж',0,'','1000');
+INSERT INTO "CM102_blocks_io" VALUES('C102_2','Qlq',0,'','1000');
 INSERT INTO "CM102_blocks_io" VALUES('C102_2','f_frq',0,'','100');
 INSERT INTO "CM102_blocks_io" VALUES('C102_2','Pot',0,'','43.424525814954');
 INSERT INTO "CM102_blocks_io" VALUES('C102_2','Fit',0,'','37.7013136906827');
@@ -2260,13 +2260,13 @@ INSERT INTO "CM102_blocks_io" VALUES('C102_3','Fo',1,'node6_1.Fi','51.4839802747
 INSERT INTO "CM102_blocks_io" VALUES('C102_3','Po',0,'','97.0451583229321');
 INSERT INTO "CM102_blocks_io" VALUES('C102_3','So',0,'','0.00785');
 INSERT INTO "CM102_blocks_io" VALUES('C102_3','lo',0,'','8');
-INSERT INTO "CM102_blocks_io" VALUES('C102_3','Fo_ж',0,'','0');
-INSERT INTO "CM102_blocks_io" VALUES('C102_3','Po_ж',0,'','97.0966136218798');
-INSERT INTO "CM102_blocks_io" VALUES('C102_3','Lж',0,'','34.3035326317623');
-INSERT INTO "CM102_blocks_io" VALUES('C102_3','ProcЖ',0,'','0.01');
+INSERT INTO "CM102_blocks_io" VALUES('C102_3','Fo_lq',0,'','0');
+INSERT INTO "CM102_blocks_io" VALUES('C102_3','Po_lq',0,'','97.0966136218798');
+INSERT INTO "CM102_blocks_io" VALUES('C102_3','Llq',0,'','34.3035326317623');
+INSERT INTO "CM102_blocks_io" VALUES('C102_3','PercLq',0,'','0.01');
 INSERT INTO "CM102_blocks_io" VALUES('C102_3','Vap',0,'','1.5');
 INSERT INTO "CM102_blocks_io" VALUES('C102_3','Q0',0,'','1');
-INSERT INTO "CM102_blocks_io" VALUES('C102_3','Qж',0,'','1000');
+INSERT INTO "CM102_blocks_io" VALUES('C102_3','Qlq',0,'','1000');
 INSERT INTO "CM102_blocks_io" VALUES('C102_3','f_frq',0,'','100');
 INSERT INTO "CM102_blocks_io" VALUES('C102_3','Pot',0,'','100.289121612061');
 INSERT INTO "CM102_blocks_io" VALUES('C102_3','Fit',0,'','37.1200537368204');
@@ -2315,28 +2315,28 @@ INSERT INTO "CM102_blocks_io" VALUES('G_BC116','t_up',0,'','0.5');
 INSERT INTO "CM102_blocks_io" VALUES('G_BC116','f_frq',0,'','100');
 INSERT INTO "CM102_blocks_io" VALUES('G_BC116','tmp_up',0,'','0');
 INSERT INTO "CM102_blocks_io" VALUES('G_BC116','lst_com',0,'','0');
-INSERT INTO "CM102_blocks_io" VALUES('KPP102','t_kl1',0,'','3');
-INSERT INTO "CM102_blocks_io" VALUES('KPP102','t_kl2',0,'','5');
+INSERT INTO "CM102_blocks_io" VALUES('KPP102','t_v1',0,'','3');
+INSERT INTO "CM102_blocks_io" VALUES('KPP102','t_v2',0,'','5');
 INSERT INTO "CM102_blocks_io" VALUES('KPP102','tmp_l1',0,'','7.4109846876187e-322');
 INSERT INTO "CM102_blocks_io" VALUES('KPP102','tmp_l2',0,'','0');
-INSERT INTO "CM102_blocks_io" VALUES('DR101','t_kl1',0,'','10');
-INSERT INTO "CM102_blocks_io" VALUES('DR101','t_kl2',0,'','5');
+INSERT INTO "CM102_blocks_io" VALUES('DR101','t_v1',0,'','10');
+INSERT INTO "CM102_blocks_io" VALUES('DR101','t_v2',0,'','5');
 INSERT INTO "CM102_blocks_io" VALUES('DR101','tmp_l1',0,'','49.9999999999964');
 INSERT INTO "CM102_blocks_io" VALUES('DR101','tmp_l2',0,'','0');
-INSERT INTO "CM102_blocks_io" VALUES('BC111','t_kl1',0,'','10');
-INSERT INTO "CM102_blocks_io" VALUES('BC111','t_kl2',0,'','5');
+INSERT INTO "CM102_blocks_io" VALUES('BC111','t_v1',0,'','10');
+INSERT INTO "CM102_blocks_io" VALUES('BC111','t_v2',0,'','5');
 INSERT INTO "CM102_blocks_io" VALUES('BC111','tmp_l1',0,'','99.9999999999929');
 INSERT INTO "CM102_blocks_io" VALUES('BC111','tmp_l2',0,'','0');
-INSERT INTO "CM102_blocks_io" VALUES('BC113','t_kl1',0,'','10');
-INSERT INTO "CM102_blocks_io" VALUES('BC113','t_kl2',0,'','5');
+INSERT INTO "CM102_blocks_io" VALUES('BC113','t_v1',0,'','10');
+INSERT INTO "CM102_blocks_io" VALUES('BC113','t_v2',0,'','5');
 INSERT INTO "CM102_blocks_io" VALUES('BC113','tmp_l1',0,'','0');
 INSERT INTO "CM102_blocks_io" VALUES('BC113','tmp_l2',0,'','0');
-INSERT INTO "CM102_blocks_io" VALUES('BC114','t_kl1',0,'','10');
-INSERT INTO "CM102_blocks_io" VALUES('BC114','t_kl2',0,'','5');
+INSERT INTO "CM102_blocks_io" VALUES('BC114','t_v1',0,'','10');
+INSERT INTO "CM102_blocks_io" VALUES('BC114','t_v2',0,'','5');
 INSERT INTO "CM102_blocks_io" VALUES('BC114','tmp_l1',0,'','99.9999999999929');
 INSERT INTO "CM102_blocks_io" VALUES('BC114','tmp_l2',0,'','0');
-INSERT INTO "CM102_blocks_io" VALUES('BC116','t_kl1',0,'','10');
-INSERT INTO "CM102_blocks_io" VALUES('BC116','t_kl2',0,'','5');
+INSERT INTO "CM102_blocks_io" VALUES('BC116','t_v1',0,'','10');
+INSERT INTO "CM102_blocks_io" VALUES('BC116','t_v2',0,'','5');
 INSERT INTO "CM102_blocks_io" VALUES('BC116','tmp_l1',0,'','0');
 INSERT INTO "CM102_blocks_io" VALUES('BC116','tmp_l2',0,'','0');
 INSERT INTO "CM102_blocks_io" VALUES('node5_1','Kpr',0,'','0.95');
@@ -2347,7 +2347,7 @@ INSERT INTO "CM102_blocks_io" VALUES('PP103','Kpr',0,'','0.95');
 INSERT INTO "CM102_blocks_io" VALUES('PP104','Kpr',0,'','0.95');
 CREATE TABLE 'CM102_prm' ("SHIFR" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '' ,"IO" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR"));
 INSERT INTO "CM102_prm" VALUES('F103','F103','Flow on the diaphragm PP103',1,'PP103.Fi:var:Variable
-*s.tone/h:ed:Dimension
+*s.ton/h:ed:Dimension
 *i.1:prec:Precision
 *r.0:min:Minimum
 *r.100:max:Maximum','Витрати на діафрагмі PP103','Расход на диафрагме PP103','','PP103.Fi:var:Переменная
@@ -2360,7 +2360,7 @@ INSERT INTO "CM102_prm" VALUES('F103','F103','Flow on the diaphragm PP103',1,'PP
 *r.0:min:Мінімум
 *r.100:max:Максимум');
 INSERT INTO "CM102_prm" VALUES('F104','F104','Flow on the diaphragm PP104',1,'PP104.Fi:var:Variable
-*s.tone/h:ed:Dimension
+*s.ton/h:ed:Dimension
 *i.1:prec:Precision
 *r.0:min:Minimum
 *r.100:max:Maximum','Витрати на діафрагмі PP104','Расход на диафрагме PP104','','PP104.Fi:var:Переменная
@@ -2372,21 +2372,21 @@ INSERT INTO "CM102_prm" VALUES('F104','F104','Flow on the diaphragm PP104',1,'PP
 *i.1:prec:Точність
 *r.0:min:Мінімум
 *r.100:max:Максимум');
-INSERT INTO "CM102_prm" VALUES('KPP102','KPP102','Anti-surge control valve of the compressor',1,'KPP102.l_kl1:out:Output
-KPP102.l_kl1:var:Variable
-KPP102.l_kl1:varIn:Variable input
+INSERT INTO "CM102_prm" VALUES('KPP102','KPP102','Anti-surge control valve of the compressor',1,'KPP102.l_v1:out:Output
+KPP102.l_v1:var:Variable
+KPP102.l_v1:varIn:Variable input
 *s.%:ed:Dimension
 *i.0:prec:Precision
 *r.0:min:Minimum
-*r.100:max:Maximum','Антипомпажний регулюючий клапан компресору','Антипомпажный регулирующий клапан компрессора','','KPP102.l_kl1:out:Выход
-KPP102.l_kl1:var:Переменная
-KPP102.l_kl1:varIn:Ввод переменной
+*r.100:max:Maximum','Антипомпажний регулюючий клапан компресору','Антипомпажный регулирующий клапан компрессора','','KPP102.l_v1:out:Выход
+KPP102.l_v1:var:Переменная
+KPP102.l_v1:varIn:Ввод переменной
 *s.%:ed:Ед.измерения
 *i.0:prec:Точность
 *r.0:min:Минимум
-*r.100:max:Максимум','','KPP102.l_kl1:out:Вихід
-KPP102.l_kl1:var:Змінна
-KPP102.l_kl1:varIn:Ввід змінної
+*r.100:max:Максимум','','KPP102.l_v1:out:Вихід
+KPP102.l_v1:var:Змінна
+KPP102.l_v1:varIn:Ввід змінної
 *s.%:ed:Од.виміру
 *i.0:prec:Точність
 *r.0:min:Мінімум
@@ -2540,7 +2540,7 @@ INSERT INTO "CM102_prm" VALUES('PT0204','PT0204_4','Pressure after the second st
 *r.0:min:Мінімум
 *r.150:max:Максимум');
 CREATE TABLE 'CM102cntr_blocks_io' ("BLK_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"TLNK" INTEGER DEFAULT '' ,"LNK" TEXT DEFAULT '' ,"VAL" TEXT DEFAULT '' , PRIMARY KEY ("BLK_ID","ID"));
-INSERT INTO "CM102cntr_blocks_io" VALUES('BC111','pos',6,'CM102.BC111.l_kl1','100');
+INSERT INTO "CM102cntr_blocks_io" VALUES('BC111','pos',6,'CM102.BC111.l_v1','100');
 INSERT INTO "CM102cntr_blocks_io" VALUES('BC111','com',0,'','1');
 INSERT INTO "CM102cntr_blocks_io" VALUES('BC111','st_open',0,'','1');
 INSERT INTO "CM102cntr_blocks_io" VALUES('BC111','st_close',0,'','0');
@@ -2549,7 +2549,7 @@ INSERT INTO "CM102cntr_blocks_io" VALUES('BC111','t_up',0,'','0.5');
 INSERT INTO "CM102cntr_blocks_io" VALUES('BC111','f_frq',0,'','1');
 INSERT INTO "CM102cntr_blocks_io" VALUES('BC111','tmp_up',0,'','0');
 INSERT INTO "CM102cntr_blocks_io" VALUES('BC111','lst_com',0,'','1');
-INSERT INTO "CM102cntr_blocks_io" VALUES('BC112','pos',6,'CM102.BC111.l_kl2','0');
+INSERT INTO "CM102cntr_blocks_io" VALUES('BC112','pos',6,'CM102.BC111.l_v2','0');
 INSERT INTO "CM102cntr_blocks_io" VALUES('BC112','com',0,'','0');
 INSERT INTO "CM102cntr_blocks_io" VALUES('BC112','st_open',0,'','0');
 INSERT INTO "CM102cntr_blocks_io" VALUES('BC112','st_close',0,'','1');
@@ -2558,7 +2558,7 @@ INSERT INTO "CM102cntr_blocks_io" VALUES('BC112','t_up',0,'','0.5');
 INSERT INTO "CM102cntr_blocks_io" VALUES('BC112','f_frq',0,'','1');
 INSERT INTO "CM102cntr_blocks_io" VALUES('BC112','tmp_up',0,'','0');
 INSERT INTO "CM102cntr_blocks_io" VALUES('BC112','lst_com',0,'','0');
-INSERT INTO "CM102cntr_blocks_io" VALUES('BC113','pos',6,'CM102.BC113.l_kl1','0');
+INSERT INTO "CM102cntr_blocks_io" VALUES('BC113','pos',6,'CM102.BC113.l_v1','0');
 INSERT INTO "CM102cntr_blocks_io" VALUES('BC113','com',0,'','0');
 INSERT INTO "CM102cntr_blocks_io" VALUES('BC113','st_open',0,'','0');
 INSERT INTO "CM102cntr_blocks_io" VALUES('BC113','st_close',0,'','1');
@@ -2567,7 +2567,7 @@ INSERT INTO "CM102cntr_blocks_io" VALUES('BC113','t_up',0,'','0.5');
 INSERT INTO "CM102cntr_blocks_io" VALUES('BC113','f_frq',0,'','1');
 INSERT INTO "CM102cntr_blocks_io" VALUES('BC113','tmp_up',0,'','0');
 INSERT INTO "CM102cntr_blocks_io" VALUES('BC113','lst_com',0,'','0');
-INSERT INTO "CM102cntr_blocks_io" VALUES('BC114','pos',6,'CM102.BC114.l_kl1','100');
+INSERT INTO "CM102cntr_blocks_io" VALUES('BC114','pos',6,'CM102.BC114.l_v1','100');
 INSERT INTO "CM102cntr_blocks_io" VALUES('BC114','com',0,'','1');
 INSERT INTO "CM102cntr_blocks_io" VALUES('BC114','st_open',0,'','1');
 INSERT INTO "CM102cntr_blocks_io" VALUES('BC114','st_close',0,'','0');
@@ -2576,7 +2576,7 @@ INSERT INTO "CM102cntr_blocks_io" VALUES('BC114','t_up',0,'','0.5');
 INSERT INTO "CM102cntr_blocks_io" VALUES('BC114','f_frq',0,'','1');
 INSERT INTO "CM102cntr_blocks_io" VALUES('BC114','tmp_up',0,'','0');
 INSERT INTO "CM102cntr_blocks_io" VALUES('BC114','lst_com',0,'','1');
-INSERT INTO "CM102cntr_blocks_io" VALUES('BC116','pos',6,'CM102.BC116.l_kl1','0');
+INSERT INTO "CM102cntr_blocks_io" VALUES('BC116','pos',6,'CM102.BC116.l_v1','0');
 INSERT INTO "CM102cntr_blocks_io" VALUES('BC116','com',0,'','0');
 INSERT INTO "CM102cntr_blocks_io" VALUES('BC116','st_open',0,'','0');
 INSERT INTO "CM102cntr_blocks_io" VALUES('BC116','st_close',0,'','1');
@@ -2610,7 +2610,7 @@ INSERT INTO "CM201_blocks_io" VALUES('CM101_1','Po',0,'','10.3220057791189');
 INSERT INTO "CM201_blocks_io" VALUES('CM101_1','To',0,'','331.562291183288');
 INSERT INTO "CM201_blocks_io" VALUES('CM101_1','So',0,'','0.071');
 INSERT INTO "CM201_blocks_io" VALUES('CM101_1','lo',0,'','55');
-INSERT INTO "CM201_blocks_io" VALUES('CM101_1','Kzp',0,'','0.68977922091029');
+INSERT INTO "CM201_blocks_io" VALUES('CM101_1','Kmrg',0,'','0.68977922091029');
 INSERT INTO "CM201_blocks_io" VALUES('CM101_1','N',0,'','8.2');
 INSERT INTO "CM201_blocks_io" VALUES('CM101_1','V',0,'','1.5');
 INSERT INTO "CM201_blocks_io" VALUES('CM101_1','Kpmp',0,'','0.025');
@@ -2631,7 +2631,7 @@ INSERT INTO "CM201_blocks_io" VALUES('CM101_2','Po',0,'','25.9506627054125');
 INSERT INTO "CM201_blocks_io" VALUES('CM101_2','To',0,'','391.411919754239');
 INSERT INTO "CM201_blocks_io" VALUES('CM101_2','So',0,'','0.0314');
 INSERT INTO "CM201_blocks_io" VALUES('CM101_2','lo',0,'','55');
-INSERT INTO "CM201_blocks_io" VALUES('CM101_2','Kzp',0,'','0.886553806911506');
+INSERT INTO "CM201_blocks_io" VALUES('CM101_2','Kmrg',0,'','0.886553806911506');
 INSERT INTO "CM201_blocks_io" VALUES('CM101_2','N',1,'CM101_1.N','8.2');
 INSERT INTO "CM201_blocks_io" VALUES('CM101_2','V',0,'','1');
 INSERT INTO "CM201_blocks_io" VALUES('CM101_2','Kpmp',0,'','0.035');
@@ -2652,10 +2652,10 @@ INSERT INTO "CM201_blocks_io" VALUES('KPP101','Po',0,'','5.48537183626317');
 INSERT INTO "CM201_blocks_io" VALUES('KPP101','To',0,'','276.860920515647');
 INSERT INTO "CM201_blocks_io" VALUES('KPP101','So',0,'','0.071');
 INSERT INTO "CM201_blocks_io" VALUES('KPP101','lo',0,'','10');
-INSERT INTO "CM201_blocks_io" VALUES('KPP101','S_kl1',0,'','0.04');
-INSERT INTO "CM201_blocks_io" VALUES('KPP101','S_kl2',0,'','0.001');
-INSERT INTO "CM201_blocks_io" VALUES('KPP101','l_kl1',2,'gen_cntr.SurgeCM201.out','0');
-INSERT INTO "CM201_blocks_io" VALUES('KPP101','l_kl2',0,'','0');
+INSERT INTO "CM201_blocks_io" VALUES('KPP101','S_v1',0,'','0.04');
+INSERT INTO "CM201_blocks_io" VALUES('KPP101','S_v2',0,'','0.001');
+INSERT INTO "CM201_blocks_io" VALUES('KPP101','l_v1',2,'gen_cntr.SurgeCM201.out','0');
+INSERT INTO "CM201_blocks_io" VALUES('KPP101','l_v2',0,'','0');
 INSERT INTO "CM201_blocks_io" VALUES('KPP101','Q0',0,'','1');
 INSERT INTO "CM201_blocks_io" VALUES('KPP101','Kln',0,'','2');
 INSERT INTO "CM201_blocks_io" VALUES('KPP101','Kpr',0,'','0.95');
@@ -2675,10 +2675,10 @@ INSERT INTO "CM201_blocks_io" VALUES('DR100','Po',0,'','5.48535840453755');
 INSERT INTO "CM201_blocks_io" VALUES('DR100','To',0,'','272.999999989907');
 INSERT INTO "CM201_blocks_io" VALUES('DR100','So',0,'','0.2');
 INSERT INTO "CM201_blocks_io" VALUES('DR100','lo',0,'','1');
-INSERT INTO "CM201_blocks_io" VALUES('DR100','S_kl1',0,'','0.05');
-INSERT INTO "CM201_blocks_io" VALUES('DR100','S_kl2',0,'','0.01');
-INSERT INTO "CM201_blocks_io" VALUES('DR100','l_kl1',0,'','50');
-INSERT INTO "CM201_blocks_io" VALUES('DR100','l_kl2',0,'','0');
+INSERT INTO "CM201_blocks_io" VALUES('DR100','S_v1',0,'','0.05');
+INSERT INTO "CM201_blocks_io" VALUES('DR100','S_v2',0,'','0.01');
+INSERT INTO "CM201_blocks_io" VALUES('DR100','l_v1',0,'','50');
+INSERT INTO "CM201_blocks_io" VALUES('DR100','l_v2',0,'','0');
 INSERT INTO "CM201_blocks_io" VALUES('DR100','Q0',0,'','1');
 INSERT INTO "CM201_blocks_io" VALUES('DR100','Kln',0,'','1');
 INSERT INTO "CM201_blocks_io" VALUES('DR100','Kpr',0,'','0.95');
@@ -2760,10 +2760,10 @@ INSERT INTO "CM201_blocks_io" VALUES('BC101','Po',0,'','5.51863533098921');
 INSERT INTO "CM201_blocks_io" VALUES('BC101','To',0,'','290.308945692316');
 INSERT INTO "CM201_blocks_io" VALUES('BC101','So',0,'','0.2');
 INSERT INTO "CM201_blocks_io" VALUES('BC101','lo',0,'','5');
-INSERT INTO "CM201_blocks_io" VALUES('BC101','S_kl1',0,'','0.2');
-INSERT INTO "CM201_blocks_io" VALUES('BC101','S_kl2',0,'','0.05');
-INSERT INTO "CM201_blocks_io" VALUES('BC101','l_kl1',1,'G_BC101.pos','100');
-INSERT INTO "CM201_blocks_io" VALUES('BC101','l_kl2',1,'G_BC102.pos','0');
+INSERT INTO "CM201_blocks_io" VALUES('BC101','S_v1',0,'','0.2');
+INSERT INTO "CM201_blocks_io" VALUES('BC101','S_v2',0,'','0.05');
+INSERT INTO "CM201_blocks_io" VALUES('BC101','l_v1',1,'G_BC101.pos','100');
+INSERT INTO "CM201_blocks_io" VALUES('BC101','l_v2',1,'G_BC102.pos','0');
 INSERT INTO "CM201_blocks_io" VALUES('BC101','Q0',0,'','1');
 INSERT INTO "CM201_blocks_io" VALUES('BC101','Kln',0,'','1');
 INSERT INTO "CM201_blocks_io" VALUES('BC101','Kpr',0,'','0.95');
@@ -2805,10 +2805,10 @@ INSERT INTO "CM201_blocks_io" VALUES('BC104','Po',0,'','24.8381138045763');
 INSERT INTO "CM201_blocks_io" VALUES('BC104','To',0,'','304.468867336246');
 INSERT INTO "CM201_blocks_io" VALUES('BC104','So',0,'','0.03');
 INSERT INTO "CM201_blocks_io" VALUES('BC104','lo',0,'','100');
-INSERT INTO "CM201_blocks_io" VALUES('BC104','S_kl1',0,'','0.03');
-INSERT INTO "CM201_blocks_io" VALUES('BC104','S_kl2',0,'','0.01');
-INSERT INTO "CM201_blocks_io" VALUES('BC104','l_kl1',1,'G_BC104.pos','100');
-INSERT INTO "CM201_blocks_io" VALUES('BC104','l_kl2',1,'G_BC105.pos','0');
+INSERT INTO "CM201_blocks_io" VALUES('BC104','S_v1',0,'','0.03');
+INSERT INTO "CM201_blocks_io" VALUES('BC104','S_v2',0,'','0.01');
+INSERT INTO "CM201_blocks_io" VALUES('BC104','l_v1',1,'G_BC104.pos','100');
+INSERT INTO "CM201_blocks_io" VALUES('BC104','l_v2',1,'G_BC105.pos','0');
 INSERT INTO "CM201_blocks_io" VALUES('BC104','Q0',0,'','1');
 INSERT INTO "CM201_blocks_io" VALUES('BC104','Kln',0,'','1');
 INSERT INTO "CM201_blocks_io" VALUES('BC104','Kpr',0,'','0.95');
@@ -2828,10 +2828,10 @@ INSERT INTO "CM201_blocks_io" VALUES('BC106','Po',0,'','5.48536869861613');
 INSERT INTO "CM201_blocks_io" VALUES('BC106','To',0,'','273');
 INSERT INTO "CM201_blocks_io" VALUES('BC106','So',0,'','0.0314');
 INSERT INTO "CM201_blocks_io" VALUES('BC106','lo',0,'','10');
-INSERT INTO "CM201_blocks_io" VALUES('BC106','S_kl1',0,'','0.0314');
-INSERT INTO "CM201_blocks_io" VALUES('BC106','S_kl2',0,'','0.01');
-INSERT INTO "CM201_blocks_io" VALUES('BC106','l_kl1',1,'G_BC106.pos','0');
-INSERT INTO "CM201_blocks_io" VALUES('BC106','l_kl2',0,'','0');
+INSERT INTO "CM201_blocks_io" VALUES('BC106','S_v1',0,'','0.0314');
+INSERT INTO "CM201_blocks_io" VALUES('BC106','S_v2',0,'','0.01');
+INSERT INTO "CM201_blocks_io" VALUES('BC106','l_v1',1,'G_BC106.pos','0');
+INSERT INTO "CM201_blocks_io" VALUES('BC106','l_v2',0,'','0');
 INSERT INTO "CM201_blocks_io" VALUES('BC106','Q0',0,'','1');
 INSERT INTO "CM201_blocks_io" VALUES('BC106','Kln',0,'','1');
 INSERT INTO "CM201_blocks_io" VALUES('BC106','Kpr',0,'','0.95');
@@ -2850,13 +2850,13 @@ INSERT INTO "CM201_blocks_io" VALUES('C101_1','Fo',1,'PP101.Fi','50.251393141434
 INSERT INTO "CM201_blocks_io" VALUES('C101_1','Po',0,'','5.45242131882191');
 INSERT INTO "CM201_blocks_io" VALUES('C101_1','So',0,'','0.2');
 INSERT INTO "CM201_blocks_io" VALUES('C101_1','lo',0,'','40');
-INSERT INTO "CM201_blocks_io" VALUES('C101_1','Fo_ж',0,'','0');
-INSERT INTO "CM201_blocks_io" VALUES('C101_1','Po_ж',0,'','5.49443225748623');
-INSERT INTO "CM201_blocks_io" VALUES('C101_1','Lж',0,'','4.4222040699282');
-INSERT INTO "CM201_blocks_io" VALUES('C101_1','ProcЖ',0,'','0.01');
+INSERT INTO "CM201_blocks_io" VALUES('C101_1','Fo_lq',0,'','0');
+INSERT INTO "CM201_blocks_io" VALUES('C101_1','Po_lq',0,'','5.49443225748623');
+INSERT INTO "CM201_blocks_io" VALUES('C101_1','Llq',0,'','4.4222040699282');
+INSERT INTO "CM201_blocks_io" VALUES('C101_1','PercLq',0,'','0.01');
 INSERT INTO "CM201_blocks_io" VALUES('C101_1','Vap',0,'','9.5');
 INSERT INTO "CM201_blocks_io" VALUES('C101_1','Q0',0,'','1');
-INSERT INTO "CM201_blocks_io" VALUES('C101_1','Qж',0,'','1000');
+INSERT INTO "CM201_blocks_io" VALUES('C101_1','Qlq',0,'','1000');
 INSERT INTO "CM201_blocks_io" VALUES('C101_1','f_frq',0,'','100');
 INSERT INTO "CM201_blocks_io" VALUES('C101_1','Pot',0,'','5.1709458096161');
 INSERT INTO "CM201_blocks_io" VALUES('C101_1','Fit',0,'','37.7441933839702');
@@ -2867,13 +2867,13 @@ INSERT INTO "CM201_blocks_io" VALUES('C101_2','Fo',1,'PP102.Fi','49.759322101475
 INSERT INTO "CM201_blocks_io" VALUES('C101_2','Po',0,'','10.0329301847781');
 INSERT INTO "CM201_blocks_io" VALUES('C101_2','So',0,'','0.071');
 INSERT INTO "CM201_blocks_io" VALUES('C101_2','lo',0,'','50');
-INSERT INTO "CM201_blocks_io" VALUES('C101_2','Fo_ж',0,'','0');
-INSERT INTO "CM201_blocks_io" VALUES('C101_2','Po_ж',0,'','10.0740601885689');
-INSERT INTO "CM201_blocks_io" VALUES('C101_2','Lж',0,'','4.32947408324947');
-INSERT INTO "CM201_blocks_io" VALUES('C101_2','ProcЖ',0,'','0.01');
+INSERT INTO "CM201_blocks_io" VALUES('C101_2','Fo_lq',0,'','0');
+INSERT INTO "CM201_blocks_io" VALUES('C101_2','Po_lq',0,'','10.0740601885689');
+INSERT INTO "CM201_blocks_io" VALUES('C101_2','Llq',0,'','4.32947408324947');
+INSERT INTO "CM201_blocks_io" VALUES('C101_2','PercLq',0,'','0.01');
 INSERT INTO "CM201_blocks_io" VALUES('C101_2','Vap',0,'','9.5');
 INSERT INTO "CM201_blocks_io" VALUES('C101_2','Q0',0,'','1');
-INSERT INTO "CM201_blocks_io" VALUES('C101_2','Qж',0,'','1000');
+INSERT INTO "CM201_blocks_io" VALUES('C101_2','Qlq',0,'','1000');
 INSERT INTO "CM201_blocks_io" VALUES('C101_2','f_frq',0,'','100');
 INSERT INTO "CM201_blocks_io" VALUES('C101_2','Pot',0,'','10.3349732470663');
 INSERT INTO "CM201_blocks_io" VALUES('C101_2','Fit',0,'','37.3626857881806');
@@ -2884,13 +2884,13 @@ INSERT INTO "CM201_blocks_io" VALUES('C101_3','Fo',1,'node4_1.Fi','49.2691075548
 INSERT INTO "CM201_blocks_io" VALUES('C101_3','Po',0,'','25.3898579360166');
 INSERT INTO "CM201_blocks_io" VALUES('C101_3','So',0,'','0.0314');
 INSERT INTO "CM201_blocks_io" VALUES('C101_3','lo',0,'','8');
-INSERT INTO "CM201_blocks_io" VALUES('C101_3','Fo_ж',0,'','0');
-INSERT INTO "CM201_blocks_io" VALUES('C101_3','Po_ж',0,'','25.4295224540598');
-INSERT INTO "CM201_blocks_io" VALUES('C101_3','Lж',0,'','13.2215060144054');
-INSERT INTO "CM201_blocks_io" VALUES('C101_3','ProcЖ',0,'','0.01');
+INSERT INTO "CM201_blocks_io" VALUES('C101_3','Fo_lq',0,'','0');
+INSERT INTO "CM201_blocks_io" VALUES('C101_3','Po_lq',0,'','25.4295224540598');
+INSERT INTO "CM201_blocks_io" VALUES('C101_3','Llq',0,'','13.2215060144054');
+INSERT INTO "CM201_blocks_io" VALUES('C101_3','PercLq',0,'','0.01');
 INSERT INTO "CM201_blocks_io" VALUES('C101_3','Vap',0,'','3');
 INSERT INTO "CM201_blocks_io" VALUES('C101_3','Q0',0,'','1');
-INSERT INTO "CM201_blocks_io" VALUES('C101_3','Qж',0,'','1000');
+INSERT INTO "CM201_blocks_io" VALUES('C101_3','Qlq',0,'','1000');
 INSERT INTO "CM201_blocks_io" VALUES('C101_3','f_frq',0,'','100');
 INSERT INTO "CM201_blocks_io" VALUES('C101_3','Pot',0,'','26.3987476146491');
 INSERT INTO "CM201_blocks_io" VALUES('C101_3','Fit',0,'','37.3023338053042');
@@ -2921,26 +2921,26 @@ INSERT INTO "CM201_blocks_io" VALUES('PP102','Fit',0,'','37.3637648351936');
 INSERT INTO "CM201_blocks_io" VALUES('G_BC104','pos',0,'','100');
 INSERT INTO "CM201_blocks_io" VALUES('CM101_1','Kpr',0,'','0.95');
 INSERT INTO "CM201_blocks_io" VALUES('CM101_2','Kpr',0,'','0.95');
-INSERT INTO "CM201_blocks_io" VALUES('KPP101','t_kl1',0,'','3');
-INSERT INTO "CM201_blocks_io" VALUES('KPP101','t_kl2',0,'','5');
+INSERT INTO "CM201_blocks_io" VALUES('KPP101','t_v1',0,'','3');
+INSERT INTO "CM201_blocks_io" VALUES('KPP101','t_v2',0,'','5');
 INSERT INTO "CM201_blocks_io" VALUES('KPP101','tmp_l1',0,'','7.4109846876187e-322');
 INSERT INTO "CM201_blocks_io" VALUES('KPP101','tmp_l2',0,'','0');
-INSERT INTO "CM201_blocks_io" VALUES('DR100','t_kl1',0,'','10');
-INSERT INTO "CM201_blocks_io" VALUES('DR100','t_kl2',0,'','5');
+INSERT INTO "CM201_blocks_io" VALUES('DR100','t_v1',0,'','10');
+INSERT INTO "CM201_blocks_io" VALUES('DR100','t_v2',0,'','5');
 INSERT INTO "CM201_blocks_io" VALUES('DR100','tmp_l1',0,'','49.9999999999964');
 INSERT INTO "CM201_blocks_io" VALUES('DR100','tmp_l2',0,'','0');
 INSERT INTO "CM201_blocks_io" VALUES('node3_1','Kpr',0,'','0.95');
-INSERT INTO "CM201_blocks_io" VALUES('BC101','t_kl1',0,'','10');
-INSERT INTO "CM201_blocks_io" VALUES('BC101','t_kl2',0,'','5');
+INSERT INTO "CM201_blocks_io" VALUES('BC101','t_v1',0,'','10');
+INSERT INTO "CM201_blocks_io" VALUES('BC101','t_v2',0,'','5');
 INSERT INTO "CM201_blocks_io" VALUES('BC101','tmp_l1',0,'','99.9999999999929');
 INSERT INTO "CM201_blocks_io" VALUES('BC101','tmp_l2',0,'','1.23516411460312e-321');
-INSERT INTO "CM201_blocks_io" VALUES('BC104','t_kl1',0,'','10');
-INSERT INTO "CM201_blocks_io" VALUES('BC104','t_kl2',0,'','5');
+INSERT INTO "CM201_blocks_io" VALUES('BC104','t_v1',0,'','10');
+INSERT INTO "CM201_blocks_io" VALUES('BC104','t_v2',0,'','5');
 INSERT INTO "CM201_blocks_io" VALUES('BC104','tmp_l1',0,'','99.9999999999929');
 INSERT INTO "CM201_blocks_io" VALUES('BC104','tmp_l2',0,'','0');
 INSERT INTO "CM201_blocks_io" VALUES('node4_1','Kpr',0,'','0.95');
-INSERT INTO "CM201_blocks_io" VALUES('BC106','t_kl1',0,'','10');
-INSERT INTO "CM201_blocks_io" VALUES('BC106','t_kl2',0,'','5');
+INSERT INTO "CM201_blocks_io" VALUES('BC106','t_v1',0,'','10');
+INSERT INTO "CM201_blocks_io" VALUES('BC106','t_v2',0,'','5');
 INSERT INTO "CM201_blocks_io" VALUES('BC106','tmp_l1',0,'','0');
 INSERT INTO "CM201_blocks_io" VALUES('BC106','tmp_l2',0,'','0');
 INSERT INTO "CM201_blocks_io" VALUES('PP101','Kpr',0,'','0.95');
@@ -2992,7 +2992,7 @@ INSERT INTO "CM201_blocks_io" VALUES('G_BC102','lst_com',0,'','0');
 CREATE TABLE 'CM201_prm' ("SHIFR" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '' ,"IO" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"ru#IO" TEXT DEFAULT '' ,"uk#IO" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR"));
 INSERT INTO "CM201_prm" VALUES('FN101','FN201','Flow at the output of compressor',1,'BC104.Fi:var:Variable','','Витрати на виході компресора','','Расход на выходе компрессора','BC104.Fi:var:Переменная','BC104.Fi:var:Змінна');
 INSERT INTO "CM201_prm" VALUES('F101','F201','Flow on the diaphragm PP201',1,'PP101.Fi:var:Variable
-*s.tone/h:ed:Dimension
+*s.ton/h:ed:Dimension
 *i.1:prec:Precision
 *r.0:min:Minimum
 *r.100:max:Maximum','','Витрати на діафрагмі PP201','','Расход на диафрагме PP201','PP101.Fi:var:Переменная
@@ -3005,7 +3005,7 @@ INSERT INTO "CM201_prm" VALUES('F101','F201','Flow on the diaphragm PP201',1,'PP
 *r.0:min:Мінімум
 *r.100:max:Максимум');
 INSERT INTO "CM201_prm" VALUES('F102','F202','Flow on the diaphragm PP202',1,'PP102.Fi:var:Variable
-*s.tone/h:ed:Dimension
+*s.ton/h:ed:Dimension
 *i.1:prec:Precision
 *r.0:min:Minimum
 *r.100:max:Maximum','','Витрати на діафрагмі PP202','','Расход на диафрагме PP202','PP102.Fi:var:Переменная
@@ -3098,21 +3098,21 @@ CM101_1.N:varIn:Ввід змінної
 *i.1:prec:Точність
 *r.0:min:Мінімум
 *r.10:max:Максимум');
-INSERT INTO "CM201_prm" VALUES('KPP101','KPP201','Anti-surge control valve of the compressor',1,'KPP101.l_kl1:out:Output
-KPP101.l_kl1:var:Variable
-KPP101.l_kl1:varIn:Variable input
+INSERT INTO "CM201_prm" VALUES('KPP101','KPP201','Anti-surge control valve of the compressor',1,'KPP101.l_v1:out:Output
+KPP101.l_v1:var:Variable
+KPP101.l_v1:varIn:Variable input
 *s.%:ed:Dimension
 *i.0:prec:Precision
 *r.0:min:Minimum
-*r.100:max:Maximum','','Антипомпажний регулюючий клапан компресору','','Антипомпажный регулирующий клапан компрессора','KPP101.l_kl1:out:Выход
-KPP101.l_kl1:var:Переменная
-KPP101.l_kl1:varIn:Ввод переменной
+*r.100:max:Maximum','','Антипомпажний регулюючий клапан компресору','','Антипомпажный регулирующий клапан компрессора','KPP101.l_v1:out:Выход
+KPP101.l_v1:var:Переменная
+KPP101.l_v1:varIn:Ввод переменной
 *s.%:ed:Ед.измерения
 *i.0:prec:Точность
 *r.0:min:Минимум
-*r.100:max:Максимум','KPP101.l_kl1:out:Вихід
-KPP101.l_kl1:var:Змінна
-KPP101.l_kl1:varIn:Ввід змінної
+*r.100:max:Максимум','KPP101.l_v1:out:Вихід
+KPP101.l_v1:var:Змінна
+KPP101.l_v1:varIn:Ввід змінної
 *s.%:ed:Од.виміру
 *i.0:prec:Точність
 *r.0:min:Мінімум
@@ -3199,10 +3199,10 @@ INSERT INTO "CM202_blocks_io" VALUES('KPP102','Po',0,'','23.7039729602121');
 INSERT INTO "CM202_blocks_io" VALUES('KPP102','To',0,'','273.000002289451');
 INSERT INTO "CM202_blocks_io" VALUES('KPP102','So',0,'','0.017');
 INSERT INTO "CM202_blocks_io" VALUES('KPP102','lo',0,'','10');
-INSERT INTO "CM202_blocks_io" VALUES('KPP102','S_kl1',0,'','0.015');
-INSERT INTO "CM202_blocks_io" VALUES('KPP102','S_kl2',0,'','0.015');
-INSERT INTO "CM202_blocks_io" VALUES('KPP102','l_kl1',2,'gen_cntr.SurgeCM202.out','0');
-INSERT INTO "CM202_blocks_io" VALUES('KPP102','l_kl2',0,'','0');
+INSERT INTO "CM202_blocks_io" VALUES('KPP102','S_v1',0,'','0.015');
+INSERT INTO "CM202_blocks_io" VALUES('KPP102','S_v2',0,'','0.015');
+INSERT INTO "CM202_blocks_io" VALUES('KPP102','l_v1',2,'gen_cntr.SurgeCM202.out','0');
+INSERT INTO "CM202_blocks_io" VALUES('KPP102','l_v2',0,'','0');
 INSERT INTO "CM202_blocks_io" VALUES('KPP102','Q0',0,'','1');
 INSERT INTO "CM202_blocks_io" VALUES('KPP102','Kln',0,'','2');
 INSERT INTO "CM202_blocks_io" VALUES('KPP102','Kpr',0,'','0.95');
@@ -3230,10 +3230,10 @@ INSERT INTO "CM202_blocks_io" VALUES('DR101','Po',0,'','23.7038311144225');
 INSERT INTO "CM202_blocks_io" VALUES('DR101','To',0,'','272.999999999997');
 INSERT INTO "CM202_blocks_io" VALUES('DR101','So',0,'','0.0314');
 INSERT INTO "CM202_blocks_io" VALUES('DR101','lo',0,'','3');
-INSERT INTO "CM202_blocks_io" VALUES('DR101','S_kl1',0,'','0.00314');
-INSERT INTO "CM202_blocks_io" VALUES('DR101','S_kl2',0,'','0.00314');
-INSERT INTO "CM202_blocks_io" VALUES('DR101','l_kl1',0,'','50');
-INSERT INTO "CM202_blocks_io" VALUES('DR101','l_kl2',0,'','0');
+INSERT INTO "CM202_blocks_io" VALUES('DR101','S_v1',0,'','0.00314');
+INSERT INTO "CM202_blocks_io" VALUES('DR101','S_v2',0,'','0.00314');
+INSERT INTO "CM202_blocks_io" VALUES('DR101','l_v1',0,'','50');
+INSERT INTO "CM202_blocks_io" VALUES('DR101','l_v2',0,'','0');
 INSERT INTO "CM202_blocks_io" VALUES('DR101','Q0',0,'','1');
 INSERT INTO "CM202_blocks_io" VALUES('DR101','Kln',0,'','1');
 INSERT INTO "CM202_blocks_io" VALUES('DR101','Kpr',0,'','0.95');
@@ -3252,13 +3252,13 @@ INSERT INTO "CM202_blocks_io" VALUES('С102_1','Fo',1,'PP103.Fi','-2.90571790120
 INSERT INTO "CM202_blocks_io" VALUES('С102_1','Po',0,'','23.7038126398924');
 INSERT INTO "CM202_blocks_io" VALUES('С102_1','So',0,'','0.0314');
 INSERT INTO "CM202_blocks_io" VALUES('С102_1','lo',0,'','40');
-INSERT INTO "CM202_blocks_io" VALUES('С102_1','Fo_ж',0,'','0');
-INSERT INTO "CM202_blocks_io" VALUES('С102_1','Po_ж',0,'','23.7133479738958');
-INSERT INTO "CM202_blocks_io" VALUES('С102_1','Lж',0,'','3.97305583474469');
-INSERT INTO "CM202_blocks_io" VALUES('С102_1','ProcЖ',0,'','0.01');
+INSERT INTO "CM202_blocks_io" VALUES('С102_1','Fo_lq',0,'','0');
+INSERT INTO "CM202_blocks_io" VALUES('С102_1','Po_lq',0,'','23.7133479738958');
+INSERT INTO "CM202_blocks_io" VALUES('С102_1','Llq',0,'','3.97305583474469');
+INSERT INTO "CM202_blocks_io" VALUES('С102_1','PercLq',0,'','0.01');
 INSERT INTO "CM202_blocks_io" VALUES('С102_1','Vap',0,'','2.4');
 INSERT INTO "CM202_blocks_io" VALUES('С102_1','Q0',0,'','1');
-INSERT INTO "CM202_blocks_io" VALUES('С102_1','Qж',0,'','1000');
+INSERT INTO "CM202_blocks_io" VALUES('С102_1','Qlq',0,'','1000');
 INSERT INTO "CM202_blocks_io" VALUES('С102_1','f_frq',0,'','100');
 INSERT INTO "CM202_blocks_io" VALUES('С102_1','Pot',0,'','24.7312311757839');
 INSERT INTO "CM202_blocks_io" VALUES('С102_1','Fit',0,'','0.00155800981669319');
@@ -3306,10 +3306,10 @@ INSERT INTO "CM202_blocks_io" VALUES('BC111','Po',0,'','23.7038199342454');
 INSERT INTO "CM202_blocks_io" VALUES('BC111','To',0,'','273.000000001701');
 INSERT INTO "CM202_blocks_io" VALUES('BC111','So',0,'','0.0314');
 INSERT INTO "CM202_blocks_io" VALUES('BC111','lo',0,'','5');
-INSERT INTO "CM202_blocks_io" VALUES('BC111','S_kl1',0,'','0.0314');
-INSERT INTO "CM202_blocks_io" VALUES('BC111','S_kl2',0,'','0.002');
-INSERT INTO "CM202_blocks_io" VALUES('BC111','l_kl1',1,'G_BC111.pos','0');
-INSERT INTO "CM202_blocks_io" VALUES('BC111','l_kl2',1,'G_BC112.pos','0');
+INSERT INTO "CM202_blocks_io" VALUES('BC111','S_v1',0,'','0.0314');
+INSERT INTO "CM202_blocks_io" VALUES('BC111','S_v2',0,'','0.002');
+INSERT INTO "CM202_blocks_io" VALUES('BC111','l_v1',1,'G_BC111.pos','0');
+INSERT INTO "CM202_blocks_io" VALUES('BC111','l_v2',1,'G_BC112.pos','0');
 INSERT INTO "CM202_blocks_io" VALUES('BC111','Q0',0,'','1');
 INSERT INTO "CM202_blocks_io" VALUES('BC111','Kln',0,'','1');
 INSERT INTO "CM202_blocks_io" VALUES('BC111','Kpr',0,'','0.95');
@@ -3329,10 +3329,10 @@ INSERT INTO "CM202_blocks_io" VALUES('BC113','Po',0,'','0.999999988049899');
 INSERT INTO "CM202_blocks_io" VALUES('BC113','To',0,'','272.999999998993');
 INSERT INTO "CM202_blocks_io" VALUES('BC113','So',0,'','0.00785');
 INSERT INTO "CM202_blocks_io" VALUES('BC113','lo',0,'','10');
-INSERT INTO "CM202_blocks_io" VALUES('BC113','S_kl1',0,'','0.00785');
-INSERT INTO "CM202_blocks_io" VALUES('BC113','S_kl2',0,'','0.002');
-INSERT INTO "CM202_blocks_io" VALUES('BC113','l_kl1',0,'','0');
-INSERT INTO "CM202_blocks_io" VALUES('BC113','l_kl2',0,'','0');
+INSERT INTO "CM202_blocks_io" VALUES('BC113','S_v1',0,'','0.00785');
+INSERT INTO "CM202_blocks_io" VALUES('BC113','S_v2',0,'','0.002');
+INSERT INTO "CM202_blocks_io" VALUES('BC113','l_v1',0,'','0');
+INSERT INTO "CM202_blocks_io" VALUES('BC113','l_v2',0,'','0');
 INSERT INTO "CM202_blocks_io" VALUES('BC113','Q0',0,'','1');
 INSERT INTO "CM202_blocks_io" VALUES('BC113','Kln',0,'','1');
 INSERT INTO "CM202_blocks_io" VALUES('BC113','Kpr',0,'','0.95');
@@ -3352,10 +3352,10 @@ INSERT INTO "CM202_blocks_io" VALUES('BC114','Po',0,'','92.291645783093');
 INSERT INTO "CM202_blocks_io" VALUES('BC114','To',0,'','273.00000001007');
 INSERT INTO "CM202_blocks_io" VALUES('BC114','So',0,'','0.00785');
 INSERT INTO "CM202_blocks_io" VALUES('BC114','lo',0,'','100');
-INSERT INTO "CM202_blocks_io" VALUES('BC114','S_kl1',0,'','0.00785');
-INSERT INTO "CM202_blocks_io" VALUES('BC114','S_kl2',0,'','0.002');
-INSERT INTO "CM202_blocks_io" VALUES('BC114','l_kl1',1,'G_BC114.pos','0');
-INSERT INTO "CM202_blocks_io" VALUES('BC114','l_kl2',1,'G_BC115.pos','0');
+INSERT INTO "CM202_blocks_io" VALUES('BC114','S_v1',0,'','0.00785');
+INSERT INTO "CM202_blocks_io" VALUES('BC114','S_v2',0,'','0.002');
+INSERT INTO "CM202_blocks_io" VALUES('BC114','l_v1',1,'G_BC114.pos','0');
+INSERT INTO "CM202_blocks_io" VALUES('BC114','l_v2',1,'G_BC115.pos','0');
 INSERT INTO "CM202_blocks_io" VALUES('BC114','Q0',0,'','1');
 INSERT INTO "CM202_blocks_io" VALUES('BC114','Kln',0,'','1');
 INSERT INTO "CM202_blocks_io" VALUES('BC114','Kpr',0,'','0.95');
@@ -3375,10 +3375,10 @@ INSERT INTO "CM202_blocks_io" VALUES('BC116','Po',0,'','23.7038659541817');
 INSERT INTO "CM202_blocks_io" VALUES('BC116','To',0,'','273');
 INSERT INTO "CM202_blocks_io" VALUES('BC116','So',0,'','0.0078');
 INSERT INTO "CM202_blocks_io" VALUES('BC116','lo',0,'','1');
-INSERT INTO "CM202_blocks_io" VALUES('BC116','S_kl1',0,'','0.0078');
-INSERT INTO "CM202_blocks_io" VALUES('BC116','S_kl2',0,'','0.0078');
-INSERT INTO "CM202_blocks_io" VALUES('BC116','l_kl1',1,'G_BC116.pos','0');
-INSERT INTO "CM202_blocks_io" VALUES('BC116','l_kl2',0,'','0');
+INSERT INTO "CM202_blocks_io" VALUES('BC116','S_v1',0,'','0.0078');
+INSERT INTO "CM202_blocks_io" VALUES('BC116','S_v2',0,'','0.0078');
+INSERT INTO "CM202_blocks_io" VALUES('BC116','l_v1',1,'G_BC116.pos','0');
+INSERT INTO "CM202_blocks_io" VALUES('BC116','l_v2',0,'','0');
 INSERT INTO "CM202_blocks_io" VALUES('BC116','Q0',0,'','1');
 INSERT INTO "CM202_blocks_io" VALUES('BC116','Kln',0,'','1');
 INSERT INTO "CM202_blocks_io" VALUES('BC116','Kpr',0,'','0.95');
@@ -3424,7 +3424,7 @@ INSERT INTO "CM202_blocks_io" VALUES('CM102_1','Po',0,'','23.7038084563817');
 INSERT INTO "CM202_blocks_io" VALUES('CM102_1','To',0,'','273.054561835007');
 INSERT INTO "CM202_blocks_io" VALUES('CM102_1','So',0,'','0.017');
 INSERT INTO "CM202_blocks_io" VALUES('CM102_1','lo',0,'','55');
-INSERT INTO "CM202_blocks_io" VALUES('CM102_1','Kzp',0,'','0');
+INSERT INTO "CM202_blocks_io" VALUES('CM102_1','Kmrg',0,'','0');
 INSERT INTO "CM202_blocks_io" VALUES('CM102_1','N',0,'','0');
 INSERT INTO "CM202_blocks_io" VALUES('CM102_1','V',0,'','0.27');
 INSERT INTO "CM202_blocks_io" VALUES('CM102_1','Kpmp',0,'','0.02');
@@ -3445,7 +3445,7 @@ INSERT INTO "CM202_blocks_io" VALUES('CM102_2','Po',0,'','23.7038162513105');
 INSERT INTO "CM202_blocks_io" VALUES('CM102_2','To',0,'','274.173388312536');
 INSERT INTO "CM202_blocks_io" VALUES('CM102_2','So',0,'','0.00785');
 INSERT INTO "CM202_blocks_io" VALUES('CM102_2','lo',0,'','55');
-INSERT INTO "CM202_blocks_io" VALUES('CM102_2','Kzp',0,'','0');
+INSERT INTO "CM202_blocks_io" VALUES('CM102_2','Kmrg',0,'','0');
 INSERT INTO "CM202_blocks_io" VALUES('CM102_2','N',1,'CM102_1.N','0');
 INSERT INTO "CM202_blocks_io" VALUES('CM102_2','V',0,'','0.13');
 INSERT INTO "CM202_blocks_io" VALUES('CM102_2','Kpmp',0,'','0.02');
@@ -3517,13 +3517,13 @@ INSERT INTO "CM202_blocks_io" VALUES('C102_2','Fo',1,'PP104.Fi','8.2035538521416
 INSERT INTO "CM202_blocks_io" VALUES('C102_2','Po',0,'','23.703811510417');
 INSERT INTO "CM202_blocks_io" VALUES('C102_2','So',0,'','0.017');
 INSERT INTO "CM202_blocks_io" VALUES('C102_2','lo',0,'','50');
-INSERT INTO "CM202_blocks_io" VALUES('C102_2','Fo_ж',0,'','0');
-INSERT INTO "CM202_blocks_io" VALUES('C102_2','Po_ж',0,'','23.7133725577122');
-INSERT INTO "CM202_blocks_io" VALUES('C102_2','Lж',0,'','4.78052364759093');
-INSERT INTO "CM202_blocks_io" VALUES('C102_2','ProcЖ',0,'','0.01');
+INSERT INTO "CM202_blocks_io" VALUES('C102_2','Fo_lq',0,'','0');
+INSERT INTO "CM202_blocks_io" VALUES('C102_2','Po_lq',0,'','23.7133725577122');
+INSERT INTO "CM202_blocks_io" VALUES('C102_2','Llq',0,'','4.78052364759093');
+INSERT INTO "CM202_blocks_io" VALUES('C102_2','PercLq',0,'','0.01');
 INSERT INTO "CM202_blocks_io" VALUES('C102_2','Vap',0,'','2');
 INSERT INTO "CM202_blocks_io" VALUES('C102_2','Q0',0,'','1');
-INSERT INTO "CM202_blocks_io" VALUES('C102_2','Qж',0,'','1000');
+INSERT INTO "CM202_blocks_io" VALUES('C102_2','Qlq',0,'','1000');
 INSERT INTO "CM202_blocks_io" VALUES('C102_2','f_frq',0,'','100');
 INSERT INTO "CM202_blocks_io" VALUES('C102_2','Pot',0,'','24.7284580318349');
 INSERT INTO "CM202_blocks_io" VALUES('C102_2','Fit',0,'','-0.0311306889521761');
@@ -3534,40 +3534,40 @@ INSERT INTO "CM202_blocks_io" VALUES('C102_3','Fo',1,'node6_1.Fi','0.00065383950
 INSERT INTO "CM202_blocks_io" VALUES('C102_3','Po',0,'','23.7037913283502');
 INSERT INTO "CM202_blocks_io" VALUES('C102_3','So',0,'','0.00785');
 INSERT INTO "CM202_blocks_io" VALUES('C102_3','lo',0,'','8');
-INSERT INTO "CM202_blocks_io" VALUES('C102_3','Fo_ж',0,'','0');
-INSERT INTO "CM202_blocks_io" VALUES('C102_3','Po_ж',0,'','23.714078791932');
-INSERT INTO "CM202_blocks_io" VALUES('C102_3','Lж',0,'','6.85830905452556');
-INSERT INTO "CM202_blocks_io" VALUES('C102_3','ProcЖ',0,'','0.01');
+INSERT INTO "CM202_blocks_io" VALUES('C102_3','Fo_lq',0,'','0');
+INSERT INTO "CM202_blocks_io" VALUES('C102_3','Po_lq',0,'','23.714078791932');
+INSERT INTO "CM202_blocks_io" VALUES('C102_3','Llq',0,'','6.85830905452556');
+INSERT INTO "CM202_blocks_io" VALUES('C102_3','PercLq',0,'','0.01');
 INSERT INTO "CM202_blocks_io" VALUES('C102_3','Vap',0,'','1.5');
 INSERT INTO "CM202_blocks_io" VALUES('C102_3','Q0',0,'','1');
-INSERT INTO "CM202_blocks_io" VALUES('C102_3','Qж',0,'','1000');
+INSERT INTO "CM202_blocks_io" VALUES('C102_3','Qlq',0,'','1000');
 INSERT INTO "CM202_blocks_io" VALUES('C102_3','f_frq',0,'','100');
 INSERT INTO "CM202_blocks_io" VALUES('C102_3','Pot',0,'','24.6232820831098');
 INSERT INTO "CM202_blocks_io" VALUES('C102_3','Fit',0,'','0.84291905311513');
-INSERT INTO "CM202_blocks_io" VALUES('KPP102','t_kl1',0,'','3');
-INSERT INTO "CM202_blocks_io" VALUES('KPP102','t_kl2',0,'','5');
+INSERT INTO "CM202_blocks_io" VALUES('KPP102','t_v1',0,'','3');
+INSERT INTO "CM202_blocks_io" VALUES('KPP102','t_v2',0,'','5');
 INSERT INTO "CM202_blocks_io" VALUES('KPP102','tmp_l1',0,'','7.4109846876187e-322');
 INSERT INTO "CM202_blocks_io" VALUES('KPP102','tmp_l2',0,'','0');
 INSERT INTO "CM202_blocks_io" VALUES('G_BC114','com',0,'','0');
-INSERT INTO "CM202_blocks_io" VALUES('DR101','t_kl1',0,'','10');
-INSERT INTO "CM202_blocks_io" VALUES('DR101','t_kl2',0,'','5');
+INSERT INTO "CM202_blocks_io" VALUES('DR101','t_v1',0,'','10');
+INSERT INTO "CM202_blocks_io" VALUES('DR101','t_v2',0,'','5');
 INSERT INTO "CM202_blocks_io" VALUES('DR101','tmp_l1',0,'','49.9999999999964');
 INSERT INTO "CM202_blocks_io" VALUES('DR101','tmp_l2',0,'','0');
 INSERT INTO "CM202_blocks_io" VALUES('G_BC114','pos',0,'','0');
-INSERT INTO "CM202_blocks_io" VALUES('BC111','t_kl1',0,'','10');
-INSERT INTO "CM202_blocks_io" VALUES('BC111','t_kl2',0,'','5');
+INSERT INTO "CM202_blocks_io" VALUES('BC111','t_v1',0,'','10');
+INSERT INTO "CM202_blocks_io" VALUES('BC111','t_v2',0,'','5');
 INSERT INTO "CM202_blocks_io" VALUES('BC111','tmp_l1',0,'','2.47032822920623e-321');
 INSERT INTO "CM202_blocks_io" VALUES('BC111','tmp_l2',0,'','0');
-INSERT INTO "CM202_blocks_io" VALUES('BC113','t_kl1',0,'','10');
-INSERT INTO "CM202_blocks_io" VALUES('BC113','t_kl2',0,'','5');
+INSERT INTO "CM202_blocks_io" VALUES('BC113','t_v1',0,'','10');
+INSERT INTO "CM202_blocks_io" VALUES('BC113','t_v2',0,'','5');
 INSERT INTO "CM202_blocks_io" VALUES('BC113','tmp_l1',0,'','0');
 INSERT INTO "CM202_blocks_io" VALUES('BC113','tmp_l2',0,'','0');
-INSERT INTO "CM202_blocks_io" VALUES('BC114','t_kl1',0,'','10');
-INSERT INTO "CM202_blocks_io" VALUES('BC114','t_kl2',0,'','5');
+INSERT INTO "CM202_blocks_io" VALUES('BC114','t_v1',0,'','10');
+INSERT INTO "CM202_blocks_io" VALUES('BC114','t_v2',0,'','5');
 INSERT INTO "CM202_blocks_io" VALUES('BC114','tmp_l1',0,'','2.47032822920623e-321');
 INSERT INTO "CM202_blocks_io" VALUES('BC114','tmp_l2',0,'','0');
-INSERT INTO "CM202_blocks_io" VALUES('BC116','t_kl1',0,'','10');
-INSERT INTO "CM202_blocks_io" VALUES('BC116','t_kl2',0,'','5');
+INSERT INTO "CM202_blocks_io" VALUES('BC116','t_v1',0,'','10');
+INSERT INTO "CM202_blocks_io" VALUES('BC116','t_v2',0,'','5');
 INSERT INTO "CM202_blocks_io" VALUES('BC116','tmp_l1',0,'','0');
 INSERT INTO "CM202_blocks_io" VALUES('BC116','tmp_l2',0,'','0');
 INSERT INTO "CM202_blocks_io" VALUES('G_BC111','pos',0,'','0');
@@ -3620,27 +3620,27 @@ INSERT INTO "CM202_blocks_io" VALUES('G_BC112','f_frq',0,'','100');
 INSERT INTO "CM202_blocks_io" VALUES('G_BC112','tmp_up',0,'','0');
 INSERT INTO "CM202_blocks_io" VALUES('G_BC112','lst_com',0,'','0');
 CREATE TABLE 'CM202_prm' ("SHIFR" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '' ,"IO" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"ru#IO" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"uk#IO" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR"));
-INSERT INTO "CM202_prm" VALUES('KPP102','KPP202','Anti-surge control valve of the compressor',1,'KPP102.l_kl1:out:Output
-KPP102.l_kl1:var:Variable
-KPP102.l_kl1:varIn:Variable input
+INSERT INTO "CM202_prm" VALUES('KPP102','KPP202','Anti-surge control valve of the compressor',1,'KPP102.l_v1:out:Output
+KPP102.l_v1:var:Variable
+KPP102.l_v1:varIn:Variable input
 *s.%:ed:Dimension
 *i.0:prec:Precision
 *r.0:min:Minimum
-*r.100:max:Maximum','','Антипомпажный регулирующий клапан компрессора','KPP102.l_kl1:out:Выход
-KPP102.l_kl1:var:Переменная
-KPP102.l_kl1:varIn:Ввод переменной
+*r.100:max:Maximum','','Антипомпажный регулирующий клапан компрессора','KPP102.l_v1:out:Выход
+KPP102.l_v1:var:Переменная
+KPP102.l_v1:varIn:Ввод переменной
 *s.%:ed:Ед.измерения
 *i.0:prec:Точность
 *r.0:min:Минимум
-*r.100:max:Максимум','','Антипомпажний регулюючий клапан компресору','KPP102.l_kl1:out:Вихід
-KPP102.l_kl1:var:Змінна
-KPP102.l_kl1:varIn:Ввід змінної
+*r.100:max:Максимум','','Антипомпажний регулюючий клапан компресору','KPP102.l_v1:out:Вихід
+KPP102.l_v1:var:Змінна
+KPP102.l_v1:varIn:Ввід змінної
 *s.%:ed:Од.виміру
 *i.0:prec:Точність
 *r.0:min:Мінімум
 *r.100:max:Максимум');
 INSERT INTO "CM202_prm" VALUES('F103','F203','Flow on the diaphragm PP203',1,'PP103.Fi:var:Variable
-*s.tone/h:ed:Dimension
+*s.ton/h:ed:Dimension
 *i.1:prec:Precision
 *r.0:min:Minimum
 *r.100:max:Maximum','','Расход на диафрагме PP203','PP103.Fi:var:Переменная
@@ -3666,7 +3666,7 @@ INSERT INTO "CM202_prm" VALUES('TT0202','TE1202_5','Temperature after the first 
 *r.273:min:Мінімум
 *r.373:max:Максимум');
 INSERT INTO "CM202_prm" VALUES('F104','F204','Flow on the diaphragm PP204',1,'PP104.Fi:var:Variable
-*s.tone/h:ed:Dimension
+*s.ton/h:ed:Dimension
 *i.1:prec:Precision
 *r.0:min:Minimum
 *r.100:max:Maximum','','Расход на диафрагме PP204','PP104.Fi:var:Переменная
@@ -3822,7 +3822,7 @@ INSERT INTO "CM301_blocks_io" VALUES('CM101_1','Po',0,'','5.59313397430224');
 INSERT INTO "CM301_blocks_io" VALUES('CM101_1','To',0,'','273.015941182151');
 INSERT INTO "CM301_blocks_io" VALUES('CM101_1','So',0,'','0.071');
 INSERT INTO "CM301_blocks_io" VALUES('CM101_1','lo',0,'','55');
-INSERT INTO "CM301_blocks_io" VALUES('CM101_1','Kzp',0,'','0');
+INSERT INTO "CM301_blocks_io" VALUES('CM101_1','Kmrg',0,'','0');
 INSERT INTO "CM301_blocks_io" VALUES('CM101_1','N',0,'','0');
 INSERT INTO "CM301_blocks_io" VALUES('CM101_1','V',0,'','1.5');
 INSERT INTO "CM301_blocks_io" VALUES('CM101_1','Kpmp',0,'','0.025');
@@ -3843,7 +3843,7 @@ INSERT INTO "CM301_blocks_io" VALUES('CM101_2','Po',0,'','5.59313179013177');
 INSERT INTO "CM301_blocks_io" VALUES('CM101_2','To',0,'','274.522076141394');
 INSERT INTO "CM301_blocks_io" VALUES('CM101_2','So',0,'','0.0314');
 INSERT INTO "CM301_blocks_io" VALUES('CM101_2','lo',0,'','55');
-INSERT INTO "CM301_blocks_io" VALUES('CM101_2','Kzp',0,'','0');
+INSERT INTO "CM301_blocks_io" VALUES('CM101_2','Kmrg',0,'','0');
 INSERT INTO "CM301_blocks_io" VALUES('CM101_2','N',1,'CM101_1.N','0');
 INSERT INTO "CM301_blocks_io" VALUES('CM101_2','V',0,'','1');
 INSERT INTO "CM301_blocks_io" VALUES('CM101_2','Kpmp',0,'','0.035');
@@ -3864,10 +3864,10 @@ INSERT INTO "CM301_blocks_io" VALUES('KPP101','Po',0,'','5.59313014919409');
 INSERT INTO "CM301_blocks_io" VALUES('KPP101','To',0,'','273.000000092615');
 INSERT INTO "CM301_blocks_io" VALUES('KPP101','So',0,'','0.071');
 INSERT INTO "CM301_blocks_io" VALUES('KPP101','lo',0,'','10');
-INSERT INTO "CM301_blocks_io" VALUES('KPP101','S_kl1',0,'','0.04');
-INSERT INTO "CM301_blocks_io" VALUES('KPP101','S_kl2',0,'','0.001');
-INSERT INTO "CM301_blocks_io" VALUES('KPP101','l_kl1',2,'gen_cntr.SurgeCM301.out','0');
-INSERT INTO "CM301_blocks_io" VALUES('KPP101','l_kl2',0,'','0');
+INSERT INTO "CM301_blocks_io" VALUES('KPP101','S_v1',0,'','0.04');
+INSERT INTO "CM301_blocks_io" VALUES('KPP101','S_v2',0,'','0.001');
+INSERT INTO "CM301_blocks_io" VALUES('KPP101','l_v1',2,'gen_cntr.SurgeCM301.out','0');
+INSERT INTO "CM301_blocks_io" VALUES('KPP101','l_v2',0,'','0');
 INSERT INTO "CM301_blocks_io" VALUES('KPP101','Q0',0,'','1');
 INSERT INTO "CM301_blocks_io" VALUES('KPP101','Kln',0,'','2');
 INSERT INTO "CM301_blocks_io" VALUES('KPP101','Kpr',0,'','0.95');
@@ -3887,10 +3887,10 @@ INSERT INTO "CM301_blocks_io" VALUES('DR100','Po',0,'','5.59313692466279');
 INSERT INTO "CM301_blocks_io" VALUES('DR100','To',0,'','273.000000001325');
 INSERT INTO "CM301_blocks_io" VALUES('DR100','So',0,'','0.2');
 INSERT INTO "CM301_blocks_io" VALUES('DR100','lo',0,'','1');
-INSERT INTO "CM301_blocks_io" VALUES('DR100','S_kl1',0,'','0.05');
-INSERT INTO "CM301_blocks_io" VALUES('DR100','S_kl2',0,'','0.01');
-INSERT INTO "CM301_blocks_io" VALUES('DR100','l_kl1',0,'','50');
-INSERT INTO "CM301_blocks_io" VALUES('DR100','l_kl2',0,'','0');
+INSERT INTO "CM301_blocks_io" VALUES('DR100','S_v1',0,'','0.05');
+INSERT INTO "CM301_blocks_io" VALUES('DR100','S_v2',0,'','0.01');
+INSERT INTO "CM301_blocks_io" VALUES('DR100','l_v1',0,'','50');
+INSERT INTO "CM301_blocks_io" VALUES('DR100','l_v2',0,'','0');
 INSERT INTO "CM301_blocks_io" VALUES('DR100','Q0',0,'','1');
 INSERT INTO "CM301_blocks_io" VALUES('DR100','Kln',0,'','1');
 INSERT INTO "CM301_blocks_io" VALUES('DR100','Kpr',0,'','0.95');
@@ -3972,10 +3972,10 @@ INSERT INTO "CM301_blocks_io" VALUES('BC101','Po',0,'','5.59313218412456');
 INSERT INTO "CM301_blocks_io" VALUES('BC101','To',0,'','273.000000002935');
 INSERT INTO "CM301_blocks_io" VALUES('BC101','So',0,'','0.2');
 INSERT INTO "CM301_blocks_io" VALUES('BC101','lo',0,'','5');
-INSERT INTO "CM301_blocks_io" VALUES('BC101','S_kl1',0,'','0.2');
-INSERT INTO "CM301_blocks_io" VALUES('BC101','S_kl2',0,'','0.05');
-INSERT INTO "CM301_blocks_io" VALUES('BC101','l_kl1',1,'G_BC101.pos','0');
-INSERT INTO "CM301_blocks_io" VALUES('BC101','l_kl2',1,'G_BC102.pos','0');
+INSERT INTO "CM301_blocks_io" VALUES('BC101','S_v1',0,'','0.2');
+INSERT INTO "CM301_blocks_io" VALUES('BC101','S_v2',0,'','0.05');
+INSERT INTO "CM301_blocks_io" VALUES('BC101','l_v1',1,'G_BC101.pos','0');
+INSERT INTO "CM301_blocks_io" VALUES('BC101','l_v2',1,'G_BC102.pos','0');
 INSERT INTO "CM301_blocks_io" VALUES('BC101','Q0',0,'','1');
 INSERT INTO "CM301_blocks_io" VALUES('BC101','Kln',0,'','1');
 INSERT INTO "CM301_blocks_io" VALUES('BC101','Kpr',0,'','0.95');
@@ -3995,10 +3995,10 @@ INSERT INTO "CM301_blocks_io" VALUES('BC104','Po',0,'','24.5716868275176');
 INSERT INTO "CM301_blocks_io" VALUES('BC104','To',0,'','273.000000009146');
 INSERT INTO "CM301_blocks_io" VALUES('BC104','So',0,'','0.03');
 INSERT INTO "CM301_blocks_io" VALUES('BC104','lo',0,'','100');
-INSERT INTO "CM301_blocks_io" VALUES('BC104','S_kl1',0,'','0.03');
-INSERT INTO "CM301_blocks_io" VALUES('BC104','S_kl2',0,'','0.01');
-INSERT INTO "CM301_blocks_io" VALUES('BC104','l_kl1',1,'G_BC104.pos','0');
-INSERT INTO "CM301_blocks_io" VALUES('BC104','l_kl2',1,'G_BC105.pos','0');
+INSERT INTO "CM301_blocks_io" VALUES('BC104','S_v1',0,'','0.03');
+INSERT INTO "CM301_blocks_io" VALUES('BC104','S_v2',0,'','0.01');
+INSERT INTO "CM301_blocks_io" VALUES('BC104','l_v1',1,'G_BC104.pos','0');
+INSERT INTO "CM301_blocks_io" VALUES('BC104','l_v2',1,'G_BC105.pos','0');
 INSERT INTO "CM301_blocks_io" VALUES('BC104','Q0',0,'','1');
 INSERT INTO "CM301_blocks_io" VALUES('BC104','Kln',0,'','1');
 INSERT INTO "CM301_blocks_io" VALUES('BC104','Kpr',0,'','0.95');
@@ -4040,10 +4040,10 @@ INSERT INTO "CM301_blocks_io" VALUES('BC106','Po',0,'','5.59311992820393');
 INSERT INTO "CM301_blocks_io" VALUES('BC106','To',0,'','273');
 INSERT INTO "CM301_blocks_io" VALUES('BC106','So',0,'','0.0314');
 INSERT INTO "CM301_blocks_io" VALUES('BC106','lo',0,'','10');
-INSERT INTO "CM301_blocks_io" VALUES('BC106','S_kl1',0,'','0.0314');
-INSERT INTO "CM301_blocks_io" VALUES('BC106','S_kl2',0,'','0.01');
-INSERT INTO "CM301_blocks_io" VALUES('BC106','l_kl1',1,'G_BC106.pos','0');
-INSERT INTO "CM301_blocks_io" VALUES('BC106','l_kl2',0,'','0');
+INSERT INTO "CM301_blocks_io" VALUES('BC106','S_v1',0,'','0.0314');
+INSERT INTO "CM301_blocks_io" VALUES('BC106','S_v2',0,'','0.01');
+INSERT INTO "CM301_blocks_io" VALUES('BC106','l_v1',1,'G_BC106.pos','0');
+INSERT INTO "CM301_blocks_io" VALUES('BC106','l_v2',0,'','0');
 INSERT INTO "CM301_blocks_io" VALUES('BC106','Q0',0,'','1');
 INSERT INTO "CM301_blocks_io" VALUES('BC106','Kln',0,'','1');
 INSERT INTO "CM301_blocks_io" VALUES('BC106','Kpr',0,'','0.95');
@@ -4062,13 +4062,13 @@ INSERT INTO "CM301_blocks_io" VALUES('C101_1','Fo',1,'PP101.Fi','8.6305515836954
 INSERT INTO "CM301_blocks_io" VALUES('C101_1','Po',0,'','5.59313359540344');
 INSERT INTO "CM301_blocks_io" VALUES('C101_1','So',0,'','0.2');
 INSERT INTO "CM301_blocks_io" VALUES('C101_1','lo',0,'','40');
-INSERT INTO "CM301_blocks_io" VALUES('C101_1','Fo_ж',0,'','0');
-INSERT INTO "CM301_blocks_io" VALUES('C101_1','Po_ж',0,'','5.62245947509774');
-INSERT INTO "CM301_blocks_io" VALUES('C101_1','Lж',0,'','3.08693470466339');
-INSERT INTO "CM301_blocks_io" VALUES('C101_1','ProcЖ',0,'','0.01');
+INSERT INTO "CM301_blocks_io" VALUES('C101_1','Fo_lq',0,'','0');
+INSERT INTO "CM301_blocks_io" VALUES('C101_1','Po_lq',0,'','5.62245947509774');
+INSERT INTO "CM301_blocks_io" VALUES('C101_1','Llq',0,'','3.08693470466339');
+INSERT INTO "CM301_blocks_io" VALUES('C101_1','PercLq',0,'','0.01');
 INSERT INTO "CM301_blocks_io" VALUES('C101_1','Vap',0,'','9.5');
 INSERT INTO "CM301_blocks_io" VALUES('C101_1','Q0',0,'','1');
-INSERT INTO "CM301_blocks_io" VALUES('C101_1','Qж',0,'','1000');
+INSERT INTO "CM301_blocks_io" VALUES('C101_1','Qlq',0,'','1000');
 INSERT INTO "CM301_blocks_io" VALUES('C101_1','f_frq',0,'','100');
 INSERT INTO "CM301_blocks_io" VALUES('C101_1','Pot',0,'','5.40135425836322');
 INSERT INTO "CM301_blocks_io" VALUES('C101_1','Fit',0,'','0.147603004609401');
@@ -4079,13 +4079,13 @@ INSERT INTO "CM301_blocks_io" VALUES('C101_2','Fo',1,'PP102.Fi','8.5448180717354
 INSERT INTO "CM301_blocks_io" VALUES('C101_2','Po',0,'','5.59313374626812');
 INSERT INTO "CM301_blocks_io" VALUES('C101_2','So',0,'','0.071');
 INSERT INTO "CM301_blocks_io" VALUES('C101_2','lo',0,'','50');
-INSERT INTO "CM301_blocks_io" VALUES('C101_2','Fo_ж',0,'','0');
-INSERT INTO "CM301_blocks_io" VALUES('C101_2','Po_ж',0,'','5.62169585273225');
-INSERT INTO "CM301_blocks_io" VALUES('C101_2','Lж',0,'','3.00653752254049');
-INSERT INTO "CM301_blocks_io" VALUES('C101_2','ProcЖ',0,'','0.01');
+INSERT INTO "CM301_blocks_io" VALUES('C101_2','Fo_lq',0,'','0');
+INSERT INTO "CM301_blocks_io" VALUES('C101_2','Po_lq',0,'','5.62169585273225');
+INSERT INTO "CM301_blocks_io" VALUES('C101_2','Llq',0,'','3.00653752254049');
+INSERT INTO "CM301_blocks_io" VALUES('C101_2','PercLq',0,'','0.01');
 INSERT INTO "CM301_blocks_io" VALUES('C101_2','Vap',0,'','9.5');
 INSERT INTO "CM301_blocks_io" VALUES('C101_2','Q0',0,'','1');
-INSERT INTO "CM301_blocks_io" VALUES('C101_2','Qж',0,'','1000');
+INSERT INTO "CM301_blocks_io" VALUES('C101_2','Qlq',0,'','1000');
 INSERT INTO "CM301_blocks_io" VALUES('C101_2','f_frq',0,'','100');
 INSERT INTO "CM301_blocks_io" VALUES('C101_2','Pot',0,'','5.40056348486556');
 INSERT INTO "CM301_blocks_io" VALUES('C101_2','Fit',0,'','-0.0226484354771605');
@@ -4096,13 +4096,13 @@ INSERT INTO "CM301_blocks_io" VALUES('C101_3','Fo',1,'node4_1.Fi','0.00064949393
 INSERT INTO "CM301_blocks_io" VALUES('C101_3','Po',0,'','5.59312568577158');
 INSERT INTO "CM301_blocks_io" VALUES('C101_3','So',0,'','0.0314');
 INSERT INTO "CM301_blocks_io" VALUES('C101_3','lo',0,'','8');
-INSERT INTO "CM301_blocks_io" VALUES('C101_3','Fo_ж',0,'','0');
-INSERT INTO "CM301_blocks_io" VALUES('C101_3','Po_ж',0,'','5.62021986948726');
-INSERT INTO "CM301_blocks_io" VALUES('C101_3','Lж',0,'','9.03139457189366');
-INSERT INTO "CM301_blocks_io" VALUES('C101_3','ProcЖ',0,'','0.01');
+INSERT INTO "CM301_blocks_io" VALUES('C101_3','Fo_lq',0,'','0');
+INSERT INTO "CM301_blocks_io" VALUES('C101_3','Po_lq',0,'','5.62021986948726');
+INSERT INTO "CM301_blocks_io" VALUES('C101_3','Llq',0,'','9.03139457189366');
+INSERT INTO "CM301_blocks_io" VALUES('C101_3','PercLq',0,'','0.01');
 INSERT INTO "CM301_blocks_io" VALUES('C101_3','Vap',0,'','3');
 INSERT INTO "CM301_blocks_io" VALUES('C101_3','Q0',0,'','1');
-INSERT INTO "CM301_blocks_io" VALUES('C101_3','Qж',0,'','1000');
+INSERT INTO "CM301_blocks_io" VALUES('C101_3','Qlq',0,'','1000');
 INSERT INTO "CM301_blocks_io" VALUES('C101_3','f_frq',0,'','100');
 INSERT INTO "CM301_blocks_io" VALUES('C101_3','Pot',0,'','5.40093511492469');
 INSERT INTO "CM301_blocks_io" VALUES('C101_3','Fit',0,'','0.131497386772777');
@@ -4132,26 +4132,26 @@ INSERT INTO "CM301_blocks_io" VALUES('PP102','Pot',0,'','5.33730972594639');
 INSERT INTO "CM301_blocks_io" VALUES('PP102','Fit',0,'','6.59905508875654');
 INSERT INTO "CM301_blocks_io" VALUES('CM101_1','Kpr',0,'','0.95');
 INSERT INTO "CM301_blocks_io" VALUES('CM101_2','Kpr',0,'','0.95');
-INSERT INTO "CM301_blocks_io" VALUES('KPP101','t_kl1',0,'','3');
-INSERT INTO "CM301_blocks_io" VALUES('KPP101','t_kl2',0,'','5');
+INSERT INTO "CM301_blocks_io" VALUES('KPP101','t_v1',0,'','3');
+INSERT INTO "CM301_blocks_io" VALUES('KPP101','t_v2',0,'','5');
 INSERT INTO "CM301_blocks_io" VALUES('KPP101','tmp_l1',0,'','7.4109846876187e-322');
 INSERT INTO "CM301_blocks_io" VALUES('KPP101','tmp_l2',0,'','0');
-INSERT INTO "CM301_blocks_io" VALUES('DR100','t_kl1',0,'','10');
-INSERT INTO "CM301_blocks_io" VALUES('DR100','t_kl2',0,'','5');
+INSERT INTO "CM301_blocks_io" VALUES('DR100','t_v1',0,'','10');
+INSERT INTO "CM301_blocks_io" VALUES('DR100','t_v2',0,'','5');
 INSERT INTO "CM301_blocks_io" VALUES('DR100','tmp_l1',0,'','49.9999999999964');
 INSERT INTO "CM301_blocks_io" VALUES('DR100','tmp_l2',0,'','0');
 INSERT INTO "CM301_blocks_io" VALUES('node3_1','Kpr',0,'','0.95');
-INSERT INTO "CM301_blocks_io" VALUES('BC101','t_kl1',0,'','10');
-INSERT INTO "CM301_blocks_io" VALUES('BC101','t_kl2',0,'','5');
+INSERT INTO "CM301_blocks_io" VALUES('BC101','t_v1',0,'','10');
+INSERT INTO "CM301_blocks_io" VALUES('BC101','t_v2',0,'','5');
 INSERT INTO "CM301_blocks_io" VALUES('BC101','tmp_l1',0,'','2.47032822920623e-321');
 INSERT INTO "CM301_blocks_io" VALUES('BC101','tmp_l2',0,'','0');
-INSERT INTO "CM301_blocks_io" VALUES('BC104','t_kl1',0,'','10');
-INSERT INTO "CM301_blocks_io" VALUES('BC104','t_kl2',0,'','5');
+INSERT INTO "CM301_blocks_io" VALUES('BC104','t_v1',0,'','10');
+INSERT INTO "CM301_blocks_io" VALUES('BC104','t_v2',0,'','5');
 INSERT INTO "CM301_blocks_io" VALUES('BC104','tmp_l1',0,'','2.47032822920623e-321');
 INSERT INTO "CM301_blocks_io" VALUES('BC104','tmp_l2',0,'','0');
 INSERT INTO "CM301_blocks_io" VALUES('node4_1','Kpr',0,'','0.95');
-INSERT INTO "CM301_blocks_io" VALUES('BC106','t_kl1',0,'','10');
-INSERT INTO "CM301_blocks_io" VALUES('BC106','t_kl2',0,'','5');
+INSERT INTO "CM301_blocks_io" VALUES('BC106','t_v1',0,'','10');
+INSERT INTO "CM301_blocks_io" VALUES('BC106','t_v2',0,'','5');
 INSERT INTO "CM301_blocks_io" VALUES('BC106','tmp_l1',0,'','0');
 INSERT INTO "CM301_blocks_io" VALUES('BC106','tmp_l2',0,'','0');
 INSERT INTO "CM301_blocks_io" VALUES('G_BC104','pos',0,'','0');
@@ -4204,7 +4204,7 @@ INSERT INTO "CM301_blocks_io" VALUES('G_BC102','lst_com',0,'','0');
 CREATE TABLE 'CM301_prm' ("SHIFR" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '' ,"IO" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"ru#IO" TEXT DEFAULT '' ,"uk#IO" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR"));
 INSERT INTO "CM301_prm" VALUES('FN101','FN301','Flow at the output of compressor',1,'BC104.Fi:var:Variable','','Витрати на виході компресора','','Расход на выходе компрессора','BC104.Fi:var:Переменная','BC104.Fi:var:Змінна');
 INSERT INTO "CM301_prm" VALUES('F101','F301','Flow on the diaphragm PP301',1,'PP101.Fi:var:Variable
-*s.tone/h:ed:Dimension
+*s.ton/h:ed:Dimension
 *i.1:prec:Precision
 *r.0:min:Minimum
 *r.100:max:Maximum','','Витрати на діафрагмі PP301','','Расход на диафрагме PP301','PP101.Fi:var:Переменная
@@ -4217,7 +4217,7 @@ INSERT INTO "CM301_prm" VALUES('F101','F301','Flow on the diaphragm PP301',1,'PP
 *r.0:min:Мінімум
 *r.100:max:Максимум');
 INSERT INTO "CM301_prm" VALUES('F102','F302','Flow on the diaphragm PP302',1,'PP102.Fi:var:Variable
-*s.tone/h:ed:Dimension
+*s.ton/h:ed:Dimension
 *i.1:prec:Precision
 *r.0:min:Minimum
 *r.100:max:Maximum','','Витрати на діафрагмі PP302','','Расход на диафрагме PP302','PP102.Fi:var:Переменная
@@ -4310,21 +4310,21 @@ CM101_1.N:varIn:Ввід змінної
 *i.1:prec:Точність
 *r.0:min:Мінімум
 *r.10:max:Максимум');
-INSERT INTO "CM301_prm" VALUES('KPP101','KPP301','Anti-surge control valve of the compressor',1,'KPP101.l_kl1:out:Output
-KPP101.l_kl1:var:Variable
-KPP101.l_kl1:varIn:Variable input
+INSERT INTO "CM301_prm" VALUES('KPP101','KPP301','Anti-surge control valve of the compressor',1,'KPP101.l_v1:out:Output
+KPP101.l_v1:var:Variable
+KPP101.l_v1:varIn:Variable input
 *s.%:ed:Dimension
 *i.0:prec:Precision
 *r.0:min:Minimum
-*r.100:max:Maximum','','Антипомпажний регулюючий клапан компресору','','Антипомпажный регулирующий клапан компрессора','KPP101.l_kl1:out:Выход
-KPP101.l_kl1:var:Переменная
-KPP101.l_kl1:varIn:Ввод переменной
+*r.100:max:Maximum','','Антипомпажний регулюючий клапан компресору','','Антипомпажный регулирующий клапан компрессора','KPP101.l_v1:out:Выход
+KPP101.l_v1:var:Переменная
+KPP101.l_v1:varIn:Ввод переменной
 *s.%:ed:Ед.измерения
 *i.0:prec:Точность
 *r.0:min:Минимум
-*r.100:max:Максимум','KPP101.l_kl1:out:Вихід
-KPP101.l_kl1:var:Змінна
-KPP101.l_kl1:varIn:Ввід змінної
+*r.100:max:Максимум','KPP101.l_v1:out:Вихід
+KPP101.l_v1:var:Змінна
+KPP101.l_v1:varIn:Ввід змінної
 *s.%:ed:Од.виміру
 *i.0:prec:Точність
 *r.0:min:Мінімум
@@ -4411,10 +4411,10 @@ INSERT INTO "CM302_blocks_io" VALUES('KPP102','Po',0,'','23.9735548122435');
 INSERT INTO "CM302_blocks_io" VALUES('KPP102','To',0,'','273.000002553873');
 INSERT INTO "CM302_blocks_io" VALUES('KPP102','So',0,'','0.017');
 INSERT INTO "CM302_blocks_io" VALUES('KPP102','lo',0,'','10');
-INSERT INTO "CM302_blocks_io" VALUES('KPP102','S_kl1',0,'','0.015');
-INSERT INTO "CM302_blocks_io" VALUES('KPP102','S_kl2',0,'','0.015');
-INSERT INTO "CM302_blocks_io" VALUES('KPP102','l_kl1',2,'gen_cntr.SurgeCM302.out','0');
-INSERT INTO "CM302_blocks_io" VALUES('KPP102','l_kl2',0,'','0');
+INSERT INTO "CM302_blocks_io" VALUES('KPP102','S_v1',0,'','0.015');
+INSERT INTO "CM302_blocks_io" VALUES('KPP102','S_v2',0,'','0.015');
+INSERT INTO "CM302_blocks_io" VALUES('KPP102','l_v1',2,'gen_cntr.SurgeCM302.out','0');
+INSERT INTO "CM302_blocks_io" VALUES('KPP102','l_v2',0,'','0');
 INSERT INTO "CM302_blocks_io" VALUES('KPP102','Q0',0,'','1');
 INSERT INTO "CM302_blocks_io" VALUES('KPP102','Kln',0,'','2');
 INSERT INTO "CM302_blocks_io" VALUES('KPP102','Kpr',0,'','0.95');
@@ -4442,10 +4442,10 @@ INSERT INTO "CM302_blocks_io" VALUES('DR101','Po',0,'','23.9733805674584');
 INSERT INTO "CM302_blocks_io" VALUES('DR101','To',0,'','272.999999999798');
 INSERT INTO "CM302_blocks_io" VALUES('DR101','So',0,'','0.0314');
 INSERT INTO "CM302_blocks_io" VALUES('DR101','lo',0,'','3');
-INSERT INTO "CM302_blocks_io" VALUES('DR101','S_kl1',0,'','0.00314');
-INSERT INTO "CM302_blocks_io" VALUES('DR101','S_kl2',0,'','0.00314');
-INSERT INTO "CM302_blocks_io" VALUES('DR101','l_kl1',0,'','50');
-INSERT INTO "CM302_blocks_io" VALUES('DR101','l_kl2',0,'','0');
+INSERT INTO "CM302_blocks_io" VALUES('DR101','S_v1',0,'','0.00314');
+INSERT INTO "CM302_blocks_io" VALUES('DR101','S_v2',0,'','0.00314');
+INSERT INTO "CM302_blocks_io" VALUES('DR101','l_v1',0,'','50');
+INSERT INTO "CM302_blocks_io" VALUES('DR101','l_v2',0,'','0');
 INSERT INTO "CM302_blocks_io" VALUES('DR101','Q0',0,'','1');
 INSERT INTO "CM302_blocks_io" VALUES('DR101','Kln',0,'','1');
 INSERT INTO "CM302_blocks_io" VALUES('DR101','Kpr',0,'','0.95');
@@ -4464,13 +4464,13 @@ INSERT INTO "CM302_blocks_io" VALUES('С102_1','Fo',1,'PP103.Fi','-2.19932473170
 INSERT INTO "CM302_blocks_io" VALUES('С102_1','Po',0,'','23.9733836085613');
 INSERT INTO "CM302_blocks_io" VALUES('С102_1','So',0,'','0.0314');
 INSERT INTO "CM302_blocks_io" VALUES('С102_1','lo',0,'','40');
-INSERT INTO "CM302_blocks_io" VALUES('С102_1','Fo_ж',0,'','0');
-INSERT INTO "CM302_blocks_io" VALUES('С102_1','Po_ж',0,'','23.9830149785244');
-INSERT INTO "CM302_blocks_io" VALUES('С102_1','Lж',0,'','4.01307081794422');
-INSERT INTO "CM302_blocks_io" VALUES('С102_1','ProcЖ',0,'','0.01');
+INSERT INTO "CM302_blocks_io" VALUES('С102_1','Fo_lq',0,'','0');
+INSERT INTO "CM302_blocks_io" VALUES('С102_1','Po_lq',0,'','23.9830149785244');
+INSERT INTO "CM302_blocks_io" VALUES('С102_1','Llq',0,'','4.01307081794422');
+INSERT INTO "CM302_blocks_io" VALUES('С102_1','PercLq',0,'','0.01');
 INSERT INTO "CM302_blocks_io" VALUES('С102_1','Vap',0,'','2.4');
 INSERT INTO "CM302_blocks_io" VALUES('С102_1','Q0',0,'','1');
-INSERT INTO "CM302_blocks_io" VALUES('С102_1','Qж',0,'','1000');
+INSERT INTO "CM302_blocks_io" VALUES('С102_1','Qlq',0,'','1000');
 INSERT INTO "CM302_blocks_io" VALUES('С102_1','f_frq',0,'','100');
 INSERT INTO "CM302_blocks_io" VALUES('С102_1','Pot',0,'','26.8150252942661');
 INSERT INTO "CM302_blocks_io" VALUES('С102_1','Fit',0,'','0.0136804199541132');
@@ -4518,10 +4518,10 @@ INSERT INTO "CM302_blocks_io" VALUES('BC111','Po',0,'','23.9733842894812');
 INSERT INTO "CM302_blocks_io" VALUES('BC111','To',0,'','273.000000001701');
 INSERT INTO "CM302_blocks_io" VALUES('BC111','So',0,'','0.0314');
 INSERT INTO "CM302_blocks_io" VALUES('BC111','lo',0,'','5');
-INSERT INTO "CM302_blocks_io" VALUES('BC111','S_kl1',0,'','0.0314');
-INSERT INTO "CM302_blocks_io" VALUES('BC111','S_kl2',0,'','0.002');
-INSERT INTO "CM302_blocks_io" VALUES('BC111','l_kl1',1,'G_BC111.pos','0');
-INSERT INTO "CM302_blocks_io" VALUES('BC111','l_kl2',1,'G_BC112.pos','0');
+INSERT INTO "CM302_blocks_io" VALUES('BC111','S_v1',0,'','0.0314');
+INSERT INTO "CM302_blocks_io" VALUES('BC111','S_v2',0,'','0.002');
+INSERT INTO "CM302_blocks_io" VALUES('BC111','l_v1',1,'G_BC111.pos','0');
+INSERT INTO "CM302_blocks_io" VALUES('BC111','l_v2',1,'G_BC112.pos','0');
 INSERT INTO "CM302_blocks_io" VALUES('BC111','Q0',0,'','1');
 INSERT INTO "CM302_blocks_io" VALUES('BC111','Kln',0,'','1');
 INSERT INTO "CM302_blocks_io" VALUES('BC111','Kpr',0,'','0.95');
@@ -4541,10 +4541,10 @@ INSERT INTO "CM302_blocks_io" VALUES('BC113','Po',0,'','0.999999925223652');
 INSERT INTO "CM302_blocks_io" VALUES('BC113','To',0,'','272.999999998982');
 INSERT INTO "CM302_blocks_io" VALUES('BC113','So',0,'','0.00785');
 INSERT INTO "CM302_blocks_io" VALUES('BC113','lo',0,'','10');
-INSERT INTO "CM302_blocks_io" VALUES('BC113','S_kl1',0,'','0.00785');
-INSERT INTO "CM302_blocks_io" VALUES('BC113','S_kl2',0,'','0.002');
-INSERT INTO "CM302_blocks_io" VALUES('BC113','l_kl1',0,'','0');
-INSERT INTO "CM302_blocks_io" VALUES('BC113','l_kl2',0,'','0');
+INSERT INTO "CM302_blocks_io" VALUES('BC113','S_v1',0,'','0.00785');
+INSERT INTO "CM302_blocks_io" VALUES('BC113','S_v2',0,'','0.002');
+INSERT INTO "CM302_blocks_io" VALUES('BC113','l_v1',0,'','0');
+INSERT INTO "CM302_blocks_io" VALUES('BC113','l_v2',0,'','0');
 INSERT INTO "CM302_blocks_io" VALUES('BC113','Q0',0,'','1');
 INSERT INTO "CM302_blocks_io" VALUES('BC113','Kln',0,'','1');
 INSERT INTO "CM302_blocks_io" VALUES('BC113','Kpr',0,'','0.95');
@@ -4564,10 +4564,10 @@ INSERT INTO "CM302_blocks_io" VALUES('BC114','Po',0,'','92.2918580753924');
 INSERT INTO "CM302_blocks_io" VALUES('BC114','To',0,'','273.000000010185');
 INSERT INTO "CM302_blocks_io" VALUES('BC114','So',0,'','0.00785');
 INSERT INTO "CM302_blocks_io" VALUES('BC114','lo',0,'','100');
-INSERT INTO "CM302_blocks_io" VALUES('BC114','S_kl1',0,'','0.00785');
-INSERT INTO "CM302_blocks_io" VALUES('BC114','S_kl2',0,'','0.002');
-INSERT INTO "CM302_blocks_io" VALUES('BC114','l_kl1',1,'G_BC114.pos','0');
-INSERT INTO "CM302_blocks_io" VALUES('BC114','l_kl2',1,'G_BC115.pos','0');
+INSERT INTO "CM302_blocks_io" VALUES('BC114','S_v1',0,'','0.00785');
+INSERT INTO "CM302_blocks_io" VALUES('BC114','S_v2',0,'','0.002');
+INSERT INTO "CM302_blocks_io" VALUES('BC114','l_v1',1,'G_BC114.pos','0');
+INSERT INTO "CM302_blocks_io" VALUES('BC114','l_v2',1,'G_BC115.pos','0');
 INSERT INTO "CM302_blocks_io" VALUES('BC114','Q0',0,'','1');
 INSERT INTO "CM302_blocks_io" VALUES('BC114','Kln',0,'','1');
 INSERT INTO "CM302_blocks_io" VALUES('BC114','Kpr',0,'','0.95');
@@ -4587,10 +4587,10 @@ INSERT INTO "CM302_blocks_io" VALUES('BC116','Po',0,'','23.9733671205768');
 INSERT INTO "CM302_blocks_io" VALUES('BC116','To',0,'','273');
 INSERT INTO "CM302_blocks_io" VALUES('BC116','So',0,'','0.0078');
 INSERT INTO "CM302_blocks_io" VALUES('BC116','lo',0,'','1');
-INSERT INTO "CM302_blocks_io" VALUES('BC116','S_kl1',0,'','0.0078');
-INSERT INTO "CM302_blocks_io" VALUES('BC116','S_kl2',0,'','0.0078');
-INSERT INTO "CM302_blocks_io" VALUES('BC116','l_kl1',1,'G_BC116.pos','0');
-INSERT INTO "CM302_blocks_io" VALUES('BC116','l_kl2',0,'','0');
+INSERT INTO "CM302_blocks_io" VALUES('BC116','S_v1',0,'','0.0078');
+INSERT INTO "CM302_blocks_io" VALUES('BC116','S_v2',0,'','0.0078');
+INSERT INTO "CM302_blocks_io" VALUES('BC116','l_v1',1,'G_BC116.pos','0');
+INSERT INTO "CM302_blocks_io" VALUES('BC116','l_v2',0,'','0');
 INSERT INTO "CM302_blocks_io" VALUES('BC116','Q0',0,'','1');
 INSERT INTO "CM302_blocks_io" VALUES('BC116','Kln',0,'','1');
 INSERT INTO "CM302_blocks_io" VALUES('BC116','Kpr',0,'','0.95');
@@ -4636,7 +4636,7 @@ INSERT INTO "CM302_blocks_io" VALUES('CM102_1','Po',0,'','23.9733835205657');
 INSERT INTO "CM302_blocks_io" VALUES('CM102_1','To',0,'','273.073976680767');
 INSERT INTO "CM302_blocks_io" VALUES('CM102_1','So',0,'','0.017');
 INSERT INTO "CM302_blocks_io" VALUES('CM102_1','lo',0,'','55');
-INSERT INTO "CM302_blocks_io" VALUES('CM102_1','Kzp',0,'','0');
+INSERT INTO "CM302_blocks_io" VALUES('CM102_1','Kmrg',0,'','0');
 INSERT INTO "CM302_blocks_io" VALUES('CM102_1','N',0,'','0');
 INSERT INTO "CM302_blocks_io" VALUES('CM102_1','V',0,'','0.27');
 INSERT INTO "CM302_blocks_io" VALUES('CM102_1','Kpmp',0,'','0.02');
@@ -4657,7 +4657,7 @@ INSERT INTO "CM302_blocks_io" VALUES('CM102_2','Po',0,'','23.973370854836');
 INSERT INTO "CM302_blocks_io" VALUES('CM102_2','To',0,'','274.253376997186');
 INSERT INTO "CM302_blocks_io" VALUES('CM102_2','So',0,'','0.00785');
 INSERT INTO "CM302_blocks_io" VALUES('CM102_2','lo',0,'','55');
-INSERT INTO "CM302_blocks_io" VALUES('CM102_2','Kzp',0,'','0');
+INSERT INTO "CM302_blocks_io" VALUES('CM102_2','Kmrg',0,'','0');
 INSERT INTO "CM302_blocks_io" VALUES('CM102_2','N',1,'CM102_1.N','0');
 INSERT INTO "CM302_blocks_io" VALUES('CM102_2','V',0,'','0.13');
 INSERT INTO "CM302_blocks_io" VALUES('CM102_2','Kpmp',0,'','0.02');
@@ -4729,13 +4729,13 @@ INSERT INTO "CM302_blocks_io" VALUES('C102_2','Fo',1,'PP104.Fi','0.0001101933686
 INSERT INTO "CM302_blocks_io" VALUES('C102_2','Po',0,'','23.9733841497219');
 INSERT INTO "CM302_blocks_io" VALUES('C102_2','So',0,'','0.017');
 INSERT INTO "CM302_blocks_io" VALUES('C102_2','lo',0,'','50');
-INSERT INTO "CM302_blocks_io" VALUES('C102_2','Fo_ж',0,'','0');
-INSERT INTO "CM302_blocks_io" VALUES('C102_2','Po_ж',0,'','23.9830884685443');
-INSERT INTO "CM302_blocks_io" VALUES('C102_2','Lж',0,'','4.85215941120694');
-INSERT INTO "CM302_blocks_io" VALUES('C102_2','ProcЖ',0,'','0.01');
+INSERT INTO "CM302_blocks_io" VALUES('C102_2','Fo_lq',0,'','0');
+INSERT INTO "CM302_blocks_io" VALUES('C102_2','Po_lq',0,'','23.9830884685443');
+INSERT INTO "CM302_blocks_io" VALUES('C102_2','Llq',0,'','4.85215941120694');
+INSERT INTO "CM302_blocks_io" VALUES('C102_2','PercLq',0,'','0.01');
 INSERT INTO "CM302_blocks_io" VALUES('C102_2','Vap',0,'','2');
 INSERT INTO "CM302_blocks_io" VALUES('C102_2','Q0',0,'','1');
-INSERT INTO "CM302_blocks_io" VALUES('C102_2','Qж',0,'','1000');
+INSERT INTO "CM302_blocks_io" VALUES('C102_2','Qlq',0,'','1000');
 INSERT INTO "CM302_blocks_io" VALUES('C102_2','f_frq',0,'','100');
 INSERT INTO "CM302_blocks_io" VALUES('C102_2','Pot',0,'','26.8110487968738');
 INSERT INTO "CM302_blocks_io" VALUES('C102_2','Fit',0,'','-0.0290302511841726');
@@ -4746,41 +4746,41 @@ INSERT INTO "CM302_blocks_io" VALUES('C102_3','Fo',1,'node6_1.Fi','0.00055233554
 INSERT INTO "CM302_blocks_io" VALUES('C102_3','Po',0,'','23.9734524452684');
 INSERT INTO "CM302_blocks_io" VALUES('C102_3','So',0,'','0.00785');
 INSERT INTO "CM302_blocks_io" VALUES('C102_3','lo',0,'','8');
-INSERT INTO "CM302_blocks_io" VALUES('C102_3','Fo_ж',0,'','0');
-INSERT INTO "CM302_blocks_io" VALUES('C102_3','Po_ж',0,'','23.9838299761813');
-INSERT INTO "CM302_blocks_io" VALUES('C102_3','Lж',0,'','6.91835394191689');
-INSERT INTO "CM302_blocks_io" VALUES('C102_3','ProcЖ',0,'','0.01');
+INSERT INTO "CM302_blocks_io" VALUES('C102_3','Fo_lq',0,'','0');
+INSERT INTO "CM302_blocks_io" VALUES('C102_3','Po_lq',0,'','23.9838299761813');
+INSERT INTO "CM302_blocks_io" VALUES('C102_3','Llq',0,'','6.91835394191689');
+INSERT INTO "CM302_blocks_io" VALUES('C102_3','PercLq',0,'','0.01');
 INSERT INTO "CM302_blocks_io" VALUES('C102_3','Vap',0,'','1.5');
 INSERT INTO "CM302_blocks_io" VALUES('C102_3','Q0',0,'','1');
-INSERT INTO "CM302_blocks_io" VALUES('C102_3','Qж',0,'','1000');
+INSERT INTO "CM302_blocks_io" VALUES('C102_3','Qlq',0,'','1000');
 INSERT INTO "CM302_blocks_io" VALUES('C102_3','f_frq',0,'','100');
 INSERT INTO "CM302_blocks_io" VALUES('C102_3','Pot',0,'','26.7868124450488');
 INSERT INTO "CM302_blocks_io" VALUES('C102_3','Fit',0,'','0.313336706308645');
 INSERT INTO "CM302_blocks_io" VALUES('G_BC112','pos',0,'','0');
-INSERT INTO "CM302_blocks_io" VALUES('KPP102','t_kl1',0,'','3');
-INSERT INTO "CM302_blocks_io" VALUES('KPP102','t_kl2',0,'','5');
+INSERT INTO "CM302_blocks_io" VALUES('KPP102','t_v1',0,'','3');
+INSERT INTO "CM302_blocks_io" VALUES('KPP102','t_v2',0,'','5');
 INSERT INTO "CM302_blocks_io" VALUES('KPP102','tmp_l1',0,'','7.4109846876187e-322');
 INSERT INTO "CM302_blocks_io" VALUES('KPP102','tmp_l2',0,'','0');
-INSERT INTO "CM302_blocks_io" VALUES('DR101','t_kl1',0,'','10');
-INSERT INTO "CM302_blocks_io" VALUES('DR101','t_kl2',0,'','5');
+INSERT INTO "CM302_blocks_io" VALUES('DR101','t_v1',0,'','10');
+INSERT INTO "CM302_blocks_io" VALUES('DR101','t_v2',0,'','5');
 INSERT INTO "CM302_blocks_io" VALUES('DR101','tmp_l1',0,'','49.9999999999964');
 INSERT INTO "CM302_blocks_io" VALUES('DR101','tmp_l2',0,'','0');
 INSERT INTO "CM302_blocks_io" VALUES('G_BC114','pos',0,'','0');
 INSERT INTO "CM302_blocks_io" VALUES('G_BC116','pos',0,'','0');
-INSERT INTO "CM302_blocks_io" VALUES('BC111','t_kl1',0,'','10');
-INSERT INTO "CM302_blocks_io" VALUES('BC111','t_kl2',0,'','5');
+INSERT INTO "CM302_blocks_io" VALUES('BC111','t_v1',0,'','10');
+INSERT INTO "CM302_blocks_io" VALUES('BC111','t_v2',0,'','5');
 INSERT INTO "CM302_blocks_io" VALUES('BC111','tmp_l1',0,'','2.47032822920623e-321');
 INSERT INTO "CM302_blocks_io" VALUES('BC111','tmp_l2',0,'','0');
-INSERT INTO "CM302_blocks_io" VALUES('BC113','t_kl1',0,'','10');
-INSERT INTO "CM302_blocks_io" VALUES('BC113','t_kl2',0,'','5');
+INSERT INTO "CM302_blocks_io" VALUES('BC113','t_v1',0,'','10');
+INSERT INTO "CM302_blocks_io" VALUES('BC113','t_v2',0,'','5');
 INSERT INTO "CM302_blocks_io" VALUES('BC113','tmp_l1',0,'','0');
 INSERT INTO "CM302_blocks_io" VALUES('BC113','tmp_l2',0,'','0');
-INSERT INTO "CM302_blocks_io" VALUES('BC114','t_kl1',0,'','10');
-INSERT INTO "CM302_blocks_io" VALUES('BC114','t_kl2',0,'','5');
+INSERT INTO "CM302_blocks_io" VALUES('BC114','t_v1',0,'','10');
+INSERT INTO "CM302_blocks_io" VALUES('BC114','t_v2',0,'','5');
 INSERT INTO "CM302_blocks_io" VALUES('BC114','tmp_l1',0,'','2.47032822920623e-321');
 INSERT INTO "CM302_blocks_io" VALUES('BC114','tmp_l2',0,'','0');
-INSERT INTO "CM302_blocks_io" VALUES('BC116','t_kl1',0,'','10');
-INSERT INTO "CM302_blocks_io" VALUES('BC116','t_kl2',0,'','5');
+INSERT INTO "CM302_blocks_io" VALUES('BC116','t_v1',0,'','10');
+INSERT INTO "CM302_blocks_io" VALUES('BC116','t_v2',0,'','5');
 INSERT INTO "CM302_blocks_io" VALUES('BC116','tmp_l1',0,'','0');
 INSERT INTO "CM302_blocks_io" VALUES('BC116','tmp_l2',0,'','0');
 INSERT INTO "CM302_blocks_io" VALUES('G_BC111','pos',0,'','0');
@@ -4832,27 +4832,27 @@ INSERT INTO "CM302_blocks_io" VALUES('G_BC112','f_frq',0,'','100');
 INSERT INTO "CM302_blocks_io" VALUES('G_BC112','tmp_up',0,'','0');
 INSERT INTO "CM302_blocks_io" VALUES('G_BC112','lst_com',0,'','0');
 CREATE TABLE 'CM302_prm' ("SHIFR" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '' ,"IO" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"ru#IO" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"uk#IO" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR"));
-INSERT INTO "CM302_prm" VALUES('KPP102','KPP302','Anti-surge control valve of the compressor',1,'KPP102.l_kl1:out:Output
-KPP102.l_kl1:var:Variable
-KPP102.l_kl1:varIn:Variable input
+INSERT INTO "CM302_prm" VALUES('KPP102','KPP302','Anti-surge control valve of the compressor',1,'KPP102.l_v1:out:Output
+KPP102.l_v1:var:Variable
+KPP102.l_v1:varIn:Variable input
 *s.%:ed:Dimension
 *i.0:prec:Precision
 *r.0:min:Minimum
-*r.100:max:Maximum','','Антипомпажный регулирующий клапан компрессора','KPP102.l_kl1:out:Выход
-KPP102.l_kl1:var:Переменная
-KPP102.l_kl1:varIn:Ввод переменной
+*r.100:max:Maximum','','Антипомпажный регулирующий клапан компрессора','KPP102.l_v1:out:Выход
+KPP102.l_v1:var:Переменная
+KPP102.l_v1:varIn:Ввод переменной
 *s.%:ed:Ед.измерения
 *i.0:prec:Точность
 *r.0:min:Минимум
-*r.100:max:Максимум','','Антипомпажний регулюючий клапан компресору','KPP102.l_kl1:out:Вихід
-KPP102.l_kl1:var:Змінна
-KPP102.l_kl1:varIn:Ввід змінної
+*r.100:max:Максимум','','Антипомпажний регулюючий клапан компресору','KPP102.l_v1:out:Вихід
+KPP102.l_v1:var:Змінна
+KPP102.l_v1:varIn:Ввід змінної
 *s.%:ed:Од.виміру
 *i.0:prec:Точність
 *r.0:min:Мінімум
 *r.100:max:Максимум');
 INSERT INTO "CM302_prm" VALUES('F103','F303','Flow on the diaphragm PP303',1,'PP103.Fi:var:Variable
-*s.tone/h:ed:Dimension
+*s.ton/h:ed:Dimension
 *i.1:prec:Precision
 *r.0:min:Minimum
 *r.100:max:Maximum','','Расход на диафрагме PP303','PP103.Fi:var:Переменная
@@ -4878,7 +4878,7 @@ INSERT INTO "CM302_prm" VALUES('TT0202','TE1202_6','Temperature after the first 
 *r.273:min:Мінімум
 *r.373:max:Максимум');
 INSERT INTO "CM302_prm" VALUES('F104','F304','Flow on the diaphragm PP304',1,'PP104.Fi:var:Variable
-*s.tone/h:ed:Dimension
+*s.ton/h:ed:Dimension
 *i.1:prec:Precision
 *r.0:min:Minimum
 *r.100:max:Maximum','','Расход на диафрагме PP304','PP104.Fi:var:Переменная
@@ -5089,27 +5089,27 @@ CREATE TABLE 'gen_blcks' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME
 INSERT INTO "gen_blcks" VALUES('node1_1','Node 1.1','Вузол 1.1','Узел 1.1','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_pipe1_3',1,1,'',0);
 INSERT INTO "gen_blcks" VALUES('G_BC22','BC22 (control mechanism)','КК22 (вик. механізм)','КШ22 (исп. механизм)','Control mechanism of ball crane КSH22.','Виконавчий механізм кульового крану КК22.','Исполнительный механизм шарового крана КШ22.','DAQ.JavaLikeCalc.lib_techApp.fnc_ballCrane',1,1,'',0);
 INSERT INTO "gen_blcks" VALUES('netHPG','Net of HPG','Мережа ГВТ','Сеть ГВД','','','','DAQ.JavaLikeCalc.lib_techApp.net',1,1,'',0);
-INSERT INTO "gen_blcks" VALUES('BC21','BC21','КК21','КШ21','Ball crane armature for BC21 и BC22','Арматура кульових кранів КК21 та КК22','Арматура шаровых кранов КШ21 и КШ22','DAQ.JavaLikeCalc.lib_techApp.fnc_klap',1,1,'',0);
+INSERT INTO "gen_blcks" VALUES('BC21','BC21','КК21','КШ21','Ball crane armature for BC21 и BC22','Арматура кульових кранів КК21 та КК22','Арматура шаровых кранов КШ21 и КШ22','DAQ.JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
 INSERT INTO "gen_blcks" VALUES('noisePP3','PP3 noise','Шум PP3','Шум PP3','Flow source noise for diaphragms PP3','Шум джерела витрат діафрагми PP3','Шум источника расхода диафрагмы PP3','DAQ.JavaLikeCalc.lib_techApp.fnc_noise',1,1,'',0);
 INSERT INTO "gen_blcks" VALUES('G_PCV2','PCV2 (control mechanism)','КРТ2 (вик. механізм)','КРД2 (исп. механизм)','','','','DAQ.JavaLikeCalc.lib_techApp.fnc_lagClean',1,1,'',0);
 INSERT INTO "gen_blcks" VALUES('netGlinsk','Glinsk (net)','Глінск (мережа)','Глинск (сеть)','','','','DAQ.JavaLikeCalc.lib_techApp.fnc_net',1,1,'',0);
 INSERT INTO "gen_blcks" VALUES('G_BC6','BC6 (control mechanism)','КК6 (вик. механізм)','КШ6 (исп. механизм)','Control mechanism of ball crane BC6.','Виконавчий механізм кульового крану КК6.','Исполнительный механизм шарового крана КШ6.','DAQ.JavaLikeCalc.lib_techApp.fnc_ballCrane',1,1,'',0);
 INSERT INTO "gen_blcks" VALUES('P_PCV2','P_PCV2 (Pressure sensor)','P КРТ2 (Давач тиску)','P КРД2 (Датчик давления)','','','','DAQ.JavaLikeCalc.lib_techApp.fnc_lag',1,1,'',0);
 INSERT INTO "gen_blcks" VALUES('SrcGas','','','','Gas source to compressor station','Джерело газу на компресорну станцію.','Источник газа на компрессорную станцию','DAQ.JavaLikeCalc.lib_techApp.src_press',1,1,'',0);
-INSERT INTO "gen_blcks" VALUES('PCV1','PCV1','КРТ1','КРД1','The crane for regulation the input pressure of  the compressor low pressure.','Клапан, який регулює вхідний тиск на всасі компресорів низького тиску.','Клапан, регулирующий входное давление на всасе компресоров низкого давления.','DAQ.JavaLikeCalc.lib_techApp.fnc_klap',1,1,'',0);
+INSERT INTO "gen_blcks" VALUES('PCV1','PCV1','КРТ1','КРД1','The crane for regulation the input pressure of  the compressor low pressure.','Клапан, який регулює вхідний тиск на всасі компресорів низького тиску.','Клапан, регулирующий входное давление на всасе компресоров низкого давления.','DAQ.JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
 INSERT INTO "gen_blcks" VALUES('pipeGlinsk','Pipe to Glinsk','Труба на Глінск','Труба на Глинск','','','','DAQ.JavaLikeCalc.lib_techApp.fnc_pipe1_1',1,1,'',0);
-INSERT INTO "gen_blcks" VALUES('PCV2','PCV2','КРТ2','КРД2','','','','DAQ.JavaLikeCalc.lib_techApp.fnc_klap',1,1,'',0);
-INSERT INTO "gen_blcks" VALUES('PCV4','PCV4','КРТ4','КРД4','The control crane on outgo to GHP.','Регулюючий клапан на виході у ГВТ.','Регулирующий клапан на выходе в ГВД.','DAQ.JavaLikeCalc.lib_techApp.klap',1,1,'',0);
+INSERT INTO "gen_blcks" VALUES('PCV2','PCV2','КРТ2','КРД2','','','','DAQ.JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
+INSERT INTO "gen_blcks" VALUES('PCV4','PCV4','КРТ4','КРД4','The control crane on outgo to GHP.','Регулюючий клапан на виході у ГВТ.','Регулирующий клапан на выходе в ГВД.','DAQ.JavaLikeCalc.lib_techApp.valve',1,1,'',0);
 INSERT INTO "gen_blcks" VALUES('G_BC7','BC7 (control mechanism)','КК7 (вик. механізм)','КШ7 (исп. механизм)','Control mechanism of ball crane BC7.','Виконавчий механізм кульового крану КК7.','Исполнительный механизм шарового крана КШ7.','DAQ.JavaLikeCalc.lib_techApp.fnc_ballCrane',1,1,'',0);
-INSERT INTO "gen_blcks" VALUES('PP1','','','','Flow measure point based on diaphragm.','Вузол виміру витрат на основі діафрагми.','Узел измерения расхода на основе диафрагмы.','DAQ.JavaLikeCalc.lib_techApp.diafragma',1,1,'',0);
-INSERT INTO "gen_blcks" VALUES('PP3','PP3','PP3','','Flow measure point based on diaphragm.','Вимірювальна діафрагма на вході у вузол.','Измерительная диафрагма на входе в узел.','DAQ.JavaLikeCalc.lib_techApp.fnc_diafragma',1,1,'',0);
-INSERT INTO "gen_blcks" VALUES('PP5','PP5','PP5','','','','','DAQ.JavaLikeCalc.lib_techApp.fnc_diafragma',1,1,'',0);
-INSERT INTO "gen_blcks" VALUES('PP7','','','','','','','DAQ.JavaLikeCalc.lib_techApp.diafragma',1,1,'',0);
+INSERT INTO "gen_blcks" VALUES('PP1','','','','Flow measure point based on diaphragm.','Вузол виміру витрат на основі діафрагми.','Узел измерения расхода на основе диафрагмы.','DAQ.JavaLikeCalc.lib_techApp.diaphragm',1,1,'',0);
+INSERT INTO "gen_blcks" VALUES('PP3','PP3','PP3','','Flow measure point based on diaphragm.','Вимірювальна діафрагма на вході у вузол.','Измерительная диафрагма на входе в узел.','DAQ.JavaLikeCalc.lib_techApp.fnc_diaphragm',1,1,'',0);
+INSERT INTO "gen_blcks" VALUES('PP5','PP5','PP5','','','','','DAQ.JavaLikeCalc.lib_techApp.fnc_diaphragm',1,1,'',0);
+INSERT INTO "gen_blcks" VALUES('PP7','','','','','','','DAQ.JavaLikeCalc.lib_techApp.diaphragm',1,1,'',0);
 INSERT INTO "gen_blcks" VALUES('netTorch','Torch (net)','Факел (мережа)','Факел (сеть)','Torch net.','Факельна мережа.','Факеьная сеть.','DAQ.JavaLikeCalc.lib_techApp.net',1,1,'',0);
-INSERT INTO "gen_blcks" VALUES('BC1','BC1','КК1','КШ1','The ball crane for getting gas to the station.','Кульові крани подачі газу на станцію.','Шаровые краны подачи газа на станцию.','DAQ.JavaLikeCalc.lib_techApp.klap',1,1,'',0);
+INSERT INTO "gen_blcks" VALUES('BC1','BC1','КК1','КШ1','The ball crane for getting gas to the station.','Кульові крани подачі газу на станцію.','Шаровые краны подачи газа на станцию.','DAQ.JavaLikeCalc.lib_techApp.valve',1,1,'',0);
 INSERT INTO "gen_blcks" VALUES('G_BC21','BC21 (control mechanism)','КК21 (вик. механізм)','КШ21 (исп. механизм)','Control mechanism of ball crane BC21.','Виконавчий механізм кульового крану КК21.','Исполнительный механизм шарового крана КШ21.','DAQ.JavaLikeCalc.lib_techApp.fnc_ballCrane',1,1,'',0);
-INSERT INTO "gen_blcks" VALUES('BC5','BC5','КК5','КШ5','Ball crane for dropping gas to torch.','Кульовий кран для скидання вхідного газу на факел.','Шаровый кран для сброса входного газа на факел.','DAQ.JavaLikeCalc.lib_techApp.klap',1,1,'',0);
-INSERT INTO "gen_blcks" VALUES('BC6','BC6','КК6','КШ6','Ball cranes BC6 and BC7 armature','Арматура кульових кранів КК6 та КК7','Арматура шаровых кранов КШ6 и КШ7','DAQ.JavaLikeCalc.lib_techApp.fnc_klap',1,1,'',0);
+INSERT INTO "gen_blcks" VALUES('BC5','BC5','КК5','КШ5','Ball crane for dropping gas to torch.','Кульовий кран для скидання вхідного газу на факел.','Шаровый кран для сброса входного газа на факел.','DAQ.JavaLikeCalc.lib_techApp.valve',1,1,'',0);
+INSERT INTO "gen_blcks" VALUES('BC6','BC6','КК6','КШ6','Ball cranes BC6 and BC7 armature','Арматура кульових кранів КК6 та КК7','Арматура шаровых кранов КШ6 и КШ7','DAQ.JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
 INSERT INTO "gen_blcks" VALUES('node1','Node 1','Вузол 1','Узел 1','Node to torch and compressor low pressure.','Вузол розгалуження на факел та компресор низького тиску.','Узел разветвления на факел и компрессор низкого давления.','DAQ.JavaLikeCalc.lib_techApp.pipe1_2',1,1,'',0);
 INSERT INTO "gen_blcks" VALUES('node20','Node 20','Вузол 20','Узел 20','','','','DAQ.JavaLikeCalc.lib_techApp.fnc_pipe1_2',1,1,'',0);
 INSERT INTO "gen_blcks" VALUES('node21','Node 21','Вузол 21','Узел 21','Node before CLP.','Вузол перед КНТ.','Узел перед КНД.','DAQ.JavaLikeCalc.lib_techApp.fnc_pipe1_3',1,1,'',0);
@@ -5133,42 +5133,42 @@ INSERT INTO "gen_cntr_blocks" VALUES('SurgeCM302','CM302 surge','КМ302 пом�
 CREATE TABLE 'CM101_blocks' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"FUNC" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PROC" INTEGER DEFAULT '0' ,"PRIOR" TEXT DEFAULT '' ,"LNK_OUT_WR_CH" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 INSERT INTO "CM101_blocks" VALUES('CM101_1','Compressor CM101 stage 1','Ступ. 1 компр. КМ101','Ступ. 1 компр. КМ101','Stage one of compressor CM101.','Перша ступінь компресора КМ101.','Первая ступень компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.compressor',1,1,'',0);
 INSERT INTO "CM101_blocks" VALUES('CM101_2','Compressor CM101 stage 2','Ступ. 2 компр. КМ101','Ступ. 2 компр. КМ101','Stage two of compressor CM101.','Друга ступінь компресора КМ101.','Вторая ступень компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.compressor',1,1,'',0);
-INSERT INTO "CM101_blocks" VALUES('KPP101','','','','Surge protect control crane of compressor CM101.','Протипомпажний регулюючий клапан компресору КМ101.','Антипомпажный регулирующий клапан компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.fnc_klap',1,1,'',0);
-INSERT INTO "CM101_blocks" VALUES('DR100','Baffle 100','Дросель 100','Дросель 100','','','','DAQ.JavaLikeCalc.lib_techApp.klap',1,1,'',0);
+INSERT INTO "CM101_blocks" VALUES('KPP101','','','','Surge protect control crane of compressor CM101.','Протипомпажний регулюючий клапан компресору КМ101.','Антипомпажный регулирующий клапан компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
+INSERT INTO "CM101_blocks" VALUES('DR100','Baffle 100','Дросель 100','Дросель 100','','','','DAQ.JavaLikeCalc.lib_techApp.valve',1,1,'',0);
 INSERT INTO "CM101_blocks" VALUES('AT101_1','Air cooler AT101_1','Пов. охолод. AT101_1','Возд. охлад. AT101_1','The air cooler for gas after compressor CM101 stage one.','Охолоджувач газу після першої ступені компресору КМ101.','Охладитель газа после первой ступени компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.cooler',1,1,'',0);
 INSERT INTO "CM101_blocks" VALUES('AT101_2','Air cooler AT101_2','Пов. охолод. AT101_2','Возд. охлад. AT101_2','The air cooler for gas after compressor CM101 stage two.','Охолоджувач газу після другої ступені компресора КМ101.','Охладитель газа после второй ступени компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.cooler',1,1,'',0);
 INSERT INTO "CM101_blocks" VALUES('node3_1','Node 3.1','Вузол 3.1','Узел 3.1','','','','DAQ.JavaLikeCalc.lib_techApp.pipe3_1',1,1,'',0);
-INSERT INTO "CM101_blocks" VALUES('BC101','BC101','КК101','КШ101','Ball crane for compressor CM101 enable.','Кульовий кран підключення компресора КМ101.','Шаровый кран подключения компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.klap',1,1,'',0);
-INSERT INTO "CM101_blocks" VALUES('BC104','BC104','КК104','КШ104','Ball crane for compressor CM101 enable to net.','Кульовий кран підключення компресора КМ101 у мережу.','Шаровый кран подключения компрессора КМ101 в сеть.','DAQ.JavaLikeCalc.lib_techApp.klap',1,1,'',0);
+INSERT INTO "CM101_blocks" VALUES('BC101','BC101','КК101','КШ101','Ball crane for compressor CM101 enable.','Кульовий кран підключення компресора КМ101.','Шаровый кран подключения компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.valve',1,1,'',0);
+INSERT INTO "CM101_blocks" VALUES('BC104','BC104','КК104','КШ104','Ball crane for compressor CM101 enable to net.','Кульовий кран підключення компресора КМ101 у мережу.','Шаровый кран подключения компрессора КМ101 в сеть.','DAQ.JavaLikeCalc.lib_techApp.valve',1,1,'',0);
 INSERT INTO "CM101_blocks" VALUES('node4_1','Node 4.1','Вузол 4.1','Узел 4.1','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_pipe1_3',1,1,'',0);
-INSERT INTO "CM101_blocks" VALUES('BC106','BC106','КК106','КШ106','Surge protect ball crane of compressor CM101.','Протипомпажний шаровий кран компресора КМ101.','Антипомпажный шаровый кран компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.klap',1,1,'',0);
+INSERT INTO "CM101_blocks" VALUES('BC106','BC106','КК106','КШ106','Surge protect ball crane of compressor CM101.','Протипомпажний шаровий кран компресора КМ101.','Антипомпажный шаровый кран компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.valve',1,1,'',0);
 INSERT INTO "CM101_blocks" VALUES('C101_1','Separator C101/1','Сепаратор C101/1','Сепаратор C101/1','Liquid fraction droping before compressor CM101 stage one.','Сепаратор відгону рідини перед першим ступенем компресора КМ101.','Сепаратор отгона жидкости перед первой ступенью компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.separator',1,1,'',0);
 INSERT INTO "CM101_blocks" VALUES('C101_2','Separator C101/2','Сепаратор C101/2','Сепаратор C101/2','Liquid fraction droping after compressor CM101 stage one.','Сепаратор відгону рідини після першого ступеня компресора КМ101.','Сепаратор отгона жидкости после первой ступени компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.separator',1,1,'',0);
 INSERT INTO "CM101_blocks" VALUES('C101_3','Separator C101/3','Сепаратор C101/3','Сепаратор C101/3','Liquid fraction droping after compressor CM101 stage two.','Сепаратор відгону рідини після другого ступеня компресора КМ101.','Сепаратор отгона жидкости после второй ступени компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.separator',1,1,'',0);
-INSERT INTO "CM101_blocks" VALUES('PP101','','','','Flow control point, diaphragm type, for first stage of compressor CM101.','Вузол виміру витрат на першому ступені компресора КМ101 діафрагменого типу.','Узел замера расхода на первую ступень компрессора КМ101 диафрагменного типа.','DAQ.JavaLikeCalc.lib_techApp.diafragma',1,1,'',0);
-INSERT INTO "CM101_blocks" VALUES('PP102','','','','Flow control point, diaphragm type, for second stage of compressor CM101.','Вузол виміру витрат на другому ступені компресора КМ101 діафрагменого типу.','Узел замера расхода на вторую ступень компрессора КМ101 диафрагменного типа.','DAQ.JavaLikeCalc.lib_techApp.diafragma',1,1,'',0);
+INSERT INTO "CM101_blocks" VALUES('PP101','','','','Flow control point, diaphragm type, for first stage of compressor CM101.','Вузол виміру витрат на першому ступені компресора КМ101 діафрагменого типу.','Узел замера расхода на первую ступень компрессора КМ101 диафрагменного типа.','DAQ.JavaLikeCalc.lib_techApp.diaphragm',1,1,'',0);
+INSERT INTO "CM101_blocks" VALUES('PP102','','','','Flow control point, diaphragm type, for second stage of compressor CM101.','Вузол виміру витрат на другому ступені компресора КМ101 діафрагменого типу.','Узел замера расхода на вторую ступень компрессора КМ101 диафрагменного типа.','DAQ.JavaLikeCalc.lib_techApp.diaphragm',1,1,'',0);
 INSERT INTO "CM101_blocks" VALUES('G_BC102','BC102 (control mechanism)','КК102 (вик. механізм)','КШ102 (исп. механизм)','Control mechanism of ball crane КSH102.','Виконавчий механізм кульового крану КК102.','Исполнительный механизм шарового крана КШ102.','DAQ.JavaLikeCalc.lib_techApp.fnc_ballCrane',1,1,'',0);
 INSERT INTO "CM101_blocks" VALUES('G_BC101','BC101 (control mechanism)','КК101 (вик. механізм)','КШ101 (исп. механизм)','Control mechanism of ball crane КSH101.','Виконавчий механізм кульового крану КК101.','Исполнительный механизм шарового крана КШ101.','DAQ.JavaLikeCalc.lib_techApp.fnc_ballCrane',1,1,'',0);
 INSERT INTO "CM101_blocks" VALUES('G_BC104','BC104 (control mechanism)','КК104 (вик. механізм)','КШ104 (исп. механизм)','Control mechanism of ball crane КSH104.','Виконавчий механізм кульового крану КК104.','Исполнительный механизм шарового крана КШ104.','DAQ.JavaLikeCalc.lib_techApp.fnc_ballCrane',1,1,'',0);
 INSERT INTO "CM101_blocks" VALUES('G_BC105','BC105 (control mechanism)','КК105 (вик. механізм)','КШ105 (исп. механизм)','Control mechanism of ball crane КSH105.','Виконавчий механізм кульового крану КК105.','Исполнительный механизм шарового крана КШ105.','DAQ.JavaLikeCalc.lib_techApp.fnc_ballCrane',1,1,'',0);
 INSERT INTO "CM101_blocks" VALUES('G_BC106','BC106 (control mechanism)','КК106 (вик. механізм)','КШ106 (исп. механизм)','Control mechanism of ball crane КSH106.','Виконавчий механізм кульового крану КК106.','Исполнительный механизм шарового крана КШ106.','DAQ.JavaLikeCalc.lib_techApp.fnc_ballCrane',1,1,'',0);
 CREATE TABLE 'CM102_blocks' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"FUNC" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PROC" INTEGER DEFAULT '0' ,"PRIOR" TEXT DEFAULT '' ,"LNK_OUT_WR_CH" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
-INSERT INTO "CM102_blocks" VALUES('KPP102','','','','Surge protect control crane of compressor КМ102.','Протипомпажний регулюючий клапан компресору КМ102.','Антипомпажный регулирующий клапан компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.fnc_klap',1,1,'',0);
+INSERT INTO "CM102_blocks" VALUES('KPP102','','','','Surge protect control crane of compressor КМ102.','Протипомпажний регулюючий клапан компресору КМ102.','Антипомпажный регулирующий клапан компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
 INSERT INTO "CM102_blocks" VALUES('net102','','','','','','','DAQ.JavaLikeCalc.lib_techApp.fnc_net',1,1,'',0);
-INSERT INTO "CM102_blocks" VALUES('DR101','Baffle 101','Дросель 101','Дросель 101','','','','DAQ.JavaLikeCalc.lib_techApp.klap',1,1,'',0);
+INSERT INTO "CM102_blocks" VALUES('DR101','Baffle 101','Дросель 101','Дросель 101','','','','DAQ.JavaLikeCalc.lib_techApp.valve',1,1,'',0);
 INSERT INTO "CM102_blocks" VALUES('С102_1','Separator C102/1','Сепаратор С102/1','Сепаратор С102/1','Liquid fraction droping before compressor CM102 stage one.','Сепаратор відгону рідини перед першим ступенем компресора КМ102.','Сепаратор отгона жидкости перед первой ступенью компрессора КМ102.','DAQ.JavaLikeCalc.lib_techApp.separator',1,1,'',0);
 INSERT INTO "CM102_blocks" VALUES('AT102_1','Air cooler AT102_1','Пов. охолод. AT102_1','Возд. охлад. AT102_1','The air cooler for gas after compressor CM102 stage one.','Охолоджувач газу після першої ступені компресору КМ102.','Охладитель газа после первой ступени компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.cooler',1,1,'',0);
 INSERT INTO "CM102_blocks" VALUES('AT102_2','Air cooler AT102_2','Пов. охолод. AT102_2','Возд. охлад. AT102_2','The air cooler for gas after compressor CM102 stage two.','Охолоджувач газу після другої ступені компресора КМ102.','Охладитель газа после второй ступени компрессора КМ102.','DAQ.JavaLikeCalc.lib_techApp.cooler',1,1,'',0);
-INSERT INTO "CM102_blocks" VALUES('BC111','BC111','КК111','КШ111','Ball crane for compressor CM102 enable.','Кульовий кран підключення компресору КМ102.','Шаровый кран подключения компрессора КМ102.','DAQ.JavaLikeCalc.lib_techApp.klap',1,1,'',0);
-INSERT INTO "CM102_blocks" VALUES('BC113','BC113','КК113','КШ113','','','','DAQ.JavaLikeCalc.lib_techApp.fnc_klap',1,1,'',0);
-INSERT INTO "CM102_blocks" VALUES('BC114','BC114','КК114','КШ114','Ball crane for compressor CM102 enable to net.','Кульовий кран підключення компресору КМ102 у мережу.','Шаровый кран подключения компрессора КМ101 в сеть.','DAQ.JavaLikeCalc.lib_techApp.klap',1,1,'',0);
-INSERT INTO "CM102_blocks" VALUES('BC116','BC116','КК116','КШ116','Surge protect ball crane of compressor CM102.','Протипомпажний шаровий кран компресора КМ102.','Антипомпажный шаровый кран компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.klap',1,1,'',0);
+INSERT INTO "CM102_blocks" VALUES('BC111','BC111','КК111','КШ111','Ball crane for compressor CM102 enable.','Кульовий кран підключення компресору КМ102.','Шаровый кран подключения компрессора КМ102.','DAQ.JavaLikeCalc.lib_techApp.valve',1,1,'',0);
+INSERT INTO "CM102_blocks" VALUES('BC113','BC113','КК113','КШ113','','','','DAQ.JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
+INSERT INTO "CM102_blocks" VALUES('BC114','BC114','КК114','КШ114','Ball crane for compressor CM102 enable to net.','Кульовий кран підключення компресору КМ102 у мережу.','Шаровый кран подключения компрессора КМ101 в сеть.','DAQ.JavaLikeCalc.lib_techApp.valve',1,1,'',0);
+INSERT INTO "CM102_blocks" VALUES('BC116','BC116','КК116','КШ116','Surge protect ball crane of compressor CM102.','Протипомпажний шаровий кран компресора КМ102.','Антипомпажный шаровый кран компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.valve',1,1,'',0);
 INSERT INTO "CM102_blocks" VALUES('node5_1','Node 5.1','Вузол 5.1','Узел 5.1','','','','DAQ.JavaLikeCalc.lib_techApp.pipe3_1',1,1,'',0);
 INSERT INTO "CM102_blocks" VALUES('CM102_1','Compressor CM102 stage 1','Ступ. 1 компр. КМ102','Ступ. 1 компр. КМ102','Stage one of compressor CM102.','Перша ступінь компресора КМ102.','Первая ступень компрессора КМ102.','DAQ.JavaLikeCalc.lib_techApp.compressor',1,1,'',0);
 INSERT INTO "CM102_blocks" VALUES('CM102_2','Compressor CM102 stage 2','Ступ. 2 компр. КМ102','Ступ. 2 компр. КМ102','Stage two of compressor CM102.','Друга ступінь компресора КМ102.','Вторая ступень компрессора КМ102.','DAQ.JavaLikeCalc.lib_techApp.compressor',1,1,'',0);
 INSERT INTO "CM102_blocks" VALUES('node6_1','Node 6.1','Вузол 6.1','Узел 6.1','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_pipe1_4',1,1,'',0);
-INSERT INTO "CM102_blocks" VALUES('PP103','','','','Flow control point, diaphragm type, for first stage of compressor CM102.','Вузол виміру витрат на першому ступені компресора КМ102 діафрагменого типу.','Узел замера расхода на первую ступень компрессора КМ102 диафрагменного типа.','DAQ.JavaLikeCalc.lib_techApp.diafragma',1,1,'',0);
-INSERT INTO "CM102_blocks" VALUES('PP104','','','','Flow control point, diaphragm type, for second stage of compressor CM102.','Вузол виміру витрат на другому ступені компресора КМ102 діафрагменого типу.','Узел замера расхода на вторую ступень компрессора КМ102 диафрагменного типа.','DAQ.JavaLikeCalc.lib_techApp.diafragma',1,1,'',0);
+INSERT INTO "CM102_blocks" VALUES('PP103','','','','Flow control point, diaphragm type, for first stage of compressor CM102.','Вузол виміру витрат на першому ступені компресора КМ102 діафрагменого типу.','Узел замера расхода на первую ступень компрессора КМ102 диафрагменного типа.','DAQ.JavaLikeCalc.lib_techApp.diaphragm',1,1,'',0);
+INSERT INTO "CM102_blocks" VALUES('PP104','','','','Flow control point, diaphragm type, for second stage of compressor CM102.','Вузол виміру витрат на другому ступені компресора КМ102 діафрагменого типу.','Узел замера расхода на вторую ступень компрессора КМ102 диафрагменного типа.','DAQ.JavaLikeCalc.lib_techApp.diaphragm',1,1,'',0);
 INSERT INTO "CM102_blocks" VALUES('C102_2','Separator C102/2','Сепаратор C102/2','Сепаратор C102/2','Liquid fraction droping after compressor CM102 stage one.','Сепаратор відгону рідини після першого ступеня компресора КМ102.','Сепаратор отгона жидкости после первой ступени компрессора КМ102.','DAQ.JavaLikeCalc.lib_techApp.separator',1,1,'',0);
 INSERT INTO "CM102_blocks" VALUES('C102_3','Separator C102/3','Сепаратор C102/3','Сепаратор C102/3','Liquid fraction droping after compressor CM102 stage two.','Сепаратор відгону рідини після другого ступеня компресора КМ102.','Сепаратор отгона жидкости после второй ступени компрессора КМ102.','DAQ.JavaLikeCalc.lib_techApp.separator',1,1,'',0);
 INSERT INTO "CM102_blocks" VALUES('G_BC111','BC111 (control mechanism)','КК111 (вик. механізм)','КШ111 (исп. механизм)','Control mechanism of ball crane КSH111.','Виконавчий механізм кульового крану КК101.','Исполнительный механизм шарового крана КШ101.','DAQ.JavaLikeCalc.lib_techApp.fnc_ballCrane',1,1,'',0);
@@ -5185,20 +5185,20 @@ INSERT INTO "CM102cntr_blocks" VALUES('BC116','BC116','КК116','КШ116','','',
 CREATE TABLE 'CM201_blocks' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"FUNC" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PROC" INTEGER DEFAULT '0' ,"PRIOR" TEXT DEFAULT '' ,"LNK_OUT_WR_CH" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 INSERT INTO "CM201_blocks" VALUES('CM101_1','Compressor CM101 stage 1','Ступ. 1 компр. КМ101','Ступ. 1 компр. КМ101','Stage one of compressor CM101.','Перша ступінь компресора КМ101.','Первая ступень компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.compressor',1,1,'',0);
 INSERT INTO "CM201_blocks" VALUES('CM101_2','Compressor CM101 stage 2','Ступ. 2 компр. КМ101','Ступ. 2 компр. КМ101','Stage two of compressor CM101.','Друга ступінь компресора КМ101.','Вторая ступень компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.compressor',1,1,'',0);
-INSERT INTO "CM201_blocks" VALUES('KPP101','','','','Surge protect control crane of compressor CM101.','Протипомпажний регулюючий клапан компресору КМ101.','Антипомпажный регулирующий клапан компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.fnc_klap',1,1,'',0);
-INSERT INTO "CM201_blocks" VALUES('DR100','Baffle 100','Дросель 100','Дросель 100','','','','DAQ.JavaLikeCalc.lib_techApp.klap',1,1,'',0);
+INSERT INTO "CM201_blocks" VALUES('KPP101','','','','Surge protect control crane of compressor CM101.','Протипомпажний регулюючий клапан компресору КМ101.','Антипомпажный регулирующий клапан компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
+INSERT INTO "CM201_blocks" VALUES('DR100','Baffle 100','Дросель 100','Дросель 100','','','','DAQ.JavaLikeCalc.lib_techApp.valve',1,1,'',0);
 INSERT INTO "CM201_blocks" VALUES('AT101_1','Air cooler AT101_1','Пов. охолод. AT101_1','Возд. охлад. AT101_1','The air cooler for gas after compressor CM101 stage one.','Охолоджувач газу після першої ступені компресору КМ101.','Охладитель газа после первой ступени компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.cooler',1,1,'',0);
 INSERT INTO "CM201_blocks" VALUES('AT101_2','Air cooler AT101_2','Пов. охолод. AT101_2','Возд. охлад. AT101_2','The air cooler for gas after compressor CM101 stage two.','Охолоджувач газу після другої ступені компресора КМ101.','Охладитель газа после второй ступени компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.cooler',1,1,'',0);
 INSERT INTO "CM201_blocks" VALUES('node3_1','Node 3.1','Вузол 3.1','Узел 3.1','','','','DAQ.JavaLikeCalc.lib_techApp.pipe3_1',1,1,'',0);
-INSERT INTO "CM201_blocks" VALUES('BC101','BC101','КК101','КШ101','Ball crane for compressor CM101 enable.','Кульовий кран підключення компресора КМ101.','Шаровый кран подключения компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.klap',1,1,'',0);
+INSERT INTO "CM201_blocks" VALUES('BC101','BC101','КК101','КШ101','Ball crane for compressor CM101 enable.','Кульовий кран підключення компресора КМ101.','Шаровый кран подключения компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.valve',1,1,'',0);
 INSERT INTO "CM201_blocks" VALUES('node4_1','Node 4.1','Вузол 4.1','Узел 4.1','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_pipe1_3',1,1,'',0);
-INSERT INTO "CM201_blocks" VALUES('BC104','BC104','КК104','КШ104','Ball crane for compressor CM101 enable to net.','Кульовий кран підключення компресора КМ101 у мережу.','Шаровый кран подключения компрессора КМ101 в сеть.','DAQ.JavaLikeCalc.lib_techApp.klap',1,1,'',0);
-INSERT INTO "CM201_blocks" VALUES('BC106','BC106','КК106','КШ106','Surge protect ball crane of compressor CM101.','Протипомпажний шаровий кран компресора КМ101.','Антипомпажный шаровый кран компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.klap',1,1,'',0);
+INSERT INTO "CM201_blocks" VALUES('BC104','BC104','КК104','КШ104','Ball crane for compressor CM101 enable to net.','Кульовий кран підключення компресора КМ101 у мережу.','Шаровый кран подключения компрессора КМ101 в сеть.','DAQ.JavaLikeCalc.lib_techApp.valve',1,1,'',0);
+INSERT INTO "CM201_blocks" VALUES('BC106','BC106','КК106','КШ106','Surge protect ball crane of compressor CM101.','Протипомпажний шаровий кран компресора КМ101.','Антипомпажный шаровый кран компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.valve',1,1,'',0);
 INSERT INTO "CM201_blocks" VALUES('C101_1','Separator C101/1','Сепаратор C101/1','Сепаратор C101/1','Liquid fraction droping before compressor CM101 stage one.','Сепаратор відгону рідини перед першим ступенем компресора КМ101.','Сепаратор отгона жидкости перед первой ступенью компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.separator',1,1,'',0);
 INSERT INTO "CM201_blocks" VALUES('C101_2','Separator C101/2','Сепаратор C101/2','Сепаратор C101/2','Liquid fraction droping after compressor CM101 stage one.','Сепаратор відгону рідини після першого ступеня компресора КМ101.','Сепаратор отгона жидкости после первой ступени компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.separator',1,1,'',0);
 INSERT INTO "CM201_blocks" VALUES('C101_3','Separator C101/3','Сепаратор C101/3','Сепаратор C101/3','Liquid fraction droping after compressor CM101 stage two.','Сепаратор відгону рідини після другого ступеня компресора КМ101.','Сепаратор отгона жидкости после второй ступени компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.separator',1,1,'',0);
-INSERT INTO "CM201_blocks" VALUES('PP101','','','','Flow control point, diaphragm type, for first stage of compressor CM101.','Вузол виміру витрат на першому ступені компресора КМ101 діафрагменого типу.','Узел замера расхода на первую ступень компрессора КМ101 диафрагменного типа.','DAQ.JavaLikeCalc.lib_techApp.diafragma',1,1,'',0);
-INSERT INTO "CM201_blocks" VALUES('PP102','','','','Flow control point, diaphragm type, for second stage of compressor CM101.','Вузол виміру витрат на другому ступені компресора КМ101 діафрагменого типу.','Узел замера расхода на вторую ступень компрессора КМ101 диафрагменного типа.','DAQ.JavaLikeCalc.lib_techApp.diafragma',1,1,'',0);
+INSERT INTO "CM201_blocks" VALUES('PP101','','','','Flow control point, diaphragm type, for first stage of compressor CM101.','Вузол виміру витрат на першому ступені компресора КМ101 діафрагменого типу.','Узел замера расхода на первую ступень компрессора КМ101 диафрагменного типа.','DAQ.JavaLikeCalc.lib_techApp.diaphragm',1,1,'',0);
+INSERT INTO "CM201_blocks" VALUES('PP102','','','','Flow control point, diaphragm type, for second stage of compressor CM101.','Вузол виміру витрат на другому ступені компресора КМ101 діафрагменого типу.','Узел замера расхода на вторую ступень компрессора КМ101 диафрагменного типа.','DAQ.JavaLikeCalc.lib_techApp.diaphragm',1,1,'',0);
 INSERT INTO "CM201_blocks" VALUES('G_BC104','BC104 (control mechanism)','КК104 (вик. механізм)','КШ104 (исп. механизм)','Control mechanism of ball crane КSH104.','Виконавчий механізм кульового крану КК104.','Исполнительный механизм шарового крана КШ104.','DAQ.JavaLikeCalc.lib_techApp.fnc_ballCrane',1,1,'',0);
 INSERT INTO "CM201_blocks" VALUES('G_BC105','BC105 (control mechanism)','КК105 (вик. механізм)','КШ105 (исп. механизм)','Control mechanism of ball crane КSH105.','Виконавчий механізм кульового крану КК105.','Исполнительный механизм шарового крана КШ105.','DAQ.JavaLikeCalc.lib_techApp.fnc_ballCrane',1,1,'',0);
 INSERT INTO "CM201_blocks" VALUES('G_BC101','BC101 (control mechanism)','КК101 (вик. механізм)','КШ101 (исп. механизм)','Control mechanism of ball crane КSH101.','Виконавчий механізм кульового крану КК101.','Исполнительный механизм шарового крана КШ101.','DAQ.JavaLikeCalc.lib_techApp.fnc_ballCrane',1,1,'',0);
@@ -5207,42 +5207,42 @@ INSERT INTO "CM201_blocks" VALUES('G_BC102','BC102 (control mechanism)','КК102
 CREATE TABLE 'CM301_blocks' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"FUNC" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PROC" INTEGER DEFAULT '0' ,"PRIOR" TEXT DEFAULT '' ,"LNK_OUT_WR_CH" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 INSERT INTO "CM301_blocks" VALUES('CM101_1','Compressor CM101 stage 1','Ступ. 1 компр. КМ101','Ступ. 1 компр. КМ101','Stage one of compressor CM101.','Перша ступінь компресора КМ101.','Первая ступень компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.compressor',1,1,'',0);
 INSERT INTO "CM301_blocks" VALUES('CM101_2','Compressor CM101 stage 2','Ступ. 2 компр. КМ101','Ступ. 2 компр. КМ101','Stage two of compressor CM101.','Друга ступінь компресора КМ101.','Вторая ступень компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.compressor',1,1,'',0);
-INSERT INTO "CM301_blocks" VALUES('KPP101','','','','Surge protect control crane of compressor CM101.','Протипомпажний регулюючий клапан компресору КМ101.','Антипомпажный регулирующий клапан компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.fnc_klap',1,1,'',0);
-INSERT INTO "CM301_blocks" VALUES('DR100','Baffle 100','Дросель 100','Дросель 100','','','','DAQ.JavaLikeCalc.lib_techApp.klap',1,1,'',0);
+INSERT INTO "CM301_blocks" VALUES('KPP101','','','','Surge protect control crane of compressor CM101.','Протипомпажний регулюючий клапан компресору КМ101.','Антипомпажный регулирующий клапан компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
+INSERT INTO "CM301_blocks" VALUES('DR100','Baffle 100','Дросель 100','Дросель 100','','','','DAQ.JavaLikeCalc.lib_techApp.valve',1,1,'',0);
 INSERT INTO "CM301_blocks" VALUES('AT101_1','Air cooler AT101_1','Пов. охолод. AT101_1','Возд. охлад. AT101_1','The air cooler for gas after compressor CM101 stage one.','Охолоджувач газу після першої ступені компресору КМ101.','Охладитель газа после первой ступени компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.cooler',1,1,'',0);
 INSERT INTO "CM301_blocks" VALUES('AT101_2','Air cooler AT101_2','Пов. охолод. AT101_2','Возд. охлад. AT101_2','The air cooler for gas after compressor CM101 stage two.','Охолоджувач газу після другої ступені компресора КМ101.','Охладитель газа после второй ступени компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.cooler',1,1,'',0);
 INSERT INTO "CM301_blocks" VALUES('node3_1','Node 3.1','Вузол 3.1','Узел 3.1','','','','DAQ.JavaLikeCalc.lib_techApp.pipe3_1',1,1,'',0);
-INSERT INTO "CM301_blocks" VALUES('BC101','BC101','КК101','КШ101','Ball crane for compressor CM101 enable.','Кульовий кран підключення компресора КМ101.','Шаровый кран подключения компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.klap',1,1,'',0);
-INSERT INTO "CM301_blocks" VALUES('BC104','BC104','КК104','КШ104','Ball crane for compressor CM101 enable to net.','Кульовий кран підключення компресора КМ101 у мережу.','Шаровый кран подключения компрессора КМ101 в сеть.','DAQ.JavaLikeCalc.lib_techApp.klap',1,1,'',0);
+INSERT INTO "CM301_blocks" VALUES('BC101','BC101','КК101','КШ101','Ball crane for compressor CM101 enable.','Кульовий кран підключення компресора КМ101.','Шаровый кран подключения компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.valve',1,1,'',0);
+INSERT INTO "CM301_blocks" VALUES('BC104','BC104','КК104','КШ104','Ball crane for compressor CM101 enable to net.','Кульовий кран підключення компресора КМ101 у мережу.','Шаровый кран подключения компрессора КМ101 в сеть.','DAQ.JavaLikeCalc.lib_techApp.valve',1,1,'',0);
 INSERT INTO "CM301_blocks" VALUES('node4_1','Node 4.1','Вузол 4.1','Узел 4.1','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_pipe1_3',1,1,'',0);
-INSERT INTO "CM301_blocks" VALUES('BC106','BC106','КК106','КШ106','Surge protect ball crane of compressor CM101.','Протипомпажний шаровий кран компресора КМ101.','Антипомпажный шаровый кран компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.klap',1,1,'',0);
+INSERT INTO "CM301_blocks" VALUES('BC106','BC106','КК106','КШ106','Surge protect ball crane of compressor CM101.','Протипомпажний шаровий кран компресора КМ101.','Антипомпажный шаровый кран компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.valve',1,1,'',0);
 INSERT INTO "CM301_blocks" VALUES('C101_1','Separator C101/1','Сепаратор C101/1','Сепаратор C101/1','Liquid fraction droping before compressor CM101 stage one.','Сепаратор відгону рідини перед першим ступенем компресора КМ101.','Сепаратор отгона жидкости перед первой ступенью компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.separator',1,1,'',0);
 INSERT INTO "CM301_blocks" VALUES('C101_2','Separator C101/2','Сепаратор C101/2','Сепаратор C101/2','Liquid fraction droping after compressor CM101 stage one.','Сепаратор відгону рідини після першого ступеня компресора КМ101.','Сепаратор отгона жидкости после первой ступени компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.separator',1,1,'',0);
 INSERT INTO "CM301_blocks" VALUES('C101_3','Separator C101/3','Сепаратор C101/3','Сепаратор C101/3','Liquid fraction droping after compressor CM101 stage two.','Сепаратор відгону рідини після другого ступеня компресора КМ101.','Сепаратор отгона жидкости после второй ступени компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.separator',1,1,'',0);
-INSERT INTO "CM301_blocks" VALUES('PP101','','','','Flow control point, diaphragm type, for first stage of compressor CM101.','Вузол виміру витрат на першому ступені компресора КМ101 діафрагменого типу.','Узел замера расхода на первую ступень компрессора КМ101 диафрагменного типа.','DAQ.JavaLikeCalc.lib_techApp.diafragma',1,1,'',0);
-INSERT INTO "CM301_blocks" VALUES('PP102','','','','Flow control point, diaphragm type, for second stage of compressor CM101.','Вузол виміру витрат на другому ступені компресора КМ101 діафрагменого типу.','Узел замера расхода на вторую ступень компрессора КМ101 диафрагменного типа.','DAQ.JavaLikeCalc.lib_techApp.diafragma',1,1,'',0);
+INSERT INTO "CM301_blocks" VALUES('PP101','','','','Flow control point, diaphragm type, for first stage of compressor CM101.','Вузол виміру витрат на першому ступені компресора КМ101 діафрагменого типу.','Узел замера расхода на первую ступень компрессора КМ101 диафрагменного типа.','DAQ.JavaLikeCalc.lib_techApp.diaphragm',1,1,'',0);
+INSERT INTO "CM301_blocks" VALUES('PP102','','','','Flow control point, diaphragm type, for second stage of compressor CM101.','Вузол виміру витрат на другому ступені компресора КМ101 діафрагменого типу.','Узел замера расхода на вторую ступень компрессора КМ101 диафрагменного типа.','DAQ.JavaLikeCalc.lib_techApp.diaphragm',1,1,'',0);
 INSERT INTO "CM301_blocks" VALUES('G_BC104','BC104 (control mechanism)','КК104 (вик. механізм)','КШ104 (исп. механизм)','Control mechanism of ball crane КSH104.','Виконавчий механізм кульового крану КК104.','Исполнительный механизм шарового крана КШ104.','DAQ.JavaLikeCalc.lib_techApp.fnc_ballCrane',1,1,'',0);
 INSERT INTO "CM301_blocks" VALUES('G_BC105','BC105 (control mechanism)','КК105 (вик. механізм)','КШ105 (исп. механизм)','Control mechanism of ball crane КSH105.','Виконавчий механізм кульового крану КК105.','Исполнительный механизм шарового крана КШ105.','DAQ.JavaLikeCalc.lib_techApp.fnc_ballCrane',1,1,'',0);
 INSERT INTO "CM301_blocks" VALUES('G_BC101','BC101 (control mechanism)','КК101 (вик. механізм)','КШ101 (исп. механизм)','Control mechanism of ball crane КSH101.','Виконавчий механізм кульового крану КК101.','Исполнительный механизм шарового крана КШ101.','DAQ.JavaLikeCalc.lib_techApp.fnc_ballCrane',1,1,'',0);
 INSERT INTO "CM301_blocks" VALUES('G_BC106','BC106 (control mechanism)','КК106 (вик. механізм)','КШ106 (исп. механизм)','Control mechanism of ball crane КSH106.','Виконавчий механізм кульового крану КК106.','Исполнительный механизм шарового крана КШ106.','DAQ.JavaLikeCalc.lib_techApp.fnc_ballCrane',1,1,'',0);
 INSERT INTO "CM301_blocks" VALUES('G_BC102','BC102 (control mechanism)','КК102 (вик. механізм)','КШ102 (исп. механизм)','Control mechanism of ball crane КSH102.','Виконавчий механізм кульового крану КК102.','Исполнительный механизм шарового крана КШ102.','DAQ.JavaLikeCalc.lib_techApp.fnc_ballCrane',1,1,'',0);
 CREATE TABLE 'CM302_blocks' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"FUNC" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PROC" INTEGER DEFAULT '0' ,"PRIOR" TEXT DEFAULT '' ,"LNK_OUT_WR_CH" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
-INSERT INTO "CM302_blocks" VALUES('KPP102','','','','Surge protect control crane of compressor CM102.','Протипомпажний регулюючий клапан компресору КМ102.','Антипомпажный регулирующий клапан компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.fnc_klap',1,1,'',0);
+INSERT INTO "CM302_blocks" VALUES('KPP102','','','','Surge protect control crane of compressor CM102.','Протипомпажний регулюючий клапан компресору КМ102.','Антипомпажный регулирующий клапан компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
 INSERT INTO "CM302_blocks" VALUES('net102','','','','','','','DAQ.JavaLikeCalc.lib_techApp.fnc_net',1,1,'',0);
-INSERT INTO "CM302_blocks" VALUES('DR101','Baffle 101','Дросель 101','Дросель 101','','','','DAQ.JavaLikeCalc.lib_techApp.klap',1,1,'',0);
+INSERT INTO "CM302_blocks" VALUES('DR101','Baffle 101','Дросель 101','Дросель 101','','','','DAQ.JavaLikeCalc.lib_techApp.valve',1,1,'',0);
 INSERT INTO "CM302_blocks" VALUES('С102_1','Separator C102/1','Сепаратор С102/1','Сепаратор С102/1','Liquid fraction droping before compressor CM102 stage one.','Сепаратор відгону рідини перед першим ступенем компресора КМ102.','Сепаратор отгона жидкости перед первой ступенью компрессора КМ102.','DAQ.JavaLikeCalc.lib_techApp.separator',1,1,'',0);
 INSERT INTO "CM302_blocks" VALUES('AT102_1','Air cooler AT102_1','Пов. охолод. AT102_1','Возд. охлад. AT102_1','The air cooler for gas after compressor CM102 stage one.','Охолоджувач газу після першої ступені компресору КМ102.','Охладитель газа после первой ступени компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.cooler',1,1,'',0);
 INSERT INTO "CM302_blocks" VALUES('AT102_2','Air cooler AT102_2','Пов. охолод. AT102_2','Возд. охлад. AT102_2','The air cooler for gas after compressor CM102 stage two.','Охолоджувач газу після другої ступені компресора КМ102.','Охладитель газа после второй ступени компрессора КМ102.','DAQ.JavaLikeCalc.lib_techApp.cooler',1,1,'',0);
-INSERT INTO "CM302_blocks" VALUES('BC111','BC111','КК111','КШ111','Ball crane for compressor CM102 enable.','Кульовий кран підключення компресору КМ102.','Шаровый кран подключения компрессора КМ102.','DAQ.JavaLikeCalc.lib_techApp.klap',1,1,'',0);
-INSERT INTO "CM302_blocks" VALUES('BC113','BC113','КК113','КШ113','','','','DAQ.JavaLikeCalc.lib_techApp.fnc_klap',1,1,'',0);
-INSERT INTO "CM302_blocks" VALUES('BC114','BC114','КК114','КШ114','Ball crane for compressor CM102 enable to net.','Кульовий кран підключення компресору КМ102 у мережу.','Шаровый кран подключения компрессора КМ101 в сеть.','DAQ.JavaLikeCalc.lib_techApp.klap',1,1,'',0);
-INSERT INTO "CM302_blocks" VALUES('BC116','BC116','КК116','КШ116','Surge protect ball crane of compressor CM102.','Протипомпажний шаровий кран компресора КМ102.','Антипомпажный шаровый кран компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.klap',1,1,'',0);
+INSERT INTO "CM302_blocks" VALUES('BC111','BC111','КК111','КШ111','Ball crane for compressor CM102 enable.','Кульовий кран підключення компресору КМ102.','Шаровый кран подключения компрессора КМ102.','DAQ.JavaLikeCalc.lib_techApp.valve',1,1,'',0);
+INSERT INTO "CM302_blocks" VALUES('BC113','BC113','КК113','КШ113','','','','DAQ.JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
+INSERT INTO "CM302_blocks" VALUES('BC114','BC114','КК114','КШ114','Ball crane for compressor CM102 enable to net.','Кульовий кран підключення компресору КМ102 у мережу.','Шаровый кран подключения компрессора КМ101 в сеть.','DAQ.JavaLikeCalc.lib_techApp.valve',1,1,'',0);
+INSERT INTO "CM302_blocks" VALUES('BC116','BC116','КК116','КШ116','Surge protect ball crane of compressor CM102.','Протипомпажний шаровий кран компресора КМ102.','Антипомпажный шаровый кран компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.valve',1,1,'',0);
 INSERT INTO "CM302_blocks" VALUES('node5_1','Node 5.1','Вузол 5.1','Узел 5.1','','','','DAQ.JavaLikeCalc.lib_techApp.pipe3_1',1,1,'',0);
 INSERT INTO "CM302_blocks" VALUES('CM102_1','Compressor CM102 stage 1','Ступ. 1 компр. КМ102','Ступ. 1 компр. КМ102','Stage one of compressor CM102.','Перша ступінь компресора КМ102.','Первая ступень компрессора КМ102.','DAQ.JavaLikeCalc.lib_techApp.compressor',1,1,'',0);
 INSERT INTO "CM302_blocks" VALUES('CM102_2','Compressor CM102 stage 2','Ступ. 2 компр. КМ102','Ступ. 2 компр. КМ102','Stage two of compressor CM102.','Друга ступінь компресора КМ102.','Вторая ступень компрессора КМ102.','DAQ.JavaLikeCalc.lib_techApp.compressor',1,1,'',0);
 INSERT INTO "CM302_blocks" VALUES('node6_1','Node 6.1','Вузол 6.1','Узел 6.1','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_pipe1_4',1,1,'',0);
-INSERT INTO "CM302_blocks" VALUES('PP103','','','','Flow control point, diaphragm type, for first stage of compressor CM102.','Вузол виміру витрат на першому ступені компресора КМ102 діафрагменого типу.','Узел замера расхода на первую ступень компрессора КМ102 диафрагменного типа.','DAQ.JavaLikeCalc.lib_techApp.diafragma',1,1,'',0);
-INSERT INTO "CM302_blocks" VALUES('PP104','','','','Flow control point, diaphragm type, for second stage of compressor CM102.','Вузол виміру витрат на другому ступені компресора КМ102 діафрагменого типу.','Узел замера расхода на вторую ступень компрессора КМ102 диафрагменного типа.','DAQ.JavaLikeCalc.lib_techApp.diafragma',1,1,'',0);
+INSERT INTO "CM302_blocks" VALUES('PP103','','','','Flow control point, diaphragm type, for first stage of compressor CM102.','Вузол виміру витрат на першому ступені компресора КМ102 діафрагменого типу.','Узел замера расхода на первую ступень компрессора КМ102 диафрагменного типа.','DAQ.JavaLikeCalc.lib_techApp.diaphragm',1,1,'',0);
+INSERT INTO "CM302_blocks" VALUES('PP104','','','','Flow control point, diaphragm type, for second stage of compressor CM102.','Вузол виміру витрат на другому ступені компресора КМ102 діафрагменого типу.','Узел замера расхода на вторую ступень компрессора КМ102 диафрагменного типа.','DAQ.JavaLikeCalc.lib_techApp.diaphragm',1,1,'',0);
 INSERT INTO "CM302_blocks" VALUES('C102_2','Separator C102/2','Сепаратор C102/2','Сепаратор C102/2','Liquid fraction droping after compressor CM102 stage one.','Сепаратор відгону рідини після першого ступеня компресора КМ102.','Сепаратор отгона жидкости после первой ступени компрессора КМ102.','DAQ.JavaLikeCalc.lib_techApp.separator',1,1,'',0);
 INSERT INTO "CM302_blocks" VALUES('C102_3','Separator C102/3','Сепаратор C102/3','Сепаратор C102/3','Liquid fraction droping after compressor CM102 stage two.','Сепаратор відгону рідини після другого ступеня компресора КМ102.','Сепаратор отгона жидкости после второй ступени компрессора КМ102.','DAQ.JavaLikeCalc.lib_techApp.separator',1,1,'',0);
 INSERT INTO "CM302_blocks" VALUES('G_BC114','BC114 (control mechanism)','КК114 (вик. механізм)','КШ114 (исп. механизм)','Control mechanism of ball crane КSH114.','Виконавчий механізм кульового крану КК104.','Исполнительный механизм шарового крана КШ104.','DAQ.JavaLikeCalc.lib_techApp.fnc_ballCrane',1,1,'',0);
@@ -5251,22 +5251,22 @@ INSERT INTO "CM302_blocks" VALUES('G_BC111','BC111 (control mechanism)','КК111
 INSERT INTO "CM302_blocks" VALUES('G_BC116','BC116 (control mechanism)','КК116 (вик. механізм)','КШ116 (исп. механизм)','Control mechanism of ball crane КSH116.','Виконавчий механізм кульового крану КК106.','Исполнительный механизм шарового крана КШ106.','DAQ.JavaLikeCalc.lib_techApp.fnc_ballCrane',1,1,'',0);
 INSERT INTO "CM302_blocks" VALUES('G_BC112','BC112 (control mechanism)','КК112 (вик. механізм)','КШ112 (исп. механизм)','Control mechanism of ball crane КSH112.','Виконавчий механізм кульового крану КК102.','Исполнительный механизм шарового крана КШ102.','DAQ.JavaLikeCalc.lib_techApp.fnc_ballCrane',1,1,'',0);
 CREATE TABLE 'CM202_blocks' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"FUNC" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PROC" INTEGER DEFAULT '0' ,"PRIOR" TEXT DEFAULT '' ,"LNK_OUT_WR_CH" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
-INSERT INTO "CM202_blocks" VALUES('KPP102','','','KPP102','Surge protect control crane of compressor CM102.','Протипомпажний регулюючий клапан компресору КМ102.','Антипомпажный регулирующий клапан компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.fnc_klap',1,1,'',0);
+INSERT INTO "CM202_blocks" VALUES('KPP102','','','KPP102','Surge protect control crane of compressor CM102.','Протипомпажний регулюючий клапан компресору КМ102.','Антипомпажный регулирующий клапан компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
 INSERT INTO "CM202_blocks" VALUES('net102','','','','','','','DAQ.JavaLikeCalc.lib_techApp.fnc_net',1,1,'',0);
-INSERT INTO "CM202_blocks" VALUES('DR101','Baffle 101','Дросель 101','Дросель 101','','','','DAQ.JavaLikeCalc.lib_techApp.klap',1,1,'',0);
+INSERT INTO "CM202_blocks" VALUES('DR101','Baffle 101','Дросель 101','Дросель 101','','','','DAQ.JavaLikeCalc.lib_techApp.valve',1,1,'',0);
 INSERT INTO "CM202_blocks" VALUES('С102_1','Separator C102/1','Сепаратор С102/1','Сепаратор С102/1','Liquid fraction droping before compressor CM102 stage one.','Сепаратор відгону рідини перед першим ступенем компресора КМ102.','Сепаратор отгона жидкости перед первой ступенью компрессора КМ102.','DAQ.JavaLikeCalc.lib_techApp.separator',1,1,'',0);
 INSERT INTO "CM202_blocks" VALUES('AT102_1','Air cooler AT102_1','Пов. охолод. AT102_1','Возд. охлад. AT102_1','The air cooler for gas after compressor CM102 stage one.','Охолоджувач газу після першої ступені компресору КМ102.','Охладитель газа после первой ступени компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.cooler',1,1,'',0);
 INSERT INTO "CM202_blocks" VALUES('AT102_2','Air cooler AT102_2','Пов. охолод. AT102_2','Возд. охлад. AT102_2','The air cooler for gas after compressor CM102 stage two.','Охолоджувач газу після другої ступені компресора КМ102.','Охладитель газа после второй ступени компрессора КМ102.','DAQ.JavaLikeCalc.lib_techApp.cooler',1,1,'',0);
-INSERT INTO "CM202_blocks" VALUES('BC111','BC111','КК111','КШ111','Ball crane for compressor CM102 enable.','Кульовий кран підключення компресору КМ102.','Шаровый кран подключения компрессора КМ102.','DAQ.JavaLikeCalc.lib_techApp.klap',1,1,'',0);
-INSERT INTO "CM202_blocks" VALUES('BC113','BC113','КК113','КШ113','','','','DAQ.JavaLikeCalc.lib_techApp.fnc_klap',1,1,'',0);
-INSERT INTO "CM202_blocks" VALUES('BC114','BC114','КК114','КШ114','Ball crane for compressor CM102 enable to net.','Кульовий кран підключення компресору КМ102 у мережу.','Шаровый кран подключения компрессора КМ101 в сеть.','DAQ.JavaLikeCalc.lib_techApp.klap',1,1,'',0);
-INSERT INTO "CM202_blocks" VALUES('BC116','BC116','КК116','КШ116','Surge protect ball crane of compressor CM102.','Протипомпажний шаровий кран компресора КМ102.','Антипомпажный шаровый кран компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.klap',1,1,'',0);
+INSERT INTO "CM202_blocks" VALUES('BC111','BC111','КК111','КШ111','Ball crane for compressor CM102 enable.','Кульовий кран підключення компресору КМ102.','Шаровый кран подключения компрессора КМ102.','DAQ.JavaLikeCalc.lib_techApp.valve',1,1,'',0);
+INSERT INTO "CM202_blocks" VALUES('BC113','BC113','КК113','КШ113','','','','DAQ.JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
+INSERT INTO "CM202_blocks" VALUES('BC114','BC114','КК114','КШ114','Ball crane for compressor CM102 enable to net.','Кульовий кран підключення компресору КМ102 у мережу.','Шаровый кран подключения компрессора КМ101 в сеть.','DAQ.JavaLikeCalc.lib_techApp.valve',1,1,'',0);
+INSERT INTO "CM202_blocks" VALUES('BC116','BC116','КК116','КШ116','Surge protect ball crane of compressor CM102.','Протипомпажний шаровий кран компресора КМ102.','Антипомпажный шаровый кран компрессора КМ101.','DAQ.JavaLikeCalc.lib_techApp.valve',1,1,'',0);
 INSERT INTO "CM202_blocks" VALUES('node5_1','Node 5.1','Вузол 5.1','Узел 5.1','','','','DAQ.JavaLikeCalc.lib_techApp.pipe3_1',1,1,'',0);
 INSERT INTO "CM202_blocks" VALUES('CM102_1','Compressor CM102 stage 1','Ступ. 1 компр. КМ102','Ступ. 1 компр. КМ102','Stage one of compressor CM102.','Перша ступінь компресора КМ102.','Первая ступень компрессора КМ102.','DAQ.JavaLikeCalc.lib_techApp.compressor',1,1,'',0);
 INSERT INTO "CM202_blocks" VALUES('CM102_2','Compressor CM102 stage 2','Ступ. 2 компр. КМ102','Ступ. 2 компр. КМ102','Stage two of compressor CM102.','Друга ступінь компресора КМ102.','Вторая ступень компрессора КМ102.','DAQ.JavaLikeCalc.lib_techApp.compressor',1,1,'',0);
 INSERT INTO "CM202_blocks" VALUES('node6_1','Node 6.1','Вузол 6.1','Узел 6.1','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_pipe1_4',1,1,'',0);
-INSERT INTO "CM202_blocks" VALUES('PP103','','','','Flow control point, diaphragm type, for first stage of compressor CM102.','Вузол виміру витрат на першому ступені компресора КМ102 діафрагменого типу.','Узел замера расхода на первую ступень компрессора КМ102 диафрагменного типа.','DAQ.JavaLikeCalc.lib_techApp.diafragma',1,1,'',0);
-INSERT INTO "CM202_blocks" VALUES('PP104','','','','Flow control point, diaphragm type, for second stage of compressor CM102.','Вузол виміру витрат на другому ступені компресора КМ102 діафрагменого типу.','Узел замера расхода на вторую ступень компрессора КМ102 диафрагменного типа.','DAQ.JavaLikeCalc.lib_techApp.diafragma',1,1,'',0);
+INSERT INTO "CM202_blocks" VALUES('PP103','','','','Flow control point, diaphragm type, for first stage of compressor CM102.','Вузол виміру витрат на першому ступені компресора КМ102 діафрагменого типу.','Узел замера расхода на первую ступень компрессора КМ102 диафрагменного типа.','DAQ.JavaLikeCalc.lib_techApp.diaphragm',1,1,'',0);
+INSERT INTO "CM202_blocks" VALUES('PP104','','','','Flow control point, diaphragm type, for second stage of compressor CM102.','Вузол виміру витрат на другому ступені компресора КМ102 діафрагменого типу.','Узел замера расхода на вторую ступень компрессора КМ102 диафрагменного типа.','DAQ.JavaLikeCalc.lib_techApp.diaphragm',1,1,'',0);
 INSERT INTO "CM202_blocks" VALUES('C102_2','Separator C102/2','Сепаратор C102/2','Сепаратор C102/2','Liquid fraction droping after compressor CM102 stage one.','Сепаратор відгону рідини після першого ступеня компресора КМ102.','Сепаратор отгона жидкости после первой ступени компрессора КМ102.','DAQ.JavaLikeCalc.lib_techApp.separator',1,1,'',0);
 INSERT INTO "CM202_blocks" VALUES('C102_3','Separator C102/3','Сепаратор C102/3','Сепаратор C102/3','Liquid fraction droping after compressor CM102 stage two.','Сепаратор відгону рідини після другого ступеня компресора КМ102.','Сепаратор отгона жидкости после второй ступени компрессора КМ102.','DAQ.JavaLikeCalc.lib_techApp.separator',1,1,'',0);
 INSERT INTO "CM202_blocks" VALUES('G_BC114','BC114 (control mechanism)','КК114 (вик. механізм)','КШ114 (исп. механизм)','Control mechanism of ball crane КSH114.','Виконавчий механізм кульового крану КК104.','Исполнительный механизм шарового крана КШ104.','DAQ.JavaLikeCalc.lib_techApp.fnc_ballCrane',1,1,'',0);

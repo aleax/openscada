@@ -1,3 +1,13 @@
+2019-04-30 Roman (stable)
+- !!!!:FIX:DB.LibsDB.{OscadaLibs,vcaTest}, Model.{AGLKS,Boiler}.Model: Completed for revision the functions library "Technological devices (techApp)"
+    in removing all cyrillic symbols from identifiers of the models and fixing all texts.
+- !:FIX:DB.LibsDB.OscadaLibs: TmpLib.Base.ntf: prevented from more douple messages generation at the first error connection.
+- DB.LibsDB.vcaBase: Main.{grph_panel,doc_panel}: appended for the "Begin and depth" label and the depth fields moved to a single line.
+    Main.grph_panel: improved for conditional display the microseconds part in the cursor field information.
+- UI.Vision: The view "Button" of the primitive "FormEl" appended of setting the pointing cursor.
+- UI.WebVision: The view "CheckBox" of the primitive "FormEl" appended for scalling the element.
+
+
 2019-04-22 Roman (stable)
 - !!!:FIX:SYS: The function nodeDis() waiting fixed for zero time and the function chldDel() set to no waiting by default.
 - SYS: The standard waiting time decreased to 5 seconds (from 10) and the standard interface waiting time set slightly more, that is 7 seconds.

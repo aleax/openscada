@@ -751,6 +751,10 @@ void ShapeFormEl::setActive( WdgView *w, bool val )
     switch(shD->elType) {
 	case F_LINE_ED:	((LineEdit*)shD->addrWdg)->setReadOnly(!val);			break;
 	case F_TEXT_ED:	((TextEdit*)shD->addrWdg)->workWdg()->setReadOnly(!val);	break;
+	case F_BUTTON:
+	    if(val) shD->addrWdg->setCursor(Qt::PointingHandCursor);
+	    else shD->addrWdg->unsetCursor();
+	    break;
 	case F_TABLE:	break;
 	default: shD->addrWdg->setEnabled(val);
     }
