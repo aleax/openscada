@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.SMH2Gi file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2012-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2012-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Segnetics SMH2Gi and SMH4")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.1.0"
+#define MOD_VER		"1.1.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Data acquisition and control by Segnetics SMH2Gi and SMH4 hardware interfaces and modules.")
 #define LICENSE		"GPL2"
@@ -197,7 +197,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     ::TController(name_c,daq_db,cfgelem), smv(NULL), m_prior(cfg("PRIOR").getId()), connTry(cfg("REQ_TRY").getId()),
-    prcSt(false), callSt(false), endrunReq(false), tmGath(0)
+    mPer(0), prcSt(false), callSt(false), endrunReq(false), tmGath(0)
 {
     cfg("PRM_BD_SHM").setS("SMH2GiPrmSHM_"+name_c);
     cfg("PRM_BD_MRC").setS("SMH2GiPrmMRC_"+name_c);
@@ -256,9 +256,6 @@ void TMdContr::disable_( )
 
 void TMdContr::start_( )
 {
-    //Schedule process
-    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
-
     //Start the gathering data task
     SYS->taskCreate(nodePath('.',true), m_prior, TMdContr::Task, this);
 }
@@ -424,6 +421,16 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/cntr/cfg/devMCLs" && ctrChkNode(opt))	TSYS::ctrListFS(opt, cfg("MC_DEV").getS(), "<chrdev>;");
     else if(a_path == "/cntr/cfg/devMRLs" && ctrChkNode(opt))	TSYS::ctrListFS(opt, cfg("MR_DEV").getS(), "<chrdev>;");
     else TController::cntrCmdProc(opt);
+}
+
+bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
+{
+    TController::cfgChange(co, pc);
+
+    if(co.fld().name() == "SCHEDULE")
+	mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
+
+    return true;
 }
 
 uint8_t TMdContr::CRCHi[] =

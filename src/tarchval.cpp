@@ -928,6 +928,7 @@ bool TVArchive::cfgChange( TCfg &co, const TVariant &pc )
     else if(co.name() == "BPER") {
 	if(co.getR() < 1e-6) co.setR(1e-6);
 	else mBSize = 100/co.getR();
+	setUpBuf();
     }
 
     modif();

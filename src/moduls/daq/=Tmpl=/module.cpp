@@ -146,7 +146,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //*************************************************
 //!!! Constructor for DAQ-subsystem controller object.
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem ) : TController(name_c,daq_db,cfgelem),
-    prcSt(false), callSt(false), tmGath(0), mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR"))
+    prcSt(false), callSt(false), tmGath(0), mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mPer(0)
 {
     cfg("PRM_BD").setS("TmplPrm_"+name_c);
 }
@@ -180,9 +180,6 @@ TParamContr *TMdContr::ParamAttach( const string &name, int type )
 //!!! Processing virtual functions for start DAQ-controller
 void TMdContr::start_( )
 {
-    //Schedule process
-    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
-
     //Start the gathering data task
     SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
 }
@@ -251,6 +248,16 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     }
     //Process command to page
     TController::cntrCmdProc(opt);
+}
+
+bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
+{
+    TController::cfgChange(co, pc);
+
+    if(co.fld().name() == "SCHEDULE")
+	mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
+
+    return true;
 }
 
 //*************************************************

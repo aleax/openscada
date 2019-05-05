@@ -20885,7 +20885,7 @@ if(f_start) {
 		isBool = (typeof(aObj.get())=="boolean");
 		trObj.attrSet("prm"+trN+"addr", pAddr+"/a_"+sP);
 		trObj.attrSet("prm"+trN+"color", (trClr=this.attr("labColorGrph"+(trNClr+1)))+(isBool?"-127":""));
-		trObj.attrSet("prm"+trN+"width", 1);
+		trObj.attrSet("prm"+trN+"width", 2);
 		if((sP == "var" || sP == "sp" || sP == "aMin" || sP == "aMax" || sP == "wMin" || sP == "wMax") && pObj.nodeAt("a_min")) {
 			trObj.attrSet("prm"+trN+"bordL", pObj.nodeAt("a_min").get()).attrSet("prm"+trN+"bordU", pObj.nodeAt("a_max").get()).attrSet("prm"+trN+"scl",0);
 			if(sP == "aMin" || sP == "aMax" || sP == "wMin" || sP == "wMax")
@@ -20906,7 +20906,7 @@ if(f_start) {
 		isBool = (typeof(aObj.get())=="boolean");
 		trObj.attrSet("prm"+trN+"addr", pAddr+"/a_"+sP);
 		trObj.attrSet("prm"+trN+"color", this.attr("labColorGrph"+(trNClr+1))+(isBool?"-127":""));
-		trObj.attrSet("prm"+trN+"width", 1);
+		trObj.attrSet("prm"+trN+"width", 2);
 		if(isBool) { trObj.attrSet("prm"+trN+"bordL", -trDigN).attrSet("prm"+trN+"bordU", 20-trDigN); trDigN++; }
 		trendsList_items += "<r><s>"+trN+"</s>"
 											"<s color=''"+this.attr("labColorGrph"+(trNClr+1))+"''>"+strEnc2HTML(aObj.descr())+"</s>"
@@ -21001,7 +21001,7 @@ for(off = 0; true; ) {
 	else if((sval == "ws_LnAccept:/viewSet" || sval == "ws_TxtAccept:/viewSet") && (aObj=pObj.nodeAt(view_value))) aObj.set(this.viewSet.attr("value"));
 	else if(sval == "ws_TableChangeSel:/trendsList")
 		for(i_tr = 0; i_tr < trN; i_tr++)
-			trObj.attrSet("prm"+i_tr+"width", ((i_tr==trendsList_value)?3:1));
+			trObj.attrSet("prm"+i_tr+"width", ((i_tr==trendsList_value)?3:2));
 	else if((reRez=sval.match("ws_TableEdit_(\\d+)_(\\d+)\\:\\/trendsList")).length)
 		trObj.attrSet("prm"+trendsList_value+((reRez[1]==2)?"bordL":"bordU"), trendsList_set);
 	else ev_rez += sval+"\n";

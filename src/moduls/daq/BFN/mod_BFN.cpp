@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.BFN file: mod_BFN.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2010-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,7 +36,7 @@
 #define MOD_NAME	_("BFN module")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.6.13"
+#define MOD_VER		"0.6.14"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Support Big Farm Net (BFN) modules for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com).")
 #define LICENSE		"GPL2"
@@ -280,7 +280,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 TMdContr::TMdContr(string name_c, const string &daq_db, ::TElem *cfgelem) : ::TController(name_c,daq_db,cfgelem),
 	mPrior(cfg("PRIOR").getId()), mSync(cfg("SYNCPER").getRd()),
-	prc_st(false), acq_st(false), endrun_req(false), alSt(-1), tm_gath(0)
+	mPer(0), prc_st(false), acq_st(false), endrun_req(false), alSt(-1), tm_gath(0)
 {
     //cfg("PRM_BD").setS("TmplPrm_"+name_c);
 }
@@ -377,9 +377,6 @@ void TMdContr::enable_( )
 
 void TMdContr::start_( )
 {
-    //Schedule process
-    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
-
     //Start the gathering data task
     if(!prc_st) SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
 }
@@ -652,6 +649,16 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	}
     }*/
     else TController::cntrCmdProc(opt);
+}
+
+bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
+{
+    TController::cfgChange(co, pc);
+
+    if(co.fld().name() == "SCHEDULE")
+	mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
+
+    return true;
 }
 
 //*************************************************

@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: os_contr.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -50,7 +50,7 @@
 #define MOD_NAME	_("System DA")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.3.4"
+#define MOD_VER		"2.3.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides data acquisition from the OS. Supported OS Linux data sources: HDDTemp, Sensors, Uptime, Memory, CPU, UPS etc.")
 #define LICENSE		"GPL2"
@@ -178,7 +178,7 @@ void TTpContr::perSYSCall( unsigned int cnt )
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem) : TController(name_c,daq_db,cfgelem),
     mPrior(cfg("PRIOR").getId()),
-    prcSt(false), callSt(false), endrunReq(false), mPer(1e9)
+    prcSt(false), callSt(false), endrunReq(false), mPer(0)
 {
     cfg("PRM_BD").setS("OSPrm_"+name_c);
 }
@@ -230,9 +230,6 @@ void TMdContr::enable_( )
 
 void TMdContr::start_( )
 {
-    //Schedule process
-    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,1e9*s2r(cron())) : 0;
-
     //Start the request data task
     if(!prcSt) SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
 }
@@ -298,6 +295,16 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	return;
     }
     TController::cntrCmdProc(opt);
+}
+
+bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
+{
+    TController::cfgChange(co, pc);
+
+    if(co.fld().name() == "SCHEDULE")
+	mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,1e9*s2r(cron())) : 0;
+
+    return true;
 }
 
 //*************************************************

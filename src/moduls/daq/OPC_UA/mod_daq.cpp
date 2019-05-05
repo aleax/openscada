@@ -85,7 +85,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) : TCon
     mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mRestTm(cfg("TM_REST")), mSync(cfg("SYNCPER")),
     mEndP(cfg("EndPoint")), mSecPol(cfg("SecPolicy")), mSecMessMode(cfg("SecMessMode")), mCert(cfg("Cert")), mPvKey(cfg("PvKey")),
     mAuthUser(cfg("AuthUser")), mAuthPass(cfg("AuthPass")), mPAttrLim(cfg("AttrsLimit").getId()),
-    prcSt(false), callSt(false), mPCfgCh(false), alSt(-1), mBrwsVar(TSYS::strMess(_("Root folder (%d)"),OpcUa_RootFolder)),
+    mPer(0), prcSt(false), callSt(false), mPCfgCh(false), alSt(-1), mBrwsVar(TSYS::strMess(_("Root folder (%d)"),OpcUa_RootFolder)),
     acqErr(dataRes()), tmDelay(0), servSt(0)
 {
     cfg("PRM_BD").setS("OPC_UA_Prm_"+name_c);
@@ -186,9 +186,6 @@ void TMdContr::start_( )
 {
     //Establish connection
     //try { tr.at().start(); } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
-
-    //Schedule process
-    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
 
     servSt = 0;
     tmDelay = 0;
@@ -360,7 +357,9 @@ bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
     TController::cfgChange(co, pc);
 
     try {
-	if(co.name() == "EndPoint" && enableStat()) {
+	if(co.fld().name() == "SCHEDULE")
+	    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
+	else if(co.name() == "EndPoint" && enableStat()) {
 	    tr.at().setAddr("TCP:"+epParse());
 	    ResAlloc res(nodeRes(), false);
 	    SecuritySetting ss("", -1);

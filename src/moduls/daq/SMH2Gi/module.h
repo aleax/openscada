@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.SMH2Gi file: module.h
 /***************************************************************************
- *   Copyright (C) 2012-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2012-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -188,7 +188,7 @@ class TMdContr: public TController
 	string modBusReq( string &pdu, bool MC = false, bool broadCast = false );	//pdu included address, by specific
 
 	//Attributes
-	Shm     *smv;
+	Shm	*smv;
 	string	MRWrFrm;
 
     protected:
@@ -201,6 +201,7 @@ class TMdContr: public TController
 	void stop_( );
 
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
     private:
 	//Methods

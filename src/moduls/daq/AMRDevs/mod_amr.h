@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.AMRDevs file: mod_tmpl.h
 /***************************************************************************
- *   Copyright (C) 2010-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2010-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -105,6 +105,7 @@ class TMdContr: public TController
 	void start_( );
 	void stop_( );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
     private:
 	//Methods

@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.ICP_DAS file: ICP_module.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2010-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,7 +39,7 @@ extern "C"
 #define MOD_NAME	_("ICP DAS hardware")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.8.9"
+#define MOD_VER		"1.8.10"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides implementation for 'ICP DAS' hardware support.\
  Includes main I-87xxx DCON modules, I-8xxx fast modules and boards on ISA bus.")
@@ -158,7 +158,7 @@ TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
 	TController(name_c, daq_db, cfgelem), reqRes(true), pBusRes(true),
 	mPrior(cfg("PRIOR").getId()), mBus(cfg("BUS").getId()),
 	mBaud(cfg("BAUD").getId()), connTry(cfg("REQ_TRY").getId()), mSched(cfg("SCHEDULE")), mTrOscd(cfg("TR_OSCD")),
-	mPer(100000000), prcSt(false), callSt(false), endRunReq(false), tmGath(0), mCurSlot(-1), numReq(0), numErr(0), numErrResp(0)
+	mPer(0), prcSt(false), callSt(false), endRunReq(false), tmGath(0), mCurSlot(-1), numReq(0), numErr(0), numErrResp(0)
 {
     cfg("PRM_BD").setS("ICPDASPrm_"+name_c);
     cfg("BUS").setI(1);
@@ -208,9 +208,6 @@ void TMdContr::start_( )
 
 	numReq = numErr = numErrResp = 0;
 
-	//Schedule process
-	mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
-
 	//Start the gathering data task
 	SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this, 10);
     } catch(TError &err) {
@@ -232,14 +229,7 @@ void TMdContr::stop_( )
     if(mBus == 0) { pBusRes.lock(); Close_Slot(9); Close_SlotAll(); pBusRes.unlock(); }
 }
 
-bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
-{
-    TController::cfgChange(co, pc);
 
-    if((co.name() == "BUS" || co.name() == "BAUD") && startStat()) stop();
-
-    return true;
-}
 
 string TMdContr::DCONCRC( string str )
 {
@@ -451,6 +441,17 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setPrmLP("wTm",opt->text());
     }
     else TController::cntrCmdProc(opt);
+}
+
+bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
+{
+    TController::cfgChange(co, pc);
+
+    if(co.fld().name() == "SCHEDULE")
+	mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
+    else if((co.name() == "BUS" || co.name() == "BAUD") && startStat()) stop();
+
+    return true;
 }
 
 //******************************************************

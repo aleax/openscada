@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.Comedi file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2012-2018 by Roman Savochenko                           *
+ *   Copyright (C) 2012-2019 by Roman Savochenko                           *
  *   rom_as@oscada.org                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -37,7 +37,7 @@
 #define MOD_NAME	_("DAQ boards by Comedi")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.0.11"
+#define MOD_VER		"1.0.12"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("ISA, PCI, PCMCIA, USB DAQ boards collection by Comedi(http://www.comedi.org).")
 #define LICENSE		"GPL2"
@@ -101,7 +101,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )	{
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
 	::TController(name_c,daq_db,cfgelem), mPrior(cfg("PRIOR").getId()), mSched(cfg("SCHEDULE")),
-	mPer(1000000000), prcSt(false), call_st(false), endRunReq(false), tm_gath(0)
+	mPer(0), prcSt(false), call_st(false), endRunReq(false), tm_gath(0)
 {
     cfg("PRM_BD").setS("ComediPrm_"+name_c);
 }
@@ -130,9 +130,6 @@ TParamContr *TMdContr::ParamAttach( const string &name, int type )	{ return new 
 void TMdContr::start_( )
 {
     if(prcSt)	return;
-
-    //Schedule process
-    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
 
     //Start the gathering data task
     SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this, 10);
@@ -203,6 +200,15 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     TController::cntrCmdProc(opt);
 }
 
+bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
+{
+    TController::cfgChange(co, pc);
+
+    if(co.fld().name() == "SCHEDULE")
+	mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
+
+    return true;
+}
 
 //*************************************************
 //* TMdPrm                                        *

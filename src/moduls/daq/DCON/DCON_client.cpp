@@ -39,7 +39,7 @@
 #define MOD_NAME	_("DCON client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.3.4"
+#define MOD_VER		"1.3.5"
 #define AUTHORS		_("Roman Savochenko, Almaz Karimov")
 #define DESCRIPTION	_("Provides an implementation of DCON-client protocol. Supports I-7000 DCON protocol.")
 #define LICENSE		"GPL2"
@@ -147,7 +147,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db ) {
 TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) :
     TController(name_c, daq_db, cfgelem), enRes(true), reqRes(true),
     mAddr(cfg("ADDR")), mPrior(cfg("PRIOR").getId()), connTry(cfg("REQ_TRY").getId()),
-    prcSt(false), callSt(false), endrunReq(false), mPer(1e9), tmGath(0)
+    prcSt(false), callSt(false), endrunReq(false), mPer(0), tmGath(0)
 {
     cfg("PRM_BD").setS("DCONPrm_"+name_c);
 }
@@ -190,9 +190,6 @@ void TMdContr::start_( )
 {
     if(prcSt)	return;
 
-    //Schedule process
-    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,1e9*s2r(cron())) : 0;
-
     //Fix old address format
     if(addr().size() && TSYS::strParse(addr(),1,".").empty())	mAddr = "Serial."+addr();
 
@@ -211,7 +208,7 @@ void TMdContr::stop_( )
     if(prcSt) SYS->taskDestroy(nodePath('.',true), &endrunReq);
 }
 
-bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )	{ TController::cfgChange(co, pc); return true; }
+
 
 void TMdContr::prmEn( TMdPrm *prm, bool val )
 {
@@ -681,6 +678,16 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	    opt->childAdd("el")->setText(sls[i_s]);
     }
     else TController::cntrCmdProc(opt);
+}
+
+bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
+{
+    TController::cfgChange(co, pc);
+
+    if(co.fld().name() == "SCHEDULE")
+	mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,1e9*s2r(cron())) : 0;
+
+    return true;
 }
 
 //******************************************************

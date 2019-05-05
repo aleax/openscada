@@ -1,6 +1,14 @@
+2019-05-05 Roman (stable)
+- DB.LibsDB.vcaBase: Main.cntrPaspExt: Expanded for the trand width in 2 pixels.
+- FIX:SYS.ValueArch: Forced to the values buffer updating at the data period update.
+- !!:FIX:DAQ.{=Tmpl=,AMRDevs,BFN,Comedy,DAQGate,DCON,DiamondBoards,FT3,Fastwel,ICP_DAS,MMS,ModBus,OPC_UA,SMH2Gi,SNMP,System}:
+    The property period() is set actual in early, at the configuration "SCHEDULE" changing,
+    for true data period of the archives, the problem detected at complex copy whole controller objects.
+
+
 2019-04-30 Roman (stable)
 - !!!!:FIX:DB.LibsDB.{OscadaLibs,vcaTest}, Model.{AGLKS,Boiler}.Model: Completed for revision the functions library "Technological devices (techApp)"
-    in removing all cyrillic symbols from identifiers of the models and fixing all texts.
+    in removing all Cyrillic symbols from identifiers of the models and fixing all texts.
 - !:FIX:DB.LibsDB.OscadaLibs: TmpLib.Base.ntf: prevented from more douple messages generation at the first error connection.
 - DB.LibsDB.vcaBase: Main.{grph_panel,doc_panel}: appended for the "Begin and depth" label and the depth fields moved to a single line.
     Main.grph_panel: improved for conditional display the microseconds part in the cursor field information.

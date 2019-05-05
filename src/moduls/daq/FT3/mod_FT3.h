@@ -43,7 +43,7 @@ using namespace OSCADA;
 #define MOD_NAME	_("DAQ FT3")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.4.7"
+#define MOD_VER		"0.4.8"
 #define AUTHORS		_("Maxim Kothetkov, Olga Avdeyeva, Olga Kuzmickaya")
 #define DESCRIPTION	_("Allow realization of FT3 master/slave service")
 #define LICENSE		"GPL2"
@@ -336,13 +336,15 @@ namespace FT3
 	uint8_t nChannel;
 
     protected:
-
 	//Methods
 	void prmEn(TMdPrm *prm, bool val);
 
 	//!!! Processing virtual functions for start and stop DAQ-controller
 	void start_();
 	void stop_();
+
+	void cntrCmdProc(XMLNode *opt);
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
 	//!!! FT3 CRC
 	uint16_t CRC(char *data, uint16_t length);
@@ -364,7 +366,7 @@ namespace FT3
 	//!!! Background task's function for periodic data acquisition.
 	static void *DAQTask(void *icntr);
 	static void *LogicTask(void *icntr);
-	void cntrCmdProc(XMLNode *opt);
+
 
 	//Attributes
 	//!!! The resource for Enable parameters.

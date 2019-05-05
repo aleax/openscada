@@ -133,7 +133,7 @@ class TMdContr: public TController
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
-	//> Request to OpenSCADA control interface
+	// Request to OpenSCADA control interface
 	int cntrIfCmd( XMLNode &node );
 
     protected:

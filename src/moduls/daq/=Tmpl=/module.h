@@ -123,12 +123,14 @@ class TMdContr: public TController
 	void start_( );
 	void stop_( );
 
+	//!!! Processing virtual function for OpenSCADA control interface comands
+	void cntrCmdProc( XMLNode *opt );
+	bool cfgChange( TCfg &co, const TVariant &pc );
+
     private:
 	//Methods
 	//!!! Processing virtual functions for self object-parameter creation.
 	TParamContr *ParamAttach( const string &name, int type );
-	//!!! Processing virtual function for OpenSCADA control interface comands
-	void cntrCmdProc( XMLNode *opt );
 	//!!! Background task's function for periodic data acquisition.
 	static void *Task( void *icntr );
 

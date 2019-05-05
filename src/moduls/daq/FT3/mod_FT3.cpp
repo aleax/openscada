@@ -557,7 +557,7 @@ TController *TTpContr::ContrAttach(const string &name, const string &daq_db)
 //*************************************************
 TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
 	TController(name_c, daq_db, cfgelem), prc_st(false), endrun_req(false), tm_gath(0), CntrState(StateNoConnection), NeedInit(true), enRes(true),
-	eventRes(true), mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR").getId())
+	eventRes(true), mSched(cfg("SCHEDULE")), mPer(0), mPrior(cfg("PRIOR").getId())
 {
     cfg("PRM_BD_BUC").setS("FT3Prm_BUC_" + name_c);
     cfg("PRM_BD_BVTS").setS("FT3Prm_BVTS_" + name_c);
@@ -1048,7 +1048,6 @@ TParamContr *TMdContr::ParamAttach(const string &name, int type)
 
 void TMdContr::start_()
 {
-    mPer = TSYS::strSepParse(cron(), 1, ' ').empty() ? vmax(0, (int64_t )(1e9 * s2r(cron()))) : 0;
     nChannel = cfg("NCHANNEL").getI();
     Channels.clear();
     devAddr = vmin(63, vmax(1,cfg("NODE").getI()));
@@ -1455,7 +1454,6 @@ void *TMdContr::LogicTask(void *icntr)
 
 void TMdContr::cntrCmdProc(XMLNode *opt)
 {
-
     //> Get page info
     if(opt->name() == "info") {
 	TController::cntrCmdProc(opt);
@@ -1473,6 +1471,17 @@ void TMdContr::cntrCmdProc(XMLNode *opt)
     } else
 	TController::cntrCmdProc(opt);
 }
+
+bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
+{
+    TController::cfgChange(co, pc);
+
+    if(co.fld().name() == "SCHEDULE")
+	mPer = TSYS::strSepParse(cron(), 1, ' ').empty() ? vmax(0, (int64_t )(1e9 * s2r(cron()))) : 0;
+
+    return true;
+}
+
 //*************************************************
 //* TMdPrm                                        *
 //*************************************************

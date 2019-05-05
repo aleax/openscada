@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.MMS file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2013-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2013-2017,2019 by Roman Savochenko, <rom_as@oscada.org> *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,7 +37,7 @@
 #define MOD_NAME	_("MMS(IEC-9506)")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.3.17"
+#define MOD_VER		"1.3.18"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("MMS(IEC-9506) client implementation.")
 #define LICENSE		"GPL2"
@@ -116,7 +116,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 //* TMdContr                                      *
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem ) : TController(name_c,daq_db,cfgelem), enRes(true), cntrRes(true),
-    mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mRestTm(cfg("TM_REST")), mSync(cfg("SYNCPER")), mAddr(cfg("ADDR")), mVarsRdReq(cfg("VARS_RD_REQ")),
+    mPer(0), mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mRestTm(cfg("TM_REST")), mSync(cfg("SYNCPER")), mAddr(cfg("ADDR")), mVarsRdReq(cfg("VARS_RD_REQ")),
     prcSt(false), callSt(false), isReload(false), alSt(-1), acq_err(dataRes()), tmDelay(0)
 {
     cfg("PRM_BD").setS("MMSPrm_"+name_c);
@@ -274,8 +274,6 @@ void TMdContr::start_( )
 {
     reset();	//MMS coneection state reset
 
-    //Schedule process
-    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
     tmDelay = 0;
 
     //Clear data blocks
@@ -486,7 +484,9 @@ bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
     TController::cfgChange(co, pc);
 
     try {
-	if(co.name() == "ADDR" && enableStat()) tr.at().setAddr("TCP:"+co.getS());
+	if(co.fld().name() == "SCHEDULE")
+	    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
+	else if(co.name() == "ADDR" && enableStat()) tr.at().setAddr("TCP:"+co.getS());
     } catch(...) { }
 
     return true;
