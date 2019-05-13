@@ -36,7 +36,7 @@
 #define MOD_NAME	_("BFN module")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.6.14"
+#define MOD_VER		"0.6.15"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Support Big Farm Net (BFN) modules for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com).")
 #define LICENSE		"GPL2"
@@ -280,7 +280,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 TMdContr::TMdContr(string name_c, const string &daq_db, ::TElem *cfgelem) : ::TController(name_c,daq_db,cfgelem),
 	mPrior(cfg("PRIOR").getId()), mSync(cfg("SYNCPER").getRd()),
-	mPer(0), prc_st(false), acq_st(false), endrun_req(false), alSt(-1), tm_gath(0)
+	mPer(1e9), prc_st(false), acq_st(false), endrun_req(false), alSt(-1), tm_gath(0)
 {
     //cfg("PRM_BD").setS("TmplPrm_"+name_c);
 }

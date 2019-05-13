@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"4.1.2"
+#define MOD_VER		"4.1.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")
@@ -385,6 +385,8 @@ void TpContr::cntrCmdProc( XMLNode *opt )
     else TTypeDAQ::cntrCmdProc(opt);
 }
 
+
+
 NConst *TpContr::constGet( const char *nm )
 {
     for(unsigned i_cst = 0; i_cst < mConst.size(); i_cst++)
@@ -405,7 +407,7 @@ BFunc *TpContr::bFuncGet( const char *nm )
 Contr::Contr( string name_c, const string &daq_db, ::TElem *cfgelem ) :
     ::TController(name_c, daq_db, cfgelem), TPrmTempl::Impl(this, ("JavaLikeCalc_"+name_c).c_str()),
     prcSt(false), callSt(false), endrunReq(false), isDAQTmpl(false), chkLnkNeed(false),
-    mPrior(cfg("PRIOR").getId()), mIter(cfg("ITER").getId()), idFreq(-1), idStart(-1), idStop(-1), mPer(0)
+    mPrior(cfg("PRIOR").getId()), mIter(cfg("ITER").getId()), idFreq(-1), idStart(-1), idStop(-1), mPer(1e9)
 {
     cfg("PRM_BD").setS("JavaLikePrm_"+name_c);
 }
@@ -599,9 +601,6 @@ void Contr::start_( )
     idStop	= ioId("f_stop");
     int id_this = ioId("this");
     if(id_this >= 0) setO(id_this, new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
-
-    //Schedule process
-    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
 
     //Start the request data task
     SYS->taskCreate(nodePath('.',true), mPrior, Contr::Task, this);
@@ -841,6 +840,16 @@ void Contr::cntrCmdProc( XMLNode *opt )
     }
     else if(isDAQTmpl && func() && TPrmTempl::Impl::cntrCmdProc(opt))	;
     else TController::cntrCmdProc(opt);
+}
+
+bool Contr::cfgChange( TCfg &co, const TVariant &pc )
+{
+    TController::cfgChange(co, pc);
+
+    if(co.fld().name() == "SCHEDULE")
+	mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
+
+    return true;
 }
 
 //*************************************************

@@ -145,6 +145,7 @@ class Contr: public TController, public TPrmTempl::Impl
 
 	TParamContr *ParamAttach( const string &name, int type );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
     private:
 	//Methods

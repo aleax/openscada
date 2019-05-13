@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Segnetics SMH2Gi and SMH4")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.1.1"
+#define MOD_VER		"1.1.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Data acquisition and control by Segnetics SMH2Gi and SMH4 hardware interfaces and modules.")
 #define LICENSE		"GPL2"
@@ -197,7 +197,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     ::TController(name_c,daq_db,cfgelem), smv(NULL), m_prior(cfg("PRIOR").getId()), connTry(cfg("REQ_TRY").getId()),
-    mPer(0), prcSt(false), callSt(false), endrunReq(false), tmGath(0)
+    mPer(1e9), prcSt(false), callSt(false), endrunReq(false), tmGath(0)
 {
     cfg("PRM_BD_SHM").setS("SMH2GiPrmSHM_"+name_c);
     cfg("PRM_BD_MRC").setS("SMH2GiPrmMRC_"+name_c);

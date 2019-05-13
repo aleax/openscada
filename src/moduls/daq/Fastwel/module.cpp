@@ -36,7 +36,7 @@
 #define MOD_NAME	_("Fastwel IO")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.1.14"
+#define MOD_VER		"0.1.15"
 #define AUTHORS		_("Maxim Kochetkov")
 #define DESCRIPTION	_("Fastwel IO FBUS client implementation")
 #define LICENSE		"GPL2"
@@ -294,7 +294,7 @@ TController *TTpContr::ContrAttach(const string & name, const string & daq_db)
 //*************************************************
 TMdContr::TMdContr(string name_c, const string & daq_db, ::TElem * cfgelem) :
 	::TController(name_c, daq_db, cfgelem), prcSt(false), callSt(false), endrunReq(false), tmGath(0), enRes(true), dataRes(true),
-	mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mNet(cfg("NET_ID")), mPer(0)
+	mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mNet(cfg("NET_ID")), mPer(1e9)
 {
     cfg("PRM_BD_DIM762").setS("FBUSPrmDIM762_" + name_c);
     cfg("PRM_BD_DIM716").setS("FBUSPrmDIM716_" + name_c);

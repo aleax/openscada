@@ -146,7 +146,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //*************************************************
 //!!! Constructor for DAQ-subsystem controller object.
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem ) : TController(name_c,daq_db,cfgelem),
-    prcSt(false), callSt(false), tmGath(0), mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mPer(0)
+    prcSt(false), callSt(false), tmGath(0), mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mPer(1e9)
 {
     cfg("PRM_BD").setS("TmplPrm_"+name_c);
 }

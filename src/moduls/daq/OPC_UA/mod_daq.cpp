@@ -85,7 +85,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) : TCon
     mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mRestTm(cfg("TM_REST")), mSync(cfg("SYNCPER")),
     mEndP(cfg("EndPoint")), mSecPol(cfg("SecPolicy")), mSecMessMode(cfg("SecMessMode")), mCert(cfg("Cert")), mPvKey(cfg("PvKey")),
     mAuthUser(cfg("AuthUser")), mAuthPass(cfg("AuthPass")), mPAttrLim(cfg("AttrsLimit").getId()),
-    mPer(0), prcSt(false), callSt(false), mPCfgCh(false), alSt(-1), mBrwsVar(TSYS::strMess(_("Root folder (%d)"),OpcUa_RootFolder)),
+    mPer(1e9), prcSt(false), callSt(false), mPCfgCh(false), alSt(-1), mBrwsVar(TSYS::strMess(_("Root folder (%d)"),OpcUa_RootFolder)),
     acqErr(dataRes()), tmDelay(0), servSt(0)
 {
     cfg("PRM_BD").setS("OPC_UA_Prm_"+name_c);

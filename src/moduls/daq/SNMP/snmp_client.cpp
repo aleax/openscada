@@ -47,7 +47,7 @@
 #define MOD_NAME	_("SNMP client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.9.2"
+#define MOD_VER		"0.9.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides an implementation of the client of SNMP-service.")
 #define LICENSE		"GPL2"
@@ -122,7 +122,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )	{
 TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
     TController(name_c,daq_db,cfgelem), enRes(true),
     mPrior(cfg("PRIOR").getId()), mPattrLim(cfg("PATTR_LIM").getId()), mRetr(cfg("RETR").getId()), mTm(cfg("TM").getId()),
-    mPer(0), prcSt(false), callSt(false), endrunReq(false), prmEnErr(false), tmGath(0), acqErr(dataRes())
+    mPer(1e9), prcSt(false), callSt(false), endrunReq(false), prmEnErr(false), tmGath(0), acqErr(dataRes())
 {
     cfg("PRM_BD").setS("SNMPPrm_"+name_c);
 }
