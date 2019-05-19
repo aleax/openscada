@@ -122,8 +122,10 @@ void VCASess::getReq( SSess &ses )
 	req.setAttr("path", ses.url);
 	req.childAdd("openlist")->setAttr("path", "/%2fserv%2fpg")->setAttr("tm", (prmEl!=ses.prm.end())?prmEl->second:"0");
 	req.childAdd("get")->setAttr("path", "/%2fobj%2fcfg%2fper");
+	req.childAdd("get")->setAttr("path", "/%2fserv%2falarm")->setAttr("mode", "stat");
 	mod->cntrIfCmd(req, ses);
 	req.childGet(0)->setAttr("per", req.childGet(1)->text())->
+			setAttr("alarmSt", req.childGet(2)->attr("alarmSt"))->
 			setAttr("cachePgSz", i2s(mod->cachePgSz()))->
 			setAttr("cachePgLife", r2s(mod->cachePgLife()));
 

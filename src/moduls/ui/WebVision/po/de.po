@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-01 17:26+0200\n"
+"POT-Creation-Date: 2019-05-19 19:31+0300\n"
 "PO-Revision-Date: 2009-08-26 08:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -175,6 +175,9 @@ msgstr "Feld zum Anzeigen und Ändern des aktuellen Benutzers."
 
 msgid "Field for displaying and changing the used interface style."
 msgstr "Feld zum Anzeigen und Ändern des verwendeten Schnittstellenstils."
+
+msgid "Alarm level: %1"
+msgstr "Stufe der Störung: %1"
 
 #, c-format
 msgid ""

@@ -603,6 +603,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		masterPage.status.setAttribute('id', 'gen-pnl-status');
 		this.place.appendChild(masterPage.status);
 		stBar = "<table width='100%'><TR><td id='StatusBar' width='100%'/>";
+		stBar += "<td id='st_alarm' title1='###Alarm level: %1###'><img onclick='alarmQuiet()' height='"+masterPage.status.height+"px' src='/"+MOD_ID+"/img_alarmLev'/></td>";
 		if(modelStyles && parseInt(modelStyles.getAttribute('curStlId')) >= 0 && modelStyles.childNodes.length > 1) {
 		    stBar += "<td id='st_style' title='###Field for displaying and changing the used interface style.###'>";
 		    stBar += "<select onchange='styleSet(this.selectedOptions[0].getAttribute(\"itId\"))'>";
@@ -2537,6 +2538,8 @@ function makeUI( callBackRez )
 	if(tmCnt == 0)	modelStyles = servGet('/'+sessId,'com=style');
 
 	modelPer = parseInt(pgNode.getAttribute("per"));
+	if(alrmUpdCnt > 0.5) { alarmSet(parseInt(pgNode.getAttribute("alarmSt"))); alrmUpdCnt = 0; }
+	else alrmUpdCnt += planePer;
 	cachePgSz   = parseInt(pgNode.getAttribute("cachePgSz"));
 	cachePgLife = parseFloat(pgNode.getAttribute("cachePgLife"));
 	// Check for delete pages
@@ -2704,7 +2707,7 @@ function getTree( )
 		    cur_it.formObj = formObj;
 		}
 	    }
-	    if(cur_it) {
+	    if(cur_it && ipath.length) {
 		cur_it.classList.add("selectable");
 		cur_it.itPath = ipath;
 	    }
@@ -2721,6 +2724,28 @@ function getTree( )
 var SEC_XT = 0x01;	//Extended
 var SEC_WR = 0x02;	//Write access
 var SEC_RD = 0x04;	//Read access
+
+//Alarms processing
+function alarmSet(alarm) {
+    ch_tp = alarm^mAlrmSt;
+
+    st_alarm = document.getElementById("st_alarm");
+    if(!st_alarm) return;
+    st_alarm_img = st_alarm.childNodes[0];
+
+    if(ch_tp&0xFF || (alarm>>16)&0xFF || !st_alarm_img.style.backgroundColor.length) {
+	alarmLev = alarm&0xFF;
+	st_alarm_img.style.cursor = alarmLev ? 'pointer' : '';
+	st_alarm_img.style.backgroundColor = st_alarm_img.style.backgroundColor.length ? '' :
+	    '#'+(alarmLev?'ff':'00')+(alarmLev?((alarmLev<=9)?'0':'')+(255-alarmLev).toString(16):'FF')+'00';
+	st_alarm.title = st_alarm.getAttribute("title1").replace('%1',alarmLev);
+    }
+    mAlrmSt = alarm;
+}
+
+function alarmQuiet() {
+    servSet("/UI/VCAEngine/"+sessId+"/%2fserv%2falarm", "com=com", "<quietance tmpl='255'/>", true);
+}
 
 //Call session identifier
 var sessId = location.pathname.split('/');
@@ -2753,6 +2778,8 @@ window.onresize = function( ) {
 	stTmReload = setTimeout('window.location.reload()', 1000);
 }
 
+var alrmUpdCnt = 0;			//Alarms updating counter, for 0.5 seconds
+var mAlrmSt = -1;			//Current allarm state
 var modelPer = 0;			//Model proc period
 var modelStyles = null;			//Model styles
 var prcCnt = 0;				//Process counter

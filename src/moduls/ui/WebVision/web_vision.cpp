@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"3.4.1"
+#define MOD_VER		"3.5.0"
 #define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on the the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -242,7 +242,7 @@ TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5), mCachePgLife
 	_("Today"), _("Mon"), _("Tue"), _("Wed"), _("Thr"), _("Fri"), _("Sat"), _("Sun"),
 	_("January"), _("February"), _("March"), _("April"), _("May"), _("June"), _("July"),
 	_("August"), _("September"), _("October"), _("November"), _("December")
-	_("Field for displaying and changing the current user."), _("Field for displaying and changing the used interface style.") };
+	_("Field for displaying and changing the current user."), _("Field for displaying and changing the used interface style."), _("Alarm level: %1") };
 #endif
 }
 

@@ -194,7 +194,7 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     statusBar()->insertPermanentWidget(0, mWUser);
     mWStat = new QLabel(VCAStation().c_str(), this);
     mWStat->setVisible(VCAStation() != ".");
-    statusBar()->insertPermanentWidget(0,mWStat);
+    statusBar()->insertPermanentWidget(0, mWStat);
     mStlBar = new StylesStBar(-1, this);
     connect(mStlBar, SIGNAL(styleChanged()), this, SLOT(styleChanged()));
     statusBar()->insertPermanentWidget(0, mStlBar);
@@ -1655,7 +1655,7 @@ void VisRun::alarmSet( unsigned alarm )
 	actAlrmLev->setToolTip(QString(_("Alarm level: %1")).arg(alarmLev));
 
 	QImage lens(":/images/alarmLev.png");
-	QImage levImage(lens.size(),lens.format());
+	QImage levImage(lens.size(), lens.format());
 
 	QPainter painter(&levImage);
 	//QColor lclr( alarmLev ? 224 : 0, alarmLev ? 224-(int)(0.87*alarmLev) : 224, 0 );

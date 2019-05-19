@@ -1,3 +1,8 @@
+2019-05-19 Roman (stable)
+- !!!:FIX:UI.WEBVision: The view "Tree" of the primitive "FormEl" fixed for the empty string in the end processing.
+    !!!: The alarm level appended to the status panel with a function of the global quietation.
+
+
 2019-05-13 Roman (stable)
 - FIX:DAQ.{=Tmpl=,AMRDevs,BFN,Comedy,DAQGate,DCON,DiamondBoards,FT3,Fastwel,ICP_DAS,MMS,ModBus,OPC_UA,SMH2Gi,SNMP,System}:
     Fixed for default value of the property period(), co-related to "SCHEDULE".
