@@ -2544,13 +2544,30 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	pclose(fp);
 	return rez;
     }
-    // string fileRead( string file ) - Return <file> content by string.
+    // int fileSize( string file ) - Return the <file> size.
+    if(iid == "fileSize" && prms.size() >= 1) {
+	int hd = open(prms[0].getS().c_str(), O_RDONLY);
+	int rez = -1;
+	if(hd >= 0) {
+	    rez = lseek(hd, 0, SEEK_END);
+	    close(hd);
+	}
+	return rez;
+    }
+    // string fileRead( string file, int off = 0, int sz = -1 ) - Return the <file> content from offset <off> and for the block size <sz>.
     if(iid == "fileRead" && prms.size() >= 1) {
 	char buf[STR_BUF_LEN];
 	string rez;
 	int hd = open(prms[0].getS().c_str(), O_RDONLY);
 	if(hd >= 0) {
-	    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) rez.append(buf, len);
+	    if(prms.size() >= 2) lseek(hd, prms[1].getI(), SEEK_SET);
+	    int sz = (prms.size() >= 3) ? prms[2].getI() : -1;
+	    if(sz < 0)
+		for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; )
+		    rez.append(buf, len);
+	    else
+		for(int len = 0, rLen = 0; rLen < sz && (len=read(hd,buf,fmin(sz-rLen,(int)sizeof(buf)))) > 0; rLen += len)
+		    rez.append(buf, len);
 	    close(hd);
 	}
 	return rez;

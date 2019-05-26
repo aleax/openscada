@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-19 19:31+0300\n"
+"POT-Creation-Date: 2019-05-25 20:34+0300\n"
 "PO-Revision-Date: 2007-12-03 11:05+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -104,6 +104,12 @@ msgstr "мкс"
 msgid "Ready"
 msgstr "Готов"
 
+msgid "Page"
+msgstr "Страница"
+
+msgid "View access is not permitted."
+msgstr "Отсутствует доступ для просмотра."
+
 msgid "Today"
 msgstr "Сегодня"
 
@@ -197,11 +203,14 @@ msgstr ""
 "PNGCompLev   <уров.>    Уровень сжатия [-1..9] создаваемых PNG-фафлов.\n"
 "\n"
 
-msgid "Connecting to the opened session"
-msgstr "Подключение к открытой сессии"
+msgid "close"
+msgstr "закрыть"
 
-msgid "Creating a new session for the existing project"
-msgstr "Создание новой сессии для доступного проекта"
+msgid "Opened sessions of the projects"
+msgstr "Открытые сеансы проектов"
+
+msgid "Available projects"
+msgstr "Доступные проекты"
 
 msgid "There is no session and project of the VCA engine for the user!"
 msgstr "Нет ни одного сеанса и проекта движка СВУ для пользователя!"
@@ -212,6 +221,16 @@ msgstr "Извините, количество открытых сеансов �
 #, c-format
 msgid "Going to the session '%s' for the project '%s' ..."
 msgstr "Переход к сеансу '%s' для проекта '%s' ..."
+
+msgid "Going to the main page ..."
+msgstr "Переход к основной странице ..."
+
+msgid "The session '%s' is closed."
+msgstr "Закрыт сеанс '%s'."
+
+#, c-format
+msgid "You '%s' have no access to close sessions!"
+msgstr "Вы '%s' не имеете доступа к закрытию сеансов!"
 
 #, c-format
 msgid "The specified project/session '%s' is false!"

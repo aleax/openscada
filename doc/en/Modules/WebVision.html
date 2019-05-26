@@ -31,7 +31,7 @@
 <td> <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a> </td>
 <td> Operation user interface (WEB)
 </td>
-<td> 3.4 </td>
+<td> 3.6 </td>
 <td> GPL2 </td>
 <td> ui_WebVision.so </td>
 <td> en,uk,ru,de </td>
@@ -99,7 +99,7 @@
 <p><br />
 </p>
 <h2><span class="mw-headline" id="Execution_of_the_VCA_interfaces"><span class="mw-headline-number">2</span> Execution of the VCA interfaces</span></h2>
-<p>Execution of the VCA interface is to run a new project session, or connect to the existing one, on the level of the VCA engine (Fig.2). Before the connection request to the session the user authentication request (Fig.1) is done. Then the module of direct visualization displays and controls the data of the session. The main window of the execution mode of this module has the form presented at Figure 3.
+<p>Execution of the VCA interface is to run a new project session, or connect to the existing one, on the level of the VCA engine (Fig.2). Before the connection request to the session the user authentication request (Fig.1) is done. Then the module of direct visualization displays and controls the data of the session. The main window of the execution mode of this module has the form presented at Figure 3. The administrator users ("root" or in the group "root") can close the opened sessions.
 </p><p>The interface of the execution window is built fully dynamically by the JavaScript script on the basis of the contents of the project session through direct XML requests to the server.
 </p><p>Update of the contents of the open pages of the visual interface with periodicity of the project session is implemented. During the upgrade process:
 </p>
@@ -112,7 +112,8 @@
 </p>
 <ul><li> On the right side:
 <ul><li> the current user, on whose behalf the VCA interface is executed — by a clicking this user can be changed, typing of the new username and password;</li>
-<li> the current interface style, which can be changed selecting need one in the combobox.</li></ul></li>
+<li> the current interface style, which can be changed selecting need one in the combobox;</li>
+<li> the current alarm status by a lamp with color related to the alarm level; blinks at the alarm appearing or changing; pressing on the lamp you may quiet the alarm.</li></ul></li>
 <li> In the main field of the status line various messages and assistance messages are displayed.</li></ul>
 <p>The module supports multi-language which one enabled by the <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#ConfigTr" title="Special:MyLanguage/Documents/Program manual">dynamic messages translation of OpenSCADA</a>. The gotten language passes by the module <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a> and detects in way and by the order:
 </p>
@@ -121,7 +122,7 @@
 <li> Language of the Web-browser from the HTTP property "Accept-Language".</li>
 <li> Generic language of the OpenSCADA process.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:619px;"><a class="image" href="http://oscada.org/wiki/File:HTTP_auth.png"><img class="thumbimage" height="302" src="../files/HTTP_auth.png" width="617" /></a>  <div class="thumbcaption">Fig.1. Authentication page.</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:618px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_connect.png"><img class="thumbimage" height="423" src="../files/WebVision_wvis_connect.png" width="616" /></a>  <div class="thumbcaption">Fig.2. Connection or creation of a new session of the execution project of the VCA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:621px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_connect.png"><img class="thumbimage" height="411" src="../files/WebVision_wvis_connect.png" width="619" /></a>  <div class="thumbcaption">Fig.2. Connection or creation of a new session of the execution project of the VCA.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1041px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run.png"><img class="thumbimage" height="782" src="../files/WebVision_wvis_run.png" width="1039" /></a>  <div class="thumbcaption">Fig.3. Main execution window.</div></div></div></div>
 <h2><span class="mw-headline" id="Presentation_of_the_basic_elements_.28primitives.29"><span class="mw-headline-number">3</span> Presentation of the basic elements (primitives)</span></h2>
 <p>This version of the module does not implement all the shapes of the primitives laid by the project. In general, the project provides the following primitives:

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-19 19:31+0300\n"
+"POT-Creation-Date: 2019-05-25 20:34+0300\n"
 "PO-Revision-Date: 2009-08-26 08:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -110,6 +110,12 @@ msgstr "mcsek"
 msgid "Ready"
 msgstr "Fertig"
 
+msgid "Page"
+msgstr "Seite"
+
+msgid "View access is not permitted."
+msgstr "Der Zugriff auf Ansichten ist nicht zulässig."
+
 msgid "Today"
 msgstr "Heute"
 
@@ -205,11 +211,14 @@ msgstr ""
 "Bilder.\n"
 "\n"
 
-msgid "Connecting to the opened session"
-msgstr "Verbindung zur geöffneten Sitzung herstellen"
+msgid "close"
+msgstr "schließen"
 
-msgid "Creating a new session for the existing project"
-msgstr "Erstellen einer neuen Sitzung für das vorhandene Projekt"
+msgid "Opened sessions of the projects"
+msgstr "Eröffnete Sitzungen der Projekte"
+
+msgid "Available projects"
+msgstr "Verfügbare Projekte"
 
 msgid "There is no session and project of the VCA engine for the user!"
 msgstr ""
@@ -222,6 +231,16 @@ msgstr ""
 #, c-format
 msgid "Going to the session '%s' for the project '%s' ..."
 msgstr "Gehen Sie zu Session '%s' für Projekt '%s' ..."
+
+msgid "Going to the main page ..."
+msgstr "Zur Hauptseite gehen ..."
+
+msgid "The session '%s' is closed."
+msgstr "Die Sitzung '%s' ist geschlossen.
+
+#, c-format
+msgid "You '%s' have no access to close sessions!"
+msgstr "Sie '%s' haben keinen Zugriff auf geschlossene Sitzungen!"
 
 #, c-format
 msgid "The specified project/session '%s' is false!"

@@ -1,3 +1,18 @@
+2019-05-26 Roman (stable)
+- !!:FIX:DB.LibsDB.vcaBase: The template project "tmplSO" fixed for the links renaming.
+    Main.objProps expanded for the notification.
+    FIX:Main.alarmsAct: prevented from very more expanding at appearing several events.
+- SYS: The user API function SYS.fileRead() expanded by the arguments of the reading block offset and size.
+    The user API appended by the function SYS.fileSize().
+- !!:FIX:UI.WebVision: Fixed for the status line size-padding-spacing and the Alarm icon size.
+    FIX: Fixed to show the Alarm color of the alarmLev < 9.
+    FIX: The view Line of the primitive FormEl in the variants Integer and Real fixed in the spin box on the scrolling frames.
+	Fixed for the previous value saving after operations in the spin box.
+    FIX: Prevented from the ToolTip setting at the empty attribute 'tipTool'.
+    Appended for the message "View access is not permitted" translation.
+    !!:Expanded for the possibility of the opened sessions manual closing from the administarator user.
+
+
 2019-05-19 Roman (stable)
 - !!!:FIX:UI.WEBVision: The view "Tree" of the primitive "FormEl" fixed for the empty string in the end processing.
     !!!: The alarm level appended to the status panel with a function of the global quietation.

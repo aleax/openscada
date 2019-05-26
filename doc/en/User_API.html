@@ -403,7 +403,8 @@ var OK = re.test("12/30/1969"); </pre></li>
 </p>
 <ul>
 <li><i>{string|int} system( string cmd, bool noPipe = false );</i> — calls the console commands <i>cmd</i> of the OS returning the result by the channel. If <i>noPipe</i> is set then the callback code is returned and program can be started in the background ("sleep 5 &amp;"). The function provides OpenSCADA with a wide range of capabilities by calling any system programs, utilities, and scripts, as well as by providing them with access to a huge amount of system data. For example the command "ls-l" returns the detailed content of the working directory.</li>
-<li><i>string fileRead( string file );</i> — returns a string of the <i>file</i> content.</li>
+<li><i>int fileSize( string file );</i> — returns the <i>file</i> size.</li>
+<li><i>string fileRead( string file, int off = 0, int sz = -1 );</i> — returns a string of part of the <i>file</i> for the offset <i>off</i> and the block size <i>sz</i>.</li>
 <li><i>int fileWrite( string file, string str, bool append = false );</i> — writes the string <i>str</i> to the <i>file</i>, removes presented one, at <i>append</i>. Returns the wrote bytes count.</li>
 <li><i>int fileRemove( string file );</i> — removes the <i>file</i>. Returns the removing result.</li>
 <li><i>int message( string cat, int level, string mess );</i> — forms of the system message <i>mess</i> with the category <i>cat</i>, level <i>level</i> (-7...7). The negative value of the level forms the alarms.</li>

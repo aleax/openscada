@@ -400,7 +400,8 @@ var OK = re.test("12/30/1969"); </pre></li>
 </p>
 <ul>
 <li><i>{string|int} system( string cmd, bool noPipe = false);</i> — викликає консольні команди <i>cmd</i> ОС з поверненням результату по каналу. Якщо встановлено <i>noPipe</i> то повертається код повернення виклику та можливий запуск програм у фоні ("sleep 5 &amp;"). Функція надає користувачу OpenSCADA широкі можливості через виклик будь яких системних програм, утиліт та скриптів, а також отримання за посередництвом них доступу до величезного об'єму системних даних. Наприклад, команда "ls -l" поверне деталізований вміст робочої теки.</li>
-<li><i>string fileRead( string file );</i> — повертає у рядку вміст файлу <i>file</i>.</li>
+<li><i>int fileSize( string file );</i> — повертає розмір файлу <i>file</i>.</li>
+<li><i>string fileRead( string file, int off = 0, int sz = -1 );</i> — повертає рядок частини файлу <i>file</i> за зміщенням <i>off</i> та розміром <i>sz</i>.</li>
 <li><i>int fileWrite( string file, string str, bool append = false );</i> — записує рядок <i>str</i> до файлу <i>file</i>, видаляючи присутній файл або додаючи до нього, <i>append</i>. Повертає кількість записаних байт.</li>
 <li><i>int fileRemove( string file );</i> — видаляє файл <i>file</i>. Повертає результат видалення.</li>
 <li><i>int message( string cat, int level, string mess );</i> — формує системне повідомлення <i>mess</i> з категорією <i>cat</i>, рівнем <i>level</i> (-7...7). Негативне значення рівня формує порушення — "Alarm".</li>

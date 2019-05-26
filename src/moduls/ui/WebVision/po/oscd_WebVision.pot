@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-19 19:31+0300\n"
+"POT-Creation-Date: 2019-05-25 20:34+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -98,6 +98,12 @@ msgstr ""
 msgid "Ready"
 msgstr ""
 
+msgid "Page"
+msgstr ""
+
+msgid "View access is not permitted."
+msgstr ""
+
 msgid "Today"
 msgstr ""
 
@@ -179,10 +185,13 @@ msgid ""
 "\n"
 msgstr ""
 
-msgid "Connecting to the opened session"
+msgid "close"
 msgstr ""
 
-msgid "Creating a new session for the existing project"
+msgid "Opened sessions of the projects"
+msgstr ""
+
+msgid "Available projects"
 msgstr ""
 
 msgid "There is no session and project of the VCA engine for the user!"
@@ -193,6 +202,17 @@ msgstr ""
 
 #, c-format
 msgid "Going to the session '%s' for the project '%s' ..."
+msgstr ""
+
+msgid "Going to the main page ..."
+msgstr ""
+
+#, c-format
+msgid "The session '%s' is closed."
+msgstr ""
+
+#, c-format
+msgid "You '%s' have no access to close sessions!"
 msgstr ""
 
 #, c-format

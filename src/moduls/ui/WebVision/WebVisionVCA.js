@@ -94,6 +94,7 @@ function posGetY( obj, noWScrl )
 	    (obj.parentNode.style.borderTopWidth?parseInt(obj.parentNode.style.borderTopWidth):0)+
 	    (obj.parentNode.style.marginTop?parseInt(obj.parentNode.style.marginTop):0);
 	if(obj.style.position == 'relative') posY += obj.offsetTop;
+	posY -= obj.scrollTop;
     }
     return posY + (!noWScrl?-window.pageYOffset:0);
 }
@@ -603,7 +604,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		masterPage.status.setAttribute('id', 'gen-pnl-status');
 		this.place.appendChild(masterPage.status);
 		stBar = "<table width='100%'><TR><td id='StatusBar' width='100%'/>";
-		stBar += "<td id='st_alarm' title1='###Alarm level: %1###'><img onclick='alarmQuiet()' height='"+masterPage.status.height+"px' src='/"+MOD_ID+"/img_alarmLev'/></td>";
+		stBar += "<td id='st_alarm' title1='###Alarm level: %1###'><img onclick='alarmQuiet()' height='"+(masterPage.status.height-2)+"px' src='/"+MOD_ID+"/img_alarmLev'/></td>";
 		if(modelStyles && parseInt(modelStyles.getAttribute('curStlId')) >= 0 && modelStyles.childNodes.length > 1) {
 		    stBar += "<td id='st_style' title='###Field for displaying and changing the used interface style.###'>";
 		    stBar += "<select onchange='styleSet(this.selectedOptions[0].getAttribute(\"itId\"))'>";
@@ -682,7 +683,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	if(!(parseInt(this.attrs['perm'])&SEC_RD)) {
 	    if(this.pg) {
 		elStyle += 'background-color: #B0B0B0; border: 1px solid black; color: red; overflow: auto; ';
-		this.place.innerHTML = "<div class='vertalign' style='width: "+(geomW-2)+"px; height: "+(geomH-2)+"px;'>Page: '"+this.addr+"'.<br/>View access is not permitted.</div>";
+		this.place.innerHTML = "<div class='vertalign' style='width: "+(geomW-2)+"px; height: "+(geomH-2)+"px;'>###Page###: '"+this.addr+"'.<br/>###View access is not permitted.###</div>";
 	    }
 	    isPrim = false;
 	}
@@ -1004,8 +1005,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				    var formObj = this.parentNode.childNodes[0];
 				    var argCfg = this.parentNode.cfg.split(':');
 				    if((e.clientY-posGetY(this)) < fntSz/2)
-					formObj.valSet(formObj.valGet()+((argCfg.length>2)?((this.parentNode.view==2)?parseInt(argCfg[2]):parseFloat(argCfg[2])):1));
-				    else formObj.valSet(formObj.valGet()-((argCfg.length>2)?((this.parentNode.view==2)?parseInt(argCfg[2]):parseFloat(argCfg[2])):1));
+					formObj.valSet(formObj.valGet()+((argCfg.length>2)?((this.parentNode.view==2)?parseInt(argCfg[2]):parseFloat(argCfg[2])):1), true);
+				    else formObj.valSet(formObj.valGet()-((argCfg.length>2)?((this.parentNode.view==2)?parseInt(argCfg[2]):parseFloat(argCfg[2])):1), true);
 				    formObj.setModify(true);
 				    return false;
 				}
@@ -1156,7 +1157,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    this.parentNode.isModify = on;
 			}
 		    }
-		    formObj.valSet = function(val) {
+		    formObj.valSet = function(val, noUpSave) {
 			switch(this.parentNode.view) {
 			    case 0: case 1: case 7: this.value = val; break;
 			    case 2:	//Integer
@@ -1201,7 +1202,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				this.value = rez;
 				break;
 			}
-			this.saveVal = this.value;
+			if(noUpSave == null || !noUpSave)	this.saveVal = this.value;
 			this.srcVal = val;
 		    }
 		    formObj.valGet = function( ) {
@@ -2354,7 +2355,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	this.place.elWr = elWr;
     }
     if(margBrdUpd || this.attrsMdf["geomXsc"] || this.attrsMdf["geomYsc"]) for(var i in this.wdgs) this.wdgs[i].makeEl();
-    this.place.setAttribute('title',this.attrs['tipTool']);
+    if(this.attrs['tipTool'].length) this.place.setAttribute('title', this.attrs['tipTool']);
+    else this.place.removeAttribute('title');
     this.place.onmouseover = function(e) {
 	if(this.wdgLnk.attrs['tipStatus']) {
 	    setStatus(this.wdgLnk.attrs['tipStatus'], 10000);
@@ -2737,7 +2739,7 @@ function alarmSet(alarm) {
 	alarmLev = alarm&0xFF;
 	st_alarm_img.style.cursor = alarmLev ? 'pointer' : '';
 	st_alarm_img.style.backgroundColor = st_alarm_img.style.backgroundColor.length ? '' :
-	    '#'+(alarmLev?'ff':'00')+(alarmLev?((alarmLev<=9)?'0':'')+(255-alarmLev).toString(16):'FF')+'00';
+	    '#'+(alarmLev?'ff':'00')+(alarmLev?((alarmLev>245)?'0':'')+(255-alarmLev).toString(16):'FF')+'00';
 	st_alarm.title = st_alarm.getAttribute("title1").replace('%1',alarmLev);
     }
     mAlrmSt = alarm;
