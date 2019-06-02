@@ -1,3 +1,13 @@
+2019-06-02 Roman (stable)
+- !:DB.LibsDB.OscadaLibs: The template base.codeState appended for the code-text commands processing.
+- !:DB.LibsDB.vcaBase: The document doc.docUsersSet of the user actions appended of the user name.
+    The cadre Main.ElCadr expanded for the current text state show into the text command combobox.
+- UI.VCAEngine: The attribute "tSize" range of the primitive "Diagram" expanded for one year (32e6 seconds).
+- !!:FIX:UI.WebVision: Fixed to form the statusbar size and then the alarm-level icon size.
+    Fixed to apply the table columns widths for tables without the horizontal header, copying the style to the first row.
+    Pressing the alarm lamp appended for generating the event "ws_alarmLev".
+
+
 2019-05-26 Roman (stable)
 - !!:FIX:DB.LibsDB.vcaBase: The template project "tmplSO" fixed for the links renaming.
     Main.objProps expanded for the notification.

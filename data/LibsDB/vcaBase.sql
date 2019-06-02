@@ -62,11 +62,11 @@ Version: 1.5.1','wlb_Main','','Основні елементи','Бібліот�
 INSERT INTO "VCALibs" VALUES('mnEls','Mnemo elements','User interface''s main elements library.','wlb_mnEls','','Елементи мнемосхеми','Бібліотека основних елементів інтерфейсу користувача.','Элементы мнемосхемы','Библиотека основных элементов пользовательского интерфейса.');
 INSERT INTO "VCALibs" VALUES('doc','Documents','Documents library.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.1.0','wlb_doc','','Документи','Бібліотека документів.
+Version: 1.1.1','wlb_doc','','Документи','Бібліотека документів.
 Автор: Роман Савоченко <rom_as@oscada.org>
-Версія: 1.0.0','Документы','Библиотека документов.
+Версія: 1.1.1','Документы','Библиотека документов.
 Автор: Роман Савоченко <rom_as@oscada.org>
-Версия: 1.0.0');
+Версия: 1.1.1');
 CREATE TABLE 'prj_archBrowser_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_graphSelPrm','color','/wlb_Main/wdg_graphSelPrm/wdg_color','value;');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_graphSelPrm','dim','/wlb_Main/wdg_graphSelPrm/wdg_dim','value;');
@@ -5238,7 +5238,7 @@ INSERT INTO "wlb_Main_io" VALUES('ElCadr','elType','3',32,'','','upMax','','',''
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','img','upMax',0,'','','upMax','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','dscr','The cadre "Element cadre".
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.1.0',32,'','','','','','','','','');
+Version: 1.1.1',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrRunSimple','geomZ','5',32,'','','lib','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','numbArg','1',32,'','','labProg','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','arg0tp','2',0,'','','labProg','','','','','','');
@@ -10535,11 +10535,12 @@ INSERT INTO "wlb_doc_io" VALUES('docUsersSet','name','Log of interruptions',32,'
 INSERT INTO "wlb_doc_io" VALUES('docUsersSet','tmpl','<body docProcLang="JavaLikeCalc.JavaScript">
 <h1>Log of interruptions</h1>
 <TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data">
-  <TR><TH colspan="6" align="left">Interruptions at <?dp return "Interruptions at "+SYS.strftime(bTime)+" — "+SYS.strftime(time);?></TH></TR>
-  <TR><TH>Date</TH><TH>Time</TH><TH>Parameter</TH><TH>Description</TH><TH>Old value</TH><TH>New value</TH></TR>
+  <TR><TH colspan="7" align="left">Interruptions at <?dp return "Interruptions at "+SYS.strftime(bTime)+" — "+SYS.strftime(time);?></TH></TR>
+  <TR><TH>Date</TH><TH>Time</TH><TH>User</TH><TH>Parameter</TH><TH>Description</TH><TH>Old value</TH><TH>New value</TH></TR>
   <TR docAMess="2:OP*" docRevers="1">
 	<?dp return "<TD>"+SYS.strftime(mTime,"%d %m")+"</TD>"+
 		"<TD>"+SYS.strftime(mTime,"%H:%M:%S")+"</TD>"+
+		"<TD>"+Special.FLibSYS.strEnc2HTML(mCat.parse(1,":"))+"</TD>"+
 		"<TD>"+Special.FLibSYS.strEnc2HTML(mVal.parse(0,":"))+"</TD>"+
 		"<TD>"+Special.FLibSYS.strEnc2HTML(mVal.parse(1,":"))+"</TD>"+
 		"<TD>"+mVal.parse(2,":")+"</TD>"+
@@ -10549,11 +10550,12 @@ INSERT INTO "wlb_doc_io" VALUES('docUsersSet','tmpl','<body docProcLang="JavaLik
 </body>',32,'','','doc','<body docProcLang="JavaLikeCalc.JavaScript">
 <h1>Журнал дій</h1>
 <TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data">
-  <TR><TH colspan="6" align="left">Дії за <?dp return "Дії за "+SYS.strftime(bTime)+" — "+SYS.strftime(time);?></TH></TR>
-  <TR><TH>Дата</TH><TH>Час</TH><TH>Параметр</TH><TH>Опис</TH><TH>Старе знач.</TH><TH>Нове знач.</TH></TR>
+  <TR><TH colspan="7" align="left">Дії за <?dp return "Дії за "+SYS.strftime(bTime)+" — "+SYS.strftime(time);?></TH></TR>
+  <TR><TH>Дата</TH><TH>Час</TH><TH>Користувач</TH><TH>Параметр</TH><TH>Опис</TH><TH>Старе знач.</TH><TH>Нове знач.</TH></TR>
   <TR docAMess="2:OP*" docRevers="1">
 	<?dp return "<TD>"+SYS.strftime(mTime,"%d %m")+"</TD>"+
 		"<TD>"+SYS.strftime(mTime,"%H:%M:%S")+"</TD>"+
+		"<TD>"+Special.FLibSYS.strEnc2HTML(mCat.parse(1,":"))+"</TD>"+
 		"<TD>"+Special.FLibSYS.strEnc2HTML(mVal.parse(0,":"))+"</TD>"+
 		"<TD>"+Special.FLibSYS.strEnc2HTML(mVal.parse(1,":"))+"</TD>"+
 		"<TD>"+mVal.parse(2,":")+"</TD>"+
@@ -10563,11 +10565,12 @@ INSERT INTO "wlb_doc_io" VALUES('docUsersSet','tmpl','<body docProcLang="JavaLik
 </body>','','<body docProcLang="JavaLikeCalc.JavaScript">
 <h1>Журнал вмешательств</h1>
 <TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data">
-  <TR><TH colspan="6" align="left">Вмешательство за <?dp return "Вмешательство за "+SYS.strftime(bTime)+" — "+SYS.strftime(time);?></TH></TR>
-  <TR><TH>Дата</TH><TH>Время</TH><TH>Параметр</TH><TH>Описание</TH><TH>Старое знач.</TH><TH>Новое знач.</TH></TR>
+  <TR><TH colspan="7" align="left">Вмешательство за <?dp return "Вмешательство за "+SYS.strftime(bTime)+" — "+SYS.strftime(time);?></TH></TR>
+  <TR><TH>Дата</TH><TH>Время</TH><TH>Пользователь</TH><TH>Параметр</TH><TH>Описание</TH><TH>Старое знач.</TH><TH>Новое знач.</TH></TR>
   <TR docAMess="2:OP*" docRevers="1">
 	<?dp return "<TD>"+SYS.strftime(mTime,"%d %m")+"</TD>"+
 		"<TD>"+SYS.strftime(mTime,"%H:%M:%S")+"</TD>"+
+		"<TD>"+Special.FLibSYS.strEnc2HTML(mCat.parse(1,":"))+"</TD>"+
 		"<TD>"+Special.FLibSYS.strEnc2HTML(mVal.parse(0,":"))+"</TD>"+
 		"<TD>"+Special.FLibSYS.strEnc2HTML(mVal.parse(1,":"))+"</TD>"+
 		"<TD>"+mVal.parse(2,":")+"</TD>"+
@@ -12083,23 +12086,23 @@ INSERT INTO "wlb_doc_io" VALUES('docMessRep','dscr','Generic messages report all
 Author: Roman Savochenko <rom_as@oscada.org>
 Version: 1.1.0',32,'','','','Загальний звіт повідомлень, допускає фільтрацію як статично так і динамічно. Заснований на динамічному документі.
 Автор: Роман Савоченко <rom_as@oscada.org>
-Версія: 1.0.1','','Общий отчёт сообщений, допускает фильтрацию как статически так и динамически. Основан на динамическом документе.
+Версія: 1.1.0','','Общий отчёт сообщений, допускает фильтрацию как статически так и динамически. Основан на динамическом документе.
 Автор: Роман Савоченко <rom_as@oscada.org>
-Версия: 1.0.1','','','');
+Версия: 1.1.0','','','');
 INSERT INTO "wlb_doc_io" VALUES('docRepSm2','dscr','2 shift report. Based on the dynamic document.
 Author: Roman Savochenko <rom_as@oscada.org>
 Version: 1.1.0',32,'','','','Звіт на дві зміни. Заснований на динамічному документі.
 Автор: Роман Савоченко <rom_as@oscada.org>
-Версія: 1.0.0','','Отчёт на две смены. Основан на динамическом документе.
+Версія: 1.1.0','','Отчёт на две смены. Основан на динамическом документе.
 Автор: Роман Савоченко <rom_as@oscada.org>
-Версия: 1.0.0','','','');
+Версия: 1.1.0','','','');
 INSERT INTO "wlb_doc_io" VALUES('docUsersSet','dscr','Log of user interruptions. Based on the dynamic document.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.1.0',32,'','','','Протокол дій користувача. Заснований на динамічному документі.
+Version: 1.2.0',32,'','','','Протокол дій користувача. Заснований на динамічному документі.
 Автор: Роман Савоченко <rom_as@oscada.org>
-Версія: 1.0.0','','Протокол действий пользователя. Основан на динамическом документе.
+Версія: 1.2.0','','Протокол действий пользователя. Основан на динамическом документе.
 Автор: Роман Савоченко <rom_as@oscada.org>
-Версия: 1.0.0','','','');
+Версия: 1.2.0','','','');
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','aSize','0',32,'','wdg:../a_aSize','doc','','','','','','');
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','doc','',40,'','','doc','','','','','','');
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','doc','',40,'','','doc','','','','','','');
@@ -18632,13 +18635,14 @@ else if(!prmComText.isEVal() || !prmStText.isEVal()) {
 	}
 	if(st_text_en) {
 		st_text_text = !prmStText.isEVal() ? prmStText.parse(0,":") : "";
+		if(com_text_en) com_text_value = st_text_text;
 		st_text_color = (prmStText.parse(1,":") != "") ? prmStText.parse(1,":") : "green";
 		st_text_tipTool = !prmStText.isEVal() ? prmStText.parse(0,":") : "";
 		st_text_tipStatus = !prmStText.isEVal() ? tr("State")+" "+prmStText.parse(0,":") : "";
 		st_text_en = st_text_text.length;
 		if(st_text_en && com_text_items.indexOf(st_text_text) != -1) com_text_value = st_text_text;
 	}
-}','','',100,'path;name;dscr;active;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1552226019);
+}','','',100,'path;name;dscr;active;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1559499436);
 INSERT INTO "wlb_Main" VALUES('grpGraph','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAE
 xklEQVRYhdVYTW/bRhCd2S8uRVESJbOCZCSAgThBTknR3Jrmnj+R/5Kf2EvgwEacOkod24q+SIHk
 krvbA22akW0ILQSknNO+p/cWXM2sZih8//69ylSSJo7jGGPiOG6327ooALHlulEcE0IAQCmVJAn8
@@ -23897,7 +23901,7 @@ else if(curMin != lastMin && !(curMin%5))	{
 	else doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-1 "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
 }','','',1000,'name;dscr;evProc;',1552226019);
 INSERT INTO "wlb_doc" VALUES('docUsersSet','','/wlb_doc/wdg_docDin',0,'JavaLikeCalc.JavaScript
-if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-24*3600; }','','',-1,'name;dscr;',1552226019);
+if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-24*3600; }','','',-1,'name;dscr;',1559499400);
 INSERT INTO "wlb_doc" VALUES('doc','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAF
 b0lEQVRYhe1W3W4TOxC2d73OOslusomSE6LwU0RIoQipVELcIN6BF+CVOG/CI/SCShVXtAhEWiWI
 qIV287de7Z93vd5zYZ0oJ2mrFqGTc6R8V9aMPTPfjD0e+Ofbt5RSxpjIMk3T4jhGCDmOA/5jaLfb

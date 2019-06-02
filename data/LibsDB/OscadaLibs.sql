@@ -4,10 +4,10 @@ CREATE TABLE 'ParamTemplLibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk
 INSERT INTO "ParamTemplLibs" VALUES('S7','S7','','Templates library of parameters for PLC series S7 of firm Siemens.','Бібліотека шаблонів параметрів для контролерів фірми Siemens серії S7.','tmplib_S7','','Библиотека шаблонов параметров для контроллеров фирмы Siemens серии S7.');
 INSERT INTO "ParamTemplLibs" VALUES('base','Main templates','Базові шаблони','Provides of implementation of the main templates.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.1.0','Автор: Роман Савоченко <rom_as@oscada.org>
-Версія: 1.0.1
+Version: 1.1.1','Автор: Роман Савоченко <rom_as@oscada.org>
+Версія: 1.1.1
 Надає реалізацію базових шаблонів.','tmplib_base','Базовые шаблоны','Автор: Роман Савоченко <rom_as@oscada.org>
-Версия: 1.0.1
+Версия: 1.1.1
 Предоставляет реализацию базовых шаблонов.');
 INSERT INTO "ParamTemplLibs" VALUES('DevLib','Devices','Бібліотека пристроїв','The templates library provides common templates and related functions for custom access to wide range of devices'' data with simple protocol to implement into User Protocol module, present complex protocols (ModBus, OPC_UA, HTTP) or direct at internal language and also for some integration the devices data.
 Version: 2.3.0','','tmplib_DevLib','Библиотека устройств','');
@@ -1561,14 +1561,14 @@ INSERT INTO "tmplib_base_io" VALUES('anUnifSt','log','Logarithmic scale',3,32,'0
 INSERT INTO "tmplib_base_io" VALUES('digAlarm','inProc','Input processing procedure',0,68,'',3,'Вхідна процедура обробки','','Входная процедура обработки','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','alDelay','Alarms delay, s',2,32,'0',10,'Затримка сигналізації, с','','Задержка сигнализации, с','');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','alDelay','Alarms delay, s',2,32,'',15,'Затримка сигналізації, с','','Задержка сигнализации, с','');
-INSERT INTO "tmplib_base_io" VALUES('codeState','in','Input',1,144,'Input|in',0,'Вхід','','Вход','');
-INSERT INTO "tmplib_base_io" VALUES('codeState','inProc','Input processing procedure',0,68,'',1,'Вхідна процедура обробки','','Входная процедура обработки','');
-INSERT INTO "tmplib_base_io" VALUES('codeState','st_text','State "Text"',0,16,'',2,'Стан "Текст"','','Состояние "Текст"','');
-INSERT INTO "tmplib_base_io" VALUES('codeState','stats','States, rows "{code}:{State}"',0,36,'',3,'Стан, рядки "{code}:{State}"','','Состояние, строки "{code}:{State}"','');
-INSERT INTO "tmplib_base_io" VALUES('codeState','SHIFR','Code',0,0,'',4,'Код','','Код','');
-INSERT INTO "tmplib_base_io" VALUES('codeState','NAME','Name',0,0,'',5,'Ім''я','','Имя','');
-INSERT INTO "tmplib_base_io" VALUES('codeState','DESCR','Description',0,0,'',6,'Опис','','Описание','');
-INSERT INTO "tmplib_base_io" VALUES('codeState','this','Object',4,0,'',7,'Об''єкт','','Объект','');
+INSERT INTO "tmplib_base_io" VALUES('codeState','in','Input',1,144,'Signal|in',0,'Вхід','','Вход','');
+INSERT INTO "tmplib_base_io" VALUES('codeState','inProc','Input processing procedure',0,68,'',2,'Вхідна процедура обробки','','Входная процедура обработки','');
+INSERT INTO "tmplib_base_io" VALUES('codeState','st_text','State "Text"',0,16,'',3,'Стан "Текст"','','Состояние "Текст"','');
+INSERT INTO "tmplib_base_io" VALUES('codeState','stats','States, rows "{code}:{State}"',0,36,'',4,'Стани, рядки "{code}:{State}"','','Состояния, строки "{code}:{State}"','');
+INSERT INTO "tmplib_base_io" VALUES('codeState','SHIFR','Code',0,0,'',8,'Код','','Код','');
+INSERT INTO "tmplib_base_io" VALUES('codeState','NAME','Name',0,0,'',9,'Ім''я','','Имя','');
+INSERT INTO "tmplib_base_io" VALUES('codeState','DESCR','Description',0,0,'',10,'Опис','','Описание','');
+INSERT INTO "tmplib_base_io" VALUES('codeState','this','Object',4,0,'',11,'Об''єкт','','Объект','');
 INSERT INTO "tmplib_base_io" VALUES('ntf','tmOut','Maximum notification timeout, seconds',1,64,'5',2,'','','','');
 INSERT INTO "tmplib_base_io" VALUES('ntf','messLev','Messages level, negative for alarms',1,64,'1',3,'','','','');
 INSERT INTO "tmplib_base_io" VALUES('ntf','messCat','Messages category, template or regular expression',0,64,'al*:*',4,'','','','');
@@ -1586,6 +1586,10 @@ INSERT INTO "tmplib_base_io" VALUES('ntf','io','UserPrt: Output IO',4,0,'',0,'',
 INSERT INTO "tmplib_base_io" VALUES('ntf','tr','UserPrt: Transport',4,0,'',1,'','','','');
 INSERT INTO "tmplib_base_io" VALUES('ntf','emailTrAddr','Output transport for SMTP connection, empty for disable',0,64,'Sockets.out_SMTP',6,'','','','');
 INSERT INTO "tmplib_base_io" VALUES('ntf','SMSTrAddr','SMS serial transport, empty for disable',0,64,'Serial.out_SMS',13,'','','','');
+INSERT INTO "tmplib_base_io" VALUES('codeState','out','Output',1,145,'Signal|out',1,'Вихід','','Выход','');
+INSERT INTO "tmplib_base_io" VALUES('codeState','com_text','Command "Text"',0,32,'',5,'Команда "Текст"','','Команда "Текст"','');
+INSERT INTO "tmplib_base_io" VALUES('codeState','coms','Commands-states, rows "{code}:{State}"',0,36,'',6,'Команди-стани, рядки "{code}:{State}"','','Команды-состояния, строки "{code}:{State}"','');
+INSERT INTO "tmplib_base_io" VALUES('codeState','digComs','Commands',0,20,'',7,'Команди','','Команды','');
 CREATE TABLE 'DAQ_JavaLikeCalc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT 'system' ,"FUNC" TEXT DEFAULT '' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' ,"ITER" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 CREATE TABLE 'DAQ_LogicLev' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT '' ,"PRM_BD_REFL" TEXT DEFAULT '' ,"PERIOD" INTEGER DEFAULT '0' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 CREATE TABLE 'flb_web_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
@@ -6647,7 +6651,16 @@ if(tErr.toInt() && tErr.toInt() != f_err.toInt())
 else if(f_err.toInt() && !tErr.toInt())
 	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
 f_err = tErr;','','',1416765601);
-INSERT INTO "tmplib_base" VALUES('codeState','Code state','Стан за кодом','Состояние по коду','A state forming at the code.','Формування стану за кодом','Формирование состояния по коду',10,0,'JavaLikeCalc.JavaScript
+INSERT INTO "tmplib_base" VALUES('codeState','Code state','Стан за кодом
+
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версія: 1.1.0','Состояние по коду
+
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.1.0','A state forming at the code.
+
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.1.0','Формування стану за кодом','Формирование состояния по коду',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	f_err = "0";
 	//Prepare data for preprocessing
@@ -6668,11 +6681,26 @@ if(inProc.length)	{
 	inPrcArgs.in = in;
 	inPrcArgs.text = "";
 	inPrcArgs.levErr = levErr; inPrcArgs.tErr = tErr;
+	inPrcArgs.coms = coms; inPrcArgs.com_text = com_text;
 	SYS.DAQ.funcCall(inPrcLng, inPrcArgs, inProc, inPrcId);
 	in = inPrcArgs.in;
 	levErr = inPrcArgs.levErr; tErr = inPrcArgs.tErr;
 	st_text = inPrcArgs.text;
+	com_text = inPrcArgs.com_text;
 }
+
+//Commands processing
+digComs = "";
+if(!coms.length)	com_text = EVAL;
+else if(com_text.isEVal())	com_text = "";
+for(off = 0; (tVl=coms.parseLine(0,off)).length; ) {
+	off1 = 0;
+	code = tVl.parse(0,":",off1).toInt();
+	st = tVl.slice(off1);
+	digComs += (digComs.length?"\n":"") + st;
+	if(com_text.length && com_text == st)	out = code;
+}
+if(!com_text.isEVal()) com_text = "";
 
 //State set
 if(st_text.length) ;
@@ -6695,7 +6723,7 @@ if(tErr.toInt() && tErr.toInt() != f_err.toInt())
 	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
 else if(f_err.toInt() && !tErr.toInt())
 	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
-f_err = tErr;','','',1542727978);
+f_err = tErr;','','',1559499298);
 INSERT INTO "tmplib_base" VALUES('ntf','Notificator by SMS, EMail(SMTP)','','','The complex template of the notification, contains of parts of the dispatcher and the output user protocol of notification by EMail(SMTP) and SMS.
 
 The dispatcher can be performed for pointed messages of the message buffer of OpenSCADA and applied on the Logical level or the controller object of the module JavaLikeCalc.

@@ -600,9 +600,28 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    //  Own status bar reserve
 	    if(!parseInt(this.attrs["stBarNoShow"]) && !masterPage.status) {
 		masterPage.status = document.createElement('div');
-		masterPage.status.height = 25;
+		masterPage.status.srcHeight = 25;
 		masterPage.status.setAttribute('id', 'gen-pnl-status');
 		this.place.appendChild(masterPage.status);
+	    }
+
+	    var geomW = parseFloat(this.attrs['geomW']);
+	    var geomH = parseFloat(this.attrs['geomH']);
+	    if(window.devicePixelRatio && window.devicePixelRatio != 1)	wx_scale = wy_scale = 1;
+	    else {
+		wx_scale = Math.max(1, window.innerWidth/geomW);
+		wy_scale = Math.max(1, window.innerHeight/(geomH+(masterPage.status?masterPage.status.srcHeight:0)));
+	    }
+	    if(parseInt(this.attrs['keepAspectRatio']))
+		wx_scale = wy_scale = Math.min(wx_scale, wy_scale);
+
+	    if(masterPage.status) {
+		masterPage.status.height = Math.floor(masterPage.status.srcHeight*wy_scale);
+		masterPage.status.style.top = Math.floor(geomH*wy_scale)+"px";
+		masterPage.status.style.width = (Math.floor(geomW*wx_scale)-5)+"px";
+		masterPage.status.style.height = (masterPage.status.height-1)+"px";
+		masterPage.status.style.fontSize = Math.floor(masterPage.status.height*0.7)+"px";
+
 		stBar = "<table width='100%'><TR><td id='StatusBar' width='100%'/>";
 		stBar += "<td id='st_alarm' title1='###Alarm level: %1###'><img onclick='alarmQuiet()' height='"+(masterPage.status.height-2)+"px' src='/"+MOD_ID+"/img_alarmLev'/></td>";
 		if(modelStyles && parseInt(modelStyles.getAttribute('curStlId')) >= 0 && modelStyles.childNodes.length > 1) {
@@ -619,23 +638,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		stBar += "<td id='st_user' title='###Field for displaying and changing the current user.###'><a href='/login/"+MOD_ID+"/'>"+pgBr.getAttribute('user')+"</a></td>";
 		stBar += "</TR></table>";
 		masterPage.status.innerHTML = stBar;
-	    }
 
-	    var geomW = parseFloat(this.attrs['geomW']);
-	    var geomH = parseFloat(this.attrs['geomH']);
-	    if(window.devicePixelRatio && window.devicePixelRatio != 1)	wx_scale = wy_scale = 1;
-	    else {
-		wx_scale = Math.max(1, window.innerWidth/geomW);
-		wy_scale = Math.max(1, window.innerHeight/(geomH+(masterPage.status?masterPage.status.height:0)));
-	    }
-	    if(parseInt(this.attrs['keepAspectRatio']))
-		wx_scale = wy_scale = Math.min(wx_scale, wy_scale);
-
-	    if(masterPage.status) {
-		masterPage.status.style.top = Math.floor(geomH*wy_scale)+"px";
-		masterPage.status.style.width = (Math.floor(geomW*wx_scale)-5)+"px";
-		masterPage.status.style.height = Math.floor((masterPage.status.height-1)*wy_scale)+"px";
-		masterPage.status.style.fontSize = Math.floor(masterPage.status.height*0.6*wy_scale)+"px";
 		elStyle += "overflow: visible; ";
 	    }
 	}
@@ -1926,8 +1929,16 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    else if(formObj.oSel == "col" && formObj.oKeyID)	formObj.oKeyID = Math.min(formObj.oKeyID, maxRows-1);
 
 			    // Remove spare rows and columns; Headers visibility process
-			    formObj.tHead.rows[0].style.display =
-				(!(wVl=tX.getAttribute("hHdrVis")) || !wVl.length || parseInt(wVl)) ? "" : "none";
+			    if(!(wVl=tX.getAttribute("hHdrVis")) || !wVl.length || parseInt(wVl))
+				formObj.tHead.rows[0].style.display = ""
+			    else {
+				formObj.tHead.rows[0].style.display = "none";
+				if(formObj.tBodies[0].rows.length)
+				    for(iC = 0; iC < formObj.tBodies[0].rows[0].cells.length; iC++)
+					formObj.tBodies[0].rows[0].cells[iC].style.width = formObj.tHead.rows[0].cells[iC].style.width;
+			    }
+			    //formObj.tHead.rows[0].style.display =
+			    //	(!(wVl=tX.getAttribute("hHdrVis")) || !wVl.length || parseInt(wVl)) ? "" : "none";
 			    while(formObj.tHead.rows[0].cells.length > (maxCols+1))
 				formObj.tHead.rows[0].removeChild(formObj.tHead.rows[0].lastChild);
 			    wVl = (wVl=tX.getAttribute("vHdrVis")) ? parseInt(wVl) : false;
@@ -1962,9 +1973,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    }
 		    break;
 	    }
-
-
-
 	}
 	else if(this.attrs['root'] == 'Diagram') {
 	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
@@ -2747,6 +2755,9 @@ function alarmSet(alarm) {
 
 function alarmQuiet() {
     servSet("/UI/VCAEngine/"+sessId+"/%2fserv%2falarm", "com=com", "<quietance tmpl='255'/>", true);
+
+    var attrs = new Object();
+    attrs.event = 'ws_alarmLev'; setWAttrs(masterPage.addr, attrs);
 }
 
 //Call session identifier
