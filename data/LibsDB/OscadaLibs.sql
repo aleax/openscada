@@ -1,62 +1,143 @@
 PRAGMA foreign_keys=OFF;
 BEGIN TRANSACTION;
 CREATE TABLE 'ParamTemplLibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"DB" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "ParamTemplLibs" VALUES('S7','S7','','Templates library of parameters for PLC series S7 of firm Siemens.','Бібліотека шаблонів параметрів для контролерів фірми Siemens серії S7.','tmplib_S7','','Библиотека шаблонов параметров для контроллеров фирмы Siemens серии S7.');
-INSERT INTO "ParamTemplLibs" VALUES('base','Main templates','Базові шаблони','Provides of implementation of the main templates.
-Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.1.1','Автор: Роман Савоченко <rom_as@oscada.org>
-Версія: 1.1.1
-Надає реалізацію базових шаблонів.','tmplib_base','Базовые шаблоны','Автор: Роман Савоченко <rom_as@oscada.org>
-Версия: 1.1.1
-Предоставляет реализацию базовых шаблонов.');
-INSERT INTO "ParamTemplLibs" VALUES('DevLib','Devices','Бібліотека пристроїв','The templates library provides common templates and related functions for custom access to wide range of devices'' data with simple protocol to implement into User Protocol module, present complex protocols (ModBus, OPC_UA, HTTP) or direct at internal language and also for some integration the devices data.
-Version: 2.3.0','','tmplib_DevLib','Библиотека устройств','');
-INSERT INTO "ParamTemplLibs" VALUES('PrescrTempl','Prescription templates','Шаблони рецепту','','','tmplib_PrescrTempl','Шаблоны рецепта','');
-INSERT INTO "ParamTemplLibs" VALUES('LowDevLib','Low-level devices','Низькорівневі пристрої','The templates library provides common templates and related functions for custom access to low-level devices'' data with simple protocol to implement into User Protocol module, present complex protocols (ModBus, OPC_UA, HTTP) or direct at internal language and also for some integration the devices data.
-Version: 1.4.0','','tmplib_LowDevLib','Низкоуровневые устройства','');
+INSERT INTO "ParamTemplLibs" VALUES('S7','S7 tests','','Templates library of the test parameters for PLC series S7 of the firm Siemens.
+
+Author: Roman Savochenko <roman@oscada.org>','Бібліотека шаблонів параметрів для контролерів фірми Siemens серії S7.
+
+Автор: Роман Савоченко <roman@oscada.org>','tmplib_S7','','Библиотека шаблонов параметров для контроллеров фирмы Siemens серии S7.
+
+Автор: Роман Савоченко <roman@oscada.org>');
+INSERT INTO "ParamTemplLibs" VALUES('base','Main library','Базові шаблони','Library of the main templates of the DAQ sources processing and related services.
+
+Author: Roman Savochenko <roman@oscada.org>
+Founded: 2006
+Version: 1.1.1
+License: GPLv2
+DOC: Libs_Main|Libs/Main','Надає реалізацію базових шаблонів.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Засновано: 2006
+Версія: 1.1.1','tmplib_base','Базовые шаблоны','Предоставляет реализацию базовых шаблонов.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Основано: 2006
+Версия: 1.1.1');
+INSERT INTO "ParamTemplLibs" VALUES('DevLib','Devices','Бібліотека пристроїв','Library of functions to provide access to industrial device''s data through network with simply enough protocols like to common industrial automation devices, wide resources counters.
+
+Author: Roman Savochenko <roman@oscada.org>, Constantine (IrmIngeneer) (2018), Arsen Zakojan (2017), Ruslan Yarmoliuk (2017)
+Founded: January 2010
+Version: 2.3.0
+License: GPLv2 mostly
+DOC: Libs_Devices|Libs/Devices','','tmplib_DevLib','Библиотека устройств','');
+INSERT INTO "ParamTemplLibs" VALUES('PrescrTempl','Prescriptions','Шаблони рецепту','Library of the prescriptions.
+
+Author: Roman Savochenko <roman@oscada.org>
+Founded: April 2012
+Version: 1.0.0
+License: GPLv2
+DOC: Libs_Prescriptions|Libs/Prescriptions','','tmplib_PrescrTempl','Шаблоны рецепта','');
+INSERT INTO "ParamTemplLibs" VALUES('LowDevLib','Low-level devices','Низькорівневі пристрої','Library of functions to provide access to device''s data of low-level buses'' chips.
+
+Author: Roman Savochenko <roman@oscada.org>, Arcadiy Kisel (2017)
+Founded: Jul 2016
+Version: 1.4.0
+License: GPLv2 mostly
+DOC: Libs_LowLevelDevices|Libs/LowLevelDevices','','tmplib_LowDevLib','Низкоуровневые устройства','');
 CREATE TABLE 'UserFuncLibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"PROG_TR" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "UserFuncLibs" VALUES('techApp','Technological devices','Library of models of the technological apparatuses.
+
 Founded: October 2005
-Author: Roman Savochenko <rom_as@oscada.org>, Maxim Lysenko (2007,2010), Ksenia Yashina (2007)
+Author: Roman Savochenko <roman@oscada.org>, Maxim Lysenko (2007,2010), Ksenia Yashina (2007)
 Version: 2.0.0
-License: GPL','techApp','Технологічні апарати','Бібліотека моделей апаратів технологічних процесів.
+License: GPL
+DOC: Libs_Technological_apparatuses|Libs/Technological_apparatuses','techApp','Технологічні апарати','Бібліотека моделей апаратів технологічних процесів.
+
 Засновано: Жовтень 2005
-Автор: Роман Савоченко <rom_as@oscada.org>, Максим Лисенко (2007,2010), Ксенія Яшина (2007)
-Ліцензія: GPL','Технологические аппараты','Библиотека моделей аппаратов технологических процессов.
+Автор: Роман Савоченко <roman@oscada.org>, Максим Лисенко (2007,2010), Ксенія Яшина (2007)
+Версія: 2.0.0
+Ліцензія: GPL
+DOC: Libs_Technological_apparatuses|Libs/Technological_apparatuses','Технологические аппараты','Библиотека моделей аппаратов технологических процессов.
+
 Основан: Октябрь 2005
-Автор: Роман Савоченко <rom_as@oscada.org>, Максим Лысенко (2007,2010), Ксения Яшина (2007)
-Лицензия: GPL',0);
+Автор: Роман Савоченко <roman@oscada.org>, Максим Лысенко (2007,2010), Ксения Яшина (2007)
+Версия: 2.0.0
+Лицензия: GPL
+DOC: Libs_Technological_apparatuses|Libs/Technological_apparatuses',0);
 INSERT INTO "UserFuncLibs" VALUES('servProc','Service procedures','Library of service procedures for different using.
-Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.2.0
-License: GPL','lib_servProc','Сервісні процедури','Бібліотека різноманітних сервісних процедур.','Сервисные процедуры','Библиотека различных сервисных процедур.',1);
+
+Founded: November 2017
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.2.1
+License: GPLv2
+DOC: Libs_Service_procedures|Libs/Service_procedures','lib_servProc','Сервісні процедури','Бібліотека різноманітних сервісних процедур.
+
+Засновано: Жовтень 2017
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.2.1
+Ліцензія: GPLv2
+DOC: Libs_Service_procedures|Libs/Service_procedures','Сервисные процедуры','Библиотека различных сервисных процедур.
+
+Основан: Октябрь 2017
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.2.1
+Лицензия: GPLv2
+DOC: Libs_Service_procedures|Libs/Service_procedures',1);
 INSERT INTO "UserFuncLibs" VALUES('doc','Report''s documents','Library of functions to facilitate the implementation of typical computations the primitive form of reporting documentation VCA "Document".
+
 Founded: January 2008
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.0
-License: GPL','flb_doc','Звітна документація','Бібліотека функцій для полегшення виконання типових обчислень примітиву формування звітної документації СВК "Документ".
+License: GPL','flb_doc','Звітна документація','Бібліотека функцій для полегшення виконання типових обчислень примітиву формування звітної документації СВУ "Документ".
+
 Засновано: січень 2008р
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.1.0
-Ліцензія: GPL','Отчётная документация','Библиотека функций для облегчения выполнения типовых
-вычислений примитива формирования отчётной документации
-СВУ "Документ".
-Основана: январь 2008г
-Автор: Роман Савоченко <rom_as@oscada.org>
+Ліцензія: GPL','Отчётная документация','Библиотека функций для облегчения выполнения типовых вычислений примитива формирования отчётной документации СВУ "Документ".
+
+Основано: январь 2008г
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.1.0
 Лицензия: GPL',1);
 INSERT INTO "UserFuncLibs" VALUES('regEl','Regulation elements','Regulation elements library.
-Author: Roman Savochenko <rom_as@oscada.org>
+
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0
-License: GPL','flb_regEl','Елементи регулювання','Бібліотека елементів регулювання','Элементы регулирования','Библиотека элементов регулирования',0);
+License: GPL','flb_regEl','Елементи регулювання','Бібліотека елементів регулювання.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.0.0
+Ліцензія: GPL','Элементы регулирования','Библиотека элементов регулирования.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.0.0
+Лицензия: GPL',0);
 INSERT INTO "UserFuncLibs" VALUES('Controller','Controllers','Library of programs of controllers based on JavaLikeCalc.
-Author: Roman Savochenko <rom_as@oscada.org>
+
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.1
-License: GPL','lib_Controllers','Контролери','Програми контролерів базованих на JavaLikeCalc.','Контроллеры','Программы контроллеров основанных на JavaLikeCalc.',0);
+License: GPLv2','lib_Controllers','Контролери','Програми контролерів базованих на JavaLikeCalc.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.1.1
+Ліцензія: GPLv2','Контроллеры','Программы контроллеров основанных на JavaLikeCalc.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.1.1
+Лицензия: GPLv2',0);
 INSERT INTO "UserFuncLibs" VALUES('web','XHTML-template','Pages processing functions library for XHTML-template user''s Web-interface.
+
 Author: Roman Savochenko
 Version: 0.1.0
-License: GPL','flb_web','XHTML-шаблон','Бібліотека функцій обробки сторінок XHTML-шаблонів користувацткого Web-інтерфейсу.','XHTML-шаблон','Библиотека функций обработки страниц XHTML-шаблонов пользовательского Web-интерфейса.',0);
+License: GPL','flb_web','XHTML-шаблон','Бібліотека функцій обробки сторінок XHTML-шаблонів користувацткого Web-інтерфейсу.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 0.1.0
+Ліцензія: GPL','XHTML-шаблон','Библиотека функций обработки страниц XHTML-шаблонов пользовательского Web-интерфейса.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 0.1.0
+Лицензия: GPL',0);
 CREATE TABLE 'flb_doc_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DEF" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DEF" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
 INSERT INTO "flb_doc_io" VALUES('getVal','rez','Result',0,2,'',0,0,'Результат','','Результат','');
 INSERT INTO "flb_doc_io" VALUES('getVal','addr','Address',0,0,'',0,1,'Адреса','','Адрес','');
@@ -221,7 +302,7 @@ INSERT INTO "lib_Controllers_io" VALUES('prescr','dbProgs','DB:Table with progra
 INSERT INTO "lib_Controllers_io" VALUES('prescr','mode','Mode: Finish(-2); Error(-1); Stop(0); Run (1); Pause(2); Pass com (3)',1,1,'',0,8,'Режим: Оконч.(-2); Ошибка(-1); Стоп(0); Исполн.(1); Пауза (2); Пропуст. ком. (3)','','Режим: Окінч.(-2); Помилка(-1); Стоп(0); Викон.(1); Пауза (2); Пропуст. ком. (3)','');
 INSERT INTO "lib_Controllers_io" VALUES('prescr','curMode','Current mode',1,0,'',0,9,'Текущий режим','','Поточний режим','');
 INSERT INTO "lib_Controllers_io" VALUES('prescr','prog','Name of selected program',0,1,'',0,10,'Имя выбранной программы','','Ім''я обраної програми','');
-INSERT INTO "lib_Controllers_io" VALUES('prescr','startTm','Start time (seconds)',1,0,'',0,11,'Время запуска (секунды)','','Час запуску (секунди)','');
+INSERT INTO "lib_Controllers_io" VALUES('prescr','startTm','Start time, seconds',1,0,'',0,11,'Время запуска, секунды','','Час запуску, секунди','');
 INSERT INTO "lib_Controllers_io" VALUES('prescr','curCom','Current command-step',0,0,'',0,12,'Текущая комманда-шаг','','Поточна команда-крок','');
 INSERT INTO "lib_Controllers_io" VALUES('prescr','work','Work program',4,0,'',0,13,'Рабочая программа','','Робоча програма','');
 INSERT INTO "lib_Controllers_io" VALUES('prescr','comsCntr','Commands controller',0,0,'',0,7,'Контроллер команд','','Контролер команд','');
@@ -344,7 +425,8 @@ Modules/WebUser:en,uk,ru:Modules/WebUser.html
 Modules/FLibSYS:en,uk,ru:Modules/FLibSYS.html
 Modules/SystemTests:en,uk,ru:Modules/SystemTests.html
 Modules/FLibMath:en,uk,ru:Modules/FLibMath.html
-Modules/FLibComplex1:en,uk,ru:Modules/FLibComplex1.html',0,3,'','','','');
+Modules/FLibComplex1:en,uk,ru:Modules/FLibComplex1.html
+Libs/Technological_apparatuses:en,uk,ru:Libs_Technological_apparatuses.html',0,3,'','','','');
 INSERT INTO "lib_servProc_io" VALUES('docOffLine','pagesCur','Current pages list of "{wiki}:{langs}:{dest}", for empty here used "pages"',0,4,'',0,4,'','','','');
 INSERT INTO "lib_servProc_io" VALUES('docOffLine','res','Result',0,1,'',0,0,'','','','');
 INSERT INTO "lib_servProc_io" VALUES('docOffLine','reqTr','Tries of requests',1,1,'3',0,1,'','','','');
@@ -1227,22 +1309,39 @@ INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do31','Input: DO31',3,129,'
 CREATE TABLE 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','error','Prescription:error',3,32,'0',2,'Рецепт:ошибка','','Рецепт:помилка','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','abort','Prescription:abort',3,32,'0',3,'Рецепт:прерывание','','Рецепт:перервано','');
+INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','error','Prescription: error',3,32,'0',2,'Рецепт: ошибка','','Рецепт: помилка','');
+INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','abort','Prescription: abort',3,32,'0',3,'Рецепт: прерывание','','Рецепт: перервано','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','rez','Command: result',0,32,'1',6,'Команда: результат','','Команда: результат','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','arg1','Time (s)',2,32,'',7,'Время (сек.)','','Час (сек.)','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','tmp1','Temporary 1',2,1,'0',8,'Временный 1','','Тимчасово 1','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('backTimer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('backTimer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('backTimer','error','Prescription:error',3,32,'0',2,'Рецепт:ошибка','','Рецепт:помилка','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('backTimer','abort','Prescription:abort',3,32,'0',3,'Рецепт:прерывание','','Рецепт:перервано','');
+INSERT INTO "tmplib_PrescrTempl_io" VALUES('backTimer','error','Prescription: error',3,32,'0',2,'Рецепт: ошибка','','Рецепт: помилка','');
+INSERT INTO "tmplib_PrescrTempl_io" VALUES('backTimer','abort','Prescription: abort',3,32,'0',3,'Рецепт: прерывание','','Рецепт: перервано','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('backTimer','rez','Command: result',0,32,'1',6,'Команда: результат','','Команда: результат','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('backTimer','arg1','Time (s)',2,32,'',7,'Время (сек.)','','Час (сек.)','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('backTimer','tmp1','Temporary 1',2,1,'0',8,'Временный 1','','Тимчасово 1','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('backTimer','start','Prescription:start',3,32,'0',0,'Рецепт:старт','','Рецепт:старт','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('backTimer','stop','Prescription:stop',3,32,'0',1,'Рецепт:стоп','','Рецепт:стоп','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','start','Prescription:start',3,32,'0',0,'Рецепт:старт','','Рецепт:старт','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','stop','Prescription:stop',3,32,'0',1,'Рецепт:стоп','','Рецепт:стоп','');
+INSERT INTO "tmplib_PrescrTempl_io" VALUES('backTimer','start','Prescription: start',3,32,'0',0,'Рецепт: старт','','Рецепт: старт','');
+INSERT INTO "tmplib_PrescrTempl_io" VALUES('backTimer','stop','Prescription: stop',3,32,'0',1,'Рецепт: стоп','','Рецепт: стоп','');
+INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','start','Prescription: start',3,32,'0',0,'Рецепт: старт','','Рецепт: старт','');
+INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','stop','Prescription: stop',3,32,'0',1,'Рецепт: стоп','','Рецепт: стоп','');
+INSERT INTO "tmplib_PrescrTempl_io" VALUES('manager','dbDB','DB: DB name with the tables',0,64,'',0,'БД:Имя БД с таблицами','','БД:Ім''я БД з таблицями','');
+INSERT INTO "tmplib_PrescrTempl_io" VALUES('manager','dbComs','DB: Table with commands',0,64,'PrescrComs',1,'БД:Таблица с коммандами','','БД:Таблиця з командами','');
+INSERT INTO "tmplib_PrescrTempl_io" VALUES('manager','dbProgs','DB: Table with programs',0,64,'PrescrProgs',2,'БД:Таблица с программами','','БД:Таблиця з програмами','');
+INSERT INTO "tmplib_PrescrTempl_io" VALUES('manager','comsCntr','Commands controller, <empty> - for commands into the table, ''*'' - this parameter''s controller',0,64,'*',3,'Контроллер команд, <пусто> - для команд в таблице, ''*'' - этот параметр контроллер','','Контролер команд, <порожньо> - для команд у таблиці, ''*'' - цей параметр контролеру','');
+INSERT INTO "tmplib_PrescrTempl_io" VALUES('manager','mode','Mode',1,40,'-2
+-2;-1;0;1;2;3
+Finish;Error;Stop;Run;Pause;Pass com',4,'Режим','','Режим','');
+INSERT INTO "tmplib_PrescrTempl_io" VALUES('manager','curMode','Current mode',1,24,'-2
+-2;-1;0;1;2;3
+Finish;Error;Stop;Run;Pause;Pass com',5,'','','','');
+INSERT INTO "tmplib_PrescrTempl_io" VALUES('manager','prog','Name of selected program',0,32,'',6,'Имя выбранной программы','','Ім''я обраної програми','');
+INSERT INTO "tmplib_PrescrTempl_io" VALUES('manager','startTm','Start time, seconds',1,16,'',7,'Время запуска, секунды','','Час запуску, секунди','');
+INSERT INTO "tmplib_PrescrTempl_io" VALUES('manager','curCom','Current command-step',0,16,'',8,'Текущая комманда-шаг','','Поточна команда-крок','');
+INSERT INTO "tmplib_PrescrTempl_io" VALUES('manager','work','Work program',4,16,'',9,'Рабочая программа','','Робоча програма','');
+INSERT INTO "tmplib_PrescrTempl_io" VALUES('manager','comLs','Commands list',4,16,'',10,'Список команд','','Перелік команд','');
+INSERT INTO "tmplib_PrescrTempl_io" VALUES('manager','clcCnt','Cycles counter',1,0,'',11,'Счётчик циклов','','Лічильник циклів','');
+INSERT INTO "tmplib_PrescrTempl_io" VALUES('manager','this','The object',4,0,'',12,'Объект','','Об''єкт','');
 CREATE TABLE 'tmplib_S7_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO "tmplib_S7_io" VALUES('ai_simple','val_cod','Value''s source code',1,128,'',0,'Вихідний код значення','','Исходный код значения','');
 INSERT INTO "tmplib_S7_io" VALUES('ai_simple','val','Value',2,16,'0',1,'Значення','','Значение','');
@@ -1362,17 +1461,17 @@ INSERT INTO "tmplib_base_io" VALUES('manInUnif','plcExcess','Allowed scale excee
 INSERT INTO "tmplib_base_io" VALUES('anUnif','in','Input',2,128,'Input|var',0,'Вхід','Вхід|var','Вход','Вход|var');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','var','Variable',2,16,'0',2,'Змінна','','Переменная','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','ed','Dimension',0,32,'',3,'Од. виміру','','Ед. измерения','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','min','Scale:minimum',2,32,'0',4,'Шкала:мінімум','','Шкала:минимум','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','max','Scale:maximum',2,32,'100',5,'Шкала:максимум','','Шкала:максимум','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','scSqr','Scale:square',3,32,'0',6,'Шкала:квадратична','','Шкала:квадратичная','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','min','Scale: minimum',2,32,'0',4,'Шкала: мінімум','','Шкала: минимум','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','max','Scale: maximum',2,32,'100',5,'Шкала: максимум','','Шкала: максимум','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','scSqr','Scale: square',3,32,'0',6,'Шкала: квадратична','','Шкала: квадратичная','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','aMin','Border down alarm',2,32,'0',11,'Границя нижня ав.','','Граница нижняя ав.','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','aMax','Border up alarm',2,32,'0',12,'Границя верхня аварійна','','Граница верхняя ав.','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','wMin','Border down warning',2,32,'0',13,'Границя нижня попереджув.','','Граница нижняя пред.','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','wMax','Border up warning',2,32,'0',14,'Границя верхня попереджув.','','Граница верхняя пред.','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','speed','Motion speed (%/cycle)',2,32,'0',16,'Швидкість зміни (%/цикл)','','Скорость изменения (%/цикл)','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','prec','Precision (signs)',1,32,'2',17,'Точність (знаків)','','Точность (знаков)','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','Tf','Filter time, s',2,32,'0',19,'Час фільтру (с)','','Время фильтрации (с)','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','iAdd','Input addon',2,64,'0',20,'Додаток до входу','','Дополнение ко входу','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','Tf','Filter time, seconds',2,32,'0',19,'Час фільтру, секунд','','Время фильтрации, секунд','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','iAdd','Input addition',2,64,'0',20,'Додаток до входу','','Дополнение ко входу','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','iMult','Input multiplication',2,64,'1',21,'Множник входу','','Множитель ко входу','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','plcMin','Minimum module scale',2,64,'0',22,'Мінімум шкали модуля','','Минимум шкалы модуля','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','plcMax','Maximum module scale',2,64,'0',23,'Максимум шкали модуля','','Максимум шкалы модуля','');
@@ -1526,9 +1625,13 @@ INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','NAME','Name',0,0,'',52,'Ім''
 INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','DESCR','Description',0,0,'',53,'Опис','','Описание','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','HystBnd','Hysteresis of boders violation',2,32,'1',15,'Гістерезиз поруш. границь','','Гистерезиз наруш. границ','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','inProc','Input processing procedure',0,68,'',1,'Вхідна процедура обробки','','Входная процедура обработки','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','subMode','Substitute:mode (0-no; 1-last; 2-substitute)',1,32,'0',7,'Заміна:режим (0-немає; 1-останне; 2-заміна)','','Замена:режим (0-нет; 1-последний; 2-замена)','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','subVar','Substitute:variable',2,32,'0',8,'Заміна:змінна','','Замена:переменная','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','alSup','Alarms (0-init NORMA, 1-suppress, 2-save on change)',1,32,'0',9,'Порушення (0-ініціаліз. НОРМА, 1-придушення, 2-збереж. при зміні)','','Нарушения (0-принужд. НОРМА, 1-подавление, 2-сохр. при смене)','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','subMode','Substitute: mode',1,40,'0
+0;1;2
+no;last;substitute',7,'Заміна:режим','','Замена:режим','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','subVar','Substitute: variable',2,32,'0',8,'Заміна:змінна','','Замена:переменная','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','alSup','Alarms',1,40,'0
+0;1;2
+init NORMA;suppress;save on change',9,'Порушення','','Нарушения','');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','inProc','Input processing procedure',0,68,'',1,'Вхідна процедура обробки','','Входная процедура обработки','');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','subMode','Substitute:mode (0-no; 1-last; 2-substitute)',1,32,'0',12,'Заміна:режим (0-немає; 1-останне; 2-заміна)','','Замена:режим (0-нет; 1-последний; 2-замена)','');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','subVar','Substitute:variable',2,32,'0',13,'Заміна:змінна','','Замена:переменная','');
@@ -1559,8 +1662,8 @@ INSERT INTO "tmplib_base_io" VALUES('digAlarm','st_open','State "Opened"',3,16,'
 INSERT INTO "tmplib_base_io" VALUES('digAlarm','st_close','State "Closed"',3,16,'',5,'Стан "Закрито"','','Состояние "Закрыто"','');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','log','Logarithmic scale',3,32,'0',23,'Логарифмічна шкала','','Логарифмическая шкала','');
 INSERT INTO "tmplib_base_io" VALUES('digAlarm','inProc','Input processing procedure',0,68,'',3,'Вхідна процедура обробки','','Входная процедура обработки','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','alDelay','Alarms delay, s',2,32,'0',10,'Затримка сигналізації, с','','Задержка сигнализации, с','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','alDelay','Alarms delay, s',2,32,'',15,'Затримка сигналізації, с','','Задержка сигнализации, с','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','alDelay','Alarms delay, seconds',2,32,'0',10,'Затримка сигналізації, секунди','','Задержка сигнализации, секунди','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','alDelay','Alarms delay, seconds',2,32,'',15,'Затримка сигналізації, секунди','','Задержка сигнализации, секунди','');
 INSERT INTO "tmplib_base_io" VALUES('codeState','in','Input',1,144,'Signal|in',0,'Вхід','','Вход','');
 INSERT INTO "tmplib_base_io" VALUES('codeState','inProc','Input processing procedure',0,68,'',2,'Вхідна процедура обробки','','Входная процедура обработки','');
 INSERT INTO "tmplib_base_io" VALUES('codeState','st_text','State "Text"',0,16,'',3,'Стан "Текст"','','Состояние "Текст"','');
@@ -1590,6 +1693,25 @@ INSERT INTO "tmplib_base_io" VALUES('codeState','out','Output',1,145,'Signal|out
 INSERT INTO "tmplib_base_io" VALUES('codeState','com_text','Command "Text"',0,32,'',5,'Команда "Текст"','','Команда "Текст"','');
 INSERT INTO "tmplib_base_io" VALUES('codeState','coms','Commands-states, rows "{code}:{State}"',0,36,'',6,'Команди-стани, рядки "{code}:{State}"','','Команды-состояния, строки "{code}:{State}"','');
 INSERT INTO "tmplib_base_io" VALUES('codeState','digComs','Commands',0,20,'',7,'Команди','','Команды','');
+INSERT INTO "tmplib_base_io" VALUES('UPS','srcAddr','Source object''s address',0,64,'',0,'Адрес исходного объекта','','Адреса вихідного об''єкту','');
+INSERT INTO "tmplib_base_io" VALUES('UPS','items','All items',4,33,'',1,'Все элементы','','Всі елементи','');
+INSERT INTO "tmplib_base_io" VALUES('UPS','alDelay','Alarms delay, seconds',2,32,'0',2,'Задержка сигнализации, секунди','','Затримка сигналізації, секунди','');
+INSERT INTO "tmplib_base_io" VALUES('UPS','bChL','Battery charge low',2,32,'20',3,'Заряд батареи низкий','','Заряд батареї низький','');
+INSERT INTO "tmplib_base_io" VALUES('UPS','bChLL','Battery charge critical',2,32,'5',4,'Заряд батареи критический','','Заряд батареї критичний','');
+INSERT INTO "tmplib_base_io" VALUES('UPS','inVL','Input voltage low',2,32,'210',5,'Низкое входное напряжение','','Низька вхідна напруга','');
+INSERT INTO "tmplib_base_io" VALUES('UPS','inVH','Input voltage high',2,32,'250',6,'Высокое входное напряжение','','Висока вхідна напруга','');
+INSERT INTO "tmplib_base_io" VALUES('UPS','inFLL','Input frequency too low',2,32,'40',7,'Очень низкая входная частота','','Дуже низька вхідна частота','');
+INSERT INTO "tmplib_base_io" VALUES('UPS','inFL','Input frequency low',2,32,'45',8,'Низкая входная частота','','Низька вхідна частота','');
+INSERT INTO "tmplib_base_io" VALUES('UPS','inFH','Input frequency high',2,32,'55',9,'Высокая входная частота','','Висока вхідна частота','');
+INSERT INTO "tmplib_base_io" VALUES('UPS','inFHH','Input frequency too high',2,32,'60',10,'Очень высокая входная частота','','Дуже висока вхідна частота','');
+INSERT INTO "tmplib_base_io" VALUES('UPS','loadH','Load high',2,32,'80',11,'Нагрузка высокая','','Навантаження високе','');
+INSERT INTO "tmplib_base_io" VALUES('UPS','loadHH','Load too high',2,32,'100',12,'Нагрузка очень высокая','','Навантаження дуже високе','');
+INSERT INTO "tmplib_base_io" VALUES('UPS','tH','Temperature high',2,32,'50',13,'Температура высокая','','Температура висока','');
+INSERT INTO "tmplib_base_io" VALUES('UPS','tHH','Temperature too high',2,32,'70',14,'Температура очень высокая','','Температура дуже висока','');
+INSERT INTO "tmplib_base_io" VALUES('UPS','this','Object',4,0,'',15,'Объект','','Об''єкт','');
+INSERT INTO "tmplib_base_io" VALUES('UPS','SHIFR','Code',0,0,'',16,'Шифр','','Шифр','');
+INSERT INTO "tmplib_base_io" VALUES('UPS','NAME','Name',0,0,'',17,'Имя','','Ім''я','');
+INSERT INTO "tmplib_base_io" VALUES('UPS','DESCR','Description',0,0,'',18,'Описание','','Опис','');
 CREATE TABLE 'DAQ_JavaLikeCalc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT 'system' ,"FUNC" TEXT DEFAULT '' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' ,"ITER" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 CREATE TABLE 'DAQ_LogicLev' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT '' ,"PRM_BD_REFL" TEXT DEFAULT '' ,"PERIOD" INTEGER DEFAULT '0' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 CREATE TABLE 'flb_web_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
@@ -2932,7 +3054,7 @@ INSERT INTO "Trs" VALUES('Write','','');
 INSERT INTO "Trs" VALUES('uh oh, no thermocouple attached!','','');
 CREATE TABLE 'tmplib_DevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_DevLib" VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
 Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
@@ -3066,7 +3188,7 @@ else {
 
 f_err = t_err;','','',1512240506);
 INSERT INTO "tmplib_DevLib" VALUES('TMH','Power supply for turbomolecular pumps','','','Power supply for turbomolecular pumps of firm SHIMADZU (http://www.shimadzu.com), model EI-R04M.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
 Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
 tr = SYS.Transport.Serial.nodeAt("out_"+transport);
@@ -3246,7 +3368,7 @@ else {
 
 f_err = t_err;','','',1512240506);
 INSERT INTO "tmplib_DevLib" VALUES('TM510x','Elemer TM510x','','','Multichannels thermometer Elemer TM5102 and TM5103 of firm Elemer (http://www.elemer.ru).
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start) devTp = EVAL_INT;
 
@@ -3294,8 +3416,10 @@ else {
 }
 
 f_err = t_err;','','',1512240506);
-INSERT INTO "tmplib_DevLib" VALUES('UPS','','','','Uninterruptible power supply unifying data for provide all the data into single attribute of object type "All items" for next the control as the object with the data provide as table, alarming and allowing set writable attributes. The template aimed for using with module "System" data source as "UPS" and widget "Main.objProps" as the data presenter. The template also you can use as example for create like other data unification as complex object with properties, alarming and writing.
-Author: Roman Savochenko <rom_as@oscada.org>
+INSERT INTO "tmplib_DevLib" VALUES('UPS','UPS (obsolete)','','','!!!!: Moved to the template library Main. Will be removed soon
+Uninterruptible power supply unifying data for provide all the data into single attribute of object type "All items" for next the control as the object with the data provide as table, alarming and allowing set writable attributes. The template aimed for using with module "System" data source as "UPS" and widget "Main.objProps" as the data presenter. The template also you can use as example for create like other data unification as complex object with properties, alarming and writing.
+
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.2.0','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	{ srcPrm = false; items = new Object(); conDelay_ = 0; }
 
@@ -3405,9 +3529,9 @@ if(tErr.toInt() && tErr.toInt() != f_err.toInt())
 else if(f_err.toInt() && !tErr.toInt())
 	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
 f_err = tErr;
-conDelay_ = 0;','','',1512240506);
+conDelay_ = 0;','','',1560017752);
 INSERT INTO "tmplib_DevLib" VALUES('VKT7','VKT-7','','','Firm "Teplocom" (http://www.teplocom.spb.ru) computer "VKT-7" for complex heat measurement and counting. The device complex enough to provide more parameters, more history and accessed by a nonlinear Serial-based protocol at low speed. The template implements acquisition for all significant parameters, gets for their history by hours, days and result months. Also you can to append easily enough for processing of the remained parameters.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vladislav Chubuk
 Version: 1.0.0','','',60,0,'JavaLikeCalc.JavaScript
 using Special.FLibSYS;
@@ -3763,7 +3887,7 @@ if(t_err.length) {
 }
 else f_err = errAttrs.length ? "11:"+tr("Quality errors")+": "+errAttrs : "0";','','',1512240506);
 INSERT INTO "tmplib_DevLib" VALUES('SMDP','Sycon Multi Drop Protocol','','','STM devices for resonant frequency measurement for mass of deposited films attached to its surface by Sycon Instruments, Inc. (http://www.sycon.com).
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
 Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
 if(f_stop) return;
@@ -4010,7 +4134,7 @@ else {
 
 f_err = t_err.length ? t_err : "0";','','',1512240506);
 INSERT INTO "tmplib_DevLib" VALUES('IT3','Temperature measurement IT-3','','','Temperature measurement IT-3 from OmskEtalon (http://www.omsketalon.ru).
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
 Version: 1.2.0','','',10,0,'JavaLikeCalc.JavaScript
 if(mdPass)	{
@@ -4055,7 +4179,7 @@ else {
 if(t_err.length) { SYS.messDebug("/IT3/TMPL",tr("Error response")+": "+t_err); f_err = t_err; }
 else f_err = "0";','','',1512240506);
 INSERT INTO "tmplib_DevLib" VALUES('IVE_452HS_02','IVE-452HS-02','','','Power supply of beam-electrons evaporator of "Plasma Tech" Ltd, from Moskov.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
 Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
 //Set transport
@@ -4155,7 +4279,7 @@ if(t_err.length) {
 }
 else f_err = "0";','','',1512240506);
 INSERT INTO "tmplib_DevLib" VALUES('OPTRIS','OPTRIS CT/CTL','','','OPTRIS CT/CTL communication interface of "Optris" GmbH, from Berlin.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
 Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
 //Set transport
@@ -4249,7 +4373,7 @@ if(t_err.length) {
 }
 else f_err = "0";','','',1512240506);
 INSERT INTO "tmplib_DevLib" VALUES('CTR','CTR 100, 101','','','The RS232C Serial Interface permits the communication between the digital Oerlikon Leybold Vacuum CERAVAC, from Köln.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
 Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
 //Set transport
@@ -4356,7 +4480,7 @@ if(t_err.length) {
 }
 else f_err = "0: " + u_err;','','',1512240506);
 INSERT INTO "tmplib_DevLib" VALUES('IEC60870','IEC-60870','','','IEC 60870 part 5 is one of the IEC 60870 set of standards which define systems used for telecontrol (supervisory control and data acquisition) in electrical engineering and power system automation applications. Part 5 provides a communication profile for sending basic telecontrol messages between two systems, which uses permanent directly connected data circuits between the systems. The template implements part 104 (Ethernet transport) for client and followed services: STARTDT, STOPDT, TESTFR, Ack, C_IC_NA_1, C_CI_NA_1, C_SC_NA_1, M_SP_NA_1, M_ME_NB_1, C_CS_NA_1. For acquired and control data primarily used an object into attribute "items" for next the control as the object with the data provide as table, alarming and allowing set writable attributes. To the data control by attributes at once you can its describe into "itemsSet". Into the template for the first time used the non request mode of an output transport and free attributes creation wile performing.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Ustijancev Michael.
 Version: 1.0.2','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	{
@@ -4650,7 +4774,7 @@ if(t_err.length) {
 }
 else f_err = "0";','','',1512240506);
 INSERT INTO "tmplib_DevLib" VALUES('SSCP','Shark Slave Communication Protocol','','','Shark Slave Communication Protocol from EnergoCentrum PLUS, s.r.o.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Costumer Faster CZ (http://faster.cz)
 Version: 0.6.2','','',30,0,'JavaLikeCalc.JavaScript
 //Same request to the device
@@ -5303,7 +5427,7 @@ if(tErr.length) {
 }
 else f_err = "0";','','',1512241411);
 INSERT INTO "tmplib_DevLib" VALUES('ModBusScan','ModBus scanner','','','ModBus scanner for Coils (1), Input Coils (2), Registers (3), Input Registers (4); in the range [0...65535].
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.2','','',240,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	res = "";
@@ -5331,7 +5455,7 @@ for(stTm = SYS.time(); begin < end && begin < 65536 && (SYS.time()-stTm) < lim; 
 }
 type_ = type, begin_ = begin;','','',1539500942);
 INSERT INTO "tmplib_DevLib" VALUES('pulsarM','Pulsar-M','Пульсар-М','Пульсар-М','Pulsar-M counters protocol
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Zubarev Dmitry (IP INTEGRAL<http://kip-i-a.pro>)
 Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
 //Same request to the device
@@ -5486,7 +5610,7 @@ The field "addr" of the items can be wrote positive, for  the 8 bit address [0..
 The protocol implementing is not finished due to missing for feedback from the developer to resolve this undocumented behavior:
 - МВ110-8А responds error 0x31 for reading "in-t" >1003023331932DCB43 <1010932D4791;
 - and error 0x34 for it writing >1003023334932D2A42 <1001932D0BEDBC.
-Author: Roman Savochenko <rom_as@oscada.org>, Constantine (IrmIngeneer)
+Author: Roman Savochenko <roman@oscada.org>, Constantine (IrmIngeneer)
 Version: 0.8.1','','',30,0,'JavaLikeCalc.JavaScript
 function hash(data, isName) {
 	for(CRC = 0, i = 0; i < data.length; i++) {
@@ -5717,7 +5841,7 @@ f_err = t_err;
 if(!f_err.toInt())	f_err += t_inf + (t_infW.length?" "+tr("Write")+t_infW:"");','','',1544882666);
 INSERT INTO "tmplib_DevLib" VALUES('DCON_Prt','DCON Protocol + Input AI','','','Input and output part of the protocol DCON implementation with the input part designed for typical AI module at up to 20 channels.
 The DCON commands are supported: #AA
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.1','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	io = tr = EVAL;
 
@@ -5801,7 +5925,7 @@ answer += "\r";
 return true;','','',1551028560);
 INSERT INTO "tmplib_DevLib" VALUES('DCON_Prt_DI','DCON Protocol + Input DI','','','Input and output part of the protocol DCON implementation with the input part designed for typical DI module at up to 32 channels.
 The DCON commands are supported: @AA, $AA6
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.1','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	io = tr = EVAL;
 
@@ -5890,7 +6014,7 @@ answer += "\r";
 return true;','','',1551028549);
 INSERT INTO "tmplib_DevLib" VALUES('DCON_Prt_AO','DCON Protocol + Input AO','','','Input and output part of the protocol DCON implementation with the input part designed for typical AO module at up to 8 channels.
 The DCON commands are supported: $AA8N, #AAN{Data}
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.1','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	io = tr = EVAL;
 
@@ -5979,7 +6103,7 @@ answer += "\r";
 return true;','','',1551028555);
 INSERT INTO "tmplib_DevLib" VALUES('DCON_Prt_DO','DCON Protocol + Input DO','','','Input and output part of the protocol DCON implementation with the input part designed for typical DO module at up to 32 channels.
 The DCON commands are supported: @AA, @AA{Data}
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.1','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	io = tr = EVAL;
 
@@ -6084,7 +6208,7 @@ if(run && !pause) {
 	tmp1 = max(0, tmp1 - 1/f_frq);
 	if(tmp1 <= 0) { rez = "1:"+tr("Waiting %1s expired").replace("%1",arg1.toPrecision(3)); run = false; }
 	else rez = "0:"+tr("Waiting %1s").replace("%1",tmp1.toPrecision(3));
-}','','',1416656093);
+}','','',1559660663);
 INSERT INTO "tmplib_PrescrTempl" VALUES('backTimer','Background timer','Фоновий таймер','Фоновый таймер','Background timer. Updating parallel with current command.','Фоновий таймер. Оновлення паралельно із поточною командой.','Фоновый таймер. Обновление параллельно с текущей командой.',10,0,'JavaLikeCalc.JavaScript
 //Reset to default
 if(f_start || (!run && tmp1)) { run = pause = error = abort = false; tmp1 = 0; rez = 1; }
@@ -6095,7 +6219,343 @@ if(run && !pause) {
 	if(tmp1 <= 0) { rez = "1:"+tr("Waiting %1s expired").replace("%1",arg1.toPrecision(3)); run = false; }
 	//if(tmp1 <= 10)	rez = "-1:Waiting "+arg1.toPrecision(3)+"s expired";
 	else rez = "10:"+tr("Background waiting %1s").replace("%1",tmp1.toPrecision(3));
-}','','',1416656088);
+}','','',1559660663);
+INSERT INTO "tmplib_PrescrTempl" VALUES('manager','Prescriptions manager','','','Prescriptions manager and controller. Used in addition with user interface''s cadre "Prescription: editing" and "Prescription: runtime" for which into a parameter of the controller you must pass that parameters: "mode", "prog", "startTm", "curCom", "comLs", "work".
+
+Author: Roman Savochenko <roman@oscada.org>
+Sponsor: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
+Version: 2.0.0','','',10,0,'JavaLikeCalc.JavaScript
+clcCnt++;
+
+if(f_start)	work = SYS.XMLNode("prg");
+
+//Checking for the commands controller presence
+comCntrO = false;
+if(comsCntr.length)	comCntrO = (comsCntr=="*") ? this.nodePrev() : SYS.DAQ.nodeAt(comsCntr,".");
+
+//Commands list update
+if(f_start || !(clcCnt%(60*f_frq))) {
+	if(!comCntrO) {
+		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT * FROM "+dbComs+";");
+		comLs = new Object();
+		for(i_t = 1; i_t < rez.length; i_t++) {
+			comNm = rez[i_t]["name"];
+			comLs[comNm] = new Object();
+			comLs[comNm]["descr"] = rez[i_t]["descr"];
+			comLs[comNm]["proc"] = rez[i_t]["proc"];
+			for(i_a = 1; i_a <= 5; i_a++)
+				comLs[comNm]["arg"+i_a] = rez[i_t]["arg"+i_a];
+		}
+	}
+	else {
+		var nL = comCntrO.nodeList("prm_");
+		comLs = new Object();
+		for(i_n = 0; i_n < nL.length; i_n++) {
+			comO = comCntrO[nL[i_n]];
+			if(!comO.nodeAt("start") || !comO.nodeAt("stop") || !comO.nodeAt("run"))	continue;
+			comNm = comO.cfg("NAME");
+			comLs[comNm] = new Object();
+			comLs[comNm]["prmID"] = nL[i_n].slice(4);
+			comLs[comNm]["descr"] = comO.cfg("DESCR");
+			for(i_a = 1; i_a <= 5; i_a++)
+				if(!(comA=comO["arg"+i_a]).isEVal())
+					comLs[comNm]["arg"+i_a] = comA.descr();
+		}
+	}
+}
+
+//Programm selection change
+if(curMode <= 0 && prog.length && (prog != work.attr("name") || mode == 1)) {
+	work = SYS.XMLNode("prg");
+	rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+prog+"'';");
+	if(rez.length > 1) {
+		//Parse program and insert procedure text and argument''s labels
+		work.load(rez[1][0]);
+		work.setAttr("name",prog);
+		for(comElN = work, comPos = 0; true; comPos++) {
+			if(comPos >= comElN.childSize()) {
+				if((comElN=comElN.parent())) { comPos = comElN.attr("seekPos").toInt(); continue; }
+				break;
+			}
+			comElI = comElN.childGet(comPos);
+			comId = comElI.attr("id");
+			if(comLs[comId].isEVal())	continue;
+			comElI.setAttr("proc",comLs[comId].proc);
+			for(i_a = 1; i_a <= 5; i_a++) comElI.setAttr("labArg"+i_a,comLs[comId]["arg"+i_a]);
+			if(comElI.childSize()) { comElN.setAttr("seekPos",comPos); comElN = comElI; comPos = -1; }
+		}
+	}
+	else prog = "";
+}
+
+//Start process
+if(curMode <= 0 && mode == 1 && prog.length) {
+	startTm = SYS.time();
+	curCom = 0;
+	curMode = mode;	
+
+	if(comCntrO) {
+		var cL = comCntrO.nodeList("prm_");
+		for(i_c = 0; i_c < cL.length; i_c++) {
+			var cLi = comCntrO[cL[i_c]];
+			cLi.run.set(false);
+			cLi.stop.set(false);
+			cLi.error.set(false);
+			cLi.abort.set(false);
+			cLi.start.set(true);
+		}
+	}
+}
+//Pause and other process
+else if((mode == 0 && curMode < 0) || (curMode == 1 && mode == 2) || (curMode == 2 && (mode == 0 || mode == 1))) {
+	//curMode = mode;
+	if((mode == 0 || mode == 1 || mode == 2) && comCntrO) {
+		var cL = comCntrO.nodeList("prm_");
+		for(i_c = 0; i_c < cL.length; i_c++)
+			comCntrO[cL[i_c]].pause.set(mode==2);
+	}
+}
+
+//Call program
+if(curMode == 1 || curMode == 2) {
+	prog = work.attr("name");
+
+	//Curent node at levels obtain
+	curComNd = work;
+	for(curComLev = 0, curComPos = 0, off = 0; curComNd && (tVl=curCom.parse(0,":",off)).length; curComLev++, curComPos = tVl.toInt())
+		curComNd = curComNd.childGet(tVl.toInt());
+	if(!curComNd) {
+		SYS.messInfo("uprg"+prog,tr("No current node present")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+		curMode = mode = -3;
+	}
+	curComNd = curComNd.parent();
+
+	//Internal commands call
+	if(!comCntrO) {
+		//????
+		if(mode == 3 && curCom >= 0 && curCom < work.childSize()) {
+			work.childGet(curCom).setAttr("rez", "-10:"+tr("Step missed"));
+			curCom++;
+		}
+		if(curCom >= 0 && curCom < work.childSize()) {
+			comEl = work.childGet(curCom);
+			//Stop process
+			if(mode == 0) {
+				comEl.setAttr("rez","-10:"+tr("Program terminated"));
+				// Call stop command
+				if(!comLs["Stop"].isEVal()) {
+					off = 0;
+					prLang = comLs["Stop"].proc.parse(0,"\n",off);
+					SYS.DAQ.funcCall(prLang,new Object(),comLs["Stop"].proc.slice(off));
+				}
+				SYS.messInfo("uprg"+prog,tr("Terminated by user session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+				curMode = mode = -3;
+			}
+			//Pass empty command		
+			else if(!comEl.attr("proc").length) curCom++;
+			//Execute command
+			else if(curMode == 1) {
+				args = new Object();
+				args.rez = "";
+				args.f_start = !comEl.attr("tm").length;
+				if(args.f_start) comEl.setAttr("tm",SYS.time());
+				args.f_frq = f_frq;
+				for(i_a = 1; i_a <= 5; i_a++) args["arg"+i_a] = comEl.attr("arg"+i_a);
+				for(i_a = 1; i_a <= 10; i_a++) args["tmp"+i_a] = comEl.attr("tmp"+i_a);
+				off = 0;
+				prLang = comEl.attr("proc").parse(0,"\n",off);
+				rez = SYS.DAQ.funcCall(prLang,args,comEl.attr("proc").slice(off));
+				if(rez && args.rez.toInt() > 0) curCom++;
+				else if(!rez || args.rez.toInt() < 0) {
+					// Call error command
+					if(!comLs["Error"].isEVal()) {
+						off = 0;
+						prLang = comLs["Error"].proc.parse(0,"\n",off);
+						SYS.DAQ.funcCall(prLang,new Object(),comLs["Error"].proc.slice(off));
+					}
+					SYS.messInfo("uprg"+prog,tr("Terminated by error session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+					curMode = mode = -1;
+				}
+				comEl.setAttr("rez",args.rez);
+				for(i_a = 1; i_a <= 5; i_a++) comEl.setAttr("arg"+i_a, args["arg"+i_a]);
+				for(i_a = 1; i_a <= 10; i_a++) comEl.setAttr("tmp"+i_a, args["tmp"+i_a]);
+				//SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y);
+			}
+		}
+
+		//End call
+		if(curCom < 0 || curCom >= work.childSize()) {
+			// Call stop command
+			if(!comLs["Stop"].isEVal()) {
+				off = 0;
+				prLang = comLs["Stop"].proc.parse(0,"\n",off);
+				SYS.DAQ.funcCall(prLang,new Object(),comLs["Stop"].proc.slice(off));
+			}
+
+			curMode = mode = -2;
+			SYS.messInfo("uprg"+prog,tr("Successful session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+
+			//Place to program last execution time
+			rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+prog+"'';");
+			if(rez.length > 1) {
+				//Parse programm and insert procedure text and argument''s labels to here
+				comTree = SYS.XMLNode("prg");
+				comTree.load(rez[1][0]);
+				comTree.setAttr("wtm",SYS.time()-startTm);
+				SYS.BD.nodeAt(dbDB,".").SQLReq("UPDATE "+dbProgs+" SET prgTxt=''"+comTree.save().replace("''","''''")+"'' WHERE name=''"+prog+"'';");
+			}
+		}
+	}
+	//External commands call
+	else {
+		// Get current command parameter-object		
+		toNext = toStop = toPass = false;
+		isRun = actBackGrnd = false;
+
+		curComPrm = EVAL_BOOL;
+		if(curComPos >= 0 && curComPos < curComNd.childSize()) {
+			if(!(comId=comLs[curComNd.childGet(curComPos).attr("id")]).isEVal()) curComPrm = comCntrO["prm_"+comId.prmID];
+			if(curComPrm.isEVal()) {
+				curMode = mode = -1;
+				curComNd.childGet(curComPos).setAttr("rez","-11:"+tr("Command miss: ")+work.childGet(curCom).attr("id"));
+				return;
+			}
+		}
+		if(mode == 3 && curComPos >= 0 && curComPos < curComNd.childSize()) {
+			//curComNd.childGet(curComPos).setAttr("rez","-10:"+tr("Step missed"));
+			//curComPrm.run.set(false);
+			mode = curMode;
+			toNext = toPass = true;
+		}
+		else if(curComPos >= 0 && curComPos < curComNd.childSize()) {
+			comEl = curComNd.childGet(curComPos);
+
+			//Stop process
+			if(mode == 0) {
+				toStop = true;
+				//comEl.setAttr("rez","-12:"+tr("Program terminated"));
+				// Stop all typical and set "abort" flag
+				var cL = comCntrO.nodeList("prm_");
+				for(i_c = 0; i_c < cL.length; i_c++) {
+					var cLi = comCntrO[cL[i_c]];
+					cLi.run.set(false);
+					cLi.start.set(false);
+					cLi.abort.set(true);
+				}
+				SYS.messInfo("uprg"+prog, tr("Terminated by user session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+				curMode = mode = -3;
+			}
+			//Commands process
+			else {
+				// Start command
+				if(!comEl.attr("tm").length) {
+					curComPrm.run.set(false);	//Stop for possible background call
+					comEl.setAttr("tm", SYS.time());
+					for(i_a = 1; i_a <= 5; i_a++)
+						if(!(comA=curComPrm["arg"+i_a]).isEVal())
+							comA.set(comEl.attr("arg"+i_a));
+					curComPrm.rez.set(0);
+					curComPrm.run.set(true);
+					if(mode == 2) curComPrm.pause.set(true);
+				}
+				isRun = true;
+			}
+		}
+		//Update steps status, up to the current comand
+		isCurCmd = false;
+		for(comElN = work, comPos = 0, comLev = 0, comCur = true; isRun || toPass || toStop; comPos++) {
+			if(comPos >= comElN.childSize()) {
+				if((comElN=comElN.parent())) {
+					comLev--;
+					comPos = comElN.attr("seekPos").toInt();
+					comCur = comElN.attr("comCur").toInt();
+					continue;
+				}
+				if(actBackGrnd && toNext) toNext = false;
+				break;
+			}
+			comElI = comElN.childGet(comPos);
+			isBackgrnd = comElI.attr("backgrnd").toInt();
+			if(!isBackgrnd && actBackGrnd)	toNext = false;
+			if(isCurCmd) break;
+			isCurCmd = comCur && comLev == (curComLev-1) && curCom.parse(comLev,":").toInt() == comPos;
+			curComPI = comCntrO["prm_"+comLs[comElI.attr("id")].prmID];
+			rez = curComPI.rez.get();
+			if(isCurCmd || ((toStop || curComPI.run.get()) && comElI.attr("rez").toInt() != 1 && comElI.attr("rez").toInt() > -10)) {
+				if(toStop)	rez = "-12:" + tr("Program terminated");
+				else if(toPass) {
+					rez = "-10:" + tr("Step missed");
+					curComPI.run.set(false);
+				}
+				else if(rez.toInt() < 0) {
+					// Stop all typical and call "error" command
+					var cL = comCntrO.nodeList("prm_");
+					for(i_c = 0; i_c < cL.length; i_c++) {
+						var cLi = comCntrO[cL[i_c]];
+						cLi.run.set(false);
+						cLi.start.set(false);
+						cLi.error.set(true);
+					}
+					SYS.messInfo("uprg"+prog,tr("Terminated by error session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+					curMode = mode = -1;
+				}
+				if(!actBackGrnd && isBackgrnd && rez.toInt() == 0) actBackGrnd = true;
+				if(isCurCmd && (rez.toInt() > 0 || isBackgrnd) && !toStop)	toNext = true;
+				comElI.setAttr("rez", rez);
+				for(i_a = 1; i_a <= 5; i_a++)
+					if(!(comA=curComPI["arg"+i_a]).isEVal())
+						comElI.setAttr("arg"+i_a, comA.get());
+			}
+			if(isCurCmd) continue;
+			//Force backgrounded rezult update for running
+			if(rez.toInt() != 0 && comElI.attr("rez").toInt() == 0)	comElI.setAttr("rez", rez);
+
+			if(comElI.childSize()) {
+				comElN.setAttr("seekPos", comPos);
+				comElN.setAttr("comCur", comCur);
+				comElN = comElI;
+				comCur = comCur && comLev < curComLev && curCom.parse(comLev,":").toInt() == comPos;
+				comPos = -1; comLev++;
+			}
+		}
+
+		// Go to next step
+		if(toNext) {
+			if(curComNd.childGet(curComPos).childSize())	{ curComLev++; curComPos = 0; }
+			else if((++curComPos) >= curComNd.childSize())
+			{ curComLev--; curComPos = curComLev ? curCom.parse(curComLev-1,":").toInt()+1 : curComNd.childSize(); }
+			for(i_c = 0, curComN = ""; i_c < (curComLev-1); i_c++) curComN += curCom.parse(i_c,":");
+			curCom = curComN.length ? curComN+":"+curComPos : curComPos;
+		}
+		
+		//End call
+		if(curComLev <= 0) {
+			// Stop all typical and call "stop" command
+			var cL = comCntrO.nodeList("prm_");
+			for(i_c = 0; i_c < cL.length; i_c++) {
+				var cLi = comCntrO[cL[i_c]];
+				cLi.run.set(false);
+				cLi.start.set(false);
+				cLi.stop.set(true);
+			}
+
+			curMode = mode = -2;
+			SYS.messInfo("uprg"+prog,tr("Successful session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+
+			//Place to program last execution time
+			rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+prog+"'';");
+			if(rez.length > 1) {
+				//Parse program and insert procedure text and argument''s labels to here
+				comTree = SYS.XMLNode("prg");
+				comTree.load(rez[1][0]);
+				comTree.setAttr("wtm",SYS.time()-startTm);
+				SYS.BD.nodeAt(dbDB,".").SQLReq("UPDATE "+dbProgs+" SET prgTxt=''"+comTree.save().replace("''","''''")+"'' WHERE name=''"+prog+"'';");
+			}
+		}
+	}
+}
+curMode = mode;
+//mode = curMode;','','',1559658615);
 CREATE TABLE 'tmplib_base' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_base" VALUES('digAlarm','Alarm digital','Сигн. дискретна','Сигн. дискретная','Alarm from a digital parameter.','Сигналізація за дискретним параметром.','Сигнализация по дискретному параметру.',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
@@ -6252,7 +6712,42 @@ else {
 		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
 	f_err = tErr;
 }','','',1441880537);
-INSERT INTO "tmplib_base" VALUES('anUnif','Analog sign. (Unif)','Аналог. сигнал (Уніф)','Аналог. сигн. (Униф)','Unified template for analog input signals processing.','Уніфікований шаблон для обробки аналогових вхідних сигналів.','Унифицированный шаблон обработки аналогового входного сигнала.',10,0,'JavaLikeCalc.JavaScript
+INSERT INTO "tmplib_base" VALUES('anUnif','Analog signal (unified)','Аналог. сигнал (Уніф)','Аналог. сигн. (Униф)','Common unified template of analog input signals processing. The template forms a structure of complex analog parameter (tag) which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object.
+Functions:
+- Generic processing of the raw analog input for:
+  - simple correction-calibration at the formula "in = iMult*(in+iAdd)";
+  - scaling from the hardware border [plcMin...plcMax] to the main border [min...max], applying the square scale scSqr;
+     !!! The hardware border can be inverted one and disabled in whole for equal values of the maximum and minimum, when the main border only used.
+  - allowing to exceed of the input value in the border for the percentage range plcExcess;
+  - filtering the input value changing in the time Tf.
+- Simple imitation of the analog input setting plcImit and linking the imitation-simulation source in plcImitIn.
+   !!! Missing the link plcImitIn (EVAL) causes to generating random analog input
+- Complex preprocessing and complete generation-imitation of the analog input on the internal programming language of OpenSCADA into the configuration IO inProc, where you can operate next service parameters:
+  - f_frq [IN] — frequency of calculation the template IO;
+  - in [IN|OUT] — the same raw analog input IO;
+  - var [IN] — the end variable IO;
+  - min, max [IN] — the main border IOs;
+  - plcMin, plcMax [IN] — the hardware border IOs;
+  - plcImit, plcImitIn [IN] — IOs of the simple imitation;
+  - levErr, tErr [IN|OUT] — alarm level [-7...0] and text of the error (the attribute "err" format).
+- Simple substitution for the variable subVar at the error (not valid) input variable (EVAL) in the modes: "no", "last" and "substitute".
+- Processing the result variable var for violation some borders and criteria, generating the alarms and proper setting the attribute err. The alarm borders can have some hysteresis HystBnd, can be delayed for the time alDelay and can be worked in the modes alSup: "init NORMA", "suppress", "save on change". Next borders and criteria are provided:
+  - missing for data or connection with source at the EVAL input value — error code 1 and alarm level 5;
+  - exceeding the input value of the hardware border — error code 1,2 and alarm level 5;
+  - exceeding the end variable of the alarm border [aMin...aMax] — error code 3,4 and alarm level 4;
+      !!! Disabled at setting for equal or inverted values of the border
+  - exceeding the end variable of the warning border [wMin...wMax] — error code 5,6 and alarm level 2;
+      !!! Disabled at setting for equal or inverted values of the border
+  - big motion speed of the end variable — error code 7 and alarm level 2.
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 2.0.0','Уніфікований шаблон для обробки аналогових вхідних сигналів.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 2.0.0','Унифицированный шаблон обработки аналогового входного сигнала.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 2.0.0',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	if(alSup == 0) f_err = "0";
 	prevVar = EVAL_REAL;
@@ -6357,7 +6852,7 @@ else {
 	f_err = tErr;
 	if(toSave) SYS.cntrReq(SYS.XMLNode("save").setAttr("path",this.nodePath()+"/%2fobj").setAttr("force",1));
 	conDelay_ = 0;
-}','','',1540131917);
+}','','',1559924625);
 INSERT INTO "tmplib_base" VALUES('digitBlockUnif','Diskret block (Unif)','Блок дискретних (Уніф)','Блок дискр. (Униф)','The block for union of Diskret parameters for one device control.','Блок поєднання дискретних сигналів контролю одним пристроєм.','Блок для дискретных параметров управляющих одним аппаратом.',10,0,'JavaLikeCalc.JavaScript
 set = false;
 if(!com.isEVal() && com && last_cmd != 1)		last_cmd = 1, set = true;
@@ -6566,7 +7061,10 @@ else {
 if(!f_err.toInt() && tErr.toInt()) this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -4, SHIFR);
 else if(f_err.toInt() && !tErr.toInt()) this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
 f_err = tErr;','','',1450381549);
-INSERT INTO "tmplib_base" VALUES('SNMP','','','','','','',10,0,'JavaLikeCalc.JavaScript
+INSERT INTO "tmplib_base" VALUES('SNMP','SNMP','','','SNMP unifying data is to provide all the data into the single attribute "All items" of the object type for next control as object with the data providing as a table, alarming and allowing to set for writable attributes. The template designed for using with the data source module "SNMP" as an "SNMP device" and the widget "Main.objProps" as the data presenter. The template you can use also as an example to create other data unification as the complex object with properties, alarming and writing.
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	{ srcPrm = false; items = new Object(); }
 
 alLev = 0;
@@ -6650,17 +7148,17 @@ if(tErr.toInt() && tErr.toInt() != f_err.toInt())
 	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -(2+alLev), SHIFR);
 else if(f_err.toInt() && !tErr.toInt())
 	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
-f_err = tErr;','','',1416765601);
-INSERT INTO "tmplib_base" VALUES('codeState','Code state','Стан за кодом
+f_err = tErr;','','',1560017641);
+INSERT INTO "tmplib_base" VALUES('codeState','Code state','Стан за кодом','Состояние по коду','A state forming at the code.
 
-Автор: Роман Савоченко <rom_as@oscada.org>
-Версія: 1.1.0','Состояние по коду
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.1.0','Формування стану за кодом
 
-Автор: Роман Савоченко <rom_as@oscada.org>
-Версия: 1.1.0','A state forming at the code.
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.1.0','Формирование состояния по коду
 
-Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.1.0','Формування стану за кодом','Формирование состояния по коду',10,0,'JavaLikeCalc.JavaScript
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.1.0',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	f_err = "0";
 	//Prepare data for preprocessing
@@ -6732,7 +7230,7 @@ The output user protocol part "SMS" provides operations with SMS by a GSM-modem 
 
 The output user protocol part "SMTP" provides operations with a SMTP server for receiving EMails.
 
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Sponsor: Oleksandr Knestyapin <olexanderrr@gmail.com>
 Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	io = tr = EVAL;
@@ -7034,9 +7532,124 @@ else {
 	SMSState = tr("Sent %1. In queue %2.").replace("%1",SMSSentN.toString()).replace("%2",SMSQueueN.toString());
 	if(SMSErr.length) SMSState += " "+tr("Error: %1.").replace("%1",SMSErr);
 }','','',1550428714);
+INSERT INTO "tmplib_base" VALUES('UPS','','','','Uninterruptible power supply unifying data for provide all the data into single attribute of object type "All items" for next the control as the object with the data provide as table, alarming and allowing set writable attributes. The template aimed for using with module "System" data source as "UPS" and widget "Main.objProps" as the data presenter. The template also you can use as example for create like other data unification as complex object with properties, alarming and writing.
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.2.0','','',10,0,'JavaLikeCalc.JavaScript
+if(f_start)	{ srcPrm = false; items = new Object(); conDelay_ = 0; }
+
+alLev = 0;
+tErr = "";
+
+//Connect to source
+if(typeof(srcPrm) != "TCntrNode:TValue:TParamContr") srcPrm = SYS.DAQ.nodeAt(srcAddr,".");
+if(!srcPrm) { tErr = tr("No connection to source object"); alLev = 3; }
+else if(srcPrm.err.get() != 0)	 { tErr = tr("Source error")+": "+srcPrm.err.get().parse(1,":"); alLev = 3; }
+else {
+	//Attributes list get and "items" update
+	nLst = srcPrm.nodeList("a_");
+	for(i_n = 0; i_n < nLst.length; i_n++) {
+		aId = nLst[i_n].slice(2);
+		aNd = srcPrm[nLst[i_n]];
+		if(items[aId].isEVal()) {
+			items[aId] = itW = new Object();
+			itW.descr = aNd.descr();
+
+			// Writeable check
+			//SYS.messInfo("UPS test", aId+": aNd.flg()="+aNd.flg());
+			if((itW.wr=!(aNd.flg()&0x04)) && aNd.flg()&0x01) {
+				itW.wr = "";
+				for(off = 0, pos = 0; (selId=aNd.values().parse(0,";",off)).length; pos++)
+					itW.wr += ((selId==(selNm=aNd.selNames().parse(pos,";")))?selId:(selNm+" ("+selId+")"))+";";
+			}
+			itW.alarm = 0;
+		}
+		items[aId].val = aNd.get();
+	}
+
+	//Alarms process and mark
+	varS = "ups_status";
+	if(!(tP=srcPrm[varS]).isEVal() && !(tVl=tP.get()).isEVal()) {
+		if(tVl == "OB")	{ items[varS].alarm = 1; tErr += tr("Status")+" \""+tr("On battery")+"\"; "; }
+		else if(tVl == "LB")	{ items[varS].alarm = 2; tErr += tr("Status")+" \""+tr("Low battery")+"\"; "; }
+		else if(tVl == "SD")	{ items[varS].alarm = 2; tErr += tr("Status")+" \""+tr("Shutdown load")+"\"; "; }
+		else if(tVl.indexOf("ALARM") != -1)	{ items[varS].alarm = 2; tErr += tr("Status")+" \""+tr("ALARM")+"\"; "; }
+		else items[varS].alarm = 0;
+	}
+	varS = "battery_packs";
+	if(!(tP=srcPrm[varS]).isEVal() && !(tVl=tP.get()).isEVal()) {
+		if(tVl.toInt() == 0)	{ items[varS].alarm = 2; tErr += tr("None of good battery present")+"; "; }
+		else items[varS].alarm = 0;
+	}
+	varS = "battery_charge";
+	if(!(tP=srcPrm[varS]).isEVal() && !(tVl=tP.get()).isEVal()) {
+		if(tVl.toReal() < bChL) { items[varS].alarm = 1; tErr += tr("Battery charge low")+"; "; }
+		else if(tVl.toReal() < bChLL) { items[varS].alarm = 2; tErr += tr("Battery charge critical")+"; "; }
+		else items[varS].alarm = 0;
+	}
+	varS = "battery_packs_bad";
+	if(!(tP=srcPrm[varS]).isEVal() && !(tVl=tP.get()).isEVal()) {
+		if(tVl.toInt())	{ items[varS].alarm = 1; tErr += tr("Bad %1 batteries present").replace("%1",tVl); }
+		else items[varS].alarm = 0;
+	}
+	varS = "input_voltage";
+	if(!(tP=srcPrm[varS]).isEVal() && !(tVl=tP.get()).isEVal()) {
+		if(tVl.toReal() > 10 && tVl.toReal() < inVL) { items[varS].alarm = 1; tErr += tr("Input voltage low")+"; "; }
+		else if(tVl.toReal() > inVH) { items[varS].alarm = 1; tErr += tr("Input voltage high")+"; "; }
+		else items[varS].alarm = 0;
+	}
+	varS = "input_frequency";
+	if(!(tP=srcPrm[varS]).isEVal() && !(tVl=tP.get()).isEVal()) {
+		if(tVl.toReal() < inFLL) { items[varS].alarm = 2; tErr += tr("Input frequency too low")+"; "; }
+		else if(tVl.toReal() > inFHH)	{ items[varS].alarm = 2; tErr += tr("Input frequency too high")+"; "; }
+		else if(tVl.toReal() < inFL) { items[varS].alarm = 1; tErr += tr("Input frequency low")+"; "; }
+		else if(tVl.toReal() > inFH) { items[varS].alarm = 1; tErr += tr("Input frequency high")+"; "; }
+		else items[varS].alarm = 0;
+	}
+	varS = "ups_load";
+	if(!(tP=srcPrm[varS]).isEVal() && !(tVl=tP.get()).isEVal()) {
+		if(tVl.toReal() > loadHH)		{ items[varS].alarm = 2; tErr += tr("UPS overloaded")+"; "; }
+		else if(tVl.toReal() > loadH)	{ items[varS].alarm = 1; tErr += tr("UPS load high")+"; "; }
+		else items[varS].alarm = 0;
+	}
+	varS = "ups_temperature";
+	if(!(tP=srcPrm[varS]).isEVal() && !(tVl=tP.get()).isEVal()) {
+		if(tVl.toReal() > tHH) 		{ items[varS].alarm = 2; tErr += tr("UPS overheated")+"; "; }
+		else if(tVl.toReal() > tH)	{ items[varS].alarm = 1; tErr += tr("Temperature high")+"; "; }
+		else items[varS].alarm = 0;
+	}
+
+	//Set variables process
+	for(var aIt in items) {
+		it = items[aIt];
+		if(!it.set.isEVal()) {
+			aNd = srcPrm["a_"+it.id];
+			if(aNd.flg()&0x01 && (selV=it.set.match(".+\\((.+)\\)$")).length) it.set = selV[1];
+			aNd.set(it.set);
+			it.set = EVAL_REAL;
+		}
+		alLev = max(alLev, it.alarm);
+	}
+}
+
+//SYS.messInfo("UPS test", "tErr="+tErr+"; alLev="+alLev);
+tErr = tErr.length ? ""+alLev+":"+tErr : "0";
+
+//Alarms forming
+if(alDelay > 0 && conDelay_ <= 0 && tErr.toInt() != f_err.toInt())	tErr1 = tErr.toInt();
+if(alDelay > 0 && conDelay_ > 0 && tErr.toInt() != tErr1)	{ conDelay_ = 0; tErr1 = tErr.toInt(); }
+if(alDelay > 0 && conDelay_ < alDelay){ conDelay_ += 1/f_frq; return; }
+if(tErr.toInt() && tErr.toInt() != f_err.toInt())
+	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -(2+alLev), SHIFR);
+else if(f_err.toInt() && !tErr.toInt())
+	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
+f_err = tErr;
+conDelay_ = 0;','','',1560017660);
 CREATE TABLE 'lib_Controllers' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "lib_Controllers" VALUES('prescr','Prescriptions manager','','','Prescriptions manager and controller. Used in addition with user interface''s cadre "Prescription: editing" and "Prescription: runtime" for which into a parameter of the controller you must pass that parameters: "mode", "prog", "startTm", "curCom", "comLs", "work".
-Author: Roman Savochenko <rom_as@oscada.org>
+INSERT INTO "lib_Controllers" VALUES('prescr','Prescriptions manager (obsolete)','','','!!!!: Moved and replaced by the template PrescrTempl.manager. Will be removed soon
+Prescriptions manager and controller. Used in addition with user interface''s cadre "Prescription: editing" and "Prescription: runtime" for which into a parameter of the controller you must pass that parameters: "mode", "prog", "startTm", "curCom", "comLs", "work".
+
+Author: Roman Savochenko <roman@oscada.org>
 Sponsor: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
 Version: 1.1.1','','',1,10,0,'clcCnt++;
 
@@ -7367,8 +7980,9 @@ if(curMode == 1 || curMode == 2) {
 	}
 }
 curMode = mode;
-//mode = curMode;','','',1545733408);
+//mode = curMode;','','',1559660641);
 INSERT INTO "lib_Controllers" VALUES('test','test','test','','Different tests of the JavaLikeCalc language for execution into the controller mode.
+
 Author: Roman Savochenko
 Version: 1.0.0
 ','','',1,10,0,'using Special.FLibSYS;
@@ -7497,8 +8111,9 @@ for( var i_rw = 0; i_rw < DBTbl.length; i_rw++ )
   for( var i_fld = 0; i_fld < DBTbl[i_rw].length; i_fld++ )
     rec += DBTbl[i_rw][i_fld]+"\t";
   SYS.messDebug("TEST DB","Row "+i_rw+": "+rec);
-}*/','','',1479056226);
+}*/','','',1560101779);
 INSERT INTO "lib_Controllers" VALUES('test1','test1','','test1','Different tests of the JavaLikeCalc language for execution into the controller mode.
+
 Author: Roman Savochenko
 Version: 1.0.0','','',1,10,0,'//clc=0;
 //First getting previous time
@@ -7521,10 +8136,11 @@ Version: 1.0.0','','',1,10,0,'//clc=0;
 
 //Close value archive
 //Special.FLibSYS.avalClose(a_id);
-//p_tm=c_tm;','','',1550423772);
+//p_tm=c_tm;','','',1560101785);
 INSERT INTO "lib_Controllers" VALUES('ntfDispatch','Notifications dispatcher (obsolete)','','','!!!!: Replaced by the complex template Main.ntf. Will be removed soon
 Notifications dispatcher by EMail and SMS for pointed messages of OpenSCADA messages buffer.
-Author: Roman Savochenko <rom_as@oscada.org>
+
+Author: Roman Savochenko <roman@oscada.org>
 Sponsor: Oleksandr Knestyapin <olexanderrr@gmail.com>
 Version: 1.3.1','','',1,30,0,'//Initial
 if(f_start) {
@@ -7626,10 +8242,11 @@ if(!SMSTr)	SMSState = "Disabled!";
 else {
 	SMSState = tr("Sent %1. In queue %2.").replace("%1",SMSSentN.toString()).replace("%2",SMSQueueN.toString());
 	if(SMSErr.length) SMSState += " "+tr("Error: %1.").replace("%1",SMSErr);
-}','','',1550073207);
+}','','',1560101769);
 CREATE TABLE 'lib_servProc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "lib_servProc" VALUES('procArh','Archives recalculation','Перерахунок архівів','Пересчёт архивов','Value archives recalculation.
-Author: Roman Savochenko <rom_as@oscada.org>
+
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','','',1,600,0,'using Special.FLibSYS;
 
 //messPut("UserProc/ProcessArch",1,"Archive open");
@@ -7671,14 +8288,15 @@ while( begwtm<endtm )
 
     a_dst.copy(bf_dst,begwtm,0,endwtm,0);
     begwtm = endwtm;
-}','','',1528952518);
+}','','',1560097197);
 INSERT INTO "lib_servProc" VALUES('crc16','CRC 16','','','Standard Cyclic Redundancy Check (CRC) with free setting the polynomial, by default 0x8005. It isn''t actual more by the common CRC implementing.
-Author: Roman Savochenko <rom_as@oscada.org>
+
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','','',1,10,0,'out = 0xFFFF;
 for(i = 0; i < in.length; i++) {
   out = out^in.charCodeAt(i);
   for(j = 0; j < 8; j++) out = (out&1) ? ((out>>1)^poly) : out >> 1;
-}','','',1528952518);
+}','','',1560097197);
 INSERT INTO "lib_servProc" VALUES('releaseTests','TEST: Release','Тести випуску','Тесты выпуска','Set of formal tests of the OpenSCADA releases:
   - 0:System
   - 1:Security User/Group tests
@@ -7716,7 +8334,8 @@ INSERT INTO "lib_servProc" VALUES('releaseTests','TEST: Release','Тести в�
 		presence the DAQ parameter LogicLev.experiment.F3.var.
   - 7:UI subsystem tests
   - 8:Special subsystem tests
-Author: Roman Savochenko <rom_as@oscada.org>
+
+Author: Roman Savochenko <roman@oscada.org>
 Version: 2.0.0','','',1,600,0,'nNm = "testNode";
 node  = false;		//Process node
 testREZ = "";		//Test rezult
@@ -8369,7 +8988,7 @@ SYS.fileWrite("ReleaseTests.html", "<?xml version=''1.0'' ?>\n"
 	rezF+
 	"</TABLE>\n"
 	"</body>"
-	"</html>");','','',1528950514);
+	"</html>");','','',1560097197);
 INSERT INTO "lib_servProc" VALUES('archPackFStests','TEST: Packing of the archiver on FS','','','Tests set for packing of the value archives to File System, to check the optimization algorithm. The stages are provided:
   - Stage 0: Filling the main values: "1,1,10,10,100,100,1000,1000,10000,10000,EVAL"
   - Stage 1: Changing to different value 20: "1,1,20,10,100,100,1000,1000,10000,10000,EVAL"
@@ -8380,7 +8999,8 @@ INSERT INTO "lib_servProc" VALUES('archPackFStests','TEST: Packing of the archiv
   - Stage 6: Setting a value to the end for merging to the up (10000): "1,1,20,10,10,1000,1000,1000,10000,10000,10000,10000,EVAL"
   - Stage 7: Setting the end value to EVAL: "1,1,20,10,10,1000,1000,1000,10000,10000,10000,EVAL"
   - Stage 8: Setting an equal value for inserting 10000: "1,1,20,10,10,1000,1000,1000,10000,10000,10000,EVAL"
-Author: Roman Savochenko <rom_as@oscada.org>
+
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','','',1,10,0,'using Special.FLibSYS;
 arh = vArh("Archive.va_"+addr);
 
@@ -8437,18 +9057,16 @@ if(step < 0 || step == 7) {
 if(step < 0 || step == 8) {
 	buf = vArhBuf(1, 10, per*1000000, true, true);
 	buf.set(10000, tm+9*per, 0); arh.copy(buf, buf.begin(), 0, buf.end(), 0, archiver);
-}','','',1528896921);
+}','','',1560097170);
 INSERT INTO "lib_servProc" VALUES('wacko2media','EXT: WackoWiki to MediaWiki','','','Procedure of conversion Wiki-dialect from WackoWiki to MediaWiki. Used to move OpenSCADA Wiki to MediaWiki.
-Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.0.0','','',1,10,0,'dbO = SYS.BD.MySQL[ndb];
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.1.0','','',1,10,0,'dbO = SYS.BD.MySQL[ndb];
 if(!dbO)	return "Error: DB ''"+ndb+"'' missed!";
 DBTbl = dbO.SQLReq("SELECT body FROM `wk_pages` WHERE `tag`=\""+wpg+"\";");
 if(DBTbl.err.length) return "Error: "+DBTbl.err;
 else if(DBTbl.length < 2 || !DBTbl[1].length)	return "Error: Page ''"+wpg+"'' is not found!"; 
 ibuf = DBTbl[1][0];
-//ibuf = "==== 1.1. Вызов консольных команд и утилит операционной системы (sysCall) ====\n"
-//	"//Описание:// Осуществляет вызовы консольных команд ОС. Функция открывает широкие возможности пользователю ~OpenSCADA путём вызова любых системных программ, утилит и скриптов, а также получения посредством них доступа к огромному объёму системных данных. Например команда \"ls -l\" вернёт детализированное содержимое рабочей директории.\n"
-//	"//Параметры://";
 obuf = "";
 tblIn = tblInRow = formIt = formBold = formAlert = formSup = formUndrLn = false;
 for(pos = 0; pos < ibuf.length; ) {
@@ -8475,7 +9093,12 @@ for(pos = 0; pos < ibuf.length; ) {
 	if((mr=ln.match("^#\\|\\s*$","gm")).length)	{ tblIn = true; obuf += "{| class=\"wikitable\""; pos += mr[0].length; continue; }
 	if(tblIn && twos == "||") {
 		if(!tblInRow)	{ obuf += "|-\n|"; tblInRow = true; }
-		else tblInRow = false;
+		else {
+			tblInRow = false;
+			//  Checking for the table header
+			if((stLineOut=obuf.lastIndexOf("\n")) < 0)	stLineOut = 0;
+			obuf = obuf.slice(0, stLineOut) + obuf.slice(stLineOut).replace(new RegExp("\\|\\s*''''''(.+?)''''''\\s*\\|","g"),"! $1 !").replace(new RegExp("\\|\\s*''''''(.+?)''''''\\s*$","m"),"! $1");
+		}
 		pos += 2; continue;
 	}
 	if(tblIn && tblInRow && ibuf[pos] == "|")	{ obuf += "||"; pos++; continue; }
@@ -8533,9 +9156,10 @@ for(pos = 0; pos < ibuf.length; ) {
 	obuf += ibuf[pos]; pos++;
 }
 
-return obuf;','','',1528951931);
+return obuf;','','',1560098890);
 INSERT INTO "lib_servProc" VALUES('docOffLine','EXT: Off-line documentation','','','Procedure of forming the offline documentation of OpenSCADA from Wiki by reading and processing the specified Wiki pages on different languages, currently it is: English, Ukrainian, Russian.
-Author: Roman Savochenko <rom_as@oscada.org>
+
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','','',1,300,0,'trNm = "offLine";
 docHost = "oscada.org:80";
 docHost_ = "http://" + docHost.parse(0, ":");
@@ -8691,9 +9315,18 @@ for(var ip in pgsOprc) {
 	//SYS.messInfo("OffLine", "TEST 00: pLang="+pLang);
 }
 
-res = "0: Fetched and processed pages="+pCnt+"; images="+imgCnt+"; links="+lnkCnt+"; languages="+lngCnt;','','',1528952516);
+res = "0: Fetched and processed pages="+pCnt+"; images="+imgCnt+"; links="+lnkCnt+"; languages="+lngCnt;','','',1560097197);
 CREATE TABLE 'flb_regEl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "flb_regEl" VALUES('pidUnif','PID (unified)','ПІД (уніфікований)','ПИД (унифицированный)','Composite-unified analog and pulse PID. At the heart of the regulator is core a standard analog PID controller from the library "FLibComplex1" (http://wiki.oscada.org/HomePageEn/Doc/FLibComplex1#h902-15) and the implementation of the PWM for the pulse part.','Суміщений-уніфікований аналоговий та імпульсний ПІД-регулятор. У основі регулятора лежить мова стандартного аналогового ПІД-регулятора з бібліотеки "FLibComplex1" та реалізація ШІМ для імпульсної частини.','Совмещённый-унифицированный аналоговый и импульсный ПИД-регулятор. В основе регулятора лежит ядро стандартного аналогового ПИД-регулятора из библиотеки "FLibComplex1" (http://wiki.oscada.org/Doc/FLibComplex1#h91-15) и реализация ШИМ для импульсной части.',1,10,0,'//Call standard analog PID
+INSERT INTO "flb_regEl" VALUES('pidUnif','PID (unified)','ПІД (уніфікований)','ПИД (унифицированный)','Composite-unified analog and pulse PID. At the heart of the regulator is core a standard analog PID controller from the library FLibComplex1 and the implementation of the PWM for the pulse part.
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.0.0','Суміщений-уніфікований аналоговий та імпульсний ПІД-регулятор. У основі регулятора лежить мова стандартного аналогового ПІД-регулятора з бібліотеки "FLibComplex1" та реалізація ШІМ для імпульсної частини.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.0.0','Совмещённый-унифицированный аналоговый и импульсный ПИД-регулятор. В основе регулятора лежит ядро стандартного аналогового ПИД-регулятора из библиотеки "FLibComplex1" и реализация ШИМ для импульсной части.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.0.0',1,10,0,'//Call standard analog PID
 outA = Special.FLibComplex1.pid(var,sp,max,min,manIn,auto,casc,Kp,Ti,Kd,Td,Tzd,Hup,Hdwn,Zi,followSp,K1,in1,K2,in2,K3,in3,K4,in4,f_frq,int,dif,lag);
 if(analog) return outA;
 
@@ -8728,8 +9361,11 @@ if(impAnImit) {
 	if(impQdwn)	out -= 100/(impAnOut*f_frq);
 	return max(0,min(100,out));
 }
-return impAnOut;','','',1441908785);
-INSERT INTO "flb_regEl" VALUES('pidUnifD','PID dynamic','ПІД динамічний','ПИД динамический','Completely identical to unified PID regulator is implemented dynamically on JavaLikeCalc. The dynamic implementation allows you to easily adapt the regulator to the desired requirements, simply by editing it.','Повністю ідентичний уніфікованому ПІД регулятор, реалізований динамічно на JavaLikeCalc. Динамічна реалізація дозволяє легко адаптувати регулятор під потрібні вимоги, просто відредагувати його.','Полностью идентичный унифицированному ПИД регулятор, реализованный динамически на JavaLikeCalc. Динамическая реализация позволяет легко адаптировать регулятор под нужные требования, просто отредактировав его.',1,10,0,'if(f_start) {
+return impAnOut;','','',1560101809);
+INSERT INTO "flb_regEl" VALUES('pidUnifD','PID dynamic','ПІД динамічний','ПИД динамический','Completely identical to the unified PID regulator is implemented dynamically on JavaLikeCalc. The dynamic implementation allows you to easily adapt the regulator to the desired requirements, simply editing it.
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.0.0','Повністю ідентичний уніфікованому ПІД регулятор, реалізований динамічно на JavaLikeCalc. Динамічна реалізація дозволяє легко адаптувати регулятор під потрібні вимоги, просто відредагувати його.','Полностью идентичный унифицированному ПИД регулятор, реализованный динамически на JavaLikeCalc. Динамическая реализация позволяет легко адаптировать регулятор под нужные требования, просто отредактировав его.',1,10,0,'if(f_start) {
 	auto_ = auto;
 	outA = out;
 	impQupTm_ = impQdwnTm_ = 0;
@@ -8818,8 +9454,17 @@ if(impAnImit > 0) {
 	if(impQdwn)	out -= 100/(impAnImit*f_frq);
 	return max(0, min(100,out));
 }
-return max(0, min(100,impAnOut));','','',1479063083);
-INSERT INTO "flb_regEl" VALUES('pidImp','PID pulse','ПІД імпульсний','ПИД импульсный','Specialized pulse PID regulator is implemented on a special algorithm with compensation of double integration.','Спеціалізований імпульсний ПІД регулятор реалізований за особливим алгоритмом з компенсацією подвійного інтегрування.','Специализированный импульсный ПИД регулятор реализованный по особому алгоритму с компенсацией двойного интегрирования.',1,10,0,'//Call standard analog PID
+return max(0, min(100,impAnOut));','','',1560104664);
+INSERT INTO "flb_regEl" VALUES('pidImp','PID pulse','ПІД імпульсний','ПИД импульсный','Specialized pulse PID regulator is implemented on a special algorithm with compensation of double integration.
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.0.0','Спеціалізований імпульсний ПІД регулятор реалізований за особливим алгоритмом з компенсацією подвійного інтегрування.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.0.0','Специализированный импульсный ПИД регулятор реализованный по особому алгоритму с компенсацией двойного интегрирования.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.0.0',1,10,0,'//Call standard analog PID
 Kzd = min(1e3/(f_frq*Tzd), 1);
 Kint = min(1e3/(f_frq*Ti), 1);
 Kdif = min(1e3/(f_frq*Td), 1);
@@ -8894,14 +9539,14 @@ if(impAnImit) {
 	if(impQdwn) out -= 100/(impAnOut*f_frq);
 	return max(0, min(100,out));
 }
-return impAnOut;','','',1479063320);
+return impAnOut;','','',1560104660);
 CREATE TABLE 'flb_doc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 INSERT INTO "flb_doc" VALUES('getVal','Getting value from archive','Запит значення архіву','Запрос знач. архива','Query the value for a specified time from the assigned archive and issuing the result with the specified number of decimal points.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.1','Запит значення на визначений час з вказаного архіву та видача результату з вказаною кількістю знаків після точки.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.1.1','Запрос значения на указанное время из установленного архива и выдача результата с указанным количеством знаков после точки.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.1.1',1,10,0,'srcTime = time*1e6 + uTime;
 aO = SYS.nodeAt(addr).arch();
 if(aO) {
@@ -8922,11 +9567,11 @@ if(val.isEVal())	return tr("Empty");
 if(typeof(val) == "real")	return val.toFixed(prec);
 return val;','','',1501145635);
 INSERT INTO "flb_doc" VALUES('sumVal','Sum values of archive','Сума значень архіву','Сумма знач. архива','Calculating the sum of values ​​for a specified period of time an archive and issuing results with the specified number of decimal points.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.0','Обчислення суми значень за проміжок часу визначеного архіву та видача результату з вказаною кількістю знаків після точки.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.1.0','Вычисление суммы значений за промежуток времени указанного архива и выдача результата с указанным количеством знаков после точки.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.1.0',1,10,0,'val = 0;
 aO = SYS.nodeAt(addr).arch();
 if(aO) {
@@ -8945,11 +9590,11 @@ if(val.isEVal())	return tr("Empty");
 if(typeof(val) == "real")	return val.toFixed(prec);
 return val;','','',1501231568);
 INSERT INTO "flb_doc" VALUES('averVal','Average value of archive','Середнє значення архіву','Среднее знач. архива','Calculate the average value over a specified period of time an archive and issuing results with the specified number of decimal points.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.0','Обчислення середнього значення за проміжок часу визначеного архіву та видача результату з вказаною кількістю знаків після точки.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.1.0','Вычисление среднего значения за промежуток времени указанного архива и выдача результата с указанным количеством знаков после точки.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.1.0',1,10,0,'val = EVAL;
 actPerc = 0;
 aO = SYS.nodeAt(addr).arch();
@@ -8978,7 +9623,7 @@ return val;','','',1501228052);
 CREATE TABLE 'tmplib_LowDevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_LowDevLib" VALUES('1602A','GPIO|I2C: 1602A(HD44780)','LCD Module 1602A, STN, BLUB, 16 Character x 2 Line,  5 x 8 Dots, by the direct (Raspberry PI BCM2835 GPIO) or I2C (PCF8574) wiring.
 Conditions: Default planing policy but realtime one preferred.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.1',10,0,'JavaLikeCalc.JavaScript
 using Special.FLibSYS;
 
@@ -9046,7 +9691,7 @@ else if(ln1 != ln1_ || ln2 != ln2_) {
 f_err = t_err;',1509990639);
 INSERT INTO "tmplib_LowDevLib" VALUES('1W_DS9097','One Wire by DS9097','One Wire sensors bus implementing by 1Wire-adapter DS9097. Supported direct and parasite powering for the temperature sensors.
 Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not tested), DS2413, DS2408, DS2450, DS2438.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.2.1',30,0,'JavaLikeCalc.JavaScript
 //Functions
 function reset(tr) {
@@ -9487,7 +10132,7 @@ else {
 f_err = t_err;',1509990639);
 INSERT INTO "tmplib_LowDevLib" VALUES('1W_DS9097U','One Wire by DS9097U','One Wire sensors bus implementing by 1Wire-adapter DS9097U. Supported direct and parasite powering for the temperature sensors.
 Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not tested), DS2413, DS2408, DS2450, DS2438.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.2.1',30,0,'JavaLikeCalc.JavaScript
 //Functions
 function reset(tr) {
@@ -9957,7 +10602,7 @@ else {
 
 f_err = t_err;',1509990639);
 INSERT INTO "tmplib_LowDevLib" VALUES('BMP180','I2C: BMP180','I2C Pressure and Temperature sensor. Connect through a Serial output transport into the I2C mode.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.1',10,0,'JavaLikeCalc.JavaScript
 //Initial set
 if(f_start) {
@@ -10040,7 +10685,7 @@ f_err = t_err;',1509990639);
 INSERT INTO "tmplib_LowDevLib" VALUES('DHT','GPIO: DHT11,22 (AM23XX)','Digital Temperature and Humidity Sensor for models: DHT11, DHT12, AM2302, AM2320, ...
 The module designed for the sensors connect through GPIO, mostly it''s Raspberry PI BCM2835 GPIO.
 Conditions: Exclusively realtime planing in the priority 199 (FIFO-99).
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0',10,0,'JavaLikeCalc.JavaScript
 using Special.FLibSYS;
 
@@ -10116,7 +10761,7 @@ else {
 if(t_err.toInt() && !f_err.toInt()) t = h = EVAL;
 f_err = t_err;',1509373346);
 INSERT INTO "tmplib_LowDevLib" VALUES('DS3231','I2C: DS1307,DS3231','I2C RTC chips DS1307,DS3231 with Temperature sensor and calibration for DS3231. Connects through a Serial output transport into the I2C mode.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.0',10,0,'JavaLikeCalc.JavaScript
 //Set transport
 if(f_start) {
@@ -10259,7 +10904,7 @@ else {
 if(t_err.toInt() && !f_err.toInt()) t = p = EVAL;
 f_err = t_err;',1541249292);
 INSERT INTO "tmplib_LowDevLib" VALUES('PCF8574','I2C: PCF8574','I2C 8-bit 8DIO. Connect through a Serial output transport into the I2C mode.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.1',10,0,'JavaLikeCalc.JavaScript
 //Set transport
 if(f_start) {
@@ -10300,7 +10945,7 @@ if(t_err.toInt() && !f_err.toInt())
 
 f_err = t_err;',1509990639);
 INSERT INTO "tmplib_LowDevLib" VALUES('PCF8591','I2C: PCF8591','I2C 8-bit 4xA/D and D/A converter. Connect through a Serial output transport into the I2C mode.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.1',10,0,'JavaLikeCalc.JavaScript
 //Set transport
 if(f_start) {
@@ -10335,7 +10980,7 @@ if(t_err.toInt() && !f_err.toInt())
 
 f_err = t_err;',1509908745);
 INSERT INTO "tmplib_LowDevLib" VALUES('BME280','I2C: BME280','I2C Pressure, Temperature and Humidity sensor. Connect through a Serial output transport into the I2C mode.
-Author: Arcadiy Kisel, Roman Savochenko <rom_as@oscada.org>
+Author: Arcadiy Kisel, Roman Savochenko <roman@oscada.org>
 Version: 1.0.1',10,0,'JavaLikeCalc.JavaScript
 //Initial set
 if(f_start) {
@@ -10458,7 +11103,7 @@ if(t_err.toInt() && !f_err.toInt()) t = p = h = EVAL;
 
 f_err = t_err;',1509989860);
 INSERT INTO "tmplib_LowDevLib" VALUES('SHT3x','I2C: SHT3x','Digital Temperature and Humidity Sensor for the models: SHT30
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0',10,0,'JavaLikeCalc.JavaScript
 //Set transport
 if(f_start) {
@@ -10501,7 +11146,7 @@ else {
 
 f_err = t_err;',1542469153);
 INSERT INTO "tmplib_LowDevLib" VALUES('ADS111x','I2C: ADS101x, ADS111x','I2C 12/16-bit 4xA/D converter. Connect through a Serial output transport into the I2C mode.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.1',10,0,'JavaLikeCalc.JavaScript
 //Set transport
 if(f_start) {
@@ -10546,7 +11191,7 @@ if(t_err.toInt() && !f_err.toInt())
 
 f_err = t_err;',1549528595);
 INSERT INTO "tmplib_LowDevLib" VALUES('MCP4725','I2C: MCP4725','I2C 12-bit D/A converter. Connect through a Serial output transport into the I2C mode.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0',10,0,'JavaLikeCalc.JavaScript
 //Set transport
 if(f_start) {
@@ -10673,7 +11318,7 @@ INSERT INTO "tmplib_S7" VALUES('test','Test','Тест','Тест','S7 controlle
 CREATE TABLE 'UserProtocol_uPrt' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"DAQTmpl" TEXT DEFAULT '' ,"WaitReqTm" INTEGER DEFAULT '0' ,"InPROG" TEXT DEFAULT '' ,"OutPROG" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '0' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 INSERT INTO "UserProtocol_uPrt" VALUES('SMS','SMS (obsolete)','','','!!!!: Replaced by the complex template Main.ntf. Will be removed soon
 Provides operations with SMS by GSM-modem connected as serial device. For now supported only sending SMS messages to a number of remote cell phone or GSM modem.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 2.1.1','','',1,'',0,'','JavaLikeCalc.JavaScript
 //Request form:
 //<{cmd} pin="1111" tel="+380XXXXXXXXX" text="{0|1}" err="1:Error">{SMSText}</cmd>
@@ -10758,7 +11403,7 @@ if(io.name() == "send") {
 	io.setAttr("err", "0");
 }',0,1550073193);
 INSERT INTO "UserProtocol_uPrt" VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Protocol level of typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
 Version: 1.0.0','','',1,'',0,'','JavaLikeCalc.JavaScript
 //Request form:
@@ -10825,7 +11470,7 @@ for(i_k = 1; i_k <= k; i_k++) {
 	}
 }',0,1509283349);
 INSERT INTO "UserProtocol_uPrt" VALUES('TMH','Power supply for turbomolecular pumps','','','Protocol level of power supply for turbomolecular pumps of firm SHIMADZU (http://www.shimadzu.com), model EI-R04M.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
 Version: 1.0.0','','',1,'',0,'','JavaLikeCalc.JavaScript
 //Request form:
@@ -10859,7 +11504,7 @@ for(i = 0; i < (resp.length-3); i++) CRC += resp.charCodeAt(i);
 if((CRC&0xFF) != resp.slice(resp.length-3,resp.length-1).toInt(16)) { io.setAttr("err","6:"+tr("CRC error.")); return; }
 io.setText(resp.slice(4,resp.length-3));',0,1509283419);
 INSERT INTO "UserProtocol_uPrt" VALUES('VKT7','VKT-7','','','Protocol level of firm "Teplocom" (http://www.teplocom.spb.ru) computer "VKT-7" for complex heat measurement and counting. The device complex enough to provide more parameters, more history and accessed by a nonlinear Serial-based protocol at low speed. The template implements acquisition for all significant parameters, gets for their history by hours, days and result months. Also you can to append easily enough for processing of the remained parameters.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vladislav Chubuk
 Version: 1.0.0','','',1,'',0,'','JavaLikeCalc.JavaScript
 //Request form:
@@ -10904,7 +11549,7 @@ if(resp.charCodeAt(1)&0x80)
 { io.setAttr("err","7:"+resp.charCodeAt(2)+":"+tr("Request error.")); return; }
 io.setText(resp.slice(1,-2));',0,1509283495);
 INSERT INTO "UserProtocol_uPrt" VALUES('TM510x','Elemer TM510x','','','Protocol level of multichannels thermometer Elemer TM5102 and TM5103 of firm Elemer (http://www.elemer.ru).
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','','',1,'',0,'','JavaLikeCalc.JavaScript
 //Request form:
 //<mess addr="1" err="1:Error">{req}</mess> - message tag
@@ -10948,7 +11593,7 @@ for(i = 1; i < min(KSpos+1,resp.length); i++) {
 if(KS != resp.slice(KSpos+1).toInt(10)) { io.setAttr("err","6:"+tr("KS error.")); return; }
 io.setText(resp.slice(resp.indexOf(";")+1,KSpos));',0,1509283413);
 INSERT INTO "UserProtocol_uPrt" VALUES('SMDP','Sycon Multi Drop Protocol','','','Protocol level of STM devices for resonant frequency measurement for mass of deposited films attached to its surface by Sycon Instruments, Inc. (http://www.sycon.com)
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
 Version: 1.0.0','','',1,'',0,'','JavaLikeCalc.JavaScript
 //Request form:
@@ -10999,7 +11644,7 @@ else if(errCd == 5) io.setAttr("err",""+(10+errCd)+":Err_inhibited: "+tr("Inhibi
 else if(errCd == 6) io.setAttr("err",""+(10+errCd)+":Err_obso: "+tr("Obsolete command. No action taken, but not really an error."));
 else io.setAttr("err",""+(10+errCd)+":"+tr("Unknown error."));',0,1509283368);
 INSERT INTO "UserProtocol_uPrt" VALUES('IT3','Temperature measurement IT-3','','','Protocol level of temperature measurement IT-3 from OmskEtalon (http://www.omsketalon.ru).
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
 Version: 1.2.0','','',1,'',0,'JavaLikeCalc.JavaScript
 // Input part of the protocol IT-3
@@ -11100,7 +11745,7 @@ for(blkOff = 0, blkLen = 0; blkOff < resp.length; blkOff += 6+blkLen) {
 	io.setText(resp.slice(blkOff+6,blkOff+6+blkLen));
 }',0,1472721683);
 INSERT INTO "UserProtocol_uPrt" VALUES('IVE_452HS_02','IVE-452HS-02','IVE-452HS-02','','Protocol level of power supply of beam-electrons evaporator of "Plasma Tech" Ltd, from Moskov.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
 Version: 1.0.0','','',1,'',0,'','JavaLikeCalc.JavaScript
 //Request form:
@@ -11133,7 +11778,7 @@ KS = 0x100-KS&0xFF;
 if(resp.charCodeAt(resp.length-1) != KS )	{ io.setAttr("err","3:"+tr("CRC error")); return; }
 io.setText(resp.slice(1,resp.length-1));',0,1509285266);
 INSERT INTO "UserProtocol_uPrt" VALUES('OPTRIS','OPTRIS CT/CTL','','','Protocol level of OPTRIS CT/CTL communication interface of "Optris" GmbH, from Berlin.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
 Version: 1.0.0','','',1,'',0,'','JavaLikeCalc.JavaScript
 //Request form:
@@ -11159,10 +11804,10 @@ SYS.messDebug("/OPTRIS/PRT","Respond: "+SYS.strDecode(resp,"Bin"," "));
 if(resp.length <= 0) { io.setAttr("err","3:"+tr("No a respond")); return; }
 io.setText(resp);',0,1509286719);
 INSERT INTO "UserProtocol_uPrt" VALUES('CTR','CTR 100, 101','CTR 100, 101','','Protocol part of the RS232C Serial Interface permits the communication between the digital Oerlikon Leybold Vacuum CERAVAC, from Köln.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
 Version: 1.0.0','Protocol part of the RS232C Serial Interface permits the communication between the digital Oerlikon Leybold Vacuum CERAVAC, from Köln.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','',1,'',0,'','JavaLikeCalc.JavaScript
 //Request form:
 //<mess err="1:Error">{req}</mess> - message tag
@@ -11186,9 +11831,9 @@ if(resp.charCodeAt(resp.length-1) != (CS&0xFF))	{ io.setAttr("err","5:"+tr("CRC 
 io.setText(resp.slice(1,resp.length-1));',0,1509287419);
 INSERT INTO "UserProtocol_uPrt" VALUES('SMTP','SMTP (obsolete)','SMTP','','!!!!: Replaced by the complex template Main.ntf. Will be removed soon
 Provides EMAIL sending by the protocol SMTP.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','Provides EMAIL sending by the protocol SMTP.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.0','',1,'',0,'','JavaLikeCalc.JavaScript
 //Request form:
 //<send auth="{user}:{pass}" from="{FromAddr}" to="{ToAddr}" topic="{My Topic}" err="1:Error">{MessageText}</send>
@@ -11284,7 +11929,7 @@ while(rez.length && rez.slice(-2) != "\x0D\x0A" && (trez=tr.messIO("")).length) 
 //Disconnect from the SMTP-server
 tr.start(false);',0,1550073190);
 INSERT INTO "UserProtocol_uPrt" VALUES('AT24CXX','I2C: AT24C{32|64}','','','Provides operations with EEPROM memory based on I2C chips AT24C32 (4KB) and AT24C64 (8KB). Supported random reading and writing.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','','',1,'',0,'','JavaLikeCalc.JavaScript
 //Request form:
 //<{cmd} addr="{ChipAddr}" off="{MemOffset}" size="{ReadSize}" err="1:Error">{ReadWriteSeq}</{cmd}>

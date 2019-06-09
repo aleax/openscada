@@ -14,7 +14,7 @@
 		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/DAQ/ru" title="Документы/Сбор данных (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/DAQ/uk" title="Документи/Збір даних (100% translated)">українська</a></div></div>
 <p><i>Author:</i> <a class="external text" href="http://wiki.oscada.org/RomanSavochenko" rel="nofollow noreferrer noopener" target="_blank">Roman Svochenko</a>
 </p>
-<dl><dd><dl><dd><a class="external text" href="http://wiki.oscada.org/MaximLysenko" rel="nofollow noreferrer noopener" target="_blank">Maxim Lysenko</a> (2010) — the page translation</dd></dl></dd></dl>
+<dl><dd><dl><dd><a class="external text" href="http://wiki.oscada.org/MaximLysenko" rel="nofollow noreferrer noopener" target="_blank">Maxim Lysenko</a> (2010) — the page initial translation</dd></dl></dd></dl>
 <p><br />
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
@@ -28,10 +28,14 @@
 </ul>
 </li>
 <li class="toclevel-1 tocsection-6"><a href="#Virtual_data_sources"><span class="tocnumber">2</span> <span class="toctext"><span>Virtual data sources</span></span></a></li>
-<li class="toclevel-1 tocsection-7"><a href="#Logic_level_of_the_data_processing"><span class="tocnumber">3</span> <span class="toctext"><span>Logic level of the data processing</span></span></a></li>
-<li class="toclevel-1 tocsection-8"><a href="#Redundancy_of_the_data_sources"><span class="tocnumber">4</span> <span class="toctext"><span>Redundancy of the data sources</span></span></a></li>
-<li class="toclevel-1 tocsection-9"><a href="#Timestamp_of_the_data_source"><span class="tocnumber">5</span> <span class="toctext"><span>Timestamp of the data source</span></span></a></li>
-<li class="toclevel-1 tocsection-10"><a href="#Links"><span class="tocnumber">6</span> <span class="toctext">Links</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Logic_level_of_the_data_processing"><span class="tocnumber">3</span> <span class="toctext"><span>Logic level of the data processing</span></span></a>
+<ul>
+<li class="toclevel-2 tocsection-8"><a href="#Conception_of_accessing_the_data_by_a_user_protocol"><span class="tocnumber">3.1</span> <span class="toctext">Conception of accessing the data by a user protocol</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#Redundancy_of_the_data_sources"><span class="tocnumber">4</span> <span class="toctext"><span>Redundancy of the data sources</span></span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#Timestamp_of_the_data_source"><span class="tocnumber">5</span> <span class="toctext"><span>Timestamp of the data source</span></span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#Links"><span class="tocnumber">6</span> <span class="toctext">Links</span></a></li>
 </ul>
 </div>
 
@@ -192,6 +196,17 @@
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:803px;"><a class="image" href="http://oscada.org/wiki/File:DAQ_wprm_tmpl.png"><img class="thumbimage" height="595" src="files/DAQ_wprm_tmpl.png" width="801" /></a>  <div class="thumbcaption">Fig. 10. Tab "Template configuration" of the parameter "F3" of the logic level module.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:803px;"><a class="image" href="http://oscada.org/wiki/File:DAQ_wprm_a.png"><img class="thumbimage" height="663" src="files/DAQ_wprm_a.png" width="801" /></a>  <div class="thumbcaption">Fig. 11. Tab "Attributes" of the parameter "F3" of the logical level module.</div></div></div></div>
+<h3><span class="mw-headline" id="Conception_of_accessing_the_data_by_a_user_protocol"><span class="mw-headline-number">3.1</span> Conception of accessing the data by a user protocol</span></h3>
+<p>Next level, based on the Logical Level, is a conception of accessing the data by a user protocol, implemented whether directly into the template code or as a different User Protocol object into <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">the Protocol.UserProtocol module</a>, where you currently may also use the DAQ-templates.
+</p><p>The conception of accessing the data by a user protocol we can imagine like to Figure 1.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:324px;"><a class="image" href="http://oscada.org/wiki/File:UserPrtDevs_concept.png"><img class="thumbimage" height="275" src="files/UserPrtDevs_concept.png" width="322" /></a>  <div class="thumbcaption">Fig.1. Conception of custom accessing to services and device's data.</div></div></div></div>
+<p>As you can see from Figure 1, interaction with devices carried out through some transport on which their physically based. Requests to the transport you can send:
+</p>
+<ol><li> Directly by OpenSCADA system API function of the transport object <i><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/User_API#SYSTransport" title="Special:MyLanguage/Documents/User API">string messIO( string mess, real timeOut = 0 );</a></i>, if the protocol specific part is very simple and you need only the data extract.</li>
+<li> Wrapped data request <i>req</i> by function <i><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/User_API#SYSTransport" title="Special:MyLanguage/Documents/User API">int messIO( XMLNodeObj req, string prt );</a></i> and for protocol <i>prt</i>, if the protocol part is complex enough and already presented into OpenSCADA.</li>
+<li> Wrapped data request specific for user by function <i><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/User_API#SYSTransport" title="Special:MyLanguage/Documents/User API">int messIO( XMLNodeObj req, "UserProtocol" );</a></i> and <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">the user protocol</a> implementation, if the protocol part is complex enough and not yet present into OpenSCADA. The user implements here itself of the protocol specific part into <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">the module UserProtocol</a>  and the data specific part into the template for <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">the Logical Level module</a> or directly into controller's procedure on the internal language of <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">the module JavaLikeCalc</a>.</li></ol>
+<dl><dd><dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> This latter method is currently developed to the possibility of forming a protocol code part directly in the same code of the template as a separate built-in function with call the requesting function of the first method, if there is no need for reuse, or even if such a need exists and it makes sense to create a complex template that can combine the role of the output protocol, through its connection to the user protocol module. And it will be completely stored in a single template library. </dd></dl></dd></dl>
 <h2><span class="mw-headline" id="Redundancy_of_the_data_sources"><span class="mw-headline-number">4</span> <span id="Redundancy" title="#Redundancy">Redundancy of the data sources</span></span></h2>
 <p>Redundancy in general and of the data sources in particular serves to increase the overall level of fault-tolerance of the solution by integrating the redundant nodes in collaboration with the main node. In case of failure of the main node, the grab of the main node functions by the redundant one takes place. The redundant scheme can work in the mode of the load distribution between the co-operating nodes.
 </p>
@@ -236,6 +251,7 @@
 <li> <a class="external" href="http://oscada.org/wiki/File:Daq_loglevel.dia" title="File:Daq loglevel.dia">Diagram: The mechanism of the "Logic Level" on the example of LogicLev module.</a></li>
 <li> <a class="external" href="http://oscada.org/wiki/File:Loglev_prm.dia" title="File:Loglev prm.dia">Diagram: Structure of the parameters, with a template in their basis.</a></li>
 <li> <a class="external" href="http://oscada.org/wiki/File:Daq_progcompon.dia" title="File:Daq progcompon.dia">Diagram: The overall structure of the programming area components.</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/File:UserPrtDevs_concept.odg" title="File:UserPrtDevs concept.odg">Diagram: Conception of custom accessing to services and device's data.</a></li>
 <li> <a class="external" href="http://oscada.org/wiki/File:Daq_red.odg" title="File:Daq red.odg">Diagram: Horizontal and vertical redundancy.</a></li></ul>
 
 

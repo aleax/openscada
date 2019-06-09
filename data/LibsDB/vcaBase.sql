@@ -47,25 +47,25 @@ INSERT INTO "PrescrProgs" VALUES('Библ1/Прог3','<prg><com arg1="10" arg2
 INSERT INTO "PrescrProgs" VALUES('Библ1/Прог4','<prg><com arg1="12" arg2="0" arg3="0" arg4="0" arg5="0" id="Таймер" /></prg>');
 INSERT INTO "PrescrProgs" VALUES('Библ1/Прог5','<prg><com arg1="12" arg2="0" arg3="0" arg4="0" arg5="0" id="Таймер" /></prg>');
 INSERT INTO "PrescrProgs" VALUES('Библ1/Прог6','<prg><com arg1="12" arg2="0" arg3="0" arg4="0" arg5="0" id="Таймер" /></prg>');
-INSERT INTO "PrescrProgs" VALUES('abcd','<prg wtm="65"><com arg1="5" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" /><com arg1="10" arg2="0" arg3="0" arg4="0" arg5="0" descr="Таймер уровень 1" id="Timer" name="Таймер ур.1"><com arg1="15" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" name="Таймер ур.2" /></com><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" /></prg>');
+INSERT INTO "PrescrProgs" VALUES('abcd','<prg wtm="52"><com arg1="5" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" /><com arg1="10" arg2="0" arg3="0" arg4="0" arg5="0" descr="Таймер уровень 1" id="Timer" name="Таймер ур.1"><com arg1="15" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" name="Таймер ур.2" /></com><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" /></prg>');
 INSERT INTO "PrescrProgs" VALUES('Abcdef','');
 INSERT INTO "PrescrProgs" VALUES('Библ1/Прог123','');
 INSERT INTO "PrescrProgs" VALUES('Тест12','<prg id="Тест12" wtm="31"><com arg1="10" arg2="0" arg3="0" arg4="0" arg5="0" id="Timer" /><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" id="Background timer"><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer"><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" id="Timer" /><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" id="Background timer" /><com id="New command"><com arg1="123" arg2="0" arg3="0" arg4="0" arg5="0" descr="123456" id="Timer" name="Test timer" /></com></com></com></prg>');
 CREATE TABLE 'VCALibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "VCALibs" VALUES('Main','Main elements','Main elements library of user interface.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.5.1','wlb_Main','','Основні елементи','Бібліотека основних елементів інтерфейсу користувача.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.5.1','Основные элементы','Библиотека основных элементов пользовательского интерфейса.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.5.1');
 INSERT INTO "VCALibs" VALUES('mnEls','Mnemo elements','User interface''s main elements library.','wlb_mnEls','','Елементи мнемосхеми','Бібліотека основних елементів інтерфейсу користувача.','Элементы мнемосхемы','Библиотека основных элементов пользовательского интерфейса.');
 INSERT INTO "VCALibs" VALUES('doc','Documents','Documents library.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.1','wlb_doc','','Документи','Бібліотека документів.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.1.1','Документы','Библиотека документов.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.1.1');
 CREATE TABLE 'prj_archBrowser_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_graphSelPrm','color','/wlb_Main/wdg_graphSelPrm/wdg_color','value;');
@@ -689,25 +689,25 @@ INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','owner
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','perm','944',32,'','','media','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','owner','root:op',32,'','','prescrRunSimple','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','perm','944',32,'','','prescrRunSimple','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','prExtCurCom','0',34,'Controller|curCom','prm:/JavaLikeCalc/prescr/cntr/curCom','prescrRunSimple','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','prExtMode','0',38,'Controller|mode','prm:/JavaLikeCalc/prescr/cntr/mode','prescrRunSimple','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','prExtProg','',38,'Controller|prog','prm:/JavaLikeCalc/prescr/cntr/prog','prescrRunSimple','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','prExtStartTm','0',34,'Controller|startTm','prm:/JavaLikeCalc/prescr/cntr/startTm','prescrRunSimple','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','prExtCurCom','0',34,'Controller|curCom','prm:/LogicLev/prescription/manager/curCom','prescrRunSimple','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','prExtMode','0',38,'Controller|mode','prm:/LogicLev/prescription/manager/mode','prescrRunSimple','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','prExtProg','',38,'Controller|prog','prm:/LogicLev/prescription/manager/prog','prescrRunSimple','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','prExtStartTm','0',34,'Controller|startTm','prm:/LogicLev/prescription/manager/startTm','prescrRunSimple','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','prExtWork','<TVarObj>
 </TVarObj>
-',34,'Controller|work','prm:/JavaLikeCalc/prescr/cntr/work','prescrRunSimple','','','','','','');
+',34,'Controller|work','prm:/LogicLev/prescription/manager/work','prescrRunSimple','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','owner','root:op',32,'','','prt','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','perm','944',32,'','','prt','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','owner','root:op',32,'','','','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','perm','944',32,'','','','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','pgNoOpenProc','1',0,'','','','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','prExtCurCom','0',42,'Controller|curCom','prm:/JavaLikeCalc/prescr/cntr//curCom','','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','prExtMode','0',46,'Controller|mode','prm:/JavaLikeCalc/prescr/cntr//mode','','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','prExtProg','',46,'Controller|prog','prm:/JavaLikeCalc/prescr/cntr//prog','','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','prExtStartTm','0',42,'Controller|startTm','prm:/JavaLikeCalc/prescr/cntr//startTm','','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','prExtCurCom','0',42,'Controller|curCom','prm:/LogicLev/prescription/manager/curCom','','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','prExtMode','0',46,'Controller|mode','prm:/LogicLev/prescription/manager/mode','','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','prExtProg','',46,'Controller|prog','prm:/LogicLev/prescription/manager/prog','','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','prExtStartTm','0',42,'Controller|startTm','prm:/LogicLev/prescription/manager/startTm','','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','prExtWork','<TVarObj>
 </TVarObj>
-',42,'Controller|work','prm:/JavaLikeCalc/prescr/cntr//work','','','','','','','');
+',42,'Controller|work','prm:/LogicLev/prescription/manager/work','','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','owner','root:op',32,'','','btPass','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','perm','944',32,'','','btPass','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','owner','root:op',32,'','','btStart','','','','','','');
@@ -730,7 +730,7 @@ INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owne
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','prExtComLs','<TVarObj>
 </TVarObj>
-',42,'Controller|comLs','prm:/JavaLikeCalc/prescr/cntr/comLs','','','','','','','');
+',42,'Controller|comLs','prm:/LogicLev/prescription/manager/comLs','','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','arg1','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','arg1','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','arg2','','','','','','');
@@ -1875,11 +1875,11 @@ INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomH','30',32,'','','st_open','','',
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomY','98',32,'','','st_open','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','name','Graphics group',41,'','','','Група графіків','','Группа графиков','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','dscr','The template cadre "Graphics group".
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.4.0',32,'','','','Шаблон сторінок: "Група графіків"
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.4.0','','Шаблон страниц: "Группа графиков"
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.4.0','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','geomW','900',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','geomH','600',32,'','','','','','','','','');
@@ -2031,11 +2031,11 @@ INSERT INTO "wlb_Main_io" VALUES('grpGraph','min',NULL,34,'Parameter|min','','el
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','varEl',NULL,32,'','','el2','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','name','Root page (SO)',32,'','','','Корнева сторінка (ОС)','','Корневая страница (ОС)','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','dscr','Root page of visual interface of TP, builded on signal objects base.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 2.2.0',32,'','','','Корнева сторінка інтерфейсу візуалізації ТП, побудованого на основі об''єктів сигналізації.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 2.1.0','','Корневая страница интерфейса визуализации ТП, построенного на основе объектов сигнализации.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 2.1.0','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomW','1024',40,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomH','670',32,'','','','','','','','','');
@@ -2089,11 +2089,11 @@ INSERT INTO "wlb_Main_io" VALUES('ElViewCadr','geomW','141',32,'','','text','','
 INSERT INTO "wlb_Main_io" VALUES('ElViewCadr','geomH','36',32,'','','text','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpCadr','name','Contours group',32,'','','','Група контурів','','Группа контуров','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpCadr','dscr','The template cadre "Contours group".
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.2.0',32,'','','','Шаблон сторінок: "Група контурів".
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.2.0','','Шаблон страниц: "Группа контуров".
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.2.0','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpCadr','geomW','900',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpCadr','geomH','600',32,'','','','','','','','','');
@@ -4157,11 +4157,11 @@ INSERT INTO "wlb_Main_io" VALUES('prescrRunSimple','bordColor','gray',32,'','','
 INSERT INTO "wlb_Main_io" VALUES('prescrRunSimple','bordStyle','6',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrRunSimple','name','',32,'','','btPass','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElViewGraph','dscr','Element of the graph groups.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.3.0',42,'Parameter|DESCR','','','Елемент групи графіків.
-Автор: Роман Савоченко<rom_as@oscada.org>
+Автор: Роман Савоченко<roman@oscada.org>
 Версія: 1.3.0','','Элемент группы графиков.
-Автор: Роман Савоченко<rom_as@oscada.org>
+Автор: Роман Савоченко<roman@oscada.org>
 Версия: 1.2.1','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElViewGraph','tipStatus','',40,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrRunSimple','geomX','71.508',32,'','','btPass','','','','','','');
@@ -4869,7 +4869,7 @@ with get up to five arguments and return three results: "Work" (0), "Finish" (> 
 The command step call cyclic while return result "Work" (0). Go to next step performed in
 case result "Finish" (> 0) return. In error case, result "Error" (< 0), the prescription run interrurpt.
 Prescription execution performed into visualization interface session.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.2.0',32,'','','','Елемент "Рецепт: редагування" є одним з двох кадрів роботи з рецептами,
 який слугує для редагування програм-рецептів користувачем.
 Програма-рецепт представляє собою послідовний виклик блоків функцій - команди
@@ -4879,7 +4879,7 @@ Version: 1.2.0',32,'','','','Елемент "Рецепт: редагуванн�
 Перехід до наступного кроку відбувається у випадку результату "Завершено" (> 0).
 У випадку помилки, результат "Помилка" (< 0), виконання рецепту припиняється.
 Виконання рецепту відбувається у сеансі інтерфейсу візуалізації.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.2.0','','Элемент "Рецепт: редактирование" является одним из двух кадров работы с рецептами,
 который служит для пользовательского редактирования программ-рецептов.
 Программа-рецепт представляет собой последовательный вызов блоков функций - команды
@@ -4889,7 +4889,7 @@ Version: 1.2.0',32,'','','','Елемент "Рецепт: редагуванн�
 Переход к следующему шагу осуществляется в случае результата "Завершен" (> 0).
 В случае ошибки, результат "Ошибка" (< 0), выполнение рецепта прерывается.
 Исполнение рецепта осуществляется в сеансе интерфейса визуализации.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.2.0','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrRun','dscr','The element "Prescription: run" is one from two frames for prescriptions work,
 which serve for programm-prescription execution, early prepared in frame кадре "Prescription: edit".
@@ -4903,7 +4903,7 @@ observe on messages archive seen, or for prepare sessions list, for example for 
 session time in graphics group. For history of reports of programms execution see you can press on
 document field and list into appear navigation panel on archived document.
 By default the document''s archive configured to 10 documents depth.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.2.0',32,'','','','Елемент "Рецепт: виконання" є одним з двох кадрів роботи з рецептами,
 які слугують для безпосереднього виконання програм-рецептів,
 раніше сформованих у кадрі "Рецепт: редагування".
@@ -4918,7 +4918,7 @@ Version: 1.2.0',32,'','','','Елемент "Рецепт: виконання" �
 час сеансу. Для перегляду історії звітів виконання програм можна натиснути на поле
 документа та погортати по архівному документу на панелі навігації що з''явилася праворуч.
 По замовченню архів документів налаштовано на глибину 10 документів.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.1.1','','Элемент "Рецепт: исполнение" является одним из двух кадров работы с рецептами,
 который служит для непосредственного исполнения программ-рецептов,
 ранее сформированных в кадре "Рецепт: редактирование".
@@ -4933,7 +4933,7 @@ Version: 1.2.0',32,'','','','Елемент "Рецепт: виконання" �
 время сеанса. Для просмотра истории отчётов исполнения программ можно нажать на поле
 документа и полистать на появившейся справа панели навигации по архивному документу.
 По умолчанию архив документов настроен на глубину 10 документов.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.1.1','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomX','913',32,'','','logo','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomY','3',40,'','','logo','','','','','','');
@@ -5237,7 +5237,7 @@ INSERT INTO "wlb_Main_io" VALUES('ElCadr','active','1',32,'','','upMax','','',''
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','elType','3',32,'','','upMax','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','img','upMax',0,'','','upMax','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','dscr','The cadre "Element cadre".
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.1',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrRunSimple','geomZ','5',32,'','','lib','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','numbArg','1',32,'','','labProg','','','','','','');
@@ -5508,11 +5508,11 @@ INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','font','Arial 9',0,'','','trendsL
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','value','',8,'','','trendsList','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','name','Graphics group 10',41,'','','','Група графіків 10','','Группа графиков 10','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','dscr','The template cadre "Graphics group 10".
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.4.0',32,'','','','Шаблон сторінок: "Група графіків 10"
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.4.0','','Шаблон страниц: "Группа графиков 10"
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.4.0','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomW','1160',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomH','600',32,'','','','','','','','','');
@@ -5622,7 +5622,7 @@ INSERT INTO "wlb_Main_io" VALUES('grpGraph10','sclMarkFont','Arial 14',32,'','',
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','parNum','10',32,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','prm0color','mediumorchid',32,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','prm0val',NULL,32,'','','trnd1','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('grpGraph10','curSek','1552220222',8,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','curSek','1559937716',8,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','curUSek','0',0,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','prm1color','darkgoldenrod',0,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','prm1val',NULL,0,'','','trnd1','','','','','','');
@@ -6537,22 +6537,22 @@ INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','value','',8,'','','prmSearch',''
 INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','confirm','0',32,'','','prmSearch','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','font','Arial 15',32,'','','prmSearch','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','dscr','The cadre "Selection of the graph params".
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.4.0',32,'','','','Кадр "Обрання параметрів графіку".
-Автор: Роман Савоченко<rom_as@oscada.org>
+Автор: Роман Савоченко<roman@oscada.org>
 Версія: 1.4.0','','Кадр "Выбор параметров графиков".
-Автор: Роман Савоченко<rom_as@oscada.org>
+Автор: Роман Савоченко<roman@oscada.org>
 Версия: 1.4.0','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','dscr','The cadre "Graph control panel".
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.4.0',32,'','','','Кадр "Панель контролю графіків".
-Автор: Роман Савоченко<rom_as@oscada.org>
+Автор: Роман Савоченко<roman@oscada.org>
 Версія: 1.3.0','','Кадр "Панель контроля графиков".
-Автор: Роман Савоченко<rom_as@oscada.org>
+Автор: Роман Савоченко<roman@oscada.org>
 Версия: 1.3.0','','','');
-INSERT INTO "wlb_Main_io" VALUES('objProps','dscr','Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.1.0',32,'','','','Автор: Роман Савоченко<rom_as@oscada.org>
-Версія: 1.1.0','','Автор: Роман Савоченко<rom_as@oscada.org>
+INSERT INTO "wlb_Main_io" VALUES('objProps','dscr','Author: Roman Savochenko <roman@oscada.org>
+Version: 1.1.0',32,'','','','Автор: Роман Савоченко<roman@oscada.org>
+Версія: 1.1.0','','Автор: Роман Савоченко<roman@oscada.org>
 Версия: 1.1.0','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomW','78.1',32,'','','h_line','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','perm','438',32,'','','pgSel','','','','','','');
@@ -6573,17 +6573,17 @@ INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','dscr','Extended pasport of the s
 - Table of attributes of the parameter with their edition for editable ones.
 - Trends for standard and key attributes: var, sp, out, auto, com, st_open, ...
 - Table of the current data.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.2.0',32,'','','','Розширений паспорт стандартних параметрів з функціями:
 - Таблиця атрибутів параметру з їх редагуванням для редагованих.
 - Тренди для стандартних та ключових атрибутів: var, sp, out, auto, com, st_open, ...
 - Таблиця поточних даних.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.2.0','','Расширенный паспорт стандартных параметров с функциями:
 - Таблица атрибутов параметра с их редактированием для редактируемых.
 - Тренды для стандартных и ключевых атрибутов: var, sp, out, auto, com, st_open, ...
 - Таблица текущих данных.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.2.0','','','');
 INSERT INTO "wlb_Main_io" VALUES('alarmsAct','owner','root:UI',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('alarmsAct','name','Alarms: active',32,'','','','Порушення: активні','','Нарушения: активные','','','');
@@ -6644,21 +6644,21 @@ for placing as a widget of mnemo and works only in cooperation with the primary 
 Executed prescription-programm can been paused, pressing the button "Pause" in the place of the button "Start",
 or interrupt, pressing the button "Stop".
 
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.2.0',32,'','','','Елемент "Рецепт: просте виконання" - простий варіант елементу "Рецепт: виконання" який розроблено
 для розташування як віджет мнемосхеми та роботи тільки разом з первинним елементом "Рецепт: виконання".
 
 Запущений рецепт-програма може бути призупинено, натиском кнопки "Пауза" у місці кнопки "Запуск",
 або перервати, натиском "Зупинити".
 
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.2.0','','Элемент "Рецепт: простое исполнение" - простой вариант элемента "Рецепт: выполнение" который разработан
 для располажения как виджет мнемосхемы и работы только вместе с первичным элементом "Рецепт: исполнения".
 
 Запущенный рецепт-программа может быть приостановлен, нажатием кнопки "Пауза" в месте кнопки "Запуск",
 или прервать, нажатием "Остановить".
 
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.2.0','','','');
 INSERT INTO "wlb_Main_io" VALUES('alarmsAct','contextMenu','Quittance:qtc',32,'','','','Підтвердження:qtc','','Подтверждение:qtc','','','');
 INSERT INTO "wlb_Main_io" VALUES('alarmsAct','evProc','usr_goquitt::open:/pg_control/pg_ElCadr',32,'','','','','','','','','');
@@ -7317,12 +7317,12 @@ INSERT INTO "wlb_Main_io" VALUES('RootPgSo','active','1',40,'','','go_view6','',
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','elType','3',32,'','','go_view6','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','img','view6',1,'','','go_view6','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','dscr','The cadre "User manager".
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.2.0',32,'','','','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('alarmsAct','dscr','Author: Roman Savochenko <rom_as@oscada.org>
+INSERT INTO "wlb_Main_io" VALUES('alarmsAct','dscr','Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.1',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('alarmsSt','dscr','The cadre "Alarms state table".
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.0',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','view','7',32,'','','pass','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','backColor','black',96,'backColorVal','','trnd1','','','','','','');
@@ -7362,31 +7362,31 @@ INSERT INTO "wlb_Main_io" VALUES('grpGraph10','colorDef','magenta',96,'labColorG
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','colorDef','yellow',96,'labColorGrph8','','el8','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','colorDef','lightyellow',96,'labColorGrph9','','el9','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElViewCadr','dscr','Element of the Overview frames panel.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.0',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraph','dscr','The template cadre "Result graphics".
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.0',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','dscr','Element of the Result graphics.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.0',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ViewCadr','dscr','The template cadre "Overview frames panel".
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.0',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('anShow','dscr','The widget "Analog show".
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.0',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('anShow1','dscr','The widget "Analog show 1".
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.0',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrRegul','dscr','The cadre "Control cadre of the regulators".
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.0',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('doc_panel','dscr','The cadre "Document control panel".
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.2.1',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('terminator','dscr','The cadre "Terminator panel".
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.0',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpCadr','prm0width','2',32,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpCadr','prm1width','2',0,'','','trnd1','','','','','','');
@@ -11207,25 +11207,25 @@ INSERT INTO "wlb_doc_io" VALUES('docDin','bTime','0',40,'','','doc','','','','',
 INSERT INTO "wlb_doc_io" VALUES('docDin','time','0',40,'','','doc','','','','','','');
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','evProc','ws_FocusIn::open:/pg_control/pg_doc_panel',32,'','','','','','','','','');
 INSERT INTO "wlb_doc_io" VALUES('doc','dscr','Base of an archive document.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.0',32,'','','','Основа архівного документу.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.0.0','','Основа архивного документа.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.0.0','','','');
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayOrder','dscr','Full day report of the flow-control point.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.0',32,'','','','Повний добовий звіт вузла контролю витрат.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.0.0','','Полный суточный отчёт узла контроля расхода.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.0.0','','','');
 INSERT INTO "wlb_doc_io" VALUES('docDin','dscr','Base of dynamic documents.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.0',32,'','','','Основа динамічного документу.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.0.0','','Основа динамического документа.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.0.0','','','');
 INSERT INTO "wlb_doc_io" VALUES('doc','evProc','ws_FocusIn:/doc:open:/pg_control/pg_doc_panel',32,'','','','ws_FocusIn:/doc:open:/pg_control/pg_doc_panel','','ws_FocusIn:/doc:open:/pg_control/pg_doc_panel','','','');
 INSERT INTO "wlb_doc_io" VALUES('docDin','evProc','ws_FocusIn:/doc:open:/pg_control/pg_doc_panel',32,'','','','ws_FocusIn:/doc:open:/pg_control/pg_doc_panel','','ws_FocusIn:/doc:open:/pg_control/pg_doc_panel','','','');
@@ -12019,11 +12019,11 @@ INSERT INTO "wlb_doc_io" VALUES('docMessRep','font','Arial 15',32,'','','lab_flt
 INSERT INTO "wlb_doc_io" VALUES('docMessRep','alignment','8',32,'','','lab_fltr','','','','','','');
 INSERT INTO "wlb_doc_io" VALUES('docMessRep','text','Filter:',32,'','','lab_fltr','Фільтр:','','Фильтр:','','','');
 INSERT INTO "wlb_doc_io" VALUES('docAlarmsRep','dscr','Standard protocol of violations
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.0',32,'','','','Стандартний протокол порушень
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.0.0','','Стандартный протокол нарушений
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.0.0','','','');
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','dscr','Table of hour-averaged values of the flow-control point. Based on the archival mode document, but supports the both modes - dynamic and archival.
 The custom configuration fields in the tab "Links":
@@ -12032,7 +12032,7 @@ The custom configuration fields in the tab "Links":
 "doc.arch" - the used archiver for build the document, which is "FSArch.1m" by default.
 "doc.pTitle" - the document (a parameter of the flow-control point) title.
 "doc.Point" - the parameter of the flow-control point with group of attributes.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 2.2.0',32,'','','','Таблиця середніх за годину значень вузла контролю витрат. Заснований на архівному документі, але підтримує обидва режими - динамічний та архівний.
 Користувацькі конфігураційні поля у вкладці "Зв''язки":
 "n" - режим документу, встановіть у 0 для динамічного режиму та деякий розмір архіву для архівного режиму.
@@ -12040,7 +12040,7 @@ Version: 2.2.0',32,'','','','Таблиця середніх за годину �
 "doc.arch" - архіватор користувача для формування документу, який по замовченю "FSArch.1m".
 "doc.pTitle" - заголовок документу (параметр вузла обліку витрат).
 "doc.Point" - параметр вузла обліку витрат з групою атрибутів.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 2.1.0','','Таблица средних за час значений узла контроля расхода. Основан на архивном документе, но поддерживает оба режима - динамический и архивный.
 Пользовательские конфигурационные поля во вкладке "Связи":
 "n" - режим документа, установить в 0 для динамического режима и некоторый размер архива для архивного режима.
@@ -12048,14 +12048,14 @@ Version: 2.2.0',32,'','','','Таблиця середніх за годину �
 "doc.arch" - архиватор пользователя для формирования документа, который по умолчанию "FSArch.1m".
 "doc.pTitle" - заголовок документа (параметр узла учёта расхода).
 "doc.Point" - параметр узла учёта расхода с группой атрибутов.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 2.1.0','','','');
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeMgn','dscr','Instantaneous values table of the gas control node. Based on the dynamic document.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.0',32,'','','','Таблиця миттєвих значень вузла контролю газу. Засновано на динамічному документі.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.0.0','','Таблица мгновенных значений узла контроля газа. Основана на динамическом документе.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.0.0','','','');
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','dscr','Table of day-averaged values of the flow-control point. Based on the archival mode document, but supports the both modes - dynamic and archival.
 The custom configuration fields in the tab "Links":
@@ -12064,7 +12064,7 @@ The custom configuration fields in the tab "Links":
 "doc.arch" - the used archiver, for build the document, which is "FSArch.1m" by default.
 "doc.pTitle" - the document (a parameter of the flow-control point) title.
 "doc.Point" - the parameter of the flow-control point with group of attributes.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 2.2.0',32,'','','','Таблиця середніх за добу значень вузла контролю витрат. Заснований на архівному документі, але підтримує обидва режими - динамічний та архівний.
 Користувацькі конфігураційні поля у вкладці "Зв''язки":
 "n" - режим документу, встановіть у 0 для динамічного режиму та деякий розмір архіву для архівного режиму.
@@ -12072,7 +12072,7 @@ Version: 2.2.0',32,'','','','Таблиця середніх за добу зн�
 "doc.arch" - архіватор користувача для формування документу, який по замовченю "FSArch.1m".
 "doc.pTitle" - заголовок документу (параметр вузла обліку витрат).
 "doc.Point" - параметр вузла обліку витрат з групою атрибутів.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 2.1.0','','Таблица средних за сутки значений узла контроля расхода. Основан на архивном документе, но поддерживает оба режима - динамический и архивный.
 Пользовательские конфигурационные поля во вкладке "Связи":
 "n" - режим документа, установить в 0 для динамического режима и некоторый размер архива для архивного режима.
@@ -12080,28 +12080,28 @@ Version: 2.2.0',32,'','','','Таблиця середніх за добу зн�
 "doc.arch" - архиватор пользователя для формирования документа, который по умолчанию "FSArch.1m".
 "doc.pTitle" - заголовок документа (параметр узла учёта расхода).
 "doc.Point" - параметр узла учёта расхода с группой атрибутов.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 2.1.0','','','');
 INSERT INTO "wlb_doc_io" VALUES('docMessRep','dscr','Generic messages report allowed for filtering both in static and dynamic. Based on the dynamic document.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.0',32,'','','','Загальний звіт повідомлень, допускає фільтрацію як статично так і динамічно. Заснований на динамічному документі.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.1.0','','Общий отчёт сообщений, допускает фильтрацию как статически так и динамически. Основан на динамическом документе.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.1.0','','','');
 INSERT INTO "wlb_doc_io" VALUES('docRepSm2','dscr','2 shift report. Based on the dynamic document.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.0',32,'','','','Звіт на дві зміни. Заснований на динамічному документі.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.1.0','','Отчёт на две смены. Основан на динамическом документе.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.1.0','','','');
 INSERT INTO "wlb_doc_io" VALUES('docUsersSet','dscr','Log of user interruptions. Based on the dynamic document.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.2.0',32,'','','','Протокол дій користувача. Заснований на динамічному документі.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.2.0','','Протокол действий пользователя. Основан на динамическом документе.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.2.0','','','');
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','aSize','0',32,'','wdg:../a_aSize','doc','','','','','','');
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','doc','',40,'','','doc','','','','','','');
@@ -21223,7 +21223,7 @@ if(arh_end && ((arh_end-arh_beg)/trnd1_tSize > 2)) {
 	arh_active = true;
 	if(selSingle) trnd1_tSek = arh_end;
 }
-else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1554017298);
+else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1559937720);
 INSERT INTO "wlb_Main" VALUES('anShow1s','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAWCAIAAAD/3A1jAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAG50lEQVRYhdVXWWwb1xW9bxYOOdzERRTFVbtEWRIlWY5dWbHdqI2auC3Q
 nyDoR4EW8H+B+qctYOjDRVC4CBAU7UdRFG4LNAWCRj8tWtiwnTiKHFkRJSaUrJUUtXARZXK4zsJZ
@@ -23715,11 +23715,11 @@ INSERT INTO "prj_archBrowser" VALUES('/archBrowser/so/1','doc','','root',0,'
 ','','',-1,5,'owner;perm;name;dscr;geomZ;',1495719828);
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/so/1/doc','messRep','','/wlb_doc/wdg_docMessRep',0,'','','',-1,0,'owner;geomYsc;archLs;messCat;',1495719828);
 CREATE TABLE 'prj_tmplSO' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
-INSERT INTO "prj_tmplSO" VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;',1554062066);
+INSERT INTO "prj_tmplSO" VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;',1559660517);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so','1','','root',1,'
 ','
 ','
-',-1,5,'name;dscr;geomX;',1546704070);
+',-1,5,'name;dscr;geomX;',1559660517);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so','2','','root',1,'
 ','
 ','',-1,5,'name;',1546704070);
@@ -23738,10 +23738,10 @@ INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','treeSelect','','/wlb_Main/wdg
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','cntrPasp','','/wlb_Main/wdg_cntrPaspExt',0,'','','',-1,0,'owner;perm;name;geomZ;pName;',1494598746);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','cntrPaspOld','','/wlb_Main/wdg_cntrPasp',0,'','','',-1,0,'owner;perm;geomZ;pName;',1494596514);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1','view1','','root',0,'
-','','',-1,5,'owner;perm;name;dscr;geomZ;',1546703892);
-INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/view1','1','','/wlb_test/wdg_mn_gen',0,'','','',-1,0,'owner;perm;name;pgOpen;pgNoOpenProc;pgGrp;',1546703892);
-INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/view1','10','','/wlb_Main/wdg_prescrRun',0,'','','',-1,0,'owner;perm;pgNoOpenProc;prExtCurCom;prExtMode;prExtProg;prExtStartTm;prExtWork;',1546703892);
-INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/view1','11','','/wlb_Main/wdg_prescrEdit',0,'','','',-1,0,'owner;perm;prExtComLs;',1546703892);
+','','',-1,5,'owner;perm;name;dscr;geomZ;',1559660517);
+INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/view1','1','','/wlb_test/wdg_mn_gen',0,'','','',-1,0,'owner;perm;name;pgOpen;pgNoOpenProc;pgGrp;',1559660517);
+INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/view1','10','','/wlb_Main/wdg_prescrRun',0,'','','',-1,0,'owner;perm;pgNoOpenProc;prExtCurCom;prExtMode;prExtProg;prExtStartTm;prExtWork;',1559660517);
+INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/view1','11','','/wlb_Main/wdg_prescrEdit',0,'','','',-1,0,'owner;perm;prExtComLs;',1559660517);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1','view2','','/wlb_Main/wdg_grpGraph',0,'','','',-1,2,'owner;perm;geomZ;pgGrp;',1546704070);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/view2','1','','..',0,'','','',-1,0,'owner;',1546704070);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1','view3','','/wlb_Main/wdg_grpCadr',0,'','','',-1,2,'owner;perm;geomZ;pgGrp;',1546703892);
@@ -24053,11 +24053,11 @@ for(off = 0, ev_rez = ""; (sval=event.parse(0,"\n",off)).length; ) {
 event = ev_rez;','','',-1,'owner;name;dscr;geomH;backColor;',1552226019);
 CREATE TABLE 'VCAPrjs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"USER" TEXT DEFAULT 'root' ,"GRP" TEXT DEFAULT 'UI' ,"PERMIT" INTEGER DEFAULT '436' ,"PER" INTEGER DEFAULT '100' ,"STYLE" INTEGER DEFAULT '-1' ,"EN_BY_NEED" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 INSERT INTO "VCAPrjs" VALUES('tmplSO','Signal groups (template)','Групи сигналізації (шаблон)','Группы сигнализаций (шаблон)','The projects'' template of visualisation based on signal groups.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.2.1','Шаблон проекту візуалізації, який базовано на групах сигналізації.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.2.1','Шаблон проекта визуализации основанного на группах сигнализации.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.2.1','prj_tmplSO','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA
 HXRFWHRDb21tZW50AENyZWF0ZWQgd2l0aCBUaGUgR0lNUO9kJW4AABcpSURBVHicxXtbjCTXed73
 /+fUrav6Ot093bNLcsndnRUjUdbFlCkFDhEEhiMoUOxADwnyFgQwlABEXiw4fslD4AfnUYjNXBHH
@@ -24166,7 +24166,7 @@ JM6JM9aZkbHmcOLMeF+cueNcumeL/aHL9neKfLwF93hfnn5cC/UCEQiBegyvGmkVx6KlSUR9It1T
 KkpIBz5YMUTx0VIhArIO1jprs1zsZChi1kVkQIZ2jR2NUBxOgMf/+vz/BxKBWMs6b8DcAAAAAElF
 TkSuQmCC','root','op',432,100,0,1);
 INSERT INTO "VCAPrjs" VALUES('archBrowser','Archives browser','Огляд архівів','Обзор архивов','Project of value archives browsing.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.2.1','','','prj_archBrowser','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAABKtSURB
 VHic5ZtZbFzXecd/59x7Z+FwuImLSGuxJVkSJWrxIkWb18iOjSRN0hSx46YpkJcWaFEUaZ8KBC3Q

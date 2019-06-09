@@ -1411,53 +1411,13 @@ return 0;','','','JavaLikeCalc.JavaScript
 io.setText(tr.messIO(io.text()));','','');
 CREATE TABLE 'DAQ_JavaLikeCalc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT 'system' ,"FUNC" TEXT DEFAULT '' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' ,"ITER" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 INSERT INTO "DAQ_JavaLikeCalc" VALUES('testCalc','Test calculator','Тестовий обчислювач','Тестовый вычислитель','Test calculator','Тестовий обчислювач','Тестовый вычислитель',1,0,3,0,'<high>','testCalc_prm','Controller.test','10',0,1);
-INSERT INTO "DAQ_JavaLikeCalc" VALUES('prescr','Prescriptions','Prescriptions','','','','',1,1,3,0,'<high>','JavaLikePrm_prescr','Controller.prescr','0.2',0,1);
-CREATE TABLE 'prescr_val' ("ID" TEXT DEFAULT '' ,"VAL" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "prescr_val" VALUES('f_frq','5');
-INSERT INTO "prescr_val" VALUES('f_start','0');
-INSERT INTO "prescr_val" VALUES('f_stop','0');
-INSERT INTO "prescr_val" VALUES('this','<TCntrNodeObj path="/sub_DAQ/mod_JavaLikeCalc/cntr_prescr/"/>');
-INSERT INTO "prescr_val" VALUES('dbDB','SQLite.vcaBase');
-INSERT INTO "prescr_val" VALUES('dbComs','PrescrComs');
-INSERT INTO "prescr_val" VALUES('dbProgs','PrescrProgs');
-INSERT INTO "prescr_val" VALUES('comsCntr','LogicLev.prescription');
-INSERT INTO "prescr_val" VALUES('mode','-2');
-INSERT INTO "prescr_val" VALUES('curMode','-2');
-INSERT INTO "prescr_val" VALUES('prog','abcd');
-INSERT INTO "prescr_val" VALUES('startTm','1413479709');
-INSERT INTO "prescr_val" VALUES('curCom','3');
-INSERT INTO "prescr_val" VALUES('work','<XMLNodeObj:prg name="abcd" seekPos="1" wtm="52">
-<XMLNodeObj:com arg1="5" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" labArg1="Time (s)" labArg2="&lt;EVAL&gt;" labArg3="&lt;EVAL&gt;" labArg4="&lt;EVAL&gt;" labArg5="&lt;EVAL&gt;" proc="&lt;EVAL&gt;">
-</XMLNodeObj:com>
-<XMLNodeObj:com arg1="10" arg2="0" arg3="0" arg4="0" arg5="0" descr="Таймер уровень 1" id="Timer" labArg1="Time (s)" labArg2="&lt;EVAL&gt;" labArg3="&lt;EVAL&gt;" labArg4="&lt;EVAL&gt;" labArg5="&lt;EVAL&gt;" name="Таймер ур.1" proc="&lt;EVAL&gt;">
-<XMLNodeObj:com arg1="15" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" labArg1="Time (s)" labArg2="&lt;EVAL&gt;" labArg3="&lt;EVAL&gt;" labArg4="&lt;EVAL&gt;" labArg5="&lt;EVAL&gt;" name="Таймер ур.2" proc="&lt;EVAL&gt;">
-</XMLNodeObj:com>
-</XMLNodeObj:com>
-<XMLNodeObj:com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" labArg1="Time (s)" labArg2="&lt;EVAL&gt;" labArg3="&lt;EVAL&gt;" labArg4="&lt;EVAL&gt;" labArg5="&lt;EVAL&gt;" proc="&lt;EVAL&gt;">
-</XMLNodeObj:com>
-</XMLNodeObj:prg>
-');
-INSERT INTO "prescr_val" VALUES('comLs','<TVarObj>
-<TVarObj p=''Timer''>
-<str p=''arg1''>Час (сек.)</str>
-<str p=''descr''>Typical timer. Hold run up to time elapse.</str>
-<str p=''prmID''>timer</str>
-</TVarObj>
-<TVarObj p=''Фоновий таймер''>
-<str p=''arg1''>Час (сек.)</str>
-<str p=''descr''>Фоновий таймер. Оновлення паралельно із поточною командой.</str>
-<str p=''prmID''>backTimer</str>
-</TVarObj>
-</TVarObj>
-');
-INSERT INTO "prescr_val" VALUES('clcCnt','10316577');
 CREATE TABLE 'DAQ_LogicLev' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT '' ,"PRM_BD_REFL" TEXT DEFAULT '' ,"PERIOD" INTEGER DEFAULT '0' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 INSERT INTO "DAQ_LogicLev" VALUES('gen','Mainstation','Загальностанційка','Общестанционка','Virtual controller of the mainstation.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 2.0.0','Віртуальний контролер загальностанційки.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 2.0.0','Виртуальный контроллер общестанционки.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 2.0.0',1,1,3,0,'<high>','LogLevPrm_gen','LogLevPrmRefl_gen',0,'1',0);
 INSERT INTO "DAQ_LogicLev" VALUES('prescription','Prescription commands','','','','','',1,1,3,0,'<high>','LogLevPrm_prescription','LogLevPrmRefl_prescription',0,'0.2',0);
 CREATE TABLE 'BFN_SymbCode' ("ID" INTEGER DEFAULT '' ,"TEXT" TEXT DEFAULT '' ,"ru#TEXT" TEXT DEFAULT '' ,"uk#TEXT" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
@@ -1816,13 +1776,7 @@ INSERT INTO "BFN_SymbCode" VALUES(12920,'Set temperature tunnel','Set temperatur
 CREATE TABLE 'LogLevPrm_prescription' ("SHIFR" TEXT DEFAULT '' ,"OWNER" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PRM" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR","OWNER"));
 INSERT INTO "LogLevPrm_prescription" VALUES('backTimer','','Background timer','Background timer. Updating parallel with current command.',1,'PrescrTempl.backTimer','Фоновий таймер','Фоновый таймер','Фоновий таймер. Оновлення паралельно із поточною командой.','Фоновый таймер. Обновление параллельно с текущей командой.');
 INSERT INTO "LogLevPrm_prescription" VALUES('timer','','Timer','Typical timer. Hold run up to time elapse.',1,'PrescrTempl.timer','Timer','','Typical timer. Hold run up to time elapse.','');
-CREATE TABLE 'JavaLikePrm_prescr' ("SHIFR" TEXT DEFAULT '' ,"OWNER" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"FLD" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR","OWNER"));
-INSERT INTO "JavaLikePrm_prescr" VALUES('cntr','','Control','',1,'mode
-prog
-startTm
-curCom
-comLs
-work','Контроль','Контроль');
+INSERT INTO "LogLevPrm_prescription" VALUES('manager','','Manager','',1,'PrescrTempl.manager','','','','');
 CREATE TABLE 'ModBus_node' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"ADDR" INTEGER DEFAULT '1' ,"InTR" TEXT DEFAULT '*' ,"PRT" TEXT DEFAULT '*' ,"MODE" INTEGER DEFAULT '0' ,"DT_PER" DOUBLE DEFAULT '1' ,"DT_PR_TR" INTEGER DEFAULT '1' ,"DT_PROG" TEXT DEFAULT '' ,"uk#DT_PROG" TEXT DEFAULT '' ,"ru#DT_PROG" TEXT DEFAULT '' ,"TO_TR" TEXT DEFAULT '' ,"TO_PRT" TEXT DEFAULT 'RTU' ,"TO_ADDR" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 INSERT INTO "ModBus_node" VALUES('test','Test','Тест','Тест',' ',' ',' ',1,1,'*','*',0,1.0,1,'JavaLikeCalc.JavaScript
 //Test
@@ -1979,6 +1933,9 @@ INSERT INTO "Archive_val" VALUES('CB7_cmdOpen','','','','','','',1,2,'LogicLev.g
 CREATE TABLE 'SYS' ("user" TEXT DEFAULT '' ,"id" TEXT DEFAULT '' ,"val" TEXT DEFAULT '' ,"uk#val" TEXT DEFAULT '' , PRIMARY KEY ("user","id"));
 INSERT INTO "SYS" VALUES('root','/sub_Protocol/mod_HTTP/AuthTime','10','');
 INSERT INTO "SYS" VALUES('root','/sub_Protocol/mod_HTTP/AutoLogin','<aLog><it addrs="*" user="user" /></aLog>','');
+INSERT INTO "SYS" VALUES('roman','/sub_UI/mod_QTCfg/st','1102:752:AAAA/wAAAAEAAAACAAABGAAAAywB/////wEAAAABAA==','');
+INSERT INTO "SYS" VALUES('roman','/sub_UI/mod_Vision/uiProps','<UI devWinState="AAAA/wAAAAD9AAAAAQAAAAAAAAEaAAACgvwCAAAAAvwAAAA4AAABPgAAAHkA////+gAAAAACAAAAAvsAAAAQAFAAcgBvAGoAVAByAGUAZQEAAAAA/////wAAAFkA////+wAAAA4AVwBkAGcAVAByAGUAZQEAAAAA/////wAAAFkA/////AAAAXwAAAE+AAAAeQD////6AAAAAQIAAAAC+wAAABgASQBuAHMAcABBAHQAdAByAEQAbwBjAGsBAAAAAP////8AAABZAP////sAAAAWAEkAbgBzAHAATABuAGsARABvAGMAawEAAAAA/////wAAAFkA////AAAD4AAAAoIAAAAEAAAABAAAAAgAAAAI/AAAAAEAAAACAAAACQAAABgAdgBpAHMASQB0AFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAAAAAAAAAABYAdwBkAGcAVABvAG8AbABWAGkAZQB3AAAAAAD/////AAAAAAAAAAAAAAASAGUAbABGAGkAZwBUAG8AbwBsAAAAAAD/////AAAAAAAAAAAAAAAKAEEARwBMAEsAUwAAAAAA/////wAAAAAAAAAAAAAACABNAGEAaQBuAAAAAAD/////AAAAAAAAAAAAAAAGAGQAbwBjAAAAAAD/////AAAAAAAAAAAAAAAKAG0AbgBFAGwAcwAAAAAA/////wAAAAAAAAAAAAAAEgBvAHIAaQBnAGkAbgBhAGwAcwEAAAHe/////wAAAAAAAAAAAAAACAB0AGUAcwB0AAAAAAD/////AAAAAAAAAAA=:1280:720" />
+','');
 CREATE TABLE 'DAQ_Siemens' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT '' ,"PERIOD" INTEGER DEFAULT '0' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' ,"TM_REST" INTEGER DEFAULT '30' ,"ASINC_WR" INTEGER DEFAULT '0' ,"TYPE" INTEGER DEFAULT '0' ,"ADDR" TEXT DEFAULT '10' ,"ADDR_TR" TEXT DEFAULT '' ,"SLOT" INTEGER DEFAULT '2' ,"CIF_DEV" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 INSERT INTO "DAQ_Siemens" VALUES('test','','','','','','',1,0,3,0,'<high>','CIFPrm_test',0,'1',0,30,0,1,'192.168.2.12','',2,0);
 CREATE TABLE 'DAQGatePrm_test' ("SHIFR" TEXT DEFAULT '' ,"OWNER" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PRM_ADDR" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"STATS" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR","OWNER"));
@@ -2185,7 +2142,7 @@ INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','rez','1','1');
 INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','arg1','10','');
 INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','tmp1','0','');
 INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','f_stop','0','');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','f_frq','5.00122404098511','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','f_frq','4.96115016937256','');
 INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','f_err','0','0');
 INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','f_start','0','');
 INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','start','0','');
@@ -2198,9 +2155,48 @@ INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','rez','1','1');
 INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','arg1','20','');
 INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','tmp1','0','');
 INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','f_stop','0','');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','f_frq','5.00122404098511','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','f_frq','4.96115016937256','');
 INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','f_err','0','0');
 INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','f_start','0','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('manager','dbDB','SQLite.vcaBase','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('manager','dbComs','PrescrComs','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('manager','dbProgs','PrescrProgs','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('manager','comsCntr','*','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('manager','mode','-2','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('manager','curMode','-2','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('manager','prog','abcd','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('manager','startTm','0','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('manager','curCom','','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('manager','work','<XMLNodeObj:prg comCur="1" comN="" comPath="" name="abcd" seekPos="1" wtm="52">
+<XMLNodeObj:com arg1="5" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" labArg1="Time (s)" labArg2="&lt;EVAL&gt;" labArg3="&lt;EVAL&gt;" labArg4="&lt;EVAL&gt;" labArg5="&lt;EVAL&gt;" proc="&lt;EVAL&gt;">
+</XMLNodeObj:com>
+<XMLNodeObj:com arg1="10" arg2="0" arg3="0" arg4="0" arg5="0" descr="Таймер уровень 1" id="Timer" labArg1="Time (s)" labArg2="&lt;EVAL&gt;" labArg3="&lt;EVAL&gt;" labArg4="&lt;EVAL&gt;" labArg5="&lt;EVAL&gt;" name="Таймер ур.1" proc="&lt;EVAL&gt;">
+<XMLNodeObj:com arg1="15" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" labArg1="Time (s)" labArg2="&lt;EVAL&gt;" labArg3="&lt;EVAL&gt;" labArg4="&lt;EVAL&gt;" labArg5="&lt;EVAL&gt;" name="Таймер ур.2" proc="&lt;EVAL&gt;">
+</XMLNodeObj:com>
+</XMLNodeObj:com>
+<XMLNodeObj:com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" labArg1="Time (s)" labArg2="&lt;EVAL&gt;" labArg3="&lt;EVAL&gt;" labArg4="&lt;EVAL&gt;" labArg5="&lt;EVAL&gt;" proc="&lt;EVAL&gt;">
+</XMLNodeObj:com>
+</XMLNodeObj:prg>
+','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('manager','comLs','<TVarObj>
+<TVarObj p=''Background timer''>
+<str p=''arg1''>Time (s)</str>
+<str p=''descr''>Background timer. Updating parallel with current command.</str>
+<str p=''prmID''>backTimer</str>
+</TVarObj>
+<TVarObj p=''Timer''>
+<str p=''arg1''>Time (s)</str>
+<str p=''descr''>Typical timer. Hold run up to time elapse.</str>
+<str p=''prmID''>timer</str>
+</TVarObj>
+</TVarObj>
+','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('manager','clcCnt','610','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('manager','this','<TCntrNodeObj path="/sub_DAQ/mod_LogicLev/cntr_prescription/prm_manager/"/>','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('manager','f_start','0','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('manager','f_err','0','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('manager','f_frq','4.96115016937256','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('manager','f_stop','0','');
 CREATE TABLE 'Archive_mess_proc' ("ID" TEXT DEFAULT '' ,"MODUL" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '0' ,"CATEG" TEXT DEFAULT '' ,"LEVEL" INTEGER DEFAULT '0' ,"ADDR" TEXT DEFAULT '' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"A_PRMS" TEXT DEFAULT '' , PRIMARY KEY ("ID","MODUL"));
 INSERT INTO "Archive_mess_proc" VALUES('NetRequsts','FSArch','','','','Requests to server through transport Sockets.','Запити до сервера через транспорт Sockets.','Запросы к серверу через транспорт Sockets.',1,'/sub_Transport/mod_Sockets*',1,'ARCHIVES/MESS/Net/',0,'<high>','<prms XML="0" MSize="1024" NFiles="30" TmSize="30" PackTm="10" CheckTm="60" PackInfoFiles="0" PrevDbl="0" />
 ');

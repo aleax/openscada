@@ -3407,17 +3407,17 @@ CREATE TABLE 'UserFuncLibs' ("ID" TEXT DEFAULT '''''' ,"NAME" TEXT DEFAULT '''''
 INSERT INTO "UserFuncLibs" VALUES('boiler9','Boiler #9','Котёл #9','','','flb_boiler9',1,'Котел #9');
 CREATE TABLE 'DAQ_BlockCalc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT 'system' ,"BLOCK_SH" TEXT DEFAULT 'block' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' ,"ITER" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 INSERT INTO "DAQ_BlockCalc" VALUES('boiler9','DMC Boiler9','ДМК Котёл9','ДМК Котел9','Contains a simulator of the boiler unit #9 of the Dnepr Metallurgical Combine.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 2.0.0','Содержит модель котлоагрегата №9 Днепровского Металлургического Комбината.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 2.0.0','Містить модель котлоагрегату №9 Дніпровського Металургійного Комбінату.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 2.0.0',1,1,3,0,'<high>','BlckCalcPrm_boiler9','BlckCalcBlcks_boiler9','0.005',0,1);
 INSERT INTO "DAQ_BlockCalc" VALUES('boiler9_cntr','DMC Boiler9 Controller','ДМК Котёл9 Контроллер','ДМК Котел9 Контролер','Contains a simulator of the control system of the boiler unit #9 of the Dnepr Metallurgical Combine.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 2.0.0','Содержит модель системы управления котлоагрегата №9 Днепровского Металлургического Комбината.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 2.0.0','Містить модель системи керування котлоагрегату №9 Дніпровського Металургійного Комбінату.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 2.0.0',1,1,3,0,'<high>','BlckCalcPrm_boiler9_cntr','BlckCalcBlcks_boiler9_cntr','1',0,1);
 COMMIT;

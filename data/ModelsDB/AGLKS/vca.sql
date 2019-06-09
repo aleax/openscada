@@ -2,13 +2,13 @@ PRAGMA foreign_keys=OFF;
 BEGIN TRANSACTION;
 CREATE TABLE 'VCALibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "VCALibs" VALUES('AGLKS','','Library of the interface items of the project "AGLKS".
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 2.0.0
 ','wlb_AGLKS','','','Бібліотека сторінок АГЛКС
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 2.0.0
 ','','Библиотека страниц АГЛКС
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 2.0.0
 ');
 CREATE TABLE 'prj_AGLKS_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
@@ -5914,11 +5914,11 @@ INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','cntrPasp','','/wlb_Main/wdg_cnt
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','cntrPaspOld','','/wlb_Main/wdg_cntrPasp',0,'','','',-1,0,'owner;geomZ;pName;',1494521098);
 CREATE TABLE 'VCAPrjs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"USER" TEXT DEFAULT 'root' ,"GRP" TEXT DEFAULT 'UI' ,"PERMIT" INTEGER DEFAULT '436' ,"PER" INTEGER DEFAULT '100' ,"STYLE" INTEGER DEFAULT '-1' ,"EN_BY_NEED" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 INSERT INTO "VCAPrjs" VALUES('AGLKS','AGLKS','АГЛКС','АГЛКС','The project of visualisation AGLKS.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 2.0.0','Проект візуалізації Анастасіївської Газо-Ліфтної компресорної станції.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 2.0.0','Проект визуализации Анастасиевской Газо-Лифтной компрессорной станции.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 2.0.0','prj_AGLKS','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA
 HXRFWHRDb21tZW50AENyZWF0ZWQgd2l0aCBUaGUgR0lNUO9kJW4AABEsSURBVHic7Vp7cFzVef+d
 c+/duw/tQ6u1bEn2rh8YSwbHYIuHecQmgkBVCG1pnKYUA8Mr00JppqUkHdq0mUzaNPxFOulMO4Fm

@@ -5027,63 +5027,63 @@ CM102_1.N:varIn:Ввід змінної
 *r.15:max:Максимум');
 CREATE TABLE 'DAQ_BlockCalc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT 'system' ,"BLOCK_SH" TEXT DEFAULT 'block' ,"PERIOD" INTEGER DEFAULT '0' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' ,"ITER" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 INSERT INTO "DAQ_BlockCalc" VALUES('gen','Mainstation','Загальностанційка','Общестанционка','Contains the model of the general part of the compressor station, that is all that is shown on the principle scheme besides the gray blocks of individual compressors.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 2.0.0','Містить модель загальної частини компресорної станції, а саме все що зображено на принциповій схемі за межами сірих блоків окремих компресорів.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 2.0.0','Содержит модель общей части компрессорной станции, а именно всё что изображено на принципиальной схеме за пределами серых блоков отдельных компрессоров.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 2.0.0',1,1,3,0,'<high>','gen_prm','gen_blcks',0,'0.01',0,1);
-INSERT INTO "DAQ_BlockCalc" VALUES('CM102cntr','','','','Author: Roman Savochenko <rom_as@oscada.org>
+INSERT INTO "DAQ_BlockCalc" VALUES('CM102cntr','','','','Author: Roman Savochenko <roman@oscada.org>
 Version: 2.0.0','','
 ',1,1,3,0,'<high>','CM102cntr_prm','CM102cntr_blocks',0,'1',0,1);
 INSERT INTO "DAQ_BlockCalc" VALUES('gen_cntr','Mainstation (controller)','Загальностанційка (контролер)','Общестанционка (контроллер)','Contains the model of the control system of the general part.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 2.0.0','Містить модель системи керування загальностанційною частиною.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 2.0.0','Содержит модель системы управления общестанционной частью.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 2.0.0',1,1,3,0,'<high>','gen_cntr_prm','gen_cntr_blocks',0,'0.2',0,1);
 INSERT INTO "DAQ_BlockCalc" VALUES('CM101','Model of CM101','Модель КМ101','Модель КМ101','Contains the model of the first compressor CM101 of low pressure.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 2.0.0','Містить модель першого компресора низького тиску КМ101.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 2.0.0','Содержит модель первого компрессора низкого давления КМ101.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 2.0.0',1,1,3,0,'<high>','CM101_prm','CM101_blocks',0,'0.01',0,1);
 INSERT INTO "DAQ_BlockCalc" VALUES('CM102','Model of CM102','Модель КМ102','Модель КМ102','Contains the model of the first compressor CM102 of high pressure.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 2.0.0','Містить модель першого компресора високого тиску КМ102.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 2.0.0','Содержит модель первого компрессора высокого давления КМ102.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 2.0.0',1,1,3,0,'<high>','CM102_prm','CM102_blocks',0,'0.01',0,1);
 INSERT INTO "DAQ_BlockCalc" VALUES('CM201','Model of CM201','Модель КМ201','Модель КМ201','Contains the model of the second compressor CM201 of low pressure.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 2.0.0','Містить модель другого компресора низького тиску КМ201.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 2.0.0','Содержит модель второго компрессора низкого давления КМ201.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 2.0.0',1,1,3,0,'<high>','CM201_prm','CM201_blocks',0,'0.01',0,1);
 INSERT INTO "DAQ_BlockCalc" VALUES('CM202','Model of CM202','Модель КМ202','Модель КМ202','Contains the model of the second compressor CM202 of high pressure.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 2.0.0','Містить модель другого компресора високого тиску КМ202.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 2.0.0','Содержит модель второго компрессора высокого давления КМ202.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 2.0.0',1,1,3,0,'<high>','CM202_prm','CM202_blocks',0,'0.01',0,1);
 INSERT INTO "DAQ_BlockCalc" VALUES('CM301','Model of CM301','Модель КМ301','Модель КМ301','Contains the model of the third compressor CM301 of low pressure.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 2.0.0','Містить модель третього компресора низького тиску КМ301.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 2.0.0','Содержит модель третьего компрессора низкого давления КМ301.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 2.0.0',1,1,3,0,'<high>','CM301_prm','CM301_blocks',0,'0.01',0,1);
 INSERT INTO "DAQ_BlockCalc" VALUES('CM302','Model of CM302','Модель КМ302','Модель КМ302','Contains the model of the third compressor CM302 of high pressure.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 2.0.0','Містить модель третього компресора високого тиску КМ302.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 2.0.0','Содержит модель третьего компрессора высокого давления КМ302.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 2.0.0',1,1,3,0,'<high>','CM302_prm','CM302_blocks',0,'0.01',0,1);
 CREATE TABLE 'gen_blcks' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"FUNC" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PROC" INTEGER DEFAULT '0' ,"PRIOR" TEXT DEFAULT '' ,"LNK_OUT_WR_CH" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 INSERT INTO "gen_blcks" VALUES('node1_1','Node 1.1','Вузол 1.1','Узел 1.1','','','','sub_DAQ.mod_JavaLikeCalc.lib_techApp.fnc_pipe1_3',1,1,'',0);

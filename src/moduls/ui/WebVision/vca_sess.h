@@ -435,11 +435,15 @@ class VCASess : public TCntrNode
 	VCASess( const string &iid, bool isCreate );
 
 	string id( )			{ return mId; }
+	string proj( )			{ return mProj; }
+	string user( )			{ return mUser; }
 	const string &sender( )		{ return mSender; }
 	time_t openTm( )		{ return open_ses; }
 	time_t lstReq( )		{ return lst_ses_req; }
 
-	void senderSet(const string &val)	{ mSender = val; }
+	void projSet( const string &val )	{ mProj = val; }
+	void userSet( const string &val )	{ mUser = val; }
+	void senderSet( const string &val )	{ mSender = val; }
 
 	void getReq( SSess &ses );
 	void postReq( SSess &ses );
@@ -486,7 +490,7 @@ class VCASess : public TCntrNode
 	const string		mId;
 	int			id_objs;	//Primitive object's container identifier
 	time_t			open_ses, lst_ses_req;
-	string			mSender;
+	string			mUser, mProj, mSender;
 	bool			mIsCreate;
 
 	deque<pair<time_t,string> > mCachePg;	//Pages cache

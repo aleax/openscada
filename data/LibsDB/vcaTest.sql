@@ -2,7 +2,7 @@ PRAGMA foreign_keys=OFF;
 BEGIN TRANSACTION;
 CREATE TABLE 'VCALibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "VCALibs" VALUES('test','Tests','Tests library
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.0','wlb_test','iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAACXBI
 WXMAAAsQAAALEAGtI711AAAAB3RJTUUH0wkJFDADdQaFPwAABcBJREFUeNrFl01sG9cRx3+7XH5z
 rZXkyHKcKlKAJkaa2lSE1GmbFhYgB2lRJAWaIkAOWQOGe+jF6LkoJPTSq90ee/Gil6JIUbR1WsRo
@@ -696,7 +696,7 @@ INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0val','7.07071',32,'','','tr2
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm1val','1684350',0,'','','tr2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm2val',NULL,0,'','','tr2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','dscr','The test cadre "Diagrams"
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.0',32,'','','','','','','','','');
 CREATE TABLE 'wlb_test_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "wlb_test_mime" VALUES('bake','image/png;9.79492','iVBORw0KGgoAAAANSUhEUgAAAKAAAADICAYAAABvaOoaAAAABmJLR0QA/wD/AP+gvaeTAAAACXBI

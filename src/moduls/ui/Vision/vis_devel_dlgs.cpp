@@ -1108,14 +1108,14 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     connect(obj_attr_cfg, SIGNAL(itemChanged(QTreeWidgetItem*,int)), this, SLOT(changeAttr(QTreeWidgetItem*,int)));
     obj_attr_cfg->setHeaderLabels(QStringList() << _("Identifier") << _("Name") << _("Data type") << _("Work area") << _("Processing")
 						<< _("Configuration") << _("Configuration template"));
-    glay->addWidget(obj_attr_cfg,0,0,1,2);
+    glay->addWidget(obj_attr_cfg, 0, 0, 1, 2);
 
     buttAttrAdd = new QPushButton(_("Add attribute"),attr_cf_fr); 
     connect(buttAttrAdd, SIGNAL(clicked()), this, SLOT(addAttr()));
-    glay->addWidget(buttAttrAdd,1,0);
+    glay->addWidget(buttAttrAdd, 1, 0);
     buttAttrDel = new QPushButton(_("Delete attribute"),attr_cf_fr);
     connect(buttAttrDel, SIGNAL(clicked()), this, SLOT(delAttr()));
-    glay->addWidget(buttAttrDel,1,1);
+    glay->addWidget(buttAttrDel, 1, 1);
 
     QFrame *wdg_proc_fr = new QFrame(proc_split);
     wdg_proc_fr->setFrameShape(QFrame::StyledPanel);
@@ -1132,6 +1132,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     proc_lang = new QComboBox(wdg_proc_fr);
     proc_lang->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred));
     proc_lang->setObjectName("/proc/calc/progLng");
+    proc_lang->setToolTip(_("Select the blank language to reset the widget procedure and language to the parent widget."));
     connect(proc_lang, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
     glay->addWidget(proc_lang, 1, 1);
 

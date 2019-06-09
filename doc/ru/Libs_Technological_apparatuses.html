@@ -1,0 +1,3683 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Библиотека/Технологические аппараты - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../en/files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="ru">Библиотека/Технологические аппараты</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FTechnological+apparatuses&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Technological_apparatuses" title="Libs/Technological apparatuses">Libs/Technological apparatuses</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Libs/Technological_apparatuses" title="Libs/Technological apparatuses (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Libs/Technological_apparatuses/uk" title="Бібліотека/Технологічні апарати (100% translated)">українська</a></div></div>
+<table class="wikitable">
+
+<tr>
+<th> Название </th>
+<th> Версия </th>
+<th> Лицензия </th>
+<th> Источник </th>
+<th> Языки </th>
+<th> Автор </th>
+<th> Описание
+</th></tr>
+
+<tr>
+<td> <a href="Libs_Technological_apparatuses.html" title="Special:MyLanguage/Libs/Technological apparatuses">Библиотека моделей аппаратов технологических процессов</a>
+</td>
+<td> 2.0 </td>
+<td> GPL
+</td>
+<td> БД SQLite: <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">File:OscadaLibs.db.gz</a>, <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">Наиболее актуальный SQL</a> </td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a><br />&nbsp;&nbsp;<font size="-2"><i>Максим Лысенко (2007,2010), Ксения Яшина (2007)</i></font>
+</td>
+<td> Библиотека моделей технологических аппаратов для создания комплексных моделей технологических процессов.
+<ul><li> <b>Основано:</b> Октябрь 2005р</li>
+<li> <b>Изначально создано:</b> <a class="external text" href="http://wiki.oscada.org/Using/APIFunctionLibs/TechApp" rel="nofollow noreferrer noopener" target="_blank">в старой Wiki</a></li>
+<li> <b>Адрес:</b> JavaLikeCalc =&gt; techApp</li>
+<li> <b>Использовано:</b> моделями <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">АГЛКС</a> и <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_Boiler" title="Special:MyLanguage/Using/Model Boiler">Котёл</a></li></ul>
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9A.D0.BE.D0.BD.D1.86.D0.B5.D0.BF.D1.86.D0.B8.D1.8F"><span class="tocnumber">1</span> <span class="toctext">Концепция</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.A1.D0.BE.D1.81.D1.82.D0.B0.D0.B2_.D0.B1.D0.B8.D0.B1.D0.BB.D0.B8.D0.BE.D1.82.D0.B5.D0.BA.D0.B8"><span class="tocnumber">2</span> <span class="toctext">Состав библиотеки</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#.D0.97.D0.B0.D0.BF.D0.B0.D0.B7.D0.B4.D1.8B.D0.B2.D0.B0.D0.BD.D0.B8.D0.B5_.28lag.29"><span class="tocnumber">2.1</span> <span class="toctext">Запаздывание (lag)</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#.D0.A8.D1.83.D0.BC:_2_.D0.B3.D0.B0.D1.80.D0.BC.D0.BE.D0.BD.D0.B8.D0.BA.D0.B8_.2B_.D1.81.D0.BB.D1.83.D1.87.D0.B0.D0.B9.D0.BD.D0.BE.D0.B5_.28noise.29"><span class="tocnumber">2.2</span> <span class="toctext">Шум: 2 гармоники + случайное (noise)</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#.D0.A8.D0.B0.D1.80.D0.BE.D0.B2.D1.8B.D0.B9_.D0.BA.D1.80.D0.B0.D0.BD_.28ballCrane.29"><span class="tocnumber">2.3</span> <span class="toctext">Шаровый кран (ballCrane)</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#.D0.A1.D0.B5.D0.BF.D0.B0.D1.80.D0.B0.D1.82.D0.BE.D1.80_.28separator.29"><span class="tocnumber">2.4</span> <span class="toctext">Сепаратор (separator)</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#.D0.9A.D0.BB.D0.B0.D0.BF.D0.B0.D0.BD_.28valve.29"><span class="tocnumber">2.5</span> <span class="toctext">Клапан (valve)</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#.D0.97.D0.B0.D0.B4.D0.B5.D1.80.D0.B6.D0.BA.D0.B0:_.D1.87.D0.B8.D1.81.D1.82.D0.B0.D1.8F_.28lagClean.29"><span class="tocnumber">2.6</span> <span class="toctext">Задержка: чистая (lagClean)</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#.D0.9A.D0.BE.D1.82.D1.91.D0.BB:_.D0.B1.D0.B0.D1.80.D0.B0.D0.B1.D0.B0.D0.BD_.28boilerBarrel.29"><span class="tocnumber">2.7</span> <span class="toctext">Котёл: барабан (boilerBarrel)</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#.D0.9A.D0.BE.D1.82.D1.91.D0.BB:_.D1.82.D0.BE.D0.BF.D0.BA.D0.B0_.28boilerBurner.29"><span class="tocnumber">2.8</span> <span class="toctext">Котёл: топка (boilerBurner)</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#.D0.A1.D0.B5.D1.82.D1.8C:_.D0.BD.D0.B0.D0.B3.D1.80.D1.83.D0.B7.D0.BA.D0.B0_.28net.29"><span class="tocnumber">2.9</span> <span class="toctext">Сеть: нагрузка (net)</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#.D0.98.D1.81.D1.82.D0.BE.D1.87.D0.BD.D0.B8.D0.BA:_.D0.B4.D0.B0.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D0.B5_.28src_press.29"><span class="tocnumber">2.10</span> <span class="toctext">Источник: давление (src_press)</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#.D0.92.D0.BE.D0.B7.D0.B4.D1.83.D1.88.D0.BD.D1.8B.D0.B9_.D1.85.D0.BE.D0.BB.D0.BE.D0.B4.D0.B8.D0.BB.D1.8C.D0.BD.D0.B8.D0.BA_.28cooler.29"><span class="tocnumber">2.11</span> <span class="toctext">Воздушный холодильник (cooler)</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#.D0.9A.D0.BE.D0.BC.D0.BF.D1.80.D0.B5.D1.81.D1.81.D0.BE.D1.80_.D0.B3.D0.B0.D0.B7.D0.BE.D0.B2.D1.8B.D0.B9_.28compressor.29"><span class="tocnumber">2.12</span> <span class="toctext">Компрессор газовый (compressor)</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#.D0.98.D1.81.D1.82.D0.BE.D1.87.D0.BD.D0.B8.D0.BA:_.D1.80.D0.B0.D1.81.D1.85.D0.BE.D0.B4_.28src_flow.29"><span class="tocnumber">2.13</span> <span class="toctext">Источник: расход (src_flow)</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#.D0.A2.D1.80.D1.83.D0.B1.D0.B0-.D0.B1.D0.B0.D0.B7.D0.B0_.28pipeBase.29"><span class="tocnumber">2.14</span> <span class="toctext">Труба-база (pipeBase)</span></a></li>
+<li class="toclevel-2 tocsection-17"><a href="#.D0.A2.D1.80.D1.83.D0.B1.D0.B0_1-.3E1_.28pipe1_1.29"><span class="tocnumber">2.15</span> <span class="toctext">Труба 1-&gt;1 (pipe1_1)</span></a></li>
+<li class="toclevel-2 tocsection-18"><a href="#.D0.A2.D1.80.D1.83.D0.B1.D0.B0_2-.3E1_.28pipe2_1.29"><span class="tocnumber">2.16</span> <span class="toctext">Труба 2-&gt;1 (pipe2_1)</span></a></li>
+<li class="toclevel-2 tocsection-19"><a href="#.D0.A2.D1.80.D1.83.D0.B1.D0.B0_3-.3E1_.28pipe3_1.29"><span class="tocnumber">2.17</span> <span class="toctext">Труба 3-&gt;1 (pipe3_1)</span></a></li>
+<li class="toclevel-2 tocsection-20"><a href="#.D0.A2.D1.80.D1.83.D0.B1.D0.B0_1-.3E2_.28pipe1_2.29"><span class="tocnumber">2.18</span> <span class="toctext">Труба 1-&gt;2 (pipe1_2)</span></a></li>
+<li class="toclevel-2 tocsection-21"><a href="#.D0.A2.D1.80.D1.83.D0.B1.D0.B0_1-.3E3_.28pipe1_3.29"><span class="tocnumber">2.19</span> <span class="toctext">Труба 1-&gt;3 (pipe1_3)</span></a></li>
+<li class="toclevel-2 tocsection-22"><a href="#.D0.A2.D1.80.D1.83.D0.B1.D0.B0_1-.3E4_.28pipe1_4.29"><span class="tocnumber">2.20</span> <span class="toctext">Труба 1-&gt;4 (pipe1_4)</span></a></li>
+<li class="toclevel-2 tocsection-23"><a href="#.D0.9A.D0.BB.D0.B0.D0.BF.D0.B0.D0.BD:_.D0.B8.D1.81.D0.BF.D0.BE.D0.BB.D0.BD.D0.B8.D1.82.D0.B5.D0.BB.D1.8C.D0.BD.D1.8B.D0.B9_.D0.BC.D0.B5.D1.85.D0.B0.D0.BD.D0.B8.D0.B7.D0.BC_.28valveMech.29"><span class="tocnumber">2.21</span> <span class="toctext">Клапан: исполнительный механизм (valveMech)</span></a></li>
+<li class="toclevel-2 tocsection-24"><a href="#.D0.94.D0.B8.D0.B0.D1.84.D1.80.D0.B0.D0.B3.D0.BC.D0.B0_.28diaphragm.29"><span class="tocnumber">2.22</span> <span class="toctext">Диафрагма (diaphragm)</span></a></li>
+<li class="toclevel-2 tocsection-25"><a href="#.D0.A2.D0.B5.D0.BF.D0.BB.D0.BE.D0.BE.D0.B1.D0.BC.D0.B5.D0.BD.D0.BD.D0.B8.D0.BA_.28heatExch.29"><span class="tocnumber">2.23</span> <span class="toctext">Теплообменник (heatExch)</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<p>Библиотека создаётся для предоставления моделей аппаратов технологических процессов. Библиотека не является статической, а строится на основе модуля <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, позволяющего создавать вычисления на Java-подобном языке.
+</p><p>Для адресации к функции этой библиотеки можно использовать статический адрес вызова <b>DAQ.JavaLikeCalc.lib_techApp.{Func}()</b> или динамический <b>SYS.DAQ.JavaLikeCalc["lib_techApp"]["{Func}"].call()</b>, <b>SYS.DAQ.JavaLikeCalc["lib_techApp"].{Func}()</b>.
+Где <i>{Func}</i> — идентификатор функции в библиотеке.
+</p><p>Для подключения библиотеки к проекту станции OpenSCADA Вы можете получить файл БД как:
+</p>
+<ul><li> такой что поставляется с готовым и соответствующим пакетом дистрибутива Linux вроде "openscada-libdb-main", "openscada-LibDB.Main";</li>
+<li> наиболее актуальный и непосредственно полученный из <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">репозиторию subversion</a>, преобразованный в файл БД SQLite путём:</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 15px">
+$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql
+$ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
+</pre>
+<ul><li> загрузка <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">прикреплённого тут</a>.</li></ul>
+<p>Этот загруженный файл Вы далее можете разместить в каталоге проекта станции и создать объект базы данных модуля БД "SQLite", зарегистрировав файл базы данных в конфигурации.
+</p>
+<h2><span class="mw-headline" id=".D0.9A.D0.BE.D0.BD.D1.86.D0.B5.D0.BF.D1.86.D0.B8.D1.8F"><span class="mw-headline-number">1</span> Концепция</span></h2>
+<p>В основе модели каждого аппарата лежит вычисление входного расхода и выходного давления, исходя из входного давления и выходного расхода. В целом, модели аппаратов технологических процессов описываются разностными уравнениями для дискретных машин.
+</p><p>На основе функций этой библиотеки можно легко и быстро строить модели технологических процессов в модуле <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">BlockCalc</a> путём объединения блоков согласно технологической схемы. Пример объединения части аппаратов технологической схемы приведен на рисунке 1.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:598px;"><a class="image" href="http://oscada.org/wiki/File:TechApps_blocksh.png"><img class="thumbimage" height="78" src="../en/files/TechApps_blocksh.png" width="596" /></a>  <div class="thumbcaption">Рис.1. Пример блочной схемы технологического процесса.</div></div></div></div>
+<p>В основе модели любого аппарата ТП лежат две основные формулы, а именно формула расхода и давления среды. Каноническая формула расхода среды для сечения трубы или проходного сечения сужения имеет вид (1).
+</p><p><a class="image" href="http://oscada.org/wiki/File:TechApps_flow1.png"><img alt="TechApps flow1.png" height="22" src="../en/files/TechApps_flow1.png" width="124" /></a> (1)
+</p><p>Где:
+</p>
+<dl><dd>F — массовый расход (т/час).</dd>
+<dd>S — поперечное сечение (м2).</dd>
+<dd>Qr — реальная плотность среды (кг/м3).</dd>
+<dd>�P — перепад давления (ат).</dd></dl>
+<p>Реальная плотность вычисляется по формуле (2).
+</p><p><a class="image" href="http://oscada.org/wiki/File:TechApps_dens.png"><img alt="TechApps dens.png" height="26" src="../en/files/TechApps_dens.png" width="191" /></a> (2) 
+</p><p>Где:
+</p>
+<dl><dd>Q0 — плотность среды при нормальных условиях (кг/м3).</dd>
+<dd>Kpr — коэффициент сжимаемости среды (0,001 — жидкость; 0,95 — газ).</dd>
+<dd>Pi — входное давление (ат).</dd></dl>
+<p>Любая труба представляет потоку динамическое сопротивление, связанное с трением о стенки трубы и которое зависит от скорости потока. Динамическое сопротивление трубы выражается формулой (3). Общий расход среды с учётом динамического сопротивления вычисляется по формуле (4).
+</p><p><a class="image" href="http://oscada.org/wiki/File:TechApps_flowR.png"><img alt="TechApps flowR.png" height="48" src="../en/files/TechApps_flowR.png" width="418" /></a> (3) 
+</p><p>Где:
+</p>
+<dl><dd>�P — перепад давления (ат), сопротивление потоку среды стенками трубопровода.</dd>
+<dd>Kr — коэффициент трения стенок трубопровода.</dd>
+<dd>D — диаметр трубопровода (м).</dd>
+<dd>l — длина трубопровода (м).</dd>
+<dd>v — скорость потока в трубопроводе (м3/ч).</dd></dl>
+<p><a class="image" href="http://oscada.org/wiki/File:TechApps_flow2.png"><img alt="TechApps flow2.png" height="49" src="../en/files/TechApps_flow2.png" width="267" /></a> (4) 
+</p><p>Формула (1) описывает ламинарное истечение среды до критических скоростей. В случае превышения критической скорости вычисление расхода осуществляется по формуле (5). Универсальная формула расчёта расхода на всех скоростях будет иметь вид (6).
+</p><p><a class="image" href="http://oscada.org/wiki/File:TechApps_flowCrit.png"><img alt="TechApps flowCrit.png" height="30" src="../en/files/TechApps_flowCrit.png" width="205" /></a> (5) 
+</p><p>Где:
+</p>
+<dl><dd>Pi — давление в начале трубы.</dd></dl>
+<p><a class="image" href="http://oscada.org/wiki/File:TechApps_flow3.png"><img alt="TechApps flow3.png" height="43" src="../en/files/TechApps_flow3.png" width="414" /></a> (6) 
+</p><p>Где:
+</p>
+<dl><dd>Po — давление в конце трубы.</dd></dl>
+<p>В динамических системах изменение расхода на конце трубы не меняется мгновенно, а запаздывает на время перемещения участка среды от начала трубопровода к концу. Это время зависит от длины трубы и скорости движения среды в трубе. Задержку изменения расхода на конце трубы можно описать формулой (7). Результирующая формула расчёта расхода в трубе, с учётом описанных выше особенностей, записывается в виде (8).
+</p><p><a class="image" href="http://oscada.org/wiki/File:TechApps_flowLag.png"><img alt="TechApps flowLag.png" height="48" src="../en/files/TechApps_flowLag.png" width="200" /></a> (7) 
+</p><p>Где:
+</p>
+<dl><dd>Fo — расход на конце трубы.</dd>
+<dd>t — время.</dd>
+<dd>v — скорость потока среды = F/(Qr*S).</dd></dl>
+<p><a class="image" href="http://oscada.org/wiki/File:TechApps_flow4.png"><img alt="TechApps flow4.png" height="63" src="../en/files/TechApps_flow4.png" width="644" /></a> (8) 
+</p><p>Давление среды в объеме обычно вычисляется идентично для всех случаев, по формуле (9).
+</p><p><a class="image" href="http://oscada.org/wiki/File:TechApps_pressure.png"><img alt="TechApps pressure.png" height="60" src="../en/files/TechApps_pressure.png" width="333" /></a> (9) 
+</p>
+<h2><span class="mw-headline" id=".D0.A1.D0.BE.D1.81.D1.82.D0.B0.D0.B2_.D0.B1.D0.B8.D0.B1.D0.BB.D0.B8.D0.BE.D1.82.D0.B5.D0.BA.D0.B8"><span class="mw-headline-number">2</span> Состав библиотеки</span></h2>
+<p>В своём составе библиотека содержит около двух десятков моделей часто востребованных аппаратов технологических процессов и вспомогательных элементов. Названия функций и их параметров доступны на трёх языках: Английский, Украинский и Российский.
+</p>
+<h3><span class="mw-headline" id=".D0.97.D0.B0.D0.BF.D0.B0.D0.B7.D0.B4.D1.8B.D0.B2.D0.B0.D0.BD.D0.B8.D0.B5_.28lag.29"><span class="mw-headline-number">2.1</span> Запаздывание (lag)</span></h3>
+<p>Модель задержки. Может использоваться для имитации запаздывания значений датчиков.
+</p><p><b><u>Параметры</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Идентификатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Скрытый </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> out </td>
+<td> Выход </td>
+<td> Веществ. </td>
+<td> Возврат </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> in </td>
+<td> Вход </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> t_lg </td>
+<td> Время запаздывания, секунд </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота вычисления, Гц </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> true </td>
+<td> 100
+</td></tr></table>
+<p><b><u>Программа</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+out -= (out-in)/(t_lg*f_frq);
+</pre>
+<h3><span class="mw-headline" id=".D0.A8.D1.83.D0.BC:_2_.D0.B3.D0.B0.D1.80.D0.BC.D0.BE.D0.BD.D0.B8.D0.BA.D0.B8_.2B_.D1.81.D0.BB.D1.83.D1.87.D0.B0.D0.B9.D0.BD.D0.BE.D0.B5_.28noise.29"><span class="mw-headline-number">2.2</span> Шум: 2 гармоники + случайное (noise)</span></h3>
+<p>Модель шума. Содержит три составляющие:
+</p>
+<ul><li> первая гармоника;</li>
+<li> вторая гармоника;</li>
+<li> шум на основе генератора случайных чисел.</li></ul>
+<p><b><u>Параметры</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Идентификатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Скрытый </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> out </td>
+<td> Выход </td>
+<td> Веществ. </td>
+<td> Возврат </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> off </td>
+<td> Общее смещение </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> a_g1 </td>
+<td> Амплитуда гармоники 1 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> per_g1 </td>
+<td> Период гармоники 1, секунд </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> a_g2 </td>
+<td> Амплитуда гармоники 2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 5
+</td></tr>
+<tr>
+<td> per_g2 </td>
+<td> Период гармоники 2, секунд </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.1
+</td></tr>
+<tr>
+<td> a_rnd </td>
+<td> Амплитуда случайных значений </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота вычисления, Гц </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> true </td>
+<td> 100
+</td></tr>
+<tr>
+<td> tmp_g1 </td>
+<td> Счётчик гармоники 1 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> tmp_g2 </td>
+<td> Счётчик гармоники 2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> true </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Программа</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+tmp_g1 = (tmp_g1 &gt; 6.28)&nbsp;? 0&nbsp;: tmp_g1+6.28/(per_g1*f_frq);
+tmp_g2 = (tmp_g2 &gt; 6.28)&nbsp;? 0&nbsp;: tmp_g2+6.28/(per_g2*f_frq);
+out = off + a_g1*sin(tmp_g1) + a_g2*sin(tmp_g2) + a_rnd*(rand(2)-1);
+</pre>
+<h3><span class="mw-headline" id=".D0.A8.D0.B0.D1.80.D0.BE.D0.B2.D1.8B.D0.B9_.D0.BA.D1.80.D0.B0.D0.BD_.28ballCrane.29"><span class="mw-headline-number">2.3</span> Шаровый кран (ballCrane)</span></h3>
+<p>Модель шарового крана. Включает время хода и время отрыва.
+</p><p><b><u>Параметры</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Идентификатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Скрытый </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> pos </td>
+<td> Положение,&nbsp;% </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> com </td>
+<td> Команда </td>
+<td> Логич. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> st_open </td>
+<td> Состояние "Открыто" </td>
+<td> Логич. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> st_close </td>
+<td> Состояние "Закрыто" </td>
+<td> Логич. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> t_full </td>
+<td> Время хода, секунд </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 5
+</td></tr>
+<tr>
+<td> t_up </td>
+<td> Время отрыва, секунд </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.5
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота вычисления, Гц </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> true </td>
+<td> 100
+</td></tr>
+<tr>
+<td> tmp_up </td>
+<td> Счётчик отрыва </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> lst_com </td>
+<td> Последняя команда </td>
+<td> Логич. </td>
+<td> Вход </td>
+<td> true </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Программа</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+if(!(st_close &amp;&amp;&nbsp;!com) &amp;&amp;&nbsp;!(st_open &amp;&amp; com)) {
+  tmp_up = (pos &gt; 0 &amp;&amp; pos &lt; 100)&nbsp;? 0&nbsp;: (tmp_up&gt;0&amp;&amp;lst_com==com)?tmp_up-1/f_frq:t_up;
+  pos += (tmp_up &gt; 0)&nbsp;? 0&nbsp;: (100*(com?1:-1))/(t_full*f_frq);
+  pos = (pos &gt; 100)&nbsp;? 100&nbsp;: (pos&lt;0)?0:pos;
+  st_open = (pos &gt;= 100)&nbsp;? true&nbsp;: false;
+  st_close = (pos &lt;= 0)&nbsp;? true&nbsp;: false;
+  lst_com = com;
+}
+</pre>
+<h3><span class="mw-headline" id=".D0.A1.D0.B5.D0.BF.D0.B0.D1.80.D0.B0.D1.82.D0.BE.D1.80_.28separator.29"><span class="mw-headline-number">2.4</span> Сепаратор (separator)</span></h3>
+<p>Модель сепаратора с двумя фазами, жидкой и газовой.
+</p><p><b><u>Параметры</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Идентификатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Скрытый </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> Fi </td>
+<td> Входной расход, т/ч </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pi </td>
+<td> Входное давление, ата </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Si </td>
+<td> Входное сечение, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> Fo </td>
+<td> Выходной расход, т/ч </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po </td>
+<td> Выходное давление, ата </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> So </td>
+<td> Выходное сечение, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo </td>
+<td> Выходная длина, м </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Fo_lq </td>
+<td> Выходной расход жидкости, т/ч </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po_lq </td>
+<td> Выходное давление жидкости, ата </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Llq </td>
+<td> Уровень жидкости,&nbsp;% </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> PercLq </td>
+<td>&nbsp;% жидкости </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.01
+</td></tr>
+<tr>
+<td> Vap </td>
+<td> Объём аппарата, м3 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Q0 </td>
+<td> Нормальная плотность среды, кг/м3 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Qlq </td>
+<td> Плотность жидкости, кг/м3 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота вычисления, Гц </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> true </td>
+<td> 200
+</td></tr></table>
+<p><b><u>Программа</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+Flq = max(0, Fi*PercLq);
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, 293, Si, Fo+Flq, Po, 293, So, lo, Q0, 0.95, 0.01, f_frq);
+Llq = max(0, min(100,Llq+0.27*(Flq-Fo_lq)/(Vap*Qlq*f_frq)));
+Po_lq = Po + Llq*Vap/Qlq;
+</pre>
+<h3><span class="mw-headline" id=".D0.9A.D0.BB.D0.B0.D0.BF.D0.B0.D0.BD_.28valve.29"><span class="mw-headline-number">2.5</span> Клапан (valve)</span></h3>
+<p>Модель клапана, учитывающая:
+</p>
+<ul><li> два клапана в одном;</li>
+<li> сверхкритическое истечение;</li>
+<li> изменение температуры при дросселировании;</li>
+<li> работа только в одном направлении, обратный клапан;</li>
+<li> управляемая скорость изменения положения;</li>
+<li> нелинейность проходного сечения от положения.</li></ul>
+<p><b><u>Параметры</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Идентификатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Скрытый </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> Fi </td>
+<td> Входной расход, т/ч </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pi </td>
+<td> Входное давление, ата </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Ti </td>
+<td> Входная температура, К </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> Fo </td>
+<td> Выходной расход, т/ч </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po </td>
+<td> Выходное давление, ата </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> To </td>
+<td> Выходная температура, К </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> So </td>
+<td> Выходное сечение трубы, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo </td>
+<td> Выходная длина трубы, м </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> S_v1 </td>
+<td> Сечение клапана 1, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.1
+</td></tr>
+<tr>
+<td> l_v1 </td>
+<td> Положение клапана 1,&nbsp;% </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> t_v1 </td>
+<td> Время хода клапана 1, секунд </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> S_v2 </td>
+<td> Сечение клапана 2, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.05
+</td></tr>
+<tr>
+<td> l_v2 </td>
+<td> Положение клапана 2,&nbsp;% </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> t_v2 </td>
+<td> Время хода клапана 2, секунд </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Q0 </td>
+<td> Нормальная плотность среды, кг/м3 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Kln </td>
+<td> Коэффициент нелинейности </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Kpr </td>
+<td> Коэффициент сжимаемости среды [0...1] </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.95
+</td></tr>
+<tr>
+<td> Ct </td>
+<td> Теплоёмкость среды </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 20
+</td></tr>
+<tr>
+<td> Riz </td>
+<td> Тепловое сопротивление изоляции </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 20
+</td></tr>
+<tr>
+<td> noBack </td>
+<td> Обратный клапан </td>
+<td> Логич. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Fwind </td>
+<td> Скорость воздуха </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Twind </td>
+<td> Температура воздуха, К </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота вычисления, Гц </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> true </td>
+<td> 200
+</td></tr>
+<tr>
+<td> tmp_l1 </td>
+<td> Задержка положения 1 </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> tmp_l2 </td>
+<td> Задержка положения 2 </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> true </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Программа</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+Qr = Q0+Q0*Kpr*(Pi-1);
+tmp_l1 += (abs(l_kl1-tmp_l1) &gt; 5)&nbsp;? 100*sign(l_kl1-tmp_l1)/(t_kl1*f_frq)&nbsp;: (l_kl1-tmp_l1)/(t_kl1*f_frq);
+tmp_l2 += (abs(l_kl2-tmp_l2) &gt; 5)&nbsp;? 100*sign(l_kl2-tmp_l2)/(t_kl2*f_frq)&nbsp;: (l_kl2-tmp_l2)/(t_kl2*f_frq);
+Sr = (S_kl1*pow(tmp_l1,Kln)+S_kl2*pow(tmp_l2,Kln))/pow(100,Kln);
+
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, Ti, Sr, EVAL_REAL, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
+if(noBack) Fi = max(0, Fi);
+Po = max(0, min(100,Po+0.27*(Fi-Fo)/(Q0*Kpr*So*lo*f_frq)));
+
+To = max(0, min(2e3,To+(abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*f_frq)));
+</pre>
+<h3><span class="mw-headline" id=".D0.97.D0.B0.D0.B4.D0.B5.D1.80.D0.B6.D0.BA.D0.B0:_.D1.87.D0.B8.D1.81.D1.82.D0.B0.D1.8F_.28lagClean.29"><span class="mw-headline-number">2.6</span> Задержка: чистая (lagClean)</span></h3>
+<p>Модель чистого(транспортного) запаздывания. Реализуется путём включения нескольких простых звеньев запаздывания. Предназначен для имитации запаздывания в длинных трубопроводах.
+</p><p><b><u>Параметры</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Идентификатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Скрытый </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> out </td>
+<td> Выход </td>
+<td> Веществ. </td>
+<td> Возврат </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> in </td>
+<td> Вход </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> t_lg </td>
+<td> Время запаздывания, секунд </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обсчёта (Гц) </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> true </td>
+<td> 100
+</td></tr>
+<tr>
+<td> cl1 </td>
+<td> Звено 1 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> cl2 </td>
+<td> Звено 2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> cl3 </td>
+<td> Звено 3 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> true </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Программа</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+cl1 -= (cl1-in)/(t_lg*f_frq/4);
+cl2 -= (cl2-cl1)/(t_lg*f_frq/4);
+cl3 -= (cl3-cl2)/(t_lg*f_frq/4);
+out -= (out-cl3)/(t_lg*f_frq/4);
+</pre>
+<h3><span class="mw-headline" id=".D0.9A.D0.BE.D1.82.D1.91.D0.BB:_.D0.B1.D0.B0.D1.80.D0.B0.D0.B1.D0.B0.D0.BD_.28boilerBarrel.29"><span class="mw-headline-number">2.7</span> Котёл: барабан (boilerBarrel)</span></h3>
+<p>Модель барабана котлоагрегата.
+</p><p><b><u>Параметры</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Скрытый </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> Fi1 </td>
+<td> Входной расход воды, т/ч </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 22
+</td></tr>
+<tr>
+<td> Pi1 </td>
+<td> Входное давление воды, ата </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 43
+</td></tr>
+<tr>
+<td> Ti1 </td>
+<td> Входная температура воды, K </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 523
+</td></tr>
+<tr>
+<td> Si1 </td>
+<td> Входное сечение труб с водой, м2 </td>
+<td> Веществ. </td>
+<td> Вход</td>
+<td> false </td>
+<td> 0.6
+</td></tr>
+<tr>
+<td> Fi2 </td>
+<td> Входной расход дымовых газов, т/ч </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> Pi2 </td>
+<td> Входное давление дымовых газов, ата </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1.3
+</td></tr>
+<tr>
+<td> Ti2 </td>
+<td> Входная температура дымовых газов, K </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1700
+</td></tr>
+<tr>
+<td> Si2 </td>
+<td> Входное сечение трубы дымовых газов, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Vi1 </td>
+<td> Объем барабана, м3 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 3
+</td></tr>
+<tr>
+<td> Lo </td>
+<td> Уровень в барабане,&nbsp;% </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> S </td>
+<td> Поверхность нагрева, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 15
+</td></tr>
+<tr>
+<td> k </td>
+<td> Коэффициент теплоотдачи </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.8
+</td></tr>
+<tr>
+<td> Fo </td>
+<td> Выходной расход пара, т/ч </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 20
+</td></tr>
+<tr>
+<td> Po1 </td>
+<td> Выходное давление пара, ата </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 41.68
+</td></tr>
+<tr>
+<td> To1 </td>
+<td> Выходная температура пара, K </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> So1 </td>
+<td> Выходное сечение трубы по пару, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.5
+</td></tr>
+<tr>
+<td> lo1 </td>
+<td> Выходная длина трубы пара, м </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 5
+</td></tr>
+<tr>
+<td> Fo2 </td>
+<td> Выходной расход дымовых газов, т/ч </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 180
+</td></tr>
+<tr>
+<td> Po2 </td>
+<td> Выходное давление дымовых газов, ата </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> To2 </td>
+<td> Выходная температура дымовых газов, K </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Fstm </td>
+<td> Расход пара в барабане, т/ч </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Tv </td>
+<td> Температура воды в барабане, K </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота вычисления, Гц </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 200
+</td></tr></table>
+<p><b><u>Программа</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+// Water
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi1, Pi1, 293, Si1, EVAL_REAL, Po1, 293, So1, lo1, 1e3, 0.001, 0.01, f_frq);
+Fi1 = max(0, Fi1);
+
+// Steam
+Lo = max(0, min(100,Lo+(Fi1-Fstm)*100/(Vi1*1000*f_frq)));
+To1 = (100*pow(Po1,0.241)+5) + 273;
+
+if(Tv &lt; To1) {
+  Tv += (k*S*(Ti2-Tv)-Fi1*0.00418*(Tv-Ti1))/f_frq;
+  Fstm = 0;
+}
+if(Tv &gt;= To1) {
+  Tv = To1;
+  Lambda = 2750-0.00418*(Tv-273);
+  Fstm = (5*S*Fi2*(Ti2-Tv)-Fi1*0.00418*(Tv-Ti1))/(Po1*Lambda);
+}
+
+To2 = Ti2-Tv/k;
+Po1 = max(0, min(100,Po1+0.27*(Fstm-Fo)/(1.2*0.98*((1-Lo/100)*Vi1+So1*lo1)*f_frq)));
+
+// Smoke gas
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi2, Pi2, 293, Si2, Fo2, Po2, 293, Si2, 30, 1.2, 0.98, 0.01, f_frq);
+</pre>
+<h3><span class="mw-headline" id=".D0.9A.D0.BE.D1.82.D1.91.D0.BB:_.D1.82.D0.BE.D0.BF.D0.BA.D0.B0_.28boilerBurner.29"><span class="mw-headline-number">2.8</span> Котёл: топка (boilerBurner)</span></h3>
+<p>Модель топки котлоагрегата, работающего на трех видах топлива, исходно это: доменный, коксовый и природный газы.
+</p><p><b><u>Параметры</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Идентификатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Скрытый </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> Fi1 </td>
+<td> Входной расход доменного газа, т/ч </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> Pi1 </td>
+<td> Входное давление доменного газа, ата </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> Ti1 </td>
+<td> Входная температура доменного газа, K </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 40
+</td></tr>
+<tr>
+<td> Si1 </td>
+<td> Входное сечение трубы доменного газа, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> Fi2 </td>
+<td> Входной расход природного газа, т/ч </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> Pi2 </td>
+<td> Входное давление природного газа, ата </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> Ti2 </td>
+<td> Входная температура природного газа, K </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 20
+</td></tr>
+<tr>
+<td> Si2 </td>
+<td> Входное сечение трубы природного газа, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> Fi3 </td>
+<td> Входной расход коксового газа, т/ч </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> Pi3 </td>
+<td> Входное давление коксового газа, ата </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> Ti3 </td>
+<td> Входная температура коксового газа, K </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Si3 </td>
+<td> Входное сечение трубы коксового газа, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> Fi4 </td>
+<td> Входной расход воздуха, т/ч </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> Pi4 </td>
+<td> Входное давление воздуха, ата </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> Ti4 </td>
+<td> Входная температура воздуха, K </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 20
+</td></tr>
+<tr>
+<td> Si4 </td>
+<td> Входное сечение трубы воздуха, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> Fo </td>
+<td> Выходной расход дымовых газов, т/ч </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> Po </td>
+<td> Выходное давление дымовых газов, ата </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> To </td>
+<td> Выходная температура дымовых газов, K </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> So </td>
+<td> Выходное сечение трубы, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 90
+</td></tr>
+<tr>
+<td> lo </td>
+<td> Выходная длина трубы, м </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> V </td>
+<td> Объём топки, м3 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 830
+</td></tr>
+<tr>
+<td> CO </td>
+<td> Процент содержания CO в дымовых газах,&nbsp;% </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> O2 </td>
+<td> Процент содержания O2 в дымовых газах,&nbsp;% </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота вычисления, Гц </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 200
+</td></tr></table>
+<p><b><u>Программа</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+using DAQ.JavaLikeCalc.lib_techApp;
+pipeBase(Fi1, Pi1, Ti1, Si1, EVAL_REAL, Po, 293, So, lo, 1.2, 0.95, 0.01, f_frq); Fi1 = max(0, Fi1);
+pipeBase(Fi2, Pi2, Ti2, Si2, EVAL_REAL, Po, 293, So, lo, 0.7, 0.95, 0.01, f_frq); Fi2 = max(0, Fi2);
+pipeBase(Fi3, Pi3, Ti3, Si3, EVAL_REAL, Po, 293, So, lo, 1.33, 0.95, 0.01, f_frq); Fi3 = max(0, Fi3);
+pipeBase(Fi4, Pi4, Ti4, Si4, EVAL_REAL, Po, 293, So, lo, 1.293, 0.95, 0.01, f_frq); Fi4 = max(0, Fi4);
+
+Neobhod_vzd = Fi1 + 10*Fi2 + 4*Fi3;
+F_DG = Fi1 + Fi2 + Fi3 + Fi4;
+O2 = max(0, min(100,(Fi4-Neobhod_vzd)*100/F_DG));
+CO = min(100, (O2&lt;1)&nbsp;? (1.2*abs(O2))&nbsp;: 0);
+koef = min(1, Fi4/Neobhod_vzd);
+Q = koef*(8050*Fi2+3900*Fi3+930*Fi1);
+delta_t = Q/(F_DG*1.047);
+To = max(0, min(2000,(delta_t+(Ti4-273)+(Ti3-273)*(Fi3/Fi1)+(Ti2-273)*(Fi2/Fi1)+(Ti1-273)*(Fi1/Fi4))+273));
+
+Po = max(0, min(10,Po+0.27*(F_DG-Fo)/(1.2*0.95*(So*lo+V)*f_frq)));
+</pre>
+<h3><span class="mw-headline" id=".D0.A1.D0.B5.D1.82.D1.8C:_.D0.BD.D0.B0.D0.B3.D1.80.D1.83.D0.B7.D0.BA.D0.B0_.28net.29"><span class="mw-headline-number">2.9</span> Сеть: нагрузка (net)</span></h3>
+<p>Нагрузка с фиксированным давлением сети. Содержит параметр для подключения шума.
+</p><p><b><u>Параметры</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Идентификатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Скрытый </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> Fi </td>
+<td> Входной расход, т/ч </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Pi </td>
+<td> Входное давление, ата </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Po </td>
+<td> Задание выходного давления, ата </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> So </td>
+<td> Сечение трубы на выходе, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.1
+</td></tr>
+<tr>
+<td> Kpr </td>
+<td> Коэффициент сжимаемости среды [0...1] </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.95
+</td></tr>
+<tr>
+<td> Noise </td>
+<td> Шум входного расхода </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Q0 </td>
+<td> Нормальная плотность среды, кг/м3 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота вычисления, Гц </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> true </td>
+<td> 200
+</td></tr></table>
+<p><b><u>Программа</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, 293, So, EVAL_REAL, Po, 293, So, 10, Q0, Kpr, 0.01, f_frq);
+</pre>
+<h3><span class="mw-headline" id=".D0.98.D1.81.D1.82.D0.BE.D1.87.D0.BD.D0.B8.D0.BA:_.D0.B4.D0.B0.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D0.B5_.28src_press.29"><span class="mw-headline-number">2.10</span> Источник: давление (src_press)</span></h3>
+<p>Источник с фиксированным давлением. Содержит параметр для подключения шума.
+</p><p><b><u>Параметры</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Идентификатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Скрытый </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> Pi </td>
+<td> Задание входного давления, ата </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Fo </td>
+<td> Выходной расход, т/ч </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po </td>
+<td> Выходное давление, ата </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> So </td>
+<td> Сечение трубы на выходе, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.1
+</td></tr>
+<tr>
+<td> lo </td>
+<td> Длина трубы на выходе, м </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 100
+</td></tr>
+<tr>
+<td> Noise </td>
+<td> Шум входного давления </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Q0 </td>
+<td> Нормальная плотность среды, кг/м3 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Kpr </td>
+<td> Коэффициент сжимаемости среды [0...1] </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.95
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення, Гц </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> true </td>
+<td> 200
+</td></tr>
+<tr>
+<td> Fit </td>
+<td> Входной расход, удержанный </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> true </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Программа</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fit, Pi*Noise, 293, So, Fo, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
+</pre>
+<h3><span class="mw-headline" id=".D0.92.D0.BE.D0.B7.D0.B4.D1.83.D1.88.D0.BD.D1.8B.D0.B9_.D1.85.D0.BE.D0.BB.D0.BE.D0.B4.D0.B8.D0.BB.D1.8C.D0.BD.D0.B8.D0.BA_.28cooler.29"><span class="mw-headline-number">2.11</span> Воздушный холодильник (cooler)</span></h3>
+<p>Модель воздушного охладителя газового потока.
+</p><p><b><u>Параметры</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Идентификатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Скрытый </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> Fi </td>
+<td> Входной расход, т/ч </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pi </td>
+<td> Входное давление, ата </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Ti </td>
+<td> Входная температура, К </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> Si </td>
+<td> Сечение трубок, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.05
+</td></tr>
+<tr>
+<td> li </td>
+<td> Общая длина трубок, м </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Fo </td>
+<td> Выходной расход, т/ч </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po </td>
+<td> Выходное давление, ата </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> To </td>
+<td> Выходная температура, К </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> So </td>
+<td> Выходное сечение трубы, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo </td>
+<td> Длина выходной трубы, м </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Tair </td>
+<td> Температура охлаждения воздуха, К </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 283
+</td></tr>
+<tr>
+<td> Wc </td>
+<td> Производительность холодильника </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 200
+</td></tr>
+<tr>
+<td> Q0 </td>
+<td> Нормальная плотность среды, кг/м3 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Ct </td>
+<td> Теплоёмкость среды </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 100
+</td></tr>
+<tr>
+<td> Rt </td>
+<td> Тепловое сопротивление </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота вычисления, Гц </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> true </td>
+<td> 200
+</td></tr></table>
+<p><b><u>Программа</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, 293, Si, Fo, Po, 293, So, lo, Q0, 0.95, 0.01, f_frq);
+Qr = Q0 + Q0*0.95*(Pi-1);
+To += (Fi*(Ti-To)+Wc*(Tair-To)/Rt)/(Ct*(Si*li+So*lo)*Qr*f_frq);
+</pre>
+<h3><span class="mw-headline" id=".D0.9A.D0.BE.D0.BC.D0.BF.D1.80.D0.B5.D1.81.D1.81.D0.BE.D1.80_.D0.B3.D0.B0.D0.B7.D0.BE.D0.B2.D1.8B.D0.B9_.28compressor.29"><span class="mw-headline-number">2.12</span> Компрессор газовый (compressor)</span></h3>
+<p>Модель газового компрессора. Учитывает эффект помпажа. Помпаж вычисляется по газо-динамической кривой, исходя из которой получается коэффициент запаса по помпажу.
+</p><p><b><u>Параметры</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Идентификатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Скрытый </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> Fi </td>
+<td> Входной расход, т/ч </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pi </td>
+<td> Входное давление, ата </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Ti </td>
+<td> Входная температура, К </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> Fo </td>
+<td> Выходной расход, т/ч </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po </td>
+<td> Выходное давление, ата </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> To </td>
+<td> Выходная температура, К </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> So </td>
+<td> Выходное сечение трубы, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo </td>
+<td> Длина выходной трубы, м </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 2
+</td></tr>
+<tr>
+<td> Kmrg </td>
+<td> Коэффициент запаса по помпажу </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 0.1
+</td></tr>
+<tr>
+<td> N </td>
+<td> Обороты компрессора, тыс. об./мин </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> V </td>
+<td> Объём компрессора, м3 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 7
+</td></tr>
+<tr>
+<td> Kpmp </td>
+<td> Коэффициент помпажа, точка помпажа </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.066
+</td></tr>
+<tr>
+<td> Kslp </td>
+<td> Коэффициент наклона помпажной кривой </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.08
+</td></tr>
+<tr>
+<td> Q0 </td>
+<td> Нормальная плотность среды, кг/м3 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Kpr </td>
+<td> Коэффициент сжимаемости среды [0...1] </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.95
+</td></tr>
+<tr>
+<td> Ct </td>
+<td> Теплоёмкость среды </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 100
+</td></tr>
+<tr>
+<td> Riz </td>
+<td> Тепловое сопротивление изоляции </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 100
+</td></tr>
+<tr>
+<td> Fwind </td>
+<td> Скорость воздуха </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Twind </td>
+<td> Температура воздуха, К </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота вычисления, Гц </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> true </td>
+<td> 200
+</td></tr>
+<tr>
+<td> Fit </td>
+<td> Входной расход, удержанный </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> true </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Программа</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+Pmax = max(Pi, Po);
+Pmin = min(Pi, Po);
+Qr = Q0 + Q0*Kpr*(Pi-1);
+Qrf = Q0 + Q0*Kpr*(Pmax-1);
+Ftmp = (N &gt; 0.1)&nbsp;? (1-10*(Po-Pi)/(Qr*(pow(N,3)+0.1)*Kpmp))&nbsp;: 1;
+Kmrg = 1-Ftmp;  //The margin coefficient
+Fi = V*N*Qr*sign(Ftmp)*pow(abs(Ftmp),Kslp)+
+     0.3*(4*So*Qrf/(0.01*lo*1.7724+4*Qrf))*sign(Pi-Po)*pow(Qrf*(Pmax-max(Pmax*0.528,Pmin)),0.5);
+Fit -= (Fit-Fi)/max(1,(lo*f_frq)/max(1e-4,abs(Fi/(Qrf*So))));
+Po = max(0, min(100,Po+0.27*(Fi-Fo)/(Q0*Kpr*So*lo*f_frq)));
+
+To += (abs(Fi)*(Ti*pow(Po/Pi,0.3)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*(V+So*lo)*Qr*f_frq);
+</pre>
+<h3><span class="mw-headline" id=".D0.98.D1.81.D1.82.D0.BE.D1.87.D0.BD.D0.B8.D0.BA:_.D1.80.D0.B0.D1.81.D1.85.D0.BE.D0.B4_.28src_flow.29"><span class="mw-headline-number">2.13</span> Источник: расход (src_flow)</span></h3>
+<p>Источник с фиксированным расходом. Содержит параметр для подключения шума.
+</p><p><b><u>Параметры</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Идентификатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Скрытый </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> Fi </td>
+<td> Задание входного расхода, т/ч </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Fo </td>
+<td> Выходной расход, т/ч </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Po </td>
+<td> Выходное давление, ата </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> So </td>
+<td> Сечение трубы на выходе, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.1
+</td></tr>
+<tr>
+<td> lo </td>
+<td> Длина трубы на выходе, м </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 100
+</td></tr>
+<tr>
+<td> Noise </td>
+<td> Шум входного расхода </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Q0 </td>
+<td> Нормальная плотность среды, кг/м3 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Kpr </td>
+<td> Коэффициент сжимаемости среды [0...1] </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.95
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота вычисления, Гц </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> true </td>
+<td> 100
+</td></tr></table>
+<p><b><u>Программа</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+Po = max(0, min(100,Po+0.27*(Noise*Fi-Fo)/(Q0*Kpr*So*lo*f_frq)));
+</pre>
+<h3><span class="mw-headline" id=".D0.A2.D1.80.D1.83.D0.B1.D0.B0-.D0.B1.D0.B0.D0.B7.D0.B0_.28pipeBase.29"><span class="mw-headline-number">2.14</span> Труба-база (pipeBase)</span></h3>
+<p>Реализация базовых основ модели трубы:
+</p>
+<ul><li> расход в трубе с учётом: скорости движения, перепада давления, сопротивления за счёт трения и критического истечения;</li>
+<li> расчёт давления;</li>
+<li> учёт плотности среды и степени её сжимаемости как для газов, так и для жидкостей.</li></ul>
+<p><b><u>Параметры</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Идентификатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Скрытый </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> Fi </td>
+<td> Входной расход, т/ч </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pi </td>
+<td> Входное давление, ата </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Ti </td>
+<td> Входная температура, К </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 293
+</td></tr>
+<tr>
+<td> Si </td>
+<td> Входное сечение, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> Fo </td>
+<td> Выходной расход, т/ч </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po </td>
+<td> Выходное давление, ата </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> To </td>
+<td> Выходная температура, К </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 293
+</td></tr>
+<tr>
+<td> So </td>
+<td> Выходное сечение, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo </td>
+<td> Выходная длина, м </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Q0 </td>
+<td> Нормальная плотность среды, кг/м3 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Kpr </td>
+<td> Коэффициент сжимаемости среды [0...1] </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.98
+</td></tr>
+<tr>
+<td> Ktr </td>
+<td> Коэффициент трения </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.01
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота вычисления, Гц </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 100
+</td></tr></table>
+<p><b><u>Программа</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+Pmax = max(Pi, Po);
+Pmin = min(Pi, Po);
+Qr = Q0 + Q0*Kpr*(Pmax-1);
+Fit = 630*(4*Si*So*Qr/(Ktr*lo*1.7724*Si+4*So*Qr))*sign(Pi-Po)*pow(Qr*(Pmax-max(Pmax*0.528,Pmin)),0.5);
+Fi -= (Fi-Fit)/max(1,(lo*f_frq)/max(1,abs(Fit/(Qr*So))));
+if(!Fo.isEVal()) Po = max(0, min(100,Po+0.27*(Fi-Fo)/(Q0*Kpr*So*lo*f_frq)));
+</pre>
+<h3><span class="mw-headline" id=".D0.A2.D1.80.D1.83.D0.B1.D0.B0_1-.3E1_.28pipe1_1.29"><span class="mw-headline-number">2.15</span> Труба 1-&gt;1 (pipe1_1)</span></h3>
+<p>Модель узла труб по схеме "1 -&gt; 1".
+</p><p><b><u>Параметры</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Идентификатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Скрытый </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> Fi </td>
+<td> Входной расход, т/ч </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pi </td>
+<td> Входное давление, ата </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Fo </td>
+<td> Выходной расход, т/ч </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po </td>
+<td> Выходное давление, ата </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> So </td>
+<td> Выходное сечение, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo </td>
+<td> Выходная длина, м </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Q0 </td>
+<td> Нормальная плотность среды, кг/м3 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Kpr </td>
+<td> Коэффициент сжимаемости среды [0...1] </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.95
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота вычисления, Гц </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> true </td>
+<td> 200
+</td></tr>
+<tr>
+<td> Pti </td>
+<td> Pti </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> true </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Fto </td>
+<td> Fto </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pt1 </td>
+<td> Pt1 </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> true </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Ft1 </td>
+<td> Ft1 </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> true </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Программа</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, 293, So, Ft1, Pti, 293, So, 0.33*lo, Q0, Kpr, 0.01, f_frq);
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Ft1, Pti, 293, So, Fto, Pt1, 293, So, 0.33*lo, Q0, Kpr, 0.01, f_frq);
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fto, Pt1, 293, So, Fo, Po, 293, So, 0.33*lo, Q0, Kpr, 0.01, f_frq);
+</pre>
+<h3><span class="mw-headline" id=".D0.A2.D1.80.D1.83.D0.B1.D0.B0_2-.3E1_.28pipe2_1.29"><span class="mw-headline-number">2.16</span> Труба 2-&gt;1 (pipe2_1)</span></h3>
+<p>Модель узла труб по схеме "2 -&gt; 1".
+</p><p><b><u>Параметры</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Идентификатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Скрытый </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> Fi1 </td>
+<td> Входной расход 1, т/ч </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pi1 </td>
+<td> Входное давление 1, ата </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Ti1 </td>
+<td> Входная температура 1, К </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> Si1 </td>
+<td> Входное сечение 1, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> Fi2 </td>
+<td> Входной расход 2, т/ч </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pi2 </td>
+<td> Входное давление 2, ата </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Ti2 </td>
+<td> Входная температура 2, К </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> Si2 </td>
+<td> Входное сечение 2, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> Fo </td>
+<td> Выходной расход, т/ч </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po </td>
+<td> Выходное давление, ата </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> To </td>
+<td> Выходная температура, К </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> So </td>
+<td> Выходное сечение 1, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo </td>
+<td> Выходная длина 1, м </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Q0 </td>
+<td> Нормальная плотность среды, кг/м3 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Kpr </td>
+<td> Коэффициент сжимаемости среды [0...1] </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.95
+</td></tr>
+<tr>
+<td> Ct </td>
+<td> Теплоёмкость среды </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 20
+</td></tr>
+<tr>
+<td> Riz </td>
+<td> Тепловое сопротивления изоляции </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 20
+</td></tr>
+<tr>
+<td> Fwind </td>
+<td> Скорость воздуха </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Twind </td>
+<td> Температура воздуха, К </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота вычисления, Гц </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> true </td>
+<td> 100
+</td></tr></table>
+<p><b><u>Программа</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi1, Pi1, 293, Si1, EVAL_REAL, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi2, Pi2, 293, Si2, EVAL_REAL, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
+Po = max(0, min(100,Po+0.27*(Fi1+Fi2-Fo)/(Q0*Kpr*So*lo*f_frq)));
+To = max(0, To+(Fi1*(Ti1-To)+Fi2*(Ti2-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Q0*f_frq));
+</pre>
+<h3><span class="mw-headline" id=".D0.A2.D1.80.D1.83.D0.B1.D0.B0_3-.3E1_.28pipe3_1.29"><span class="mw-headline-number">2.17</span> Труба 3-&gt;1 (pipe3_1)</span></h3>
+<p>Модель узла труб по схеме "3 -&gt; 1".
+</p><p><b><u>Параметры</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Идентификатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Скрытый </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> Fi1 </td>
+<td> Входной расход 1, т/ч </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pi1 </td>
+<td> Входное давление 1, ата </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Ti1 </td>
+<td> Входная температура 1, К </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> Si1 </td>
+<td> Входное сечение 1, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> Fi2 </td>
+<td> Входной расход 2, т/ч </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pi2 </td>
+<td> Входное давление 2, ата </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Ti2 </td>
+<td> Входная температура 2, К </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> Si2 </td>
+<td> Входное сечение 2, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> Fi3 </td>
+<td> Входной расход 3, т/ч </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pi3 </td>
+<td> Входное давление 3, ата </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Ti3 </td>
+<td> Входная температура 3, К </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> Si3 </td>
+<td> Входное сечение 3, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> Fo </td>
+<td> Выходной расход, т/ч </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po </td>
+<td> Выходное давление, ата </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> To </td>
+<td> Выходная температура, К </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> So </td>
+<td> Выходное сечение 1, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo </td>
+<td> Выходная длина 1, м </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Q0 </td>
+<td> Нормальная плотность среды, кг/м3 </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Kpr </td>
+<td> Коэффициент сжимаемости среды [0...1] </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.95
+</td></tr>
+<tr>
+<td> Ct </td>
+<td> Теплоёмкость среды </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 20
+</td></tr>
+<tr>
+<td> Riz </td>
+<td> Тепловое сопротивление изоляции </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 20
+</td></tr>
+<tr>
+<td> Fwind </td>
+<td> Скорость воздуха </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Twind </td>
+<td> Температура воздуха, К </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота вычисления, Гц </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> true </td>
+<td> 100
+</td></tr></table>
+<p><b><u>Программа</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi1, Pi1, 293, Si1, EVAL_REAL, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi2, Pi2, 293, Si2, EVAL_REAL, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi3, Pi3, 293, Si3, EVAL_REAL, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
+Po = max(0, min(100,Po+0.27*(Fi1+Fi2+Fi3-Fo)/(Q0*Kpr*So*lo*f_frq)));
+To = max(0, To+(Fi1*(Ti1-To)+Fi2*(Ti2-To)+Fi3*(Ti3-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Q0*f_frq));
+</pre>
+<h3><span class="mw-headline" id=".D0.A2.D1.80.D1.83.D0.B1.D0.B0_1-.3E2_.28pipe1_2.29"><span class="mw-headline-number">2.18</span> Труба 1-&gt;2 (pipe1_2)</span></h3>
+<p>Модель узла труб по схеме "1 -&gt; 2".
+</p><p><b><u>Параметры</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Идентификатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Скрытый </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> Fi </td>
+<td> Входной расход, т/ч </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pi </td>
+<td> Входное давление, ата </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Fo1 </td>
+<td> Выходной расход 1, т/ч </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po1 </td>
+<td> Выходное давление 1, ата </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> So1 </td>
+<td> Выходное сечение 1, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo1 </td>
+<td> Выходная длина 1, м </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Fo2 </td>
+<td> Выходной расход 2, т/ч </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po2 </td>
+<td> Выходное давление 2, ата </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> So2 </td>
+<td> Выходное сечение 2, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo2 </td>
+<td> Выходная длина 2, м </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Q0 </td>
+<td> Нормальная плотность среды, кг/м3 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Kpr </td>
+<td> Коэффициент сжимаемости среды [0...1] </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.95
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обсчёта (Гц) </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> true </td>
+<td> 100
+</td></tr>
+<tr>
+<td> F1tmp </td>
+<td> Временный расход 1 </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> F2tmp </td>
+<td> Временный расход 2 </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pot1 </td>
+<td> Выходное давление удержанное </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> true	 </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Pot2 </td>
+<td> Выходное давление удержанное </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> true </td>
+<td> 1
+</td></tr></table>
+<p><b><u>Программа</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(F1tmp, Pi, 293, So1, Fo1, Po1, 293, So1, lo1, Q0, Kpr, 0.01, f_frq);
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(F2tmp, Pi, 293, So2, Fo2, Po2, 293, So2, lo2, Q0, Kpr, 0.01, f_frq);
+Fi = F1tmp + F2tmp;
+</pre>
+<h3><span class="mw-headline" id=".D0.A2.D1.80.D1.83.D0.B1.D0.B0_1-.3E3_.28pipe1_3.29"><span class="mw-headline-number">2.19</span> Труба 1-&gt;3 (pipe1_3)</span></h3>
+<p>Модель узла труб по схеме "1 -&gt; 3".
+</p><p><b><u>Параметры</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Идентификатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Скрытый </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> Fi </td>
+<td> Входной расход, т/ч </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pi </td>
+<td> Входное давление, ата </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Fo1 </td>
+<td> Выходной расход 1, т/ч </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po1 </td>
+<td> Выходное давление 1, ата </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> So1 </td>
+<td> Выходное сечение 1, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo1 </td>
+<td> Выходная длина 1, м </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Fo2 </td>
+<td> Выходной расход 2, т/ч </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po2 </td>
+<td> Выходное давление 2, ата </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> So2 </td>
+<td> Выходное сечение 2, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo2 </td>
+<td> Выходная длина 2, м </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Fo3 </td>
+<td> Выходной расход 3, т/ч </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po3 </td>
+<td> Выходное давление 3, ата </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> So3 </td>
+<td> Выходное сечение 3, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo3 </td>
+<td> Выходная длина 3, м </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Q0 </td>
+<td> Нормальная плотность среды, кг/м3 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Kpr </td>
+<td> Коэффициент сжимаемости среды [0...1] </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.95
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота вычисления, Гц </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> true </td>
+<td> 100
+</td></tr>
+<tr>
+<td> F1tmp </td>
+<td> Временный расход 1 </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> F2tmp </td>
+<td> Временный расход 2 </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> F3tmp </td>
+<td> Временный расход 3 </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pot1 </td>
+<td> Временное давление 1 </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> true </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Pot2 </td>
+<td> Временное давление 2 </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> true </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Pot3 </td>
+<td> Временное давление 3 </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> true </td>
+<td> 1
+</td></tr></table>
+<p><b><u>Программа</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(F1tmp, Pi, 293, So1, Fo1, Po1, 293, So1, lo1, Q0, Kpr, 0.01, f_frq);
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(F2tmp, Pi, 293, So2, Fo2, Po2, 293, So2, lo2, Q0, Kpr, 0.01, f_frq);
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(F3tmp, Pi, 293, So3, Fo3, Po3, 293, So3, lo3, Q0, Kpr, 0.01, f_frq);
+Fi = F1tmp + F2tmp + F3tmp;
+</pre>
+<h3><span class="mw-headline" id=".D0.A2.D1.80.D1.83.D0.B1.D0.B0_1-.3E4_.28pipe1_4.29"><span class="mw-headline-number">2.20</span> Труба 1-&gt;4 (pipe1_4)</span></h3>
+<p>Модель узла труб по схеме "1 -&gt; 4".
+</p><p><b><u>Параметры</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Идентификатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Скрытый </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> Fi </td>
+<td> Входной расход, т/ч </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pi </td>
+<td> Входное давление, ата </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Fo1 </td>
+<td> Выходной расход 1, т/ч </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po1 </td>
+<td> Выходное давление 1, ата </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> So1 </td>
+<td> Выходное сечение 1, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo1 </td>
+<td> Выходная длина 1, м </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Fo2 </td>
+<td> Выходной расход 2, т/ч </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po2 </td>
+<td> Выходное давление 2, ата </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> So2 </td>
+<td> Выходное сечение 2, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo2 </td>
+<td> Выходная длина 2, м </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Fo3 </td>
+<td> Выходной расход 3, т/ч </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po3 </td>
+<td> Выходное давление 3, ата </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> So3 </td>
+<td> Выходное сечение 3, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo3 </td>
+<td> Выходная длина 3, м </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Fo4 </td>
+<td> Выходной расход 4, т/ч </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po4 </td>
+<td> Выходное давление 4, ата </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> So4 </td>
+<td> Выходное сечение 4, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo4 </td>
+<td> Выходная длина 4, м </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Q0 </td>
+<td> Нормальная плотность среды, кг/м3 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Kpr </td>
+<td> Коэффициент сжимаемости среды [0...1] </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.95
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота вычисления, Гц </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> true </td>
+<td> 100
+</td></tr>
+<tr>
+<td> F1tmp </td>
+<td> Временный расход 1 </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> F2tmp </td>
+<td> Временный расход 2 </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> F3tmp </td>
+<td> Временный расход 3 </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> F4tmp </td>
+<td> Временный расход 4 </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pot1 </td>
+<td> Временное давление 1 </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> true </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Pot2 </td>
+<td> Временное давление 2 </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> true </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Pot3 </td>
+<td> Временное давление 3 </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> true </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Pot4 </td>
+<td> Временное давление 4 </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> true </td>
+<td> 1
+</td></tr></table>
+<p><b><u>Программа</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(F1tmp, Pi, 293, So1, Fo1, Po1, 293, So1, lo1, Q0, Kpr, 0.01, f_frq);
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(F2tmp, Pi, 293, So2, Fo2, Po2, 293, So2, lo2, Q0, Kpr, 0.01, f_frq);
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(F3tmp, Pi, 293, So3, Fo3, Po3, 293, So3, lo3, Q0, Kpr, 0.01, f_frq);
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(F4tmp, Pi, 293, So4, Fo4, Po4, 293, So4, lo4, Q0, Kpr, 0.01, f_frq);
+Fi = F1tmp + F2tmp + F3tmp + F4tmp;
+</pre>
+<h3><span class="mw-headline" id=".D0.9A.D0.BB.D0.B0.D0.BF.D0.B0.D0.BD:_.D0.B8.D1.81.D0.BF.D0.BE.D0.BB.D0.BD.D0.B8.D1.82.D0.B5.D0.BB.D1.8C.D0.BD.D1.8B.D0.B9_.D0.BC.D0.B5.D1.85.D0.B0.D0.BD.D0.B8.D0.B7.D0.BC_.28valveMech.29"><span class="mw-headline-number">2.21</span> Клапан: исполнительный механизм (valveMech)</span></h3>
+<p>Модель исполнительного механизма клапана. Включает время хода и время отрыва.
+</p><p><b><u>Параметры</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Идентификатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Скрытый </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> pos </td>
+<td> Положение,&nbsp;% </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> pos_sensor </td>
+<td> Положение по датчику,&nbsp;% </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> com </td>
+<td> Команда </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> st_open </td>
+<td> Состояние "Открыто" </td>
+<td> Логич. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> st_close </td>
+<td> Состояние "Закрыто" </td>
+<td> Логич. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> t_full </td>
+<td> Время хода, секунд </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 3
+</td></tr>
+<tr>
+<td> t_up </td>
+<td> Время срыва, секунд </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> t_sensor </td>
+<td> Время задержки сенсора, секунд </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обсчёта, Гц </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> true </td>
+<td> 100
+</td></tr>
+<tr>
+<td> tmp_up </td>
+<td> Счётчик срыва </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> lst_com </td>
+<td> Последняя команда </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Программа</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+if((pos &gt;= 99 &amp;&amp; com &gt;= 99) || (pos &lt;= 1 &amp;&amp; com &lt;= 1)) { 
+  tmp_up = t_up;
+  if(pos &gt;= 99) { pos = 100; st_open = true; }
+  else { pos = 0; st_close = true; }
+}
+else if(tmp_up &gt; 0) tmp_up -= 1/f_frq;
+else {
+  st_open = st_close = false;
+  lst_com += (com-lst_com)/(0.5*t_full*f_frq);
+  pos += (lst_com-pos)/(0.5*t_full*f_frq);
+}
+pos_sensor += (pos-pos_sensor)/(t_sensor*f_frq);
+</pre>
+<h3><span class="mw-headline" id=".D0.94.D0.B8.D0.B0.D1.84.D1.80.D0.B0.D0.B3.D0.BC.D0.B0_.28diaphragm.29"><span class="mw-headline-number">2.22</span> Диафрагма (diaphragm)</span></h3>
+<p>Модель диафрагмы.
+</p><p><b><u>Параметры</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Идентификатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Скрытый </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> Fi </td>
+<td> Входной расход, т/ч </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pi </td>
+<td> Входное давление, ata </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Fo </td>
+<td> Выходной расход, т/ч </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po </td>
+<td> Выходное давление, ata </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> dP </td>
+<td> Перепад давления, кПа </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Sdf </td>
+<td> Сечение диафрагмы, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.1
+</td></tr>
+<tr>
+<td> So </td>
+<td> Выходное сечение трубы, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo </td>
+<td> Длина трубы на выходе, м </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Q0 </td>
+<td> Нормальная плотность среды, кг/м3 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Kpr </td>
+<td> Коэффициент сжимаемости среды [0...1] </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.95
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота вычисления, Гц </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> true </td>
+<td> 100
+</td></tr></table>
+<p><b><u>Программа</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, 293, Sdf, Fo, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
+dP -= (dP-100*(Pi-Po))/f_frq;
+</pre>
+<h3><span class="mw-headline" id=".D0.A2.D0.B5.D0.BF.D0.BB.D0.BE.D0.BE.D0.B1.D0.BC.D0.B5.D0.BD.D0.BD.D0.B8.D0.BA_.28heatExch.29"><span class="mw-headline-number">2.23</span> Теплообменник (heatExch)</span></h3>
+<p>Модель теплообменника, рассчитывающая теплообмен двух потоков.
+</p><p><b><u>Параметры</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Идентификатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Скрытый </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> Fi1 </td>
+<td> Входной расход 1, т/ч </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 20
+</td></tr>
+<tr>
+<td> Pi1 </td>
+<td> Входное давление 1, ата </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Ti1 </td>
+<td> Входная температура 1, K </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 20
+</td></tr>
+<tr>
+<td> Si1 </td>
+<td> Входное сечение 1, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> li1 </td>
+<td> Входная длина 1, м </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Q0i1 </td>
+<td> Входная нормальная плотность 1, кг/м3 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Kpr1 </td>
+<td> Входной коэффициент сжимаемости среды 1 [0...1] </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.9
+</td></tr>
+<tr>
+<td> Ci1 </td>
+<td> Входная теплоёмкость 1 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Fi2 </td>
+<td> Входной расход 2, т/ч </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 20
+</td></tr>
+<tr>
+<td> Pi2 </td>
+<td> Входное давление 2, ата </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Ti2 </td>
+<td> Входная температура 2, K </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 40
+</td></tr>
+<tr>
+<td> Si2 </td>
+<td> Входное сечение 2, м2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> li2 </td>
+<td> Входная длина 2, м </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Q0i2 </td>
+<td> Входная нормальная плотность 2, кг/м3 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Kpr2 </td>
+<td> Входной коэффициент сжимаемости среды 2 [0...1] </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.9
+</td></tr>
+<tr>
+<td> Ci2 </td>
+<td> Входная теплоёмкость 2 </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> ki </td>
+<td> Коэффициент теплоотдачи </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0.9
+</td></tr>
+<tr>
+<td> Fo1 </td>
+<td> Выходной расход 1, т/ч </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po1 </td>
+<td> Выходное давление 1, ата </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> To1 </td>
+<td> Выходная температура 1, K </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> So1 </td>
+<td> Выходное сечение 1, м2 </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> lo1 </td>
+<td> Выходная длина 1, м </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Fo2 </td>
+<td> Выходной расход 2, т/ч </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po2 </td>
+<td> Выходное давление 2, ата </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> To2 </td>
+<td> Выходная температура 2, K </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> So2 </td>
+<td> Выходное сечение 2, м2 </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> lo2 </td>
+<td> Выходная длина 2, м </td>
+<td> Веществ. </td>
+<td> Выход </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота вычисления, Гц </td>
+<td> Веществ. </td>
+<td> Вход </td>
+<td> false </td>
+<td> 200
+</td></tr></table>
+<p><b><u>Программа</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi1, Pi1, Ti1, Si1, Fo1, Po1, 293, So1, lo1, Q0i1, Kpr1, 0.01, f_frq);
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi2, Pi2, Ti2, Si2, Fo2, Po2, 293, So2, lo2, Q0i2, Kpr2, 0.01, f_frq);
+
+To1 = max(0, min(1e4,(Fi1*Ti1*Ci1+ki*Fi2*Ti2*Ci2)/(Fi1*Ci1+ki*Fi2*Ci2)));
+To2 = max(0, min(1e4,(ki*Fi1*Ti1*Ci1+Fi2*Ti2*Ci2)/(ki*Fi1*Ci1+Fi2*Ci2)));
+</pre>
+
+
+
+
+
+
+</div></body>
+</html>

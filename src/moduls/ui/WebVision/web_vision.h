@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebVision file: web_vision.h
 /***************************************************************************
- *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -49,9 +49,11 @@ namespace WebVision
 //*************************************************
 struct SSess
 {
-    SSess( const string &iuser ) : user(iuser)	{ }
+    SSess( const string &iuser ) : user(iuser), mRoot(-1)	{ }
     SSess( const string &iurl, const string &isender, const string &iuser, vector<string> &ivars,
 	    const string &icontent, TProtocolIn *iprt );
+
+    bool isRoot( );
 
     //Attributes
     TProtocolIn	*prt;		//input protocol
@@ -62,6 +64,7 @@ struct SSess
 		content,	//Contains
 		gPrms,		//Global parameters
 		lang;		//Language
+    int		mRoot;		//Root access user
 
     vector<string>	vars;	//request vars
     vector<XMLNode>	cnt;	//Parsed contain

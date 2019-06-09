@@ -2640,15 +2640,15 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 	    }
 	    if( flag_dr )//-- If the figure is out of this array, then draw it(it is the figures which are lower than the current fill ) --
 	    {
-		shape_temp_all.push_back( draw_before[k] );
-		gdImagePtr im2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
+		shape_temp_all.push_back(draw_before[k]);
+		gdImagePtr im2 = gdImageCreateTrueColor(scaleWidth, scaleHeight);
 		gdImageAlphaBlending(im2, 0);
-		gdImageFilledRectangle( im2, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(im2,0,0,0,127) );
+		gdImageFilledRectangle(im2, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(im2,0,0,0,127));
 		gdImageAlphaBlending(im2, 1);
-		paintFigure( im2, shapeItems[draw_before[k]], xSc, ySc, true, true );
-		gdImageAlphaBlending(im,1);
+		paintFigure(im2, shapeItems[draw_before[k]], xSc, ySc, true, true);
+		gdImageAlphaBlending(im, 1);
 		gdImageSaveAlpha(im, 1);
-		gdImageAlphaBlending(im2,1);
+		gdImageAlphaBlending(im2, 1);
 		gdImageSaveAlpha(im2, 1);
 		gdImageCopy(im, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
 		if(im2) { gdImageDestroy(im2); im2 = NULL; }
@@ -4188,9 +4188,9 @@ void VCAElFigure::postReq( SSess &ses )
 	int y_coord = (prmEl!=ses.prm.end()) ? s2i(prmEl->second) : -1;
 	prmEl = ses.prm.find("key");
 	string key = (prmEl!=ses.prm.end()) ? prmEl->second : "";
-	if( x_coord < 0 || y_coord < 0 ) return;
+	if(!im || x_coord < 0 || y_coord < 0) return;
 
-	int clickFillNum = drawElF( ses, xSc, ySc, Point(x_coord,y_coord) );
+	int clickFillNum = drawElF(ses, xSc, ySc, Point(x_coord,y_coord));
 	if(clickFillNum != -1) {
 	    XMLNode req("set");
 	    req.setAttr("path",ses.url+"/%2fserv%2fattr");

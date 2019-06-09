@@ -709,7 +709,7 @@ void TSYS::load_( )
 	    TArrayObj *rez = TRegExp("openscada_(.+)$").match(cmdOpt(""));
 	    if(rez) {
 		if(rez->size() >= 2) setPrjNm(rez->arGet(1).getS());
-		delete(rez);
+		delete rez;
 	    }
 	}
 	if(!prjNm().size() && getenv("OSCADA_ProjName")) setPrjNm(getenv("OSCADA_ProjName"));

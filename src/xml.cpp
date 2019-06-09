@@ -24,6 +24,8 @@
 #include "tmess.h"
 #include "xml.h"
 
+#define ENT_MAX_SZ	100
+
 using namespace OSCADA;
 
 //*************************************************
@@ -507,18 +509,22 @@ void XMLNode::parseEntity( LoadCtx &ctx, unsigned &rpos, string &rez )
     else if((rpos+3) < ctx.vl.size() && ctx.vl[rpos+1] == '#') {
 	uint32_t eVal = 0;
 	if(ctx.vl[rpos+2] == 'X' || ctx.vl[rpos+2] == 'x') {
-	    rpos += 3;
-	    unsigned nBeg = rpos;
-	    while(isxdigit(ctx.vl[rpos])) rpos++;
-	    if(ctx.vl[rpos] != ';') throw TError("XMLNode", _("Error entity. Pos: %d"), nBeg-3);
+	    rpos += 1;
+	    unsigned nBeg = rpos + 2, nEnd = rpos + 2;
+	    while(isxdigit(ctx.vl[nEnd]) && (nEnd-nBeg) < ENT_MAX_SZ) ++nEnd;
+	    if(ctx.vl[nEnd] != ';') { rez += '&'; return; }
+	    //if(ctx.vl[nEnd] != ';') throw TError("XMLNode", _("Error entity. Pos: %d"), nBeg-3);
 	    eVal = strtoul(ctx.vl.data()+nBeg, NULL, 16);
+	    rpos = nEnd;
 	}
 	else {
-	    rpos += 2;
-	    unsigned nBeg = rpos;
-	    while(isdigit(ctx.vl[rpos])) rpos++;
-	    if(ctx.vl[rpos] != ';') throw TError("XMLNode", _("Error entity. Pos: %d"), nBeg-2);
+	    rpos += 1;
+	    unsigned nBeg = rpos + 1, nEnd = rpos + 1;
+	    while(isdigit(ctx.vl[nEnd]) && (nEnd-nBeg) < ENT_MAX_SZ) ++nEnd;
+	    if(ctx.vl[nEnd] != ';') { rez += '&'; return; }
+	    //if(ctx.vl[nEnd] != ';') throw TError("XMLNode", _("Error entity. Pos: %d"), nBeg-2);
 	    eVal = strtoul(ctx.vl.data()+nBeg, NULL, 10);
+	    rpos = nEnd;
 	}
 	//Value process		!!!! Rewrote
 	if(eVal < 0x80)	rez += (char)eVal;
@@ -532,15 +538,17 @@ void XMLNode::parseEntity( LoadCtx &ctx, unsigned &rpos, string &rez )
     //Check for loaded entities
     else {
 	rpos += 1;
-	unsigned nBeg = rpos;
-	for( ; ctx.vl[rpos] != ';'; rpos++)
-	    if(rpos >= ctx.vl.size()) throw TError("XMLNode", _("Error entity. Pos: %d"), nBeg-1);
-	map<string,string>::iterator ient = ctx.ent.size() ? ctx.ent.find(ctx.vl.substr(nBeg,rpos-nBeg)) : ctx.ent.end();
+	unsigned nBeg = rpos, nEnd = rpos;
+	while(ctx.vl[nEnd] != ';' && (nEnd-nBeg) < ENT_MAX_SZ) ++nEnd;
+	if(ctx.vl[nEnd] != ';')	{ rez += '&'; return; }
+	//if(rpos >= ctx.vl.size()) throw TError("XMLNode", _("Error entity. Pos: %d"), nBeg-1);
+	map<string,string>::iterator ient = ctx.ent.size() ? ctx.ent.find(ctx.vl.substr(nBeg,nEnd-nBeg)) : ctx.ent.end();
 	if(ient != ctx.ent.end()) rez += ient->second;
 	else {
 	    rez += '?';
-	    mess_debug("/XMLNode", _("Unknown entity '%s'. Pos: %d"), ctx.vl.substr(nBeg,rpos-nBeg).c_str(), rpos);
+	    mess_debug("/XMLNode", _("Unknown entity '%s'. Pos: %d"), ctx.vl.substr(nBeg,nEnd-nBeg).c_str(), rpos);
 	}
+	rpos = nEnd;
     }
 }
 

@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"3.6.1"
+#define MOD_VER		"3.7.0"
 #define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on the the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -381,14 +381,13 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		ResAlloc sesRes(mSesRes, false);
 		for(unsigned iCh = 0; iCh < req.childSize(); iCh++) {
 		    if(!pgAccess(iprt,sender+"/" MOD_ID "/ses_"+req.childGet(iCh)->text()+"/"))	continue;
-		    bool isRoot = false;
-		    if(!(isRoot=SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_)) &&
+		    if(!ses.isRoot() &&
 			    (req.childGet(iCh)->attr("user") != user ||
 			    (vcaSesPresent(req.childGet(iCh)->text()) && vcaSesAt(req.childGet(iCh)->text()).at().sender() != sender)))
 			continue;
 		    prjSesEls += "<tr><td><img src='/" MOD_ID "/ico?it=/ses_" + req.childGet(iCh)->text() + "' height='32' width='32'/> "
 			"<a href='/" MOD_ID "/ses_" + req.childGet(iCh)->text() + "/"+ses.gPrms+"'>" + req.childGet(iCh)->text()+"</a>";
-		    if(isRoot) prjSesEls += " (<a href='/" MOD_ID "/ses_" + req.childGet(iCh)->text() + "?com=close'>"+_("close")+"</a>)";
+		    if(ses.isRoot()) prjSesEls += " (<a href='/" MOD_ID "/ses_" + req.childGet(iCh)->text() + "?com=close'>"+_("close")+"</a>)";
 		    if(req.childGet(iCh)->attr("user") != user) prjSesEls += " - "+req.childGet(iCh)->attr("user");
 		    if(vcaSesPresent(req.childGet(iCh)->text()) && vcaSesAt(req.childGet(iCh)->text()).at().sender() != sender)
 			prjSesEls += " - "+vcaSesAt(req.childGet(iCh)->text()).at().sender();
@@ -410,8 +409,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		cntrIfCmd(req, ses);
 		for(unsigned iCh = 0; iCh < req.childSize(); iCh++) {
 		    if(!pgAccess(iprt,sender+"/" MOD_ID "/prj_"+req.childGet(iCh)->attr("id")+"/"))	continue;
-		    if(!SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_) && self_prjSess.find(req.childGet(iCh)->attr("id")+";") != string::npos)
-			continue;
+		    if(!ses.isRoot() && self_prjSess.find(req.childGet(iCh)->attr("id")+";") != string::npos)	continue;
 		    prjSesEls += "<tr><td><img src='/" MOD_ID "/ico?it=/prj_" + req.childGet(iCh)->attr("id") + "' height='32' width='32'/> "
 			"<a href='/" MOD_ID "/prj_" + req.childGet(iCh)->attr("id") + "/"+ses.gPrms+"'>" + req.childGet(iCh)->text() + "</a></td></tr>";
 		}
@@ -437,7 +435,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		req.setAttr("path","/%2fses%2fses")->setAttr("chkUserPerm","1");
 		cntrIfCmd(req, ses);
 		ResAlloc sesRes(mSesRes, false);
-		if(!SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_))
+		if(!ses.isRoot())
 		    for(unsigned iCh = 0; iCh < req.childSize(); iCh++)
 			if(req.childGet(iCh)->attr("user") == user && req.childGet(iCh)->attr("proj") == zero_lev.substr(4) &&
 			    vcaSesPresent(req.childGet(iCh)->text()) && vcaSesAt(req.childGet(iCh)->text()).at().sender() == sender)
@@ -455,6 +453,8 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 			else {
 			    sName = req.attr("sess");
 			    vcaSesAdd(sName, true);
+			    vcaSesAt(sName).at().projSet(req.attr("prj"));
+			    vcaSesAt(sName).at().userSet(user);
 			    vcaSesAt(sName).at().senderSet(sender);
 			}
 		    }
@@ -469,10 +469,13 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		ses.url = Mess->codeConvIn("UTF-8", ses.url);	//Internal data into UTF-8
 		string sesnm = zero_lev.substr(4);
 
+		AutoHD<VCASess> vs;
+		try { vs = vcaSesAt(sesnm); } catch(TError&) { }
+
 		map<string,string>::iterator cntEl;
 		if((cntEl=ses.prm.find("com"))!=ses.prm.end() && cntEl->second == "close") {
-		    if(SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_)) {
-			vcaSesDel(sesnm);
+		    if(ses.isRoot()) {
+			if(!vs.freeStat()) { vs.free(); vcaSesDel(sesnm); }
 			page = pgCreator(iprt, _("Going to the main page ..."),
 			    "200 OK", "", "<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/" MOD_ID "'/>", "", ses.lang);
 			mess_info(nodePath().c_str(), _("The session '%s' is closed."), sesnm.c_str());
@@ -480,15 +483,26 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		    else page = pgCreator(iprt, string("<div class='error'>")+_("You '%s' have no access to close sessions!")+"</div>\n",
 			    "401 Unauthorized", "", "", "", ses.lang);
 		}
+		// Checking for the session presence
+		else if(!vs.freeStat() && (user != vs.at().user() || sender != vs.at().sender()) && !SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_))
+		    page = pgCreator(iprt, _("Going to the different session ..."),
+			"200 OK", "", "<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/" MOD_ID "/prj_"+vs.at().proj()+"'/>", "", ses.lang);
 		else {
-		    // Check for the session presence
 		    if(!ses.prm.size()) {
 			XMLNode req("get"); req.setAttr("path",ses.url+"/%2fobj%2fst%2fen");
 			if(cntrIfCmd(req,ses) || !s2i(req.text()))	{ HTTP_GET("", page, vars, user, iprt); return; }
 		    }
 		    // Call to the session
 		    ResAlloc sesRes(mSesRes, false);
-		    try { vcaSesAt(sesnm).at().getReq(ses); }
+		    if(!vs.freeStat())	vs.at().getReq(ses);
+		    else {
+			sesRes.request(true);
+			vcaSesAdd(sesnm, false);
+			vcaSesAt(sesnm).at().senderSet(sender);
+			vcaSesAt(sesnm).at().getReq(ses);
+		    }
+
+		    /*try { vcaSesAt(sesnm).at().getReq(ses); }
 		    catch(...) {
 			if(!vcaSesPresent(sesnm)) {
 			    sesRes.request(true);
@@ -496,7 +510,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 			    vcaSesAt(sesnm).at().senderSet(sender);
 			    vcaSesAt(sesnm).at().getReq(ses);
 			} else throw;
-		    }
+		    }*/
 		    page = ses.page;
 		}
 	    }
@@ -765,7 +779,7 @@ string TWEB::trMessReplace( const string &tsrc )
 //*************************************************
 SSess::SSess( const string &iurl, const string &isender, const string &iuser, vector<string> &ivars,
 	const string &icontent, TProtocolIn *iprt ) :
-    prt(iprt), url(iurl), sender(isender), user(iuser), content(icontent), vars(ivars)
+    prt(iprt), url(iurl), sender(isender), user(iuser), content(icontent), mRoot(-1), vars(ivars)
 {
     //URL parameters parse
     size_t prmSep = iurl.find("?");
@@ -822,6 +836,13 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
 	if(pos >= content.size()) return;
 	cnt.back().setText(content.substr(pos, content.find(string(c_term)+c_end+boundary,pos)-pos));
     }
+}
+
+bool SSess::isRoot( )
+{
+    if(mRoot < 0) mRoot = SYS->security().at().access(user, SEC_WR, "root", "root", RWRWR_);
+
+    return mRoot;
 }
 
 #undef _

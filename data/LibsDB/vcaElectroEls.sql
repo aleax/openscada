@@ -1488,11 +1488,11 @@ else {
 ',-1,'name;dscr;lineClr;elLst;p1x;p1y;c1;s1;s2;',1501767258);
 CREATE TABLE 'VCALibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "VCALibs" VALUES('ElectroEls','Elements of the electric','Элементы электрики','Елементи електрики','Library of elements of the electic schemes of the user interface.
-Author: Roman Savochenko <rom_as@oscada.org>, Maksim Lisenko (2010)
+Author: Roman Savochenko <roman@oscada.org>, Maksim Lisenko (2010)
 Version: 1.2.0','Библиотека элементов электрических схем пользовательского интерфейса.
-Автор: Роман Савоченко <rom_as@oscada.org>, Максим Лысенко (2010)
+Автор: Роман Савоченко <roman@oscada.org>, Максим Лысенко (2010)
 Версия: 1.2.0','Бібліотека елементів електричних схем інтерфейсу користувача.
-Автор: Роман Савоченко <rom_as@oscada.org>, Максим Лисенко (2010)
+Автор: Роман Савоченко <roman@oscada.org>, Максим Лисенко (2010)
 Версія: 1.2.0','wlb_ElectroEls','');
 CREATE TABLE 'wlb_ElectroEls_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '0' ,"CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','name','','One-way key','Ключ однополосный','Ключ однополосний',32,'','','','','','');
@@ -2693,11 +2693,11 @@ line:(0|29):(72|100):::::
 ','','',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('arrowSharp','name','','Double arrow','Двойная стрелка','Подвійна стрілка',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('arrowSharp','dscr','','Double arrow, designation of outboard equipment
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','Двойная стрелка, обозначение выездного оборудования
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.0.0','Подвійна стрілка, позначення виїздного обладнання
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.0.0',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('arrowSharp','geomX','','827','','',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('arrowSharp','geomY','','412','','',32,'','','','','','');
@@ -2742,11 +2742,11 @@ line:(83|45):(83|55):::::
 INSERT INTO "wlb_ElectroEls_io" VALUES('conBus','owner','','root:UI','','',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('conBus','name','','Distribution bus','Распред. шина','Розпод. шина',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('conBus','dscr','','Distribution bus
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','Распределительная шина
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.0.0','Розподільча шина
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.0.0',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('conBus','lineWdth','','2','','',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('conBus','lineClr','','','','',32,'','','','','','');
@@ -2796,11 +2796,11 @@ line:(15|31):(46|31):::::
 ','','',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('fuse1','name','','Fuse','Предохранитель','Запобіжник',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('fuse1','dscr','','Fuse
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','Предохранитель
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.0.0','Запобіжник
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.0.0',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('fuse1','lineWdth','','2','','',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('fuse1','lineClr','','','','',32,'','','','','','');
@@ -2812,21 +2812,21 @@ line:(15|50):(84|50):::::
 ','','',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('key','name','','Key','Ключ','Ключ',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('key','dscr','','A simple key.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.1
 Properties:
 - var = true - closure;
 - var = false - opening;
 - var = EVAL - the key is dotted;
 - the frame is configured.','Простой ключ.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.0.1
 Свойства:
 - var=true - замыкание;
 - var=false - размыкание;
 - var=EVAL - ключ пунктирный;
 - рамка конфигурируется.','Простий ключ.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.0.1
 Властивості:
 - var=true - замкнення;
@@ -2857,11 +2857,11 @@ INSERT INTO "wlb_ElectroEls_io" VALUES('key','s1','','0','','',8,'','','','','',
 INSERT INTO "wlb_ElectroEls_io" VALUES('key','s2','','2','','',0,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('limU','name','','Voltage limiter','Огранич. напряжения','Обмежувач напруги',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('limU','dscr','','Voltage limiter
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','Ограничитель напряжения
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.0.0','Обмежувач напруги
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.0.0',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('limU','lineWdth','','2','','',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('limU','lineClr','','','','',32,'','','','','','');
@@ -2874,11 +2874,11 @@ line:(17|86):(60|23):::::
 ','','',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('load1','name','','Load 1','Нагрузка 1','Навантаження 1',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('load1','dscr','','Load 1
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','Нагрузка 1
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.0.0','Навантаження 1
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.0.0',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('load1','geomX','','827','','',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('load1','geomY','','412','','',32,'','','','','','');
@@ -2896,11 +2896,11 @@ line:(54|90):(54|75):::::
 ','','',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('load2','name','','Load 2','Нагрузка 2','Навантаження 2',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('load2','dscr','','Load 2
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','Нагрузка 2
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.0.0','Навантаження 2
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.0.0',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('load2','lineWdth','','2','','',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('load2','lineClr','','black','','',32,'','','','','','');
@@ -2953,19 +2953,19 @@ arc:(90|50):(50|50):(70|50):(70|70):(90|50):::::
 INSERT INTO "wlb_ElectroEls_io" VALUES('stGen','owner','','root:UI','','',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('stGen','name','','General state','Состояние общее','Загальний стан',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('stGen','dscr','','General state, usually for contactors
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0
 Properties:
 - var = true - fill in red
 - var = false - fill in green
 - var = EVAL - filling is transparent','Общее состояние, обычно для контакторов
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.0.0
 Свойства:
 - var=true - заполнение красным
 - var=false - заполнение зелёным
 - var=EVAL - заполнение прозрачным','Загальний стан, типово для контакторів
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.0.0
 Властивості:
 - var=true - заповнення червоним
@@ -2983,19 +2983,19 @@ INSERT INTO "wlb_ElectroEls_io" VALUES('stGen','c1','','#000000-127','','',8,'',
 INSERT INTO "wlb_ElectroEls_io" VALUES('stGen1','owner','','root:UI','','',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('stGen1','name','','General state 1','Состояние общее 1','Загальний стан 1',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('stGen1','dscr','','General status of the group for boxing elements included
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0
 Properties:
 - var = true - the color of the curtain is red
 - var = false - the color of the curtain is green
 - var = EVAL - the color of the curtain is black','Общее состояние группы, для включенных в бокс элементов
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.0.0
 Свойства:
 - var=true - цвет бордюра красный
 - var=false - цвет бордюра зелёный
 - var=EVAL - цвет бордюра чёрный','Загальний стан групи, для включених до боксу елементів
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.0.0
 Властивості:
 - var=true - колір бордюру червоний
@@ -3021,11 +3021,11 @@ arc:(25|30):(25|30):(50|30):(50|5):(25|30):::::
 INSERT INTO "wlb_ElectroEls_io" VALUES('trStarTriangl','owner','','root:UI','','',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('trStarTriangl','name','','Tr: star in triangle','Тр.: звезда в треуг.','Тр.: зірка у трикутник',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('trStarTriangl','dscr','','Transformer three-phase, star in triangle
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','Трансформатор трёхфазный, звезда в треугольник
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.0.0','Трансформатор трифазний, зірка у трикутник
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.0.0',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('trStarTriangl','lineWdth','','2','','',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('trStarTriangl','lineClr','','black','','',32,'','','','','','');
@@ -3044,11 +3044,11 @@ line:(77.188|10.313):(84.375|9.688):::::
 INSERT INTO "wlb_ElectroEls_io" VALUES('trTrianglStar','owner','','root:UI','','',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('trTrianglStar','name','','Tr: triangle in star','Тр.: треуг. в звезда','Тр.: трикутник у зірку',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('trTrianglStar','dscr','','Transformer three-phase, triangle in star
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','Трансформатор трёхфазный, треугольник в звезду
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.0.0','Трансформатор трифазний, трикутник у зірку
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.0.0',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('trTrianglStar','lineWdth','','2','','',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('trTrianglStar','lineClr','','black','','',32,'','','','','','');
@@ -3063,11 +3063,11 @@ line:(66.875|84.375):(50|70.312):::::
 ','','',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('trTrianglStarH','name','','Tr: triangle in star, hor.','Тр.: треуг. в звезда, гор.','Тр.: трикутник у зірку, гор.',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('trTrianglStarH','dscr','','Transformer three-phase, triangle in star, horizontal
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','Трансформатор трёхфазный, треугольник в звезду, горизонтальный
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.0.0','Трансформатор трифазний, трикутник у зірку, горизонтальний
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.0.0',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('trTrianglStarH','lineWdth','','2','','',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('trTrianglStarH','lineClr','','black','','',32,'','','','','','');
@@ -3096,11 +3096,11 @@ arc:(45|65):(45|65):(70|65):(70|40):(45|65):::::
 ','','',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('triangle','name','','Triangle','Треугольник','Трикутник',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('triangle','dscr','','Equilateral triangle
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','Равносторонний треугольник
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.0.0','Рівносторонній трикутник
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.0.0',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('triangle','geomX','','827','','',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('triangle','geomY','','412','','',32,'','','','','','');
@@ -3135,7 +3135,7 @@ Version: 1.0.0','Ключ-предохранитель, круг, разомкн
 Версія: 1.0.0',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('tr','name','','Transformer','Трансформатор','Трансформатор',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('tr','dscr','','Transformer
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','Трансформатор
 Автор: Роман Савоченко
 Версия: 1.0.0','Трансформатор
@@ -3152,7 +3152,7 @@ line:(50|4):(50|96):::::
 ','','',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('tr1','name','','Transformer 1','Трансформатор 1','Трансформатор 1',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('tr1','dscr','','Transformer 1
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','Трансформатор 1
 Автор: Роман Савоченко
 Версия: 1.0.0','Трансформатор 1
@@ -3167,21 +3167,21 @@ arc:(85|95):(85|50):(85|72.5):(110|72.5):(85|50):::::
 ','','',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('sw','name','','Switch','Переключатель','Перемикач',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('sw','dscr','','A simple switch.
-Author: Roman Savochenko <rom_as@oscada.org>
+Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0
 Properties:
 - var = true - closure;
 - var = false - opening;
 - var = EVAL - the key is dotted;
 - the frame is configured.','Простой переключатель.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.0.0
 Свойства:
 - var=true - замыкание;
 - var=false - размыкание;
 - var=EVAL - ключ пунктирный;
 - рамка конфигурируется.','Простий перемикач.
-Автор: Роман Савоченко <rom_as@oscada.org>
+Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.0.0
 Властивості:
 - var=true - замкнення;

@@ -34,7 +34,7 @@
 #define MOD_NAME	_("DB MySQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"3.1.0"
+#define MOD_VER		"3.1.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DBMS MySQL.")
 #define MOD_LICENSE	"GPL2"
@@ -796,10 +796,14 @@ void MTable::fieldFix( TConfig &cfg, bool trPresent )
     if(pr_keys.size()) req += ",ADD PRIMARY KEY (" + pr_keys + ") ";
 
     if(next) {
-	owner().sqlReq(req, NULL, false);
-	//Update structure information
-	req = "DESCRIBE `" + TSYS::strEncode(owner().bd,TSYS::SQL) + "`.`" + TSYS::strEncode(name(),TSYS::SQL) + "`";
-	owner().sqlReq(req, &tblStrct, false);
+	try { owner().sqlReq(req, NULL, false); }
+	catch(TError&) {
+	    //An error possible at creating already presented columns, so try to update the table structure information before
+	    owner().sqlReq("DESCRIBE `" + TSYS::strEncode(owner().bd,TSYS::SQL) + "`.`" + TSYS::strEncode(name(),TSYS::SQL) + "`", &tblStrct, false);
+	    owner().sqlReq(req, NULL, false);
+	}
+	//Updating structure information of the table
+	owner().sqlReq("DESCRIBE `" + TSYS::strEncode(owner().bd,TSYS::SQL) + "`.`" + TSYS::strEncode(name(),TSYS::SQL) + "`", &tblStrct, false);
     }
 }
 

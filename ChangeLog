@@ -1,3 +1,26 @@
+2019-06-09 Roman (stable)
+- DB.LibsDB/*,DB.{AGLKS,Boiler}: The Roman Savochenko EMail rom_as@oscada.org replaced by roman@oscada.org.
+- !!!!:DB.LibsDB.OscadaLibs: The full restructuration of the libraries was started for
+    true documenting, revision and translation.
+    !!: The template libraries "PrescrTempl" appended for the "Manager", moving from the controllers library.
+    !!: The template libraries "Main" appended for the "UPS", moving from the "Devices" library.
+    !: The function base.anUnif some improved and appended for the description.
+    !: The function servProc.wacko2media appended for table headers true processing.
+- !:DB.LibsDB.vcaBase: The prescription cadres of the template project "tmplSO" relinked to the new prescription manager
+    into the Logic Level controller object.
+- DOC: The document "Library of models of the technological apparatuses" appended for downloading to offline.
+- !!: DAQ,DAQ.JavaLikeCalc: The template libraries and JavaLikeCalc libraries appended for specifying documentation links
+    by the key "DOC: {offline}|{online}" into the description.
+- !:SYS.XMLNode: Appended for entities size limit and silence at incomplete ones.
+- FIX:DB.MySQL: Appended for updating the table structure at ALTER errors.
+- !:FIX:UI.Vision: The view "Button" of the primitive "FormEl" fixed for disabling at inactivity.
+    The procedure language combobox appended for the tooltip of reseting the procedure at the empty value selecting.
+- !!:FIX:UI.WebVision: The setting function setWAttrs() fixed for encoding the special symbols "<>".
+    FIX: The primitive "ElFig" prevented from crashing at coming the POST requests firstly.
+    The ordinal users prevented from connection to foreign sessions.
+    Unified for the ROOT users processing.
+
+
 2019-06-02 Roman (stable)
 - !:DB.LibsDB.OscadaLibs: The template base.codeState appended for the code-text commands processing.
 - !:DB.LibsDB.vcaBase: The document doc.docUsersSet of the user actions appended of the user name.

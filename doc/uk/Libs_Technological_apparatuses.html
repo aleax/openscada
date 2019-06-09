@@ -1,0 +1,3684 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Бібліотека/Технологічні апарати - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../en/files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="uk">Бібліотека/Технологічні апарати</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FTechnological+apparatuses&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Technological_apparatuses" title="Libs/Technological apparatuses">Libs/Technological apparatuses</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Libs/Technological_apparatuses" title="Libs/Technological apparatuses (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Libs/Technological_apparatuses/ru" title="Библиотека/Технологические аппараты (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+<table class="wikitable">
+
+<tr>
+<th> Назва </th>
+<th> Версія </th>
+<th> Ліцензія </th>
+<th> Джерело </th>
+<th> Мови </th>
+<th> Автор </th>
+<th> Опис
+</th></tr>
+
+<tr>
+<td> <a href="Libs_Technological_apparatuses.html" title="Special:MyLanguage/Libs/Technological apparatuses">Бібліотека моделей апаратів технологічних процесів</a>
+</td>
+<td> 2.0 </td>
+<td> GPL
+</td>
+<td> БД SQLite: <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">File:OscadaLibs.db.gz</a>, <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">Найбільш актуальний SQL</a> </td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a><br />&nbsp;&nbsp;<font size="-2"><i>Максим Лисенко (2007,2010), Ксенія Яшина (2007)</i></font>
+</td>
+<td> Бібліотека моделей технологічних апаратів для створення комплексних моделей технологічних процесів.
+<ul><li> <b>Засновано:</b> Жовтень 2005р</li>
+<li> <b>Початково створено:</b> <a class="external text" href="http://wiki.oscada.org/HomePageUk/Using/APIFunctionLibs/TechApp" rel="nofollow noreferrer noopener" target="_blank">у старій Wiki</a></li>
+<li> <b>Адреса:</b> JavaLikeCalc =&gt; techApp</li>
+<li> <b>Використано:</b> моделями <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">АГЛКС</a> та <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_Boiler" title="Special:MyLanguage/Using/Model Boiler">Котел</a></li></ul>
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9A.D0.BE.D0.BD.D1.86.D0.B5.D0.BF.D1.86.D1.96.D1.8F"><span class="tocnumber">1</span> <span class="toctext">Концепція</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.A1.D0.BA.D0.BB.D0.B0.D0.B4_.D0.B1.D1.96.D0.B1.D0.BB.D1.96.D0.BE.D1.82.D0.B5.D0.BA.D0.B8"><span class="tocnumber">2</span> <span class="toctext">Склад бібліотеки</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#.D0.97.D0.B0.D1.82.D1.80.D0.B8.D0.BC.D0.BA.D0.B0_.28lag.29"><span class="tocnumber">2.1</span> <span class="toctext">Затримка (lag)</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#.D0.A8.D1.83.D0.BC:_2_.D0.B3.D0.B0.D1.80.D0.BC.D0.BE.D0.BD.D1.96.D0.BA.D0.B8_.2B_.D0.B2.D0.B8.D0.BF.D0.B0.D0.B4.D0.BA.D0.BE.D0.B2.D0.B8.D0.B9_.28noise.29"><span class="tocnumber">2.2</span> <span class="toctext">Шум: 2 гармоніки + випадковий (noise)</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#.D0.9A.D1.83.D0.BB.D1.8C.D0.BE.D0.B2.D0.B8.D0.B9_.D0.BA.D1.80.D0.B0.D0.BD_.28ballCrane.29"><span class="tocnumber">2.3</span> <span class="toctext">Кульовий кран (ballCrane)</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#.D0.A1.D0.B5.D0.BF.D0.B0.D1.80.D0.B0.D1.82.D0.BE.D1.80_.28separator.29"><span class="tocnumber">2.4</span> <span class="toctext">Сепаратор (separator)</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#.D0.9A.D0.BB.D0.B0.D0.BF.D0.B0.D0.BD_.28valve.29"><span class="tocnumber">2.5</span> <span class="toctext">Клапан (valve)</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#.D0.97.D0.B0.D1.82.D1.80.D0.B8.D0.BC.D0.BA.D0.B0:_.D1.87.D0.B8.D1.81.D1.82.D0.B0_.28lagClean.29"><span class="tocnumber">2.6</span> <span class="toctext">Затримка: чиста (lagClean)</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#.D0.9A.D0.BE.D1.82.D0.B5.D0.BB:_.D0.B1.D0.B0.D1.80.D0.B0.D0.B1.D0.B0.D0.BD_.28boilerBarrel.29"><span class="tocnumber">2.7</span> <span class="toctext">Котел: барабан (boilerBarrel)</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#.D0.9A.D0.BE.D1.82.D0.B5.D0.BB:_.D1.82.D0.BE.D0.BF.D0.BA.D0.B0_.28boilerBurner.29"><span class="tocnumber">2.8</span> <span class="toctext">Котел: топка (boilerBurner)</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#.D0.9C.D0.B5.D1.80.D0.B5.D0.B6.D0.B0:_.D0.BD.D0.B0.D0.B2.D0.B0.D0.BD.D1.82.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F_.28net.29"><span class="tocnumber">2.9</span> <span class="toctext">Мережа: навантаження (net)</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#.D0.94.D0.B6.D0.B5.D1.80.D0.B5.D0.BB.D0.BE:_.D1.82.D0.B8.D1.81.D0.BA_.28src_press.29"><span class="tocnumber">2.10</span> <span class="toctext">Джерело: тиск (src_press)</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#.D0.9F.D0.BE.D0.B2.D1.96.D1.82.D1.80.D1.8F.D0.BD.D0.B8.D0.B9_.D1.85.D0.BE.D0.BB.D0.BE.D0.B4.D0.B8.D0.BB.D1.8C.D0.BD.D0.B8.D0.BA_.28cooler.29"><span class="tocnumber">2.11</span> <span class="toctext">Повітряний холодильник (cooler)</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#.D0.9A.D0.BE.D0.BC.D0.BF.D1.80.D0.B5.D1.81.D0.BE.D1.80_.D0.B3.D0.B0.D0.B7.D0.BE.D0.B2.D0.B8.D0.B9_.28compressor.29"><span class="tocnumber">2.12</span> <span class="toctext">Компресор газовий (compressor)</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#.D0.94.D0.B6.D0.B5.D1.80.D0.B5.D0.BB.D0.BE:_.D0.B2.D0.B8.D1.82.D1.80.D0.B0.D1.82.D0.B8_.28src_flow.29"><span class="tocnumber">2.13</span> <span class="toctext">Джерело: витрати (src_flow)</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#.D0.A2.D1.80.D1.83.D0.B1.D0.B0-.D0.B1.D0.B0.D0.B7.D0.B0_.28pipeBase.29"><span class="tocnumber">2.14</span> <span class="toctext">Труба-база (pipeBase)</span></a></li>
+<li class="toclevel-2 tocsection-17"><a href="#.D0.A2.D1.80.D1.83.D0.B1.D0.B0_1-.3E1_.28pipe1_1.29"><span class="tocnumber">2.15</span> <span class="toctext">Труба 1-&gt;1 (pipe1_1)</span></a></li>
+<li class="toclevel-2 tocsection-18"><a href="#.D0.A2.D1.80.D1.83.D0.B1.D0.B0_2-.3E1_.28pipe2_1.29"><span class="tocnumber">2.16</span> <span class="toctext">Труба 2-&gt;1 (pipe2_1)</span></a></li>
+<li class="toclevel-2 tocsection-19"><a href="#.D0.A2.D1.80.D1.83.D0.B1.D0.B0_3-.3E1_.28pipe3_1.29"><span class="tocnumber">2.17</span> <span class="toctext">Труба 3-&gt;1 (pipe3_1)</span></a></li>
+<li class="toclevel-2 tocsection-20"><a href="#.D0.A2.D1.80.D1.83.D0.B1.D0.B0_1-.3E2_.28pipe1_2.29"><span class="tocnumber">2.18</span> <span class="toctext">Труба 1-&gt;2 (pipe1_2)</span></a></li>
+<li class="toclevel-2 tocsection-21"><a href="#.D0.A2.D1.80.D1.83.D0.B1.D0.B0_1-.3E3_.28pipe1_3.29"><span class="tocnumber">2.19</span> <span class="toctext">Труба 1-&gt;3 (pipe1_3)</span></a></li>
+<li class="toclevel-2 tocsection-22"><a href="#.D0.A2.D1.80.D1.83.D0.B1.D0.B0_1-.3E4_.28pipe1_4.29"><span class="tocnumber">2.20</span> <span class="toctext">Труба 1-&gt;4 (pipe1_4)</span></a></li>
+<li class="toclevel-2 tocsection-23"><a href="#.D0.9A.D0.BB.D0.B0.D0.BF.D0.B0.D0.BD:_.D0.B2.D0.B8.D0.BA.D0.BE.D0.BD.D0.B0.D0.B2.D1.87.D0.B8.D0.B9_.D0.BC.D0.B5.D1.85.D0.B0.D0.BD.D1.96.D0.B7.D0.BC_.28valveMech.29"><span class="tocnumber">2.21</span> <span class="toctext">Клапан: виконавчий механізм (valveMech)</span></a></li>
+<li class="toclevel-2 tocsection-24"><a href="#.D0.94.D1.96.D0.B0.D1.84.D1.80.D0.B0.D0.B3.D0.BC.D0.B0_.28diaphragm.29"><span class="tocnumber">2.22</span> <span class="toctext">Діафрагма (diaphragm)</span></a></li>
+<li class="toclevel-2 tocsection-25"><a href="#.D0.A2.D0.B5.D0.BF.D0.BB.D0.BE.D0.BE.D0.B1.D0.BC.D1.96.D0.BD.D0.BD.D0.B8.D0.BA_.28heatExch.29"><span class="tocnumber">2.23</span> <span class="toctext">Теплообмінник (heatExch)</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<p>Бібліотека створюється для надання моделей апаратів технологічних процесів. Бібліотека не є статичною, а будується на основі модуля <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, який дозволяє створювати обчислення на мові схожій на Java.
+</p><p>Для адресації до функцій цієї бібліотеки можна використати статичну адресу виклику <b>DAQ.JavaLikeCalc.lib_techApp.{Func}()</b> або динамічну <b>SYS.DAQ.JavaLikeCalc["lib_techApp"]["{Func}"].call()</b>, <b>SYS.DAQ.JavaLikeCalc["lib_techApp"].{Func}()</b>.
+Де <i>{Func}</i> — ідентифікатор функції у бібліотеці.
+</p><p>Для підключення бібліотеки до проекту станції OpenSCADA Ви можете отримати файл БД як:
+</p>
+<ul><li> такий що постачається з готовим та відповідним пакетом дистрибутиву Linux на кшталт "openscada-libdb-main", "openscada-LibDB.Main";</li>
+<li> найбільш актуальний та безпосередньо отриманий з <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">репозиторію subversion</a>, перетворений у файл БД SQLite шляхом:</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 15px">
+$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql
+$ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
+</pre>
+<ul><li> завантаження <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">прикріпленого тут</a>.</li></ul>
+<p>Цей завантажений файл Ви надалі можете розмістити у теці проекту станції та створити об'єкт бази даних модуля БД "SQLite", зареєструвавши файл бази даних у конфігурації.
+</p>
+<h2><span class="mw-headline" id=".D0.9A.D0.BE.D0.BD.D1.86.D0.B5.D0.BF.D1.86.D1.96.D1.8F"><span class="mw-headline-number">1</span> Концепція</span></h2>
+<p>У основі моделі кожного апарату лежить обчислення витрат на вході та тиску на виході, виходячи із тиску на вході та витрат на виході. Загалом, моделі апаратів технологічних процесів описуються різницевими рівняннями для дискретних машин.
+</p><p>На основі функцій цієї бібліотеки можна легко та швидко будувати моделі технологічних процесів у модулі <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">BlockCalc</a> шляхом поєднання блоків згідно до технологічної схеми. Приклад поєднання частини апаратів технологічної схеми наведено на рисунку 1.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:598px;"><a class="image" href="http://oscada.org/wiki/File:TechApps_blocksh.png"><img class="thumbimage" height="78" src="../en/files/TechApps_blocksh.png" width="596" /></a>  <div class="thumbcaption">Рис.1. Приклад блокової схеми технологічного процесу.</div></div></div></div>
+<p>У основі моделі будь якого апарату ТП лежать дві основні формули, а саме формула витрат та тиску середовища. Канонічна формула витрат середовища для перетину труби або прохідного перетину звуження має вигляд (1).
+</p><p><a class="image" href="http://oscada.org/wiki/File:TechApps_flow1.png"><img alt="TechApps flow1.png" height="22" src="../en/files/TechApps_flow1.png" width="124" /></a> (1)
+</p><p>Де:
+</p>
+<dl><dd>F — масові витрати (т/год).</dd>
+<dd>S — поперечний перетин (м2).</dd>
+<dd>Qr — реальна щільність середовища (кг/м3).</dd>
+<dd>�P — різниця тиску (ат).</dd></dl>
+<p>Реальна щільність обчислюється за формулою (2).
+</p><p><a class="image" href="http://oscada.org/wiki/File:TechApps_dens.png"><img alt="TechApps dens.png" height="26" src="../en/files/TechApps_dens.png" width="191" /></a> (2) 
+</p><p>Де:
+</p>
+<dl><dd>Q0 — щільність середовища за нормальних умов (кг/м3).</dd>
+<dd>Kpr — коефіцієнт стиснення середовища (0,001 — рідина; 0,95 — газ).</dd>
+<dd>Pi — вхідний тиск (ат).</dd></dl>
+<p>Будь яка труба становить потоку динамічний опір, який пов'язаний з тертям о стіни труби та який залежить від швидкості потоку. Динамічний опір труби відображається формулою (3). Загальні витрати середовища з урахуванням динамічного опору обчислюються за  формулою (4).
+</p><p><a class="image" href="http://oscada.org/wiki/File:TechApps_flowR.png"><img alt="TechApps flowR.png" height="48" src="../en/files/TechApps_flowR.png" width="418" /></a> (3) 
+</p><p>Де:
+</p>
+<dl><dd>�P — різниця тиску (ат), опір потоку середовища стінками трубопроводу.</dd>
+<dd>Kr — коефіцієнт тертя стінок трубопроводу.</dd>
+<dd>D — діаметр трубопроводу (м).</dd>
+<dd>l — довжина трубопроводу (м).</dd>
+<dd>v — швидкість потоку у трубопроводі (м3/год).</dd></dl>
+<p><a class="image" href="http://oscada.org/wiki/File:TechApps_flow2.png"><img alt="TechApps flow2.png" height="49" src="../en/files/TechApps_flow2.png" width="267" /></a> (4) 
+</p><p>Формула (1) описує ламінарний потік середовища у до критичних швидкостях. У випадку перевищення критичної швидкості обчислення витрат відбувається за формулою (5). Універсальна формула обчислення витрат на всіх швидкостях буде мати вигляд (6).
+</p><p><a class="image" href="http://oscada.org/wiki/File:TechApps_flowCrit.png"><img alt="TechApps flowCrit.png" height="30" src="../en/files/TechApps_flowCrit.png" width="205" /></a> (5) 
+</p><p>Де:
+</p>
+<dl><dd>Pi — тиск на початку труби.</dd></dl>
+<p><a class="image" href="http://oscada.org/wiki/File:TechApps_flow3.png"><img alt="TechApps flow3.png" height="43" src="../en/files/TechApps_flow3.png" width="414" /></a> (6) 
+</p><p>Де:
+</p>
+<dl><dd>Po — тиск на кінці труби.</dd></dl>
+<p>У динамічних системах зміна витрат на кінці труби не відбувається миттєво, а запізнюється на час переміщення ділянки середовища від початку трубопроводу до кінця. Цей час залежить від довжини труби та швидкості руху середовища у трубі. Затримку зміни витрат на кінці труби можна описати формулою (7). Результуюча формула розрахунку витрат у трубі, з урахуванням вказаних вище особливостей, записується у вигляді (8).
+</p><p><a class="image" href="http://oscada.org/wiki/File:TechApps_flowLag.png"><img alt="TechApps flowLag.png" height="48" src="../en/files/TechApps_flowLag.png" width="200" /></a> (7) 
+</p><p>Де:
+</p>
+<dl><dd>Fo — витрати на кінці труби.</dd>
+<dd>t — час.</dd>
+<dd>v — швидкість потоку середовища = F/(Qr*S).</dd></dl>
+<p><a class="image" href="http://oscada.org/wiki/File:TechApps_flow4.png"><img alt="TechApps flow4.png" height="63" src="../en/files/TechApps_flow4.png" width="644" /></a> (8) 
+</p><p>Тиск середовища у об'ємі за звичай обчислюється ідентично для всіх випадків, за формулою (9).
+</p><p><a class="image" href="http://oscada.org/wiki/File:TechApps_pressure.png"><img alt="TechApps pressure.png" height="60" src="../en/files/TechApps_pressure.png" width="333" /></a> (9) 
+</p>
+<h2><span class="mw-headline" id=".D0.A1.D0.BA.D0.BB.D0.B0.D0.B4_.D0.B1.D1.96.D0.B1.D0.BB.D1.96.D0.BE.D1.82.D0.B5.D0.BA.D0.B8"><span class="mw-headline-number">2</span> Склад бібліотеки</span></h2>
+<p>У своєму складі бібліотека містить біля двох десятків моделей часто потрібних апаратів технологічних процесів та допоміжних елементів. Назви функцій та їх параметрів наявні на трьох мовах: Англійська, Українська та Російська.
+</p>
+<h3><span class="mw-headline" id=".D0.97.D0.B0.D1.82.D1.80.D0.B8.D0.BC.D0.BA.D0.B0_.28lag.29"><span class="mw-headline-number">2.1</span> Затримка (lag)</span></h3>
+<p>Модель затримки. Може використовуватися для імітації запізнення значень давачів.
+</p><p><b><u>Параметри</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Прихований </th>
+<th> По замовченню
+</th></tr>
+<tr>
+<td> out </td>
+<td> Вихід </td>
+<td> Реальний </td>
+<td> Повернення </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> in </td>
+<td> Вхід </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> t_lg </td>
+<td> Час затримки, секунд </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> true </td>
+<td> 100
+</td></tr></table>
+<p><b><u>Програма</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+out -= (out-in)/(t_lg*f_frq);
+</pre>
+<h3><span class="mw-headline" id=".D0.A8.D1.83.D0.BC:_2_.D0.B3.D0.B0.D1.80.D0.BC.D0.BE.D0.BD.D1.96.D0.BA.D0.B8_.2B_.D0.B2.D0.B8.D0.BF.D0.B0.D0.B4.D0.BA.D0.BE.D0.B2.D0.B8.D0.B9_.28noise.29"><span class="mw-headline-number">2.2</span> Шум: 2 гармоніки + випадковий (noise)</span></h3>
+<p>Модель шуму. Містить три складові:
+</p>
+<ul><li> перша гармоніка;</li>
+<li> друга гармоніка;</li>
+<li> шум на основі генератору випадкових чисел.</li></ul>
+<p><b><u>Параметри</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Прихований </th>
+<th> По замовченню
+</th></tr>
+<tr>
+<td> out </td>
+<td> Вихід </td>
+<td> Реальний </td>
+<td> Повернення </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> off </td>
+<td> Загальний зсув </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> a_g1 </td>
+<td> Амплітуда гармоніки 1 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> per_g1 </td>
+<td> Період гармоніки 1, секунд </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> a_g2 </td>
+<td> Амплітуда гармоніки 2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 5
+</td></tr>
+<tr>
+<td> per_g2 </td>
+<td> Період гармоніки 2, секунд </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.1
+</td></tr>
+<tr>
+<td> a_rnd </td>
+<td> Амплітуда випадкових значень </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> true </td>
+<td> 100
+</td></tr>
+<tr>
+<td> tmp_g1 </td>
+<td> Лічильник гармоніки 1 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> tmp_g2 </td>
+<td> Лічильник гармоніки 2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> true </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Програма</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+tmp_g1 = (tmp_g1 &gt; 6.28)&nbsp;? 0&nbsp;: tmp_g1+6.28/(per_g1*f_frq);
+tmp_g2 = (tmp_g2 &gt; 6.28)&nbsp;? 0&nbsp;: tmp_g2+6.28/(per_g2*f_frq);
+out = off + a_g1*sin(tmp_g1) + a_g2*sin(tmp_g2) + a_rnd*(rand(2)-1);
+</pre>
+<h3><span class="mw-headline" id=".D0.9A.D1.83.D0.BB.D1.8C.D0.BE.D0.B2.D0.B8.D0.B9_.D0.BA.D1.80.D0.B0.D0.BD_.28ballCrane.29"><span class="mw-headline-number">2.3</span> Кульовий кран (ballCrane)</span></h3>
+<p>Модель кульового крану. Включає час ходу та час відриву.
+</p><p><b><u>Параметри</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Прихований </th>
+<th> По замовченню
+</th></tr>
+<tr>
+<td> pos </td>
+<td> Положення,&nbsp;% </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> com </td>
+<td> Команда </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> st_open </td>
+<td> Стан "Відкрито" </td>
+<td> Логічний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> st_close </td>
+<td> Стан "Закрито" </td>
+<td> Логічний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> t_full </td>
+<td> Час ходу, секунд </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 5
+</td></tr>
+<tr>
+<td> t_up </td>
+<td> Час відриву, секунд </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.5
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> true </td>
+<td> 100
+</td></tr>
+<tr>
+<td> tmp_up </td>
+<td> Лічильник відриву </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> lst_com </td>
+<td> Остання команда </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> true </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Програма</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+if(!(st_close &amp;&amp;&nbsp;!com) &amp;&amp;&nbsp;!(st_open &amp;&amp; com)) {
+  tmp_up = (pos &gt; 0 &amp;&amp; pos &lt; 100)&nbsp;? 0&nbsp;: (tmp_up&gt;0&amp;&amp;lst_com==com)?tmp_up-1/f_frq:t_up;
+  pos += (tmp_up &gt; 0)&nbsp;? 0&nbsp;: (100*(com?1:-1))/(t_full*f_frq);
+  pos = (pos &gt; 100)&nbsp;? 100&nbsp;: (pos&lt;0)?0:pos;
+  st_open = (pos &gt;= 100)&nbsp;? true&nbsp;: false;
+  st_close = (pos &lt;= 0)&nbsp;? true&nbsp;: false;
+  lst_com = com;
+}
+</pre>
+<h3><span class="mw-headline" id=".D0.A1.D0.B5.D0.BF.D0.B0.D1.80.D0.B0.D1.82.D0.BE.D1.80_.28separator.29"><span class="mw-headline-number">2.4</span> Сепаратор (separator)</span></h3>
+<p>Модель сепаратору з двома фазами, рідинною та газовою.
+</p><p><b><u>Параметри</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Прихований </th>
+<th> По замовченню
+</th></tr>
+<tr>
+<td> Fi </td>
+<td> Вхідні витрати, т/год </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pi </td>
+<td> Вхідний тиск, ата </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Si </td>
+<td> Вхідний перетин, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> Fo </td>
+<td> Вихідні витрати, т/год </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po </td>
+<td> Вихідний тиск, ата </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> So </td>
+<td> Вихідний перетин, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo </td>
+<td> Вихідна довжина, м </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Fo_lq </td>
+<td> Вихідні витрати рідини, т/год </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po_lq </td>
+<td> Вихідний тиск рідини, ата </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Llq </td>
+<td> Рівень рідини,&nbsp;% </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> PercLq </td>
+<td>&nbsp;% рідини </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.01
+</td></tr>
+<tr>
+<td> Vap </td>
+<td> Об'єм апарату, м3 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Q0 </td>
+<td> Нормальна щільність середовища, кг/м3 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Qlq </td>
+<td> Щільність рідини, кг/м3 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> true </td>
+<td> 200
+</td></tr></table>
+<p><b><u>Програма</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+Flq = max(0, Fi*PercLq);
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, 293, Si, Fo+Flq, Po, 293, So, lo, Q0, 0.95, 0.01, f_frq);
+Llq = max(0, min(100,Llq+0.27*(Flq-Fo_lq)/(Vap*Qlq*f_frq)));
+Po_lq = Po + Llq*Vap/Qlq;
+</pre>
+<h3><span class="mw-headline" id=".D0.9A.D0.BB.D0.B0.D0.BF.D0.B0.D0.BD_.28valve.29"><span class="mw-headline-number">2.5</span> Клапан (valve)</span></h3>
+<p>Модель клапану яка враховує:
+</p>
+<ul><li> два клапани в одному; </li>
+<li> надкритичне витікання; </li>
+<li> зміна температури при дроселюванні; </li>
+<li> робота тільки у одному напрямку, зворотний клапан;</li>
+<li> керування швидкістю зміни положення;</li>
+<li> нелінійність прохідного перетину від положення.</li></ul>
+<p><b><u>Параметри</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Прихований </th>
+<th> По замовченню
+</th></tr>
+<tr>
+<td> Fi </td>
+<td> Вхідні витрати, т/год </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pi </td>
+<td> Вхідний тиск, ата </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Ti </td>
+<td> Вхідна температура, К </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> Fo </td>
+<td> Вихідні витрати, т/год </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po </td>
+<td> Вихідний тиск, ата </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> To </td>
+<td> Вихідна температура, К </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> So </td>
+<td> Вихідний перетин труби, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo </td>
+<td> Вихідна довжина труби, м </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> S_v1 </td>
+<td> Перетин клапану 1, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.1
+</td></tr>
+<tr>
+<td> l_v1 </td>
+<td> Положення клапану 1,&nbsp;% </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> t_v1 </td>
+<td> Час відкриття клапану 1, секунди </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> S_v2 </td>
+<td> Перетин клапану 2, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.05
+</td></tr>
+<tr>
+<td> l_v2 </td>
+<td> Положення клапану 2,&nbsp;% </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> t_v2 </td>
+<td> Час відкриття клапану 2, секунд </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 5
+</td></tr>
+<tr>
+<td> Q0 </td>
+<td> Нормальна щільність середовища, кг/м3 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Kln </td>
+<td> Коефіцієнт нелінійності </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Kpr </td>
+<td> Коефіцієнт стискання середовища [0...1] </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.95
+</td></tr>
+<tr>
+<td> Ct </td>
+<td> Теплоємність середовища </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 20
+</td></tr>
+<tr>
+<td> Riz </td>
+<td> Тепловий опір ізоляції </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 20
+</td></tr>
+<tr>
+<td> noBack </td>
+<td> Зворотній клапан </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Fwind </td>
+<td> Швидкість повітря </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Twind </td>
+<td> Температура повітря, К </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> true </td>
+<td> 200
+</td></tr>
+<tr>
+<td> tmp_l1 </td>
+<td> Затримка положення 1 </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> tmp_l2 </td>
+<td> Затримка положення 2 </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Програма</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+Qr = Q0+Q0*Kpr*(Pi-1);
+tmp_l1 += (abs(l_kl1-tmp_l1) &gt; 5)&nbsp;? 100*sign(l_kl1-tmp_l1)/(t_kl1*f_frq)&nbsp;: (l_kl1-tmp_l1)/(t_kl1*f_frq);
+tmp_l2 += (abs(l_kl2-tmp_l2) &gt; 5)&nbsp;? 100*sign(l_kl2-tmp_l2)/(t_kl2*f_frq)&nbsp;: (l_kl2-tmp_l2)/(t_kl2*f_frq);
+Sr = (S_kl1*pow(tmp_l1,Kln)+S_kl2*pow(tmp_l2,Kln))/pow(100,Kln);
+
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, Ti, Sr, EVAL_REAL, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
+if(noBack) Fi = max(0, Fi);
+Po = max(0, min(100,Po+0.27*(Fi-Fo)/(Q0*Kpr*So*lo*f_frq)));
+
+To = max(0, min(2e3,To+(abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*f_frq)));
+</pre>
+<h3><span class="mw-headline" id=".D0.97.D0.B0.D1.82.D1.80.D0.B8.D0.BC.D0.BA.D0.B0:_.D1.87.D0.B8.D1.81.D1.82.D0.B0_.28lagClean.29"><span class="mw-headline-number">2.6</span> Затримка: чиста (lagClean)</span></h3>
+<p>Модель чистої(транспортної) затримки. Реалізується шляхом включення декількох ланок простої затримки. Призначено для імітації затримок у довгих трубопроводах.
+</p><p><b><u>Параметри</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Прихований </th>
+<th> По замовченню
+</th></tr>
+<tr>
+<td> out </td>
+<td> Вихід </td>
+<td> Реальний </td>
+<td> Повернення </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> in </td>
+<td> Вхід </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> t_lg </td>
+<td> Час затримки, секунд </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> true </td>
+<td> 100
+</td></tr>
+<tr>
+<td> cl1 </td>
+<td> Ланка 1 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> cl2 </td>
+<td> Ланка 2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> cl3 </td>
+<td> Ланка 3 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> true </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Програма</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+cl1 -= (cl1-in)/(t_lg*f_frq/4);
+cl2 -= (cl2-cl1)/(t_lg*f_frq/4);
+cl3 -= (cl3-cl2)/(t_lg*f_frq/4);
+out -= (out-cl3)/(t_lg*f_frq/4);
+</pre>
+<h3><span class="mw-headline" id=".D0.9A.D0.BE.D1.82.D0.B5.D0.BB:_.D0.B1.D0.B0.D1.80.D0.B0.D0.B1.D0.B0.D0.BD_.28boilerBarrel.29"><span class="mw-headline-number">2.7</span> Котел: барабан (boilerBarrel)</span></h3>
+<p>Модель барабану котлоагрегату.
+</p><p><b><u>Параметри</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Прихований </th>
+<th> По замовченню
+</th></tr>
+<tr>
+<td> Fi1 </td>
+<td> Вхідні витрати води, т/год </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 22
+</td></tr>
+<tr>
+<td> Pi1 </td>
+<td> Вхідний тиск води, ата </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 43
+</td></tr>
+<tr>
+<td> Ti1 </td>
+<td> Вхідна температура води, К </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 523
+</td></tr>
+<tr>
+<td> Si1 </td>
+<td> Вхідний перетин труб з водою, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.6
+</td></tr>
+<tr>
+<td> Fi2 </td>
+<td> Вхідні витрати димових газів, т/год </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> Pi2 </td>
+<td> Вхідний тиск димових газів, ата </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1.3
+</td></tr>
+<tr>
+<td> Ti2 </td>
+<td> Вхідна температура димових газів, К </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1700
+</td></tr>
+<tr>
+<td> Si2 </td>
+<td> Вхідний перетин труби димових газів, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Vi1 </td>
+<td> Об'єм барабану, м3 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 3
+</td></tr>
+<tr>
+<td> Lo </td>
+<td> Рівень у барабані,&nbsp;% </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> S </td>
+<td> Поверхня нагріву, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 15
+</td></tr>
+<tr>
+<td> k </td>
+<td> Коефіцієнт тепловіддачі </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.8
+</td></tr>
+<tr>
+<td> Fo </td>
+<td> Вихідні витрати пару, т/год </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 20
+</td></tr>
+<tr>
+<td> Po1 </td>
+<td> Вихідний тиск пару, ата </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 41.68
+</td></tr>
+<tr>
+<td> To1 </td>
+<td> Вихідна температура пару, К </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> So1 </td>
+<td> Вихідний перетин труби пару, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.5
+</td></tr>
+<tr>
+<td> lo1 </td>
+<td> Вихідна довжина труби пару, м </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 5
+</td></tr>
+<tr>
+<td> Fo2 </td>
+<td> Вихідні витрати димових газів, т/год </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 180
+</td></tr>
+<tr>
+<td> Po2 </td>
+<td> Вихідний тиск димових газів, ата </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> To2 </td>
+<td> Вихідна температура димових газів, К </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Fstm </td>
+<td> Витрати пару у барабані, т/год </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Tv </td>
+<td> Температура води у барабані, K </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 200
+</td></tr></table>
+<p><b><u>Програма</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+// Water
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi1, Pi1, 293, Si1, EVAL_REAL, Po1, 293, So1, lo1, 1e3, 0.001, 0.01, f_frq);
+Fi1 = max(0, Fi1);
+
+// Steam
+Lo = max(0, min(100,Lo+(Fi1-Fstm)*100/(Vi1*1000*f_frq)));
+To1 = (100*pow(Po1,0.241)+5) + 273;
+
+if(Tv &lt; To1) {
+  Tv += (k*S*(Ti2-Tv)-Fi1*0.00418*(Tv-Ti1))/f_frq;
+  Fstm = 0;
+}
+if(Tv &gt;= To1) {
+  Tv = To1;
+  Lambda = 2750-0.00418*(Tv-273);
+  Fstm = (5*S*Fi2*(Ti2-Tv)-Fi1*0.00418*(Tv-Ti1))/(Po1*Lambda);
+}
+
+To2 = Ti2-Tv/k;
+Po1 = max(0, min(100,Po1+0.27*(Fstm-Fo)/(1.2*0.98*((1-Lo/100)*Vi1+So1*lo1)*f_frq)));
+
+// Smoke gas
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi2, Pi2, 293, Si2, Fo2, Po2, 293, Si2, 30, 1.2, 0.98, 0.01, f_frq);
+</pre>
+<h3><span class="mw-headline" id=".D0.9A.D0.BE.D1.82.D0.B5.D0.BB:_.D1.82.D0.BE.D0.BF.D0.BA.D0.B0_.28boilerBurner.29"><span class="mw-headline-number">2.8</span> Котел: топка (boilerBurner)</span></h3>
+<p>Модель топки котлоагрегату, який працює на трьох видах палива, початково це: доменний, коксовий та природний гази.
+</p><p><b><u>Параметри</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Прихований </th>
+<th> По замовченню
+</th></tr>
+<tr>
+<td> Fi1 </td>
+<td> Вхідні витрати доменного газу, т/год </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> Pi1 </td>
+<td> Вхідний тиск доменного газу, ата </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> Ti1 </td>
+<td> Вхідна температура димових газів, К </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 40
+</td></tr>
+<tr>
+<td> Si1 </td>
+<td> Вхідний перетин труби димових газів, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> Fi2 </td>
+<td> Вхідні витрати природного газу, т/год </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> Pi2 </td>
+<td> Вхідний тиск природного газу, ата </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> Ti2 </td>
+<td> Вхідна температура природного газу, К </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 20
+</td></tr>
+<tr>
+<td> Si2 </td>
+<td> Вхідний перетин труби природного газу, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> Fi3 </td>
+<td> Вхідні витрати коксового газу, т/год </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> Pi3 </td>
+<td> Вхідний тиск коксового газу, ата </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> Ti3 </td>
+<td> Вхідна температура коксового газу, К </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Si3 </td>
+<td> Вхідний перетин труби коксового газу, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> Fi4 </td>
+<td> Вхідні витрати повітря, т/год </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> Pi4 </td>
+<td> Вхідний тиск повітря, ата </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> Ti4 </td>
+<td> Вхідна температура повітря, К </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 20
+</td></tr>
+<tr>
+<td> Si4 </td>
+<td> Вхідний перетин труби повітря, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> Fo </td>
+<td> Вихідні витрати димових газів, т/год </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> Po </td>
+<td> Вихідний тиск димових газів, ата </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> To </td>
+<td> Вихідна температура димових газів, К </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> So </td>
+<td> Вихідний перетин труби димових газів, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 90
+</td></tr>
+<tr>
+<td> lo </td>
+<td> Вихідна довжина труби димових газів, м </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> V </td>
+<td> Об'єм топки, м3 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 830
+</td></tr>
+<tr>
+<td> CO </td>
+<td> Відсоток вмісту CO у димових газах,&nbsp;% </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> O2 </td>
+<td> Відсоток вмісту O2 у димових газах,&nbsp;% </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 200
+</td></tr></table>
+<p><b><u>Програма</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+using DAQ.JavaLikeCalc.lib_techApp;
+pipeBase(Fi1, Pi1, Ti1, Si1, EVAL_REAL, Po, 293, So, lo, 1.2, 0.95, 0.01, f_frq); Fi1 = max(0, Fi1);
+pipeBase(Fi2, Pi2, Ti2, Si2, EVAL_REAL, Po, 293, So, lo, 0.7, 0.95, 0.01, f_frq); Fi2 = max(0, Fi2);
+pipeBase(Fi3, Pi3, Ti3, Si3, EVAL_REAL, Po, 293, So, lo, 1.33, 0.95, 0.01, f_frq); Fi3 = max(0, Fi3);
+pipeBase(Fi4, Pi4, Ti4, Si4, EVAL_REAL, Po, 293, So, lo, 1.293, 0.95, 0.01, f_frq); Fi4 = max(0, Fi4);
+
+Neobhod_vzd = Fi1 + 10*Fi2 + 4*Fi3;
+F_DG = Fi1 + Fi2 + Fi3 + Fi4;
+O2 = max(0, min(100,(Fi4-Neobhod_vzd)*100/F_DG));
+CO = min(100, (O2&lt;1)&nbsp;? (1.2*abs(O2))&nbsp;: 0);
+koef = min(1, Fi4/Neobhod_vzd);
+Q = koef*(8050*Fi2+3900*Fi3+930*Fi1);
+delta_t = Q/(F_DG*1.047);
+To = max(0, min(2000,(delta_t+(Ti4-273)+(Ti3-273)*(Fi3/Fi1)+(Ti2-273)*(Fi2/Fi1)+(Ti1-273)*(Fi1/Fi4))+273));
+
+Po = max(0, min(10,Po+0.27*(F_DG-Fo)/(1.2*0.95*(So*lo+V)*f_frq)));
+</pre>
+<h3><span class="mw-headline" id=".D0.9C.D0.B5.D1.80.D0.B5.D0.B6.D0.B0:_.D0.BD.D0.B0.D0.B2.D0.B0.D0.BD.D1.82.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F_.28net.29"><span class="mw-headline-number">2.9</span> Мережа: навантаження (net)</span></h3>
+<p>Навантаження з фіксованим тиском мережі. Містить параметр для підключення шуму.
+</p><p><b><u>Параметри</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Прихований </th>
+<th> По замовченню
+</th></tr>
+<tr>
+<td> Fi </td>
+<td> Вхідні витрати, т/год </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Pi </td>
+<td> Вхідний тиск, ата </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Po </td>
+<td> Завдання вихідного тиску, ата </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> So </td>
+<td> Вихідний перетин труби, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.1
+</td></tr>
+<tr>
+<td> Kpr </td>
+<td> Коефіцієнт стискання середовища [0...1] </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.95
+</td></tr>
+<tr>
+<td> Noise </td>
+<td> Шум вхідних витрат </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Q0 </td>
+<td> Нормальна щільність середовища, кг/м3 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> true </td>
+<td> 200
+</td></tr></table>
+<p><b><u>Програма</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, 293, So, EVAL_REAL, Po, 293, So, 10, Q0, Kpr, 0.01, f_frq);
+</pre>
+<h3><span class="mw-headline" id=".D0.94.D0.B6.D0.B5.D1.80.D0.B5.D0.BB.D0.BE:_.D1.82.D0.B8.D1.81.D0.BA_.28src_press.29"><span class="mw-headline-number">2.10</span> Джерело: тиск (src_press)</span></h3>
+<p>Джерело з фіксованим тиском. Містить параметр для підключення шуму.
+</p><p><b><u>Параметри</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Прихований </th>
+<th> По замовченню
+</th></tr>
+<tr>
+<td> Pi </td>
+<td> Завдання вхідного тиску, ата </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Fo </td>
+<td> Вихідні витрати, т/год </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po </td>
+<td> Вихідний тиск, ата </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> So </td>
+<td> Вихідний перетин труби, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.1
+</td></tr>
+<tr>
+<td> lo </td>
+<td> Вихідна довжина труби, м </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 100
+</td></tr>
+<tr>
+<td> Noise </td>
+<td> Шум вхідних витрат </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Q0 </td>
+<td> Нормальна щільність середовища, кг/м3 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Kpr </td>
+<td> Коефіцієнт стискання середовища [0...1] </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.95
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> true </td>
+<td> 200
+</td></tr>
+<tr>
+<td> Fit </td>
+<td> Вхідні витрати, утримані </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Програма</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fit, Pi*Noise, 293, So, Fo, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
+</pre>
+<h3><span class="mw-headline" id=".D0.9F.D0.BE.D0.B2.D1.96.D1.82.D1.80.D1.8F.D0.BD.D0.B8.D0.B9_.D1.85.D0.BE.D0.BB.D0.BE.D0.B4.D0.B8.D0.BB.D1.8C.D0.BD.D0.B8.D0.BA_.28cooler.29"><span class="mw-headline-number">2.11</span> Повітряний холодильник (cooler)</span></h3>
+<p>Модель повітряного охолоджувача газового потоку.
+</p><p><b><u>Параметри</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Прихований </th>
+<th> По замовченню
+</th></tr>
+<tr>
+<td> Fi </td>
+<td> Вхідні витрати, т/год </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pi </td>
+<td> Вхідний тиск, ата </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Ti </td>
+<td> Вхідна температура, К </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> Si </td>
+<td> Перетин трубок, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.05
+</td></tr>
+<tr>
+<td> li </td>
+<td> Загальна довжина трубок, м </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Fo </td>
+<td> Вихідні витрати, т/год </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po </td>
+<td> Вихідний тиск, ата </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> To </td>
+<td> Вихідна температура, К </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> So </td>
+<td> Вихідний перетин труби, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo </td>
+<td> Вихідна довжина труби, м </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Tair </td>
+<td> Температура охолодження повітря, К </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 283
+</td></tr>
+<tr>
+<td> Wc </td>
+<td> Продуктивність холодильника </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 200
+</td></tr>
+<tr>
+<td> Q0 </td>
+<td> Нормальна щільність середовища, кг/м3 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Ct </td>
+<td> Теплоємність середовища </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 100
+</td></tr>
+<tr>
+<td> Rt </td>
+<td> Тепловий опір </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> true </td>
+<td> 200
+</td></tr></table>
+<p><b><u>Програма</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, 293, Si, Fo, Po, 293, So, lo, Q0, 0.95, 0.01, f_frq);
+Qr = Q0 + Q0*0.95*(Pi-1);
+To += (Fi*(Ti-To)+Wc*(Tair-To)/Rt)/(Ct*(Si*li+So*lo)*Qr*f_frq);
+</pre>
+<h3><span class="mw-headline" id=".D0.9A.D0.BE.D0.BC.D0.BF.D1.80.D0.B5.D1.81.D0.BE.D1.80_.D0.B3.D0.B0.D0.B7.D0.BE.D0.B2.D0.B8.D0.B9_.28compressor.29"><span class="mw-headline-number">2.12</span> Компресор газовий (compressor)</span></h3>
+<p>Модель газового компресора. Враховує ефект помпажу. Помпаж розраховується за газово-динамічною кривою, виходячи з якої розраховується коефіцієнт запасу за помпажем.
+</p><p><b><u>Параметри</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Прихований </th>
+<th> По замовченню
+</th></tr>
+<tr>
+<td> Fi </td>
+<td> Вхідні витрати, т/год </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pi </td>
+<td> Вхідний тиск, ата </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Ti </td>
+<td> Вхідна температура, К </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> Fo </td>
+<td> Вихідні витрати, т/год </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po </td>
+<td> Вихідний тиск, ата </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> To </td>
+<td> Вихідна температура, К </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> So </td>
+<td> Вихідний перетин труби, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo </td>
+<td> Вихідна довжина труби, м </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 2
+</td></tr>
+<tr>
+<td> Kmrg </td>
+<td> Коефіцієнт запасу за помпажем </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0.1
+</td></tr>
+<tr>
+<td> N </td>
+<td> Оберти компресору, тис. об./хвил </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> V </td>
+<td> Об'єм компресору, м3 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 7
+</td></tr>
+<tr>
+<td> Kpmp </td>
+<td> Коефіцієнт помпажу, точка помпажу </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.066
+</td></tr>
+<tr>
+<td> Kslp </td>
+<td> Коефіцієнт нахилу помпажної кривої </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.08
+</td></tr>
+<tr>
+<td> Q0 </td>
+<td> Нормальна щільність середовища, кг/м3 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Kpr </td>
+<td> Коефіцієнт стискання середовища [0...1] </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.95
+</td></tr>
+<tr>
+<td> Ct </td>
+<td> Теплоємність середовища </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 100
+</td></tr>
+<tr>
+<td> Riz </td>
+<td> Тепловий опір ізоляції </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 100
+</td></tr>
+<tr>
+<td> Fwind </td>
+<td> Швидкість повітря </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Twind </td>
+<td> Температура повітря, К </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> true </td>
+<td> 200
+</td></tr>
+<tr>
+<td> Fit </td>
+<td> Вхідні витрати, утримані </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Програма</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+Pmax = max(Pi, Po);
+Pmin = min(Pi, Po);
+Qr = Q0 + Q0*Kpr*(Pi-1);
+Qrf = Q0 + Q0*Kpr*(Pmax-1);
+Ftmp = (N &gt; 0.1)&nbsp;? (1-10*(Po-Pi)/(Qr*(pow(N,3)+0.1)*Kpmp))&nbsp;: 1;
+Kmrg = 1-Ftmp;  //The margin coefficient
+Fi = V*N*Qr*sign(Ftmp)*pow(abs(Ftmp),Kslp)+
+     0.3*(4*So*Qrf/(0.01*lo*1.7724+4*Qrf))*sign(Pi-Po)*pow(Qrf*(Pmax-max(Pmax*0.528,Pmin)),0.5);
+Fit -= (Fit-Fi)/max(1,(lo*f_frq)/max(1e-4,abs(Fi/(Qrf*So))));
+Po = max(0, min(100,Po+0.27*(Fi-Fo)/(Q0*Kpr*So*lo*f_frq)));
+
+To += (abs(Fi)*(Ti*pow(Po/Pi,0.3)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*(V+So*lo)*Qr*f_frq);
+</pre>
+<h3><span class="mw-headline" id=".D0.94.D0.B6.D0.B5.D1.80.D0.B5.D0.BB.D0.BE:_.D0.B2.D0.B8.D1.82.D1.80.D0.B0.D1.82.D0.B8_.28src_flow.29"><span class="mw-headline-number">2.13</span> Джерело: витрати (src_flow)</span></h3>
+<p>Джерело з фіксованими витратами. Містить параметр для підключення шуму.
+</p><p><b><u>Параметри</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Прихований </th>
+<th> По замовченню
+</th></tr>
+<tr>
+<td> Fi </td>
+<td> Завдання вхідних витрат, т/год </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Fo </td>
+<td> Вихідні витрати, т/год </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Po </td>
+<td> Вихідний тиск, ата </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> So </td>
+<td> Вихідний перетин труби, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.1
+</td></tr>
+<tr>
+<td> lo </td>
+<td> Вихідна довжина труби, м </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 100
+</td></tr>
+<tr>
+<td> Noise </td>
+<td> Шум вхідних витрат </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Q0 </td>
+<td> Нормальна щільність середовища, кг/м3 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Kpr </td>
+<td> Коефіцієнт стискання середовища [0...1] </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.95
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> true </td>
+<td> 100
+</td></tr></table>
+<p><b><u>Програма</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+Po = max(0, min(100,Po+0.27*(Noise*Fi-Fo)/(Q0*Kpr*So*lo*f_frq)));
+</pre>
+<h3><span class="mw-headline" id=".D0.A2.D1.80.D1.83.D0.B1.D0.B0-.D0.B1.D0.B0.D0.B7.D0.B0_.28pipeBase.29"><span class="mw-headline-number">2.14</span> Труба-база (pipeBase)</span></h3>
+<p>Реалізація базових основ моделі труби:
+</p>
+<ul><li> витрати у трубі з урахуванням: швидкості руху, різниці тиску, опору за рахунок тертя та критичної течі;</li>
+<li> розрахунок тиску.</li>
+<li> урахування щільності середовища та ступеня його стиснення як для газів, так і рідин.</li></ul>
+<p><b><u>Параметри</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Прихований </th>
+<th> По замовченню
+</th></tr>
+<tr>
+<td> Fi </td>
+<td> Вхідні витрати, т/год </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pi </td>
+<td> Вхідний тиск, ата </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Ti </td>
+<td> Вхідна температура, К </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 293
+</td></tr>
+<tr>
+<td> Si </td>
+<td> Вхідний перетин, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> Fo </td>
+<td> Вихідні витрати, т/год </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po </td>
+<td> Вихідний тиск, ата </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> To </td>
+<td> Вихідна температура, К </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 293
+</td></tr>
+<tr>
+<td> So </td>
+<td> Вихідний перетин труби, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo </td>
+<td> Вихідна довжина труби, м </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Q0 </td>
+<td> Нормальна щільність середовища, кг/м3 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Kpr </td>
+<td> Коефіцієнт стискання середовища [0...1] </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.98
+</td></tr>
+<tr>
+<td> Ktr </td>
+<td> Коефіцієнт тертя </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.01
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 100
+</td></tr></table>
+<p><b><u>Програма</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+Pmax = max(Pi, Po);
+Pmin = min(Pi, Po);
+Qr = Q0 + Q0*Kpr*(Pmax-1);
+Fit = 630*(4*Si*So*Qr/(Ktr*lo*1.7724*Si+4*So*Qr))*sign(Pi-Po)*pow(Qr*(Pmax-max(Pmax*0.528,Pmin)),0.5);
+Fi -= (Fi-Fit)/max(1,(lo*f_frq)/max(1,abs(Fit/(Qr*So))));
+if(!Fo.isEVal()) Po = max(0, min(100,Po+0.27*(Fi-Fo)/(Q0*Kpr*So*lo*f_frq)));
+</pre>
+<h3><span class="mw-headline" id=".D0.A2.D1.80.D1.83.D0.B1.D0.B0_1-.3E1_.28pipe1_1.29"><span class="mw-headline-number">2.15</span> Труба 1-&gt;1 (pipe1_1)</span></h3>
+<p>Модель вузла труб за схемою "1 -&gt; 1".
+</p><p><b><u>Параметри</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Прихований </th>
+<th> По замовченню
+</th></tr>
+<tr>
+<td> Fi </td>
+<td> Вхідні витрати, т/год </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pi </td>
+<td> Вхідний тиск, ата </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Fo </td>
+<td> Вихідні витрати, т/год </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po </td>
+<td> Вихідний тиск, ата </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> So </td>
+<td> Вихідний перетин труби, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo </td>
+<td> Вихідна довжина труби, м </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Q0 </td>
+<td> Нормальна щільність середовища, кг/м3 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Kpr </td>
+<td> Коефіцієнт стискання середовища [0...1] </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.95
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> true </td>
+<td> 200
+</td></tr>
+<tr>
+<td> Pti </td>
+<td> Pti </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Fto </td>
+<td> Fto </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pt1 </td>
+<td> Pt1 </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Ft1 </td>
+<td> Ft1 </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Програма</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, 293, So, Ft1, Pti, 293, So, 0.33*lo, Q0, Kpr, 0.01, f_frq);
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Ft1, Pti, 293, So, Fto, Pt1, 293, So, 0.33*lo, Q0, Kpr, 0.01, f_frq);
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fto, Pt1, 293, So, Fo, Po, 293, So, 0.33*lo, Q0, Kpr, 0.01, f_frq);
+</pre>
+<h3><span class="mw-headline" id=".D0.A2.D1.80.D1.83.D0.B1.D0.B0_2-.3E1_.28pipe2_1.29"><span class="mw-headline-number">2.16</span> Труба 2-&gt;1 (pipe2_1)</span></h3>
+<p>Модель вузла труб за схемою "2 -&gt; 1".
+</p><p><b><u>Параметри</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Прихований </th>
+<th> По замовченню
+</th></tr>
+<tr>
+<td> Fi1 </td>
+<td> Вхідні витрати 1, т/год </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pi1 </td>
+<td> Вхідний тиск 1, ата </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Ti1 </td>
+<td> Вхідна температура 1, К </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> Si1 </td>
+<td> Вхідний перетин 1, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> Fi2 </td>
+<td> Вхідні витрати 2, т/год </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pi2 </td>
+<td> Вхідний тиск 2, ата </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Ti2 </td>
+<td> Вхідна температура 2, К </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> Si2 </td>
+<td> Вхідний перетин 2, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> Fo </td>
+<td> Вихідні витрати, т/год </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po </td>
+<td> Вихідний тиск, ата </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> To </td>
+<td> Вихідна температура, К </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> So </td>
+<td> Вихідний перетин труби, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo </td>
+<td> Вихідна довжина труби, м </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Q0 </td>
+<td> Нормальна щільність середовища, кг/м3 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Kpr </td>
+<td> Коефіцієнт стискання середовища [0...1] </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.95
+</td></tr>
+<tr>
+<td> Ct </td>
+<td> Теплоємність середовища </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 20
+</td></tr>
+<tr>
+<td> Riz </td>
+<td> Тепловий опір ізоляції </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 20
+</td></tr>
+<tr>
+<td> Fwind </td>
+<td> Швидкість повітря </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Twind </td>
+<td> Температура повітря, К </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> true </td>
+<td> 100
+</td></tr></table>
+<p><b><u>Програма</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi1, Pi1, 293, Si1, EVAL_REAL, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi2, Pi2, 293, Si2, EVAL_REAL, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
+Po = max(0, min(100,Po+0.27*(Fi1+Fi2-Fo)/(Q0*Kpr*So*lo*f_frq)));
+To = max(0, To+(Fi1*(Ti1-To)+Fi2*(Ti2-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Q0*f_frq));
+</pre>
+<h3><span class="mw-headline" id=".D0.A2.D1.80.D1.83.D0.B1.D0.B0_3-.3E1_.28pipe3_1.29"><span class="mw-headline-number">2.17</span> Труба 3-&gt;1 (pipe3_1)</span></h3>
+<p>Модель вузла труб за схемою "3 -&gt; 1".
+</p><p><b><u>Параметри</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Прихований </th>
+<th> По замовченню
+</th></tr>
+<tr>
+<td> Fi1 </td>
+<td> Вхідні витрати 1, т/год </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pi1 </td>
+<td> Вхідний тиск 1, ата </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Ti1 </td>
+<td> Вхідна температура 1, К </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> Si1 </td>
+<td> Вхідний перетин 1, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> Fi2 </td>
+<td> Вхідні витрати 2, т/год </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pi2 </td>
+<td> Вхідний тиск 2, ата </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Ti2 </td>
+<td> Вхідна температура 2, К </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> Si2 </td>
+<td> Вхідний перетин 2, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> Fi3 </td>
+<td> Вхідні витрати 3, т/год </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pi3 </td>
+<td> Вхідний тиск 3, ата </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Ti3 </td>
+<td> Вхідна температура 3, К </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> Si3 </td>
+<td> Вхідний перетин 3, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> Fo </td>
+<td> Вихідні витрати, т/год </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po </td>
+<td> Вихідний тиск, ата </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> To </td>
+<td> Вихідна температура, К </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> So </td>
+<td> Вихідний перетин труби, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo </td>
+<td> Вихідна довжина труби, м </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Q0 </td>
+<td> Нормальна щільність середовища, кг/м3 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Kpr </td>
+<td> Коефіцієнт стискання середовища [0...1] </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.95
+</td></tr>
+<tr>
+<td> Ct </td>
+<td> Теплоємність середовища </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 20
+</td></tr>
+<tr>
+<td> Riz </td>
+<td> Тепловий опір ізоляції </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 20
+</td></tr>
+<tr>
+<td> Fwind </td>
+<td> Швидкість повітря </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Twind </td>
+<td> Температура повітря, К </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> true </td>
+<td> 100
+</td></tr></table>
+<p><b><u>Програма</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi1, Pi1, 293, Si1, EVAL_REAL, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi2, Pi2, 293, Si2, EVAL_REAL, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi3, Pi3, 293, Si3, EVAL_REAL, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
+Po = max(0, min(100,Po+0.27*(Fi1+Fi2+Fi3-Fo)/(Q0*Kpr*So*lo*f_frq)));
+To = max(0, To+(Fi1*(Ti1-To)+Fi2*(Ti2-To)+Fi3*(Ti3-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Q0*f_frq));
+</pre>
+<h3><span class="mw-headline" id=".D0.A2.D1.80.D1.83.D0.B1.D0.B0_1-.3E2_.28pipe1_2.29"><span class="mw-headline-number">2.18</span> Труба 1-&gt;2 (pipe1_2)</span></h3>
+<p>Модель вузла труб за схемою "1 -&gt; 2".
+</p><p><b><u>Параметри</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Прихований </th>
+<th> По замовченню
+</th></tr>
+<tr>
+<td> Fi </td>
+<td> Вхідні витрати, т/год </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pi </td>
+<td> Вхідний тиск, ата </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Fo1 </td>
+<td> Вихідні витрати 1, т/год </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po1 </td>
+<td> Вихідний тиск 1, ата </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> So1 </td>
+<td> Вихідний перетин труби 1, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo1 </td>
+<td> Вихідна довжина труби 1, м </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Fo2 </td>
+<td> Вихідні витрати 2, т/год </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po2 </td>
+<td> Вихідний тиск 2, ата </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> So2 </td>
+<td> Вихідний перетин труби 2, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo2 </td>
+<td> Вихідна довжина труби 2, м </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Q0 </td>
+<td> Нормальна щільність середовища, кг/м3 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Kpr </td>
+<td> Коефіцієнт стискання середовища [0...1] </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.95
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> true </td>
+<td> 100
+</td></tr>
+<tr>
+<td> F1tmp </td>
+<td> Вхідні витрати утримані 1 </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> F2tmp </td>
+<td> Вхідні витрати утримані 2 </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pot1 </td>
+<td> Вихідний тиск утриманий 1 </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Pot2 </td>
+<td> Вихідний тиск утриманий 2 </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 1
+</td></tr></table>
+<p><b><u>Програма</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(F1tmp, Pi, 293, So1, Fo1, Po1, 293, So1, lo1, Q0, Kpr, 0.01, f_frq);
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(F2tmp, Pi, 293, So2, Fo2, Po2, 293, So2, lo2, Q0, Kpr, 0.01, f_frq);
+Fi = F1tmp + F2tmp;
+</pre>
+<h3><span class="mw-headline" id=".D0.A2.D1.80.D1.83.D0.B1.D0.B0_1-.3E3_.28pipe1_3.29"><span class="mw-headline-number">2.19</span> Труба 1-&gt;3 (pipe1_3)</span></h3>
+<p>Модель вузла труб за схемою "1 -&gt; 3".
+</p><p><b><u>Параметри</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Прихований </th>
+<th> По замовченню
+</th></tr>
+<tr>
+<td> Fi </td>
+<td> Вхідні витрати, т/год </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pi </td>
+<td> Вхідний тиск, ата </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Fo1 </td>
+<td> Вихідні витрати 1, т/год </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po1 </td>
+<td> Вихідний тиск 1, ата </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> So1 </td>
+<td> Вихідний перетин труби 1, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo1 </td>
+<td> Вихідна довжина труби 1, м </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Fo2 </td>
+<td> Вихідні витрати 2, т/год </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po2 </td>
+<td> Вихідний тиск 2, ата </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> So2 </td>
+<td> Вихідний перетин труби 2, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo2 </td>
+<td> Вихідна довжина труби 2, м </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Fo3 </td>
+<td> Вихідні витрати 3, т/год </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po3 </td>
+<td> Вихідний тиск 3, ата </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> So3 </td>
+<td> Вихідний перетин труби 3, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo3 </td>
+<td> Вихідна довжина труби 3, м </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Q0 </td>
+<td> Нормальна щільність середовища, кг/м3 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Kpr </td>
+<td> Коефіцієнт стискання середовища [0...1] </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.95
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> true </td>
+<td> 100
+</td></tr>
+<tr>
+<td> F1tmp </td>
+<td> Тимчасові витрати 1 </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> F2tmp </td>
+<td> Тимчасові витрати 2 </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> F3tmp </td>
+<td> Тимчасові витрати 3 </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pot1 </td>
+<td> Тимчасовий тиск 1 </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Pot2 </td>
+<td> Тимчасовий тиск 2 </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Pot3 </td>
+<td> Тимчасовий тиск 3 </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 1
+</td></tr></table>
+<p><b><u>Програма</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(F1tmp, Pi, 293, So1, Fo1, Po1, 293, So1, lo1, Q0, Kpr, 0.01, f_frq);
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(F2tmp, Pi, 293, So2, Fo2, Po2, 293, So2, lo2, Q0, Kpr, 0.01, f_frq);
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(F3tmp, Pi, 293, So3, Fo3, Po3, 293, So3, lo3, Q0, Kpr, 0.01, f_frq);
+Fi = F1tmp + F2tmp + F3tmp;
+</pre>
+<h3><span class="mw-headline" id=".D0.A2.D1.80.D1.83.D0.B1.D0.B0_1-.3E4_.28pipe1_4.29"><span class="mw-headline-number">2.20</span> Труба 1-&gt;4 (pipe1_4)</span></h3>
+<p>Модель вузла труб за схемою "1 -&gt; 3".
+</p><p><b><u>Параметри</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Прихований </th>
+<th> По замовченню
+</th></tr>
+<tr>
+<td> Fi </td>
+<td> Вхідні витрати, т/год </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pi </td>
+<td> Вхідний тиск, ата </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Fo1 </td>
+<td> Вихідні витрати 1, т/год </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po1 </td>
+<td> Вихідний тиск 1, ата </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> So1 </td>
+<td> Вихідний перетин труби 1, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo1 </td>
+<td> Вихідна довжина труби 1, м </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Fo2 </td>
+<td> Вихідні витрати 2, т/год </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po2 </td>
+<td> Вихідний тиск 2, ата </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> So2 </td>
+<td> Вихідний перетин труби 2, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo2 </td>
+<td> Вихідна довжина труби 2, м </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Fo3 </td>
+<td> Вихідні витрати 3, т/год </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po3 </td>
+<td> Вихідний тиск 3, ата </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> So3 </td>
+<td> Вихідний перетин труби 3, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo3 </td>
+<td> Вихідна довжина труби 3, м </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Fo4 </td>
+<td> Вихідні витрати 4, т/год </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po4 </td>
+<td> Вихідний тиск 4, ата </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> So4 </td>
+<td> Вихідний перетин труби 4, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo4 </td>
+<td> Вихідна довжина труби 4, м </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Q0 </td>
+<td> Нормальна щільність середовища, кг/м3 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Kpr </td>
+<td> Коефіцієнт стискання середовища [0...1] </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.95
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> true </td>
+<td> 100
+</td></tr>
+<tr>
+<td> F1tmp </td>
+<td> Тимчасові витрати 1 </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> F2tmp </td>
+<td> Тимчасові витрати 2 </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> F3tmp </td>
+<td> Тимчасові витрати 3 </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> F4tmp </td>
+<td> Тимчасові витрати 4 </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pot1 </td>
+<td> Тимчасовий тиск 1 </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Pot2 </td>
+<td> Тимчасовий тиск 2 </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Pot3 </td>
+<td> Тимчасовий тиск 3 </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Pot4 </td>
+<td> Тимчасовий тиск 4 </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 1
+</td></tr></table>
+<p><b><u>Програма</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(F1tmp, Pi, 293, So1, Fo1, Po1, 293, So1, lo1, Q0, Kpr, 0.01, f_frq);
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(F2tmp, Pi, 293, So2, Fo2, Po2, 293, So2, lo2, Q0, Kpr, 0.01, f_frq);
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(F3tmp, Pi, 293, So3, Fo3, Po3, 293, So3, lo3, Q0, Kpr, 0.01, f_frq);
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(F4tmp, Pi, 293, So4, Fo4, Po4, 293, So4, lo4, Q0, Kpr, 0.01, f_frq);
+Fi = F1tmp + F2tmp + F3tmp + F4tmp;
+</pre>
+<h3><span class="mw-headline" id=".D0.9A.D0.BB.D0.B0.D0.BF.D0.B0.D0.BD:_.D0.B2.D0.B8.D0.BA.D0.BE.D0.BD.D0.B0.D0.B2.D1.87.D0.B8.D0.B9_.D0.BC.D0.B5.D1.85.D0.B0.D0.BD.D1.96.D0.B7.D0.BC_.28valveMech.29"><span class="mw-headline-number">2.21</span> Клапан: виконавчий механізм (valveMech)</span></h3>
+<p>Модель виконавчого механізму клапана. Включає час ходу та час відриву.
+</p><p><b><u>Параметри</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Прихований </th>
+<th> По замовченню
+</th></tr>
+<tr>
+<td> pos </td>
+<td> Положення,&nbsp;% </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> pos_sensor </td>
+<td> Положення за давачем,&nbsp;% </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> com </td>
+<td> Команда </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> st_open </td>
+<td> Стан "Відкрито" </td>
+<td> Логічний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> st_close </td>
+<td> Стан "Закрито" </td>
+<td> Логічний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> t_full </td>
+<td> Час ходу, секунд </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 3
+</td></tr>
+<tr>
+<td> t_up </td>
+<td> Час зриву, секунд </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> t_sensor </td>
+<td> Час затримки сенсора, секунд </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> true </td>
+<td> 100
+</td></tr>
+<tr>
+<td> tmp_up </td>
+<td> Лічильник зриву </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> lst_com </td>
+<td> Остання команда </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Програма</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+if((pos &gt;= 99 &amp;&amp; com &gt;= 99) || (pos &lt;= 1 &amp;&amp; com &lt;= 1)) { 
+  tmp_up = t_up;
+  if(pos &gt;= 99) { pos = 100; st_open = true; }
+  else { pos = 0; st_close = true; }
+}
+else if(tmp_up &gt; 0) tmp_up -= 1/f_frq;
+else {
+  st_open = st_close = false;
+  lst_com += (com-lst_com)/(0.5*t_full*f_frq);
+  pos += (lst_com-pos)/(0.5*t_full*f_frq);
+}
+pos_sensor += (pos-pos_sensor)/(t_sensor*f_frq);
+</pre>
+<h3><span class="mw-headline" id=".D0.94.D1.96.D0.B0.D1.84.D1.80.D0.B0.D0.B3.D0.BC.D0.B0_.28diaphragm.29"><span class="mw-headline-number">2.22</span> Діафрагма (diaphragm)</span></h3>
+<p>Модель діафрагми.
+</p><p><b><u>Параметри</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Прихований </th>
+<th> По замовченню
+</th></tr>
+<tr>
+<td> Fi </td>
+<td> Вхідні витрати, т/год </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Pi </td>
+<td> Вхідний тиск, ата </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Fo </td>
+<td> Вихідні витрати, т/год </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po </td>
+<td> Вихідний тиск, ата </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> dP </td>
+<td> Перепад тиску, кПа </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Sdf </td>
+<td> Перетин діафрагми, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.1
+</td></tr>
+<tr>
+<td> So </td>
+<td> Вихідний перетин труби, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.2
+</td></tr>
+<tr>
+<td> lo </td>
+<td> Вихідна довжина труби, м </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Q0 </td>
+<td> Нормальна щільність середовища, кг/м3 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Kpr </td>
+<td> Коефіцієнт стискання середовища [0...1] </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.95
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення функції, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> true </td>
+<td> 100
+</td></tr></table>
+<p><b><u>Програма</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, 293, Sdf, Fo, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
+dP -= (dP-100*(Pi-Po))/f_frq;
+</pre>
+<h3><span class="mw-headline" id=".D0.A2.D0.B5.D0.BF.D0.BB.D0.BE.D0.BE.D0.B1.D0.BC.D1.96.D0.BD.D0.BD.D0.B8.D0.BA_.28heatExch.29"><span class="mw-headline-number">2.23</span> Теплообмінник (heatExch)</span></h3>
+<p>Модель теплообміннику, що розраховує теплообмін двох потоків.
+</p><p><b><u>Параметри</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Прихований </th>
+<th> По замовченню
+</th></tr>
+<tr>
+<td> Fi1 </td>
+<td> Вхідні витрати 1, т/год </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 20
+</td></tr>
+<tr>
+<td> Pi1 </td>
+<td> Вхідний тиск 1, ата </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Ti1 </td>
+<td> Вхідна температура 1, К </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 20
+</td></tr>
+<tr>
+<td> Si1 </td>
+<td> Вхідний перетин 1, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> li1 </td>
+<td> Вхідна довжина 1, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Q0i1 </td>
+<td> Вхідна нормальна щільність 1, кг/м3 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Kpr1 </td>
+<td> Вхідний коефіцієнт стискання середовища 1 [0...1] </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.9
+</td></tr>
+<tr>
+<td> Ci1 </td>
+<td> Вхідна теплоємність 1 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Fi2 </td>
+<td> Вхідні витрати 2, т/год </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 20
+</td></tr>
+<tr>
+<td> Pi2 </td>
+<td> Вхідний тиск 2, ата </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Ti2 </td>
+<td> Вхідна температура 2, К </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 40
+</td></tr>
+<tr>
+<td> Si2 </td>
+<td> Вхідний перетин 2, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> li2 </td>
+<td> Вхідна довжина 2, м2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Q0i2 </td>
+<td> Вхідна нормальна щільність 2, кг/м3 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Kpr2 </td>
+<td> Вхідний коефіцієнт стискання середовища 2 [0...1] </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.9
+</td></tr>
+<tr>
+<td> Ci2 </td>
+<td> Вхідна теплоємність 2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> ki </td>
+<td> Коефіцієнт тепловіддачі </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0.9
+</td></tr>
+<tr>
+<td> Fo1 </td>
+<td> Вихідні витрати 1, т/год </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po1 </td>
+<td> Вихідний тиск 1, ата </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> To1 </td>
+<td> Вихідна температура 1, К </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> So1 </td>
+<td> Вихідний перетин труби 1, м2 </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> lo1 </td>
+<td> Вихідна довжина труби 1, м </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> Fo2 </td>
+<td> Вихідні витрати 2, т/год </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Po2 </td>
+<td> Вихідний тиск 2, ата </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> To2 </td>
+<td> Вихідна температура 2, К </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 273
+</td></tr>
+<tr>
+<td> So2 </td>
+<td> Вихідний перетин труби 2, м2 </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> lo2 </td>
+<td> Вихідна довжина труби 2, м </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 10
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 200
+</td></tr></table>
+<p><b><u>Програма</u></b><br />
+</p>
+<pre style="white-space: pre-wrap;">
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi1, Pi1, Ti1, Si1, Fo1, Po1, 293, So1, lo1, Q0i1, Kpr1, 0.01, f_frq);
+DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi2, Pi2, Ti2, Si2, Fo2, Po2, 293, So2, lo2, Q0i2, Kpr2, 0.01, f_frq);
+
+To1 = max(0, min(1e4,(Fi1*Ti1*Ci1+ki*Fi2*Ti2*Ci2)/(Fi1*Ci1+ki*Fi2*Ci2)));
+To2 = max(0, min(1e4,(ki*Fi1*Ti1*Ci1+Fi2*Ti2*Ci2)/(ki*Fi1*Ci1+Fi2*Ci2)));
+</pre>
+
+
+
+
+
+
+</div></body>
+</html>
