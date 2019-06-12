@@ -1012,11 +1012,11 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 	switch(cfg.getI()) {
 	    case FD_TRND:
 		cfg.owner()->attrAdd(new TFld("sclHorPer",_("Scale: horizontal grid size, seconds"),TFld::Real,Attr::Mutable,
-		    "","0","0;3e6","",i2s(A_DiagramSclHorPer).c_str()));
+		    "","0","0;4e7","",i2s(A_DiagramSclHorPer).c_str()));
 	    case FD_SPECTR: case FD_XY:
 		cfg.owner()->attrAdd(new TFld("tSek",_("Time: seconds"),TFld::Integer,Attr::DateTime|Attr::Mutable,"","","","",i2s(A_DiagramTSek).c_str()));
 		cfg.owner()->attrAdd(new TFld("tUSek",_("Time: microseconds"),TFld::Integer,Attr::Mutable,"","","","",i2s(A_DiagramTUSek).c_str()));
-		cfg.owner()->attrAdd(new TFld("tSize",_("Size, seconds"),TFld::Real,Attr::Mutable,"","60","0;3e6","",i2s(A_DiagramTSize).c_str()));
+		cfg.owner()->attrAdd(new TFld("tSize",_("Size, seconds"),TFld::Real,Attr::Mutable,"","60","0;4e7","",i2s(A_DiagramTSize).c_str()));
 		if(cfg.owner()->attrAt("active").at().getB()) {
 		    cfg.owner()->attrAdd(new TFld("curSek",_("Cursor: seconds"),TFld::Integer,Attr::DateTime|Attr::Mutable,"","","","",i2s(A_DiagramCurSek).c_str()));
 		    cfg.owner()->attrAdd(new TFld("curUSek",_("Cursor: microseconds"),TFld::Integer,Attr::Mutable,"","","","",i2s(A_DiagramCurUSek).c_str()));
