@@ -1,0 +1,13 @@
+1) #Install MSYS2
+2) #Run MINGW-w64 64bit shell
+3) pacman -S mingw-w64-x86_64-toolchain
+4) pacman -S mingw64/mingw-w64-x86_64-dlfcn #for dlfcn.h
+5) #TODO: sys/utsname.h not found
+6) pacman -S mingw64/mingw-w64-x86_64-pcre #for libpcre, pcre.h
+7) #TODO: 
+	checking for sys/un.h... no
+	configure: error: Transport.Sockets: sys/un.h GLibC network headers aren't found. Install or check the GLibC development package!
+	disabled by '--disable-Sockets'
+8) #Qt5:
+	pacman -S mingw-w64-x86_64-qt5
+9) pacman -S mingw64/mingw-w64-x86_64-libgd #gd.h

@@ -51,8 +51,57 @@ AM_SANITY_CHECK
 AC_HEADER_DIRENT
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
-AC_CHECK_HEADERS([time.h signal.h fcntl.h math.h errno.h unistd.h dirent.h stdio.h stdarg.h stdlib.h dlfcn.h locale.h pthread.h sys/types.h sys/stat.h sys/time.h sys/utsname.h],[],
-    AC_MSG_ERROR([Some GLibC headers are not found. Install or check the GLibC developing package!]))
+#AC_CHECK_HEADERS([time.h signal.h fcntl.h math.h errno.h unistd.h dirent.h stdio.h stdarg.h stdlib.h dlfcn.h locale.h pthread.h sys/types.h sys/stat.h sys/time.h sys/utsname.h],[],
+#    AC_MSG_ERROR([Some GLibC headers are not found. Install or check the GLibC developing package!]))
+AC_CHECK_HEADERS([time.h],[],
+    AC_MSG_ERROR([time.h GLibC headers are not found. Install or check the GLibC developing package!]))
+AC_CHECK_HEADERS([signal.h],[],
+    AC_MSG_ERROR([signal.h GLibC headers are not found. Install or check the GLibC developing package!]))
+AC_CHECK_HEADERS([fcntl.h],[],
+    AC_MSG_ERROR([fcntl.h GLibC headers are not found. Install or check the GLibC developing package!]))
+
+AC_CHECK_HEADERS([math.h],[],
+    AC_MSG_ERROR([math.h GLibC headers are not found. Install or check the GLibC developing package!]))
+
+AC_CHECK_HEADERS([errno.h],[],
+    AC_MSG_ERROR([error.h GLibC headers are not found. Install or check the GLibC developing package!]))
+
+AC_CHECK_HEADERS([unistd.h],[],
+    AC_MSG_ERROR([unistd.h GLibC headers are not found. Install or check the GLibC developing package!]))
+
+AC_CHECK_HEADERS([dirent.h],[],
+    AC_MSG_ERROR([dirent.h Some GLibC headers are not found. Install or check the GLibC developing package!]))
+
+AC_CHECK_HEADERS([stdio.h],[],
+    AC_MSG_ERROR([stdio.h GLibC headers are not found. Install or check the GLibC developing package!]))
+
+AC_CHECK_HEADERS([stdarg.h],[],
+    AC_MSG_ERROR([stdarg.h GLibC headers are not found. Install or check the GLibC developing package!]))
+
+AC_CHECK_HEADERS([stdlib.h],[],
+    AC_MSG_ERROR([stdlib.h GLibC headers are not found. Install or check the GLibC developing package!]))
+
+AC_CHECK_HEADERS([dlfcn.h],[],
+    AC_MSG_ERROR([dlfcn.h GLibC headers are not found. Install or check the GLibC developing package!]))
+
+AC_CHECK_HEADERS([locale.h],[],
+    AC_MSG_ERROR([locale.h GLibC headers are not found. Install or check the GLibC developing package!]))
+
+AC_CHECK_HEADERS([pthread.h],[],
+    AC_MSG_ERROR([pthread.h GLibC headers are not found. Install or check the GLibC developing package!]))
+
+AC_CHECK_HEADERS([sys/types.h],[],
+    AC_MSG_ERROR([sys/types.h GLibC headers are not found. Install or check the GLibC developing package!]))
+
+AC_CHECK_HEADERS([sys/stat.h],[],
+    AC_MSG_ERROR([sys/stat.h GLibC headers are not found. Install or check the GLibC developing package!]))
+
+AC_CHECK_HEADERS([sys/time.h],[],
+    AC_MSG_ERROR([sys/time.h GLibC headers are not found. Install or check the GLibC developing package!]))
+
+#AC_CHECK_HEADERS([sys/utsname.h],[],
+#    AC_MSG_ERROR([sys/utsname.h GLibC headers are not found. Install or check the GLibC developing package!]))
+
 AC_CHECK_HEADERS([string vector map exception typeinfo deque],[],
     AC_MSG_ERROR([Some STL headers are not found. Install or check the STL of StdC++ developing package!]))
 AC_CHECK_HEADERS([langinfo.h syscall.h iconv.h libintl.h], [], AC_MSG_NOTICE([Some system headers aren't found. Using disabled!]))
@@ -281,8 +330,20 @@ AX_MOD_Archive_EN(DBArch, [disable or enable[=incl] compilation module Archive.D
 # Transport modules
 AX_MOD_Transport_EN(Sockets, [disable or enable[=incl] compilation module Transport.Sockets], disable, incl, [
     AC_CHECK_HEADERS([linux/can.h], [], AC_MSG_NOTICE([linux/can.h header isn't found. Using disabled!]))
-    AC_CHECK_HEADERS([sys/un.h sys/socket.h sys/select.h arpa/inet.h netinet/in.h netdb.h], [],
-	AC_MSG_ERROR([Transport.Sockets: Some GLibC network headers aren't found. Install or check the GLibC development package!]))
+#    AC_CHECK_HEADERS([sys/un.h sys/socket.h sys/select.h arpa/inet.h netinet/in.h netdb.h], [],
+#	AC_MSG_ERROR([Transport.Sockets: Some GLibC network headers aren't found. Install or check the GLibC development package!]))
+    AC_CHECK_HEADERS([sys/un.h], [],
+	AC_MSG_ERROR([Transport.Sockets: sys/un.h GLibC network headers aren't found. Install or check the GLibC development package!]))
+    AC_CHECK_HEADERS([sys/socket.h], [],
+	AC_MSG_ERROR([Transport.Sockets: sys/socket.h GLibC network headers aren't found. Install or check the GLibC development package!]))
+    AC_CHECK_HEADERS([sys/select.h], [],
+	AC_MSG_ERROR([Transport.Sockets: sys/select.h GLibC network headers aren't found. Install or check the GLibC development package!]))
+    AC_CHECK_HEADERS([arpa/inet.h], [],
+	AC_MSG_ERROR([Transport.Sockets: arpa/inet.h GLibC network headers aren't found. Install or check the GLibC development package!]))
+    AC_CHECK_HEADERS([netinet/in.h], [],
+	AC_MSG_ERROR([Transport.Sockets: netin/in.h GLibC network headers aren't found. Install or check the GLibC development package!]))
+    AC_CHECK_HEADERS([netdb.h], [],
+	AC_MSG_ERROR([Transport.Sockets: netdb.h GLibC network headers aren't found. Install or check the GLibC development package!]))
 ])
 AX_MOD_Transport_EN(Serial, [disable or enable[=incl] compilation module Transport.Serial], disable, incl, [
     AC_CHECK_HEADERS([linux/serial.h linux/i2c-dev.h linux/spi/spidev.h], [], AC_MSG_NOTICE([Some Linux headers aren't found. Using disabled!]))
