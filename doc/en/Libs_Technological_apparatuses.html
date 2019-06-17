@@ -30,7 +30,8 @@
 <td> 2.0 </td>
 <td> GPL
 </td>
-<td> DB SQLite: <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">File:OscadaLibs.db.gz</a>, <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">Most actual SQL</a> </td>
+<td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.JavaLikeCalc.techApp
+</td>
 <td> en, uk, ru
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2007,2010), Ksenia Yashina (2007)</i></font>
@@ -38,7 +39,6 @@
 <td> Library of models of the technological apparatuses for creating complex simulators of the technological processes.
 <ul><li> <b>Founded:</b> October 2005</li>
 <li> <b>Initially created:</b> <a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/APIFunctionLibs/TechApp" rel="nofollow noreferrer noopener" target="_blank">in the old Wiki</a></li>
-<li> <b>Address:</b> JavaLikeCalc =&gt; techApp</li>
 <li> <b>Used by:</b> the simulator <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">AGLKS</a> and <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_Boiler" title="Special:MyLanguage/Using/Model Boiler">Boiler</a></li></ul>
 </td></tr></table>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
@@ -99,7 +99,7 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <dl><dd>F — mass flow (ton/hour).</dd>
 <dd>S — section (m2).</dd>
 <dd>Qr — real density of the environment (kg/m3).</dd>
-<dd>�P — pressure difference (at).</dd></dl>
+<dd>∆P — pressure difference (at).</dd></dl>
 <p>The actual density is calculated by the formula (2).
 </p><p><a class="image" href="http://oscada.org/wiki/File:TechApps_dens.png"><img alt="TechApps dens.png" height="26" src="files/TechApps_dens.png" width="191" /></a> (2) 
 </p><p>Where:
@@ -111,7 +111,7 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 </p><p><a class="image" href="http://oscada.org/wiki/File:TechApps_flowR.png"><img alt="TechApps flowR.png" height="48" src="files/TechApps_flowR.png" width="418" /></a> (3) 
 </p><p>Where:
 </p>
-<dl><dd>�P — pressure difference (at), the resistance of the pipe walls to flow of the environment.</dd>
+<dl><dd>∆P — pressure difference (at), the resistance of the pipe walls to flow of the environment.</dd>
 <dd>Kr — coefficient of friction of the pipe walls.</dd>
 <dd>D — diameter of the pipeline (m).</dd>
 <dd>l — pipeline length (m).</dd>

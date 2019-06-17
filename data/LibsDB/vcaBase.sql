@@ -52,13 +52,22 @@ INSERT INTO "PrescrProgs" VALUES('Abcdef','');
 INSERT INTO "PrescrProgs" VALUES('Библ1/Прог123','');
 INSERT INTO "PrescrProgs" VALUES('Тест12','<prg id="Тест12" wtm="31"><com arg1="10" arg2="0" arg3="0" arg4="0" arg5="0" id="Timer" /><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" id="Background timer"><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer"><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" id="Timer" /><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" id="Background timer" /><com id="New command"><com arg1="123" arg2="0" arg3="0" arg4="0" arg5="0" descr="123456" id="Timer" name="Test timer" /></com></com></com></prg>');
 CREATE TABLE 'VCALibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "VCALibs" VALUES('Main','Main elements','Main elements library of user interface.
+INSERT INTO "VCALibs" VALUES('Main','Main elements','Provides the library of the main elements of the user interface of common and the industrial automation.
+
+Founded: September 2007
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.5.1','wlb_Main','','Основні елементи','Бібліотека основних елементів інтерфейсу користувача.
+Version: 1.5.1
+License: GPLv2','wlb_Main','','Основні елементи','Бібліотека створюється для надання основних елементів користувацького інтерфейсу. Будується бібліотека на основі примітивів віджетів та мови внутрішнього програмування JavaLikeCalc.
+
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.5.1','Основные элементы','Библиотека основных элементов пользовательского интерфейса.
+Засновано: Вересень 2007
+Версія: 1.5.1
+Ліцензія: GPLv2','Основные элементы','Библиотека создаётся для предоставления основных элементов пользовательского интерфейса. Строится библиотека на основе примитивов виджетов и языка внутреннего программирования JavaLikeCalc.
+
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.5.1');
+Основано: Сентябрь 2007
+Версия: 1.5.1
+Лицензия: GPLv2');
 INSERT INTO "VCALibs" VALUES('mnEls','Mnemo elements','User interface''s main elements library.','wlb_mnEls','','Елементи мнемосхеми','Бібліотека основних елементів інтерфейсу користувача.','Элементы мнемосхемы','Библиотека основных элементов пользовательского интерфейса.');
 INSERT INTO "VCALibs" VALUES('doc','Documents','Documents library.
 Author: Roman Savochenko <roman@oscada.org>
@@ -3397,7 +3406,7 @@ INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm0bordL','0',32,'','','trnd1','',
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm0bordU','0',32,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm0color','mediumorchid',32,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm0val',NULL,32,'','','trnd1','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('grpGraph','curSek','1552209360',8,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph','curSek','1560238026',8,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','curUSek','0',0,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm1addr','',0,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm1bordL','0',0,'','','trnd1','','','','','','');
@@ -7373,9 +7382,19 @@ Version: 1.1.0',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ViewCadr','dscr','The template cadre "Overview frames panel".
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.0',32,'','','','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('anShow','dscr','The widget "Analog show".
+INSERT INTO "wlb_Main_io" VALUES('anShow','dscr','The element is used to display the current value of the analog parameter and the regulator mode, if the parameter is a regulator. Also this element generates alarms on the corresponding parameter settings.
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.0',32,'','','','','','','','','');
+Version: 1.1.1
+License: GPLv2',32,'','','','Елемент слугує для відображення поточного значения аналогового параметру та режиму регулятору, якщо параметр є таким. Також цей елемент генерує сигналізації (alarms) за відповідними уставкам параметру. Елемент загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал".
+
+Автор: Роман Савоченко <roman@oscada,org>
+Версія: 1.1.1
+Ліцензія: GPLv2','','Элемент служит для отображения текущего значения аналогового параметра и режима регулятора, если параметр является таковым. Также этот элемент генерирует сигнализации (alarms) по соответствующим уставкам параметра. Элемент в целом использует и представляет представительскую структуру DAQ-шаблона "Аналоговый сигнал".
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.1.1
+Лицензия: GPLv2','','','');
 INSERT INTO "wlb_Main_io" VALUES('anShow1','dscr','The widget "Analog show 1".
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.0',32,'','','','','','','','','');
@@ -9906,10 +9925,10 @@ INSERT INTO "wlb_Main_uio" VALUES('grpCadr','prmAddr','Parameter: address',19661
 INSERT INTO "wlb_Main_uio" VALUES('grpCadr','prmAddr','Parameter: address',196613,NULL,10,'Parameter|var','','el3','Параметр: адреса','','','Параметр: адрес','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpCadr','prmAddr','Parameter: address',196613,NULL,10,'Parameter|var','','el2','Параметр: адреса','','','Параметр: адрес','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpCadr','prmAddr','Parameter: address',196613,NULL,10,'Parameter|var','','el1','Параметр: адреса','','','Параметр: адрес','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow','pErr','Error',131077,NULL,10,'Parameter|err','','','Помилка','<EVAL>||','','Ошибка','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow','pErr','Error',131077,NULL,10,'Parameter|err','','','Помилка',NULL,'','Ошибка',NULL,'','','');
 INSERT INTO "wlb_Main_uio" VALUES('anShow','pErrCode','Error code',131073,'1|',8,'','','','Код помилки','','','Код ошибки','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow','pName','Parameter name',131077,'',10,'Parameter|NAME','','','Ім''я параметру','||','','Имя параметра','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow','pVal','Parameter value',131076,'0|',10,'Parameter|var','','','Значення парметру','','','Значение парметра','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow','pName','Parameter name',131077,'',10,'Parameter|NAME','','','Ім''я параметру','','','Имя параметра','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow','pVal','Parameter value',131076,'0|',10,'Parameter|var','','','Значення параметру','','','Значение параметра','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('anShow1','pName','Short name',131077,'',9,'','','','Ім''я параметра','||','','Имя параметра','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('anShow1','pVal','Parameter: value',131076,'0|',10,'Parameter|var','','','Параметр: значення','','','Параметр: значение','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p1_max','Parameter1: maximum',131076,'<EVAL>|',10,'Parameter 1|max','','','Параметр1: максимум','','','Параметр1: максимум','','','','');
@@ -9982,11 +10001,11 @@ INSERT INTO "wlb_Main_uio" VALUES('grph_panel','type','Type',131073,'<EVAL>|',14
 INSERT INTO "wlb_Main_uio" VALUES('grph_panel','curUSek','Cursor, usec',131073,'<EVAL>|',14,'<page>|curUSek','','','Курсор, мкс','','','Курсор, мкс','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','lastView','Last view',131077,NULL,8,'','','','Останній вигляд',NULL,'','Последний вид','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmManIn','Parameter: manual input',131076,'<EVAL>|',14,'Parameter|manIn','','','Параметр: ручний ввід','','','Параметр: ручной ввод','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow','pModeA','Regulator mode (auto)',131072,NULL,10,'Parameter|auto','','','Режим регулятору (автомат)','','','Режим регулятора (автомат)','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow','pModeC','Regulator mode (cascad)',131072,NULL,10,'Parameter|casc','','','Режим регулятору (каскад)','','','Режим регулятора (каскад)','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow','pModeA','Regulator mode: auto',131072,NULL,10,'Parameter|auto','','','Режим регулятору: автомат','','','Режим регулятора: автомат','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow','pModeC','Regulator mode: cascade',131072,NULL,10,'Parameter|casc','','','Режим регулятору: каскад','','','Режим регулятора: каскад','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('anShow','pPrec','Precision',131073,'1|',10,'Parameter|prec','','','Точність','','','Точность','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow','redEVAL','Speech message generation on reject',131072,NULL,9,'','','','Генерація мовного повідомлення у разі відмови','','','Генерация речевого сообщения при отказе','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow','spName','Speech name',131077,NULL,9,'','','','Ім’я для синтезу','<EVAL>||','','Имя для синтеза','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow','redEVAL','Red parameter name in case of failure',131072,NULL,9,'','','','Червоне ім''я параметру у випадку відмови','','','Красное имя параметра в случае отказа','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow','spName','Speech name',131077,NULL,9,'','','','Ім''я для синтезу',NULL,'','Имя для синтеза',NULL,'','','');
 INSERT INTO "wlb_Main_uio" VALUES('cntrPasp','pName','Parameter name',196613,'<EVAL>',10,'Parameter|NAME','','','Ім''я параметру','','','Имя параметра','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElCadr','digComs','Parameter: discrete commands',131077,'OPEN;CLOSE;STOP',10,'Parameter|digComs','','','Параметр: дискр. команди','ВІДКР;ЗАКР;СТОП','','Параметр: дискр. команды','ОТКР;ЗАКР;СТОП','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElCadr','digStts','Parameter: discrete stats',131077,NULL,10,'Parameter|digStts','','','Параметр: дискр. стани','ВІДКР;ЗАКР;СТОП||','','Параметр: дискр. состояния','ОТКР;ЗАКР;СТОП','','','');
@@ -10298,9 +10317,9 @@ INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','backColorButtonSel','Button color:
 INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','labColorGood','Label color: good',147461,'#00FF00',72,'','','','','','','','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','labColorAlarm','Label color: alarm',147461,'#ff0000',72,'','','','','','','','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','labColorWarning','Label color: warning',147461,'#ffff00',72,'','','','','','','','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow','labColorAlarm','Label color: alarm',147461,'red',72,'','','','','','','','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow','labColorGood','Label color: good',147461,'lime',72,'','','','','','','','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow','labColorWarning','Label color: warning',147461,'yellow',72,'','','','','','','','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow','labColorAlarm','Label color: alarm',147461,'red',72,'','','','Колір мітки: аварія','','','Цвет метки: авария','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow','labColorGood','Label color: good',147461,'lime',72,'','','','Колір мітки: норма','','','Цвет метки: норма','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow','labColorWarning','Label color: warning',147461,'yellow',72,'','','','Колір мітки: попередження','','','Цвет метки: предупреждение','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('anShow1','labColorAlarm','Label color: alarm',147461,'red',72,'','','','','','','','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('anShow1','labColorGood','Label color: good',147461,'lime',72,'','','','','','','','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('anShow1','labColorWarning','Label color: warning',147461,'yellow',72,'','','','','','','','','','','');
@@ -10335,6 +10354,15 @@ INSERT INTO "wlb_doc_incl" VALUES('docMessRep','doc','/wlb_doc/wdg_docDin/wdg_do
 INSERT INTO "wlb_doc_incl" VALUES('docMessRep','fltr','/wlb_originals/wdg_FormEl','owner;name;active;geomX;geomY;geomW;geomH;geomZ;value;font;','');
 INSERT INTO "wlb_doc_incl" VALUES('docMessRep','fltrCol','/wlb_originals/wdg_FormEl','owner;name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
 INSERT INTO "wlb_doc_incl" VALUES('docMessRep','lab_fltr','/wlb_originals/wdg_Text','owner;name;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;bordWidth;font;alignment;text;','');
+INSERT INTO "wlb_doc_incl" VALUES('docResourcesYear','data','/wlb_originals/wdg_FormEl','geomX;geomY;geomW;geomH;geomZ;elType;items;','');
+INSERT INTO "wlb_doc_incl" VALUES('docResourcesYear','doc','/wlb_doc/wdg_doc/wdg_doc','owner;perm;geomY;geomH;geomZ;style;tmpl;doc;font;bTime;time;process;n;vCur;aCur;aSize;','');
+INSERT INTO "wlb_doc_incl" VALUES('docResourcesYear','lab_set','/wlb_originals/wdg_Text','owner;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;bordWidth;font;alignment;text;','');
+INSERT INTO "wlb_doc_incl" VALUES('docResourcesYear','name','/wlb_originals/wdg_Text','owner;geomX;geomY;geomW;geomH;geomZ;font;color;alignment;text;numbArg;arg0tp;arg0val;','');
+INSERT INTO "wlb_doc_incl" VALUES('docResourcesYear','set_item','/wlb_originals/wdg_FormEl','owner;geomX;geomY;geomW;geomH;geomZ;elType;value;font;','');
+INSERT INTO "wlb_doc_incl" VALUES('docResourcesYear','set_month','/wlb_originals/wdg_FormEl','owner;geomX;geomY;geomW;geomH;geomZ;elType;value;font;','');
+INSERT INTO "wlb_doc_incl" VALUES('docResourcesYear','set_val','/wlb_originals/wdg_FormEl','geomX;geomY;geomW;geomH;geomZ;view;font;','');
+INSERT INTO "wlb_doc_incl" VALUES('docResourcesYear','trnd','/wlb_originals/wdg_Diagram','geomX;geomY;geomW;geomH;geomZ;prm0val;','');
+INSERT INTO "wlb_doc_incl" VALUES('docResourcesYear','year','/wlb_originals/wdg_FormEl','geomX;geomY;geomH;geomZ;elType;value;font;','');
 CREATE TABLE 'wlb_doc_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','name','Hour-averaged values of the flow-control point',32,'','','','Середні за годину значення витратовимірювального вузла','','Среднечасовые значения расходомерного узла','','','');
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','geomZ','1',32,'','','doc','','','','','','');
@@ -12114,6 +12142,128 @@ INSERT INTO "wlb_doc_io" VALUES('docMessRep','backColor','#5A5A5A',96,'','','','
 INSERT INTO "wlb_doc_io" VALUES('docAlarmsRep','backColor','#5A5A5A',96,'backColorFrame','','','','','','','','');
 INSERT INTO "wlb_doc_io" VALUES('docAlarmsRep','bordWidth','1',32,'','','','','','','','','');
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','backColor','#5A5A5A',96,'backColorFrame','','','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','owner','root:UI',32,'','','','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','name','Year report of the resources-counters',32,'','','','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','dscr','Year report of the resources-counters
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.0.0',32,'','','','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','evProc','ws_FocusIn::open:/pg_control/pg_doc_panel',32,'','','','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomX','5',32,'','','data','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomY','478',32,'','','data','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomW','890',32,'','','data','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomH','120',32,'','','data','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomZ','8',32,'','','data','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','elType','9',32,'','','data','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','items','<tbl colsWdthFit="1">
+ <h><s>Parameter</s><s>January (1)</s><s>February (2)</s><s>Mar (3)</s><s>April (4)</s><s>May (5)</s><s>Jun (6)</s><s>Jul (7)</s><s>August (8)</s><s>September (9)</s><s>October (10)</s><s>November (11)</s><s>December (12)</s><s>Summary</s></h>
+ <r><s>Natural Gas, m3</s><r>150</r><r>150</r><r>150</r><r>150</r><r>150</r><r>150</r><r>150</r><r>150</r><r>150</r><r>150</r><r>150</r><r>150</r><r>1500</r></r>
+ <r><s>Electricity, kW*h</s><r>120</r><r>120</r><r>120</r><r>120</r><r>120</r><r>120</r><r>120</r><r>120</r><r>120</r><r>120</r><r>120</r><r>120</r><r>1200</r></r>
+ <r><s>Water 1, m3</s><r>5</r><r>5</r><r>5</r><r>5</r><r>5</r><r>5</r><r>5</r><r>5</r><r>5</r><r>5</r><r>5</r><r>5</r><r>50</r></r>
+ <r><s>Water 2, m3</s><r>5</r><r>5</r><r>5</r><r>5</r><r>5</r><r>5</r><r>5</r><r>5</r><r>5</r><r>5</r><r>5</r><r>5</r><r>50</r></r>
+ <r><s>Water full, m3</s><r>10</r><r>10</r><r>10</r><r>10</r><r>10</r><r>10</r><r>10</r><r>10</r><r>10</r><r>10</r><r>10</r><r>10</r><r>100</r></r>
+</tbl>',0,'','','data','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','owner','root:UI',32,'','','doc','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','perm','438',32,'','','doc','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomY','315',32,'','','doc','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomH','285',32,'','','doc','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomZ','1',32,'','','doc','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','style','TABLE.data { border-collapse: collapse; }
+TABLE.data TH { background-color: #e6e6e6; border: 1px solid black; }
+TABLE.data TD { white-space: nowrap; border: 1px solid black;}',32,'','','doc','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','tmpl','<body docProcLang="JavaLikeCalc.JavaScript">
+<TABLE class="data" width="100%" export="1">
+	<TR><TH>Month</TH><TH>Natural gas</TH><TH>Water flow 1</TH><TH>Water flow 2</TH><TH>Electricity</TH></TR>
+  	<TR><TH>&nbsp;</TH><TH>m3</TH><TH>m3</TH><TH>m3</TH><TH>kW*hour</TH></TR>
+
+  	<TR><TD>January (1)</TD><TD>200</TD><TD>5</TD><TD>4</TD><TD>190</TD></TR>
+  	<TR><TD>February (2)</TD><TD>200</TD><TD>5</TD><TD>4</TD><TD>190</TD></TR>
+  	<TR><TD>Mar (3)</TD><TD>200</TD><TD>5</TD><TD>4</TD><TD>190</TD></TR>
+  	<TR><TD>April (4)</TD><TD>200</TD><TD>5</TD><TD>4</TD><TD>190</TD></TR>
+  	<TR><TD>May (5)</TD><TD>200</TD><TD>5</TD><TD>4</TD><TD>190</TD></TR>
+  	<TR><TD>Jun (6)</TD><TD>200</TD><TD>5</TD><TD>4</TD><TD>190</TD></TR>
+  	<TR><TD>Jul (7)</TD><TD>200</TD><TD>5</TD><TD>4</TD><TD>190</TD></TR>
+  	<TR><TD>August (8)</TD><TD>200</TD><TD>5</TD><TD>4</TD><TD>190</TD></TR>
+  	<TR><TD>September (9)</TD><TD>200</TD><TD>5</TD><TD>4</TD><TD>190</TD></TR>
+  	<TR><TD>October (10)</TD><TD>200</TD><TD>5</TD><TD>4</TD><TD>190</TD></TR>
+  	<TR><TD>November (11)</TD><TD>200</TD><TD>5</TD><TD>4</TD><TD>190</TD></TR>
+  	<TR><TD>December (12)</TD><TD>200</TD><TD>5</TD><TD>4</TD><TD>190</TD></TR>
+
+	<TR><TD>Summary</TD><TD>2000</TD><TD>50</TD><TD>40</TD><TD>1900</TD></TR>
+</TABLE>
+</body>',32,'','','doc','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','doc','',40,'','','doc','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','font','Arial 10',32,'','','doc','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','bTime','0',40,'','','doc','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','time','0',40,'','','doc','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','process','0',40,'','','doc','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','n','10',34,'','wdg:../a_n','doc','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','vCur','0',32,'','wdg:../a_vCur','doc','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','aCur','0',32,'','wdg:../a_aCur','doc','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','aSize','0',32,'','wdg:../a_aSize','doc','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','owner','root:UI',32,'','','lab_set','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomX','2.5',32,'','','lab_set','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomY','575',32,'','','lab_set','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomW','894',32,'','','lab_set','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomH','25',32,'','','lab_set','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomZ','5',32,'','','lab_set','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomMargin','1',32,'','','lab_set','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','backColor','lightgray-127',32,'','','lab_set','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','bordWidth','1',32,'','','lab_set','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','font','Arial 15',32,'','','lab_set','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','alignment','8',32,'','','lab_set','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','text','Manual setting for:',32,'','','lab_set','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','owner','root:UI',32,'','','name','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomX','5',32,'','','name','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomY','0',32,'','','name','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomW','567',32,'','','name','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomH','23',32,'','','name','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomZ','2',32,'','','name','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','font','Arial 20',32,'','','name','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','color','snow',96,'labColor','','name','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','alignment','8',32,'','','name','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','text','Year report: %1',32,'','','name','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','numbArg','1',32,'','','name','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','arg0tp','2',0,'','','name','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','arg0val','',8,'','','name','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','owner','root:UI',32,'','','set_item','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomX','180',32,'','','set_item','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomY','575',32,'','','set_item','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomW','445',32,'','','set_item','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomH','25',32,'','','set_item','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomZ','6',32,'','','set_item','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','elType','4',32,'','','set_item','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','value','Natural Gas',0,'','','set_item','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','font','Arial 15',0,'','','set_item','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','owner','root:UI',32,'','','set_month','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomX','630',32,'','','set_month','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomY','575',32,'','','set_month','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomW','120',32,'','','set_month','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomH','25',32,'','','set_month','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomZ','6',32,'','','set_month','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','elType','4',32,'','','set_month','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','value','January (1)',0,'','','set_month','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','font','Arial 15',0,'','','set_month','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomX','755',32,'','','set_val','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomY','575',32,'','','set_val','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomW','140',32,'','','set_val','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomH','25',32,'','','set_val','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomZ','7',32,'','','set_val','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','view','3',32,'','','set_val','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','font','Arial 15',32,'','','set_val','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomX','5',32,'','','trnd','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomY','29',32,'','','trnd','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomW','890',32,'','','trnd','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomH','445',32,'','','trnd','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomZ','1',32,'','','trnd','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','prm0val',NULL,32,'','','trnd','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomX','795',32,'','','year','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomY','0',32,'','','year','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomH','23',32,'','','year','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','geomZ','3',32,'','','year','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','elType','4',32,'','','year','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','value','2019',0,'','','year','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docResourcesYear','font','Arial 20',0,'','','year','','','','','','');
 CREATE TABLE 'wlb_doc_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayA','lastDay','Last day',131073,'-1|',8,'','','','Останній день','','','Последний день','','','','');
 INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayA','lastHour','Last hour',131073,'-1|',8,'','','','Остання година','','','Последний час','','','','');
@@ -12250,6 +12400,25 @@ INSERT INTO "wlb_doc_uio" VALUES('docMessRep','sourceCache','Source cache',13107
 </TVarObj>
 ',0,'','','doc','Кеш джерел','','','Кеш источников','','','','');
 INSERT INTO "wlb_doc_uio" VALUES('docMessRep','defSrcMod','Default source module, do not show that',131077,'',1,'','','doc','Типовий модуль джерела, не відображати його','','','Типовой модуль источника, не отображать его','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docResourcesYear','aCur','Archive: cursor: current',131073,'0|',2,'','wdg:wdg_doc/a_aCur','','','','','','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docResourcesYear','aSize','Archive: size',131073,'0|',2,'','wdg:wdg_doc/a_aSize','','','','','','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docResourcesYear','bTime','Time: begin',139265,'0|',8,'','','','','','','','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docResourcesYear','closeDoc','Close document',131072,'0',8,'','','','','','','','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docResourcesYear','lastDay','Last day',131073,'-1|',8,'','','','','','','','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docResourcesYear','lastHour','Last hour',131073,'-1|',8,'','','','','','','','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docResourcesYear','lastMin','Last minute',131073,'-1|',8,'','','','','','','','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docResourcesYear','lastMonth','Last month',131073,'-1|',8,'','','','','','','','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docResourcesYear','n','Archive length, 0 for the dynamic mode',131073,'100|',9,'','','','','','','','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docResourcesYear','repHour','Report hour',131073,'9|',9,'','','','','','','','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docResourcesYear','time','Time: current',139265,'0|',8,'','','','','','','','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docResourcesYear','vCur','Archive: cursor: view',131073,'0|',6,'','wdg:wdg_doc/a_vCur','','','','','','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docResourcesYear','arch','Archiver',131077,'FSArch.1m',1,'','','doc','','','','','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docResourcesYear','pDP','Point: pressure diff.',196613,NULL,2,'Point|dP','','doc','','','','','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docResourcesYear','pDS','Point: density',196613,NULL,2,'Point|DS','','doc','','','','','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docResourcesYear','pP','Point: pressure',196613,NULL,2,'Point|P','','doc','','','','','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docResourcesYear','pQ','Point: volume',196613,NULL,2,'Point|Q','','doc','','','','','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docResourcesYear','pT','Point: temperature',196613,NULL,2,'Point|T','','doc','','','','','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docResourcesYear','pTitle','Point: title',131077,'',1,'','','doc','','','','','','','','');
 CREATE TABLE 'wlb_mnEls_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO "wlb_mnEls_incl" VALUES('El_box_Alarm','El_text_alarm','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;alignment;text;',2);
 INSERT INTO "wlb_mnEls_incl" VALUES('El_box_Alarm','box_alarm','/wlb_mnEls/wdg_El_Alarm','name;geomX;geomY;geomW;geomH;geomXsc;geomYsc;geomZ;fillColor;elLst;',2);
@@ -18764,7 +18933,7 @@ if(arh_end && ((arh_end-arh_beg)/trnd1_tSize > 2)) {
 	arh_active = true;
 	if(selSingle) trnd1_tSek = arh_end;
 }
-else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1554017298);
+else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1560241735);
 INSERT INTO "wlb_Main" VALUES('graphSelPrm','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAD/klEQVRYhe2Z224bRRiA57gHr8/H2MEpLSCRovYGiXsE4qJ9gEq8RR+A
 23LDg0TiFSJ6Ty8hvSEJJSRqnMb2endnZ2dPPxdxTZq6jllMlkr+rmakmX//z/96ZjSLv/v+Bx9p
@@ -19356,7 +19525,7 @@ else { bordColor = "grey"; bordWidth = 1; }
 
 //Check the regulator mode
 if(pModeC == true) mode_text = tr("C");
-else mode_text = pModeA.isEVal() ? "" : ((pModeA) ? tr("A") : tr("M"));','','',500,'path;perm;name;dscr;active;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;',1552226019);
+else mode_text = pModeA.isEVal() ? "" : ((pModeA) ? tr("A") : tr("M"));','','',500,'path;perm;name;dscr;active;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;',1560715413);
 INSERT INTO "wlb_Main" VALUES('ViewCadr','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAE
 CElEQVRYhe2YW2/bRhCFz9kLL5JpuE3ctA996T9t/mpRpC7SWrRFmuLuzPSBshTZsgPUIewAOk9a
 7szHHVLS2R1+/P2jc24cN8OwUdOUkpktF8uu74qiAABgvV7nnPH2tFgswjDckTSzpjkjMKbUNE3f
@@ -24051,6 +24220,104 @@ for(off = 0, ev_rez = ""; (sval=event.parse(0,"\n",off)).length; ) {
 	else ev_rez += sval+"\n";
 }
 event = ev_rez;','','',-1,'owner;name;dscr;geomH;backColor;',1552226019);
+INSERT INTO "wlb_doc" VALUES('docResourcesYear','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAE
+UklEQVRYhe1TyY4TVxS99w01enZX242h1crgQEACReldWJBvIZ8X1uySiAU/EKEIQmhQD+7BrrZd
+rqpXb8rCjVNpGiGRRaUln9U9R+de3VP3Ff70+HGv15NSTuK43WoBgNY6F2I0GsH/CT8+enTz5gAR
+AfHhDw8BIEnmz58/Z2mWTSaTRqOhlEqSpN1uCyGUUq7rVr3zvzAajZIkqdVCRPzt11+W4uvXf+Fg
+MDg6Oqp2uc/G1tYWM8YYY6re5DNhjCFV7/BfsQ5QNdYBqsY6QNVYB6ga6wBVYx2gaqwDVI11gKpx
+/QNsbm5WvcPnIwgCQsg1PgLitX9CeN0DXPsLrANUjnWAqrEOUDXwyZOfs8UiiiLHdQghvucba4wx
+iAgASmlrLaWEIJkn8+l0Gm1EjusopQihCKC0AgDX9bIs8zw3js8D33c9TykJFiilSIiSUhvDOQNA
+a4wxZhLHUbShtUYkiGitMcYQQjh3pJSMUSWV0moynjSbTc/zKKNKaQDre36W55QSBBSFODw8ZDKI
+xmTj9zcjh7HC2G+++mLY4SI+brfb9Vrdgp3P5tpoznin2yFITk9Pm40moWQ2m7uuwzmXhUyztN/v
+KakopWEYaqWVVq1WazKZJEnS6XRd10HEg4PDer0GAIPBgFAyPZ+KQiCSrX5fCLFIF0II13Udx+ne
+7ABA3IkXiwXjzHGcTrutjSGIJyenxlrH4dvbt4qiYH+MZqS15fW/nOaKU3xxJlmRDjv1weAWAMTn
+MeU8cGqdTmdJw3qdco6Iruv5QdButd6+e+t6frcb7e/vI9Io6u293WOMSaUtkO3tnVqtBgBv9t60
+250bN26srn94NGo0Gr3NHgC4nn86HodB2O/3V4YkPajXG71eb6W8+vOVVvr27dtLOp3O2P2m9L0T
+gog1Evh+LoTnuotkLgsBAKoossXCaCWLcEnTRWK15pynaYJgZeAXea6NloUQIstzIQsh8lyAdTlP
+F/PQ91yHA4DIMlUUy7FL5FnKKF0pIsvAGFm0S4aMIMiiVW7J0mzVorVmfhAgYrS56ThOmqZ37t57
++fLlg7v3LhoKyRw3iqJLNI7jlU65c2c4BAAk7P6DbwGAO+5wOIzjuF/qdTx/OByW/7+w1vi6pHhB
+eMkQhLVLitL2u+93Pc9bUs4dRglyxhhBtMZhlFPkjHCKFw6KBK6gZX3lv1Rc7i2NvVL5pKE8eUkJ
+ASaVlkqHRTEeTzY2No6OTxHp3rv95VvMCzUen9UarfcXuKBlPRfy+HTcbDaVtgdHx91uN8uLk7OJ
+1rrcu0jzs3Fcq9dX20xnyfksWX3OZJGO42kYhivDbL6IpzPfD/5JgHTv3f7Ozs77gxh8+vTp7u7u
+kltrEVEpxRi7cJTqMr3Sc6n4WO/HlE8aPlSePXvG8jzXWpdNiLhSVrXveQDgcL7UV8WV4rIoez6k
+ZaWQ0uH8SoMoirJCKbXWAoC11hhjjfkbm6ZFmUS8PqQAAAAASUVORK5CYII=','/wlb_doc/wdg_doc',0,'JavaLikeCalc.JavaScript
+if(f_start) {
+	if(!n) { time = SYS.time(); lastTime = 0; }
+	return;
+}
+
+curMin = curHour = curDay = curMonth = curYear = 0;
+
+for(off = 0, ev_rez = ""; (ev_cur=event.parse(0,"\n",off)).length; )
+	if(ev_cur == "ws_FocusIn:/doc")	ev_rez += "ws_FocusIn";
+	else ev_rez += ev_cur;
+event = ev_rez;
+
+//Build the document dynamically
+if(!n) {
+	if(time == lastTime)	return;
+
+	if(abs(time-lastTime) == 30*24*60*60)	time -= 10*24*60*60;
+
+	time = min(time, SYS.time());
+
+	SYS.localtime(time, 0, curMin, curHour, curDay, curMonth, curYear);
+	if(curDay == 1 && (curHour < repHour || (curHour == repHour && !curMin))) {
+		doc_bTime = SYS.mktime(0, 0, repHour, 1, curMonth ? curMonth-1 : 11, curMonth?curYear:curYear-1);
+		doc_time = SYS.mktime(0, 0, repHour, 1, curMonth, curYear);
+	}
+	else	{
+		doc_bTime = SYS.mktime(0, 0, repHour, 1, curMonth, curYear);
+		doc_time = SYS.mktime(0, 0, repHour, 1, curMonth+1, curYear);
+	}
+
+	time = lastTime = doc_time;
+	bTime = time - 30*24*60*60; // doc_bTime;
+	doc_doc = "";
+
+	return;
+}
+
+//Document generation one per hour 
+curMin = curHour = curDay = curMonth = curYear = 0;
+SYS.localtime(SYS.time(), 0, curMin, curHour, curDay, curMonth, curYear);
+if(!doc_bTime) {
+	if(curDay == 1 && curHour < repHour)
+		doc_bTime = SYS.strptime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
+	else doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-1 "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
+}
+if(lastHour < 0 || lastDay < 0 || lastMin < 0 || lastMonth < 0)
+	SYS.localtime(doc_bTime, 0, lastMin, lastHour, lastDay, lastMonth);
+
+//Archive last not closed document
+if(closeDoc == true) { if(!doc_process)	{ this.doc.attrSet("aCur", -1);/*doc_aCur = -1;*/ closeDoc = false; } }
+else if(doc_time && doc_time < doc_bTime)	{
+	closeDoc = true;
+	SYS.localtime(doc_time, 0, 0, 0, curDay, curMonth, curYear);
+	if(curDay == 1 && curHour < repHour) {
+		doc_time = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-1 "+repHour+":0:0", "%Y-%m-%d %H:%M:%S");
+		doc_bTime = SYS.strptime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 "+repHour+":0:0", "%Y-%m-%d %H:%M:%S");
+	}
+	else {
+		doc_time = SYS.strptime(""+((curMonth==11)?(curYear+1):curYear)+"-"+((curMonth==11)?1:curMonth+2)+"-1 "+repHour+":0:0", "%Y-%m-%d %H:%M:%S");
+		doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-1 "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
+	}
+}
+// Archive the document
+else if(curMonth != lastMonth && curDay >= 1 && curHour >= repHour && curMin >= 3)	{
+	closeDoc = true;
+	doc_time = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-1 "+repHour+":0:0", "%Y-%m-%d %H:%M:%S");
+	lastMonth = curMonth;
+}
+// Periodic not full update
+else if(curMin != lastMin && !(curMin%5))	{
+	lastMin = curMin;
+	doc_time = SYS.time() - 5*60;
+	SYS.localtime(doc_time, 0, 0, curHour, curDay, curMonth, curYear);
+	if(curDay == 1 && curHour < repHour)
+		doc_bTime = SYS.strptime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 "+repHour+":0:0", "%Y-%m-%d %H:%M:%S");
+	else doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-1 "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
+}','','',1000,'owner;name;dscr;evProc;',1560241735);
 CREATE TABLE 'VCAPrjs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"USER" TEXT DEFAULT 'root' ,"GRP" TEXT DEFAULT 'UI' ,"PERMIT" INTEGER DEFAULT '436' ,"PER" INTEGER DEFAULT '100' ,"STYLE" INTEGER DEFAULT '-1' ,"EN_BY_NEED" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 INSERT INTO "VCAPrjs" VALUES('tmplSO','Signal groups (template)','Групи сигналізації (шаблон)','Группы сигнализаций (шаблон)','The projects'' template of visualisation based on signal groups.
 Author: Roman Savochenko <roman@oscada.org>

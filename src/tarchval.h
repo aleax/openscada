@@ -293,7 +293,7 @@ class TTypeArchivator;
 class TVArchivator : public TCntrNode, public TConfig
 {
     friend void TVArchive::archivatorAttach( const string &arch );
-    friend void TVArchive::archivatorDetach( const string &arch, bool full = false, bool toModify = true );
+    friend void TVArchive::archivatorDetach( const string &arch, bool full, bool toModify );
 
     public:
 	//Public methods

@@ -8,21 +8,23 @@ Author: Roman Savochenko <roman@oscada.org>','Бібліотека шаблон�
 Автор: Роман Савоченко <roman@oscada.org>','tmplib_S7','','Библиотека шаблонов параметров для контроллеров фирмы Siemens серии S7.
 
 Автор: Роман Савоченко <roman@oscada.org>');
-INSERT INTO "ParamTemplLibs" VALUES('base','Main library','Базові шаблони','Library of the main templates of the DAQ sources processing and related services.
+INSERT INTO "ParamTemplLibs" VALUES('base','Main library','Основна бібліотека','The library was created to provide main templates of the DAQ-sources processing and related services.
 
 Author: Roman Savochenko <roman@oscada.org>
 Founded: 2006
 Version: 1.1.1
 License: GPLv2
-DOC: Libs_Main|Libs/Main','Надає реалізацію базових шаблонів.
+DOC: Libs_Main|Libs/Main','Бібліотеку створено для надання основних шаблонів опрацювання DAQ-джерел та похідних сервісів.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Засновано: 2006
-Версія: 1.1.1','tmplib_base','Базовые шаблоны','Предоставляет реализацию базовых шаблонов.
+Версія: 1.1.1
+Ліцензія: GPLv2','tmplib_base','Основная библиотека','Библиотека создана для предоставления основных шаблонов обработки DAQ-источников и производных сервисов.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Основано: 2006
-Версия: 1.1.1');
+Версия: 1.1.1
+Лицензия: GPLv2');
 INSERT INTO "ParamTemplLibs" VALUES('DevLib','Devices','Бібліотека пристроїв','Library of functions to provide access to industrial device''s data through network with simply enough protocols like to common industrial automation devices, wide resources counters.
 
 Author: Roman Savochenko <roman@oscada.org>, Constantine (IrmIngeneer) (2018), Arsen Zakojan (2017), Ruslan Yarmoliuk (2017)
@@ -1460,14 +1462,14 @@ INSERT INTO "tmplib_base_io" VALUES('manInUnif','plcMax','Maximum module scale',
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','plcExcess','Allowed scale exceeding (%)',2,64,'0',21,'Дозволене перевищення шкали (%)','','Допустимое превышение шкалы модуля (%)','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','in','Input',2,128,'Input|var',0,'Вхід','Вхід|var','Вход','Вход|var');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','var','Variable',2,16,'0',2,'Змінна','','Переменная','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','ed','Dimension',0,32,'',3,'Од. виміру','','Ед. измерения','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','ed','Dimension',0,32,'',3,'Одиниця виміру','','Единица измерения','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','min','Scale: minimum',2,32,'0',4,'Шкала: мінімум','','Шкала: минимум','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','max','Scale: maximum',2,32,'100',5,'Шкала: максимум','','Шкала: максимум','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','scSqr','Scale: square',3,32,'0',6,'Шкала: квадратична','','Шкала: квадратичная','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','aMin','Border down alarm',2,32,'0',11,'Границя нижня ав.','','Граница нижняя ав.','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','aMax','Border up alarm',2,32,'0',12,'Границя верхня аварійна','','Граница верхняя ав.','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','wMin','Border down warning',2,32,'0',13,'Границя нижня попереджув.','','Граница нижняя пред.','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','wMax','Border up warning',2,32,'0',14,'Границя верхня попереджув.','','Граница верхняя пред.','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','aMin','Border down alarm',2,32,'0',11,'Границя нижня аварійна','','Граница нижняя аварийная','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','aMax','Border up alarm',2,32,'0',12,'Границя верхня аварійна','','Граница верхняя аварийная','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','wMin','Border down warning',2,32,'0',13,'Границя нижня попереджув.','','Граница нижняя предупр.','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','wMax','Border up warning',2,32,'0',14,'Границя верхня попереджув.','','Граница верхняя предупр.','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','speed','Motion speed (%/cycle)',2,32,'0',16,'Швидкість зміни (%/цикл)','','Скорость изменения (%/цикл)','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','prec','Precision (signs)',1,32,'2',17,'Точність (знаків)','','Точность (знаков)','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','Tf','Filter time, seconds',2,32,'0',19,'Час фільтру, секунд','','Время фильтрации, секунд','');
@@ -1623,15 +1625,23 @@ INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','this','Object',4,1,'',50,'Об
 INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','SHIFR','Code',0,0,'',51,'Шифр','','Шифр','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','NAME','Name',0,0,'',52,'Ім''я','','Имя','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','DESCR','Description',0,0,'',53,'Опис','','Описание','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','HystBnd','Hysteresis of boders violation',2,32,'1',15,'Гістерезиз поруш. границь','','Гистерезиз наруш. границ','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','HystBnd','Hysteresis of boders violation',2,32,'1',15,'Гистерезиз порушення границь','','Гистерезиз нарушения границ','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','inProc','Input processing procedure',0,68,'',1,'Вхідна процедура обробки','','Входная процедура обработки','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','subMode','Substitute: mode',1,40,'0
 0;1;2
-no;last;substitute',7,'Заміна:режим','','Замена:режим','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','subVar','Substitute: variable',2,32,'0',8,'Заміна:змінна','','Замена:переменная','');
+no;last;substitute',7,'Заміна: режим','0
+0;1;2
+немає;останнє;підстановка','Замена: режим','0
+0;1;2
+нет;последнее;подстановка');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','subVar','Substitute: variable',2,32,'0',8,'Заміна: змінна','','Замена: переменная','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','alSup','Alarms',1,40,'0
 0;1;2
-init NORMA;suppress;save on change',9,'Порушення','','Нарушения','');
+init NORMA;suppress;save on change',9,'Порушення','0
+0;1;2
+ініціювати НОРМА;придушувати;зберігати при зміні','Нарушения','0
+0;1;2
+Инициировать НОРМА;подавлять;сохранять при смене');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','inProc','Input processing procedure',0,68,'',1,'Вхідна процедура обробки','','Входная процедура обработки','');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','subMode','Substitute:mode (0-no; 1-last; 2-substitute)',1,32,'0',12,'Заміна:режим (0-немає; 1-останне; 2-заміна)','','Замена:режим (0-нет; 1-последний; 2-замена)','');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','subVar','Substitute:variable',2,32,'0',13,'Заміна:змінна','','Замена:переменная','');
@@ -6712,18 +6722,18 @@ else {
 		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
 	f_err = tErr;
 }','','',1441880537);
-INSERT INTO "tmplib_base" VALUES('anUnif','Analog signal (unified)','Аналог. сигнал (Уніф)','Аналог. сигн. (Униф)','Common unified template of analog input signals processing. The template forms a structure of complex analog parameter (tag) which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object.
+INSERT INTO "tmplib_base" VALUES('anUnif','Analog signal (unified)','Аналоговий сигнал (уніфікований)','Аналоговый сигнал (унифицированный)','Common, representative and unified template of analog input signals processing. The template forms a structure of complex analog parameter (tag) which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object.
 Functions:
 - Generic processing of the raw analog input for:
   - simple correction-calibration at the formula "in = iMult*(in+iAdd)";
   - scaling from the hardware border [plcMin...plcMax] to the main border [min...max], applying the square scale scSqr;
-     !!! The hardware border can be inverted one and disabled in whole for equal values of the maximum and minimum, when the main border only used.
-  - allowing to exceed of the input value in the border for the percentage range plcExcess;
+     !!! The hardware borders can be inverted ones and disabled in whole for equal values of the maximum and minimum, when the main border only used.
+  - permission to exceed the border for the input value on the value of plcExcess percent;
   - filtering the input value changing in the time Tf.
-- Simple imitation of the analog input setting plcImit and linking the imitation-simulation source in plcImitIn.
-   !!! Missing the link plcImitIn (EVAL) causes to generating random analog input
+- Simple imitation of the analog input, setting plcImit and linking the imitation-simulation source in plcImitIn.
+     !!! Missing the link plcImitIn (EVAL) causes to generating random analog input
 - Complex preprocessing and complete generation-imitation of the analog input on the internal programming language of OpenSCADA into the configuration IO inProc, where you can operate next service parameters:
-  - f_frq [IN] — frequency of calculation the template IO;
+  - f_frq [IN] — frequency of calculation, the template IO;
   - in [IN|OUT] — the same raw analog input IO;
   - var [IN] — the end variable IO;
   - min, max [IN] — the main border IOs;
@@ -6735,19 +6745,48 @@ Functions:
   - missing for data or connection with source at the EVAL input value — error code 1 and alarm level 5;
   - exceeding the input value of the hardware border — error code 1,2 and alarm level 5;
   - exceeding the end variable of the alarm border [aMin...aMax] — error code 3,4 and alarm level 4;
-      !!! Disabled at setting for equal or inverted values of the border
+     !!! Disabled at setting for equal or inverted values of the border
   - exceeding the end variable of the warning border [wMin...wMax] — error code 5,6 and alarm level 2;
-      !!! Disabled at setting for equal or inverted values of the border
+     !!! Disabled at setting for equal or inverted values of the border
   - big motion speed of the end variable — error code 7 and alarm level 2.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.0.0','Уніфікований шаблон для обробки аналогових вхідних сигналів.
+Version: 2.0.0
+License: GPLv2','Загальний, представницький та уніфікований шаблон обробки аналогових вхідних сигналів. Шаблон формує структуру складного аналогового параметру (тегу) який може бути легко підключений до більшості віджетів та кадрів бібліотеки основних елементів інтерфейсу користувача просто вказавши об''єкт параметру.
+Функції:
+- Загальне опрацювання аналогового входу щодо:
+  - проста корекція-калібрування за формулою "in = iMult*(in+iAdd)";
+  - масштабування від апаратної границі [plcMin...plcMax] у головну границю [min...max], враховуючи квадратичну шкалу scSqr;
+     !!! Апаратні границі може бути інвертовано та взагалі вимкнено однаковими значеннями максимуму та мінімуму, коли використовується тільки головна шкала.
+  - дозвіл на перевищення границі вхідним значенням на величину plcExcess відсотків;
+  - фільтрування зміни вхідного значення на час Tf.
+- Проста імітація аналогового входу, встановленням plcImit та підключенням джерела імітації-симуляції до plcImitIn.
+     !!! Відсутність зв''язка plcImitIn (EVAL) призводить до генерації випадкового аналогового входу
+- Складна передобробка та повна генерація-імітація аналогового входу на внутрішній мові програмування OpenSCADA у конфігураційному ВВ inProc, де Ви можете оперувати наступними сервісними параметрами:
+  - f_frq [IN] — частота обчислення, шаблонний ВВ;
+  - in [IN|OUT] — той самий сирий аналоговий ВВ;
+  - var [IN] — ВВ кінцевої змінної;
+  - min, max [IN] — ВВ головної шкали;
+  - plcMin, plcMax [IN] — ВВ апаратної шкали;
+  - plcImit, plcImitIn [IN] — ВВ простої імітації;
+  - levErr, tErr [IN|OUT] — рівень аварії [-7...0] та текст помилки (формат атрибуту "err").
+- Проста підстановка значення subVar за помилкою (недостовірністю) вхідної змінної (EVAL) у режимах: "немає", "останнє" та "підстановка".
+- Опрацювання кінцевої змінної var на предмет порушення деяких границь та критеріїв, генеруючи аварії та відповідно встановлюючи атрибут err. Границі аварії можуть мати деякий гістерезис HystBnd, можуть бути затримані на час alDelay та можуть працювати у режимах alSup: "ініціювати НОРМА", "придушувати", "зберігати при зміні". Надаються наступні границі та критерії:
+  - відсутність даних або підключення до джерела за вхідним значенням EVAL — код помилки 1 та рівень аварії 5;
+  - перевищення апаратної границі вхідним значенням — код помилки 1,2 та рівень аварії 5;
+  - перевищення аварійної границі кінцевою змінною [aMin...aMax] — код помилки 3,4 та рівень аварії 4;
+     !!! Вимикається встановленням однакових або інверсних значень границі
+  - перевищення попереджувальної границі кінцевою змінною [wMin...wMax] — код помилки 5,6 та рівень аварії 2;
+     !!! Вимикається встановленням однакових або інверсних значень границі
+  - велика швидкість зміни speed кінцевої змінної — код помилки 7 та рівень аварії 2.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.0.0','Унифицированный шаблон обработки аналогового входного сигнала.
+Версія: 2.0.0
+Ліцензія: GPLv2','Общий, представительский и унифицированный шаблон обработки аналоговых входных сигналов. Шаблон формирует структуру сложного аналогового параметра (тега) который может быть легко подключенный к большинству виджетов и кадров библиотеки основных элементов интерфейса пользователя просто указав объект параметра.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 2.0.0',10,0,'JavaLikeCalc.JavaScript
+Версия: 2.0.0
+Лицензия: GPLv2',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	if(alSup == 0) f_err = "0";
 	prevVar = EVAL_REAL;
@@ -6852,7 +6891,7 @@ else {
 	f_err = tErr;
 	if(toSave) SYS.cntrReq(SYS.XMLNode("save").setAttr("path",this.nodePath()+"/%2fobj").setAttr("force",1));
 	conDelay_ = 0;
-}','','',1559924625);
+}','','',1560715927);
 INSERT INTO "tmplib_base" VALUES('digitBlockUnif','Diskret block (Unif)','Блок дискретних (Уніф)','Блок дискр. (Униф)','The block for union of Diskret parameters for one device control.','Блок поєднання дискретних сигналів контролю одним пристроєм.','Блок для дискретных параметров управляющих одним аппаратом.',10,0,'JavaLikeCalc.JavaScript
 set = false;
 if(!com.isEVal() && com && last_cmd != 1)		last_cmd = 1, set = true;

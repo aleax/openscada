@@ -951,7 +951,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
 
     //Add tab 'Widget'
     QScrollArea *scrl = new QScrollArea();
-    wdg_tabs->addTab(scrl,_("Widget"));
+    wdg_tabs->addTab(scrl, _("Widget"));
     QWidget *tab_w = new QWidget(scrl);
     scrl->setWidget(tab_w);
     scrl->setWidgetResizable(true);
@@ -1132,7 +1132,6 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     proc_lang = new QComboBox(wdg_proc_fr);
     proc_lang->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred));
     proc_lang->setObjectName("/proc/calc/progLng");
-    proc_lang->setToolTip(_("Select the blank language to reset the widget procedure and language to the parent widget."));
     connect(proc_lang, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
     glay->addWidget(proc_lang, 1, 1);
 
@@ -1459,9 +1458,10 @@ void VisItProp::tabChanged( int itb )
 		}
 	    }
 	    //  Calc language
-	    gnd = TCntrNode::ctrId(root,proc_lang->objectName().toStdString(),true);
+	    gnd = TCntrNode::ctrId(root,proc_lang->objectName().toStdString(), true);
 	    proc_lang->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
 	    if(gnd) {
+		proc_lang->setToolTip(gnd->attr("help").c_str());
 		req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(proc_lang->objectName().toStdString(),TSYS::PathEl));
 		if(!owner()->cntrIfCmd(req)) sval = req.text().c_str();
 		//   Get combo list

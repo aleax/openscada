@@ -30,7 +30,8 @@
 <td> 2.0 </td>
 <td> GPL
 </td>
-<td> БД SQLite: <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">File:OscadaLibs.db.gz</a>, <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">Найбільш актуальний SQL</a> </td>
+<td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.JavaLikeCalc.techApp
+</td>
 <td> en, uk, ru
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a><br />&nbsp;&nbsp;<font size="-2"><i>Максим Лисенко (2007,2010), Ксенія Яшина (2007)</i></font>
@@ -38,7 +39,6 @@
 <td> Бібліотека моделей технологічних апаратів для створення комплексних моделей технологічних процесів.
 <ul><li> <b>Засновано:</b> Жовтень 2005р</li>
 <li> <b>Початково створено:</b> <a class="external text" href="http://wiki.oscada.org/HomePageUk/Using/APIFunctionLibs/TechApp" rel="nofollow noreferrer noopener" target="_blank">у старій Wiki</a></li>
-<li> <b>Адреса:</b> JavaLikeCalc =&gt; techApp</li>
 <li> <b>Використано:</b> моделями <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">АГЛКС</a> та <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_Boiler" title="Special:MyLanguage/Using/Model Boiler">Котел</a></li></ul>
 </td></tr></table>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
@@ -100,7 +100,7 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <dl><dd>F — масові витрати (т/год).</dd>
 <dd>S — поперечний перетин (м2).</dd>
 <dd>Qr — реальна щільність середовища (кг/м3).</dd>
-<dd>�P — різниця тиску (ат).</dd></dl>
+<dd>∆P — різниця тиску (ат).</dd></dl>
 <p>Реальна щільність обчислюється за формулою (2).
 </p><p><a class="image" href="http://oscada.org/wiki/File:TechApps_dens.png"><img alt="TechApps dens.png" height="26" src="../en/files/TechApps_dens.png" width="191" /></a> (2) 
 </p><p>Де:
@@ -112,7 +112,7 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 </p><p><a class="image" href="http://oscada.org/wiki/File:TechApps_flowR.png"><img alt="TechApps flowR.png" height="48" src="../en/files/TechApps_flowR.png" width="418" /></a> (3) 
 </p><p>Де:
 </p>
-<dl><dd>�P — різниця тиску (ат), опір потоку середовища стінками трубопроводу.</dd>
+<dl><dd>∆P — різниця тиску (ат), опір потоку середовища стінками трубопроводу.</dd>
 <dd>Kr — коефіцієнт тертя стінок трубопроводу.</dd>
 <dd>D — діаметр трубопроводу (м).</dd>
 <dd>l — довжина трубопроводу (м).</dd>

@@ -55,8 +55,8 @@ void VCASess::postDisable( int flag )
     // Disconnect/delete session
     if(mIsCreate) {
 	XMLNode req("disconnect");
-	req.setAttr("path", "/%2fserv%2fsess")->setAttr("sess", id());
-	mod->cntrIfCmd(req, SSess("root"));
+	req.setAttr("path", "/%2fserv%2fsess")->setAttr("sess", id())->setAttr("remoteSrcAddr", sender());
+	mod->cntrIfCmd(req, SSess(user()));
     }
 }
 

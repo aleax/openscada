@@ -243,7 +243,7 @@ class Func : public TConfig, public TFunction
 {
     friend int yylex();
     friend int yyparse();
-    friend void yyerror(const char*);
+    friend void yyerror( const char* );
     public:
 	// Addition flags for IO
 	enum IOSpecFlgs {

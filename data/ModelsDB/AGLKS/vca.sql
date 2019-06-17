@@ -2758,13 +2758,13 @@ INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','dscr',
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_rg/pg_rg','grpName','Common',41,'','Generic','','Загальні','','Загальні','Общие','','Общие');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_treeSelect','value','',0,'','','apply','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_treeSelect','value','',0,'','','cancel','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_10','prExtCurCom','0',34,'Controller|curCom','prm:/JavaLikeCalc/prescr/cntr/curCom','prescrRunSimple','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_10','prExtMode','0',38,'Controller|mode','prm:/JavaLikeCalc/prescr/cntr/mode','prescrRunSimple','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_10','prExtProg','',38,'Controller|prog','prm:/JavaLikeCalc/prescr/cntr/prog','prescrRunSimple','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_10','prExtStartTm','0',34,'Controller|startTm','prm:/JavaLikeCalc/prescr/cntr/startTm','prescrRunSimple','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_10','prExtCurCom','0',34,'Controller|curCom','prm:/LogicLev/prescription/manager/curCom','prescrRunSimple','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_10','prExtMode','0',38,'Controller|mode','prm:/LogicLev/prescription/manager/mode','prescrRunSimple','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_10','prExtProg','',38,'Controller|prog','prm:/LogicLev/prescription/manager/prog','prescrRunSimple','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_10','prExtStartTm','0',34,'Controller|startTm','prm:/LogicLev/prescription/manager/startTm','prescrRunSimple','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_10','prExtWork','<TVarObj>
 </TVarObj>
-',34,'Controller|work','prm:/JavaLikeCalc/prescr/cntr/work','prescrRunSimple','','','','','','');
+',34,'Controller|work','prm:/LogicLev/prescription/manager/work','prescrRunSimple','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','pErr','',34,'Parameter|err','prm:/LogicLev/gen/F_PP1/err','F_PP1','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','pNAME','',34,'Parameter|NAME','prm:/LogicLev/gen/F_PP1/NAME','F_PP1','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','pErr','',34,'Parameter|err','prm:/LogicLev/gen/F_PP3/err','F_PP3','','','','','','');
@@ -5817,8 +5817,8 @@ CREATE TABLE 'wlb_AGLKS_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DA
 CREATE TABLE 'wlb_AGLKS_uio' ("IDW" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","IDC","ID"));
 INSERT INTO "wlb_AGLKS_uio" VALUES('comprEn','','pVar','Variable',131073,'<EVAL>|0;0|',10,'Parameter|var','','Переменная','','','','Змінна','','','');
 CREATE TABLE 'prj_AGLKS' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;demoPlayProc;',1554066600);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','1','','root',1,'','','',-1,5,'name;dscr;geomX;',1552226019);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;demoPlayProc;',1560142498);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','1','','root',1,'','','',-1,5,'name;dscr;geomX;',1560142498);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1552226019);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/ggraph','1','','..',1,'','','',-1,0,'name;dscr;',1552226019);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/ggraph','2','','..',1,'','','',-1,0,'name;dscr;',1551624161);
@@ -5831,9 +5831,9 @@ INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','2','','/wlb_doc/wdg_docUsersSe
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','3','','/wlb_doc/wdg_docGasNodeDayA',1,'','','',-1,0,'name;geomYsc;pgNoOpenProc;',1503585460);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','4','','/wlb_doc/wdg_docGasNodeMonthA',1,'','','',-1,0,'name;geomYsc;pgNoOpenProc;',1503585460);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','5','','/wlb_doc/wdg_docGasNodeDayOrder',1,'','','',-1,0,'name;geomYsc;pgNoOpenProc;',1503589930);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','mn','','root',1,'','','',-1,5,'name;dscr;',1522592964);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','mn','','root',1,'','','',-1,5,'name;dscr;',1560142498);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/mn','1','','/wlb_AGLKS/wdg_KCH_MN1',1,'','','',-1,0,'name;pgOpen;pgNoOpenProc;pgGrp;',1522592964);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/mn','10','','/wlb_test/wdg_mn_gen',1,'','','',-1,0,'pgNoOpenProc;pgGrp;',1414521219);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/mn','10','','/wlb_test/wdg_mn_gen',1,'','','',-1,0,'pgNoOpenProc;pgGrp;',1560142498);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','gcadr','','/wlb_Main/wdg_grpCadr',1,'','','',-1,2,'geomYsc;evProc;pgGrp;',1400851728);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/gcadr','1','','..',1,'','','',-1,0,'name;grpName;','');
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','rg','','root',1,'','','',-1,5,'name;',1554066600);
@@ -6112,7 +6112,7 @@ else c1 = (pVar<1) ? "red" : "green";',1000,'name;geomW;geomH;fillColor;elLst;c1
 CREATE TABLE 'prj_AGLKS_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO "prj_AGLKS_uio" VALUES('/prj_AGLKS/pg_so','statLine','','Status line items',131205,'',128,'','');
 INSERT INTO "prj_AGLKS_uio" VALUES('/prj_AGLKS/pg_so','runWin','','Run window',131089,'0|0;1;2|Original size;Maximize;Full screen',128,'','');
-INSERT INTO "prj_AGLKS_uio" VALUES('/prj_AGLKS/pg_so','keepAspectRatio','','Keep aspect ratio on scale',131072,'1',128,'','');
+INSERT INTO "prj_AGLKS_uio" VALUES('/prj_AGLKS/pg_so','keepAspectRatio','','Keep aspect ratio on scale',131072,'1',0,'','');
 INSERT INTO "prj_AGLKS_uio" VALUES('/prj_AGLKS/pg_so','stBarNoShow','','Not show status bar',131072,'0',128,'','');
-INSERT INTO "prj_AGLKS_uio" VALUES('/prj_AGLKS/pg_so','winPosCntrSave','','Windows position control and save',131072,'1',128,'','');
+INSERT INTO "prj_AGLKS_uio" VALUES('/prj_AGLKS/pg_so','winPosCntrSave','','Windows position control and save',131072,'1',0,'','');
 COMMIT;

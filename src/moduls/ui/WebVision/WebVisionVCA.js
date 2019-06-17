@@ -1723,8 +1723,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    if(toInit) this.place.appendChild(formObj);
 		    break;
 		case 9:	//Table
-		    elStyle += "padding: 1px; border: "+(bordStyle?bordStyle:"1px solid gray")+"; ";
-		    elStyle += (backStyle == null) ? 'background-color: white; ' : (backStyle.length?backStyle:'');
+		    elStyle += "padding: 1px; ";
+		    if(bordStyle) elStyle += "border: "+bordStyle+"; ";
+		    if(backStyle != null) elStyle += backStyle;
 		    geomW -= 4; geomH -= 4;
 		    this.place.className += " Table";
 		    if(elWr) this.place.className += " active";
@@ -1780,6 +1781,17 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					this.parentNode.offsetParent.setVal((this.checked?1:0),
 					    this.parentNode.parentNode.rowIndex-1, this.parentNode.cellIndex-1);
 				    }
+				    this.firstChild.onkeyup = function(e) {
+					e = e ? e : window.event;
+					if(e.keyCode == 13 || e.keyCode == 20)
+					    this.parentNode.offsetParent.setVal((this.checked?0:1), this.parentNode.parentNode.rowIndex-1, this.parentNode.cellIndex-1);
+					if(e.keyCode == 27) {
+					    this.parentNode.isEnter = false; this.parentNode.offsetParent.edIt = null;
+					    this.parentNode.innerHTML = this.parentNode.svInnerHTML;
+					}
+					return true;
+				    }
+				    this.firstChild.focus();
 				}
 				else if(this.outTp == "i" || this.outTp == "r" || this.outTp == "s") {
 				    tVl = elTbl.getVal(this.parentNode.rowIndex-1, this.cellIndex-1);
@@ -1795,6 +1807,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					}
 					return true;
 				    }
+				    this.firstChild.focus();
 				} else { this.isEnter = false; elTbl.edIt = null; }
 			    }
 			    //   Prevent for wrong selection

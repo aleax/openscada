@@ -1444,7 +1444,8 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/proc/attr/cfgtmpl",_("Configuration template"),RWRWR_,"root",SUI_ID,1,"tp","str");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/proc/calc",_("Calculation"))) {
-		ctrMkNode("fld",opt,-1,"/proc/calc/progLng",_("Procedure language"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/plang/list");
+		ctrMkNode("fld",opt,-1,"/proc/calc/progLng",_("Procedure language"),RWRWR_,"root",SUI_ID,4,"tp","str","dest","sel_ed","select","/plang/list",
+		    "help",_("Select the blank language to reset the widget procedure and language to the parent widget."));
 		ctrMkNode("fld",opt,-1,"/proc/calc/per",_("Period of the calculating, milliseconds"),RWRWR_,"root",SUI_ID,1,"tp","dec");
 		ctrMkNode("fld",opt,-1,"/proc/calc/prog_tr",_("Completely translate the procedure"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/proc/calc/prog",_("Procedure"),RWRWR_,"root",SUI_ID,3,"tp","str","rows","10","SnthHgl","1");

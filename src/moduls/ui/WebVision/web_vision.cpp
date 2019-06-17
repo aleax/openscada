@@ -447,7 +447,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 			page = messPost(nodePath(), _("Sorry, the number of open sessions has reached a limit!"), TWEB::Warning);
 		    else {
 			sesRes.request(true);
-			req.setName("connect")->setAttr("path","/%2fserv%2fsess")->setAttr("prj",zero_lev.substr(4));
+			req.setName("connect")->setAttr("path", "/%2fserv%2fsess")->setAttr("prj", zero_lev.substr(4))->setAttr("remoteSrcAddr", sender);
 			if(cntrIfCmd(req,ses))
 			    page = messPost(req.attr("mcat").c_str(), req.text().c_str(), TWEB::Error);
 			else {

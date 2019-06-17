@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-04 16:46+0300\n"
+"POT-Creation-Date: 2019-06-10 08:25+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -1153,12 +1153,6 @@ msgstr "Видалити атрибут"
 msgid "Procedure language:"
 msgstr "Мова процедури:"
 
-msgid ""
-"Select the blank language to reset the widget procedure and language to the "
-"parent widget."
-msgstr ""
-"Оберіть порожню мову для скидання процедури та мови віджету до батьківського віджету."
-
 msgid "Translate:"
 msgstr "Перекладати:"
 
@@ -2188,6 +2182,3 @@ msgstr "Час ініціалізації '%s': %f мс."
 
 msgid "Input dialog of Vision"
 msgstr "Діалог вводу Vision"
-
-#~ msgid "No style"
-#~ msgstr "Немає стилю"

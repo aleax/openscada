@@ -1,3 +1,23 @@
+2019-06-17 Roman (stable)
+- !!:DB.LibsDB.OscadaLibs: In way of the documentation update: the information about the DAQ-template "base" is updated,
+    the DAQ-template base.anUnif revised and updated.
+- !!:DB.LibsDB.vcaBase: In way of the documentation update: the information about the VCA-library "Main" is updated,
+    the widget Main.anShow revised and updated.
+    The new document doc.docResourcesYear of the resources reporting at year appended but not finished yet.
+- FIX:DB.AGLKS.vca.db: The VCA-project fixed for linking to the new prescription manager place.
+- Archive: The friend function declaration archivatorDetach() cleared from specifying default values of the arguments,
+    what may fix a compiling problem on GCC 9.1.
+- FIX:SYS: The function TMess::setUTF8() improved and fixed for generation three and more bytes UTF-8 symbol sequency.
+- DAQ: DAQ-templates allowed to save translation of the field "VALUE" for selectable IOs.
+- FIX:SYS.XMLNode: Fixed for processing of entities size limit in the common string length.
+- UI.{VCAEngine,Vision}: The tooltip of the procedure language combobox moved to the VCA-engine.
+- UI.Vision: The primitive "Diagram" have cleared from the Cap Style specific on Qt5 and Qt4.
+- !:UI.WebVision: Default styles of the border and background of the view "Table" of the primitive "FormEl" moved from the JS-code.
+    The view "Table" of the primitive "FormEl" improved to gain focus at entering to edit a cell for the hotkey operations,
+	the boolean type appended for the hotkey operations.
+    The service operations "connect" and "disconnect" appended for the true user and sender information for the VCA-engine.
+
+
 2019-06-09 Roman (stable)
 - DB.LibsDB/*,DB.{AGLKS,Boiler}: The Roman Savochenko EMail rom_as@oscada.org replaced by roman@oscada.org.
 - !!!!:DB.LibsDB.OscadaLibs: The full restructuration of the libraries was started for

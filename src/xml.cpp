@@ -526,22 +526,17 @@ void XMLNode::parseEntity( LoadCtx &ctx, unsigned &rpos, string &rez )
 	    eVal = strtoul(ctx.vl.data()+nBeg, NULL, 10);
 	    rpos = nEnd;
 	}
-	//Value process		!!!! Rewrote
+	//Value processing
 	if(eVal < 0x80)	rez += (char)eVal;
 	else if(Mess->isUTF8())	rez += TMess::setUTF8(eVal);
-	    /*for(int iCh = 5, iSt = -1; iCh >= 0; iCh--) {
-		if(iSt < iCh && (eVal>>(iCh*6))) iSt = iCh;
-		if(iCh == iSt) rez += (char)(0xC0|(eVal>>(iCh*6)));
-		else if(iCh < iSt) rez += (char)(0x80|(0x3F&(eVal>>(iCh*6))));
-	    }*/
     }
     //Check for loaded entities
     else {
 	rpos += 1;
 	unsigned nBeg = rpos, nEnd = rpos;
-	while(ctx.vl[nEnd] != ';' && (nEnd-nBeg) < ENT_MAX_SZ) ++nEnd;
+	while(nEnd < ctx.vl.size() && ctx.vl[nEnd] != ';' && (nEnd-nBeg) < ENT_MAX_SZ) ++nEnd;
 	if(ctx.vl[nEnd] != ';')	{ rez += '&'; return; }
-	//if(rpos >= ctx.vl.size()) throw TError("XMLNode", _("Error entity. Pos: %d"), nBeg-1);
+	//	if(rpos >= ctx.vl.size()) throw TError("XMLNode", _("Error entity. Pos: %d"), nBeg-1);
 	map<string,string>::iterator ient = ctx.ent.size() ? ctx.ent.find(ctx.vl.substr(nBeg,nEnd-nBeg)) : ctx.ent.end();
 	if(ient != ctx.ent.end()) rez += ient->second;
 	else {
