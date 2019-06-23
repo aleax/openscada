@@ -414,29 +414,40 @@ string TController::catsPat( )
 
 void TController::alarmSet( const string &mess, int lev, const string &prm )
 {
-    if(!redntUse(TController::Any))
-	message(("al"+owner().modId()+":"+id()+(prm.size()?("."+prm):"")).c_str(), lev, mess.c_str());
+    if(!redntUse(TController::Any)) {
+	string	pId = TSYS::strLine(prm, 0);
+	string	pNm = TSYS::strLine(prm, 1);
+	string	aCat = "al" + owner().modId() + ":" + id();
+	if(pId.size()) aCat += "." + pId;
+	string	aMess = mess;
+	if(aMess.size()) {
+	    pId = name();
+	    if(pNm.size()) pId += " > " + pNm;
+	    aMess = pId + ((prm.size() && !pNm.size())?" > ":": ") + aMess;
+	}
+	message(aCat.c_str(), lev, aMess.c_str());
+    }
 }
 
 TVariant TController::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
-    // string name() - get controller name.
+    // string name( ) - get controller name.
     if(iid == "name")	return name();
-    // string descr() - get controller description.
+    // string descr( ) - get controller description.
     if(iid == "descr")	return descr();
-    // string status() - get controller status.
+    // string status( ) - get controller status.
     if(iid == "status")	return getStatus();
-    // bool alarmSet(string mess, int lev = -5, string prm = "") - set alarm to message <mess> and level <lev> for parameter <prm>.
+    // bool alarmSet( string mess, int lev = -5, string prm = "" ) - set alarm to message <mess> and level <lev> for parameter <prm>.
     if(iid == "alarmSet" && prms.size() >= 1) {
 	alarmSet(prms[0].getS(), (prms.size() >= 2) ? prms[1].getI() : -TMess::Crit, (prms.size() >= 3) ? prms[2].getS() : "");
 	return true;
     }
-    // bool enable(bool newSt = EVAL) - get enable status or change it by argument 'newSt' assign.
+    // bool enable( bool newSt = EVAL ) - get enable status or change it by argument 'newSt' assign.
     if(iid == "enable") {
 	if(prms.size())	{ prms[0].getB() ? enable() : disable(); }
 	return enableStat();
     }
-    // bool start(bool newSt = EVAL) - get start status or change it by argument 'newSt' assign.
+    // bool start( bool newSt = EVAL ) - get start status or change it by argument 'newSt' assign.
     if(iid == "start") {
 	if(prms.size())	{ prms[0].getB() ? start() : stop(); }
 	return startStat();

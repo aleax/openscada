@@ -271,9 +271,9 @@ function setWAttrs( wId, attrs, val )
 {
     var body = '<set>';
     if(typeof(attrs) == 'string')
-	body += '<el id=\''+attrs+'\'>'+((typeof(val)=='string')?val.replace('<','&lt;').replace('>','&gt;'):val)+'</el>';
+	body += '<el id=\''+attrs+'\'>'+((typeof(val)=='string')?val.replace(new RegExp('<','g'),'&lt;').replace(new RegExp('>','g'),'&gt;'):val)+'</el>';
     else for(var i in attrs)
-	body += '<el id=\''+i+'\'>'+((typeof(attrs[i])=='string')?attrs[i].replace('<','&lt;').replace('>','&gt;'):attrs[i])+'</el>';
+	body += '<el id=\''+i+'\'>'+((typeof(attrs[i])=='string')?attrs[i].replace(new RegExp('<','g'),'&lt;').replace(new RegExp('>','g'),'&gt;'):attrs[i])+'</el>';
     body += '</set>';
     servSet(wId, 'com=attrs', body);
 }

@@ -12,9 +12,8 @@
 </div>
 			<h1 id="firstHeading" lang="en">Documents/User API</h1>
 		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/User_API/ru" title="Документация/API пользователя (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/User_API/uk" title="Документація/API користувача (100% translated)">українська</a></div></div>
-<p><i>Author:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+<p><i>Author:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2012) — the page initial translation</i></font>
 </p>
-<dl><dd><dl><dd>Maxim Lysenko (2012) — the page translation</dd></dl></dd></dl>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#The_user_programming_language_JavaLikeCalc"><span class="tocnumber">1</span> <span class="toctext"><span>The user programming language JavaLikeCalc</span></span></a>
@@ -557,17 +556,21 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <li> <i>string name( )</i> — name of the controller object.</li>
 <li> <i>string descr( )</i> — description of the controller object and controller.</li>
 <li> <i>string status( )</i> — status of the controller.</li>
-<li> <i>bool alarmSet( string mess, int lev = -5, string prm = "" )</i> — sets/removes of the violations <i>mess</i> with the level <i>lev</i> (negative to remove otherwise to set), for the parameter <i>prm</i>. The function forms an alarm with the category: <b>al{ModId}:{CntrId}[.{PrmId}]</b>, where:
+<li> <i>bool alarmSet( string mess, int lev = -5, string prm = "" )</i> — sets/removes of the violations <i>mess</i> with the level <i>lev</i> (negative to remove otherwise to set), for the parameter <i>prm</i> (<b>{PrmId}\n{PrmNm}</b>). The function forms an alarm with the category <b>al{ModId}:{CntrId}[.{PrmId}]</b> and the text <b>{CntrNm} &gt; {PrmNm}: {MessText}</b>, where:
 <ul><li> <i>ModId</i> — identifier of the module;</li>
 <li> <i>CntrId</i> — identifier of the controller object;</li>
-<li> <i>PrmId</i> — parameter identifier, from the argument <i>prm</i>.</li></ul></li>
+<li> <i>PrmId</i> — parameter identifier, from the argument <i>prm</i>;</li>
+<li> <i>CntrNm</i> — name of the controller object;</li>
+<li> <i>PrmNm</i> — parameter name, from the argument <i>prm</i>;</li>
+<li> <i>MessText</i> — message text.</li></ul></li>
 <li> <i>bool enable( bool newSt = EVAL )</i> — gets the status "Enabled" or changes it by the argument <i>newSt</i> assign.</li>
 <li> <i>bool start( bool newSt = EVAL )</i> — gets the status "Running" or changes it by the argument <i>newSt</i> assign.</li></ul>
 <p>Functions of the parameter object of the controller (SYS.DAQ["Modul"]["Controller"]["Parameter"]):
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
 <li> <i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">access to the appropriate subsystem</span>] — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
-<li> <i>TCntrNodeObj cntr( )</i> — returns the controller object regardless of the nesting parameters.</li></ul>
+<li> <i>TCntrNodeObj cntr( )</i> — returns the controller object regardless of the nesting parameters.</li>
+<li> <i>bool alarmSet( string mess, int lev = -5 )</i> — sets/removes of the violations <i>mess</i> with the level <i>lev</i> (negative to remove otherwise to set) for the parameter.</li></ul>
 <p>Functions of the attribute object of the parameter of the controller (SYS.DAQ["Modul"]["Controller"]["Parameter"]["Attribute"]):
 </p>
 <ul><li> <i>ElTp get( int tm = 0, int utm = 0, bool sys = false );</i> — gets the attribute value at the time <i>tm.utm</i> and system access flag <i>sys</i>. The time attributes <i>tm.utm</i> is outputs also then real time of the gotten value also places here if their are variables.</li>

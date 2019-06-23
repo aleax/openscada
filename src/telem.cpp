@@ -40,7 +40,10 @@ TElem::TElem( const TElem &src ) : mName(src.mName), mResEl(true)
 
 TElem &TElem::operator=( const TElem &src )
 {
-    //???? Implement on needs, for now pass it
+    fldClear();
+
+    for(int iEl = 0; iEl < src.fldSize(); iEl++)
+	fldAdd(new TFld(src.fldAt(iEl)));
 
     return *this;
 }
@@ -121,7 +124,7 @@ void TElem::fldList( vector<string> &list )
 	list.push_back(elem[i]->name());
 }
 
-TFld &TElem::fldAt( unsigned int id )
+TFld &TElem::fldAt( unsigned int id ) const
 {
     if(id >= elem.size()) throw TError("Elem", _("Error ID!"));
     return *elem[id];

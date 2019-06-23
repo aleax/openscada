@@ -1,7 +1,7 @@
 
 //OpenSCADA file: telem.h
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -168,12 +168,12 @@ class TElem
 	string &elName( )			{ return mName; }
 
 	void fldList( vector<string> &list );
-	unsigned fldSize( )			{ return elem.size(); }
+	unsigned fldSize( ) const		{ return elem.size(); }
 	unsigned fldId( const string &name, bool noex = false );
 	bool fldPresent( const string &name );
 	int fldAdd( TFld *fld, int id = -1 );
 	void fldDel( unsigned int id );
-	TFld &fldAt( unsigned int id );
+	TFld &fldAt( unsigned int id ) const;
 	void fldClear( );
 
 	void valAtt( TValElem *cnt );

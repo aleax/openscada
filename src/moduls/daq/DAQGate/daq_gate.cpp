@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.1.2"
+#define MOD_VER		"2.1.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -375,7 +375,7 @@ void TMdContr::stop_( )
     SYS->taskDestroy(nodePath('.',true), &endrunReq);
 
     //Connection alarm clear
-    alarmSet(TSYS::strMess(_("DAQ.%s.%s: connecting to the data source: %s."),owner().modId().c_str(),id().c_str(),_("STOP")), TMess::Info);
+    alarmSet(TSYS::strMess(_("Connection to the data source: %s."),_("STOP")), TMess::Info);
     alSt = -1;
 }
 
@@ -657,14 +657,14 @@ int TMdContr::cntrIfCmd( XMLNode &node )
 		int rez = SYS->transport().at().cntrIfCmd(node, MOD_ID+id());
 		if(alSt != 0) {
 		    alSt = 0;
-		    alarmSet(TSYS::strMess(_("DAQ.%s.%s: connecting to the data source: %s."),owner().modId().c_str(),id().c_str(),_("OK")), TMess::Info);
+		    alarmSet(TSYS::strMess(_("Connection to the data source: %s."),_("OK")), TMess::Info);
 		}
 		mStatWork[iSt].second.cntr -= 1;
 		return rez;
 	    } catch(TError &err) {
 		if(alSt <= 0) {
 		    alSt = 1;
-		    alarmSet(TSYS::strMess(_("DAQ.%s.%s: connecting to the data source '%s': %s."),owner().modId().c_str(), id().c_str(),
+		    alarmSet(TSYS::strMess(_("Connection to the data source '%s': %s."),
 						mStatWork[iSt].first.c_str(), TRegExp(":","g").replace(err.mess,"=").c_str()));
 		}
 		if(callSt) mStatWork[iSt].second.cntr = mRestTm;

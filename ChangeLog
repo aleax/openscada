@@ -1,3 +1,22 @@
+2019-06-23 Roman (stable)
+- !!:DB.LibsDB.OscadaLibs: Using of the function alarmSet() moved to the new direct variant of the parameter.
+    base.{digAlarm,codeState}: Prevented from call at the stopping.
+- !!:FIX:DB.LibsDB.vcaBase: doc.{docUsersSet,docAlarmsRep,docMessRep}: The field "Parameter" renamed to "Source" in the way
+	of global unification of the alarm messages structure of the function alarmSet().
+    !!:doc.docMessRep: Switched to processing only remote stations as additional sources and anytime.
+    !!:Main.{alarmsAct,alarmsSt}: The field "src" removed and the field "prm" renamed to "Source" where the processing only remote stations moved.
+    FIX:Main.userManager: Fixed to comment all debug messages.
+- !!!!:DAQ.{TController,*}: The function alarmSet() globally unified and completely described in the documentation for messages from
+    the controller objects and DAQ-parameters, when the parameter-source in the message appended for the controller object name and
+    the category and text format will be configurable.
+    The DAQ-parameter appended for the User-API function alarmSet().
+- !!:FIX:DAQ,Archive.DBArch: The TElem copy constructor was implemented to fix problems into Archive.DBArch at multiple groups-tables
+    in the group table mode.
+- Archive.DBArch: Some improved for the locking space of reqRes and accm.
+- FIX:UI.QTCfg: Fixed for true striction of list of the removing nodes into the requesting dialog.
+- FIX:UI.WebVision: The setting function setWAttrs() fixed in multiple-complete encoding the special symbols "<>".
+
+
 2019-06-17 Roman (stable)
 - !!:DB.LibsDB.OscadaLibs: In way of the documentation update: the information about the DAQ-template "base" is updated,
     the DAQ-template base.anUnif revised and updated.

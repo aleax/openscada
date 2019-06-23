@@ -3430,7 +3430,7 @@ INSERT INTO "tmplib_DevLib" VALUES('UPS','UPS (obsolete)','','','!!!!: Moved to 
 Uninterruptible power supply unifying data for provide all the data into single attribute of object type "All items" for next the control as the object with the data provide as table, alarming and allowing set writable attributes. The template aimed for using with module "System" data source as "UPS" and widget "Main.objProps" as the data presenter. The template also you can use as example for create like other data unification as complex object with properties, alarming and writing.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.0','','',10,0,'JavaLikeCalc.JavaScript
+Version: 1.2.1','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	{ srcPrm = false; items = new Object(); conDelay_ = 0; }
 
 alLev = 0;
@@ -3534,12 +3534,10 @@ tErr = tErr.length ? ""+alLev+":"+tErr : "0";
 if(alDelay > 0 && conDelay_ <= 0 && tErr.toInt() != f_err.toInt())	tErr1 = tErr.toInt();
 if(alDelay > 0 && conDelay_ > 0 && tErr.toInt() != tErr1)	{ conDelay_ = 0; tErr1 = tErr.toInt(); }
 if(alDelay > 0 && conDelay_ < alDelay){ conDelay_ += 1/f_frq; return; }
-if(tErr.toInt() && tErr.toInt() != f_err.toInt())
-	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -(2+alLev), SHIFR);
-else if(f_err.toInt() && !tErr.toInt())
-	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
+if(tErr.toInt() && tErr.toInt() != f_err.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), -(2+alLev));
+else if(f_err.toInt() && !tErr.toInt())			this.alarmSet(DESCR+": "+tr("NORMA"), 1);
 f_err = tErr;
-conDelay_ = 0;','','',1560017752);
+conDelay_ = 0;','','',1561317269);
 INSERT INTO "tmplib_DevLib" VALUES('VKT7','VKT-7','','','Firm "Teplocom" (http://www.teplocom.spb.ru) computer "VKT-7" for complex heat measurement and counting. The device complex enough to provide more parameters, more history and accessed by a nonlinear Serial-based protocol at low speed. The template implements acquisition for all significant parameters, gets for their history by hours, days and result months. Also you can to append easily enough for processing of the remained parameters.
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vladislav Chubuk
@@ -6567,7 +6565,16 @@ if(curMode == 1 || curMode == 2) {
 curMode = mode;
 //mode = curMode;','','',1559658615);
 CREATE TABLE 'tmplib_base' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "tmplib_base" VALUES('digAlarm','Alarm digital','Сигн. дискретна','Сигн. дискретная','Alarm from a digital parameter.','Сигналізація за дискретним параметром.','Сигнализация по дискретному параметру.',10,0,'JavaLikeCalc.JavaScript
+INSERT INTO "tmplib_base" VALUES('digAlarm','Alarm digital','Сигн. дискретна','Сигн. дискретная','Alarm from a digital parameter.
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.0.1','Сигналізація за дискретним параметром.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.0.1','Сигнализация по дискретному параметру.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.0.1',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	f_err = "0";
 	//Prepare data for preprocessing
@@ -6578,6 +6585,7 @@ if(f_start) {
 	inPrcArgs.ctx = new Object();
 	return;
 }
+if(f_stop) return;
 
 tErr = "0", levErr = 0;
 
@@ -6606,11 +6614,9 @@ else {
 
 //Alarms forming
 if(this.cntr().status().toInt())	return;
-if(tErr.toInt() && tErr.toInt() != f_err.toInt())
-	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
-else if(f_err.toInt() && !tErr.toInt())
-	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
-f_err = tErr;','','',1542446118);
+if(tErr.toInt() && tErr.toInt() != f_err.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), levErr);
+else if(f_err.toInt() && !tErr.toInt())			this.alarmSet(DESCR+": "+tr("NORMA"), 1);
+f_err = tErr;','','',1561317371);
 INSERT INTO "tmplib_base" VALUES('simleBoard','Analog alarm by borders','Сигн. аналог. за границями','Сигн. аналог. по границам','The template of simple parameter included boders and dimension variable.','Шаблон простого параметру з перевіркою границь та одиницею виміру.','Шаблон простого параметра с проверкой границ и единицей измерения.',10,1,'JavaLikeCalc.JavaScript
 var=iMult*(in+iAdd);
 if(var>max)			f_err="1:Upper work border violation";
@@ -6660,7 +6666,16 @@ Q += F.isEVal() ? 0 : F/3600;
 dP = F.isEVal() ? 0 : F/33;
 DS = 1+(rand(0.2)-0.1);
 ','','',1503582557);
-INSERT INTO "tmplib_base" VALUES('manInUnif','Manual input (Unif)','Ручний ввід (Уніф)','Ручной ввод (Униф)','Unified template for manual input signals.','Уніфікований шаблон для ручного вводу значень сигналів.','Унифицированный шаблон ручного ввода сигнала.',10,0,'JavaLikeCalc.JavaScript
+INSERT INTO "tmplib_base" VALUES('manInUnif','Manual input (Unif)','Ручний ввід (Уніф)','Ручной ввод (Униф)','Unified template for manual input signals.
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.0.1','Уніфікований шаблон для ручного вводу значень сигналів.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.0.1','Унифицированный шаблон ручного ввода сигнала.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.0.1',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	f_err = "0";
 
 pMax = plcMax; pMin = plcMin;	//Copy for local modifies using
@@ -6716,12 +6731,10 @@ if(!tErr) {
 if(alSup)	f_err = "0";
 else {
 	if(this.cntr().status().toInt())	return;
-	if(tErr.toInt() && tErr.toInt() != f_err.toInt())
-		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
-	else if(f_err.toInt() && !tErr.toInt())
-		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
+	if(tErr.toInt() && tErr.toInt() != f_err.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), levErr);
+	else if(f_err.toInt() && !tErr.toInt())			this.alarmSet(DESCR+": "+tr("NORMA"), 1);
 	f_err = tErr;
-}','','',1441880537);
+}','','',1561317384);
 INSERT INTO "tmplib_base" VALUES('anUnif','Analog signal (unified)','Аналоговий сигнал (уніфікований)','Аналоговый сигнал (унифицированный)','Common, representative and unified template of analog input signals processing. The template forms a structure of complex analog parameter (tag) which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object.
 Functions:
 - Generic processing of the raw analog input for:
@@ -6751,7 +6764,7 @@ Functions:
   - big motion speed of the end variable — error code 7 and alarm level 2.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.0.0
+Version: 2.0.1
 License: GPLv2','Загальний, представницький та уніфікований шаблон обробки аналогових вхідних сигналів. Шаблон формує структуру складного аналогового параметру (тегу) який може бути легко підключений до більшості віджетів та кадрів бібліотеки основних елементів інтерфейсу користувача просто вказавши об''єкт параметру.
 Функції:
 - Загальне опрацювання аналогового входу щодо:
@@ -6781,11 +6794,11 @@ License: GPLv2','Загальний, представницький та уні�
   - велика швидкість зміни speed кінцевої змінної — код помилки 7 та рівень аварії 2.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.0.0
+Версія: 2.0.1
 Ліцензія: GPLv2','Общий, представительский и унифицированный шаблон обработки аналоговых входных сигналов. Шаблон формирует структуру сложного аналогового параметра (тега) который может быть легко подключенный к большинству виджетов и кадров библиотеки основных элементов интерфейса пользователя просто указав объект параметра.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 2.0.0
+Версия: 2.0.1
 Лицензия: GPLv2',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	if(alSup == 0) f_err = "0";
@@ -6883,15 +6896,13 @@ else {
 	if(alDelay > 0 && conDelay_ <= 0 && tErr.toInt() != f_err.toInt())	tErr1 = tErr.toInt();
 	if(alDelay > 0 && conDelay_ > 0 && tErr.toInt() != tErr1)	{ conDelay_ = 0; tErr1 = tErr.toInt(); }
 	if(alDelay > 0 && conDelay_ < alDelay){ conDelay_ += 1/f_frq; return; }
-	if(tErr.toInt() && tErr.toInt() != f_err.toInt())
-		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
-	else if(f_err.toInt() && !tErr.toInt())
-		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
+	if(tErr.toInt() && tErr.toInt() != f_err.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), levErr);
+	else if(f_err.toInt() && !tErr.toInt())			this.alarmSet(DESCR+": "+tr("NORMA"), 1);
 	toSave = (alSup == 2 && f_err != tErr);
 	f_err = tErr;
 	if(toSave) SYS.cntrReq(SYS.XMLNode("save").setAttr("path",this.nodePath()+"/%2fobj").setAttr("force",1));
 	conDelay_ = 0;
-}','','',1560715927);
+}','','',1561317354);
 INSERT INTO "tmplib_base" VALUES('digitBlockUnif','Diskret block (Unif)','Блок дискретних (Уніф)','Блок дискр. (Униф)','The block for union of Diskret parameters for one device control.','Блок поєднання дискретних сигналів контролю одним пристроєм.','Блок для дискретных параметров управляющих одним аппаратом.',10,0,'JavaLikeCalc.JavaScript
 set = false;
 if(!com.isEVal() && com && last_cmd != 1)		last_cmd = 1, set = true;
@@ -6908,7 +6919,16 @@ else {
 		last_cmd = 0;
 	}
 }','','',1441903511);
-INSERT INTO "tmplib_base" VALUES('pidUnifImp','Impulse PID sign. (Unif, stats)','Імпульсний ПІД сигнал (Уніф, стани)','ПИД импульсный сигнал (Униф, состояния)','The unified template for process analog signals with properties impulse PID.','Уніфікований шаблон для обробки аналогового сигналу з властивостями імпульсного ПІД.','Унифицированный шаблон обработки аналогового сигнала со свойствами импульсного ПИД.',10,0,'JavaLikeCalc.JavaScript
+INSERT INTO "tmplib_base" VALUES('pidUnifImp','Impulse PID sign. (Unif, stats)','Імпульсний ПІД сигнал (Уніф, стани)','ПИД импульсный сигнал (Униф, состояния)','The unified template for process analog signals with properties impulse PID.
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.0.1','Уніфікований шаблон для обробки аналогового сигналу з властивостями імпульсного ПІД.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.0.1','Унифицированный шаблон обработки аналогового сигнала со свойствами импульсного ПИД.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.0.1',10,0,'JavaLikeCalc.JavaScript
 if(f_start) f_err = "0";
 
 if(plcImit) {
@@ -6949,10 +6969,19 @@ else {
 	else EVAL = HH = H = LL = L = false;
 }
 
-if(!f_err.toInt() && tErr.toInt()) this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -4, SHIFR);
-else if(f_err.toInt() && !tErr.toInt()) this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
-f_err = tErr;','','',1450381598);
-INSERT INTO "tmplib_base" VALUES('anUnifSt','Analog sign. (Unif, stats)','Аналог. сигнал (Уніф, стани)','Аналог. сигн. (Униф, состояния)','Unified template for analog input signals processing.','Уніфікований шаблон для обробки аналогових вхідних сигналів.','Унифицированный шаблон обработки аналогового входного сигнала.',10,0,'JavaLikeCalc.JavaScript
+if(!f_err.toInt() && tErr.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), -4);
+else if(f_err.toInt() && !tErr.toInt())	this.alarmSet(DESCR+": "+tr("NORMA"), 1);
+f_err = tErr;','','',1561317417);
+INSERT INTO "tmplib_base" VALUES('anUnifSt','Analog sign. (Unif, stats)','Аналог. сигнал (Уніф, стани)','Аналог. сигн. (Униф, состояния)','Unified template for analog input signals processing.
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.0.1','Уніфікований шаблон для обробки аналогових вхідних сигналів.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.0.1','Унифицированный шаблон обработки аналогового входного сигнала.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.0.1',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	if(alSup == 0) f_err = "0";
 	prevVar = EVAL_REAL;
@@ -7047,16 +7076,23 @@ else {
 	if(alDelay > 0 && conDelay_ <= 0 && tErr.toInt() != f_err.toInt())	tErr1 = tErr.toInt();
 	if(alDelay > 0 && conDelay_ > 0 && tErr.toInt() != tErr1)	{ conDelay_ = 0; tErr1 = tErr.toInt(); }
 	if(alDelay > 0 && conDelay_ < alDelay){ conDelay_ += 1/f_frq; return; }
-	if(tErr.toInt() && tErr.toInt() != f_err.toInt())
-		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
-	else if(f_err.toInt() && !tErr.toInt())
-		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
+	if(tErr.toInt() && tErr.toInt() != f_err.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), levErr);
+	else if(f_err.toInt() && !tErr.toInt())			this.alarmSet(DESCR+": "+tr("NORMA"), 1);
 	toSave = (alSup == 2 && f_err != tErr);
 	f_err = tErr;
 	if(toSave) SYS.cntrReq(SYS.XMLNode("save").setAttr("path",this.nodePath()+"/%2fobj").setAttr("force",1));
 	conDelay_ = 0;
-}','','',1481216725);
-INSERT INTO "tmplib_base" VALUES('pidUnif','PID sign. (Unif, stats)','ПІД сигнал (Уніф, стани)','ПИД сигнал (Униф, состояния)','The unified template for process analog signals with properties PID.','Уніфікований шаблон для обробки аналогового сигналу з властивостями ПІД.','Унифицированный шаблон обработки аналогового сигнала со свойствами ПИД.',10,0,'JavaLikeCalc.JavaScript
+}','','',1561317455);
+INSERT INTO "tmplib_base" VALUES('pidUnif','PID sign. (Unif, stats)','ПІД сигнал (Уніф, стани)','ПИД сигнал (Униф, состояния)','The unified template for process analog signals with properties PID.
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.0.1','Уніфікований шаблон для обробки аналогового сигналу з властивостями ПІД.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.0.1','Унифицированный шаблон обработки аналогового сигнала со свойствами ПИД.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.0.1',10,0,'JavaLikeCalc.JavaScript
 if(f_start) f_err = "0";
 
 if(plcImit) {
@@ -7097,13 +7133,13 @@ else {
 	else EVAL = HH = H = LL = L = false;
 }
 
-if(!f_err.toInt() && tErr.toInt()) this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -4, SHIFR);
-else if(f_err.toInt() && !tErr.toInt()) this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
-f_err = tErr;','','',1450381549);
+if(!f_err.toInt() && tErr.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), -4);
+else if(f_err.toInt() && !tErr.toInt())	this.alarmSet(DESCR+": "+tr("NORMA"), 1);
+f_err = tErr;','','',1561317477);
 INSERT INTO "tmplib_base" VALUES('SNMP','SNMP','','','SNMP unifying data is to provide all the data into the single attribute "All items" of the object type for next control as object with the data providing as a table, alarming and allowing to set for writable attributes. The template designed for using with the data source module "SNMP" as an "SNMP device" and the widget "Main.objProps" as the data presenter. The template you can use also as an example to create other data unification as the complex object with properties, alarming and writing.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
+Version: 1.0.1','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	{ srcPrm = false; items = new Object(); }
 
 alLev = 0;
@@ -7183,21 +7219,19 @@ else {
 tErr = tErr.length ? ""+alLev+":"+tErr : "0";
 
 //Alarms forming
-if(tErr.toInt() && tErr.toInt() != f_err.toInt())
-	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -(2+alLev), SHIFR);
-else if(f_err.toInt() && !tErr.toInt())
-	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
-f_err = tErr;','','',1560017641);
+if(tErr.toInt() && tErr.toInt() != f_err.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), -(2+alLev));
+else if(f_err.toInt() && !tErr.toInt())			this.alarmSet(DESCR+": "+tr("NORMA"), 1);
+f_err = tErr;','','',1561317493);
 INSERT INTO "tmplib_base" VALUES('codeState','Code state','Стан за кодом','Состояние по коду','A state forming at the code.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.0','Формування стану за кодом
+Version: 1.1.1','Формування стану за кодом
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.1.0','Формирование состояния по коду
+Версія: 1.1.1','Формирование состояния по коду
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.1.0',10,0,'JavaLikeCalc.JavaScript
+Версия: 1.1.1',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	f_err = "0";
 	//Prepare data for preprocessing
@@ -7208,6 +7242,7 @@ if(f_start) {
 	inPrcArgs.ctx = new Object();
 	return;
 }
+if(f_stop) return;
 
 tErr = "0", levErr = 0;
 
@@ -7256,11 +7291,9 @@ else {
 
 //Alarms forming
 if(this.cntr().status().toInt())	return;
-if(tErr.toInt() && tErr.toInt() != f_err.toInt())
-	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
-else if(f_err.toInt() && !tErr.toInt())
-	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
-f_err = tErr;','','',1559499298);
+if(tErr.toInt() && tErr.toInt() != f_err.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), levErr);
+else if(f_err.toInt() && !tErr.toInt())			this.alarmSet(DESCR+": "+tr("NORMA"), 1);
+f_err = tErr;','','',1561317508);
 INSERT INTO "tmplib_base" VALUES('ntf','Notificator by SMS, EMail(SMTP)','','','The complex template of the notification, contains of parts of the dispatcher and the output user protocol of notification by EMail(SMTP) and SMS.
 
 The dispatcher can be performed for pointed messages of the message buffer of OpenSCADA and applied on the Logical level or the controller object of the module JavaLikeCalc.
@@ -7574,7 +7607,7 @@ else {
 INSERT INTO "tmplib_base" VALUES('UPS','','','','Uninterruptible power supply unifying data for provide all the data into single attribute of object type "All items" for next the control as the object with the data provide as table, alarming and allowing set writable attributes. The template aimed for using with module "System" data source as "UPS" and widget "Main.objProps" as the data presenter. The template also you can use as example for create like other data unification as complex object with properties, alarming and writing.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.0','','',10,0,'JavaLikeCalc.JavaScript
+Version: 1.2.1','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	{ srcPrm = false; items = new Object(); conDelay_ = 0; }
 
 alLev = 0;
@@ -7678,12 +7711,10 @@ tErr = tErr.length ? ""+alLev+":"+tErr : "0";
 if(alDelay > 0 && conDelay_ <= 0 && tErr.toInt() != f_err.toInt())	tErr1 = tErr.toInt();
 if(alDelay > 0 && conDelay_ > 0 && tErr.toInt() != tErr1)	{ conDelay_ = 0; tErr1 = tErr.toInt(); }
 if(alDelay > 0 && conDelay_ < alDelay){ conDelay_ += 1/f_frq; return; }
-if(tErr.toInt() && tErr.toInt() != f_err.toInt())
-	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -(2+alLev), SHIFR);
-else if(f_err.toInt() && !tErr.toInt())
-	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
+if(tErr.toInt() && tErr.toInt() != f_err.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), -(2+alLev));
+else if(f_err.toInt() && !tErr.toInt())			this.alarmSet(DESCR+": "+tr("NORMA"), 1);
 f_err = tErr;
-conDelay_ = 0;','','',1560017660);
+conDelay_ = 0;','','',1561317526);
 CREATE TABLE 'lib_Controllers' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "lib_Controllers" VALUES('prescr','Prescriptions manager (obsolete)','','','!!!!: Moved and replaced by the template PrescrTempl.manager. Will be removed soon
 Prescriptions manager and controller. Used in addition with user interface''s cadre "Prescription: editing" and "Prescription: runtime" for which into a parameter of the controller you must pass that parameters: "mode", "prog", "startTm", "curCom", "comLs", "work".

@@ -56,7 +56,7 @@ INSERT INTO "VCALibs" VALUES('Main','Main elements','Provides the library of the
 
 Founded: September 2007
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.5.1
+Version: 1.5.2
 License: GPLv2','wlb_Main','','Основні елементи','Бібліотека створюється для надання основних елементів користувацького інтерфейсу. Будується бібліотека на основі примітивів віджетів та мови внутрішнього програмування JavaLikeCalc.
 
 Автор: Роман Савоченко <roman@oscada.org>
@@ -7329,10 +7329,11 @@ INSERT INTO "wlb_Main_io" VALUES('userManager','dscr','The cadre "User manager".
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.2.0',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('alarmsAct','dscr','Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.1',32,'','','','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('alarmsSt','dscr','The cadre "Alarms state table".
-Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.0',32,'','','','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('alarmsSt','dscr','The cadre "Alarms state table".
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.2.0',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','view','7',32,'','','pass','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','backColor','black',96,'backColorVal','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','bordColor','#000000',32,'','','trnd1','','','','','','');
@@ -10248,7 +10249,7 @@ INSERT INTO "wlb_Main_uio" VALUES('grpGraph10','sclWinCtx','Scale: by window sav
 ',0,'','','trnd1','Масштаб: контекст вікном','','','Масштаб: контекст окном','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph','perUserSel','Select: save salection per user',131072,'0',0,'','','','Обрання: зберігати обрання за користувачем','','','Выбор: сохранять выбор по пользователям','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph10','perUserSel','Select: save salection per user',131072,'0',0,'','','','Обрання: зберігати обрання за користувачем','','','Выбор: сохранять выбор по пользователям','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','colms','Collumns, by '','' (atm,qttm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt,src)',131077,'atm,lev,prm,dscr,alrm',8,'','','','Стовпчики, за '','' (atm,qttm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt,src)','','','Колонки, по '','' (atm,qttm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt,src)','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','colms','Collumns, by '','' (atm,qttm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)',131077,'atm,lev,prm,dscr,alrm',8,'','','','Стовпчики, за '','' (atm,qttm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)','','','Колонки, по '','' (atm,qttm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','expOnFocus','Expand on focus: pixels (0-disabled,>-down,<-up)',131073,'0|',8,'','','','Розширяти при фокусі: пікселів (0-відключено,>-донизу,<-догори)','','','Расширять при фокусе: пикселей (0-отключено,>-вниз,<-вверх)','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','expOnItems','Expand on focus: items (<=0-disabled)',131073,'0|',8,'','','','Розширяти при фокусі: елементів (<=0-відключено)','','','Расширять при фокусе: елементов (<=0-отключено)','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','formDtTm','Data and time format (%Y-%m-%d %H.%M.%S[.%MS,%US])',131077,'%Y-%m-%d %H.%M.%S.%MS',8,'','','','Формат дати та часу (%Y-%m-%d %H.%M.%S[.%MS,%US])','','','Формат даты и времени (%Y-%m-%d %H.%M.%S[.%MS,%US])','','','','');
@@ -10268,7 +10269,7 @@ INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','NAME','Quittance: name',131077,''
 INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','colDscrCustNames','Names list of the custom fields, separated by '';''',131077,'',8,'','','','Перелік назв користувацьких полів, поділених '';''','','','Перечень наименований пользовательских полей, поделённых '';''','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','alArch','Alarms archiver, "{ArhMod}.{Arh}"',131077,'ArhMod.Arh',8,'','','','Архіватор сигналів, "{ArhMod}.{Arh}"','ArhMod.Arh','','Архиватор сигналов, "{ArhMod}.{Arh}"','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','colDscrCustNames','Names list of the custom fields, separated by '';''',131205,'',8,'','','','Перелік назв користувацьких полів, поділених '';''','','','Перечень наименований пользовательских полей, поделённых '';''','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','colms','Collumns, by '','' (atm,qttm,nrmtm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt,src)',131077,'atm,qttm,nrmtm,lev,prm,dscr,alrm,cmnt',8,'','','','Стовпчики, за '','' (atm,qttm,nrmtm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt,src)','atm,qttm,nrmtm,lev,prm,dscr,alrm,cmnt','','Колонки, по '','' (atm,qttm,nrmtm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt,src)','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','colms','Collumns, by '','' (atm,qttm,nrmtm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)',131077,'atm,qttm,nrmtm,lev,prm,dscr,alrm,cmnt',8,'','','','Стовпчики, за '','' (atm,qttm,nrmtm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)','atm,qttm,nrmtm,lev,prm,dscr,alrm,cmnt','','Колонки, по '','' (atm,qttm,nrmtm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','formDtTm','Data and time format (%Y-%m-%d %H.%M.%S[.%MS,%US])',131077,'%Y-%m-%d %H.%M.%S.%MS',8,'','','','Data and time format (%Y-%m-%d %H.%M.%S[.%MS,%US])','%Y-%m-%d %H.%M.%S.%MS','','','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','hHdrVis','Show header: horizontal',131072,'1',8,'','','','Show header: horizontal','','','','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','highLght','Highlight rules, {lev}{quitt}{act}:{color}:{font}:{fontColor}',131205,'501:gray
@@ -10564,7 +10565,7 @@ INSERT INTO "wlb_doc_io" VALUES('docUsersSet','tmpl','<body docProcLang="JavaLik
 <h1>Log of interruptions</h1>
 <TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data">
   <TR><TH colspan="7" align="left">Interruptions at <?dp return "Interruptions at "+SYS.strftime(bTime)+" — "+SYS.strftime(time);?></TH></TR>
-  <TR><TH>Date</TH><TH>Time</TH><TH>User</TH><TH>Parameter</TH><TH>Description</TH><TH>Old value</TH><TH>New value</TH></TR>
+  <TR><TH>Date</TH><TH>Time</TH><TH>User</TH><TH>Source</TH><TH>Description</TH><TH>Old value</TH><TH>New value</TH></TR>
   <TR docAMess="2:OP*" docRevers="1">
 	<?dp return "<TD>"+SYS.strftime(mTime,"%d %m")+"</TD>"+
 		"<TD>"+SYS.strftime(mTime,"%H:%M:%S")+"</TD>"+
@@ -10579,7 +10580,7 @@ INSERT INTO "wlb_doc_io" VALUES('docUsersSet','tmpl','<body docProcLang="JavaLik
 <h1>Журнал дій</h1>
 <TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data">
   <TR><TH colspan="7" align="left">Дії за <?dp return "Дії за "+SYS.strftime(bTime)+" — "+SYS.strftime(time);?></TH></TR>
-  <TR><TH>Дата</TH><TH>Час</TH><TH>Користувач</TH><TH>Параметр</TH><TH>Опис</TH><TH>Старе знач.</TH><TH>Нове знач.</TH></TR>
+  <TR><TH>Дата</TH><TH>Час</TH><TH>Користувач</TH><TH>Джерело</TH><TH>Опис</TH><TH>Старе знач.</TH><TH>Нове знач.</TH></TR>
   <TR docAMess="2:OP*" docRevers="1">
 	<?dp return "<TD>"+SYS.strftime(mTime,"%d %m")+"</TD>"+
 		"<TD>"+SYS.strftime(mTime,"%H:%M:%S")+"</TD>"+
@@ -10594,7 +10595,7 @@ INSERT INTO "wlb_doc_io" VALUES('docUsersSet','tmpl','<body docProcLang="JavaLik
 <h1>Журнал вмешательств</h1>
 <TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data">
   <TR><TH colspan="7" align="left">Вмешательство за <?dp return "Вмешательство за "+SYS.strftime(bTime)+" — "+SYS.strftime(time);?></TH></TR>
-  <TR><TH>Дата</TH><TH>Время</TH><TH>Пользователь</TH><TH>Параметр</TH><TH>Описание</TH><TH>Старое знач.</TH><TH>Новое знач.</TH></TR>
+  <TR><TH>Дата</TH><TH>Время</TH><TH>Пользователь</TH><TH>Источник</TH><TH>Описание</TH><TH>Старое знач.</TH><TH>Новое знач.</TH></TR>
   <TR docAMess="2:OP*" docRevers="1">
 	<?dp return "<TD>"+SYS.strftime(mTime,"%d %m")+"</TD>"+
 		"<TD>"+SYS.strftime(mTime,"%H:%M:%S")+"</TD>"+
@@ -10618,7 +10619,7 @@ INSERT INTO "wlb_doc_io" VALUES('docAlarmsRep','tmpl','<body docProcLang="JavaLi
 <h1>Protocol of violations</h1>
 <TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data">
   <TR><TH colspan="5" align="left">Violations at <?dp return "Violations at "+SYS.strftime(bTime)+" — "+SYS.strftime(time);?></TH></TR>
-  <TR><TH>Date</TH><TH>Time</TH><TH>Parameter</TH><TH>Violation</TH><TH>Value</TH></TR>
+  <TR><TH>Date</TH><TH>Time</TH><TH>Source</TH><TH>Violation</TH><TH>Value</TH></TR>
   <TR docAMess="@@messCat@@" docRevers="1">
 	<?dp return "<TD><center style=''white-space: nowrap;''>"+SYS.strftime(mTime,"%d %m")+"</center></TD>"+
 		"<TD><center style=''white-space: nowrap;''>"+SYS.strftime(mTime,"%H:%M:%S")+"</center></TD>"+
@@ -10631,7 +10632,7 @@ INSERT INTO "wlb_doc_io" VALUES('docAlarmsRep','tmpl','<body docProcLang="JavaLi
 <h1>Протокол порушень</h1>
 <TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data">
   <TR><TH colspan="5" align="left">Порушення за <?dp return "Порушення за "+SYS.strftime(bTime)+" — "+SYS.strftime(time);?></TH></TR>
-  <TR><TH>Дата</TH><TH>Час</TH><TH>Параметр</TH><TH>Порушення</TH><TH>Значення</TH></TR>
+  <TR><TH>Дата</TH><TH>Час</TH><TH>Джерело</TH><TH>Порушення</TH><TH>Значення</TH></TR>
   <TR docAMess="@@messCat@@" docRevers="1">
 	<?dp return "<TD><center style=''white-space: nowrap;''>"+SYS.strftime(mTime,"%d %m")+"</center></TD>"+
 		"<TD><center style=''white-space: nowrap;''>"+SYS.strftime(mTime,"%H:%M:%S")+"</center></TD>"+
@@ -10644,7 +10645,7 @@ INSERT INTO "wlb_doc_io" VALUES('docAlarmsRep','tmpl','<body docProcLang="JavaLi
 <h1>Протокол нарушений</h1>
 <TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data">
   <TR><TH colspan="5" align="left">Нарушения за <?dp return "Нарушения за "+SYS.strftime(bTime)+" — "+SYS.strftime(time);?></TH></TR>
-  <TR><TH>Дата</TH><TH>Время</TH><TH>Параметр</TH><TH>Нарушение</TH><TH>Значение</TH></TR>
+  <TR><TH>Дата</TH><TH>Время</TH><TH>Источник</TH><TH>Нарушение</TH><TH>Значение</TH></TR>
   <TR docAMess="@@messCat@@" docRevers="1">
 	<?dp return "<TD><center style=''white-space: nowrap;''>"+SYS.strftime(mTime,"%d %m")+"</center></TD>"+
 		"<TD><center style=''white-space: nowrap;''>"+SYS.strftime(mTime,"%H:%M:%S")+"</center></TD>"+
@@ -11845,30 +11846,26 @@ INSERT INTO "wlb_doc_io" VALUES('docMessRep','tmpl','<body docProcLang="JavaLike
 <h1>Protocol of messages</h1>
 <TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data">
   <TR><TH colspan="6" align="left">Message at <?dp return "Message at "+SYS.strftime(bTime)+" — "+SYS.strftime(time);?></TH></TR>
-  <TR><TH>Date</TH><TH>Time</TH><TH>Lev.</TH><TH>Parameter</TH><TH>Description</TH><TH>Value</TH></TR>
+  <TR><TH>Date</TH><TH>Time</TH><TH>Lev.</TH><TH>Source</TH><TH>Description</TH><TH>Value</TH></TR>
   <TR docAMess="@@messCat@@" docAMessArchs="@@archLs@@" docRevers="1">
   <!--<TR docAMess="1:al*:*" docRevers="1">-->
 <?dp
 mValPrm = mVal.parse(0, ": "); mValDscr = mVal.parse(1, ": "); mValVal = mVal.parse(2, ": ");
-if(fullSrc) {
-	srcO = mCat.match("^al(.+):([^\\.]+)|^(.+):al");
-	tVl = "";
-	//From remote station
-	if(srcO.length == 4 && (tVl=sourceCache[srcO[3]]).isEVal()) {
-		req = SYS.XMLNode("get").setAttr("path","/Transport/%2fsub%2fehost");
-		SYS.cntrReq(req);
-		for(iTr = 0; req.childSize() && iTr < req.childGet(0).childSize(); iTr++)
-			if(req.childGet(0).childGet(iTr).text() == srcO[3]) {
-				sourceCache[srcO[3]] = tVl = req.childGet(1).childGet(iTr).text();
-				break;
-			}
-	}
-	//From local controller object
-	else if(srcO.length == 3 && (tVl=sourceCache[srcO[1]+"."+srcO[2]]).isEVal())
-		sourceCache[srcO[1]+"."+srcO[2]] = tVl = ((defSrcMod==srcO[1])?"":srcO[1]+" > ") + SYS.DAQ[srcO[1]][srcO[2]].name();
 
-	if(tVl.length)	mValPrm = tVl + " > " + mValPrm;
+srcO = mCat.match("^al(.+):([^\\.]+)|^(.+):al");
+tVl = "";
+//From remote station
+if(srcO.length == 4 && (tVl=sourceCache[srcO[3]]).isEVal()) {
+	req = SYS.XMLNode("get").setAttr("path","/Transport/%2fsub%2fehost");
+	SYS.cntrReq(req);
+	for(iTr = 0; req.childSize() && iTr < req.childGet(0).childSize(); iTr++)
+		if(req.childGet(0).childGet(iTr).text() == srcO[3]) {
+			sourceCache[srcO[3]] = tVl = req.childGet(1).childGet(iTr).text();
+			break;
+		}
 }
+if(tVl.length)	mValPrm = tVl + " > " + mValPrm;
+
 if(mCat.slice(0,2) == "OP") mValVal += " -> "+mVal.parse(3,":");
 else if(mCat[0] == "/")	mValDscr = mVal, mValPrm = mCat;
 if(fltr.length && !fltrCol.isEVal() && (
@@ -11896,30 +11893,26 @@ return "<TD style=''white-space: nowrap; ''>"+SYS.strftime(mTime,"%d %m")+"</TD>
 <h1>Протокол повідомлень</h1>
 <TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data">
   <TR><TH colspan="6" align="left">Повідомлення на <?dp return "Повідомлення на "+SYS.strftime(bTime)+" — "+SYS.strftime(time);?></TH></TR>
-  <TR><TH>Дата</TH><TH>Час</TH><TH>Рівень</TH><TH>Параметр</TH><TH>Опис</TH><TH>Значення</TH></TR>
+  <TR><TH>Дата</TH><TH>Час</TH><TH>Рівень</TH><TH>Джерело</TH><TH>Опис</TH><TH>Значення</TH></TR>
   <TR docAMess="@@messCat@@" docAMessArchs="@@archLs@@" docRevers="1">
   <!--<TR docAMess="1:al*:*" docRevers="1">-->
 <?dp
 mValPrm = mVal.parse(0, ": "); mValDscr = mVal.parse(1, ": "); mValVal = mVal.parse(2, ": ");
-if(fullSrc) {
-	srcO = mCat.match("^al(.+):([^\\.]+)|^(.+):al");
-	tVl = "";
-	//From remote station
-	if(srcO.length == 4 && (tVl=sourceCache[srcO[3]]).isEVal()) {
-		req = SYS.XMLNode("get").setAttr("path","/Transport/%2fsub%2fehost");
-		SYS.cntrReq(req);
-		for(iTr = 0; req.childSize() && iTr < req.childGet(0).childSize(); iTr++)
-			if(req.childGet(0).childGet(iTr).text() == srcO[3]) {
-				sourceCache[srcO[3]] = tVl = req.childGet(1).childGet(iTr).text();
-				break;
-			}
-	}
-	//From local controller object
-	else if(srcO.length == 3 && (tVl=sourceCache[srcO[1]+"."+srcO[2]]).isEVal())
-		sourceCache[srcO[1]+"."+srcO[2]] = tVl = ((defSrcMod==srcO[1])?"":srcO[1]+" > ") + SYS.DAQ[srcO[1]][srcO[2]].name();
 
-	if(tVl.length)	mValPrm = tVl + " > " + mValPrm;
+srcO = mCat.match("^al(.+):([^\\.]+)|^(.+):al");
+tVl = "";
+//From remote station
+if(srcO.length == 4 && (tVl=sourceCache[srcO[3]]).isEVal()) {
+	req = SYS.XMLNode("get").setAttr("path","/Transport/%2fsub%2fehost");
+	SYS.cntrReq(req);
+	for(iTr = 0; req.childSize() && iTr < req.childGet(0).childSize(); iTr++)
+		if(req.childGet(0).childGet(iTr).text() == srcO[3]) {
+			sourceCache[srcO[3]] = tVl = req.childGet(1).childGet(iTr).text();
+			break;
+		}
 }
+if(tVl.length)	mValPrm = tVl + " > " + mValPrm;
+
 if(mCat.slice(0,2) == "OP") mValVal += " -> "+mVal.parse(3,":");
 else if(mCat[0] == "/")	mValDscr = mVal, mValPrm = mCat;
 if(fltr.length && !fltrCol.isEVal() && (
@@ -11947,30 +11940,26 @@ return "<TD style=''white-space: nowrap; ''>"+SYS.strftime(mTime,"%d %m")+"</TD>
 <h1>Протокол сообщений</h1>
 <TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data">
   <TR><TH colspan="6" align="left">Сообщения на <?dp return "Сообщения на "+SYS.strftime(bTime)+" — "+SYS.strftime(time);?></TH></TR>
-  <TR><TH>Дата</TH><TH>Время</TH><TH>Уровень</TH><TH>Параметр</TH><TH>Описание</TH><TH>Значение</TH></TR>
+  <TR><TH>Дата</TH><TH>Время</TH><TH>Уровень</TH><TH>Источник</TH><TH>Описание</TH><TH>Значение</TH></TR>
   <TR docAMess="@@messCat@@" docAMessArchs="@@archLs@@" docRevers="1">
   <!--<TR docAMess="1:al*:*" docRevers="1">-->
 <?dp
 mValPrm = mVal.parse(0, ": "); mValDscr = mVal.parse(1, ": "); mValVal = mVal.parse(2, ": ");
-if(fullSrc) {
-	srcO = mCat.match("^al(.+):([^\\.]+)|^(.+):al");
-	tVl = "";
-	//From remote station
-	if(srcO.length == 4 && (tVl=sourceCache[srcO[3]]).isEVal()) {
-		req = SYS.XMLNode("get").setAttr("path","/Transport/%2fsub%2fehost");
-		SYS.cntrReq(req);
-		for(iTr = 0; req.childSize() && iTr < req.childGet(0).childSize(); iTr++)
-			if(req.childGet(0).childGet(iTr).text() == srcO[3]) {
-				sourceCache[srcO[3]] = tVl = req.childGet(1).childGet(iTr).text();
-				break;
-			}
-	}
-	//From local controller object
-	else if(srcO.length == 3 && (tVl=sourceCache[srcO[1]+"."+srcO[2]]).isEVal())
-		sourceCache[srcO[1]+"."+srcO[2]] = tVl = ((defSrcMod==srcO[1])?"":srcO[1]+" > ") + SYS.DAQ[srcO[1]][srcO[2]].name();
 
-	if(tVl.length)	mValPrm = tVl + " > " + mValPrm;
+srcO = mCat.match("^al(.+):([^\\.]+)|^(.+):al");
+tVl = "";
+//From remote station
+if(srcO.length == 4 && (tVl=sourceCache[srcO[3]]).isEVal()) {
+	req = SYS.XMLNode("get").setAttr("path","/Transport/%2fsub%2fehost");
+	SYS.cntrReq(req);
+	for(iTr = 0; req.childSize() && iTr < req.childGet(0).childSize(); iTr++)
+		if(req.childGet(0).childGet(iTr).text() == srcO[3]) {
+			sourceCache[srcO[3]] = tVl = req.childGet(1).childGet(iTr).text();
+			break;
+		}
 }
+if(tVl.length)	mValPrm = tVl + " > " + mValPrm;
+
 if(mCat.slice(0,2) == "OP") mValVal += " -> "+mVal.parse(3,":");
 else if(mCat[0] == "/")	mValDscr = mVal, mValPrm = mCat;
 if(fltr.length && !fltrCol.isEVal() && (
@@ -12047,8 +12036,9 @@ INSERT INTO "wlb_doc_io" VALUES('docMessRep','font','Arial 15',32,'','','lab_flt
 INSERT INTO "wlb_doc_io" VALUES('docMessRep','alignment','8',32,'','','lab_fltr','','','','','','');
 INSERT INTO "wlb_doc_io" VALUES('docMessRep','text','Filter:',32,'','','lab_fltr','Фільтр:','','Фильтр:','','','');
 INSERT INTO "wlb_doc_io" VALUES('docAlarmsRep','dscr','Standard protocol of violations
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.0',32,'','','','Стандартний протокол порушень
+Version: 1.1.1',32,'','','','Стандартний протокол порушень
 Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.0.0','','Стандартный протокол нарушений
 Автор: Роман Савоченко <roman@oscada.org>
@@ -12111,8 +12101,9 @@ Version: 2.2.0',32,'','','','Таблиця середніх за добу зн�
 Автор: Роман Савоченко <roman@oscada.org>
 Версия: 2.1.0','','','');
 INSERT INTO "wlb_doc_io" VALUES('docMessRep','dscr','Generic messages report allowed for filtering both in static and dynamic. Based on the dynamic document.
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.0',32,'','','','Загальний звіт повідомлень, допускає фільтрацію як статично так і динамічно. Заснований на динамічному документі.
+Version: 1.2.0',32,'','','','Загальний звіт повідомлень, допускає фільтрацію як статично так і динамічно. Заснований на динамічному документі.
 Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.1.0','','Общий отчёт сообщений, допускает фильтрацию как статически так и динамически. Основан на динамическом документе.
 Автор: Роман Савоченко <roman@oscada.org>
@@ -12125,8 +12116,9 @@ Version: 1.1.0',32,'','','','Звіт на дві зміни. Засновани
 Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.1.0','','','');
 INSERT INTO "wlb_doc_io" VALUES('docUsersSet','dscr','Log of user interruptions. Based on the dynamic document.
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.0',32,'','','','Протокол дій користувача. Заснований на динамічному документі.
+Version: 1.2.1',32,'','','','Протокол дій користувача. Заснований на динамічному документі.
 Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.2.0','','Протокол действий пользователя. Основан на динамическом документе.
 Автор: Роман Савоченко <roman@oscada.org>
@@ -12395,7 +12387,6 @@ INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','bTime','Time: begin',139265
 INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','aSize','Archive: size',131073,'0|',2,'','wdg:wdg_doc/a_aSize','','Архів: розмір','','','Архив: размер','','','','');
 INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','aCur','Archive: cursor: current',131073,'0|',2,'','wdg:wdg_doc/a_aCur','','Архів: курсор: поточний','','','Архив: курсор: текущий','','','','');
 INSERT INTO "wlb_doc_uio" VALUES('docAlarmsRep','messCat','Message category',131077,'1:al*:*',8,'','','','Категорія повідомлень','','','Категория сообщения','','','','');
-INSERT INTO "wlb_doc_uio" VALUES('docMessRep','fullSrc','Placing the full source to the parameter',131072,'0',1,'','','doc','Додавати повне джерело до параметру','','','Добавлять полное имя к параметру','','','','');
 INSERT INTO "wlb_doc_uio" VALUES('docMessRep','sourceCache','Source cache',131078,'<TVarObj>
 </TVarObj>
 ',0,'','','doc','Кеш джерел','','','Кеш источников','','','','');
@@ -21612,11 +21603,11 @@ if(((cnt++)%(f_frq*1) == 0 || f_start || toUpdate) && !f_stop) {
 		else if(vC == "lev")	items += "<s>"+tr("Lev.")+"</s>";
 		else if(vC == "cat")	items += "<s>"+tr("Category")+"</s>";
 		else if(vC == "mess")	items += "<s>"+tr("Message")+"</s>";
-		else if(vC == "prm")	items += "<s>"+tr("Parameter")+"</s>";
+		else if(vC == "prm")	items += "<s>"+tr("Source")+"</s>";
 		else if(vC == "dscr")	items += "<s>"+tr("Description")+"</s>";
 		else if(vC == "alrm")	items += "<s>"+tr("Alarm")+"</s>";
 		else if(vC == "cmnt")	items += "<s edit=''1''>"+tr("Comment")+"</s>";
-		else if(vC == "src")	items += "<s>"+tr("Source")+"</s>";
+		//else if(vC == "src")	items += "<s>"+tr("Source")+"</s>";
 		else if(vC.slice(0,8) == "dscrCust")
 			items += "<s>"+((tVl=colDscrCustNames.parse(vC.slice(8).toInt(),";")).length?tVl:tr("Custom")+" "+vC.slice(8))+"</s>";
 	items += "</h>\n";
@@ -21636,11 +21627,29 @@ if(((cnt++)%(f_frq*1) == 0 || f_start || toUpdate) && !f_stop) {
 			else if(vC == "lev")	items += "<i>"+abs(iM.level)+"</i>";
 			else if(vC == "cat")	items += "<s>"+SYS.strEncode(iM.categ,"HTML")+"</s>";
 			else if(vC == "mess")	items += "<s>"+SYS.strEncode(iM.mess,"HTML")+"</s>";
-			else if(vC == "prm")	items += "<s>"+SYS.strEncode(iM.mess.parse(0,messItSep),"HTML")+"</s>";
+			else if(vC == "prm") {
+				srcO = iM.categ.match("^al(.+):([^\\.]+)|^(.+):al");
+				tVl = "";
+				//From remote station
+				if(srcO.length == 4 && (tVl=sourceCache[srcO[3]]).isEVal()) {
+					req = SYS.XMLNode("get").setAttr("path","/Transport/%2fsub%2fehost");
+					SYS.cntrReq(req);
+					for(iTr = 0; req.childSize() && iTr < req.childGet(0).childSize(); iTr++)
+						if(req.childGet(0).childGet(iTr).text() == srcO[3]) {
+							sourceCache[srcO[3]] = tVl = req.childGet(1).childGet(iTr).text();
+							break;
+						}
+				}
+				//From local controller object
+				//else if(srcO.length == 3 && (tVl=sourceCache[srcO[1]+"."+srcO[2]]).isEVal())
+				//	sourceCache[srcO[1]+"."+srcO[2]] = tVl = ((defSrcMod==srcO[1])?"":srcO[1]+" > ") + SYS.DAQ[srcO[1]][srcO[2]].name();
+
+				items += "<s>"+SYS.strEncode((tVl.length?tVl+" > ":"")+iM.mess.parse(0,messItSep),"HTML")+"</s>";
+			}
 			else if(vC == "dscr")	items += "<s>"+SYS.strEncode(iM.mess.parse(1,messItSep).replace(new RegExp("\\[\\[.+\\]\\]"),""),"HTML")+"</s>";
 			else if(vC == "alrm")	items += "<s>"+SYS.strEncode(iM.mess.parse(2,messItSep),"HTML")+"</s>";
 			else if(vC == "cmnt")	items += "<s>"+SYS.strEncode(iM.mess.parse(5,messItSep),"HTML")+"</s>";
-			else if(vC == "src") {
+			/*else if(vC == "src") {
 				srcO = iM.categ.match("^al(.+):([^\\.]+)|^(.+):al");
 				tVl = "";
 				//From remote station
@@ -21661,7 +21670,7 @@ if(((cnt++)%(f_frq*1) == 0 || f_start || toUpdate) && !f_stop) {
 			else if(vC.slice(0,8) == "dscrCust") {
 				tVl = (tVl=iM.mess.parse(1,messItSep).match("\\[\\[(.+)\\]\\]")).length ? tVl[1].parse(vC.slice(8).toInt(),"=>") : "";
 				items += "<s>"+SYS.strEncode(tVl,"HTML")+"</s>";
-			}
+			}*/
 		items += "</r>\n";
 	}
 	items += "</tbl>";
@@ -21727,7 +21736,7 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 		SYS.Archive.messPut(iM.tm, iM.utm, iM.categ, iM.level, iM.mess.parse(0,messItSep)+messItSep+iM.mess.parse(1,messItSep)+messItSep+iM.mess.parse(2,messItSep)+messItSep+
 										iM.mess.parse(3,messItSep)+messItSep+iM.mess.parse(4,messItSep)+messItSep+set);
 	}
-}','','',-1,'owner;name;dscr;active;geomY;geomW;geomH;contextMenu;evProc;elType;value;items;set;',1547196538);
+}','','',-1,'owner;name;dscr;active;geomY;geomW;geomH;contextMenu;evProc;elType;value;items;set;',1561317169);
 INSERT INTO "wlb_Main" VALUES('alarmsSt','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAnCAIAAAAw+tlrAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAE60lEQVRYhe2YTW8kRwGGn/qumpn2jJ1db+z1JpsEwgJCCkJw4PeQPwEX
 Llw5w50rd05RDhyQkDgmkdkQstpo7bXX3vXMdFd31wcHx4CEcjASGSLNc6y3q/p9qrtVUov33/9Z
@@ -21766,8 +21775,8 @@ function getSrc( categ, sourceCache ) {
 			}
 	}
 	//From local controller object
-	else if(srcO.length == 3 && (tVl=sourceCache[srcO[1]+"."+srcO[2]]).isEVal())
-		sourceCache[srcO[1]+"."+srcO[2]] = tVl = ((defSrcMod==srcO[1])?"":srcO[1]+" > ") + SYS.DAQ[srcO[1]][srcO[2]].name();
+	//else if(srcO.length == 3 && (tVl=sourceCache[srcO[1]+"."+srcO[2]]).isEVal())
+	//	sourceCache[srcO[1]+"."+srcO[2]] = tVl = ((defSrcMod==srcO[1])?"":srcO[1]+" > ") + SYS.DAQ[srcO[1]][srcO[2]].name();
 
 	return tVl;
 }
@@ -21931,11 +21940,14 @@ if((((cnt++)%(f_frq*1) == 0 && !wTm) || f_start || toUpdate) && !f_stop) {
 			else if(sR_ == "lev")	tvl = iMo.level;
 			else if(sR_ == "cat")	tvl = iMo.categ;
 			else if(sR_ == "mess")	tvl = iMo.mess;
-			else if(sR_ == "prm")	tvl = iMo.mess.parse(0, messItSep);
+			else if(sR_ == "prm")	{
+				tvl = iMo.mess.parse(0, messItSep);
+				if((tvl2=getSrc(iMo.categ,sourceCache)).length)	tvl = tvl2 + " > " + tvl;
+			}
 			else if(sR_ == "dscr")	tvl = iMo.mess.parse(1, messItSep).replace(new RegExp("\\[\\[.+\\]\\]"),"");
 			else if(sR_ == "alrm")	tvl = iMo.mess.parse(2, messItSep);
 			else if(sR_ == "cmnt")	tvl = iMo.mess.parse(5, messItSep);
-			else if(sR_ == "src")	tvl = getSrc(iMo.categ, sourceCache);
+			//else if(sR_ == "src")	tvl = getSrc(iMo.categ, sourceCache);
 			else if(sR_.slice(0,8) == "dscrCust")
 				tvl = (tvl=iMo.mess.parse(1,messItSep).match("\\[\\[(.+)\\]\\]")).length ? tvl[1].parse(sR_.slice(8).toInt(),"=>") : "";
 			sortAr.push(">"+tvl+"\n"+iM);
@@ -21960,11 +21972,11 @@ if((((cnt++)%(f_frq*1) == 0 && !wTm) || f_start || toUpdate) && !f_stop) {
 			else if(vC == "lev")	tvl = tr("Lev.");
 			else if(vC == "cat")	tvl = tr("Category");
 			else if(vC == "mess")	tvl = tr("Message");
-			else if(vC == "prm")	tvl = tr("Parameter");
+			else if(vC == "prm")	tvl = tr("Source");
 			else if(vC == "dscr")	tvl = tr("Description");
 			else if(vC == "alrm")	tvl = tr("Alarm");
 			else if(vC == "cmnt")	tvl = tr("Comment"), toEdit = true;
-			else if(vC == "src")	tvl = tr("Source");
+			//else if(vC == "src")	tvl = tr("Source");
 			else if(vC.slice(0,8) == "dscrCust") {
 				nCust = vC.slice(8).toInt();
 				tvl = (tVl=colDscrCustNames.parse(nCust,";")).length ? tVl : tr("Custom")+" "+nCust;
@@ -22002,11 +22014,15 @@ if((((cnt++)%(f_frq*1) == 0 && !wTm) || f_start || toUpdate) && !f_stop) {
 				else if(vC == "lev")	{ sVl = abs(iM.level).toString(); aRow += "<i>"+sVl+"</i>"; }
 				else if(vC == "cat")	{ sVl = iM.categ; aRow += "<s>"+SYS.strEncode(sVl,"HTML")+"</s>"; }
 				else if(vC == "mess")	{ sVl = iM.mess; aRow += "<s>"+SYS.strEncode(sVl,"HTML")+"</s>"; }
-				else if(vC == "prm")	{ sVl = iM.mess.parse(0, messItSep); aRow += "<s>"+SYS.strEncode(sVl,"HTML")+"</s>"; }
+				else if(vC == "prm")	{
+					sVl = iM.mess.parse(0, messItSep);
+					if((tvl2=getSrc(iM.categ, sourceCache)).length)	sVl = tvl2 + " > " + sVl;
+					aRow += "<s>"+SYS.strEncode(sVl,"HTML")+"</s>";
+				}
 				else if(vC == "dscr")	{ sVl = iM.mess.parse(1, messItSep).replace(new RegExp("\\[\\[.+\\]\\]"),""); aRow += "<s>"+SYS.strEncode(sVl,"HTML")+"</s>"; }
 				else if(vC == "alrm")	{ sVl = iM.mess.parse(2, messItSep); aRow += "<s>"+SYS.strEncode(sVl,"HTML")+"</s>"; }
 				else if(vC == "cmnt")	{ sVl = iM.mess.parse(5, messItSep); aRow += "<s>"+SYS.strEncode(sVl,"HTML")+"</s>"; }
-				else if(vC == "src")	{ sVl = getSrc(iM.categ, sourceCache); aRow += "<s>"+SYS.strEncode(sVl,"HTML")+"</s>"; }
+				//else if(vC == "src")	{ sVl = getSrc(iM.categ, sourceCache); aRow += "<s>"+SYS.strEncode(sVl,"HTML")+"</s>"; }
 				else if(vC.slice(0,8) == "dscrCust") {
 					nCust = vC.slice(8).toInt();
 					sVl = (sVl=iM.mess.parse(1,messItSep).match("\\[\\[(.+)\\]\\]")).length ? sVl[1].parse(nCust,"=>") : "";
@@ -22155,7 +22171,7 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 }
 
 time_value = wTm ? wTm : SYS.time();
-//go_cur_active = wTm;','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1552226019);
+//go_cur_active = wTm;','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1561317169);
 INSERT INTO "wlb_Main" VALUES('ImgLab','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAN
 EklEQVR4nOWb6W5dyXWFv7XPcCfegRRHiZJIiZRavE31QLtjuQ1ET+GH8O88gB8gT2IgzxD/cAAD
 toLYgdyA3XHakhrd7pZkURTHe0+t/LiUqO5I1MBBRrKAQxI8VXVWrbNr195VdQSY/8fI93//M/Dr
@@ -22336,7 +22352,7 @@ if(f_start) {
 
 //Events for commands process
 for(ev_rez = "", offEv = 0; (ev_cur=event.parse(0,"\n",offEv)).length; ) {
-	this.messInfo("Event: "+ev_cur);
+	//this.messInfo("Event: "+ev_cur);
 	if(ev_cur == "ws_ListChange:/lib") {
 		userSel = SYS.mtime();
 		userSelVl = ((userSelVl=lib_value.match("\\((.+)\\)$")).length > 1) ? userSelVl[1] : "";
@@ -22360,7 +22376,7 @@ for(ev_rez = "", offEv = 0; (ev_cur=event.parse(0,"\n",offEv)).length; ) {
 		//SYS.BD.nodeAt(dbDB,".").SQLReq("DELETE FROM "+dbProgs+" WHERE name=''"+userSelVl+"'';");
 		req = SYS.XMLNode("del").setAttr("path","/sub_Security/%2fbr%2fusr_").setText(userSelVl);
 		rez = SYS.cntrReq(req);
-		this.messInfo("Result: "+rez+": "+req.save());
+		//this.messInfo("Result: "+rez+": "+req.save());
 		lib_value_ = userSelVl = "";
 		userLbUpdt = userSel = SYS.mtime()+500;
 	}
@@ -22384,7 +22400,7 @@ for(ev_rez = "", offEv = 0; (ev_cur=event.parse(0,"\n",offEv)).length; ) {
 			grp_value.length && (oIt1=SYS.Security.nodeAt(grp_value))) {
 		grp_value = grp_value.slice(4);
 		users = oIt1.cfg("USERS");
-		this.messInfo("grp_value="+grp_value+"; users="+users);
+		//this.messInfo("grp_value="+grp_value+"; users="+users);
 		oIt1.cfgSet("USERS", oIt1.user(userSelVl) ? users.replace(userSelVl+";","") : users+userSelVl+";");
 		SYS.cntrReq(SYS.XMLNode("save").setAttr("path","/sub_Security/usr_"+userSelVl+"/%2fobj")); 
 		userSel = SYS.mtime()+500;
@@ -22419,7 +22435,7 @@ if(userSel && SYS.mtime() >= userSel) {
 	name_value = fullName_value = descr_value = pass_value = grp_items = "";
 
 	if(userSelVl.length && (oIt=SYS.Security.nodeAt(userSelVl))) {
-		this.messInfo("userSelVl="+userSelVl);
+		//this.messInfo("userSelVl="+userSelVl);
 		fullName_active = descr_active = pass_active = grp_active = true;
 		name_value = oIt.cfg("NAME");
 		fullName_value = oIt.cfg("DESCR");
@@ -24070,7 +24086,7 @@ else if(curMin != lastMin && !(curMin%5))	{
 	else doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-1 "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
 }','','',1000,'name;dscr;evProc;',1552226019);
 INSERT INTO "wlb_doc" VALUES('docUsersSet','','/wlb_doc/wdg_docDin',0,'JavaLikeCalc.JavaScript
-if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-24*3600; }','','',-1,'name;dscr;',1559499400);
+if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-24*3600; }','','',-1,'name;dscr;',1561315880);
 INSERT INTO "wlb_doc" VALUES('doc','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAF
 b0lEQVRYhe1W3W4TOxC2d73OOslusomSE6LwU0RIoQipVELcIN6BF+CVOG/CI/SCShVXtAhEWiWI
 qIV287de7Z93vd5zYZ0oJ2mrFqGTc6R8V9aMPTPfjD0e+Ofbt5RSxpjIMk3T4jhGCDmOA/5jaLfb
@@ -24188,7 +24204,7 @@ if(f_start) {
 	doc_time = SYS.time();
 	doc_bTime = doc_time-24*3600;
 	doc_tmpl = doc_tmpl.replace("@@messCat@@", messCat);
-}','','',-1,'name;dscr;backColor;bordWidth;',1552226019);
+}','','',-1,'name;dscr;backColor;bordWidth;',1561315880);
 INSERT INTO "wlb_doc" VALUES('docMessRep','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAnCAIAAAAw+tlrAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAACc0lEQVRYhe2Vy27TQBSGz7EnNq2bOObipE0DEhECVaxAsCsIcEGwKk9C
 n6QvgES76iPQB0BI7FCpFC5Jm2IUpW0CLqGNL2N7WIwU3Jso3QyV5lt4cebYPt+vGRvn5+fL5TKc
@@ -24219,7 +24235,7 @@ for(off = 0, ev_rez = ""; (sval=event.parse(0,"\n",off)).length; ) {
 	else if(sval == "ws_LnAccept:/fltr")		{ doc_doc = ""; doc_time = 0; }
 	else ev_rez += sval+"\n";
 }
-event = ev_rez;','','',-1,'owner;name;dscr;geomH;backColor;',1552226019);
+event = ev_rez;','','',-1,'owner;name;dscr;geomH;backColor;',1561315796);
 INSERT INTO "wlb_doc" VALUES('docResourcesYear','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAE
 UklEQVRYhe1TyY4TVxS99w01enZX242h1crgQEACReldWJBvIZ8X1uySiAU/EKEIQmhQD+7BrrZd
 rqpXb8rCjVNpGiGRRaUln9U9R+de3VP3Ff70+HGv15NSTuK43WoBgNY6F2I0GsH/CT8+enTz5gAR

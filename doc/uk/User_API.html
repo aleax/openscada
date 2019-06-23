@@ -554,17 +554,21 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <li> <i>string name( )</i> — ім'я об'єкту контролера.</li>
 <li> <i>string descr( )</i> — опис об'єкту та контролеру.</li>
 <li> <i>string status( )</i> — статус контролеру.</li>
-<li> <i>bool alarmSet( string mess, int lev = -5, string prm = "" )</i> — встановлює/знімає порушення <i>mess</i> з рівнем <i>lev</i> (негативне для встановлення інакше зняття), для параметру <i>prm</i>. Функція формує порушення з категорією: <b>al{ModId}:{CntrId}[.{PrmId}]</b>, де:
+<li> <i>bool alarmSet( string mess, int lev = -5, string prm = "" )</i> — встановлює/знімає порушення <i>mess</i> з рівнем <i>lev</i> (негативне для встановлення інакше зняття), для параметру <i>prm</i> (<b>{PrmId}\n{PrmNm}</b>). Функція формує порушення з категорією <b>al{ModId}:{CntrId}[.{PrmId}]</b> та текстом <b>{CntrNm} &gt; {PrmNm}: {MessText}</b>, де 
 <ul><li> <i>ModId</i> — ідентифікатор модуля;</li>
 <li> <i>CntrId</i> — ідентифікатор об'єкту контролера;</li>
-<li> <i>PrmId</i> — ідентифікатор параметру, з аргументу <i>prm</i>.</li></ul></li>
+<li> <i>PrmId</i> — ідентифікатор параметру, з аргументу <i>prm</i>;</li>
+<li> <i>CntrNm</i> — назва об'єкту контролера;</li>
+<li> <i>PrmNm</i> — назва параметру, з аргументу <i>prm</i>;</li>
+<li> <i>MessText</i> — текст повідомлення.</li></ul></li>
 <li> <i>bool enable( bool newSt = EVAL )</i> — отримує стан "Включений" або змінює його призначенням атрибуту <i>newSt</i>.</li>
 <li> <i>bool start( bool newSt = EVAL)</i> — отримує стан "Виконується" або змінює його призначенням атрибуту <i>newSt</i>.</li></ul>
 <p>Функції об'єкту параметру контролера (SYS.DAQ["Modul"]["Controller"]["Parameter"]):
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — отримує значення конфігураційного поля <i>nm</i> об'єкту.</li>
 <li> <i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">доступ до відповідної підсистеми</span>] — встановлює конфігураційне поля <i>nm</i> об'єкту у значення <i>val</i>.</li>
-<li> <i>TCntrNodeObj cntr( )</i> — повертає об'єкт контролеру цього параметру, незалежно від вкладеності.</li></ul>
+<li> <i>TCntrNodeObj cntr( )</i> — повертає об'єкт контролеру цього параметру, незалежно від вкладеності.</li>
+<li> <i>bool alarmSet( string mess, int lev = -5 )</i> — встановлює/знімає порушення <i>mess</i> з рівнем <i>lev</i> (негативне для встановлення інакше зняття) для цього параметру.</li></ul>
 <p>Функції об'єкту атрибута параметра контролера (SYS.DAQ["Modul"]["Controller"]["Parameter"]["Attribute"]):
 </p>
 <ul><li> <i>ElTp get( int tm = 0, int utm = 0, bool sys = false )</i> — запитує значення атрибуту на час <i>tm.utm</i> та ознакою системного доступу <i>sys</i>. Атрибути часу <i>tm.utm</i> є також виходами, відтак реальний час отриманого значення розміщується у них, якщо це змінні.</li>

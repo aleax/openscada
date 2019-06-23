@@ -123,6 +123,7 @@ void ModVArch::stop( bool full_del )
     //Stop getting data cicle an detach archives
     TVArchivator::stop(full_del);
 
+    MtxAlloc res(reqRes, true);
     if(groupPrms()) accm.clear();
     needMeta = true;
 }
@@ -135,7 +136,9 @@ void ModVArch::checkArchivator( unsigned int cnt )
 {
     if(needRePushGrps) pushAccumVals();
 
-    if(!needMeta || (cnt%60)) return;
+    if((groupPrms() && !needMeta) || (!groupPrms() && (cnt%60))) return;	//One time update at <needMeta> for groupPrms()
+
+    MtxAlloc res(reqRes, true);	//Moved to the up to prevent for unlocked cleaning the accumulator on the groupPrms() mode
 
     //Clear the accummulator's groups
     if(groupPrms()) accm.clear();
@@ -174,7 +177,7 @@ void ModVArch::checkArchivator( unsigned int cnt )
 	    int gId = s2i(vTbl.substr(archTbl(0).size()));
 	    SGrp *gO = NULL;
 
-	    MtxAlloc res(reqRes, true);
+	    //MtxAlloc res(reqRes, true);
 
 	    // The parameters
 	    for(int off = 0, aTp; (aNm=TSYS::strLine(cfg.cfg("PRM2").getS(),0,&off)).size(); ) {
@@ -241,6 +244,8 @@ void ModVArch::checkArchivator( unsigned int cnt )
 
 TValBuf &ModVArch::accmGetReg( const string &aNm, SGrp **grp, TFld::Type tp, int prefGrpPos )
 {
+    MtxAlloc res(reqRes, true);
+
     //Find the parameter into a group
     for(unsigned iG = 0; iG < accm.size(); iG++) {
 	map<string,TValBuf>::iterator iP = accm[iG].els.find(aNm);
@@ -263,6 +268,7 @@ TValBuf &ModVArch::accmGetReg( const string &aNm, SGrp **grp, TFld::Type tp, int
 
     //Place the parameter to the selected group
     SGrp &gO = accm[prefGrpPos];
+
     switch(tp&TFld::GenMask) {
 	case TFld::Boolean: gO.tblEl.fldAdd(new TFld(aNm.c_str(),aNm.c_str(),TFld::Integer,TFld::NoFlag,"1",i2s(EVAL_BOOL).c_str()));	break;
 	case TFld::Integer: gO.tblEl.fldAdd(new TFld(aNm.c_str(),aNm.c_str(),TFld::Integer,TFld::NoFlag,"20",ll2s(EVAL_INT).c_str()));	break;

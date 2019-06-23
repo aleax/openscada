@@ -36,7 +36,7 @@
 #define MOD_NAME	_("BFN module")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.6.15"
+#define MOD_VER		"0.6.16"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Support Big Farm Net (BFN) modules for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com).")
 #define LICENSE		"GPL2"
@@ -386,7 +386,7 @@ void TMdContr::stop_( )
     //Stop the request and calc data task
     if(prc_st) SYS->taskDestroy(nodePath('.',true), &endrun_req);
 
-    alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to the data source: %s."),owner().modId().c_str(),id().c_str(),_("STOP")), TMess::Info);
+    alarmSet(TSYS::strMess(_("Connection to the data source: %s."),_("STOP")), TMess::Info);
     alSt = -1;
 
     //Clear errors and set EVal
@@ -582,13 +582,11 @@ void *TMdContr::Task( void *icntr )
 	//Generic alarm generate
 	if(tErr.size() && cntr.alSt <= 0) {
 	    cntr.alSt = 1;
-	    cntr.alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to the data source: %s."),cntr.owner().modId().c_str(),cntr.id().c_str(),
-						TRegExp(":","g").replace(tErr,"=").c_str()));
+	    cntr.alarmSet(TSYS::strMess(_("Connection to the data source: %s."),TRegExp(":","g").replace(tErr,"=").c_str()));
 	}
 	else if(!tErr.size() && cntr.alSt != 0) {
 	    cntr.alSt = 0;
-	    cntr.alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to the data source: %s."),cntr.owner().modId().c_str(),cntr.id().c_str(),_("OK")),
-			    TMess::Info);
+	    cntr.alarmSet(TSYS::strMess(_("Connection to the data source: %s."),_("OK")), TMess::Info);
 	}
 	cntr.acq_err.setVal(tErr);
 

@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Siemens DAQ and Beckhoff")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"3.1.3"
+#define MOD_VER		"3.1.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol)\
  and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the\
@@ -556,7 +556,7 @@ void TMdContr::stop_( )
     //Stop the request and calc data task
     SYS->taskDestroy(nodePath('.',true), &endrunReq);
 
-    alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),owner().modId().c_str(),id().c_str(),_("STOP")), TMess::Info);
+    alarmSet(TSYS::strMess(_("Connection to the data source: %s."),_("STOP")), TMess::Info);
     alSt = -1;
 
     //Clear proccess parameters list
@@ -1511,8 +1511,7 @@ void *TMdContr::Task( void *icntr )
 	    if(cntr.tmDelay <= 0) {
 		if(cntr.alSt != 0) {
 		    cntr.alSt = 0;
-		    cntr.alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),cntr.owner().modId().c_str(),cntr.id().c_str(),_("OK")),
-				    TMess::Info);
+		    cntr.alarmSet(TSYS::strMess(_("Connection to the data source: %s."),_("OK")), TMess::Info);
 		}
 		cntr.tmDelay--;
 	    }
@@ -1538,8 +1537,7 @@ void TMdContr::setCntrDelay( const string &err )
 {
     if(alSt <= 0) {
 	alSt = 1;
-	alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),owner().modId().c_str(),id().c_str(),
-								TRegExp(":","g").replace(err,"=").c_str()));
+	alarmSet(TSYS::strMess(_("Connection to the data source: %s."),TRegExp(":","g").replace(err,"=").c_str()));
 	reset();
 	numErr++;
     }

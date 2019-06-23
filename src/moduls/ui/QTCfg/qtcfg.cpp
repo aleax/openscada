@@ -673,19 +673,22 @@ void ConfApp::itAdd( )
 
 void ConfApp::itDel( const string &iit )
 {
-    string rmits = iit, rmit;
+    string rmits = iit, rmit, rmits_lim = iit;
     if(iit.empty()) {
 	QList<QTreeWidgetItem *> sel_ls = CtrTree->selectedItems();
 	if(sel_ls.size() <= 1) rmits = selPath;
-	else for(int iEl = 0; iEl < vmin(10,sel_ls.size()); iEl++)
-	    rmits += sel_ls.at(iEl)->text(2).toStdString() + ((iEl<(sel_ls.size()-1))?"\n":"");
-	if(sel_ls.size() > 10) rmits += TSYS::strMess(_("... and yet %d nodes"), sel_ls.size()-10);
+	else for(int iEl = 0; iEl < sel_ls.size(); iEl++) {
+	    rmit = sel_ls.at(iEl)->text(2).toStdString() + ((iEl<(sel_ls.size()-1))?"\n":"");
+	    rmits += rmit;
+	    if(iEl < 10) rmits_lim += rmit;
+	}
+	if(sel_ls.size() > 10) rmits_lim += TSYS::strMess(_("... and yet %d nodes"), sel_ls.size()-10);
     }
     if(rmits.empty())	return;
 
     if(iit.empty()) {
 	InputDlg dlg(this, actItDel->icon(),
-		QString(_("Are you sure of deleting the nodes '%1'?")).arg(rmits.c_str()),_("Deleting the nodes"), 0, 0);
+		QString(_("Are you sure of deleting the nodes '%1'?")).arg(rmits_lim.c_str()),_("Deleting the nodes"), 0, 0);
 	if(dlg.exec() != QDialog::Accepted)	return;
     }
 

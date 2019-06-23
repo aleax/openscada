@@ -853,7 +853,7 @@ Redundancy modes (enum TController::Redundant):
 <li> <i>void setRedntRun( const string &amp;vl );</i> — Setting the configuration of the preferred execution.</li>
 <li> <i>virtual void redntDataUpdate( );</i> — An operation of the data receiving from the backup station execution. It is called automatically by the service procedure of the redundancy scheme of the subsystem.</li>
 <li> <i>virtual string catsPat( );</i> — regular expression rules separated '|' list for the object's generated messages math by category.</li>
-<li> <i>void alarmSet( const string &amp;mess, int lev = -TMess::Crit, const string &amp;prm = "" );</i> — Formation of the alarm (violation) for the object controller <i>prm</i>, or the controller as a whole if the object is not specified, the message <i>mess</i> and level <i>lev</i>. The negative value of the level <i>lev</i> is used to set and positive for removal of the violation. This function generates the violation and message with a category: <b>al{ModId}:{CntrId}[.{PrmId}]</b>.</li>
+<li> <i>void alarmSet( const string &amp;mess, int lev = -TMess::Crit, const string &amp;prm = "" );</i> — Formation of the alarm (violation) for the object controller <i>prm</i> (<b>{PrmId}\n{PrmNm}</b>), or the controller object as a whole if the object is not specified, the message <i>mess</i> and level <i>lev</i>. The negative value of the level <i>lev</i> is used to set and positive for removal of the violation. This function generates the violation and message with a category <b>al{ModId}:{CntrId}[.{prm}]</b> and the text <b>{CntrNm} &gt; {PrmNm}: {MessText}</b>.</li>
 <li> <i>TTypeDAQ &amp;owner( ) const;</i> — The type of the data source (module) - the owner of the controller.</li></ul>
 <p><b>Protected attributes:</b>
 </p>
@@ -2091,12 +2091,12 @@ Additional flags to <i>TFld</i> (enum — TCfg::AttrFlg):
 <li> <i>TElem &amp;operator=( const TElem &amp;src );</i> — Copying from <i>src</i>.</li>
 <li> <i>string &amp;elName( );</i> — The name if the structure.</li>
 <li> <i>void fldList( vector&lt;string&gt; &amp;list );</i> — The cell's list in the structure <i>list</i>.</li>
-<li> <i>unsigned fldSize( );</i> — The number of cells in the structure.</li>
+<li> <i>unsigned fldSize( ) const;</i> — The number of cells in the structure.</li>
 <li> <i>unsigned fldId( const string &amp;name, bool noex = false );</i> — Getting the index of the cell from its identifier <i>name</i>. Set <i>noex</i> on no the cell present caused return overall cells number, without exception generation.</li>
 <li> <i>bool fldPresent( const string &amp;name );</i> — Check for the presence of the specified cell <i>name</i>.</li>
 <li> <i>int fldAdd( TFld *fld, int id = -1 );</i> — Addition/insert of the cell <i>fld</i> to the position <i>id</i> (-1 — insert to the end).</li>
 <li> <i>void fldDel( unsigned int id );</i> — Deleting of the cell  <i>id</i>.</li>
-<li> <i>TFld &amp;fldAt( unsigned int id );</i> — Getting of the cell <i>id</i>.</li>
+<li> <i>TFld &amp;fldAt( unsigned int id ) const;</i> — Getting of the cell <i>id</i>.</li>
 <li> <i>void fldClear( );</i> — Removing all cells.</li>
 <li> <i>void valAtt( TValElem *cnt );</i> — Is called automatically when the structure is attached to the data storage <i>cnt</i>.</li>
 <li> <i>void valDet( TValElem *cnt );</i> — Is called automatically when the structure is detached from the data storage <i>cnt</i>.</li>
@@ -2273,7 +2273,7 @@ Error values for the different data types (define):
 </p><p>The container can also gather into the single request several information structures and dynamic parts, thereby optimizing the time of the request especially on the high latency network interfaces.
 </p><p>Overall control interface is built from individual components of the dynamic tree. Hierarchical inheritance from the TCntrNode object allows to realize multi-level addition of the configuration of the control interface. General view of the dynamic node tree is shown in Fig. 8.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="360" src="files/800px-Oscada_UserOM.png" srcset="/wiki/images/6/67/Oscada_UserOM.png 1.5x, /wiki/images/6/67/Oscada_UserOM.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM.png" title="Enlarge" /></div>Fig. 8. Example of a dynamic tree of the nodes in OpenSCADA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="360" src="files/800px-Oscada_UserOM.png" srcset="/wiki/images/6/67/Oscada_UserOM.png 1.5x, /wiki/images/6/67/Oscada_UserOM.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM.png" title="Збільшити" /></div>Fig. 8. Example of a dynamic tree of the nodes in OpenSCADA.</div></div></div></div>
 <p>System's nodes, containing data for the control interface of the system must also be connected to the dynamic tree of objects. 
 </p><p>Connection of the node to the dynamic tree is done as follows:
 </p>

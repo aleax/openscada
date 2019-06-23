@@ -199,7 +199,7 @@ void TMdContr::stop_( )
     //Stop the request and calc data task
     SYS->taskDestroy(nodePath('.',true));
 
-    alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),owner().modId().c_str(),id().c_str(),_("STOP")), TMess::Info);
+    alarmSet(TSYS::strMess(_("Connection to the data source: %s."),_("STOP")), TMess::Info);
     alSt = -1;
 }
 
@@ -324,8 +324,7 @@ void *TMdContr::Task( void *icntr )
 		//mess_err(cntr.nodePath().c_str(), "%s", cntr.acqErr.getVal().c_str());
 		if(cntr.alSt <= 0) {
 		    cntr.alSt = 1;
-		    cntr.alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),cntr.owner().modId().c_str(),cntr.id().c_str(),
-								TRegExp(":","g").replace(cntr.acqErr.getVal(),"=").c_str()));
+		    cntr.alarmSet(TSYS::strMess(_("Connection to the data source: %s."),TRegExp(":","g").replace(cntr.acqErr.getVal(),"=").c_str()));
 		}
 		cntr.tmDelay = cntr.restTm();
 		continue;
@@ -334,8 +333,7 @@ void *TMdContr::Task( void *icntr )
 		cntr.acqErr.setVal("");
 		if(cntr.alSt != 0) {
 		    cntr.alSt = 0;
-		    cntr.alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),cntr.owner().modId().c_str(),cntr.id().c_str(),_("OK")),
-				    TMess::Info);
+		    cntr.alarmSet(TSYS::strMess(_("Connection to the data source: %s."),_("OK")), TMess::Info);
 		}
 	    }
 	    res.unlock();

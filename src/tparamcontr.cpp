@@ -391,8 +391,13 @@ void TParamContr::setType( const string &tpId )
 
 TVariant TParamContr::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
-    //TCntrNodeObj cntr() - get the controller node
+    // TCntrNodeObj cntr() - get the controller node
     if(iid == "cntr")	return new TCntrNodeObj(AutoHD<TCntrNode>(&owner()), user);
+    // bool alarmSet( string mess, int lev = -5 ) - set alarm to message <mess> and level <lev>.
+    if(iid == "alarmSet" && prms.size() >= 1) {
+	owner().alarmSet(prms[0].getS(), (prms.size() >= 2) ? prms[1].getI() : -TMess::Crit, id()+"\n"+name());
+	return true;
+    }
 
     //Configuration functions call
     TVariant cfRez = objFunc(iid, prms, user, RWRWR_, "root:" SDAQ_ID);
