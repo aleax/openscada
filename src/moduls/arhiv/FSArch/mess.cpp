@@ -829,7 +829,8 @@ bool MFileArch::put( TMess::SRec mess )
 		if(owner().prevDblTmCatLev() && tTm == mess.time && (int)tTmU == mess.utime && tLev == mess.level &&
 		    TSYS::strDecode(Mess->codeConvIn(mChars,tCat),TSYS::HttpURL) == mess.categ)
 		{
-		    if(s_buf.size() < strlen(buf)) s_buf.resize(strlen(buf), ' ');
+		    if(s_buf.size() < strlen(buf))
+			s_buf = s_buf.substr(0,s_buf.size()-strlen("\n")) + string(strlen(buf)-s_buf.size(),' ') + "\n";
 		    mv_beg = ftell(f) - strlen(buf); mv_off = s_buf.size() - strlen(buf);
 		    break;
 		}
@@ -837,7 +838,7 @@ bool MFileArch::put( TMess::SRec mess )
 	    fseek(f, 0, SEEK_SET);
 	}
 
-	//Put message to end
+	//Put message to the end
 	if(fOK && (mess.time >= mEnd)) {
 	    //Update header
 	    if(mess.time != mEnd) {
@@ -879,7 +880,7 @@ bool MFileArch::put( TMess::SRec mess )
 		    do {
 			beg_cur = ((mv_end-mv_beg) >= bufSz) ? mv_end-bufSz : mv_beg;
 			fseek(f, beg_cur, SEEK_SET);
-			fOK = fOK && (fread(buf, mv_end-beg_cur,1,f) == 1);
+			fOK = fOK && (fread(buf,mv_end-beg_cur,1,f) == 1);
 			fseek(f, beg_cur+mv_off, SEEK_SET);
 			fOK = fOK && (fwrite(buf,mv_end-beg_cur,1,f) == 1);
 			mv_end -= bufSz;

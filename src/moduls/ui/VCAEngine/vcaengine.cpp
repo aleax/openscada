@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"5.9.4"
+#define MOD_VER		"5.9.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -621,9 +621,9 @@ void Engine::perSYSCall( unsigned int cnt )
     //Check for stop and remove lost and not used already project's sessions
     vector<string> sls;
     sesList(sls);
-    for(unsigned i_s = 0; i_s < sls.size(); i_s++)
-	if(!sesAt(sls[i_s]).at().backgrnd() && (time(NULL)-sesAt(sls[i_s]).at().reqTm()) > DIS_SES_TM)
-	    sesDel(sls[i_s]);
+    for(unsigned iS = 0; iS < sls.size(); iS++)
+	if(!sesAt(sls[iS]).at().backgrnd() && (time(NULL)-sesAt(sls[iS]).at().reqTm()) > DIS_SES_TM)
+	    sesDel(sls[iS]);
 }
 
 void Engine::cntrCmdProc( XMLNode *opt )

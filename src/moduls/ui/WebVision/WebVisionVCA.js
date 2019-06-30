@@ -413,9 +413,10 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
     if(this == masterPage) {
 	var opPg = this.findOpenPage(pgId);
 	if(opPg) {
-	    /*if(!(prcCnt%5)) opPg.makeEl(servGet(pgId,'com=attrsBr&FullTree=1&tm='+tmCnt),false,false,true);
-	    else*/ if(updWdg) servGet(pgId, 'com=attrsBr&tm='+tmCnt, makeEl, opPg);
-				//opPg.makeEl(servGet(pgId,'com=attrsBr&tm='+tmCnt));
+	    if(updWdg) {
+		fullUpdCnt = (fullUpdCnt > 5) ? 0 : fullUpdCnt + planePer;
+		servGet(pgId, 'com=attrsBr&FullTree='+((fullUpdCnt==0)?1:0)+'&tm='+tmCnt, makeEl, opPg);
+	    }
 	    return true;
 	}
     }
@@ -552,6 +553,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 {
     //Callback processing
     if(pgBr) {
+	if(pgBr.getAttribute('FullTree')) FullTree = parseInt(pgBr.getAttribute('FullTree'));
 	if(pgBr == -1) return;
 	if(pgBr.callBackPrm) {
 	    elO = pgBr.callBackPrm; pgBr.callBackPrm = null;
@@ -1783,8 +1785,10 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				    }
 				    this.firstChild.onkeyup = function(e) {
 					e = e ? e : window.event;
-					if(e.keyCode == 13 || e.keyCode == 20)
-					    this.parentNode.offsetParent.setVal((this.checked?0:1), this.parentNode.parentNode.rowIndex-1, this.parentNode.cellIndex-1);
+					if(e.keyCode == 13 || e.keyCode == 20) {
+					    this.checked = !this.checked;
+					    this.parentNode.offsetParent.setVal((this.checked?1:0), this.parentNode.parentNode.rowIndex-1, this.parentNode.cellIndex-1);
+					}
 					if(e.keyCode == 27) {
 					    this.parentNode.isEnter = false; this.parentNode.offsetParent.edIt = null;
 					    this.parentNode.innerHTML = this.parentNode.svInnerHTML;
@@ -2378,7 +2382,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	this.place.elWr = elWr;
     }
     if(margBrdUpd || this.attrsMdf["geomXsc"] || this.attrsMdf["geomYsc"]) for(var i in this.wdgs) this.wdgs[i].makeEl();
-    if(this.attrs['tipTool'].length) this.place.setAttribute('title', this.attrs['tipTool']);
+    if(this.attrs['tipTool'] && this.attrs['tipTool'].length) this.place.setAttribute('title', this.attrs['tipTool']);
     else this.place.removeAttribute('title');
     this.place.onmouseover = function(e) {
 	if(this.wdgLnk.attrs['tipStatus']) {
@@ -2464,8 +2468,9 @@ function perUpdt( )
     }
     else if(this.attrs['root'] == 'Document') {
 	var frDoc = this.place.childNodes[0].contentDocument || this.place.childNodes[0].contentWindow || this.place.childNodes[0].document;
-	frDoc.open();
-	frDoc.write("<html><head>\n"+
+	if(frDoc) {	//Sometimes can be null
+	    frDoc.open();
+	    frDoc.write("<html><head>\n"+
 		"<style type='text/css'>\n"+
 		" * { "+this.wFont+" }\n"+
 		" big { font-size: 120%; }\n"+
@@ -2481,14 +2486,15 @@ function perUpdt( )
 		" th { font-weight: bold; }\n"+
 		this.attrs['style']+"</style>"+
 		"</head>"+(this.attrs['doc']?this.attrs['doc']:this.attrs['tmpl'])+"</html>");
-	frDoc.close();
-	frDoc.body.wdgLnk = this;
-	frDoc.body.isActive = (parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR);
-	frDoc.body.onclick = function(e) {
-	    if(this.isActive) setFocus(this.wdgLnk.addr);
-	    return true;
+	    frDoc.close();
+	    frDoc.body.wdgLnk = this;
+	    frDoc.body.isActive = (parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR);
+	    frDoc.body.onclick = function(e) {
+		if(this.isActive) setFocus(this.wdgLnk.addr);
+		return true;
+	    }
 	}
-	this.perUpdtEn( false );
+	this.perUpdtEn(false);
     }
 }
 
@@ -2806,6 +2812,7 @@ window.onresize = function( ) {
 	stTmReload = setTimeout('window.location.reload()', 1000);
 }
 
+var fullUpdCnt = 0;			//Full tree updating counter, for 5 seconds
 var alrmUpdCnt = 0;			//Alarms updating counter, for 0.5 seconds
 var mAlrmSt = -1;			//Current allarm state
 var modelPer = 0;			//Model proc period

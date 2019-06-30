@@ -28,7 +28,7 @@ INSERT INTO "BFN_SymbAlarm" VALUES(16,70,'Ложное открыт. клапа�
 INSERT INTO "BFN_SymbAlarm" VALUES(70,0,'Отклонение темп. обогреваемой зоны','Отклонение темп. обогреваемой зоны');
 INSERT INTO "BFN_SymbAlarm" VALUES(71,0,'Неправ. положение бок. притока 1','Неправ. положение бок. притока 1');
 CREATE TABLE 'CIFPrm_test' ("SHIFR" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '' ,"TMPL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR"));
-INSERT INTO "CIFPrm_test" VALUES('test','','',1,'S7.test','','','','');
+INSERT INTO "CIFPrm_test" VALUES('test','','',1,'tests.test','','','','');
 CREATE TABLE 'CIFPrm_test_io' ("PRM_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"VALUE" TEXT DEFAULT '' , PRIMARY KEY ("PRM_ID","ID"));
 INSERT INTO "CIFPrm_test_io" VALUES('test','f_frq','1');
 INSERT INTO "CIFPrm_test_io" VALUES('test','f_start','0');

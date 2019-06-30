@@ -110,6 +110,8 @@ class Session : public TCntrNode
 	string stlPropGet( const string &pid, const string &def = "" );
 	bool stlPropSet( const string &pid, const string &vl );
 
+	ResMtx &dataResSes( ) { return mDataRes; }
+
 	//Attributes
 	AutoHD<TSecurity> sec;
 
@@ -208,7 +210,8 @@ class Session : public TCntrNode
 
 	//Attributes
 	ResMtx	mAlrmRes,			//Alarms resource
-		mCalcRes;			//Calc resource
+		mCalcRes,			//Calc resource
+		mDataRes;			//Own DATA resource, independent from the TCntrNode
 	int	mPage;
 	const string mId;
 	string	mPrjnm, mOwner, mGrp;
@@ -230,6 +233,8 @@ class Session : public TCntrNode
 	// Styles
 	int		mStyleIdW;
 	map<string, string>	mStProp;	//Styles' properties
+
+
 };
 
 //************************************************

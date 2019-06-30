@@ -1,3 +1,22 @@
+2019-06-30 Roman (stable)
+- !!:DB.LibsDB.OscadaLibs: The template library "S7" renamed to "tests".
+    The field "Alarms delay, s" renamed to "Violations delay, seconds" and such one for other languages.
+    The templates base.{simleBoard,digitBlock} marked as obsoleted.
+- !!:DB.LibsDB.OscadaLibs,ModelsDB.AGLKS.St: The template base.gasPoint moved to the template library "tests".
+- !!:FIX:DB.LibsDB.vcaBase: Fixed for some original messages.
+    Removed for the attribute "defSrcMod" from Main.{alarmsAct,alarmsSt} and doc.docMessRep.
+    The service call "/Transport/%2fsub%2fehost" appended for the attribute "upRiseSYS"=1, for accessing the ordinal users.
+    FIX: Main.alarmsSt fixed for pointing "messCat" in the alarms requesting.
+- !:FIX:Archive.FSArch: Fixed for archiving double messages in the mode of preventing the doubles - rewriting.
+- !!:FIX:DAQ.ModBus: Fixed to work into the redundancy mode.
+- !!!!:FIX:UI.VCAEngine: Session objects moved under own data lock to prevent dead locking in
+    the complex situations due to the style calls uses indirect parent().
+- !!:FIX:UI.WebVision: Restored to reload full widgets tree for restoring the function of removing missed widgets
+	in the visualiser at their removing into the VCA-engine.
+    Editing boolean fields of the view "Table" of the primitive "FormEl" set clean.
+    Appended for checking to availability the common attribute "tipTool" and document object of the primitive "Document".
+
+
 2019-06-23 Roman (stable)
 - !!:DB.LibsDB.OscadaLibs: Using of the function alarmSet() moved to the new direct variant of the parameter.
     base.{digAlarm,codeState}: Prevented from call at the stopping.

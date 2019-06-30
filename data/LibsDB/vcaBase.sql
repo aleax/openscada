@@ -193,7 +193,7 @@ INSERT INTO "prj_archBrowser_io" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/p
 INSERT INTO "prj_archBrowser_io" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_2','sclWin','trnd1','0',160,'','','','','','','','');
 INSERT INTO "prj_archBrowser_io" VALUES('/prj_archBrowser/pg_control/pg_cntrPasp','owner','','root:op',32,'','','','','','','','');
 INSERT INTO "prj_archBrowser_io" VALUES('/prj_archBrowser/pg_control/pg_cntrPasp','perm','','944',32,'','','','','','','','');
-INSERT INTO "prj_archBrowser_io" VALUES('/prj_archBrowser/pg_control/pg_cntrPasp','name','','Pasport',32,'','','Паспорт','','','Паспорт','','');
+INSERT INTO "prj_archBrowser_io" VALUES('/prj_archBrowser/pg_control/pg_cntrPasp','name','','Passport',32,'','','Паспорт','','','Паспорт','','');
 INSERT INTO "prj_archBrowser_io" VALUES('/prj_archBrowser/pg_control/pg_cntrPasp','geomZ','','6',32,'','','','','','','','');
 INSERT INTO "prj_archBrowser_io" VALUES('/prj_archBrowser/pg_control/pg_cntrPasp','pName','',NULL,42,'<page>|NAME','','','<page>|NAME','','','<page>|NAME','');
 INSERT INTO "prj_archBrowser_io" VALUES('/prj_archBrowser/pg_control/pg_cntrPasp','owner','data','root:op',32,'','','','','','','','');
@@ -633,7 +633,7 @@ INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','value
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_control/pg_graphSelPrm','value','',32,'','','prmSearch','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','owner','root:op',32,'','','','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','perm','944',32,'','','','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','name','Pasport',32,'','','','Паспорт','','','Паспорт','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','name','Passport',32,'','','','Паспорт','','','Паспорт','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','geomZ','10',32,'','','','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','pName',NULL,42,'<page>|NAME','','','','<page>|NAME','','','<page>|NAME','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','owner','root:op',32,'','','data','','','','','','');
@@ -3797,7 +3797,7 @@ INSERT INTO "wlb_Main_io" VALUES('anShow','color','white',32,'','','mode','','',
 INSERT INTO "wlb_Main_io" VALUES('anShow','text','',40,'','','mode','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('anShow','name','',32,'','','name','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('anShow','name','',32,'','','val','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPasp','name','Pasport',32,'','','','Паспорт','','Паспорт','','','');
+INSERT INTO "wlb_Main_io" VALUES('cntrPasp','name','Passport',32,'','','','Паспорт','','Паспорт','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPasp','geomW','400',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPasp','geomH','400',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPasp','pgGrp','fl',32,'','','','','','','','','');
@@ -5018,7 +5018,7 @@ INSERT INTO "wlb_Main_io" VALUES('prescrRun','active','1',40,'','','btPass','','
 INSERT INTO "wlb_Main_io" VALUES('prescrRun','elType','3',32,'','','btPass','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrRun','img','step_pass',0,'','','btPass','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrRun','font','Arial 20',0,'','','btPass','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('ElViewGraph','contextMenu','Pasport:pasp
+INSERT INTO "wlb_Main_io" VALUES('ElViewGraph','contextMenu','Passport:pasp
 Hide/Show:hideshow
 Show (single):single
 Show (All):all
@@ -5336,7 +5336,7 @@ INSERT INTO "wlb_Main_io" VALUES('TextLab','text','---',40,'','','','','','---',
 INSERT INTO "wlb_Main_io" VALUES('anShow1','geomZ','0',32,'','','val','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('anShow1','en','1',40,'','','name','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('anShow1','geomZ','1',32,'','','name','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','name','Pasport, extended',32,'','','','Паспорт, розширений','','Паспорт, расширенный','','','');
+INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','name','Passport, extended',32,'','','','Паспорт, розширений','','Паспорт, расширенный','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomW','400',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomH','400',40,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','pgGrp','fl',32,'','','','','','','','','');
@@ -5370,7 +5370,7 @@ INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','active','1',32,'','','view','','
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','elType','9',32,'','','view','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','items','',8,'','','view','<tbl sel=''row'' colsWdthFit=''1''><h><s width=''0px''>ID</s><s width=''60%''>Name</s><s width=''40%''>Value</s></h></tbl>','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('objProps','perm','438',32,'','','','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('objProps','name','Object''s properties',32,'','','','Властивості об''єкту','','Свойства объекта','','','');
+INSERT INTO "wlb_Main_io" VALUES('objProps','name','Object properties',32,'','','','Властивості об''єкту','','Свойства объекта','','','');
 INSERT INTO "wlb_Main_io" VALUES('objProps','geomW','260',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('objProps','geomH','200',40,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('objProps','pgOpenSrc','',40,'','','','','','','','','');
@@ -6578,7 +6578,7 @@ INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','perm','438',32,'','','sel_data',
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','perm','438',32,'','','sel_trends','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','perm','438',32,'','','sel_view','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','perm','438',32,'','','trendsList','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','dscr','Extended pasport of the standard parameters with functions:
+INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','dscr','Extended passport of the standard parameters with functions:
 - Table of attributes of the parameter with their edition for editable ones.
 - Trends for standard and key attributes: var, sp, out, auto, com, st_open, ...
 - Table of the current data.
@@ -10258,7 +10258,7 @@ INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','highLght','Highlight rules, {lev}
 4:red
 1:yellow',8,'','','','Правила підсвітлення, {lev}:{color}:{font}:{fontColor}','','','Правила подсветки, {lev}:{color}:{font}:{fontColor}','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','vHdrVis','Show header: vertical',131072,'0',8,'','','','Показув. заголовок: вертикальний','','','Показыв. заголовок: вертикальный','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('cntrPaspExt','hideAttrs','Attributes list of the pasport to hide',131077,'',10,'<page>|paspHideAttrs','','','Перелік атрибутів паспорту для приховування','','','Перечень атрибутов паспорта для скрытия','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('cntrPaspExt','hideAttrs','Attributes list of the passport to hide',131077,'',10,'<page>|paspHideAttrs','','','Перелік атрибутів паспорту для приховування','','','Перечень атрибутов паспорта для скрытия','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('cntrPaspExt','name_','For save original name',131077,'',8,'','','','Для збереження оригінальної назви','','','Для сохранения исходного наименования','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','com','Quittance: command',131072,'0',8,'','','','Підтвердження: команда','','','Подтверждение: команда','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','digStts','Quittance: statuses',131077,'QUITT-blue',0,'','','','Підтвердження: стани','ПІДТВ-blue','','Подтверждение: состояния','ПОДТВ-blue','','','');
@@ -10311,8 +10311,6 @@ INSERT INTO "wlb_Main_uio" VALUES('userManager','denyUsers','Deny to control: us
 INSERT INTO "wlb_Main_uio" VALUES('userManager','newUseGrps','Groups of new created user',131077,'UI;Guest',8,'','','','Групи новоствореного користувача','','','Группы новосозданного пользователя','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('userManager','storeDB','DB of saving new users',131077,'',9,'','','','БД зберігання нових користувачів','','','БД хранения новых пользоватей','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('userManager','mess','Dialog message',131077,'Are you sure to delete this user?',0,'','','userDel','Повідомлення діалогу','Ви дійсно бажаєте видалити користувача?','','Сообщение диалога','Вы действительно желаете удалить пользователя?','','','');
-INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','defSrcMod','Default source module, do not show that',131077,'',8,'','','','Типовий модуль джерела, не відображати його','','','Типовой модуль источника, не отображать его','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','defSrcMod','Default source module, do not show that',131077,'',8,'','','','Типовий модуль джерела, не відображати його','','','Типовой модуль источника, не отображать его','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','backColorButton','Button color: back',147461,'#555555',72,'','','','','','','','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','backColorButtonSel','Button color: back selected',147461,'#777799',72,'','','','','','','','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','labColorGood','Label color: good',147461,'#00FF00',72,'','','','','','','','','','','');
@@ -11856,7 +11854,7 @@ srcO = mCat.match("^al(.+):([^\\.]+)|^(.+):al");
 tVl = "";
 //From remote station
 if(srcO.length == 4 && (tVl=sourceCache[srcO[3]]).isEVal()) {
-	req = SYS.XMLNode("get").setAttr("path","/Transport/%2fsub%2fehost");
+	req = SYS.XMLNode("get").setAttr("path","/Transport/%2fsub%2fehost").setAttr("upRiseSYS",1);
 	SYS.cntrReq(req);
 	for(iTr = 0; req.childSize() && iTr < req.childGet(0).childSize(); iTr++)
 		if(req.childGet(0).childGet(iTr).text() == srcO[3]) {
@@ -11903,7 +11901,7 @@ srcO = mCat.match("^al(.+):([^\\.]+)|^(.+):al");
 tVl = "";
 //From remote station
 if(srcO.length == 4 && (tVl=sourceCache[srcO[3]]).isEVal()) {
-	req = SYS.XMLNode("get").setAttr("path","/Transport/%2fsub%2fehost");
+	req = SYS.XMLNode("get").setAttr("path","/Transport/%2fsub%2fehost").setAttr("upRiseSYS",1);
 	SYS.cntrReq(req);
 	for(iTr = 0; req.childSize() && iTr < req.childGet(0).childSize(); iTr++)
 		if(req.childGet(0).childGet(iTr).text() == srcO[3]) {
@@ -11950,7 +11948,7 @@ srcO = mCat.match("^al(.+):([^\\.]+)|^(.+):al");
 tVl = "";
 //From remote station
 if(srcO.length == 4 && (tVl=sourceCache[srcO[3]]).isEVal()) {
-	req = SYS.XMLNode("get").setAttr("path","/Transport/%2fsub%2fehost");
+	req = SYS.XMLNode("get").setAttr("path","/Transport/%2fsub%2fehost").setAttr("upRiseSYS",1);
 	SYS.cntrReq(req);
 	for(iTr = 0; req.childSize() && iTr < req.childGet(0).childSize(); iTr++)
 		if(req.childGet(0).childGet(iTr).text() == srcO[3]) {
@@ -12390,7 +12388,6 @@ INSERT INTO "wlb_doc_uio" VALUES('docAlarmsRep','messCat','Message category',131
 INSERT INTO "wlb_doc_uio" VALUES('docMessRep','sourceCache','Source cache',131078,'<TVarObj>
 </TVarObj>
 ',0,'','','doc','Кеш джерел','','','Кеш источников','','','','');
-INSERT INTO "wlb_doc_uio" VALUES('docMessRep','defSrcMod','Default source module, do not show that',131077,'',1,'','','doc','Типовий модуль джерела, не відображати його','','','Типовой модуль источника, не отображать его','','','','');
 INSERT INTO "wlb_doc_uio" VALUES('docResourcesYear','aCur','Archive: cursor: current',131073,'0|',2,'','wdg:wdg_doc/a_aCur','','','','','','','','','');
 INSERT INTO "wlb_doc_uio" VALUES('docResourcesYear','aSize','Archive: size',131073,'0|',2,'','wdg:wdg_doc/a_aSize','','','','','','','','','');
 INSERT INTO "wlb_doc_uio" VALUES('docResourcesYear','bTime','Time: begin',139265,'0|',8,'','','','','','','','','','','');
@@ -21632,7 +21629,7 @@ if(((cnt++)%(f_frq*1) == 0 || f_start || toUpdate) && !f_stop) {
 				tVl = "";
 				//From remote station
 				if(srcO.length == 4 && (tVl=sourceCache[srcO[3]]).isEVal()) {
-					req = SYS.XMLNode("get").setAttr("path","/Transport/%2fsub%2fehost");
+					req = SYS.XMLNode("get").setAttr("path","/Transport/%2fsub%2fehost").setAttr("upRiseSYS",1);
 					SYS.cntrReq(req);
 					for(iTr = 0; req.childSize() && iTr < req.childGet(0).childSize(); iTr++)
 						if(req.childGet(0).childGet(iTr).text() == srcO[3]) {
@@ -21640,37 +21637,12 @@ if(((cnt++)%(f_frq*1) == 0 || f_start || toUpdate) && !f_stop) {
 							break;
 						}
 				}
-				//From local controller object
-				//else if(srcO.length == 3 && (tVl=sourceCache[srcO[1]+"."+srcO[2]]).isEVal())
-				//	sourceCache[srcO[1]+"."+srcO[2]] = tVl = ((defSrcMod==srcO[1])?"":srcO[1]+" > ") + SYS.DAQ[srcO[1]][srcO[2]].name();
 
 				items += "<s>"+SYS.strEncode((tVl.length?tVl+" > ":"")+iM.mess.parse(0,messItSep),"HTML")+"</s>";
 			}
 			else if(vC == "dscr")	items += "<s>"+SYS.strEncode(iM.mess.parse(1,messItSep).replace(new RegExp("\\[\\[.+\\]\\]"),""),"HTML")+"</s>";
 			else if(vC == "alrm")	items += "<s>"+SYS.strEncode(iM.mess.parse(2,messItSep),"HTML")+"</s>";
 			else if(vC == "cmnt")	items += "<s>"+SYS.strEncode(iM.mess.parse(5,messItSep),"HTML")+"</s>";
-			/*else if(vC == "src") {
-				srcO = iM.categ.match("^al(.+):([^\\.]+)|^(.+):al");
-				tVl = "";
-				//From remote station
-				if(srcO.length == 4 && (tVl=sourceCache[srcO[3]]).isEVal()) {
-					req = SYS.XMLNode("get").setAttr("path","/Transport/%2fsub%2fehost");
-					SYS.cntrReq(req);
-					for(iTr = 0; req.childSize() && iTr < req.childGet(0).childSize(); iTr++)
-						if(req.childGet(0).childGet(iTr).text() == srcO[3]) {
-							sourceCache[srcO[3]] = tVl = req.childGet(1).childGet(iTr).text();
-							break;
-						}
-				}
-				//From local controller object
-				else if(srcO.length == 3 && (tVl=sourceCache[srcO[1]+"."+srcO[2]]).isEVal())
-					sourceCache[srcO[1]+"."+srcO[2]] = tVl = ((defSrcMod==srcO[1])?"":srcO[1]+" > ") + SYS.DAQ[srcO[1]][srcO[2]].name();
-				items += "<s>"+SYS.strEncode(tVl,"HTML")+"</s>";
-			}
-			else if(vC.slice(0,8) == "dscrCust") {
-				tVl = (tVl=iM.mess.parse(1,messItSep).match("\\[\\[(.+)\\]\\]")).length ? tVl[1].parse(vC.slice(8).toInt(),"=>") : "";
-				items += "<s>"+SYS.strEncode(tVl,"HTML")+"</s>";
-			}*/
 		items += "</r>\n";
 	}
 	items += "</tbl>";
@@ -21766,7 +21738,7 @@ function getSrc( categ, sourceCache ) {
 	tVl = "";
 	//From remote station
 	if(srcO.length == 4 && (tVl=sourceCache[srcO[3]]).isEVal()) {
-		req = SYS.XMLNode("get").setAttr("path","/Transport/%2fsub%2fehost");
+		req = SYS.XMLNode("get").setAttr("path","/Transport/%2fsub%2fehost").setAttr("upRiseSYS",1);
 		SYS.cntrReq(req);
 		for(iTr = 0; req.childSize() && iTr < req.childGet(0).childSize(); iTr++)
 			if(req.childGet(0).childGet(iTr).text() == srcO[3]) {
@@ -21774,9 +21746,6 @@ function getSrc( categ, sourceCache ) {
 				break;
 			}
 	}
-	//From local controller object
-	//else if(srcO.length == 3 && (tVl=sourceCache[srcO[1]+"."+srcO[2]]).isEVal())
-	//	sourceCache[srcO[1]+"."+srcO[2]] = tVl = ((defSrcMod==srcO[1])?"":srcO[1]+" > ") + SYS.DAQ[srcO[1]][srcO[2]].name();
 
 	return tVl;
 }
@@ -21899,7 +21868,7 @@ if((((cnt++)%(f_frq*1) == 0 && !wTm) || f_start || toUpdate) && !f_stop) {
 	realPrTm = alMess.tm;
 	//Active alarms get for the gone on down ones detect
 	if(!wTm) {
-		actAlMess = SYS.Archive.messGet(0, SYS.time(), "", -1);
+		actAlMess = SYS.Archive.messGet(0, SYS.time(), messCat, -1);
 		actAls = new Object();
 		for(iM = 0; iM < actAlMess.length; iM++) {
 			iMo = actAlMess[iM];

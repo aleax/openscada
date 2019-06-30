@@ -268,7 +268,7 @@ void TMdContr::redntDataUpdate( )
     //Send request to first active station for this controller
     if(owner().owner().rdStRequest(workId(),req).empty()) return;
 
-    //Redirect respond to local parameters
+    //Redirect respond to the local parameters
     req.setAttr("path", "/");
     for(unsigned iPrm = 0; iPrm < req.childSize(); ) {
 	if(s2i(req.childGet(iPrm)->attr("err"))) { req.childDel(iPrm); continue; }

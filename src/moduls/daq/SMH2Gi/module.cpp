@@ -84,7 +84,7 @@ TTpContr::TTpContr( string name ) : TTypeDAQ(MOD_ID), mMRCDirDevs(oscd_datadir_f
     modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 }
 
-TTpContr::~TTpContr()
+TTpContr::~TTpContr( )
 {
 
 }

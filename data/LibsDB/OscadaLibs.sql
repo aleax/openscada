@@ -1,11 +1,11 @@
 PRAGMA foreign_keys=OFF;
 BEGIN TRANSACTION;
 CREATE TABLE 'ParamTemplLibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"DB" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "ParamTemplLibs" VALUES('S7','S7 tests','','Templates library of the test parameters for PLC series S7 of the firm Siemens.
+INSERT INTO "ParamTemplLibs" VALUES('tests','Tests','','Templates library of the test parameters for PLC series S7 of the firm Siemens.
 
 Author: Roman Savochenko <roman@oscada.org>','Бібліотека шаблонів параметрів для контролерів фірми Siemens серії S7.
 
-Автор: Роман Савоченко <roman@oscada.org>','tmplib_S7','','Библиотека шаблонов параметров для контроллеров фирмы Siemens серии S7.
+Автор: Роман Савоченко <roman@oscada.org>','tmplib_tests','','Библиотека шаблонов параметров для контроллеров фирмы Siemens серии S7.
 
 Автор: Роман Савоченко <roman@oscada.org>');
 INSERT INTO "ParamTemplLibs" VALUES('base','Main library','Основна бібліотека','The library was created to provide main templates of the DAQ-sources processing and related services.
@@ -1036,7 +1036,7 @@ INSERT INTO "tmplib_DevLib_io" VALUES('UPS','loadH','Load high',2,32,'80',11,'Н
 INSERT INTO "tmplib_DevLib_io" VALUES('UPS','loadHH','Load too high',2,32,'100',12,'Нагрузка очень высокая','','Навантаження дуже високе','');
 INSERT INTO "tmplib_DevLib_io" VALUES('UPS','tH','Temperature high',2,32,'50',13,'Температура высокая','','Температура висока','');
 INSERT INTO "tmplib_DevLib_io" VALUES('UPS','tHH','Temperature too high',2,32,'70',14,'Температура очень высокая','','Температура дуже висока','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','alDelay','Alarms delay, s',2,32,'0',2,'Задержка сигнализации, с','','Затримка сигналізації, с','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','alDelay','Violations delay, seconds',2,32,'0',2,'Задержка нарушений, секунды','','Затримка порушень, секунди','');
 INSERT INTO "tmplib_DevLib_io" VALUES('m200','s','Energy from reset, tariffs sum',0,16,'',0,'Энергия от сброса сумма Тарифов','','Енергія від скидання сума Тарифів','');
 INSERT INTO "tmplib_DevLib_io" VALUES('m200','t1','Energy from reset, tariff 1',2,16,'',1,'Энергия от сброса Тариф1','','Енергія від скидання Тариф1','');
 INSERT INTO "tmplib_DevLib_io" VALUES('m200','t2','Energy from reset, tariff 2',2,16,'',2,'Энергия от сброса Тариф2','','Енергія від скидання Тариф2','');
@@ -1344,78 +1344,84 @@ INSERT INTO "tmplib_PrescrTempl_io" VALUES('manager','work','Work program',4,16,
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('manager','comLs','Commands list',4,16,'',10,'Список команд','','Перелік команд','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('manager','clcCnt','Cycles counter',1,0,'',11,'Счётчик циклов','','Лічильник циклів','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('manager','this','The object',4,0,'',12,'Объект','','Об''єкт','');
-CREATE TABLE 'tmplib_S7_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
-INSERT INTO "tmplib_S7_io" VALUES('ai_simple','val_cod','Value''s source code',1,128,'',0,'Вихідний код значення','','Исходный код значения','');
-INSERT INTO "tmplib_S7_io" VALUES('ai_simple','val','Value',2,16,'0',1,'Значення','','Значение','');
-INSERT INTO "tmplib_S7_io" VALUES('ai_simple','val_tp','Dimension',0,32,'',2,'Од. виміру','','Ед. измерения','');
-INSERT INTO "tmplib_S7_io" VALUES('ai_simple','bDwn','Lower value border',2,32,'0',3,'Нижня границя значення','','Нижняя граница значения','');
-INSERT INTO "tmplib_S7_io" VALUES('ai_simple','bUp','Upper value border',2,32,'100',4,'Верхня границя значення','','Верхняя граница значения','');
-INSERT INTO "tmplib_S7_io" VALUES('ai_simple','bWDwn','Lower technical border',2,32,'20',5,'Нижня технолог. границя','','Нижняя технологич. граница','');
-INSERT INTO "tmplib_S7_io" VALUES('ai_simple','bWUp','Upper technical border',2,32,'80',6,'Верхня технолог. границя','','Верхняя технологич. граница','');
-INSERT INTO "tmplib_S7_io" VALUES('ai_simple','bErrDwn','Lower alarm border',2,32,'10',7,'Нижня аварійна границя','','Нижняя аварийная граница','');
-INSERT INTO "tmplib_S7_io" VALUES('ai_simple','bErrUp','Upper alarm border',2,32,'90',8,'Верхня аварійна границя','','Верхняя аварийная граница','');
-INSERT INTO "tmplib_S7_io" VALUES('ai_man','val_cod','Value''s source code',1,129,'',0,'Вихідний код значення','','Исходный код значения','');
-INSERT INTO "tmplib_S7_io" VALUES('ai_man','val','Value',2,32,'0',1,'Значення','','Значение','');
-INSERT INTO "tmplib_S7_io" VALUES('ai_man','val_o','Previous value',2,0,'0',2,'Попередне значення','','Предыдущее значение','');
-INSERT INTO "tmplib_S7_io" VALUES('ai_man','val_tp','Dimension',0,32,'',3,'Од. виміру','','Ед. измерения','');
-INSERT INTO "tmplib_S7_io" VALUES('ai_man','bDwn','Lower value border',2,32,'0',4,'Нижня границя значення','','Нижняя граница значения','');
-INSERT INTO "tmplib_S7_io" VALUES('ai_man','bUp','Upper value border',2,32,'100',5,'Верхня границя значення','','Верхняя граница значения','');
-INSERT INTO "tmplib_S7_io" VALUES('ai_man','bWDwn','Lower technical border',2,32,'20',6,'Нижня технологічна границя','','Нижняя технологическая граница','');
-INSERT INTO "tmplib_S7_io" VALUES('ai_man','bWUp','Upper technical border',2,32,'80',7,'Верхня технологічна границя','','Верхняя технологич. граница','');
-INSERT INTO "tmplib_S7_io" VALUES('ai_man','bErrDwn','Lower alarm border',2,32,'10',8,'Нижня аварійна границя','','Нижняя аварийная граница','');
-INSERT INTO "tmplib_S7_io" VALUES('ai_man','bErrUp','Upper alarm border',2,32,'90',9,'Верхня аварійна границя','','Верхняя аварийная граница','');
-INSERT INTO "tmplib_S7_io" VALUES('test','in50','Input50',1,160,'DB Test|108',51,'Вхід50','DB Тест|108','Вход50','DB Тест|108');
-INSERT INTO "tmplib_S7_io" VALUES('test','in49','Input49',1,160,'DB Test|106',50,'Вхід49','DB Тест|106','Вход49','DB Тест|106');
-INSERT INTO "tmplib_S7_io" VALUES('test','in48','Input48',1,160,'DB Test|104',49,'Вхід48','DB Тест|104','Вход48','DB Тест|104');
-INSERT INTO "tmplib_S7_io" VALUES('test','in47','Input47',1,160,'DB Test|102',48,'Вхід47','DB Тест|102','Вход47','DB Тест|102');
-INSERT INTO "tmplib_S7_io" VALUES('test','in46','Input46',1,160,'DB Test|100',47,'Вхід46','DB Тест|100','Вход46','DB Тест|100');
-INSERT INTO "tmplib_S7_io" VALUES('test','in45','Input45',1,160,'DB Test|98',46,'Вхід45','DB Тест|98','Вход45','DB Тест|98');
-INSERT INTO "tmplib_S7_io" VALUES('test','in44','Input44',1,160,'DB Test|96',45,'Вхід44','DB Тест|96','Вход44','DB Тест|96');
-INSERT INTO "tmplib_S7_io" VALUES('test','in43','Input43',1,160,'DB Test|94',44,'Вхід43','DB Тест|94','Вход43','DB Тест|94');
-INSERT INTO "tmplib_S7_io" VALUES('test','in42','Input42',1,160,'DB Test|92',43,'Вхід42','DB Тест|92','Вход42','DB Тест|92');
-INSERT INTO "tmplib_S7_io" VALUES('test','in41','Input41',1,160,'DB Test|90',42,'Вхід41','DB Тест|90','Вход41','DB Тест|90');
-INSERT INTO "tmplib_S7_io" VALUES('test','in40','Input40',1,160,'DB Test|86',41,'Вхід40','DB Тест|86','Вход40','DB Тест|86');
-INSERT INTO "tmplib_S7_io" VALUES('test','in39','Input39',1,160,'DB Test|84',40,'Вхід39','DB Тест|84','Вход39','DB Тест|84');
-INSERT INTO "tmplib_S7_io" VALUES('test','in38','Input38',1,160,'DB Test|82',39,'Вхід38','DB Тест|82','Вход38','DB Тест|82');
-INSERT INTO "tmplib_S7_io" VALUES('test','in37','Input37',1,160,'DB Test|80',38,'Вхід37','DB Тест|80','Вход37','DB Тест|80');
-INSERT INTO "tmplib_S7_io" VALUES('test','in36','Input36',1,160,'DB Test|78',37,'Вхід36','DB Тест|78','Вход36','DB Тест|78');
-INSERT INTO "tmplib_S7_io" VALUES('test','in35','Input35',1,160,'DB Test|76',36,'Вхід35','DB Тест|76','Вход35','DB Тест|76');
-INSERT INTO "tmplib_S7_io" VALUES('test','in34','Input34',1,160,'DB Test|74',35,'Вхід34','DB Тест|74','Вход34','DB Тест|74');
-INSERT INTO "tmplib_S7_io" VALUES('test','in33','Input33',1,160,'DB Test|72',34,'Вхід33','DB Тест|72','Вход33','DB Тест|72');
-INSERT INTO "tmplib_S7_io" VALUES('test','in32','Input32',1,160,'DB Test|70',33,'Вхід32','DB Тест|70','Вход32','DB Тест|70');
-INSERT INTO "tmplib_S7_io" VALUES('test','in31','Input31',1,160,'DB Test|68',32,'Вхід31','DB Тест|68','Вход31','DB Тест|68');
-INSERT INTO "tmplib_S7_io" VALUES('test','in30','Input30',1,160,'DB Test|64',31,'Вхід30','DB Тест|64','Вход30','DB Тест|64');
-INSERT INTO "tmplib_S7_io" VALUES('test','in29','Input29',1,160,'DB Test|62',30,'Вхід29','DB Тест|62','Вход29','DB Тест|62');
-INSERT INTO "tmplib_S7_io" VALUES('test','in28','Input28',1,160,'DB Test|60',29,'Вхід28','DB Тест|60','Вход28','DB Тест|60');
-INSERT INTO "tmplib_S7_io" VALUES('test','in27','Input27',1,160,'DB Test|58',28,'Вхід27','DB Тест|58','Вход27','DB Тест|58');
-INSERT INTO "tmplib_S7_io" VALUES('test','in26','Input26',1,160,'DB Test|56',27,'Вхід26','DB Тест|56','Вход26','DB Тест|56');
-INSERT INTO "tmplib_S7_io" VALUES('test','in25','Input25',1,160,'DB Test|54',26,'Вхід25','DB Тест|54','Вход25','DB Тест|54');
-INSERT INTO "tmplib_S7_io" VALUES('test','in24','Input24',1,160,'DB Test|52',25,'Вхід24','DB Тест|52','Вход24','DB Тест|52');
-INSERT INTO "tmplib_S7_io" VALUES('test','in23','Input23',1,160,'DB Test|50',24,'Вхід23','DB Тест|50','Вход23','DB Тест|50');
-INSERT INTO "tmplib_S7_io" VALUES('test','in22','Input22',1,160,'DB Test|48',23,'Вхід22','DB Тест|48','Вход22','DB Тест|48');
-INSERT INTO "tmplib_S7_io" VALUES('test','in21','Input21',1,160,'DB Test|46',22,'Вхід21','DB Тест|46','Вход21','DB Тест|46');
-INSERT INTO "tmplib_S7_io" VALUES('test','in20','Input20',1,160,'DB Test|44',21,'Вхід20','DB Тест|44','Вход20','DB Тест|44');
-INSERT INTO "tmplib_S7_io" VALUES('test','in19','Input19',1,160,'DB Test|42',20,'Вхід19','DB Тест|42','Вход19','DB Тест|42');
-INSERT INTO "tmplib_S7_io" VALUES('test','in18','Input18',1,160,'DB Test|40',19,'Вхід18','DB Тест|40','Вход18','DB Тест|40');
-INSERT INTO "tmplib_S7_io" VALUES('test','in17','Input17',1,160,'DB Test|38',18,'Вхід17','DB Тест|38','Вход17','DB Тест|38');
-INSERT INTO "tmplib_S7_io" VALUES('test','in16','Input16',1,160,'DB Test|36',17,'Вхід16','DB Тест|36','Вход16','DB Тест|36');
-INSERT INTO "tmplib_S7_io" VALUES('test','in15','Input15',1,160,'DB Test|34',16,'Вхід15','DB Тест|34','Вход15','DB Тест|34');
-INSERT INTO "tmplib_S7_io" VALUES('test','in14','Input14',1,160,'DB Test|32',15,'Вхід14','DB Тест|32','Вход14','DB Тест|32');
-INSERT INTO "tmplib_S7_io" VALUES('test','in13','Input13',1,160,'DB Test|30',14,'Вхід13','DB Тест|30','Вход13','DB Тест|30');
-INSERT INTO "tmplib_S7_io" VALUES('test','in12','Input12',1,160,'DB Test|28',13,'Вхід12','DB Тест|28','Вход12','DB Тест|28');
-INSERT INTO "tmplib_S7_io" VALUES('test','in11','Input11',1,160,'DB Test|26',12,'Вхід11','DB Тест|26','Вход11','DB Тест|26');
-INSERT INTO "tmplib_S7_io" VALUES('test','in10','Input10',1,160,'DB Test|24',11,'Вхід10','DB Тест|24','Вход10','DB Тест|24');
-INSERT INTO "tmplib_S7_io" VALUES('test','in9','Input9',1,160,'DB Test|22',10,'Вхід9','DB Тест|22','Вход9','DB Тест|22');
-INSERT INTO "tmplib_S7_io" VALUES('test','in8','Input8',1,160,'DB Test|20',9,'Вхід8','DB Тест|20','Вход8','DB Тест|20');
-INSERT INTO "tmplib_S7_io" VALUES('test','in7','Input7',1,160,'DB Test|18',8,'Вхід7','DB Тест|18','Вход7','DB Тест|18');
-INSERT INTO "tmplib_S7_io" VALUES('test','in6','Input6',1,160,'DB Test|16',7,'Вхід6','DB Тест|16','Вход6','DB Тест|16');
-INSERT INTO "tmplib_S7_io" VALUES('test','in5','Input5',1,160,'DB Test|14',6,'Вхід5','DB Тест|14','Вход5','DB Тест|14');
-INSERT INTO "tmplib_S7_io" VALUES('test','in4','Input4',1,160,'DB Test|12',5,'Вхід4','DB Тест|12','Вход4','DB Тест|12');
-INSERT INTO "tmplib_S7_io" VALUES('test','in3','Input3',1,160,'DB Test|10',4,'Вхід3','DB Тест|10','Вход3','DB Тест|10');
-INSERT INTO "tmplib_S7_io" VALUES('test','in2','Input2',1,160,'DB Test|8|r8',3,'Вхід2','DB Тест|8','Вход2','DB Тест|8');
-INSERT INTO "tmplib_S7_io" VALUES('test','in1','Input1',1,160,'DB Test|6|i4',2,'Вхід1','DB Тест|6','Вход1','DB Тест|6');
-INSERT INTO "tmplib_S7_io" VALUES('test','in','Input',1,160,'DB Test|4',1,'Вхід','DB Тест|4','Вход','DB Тест|4');
-INSERT INTO "tmplib_S7_io" VALUES('test','di','DI',3,160,'DB Test|2.1',0,'','','','');
+CREATE TABLE 'tmplib_tests_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
+INSERT INTO "tmplib_tests_io" VALUES('ai_simple','val_cod','Value''s source code',1,128,'',0,'Вихідний код значення','','Исходный код значения','');
+INSERT INTO "tmplib_tests_io" VALUES('ai_simple','val','Value',2,16,'0',1,'Значення','','Значение','');
+INSERT INTO "tmplib_tests_io" VALUES('ai_simple','val_tp','Dimension',0,32,'',2,'Од. виміру','','Ед. измерения','');
+INSERT INTO "tmplib_tests_io" VALUES('ai_simple','bDwn','Lower value border',2,32,'0',3,'Нижня границя значення','','Нижняя граница значения','');
+INSERT INTO "tmplib_tests_io" VALUES('ai_simple','bUp','Upper value border',2,32,'100',4,'Верхня границя значення','','Верхняя граница значения','');
+INSERT INTO "tmplib_tests_io" VALUES('ai_simple','bWDwn','Lower technical border',2,32,'20',5,'Нижня технолог. границя','','Нижняя технологич. граница','');
+INSERT INTO "tmplib_tests_io" VALUES('ai_simple','bWUp','Upper technical border',2,32,'80',6,'Верхня технолог. границя','','Верхняя технологич. граница','');
+INSERT INTO "tmplib_tests_io" VALUES('ai_simple','bErrDwn','Lower alarm border',2,32,'10',7,'Нижня аварійна границя','','Нижняя аварийная граница','');
+INSERT INTO "tmplib_tests_io" VALUES('ai_simple','bErrUp','Upper alarm border',2,32,'90',8,'Верхня аварійна границя','','Верхняя аварийная граница','');
+INSERT INTO "tmplib_tests_io" VALUES('ai_man','val_cod','Value''s source code',1,129,'',0,'Вихідний код значення','','Исходный код значения','');
+INSERT INTO "tmplib_tests_io" VALUES('ai_man','val','Value',2,32,'0',1,'Значення','','Значение','');
+INSERT INTO "tmplib_tests_io" VALUES('ai_man','val_o','Previous value',2,0,'0',2,'Попередне значення','','Предыдущее значение','');
+INSERT INTO "tmplib_tests_io" VALUES('ai_man','val_tp','Dimension',0,32,'',3,'Од. виміру','','Ед. измерения','');
+INSERT INTO "tmplib_tests_io" VALUES('ai_man','bDwn','Lower value border',2,32,'0',4,'Нижня границя значення','','Нижняя граница значения','');
+INSERT INTO "tmplib_tests_io" VALUES('ai_man','bUp','Upper value border',2,32,'100',5,'Верхня границя значення','','Верхняя граница значения','');
+INSERT INTO "tmplib_tests_io" VALUES('ai_man','bWDwn','Lower technical border',2,32,'20',6,'Нижня технологічна границя','','Нижняя технологическая граница','');
+INSERT INTO "tmplib_tests_io" VALUES('ai_man','bWUp','Upper technical border',2,32,'80',7,'Верхня технологічна границя','','Верхняя технологич. граница','');
+INSERT INTO "tmplib_tests_io" VALUES('ai_man','bErrDwn','Lower alarm border',2,32,'10',8,'Нижня аварійна границя','','Нижняя аварийная граница','');
+INSERT INTO "tmplib_tests_io" VALUES('ai_man','bErrUp','Upper alarm border',2,32,'90',9,'Верхня аварійна границя','','Верхняя аварийная граница','');
+INSERT INTO "tmplib_tests_io" VALUES('test','in50','Input50',1,160,'DB Test|108',51,'Вхід50','DB Тест|108','Вход50','DB Тест|108');
+INSERT INTO "tmplib_tests_io" VALUES('test','in49','Input49',1,160,'DB Test|106',50,'Вхід49','DB Тест|106','Вход49','DB Тест|106');
+INSERT INTO "tmplib_tests_io" VALUES('test','in48','Input48',1,160,'DB Test|104',49,'Вхід48','DB Тест|104','Вход48','DB Тест|104');
+INSERT INTO "tmplib_tests_io" VALUES('test','in47','Input47',1,160,'DB Test|102',48,'Вхід47','DB Тест|102','Вход47','DB Тест|102');
+INSERT INTO "tmplib_tests_io" VALUES('test','in46','Input46',1,160,'DB Test|100',47,'Вхід46','DB Тест|100','Вход46','DB Тест|100');
+INSERT INTO "tmplib_tests_io" VALUES('test','in45','Input45',1,160,'DB Test|98',46,'Вхід45','DB Тест|98','Вход45','DB Тест|98');
+INSERT INTO "tmplib_tests_io" VALUES('test','in44','Input44',1,160,'DB Test|96',45,'Вхід44','DB Тест|96','Вход44','DB Тест|96');
+INSERT INTO "tmplib_tests_io" VALUES('test','in43','Input43',1,160,'DB Test|94',44,'Вхід43','DB Тест|94','Вход43','DB Тест|94');
+INSERT INTO "tmplib_tests_io" VALUES('test','in42','Input42',1,160,'DB Test|92',43,'Вхід42','DB Тест|92','Вход42','DB Тест|92');
+INSERT INTO "tmplib_tests_io" VALUES('test','in41','Input41',1,160,'DB Test|90',42,'Вхід41','DB Тест|90','Вход41','DB Тест|90');
+INSERT INTO "tmplib_tests_io" VALUES('test','in40','Input40',1,160,'DB Test|86',41,'Вхід40','DB Тест|86','Вход40','DB Тест|86');
+INSERT INTO "tmplib_tests_io" VALUES('test','in39','Input39',1,160,'DB Test|84',40,'Вхід39','DB Тест|84','Вход39','DB Тест|84');
+INSERT INTO "tmplib_tests_io" VALUES('test','in38','Input38',1,160,'DB Test|82',39,'Вхід38','DB Тест|82','Вход38','DB Тест|82');
+INSERT INTO "tmplib_tests_io" VALUES('test','in37','Input37',1,160,'DB Test|80',38,'Вхід37','DB Тест|80','Вход37','DB Тест|80');
+INSERT INTO "tmplib_tests_io" VALUES('test','in36','Input36',1,160,'DB Test|78',37,'Вхід36','DB Тест|78','Вход36','DB Тест|78');
+INSERT INTO "tmplib_tests_io" VALUES('test','in35','Input35',1,160,'DB Test|76',36,'Вхід35','DB Тест|76','Вход35','DB Тест|76');
+INSERT INTO "tmplib_tests_io" VALUES('test','in34','Input34',1,160,'DB Test|74',35,'Вхід34','DB Тест|74','Вход34','DB Тест|74');
+INSERT INTO "tmplib_tests_io" VALUES('test','in33','Input33',1,160,'DB Test|72',34,'Вхід33','DB Тест|72','Вход33','DB Тест|72');
+INSERT INTO "tmplib_tests_io" VALUES('test','in32','Input32',1,160,'DB Test|70',33,'Вхід32','DB Тест|70','Вход32','DB Тест|70');
+INSERT INTO "tmplib_tests_io" VALUES('test','in31','Input31',1,160,'DB Test|68',32,'Вхід31','DB Тест|68','Вход31','DB Тест|68');
+INSERT INTO "tmplib_tests_io" VALUES('test','in30','Input30',1,160,'DB Test|64',31,'Вхід30','DB Тест|64','Вход30','DB Тест|64');
+INSERT INTO "tmplib_tests_io" VALUES('test','in29','Input29',1,160,'DB Test|62',30,'Вхід29','DB Тест|62','Вход29','DB Тест|62');
+INSERT INTO "tmplib_tests_io" VALUES('test','in28','Input28',1,160,'DB Test|60',29,'Вхід28','DB Тест|60','Вход28','DB Тест|60');
+INSERT INTO "tmplib_tests_io" VALUES('test','in27','Input27',1,160,'DB Test|58',28,'Вхід27','DB Тест|58','Вход27','DB Тест|58');
+INSERT INTO "tmplib_tests_io" VALUES('test','in26','Input26',1,160,'DB Test|56',27,'Вхід26','DB Тест|56','Вход26','DB Тест|56');
+INSERT INTO "tmplib_tests_io" VALUES('test','in25','Input25',1,160,'DB Test|54',26,'Вхід25','DB Тест|54','Вход25','DB Тест|54');
+INSERT INTO "tmplib_tests_io" VALUES('test','in24','Input24',1,160,'DB Test|52',25,'Вхід24','DB Тест|52','Вход24','DB Тест|52');
+INSERT INTO "tmplib_tests_io" VALUES('test','in23','Input23',1,160,'DB Test|50',24,'Вхід23','DB Тест|50','Вход23','DB Тест|50');
+INSERT INTO "tmplib_tests_io" VALUES('test','in22','Input22',1,160,'DB Test|48',23,'Вхід22','DB Тест|48','Вход22','DB Тест|48');
+INSERT INTO "tmplib_tests_io" VALUES('test','in21','Input21',1,160,'DB Test|46',22,'Вхід21','DB Тест|46','Вход21','DB Тест|46');
+INSERT INTO "tmplib_tests_io" VALUES('test','in20','Input20',1,160,'DB Test|44',21,'Вхід20','DB Тест|44','Вход20','DB Тест|44');
+INSERT INTO "tmplib_tests_io" VALUES('test','in19','Input19',1,160,'DB Test|42',20,'Вхід19','DB Тест|42','Вход19','DB Тест|42');
+INSERT INTO "tmplib_tests_io" VALUES('test','in18','Input18',1,160,'DB Test|40',19,'Вхід18','DB Тест|40','Вход18','DB Тест|40');
+INSERT INTO "tmplib_tests_io" VALUES('test','in17','Input17',1,160,'DB Test|38',18,'Вхід17','DB Тест|38','Вход17','DB Тест|38');
+INSERT INTO "tmplib_tests_io" VALUES('test','in16','Input16',1,160,'DB Test|36',17,'Вхід16','DB Тест|36','Вход16','DB Тест|36');
+INSERT INTO "tmplib_tests_io" VALUES('test','in15','Input15',1,160,'DB Test|34',16,'Вхід15','DB Тест|34','Вход15','DB Тест|34');
+INSERT INTO "tmplib_tests_io" VALUES('test','in14','Input14',1,160,'DB Test|32',15,'Вхід14','DB Тест|32','Вход14','DB Тест|32');
+INSERT INTO "tmplib_tests_io" VALUES('test','in13','Input13',1,160,'DB Test|30',14,'Вхід13','DB Тест|30','Вход13','DB Тест|30');
+INSERT INTO "tmplib_tests_io" VALUES('test','in12','Input12',1,160,'DB Test|28',13,'Вхід12','DB Тест|28','Вход12','DB Тест|28');
+INSERT INTO "tmplib_tests_io" VALUES('test','in11','Input11',1,160,'DB Test|26',12,'Вхід11','DB Тест|26','Вход11','DB Тест|26');
+INSERT INTO "tmplib_tests_io" VALUES('test','in10','Input10',1,160,'DB Test|24',11,'Вхід10','DB Тест|24','Вход10','DB Тест|24');
+INSERT INTO "tmplib_tests_io" VALUES('test','in9','Input9',1,160,'DB Test|22',10,'Вхід9','DB Тест|22','Вход9','DB Тест|22');
+INSERT INTO "tmplib_tests_io" VALUES('test','in8','Input8',1,160,'DB Test|20',9,'Вхід8','DB Тест|20','Вход8','DB Тест|20');
+INSERT INTO "tmplib_tests_io" VALUES('test','in7','Input7',1,160,'DB Test|18',8,'Вхід7','DB Тест|18','Вход7','DB Тест|18');
+INSERT INTO "tmplib_tests_io" VALUES('test','in6','Input6',1,160,'DB Test|16',7,'Вхід6','DB Тест|16','Вход6','DB Тест|16');
+INSERT INTO "tmplib_tests_io" VALUES('test','in5','Input5',1,160,'DB Test|14',6,'Вхід5','DB Тест|14','Вход5','DB Тест|14');
+INSERT INTO "tmplib_tests_io" VALUES('test','in4','Input4',1,160,'DB Test|12',5,'Вхід4','DB Тест|12','Вход4','DB Тест|12');
+INSERT INTO "tmplib_tests_io" VALUES('test','in3','Input3',1,160,'DB Test|10',4,'Вхід3','DB Тест|10','Вход3','DB Тест|10');
+INSERT INTO "tmplib_tests_io" VALUES('test','in2','Input2',1,160,'DB Test|8|r8',3,'Вхід2','DB Тест|8','Вход2','DB Тест|8');
+INSERT INTO "tmplib_tests_io" VALUES('test','in1','Input1',1,160,'DB Test|6|i4',2,'Вхід1','DB Тест|6','Вход1','DB Тест|6');
+INSERT INTO "tmplib_tests_io" VALUES('test','in','Input',1,160,'DB Test|4',1,'Вхід','DB Тест|4','Вход','DB Тест|4');
+INSERT INTO "tmplib_tests_io" VALUES('test','di','DI',3,160,'DB Test|2.1',0,'','','','');
+INSERT INTO "tmplib_tests_io" VALUES('gasPoint','F','Flow (m3/h)',2,144,'F|var',0,'','','','');
+INSERT INTO "tmplib_tests_io" VALUES('gasPoint','Q','Volume (m3)',2,16,'0',1,'','','','');
+INSERT INTO "tmplib_tests_io" VALUES('gasPoint','P','Pressure (kgH/sm2)',2,144,'P|var',2,'','','','');
+INSERT INTO "tmplib_tests_io" VALUES('gasPoint','T','Temperature (°C)',2,144,'T|var',3,'','','','');
+INSERT INTO "tmplib_tests_io" VALUES('gasPoint','dP','Differential pressure (kgH/m2)',2,16,'0',4,'','','','');
+INSERT INTO "tmplib_tests_io" VALUES('gasPoint','DS','Density (kg/m3)',2,16,'0',5,'','','','');
 CREATE TABLE 'tmplib_base_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO "tmplib_base_io" VALUES('digAlarm','in','Input',3,144,'Input|in',2,'Вхід','','Вход','');
 INSERT INTO "tmplib_base_io" VALUES('simleBoard','in','Input',2,128,'Parameter|var',0,'Вхід','','Вход','');
@@ -1459,7 +1465,7 @@ INSERT INTO "tmplib_base_io" VALUES('manInUnif','iAdd','Input addon',2,64,'0',17
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','iMult','Input multiplication',2,64,'1',18,'Множник входу','','Множитель ко входу','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','plcMin','Minimum module scale',2,64,'0',19,'Мінімум шкали модуля','','Минимум шкалы модуля','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','plcMax','Maximum module scale',2,64,'0',20,'Максимум шкали модуля','','Максимум шкалы модуля','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','plcExcess','Allowed scale exceeding (%)',2,64,'0',21,'Дозволене перевищення шкали (%)','','Допустимое превышение шкалы модуля (%)','');
+INSERT INTO "tmplib_base_io" VALUES('manInUnif','plcExcess','Allowed scale exceeding, %',2,64,'0',21,'Дозволене перевищення шкали, %','','Допустимое превышение шкалы модуля, %','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','in','Input',2,128,'Input|var',0,'Вхід','Вхід|var','Вход','Вход|var');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','var','Variable',2,16,'0',2,'Змінна','','Переменная','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','ed','Dimension',0,32,'',3,'Одиниця виміру','','Единица измерения','');
@@ -1635,7 +1641,7 @@ no;last;substitute',7,'Заміна: режим','0
 0;1;2
 нет;последнее;подстановка');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','subVar','Substitute: variable',2,32,'0',8,'Заміна: змінна','','Замена: переменная','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','alSup','Alarms',1,40,'0
+INSERT INTO "tmplib_base_io" VALUES('anUnif','alSup','Violations',1,40,'0
 0;1;2
 init NORMA;suppress;save on change',9,'Порушення','0
 0;1;2
@@ -1672,8 +1678,8 @@ INSERT INTO "tmplib_base_io" VALUES('digAlarm','st_open','State "Opened"',3,16,'
 INSERT INTO "tmplib_base_io" VALUES('digAlarm','st_close','State "Closed"',3,16,'',5,'Стан "Закрито"','','Состояние "Закрыто"','');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','log','Logarithmic scale',3,32,'0',23,'Логарифмічна шкала','','Логарифмическая шкала','');
 INSERT INTO "tmplib_base_io" VALUES('digAlarm','inProc','Input processing procedure',0,68,'',3,'Вхідна процедура обробки','','Входная процедура обработки','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','alDelay','Alarms delay, seconds',2,32,'0',10,'Затримка сигналізації, секунди','','Задержка сигнализации, секунди','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','alDelay','Alarms delay, seconds',2,32,'',15,'Затримка сигналізації, секунди','','Задержка сигнализации, секунди','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','alDelay','Violations delay, seconds',2,32,'0',10,'Затримка порушень, секунди','','Задержка нарушений, секунды','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','alDelay','Violations delay, seconds',2,32,'',15,'Затримка порушень, секунди','','Задержка нарушений, секунды','');
 INSERT INTO "tmplib_base_io" VALUES('codeState','in','Input',1,144,'Signal|in',0,'Вхід','','Вход','');
 INSERT INTO "tmplib_base_io" VALUES('codeState','inProc','Input processing procedure',0,68,'',2,'Вхідна процедура обробки','','Входная процедура обработки','');
 INSERT INTO "tmplib_base_io" VALUES('codeState','st_text','State "Text"',0,16,'',3,'Стан "Текст"','','Состояние "Текст"','');
@@ -1705,7 +1711,7 @@ INSERT INTO "tmplib_base_io" VALUES('codeState','coms','Commands-states, rows "{
 INSERT INTO "tmplib_base_io" VALUES('codeState','digComs','Commands',0,20,'',7,'Команди','','Команды','');
 INSERT INTO "tmplib_base_io" VALUES('UPS','srcAddr','Source object''s address',0,64,'',0,'Адрес исходного объекта','','Адреса вихідного об''єкту','');
 INSERT INTO "tmplib_base_io" VALUES('UPS','items','All items',4,33,'',1,'Все элементы','','Всі елементи','');
-INSERT INTO "tmplib_base_io" VALUES('UPS','alDelay','Alarms delay, seconds',2,32,'0',2,'Задержка сигнализации, секунди','','Затримка сигналізації, секунди','');
+INSERT INTO "tmplib_base_io" VALUES('UPS','alDelay','Violations delay, seconds',2,32,'0',2,'Задержка нарушений, секунды','','Затримка порушень, секунди','');
 INSERT INTO "tmplib_base_io" VALUES('UPS','bChL','Battery charge low',2,32,'20',3,'Заряд батареи низкий','','Заряд батареї низький','');
 INSERT INTO "tmplib_base_io" VALUES('UPS','bChLL','Battery charge critical',2,32,'5',4,'Заряд батареи критический','','Заряд батареї критичний','');
 INSERT INTO "tmplib_base_io" VALUES('UPS','inVL','Input voltage low',2,32,'210',5,'Низкое входное напряжение','','Низька вхідна напруга','');
@@ -6617,7 +6623,16 @@ if(this.cntr().status().toInt())	return;
 if(tErr.toInt() && tErr.toInt() != f_err.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), levErr);
 else if(f_err.toInt() && !tErr.toInt())			this.alarmSet(DESCR+": "+tr("NORMA"), 1);
 f_err = tErr;','','',1561317371);
-INSERT INTO "tmplib_base" VALUES('simleBoard','Analog alarm by borders','Сигн. аналог. за границями','Сигн. аналог. по границам','The template of simple parameter included boders and dimension variable.','Шаблон простого параметру з перевіркою границь та одиницею виміру.','Шаблон простого параметра с проверкой границ и единицей измерения.',10,1,'JavaLikeCalc.JavaScript
+INSERT INTO "tmplib_base" VALUES('simleBoard','Analog alarm by borders (obsolete)','Сигнал аналоговий за границями (застаріле)','Сигнал аналоговый по границам (устаревшее)','The template of simple parameter included borders and dimension variable.
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.0.0','Шаблон простого параметру з перевіркою границь та одиницею виміру.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.0.0','Шаблон простого параметра с проверкой границ и единицей измерения.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.0.0',10,1,'JavaLikeCalc.JavaScript
 var=iMult*(in+iAdd);
 if(var>max)			f_err="1:Upper work border violation";
 else if(var<min)			f_err="2:Bottom work border violation";
@@ -6642,7 +6657,16 @@ else if(aMax>aMin && var<aMin)	f_err="4:Нарушение нижней авар
 else if(wMax>wMin && var>wMax)	f_err="5:Нарушение верхней предупредительной границы";
 else if(wMax>wMin && var<wMin)	f_err="6:Нарушение нижней предупредительной границы";
 else f_err="0";','');
-INSERT INTO "tmplib_base" VALUES('digitBlock','Diskret parameters block','Блок дискр. параметрів','Блок дискр. параметров','The block for union of Diskret parameters for one device control.','Блок для збору дискретних параметрів, керуючих одним апаратом.','Блок для сборки дискретных параметров управляющих одним аппаратом.',10,0,'JavaLikeCalc.JavaScript
+INSERT INTO "tmplib_base" VALUES('digitBlock','Discrete parameters block (obsolete)','Блок дискр. параметрів (застаріле)','Блок дискр. параметров','The block for union of Discrete parameters for one device control.
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.0.0','Блок для збору дискретних параметрів, керуючих одним апаратом.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.0.0','Блок для сборки дискретных параметров управляющих одним аппаратом.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.0.0',10,0,'JavaLikeCalc.JavaScript
 set = false;
 if(cmdOpen && !(last_cmd&0x1))	{ last_cmd = last_cmd|0x1; set = true; }
 if(cmdClose && !(last_cmd&0x2))	{ last_cmd = last_cmd|0x2; set = true; }
@@ -6657,7 +6681,7 @@ else {
 		if(last_cmd&0x4) { cmdStop = false; last_cmd = last_cmd&(~0x4); }
 	}
 }','','',1416656400);
-INSERT INTO "tmplib_base" VALUES('gasPoint','Flow control point','Витрато-вимірювальний вузол','Расходомерный узел','','','',10,0,'JavaLikeCalc.JavaScript
+INSERT INTO "tmplib_base" VALUES('gasPoint','Flow control point (obsolete)','Витрато-вимірювальний вузол (застаріле)','Расходомерный узел (устаревшее)','','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	Q = 0;
 //F=200+(rand(5)-2.5);
 Q += F.isEVal() ? 0 : F/3600;
@@ -6666,7 +6690,7 @@ Q += F.isEVal() ? 0 : F/3600;
 dP = F.isEVal() ? 0 : F/33;
 DS = 1+(rand(0.2)-0.1);
 ','','',1503582557);
-INSERT INTO "tmplib_base" VALUES('manInUnif','Manual input (Unif)','Ручний ввід (Уніф)','Ручной ввод (Униф)','Unified template for manual input signals.
+INSERT INTO "tmplib_base" VALUES('manInUnif','Manual input (unified)','Ручний ввід (уніфікований)','Ручной ввод (унифицированный)','Unified template for manual input signals.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.1','Уніфікований шаблон для ручного вводу значень сигналів.
@@ -6903,7 +6927,16 @@ else {
 	if(toSave) SYS.cntrReq(SYS.XMLNode("save").setAttr("path",this.nodePath()+"/%2fobj").setAttr("force",1));
 	conDelay_ = 0;
 }','','',1561317354);
-INSERT INTO "tmplib_base" VALUES('digitBlockUnif','Diskret block (Unif)','Блок дискретних (Уніф)','Блок дискр. (Униф)','The block for union of Diskret parameters for one device control.','Блок поєднання дискретних сигналів контролю одним пристроєм.','Блок для дискретных параметров управляющих одним аппаратом.',10,0,'JavaLikeCalc.JavaScript
+INSERT INTO "tmplib_base" VALUES('digitBlockUnif','Discrete block (unified)','Блок дискретних (уніфікований)','Блок дискр. (унифицированный)','The block for union of Discrete parameters for one device control.
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.0.0','Блок поєднання дискретних сигналів контролю одним пристроєм.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.0.0','Блок для дискретных параметров управляющих одним аппаратом.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.0.0',10,0,'JavaLikeCalc.JavaScript
 set = false;
 if(!com.isEVal() && com && last_cmd != 1)		last_cmd = 1, set = true;
 if(!close.isEVal() && close && last_cmd != 2)last_cmd = 2, set = true;
@@ -6919,7 +6952,7 @@ else {
 		last_cmd = 0;
 	}
 }','','',1441903511);
-INSERT INTO "tmplib_base" VALUES('pidUnifImp','Impulse PID sign. (Unif, stats)','Імпульсний ПІД сигнал (Уніф, стани)','ПИД импульсный сигнал (Униф, состояния)','The unified template for process analog signals with properties impulse PID.
+INSERT INTO "tmplib_base" VALUES('pidUnifImp','Impulse PID signal (unified, violation statuses)','Імпульсний ПІД сигнал (уніфікований, стани порушень)','ПИД импульсный сигнал (унифицированный, состояния нарушений)','The unified template for process analog signals with properties of impulse PID.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.1','Уніфікований шаблон для обробки аналогового сигналу з властивостями імпульсного ПІД.
@@ -6972,7 +7005,7 @@ else {
 if(!f_err.toInt() && tErr.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), -4);
 else if(f_err.toInt() && !tErr.toInt())	this.alarmSet(DESCR+": "+tr("NORMA"), 1);
 f_err = tErr;','','',1561317417);
-INSERT INTO "tmplib_base" VALUES('anUnifSt','Analog sign. (Unif, stats)','Аналог. сигнал (Уніф, стани)','Аналог. сигн. (Униф, состояния)','Unified template for analog input signals processing.
+INSERT INTO "tmplib_base" VALUES('anUnifSt','Analog signal (unified, violation statuses)','Аналог. сигнал (уніфікований, стани порушень)','Аналог. сигн. (унифицированный, состояния нарушений)','Unified template for analog input signals processing.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.1','Уніфікований шаблон для обробки аналогових вхідних сигналів.
@@ -7083,7 +7116,7 @@ else {
 	if(toSave) SYS.cntrReq(SYS.XMLNode("save").setAttr("path",this.nodePath()+"/%2fobj").setAttr("force",1));
 	conDelay_ = 0;
 }','','',1561317455);
-INSERT INTO "tmplib_base" VALUES('pidUnif','PID sign. (Unif, stats)','ПІД сигнал (Уніф, стани)','ПИД сигнал (Униф, состояния)','The unified template for process analog signals with properties PID.
+INSERT INTO "tmplib_base" VALUES('pidUnif','PID signal (unified, violation statuses)','ПІД сигнал (уніфікований, стани порушень)','ПИД сигнал (унифицированный, состояния нарушений)','The unified template for process analog signals with properties of PID.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.1','Уніфікований шаблон для обробки аналогового сигналу з властивостями ПІД.
@@ -11346,8 +11379,8 @@ else	t = (v>>3)*0.25;
 
 if(t_err.toInt() && !f_err.toInt()) t = EVAL;
 f_err = t_err;',1550995458);
-CREATE TABLE 'tmplib_S7' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
-INSERT INTO "tmplib_S7" VALUES('ai_simple','Simple AI','Простий AI','Простой AI','Simple analog parameter.','Простий аналоговий параметр.','Простой аналоговый параметр.',10,0,'JavaLikeCalc.JavaScript
+CREATE TABLE 'tmplib_tests' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
+INSERT INTO "tmplib_tests" VALUES('ai_simple','Simple AI','Простий AI','Простой AI','Simple analog parameter.','Простий аналоговий параметр.','Простой аналоговый параметр.',10,0,'JavaLikeCalc.JavaScript
 val=val_cod;
 if(val!=EVAL_REAL)
 {
@@ -11360,7 +11393,7 @@ if(val!=EVAL_REAL)
   else if(bWUp!=bWDwn && val<bWDwn)	f_err="106:Lower warning border violation";
   else f_err="0";
 }',0);
-INSERT INTO "tmplib_S7" VALUES('ai_man','Manual input of AI','Ручний ввід AI','Ручной ввод AI','Manual input of a standard analog parameter.','Стандартний аналоговий параметр ручного вводу.','Стандартный аналоговый параметр ручного ввода.',10,0,'JavaLikeCalc.JavaScript
+INSERT INTO "tmplib_tests" VALUES('ai_man','Manual input of AI','Ручний ввід AI','Ручной ввод AI','Manual input of a standard analog parameter.','Стандартний аналоговий параметр ручного вводу.','Стандартный аналоговый параметр ручного ввода.',10,0,'JavaLikeCalc.JavaScript
 //Check and write new value
 if(val!=val_o)
 {
@@ -11383,8 +11416,17 @@ if(val!=EVAL_REAL)
   else if(bWUp!=bWDwn && val<bWDwn)	f_err="106:Lower warning border violation";
   else f_err="0";
 }',0);
-INSERT INTO "tmplib_S7" VALUES('test','Test','Тест','Тест','S7 controller testing','Тестування контролера S7','Тестирование контроллера S7',10,0,'
+INSERT INTO "tmplib_tests" VALUES('test','Test','Тест','Тест','S7 controller testing','Тестування контролера S7','Тестирование контроллера S7',10,0,'
 ',1539451468);
+INSERT INTO "tmplib_tests" VALUES('gasPoint','Flow control point','','','','','',10,0,'JavaLikeCalc.JavaScript
+if(f_start)	Q = 0;
+//F=200+(rand(5)-2.5);
+Q += F.isEVal() ? 0 : F/3600;
+//P=9+(rand(2)-1);
+//T=15+(rand(2)-1);
+dP = F.isEVal() ? 0 : F/33;
+DS = 1+(rand(0.2)-0.1);
+',1561831602);
 CREATE TABLE 'UserProtocol_uPrt' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"DAQTmpl" TEXT DEFAULT '' ,"WaitReqTm" INTEGER DEFAULT '0' ,"InPROG" TEXT DEFAULT '' ,"OutPROG" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '0' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 INSERT INTO "UserProtocol_uPrt" VALUES('SMS','SMS (obsolete)','','','!!!!: Replaced by the complex template Main.ntf. Will be removed soon
 Provides operations with SMS by GSM-modem connected as serial device. For now supported only sending SMS messages to a number of remote cell phone or GSM modem.

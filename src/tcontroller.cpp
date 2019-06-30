@@ -362,7 +362,7 @@ void TController::redntDataUpdate( )
 	prm = prmC;
     }
 
-    //Send request to first active station for this controller
+    //Send request to the first active station for this controller object
     if(owner().owner().rdStRequest(workId(),req,"",!mRdFirst).empty()) return;
     mRdFirst = false;
 

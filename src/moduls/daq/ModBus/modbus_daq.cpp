@@ -701,6 +701,7 @@ void *TMdContr::Task( void *icntr )
 
     try {
 	while(true) {
+	    if(!cntr.redntUse()) {
 	    if(cntr.tmDelay > 0) {
 		//Get data from blocks to parameters or calc for logical type parameters
 		MtxAlloc prmRes(cntr.enRes, true);
@@ -739,7 +740,7 @@ void *TMdContr::Task( void *icntr )
 	    //Get coils
 	    for(unsigned iB = 0; !isStart && !isStop && iB < cntr.acqBlksCoil.size(); iB++) {
 		if(cntr.endrunReq) break;
-		if(cntr.redntUse()) { cntr.acqBlksCoil[iB].err.setVal(_("4:Server failure.")); continue; }
+		//if(cntr.redntUse()) { cntr.acqBlksCoil[iB].err.setVal(_("4:Server failure.")); continue; }
 		// Encode request PDU (Protocol Data Units)
 		pdu = (char)0x01;					//Function, read multiple coils
 		pdu += (char)(cntr.acqBlksCoil[iB].off>>8);		//Address MSB
@@ -766,7 +767,7 @@ void *TMdContr::Task( void *icntr )
 	    //Get input's coils
 	    for(unsigned iB = 0; !isStart && !isStop && iB < cntr.acqBlksCoilIn.size(); iB++) {
 		if(cntr.endrunReq) break;
-		if(cntr.redntUse()) { cntr.acqBlksCoilIn[iB].err.setVal(_("4:Server failure.")); continue; }
+		//if(cntr.redntUse()) { cntr.acqBlksCoilIn[iB].err.setVal(_("4:Server failure.")); continue; }
 		// Encode request PDU (Protocol Data Units)
 		pdu = (char)0x02;					//Function, read multiple input's coils
 		pdu += (char)(cntr.acqBlksCoilIn[iB].off>>8);		//Address MSB
@@ -793,7 +794,7 @@ void *TMdContr::Task( void *icntr )
 	    //Get registers
 	    for(unsigned iB = 0; !isStart && !isStop && iB < cntr.acqBlks.size(); iB++) {
 		if(cntr.endrunReq) break;
-		if(cntr.redntUse()) { cntr.acqBlks[iB].err.setVal(_("4:Server failure.")); continue; }
+		//if(cntr.redntUse()) { cntr.acqBlks[iB].err.setVal(_("4:Server failure.")); continue; }
 		// Encode request PDU (Protocol Data Units)
 		pdu = (char)0x03;				//Function, read multiple registers
 		pdu += (char)((cntr.acqBlks[iB].off/2)>>8);	//Address MSB
@@ -819,7 +820,7 @@ void *TMdContr::Task( void *icntr )
 	    //Get input registers
 	    for(unsigned iB = 0; !isStart && !isStop && iB < cntr.acqBlksIn.size(); iB++) {
 		if(cntr.endrunReq) break;
-		if(cntr.redntUse()) { cntr.acqBlksIn[iB].err.setVal(_("4:Server failure.")); continue; }
+		//if(cntr.redntUse()) { cntr.acqBlksIn[iB].err.setVal(_("4:Server failure.")); continue; }
 		// Encode request PDU (Protocol Data Units)
 		pdu = (char)0x04;					//Function, read multiple input registers
 		pdu += (char)((cntr.acqBlksIn[iB].off/2)>>8);		//Address MSB
@@ -863,6 +864,7 @@ void *TMdContr::Task( void *icntr )
 	    //Calc acquisition process time
 	    t_prev = t_cnt;
 	    cntr.callSt = false;
+	    }
 
 	    if(isStop) break;
 
@@ -1111,7 +1113,7 @@ void TMdPrm::enable( )
 	    if(id_this >= 0) lCtx->setO(id_this, new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
 
 	    // First call
-	    if(owner().startStat()) upVal(true, false, 0);
+	    if(owner().startStat() && !owner().redntUse()) upVal(true, false, 0);
 
 	} catch(TError &err) { disable(); throw; }
 
@@ -1129,7 +1131,7 @@ void TMdPrm::disable( )
     if(!enableStat())  return;
 
     owner().prmEn(this, false);	//Remove from process
-    if(lCtx && lCtx->func() && owner().startStat()) upVal(false, true, 0);
+    if(lCtx && lCtx->func() && owner().startStat() && !owner().redntUse()) upVal(false, true, 0);
 
     TParamContr::disable();
 
