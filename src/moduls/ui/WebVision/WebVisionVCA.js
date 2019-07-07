@@ -1653,12 +1653,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			formObj.size = 100;
 			formObj.onclick = function( ) {
 			    var attrs = new Object();
-			    if(this.selectedIndex) attrs.value = this.options[this.selectedIndex].value;
-			    else {
-				attrs.value = "";
-				for(iO = 0; iO < this.options.length; iO++)
-				    if(this.options[iO].selected) attrs.value += (attrs.value.length?"\n":"") + this.options[iO].value;
-			    }
+			    attrs.value = "";
+			    for(iO = 0; iO < this.options.length; iO++)
+				if(this.options[iO].selected) attrs.value += (attrs.value.length?"\n":"") + this.options[iO].value;
 			    attrs.event = 'ws_ListChange';
 			    setWAttrs(this.wdgLnk.addr, attrs);
 			}

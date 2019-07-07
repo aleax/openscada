@@ -2893,7 +2893,6 @@ INSERT INTO "wlb_Main_io" VALUES('RootPgSo','evProc','ws_BtPress:/prev:prev:/pg_
 key_presCtrlLeft:*:prev:/pg_so/*/*/$
 ws_BtPress:/next:next:/pg_so/*/*/$
 key_presCtrlRight:*:next:/pg_so/*/*/$
-ws_BtPress:*:open:/pg_control/pg_terminator
 ',40,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','active','0',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomZ','7',32,'','','st_open','','','','','','');
@@ -7383,22 +7382,44 @@ Version: 1.1.0',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ViewCadr','dscr','The template cadre "Overview frames panel".
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.0',32,'','','','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('anShow','dscr','The element is used to display the current value of the analog parameter and the regulator mode, if the parameter is a regulator. Also this element generates alarms on the corresponding parameter settings.
+INSERT INTO "wlb_Main_io" VALUES('anShow','dscr','The element is used to display the current value of the analog parameter and the regulator mode, if the parameter is a regulator.
+Also this element generates alarms on the corresponding parameter settings.
+The element commonly uses and represents the representative structure of the "Analog signal" DAQ-template.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.1
-License: GPLv2',32,'','','','Елемент слугує для відображення поточного значения аналогового параметру та режиму регулятору, якщо параметр є таким. Також цей елемент генерує сигналізації (alarms) за відповідними уставкам параметру. Елемент загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал".
+License: GPLv2',32,'','','','Елемент слугує для відображення поточного значения аналогового параметру та режиму регулятору, якщо параметр є таким.
+Також цей елемент генерує сигналізації (alarms) за відповідними уставкам параметру.
+Елемент загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал".
 
 Автор: Роман Савоченко <roman@oscada,org>
 Версія: 1.1.1
-Ліцензія: GPLv2','','Элемент служит для отображения текущего значения аналогового параметра и режима регулятора, если параметр является таковым. Также этот элемент генерирует сигнализации (alarms) по соответствующим уставкам параметра. Элемент в целом использует и представляет представительскую структуру DAQ-шаблона "Аналоговый сигнал".
+Ліцензія: GPLv2','','Элемент служит для отображения текущего значения аналогового параметра и режима регулятора, если параметр является таковым.
+Также этот элемент генерирует сигнализации (alarms) по соответствующим уставкам параметра.
+Элемент в целом использует и представляет представительскую структуру DAQ-шаблона "Аналоговый сигнал".
 
 Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.1.1
 Лицензия: GPLv2','','','');
-INSERT INTO "wlb_Main_io" VALUES('anShow1','dscr','The widget "Analog show 1".
+INSERT INTO "wlb_Main_io" VALUES('anShow1','dscr','The element is used to display the current value of the analog parameter and a short prefix of the measured value type.
+Also this element generates alarms on the corresponding parameter settings.
+The element commonly uses and represents the representative structure of the "Analog signal" DAQ-template.
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.0',32,'','','','','','','','','');
+Version: 1.1.0
+License: GPLv2',32,'','','','Елемент слугує для відображення поточного значения аналогового параметру та короткого префіксу виміряного значення.
+Також цей елемент генерує сигналізації (alarms) за відповідними уставкам параметру.
+Елемент загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал".
+
+Автор: Роман Савоченко <roman@oscada,org>
+Версія: 1.1.0
+Ліцензія: GPLv2','','Элемент служит для отображения текущего значения аналогового параметра и краткого префиксу измеренного значения.
+Также этот элемент генерирует сигнализации (alarms) по соответствующим уставкам параметра.
+Элемент в целом использует и представляет представительскую структуру DAQ-шаблона "Аналоговый сигнал".
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.1.0
+Лицензия: GPLv2','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrRegul','dscr','The cadre "Control cadre of the regulators".
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.0',32,'','','','','','','','','');
@@ -9926,10 +9947,10 @@ INSERT INTO "wlb_Main_uio" VALUES('grpCadr','prmAddr','Parameter: address',19661
 INSERT INTO "wlb_Main_uio" VALUES('grpCadr','prmAddr','Parameter: address',196613,NULL,10,'Parameter|var','','el3','Параметр: адреса','','','Параметр: адрес','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpCadr','prmAddr','Parameter: address',196613,NULL,10,'Parameter|var','','el2','Параметр: адреса','','','Параметр: адрес','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpCadr','prmAddr','Parameter: address',196613,NULL,10,'Parameter|var','','el1','Параметр: адреса','','','Параметр: адрес','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow','pErr','Error',131077,NULL,10,'Parameter|err','','','Помилка',NULL,'','Ошибка',NULL,'','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow','pErrCode','Error code',131073,'1|',8,'','','','Код помилки','','','Код ошибки','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow','pName','Parameter name',131077,'',10,'Parameter|NAME','','','Ім''я параметру','','','Имя параметра','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow','pVal','Parameter value',131076,'0|',10,'Parameter|var','','','Значення параметру','','','Значение параметра','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow','pErr','Parameter: error',131077,NULL,10,'Parameter|err','','','Параметр: помилка',NULL,'','Параметр: ошибка',NULL,'','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow','pErrCode','Parameter: error code',131073,'1|',8,'','','','Параметр: код помилки','','','Параметр: код ошибки','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow','pName','Parameter: name',131077,'',10,'Parameter|NAME','','','Параметр: ім''я','','','Параметр: имя','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow','pVal','Parameter: value',131076,'0|',10,'Parameter|var','','','Параметр: значення','','','Параметр: значение','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('anShow1','pName','Short name',131077,'',9,'','','','Ім''я параметра','||','','Имя параметра','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('anShow1','pVal','Parameter: value',131076,'0|',10,'Parameter|var','','','Параметр: значення','','','Параметр: значение','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p1_max','Parameter1: maximum',131076,'<EVAL>|',10,'Parameter 1|max','','','Параметр1: максимум','','','Параметр1: максимум','','','','');
@@ -10002,9 +10023,9 @@ INSERT INTO "wlb_Main_uio" VALUES('grph_panel','type','Type',131073,'<EVAL>|',14
 INSERT INTO "wlb_Main_uio" VALUES('grph_panel','curUSek','Cursor, usec',131073,'<EVAL>|',14,'<page>|curUSek','','','Курсор, мкс','','','Курсор, мкс','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','lastView','Last view',131077,NULL,8,'','','','Останній вигляд',NULL,'','Последний вид','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmManIn','Parameter: manual input',131076,'<EVAL>|',14,'Parameter|manIn','','','Параметр: ручний ввід','','','Параметр: ручной ввод','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow','pModeA','Regulator mode: auto',131072,NULL,10,'Parameter|auto','','','Режим регулятору: автомат','','','Режим регулятора: автомат','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow','pModeC','Regulator mode: cascade',131072,NULL,10,'Parameter|casc','','','Режим регулятору: каскад','','','Режим регулятора: каскад','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow','pPrec','Precision',131073,'1|',10,'Parameter|prec','','','Точність','','','Точность','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow','pModeA','Parameter: regulator mode: auto',131072,NULL,10,'Parameter|auto','','','Параметр: режим регулятору: автомат','','','Параметр: режим регулятора: автомат','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow','pModeC','Parameter: regulator mode: cascade',131072,NULL,10,'Parameter|casc','','','Параметр: режим регулятору: каскад','','','Параметр: режим регулятора: каскад','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow','pPrec','Parameter: precision',131073,'1|',10,'Parameter|prec','','','Параметр: точність','','','Параметр: точность','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('anShow','redEVAL','Red parameter name in case of failure',131072,NULL,9,'','','','Червоне ім''я параметру у випадку відмови','','','Красное имя параметра в случае отказа','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('anShow','spName','Speech name',131077,NULL,9,'','','','Ім''я для синтезу',NULL,'','Имя для синтеза',NULL,'','','');
 INSERT INTO "wlb_Main_uio" VALUES('cntrPasp','pName','Parameter name',196613,'<EVAL>',10,'Parameter|NAME','','','Ім''я параметру','','','Имя параметра','','','','');
@@ -10063,7 +10084,7 @@ INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','prec','Precision',131073,'1|',1
 INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','varEl','Value',131076,'<EVAL>|',8,'','','','Значення','','','Значение','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','wMax','Border up warning',131076,'<EVAL>|',10,'Parameter|wMax','','','Границя верхня попереджув.','','','Граница верхняя пред.','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','wMin','Border down warning',131076,'<EVAL>|',10,'Parameter|wMin','','','Границя нижня попереджув.','','','Граница нижняя пред.','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow1','prec','Precision',131073,'1|',10,'Parameter|prec','','','Точність','','','Точность','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow1','prec','Parameter: precision',131073,'1|',10,'Parameter|prec','','','Параметр: точність','','','Параметр: точность','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmVarIn','Parameter: variable input',131076,'<EVAL>|',14,'Parameter|varIn','','','Параметр: ввід змінної','','','Параметр: ввод переменной','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElCadr','clearCnt','Clear counter',131073,'<EVAL>||',8,'','','info_var','Лічильник очищень','','','Счётчик очистки','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('prescrRun','prCnt','Cycles counter',131073,'0|',8,'','','','Лічильник циклів','','','Счётчик циклов','','','','');
@@ -10120,8 +10141,8 @@ INSERT INTO "wlb_Main_uio" VALUES('TextLab','st_text','Parameter: status (text)'
 INSERT INTO "wlb_Main_uio" VALUES('TextLab','stop','Parameter: stop',131072,'0',14,'Parameter|stop','','','Параметр: зупинка','','','Параметр: останов','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('anShow1','pNAME','Parameter: name',131077,'',10,'Parameter|NAME','','','Параметр: ім''я','||','','Параметр: имя','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('anShow1','pNameSz','Short name size',131073,'15|',9,'','','','Розмір короткого ім''я','','','Размер короткого имени','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow1','pErr','Error',131077,'',10,'Parameter|err','','','Помилка','||','','Ошибка','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow1','pErrCode','Error code',131073,'0|',8,'','','','Error code','','','Код ошибки','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow1','pErr','Parameter: error',131077,'',10,'Parameter|err','','','Параметр: помилка','||','','Параметр: ошибка','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow1','pErrCode','Parameter: error code',131073,'0|',8,'','','','Параметр: код помилки','','','Параметр: код ошибки','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('anShow1','spName','Speech message generation on reject',131077,'',9,'','','','Генерація мовного повідомлення у разі відмови','||','','Генерация речевого сообщения при отказе','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('cntrPaspExt','pName','Parameter name',196613,NULL,10,'<page>|NAME','','','Ім''я параметру','','Parameter|NAME','Имя параметра','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('objProps','objDescr','Object: description',131205,'',10,'Object|DESCR','','','Об''єкт: опис','','','Объект: описание','','','','');
@@ -19228,6 +19249,7 @@ if(f_start) {
 }
 
 if(pgCont_pgOpenSrc != lastView) {
+	this.ownerSess().uiCmd("open", "/pg_control/pg_terminator", this.attr("path"));
 	//Checking for SO selection change
 	curSO = pgCont_pgOpenSrc.parsePath(2).slice(3);
 	lastSO = lastView.parsePath(2).slice(3);

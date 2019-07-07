@@ -239,7 +239,7 @@ void TArchiveS::save_( )
 
 string TArchiveS::valAdd( const string &iid, const string &idb )
 {
-    if(valPresent(iid)) return "";
+    //if(valPresent(iid)) return "";
 
     return chldAdd(mAval, new TVArchive(TSYS::strEncode(sTrm(iid),TSYS::oscdID),idb,&aValE()));
 }

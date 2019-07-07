@@ -1,3 +1,16 @@
+2019-07-07 Roman (stable)
+- !!:DB.LibsDB.OscadaLibs: Updated for some messages.
+    base.{anUnifSt,manInUnif}: Revised during the documenting.
+- !!:DB.LibsDB.vcaBase: Main.{anShow1,anShow1s}: Revised during the documenting.
+    Main.RootPgSo: Improved for cleaning the control panel at changing content of the main container.
+- Archive: TArchiveS::valAdd() improved to return the result node ID.
+- FIX:DB: The function "Load the program from this DB" fixed for storing the node modification state.
+- !:DAQ: Appended for the attribute encoding into the common DAQ-path, to allow dots into the path.
+    The function of setting archive improved to back-using of identifier of new created value archive, for cleaning the identifier.
+- !!:FIX:DAQ.ModBus: The mode "Asynchronous write" restored and tested in writing after restoring the connection.
+- FIX:UI.WebVison: Multiple items selecting of the view "List" of the primitive "FormEl" fixed.
+
+
 2019-06-30 Roman (stable)
 - !!:DB.LibsDB.OscadaLibs: The template library "S7" renamed to "tests".
     The field "Alarms delay, s" renamed to "Violations delay, seconds" and such one for other languages.

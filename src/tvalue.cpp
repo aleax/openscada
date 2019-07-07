@@ -400,7 +400,7 @@ TVal::~TVal( )
 
 string TVal::objName( )	{ return TCntrNode::objName()+":TVal"; }
 
-string TVal::DAQPath( )	{ return owner().DAQPath()+"."+name(); }
+string TVal::DAQPath( )	{ return owner().DAQPath()+"."+TSYS::strEncode(name(),TSYS::Custom,". "); }
 
 TValue &TVal::owner( ) const	{ return *(TValue*)nodePrev(); }
 
@@ -479,7 +479,7 @@ string TVal::setArch( const string &nm )
 	if(rez_nm.size() > s2i(ARCH_ID_SZ)) rez_nm = a_nm.substr(0,a_nm.size()-(rez_nm.size()-s2i(ARCH_ID_SZ)))+i2s(p_cnt);
     }
     //Create new archive
-    if(!SYS->archive().at().valPresent(rez_nm)) SYS->archive().at().valAdd(rez_nm);
+    rez_nm = SYS->archive().at().valAdd(rez_nm);
     SYS->archive().at().valAt(rez_nm).at().setValType(fld().type());
     SYS->archive().at().valAt(rez_nm).at().setSrcMode(TVArchive::PassiveAttr,DAQPath());
     SYS->archive().at().valAt(rez_nm).at().setToStart(true);

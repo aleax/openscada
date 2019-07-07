@@ -24,7 +24,7 @@
 <li class="toclevel-2 tocsection-7"><a href="#User_interfaces"><span class="tocnumber">2.5</span> <span class="toctext">User interfaces</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-8"><a href="#Problems"><span class="tocnumber">3</span> <span class="toctext">Problems</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Problems"><span class="tocnumber">3</span> <span class="toctext"><span>Problems</span></span></a></li>
 </ul>
 </div>
 
@@ -119,7 +119,7 @@ if(!prevArchRestore &amp;&amp; (archEnd=this.cntr.arch().end("FSArch.1s"))) {
 <p><b>Q:</b> The user operation interface starts in full-screen and I am unable to close it for gain access to the system desktop environment!<br />
 <b>Re:</b> Of course, OpenSCADA protects the control system from closing and unprivileged access to the system desktop environment. Then, for gain access to the system desktop environment, you must be a privileged user into the user operation interface, change the interface user to your account and into the appeared global menu do needed one: disable the full-screen mode, close or quit the program.
 </p>
-<h2><span class="mw-headline" id="Problems"><span class="mw-headline-number">3</span> Problems</span></h2>
+<h2><span class="mw-headline" id="Problems"><span class="mw-headline-number">3</span> <span id="Problems" title="#Problems">Problems</span></span></h2>
 <p><b>Q:</b> Why I lost the fractional part into all values of the loaded data of the real type?<br />
 <b>Re:</b> You use a locale different from "C" or most English one, which are directly set by the environment variable "LC_NUMERIC" or its generic variant "LC_ALL", which caused to use into system functions like to atof() and sprintf() the fractional part separator symbol different from "." (dot), it is mostly "," (coma). Then never set directly the environment variables "LC_NUMERIC" and "LC_ALL" but that overrides "LC_NUMERIC" correct setting to "C" internally! For the program language changing use only environment variables "LANG" and "LANGUAGE" which enough anytime. Currently the problem completely excluded, through checking and clearing the "LC_ALL"!
 </p><p><b>Q:</b> "No permission for create real-time policy for '****'. Default thread is created!"<br /> 
@@ -133,6 +133,8 @@ user    soft    rtprio  90
 </pre>
 <p><b>Q:</b> I observe the lack of all text labels on the charts (primitive "Diagram") of the <a href="Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">UI.WebVision</a> module interfaces. Why so?<br />
 <b>Re:</b> This result is possible on interfaces constructed on the GD library, and if this library is compiled without using the FontConfig library. Currently only <a href="Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">UI.WebVision</a> module uses this library for the exclusive construction of the "Elementary Figure" and "Diagram" primitives. Therefore, to fix this problem, you must install the correct library package or build the library yourself with FontConfig. Currently, there is one such instance of the problem with the "libgd2-noxpm" package of the older versions of the Linux Debian distribution where you must install the correct "libgd2-xpm" package.
+</p><p><b>Q:</b> I observe the lack of SVG-images in the Qt-interfaces. Why so?<br />
+<b>Re:</b> This usually indicates that there in the system is no Qt-module for SVG-graphics, for example, the package "libqt5svg5" in Linux distributions based on Debian.
 </p>
 
 

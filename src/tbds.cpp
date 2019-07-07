@@ -838,10 +838,12 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	}
     }
     else if(a_path == "/prm/st/load" && ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR)) {
+	bool isMdf = isModify(TCntrNode::Self);
 	SYS->setSelDB(owner().modId()+"."+id());
 	SYS->modifG();
 	SYS->load();
 	SYS->setSelDB("");
+	if(isMdf) modif();
     }
     else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SDB_ID,RWRWR_);
     else if(a_path == "/br/tbl_" || a_path == "/tbls/otbl") {

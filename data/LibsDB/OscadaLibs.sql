@@ -165,8 +165,8 @@ INSERT INTO "flb_doc_io" VALUES('averVal','actPerc','Процент активн
 CREATE TABLE 'flb_regEl_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"uk#DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DEF" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
 INSERT INTO "flb_regEl_io" VALUES('pidUnif','var','Variable','Змінна',2,0,'0','',0,0,'Переменная','');
 INSERT INTO "flb_regEl_io" VALUES('pidUnif','sp','Setpoint','Завдання',2,0,'0','',0,1,'Задание','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','max','Scale:maximum','Шкала:максимум',2,0,'100','',0,2,'Шкала:максимум','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','min','Scale:minimum','Шкала:мінімум',2,0,'0','',0,3,'Шкала:минимум','');
+INSERT INTO "flb_regEl_io" VALUES('pidUnif','max','Scale: maximum','Шкала: максимум',2,0,'100','',0,2,'Шкала: максимум','');
+INSERT INTO "flb_regEl_io" VALUES('pidUnif','min','Scale: minimum','Шкала: мінімум',2,0,'0','',0,3,'Шкала: минимум','');
 INSERT INTO "flb_regEl_io" VALUES('pidUnif','manIn','Manual input','Ручний ввід',2,0,'0','',0,4,'Ручной ввод','');
 INSERT INTO "flb_regEl_io" VALUES('pidUnif','out','Output (%)','Вихід (%)',2,2,'0','',0,5,'Выход (%)','');
 INSERT INTO "flb_regEl_io" VALUES('pidUnif','impQup','Impulse output up','Імп. вихід у гору',3,1,'0','',0,6,'Имп. выход вверх','');
@@ -199,8 +199,8 @@ INSERT INTO "flb_regEl_io" VALUES('pidUnif','impLag','Impulse lag time','Час 
 INSERT INTO "flb_regEl_io" VALUES('pidUnif','perLag','New impulse generation time','Час генерації нового імпульсу',2,1,'0','',1,42,'Время генерации нового импульса','');
 INSERT INTO "flb_regEl_io" VALUES('pidUnifD','var','Variable','Змінна',2,0,'0','',0,0,'Переменная','');
 INSERT INTO "flb_regEl_io" VALUES('pidUnifD','sp','Setpoint','Завдання',2,0,'0','',0,1,'Задание','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','max','Scale:maximum','Шкала:максимум',2,0,'100','',0,2,'Шкала:максимум','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','min','Scale:minimum','Шкала:мінімум',2,0,'0','',0,3,'Шкала:минимум','');
+INSERT INTO "flb_regEl_io" VALUES('pidUnifD','max','Scale: maximum','Шкала: максимум',2,0,'100','',0,2,'Шкала: максимум','');
+INSERT INTO "flb_regEl_io" VALUES('pidUnifD','min','Scale: minimum','Шкала: мінімум',2,0,'0','',0,3,'Шкала: минимум','');
 INSERT INTO "flb_regEl_io" VALUES('pidUnifD','manIn','Manual input','Ручний ввід',2,0,'0','',0,4,'Ручной ввод','');
 INSERT INTO "flb_regEl_io" VALUES('pidUnifD','out','Output (%)','Вихід (%)',2,2,'0','',0,5,'Выход (%)','');
 INSERT INTO "flb_regEl_io" VALUES('pidUnifD','impQup','Impulse output up','Імп. вихід у гору',3,1,'0','',0,6,'Имп. выход вверх','');
@@ -251,8 +251,8 @@ INSERT INTO "flb_regEl_io" VALUES('pidUnif','f_start','First start','Перши�
 INSERT INTO "flb_regEl_io" VALUES('pidUnif','f_stop','Last start','Останній запуск',3,0,'0','',1,37,'Последний запуск','');
 INSERT INTO "flb_regEl_io" VALUES('pidImp','var','Variable','Змінна',2,0,'0','',0,0,'Переменная','');
 INSERT INTO "flb_regEl_io" VALUES('pidImp','sp','Setpoint','Завдання',2,0,'0','',0,1,'Задание','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','max','Scale:maximum','Шкала:максимум',2,0,'100','',0,2,'Шкала:максимум','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','min','Scale:minimum','Шкала:мінімум',2,0,'0','',0,3,'Шкала:минимум','');
+INSERT INTO "flb_regEl_io" VALUES('pidImp','max','Scale: maximum','Шкала: максимум',2,0,'100','',0,2,'Шкала: максимум','');
+INSERT INTO "flb_regEl_io" VALUES('pidImp','min','Scale: minimum','Шкала: мінімум',2,0,'0','',0,3,'Шкала: минимум','');
 INSERT INTO "flb_regEl_io" VALUES('pidImp','manIn','Manual input','Ручний ввід',2,0,'0','',0,4,'Ручной ввод','');
 INSERT INTO "flb_regEl_io" VALUES('pidImp','out','Output (%)','Вихід (%)',2,2,'0','',0,5,'Выход (%)','');
 INSERT INTO "flb_regEl_io" VALUES('pidImp','outPID','PID output','Вихід ПІД',2,1,'0','',0,6,'Выход ПИД','');
@@ -1347,7 +1347,7 @@ INSERT INTO "tmplib_PrescrTempl_io" VALUES('manager','this','The object',4,0,'',
 CREATE TABLE 'tmplib_tests_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO "tmplib_tests_io" VALUES('ai_simple','val_cod','Value''s source code',1,128,'',0,'Вихідний код значення','','Исходный код значения','');
 INSERT INTO "tmplib_tests_io" VALUES('ai_simple','val','Value',2,16,'0',1,'Значення','','Значение','');
-INSERT INTO "tmplib_tests_io" VALUES('ai_simple','val_tp','Dimension',0,32,'',2,'Од. виміру','','Ед. измерения','');
+INSERT INTO "tmplib_tests_io" VALUES('ai_simple','val_tp','Dimension',0,32,'',2,'Одиниця виміру','','Единица измерения','');
 INSERT INTO "tmplib_tests_io" VALUES('ai_simple','bDwn','Lower value border',2,32,'0',3,'Нижня границя значення','','Нижняя граница значения','');
 INSERT INTO "tmplib_tests_io" VALUES('ai_simple','bUp','Upper value border',2,32,'100',4,'Верхня границя значення','','Верхняя граница значения','');
 INSERT INTO "tmplib_tests_io" VALUES('ai_simple','bWDwn','Lower technical border',2,32,'20',5,'Нижня технолог. границя','','Нижняя технологич. граница','');
@@ -1357,7 +1357,7 @@ INSERT INTO "tmplib_tests_io" VALUES('ai_simple','bErrUp','Upper alarm border',2
 INSERT INTO "tmplib_tests_io" VALUES('ai_man','val_cod','Value''s source code',1,129,'',0,'Вихідний код значення','','Исходный код значения','');
 INSERT INTO "tmplib_tests_io" VALUES('ai_man','val','Value',2,32,'0',1,'Значення','','Значение','');
 INSERT INTO "tmplib_tests_io" VALUES('ai_man','val_o','Previous value',2,0,'0',2,'Попередне значення','','Предыдущее значение','');
-INSERT INTO "tmplib_tests_io" VALUES('ai_man','val_tp','Dimension',0,32,'',3,'Од. виміру','','Ед. измерения','');
+INSERT INTO "tmplib_tests_io" VALUES('ai_man','val_tp','Dimension',0,32,'',3,'Одиниця виміру','','Единица измерения','');
 INSERT INTO "tmplib_tests_io" VALUES('ai_man','bDwn','Lower value border',2,32,'0',4,'Нижня границя значення','','Нижняя граница значения','');
 INSERT INTO "tmplib_tests_io" VALUES('ai_man','bUp','Upper value border',2,32,'100',5,'Верхня границя значення','','Верхняя граница значения','');
 INSERT INTO "tmplib_tests_io" VALUES('ai_man','bWDwn','Lower technical border',2,32,'20',6,'Нижня технологічна границя','','Нижняя технологическая граница','');
@@ -1426,7 +1426,7 @@ CREATE TABLE 'tmplib_base_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,
 INSERT INTO "tmplib_base_io" VALUES('digAlarm','in','Input',3,144,'Input|in',2,'Вхід','','Вход','');
 INSERT INTO "tmplib_base_io" VALUES('simleBoard','in','Input',2,128,'Parameter|var',0,'Вхід','','Вход','');
 INSERT INTO "tmplib_base_io" VALUES('simleBoard','var','Variable',2,32,'0',1,'Змінна','','Переменная','');
-INSERT INTO "tmplib_base_io" VALUES('simleBoard','ed','Dimension',0,32,'',2,'Од. виміру','','Ед. измерения','');
+INSERT INTO "tmplib_base_io" VALUES('simleBoard','ed','Dimension',0,32,'',2,'Одиниця виміру','','Единица измерения','');
 INSERT INTO "tmplib_base_io" VALUES('simleBoard','min','Lower work border',2,32,'0',3,'Нижня робоча границя','','Нижн. раб. граница','');
 INSERT INTO "tmplib_base_io" VALUES('simleBoard','max','Upper work border',2,32,'100',4,'Верхня робоча границя','','Верхн. раб. граница','');
 INSERT INTO "tmplib_base_io" VALUES('simleBoard','aMin','Lower alarm border',2,32,'0',5,'Нижня аварійна границя','','Нижняя аварийная граница','');
@@ -1451,18 +1451,18 @@ INSERT INTO "tmplib_base_io" VALUES('gasPoint','Q','Volume (m3)',2,16,'0',1,'О�
 INSERT INTO "tmplib_base_io" VALUES('gasPoint','F','Flow (m3/h)',2,144,'F|var',0,'Витрати (м3/ч)','','Расход (м3/ч)','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','inout','Input/Output',2,129,'Parameter|var',0,'Вхід/Вихід','','Вход/Выход','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','var','Variable',2,16,'0',1,'Змінна','','Переменная','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','ed','Dimension',0,32,'',3,'Од. виміру','','Ед. измерения','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','min','Scale:minimum',2,32,'0',4,'Шкала:мінімум','','Шкала:минимум','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','max','Scale:maximum',2,32,'100',5,'Шкала:максимум','','Шкала:максимум','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','scSqr','Scale:square',3,0,'0',6,'Шкала:квадратична','','Шкала:квадратичная','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','aMin','Border down alarm',2,32,'0',8,'Границя нижня ав.','','Граница нижняя ав.','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','aMax','Border up alarm',2,32,'0',9,'Границя верхня аварійна','','Граница верхняя ав.','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','wMin','Border down warning',2,32,'0',10,'Границя нижня попереджув.','','Граница нижняя пред.','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','wMax','Border up warning',2,32,'0',11,'Границя верхня попереджув.','','Граница верхняя пред.','');
+INSERT INTO "tmplib_base_io" VALUES('manInUnif','ed','Dimension',0,32,'',3,'Одиниця виміру','','Единица измерения','');
+INSERT INTO "tmplib_base_io" VALUES('manInUnif','min','Scale: minimum',2,32,'0',4,'Шкала: мінімум','','Шкала: минимум','');
+INSERT INTO "tmplib_base_io" VALUES('manInUnif','max','Scale: maximum',2,32,'100',5,'Шкала: максимум','','Шкала: максимум','');
+INSERT INTO "tmplib_base_io" VALUES('manInUnif','scSqr','Scale: square',3,0,'0',6,'Шкала: квадратична','','Шкала: квадратичная','');
+INSERT INTO "tmplib_base_io" VALUES('manInUnif','aMin','Border down alarm',2,32,'0',8,'Границя нижня аварійна','','Граница нижняя аварийная','');
+INSERT INTO "tmplib_base_io" VALUES('manInUnif','aMax','Border up alarm',2,32,'0',9,'Границя верхня аварійна','','Граница верхняя аварийная','');
+INSERT INTO "tmplib_base_io" VALUES('manInUnif','wMin','Border down warning',2,32,'0',10,'Границя нижня попереджув.','','Граница нижняя предупр.','');
+INSERT INTO "tmplib_base_io" VALUES('manInUnif','wMax','Border up warning',2,32,'0',11,'Границя верхня попереджув.','','Граница верхняя предупр.','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','speed','Motion speed (%/cycle)',2,32,'0',13,'Швидкість зміни (%/цикл)','','Скорость изменения (%/цикл)','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','Tf','Filter time (s)',2,32,'0',16,'Час фільтру (с)','','Время фильтрации (с)','');
+INSERT INTO "tmplib_base_io" VALUES('manInUnif','Tf','Filter time, seconds',2,32,'0',16,'Час фільтру, секунд','','Время фильтрации, секунд','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','iAdd','Input addon',2,64,'0',17,'Додаток до входу','','Дополнение ко входу','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','iMult','Input multiplication',2,64,'1',18,'Множник входу','','Множитель ко входу','');
+INSERT INTO "tmplib_base_io" VALUES('manInUnif','iMult','Input multiplication',2,64,'1',18,'Множник входу','','Множитель входуа','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','plcMin','Minimum module scale',2,64,'0',19,'Мінімум шкали модуля','','Минимум шкалы модуля','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','plcMax','Maximum module scale',2,64,'0',20,'Максимум шкали модуля','','Максимум шкалы модуля','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','plcExcess','Allowed scale exceeding, %',2,64,'0',21,'Дозволене перевищення шкали, %','','Допустимое превышение шкалы модуля, %','');
@@ -1480,10 +1480,10 @@ INSERT INTO "tmplib_base_io" VALUES('anUnif','speed','Motion speed (%/cycle)',2,
 INSERT INTO "tmplib_base_io" VALUES('anUnif','prec','Precision (signs)',1,32,'2',17,'Точність (знаків)','','Точность (знаков)','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','Tf','Filter time, seconds',2,32,'0',19,'Час фільтру, секунд','','Время фильтрации, секунд','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','iAdd','Input addition',2,64,'0',20,'Додаток до входу','','Дополнение ко входу','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','iMult','Input multiplication',2,64,'1',21,'Множник входу','','Множитель ко входу','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','iMult','Input multiplication',2,64,'1',21,'Множник входу','','Множитель входа','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','plcMin','Minimum module scale',2,64,'0',22,'Мінімум шкали модуля','','Минимум шкалы модуля','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','plcMax','Maximum module scale',2,64,'0',23,'Максимум шкали модуля','','Максимум шкалы модуля','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','plcExcess','Allowed scale exceeding, %',2,64,'0',24,'Дозволене перевищення шкали (%)','','Допустимое превышение шкалы модуля (%)','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','plcExcess','Allowed scale exceeding, %',2,64,'0',24,'Дозволене перевищення шкали, %','','Допустимое превышение шкалы, %','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','plcImit','PLC imitation',3,64,'0',25,'Імітація ПЛК','','Имитация ПЛК','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','plcImitIn','PLC imitation input',2,128,'Imitation|var',26,'Вхід імітації ПЛК','Імітація|var','Вход имитации ПЛК','Имитация|var');
 INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','com','Command "Open"',3,161,'Crane|com',0,'Команда "Відкрити"','Кран|com','Команда "Открыть"','Кран|com');
@@ -1503,10 +1503,10 @@ INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','impQup','Impulse output up',3,
 INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','impQdwn','Impulse output down',3,144,'PID|impQdwnTm',6,'Імп. вихід до низу','ПІД|impQdwnTm','Имп. выход вниз','ПИД|impQdwnTm');
 INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','auto','Mode (automate)',3,160,'PID|auto',7,'Режим (автомат)','ПІД|auto','Режим (автомат)','ПИД|auto');
 INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','analog','Analog',3,144,'PID|analog',8,'Аналоговий','ПІД|analog','Аналоговый','ПИД|analog');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','ed','Dimension',0,32,'',9,'Од. виміру','','Ед. измерения','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','min','Scale:minimum',2,160,'PID|min',10,'Шкала:мінімум','ПІД|min','Шкала:минимум','ПИД|min');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','max','Scale:maximum',2,160,'PID|max',11,'Шкала:максимум','ПІД|max','Шкала:максимум','ПИД|max');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','scSqr','Scale:square',3,32,'0',12,'Шкала:квадратична','','Шкала:квадратичная','');
+INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','ed','Dimension',0,32,'',9,'Одиниця виміру','','Единица измерения','');
+INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','min','Scale: minimum',2,160,'PID|min',10,'Шкала: мінімум','ПІД|min','Шкала: минимум','ПИД|min');
+INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','max','Scale: maximum',2,160,'PID|max',11,'Шкала: максимум','ПІД|max','Шкала: максимум','ПИД|max');
+INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','scSqr','Scale: square',3,32,'0',12,'Шкала: квадратична','','Шкала: квадратичная','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','aMin','Border down alarm',2,32,'0',13,'Границя нижня ав.','','Граница нижняя ав.','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','aMax','Border up alarm',2,32,'0',14,'Границя верхня аварійна','','Граница верхняя ав.','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','wMin','Border down warning',2,32,'0',15,'Границя нижня попереджув.','','Граница нижняя пред.','');
@@ -1550,24 +1550,24 @@ INSERT INTO "tmplib_base_io" VALUES('anUnifSt','H','Border up warning violation'
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','L','Border down warning violation',3,17,'',4,'Порушення нижньої попереджув. границі','','Нарушение нижней предупредительной границы','');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','HH','Border up alarm violation',3,17,'',5,'Порушення верхньої аварійної границі','','Нарушение верхней аварийной границы','');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','LL','Border down alarm violation',3,17,'',6,'Порушення нижньої аварійної границі','','Нарушение нижней аварийной границы','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','EVAL','Value is eval',3,17,'',7,'Значення невірогідне','','Значение недостоверно','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','ed','Dimension',0,32,'',8,'Од. виміру','','Ед. измерения','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','min','Scale:minimum',2,32,'0',9,'Шкала:мінімум','','Шкала:минимум','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','max','Scale:maximum',2,32,'100',10,'Шкала:максимум','','Шкала:максимум','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','scSqr','Scale:square',3,32,'0',11,'Шкала:квадратична','','Шкала:квадратичная','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','aMin','Border down alarm',2,32,'0',16,'Границя нижня ав.','','Граница нижняя ав.','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','aMax','Border up alarm',2,32,'0',17,'Границя верхня аварійна','','Граница верхняя ав.','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','wMin','Border down warning',2,32,'0',18,'Границя нижня попереджув.','','Граница нижняя пред.','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','wMax','Border up warning',2,32,'0',19,'Границя верхня попереджув.','','Граница верхняя пред.','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','HystBnd','Hysteresis of boders violation',2,32,'0',20,'Гистерезис нарушений границ','','Гистерезиз наруш. границ','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','EVAL','Error value',3,17,'',7,'Помилка значення','','Ошибка значения','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','ed','Dimension',0,32,'',8,'Одиниця виміру','','Единица измерения','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','min','Scale: minimum',2,32,'0',9,'Шкала: мінімум','','Шкала: минимум','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','max','Scale: maximum',2,32,'100',10,'Шкала: максимум','','Шкала: максимум','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','scSqr','Scale: square',3,32,'0',11,'Шкала: квадратична','','Шкала:к вадратичная','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','aMin','Border down alarm',2,32,'0',16,'Границя нижня аварійна','','Граница нижняя аварийная','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','aMax','Border up alarm',2,32,'0',17,'Границя верхня аварійна','','Граница верхняя аварийная','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','wMin','Border down warning',2,32,'0',18,'Границя нижня попереджув.','','Граница нижняя предупр.','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','wMax','Border up warning',2,32,'0',19,'Границя верхня попереджув.','','Граница верхняя предупр.','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','HystBnd','Hysteresis of boders violation',2,32,'0',20,'Гистерезис порушення границь','','Гистерезиз нарушения границ','');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','speed','Motion speed (%/cycle)',2,32,'0',21,'Швидкість зміни (%/цикл)','','Скорость изменения (%/цикл)','');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','prec','Precision (signs)',1,32,'2',22,'Точність (знаків)','','Точность (знаков)','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','Tf','Filter time, s',2,32,'0',24,'Час фільтру (с)','','Время фильтрации (с)','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','Tf','Filter time, seconds',2,32,'0',24,'Час фільтру, секунд','','Время фильтрации, секунд','');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','iAdd','Input addon',2,64,'0',25,'Додаток до входу','','Дополнение ко входу','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','iMult','Input multiplication',2,64,'1',26,'Множник входу','','Множитель ко входу','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','iMult','Input multiplication',2,64,'1',26,'Множник входу','','Множитель входа','');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','plcMin','Minimum module scale',2,64,'1',27,'Мінімум шкали модуля','','Минимум шкалы модуля','');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','plcMax','Maximum module scale',2,64,'5',28,'Максимум шкали модуля','','Максимум шкалы модуля','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','plcExcess','Allowed scale exceeding, %',2,64,'0',29,'Дозволене перевищення шкали (%)','','Допустимое превышение шкалы модуля (%)','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','plcExcess','Allowed scale exceeding, %',2,64,'0',29,'Дозволене перевищення шкали, %','','Допустимое превышение шкалы, %','');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','plcImit','PLC imitation',3,64,'0',30,'Імітація ПЛК','','Имитация ПЛК','');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','plcImitIn','PLC imitation input',2,128,'Imitation|var',31,'Вхід імітації ПЛК','Імітація|var','Вход имитации ПЛК','Имитация|var');
 INSERT INTO "tmplib_base_io" VALUES('pidUnif','in','Input',2,128,'Signal|in',0,'Вхід','','Вход','Signal|in');
@@ -1577,10 +1577,10 @@ INSERT INTO "tmplib_base_io" VALUES('pidUnif','manIn','Manual input (%)',2,160,'
 INSERT INTO "tmplib_base_io" VALUES('pidUnif','out','Output (%)',2,160,'PID|out',4,'Вихід (%)','ПІД|out','Выход (%)','ПИД|out');
 INSERT INTO "tmplib_base_io" VALUES('pidUnif','auto','Mode (automate)',3,160,'PID|auto',5,'Режим (автомат)','ПІД|auto','Режим (автомат)','ПИД|auto');
 INSERT INTO "tmplib_base_io" VALUES('pidUnif','casc','Mode (cascad)',3,160,'PID|casc',6,'Режим (каскад)','ПІД|casc','Режим (каскад)','ПИД|casc');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','ed','Dimension',0,32,'',7,'Од. виміру','','Ед. измерения','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','min','Scale:minimum',2,160,'PID|min',8,'Шкала:мінімум','ПІД|min','Шкала:минимум','ПИД|min');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','max','Scale:maximum',2,160,'PID|max',9,'Шкала:максимум','ПІД|max','Шкала:максимум','ПИД|max');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','scSqr','Scale:square',3,32,'0',10,'Шкала:квадратична','','Шкала:квадратичная','');
+INSERT INTO "tmplib_base_io" VALUES('pidUnif','ed','Dimension',0,32,'',7,'Одиниця виміру','','Единица измерения','');
+INSERT INTO "tmplib_base_io" VALUES('pidUnif','min','Scale: minimum',2,160,'PID|min',8,'Шкала: мінімум','ПІД|min','Шкала: минимум','ПИД|min');
+INSERT INTO "tmplib_base_io" VALUES('pidUnif','max','Scale: maximum',2,160,'PID|max',9,'Шкала: максимум','ПІД|max','Шкала: максимум','ПИД|max');
+INSERT INTO "tmplib_base_io" VALUES('pidUnif','scSqr','Scale: square',3,32,'0',10,'Шкала: квадратична','','Шкала: квадратичная','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnif','aMin','Border down alarm',2,32,'0',11,'Границя нижня ав.','','Граница нижняя ав.','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnif','aMax','Border up alarm',2,32,'0',12,'Границя верхня аварійна','','Граница верхняя ав.','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnif','wMin','Border down warning',2,32,'0',13,'Границя нижня попереджув.','','Граница нижняя пред.','');
@@ -1649,10 +1649,22 @@ init NORMA;suppress;save on change',9,'Порушення','0
 0;1;2
 Инициировать НОРМА;подавлять;сохранять при смене');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','inProc','Input processing procedure',0,68,'',1,'Вхідна процедура обробки','','Входная процедура обработки','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','subMode','Substitute:mode (0-no; 1-last; 2-substitute)',1,32,'0',12,'Заміна:режим (0-немає; 1-останне; 2-заміна)','','Замена:режим (0-нет; 1-последний; 2-замена)','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','subVar','Substitute:variable',2,32,'0',13,'Заміна:змінна','','Замена:переменная','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','alSup','Alarms (0-init NORMA, 1-suppress, 2-save on change)',1,32,'0',14,'Порушення (0-инициализ. НОРМА, 1-придушення, 2-збереж. при зміні)','','Нарушения (0-принужд. НОРМА, 1-подавление, 2-сохр. при смене)','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','alSup','Alarms suppress',3,32,'0',7,'Придушення порушень','','Подавление нарушений','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','subMode','Substitute: mode',1,40,'0
+0;1;2
+no;last;substitute',7,'Заміна: режим','0
+0;1;2
+немає;останнє;підстановка','Замена: режим','0
+0;1;2
+нет;последнее;подстановка');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','subVar','Substitute: variable',2,32,'0',13,'Заміна:змінна','','Замена:переменная','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','alSup','Violations',1,40,'0
+0;1;2
+init NORMA;suppress;save on change',9,'Порушення','0
+0;1;2
+ініціювати НОРМА;придушувати;зберігати при зміні','Нарушения','0
+0;1;2
+Инициировать НОРМА;подавлять;сохранять при смене');
+INSERT INTO "tmplib_base_io" VALUES('manInUnif','alSup','Violations suppress',3,32,'0',7,'Придушення порушень','','Подавление нарушений','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','HystBnd','Hysteresis of boders violation',2,32,'1',12,'Гістерезиз поруш. границь','','Гистерезиз наруш. границ','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','prec','Precision (signs)',1,32,'2',14,'Точність (знаків)','','Точность (знаков)','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','this','Object',4,1,'',22,'Об''єкт','','Объект','');
@@ -6690,13 +6702,20 @@ Q += F.isEVal() ? 0 : F/3600;
 dP = F.isEVal() ? 0 : F/33;
 DS = 1+(rand(0.2)-0.1);
 ','','',1503582557);
-INSERT INTO "tmplib_base" VALUES('manInUnif','Manual input (unified)','Ручний ввід (уніфікований)','Ручной ввод (унифицированный)','Unified template for manual input signals.
+INSERT INTO "tmplib_base" VALUES('manInUnif','Manual input (unified)','Ручний ввід (уніфікований)','Ручной ввод (унифицированный)','Common, representative and unified template of a manual input — an analog output signal.
+The template forms a structure of parameter (complex tag) of the analog output which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object, mostly through the Element cadre control panel.
+
+Functions:
+Mostly the same as the basic template "Analog signal (unified)" and the value entering attribute is additionally provided.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.1','Уніфікований шаблон для ручного вводу значень сигналів.
+Version: 1.0.1
+License: GPLv2','Загальний, представницький та уніфікований шаблон ручного вводу — сигналу аналогового виходу.
+Шаблон формує структуру параметру (складного тегу) аналогового виходу який може бути легко підключений до більшості віджетів та кадрів бібліотеки основних елементів інтерфейсу користувача просто вказавши об''єкт параметру, переважно через панель контролю Елемент кадр.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.0.1','Унифицированный шаблон ручного ввода сигнала.
+Версія: 1.0.1
+Ліцензія: GPLv2','Унифицированный шаблон ручного ввода сигнала.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.0.1',10,0,'JavaLikeCalc.JavaScript
@@ -7005,16 +7024,26 @@ else {
 if(!f_err.toInt() && tErr.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), -4);
 else if(f_err.toInt() && !tErr.toInt())	this.alarmSet(DESCR+": "+tr("NORMA"), 1);
 f_err = tErr;','','',1561317417);
-INSERT INTO "tmplib_base" VALUES('anUnifSt','Analog signal (unified, violation statuses)','Аналог. сигнал (уніфікований, стани порушень)','Аналог. сигн. (унифицированный, состояния нарушений)','Unified template for analog input signals processing.
+INSERT INTO "tmplib_base" VALUES('anUnifSt','Analog signal (unified, violation statuses)','Аналог. сигнал (уніфікований, стани порушень)','Аналог. сигн. (унифицированный, состояния нарушений)','Common, representative and unified template of analog input signals processing, extended by binary states of indication the violations. The template grounded on the base template "Analog signal (unified)" with its representative structure and some differences characteristic to independent development and expansion.
+Binary states were provided for the convenient use of algorithms of operation at the borders of violations of the parameter object, preferably in the block diagrams of general control algorithms.
+
+Functions:
+Mostly the same as the basic "Analog signal (unified)" and the borderline signs are additionally provided: "H", "L", "HH", "LL", "EVAL".
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.1','Уніфікований шаблон для обробки аналогових вхідних сигналів.
+Version: 1.1.0
+License: GPLv2','Загальний, представницький та уніфікований шаблон обробки аналогових вхідних сигналів, розширений бінарними станами індикації порушень. Шаблон засновано на базовому шаблоні "Аналоговий сигнал (уніфікований)" з відповідною до нього представницькою структурою та деякими відмінностями, характерними до незалежного розвитку та розширення.
+Бінарні стани передбачалося для зручного використання у алгоритмах роботи за границями порушення об''єкту параметру, переважно у блокових схемах загальних алгоритмів керування.
+
+Функції:
+Переважно відповідають базовому шаблону "Аналоговий сигнал (уніфікований)" та додатково надаються ознаки порушень границь: "H", "L", "HH", "LL", "EVAL".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.0.1','Унифицированный шаблон обработки аналогового входного сигнала.
+Версія: 1.1.0
+Ліцензія: GPLv2','Унифицированный шаблон обработки аналогового входного сигнала.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.0.1',10,0,'JavaLikeCalc.JavaScript
+Версия: 1.1.0',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	if(alSup == 0) f_err = "0";
 	prevVar = EVAL_REAL;
@@ -7115,7 +7144,7 @@ else {
 	f_err = tErr;
 	if(toSave) SYS.cntrReq(SYS.XMLNode("save").setAttr("path",this.nodePath()+"/%2fobj").setAttr("force",1));
 	conDelay_ = 0;
-}','','',1561317455);
+}','','',1562421007);
 INSERT INTO "tmplib_base" VALUES('pidUnif','PID signal (unified, violation statuses)','ПІД сигнал (уніфікований, стани порушень)','ПИД сигнал (унифицированный, состояния нарушений)','The unified template for process analog signals with properties of PID.
 
 Author: Roman Savochenko <roman@oscada.org>

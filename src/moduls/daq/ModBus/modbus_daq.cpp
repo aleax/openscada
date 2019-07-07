@@ -437,20 +437,22 @@ char TMdContr::getValC( int addr, MtxString &err, bool in )
 
 bool TMdContr::setVal( const TVariant &val, const string &addr, MtxString &w_err, bool chkAssync )
 {
-    if(tmDelay > 0) {
-	if(w_err.getVal().empty()) w_err.setVal(_("10:Error of connection or no response."));
-	return false;
-    }
-
     int off = 0;
     string tp = TSYS::strParse(addr, 0, ":", &off);
     string atp_sub = TSYS::strParse(tp, 1, "_");
     string aids = TSYS::strParse(addr, 0, ":", &off);
     int aid = strtol(aids.c_str(), NULL, 0);
-    string mode = TSYS::strParse(addr, 0, ":", &off);
 
-    if(chkAssync && mAsynchWr && (mode == "w" || mode == "rw")) { MtxAlloc resAsWr(dataRes(), true); asynchWrs[addr] = val.getS(); return true; }
-    if(tp.empty() || (tp.size() >= 2 && tp[1] == 'I') || !(mode.empty() || mode == "w" || mode == "rw")) return true;
+    //Will be wrote after the connection return
+    if(chkAssync && mAsynchWr) { MtxAlloc resAsWr(dataRes(), true); asynchWrs[addr] = val.getS(); return true; }
+
+    //For direct writing we need the good connection in any event
+    if(tmDelay > 0) {
+	if(w_err.getVal().empty()) w_err.setVal(_("10:Error of connection or no response."));
+	return false;
+    }
+
+    if(tp.empty() || (tp.size() >= 2 && tp[1] == 'I')) return true;
     bool wrRez = false;
     if(tp[0] == 'C')	wrRez = setValC(val.getB(), aid, w_err);
     if(tp[0] == 'R') {
@@ -773,7 +775,7 @@ void *TMdContr::Task( void *icntr )
 		pdu += (char)(cntr.acqBlksCoilIn[iB].off>>8);		//Address MSB
 		pdu += (char)cntr.acqBlksCoilIn[iB].off;		//Address LSB
 		pdu += (char)(cntr.acqBlksCoilIn[iB].val.size()>>8);	//Number of coils MSB
-		pdu += (char)cntr.acqBlksCoilIn[iB].val.size();	//Number of coils LSB
+		pdu += (char)cntr.acqBlksCoilIn[iB].val.size();		//Number of coils LSB
 		// Request to remote server
 		cntr.acqBlksCoilIn[iB].err.setVal(cntr.modBusReq(pdu));
 		if(cntr.acqBlksCoilIn[iB].err.getVal().empty()) {
