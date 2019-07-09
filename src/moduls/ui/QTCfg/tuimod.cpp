@@ -24,11 +24,11 @@
 #include <QErrorMessage>
 #include <QIcon>
 
-#include <tsys.h>
 #include "qtcfg.h"
 #include "selfwidg.h"
-#include <tmess.h>
 #include "tuimod.h"
+
+#include <tmess.h>
 
 //*************************************************
 //* Modul info!                                   *

@@ -4,7 +4,7 @@ Priority: optional
 Standards-Version: 3.9.6
 Maintainer: Roman Savochenko <rom_as@oscada.org>
 Homepage: http://oscada.org
-Build-Depends: debhelper (>= 5), dh-autoreconf, sqlite3, g++, autotools-dev, pkg-config, gettext, libgd2-xpm-dev | libgd2-noxpm-dev, libpcre3-dev,
+Build-Depends: debhelper (>= 5), dh-autoreconf, sqlite3, g++, autotools-dev, pkg-config, gettext, libgd-dev | libgd2-xpm-dev | libgd2-noxpm-dev, libpcre3-dev,
  libmysqlclient-dev | libmariadb-dev, libsqlite3-dev, firebird-dev, libpq-dev,
  libsensors4-dev, portaudio19-dev, bison, libsnmp-dev, libcomedi-dev,
  libssl-dev,

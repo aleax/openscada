@@ -1,3 +1,9 @@
+2019-07-09 Roman (stable)
+- SYS:data/{debian,debian_mod}/control: Appended for the depend libgd-dev, which actual for Debian 10.
+- !!:UI.QTCfg: Adapted to build in the environment of Debian 10 for Qt5.11.3, GCC8 and
+    an error about a conflict in the macro "message" into GLibC++ through Qt5.
+
+
 2019-07-07 Roman (stable)
 - !!:DB.LibsDB.OscadaLibs: Updated for some messages.
     base.{anUnifSt,manInUnif}: Revised during the documenting.

@@ -37,11 +37,8 @@
 #include <QApplication>
 #include <QDesktopWidget>
 
-#include <tsys.h>
-
-#include "vis_devel.h"
-#include "tvision.h"
 #include "vis_widgs.h"
+#include "vis_devel.h"
 #include "vis_devel_dlgs.h"
 
 using namespace VISION;

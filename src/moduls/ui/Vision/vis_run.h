@@ -22,11 +22,6 @@
 #ifndef VIS_RUN_H
 #define VIS_RUN_H
 
-#include <string>
-#include <vector>
-#include <deque>
-#include <map>
-
 #include <QMainWindow>
 #include <QThread>
 #include <QLabel>
@@ -35,11 +30,6 @@
 #include <QMenu>
 
 #include "tvision.h"
-
-using std::string;
-using std::vector;
-using std::deque;
-using std::map;
 
 namespace VISION
 {

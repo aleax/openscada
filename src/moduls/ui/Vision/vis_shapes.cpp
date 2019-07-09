@@ -56,10 +56,8 @@
 #include <qdrawutil.h>
 #endif
 
-#include <tsys.h>
-#include "tvision.h"
-#include "vis_devel.h"
 #include "vis_run.h"
+#include "vis_devel.h"
 #include "vis_run_widgs.h"
 #include "vis_devel_widgs.h"
 #include "vis_shapes.h"

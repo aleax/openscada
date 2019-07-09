@@ -10277,7 +10277,7 @@ INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','formDtTm','Data and time format (
 INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','hHdrVis','Show header: horizontal',131072,'0',8,'','','','Показув. заголовок: горизонтальний','','','Показыв. заголовок: горизонтальный','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','highLght','Highlight rules, {lev}{quitt}:{color}:{font}:{fontColor}',131205,'5:gray
 4:red
-1:yellow',8,'','','','Правила підсвітлення, {lev}:{color}:{font}:{fontColor}','','','Правила подсветки, {lev}:{color}:{font}:{fontColor}','','','','');
+1:yellow',8,'','','','Правила підсвітлення, {lev}{quitt}:{color}:{font}:{fontColor}','','','Правила подсветки, {lev}{quitt}:{color}:{font}:{fontColor}','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','vHdrVis','Show header: vertical',131072,'0',8,'','','','Показув. заголовок: вертикальний','','','Показыв. заголовок: вертикальный','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('cntrPaspExt','hideAttrs','Attributes list of the passport to hide',131077,'',10,'<page>|paspHideAttrs','','','Перелік атрибутів паспорту для приховування','','','Перечень атрибутов паспорта для скрытия','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('cntrPaspExt','name_','For save original name',131077,'',8,'','','','Для збереження оригінальної назви','','','Для сохранения исходного наименования','','','','');

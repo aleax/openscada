@@ -56,13 +56,9 @@
 #include <QClipboard>
 #include <QTextBrowser>
 
-#include <tmess.h>
-#include <tsys.h>
-#include <tsecurity.h>
-
+#include "qtcfg.h"
 #include "selfwidg.h"
 #include "tuimod.h"
-#include "qtcfg.h"
 
 #define CH_REFR_TM	100
 

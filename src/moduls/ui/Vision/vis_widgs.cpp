@@ -44,12 +44,10 @@
 #include <QCompleter>
 #include <QDesktopWidget>
 
-#include <tsys.h>
-
+#include "vis_run.h"
 #include "vis_shapes.h"
 #include "vis_widgs.h"
 #include "vis_run_widgs.h"
-#include "vis_run.h"
 
 using namespace VISION;
 

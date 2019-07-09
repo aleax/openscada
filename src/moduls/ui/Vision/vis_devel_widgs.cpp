@@ -51,12 +51,9 @@
 #include <QCompleter>
 #include <QMdiSubWindow>
 
-#include <tsys.h>
-
-#include "vis_devel.h"
-#include "tvision.h"
-#include "vis_shapes.h"
 #include "vis_widgs.h"
+#include "vis_devel.h"
+#include "vis_shapes.h"
 #include "vis_devel_widgs.h"
 
 using namespace VISION;

@@ -22,10 +22,6 @@
 #ifndef VIS_SHAPES_H
 #define VIS_SHAPES_H
 
-#include <string>
-#include <deque>
-#include <vector>
-
 #include <config.h>
 
 #if HAVE_FFTW3_H
@@ -49,12 +45,12 @@
 #include <QWebFrame>
 #endif
 
+#include <deque>
+
 #include <tmess.h>
 #include <xml.h>
 
-using std::string;
 using std::deque;
-using std::vector;
 using namespace OSCADA;
 
 class QEvent;
