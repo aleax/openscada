@@ -27,12 +27,9 @@
 #include <QStatusBar>
 #include <QDesktopWidget>
 
-#include <tsys.h>
-
-#include "tvision.h"
-#include "vis_shapes.h"
 #include "vis_run.h"
 #include "vis_run_widgs.h"
+#include "vis_shapes.h"
 
 #undef _
 #define _(mess) mod->I18N(mess, mainWin()->lang().c_str())

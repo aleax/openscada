@@ -22,17 +22,13 @@
 #ifndef VIS_DEVEL_H
 #define VIS_DEVEL_H
 
-#include <string>
-#include <vector>
-
 #include <QMainWindow>
 #include <QLabel>
 #include <QFileDialog>
 
-#include "tvision.h"
+#include <xml.h>
 
-using std::string;
-using std::vector;
+using namespace OSCADA;
 
 class QMdiArea;
 class QSignalMapper;

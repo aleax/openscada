@@ -22,10 +22,6 @@
 #ifndef VIS_WIDGS_H
 #define VIS_WIDGS_H
 
-#include <string>
-#include <vector>
-#include <map>
-
 #include <QLabel>
 #include <QDialog>
 #include <QMap>
@@ -38,9 +34,6 @@
 
 #include "tvision.h"
 
-using std::string;
-using std::vector;
-using std::map;
 using namespace OSCADA;
 
 class QMainWindow;

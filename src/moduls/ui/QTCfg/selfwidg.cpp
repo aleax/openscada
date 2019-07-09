@@ -45,8 +45,7 @@
 #include <QCompleter>
 #include <QDesktopWidget>
 
-#include <tsys.h>
-
+#include "qtcfg.h"
 #include "tuimod.h"
 #include "selfwidg.h"
 

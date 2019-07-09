@@ -25,7 +25,6 @@
 #define VIS_SHAPE_ELFIG_H
 
 #include <math.h>
-#include <map>
 
 #include <QPainterPath>
 #include <QPen>
@@ -33,7 +32,6 @@
 #include "vis_shapes.h"
 #include "vis_widgs.h"
 
-using std::map;
 typedef map<int,QPointF> PntMap;
 typedef map<int,float> WidthMap;
 typedef map<int,QColor> ColorMap;

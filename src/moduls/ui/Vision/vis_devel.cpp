@@ -36,12 +36,10 @@
 #include <QCheckBox>
 #include <QMdiSubWindow>
 
-// #include <config.h>
-#include <tsys.h>
+#include "vis_run.h"
+#include "vis_widgs.h"
 #include "vis_shapes.h"
 #include "vis_devel_dlgs.h"
-#include "vis_widgs.h"
-#include "vis_run.h"
 #include "vis_devel.h"
 #include "vis_shape_elfig.h"
 

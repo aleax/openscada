@@ -21,9 +21,6 @@
 #ifndef QTCFG_H
 #define QTCFG_H
 
-#include <string>
-#include <vector>
-
 #include <QWidget>
 #include <QMainWindow>
 #include <QThread>
@@ -31,6 +28,12 @@
 #include <QWaitCondition>
 #include <QProgressDialog>
 
+#include <string>
+#include <vector>
+
+#include <tmess.h>
+#include <tsys.h>
+#include <tsecurity.h>
 #include <resalloc.h>
 #include <tcntrnode.h>
 #include <xml.h>

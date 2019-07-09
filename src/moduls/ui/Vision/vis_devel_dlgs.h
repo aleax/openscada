@@ -22,17 +22,12 @@
 #ifndef VIS_DEVEL_DLGS_H
 #define VIS_DEVEL_DLGS_H
 
-#include <string>
-#include <vector>
-
 #include <QDialog>
 #include <QItemDelegate>
 #include <QCloseEvent>
 
+#include "vis_widgs.h"
 #include "vis_devel_widgs.h"
-
-using std::string;
-using std::vector;
 
 class QLabel;
 class QComboBox;

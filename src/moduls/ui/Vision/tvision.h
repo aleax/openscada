@@ -25,9 +25,7 @@
 
 #include <QMainWindow>
 
-#include <telem.h>
-#include <tuis.h>
-#include "tsys.h"
+#include <tsys.h>
 #include "../VCAEngine/types.h"
 
 #undef _

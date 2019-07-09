@@ -22,10 +22,6 @@
 #ifndef VIS_DEVEL_WIDGS_H
 #define VIS_DEVEL_WIDGS_H
 
-#include <string>
-#include <vector>
-#include <map>
-
 #include <QAbstractTableModel>
 #include <QDockWidget>
 #include <QTreeView>
@@ -34,10 +30,6 @@
 #include <QScrollArea>
 
 #include "vis_widgs.h"
-
-using std::string;
-using std::vector;
-using std::map;
 
 class QTreeWidgetItem;
 class QTreeWidget;
