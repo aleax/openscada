@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-10 08:24+0300\n"
+"POT-Creation-Date: 2019-07-14 22:37+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1122,6 +1122,14 @@ msgid "Time of the processing task starting: %f ms."
 msgstr ""
 
 msgid "Stopping the session."
+msgstr ""
+
+#, c-format
+msgid "Registering/opening the page '%s'."
+msgstr ""
+
+#, c-format
+msgid "Unregistering/closing the page '%s'."
 msgstr ""
 
 #, c-format

@@ -1491,9 +1491,9 @@ INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','close','Command "Close"',3
 INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','stop','Command "Stop"',3,161,'Crane|stop',2,'Команда "Зупинити"','Кран|stop','Команда "Стоп"','Кран|stop');
 INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','st_open','State "Opened"',3,144,'Crane|st_open',3,'Стан "Відкрито"','Кран|st_open','Сост. "Открыто"','Кран|st_open');
 INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','st_close','State "Closed"',3,144,'Crane|st_close',4,'Стан "Закрито"','Кран|st_close','Сост. "Закрыто"','Кран|st_close');
-INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','tCmd','Time for hold the command, seconds',1,64,'5',5,'Час утримання команди, секунди','','Время удерж. команды, секунды','');
+INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','tCmd','Time to hold the command, seconds',1,64,'5',5,'Час утримання команди, секунди','','Время удерж. команды, секунды','');
 INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','last_cmd','Last command',1,1,'0',6,'Остання команда','','Последняя команда','');
-INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','w_tm','Process command counter',2,1,'0',7,'Лічильнк обробки команди','','Счётчик отраб. команды','');
+INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','w_tm','Process command counter',2,1,'0',7,'Лічильник обробки команди','','Счётчик отраб. команды','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','in','Input',2,128,'Signal|in',0,'Вхід','','Вход','Signal|in');
 INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','sp','Setpoint',2,160,'PID|sp',1,'Завдання','ПІД|sp','Задание','ПИД|sp');
 INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','var','Variable',2,16,'0',2,'Змінна','','Переменная','');
@@ -1685,7 +1685,7 @@ INSERT INTO "tmplib_base_io" VALUES('digAlarm','DESCR','Description',0,0,'',8,'�
 INSERT INTO "tmplib_base_io" VALUES('digAlarm','this','Object',4,0,'',9,'Об''єкт','','Объект','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','log','Logarithmic scale',3,32,'0',18,'Логарифмічна шкала','','Логарифмическая шкала','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','log','Logarithmic scale',3,32,'0',15,'Логарифмічна шкала','','Логарифмическая шкала','');
-INSERT INTO "tmplib_base_io" VALUES('digAlarm','stInv','State inverse',3,64,'',1,'Інверсія стану','','Инверсия состояния','');
+INSERT INTO "tmplib_base_io" VALUES('digAlarm','stInv','State inversion',3,64,'',1,'Інверсія стану','','Инверсия состояния','');
 INSERT INTO "tmplib_base_io" VALUES('digAlarm','st_open','State "Opened"',3,16,'',4,'Стан "Відкрито"','','Состояние "Открыто"','');
 INSERT INTO "tmplib_base_io" VALUES('digAlarm','st_close','State "Closed"',3,16,'',5,'Стан "Закрито"','','Состояние "Закрыто"','');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','log','Logarithmic scale',3,32,'0',23,'Логарифмічна шкала','','Логарифмическая шкала','');
@@ -6583,7 +6583,7 @@ if(curMode == 1 || curMode == 2) {
 curMode = mode;
 //mode = curMode;','','',1559658615);
 CREATE TABLE 'tmplib_base' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "tmplib_base" VALUES('digAlarm','Alarm digital','Сигн. дискретна','Сигн. дискретная','Alarm from a digital parameter.
+INSERT INTO "tmplib_base" VALUES('digAlarm','Alarm discrete','Сигналізація дискретна','Сигнализация дискретная','Alarm from a digital parameter.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.1','Сигналізація за дискретним параметром.
@@ -6946,13 +6946,25 @@ else {
 	if(toSave) SYS.cntrReq(SYS.XMLNode("save").setAttr("path",this.nodePath()+"/%2fobj").setAttr("force",1));
 	conDelay_ = 0;
 }','','',1561317354);
-INSERT INTO "tmplib_base" VALUES('digitBlockUnif','Discrete block (unified)','Блок дискретних (уніфікований)','Блок дискр. (унифицированный)','The block for union of Discrete parameters for one device control.
+INSERT INTO "tmplib_base" VALUES('digitBlockUnif','Discrete block (unified)','Блок дискретних (уніфікований)','Блок дискретных (унифицированный)','Common, representative and unified template of the block for union of Discrete parameters for the common control device.
+The template forms a structure of discrete parameter-block (complex tag) which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object.
+Functions:
+- Direct obtaining, by link, two states (read only) and three commands (reading and writing).
+- Possibility of holding the commands for a certain time and removing them.
+- Ability to redefine the states and commands by the appropriate settings of the interface elements, such as digStts, for statuses, and digComs, for commands.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.0','Блок поєднання дискретних сигналів контролю одним пристроєм.
+Version: 1.0.0
+License: GPLv2','Загальний, представницький та уніфікований шаблон блоку поєднання дискретних параметрів у пристрій загального контролю.
+Шаблон формує структуру дискретного параметру-блоку (складного тегу) який може бути легко підключений до більшості віджетів та кадрів бібліотеки основних елементів інтерфейсу користувача просто вказавши об''єкт параметру.
+Функції:
+- Пряме отримання, за посиланням, двох станів (тільки читання) та трьох команд (читання та запис).
+- Можливість утримання команди протягом визначеного часу та зняття їх.
+- Можливість перевизначення станів та команд відповідним налаштуванням елементів інтерфейсу, як то digStts, для статусів, та digComs, для команд.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.0.0','Блок для дискретных параметров управляющих одним аппаратом.
+Версія: 1.0.0
+Ліцензія: GPLv2','Блок для дискретных параметров управляющих одним аппаратом.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.0.0',10,0,'JavaLikeCalc.JavaScript

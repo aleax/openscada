@@ -1,7 +1,23 @@
+2019-07-14 Roman (stable)
+- !!:DB.LibsDB.OscadaLibs: base.{digitBlockUnif,digAlarm}: Revised during the documenting.
+- !!!!:DB.LibsDB.vcaBase,Model.{AGLKS.vca,Boiler.St}: Main.grpGraph[10]:
+    !!!!:Appended for a new control panel-window Main.graphCalc of calculating trends data.
+    !!:Main.grph_panel: Appended for an independent button of switching to the cursor time instead the indirect switching
+	at the depth of decreasing.
+	The microsecond part of the cursor time set hidden at the big intervals.
+- Model.Boiler.St: The simple pasport cadre replaced by the the extended one.
+- DAQ: The user API function funcCall() expanded by the "err" argument.
+- FIX:SYS: Fixed from crashing at early exit in the lock-file presence.
+- UI.VCAEngine: Appended for some debug messages at the windows opening and closing.
+    The attribute "tipTool" set to the "Text" type.
+- !!!!:FIX:UI.WebVision: The function servSet() of writing to the server switched to the synchronous mode to prevent losts
+    FIX: The view ComboBox of the primitive "FormEl" fixed for guaranty updating at the value changing.
+
+
 2019-07-09 Roman (stable)
 - SYS:data/{debian,debian_mod}/control: Appended for the depend libgd-dev, which actual for Debian 10.
-- !!:UI.QTCfg: Adapted to build in the environment of Debian 10 for Qt5.11.3, GCC8 and
-    an error about a conflict in the macro "message" into GLibC++ through Qt5.
+- !!:UI.{QTCfg,Vision}: Adapted to build in the environment of Debian 10 for Qt5.11.3, GCC8 and
+    an error about a conflict in the macro message() into StdLibC++ through Qt5.
 
 
 2019-07-07 Roman (stable)

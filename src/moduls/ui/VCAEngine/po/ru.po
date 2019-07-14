@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-10 08:24+0300\n"
+"POT-Creation-Date: 2019-07-14 22:37+0300\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1445,6 +1445,14 @@ msgid "Stopping the session."
 msgstr "Останов сеанса."
 
 #, c-format
+msgid "Registering/opening the page '%s'."
+msgstr "Регистрация/открытие страницы '%s'."
+
+#, c-format
+msgid "Unregistering/closing the page '%s'."
+msgstr "Дерегистрация/закрытие страницы '%s'."
+
+#, c-format
 msgid "Error calculating the session '%s'."
 msgstr "Ошибка вычисления сессии '%s'."
 
@@ -2000,7 +2008,9 @@ msgstr "Язык процедуры"
 msgid ""
 "Select the blank language to reset the widget procedure and language to the "
 "parent widget."
-msgstr "Выберите пустой язык для сброса процедуры и языка виджета к родительскому виджету."
+msgstr ""
+"Выберите пустой язык для сброса процедуры и языка виджета к родительскому "
+"виджету."
 
 msgid "Period of the calculating, milliseconds"
 msgstr "Период вычисления, миллисекунд"

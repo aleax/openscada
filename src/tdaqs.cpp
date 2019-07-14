@@ -230,7 +230,7 @@ TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const st
 	AutoHD<TCntrNode> nd = daqAt(prms[0].getS(), (prms.size()>=2 && prms[1].getS().size())?prms[1].getS()[0]:0, true, (prms.size()>=3)?prms[2].getB():true);
 	return nd.freeStat() ? TVariant(false) : TVariant(new TCntrNodeObj(nd,user));
     }
-    // bool funcCall(string progLang, TVarObj args, string prog, string fixId = "") -
+    // bool funcCall(string progLang, TVarObj args, string prog, string fixId = "", string err = "") -
     //    Call function text <prog> whith arguments <args> for program language <progLang>
     //    and with the fixed identifier <fixId> (automatic for this empty). Return "true" on a well call.
     //    For the fixed function recreate you need change the program or clean up <fixId> by the function original id.
@@ -240,6 +240,7 @@ TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const st
     //  fixId - two direction field of fixed identifier of the function;
     //          for the field empty the function id will be automatic and destroy at end,
     //          else the id will used on the function creation and replaced by an address to it.
+    //  err   - to place here all errors
     if(iid == "funcCall" && prms.size() >= 3 && prms[1].type() == TVariant::Object) {
 	string fixId = (prms.size() >= 4) ? prms[3].getS() : "";
 	string faddr;
@@ -315,7 +316,11 @@ TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const st
 		}
 
 	    return true;
-	} catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+	}
+	catch(TError &err) {
+	    if(prms.size() >= 5) { prms[4].setS(err.mess); prms[4].setModify(); }
+	    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+	}
 
 	return false;
     }

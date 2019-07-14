@@ -282,6 +282,8 @@ void Session::openReg( const string &iid )
     if(iOp >= mOpen.size())	mOpen.push_back(iid);
     dataResSes().unlock();
 
+    mess_debug(nodePath().c_str(), _("Registering/opening the page '%s'."), iid.c_str());
+
     //Check for notifiers register
     for(unsigned iNtf = 0; iNtf < 7; iNtf++) {
 	string aNtf = TSYS::strMess("notify%d", iNtf);
@@ -297,6 +299,8 @@ bool Session::openUnreg( const string &iid )
     for(unsigned iOp = 0; iOp < mOpen.size(); iOp++)
 	if(iid == mOpen[iOp]) { mOpen.erase(mOpen.begin()+iOp); rez = true; }
     dataResSes().unlock();
+
+    mess_debug(nodePath().c_str(), _("Unregistering/closing the page '%s'."), iid.c_str());
 
     //Check for notifiers unregister of the page
     for(unsigned iNtf = 0; iNtf < 7; iNtf++) ntfReg(iNtf, "", iid);
@@ -371,6 +375,7 @@ void Session::uiCmd( const string &com, const string &prm, SessWdg *src )
 	    //!!!! <oppg> here mostly wrong for multiple container pages
 	    //if(!oppg.empty() && ((AutoHD<SessPage>)mod->nodeAt(oppg)).at().path() != cpg.at().path())
 	    //	((AutoHD<SessPage>)mod->nodeAt(oppg)).at().attrAt("pgOpenSrc").at().setS("");
+
 	    cpg.at().setPathAsOpen(cpgAddr);	//To descry links
 	    if(src) cpg.at().attrAt("pgOpenSrc").at().setS(src->path(), true);
 	    else cpg.at().attrAt("pgOpen").at().setB(true, true);

@@ -237,13 +237,14 @@ function servGet( adr, prm, callBack, callBackPrm )
 /***************************************************
  * servSet - XML set request to server             *
  ***************************************************/
-function servSet( adr, prm, body, waitRez )
+function servSet( adr, prm, body, noWaitRez )
 {
+    if(noWaitRez == null) noWaitRez = false;
     var req = getXmlHttp();
-    req.open('POST', encodeURI('/'+MOD_ID+adr+(gPrms.length?gPrms+'&':'?')+prm), !waitRez);
+    req.open('POST', encodeURI('/'+MOD_ID+adr+(gPrms.length?gPrms+'&':'?')+prm), noWaitRez);
     try {
 	req.send(body);
-	if(waitRez && req.status == 200 && req.responseXML.childNodes.length)
+	if(!noWaitRez && req.status == 200 && req.responseXML.childNodes.length)
 	    return req.responseXML.childNodes[0];
 	//if(mainTmId) clearTimeout(mainTmId);
 	//mainTmId = setTimeout(makeUI, 1000);
@@ -275,6 +276,7 @@ function setWAttrs( wId, attrs, val )
     else for(var i in attrs)
 	body += '<el id=\''+i+'\'>'+((typeof(attrs[i])=='string')?attrs[i].replace(new RegExp('<','g'),'&lt;').replace(new RegExp('>','g'),'&gt;'):attrs[i])+'</el>';
     body += '</set>';
+
     servSet(wId, 'com=attrs', body);
 }
 
@@ -426,7 +428,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
     if(!pgOpenSrc) pgOpenSrc = getWAttr(pgId,'pgOpenSrc');
     if(this == masterPage && (!this.addr.length || pgGrp == 'main' || pgGrp == this.attrs['pgGrp'])) {
 	if(this.addr.length) {
-	    servSet(this.addr,'com=pgClose&cacheCntr','');
+	    servSet(this.addr, 'com=pgClose&cacheCntr', '');
 	    this.pwClean();
 	    document.body.removeChild(this.window);
 	}
@@ -438,7 +440,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	servSet("/UI/VCAEngine"+this.addr, 'com=com', "<CntrReqs>"+
 	    "<activate path='/%2fserv%2fattr%2fkeepAspectRatio' aNm='Keep aspect ratio on scale' aTp='0'/>"+
 	    "<activate path='/%2fserv%2fattr%2fstBarNoShow' aNm='Not show status bar' aTp='0'/>"+
-	    "</CntrReqs>", true);
+	    "</CntrReqs>");
 
 	this.makeEl(servGet(pgId,'com=attrsBr'), false, true);
 	var centerTag = document.createElement('center');
@@ -1647,6 +1649,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			formObj.onchange = function( ) {
 			    var attrs = new Object();
 			    attrs.value = this.options[this.selectedIndex].value; attrs.event = 'ws_CombChange';
+			    this.wdgLnk.attrs['value'] = attrs.value;
 			    setWAttrs(this.wdgLnk.addr,attrs);
 			}
 		    else {
@@ -1657,6 +1660,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    for(iO = 0; iO < this.options.length; iO++)
 				if(this.options[iO].selected) attrs.value += (attrs.value.length?"\n":"") + this.options[iO].value;
 			    attrs.event = 'ws_ListChange';
+			    this.wdgLnk.attrs['value'] = attrs.value;
 			    setWAttrs(this.wdgLnk.addr, attrs);
 			}
 		    }
@@ -2090,7 +2094,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    if(parseInt(this.curLev) < 0) this.messList = new Array();
 		    else {
 			if(!this.arhBeg || !this.arhEnd || !tTime || tTime > this.arhEnd || tTimeCurent) {
-			    var rez = servSet('/Archive/%2fserv%2fmess','com=com',"<info arch='"+this.curArch+"'/>",true);
+			    var rez = servSet('/Archive/%2fserv%2fmess','com=com',"<info arch='"+this.curArch+"'/>");
 			    if(!rez || parseInt(rez.getAttribute('rez')) != 0)	this.arhBeg = this.arhEnd = 0;
 			    else {
 				this.arhBeg = parseInt(rez.getAttribute('beg'));
@@ -2128,7 +2132,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    this.tmGrndPrev = srcTime-parseInt(this.attrs['tSize']);
 
 		    var rez = servSet('/Archive/%2fserv%2fmess','com=com',
-			"<get arch='"+this.curArch+"' tm='"+tTime+"' tm_grnd='"+tTimeGrnd+"' cat='"+this.curTmpl+"' lev='"+this.curLev+"' />",true);
+			"<get arch='"+this.curArch+"' tm='"+tTime+"' tm_grnd='"+tTimeGrnd+"' cat='"+this.curTmpl+"' lev='"+this.curLev+"' />");
 		    if(!rez || parseInt(rez.getAttribute('rez')) != 0) return;
 
 		    if(toUp)
@@ -2772,7 +2776,7 @@ function alarmSet(alarm) {
 }
 
 function alarmQuiet() {
-    servSet("/UI/VCAEngine/"+sessId+"/%2fserv%2falarm", "com=com", "<quietance tmpl='255'/>", true);
+    servSet("/UI/VCAEngine/"+sessId+"/%2fserv%2falarm", "com=com", "<quietance tmpl='255'/>");
 
     var attrs = new Object();
     attrs.event = 'ws_alarmLev'; setWAttrs(masterPage.addr, attrs);
@@ -2785,7 +2789,7 @@ for(var i_el = sessId.length-1; i_el >= 0; i_el--)
     { sessId = sessId[i_el]; break; }
 
 function styleSet(sid) {
-    servSet("/UI/VCAEngine/"+sessId+"/%2fobj%2fcfg%2fstyle", "com=com", "<set>"+sid+"</set>", true);
+    servSet("/UI/VCAEngine/"+sessId+"/%2fobj%2fcfg%2fstyle", "com=com", "<set>"+sid+"</set>");
     stTmReload = setTimeout('window.location.reload()', 1000);
 }
 

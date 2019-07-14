@@ -116,16 +116,18 @@ TSYS::~TSYS( )
     int mLev = Mess->messLevel();
     finalKill = true;
 
-    //Delete all nodes in order
-    del("ModSched");
-    del("UI");
-    del("Special");
-    del("Archive");
-    del("DAQ");
-    del("Protocol");
-    del("Transport");
-    del("Security");
-    del("BD");
+    //Delete all nodes in the order
+    if(present("BD")) {
+	del("ModSched");
+	del("UI");
+	del("Special");
+	del("Archive");
+	del("DAQ");
+	del("Protocol");
+	del("Transport");
+	del("Security");
+	del("BD");
+    }
 
     if(prjNm().size() && prjLockUpdPer()) prjLock("free");
 

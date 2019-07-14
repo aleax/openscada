@@ -541,7 +541,7 @@ SYS.messDebug("TEST DB","Value: "+req.childGet(2).text());</pre></li>
 </p>
 <ul>
 <li><i>TCntrNodeObj daqAt(string path, string sep = "", waitForAttr = true)</i> — attaches to a DAQ node (controller object, parameter, attribute) in the <i>path</i> or the separated string by the separator <i>sep</i>, from the DAQ-subsystem. Check for an attribute in the path last element, at <i>waitForAttr</i>.</li>
-<li><i>bool funcCall( string progLang, TVarObj args, string prog, string fixId = "" );</i> — executes the function text <i>prog</i> with the arguments <i>args</i> on the program language <i>progLang</i> and with the function fixing identifier <i>fixId</i> (automatic if it is empty). Returns "true" when it is executed correctly. The fixed function differ from the automatic one by it does not remove after execution and uses repeatedly by an address into <i>fixId</i>, which replaces that original identifier in first call. To recreate the function, you must change the program or clear the <i>fixId</i> in its original id.
+<li><i>bool funcCall( string progLang, TVarObj args, string prog, string fixId = "", string err = "" );</i> — executes the function text <i>prog</i> with the arguments <i>args</i> on the program language <i>progLang</i> and with the function fixing identifier <i>fixId</i> (automatic if it is empty). Returns "true" when it is executed correctly or "false" and set <i>err</i>. The fixed function differ from the automatic one by it does not remove after execution and uses repeatedly by an address into <i>fixId</i>, which replaces that original identifier in first call. To recreate the function, you must change the program or clear the <i>fixId</i> in its original id.
 <pre style="white-space: pre-wrap;">
 var args = new Object();
 args.y = 0;
@@ -895,8 +895,8 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 
 <tr>
 <td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Documents" title="Special:MyLanguage/Libs/Documents">Reports and documents libraries</a> </td>
-<td> 1.0 </td>
-<td> GPL </td>
+<td> 1.0, 1.0 </td>
+<td> GPLv2 </td>
 <td>
 <p>OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.JavaLikeCalc.doc<br />
 vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">GZip</a>) &gt; VCA.wlb_doc
@@ -908,7 +908,7 @@ vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA
 <tr>
 <td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Prescriptions" title="Special:MyLanguage/Libs/Prescriptions">Prescriptions</a> </td>
 <td> 1.0, 1.0 </td>
-<td> GPL </td>
+<td> GPLv2 </td>
 <td>
 <p>OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.tmplb_PrescrTempl<br />
 vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">GZip</a>) &gt; VCA.wlb_prescr
