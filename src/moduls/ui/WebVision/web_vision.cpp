@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"3.9.0"
+#define MOD_VER		"3.9.1"
 #define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on the the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -483,35 +483,17 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		    else page = pgCreator(iprt, string("<div class='error'>")+_("You '%s' have no access to close sessions!")+"</div>\n",
 			    "401 Unauthorized", "", "", "", ses.lang);
 		}
-		// Checking for the session presence
+		// Checking for the internal session presence
 		else if(!vs.freeStat() && (user != vs.at().user() || sender != vs.at().sender()) && !SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_))
 		    page = pgCreator(iprt, _("Going to the different session ..."),
 			"200 OK", "", "<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/" MOD_ID "/prj_"+vs.at().proj()+"'/>", "", ses.lang);
+		// The main requesting code
 		else {
-		    if(!ses.prm.size()) {
-			XMLNode req("get"); req.setAttr("path",ses.url+"/%2fobj%2fst%2fen");
-			if(cntrIfCmd(req,ses) || !s2i(req.text()))	{ HTTP_GET("", page, vars, user, iprt); return; }
-		    }
-		    // Call to the session
-		    ResAlloc sesRes(mSesRes, false);
-		    if(!vs.freeStat())	vs.at().getReq(ses);
-		    else {
-			sesRes.request(true);
-			vcaSesAdd(sesnm, false);
-			vcaSesAt(sesnm).at().senderSet(sender);
-			vcaSesAt(sesnm).at().getReq(ses);
-		    }
-
-		    /*try { vcaSesAt(sesnm).at().getReq(ses); }
-		    catch(...) {
-			if(!vcaSesPresent(sesnm)) {
-			    sesRes.request(true);
-			    vcaSesAdd(sesnm, false);
-			    vcaSesAt(sesnm).at().senderSet(sender);
-			    vcaSesAt(sesnm).at().getReq(ses);
-			} else throw;
-		    }*/
-		    page = ses.page;
+		    if(!vs.freeStat()) {
+			ResAlloc sesRes(mSesRes, false);
+			vs.at().getReq(ses);
+			page = ses.page;
+		    } else HTTP_GET("", page, vars, user, iprt);
 		}
 	    }
 	    else {

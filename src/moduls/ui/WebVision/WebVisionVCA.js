@@ -215,7 +215,7 @@ function servGet( adr, prm, callBack, callBackPrm )
 	req.callBackPrm = callBackPrm;
 	req.onreadystatechange = function( ) {
 	    if(this.readyState != 4) return;
-	    if(this.status == 200 && this.responseXML.childNodes.length) {
+	    if(this.status == 200 && this.responseXML && this.responseXML.childNodes.length) {
 		this.responseXML.childNodes[0].callBackPrm = this.callBackPrm;
 		this.callBack(this.responseXML.childNodes[0]);
 	    }
@@ -555,8 +555,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 {
     //Callback processing
     if(pgBr) {
+	if(pgBr == -1) { window.location.reload(true); return; }	//???? Try to restore the connection
 	if(pgBr.getAttribute('FullTree')) FullTree = parseInt(pgBr.getAttribute('FullTree'));
-	if(pgBr == -1) return;
 	if(pgBr.callBackPrm) {
 	    elO = pgBr.callBackPrm; pgBr.callBackPrm = null;
 	    elO.makeEl(pgBr, inclPg, full, FullTree);

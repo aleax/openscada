@@ -56,7 +56,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"MainThr"
-#define MOD_VER		"4.7.3"
+#define MOD_VER		"4.7.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -783,7 +783,7 @@ void StApp::callQtModule( )
     }
 }
 
-bool StApp::updLookFeel( )
+void StApp::updLookFeel( )
 {
     QStyle *appStl = QStyleFactory::create(mod->style().c_str());
     if(appStl)	QApplication::setStyle(appStl);

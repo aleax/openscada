@@ -305,7 +305,7 @@ INSERT INTO "LogLevPrm_gen_io" VALUES('P_PP5','f_err','0','0','');
 INSERT INTO "LogLevPrm_gen_io" VALUES('BC6close','alrm_md','0','','');
 INSERT INTO "LogLevPrm_gen_io" VALUES('BC6close','alrm_mess','The crane closed!','Клапан закрито!','Клапан закрыт!');
 INSERT INTO "LogLevPrm_gen_io" VALUES('BC6close','in','BlockCalc.gen.BC6.st_open','','');
-INSERT INTO "LogLevPrm_gen_io" VALUES('BC6close','f_frq','0.999974370002747','','');
+INSERT INTO "LogLevPrm_gen_io" VALUES('BC6close','f_frq','1.00002479553223','','');
 INSERT INTO "LogLevPrm_gen_io" VALUES('BC6close','f_start','0','','');
 INSERT INTO "LogLevPrm_gen_io" VALUES('BC6close','f_stop','0','','');
 INSERT INTO "LogLevPrm_gen_io" VALUES('BC6close','f_err','0','0','');
@@ -739,10 +739,10 @@ INSERT INTO "LogLevPrm_gen_io" VALUES('T_PP3','this','<TCntrNodeObj path="/sub_D
 INSERT INTO "LogLevPrm_gen_io" VALUES('T_PP3','SHIFR','T_PP3','T_PP3','');
 INSERT INTO "LogLevPrm_gen_io" VALUES('T_PP3','NAME','T_PP3','T_PP3','');
 INSERT INTO "LogLevPrm_gen_io" VALUES('T_PP3','DESCR','Gas temperature at the diaphragm PP3','Температура газу на діафрагмі PP3','Температура газа на диафрагме PP3');
-INSERT INTO "LogLevPrm_gen_io" VALUES('BC6close','alrm','0:4:The crane BC6 closed!','0:4:The crane BC6 closed!','');
+INSERT INTO "LogLevPrm_gen_io" VALUES('BC6close','alrm','0:4:The crane BC6 closed!','0:4:Закрито кран КК6!','0:4:Закрыт кран КШ6!');
 INSERT INTO "LogLevPrm_gen_io" VALUES('BC6close','SHIFR','BC6close','BC6close','');
-INSERT INTO "LogLevPrm_gen_io" VALUES('BC6close','NAME','Close BC6','Закриття BC6','');
-INSERT INTO "LogLevPrm_gen_io" VALUES('BC6close','DESCR','Alarm for closing the valve BC6','Сигналізація по закриттю крана BC6','');
+INSERT INTO "LogLevPrm_gen_io" VALUES('BC6close','NAME','Close BC6','Закриття КК6','Закрытие КШ6');
+INSERT INTO "LogLevPrm_gen_io" VALUES('BC6close','DESCR','Alarm for closing the valve BC6','Сигналізація по закриттю крана КК6','Сигнализация по закрытию крана КШ6');
 INSERT INTO "LogLevPrm_gen_io" VALUES('BC6close','this','<TCntrNodeObj path="/sub_DAQ/mod_LogicLev/cntr_gen/prm_BC6close/"/>','','');
 INSERT INTO "LogLevPrm_gen_io" VALUES('F3','log','0','','');
 INSERT INTO "LogLevPrm_gen_io" VALUES('F4','log','0','','');
@@ -790,8 +790,13 @@ INSERT INTO "LogLevPrm_gen_io" VALUES('CB7','last_cmd','0','','');
 INSERT INTO "LogLevPrm_gen_io" VALUES('CB7','w_tm','0','','');
 INSERT INTO "LogLevPrm_gen_io" VALUES('CB7','f_start','0','','');
 INSERT INTO "LogLevPrm_gen_io" VALUES('CB7','f_stop','0','','');
-INSERT INTO "LogLevPrm_gen_io" VALUES('CB7','f_frq','0.999974370002747','','');
+INSERT INTO "LogLevPrm_gen_io" VALUES('CB7','f_frq','1.00003564357758','','');
 INSERT INTO "LogLevPrm_gen_io" VALUES('CB7','f_err','0','0','0');
+INSERT INTO "LogLevPrm_gen_io" VALUES('CB7','com','BlockCalc.gen.BC7.com','','');
+INSERT INTO "LogLevPrm_gen_io" VALUES('CB7','close','BlockCalc.gen.BC7','','');
+INSERT INTO "LogLevPrm_gen_io" VALUES('CB7','stop','BlockCalc.gen.BC7','','');
+INSERT INTO "LogLevPrm_gen_io" VALUES('CB7','st_open','BlockCalc.gen.BC7.st_open','','');
+INSERT INTO "LogLevPrm_gen_io" VALUES('CB7','st_close','BlockCalc.gen.BC7.st_close','','');
 CREATE TABLE 'ModBus_node_io' ("NODE_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("NODE_ID","ID"));
 INSERT INTO "ModBus_node_io" VALUES('test','R0','Register 0',1,0,'1000',0,'Регістр 0','','Регистр 0','');
 INSERT INTO "ModBus_node_io" VALUES('test','R3w','Register 3 (write)',1,0,'10',2,'Регістр 3 (запис)','','Регистр 3 (запись)','');
@@ -1313,7 +1318,7 @@ INSERT INTO "LogLevPrm_gen" VALUES('F_PP1','','F_PP1','','F_PP1','Gas flow throu
 INSERT INTO "LogLevPrm_gen" VALUES('F_PP3','','F_PP3','','F_PP3','Gas flow through the diaphragm PP3','Расход газа через диафрагму PP3','Витрати газу через діафрагму PP3',1,'base.anUnif');
 INSERT INTO "LogLevPrm_gen" VALUES('F_PP5','','F_PP5','','F_PP5','Gas flow through the diaphragm PP5','Расход газа через диафрагму PP5','Витрати газу через діафрагму PP5',1,'base.anUnif');
 INSERT INTO "LogLevPrm_gen" VALUES('gN1','','Account node of the diaphragm PP1','Узел учёта диафрагмы PP1','Вузол обліку діафрагми PP1',' ',' ',' ',1,'base.gasPoint');
-INSERT INTO "LogLevPrm_gen" VALUES('CB7','','CB7','КШ7','КК7','Control block of the ball crane CB7','Блок контроля шарового крана КШ7','Блок контролю кульовим краном КК7',1,'base.digitBlock');
+INSERT INTO "LogLevPrm_gen" VALUES('CB7','','CB7','КШ7','КК7','Control block of the ball crane CB7','Блок контроля шарового крана КШ7','Блок контролю кульовим краном КК7',1,'base.digitBlockUnif');
 CREATE TABLE 'DAQ_OPC_UA' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT '' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' ,"SYNCPER" DOUBLE DEFAULT '60' ,"EndPoint" TEXT DEFAULT 'opc.tcp://localhost' ,"SecPolicy" TEXT DEFAULT 'None' ,"SecMessMode" INTEGER DEFAULT '1' ,"Cert" TEXT DEFAULT '' ,"PvKey" TEXT DEFAULT '' ,"AuthUser" TEXT DEFAULT '' ,"AuthPass" TEXT DEFAULT '' ,"AttrsLimit" INTEGER DEFAULT '100' , PRIMARY KEY ("ID"));
 INSERT INTO "DAQ_OPC_UA" VALUES('test','','','','','','',1,1,3,0,'<high>','OPC_UA_Prm_test','1',0,60.0,'opc.tcp://127.0.0.1:4841/OSCADA_OPC/None','None',1,'-----BEGIN CERTIFICATE-----
 MIIEhDCCA2ygAwIBAgIJAJtukvCfqH7fMA0GCSqGSIb3DQEBBQUAMIGhMQswCQYD
@@ -1929,7 +1934,7 @@ INSERT INTO "Archive_val" VALUES('test123','','','','','','',1,0,'',0,5,1.0,100,
 INSERT INTO "Archive_val" VALUES('test1234','','','','','','',1,0,'',0,1,1.0,100,1,0,0,'FSArch.1m;');
 INSERT INTO "Archive_val" VALUES('testArch_cntr','','','','','','',1,0,'',0,1,1.0,100,1,0,0,'FSArch.1s;FSArch.1m;');
 INSERT INTO "Archive_val" VALUES('test_reg4','','','','','','',1,0,'',0,1,1.0,100,1,0,0,'FSArch.1s;');
-INSERT INTO "Archive_val" VALUES('CB7_cmdOpen','','','','','','',1,2,'LogicLev.gen.CB7.cmdOpen',0,0,1.0,100,1,1,0,'FSArch.1s;');
+INSERT INTO "Archive_val" VALUES('CB7_st_open','','','','','','',1,2,'LogicLev.gen.CB7.st_open',0,0,1.0,100,1,1,0,'FSArch.1s;');
 CREATE TABLE 'SYS' ("user" TEXT DEFAULT '' ,"id" TEXT DEFAULT '' ,"val" TEXT DEFAULT '' ,"uk#val" TEXT DEFAULT '' , PRIMARY KEY ("user","id"));
 INSERT INTO "SYS" VALUES('root','/sub_Protocol/mod_HTTP/AuthTime','10','');
 INSERT INTO "SYS" VALUES('root','/sub_Protocol/mod_HTTP/AutoLogin','<aLog><it addrs="*" user="user" /></aLog>','');

@@ -122,7 +122,7 @@ public:
     void createTray( );
     bool callQtModule( const string &nm );
 
-    bool updLookFeel( );
+    void updLookFeel( );
 
     bool notify( QObject *receiver, QEvent *event );
     void saveState( QSessionManager &manager );

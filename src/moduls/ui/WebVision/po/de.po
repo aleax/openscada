@@ -236,7 +236,7 @@ msgid "Going to the main page ..."
 msgstr "Zur Hauptseite gehen ..."
 
 msgid "The session '%s' is closed."
-msgstr "Die Sitzung '%s' ist geschlossen.
+msgstr "Die Sitzung '%s' ist geschlossen."
 
 #, c-format
 msgid "You '%s' have no access to close sessions!"

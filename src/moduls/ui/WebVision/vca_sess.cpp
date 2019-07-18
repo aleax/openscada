@@ -79,7 +79,7 @@ void VCASess::getReq( SSess &ses )
 	// Get the name of the project
 	string prjNm;
 	XMLNode req("get");
-	req.setAttr("path",ses.url+"/%2fobj%2fst%2fprj");
+	req.setAttr("path", ses.url+"/%2fobj%2fst%2fprj");
 	if(!mod->cntrIfCmd(req,ses)) {
 	    req.setAttr("path","/prj_"+req.text()+"/%2fobj%2fcfg%2fname");
 	    if(!mod->cntrIfCmd(req,ses))	prjNm = req.text();

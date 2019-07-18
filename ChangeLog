@@ -1,3 +1,13 @@
+2019-07-18 Roman (stable)
+- FIX:DB.LibsDB.OscadaLibs: All alarm forming templates prevented from the messages loss in the code of the messages opressing
+    at global controller object errors (missing connections) if the previosly set message gone in the time of the connection missing.
+- Model.AGLKS.vca: The parameter LogLevPrm.gen.CB7 switched to the template base.digitBlockUnif.
+- !!!:FIX:UI.QTStarter: The function updLookFeel() fixed for the void return type,
+    where the boolean return causes to the guaranty crashes at the code built by GCC 8.
+- !!:FIX:UI.WebVision: Some fixed for the connection to already closed session but work has to do yet here.
+    !!:The main requesting code of GET significantly simplified to prevent of reconnections to the VCA-sessions without the local ones.
+
+
 2019-07-14 Roman (stable)
 - !!:DB.LibsDB.OscadaLibs: base.{digitBlockUnif,digAlarm}: Revised during the documenting.
 - !!!!:DB.LibsDB.vcaBase,Model.{AGLKS.vca,Boiler.St}: Main.grpGraph[10]:
