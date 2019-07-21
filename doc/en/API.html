@@ -256,7 +256,8 @@ Information variables of the program:
 <li> <i>float period( );</i> — the task's call instant periodicity, in seconds.</li>
 <li> <i>string path;</i> — path.</li>
 <li> <i>pthread_t thr;</i> — thread handler.</li>
-<li> <i>uint8_t policy, prior;</i> — scheduling policy and priority. </li>
+<li> <i>uint8_t policy, phase;</i> — scheduling policy and phase. </li>
+<li> <i>int16_t prior;</i> — scheduling priority. </li>
 <li> <i>pid_t tid;</i> — thread's identifier as a Linux process's ID.</li>
 <li> <i>ResString cpuSet;</i> — used processors/cores list.</li>
 <li> <i>void *(*task) (void *);</i> — pointer to the task.</li>
@@ -319,12 +320,14 @@ Information variables of the program:
 <li> <i>string selDB( );</i> — Chosen DB. Used for selective loading from the specified database in the subsystem "DB". </li>
 <li> <i>string mainCPUs( );</i> — Used processors list.</li>
 <li> <i>bool clockRT( );</i> — The Real-time clock selection for the tasks planning, else used the monotonic one (by defaults).</li>
+<li> <i>int taskInvPhs( );</i> — Number of the tasks invoking phases.</li>
 <li> <i>bool saveAtExit( );</i> — Sign - "Save configuration on exit".</li>
 <li> <i>int savePeriod( );</i> — Frequency of the automatically saving the station in the database (seconds).</li>
 <li> <i>void setWorkDB( const string &amp;wdb );</i> — Setting of  the full name of the working database.</li>
 <li> <i>void setSelDB( const string &amp;vl );</i> — Installation of the selected database for the specified  boot.</li>
 <li> <i>void setMainCPUs( const string &amp;vl );</i> — Setting of used processors list.</li>
 <li> <i>void setClockRT( bool vl );</i> — Setting of the Real-time clock selection for the tasks planning.</li>
+<li> <i>void setTaskInvPhs( int vl );</i> — Setting number of the tasks invoking phases.</li>
 <li> <i>void setSaveAtExit( bool vl );</i> — Setting of the sign - "Save configuration on exit".</li>
 <li> <i>void setSavePeriod( int vl );</i> — Set the frequency of the automatically saving of the station to the database (seconds).</li>
 <li> <i>bool chkSelDB( const string &amp;wDB );</i> — The function of checking for compliance of the specified database <i>wDB</i>  with the selected "selDB()".</li>
@@ -2273,7 +2276,7 @@ Error values for the different data types (define):
 </p><p>The container can also gather into the single request several information structures and dynamic parts, thereby optimizing the time of the request especially on the high latency network interfaces.
 </p><p>Overall control interface is built from individual components of the dynamic tree. Hierarchical inheritance from the TCntrNode object allows to realize multi-level addition of the configuration of the control interface. General view of the dynamic node tree is shown in Fig. 8.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="360" src="files/800px-Oscada_UserOM.png" srcset="/wiki/images/6/67/Oscada_UserOM.png 1.5x, /wiki/images/6/67/Oscada_UserOM.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM.png" title="Enlarge" /></div>Fig. 8. Example of a dynamic tree of the nodes in OpenSCADA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="360" src="files/800px-Oscada_UserOM.png" srcset="/wiki/images/6/67/Oscada_UserOM.png 1.5x, /wiki/images/6/67/Oscada_UserOM.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM.png" title="Збільшити" /></div>Fig. 8. Example of a dynamic tree of the nodes in OpenSCADA.</div></div></div></div>
 <p>System's nodes, containing data for the control interface of the system must also be connected to the dynamic tree of objects. 
 </p><p>Connection of the node to the dynamic tree is done as follows:
 </p>

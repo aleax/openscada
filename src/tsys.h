@@ -97,10 +97,10 @@ class TSYS : public TCntrNode
 		enum Flgs	{ Detached = 0x01, FinishTask = 0x02 };
 
 		//Methods
-		STask( ) : thr(0), policy(0), prior(0), tid(0), flgs(0), tm_beg(0), tm_end(0), tm_per(0), tm_pnt(0),
+		STask( ) : thr(0), policy(0), phase(0), prior(0), tid(0), flgs(0), tm_beg(0), tm_end(0), tm_per(0), tm_pnt(0),
 		    cycleLost(0), lagMax(0), consMax(0)	{ }
 		STask( pthread_t ithr, char ipolicy, char iprior ) :
-		    thr(ithr), policy(ipolicy), prior(iprior), tid(0), flgs(0), tm_beg(0), tm_end(0), tm_per(0), tm_pnt(0),
+		    thr(ithr), policy(ipolicy), phase(0), prior(iprior), tid(0), flgs(0), tm_beg(0), tm_end(0), tm_per(0), tm_pnt(0),
 		    cycleLost(0), lagMax(0), consMax(0)	{ }
 
 		float consumpt( ) const	{ return tm_beg ? 1e-9*(tm_end-tm_beg) : 0; }
@@ -109,7 +109,8 @@ class TSYS : public TCntrNode
 		//Attributes
 		string		path;
 		pthread_t	thr;
-		uint8_t		policy, prior;
+		uint8_t		policy, phase;
+		int16_t		prior;
 		pid_t		tid;
 		ResString	cpuSet;
 		void *(*task) (void *);
@@ -185,6 +186,7 @@ class TSYS : public TCntrNode
 	string	selDB( )	{ return mSelDB; }
 	string	mainCPUs( )	{ return mMainCPUs; }
 	bool	clockRT( )	{ return mClockRT; }
+	int	taskInvPhs( )	{ return mTaskInvPhs; }
 	bool	saveAtExit( )	{ return mSaveAtExit; }
 	int	savePeriod( )	{ return mSavePeriod; }
 
@@ -192,6 +194,7 @@ class TSYS : public TCntrNode
 	void	setSelDB( const string &vl )	{ mSelDB = vl; }
 	void	setMainCPUs( const string &vl );
 	void	setClockRT( bool vl )		{ mClockRT = vl; modif(); }
+	void	setTaskInvPhs( int vl );
 	void	setSaveAtExit( bool vl )	{ mSaveAtExit = vl; modif(); }
 	void	setSavePeriod( int vl )		{ mSavePeriod = vmax(0,vl); modif(); }
 
@@ -419,6 +422,7 @@ class TSYS : public TCntrNode
 
 	string	mWorkDB, mSelDB,// Work and selected DB
 		mMainCPUs;	// Main used processors set
+	int	mTaskInvPhs;	// Number of phases of the task invoking
 	bool	mSaveAtExit;	// Save at exit
 	int	mSavePeriod;	// Save period (s) for periodic system saving to DB
 

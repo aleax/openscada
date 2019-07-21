@@ -1255,11 +1255,11 @@ float SessPage::tmCalcAll( )
 
 float SessPage::tmCalcMaxAll( )
 {
-    float vl = SessWdg::tmCalcMaxAll();
     vector<string> lst;
     pageList(lst);
+    float vl = SessWdg::tmCalcMaxAll();
     for(unsigned iW = 0; iW < lst.size(); iW++)
-	vl = vmax(vl, pageAt(lst[iW]).at().tmCalcMaxAll());
+	vl += pageAt(lst[iW]).at().tmCalcMaxAll();
 
     return vl;
 }
@@ -1799,11 +1799,11 @@ float SessWdg::tmCalcAll( )
 
 float SessWdg::tmCalcMaxAll( )
 {
-    float vl = tmCalcMax;
     vector<string> lst;
     wdgList(lst);
+    float vl = tmCalcMax;
     for(unsigned iW = 0; iW < lst.size(); iW++)
-	vl = vmax(vl, ((AutoHD<SessWdg>)wdgAt(lst[iW])).at().tmCalcMaxAll());
+	vl += ((AutoHD<SessWdg>)wdgAt(lst[iW])).at().tmCalcMaxAll();
 
     return vl;
 }

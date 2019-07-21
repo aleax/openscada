@@ -7296,16 +7296,50 @@ tErr = tErr.length ? ""+alLev+":"+tErr : "0";
 if(tErr.toInt() && tErr.toInt() != f_err.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), -(2+alLev));
 else if(f_err.toInt() && !tErr.toInt())			this.alarmSet(DESCR+": "+tr("NORMA"), 1);
 f_err = tErr;','','',1561317493);
-INSERT INTO "tmplib_base" VALUES('codeState','Code state','Стан за кодом','Состояние по коду','A state forming at the code.
+INSERT INTO "tmplib_base" VALUES('codeState','Code state','Стан за кодом','Состояние по коду','A variant of the common, representative and unified template of the block for union of Discrete parameters, expanded by more than two states and three commands that can be encoded by an integer value.
+The template forms a structure of parameter (complex tag) which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object.
+
+Functions:
+- Direct receiving, by link, the status code and the command (read only), as well as setting the status text according to the list of states stats.
+- Working out the text of the command com_text to find it in the general list coms of commands and issuing the received command code to the output.
+- Generating from the general list coms of commands the list of commands to be selected in digComs.
+- Complex processing and complete generation-imitation of the code state, as well as processing the code or the command text for targeted actions, on the internal programming language of OpenSCADA into the configuration IO inProc, where you can operate next service parameters:
+  - in [IN|OUT] — IO of the code state;
+  - text [OUT] — direct text status setting;
+  - coms [IN] — list of available commands, of the corresponded IO;
+  - com_text [IN|OUT] — text of the received command;
+  - levErr, tErr [IN|OUT] — alarm level [-7...0] and text of the error (the attribute "err" format);
+  - f_frq [IN] — frequency of the calculation, the template IO;
+  - this [IN] — reference to the parameter object, what executing the template;
+  - ctx [IN] — object of the user context, what saved between the execution cycles.
+- Formation of the violation and the corresponding setting of the attribute err, provided at setting in the processing procedure or lack of the communication (in = EVAL).
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.1','Формування стану за кодом
+Version: 1.1.2
+License: GPLv2','Варіант загального, представницького та уніфікованого шаблону блоку поєднання дискретних параметрів, розширений більш ніж двома станами та трьома командами які можна закодувати цілим значенням.
+Шаблон формує структуру параметру (складного тегу) стану за кодом який може бути легко підключений до більшості віджетів та кадрів бібліотеки основних елементів інтерфейсу користувача просто вказавши об''єкт параметру.
+
+Функції:
+- Пряме отримання, за посиланням, коду стану та команди (тільки читання), а також встановлення тексту стану згідно до переліку станів stats.
+- Опрацювання тексту команди com_text на предмет пошуку її у загальному переліку команд coms та видача отриманого коду команди на вихід.
+- Формування із загальному переліку команд coms переліку команд для обрання у digComs.
+- Складна обробка та повна генерація-імітація коду стану, а також обробка коду або тексту команди для цільових дій, на внутрішній мові програмування OpenSCADA у конфігураційному ВВ inProc, де Ви можете оперувати наступними сервісними параметрами:
+  - in [IN|OUT] — ВВ коду статусу;
+  - text [OUT] — пряме встановлення тексту статусу;
+  - coms [IN] — перелік наявних команд, відповідного ВВ;
+  - com_text [IN|OUT] — текст отриманої команди;
+  - levErr, tErr [IN|OUT] — рівень аварії [-7...0] та текст помилки (формат атрибуту "err");
+  - f_frq [IN] — частота обчислення, шаблонний ВВ;
+  - this [IN] — посилання на об''єкт параметру, що виконує шаблон;
+  - ctx [IN] — об''єкт користувацького контексту, що зберігається між циклами виклику.
+- Формування порушення та відповідне встановлення атрибуту err, за умови встановлення у процедурі обробки або відсутності зв''язку (in = EVAL).
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.1.1','Формирование состояния по коду
+Версія: 1.1.2
+Ліцензія: GPLv2','Формирование состояния по коду
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.1.1',10,0,'JavaLikeCalc.JavaScript
+Версия: 1.1.2',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	f_err = "0";
 	//Prepare data for preprocessing

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-17 18:48+0200\n"
+"POT-Creation-Date: 2019-07-21 21:52+0300\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -1725,6 +1725,8 @@ msgid ""
 "Lang2CodeBase <lang>\tBase language for variable texts translation, in the "
 "two symbols code.\n"
 "MainCPUs   <list>\tMain list of the using CPUs, separated by ':'.\n"
+"TaskInvPhs <n>\t\tNumber of phases of the task invoking, 1 to disable the "
+"phasing.\n"
 "ClockRT    <0|1>\tSets the clock source to use to REALTIME (otherwise "
 "MONOTONIC), which is problematic one at the system clock modification.\n"
 "SaveAtExit <0|1>\tSave the program at exit.\n"
@@ -1797,6 +1799,7 @@ msgstr ""
 "символи.\n"
 "MainCPUs   <перелік>\tОсновний перелік використаних процесорів, поділено "
 "':'.\n"
+"TaskInvPhs <n>\t\tКількість фаз виклику задач, 1 для вимкнення фазування.\n"
 "ClockRT    <0|1>\tВстановити використання джерела годиннику у REALTIME "
 "(інакше MONOTONIC), дещо проблематичне при модифікації системного "
 "годинника.\n"
@@ -1953,6 +1956,7 @@ msgstr "Системний годинник змінено у '%s'. Корекц
 msgid "1:Request is not an object!"
 msgstr "1:Запит не є об'єкт!"
 
+#, c-format
 msgid "10:Error remote request: %s"
 msgstr "10:Помилка віддаленого запиту: %s"
 
@@ -1998,6 +2002,16 @@ msgstr ""
 
 msgid "Tasks planning clock"
 msgstr "Годинник планування задач"
+
+msgid "Number of phases of the task invoking"
+msgstr "Кількість фаз виклику задач"
+
+msgid ""
+"To set up phasing of the task invoking in the determined phases number, <= 0 "
+"to set optimal, 1 to disable the tasks phasing."
+msgstr ""
+"Для встановлення фазування виклику задач у визначену кількість фаз, <= 0 для "
+"встановлення оптимально, 1 для вимкнення фазування задач."
 
 msgid "Internal charset"
 msgstr "Внутрішнє кодування"
@@ -2120,6 +2134,12 @@ msgid ""
 msgstr ""
 "Для встановлення використовуваних процесорів записуйте рядок номерів "
 "поділених символом ':'."
+
+msgid "Phase"
+msgstr "Фаза"
+
+msgid "To set up the task invoking phase."
+msgstr "Для встановлення фазування виклику задач."
 
 msgid "Translations"
 msgstr "Переклади"
@@ -2564,10 +2584,6 @@ msgid "Unfinished attribute. Pos: %d"
 msgstr "Незавершений атрибут. Поз: %d"
 
 #, c-format
-msgid "Error entity. Pos: %d"
-msgstr "Помилка сутності. Поз: %d"
-
-#, c-format
 msgid "Unknown entity '%s'. Pos: %d"
 msgstr "Невідома сутність '%s'. Поз: %d"
 
@@ -2627,6 +2643,9 @@ msgstr "Встановлено назву проекту у:"
 
 msgid "already started."
 msgstr "вже запущено."
+
+#~ msgid "Error entity. Pos: %d"
+#~ msgstr "Помилка сутності. Поз: %d"
 
 #~ msgid "The node '%s' is already present."
 #~ msgstr "Вузол '%s' вже присутній."

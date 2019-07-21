@@ -604,11 +604,13 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	// Calculation of the main window/page scale
 	if(this == masterPage) {
 	    //  Own status bar reserve
+	    var toCrtStBar = false;
 	    if(!parseInt(this.attrs["stBarNoShow"]) && !masterPage.status) {
 		masterPage.status = document.createElement('div');
 		masterPage.status.srcHeight = 25;
 		masterPage.status.setAttribute('id', 'gen-pnl-status');
 		this.place.appendChild(masterPage.status);
+		toCrtStBar = true;
 	    }
 
 	    var geomW = parseFloat(this.attrs['geomW']);
@@ -628,22 +630,24 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		masterPage.status.style.height = (masterPage.status.height-1)+"px";
 		masterPage.status.style.fontSize = Math.floor(masterPage.status.height*0.7)+"px";
 
-		stBar = "<table width='100%'><TR><td id='StatusBar' width='100%'/>";
-		stBar += "<td id='st_alarm' title1='###Alarm level: %1###'><img onclick='alarmQuiet()' height='"+(masterPage.status.height-2)+"px' src='/"+MOD_ID+"/img_alarmLev'/></td>";
-		if(modelStyles && parseInt(modelStyles.getAttribute('curStlId')) >= 0 && modelStyles.childNodes.length > 1) {
-		    stBar += "<td id='st_style' title='###Field for displaying and changing the used interface style.###'>";
-		    stBar += "<select onchange='styleSet(this.selectedOptions[0].getAttribute(\"itId\"))'>";
-		    for(iSt = 0; iSt < modelStyles.childNodes.length; iSt++) {
-			if(parseInt(modelStyles.childNodes[iSt].getAttribute("id")) < 0) continue;
-			stBar += "<option itId='"+modelStyles.childNodes[iSt].getAttribute("id")+"' "+
-			    ((modelStyles.childNodes[iSt].getAttribute("id")==modelStyles.getAttribute('curStlId'))?"selected='1'":"")+">"+
-				modelStyles.childNodes[iSt].textContent+"</option>";
+		if(toCrtStBar) {
+		    stBar = "<table width='100%'><TR><td id='StatusBar' width='100%'/>";
+		    stBar += "<td id='st_alarm' title1='###Alarm level: %1###'><img onclick='alarmQuiet()' height='"+(masterPage.status.height-2)+"px' src='/"+MOD_ID+"/img_alarmLev'/></td>";
+		    if(modelStyles && parseInt(modelStyles.getAttribute('curStlId')) >= 0 && modelStyles.childNodes.length > 1) {
+			stBar += "<td id='st_style' title='###Field for displaying and changing the used interface style.###'>";
+			stBar += "<select onchange='styleSet(this.selectedOptions[0].getAttribute(\"itId\"))'>";
+			for(iSt = 0; iSt < modelStyles.childNodes.length; iSt++) {
+			    if(parseInt(modelStyles.childNodes[iSt].getAttribute("id")) < 0) continue;
+			    stBar += "<option itId='"+modelStyles.childNodes[iSt].getAttribute("id")+"' "+
+				((modelStyles.childNodes[iSt].getAttribute("id")==modelStyles.getAttribute('curStlId'))?"selected='1'":"")+">"+
+				    modelStyles.childNodes[iSt].textContent+"</option>";
+			}
+			stBar += "</select></td>";
 		    }
-		    stBar += "</select></td>";
+		    stBar += "<td id='st_user' title='###Field for displaying and changing the current user.###'><a href='/login/"+MOD_ID+"/'>"+pgBr.getAttribute('user')+"</a></td>";
+		    stBar += "</TR></table>";
+		    masterPage.status.innerHTML = stBar;
 		}
-		stBar += "<td id='st_user' title='###Field for displaying and changing the current user.###'><a href='/login/"+MOD_ID+"/'>"+pgBr.getAttribute('user')+"</a></td>";
-		stBar += "</TR></table>";
-		masterPage.status.innerHTML = stBar;
 
 		elStyle += "overflow: visible; ";
 	    }
@@ -736,6 +740,13 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    if(this == masterPage && this.attrs['tipStatus'].length) { setStatus(this.attrs['tipStatus'],10000); this.attrs['tipStatus'] = ""; }
 	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
 	    if(elWr && this.attrs['backColor'].length && getColor(this.attrs['backColor'],true)) elStyle += 'cursor: pointer; ';
+
+	    if(this.attrs['vs_winTitle']) {
+		if(this == masterPage || (this.pg && this.window && this.windowExt))
+		    window.document.title = this.attrs['vs_winTitle'];
+		else if(this.pg && this.window && !this.windowExt)
+		    this.place.parentElement.offsetParent.rows[0].cells[0].innerText = this.attrs['vs_winTitle'];
+	    }
 
 	    if(!this.pg && ((this.inclOpen && this.attrs['pgOpenSrc'] != this.inclOpen) ||
 		    (!this.inclOpen && this.attrs['pgOpenSrc'].length)))

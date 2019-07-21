@@ -34,7 +34,7 @@
 #define MOD_NAME	_("DB MySQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"3.1.1"
+#define MOD_VER		"3.1.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DBMS MySQL.")
 #define MOD_LICENSE	"GPL2"
@@ -103,7 +103,7 @@ void MBD::postEnable( int flag )
 {
     TBD::postEnable(flag);
 
-    SYS->taskCreate(nodePath('.',true), 0, Task, this);
+    SYS->taskCreate(nodePath('.',true), 20, Task, this);
 }
 
 void MBD::postDisable( int flag )

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-17 18:48+0200\n"
+"POT-Creation-Date: 2019-07-21 21:52+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1509,6 +1509,7 @@ msgid ""
 "Lang       <lang>\tStation language, in the view \"uk_UA.UTF-8\".\n"
 "Lang2CodeBase <lang>\tBase language for variable texts translation, in the two symbols code.\n"
 "MainCPUs   <list>\tMain list of the using CPUs, separated by ':'.\n"
+"TaskInvPhs <n>\t\tNumber of phases of the task invoking, 1 to disable the phasing.\n"
 "ClockRT    <0|1>\tSets the clock source to use to REALTIME (otherwise MONOTONIC), which is problematic one at the system clock modification.\n"
 "SaveAtExit <0|1>\tSave the program at exit.\n"
 "SavePeriod <sec>\tPeriod of the program saving, in seconds. Set zero to disable.\n"
@@ -1693,6 +1694,12 @@ msgstr ""
 msgid "Tasks planning clock"
 msgstr ""
 
+msgid "Number of phases of the task invoking"
+msgstr ""
+
+msgid "To set up phasing of the task invoking in the determined phases number, <= 0 to set optimal, 1 to disable the tasks phasing."
+msgstr ""
+
 msgid "Internal charset"
 msgstr ""
 
@@ -1801,6 +1808,12 @@ msgid "CPU set"
 msgstr ""
 
 msgid "To set up the processors you use, write a row of numbers separated by a ':' character."
+msgstr ""
+
+msgid "Phase"
+msgstr ""
+
+msgid "To set up the task invoking phase."
 msgstr ""
 
 msgid "Translations"
@@ -2203,10 +2216,6 @@ msgstr ""
 
 #, c-format
 msgid "Unfinished attribute. Pos: %d"
-msgstr ""
-
-#, c-format
-msgid "Error entity. Pos: %d"
 msgstr ""
 
 #, c-format

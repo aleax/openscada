@@ -59,7 +59,7 @@ pthread_key_t TSYS::sTaskKey;
 TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char **)argb), envp((const char **)env),
     mUser("root"), mConfFile(sysconfdir_full "/oscada.xml"), mId("InitSt"),
     mModDir(oscd_moddir_full), mIcoDir("icons;" oscd_datadir_full "/icons"), mDocDir("docs;" oscd_datadir_full "/docs"),
-    mWorkDB(DB_CFG), mSaveAtExit(false), mSavePeriod(0), isLoaded(false), rootModifCnt(0), sysModifFlgs(0), mStopSignal(0), mN_CPU(1),
+    mWorkDB(DB_CFG), mTaskInvPhs(10), mSaveAtExit(false), mSavePeriod(0), isLoaded(false), rootModifCnt(0), sysModifFlgs(0), mStopSignal(0), mN_CPU(1),
     mainPthr(0), mSysTm(0), mClockRT(false), mPrjCustMode(true), mPrjNm(dataRes()),
     mRdStLevel(0), mRdRestConnTm(10), mRdTaskPer(1), mRdPrimCmdTr(false)
 {
@@ -510,6 +510,7 @@ string TSYS::optDescr( )
 	"Lang       <lang>	Station language, in the view \"uk_UA.UTF-8\".\n"
 	"Lang2CodeBase <lang>	Base language for variable texts translation, in the two symbols code.\n"
 	"MainCPUs   <list>	Main list of the using CPUs, separated by ':'.\n"
+	"TaskInvPhs <n>		Number of phases of the task invoking, 1 to disable the phasing.\n"
 	"ClockRT    <0|1>	Sets the clock source to use to REALTIME (otherwise MONOTONIC), which is problematic one at the system clock modification.\n"
 	"SaveAtExit <0|1>	Save the program at exit.\n"
 	"SavePeriod <sec>	Period of the program saving, in seconds. Set zero to disable.\n"
@@ -681,6 +682,7 @@ void TSYS::cfgPrmLoad( )
     setIcoDir(TBDS::genDBGet(nodePath()+"IcoDir",icoDir(),"root",TBDS::OnlyCfg), true);
     setDocDir(TBDS::genDBGet(nodePath()+"DocDir",docDir(),"root",TBDS::OnlyCfg), true);
     setMainCPUs(TBDS::genDBGet(nodePath()+"MainCPUs",mainCPUs()));
+    setTaskInvPhs(s2i(TBDS::genDBGet(nodePath()+"TaskInvPhs",i2s(taskInvPhs()))));
     setSaveAtExit(s2i(TBDS::genDBGet(nodePath()+"SaveAtExit","0")));
     setSavePeriod(s2i(TBDS::genDBGet(nodePath()+"SavePeriod","0")));
 
@@ -803,6 +805,7 @@ void TSYS::save_( )
     if(sysModifFlgs&MDF_DocDir)	TBDS::genDBSet(nodePath()+"DocDir", docDir(), "root", TBDS::OnlyCfg);
     TBDS::genDBSet(nodePath()+"MainCPUs", mainCPUs());
     TBDS::genDBSet(nodePath()+"ClockRT", i2s(clockRT()));
+    TBDS::genDBSet(nodePath()+"TaskInvPhs", i2s(taskInvPhs()));
     TBDS::genDBSet(nodePath()+"SaveAtExit", i2s(saveAtExit()));
     TBDS::genDBSet(nodePath()+"SavePeriod", i2s(savePeriod()));
 
@@ -965,6 +968,15 @@ void TSYS::setMainCPUs( const string &vl )
 	pthread_setaffinity_np(mainPthr, sizeof(cpu_set_t), &cpuset);
     }
 #endif
+
+    modif();
+}
+
+void TSYS::setTaskInvPhs( int vl )
+{
+    mTaskInvPhs = (vl <= 0) ?
+		    vmax(1, mTasks.size()/(10*nCPU())) * 10 :
+		    vmax(1, vmin(100,vl));
 
     modif();
 }
@@ -1998,7 +2010,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 	    continue;
 	}
 	res.release();
-	//Error by this active task present
+	//Error by this active task presence
 	if(time(NULL) >= (c_tm+wtm)) throw err_sys(_("Task '%s' is already present!"), path.c_str());
 	sysSleep(0.01);
 	res.request(true);
@@ -2009,6 +2021,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     htsk.taskArg = arg;
     htsk.flgs = 0;
     htsk.thr = 0;
+    htsk.phase = s2i(TBDS::genDBGet(SYS->nodePath()+"TaskPhase:"+path,i2s(mTasks.size()-1)));
     htsk.prior = priority%100;
     res.release();
 
@@ -2034,7 +2047,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     pthread_attr_setschedparam(pthr_attr, &prior);
 
     try {
-	pthread_attr_getdetachstate(pthr_attr,&detachStat);
+	pthread_attr_getdetachstate(pthr_attr, &detachStat);
 	if(detachStat == PTHREAD_CREATE_DETACHED) htsk.flgs |= STask::Detached;
 	int rez = pthread_create(&procPthr, pthr_attr, taskWrap, &htsk);
 	if(rez == EPERM) {
@@ -2345,19 +2358,20 @@ void TSYS::taskSleep( int64_t per, const string &icron, int64_t *lag )
 	clock_gettime(clkId, &spTm);
 	int64_t cur_tm = (int64_t)spTm.tv_sec*1000000000ll + spTm.tv_nsec,
 		pnt_tm = (cur_tm/per + 1)*per,
-		wake_tm = 0;
+		wake_tm = 0,
+		off = (stsk && SYS->taskInvPhs() > 1) ? per*(stsk->phase%SYS->taskInvPhs())/SYS->taskInvPhs() : 0;	//phasing offset
 	do {
-	    spTm.tv_sec = pnt_tm/1000000000ll; spTm.tv_nsec = pnt_tm%1000000000ll;
+	    spTm.tv_sec = (pnt_tm+off)/1000000000ll; spTm.tv_nsec = (pnt_tm+off)%1000000000ll;
 	    if(clock_nanosleep(clkId,TIMER_ABSTIME,&spTm,NULL)) return;
 	    clock_gettime(clkId, &spTm);
-	    wake_tm = (int64_t)spTm.tv_sec*1000000000ll + spTm.tv_nsec;
+	    wake_tm = (int64_t)spTm.tv_sec*1000000000ll + spTm.tv_nsec - off;
 	} while(wake_tm < pnt_tm);
 
 	if(stsk) {
 	    if(stsk->tm_pnt) stsk->cycleLost += vmax(0, pnt_tm/per-stsk->tm_pnt/per-1);
 	    if(lag) *lag = stsk->tm_pnt ? wake_tm-stsk->tm_pnt-per : 0;
 	    stsk->tm_beg = stsk->tm_per;
-	    stsk->tm_end = cur_tm;
+	    stsk->tm_end = cur_tm - off;
 	    stsk->tm_per = wake_tm;
 	    stsk->tm_pnt = pnt_tm;
 	    stsk->lagMax = vmax(stsk->lagMax, stsk->tm_per - stsk->tm_pnt);
@@ -2909,6 +2923,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/gen/mainCPUs",_("Main CPUs set"),RWRWR_,"root","root",2,"tp","str",
 		    "help",_("To set up the processors you use, write a row of numbers separated by a ':' character.\nProcessor numbers start at 0."));
 	    ctrMkNode("fld",opt,-1,"/gen/clk",_("Tasks planning clock"),R_R_R_,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/gen/taskInvPhs",_("Number of phases of the task invoking"),RWRWR_,"root","root",2,"tp","dec",
+		"help",_("To set up phasing of the task invoking in the determined phases number, <= 0 to set optimal, 1 to disable the tasks phasing."));
 	    ctrMkNode("fld",opt,-1,"/gen/in_charset",_("Internal charset"),R_R___,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/config",_("Configuration file"),R_R___,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/workdir",_("Work directory"),R_R___,"root","root",3,"tp","str","dest","sel_ed","select","/gen/workDirList");
@@ -2964,6 +2980,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		if(nCPU() > 1) ctrMkNode("list",opt,-1,"/tasks/tasks/cpuSet",_("CPU set"),RWRW__,"root","root",2,"tp","str",
 		    "help",_("To set up the processors you use, write a row of numbers separated by a ':' character."));
 #endif
+		if(taskInvPhs() > 1) ctrMkNode("list",opt,-1,"/tasks/tasks/taskPh",_("Phase"),RWRW__,"root","root",2,"tp","dec",
+		    "help",_("To set up the task invoking phase."));
 	    }
 	if(ctrMkNode("area",opt,-1,"/tr",_("Translations"))) {
 	    ctrMkNode("fld",opt,-1,"/tr/baseLang",_("Base language of the text variables"),RWRWR_,"root","root",5,
@@ -3047,6 +3065,10 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	struct timespec tmval;
 	clock_getres(SYS->clockRT()?CLOCK_REALTIME:CLOCK_MONOTONIC, &tmval);
 	opt->setText(TSYS::strMess(SYS->clockRT()?_("Real-time %s"):_("Monotonic %s"),tm2s(1e-9*tmval.tv_nsec).c_str()));
+    }
+    else if(a_path == "/gen/taskInvPhs") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(i2s(taskInvPhs()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setTaskInvPhs(s2i(opt->text()));
     }
     else if(a_path == "/gen/in_charset" && ctrChkNode(opt))	opt->setText(Mess->charset());
     else if(a_path == "/gen/config") {
@@ -3177,7 +3199,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    XMLNode *n_stat	= ctrMkNode("list",opt,-1,"/tasks/tasks/stat","",R_R___,"root","root");
 	    XMLNode *n_plc	= ctrMkNode("list",opt,-1,"/tasks/tasks/plc","",R_R___,"root","root");
 	    XMLNode *n_prior	= ctrMkNode("list",opt,-1,"/tasks/tasks/prior","",R_R___,"root","root");
-	    XMLNode *n_cpuSet	= (nCPU()>1) ? ctrMkNode("list",opt,-1,"/tasks/tasks/cpuSet","",RWRW__,"root","root") : NULL;
+	    XMLNode *n_cpuSet	= (nCPU() > 1) ? ctrMkNode("list",opt,-1,"/tasks/tasks/cpuSet","",RWRW__,"root","root") : NULL;
+	    XMLNode *n_taskPh	= (taskInvPhs() > 1) ? ctrMkNode("list",opt,-1,"/tasks/tasks/taskPh","",RWRW__,"root","root") : NULL;
 
 	    ResAlloc res(taskRes, false);
 	    for(map<string,STask>::iterator it = mTasks.begin(); it != mTasks.end(); it++) {
@@ -3223,10 +3246,11 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 #endif
 		    n_cpuSet->childAdd("el")->setText(vl);
 		}
+		if(n_taskPh)	n_taskPh->childAdd("el")->setText(i2s(it->second.phase%taskInvPhs()));
 	    }
 	}
 #if !defined(__ANDROID__) && __GLIBC_PREREQ(2,4)
-	if(nCPU() > 1 && ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR) && opt->attr("col") == "cpuSet") {
+	if(nCPU() > 1 && opt->attr("col") == "cpuSet" && ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR)) {
 	    ResAlloc res(taskRes, true);
 	    map<string,STask>::iterator it = mTasks.find(opt->attr("key_path"));
 	    if(it == mTasks.end()) throw err_sys(_("The task '%s' is missing."));
@@ -3254,6 +3278,17 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    if(rez) throw err_sys(_("Error installing processors for the thread."));
 	}
 #endif
+	if(taskInvPhs() > 1 && opt->attr("col") == "taskPh" && ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR)) {
+	    ResAlloc res(taskRes, true);
+	    map<string,STask>::iterator it = mTasks.find(opt->attr("key_path"));
+	    if(it == mTasks.end()) throw err_sys(_("The task '%s' is missing."));
+	    if(it->second.flgs & STask::Detached) return;
+
+	    int tVl = vmax(0, vmin(100,s2i(opt->text())));
+	    it->second.phase = tVl;
+	    res.release();
+	    TBDS::genDBSet(nodePath()+"TaskPhase:"+it->first, i2s(tVl));
+	}
     }
     else if(a_path == "/tr/baseLang") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(Mess->lang2CodeBase());

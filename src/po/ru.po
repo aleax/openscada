@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-17 18:48+0200\n"
+"POT-Creation-Date: 2019-07-21 21:52+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1727,6 +1727,8 @@ msgid ""
 "Lang2CodeBase <lang>\tBase language for variable texts translation, in the "
 "two symbols code.\n"
 "MainCPUs   <list>\tMain list of the using CPUs, separated by ':'.\n"
+"TaskInvPhs <n>\t\tNumber of phases of the task invoking, 1 to disable the "
+"phasing.\n"
 "ClockRT    <0|1>\tSets the clock source to use to REALTIME (otherwise "
 "MONOTONIC), which is problematic one at the system clock modification.\n"
 "SaveAtExit <0|1>\tSave the program at exit.\n"
@@ -1800,6 +1802,8 @@ msgstr ""
 "символа.\n"
 "MainCPUs   <список>\tОсновной перечень используемых процессоров, разделены "
 "':'.\n"
+"TaskInvPhs <n>\t\tКоличество фаз вызова задач, 1 для отключения "
+"фазирования.\n"
 "ClockRT    <0|1>\tУстановить использование источника часов в REALTIME (иначе "
 "MONOTONIC), несколько проблематичное при модификации системных часов.\n"
 "SaveAtExit <0|1>\tСохранять программу при выходе.\n"
@@ -1956,6 +1960,7 @@ msgstr "Системные часы изменены в '%s'. Коррекция
 msgid "1:Request is not an object!"
 msgstr "1:Запрос не объект!"
 
+#, c-format
 msgid "10:Error remote request: %s"
 msgstr "10:Ошибка удалённого запроса: %s"
 
@@ -2001,6 +2006,16 @@ msgstr ""
 
 msgid "Tasks planning clock"
 msgstr "Часы планирования задач"
+
+msgid "Number of phases of the task invoking"
+msgstr "Количество фаз вызова задач"
+
+msgid ""
+"To set up phasing of the task invoking in the determined phases number, <= 0 "
+"to set optimal, 1 to disable the tasks phasing."
+msgstr ""
+"Для установки фазирования вызова задач в определённое количество фаз, <= 0 "
+"для установки оптимально, 1 для выключения фазирования задач."
 
 msgid "Internal charset"
 msgstr "Внутренняя кодировка"
@@ -2123,6 +2138,12 @@ msgid ""
 msgstr ""
 "Для указания используемых процессоров записывайте строку номеров разделённых "
 "символом ':'."
+
+msgid "Phase"
+msgstr "Фаза"
+
+msgid "To set up the task invoking phase."
+msgstr "Для установки фазирования вызова задач."
 
 msgid "Translations"
 msgstr "Переводы"
@@ -2568,10 +2589,6 @@ msgid "Unfinished attribute. Pos: %d"
 msgstr "Незавершённый атрибут. Поз: %d"
 
 #, c-format
-msgid "Error entity. Pos: %d"
-msgstr "Ошибка сущности. Поз: %d"
-
-#, c-format
 msgid "Unknown entity '%s'. Pos: %d"
 msgstr "Неизвестная сущность '%s'. Поз: %d"
 
@@ -2631,6 +2648,9 @@ msgstr "Имя проекта установлено в:"
 
 msgid "already started."
 msgstr "уже запущен."
+
+#~ msgid "Error entity. Pos: %d"
+#~ msgstr "Ошибка сущности. Поз: %d"
 
 #~ msgid "The node '%s' is already present."
 #~ msgstr "Узел '%s' уже присутствует."

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-17 18:48+0200\n"
+"POT-Creation-Date: 2019-07-21 21:52+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1736,6 +1736,8 @@ msgid ""
 "Lang2CodeBase <lang>\tBase language for variable texts translation, in the "
 "two symbols code.\n"
 "MainCPUs   <list>\tMain list of the using CPUs, separated by ':'.\n"
+"TaskInvPhs <n>\t\tNumber of phases of the task invoking, 1 to disable the "
+"phasing.\n"
 "ClockRT    <0|1>\tSets the clock source to use to REALTIME (otherwise "
 "MONOTONIC), which is problematic one at the system clock modification.\n"
 "SaveAtExit <0|1>\tSave the program at exit.\n"
@@ -1811,6 +1813,8 @@ msgstr ""
 "Lang2CodeBase <Sprache> Basissprache für die Übersetzung von variablen "
 "Texten, in den beiden Symbolen.\n"
 "MainCPUs   <Liste>\tHauptliste der verwendeten CPUs, getrennt durch ':'.\n"
+"TaskInvPhs <n>\t\tAnzahl der Phasen des Taskaufrufs, 1 um die "
+"Phaseneinstellung zu deaktivieren.\n"
 "ClockRT    <0|1>\tLegt die zu verwendende Taktquelle auf REALTIME (sonst "
 "MONOTONIC) fest, was bei der Systemtaktmodifikation problematisch ist.\n"
 "SaveAtExit <0|1>\tSpeichere das Programm beim Beenden.\n"
@@ -1967,6 +1971,7 @@ msgstr "Der Systemtakt geändert '%s'. Korrektur der cron '%s' Ziel!"
 msgid "1:Request is not an object!"
 msgstr "1:Die Anfrage ist kein Objekt!"
 
+#, c-format
 msgid "10:Error remote request: %s"
 msgstr "10:Fehler Remote-Anforderung: %s"
 
@@ -2012,6 +2017,17 @@ msgstr ""
 
 msgid "Tasks planning clock"
 msgstr "Aufgaben Uhr Planung"
+
+msgid "Number of phases of the task invoking"
+msgstr "Anzahl der Phasen des Taskaufrufs"
+
+msgid ""
+"To set up phasing of the task invoking in the determined phases number, <= 0 "
+"to set optimal, 1 to disable the tasks phasing."
+msgstr ""
+"Zum Einstellen der Phaseneinstellung der Task, die in der festgelegten "
+"Phasennummer aufgerufen wird, <= 0 zum Einstellen des Optimums, 1 zum "
+"Deaktivieren der Task-Phaseneinstellung."
 
 msgid "Internal charset"
 msgstr "Interne Kodierung"
@@ -2134,6 +2150,12 @@ msgid ""
 msgstr ""
 "Für eine Verwendung von CPU gesetzt Schreib Prozessoren Zahlen String mit "
 "dem Symbol ':' getrennt."
+
+msgid "Phase"
+msgstr "Phase"
+
+msgid "To set up the task invoking phase."
+msgstr "Zum Einstellen der Phaseneinstellung der Task"
 
 msgid "Translations"
 msgstr "Übersetzungen"
@@ -2580,10 +2602,6 @@ msgid "Unfinished attribute. Pos: %d"
 msgstr "Unfertig Attribut. Pos: %d"
 
 #, c-format
-msgid "Error entity. Pos: %d"
-msgstr "Entity Fehler. Pos: %d"
-
-#, c-format
 msgid "Unknown entity '%s'. Pos: %d"
 msgstr "Unbekannte Entität '%s'. Pos: %d"
 
@@ -2643,6 +2661,9 @@ msgstr "Stellen Sie den Namen des Projekts an:"
 
 msgid "already started."
 msgstr "begonnen."
+
+#~ msgid "Error entity. Pos: %d"
+#~ msgstr "Entity Fehler. Pos: %d"
 
 #~ msgid "The node '%s' is already present."
 #~ msgstr "Der Knoten '%s' ist schon vorhanden."

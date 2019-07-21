@@ -1,3 +1,13 @@
+2019-07-21 Roman (stable)
+- !!:DB.LibsDB.OscadaLibs: base.codeState: Revised during the documenting.
+- !!!!:FIX:SYS: Fix for the negative priority of the policy "BATCH".
+    !!!!:The tasks planning appended for phasing their invoking, what make the CPU loading even.
+- DB.{MySQL,PostgreSQL}: Priority of the transaction tracing task increased to 20.
+- FIX:UI.VCAEngine: Fixed in calculation of the maximum consumed time of the session items in the debugging.
+- UI.{Vision,WebVision}: Appended for the visualiser specific attribute "vs_winTitle" of the dynamic window title value.
+- FIX:UI.WebVision: Fixed for the statusbar updating and prevented from its flicking at the master page updating.
+
+
 2019-07-18 Roman (stable)
 - FIX:DB.LibsDB.OscadaLibs: All alarm forming templates prevented from the messages loss in the code of the messages opressing
     at global controller object errors (missing connections) if the previosly set message gone in the time of the connection missing.

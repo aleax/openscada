@@ -4790,6 +4790,9 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val, const strin
 	    up = true;
 	    //if(runW && shD->inclPg) shD->inclPg->setMinimumSize(w->size());
 	    break;
+	case A_NO_ID:
+	    if(runP && attr == "vs_winTitle")	w->window()->setWindowTitle(val.c_str());
+	    break;
 	case A_COM_FOCUS: break;
 	case A_EN:
 	    if(!runW)	{ up = false; break; }
