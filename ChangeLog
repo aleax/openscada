@@ -1,3 +1,14 @@
+2019-07-28 Roman (stable)
+- !!:DB.LibsDB.vcaBase: Main.{TextLab,ImgLab}: Revised during the documenting.
+- DAQ.JavaLikeCalc: The work registers object "RegW" appended for the debug counters, to monitor the objects leak.
+- !!!:FIX:UI.VCAEngine: The project session command "close" of the service "/serv/pg" forced to processing, what actual to the linked pages.
+    The UI attributes object "Attr" appended for the debug counters, to monitor the objects leak.
+    Finishing time of the task of generating documents of the primitive "Document" increased to 3*STD_INTERF_TM(7).
+- !!:FIX:UI.WebVision: Fixed to close only complete sessions and restored to connect the ready VCA-session, only for root.
+    The UI objects "VCAObj" and "VCASess" appended for the debug counters, to monitor the objects leak.
+    The session information appended for the connected project and the user.
+
+
 2019-07-21 Roman (stable)
 - !!:DB.LibsDB.OscadaLibs: base.codeState: Revised during the documenting.
 - !!!!:FIX:SYS: Fix for the negative priority of the policy "BATCH".

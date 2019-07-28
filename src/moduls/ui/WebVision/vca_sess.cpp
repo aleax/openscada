@@ -42,22 +42,29 @@ using namespace VCA;
 //*************************************************
 //* VCASess					  *
 //*************************************************
-VCASess::VCASess( const string &iid, bool isCreate ) : mId(iid), mIsCreate(isCreate)
+VCASess::VCASess( const string &iid ) : mId(iid)
 {
     open_ses = lst_ses_req	= time(NULL);
     id_objs	= grpAdd("obj_");
+
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
 }
+
+VCASess::~VCASess( )
+{
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), -1);
+}
+
+string VCASess::objName( )	{ return TCntrNode::objName()+":VCASess"; }
 
 void VCASess::postDisable( int flag )
 {
     TCntrNode::postDisable(flag);
 
     // Disconnect/delete session
-    if(mIsCreate) {
-	XMLNode req("disconnect");
-	req.setAttr("path", "/%2fserv%2fsess")->setAttr("sess", id())->setAttr("remoteSrcAddr", sender());
-	mod->cntrIfCmd(req, SSess(user()));
-    }
+    XMLNode req("disconnect");
+    req.setAttr("path", "/%2fserv%2fsess")->setAttr("sess", id())->setAttr("remoteSrcAddr", sender());
+    mod->cntrIfCmd(req, SSess(user()));
 }
 
 void VCASess::getReq( SSess &ses )
@@ -239,12 +246,14 @@ void VCASess::postReq( SSess &ses )
 	req.load(ses.content);
 	req.setAttr("path", ses.url+"/%2fserv%2fattr");
 	mod->cntrIfCmd(req, ses);
+	ses.page = mod->pgCreator(ses.prt, req.save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
     }
     //Open page command
     else if(wp_com == "pgClose" || wp_com == "pgOpen") {
 	XMLNode req((wp_com=="pgOpen")?"open":"close");
 	req.setAttr("path","/"+TSYS::pathLev(ses.url,0)+"/%2fserv%2fpg")->setAttr("pg",ses.url);
 	mod->cntrIfCmd(req, ses);
+	ses.page = mod->pgCreator(ses.prt, req.save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
 	// Remove for objects of that page - pages' cache
 	string oAddr = TSYS::path2sepstr(ses.url);
 	if(wp_com == "pgOpen")	pgCacheGet(oAddr);
@@ -253,8 +262,9 @@ void VCASess::postReq( SSess &ses )
     }
     else if(wp_com == "obj" && objPresent(oAddr=TSYS::path2sepstr(ses.url))) objAt(oAddr).at().postReq(ses);
 
-    ses.page = mod->pgCreator(ses.prt, string("<div class='error'>")+_("Content is missing.")+"</div>\n", "204 No Content");
-    //ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type:text/html;charset="+Mess->charset());
+    if(ses.page.empty())
+	ses.page = mod->pgCreator(ses.prt, "<req rez='0'/>\n", "200 OK", "Content-Type: text/xml;charset=UTF-8");
+	//ses.page = mod->pgCreator(ses.prt, string("<div class='error'>")+_("Content is missing.")+"</div>\n", "204 No Content");
 }
 
 void VCASess::objCheck( const string &rootId, const string &wPath )
@@ -378,11 +388,17 @@ float VCASess::cacheResLen( )
 //*************************************************
 VCAObj::VCAObj( const string &iid ) : mId(iid)
 {
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
+}
 
+VCAObj::~VCAObj( )
+{
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), -1);
 }
 
 VCASess &VCAObj::owner( ) const	{ return *(VCASess*)nodePrev(); }
 
+string VCAObj::objName( )	{ return TCntrNode::objName()+":VCAObj"; }
 
 //*************************************************
 //* VCAFormEl					  *
@@ -432,6 +448,7 @@ void VCAFormEl::postReq( SSess &ses )
 	req.childAdd("el")->setAttr("id","value")->setText(fTmpl+"|"+fTitle+"|"+fRealFile+"|"+fMime+"\n"+ses.cnt[0].text());
 	req.childAdd("el")->setAttr("id","event")->setText("ws_BtLoad");
 	mod->cntrIfCmd(req, ses);
+	ses.page = mod->pgCreator(ses.prt, req.save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
     }
 }
 
@@ -4199,6 +4216,7 @@ void VCAElFigure::postReq( SSess &ses )
 	    req.childAdd("el")->setAttr("id","event")->setText("ws_FocusIn");
 	    req.childAdd("el")->setAttr("id","focus")->setText("1");
 	    mod->cntrIfCmd(req, ses.user);
+	    ses.page = mod->pgCreator(ses.prt, req.save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
 	}
     }
 }

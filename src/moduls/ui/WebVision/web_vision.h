@@ -99,7 +99,7 @@ class TWEB: public TUI
 	// VCA sessions
 	void vcaSesList( vector<string> &list ) const	{ chldList(id_vcases,list); }
 	bool vcaSesPresent( const string &name ) const	{ return chldPresent(id_vcases,name); }
-	void vcaSesAdd( const string &name, bool isCreate );
+	void vcaSesAdd( const string &name );
 	void vcaSesDel( const string &name )		{ chldDel(id_vcases, name); }
 	AutoHD<VCASess> vcaSesAt( const string &name ) const	{ return chldAt(id_vcases, name); }
 

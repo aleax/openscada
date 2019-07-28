@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-25 20:34+0300\n"
+"POT-Creation-Date: 2019-07-23 09:19+0300\n"
 "PO-Revision-Date: 2007-12-03 11:05+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -225,12 +225,16 @@ msgstr "Переход к сеансу '%s' для проекта '%s' ..."
 msgid "Going to the main page ..."
 msgstr "Переход к основной странице ..."
 
+#, c-format
 msgid "The session '%s' is closed."
 msgstr "Закрыт сеанс '%s'."
 
 #, c-format
 msgid "You '%s' have no access to close sessions!"
 msgstr "Вы '%s' не имеете доступа к закрытию сеансов!"
+
+msgid "Going to the different session ..."
+msgstr "Переход к другому сеансу ..."
 
 #, c-format
 msgid "The specified project/session '%s' is false!"
@@ -299,10 +303,9 @@ msgstr ""
 "  0   - отключен;\n"
 "  1-9 - прямой уровень."
 
-#, c-format
 msgid ""
-"%s %s(%s): the last %s; cached pages %d and resources %d, %s; session "
+"%s %s(%s):%s(%s): the last %s; cached pages %d and resources %d, %s; session "
 "objects %d."
 msgstr ""
-"%s %s(%s): последний %s; кешированных страниц %d и ресурсов %d, %s; объектов "
+"%s %s(%s):%s(%s): последний %s; кешированных страниц %d и ресурсов %d, %s; объектов "
 "сеанса %d."

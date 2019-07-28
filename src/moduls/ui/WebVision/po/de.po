@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-25 20:34+0300\n"
+"POT-Creation-Date: 2019-07-23 09:19+0300\n"
 "PO-Revision-Date: 2009-08-26 08:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -235,12 +235,16 @@ msgstr "Gehen Sie zu Session '%s' für Projekt '%s' ..."
 msgid "Going to the main page ..."
 msgstr "Zur Hauptseite gehen ..."
 
+#, c-format
 msgid "The session '%s' is closed."
 msgstr "Die Sitzung '%s' ist geschlossen."
 
 #, c-format
 msgid "You '%s' have no access to close sessions!"
 msgstr "Sie '%s' haben keinen Zugriff auf geschlossene Sitzungen!"
+
+msgid "Going to the different session ..."
+msgstr "Zur anderen Sitzung gehen ..."
 
 #, c-format
 msgid "The specified project/session '%s' is false!"
@@ -309,10 +313,9 @@ msgstr ""
 "  0   - abgeschaltet;\n"
 "  1-9 - direkte Stufe."
 
-#, c-format
 msgid ""
-"%s %s(%s): the last %s; cached pages %d and resources %d, %s; session "
+"%s %s(%s):%s(%s): the last %s; cached pages %d and resources %d, %s; session "
 "objects %d."
 msgstr ""
-"%s %s(%s): die letzten %s; zwischengespeicherte Seiten %d und Ressourcen %d, "
+"%s %s(%s):%s(%s): die letzten %s; zwischengespeicherte Seiten %d und Ressourcen %d, "
 "%s; Sitzungsobjekte %d."

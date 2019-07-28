@@ -72,6 +72,9 @@ class VCAObj : public TCntrNode
     public:
 	//Methods
 	VCAObj( const string &iid );
+	~VCAObj( );
+
+	string objName( );
 
 	const char *nodeName( ) const	{ return mId.c_str(); }
 	string path( )	{ return TSYS::sepstr2path(mId); }
@@ -432,7 +435,10 @@ class VCASess : public TCntrNode
 {
     public:
 	//Methods
-	VCASess( const string &iid, bool isCreate );
+	VCASess( const string &iid );
+	~VCASess( );
+
+	string objName( );
 
 	string id( )			{ return mId; }
 	string proj( )			{ return mProj; }
@@ -491,7 +497,6 @@ class VCASess : public TCntrNode
 	int			id_objs;	//Primitive object's container identifier
 	time_t			open_ses, lst_ses_req;
 	string			mUser, mProj, mSender;
-	bool			mIsCreate;
 
 	deque<pair<time_t,string> > mCachePg;	//Pages cache
 	map<string,CacheEl>	mCacheRes;	//Resources cache

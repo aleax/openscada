@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"4.0.0"
+#define MOD_VER		"4.0.1"
 #define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on the the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -251,10 +251,10 @@ TWEB::~TWEB( )
 
 }
 
-void TWEB::vcaSesAdd( const string &name, bool isCreate )
+void TWEB::vcaSesAdd( const string &name )
 {
     if(vcaSesPresent(name))	return;
-    chldAdd(id_vcases, new VCASess(name,isCreate));
+    chldAdd(id_vcases, new VCASess(name));
 }
 
 string TWEB::optDescr( )
@@ -387,7 +387,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 			continue;
 		    prjSesEls += "<tr><td><img src='/" MOD_ID "/ico?it=/ses_" + req.childGet(iCh)->text() + "' height='32' width='32'/> "
 			"<a href='/" MOD_ID "/ses_" + req.childGet(iCh)->text() + "/"+ses.gPrms+"'>" + req.childGet(iCh)->text()+"</a>";
-		    if(ses.isRoot()) prjSesEls += " (<a href='/" MOD_ID "/ses_" + req.childGet(iCh)->text() + "?com=close'>"+_("close")+"</a>)";
+		    if(ses.isRoot() && vcaSesPresent(req.childGet(iCh)->text())) prjSesEls += " (<a href='/" MOD_ID "/ses_" + req.childGet(iCh)->text() + "?com=close'>"+_("close")+"</a>)";
 		    if(req.childGet(iCh)->attr("user") != user) prjSesEls += " - "+req.childGet(iCh)->attr("user");
 		    if(vcaSesPresent(req.childGet(iCh)->text()) && vcaSesAt(req.childGet(iCh)->text()).at().sender() != sender)
 			prjSesEls += " - "+vcaSesAt(req.childGet(iCh)->text()).at().sender();
@@ -452,10 +452,11 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 			    page = messPost(req.attr("mcat").c_str(), req.text().c_str(), TWEB::Error);
 			else {
 			    sName = req.attr("sess");
-			    vcaSesAdd(sName, true);
-			    vcaSesAt(sName).at().projSet(req.attr("prj"));
-			    vcaSesAt(sName).at().userSet(user);
-			    vcaSesAt(sName).at().senderSet(sender);
+			    vcaSesAdd(sName);
+			    AutoHD<VCASess> vs = vcaSesAt(sName);
+			    vs.at().projSet(req.attr("prj"));
+			    vs.at().userSet(user);
+			    vs.at().senderSet(sender);
 			}
 		    }
 		}
@@ -489,6 +490,25 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 			"200 OK", "", "<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/" MOD_ID "/prj_"+vs.at().proj()+"'/>", "", ses.lang);
 		// The main requesting code
 		else {
+		    // Try to connect the VCA-session at missing the Web-session
+		    if(vs.freeStat() && !ses.prm.size() && ses.isRoot()) {
+			XMLNode req("get"); req.setAttr("path", ses.url+"/%2fobj%2fst%2fen");
+			//  Connecting and creation a new Web-session for the VCA-session
+			if(!cntrIfCmd(req,ses) && s2i(req.text())) {
+			    req.setName("connect")->setAttr("path", "/%2fserv%2fsess")->setAttr("sess", sesnm)->setAttr("remoteSrcAddr", sender);
+			    if(cntrIfCmd(req,ses)) {
+				page = messPost(req.attr("mcat").c_str(), req.text().c_str(), TWEB::Error);
+				return;
+			    }
+			    ResAlloc sesRes(mSesRes, true);
+			    vcaSesAdd(sesnm); vs = vcaSesAt(sesnm);
+			    vs.at().projSet(req.attr("prj"));
+			    vs.at().userSet(user);
+			    vs.at().senderSet(sender);
+			}
+		    }
+
+		    // Same request
 		    if(!vs.freeStat()) {
 			ResAlloc sesRes(mSesRes, false);
 			vs.at().getReq(ses);
@@ -602,9 +622,10 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 	for(int iS = 0; iS < vSesLs.size(); iS++) {
 	    AutoHD<VCASess> ses = vcaSesAt(vSesLs[iS]);
 	    ses.at().objList(vSesObjs);
-	    opt->childAdd("el")->setText(TSYS::strMess(_("%s %s(%s): the last %s; cached pages %d and resources %d, %s; session objects %d."),
+	    opt->childAdd("el")->setText(TSYS::strMess(_("%s %s(%s):%s(%s): the last %s; cached pages %d and resources %d, %s; session objects %d."),
 		atm2s(ses.at().openTm(),"%Y-%m-%dT%H:%M:%S").c_str(),
-		ses.at().id().c_str(), ses.at().sender().c_str(),
+		ses.at().id().c_str(), ses.at().proj().c_str(),
+		ses.at().user().c_str(),  ses.at().sender().c_str(),
 		atm2s(ses.at().lstReq(),"%Y-%m-%dT%H:%M:%S").c_str(),
 		ses.at().pgCacheSize(), ses.at().cacheResSize(), TSYS::cpct2str(ses.at().cacheResLen()).c_str(), vSesObjs.size()));
 	}

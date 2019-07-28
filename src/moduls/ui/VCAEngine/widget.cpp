@@ -1650,11 +1650,15 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 Attr::Attr( TFld *ifld, bool inher ) : mFld(NULL), mModif(0), mFlgSelf((SelfAttrFlgs)0), mConn(0), mOwner(NULL)
 {
     setFld(ifld, inher);
+
+    if(mess_lev() == TMess::Debug) SYS->cntrIter("UI:VCAEngine:Attr", 1);
 }
 
 Attr::~Attr( )
 {
     setFld(NULL, false);
+
+    if(mess_lev() == TMess::Debug) SYS->cntrIter("UI:VCAEngine:Attr", -1);
 }
 
 void Attr::setFld( TFld *fld, bool inher )

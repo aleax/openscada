@@ -645,7 +645,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 	    ((AutoHD<SessWdg>)nodeAt(opt->attr("pg"),1)).at().attrAt("pgOpen").at().setB(true, true);
 	//Close open pages
 	else if(ctrChkNode(opt,"close",RWRWRW,owner().c_str(),grp().c_str(),SEC_WR) && openCheck(opt->attr("pg")))
-	    ((AutoHD<SessWdg>)nodeAt(opt->attr("pg"),1)).at().attrAt("pgOpen").at().setB(false);
+	    ((AutoHD<SessWdg>)nodeAt(opt->attr("pg"),1)).at().attrAt("pgOpen").at().setB(false, true);
 	mReqTm = time(NULL);
 	setReqUser(opt->attr("user"));
 	setReqLang(opt->attr("lang"));

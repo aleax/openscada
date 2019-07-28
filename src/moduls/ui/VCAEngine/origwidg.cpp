@@ -1296,7 +1296,11 @@ void OrigDocument::postEnable( int flag )
     }
 }
 
-void OrigDocument::disable( Widget *base )	{ SYS->taskDestroy(base->nodePath('.',true)+".doc"); }
+void OrigDocument::disable( Widget *base )
+{
+    if(dynamic_cast<SessWdg*>(base))
+	SYS->taskDestroy(base->nodePath('.',true)+".doc", NULL, 3*STD_INTERF_TM);
+}
 
 bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 {
@@ -1740,7 +1744,7 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 			progrNode->childGet(progrNode->childSize()-1)->
 			    setText(TSYS::strMess(_("Messages block %d: %0.2f%% loaded."),progrNode->childSize(),100*(float)iR/(float)mess.size()));
 			XMLNode *rootN = xcur->root();
-			wdg->attrAt("doc").at().setS(rootN->childGet(rootN->childSize()-1)->save(0, Mess->charset()));
+			wdg->attrAt("doc").at().setS(rootN->childGet(rootN->childSize()-1)->save(0,Mess->charset()));
 		    }
 		}
 

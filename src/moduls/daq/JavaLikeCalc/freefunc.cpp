@@ -2979,6 +2979,18 @@ void Reg::free( )
 //*************************************************
 //* RegW : Work register                          *
 //*************************************************
+RegW::RegW( ) : mTp(Reg::Free), mConst(false)
+{
+    if(mess_lev() == TMess::Debug) SYS->cntrIter("DAQ:JavaLikeCalc:RegW", 1);
+}
+
+RegW::~RegW( )
+{
+    setType(Reg::Free);
+
+    if(mess_lev() == TMess::Debug) SYS->cntrIter("DAQ:JavaLikeCalc:RegW", -1);
+}
+
 void RegW::operator=( const TVariant &ivar )
 {
     switch(ivar.type()) {

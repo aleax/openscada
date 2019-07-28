@@ -116,7 +116,6 @@ INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_doc_pa
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_doc_panel','prev1','/wlb_Main/wdg_doc_panel/wdg_prev1','owner;value;');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_doc_panel','size','/wlb_Main/wdg_doc_panel/wdg_size','owner;value;');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_doc_panel','tmTp','/wlb_Main/wdg_doc_panel/wdg_tmTp','owner;');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_grph_panel','curstime','/wlb_Main/wdg_grph_panel/wdg_curstime','');
 CREATE TABLE 'prj_archBrowser_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO "prj_archBrowser_io" VALUES('/prj_archBrowser/pg_control','name','','Control panels',0,'','','Панели управления','','','Панелі керування','','');
 INSERT INTO "prj_archBrowser_io" VALUES('/prj_archBrowser/pg_control/pg_graphSelPrm','value','color','',8,'','','','','','','','');
@@ -512,7 +511,6 @@ INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1',
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e8','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e8','owner;','');
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e9','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e9','owner;','');
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','name','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_name','owner;','');
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','curstime','/wlb_Main/wdg_grph_panel/wdg_curstime','','');
 CREATE TABLE 'prj_tmplSO_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so','evProc','ws_BtPress:/prev:prev:/pg_so/*/*/$
 ws_BtPress:/next:next:/pg_so/*/*/$
@@ -3009,7 +3007,7 @@ INSERT INTO "wlb_Main_io" VALUES('terminator','geomX','1',32,'','','Text1','',''
 INSERT INTO "wlb_Main_io" VALUES('terminator','geomY','68',32,'','','Text1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('terminator','geomW','108',32,'','','Text1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('terminator','font','Arial 15',32,'','','Text1','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('terminator','text','Control panel',32,'','','Text1','Контрольна панель','','Панель контроля','','','');
+INSERT INTO "wlb_Main_io" VALUES('terminator','text','Control panel',32,'','','Text1','Панель контролю','','Панель контроля','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','name','Graphics group panel',32,'','','','Панель групи графіків','','Панель группы графиков','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomW','110',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomH','365',32,'','','','','','','','','');
@@ -3919,19 +3917,19 @@ INSERT INTO "wlb_Main_io" VALUES('grpCadr','prmSp','0',38,'Parameter|sp','','el8
 INSERT INTO "wlb_Main_io" VALUES('grpCadr','prmStop',NULL,38,'Parameter|stop','','el8','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpCadr','prmVar','0',38,'Parameter|var','','el8','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpCadr','prmManIn',NULL,38,'Parameter|manIn','','el8','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('grpCadr','prmAMax','<EVAL>',34,'Parametr|aMax','','el8','','','','Parametr|aMax','','');
-INSERT INTO "wlb_Main_io" VALUES('grpCadr','prmAMin','<EVAL>',34,'Parametr|aMin','','el8','','','','Parametr|aMin','','');
-INSERT INTO "wlb_Main_io" VALUES('grpCadr','prmAnalog','<EVAL>',34,'Parametr|analog','','el8','','','','Parametr|analog','','');
+INSERT INTO "wlb_Main_io" VALUES('grpCadr','prmAMax','<EVAL>',34,'Parameter|aMax','','el8','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpCadr','prmAMin','<EVAL>',34,'Parameter|aMin','','el8','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpCadr','prmAnalog','<EVAL>',34,'Parameter|analog','','el8','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpCadr','prmColor','yellow',96,'labColorGrph8','yellow','el8','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('grpCadr','prmDescr','<EVAL>',34,'Parametr|DESCR','','el8','','','<EVAL>','Parametr|DESCR','','');
-INSERT INTO "wlb_Main_io" VALUES('grpCadr','prmId','<EVAL>',34,'Parametr|SHIFR','','el8','','','<EVAL>','Parametr|SHIFR','','');
-INSERT INTO "wlb_Main_io" VALUES('grpCadr','prmImpQdwnTm','<EVAL>',34,'Parametr|impQdwn','','el8','','','','Parametr|impQdwn','','');
-INSERT INTO "wlb_Main_io" VALUES('grpCadr','prmImpQupTm','<EVAL>',34,'Parametr|impQup','','el8','','','','Parametr|impQup','','');
-INSERT INTO "wlb_Main_io" VALUES('grpCadr','prmPrec','<EVAL>',34,'Parametr|prec','','el8','','','','Parametr|prec','','');
-INSERT INTO "wlb_Main_io" VALUES('grpCadr','prmWMax','<EVAL>',34,'Parametr|wMax','','el8','','','','Parametr|wMax','','');
-INSERT INTO "wlb_Main_io" VALUES('grpCadr','prmWMin','<EVAL>',34,'Parametr|wMin','','el8','','','','Parametr|wMin','','');
-INSERT INTO "wlb_Main_io" VALUES('grpCadr','digComs','OPEN;CLOSE;STOP',34,'Parametr|digComs','','el8','','','OPEN;CLOSE;STOP','Parametr|digComs','','');
-INSERT INTO "wlb_Main_io" VALUES('grpCadr','digStts','<EVAL>',34,'Parametr|digStts','','el8','','','<EVAL>','Parametr|digStts','','');
+INSERT INTO "wlb_Main_io" VALUES('grpCadr','prmDescr','<EVAL>',34,'Parameter|DESCR','','el8','','','<EVAL>','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpCadr','prmId','<EVAL>',34,'Parameter|SHIFR','','el8','','','<EVAL>','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpCadr','prmImpQdwnTm','<EVAL>',34,'Parameter|impQdwn','','el8','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpCadr','prmImpQupTm','<EVAL>',34,'Parameter|impQup','','el8','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpCadr','prmPrec','<EVAL>',34,'Parameter|prec','','el8','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpCadr','prmWMax','<EVAL>',34,'Parameter|wMax','','el8','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpCadr','prmWMin','<EVAL>',34,'Parameter|wMin','','el8','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpCadr','digComs','OPEN;CLOSE;STOP',34,'Parameter|digComs','','el8','','','OPEN;CLOSE;STOP','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpCadr','digStts','<EVAL>',34,'Parameter|digStts','','el8','','','<EVAL>','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrRegul','active','1',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrRegul','evProc','usr_ElCadr::open:/pg_control/pg_ElCadr
 ws_FocusIn:/trnd:open:/pg_control/pg_grph_panel
@@ -5334,7 +5332,7 @@ INSERT INTO "wlb_Main_io" VALUES('ElCadr','wordWrap','0',32,'','','info_out','',
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','wordWrap','0',32,'','','info_sp','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','wordWrap','0',32,'','','info_var','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','color','',0,'','','spToVar','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('TextLab','name','',32,'','','','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('TextLab','name','Text label',32,'','','','Текстова мітка','','Текстовая метка','','','');
 INSERT INTO "wlb_Main_io" VALUES('TextLab','geomW','60',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('TextLab','geomH','22',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('TextLab','contextMenu','',40,'','','','','','','','','');
@@ -5346,7 +5344,7 @@ INSERT INTO "wlb_Main_io" VALUES('TextLab','bordWidth','1',40,'','','','','','',
 INSERT INTO "wlb_Main_io" VALUES('TextLab','bordColor','#000000',40,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('TextLab','font','Arial 20 1',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('TextLab','alignment','10',32,'','','','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('TextLab','text','---',40,'','','','','','---','','','');
+INSERT INTO "wlb_Main_io" VALUES('TextLab','text','---',40,'','','','---','','---','','','');
 INSERT INTO "wlb_Main_io" VALUES('anShow1','geomZ','0',32,'','','val','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('anShow1','en','1',40,'','','name','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('anShow1','geomZ','1',32,'','','name','','','','','','');
@@ -7044,7 +7042,7 @@ INSERT INTO "wlb_Main_io" VALUES('alarmsSt','view','6',32,'','','time','','','',
 INSERT INTO "wlb_Main_io" VALUES('alarmsSt','cfg','dd.MM.yy hh:mm:ss',32,'','','time','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('alarmsSt','font','Arial 13',32,'','','time','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ImgLab','owner','root:UI',32,'','','','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('ImgLab','name','',32,'','','','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('ImgLab','name','Image label',32,'','','','Мітка зображенням','','Метка изображением','','','');
 INSERT INTO "wlb_Main_io" VALUES('ImgLab','geomW','50',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ImgLab','geomH','50',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ImgLab','contextMenu','',40,'','','','','','','','','');
@@ -7617,6 +7615,32 @@ INSERT INTO "wlb_Main_io" VALUES('grph_panel','tipStatus','Press to go to the cu
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','active','1',32,'','','curstime','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','elType','3',32,'','','curstime','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','font','Arial 13 1 0 0 0',0,'','','curstime','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('TextLab','dscr','The element is used to display the dynamic text labels, which form on basis of the discrete signals. Also this element generates notifications of violations on the locally defined condition, the attribute ntf. The element commonly uses and represents the representative structure of DAQ-templates of the discrete block and the code state.
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.0.0
+License: GPLv2',32,'','','','Елемент слугує для відображення динамічних текстових міток, що формується на основі дискретних сигналів. Також цей елемент генерує повідомлення про порушення за локально визначеною умовою, атрибут ntf. Елемент загалом використовує та представляє представницьку структуру DAQ-шаблонів дискретного блоку та стану за кодом.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.0.0
+Ліцензія: GPLv2','','Элемент служит для отображения динамических текстовых меток, которые формируется на основе дискретных сигналов. Также этот элемент генерирует уведомление про нарушения по локально определённому условию, атрибут ntf. Элемент в целом использует и представляет представительскую структуру DAQ-шаблонов дискретного блока и состояния по коду.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.0.0
+Лицензия: GPLv2','','','');
+INSERT INTO "wlb_Main_io" VALUES('ImgLab','dscr','The element is used to display the dynamic image labels, which form on basis of the discrete signals. Also this element generates notifications of violations on the locally defined condition, the attribute ntf. The element commonly uses and represents the representative structure of DAQ-templates of the discrete block and the code state.
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.0.0
+License: GPLv2',32,'','','','Елемент слугує для відображення динамічних міток зображень, що формується на основі дискретних сигналів. Також цей елемент генерує повідомлення про порушення за локально визначеною умовою, атрибут ntf. Елемент загалом використовує та представляє представницьку структуру DAQ-шаблонів дискретного блоку та стану за кодом.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.0.0
+Ліцензія: GPLv2','','Элемент служит для отображения динамических меток изображений, которые формируются на основе дискретных сигналов. Также этот элемент генерирует уведомления про нарушения по локально определённому условию, атрибут ntf. Элемент в целом использует и представляет представительскую структуру DAQ-шаблонов дискретного блока и состояния по коду.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.0.0
+Лицензия: GPLv2','','','');
 CREATE TABLE 'wlb_Main_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "wlb_Main_mime" VALUES('pg_next','image/png;6.00684','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAAZiS0dEACwA
 RADxQFue7AAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9gDBQghJ2VBTzAAAAAddEVYdENv
@@ -10254,16 +10278,16 @@ INSERT INTO "wlb_Main_uio" VALUES('treeSelect','elItems','Element:items list',13
 INSERT INTO "wlb_Main_uio" VALUES('prescrRunSimple','items','Items for tree',131205,'||',8,'','','lib','Елементи для дерева','','','Элементы дерева','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('prescrRunSimple','selValue','Selected value',131077,'||',8,'','','lib','Обране значення','','','Выбранное значение','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('treeSelect','selValue','Element:selected value',131077,'||',14,'<page>|selValue','','','Елемент:обране значення','','','Элемент:выбранное значение','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('TextLab','DESCR','Description',131077,'',10,'Parameter|DESCR','','','Опис','','','Описание','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('TextLab','NAME','Name',131077,'',10,'Parameter|NAME','','','Ім''я','','','Имя','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('TextLab','close','Parameter: close',131072,'0',14,'Parameter|close','','','Параметр: закрити','','','Параметр: закрыть','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('TextLab','com','Parameter: command',131072,'0',14,'Parameter|com','','','Параметр: команда','','','Параметр: команда','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('TextLab','digComs','Commands',131077,'',10,'Parameter|digComs','','','Команди','','','Команды','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('TextLab','digStts','Statuses',131077,'',10,'Parameter|digStts','','','Статуси','','','Статусы','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('TextLab','st_close','Parameter: status-close',131072,'0',10,'Parameter|st_close','','','Параметр: статус-закрито','','','Параметр: статус-закрыт','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('TextLab','st_open','Parameter: status-open',131072,'0',10,'Parameter|st_open','','','Параметр: статус-відкрито','','','Параметр: статус-открыто','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('TextLab','st_text','Parameter: status (text)',131077,'',10,'Parameter|st_text','','','Параметр: статус (текст)','','','Параметр: статус (текст)','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('TextLab','stop','Parameter: stop',131072,'0',14,'Parameter|stop','','','Параметр: зупинка','','','Параметр: останов','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('TextLab','DESCR','Parameter: description',131077,'',10,'Parameter|DESCR','','','Параметр: опис','','Parameter|DESCR','Параметр: описание','','Parameter|DESCR','','');
+INSERT INTO "wlb_Main_uio" VALUES('TextLab','NAME','Parameter: name',131077,'',10,'Parameter|NAME','','','Параметр: ім''я','','Parameter|NAME','Параметр: имя','','Parameter|NAME','','');
+INSERT INTO "wlb_Main_uio" VALUES('TextLab','close','Parameter: close',131072,'0',14,'Parameter|close','','','Параметр: закрити','','Parameter|close','Параметр: закрыть','','Parameter|close','','');
+INSERT INTO "wlb_Main_uio" VALUES('TextLab','com','Parameter: command',131072,'0',14,'Parameter|com','','','Параметр: команда','','Parameter|com','Параметр: команда','','Parameter|com','','');
+INSERT INTO "wlb_Main_uio" VALUES('TextLab','digComs','Parameter: commands',131077,'',10,'Parameter|digComs','','','Параметр: команди','','Parameter|digComs','Параметр: команды','','Parameter|digComs','','');
+INSERT INTO "wlb_Main_uio" VALUES('TextLab','digStts','Parameter: statuses',131077,'',10,'Parameter|digStts','','','Параметр: статуси','','Parameter|digStts','Параметр: статусы','','Parameter|digStts','','');
+INSERT INTO "wlb_Main_uio" VALUES('TextLab','st_close','Parameter: status-close',131072,'0',10,'Parameter|st_close','','','Параметр: статус-закрито','','Parameter|st_close','Параметр: статус-закрыт','','Parameter|st_close','','');
+INSERT INTO "wlb_Main_uio" VALUES('TextLab','st_open','Parameter: status-open',131072,'0',10,'Parameter|st_open','','','Параметр: статус-відкрито','','Parameter|st_open','Параметр: статус-открыто','','Parameter|st_open','','');
+INSERT INTO "wlb_Main_uio" VALUES('TextLab','st_text','Parameter: status (text)',131077,'',10,'Parameter|st_text','','','Параметр: статус (текст)','','Parameter|st_text','Параметр: статус (текст)','','Parameter|st_text','','');
+INSERT INTO "wlb_Main_uio" VALUES('TextLab','stop','Parameter: stop',131072,'0',14,'Parameter|stop','','','Параметр: зупинка','','Parameter|stop','Параметр: останов','','Parameter|stop','','');
 INSERT INTO "wlb_Main_uio" VALUES('anShow1','pNAME','Parameter: name',131077,'',10,'Parameter|NAME','','','Параметр: ім''я','||','','Параметр: имя','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('anShow1','pNameSz','Short name size',131073,'15|',9,'','','','Розмір короткого ім''я','','','Размер короткого имени','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('anShow1','pErr','Parameter: error',131077,'',10,'Parameter|err','','','Параметр: помилка','||','','Параметр: ошибка','','','','');
@@ -10278,11 +10302,11 @@ INSERT INTO "wlb_Main_uio" VALUES('objProps','objItems','Object: items',131078,'
 INSERT INTO "wlb_Main_uio" VALUES('objProps','objName','Object: name',131077,'',10,'Object|NAME','','','Об''єкт: ім''я','','','Объект: имя','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('cntrPaspExt','prevTab','Previous tab',131077,'view',8,'','','','Попередня вкладинка','view||','','Предыдущая вкладка','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph10','allowSelLst','Select: allowed for select parameters',131205,'',8,'','','','Вибір: параметри дозволені для обрання','','','Выбор: параметры разрешённые для выбора','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('TextLab','ntf','Notification "{st}:{modes}:{Speech text}"',131077,'',9,'','','','Повідомлення "{стан}:{режими}:{Текст мови}"','','','Уведомление "{сост.}:{режимы}:{Текст речи}"','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('TextLab','ntf','Notification "{st}:{modes}:{Speech text}"',131077,'',9,'','','','Повідомлення "{st}:{modes}:{Текст мови}"','','','Уведомление "{st}:{modes}:{Текст речи}"','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','log','Logarithmic scale',131072,'0',10,'Parameter|log','','','Логарифмічна шкала','','','Логарифмическая шкала','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grph_panel','sclHor','Horizontal scale',131076,'0|',14,'<page>|sclHorScl','','','Горизонтальна шкала','','','Горизонтальная шкала','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grph_panel','sclHorOff','Horizontal scale offset',131076,'0|',14,'<page>|sclHorSclOff','','','Зсув горизонтальної шкали','','','Смещение горизонтальной шкалы','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('TextLab','com_text','Command text (from digComs)',131077,'',14,'Parameter|com_text','','','Текст команди (з digComs)','','','Текст команды (из digComs)','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('TextLab','com_text','Parameter: command text (from digComs)',131077,'',14,'Parameter|com_text','','','Параметр: текст команди (з digComs)','','Parameter|com_text','Параметр: текст команды (из digComs)','','Parameter|com_text','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmStText','Parameter: status text',131077,'',10,'Parameter|st_text','','','Параметр: текст статусу','','','Параметр: текст статуса','ОТКР;ЗАКР;СТОП','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmComText','Parameter:  text of command',131077,'',14,'Parameter|com_text','','','Параметр: текст команди','','','Параметр: текст команды','ОТКР;ЗАКР;СТОП','','','');
 INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','notify2','Notification: type 2 (TextSpeech)',131205,'#!/bin/sh
@@ -10439,19 +10463,19 @@ INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','digStts','Quittance: statuses',131
 INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','st_open','Quittance: state',131072,'0',8,'','','alarms','Підтвердження: стан','','','Подтверждение: состояние','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','report','Report',131205,'',8,'','','go_report','Звіт','','','Отчёт','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','messCat','Message category',131077,'al*:*',8,'','','','Категорія повідомлень','al*:*','','Категория сообщения','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ImgLab','DESCR','Description',131077,'',10,'Parameter|DESCR','','','Опис','','','Описание','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ImgLab','NAME','Name',131077,'',10,'Parameter|NAME','','','Ім''я','','','Имя','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ImgLab','close','Parameter: close',131072,'0',14,'Parameter|close','','','Параметр: закрити','','','Параметр: закрыть','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ImgLab','com','Parameter: command',131072,'0',14,'Parameter|com','','','Параметр: команда','','','Параметр: команда','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ImgLab','com_text','Command text (from digComs)',131077,'',14,'Parameter|com_text','','','Текст команди (з digComs)','','','Текст команды (из digComs)','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ImgLab','digComs','Commands',131077,'',10,'Parameter|digComs','','','Команди','','','Команды','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ImgLab','digStts','Statuses',131077,'',10,'Parameter|digStts','','','Статуси','','','Статусы','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ImgLab','DESCR','Parameter: description',131077,'',10,'Parameter|DESCR','','','Параметр: опис','','Parameter|DESCR','Параметр: описание','','Parameter|DESCR','','');
+INSERT INTO "wlb_Main_uio" VALUES('ImgLab','NAME','Parameter: name',131077,'',10,'Parameter|NAME','','','Параметр: ім''я','','Parameter|NAME','Параметр: имя','','Parameter|NAME','','');
+INSERT INTO "wlb_Main_uio" VALUES('ImgLab','close','Parameter: close',131072,'0',14,'Parameter|close','','','Параметр: закрити','','Parameter|close','Параметр: закрыть','','Parameter|close','','');
+INSERT INTO "wlb_Main_uio" VALUES('ImgLab','com','Parameter: command',131072,'0',14,'Parameter|com','','','Параметр: команда','','Parameter|com','Параметр: команда','','Parameter|com','','');
+INSERT INTO "wlb_Main_uio" VALUES('ImgLab','com_text','Parameter: command text (from digComs)',131077,'',14,'Parameter|com_text','','','Параметр: текст команди (з digComs)','','Parameter|com_text','Параметр: текст команды (из digComs)','','Parameter|com_text','','');
+INSERT INTO "wlb_Main_uio" VALUES('ImgLab','digComs','Parameter: commands',131077,'',10,'Parameter|digComs','','','Параметр: команди','','Parameter|digComs','Параметр: команды','','Parameter|digComs','','');
+INSERT INTO "wlb_Main_uio" VALUES('ImgLab','digStts','Parameter: statuses',131077,'',10,'Parameter|digStts','','','Параметр: статуси','','Parameter|digStts','Параметр: статусы','','Parameter|digStts','','');
 INSERT INTO "wlb_Main_uio" VALUES('ImgLab','ntf','Notification "{st}:{modes}:{Speech text}"',131077,'',9,'','','','Повідомлення "{стан}:{режими}:{Текст мови}"','','','Уведомление "{сост.}:{режимы}:{Текст речи}"','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ImgLab','st_close','Parameter: status-close',131072,'0',10,'Parameter|st_close','','','Параметр: статус-закрито','','','Параметр: статус-закрыт','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ImgLab','st_open','Parameter: status-open',131072,'0',10,'Parameter|st_open','','','Параметр: статус-відкрито','','','Параметр: статус-открыто','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ImgLab','stop','Parameter: stop',131072,'0',14,'Parameter|stop','','','Параметр: зупинка','','','Параметр: останов','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ImgLab','imgs','Images, for "{true}-{bCol}:{false}-{bCol}:{EVAL}-{bCol}"',131077,'',9,'','','','Зображення, для "{true}-{bCol}:{false}-{bCol}:{EVAL}-{bCol}"','','','Изображение, для "{true}-{bCol}:{false}-{bCol}:{EVAL}-{bCol}"','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ImgLab','st_img','Parameter: status "{img}:{bCol}:{blink}"',131077,'',10,'Parameter|st_text','','','Параметр: статус "{img}:{bCol}:{blink}"','','','Параметр: статус "{img}:{bCol}:{blink}"','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ImgLab','st_close','Parameter: status-close',131072,'0',10,'Parameter|st_close','','','Параметр: статус-закрито','','Parameter|st_close','Параметр: статус-закрыт','','Parameter|st_close','','');
+INSERT INTO "wlb_Main_uio" VALUES('ImgLab','st_open','Parameter: status-open',131072,'0',10,'Parameter|st_open','','','Параметр: статус-відкрито','','Parameter|st_open','Параметр: статус-открыто','','Parameter|st_open','','');
+INSERT INTO "wlb_Main_uio" VALUES('ImgLab','stop','Parameter: stop',131072,'0',14,'Parameter|stop','','','Параметр: зупинка','','Parameter|stop','Параметр: останов','','Parameter|stop','','');
+INSERT INTO "wlb_Main_uio" VALUES('ImgLab','imgs','Images, for "{openedImage}-{bCol}:{closedImage}-{bCol}:{EVAL}-{bCol}"',131077,'',9,'','','','Зображення, для "{openedImage}-{bCol}:{closedImage}-{bCol}:{EVAL}-{bCol}"','','','Изображение, для "{openedImage}-{bCol}:{closedImage}-{bCol}:{EVAL}-{bCol}"','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ImgLab','st_img','Parameter: status "{img}:{bCol}:{blink}"',131077,'',10,'Parameter|st_text','','','Параметр: статус "{img}:{bCol}:{blink}"','','Parameter|st_text','Параметр: статус "{img}:{bCol}:{blink}"','','Parameter|st_text','','');
 INSERT INTO "wlb_Main_uio" VALUES('userManager','denyGroups','Deny to control: groups, separated by '';''',131077,'root;users;Archive;BD;DAQ;ModSched;Protocol;Security;Special;Transport;UI;',9,'','','','Заборонене до контролю: групи, поділені '';''','','','Запрещённые для редактирования: группы, разделённые '';''','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('userManager','denyUsers','Deny to control: users, separated by '';''',131077,'root;',9,'','','','Заборонене до контролю: користувачі, поділені '';''','','','Запрещённые для редактирования: пользователи, разделённые '';''','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('userManager','newUseGrps','Groups of new created user',131077,'UI;Guest',8,'','','','Групи новоствореного користувача','','','Группы новосозданного пользователя','','','','');
@@ -19177,7 +19201,7 @@ colorBox_backColor = color_value;
 //Events for commands process
 for(evRez = "", off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
 	//this.messInfo("Event: "+evCur);
-	if(evCur == "ws_ListChange:/prm") {	//Parametr selected
+	if(evCur == "ws_ListChange:/prm") {	//Parameter selected
 		//Set properties
 		itTmp = prm_value.match(".+''(.*)'' \\((.+?)\\)");
 		if(itTmp.length == 3) {
@@ -21138,7 +21162,7 @@ for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 	}
 	else ev_rez += sval+"\n";
 }
-event = ev_rez;','','',500,'name;active;geomW;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;font;alignment;text;',1542444733);
+event = ev_rez;','','',500,'name;dscr;active;geomW;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;font;alignment;text;',1564252636);
 INSERT INTO "wlb_Main" VALUES('cntrPaspExt','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAADaUlEQVRoge2aTW8bRRjH/zM7u469u15vHLu1U1cRThB9FQUkyq2ocOon
 QHwALnwCznDiwKkfoRI3LnAAKioqWqlBFEqFTGQRShJHpI7j+CXZ2Ls7D4dNE0tIrVMjppHmd9rZ
@@ -22450,7 +22474,7 @@ for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 	}
 	else ev_rez += sval+"\n";
 }
-event = ev_rez;','','',500,'owner;name;geomW;geomH;contextMenu;active;evProc;backColor;bordWidth;bordColor;src;fit;',1542462617);
+event = ev_rez;','','',500,'owner;name;dscr;active;geomW;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;src;fit;',1564252678);
 INSERT INTO "wlb_Main" VALUES('userManager','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAnCAIAAAAw+tlrAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAC
 /klEQVRYhe2Zy07bQBiFx+OxnYydC04h0K5ggRJub8ArAEuegrdgy2OwZcGGHS/AgghEKhEJobYh
 JUIE4kkm8Xj+LqwiBC5N0z9EkfhWo7kczxlf5tg2dnZ2UqkUQaLb7abTaSy1vyKlZKlUinOOpXh9

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-25 20:34+0300\n"
+"POT-Creation-Date: 2019-07-23 09:19+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -215,6 +215,9 @@ msgstr ""
 msgid "You '%s' have no access to close sessions!"
 msgstr ""
 
+msgid "Going to the different session ..."
+msgstr ""
+
 #, c-format
 msgid "The specified project/session '%s' is false!"
 msgstr ""
@@ -269,5 +272,5 @@ msgid ""
 msgstr ""
 
 #, c-format
-msgid "%s %s(%s): the last %s; cached pages %d and resources %d, %s; session objects %d."
+msgid "%s %s(%s):%s(%s): the last %s; cached pages %d and resources %d, %s; session objects %d."
 msgstr ""

@@ -206,8 +206,8 @@ class Reg
 class RegW
 {
     public:
-	RegW( ) : mTp(Reg::Free), mConst(false)	{ }
-	~RegW( )				{ setType(Reg::Free); }
+	RegW( );
+	~RegW( );
 
 	void operator=( char ivar )		{ setType(Reg::Bool);	el.b = ivar; }
 	void operator=( int ivar )		{ setType(Reg::Int);	el.i = ivar; }
