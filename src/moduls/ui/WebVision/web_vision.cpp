@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"4.0.1"
+#define MOD_VER		"4.1.0"
 #define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on the the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -435,11 +435,11 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		req.setAttr("path","/%2fses%2fses")->setAttr("chkUserPerm","1");
 		cntrIfCmd(req, ses);
 		ResAlloc sesRes(mSesRes, false);
-		if(!ses.isRoot())
-		    for(unsigned iCh = 0; iCh < req.childSize(); iCh++)
-			if(req.childGet(iCh)->attr("user") == user && req.childGet(iCh)->attr("proj") == zero_lev.substr(4) &&
-			    vcaSesPresent(req.childGet(iCh)->text()) && vcaSesAt(req.childGet(iCh)->text()).at().sender() == sender)
-			{ sName = req.childGet(iCh)->text(); break; }
+		//if(!ses.isRoot())
+		for(unsigned iCh = 0; iCh < req.childSize(); iCh++)
+		    if(req.childGet(iCh)->attr("user") == user && req.childGet(iCh)->attr("proj") == zero_lev.substr(4) &&
+			vcaSesPresent(req.childGet(iCh)->text()) && vcaSesAt(req.childGet(iCh)->text()).at().sender() == sender)
+		    { sName = req.childGet(iCh)->text(); break; }
 		if(sName.empty()) {
 		    vector<string> vcaLs;
 		    vcaSesList(vcaLs);

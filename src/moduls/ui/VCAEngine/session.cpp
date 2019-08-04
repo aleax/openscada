@@ -644,8 +644,10 @@ void Session::cntrCmdProc( XMLNode *opt )
 	else if(ctrChkNode(opt,"open",permit(),owner().c_str(),grp().c_str(),SEC_WR) && !openCheck(opt->attr("pg")))
 	    ((AutoHD<SessWdg>)nodeAt(opt->attr("pg"),1)).at().attrAt("pgOpen").at().setB(true, true);
 	//Close open pages
-	else if(ctrChkNode(opt,"close",RWRWRW,owner().c_str(),grp().c_str(),SEC_WR) && openCheck(opt->attr("pg")))
-	    ((AutoHD<SessWdg>)nodeAt(opt->attr("pg"),1)).at().attrAt("pgOpen").at().setB(false, true);
+	else if(ctrChkNode(opt,"close",RWRWRW,owner().c_str(),grp().c_str(),SEC_WR) && openCheck(opt->attr("pg"))) {
+	    ((AutoHD<SessWdg>)nodeAt(opt->attr("pg"),1)).at().attrAt("pgOpen").at().setB(false);
+	    openUnreg(opt->attr("pg"));	//!!!! Doubled to guarantee the linked pages unregistering
+	}
 	mReqTm = time(NULL);
 	setReqUser(opt->attr("user"));
 	setReqLang(opt->attr("lang"));
@@ -1080,7 +1082,7 @@ void *Session::Notify::Task( void *intf )
 //* SessPage: Page of Project's session          *
 //************************************************
 SessPage::SessPage( const string &iid, const string &ipage, Session *sess ) :
-    SessWdg(iid,ipage,sess), mClosePgCom(false), mDisMan(false), mCalcClk_(sess->calcClk()), mFuncM(true), pathAsOpen(dataRes()), pathAsOpenPrev(dataRes())
+    SessWdg(iid,ipage,sess), mClosePgCom(false), mDisMan(false), mCalcClk_(sess->calcClk()), mFuncM(true), pathAsOpen(dataRes()), pathToClose(dataRes())
 {
     mPage = grpAdd("pg_");
 }
@@ -1105,7 +1107,7 @@ string SessPage::getStatus( )
 void SessPage::setPathAsOpen( const string &ip )
 {
     if((!pathAsOpen.size() && ip == path(true)) || ip == path()) return;
-    pathAsOpenPrev = attrAt("pgOpen").at().getB() ? path(): pathAsOpen;
+    pathToClose = ownerSess()->openCheck(path(true)) ? path(true): pathAsOpen;
     pathAsOpen = ip;
 }
 
@@ -1294,14 +1296,21 @@ bool SessPage::attrChange( Attr &cfg, TVariant prev )
 		if(!process()) setProcess(true);
 	    }
 	    else {
-		ownerSess()->openUnreg(pathAsOpenPrev.size()?pathAsOpenPrev:path());
-		if(!pathAsOpenPrev.size()) {
+		ownerSess()->openUnreg(pathToClose.size()?pathToClose:path());
+		if(!pathToClose.size()) {
 		    if(process() && !attrAt("pgNoOpenProc").at().getB())	mClosePgCom = true;
 		    if(!attrAt("pgOpenSrc").at().getS().empty()) attrAt("pgOpenSrc").at().setS("");
 		    pgClose();
 		    pathAsOpen = "";
-		} else cfg.setB(true);
-		pathAsOpenPrev = "";
+		} //else cfg.setB(true);
+		// Restore the opening and restarting for the linked pages
+		else {
+		    setProcess(false);
+		    cfg.setB(true, false, true);
+		    mClosePgCom = false;
+		    if(!process()) setProcess(true);
+		}
+		pathToClose = "";
 	    }
 	}
 	else if(cfg.id() == "pgOpenSrc") {

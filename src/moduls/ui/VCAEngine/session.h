@@ -405,7 +405,7 @@ class SessPage : public SessWdg
 	unsigned mDisMan	: 1;		//Disable the page enabling at request by it's disabling in manual
 	unsigned int	mCalcClk_;
 	ResMtx	mFuncM;
-	MtxString pathAsOpen, pathAsOpenPrev;
+	MtxString pathAsOpen, pathToClose;
 };
 
 }

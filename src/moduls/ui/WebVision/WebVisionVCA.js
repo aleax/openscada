@@ -2818,7 +2818,7 @@ window.onresize = function( ) {
 
     brwsSc = (window.devicePixelRatio && window.devicePixelRatio != 1);
 
-    if((!brwsSc && (window.innerHeight > document.body.clientHeight ||
+    if((!brwsSc && ((window.innerHeight-document.body.clientHeight)/window.innerHeight > 0.1 ||
 		((document.body.clientHeight-window.innerHeight)/document.body.clientHeight > 0.5 && wy_scale > 1))) ||
 	    (brwsSc && (wy_scale != 1 || wx_scale != 1)))
 	stTmReload = setTimeout('window.location.reload()', 1000);

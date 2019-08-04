@@ -708,14 +708,14 @@ void *TMdContr::Task( void *icntr )
 		//Get data from blocks to parameters or calc for logical type parameters
 		MtxAlloc prmRes(cntr.enRes, true);
 		for(unsigned iP = 0; iP < cntr.pHd.size(); iP++)
-		    cntr.pHd[iP].at().upVal(isStart, isStop, cntr.period()?1:-1);
+		    cntr.pHd[iP].at().upVal(isStart, isStop, cntr.period()?(1e9/(float)cntr.period()):-1);
 		prmRes.unlock();
 
-		cntr.tmDelay = vmax(0, cntr.tmDelay-1);
+		cntr.tmDelay = vmax(0, cntr.tmDelay-(cntr.period()?(1e9/(float)cntr.period()):1));
 
 		if(isStop) break;
 
-		TSYS::taskSleep(1e9);
+		TSYS::taskSleep(cntr.period()?cntr.period():1e9);
 
 		if(cntr.endrunReq) isStop = true;
 		isStart = false;

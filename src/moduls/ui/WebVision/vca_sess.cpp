@@ -191,11 +191,8 @@ void VCASess::getReq( SSess &ses )
 		else cpos++;
 		continue;
 	    }
-	    //Check for objects represent some widgets type creation if attribute "root" present, typical for init requests
-	    XMLNode *rootId = cn->getElementBy("id", "root");
-	    oAddr = TSYS::path2sepstr(caddr);
-	    if(rootId) objCheck(rootId->text(), oAddr);
-	    if(objPresent(oAddr)) objAt(oAddr).at().setAttrs(*cn, ses);
+	    //Processing of the background objects for creation obligatory ones and for sending them the attributes updating request
+	    objProc(TSYS::path2sepstr(caddr), ses, cn);
 	    if(!cn->parent())	break;
 	    cn = cn->parent();
 	    cpos = pos.back();	pos.pop_back();
@@ -218,8 +215,9 @@ void VCASess::getReq( SSess &ses )
     //Request to the primitive object. Used for data caching
     else if(wp_com == "obj") {
 	size_t tPos;
-	if(objPresent(oAddr=TSYS::path2sepstr(ses.url)))	objAt(oAddr).at().getReq(ses);
-	else if(ses.url.rfind(".") != string::npos && (tPos=ses.url.rfind("/")) != string::npos && objPresent(oAddr=TSYS::path2sepstr(ses.url.substr(0,tPos))))
+	if(objProc(oAddr=TSYS::path2sepstr(ses.url),ses))
+	    objAt(oAddr).at().getReq(ses);
+	else if(ses.url.rfind(".") != string::npos && (tPos=ses.url.rfind("/")) != string::npos && objProc(oAddr=TSYS::path2sepstr(ses.url.substr(0,tPos)),ses))
 	    objAt(oAddr).at().getReq(ses);
 	else ses.page = mod->pgCreator(ses.prt, "<div class='warning'>"+TSYS::strMess(_("Unknown object of the command: %s."),wp_com.c_str())+"</div>\n", "200 OK");
     }
@@ -260,21 +258,46 @@ void VCASess::postReq( SSess &ses )
 	else if(ses.prm.find("cacheCntr") != ses.prm.end())
 	    pgCacheProc(oAddr, ses.prm.find("cachePg") == ses.prm.end());
     }
-    else if(wp_com == "obj" && objPresent(oAddr=TSYS::path2sepstr(ses.url))) objAt(oAddr).at().postReq(ses);
+    else if(wp_com == "obj" && objProc(oAddr=TSYS::path2sepstr(ses.url),ses)) objAt(oAddr).at().postReq(ses);
 
     if(ses.page.empty())
-	ses.page = mod->pgCreator(ses.prt, "<req rez='0'/>\n", "200 OK", "Content-Type: text/xml;charset=UTF-8");
-	//ses.page = mod->pgCreator(ses.prt, string("<div class='error'>")+_("Content is missing.")+"</div>\n", "204 No Content");
+	ses.page = mod->pgCreator(ses.prt, string("<div class='error'>")+_("Content is missing.")+"</div>\n",
+	    "204 No Content", "Content-Type:text/html");
+	//ses.page = mod->pgCreator(ses.prt, "<req rez='0'/>\n", "200 OK", "Content-Type: text/xml;charset=UTF-8");
 }
 
-void VCASess::objCheck( const string &rootId, const string &wPath )
+bool VCASess::objProc( const string &wPath, const SSess &ses, XMLNode *attrsN )
 {
-    if(objPresent(wPath)) return;
-    if(rootId == "FormEl")		objAdd(new VCAFormEl(wPath));
-    else if(rootId == "ElFigure")	objAdd(new VCAElFigure(wPath));
-    else if(rootId == "Text")		objAdd(new VCAText(wPath));
-    else if(rootId == "Diagram")	objAdd(new VCADiagram(wPath));
-    else if(rootId == "Document")	objAdd(new VCADocument(wPath));
+    XMLNode req("get");
+    bool isOpt = !attrsN;
+
+    if(!objPresent(wPath)) {
+	XMLNode *rootIdNd = NULL;
+	string rootId = "";
+	//Prepare request for all attributes after the creation of an optional object
+	if(attrsN) rootIdNd = attrsN->getElementBy("id", "root");
+	else {
+	    req.setAttr("path", TSYS::sepstr2path(wPath)+"/%2fserv%2fattrBr");
+	    mod->cntrIfCmd(req, ses);
+	    rootIdNd = req.getElementBy("id", "root");
+	    attrsN = &req;
+	}
+	if(rootIdNd) rootId = rootIdNd->text();
+
+	//Main
+	if(!isOpt && rootId == "ElFigure")	objAdd(new VCAElFigure(wPath));
+	else if(!isOpt && rootId == "Diagram")	objAdd(new VCADiagram(wPath));
+	else if(!isOpt && rootId == "Document")	objAdd(new VCADocument(wPath));
+	//Optional
+	else if(isOpt && rootId == "FormEl")	objAdd(new VCAFormEl(wPath));
+	else if(isOpt && rootId == "Text")	objAdd(new VCAText(wPath));
+    }
+    if(objPresent(wPath)) {
+	if(attrsN) objAt(wPath).at().setAttrs(*attrsN, ses);
+	return true;
+    }
+
+    return false;
 }
 
 void VCASess::objAdd( VCAObj *obj )
@@ -405,8 +428,15 @@ string VCAObj::objName( )	{ return TCntrNode::objName()+":VCAObj"; }
 //*************************************************
 VCAFormEl::VCAFormEl( const string &iid ) : VCAObj(iid), type(0), btMode(0), mRes(true)
 {
-
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
 }
+
+VCAFormEl::~VCAFormEl( )
+{
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), -1);
+}
+
+string VCAFormEl::objName( )	{ return VCAObj::objName()+":VCAFormEl"; }
 
 void VCAFormEl::getReq( SSess &ses )
 {
@@ -448,12 +478,13 @@ void VCAFormEl::postReq( SSess &ses )
 	req.childAdd("el")->setAttr("id","value")->setText(fTmpl+"|"+fTitle+"|"+fRealFile+"|"+fMime+"\n"+ses.cnt[0].text());
 	req.childAdd("el")->setAttr("id","event")->setText("ws_BtLoad");
 	mod->cntrIfCmd(req, ses);
-	ses.page = mod->pgCreator(ses.prt, req.save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
+	//ses.page = mod->pgCreator(ses.prt, req.save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
     }
 }
 
 void VCAFormEl::setAttrs( XMLNode &node, const SSess &ses )
 {
+    int iAVal = -1;
     for(unsigned iA = 0; iA < node.childSize(); iA++) {
 	XMLNode *reqEl = node.childGet(iA);
 	if(reqEl->name() != "el")	continue;
@@ -464,12 +495,12 @@ void VCAFormEl::setAttrs( XMLNode &node, const SSess &ses )
 	    case A_FormElMixP3:
 		if(type == F_BUTTON) btMode = s2i(reqEl->text());
 		break;
-	    case A_FormElValue:
-		if(type == F_BUTTON && (btMode == FBT_LOAD || btMode == FBT_SAVE) && (fCtx=reqEl->text()).size())
-		    reqEl->setText(TSYS::strLine(fCtx,0));
-		break;
+	    case A_FormElValue: iAVal = iA;	break;
 	}
     }
+    //Processing the value at the end
+    if(iAVal >= 0 && type == F_BUTTON && (btMode == FBT_LOAD || btMode == FBT_SAVE) && (fCtx=node.childGet(iAVal)->text()).size())
+	node.childGet(iAVal)->setText(TSYS::strLine(fCtx,0));
 }
 
 //*************************************************
@@ -477,13 +508,17 @@ void VCAFormEl::setAttrs( XMLNode &node, const SSess &ses )
 //*************************************************
 VCAElFigure::VCAElFigure( const string &iid ) : VCAObj(iid), im(NULL), mRes(true)
 {
-
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
 }
 
 VCAElFigure::~VCAElFigure( )
 {
     if(im) { gdImageDestroy(im); im = NULL; }
+
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), -1);
 }
+
+string VCAElFigure::objName( )	{ return VCAObj::objName()+":VCAElFigure"; }
 
 #define SAME_SIGNS(a, b) ((a) * (b) >= 0)
 
@@ -4504,13 +4539,17 @@ void VCAElFigure::setAttrs( XMLNode &node, const SSess &ses )
 //*************************************************
 VCAText::VCAText( const string &iid ) : VCAObj(iid), im(NULL), mRes(true)
 {
-
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
 }
 
 VCAText::~VCAText( )
 {
     if(im) { gdImageDestroy(im); im = NULL; }
+
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), -1);
 }
+
+string VCAText::objName( )	{ return VCAObj::objName()+":VCAText"; }
 
 Point VCAText::rot( const Point pnt, double alpha, const Point center )
 {
@@ -4982,13 +5021,15 @@ void VCAText::setAttrs( XMLNode &node, const SSess &ses )
 VCADiagram::VCADiagram( const string &iid ) : VCAObj(iid), type(0), tTimeCurent(false), holdCur(false), tTime(0),
     sclHorPer(0), tSize(1), sclVerScl(100), sclVerSclOff(0), sclHorScl(100), sclHorSclOff(0), lstTrc(false), mRes(true)
 {
-
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
 }
 
 VCADiagram::~VCADiagram( )
 {
-
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), -1);
 }
+
+string VCADiagram::objName( )	{ return VCAObj::objName()+":VCADiagram"; }
 
 void VCADiagram::getReq( SSess &ses )
 {
@@ -6859,8 +6900,15 @@ void VCADiagram::TrendObj::loadSpectrumData( const string &user, bool full )
 //*************************************************
 VCADocument::VCADocument( const string &iid ) : VCAObj(iid)
 {
-
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
 }
+
+VCADocument::~VCADocument( )
+{
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), -1);
+}
+
+string VCADocument::objName( )	{ return VCAObj::objName()+":VCADocument"; }
 
 void VCADocument::setAttrs( XMLNode &node, const SSess &ses )
 {
@@ -6877,7 +6925,7 @@ void VCADocument::setAttrs( XMLNode &node, const SSess &ses )
 		XMLNode xproc("body");
 		try {
 		    xproc.load(string(XHTML_entity)+reqEl->text(), true, Mess->charset());
-		    reqEl->setText(xproc.save(XMLNode::Clean, Mess->charset()));
+		    reqEl->setText(xproc.save(XMLNode::Clean,Mess->charset()));
 		}
 		catch(TError &err)
 		{ mess_err(mod->nodePath().c_str(),_("Error parsing the document '%s': %s"),path().c_str(),err.mess.c_str()); }

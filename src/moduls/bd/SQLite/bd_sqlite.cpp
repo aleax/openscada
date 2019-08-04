@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.5.5"
+#define MOD_VER		"2.5.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -715,7 +715,7 @@ string MTable::getVal( TCfg &cfg, uint8_t RqFlg )
 	return isBin ? "X'"+TSYS::strDecode(rez, TSYS::Bin)+"'" : "'"+prntRes+"'";
     }
 
-    return "'" + rez + "'";
+    return rez;
 }
 
 void MTable::setVal( TCfg &cf, const string &ival, bool tr )

@@ -31,7 +31,7 @@
 <td> <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a> </td>
 <td> Рабочий пользовательский интерфейс (WEB)
 </td>
-<td> 4.0 </td>
+<td> 4.1 </td>
 <td> GPL2 </td>
 <td> ui_WebVision.so </td>
 <td> en,uk,ru,de </td>
@@ -58,7 +58,8 @@
 </ul>
 </li>
 <li class="toclevel-1 tocsection-12"><a href="#.D0.9E.D0.B1.D1.89.D0.B0.D1.8F_.D0.BA.D0.BE.D0.BD.D1.84.D0.B8.D0.B3.D1.83.D1.80.D0.B0.D1.86.D0.B8.D1.8F_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.8F"><span class="tocnumber">4</span> <span class="toctext">Общая конфигурация модуля</span></a></li>
-<li class="toclevel-1 tocsection-13"><a href="#.D0.97.D0.B0.D0.BC.D0.B5.D1.87.D0.B0.D0.BD.D0.B8.D1.8F"><span class="tocnumber">5</span> <span class="toctext">Замечания</span></a></li>
+<li class="toclevel-1 tocsection-13"><a href="#.D0.AD.D1.84.D1.84.D0.B5.D0.BA.D1.82.D0.B8.D0.B2.D0.BD.D0.BE.D1.81.D1.82.D1.8C_.D0.B8_.D0.BC.D0.B0.D1.81.D1.88.D1.82.D0.B0.D0.B1.D0.B8.D1.80.D1.83.D0.B5.D0.BC.D0.BE.D1.81.D1.82.D1.8C"><span class="tocnumber">5</span> <span class="toctext"><span>Эффективность и масштабируемость</span></span></a></li>
+<li class="toclevel-1 tocsection-14"><a href="#.D0.97.D0.B0.D0.BC.D0.B5.D1.87.D0.B0.D0.BD.D0.B8.D1.8F"><span class="tocnumber">6</span> <span class="toctext">Замечания</span></a></li>
 </ul>
 </div>
 
@@ -390,7 +391,210 @@
 <li> Время жизни, в часах, и максимальное количество страниц в кеше.</li>
 <li> Уровень сжатия PNG-изображений. Наиболее оптимальным является минимальный уровень 1, поскольку без сжатия получаются большие файлы, а большие уровни сжатия создают более высокую нагрузку на процессор.</li></ul></li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1266px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_cfg_ru.png"><img class="thumbimage" height="481" src="../files/WebVision_wvis_cfg_ru.png" width="1264" /></a>  <div class="thumbcaption">Рис.4. Страница конфигурации модуля.</div></div></div></div>
-<h2><span class="mw-headline" id=".D0.97.D0.B0.D0.BC.D0.B5.D1.87.D0.B0.D0.BD.D0.B8.D1.8F"><span class="mw-headline-number">5</span> Замечания</span></h2>
+<h2><span class="mw-headline" id=".D0.AD.D1.84.D1.84.D0.B5.D0.BA.D1.82.D0.B8.D0.B2.D0.BD.D0.BE.D1.81.D1.82.D1.8C_.D0.B8_.D0.BC.D0.B0.D1.81.D1.88.D1.82.D0.B0.D0.B1.D0.B8.D1.80.D1.83.D0.B5.D0.BC.D0.BE.D1.81.D1.82.D1.8C"><span class="mw-headline-number">5</span> <span id="Efficiency" title="#Efficiency">Эффективность и масштабируемость</span></span></h2>
+<p><b><u>31.07.2019</u></b><br />
+<i>Grounds:</i> The Web-sessions may create many objects servicing the VCA-session for generating images, processing documents and performing other background functions of the end user Web-interface. Moreover, in difference to <a class="new" href="http://oscada.org/wiki/Special:MyLanguage/Module/Vision" title="Special:MyLanguage/Module/Vision (page does not exist)">Vision</a>, the VCA-sessions may be created, closed and recreated again multiple times for different users and remote hosts. In the time the memory heap is affected by the memory fragmentation, so the program consumes more memory than at the start. The table below represents the phenomenon for different environments and the first page of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">the DemoDB (AGLKS) project</a> reopening:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Environment </th>
+<th> Initially, MB </th>
+<th> Iter. 1, MB </th>
+<th> Iter. 2, MB </th>
+<th> Iter. 3, MB </th>
+<th> Iter. 4, MB </th>
+<th> Iter. 5, MB </th>
+<th> Resume
+</th></tr>
+<tr>
+<td colspan="9"> <i>Complete creation the Web- and VCA-sessions</i>
+</td></tr>
+<tr>
+<td> Debian 10 amd64, GCC 8.3.0 </td>
+<td> 182 </td>
+<td> 191.5 </td>
+<td> 199 </td>
+<td> 206 </td>
+<td> 212 </td>
+<td> 212 </td>
+<td> Satiated on the iteration <b>4</b>, base consumption 9.5 MB, extra consumption 20 MB (<b>200</b>&nbsp;%), liboscada.so 3.5 MB, ui_WebVision.so 0.74 MB
+</td></tr>
+<tr>
+<td> Debian 9 amd64, GCC 6.3.0 </td>
+<td> 160 </td>
+<td> 170 </td>
+<td> 178 </td>
+<td> 179 </td>
+<td> 183 </td>
+<td> 185 </td>
+<td> Satiated on the iteration <b>5</b>, base consumption 10 MB, extra consumption 15 MB (<b>150</b>&nbsp;%), liboscada.so 3.5 MB, ui_WebVision.so 0.72 MB
+</td></tr>
+<tr>
+<td> Debian 8 amd64, GCC 4.9.2 </td>
+<td> 125.5 </td>
+<td> 133 </td>
+<td> 139 </td>
+<td> 139 </td>
+<td> 139 </td>
+<td> 139 </td>
+<td> Satiated on the iteration <b>2</b>, base consumption 7.5 MB, extra consumption 6 MB (<b>80</b>&nbsp;%), liboscada.so 3.8 MB, ui_WebVision.so 0.79 MB
+</td></tr>
+<tr>
+<td> Debian 7 amd64, GCC 4.7.2 </td>
+<td> 101 </td>
+<td> 108 </td>
+<td> 111 </td>
+<td> 112 </td>
+<td> 112 </td>
+<td> 112 </td>
+<td> Satiated on the iteration <b>2</b>, base consumption 7 MB, extra consumption 4 MB (<b>57</b>&nbsp;%), liboscada.so 3.4 MB, ui_WebVision.so 0.85 MB
+</td></tr>
+<tr>
+<td> Debian 10 i386, GCC 8.3.0 </td>
+<td> 151 </td>
+<td> 158 </td>
+<td> 162.5 </td>
+<td> 166 </td>
+<td> 166 </td>
+<td> 166 </td>
+<td> Satiated on the iteration <b>3</b>, base consumption 7 MB, extra consumption 8 MB (<b>114</b>&nbsp;%), liboscada.so 3.7 MB, ui_WebVision.so 0.9 MB
+</td></tr>
+<tr>
+<td> Debian 9 i386, GCC 6.3.0 </td>
+<td> 125 </td>
+<td> 131 </td>
+<td> 132 </td>
+<td> 136 </td>
+<td> 136 </td>
+<td> 139 </td>
+<td> Satiated on the iteration <b>5</b>, base consumption 6 MB, extra consumption 8 MB (<b>133</b>&nbsp;%), liboscada.so 3.7 MB, ui_WebVision.so 0.9 MB
+</td></tr>
+<tr>
+<td> Debian 8 i386, GCC 4.9.2 </td>
+<td> 92.5 </td>
+<td> 99 </td>
+<td> 101.5 </td>
+<td> 103 </td>
+<td> 103.5 </td>
+<td> 103.5 </td>
+<td> Satiated on the iteration <b>2</b>, base consumption 6.5 MB, extra consumption 4.5 (<b>69</b>&nbsp;%), liboscada.so 3.6 MB, ui_WebVision.so 0.94 MB
+</td></tr>
+<tr>
+<td> Debian 7 i386, GCC 4.7.2 </td>
+<td> 70 </td>
+<td> 76 </td>
+<td> 76 </td>
+<td> 76 </td>
+<td> 77 </td>
+<td> 77 </td>
+<td> Satiated on the iteration <b>2</b>, base consumption 6 MB, extra consumption 1 MB (<b>16</b>&nbsp;%), liboscada.so 3.6 MB, ui_WebVision.so 0.9 MB
+</td></tr>
+<tr>
+<td> ALTLinux 6 i386, GCC 4.5.4 </td>
+<td> 69 </td>
+<td> 74 </td>
+<td> 75 </td>
+<td> 75 </td>
+<td> 75 </td>
+<td> 75 </td>
+<td> Satiated on the iteration <b>2</b>, base consumption 5 MB, extra consumption 1 MB (<b>20</b>&nbsp;%), liboscada.so 2.3 MB, ui_WebVision.so 0.9 MB
+</td></tr>
+<tr>
+<td colspan="9"> <i>Creation only VCA-session, from remote connection to the visualizer server</i>
+</td></tr>
+<tr>
+<td> Debian 10 amd64, GCC 8.3.0 </td>
+<td> 180 </td>
+<td> 186 </td>
+<td> 186 </td>
+<td> 186 </td>
+<td> 186 </td>
+<td> 186 </td>
+<td> Satiated on the iteration <b>1</b>, extra consumption 0.2 MB (3&nbsp;%)
+</td></tr>
+<tr>
+<td> Debian 7 amd64, GCC 4.7.2 </td>
+<td> 100 </td>
+<td> 104 </td>
+<td> 105 </td>
+<td> 105 </td>
+<td> 105 </td>
+<td> 105 </td>
+<td> Satiated on the iteration <b>1</b>, extra consumption 1 MB (25&nbsp;%)
+</td></tr>
+<tr>
+<td> Debian 10 i386, GCC 8.3.0 </td>
+<td> 148 </td>
+<td> 154 </td>
+<td> 155 </td>
+<td> 155 </td>
+<td> 155 </td>
+<td> 155 </td>
+<td> Satiated on the iteration <b>1</b>, extra consumption 1 MB (16&nbsp;%)
+</td></tr>
+<tr>
+<td> Debian 7 i386, GCC 4.7.2 </td>
+<td> 69 </td>
+<td> 72 </td>
+<td> 72 </td>
+<td> 72 </td>
+<td> 72 </td>
+<td> 72 </td>
+<td> Satiated on the iteration <b>1</b>, extra consumption 0 MB (0&nbsp;%)
+</td></tr></table>
+<p><b><u>20.06.2013</u></b><br />
+<i>Grounds:</i> At working with the board <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Kontron_MOPSlcdLX" title="Special:MyLanguage/Using/Kontron MOPSlcdLX">MOPSlcdLX</a>, attention was drawn to the heavy load of the task of forming full-size trends. As it turned out later, a large load is created by the formation of a PNG image in the GD2 library, or rather, the packing procedure of ZLib. The subject analysis of the performance of the formation of images of various formats on this board is summarized in the table below:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Format </th>
+<th> Trend building, milliseconds </th>
+<th> Converting to the image format, milliseconds </th>
+<th> Size of the image, bytes
+</th></tr>
+<tr>
+<td> PNG (0) </td>
+<td> 200 </td>
+<td> 800 </td>
+<td> 1700365
+</td></tr>
+<tr>
+<td> PNG (1) </td>
+<td> 200 </td>
+<td> 690 </td>
+<td> 24000
+</td></tr>
+<tr>
+<td> PNG (-1) </td>
+<td> 200 </td>
+<td> 1000 </td>
+<td> 14800
+</td></tr>
+<tr>
+<td> PNG (9) </td>
+<td> 200 </td>
+<td> 1900 </td>
+<td> 13354
+</td></tr>
+<tr>
+<td> JPEG (-1) </td>
+<td> 200 </td>
+<td> 180 </td>
+<td> 53157
+</td></tr>
+<tr>
+<td> GIF </td>
+<td> 200 </td>
+<td> 380 </td>
+<td> 14300
+</td></tr></table>
+<p><i>Conclusion:</i> As can be seen from the table above, the operation of forming PNG as a whole is resource-intensive and the most optimal level of compression is "1". At the same time, the formation of JPEG and GIF is much faster, but these image formats have a number of critical flaws, namely: JPEG does not have an alpha channel (transparency), and GIF is limited by the number of colors, which in both cases leads to loss of transparency and distortion of text smoothing and images in general.
+</p><p><i>Measures:</i> The ability to select the compression level for the generated PNG images is added, and the default value is set to the optimal level "1". The implementation of the formation of the "Diagram" primitive on the browser side in the "svg" or "canvas" tags is planned.
+</p><p><br />
+</p>
+<h2><span class="mw-headline" id=".D0.97.D0.B0.D0.BC.D0.B5.D1.87.D0.B0.D0.BD.D0.B8.D1.8F"><span class="mw-headline-number">6</span> Замечания</span></h2>
 <p>На данном этапе модуль может быть использован для построения реальных интерфейсов пользователя с поддержкой основных функций. Однако, отдельные проблемы могут возникать как по причине недоработанности, так и различия браузеров. Сейчас достаточно качественно обеспечена работоспособность на браузерах: Chromium (Google Chrome), FireFox, Opera, Konqueror.
 </p>
 

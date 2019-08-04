@@ -101,7 +101,9 @@ class VCAFormEl : public VCAObj
     public:
 	//Methods
 	VCAFormEl( const string &iid );
-	~VCAFormEl( )			{ }
+	~VCAFormEl( );
+
+	string objName( );
 
 	void getReq( SSess &ses );
 	void postReq( SSess &ses );
@@ -165,6 +167,8 @@ class VCAElFigure : public VCAObj
 	//Methods
 	VCAElFigure( const string &iid );
 	~VCAElFigure( );
+
+	string objName( );
 
 	void getReq( SSess &ses );
 	void postReq( SSess &ses );
@@ -256,6 +260,8 @@ class VCAText : public VCAObj
 	VCAText( const string &iid );
 	~VCAText( );
 
+	string objName( );
+
 	void getReq( SSess &ses );
 	void postReq( SSess &ses )  { }
 	void setAttrs( XMLNode &node, const SSess &ses );
@@ -295,6 +301,8 @@ class VCADiagram : public VCAObj
 	//Methods
 	VCADiagram( const string &iid );
 	~VCADiagram( );
+
+	string objName( );
 
 	void getReq( SSess &ses );
 	void postReq( SSess &ses );
@@ -421,7 +429,9 @@ class VCADocument : public VCAObj
     public:
 	//Methods
 	VCADocument( const string &iid );
-	~VCADocument( )			{ }
+	~VCADocument( );
+
+	string objName( );
 
 	void getReq( SSess &ses )	{ }
 	void postReq( SSess &ses )	{ }
@@ -455,7 +465,7 @@ class VCASess : public TCntrNode
 	void postReq( SSess &ses );
 
 	// Objects
-	void objCheck( const string &rootId, const string &wPath );
+	bool objProc( const string &wPath, const SSess &ses, XMLNode *attrsN = NULL );
 	void objList( vector<string> &list ) const		{ chldList(id_objs,list); }
 	bool objPresent( const string &name ) const		{ return chldPresent(id_objs,name); }
 	void objAdd( VCAObj *obj );

@@ -2489,7 +2489,7 @@ Where:
 <tr>
 <td>String's addition</td>
 <td>
-<p><i>Request:</i> command "add": <i>&lt;add path="/fld_teg" user="user" id="tst"&gt;Test&lt;/add&gt;</i> 
+<p><i>Request:</i> command "add": <i>&lt;add path="/fld_teg" user="user" id="tst"&gt;Test&lt;/add&gt;</i>
 </p>
 <dl><dd>To add the string with ID "tst" and value "Test". If the list is not indexed, then the id attribute is absent.<br /></dd></dl>
 <p><i>Result:</i> confirmation or an error message.
@@ -2498,7 +2498,7 @@ Where:
 <tr>
 <td>Insert the string</td>
 <td>
-<p><i>Request:</i> command "ins": <i><ins id="tst">Test</ins></i>
+<p><i>Request:</i> command "ins": <i>&lt;ins path="/fld_teg" user="user" pos="3" p_id="tst1" id="tst"&gt;Test&lt;/ins&gt;</i>
 </p>
 <dl><dd>To insert the string with the ID "tst" and value "Test" in position 3 with the string "tst1". In the case of the index list p_id attribute contains the identifier, else — the text of the string. If the list is not indexed, then the ID attribute is absent.<br /></dd></dl>
 <p><i>Result:</i> confirmation or an error message.
@@ -2507,7 +2507,7 @@ Where:
 <tr>
 <td>Deleting of the string</td>
 <td>
-<p><i>Request:</i> command "del": <i><del id="tst">Test</del></i>
+<p><i>Request:</i> command "del": <i>&lt;del path="/fld_teg" user="user" pos="3" id="tst"&gt;Test&lt;/del&gt;</i>
 </p>
 <dl><dd>To delete the string with ID "tst" and value "Test" from the position 3. If the list is not indexed, then the ID attribute is absent.<br /></dd></dl>
 <p><i>Result:</i> confirmation or an error message.

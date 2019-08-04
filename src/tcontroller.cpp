@@ -414,7 +414,7 @@ string TController::catsPat( )
 
 void TController::alarmSet( const string &mess, int lev, const string &prm )
 {
-    if(!redntUse(TController::Any)) {
+    if(lev >= 0 || !redntUse(TController::Any)) {
 	string	pId = TSYS::strLine(prm, 0);
 	string	pNm = TSYS::strLine(prm, 1);
 	string	aCat = "al" + owner().modId() + ":" + id();

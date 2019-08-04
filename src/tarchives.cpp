@@ -996,15 +996,18 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/m_arch/view/cat",_("Category pattern"),RWRW__,"root",SARH_ID,2,"tp","str","help",TMess::labMessCat());
 		ctrMkNode("fld",opt,-1,"/m_arch/view/archtor",_("Archivers"),RWRW__,"root",SARH_ID,4,"tp","str","dest","sel_ed","select","/m_arch/lstAMess",
 		    "help",_("Message archivers.\nDo not set the field for processing the request by the buffer and all archivers.\nSet '<buffer>' for processing by the buffer."));
-		if(ctrMkNode("table",opt,-1,"/m_arch/view/mess",_("Messages"),R_R___,"root",SARH_ID)) {
+		XMLNode *tNd = NULL;
+		if((tNd=ctrMkNode("table",opt,-1,"/m_arch/view/mess",_("Messages"),RWRW__,"root",SARH_ID))) {
+		    if(tNd && s2i(TBDS::genDBGet(nodePath()+"messLev","0",opt->attr("user"))) < 0)
+			tNd->setAttr("key","1")->setAttr("s_com","del");
 		    ctrMkNode("list",opt,-1,"/m_arch/view/mess/0",_("Time"),R_R___,"root",SARH_ID,1,"tp","time");
 		    ctrMkNode("list",opt,-1,"/m_arch/view/mess/0a",_("mcsec"),R_R___,"root",SARH_ID,1,"tp","dec");
 		    ctrMkNode("list",opt,-1,"/m_arch/view/mess/1",_("Category"),R_R___,"root",SARH_ID,1,"tp","str");
 		    ctrMkNode("list",opt,-1,"/m_arch/view/mess/2",_("Level"),R_R___,"root",SARH_ID,1,"tp","dec");
 		    ctrMkNode("list",opt,-1,"/m_arch/view/mess/3",_("Message"),R_R___,"root",SARH_ID,1,"tp","str");
 		}
-		if(s2i(TBDS::genDBGet(nodePath()+"messLev","0",opt->attr("user"))) < 0)
-		    ctrMkNode("comm",opt,-1,"/m_arch/view/alClear",_("Clear the current alarms table"),RWRW__,"root",SARH_ID);
+		if(s2i(TBDS::genDBGet(nodePath()+"messLev","0",opt->attr("user"))) < 0 && mAlarms.size())
+		    ctrMkNode("comm",opt,-1,"/m_arch/view/alClean",_("Clean up the the current violations table"),RWRW__,"root",SARH_ID);
 	    }
 	}
 	if(ctrMkNode("area",opt,2,"/v_arch",_("Values"),R_R_R_,"root",SARH_ID)) {
@@ -1071,30 +1074,37 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	for(map<string, bool>::iterator iM = itsMap.begin(); iM != itsMap.end(); ++iM)
 	    if(iM->second) opt->childAdd("el")->setText(curVal+(curVal.size()?";":"")+iM->first);
     }
-    else if(a_path == "/m_arch/view/mess" && ctrChkNode(opt,"get",R_R___,"root",SARH_ID)) {
-	vector<TMess::SRec> rec;
-	time_t gtm = s2i(TBDS::genDBGet(nodePath()+"messTm","0",opt->attr("user")));
-	if(!gtm) gtm = time(NULL);
-	int gsz = s2i(TBDS::genDBGet(nodePath()+"messSize","60",opt->attr("user")));
-	messGet(gtm-gsz, gtm, rec,
+    else if(a_path == "/m_arch/view/mess"){
+	if(ctrChkNode(opt,"get",R_R___,"root",SARH_ID)) {
+	    vector<TMess::SRec> rec;
+	    time_t gtm = s2i(TBDS::genDBGet(nodePath()+"messTm","0",opt->attr("user")));
+	    if(!gtm) gtm = time(NULL);
+	    int gsz = s2i(TBDS::genDBGet(nodePath()+"messSize","60",opt->attr("user")));
+	    messGet(gtm-gsz, gtm, rec,
 		TBDS::genDBGet(nodePath()+"messCat","",opt->attr("user")),
 		s2i(TBDS::genDBGet(nodePath()+"messLev","0",opt->attr("user"))),
 		TBDS::genDBGet(nodePath()+"messArch","",opt->attr("user")));
 
-	XMLNode *n_tm	= ctrMkNode("list",opt,-1,"/m_arch/view/mess/0","",R_R___,"root",SARH_ID);
-	XMLNode *n_tmu	= ctrMkNode("list",opt,-1,"/m_arch/view/mess/0a","",R_R___,"root",SARH_ID);
-	XMLNode *n_cat	= ctrMkNode("list",opt,-1,"/m_arch/view/mess/1","",R_R___,"root",SARH_ID);
-	XMLNode *n_lvl	= ctrMkNode("list",opt,-1,"/m_arch/view/mess/2","",R_R___,"root",SARH_ID);
-	XMLNode *n_mess	= ctrMkNode("list",opt,-1,"/m_arch/view/mess/3","",R_R___,"root",SARH_ID);
-	for(int i_rec = rec.size()-1; i_rec >= 0; i_rec--) {
-	    if(n_tm)	n_tm->childAdd("el")->setText(i2s(rec[i_rec].time));
-	    if(n_tmu)	n_tmu->childAdd("el")->setText(i2s(rec[i_rec].utime));
-	    if(n_cat)	n_cat->childAdd("el")->setText(rec[i_rec].categ);
-	    if(n_lvl)	n_lvl->childAdd("el")->setText(i2s(rec[i_rec].level));
-	    if(n_mess)	n_mess->childAdd("el")->setText(rec[i_rec].mess);
+	    XMLNode *n_tm	= ctrMkNode("list",opt,-1,"/m_arch/view/mess/0","",R_R___,"root",SARH_ID);
+	    XMLNode *n_tmu	= ctrMkNode("list",opt,-1,"/m_arch/view/mess/0a","",R_R___,"root",SARH_ID);
+	    XMLNode *n_cat	= ctrMkNode("list",opt,-1,"/m_arch/view/mess/1","",R_R___,"root",SARH_ID);
+	    XMLNode *n_lvl	= ctrMkNode("list",opt,-1,"/m_arch/view/mess/2","",R_R___,"root",SARH_ID);
+	    XMLNode *n_mess	= ctrMkNode("list",opt,-1,"/m_arch/view/mess/3","",R_R___,"root",SARH_ID);
+	    for(int i_rec = rec.size()-1; i_rec >= 0; i_rec--) {
+		if(n_tm)	n_tm->childAdd("el")->setText(i2s(rec[i_rec].time));
+		if(n_tmu)	n_tmu->childAdd("el")->setText(i2s(rec[i_rec].utime));
+		if(n_cat)	n_cat->childAdd("el")->setText(rec[i_rec].categ);
+		if(n_lvl)	n_lvl->childAdd("el")->setText(i2s(rec[i_rec].level));
+		if(n_mess)	n_mess->childAdd("el")->setText(rec[i_rec].mess);
+	    }
+	}
+	if(s2i(TBDS::genDBGet(nodePath()+"messLev","0",opt->attr("user"))) < 0 && ctrChkNode(opt,"del",RWRW__,"root",SARH_ID,SEC_WR)) {
+	    mRes.lock();
+	    mAlarms.erase(opt->attr("key_1"));
+	    mRes.unlock();
 	}
     }
-    else if(a_path == "/m_arch/view/alClear" && ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR)) {
+    else if(a_path == "/m_arch/view/alClean" && ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR)) {
 	mRes.lock();
 	mAlarms.clear();
 	mRes.unlock();

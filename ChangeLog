@@ -1,3 +1,22 @@
+2019-08-04 Roman (stable)
+- Archives: The messages table in the mode of alarms display appended for the "Delete" command to delete single messages.
+- DAQ.Controller: The system and user API function alarmSet() enabled for not violation messages (lev >= 0) in the "Redundancy" mode.
+- DB.{SQLite,MySQL,PostgreSQL,FireBird}: The not string values cleared from the string brackets '{Value}' and that tested.
+- DAQ.ModBus: Period of the idle (waiting for connection) mode switched from the fixed periodicity in 1 (one) second to the main period,
+    to prevent for high loading on big projects with more than one second main period.
+- !!:FIX:UI.VCAEngine: The linked pages switching mode improved to guaranty of closing proper linking page.
+    The linking pages moved to complette restarting for equal to the main pages behaviour at their switching.
+- !!!:UI.WebVision: The main checking of the background objects is made unified and expanded to support of optional background objects,
+	to decrease the overall number of the background objects.
+    The optional background objects is currently "FormEl" and "Text".
+    Background objects of the Web-sessions appended of the objects counter, to their allocation control and debug.
+    The post requests default response returned to the result "204 No Content"
+	due problems with the mode "Load" of the view "Button" of the primitive "FormEl".
+    The modes "Load" and "Save" of the view "Button" of the primitive "FormEl" fixed and improved for work in the optional background mode.
+    The main window expaning threshold set to 10% of the window decreasing size at 50% for shrinking, to prevent flicking on FireFox
+	for notes about block the external windows.
+
+
 2019-07-28 Roman (stable)
 - !!:DB.LibsDB.vcaBase: Main.{TextLab,ImgLab}: Revised during the documenting.
 - DAQ.JavaLikeCalc: The work registers object "RegW" appended for the debug counters, to monitor the objects leak.

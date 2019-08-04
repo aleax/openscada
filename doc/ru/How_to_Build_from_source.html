@@ -84,14 +84,12 @@
 <dl><dd>$ cd ~/OScadaW/bin; ./openscada</dd></dl></dd></dl>
 <h2><span class="mw-headline" id=".D0.A1.D0.B1.D0.BE.D1.80.D0.BA.D0.B0_.D0.BF.D0.B0.D0.BA.D0.B5.D1.82.D0.BE.D0.B2_OpenSCADA_.D0.B4.D0.BB.D1.8F_.D0.B4.D0.B8.D1.81.D1.82.D1.80.D0.B8.D0.B1.D1.83.D1.82.D0.B8.D0.B2.D0.B0_Linux"><span class="mw-headline-number">3</span> Сборка пакетов OpenSCADA для дистрибутива Linux</span></h2>
 <h3><span class="mw-headline" id=".D0.94.D0.B8.D1.81.D1.82.D1.80.D0.B8.D0.B1.D1.83.D1.82.D0.B8.D0.B2.D1.8B_.D0.BE.D1.81.D0.BD.D0.BE.D0.B2.D0.B0.D0.BD.D0.BD.D1.8B.D0.B9_.D0.BD.D0.B0_RedHat_.E2.80.94_.D0.BF.D0.B0.D0.BA.D0.B5.D1.82.D1.8B_RPM"><span class="mw-headline-number">3.1</span> Дистрибутивы основанный на RedHat — пакеты RPM</span></h3>
-<p>Для сборки RPM-пакетов OpenSCADA Вам понадобятся архивы исходных текстов, ресурсов и файл спецификации RPM пакета (openscada.spec, openscada_mod.spec) или же SRPM-пакет всех этих исходных материалов.
+<p>Для сборки RPM-пакетов OpenSCADA Вам понадобятся архивы исходных текстов, ресурсов и файл спецификации RPM пакета (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/" rel="nofollow noreferrer noopener" target="_blank">openscada.spec, openscada_mod_ALT.spec, openscada_mod_RH.spec</a>) или же SRPM-пакет всех этих исходных материалов.
 </p><p>Файл спецификации RPM-пакетов и SRPM-пакет могут отличаться для разных дистрибутивов Linux, учитывая их особенности, поэтому нужно стараться загружать их в соответствии с дистрибутивом. Если специальный SRPM пакет отсутствует то можно попробовать собрать из унифицированного файла спецификации (openscada.spec) в основном SRPM пакете или пакете ресурсов.
 </p><p>Сборка RPM-пакетов производится в директории со специальной структурой, которая обычно создаётся при установке соответствующего пакета дистрибутива (например: rpm-build). Эта директория, в зависимости от дистрибутива, располагается в домашней директории пользователя или в директории <b>/usr/src</b>. Известные факты расположения директории сборки RPM-пакетов различных дистрибутивов:
 </p>
-<ul><li> <b>~/rpmbuild</b>: <a class="external text" href="https://www.redhat.com" rel="nofollow noreferrer noopener" target="_blank">RedHat</a>, <a class="external text" href="https://www.centos.org/" rel="nofollow noreferrer noopener" target="_blank">CentOS</a>, Mandriva,</li></ul>
-<pre><a class="external text" href="http://fedoraproject.org" rel="nofollow noreferrer noopener" target="_blank">Fedora</a>
-</pre>
-<ul><li> <b>/usr/src/packages</b>: <a class="external text" href="https://www.opensuse.org/" rel="nofollow noreferrer noopener" target="_blank">Open-SUSE</a></li>
+<ul><li> <b>~/rpmbuild</b>: <a class="external text" href="https://www.redhat.com" rel="nofollow noreferrer noopener" target="_blank">RedHat</a>, <a class="external text" href="https://www.centos.org/" rel="nofollow noreferrer noopener" target="_blank">CentOS</a>, Mandriva, <a class="external text" href="http://fedoraproject.org" rel="nofollow noreferrer noopener" target="_blank">Fedora</a></li>
+<li> <b>/usr/src/packages</b>: <a class="external text" href="https://www.opensuse.org/" rel="nofollow noreferrer noopener" target="_blank">Open-SUSE</a></li>
 <li> <b>~/RPM</b>: <a class="external text" href="http://altlinux.com" rel="nofollow noreferrer noopener" target="_blank">ALTLinux</a></li></ul>
 <p>Если после установки специализированного пакета директории создания RPM пакетов нет то её нужно создать командой:
 </p>
