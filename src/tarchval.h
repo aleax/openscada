@@ -179,6 +179,8 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	TVArchive( const string &id, const string &db, TElem *cf_el );
 	~TVArchive( );
 
+	string objName( );
+
 	TCntrNode &operator=( const TCntrNode &node );
 
 	// Base functions

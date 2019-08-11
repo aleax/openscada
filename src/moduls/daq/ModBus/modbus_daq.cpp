@@ -711,7 +711,7 @@ void *TMdContr::Task( void *icntr )
 		    cntr.pHd[iP].at().upVal(isStart, isStop, cntr.period()?(1e9/(float)cntr.period()):-1);
 		prmRes.unlock();
 
-		cntr.tmDelay = vmax(0, cntr.tmDelay-(cntr.period()?(1e9/(float)cntr.period()):1));
+		cntr.tmDelay = vmax(0, cntr.tmDelay-(cntr.period()?(1e-9*(float)cntr.period()):1));
 
 		if(isStop) break;
 

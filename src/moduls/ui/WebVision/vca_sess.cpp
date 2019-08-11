@@ -5381,7 +5381,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 		    //Check for data present
 		    lab_dt = lab_tm = "";
 		    //Date
-		    if(hvLev == 5 || chLev >= 4)
+		    if(/*hvLev == 5 ||*/ chLev >= 4)
 			lab_dt = TSYS::strMess(((chLev>=5 || chLev==-1)?"%d-%02d-%d":"%d"), ttm.tm_mday, ttm.tm_mon+1, ttm.tm_year+1900);
 		    //Hours and minuts
 		    if((hvLev == 4 || hvLev == 3 || ttm.tm_hour || ttm.tm_min) && !ttm.tm_sec)

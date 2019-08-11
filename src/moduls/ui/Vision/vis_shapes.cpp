@@ -3336,7 +3336,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		    //Check for data present
 		    lab_dt.clear(), lab_tm.clear();
 		    //Date
-		    if(hvLev == 5 || chLev >= 4)
+		    if(/*hvLev == 5 ||*/ chLev >= 4)
 			lab_dt = TSYS::strMess(((chLev>=5 || chLev==-1)?"%d-%02d-%d":"%d"), ttm.tm_mday, ttm.tm_mon+1, ttm.tm_year+1900);
 		    //Hours and minuts
 		    if((hvLev == 4 || hvLev == 3 || ttm.tm_hour || ttm.tm_min) && !ttm.tm_sec)
@@ -3361,7 +3361,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		    }
 		    if(lab_dt.size()) {
 			wdth = pnt.fontMetrics().width(lab_dt.c_str());
-			tpos = vmax(h_pos-wdth/2,0);
+			tpos = vmax(h_pos-wdth/2, 0);
 			if((tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3)) {
 			    pnt.drawText(tpos, tAr.y()+tAr.height()+2*mrkHeight, lab_dt.c_str());
 			    endPosDt = tpos+wdth;

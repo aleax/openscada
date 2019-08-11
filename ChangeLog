@@ -1,3 +1,15 @@
+2019-08-11 Roman (stable)
+- !!:DB.LibsDB.vcaBase: Main.{grpGraph,grpGraph10,ElViewGraph,graphSelPrm,graphCalc}: Revised during the documenting.
+    Main.ElViewGraph: Size of the name decreased from 15 to 11 and trend color of the disabled items set to "gray".
+    Main.graphCalc: Expanded for direct connections to the value archives.
+    Some messages updated.
+- Archive: The object TVArchive appended for itself declaration as a part of the core object TCntrNode.
+- FIX:DAQ.ModBus: Fixed for the connection restoring time after the previous changes.
+- FIX:UI.VCAEngine: The runtime pages appended for the function lock in the call setProcess(),
+    but in WebVision there can be concurrence access and for the linked pages it is oftener.
+- UI.{Vision,WebVision}: Some improved in the horizontal scale building of the primitive "Diagram".
+
+
 2019-08-04 Roman (stable)
 - Archives: The messages table in the mode of alarms display appended for the "Delete" command to delete single messages.
 - DAQ.Controller: The system and user API function alarmSet() enabled for not violation messages (lev >= 0) in the "Redundancy" mode.

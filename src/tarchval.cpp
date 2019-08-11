@@ -888,6 +888,8 @@ TVArchive::~TVArchive( )
 
 }
 
+string TVArchive::objName( )	{ return TCntrNode::objName()+":TVArchive"; }
+
 TCntrNode &TVArchive::operator=( const TCntrNode &node )
 {
     const TVArchive *src_n = dynamic_cast<const TVArchive*>(&node);

@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"5.9.9"
+#define MOD_VER		"5.9.10"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -545,15 +545,15 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
 
 string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, const string &idc, bool ldGen )
 {
-    string tbl = TSYS::strSepParse(fullDB,2,';');
+    string tbl = TSYS::strSepParse(fullDB, 2, ';');
     string m_attrs = "";
     vector<string> als;
 
     w.attrList(als);
-    TConfig cEl(&mod->elWdgIO()); cEl.cfg("IDW").setS(idw,true);
-    cEl.cfg("IDC").setS(idc,true);
-    TConfig cElu(&mod->elWdgUIO()); cElu.cfg("IDW").setS(idw,true);
-    cElu.cfg("IDC").setS(idc,true);
+    TConfig cEl(&mod->elWdgIO()); cEl.cfg("IDW").setS(idw, true);
+    cEl.cfg("IDC").setS(idc, true);
+    TConfig cElu(&mod->elWdgUIO()); cElu.cfg("IDW").setS(idw, true);
+    cElu.cfg("IDC").setS(idc, true);
     for(unsigned iA = 0; iA < als.size(); iA++) {
 	AutoHD<Attr> attr = w.attrAt(als[iA]);
 	if(!attr.at().modif()) continue;

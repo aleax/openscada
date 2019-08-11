@@ -56,17 +56,17 @@ INSERT INTO "VCALibs" VALUES('Main','Main elements','Provides the library of the
 
 Founded: September 2007
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.6.0
+Version: 1.6.1
 License: GPLv2','wlb_Main','','Основні елементи','Бібліотека створюється для надання основних елементів користувацького інтерфейсу. Будується бібліотека на основі примітивів віджетів та мови внутрішнього програмування JavaLikeCalc.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Засновано: Вересень 2007
-Версія: 1.6.0
+Версія: 1.6.1
 Ліцензія: GPLv2','Основные элементы','Библиотека создаётся для предоставления основных элементов пользовательского интерфейса. Строится библиотека на основе примитивов виджетов и языка внутреннего программирования JavaLikeCalc.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Основано: Сентябрь 2007
-Версия: 1.6.0
+Версия: 1.6.1
 Лицензия: GPLv2');
 INSERT INTO "VCALibs" VALUES('mnEls','Mnemo elements','User interface''s main elements library.','wlb_mnEls','','Елементи мнемосхеми','Бібліотека основних елементів інтерфейсу користувача.','Элементы мнемосхемы','Библиотека основных элементов пользовательского интерфейса.');
 INSERT INTO "VCALibs" VALUES('doc','Documents','Documents library.
@@ -1892,13 +1892,19 @@ INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomW','45',32,'','','st_open','','',
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomH','30',32,'','','st_open','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomY','98',32,'','','st_open','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','name','Graphics group',41,'','','','Група графіків','','Группа графиков','','','');
-INSERT INTO "wlb_Main_io" VALUES('grpGraph','dscr','The template cadre "Graphics group".
+INSERT INTO "wlb_Main_io" VALUES('grpGraph','dscr','The element is provided for simultaneous observation of trends and control the parameters in the signal object, includes both instances of the widget "Graphics group element (ElViewGraph)" of each parameter (up to 8) and the widget "Diagram" to monitor the parameters'' trends and browsing history, and also the scroll bar for fast navigation on allowed history of selected parameters for show.
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.4.0',32,'','','','Шаблон сторінок: "Група графіків"
+Version: 1.4.0
+License: GPLv2',32,'','','','Елемент слугує для одночасного спостереження трендів та управління параметрами у об''єкті сигналізації, включає у себе як екземпляри віджету "Елемент групи графіків (ElViewGraph)" кожного параметру (до 8), так і віджет "Діаграма" для спостереження за графіками параметрів та перегляду історії, а також горизонтальну стрічку гортання для швидкої навігації за доступною історією обраних для відображення параметрів.
+
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.4.0','','Шаблон страниц: "Группа графиков"
+Версія: 1.4.0
+Ліцензія: GPLv2','','Элемент служит для одновременного наблюдения трендов и управления параметрами в объекте сигнализации, включает в себя как экземпляры виджета "Элемент группы графиков (ElViewGraph)" каждого параметра (до 8), так и виджет "Диаграмма" для наблюдения за графиками параметров и просмотра истории, а также горизонтальную полосу прокрутки для быстрой навигации по доступной истории выбранных для отображения параметров.
+
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.4.0','','','');
+Версия: 1.4.0
+Лицензия: GPLv2','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','geomW','900',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','geomH','600',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','backColor','#5A5A5A',96,'backColorFrame','','','','','','','','');
@@ -2741,7 +2747,7 @@ INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomY','3',32,'','','info_ed','','','
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomW','110',32,'','','info_ed','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomH','20',32,'','','info_ed','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomZ','30',32,'','','info_ed','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('ElCadr','text','Dimension',40,'','','info_ed','Од. виміру','','Ед. измерения','','','');
+INSERT INTO "wlb_Main_io" VALUES('ElCadr','text','Dimension',40,'','','info_ed','Одиниця виміру','','Единица измерения','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','font','Arial 14 1 0 0 0',0,'','','com_open','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','name','Set point',32,'','','lev_sp','Завдання','','Задание','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','active','1',32,'','','com_open','','','','','','');
@@ -3065,7 +3071,7 @@ INSERT INTO "wlb_Main_io" VALUES('grph_panel','tipTool','More forward',32,'','',
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','tipStatus','Press for going to forward to five graphic''s sizes',32,'','','next1','Натиснути для переходу вперед на п''ять розмірів вікна графіку','','Нажать для перехода вперёд на пять размеров окна графика','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomX','70',32,'','','tmTp','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomZ','3',32,'','','tmTp','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('grph_panel','tipTool','Dimension',32,'','','tmTp','Од. виміру','','Ед. измерения','','','');
+INSERT INTO "wlb_Main_io" VALUES('grph_panel','tipTool','Dimension',32,'','','tmTp','Одиниця виміру','','Единица измерения','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomY','179',32,'','','tmTp','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomW','40',32,'','','tmTp','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomH','20',32,'','','tmTp','','','','','','');
@@ -4049,7 +4055,7 @@ INSERT INTO "wlb_Main_io" VALUES('cntrRegul','tmpl','<body bgcolor=''grey''>
 <tr><td>Id:</td><td>ID</td></tr>
 <tr><td>Ім’я:</td><td></td></tr>
 <tr><td>Опис:</td><td></td></tr>
-<tr><td>Од. виміру:</td><td></td></tr>
+<tr><td>Одиниця виміру:</td><td></td></tr>
 <tr><td>Завдання:</td><td></td></tr>
 <tr><td>Змінна:</td><td></td></tr>
 <tr><td>Вихід:</td><td></td></tr>
@@ -4147,13 +4153,13 @@ INSERT INTO "wlb_Main_io" VALUES('ElViewGraph','geomH','18',32,'','','lb_ed','',
 INSERT INTO "wlb_Main_io" VALUES('ElViewGraph','geomZ','3',32,'','','lb_ed','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElViewGraph','font','Arial 15 1 0 0 0',32,'','','lb_ed','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElViewGraph','color','#00aa00',40,'','','lb_ed','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('ElViewGraph','text','',40,'','','lb_ed','од. виміру','','ед. измер.','','','');
+INSERT INTO "wlb_Main_io" VALUES('ElViewGraph','text','',40,'','','lb_ed','одиниця виміру','','единица измерения','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElViewGraph','name','',32,'','','lb_sfr','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElViewGraph','geomX','2',32,'','','lb_sfr','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElViewGraph','geomW','108',32,'','','lb_sfr','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElViewGraph','geomH','18',32,'','','lb_sfr','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElViewGraph','geomZ','2',32,'','','lb_sfr','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('ElViewGraph','font','Arial 15 1 0 0 0',32,'','','lb_sfr','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('ElViewGraph','font','Arial 11 1 0 0 0',32,'','','lb_sfr','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElViewGraph','color','gray',40,'','','lb_sfr','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElViewGraph','alignment','8',32,'','','lb_sfr','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElViewGraph','text','No data',40,'','','lb_sfr','Немає даних','','Нет данных','','','');
@@ -4174,13 +4180,19 @@ INSERT INTO "wlb_Main_io" VALUES('RootPgSo','en','1',40,'','','play','','','',''
 INSERT INTO "wlb_Main_io" VALUES('prescrRunSimple','bordColor','gray',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrRunSimple','bordStyle','6',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrRunSimple','name','',32,'','','btPass','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('ElViewGraph','dscr','Element of the graph groups.
+INSERT INTO "wlb_Main_io" VALUES('ElViewGraph','dscr','Element is provided to create graphics groups. Element contains information about a parameter, the regulator mode, if the parameter is such, the units of analog parameter, as well as the color corresponding to the parameter''s trend. The element commonly uses and represents the representative structure of the DAQ-templates "Analog signal" and "Discrete block".
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.3.0',42,'Parameter|DESCR','','','Елемент групи графіків.
-Автор: Роман Савоченко<roman@oscada.org>
-Версія: 1.3.0','','Элемент группы графиков.
-Автор: Роман Савоченко<roman@oscada.org>
-Версия: 1.2.1','','','');
+Version: 1.3.1
+License: GPLv2',42,'Parameter|DESCR','','','Елемент слугує для створення груп графіків. Елемент містить інформацію про параметр, режим регулятору, якщо параметр є таким, одиницю виміру аналогового параметру, а також колір, що відповідає параметру тренда. Елемент загалом використовує та представляє представницьку структуру DAQ-шаблонів "Аналоговий сигнал" та "Дискретний блок".
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.3.1
+Ліцензія: GPLv2','Parameter|DESCR','Элемент служит для создания групп графиков. Элемент содержит информацию о параметре, режиме регулятора, если параметр является таковым, единице измерения аналогового параметра, а также цвет, соответствующий параметру тренда. Элемент в целом использует и представляет представительскую структуру DAQ-шаблонов "Аналоговый сигнал" и "Дискретный блок".
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.3.1
+Лицензия: GPLv2','Parameter|DESCR','','');
 INSERT INTO "wlb_Main_io" VALUES('ElViewGraph','tipStatus','',40,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrRunSimple','geomX','71.508',32,'','','btPass','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrRunSimple','geomY','13.376',32,'','','btPass','','','','','','');
@@ -5029,21 +5041,21 @@ INSERT INTO "wlb_Main_io" VALUES('prescrRun','img','step_pass',0,'','','btPass',
 INSERT INTO "wlb_Main_io" VALUES('prescrRun','font','Arial 20',0,'','','btPass','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElViewGraph','contextMenu','Passport:pasp
 Hide/Show:hideshow
-Show (single):single
-Show (All):all
-Calculating:calc
+Show one:single
+Show all:all
+Calculation:calc
 ',32,'','','','Паспорт:pasp
 Приховати/Показати:hideshow
-Показати (один):single
-Показати (Всі):all
+Показати один:single
+Показати все:all
 Обчислення:calc
 ','','Паспорт:pasp
 Скрыть/Показать:hideshow
-Показать (один):single
-Показать (Все):all
+Показать один:single
+Показать все:all
 Вычисление:calc
 ','','','');
-INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','name','Graph param select',32,'','','','Вибір параметру графіку','','Выбор и конфигурация параметра графика','','','');
+INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','name','Graph param selection',32,'','','','Вибір параметру графіку','','Выбор параметра графика','','','');
 INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','geomW','600',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','geomH','400',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','pgGrp','fl',32,'','','','','','','','','');
@@ -5107,7 +5119,7 @@ INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','geomH','25',32,'','','lab_dim','
 INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','geomZ','12',32,'','','lab_dim','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','font','Arial 15',32,'','','lab_dim','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','alignment','8',32,'','','lab_dim','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','text','Dimension:',32,'','','lab_dim','Одиниця виміру:','','Ед. измерения:','','','');
+INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','text','Dimension:',32,'','','lab_dim','Одиниця виміру:','','Единица измерения:','','','');
 INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','name','',32,'','','lab_sc','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','geomX','23',32,'','','lab_sc','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','geomY','270',32,'','','lab_sc','','','','','','');
@@ -5528,13 +5540,19 @@ INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','active','1',32,'','','trendsList
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','font','Arial 9',0,'','','trendsList','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','value','',8,'','','trendsList','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','name','Graphics group 10',41,'','','','Група графіків 10','','Группа графиков 10','','','');
-INSERT INTO "wlb_Main_io" VALUES('grpGraph10','dscr','The template cadre "Graphics group 10".
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','dscr','The element is provided for simultaneous observation of trends and control the parameters in the signal object, includes both instances of the widget "Graphics group element (ElViewGraph)" of each parameter (up to 10) and the widget "Diagram" to monitor the parameters'' trends and browsing history, and also the scroll bar for fast navigation on allowed history of selected parameters for show.
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.4.0',32,'','','','Шаблон сторінок: "Група графіків 10"
+Version: 1.4.0
+License: GPLv2',32,'','','','Елемент слугує для одночасного спостереження трендів та управління параметрами у об''єкті сигналізації, включає у себе як екземпляри віджету "Елемент групи графіків (ElViewGraph)" кожного параметру (до 10), так і віджет "Діаграма" для спостереження за графіками параметрів та перегляду історії, а також горизонтальну стрічку гортання для швидкої навігації за доступною історією обраних для відображення параметрів.
+
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.4.0','','Шаблон страниц: "Группа графиков 10"
+Версія: 1.4.0
+Ліцензія: GPLv2','','Элемент служит для одновременного наблюдения трендов и управления параметрами в объекте сигнализации, включает в себя как экземпляры виджета "Элемент группы графиков (ElViewGraph)" каждого параметра (до 10), так и виджет "Диаграмма" для наблюдения за графиками параметров и просмотра истории, а также горизонтальную полосу прокрутки для быстрой навигации по доступной истории выбранных для отображения параметров.
+
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.4.0','','','');
+Версия: 1.4.0
+Лицензия: GPLv2','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomW','1160',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomH','600',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','evProc','ws_FocusIn:/trnd1:open:/pg_control/pg_grph_panel',32,'','','','','','','','','');
@@ -6557,13 +6575,53 @@ INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','active','1',32,'','','prmSearch'
 INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','value','',8,'','','prmSearch','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','confirm','0',32,'','','prmSearch','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','font','Arial 15',32,'','','prmSearch','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','dscr','The cadre "Selection of the graph params".
+INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','dscr','The element implements a dialog of selection the data source, often the archive ones, for the trend formation in the "Graphics group" frame. Selection is provided from the list, specified in the attribute "Select: parameters accessible to select (allowSelLst)" of the frame-initiator. For the selected source you can specify the name, scale, logarithmic scale, dimension and the color of the trend.
+
+In the "Select: parameters accessible to select (allowSelLst)" attribute the data sources should be placed in the following way:
+- {DAQ_Arh_addr}[:Name[:min:max[:dim]], where:
+  - "DAQ_Arh_addr" — address of the parameter, for the group linking, or address of the attribute with data from the "Data acquisition (DAQ)" subsystem, as well as the address of the values'' archive, for example:
+    - /LogicLev/experiment/prm_F3 — address of the "F3" parameter ;
+    - /DAQ/System/AutoDA/prm_CPULoad/load — address of the "load" attribute of the "CPULoad" parameter;
+    - /Archive/va_LC21_1_var — address of the "LC21_1_var" archive.
+  - "Name" — name of the source to display. At the group linking the name will be taken from the "NAME" attribute.
+  - "min", "max" — display scale. At group linking the scale will be taken from the "min" and "max" attributes, respectively. In the case of the scale absence (min >= max) the auto-scale will be enabled.
+  - "dim" — dimension (measuring unit) of the parameter to display. At the group linking it will be taken from the "ed" attribute.
+- <varhs> — template of the group selection, if you specify it all available archives in the system will be included into the selection list.
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.4.0',32,'','','','Кадр "Обрання параметрів графіку".
-Автор: Роман Савоченко<roman@oscada.org>
-Версія: 1.4.0','','Кадр "Выбор параметров графиков".
-Автор: Роман Савоченко<roman@oscada.org>
-Версия: 1.4.0','','','');
+Version: 1.4.0
+License: GPLv2',32,'','','','Елемент реалізує діалог користувацького вибору джерел даних, часто архівних, для формування графіку у кадрі "Група графіків". Вибір надається з переліку вказаного у атрибуті "Вибір: параметри дозволені для обрання (allowSelLst)", кадру-ініціатору. Для обраного джерела можна вказати ім''я, шкалу, логарифмічність, одиницю вимірювання та колір графіку.
+
+У атрибуті "Вибір: параметри дозволені для обрання (allowSelLst)" мають розташовуватися джерела даних у вигляді:
+
+- {DAQ_Arh_addr}[:Name[:min:max[:dim]], де:
+  - "DAQ_Arh_addr" — адреса параметру, за групового зв''язування, або атрибуту з даними з підсистеми "Збір даних (DAQ)", а також адреса архіву значень, наприклад:
+    - /LogicLev/experiment/prm_F3 — адреса параметру "F3";
+    - /DAQ/System/AutoDA/prm_CPULoad/load — адреса атрибуту "load", параметру "CPULoad";
+    - /Archive/va_LC21_1_var — адреса архіву "LC21_1_var".
+  - "Name" — назва джерела, для відображення. За групового зв''язування назва буде братися з атрибуту "NAME".
+  - "min", "max" — шкала відображення. За групового зв''язування шкала буде братися з атрибуту "min" та "max", відповідно. У випадку відсутності шкали (min >= max) вмикається автоматичний вибір шкали.
+  - "dim" — одиниця виміру параметру, для відображення. За групового зв''язування буде братися з атрибуту "ed".
+- <varhs> — шаблон групового обрання, при визначені якого до переліку обрання потраплять усе доступні у системі архіви.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.4.0
+Ліцензія: GPLv2','','Элемент реализует диалог пользовательского выбора источников данных, часто архивных, для формирования графика в кадре "Группа графиков". Выбор предоставляется из перечня указанного в атрибуте "Выбор: параметры доступные для выбора (allowSelLst)", кадра-инициатора. Для выбранного источника можно указать имя, шкалу, логарифмичность, единицу измерения и цвет графика.
+
+В атрибуте "Выбор: параметры доступные для выбора (allowSelLst)" должны помещаться источники данных в виде:
+- {DAQ_Arh_addr}[:Name[:min:max[:dim]], где:
+  - "DAQ_Arh_addr" — адрес параметра, при групповом связывании, или атрибута с данными из подсистемы "Сбор данных (DAQ)", а также адрес архива значений, например:
+    - /LogicLev/experiment/prm_F3 — адрес параметра "F3";
+    - /DAQ/System/AutoDA/prm_CPULoad/load — адрес атрибута "load", параметра "CPULoad";
+    - /Archive/va_LC21_1_var — адрес архива "LC21_1_var".
+  - "Name" — имя источника, для отображения. При групповом связывании имя будет браться из атрибута "NAME".
+  - "min", "max" — шкала отображения. При групповом связывании шкала будет браться из атрибута "min" и "max", соответственно. В случае отсутствия шкалы (min >= max) включится автоматический выбор шкалы.
+  - "dim" — единица измерения параметра, для отображения. При групповом связывании будет браться из атрибута "ed".
+- <varhs> — шаблон группового выбора, при указании которого в список выбора попадут все доступные в системе архивы.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.4.0
+Лицензия: GPLv2','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','dscr','The cadre "Graph control panel".
 
 Author: Roman Savochenko <roman@oscada.org>
@@ -7509,19 +7567,31 @@ INSERT INTO "wlb_Main_io" VALUES('doc_panel','font','Arial 12 0 1',32,'','','Tex
 INSERT INTO "wlb_Main_io" VALUES('doc_panel','alignment','10',32,'','','Text2','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('doc_panel','text','Begin and depth',32,'','','Text2','Початок і глиб.','','Начало и глуб.','','','');
 INSERT INTO "wlb_Main_io" VALUES('graphCalc','owner','root:UI',32,'','','','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('graphCalc','name','Graph param calculating',32,'','','','Обчислення параметру графіку','','Вычисление параметра графика','','','');
-INSERT INTO "wlb_Main_io" VALUES('graphCalc','dscr','The cadre "Graph param calculating".
+INSERT INTO "wlb_Main_io" VALUES('graphCalc','name','Graph param calculation',32,'','','','Обчислення параметру графіку','','Вычисление параметра графика','','','');
+INSERT INTO "wlb_Main_io" VALUES('graphCalc','dscr','The element implements a dialog of user calculation of the selected graph parameter for the graphically visible data. The user is given an option to select calculations from the built-in library, the privileged user ("root" or in the "ITW" group) has the opportunity to edit or write their own calculation procedure.
+
+In general, the built-in library currently contains the following functions of the user calculation:
+- Sum, at hour.
+- Average and range.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.0
-License: GPLv2',32,'','','','Кадр "Обчислення параметру графіку".
+Version: 1.0.1
+License: GPLv2',32,'','','','Елемент реалізує діалог користувацького обчислення параметру обраного графіку для видимих на графіку даних. Користувачу надається можливість обрати обчислення із вбудованої бібліотеки, привілейований користувач ("root" або у групі "ITW") має можливість відредагувати або написати власну процедуру обчислення.
+
+Загалом, вбудована бібліотека наразі містить наступні функції користувацького обчислення:
+- Сума, на годину.
+- Середнє та діапазон.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.0.0
-Ліцензія: GPLv2','','Кадр "Вычисление параметра графика".
+Версія: 1.0.1
+Ліцензія: GPLv2','','Элемент реализует диалог пользовательского вычисления параметра выбранного графика для видимых на графике данных. Пользователю предоставляется возможность выбрать вычисление из встроенной библиотеки, привилегированный пользователь ("root" или в группе "ITW") имеет возможность отредактировать или написать собственную процедуру вычисления.
+
+В целом, встроенная библиотека, на данное врем, содержит следующие функции пользовательского вычисления:
+- Сумма, на час.
+- Среднее и диапазон.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.0.0
+Версия: 1.0.1
 Лицензия: GPLv2','','','');
 INSERT INTO "wlb_Main_io" VALUES('graphCalc','geomW','600',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('graphCalc','geomH','300',32,'','','','','','','','','');
@@ -7578,12 +7648,12 @@ INSERT INTO "wlb_Main_io" VALUES('graphCalc','geomH','45',32,'','','title','',''
 INSERT INTO "wlb_Main_io" VALUES('graphCalc','geomZ','5',32,'','','title','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('graphCalc','font','Arial 18 0 1',32,'','','title','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('graphCalc','alignment','2',32,'','','title','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('graphCalc','text','Calculating for the parameter "%1" archive at the range[%2...%3] and the archiver "%4"',40,'','','title','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('graphCalc','text','Calculation for the parameter "%1" archive at the range[%2...%3] and the archiver "%4"',40,'','','title','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('graphCalc','numbArg','0',32,'','','title','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('graphCalc','font','Courier 12',0,'','','funcCode','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('graphCalc','font','Arial 12',0,'','','result','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('graphCalc','geomH','160',32,'','','funcCode','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('graphCalc','tipTool','The calculating function reserves followed service variables:
+INSERT INTO "wlb_Main_io" VALUES('graphCalc','tipTool','The calculation function reserves followed service variables:
 * "result" - text result for the field "Result";
 * "data" - data values array;
 * "per" - period of the data, in microseconds;
@@ -10053,37 +10123,37 @@ INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmSp','Parameter: set point',131076
 INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmVar','Parameter: variable',131076,'0|',14,'Parameter|var','','','Параметр: змінна','','','Параметр: переменная','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph','min','Minimum',131076,'0|0;0|',10,'Parameter|min','','el8','Мінімум','','','Минимум','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph','max','Maximum',131076,'0|0;0|',10,'Parameter|max','','el8','Максимум','','','Максимум','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('grpGraph','ed','Dimension',131077,'||',10,'Parameter|ed','','el8','Од. виміру','','','Ед. измерения','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('grpGraph','ed','Dimension',131077,'||',10,'Parameter|ed','','el8','Одиниця виміру','','','Единица измерения','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grph_panel','sclVer','Vertical scale',131076,'<EVAL>|',14,'<page>|sclVerScl','','','Вертикальний масштаб','','','Вертикальный масштаб','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grph_panel','sclVerOff','Vertical scale offset',131076,'<EVAL>|',14,'<page>|sclVerSclOff','','','Зміщення вертикального масштабу','','','Смещение вертикального масштаба','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph','addr','Address',196613,'||',10,'Parameter|var','','el8','Адреса','','','Адрес','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph','min','Minimum',131076,'0|0;0|',10,'Parameter|min','','el7','Мінімум','','','Минимум','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph','max','Maximum',131076,'0|0;0|',10,'Parameter|max','','el7','Максимум','','','Максимум','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('grpGraph','ed','Dimension',131077,'||',10,'Parameter|ed','','el7','Од. виміру','','','Ед. измерения','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('grpGraph','ed','Dimension',131077,'||',10,'Parameter|ed','','el7','Одиниця виміру','','','Единица измерения','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph','addr','Address',196613,'||',10,'Parameter|var','','el7','Адреса','','','Адрес','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph','min','Minimum',131076,'0|0;0|',10,'Parameter|min','','el6','Мінімум','','','Минимум','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph','max','Maximum',131076,'0|0;0|',10,'Parameter|max','','el6','Максимум','','','Максимум','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('grpGraph','ed','Dimension',131077,'||',10,'Parameter|ed','','el6','Од. виміру','','','Ед. измерения','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('grpGraph','ed','Dimension',131077,'||',10,'Parameter|ed','','el6','Одиниця виміру','','','Единица измерения','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph','addr','Address',196613,'||',10,'Parameter|var','','el6','Адреса','','','Адрес','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph','min','Minimum',131076,'0|0;0|',10,'Parameter|min','','el5','Мінімум','','','Минимум','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph','max','Maximum',131076,'0|0;0|',10,'Parameter|max','','el5','Максимум','','','Максимум','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('grpGraph','ed','Dimension',131077,'||',10,'Parameter|ed','','el5','Од. виміру','','','Ед. измерения','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('grpGraph','ed','Dimension',131077,'||',10,'Parameter|ed','','el5','Одиниця виміру','','','Единица измерения','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph','addr','Address',196613,'||',10,'Parameter|var','','el5','Адреса','','','Адрес','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph','min','Minimum',131076,'0|0;0|',10,'Parameter|min','','el4','Мінімум','','','Минимум','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph','max','Maximum',131076,'0|0;0|',10,'Parameter|max','','el4','Максимум','','','Максимум','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('grpGraph','ed','Dimension',131077,'||',10,'Parameter|ed','','el4','Од. виміру','','','Ед. измерения','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('grpGraph','ed','Dimension',131077,'||',10,'Parameter|ed','','el4','Одиниця виміру','','','Единица измерения','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph','addr','Address',196613,'||',10,'Parameter|var','','el4','Адреса','','','Адрес','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph','min','Minimum',131076,'0|0;0|',10,'Parameter|min','','el3','Мінімум','','','Минимум','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph','max','Maximum',131076,'0|0;0|',10,'Parameter|max','','el3','Максимум','','','Максимум','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('grpGraph','ed','Dimension',131077,'||',10,'Parameter|ed','','el3','Од. виміру','','','Ед. измерения','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('grpGraph','ed','Dimension',131077,'||',10,'Parameter|ed','','el3','Одиниця виміру','','','Единица измерения','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph','addr','Address',196613,'||',10,'Parameter|var','','el3','Адреса','','','Адрес','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph','min','Minimum',131076,'0|0;0|',10,'Parameter|min','','el2','Мінімум','','','Минимум','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph','max','Maximum',131076,'0|0;0|',10,'Parameter|max','','el2','Максимум','','','Максимум','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('grpGraph','ed','Dimension',131077,'||',10,'Parameter|ed','','el2','Од. виміру','','','Ед. измерения','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('grpGraph','ed','Dimension',131077,'||',10,'Parameter|ed','','el2','Одиниця виміру','','','Единица измерения','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph','addr','Address',196613,'||',10,'Parameter|var','','el2','Адреса','','','Адрес','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph','min','Minimum',131076,'0|0;0|',10,'Parameter|min','','el1','Мінімум','','','Минимум','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph','max','Maximum',131076,'0|0;0|',10,'Parameter|max','','el1','Максимум','','','Максимум','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('grpGraph','ed','Dimension',131077,'<EVAL>||',10,'Parameter|ed','','el1','Од. виміру','','','Ед. измерения','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('grpGraph','ed','Dimension',131077,'<EVAL>||',10,'Parameter|ed','','el1','Одиниця виміру','','','Единица измерения','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph','addr','Address',196613,'<EVAL>||',10,'Parameter|var','','el1','Адреса','','','Адрес','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElViewCadr','addr','Address',196613,NULL,10,'Parameter|var','','','Адреса','','','Адрес','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElViewCadr','var','Variable',131076,'<EVAL>|',10,'Parameter|var','','','Змінна','','','Переменная','','','','');
@@ -10217,22 +10287,22 @@ INSERT INTO "wlb_Main_uio" VALUES('cntrRegul','impQdwn_addr','Parameter: address
 INSERT INTO "wlb_Main_uio" VALUES('cntrRegul','impQup_addr','Parameter: address of impulse output up',196613,NULL,10,'Parameter|impQup','','','Параметр: адреса імпульсного виходу догори','','','Параметр: адрес выхода импульса вверх','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('cntrRegul','prec','Parameter: precision',131073,'<EVAL>|',10,'Parameter|prec','','','Параметр: точність','','','Параметр: точность','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','addr','Address',196613,NULL,10,'Parameter|var','','','Адреса','','','Адрес','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','digComs','Digital: commands',131077,NULL,1,'','','','Дискр: команди','<EVAL>||','','Дискретный: команды','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','digStts','Digital: stats',131077,NULL,9,'','','','Дискр: стани','<EVAL>||','','Дискретный: состояния','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','pModeA','Regulator mode (auto)',131072,NULL,10,'Parameter|auto','','','Режим регулятору (автомат)','','','Режим регулятора (автомат)','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','pModeC','Regulator mode (cascad)',131072,NULL,10,'Parameter|casc','','','Режим регулятору (каскад)','','','Режим регулятора (каскад)','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','aMax','Border up alarm',131076,'<EVAL>|',10,'Parameter|aMax','','','Границя верхня аварійна','','','Граница верхняя ав.','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','aMin','Border down alarm',131076,'<EVAL>|',10,'Parameter|aMin','','','Границя нижня ав.','','','Граница нижняя ав.','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','color','Graphic color',131077,NULL,8,'','','','Колір графіку','<EVAL>||','','Цвет графика','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','digRevers','Digital: reversion',131072,'0',9,'','','','Дискр: реверс','','','Дискретный: реверс','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','ed','Dimension',131077,NULL,10,'Parameter|ed','','','Од. виміру','<EVAL>||','','Ед. измерения','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','digComs','Digital: commands',131077,NULL,1,'','','','Дискретний: команди',NULL,'','Дискретный: команды',NULL,'','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','digStts','Digital: states',131077,NULL,9,'','','','Дискретний: стани',NULL,'','Дискретный: состояния',NULL,'','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','pModeA','Regulator mode: auto',131072,NULL,10,'Parameter|auto','','','Режим регулятору: автомат','','','Режим регулятора: автомат','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','pModeC','Regulator mode: cascade',131072,NULL,10,'Parameter|casc','','','Режим регулятору: каскад','','','Режим регулятора: каскад','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','aMax','Border up alarm',131076,'<EVAL>|',10,'Parameter|aMax','','','Границя верхня аварійна','','','Граница верхняя аварийная','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','aMin','Border down alarm',131076,'<EVAL>|',10,'Parameter|aMin','','','Границя нижня аварійна','','','Граница нижняя аварийная','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','color','Graphic color',131077,NULL,8,'','','','Колір графіку',NULL,'','Цвет графика',NULL,'','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','digRevers','Digital: reversion',131072,'0',9,'','','','Дискретний: реверс','','','Дискретный: реверс','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','ed','Dimension',131077,NULL,10,'Parameter|ed','','','Одиниця виміру',NULL,'','Единица измерения',NULL,'','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','enMode','Show regulator mode',131072,NULL,8,'','','','Відображати режим регулятору','','','Отображать режим регулятора','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','max','Maximum',131076,'<EVAL>|',10,'Parameter|max','','','Максимум','','','Максимум','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','min','Minimum',131076,'<EVAL>|',10,'Parameter|min','','','Мінімум','','','Минимум','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','prec','Precision',131073,'1|',10,'Parameter|prec','','','Точність','','','Точность','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','varEl','Value',131076,'<EVAL>|',8,'','','','Значення','','','Значение','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','wMax','Border up warning',131076,'<EVAL>|',10,'Parameter|wMax','','','Границя верхня попереджув.','','','Граница верхняя пред.','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','wMin','Border down warning',131076,'<EVAL>|',10,'Parameter|wMin','','','Границя нижня попереджув.','','','Граница нижняя пред.','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','wMax','Border up warning',131076,'<EVAL>|',10,'Parameter|wMax','','','Границя верхня попереджув.','','','Граница верхняя предупр.','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','wMin','Border down warning',131076,'<EVAL>|',10,'Parameter|wMin','','','Границя нижня попереджув.','','','Граница нижняя предупр.','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('anShow1','prec','Parameter: precision',131073,'1|',10,'Parameter|prec','','','Параметр: точність','','','Параметр: точность','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmVarIn','Parameter: variable input',131076,'<EVAL>|',14,'Parameter|varIn','','','Параметр: ввід змінної','','','Параметр: ввод переменной','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElCadr','clearCnt','Clear counter',131073,'<EVAL>||',8,'','','info_var','Лічильник очищень','','','Счётчик очистки','','','','');
@@ -10269,7 +10339,7 @@ INSERT INTO "wlb_Main_uio" VALUES('prescrRun','prExtWork','Controller:work',1310
 ',10,'Controller|work','','','Контроллер:робоча','||','Controller|work','Контроллер:рабочая','||','Controller|work','','');
 INSERT INTO "wlb_Main_uio" VALUES('doc_panel','aSize','Archive size',131073,'0|',10,'<page>|aSize','','','Archive size','','','Размер архива','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('prescrRunSimple','prCnt','Cycles counter',131073,'0|',8,'','','','Лічильник циклів','','','Счётчик циклов','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('grpGraph','allowSelLst','Select: allowed for select parameters',131205,'',8,'','','','Вибір: параметри дозволені для обрання','||','','Выбор: параметры разрешённые для выбора','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('grpGraph','allowSelLst','Select: parameters accessible to select',131205,'',8,'','','','Вибір: параметри дозволені для обрання','','','Выбор: параметры доступные для выбора','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('graphSelPrm','lWdg','Linked widget',131078,'<TVarObj>
 </TVarObj>
 ',8,'','','','Пов''язаний віджет','','','Связанный виджет','','','','');
@@ -10417,8 +10487,8 @@ INSERT INTO "wlb_Main_uio" VALUES('grpGraph10','sclWin','Scale: by window',13107
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph10','sclWinCtx','Scale: by window save context',131078,'<TVarObj>
 </TVarObj>
 ',0,'','','trnd1','Масштаб: контекст вікном','','','Масштаб: контекст окном','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('grpGraph','perUserSel','Select: save salection per user',131072,'0',0,'','','','Обрання: зберігати обрання за користувачем','','','Выбор: сохранять выбор по пользователям','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('grpGraph10','perUserSel','Select: save salection per user',131072,'0',0,'','','','Обрання: зберігати обрання за користувачем','','','Выбор: сохранять выбор по пользователям','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('grpGraph','perUserSel','Select: save the selection per user',131072,'0',0,'','','','Обрання: зберігати обрання за користувачем','','','Выбор: сохранять выбор по пользователям','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('grpGraph10','perUserSel','Select: save the selection per user',131072,'0',0,'','','','Обрання: зберігати обрання за користувачем','','','Выбор: сохранять выбор по пользователям','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','colms','Collumns, by '','' (atm,qttm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)',131077,'atm,lev,prm,dscr,alrm',8,'','','','Стовпчики, за '','' (atm,qttm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)','','','Колонки, по '','' (atm,qttm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','expOnFocus','Expand on focus: pixels (0-disabled,>-down,<-up)',131073,'0|',8,'','','','Розширяти при фокусі: пікселів (0-відключено,>-донизу,<-догори)','','','Расширять при фокусе: пикселей (0-отключено,>-вниз,<-вверх)','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','expOnItems','Expand on focus: items (<=0-disabled)',131073,'0|',8,'','','','Розширяти при фокусі: елементів (<=0-відключено)','','','Расширять при фокусе: елементов (<=0-отключено)','','','','');
@@ -10483,22 +10553,22 @@ INSERT INTO "wlb_Main_uio" VALUES('userManager','storeDB','DB of saving new user
 INSERT INTO "wlb_Main_uio" VALUES('userManager','mess','Dialog message',131077,'Are you sure to delete this user?',0,'','','userDel','Повідомлення діалогу','Ви дійсно бажаєте видалити користувача?','','Сообщение диалога','Вы действительно желаете удалить пользователя?','','','');
 INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','backColorButton','Button color: back',147461,'#555555',72,'','','','','','','','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','backColorButtonSel','Button color: back selected',147461,'#777799',72,'','','','','','','','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','labColorGood','Label color: good',147461,'#00FF00',72,'','','','','','','','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','labColorAlarm','Label color: alarm',147461,'#ff0000',72,'','','','','','','','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','labColorWarning','Label color: warning',147461,'#ffff00',72,'','','','','','','','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','labColorGood','Label color: good',147461,'#00FF00',72,'','','','Колір мітки: норма','','','Цвет метки: норма','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','labColorAlarm','Label color: alarm',147461,'#ff0000',72,'','','','Колір мітки: аварія','','','Цвет метки: авария','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','labColorWarning','Label color: warning',147461,'#ffff00',72,'','','','Колір мітки: попередження','','','Цвет метки: предупреждение','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('anShow','labColorAlarm','Label color: alarm',147461,'red',72,'','','','Колір мітки: аварія','','','Цвет метки: авария','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('anShow','labColorGood','Label color: good',147461,'lime',72,'','','','Колір мітки: норма','','','Цвет метки: норма','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('anShow','labColorWarning','Label color: warning',147461,'yellow',72,'','','','Колір мітки: попередження','','','Цвет метки: предупреждение','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('anShow1','labColorAlarm','Label color: alarm',147461,'red',72,'','','','','','','','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('anShow1','labColorGood','Label color: good',147461,'lime',72,'','','','','','','','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('anShow1','labColorWarning','Label color: warning',147461,'yellow',72,'','','','','','','','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','labColorAlarm','Label color: alarm',147461,'red',72,'','','','','','','','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','labColorGood','Label color: good',147461,'lime',72,'','','','','','','','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','labColorWarning','Label color: warning',147461,'yellow',72,'','','','','','','','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','labColorAlarm','Label color: alarm',147461,'red',72,'','','','Колір мітки: аварія','','','Цвет метки: авария','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','labColorGood','Label color: good',147461,'lime',72,'','','','Колір мітки: норма','','','Цвет метки: норма','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','labColorWarning','Label color: warning',147461,'yellow',72,'','','','Колір мітки: попередження','','','Цвет метки: предупреждение','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('cntrRegul','labColor','Label: color',147461,'white',72,'','','','','','','','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('cntrPaspExt','backColorButton','Button color: back',147461,'#555555',72,'','','','','','','','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('cntrPaspExt','backColorButtonSel','Button color: back selected',147461,'#777799',72,'','','','','','','','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','colorDef','Default color from the style',131077,'',8,'','','','','','','','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','colorDef','Default color from the style',131077,'',8,'','','','Типовий колір зі стилю','','','Типовой цвет из стиля','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('cntrPaspExt','labColorGrph1','Graph color: 1',147461,'#ae77c3',64,'','','','','','','','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('cntrPaspExt','labColorGrph2','Graph color: 2',147461,'orange',64,'','','','','','','','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('cntrPaspExt','labColorGrph3','Graph color: 3',147461,'blue',64,'','','','','','','','','','','');
@@ -18630,7 +18700,7 @@ INSERT INTO "Trs" VALUES('Select command','Обреріть команду','В�
 INSERT INTO "Trs" VALUES('Press for command select','Натисніть для обрання команди','Нажмите для выбора команды');
 INSERT INTO "Trs" VALUES('not set','не встановлено','не установлено');
 INSERT INTO "Trs" VALUES('Id','Ідентиф.','Идентиф.');
-INSERT INTO "Trs" VALUES('Dimension','Од. виміру','Ед. измерения');
+INSERT INTO "Trs" VALUES('Dimension','Одиниця виміру','Единица измерения');
 INSERT INTO "Trs" VALUES('Message','Повідомлення','Сообщение');
 INSERT INTO "Trs" VALUES('(background)','(фоновий)','(фоновый)');
 INSERT INTO "Trs" VALUES('Alarm time','Час сигналу','Время сигнала');
@@ -18651,7 +18721,7 @@ INSERT INTO "Trs" VALUES('Signal object','Об''єкт сигналізації'
 INSERT INTO "Trs" VALUES('Press for select signal object','Натисніть для вибору об''єкту сигналізації','Нажмите для выбора объекта сигнализации');
 INSERT INTO "Trs" VALUES('<Clear>','<Очистити>','<Очистить>');
 INSERT INTO "Trs" VALUES('Error connecting to the widget ''%1''!','Помилка підключення до віджету ''%1''!','Ошибка подключения к виджету ''%1''!');
-INSERT INTO "Trs" VALUES('Calculating for the parameter "%1" archive at the data range [%2...%3] and the archiver "%4"','Обчислення архіву параметру "%1" на інтервалі даних [%2...%3] та для архіватору "%4"','Вычисление архива параметра "%1" на интервале данных [%2...%3] и для архиватора "%4"');
+INSERT INTO "Trs" VALUES('Calculation for the parameter "%1" archive at the data range [%2...%3] and the archiver "%4"','Обчислення архіву параметру "%1" на інтервалі даних [%2...%3] та для архіватору "%4"','Вычисление архива параметра "%1" на интервале данных [%2...%3] и для архиватора "%4"');
 INSERT INTO "Trs" VALUES('Sum, at hour','Сума, на годину','Сумма, за час');
 INSERT INTO "Trs" VALUES('Average and range','Середнє та діапазон','Среднее и диапазон');
 CREATE TABLE 'wlb_Main' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
@@ -19095,7 +19165,7 @@ if(arh_end && ((arh_end-arh_beg)/trnd1_tSize > 2)) {
 	arh_active = true;
 	if(selSingle) trnd1_tSek = arh_end;
 }
-else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1560241735);
+else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1565536317);
 INSERT INTO "wlb_Main" VALUES('graphSelPrm','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAD/klEQVRYhe2Z224bRRiA57gHr8/H2MEpLSCRovYGiXsE4qJ9gEq8RR+A
 23LDg0TiFSJ6Ty8hvSEJJSRqnMb2endnZ2dPPxdxTZq6jllMlkr+rmakmX//z/96ZjSLv/v+Bx9p
@@ -19268,7 +19338,7 @@ for(evRez = "", off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
 	else if(evCur == "ws_BtPress:/cancel")	this.attrSet("pgOpen", false);
 	else evRez += evCur+"\n";
 }
-event = evRez;','','',500,'name;dscr;geomW;geomH;pgOpenSrc;pgGrp;backColor;bordWidth;',1562999734);
+event = evRez;','','',500,'name;dscr;geomW;geomH;pgOpenSrc;pgGrp;backColor;bordWidth;',1565536317);
 INSERT INTO "wlb_Main" VALUES('RootPgSo','iVBORw0KGgoAAAANSUhEUgAAAEAAAAApCAIAAAAK8LgbAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAADVklEQVRYhe2XS28jRRRGbz366U77ETu2Q6QomwCDDBIsZsFi/gISINbJ
 L4QtC1giQLCZSKMZMa9A7JkYP9vVXd1VdYtF24AEEoFN05LPrj7p072nVepWk4uLC6WU7GSA1F96
@@ -20360,7 +20430,7 @@ if(toSave || (f_start && allowSel && !loadOK)) {
 if(!color_.length)	color_ = color;
 if(bordStyle == 1 && color != "-")			color_ = color, color = "-";
 else if(bordStyle != 1 && color == "-")	color = color_;
-trClr_lineClr = color;
+trClr_lineClr = (color.length && color != "-") ? color : "gray";
 
 tipTool = "";
 if(!name.isEVal())	tipTool += tr("Name")+": "+name+"\n";
@@ -20370,7 +20440,7 @@ if(!wMin.isEVal() && !wMax.isEVal() && wMax > wMin) tipTool += tr("Warning borde
 if(!dscr.isEVal()) {
 	tipTool += tr("Description")+": "+dscr+"\n";
 	tipStatus = dscr;
-}','','',500,'path;perm;name;dscr;en;active;geomW;geomH;tipTool;tipStatus;contextMenu;evProc;backColor;bordWidth;bordColor;bordStyle;',1562691559);
+}','','',500,'path;perm;name;dscr;en;active;geomW;geomH;tipTool;tipStatus;contextMenu;evProc;backColor;bordWidth;bordColor;bordStyle;',1565538848);
 INSERT INTO "wlb_Main" VALUES('prescrEdit','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAF
 gUlEQVRYhe1ZTW8TRxh+52N37fVXDLGd1FEUEomQEqGmUpB66YkjvfYf9HfAkUt/Ab+BUwuX0N4L
 QUV1cdzg2ASEnQTbWcf27uzXTA/TLmaduhslrlUpz2G1fuaZ1/PMzM6+M4vu378Pn6Ldbuu6rmka
@@ -21556,7 +21626,7 @@ if(arh_end && ((arh_end-arh_beg)/trnd1_tSize > 2)) {
 	arh_active = true;
 	if(selSingle) trnd1_tSek = arh_end;
 }
-else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1562691559);
+else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1565536317);
 INSERT INTO "wlb_Main" VALUES('anShow1s','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAWCAIAAAD/3A1jAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAG50lEQVRYhdVXWWwb1xW9bxYOOdzERRTFVbtEWRIlWY5dWbHdqI2auC3Q
 nyDoR4EW8H+B+qctYOjDRVC4CBAU7UdRFG4LNAWCRj8tWtiwnTiKHFkRJSaUrJUUtXARZXK4zsJZ
@@ -22619,9 +22689,14 @@ tMmryfNcCPE7hI+m2a6F3MAAAAAASUVORK5CYII=','/wlb_originals/wdg_Box',0,'JavaLikeCa
 if(f_start) {
 	//Connect to linked widget 
 	if(pgOpenSrc.length) lWdg = this.wdgAt(pgOpenSrc, true);
-	if(lWdg)	attrO = SYS.nodeAt(lWdg.attr("addr"));
+	if(lWdg) {
+		attrO = SYS.nodeAt(lWdg.attr("addr"));
+		if(typeof(attrO) == "TCntrNode:TVal")	archO = attrO.arch();
+		else archO = attrO;
+		//this.messInfo("attrO="+typeof(attrO));
+	}
 
-	funcLs_active = funcCode_active = (lWdg && attrO && attrO.arch());
+	funcLs_active = funcCode_active = (lWdg && archO);
 	result_value = "";
 
 	if(funcCode_active) {
@@ -22629,7 +22704,7 @@ if(f_start) {
 		if(dtTm <= 0)	dtTm = SYS.time();
 		dtTmBeg = dtTm - lWdg.nodePrev().trnd1.attr("tSize");
 		valArch = lWdg.nodePrev().trnd1.attr("valArch");
-		title_text = tr("Calculating for the parameter \"%1\" archive at the data range [%2...%3] and the archiver \"%4\"")
+		title_text = tr("Calculation for the parameter \"%1\" archive at the data range [%2...%3] and the archiver \"%4\"")
 			.replace("%1", lWdg.attr("name"))
 			.replace("%2", SYS.strftime(dtTmBeg,"%Y-%m-%dT%H:%M:%S"))
 			.replace("%3", SYS.strftime(dtTm,"%Y-%m-%dT%H:%M:%S"))
@@ -22643,7 +22718,7 @@ if(f_start) {
 		inPrcArgs.beg = dtTmBeg*1e6;
 		inPrcArgs.end = dtTm*1e6;
 		inPrcArgs.per = (inPrcArgs.end-inPrcArgs.beg) / 1000;
-		inPrcArgs.data = attrO.arch().getVals(inPrcArgs.beg, inPrcArgs.end, inPrcArgs.per, valArch);
+		inPrcArgs.data = archO.getVals(inPrcArgs.beg, inPrcArgs.end, inPrcArgs.per, valArch);
 
 		//Functions library
 		fLib = new Object();
@@ -22687,13 +22762,13 @@ for(evRez = "", off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
 	else if(evCur == "ws_TxtAccept:/funcCode")	toCalc = true;
 }
 
-//Calculating
+//Calculation
 if(toCalc)	{
 	inPrcArgs.result = "";
 	rez = SYS.DAQ.funcCall(inPrcLng, inPrcArgs, funcCode_value, inPrcId, inPrcErr);
 	result_value = rez ? inPrcArgs.result : inPrcErr;
 	toCalc = false;
-}','','',500,'owner;name;dscr;geomW;geomH;pgOpenSrc;pgGrp;backColor;bordWidth;',1563002772);
+}','','',500,'owner;name;dscr;geomW;geomH;pgOpenSrc;pgGrp;backColor;bordWidth;',1565536317);
 CREATE TABLE 'wlb_mnEls' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "wlb_mnEls" VALUES('El_round_square1','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABaBJREFUeJztm11MU1cAx/+tZVB0027ysctqN2SYKDoEP8aD05XE6hQB
@@ -24122,7 +24197,7 @@ INSERT INTO "prj_archBrowser" VALUES('/archBrowser/control','graphSelPrm','','/w
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/control','ElCadr','','/wlb_Main/wdg_ElCadr',1,'','','',-1,0,'pgGrp;digComs;digStts;max;min;prmAMax;prmAMin;prmAnalog;prmAuto;prmCasc;prmClose;prmCloseSt;prmColor;prmCom;prmComText;prmDemention;prmDescr;prmId;prmImpQdwnTm;prmImpQupTm;prmManIn;prmOpenSt;prmOut;prmPrec;prmShifr;prmSp;prmStText;prmStop;prmVar;prmVarIn;prmWMax;prmWMin;',1426000648);
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/control','grph_panel','','/wlb_Main/wdg_grph_panel',1,'','','',-1,0,'',1563041089);
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/control','terminator','','/wlb_Main/wdg_terminator',1,'','','',-1,0,'','');
-INSERT INTO "prj_archBrowser" VALUES('/archBrowser','so','','/wlb_Main/wdg_RootPgSo',0,'','','',-1,1,'pgOpen;',1554015998);
+INSERT INTO "prj_archBrowser" VALUES('/archBrowser','so','','/wlb_Main/wdg_RootPgSo',0,'','','',-1,1,'pgOpen;',1565532102);
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/so/1/ggraph','5','','..',1,'','','',-1,0,'name;',1495717615);
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/so','1','','root',1,'
 ','
