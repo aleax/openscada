@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.5.6"
+#define MOD_VER		"2.6.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -218,9 +218,9 @@ void MBD::transOpen( )
 
     MtxAlloc res(connRes, true);
     bool begin = !reqCnt;
-    if(begin) trOpenTm = SYS->sysTm();
+    if(begin) trOpenTm = TSYS::curTime();
     reqCnt++;
-    reqCntTm = SYS->sysTm();
+    reqCntTm = TSYS::curTime();
 
     if(begin) sqlReq("BEGIN;");
 }
@@ -236,7 +236,7 @@ void MBD::transCommit( )
 
 void MBD::transCloseCheck( )
 {
-    if(enableStat() && reqCnt && ((SYS->sysTm()-reqCntTm) > TRANS_CLOSE_TM_AFT_REQ || (SYS->sysTm()-trOpenTm) > TRANS_CLOSE_TM_AFT_OPEN))
+    if(enableStat() && reqCnt && ((TSYS::curTime()-reqCntTm) > 1e6*trTm_ClsOnReq() || (TSYS::curTime()-trOpenTm) > 1e6*trTm_ClsOnOpen()))
 	transCommit();
 }
 

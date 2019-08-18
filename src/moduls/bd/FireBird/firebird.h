@@ -99,11 +99,8 @@ class MBD : public TBD
 
     private:
 	//Private methods
-	void postEnable( int flag );
 	void postDisable( int flag );
 	TTable *openTable( const string &name, bool create );
-
-	static void *Task( void * );
 
 	string getErr( ISC_STATUS_ARRAY status );
 
@@ -112,7 +109,7 @@ class MBD : public TBD
 	isc_db_handle	hdb;
 	isc_tr_handle	htrans;
 	int		reqCnt;
-	time_t		reqCntTm, trOpenTm;
+	int64_t		reqCntTm, trOpenTm;
 	ResMtx		connRes;
 };
 

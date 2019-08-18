@@ -19,7 +19,7 @@
 <td style="padding-left:5px;"> Revision and Actualizing
 </td></tr></table>
 </div>
-<p><i>Author:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>, Maxim Lysenko (2012)
+<p><i>Author:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2012) — the page initial translation</i></font>
 </p><p>This page describes an application programming interface (API) of OpenSCADA.
 </p><p>OpenSCADA is the project of an open SCADA-system based on the modular principle. The document contains an exhaustive description of the internal system architecture of OpenSCADA. In addition to information on the architecture the background information on methods and attributes of the system is provided.<br />
 The document is intended for programmers wishing to understand the architecture of OpenSCADA and develop extensions for it. The document is not intended for users and integrators of OpenSCADA!
@@ -270,10 +270,11 @@ Information variables of the program:
 <li> <i>USER_ITS_LIMIT</i> — Creating user items limit, like to array items (1000000).</li>
 <li> <i>STR_BUF_LEN</i> — Standard length of string buffers (10000).</li>
 <li> <i>NSTR_BUF_LEN</i> — Standard length of string buffers, for numbers (100). </li>
-<li> <i>STD_WAIT_DELAY</i> — Standard quantum of the waiting time cycles (100 ms).</li>
+<li> <i>STD_WAIT_DELAY</i> — Standard quantum of the waiting time cycles (100 milliseconds).</li>
 <li> <i>STD_CACHE_LIM</i> — Standard cache limit (100).</li>
-<li> <i>STD_WAIT_TM</i> — Standard interval of the event waiting (10 ms).</li>
-<li> <i>STD_INTERF_TM</i> — Timeout, maximum time, waiting for the interface reaction (5 s).</li>
+<li> <i>STD_WAIT_TM</i> — Standard interval of the event waiting (10 milliseconds).</li>
+<li> <i>STD_INTERF_TM</i> — Timeout, maximum time, waiting for the interface reaction (5 seconds).</li>
+<li> <i>SERV_TASK_PER</i> — Service task period (10 seconds)</li>
 <li> <i>BUF_ARCH_NM</i> — The archive buffer name ("&lt;buffer&gt;").</li>
 <li> <i>ALRM_ARCH_NM</i> — The alarms table name ("&lt;alarms&gt;").</li>
 <li> <i>__func__</i> — The full name of the calling function.</li>
@@ -684,6 +685,9 @@ Flags of the queries to the system table (enum – TDBS::ReqGen):
 <li> <i>string dscr( );</i> — DB description.</li>
 <li> <i>string addr( ) const;</i> — Address of the database. The form of recording is different for each type of database.</li>
 <li> <i>string codePage( );</i> — Codepage in which the data of the database are stored.</li>
+<li> <i>double trTm_ClsOnOpen( );</i> — Transaction closing: after opening, seconds.</li>
+<li> <i>double trTm_ClsOnReq( );</i> — Transaction closing: after request, seconds.</li>
+<li> <i>int trPr_ClsTask( );</i> — Transaction closing: separate task priority.</li>
 <li> <i>bool enableStat( ) const;</i> — The state of the database: "Enabled".</li>
 <li> <i>bool toEnable( );</i> — Sign of the DB: "To Enable".</li>
 <li> <i>void setName( const string &amp;inm );</i> — Setting the DB name.</li>
@@ -2019,6 +2023,7 @@ Parameter's type (enum — IO::Type):
 <li> <i>TCfg *at( const string &amp;n_val, bool noExpt = false ) const;</i> — Getting of the element's pointer <i>n_val</i>. If the element is absent an exception is generated or the null pointer is returned when setting <i>noExpt</i>.</li>
 <li> <i>void cfgViewAll( bool val = true );</i> — Set/unset the sign of the visibility for all the elements.</li>
 <li> <i>void cfgKeyUseAll( bool val );</i> — Set/unset the sign of the using the key for all the elements.</li>
+<li> <i>void cfgToDefault( );</i> — Setting all not key and view fields to the default value.</li>
 <li> <i>TElem &amp;elem( );</i> — The using structure.</li>
 <li> <i>void setElem( TElem *Elements, bool first = false );</i> — Setting the structure in <i>Elements</i>.</li>
 <li> <i>void cntrCmdMake( XMLNode *fld, const string &amp;path, int pos, const string &amp;user = "root", const string &amp;grp = "root", int perm = 0664 );</i> — Formation of the information description of elements of the configuration for the management interface of OpenSCADA.</li>
@@ -2067,6 +2072,7 @@ Additional flags to <i>TFld</i> (enum — TCfg::AttrFlg):
 <li> <i>void setNoTransl( bool vl );</i> — Setting of the sign "No translation".</li>
 <li> <i>void setReqKey( bool vl );</i> — Setting of the sign "Requests key".</li>
 <li> <i>void setExtVal( bool vw );</i> — Setting of the sign "Extended value".</li>
+<li> <i>void toDefault( );</i> — Setting the field value to the default one.</li>
 <li> <i>TFld &amp;fld( ) const;</i> —  Configuration of the cell.</li>
 <li> <i>string getSEL( );</i> — Get the value of the selectable type.</li>
 <li> <i>string getS( ) const; string getS( uint8_t RqFlg );</i> — Get the value of the string type with the request flags <i>RqFlg</i>.</li>
@@ -2276,7 +2282,7 @@ Error values for the different data types (define):
 </p><p>The container can also gather into the single request several information structures and dynamic parts, thereby optimizing the time of the request especially on the high latency network interfaces.
 </p><p>Overall control interface is built from individual components of the dynamic tree. Hierarchical inheritance from the TCntrNode object allows to realize multi-level addition of the configuration of the control interface. General view of the dynamic node tree is shown in Fig. 8.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="360" src="files/800px-Oscada_UserOM.png" srcset="/wiki/images/6/67/Oscada_UserOM.png 1.5x, /wiki/images/6/67/Oscada_UserOM.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM.png" title="Enlarge" /></div>Fig. 8. Example of a dynamic tree of the nodes in OpenSCADA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="360" src="files/800px-Oscada_UserOM.png" srcset="/wiki/images/6/67/Oscada_UserOM.png 1.5x, /wiki/images/6/67/Oscada_UserOM.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM.png" title="Збільшити" /></div>Fig. 8. Example of a dynamic tree of the nodes in OpenSCADA.</div></div></div></div>
 <p>System's nodes, containing data for the control interface of the system must also be connected to the dynamic tree of objects. 
 </p><p>Connection of the node to the dynamic tree is done as follows:
 </p>
@@ -2975,7 +2981,7 @@ Options for XML-file loading (enum — XMLNode::LoadFlgs):
 <li> <i>void attrList( vector&lt;string&gt; &amp; list ) const;</i> — <i>List</i> of attributes in the tag.</li>
 <li> <i>XMLNode* attrDel( const string &amp;name );</i> — Deleting of the attribute <i>name</i>.</li>
 <li> <i>void attrClear( );</i> — Clean up the tag's attributes.</li>
-<li> <i>string attr( const string &amp;name, bool caseSens = true ) const;</i> — Getting the attribute <i>name</i>.</li>
+<li> <i>string attr( const string &amp;name, bool caseSens = true, bool *presence = NULL ) const;</i> — Getting the attribute <i>name</i> for the case-sensitivity <i>caseSens</i> and with the <i>presence</i> sign.</li>
 <li> <i>XMLNode* setAttr( const string &amp;name, const string &amp;val );</i> — Setting/creation of the attribute <i>name</i> with the value <i>val</i>.</li>
 <li> <i>void load( const string &amp;vl, unsigned flg = 0, const string &amp;cp = "UTF-8" );</i> — Load/parsing of the XML-file, with source encoding <i>cp</i> and flags <i>flg</i>.</li>
 <li> <i>string save( unsigned flg = 0, const string &amp;cp = "UTF-8" ) const;</i> — Saving/creation of the XML-file with the formatting parameter <i>flg</i> and encoding to <i>cp</i>.</li>

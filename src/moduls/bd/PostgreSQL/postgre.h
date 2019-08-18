@@ -108,17 +108,14 @@ class MBD : public TBD
 
     private:
 	//Private methods
-	void postEnable( int flag );
 	void postDisable( int flag );
 	TTable *openTable( const string &name, bool create );
-
-	static void *Task( void * );
 
 	//Private attributes
 	string host, hostaddr, user, pass, db, port, connect_timeout, cd_pg, conninfo;
 	PGconn	*connection;
 	int	reqCnt;
-	time_t	reqCntTm, trOpenTm;
+	int64_t	reqCntTm, trOpenTm;
 	ResMtx	connRes;
 
 	// Statistic

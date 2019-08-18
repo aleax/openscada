@@ -2241,7 +2241,7 @@ void *TSYS::ServTask( void * )
 	if(!(iCnt%10))	SYS->cfgFileSave();
 
 	//Subsystems calling (per 10s)
-	for(unsigned iA = 0; !(iCnt%10) && iA < lst.size(); iA++)
+	for(unsigned iA = 0; !(iCnt%SERV_TASK_PER) && iA < lst.size(); iA++)
 	    try { SYS->at(lst[iA]).at().perSYSCall(iCnt); }
 	    catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 

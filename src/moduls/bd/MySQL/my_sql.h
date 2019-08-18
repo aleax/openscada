@@ -101,18 +101,15 @@ class MBD : public TBD
 
     private:
 	//Private methods
-	void postEnable( int flag );
 	void postDisable( int flag );
 	TTable *openTable( const string &name, bool create );
-
-	static void *Task( void * );
 
 	//Private attributes
 	string	host, user, pass, bd, u_sock, cd_pg;
 	int	port;
 
 	int	reqCnt;
-	time_t	reqCntTm, trOpenTm;
+	int64_t	reqCntTm, trOpenTm;
 	MYSQL	connect;
 	ResMtx	connRes;
 };

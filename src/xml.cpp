@@ -210,15 +210,22 @@ XMLNode* XMLNode::attrDel( const string &name )
 
 void XMLNode::attrClear( )	{ mAttr.clear(); }
 
-string XMLNode::attr( const string &name, bool caseSens ) const
+string XMLNode::attr( const string &name, bool caseSens, bool *presence ) const
 {
     if(caseSens) {
 	for(unsigned iA = 0; iA < mAttr.size(); iA++)
-	    if(mAttr[iA].first == name) return mAttr[iA].second;
+	    if(mAttr[iA].first == name) {
+		if(presence) *presence = true;
+		return mAttr[iA].second;
+	    }
     }
     else for(unsigned iA = 0; iA < mAttr.size(); iA++)
-	if(strcasecmp(mAttr[iA].first.c_str(),name.c_str()) == 0) return mAttr[iA].second;
+	if(strcasecmp(mAttr[iA].first.c_str(),name.c_str()) == 0) {
+	    if(presence) *presence = true;
+	    return mAttr[iA].second;
+	}
 
+    if(presence) *presence = false;
     return "";
 }
 

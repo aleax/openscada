@@ -34,15 +34,13 @@
 #define MOD_NAME	_("DB MySQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"3.1.3"
+#define MOD_VER		"3.2.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DBMS MySQL.")
 #define MOD_LICENSE	"GPL2"
 //************************************************
 
 #define MYSQL_RECONNECT		0		//!!!! MySQL/MariaDB reconnect some time crashable due to a need of releasing some locks
-#define TRANS_CLOSE_TM_AFT_REQ	2
-#define TRANS_CLOSE_TM_AFT_OPEN	10
 #define SEEK_PRELOAD_LIM	100
 
 BDMySQL::BDMod *BDMySQL::mod;
@@ -99,18 +97,9 @@ MBD::~MBD( )
 
 }
 
-void MBD::postEnable( int flag )
-{
-    TBD::postEnable(flag);
-
-    SYS->taskCreate(nodePath('.',true), 20, Task, this);
-}
-
 void MBD::postDisable( int flag )
 {
     TBD::postDisable(flag);
-
-    SYS->taskDestroy(nodePath('.',true));
 
     if(flag && owner().fullDeleteDB())
 	try {
@@ -229,19 +218,6 @@ TTable *MBD::openTable( const string &inm, bool create )
     return new MTable(inm, this, &tblStrct);
 }
 
-void *MBD::Task( void *param )
-{
-    MBD &db = *(MBD *)param;
-
-    while(!TSYS::taskEndRun()) {
-	if(db.enableStat()) db.transCloseCheck();
-
-	TSYS::taskSleep(1000000000);
-    }
-
-    return NULL;
-}
-
 void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTrans )
 {
     MYSQL_RES *res = NULL;
@@ -319,9 +295,9 @@ void MBD::transOpen( )
 
     connRes.lock();
     bool begin = !reqCnt;
-    if(begin) trOpenTm = SYS->sysTm();
+    if(begin) trOpenTm = TSYS::curTime();
     reqCnt++;
-    reqCntTm = SYS->sysTm();
+    reqCntTm = TSYS::curTime();
     connRes.unlock();
 
     if(begin) sqlReq("BEGIN;");
@@ -339,7 +315,7 @@ void MBD::transCommit( )
 
 void MBD::transCloseCheck( )
 {
-    if(enableStat() && reqCnt && ((SYS->sysTm()-reqCntTm) > TRANS_CLOSE_TM_AFT_REQ || (SYS->sysTm()-trOpenTm) > TRANS_CLOSE_TM_AFT_OPEN))
+    if(enableStat() && reqCnt && ((TSYS::curTime()-reqCntTm) > 1e6*trTm_ClsOnReq() || (TSYS::curTime()-trOpenTm) > 1e6*trTm_ClsOnOpen()))
 	transCommit();
     if(!enableStat() && toEnable()) enable();
 }

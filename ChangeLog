@@ -1,3 +1,18 @@
+2019-08-18 Roman (stable)
+- !!:DB.LibsDB.vcaBase: Main.RootPgSo: Revised during the documenting.
+- !!!!:DB,DB.{SQLite,MySQL,PostgreSQL,FireBird}: Significantly unified for the transactions closing control into the OpenSCADA core,
+    due to needs for closing faster than 2 secons period of the current implementation for the network DBMS,
+    so the transactions closing task moved to the OpenSCADA core and the transaction options appended to configure on the DB object side.
+    !!: The generic data requesting functions dataSeek() and dataGet() improved to read with new fields, for the default value.
+    The DBs loading function appended for resetting to default values before the next operation.
+- !!:SYS: Appended for the definition SERV_TASK_PER=10 of the service task periodicity.
+    !!:{TConfig,TCfg}: Appennded by a function of setting the TCfg fields to the default value,
+	to prevent loading values of previous records for miss fields.
+    !!:XMLNode: The attributes getting function attr() expanded for the optional argument of the presence detection.
+    !!:Modules version of the subsystem DB rose to 21.
+- UI.WebVision: Some original messages were updated.
+
+
 2019-08-11 Roman (stable)
 - !!:DB.LibsDB.vcaBase: Main.{grpGraph,grpGraph10,ElViewGraph,graphSelPrm,graphCalc}: Revised during the documenting.
     Main.ElViewGraph: Size of the name decreased from 15 to 11 and trend color of the disabled items set to "gray".

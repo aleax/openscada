@@ -33,14 +33,12 @@
 #define MOD_NAME	_("DB PostgreSQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.1.2"
+#define MOD_VER		"2.2.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2010-2011)")
 #define DESCRIPTION	_("DB module. Provides support of the DBMS PostgreSQL.")
 #define MOD_LICENSE	"GPL2"
 //************************************************
 
-#define TRANS_CLOSE_TM_AFT_REQ	2
-#define TRANS_CLOSE_TM_AFT_OPEN	10
 #define SEEK_PRELOAD_LIM	100
 
 BDPostgreSQL::BDMod *BDPostgreSQL::mod;
@@ -101,18 +99,9 @@ MBD::~MBD( )
 //Override the default notice processor with the empty one. This is done to avoid the notice messages printing on stderr
 void MyNoticeProcessor( void *arg, const char *message )	{ }
 
-void MBD::postEnable( int flag )
-{
-    TBD::postEnable(flag);
-
-    SYS->taskCreate(nodePath('.',true), 20, Task, this);
-}
-
 void MBD::postDisable( int flag )
 {
     TBD::postDisable(flag);
-
-    SYS->taskDestroy(nodePath('.',true));
 
     if(flag && owner().fullDeleteDB()) {
 	MtxAlloc resource(connRes, true);
@@ -250,19 +239,6 @@ TTable *MBD::openTable( const string &inm, bool icreate )
     return new MTable(inm, this, &tblStrct);
 }
 
-void *MBD::Task( void *param )
-{
-    MBD &db = *(MBD *)param;
-
-    while(!TSYS::taskEndRun()) {
-	if(db.enableStat()) db.transCloseCheck();
-
-	TSYS::taskSleep(1000000000);
-    }
-
-    return NULL;
-}
-
 void MBD::create( const string &nm, bool toCreate )
 {
     vector< vector<string> > tbl;
@@ -321,9 +297,9 @@ void MBD::transOpen( )
 #if 1
     connRes.lock();
     bool begin = !reqCnt;
-    if(begin) trOpenTm = SYS->sysTm();
+    if(begin) trOpenTm = TSYS::curTime();
     reqCnt++;
-    reqCntTm = SYS->sysTm();
+    reqCntTm = TSYS::curTime();
     connRes.unlock();
 
     if(begin) sqlReq("BEGIN;");
@@ -343,10 +319,10 @@ void MBD::transOpen( )
 	    //throw err_sys(_("Error starting a transaction!"));
 	}
 	PQclear(res);
-	trOpenTm = SYS->sysTm();
+	trOpenTm = TSYS::curTime();
     }
     reqCnt++;
-    reqCntTm = SYS->sysTm();
+    reqCntTm = TSYS::curTime();
 #endif
 }
 
@@ -382,7 +358,7 @@ void MBD::transCommit( )
 void MBD::transCloseCheck( )
 {
     if(!enableStat() && toEnable()) enable();
-    if(reqCnt && ((SYS->sysTm()-reqCntTm) > TRANS_CLOSE_TM_AFT_REQ || (SYS->sysTm()-trOpenTm) > TRANS_CLOSE_TM_AFT_OPEN))
+    if(reqCnt && ((TSYS::curTime()-reqCntTm) > 1e6*trTm_ClsOnReq() || (TSYS::curTime()-trOpenTm) > 1e6*trTm_ClsOnOpen()))
 	transCommit();
 }
 

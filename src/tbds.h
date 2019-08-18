@@ -21,7 +21,7 @@
 #ifndef TBDS_H
 #define TBDS_H
 
-#define SDB_VER		20		//BDS type modules version
+#define SDB_VER		21		//BDS type modules version
 #define SDB_ID		"BD"
 
 #include <stdio.h>
@@ -105,12 +105,15 @@ class TBD : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( const TCntrNode &node );
 
-	string	id( )		{ return mId; }
+	string	id( )			{ return mId; }
 	string	fullDBName( );
 	string	name( );
-	string	dscr( )		{ return cfg("DESCR").getS(); }
-	string	addr( ) const	{ return cfg("ADDR").getS(); }
-	string	codePage( )	{ return cfg("CODEPAGE").getS(); }
+	string	dscr( )			{ return cfg("DESCR").getS(); }
+	string	addr( ) const		{ return cfg("ADDR").getS(); }
+	string	codePage( )		{ return cfg("CODEPAGE").getS(); }
+	double	trTm_ClsOnOpen( )	{ return mTrTm_ClsOnOpen; }
+	double	trTm_ClsOnReq( )	{ return mTrTm_ClsOnReq; }
+	int	trPr_ClsTask( )		{ return mTrPr_ClsTask; }
 
 	bool enableStat( ) const	{ return mEn; }
 	bool toEnable( )		{ return mToEn; }
@@ -152,7 +155,7 @@ class TBD : public TCntrNode, public TConfig
 	void postEnable( int flag );
 	void preDisable( int flag );
 	void postDisable( int flag );
-	bool cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
 	void load_( TConfig *cfg );
 	void save_( );
@@ -169,10 +172,14 @@ class TBD : public TCntrNode, public TConfig
 	//Private methods
 	const char *nodeName( ) const	{ return mId.getSd(); }
 
+	static void *Task( void * );
+
 	//Private attributes
 	// Base options
 	TCfg	&mId;	//ID
 	char	&mToEn;
+	double	&mTrTm_ClsOnOpen, &mTrTm_ClsOnReq;
+	int64_t	&mTrPr_ClsTask;
 
 	// Special options
 	int	mTbl;

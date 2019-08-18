@@ -2053,14 +2053,94 @@ INSERT INTO "wlb_Main_io" VALUES('grpGraph','enMode',NULL,32,'','','el2','','','
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','max',NULL,34,'Parameter|max','','el2','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','min',NULL,34,'Parameter|min','','el2','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','varEl',NULL,32,'','','el2','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('RootPgSo','name','Root page (SO)',32,'','','','Корнева сторінка (ОС)','','Корневая страница (ОС)','','','');
-INSERT INTO "wlb_Main_io" VALUES('RootPgSo','dscr','Root page of visual interface of TP, builded on signal objects base.
+INSERT INTO "wlb_Main_io" VALUES('RootPgSo','name','Root page (SO)',32,'','','','Коренева сторінка (СО)','','Корневая страница (СО)','','','');
+INSERT INTO "wlb_Main_io" VALUES('RootPgSo','dscr','The element-frame serves as the basis for the user interfaces creating, initially for control the technological processes, grounded on the signal objects (SO).
+
+The root page contains four areas:
+- signal objects area of the buttons-indicators (top);
+- navigation area by types of view (right-top);
+- container of the main frames of the user interface (in the center);
+- container of the control panels (right-bottom).
+
+Signal objects area of the buttons-indicators provides information on the presence of violations in the signal object and for switching between them.
+
+To show the signal objects selection the background color is used, by the styles: backColorButton and backColorButtonSel. And the violations are displayed in the color of the text according to the styles: labColorGood, labColorWarning, labColorAlarm; and in which value the text of the inquieted signal object may blink.
+
+Buttons are currently generated dynamically by copying the first and only, according to the virtual pages of the signal objects in the project tree, with the serial digital identification from 1. The limitation on the number of buttons or signal objects is only the total length of the names of the signal objects that can be placed in two rows of these buttons. That is, for short names we can get up to near 100 signal objects. If the signal object is one, even this single base button is hidden.
+
+Navigation area by types of view — indication of the choice and selection of the type of view, such as: "Mnemonic schemes", "Graph groups", "Contour groups", "Documents" and more; and the listing buttons or the direct selection combobox of the frames into the signal object.
+
+The buttons area of the types of view is dynamic, in the sense of occupying the space of the missing ones, and the meaning of the types of view themselves are configured to different from the default value, i.e. there are two main types of view (view1 and view2), three auxiliary (view3, view4 and view5), as well as one common to the whole interface (view6).
+
+Below are also the buttons of quietation those appear in the event of violations, and at the top is a customizable logo.
+
+Container of the main frames of the user interface — the area of the container for inclusion in it of the basic frames by their choice of buttons of types of view or change of the signal object.
+
+Container of the control panels — container area to include control panels of various objects in the container area of the main frames, for example — panel of the parameter, document, graph and more.
+
+Under the control panels container placed a button to start the demo mode — mode in which performed periodic switching for representative frames, changing regimes and other operations by a scenario.
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.2.0',32,'','','','Корнева сторінка інтерфейсу візуалізації ТП, побудованого на основі об''єктів сигналізації.
+Version: 2.2.0
+License: GPLv2',32,'','','','Елемент-кадр слугує базою для створення користувацьких інтерфейсів, пачатково для управління технологічними процесами, заснованими на об''єктах сигналізації (СО).
+
+Коренева сторінка містить чотири області:
+- область кнопок-індикаторів об''єктів сигналізації (нагорі);
+- область навігації за видами відображення (праворуч-нагорі);
+- контейнер основних кадрів користувацького інтерфейсу (у центрі);
+- контейнер панелей управління (праворуч-знизу).
+
+Область кнопок-індикаторів об''єктів сигналізації слугує для надання інформації про наявність порушень у об''єкті сигналізації, а також для перемикання між ними.
+
+Для відображення обраного об''єкту сигналізації використовується колір фону, за стилями: backColorButton та backColorButtonSel. А порушення відображаються кольором тексту, відповідно до стилів: labColorGood, labColorWarning, labColorAlarm; та яким текст незквітованого об''єкту сигналізації може блимати.
+
+Кнопки наразі генеруються динамічно, шляхом копіювання першої та єдиної, відповідно до наявних у дереві проекту віртуальних сторінок об''єктів сигналізації з послідовною цифровою ідентифікацією від 1. Обмеження на кількість кнопок, або об''єктів сигналізації, полягає лише у сумарній довжині назв об''єктів сигналізації, які можна розташувати у два ряди цих кнопок. Тобто, за коротких назв можна отримати до близка 100 об''єктів сигналізація. Якщо об''єкт сигналізації один то навіть ця єдина-базова кнопка ховається.
+
+Область навігації за видами відображення — індикація вибору та обрання виду відображення як, наприклад: "Мнемосхеми", "Групи графіків", "Групи контурів", "Документи" та інше; та кнопки гортання або комбобокс прямого обрання кадрів у об''єкті сигналізації.
+
+Простір кнопок видів відображення є динамічним, у сенсі зайняття простору відсутніх, та значення самих видів відображення налаштовується на інше від типового значення, тобто передбачено два основних види відображення (view1 та view2), три допоміжних (view3, view4 та view5), а також один загальний на весь інтерфейс (view6).
+
+Нижче також містяться кнопки квітації, які з''являються за виникнення порушень, а на горі зображення логотипу, яке налаштовується.
+
+Контейнер основних кадрів користувацького інтерфейсу — область контейнеру для включення у нього основних кадрів за обранням їх кнопками режимів відображення або зміни об''єкту сигналізації.
+
+Контейнер панелей управління — область контейнеру для включення до нього панелей управління різними об''єктами у області контейнеру основних кадрів, наприклад — панель параметру, документу, графіку та інше.
+
+Під контейнером панелей управління розташовується кнопка запуску демонстраційного режиму — режиму за яким здійснюється періодичне перемикання показних кадрів, зміна режимів та інших операцій згідно сценарію.
+
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.1.0','','Корневая страница интерфейса визуализации ТП, построенного на основе объектов сигнализации.
+Версія: 2.2.0
+Ліцензія: GPLv2','','Элемент-кадр служит базой для создания пользовательских интерфейсов, начально для управления технологическими процессами, основанными на объектах сигнализации (СО).
+
+Корневая страница содержит четыре области:
+- область кнопок-индикаторов объектов сигнализации (вверху);
+- область навигации по видами отображения (справа-вверху);
+- контейнер основных кадров пользовательского интерфейса (в центре);
+- контейнер панелей управления (справа-внизу).
+
+Область кнопок-индикаторов объектов сигнализации служит для предоставления информации о наличии нарушений в объекте сигнализации, а также для переключения между ними.
+
+Для отображения выбранного объекта сигнализации используется цвет фона, согласно стилям: backColorButton и backColorButtonSel. А нарушения отображаются цветом текста, согласно стилям: labColorGood, labColorWarning, labColorAlarm; и которыми текст несквитированного объекта сигнализации может мигать.
+
+Кнопки сейчас генерируются динамически, путём копирования первой и единственной, согласно присутствующим в дереве проекта виртуальным страницам объектов сигнализации с последовательной цифровой идентификацией от 1. Ограничение на количество кнопок, или объектов сигнализации, состоит лишь в суммарной длине названий объектов сигнализации, которые можно поместить в два ряда этих кнопок. Т.е., для коротких названий можно получить до около 100 объектов сигнализации. Если объект сигнализации один то даже эта единственная-базовая кнопка прячется.
+
+Область навигации по видами отображения — индикация выбора и выбор вида отображения как, например: "Мнемосхемы", "Группы графиков", "Группы контуров", "Документы" и другое; и кнопки перелистывания или комбобокс прямого выбора кадров в объекте сигнализации.
+
+Пространство кнопок видов отображения является динамическим, в смысле занимания пространства отсутствующих, и значение самих видов отображения настраивается на другое от типичного значение, т.е. предусмотрено два основных вида отображения (view1 и view2), три дополнительных (view3, view4 и view5), а также один общий на весь интерфейс (view6).
+
+Ниже также содержаться кнопки квитации, которые появляются при возникновении нарушений, а сверху изображение логотипа, которое настраивается.
+
+Контейнер основных кадров пользовательского интерфейса — область контейнера для включения в неё основных кадров при выборе их кнопками режимов отображения или смене объекта сигнализации.
+
+Контейнер панелей управления — область контейнера для включения в неё панелей управления различными объектами в области контейнера основных кадров, например — панель параметра, документа, графика и т.д.
+
+Под контейнером панелей управления располагается кнопка запуска демонстрационного режима — режима при котором осуществляется периодическое переключение показательных кадров, изменение режимов и других операций согласно сценарию.
+
+Корневая страница интерфейса визуализации ТП, построенного на основе объектов сигнализации.
+
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 2.1.0','','','');
+Версия: 2.2.0
+Лицензия: GPLv2','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomW','1024',40,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomH','670',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','backColor','gray',96,'','','','','backColor','','','','');
@@ -5055,7 +5135,7 @@ Calculation:calc
 Показать все:all
 Вычисление:calc
 ','','','');
-INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','name','Graph param selection',32,'','','','Вибір параметру графіку','','Выбор параметра графика','','','');
+INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','name','Graph parameter selection',32,'','','','Вибір параметру графіку','','Выбор параметра графика','','','');
 INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','geomW','600',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','geomH','400',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','pgGrp','fl',32,'','','','','','','','','');
@@ -7554,7 +7634,7 @@ INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomZ','28',32,'','','Text2','','
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomMargin','2',32,'','','Text2','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','font','Arial 12 0 1 1 0',32,'','','Text2','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','alignment','10',32,'','','Text2','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('grph_panel','text','Begin and depth',32,'','','Text2','Початок і глиб.','','Начало и глуб.','','','');
+INSERT INTO "wlb_Main_io" VALUES('grph_panel','text','Begin and depth',32,'','','Text2','Початок і глибина','','Начало и глубина','','','');
 INSERT INTO "wlb_Main_io" VALUES('doc_panel','owner','root:UI',32,'','','Text2','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('doc_panel','en','1',40,'','','Text2','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('doc_panel','geomX','1',32,'','','Text2','','','','','','');
@@ -7567,7 +7647,7 @@ INSERT INTO "wlb_Main_io" VALUES('doc_panel','font','Arial 12 0 1',32,'','','Tex
 INSERT INTO "wlb_Main_io" VALUES('doc_panel','alignment','10',32,'','','Text2','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('doc_panel','text','Begin and depth',32,'','','Text2','Початок і глиб.','','Начало и глуб.','','','');
 INSERT INTO "wlb_Main_io" VALUES('graphCalc','owner','root:UI',32,'','','','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('graphCalc','name','Graph param calculation',32,'','','','Обчислення параметру графіку','','Вычисление параметра графика','','','');
+INSERT INTO "wlb_Main_io" VALUES('graphCalc','name','Graph parameter calculation',32,'','','','Обчислення параметру графіку','','Вычисление параметра графика','','','');
 INSERT INTO "wlb_Main_io" VALUES('graphCalc','dscr','The element implements a dialog of user calculation of the selected graph parameter for the graphically visible data. The user is given an option to select calculations from the built-in library, the privileged user ("root" or in the "ITW" group) has the opportunity to edit or write their own calculation procedure.
 
 In general, the built-in library currently contains the following functions of the user calculation:
@@ -10316,7 +10396,7 @@ INSERT INTO "wlb_Main_uio" VALUES('prescrRun','dbProgs','DB: Programms',131077,'
 INSERT INTO "wlb_Main_uio" VALUES('prescrEdit','fileExpImp','File export/import',131077,'PrescrExport.xml',9,'File','','','Файл експорту/імпорту','PrescrExport.xml','Файл','Файл экспорта/импорта','PrescrExport.xml','Файл','','');
 INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','stepCur','Step: current',131073,'0|',8,'','','','Крок: поточний','','','Шаг: текущий','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','stepTm','Step: time',131076,'0|',8,'','','','Крок: час','','','Шаг: час','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','demoPlayProc','Procedure play demo',131205,'',8,'','','','Проц. програвання демо','','','Проц. проигрывания демо','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','demoPlayProc','Procedure of the Demo play',131205,'',8,'','','','Проц. програвання демо','','','Проц. проигрывания демо','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('accept','elEvent','Element: event',131077,'||',14,'<page>|event','','','Елемент: подія','','','Элемент: событие','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('accept','elMess','Element: message',131077,'||',10,'<page>|mess','','','Елемент: повідомлення','','','Элемент: сообщение','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('prescrEdit','mess','Dialog message',131077,'Are you really want to delete this program?||',0,'','','progDel','Повідомлення діалогу','Ви дійсно бажаєте видалити обрану програму?||','','Сообщение диалога','Вы действительно желаете удалить выбранную программу?||','','','');
@@ -19579,7 +19659,7 @@ if(play_value) {
 		stepTm = args.stepTm;
 		stepCur = args.stepCur;
 	}
-}','','',200,'path;name;dscr;active;geomW;geomH;evProc;backColor;',1554993334);
+}','','',200,'path;name;dscr;active;geomW;geomH;evProc;backColor;',1565888623);
 INSERT INTO "wlb_Main" VALUES('ElViewCadr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAAx1AAAMdQEteJR1AAAC
 xUlEQVRoge2W0Y4URRSG///06eqZRQYkqCuBSQDNSEJcHsBrXsInID6P4Y32QhZ3DKLZENZ1iRPR
 XZmNLHZXV53yYokX63IBw1Crqe+yulPn/6r6dBU3Nu5vbk7x32Q0Oqubm9O7d78ej8e5w7w2u7u7

@@ -439,7 +439,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	//Get and activate for specific attributes to the master-page
 	servSet("/UI/VCAEngine"+this.addr, 'com=com', "<CntrReqs>"+
 	    "<activate path='/%2fserv%2fattr%2fkeepAspectRatio' aNm='Keep aspect ratio on scale' aTp='0'/>"+
-	    "<activate path='/%2fserv%2fattr%2fstBarNoShow' aNm='Not show status bar' aTp='0'/>"+
+	    "<activate path='/%2fserv%2fattr%2fstBarNoShow' aNm='Do not show the status bar' aTp='0'/>"+
 	    "</CntrReqs>");
 
 	this.makeEl(servGet(pgId,'com=attrsBr'), false, true);

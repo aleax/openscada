@@ -40,6 +40,8 @@
 #define STD_CACHE_LIM	100	// Standard caches limit
 #define STD_WAIT_TM	5	// Standard timeouts length (s), and interface wait for long
 #define STD_INTERF_TM	7	// Interface wait for long (s)
+#define SERV_TASK_PER	10	// Service task period
+
 #define BUF_ARCH_NM	"<buffer>"
 #define ALRM_ARCH_NM	"<alarms>"
 #define DB_CFG		"<cfg>"

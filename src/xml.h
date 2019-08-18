@@ -75,7 +75,7 @@ class XMLNode
 	void	attrList( vector<string> &list ) const;
 	XMLNode* attrDel( const string &name );
 	void	attrClear( );
-	string	attr( const string &name, bool caseSens = true ) const;
+	string	attr( const string &name, bool caseSens = true, bool *presence = NULL ) const;
 	XMLNode* setAttr( const string &name, const string &val );
 
 	void	load( const string &vl, unsigned flg = 0, const string &cp = "UTF-8" );

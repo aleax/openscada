@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-30 11:32+0300\n"
+"POT-Creation-Date: 2019-08-14 18:27+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -528,6 +528,15 @@ msgstr "Кодовая страница"
 
 msgid "To enable"
 msgstr "Включать"
+
+msgid "Transaction closing: after opening, seconds"
+msgstr "Закрытие транзакции: после открытия, секунд"
+
+msgid "Transaction closing: after request, seconds"
+msgstr "Закрытие транзакции: после запроса, секунд"
+
+msgid "Transaction closing: separate task priority"
+msgstr "Закрытие транзакции: приоритет отдельной задачи"
 
 #, c-format
 msgid "Error closing database '%s'!"

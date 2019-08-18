@@ -144,6 +144,13 @@ void TConfig::cfgKeyUseAll( bool val )
 	    p->second->setKeyUse(val);
 }
 
+void TConfig::cfgToDefault( )
+{
+    for(TCfgMap::iterator p = value.begin(); p != value.end(); ++p)
+	if(!(p->second->fld().flg()&TCfg::Key) && p->second->view())
+	    p->second->toDefault();
+}
+
 void TConfig::setElem( TElem *Elements, bool first )
 {
     if(mElem == Elements && !first) return;
@@ -241,13 +248,8 @@ TCfg::TCfg( TFld &fld, TConfig &owner ) : mView(true), mKeyUse(false), mNoTransl
     }
     else mFld = &fld;
 
-    switch(mFld->type()) {
-	case TFld::String:	setType(TVariant::String, true, (fld.flg()&TCfg::Key)); TVariant::setS(mFld->def());	break;
-	case TFld::Integer:	setType(TVariant::Integer, true); TVariant::setI(s2ll(mFld->def()));	break;
-	case TFld::Real:	setType(TVariant::Real, true);	  TVariant::setR(s2r(mFld->def()));	break;
-	case TFld::Boolean:	setType(TVariant::Boolean, true); TVariant::setB((bool)s2i(mFld->def()));break;
-	default: break;
-    }
+    toDefault();
+
     if(fld.flg()&TCfg::Hide)	mView = false;
 }
 
@@ -260,13 +262,8 @@ TCfg::TCfg( const TCfg &src ) : mView(true), mKeyUse(false), mNoTransl(false), m
     }
     else mFld = src.mFld;
 
-    switch(mFld->type()) {
-	case TFld::String:	setType(TVariant::String, true, (src.mFld->flg()&TCfg::Key)); TVariant::setS(mFld->def());	break;
-	case TFld::Integer:	setType(TVariant::Integer, true); TVariant::setI(s2ll(mFld->def()));	break;
-	case TFld::Real:	setType(TVariant::Real, true);	  TVariant::setR(s2r(mFld->def()));	break;
-	case TFld::Boolean:	setType(TVariant::Boolean, true); TVariant::setB((bool)s2i(mFld->def()));break;
-	default: break;
-    }
+    toDefault();
+
     if(src.mFld->flg()&TCfg::Hide)	mView = false;
 
     operator=(src);
@@ -298,6 +295,19 @@ void TCfg::setReqKey( bool vl )
 {
     mReqKey = mKeyUse = vl;
     mOwner.reqKeysUpdate();
+}
+
+void TCfg::toDefault( )
+{
+    if(!mFld)	return;
+
+    switch(mFld->type()) {
+	case TFld::String:	setType(TVariant::String, true, (mFld->flg()&TCfg::Key)); TVariant::setS(mFld->def());	break;
+	case TFld::Integer:	setType(TVariant::Integer, true); TVariant::setI(s2ll(mFld->def()));	break;
+	case TFld::Real:	setType(TVariant::Real, true);	  TVariant::setR(s2r(mFld->def()));	break;
+	case TFld::Boolean:	setType(TVariant::Boolean, true); TVariant::setB((bool)s2i(mFld->def()));break;
+	default: break;
+    }
 }
 
 string TCfg::getSEL( )
