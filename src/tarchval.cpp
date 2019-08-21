@@ -476,7 +476,7 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( int64_t *itm, bool up_or
 {
     int64_t tm = (itm)?(*itm):TSYS::curTime();
 
-    if((up_ord && tm > end) || (!up_ord && tm < beg))	throw TError("ValBuf", _("No value."));
+    if((up_ord && tm > end) || (!up_ord && tm < beg))	return eval;	//throw TError("ValBuf", _("No value."));
 
     tm = up_ord ? vmax(tm, beg) : vmin(tm, end);
     //Process hard grid buffer
@@ -1160,6 +1160,7 @@ void TVArchive::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string 
     bool isFreeBuf = !buf.period();
     vector<TValBuf*> tBuf;
     TValBuf	*wBuf = &buf;
+    int64_t ibeg_ = 0;
 
     try {
 
@@ -1170,8 +1171,8 @@ void TVArchive::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string 
 	    tBuf.push_back(wBuf);
 	}
 
-	ibeg = vmax(ibeg, iend-TValBuf::period()*limit);
-	TValBuf::getVals(*wBuf, ibeg, iend);
+	ibeg_ = vmax(ibeg, iend-TValBuf::period()*limit);
+	TValBuf::getVals(*wBuf, ibeg_, iend);
 	iend = wBuf->begin()-1;
 	if(arch == BUF_ARCH_NM) return;
     }
@@ -1198,8 +1199,8 @@ void TVArchive::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string 
 
 	// Decrease the range begin to the limit
 	int prevSz = wBuf->realSize();
-	if(!prevSz) ibeg = vmax(ibeg, iend-(int64_t)(1e6*iA->second->archivator().valPeriod())*(limit-wBuf->realSize()));
-	iA->second->getVals(*wBuf, ibeg, iend, onlyLocal);
+	ibeg_ = prevSz ? ibeg : vmax(ibeg, iend-(int64_t)(1e6*iA->second->archivator().valPeriod())*(limit/*-wBuf->realSize()*/));
+	iA->second->getVals(*wBuf, ibeg_, iend, onlyLocal);
 
 	if(wBuf->realSize() != prevSz) {// The request is good
 	    iend = wBuf->begin()-1;

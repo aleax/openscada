@@ -856,7 +856,7 @@ void VisRun::exportDiag( const string &idg )
 			ShapeDiagram::TrendObj &cPrm = dgDt->prms[iP];
 			if(cPrm.val().size() && cPrm.color().isValid()) {
 			    vPos = cPrm.val(baseVls[i_v].tm);
-			    CSVr = CSVr + ";"+((vPos < (int)cPrm.val().size())?QLocale().toString(cPrm.val()[vPos].val).toStdString():"");
+			    CSVr = CSVr + ";"+((vPos < (int)cPrm.val().size())?((cPrm.val()[vPos].val!=EVAL_REAL)?QLocale().toString(cPrm.val()[vPos].val).toStdString():"\""+string(_("Empty"))+"\""):"");
 			}
 		    }
 		    CSVr += "\x0D\x0A";

@@ -1010,7 +1010,7 @@ bool TextEdit::event( QEvent * e )
 	    return true;
 	}
     }
-    if(e->type() == QEvent::ToolTip && hasFocus() && toolTip().isEmpty()) {
+    if(!dynamic_cast<VisRun*>(window()) && e->type() == QEvent::ToolTip && hasFocus() && toolTip().isEmpty()) {
 	QToolTip::showText(((QHelpEvent *)e)->globalPos(),QString(_("Cursor = (%1:%2)")).
 	    arg(ed_fld->textCursor().blockNumber()+1).arg(ed_fld->textCursor().columnNumber()+1));
 	return true;

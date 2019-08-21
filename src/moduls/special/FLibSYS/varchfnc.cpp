@@ -111,7 +111,7 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
     //    and microseconds <usec> for the archivator <archivator>.
     if(id == "end") {
 	int64_t vtm;
-	if(isArch())	vtm = arch().at().end( (prms.size()>=2) ? prms[1].getS() : "" );
+	if(isArch())	vtm = arch().at().end((prms.size()>=2) ? prms[1].getS() : "");
 	else {
 	    if(!buf()) return (int64_t)EVAL_INT;
 	    vtm = buf()->end();

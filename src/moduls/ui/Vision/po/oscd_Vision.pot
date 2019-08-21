@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-10 08:25+0300\n"
+"POT-Creation-Date: 2019-08-20 20:44+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1383,6 +1383,9 @@ msgid "Images (*.png *.xpm *.jpg);;CSV file (*.csv)"
 msgstr ""
 
 msgid "\"Date and time\";\"us\""
+msgstr ""
+
+msgid "Empty"
 msgstr ""
 
 msgid "\"Frequency (Hz)\""

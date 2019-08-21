@@ -5312,15 +5312,25 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     if(hmax_ln >= 2) {
 	int hvLev = 0;
 	int64_t hLen = tEnd - tBeg;
-	if(hLen/86400000000ll >= 2)	{ hvLev = 5; hDiv = 86400000000ll; }	//Days
-	else if(hLen/3600000000ll >= 2)	{ hvLev = 4; hDiv =  3600000000ll; }	//Hours
-	else if(hLen/60000000 >= 2)	{ hvLev = 3; hDiv =    60000000; }	//Minutes
-	else if(hLen/1000000 >= 2)	{ hvLev = 2; hDiv =     1000000; }	//Seconds
-	else if(hLen/1000 >= 2)		{ hvLev = 1; hDiv =	1000; }		//Milliseconds
-	while(hLen/hDiv > hmax_ln)     hDiv *= 10;
-	while(hLen/hDiv < hmax_ln/2)   hDiv /= 2;
+
+	if(hLen/2635200000000ll >= 5)	{ hvLev = 7; hDiv = 2635200000000ll; }	//Month a unstrict interval !!!! to implement !!!!
+	else if(hLen/86400000000ll >= 5){ hvLev = 6; hDiv =   86400000000ll; }	//More days and no time in the scale
+	else if(hLen/86400000000ll >= 2){ hvLev = 5; hDiv =   86400000000ll; }	//Days
+	else if(hLen/3600000000ll >= 2)	{ hvLev = 4; hDiv =    3600000000ll; }	//Hours
+	else if(hLen/60000000 >= 2)	{ hvLev = 3; hDiv =      60000000ll; }	//Minutes
+	else if(hLen/1000000 >= 2)	{ hvLev = 2; hDiv =       1000000ll; }	//Seconds
+	else if(hLen/1000 >= 2)		{ hvLev = 1; hDiv =          1000ll; }	//Milliseconds
+
+	int64_t hDiv_ = hDiv;
+	while(hLen/hDiv_ > hmax_ln)	hDiv_ *= 10;
+	while(hLen/hDiv_ < hmax_ln/2 && hDiv_/2 >= hDiv) hDiv_ /= 2;
+	hDiv = hDiv_;
+
+	int64_t UTChourDt = 1000000ll*TSYS::str2atime(TSYS::atime2str(tEnd/1000000),"",true) - tEnd;
+
 	if(hLen/hDiv >= 5 && trcPer) {
 	    tPict = hDiv*(tEnd/hDiv+1);
+	    if((tPict-tEnd) > UTChourDt) tPict -= UTChourDt;
 	    tBeg = tPict-hLen;
 	}
 
@@ -5331,10 +5341,6 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    time_t tm_t = 0;
 	    struct tm ttm, ttm1 = ttm;
 	    string lab_tm, lab_dt;
-
-	    //localtime_r(&tm_t, &ttm);
-	    //int64_t UTChourDt = (int64_t)ttm.tm_hour*3600000000ll;	//This way is mostly wrong but returns the offset in the somer time
-	    int64_t UTChourDt = 1000000ll*TSYS::str2atime(TSYS::atime2str(tEnd/1000000),"",true) - tEnd;
 
 	    //  Draw generic grid line
 	    gdImageLine(im, tArX, tArY+tArH, tArX+tArW, tArY+tArH, clrGrid);
@@ -5348,14 +5354,20 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 		if(ttm.tm_sec == 0 && tPict%1000000 == 0) lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
 		else if(tPict%1000000 == 0) lab_tm = TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec);
 		else lab_tm = TSYS::strMess("%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(tPict%1000000)/1e6);
-		gdImageStringFTEx(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)lab_dt.c_str(), &strex);
-		int markBrd = tArX+tArW-(brect[2]-brect[6]);
+
+		int markBrd = 0, markY = tArY+tArH+3;
+		if(hvLev < 6) {
+		    gdImageStringFTEx(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0.0, 0, 0, (char*)lab_tm.c_str(), &strex);
+		    markBrd = tArX + tArW - (brect[2]-brect[6]);
+		    markY += (brect[3] - brect[7]);
+		    endMarkBrd = vmin(endMarkBrd, markBrd);
+		    gdImageStringFTEx(im, NULL, clrMrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0.0, markBrd, markY, (char*)lab_tm.c_str(), &strex);
+		}
+		gdImageStringFTEx(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0.0, 0, 0, (char*)lab_dt.c_str(), &strex);
+		markBrd = tArX + tArW - (brect[2]-brect[6]);
+		markY += (brect[3] - brect[7]);
 		endMarkBrd = markBrd;
-		gdImageStringFTEx(im,NULL,clrMrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,markBrd,tArY+tArH+3+2*(brect[3]-brect[7]),(char*)lab_dt.c_str(), &strex);
-		gdImageStringFTEx(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)lab_tm.c_str(), &strex);
-		markBrd = tArX+tArW-(brect[2]-brect[6]);
-		endMarkBrd = vmin(endMarkBrd,markBrd);
-		gdImageStringFTEx(im,NULL,clrMrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,markBrd,tArY+tArH+3+(brect[3]-brect[7]),(char*)lab_tm.c_str(), &strex);
+		gdImageStringFTEx(im, NULL, clrMrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0.0, markBrd, markY, (char*)lab_dt.c_str(), &strex);
 	    }
 
 	    //  Draw grid and/or markers
@@ -5367,50 +5379,53 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 		else gdImageLine(im, h_pos, tArY+tArH-3, h_pos, tArY+tArH+3, clrGrid);
 		//   Draw markers
 		if(sclHor&FD_MARKS && mrkHeight && !((i_h+UTChourDt)%hDiv) && i_h != tPict) {
-		    tm_t = i_h/1000000;
-		    localtime_r(&tm_t, &ttm);
-		    int chLev = -1;
-		    if(!first_m) {
-			if(ttm.tm_mon > ttm1.tm_mon || ttm.tm_year > ttm1.tm_year) chLev = 5;
-			else if(ttm.tm_mday > ttm1.tm_mday) chLev = 4;
-			else if(ttm.tm_hour > ttm1.tm_hour) chLev = 3;
-			else if(ttm.tm_min > ttm1.tm_min)   chLev = 2;
-			else if(ttm.tm_sec > ttm1.tm_sec)   chLev = 1;
-			else chLev = 0;
-		    }
+		    if(first_m) tm_t = (tBeg-(tEnd-tBeg))/1000000, localtime_r(&tm_t, &ttm1);
+		    tm_t = i_h/1000000, localtime_r(&tm_t, &ttm);
+
+		    int chLev = 0;
+		    if((ttm.tm_mon-ttm1.tm_mon) || (ttm.tm_year-ttm1.tm_year)) chLev = 5;
+		    else if(ttm.tm_mday-ttm1.tm_mday)	chLev = 4;
+		    else if(ttm.tm_hour-ttm1.tm_hour)	chLev = 3;
+		    else if(ttm.tm_min-ttm1.tm_min)	chLev = 2;
+		    else if(ttm.tm_sec-ttm1.tm_sec)	chLev = 1;
+
 		    //Check for data present
 		    lab_dt = lab_tm = "";
 		    //Date
 		    if(/*hvLev == 5 ||*/ chLev >= 4)
-			lab_dt = TSYS::strMess(((chLev>=5 || chLev==-1)?"%d-%02d-%d":"%d"), ttm.tm_mday, ttm.tm_mon+1, ttm.tm_year+1900);
+			lab_dt = TSYS::strMess((chLev>=5?"%d-%02d-%d":"%d"), ttm.tm_mday, ttm.tm_mon+1, ttm.tm_year+1900);
 		    //Hours and minuts
 		    if((hvLev == 4 || hvLev == 3 || ttm.tm_hour || ttm.tm_min) && !ttm.tm_sec)
 			lab_tm = TSYS::strMess("%d:%02d", ttm.tm_hour, ttm.tm_min);
 		    //Seconds
 		    else if((hvLev == 2 || ttm.tm_sec) && !(i_h%1000000))
-			lab_tm = (chLev>=2 || chLev==-1) ? TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec) :
-							   Mess->codeConvOut("UTF-8",TSYS::strMess(_("%ds"),ttm.tm_sec));
+			lab_tm = chLev >= 2 ? TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec) :
+					      Mess->codeConvOut("UTF-8",TSYS::strMess(_("%ds"),ttm.tm_sec));
 		    //Milliseconds
 		    else if(hvLev <= 1 || i_h%1000000)
-			lab_tm = (chLev>=2 || chLev==-1) ? TSYS::strMess("%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(i_h%1000000)/1e6) :
-				 (chLev>=1) ? Mess->codeConvOut("UTF-8",TSYS::strMess(_("%gs"),(float)ttm.tm_sec+(float)(i_h%1000000)/1e6)) :
+			lab_tm = chLev >= 2 ? TSYS::strMess("%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(i_h%1000000)/1e6) :
+				 chLev >= 1 ? Mess->codeConvOut("UTF-8",TSYS::strMess(_("%gs"),(float)ttm.tm_sec+(float)(i_h%1000000)/1e6)) :
 					      Mess->codeConvOut("UTF-8",TSYS::strMess(_("%gms"),(double)(i_h%1000000)/1000.));
-		    int wdth, tpos, endPosTm = 0, endPosDt = 0;
-		    if(lab_tm.size()) {
+		    int wdth, tpos, endPosTm = 0, endPosDt = 0, markY = tArY + tArH + 3;
+		    if(hvLev < 6) {
 			gdImageStringFTEx(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)lab_tm.c_str(), &strex);
-			wdth = brect[2]-brect[6];
-			tpos = vmax(h_pos-wdth/2, 0);
-			if((tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3)) {
-			    gdImageStringFTEx(im, NULL, clrMrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0, tpos, tArY+tArH+3+(brect[3]-brect[7]), (char*)lab_tm.c_str(), &strex);
-			    endPosTm = tpos+wdth;
+			markY += (brect[3] - brect[7]);
+			if(lab_tm.size()) {
+			    wdth = brect[2]-brect[6];
+			    tpos = vmax(h_pos-wdth/2, 0);
+			    if((tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3)) {
+				gdImageStringFTEx(im, NULL, clrMrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0, tpos, markY, (char*)lab_tm.c_str(), &strex);
+				endPosTm = tpos+wdth;
+			    }
 			}
 		    }
 		    if(lab_dt.size()) {
 			gdImageStringFTEx(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)lab_dt.c_str(), &strex);
+			markY += (brect[3] - brect[7]);
 			wdth = brect[2]-brect[6];
 			tpos = vmax(h_pos-wdth/2, 0);
 			if((tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3)) {
-			    gdImageStringFTEx(im, NULL, clrMrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0, tpos, tArY+tArH+3+2*(brect[3]-brect[7]), (char*)lab_dt.c_str(), &strex);
+			    gdImageStringFTEx(im, NULL, clrMrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0, tpos, markY, (char*)lab_dt.c_str(), &strex);
 			    endPosDt = tpos+wdth;
 			}
 		    }

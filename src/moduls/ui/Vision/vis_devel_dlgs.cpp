@@ -27,6 +27,7 @@
 #include <QGridLayout>
 #include <QCheckBox>
 #include <QComboBox>
+#include <QTextEdit>
 #include <QDialogButtonBox>
 #include <QBuffer>
 #include <QTableWidget>
@@ -490,6 +491,11 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	gnd = TCntrNode::ctrId(root,obj_descr->objectName().toStdString(),true);
 	obj_descr->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
 	if(gnd) {
+	    if(s2i(gnd->attr("cols"))) {
+		obj_descr->workWdg()->setWordWrapMode(QTextOption::WordWrap);
+		obj_descr->workWdg()->setLineWrapMode(QTextEdit::FixedColumnWidth);
+		obj_descr->workWdg()->setLineWrapColumnOrWidth(s2i(gnd->attr("cols")));
+	    }
 	    req.clear()->setAttr("path", ed_it+"/"+TSYS::strEncode(obj_descr->objectName().toStdString(),TSYS::PathEl));
 	    if(!owner()->cntrIfCmd(req)) obj_descr->setText(req.text().c_str());
 	}
@@ -1296,8 +1302,12 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	gnd = TCntrNode::ctrId(root,obj_descr->objectName().toStdString(),true);
 	obj_descr->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
 	if(gnd) {
-	    req.clear();
-	    req.setAttr("path",ed_it+"/"+TSYS::strEncode(obj_descr->objectName().toStdString(),TSYS::PathEl));
+	    if(s2i(gnd->attr("cols"))) {
+		obj_descr->workWdg()->setWordWrapMode(QTextOption::WordWrap);
+		obj_descr->workWdg()->setLineWrapMode(QTextEdit::FixedColumnWidth);
+		obj_descr->workWdg()->setLineWrapColumnOrWidth(s2i(gnd->attr("cols")));
+	    }
+	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_descr->objectName().toStdString(),TSYS::PathEl));
 	    if(!owner()->cntrIfCmd(req)) obj_descr->setText(req.text().c_str());
 	}
 

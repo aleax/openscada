@@ -563,10 +563,13 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 				hit->setData(Qt::FontRole, elFnt);
 				if(tC) {
 				    if((wVl=tC->attr("width")).size()) {
-					int wdthCel = fmax(1, s2i(wVl));
-					hit->setData(Qt::UserRole,
-					    (wVl.find("%") == wVl.size()-1) ? -wdthCel : wdthCel*w->xScale(true));
-				    } else hit->setData(Qt::UserRole, QVariant());
+					int wdthCel = fmax(0, s2i(wVl));
+					if(wdthCel) {
+					    wdg->showColumn(iC);
+					    hit->setData(Qt::UserRole,
+						(wVl.find("%") == wVl.size()-1) ? -wdthCel : wdthCel*w->xScale(true));
+					} else wdg->hideColumn(iC);
+				    } //else hit->setData(Qt::UserRole, QVariant());
 				    hit->setData(Qt::UserRole+1, (bool)s2i(tC->attr("edit")));
 				    hit->setData(Qt::UserRole+2, ((wVl=tC->attr("color")).size()) ? QString::fromStdString(wVl) : QVariant());
 				    hit->setData(Qt::UserRole+3, ((wVl=tC->attr("colorText")).size()) ? QString::fromStdString(wVl) : QVariant());
@@ -3265,18 +3268,27 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
     if(hmax_ln >= 2) {
 	int hvLev = 0;
 	int64_t hLen = tEnd - tBeg;
-	if(hLen/86400000000ll >= 2)	{ hvLev = 5; hDiv = 86400000000ll; }	//Days
-	else if(hLen/3600000000ll >= 2)	{ hvLev = 4; hDiv =  3600000000ll; }	//Hours
-	else if(hLen/60000000 >= 2)	{ hvLev = 3; hDiv =    60000000ll; }	//Minutes
-	else if(hLen/1000000 >= 2)	{ hvLev = 2; hDiv =     1000000ll; }	//Seconds
-	else if(hLen/1000 >= 2)		{ hvLev = 1; hDiv =        1000ll; }	//Milliseconds
-	while(hLen/hDiv > hmax_ln)	hDiv *= 10;
-	while(hLen/hDiv < hmax_ln/2)	hDiv /= 2;
+
+	if(hLen/2635200000000ll >= 5)	{ hvLev = 7; hDiv = 2635200000000ll; }	//Month a unstrict interval !!!! to implement !!!!
+	else if(hLen/86400000000ll >= 5){ hvLev = 6; hDiv =   86400000000ll; }	//More days and no time in the scale
+	else if(hLen/86400000000ll >= 2){ hvLev = 5; hDiv =   86400000000ll; }	//Days
+	else if(hLen/3600000000ll >= 2)	{ hvLev = 4; hDiv =    3600000000ll; }	//Hours
+	else if(hLen/60000000 >= 2)	{ hvLev = 3; hDiv =      60000000ll; }	//Minutes
+	else if(hLen/1000000 >= 2)	{ hvLev = 2; hDiv =       1000000ll; }	//Seconds
+	else if(hLen/1000 >= 2)		{ hvLev = 1; hDiv =          1000ll; }	//Milliseconds
+
+	int64_t hDiv_ = hDiv;
+	while(hLen/hDiv_ > hmax_ln)	hDiv_ *= 10;
+	while(hLen/hDiv_ < hmax_ln/2 && hDiv_/2 >= hDiv) hDiv_ /= 2;
+	hDiv = hDiv_;
 
 	if(shD->sclHorPer > 0 && (hLen/shD->sclHorPer) > 2 && (tAr.width()/(hLen/shD->sclHorPer)) > 15)	hDiv = shD->sclHorPer;
 
+	int64_t UTChourDt = 1000000ll*TSYS::str2atime(TSYS::atime2str(tEnd/1000000),"",true) - tEnd;
+
 	if((hLen/hDiv) >= 5 && shD->trcPer) {
 	    tPict = hDiv*(tEnd/hDiv+1);
+	    if((tPict-tEnd) > UTChourDt) tPict -= UTChourDt;
 	    tBeg = tPict-hLen;
 	}
 
@@ -3285,10 +3297,6 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    time_t tm_t = 0;
 	    struct tm ttm, ttm1 = ttm;
 	    string lab_tm, lab_dt;
-
-	    //localtime_r(&tm_t, &ttm);
-	    //int64_t UTChourDt = (int64_t)ttm.tm_hour*3600000000ll;	//This way is mostly wrong but returns the offset in the somer time
-	    int64_t UTChourDt = 1000000ll*TSYS::str2atime(TSYS::atime2str(tEnd/1000000),"",true) - tEnd;
 
 	    //  Draw generic grid line
 	    pnt.setPen(grdPen);
@@ -3304,12 +3312,17 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		if(ttm.tm_sec == 0 && tPict%1000000 == 0) lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
 		else if(tPict%1000000 == 0) lab_tm = TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec);
 		else lab_tm = TSYS::strMess("%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(tPict%1000000)/1e6);
-		int markBrd = tAr.x()+tAr.width()-pnt.fontMetrics().width(lab_tm.c_str());
-		endMarkBrd = vmin(endMarkBrd,markBrd);
-		pnt.drawText(markBrd,tAr.y()+tAr.height()+mrkHeight,lab_tm.c_str());
-		markBrd = tAr.x()+tAr.width()-pnt.fontMetrics().width(lab_dt.c_str());
-		endMarkBrd = vmin(endMarkBrd,markBrd);
-		pnt.drawText(markBrd,tAr.y()+tAr.height()+2*mrkHeight,lab_dt.c_str());
+
+		int markBrd = 0, markY = tAr.y()+tAr.height()+mrkHeight;
+		if(hvLev < 6) {
+		    markBrd = tAr.x() + tAr.width() - pnt.fontMetrics().width(lab_tm.c_str());
+		    endMarkBrd = vmin(endMarkBrd, markBrd);
+		    pnt.drawText(markBrd, markY, lab_tm.c_str());
+		    markY += mrkHeight;
+		}
+		markBrd = tAr.x() + tAr.width() - pnt.fontMetrics().width(lab_dt.c_str());
+		endMarkBrd = vmin(endMarkBrd, markBrd);
+		pnt.drawText(markBrd, markY, lab_dt.c_str());
 	    }
 	    //  Drawing the grid and/or markers
 	    bool first_m = true;
@@ -3321,49 +3334,52 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		else pnt.drawLine(h_pos, tAr.y()+tAr.height()-3, h_pos, tAr.y()+tAr.height()+3);
 
 		if(sclHor&FD_MARKS && !((i_h+UTChourDt)%hDiv) && i_h != tPict) {
-		    tm_t = i_h/1000000;
-		    localtime_r(&tm_t, &ttm);
-		    int chLev = -1;
-		    if(!first_m) {
-			if(ttm.tm_mon > ttm1.tm_mon || ttm.tm_year > ttm1.tm_year) chLev = 5;
-			else if(ttm.tm_mday > ttm1.tm_mday)	chLev = 4;
-			else if(ttm.tm_hour > ttm1.tm_hour)	chLev = 3;
-			else if(ttm.tm_min > ttm1.tm_min)	chLev = 2;
-			else if(ttm.tm_sec > ttm1.tm_sec)	chLev = 1;
-			else chLev = 0;
-		    }
+		    if(first_m) tm_t = (tBeg-(tEnd-tBeg))/1000000, localtime_r(&tm_t, &ttm1);
+		    tm_t = i_h/1000000; localtime_r(&tm_t, &ttm);
+
+		    int chLev = 0;
+		    if((ttm.tm_mon-ttm1.tm_mon) || (ttm.tm_year-ttm1.tm_year)) chLev = 5;
+		    else if(ttm.tm_mday-ttm1.tm_mday)	chLev = 4;
+		    else if(ttm.tm_hour-ttm1.tm_hour)	chLev = 3;
+		    else if(ttm.tm_min-ttm1.tm_min)	chLev = 2;
+		    else if(ttm.tm_sec-ttm1.tm_sec)	chLev = 1;
 
 		    //Check for data present
 		    lab_dt.clear(), lab_tm.clear();
 		    //Date
 		    if(/*hvLev == 5 ||*/ chLev >= 4)
-			lab_dt = TSYS::strMess(((chLev>=5 || chLev==-1)?"%d-%02d-%d":"%d"), ttm.tm_mday, ttm.tm_mon+1, ttm.tm_year+1900);
+			lab_dt = TSYS::strMess((chLev>=5?"%d-%02d-%d":"%d"), ttm.tm_mday, ttm.tm_mon+1, ttm.tm_year+1900);
 		    //Hours and minuts
 		    if((hvLev == 4 || hvLev == 3 || ttm.tm_hour || ttm.tm_min) && !ttm.tm_sec)
 			lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
 		    //Seconds
 		    else if((hvLev == 2 || ttm.tm_sec) && !(i_h%1000000))
-			lab_tm = (chLev>=2 || chLev==-1) ? TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec) : TSYS::strMess(_("%ds"),ttm.tm_sec);
+			lab_tm = chLev >= 2 ? TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec) :
+					      TSYS::strMess(_("%ds"),ttm.tm_sec);
 		    //Milliseconds
 		    else if(hvLev <= 1 || i_h%1000000)
-			lab_tm = (chLev>=2 || chLev==-1) ? TSYS::strMess("%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(i_h%1000000)/1e6) :
-				 (chLev>=1) ? TSYS::strMess(_("%gs"),(float)ttm.tm_sec+(float)(i_h%1000000)/1e6) :
+			lab_tm = chLev >= 2 ? TSYS::strMess("%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(i_h%1000000)/1e6) :
+				 chLev >= 1 ? TSYS::strMess(_("%gs"),(float)ttm.tm_sec+(float)(i_h%1000000)/1e6) :
 					      TSYS::strMess(_("%gms"),(double)(i_h%1000000)/1000.);
-		    int wdth, tpos, endPosTm = 0, endPosDt = 0;
+
+		    int wdth, tpos, endPosTm = 0, endPosDt = 0, markY = tAr.y()+tAr.height()+mrkHeight;
 		    pnt.setPen(mrkPen);
-		    if(lab_tm.size()) {
-			wdth = pnt.fontMetrics().width(lab_tm.c_str());
-			tpos = vmax(h_pos-wdth/2,0);
-			if((tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3)) {
-			    pnt.drawText(tpos, tAr.y()+tAr.height()+mrkHeight, lab_tm.c_str());
-			    endPosTm = tpos+wdth;
+		    if(hvLev < 6) {
+			if(lab_tm.size()) {
+			    wdth = pnt.fontMetrics().width(lab_tm.c_str());
+			    tpos = vmax(h_pos-wdth/2,0);
+			    if((tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3)) {
+				pnt.drawText(tpos, markY, lab_tm.c_str());
+				endPosTm = tpos+wdth;
+			    }
 			}
+			markY += mrkHeight;
 		    }
 		    if(lab_dt.size()) {
 			wdth = pnt.fontMetrics().width(lab_dt.c_str());
 			tpos = vmax(h_pos-wdth/2, 0);
 			if((tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3)) {
-			    pnt.drawText(tpos, tAr.y()+tAr.height()+2*mrkHeight, lab_dt.c_str());
+			    pnt.drawText(tpos, markY, lab_dt.c_str());
 			    endPosDt = tpos+wdth;
 			}
 		    }

@@ -1,3 +1,18 @@
+2019-08-21 Roman (stable)
+- !!!!:DB.LibsDB.vcaBase: The ".dump" command of sqlite3 3.27 significantly changed, needed now for the parameter "--newlines"
+	and removes quotes around the table names.
+    !!:Main.userManager: Documented and revised during the documenting.
+- !!!:FIX:Archive: TValBuf.get() switched from exceptions to return EVAL at the requested data missing.
+    !!:FIX: getVals() improved for the limit processing independently for the buffer and the archivers and their periodicity,
+	to work the long ranged and high periodicity data requests.
+- !!:FIX:UI.Vision: Fixed for real hiding of the collumns of the view "Table" of the primitive "FormEl" on Qt 5.11.
+    FIX: The "Text" field of the primitive "FormEl" fixed for show tooltips in the runtime mode.
+    The text fields of description the libraries and projects expanded for the word wrap.
+    Export to CSV for the diagrams improved for replacing the original EVAL value to the string "Empty".
+- !!:UI.{Vision,WebVision}: The primitive "Diagram" expanded in the time scale building for more days with the time complete hiding
+    and show the first value in the left.
+
+
 2019-08-18 Roman (stable)
 - !!:DB.LibsDB.vcaBase: Main.RootPgSo: Revised during the documenting.
 - !!!!:DB,DB.{SQLite,MySQL,PostgreSQL,FireBird}: Significantly unified for the transactions closing control into the OpenSCADA core,
