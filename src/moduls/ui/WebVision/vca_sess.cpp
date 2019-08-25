@@ -5323,7 +5323,8 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 
 	int64_t hDiv_ = hDiv;
 	while(hLen/hDiv_ > hmax_ln)	hDiv_ *= 10;
-	while(hLen/hDiv_ < hmax_ln/2 && hDiv_/2 >= hDiv) hDiv_ /= 2;
+	while(hLen/hDiv_ < hmax_ln/5 && (hDiv_/5)%hDiv == 0) hDiv_ /= 5;
+	while(hLen/hDiv_ < hmax_ln/2 && (hvLev < 6 || (hDiv_/2)%hDiv == 0)) hDiv_ /= 2;
 	hDiv = hDiv_;
 
 	int64_t UTChourDt = 1000000ll*TSYS::str2atime(TSYS::atime2str(tEnd/1000000),"",true) - tEnd;

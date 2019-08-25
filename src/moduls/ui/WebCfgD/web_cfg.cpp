@@ -40,7 +40,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.3.3"
+#define MOD_VER		"1.3.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the WEB-based configurator of OpenSCADA. The technologies are used: XHTML, CSS and JavaScript.")
 #define LICENSE		"GPL2"
@@ -404,9 +404,9 @@ int TWEB::cntrIfCmd( XMLNode &node, const string &user )
 {
     //Mark commands in "primaryCmd", for redundant hosts mostly transfer
     // !!! Move further to the command's source
-    if(node.name() == "set" || node.name() == "add" || node.name() == "ins" || node.name() == "del" || node.name() == "move" ||
-	    node.name() == "load" || node.name() == "save" || node.name() == "copy")
-	node.setAttr("primaryCmd", "1");
+    //if(node.name() == "set" || node.name() == "add" || node.name() == "ins" || node.name() == "del" || node.name() == "move" ||
+    //	    node.name() == "load" || node.name() == "save" || node.name() == "copy")
+    //	node.setAttr("primaryCmd", "1");
     try { return SYS->transport().at().cntrIfCmd(node,"UIWebCfg",user); }
     catch(TError &err) { node.setAttr("mcat",err.cat)->setAttr("rez","10")->setText(err.mess); }
 

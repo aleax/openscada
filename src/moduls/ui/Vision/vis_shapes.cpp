@@ -3279,7 +3279,8 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 
 	int64_t hDiv_ = hDiv;
 	while(hLen/hDiv_ > hmax_ln)	hDiv_ *= 10;
-	while(hLen/hDiv_ < hmax_ln/2 && hDiv_/2 >= hDiv) hDiv_ /= 2;
+	while(hLen/hDiv_ < hmax_ln/5 && (hDiv_/5)%hDiv == 0) hDiv_ /= 5;
+	while(hLen/hDiv_ < hmax_ln/2 && (hvLev < 6 || (hDiv_/2)%hDiv == 0)) hDiv_ /= 2;
 	hDiv = hDiv_;
 
 	if(shD->sclHorPer > 0 && (hLen/shD->sclHorPer) > 2 && (tAr.width()/(hLen/shD->sclHorPer)) > 15)	hDiv = shD->sclHorPer;

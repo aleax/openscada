@@ -210,9 +210,11 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 		throw TError("ContrItfc", _("%s:%s:> Error in the control item '%s'!"), opt->name().c_str(), (nodePath()+path).c_str(), s_br.c_str());
 
 	    // Check and put the command to the redundant stations
-	    if(SYS->rdPrimCmdTr() && SYS->rdEnable() && SYS->rdActive() && s2i(opt->attr("primaryCmd"))) {
-		string aNm = opt->name(), lstStat;
-		opt->setAttr("path", nodePath()+"/"+TSYS::strEncode(s_br,TSYS::PathEl))->setAttr("primaryCmd", "");
+	    string aNm = opt->name();
+	    if(SYS->rdPrimCmdTr() && SYS->rdEnable() && SYS->rdActive() && !s2i(opt->attr("reforwardRedundReq")) && (s2i(opt->attr("primaryCmd")) ||
+			aNm == "set" || aNm == "add" || aNm == "ins" || aNm == "del" || aNm == "move" || aNm == "load" || aNm == "save" || aNm == "copy")) {
+		string lstStat;
+		opt->setAttr("path", nodePath()+"/"+TSYS::strEncode(s_br,TSYS::PathEl))->setAttr("primaryCmd", "")->setAttr("reforwardRedundReq", "1");
 		try{ while((lstStat=SYS->rdStRequest(*opt,lstStat,true)).size()) ; }
 		catch(TError &) { }
 	    }
@@ -978,11 +980,17 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"modify",R_R_R_))	opt->setText(isModify(TCntrNode::All)?"1":"0");
 	// Do load node
 	else if(ctrChkNode(opt,"load",RWRWRW,"root","root",SEC_WR)) {
-	    if(s2i(opt->attr("force"))) modifG();
+	    string selDB;
+	    if((selDB=opt->attr("force")).size()) {
+		if(!isdigit(selDB[0]) || s2i(selDB)) modifG();
+		if(!isdigit(selDB[0]))	SYS->setSelDB(selDB);
+	    }
 
 	    string errs;
 	    load(NULL, &errs);
 	    if(errs.size()) throw err_sys(_("Error loading:\n%s"), errs.c_str());
+
+	    if(selDB.size() && !isdigit(selDB[0]))	SYS->setSelDB("");
 	}
 	// Do save node
 	else if(ctrChkNode(opt,"save",RWRWRW,"root","root",SEC_WR)) {

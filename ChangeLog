@@ -1,3 +1,18 @@
+2019-08-25 Roman (stable)
+- !!:DB.LibsDB.vcaBase: Main.accept: Revised during the documenting.
+    !:Main.userManager: Expanded to save the subsystem Security for just created and removed users.
+    Main.graphCalc: Expanded to show range of the real loaded data.
+- !!!!:SYS,UI.{QTCfg,Vision,WebCfg,WebCfgD}: The function "Local primary commands transfer" of the redundant systems is unified and expanded
+    for complete moving to TCntrNode::cntrCmd(), so the function works now for any calls also from the user programing environment.
+    But this function must be leave to be compatible in work with old versions in the redundancy!
+    !!: The user API request "load" to the control interface expanded for specifying the selected DB in the attribute "force"
+	to perform such operations for concrete node and with the function of removing missed nodes into the configuration.
+- FIX:UI.{Vision,WebVision}: Fixed for severity of the days periodicity of the time scale of the primitive Diagram.
+- UI.WebVision: Some improved for the updating periodicity calculation for it limiting after restoring the long missed connections.
+    The exceptions processing of the function getXmlHttp().send() removed due to at the connection exceptions
+	the main loop is just stopped and no exceptions generated.
+
+
 2019-08-21 Roman (stable)
 - !!!!:DB.LibsDB.vcaBase: The ".dump" command of sqlite3 3.27 significantly changed, needed now for the parameter "--newlines"
 	and removes quotes around the table names.

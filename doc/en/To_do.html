@@ -78,7 +78,9 @@
 <tr>
 <td>
 <h3><span class="mw-headline" id="Testing.2C_optimization_and_fixing"><span class="mw-headline-number">3</span> Testing, optimization and fixing</span></h3>
-<ul><li> <i>UI.{Vision,WebVision}</i>: Full revision of the primitive "ElFigure" implementation, which needs:</li></ul>
+<ul><li> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> [TESTING] Implement the asynchronous writing with a function of preventing the data lose on the time of the connection missing for the key DAQ-modules of the OpenSCADA internal procedures: <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQGate</a>, <a href="Modules/ICP_DAS.html" title="Special:MyLanguage/Modules/ICP DAS">ICP_DAS</a>, <a href="Modules/DCON.html" title="Special:MyLanguage/Modules/DCON">DCON</a>, <a href="Modules/SMH2Gi.html" title="Special:MyLanguage/Modules/SMH2Gi">SMH2Gi</a>. The function currently tested on the module <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a>.</li>
+<li> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> [TESTING] Use the new function <i>cfgToDefault()</i> of resetting the loaded data of the TConfig object into functions of the data loading, to prevent of using the loaded data of the previous items for new fields. The function currently tested on the subsystem DB loading.</li>
+<li> <i>UI.{Vision,WebVision}</i>: Full revision of the primitive "ElFigure" implementation, which needs:</li></ul>
 <dl><dd>- BUG: selecting multiple figures at hold the key "Ctrl";</dd>
 <dd>- BUG: not full implementing the mirroring;
 <dl><dd> =&gt; appending in the full features is difficult but the code's original style is bad;</dd></dl></dd>

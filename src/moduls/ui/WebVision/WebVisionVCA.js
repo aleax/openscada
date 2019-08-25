@@ -225,11 +225,9 @@ function servGet( adr, prm, callBack, callBackPrm )
 	return null;
     }
     //else console.log("TEST 00: Sync GET="+adr+'?'+prm);
-    try {
-	req.send(null);
-	if(req.status == 200 && req.responseXML.childNodes.length)
-	    return req.responseXML.childNodes[0];
-    } catch(e) { window.location.reload(); /*window.location = '/'+MOD_ID;*/ }
+    req.send(null);
+    if(req.status == 200 && req.responseXML.childNodes.length)
+	return req.responseXML.childNodes[0];
 
     return null;
 }
@@ -2632,7 +2630,7 @@ function makeUI( callBackRez )
     //Elapsed time get and adjust for plane update period depends from the network speed
     var elTm = 1e-3*((new Date()).getTime()-stTmMain.getTime());
     if(!planePer) planePer = 1e-3*modelPer;
-    planePer += (Math.max(1e-3*modelPer,elTm*3)-planePer)/100;
+    planePer = Math.min(Math.max(1e-3*modelPer,elTm*10), planePer + (Math.max(1e-3*modelPer,elTm*3)-planePer)/100);
     var sleepTm = Math.max(0, planePer-elTm);
     prcTm = elTm + sleepTm;
     //console.log("sleepTm: "+sleepTm+"s; prcTm: "+prcTm+"s; elTm: "+elTm+"s; planePer: "+planePer+"s.");

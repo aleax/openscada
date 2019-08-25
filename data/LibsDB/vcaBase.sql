@@ -7235,7 +7235,7 @@ INSERT INTO wlb_Main_io VALUES('userManager','perm','944',32,'','','labDescr',''
 INSERT INTO wlb_Main_io VALUES('userManager','geomX','324.077',32,'','','labDescr','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','geomY','145',32,'','','labDescr','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','geomW','100',32,'','','labDescr','','','','','','');
-INSERT INTO wlb_Main_io VALUES('userManager','geomH','19',32,'','','labDescr','','','','','','');
+INSERT INTO wlb_Main_io VALUES('userManager','geomH','22',32,'','','labDescr','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','geomZ','15',32,'','','labDescr','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','font','Arial 17',32,'','','labDescr','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','alignment','8',32,'','','labDescr','','','','','','');
@@ -7256,7 +7256,7 @@ INSERT INTO wlb_Main_io VALUES('userManager','name','labDescr',32,'','','labGrp'
 INSERT INTO wlb_Main_io VALUES('userManager','geomX','324.077',32,'','','labGrp','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','geomY','300',32,'','','labGrp','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','geomW','100',32,'','','labGrp','','','','','','');
-INSERT INTO wlb_Main_io VALUES('userManager','geomH','19',32,'','','labGrp','','','','','','');
+INSERT INTO wlb_Main_io VALUES('userManager','geomH','22',32,'','','labGrp','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','geomZ','18',32,'','','labGrp','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','font','Arial 17',32,'','','labGrp','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','alignment','8',32,'','','labGrp','','','','','','');
@@ -7284,9 +7284,9 @@ INSERT INTO wlb_Main_io VALUES('userManager','text','Password:',32,'','','labPas
 INSERT INTO wlb_Main_io VALUES('userManager','owner','root:Security',32,'','','labUser','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','perm','944',32,'','','labUser','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','geomX','324.077',32,'','','labUser','','','','','','');
-INSERT INTO wlb_Main_io VALUES('userManager','geomY','53',32,'','','labUser','','','','','','');
+INSERT INTO wlb_Main_io VALUES('userManager','geomY','52',32,'','','labUser','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','geomW','142.25',32,'','','labUser','','','','','','');
-INSERT INTO wlb_Main_io VALUES('userManager','geomH','19',32,'','','labUser','','','','','','');
+INSERT INTO wlb_Main_io VALUES('userManager','geomH','22',32,'','','labUser','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','geomZ','14',32,'','','labUser','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','geomMargin','2',32,'','','labUser','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','backColor','gray',96,'','','labUser','','','','','','');
@@ -7486,7 +7486,7 @@ but sometimes there is a need to provide this capability from the user interface
 - adding new and deleting existing users.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.4.1
+Version: 1.4.3
 License: GPLv2',32,'','','','Елемент-кадр слугує для надання можливості контролю користувачів з інтерфейсу самого користувача.
 Тобто, типово ця функція надається програмісту SCADA на рівні конфігурації підсистеми "Безпека",
 але інколи виникає потреба надання такої можливості з інтерфейсу користувача та із низкою обмежень на контрольованих користувачів та їх групи, що цей кадр здійснює та загалом надає функції:
@@ -7495,7 +7495,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для над�
 - додання нових та видалення діючих користувачів.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.4.1
+Версія: 1.4.3
 Ліцензія: GPLv2','','Элемент-кадр служит для предоставления возможности контроля пользователей из интерфейса самого пользователя.
 Т.е., типично эта функция предоставляется программисту SCADA на уровне конфигурации подсистемы "Безопасность",
 но иногда возникает необходимость предоставления такой возможности из интерфейса пользователя и с рядом ограничений на контролируемых пользователей и их группы, что этот кадр осуществляет и в целом предоставляет функции:
@@ -7504,7 +7504,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для над�
 - добавления новых и удаления существующих пользователей.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.4.1
+Версия: 1.4.3
 Лицензия: GPLv2','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsAct','dscr','Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.0',32,'','','','','','','','','');
@@ -7680,7 +7680,7 @@ In general, the built-in library currently contains the following functions of t
 - Average and range.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.1
+Version: 1.0.2
 License: GPLv2',32,'','','','Елемент реалізує діалог користувацького обчислення параметру обраного графіку для видимих на графіку даних. Користувачу надається можливість обрати обчислення із вбудованої бібліотеки, привілейований користувач ("root" або у групі "ITW") має можливість відредагувати або написати власну процедуру обчислення.
 
 Загалом, вбудована бібліотека наразі містить наступні функції користувацького обчислення:
@@ -7688,7 +7688,7 @@ License: GPLv2',32,'','','','Елемент реалізує діалог кор
 - Середнє та діапазон.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.0.1
+Версія: 1.0.2
 Ліцензія: GPLv2','','Элемент реализует диалог пользовательского вычисления параметра выбранного графика для видимых на графике данных. Пользователю предоставляется возможность выбрать вычисление из встроенной библиотеки, привилегированный пользователь ("root" или в группе "ITW") имеет возможность отредактировать или написать собственную процедуру вычисления.
 
 В целом, встроенная библиотека, на данное врем, содержит следующие функции пользовательского вычисления:
@@ -7696,7 +7696,7 @@ License: GPLv2',32,'','','','Елемент реалізує діалог кор
 - Среднее и диапазон.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.0.1
+Версия: 1.0.2
 Лицензия: GPLv2','','','');
 INSERT INTO wlb_Main_io VALUES('graphCalc','geomW','600',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('graphCalc','geomH','300',32,'','','','','','','','','');
@@ -7812,6 +7812,25 @@ License: GPLv2',32,'','','','Елемент слугує для відображ
 Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.0.0
 Ліцензія: GPLv2','','Элемент служит для отображения динамических меток изображений, которые формируются на основе дискретных сигналов. Также этот элемент генерирует уведомления про нарушения по локально определённому условию, атрибут ntf. Элемент в целом использует и представляет представительскую структуру DAQ-шаблонов дискретного блока и состояния по коду.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.0.0
+Лицензия: GPLv2','','','');
+INSERT INTO wlb_Main_io VALUES('accept','dscr','The element-frame implements a simple operations'' acception dialog.
+The element contains a message with a question and two buttons "Apply" and "Cancel".
+The dialogue, for example, is used in the frame Users manager to accept the deleting operation.
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.0.0
+License: GPLv2',32,'','','','Елемент-кадр реалізує простий діалог підтвердження операцій.
+Елемент містить повідомлення з питанням та дві кнопки "Прийняти" та "Скасувати".
+Цей діалог, наприклад, використано у кадрі Менеджер користувачів для підтвердження операції видалення.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.0.0
+Ліцензія: GPLv2','','Элемент-кадр реализует простейший диалог подтверждения операций.
+Элемент содержит сообщение с вопросом и две кнопки "Принять" и "Отмена".
+Данный диалог, например, использован в кадре Менеджер пользователей для подтверждения операции удаления.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.0.0
@@ -10422,8 +10441,8 @@ INSERT INTO wlb_Main_uio VALUES('prescrEdit','fileExpImp','File export/import',1
 INSERT INTO wlb_Main_uio VALUES('RootPgSo','stepCur','Step: current',131073,'0|',8,'','','','Крок: поточний','','','Шаг: текущий','','','','');
 INSERT INTO wlb_Main_uio VALUES('RootPgSo','stepTm','Step: time',131076,'0|',8,'','','','Крок: час','','','Шаг: час','','','','');
 INSERT INTO wlb_Main_uio VALUES('RootPgSo','demoPlayProc','Procedure of the Demo play',131205,'',8,'','','','Проц. програвання демо','','','Проц. проигрывания демо','','','','');
-INSERT INTO wlb_Main_uio VALUES('accept','elEvent','Element: event',131077,'||',14,'<page>|event','','','Елемент: подія','','','Элемент: событие','','','','');
-INSERT INTO wlb_Main_uio VALUES('accept','elMess','Element: message',131077,'||',10,'<page>|mess','','','Елемент: повідомлення','','','Элемент: сообщение','','','','');
+INSERT INTO wlb_Main_uio VALUES('accept','elEvent','Element: event',131077,'',14,'<page>|event','','','Елемент: подія','','','Элемент: событие','','','','');
+INSERT INTO wlb_Main_uio VALUES('accept','elMess','Element: message',131077,'',10,'<page>|mess','','','Елемент: повідомлення','','','Элемент: сообщение','','','','');
 INSERT INTO wlb_Main_uio VALUES('prescrEdit','mess','Dialog message',131077,'Are you really want to delete this program?||',0,'','','progDel','Повідомлення діалогу','Ви дійсно бажаєте видалити обрану програму?||','','Сообщение диалога','Вы действительно желаете удалить выбранную программу?||','','','');
 INSERT INTO wlb_Main_uio VALUES('prescrEdit','max','Maximum',131076,'0|',8,'','','arg1','Максимум','','','Максимум','','','','');
 INSERT INTO wlb_Main_uio VALUES('prescrEdit','min','Minimum',131076,'0|',8,'','','arg1','Мінімум','','','Минимум','','','','');
@@ -21200,7 +21219,7 @@ for(off = 0, ev_rez = ""; (ev_cur=event.parse(0,"\n",off)).length; ) {
 	else if(ev_cur == "ws_BtPress:/cancel")	this.attrSet("pgOpen", false);
 	else ev_rez += (ev_cur+"\n");
 }
-event = ev_rez;','','',500,'name;geomW;geomH;pgGrp;backColor;bordWidth;',1430399940);
+event = ev_rez;','','',500,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1566755923);
 INSERT INTO wlb_Main VALUES('treeSelect','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAeCAIAAAATj48OAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAADx0lEQVRYhe2X3W/bVBjGX9vHTh27+XCSJWlamvSLds0qsY1O2kDbQIML
 LiYViRX1DgkEUoS44KITEn8LAuUGcVcxCQbthgasWwordEALydZpLW3WNHbjJE7OsQ8XiQrctI0L
@@ -22690,15 +22709,17 @@ for(ev_rez = "", offEv = 0; (ev_cur=event.parse(0,"\n",offEv)).length; ) {
 			lib_value_ = userNm_value+" ("+userNm_value+")"; userSelVl = userNm_value;
 			userLbUpdt = userSel = SYS.mtime()+500;
 		}
+
+		SYS.cntrReq(SYS.XMLNode("save").setAttr("path","/sub_Security/%2fobj"));	//To save all users and groups
 	}
 	else if(ev_cur == "dlg_Apply:/userDel" && userSelVl.length) {
-	//else if(ev_cur == "ws_BtPress:/userDel" && userSelVl.length) {
-		//SYS.BD.nodeAt(dbDB,".").SQLReq("DELETE FROM "+dbProgs+" WHERE name=''"+userSelVl+"'';");
 		req = SYS.XMLNode("del").setAttr("path","/sub_Security/%2fbr%2fusr_").setText(userSelVl);
 		rez = SYS.cntrReq(req);
 		//this.messInfo("Result: "+rez+": "+req.save());
 		lib_value_ = userSelVl = "";
 		userLbUpdt = userSel = SYS.mtime()+500;
+
+		SYS.cntrReq(SYS.XMLNode("save").setAttr("path","/sub_Security/%2fobj"));	//To save all groups
 	}
 	else if(ev_cur == "ws_LnAccept:/fullName" && (oIt=SYS.Security.nodeAt("usr_"+userSelVl))) {
 		oIt.cfgSet("DESCR", fullName_value);
@@ -22773,7 +22794,7 @@ if(userSel && SYS.mtime() >= userSel) {
 		grp_items += "</tbl>";
 		grp_value = "";
 	}
-}','','',500,'owner;perm;name;dscr;geomH;evProc;backColor;',1566383462);
+}','','',500,'owner;perm;name;dscr;geomH;evProc;backColor;',1566544571);
 INSERT INTO wlb_Main VALUES('graphCalc','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAgCAIAAAAt/+nTAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAD
 X0lEQVRYhe2YzU7jRgCAZ8YziWPPjBNTwoJQoBKicEBqJLgguPMkPEDeaXvgxEOgPAGI21aiIK2d
 LPHP+Hc8nh6yaqtNWJVSyaXKd7DkGXv8fRrJkg0vLy8ppZ7nIYSUUlmWua4rhKjruigK27aVUhjj
@@ -22809,11 +22830,6 @@ if(f_start) {
 		if(dtTm <= 0)	dtTm = SYS.time();
 		dtTmBeg = dtTm - lWdg.nodePrev().trnd1.attr("tSize");
 		valArch = lWdg.nodePrev().trnd1.attr("valArch");
-		title_text = tr("Calculation for the parameter \"%1\" archive at the data range [%2...%3] and the archiver \"%4\"")
-			.replace("%1", lWdg.attr("name"))
-			.replace("%2", SYS.strftime(dtTmBeg,"%Y-%m-%dT%H:%M:%S"))
-			.replace("%3", SYS.strftime(dtTm,"%Y-%m-%dT%H:%M:%S"))
-			.replace("%4", valArch.length ? valArch : tr("All"));
 
 		//Prepare the execution context
 		inPrcId = this.nodePath("_");
@@ -22824,6 +22840,12 @@ if(f_start) {
 		inPrcArgs.end = dtTm*1e6;
 		inPrcArgs.per = (inPrcArgs.end-inPrcArgs.beg) / 1000;
 		inPrcArgs.data = archO.getVals(inPrcArgs.beg, inPrcArgs.end, inPrcArgs.per, valArch);
+
+		title_text = tr("Calculation for the parameter \"%1\" archive at the data range [%2...%3] and the archiver \"%4\"")
+			.replace("%1", lWdg.attr("name"))
+			.replace("%2", SYS.strftime(1e-6*inPrcArgs.beg,"%Y-%m-%dT%H:%M:%S"))
+			.replace("%3", SYS.strftime(1e-6*inPrcArgs.end,"%Y-%m-%dT%H:%M:%S"))
+			.replace("%4", valArch.length ? valArch : tr("All"));
 
 		//Functions library
 		fLib = new Object();
