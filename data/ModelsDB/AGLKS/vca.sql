@@ -1,13 +1,13 @@
 PRAGMA foreign_keys=OFF;
 BEGIN TRANSACTION;
 CREATE TABLE 'VCALibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "VCALibs" VALUES('AGLKS','','Library of the interface items of the project "AGLKS".
+INSERT INTO "VCALibs" VALUES('AGLKS','AGLKS','Library of the interface items of the project "AGLKS".
 Author: Roman Savochenko <roman@oscada.org>
 Version: 2.0.0
-','wlb_AGLKS','','','Бібліотека сторінок АГЛКС
+','wlb_AGLKS','','АГЛКС','Бібліотека сторінок АГЛКС
 Автор: Роман Савоченко <roman@oscada.org>
 Версія: 2.0.0
-','','Библиотека страниц АГЛКС
+','АГЛКС','Библиотека страниц АГЛКС
 Автор: Роман Савоченко <roman@oscada.org>
 Версия: 2.0.0
 ');

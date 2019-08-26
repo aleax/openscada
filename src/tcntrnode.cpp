@@ -211,7 +211,8 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 
 	    // Check and put the command to the redundant stations
 	    string aNm = opt->name();
-	    if(SYS->rdPrimCmdTr() && SYS->rdEnable() && SYS->rdActive() && !s2i(opt->attr("reforwardRedundReq")) && (s2i(opt->attr("primaryCmd")) ||
+	    if(SYS->rdPrimCmdTr() && SYS->rdEnable() && SYS->rdActive() && !s2i(opt->attr("reforwardRedundReq")) && !s2i(opt->attr("reforwardRedundOff")) &&
+		    (s2i(opt->attr("primaryCmd")) ||
 			aNm == "set" || aNm == "add" || aNm == "ins" || aNm == "del" || aNm == "move" || aNm == "load" || aNm == "save" || aNm == "copy")) {
 		string lstStat;
 		opt->setAttr("path", nodePath()+"/"+TSYS::strEncode(s_br,TSYS::PathEl))->setAttr("primaryCmd", "")->setAttr("reforwardRedundReq", "1");

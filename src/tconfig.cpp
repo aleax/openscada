@@ -147,8 +147,8 @@ void TConfig::cfgKeyUseAll( bool val )
 void TConfig::cfgToDefault( )
 {
     for(TCfgMap::iterator p = value.begin(); p != value.end(); ++p)
-	if(!(p->second->fld().flg()&TCfg::Key) && p->second->view())
-	    p->second->toDefault();
+	if(!(p->second->fld().flg()&TCfg::Key) && !p->second->reqKey() && p->second->view())
+	    p->second->toDefault(true);
 }
 
 void TConfig::setElem( TElem *Elements, bool first )
@@ -297,15 +297,27 @@ void TCfg::setReqKey( bool vl )
     mOwner.reqKeysUpdate();
 }
 
-void TCfg::toDefault( )
+void TCfg::toDefault( bool notSetType )
 {
     if(!mFld)	return;
 
     switch(mFld->type()) {
-	case TFld::String:	setType(TVariant::String, true, (mFld->flg()&TCfg::Key)); TVariant::setS(mFld->def());	break;
-	case TFld::Integer:	setType(TVariant::Integer, true); TVariant::setI(s2ll(mFld->def()));	break;
-	case TFld::Real:	setType(TVariant::Real, true);	  TVariant::setR(s2r(mFld->def()));	break;
-	case TFld::Boolean:	setType(TVariant::Boolean, true); TVariant::setB((bool)s2i(mFld->def()));break;
+	case TFld::String:
+	    if(!notSetType) setType(TVariant::String, true, (mFld->flg()&TCfg::Key));
+	    TVariant::setS(mFld->def());
+	    break;
+	case TFld::Integer:
+	    if(!notSetType) setType(TVariant::Integer, true);
+	    TVariant::setI(s2ll(mFld->def()));
+	    break;
+	case TFld::Real:
+	    if(!notSetType) setType(TVariant::Real, true);
+	    TVariant::setR(s2r(mFld->def()));
+	    break;
+	case TFld::Boolean:
+	    if(!notSetType) setType(TVariant::Boolean, true);
+	    TVariant::setB((bool)s2i(mFld->def()));
+	    break;
 	default: break;
     }
 }

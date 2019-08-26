@@ -1,4 +1,6 @@
 2019-08-26 Roman (stable)
+- SYS: The reforwarding requests of the redundancy appended by the option "reforwardRedundOff" of disabling this function
+    for the user control interface.
 - !!!!:FIX:DB,DB.*: The configuration context reseting function cfgToDefault() used in the function dataSeek() and fieldSeek() begin,
     due to it is an obligatory operation for the configuration file at least and must be do for the DB configuration also, for new fields.
 

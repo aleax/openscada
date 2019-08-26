@@ -78,7 +78,7 @@ class TCfg : public TVariant
 	void	setNoTransl( bool vl )	{ mNoTransl = vl; }
 	void	setReqKey( bool vl );
 	void	setExtVal( bool vw )	{ mExtVal = vw; }
-	void	toDefault( );
+	void	toDefault( bool notSetType = false );
 
 	TFld	&fld( ) const		{ return *mFld; }
 
