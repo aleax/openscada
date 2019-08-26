@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.6.0"
+#define MOD_VER		"2.6.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -318,6 +318,8 @@ bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
 
     if(tblStrct.empty()) throw err_sys(_("Table is empty."));
     mLstUse = SYS->sysTm();
+
+    cfg.cfgToDefault();	//reset the not key and viewed fields
 
     //Check for not present and not empty keys allow
     if(row == 0) {

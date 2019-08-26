@@ -164,6 +164,8 @@ bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &c
     int c_lev = 0;
     string bdn = realDBName(ibdn);
 
+    cfg.cfgToDefault();	//reset the not key and viewed fields
+
     if(path.size() && (forceCfg || ibdn.empty() || TSYS::strParse(bdn,0,".") == DB_CFG)) {
 	ResAlloc res(SYS->cfgRes(), false);
 	XMLNode *nd, *fnd = NULL, *el;
@@ -559,7 +561,6 @@ void TBDS::load_( )
 		if((type+"."+id) != SYS->workDB() && !at(type).at().openStat(id))
 		    at(type).at().open(id);
 		try{ at(type).at().at(id).at().load(&c_el); } catch(TError&) { }
-		c_el.cfgToDefault();
 	    }
 	//}
     } catch(TError &err) {

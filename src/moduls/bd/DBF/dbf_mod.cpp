@@ -39,7 +39,7 @@
 #define MOD_NAME	_("DB DBF")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.3.0"
+#define MOD_VER		"2.3.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DBF files version 3.0.")
 #define LICENSE		"GPL2"
@@ -220,6 +220,8 @@ MBD &MTable::owner( ) const	{ return (MBD&)TTable::owner(); }
 bool MTable::fieldSeek( int i_ln, TConfig &cfg, vector< vector<string> > *full )
 {
     int i_clm;
+
+    cfg.cfgToDefault();	//reset the not key and viewed fields
 
     ResAlloc res(mRes, false);
 

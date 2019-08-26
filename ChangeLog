@@ -1,3 +1,8 @@
+2019-08-26 Roman (stable)
+- !!!!:FIX:DB,DB.*: The configuration context reseting function cfgToDefault() used in the function dataSeek() and fieldSeek() begin,
+    due to it is an obligatory operation for the configuration file at least and must be do for the DB configuration also, for new fields.
+
+
 2019-08-25 Roman (stable)
 - !!:DB.LibsDB.vcaBase: Main.accept: Revised during the documenting.
     !:Main.userManager: Expanded to save the subsystem Security for just created and removed users.
