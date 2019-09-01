@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTStarter file: tuimod.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -56,7 +56,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"MainThr"
-#define MOD_VER		"4.7.4"
+#define MOD_VER		"4.7.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -581,11 +581,11 @@ bool StApp::notify( QObject *receiver, QEvent *event )
 	if(event->type() == QEvent::MouseButtonPress && ((QMouseEvent*)event)->button() == Qt::LeftButton) {
 	    mouseBtRecv = receiver;
 	    mouseBtHold = *((QMouseEvent*)event);
-	    mouseBtPress = SYS->sysTm();
+	    mouseBtPress = TSYS::curTime();
 	}
 	if(mouseBtPress && ((event->type() == QEvent::MouseButtonRelease && ((QMouseEvent*)event)->button() == Qt::LeftButton) ||
 		(event->type() == QEvent::MouseMove && (((QMouseEvent*)event)->globalPos()-mouseBtHold.globalPos()).manhattanLength() > QFontMetrics(font()).height()) ||
-		event->type() == QEvent::FocusOut))
+		(event->type() == QEvent::FocusOut && mouseBtRecv == receiver)))
 	    mouseBtPress = 0;
     }
 
@@ -692,10 +692,17 @@ void StApp::timerEvent( QTimerEvent *event )
 
     if(mod->mQtLookMdf)	updLookFeel();
 
-    if(mouseBtPress && (SYS->sysTm()-mouseBtPress) >= simulRightMKeyTm) {
-	QMouseEvent evPress(QEvent::MouseButtonPress, mouseBtHold.pos(), Qt::RightButton, 0, 0); sendEvent(mouseBtRecv, &evPress);
-	QMouseEvent evRels(QEvent::MouseButtonRelease, mouseBtHold.pos(), Qt::RightButton, 0, 0);sendEvent(mouseBtRecv, &evRels);
-	QContextMenuEvent evCtxMenu(QContextMenuEvent::Mouse, mouseBtHold.pos());		 sendEvent(mouseBtRecv, &evCtxMenu);
+    if(mouseBtPress && 1e-6*(TSYS::curTime()-mouseBtPress) >= simulRightMKeyTm) {
+	QMouseEvent evPress(QEvent::MouseButtonPress, mouseBtHold.pos(), Qt::RightButton, 0, 0);
+	sendEvent(mouseBtRecv, &evPress);
+
+	QMouseEvent evRels(QEvent::MouseButtonRelease, mouseBtHold.pos(), Qt::RightButton, 0, 0);
+	sendEvent(mouseBtRecv, &evRels);
+
+	if(dynamic_cast<QWidget*>(mouseBtRecv)) {
+	    QContextMenuEvent evCtxMenu(QContextMenuEvent::Mouse, mouseBtHold.pos());
+	    sendEvent(mouseBtRecv, &evCtxMenu);
+	}
 	mouseBtPress = 0;
     }
 

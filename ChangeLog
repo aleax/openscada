@@ -1,3 +1,13 @@
+2019-09-01 Roman (stable)
+- SYS.Android: The building SDK parameters set to "<uses-sdk android:minSdkVersion="19" android:targetSdkVersion="21"/>".
+- !!!:FIX:UI.QTStarter: Fixed in crash at the event QContextMenuEvent call for not QWidget, into UI.Vision runtime mostly.
+    The right key simulation disabling at focus lost is set wide to the source widget,
+    otherwise we lost the first selection the widget in the simulation into UI.Vision runtime mostly.
+    Precision of the right key simulation time rose to microseconds.
+- FIX:UI.WebVision: Fixed in the loading view processing of the button mode of the primitive "FormEl" moving it back
+    to the obligatory one primitives.
+
+
 2019-08-26 Roman (stable)
 - SYS: The reforwarding requests of the redundancy appended by the option "reforwardRedundOff" of disabling this function
     for the user control interface.

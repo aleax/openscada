@@ -288,8 +288,8 @@ bool VCASess::objProc( const string &wPath, const SSess &ses, XMLNode *attrsN )
 	if(!isOpt && rootId == "ElFigure")	objAdd(new VCAElFigure(wPath));
 	else if(!isOpt && rootId == "Diagram")	objAdd(new VCADiagram(wPath));
 	else if(!isOpt && rootId == "Document")	objAdd(new VCADocument(wPath));
+	else if(!isOpt && rootId == "FormEl")	objAdd(new VCAFormEl(wPath));	//Due to the "value" must be truncated in the loading view of the button mode
 	//Optional
-	else if(isOpt && rootId == "FormEl")	objAdd(new VCAFormEl(wPath));
 	else if(isOpt && rootId == "Text")	objAdd(new VCAText(wPath));
     }
     if(objPresent(wPath)) {
