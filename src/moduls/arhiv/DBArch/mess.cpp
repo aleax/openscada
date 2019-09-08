@@ -1,7 +1,7 @@
 
 //OpenSCADA module Archive.DBArch file: mess.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -117,9 +117,23 @@ void ModMArch::start( )
 
 void ModMArch::stop( )
 {
+    ResAlloc res(mRes, true);
+
     TMArchivator::stop();
 
     reqEl.fldClear();
+}
+
+time_t ModMArch::begin( )
+{
+    ResAlloc res(mRes, false);
+    return mBeg;
+}
+
+time_t ModMArch::end( )
+{
+    ResAlloc res(mRes, false);
+    return mEnd;
 }
 
 bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
@@ -127,6 +141,8 @@ bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
     if(needMeta && (needMeta=!readMeta()))	return false;
 
     TMArchivator::put(mess, force);	//Allow redundancy
+
+    ResAlloc res(mRes, true /*false*/);	//true for processing the messages group as one
 
     if(!runSt) throw TError(nodePath().c_str(), _("The archive is not started!"));
 
@@ -179,6 +195,8 @@ bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
 
 time_t ModMArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const string &category, char level, time_t upTo )
 {
+    ResAlloc res(mRes, false);
+
     if(!runSt) throw TError(nodePath().c_str(), _("The archive is not started!"));
     if(needMeta && (needMeta=!readMeta())) return eTm;
     if(!upTo) upTo = SYS->sysTm() + STD_INTERF_TM;

@@ -6748,7 +6748,7 @@ Version: 1.2.0',32,'','','','Розширений паспорт стандар�
 Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.2.0','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsAct','owner','root:UI',32,'','','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('alarmsAct','name','Alarms: active',32,'','','','Порушення: активні','','Нарушения: активные','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsAct','name','Alarms — active',32,'','','','Порушення — активні','','Нарушения — активные','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsAct','geomY','0',40,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsAct','geomW','558',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsAct','geomH','100',40,'','','','','','','','','');
@@ -6827,7 +6827,7 @@ INSERT INTO wlb_Main_io VALUES('alarmsAct','evProc','usr_goquitt::open:/pg_contr
 INSERT INTO wlb_Main_io VALUES('alarmsAct','set','',8,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsAct','value','',8,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','owner','root:UI',32,'','','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('alarmsSt','name','Alarms: state',32,'','','','Порушення: стан','','Нарушения: состояние','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsSt','name','Alarms — state',32,'','','','Порушення — стан','','Нарушения — состояние','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','geomX','6',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','geomY','62',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','geomW','900',32,'','','','','','','','','');
@@ -7486,6 +7486,7 @@ but sometimes there is a need to provide this capability from the user interface
 - adding new and deleting existing users.
 
 Author: Roman Savochenko <roman@oscada.org>
+Sponsored by: Vinnica Poultry Farm
 Version: 1.4.3
 License: GPLv2',32,'','','','Елемент-кадр слугує для надання можливості контролю користувачів з інтерфейсу самого користувача.
 Тобто, типово ця функція надається програмісту SCADA на рівні конфігурації підсистеми "Безпека",
@@ -7495,6 +7496,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для над�
 - додання нових та видалення діючих користувачів.
 
 Автор: Роман Савоченко <roman@oscada.org>
+Спонсорування: Вінницька Птахофабрика
 Версія: 1.4.3
 Ліцензія: GPLv2','','Элемент-кадр служит для предоставления возможности контроля пользователей из интерфейса самого пользователя.
 Т.е., типично эта функция предоставляется программисту SCADA на уровне конфигурации подсистемы "Безопасность",
@@ -7504,10 +7506,85 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для над�
 - добавления новых и удаления существующих пользователей.
 
 Автор: Роман Савоченко <roman@oscada.org>
+Спонсирование: Винницкая Птицефабрика
 Версия: 1.4.3
 Лицензия: GPLv2','','','');
-INSERT INTO wlb_Main_io VALUES('alarmsAct','dscr','Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.0',32,'','','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsAct','dscr','The element serves to dynamically display the active violations in a tabular form and to highlight them in color and text. The violations are obtained from the buffer of current-active violations of OpenSCADA. In fact, the element implements the primitive "Protocol" functions for violations and extension opportunities.
+
+For detailed study of current violations, the element provides a function of increasing the height up or down in focus.
+
+The element is created, and is usually used, in pair with the full-format frame of presenting the violations history, which is completed with most of the features of this element but also for the violations history.
+
+The main user extension is the ability to define visible table fields from a list of options:
+- atm — time of the violation appearing;
+- qttm — time of the violation confirmation (quietation), for quieted violations;
+- lev — level of the violation;
+- cat — category of the violation;
+- mess — full and unparsed text of the violation message;
+- prm — address of the DAQ-parameter of the data source;
+- dscr — description of the violation from the source DAQ-parameter;
+- dscrCust{N} — description of the user field N;
+- alrm — text of the violation;
+- cmnt — commentary of the violation.
+
+This element and its fields generally represent the structure of the violation message, which is described in detail in the Program manual.
+
+As you can see from the list of possible table fields, this item supports confirmation (quietation), commenting, and user fields.
+
+Author: Roman Savochenko <roman@oscada.org>
+Sponsored by: Ustijancev Michael
+Version: 1.1.1
+License: GPLv2',32,'','','','Елемент на рисунку 1.5 слугує для динамічного відображення активних порушень у табличному вигляді та із виділенням їх за кольором та текстом. Порушення отримуються із буферу поточних-активних порушень OpenSCADA. Фактично елемент реалізує функції примітиву "Протокол" для порушень та із розширенням можливостей.
+
+Для детального вивчення актуальних порушень елементом передбачено функцію збільшення висоти угору або униз за отриманням фокусу.
+
+Елемент створено, та він зазвичай використовується, у парі з кадром повноформатного представлення історії порушень, який наділено більшістю функцій цього елементу, але і для історії порушень.
+
+Основним користувацьким розширенням є можливість визначення видимих полів таблиці із переліку варіантів:
+- atm — час виникнення порушення;
+- qttm — час підтвердження (квітації) порушення, для підтверджених порушень;
+- lev — рівень порушення;
+- cat — категорія порушення;
+- mess — повний та нерозібраний текст повідомлення порушення;
+- prm — адреса DAQ-параметру джерела порушення;
+- dscr — опис порушення із DAQ-параметру джерела;
+- dscrCust{N} — опис користувацького поля N;
+- alrm — текст порушення;
+- cmnt — коментар до порушення.
+
+Цей елемент та його поля загалом репрезентують структуру повідомлення порушення, яку детально описано у посібнику користувача.
+
+Як можна бачити із переліку можливих полів таблиці, цей елемент підтримує механізм підтвердження (квітації), коментування та користувацькі поля.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Спонсорування: Устьянцев Михайло
+Версія: 1.1.1
+Ліцензія: GPLv2','','Элемент на рисунке 1.5 служит для динамического отображения активных нарушений в табличном виде и с выделением их цветом и текстом. Нарушения получаются из буфера текущих-активных нарушений OpenSCADA. Фактически элемент реализует функции примитива "Протокол" для нарушений и с расширением возможностей.
+
+Для детального изучения актуальных нарушений элементом предусмотрено функцию увеличения высоты вверх или вниз при получении фокуса.
+
+Элемент создан, и он обычно используется, в паре с кадром полноформатного представления истории нарушений, который наделён большинством функций этого элемента, но и для истории нарушений.
+
+Основным пользовательским расширением является возможность определения видимых полей таблицы из перечня вариантов:
+- atm — время возникновения нарушения;
+- qttm — время подтверждения (квитации) нарушения, для подтверждённых нарушений;
+- lev — уровень нарушения;
+- cat — категория нарушения;
+- mess — полный и неразобранный текст сообщения нарушения;
+- prm — адрес DAQ-параметра источника нарушения;
+- dscr — описание нарушения из DAQ-параметра источника;
+- dscrCust{N} — описание пользовательского поля N;
+- alrm — текст нарушения;
+- cmnt — комментарий к нарушению.
+
+Этот элемент и его поля в целом представляют структуру сообщения нарушения, которая детально описана в руководстве пользователя.
+
+Как можно видеть из перечня возможных полей таблицы, этот элемент поддерживает механизм подтверждения (квитации), комментирования и пользовательские поля.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Спонсирование: Устьянцев Михаил
+Версия: 1.1.1
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','dscr','The cadre "Alarms state table".
 
 Author: Roman Savochenko <roman@oscada.org>
@@ -7785,35 +7862,41 @@ INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','90',32,'','','curstime','',
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','53',32,'','','curstime','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','23',32,'','','curstime','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','29',32,'','','curstime','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','tipTool','Go to the current time',32,'','','curstime','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','tipStatus','Press to go to the current time',32,'','','curstime','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','tipTool','Go to the cursor time',32,'','','curstime','Перейти до часу курсору','','Перейти к времени курсора','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','tipStatus','Press to go to the cursor time',32,'','','curstime','Натиснути для переходу до часу курсору','','Нажать для перехода к времени курсора','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','active','1',32,'','','curstime','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','elType','3',32,'','','curstime','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','font','Arial 13 1 0 0 0',0,'','','curstime','','','','','','');
 INSERT INTO wlb_Main_io VALUES('TextLab','dscr','The element is used to display the dynamic text labels, which form on basis of the discrete signals. Also this element generates notifications of violations on the locally defined condition, the attribute ntf. The element commonly uses and represents the representative structure of DAQ-templates of the discrete block and the code state.
 
 Author: Roman Savochenko <roman@oscada.org>
+Sponsored by: the Laboratory of Vacuum Technologies <http://e-beam.ru/>
 Version: 1.0.0
 License: GPLv2',32,'','','','Елемент слугує для відображення динамічних текстових міток, що формується на основі дискретних сигналів. Також цей елемент генерує повідомлення про порушення за локально визначеною умовою, атрибут ntf. Елемент загалом використовує та представляє представницьку структуру DAQ-шаблонів дискретного блоку та стану за кодом.
 
 Автор: Роман Савоченко <roman@oscada.org>
+Спонсорування: Лабораторія Вакуумних Технологій <http://e-beam.ru/>
 Версія: 1.0.0
 Ліцензія: GPLv2','','Элемент служит для отображения динамических текстовых меток, которые формируется на основе дискретных сигналов. Также этот элемент генерирует уведомление про нарушения по локально определённому условию, атрибут ntf. Элемент в целом использует и представляет представительскую структуру DAQ-шаблонов дискретного блока и состояния по коду.
 
 Автор: Роман Савоченко <roman@oscada.org>
+Спонсирование: Лаборатория Вакуумных Технологий <http://e-beam.ru/>
 Версия: 1.0.0
 Лицензия: GPLv2','','','');
 INSERT INTO wlb_Main_io VALUES('ImgLab','dscr','The element is used to display the dynamic image labels, which form on basis of the discrete signals. Also this element generates notifications of violations on the locally defined condition, the attribute ntf. The element commonly uses and represents the representative structure of DAQ-templates of the discrete block and the code state.
 
 Author: Roman Savochenko <roman@oscada.org>
+Sponsored by: Vinnica Poultry Farm
 Version: 1.0.0
 License: GPLv2',32,'','','','Елемент слугує для відображення динамічних міток зображень, що формується на основі дискретних сигналів. Також цей елемент генерує повідомлення про порушення за локально визначеною умовою, атрибут ntf. Елемент загалом використовує та представляє представницьку структуру DAQ-шаблонів дискретного блоку та стану за кодом.
 
 Автор: Роман Савоченко <roman@oscada.org>
+Спонсорування: Вінницька Птахофабрика
 Версія: 1.0.0
 Ліцензія: GPLv2','','Элемент служит для отображения динамических меток изображений, которые формируются на основе дискретных сигналов. Также этот элемент генерирует уведомления про нарушения по локально определённому условию, атрибут ntf. Элемент в целом использует и представляет представительскую структуру DAQ-шаблонов дискретного блока и состояния по коду.
 
 Автор: Роман Савоченко <roman@oscada.org>
+Спонсирование: Винницкая Птицефабрика
 Версия: 1.0.0
 Лицензия: GPLv2','','','');
 INSERT INTO wlb_Main_io VALUES('accept','dscr','The element-frame implements a simple operations'' acception dialog.
@@ -7821,18 +7904,21 @@ The element contains a message with a question and two buttons "Apply" and "Canc
 The dialogue, for example, is used in the frame Users manager to accept the deleting operation.
 
 Author: Roman Savochenko <roman@oscada.org>
+Sponsored by: the Laboratory of Vacuum Technologies <http://e-beam.ru/>
 Version: 1.0.0
 License: GPLv2',32,'','','','Елемент-кадр реалізує простий діалог підтвердження операцій.
 Елемент містить повідомлення з питанням та дві кнопки "Прийняти" та "Скасувати".
 Цей діалог, наприклад, використано у кадрі Менеджер користувачів для підтвердження операції видалення.
 
 Автор: Роман Савоченко <roman@oscada.org>
+Спонсорування: Лабораторія Вакуумних Технологій <http://e-beam.ru/>
 Версія: 1.0.0
 Ліцензія: GPLv2','','Элемент-кадр реализует простейший диалог подтверждения операций.
 Элемент содержит сообщение с вопросом и две кнопки "Принять" и "Отмена".
 Данный диалог, например, использован в кадре Менеджер пользователей для подтверждения операции удаления.
 
 Автор: Роман Савоченко <roman@oscada.org>
+Спонсирование: Лаборатория Вакуумных Технологий <http://e-beam.ru/>
 Версия: 1.0.0
 Лицензия: GPLv2','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_Main_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
@@ -10613,15 +10699,15 @@ INSERT INTO wlb_Main_uio VALUES('grpGraph10','sclWinCtx','Scale: by window save 
 ',0,'','','trnd1','Масштаб: контекст вікном','','','Масштаб: контекст окном','','','','');
 INSERT INTO wlb_Main_uio VALUES('grpGraph','perUserSel','Select: save the selection per user',131072,'0',0,'','','','Обрання: зберігати обрання за користувачем','','','Выбор: сохранять выбор по пользователям','','','','');
 INSERT INTO wlb_Main_uio VALUES('grpGraph10','perUserSel','Select: save the selection per user',131072,'0',0,'','','','Обрання: зберігати обрання за користувачем','','','Выбор: сохранять выбор по пользователям','','','','');
-INSERT INTO wlb_Main_uio VALUES('alarmsAct','colms','Collumns, by '','' (atm,qttm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)',131077,'atm,lev,prm,dscr,alrm',8,'','','','Стовпчики, за '','' (atm,qttm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)','','','Колонки, по '','' (atm,qttm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)','','','','');
+INSERT INTO wlb_Main_uio VALUES('alarmsAct','colms','Columns, by '','' (atm,qttm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)',131077,'atm,lev,prm,dscr,alrm',8,'','','','Стовпчики, за '','' (atm,qttm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)','','','Колонки, по '','' (atm,qttm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsAct','expOnFocus','Expand on focus: pixels (0-disabled,>-down,<-up)',131073,'0|',8,'','','','Розширяти при фокусі: пікселів (0-відключено,>-донизу,<-догори)','','','Расширять при фокусе: пикселей (0-отключено,>-вниз,<-вверх)','','','','');
-INSERT INTO wlb_Main_uio VALUES('alarmsAct','expOnItems','Expand on focus: items (<=0-disabled)',131073,'0|',8,'','','','Розширяти при фокусі: елементів (<=0-відключено)','','','Расширять при фокусе: елементов (<=0-отключено)','','','','');
+INSERT INTO wlb_Main_uio VALUES('alarmsAct','expOnItems','Expand on focus: items (<=0-disabled)',131073,'0|',8,'','','','Розширяти при фокусі: елементів (<=0-відключено)','','','Расширять при фокусе: элементов (<=0-отключено)','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsAct','formDtTm','Data and time format (%Y-%m-%d %H.%M.%S[.%MS,%US])',131077,'%Y-%m-%d %H.%M.%S.%MS',8,'','','','Формат дати та часу (%Y-%m-%d %H.%M.%S[.%MS,%US])','','','Формат даты и времени (%Y-%m-%d %H.%M.%S[.%MS,%US])','','','','');
-INSERT INTO wlb_Main_uio VALUES('alarmsAct','hHdrVis','Show header: horizontal',131072,'0',8,'','','','Показув. заголовок: горизонтальний','','','Показыв. заголовок: горизонтальный','','','','');
+INSERT INTO wlb_Main_uio VALUES('alarmsAct','hHdrVis','Show header: horizontal',131072,'0',8,'','','','Показувати заголовок: горизонтальний','','','Показывать заголовок: горизонтальный','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsAct','highLght','Highlight rules, {lev}{quitt}:{color}:{font}:{fontColor}',131205,'5:gray
 4:red
 1:yellow',8,'','','','Правила підсвітлення, {lev}{quitt}:{color}:{font}:{fontColor}','','','Правила подсветки, {lev}{quitt}:{color}:{font}:{fontColor}','','','','');
-INSERT INTO wlb_Main_uio VALUES('alarmsAct','vHdrVis','Show header: vertical',131072,'0',8,'','','','Показув. заголовок: вертикальний','','','Показыв. заголовок: вертикальный','','','','');
+INSERT INTO wlb_Main_uio VALUES('alarmsAct','vHdrVis','Show header: vertical',131072,'0',8,'','','','Показувати заголовок: вертикальний','','','Показывать заголовок: вертикальный','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrPaspExt','hideAttrs','Attributes list of the passport to hide',131077,'',10,'<page>|paspHideAttrs','','','Перелік атрибутів паспорту для приховування','','','Перечень атрибутов паспорта для скрытия','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrPaspExt','name_','For save original name',131077,'',8,'','','','Для збереження оригінальної назви','','','Для сохранения исходного наименования','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsAct','com','Quittance: command',131072,'0',8,'','','','Підтвердження: команда','','','Подтверждение: команда','','','','');
@@ -10630,10 +10716,10 @@ INSERT INTO wlb_Main_uio VALUES('alarmsAct','digComs','Quittance: commands',1310
 INSERT INTO wlb_Main_uio VALUES('alarmsAct','st_open','Quittance: state',131072,'0',8,'','','','Підтвердження: стан','','','Подтверждение: состояние','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsAct','DESCR','Quittance: description',131077,'',8,'','','','Підтвердження: опис','','','Подтверждение: описание','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsAct','NAME','Quittance: name',131077,'',8,'','','','Підтвердження: ім''я','','','Подтверждение: имя','','','','');
-INSERT INTO wlb_Main_uio VALUES('alarmsAct','colDscrCustNames','Names list of the custom fields, separated by '';''',131077,'',8,'','','','Перелік назв користувацьких полів, поділених '';''','','','Перечень наименований пользовательских полей, поделённых '';''','','','','');
+INSERT INTO wlb_Main_uio VALUES('alarmsAct','colDscrCustNames','Names list of the user fields, separated by '';''',131077,'',8,'','','','Перелік назв користувацьких полів, поділених '';''','','','Перечень наименований пользовательских полей, поделённых '';''','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','alArch','Alarms archiver, "{ArhMod}.{Arh}"',131077,'ArhMod.Arh',8,'','','','Архіватор сигналів, "{ArhMod}.{Arh}"','ArhMod.Arh','','Архиватор сигналов, "{ArhMod}.{Arh}"','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','colDscrCustNames','Names list of the custom fields, separated by '';''',131205,'',8,'','','','Перелік назв користувацьких полів, поділених '';''','','','Перечень наименований пользовательских полей, поделённых '';''','','','','');
-INSERT INTO wlb_Main_uio VALUES('alarmsSt','colms','Collumns, by '','' (atm,qttm,nrmtm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)',131077,'atm,qttm,nrmtm,lev,prm,dscr,alrm,cmnt',8,'','','','Стовпчики, за '','' (atm,qttm,nrmtm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)','atm,qttm,nrmtm,lev,prm,dscr,alrm,cmnt','','Колонки, по '','' (atm,qttm,nrmtm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)','','','','');
+INSERT INTO wlb_Main_uio VALUES('alarmsSt','colms','Columns, by '','' (atm,qttm,nrmtm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)',131077,'atm,qttm,nrmtm,lev,prm,dscr,alrm,cmnt',8,'','','','Стовпчики, за '','' (atm,qttm,nrmtm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)','atm,qttm,nrmtm,lev,prm,dscr,alrm,cmnt','','Колонки, по '','' (atm,qttm,nrmtm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','formDtTm','Data and time format (%Y-%m-%d %H.%M.%S[.%MS,%US])',131077,'%Y-%m-%d %H.%M.%S.%MS',8,'','','','Data and time format (%Y-%m-%d %H.%M.%S[.%MS,%US])','%Y-%m-%d %H.%M.%S.%MS','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','hHdrVis','Show header: horizontal',131072,'1',8,'','','','Show header: horizontal','','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','highLght','Highlight rules, {lev}{quitt}{act}:{color}:{font}:{fontColor}',131205,'501:gray
@@ -21219,7 +21305,7 @@ for(off = 0, ev_rez = ""; (ev_cur=event.parse(0,"\n",off)).length; ) {
 	else if(ev_cur == "ws_BtPress:/cancel")	this.attrSet("pgOpen", false);
 	else ev_rez += (ev_cur+"\n");
 }
-event = ev_rez;','','',500,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1566755923);
+event = ev_rez;','','',500,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1567951548);
 INSERT INTO wlb_Main VALUES('treeSelect','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAeCAIAAAATj48OAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAADx0lEQVRYhe2X3W/bVBjGX9vHTh27+XCSJWlamvSLds0qsY1O2kDbQIML
 LiYViRX1DgkEUoS44KITEn8LAuUGcVcxCQbthgasWwordEALydZpLW3WNHbjJE7OsQ8XiQrctI0L
@@ -21356,7 +21442,7 @@ for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 	}
 	else ev_rez += sval+"\n";
 }
-event = ev_rez;','','',500,'name;dscr;active;geomW;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;font;alignment;text;',1564252636);
+event = ev_rez;','','',500,'name;dscr;active;geomW;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;font;alignment;text;',1567951412);
 INSERT INTO wlb_Main VALUES('cntrPaspExt','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAADaUlEQVRoge2aTW8bRRjH/zM7u469u15vHLu1U1cRThB9FQUkyq2ocOon
 QHwALnwCznDiwKkfoRI3LnAAKioqWqlBFEqFTGQRShJHpI7j+CXZ2Ls7D4dNE0tIrVMjppHmd9rZ
@@ -22013,6 +22099,10 @@ if(((cnt++)%(f_frq*1) == 0 || f_start || toUpdate) && !f_stop) {
 			else if(vC == "dscr")	items += "<s>"+SYS.strEncode(iM.mess.parse(1,messItSep).replace(new RegExp("\\[\\[.+\\]\\]"),""),"HTML")+"</s>";
 			else if(vC == "alrm")	items += "<s>"+SYS.strEncode(iM.mess.parse(2,messItSep),"HTML")+"</s>";
 			else if(vC == "cmnt")	items += "<s>"+SYS.strEncode(iM.mess.parse(5,messItSep),"HTML")+"</s>";
+			else if(vC.slice(0,8) == "dscrCust") {
+			    sVl = (sVl=iM.mess.parse(1,messItSep).match("\\[\\[(.+)\\]\\]")).length ? sVl[1].parse(vC.slice(8).toInt(),"=>") : "";
+			    items += "<s>"+SYS.strEncode(sVl,"HTML")+"</s>";
+			}
 		items += "</r>\n";
 	}
 	items += "</tbl>";
@@ -22078,7 +22168,7 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 		SYS.Archive.messPut(iM.tm, iM.utm, iM.categ, iM.level, iM.mess.parse(0,messItSep)+messItSep+iM.mess.parse(1,messItSep)+messItSep+iM.mess.parse(2,messItSep)+messItSep+
 										iM.mess.parse(3,messItSep)+messItSep+iM.mess.parse(4,messItSep)+messItSep+set);
 	}
-}','','',-1,'owner;name;dscr;active;geomY;geomW;geomH;contextMenu;evProc;elType;value;items;set;',1561317169);
+}','','',-1,'owner;name;dscr;active;geomY;geomW;geomH;contextMenu;evProc;elType;value;items;set;',1567951356);
 INSERT INTO wlb_Main VALUES('alarmsSt','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAnCAIAAAAw+tlrAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAE60lEQVRYhe2YTW8kRwGGn/qumpn2jJ1db+z1JpsEwgJCCkJw4PeQPwEX
 Llw5w50rd05RDhyQkDgmkdkQstpo7bXX3vXMdFd31wcHx4CEcjASGSLNc6y3q/p9qrtVUov33/9Z
@@ -22510,7 +22600,7 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 }
 
 time_value = wTm ? wTm : SYS.time();
-//go_cur_active = wTm;','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1561317169);
+//go_cur_active = wTm;','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1567951255);
 INSERT INTO wlb_Main VALUES('ImgLab','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAN
 EklEQVR4nOWb6W5dyXWFv7XPcCfegRRHiZJIiZRavE31QLtjuQ1ET+GH8O88gB8gT2IgzxD/cAAD
 toLYgdyA3XHakhrd7pZkURTHe0+t/LiUqO5I1MBBRrKAQxI8VXVWrbNr195VdQSY/8fI93//M/Dr
@@ -22668,7 +22758,7 @@ for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 	}
 	else ev_rez += sval+"\n";
 }
-event = ev_rez;','','',500,'owner;name;dscr;active;geomW;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;src;fit;',1564252678);
+event = ev_rez;','','',500,'owner;name;dscr;active;geomW;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;src;fit;',1567951438);
 INSERT INTO wlb_Main VALUES('userManager','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAnCAIAAAAw+tlrAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAC
 /klEQVRYhe2Zy07bQBiFx+OxnYydC04h0K5ggRJub8ArAEuegrdgy2OwZcGGHS/AgghEKhEJobYh
 JUIE4kkm8Xj+LqwiBC5N0z9EkfhWo7kczxlf5tg2dnZ2UqkUQaLb7abTaSy1vyKlZKlUinOOpXh9
@@ -22794,7 +22884,7 @@ if(userSel && SYS.mtime() >= userSel) {
 		grp_items += "</tbl>";
 		grp_value = "";
 	}
-}','','',500,'owner;perm;name;dscr;geomH;evProc;backColor;',1566544571);
+}','','',500,'owner;perm;name;dscr;geomH;evProc;backColor;',1567951477);
 INSERT INTO wlb_Main VALUES('graphCalc','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAgCAIAAAAt/+nTAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAD
 X0lEQVRYhe2YzU7jRgCAZ8YziWPPjBNTwoJQoBKicEBqJLgguPMkPEDeaXvgxEOgPAGI21aiIK2d
 LPHP+Hc8nh6yaqtNWJVSyaXKd7DkGXv8fRrJkg0vLy8ppZ7nIYSUUlmWua4rhKjruigK27aVUhjj

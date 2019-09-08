@@ -488,7 +488,7 @@ void TArchiveS::messPut( const vector<TMess::SRec> &recs, const string &arch, bo
 time_t TArchiveS::messGet( time_t bTm, time_t eTm, vector<TMess::SRec> &recs,
     const string &category, int8_t level, const string &arch, time_t upTo )
 {
-    time_t result = eTm;	//Means successful buffers processing
+    time_t result = fmin(eTm, time(NULL)-1);	//Means successful buffers processing, -1 for waranty all curent date get without doubles and losses
     recs.clear();
 
     map<string, bool> archMap;
@@ -610,6 +610,21 @@ time_t TArchiveS::messEnd( const string &arch )
     }
 
     return rez;
+}
+
+time_t TArchiveS::rdTm( )
+{
+    time_t rez = 0;
+
+    vector<string> cls;
+    rdActArchMList(cls);
+    for(unsigned iC = 0; iC < cls.size(); iC++) {
+	AutoHD<TMArchivator> arch = at(TSYS::strParse(cls[iC],0,".")).at().messAt(TSYS::strParse(cls[iC],1,"."));
+
+	if(arch.at().startStat() && arch.at().redntUse()) rez = fmax(rez, arch.at().redntTm());
+    }
+
+    return rez ? rez : time(NULL) - 1;
 }
 
 bool TArchiveS::rdProcess( XMLNode *reqSt )
@@ -945,19 +960,19 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	    int    lev     = s2i(opt->attr("lev"));
 	    vector<TMess::SRec> rez;
 
-	    if(!tm) { tm = time(NULL); opt->setAttr("tm", u2s(tm)); }
+	    if(!tm) tm = time(NULL)-1;	//-1 for waranty all curent date get without doubles and losses
 	    opt->setAttr("tm", ll2s(messGet(tm_grnd,tm,rez,cat,(TMess::Type)lev,arch)));
-	    for(unsigned i_r = 0; i_r < rez.size(); i_r++)
+	    for(unsigned iR = 0; iR < rez.size(); iR++)
 		opt->childAdd("el")->
-		    setAttr("time", u2s(rez[i_r].time))->
-		    setAttr("utime", u2s(rez[i_r].utime))->
-		    setAttr("cat", rez[i_r].categ)->
-		    setAttr("lev", i2s(rez[i_r].level))->
-		    setText(rez[i_r].mess);
+		    setAttr("time", u2s(rez[iR].time))->
+		    setAttr("utime", u2s(rez[iR].utime))->
+		    setAttr("cat", rez[iR].categ)->
+		    setAttr("lev", i2s(rez[iR].level))->
+		    setText(rez[iR].mess);
 	}
 	else if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	//Value's data set
-	    for(unsigned i_r = 0; i_r < opt->childSize(); i_r++) {
-		XMLNode *mNd = opt->childGet(i_r);
+	    for(unsigned iR = 0; iR < opt->childSize(); iR++) {
+		XMLNode *mNd = opt->childGet(iR);
 		messPut(strtol(mNd->attr("time").c_str(),NULL,10),
 			s2i(mNd->attr("utime")),
 			mNd->attr("cat"), s2i(mNd->attr("lev")), mNd->text());
@@ -1090,12 +1105,12 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	    XMLNode *n_cat	= ctrMkNode("list",opt,-1,"/m_arch/view/mess/1","",R_R___,"root",SARH_ID);
 	    XMLNode *n_lvl	= ctrMkNode("list",opt,-1,"/m_arch/view/mess/2","",R_R___,"root",SARH_ID);
 	    XMLNode *n_mess	= ctrMkNode("list",opt,-1,"/m_arch/view/mess/3","",R_R___,"root",SARH_ID);
-	    for(int i_rec = rec.size()-1; i_rec >= 0; i_rec--) {
-		if(n_tm)	n_tm->childAdd("el")->setText(i2s(rec[i_rec].time));
-		if(n_tmu)	n_tmu->childAdd("el")->setText(i2s(rec[i_rec].utime));
-		if(n_cat)	n_cat->childAdd("el")->setText(rec[i_rec].categ);
-		if(n_lvl)	n_lvl->childAdd("el")->setText(i2s(rec[i_rec].level));
-		if(n_mess)	n_mess->childAdd("el")->setText(rec[i_rec].mess);
+	    for(int iRec = rec.size()-1; iRec >= 0; iRec--) {
+		if(n_tm)	n_tm->childAdd("el")->setText(i2s(rec[iRec].time));
+		if(n_tmu)	n_tmu->childAdd("el")->setText(i2s(rec[iRec].utime));
+		if(n_cat)	n_cat->childAdd("el")->setText(rec[iRec].categ);
+		if(n_lvl)	n_lvl->childAdd("el")->setText(i2s(rec[iRec].level));
+		if(n_mess)	n_mess->childAdd("el")->setText(rec[iRec].mess);
 	    }
 	}
 	if(s2i(TBDS::genDBGet(nodePath()+"messLev","0",opt->attr("user"))) < 0 && ctrChkNode(opt,"del",RWRW__,"root",SARH_ID,SEC_WR)) {
@@ -1351,7 +1366,9 @@ void TMArchivator::redntDataUpdate( )
     for(unsigned iM = 0; iM < req.childSize(); ++iM)
 	if((mO=req.childGet(iM)) && mO->name() == "it")
 	    mess.push_back(TMess::SRec(s2ll(mO->attr("tm")),s2i(mO->attr("tmu")),mO->attr("cat"),s2i(mO->attr("lev")),mO->text()));
-    owner().owner().messPut(mess, workId() + ";" ALRM_ARCH_NM, true);
+
+    put(mess, true);
+    owner().owner().messPut(mess, ALRM_ARCH_NM);	//Just for alarms
 }
 
 void TMArchivator::start( )

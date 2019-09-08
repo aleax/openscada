@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.1.3"
+#define MOD_VER		"2.1.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -439,7 +439,7 @@ void *TMdContr::Task( void *icntr )
 		    }
 		    for(map<string, time_t>::iterator iLM = cntr.mStatWork[iSt].second.lstMess.begin();
 								iLM != cntr.mStatWork[iSt].second.lstMess.end(); ++iLM)
-			iLM->second = iLM->second ? s2i(prmNd->attr("tm")) : SYS->sysTm()-3600*cntr.restDtTm();
+			iLM->second = iLM->second ? s2i(prmNd->attr("tm"))+1 : SYS->sysTm()-3600*cntr.restDtTm();
 		}
 		TSYS::taskSleep(SYS->rdTaskPer()*1e9);
 	    }
@@ -556,16 +556,16 @@ void *TMdContr::Task( void *icntr )
 			string pId	= TSYS::pathLev(prmNd->attr("path"), 2);
 			string tVl;
 			if(pId == "/serv/mess") {
-			    for(unsigned i_m = 0; i_m < prmNd->childSize(); i_m++) {
-				XMLNode *m = prmNd->childGet(i_m);
+			    for(unsigned iM = 0; iM < prmNd->childSize(); iM++) {
+				XMLNode *m = prmNd->childGet(iM);
 				SYS->archive().at().messPut(s2i(m->attr("time")), s2i(m->attr("utime")),
 				    cntr.mStatWork[iSt].first+":"+m->attr("cat"), s2i(m->attr("lev")), m->text());
 			    }
 			    cntr.mStatWork[iSt].second.lstMess[aMod+"/"+aCntr] =
-				cntr.mStatWork[iSt].second.lstMess[aMod+"/"+aCntr] ? s2i(prmNd->attr("tm")) :
+				cntr.mStatWork[iSt].second.lstMess[aMod+"/"+aCntr] ? s2i(prmNd->attr("tm"))+1 :
 										    SYS->sysTm()-3600*cntr.restDtTm();
 			    cntr.mStatWork[iSt].second.lstMess["<<redundant>>"] =
-				cntr.mStatWork[iSt].second.lstMess["<<redundant>>"] ? s2i(prmNd->attr("tm")) :
+				cntr.mStatWork[iSt].second.lstMess["<<redundant>>"] ? s2i(prmNd->attr("tm"))+1 :
 										    SYS->sysTm()-3600*cntr.restDtTm();
 			}
 			else {

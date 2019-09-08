@@ -474,11 +474,7 @@ void VisRun::resizeEvent( QResizeEvent *ev )
 	    if(y_scale > 1 && y_scale < 1.02) y_scale = 1;
 	    if(keepAspectRatio()) x_scale = y_scale = vmin(x_scale, y_scale);
 	} else x_scale = y_scale = 1;
-	if(x_scale_old != x_scale || y_scale_old != y_scale) {
-	    isResizeManual = true;
-	    fullUpdatePgs();
-	    isResizeManual = false;
-	}
+	if(x_scale_old != x_scale || y_scale_old != y_scale)	fullUpdatePgs();
 
 	// Fit to the master page size
 	if((x_scale_old != x_scale || y_scale_old != y_scale || !ev || !ev->oldSize().isValid()) && !(windowState()&(Qt::WindowMaximized|Qt::WindowFullScreen))) {
@@ -1050,9 +1046,7 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
 	    if(keepAspectRatio()) x_scale = y_scale = vmin(x_scale, y_scale);
 	    mess_debug(mod->nodePath().c_str(), _("Scale of the root page [%f:%f]."), x_scale, y_scale);
 	}
-	isResizeManual = true;
 	fullUpdatePgs();
-	isResizeManual = false;
 	messUpd();
 
 	//Resize
@@ -1319,8 +1313,6 @@ void VisRun::initSess( const string &iprjSes_it, bool icrSessForce )
 	    callPage(pIt);
     }
 
-    if(toRestore) isResizeManual = false;
-
     QCoreApplication::processEvents();
 
     //Start timer
@@ -1330,6 +1322,8 @@ void VisRun::initSess( const string &iprjSes_it, bool icrSessForce )
 
 void VisRun::fullUpdatePgs( )
 {
+    isResizeManual = true;
+
     for(unsigned iP = 0; iP < pgList.size(); iP++) {
 	RunPageView *pg = master_pg->findOpenPage(pgList[iP]);
 	if(pg) pg->update(true);
@@ -1847,7 +1841,7 @@ void VisRun::updatePage( )
     }
 
     wPrcCnt++;
-    updPage = false;
+    updPage = isResizeManual = false;
 }
 
 #undef _

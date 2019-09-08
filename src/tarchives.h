@@ -78,6 +78,7 @@ class TMArchivator : public TCntrNode, public TConfig
 	void setDB( const string &idb )		{ mDB = idb; modifG(); }
 
 	// Redundancy
+	time_t redntTm( )	{ return mRdTm; }	//Time of the last redundancy operation
 	//  In redundancy now
 	bool redntUse( )	{ return mRdUse; }
 	void setRedntUse( bool vl )		{ mRdUse = vl; }
@@ -241,6 +242,7 @@ class TArchiveS : public TSubSYS
 	time_t messEnd( const string &arch = "" );
 
 	// Redundancy
+	time_t rdTm( );			//Time of the last redundancy operation
 	bool rdProcess( XMLNode *reqSt = NULL );
 	float rdRestDtOverTm( )			{ return mRdRestDtOverTm; }	//In days
 	void setRdRestDtOverTm( float vl )	{ mRdRestDtOverTm = vmin(356,vmax(0,vl)); modif(); }

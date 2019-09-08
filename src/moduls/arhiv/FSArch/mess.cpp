@@ -1,7 +1,7 @@
 
 //OpenSCADA module Archive.FSArch file: mess.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -153,10 +153,11 @@ void ModMArch::stop( )
 {
     bool curSt = startStat();
 
+    ResAlloc res(mRes, true);
+
     TMArchivator::stop();
 
     //Clear archive files list
-    ResAlloc res(mRes, true);
     while(files.size()) { delete files[0]; files.pop_front(); }
 
     if(curSt)	infoTbl = "";
@@ -186,29 +187,29 @@ bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
 
     int64_t t_cnt = TSYS::curTime();
 
-    ResAlloc res(mRes, false);
+    ResAlloc res(mRes, true /*false*/);	//true for processing the messages group as one
 
     if(!runSt) throw err_sys(_("Archive is not started!"));
 
     bool wrOK = true;
-    for(unsigned i_m = 0; i_m < mess.size(); i_m++) {
-	if(!chkMessOK(mess[i_m].categ,mess[i_m].level)) continue;
+    for(unsigned iM = 0; iM < mess.size(); iM++) {
+	if(!chkMessOK(mess[iM].categ,mess[iM].level)) continue;
 	int iF;
 	for(iF = 0; iF < (int)files.size(); iF++)
-	    if(!files[iF]->err() && mess[i_m].time >= files[iF]->begin()) {
-		if(mess[i_m].time > files[iF]->end() &&
+	    if(!files[iF]->err() && mess[iM].time >= files[iF]->begin()) {
+		if(mess[iM].time > files[iF]->end() &&
 		    ((mMaxSize && iF == 0 && files[iF]->size() > mMaxSize*1024) ||
-		    (mess[i_m].time >= files[iF]->begin()+mTimeSize*24*60*60))) break;
+		    (mess[iM].time >= files[iF]->begin()+mTimeSize*24*60*60))) break;
 		try {
-		    wrOK = files[iF]->put(mess[i_m]) && wrOK;
+		    wrOK = files[iF]->put(mess[iM]) && wrOK;
 		} catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); continue; }
 		iF = -1;
 		break;
 	    }
 	//If going a new data then create new file
 	if(iF >= 0) {
-	    res.request(true);
-	    time_t f_beg = mess[i_m].time;
+	    //res.request(true);
+	    time_t f_beg = mess[iM].time;
 	    if(iF < (int)files.size() && f_beg > files[iF]->end() && (f_beg-files[iF]->end()) < (mTimeSize*24*60*60/3))
 		f_beg = files[iF]->end()+1;
 	    if(iF && files[iF-1]->begin() > f_beg && (files[iF-1]->begin()-f_beg) < (mTimeSize*24*60*60*2/3))
@@ -232,8 +233,8 @@ bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
 		return false;
 	    }
 	    // Allow parallel read access
-	    res.request(false);
-	    wrOK = files[iF]->put(mess[i_m]) && wrOK;
+	    //res.request(false);
+	    wrOK = files[iF]->put(mess[iM]) && wrOK;
 	}
     }
 
@@ -244,13 +245,14 @@ bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
 
 time_t ModMArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const string &category, char level, time_t upTo )
 {
+    ResAlloc res(mRes, false);
+
     bTm = vmax(bTm, begin());
     eTm = vmin(eTm, end());
     if(eTm < bTm) return eTm;
     if(!runSt) throw err_sys(_("Archive is not started!"));
     if(!upTo) upTo = SYS->sysTm() + STD_INTERF_TM;
 
-    ResAlloc res(mRes, false);
     time_t result = bTm;
     for(int iF = files.size()-1; iF >= 0 && SYS->sysTm() < upTo; iF--) {
 	if(!files[iF]->err() &&
@@ -947,15 +949,15 @@ time_t MFileArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const 
 		bRec.mess  = mNode->childGet(iCh)->text();
 		bool equal = false;
 		int i_p = mess.size();
-		for(int i_m = mess.size()-1; i_m >= 0; i_m--) {
-		    if(FTM(mess[i_m]) > FTM(bRec)) i_p = i_m;
-		    else if(FTM(mess[i_m]) == FTM(bRec) && bRec.level == mess[i_m].level &&
-			    (owner().prevDblTmCatLev() || bRec.mess == mess[i_m].mess)) {
-			if(owner().prevDblTmCatLev()) mess[i_m] = bRec;	//Replace previous as the archieved is priority
+		for(int iM = mess.size()-1; iM >= 0; iM--) {
+		    if(FTM(mess[iM]) > FTM(bRec)) i_p = iM;
+		    else if(FTM(mess[iM]) == FTM(bRec) && bRec.level == mess[iM].level &&
+			    (owner().prevDblTmCatLev() || bRec.mess == mess[iM].mess)) {
+			if(owner().prevDblTmCatLev()) mess[iM] = bRec;	//Replace previous as the archieved is priority
 			equal = true;
 			break;
 		    }
-		    else if(FTM(mess[i_m]) < FTM(bRec)) break;
+		    else if(FTM(mess[iM]) < FTM(bRec)) break;
 		}
 		if(!equal) mess.insert(mess.begin()+i_p, bRec);
 	    }
@@ -994,15 +996,15 @@ time_t MFileArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const 
 		// Check to equal messages and inserting
 		bool equal = false;
 		int i_p = mess.size();
-		for(int i_m = mess.size()-1; i_m >= 0; i_m--)
-		    if(FTM(mess[i_m]) > FTM(bRec)) i_p = i_m;
-		    else if(FTM(mess[i_m]) == FTM(bRec) && bRec.level == mess[i_m].level &&
-			    (owner().prevDblTmCatLev() || bRec.mess == mess[i_m].mess)) {
-			if(owner().prevDblTmCatLev()) mess[i_m] = bRec;	//Replace previous as the archieved is priority
+		for(int iM = mess.size()-1; iM >= 0; iM--)
+		    if(FTM(mess[iM]) > FTM(bRec)) i_p = iM;
+		    else if(FTM(mess[iM]) == FTM(bRec) && bRec.level == mess[iM].level &&
+			    (owner().prevDblTmCatLev() || bRec.mess == mess[iM].mess)) {
+			if(owner().prevDblTmCatLev()) mess[iM] = bRec;	//Replace previous as the archieved is priority
 			equal = true;
 			break;
 		    }
-		    else if(FTM(mess[i_m]) < FTM(bRec)) break;
+		    else if(FTM(mess[iM]) < FTM(bRec)) break;
 		if(!equal) mess.insert(mess.begin()+i_p, bRec);
 	    }
 	    else if((pass_cnt++) > CACHE_POS && bRec.time != last_tm) {

@@ -857,10 +857,10 @@ void SyntxHighl::rule( XMLNode *irl, const QString &text, int off, char lev )
     }
 }
 
-void SyntxHighl::highlightBlock(const QString &text)
+void SyntxHighl::highlightBlock( const QString &text )
 {
     setCurrentBlockState((previousBlockState()<0)?0:previousBlockState());
-    rule(&rules,text);
+    rule(&rules, text);
 }
 
 #undef _
@@ -968,7 +968,7 @@ void TextEdit::changed( )
 
     if(!but_box) bt_tm->start(500);
 
-    emit textChanged(text());
+    if(text() != m_text) emit textChanged(text());
 }
 
 void TextEdit::applySlot( )

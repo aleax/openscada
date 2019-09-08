@@ -1,7 +1,7 @@
 
 //OpenSCADA module Archive.DBArch file: mess.h
 /***************************************************************************
- *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -48,8 +48,8 @@ class ModMArch: public TMArchivator
 	void setMaxSize( double vl )	{ mMaxSize = (vl<0.1) ? 0 : vl; modif(); }
 	void setTmAsStr( bool vl )	{ mTmAsStr = vl; modif(); }
 
-	time_t begin( )		{ return mBeg; }
-	time_t end( )		{ return mEnd; }
+	time_t begin( );
+	time_t end( );
 
 	bool put( vector<TMess::SRec> &mess, bool force = false );
 	time_t get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const string &category = "", char level = 0, time_t upTo = 0 );
@@ -76,6 +76,8 @@ class ModMArch: public TMArchivator
 		needMeta;
 
 	TElem	reqEl;				//Requests structure
+
+	ResRW	mRes;				//Resource to access;
 };
 
 }

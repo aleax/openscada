@@ -1,14 +1,14 @@
 PRAGMA foreign_keys=OFF;
 BEGIN TRANSACTION;
-CREATE TABLE 'ParamTemplLibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"DB" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "ParamTemplLibs" VALUES('tests','Tests','','Templates library of the test parameters for PLC series S7 of the firm Siemens.
+CREATE TABLE IF NOT EXISTS 'ParamTemplLibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"DB" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
+INSERT INTO ParamTemplLibs VALUES('tests','Tests','','Templates library of the test parameters for PLC series S7 of the firm Siemens.
 
 Author: Roman Savochenko <roman@oscada.org>','Бібліотека шаблонів параметрів для контролерів фірми Siemens серії S7.
 
 Автор: Роман Савоченко <roman@oscada.org>','tmplib_tests','','Библиотека шаблонов параметров для контроллеров фирмы Siemens серии S7.
 
 Автор: Роман Савоченко <roman@oscada.org>');
-INSERT INTO "ParamTemplLibs" VALUES('base','Main library','Основна бібліотека','The library was created to provide main templates of the DAQ-sources processing and related services.
+INSERT INTO ParamTemplLibs VALUES('base','Main library','Основна бібліотека','The library was created to provide main templates of the DAQ-sources processing and related services.
 
 Author: Roman Savochenko <roman@oscada.org>
 Founded: 2006
@@ -25,29 +25,35 @@ DOC: Libs_Main|Libs/Main','Бібліотеку створено для нада
 Основано: 2006
 Версия: 1.1.1
 Лицензия: GPLv2');
-INSERT INTO "ParamTemplLibs" VALUES('DevLib','Devices','Бібліотека пристроїв','Library of functions to provide access to industrial device''s data through network with simply enough protocols like to common industrial automation devices, wide resources counters.
+INSERT INTO ParamTemplLibs VALUES('DevLib','Devices','Бібліотека пристроїв','The user protocol devices library created to provide access to industrial device''s data through network, like to common industrial automation devices and wide resources counters, with protocols simple enough to implement into the User Protocol module, using the presented complex protocols (ModBus, OPC_UA, HTTP) or directly on the internal like to Java language.
 
 Author: Roman Savochenko <roman@oscada.org>, Constantine (IrmIngeneer) (2018), Arsen Zakojan (2017), Ruslan Yarmoliuk (2017)
 Founded: January 2010
 Version: 2.3.0
 License: GPLv2 mostly
-DOC: Libs_Devices|Libs/Devices','','tmplib_DevLib','Библиотека устройств','');
-INSERT INTO "ParamTemplLibs" VALUES('PrescrTempl','Prescriptions','Шаблони рецепту','Library of the prescriptions.
+DOC: Libs_Devices|Libs/Devices','Бібліотеку пристроїв користувацьких протоколів створено для надання доступу до даних промислових пристроїв через мережу із доволі простим протоколом, на кшталт пристроїв загальної промислової автоматики та лічильників різних ресурсів, із протоколом достатньо простим до реалізації у модулі користувацького протоколу, з використанням наявних комплексних протоколів (ModBus, OPC_UA, HTTP) або безпосередньо на внутрішній мові подібній до Java.
+
+Автор: Роман Савоченко <roman@oscada.org>, Константин (IrmIngeneer) (2018), Арсен Закоян (2017), Руслан Ярмолюк (2017)
+Засновано: Січень 2010
+Версія: 2.3.0
+Ліцензія: переважно GPLv2
+DOC: Libs_Devices|Libs/Devices','tmplib_DevLib','Библиотека устройств','');
+INSERT INTO ParamTemplLibs VALUES('PrescrTempl','Prescriptions','Шаблони рецепту','Library of the prescriptions.
 
 Author: Roman Savochenko <roman@oscada.org>
 Founded: April 2012
 Version: 1.0.0
 License: GPLv2
 DOC: Libs_Prescriptions|Libs/Prescriptions','','tmplib_PrescrTempl','Шаблоны рецепта','');
-INSERT INTO "ParamTemplLibs" VALUES('LowDevLib','Low-level devices','Низькорівневі пристрої','Library of functions to provide access to device''s data of low-level buses'' chips.
+INSERT INTO ParamTemplLibs VALUES('LowDevLib','Low-level devices','Низькорівневі пристрої','Library of functions to provide access to device''s data of low-level buses'' chips.
 
 Author: Roman Savochenko <roman@oscada.org>, Arcadiy Kisel (2017)
 Founded: Jul 2016
 Version: 1.4.0
 License: GPLv2 mostly
 DOC: Libs_LowLevelDevices|Libs/LowLevelDevices','','tmplib_LowDevLib','Низкоуровневые устройства','');
-CREATE TABLE 'UserFuncLibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"PROG_TR" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "UserFuncLibs" VALUES('techApp','Technological devices','Library of models of the technological apparatuses.
+CREATE TABLE IF NOT EXISTS 'UserFuncLibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"PROG_TR" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
+INSERT INTO UserFuncLibs VALUES('techApp','Technological devices','Library of models of the technological apparatuses.
 
 Founded: October 2005
 Author: Roman Savochenko <roman@oscada.org>, Maxim Lysenko (2007,2010), Ksenia Yashina (2007)
@@ -66,7 +72,7 @@ DOC: Libs_Technological_apparatuses|Libs/Technological_apparatuses','Техно�
 Версия: 2.0.0
 Лицензия: GPL
 DOC: Libs_Technological_apparatuses|Libs/Technological_apparatuses',0);
-INSERT INTO "UserFuncLibs" VALUES('servProc','Service procedures','Library of service procedures for different using.
+INSERT INTO UserFuncLibs VALUES('servProc','Service procedures','Library of service procedures for different using.
 
 Founded: November 2017
 Author: Roman Savochenko <roman@oscada.org>
@@ -85,7 +91,7 @@ DOC: Libs_Service_procedures|Libs/Service_procedures','Сервисные про
 Версия: 1.2.1
 Лицензия: GPLv2
 DOC: Libs_Service_procedures|Libs/Service_procedures',1);
-INSERT INTO "UserFuncLibs" VALUES('doc','Report''s documents','Library of functions to facilitate the implementation of typical computations the primitive form of reporting documentation VCA "Document".
+INSERT INTO UserFuncLibs VALUES('doc','Report''s documents','Library of functions to facilitate the implementation of typical computations the primitive form of reporting documentation VCA "Document".
 
 Founded: January 2008
 Author: Roman Savochenko <roman@oscada.org>
@@ -101,7 +107,7 @@ License: GPL','flb_doc','Звітна документація','Бібліот�
 Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.1.0
 Лицензия: GPL',1);
-INSERT INTO "UserFuncLibs" VALUES('regEl','Regulation elements','Regulation elements library.
+INSERT INTO UserFuncLibs VALUES('regEl','Regulation elements','Regulation elements library.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0
@@ -114,7 +120,7 @@ License: GPL','flb_regEl','Елементи регулювання','Біблі�
 Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.0.0
 Лицензия: GPL',0);
-INSERT INTO "UserFuncLibs" VALUES('Controller','Controllers','Library of programs of controllers based on JavaLikeCalc.
+INSERT INTO UserFuncLibs VALUES('Controller','Controllers','Library of programs of controllers based on JavaLikeCalc.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.1
@@ -127,7 +133,7 @@ License: GPLv2','lib_Controllers','Контролери','Програми ко�
 Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.1.1
 Лицензия: GPLv2',0);
-INSERT INTO "UserFuncLibs" VALUES('web','XHTML-template','Pages processing functions library for XHTML-template user''s Web-interface.
+INSERT INTO UserFuncLibs VALUES('web','XHTML-template','Pages processing functions library for XHTML-template user''s Web-interface.
 
 Author: Roman Savochenko
 Version: 0.1.0
@@ -140,230 +146,230 @@ License: GPL','flb_web','XHTML-шаблон','Бібліотека функці�
 Автор: Роман Савоченко <roman@oscada.org>
 Версия: 0.1.0
 Лицензия: GPL',0);
-CREATE TABLE 'flb_doc_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DEF" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DEF" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
-INSERT INTO "flb_doc_io" VALUES('getVal','rez','Result',0,2,'',0,0,'Результат','','Результат','');
-INSERT INTO "flb_doc_io" VALUES('getVal','addr','Address',0,0,'',0,1,'Адреса','','Адрес','');
-INSERT INTO "flb_doc_io" VALUES('getVal','time','Time (s)',1,0,'',0,2,'Час (сек.)','','Время (сек.)','');
-INSERT INTO "flb_doc_io" VALUES('getVal','uTime','Time (us)',1,0,'',0,3,'Час (мксек.)','','Время (мксек.)','');
-INSERT INTO "flb_doc_io" VALUES('getVal','prec','Signs after dot',1,0,'3',0,4,'Знаків після коми','','Знаков после запятой','');
-INSERT INTO "flb_doc_io" VALUES('getVal','archtor','Archiver',0,0,'',0,5,'Архіватор','','Архиватор','');
-INSERT INTO "flb_doc_io" VALUES('sumVal','rez','Result',0,2,'',0,0,'Результат','','Результат','');
-INSERT INTO "flb_doc_io" VALUES('sumVal','addr','Address',0,0,'',0,1,'Адреса','','Адрес','');
-INSERT INTO "flb_doc_io" VALUES('averVal','addr','Address',0,0,'',0,1,'Адреса','','Адрес','');
-INSERT INTO "flb_doc_io" VALUES('averVal','rez','Result',0,2,'',0,0,'Результат','','Результат','');
-INSERT INTO "flb_doc_io" VALUES('sumVal','prec','Signs after dot',1,0,'3',0,4,'Знаків після коми','','Знаков после запятой','');
-INSERT INTO "flb_doc_io" VALUES('sumVal','archtor','Archiver',0,0,'',0,5,'Архіватор','','Архиватор','');
-INSERT INTO "flb_doc_io" VALUES('sumVal','bTime','Begin time (s)',1,0,'',0,2,'Час початку (сек.)','','Время начала (сек.)','');
-INSERT INTO "flb_doc_io" VALUES('sumVal','eTime','End time (s)',1,0,'',0,3,'Час кінця (сек.)','','Время конца (сек.)','');
-INSERT INTO "flb_doc_io" VALUES('averVal','bTime','Begin time (s)',1,0,'',0,2,'Час початку (сек.)','','Время начала (сек.)','');
-INSERT INTO "flb_doc_io" VALUES('averVal','eTime','End time (s)',1,0,'',0,3,'Час кінця (сек.)','','Время конца (сек.)','');
-INSERT INTO "flb_doc_io" VALUES('averVal','prec','Signs after dot',1,0,'3',0,4,'Знаків після коми','','Знаков после запятой','');
-INSERT INTO "flb_doc_io" VALUES('averVal','archtor','Archiver',0,0,'',0,5,'Архіватор','','Архиватор','');
-INSERT INTO "flb_doc_io" VALUES('getVal','strong','Precisely',3,0,'0',0,6,'Точно','','Точно','');
-INSERT INTO "flb_doc_io" VALUES('getVal','tryTo','Пробовать значение до {микросек}',1,0,'0',0,7,'','','Пробовать значение до {микросек}','');
-INSERT INTO "flb_doc_io" VALUES('averVal','actPerc','Процент активных значений',2,1,'',0,6,'','','Процент активных значений','');
-CREATE TABLE 'flb_regEl_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"uk#DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DEF" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','var','Variable','Змінна',2,0,'0','',0,0,'Переменная','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','sp','Setpoint','Завдання',2,0,'0','',0,1,'Задание','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','max','Scale: maximum','Шкала: максимум',2,0,'100','',0,2,'Шкала: максимум','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','min','Scale: minimum','Шкала: мінімум',2,0,'0','',0,3,'Шкала: минимум','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','manIn','Manual input','Ручний ввід',2,0,'0','',0,4,'Ручной ввод','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','out','Output (%)','Вихід (%)',2,2,'0','',0,5,'Выход (%)','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','impQup','Impulse output up','Імп. вихід у гору',3,1,'0','',0,6,'Имп. выход вверх','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','impQdwn','Impulse output down','Імп. вихід до низу',3,1,'0','',0,7,'Имп. выход вниз','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','analog','Analog','Аналоговий',3,0,'1','',0,8,'Аналоговый','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','auto','Automate','Автомат',3,0,'0','',0,9,'Автомат','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','casc','Cascade','Каскад',3,0,'0','',0,10,'Каскад','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','Kp','Gain','Kп',2,0,'1','',0,11,'Kп','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','Ti','Ti (ms)','Tі (мс)',1,0,'1000','',0,12,'Tи (мс)','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','Td','Td (ms)','Tд (мс)',1,0,'0','',0,14,'Tд (мс)','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','TImpPer','T impulses period (ms)','T період імпульсів (мс)',1,0,'5000','',0,16,'T период импульса (мс)','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','TImpMin','T minimal impulse (ms)','Мінімальна довжина імпульсу (мс)',1,0,'500','',0,17,'T минимальная длина импульса (мс)','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','KImpRfact','Impulse rate factor','Рейтинг фактор імпульсів',2,0,'1','',0,18,'Рейтинг фактор импульса','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','Hup','Upper output border (%)','Верхня границя виходу (%)',2,0,'100','',0,19,'Верхняя граница выхода (%)','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','Hdwn','Lower output border (%)','Нижня границя виходу (%)',2,0,'0','',0,20,'Нижняя граница выхода (%)','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','Zi','Insensitivity (%)','Нечутливість (%)',2,0,'0','',0,21,'Нечувствительность (%)','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','K1','Coefficient of input 1','Коеф. входу 1',2,0,'0','',0,23,'Коэф. входа 1','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','in1','Input 1','Вхід 1',2,0,'0','',0,24,'Вход 1','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','K2','Coefficient of input 2','Коеф. входу 2',2,0,'0','',0,25,'Коэф. входа 2','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','in2','Input 2','Вхід 2',2,0,'0','',0,26,'Вход 2','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','K3','Coefficient of input 3','Коеф. входу 3',2,0,'0','',0,27,'Коэф. входа 3','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','in3','Input 3','Вхід 3',2,0,'0','',0,28,'Вход 3','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','K4','Coefficient of input 4','Коеф. входу 4',2,0,'0','',0,29,'Коэф. входа 4','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','in4','Input 4','Вхід 4',2,0,'0','',0,30,'Вход 4','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','impAnOut','Analog position of impulse regulator','Аналогове положення імпульсного регулятора',2,0,'0','',0,31,'Аналоговое положение импульсного регулятора','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','int','Integral accumulation','Накопичення інтегралу',2,1,'0','',1,38,'Накопление интеграла','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','dif','Differential accumulation','Знач. диференціалу',2,1,'0','',1,39,'Накопление производной','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','lag','Lag accumulation','Накопичення затримки',2,1,'0','',1,40,'Накопление задержки','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','impLag','Impulse lag time','Час утримання імпульсу',2,1,'0','',1,41,'Время удержания импульса','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','perLag','New impulse generation time','Час генерації нового імпульсу',2,1,'0','',1,42,'Время генерации нового импульса','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','var','Variable','Змінна',2,0,'0','',0,0,'Переменная','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','sp','Setpoint','Завдання',2,0,'0','',0,1,'Задание','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','max','Scale: maximum','Шкала: максимум',2,0,'100','',0,2,'Шкала: максимум','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','min','Scale: minimum','Шкала: мінімум',2,0,'0','',0,3,'Шкала: минимум','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','manIn','Manual input','Ручний ввід',2,0,'0','',0,4,'Ручной ввод','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','out','Output (%)','Вихід (%)',2,2,'0','',0,5,'Выход (%)','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','impQup','Impulse output up','Імп. вихід у гору',3,1,'0','',0,6,'Имп. выход вверх','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','impQdwn','Impulse output down','Імп. вихід до низу',3,1,'0','',0,7,'Имп. выход вниз','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','analog','Analog','Аналоговий',3,0,'1','',0,8,'Аналоговый','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','auto','Automat','Автомат',3,0,'0','',0,9,'Автомат','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','casc','Cascade','Каскад',3,0,'0','',0,10,'Каскад','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','Kp','Gain','Kп',2,0,'1','',0,11,'Kп','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','Ti','Ti (ms)','Tі (мс)',1,0,'1000','',0,12,'Tи (мс)','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','Kd','Gain differential','Кп диференціалу',2,0,'1','',0,13,'Кп производной','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','Td','Td (ms)','Tд (мс)',1,0,'0','',0,14,'Tд (мс)','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','Tzd','T differential lag (ms)','T фільтру диференціалу (мс)',1,0,'0','',0,15,'T задержки дифференциров. (мс)','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','TImpPer','T impulses period (ms)','T період імпульсів (мс)',1,0,'5000','',0,16,'T период импульса (мс)','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','TImpMin','T minimal impulse (ms)','Мінімальна довжина імпульсу (мс)',1,0,'500','',0,17,'T минимальная длина импульса (мс)','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','KImpRfact','Impulse rate factor','Рейтинг фактор імпульсів',2,0,'1','',0,18,'Рейтинг фактор импульса','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','Hup','Upper output border (%)','Верхня границя виходу (%)',2,0,'100','',0,19,'Верхняя граница выхода (%)','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','Hdwn','Lower output border (%)','Нижня границя виходу (%)',2,0,'0','',0,20,'Нижняя граница выхода (%)','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','Zi','Insensitivity (%)','Нечутливість (%)',2,0,'0','',0,21,'Нечувствительность (%)','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','followSp','Follow to variable by setpoint into manual','Відслідковувати завданням за змінною у ручному',3,0,'1','',0,22,'Следить заданием за переменной в ручном','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','K1','Coefficient of input 1','Коеф. входу 1',2,0,'0','',0,23,'Коэф. входа 1','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','in1','Input 1','Вхід 1',2,0,'0','',0,24,'Вход 1','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','K2','Coefficient of input 2','Коеф. входу 2',2,0,'0','',0,25,'Коэф. входа 2','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','in2','Input 2','Вхід 2',2,0,'0','',0,26,'Вход 2','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','K3','Coefficient of input 3','Коеф. входу 3',2,0,'0','',0,27,'Коэф. входа 3','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','in3','Input 3','Вхід 3',2,0,'0','',0,28,'Вход 3','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','K4','Coefficient of input 4','Коеф. входу 4',2,0,'0','',0,29,'Коэф. входа 4','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','in4','Input 4','Вхід 4',2,0,'0','',0,30,'Вход 4','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','impAnOut','Real analog position of impulse regulator, [0...100], -1 - disable','Аналогове положення імпульсного регулятора',2,0,'-1','',0,33,'Аналоговое положение импульсного регулятора или ск','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','Kd','Gain differential','Кп диференціалу',2,0,'1','',0,13,'Кп производной','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','impAnImit','Full stroke time for analog position imitation, s','Імітація аналогового положення',2,0,'-1','',0,34,'Имитация аналогового положения','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','impQupTm','Imp. output up lag for GUI','Імп. вихід вгору утримано для GUI',3,1,'0','',0,35,'Имп. выход вверх удерж. для GUI','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','impQdwnTm','Imp. output down lag for GUI','Імп. вихід додолу утримано для GUI',3,1,'0','',0,36,'Имп. выход вниз удерж. для GUI','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','f_frq','Calculation frequency, Hz','Частота обчислення, Гц',2,0,'1','',1,37,'Частота вычисления, Гц','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','f_start','First start','Перший запуск',3,0,'0','',1,38,'Первый запуск','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','f_stop','Last start','Останній запуск',3,0,'0','',1,39,'Последний запуск','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','impLag','Impulse lag time','Час утримання імпульсу',2,1,'0','',1,40,'Время удержания импульса','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','perLag','New impulse generation time','Час генерації нового імпульсу',2,1,'0','',1,41,'Время генерации нового импульса','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','integ','Integral accumulation','Накопичення інтегралу',2,1,'0','',1,42,'Накопление интеграла','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','difer','Differential accumulation','Накопичення диференціалу',2,1,'0','',1,43,'Накопление производной','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','dlag','Differential lag accumulation','Фільтр диференціалу',2,1,'0','',1,44,'Накопление задержки производной','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','Tzd','T differential lag (ms)','T фільтру диференціалу (мс)',1,0,'0','',0,15,'T задержки дифференциров. (мс)','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','followSp','Follow to variable by setpoint into manual','Відслідковувати завданням за змінною у ручному',3,0,'1','',0,22,'Следить заданием за переменной в ручном','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','impAnImit','Analog position imitation','Імітація аналогового положення',3,0,'0','',0,32,'Имитация аналогового положения','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','impQupTm','Imp. output up lag for GUI',' Імп. вихід вгору утримано для GUI',1,1,'0','',0,33,'Имп. выход вверх удерж. для GUI','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','impQdwnTm','Imp. output down lag for GUI','Імп. вихід додолу утримано для GUI',1,1,'0','',0,34,'Имп. выход вниз удерж. для GUI','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','f_frq','Calculation frequency, Hz','Частота обчислення, Гц',1,0,'1','',1,35,'Частота вычисления, Гц','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','f_start','First start','Перший запуск',3,0,'0','',1,36,'Первый запуск','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnif','f_stop','Last start','Останній запуск',3,0,'0','',1,37,'Последний запуск','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','var','Variable','Змінна',2,0,'0','',0,0,'Переменная','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','sp','Setpoint','Завдання',2,0,'0','',0,1,'Задание','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','max','Scale: maximum','Шкала: максимум',2,0,'100','',0,2,'Шкала: максимум','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','min','Scale: minimum','Шкала: мінімум',2,0,'0','',0,3,'Шкала: минимум','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','manIn','Manual input','Ручний ввід',2,0,'0','',0,4,'Ручной ввод','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','out','Output (%)','Вихід (%)',2,2,'0','',0,5,'Выход (%)','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','outPID','PID output','Вихід ПІД',2,1,'0','',0,6,'Выход ПИД','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','impQup','Impulse output up','Імп. вихід у гору',3,1,'0','',0,7,'Имп. выход вверх','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','impQdwn','Impulse output down','Імп. вихід до низу',3,1,'0','',0,8,'Имп. выход вниз','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','auto','Automate','Автомат',3,0,'0','',0,9,'Автомат','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','casc','Cascade','Каскад',3,0,'0','',0,10,'Каскад','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','Kp','Gain','Kп',2,0,'1','',0,11,'Kп','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','Ki','Gain integration','Кп інтегралу',2,0,'1','',0,12,'Кп интеграла','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','Ti','Ti (ms)','Tі (мс)',1,0,'1000','',0,13,'Tи (мс)','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','Kd','Gain differential','Кп диференціалу',2,0,'1','',0,14,'Кп производной','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','Td','Td (ms)','Tд (мс)',1,0,'0','',0,15,'Tд (мс)','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','Tzd','T differential lag (ms)','T фільтру диференціалу (мс)',1,0,'0','',0,16,'T задержки дифференциров. (мс)','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','TImpPer','T impulses period (ms)','T період імпульсів (мс)',1,0,'5000','',0,17,'T период импульса (мс)','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','TImpMin','T minimal impulse (ms)','Мінімальна довжина імпульсу (мс)',1,0,'500','',0,18,'T минимальная длина импульса (мс)','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','KImpRfact','Impulse rate factor','Рейтинг фактор імпульсів',2,0,'1','',0,19,'Рейтинг фактор импульса','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','Hup','Upper output border (%)','Верхня границя виходу (%)',2,0,'100','',0,20,'Верхняя граница выхода (%)','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','Hdwn','Lower output border (%)','Нижня границя виходу (%)',2,0,'0','',0,21,'Нижняя граница выхода (%)','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','Zi','Insensitivity (%)','Нечутливість (%)',2,0,'0','',0,22,'Нечувствительность (%)','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','followSp','Follow to variable by setpoint into manual','Відслідковувати завданням за змінною у ручному',3,0,'1','',0,23,'Следить заданием за переменной в ручном','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','K1','Coefficient of input 1','Коеф. входу 1',2,0,'0','',0,24,'Коэф. входа 1','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','in1','Input 1','Вхід 1',2,0,'0','',0,25,'Вход 1','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','K2','Coefficient of input 2','Коеф. входу 2',2,0,'0','',0,26,'Коэф. входа 2','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','in2','Input 2','Вхід 2',2,0,'0','',0,27,'Вход 2','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','K3','Coefficient of input 3','Коеф. входу 3',2,0,'0','',0,28,'Коэф. входа 3','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','in3','Input 3','Вхід 3',2,0,'0','',0,29,'Вход 3','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','K4','Coefficient of input 4','Коеф. входу 4',2,0,'0','',0,30,'Коэф. входа 4','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','in4','Input 4','Вхід 4',2,0,'0','',0,31,'Вход 4','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','impAnOut','Analog position of impulse regulator','Аналогове положення імпульсного регулятора',2,0,'0','',0,32,'Аналоговое положение импульсного регулятора или ск','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','impAnImit','Analog position imitation','Імітація аналогового положення',3,0,'0','',0,33,'Имитация аналогового положения','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','impQupTm','Imp. output up lag for GUI','Імп. вихід вгору утримано для GUI',1,1,'0','',0,34,'Имп. выход вверх удерж. для GUI','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','impQdwnTm','Imp. output down lag for GUI','Імп. вихід додолу утримано для GUI',1,1,'0','',0,35,'Имп. выход вниз удерж. для GUI','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','f_frq','Calculation frequency, Hz','Частота обчислення, Гц',2,0,'1','',1,36,'Частота вычисления, Гц','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','f_start','First start','Перший запуск',3,0,'0','',1,37,'Первый запуск','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','f_stop','Last start','Останній запуск',3,0,'0','',1,38,'Последний запуск','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','impLag','Impulse lag time','Час утримання імпульсу',2,1,'0','',1,39,'Время удержания импульса','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','perLag','New impulse generation time','Час генерації нового імпульсу',2,1,'0','',1,40,'Время генерации нового импульса','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','integ','Integral accumulation','Накопичення інтегралу',2,1,'0','',1,41,'Накопление интеграла','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','difer','Differential accumulation','Накопичення диференціалу',2,1,'0','',1,42,'Накопление производной','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','dlag','Differential lag accumulation','Фільтр диференціалу',2,1,'0','',1,43,'Накопление задержки производной','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','err1','Error step back','Помилка крок назад',2,1,'0','',1,44,'Ошибка шаг назад','');
-INSERT INTO "flb_regEl_io" VALUES('pidImp','err2','Error two step back','Помилка два кроки назад',2,1,'0','',1,45,'Ошибка два шага назад','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','QO','Opened state of the control mechanism','Відкритий стан виконавчого механізму',3,0,'0','',0,31,'Открытое состояние исполнительного механизма','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','QZ','Closed state of the control mechanism','Закритий стан виконавчого механізму',3,0,'0','',0,32,'Закрытое состояние исполнительного механизма','');
-CREATE TABLE 'lib_Controllers_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DEF" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DEF" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
-INSERT INTO "lib_Controllers_io" VALUES('prescr','dbDB','DB:DB with tables name',0,1,'',0,4,'БД:Имя БД с таблицами','','БД:Ім''я БД з таблицями','');
-INSERT INTO "lib_Controllers_io" VALUES('prescr','dbComs','DB:Table with commands',0,1,'',0,5,'БД:Таблица с коммандами','','БД:Таблиця з командами','');
-INSERT INTO "lib_Controllers_io" VALUES('prescr','dbProgs','DB:Table with programs',0,1,'',0,6,'БД:Таблица с программами','','БД:Таблиця з програмами','');
-INSERT INTO "lib_Controllers_io" VALUES('prescr','mode','Mode: Finish(-2); Error(-1); Stop(0); Run (1); Pause(2); Pass com (3)',1,1,'',0,8,'Режим: Оконч.(-2); Ошибка(-1); Стоп(0); Исполн.(1); Пауза (2); Пропуст. ком. (3)','','Режим: Окінч.(-2); Помилка(-1); Стоп(0); Викон.(1); Пауза (2); Пропуст. ком. (3)','');
-INSERT INTO "lib_Controllers_io" VALUES('prescr','curMode','Current mode',1,0,'',0,9,'Текущий режим','','Поточний режим','');
-INSERT INTO "lib_Controllers_io" VALUES('prescr','prog','Name of selected program',0,1,'',0,10,'Имя выбранной программы','','Ім''я обраної програми','');
-INSERT INTO "lib_Controllers_io" VALUES('prescr','startTm','Start time, seconds',1,0,'',0,11,'Время запуска, секунды','','Час запуску, секунди','');
-INSERT INTO "lib_Controllers_io" VALUES('prescr','curCom','Current command-step',0,0,'',0,12,'Текущая комманда-шаг','','Поточна команда-крок','');
-INSERT INTO "lib_Controllers_io" VALUES('prescr','work','Work program',4,0,'',0,13,'Рабочая программа','','Робоча програма','');
-INSERT INTO "lib_Controllers_io" VALUES('prescr','comsCntr','Commands controller',0,0,'',0,7,'Контроллер команд','','Контролер команд','');
-INSERT INTO "lib_Controllers_io" VALUES('prescr','comLs','Commands list',4,0,'',0,14,'Список команд','','Перелік команд','');
-INSERT INTO "lib_Controllers_io" VALUES('prescr','clcCnt','Cycles counter',1,0,'',0,15,'Счётчик циклов','','Лічильник циклів','');
-INSERT INTO "lib_Controllers_io" VALUES('test','offset','Offset',1,0,'100',0,4,'Смещение','','Зміщення','');
-INSERT INTO "lib_Controllers_io" VALUES('test','out','Out',2,1,'',0,5,'Вых.','','Вих.','');
-INSERT INTO "lib_Controllers_io" VALUES('test','test','Test',0,1,'',0,6,'Тест','','Тест','');
-INSERT INTO "lib_Controllers_io" VALUES('test','rez','Result',0,1,'',0,7,'Результат','','Результат','');
-INSERT INTO "lib_Controllers_io" VALUES('test1','clc','Clock',2,0,'',0,0,'Часы','','Годинник','');
-INSERT INTO "lib_Controllers_io" VALUES('test1','p_tm','Previous time (s)',1,1,'0',0,1,'Предыдущее время (с)','','Попередній час (с)','');
-INSERT INTO "lib_Controllers_io" VALUES('test1','rez','Result',2,1,'0',0,2,'Результат','','Результат','');
-INSERT INTO "lib_Controllers_io" VALUES('prescr','f_frq','Function calculate frequency (Hz)',2,0,'1000',0,0,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('prescr','f_start','Function start flag',3,0,'0',0,1,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('prescr','f_stop','Function stop flag',3,0,'0',0,2,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('prescr','this','This controller object link',4,0,'0',0,3,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','f_start','Function start flag',3,0,'',0,15,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','emailTopic','EMail topic',0,0,'Notification',0,8,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','emailMess','EMail message',0,0,'',0,9,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','f_frq','Function calculate frequency (Hz)',2,0,'1000',0,17,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','f_stop','Function stop flag',3,0,'0',0,16,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','this','This controller object link',4,0,'0',0,18,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','tmOut','Maximum notification timeout, seconds',1,0,'5',0,0,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','SMSTrId','SMS serial transport, empty for disable',0,0,'SMS',0,11,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','SMSPin','SMS pin, empty for disable',0,0,'1111',0,12,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('test','f_frq','Function calculate frequency (Hz)',2,0,'1000',0,0,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('test','f_start','Function start flag',3,0,'0',0,1,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('test','f_stop','Function stop flag',3,0,'0',0,2,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('test','this','This controller object link',4,0,'0',0,3,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','emailServer','Output transport for SMTP connection, empty for disable',0,0,'Sockets.out_SMTP',0,4,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','emailAuth','Auth, empty for disable',0,0,'user:pass',0,5,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','emailSender','Sender',0,0,'noreply@oscada.org',0,6,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','emailReceiver','Destination receiver address',0,0,'test@oscada.org',0,7,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','SMSTel','SMS destination receiver, tel. number',0,0,'+380XXXXXXXXX',0,13,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','emailState','Email notification current state',0,1,'',0,3,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','SMSState','SMS notification current state',0,1,'',0,10,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','SMSTextMd','SMS in text mode, else PDU',3,0,'0',0,14,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','messLev','Messages level, negative for alarms',1,0,'1',0,1,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','messCat','Messages category, template or regular expression',0,0,'al*:*',0,2,'','','','');
-CREATE TABLE 'lib_servProc_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DEF" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DEF" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
-INSERT INTO "lib_servProc_io" VALUES('procArh','fromarch','From archive',0,0,'Archive.va_ai3_code',0,0,'З архіву','','Из архива','');
-INSERT INTO "lib_servProc_io" VALUES('procArh','toarch','To archive',0,0,'Archive.va_ai3_dP',0,1,'У архів','','В архив','');
-INSERT INTO "lib_servProc_io" VALUES('procArh','begs','Begin time',0,0,'2006-08-08 9:21:56',0,2,'Час початку','','Время начала','');
-INSERT INTO "lib_servProc_io" VALUES('procArh','ends','End time',0,0,'2006-08-08 11:21:55',0,3,'Час закінчення','','Время конца','');
-INSERT INTO "lib_servProc_io" VALUES('crc16','in','Input',0,0,'',0,0,'Вхід','','Вход','');
-INSERT INTO "lib_servProc_io" VALUES('crc16','out','Result',1,1,'',0,1,'Результат','','Результат','');
-INSERT INTO "lib_servProc_io" VALUES('releaseTests','sub','Subsystem (-1:All;0:SYS;1:Security;2:Transport;...',1,0,'-1',0,0,'Підсистема (-1:Всі;0:SYS;1:Безпека;2:Транспорти;...)','','Подсистема (-1:Все;0:SYS;1:Безопасность;2:Транспорты;...)','');
-INSERT INTO "lib_servProc_io" VALUES('releaseTests','rez','Result',0,5,'',0,1,'Результат','','Результат','');
-INSERT INTO "lib_servProc_io" VALUES('crc16','poly','Polynomial (reversion)',1,0,'40961',0,2,'','','','');
-INSERT INTO "lib_servProc_io" VALUES('archPackFStests','tm','Start time (14.03.2015 21:37)',1,0,'1426361839',0,0,'','','','');
-INSERT INTO "lib_servProc_io" VALUES('archPackFStests','per','Period, seconds',1,0,'60',0,1,'','','','');
-INSERT INTO "lib_servProc_io" VALUES('archPackFStests','addr','Archive address',0,0,'test123',0,2,'','','','');
-INSERT INTO "lib_servProc_io" VALUES('archPackFStests','step','Step (0-8), -1 for all',1,0,'-1',0,4,'','','','');
-INSERT INTO "lib_servProc_io" VALUES('archPackFStests','archiver','Archiver address',0,0,'FSArch.1m',0,3,'','','','');
-INSERT INTO "lib_servProc_io" VALUES('wacko2media','ndb','MySQL DB id',0,0,'wiki',0,0,'','','','');
-INSERT INTO "lib_servProc_io" VALUES('wacko2media','wpg','Wiki page',0,0,'HomePageUk/Doc/SQLite',0,1,'','','','');
-INSERT INTO "lib_servProc_io" VALUES('wacko2media','rez','Result',0,6,'',0,2,'','','','');
-INSERT INTO "lib_servProc_io" VALUES('docOffLine','resDir','Results directory',0,0,'/home/roman/ext/work/Projects/OpenSCADA/doc/',0,2,'','','','');
-INSERT INTO "lib_servProc_io" VALUES('docOffLine','pages','Pages list of "{wiki}:{langs}:{dest}"',0,4,'Documents:en,uk,ru:index.html
+CREATE TABLE IF NOT EXISTS 'flb_doc_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DEF" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DEF" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
+INSERT INTO flb_doc_io VALUES('getVal','rez','Result',0,2,'',0,0,'Результат','','Результат','');
+INSERT INTO flb_doc_io VALUES('getVal','addr','Address',0,0,'',0,1,'Адреса','','Адрес','');
+INSERT INTO flb_doc_io VALUES('getVal','time','Time (s)',1,0,'',0,2,'Час (сек.)','','Время (сек.)','');
+INSERT INTO flb_doc_io VALUES('getVal','uTime','Time (us)',1,0,'',0,3,'Час (мксек.)','','Время (мксек.)','');
+INSERT INTO flb_doc_io VALUES('getVal','prec','Signs after dot',1,0,'3',0,4,'Знаків після коми','','Знаков после запятой','');
+INSERT INTO flb_doc_io VALUES('getVal','archtor','Archiver',0,0,'',0,5,'Архіватор','','Архиватор','');
+INSERT INTO flb_doc_io VALUES('sumVal','rez','Result',0,2,'',0,0,'Результат','','Результат','');
+INSERT INTO flb_doc_io VALUES('sumVal','addr','Address',0,0,'',0,1,'Адреса','','Адрес','');
+INSERT INTO flb_doc_io VALUES('averVal','addr','Address',0,0,'',0,1,'Адреса','','Адрес','');
+INSERT INTO flb_doc_io VALUES('averVal','rez','Result',0,2,'',0,0,'Результат','','Результат','');
+INSERT INTO flb_doc_io VALUES('sumVal','prec','Signs after dot',1,0,'3',0,4,'Знаків після коми','','Знаков после запятой','');
+INSERT INTO flb_doc_io VALUES('sumVal','archtor','Archiver',0,0,'',0,5,'Архіватор','','Архиватор','');
+INSERT INTO flb_doc_io VALUES('sumVal','bTime','Begin time (s)',1,0,'',0,2,'Час початку (сек.)','','Время начала (сек.)','');
+INSERT INTO flb_doc_io VALUES('sumVal','eTime','End time (s)',1,0,'',0,3,'Час кінця (сек.)','','Время конца (сек.)','');
+INSERT INTO flb_doc_io VALUES('averVal','bTime','Begin time (s)',1,0,'',0,2,'Час початку (сек.)','','Время начала (сек.)','');
+INSERT INTO flb_doc_io VALUES('averVal','eTime','End time (s)',1,0,'',0,3,'Час кінця (сек.)','','Время конца (сек.)','');
+INSERT INTO flb_doc_io VALUES('averVal','prec','Signs after dot',1,0,'3',0,4,'Знаків після коми','','Знаков после запятой','');
+INSERT INTO flb_doc_io VALUES('averVal','archtor','Archiver',0,0,'',0,5,'Архіватор','','Архиватор','');
+INSERT INTO flb_doc_io VALUES('getVal','strong','Precisely',3,0,'0',0,6,'Точно','','Точно','');
+INSERT INTO flb_doc_io VALUES('getVal','tryTo','Пробовать значение до {микросек}',1,0,'0',0,7,'','','Пробовать значение до {микросек}','');
+INSERT INTO flb_doc_io VALUES('averVal','actPerc','Процент активных значений',2,1,'',0,6,'','','Процент активных значений','');
+CREATE TABLE IF NOT EXISTS 'flb_regEl_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"uk#DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DEF" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
+INSERT INTO flb_regEl_io VALUES('pidUnif','var','Variable','Змінна',2,0,'0','',0,0,'Переменная','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','sp','Setpoint','Завдання',2,0,'0','',0,1,'Задание','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','max','Scale: maximum','Шкала: максимум',2,0,'100','',0,2,'Шкала: максимум','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','min','Scale: minimum','Шкала: мінімум',2,0,'0','',0,3,'Шкала: минимум','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','manIn','Manual input','Ручний ввід',2,0,'0','',0,4,'Ручной ввод','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','out','Output (%)','Вихід (%)',2,2,'0','',0,5,'Выход (%)','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','impQup','Impulse output up','Імп. вихід у гору',3,1,'0','',0,6,'Имп. выход вверх','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','impQdwn','Impulse output down','Імп. вихід до низу',3,1,'0','',0,7,'Имп. выход вниз','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','analog','Analog','Аналоговий',3,0,'1','',0,8,'Аналоговый','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','auto','Automate','Автомат',3,0,'0','',0,9,'Автомат','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','casc','Cascade','Каскад',3,0,'0','',0,10,'Каскад','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','Kp','Gain','Kп',2,0,'1','',0,11,'Kп','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','Ti','Ti (ms)','Tі (мс)',1,0,'1000','',0,12,'Tи (мс)','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','Td','Td (ms)','Tд (мс)',1,0,'0','',0,14,'Tд (мс)','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','TImpPer','T impulses period (ms)','T період імпульсів (мс)',1,0,'5000','',0,16,'T период импульса (мс)','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','TImpMin','T minimal impulse (ms)','Мінімальна довжина імпульсу (мс)',1,0,'500','',0,17,'T минимальная длина импульса (мс)','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','KImpRfact','Impulse rate factor','Рейтинг фактор імпульсів',2,0,'1','',0,18,'Рейтинг фактор импульса','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','Hup','Upper output border (%)','Верхня границя виходу (%)',2,0,'100','',0,19,'Верхняя граница выхода (%)','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','Hdwn','Lower output border (%)','Нижня границя виходу (%)',2,0,'0','',0,20,'Нижняя граница выхода (%)','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','Zi','Insensitivity (%)','Нечутливість (%)',2,0,'0','',0,21,'Нечувствительность (%)','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','K1','Coefficient of input 1','Коеф. входу 1',2,0,'0','',0,23,'Коэф. входа 1','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','in1','Input 1','Вхід 1',2,0,'0','',0,24,'Вход 1','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','K2','Coefficient of input 2','Коеф. входу 2',2,0,'0','',0,25,'Коэф. входа 2','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','in2','Input 2','Вхід 2',2,0,'0','',0,26,'Вход 2','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','K3','Coefficient of input 3','Коеф. входу 3',2,0,'0','',0,27,'Коэф. входа 3','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','in3','Input 3','Вхід 3',2,0,'0','',0,28,'Вход 3','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','K4','Coefficient of input 4','Коеф. входу 4',2,0,'0','',0,29,'Коэф. входа 4','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','in4','Input 4','Вхід 4',2,0,'0','',0,30,'Вход 4','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','impAnOut','Analog position of impulse regulator','Аналогове положення імпульсного регулятора',2,0,'0','',0,31,'Аналоговое положение импульсного регулятора','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','int','Integral accumulation','Накопичення інтегралу',2,1,'0','',1,38,'Накопление интеграла','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','dif','Differential accumulation','Знач. диференціалу',2,1,'0','',1,39,'Накопление производной','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','lag','Lag accumulation','Накопичення затримки',2,1,'0','',1,40,'Накопление задержки','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','impLag','Impulse lag time','Час утримання імпульсу',2,1,'0','',1,41,'Время удержания импульса','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','perLag','New impulse generation time','Час генерації нового імпульсу',2,1,'0','',1,42,'Время генерации нового импульса','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','var','Variable','Змінна',2,0,'0','',0,0,'Переменная','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','sp','Setpoint','Завдання',2,0,'0','',0,1,'Задание','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','max','Scale: maximum','Шкала: максимум',2,0,'100','',0,2,'Шкала: максимум','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','min','Scale: minimum','Шкала: мінімум',2,0,'0','',0,3,'Шкала: минимум','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','manIn','Manual input','Ручний ввід',2,0,'0','',0,4,'Ручной ввод','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','out','Output (%)','Вихід (%)',2,2,'0','',0,5,'Выход (%)','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','impQup','Impulse output up','Імп. вихід у гору',3,1,'0','',0,6,'Имп. выход вверх','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','impQdwn','Impulse output down','Імп. вихід до низу',3,1,'0','',0,7,'Имп. выход вниз','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','analog','Analog','Аналоговий',3,0,'1','',0,8,'Аналоговый','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','auto','Automat','Автомат',3,0,'0','',0,9,'Автомат','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','casc','Cascade','Каскад',3,0,'0','',0,10,'Каскад','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','Kp','Gain','Kп',2,0,'1','',0,11,'Kп','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','Ti','Ti (ms)','Tі (мс)',1,0,'1000','',0,12,'Tи (мс)','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','Kd','Gain differential','Кп диференціалу',2,0,'1','',0,13,'Кп производной','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','Td','Td (ms)','Tд (мс)',1,0,'0','',0,14,'Tд (мс)','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','Tzd','T differential lag (ms)','T фільтру диференціалу (мс)',1,0,'0','',0,15,'T задержки дифференциров. (мс)','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','TImpPer','T impulses period (ms)','T період імпульсів (мс)',1,0,'5000','',0,16,'T период импульса (мс)','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','TImpMin','T minimal impulse (ms)','Мінімальна довжина імпульсу (мс)',1,0,'500','',0,17,'T минимальная длина импульса (мс)','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','KImpRfact','Impulse rate factor','Рейтинг фактор імпульсів',2,0,'1','',0,18,'Рейтинг фактор импульса','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','Hup','Upper output border (%)','Верхня границя виходу (%)',2,0,'100','',0,19,'Верхняя граница выхода (%)','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','Hdwn','Lower output border (%)','Нижня границя виходу (%)',2,0,'0','',0,20,'Нижняя граница выхода (%)','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','Zi','Insensitivity (%)','Нечутливість (%)',2,0,'0','',0,21,'Нечувствительность (%)','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','followSp','Follow to variable by setpoint into manual','Відслідковувати завданням за змінною у ручному',3,0,'1','',0,22,'Следить заданием за переменной в ручном','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','K1','Coefficient of input 1','Коеф. входу 1',2,0,'0','',0,23,'Коэф. входа 1','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','in1','Input 1','Вхід 1',2,0,'0','',0,24,'Вход 1','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','K2','Coefficient of input 2','Коеф. входу 2',2,0,'0','',0,25,'Коэф. входа 2','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','in2','Input 2','Вхід 2',2,0,'0','',0,26,'Вход 2','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','K3','Coefficient of input 3','Коеф. входу 3',2,0,'0','',0,27,'Коэф. входа 3','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','in3','Input 3','Вхід 3',2,0,'0','',0,28,'Вход 3','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','K4','Coefficient of input 4','Коеф. входу 4',2,0,'0','',0,29,'Коэф. входа 4','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','in4','Input 4','Вхід 4',2,0,'0','',0,30,'Вход 4','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','impAnOut','Real analog position of impulse regulator, [0...100], -1 - disable','Аналогове положення імпульсного регулятора',2,0,'-1','',0,33,'Аналоговое положение импульсного регулятора или ск','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','Kd','Gain differential','Кп диференціалу',2,0,'1','',0,13,'Кп производной','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','impAnImit','Full stroke time for analog position imitation, s','Імітація аналогового положення',2,0,'-1','',0,34,'Имитация аналогового положения','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','impQupTm','Imp. output up lag for GUI','Імп. вихід вгору утримано для GUI',3,1,'0','',0,35,'Имп. выход вверх удерж. для GUI','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','impQdwnTm','Imp. output down lag for GUI','Імп. вихід додолу утримано для GUI',3,1,'0','',0,36,'Имп. выход вниз удерж. для GUI','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','f_frq','Calculation frequency, Hz','Частота обчислення, Гц',2,0,'1','',1,37,'Частота вычисления, Гц','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','f_start','First start','Перший запуск',3,0,'0','',1,38,'Первый запуск','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','f_stop','Last start','Останній запуск',3,0,'0','',1,39,'Последний запуск','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','impLag','Impulse lag time','Час утримання імпульсу',2,1,'0','',1,40,'Время удержания импульса','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','perLag','New impulse generation time','Час генерації нового імпульсу',2,1,'0','',1,41,'Время генерации нового импульса','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','integ','Integral accumulation','Накопичення інтегралу',2,1,'0','',1,42,'Накопление интеграла','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','difer','Differential accumulation','Накопичення диференціалу',2,1,'0','',1,43,'Накопление производной','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','dlag','Differential lag accumulation','Фільтр диференціалу',2,1,'0','',1,44,'Накопление задержки производной','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','Tzd','T differential lag (ms)','T фільтру диференціалу (мс)',1,0,'0','',0,15,'T задержки дифференциров. (мс)','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','followSp','Follow to variable by setpoint into manual','Відслідковувати завданням за змінною у ручному',3,0,'1','',0,22,'Следить заданием за переменной в ручном','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','impAnImit','Analog position imitation','Імітація аналогового положення',3,0,'0','',0,32,'Имитация аналогового положения','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','impQupTm','Imp. output up lag for GUI',' Імп. вихід вгору утримано для GUI',1,1,'0','',0,33,'Имп. выход вверх удерж. для GUI','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','impQdwnTm','Imp. output down lag for GUI','Імп. вихід додолу утримано для GUI',1,1,'0','',0,34,'Имп. выход вниз удерж. для GUI','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','f_frq','Calculation frequency, Hz','Частота обчислення, Гц',1,0,'1','',1,35,'Частота вычисления, Гц','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','f_start','First start','Перший запуск',3,0,'0','',1,36,'Первый запуск','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','f_stop','Last start','Останній запуск',3,0,'0','',1,37,'Последний запуск','');
+INSERT INTO flb_regEl_io VALUES('pidImp','var','Variable','Змінна',2,0,'0','',0,0,'Переменная','');
+INSERT INTO flb_regEl_io VALUES('pidImp','sp','Setpoint','Завдання',2,0,'0','',0,1,'Задание','');
+INSERT INTO flb_regEl_io VALUES('pidImp','max','Scale: maximum','Шкала: максимум',2,0,'100','',0,2,'Шкала: максимум','');
+INSERT INTO flb_regEl_io VALUES('pidImp','min','Scale: minimum','Шкала: мінімум',2,0,'0','',0,3,'Шкала: минимум','');
+INSERT INTO flb_regEl_io VALUES('pidImp','manIn','Manual input','Ручний ввід',2,0,'0','',0,4,'Ручной ввод','');
+INSERT INTO flb_regEl_io VALUES('pidImp','out','Output (%)','Вихід (%)',2,2,'0','',0,5,'Выход (%)','');
+INSERT INTO flb_regEl_io VALUES('pidImp','outPID','PID output','Вихід ПІД',2,1,'0','',0,6,'Выход ПИД','');
+INSERT INTO flb_regEl_io VALUES('pidImp','impQup','Impulse output up','Імп. вихід у гору',3,1,'0','',0,7,'Имп. выход вверх','');
+INSERT INTO flb_regEl_io VALUES('pidImp','impQdwn','Impulse output down','Імп. вихід до низу',3,1,'0','',0,8,'Имп. выход вниз','');
+INSERT INTO flb_regEl_io VALUES('pidImp','auto','Automate','Автомат',3,0,'0','',0,9,'Автомат','');
+INSERT INTO flb_regEl_io VALUES('pidImp','casc','Cascade','Каскад',3,0,'0','',0,10,'Каскад','');
+INSERT INTO flb_regEl_io VALUES('pidImp','Kp','Gain','Kп',2,0,'1','',0,11,'Kп','');
+INSERT INTO flb_regEl_io VALUES('pidImp','Ki','Gain integration','Кп інтегралу',2,0,'1','',0,12,'Кп интеграла','');
+INSERT INTO flb_regEl_io VALUES('pidImp','Ti','Ti (ms)','Tі (мс)',1,0,'1000','',0,13,'Tи (мс)','');
+INSERT INTO flb_regEl_io VALUES('pidImp','Kd','Gain differential','Кп диференціалу',2,0,'1','',0,14,'Кп производной','');
+INSERT INTO flb_regEl_io VALUES('pidImp','Td','Td (ms)','Tд (мс)',1,0,'0','',0,15,'Tд (мс)','');
+INSERT INTO flb_regEl_io VALUES('pidImp','Tzd','T differential lag (ms)','T фільтру диференціалу (мс)',1,0,'0','',0,16,'T задержки дифференциров. (мс)','');
+INSERT INTO flb_regEl_io VALUES('pidImp','TImpPer','T impulses period (ms)','T період імпульсів (мс)',1,0,'5000','',0,17,'T период импульса (мс)','');
+INSERT INTO flb_regEl_io VALUES('pidImp','TImpMin','T minimal impulse (ms)','Мінімальна довжина імпульсу (мс)',1,0,'500','',0,18,'T минимальная длина импульса (мс)','');
+INSERT INTO flb_regEl_io VALUES('pidImp','KImpRfact','Impulse rate factor','Рейтинг фактор імпульсів',2,0,'1','',0,19,'Рейтинг фактор импульса','');
+INSERT INTO flb_regEl_io VALUES('pidImp','Hup','Upper output border (%)','Верхня границя виходу (%)',2,0,'100','',0,20,'Верхняя граница выхода (%)','');
+INSERT INTO flb_regEl_io VALUES('pidImp','Hdwn','Lower output border (%)','Нижня границя виходу (%)',2,0,'0','',0,21,'Нижняя граница выхода (%)','');
+INSERT INTO flb_regEl_io VALUES('pidImp','Zi','Insensitivity (%)','Нечутливість (%)',2,0,'0','',0,22,'Нечувствительность (%)','');
+INSERT INTO flb_regEl_io VALUES('pidImp','followSp','Follow to variable by setpoint into manual','Відслідковувати завданням за змінною у ручному',3,0,'1','',0,23,'Следить заданием за переменной в ручном','');
+INSERT INTO flb_regEl_io VALUES('pidImp','K1','Coefficient of input 1','Коеф. входу 1',2,0,'0','',0,24,'Коэф. входа 1','');
+INSERT INTO flb_regEl_io VALUES('pidImp','in1','Input 1','Вхід 1',2,0,'0','',0,25,'Вход 1','');
+INSERT INTO flb_regEl_io VALUES('pidImp','K2','Coefficient of input 2','Коеф. входу 2',2,0,'0','',0,26,'Коэф. входа 2','');
+INSERT INTO flb_regEl_io VALUES('pidImp','in2','Input 2','Вхід 2',2,0,'0','',0,27,'Вход 2','');
+INSERT INTO flb_regEl_io VALUES('pidImp','K3','Coefficient of input 3','Коеф. входу 3',2,0,'0','',0,28,'Коэф. входа 3','');
+INSERT INTO flb_regEl_io VALUES('pidImp','in3','Input 3','Вхід 3',2,0,'0','',0,29,'Вход 3','');
+INSERT INTO flb_regEl_io VALUES('pidImp','K4','Coefficient of input 4','Коеф. входу 4',2,0,'0','',0,30,'Коэф. входа 4','');
+INSERT INTO flb_regEl_io VALUES('pidImp','in4','Input 4','Вхід 4',2,0,'0','',0,31,'Вход 4','');
+INSERT INTO flb_regEl_io VALUES('pidImp','impAnOut','Analog position of impulse regulator','Аналогове положення імпульсного регулятора',2,0,'0','',0,32,'Аналоговое положение импульсного регулятора или ск','');
+INSERT INTO flb_regEl_io VALUES('pidImp','impAnImit','Analog position imitation','Імітація аналогового положення',3,0,'0','',0,33,'Имитация аналогового положения','');
+INSERT INTO flb_regEl_io VALUES('pidImp','impQupTm','Imp. output up lag for GUI','Імп. вихід вгору утримано для GUI',1,1,'0','',0,34,'Имп. выход вверх удерж. для GUI','');
+INSERT INTO flb_regEl_io VALUES('pidImp','impQdwnTm','Imp. output down lag for GUI','Імп. вихід додолу утримано для GUI',1,1,'0','',0,35,'Имп. выход вниз удерж. для GUI','');
+INSERT INTO flb_regEl_io VALUES('pidImp','f_frq','Calculation frequency, Hz','Частота обчислення, Гц',2,0,'1','',1,36,'Частота вычисления, Гц','');
+INSERT INTO flb_regEl_io VALUES('pidImp','f_start','First start','Перший запуск',3,0,'0','',1,37,'Первый запуск','');
+INSERT INTO flb_regEl_io VALUES('pidImp','f_stop','Last start','Останній запуск',3,0,'0','',1,38,'Последний запуск','');
+INSERT INTO flb_regEl_io VALUES('pidImp','impLag','Impulse lag time','Час утримання імпульсу',2,1,'0','',1,39,'Время удержания импульса','');
+INSERT INTO flb_regEl_io VALUES('pidImp','perLag','New impulse generation time','Час генерації нового імпульсу',2,1,'0','',1,40,'Время генерации нового импульса','');
+INSERT INTO flb_regEl_io VALUES('pidImp','integ','Integral accumulation','Накопичення інтегралу',2,1,'0','',1,41,'Накопление интеграла','');
+INSERT INTO flb_regEl_io VALUES('pidImp','difer','Differential accumulation','Накопичення диференціалу',2,1,'0','',1,42,'Накопление производной','');
+INSERT INTO flb_regEl_io VALUES('pidImp','dlag','Differential lag accumulation','Фільтр диференціалу',2,1,'0','',1,43,'Накопление задержки производной','');
+INSERT INTO flb_regEl_io VALUES('pidImp','err1','Error step back','Помилка крок назад',2,1,'0','',1,44,'Ошибка шаг назад','');
+INSERT INTO flb_regEl_io VALUES('pidImp','err2','Error two step back','Помилка два кроки назад',2,1,'0','',1,45,'Ошибка два шага назад','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','QO','Opened state of the control mechanism','Відкритий стан виконавчого механізму',3,0,'0','',0,31,'Открытое состояние исполнительного механизма','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','QZ','Closed state of the control mechanism','Закритий стан виконавчого механізму',3,0,'0','',0,32,'Закрытое состояние исполнительного механизма','');
+CREATE TABLE IF NOT EXISTS 'lib_Controllers_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DEF" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DEF" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
+INSERT INTO lib_Controllers_io VALUES('prescr','dbDB','DB:DB with tables name',0,1,'',0,4,'БД:Имя БД с таблицами','','БД:Ім''я БД з таблицями','');
+INSERT INTO lib_Controllers_io VALUES('prescr','dbComs','DB:Table with commands',0,1,'',0,5,'БД:Таблица с коммандами','','БД:Таблиця з командами','');
+INSERT INTO lib_Controllers_io VALUES('prescr','dbProgs','DB:Table with programs',0,1,'',0,6,'БД:Таблица с программами','','БД:Таблиця з програмами','');
+INSERT INTO lib_Controllers_io VALUES('prescr','mode','Mode: Finish(-2); Error(-1); Stop(0); Run (1); Pause(2); Pass com (3)',1,1,'',0,8,'Режим: Оконч.(-2); Ошибка(-1); Стоп(0); Исполн.(1); Пауза (2); Пропуст. ком. (3)','','Режим: Окінч.(-2); Помилка(-1); Стоп(0); Викон.(1); Пауза (2); Пропуст. ком. (3)','');
+INSERT INTO lib_Controllers_io VALUES('prescr','curMode','Current mode',1,0,'',0,9,'Текущий режим','','Поточний режим','');
+INSERT INTO lib_Controllers_io VALUES('prescr','prog','Name of selected program',0,1,'',0,10,'Имя выбранной программы','','Ім''я обраної програми','');
+INSERT INTO lib_Controllers_io VALUES('prescr','startTm','Start time, seconds',1,0,'',0,11,'Время запуска, секунды','','Час запуску, секунди','');
+INSERT INTO lib_Controllers_io VALUES('prescr','curCom','Current command-step',0,0,'',0,12,'Текущая комманда-шаг','','Поточна команда-крок','');
+INSERT INTO lib_Controllers_io VALUES('prescr','work','Work program',4,0,'',0,13,'Рабочая программа','','Робоча програма','');
+INSERT INTO lib_Controllers_io VALUES('prescr','comsCntr','Commands controller',0,0,'',0,7,'Контроллер команд','','Контролер команд','');
+INSERT INTO lib_Controllers_io VALUES('prescr','comLs','Commands list',4,0,'',0,14,'Список команд','','Перелік команд','');
+INSERT INTO lib_Controllers_io VALUES('prescr','clcCnt','Cycles counter',1,0,'',0,15,'Счётчик циклов','','Лічильник циклів','');
+INSERT INTO lib_Controllers_io VALUES('test','offset','Offset',1,0,'100',0,4,'Смещение','','Зміщення','');
+INSERT INTO lib_Controllers_io VALUES('test','out','Out',2,1,'',0,5,'Вых.','','Вих.','');
+INSERT INTO lib_Controllers_io VALUES('test','test','Test',0,1,'',0,6,'Тест','','Тест','');
+INSERT INTO lib_Controllers_io VALUES('test','rez','Result',0,1,'',0,7,'Результат','','Результат','');
+INSERT INTO lib_Controllers_io VALUES('test1','clc','Clock',2,0,'',0,0,'Часы','','Годинник','');
+INSERT INTO lib_Controllers_io VALUES('test1','p_tm','Previous time (s)',1,1,'0',0,1,'Предыдущее время (с)','','Попередній час (с)','');
+INSERT INTO lib_Controllers_io VALUES('test1','rez','Result',2,1,'0',0,2,'Результат','','Результат','');
+INSERT INTO lib_Controllers_io VALUES('prescr','f_frq','Function calculate frequency (Hz)',2,0,'1000',0,0,'','','','');
+INSERT INTO lib_Controllers_io VALUES('prescr','f_start','Function start flag',3,0,'0',0,1,'','','','');
+INSERT INTO lib_Controllers_io VALUES('prescr','f_stop','Function stop flag',3,0,'0',0,2,'','','','');
+INSERT INTO lib_Controllers_io VALUES('prescr','this','This controller object link',4,0,'0',0,3,'','','','');
+INSERT INTO lib_Controllers_io VALUES('ntfDispatch','f_start','Function start flag',3,0,'',0,15,'','','','');
+INSERT INTO lib_Controllers_io VALUES('ntfDispatch','emailTopic','EMail topic',0,0,'Notification',0,8,'','','','');
+INSERT INTO lib_Controllers_io VALUES('ntfDispatch','emailMess','EMail message',0,0,'',0,9,'','','','');
+INSERT INTO lib_Controllers_io VALUES('ntfDispatch','f_frq','Function calculate frequency (Hz)',2,0,'1000',0,17,'','','','');
+INSERT INTO lib_Controllers_io VALUES('ntfDispatch','f_stop','Function stop flag',3,0,'0',0,16,'','','','');
+INSERT INTO lib_Controllers_io VALUES('ntfDispatch','this','This controller object link',4,0,'0',0,18,'','','','');
+INSERT INTO lib_Controllers_io VALUES('ntfDispatch','tmOut','Maximum notification timeout, seconds',1,0,'5',0,0,'','','','');
+INSERT INTO lib_Controllers_io VALUES('ntfDispatch','SMSTrId','SMS serial transport, empty for disable',0,0,'SMS',0,11,'','','','');
+INSERT INTO lib_Controllers_io VALUES('ntfDispatch','SMSPin','SMS pin, empty for disable',0,0,'1111',0,12,'','','','');
+INSERT INTO lib_Controllers_io VALUES('test','f_frq','Function calculate frequency (Hz)',2,0,'1000',0,0,'','','','');
+INSERT INTO lib_Controllers_io VALUES('test','f_start','Function start flag',3,0,'0',0,1,'','','','');
+INSERT INTO lib_Controllers_io VALUES('test','f_stop','Function stop flag',3,0,'0',0,2,'','','','');
+INSERT INTO lib_Controllers_io VALUES('test','this','This controller object link',4,0,'0',0,3,'','','','');
+INSERT INTO lib_Controllers_io VALUES('ntfDispatch','emailServer','Output transport for SMTP connection, empty for disable',0,0,'Sockets.out_SMTP',0,4,'','','','');
+INSERT INTO lib_Controllers_io VALUES('ntfDispatch','emailAuth','Auth, empty for disable',0,0,'user:pass',0,5,'','','','');
+INSERT INTO lib_Controllers_io VALUES('ntfDispatch','emailSender','Sender',0,0,'noreply@oscada.org',0,6,'','','','');
+INSERT INTO lib_Controllers_io VALUES('ntfDispatch','emailReceiver','Destination receiver address',0,0,'test@oscada.org',0,7,'','','','');
+INSERT INTO lib_Controllers_io VALUES('ntfDispatch','SMSTel','SMS destination receiver, tel. number',0,0,'+380XXXXXXXXX',0,13,'','','','');
+INSERT INTO lib_Controllers_io VALUES('ntfDispatch','emailState','Email notification current state',0,1,'',0,3,'','','','');
+INSERT INTO lib_Controllers_io VALUES('ntfDispatch','SMSState','SMS notification current state',0,1,'',0,10,'','','','');
+INSERT INTO lib_Controllers_io VALUES('ntfDispatch','SMSTextMd','SMS in text mode, else PDU',3,0,'0',0,14,'','','','');
+INSERT INTO lib_Controllers_io VALUES('ntfDispatch','messLev','Messages level, negative for alarms',1,0,'1',0,1,'','','','');
+INSERT INTO lib_Controllers_io VALUES('ntfDispatch','messCat','Messages category, template or regular expression',0,0,'al*:*',0,2,'','','','');
+CREATE TABLE IF NOT EXISTS 'lib_servProc_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DEF" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DEF" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
+INSERT INTO lib_servProc_io VALUES('procArh','fromarch','From archive',0,0,'Archive.va_ai3_code',0,0,'З архіву','','Из архива','');
+INSERT INTO lib_servProc_io VALUES('procArh','toarch','To archive',0,0,'Archive.va_ai3_dP',0,1,'У архів','','В архив','');
+INSERT INTO lib_servProc_io VALUES('procArh','begs','Begin time',0,0,'2006-08-08 9:21:56',0,2,'Час початку','','Время начала','');
+INSERT INTO lib_servProc_io VALUES('procArh','ends','End time',0,0,'2006-08-08 11:21:55',0,3,'Час закінчення','','Время конца','');
+INSERT INTO lib_servProc_io VALUES('crc16','in','Input',0,0,'',0,0,'Вхід','','Вход','');
+INSERT INTO lib_servProc_io VALUES('crc16','out','Result',1,1,'',0,1,'Результат','','Результат','');
+INSERT INTO lib_servProc_io VALUES('releaseTests','sub','Subsystem (-1:All;0:SYS;1:Security;2:Transport;...',1,0,'-1',0,0,'Підсистема (-1:Всі;0:SYS;1:Безпека;2:Транспорти;...)','','Подсистема (-1:Все;0:SYS;1:Безопасность;2:Транспорты;...)','');
+INSERT INTO lib_servProc_io VALUES('releaseTests','rez','Result',0,5,'',0,1,'Результат','','Результат','');
+INSERT INTO lib_servProc_io VALUES('crc16','poly','Polynomial (reversion)',1,0,'40961',0,2,'','','','');
+INSERT INTO lib_servProc_io VALUES('archPackFStests','tm','Start time (14.03.2015 21:37)',1,0,'1426361839',0,0,'','','','');
+INSERT INTO lib_servProc_io VALUES('archPackFStests','per','Period, seconds',1,0,'60',0,1,'','','','');
+INSERT INTO lib_servProc_io VALUES('archPackFStests','addr','Archive address',0,0,'test123',0,2,'','','','');
+INSERT INTO lib_servProc_io VALUES('archPackFStests','step','Step (0-8), -1 for all',1,0,'-1',0,4,'','','','');
+INSERT INTO lib_servProc_io VALUES('archPackFStests','archiver','Archiver address',0,0,'FSArch.1m',0,3,'','','','');
+INSERT INTO lib_servProc_io VALUES('wacko2media','ndb','MySQL DB id',0,0,'wiki',0,0,'','','','');
+INSERT INTO lib_servProc_io VALUES('wacko2media','wpg','Wiki page',0,0,'HomePageUk/Doc/SQLite',0,1,'','','','');
+INSERT INTO lib_servProc_io VALUES('wacko2media','rez','Result',0,6,'',0,2,'','','','');
+INSERT INTO lib_servProc_io VALUES('docOffLine','resDir','Results directory',0,0,'/home/roman/ext/work/Projects/OpenSCADA/doc/',0,2,'','','','');
+INSERT INTO lib_servProc_io VALUES('docOffLine','pages','Pages list of "{wiki}:{langs}:{dest}"',0,4,'Documents:en,uk,ru:index.html
 Documents/Release_0.9:en,uk,ru:Release_0.9.html
 About:en,uk,ru:About.html
 Documents/Terms:en,uk,ru:Terms.html
@@ -429,1351 +435,1356 @@ Modules/SystemTests:en,uk,ru:Modules/SystemTests.html
 Modules/FLibMath:en,uk,ru:Modules/FLibMath.html
 Modules/FLibComplex1:en,uk,ru:Modules/FLibComplex1.html
 Libs/Technological_apparatuses:en,uk,ru:Libs_Technological_apparatuses.html',0,3,'','','','');
-INSERT INTO "lib_servProc_io" VALUES('docOffLine','pagesCur','Current pages list of "{wiki}:{langs}:{dest}", for empty here used "pages"',0,4,'',0,4,'','','','');
-INSERT INTO "lib_servProc_io" VALUES('docOffLine','res','Result',0,1,'',0,0,'','','','');
-INSERT INTO "lib_servProc_io" VALUES('docOffLine','reqTr','Tries of requests',1,1,'3',0,1,'','','','');
-INSERT INTO "lib_servProc_io" VALUES('releaseTests','rezF','Result for HTML file',0,5,'',1,2,'','','','');
-CREATE TABLE 'techApp_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DEF" TEXT DEFAULT '' ,"uk#DEF" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
-INSERT INTO "techApp_io" VALUES('lag','out','Output',2,2,'0',0,0,'Вихід','Выход','','');
-INSERT INTO "techApp_io" VALUES('lag','in','Input',2,0,'0',0,1,'Вхід','Вход','','');
-INSERT INTO "techApp_io" VALUES('lag','t_lg','Lag time, seconds',2,0,'10',0,2,'Час затримки, секунд','Время запаздывания, секунд','','');
-INSERT INTO "techApp_io" VALUES('lag','f_frq','Calculation frequency, Hz',2,0,'100',1,3,'Частота обчислення, Гц','Частота вычисления, Гц','','');
-INSERT INTO "techApp_io" VALUES('noise','out','Output',2,2,'0',0,0,'Вихід','Выход','','');
-INSERT INTO "techApp_io" VALUES('noise','off','Main offset',2,0,'1',0,1,'Загальний зсув','Общее смещение','','');
-INSERT INTO "techApp_io" VALUES('noise','a_g1','Amplitude of the harmonic 1',2,0,'10',0,2,'Амплітуда гармоніки 1','Амплитуда гармоники 1','','');
-INSERT INTO "techApp_io" VALUES('noise','per_g1','Period of the harmonic part 1, seconds',2,0,'10',0,3,'Період гармоніки 1, секунд','Период гармоники 1, секунд','','');
-INSERT INTO "techApp_io" VALUES('noise','a_g2','Amplitude of the harmonic 2',2,0,'5',0,4,'Амплітуда гармоніки 2','Амплитуда гармоники 2','','');
-INSERT INTO "techApp_io" VALUES('noise','per_g2','Period of the harmonic part 2, seconds',2,0,'0.1',0,5,'Період гармоніки 2, секунд','Период гармоники 2, секунд','','');
-INSERT INTO "techApp_io" VALUES('noise','a_rnd','Amplitude of the random numbers',2,0,'1',0,6,'Амплітуда випадкових значень','Амплитуда случайных значений','','');
-INSERT INTO "techApp_io" VALUES('noise','f_frq','Calculation frequency, Hz',2,0,'100',1,7,'Частота обчислення, Гц','Частота вычисления, Гц','','');
-INSERT INTO "techApp_io" VALUES('noise','tmp_g1','Counter of the harmonic 1',2,0,'0',1,8,'Лічильник гармоніки 1','Счётчик гармоники 1','','');
-INSERT INTO "techApp_io" VALUES('noise','tmp_g2','Counter of the harmonic 2',2,0,'0',1,9,'Лічильник гармоніки 2','Счётчик гармоники 2','','');
-INSERT INTO "techApp_io" VALUES('ballCrane','pos','Position, %',2,1,'0',0,0,'Положення, %','Положение, %','','');
-INSERT INTO "techApp_io" VALUES('ballCrane','com','Command',3,0,'0',0,1,'Команда','Команда','','');
-INSERT INTO "techApp_io" VALUES('ballCrane','st_open','State "Opened"',3,1,'0',0,2,'Стан "Відкрито"','Состояние "Открыто"','','');
-INSERT INTO "techApp_io" VALUES('ballCrane','st_close','State "Closed"',3,1,'1',0,3,'Стан "Закрито"','Состояние "Закрыто"','','');
-INSERT INTO "techApp_io" VALUES('ballCrane','t_full','Going time, seconds',2,0,'5',0,4,'Час ходу, секунд','Время хода, секунд','','');
-INSERT INTO "techApp_io" VALUES('ballCrane','t_up','Estrangement time, seconds',2,0,'0.5',0,5,'Час відриву, секунд','Время отрыва, секунд','','');
-INSERT INTO "techApp_io" VALUES('ballCrane','f_frq','Calculation frequency, Hz',2,0,'100',1,6,'Частота обчислення, Гц','Частота вычисления, Гц','','');
-INSERT INTO "techApp_io" VALUES('ballCrane','tmp_up','Estrangement counter',2,0,'0',1,7,'Лічильник відриву','Счётчик отрыва','','');
-INSERT INTO "techApp_io" VALUES('ballCrane','lst_com','Last command',3,0,'0',1,8,'Остання команда','Последняя команда','','');
-INSERT INTO "techApp_io" VALUES('separator','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','');
-INSERT INTO "techApp_io" VALUES('separator','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','');
-INSERT INTO "techApp_io" VALUES('separator','Si','Input cutset, m2',2,0,'0.2',0,2,'Вхідний перетин, м2','Входное сечение, м2','','');
-INSERT INTO "techApp_io" VALUES('separator','Fo','Output flow, ton/h',2,0,'0',0,3,'Вихідні витрати, т/год','Выходной расход, т/ч','','');
-INSERT INTO "techApp_io" VALUES('separator','Po','Output pressure, at',2,1,'1',0,4,'Вихідний тиск, ата','Выходное давление, ата','','');
-INSERT INTO "techApp_io" VALUES('separator','So','Output cutset, m2',2,0,'0.2',0,5,'Вихідний перетин, м2','Выходное сечение, м2','','');
-INSERT INTO "techApp_io" VALUES('separator','lo','Output length, m',2,0,'10',0,6,'Вихідна довжина, м','Выходная длина, м','','');
-INSERT INTO "techApp_io" VALUES('separator','Fo_lq','Output liquid flow, ton/h',2,0,'0',0,7,'Вихідні витрати рідини, т/год','Выходной расход жидкости, т/ч','','');
-INSERT INTO "techApp_io" VALUES('separator','Po_lq','Output liquid pressure, at',2,1,'1',0,8,'Вихідний тиск рідини, ата','Выходное давление жидкости, ата','','');
-INSERT INTO "techApp_io" VALUES('separator','Llq','Liquid level, %',2,1,'0',0,9,'Рівень рідини, %','Уровень жидкости, %','','');
-INSERT INTO "techApp_io" VALUES('separator','PercLq','% liquid',2,0,'0.01',0,10,'% рідини','% жидкости','','');
-INSERT INTO "techApp_io" VALUES('separator','Vap','Device capacity, m3',2,0,'10',0,11,'Об''єм апарату, м3','Объём аппарата, м3','','');
-INSERT INTO "techApp_io" VALUES('separator','Q0','Norm density of the environment, kg/m3',2,0,'1',0,12,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','');
-INSERT INTO "techApp_io" VALUES('separator','Qlq','Liquid density, kg/m3',2,0,'1000',0,13,'Щільність рідини, кг/м3','Плотность жидкости, кг/м3','','');
-INSERT INTO "techApp_io" VALUES('separator','f_frq','Calculation frequency, Hz',2,0,'200',1,14,'Частота обчислення, Гц','Частота вычисления, Гц','','');
-INSERT INTO "techApp_io" VALUES('valve','t_v1','Valve 1 opening time, seconds',2,0,'10',0,10,'Час відкриття клапану 1, секунди','Время хода клапана 1, секунд','','');
-INSERT INTO "techApp_io" VALUES('valve','t_v2','Valve 2 opening time, seconds',2,0,'5',0,13,'Час відкриття клапану 2, секунди','Время хода клапана 2, секунд','','');
-INSERT INTO "techApp_io" VALUES('valve','tmp_l1','Lag of the position 1',2,1,'0',1,23,'Затримка положення 1','Задержка положения 1','','');
-INSERT INTO "techApp_io" VALUES('valve','tmp_l2','Lag of the position 2',2,1,'0',1,24,'Затримка положення 2','Задержка положения 2','','');
-INSERT INTO "techApp_io" VALUES('valve','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','');
-INSERT INTO "techApp_io" VALUES('valve','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','');
-INSERT INTO "techApp_io" VALUES('valve','Ti','Input temperature, K',2,0,'273',0,2,'Вхідна температура, К','Входная температура, К','','');
-INSERT INTO "techApp_io" VALUES('valve','Fo','Output flow, ton/h',2,0,'0',0,3,'Вихідні витрати, т/год','Выходной расход, т/ч','','');
-INSERT INTO "techApp_io" VALUES('valve','Po','Output pressure, at',2,1,'1',0,4,'Вихідний тиск, ата','Выходное давление, ата','','');
-INSERT INTO "techApp_io" VALUES('valve','To','Output temperature, K',2,1,'273',0,5,'Вихідна температура, К','Выходная температура, К','','');
-INSERT INTO "techApp_io" VALUES('valve','So','Output pipe cutset, m2',2,0,'.2',0,6,'Вихідний перетин труби, м2','Выходное сечение трубы, м2','','');
-INSERT INTO "techApp_io" VALUES('valve','lo','Output pipe length, m',2,0,'10',0,7,'Вихідна довжина труби, м','Выходная длина трубы, м','','');
-INSERT INTO "techApp_io" VALUES('valve','S_v1','Valve 1 cutset, m2',2,0,'.1',0,8,'Перетин клапану 1, м2','Сечение клапана 1, м2','','');
-INSERT INTO "techApp_io" VALUES('valve','S_v2','Valve 2 cutset, m2',2,0,'.05',0,11,'Перетин клапану 2, м2','Сечение клапана 2, м2','','');
-INSERT INTO "techApp_io" VALUES('valve','l_v1','Valve 1 position, %',2,0,'0',0,9,'Положення клапану 1, %','Положение клапана 1, %','','');
-INSERT INTO "techApp_io" VALUES('valve','l_v2','Valve 2 position, %',2,0,'0',0,12,'Положення клапану 2, %','Положение клапана 2, %','','');
-INSERT INTO "techApp_io" VALUES('valve','Q0','Norm density of the environment, kg/m3',2,0,'1',0,14,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','');
-INSERT INTO "techApp_io" VALUES('valve','Kln','Coefficient of the linearity',2,0,'1',0,15,'Коефіцієнт нелінійності','Коэффициент нелинейности','','');
-INSERT INTO "techApp_io" VALUES('valve','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,16,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','');
-INSERT INTO "techApp_io" VALUES('valve','Ct','Heat capacity of the environment',2,0,'20',0,17,'Теплоємність середовища','Теплоёмкость среды','','');
-INSERT INTO "techApp_io" VALUES('valve','Riz','Heat resistance of the isolation',2,0,'20',0,18,'Тепловий опір ізоляції','Тепловое сопротивление изоляции','','');
-INSERT INTO "techApp_io" VALUES('valve','noBack','Back valve',3,0,'0',0,19,'Зворотній клапан','Обратный клапан','','');
-INSERT INTO "techApp_io" VALUES('valve','Fwind','Air speed',2,0,'1',0,20,'Швидкість повітря','Скорость воздуха','','');
-INSERT INTO "techApp_io" VALUES('valve','Twind','Air temperature, K',2,0,'273',0,21,'Температура повітря, К','Температура воздуха, К','','');
-INSERT INTO "techApp_io" VALUES('valve','f_frq','Calculation frequency, Hz',2,0,'200',1,22,'Частота обчислення, Гц','Частота вычисления, Гц','','');
-INSERT INTO "techApp_io" VALUES('src_press','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,7,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','');
-INSERT INTO "techApp_io" VALUES('lagClean','out','Output',2,2,'0',0,0,'Вихід','Выход','','');
-INSERT INTO "techApp_io" VALUES('lagClean','in','Input',2,0,'0',0,1,'Вхід','Вход','','');
-INSERT INTO "techApp_io" VALUES('lagClean','t_lg','Lag time, seconds',2,0,'10',0,2,'Час затримки, секунд','Время запаздывания, секунд','','');
-INSERT INTO "techApp_io" VALUES('lagClean','f_frq','Calculation frequency, Hz',2,0,'100',1,3,'Частота обчислення, Гц','Частота вычисления, Гц','','');
-INSERT INTO "techApp_io" VALUES('lagClean','cl1','Link 1',2,0,'0',1,4,'Ланка 1','Звено 1','','');
-INSERT INTO "techApp_io" VALUES('lagClean','cl2','Link 2',2,0,'0',1,5,'Ланка 2','Звено 2','','');
-INSERT INTO "techApp_io" VALUES('lagClean','cl3','Link 3',2,0,'0',1,6,'Ланка 3','Звено 3','','');
-INSERT INTO "techApp_io" VALUES('net','Fi','Input flow, ton/h',2,1,'10',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','');
-INSERT INTO "techApp_io" VALUES('net','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','');
-INSERT INTO "techApp_io" VALUES('net','Po','Output pressure setpoint, at',2,0,'1',0,2,'Вихідне завдання тиску, ата','Выходное задание давления, ата','','');
-INSERT INTO "techApp_io" VALUES('net','So','Output pipe cutset, m2',2,0,'0.1',0,3,'Вихідний перетин труби, м2','Выходное сечение трубы, м2','','');
-INSERT INTO "techApp_io" VALUES('net','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,4,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','');
-INSERT INTO "techApp_io" VALUES('net','Noise','Input flow''s noise',2,0,'1',0,5,'Шум вхідних витрат','Шум входного расхода','','');
-INSERT INTO "techApp_io" VALUES('net','Q0','Norm density of the environment, kg/m3',2,0,'1',0,6,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','');
-INSERT INTO "techApp_io" VALUES('net','f_frq','Calculation frequency, Hz',2,0,'200',1,7,'Частота обчислення, Гц','Частота вычисления, Гц','','');
-INSERT INTO "techApp_io" VALUES('src_press','Pi','Input pressure setpoint, at',2,0,'10',0,0,'Завдання вхідного тиску, ата','Задание входного давления, ата','','');
-INSERT INTO "techApp_io" VALUES('src_press','Fo','Output flow, ton/h',2,0,'0',0,1,'Вихідні витрати, т/год','Выходной расход, т/ч','','');
-INSERT INTO "techApp_io" VALUES('src_press','Po','Output pressure, at',2,1,'1',0,2,'Вихідний тиск, ата','Выходное давление, ата','','');
-INSERT INTO "techApp_io" VALUES('src_press','So','Output pipe cutset, m2',2,0,'0.1',0,3,'Вихідний перетин труби, м2','Выходное сечение трубы, м2','','');
-INSERT INTO "techApp_io" VALUES('src_press','lo','Output pipe length, m',2,0,'100',0,4,'Вихідна довжина труби, м','Выходная длина трубы, м','','');
-INSERT INTO "techApp_io" VALUES('src_press','Noise','Input flow''s noise',2,0,'1',0,5,'Шум вхідних витрат','Шум входного расхода','','');
-INSERT INTO "techApp_io" VALUES('src_press','Q0','Norm density of the environment, kg/m3',2,0,'1',0,6,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','');
-INSERT INTO "techApp_io" VALUES('src_press','f_frq','Calculation frequency, Hz',2,0,'200',1,8,'Частота обчислення, Гц','Частота вычисления, Гц','','');
-INSERT INTO "techApp_io" VALUES('src_press','Fit','Input flow, lagged',2,1,'0',1,9,'Вхідні витрати, утримані','Входной расход, удержанный','','');
-INSERT INTO "techApp_io" VALUES('cooler','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','');
-INSERT INTO "techApp_io" VALUES('cooler','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','');
-INSERT INTO "techApp_io" VALUES('cooler','Ti','Input temperature, K',2,0,'273',0,2,'Вхідна температура, К','Входная температура, К','','');
-INSERT INTO "techApp_io" VALUES('cooler','Si','Cooler''s pipes cutset, m2',2,0,'0.05',0,3,'Перетин трубок, м2','Сечение трубок, м2','','');
-INSERT INTO "techApp_io" VALUES('cooler','li','Full cooler''s pipes length, m',2,0,'10',0,4,'Загальна довжина трубок, м','Общая длина трубок, м','','');
-INSERT INTO "techApp_io" VALUES('cooler','Fo','Output flow, ton/h',2,0,'0',0,5,'Вихідні витрати, т/год','Выходной расход, т/ч','','');
-INSERT INTO "techApp_io" VALUES('cooler','Po','Output pressure, at',2,1,'1',0,6,'Вихідний тиск, ата','Выходное давление, ата','','');
-INSERT INTO "techApp_io" VALUES('cooler','To','Output temperature, K',2,1,'273',0,7,'Вихідна температура, К','Выходная температура, К','','');
-INSERT INTO "techApp_io" VALUES('cooler','So','Output pipe cutset, m2',2,0,'.2',0,8,'Вихідний перетин труби, м2','Выходное сечение трубы, м2','','');
-INSERT INTO "techApp_io" VALUES('cooler','lo','Output pipe length, m',2,0,'10',0,9,'Вихідна довжина труби, м','Выходная длина трубы, м','','');
-INSERT INTO "techApp_io" VALUES('cooler','Tair','Cooling air temperature, К',2,0,'283',0,10,'Температура охолодження повітря, К','Температура охлаждения воздуха, К','','');
-INSERT INTO "techApp_io" VALUES('cooler','Wc','Cooler performance',2,0,'200',0,11,'Продуктивність холодильника','Производительность холодильника','','');
-INSERT INTO "techApp_io" VALUES('cooler','Q0','Norm density of the environment, kg/m3',2,0,'1',0,12,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','');
-INSERT INTO "techApp_io" VALUES('cooler','Ct','Heat capacity of the environment',2,0,'100',0,13,'Теплоємність середовища','Теплоёмкость среды','','');
-INSERT INTO "techApp_io" VALUES('cooler','Rt','Heat resistance',2,0,'1',0,14,'Тепловий опір','Тепловое сопротивление','','');
-INSERT INTO "techApp_io" VALUES('cooler','f_frq','Calculation frequency, Hz',2,0,'200',1,15,'Частота обчислення, Гц','Частота вычисления, Гц','','');
-INSERT INTO "techApp_io" VALUES('src_flow','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,7,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','');
-INSERT INTO "techApp_io" VALUES('pipe1_1','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,7,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','');
-INSERT INTO "techApp_io" VALUES('compressor','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','');
-INSERT INTO "techApp_io" VALUES('compressor','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','');
-INSERT INTO "techApp_io" VALUES('compressor','Ti','Input temperature, K',2,0,'273',0,2,'Вхідна температура, К','Входная температура, К','','');
-INSERT INTO "techApp_io" VALUES('compressor','Fo','Output flow, ton/h',2,0,'0',0,3,'Вихідні витрати, т/год','Выходной расход, т/ч','','');
-INSERT INTO "techApp_io" VALUES('compressor','Po','Output pressure, at',2,1,'1',0,4,'Вихідний тиск, ата','Выходное давление, ата','','');
-INSERT INTO "techApp_io" VALUES('compressor','To','Output temperature, K',2,1,'273',0,5,'Вихідна температура, К','Выходная температура, К','','');
-INSERT INTO "techApp_io" VALUES('compressor','So','Output pipe cutset, m2',2,0,'0.2',0,6,'Вихідний перетин труби, м2','Выходное сечение трубы, м2','','');
-INSERT INTO "techApp_io" VALUES('compressor','lo','Output pipe length, m',2,0,'2',0,7,'Вихідна довжина труби, м','Выходная длина трубы, м','','');
-INSERT INTO "techApp_io" VALUES('compressor','Kmrg','Surge protect margin coefficient',2,1,'0.1',0,8,'Коефіцієнт запасу за помпажем','Коэффициент запаса по помпажу','','');
-INSERT INTO "techApp_io" VALUES('compressor','N','Turnovers, 1000 x turn/min',2,0,'0',0,9,'Оберти компресору, тис. об./хвил','Обороты компрессора, тыс. об./мин','','');
-INSERT INTO "techApp_io" VALUES('compressor','V','Compressor capacity, m3',2,0,'7',0,10,'Об''єм компресору, м3','Объём компрессора, м3','','');
-INSERT INTO "techApp_io" VALUES('compressor','Kpmp','Surge coefficient, surge point',2,0,'0.066',0,11,'Коефіцієнт помпажу, точка помпажу','Коэффициент помпажа, точка помпажа','','');
-INSERT INTO "techApp_io" VALUES('compressor','Kslp','Slope coefficient of the surge curve',2,0,'0.08',0,12,'Коефіцієнт нахилу помпажної кривої','Коэффициент наклона помпажной кривой','','');
-INSERT INTO "techApp_io" VALUES('compressor','Q0','Norm density of the environment, kg/m3',2,0,'1',0,13,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','');
-INSERT INTO "techApp_io" VALUES('compressor','Ct','Heat capacity of the environment',2,0,'100',0,15,'Теплоємність середовища','Теплоёмкость среды','','');
-INSERT INTO "techApp_io" VALUES('compressor','Riz','Heat resistance of the isolation',2,0,'100',0,16,'Тепловий опір ізоляції','Тепловое сопротивление изоляции','','');
-INSERT INTO "techApp_io" VALUES('compressor','Fwind','Air speed',2,0,'1',0,17,'Швидкість повітря','Скорость воздуха','','');
-INSERT INTO "techApp_io" VALUES('compressor','Twind','Air temperature, K',2,0,'273',0,18,'Температура повітря, К','Температура воздуха, К','','');
-INSERT INTO "techApp_io" VALUES('compressor','f_frq','Calculation frequency, Hz',2,0,'200',1,19,'Частота обчислення, Гц','Частота вычисления, Гц','','');
-INSERT INTO "techApp_io" VALUES('pipe1_2','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,11,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','');
-INSERT INTO "techApp_io" VALUES('compressor','Fit','Input flow, lagged',2,1,'0',1,20,'Вхідні витрати, утримані','Входной расход, удержанный','','');
-INSERT INTO "techApp_io" VALUES('src_flow','Fi','Input flow setpoint, ton/h',2,0,'10',0,0,'Завдання вхідних витрат, т/год','Задание входного расхода, т/ч','','');
-INSERT INTO "techApp_io" VALUES('src_flow','Fo','Output flow, ton/h',2,0,'10',0,1,'Вихідні витрати, т/год','Выходной расход, т/ч','','');
-INSERT INTO "techApp_io" VALUES('src_flow','Po','Output pressure, at',2,1,'1',0,2,'Вихідний тиск, ата','Выходное давление, ата','','');
-INSERT INTO "techApp_io" VALUES('src_flow','So','Output pipe cutset, m2',2,0,'0.1',0,3,'Вихідний перетин труби, м2','Выходное сечение трубы, м2','','');
-INSERT INTO "techApp_io" VALUES('src_flow','lo','Output pipe length, m',2,0,'100',0,4,'Вихідна довжина труби, м','Выходная длина трубы, м','','');
-INSERT INTO "techApp_io" VALUES('src_flow','Noise','Input flow''s noise',2,0,'1',0,5,'Шум вхідних витрат','Шум входного расхода','','');
-INSERT INTO "techApp_io" VALUES('src_flow','Q0','Norm density of the environment, kg/m3',2,0,'1',0,6,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','');
-INSERT INTO "techApp_io" VALUES('src_flow','f_frq','Calculation frequency, Hz',2,0,'100',1,8,'Частота обчислення, Гц','Частота вычисления, Гц','','');
-INSERT INTO "techApp_io" VALUES('pipe1_1','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','');
-INSERT INTO "techApp_io" VALUES('pipe1_1','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','');
-INSERT INTO "techApp_io" VALUES('pipe1_1','Fo','Output flow, ton/h',2,0,'0',0,2,'Вихідні витрати, т/год','Выходной расход, т/ч','','');
-INSERT INTO "techApp_io" VALUES('pipe1_1','Po','Output pressure, at',2,1,'1',0,3,'Вихідний тиск, ата','Выходное давление, ата','','');
-INSERT INTO "techApp_io" VALUES('pipe1_1','So','Output cutset, m2',2,0,'.2',0,4,'Вихідний перетин, м2','Выходное сечение, м2','','');
-INSERT INTO "techApp_io" VALUES('pipe1_1','lo','Output length, m',2,0,'10',0,5,'Вихідна довжина, м','Выходная длина, м','','');
-INSERT INTO "techApp_io" VALUES('pipe1_1','Q0','Norm density of the environment, kg/m3',2,0,'1',0,6,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','');
-INSERT INTO "techApp_io" VALUES('pipe1_1','f_frq','Calculation frequency, Hz',2,0,'200',1,8,'Частота обчислення, Гц','Частота вычисления, Гц','','');
-INSERT INTO "techApp_io" VALUES('pipe1_1','Pti','Pti',2,1,'1',1,9,'','','','');
-INSERT INTO "techApp_io" VALUES('pipe1_1','Fto','Fto',2,1,'0',1,10,'','','','');
-INSERT INTO "techApp_io" VALUES('pipe1_1','Pt1','Pt1',2,1,'1',1,11,'','','','');
-INSERT INTO "techApp_io" VALUES('pipe1_1','Ft1','Ft1',2,1,'0',1,12,'','','','');
-INSERT INTO "techApp_io" VALUES('pipe1_2','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','');
-INSERT INTO "techApp_io" VALUES('pipe1_2','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','');
-INSERT INTO "techApp_io" VALUES('pipe1_2','Fo1','Output 1 flow, ton/h',2,0,'0',0,2,'Вихідні витрати 1, т/год','Выходной расход 1, т/ч','','');
-INSERT INTO "techApp_io" VALUES('pipe1_2','Po1','Output 1 pressure, at',2,1,'1',0,3,'Вихідний тиск 1, ата','Выходное давление 1, ата','','');
-INSERT INTO "techApp_io" VALUES('pipe1_2','So1','Output 1 cutset, m2',2,0,'.2',0,4,'Вихідний перетин труби 1, м2','Выходное сечение 1, м2','','');
-INSERT INTO "techApp_io" VALUES('pipe1_2','lo1','Output 1 length, m',2,0,'10',0,5,'Вихідна довжина труби 1, м','Выходная длина 1, м','','');
-INSERT INTO "techApp_io" VALUES('pipe1_2','Fo2','Output 2 flow, ton/h',2,0,'0',0,6,'Вихідні витрати 2, т/год','Выходной расход 2, т/ч','','');
-INSERT INTO "techApp_io" VALUES('pipe1_2','Po2','Output 2 pressure, at',2,1,'1',0,7,'Вихідний тиск 2, ата','Выходное давление 2, ата','','');
-INSERT INTO "techApp_io" VALUES('pipe1_2','So2','Output 2 cutset, m2',2,0,'.2',0,8,'Вихідний перетин труби 2, м2','Выходное сечение 2, м2','','');
-INSERT INTO "techApp_io" VALUES('pipe1_2','lo2','Output 2 length, m',2,0,'10',0,9,'Вихідна довжина труби 2, м','Выходная длина 2, м','','');
-INSERT INTO "techApp_io" VALUES('pipe1_2','Q0','Norm density of the environment, kg/m3',2,0,'1',0,10,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','');
-INSERT INTO "techApp_io" VALUES('pipe1_2','f_frq','Calculation frequency, Hz',2,0,'100',1,12,'Частота обчислення, Гц','Частота вычисления, Гц','','');
-INSERT INTO "techApp_io" VALUES('pipe1_2','F1tmp','Temporary flow 1',2,1,'0',1,13,'Тимчасові витрати 1','Временный расход 1','','');
-INSERT INTO "techApp_io" VALUES('pipe1_2','F2tmp','Temporary flow 2',2,1,'0',1,14,'Тимчасові витрати 2','Временный расход 2','','');
-INSERT INTO "techApp_io" VALUES('pipe1_2','Pot1','Temporary pressure 1',2,1,'1',1,15,'Тимчасовий тиск 1','Временное давление 1','','');
-INSERT INTO "techApp_io" VALUES('pipe1_2','Pot2','Temporary pressure 2',2,1,'1',1,16,'Тимчасовий тиск 2','Временное давление 2','','');
-INSERT INTO "techApp_io" VALUES('pipe1_3','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','');
-INSERT INTO "techApp_io" VALUES('pipe1_3','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','');
-INSERT INTO "techApp_io" VALUES('pipe1_3','Fo1','Output 1 flow, ton/h',2,0,'0',0,2,'Вихідні витрати 1, т/год','Выходной расход 1, т/ч','','');
-INSERT INTO "techApp_io" VALUES('pipe1_3','Po1','Output 1 pressure, at',2,1,'1',0,3,'Вихідний тиск 1, ата','Выходное давление 1, ата','','');
-INSERT INTO "techApp_io" VALUES('pipe1_3','So1','Output 1 cutset, m2',2,0,'0.2',0,4,'Вихідний перетин труби 1, м2','Выходное сечение 1, м2','','');
-INSERT INTO "techApp_io" VALUES('pipe1_3','lo1','Output 1 length, m',2,0,'10',0,5,'Вихідна довжина труби 1, м','Выходная длина 1, м','','');
-INSERT INTO "techApp_io" VALUES('pipe1_3','Fo2','Output 2 flow, ton/h',2,0,'0',0,6,'Вихідні витрати 2, т/год','Выходной расход 2, т/ч','','');
-INSERT INTO "techApp_io" VALUES('pipe1_3','Po2','Output 2 pressure, at',2,1,'1',0,7,'Вихідний тиск 2, ата','Выходное давление 2, ата','','');
-INSERT INTO "techApp_io" VALUES('pipe1_3','So2','Output 2 cutset, m2',2,0,'0.2',0,8,'Вихідний перетин труби 2, м2','Выходное сечение 2, м2','','');
-INSERT INTO "techApp_io" VALUES('pipe1_3','lo2','Output 2 length, m',2,0,'10',0,9,'Вихідна довжина труби 2, м','Выходная длина 2, м','','');
-INSERT INTO "techApp_io" VALUES('pipe1_3','Fo3','Output 3 flow, ton/h',2,0,'0',0,10,'Вихідні витрати 3, т/год','Выходной расход 3, т/ч','','');
-INSERT INTO "techApp_io" VALUES('pipe1_3','Po3','Output 3 pressure, at',2,1,'1',0,11,'Вихідний тиск 3, ата','Выходное давление 3, ата','','');
-INSERT INTO "techApp_io" VALUES('pipe1_3','So3','Output 3 cutset, m2',2,0,'0.2',0,12,'Вихідний перетин труби 3, м2','Выходное сечение 3, м2','','');
-INSERT INTO "techApp_io" VALUES('pipe1_3','lo3','Output 3 length, m',2,0,'10',0,13,'Вихідна довжина труби 3, м','Выходная длина 3, м','','');
-INSERT INTO "techApp_io" VALUES('pipe1_3','Q0','Norm density of the environment, kg/m3',2,0,'1',0,14,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','');
-INSERT INTO "techApp_io" VALUES('pipe1_3','f_frq','Calculation frequency, Hz',2,0,'200',1,16,'Частота обчислення, Гц','Частота вычисления, Гц','','');
-INSERT INTO "techApp_io" VALUES('pipe1_3','F1tmp','Temporary flow 1',2,1,'0',0,17,'Тимчасові витрати 1','Временный расход 1','','');
-INSERT INTO "techApp_io" VALUES('pipe1_3','F2tmp','Temporary flow 2',2,1,'0',0,18,'Тимчасові витрати 2','Временный расход 2','','');
-INSERT INTO "techApp_io" VALUES('pipe1_3','F3tmp','Temporary flow 3',2,1,'0',0,19,'Тимчасові витрати 3','Временный расход 3','','');
-INSERT INTO "techApp_io" VALUES('pipe1_3','Pot1','Temporary pressure 1',2,1,'1',1,20,'Тимчасовий тиск 1','Временное давление 1','','');
-INSERT INTO "techApp_io" VALUES('pipe1_3','Pot2','Temporary pressure 2',2,1,'1',1,21,'Тимчасовий тиск 2','Временное давление 2','','');
-INSERT INTO "techApp_io" VALUES('pipe1_3','Pot3','Temporary pressure 3',2,1,'1',1,22,'Тимчасовий тиск 3','Временное давление 3','','');
-INSERT INTO "techApp_io" VALUES('pipe1_4','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','');
-INSERT INTO "techApp_io" VALUES('pipe1_4','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','');
-INSERT INTO "techApp_io" VALUES('pipe1_4','Fo1','Output 1 flow, ton/h',2,0,'0',0,2,'Вихідні витрати 1, т/год','Выходной расход 1, т/ч','','');
-INSERT INTO "techApp_io" VALUES('pipe1_4','Po1','Output 1 pressure, at',2,1,'1',0,3,'Вихідний тиск 1, ата','Выходное давление 1, ата','','');
-INSERT INTO "techApp_io" VALUES('pipe1_4','So1','Output 1 cutset, m2',2,0,'0.2',0,4,'Вихідний перетин труби 1, м2','Выходное сечение 1, м2','','');
-INSERT INTO "techApp_io" VALUES('pipe1_4','lo1','Output 1 length, m',2,0,'10',0,5,'Вихідна довжина труби 1, м','Выходная длина 1, м','','');
-INSERT INTO "techApp_io" VALUES('pipe1_4','Fo2','Output 2 flow, ton/h',2,0,'0',0,6,'Вихідні витрати 2, т/год','Выходной расход 2, т/ч','','');
-INSERT INTO "techApp_io" VALUES('pipe1_4','Po2','Output 2 pressure, at',2,1,'1',0,7,'Вихідний тиск 2, ата','Выходное давление 2, ата','','');
-INSERT INTO "techApp_io" VALUES('pipe1_4','So2','Output 2 cutset, m2',2,0,'0.2',0,8,'Вихідний перетин труби 2, м2','Выходное сечение 2, м2','','');
-INSERT INTO "techApp_io" VALUES('pipe1_4','lo2','Output 2 length, m',2,0,'10',0,9,'Вихідна довжина труби 2, м','Выходная длина 2, м','','');
-INSERT INTO "techApp_io" VALUES('pipe1_4','Fo3','Output 3 flow, ton/h',2,0,'0',0,10,'Вихідні витрати 3, т/год','Выходной расход 3, т/ч','','');
-INSERT INTO "techApp_io" VALUES('pipe1_4','Po3','Output 3 pressure, at',2,1,'1',0,11,'Вихідний тиск 3, ата','Выходное давление 3, ата','','');
-INSERT INTO "techApp_io" VALUES('pipe1_4','So3','Output 3 cutset, m2',2,0,'0.2',0,12,'Вихідний перетин труби 3, м2','Выходное сечение 3, м2','','');
-INSERT INTO "techApp_io" VALUES('pipe1_4','lo3','Output 3 length, m',2,0,'10',0,13,'Вихідна довжина труби 3, м','Выходная длина 3, м','','');
-INSERT INTO "techApp_io" VALUES('pipe1_4','Fo4','Output 4 flow, ton/h',2,0,'0',0,14,'Вихідні витрати 4, т/год','Выходной расход 4, т/ч','','');
-INSERT INTO "techApp_io" VALUES('pipe1_4','Po4','Output 4 pressure, at',2,1,'1',0,15,'Вихідний тиск 4, ата','Выходное давление 4, ата','','');
-INSERT INTO "techApp_io" VALUES('pipe1_4','So4','Output 4 cutset, m2',2,0,'0.2',0,16,'Вихідний перетин труби 4, м2','Выходное сечение 4, м2','','');
-INSERT INTO "techApp_io" VALUES('pipe1_4','lo4','Output 4 length, m',2,0,'10',0,17,'Вихідна довжина труби 4, м','Выходная длина 4, м','','');
-INSERT INTO "techApp_io" VALUES('pipe1_4','Q0','Norm density of the environment, kg/m3',2,0,'1',0,18,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','');
-INSERT INTO "techApp_io" VALUES('pipe1_4','f_frq','Calculation frequency, Hz',2,0,'200',1,20,'Частота обчислення, Гц','Частота вычисления, Гц','','');
-INSERT INTO "techApp_io" VALUES('pipe1_4','F1tmp','Temporary flow 1',2,1,'0',1,21,'Тимчасові витрати 1','Временный расход 1','','');
-INSERT INTO "techApp_io" VALUES('pipe1_4','F2tmp','Temporary flow 2',2,1,'0',1,22,'Тимчасові витрати 2','Временный расход 2','','');
-INSERT INTO "techApp_io" VALUES('pipe1_4','F3tmp','Temporary flow 3',2,1,'0',1,23,'Тимчасові витрати 3','Временный расход 3','','');
-INSERT INTO "techApp_io" VALUES('pipe1_4','F4tmp','Temporary flow 4',2,1,'0',1,24,'Тимчасові витрати 4','Временный расход 4','','');
-INSERT INTO "techApp_io" VALUES('pipe1_4','Pot1','Temporary pressure 1',2,1,'1',1,25,'Тимчасовий тиск 1','Временное давление 1','','');
-INSERT INTO "techApp_io" VALUES('pipe1_4','Pot2','Temporary pressure 2',2,1,'1',1,26,'Тимчасовий тиск 2','Временное давление 2','','');
-INSERT INTO "techApp_io" VALUES('pipe1_4','Pot3','Temporary pressure 3',2,1,'1',1,27,'Тимчасовий тиск 3','Временное давление 3','','');
-INSERT INTO "techApp_io" VALUES('pipe1_4','Pot4','Temporary pressure 4',2,1,'1',1,28,'Тимчасовий тиск 4','Временное давление 4','','');
-INSERT INTO "techApp_io" VALUES('valveMech','pos','Position, %',2,1,'0',0,0,'Положення, %','Положение, %','','');
-INSERT INTO "techApp_io" VALUES('valveMech','pos_sensor','Position by the sensor, %',2,1,'0',0,1,'Положення за давачем, %','Положение по датчику, %','','');
-INSERT INTO "techApp_io" VALUES('valveMech','com','Command',2,0,'0',0,2,'Команда','Команда','','');
-INSERT INTO "techApp_io" VALUES('valveMech','st_open','State "Opened"',3,1,'0',0,3,'Стан "Відкрито"','Состояние "Открыто"','','');
-INSERT INTO "techApp_io" VALUES('valveMech','st_close','State "Closed"',3,1,'1',0,4,'Стан "Закрито"','Состояние "Закрыто"','','');
-INSERT INTO "techApp_io" VALUES('valveMech','t_full','Going time, seconds',2,0,'3',0,5,'Час ходу, секунд','Время хода, секунд','','');
-INSERT INTO "techApp_io" VALUES('valveMech','t_up','Estrangement time, seconds',2,0,'1',0,6,'Час зриву, секунд','Время срыва, секунд','','');
-INSERT INTO "techApp_io" VALUES('valveMech','t_sensor','Sensor lag time, seconds',2,0,'1',0,7,'Час затримки сенсору, секунд','Время задержки сенсора, секунд','','');
-INSERT INTO "techApp_io" VALUES('valveMech','f_frq','Calculation frequency, Hz',2,0,'100',1,8,'Частота обчислення, Гц','Частота вычисления, Гц','','');
-INSERT INTO "techApp_io" VALUES('valveMech','tmp_up','Estrangement counter',2,1,'0',0,9,'Лічильник зриву','Счётчик срыва','','');
-INSERT INTO "techApp_io" VALUES('valveMech','lst_com','Last command',2,1,'0',0,10,'Остання команда','Последняя команда','','');
-INSERT INTO "techApp_io" VALUES('diaphragm','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','');
-INSERT INTO "techApp_io" VALUES('diaphragm','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ata','','');
-INSERT INTO "techApp_io" VALUES('diaphragm','Fo','Output flow, ton/h',2,0,'0',0,2,'Вихідні витрати, т/год','Выходной расход, т/ч','','');
-INSERT INTO "techApp_io" VALUES('diaphragm','Po','Output pressure, at',2,1,'1',0,3,'Вихідний тиск, ата','Выходное давление, ата','','');
-INSERT INTO "techApp_io" VALUES('diaphragm','dP','Pressure difference, kPa',2,1,'0',0,4,'Перепад тиску, кПа','Перепад давления, кПа','','');
-INSERT INTO "techApp_io" VALUES('diaphragm','Sdf','Diaphragm cutset, m2',2,0,'0.1',0,5,'Перетин діафрагми, м2','Сечение диафрагмы, м2','','');
-INSERT INTO "techApp_io" VALUES('diaphragm','So','Output pipe cutset, m2',2,0,'0.2',0,6,'Вихідний перетин труби, м2','Выходное сечение трубы, м2','','');
-INSERT INTO "techApp_io" VALUES('diaphragm','lo','Output pipe length, m',2,0,'10',0,7,'Вихідна довжина труби, м','Выходная длина трубы, м','','');
-INSERT INTO "techApp_io" VALUES('diaphragm','Q0','Norm density of the environment, kg/m3',2,0,'1',0,8,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','');
-INSERT INTO "techApp_io" VALUES('diaphragm','f_frq','Calculation frequency, Hz',2,0,'100',1,10,'Частота обчислення, Гц','Частота вычисления, Гц','','');
-INSERT INTO "techApp_io" VALUES('pipe3_1','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,18,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','');
-INSERT INTO "techApp_io" VALUES('pipe3_1','Fi1','Input 1 flow, ton/h',2,1,'0',0,0,'Вхідні витрати 1, т/год','Входной расход 1, т/ч','','');
-INSERT INTO "techApp_io" VALUES('pipe3_1','Pi1','Input 1 pressure, at',2,0,'1',0,1,'Вхідний тиск 1, ата','Входное давление 1, ата','','');
-INSERT INTO "techApp_io" VALUES('pipe3_1','Ti1','Input 1 temperature, K',2,0,'273',0,2,'Вхідна температура 1, К','Входная температура 1, К','','');
-INSERT INTO "techApp_io" VALUES('pipe3_1','Si1','Input 1 cutset, m2',2,0,'0.2',0,3,'Вхідний перетин 1, м2','Входное сечение 1, м2','','');
-INSERT INTO "techApp_io" VALUES('pipe3_1','Fi2','Input 2 flow, ton/h',2,1,'0',0,4,'Вхідні витрати 2, т/год','Входной расход 2, т/ч','','');
-INSERT INTO "techApp_io" VALUES('pipe3_1','Pi2','Input 2 pressure, at',2,0,'1',0,5,'Вхідний тиск 2, ата','Входное давление 2, ата','','');
-INSERT INTO "techApp_io" VALUES('pipe3_1','Ti2','Input 2 temperature, K',2,0,'273',0,6,'Вхідна температура 2, К','Входная температура 2, К','','');
-INSERT INTO "techApp_io" VALUES('pipe3_1','Si2','Input 2 cutset, m2',2,0,'0.2',0,7,'Вхідний перетин 2, м2','Входное сечение 2, м2','','');
-INSERT INTO "techApp_io" VALUES('pipe3_1','Fi3','Input 3 flow, ton/h',2,1,'0',0,8,'Вхідні витрати 3, т/год','Входной расход 3, т/ч','','');
-INSERT INTO "techApp_io" VALUES('pipe3_1','Pi3','Input 3 pressure, at',2,0,'1',0,9,'Вхідний тиск 3, ата','Входное давление 3, ата','','');
-INSERT INTO "techApp_io" VALUES('pipe3_1','Ti3','Input 3 temperature, K',2,0,'273',0,10,'Вхідна температура 3, К','Входная температура 3, К','','');
-INSERT INTO "techApp_io" VALUES('pipe3_1','Si3','Input 3 cutset, m2',2,0,'0.2',0,11,'Вхідний перетин 3, м2','Входное сечение 3, м2','','');
-INSERT INTO "techApp_io" VALUES('pipe3_1','Fo','Output flow, ton/h',2,0,'0',0,12,'Вихідні витрати, т/год','Выходной расход, т/ч','','');
-INSERT INTO "techApp_io" VALUES('pipe3_1','Po','Output pressure, at',2,1,'1',0,13,'Вихідний тиск, ата','Выходное давление, ата','','');
-INSERT INTO "techApp_io" VALUES('pipe3_1','To','Output temperature, K',2,1,'273',0,14,'Вихідна температура, К','Выходная температура, К','','');
-INSERT INTO "techApp_io" VALUES('pipe3_1','So','Output cutset, m2',2,0,'.2',0,15,'Вихідний перетин, м2','Выходное сечение, м2','','');
-INSERT INTO "techApp_io" VALUES('pipe3_1','lo','Output length, m',2,0,'10',0,16,'Вихідна довжина, м','Выходная длина, м','','');
-INSERT INTO "techApp_io" VALUES('pipe3_1','Q0','Norm density of the environment, kg/m3',2,0,'1',0,17,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','');
-INSERT INTO "techApp_io" VALUES('pipe3_1','Ct','Heat capacity of the environment',2,0,'20',0,19,'Теплоємність середовища','Теплоёмкость среды','','');
-INSERT INTO "techApp_io" VALUES('pipe3_1','Riz','Heat resistance of the isolation',2,0,'20',0,20,'Тепловий опір ізоляції','Тепловое сопротивление изоляции','','');
-INSERT INTO "techApp_io" VALUES('pipe3_1','Fwind','Air speed',2,0,'1',0,21,'Швидкість повітря','Скорость воздуха','','');
-INSERT INTO "techApp_io" VALUES('pipe3_1','Twind','Air temperature, К',2,0,'273',0,22,'Температура повітря, К','Температура воздуха, К','','');
-INSERT INTO "techApp_io" VALUES('pipe3_1','f_frq','Calculation frequency, Hz',2,0,'100',1,23,'Частота обчислення, Гц','Частота вычисления, Гц','','');
-INSERT INTO "techApp_io" VALUES('compressor','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,14,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','');
-INSERT INTO "techApp_io" VALUES('pipeBase','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','');
-INSERT INTO "techApp_io" VALUES('pipeBase','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','');
-INSERT INTO "techApp_io" VALUES('pipeBase','Ti','Input temperature, K',2,0,'293',0,2,'Вхідна температура, К','Входная температура, К','','');
-INSERT INTO "techApp_io" VALUES('pipeBase','Si','Input cutset, m2',2,0,'.2',0,3,'Вхідний перетин, м2','Входное сечение, м2','','');
-INSERT INTO "techApp_io" VALUES('pipeBase','Fo','Output flow, ton/h',2,0,'0',0,4,'Вихідні витрати, т/год','Выходной расход, т/ч','','');
-INSERT INTO "techApp_io" VALUES('pipeBase','Po','Output pressure, at',2,1,'1',0,5,'Вихідний тиск, ата','Выходное давление, ата','','');
-INSERT INTO "techApp_io" VALUES('pipeBase','To','Output temperature, K',2,1,'293',0,6,'Вихідна температура, К','Выходная температура, К','','');
-INSERT INTO "techApp_io" VALUES('pipeBase','So','Output cutset, m2',2,0,'.2',0,7,'Вихідний перетин, м2','Выходное сечение, м2','','');
-INSERT INTO "techApp_io" VALUES('pipeBase','lo','Output length, m',2,0,'10',0,8,'Вихідна довжина, м','Выходная длина, м','','');
-INSERT INTO "techApp_io" VALUES('pipeBase','Q0','Norm density of the environment, kg/m3',2,0,'1',0,9,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','');
-INSERT INTO "techApp_io" VALUES('pipeBase','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.98',0,10,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','');
-INSERT INTO "techApp_io" VALUES('pipeBase','Ktr','Coefficient of friction',2,0,'0.01',0,11,'Коефіцієнт тертя','Коэффициент трения','','');
-INSERT INTO "techApp_io" VALUES('pipeBase','f_frq','Calculation frequency, Hz',2,0,'100',0,12,'Частота обчислення, Гц','Частота вычисления, Гц','','');
-INSERT INTO "techApp_io" VALUES('heatExch','Fi1','Input 1 flow, ton/h',2,0,'20',0,0,'Вхідні витрати 1, т/год','Входной расход 1, т/ч','','');
-INSERT INTO "techApp_io" VALUES('heatExch','Pi1','Input 1 pressure, at',2,0,'1',0,1,'Вхідний тиск 1, ата','Входное давление 1, ата','','');
-INSERT INTO "techApp_io" VALUES('heatExch','Ti1','Input 1 temperature, K',2,0,'20',0,2,'Вхідна температура 1, К','Входная температура 1, K','','');
-INSERT INTO "techApp_io" VALUES('heatExch','Si1','Input 1 cutset, m2',2,0,'1',0,3,'Вхідний перетин 1, м2','Входное сечение 1, м2','','');
-INSERT INTO "techApp_io" VALUES('heatExch','li1','Input 1 length, m',2,0,'10',0,4,'Вхідна довжина 1, м','Входная длина 1, м','','');
-INSERT INTO "techApp_io" VALUES('heatExch','Q0i1','Input 1 norm density, kg/m3',2,0,'1',0,5,'Вхідна нормальна щільність 1, кг/м3','Входная нормальная плотность 1, кг/м3','','');
-INSERT INTO "techApp_io" VALUES('heatExch','Kpr1','Input 1 coefficient of the compressibility [0...1]',2,0,'0.9',0,6,'Вхідний коефіцієнт стискання середовища 1 [0...1]','Входной коэффициент сжимаемости среды 1 [0...1]','','');
-INSERT INTO "techApp_io" VALUES('heatExch','Ci1','Input 1 heat capacity',2,0,'1',0,7,'Вхідна теплоємність 1','Входная теплоёмкость 1','','');
-INSERT INTO "techApp_io" VALUES('heatExch','Fi2','Input 2 flow, ton/h',2,0,'20',0,8,'Вхідні витрати 2, т/год','Входной расход 2, т/ч','','');
-INSERT INTO "techApp_io" VALUES('heatExch','Pi2','Input 2 pressure, at',2,0,'1',0,9,'Вхідний тиск 2, ата','Входное давление 2, ата','','');
-INSERT INTO "techApp_io" VALUES('heatExch','Ti2','Input 2 temperature, K',2,0,'40',0,10,'Вхідна температура 2, К','Входная температура 2, K','','');
-INSERT INTO "techApp_io" VALUES('heatExch','Si2','Input 2 cutset, m2',2,0,'1',0,11,'Вхідний перетин 2, м2','Входное сечение 2, м2','','');
-INSERT INTO "techApp_io" VALUES('heatExch','li2','Input 2 length, m',2,0,'10',0,12,'Вхідна довжина 2, м','Входная длина 2, м','','');
-INSERT INTO "techApp_io" VALUES('heatExch','Q0i2','Input 2 norm density, kg/m3',2,0,'1',0,13,'Вхідна нормальна щільність 2, кг/м3','Входная нормальная плотность 2, кг/м3','','');
-INSERT INTO "techApp_io" VALUES('heatExch','Kpr2','Input 2 coefficient of the compressibility [0...1]',2,0,'0.9',0,14,'Вхідний коефіцієнт стискання середовища 2 [0...1]','Входной коэффициент сжимаемости среды 2 [0...1]','','');
-INSERT INTO "techApp_io" VALUES('heatExch','Ci2','Input 2 heat capacity',2,0,'1',0,15,'Вхідна теплоємність 2','Входная теплоёмкость 2','','');
-INSERT INTO "techApp_io" VALUES('heatExch','ki','Heat transfer coefficient',2,0,'0.9',0,16,'Коефіцієнт тепловіддачі','Коэффициент теплоотдачи ','','');
-INSERT INTO "techApp_io" VALUES('heatExch','Fo1','Output 1 flow, ton/h',2,0,'0',0,17,'Вихідні витрати 1, т/год','Выходной расход 1, т/ч','','');
-INSERT INTO "techApp_io" VALUES('heatExch','Po1','Output 1 pressure, at',2,1,'1',0,18,'Вихідний тиск 1, ата','Выходное давление 1, ата','','');
-INSERT INTO "techApp_io" VALUES('heatExch','To1','Output 1 temperature, K',2,1,'273',0,19,'Вихідна температура 1, К','Выходная температура 1, K','','');
-INSERT INTO "techApp_io" VALUES('heatExch','So1','Output 1 cutset, m2',2,1,'1',0,20,'Вихідний перетин труби 1, м2','Выходное сечение 1, м2','','');
-INSERT INTO "techApp_io" VALUES('heatExch','lo1','Output 1 length, m',2,1,'10',0,21,'Вихідна довжина труби 1, м','Выходная длина 1, м','','');
-INSERT INTO "techApp_io" VALUES('heatExch','Fo2','Output 2 flow, ton/h',2,0,'0',0,22,'Вихідні витрати 2, т/год','Выходной расход 2, т/ч','','');
-INSERT INTO "techApp_io" VALUES('heatExch','Po2','Output 2 pressure, at',2,1,'1',0,23,'Вихідний тиск 2, ата','Выходное давление 2, ата','','');
-INSERT INTO "techApp_io" VALUES('heatExch','To2','Output 2 temperature, K',2,1,'273',0,24,'Вихідна температура 2, К','Выходная температура 2, K','','');
-INSERT INTO "techApp_io" VALUES('heatExch','So2','Output 2 cutset, m2',2,1,'1',0,25,'Вихідний перетин труби 2, м2','Выходное сечение 2, м2','','');
-INSERT INTO "techApp_io" VALUES('heatExch','lo2','Output 2 length, m',2,1,'10',0,26,'Вихідна довжина труби 2, м','Выходная длина 2, м','','');
-INSERT INTO "techApp_io" VALUES('heatExch','f_frq','Calculation frequency, Hz',2,0,'200',0,27,'Частота обчислення, Гц','Частота вычисления, Гц','','');
-INSERT INTO "techApp_io" VALUES('boilerBarrel','Fi1','Input water flow, ton/h',2,1,'22',0,0,'Вхідні витрати води, т/год','Входной расход воды, т/ч','','');
-INSERT INTO "techApp_io" VALUES('boilerBarrel','Pi1','Input water pressure, at',2,0,'43',0,1,'Вхідний тиск води, ата','Входное давление воды, ата','','');
-INSERT INTO "techApp_io" VALUES('boilerBarrel','Ti1','Input water temperature, K',2,0,'523',0,2,'Вхідна температура води, К','Входная температура воды, K','','');
-INSERT INTO "techApp_io" VALUES('boilerBarrel','Si1','Input water pipes cutset, m2',2,0,'0.6',0,3,'Вхідний перетин труб з водою, м2','Входное сечение труб с водой, м2','','');
-INSERT INTO "techApp_io" VALUES('boilerBarrel','Fi2','Input smoke gas flow, ton/h',2,1,'',0,4,'Вхідні витрати димових газів, т/год','Входной расход дымовых газов, т/ч','','');
-INSERT INTO "techApp_io" VALUES('boilerBarrel','Pi2','Input smoke gas pressure, at',2,0,'1.3',0,5,'Вхідний тиск димових газів, ата','Входное давление дымовых газов, ата','','');
-INSERT INTO "techApp_io" VALUES('boilerBarrel','Ti2','Input smoke gas temperature, K',2,0,'1700',0,6,'Вхідна температура димових газів, К','Входная температура дымовых газов, K','','');
-INSERT INTO "techApp_io" VALUES('boilerBarrel','Si2','Input smoke gas pipes cutset, m2',2,0,'10',0,7,'Вхідний перетин труби димових газів, м2','Входное сечение трубы дымовых газов, м2','','');
-INSERT INTO "techApp_io" VALUES('boilerBarrel','Vi1','Barrel volume, m3',2,0,'3',0,8,'Об''єм барабану, м3','Объем барабана, м3','','');
-INSERT INTO "techApp_io" VALUES('boilerBarrel','Lo','Barrel level, %',2,1,'10',0,9,'Рівень у барабані, %','Уровень в барабане, %','','');
-INSERT INTO "techApp_io" VALUES('boilerBarrel','S','Heating surface, m2',2,0,'15',0,10,'Поверхня нагріву, м2','Поверхность нагрева, м2','','');
-INSERT INTO "techApp_io" VALUES('boilerBarrel','k','Heat transfer coefficient',2,0,'0.8',0,11,'Коефіцієнт тепловіддачі','Коэффициент теплоотдачи','','');
-INSERT INTO "techApp_io" VALUES('boilerBarrel','Fo','Output steam flow, ton/h',2,0,'20',0,12,'Вихідні витрати пару, т/год','Выходной расход пара, т/ч','','');
-INSERT INTO "techApp_io" VALUES('boilerBarrel','Po1','Output steam pressure, at',2,1,'41.68',0,13,'Вихідний тиск пари, ата','Выходное давление пара, ата','','');
-INSERT INTO "techApp_io" VALUES('boilerBarrel','To1','Output steam temperature, K',2,1,'10',0,14,'Вихідна температура пари, К','Выходная температура пара, K','','');
-INSERT INTO "techApp_io" VALUES('boilerBarrel','So1','Output steam pipe cutset, m2',2,0,'0.5',0,15,'Вихідний перетин труби пару, м2','Выходное сечение трубы по пару, м2','','');
-INSERT INTO "techApp_io" VALUES('boilerBarrel','lo1','Output steam pipe length, m',2,0,'5',0,16,'Вихідна довжина труби пару, м','Выходная длина трубы пара, м','','');
-INSERT INTO "techApp_io" VALUES('boilerBarrel','Fo2','Output smoke gas flow, ton/h',2,0,'180',0,17,'Вихідні витрати димових газів, т/год','Выходной расход дымовых газов, т/ч','','');
-INSERT INTO "techApp_io" VALUES('boilerBarrel','Po2','Output smoke gas pressure, at',2,1,'1',0,18,'Вихідний тиск димових газів, ата','Выходное давление дымовых газов, ата','','');
-INSERT INTO "techApp_io" VALUES('boilerBarrel','To2','Output smoke gas temperature, K',2,0,'0',0,19,'Вихідна температура димових газів, К','Выходная температура дымовых газов, K','','');
-INSERT INTO "techApp_io" VALUES('boilerBarrel','Fstm','Inner barrel steam flow, ton/h',2,1,'0',0,20,'Витрати пару у барабані, т/год','Расход пара в барабане, т/ч','','');
-INSERT INTO "techApp_io" VALUES('boilerBarrel','Tv','Inner water temperature, K',2,1,'0',0,21,'Температура води у барабані, K','Температура воды в барабане, K','','');
-INSERT INTO "techApp_io" VALUES('boilerBarrel','f_frq','Calculation frequency, Hz',2,0,'200',0,22,'Частота обчислення, Гц','Частота вычисления, Гц','','');
-INSERT INTO "techApp_io" VALUES('boilerBurner','Fi1','Input blast furnace gas flow, ton/h',2,1,'',0,0,'Вхідні витрати доменного газу, т/год','Входной расход доменного газа, т/ч','','');
-INSERT INTO "techApp_io" VALUES('boilerBurner','Pi1','Input blast furnace gas pressure, at',2,0,'',0,1,'Вхідний тиск доменного газу, ата','Входное давление доменного газа, ата','','');
-INSERT INTO "techApp_io" VALUES('boilerBurner','Ti1','Input blast furnace gas temperature, K',2,0,'40',0,2,'Вхідна температура димових газів, К','Входная температура доменного газа, K','','');
-INSERT INTO "techApp_io" VALUES('boilerBurner','Si1','Input blast furnace gas pipe cutset, m2',2,0,'',0,3,'Вхідний перетин труби димових газів, м2','Входное сечение трубы доменного газа, м2','','');
-INSERT INTO "techApp_io" VALUES('boilerBurner','Fi2','Input natural gas flow, ton/h',2,1,'',0,4,'Вхідні витрати природного газу, т/год','Входной расход природного газа, т/ч','','');
-INSERT INTO "techApp_io" VALUES('boilerBurner','Pi2','Input natural gas pressure, at',2,0,'',0,5,'Вхідний тиск природного газу, ата','Входное давление природного газа, ата','','');
-INSERT INTO "techApp_io" VALUES('boilerBurner','Ti2','Input natural gas temperature, K',2,0,'20',0,6,'Вхідна температура природного газу, К','Входная температура природного газа, K','','');
-INSERT INTO "techApp_io" VALUES('boilerBurner','Si2','Input natural gas pipe cutset, m2',2,0,'',0,7,'Вхідний перетин труби природного газу, м2','Входное сечение трубы природного газа, м2','','');
-INSERT INTO "techApp_io" VALUES('boilerBurner','Fi3','Input coke oven gas flow, ton/h',2,1,'',0,8,'Вхідні витрати коксового газу, т/год','Входной расход коксового газа, т/ч','','');
-INSERT INTO "techApp_io" VALUES('boilerBurner','Pi3','Input coke oven gas pressure, at',2,0,'',0,9,'Вхідний тиск коксового газу, ата','Входное давление коксового газа, ата','','');
-INSERT INTO "techApp_io" VALUES('boilerBurner','Ti3','Input coke oven gas temperature, K',2,0,'0',0,10,'Вхідна температура коксового газу, К','Входная температура коксового газа, K','','');
-INSERT INTO "techApp_io" VALUES('boilerBurner','Si3','Input coke oven gas pipe cutset, m2',2,0,'',0,11,'Вхідний перетин труби коксового газу, м2','Входное сечение трубы коксового газа, м2','','');
-INSERT INTO "techApp_io" VALUES('boilerBurner','Fi4','Input air flow, ton/h',2,1,'',0,12,'Вхідні витрати повітря, т/год','Входной расход воздуха, т/ч','','');
-INSERT INTO "techApp_io" VALUES('boilerBurner','Pi4','Input air pressure, at',2,0,'',0,13,'Вхідний тиск повітря, ата','Входное давление воздуха, ата','','');
-INSERT INTO "techApp_io" VALUES('boilerBurner','Ti4','Input air temperature, K',2,0,'20',0,14,'Вхідна температура повітря, К','Входная температура воздуха, K','','');
-INSERT INTO "techApp_io" VALUES('boilerBurner','Si4','Input air pipe cutset, m2',2,0,'',0,15,'Вхідний перетин труби повітря, м2','Входное сечение трубы воздуха, м2','','');
-INSERT INTO "techApp_io" VALUES('boilerBurner','Fo','Output smoke gas flow, ton/h',2,0,'',0,16,'Вихідні витрати димових газів, т/год','Выходной расход дымовых газов, т/ч','','');
-INSERT INTO "techApp_io" VALUES('boilerBurner','Po','Output smoke gas pressure, at',2,1,'',0,17,'Вихідний тиск димових газів, ата','Выходное давление дымовых газов, ата','','');
-INSERT INTO "techApp_io" VALUES('boilerBurner','To','Output smoke gas temperature, K',2,1,'',0,18,'Вихідна температура димових газів, К','Выходная температура дымовых газов, K','','');
-INSERT INTO "techApp_io" VALUES('boilerBurner','So','Output smoke gas pipe cutset, m2',2,0,'90',0,19,'Вихідний перетин труби димових газів, м2','Выходное сечение трубы дымовых газов, м2','','');
-INSERT INTO "techApp_io" VALUES('boilerBurner','lo','Output smoke gas pipe length, m',2,0,'',0,20,'Вихідна довжина труби димових газів, м','Выходная длина трубы дымовых газов, м','','');
-INSERT INTO "techApp_io" VALUES('boilerBurner','V','Burner volume, m3',2,0,'830',0,21,'Об''єм топки, м3','Объём топки, м3','','');
-INSERT INTO "techApp_io" VALUES('boilerBurner','CO','Percentage of CO in the flue stack gases, %',2,1,'',0,22,'Відсоток вмісту CO у димових газах, %','Процент содержания CO в дымовых газах, %','','');
-INSERT INTO "techApp_io" VALUES('boilerBurner','O2','Percentage of O2 in the flue stack gases, %',2,1,'',0,23,'Відсоток вмісту O2 у димових газах, %','Процент содержания O2 в дымовых газах, %','','');
-INSERT INTO "techApp_io" VALUES('boilerBurner','f_frq','Calculation frequency, Hz',2,0,'200',0,24,'Частота обчислення, Гц','Частота вычисления, Гц','','');
-INSERT INTO "techApp_io" VALUES('pipe2_1','Fi1','Input 1 flow, ton/h',2,1,'0',0,0,'Вхідні витрати 1, т/год','Входной расход 1, т/ч','','');
-INSERT INTO "techApp_io" VALUES('pipe2_1','Pi1','Input 1 pressure, at',2,0,'1',0,1,'Вхідний тиск 1, ата','Входное давление 1, ата','','');
-INSERT INTO "techApp_io" VALUES('pipe2_1','Ti1','Input 1 temperature, K',2,0,'273',0,2,'Вхідна температура 1, К','Входная температура 1, К','','');
-INSERT INTO "techApp_io" VALUES('pipe2_1','Si1','Input 1 cutset, m2',2,0,'0.2',0,3,'Вхідний перетин 1, м2','Входное сечение 1, м2','','');
-INSERT INTO "techApp_io" VALUES('pipe2_1','Fi2','Input 2 flow, ton/h',2,1,'0',0,4,'Вхідні витрати 2, т/год','Входной расход 2, т/ч','','');
-INSERT INTO "techApp_io" VALUES('pipe2_1','Pi2','Input 2 pressure, at',2,0,'1',0,5,'Вхідний тиск 2, ата','Входное давление 2, ата','','');
-INSERT INTO "techApp_io" VALUES('pipe2_1','Ti2','Input 2 temperature, K',2,0,'273',0,6,'Вхідна температура 2, К','Входная температура 2, К','','');
-INSERT INTO "techApp_io" VALUES('pipe2_1','Si2','Input 2 cutset, m2',2,0,'0.2',0,7,'Вхідний перетин 2, м2','Входное сечение 2, м2','','');
-INSERT INTO "techApp_io" VALUES('pipe2_1','Fo','Output flow, ton/h',2,0,'0',0,8,'Вихідні витрати, т/год','Выходной расход, т/ч','','');
-INSERT INTO "techApp_io" VALUES('pipe2_1','Po','Output pressure, at',2,1,'1',0,9,'Вихідний тиск, ата','Выходное давление, ата','','');
-INSERT INTO "techApp_io" VALUES('pipe2_1','To','Output temperature, K',2,1,'273',0,10,'Вихідна температура, К','Выходная температура, К','','');
-INSERT INTO "techApp_io" VALUES('pipe2_1','So','Output cutset, m2',2,0,'.2',0,11,'Вихідний перетин, м2','Выходное сечение, м2','','');
-INSERT INTO "techApp_io" VALUES('pipe2_1','lo','Output length, m',2,0,'10',0,12,'Вихідна довжина, м','Выходная длина, м','','');
-INSERT INTO "techApp_io" VALUES('pipe2_1','Q0','Norm density of the environment, kg/m3',2,0,'1',0,13,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','');
-INSERT INTO "techApp_io" VALUES('pipe2_1','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,14,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','');
-INSERT INTO "techApp_io" VALUES('pipe2_1','Ct','Heat capacity of the environment',2,0,'20',0,15,'Теплоємність середовища','Теплоёмкость среды','','');
-INSERT INTO "techApp_io" VALUES('pipe2_1','Riz','Heat resistance of the isolation',2,0,'20',0,16,'Тепловий опір ізоляції','Тепловое сопротивление изоляции','','');
-INSERT INTO "techApp_io" VALUES('pipe2_1','Fwind','Air speed',2,0,'1',0,17,'Швидкість повітря','Скорость воздуха','','');
-INSERT INTO "techApp_io" VALUES('pipe2_1','Twind','Air temperature, К',2,0,'273',0,18,'Температура повітря, К','Температура воздуха, К','','');
-INSERT INTO "techApp_io" VALUES('pipe2_1','f_frq','Calculation frequency, Hz',2,0,'100',1,19,'Частота обчислення, Гц','Частота вычисления, Гц','','');
-INSERT INTO "techApp_io" VALUES('pipe1_3','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,15,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','');
-INSERT INTO "techApp_io" VALUES('pipe1_4','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,19,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','');
-INSERT INTO "techApp_io" VALUES('diaphragm','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,9,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','');
-CREATE TABLE 'tmplib_DevLib_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
-INSERT INTO "tmplib_DevLib_io" VALUES('SCU750','transport','Transport',0,64,'SCU750',0,'Транспорт','','Транспорт','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SCU750','addr','Device address (-1...255)',1,64,'1',1,'Адрес устройства (-1...255)','','Адреса пристрою (-1...255)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SCU750','perGet','Period data getting (s)',2,64,'10',2,'Период получения данных (с)','','Період отримання даних (с)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SCU750','version','Version',0,16,'',3,'Версия','','Версія','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SCU750','snCntrUnit','Serial number: Control Unit',0,16,'',4,'Серийный номер: Блок Управления','','Серійний номер: Блок Керування','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SCU750','snPump','Serial number: Pump',0,16,'',5,'Серийный номер: Насос','','Серійний номер: Насос','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SCU750','cntPumpHour','Pump hour counter (minutes)',2,16,'',6,'Счётчик часов насоса (минуты)','','Лічильник годин насосу (хвилини)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SCU750','cntCntrUnitHour','Control unit hour counter (minutes)',2,16,'',7,'Счётчик часов объекта контроля (минуты)','','Лічильник годин об''єкта контролю (хвилини)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SCU750','cntStart','Start counter',2,16,'',8,'Запуск счётчика','','Пуск лічильника','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SCU750','operMode','Pump Operation Mode',0,16,'',9,'Режим работы насоса','','Режим роботи насосу','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SCU750','errors','Errors',0,16,'',10,'Ошибки','','Помилки','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SCU750','events','Events',0,16,'',11,'События','','Події','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SCU750','tTMS','TMS temperature (°С)',1,16,'',12,'TMS температура (°С)','','TMS температура (°С)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SCU750','tMotor','Motor temperature (°С)',1,16,'',13,'Температура мотора (°С)','','Температура мотору (°С)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SCU750','rotSpeed','Rotational speed (HZ)',1,16,'',14,'Скорость вращения (Гц)','','Швидкість обертання (Гц)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SCU750','comStart','Command: START',3,32,'',15,'Команда: ЗАПУСК','','Команда: ЗАПУСК','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SCU750','comStop','Command: STOP',3,32,'',16,'Команда: СТОП','','Команда: СТОП','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SCU750','comReset','Command: RESET',3,32,'',17,'Команда: СБРОС','','Команда: СКИД','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SCU750','spSpeed','Set point: Speed',1,32,'',18,'Задание: Скорость','','Завдання: Швидкість','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SCU750','spTMSt','Set point: TMS temperature',1,16,'',19,'Задание: температура TMS','','Завдання: температура TMS','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SCU750','spSpeedPrev','Set point: Speed (previous)',1,1,'',20,'Задание: Скорость (предыдущая)','','Завдання: Швидкість (попередня)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SCU750','cnt','Counter',1,1,'',21,'Счётчик','','Лічильник','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SCU750','operModes','Operation modes',4,1,'',22,'Режимы работы','','Режими роботи','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TMH','transport','Transport',0,64,'TMH',0,'Транспорт','','Транспорт','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TMH','addr','Device address (-1...255)',1,64,'1',1,'Адрес устройства (-1...255)','','Адреса пристрою (-1...255)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TMH','perGet','Period data getting (s)',2,64,'10',2,'Период получения данных (с)','','Період отримання даних (с)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TMH','modelID','Model ID',0,16,'',3,'ID модели','','ID моделі','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TMH','errors','Errors',0,16,'',4,'Ошибки','','Помилки','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TMH','rotSpeed','Rotational speed (HZ)',1,16,'',5,'Скорость вращения (Гц)','','Швидкість обертання (Гц)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TMH','I','Current (A)',2,16,'',6,'Ток (А)','','Струм (А)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TMH','axle1disb','Axle 1 disbalance',1,16,'',7,'Нарушение границы 1','','Порушення границі 1','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TMH','axle2disb','Axle 2 disbalance',1,16,'',8,'Нарушение границы 2','','Порушення границі 2','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TMH','MP_X1','MP X1',1,16,'',9,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TMH','MP_Y1','MP Y1',1,16,'',10,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TMH','MP_X2','MP X2',1,16,'',11,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TMH','MP_Y2','MP Y2',1,16,'',12,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TMH','MP_Z','MP Z',1,16,'',13,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TMH','operMode','Operation Mode',0,16,'',14,'Режим работы','','Режим роботи','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TMH','comStart','Command: START',3,32,'',15,'Команда: ЗАПУСК','','Команда: ЗАПУСК','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TMH','comStop','Command: STOP',3,32,'',16,'Команда: СТОП','','Команда: СТОП','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TMH','comReset','Command: RESET',3,32,'',17,'Команда: СБРОС','','Команда: СКИД','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TMH','operCntr','Operation Control Mode',0,16,'',18,'Режим работы и контроля','','Режим роботи та контролю','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TMH','comInteract','Interactive mode',3,32,'',19,'Интерактивный режим','','Інтерактивний режим','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TMH','comAutonom','Autonomous mode',3,32,'',20,'Автономный режим','','Автономний режим','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TMH','cnt','Counter',1,1,'',21,'Счётчик','','Лічильник','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TMH','operModes','Operation modes',4,1,'',22,'Режимы работы','','Режими роботи','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TM510x','transport','Transport',0,64,'tm510x',0,'Транспорт','','Транспорт','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TM510x','addr','Device address (1...254)',1,64,'1',1,'Адрес устройства (1...254)','','Адреса пристрою (1...254)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TM510x','devTp','Device type',1,16,'',2,'Тип устройства','','Тип пристрою','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TM510x','errors','Errors',0,16,'',3,'Ошибки','','Помилки','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TM510x','in1','Input 1',2,16,'',4,'Вход 1','','Вхід 1','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TM510x','in2','Input 2',2,16,'',5,'Вход 2','','Вхід 2','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TM510x','in3','Input 3',2,16,'',6,'Вход 3','','Вхід 3','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TM510x','in4','Input 4',2,16,'',7,'Вход 4','','Вхід 4','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TM510x','in5','Input 5',2,16,'',8,'Вход 5','','Вхід 5','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TM510x','in6','Input 6',2,16,'',9,'Вход 6','','Вхід 6','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TM510x','in7','Input 7',2,16,'',10,'Вход 7','','Вхід 7','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TM510x','in8','Input 8',2,16,'',11,'Вход 8','','Вхід 8','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','srcAddr','Source object''s address',0,64,'',0,'Адрес исходного объекта','','Адреса вихідного об''єкту','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','items','All items',4,33,'',1,'Все элементы','','Всі елементи','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','this','Object',4,0,'',15,'Объект','','Об''єкт','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','SHIFR','Code',0,0,'',16,'Шифр','','Шифр','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','NAME','Name',0,0,'',17,'Имя','','Ім''я','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','DESCR','Description',0,0,'',18,'Описание','','Опис','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','imit','Imitation drift % (0-disable)',2,64,'0',0,'Дрейф имитации % (0-отключен)','','Дрейф імітації % (0-відключено)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','trAddr','Transport',0,64,'Transport.Serial.out_VKT7',1,'Транспорт','','Транспорт','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','arhH','Archiver: hours',0,64,'',2,'Архиватор: часы','','Архіватор: години','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','arhD','Archiver: days',0,64,'',3,'Архиватор: дни','','Архіватор: дні','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','arhRes','Archiver: results-month',0,64,'',4,'Архиватор: результаты-месяцы','','Архіватор: результати-місяці','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','maxDayDepth','Archiver: maximum depth of reading for not hours archivers, days',1,64,'366',5,'Архиватор: максимум читаемой глубины для нечасового архиватора, дней','','Архіватор: максимум глибини читання для негодинного архіватора, днів','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','lastResTm','Last result months read time (s)',1,33,'0',6,'Время последнего чтения результирующих месяцев (с)','','Час останього читання результуючих місяців (с)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','leftResTm','Left result months for read from archive',1,17,'',7,'Осталось результ. месяцев для чтения из архива','','Залишилося результ. місяців для читання із архіву','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','lastDTm','Last days read time (s)',1,33,'0',8,'Время последнего чтения дней (с)','','Час останього читання днів (с)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','leftDTm','Left days for read from archive',1,17,'',9,'Осталось дней для чтения из архива','','Залишилося днів для читання із архіву','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','lastHTm','Last hours read time (s)',1,33,'',10,'Время последнего чтения часов (с)','','Час останього читання годин (с)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','leftHTm','Left hours for read from archive',1,17,'',11,'Осталось часов для чтения из архива','','Залишилося годин для читання із архіву','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','diffTm','Difference time (server-counter), hours',1,16,'',12,'Разница времени (сервер-счётчик), часы','','Різниця часу (сервер-лічильник), години','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','firmVer','Firmware version',2,16,'',13,'Версия прошивки','','Версія прошивки','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','abonId','Subscriber ID',0,16,'',14,'ID абонента','','ID абоненту','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','repDay','Report day',1,16,'',15,'День отчёта','','День звіту','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','netNum','Network number',1,16,'',16,'Сетевой номер','','Мережевий номер','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','modelImpl','Model implementation',1,16,'',17,'Реализация модели','','Реалізація моделі','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','tTypeM','t: dimension',0,16,'',18,'t: ед. измерения','','t: од. виміру','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','GTypeM','G: dimension',0,16,'',19,'G: ед. измерения','','G: од. виміру','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','VTypeM','V: dimension',0,16,'',20,'V: ед. измерения','','V: од. виміру','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','MTypeM','M: dimension',0,16,'',21,'M: ед.измерения','','M: од.вимірювання','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','PTypeM','P: dimension',0,16,'',22,'P: ед. измерения','','P: од.виміру','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','QoTypeM','Qo: dimension',0,16,'',23,'Qo: ед. измерения','','Qo: од. виміру','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','QntTypeHIM','ВНР: dimension',0,16,'',24,'ВНР: ед.измерения','','ВНР: од.виміру','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','QntTypeM','ВОК: dimension',0,16,'',25,'ВОК: ед.измерения','','ВОК: од.виміру','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','t1_1','t1 (Tв1)',2,32,'',26,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','t2_1','t2 (Tв1)',2,32,'',27,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','t3_1','t3 (Tв1)',2,32,'',28,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','V1_1','V1 (Tв1)',2,32,'',29,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','V2_1','V2 (Tв1)',2,32,'',30,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','V3_1','V3 (Tв1)',2,32,'',31,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','M1_1','M1 (Tв1)',2,32,'',32,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','M2_1','M2 (Tв1)',2,32,'',33,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','M3_1','M3 (Tв1)',2,32,'',34,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','P1_1','P1 (Tв1)',2,32,'',35,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','P2_1','P2 (Tв1)',2,32,'',36,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','Mg_1','Mg (Tв1)',2,32,'',37,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','Qo_1','Qo (Tв1)',2,32,'',38,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','Qg_1','Qg (Tв1)',2,32,'',39,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','dt_1','dt (Tв1)',2,32,'',40,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','BNR_1','ВНР (Tв1)',2,32,'',41,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','BOC_1','ВОС (Tв1)',2,32,'',42,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','G1_1','G1 (Tв1)',2,32,'',43,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','G2_1','G2 (Tв1)',2,32,'',44,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','t1_2','t1 (Tв2)',2,32,'',45,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','t2_2','t2 (Tв2)',2,32,'',46,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','t3_2','t3 (Tв2)',2,32,'',47,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','V1_2','V1 (Tв2)',2,32,'',48,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','V2_2','V2 (Tв2)',2,32,'',49,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','V3_2','V3 (Tв2)',2,32,'',50,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','M1_2','M1 (Tв2)',2,32,'',51,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','M2_2','M2 (Tв2)',2,32,'',52,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','M3_2','M3 (Tв2)',2,32,'',53,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','P1_2','P1 (Tв2)',2,32,'',54,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','P2_2','P2 (Tв2)',2,32,'',55,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','Mg_2','Mg (Tв2)',2,32,'',56,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','Qo_2','Qo (Tв2)',2,32,'',57,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','Qg_2','Qg (Tв2)',2,32,'',58,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','dt_2','dt (Tв2)',2,32,'',59,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','BNR_2','ВНР (Tв2)',2,32,'',60,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','BOC_2','ВОС (Tв2)',2,32,'',61,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','G1_2','G1 (Tв2)',2,32,'',62,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','G2_2','G2 (Tв2)',2,32,'',63,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','this','This parameter object',4,0,'',64,'Объект параметра','','Об''єкт параметру','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','transport','Transport',0,64,'SMDP',0,'Транспорт','','Транспорт','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','addr','Device address (16...254)',1,64,'16',1,'Адрес устройства (16...254)','','Адреса пристрою (16...254)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','perGet','Period of the data getting, s',2,64,'10',2,'Период сбора данных, с','','Період збору даних, с','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','version','Firmware version',0,16,'',3,'Версия прошивки','','Версія прошивки','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','CfgPrmSSID','Configuration parameter session ID',1,16,'',4,'Параметр конфигурации ID сеанса','','Параметр конфігурації ID сеансу','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','Srlno','Measurement serial number',1,16,'',5,'Измерянный номер серии','','Виміряний номер серії','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','RawFreq','Channel freq.',2,16,'',6,'Частота канала.','','Частота каналу.','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','GoodFreq','Last used, good channel freq., Hz',2,16,'',7,'Последне использ.: частота хорошего канала, Гц','','Останнє використ.: частота хорошого каналу, Гц','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','RawThick','Computed raw thickness, from frequency. (A)',2,16,'',8,'Вычисленная сырая толщина, с частоты. (А)','','Обчислена сира товщина, з частоти. (A)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','XtalThick','Computed material related thickness, can be zeroed. (A)',2,16,'',9,'Вычисленная относительная толщина материала, может быть нулевой. (A)','','Обчислена відносна товщина матеріалу, може бути нульовою. (A)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','XtalThick_F','Filtered computed material related thickness, can be zeroed. (A)',2,16,'',10,'Фильтрованная вычисленная относительная толщина материала, может быть нулевой. (A)','','Фільтрована обчислена відносна товщина матеріалу, може бути нульовою. (A)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','XtalRate','Rate, angstroms per second.',2,16,'',11,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','XtalRate_F','Rate, angstroms per second, filtered.',2,16,'',12,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','XtalLife','XtalLife (%)',2,16,'',13,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','XtalQual','Quality level (0-9).',1,16,'',14,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','XtalQualPeak','Highest quality level seen (0-9).',1,16,'',15,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','XtalStab','Stability level (0-9).',1,16,'',16,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','XtalStabPeak','Highest stability level seen (0-9).',1,16,'',17,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','XtalStat','Channel status.',0,16,'',18,'Статус канала.','','Статус каналу.','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','XtalLife_C','XtalLife (%).',1,16,'',19,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','SessId','Session ID',1,32,'',20,'ID сеанса','','ID сеансу','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','Fq','Xtal start freq. (Hz)',2,32,'',21,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','Fm','Xtal min freq. (Hz)',2,32,'',22,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','Density','Material density (gm/cc).',2,32,'',23,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','Zratio','Material Z ratio. Not scaled or unitized.',2,32,'',24,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','Tooling','1.000 is 100 % tooling (unity).',2,32,'',25,'1.000 есть 100 % настройка (объединение).','','1.000 є 100 % налаштування (об''єднання).','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','RateReq','Requested rate (A/S).',2,32,'',26,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','QlvlTrip','Quality threshold, if non 0 and exceeded, xtal fail occurs.',1,32,'',27,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','SlvlTrip','Stability threshold, if non 0 and exceeded, xtal fail occurs.',1,32,'',28,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IT3','transport','Transport',0,64,'IT3',0,'Транспорт','','Транспорт','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IT3','addr','Device address',1,64,'1',1,'Адрес устройства','','Адреса пристрою','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IT3','T','Temperature',2,16,'',3,'Температура','','Температура','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IT3','H','Upper border',3,16,'',4,'Верхняя граница','','Верхня границя','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IT3','L','Lower border',3,16,'',5,'Нижняя граница','','Нижня границя','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IT3','relSt','Relay state',3,16,'',6,'Состояние реле','','Стан реле','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','transport','Transport',0,64,'Sockets.out_IVE',0,'Транспорт','','Транспорт','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','addr','Device address',1,64,'255',1,'Адрес устройства','','Адреса пристрою','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','COIA','Output current level set-point',1,33,'',2,'Задание уровня выходного тока','','Завдання рівня вихідного струму','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','COUA','Output voltage level set-point',1,33,'',3,'Задание уровня выходного напряжения','','Завдання рівня вихідної напруги','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','COPA','Output power level set-point',1,33,'',4,'Задание уровня выходного мощности','','Завдання рівня вихідної потужності','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DIA','Output current',1,16,'',5,'Выходной ток','','Вихідний струм','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DUA','Output voltage',1,16,'',6,'Выходное напряжение','','Вихідна напруга','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DPA','Output power',1,16,'',7,'Выходная мощность','','Вихідна потужність','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DFA','Electric arcs frequency',1,16,'',8,'Частота появления "микродуг"','','Частота виникнення "мікродуг"','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DAC','Electric arcs counter',1,16,'',9,'Счетчик возникновения дуги','','Лічильник виникнення дуги','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','COM_DEW','Command: Blocking by SC and XX',3,32,'',10,'Команда: Блокировка отключения выхода по "КЗ" и "ХХ"','','Команда: Блокування відключеня виходу по "КЗ" та "ХХ"','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','COM_OUT','Command: Display on UI out block''s params',3,32,'',11,'Команда: Отображение на «УИ» выходных/опорных параметров каналов блока','','Команда: Відображення на «УІ» вихідних/опорних параметрів каналів блоку','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','COM_DEP','Command: Enable MK',3,32,'',12,'Команда: Включение "МК"','','Команда: Включення "МК"','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','COM_DEL','Command: Blocks #1,2 to line',3,32,'',13,'Команда: Включение блока "по сети" - канал№1,2','','Команда: Включення блоку "по мережі" - канал№1,2','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','COM_UF','Command: Display on UI frequency and current',3,32,'',14,'Команда: Отображение на «УИ» напряжения и тока/частоты и мощности блока','','Команда: Відображення на «УІ» напруги та струму/частоти та потужності блоку','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DKW','MUBR of the block overheated',3,16,'',15,'Перегрев MUBR блока','','Перегрів MUBR блоку','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DKZ','Short circuits on the block out',3,16,'',16,'Короткое замыкание выходных цепей блока','','Коротке замикання вихідних ланцюгів блоку','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DK','MK of the block overheated',3,16,'',17,'Перегрев MK блока','','Перегрів MK блоку','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DE','Power and voltage on out present',3,16,'',18,'Мощность и напряжение есть на выходе','','Потужність та напруга є на виході','');
-INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','transport','Transport',0,64,'Serial.out_OPTRIS',0,'Транспорт','','Транспорт','');
-INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','addr','Device address',3,64,'1',1,'Адрес устройства','','Адреса пристрою','');
-INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','Tproc','T process',2,16,'',2,'Т обработки','','Т обробки','');
-INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','Thead','T head',2,16,'',3,'Т головы','','Т голови','');
-INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','Tbox','T box',2,16,'',4,'Т корпуса','','Т корпусу','');
-INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','Tact','T act.',2,16,'',5,'Т акт.','','Т акт.','');
-INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','eps','IR epsilon',2,32,'',6,'IR эпсилон','','IR епсилон','');
-INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','trans','IR transmission',2,32,'',7,'IR передачи','','IR передавання','');
-INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','spIll','Spot illumination',3,32,'',8,'Точечное освещение','','Точкове освітлення','');
-INSERT INTO "tmplib_DevLib_io" VALUES('CTR','transport','Transport',0,64,'Serial.out_CTR',0,'Транспорт','','Транспорт','');
-INSERT INTO "tmplib_DevLib_io" VALUES('CTR','press','Pressure, Tor',2,17,'',1,'Давление, Tor','','Тиск, Tor','');
-INSERT INTO "tmplib_DevLib_io" VALUES('CTR','zeroSet','Zero set',3,32,'',2,'Установка нуля','','Встановлення нуля','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','transport','Transport',0,64,'Sockets.out_IEC60870',0,'Транспорт','','Транспорт','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','addr','Address, {addr}.{OA}',0,64,'0.5',1,'Адрес, {addr}.{OA}','','Адреса, {addr}.{OA}','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','tmRetr','Retry connection time, s',2,64,'10',2,'Время восстановления подключения, с','','Час відновлення підключення, с','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','t1','Acknowledge lack timeout, s',2,64,'1.5',3,'Таймаут подтверждения отсутствия активности, с','','Таймаут підтвердження відсутності активності, с','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','t2','Acknowledge timeout, s',2,64,'1',4,'Таймаут подтверждения, с','','Таймаут підтвердження, с','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','t3','Test timeout, s',2,64,'2',5,'Таймаут проверки, с','','Таймаут перевірки, с','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','k','Maximum unconfirmed',1,64,'12',6,'Максимально неподтверждённых','','Максимально непідтверджених','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','w','Maximum no ack',1,64,'8',7,'Максимальное отсутсвие "ack"','','Максимальна відсутність "ack"','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','itemsSet','Items set by: "ai|di|do:{IOA}[-{EndIOA}]:a[:{NameBase}]"',0,36,'',8,'Небор элементов по: "ai|di|do:{IOA}[-{EndIOA}]:a[:{NameBase}]"','','Набір елементів за: "ai|di|do:{IOA}[-{EndIOA}]:a[:{NameBase}]"','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','items','All items',4,33,'',9,'Все элементы','','Всі елементи','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','this','Object',4,0,'',10,'Объект','','Об''єкт','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','transport','Transport of the Ethernet network, Sockets',0,64,'SSCP',0,'Транспорт сети Ethernet, Сокеты','','Транспорт мережі Ethernet, Сокети','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','addr','Address [0...255]',1,64,'1',1,'Адрес [0...255]','','Адреса [0...255]','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','user','User',0,64,'admin',2,'Пользователь','','Користувач','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','pass','Password',0,64,'rw',3,'Пароль','','Пароль','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','list','Selected to process variables',0,36,'',8,'Переменные, выбранные для обработки','','Змінні, обрані для обробки','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','listsDir','List files'' folder',0,64,'SSCP',5,'Директория файлов-списков','','Тека файлів-переліків','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','this','Object',4,0,'',9,'Объект','','Об''єкт','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','maxDtFrm','Maximum data frame size',1,64,'2048',4,'Максимальный размер фрейма данных','','Максимальний розмір фрейму даних','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','verPrt','Protocol version',1,16,'',6,'Версия протокола','','Версія протоколу','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','maxDtFrmServ','Server''s maximum data frame size',1,16,'',7,'Максимальный размер фрейма данных сервера','','Максимальний розмір фрейму даних серверу','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IT3','mdPass','Passive mode, writing by an input protocol''s part',3,64,'0',2,'Пассивный режим, запись входной частью протокола','','Пасивний режим, запис вхідною частиною протоколу','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IT3','this','Object',4,0,'',7,'Объект','','Об''єкт','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','bChL','Battery charge low',2,32,'20',3,'Заряд батареи низкий','','Заряд батареї низький','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','bChLL','Battery charge critical',2,32,'5',4,'Заряд батареи критический','','Заряд батареї критичний','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inVL','Input voltage low',2,32,'210',5,'Низкое входное напряжение','','Низька вхідна напруга','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inVH','Input voltage high',2,32,'250',6,'Высокое входное напряжение','','Висока вхідна напруга','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inFLL','Input frequency too low',2,32,'40',7,'Очень низкая входная частота','','Дуже низька вхідна частота','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inFL','Input frequency low',2,32,'45',8,'Низкая входная частота','','Низька вхідна частота','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inFH','Input frequency high',2,32,'55',9,'Высокая входная частота','','Висока вхідна частота','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inFHH','Input frequency too high',2,32,'60',10,'Очень высокая входная частота','','Дуже висока вхідна частота','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','loadH','Load high',2,32,'80',11,'Нагрузка высокая','','Навантаження високе','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','loadHH','Load too high',2,32,'100',12,'Нагрузка очень высокая','','Навантаження дуже високе','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','tH','Temperature high',2,32,'50',13,'Температура высокая','','Температура висока','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','tHH','Temperature too high',2,32,'70',14,'Температура очень высокая','','Температура дуже висока','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','alDelay','Violations delay, seconds',2,32,'0',2,'Задержка нарушений, секунды','','Затримка порушень, секунди','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m200','s','Energy from reset, tariffs sum',0,16,'',0,'Энергия от сброса сумма Тарифов','','Енергія від скидання сума Тарифів','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m200','t1','Energy from reset, tariff 1',2,16,'',1,'Энергия от сброса Тариф1','','Енергія від скидання Тариф1','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m200','t2','Energy from reset, tariff 2',2,16,'',2,'Энергия от сброса Тариф2','','Енергія від скидання Тариф2','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m200','t3','Energy from reset, tariff 3',2,16,'',3,'Энергия от сброса Тариф3','','Енергія від скидання Тариф3','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m200','t4','Energy from reset, tariff 4',2,16,'',4,'Энергия от сброса Тариф4','','Енергія від скидання Тариф4','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m200','U','Voltage U, V',2,16,'',5,'Напряжение U, В','','Напруга U, В','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m200','I','Current I, A',2,16,'',6,'Ток I, А','','Струм I, А','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m200','P','Power P, W',2,16,'',7,'Мощность P, Вт','','Потужність P, Вт','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m200','transport','Transport',0,64,'merc200',8,'Транспорт','','Транспорт','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m200','netaddr','Network address',2,64,'1',9,'Сетевой адрес','','Мережева адреса','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m200','naladchik','Coded address by the program Fixer+',3,64,'0',10,'Адрес закодирован программой Наладчик+','','Адреса закодована програмою Налаштувач+','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m200','tarif','Read energy from reset',3,64,'1',11,'Считывать энергию от сброса','','Вичитувати енергію від скидання','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m200','UIP','Read current values',3,64,'1',12,'Считывать мгновенные значения','','Вичитувати миттеві значення','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m200','first','First byte of the address',1,0,'',13,'Первый байт адреса','','Перший байт адреси','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m200','second','Last 3 bytes of the address',1,0,'',14,'Последние 3 байта адреса','','Останні 3 байти адреси','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','answer','Answer to the password request',0,16,'',0,'Ответ на запрос пароля','','Відповідь на запит пароля','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','TS','Read energy of tariffs sum',3,64,'0',1,'Считывать энергию суммы тарифов','','Вичитувати енергію суми тарифів','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T1','Read energy of tariff 1',3,64,'0',2,'Считывать энергию тарифа 1','','Вичитувати енергію тарифу 1','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T2','Read energy of tariff 2',3,64,'0',3,'Считывать энергию тарифа 2','','Вичитувати енергію тарифу 2','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T3','Read energy of tariff 3',3,64,'0',4,'Считывать энергию тарифа 3','','Вичитувати енергію тарифу 3','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T4','Read energy of tariff 4',3,64,'0',5,'Считывать энергию тарифа 4','','Вичитувати енергію тарифу 4','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','P','Read power P',3,64,'0',6,'Считывать мощность P','','Вичитувати потужність P','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','Q','Read power Q',3,64,'0',7,'Считывать мощность Q','','Вичитувати потужність Q','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','S','Read power S',3,64,'0',8,'Считывать мощность S','','Вичитувати потужність S','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','U','Read voltage U',3,64,'0',9,'Считывать напряжение U','','Вичитувати напругу U','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','I','Read current I',3,64,'0',10,'Считывать ток I','','Вичитувати струм I','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','K','Read power coefficient',3,64,'0',11,'Считывать коэф. мощности','','Вичитувати коеф. потужності','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','F','Read frequency F',3,64,'0',12,'Считывать частоту F','','Вичитувати частоту F','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','N','Read serial number',3,64,'0',13,'Считывать серийный номер','','Вичитувати серійний номер','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','TSAp','Energy from resetting, tariffs sum A+',2,16,'',14,'Энергия от сброса сумма тарифов A+','','Енергія від скидання сума тарифів A+','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','TSAm','Energy from resetting, tariffs sum A-',2,16,'',15,'Энергия от сброса сумма тарифов A-','','Енергія від скидання сума тарифів A-','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','TSRp','Energy from resetting, tariffs sum R+',2,16,'',16,'Энергия от сброса сумма тарифов R+','','Енергія від скидання сума тарифів R+','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','TSRm','Energy from resetting, tariffs sum R-',2,16,'',17,'Энергия от сброса сумма тарифов R-','','Енергія від скидання сума тарифів R-','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T1Ap','Energy from resetting, tariff 1 A+',2,16,'',18,'Энергия от сброса тариф 1 A+','','Енергія від скидання тариф 1 A+','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T1Am','Energy from resetting, tariff 1 A-',2,16,'',19,'Энергия от сброса тариф 1 A-','','Енергія від скидання тариф 1 A-','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T1Rp','Energy from resetting, tariff 1 R+',2,16,'',20,'Энергия от сброса тариф 1 R+','','Енергія від скидання тариф 1 R+','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T1Rm','Energy from resetting, tariff 1 R-',2,16,'',21,'Энергия от сброса тариф 1 R-','','Енергія від скидання тариф 1 R-','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T2Ap','Energy from resetting, tariff 2 A+',2,16,'',22,'Энергия от сброса тариф 2 A+','','Енергія від скидання тариф 2 A+','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T2Am','Energy from resetting, tariff 2 A-',2,16,'',23,'Энергия от сброса тариф 2 A-','','Енергія від скидання тариф 2 A-','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T2Rp','Energy from resetting, tariff 2 R+',2,16,'',24,'Энергия от сброса тариф 2 R+','','Енергія від скидання тариф 2 R+','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T2Rm','Energy from resetting, tariff 2 R-',2,16,'',25,'Энергия от сброса тариф 2 R-','','Енергія від скидання тариф 2 R-','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T3Ap','Energy from resetting, tariff 3 A+',2,16,'',26,'Энергия от сброса тариф 3 A+','','Енергія від скидання тариф 3 A+','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T3Am','Energy from resetting, tariff 3 A-',2,16,'',27,'Энергия от сброса тариф 3 A-','','Енергія від скидання тариф 3 A-','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T3Rp','Energy from resetting, tariff 3 R+',2,16,'',28,'Энергия от сброса тариф 3 R+','','Енергія від скидання тариф 3 R+','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T3Rm','Energy from resetting, tariff 3 R-',2,16,'',29,'Энергия от сброса тариф 3 R-','','Енергія від скидання тариф 3 R-','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T4Ap','Energy from resetting, tariff 4 A+',2,16,'',30,'Энергия от сброса тариф 4 A+','','Енергія від скидання тариф 4 A+','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T4Am','Energy from resetting, tariff 4 A-',2,16,'',31,'Энергия от сброса тариф 4 A-','','Енергія від скидання тариф 4 A-','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T4Rp','Energy from resetting, tariff 4 R+',2,16,'',32,'Энергия от сброса тариф 4 R+','','Енергія від скидання тариф 4 R+','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T4Rm','Energy from resetting, tariff 4 R-',2,16,'',33,'Энергия от сброса тариф 4 R-','','Енергія від скидання тариф 4 R-','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','PS','Power P(W) by the phases sum',2,16,'',34,'Мощность P(Вт) по сумме фаз','','Потужніст P(Вт) по сумі фаз','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','P1','Power P(W) by the phase 1',2,16,'',35,'Мощность P(Вт) по фазе 1','','Потужніст P(Вт) по фазі 1','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','P2','Power P(W) by the phase 2',2,16,'',36,'Мощность P(Вт) по фазе 2','','Потужніст P(Вт) по фазі 2','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','P3','Power P(W) by the phase 3',2,16,'',37,'Мощность P(Вт) по фазе 3','','Потужніст P(Вт) по фазі 3','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','QS','Power Q(var) by the phases sum',2,16,'',38,'Мощность Q(вар) по сумме фаз','','Потужніст Q(вар) по сумі фаз','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','Q1','Power Q(var) by the phase 1',2,16,'',39,'Мощность Q(вар) по фазе 1','','Потужніст Q(вар) по фазі 1','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','Q2','Power Q(var) by the phase 2',2,16,'',40,'Мощность Q(вар) по фазе 2','','Потужніст Q(вар) по фазі 2','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','Q3','Power Q(var) by the phase 3',2,16,'',41,'Мощность Q(вар) по фазе 3','','Потужніст Q(вар) по фазі 3','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','SS','Power S(VA) by the phases sum',2,16,'',42,'Мощность S(ВА) по сумме фаз','','Потужніст S(ВА) по сумі фаз','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','S1','Power S(VA) by the phase 1',2,16,'',43,'Мощность S(ВА) по фазе 1','','Потужніст S(ВА) по фазі 1','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','S2','Power S(VA) by the phase 2',2,16,'',44,'Мощность S(ВА) по фазе 2','','Потужніст S(ВА) по фазі 2','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','S3','Power S(VA) by the phase 3',2,16,'',45,'Мощность S(ВА) по фазе 3','','Потужніст S(ВА) по фазі 3','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','U1','Voltage U(V) by the phase 1',2,16,'',46,'Напряжение U(В) по фазе 1','','Напруга U(В) по фазі 1','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','U2','Voltage U(V) by the phase 2',2,16,'',47,'Напряжение U(В) по фазе 2','','Напруга U(В) по фазі 2','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','U3','Voltage U(V) by the phase 3',2,16,'',48,'Напряжение U(В) по фазе 3','','Напруга U(В) по фазі 3','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','I1','Current I(A) by the phase 1',2,16,'',49,'Ток I(А) по фазе 1','','Струм I(А) по фазі 1','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','I2','Current I(A) by the phase 2',2,16,'',50,'Ток I(А) по фазе 2','','Струм I(А) по фазі 2','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','I3','Current I(A) by the phase 3',2,16,'',51,'Ток I(А) по фазе 3','','Струм I(А) по фазі 3','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','KS','Power coefficient by the phases sum',2,16,'',52,'Коэф.мощности по сумме фаз','','Коеф.потужності по сумі фаз','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','K1','Power coefficient by the phase 1',2,16,'',53,'Коэф.мощности по фазе 1','','Коеф.потужності по фазі 1','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','K2','Power coefficient by the phase 2',2,16,'',54,'Коэф.мощности по фазе 2','','Коеф.потужності по фазі 2','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','K3','Power coefficient by the phase 3',2,16,'',55,'Коэф.мощности по фазе 3','','Коеф.потужності по фазі 3','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','F1','Frequency F(Hz)',2,16,'',56,'Частота F(Гц)','','Частота F(Гц)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','N1','Serial number',0,16,'',57,'Серийный номер','','Серійний номер','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','netaddr','Network address (0...240)',1,64,'1',58,'Сетевой адрес (0...240)','','Мережева адреса (0...240)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','password','Password',0,64,'111111',59,'Пароль','','Пароль','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','transport','Transport',0,64,'merc230',60,'Транспорт','','Транспорт','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','transport','Transport',0,64,'Sockets.out_',0,'Транспорт','','Транспорт','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','serial','Factory number of the counter',0,64,'',1,'Заводской номер счётчика','','Заводський номер лічильника','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','passw','Password',0,64,'1111111111111111',2,'Пароль','','Пароль','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','kT','Coefficient of transformation',1,64,'1',3,'Коэффициент трансформации','','Коефіцієнт трансформації','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','T0','Current values',3,64,'0',4,'Текущие показатели','','Поточні показники','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','T1','Current values tariff T1',3,64,'0',5,'Текущие показатели тариф T1','','Поточні показники тариф T1','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','T2','Current values tariff T2',3,64,'0',6,'Текущие показатели тариф T2','','Поточні показники тариф T2','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','T3','Current values tariff T3',3,64,'0',7,'Текущие показатели тариф T3','','Поточні показники тариф T3','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','U','Instantaneous value "Voltage"',3,64,'0',8,'Мгновенные значения "Напряжение"','','Миттєві значення "Напруга"','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','I','Instantaneous value "Current"',3,64,'0',9,'Мгновенные значения "Ток"','','Миттєві значення "Струм"','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','P','Instantaneous value "Power"',3,64,'0',10,'Мгновенные значения "Мощность"','','Миттєві значення "Потужність"','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','kP','Instantaneous value "Power coefficient"',3,64,'0',11,'Мгновенные значения "коэффициент Мощности"','','Миттєві значення "коефіцієнт Потужності"','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Q','Instantaneous value "Power reactive"',3,64,'0',12,'Мгновенные значения "реактивная мощность"','','Миттєві значення "Реактивна потужність"','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','K','Instantaneous value "Vectors angle"',3,64,'0',13,'Мгновенные значения "Угол между векторами"','','Миттєві значення "Кут між векторами"','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Ae','А+(kW*h)',2,17,'',14,'А+(кВт*ч)','','А+(кВт*ч)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Ae_','А-(kW*h)',2,17,'',15,'А-(кВт*ч)','','А-(кВт*ч)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Re','R+(1+2quadrant)(kVar*h)',2,17,'',16,'R+(1+2квадрант)(кВар*ч)','','R+(1+2квадрант)(кВар*ч)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Re_','R-(3+4quadrant)(kVar*h)',2,17,'',17,'R-(3+4квадрант)(кВар*ч)','','R-(3+4квадрант)(кВар*ч)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Ae1','А1+(kW*h)',2,17,'',18,'А1+(кВт*ч)','','А1+(кВт*ч)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Ae_1','А1-(kW*h)',2,17,'',19,'А1-(кВт*ч)','','А1-(кВт*ч)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Re1','R1+(1+2quadrant)(kVar*h)',2,17,'',20,'R1+(1+2квадрант)(кВар*ч)','','R1+(1+2квадрант)(кВар*ч)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Re_1','R1-(3+4quadrant)(kVar*h)',2,17,'',21,'R1-(3+4квадрант)(кВар*ч)','','R1-(3+4квадрант)(кВар*ч)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Ae2','А2+(kW*h)',2,17,'',22,'А2+(кВт*ч)','','А2+(кВт*ч)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Ae_2','А2-(kW*h)',2,17,'',23,'А2-(кВт*ч)','','А2-(кВт*ч)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Re2','R2+(1+2quadrant)(kVar*h)',2,17,'',24,'R2+(1+2квадрант)(кВар*ч)','','R2+(1+2квадрант)(кВар*ч)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Re_2','R2-(3+4quadrant)(kVar*h)',2,17,'',25,'R2-(3+4квадрант)(кВар*ч)','','R2-(3+4квадрант)(кВар*ч)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Ae3','А3+(kW*h)',2,17,'',26,'А3+(кВт*ч)','','А3+(кВт*ч)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Ae_3','А3-(kW*h)',2,17,'',27,'А3-(кВт*ч)','','А3-(кВт*ч)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Re3','R3+(1+2quadrant)(kVar*h)',2,17,'',28,'R3+(1+2квадрант)(кВар*ч)','','R3+(1+2квадрант)(кВар*ч)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Re_3','R3-(3+4quadrant)(kVar*h)',2,17,'',29,'R3-(3+4квадрант)(кВар*ч)','','R3-(3+4квадрант)(кВар*ч)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','U1','Phase voltage 1(V)',2,17,'',30,'Напряжение фаза 1 (В)','','Напруга фаза 1 (В)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','U2','Phase voltage 2(V)',2,17,'',31,'Напряжение фаза 2 (В)','','Напруга фаза 2 (В)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','U3','Phase voltage 3(V)',2,17,'',32,'Напряжение фаза 3 (В)','','Напруга фаза 3 (В)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','I1','Phase current 1(A)',2,17,'',33,'Ток фаза 1 (А)','','Струм фаза 1 (А)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','I2','Phase current 2(A)',2,17,'',34,'Ток фаза 2 (А)','','Струм фаза 2 (А)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','I3','Phase current 3(A)',2,17,'',35,'Ток фаза 3 (А)','','Струм фаза 3 (А)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','kP1','Power coeff. cos φ phase 1',2,17,'',36,'Коеф. мощности. cos φ фаза 1','','Коеф. потужн. cos φ фаза 1','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','kP2','Power coeff. cos φ phase 2',2,17,'',37,'Коеф. мощности. cos φ фаза 2','','Коеф. потужн. cos φ фаза 2','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','kP3','Power coeff. cos φ phase 3',2,17,'',38,'Коеф. мощности. cos φ фаза 3','','Коеф. потужн. cos φ фаза 3','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Psum','Summary active power (kW)',2,17,'',39,'Мощность  акт. суммарная (кВт)','','Потужн.  акт. сумарна (кВт)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','P1','Active power phase 1 (kW)',2,17,'',40,'Мощность  акт. фаза 1 (кВт)','','Потужн.  акт. фаза 1 (кВт)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','P2','Active power phase 2 (kW)',2,17,'',41,'Мощность  акт. фаза 2 (кВт)','','Потужн.  акт. фаза 2 (кВт)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','P3','Active power phase 3 (kW)',2,17,'',42,'Мощность  акт. фаза 3 (кВт)','','Потужн.  акт. фаза 3 (кВт)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Qsum','Summary reactive power (kVar)',2,17,'',43,'Мощность реакт. сумарная (кВар)','','Потужн. реакт. сумарна (кВар)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Q1','Reactive power phase 1 (kVar)',2,17,'',44,'Мощность реакт. фаза 1 (кВар)','','Потужн. реакт. фаза 1 (кВар)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Q2','Reactive power phase 2 (kVar)',2,17,'',45,'Мощность реакт. фаза 2 (кВар)','','Потужн. реакт. фаза 2 (кВар)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Q3','Reactive power phase 3 (kVar)',2,17,'',46,'Мощность реакт. фаза 3 (кВар)','','Потужн. реакт. фаза 3 (кВар)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','V12','Vector angle U1_U2(degr.)',1,17,'',47,'Угол вектора U1_U2 (град.)','','Кут вектора U1_U2 (град.)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','V13','Vector angle U1_U3(degr.)',1,17,'',48,'Угол вектора U1_U3 (град.)','','Кут вектора U1_U3 (град.)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','this','Object',4,0,'',49,'Объект','','Об''єкт','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','NAME','Name',0,16,'',50,'Имя','','Ім''я','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','SHIFR','Shifr',0,16,'',51,'Шифр','','Шифр','');
-INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','DESCR','Description',0,16,'',52,'Описание','','Опис','');
-INSERT INTO "tmplib_DevLib_io" VALUES('ModBusScan','lim','Limit time, seconds',1,64,'10',0,'Время ограничения, секунд','','Час обмеження, секунд','');
-INSERT INTO "tmplib_DevLib_io" VALUES('ModBusScan','type','Type',1,40,'2
+INSERT INTO lib_servProc_io VALUES('docOffLine','pagesCur','Current pages list of "{wiki}:{langs}:{dest}", for empty here used "pages"',0,4,'',0,4,'','','','');
+INSERT INTO lib_servProc_io VALUES('docOffLine','res','Result',0,1,'',0,0,'','','','');
+INSERT INTO lib_servProc_io VALUES('docOffLine','reqTr','Tries of requests',1,1,'3',0,1,'','','','');
+INSERT INTO lib_servProc_io VALUES('releaseTests','rezF','Result for HTML file',0,5,'',1,2,'','','','');
+CREATE TABLE IF NOT EXISTS 'techApp_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DEF" TEXT DEFAULT '' ,"uk#DEF" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
+INSERT INTO techApp_io VALUES('lag','out','Output',2,2,'0',0,0,'Вихід','Выход','','');
+INSERT INTO techApp_io VALUES('lag','in','Input',2,0,'0',0,1,'Вхід','Вход','','');
+INSERT INTO techApp_io VALUES('lag','t_lg','Lag time, seconds',2,0,'10',0,2,'Час затримки, секунд','Время запаздывания, секунд','','');
+INSERT INTO techApp_io VALUES('lag','f_frq','Calculation frequency, Hz',2,0,'100',1,3,'Частота обчислення, Гц','Частота вычисления, Гц','','');
+INSERT INTO techApp_io VALUES('noise','out','Output',2,2,'0',0,0,'Вихід','Выход','','');
+INSERT INTO techApp_io VALUES('noise','off','Main offset',2,0,'1',0,1,'Загальний зсув','Общее смещение','','');
+INSERT INTO techApp_io VALUES('noise','a_g1','Amplitude of the harmonic 1',2,0,'10',0,2,'Амплітуда гармоніки 1','Амплитуда гармоники 1','','');
+INSERT INTO techApp_io VALUES('noise','per_g1','Period of the harmonic part 1, seconds',2,0,'10',0,3,'Період гармоніки 1, секунд','Период гармоники 1, секунд','','');
+INSERT INTO techApp_io VALUES('noise','a_g2','Amplitude of the harmonic 2',2,0,'5',0,4,'Амплітуда гармоніки 2','Амплитуда гармоники 2','','');
+INSERT INTO techApp_io VALUES('noise','per_g2','Period of the harmonic part 2, seconds',2,0,'0.1',0,5,'Період гармоніки 2, секунд','Период гармоники 2, секунд','','');
+INSERT INTO techApp_io VALUES('noise','a_rnd','Amplitude of the random numbers',2,0,'1',0,6,'Амплітуда випадкових значень','Амплитуда случайных значений','','');
+INSERT INTO techApp_io VALUES('noise','f_frq','Calculation frequency, Hz',2,0,'100',1,7,'Частота обчислення, Гц','Частота вычисления, Гц','','');
+INSERT INTO techApp_io VALUES('noise','tmp_g1','Counter of the harmonic 1',2,0,'0',1,8,'Лічильник гармоніки 1','Счётчик гармоники 1','','');
+INSERT INTO techApp_io VALUES('noise','tmp_g2','Counter of the harmonic 2',2,0,'0',1,9,'Лічильник гармоніки 2','Счётчик гармоники 2','','');
+INSERT INTO techApp_io VALUES('ballCrane','pos','Position, %',2,1,'0',0,0,'Положення, %','Положение, %','','');
+INSERT INTO techApp_io VALUES('ballCrane','com','Command',3,0,'0',0,1,'Команда','Команда','','');
+INSERT INTO techApp_io VALUES('ballCrane','st_open','State "Opened"',3,1,'0',0,2,'Стан "Відкрито"','Состояние "Открыто"','','');
+INSERT INTO techApp_io VALUES('ballCrane','st_close','State "Closed"',3,1,'1',0,3,'Стан "Закрито"','Состояние "Закрыто"','','');
+INSERT INTO techApp_io VALUES('ballCrane','t_full','Going time, seconds',2,0,'5',0,4,'Час ходу, секунд','Время хода, секунд','','');
+INSERT INTO techApp_io VALUES('ballCrane','t_up','Estrangement time, seconds',2,0,'0.5',0,5,'Час відриву, секунд','Время отрыва, секунд','','');
+INSERT INTO techApp_io VALUES('ballCrane','f_frq','Calculation frequency, Hz',2,0,'100',1,6,'Частота обчислення, Гц','Частота вычисления, Гц','','');
+INSERT INTO techApp_io VALUES('ballCrane','tmp_up','Estrangement counter',2,0,'0',1,7,'Лічильник відриву','Счётчик отрыва','','');
+INSERT INTO techApp_io VALUES('ballCrane','lst_com','Last command',3,0,'0',1,8,'Остання команда','Последняя команда','','');
+INSERT INTO techApp_io VALUES('separator','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','');
+INSERT INTO techApp_io VALUES('separator','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','');
+INSERT INTO techApp_io VALUES('separator','Si','Input cutset, m2',2,0,'0.2',0,2,'Вхідний перетин, м2','Входное сечение, м2','','');
+INSERT INTO techApp_io VALUES('separator','Fo','Output flow, ton/h',2,0,'0',0,3,'Вихідні витрати, т/год','Выходной расход, т/ч','','');
+INSERT INTO techApp_io VALUES('separator','Po','Output pressure, at',2,1,'1',0,4,'Вихідний тиск, ата','Выходное давление, ата','','');
+INSERT INTO techApp_io VALUES('separator','So','Output cutset, m2',2,0,'0.2',0,5,'Вихідний перетин, м2','Выходное сечение, м2','','');
+INSERT INTO techApp_io VALUES('separator','lo','Output length, m',2,0,'10',0,6,'Вихідна довжина, м','Выходная длина, м','','');
+INSERT INTO techApp_io VALUES('separator','Fo_lq','Output liquid flow, ton/h',2,0,'0',0,7,'Вихідні витрати рідини, т/год','Выходной расход жидкости, т/ч','','');
+INSERT INTO techApp_io VALUES('separator','Po_lq','Output liquid pressure, at',2,1,'1',0,8,'Вихідний тиск рідини, ата','Выходное давление жидкости, ата','','');
+INSERT INTO techApp_io VALUES('separator','Llq','Liquid level, %',2,1,'0',0,9,'Рівень рідини, %','Уровень жидкости, %','','');
+INSERT INTO techApp_io VALUES('separator','PercLq','% liquid',2,0,'0.01',0,10,'% рідини','% жидкости','','');
+INSERT INTO techApp_io VALUES('separator','Vap','Device capacity, m3',2,0,'10',0,11,'Об''єм апарату, м3','Объём аппарата, м3','','');
+INSERT INTO techApp_io VALUES('separator','Q0','Norm density of the environment, kg/m3',2,0,'1',0,12,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','');
+INSERT INTO techApp_io VALUES('separator','Qlq','Liquid density, kg/m3',2,0,'1000',0,13,'Щільність рідини, кг/м3','Плотность жидкости, кг/м3','','');
+INSERT INTO techApp_io VALUES('separator','f_frq','Calculation frequency, Hz',2,0,'200',1,14,'Частота обчислення, Гц','Частота вычисления, Гц','','');
+INSERT INTO techApp_io VALUES('valve','t_v1','Valve 1 opening time, seconds',2,0,'10',0,10,'Час відкриття клапану 1, секунди','Время хода клапана 1, секунд','','');
+INSERT INTO techApp_io VALUES('valve','t_v2','Valve 2 opening time, seconds',2,0,'5',0,13,'Час відкриття клапану 2, секунди','Время хода клапана 2, секунд','','');
+INSERT INTO techApp_io VALUES('valve','tmp_l1','Lag of the position 1',2,1,'0',1,23,'Затримка положення 1','Задержка положения 1','','');
+INSERT INTO techApp_io VALUES('valve','tmp_l2','Lag of the position 2',2,1,'0',1,24,'Затримка положення 2','Задержка положения 2','','');
+INSERT INTO techApp_io VALUES('valve','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','');
+INSERT INTO techApp_io VALUES('valve','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','');
+INSERT INTO techApp_io VALUES('valve','Ti','Input temperature, K',2,0,'273',0,2,'Вхідна температура, К','Входная температура, К','','');
+INSERT INTO techApp_io VALUES('valve','Fo','Output flow, ton/h',2,0,'0',0,3,'Вихідні витрати, т/год','Выходной расход, т/ч','','');
+INSERT INTO techApp_io VALUES('valve','Po','Output pressure, at',2,1,'1',0,4,'Вихідний тиск, ата','Выходное давление, ата','','');
+INSERT INTO techApp_io VALUES('valve','To','Output temperature, K',2,1,'273',0,5,'Вихідна температура, К','Выходная температура, К','','');
+INSERT INTO techApp_io VALUES('valve','So','Output pipe cutset, m2',2,0,'.2',0,6,'Вихідний перетин труби, м2','Выходное сечение трубы, м2','','');
+INSERT INTO techApp_io VALUES('valve','lo','Output pipe length, m',2,0,'10',0,7,'Вихідна довжина труби, м','Выходная длина трубы, м','','');
+INSERT INTO techApp_io VALUES('valve','S_v1','Valve 1 cutset, m2',2,0,'.1',0,8,'Перетин клапану 1, м2','Сечение клапана 1, м2','','');
+INSERT INTO techApp_io VALUES('valve','S_v2','Valve 2 cutset, m2',2,0,'.05',0,11,'Перетин клапану 2, м2','Сечение клапана 2, м2','','');
+INSERT INTO techApp_io VALUES('valve','l_v1','Valve 1 position, %',2,0,'0',0,9,'Положення клапану 1, %','Положение клапана 1, %','','');
+INSERT INTO techApp_io VALUES('valve','l_v2','Valve 2 position, %',2,0,'0',0,12,'Положення клапану 2, %','Положение клапана 2, %','','');
+INSERT INTO techApp_io VALUES('valve','Q0','Norm density of the environment, kg/m3',2,0,'1',0,14,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','');
+INSERT INTO techApp_io VALUES('valve','Kln','Coefficient of the linearity',2,0,'1',0,15,'Коефіцієнт нелінійності','Коэффициент нелинейности','','');
+INSERT INTO techApp_io VALUES('valve','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,16,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','');
+INSERT INTO techApp_io VALUES('valve','Ct','Heat capacity of the environment',2,0,'20',0,17,'Теплоємність середовища','Теплоёмкость среды','','');
+INSERT INTO techApp_io VALUES('valve','Riz','Heat resistance of the isolation',2,0,'20',0,18,'Тепловий опір ізоляції','Тепловое сопротивление изоляции','','');
+INSERT INTO techApp_io VALUES('valve','noBack','Back valve',3,0,'0',0,19,'Зворотній клапан','Обратный клапан','','');
+INSERT INTO techApp_io VALUES('valve','Fwind','Air speed',2,0,'1',0,20,'Швидкість повітря','Скорость воздуха','','');
+INSERT INTO techApp_io VALUES('valve','Twind','Air temperature, K',2,0,'273',0,21,'Температура повітря, К','Температура воздуха, К','','');
+INSERT INTO techApp_io VALUES('valve','f_frq','Calculation frequency, Hz',2,0,'200',1,22,'Частота обчислення, Гц','Частота вычисления, Гц','','');
+INSERT INTO techApp_io VALUES('src_press','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,7,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','');
+INSERT INTO techApp_io VALUES('lagClean','out','Output',2,2,'0',0,0,'Вихід','Выход','','');
+INSERT INTO techApp_io VALUES('lagClean','in','Input',2,0,'0',0,1,'Вхід','Вход','','');
+INSERT INTO techApp_io VALUES('lagClean','t_lg','Lag time, seconds',2,0,'10',0,2,'Час затримки, секунд','Время запаздывания, секунд','','');
+INSERT INTO techApp_io VALUES('lagClean','f_frq','Calculation frequency, Hz',2,0,'100',1,3,'Частота обчислення, Гц','Частота вычисления, Гц','','');
+INSERT INTO techApp_io VALUES('lagClean','cl1','Link 1',2,0,'0',1,4,'Ланка 1','Звено 1','','');
+INSERT INTO techApp_io VALUES('lagClean','cl2','Link 2',2,0,'0',1,5,'Ланка 2','Звено 2','','');
+INSERT INTO techApp_io VALUES('lagClean','cl3','Link 3',2,0,'0',1,6,'Ланка 3','Звено 3','','');
+INSERT INTO techApp_io VALUES('net','Fi','Input flow, ton/h',2,1,'10',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','');
+INSERT INTO techApp_io VALUES('net','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','');
+INSERT INTO techApp_io VALUES('net','Po','Output pressure setpoint, at',2,0,'1',0,2,'Вихідне завдання тиску, ата','Выходное задание давления, ата','','');
+INSERT INTO techApp_io VALUES('net','So','Output pipe cutset, m2',2,0,'0.1',0,3,'Вихідний перетин труби, м2','Выходное сечение трубы, м2','','');
+INSERT INTO techApp_io VALUES('net','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,4,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','');
+INSERT INTO techApp_io VALUES('net','Noise','Input flow''s noise',2,0,'1',0,5,'Шум вхідних витрат','Шум входного расхода','','');
+INSERT INTO techApp_io VALUES('net','Q0','Norm density of the environment, kg/m3',2,0,'1',0,6,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','');
+INSERT INTO techApp_io VALUES('net','f_frq','Calculation frequency, Hz',2,0,'200',1,7,'Частота обчислення, Гц','Частота вычисления, Гц','','');
+INSERT INTO techApp_io VALUES('src_press','Pi','Input pressure setpoint, at',2,0,'10',0,0,'Завдання вхідного тиску, ата','Задание входного давления, ата','','');
+INSERT INTO techApp_io VALUES('src_press','Fo','Output flow, ton/h',2,0,'0',0,1,'Вихідні витрати, т/год','Выходной расход, т/ч','','');
+INSERT INTO techApp_io VALUES('src_press','Po','Output pressure, at',2,1,'1',0,2,'Вихідний тиск, ата','Выходное давление, ата','','');
+INSERT INTO techApp_io VALUES('src_press','So','Output pipe cutset, m2',2,0,'0.1',0,3,'Вихідний перетин труби, м2','Выходное сечение трубы, м2','','');
+INSERT INTO techApp_io VALUES('src_press','lo','Output pipe length, m',2,0,'100',0,4,'Вихідна довжина труби, м','Выходная длина трубы, м','','');
+INSERT INTO techApp_io VALUES('src_press','Noise','Input flow''s noise',2,0,'1',0,5,'Шум вхідних витрат','Шум входного расхода','','');
+INSERT INTO techApp_io VALUES('src_press','Q0','Norm density of the environment, kg/m3',2,0,'1',0,6,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','');
+INSERT INTO techApp_io VALUES('src_press','f_frq','Calculation frequency, Hz',2,0,'200',1,8,'Частота обчислення, Гц','Частота вычисления, Гц','','');
+INSERT INTO techApp_io VALUES('src_press','Fit','Input flow, lagged',2,1,'0',1,9,'Вхідні витрати, утримані','Входной расход, удержанный','','');
+INSERT INTO techApp_io VALUES('cooler','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','');
+INSERT INTO techApp_io VALUES('cooler','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','');
+INSERT INTO techApp_io VALUES('cooler','Ti','Input temperature, K',2,0,'273',0,2,'Вхідна температура, К','Входная температура, К','','');
+INSERT INTO techApp_io VALUES('cooler','Si','Cooler''s pipes cutset, m2',2,0,'0.05',0,3,'Перетин трубок, м2','Сечение трубок, м2','','');
+INSERT INTO techApp_io VALUES('cooler','li','Full cooler''s pipes length, m',2,0,'10',0,4,'Загальна довжина трубок, м','Общая длина трубок, м','','');
+INSERT INTO techApp_io VALUES('cooler','Fo','Output flow, ton/h',2,0,'0',0,5,'Вихідні витрати, т/год','Выходной расход, т/ч','','');
+INSERT INTO techApp_io VALUES('cooler','Po','Output pressure, at',2,1,'1',0,6,'Вихідний тиск, ата','Выходное давление, ата','','');
+INSERT INTO techApp_io VALUES('cooler','To','Output temperature, K',2,1,'273',0,7,'Вихідна температура, К','Выходная температура, К','','');
+INSERT INTO techApp_io VALUES('cooler','So','Output pipe cutset, m2',2,0,'.2',0,8,'Вихідний перетин труби, м2','Выходное сечение трубы, м2','','');
+INSERT INTO techApp_io VALUES('cooler','lo','Output pipe length, m',2,0,'10',0,9,'Вихідна довжина труби, м','Выходная длина трубы, м','','');
+INSERT INTO techApp_io VALUES('cooler','Tair','Cooling air temperature, К',2,0,'283',0,10,'Температура охолодження повітря, К','Температура охлаждения воздуха, К','','');
+INSERT INTO techApp_io VALUES('cooler','Wc','Cooler performance',2,0,'200',0,11,'Продуктивність холодильника','Производительность холодильника','','');
+INSERT INTO techApp_io VALUES('cooler','Q0','Norm density of the environment, kg/m3',2,0,'1',0,12,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','');
+INSERT INTO techApp_io VALUES('cooler','Ct','Heat capacity of the environment',2,0,'100',0,13,'Теплоємність середовища','Теплоёмкость среды','','');
+INSERT INTO techApp_io VALUES('cooler','Rt','Heat resistance',2,0,'1',0,14,'Тепловий опір','Тепловое сопротивление','','');
+INSERT INTO techApp_io VALUES('cooler','f_frq','Calculation frequency, Hz',2,0,'200',1,15,'Частота обчислення, Гц','Частота вычисления, Гц','','');
+INSERT INTO techApp_io VALUES('src_flow','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,7,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','');
+INSERT INTO techApp_io VALUES('pipe1_1','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,7,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','');
+INSERT INTO techApp_io VALUES('compressor','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','');
+INSERT INTO techApp_io VALUES('compressor','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','');
+INSERT INTO techApp_io VALUES('compressor','Ti','Input temperature, K',2,0,'273',0,2,'Вхідна температура, К','Входная температура, К','','');
+INSERT INTO techApp_io VALUES('compressor','Fo','Output flow, ton/h',2,0,'0',0,3,'Вихідні витрати, т/год','Выходной расход, т/ч','','');
+INSERT INTO techApp_io VALUES('compressor','Po','Output pressure, at',2,1,'1',0,4,'Вихідний тиск, ата','Выходное давление, ата','','');
+INSERT INTO techApp_io VALUES('compressor','To','Output temperature, K',2,1,'273',0,5,'Вихідна температура, К','Выходная температура, К','','');
+INSERT INTO techApp_io VALUES('compressor','So','Output pipe cutset, m2',2,0,'0.2',0,6,'Вихідний перетин труби, м2','Выходное сечение трубы, м2','','');
+INSERT INTO techApp_io VALUES('compressor','lo','Output pipe length, m',2,0,'2',0,7,'Вихідна довжина труби, м','Выходная длина трубы, м','','');
+INSERT INTO techApp_io VALUES('compressor','Kmrg','Surge protect margin coefficient',2,1,'0.1',0,8,'Коефіцієнт запасу за помпажем','Коэффициент запаса по помпажу','','');
+INSERT INTO techApp_io VALUES('compressor','N','Turnovers, 1000 x turn/min',2,0,'0',0,9,'Оберти компресору, тис. об./хвил','Обороты компрессора, тыс. об./мин','','');
+INSERT INTO techApp_io VALUES('compressor','V','Compressor capacity, m3',2,0,'7',0,10,'Об''єм компресору, м3','Объём компрессора, м3','','');
+INSERT INTO techApp_io VALUES('compressor','Kpmp','Surge coefficient, surge point',2,0,'0.066',0,11,'Коефіцієнт помпажу, точка помпажу','Коэффициент помпажа, точка помпажа','','');
+INSERT INTO techApp_io VALUES('compressor','Kslp','Slope coefficient of the surge curve',2,0,'0.08',0,12,'Коефіцієнт нахилу помпажної кривої','Коэффициент наклона помпажной кривой','','');
+INSERT INTO techApp_io VALUES('compressor','Q0','Norm density of the environment, kg/m3',2,0,'1',0,13,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','');
+INSERT INTO techApp_io VALUES('compressor','Ct','Heat capacity of the environment',2,0,'100',0,15,'Теплоємність середовища','Теплоёмкость среды','','');
+INSERT INTO techApp_io VALUES('compressor','Riz','Heat resistance of the isolation',2,0,'100',0,16,'Тепловий опір ізоляції','Тепловое сопротивление изоляции','','');
+INSERT INTO techApp_io VALUES('compressor','Fwind','Air speed',2,0,'1',0,17,'Швидкість повітря','Скорость воздуха','','');
+INSERT INTO techApp_io VALUES('compressor','Twind','Air temperature, K',2,0,'273',0,18,'Температура повітря, К','Температура воздуха, К','','');
+INSERT INTO techApp_io VALUES('compressor','f_frq','Calculation frequency, Hz',2,0,'200',1,19,'Частота обчислення, Гц','Частота вычисления, Гц','','');
+INSERT INTO techApp_io VALUES('pipe1_2','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,11,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','');
+INSERT INTO techApp_io VALUES('compressor','Fit','Input flow, lagged',2,1,'0',1,20,'Вхідні витрати, утримані','Входной расход, удержанный','','');
+INSERT INTO techApp_io VALUES('src_flow','Fi','Input flow setpoint, ton/h',2,0,'10',0,0,'Завдання вхідних витрат, т/год','Задание входного расхода, т/ч','','');
+INSERT INTO techApp_io VALUES('src_flow','Fo','Output flow, ton/h',2,0,'10',0,1,'Вихідні витрати, т/год','Выходной расход, т/ч','','');
+INSERT INTO techApp_io VALUES('src_flow','Po','Output pressure, at',2,1,'1',0,2,'Вихідний тиск, ата','Выходное давление, ата','','');
+INSERT INTO techApp_io VALUES('src_flow','So','Output pipe cutset, m2',2,0,'0.1',0,3,'Вихідний перетин труби, м2','Выходное сечение трубы, м2','','');
+INSERT INTO techApp_io VALUES('src_flow','lo','Output pipe length, m',2,0,'100',0,4,'Вихідна довжина труби, м','Выходная длина трубы, м','','');
+INSERT INTO techApp_io VALUES('src_flow','Noise','Input flow''s noise',2,0,'1',0,5,'Шум вхідних витрат','Шум входного расхода','','');
+INSERT INTO techApp_io VALUES('src_flow','Q0','Norm density of the environment, kg/m3',2,0,'1',0,6,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','');
+INSERT INTO techApp_io VALUES('src_flow','f_frq','Calculation frequency, Hz',2,0,'100',1,8,'Частота обчислення, Гц','Частота вычисления, Гц','','');
+INSERT INTO techApp_io VALUES('pipe1_1','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','');
+INSERT INTO techApp_io VALUES('pipe1_1','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','');
+INSERT INTO techApp_io VALUES('pipe1_1','Fo','Output flow, ton/h',2,0,'0',0,2,'Вихідні витрати, т/год','Выходной расход, т/ч','','');
+INSERT INTO techApp_io VALUES('pipe1_1','Po','Output pressure, at',2,1,'1',0,3,'Вихідний тиск, ата','Выходное давление, ата','','');
+INSERT INTO techApp_io VALUES('pipe1_1','So','Output cutset, m2',2,0,'.2',0,4,'Вихідний перетин, м2','Выходное сечение, м2','','');
+INSERT INTO techApp_io VALUES('pipe1_1','lo','Output length, m',2,0,'10',0,5,'Вихідна довжина, м','Выходная длина, м','','');
+INSERT INTO techApp_io VALUES('pipe1_1','Q0','Norm density of the environment, kg/m3',2,0,'1',0,6,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','');
+INSERT INTO techApp_io VALUES('pipe1_1','f_frq','Calculation frequency, Hz',2,0,'200',1,8,'Частота обчислення, Гц','Частота вычисления, Гц','','');
+INSERT INTO techApp_io VALUES('pipe1_1','Pti','Pti',2,1,'1',1,9,'','','','');
+INSERT INTO techApp_io VALUES('pipe1_1','Fto','Fto',2,1,'0',1,10,'','','','');
+INSERT INTO techApp_io VALUES('pipe1_1','Pt1','Pt1',2,1,'1',1,11,'','','','');
+INSERT INTO techApp_io VALUES('pipe1_1','Ft1','Ft1',2,1,'0',1,12,'','','','');
+INSERT INTO techApp_io VALUES('pipe1_2','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','');
+INSERT INTO techApp_io VALUES('pipe1_2','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','');
+INSERT INTO techApp_io VALUES('pipe1_2','Fo1','Output 1 flow, ton/h',2,0,'0',0,2,'Вихідні витрати 1, т/год','Выходной расход 1, т/ч','','');
+INSERT INTO techApp_io VALUES('pipe1_2','Po1','Output 1 pressure, at',2,1,'1',0,3,'Вихідний тиск 1, ата','Выходное давление 1, ата','','');
+INSERT INTO techApp_io VALUES('pipe1_2','So1','Output 1 cutset, m2',2,0,'.2',0,4,'Вихідний перетин труби 1, м2','Выходное сечение 1, м2','','');
+INSERT INTO techApp_io VALUES('pipe1_2','lo1','Output 1 length, m',2,0,'10',0,5,'Вихідна довжина труби 1, м','Выходная длина 1, м','','');
+INSERT INTO techApp_io VALUES('pipe1_2','Fo2','Output 2 flow, ton/h',2,0,'0',0,6,'Вихідні витрати 2, т/год','Выходной расход 2, т/ч','','');
+INSERT INTO techApp_io VALUES('pipe1_2','Po2','Output 2 pressure, at',2,1,'1',0,7,'Вихідний тиск 2, ата','Выходное давление 2, ата','','');
+INSERT INTO techApp_io VALUES('pipe1_2','So2','Output 2 cutset, m2',2,0,'.2',0,8,'Вихідний перетин труби 2, м2','Выходное сечение 2, м2','','');
+INSERT INTO techApp_io VALUES('pipe1_2','lo2','Output 2 length, m',2,0,'10',0,9,'Вихідна довжина труби 2, м','Выходная длина 2, м','','');
+INSERT INTO techApp_io VALUES('pipe1_2','Q0','Norm density of the environment, kg/m3',2,0,'1',0,10,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','');
+INSERT INTO techApp_io VALUES('pipe1_2','f_frq','Calculation frequency, Hz',2,0,'100',1,12,'Частота обчислення, Гц','Частота вычисления, Гц','','');
+INSERT INTO techApp_io VALUES('pipe1_2','F1tmp','Temporary flow 1',2,1,'0',1,13,'Тимчасові витрати 1','Временный расход 1','','');
+INSERT INTO techApp_io VALUES('pipe1_2','F2tmp','Temporary flow 2',2,1,'0',1,14,'Тимчасові витрати 2','Временный расход 2','','');
+INSERT INTO techApp_io VALUES('pipe1_2','Pot1','Temporary pressure 1',2,1,'1',1,15,'Тимчасовий тиск 1','Временное давление 1','','');
+INSERT INTO techApp_io VALUES('pipe1_2','Pot2','Temporary pressure 2',2,1,'1',1,16,'Тимчасовий тиск 2','Временное давление 2','','');
+INSERT INTO techApp_io VALUES('pipe1_3','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','');
+INSERT INTO techApp_io VALUES('pipe1_3','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','');
+INSERT INTO techApp_io VALUES('pipe1_3','Fo1','Output 1 flow, ton/h',2,0,'0',0,2,'Вихідні витрати 1, т/год','Выходной расход 1, т/ч','','');
+INSERT INTO techApp_io VALUES('pipe1_3','Po1','Output 1 pressure, at',2,1,'1',0,3,'Вихідний тиск 1, ата','Выходное давление 1, ата','','');
+INSERT INTO techApp_io VALUES('pipe1_3','So1','Output 1 cutset, m2',2,0,'0.2',0,4,'Вихідний перетин труби 1, м2','Выходное сечение 1, м2','','');
+INSERT INTO techApp_io VALUES('pipe1_3','lo1','Output 1 length, m',2,0,'10',0,5,'Вихідна довжина труби 1, м','Выходная длина 1, м','','');
+INSERT INTO techApp_io VALUES('pipe1_3','Fo2','Output 2 flow, ton/h',2,0,'0',0,6,'Вихідні витрати 2, т/год','Выходной расход 2, т/ч','','');
+INSERT INTO techApp_io VALUES('pipe1_3','Po2','Output 2 pressure, at',2,1,'1',0,7,'Вихідний тиск 2, ата','Выходное давление 2, ата','','');
+INSERT INTO techApp_io VALUES('pipe1_3','So2','Output 2 cutset, m2',2,0,'0.2',0,8,'Вихідний перетин труби 2, м2','Выходное сечение 2, м2','','');
+INSERT INTO techApp_io VALUES('pipe1_3','lo2','Output 2 length, m',2,0,'10',0,9,'Вихідна довжина труби 2, м','Выходная длина 2, м','','');
+INSERT INTO techApp_io VALUES('pipe1_3','Fo3','Output 3 flow, ton/h',2,0,'0',0,10,'Вихідні витрати 3, т/год','Выходной расход 3, т/ч','','');
+INSERT INTO techApp_io VALUES('pipe1_3','Po3','Output 3 pressure, at',2,1,'1',0,11,'Вихідний тиск 3, ата','Выходное давление 3, ата','','');
+INSERT INTO techApp_io VALUES('pipe1_3','So3','Output 3 cutset, m2',2,0,'0.2',0,12,'Вихідний перетин труби 3, м2','Выходное сечение 3, м2','','');
+INSERT INTO techApp_io VALUES('pipe1_3','lo3','Output 3 length, m',2,0,'10',0,13,'Вихідна довжина труби 3, м','Выходная длина 3, м','','');
+INSERT INTO techApp_io VALUES('pipe1_3','Q0','Norm density of the environment, kg/m3',2,0,'1',0,14,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','');
+INSERT INTO techApp_io VALUES('pipe1_3','f_frq','Calculation frequency, Hz',2,0,'200',1,16,'Частота обчислення, Гц','Частота вычисления, Гц','','');
+INSERT INTO techApp_io VALUES('pipe1_3','F1tmp','Temporary flow 1',2,1,'0',0,17,'Тимчасові витрати 1','Временный расход 1','','');
+INSERT INTO techApp_io VALUES('pipe1_3','F2tmp','Temporary flow 2',2,1,'0',0,18,'Тимчасові витрати 2','Временный расход 2','','');
+INSERT INTO techApp_io VALUES('pipe1_3','F3tmp','Temporary flow 3',2,1,'0',0,19,'Тимчасові витрати 3','Временный расход 3','','');
+INSERT INTO techApp_io VALUES('pipe1_3','Pot1','Temporary pressure 1',2,1,'1',1,20,'Тимчасовий тиск 1','Временное давление 1','','');
+INSERT INTO techApp_io VALUES('pipe1_3','Pot2','Temporary pressure 2',2,1,'1',1,21,'Тимчасовий тиск 2','Временное давление 2','','');
+INSERT INTO techApp_io VALUES('pipe1_3','Pot3','Temporary pressure 3',2,1,'1',1,22,'Тимчасовий тиск 3','Временное давление 3','','');
+INSERT INTO techApp_io VALUES('pipe1_4','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','');
+INSERT INTO techApp_io VALUES('pipe1_4','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','');
+INSERT INTO techApp_io VALUES('pipe1_4','Fo1','Output 1 flow, ton/h',2,0,'0',0,2,'Вихідні витрати 1, т/год','Выходной расход 1, т/ч','','');
+INSERT INTO techApp_io VALUES('pipe1_4','Po1','Output 1 pressure, at',2,1,'1',0,3,'Вихідний тиск 1, ата','Выходное давление 1, ата','','');
+INSERT INTO techApp_io VALUES('pipe1_4','So1','Output 1 cutset, m2',2,0,'0.2',0,4,'Вихідний перетин труби 1, м2','Выходное сечение 1, м2','','');
+INSERT INTO techApp_io VALUES('pipe1_4','lo1','Output 1 length, m',2,0,'10',0,5,'Вихідна довжина труби 1, м','Выходная длина 1, м','','');
+INSERT INTO techApp_io VALUES('pipe1_4','Fo2','Output 2 flow, ton/h',2,0,'0',0,6,'Вихідні витрати 2, т/год','Выходной расход 2, т/ч','','');
+INSERT INTO techApp_io VALUES('pipe1_4','Po2','Output 2 pressure, at',2,1,'1',0,7,'Вихідний тиск 2, ата','Выходное давление 2, ата','','');
+INSERT INTO techApp_io VALUES('pipe1_4','So2','Output 2 cutset, m2',2,0,'0.2',0,8,'Вихідний перетин труби 2, м2','Выходное сечение 2, м2','','');
+INSERT INTO techApp_io VALUES('pipe1_4','lo2','Output 2 length, m',2,0,'10',0,9,'Вихідна довжина труби 2, м','Выходная длина 2, м','','');
+INSERT INTO techApp_io VALUES('pipe1_4','Fo3','Output 3 flow, ton/h',2,0,'0',0,10,'Вихідні витрати 3, т/год','Выходной расход 3, т/ч','','');
+INSERT INTO techApp_io VALUES('pipe1_4','Po3','Output 3 pressure, at',2,1,'1',0,11,'Вихідний тиск 3, ата','Выходное давление 3, ата','','');
+INSERT INTO techApp_io VALUES('pipe1_4','So3','Output 3 cutset, m2',2,0,'0.2',0,12,'Вихідний перетин труби 3, м2','Выходное сечение 3, м2','','');
+INSERT INTO techApp_io VALUES('pipe1_4','lo3','Output 3 length, m',2,0,'10',0,13,'Вихідна довжина труби 3, м','Выходная длина 3, м','','');
+INSERT INTO techApp_io VALUES('pipe1_4','Fo4','Output 4 flow, ton/h',2,0,'0',0,14,'Вихідні витрати 4, т/год','Выходной расход 4, т/ч','','');
+INSERT INTO techApp_io VALUES('pipe1_4','Po4','Output 4 pressure, at',2,1,'1',0,15,'Вихідний тиск 4, ата','Выходное давление 4, ата','','');
+INSERT INTO techApp_io VALUES('pipe1_4','So4','Output 4 cutset, m2',2,0,'0.2',0,16,'Вихідний перетин труби 4, м2','Выходное сечение 4, м2','','');
+INSERT INTO techApp_io VALUES('pipe1_4','lo4','Output 4 length, m',2,0,'10',0,17,'Вихідна довжина труби 4, м','Выходная длина 4, м','','');
+INSERT INTO techApp_io VALUES('pipe1_4','Q0','Norm density of the environment, kg/m3',2,0,'1',0,18,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','');
+INSERT INTO techApp_io VALUES('pipe1_4','f_frq','Calculation frequency, Hz',2,0,'200',1,20,'Частота обчислення, Гц','Частота вычисления, Гц','','');
+INSERT INTO techApp_io VALUES('pipe1_4','F1tmp','Temporary flow 1',2,1,'0',1,21,'Тимчасові витрати 1','Временный расход 1','','');
+INSERT INTO techApp_io VALUES('pipe1_4','F2tmp','Temporary flow 2',2,1,'0',1,22,'Тимчасові витрати 2','Временный расход 2','','');
+INSERT INTO techApp_io VALUES('pipe1_4','F3tmp','Temporary flow 3',2,1,'0',1,23,'Тимчасові витрати 3','Временный расход 3','','');
+INSERT INTO techApp_io VALUES('pipe1_4','F4tmp','Temporary flow 4',2,1,'0',1,24,'Тимчасові витрати 4','Временный расход 4','','');
+INSERT INTO techApp_io VALUES('pipe1_4','Pot1','Temporary pressure 1',2,1,'1',1,25,'Тимчасовий тиск 1','Временное давление 1','','');
+INSERT INTO techApp_io VALUES('pipe1_4','Pot2','Temporary pressure 2',2,1,'1',1,26,'Тимчасовий тиск 2','Временное давление 2','','');
+INSERT INTO techApp_io VALUES('pipe1_4','Pot3','Temporary pressure 3',2,1,'1',1,27,'Тимчасовий тиск 3','Временное давление 3','','');
+INSERT INTO techApp_io VALUES('pipe1_4','Pot4','Temporary pressure 4',2,1,'1',1,28,'Тимчасовий тиск 4','Временное давление 4','','');
+INSERT INTO techApp_io VALUES('valveMech','pos','Position, %',2,1,'0',0,0,'Положення, %','Положение, %','','');
+INSERT INTO techApp_io VALUES('valveMech','pos_sensor','Position by the sensor, %',2,1,'0',0,1,'Положення за давачем, %','Положение по датчику, %','','');
+INSERT INTO techApp_io VALUES('valveMech','com','Command',2,0,'0',0,2,'Команда','Команда','','');
+INSERT INTO techApp_io VALUES('valveMech','st_open','State "Opened"',3,1,'0',0,3,'Стан "Відкрито"','Состояние "Открыто"','','');
+INSERT INTO techApp_io VALUES('valveMech','st_close','State "Closed"',3,1,'1',0,4,'Стан "Закрито"','Состояние "Закрыто"','','');
+INSERT INTO techApp_io VALUES('valveMech','t_full','Going time, seconds',2,0,'3',0,5,'Час ходу, секунд','Время хода, секунд','','');
+INSERT INTO techApp_io VALUES('valveMech','t_up','Estrangement time, seconds',2,0,'1',0,6,'Час зриву, секунд','Время срыва, секунд','','');
+INSERT INTO techApp_io VALUES('valveMech','t_sensor','Sensor lag time, seconds',2,0,'1',0,7,'Час затримки сенсору, секунд','Время задержки сенсора, секунд','','');
+INSERT INTO techApp_io VALUES('valveMech','f_frq','Calculation frequency, Hz',2,0,'100',1,8,'Частота обчислення, Гц','Частота вычисления, Гц','','');
+INSERT INTO techApp_io VALUES('valveMech','tmp_up','Estrangement counter',2,1,'0',0,9,'Лічильник зриву','Счётчик срыва','','');
+INSERT INTO techApp_io VALUES('valveMech','lst_com','Last command',2,1,'0',0,10,'Остання команда','Последняя команда','','');
+INSERT INTO techApp_io VALUES('diaphragm','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','');
+INSERT INTO techApp_io VALUES('diaphragm','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ata','','');
+INSERT INTO techApp_io VALUES('diaphragm','Fo','Output flow, ton/h',2,0,'0',0,2,'Вихідні витрати, т/год','Выходной расход, т/ч','','');
+INSERT INTO techApp_io VALUES('diaphragm','Po','Output pressure, at',2,1,'1',0,3,'Вихідний тиск, ата','Выходное давление, ата','','');
+INSERT INTO techApp_io VALUES('diaphragm','dP','Pressure difference, kPa',2,1,'0',0,4,'Перепад тиску, кПа','Перепад давления, кПа','','');
+INSERT INTO techApp_io VALUES('diaphragm','Sdf','Diaphragm cutset, m2',2,0,'0.1',0,5,'Перетин діафрагми, м2','Сечение диафрагмы, м2','','');
+INSERT INTO techApp_io VALUES('diaphragm','So','Output pipe cutset, m2',2,0,'0.2',0,6,'Вихідний перетин труби, м2','Выходное сечение трубы, м2','','');
+INSERT INTO techApp_io VALUES('diaphragm','lo','Output pipe length, m',2,0,'10',0,7,'Вихідна довжина труби, м','Выходная длина трубы, м','','');
+INSERT INTO techApp_io VALUES('diaphragm','Q0','Norm density of the environment, kg/m3',2,0,'1',0,8,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','');
+INSERT INTO techApp_io VALUES('diaphragm','f_frq','Calculation frequency, Hz',2,0,'100',1,10,'Частота обчислення, Гц','Частота вычисления, Гц','','');
+INSERT INTO techApp_io VALUES('pipe3_1','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,18,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','');
+INSERT INTO techApp_io VALUES('pipe3_1','Fi1','Input 1 flow, ton/h',2,1,'0',0,0,'Вхідні витрати 1, т/год','Входной расход 1, т/ч','','');
+INSERT INTO techApp_io VALUES('pipe3_1','Pi1','Input 1 pressure, at',2,0,'1',0,1,'Вхідний тиск 1, ата','Входное давление 1, ата','','');
+INSERT INTO techApp_io VALUES('pipe3_1','Ti1','Input 1 temperature, K',2,0,'273',0,2,'Вхідна температура 1, К','Входная температура 1, К','','');
+INSERT INTO techApp_io VALUES('pipe3_1','Si1','Input 1 cutset, m2',2,0,'0.2',0,3,'Вхідний перетин 1, м2','Входное сечение 1, м2','','');
+INSERT INTO techApp_io VALUES('pipe3_1','Fi2','Input 2 flow, ton/h',2,1,'0',0,4,'Вхідні витрати 2, т/год','Входной расход 2, т/ч','','');
+INSERT INTO techApp_io VALUES('pipe3_1','Pi2','Input 2 pressure, at',2,0,'1',0,5,'Вхідний тиск 2, ата','Входное давление 2, ата','','');
+INSERT INTO techApp_io VALUES('pipe3_1','Ti2','Input 2 temperature, K',2,0,'273',0,6,'Вхідна температура 2, К','Входная температура 2, К','','');
+INSERT INTO techApp_io VALUES('pipe3_1','Si2','Input 2 cutset, m2',2,0,'0.2',0,7,'Вхідний перетин 2, м2','Входное сечение 2, м2','','');
+INSERT INTO techApp_io VALUES('pipe3_1','Fi3','Input 3 flow, ton/h',2,1,'0',0,8,'Вхідні витрати 3, т/год','Входной расход 3, т/ч','','');
+INSERT INTO techApp_io VALUES('pipe3_1','Pi3','Input 3 pressure, at',2,0,'1',0,9,'Вхідний тиск 3, ата','Входное давление 3, ата','','');
+INSERT INTO techApp_io VALUES('pipe3_1','Ti3','Input 3 temperature, K',2,0,'273',0,10,'Вхідна температура 3, К','Входная температура 3, К','','');
+INSERT INTO techApp_io VALUES('pipe3_1','Si3','Input 3 cutset, m2',2,0,'0.2',0,11,'Вхідний перетин 3, м2','Входное сечение 3, м2','','');
+INSERT INTO techApp_io VALUES('pipe3_1','Fo','Output flow, ton/h',2,0,'0',0,12,'Вихідні витрати, т/год','Выходной расход, т/ч','','');
+INSERT INTO techApp_io VALUES('pipe3_1','Po','Output pressure, at',2,1,'1',0,13,'Вихідний тиск, ата','Выходное давление, ата','','');
+INSERT INTO techApp_io VALUES('pipe3_1','To','Output temperature, K',2,1,'273',0,14,'Вихідна температура, К','Выходная температура, К','','');
+INSERT INTO techApp_io VALUES('pipe3_1','So','Output cutset, m2',2,0,'.2',0,15,'Вихідний перетин, м2','Выходное сечение, м2','','');
+INSERT INTO techApp_io VALUES('pipe3_1','lo','Output length, m',2,0,'10',0,16,'Вихідна довжина, м','Выходная длина, м','','');
+INSERT INTO techApp_io VALUES('pipe3_1','Q0','Norm density of the environment, kg/m3',2,0,'1',0,17,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','');
+INSERT INTO techApp_io VALUES('pipe3_1','Ct','Heat capacity of the environment',2,0,'20',0,19,'Теплоємність середовища','Теплоёмкость среды','','');
+INSERT INTO techApp_io VALUES('pipe3_1','Riz','Heat resistance of the isolation',2,0,'20',0,20,'Тепловий опір ізоляції','Тепловое сопротивление изоляции','','');
+INSERT INTO techApp_io VALUES('pipe3_1','Fwind','Air speed',2,0,'1',0,21,'Швидкість повітря','Скорость воздуха','','');
+INSERT INTO techApp_io VALUES('pipe3_1','Twind','Air temperature, К',2,0,'273',0,22,'Температура повітря, К','Температура воздуха, К','','');
+INSERT INTO techApp_io VALUES('pipe3_1','f_frq','Calculation frequency, Hz',2,0,'100',1,23,'Частота обчислення, Гц','Частота вычисления, Гц','','');
+INSERT INTO techApp_io VALUES('compressor','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,14,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','');
+INSERT INTO techApp_io VALUES('pipeBase','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','');
+INSERT INTO techApp_io VALUES('pipeBase','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','');
+INSERT INTO techApp_io VALUES('pipeBase','Ti','Input temperature, K',2,0,'293',0,2,'Вхідна температура, К','Входная температура, К','','');
+INSERT INTO techApp_io VALUES('pipeBase','Si','Input cutset, m2',2,0,'.2',0,3,'Вхідний перетин, м2','Входное сечение, м2','','');
+INSERT INTO techApp_io VALUES('pipeBase','Fo','Output flow, ton/h',2,0,'0',0,4,'Вихідні витрати, т/год','Выходной расход, т/ч','','');
+INSERT INTO techApp_io VALUES('pipeBase','Po','Output pressure, at',2,1,'1',0,5,'Вихідний тиск, ата','Выходное давление, ата','','');
+INSERT INTO techApp_io VALUES('pipeBase','To','Output temperature, K',2,1,'293',0,6,'Вихідна температура, К','Выходная температура, К','','');
+INSERT INTO techApp_io VALUES('pipeBase','So','Output cutset, m2',2,0,'.2',0,7,'Вихідний перетин, м2','Выходное сечение, м2','','');
+INSERT INTO techApp_io VALUES('pipeBase','lo','Output length, m',2,0,'10',0,8,'Вихідна довжина, м','Выходная длина, м','','');
+INSERT INTO techApp_io VALUES('pipeBase','Q0','Norm density of the environment, kg/m3',2,0,'1',0,9,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','');
+INSERT INTO techApp_io VALUES('pipeBase','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.98',0,10,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','');
+INSERT INTO techApp_io VALUES('pipeBase','Ktr','Coefficient of friction',2,0,'0.01',0,11,'Коефіцієнт тертя','Коэффициент трения','','');
+INSERT INTO techApp_io VALUES('pipeBase','f_frq','Calculation frequency, Hz',2,0,'100',0,12,'Частота обчислення, Гц','Частота вычисления, Гц','','');
+INSERT INTO techApp_io VALUES('heatExch','Fi1','Input 1 flow, ton/h',2,0,'20',0,0,'Вхідні витрати 1, т/год','Входной расход 1, т/ч','','');
+INSERT INTO techApp_io VALUES('heatExch','Pi1','Input 1 pressure, at',2,0,'1',0,1,'Вхідний тиск 1, ата','Входное давление 1, ата','','');
+INSERT INTO techApp_io VALUES('heatExch','Ti1','Input 1 temperature, K',2,0,'20',0,2,'Вхідна температура 1, К','Входная температура 1, K','','');
+INSERT INTO techApp_io VALUES('heatExch','Si1','Input 1 cutset, m2',2,0,'1',0,3,'Вхідний перетин 1, м2','Входное сечение 1, м2','','');
+INSERT INTO techApp_io VALUES('heatExch','li1','Input 1 length, m',2,0,'10',0,4,'Вхідна довжина 1, м','Входная длина 1, м','','');
+INSERT INTO techApp_io VALUES('heatExch','Q0i1','Input 1 norm density, kg/m3',2,0,'1',0,5,'Вхідна нормальна щільність 1, кг/м3','Входная нормальная плотность 1, кг/м3','','');
+INSERT INTO techApp_io VALUES('heatExch','Kpr1','Input 1 coefficient of the compressibility [0...1]',2,0,'0.9',0,6,'Вхідний коефіцієнт стискання середовища 1 [0...1]','Входной коэффициент сжимаемости среды 1 [0...1]','','');
+INSERT INTO techApp_io VALUES('heatExch','Ci1','Input 1 heat capacity',2,0,'1',0,7,'Вхідна теплоємність 1','Входная теплоёмкость 1','','');
+INSERT INTO techApp_io VALUES('heatExch','Fi2','Input 2 flow, ton/h',2,0,'20',0,8,'Вхідні витрати 2, т/год','Входной расход 2, т/ч','','');
+INSERT INTO techApp_io VALUES('heatExch','Pi2','Input 2 pressure, at',2,0,'1',0,9,'Вхідний тиск 2, ата','Входное давление 2, ата','','');
+INSERT INTO techApp_io VALUES('heatExch','Ti2','Input 2 temperature, K',2,0,'40',0,10,'Вхідна температура 2, К','Входная температура 2, K','','');
+INSERT INTO techApp_io VALUES('heatExch','Si2','Input 2 cutset, m2',2,0,'1',0,11,'Вхідний перетин 2, м2','Входное сечение 2, м2','','');
+INSERT INTO techApp_io VALUES('heatExch','li2','Input 2 length, m',2,0,'10',0,12,'Вхідна довжина 2, м','Входная длина 2, м','','');
+INSERT INTO techApp_io VALUES('heatExch','Q0i2','Input 2 norm density, kg/m3',2,0,'1',0,13,'Вхідна нормальна щільність 2, кг/м3','Входная нормальная плотность 2, кг/м3','','');
+INSERT INTO techApp_io VALUES('heatExch','Kpr2','Input 2 coefficient of the compressibility [0...1]',2,0,'0.9',0,14,'Вхідний коефіцієнт стискання середовища 2 [0...1]','Входной коэффициент сжимаемости среды 2 [0...1]','','');
+INSERT INTO techApp_io VALUES('heatExch','Ci2','Input 2 heat capacity',2,0,'1',0,15,'Вхідна теплоємність 2','Входная теплоёмкость 2','','');
+INSERT INTO techApp_io VALUES('heatExch','ki','Heat transfer coefficient',2,0,'0.9',0,16,'Коефіцієнт тепловіддачі','Коэффициент теплоотдачи ','','');
+INSERT INTO techApp_io VALUES('heatExch','Fo1','Output 1 flow, ton/h',2,0,'0',0,17,'Вихідні витрати 1, т/год','Выходной расход 1, т/ч','','');
+INSERT INTO techApp_io VALUES('heatExch','Po1','Output 1 pressure, at',2,1,'1',0,18,'Вихідний тиск 1, ата','Выходное давление 1, ата','','');
+INSERT INTO techApp_io VALUES('heatExch','To1','Output 1 temperature, K',2,1,'273',0,19,'Вихідна температура 1, К','Выходная температура 1, K','','');
+INSERT INTO techApp_io VALUES('heatExch','So1','Output 1 cutset, m2',2,1,'1',0,20,'Вихідний перетин труби 1, м2','Выходное сечение 1, м2','','');
+INSERT INTO techApp_io VALUES('heatExch','lo1','Output 1 length, m',2,1,'10',0,21,'Вихідна довжина труби 1, м','Выходная длина 1, м','','');
+INSERT INTO techApp_io VALUES('heatExch','Fo2','Output 2 flow, ton/h',2,0,'0',0,22,'Вихідні витрати 2, т/год','Выходной расход 2, т/ч','','');
+INSERT INTO techApp_io VALUES('heatExch','Po2','Output 2 pressure, at',2,1,'1',0,23,'Вихідний тиск 2, ата','Выходное давление 2, ата','','');
+INSERT INTO techApp_io VALUES('heatExch','To2','Output 2 temperature, K',2,1,'273',0,24,'Вихідна температура 2, К','Выходная температура 2, K','','');
+INSERT INTO techApp_io VALUES('heatExch','So2','Output 2 cutset, m2',2,1,'1',0,25,'Вихідний перетин труби 2, м2','Выходное сечение 2, м2','','');
+INSERT INTO techApp_io VALUES('heatExch','lo2','Output 2 length, m',2,1,'10',0,26,'Вихідна довжина труби 2, м','Выходная длина 2, м','','');
+INSERT INTO techApp_io VALUES('heatExch','f_frq','Calculation frequency, Hz',2,0,'200',0,27,'Частота обчислення, Гц','Частота вычисления, Гц','','');
+INSERT INTO techApp_io VALUES('boilerBarrel','Fi1','Input water flow, ton/h',2,1,'22',0,0,'Вхідні витрати води, т/год','Входной расход воды, т/ч','','');
+INSERT INTO techApp_io VALUES('boilerBarrel','Pi1','Input water pressure, at',2,0,'43',0,1,'Вхідний тиск води, ата','Входное давление воды, ата','','');
+INSERT INTO techApp_io VALUES('boilerBarrel','Ti1','Input water temperature, K',2,0,'523',0,2,'Вхідна температура води, К','Входная температура воды, K','','');
+INSERT INTO techApp_io VALUES('boilerBarrel','Si1','Input water pipes cutset, m2',2,0,'0.6',0,3,'Вхідний перетин труб з водою, м2','Входное сечение труб с водой, м2','','');
+INSERT INTO techApp_io VALUES('boilerBarrel','Fi2','Input smoke gas flow, ton/h',2,1,'',0,4,'Вхідні витрати димових газів, т/год','Входной расход дымовых газов, т/ч','','');
+INSERT INTO techApp_io VALUES('boilerBarrel','Pi2','Input smoke gas pressure, at',2,0,'1.3',0,5,'Вхідний тиск димових газів, ата','Входное давление дымовых газов, ата','','');
+INSERT INTO techApp_io VALUES('boilerBarrel','Ti2','Input smoke gas temperature, K',2,0,'1700',0,6,'Вхідна температура димових газів, К','Входная температура дымовых газов, K','','');
+INSERT INTO techApp_io VALUES('boilerBarrel','Si2','Input smoke gas pipes cutset, m2',2,0,'10',0,7,'Вхідний перетин труби димових газів, м2','Входное сечение трубы дымовых газов, м2','','');
+INSERT INTO techApp_io VALUES('boilerBarrel','Vi1','Barrel volume, m3',2,0,'3',0,8,'Об''єм барабану, м3','Объем барабана, м3','','');
+INSERT INTO techApp_io VALUES('boilerBarrel','Lo','Barrel level, %',2,1,'10',0,9,'Рівень у барабані, %','Уровень в барабане, %','','');
+INSERT INTO techApp_io VALUES('boilerBarrel','S','Heating surface, m2',2,0,'15',0,10,'Поверхня нагріву, м2','Поверхность нагрева, м2','','');
+INSERT INTO techApp_io VALUES('boilerBarrel','k','Heat transfer coefficient',2,0,'0.8',0,11,'Коефіцієнт тепловіддачі','Коэффициент теплоотдачи','','');
+INSERT INTO techApp_io VALUES('boilerBarrel','Fo','Output steam flow, ton/h',2,0,'20',0,12,'Вихідні витрати пару, т/год','Выходной расход пара, т/ч','','');
+INSERT INTO techApp_io VALUES('boilerBarrel','Po1','Output steam pressure, at',2,1,'41.68',0,13,'Вихідний тиск пари, ата','Выходное давление пара, ата','','');
+INSERT INTO techApp_io VALUES('boilerBarrel','To1','Output steam temperature, K',2,1,'10',0,14,'Вихідна температура пари, К','Выходная температура пара, K','','');
+INSERT INTO techApp_io VALUES('boilerBarrel','So1','Output steam pipe cutset, m2',2,0,'0.5',0,15,'Вихідний перетин труби пару, м2','Выходное сечение трубы по пару, м2','','');
+INSERT INTO techApp_io VALUES('boilerBarrel','lo1','Output steam pipe length, m',2,0,'5',0,16,'Вихідна довжина труби пару, м','Выходная длина трубы пара, м','','');
+INSERT INTO techApp_io VALUES('boilerBarrel','Fo2','Output smoke gas flow, ton/h',2,0,'180',0,17,'Вихідні витрати димових газів, т/год','Выходной расход дымовых газов, т/ч','','');
+INSERT INTO techApp_io VALUES('boilerBarrel','Po2','Output smoke gas pressure, at',2,1,'1',0,18,'Вихідний тиск димових газів, ата','Выходное давление дымовых газов, ата','','');
+INSERT INTO techApp_io VALUES('boilerBarrel','To2','Output smoke gas temperature, K',2,0,'0',0,19,'Вихідна температура димових газів, К','Выходная температура дымовых газов, K','','');
+INSERT INTO techApp_io VALUES('boilerBarrel','Fstm','Inner barrel steam flow, ton/h',2,1,'0',0,20,'Витрати пару у барабані, т/год','Расход пара в барабане, т/ч','','');
+INSERT INTO techApp_io VALUES('boilerBarrel','Tv','Inner water temperature, K',2,1,'0',0,21,'Температура води у барабані, K','Температура воды в барабане, K','','');
+INSERT INTO techApp_io VALUES('boilerBarrel','f_frq','Calculation frequency, Hz',2,0,'200',0,22,'Частота обчислення, Гц','Частота вычисления, Гц','','');
+INSERT INTO techApp_io VALUES('boilerBurner','Fi1','Input blast furnace gas flow, ton/h',2,1,'',0,0,'Вхідні витрати доменного газу, т/год','Входной расход доменного газа, т/ч','','');
+INSERT INTO techApp_io VALUES('boilerBurner','Pi1','Input blast furnace gas pressure, at',2,0,'',0,1,'Вхідний тиск доменного газу, ата','Входное давление доменного газа, ата','','');
+INSERT INTO techApp_io VALUES('boilerBurner','Ti1','Input blast furnace gas temperature, K',2,0,'40',0,2,'Вхідна температура димових газів, К','Входная температура доменного газа, K','','');
+INSERT INTO techApp_io VALUES('boilerBurner','Si1','Input blast furnace gas pipe cutset, m2',2,0,'',0,3,'Вхідний перетин труби димових газів, м2','Входное сечение трубы доменного газа, м2','','');
+INSERT INTO techApp_io VALUES('boilerBurner','Fi2','Input natural gas flow, ton/h',2,1,'',0,4,'Вхідні витрати природного газу, т/год','Входной расход природного газа, т/ч','','');
+INSERT INTO techApp_io VALUES('boilerBurner','Pi2','Input natural gas pressure, at',2,0,'',0,5,'Вхідний тиск природного газу, ата','Входное давление природного газа, ата','','');
+INSERT INTO techApp_io VALUES('boilerBurner','Ti2','Input natural gas temperature, K',2,0,'20',0,6,'Вхідна температура природного газу, К','Входная температура природного газа, K','','');
+INSERT INTO techApp_io VALUES('boilerBurner','Si2','Input natural gas pipe cutset, m2',2,0,'',0,7,'Вхідний перетин труби природного газу, м2','Входное сечение трубы природного газа, м2','','');
+INSERT INTO techApp_io VALUES('boilerBurner','Fi3','Input coke oven gas flow, ton/h',2,1,'',0,8,'Вхідні витрати коксового газу, т/год','Входной расход коксового газа, т/ч','','');
+INSERT INTO techApp_io VALUES('boilerBurner','Pi3','Input coke oven gas pressure, at',2,0,'',0,9,'Вхідний тиск коксового газу, ата','Входное давление коксового газа, ата','','');
+INSERT INTO techApp_io VALUES('boilerBurner','Ti3','Input coke oven gas temperature, K',2,0,'0',0,10,'Вхідна температура коксового газу, К','Входная температура коксового газа, K','','');
+INSERT INTO techApp_io VALUES('boilerBurner','Si3','Input coke oven gas pipe cutset, m2',2,0,'',0,11,'Вхідний перетин труби коксового газу, м2','Входное сечение трубы коксового газа, м2','','');
+INSERT INTO techApp_io VALUES('boilerBurner','Fi4','Input air flow, ton/h',2,1,'',0,12,'Вхідні витрати повітря, т/год','Входной расход воздуха, т/ч','','');
+INSERT INTO techApp_io VALUES('boilerBurner','Pi4','Input air pressure, at',2,0,'',0,13,'Вхідний тиск повітря, ата','Входное давление воздуха, ата','','');
+INSERT INTO techApp_io VALUES('boilerBurner','Ti4','Input air temperature, K',2,0,'20',0,14,'Вхідна температура повітря, К','Входная температура воздуха, K','','');
+INSERT INTO techApp_io VALUES('boilerBurner','Si4','Input air pipe cutset, m2',2,0,'',0,15,'Вхідний перетин труби повітря, м2','Входное сечение трубы воздуха, м2','','');
+INSERT INTO techApp_io VALUES('boilerBurner','Fo','Output smoke gas flow, ton/h',2,0,'',0,16,'Вихідні витрати димових газів, т/год','Выходной расход дымовых газов, т/ч','','');
+INSERT INTO techApp_io VALUES('boilerBurner','Po','Output smoke gas pressure, at',2,1,'',0,17,'Вихідний тиск димових газів, ата','Выходное давление дымовых газов, ата','','');
+INSERT INTO techApp_io VALUES('boilerBurner','To','Output smoke gas temperature, K',2,1,'',0,18,'Вихідна температура димових газів, К','Выходная температура дымовых газов, K','','');
+INSERT INTO techApp_io VALUES('boilerBurner','So','Output smoke gas pipe cutset, m2',2,0,'90',0,19,'Вихідний перетин труби димових газів, м2','Выходное сечение трубы дымовых газов, м2','','');
+INSERT INTO techApp_io VALUES('boilerBurner','lo','Output smoke gas pipe length, m',2,0,'',0,20,'Вихідна довжина труби димових газів, м','Выходная длина трубы дымовых газов, м','','');
+INSERT INTO techApp_io VALUES('boilerBurner','V','Burner volume, m3',2,0,'830',0,21,'Об''єм топки, м3','Объём топки, м3','','');
+INSERT INTO techApp_io VALUES('boilerBurner','CO','Percentage of CO in the flue stack gases, %',2,1,'',0,22,'Відсоток вмісту CO у димових газах, %','Процент содержания CO в дымовых газах, %','','');
+INSERT INTO techApp_io VALUES('boilerBurner','O2','Percentage of O2 in the flue stack gases, %',2,1,'',0,23,'Відсоток вмісту O2 у димових газах, %','Процент содержания O2 в дымовых газах, %','','');
+INSERT INTO techApp_io VALUES('boilerBurner','f_frq','Calculation frequency, Hz',2,0,'200',0,24,'Частота обчислення, Гц','Частота вычисления, Гц','','');
+INSERT INTO techApp_io VALUES('pipe2_1','Fi1','Input 1 flow, ton/h',2,1,'0',0,0,'Вхідні витрати 1, т/год','Входной расход 1, т/ч','','');
+INSERT INTO techApp_io VALUES('pipe2_1','Pi1','Input 1 pressure, at',2,0,'1',0,1,'Вхідний тиск 1, ата','Входное давление 1, ата','','');
+INSERT INTO techApp_io VALUES('pipe2_1','Ti1','Input 1 temperature, K',2,0,'273',0,2,'Вхідна температура 1, К','Входная температура 1, К','','');
+INSERT INTO techApp_io VALUES('pipe2_1','Si1','Input 1 cutset, m2',2,0,'0.2',0,3,'Вхідний перетин 1, м2','Входное сечение 1, м2','','');
+INSERT INTO techApp_io VALUES('pipe2_1','Fi2','Input 2 flow, ton/h',2,1,'0',0,4,'Вхідні витрати 2, т/год','Входной расход 2, т/ч','','');
+INSERT INTO techApp_io VALUES('pipe2_1','Pi2','Input 2 pressure, at',2,0,'1',0,5,'Вхідний тиск 2, ата','Входное давление 2, ата','','');
+INSERT INTO techApp_io VALUES('pipe2_1','Ti2','Input 2 temperature, K',2,0,'273',0,6,'Вхідна температура 2, К','Входная температура 2, К','','');
+INSERT INTO techApp_io VALUES('pipe2_1','Si2','Input 2 cutset, m2',2,0,'0.2',0,7,'Вхідний перетин 2, м2','Входное сечение 2, м2','','');
+INSERT INTO techApp_io VALUES('pipe2_1','Fo','Output flow, ton/h',2,0,'0',0,8,'Вихідні витрати, т/год','Выходной расход, т/ч','','');
+INSERT INTO techApp_io VALUES('pipe2_1','Po','Output pressure, at',2,1,'1',0,9,'Вихідний тиск, ата','Выходное давление, ата','','');
+INSERT INTO techApp_io VALUES('pipe2_1','To','Output temperature, K',2,1,'273',0,10,'Вихідна температура, К','Выходная температура, К','','');
+INSERT INTO techApp_io VALUES('pipe2_1','So','Output cutset, m2',2,0,'.2',0,11,'Вихідний перетин, м2','Выходное сечение, м2','','');
+INSERT INTO techApp_io VALUES('pipe2_1','lo','Output length, m',2,0,'10',0,12,'Вихідна довжина, м','Выходная длина, м','','');
+INSERT INTO techApp_io VALUES('pipe2_1','Q0','Norm density of the environment, kg/m3',2,0,'1',0,13,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','');
+INSERT INTO techApp_io VALUES('pipe2_1','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,14,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','');
+INSERT INTO techApp_io VALUES('pipe2_1','Ct','Heat capacity of the environment',2,0,'20',0,15,'Теплоємність середовища','Теплоёмкость среды','','');
+INSERT INTO techApp_io VALUES('pipe2_1','Riz','Heat resistance of the isolation',2,0,'20',0,16,'Тепловий опір ізоляції','Тепловое сопротивление изоляции','','');
+INSERT INTO techApp_io VALUES('pipe2_1','Fwind','Air speed',2,0,'1',0,17,'Швидкість повітря','Скорость воздуха','','');
+INSERT INTO techApp_io VALUES('pipe2_1','Twind','Air temperature, К',2,0,'273',0,18,'Температура повітря, К','Температура воздуха, К','','');
+INSERT INTO techApp_io VALUES('pipe2_1','f_frq','Calculation frequency, Hz',2,0,'100',1,19,'Частота обчислення, Гц','Частота вычисления, Гц','','');
+INSERT INTO techApp_io VALUES('pipe1_3','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,15,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','');
+INSERT INTO techApp_io VALUES('pipe1_4','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,19,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','');
+INSERT INTO techApp_io VALUES('diaphragm','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,9,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','');
+CREATE TABLE IF NOT EXISTS 'tmplib_DevLib_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
+INSERT INTO tmplib_DevLib_io VALUES('SCU750','transport','Transport',0,64,'SCU750',0,'Транспорт','','Транспорт','');
+INSERT INTO tmplib_DevLib_io VALUES('SCU750','addr','Device address (-1...255)',1,64,'1',1,'Адрес устройства (-1...255)','','Адреса пристрою (-1...255)','');
+INSERT INTO tmplib_DevLib_io VALUES('SCU750','perGet','Period data getting (s)',2,64,'10',2,'Период получения данных (с)','','Період отримання даних (с)','');
+INSERT INTO tmplib_DevLib_io VALUES('SCU750','version','Version',0,16,'',3,'Версия','','Версія','');
+INSERT INTO tmplib_DevLib_io VALUES('SCU750','snCntrUnit','Serial number: Control Unit',0,16,'',4,'Серийный номер: Блок Управления','','Серійний номер: Блок Керування','');
+INSERT INTO tmplib_DevLib_io VALUES('SCU750','snPump','Serial number: Pump',0,16,'',5,'Серийный номер: Насос','','Серійний номер: Насос','');
+INSERT INTO tmplib_DevLib_io VALUES('SCU750','cntPumpHour','Pump hour counter (minutes)',2,16,'',6,'Счётчик часов насоса (минуты)','','Лічильник годин насосу (хвилини)','');
+INSERT INTO tmplib_DevLib_io VALUES('SCU750','cntCntrUnitHour','Control unit hour counter (minutes)',2,16,'',7,'Счётчик часов объекта контроля (минуты)','','Лічильник годин об''єкта контролю (хвилини)','');
+INSERT INTO tmplib_DevLib_io VALUES('SCU750','cntStart','Start counter',2,16,'',8,'Запуск счётчика','','Пуск лічильника','');
+INSERT INTO tmplib_DevLib_io VALUES('SCU750','operMode','Pump Operation Mode',0,16,'',9,'Режим работы насоса','','Режим роботи насосу','');
+INSERT INTO tmplib_DevLib_io VALUES('SCU750','errors','Errors',0,16,'',10,'Ошибки','','Помилки','');
+INSERT INTO tmplib_DevLib_io VALUES('SCU750','events','Events',0,16,'',11,'События','','Події','');
+INSERT INTO tmplib_DevLib_io VALUES('SCU750','tTMS','TMS temperature (°С)',1,16,'',12,'TMS температура (°С)','','TMS температура (°С)','');
+INSERT INTO tmplib_DevLib_io VALUES('SCU750','tMotor','Motor temperature (°С)',1,16,'',13,'Температура мотора (°С)','','Температура мотору (°С)','');
+INSERT INTO tmplib_DevLib_io VALUES('SCU750','rotSpeed','Rotational speed (HZ)',1,16,'',14,'Скорость вращения (Гц)','','Швидкість обертання (Гц)','');
+INSERT INTO tmplib_DevLib_io VALUES('SCU750','comStart','Command: START',3,32,'',15,'Команда: ЗАПУСК','','Команда: ЗАПУСК','');
+INSERT INTO tmplib_DevLib_io VALUES('SCU750','comStop','Command: STOP',3,32,'',16,'Команда: СТОП','','Команда: СТОП','');
+INSERT INTO tmplib_DevLib_io VALUES('SCU750','comReset','Command: RESET',3,32,'',17,'Команда: СБРОС','','Команда: СКИД','');
+INSERT INTO tmplib_DevLib_io VALUES('SCU750','spSpeed','Set point: Speed',1,32,'',18,'Задание: Скорость','','Завдання: Швидкість','');
+INSERT INTO tmplib_DevLib_io VALUES('SCU750','spTMSt','Set point: TMS temperature',1,16,'',19,'Задание: температура TMS','','Завдання: температура TMS','');
+INSERT INTO tmplib_DevLib_io VALUES('SCU750','spSpeedPrev','Set point: Speed (previous)',1,1,'',20,'Задание: Скорость (предыдущая)','','Завдання: Швидкість (попередня)','');
+INSERT INTO tmplib_DevLib_io VALUES('SCU750','cnt','Counter',1,1,'',21,'Счётчик','','Лічильник','');
+INSERT INTO tmplib_DevLib_io VALUES('SCU750','operModes','Operation modes',4,1,'',22,'Режимы работы','','Режими роботи','');
+INSERT INTO tmplib_DevLib_io VALUES('TMH','transport','Transport',0,64,'TMH',0,'Транспорт','','Транспорт','');
+INSERT INTO tmplib_DevLib_io VALUES('TMH','addr','Device address (-1...255)',1,64,'1',1,'Адрес устройства (-1...255)','','Адреса пристрою (-1...255)','');
+INSERT INTO tmplib_DevLib_io VALUES('TMH','perGet','Period data getting (s)',2,64,'10',2,'Период получения данных (с)','','Період отримання даних (с)','');
+INSERT INTO tmplib_DevLib_io VALUES('TMH','modelID','Model ID',0,16,'',3,'ID модели','','ID моделі','');
+INSERT INTO tmplib_DevLib_io VALUES('TMH','errors','Errors',0,16,'',4,'Ошибки','','Помилки','');
+INSERT INTO tmplib_DevLib_io VALUES('TMH','rotSpeed','Rotational speed (HZ)',1,16,'',5,'Скорость вращения (Гц)','','Швидкість обертання (Гц)','');
+INSERT INTO tmplib_DevLib_io VALUES('TMH','I','Current (A)',2,16,'',6,'Ток (А)','','Струм (А)','');
+INSERT INTO tmplib_DevLib_io VALUES('TMH','axle1disb','Axle 1 disbalance',1,16,'',7,'Нарушение границы 1','','Порушення границі 1','');
+INSERT INTO tmplib_DevLib_io VALUES('TMH','axle2disb','Axle 2 disbalance',1,16,'',8,'Нарушение границы 2','','Порушення границі 2','');
+INSERT INTO tmplib_DevLib_io VALUES('TMH','MP_X1','MP X1',1,16,'',9,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('TMH','MP_Y1','MP Y1',1,16,'',10,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('TMH','MP_X2','MP X2',1,16,'',11,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('TMH','MP_Y2','MP Y2',1,16,'',12,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('TMH','MP_Z','MP Z',1,16,'',13,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('TMH','operMode','Operation Mode',0,16,'',14,'Режим работы','','Режим роботи','');
+INSERT INTO tmplib_DevLib_io VALUES('TMH','comStart','Command: START',3,32,'',15,'Команда: ЗАПУСК','','Команда: ЗАПУСК','');
+INSERT INTO tmplib_DevLib_io VALUES('TMH','comStop','Command: STOP',3,32,'',16,'Команда: СТОП','','Команда: СТОП','');
+INSERT INTO tmplib_DevLib_io VALUES('TMH','comReset','Command: RESET',3,32,'',17,'Команда: СБРОС','','Команда: СКИД','');
+INSERT INTO tmplib_DevLib_io VALUES('TMH','operCntr','Operation Control Mode',0,16,'',18,'Режим работы и контроля','','Режим роботи та контролю','');
+INSERT INTO tmplib_DevLib_io VALUES('TMH','comInteract','Interactive mode',3,32,'',19,'Интерактивный режим','','Інтерактивний режим','');
+INSERT INTO tmplib_DevLib_io VALUES('TMH','comAutonom','Autonomous mode',3,32,'',20,'Автономный режим','','Автономний режим','');
+INSERT INTO tmplib_DevLib_io VALUES('TMH','cnt','Counter',1,1,'',21,'Счётчик','','Лічильник','');
+INSERT INTO tmplib_DevLib_io VALUES('TMH','operModes','Operation modes',4,1,'',22,'Режимы работы','','Режими роботи','');
+INSERT INTO tmplib_DevLib_io VALUES('TM510x','transport','Transport',0,64,'tm510x',0,'Транспорт','','Транспорт','');
+INSERT INTO tmplib_DevLib_io VALUES('TM510x','addr','Device address (1...254)',1,64,'1',1,'Адрес устройства (1...254)','','Адреса пристрою (1...254)','');
+INSERT INTO tmplib_DevLib_io VALUES('TM510x','devTp','Device type',1,16,'',2,'Тип устройства','','Тип пристрою','');
+INSERT INTO tmplib_DevLib_io VALUES('TM510x','errors','Errors',0,16,'',3,'Ошибки','','Помилки','');
+INSERT INTO tmplib_DevLib_io VALUES('TM510x','in1','Input 1',2,16,'',4,'Вход 1','','Вхід 1','');
+INSERT INTO tmplib_DevLib_io VALUES('TM510x','in2','Input 2',2,16,'',5,'Вход 2','','Вхід 2','');
+INSERT INTO tmplib_DevLib_io VALUES('TM510x','in3','Input 3',2,16,'',6,'Вход 3','','Вхід 3','');
+INSERT INTO tmplib_DevLib_io VALUES('TM510x','in4','Input 4',2,16,'',7,'Вход 4','','Вхід 4','');
+INSERT INTO tmplib_DevLib_io VALUES('TM510x','in5','Input 5',2,16,'',8,'Вход 5','','Вхід 5','');
+INSERT INTO tmplib_DevLib_io VALUES('TM510x','in6','Input 6',2,16,'',9,'Вход 6','','Вхід 6','');
+INSERT INTO tmplib_DevLib_io VALUES('TM510x','in7','Input 7',2,16,'',10,'Вход 7','','Вхід 7','');
+INSERT INTO tmplib_DevLib_io VALUES('TM510x','in8','Input 8',2,16,'',11,'Вход 8','','Вхід 8','');
+INSERT INTO tmplib_DevLib_io VALUES('UPS','srcAddr','Source object''s address',0,64,'',0,'Адрес исходного объекта','','Адреса вихідного об''єкту','');
+INSERT INTO tmplib_DevLib_io VALUES('UPS','items','All items',4,33,'',1,'Все элементы','','Всі елементи','');
+INSERT INTO tmplib_DevLib_io VALUES('UPS','this','Object',4,0,'',15,'Объект','','Об''єкт','');
+INSERT INTO tmplib_DevLib_io VALUES('UPS','SHIFR','Code',0,0,'',16,'Шифр','','Шифр','');
+INSERT INTO tmplib_DevLib_io VALUES('UPS','NAME','Name',0,0,'',17,'Имя','','Ім''я','');
+INSERT INTO tmplib_DevLib_io VALUES('UPS','DESCR','Description',0,0,'',18,'Описание','','Опис','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','imit','Imitation drift % (0-disable)',2,64,'0',0,'Дрейф имитации % (0-отключен)','','Дрейф імітації % (0-відключено)','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','trAddr','Transport',0,64,'Transport.Serial.out_VKT7',1,'Транспорт','','Транспорт','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','arhH','Archiver: hours',0,64,'',2,'Архиватор: часы','','Архіватор: години','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','arhD','Archiver: days',0,64,'',3,'Архиватор: дни','','Архіватор: дні','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','arhRes','Archiver: results-month',0,64,'',4,'Архиватор: результаты-месяцы','','Архіватор: результати-місяці','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','maxDayDepth','Archiver: maximum depth of reading for not hours archivers, days',1,64,'366',5,'Архиватор: максимум читаемой глубины для нечасового архиватора, дней','','Архіватор: максимум глибини читання для негодинного архіватора, днів','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','lastResTm','Last result months read time (s)',1,33,'0',6,'Время последнего чтения результирующих месяцев (с)','','Час останього читання результуючих місяців (с)','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','leftResTm','Left result months for read from archive',1,17,'',7,'Осталось результ. месяцев для чтения из архива','','Залишилося результ. місяців для читання із архіву','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','lastDTm','Last days read time (s)',1,33,'0',8,'Время последнего чтения дней (с)','','Час останього читання днів (с)','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','leftDTm','Left days for read from archive',1,17,'',9,'Осталось дней для чтения из архива','','Залишилося днів для читання із архіву','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','lastHTm','Last hours read time (s)',1,33,'',10,'Время последнего чтения часов (с)','','Час останього читання годин (с)','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','leftHTm','Left hours for read from archive',1,17,'',11,'Осталось часов для чтения из архива','','Залишилося годин для читання із архіву','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','diffTm','Difference time (server-counter), hours',1,16,'',12,'Разница времени (сервер-счётчик), часы','','Різниця часу (сервер-лічильник), години','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','firmVer','Firmware version',2,16,'',13,'Версия прошивки','','Версія прошивки','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','abonId','Subscriber ID',0,16,'',14,'ID абонента','','ID абоненту','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','repDay','Report day',1,16,'',15,'День отчёта','','День звіту','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','netNum','Network number',1,16,'',16,'Сетевой номер','','Мережевий номер','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','modelImpl','Model implementation',1,16,'',17,'Реализация модели','','Реалізація моделі','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','tTypeM','t: dimension',0,16,'',18,'t: ед. измерения','','t: од. виміру','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','GTypeM','G: dimension',0,16,'',19,'G: ед. измерения','','G: од. виміру','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','VTypeM','V: dimension',0,16,'',20,'V: ед. измерения','','V: од. виміру','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','MTypeM','M: dimension',0,16,'',21,'M: ед.измерения','','M: од.вимірювання','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','PTypeM','P: dimension',0,16,'',22,'P: ед. измерения','','P: од.виміру','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','QoTypeM','Qo: dimension',0,16,'',23,'Qo: ед. измерения','','Qo: од. виміру','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','QntTypeHIM','ВНР: dimension',0,16,'',24,'ВНР: ед.измерения','','ВНР: од.виміру','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','QntTypeM','ВОК: dimension',0,16,'',25,'ВОК: ед.измерения','','ВОК: од.виміру','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','t1_1','t1 (Tв1)',2,32,'',26,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','t2_1','t2 (Tв1)',2,32,'',27,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','t3_1','t3 (Tв1)',2,32,'',28,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','V1_1','V1 (Tв1)',2,32,'',29,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','V2_1','V2 (Tв1)',2,32,'',30,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','V3_1','V3 (Tв1)',2,32,'',31,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','M1_1','M1 (Tв1)',2,32,'',32,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','M2_1','M2 (Tв1)',2,32,'',33,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','M3_1','M3 (Tв1)',2,32,'',34,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','P1_1','P1 (Tв1)',2,32,'',35,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','P2_1','P2 (Tв1)',2,32,'',36,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','Mg_1','Mg (Tв1)',2,32,'',37,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','Qo_1','Qo (Tв1)',2,32,'',38,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','Qg_1','Qg (Tв1)',2,32,'',39,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','dt_1','dt (Tв1)',2,32,'',40,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','BNR_1','ВНР (Tв1)',2,32,'',41,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','BOC_1','ВОС (Tв1)',2,32,'',42,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','G1_1','G1 (Tв1)',2,32,'',43,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','G2_1','G2 (Tв1)',2,32,'',44,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','t1_2','t1 (Tв2)',2,32,'',45,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','t2_2','t2 (Tв2)',2,32,'',46,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','t3_2','t3 (Tв2)',2,32,'',47,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','V1_2','V1 (Tв2)',2,32,'',48,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','V2_2','V2 (Tв2)',2,32,'',49,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','V3_2','V3 (Tв2)',2,32,'',50,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','M1_2','M1 (Tв2)',2,32,'',51,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','M2_2','M2 (Tв2)',2,32,'',52,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','M3_2','M3 (Tв2)',2,32,'',53,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','P1_2','P1 (Tв2)',2,32,'',54,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','P2_2','P2 (Tв2)',2,32,'',55,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','Mg_2','Mg (Tв2)',2,32,'',56,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','Qo_2','Qo (Tв2)',2,32,'',57,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','Qg_2','Qg (Tв2)',2,32,'',58,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','dt_2','dt (Tв2)',2,32,'',59,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','BNR_2','ВНР (Tв2)',2,32,'',60,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','BOC_2','ВОС (Tв2)',2,32,'',61,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','G1_2','G1 (Tв2)',2,32,'',62,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','G2_2','G2 (Tв2)',2,32,'',63,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VKT7','this','This parameter object',4,0,'',64,'Объект параметра','','Об''єкт параметру','');
+INSERT INTO tmplib_DevLib_io VALUES('SMDP','transport','Transport',0,64,'SMDP',0,'Транспорт','','Транспорт','');
+INSERT INTO tmplib_DevLib_io VALUES('SMDP','addr','Device address (16...254)',1,64,'16',1,'Адрес устройства (16...254)','','Адреса пристрою (16...254)','');
+INSERT INTO tmplib_DevLib_io VALUES('SMDP','perGet','Period of the data getting, s',2,64,'10',2,'Период сбора данных, с','','Період збору даних, с','');
+INSERT INTO tmplib_DevLib_io VALUES('SMDP','version','Firmware version',0,16,'',3,'Версия прошивки','','Версія прошивки','');
+INSERT INTO tmplib_DevLib_io VALUES('SMDP','CfgPrmSSID','Configuration parameter session ID',1,16,'',4,'Параметр конфигурации ID сеанса','','Параметр конфігурації ID сеансу','');
+INSERT INTO tmplib_DevLib_io VALUES('SMDP','Srlno','Measurement serial number',1,16,'',5,'Измерянный номер серии','','Виміряний номер серії','');
+INSERT INTO tmplib_DevLib_io VALUES('SMDP','RawFreq','Channel freq.',2,16,'',6,'Частота канала.','','Частота каналу.','');
+INSERT INTO tmplib_DevLib_io VALUES('SMDP','GoodFreq','Last used, good channel freq., Hz',2,16,'',7,'Последне использ.: частота хорошего канала, Гц','','Останнє використ.: частота хорошого каналу, Гц','');
+INSERT INTO tmplib_DevLib_io VALUES('SMDP','RawThick','Computed raw thickness, from frequency. (A)',2,16,'',8,'Вычисленная сырая толщина, с частоты. (А)','','Обчислена сира товщина, з частоти. (A)','');
+INSERT INTO tmplib_DevLib_io VALUES('SMDP','XtalThick','Computed material related thickness, can be zeroed. (A)',2,16,'',9,'Вычисленная относительная толщина материала, может быть нулевой. (A)','','Обчислена відносна товщина матеріалу, може бути нульовою. (A)','');
+INSERT INTO tmplib_DevLib_io VALUES('SMDP','XtalThick_F','Filtered computed material related thickness, can be zeroed. (A)',2,16,'',10,'Фильтрованная вычисленная относительная толщина материала, может быть нулевой. (A)','','Фільтрована обчислена відносна товщина матеріалу, може бути нульовою. (A)','');
+INSERT INTO tmplib_DevLib_io VALUES('SMDP','XtalRate','Rate, angstroms per second.',2,16,'',11,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SMDP','XtalRate_F','Rate, angstroms per second, filtered.',2,16,'',12,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SMDP','XtalLife','XtalLife (%)',2,16,'',13,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SMDP','XtalQual','Quality level (0-9).',1,16,'',14,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SMDP','XtalQualPeak','Highest quality level seen (0-9).',1,16,'',15,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SMDP','XtalStab','Stability level (0-9).',1,16,'',16,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SMDP','XtalStabPeak','Highest stability level seen (0-9).',1,16,'',17,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SMDP','XtalStat','Channel status.',0,16,'',18,'Статус канала.','','Статус каналу.','');
+INSERT INTO tmplib_DevLib_io VALUES('SMDP','XtalLife_C','XtalLife (%).',1,16,'',19,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SMDP','SessId','Session ID',1,32,'',20,'ID сеанса','','ID сеансу','');
+INSERT INTO tmplib_DevLib_io VALUES('SMDP','Fq','Xtal start freq. (Hz)',2,32,'',21,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SMDP','Fm','Xtal min freq. (Hz)',2,32,'',22,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SMDP','Density','Material density (gm/cc).',2,32,'',23,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SMDP','Zratio','Material Z ratio. Not scaled or unitized.',2,32,'',24,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SMDP','Tooling','1.000 is 100 % tooling (unity).',2,32,'',25,'1.000 есть 100 % настройка (объединение).','','1.000 є 100 % налаштування (об''єднання).','');
+INSERT INTO tmplib_DevLib_io VALUES('SMDP','RateReq','Requested rate (A/S).',2,32,'',26,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SMDP','QlvlTrip','Quality threshold, if non 0 and exceeded, xtal fail occurs.',1,32,'',27,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SMDP','SlvlTrip','Stability threshold, if non 0 and exceeded, xtal fail occurs.',1,32,'',28,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('IT3','transport','Transport',0,64,'IT3',0,'Транспорт','','Транспорт','');
+INSERT INTO tmplib_DevLib_io VALUES('IT3','addr','Device address',1,64,'1',1,'Адрес устройства','','Адреса пристрою','');
+INSERT INTO tmplib_DevLib_io VALUES('IT3','T','Temperature',2,16,'',3,'Температура','','Температура','');
+INSERT INTO tmplib_DevLib_io VALUES('IT3','H','Upper border',3,16,'',4,'Верхняя граница','','Верхня границя','');
+INSERT INTO tmplib_DevLib_io VALUES('IT3','L','Lower border',3,16,'',5,'Нижняя граница','','Нижня границя','');
+INSERT INTO tmplib_DevLib_io VALUES('IT3','relSt','Relay state',3,16,'',6,'Состояние реле','','Стан реле','');
+INSERT INTO tmplib_DevLib_io VALUES('IVE_452HS_02','transport','Transport',0,64,'Sockets.out_IVE',0,'Транспорт','','Транспорт','');
+INSERT INTO tmplib_DevLib_io VALUES('IVE_452HS_02','addr','Device address',1,64,'255',1,'Адрес устройства','','Адреса пристрою','');
+INSERT INTO tmplib_DevLib_io VALUES('IVE_452HS_02','COIA','Output current level set-point',1,33,'',2,'Задание уровня выходного тока','','Завдання рівня вихідного струму','');
+INSERT INTO tmplib_DevLib_io VALUES('IVE_452HS_02','COUA','Output voltage level set-point',1,33,'',3,'Задание уровня выходного напряжения','','Завдання рівня вихідної напруги','');
+INSERT INTO tmplib_DevLib_io VALUES('IVE_452HS_02','COPA','Output power level set-point',1,33,'',4,'Задание уровня выходного мощности','','Завдання рівня вихідної потужності','');
+INSERT INTO tmplib_DevLib_io VALUES('IVE_452HS_02','DIA','Output current',1,16,'',5,'Выходной ток','','Вихідний струм','');
+INSERT INTO tmplib_DevLib_io VALUES('IVE_452HS_02','DUA','Output voltage',1,16,'',6,'Выходное напряжение','','Вихідна напруга','');
+INSERT INTO tmplib_DevLib_io VALUES('IVE_452HS_02','DPA','Output power',1,16,'',7,'Выходная мощность','','Вихідна потужність','');
+INSERT INTO tmplib_DevLib_io VALUES('IVE_452HS_02','DFA','Electric arcs frequency',1,16,'',8,'Частота появления "микродуг"','','Частота виникнення "мікродуг"','');
+INSERT INTO tmplib_DevLib_io VALUES('IVE_452HS_02','DAC','Electric arcs counter',1,16,'',9,'Счетчик возникновения дуги','','Лічильник виникнення дуги','');
+INSERT INTO tmplib_DevLib_io VALUES('IVE_452HS_02','COM_DEW','Command: Blocking by SC and XX',3,32,'',10,'Команда: Блокировка отключения выхода по "КЗ" и "ХХ"','','Команда: Блокування відключеня виходу по "КЗ" та "ХХ"','');
+INSERT INTO tmplib_DevLib_io VALUES('IVE_452HS_02','COM_OUT','Command: Display on UI out block''s params',3,32,'',11,'Команда: Отображение на «УИ» выходных/опорных параметров каналов блока','','Команда: Відображення на «УІ» вихідних/опорних параметрів каналів блоку','');
+INSERT INTO tmplib_DevLib_io VALUES('IVE_452HS_02','COM_DEP','Command: Enable MK',3,32,'',12,'Команда: Включение "МК"','','Команда: Включення "МК"','');
+INSERT INTO tmplib_DevLib_io VALUES('IVE_452HS_02','COM_DEL','Command: Blocks #1,2 to line',3,32,'',13,'Команда: Включение блока "по сети" - канал№1,2','','Команда: Включення блоку "по мережі" - канал№1,2','');
+INSERT INTO tmplib_DevLib_io VALUES('IVE_452HS_02','COM_UF','Command: Display on UI frequency and current',3,32,'',14,'Команда: Отображение на «УИ» напряжения и тока/частоты и мощности блока','','Команда: Відображення на «УІ» напруги та струму/частоти та потужності блоку','');
+INSERT INTO tmplib_DevLib_io VALUES('IVE_452HS_02','DKW','MUBR of the block overheated',3,16,'',15,'Перегрев MUBR блока','','Перегрів MUBR блоку','');
+INSERT INTO tmplib_DevLib_io VALUES('IVE_452HS_02','DKZ','Short circuits on the block out',3,16,'',16,'Короткое замыкание выходных цепей блока','','Коротке замикання вихідних ланцюгів блоку','');
+INSERT INTO tmplib_DevLib_io VALUES('IVE_452HS_02','DK','MK of the block overheated',3,16,'',17,'Перегрев MK блока','','Перегрів MK блоку','');
+INSERT INTO tmplib_DevLib_io VALUES('IVE_452HS_02','DE','Power and voltage on out present',3,16,'',18,'Мощность и напряжение есть на выходе','','Потужність та напруга є на виході','');
+INSERT INTO tmplib_DevLib_io VALUES('OPTRIS','transport','Transport',0,64,'Serial.out_OPTRIS',0,'Транспорт','','Транспорт','');
+INSERT INTO tmplib_DevLib_io VALUES('OPTRIS','addr','Device address',3,64,'1',1,'Адрес устройства','','Адреса пристрою','');
+INSERT INTO tmplib_DevLib_io VALUES('OPTRIS','Tproc','T process',2,16,'',2,'Т обработки','','Т обробки','');
+INSERT INTO tmplib_DevLib_io VALUES('OPTRIS','Thead','T head',2,16,'',3,'Т головы','','Т голови','');
+INSERT INTO tmplib_DevLib_io VALUES('OPTRIS','Tbox','T box',2,16,'',4,'Т корпуса','','Т корпусу','');
+INSERT INTO tmplib_DevLib_io VALUES('OPTRIS','Tact','T act.',2,16,'',5,'Т акт.','','Т акт.','');
+INSERT INTO tmplib_DevLib_io VALUES('OPTRIS','eps','IR epsilon',2,32,'',6,'IR эпсилон','','IR епсилон','');
+INSERT INTO tmplib_DevLib_io VALUES('OPTRIS','trans','IR transmission',2,32,'',7,'IR передачи','','IR передавання','');
+INSERT INTO tmplib_DevLib_io VALUES('OPTRIS','spIll','Spot illumination',3,32,'',8,'Точечное освещение','','Точкове освітлення','');
+INSERT INTO tmplib_DevLib_io VALUES('CTR','transport','Transport',0,64,'Serial.out_CTR',0,'Транспорт','','Транспорт','');
+INSERT INTO tmplib_DevLib_io VALUES('CTR','press','Pressure, Tor',2,17,'',1,'Давление, Tor','','Тиск, Tor','');
+INSERT INTO tmplib_DevLib_io VALUES('CTR','zeroSet','Zero set',3,32,'',2,'Установка нуля','','Встановлення нуля','');
+INSERT INTO tmplib_DevLib_io VALUES('IEC60870','transport','Transport',0,64,'Sockets.out_IEC60870',0,'Транспорт','','Транспорт','Sockets.out_IEC60870');
+INSERT INTO tmplib_DevLib_io VALUES('IEC60870','addr','Address, {addr}.{OA}',0,64,'0.5',1,'Адрес, {addr}.{OA}','','Адреса, {addr}.{OA}','0.5');
+INSERT INTO tmplib_DevLib_io VALUES('IEC60870','tmRetr','Retry connection time, seconds',2,64,'10',2,'Время восстановления подключения, секунд','','Час відновлення підключення, секунд','');
+INSERT INTO tmplib_DevLib_io VALUES('IEC60870','t1','Acknowledge lack timeout, seconds',2,64,'1.5',3,'Таймаут подтверждения отсутствия активности, секунд','','Таймаут підтвердження відсутності активності, секунд','');
+INSERT INTO tmplib_DevLib_io VALUES('IEC60870','t2','Acknowledge lack activity timeout, seconds',2,64,'1',4,'Таймаут подтверждения, секунд','','Таймаут підтвердження, секунд','');
+INSERT INTO tmplib_DevLib_io VALUES('IEC60870','t3','Test timeout, seconds',2,64,'2',5,'Таймаут проверки, секунд','','Таймаут перевірки, секунд','');
+INSERT INTO tmplib_DevLib_io VALUES('IEC60870','k','Maximum unconfirmed',1,64,'12',6,'Максимально неподтверждённых','','Максимально непідтверджених','');
+INSERT INTO tmplib_DevLib_io VALUES('IEC60870','w','Maximum no ack',1,64,'8',7,'Максимальное отсутсвие "ack"','','Максимальна відсутність "ack"','');
+INSERT INTO tmplib_DevLib_io VALUES('IEC60870','itemsSet','Items set by: "ai|di|do:{IOA}[-{EndIOA}][:a[:{NameBase}]]"',0,36,'',8,'Небор элементов по: "ai|di|do:{IOA}[-{EndIOA}][:a[:{NameBase}]]"','','Набір елементів за: "ai|di|do:{IOA}[-{EndIOA}][:a[:{NameBase}]]"','');
+INSERT INTO tmplib_DevLib_io VALUES('IEC60870','items','All items',4,33,'',9,'Все элементы','','Всі елементи','');
+INSERT INTO tmplib_DevLib_io VALUES('IEC60870','this','Object',4,0,'',11,'Объект','','Об''єкт','');
+INSERT INTO tmplib_DevLib_io VALUES('SSCP','transport','Transport of the Ethernet network, Sockets',0,64,'SSCP',0,'Транспорт сети Ethernet, Сокеты','','Транспорт мережі Ethernet, Сокети','');
+INSERT INTO tmplib_DevLib_io VALUES('SSCP','addr','Address [0...255]',1,64,'1',1,'Адрес [0...255]','','Адреса [0...255]','');
+INSERT INTO tmplib_DevLib_io VALUES('SSCP','user','User',0,64,'admin',2,'Пользователь','','Користувач','');
+INSERT INTO tmplib_DevLib_io VALUES('SSCP','pass','Password',0,64,'rw',3,'Пароль','','Пароль','');
+INSERT INTO tmplib_DevLib_io VALUES('SSCP','list','Selected to process variables',0,36,'',8,'Переменные, выбранные для обработки','','Змінні, обрані для обробки','');
+INSERT INTO tmplib_DevLib_io VALUES('SSCP','listsDir','List files'' folder',0,64,'SSCP',5,'Директория файлов-списков','','Тека файлів-переліків','');
+INSERT INTO tmplib_DevLib_io VALUES('SSCP','this','Object',4,0,'',9,'Объект','','Об''єкт','');
+INSERT INTO tmplib_DevLib_io VALUES('SSCP','maxDtFrm','Maximum data frame size',1,64,'2048',4,'Максимальный размер фрейма данных','','Максимальний розмір фрейму даних','');
+INSERT INTO tmplib_DevLib_io VALUES('SSCP','verPrt','Protocol version',1,16,'',6,'Версия протокола','','Версія протоколу','');
+INSERT INTO tmplib_DevLib_io VALUES('SSCP','maxDtFrmServ','Server''s maximum data frame size',1,16,'',7,'Максимальный размер фрейма данных сервера','','Максимальний розмір фрейму даних серверу','');
+INSERT INTO tmplib_DevLib_io VALUES('IT3','mdPass','Passive mode, writing by an input protocol''s part',3,64,'0',2,'Пассивный режим, запись входной частью протокола','','Пасивний режим, запис вхідною частиною протоколу','');
+INSERT INTO tmplib_DevLib_io VALUES('IT3','this','Object',4,0,'',7,'Объект','','Об''єкт','');
+INSERT INTO tmplib_DevLib_io VALUES('UPS','bChL','Battery charge low',2,32,'20',3,'Заряд батареи низкий','','Заряд батареї низький','');
+INSERT INTO tmplib_DevLib_io VALUES('UPS','bChLL','Battery charge critical',2,32,'5',4,'Заряд батареи критический','','Заряд батареї критичний','');
+INSERT INTO tmplib_DevLib_io VALUES('UPS','inVL','Input voltage low',2,32,'210',5,'Низкое входное напряжение','','Низька вхідна напруга','');
+INSERT INTO tmplib_DevLib_io VALUES('UPS','inVH','Input voltage high',2,32,'250',6,'Высокое входное напряжение','','Висока вхідна напруга','');
+INSERT INTO tmplib_DevLib_io VALUES('UPS','inFLL','Input frequency too low',2,32,'40',7,'Очень низкая входная частота','','Дуже низька вхідна частота','');
+INSERT INTO tmplib_DevLib_io VALUES('UPS','inFL','Input frequency low',2,32,'45',8,'Низкая входная частота','','Низька вхідна частота','');
+INSERT INTO tmplib_DevLib_io VALUES('UPS','inFH','Input frequency high',2,32,'55',9,'Высокая входная частота','','Висока вхідна частота','');
+INSERT INTO tmplib_DevLib_io VALUES('UPS','inFHH','Input frequency too high',2,32,'60',10,'Очень высокая входная частота','','Дуже висока вхідна частота','');
+INSERT INTO tmplib_DevLib_io VALUES('UPS','loadH','Load high',2,32,'80',11,'Нагрузка высокая','','Навантаження високе','');
+INSERT INTO tmplib_DevLib_io VALUES('UPS','loadHH','Load too high',2,32,'100',12,'Нагрузка очень высокая','','Навантаження дуже високе','');
+INSERT INTO tmplib_DevLib_io VALUES('UPS','tH','Temperature high',2,32,'50',13,'Температура высокая','','Температура висока','');
+INSERT INTO tmplib_DevLib_io VALUES('UPS','tHH','Temperature too high',2,32,'70',14,'Температура очень высокая','','Температура дуже висока','');
+INSERT INTO tmplib_DevLib_io VALUES('UPS','alDelay','Violations delay, seconds',2,32,'0',2,'Задержка нарушений, секунды','','Затримка порушень, секунди','');
+INSERT INTO tmplib_DevLib_io VALUES('m200','s','Energy from reset, tariffs sum',0,16,'',0,'Энергия от сброса сумма Тарифов','','Енергія від скидання сума Тарифів','');
+INSERT INTO tmplib_DevLib_io VALUES('m200','t1','Energy from reset, tariff 1',2,16,'',1,'Энергия от сброса Тариф1','','Енергія від скидання Тариф1','');
+INSERT INTO tmplib_DevLib_io VALUES('m200','t2','Energy from reset, tariff 2',2,16,'',2,'Энергия от сброса Тариф2','','Енергія від скидання Тариф2','');
+INSERT INTO tmplib_DevLib_io VALUES('m200','t3','Energy from reset, tariff 3',2,16,'',3,'Энергия от сброса Тариф3','','Енергія від скидання Тариф3','');
+INSERT INTO tmplib_DevLib_io VALUES('m200','t4','Energy from reset, tariff 4',2,16,'',4,'Энергия от сброса Тариф4','','Енергія від скидання Тариф4','');
+INSERT INTO tmplib_DevLib_io VALUES('m200','U','Voltage U, V',2,16,'',5,'Напряжение U, В','','Напруга U, В','');
+INSERT INTO tmplib_DevLib_io VALUES('m200','I','Current I, A',2,16,'',6,'Ток I, А','','Струм I, А','');
+INSERT INTO tmplib_DevLib_io VALUES('m200','P','Power P, W',2,16,'',7,'Мощность P, Вт','','Потужність P, Вт','');
+INSERT INTO tmplib_DevLib_io VALUES('m200','transport','Transport',0,64,'merc200',8,'Транспорт','','Транспорт','');
+INSERT INTO tmplib_DevLib_io VALUES('m200','netaddr','Network address',2,64,'1',9,'Сетевой адрес','','Мережева адреса','');
+INSERT INTO tmplib_DevLib_io VALUES('m200','naladchik','Coded address by the program Fixer+',3,64,'0',10,'Адрес закодирован программой Наладчик+','','Адреса закодована програмою Налаштувач+','');
+INSERT INTO tmplib_DevLib_io VALUES('m200','tarif','Read energy from reset',3,64,'1',11,'Считывать энергию от сброса','','Вичитувати енергію від скидання','');
+INSERT INTO tmplib_DevLib_io VALUES('m200','UIP','Read current values',3,64,'1',12,'Считывать мгновенные значения','','Вичитувати миттеві значення','');
+INSERT INTO tmplib_DevLib_io VALUES('m200','first','First byte of the address',1,0,'',13,'Первый байт адреса','','Перший байт адреси','');
+INSERT INTO tmplib_DevLib_io VALUES('m200','second','Last 3 bytes of the address',1,0,'',14,'Последние 3 байта адреса','','Останні 3 байти адреси','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','answer','Answer to the password request',0,16,'',0,'Ответ на запрос пароля','','Відповідь на запит пароля','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','TS','Read energy of tariffs sum',3,64,'0',1,'Считывать энергию суммы тарифов','','Вичитувати енергію суми тарифів','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','T1','Read energy of tariff 1',3,64,'0',2,'Считывать энергию тарифа 1','','Вичитувати енергію тарифу 1','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','T2','Read energy of tariff 2',3,64,'0',3,'Считывать энергию тарифа 2','','Вичитувати енергію тарифу 2','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','T3','Read energy of tariff 3',3,64,'0',4,'Считывать энергию тарифа 3','','Вичитувати енергію тарифу 3','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','T4','Read energy of tariff 4',3,64,'0',5,'Считывать энергию тарифа 4','','Вичитувати енергію тарифу 4','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','P','Read power P',3,64,'0',6,'Считывать мощность P','','Вичитувати потужність P','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','Q','Read power Q',3,64,'0',7,'Считывать мощность Q','','Вичитувати потужність Q','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','S','Read power S',3,64,'0',8,'Считывать мощность S','','Вичитувати потужність S','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','U','Read voltage U',3,64,'0',9,'Считывать напряжение U','','Вичитувати напругу U','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','I','Read current I',3,64,'0',10,'Считывать ток I','','Вичитувати струм I','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','K','Read power coefficient',3,64,'0',11,'Считывать коэф. мощности','','Вичитувати коеф. потужності','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','F','Read frequency F',3,64,'0',12,'Считывать частоту F','','Вичитувати частоту F','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','N','Read serial number',3,64,'0',13,'Считывать серийный номер','','Вичитувати серійний номер','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','TSAp','Energy from resetting, tariffs sum A+',2,16,'',14,'Энергия от сброса сумма тарифов A+','','Енергія від скидання сума тарифів A+','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','TSAm','Energy from resetting, tariffs sum A-',2,16,'',15,'Энергия от сброса сумма тарифов A-','','Енергія від скидання сума тарифів A-','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','TSRp','Energy from resetting, tariffs sum R+',2,16,'',16,'Энергия от сброса сумма тарифов R+','','Енергія від скидання сума тарифів R+','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','TSRm','Energy from resetting, tariffs sum R-',2,16,'',17,'Энергия от сброса сумма тарифов R-','','Енергія від скидання сума тарифів R-','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','T1Ap','Energy from resetting, tariff 1 A+',2,16,'',18,'Энергия от сброса тариф 1 A+','','Енергія від скидання тариф 1 A+','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','T1Am','Energy from resetting, tariff 1 A-',2,16,'',19,'Энергия от сброса тариф 1 A-','','Енергія від скидання тариф 1 A-','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','T1Rp','Energy from resetting, tariff 1 R+',2,16,'',20,'Энергия от сброса тариф 1 R+','','Енергія від скидання тариф 1 R+','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','T1Rm','Energy from resetting, tariff 1 R-',2,16,'',21,'Энергия от сброса тариф 1 R-','','Енергія від скидання тариф 1 R-','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','T2Ap','Energy from resetting, tariff 2 A+',2,16,'',22,'Энергия от сброса тариф 2 A+','','Енергія від скидання тариф 2 A+','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','T2Am','Energy from resetting, tariff 2 A-',2,16,'',23,'Энергия от сброса тариф 2 A-','','Енергія від скидання тариф 2 A-','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','T2Rp','Energy from resetting, tariff 2 R+',2,16,'',24,'Энергия от сброса тариф 2 R+','','Енергія від скидання тариф 2 R+','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','T2Rm','Energy from resetting, tariff 2 R-',2,16,'',25,'Энергия от сброса тариф 2 R-','','Енергія від скидання тариф 2 R-','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','T3Ap','Energy from resetting, tariff 3 A+',2,16,'',26,'Энергия от сброса тариф 3 A+','','Енергія від скидання тариф 3 A+','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','T3Am','Energy from resetting, tariff 3 A-',2,16,'',27,'Энергия от сброса тариф 3 A-','','Енергія від скидання тариф 3 A-','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','T3Rp','Energy from resetting, tariff 3 R+',2,16,'',28,'Энергия от сброса тариф 3 R+','','Енергія від скидання тариф 3 R+','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','T3Rm','Energy from resetting, tariff 3 R-',2,16,'',29,'Энергия от сброса тариф 3 R-','','Енергія від скидання тариф 3 R-','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','T4Ap','Energy from resetting, tariff 4 A+',2,16,'',30,'Энергия от сброса тариф 4 A+','','Енергія від скидання тариф 4 A+','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','T4Am','Energy from resetting, tariff 4 A-',2,16,'',31,'Энергия от сброса тариф 4 A-','','Енергія від скидання тариф 4 A-','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','T4Rp','Energy from resetting, tariff 4 R+',2,16,'',32,'Энергия от сброса тариф 4 R+','','Енергія від скидання тариф 4 R+','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','T4Rm','Energy from resetting, tariff 4 R-',2,16,'',33,'Энергия от сброса тариф 4 R-','','Енергія від скидання тариф 4 R-','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','PS','Power P(W) by the phases sum',2,16,'',34,'Мощность P(Вт) по сумме фаз','','Потужніст P(Вт) по сумі фаз','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','P1','Power P(W) by the phase 1',2,16,'',35,'Мощность P(Вт) по фазе 1','','Потужніст P(Вт) по фазі 1','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','P2','Power P(W) by the phase 2',2,16,'',36,'Мощность P(Вт) по фазе 2','','Потужніст P(Вт) по фазі 2','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','P3','Power P(W) by the phase 3',2,16,'',37,'Мощность P(Вт) по фазе 3','','Потужніст P(Вт) по фазі 3','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','QS','Power Q(var) by the phases sum',2,16,'',38,'Мощность Q(вар) по сумме фаз','','Потужніст Q(вар) по сумі фаз','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','Q1','Power Q(var) by the phase 1',2,16,'',39,'Мощность Q(вар) по фазе 1','','Потужніст Q(вар) по фазі 1','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','Q2','Power Q(var) by the phase 2',2,16,'',40,'Мощность Q(вар) по фазе 2','','Потужніст Q(вар) по фазі 2','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','Q3','Power Q(var) by the phase 3',2,16,'',41,'Мощность Q(вар) по фазе 3','','Потужніст Q(вар) по фазі 3','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','SS','Power S(VA) by the phases sum',2,16,'',42,'Мощность S(ВА) по сумме фаз','','Потужніст S(ВА) по сумі фаз','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','S1','Power S(VA) by the phase 1',2,16,'',43,'Мощность S(ВА) по фазе 1','','Потужніст S(ВА) по фазі 1','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','S2','Power S(VA) by the phase 2',2,16,'',44,'Мощность S(ВА) по фазе 2','','Потужніст S(ВА) по фазі 2','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','S3','Power S(VA) by the phase 3',2,16,'',45,'Мощность S(ВА) по фазе 3','','Потужніст S(ВА) по фазі 3','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','U1','Voltage U(V) by the phase 1',2,16,'',46,'Напряжение U(В) по фазе 1','','Напруга U(В) по фазі 1','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','U2','Voltage U(V) by the phase 2',2,16,'',47,'Напряжение U(В) по фазе 2','','Напруга U(В) по фазі 2','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','U3','Voltage U(V) by the phase 3',2,16,'',48,'Напряжение U(В) по фазе 3','','Напруга U(В) по фазі 3','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','I1','Current I(A) by the phase 1',2,16,'',49,'Ток I(А) по фазе 1','','Струм I(А) по фазі 1','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','I2','Current I(A) by the phase 2',2,16,'',50,'Ток I(А) по фазе 2','','Струм I(А) по фазі 2','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','I3','Current I(A) by the phase 3',2,16,'',51,'Ток I(А) по фазе 3','','Струм I(А) по фазі 3','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','KS','Power coefficient by the phases sum',2,16,'',52,'Коэф.мощности по сумме фаз','','Коеф.потужності по сумі фаз','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','K1','Power coefficient by the phase 1',2,16,'',53,'Коэф.мощности по фазе 1','','Коеф.потужності по фазі 1','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','K2','Power coefficient by the phase 2',2,16,'',54,'Коэф.мощности по фазе 2','','Коеф.потужності по фазі 2','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','K3','Power coefficient by the phase 3',2,16,'',55,'Коэф.мощности по фазе 3','','Коеф.потужності по фазі 3','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','F1','Frequency F(Hz)',2,16,'',56,'Частота F(Гц)','','Частота F(Гц)','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','N1','Serial number',0,16,'',57,'Серийный номер','','Серійний номер','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','netaddr','Network address (0...240)',1,64,'1',58,'Сетевой адрес (0...240)','','Мережева адреса (0...240)','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','password','Password',0,64,'111111',59,'Пароль','','Пароль','');
+INSERT INTO tmplib_DevLib_io VALUES('m230','transport','Transport',0,64,'merc230',60,'Транспорт','','Транспорт','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','transport','Transport',0,64,'Sockets.out_',0,'Транспорт','','Транспорт','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','serial','Factory number of the counter',0,64,'',1,'Заводской номер счётчика','','Заводський номер лічильника','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','passw','Password',0,64,'1111111111111111',2,'Пароль','','Пароль','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','kT','Coefficient of transformation',1,64,'1',3,'Коэффициент трансформации','','Коефіцієнт трансформації','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','T0','Current values',3,64,'0',4,'Текущие показатели','','Поточні показники','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','T1','Current values tariff T1',3,64,'0',5,'Текущие показатели тариф T1','','Поточні показники тариф T1','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','T2','Current values tariff T2',3,64,'0',6,'Текущие показатели тариф T2','','Поточні показники тариф T2','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','T3','Current values tariff T3',3,64,'0',7,'Текущие показатели тариф T3','','Поточні показники тариф T3','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','U','Instantaneous value "Voltage"',3,64,'0',8,'Мгновенные значения "Напряжение"','','Миттєві значення "Напруга"','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','I','Instantaneous value "Current"',3,64,'0',9,'Мгновенные значения "Ток"','','Миттєві значення "Струм"','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','P','Instantaneous value "Power"',3,64,'0',10,'Мгновенные значения "Мощность"','','Миттєві значення "Потужність"','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','kP','Instantaneous value "Power coefficient"',3,64,'0',11,'Мгновенные значения "коэффициент Мощности"','','Миттєві значення "коефіцієнт Потужності"','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','Q','Instantaneous value "Power reactive"',3,64,'0',12,'Мгновенные значения "реактивная мощность"','','Миттєві значення "Реактивна потужність"','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','K','Instantaneous value "Vectors angle"',3,64,'0',13,'Мгновенные значения "Угол между векторами"','','Миттєві значення "Кут між векторами"','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','Ae','А+(kW*h)',2,17,'',14,'А+(кВт*ч)','','А+(кВт*ч)','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','Ae_','А-(kW*h)',2,17,'',15,'А-(кВт*ч)','','А-(кВт*ч)','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','Re','R+(1+2quadrant)(kVar*h)',2,17,'',16,'R+(1+2квадрант)(кВар*ч)','','R+(1+2квадрант)(кВар*ч)','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','Re_','R-(3+4quadrant)(kVar*h)',2,17,'',17,'R-(3+4квадрант)(кВар*ч)','','R-(3+4квадрант)(кВар*ч)','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','Ae1','А1+(kW*h)',2,17,'',18,'А1+(кВт*ч)','','А1+(кВт*ч)','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','Ae_1','А1-(kW*h)',2,17,'',19,'А1-(кВт*ч)','','А1-(кВт*ч)','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','Re1','R1+(1+2quadrant)(kVar*h)',2,17,'',20,'R1+(1+2квадрант)(кВар*ч)','','R1+(1+2квадрант)(кВар*ч)','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','Re_1','R1-(3+4quadrant)(kVar*h)',2,17,'',21,'R1-(3+4квадрант)(кВар*ч)','','R1-(3+4квадрант)(кВар*ч)','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','Ae2','А2+(kW*h)',2,17,'',22,'А2+(кВт*ч)','','А2+(кВт*ч)','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','Ae_2','А2-(kW*h)',2,17,'',23,'А2-(кВт*ч)','','А2-(кВт*ч)','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','Re2','R2+(1+2quadrant)(kVar*h)',2,17,'',24,'R2+(1+2квадрант)(кВар*ч)','','R2+(1+2квадрант)(кВар*ч)','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','Re_2','R2-(3+4quadrant)(kVar*h)',2,17,'',25,'R2-(3+4квадрант)(кВар*ч)','','R2-(3+4квадрант)(кВар*ч)','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','Ae3','А3+(kW*h)',2,17,'',26,'А3+(кВт*ч)','','А3+(кВт*ч)','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','Ae_3','А3-(kW*h)',2,17,'',27,'А3-(кВт*ч)','','А3-(кВт*ч)','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','Re3','R3+(1+2quadrant)(kVar*h)',2,17,'',28,'R3+(1+2квадрант)(кВар*ч)','','R3+(1+2квадрант)(кВар*ч)','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','Re_3','R3-(3+4quadrant)(kVar*h)',2,17,'',29,'R3-(3+4квадрант)(кВар*ч)','','R3-(3+4квадрант)(кВар*ч)','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','U1','Phase voltage 1(V)',2,17,'',30,'Напряжение фаза 1 (В)','','Напруга фаза 1 (В)','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','U2','Phase voltage 2(V)',2,17,'',31,'Напряжение фаза 2 (В)','','Напруга фаза 2 (В)','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','U3','Phase voltage 3(V)',2,17,'',32,'Напряжение фаза 3 (В)','','Напруга фаза 3 (В)','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','I1','Phase current 1(A)',2,17,'',33,'Ток фаза 1 (А)','','Струм фаза 1 (А)','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','I2','Phase current 2(A)',2,17,'',34,'Ток фаза 2 (А)','','Струм фаза 2 (А)','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','I3','Phase current 3(A)',2,17,'',35,'Ток фаза 3 (А)','','Струм фаза 3 (А)','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','kP1','Power coeff. cos φ phase 1',2,17,'',36,'Коеф. мощности. cos φ фаза 1','','Коеф. потужн. cos φ фаза 1','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','kP2','Power coeff. cos φ phase 2',2,17,'',37,'Коеф. мощности. cos φ фаза 2','','Коеф. потужн. cos φ фаза 2','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','kP3','Power coeff. cos φ phase 3',2,17,'',38,'Коеф. мощности. cos φ фаза 3','','Коеф. потужн. cos φ фаза 3','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','Psum','Summary active power (kW)',2,17,'',39,'Мощность  акт. суммарная (кВт)','','Потужн.  акт. сумарна (кВт)','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','P1','Active power phase 1 (kW)',2,17,'',40,'Мощность  акт. фаза 1 (кВт)','','Потужн.  акт. фаза 1 (кВт)','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','P2','Active power phase 2 (kW)',2,17,'',41,'Мощность  акт. фаза 2 (кВт)','','Потужн.  акт. фаза 2 (кВт)','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','P3','Active power phase 3 (kW)',2,17,'',42,'Мощность  акт. фаза 3 (кВт)','','Потужн.  акт. фаза 3 (кВт)','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','Qsum','Summary reactive power (kVar)',2,17,'',43,'Мощность реакт. сумарная (кВар)','','Потужн. реакт. сумарна (кВар)','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','Q1','Reactive power phase 1 (kVar)',2,17,'',44,'Мощность реакт. фаза 1 (кВар)','','Потужн. реакт. фаза 1 (кВар)','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','Q2','Reactive power phase 2 (kVar)',2,17,'',45,'Мощность реакт. фаза 2 (кВар)','','Потужн. реакт. фаза 2 (кВар)','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','Q3','Reactive power phase 3 (kVar)',2,17,'',46,'Мощность реакт. фаза 3 (кВар)','','Потужн. реакт. фаза 3 (кВар)','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','V12','Vector angle U1_U2(degr.)',1,17,'',47,'Угол вектора U1_U2 (град.)','','Кут вектора U1_U2 (град.)','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','V13','Vector angle U1_U3(degr.)',1,17,'',48,'Угол вектора U1_U3 (град.)','','Кут вектора U1_U3 (град.)','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','this','Object',4,0,'',49,'Объект','','Об''єкт','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','NAME','Name',0,16,'',50,'Имя','','Ім''я','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','SHIFR','Shifr',0,16,'',51,'Шифр','','Шифр','');
+INSERT INTO tmplib_DevLib_io VALUES('Nik2303I','DESCR','Description',0,16,'',52,'Описание','','Опис','');
+INSERT INTO tmplib_DevLib_io VALUES('ModBusScan','lim','Limit time, seconds',1,64,'10',0,'Время ограничения, секунд','','Час обмеження, секунд','');
+INSERT INTO tmplib_DevLib_io VALUES('ModBusScan','type','Type',1,40,'2
 0;1;2;3
-Coils (1);Input Coils (2);Registers (3);Input Registers (4)',1,'Тип','','Тип','');
-INSERT INTO "tmplib_DevLib_io" VALUES('ModBusScan','begin','Begin (0...65535)',1,33,'',2,'Начало (0...65536)','','Початок (0...65536)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('ModBusScan','end','End (0...65536)',1,33,'',3,'Конец (0...65536)','','Кінець (0...65536)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('ModBusScan','res','Result',0,21,'',4,'Результат','','Результат','');
-INSERT INTO "tmplib_DevLib_io" VALUES('ModBusScan','this','Object',4,0,'',5,'Объект','','Об''єкт','');
-INSERT INTO "tmplib_DevLib_io" VALUES('pulsarM','transport','Transport',0,64,'Serial.out_pulsar',0,'Транспорт','','Транспорт','');
-INSERT INTO "tmplib_DevLib_io" VALUES('pulsarM','addr','Address [0...99999999]',1,64,'12345678',1,'Адрес [0...99999999]','','Адреса [0...99999999]','');
-INSERT INTO "tmplib_DevLib_io" VALUES('pulsarM','this','Object',4,0,'',3,'Объект','','Об''єкт','');
-INSERT INTO "tmplib_DevLib_io" VALUES('pulsarM','nChnl','Channels number',1,32,'0',2,'Количество каналов','','Кількість каналів','');
-INSERT INTO "tmplib_DevLib_io" VALUES('OWEN','transport','Transport',0,64,'Serial.out_owen',0,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('OWEN','items','Items set "{addr}:{func}:{f|i|u|s}:{r|w}[:{id}[:{nm}]]"',0,36,'',1,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('OWEN','this','Object',4,0,'',2,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','io','Output: IO',4,0,'',1,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','tr','Transport',4,0,'',0,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','rez','Input: result',3,1,'0',2,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','request','Input: request',0,0,'',3,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','answer','Input: answer',0,1,'',4,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','sender','Input: sender',0,0,'',5,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','enCRC','Enable CRC',3,64,'0',27,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai0','Input: AI0',2,128,'',7,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai1','Input: AI1',2,128,'',8,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai2','Input: AI2',2,128,'',9,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai3','Input: AI3',2,128,'',10,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai4','Input: AI4',2,128,'',11,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai5','Input: AI5',2,128,'',12,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai6','Input: AI6',2,128,'',13,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai7','Input: AI7',2,128,'',14,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai8','Input: AI8',2,128,'',15,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai9','Input: AI9',2,128,'',16,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','addr','Address [0...240]',1,64,'0',28,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','n','Input: number of AI',1,64,'8',6,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai10','Input: AI10',2,128,'',17,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai11','Input: AI11',2,128,'',18,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai12','Input: AI12',2,128,'',19,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai13','Input: AI13',2,128,'',20,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai14','Input: AI14',2,128,'',21,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai15','Input: AI15',2,128,'',22,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai16','Input: AI16',2,128,'',23,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai17','Input: AI17',2,128,'',24,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai18','Input: AI18',2,128,'',25,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai19','Input: AI19',2,128,'',26,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','tr','Transport',4,0,'',0,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','io','Output: IO',4,0,'',1,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','rez','Input: result',3,1,'0',2,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','request','Input: request',0,0,'',3,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','answer','Input: answer',0,1,'',4,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','sender','Input: sender',0,0,'',5,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','n','Input: number of DI',1,64,'8',6,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','enCRC','Enable CRC',3,64,'0',39,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','addr','Address [0...240]',1,64,'0',40,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di0','Input: DI0',3,128,'',7,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di1','Input: DI1',3,128,'',8,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di2','Input: DI2',3,128,'',9,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di3','Input: DI3',3,128,'',10,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di4','Input: DI4',3,128,'',11,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di5','Input: DI5',3,128,'',12,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di6','Input: DI6',3,128,'',13,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di7','Input: DI7',3,128,'',14,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di8','Input: DI8',3,128,'',15,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di9','Input: DI9',3,128,'',16,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di10','Input: DI10',3,128,'',17,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di11','Input: DI11',3,128,'',18,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di12','Input: DI12',3,128,'',19,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di13','Input: DI13',3,128,'',20,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di14','Input: DI14',3,128,'',21,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di15','Input: DI15',3,128,'',22,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di16','Input: DI16',3,128,'',23,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di17','Input: DI17',3,128,'',24,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di18','Input: DI18',3,128,'',25,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di19','Input: DI19',3,128,'',26,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di20','Input: DI20',3,128,'',27,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di21','Input: DI21',3,128,'',28,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di22','Input: DI22',3,128,'',29,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di23','Input: DI23',3,128,'',30,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di24','Input: DI24',3,128,'',31,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di25','Input: DI25',3,128,'',32,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di26','Input: DI26',3,128,'',33,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di27','Input: DI27',3,128,'',34,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di28','Input: DI28',3,128,'',35,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di29','Input: DI29',3,128,'',36,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di30','Input: DI30',3,128,'',37,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di31','Input: DI31',3,128,'',38,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_AO','tr','Transport',4,0,'',0,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_AO','io','Output: IO',4,0,'',1,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_AO','rez','Input: result',3,1,'0',2,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_AO','request','Input: request',0,0,'',3,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_AO','answer','Input: answer',0,1,'',4,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_AO','sender','Input: sender',0,0,'',5,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_AO','ao0','Input: AO0',2,129,'',6,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_AO','ao1','Input: AO1',2,129,'',7,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_AO','ao2','Input: AO2',2,129,'',8,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_AO','ao3','Input: AO3',2,129,'',9,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_AO','ao4','Input: AO4',2,129,'',10,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_AO','ao5','Input: AO5',2,129,'',11,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_AO','ao6','Input: AO6',2,129,'',12,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_AO','ao7','Input: AO7',2,129,'',13,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_AO','enCRC','Enable CRC',3,64,'0',14,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_AO','addr','Address [0...240]',1,64,'0',15,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','tr','Transport',4,0,'',0,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','io','Output: IO',4,0,'',1,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','rez','Input: result',3,1,'0',2,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','request','Input: request',0,0,'',3,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','answer','Input: answer',0,1,'',4,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','sender','Input: sender',0,0,'',5,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','n','Input: number of DO, to read back',1,64,'8',6,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','enCRC','Enable CRC',3,64,'0',39,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','addr','Address [0...240]',1,64,'0',40,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do0','Input: DO0',3,129,'',7,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do1','Input: DO1',3,129,'',8,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do2','Input: DO2',3,129,'',9,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do3','Input: DO3',3,129,'',10,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do4','Input: DO4',3,129,'',11,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do5','Input: DO5',3,129,'',12,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do6','Input: DO6',3,129,'',13,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do7','Input: DO7',3,129,'',14,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do8','Input: DO8',3,129,'',15,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do9','Input: DO9',3,129,'',16,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do10','Input: DO10',3,129,'',17,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do11','Input: DO11',3,129,'',18,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do12','Input: DO12',3,129,'',19,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do13','Input: DO13',3,129,'',20,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do14','Input: DO14',3,129,'',21,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do15','Input: DO15',3,129,'',22,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do16','Input: DO16',3,129,'',23,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do17','Input: DO17',3,129,'',24,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do18','Input: DO18',3,129,'',25,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do19','Input: DO19',3,129,'',26,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do20','Input: DO20',3,129,'',27,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do21','Input: DO21',3,129,'',28,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do22','Input: DO22',3,129,'',29,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do23','Input: DO23',3,129,'',30,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do24','Input: DO24',3,129,'',31,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do25','Input: DO25',3,129,'',32,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do26','Input: DO26',3,129,'',33,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do27','Input: DO27',3,129,'',34,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do28','Input: DO28',3,129,'',35,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do29','Input: DO29',3,129,'',36,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do30','Input: DO30',3,129,'',37,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do31','Input: DO31',3,129,'',38,'','','','');
-CREATE TABLE 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','error','Prescription: error',3,32,'0',2,'Рецепт: ошибка','','Рецепт: помилка','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','abort','Prescription: abort',3,32,'0',3,'Рецепт: прерывание','','Рецепт: перервано','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','rez','Command: result',0,32,'1',6,'Команда: результат','','Команда: результат','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','arg1','Time (s)',2,32,'',7,'Время (сек.)','','Час (сек.)','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','tmp1','Temporary 1',2,1,'0',8,'Временный 1','','Тимчасово 1','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('backTimer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('backTimer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('backTimer','error','Prescription: error',3,32,'0',2,'Рецепт: ошибка','','Рецепт: помилка','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('backTimer','abort','Prescription: abort',3,32,'0',3,'Рецепт: прерывание','','Рецепт: перервано','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('backTimer','rez','Command: result',0,32,'1',6,'Команда: результат','','Команда: результат','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('backTimer','arg1','Time (s)',2,32,'',7,'Время (сек.)','','Час (сек.)','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('backTimer','tmp1','Temporary 1',2,1,'0',8,'Временный 1','','Тимчасово 1','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('backTimer','start','Prescription: start',3,32,'0',0,'Рецепт: старт','','Рецепт: старт','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('backTimer','stop','Prescription: stop',3,32,'0',1,'Рецепт: стоп','','Рецепт: стоп','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','start','Prescription: start',3,32,'0',0,'Рецепт: старт','','Рецепт: старт','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','stop','Prescription: stop',3,32,'0',1,'Рецепт: стоп','','Рецепт: стоп','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('manager','dbDB','DB: DB name with the tables',0,64,'',0,'БД:Имя БД с таблицами','','БД:Ім''я БД з таблицями','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('manager','dbComs','DB: Table with commands',0,64,'PrescrComs',1,'БД:Таблица с коммандами','','БД:Таблиця з командами','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('manager','dbProgs','DB: Table with programs',0,64,'PrescrProgs',2,'БД:Таблица с программами','','БД:Таблиця з програмами','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('manager','comsCntr','Commands controller, <empty> - for commands into the table, ''*'' - this parameter''s controller',0,64,'*',3,'Контроллер команд, <пусто> - для команд в таблице, ''*'' - этот параметр контроллер','','Контролер команд, <порожньо> - для команд у таблиці, ''*'' - цей параметр контролеру','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('manager','mode','Mode',1,40,'-2
+Coils (1);Input Coils (2);Registers (3);Input Registers (4)',1,'Тип','2
+0;1;2;3
+Кольца (1);Входные Кольца (2);Регистры (3);Входные Регистры (4)','Тип','2
+0;1;2;3
+Кільця (1);Вхідні Кільця (2);Регістри (3);Вхідні Регістри (4)');
+INSERT INTO tmplib_DevLib_io VALUES('ModBusScan','begin','Begin (0...65535)',1,33,'',2,'Начало (0...65536)','','Початок (0...65536)','');
+INSERT INTO tmplib_DevLib_io VALUES('ModBusScan','end','End (0...65536)',1,33,'',3,'Конец (0...65536)','','Кінець (0...65536)','');
+INSERT INTO tmplib_DevLib_io VALUES('ModBusScan','res','Result',0,21,'',4,'Результат','','Результат','');
+INSERT INTO tmplib_DevLib_io VALUES('ModBusScan','this','Object',4,0,'',5,'Объект','','Об''єкт','');
+INSERT INTO tmplib_DevLib_io VALUES('pulsarM','transport','Transport',0,64,'Serial.out_pulsar',0,'Транспорт','','Транспорт','');
+INSERT INTO tmplib_DevLib_io VALUES('pulsarM','addr','Address [0...99999999]',1,64,'12345678',1,'Адрес [0...99999999]','','Адреса [0...99999999]','');
+INSERT INTO tmplib_DevLib_io VALUES('pulsarM','this','Object',4,0,'',3,'Объект','','Об''єкт','');
+INSERT INTO tmplib_DevLib_io VALUES('pulsarM','nChnl','Channels number',1,32,'0',2,'Количество каналов','','Кількість каналів','');
+INSERT INTO tmplib_DevLib_io VALUES('OWEN','transport','Transport',0,64,'Serial.out_owen',0,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('OWEN','items','Items set "{addr}:{func}:{f|i|u|s}:{r|w}[:{id}[:{nm}]]"',0,36,'',1,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('OWEN','this','Object',4,0,'',2,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt','io','Output: IO',4,0,'',1,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt','tr','Transport',4,0,'',0,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt','rez','Input: result',3,1,'0',2,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt','request','Input: request',0,0,'',3,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt','answer','Input: answer',0,1,'',4,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt','sender','Input: sender',0,0,'',5,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt','enCRC','Enable CRC',3,64,'0',27,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt','ai0','Input: AI0',2,128,'',7,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt','ai1','Input: AI1',2,128,'',8,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt','ai2','Input: AI2',2,128,'',9,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt','ai3','Input: AI3',2,128,'',10,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt','ai4','Input: AI4',2,128,'',11,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt','ai5','Input: AI5',2,128,'',12,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt','ai6','Input: AI6',2,128,'',13,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt','ai7','Input: AI7',2,128,'',14,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt','ai8','Input: AI8',2,128,'',15,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt','ai9','Input: AI9',2,128,'',16,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt','addr','Address [0...240]',1,64,'0',28,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt','n','Input: number of AI',1,64,'8',6,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt','ai10','Input: AI10',2,128,'',17,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt','ai11','Input: AI11',2,128,'',18,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt','ai12','Input: AI12',2,128,'',19,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt','ai13','Input: AI13',2,128,'',20,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt','ai14','Input: AI14',2,128,'',21,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt','ai15','Input: AI15',2,128,'',22,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt','ai16','Input: AI16',2,128,'',23,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt','ai17','Input: AI17',2,128,'',24,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt','ai18','Input: AI18',2,128,'',25,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt','ai19','Input: AI19',2,128,'',26,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','tr','Transport',4,0,'',0,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','io','Output: IO',4,0,'',1,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','rez','Input: result',3,1,'0',2,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','request','Input: request',0,0,'',3,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','answer','Input: answer',0,1,'',4,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','sender','Input: sender',0,0,'',5,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','n','Input: number of DI',1,64,'8',6,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','enCRC','Enable CRC',3,64,'0',39,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','addr','Address [0...240]',1,64,'0',40,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','di0','Input: DI0',3,128,'',7,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','di1','Input: DI1',3,128,'',8,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','di2','Input: DI2',3,128,'',9,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','di3','Input: DI3',3,128,'',10,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','di4','Input: DI4',3,128,'',11,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','di5','Input: DI5',3,128,'',12,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','di6','Input: DI6',3,128,'',13,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','di7','Input: DI7',3,128,'',14,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','di8','Input: DI8',3,128,'',15,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','di9','Input: DI9',3,128,'',16,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','di10','Input: DI10',3,128,'',17,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','di11','Input: DI11',3,128,'',18,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','di12','Input: DI12',3,128,'',19,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','di13','Input: DI13',3,128,'',20,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','di14','Input: DI14',3,128,'',21,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','di15','Input: DI15',3,128,'',22,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','di16','Input: DI16',3,128,'',23,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','di17','Input: DI17',3,128,'',24,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','di18','Input: DI18',3,128,'',25,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','di19','Input: DI19',3,128,'',26,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','di20','Input: DI20',3,128,'',27,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','di21','Input: DI21',3,128,'',28,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','di22','Input: DI22',3,128,'',29,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','di23','Input: DI23',3,128,'',30,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','di24','Input: DI24',3,128,'',31,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','di25','Input: DI25',3,128,'',32,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','di26','Input: DI26',3,128,'',33,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','di27','Input: DI27',3,128,'',34,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','di28','Input: DI28',3,128,'',35,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','di29','Input: DI29',3,128,'',36,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','di30','Input: DI30',3,128,'',37,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DI','di31','Input: DI31',3,128,'',38,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_AO','tr','Transport',4,0,'',0,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_AO','io','Output: IO',4,0,'',1,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_AO','rez','Input: result',3,1,'0',2,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_AO','request','Input: request',0,0,'',3,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_AO','answer','Input: answer',0,1,'',4,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_AO','sender','Input: sender',0,0,'',5,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_AO','ao0','Input: AO0',2,129,'',6,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_AO','ao1','Input: AO1',2,129,'',7,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_AO','ao2','Input: AO2',2,129,'',8,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_AO','ao3','Input: AO3',2,129,'',9,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_AO','ao4','Input: AO4',2,129,'',10,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_AO','ao5','Input: AO5',2,129,'',11,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_AO','ao6','Input: AO6',2,129,'',12,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_AO','ao7','Input: AO7',2,129,'',13,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_AO','enCRC','Enable CRC',3,64,'0',14,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_AO','addr','Address [0...240]',1,64,'0',15,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','tr','Transport',4,0,'',0,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','io','Output: IO',4,0,'',1,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','rez','Input: result',3,1,'0',2,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','request','Input: request',0,0,'',3,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','answer','Input: answer',0,1,'',4,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','sender','Input: sender',0,0,'',5,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','n','Input: number of DO, to read back',1,64,'8',6,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','enCRC','Enable CRC',3,64,'0',39,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','addr','Address [0...240]',1,64,'0',40,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do0','Input: DO0',3,129,'',7,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do1','Input: DO1',3,129,'',8,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do2','Input: DO2',3,129,'',9,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do3','Input: DO3',3,129,'',10,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do4','Input: DO4',3,129,'',11,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do5','Input: DO5',3,129,'',12,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do6','Input: DO6',3,129,'',13,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do7','Input: DO7',3,129,'',14,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do8','Input: DO8',3,129,'',15,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do9','Input: DO9',3,129,'',16,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do10','Input: DO10',3,129,'',17,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do11','Input: DO11',3,129,'',18,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do12','Input: DO12',3,129,'',19,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do13','Input: DO13',3,129,'',20,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do14','Input: DO14',3,129,'',21,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do15','Input: DO15',3,129,'',22,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do16','Input: DO16',3,129,'',23,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do17','Input: DO17',3,129,'',24,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do18','Input: DO18',3,129,'',25,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do19','Input: DO19',3,129,'',26,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do20','Input: DO20',3,129,'',27,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do21','Input: DO21',3,129,'',28,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do22','Input: DO22',3,129,'',29,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do23','Input: DO23',3,129,'',30,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do24','Input: DO24',3,129,'',31,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do25','Input: DO25',3,129,'',32,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do26','Input: DO26',3,129,'',33,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do27','Input: DO27',3,129,'',34,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do28','Input: DO28',3,129,'',35,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do29','Input: DO29',3,129,'',36,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do30','Input: DO30',3,129,'',37,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do31','Input: DO31',3,129,'',38,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('IEC60870','syncTimePLC','Sync PLC time',3,32,'',10,'Синхронизация времени ПЛК','','Синхронізація часу ПЛК','');
+CREATE TABLE IF NOT EXISTS 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
+INSERT INTO tmplib_PrescrTempl_io VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
+INSERT INTO tmplib_PrescrTempl_io VALUES('timer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
+INSERT INTO tmplib_PrescrTempl_io VALUES('timer','error','Prescription: error',3,32,'0',2,'Рецепт: ошибка','','Рецепт: помилка','');
+INSERT INTO tmplib_PrescrTempl_io VALUES('timer','abort','Prescription: abort',3,32,'0',3,'Рецепт: прерывание','','Рецепт: перервано','');
+INSERT INTO tmplib_PrescrTempl_io VALUES('timer','rez','Command: result',0,32,'1',6,'Команда: результат','','Команда: результат','');
+INSERT INTO tmplib_PrescrTempl_io VALUES('timer','arg1','Time (s)',2,32,'',7,'Время (сек.)','','Час (сек.)','');
+INSERT INTO tmplib_PrescrTempl_io VALUES('timer','tmp1','Temporary 1',2,1,'0',8,'Временный 1','','Тимчасово 1','');
+INSERT INTO tmplib_PrescrTempl_io VALUES('backTimer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
+INSERT INTO tmplib_PrescrTempl_io VALUES('backTimer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
+INSERT INTO tmplib_PrescrTempl_io VALUES('backTimer','error','Prescription: error',3,32,'0',2,'Рецепт: ошибка','','Рецепт: помилка','');
+INSERT INTO tmplib_PrescrTempl_io VALUES('backTimer','abort','Prescription: abort',3,32,'0',3,'Рецепт: прерывание','','Рецепт: перервано','');
+INSERT INTO tmplib_PrescrTempl_io VALUES('backTimer','rez','Command: result',0,32,'1',6,'Команда: результат','','Команда: результат','');
+INSERT INTO tmplib_PrescrTempl_io VALUES('backTimer','arg1','Time (s)',2,32,'',7,'Время (сек.)','','Час (сек.)','');
+INSERT INTO tmplib_PrescrTempl_io VALUES('backTimer','tmp1','Temporary 1',2,1,'0',8,'Временный 1','','Тимчасово 1','');
+INSERT INTO tmplib_PrescrTempl_io VALUES('backTimer','start','Prescription: start',3,32,'0',0,'Рецепт: старт','','Рецепт: старт','');
+INSERT INTO tmplib_PrescrTempl_io VALUES('backTimer','stop','Prescription: stop',3,32,'0',1,'Рецепт: стоп','','Рецепт: стоп','');
+INSERT INTO tmplib_PrescrTempl_io VALUES('timer','start','Prescription: start',3,32,'0',0,'Рецепт: старт','','Рецепт: старт','');
+INSERT INTO tmplib_PrescrTempl_io VALUES('timer','stop','Prescription: stop',3,32,'0',1,'Рецепт: стоп','','Рецепт: стоп','');
+INSERT INTO tmplib_PrescrTempl_io VALUES('manager','dbDB','DB: DB name with the tables',0,64,'',0,'БД:Имя БД с таблицами','','БД:Ім''я БД з таблицями','');
+INSERT INTO tmplib_PrescrTempl_io VALUES('manager','dbComs','DB: Table with commands',0,64,'PrescrComs',1,'БД:Таблица с коммандами','','БД:Таблиця з командами','');
+INSERT INTO tmplib_PrescrTempl_io VALUES('manager','dbProgs','DB: Table with programs',0,64,'PrescrProgs',2,'БД:Таблица с программами','','БД:Таблиця з програмами','');
+INSERT INTO tmplib_PrescrTempl_io VALUES('manager','comsCntr','Commands controller, <empty> - for commands into the table, ''*'' - this parameter''s controller',0,64,'*',3,'Контроллер команд, <пусто> - для команд в таблице, ''*'' - этот параметр контроллер','','Контролер команд, <порожньо> - для команд у таблиці, ''*'' - цей параметр контролеру','');
+INSERT INTO tmplib_PrescrTempl_io VALUES('manager','mode','Mode',1,40,'-2
 -2;-1;0;1;2;3
 Finish;Error;Stop;Run;Pause;Pass com',4,'Режим','','Режим','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('manager','curMode','Current mode',1,24,'-2
+INSERT INTO tmplib_PrescrTempl_io VALUES('manager','curMode','Current mode',1,24,'-2
 -2;-1;0;1;2;3
 Finish;Error;Stop;Run;Pause;Pass com',5,'','','','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('manager','prog','Name of selected program',0,32,'',6,'Имя выбранной программы','','Ім''я обраної програми','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('manager','startTm','Start time, seconds',1,16,'',7,'Время запуска, секунды','','Час запуску, секунди','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('manager','curCom','Current command-step',0,16,'',8,'Текущая комманда-шаг','','Поточна команда-крок','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('manager','work','Work program',4,16,'',9,'Рабочая программа','','Робоча програма','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('manager','comLs','Commands list',4,16,'',10,'Список команд','','Перелік команд','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('manager','clcCnt','Cycles counter',1,0,'',11,'Счётчик циклов','','Лічильник циклів','');
-INSERT INTO "tmplib_PrescrTempl_io" VALUES('manager','this','The object',4,0,'',12,'Объект','','Об''єкт','');
-CREATE TABLE 'tmplib_tests_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
-INSERT INTO "tmplib_tests_io" VALUES('ai_simple','val_cod','Value''s source code',1,128,'',0,'Вихідний код значення','','Исходный код значения','');
-INSERT INTO "tmplib_tests_io" VALUES('ai_simple','val','Value',2,16,'0',1,'Значення','','Значение','');
-INSERT INTO "tmplib_tests_io" VALUES('ai_simple','val_tp','Dimension',0,32,'',2,'Одиниця виміру','','Единица измерения','');
-INSERT INTO "tmplib_tests_io" VALUES('ai_simple','bDwn','Lower value border',2,32,'0',3,'Нижня границя значення','','Нижняя граница значения','');
-INSERT INTO "tmplib_tests_io" VALUES('ai_simple','bUp','Upper value border',2,32,'100',4,'Верхня границя значення','','Верхняя граница значения','');
-INSERT INTO "tmplib_tests_io" VALUES('ai_simple','bWDwn','Lower technical border',2,32,'20',5,'Нижня технолог. границя','','Нижняя технологич. граница','');
-INSERT INTO "tmplib_tests_io" VALUES('ai_simple','bWUp','Upper technical border',2,32,'80',6,'Верхня технолог. границя','','Верхняя технологич. граница','');
-INSERT INTO "tmplib_tests_io" VALUES('ai_simple','bErrDwn','Lower alarm border',2,32,'10',7,'Нижня аварійна границя','','Нижняя аварийная граница','');
-INSERT INTO "tmplib_tests_io" VALUES('ai_simple','bErrUp','Upper alarm border',2,32,'90',8,'Верхня аварійна границя','','Верхняя аварийная граница','');
-INSERT INTO "tmplib_tests_io" VALUES('ai_man','val_cod','Value''s source code',1,129,'',0,'Вихідний код значення','','Исходный код значения','');
-INSERT INTO "tmplib_tests_io" VALUES('ai_man','val','Value',2,32,'0',1,'Значення','','Значение','');
-INSERT INTO "tmplib_tests_io" VALUES('ai_man','val_o','Previous value',2,0,'0',2,'Попередне значення','','Предыдущее значение','');
-INSERT INTO "tmplib_tests_io" VALUES('ai_man','val_tp','Dimension',0,32,'',3,'Одиниця виміру','','Единица измерения','');
-INSERT INTO "tmplib_tests_io" VALUES('ai_man','bDwn','Lower value border',2,32,'0',4,'Нижня границя значення','','Нижняя граница значения','');
-INSERT INTO "tmplib_tests_io" VALUES('ai_man','bUp','Upper value border',2,32,'100',5,'Верхня границя значення','','Верхняя граница значения','');
-INSERT INTO "tmplib_tests_io" VALUES('ai_man','bWDwn','Lower technical border',2,32,'20',6,'Нижня технологічна границя','','Нижняя технологическая граница','');
-INSERT INTO "tmplib_tests_io" VALUES('ai_man','bWUp','Upper technical border',2,32,'80',7,'Верхня технологічна границя','','Верхняя технологич. граница','');
-INSERT INTO "tmplib_tests_io" VALUES('ai_man','bErrDwn','Lower alarm border',2,32,'10',8,'Нижня аварійна границя','','Нижняя аварийная граница','');
-INSERT INTO "tmplib_tests_io" VALUES('ai_man','bErrUp','Upper alarm border',2,32,'90',9,'Верхня аварійна границя','','Верхняя аварийная граница','');
-INSERT INTO "tmplib_tests_io" VALUES('test','in50','Input50',1,160,'DB Test|108',51,'Вхід50','DB Тест|108','Вход50','DB Тест|108');
-INSERT INTO "tmplib_tests_io" VALUES('test','in49','Input49',1,160,'DB Test|106',50,'Вхід49','DB Тест|106','Вход49','DB Тест|106');
-INSERT INTO "tmplib_tests_io" VALUES('test','in48','Input48',1,160,'DB Test|104',49,'Вхід48','DB Тест|104','Вход48','DB Тест|104');
-INSERT INTO "tmplib_tests_io" VALUES('test','in47','Input47',1,160,'DB Test|102',48,'Вхід47','DB Тест|102','Вход47','DB Тест|102');
-INSERT INTO "tmplib_tests_io" VALUES('test','in46','Input46',1,160,'DB Test|100',47,'Вхід46','DB Тест|100','Вход46','DB Тест|100');
-INSERT INTO "tmplib_tests_io" VALUES('test','in45','Input45',1,160,'DB Test|98',46,'Вхід45','DB Тест|98','Вход45','DB Тест|98');
-INSERT INTO "tmplib_tests_io" VALUES('test','in44','Input44',1,160,'DB Test|96',45,'Вхід44','DB Тест|96','Вход44','DB Тест|96');
-INSERT INTO "tmplib_tests_io" VALUES('test','in43','Input43',1,160,'DB Test|94',44,'Вхід43','DB Тест|94','Вход43','DB Тест|94');
-INSERT INTO "tmplib_tests_io" VALUES('test','in42','Input42',1,160,'DB Test|92',43,'Вхід42','DB Тест|92','Вход42','DB Тест|92');
-INSERT INTO "tmplib_tests_io" VALUES('test','in41','Input41',1,160,'DB Test|90',42,'Вхід41','DB Тест|90','Вход41','DB Тест|90');
-INSERT INTO "tmplib_tests_io" VALUES('test','in40','Input40',1,160,'DB Test|86',41,'Вхід40','DB Тест|86','Вход40','DB Тест|86');
-INSERT INTO "tmplib_tests_io" VALUES('test','in39','Input39',1,160,'DB Test|84',40,'Вхід39','DB Тест|84','Вход39','DB Тест|84');
-INSERT INTO "tmplib_tests_io" VALUES('test','in38','Input38',1,160,'DB Test|82',39,'Вхід38','DB Тест|82','Вход38','DB Тест|82');
-INSERT INTO "tmplib_tests_io" VALUES('test','in37','Input37',1,160,'DB Test|80',38,'Вхід37','DB Тест|80','Вход37','DB Тест|80');
-INSERT INTO "tmplib_tests_io" VALUES('test','in36','Input36',1,160,'DB Test|78',37,'Вхід36','DB Тест|78','Вход36','DB Тест|78');
-INSERT INTO "tmplib_tests_io" VALUES('test','in35','Input35',1,160,'DB Test|76',36,'Вхід35','DB Тест|76','Вход35','DB Тест|76');
-INSERT INTO "tmplib_tests_io" VALUES('test','in34','Input34',1,160,'DB Test|74',35,'Вхід34','DB Тест|74','Вход34','DB Тест|74');
-INSERT INTO "tmplib_tests_io" VALUES('test','in33','Input33',1,160,'DB Test|72',34,'Вхід33','DB Тест|72','Вход33','DB Тест|72');
-INSERT INTO "tmplib_tests_io" VALUES('test','in32','Input32',1,160,'DB Test|70',33,'Вхід32','DB Тест|70','Вход32','DB Тест|70');
-INSERT INTO "tmplib_tests_io" VALUES('test','in31','Input31',1,160,'DB Test|68',32,'Вхід31','DB Тест|68','Вход31','DB Тест|68');
-INSERT INTO "tmplib_tests_io" VALUES('test','in30','Input30',1,160,'DB Test|64',31,'Вхід30','DB Тест|64','Вход30','DB Тест|64');
-INSERT INTO "tmplib_tests_io" VALUES('test','in29','Input29',1,160,'DB Test|62',30,'Вхід29','DB Тест|62','Вход29','DB Тест|62');
-INSERT INTO "tmplib_tests_io" VALUES('test','in28','Input28',1,160,'DB Test|60',29,'Вхід28','DB Тест|60','Вход28','DB Тест|60');
-INSERT INTO "tmplib_tests_io" VALUES('test','in27','Input27',1,160,'DB Test|58',28,'Вхід27','DB Тест|58','Вход27','DB Тест|58');
-INSERT INTO "tmplib_tests_io" VALUES('test','in26','Input26',1,160,'DB Test|56',27,'Вхід26','DB Тест|56','Вход26','DB Тест|56');
-INSERT INTO "tmplib_tests_io" VALUES('test','in25','Input25',1,160,'DB Test|54',26,'Вхід25','DB Тест|54','Вход25','DB Тест|54');
-INSERT INTO "tmplib_tests_io" VALUES('test','in24','Input24',1,160,'DB Test|52',25,'Вхід24','DB Тест|52','Вход24','DB Тест|52');
-INSERT INTO "tmplib_tests_io" VALUES('test','in23','Input23',1,160,'DB Test|50',24,'Вхід23','DB Тест|50','Вход23','DB Тест|50');
-INSERT INTO "tmplib_tests_io" VALUES('test','in22','Input22',1,160,'DB Test|48',23,'Вхід22','DB Тест|48','Вход22','DB Тест|48');
-INSERT INTO "tmplib_tests_io" VALUES('test','in21','Input21',1,160,'DB Test|46',22,'Вхід21','DB Тест|46','Вход21','DB Тест|46');
-INSERT INTO "tmplib_tests_io" VALUES('test','in20','Input20',1,160,'DB Test|44',21,'Вхід20','DB Тест|44','Вход20','DB Тест|44');
-INSERT INTO "tmplib_tests_io" VALUES('test','in19','Input19',1,160,'DB Test|42',20,'Вхід19','DB Тест|42','Вход19','DB Тест|42');
-INSERT INTO "tmplib_tests_io" VALUES('test','in18','Input18',1,160,'DB Test|40',19,'Вхід18','DB Тест|40','Вход18','DB Тест|40');
-INSERT INTO "tmplib_tests_io" VALUES('test','in17','Input17',1,160,'DB Test|38',18,'Вхід17','DB Тест|38','Вход17','DB Тест|38');
-INSERT INTO "tmplib_tests_io" VALUES('test','in16','Input16',1,160,'DB Test|36',17,'Вхід16','DB Тест|36','Вход16','DB Тест|36');
-INSERT INTO "tmplib_tests_io" VALUES('test','in15','Input15',1,160,'DB Test|34',16,'Вхід15','DB Тест|34','Вход15','DB Тест|34');
-INSERT INTO "tmplib_tests_io" VALUES('test','in14','Input14',1,160,'DB Test|32',15,'Вхід14','DB Тест|32','Вход14','DB Тест|32');
-INSERT INTO "tmplib_tests_io" VALUES('test','in13','Input13',1,160,'DB Test|30',14,'Вхід13','DB Тест|30','Вход13','DB Тест|30');
-INSERT INTO "tmplib_tests_io" VALUES('test','in12','Input12',1,160,'DB Test|28',13,'Вхід12','DB Тест|28','Вход12','DB Тест|28');
-INSERT INTO "tmplib_tests_io" VALUES('test','in11','Input11',1,160,'DB Test|26',12,'Вхід11','DB Тест|26','Вход11','DB Тест|26');
-INSERT INTO "tmplib_tests_io" VALUES('test','in10','Input10',1,160,'DB Test|24',11,'Вхід10','DB Тест|24','Вход10','DB Тест|24');
-INSERT INTO "tmplib_tests_io" VALUES('test','in9','Input9',1,160,'DB Test|22',10,'Вхід9','DB Тест|22','Вход9','DB Тест|22');
-INSERT INTO "tmplib_tests_io" VALUES('test','in8','Input8',1,160,'DB Test|20',9,'Вхід8','DB Тест|20','Вход8','DB Тест|20');
-INSERT INTO "tmplib_tests_io" VALUES('test','in7','Input7',1,160,'DB Test|18',8,'Вхід7','DB Тест|18','Вход7','DB Тест|18');
-INSERT INTO "tmplib_tests_io" VALUES('test','in6','Input6',1,160,'DB Test|16',7,'Вхід6','DB Тест|16','Вход6','DB Тест|16');
-INSERT INTO "tmplib_tests_io" VALUES('test','in5','Input5',1,160,'DB Test|14',6,'Вхід5','DB Тест|14','Вход5','DB Тест|14');
-INSERT INTO "tmplib_tests_io" VALUES('test','in4','Input4',1,160,'DB Test|12',5,'Вхід4','DB Тест|12','Вход4','DB Тест|12');
-INSERT INTO "tmplib_tests_io" VALUES('test','in3','Input3',1,160,'DB Test|10',4,'Вхід3','DB Тест|10','Вход3','DB Тест|10');
-INSERT INTO "tmplib_tests_io" VALUES('test','in2','Input2',1,160,'DB Test|8|r8',3,'Вхід2','DB Тест|8','Вход2','DB Тест|8');
-INSERT INTO "tmplib_tests_io" VALUES('test','in1','Input1',1,160,'DB Test|6|i4',2,'Вхід1','DB Тест|6','Вход1','DB Тест|6');
-INSERT INTO "tmplib_tests_io" VALUES('test','in','Input',1,160,'DB Test|4',1,'Вхід','DB Тест|4','Вход','DB Тест|4');
-INSERT INTO "tmplib_tests_io" VALUES('test','di','DI',3,160,'DB Test|2.1',0,'','','','');
-INSERT INTO "tmplib_tests_io" VALUES('gasPoint','F','Flow (m3/h)',2,144,'F|var',0,'','','','');
-INSERT INTO "tmplib_tests_io" VALUES('gasPoint','Q','Volume (m3)',2,16,'0',1,'','','','');
-INSERT INTO "tmplib_tests_io" VALUES('gasPoint','P','Pressure (kgH/sm2)',2,144,'P|var',2,'','','','');
-INSERT INTO "tmplib_tests_io" VALUES('gasPoint','T','Temperature (°C)',2,144,'T|var',3,'','','','');
-INSERT INTO "tmplib_tests_io" VALUES('gasPoint','dP','Differential pressure (kgH/m2)',2,16,'0',4,'','','','');
-INSERT INTO "tmplib_tests_io" VALUES('gasPoint','DS','Density (kg/m3)',2,16,'0',5,'','','','');
-CREATE TABLE 'tmplib_base_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
-INSERT INTO "tmplib_base_io" VALUES('digAlarm','in','Input',3,144,'Input|in',2,'Вхід','','Вход','');
-INSERT INTO "tmplib_base_io" VALUES('simleBoard','in','Input',2,128,'Parameter|var',0,'Вхід','','Вход','');
-INSERT INTO "tmplib_base_io" VALUES('simleBoard','var','Variable',2,32,'0',1,'Змінна','','Переменная','');
-INSERT INTO "tmplib_base_io" VALUES('simleBoard','ed','Dimension',0,32,'',2,'Одиниця виміру','','Единица измерения','');
-INSERT INTO "tmplib_base_io" VALUES('simleBoard','min','Lower work border',2,32,'0',3,'Нижня робоча границя','','Нижн. раб. граница','');
-INSERT INTO "tmplib_base_io" VALUES('simleBoard','max','Upper work border',2,32,'100',4,'Верхня робоча границя','','Верхн. раб. граница','');
-INSERT INTO "tmplib_base_io" VALUES('simleBoard','aMin','Lower alarm border',2,32,'0',5,'Нижня аварійна границя','','Нижняя аварийная граница','');
-INSERT INTO "tmplib_base_io" VALUES('simleBoard','aMax','Upper alarm border',2,32,'0',6,'Верхня аварійна границя','','Верхняя аварийная граница','');
-INSERT INTO "tmplib_base_io" VALUES('simleBoard','wMin','Lower warning border',2,32,'0',7,'Нижня попереджувальна границя','','Нижн. предупредительная граница','');
-INSERT INTO "tmplib_base_io" VALUES('simleBoard','wMax','Upper warning border',2,32,'0',8,'Верхня попереджувальна границя','','Верхн. предупредительная граница','');
-INSERT INTO "tmplib_base_io" VALUES('simleBoard','iAdd','Addon to input',2,64,'0',9,'Додаток до входу','','Добавка ко входу','');
-INSERT INTO "tmplib_base_io" VALUES('simleBoard','iMult','Input multiplication',2,64,'1',10,'Множник до входу','','Множитель входа','');
-INSERT INTO "tmplib_base_io" VALUES('digitBlock','cmdOpen','Command "Open"',3,161,'Crane|com',0,'Команда "Відкрити"','Кран|com','Команда "Открыть"','Кран|com');
-INSERT INTO "tmplib_base_io" VALUES('digitBlock','cmdClose','Command "Close"',3,161,'Crane|close',1,'Команда "Закрити"','Кран|close','Команда "Закрыть"','Кран|close');
-INSERT INTO "tmplib_base_io" VALUES('digitBlock','cmdStop','Command "Stop"',3,161,'Crane|stop',2,'Команда "Стоп"','Кран|stop','Команда "Стоп"','Кран|stop');
-INSERT INTO "tmplib_base_io" VALUES('digitBlock','stOpen','State "Opened"',3,144,'Crane|st_open',3,'Стан "Відкрито"','Кран|st_open','Сост. "Открыто"','Кран|st_open');
-INSERT INTO "tmplib_base_io" VALUES('digitBlock','stClose','State "Closed"',3,144,'Crane|st_close',4,'Стан "Закрито"','Кран|st_close','Сост. "Закрыто"','Кран|st_close');
-INSERT INTO "tmplib_base_io" VALUES('digitBlock','tCmd','Time for hold the command, seconds',1,32,'5',5,'Час утримання команди, секунди','','Время удерж. команды, секунды','');
-INSERT INTO "tmplib_base_io" VALUES('digitBlock','last_cmd','Last command',1,1,'0',6,'Остання команда','','Последняя команда','');
-INSERT INTO "tmplib_base_io" VALUES('digitBlock','w_tm','Process command counter',2,1,'0',7,'Лічильник опрацювання команди','','Счётчик отраб. команды','');
-INSERT INTO "tmplib_base_io" VALUES('gasPoint','DS','Density (kg/m3)',2,16,'0',5,'Щильність (кг/м3)','','Плотность (кг/м3)','');
-INSERT INTO "tmplib_base_io" VALUES('gasPoint','dP','Differential pressure (kgH/m2)',2,16,'0',4,'Перепад (кГс/м2)','','Перепад (кГс/м2)','');
-INSERT INTO "tmplib_base_io" VALUES('gasPoint','T','Temperature (°C)',2,144,'T|var',3,'Температура (°С)','','Температура (°С)','');
-INSERT INTO "tmplib_base_io" VALUES('gasPoint','P','Pressure (kgH/sm2)',2,144,'P|var',2,'Тиск (кГс/см2)','','Давление (кГс/см2)','');
-INSERT INTO "tmplib_base_io" VALUES('gasPoint','Q','Volume (m3)',2,16,'0',1,'Об''єм (м3)','','Объём (м3)','');
-INSERT INTO "tmplib_base_io" VALUES('gasPoint','F','Flow (m3/h)',2,144,'F|var',0,'Витрати (м3/ч)','','Расход (м3/ч)','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','inout','Input/Output',2,129,'Parameter|var',0,'Вхід/Вихід','','Вход/Выход','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','var','Variable',2,16,'0',1,'Змінна','','Переменная','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','ed','Dimension',0,32,'',3,'Одиниця виміру','','Единица измерения','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','min','Scale: minimum',2,32,'0',4,'Шкала: мінімум','','Шкала: минимум','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','max','Scale: maximum',2,32,'100',5,'Шкала: максимум','','Шкала: максимум','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','scSqr','Scale: square',3,0,'0',6,'Шкала: квадратична','','Шкала: квадратичная','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','aMin','Border down alarm',2,32,'0',8,'Границя нижня аварійна','','Граница нижняя аварийная','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','aMax','Border up alarm',2,32,'0',9,'Границя верхня аварійна','','Граница верхняя аварийная','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','wMin','Border down warning',2,32,'0',10,'Границя нижня попереджув.','','Граница нижняя предупр.','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','wMax','Border up warning',2,32,'0',11,'Границя верхня попереджув.','','Граница верхняя предупр.','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','speed','Motion speed (%/cycle)',2,32,'0',13,'Швидкість зміни (%/цикл)','','Скорость изменения (%/цикл)','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','Tf','Filter time, seconds',2,32,'0',16,'Час фільтру, секунд','','Время фильтрации, секунд','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','iAdd','Input addon',2,64,'0',17,'Додаток до входу','','Дополнение ко входу','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','iMult','Input multiplication',2,64,'1',18,'Множник входу','','Множитель входуа','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','plcMin','Minimum module scale',2,64,'0',19,'Мінімум шкали модуля','','Минимум шкалы модуля','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','plcMax','Maximum module scale',2,64,'0',20,'Максимум шкали модуля','','Максимум шкалы модуля','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','plcExcess','Allowed scale exceeding, %',2,64,'0',21,'Дозволене перевищення шкали, %','','Допустимое превышение шкалы модуля, %','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','in','Input',2,128,'Input|var',0,'Вхід','Вхід|var','Вход','Вход|var');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','var','Variable',2,16,'0',2,'Змінна','','Переменная','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','ed','Dimension',0,32,'',3,'Одиниця виміру','','Единица измерения','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','min','Scale: minimum',2,32,'0',4,'Шкала: мінімум','','Шкала: минимум','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','max','Scale: maximum',2,32,'100',5,'Шкала: максимум','','Шкала: максимум','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','scSqr','Scale: square',3,32,'0',6,'Шкала: квадратична','','Шкала: квадратичная','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','aMin','Border down alarm',2,32,'0',11,'Границя нижня аварійна','','Граница нижняя аварийная','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','aMax','Border up alarm',2,32,'0',12,'Границя верхня аварійна','','Граница верхняя аварийная','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','wMin','Border down warning',2,32,'0',13,'Границя нижня попереджув.','','Граница нижняя предупр.','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','wMax','Border up warning',2,32,'0',14,'Границя верхня попереджув.','','Граница верхняя предупр.','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','speed','Motion speed (%/cycle)',2,32,'0',16,'Швидкість зміни (%/цикл)','','Скорость изменения (%/цикл)','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','prec','Precision (signs)',1,32,'2',17,'Точність (знаків)','','Точность (знаков)','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','Tf','Filter time, seconds',2,32,'0',19,'Час фільтру, секунд','','Время фильтрации, секунд','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','iAdd','Input addition',2,64,'0',20,'Додаток до входу','','Дополнение ко входу','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','iMult','Input multiplication',2,64,'1',21,'Множник входу','','Множитель входа','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','plcMin','Minimum module scale',2,64,'0',22,'Мінімум шкали модуля','','Минимум шкалы модуля','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','plcMax','Maximum module scale',2,64,'0',23,'Максимум шкали модуля','','Максимум шкалы модуля','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','plcExcess','Allowed scale exceeding, %',2,64,'0',24,'Дозволене перевищення шкали, %','','Допустимое превышение шкалы, %','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','plcImit','PLC imitation',3,64,'0',25,'Імітація ПЛК','','Имитация ПЛК','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','plcImitIn','PLC imitation input',2,128,'Imitation|var',26,'Вхід імітації ПЛК','Імітація|var','Вход имитации ПЛК','Имитация|var');
-INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','com','Command "Open"',3,161,'Crane|com',0,'Команда "Відкрити"','Кран|com','Команда "Открыть"','Кран|com');
-INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','close','Command "Close"',3,161,'Crane|close',1,'Команда "Закрити"','Кран|close','Команда "Закрыть"','Кран|close');
-INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','stop','Command "Stop"',3,161,'Crane|stop',2,'Команда "Зупинити"','Кран|stop','Команда "Стоп"','Кран|stop');
-INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','st_open','State "Opened"',3,144,'Crane|st_open',3,'Стан "Відкрито"','Кран|st_open','Сост. "Открыто"','Кран|st_open');
-INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','st_close','State "Closed"',3,144,'Crane|st_close',4,'Стан "Закрито"','Кран|st_close','Сост. "Закрыто"','Кран|st_close');
-INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','tCmd','Time to hold the command, seconds',1,64,'5',5,'Час утримання команди, секунди','','Время удерж. команды, секунды','');
-INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','last_cmd','Last command',1,1,'0',6,'Остання команда','','Последняя команда','');
-INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','w_tm','Process command counter',2,1,'0',7,'Лічильник обробки команди','','Счётчик отраб. команды','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','in','Input',2,128,'Signal|in',0,'Вхід','','Вход','Signal|in');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','sp','Setpoint',2,160,'PID|sp',1,'Завдання','ПІД|sp','Задание','ПИД|sp');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','var','Variable',2,16,'0',2,'Змінна','','Переменная','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','manIn','Manual input (%)',2,160,'PID|manIn',3,'Ручний ввід (%)','ПІД|manIn','Ручной ввод (%)','ПИД|manIn');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','out','Output (%)',2,144,'PID|out',4,'Вихід (%)','ПІД|out','Выход (%)','ПИД|out');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','impQup','Impulse output up',3,144,'PID|impQupTm',5,'Імп. вихід у гору','ПІД|impQupTm','Имп. выход вверх','ПИД|impQupTm');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','impQdwn','Impulse output down',3,144,'PID|impQdwnTm',6,'Імп. вихід до низу','ПІД|impQdwnTm','Имп. выход вниз','ПИД|impQdwnTm');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','auto','Mode (automate)',3,160,'PID|auto',7,'Режим (автомат)','ПІД|auto','Режим (автомат)','ПИД|auto');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','analog','Analog',3,144,'PID|analog',8,'Аналоговий','ПІД|analog','Аналоговый','ПИД|analog');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','ed','Dimension',0,32,'',9,'Одиниця виміру','','Единица измерения','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','min','Scale: minimum',2,160,'PID|min',10,'Шкала: мінімум','ПІД|min','Шкала: минимум','ПИД|min');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','max','Scale: maximum',2,160,'PID|max',11,'Шкала: максимум','ПІД|max','Шкала: максимум','ПИД|max');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','scSqr','Scale: square',3,32,'0',12,'Шкала: квадратична','','Шкала: квадратичная','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','aMin','Border down alarm',2,32,'0',13,'Границя нижня ав.','','Граница нижняя ав.','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','aMax','Border up alarm',2,32,'0',14,'Границя верхня аварійна','','Граница верхняя ав.','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','wMin','Border down warning',2,32,'0',15,'Границя нижня попереджув.','','Граница нижняя пред.','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','wMax','Border up warning',2,32,'0',16,'Границя верхня попереджув.','','Граница верхняя пред.','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','HystBnd','Hysteresis of boders violation',2,32,'0',17,'Гістерезис порушень границь','','Гистерезиз наруш. границ','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','speed','Motion speed (%/cycle)',2,32,'0',18,'Швидкість зміни (%/цикл)','','Скорость изменения (%/цикл)','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','prec','Precision (signs)',1,32,'2',19,'Точність (знаків)','','Точность (знаков)','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','H','Border up warning violation',3,17,'0',20,'Порушення верхньої попереджув. границі','','Нарушение верхней предупредительной границы','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','L','Border down warning violation',3,17,'0',21,'Порушення нижньої попереджув. границі','','Нарушение нижней предупредительной границы','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','HH','Border up alarm violation',3,17,'0',22,'Порушення верхньої аварійної границі','','Нарушение верхней аварийной границы','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','LL','Border down alarm violation',3,17,'0',23,'Порушення нижньої аварійної границі','','Нарушение нижней аварийной границы','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','EVAL','Value is eval',3,17,'0',24,'Значення невірогідне','','Значение недостоверно','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','Tf','Filter time (ms)',2,32,'0',25,'Час фільтру (мс)','','Время фильтрации (мс)','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','Kp','Gain',2,160,'PID|Kp',26,'Kп','ПІД|Kp','Kп','ПИД|Kp');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','Ki','Gain integration',2,160,'PID|Ki',27,'Кп інтегралу','ПІД|Ki','Кп интеграла','ПИД|Ki');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','Ti','Ti (ms)',1,160,'PID|Ti',28,'Tі (мс)','ПІД|Ti','Tи (мс)','ПИД|Ti');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','Kd','Gain differential',2,160,'PID|Kd',29,'Кп диференціалу','ПІД|Kd','Кп производной','ПИД|Kd');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','Td','Td (ms)',1,160,'PID|Td',30,'Tд (мс)','ПІД|Td','Tд (мс)','ПИД|Td');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','Tzd','T differential lag (ms)',1,160,'PID|Tzd',31,'T фільтру диференціалу (мс)','ПІД|Tzd','T задержки дифференциров. (мс)','ПИД|Tzd');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','TImpPer','T impulses period (ms)',1,160,'PID|TImpPer',32,'T період імпульсів (мс)','ПІД|TImpPer','T период импульса (мс)','ПИД|TImpPer');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','TImpMin','T minimal impulse (ms)',1,160,'PID|TImpMin',33,'Мінімальна довжина імпульсу (мс)','ПІД|TImpMin','T минимальная длина импульса (мс)','ПИД|TImpMin');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','KImpRfact','Impulse rate factor',2,160,'PID|KImpRfact',34,'Рейтинг фактор імпульсів','ПІД|KImpRfact','Рейтинг фактор импульса','ПИД|KImpRfact');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','Zi','Insensitivity (%)',2,160,'PID|Zi',35,'Нечутливість (%)','ПІД|Zi','Нечувствительность (%)','ПИД|Zi');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','Hup','Upper output border (%)',2,160,'PID|Hup',36,'Верхня границя виходу (%)','ПІД|Hup','Верхняя граница выхода (%)','ПИД|Hup');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','Hdwn','Lower output border (%)',2,160,'PID|Hdwn',37,'Нижня границя виходу (%)','ПІД|Hdwn','Нижняя граница выхода (%)','ПИД|Hdwn');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','K1','Coefficient of input 1',2,160,'PID|K1',38,'Коеф. входу 1','ПІД|K1','Коэф. входа 1','ПИД|K1');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','K2','Coefficient of input 2',2,160,'PID|K2',39,'Коеф. входу 2','ПІД|K2','Коэф. входа 2','ПИД|K2');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','K3','Coefficient of input 3',2,160,'PID|K3',40,'Коеф. входу 3','ПІД|K3','Коэф. входа 3','ПИД|K3');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','K4','Coefficient of input 4',2,160,'PID|K4',41,'Коеф. входу 4','ПІД|K4','Коэф. входа 4','ПИД|K4');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','dmsk','Maximum value on eval (Max/Min)',2,64,'0',42,'Макс. парам. при недостовірності (Макс/Мин)','','Макс. парам. при недост. (Мин/Макс)','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','iAdd','Input addon',2,64,'0',43,'Додаток до входу','','Дополнение ко входу','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','iMult','Input multiplication',2,64,'1',44,'Множник входу','','Множитель ко входу','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','plcMin','Minimum module scale',2,64,'1',45,'Мінімум шкали модуля','','Минимум шкалы модуля','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','plcMax','Maximum module scale',2,64,'5',46,'Максимум шкали модуля','','Максимум шкалы модуля','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','plcExcess','Allowed scale exceeding (%)',2,64,'0',47,'Дозволене перевищення шкали (%)','','Допустимое превышение шкалы модуля (%)','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','plcImit','PLC imitation',3,64,'0',48,'Імітація ПЛК','','Имитация ПЛК','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','plcImitIn','PLC imitation input',2,128,'Imitation|var',49,'Вхід імітації ПЛК','Імітація|var','Вход имитации ПЛК','Имитация|var');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','in','Input',2,128,'Input|var',0,'Вхід','Вхід|var','Вход','Вход|var');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','var','Variable',2,16,'0',2,'Змінна','','Переменная','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','H','Border up warning violation',3,17,'',3,'Порушення верхньої попереджув. границі','','Нарушение верхней предупредительной границы','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','L','Border down warning violation',3,17,'',4,'Порушення нижньої попереджув. границі','','Нарушение нижней предупредительной границы','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','HH','Border up alarm violation',3,17,'',5,'Порушення верхньої аварійної границі','','Нарушение верхней аварийной границы','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','LL','Border down alarm violation',3,17,'',6,'Порушення нижньої аварійної границі','','Нарушение нижней аварийной границы','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','EVAL','Error value',3,17,'',7,'Помилка значення','','Ошибка значения','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','ed','Dimension',0,32,'',8,'Одиниця виміру','','Единица измерения','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','min','Scale: minimum',2,32,'0',9,'Шкала: мінімум','','Шкала: минимум','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','max','Scale: maximum',2,32,'100',10,'Шкала: максимум','','Шкала: максимум','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','scSqr','Scale: square',3,32,'0',11,'Шкала: квадратична','','Шкала:к вадратичная','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','aMin','Border down alarm',2,32,'0',16,'Границя нижня аварійна','','Граница нижняя аварийная','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','aMax','Border up alarm',2,32,'0',17,'Границя верхня аварійна','','Граница верхняя аварийная','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','wMin','Border down warning',2,32,'0',18,'Границя нижня попереджув.','','Граница нижняя предупр.','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','wMax','Border up warning',2,32,'0',19,'Границя верхня попереджув.','','Граница верхняя предупр.','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','HystBnd','Hysteresis of boders violation',2,32,'0',20,'Гистерезис порушення границь','','Гистерезиз нарушения границ','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','speed','Motion speed (%/cycle)',2,32,'0',21,'Швидкість зміни (%/цикл)','','Скорость изменения (%/цикл)','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','prec','Precision (signs)',1,32,'2',22,'Точність (знаків)','','Точность (знаков)','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','Tf','Filter time, seconds',2,32,'0',24,'Час фільтру, секунд','','Время фильтрации, секунд','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','iAdd','Input addon',2,64,'0',25,'Додаток до входу','','Дополнение ко входу','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','iMult','Input multiplication',2,64,'1',26,'Множник входу','','Множитель входа','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','plcMin','Minimum module scale',2,64,'1',27,'Мінімум шкали модуля','','Минимум шкалы модуля','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','plcMax','Maximum module scale',2,64,'5',28,'Максимум шкали модуля','','Максимум шкалы модуля','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','plcExcess','Allowed scale exceeding, %',2,64,'0',29,'Дозволене перевищення шкали, %','','Допустимое превышение шкалы, %','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','plcImit','PLC imitation',3,64,'0',30,'Імітація ПЛК','','Имитация ПЛК','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','plcImitIn','PLC imitation input',2,128,'Imitation|var',31,'Вхід імітації ПЛК','Імітація|var','Вход имитации ПЛК','Имитация|var');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','in','Input',2,128,'Signal|in',0,'Вхід','','Вход','Signal|in');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','sp','Setpoint',2,160,'PID|sp',1,'Завдання','ПІД|sp','Задание','ПИД|sp');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','var','Variable',2,16,'0',2,'Змінна','','Переменная','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','manIn','Manual input (%)',2,160,'PID|manIn',3,'Ручний ввід (%)','ПІД|manIn','Ручной ввод (%)','ПИД|manIn');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','out','Output (%)',2,160,'PID|out',4,'Вихід (%)','ПІД|out','Выход (%)','ПИД|out');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','auto','Mode (automate)',3,160,'PID|auto',5,'Режим (автомат)','ПІД|auto','Режим (автомат)','ПИД|auto');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','casc','Mode (cascad)',3,160,'PID|casc',6,'Режим (каскад)','ПІД|casc','Режим (каскад)','ПИД|casc');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','ed','Dimension',0,32,'',7,'Одиниця виміру','','Единица измерения','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','min','Scale: minimum',2,160,'PID|min',8,'Шкала: мінімум','ПІД|min','Шкала: минимум','ПИД|min');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','max','Scale: maximum',2,160,'PID|max',9,'Шкала: максимум','ПІД|max','Шкала: максимум','ПИД|max');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','scSqr','Scale: square',3,32,'0',10,'Шкала: квадратична','','Шкала: квадратичная','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','aMin','Border down alarm',2,32,'0',11,'Границя нижня ав.','','Граница нижняя ав.','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','aMax','Border up alarm',2,32,'0',12,'Границя верхня аварійна','','Граница верхняя ав.','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','wMin','Border down warning',2,32,'0',13,'Границя нижня попереджув.','','Граница нижняя пред.','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','wMax','Border up warning',2,32,'0',14,'Границя верхня попереджув.','','Граница верхняя пред.','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','HystBnd','Hysteresis of boders violation',2,32,'0',15,'Гістерезис порушень границь','','Гистерезиз наруш. границ','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','speed','Motion speed (%/cycle)',2,32,'0',16,'Швидкість зміни (%/цикл)','','Скорость изменения (%/цикл)','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','prec','Precision (signs)',1,32,'2',17,'Точність (знаків)','','Точность (знаков)','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','H','Border up warning violation',3,17,'0',18,'Порушення верхньої попереджув. границі','','Нарушение верхней предупредительной границы','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','L','Border down warning violation',3,17,'0',19,'Порушення нижньої попереджув. границі','','Нарушение нижней предупредительной границы','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','HH','Border up alarm violation',3,17,'0',20,'Порушення верхньої аварійної границі','','Нарушение верхней аварийной границы','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','LL','Border down alarm violation',3,17,'0',21,'Порушення нижньої аварійної границі','','Нарушение нижней аварийной границы','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','EVAL','Value is eval',3,17,'0',22,'Значення невірогідне','','Значение недостоверно','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','Tf','Filter time (ms)',2,32,'0',23,'Час фільтру (мс)','','Время фильтрации (мс)','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','Kp','Gain',2,160,'PID|Kp',24,'Kп','ПІД|Kp','Kп','ПИД|Kp');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','Ti','Ti (ms)',1,160,'PID|Ti',25,'Tі (мс)','ПІД|Ti','Tи (мс)','ПИД|Ti');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','Kd','Gain differential',2,160,'PID|Kd',26,'Кп диференціалу','ПІД|Kd','Кп производной','ПИД|Kd');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','Td','Td (ms)',1,160,'PID|Td',27,'Tд (мс)','ПІД|Td','Tд (мс)','ПИД|Td');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','Tzd','T differential lag (ms)',1,160,'PID|Tzd',28,'T фільтру диференціалу (мс)','ПІД|Tzd','T задержки дифференциров. (мс)','ПИД|Tzd');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','Zi','Insensitivity (%)',2,160,'PID|Zi',29,'Нечутливість (%)','ПІД|Zi','Нечувствительность (%)','ПИД|Zi');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','Hup','Upper output border (%)',2,160,'PID|Hup',30,'Верхня границя виходу (%)','ПІД|Hup','Верхняя граница выхода (%)','ПИД|Hup');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','Hdwn','Lower output border (%)',2,160,'PID|Hdwn',31,'Нижня границя виходу (%)','ПІД|Hdwn','Нижняя граница выхода (%)','ПИД|Hdwn');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','K1','Coefficient of input 1',2,160,'PID|K1',32,'Коеф. входу 1','ПІД|K1','Коэф. входа 1','ПИД|K1');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','K2','Coefficient of input 2',2,160,'PID|K2',33,'Коеф. входу 2','ПІД|K2','Коэф. входа 2','ПИД|K2');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','K3','Coefficient of input 3',2,160,'PID|K3',34,'Коеф. входу 3','ПІД|K3','Коэф. входа 3','ПИД|K3');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','K4','Coefficient of input 4',2,160,'PID|K4',35,'Коеф. входу 4','ПІД|K4','Коэф. входа 4','ПИД|K4');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','dmsk','Maximum value on eval (Max/Min)',2,64,'0',36,'Макс. парам. при недостовірності (Макс/Мин)','','Макс. парам. при недост. (Мин/Макс)','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','iAdd','Input addon',2,64,'0',37,'Додаток до входу','','Дополнение ко входу','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','iMult','Input multiplication',2,64,'1',38,'Множник входу','','Множитель ко входу','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','plcMin','Minimum module scale',2,64,'1',39,'Мінімум шкали модуля','','Минимум шкалы модуля','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','plcMax','Maximum module scale',2,64,'5',40,'Максимум шкали модуля','','Максимум шкалы модуля','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','plcExcess','Allowed scale exceeding (%)',2,64,'0',41,'Дозволене перевищення шкали (%)','','Допустимое превышение шкалы модуля (%)','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','plcImit','PLC imitation',3,64,'0',42,'Імітація ПЛК','','Имитация ПЛК','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','plcImitIn','PLC imitation input',2,128,'Imitation|var',43,'Вхід імітації ПЛК','Імітація|var','Вход имитации ПЛК','Имитация|var');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','varIn','Variable input',2,32,'0',2,'Введення змінної','','Ввод переменной','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','SHIFR','Code',0,0,'',45,'Шифр','','Шифр','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','this','Object',4,1,'',32,'Об''єкт','','Объект','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','SHIFR','Code',0,0,'',33,'Шифр','','Шифр','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','NAME','Name',0,0,'',34,'Ім''я','','Имя','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','DESCR','Description',0,0,'',35,'Опис','','Описание','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','this','Object',4,1,'',27,'Об''єкт','','Объект','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','NAME','Name',0,0,'',46,'Ім''я','','Имя','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','this','Object',4,1,'',44,'Об''єкт','','Объект','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','SHIFR','Code',0,0,'',28,'Шифр','','Шифр','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','NAME','Name',0,0,'',29,'Ім''я','','Имя','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','DESCR','Description',0,0,'',30,'Опис','','Описание','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','DESCR','Description',0,0,'',47,'Опис','','Описание','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','this','Object',4,1,'',50,'Об''єкт','','Объект','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','SHIFR','Code',0,0,'',51,'Шифр','','Шифр','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','NAME','Name',0,0,'',52,'Ім''я','','Имя','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','DESCR','Description',0,0,'',53,'Опис','','Описание','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','HystBnd','Hysteresis of boders violation',2,32,'1',15,'Гистерезиз порушення границь','','Гистерезиз нарушения границ','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','inProc','Input processing procedure',0,68,'',1,'Вхідна процедура обробки','','Входная процедура обработки','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','subMode','Substitute: mode',1,40,'0
+INSERT INTO tmplib_PrescrTempl_io VALUES('manager','prog','Name of selected program',0,32,'',6,'Имя выбранной программы','','Ім''я обраної програми','');
+INSERT INTO tmplib_PrescrTempl_io VALUES('manager','startTm','Start time, seconds',1,16,'',7,'Время запуска, секунды','','Час запуску, секунди','');
+INSERT INTO tmplib_PrescrTempl_io VALUES('manager','curCom','Current command-step',0,16,'',8,'Текущая комманда-шаг','','Поточна команда-крок','');
+INSERT INTO tmplib_PrescrTempl_io VALUES('manager','work','Work program',4,16,'',9,'Рабочая программа','','Робоча програма','');
+INSERT INTO tmplib_PrescrTempl_io VALUES('manager','comLs','Commands list',4,16,'',10,'Список команд','','Перелік команд','');
+INSERT INTO tmplib_PrescrTempl_io VALUES('manager','clcCnt','Cycles counter',1,0,'',11,'Счётчик циклов','','Лічильник циклів','');
+INSERT INTO tmplib_PrescrTempl_io VALUES('manager','this','The object',4,0,'',12,'Объект','','Об''єкт','');
+CREATE TABLE IF NOT EXISTS 'tmplib_tests_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
+INSERT INTO tmplib_tests_io VALUES('ai_simple','val_cod','Value''s source code',1,128,'',0,'Вихідний код значення','','Исходный код значения','');
+INSERT INTO tmplib_tests_io VALUES('ai_simple','val','Value',2,16,'0',1,'Значення','','Значение','');
+INSERT INTO tmplib_tests_io VALUES('ai_simple','val_tp','Dimension',0,32,'',2,'Одиниця виміру','','Единица измерения','');
+INSERT INTO tmplib_tests_io VALUES('ai_simple','bDwn','Lower value border',2,32,'0',3,'Нижня границя значення','','Нижняя граница значения','');
+INSERT INTO tmplib_tests_io VALUES('ai_simple','bUp','Upper value border',2,32,'100',4,'Верхня границя значення','','Верхняя граница значения','');
+INSERT INTO tmplib_tests_io VALUES('ai_simple','bWDwn','Lower technical border',2,32,'20',5,'Нижня технолог. границя','','Нижняя технологич. граница','');
+INSERT INTO tmplib_tests_io VALUES('ai_simple','bWUp','Upper technical border',2,32,'80',6,'Верхня технолог. границя','','Верхняя технологич. граница','');
+INSERT INTO tmplib_tests_io VALUES('ai_simple','bErrDwn','Lower alarm border',2,32,'10',7,'Нижня аварійна границя','','Нижняя аварийная граница','');
+INSERT INTO tmplib_tests_io VALUES('ai_simple','bErrUp','Upper alarm border',2,32,'90',8,'Верхня аварійна границя','','Верхняя аварийная граница','');
+INSERT INTO tmplib_tests_io VALUES('ai_man','val_cod','Value''s source code',1,129,'',0,'Вихідний код значення','','Исходный код значения','');
+INSERT INTO tmplib_tests_io VALUES('ai_man','val','Value',2,32,'0',1,'Значення','','Значение','');
+INSERT INTO tmplib_tests_io VALUES('ai_man','val_o','Previous value',2,0,'0',2,'Попередне значення','','Предыдущее значение','');
+INSERT INTO tmplib_tests_io VALUES('ai_man','val_tp','Dimension',0,32,'',3,'Одиниця виміру','','Единица измерения','');
+INSERT INTO tmplib_tests_io VALUES('ai_man','bDwn','Lower value border',2,32,'0',4,'Нижня границя значення','','Нижняя граница значения','');
+INSERT INTO tmplib_tests_io VALUES('ai_man','bUp','Upper value border',2,32,'100',5,'Верхня границя значення','','Верхняя граница значения','');
+INSERT INTO tmplib_tests_io VALUES('ai_man','bWDwn','Lower technical border',2,32,'20',6,'Нижня технологічна границя','','Нижняя технологическая граница','');
+INSERT INTO tmplib_tests_io VALUES('ai_man','bWUp','Upper technical border',2,32,'80',7,'Верхня технологічна границя','','Верхняя технологич. граница','');
+INSERT INTO tmplib_tests_io VALUES('ai_man','bErrDwn','Lower alarm border',2,32,'10',8,'Нижня аварійна границя','','Нижняя аварийная граница','');
+INSERT INTO tmplib_tests_io VALUES('ai_man','bErrUp','Upper alarm border',2,32,'90',9,'Верхня аварійна границя','','Верхняя аварийная граница','');
+INSERT INTO tmplib_tests_io VALUES('test','in50','Input50',1,160,'DB Test|108',51,'Вхід50','DB Тест|108','Вход50','DB Тест|108');
+INSERT INTO tmplib_tests_io VALUES('test','in49','Input49',1,160,'DB Test|106',50,'Вхід49','DB Тест|106','Вход49','DB Тест|106');
+INSERT INTO tmplib_tests_io VALUES('test','in48','Input48',1,160,'DB Test|104',49,'Вхід48','DB Тест|104','Вход48','DB Тест|104');
+INSERT INTO tmplib_tests_io VALUES('test','in47','Input47',1,160,'DB Test|102',48,'Вхід47','DB Тест|102','Вход47','DB Тест|102');
+INSERT INTO tmplib_tests_io VALUES('test','in46','Input46',1,160,'DB Test|100',47,'Вхід46','DB Тест|100','Вход46','DB Тест|100');
+INSERT INTO tmplib_tests_io VALUES('test','in45','Input45',1,160,'DB Test|98',46,'Вхід45','DB Тест|98','Вход45','DB Тест|98');
+INSERT INTO tmplib_tests_io VALUES('test','in44','Input44',1,160,'DB Test|96',45,'Вхід44','DB Тест|96','Вход44','DB Тест|96');
+INSERT INTO tmplib_tests_io VALUES('test','in43','Input43',1,160,'DB Test|94',44,'Вхід43','DB Тест|94','Вход43','DB Тест|94');
+INSERT INTO tmplib_tests_io VALUES('test','in42','Input42',1,160,'DB Test|92',43,'Вхід42','DB Тест|92','Вход42','DB Тест|92');
+INSERT INTO tmplib_tests_io VALUES('test','in41','Input41',1,160,'DB Test|90',42,'Вхід41','DB Тест|90','Вход41','DB Тест|90');
+INSERT INTO tmplib_tests_io VALUES('test','in40','Input40',1,160,'DB Test|86',41,'Вхід40','DB Тест|86','Вход40','DB Тест|86');
+INSERT INTO tmplib_tests_io VALUES('test','in39','Input39',1,160,'DB Test|84',40,'Вхід39','DB Тест|84','Вход39','DB Тест|84');
+INSERT INTO tmplib_tests_io VALUES('test','in38','Input38',1,160,'DB Test|82',39,'Вхід38','DB Тест|82','Вход38','DB Тест|82');
+INSERT INTO tmplib_tests_io VALUES('test','in37','Input37',1,160,'DB Test|80',38,'Вхід37','DB Тест|80','Вход37','DB Тест|80');
+INSERT INTO tmplib_tests_io VALUES('test','in36','Input36',1,160,'DB Test|78',37,'Вхід36','DB Тест|78','Вход36','DB Тест|78');
+INSERT INTO tmplib_tests_io VALUES('test','in35','Input35',1,160,'DB Test|76',36,'Вхід35','DB Тест|76','Вход35','DB Тест|76');
+INSERT INTO tmplib_tests_io VALUES('test','in34','Input34',1,160,'DB Test|74',35,'Вхід34','DB Тест|74','Вход34','DB Тест|74');
+INSERT INTO tmplib_tests_io VALUES('test','in33','Input33',1,160,'DB Test|72',34,'Вхід33','DB Тест|72','Вход33','DB Тест|72');
+INSERT INTO tmplib_tests_io VALUES('test','in32','Input32',1,160,'DB Test|70',33,'Вхід32','DB Тест|70','Вход32','DB Тест|70');
+INSERT INTO tmplib_tests_io VALUES('test','in31','Input31',1,160,'DB Test|68',32,'Вхід31','DB Тест|68','Вход31','DB Тест|68');
+INSERT INTO tmplib_tests_io VALUES('test','in30','Input30',1,160,'DB Test|64',31,'Вхід30','DB Тест|64','Вход30','DB Тест|64');
+INSERT INTO tmplib_tests_io VALUES('test','in29','Input29',1,160,'DB Test|62',30,'Вхід29','DB Тест|62','Вход29','DB Тест|62');
+INSERT INTO tmplib_tests_io VALUES('test','in28','Input28',1,160,'DB Test|60',29,'Вхід28','DB Тест|60','Вход28','DB Тест|60');
+INSERT INTO tmplib_tests_io VALUES('test','in27','Input27',1,160,'DB Test|58',28,'Вхід27','DB Тест|58','Вход27','DB Тест|58');
+INSERT INTO tmplib_tests_io VALUES('test','in26','Input26',1,160,'DB Test|56',27,'Вхід26','DB Тест|56','Вход26','DB Тест|56');
+INSERT INTO tmplib_tests_io VALUES('test','in25','Input25',1,160,'DB Test|54',26,'Вхід25','DB Тест|54','Вход25','DB Тест|54');
+INSERT INTO tmplib_tests_io VALUES('test','in24','Input24',1,160,'DB Test|52',25,'Вхід24','DB Тест|52','Вход24','DB Тест|52');
+INSERT INTO tmplib_tests_io VALUES('test','in23','Input23',1,160,'DB Test|50',24,'Вхід23','DB Тест|50','Вход23','DB Тест|50');
+INSERT INTO tmplib_tests_io VALUES('test','in22','Input22',1,160,'DB Test|48',23,'Вхід22','DB Тест|48','Вход22','DB Тест|48');
+INSERT INTO tmplib_tests_io VALUES('test','in21','Input21',1,160,'DB Test|46',22,'Вхід21','DB Тест|46','Вход21','DB Тест|46');
+INSERT INTO tmplib_tests_io VALUES('test','in20','Input20',1,160,'DB Test|44',21,'Вхід20','DB Тест|44','Вход20','DB Тест|44');
+INSERT INTO tmplib_tests_io VALUES('test','in19','Input19',1,160,'DB Test|42',20,'Вхід19','DB Тест|42','Вход19','DB Тест|42');
+INSERT INTO tmplib_tests_io VALUES('test','in18','Input18',1,160,'DB Test|40',19,'Вхід18','DB Тест|40','Вход18','DB Тест|40');
+INSERT INTO tmplib_tests_io VALUES('test','in17','Input17',1,160,'DB Test|38',18,'Вхід17','DB Тест|38','Вход17','DB Тест|38');
+INSERT INTO tmplib_tests_io VALUES('test','in16','Input16',1,160,'DB Test|36',17,'Вхід16','DB Тест|36','Вход16','DB Тест|36');
+INSERT INTO tmplib_tests_io VALUES('test','in15','Input15',1,160,'DB Test|34',16,'Вхід15','DB Тест|34','Вход15','DB Тест|34');
+INSERT INTO tmplib_tests_io VALUES('test','in14','Input14',1,160,'DB Test|32',15,'Вхід14','DB Тест|32','Вход14','DB Тест|32');
+INSERT INTO tmplib_tests_io VALUES('test','in13','Input13',1,160,'DB Test|30',14,'Вхід13','DB Тест|30','Вход13','DB Тест|30');
+INSERT INTO tmplib_tests_io VALUES('test','in12','Input12',1,160,'DB Test|28',13,'Вхід12','DB Тест|28','Вход12','DB Тест|28');
+INSERT INTO tmplib_tests_io VALUES('test','in11','Input11',1,160,'DB Test|26',12,'Вхід11','DB Тест|26','Вход11','DB Тест|26');
+INSERT INTO tmplib_tests_io VALUES('test','in10','Input10',1,160,'DB Test|24',11,'Вхід10','DB Тест|24','Вход10','DB Тест|24');
+INSERT INTO tmplib_tests_io VALUES('test','in9','Input9',1,160,'DB Test|22',10,'Вхід9','DB Тест|22','Вход9','DB Тест|22');
+INSERT INTO tmplib_tests_io VALUES('test','in8','Input8',1,160,'DB Test|20',9,'Вхід8','DB Тест|20','Вход8','DB Тест|20');
+INSERT INTO tmplib_tests_io VALUES('test','in7','Input7',1,160,'DB Test|18',8,'Вхід7','DB Тест|18','Вход7','DB Тест|18');
+INSERT INTO tmplib_tests_io VALUES('test','in6','Input6',1,160,'DB Test|16',7,'Вхід6','DB Тест|16','Вход6','DB Тест|16');
+INSERT INTO tmplib_tests_io VALUES('test','in5','Input5',1,160,'DB Test|14',6,'Вхід5','DB Тест|14','Вход5','DB Тест|14');
+INSERT INTO tmplib_tests_io VALUES('test','in4','Input4',1,160,'DB Test|12',5,'Вхід4','DB Тест|12','Вход4','DB Тест|12');
+INSERT INTO tmplib_tests_io VALUES('test','in3','Input3',1,160,'DB Test|10',4,'Вхід3','DB Тест|10','Вход3','DB Тест|10');
+INSERT INTO tmplib_tests_io VALUES('test','in2','Input2',1,160,'DB Test|8|r8',3,'Вхід2','DB Тест|8','Вход2','DB Тест|8');
+INSERT INTO tmplib_tests_io VALUES('test','in1','Input1',1,160,'DB Test|6|i4',2,'Вхід1','DB Тест|6','Вход1','DB Тест|6');
+INSERT INTO tmplib_tests_io VALUES('test','in','Input',1,160,'DB Test|4',1,'Вхід','DB Тест|4','Вход','DB Тест|4');
+INSERT INTO tmplib_tests_io VALUES('test','di','DI',3,160,'DB Test|2.1',0,'','','','');
+INSERT INTO tmplib_tests_io VALUES('gasPoint','F','Flow (m3/h)',2,144,'F|var',0,'','','','');
+INSERT INTO tmplib_tests_io VALUES('gasPoint','Q','Volume (m3)',2,16,'0',1,'','','','');
+INSERT INTO tmplib_tests_io VALUES('gasPoint','P','Pressure (kgH/sm2)',2,144,'P|var',2,'','','','');
+INSERT INTO tmplib_tests_io VALUES('gasPoint','T','Temperature (°C)',2,144,'T|var',3,'','','','');
+INSERT INTO tmplib_tests_io VALUES('gasPoint','dP','Differential pressure (kgH/m2)',2,16,'0',4,'','','','');
+INSERT INTO tmplib_tests_io VALUES('gasPoint','DS','Density (kg/m3)',2,16,'0',5,'','','','');
+CREATE TABLE IF NOT EXISTS 'tmplib_base_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
+INSERT INTO tmplib_base_io VALUES('digAlarm','in','Input',3,144,'Input|in',2,'Вхід','','Вход','');
+INSERT INTO tmplib_base_io VALUES('simleBoard','in','Input',2,128,'Parameter|var',0,'Вхід','','Вход','');
+INSERT INTO tmplib_base_io VALUES('simleBoard','var','Variable',2,32,'0',1,'Змінна','','Переменная','');
+INSERT INTO tmplib_base_io VALUES('simleBoard','ed','Dimension',0,32,'',2,'Одиниця виміру','','Единица измерения','');
+INSERT INTO tmplib_base_io VALUES('simleBoard','min','Lower work border',2,32,'0',3,'Нижня робоча границя','','Нижн. раб. граница','');
+INSERT INTO tmplib_base_io VALUES('simleBoard','max','Upper work border',2,32,'100',4,'Верхня робоча границя','','Верхн. раб. граница','');
+INSERT INTO tmplib_base_io VALUES('simleBoard','aMin','Lower alarm border',2,32,'0',5,'Нижня аварійна границя','','Нижняя аварийная граница','');
+INSERT INTO tmplib_base_io VALUES('simleBoard','aMax','Upper alarm border',2,32,'0',6,'Верхня аварійна границя','','Верхняя аварийная граница','');
+INSERT INTO tmplib_base_io VALUES('simleBoard','wMin','Lower warning border',2,32,'0',7,'Нижня попереджувальна границя','','Нижн. предупредительная граница','');
+INSERT INTO tmplib_base_io VALUES('simleBoard','wMax','Upper warning border',2,32,'0',8,'Верхня попереджувальна границя','','Верхн. предупредительная граница','');
+INSERT INTO tmplib_base_io VALUES('simleBoard','iAdd','Addon to input',2,64,'0',9,'Додаток до входу','','Добавка ко входу','');
+INSERT INTO tmplib_base_io VALUES('simleBoard','iMult','Input multiplication',2,64,'1',10,'Множник до входу','','Множитель входа','');
+INSERT INTO tmplib_base_io VALUES('digitBlock','cmdOpen','Command "Open"',3,161,'Crane|com',0,'Команда "Відкрити"','Кран|com','Команда "Открыть"','Кран|com');
+INSERT INTO tmplib_base_io VALUES('digitBlock','cmdClose','Command "Close"',3,161,'Crane|close',1,'Команда "Закрити"','Кран|close','Команда "Закрыть"','Кран|close');
+INSERT INTO tmplib_base_io VALUES('digitBlock','cmdStop','Command "Stop"',3,161,'Crane|stop',2,'Команда "Стоп"','Кран|stop','Команда "Стоп"','Кран|stop');
+INSERT INTO tmplib_base_io VALUES('digitBlock','stOpen','State "Opened"',3,144,'Crane|st_open',3,'Стан "Відкрито"','Кран|st_open','Сост. "Открыто"','Кран|st_open');
+INSERT INTO tmplib_base_io VALUES('digitBlock','stClose','State "Closed"',3,144,'Crane|st_close',4,'Стан "Закрито"','Кран|st_close','Сост. "Закрыто"','Кран|st_close');
+INSERT INTO tmplib_base_io VALUES('digitBlock','tCmd','Time for hold the command, seconds',1,32,'5',5,'Час утримання команди, секунди','','Время удерж. команды, секунды','');
+INSERT INTO tmplib_base_io VALUES('digitBlock','last_cmd','Last command',1,1,'0',6,'Остання команда','','Последняя команда','');
+INSERT INTO tmplib_base_io VALUES('digitBlock','w_tm','Process command counter',2,1,'0',7,'Лічильник опрацювання команди','','Счётчик отраб. команды','');
+INSERT INTO tmplib_base_io VALUES('gasPoint','DS','Density (kg/m3)',2,16,'0',5,'Щильність (кг/м3)','','Плотность (кг/м3)','');
+INSERT INTO tmplib_base_io VALUES('gasPoint','dP','Differential pressure (kgH/m2)',2,16,'0',4,'Перепад (кГс/м2)','','Перепад (кГс/м2)','');
+INSERT INTO tmplib_base_io VALUES('gasPoint','T','Temperature (°C)',2,144,'T|var',3,'Температура (°С)','','Температура (°С)','');
+INSERT INTO tmplib_base_io VALUES('gasPoint','P','Pressure (kgH/sm2)',2,144,'P|var',2,'Тиск (кГс/см2)','','Давление (кГс/см2)','');
+INSERT INTO tmplib_base_io VALUES('gasPoint','Q','Volume (m3)',2,16,'0',1,'Об''єм (м3)','','Объём (м3)','');
+INSERT INTO tmplib_base_io VALUES('gasPoint','F','Flow (m3/h)',2,144,'F|var',0,'Витрати (м3/ч)','','Расход (м3/ч)','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','inout','Input/Output',2,129,'Parameter|var',0,'Вхід/Вихід','','Вход/Выход','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','var','Variable',2,16,'0',1,'Змінна','','Переменная','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','ed','Dimension',0,32,'',3,'Одиниця виміру','','Единица измерения','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','min','Scale: minimum',2,32,'0',4,'Шкала: мінімум','','Шкала: минимум','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','max','Scale: maximum',2,32,'100',5,'Шкала: максимум','','Шкала: максимум','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','scSqr','Scale: square',3,0,'0',6,'Шкала: квадратична','','Шкала: квадратичная','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','aMin','Border down alarm',2,32,'0',8,'Границя нижня аварійна','','Граница нижняя аварийная','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','aMax','Border up alarm',2,32,'0',9,'Границя верхня аварійна','','Граница верхняя аварийная','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','wMin','Border down warning',2,32,'0',10,'Границя нижня попереджув.','','Граница нижняя предупр.','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','wMax','Border up warning',2,32,'0',11,'Границя верхня попереджув.','','Граница верхняя предупр.','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','speed','Motion speed (%/cycle)',2,32,'0',13,'Швидкість зміни (%/цикл)','','Скорость изменения (%/цикл)','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','Tf','Filter time, seconds',2,32,'0',16,'Час фільтру, секунд','','Время фильтрации, секунд','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','iAdd','Input addon',2,64,'0',17,'Додаток до входу','','Дополнение ко входу','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','iMult','Input multiplication',2,64,'1',18,'Множник входу','','Множитель входуа','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','plcMin','Minimum module scale',2,64,'0',19,'Мінімум шкали модуля','','Минимум шкалы модуля','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','plcMax','Maximum module scale',2,64,'0',20,'Максимум шкали модуля','','Максимум шкалы модуля','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','plcExcess','Allowed scale exceeding, %',2,64,'0',21,'Дозволене перевищення шкали, %','','Допустимое превышение шкалы модуля, %','');
+INSERT INTO tmplib_base_io VALUES('anUnif','in','Input',2,128,'Input|var',0,'Вхід','Вхід|var','Вход','Вход|var');
+INSERT INTO tmplib_base_io VALUES('anUnif','var','Variable',2,16,'0',2,'Змінна','','Переменная','');
+INSERT INTO tmplib_base_io VALUES('anUnif','ed','Dimension',0,32,'',3,'Одиниця виміру','','Единица измерения','');
+INSERT INTO tmplib_base_io VALUES('anUnif','min','Scale: minimum',2,32,'0',4,'Шкала: мінімум','','Шкала: минимум','');
+INSERT INTO tmplib_base_io VALUES('anUnif','max','Scale: maximum',2,32,'100',5,'Шкала: максимум','','Шкала: максимум','');
+INSERT INTO tmplib_base_io VALUES('anUnif','scSqr','Scale: square',3,32,'0',6,'Шкала: квадратична','','Шкала: квадратичная','');
+INSERT INTO tmplib_base_io VALUES('anUnif','aMin','Border down alarm',2,32,'0',11,'Границя нижня аварійна','','Граница нижняя аварийная','');
+INSERT INTO tmplib_base_io VALUES('anUnif','aMax','Border up alarm',2,32,'0',12,'Границя верхня аварійна','','Граница верхняя аварийная','');
+INSERT INTO tmplib_base_io VALUES('anUnif','wMin','Border down warning',2,32,'0',13,'Границя нижня попереджув.','','Граница нижняя предупр.','');
+INSERT INTO tmplib_base_io VALUES('anUnif','wMax','Border up warning',2,32,'0',14,'Границя верхня попереджув.','','Граница верхняя предупр.','');
+INSERT INTO tmplib_base_io VALUES('anUnif','speed','Motion speed (%/cycle)',2,32,'0',16,'Швидкість зміни (%/цикл)','','Скорость изменения (%/цикл)','');
+INSERT INTO tmplib_base_io VALUES('anUnif','prec','Precision (signs)',1,32,'2',17,'Точність (знаків)','','Точность (знаков)','');
+INSERT INTO tmplib_base_io VALUES('anUnif','Tf','Filter time, seconds',2,32,'0',19,'Час фільтру, секунд','','Время фильтрации, секунд','');
+INSERT INTO tmplib_base_io VALUES('anUnif','iAdd','Input addition',2,64,'0',20,'Додаток до входу','','Дополнение ко входу','');
+INSERT INTO tmplib_base_io VALUES('anUnif','iMult','Input multiplication',2,64,'1',21,'Множник входу','','Множитель входа','');
+INSERT INTO tmplib_base_io VALUES('anUnif','plcMin','Minimum module scale',2,64,'0',22,'Мінімум шкали модуля','','Минимум шкалы модуля','');
+INSERT INTO tmplib_base_io VALUES('anUnif','plcMax','Maximum module scale',2,64,'0',23,'Максимум шкали модуля','','Максимум шкалы модуля','');
+INSERT INTO tmplib_base_io VALUES('anUnif','plcExcess','Allowed scale exceeding, %',2,64,'0',24,'Дозволене перевищення шкали, %','','Допустимое превышение шкалы, %','');
+INSERT INTO tmplib_base_io VALUES('anUnif','plcImit','PLC imitation',3,64,'0',25,'Імітація ПЛК','','Имитация ПЛК','');
+INSERT INTO tmplib_base_io VALUES('anUnif','plcImitIn','PLC imitation input',2,128,'Imitation|var',26,'Вхід імітації ПЛК','Імітація|var','Вход имитации ПЛК','Имитация|var');
+INSERT INTO tmplib_base_io VALUES('digitBlockUnif','com','Command "Open"',3,161,'Crane|com',0,'Команда "Відкрити"','Кран|com','Команда "Открыть"','Кран|com');
+INSERT INTO tmplib_base_io VALUES('digitBlockUnif','close','Command "Close"',3,161,'Crane|close',1,'Команда "Закрити"','Кран|close','Команда "Закрыть"','Кран|close');
+INSERT INTO tmplib_base_io VALUES('digitBlockUnif','stop','Command "Stop"',3,161,'Crane|stop',2,'Команда "Зупинити"','Кран|stop','Команда "Стоп"','Кран|stop');
+INSERT INTO tmplib_base_io VALUES('digitBlockUnif','st_open','State "Opened"',3,144,'Crane|st_open',3,'Стан "Відкрито"','Кран|st_open','Сост. "Открыто"','Кран|st_open');
+INSERT INTO tmplib_base_io VALUES('digitBlockUnif','st_close','State "Closed"',3,144,'Crane|st_close',4,'Стан "Закрито"','Кран|st_close','Сост. "Закрыто"','Кран|st_close');
+INSERT INTO tmplib_base_io VALUES('digitBlockUnif','tCmd','Time to hold the command, seconds',1,64,'5',5,'Час утримання команди, секунди','','Время удерж. команды, секунды','');
+INSERT INTO tmplib_base_io VALUES('digitBlockUnif','last_cmd','Last command',1,1,'0',6,'Остання команда','','Последняя команда','');
+INSERT INTO tmplib_base_io VALUES('digitBlockUnif','w_tm','Process command counter',2,1,'0',7,'Лічильник обробки команди','','Счётчик отраб. команды','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','in','Input',2,128,'Signal|in',0,'Вхід','','Вход','Signal|in');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','sp','Setpoint',2,160,'PID|sp',1,'Завдання','ПІД|sp','Задание','ПИД|sp');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','var','Variable',2,16,'0',2,'Змінна','','Переменная','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','manIn','Manual input (%)',2,160,'PID|manIn',3,'Ручний ввід (%)','ПІД|manIn','Ручной ввод (%)','ПИД|manIn');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','out','Output (%)',2,144,'PID|out',4,'Вихід (%)','ПІД|out','Выход (%)','ПИД|out');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','impQup','Impulse output up',3,144,'PID|impQupTm',5,'Імп. вихід у гору','ПІД|impQupTm','Имп. выход вверх','ПИД|impQupTm');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','impQdwn','Impulse output down',3,144,'PID|impQdwnTm',6,'Імп. вихід до низу','ПІД|impQdwnTm','Имп. выход вниз','ПИД|impQdwnTm');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','auto','Mode (automate)',3,160,'PID|auto',7,'Режим (автомат)','ПІД|auto','Режим (автомат)','ПИД|auto');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','analog','Analog',3,144,'PID|analog',8,'Аналоговий','ПІД|analog','Аналоговый','ПИД|analog');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','ed','Dimension',0,32,'',9,'Одиниця виміру','','Единица измерения','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','min','Scale: minimum',2,160,'PID|min',10,'Шкала: мінімум','ПІД|min','Шкала: минимум','ПИД|min');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','max','Scale: maximum',2,160,'PID|max',11,'Шкала: максимум','ПІД|max','Шкала: максимум','ПИД|max');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','scSqr','Scale: square',3,32,'0',12,'Шкала: квадратична','','Шкала: квадратичная','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','aMin','Border down alarm',2,32,'0',13,'Границя нижня ав.','','Граница нижняя ав.','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','aMax','Border up alarm',2,32,'0',14,'Границя верхня аварійна','','Граница верхняя ав.','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','wMin','Border down warning',2,32,'0',15,'Границя нижня попереджув.','','Граница нижняя пред.','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','wMax','Border up warning',2,32,'0',16,'Границя верхня попереджув.','','Граница верхняя пред.','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','HystBnd','Hysteresis of boders violation',2,32,'0',17,'Гістерезис порушень границь','','Гистерезиз наруш. границ','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','speed','Motion speed (%/cycle)',2,32,'0',18,'Швидкість зміни (%/цикл)','','Скорость изменения (%/цикл)','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','prec','Precision (signs)',1,32,'2',19,'Точність (знаків)','','Точность (знаков)','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','H','Border up warning violation',3,17,'0',20,'Порушення верхньої попереджув. границі','','Нарушение верхней предупредительной границы','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','L','Border down warning violation',3,17,'0',21,'Порушення нижньої попереджув. границі','','Нарушение нижней предупредительной границы','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','HH','Border up alarm violation',3,17,'0',22,'Порушення верхньої аварійної границі','','Нарушение верхней аварийной границы','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','LL','Border down alarm violation',3,17,'0',23,'Порушення нижньої аварійної границі','','Нарушение нижней аварийной границы','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','EVAL','Value is eval',3,17,'0',24,'Значення невірогідне','','Значение недостоверно','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','Tf','Filter time (ms)',2,32,'0',25,'Час фільтру (мс)','','Время фильтрации (мс)','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','Kp','Gain',2,160,'PID|Kp',26,'Kп','ПІД|Kp','Kп','ПИД|Kp');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','Ki','Gain integration',2,160,'PID|Ki',27,'Кп інтегралу','ПІД|Ki','Кп интеграла','ПИД|Ki');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','Ti','Ti (ms)',1,160,'PID|Ti',28,'Tі (мс)','ПІД|Ti','Tи (мс)','ПИД|Ti');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','Kd','Gain differential',2,160,'PID|Kd',29,'Кп диференціалу','ПІД|Kd','Кп производной','ПИД|Kd');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','Td','Td (ms)',1,160,'PID|Td',30,'Tд (мс)','ПІД|Td','Tд (мс)','ПИД|Td');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','Tzd','T differential lag (ms)',1,160,'PID|Tzd',31,'T фільтру диференціалу (мс)','ПІД|Tzd','T задержки дифференциров. (мс)','ПИД|Tzd');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','TImpPer','T impulses period (ms)',1,160,'PID|TImpPer',32,'T період імпульсів (мс)','ПІД|TImpPer','T период импульса (мс)','ПИД|TImpPer');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','TImpMin','T minimal impulse (ms)',1,160,'PID|TImpMin',33,'Мінімальна довжина імпульсу (мс)','ПІД|TImpMin','T минимальная длина импульса (мс)','ПИД|TImpMin');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','KImpRfact','Impulse rate factor',2,160,'PID|KImpRfact',34,'Рейтинг фактор імпульсів','ПІД|KImpRfact','Рейтинг фактор импульса','ПИД|KImpRfact');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','Zi','Insensitivity (%)',2,160,'PID|Zi',35,'Нечутливість (%)','ПІД|Zi','Нечувствительность (%)','ПИД|Zi');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','Hup','Upper output border (%)',2,160,'PID|Hup',36,'Верхня границя виходу (%)','ПІД|Hup','Верхняя граница выхода (%)','ПИД|Hup');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','Hdwn','Lower output border (%)',2,160,'PID|Hdwn',37,'Нижня границя виходу (%)','ПІД|Hdwn','Нижняя граница выхода (%)','ПИД|Hdwn');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','K1','Coefficient of input 1',2,160,'PID|K1',38,'Коеф. входу 1','ПІД|K1','Коэф. входа 1','ПИД|K1');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','K2','Coefficient of input 2',2,160,'PID|K2',39,'Коеф. входу 2','ПІД|K2','Коэф. входа 2','ПИД|K2');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','K3','Coefficient of input 3',2,160,'PID|K3',40,'Коеф. входу 3','ПІД|K3','Коэф. входа 3','ПИД|K3');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','K4','Coefficient of input 4',2,160,'PID|K4',41,'Коеф. входу 4','ПІД|K4','Коэф. входа 4','ПИД|K4');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','dmsk','Maximum value on eval (Max/Min)',2,64,'0',42,'Макс. парам. при недостовірності (Макс/Мин)','','Макс. парам. при недост. (Мин/Макс)','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','iAdd','Input addon',2,64,'0',43,'Додаток до входу','','Дополнение ко входу','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','iMult','Input multiplication',2,64,'1',44,'Множник входу','','Множитель ко входу','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','plcMin','Minimum module scale',2,64,'1',45,'Мінімум шкали модуля','','Минимум шкалы модуля','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','plcMax','Maximum module scale',2,64,'5',46,'Максимум шкали модуля','','Максимум шкалы модуля','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','plcExcess','Allowed scale exceeding (%)',2,64,'0',47,'Дозволене перевищення шкали (%)','','Допустимое превышение шкалы модуля (%)','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','plcImit','PLC imitation',3,64,'0',48,'Імітація ПЛК','','Имитация ПЛК','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','plcImitIn','PLC imitation input',2,128,'Imitation|var',49,'Вхід імітації ПЛК','Імітація|var','Вход имитации ПЛК','Имитация|var');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','in','Input',2,128,'Input|var',0,'Вхід','Вхід|var','Вход','Вход|var');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','var','Variable',2,16,'0',2,'Змінна','','Переменная','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','H','Border up warning violation',3,17,'',3,'Порушення верхньої попереджув. границі','','Нарушение верхней предупредительной границы','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','L','Border down warning violation',3,17,'',4,'Порушення нижньої попереджув. границі','','Нарушение нижней предупредительной границы','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','HH','Border up alarm violation',3,17,'',5,'Порушення верхньої аварійної границі','','Нарушение верхней аварийной границы','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','LL','Border down alarm violation',3,17,'',6,'Порушення нижньої аварійної границі','','Нарушение нижней аварийной границы','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','EVAL','Error value',3,17,'',7,'Помилка значення','','Ошибка значения','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','ed','Dimension',0,32,'',8,'Одиниця виміру','','Единица измерения','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','min','Scale: minimum',2,32,'0',9,'Шкала: мінімум','','Шкала: минимум','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','max','Scale: maximum',2,32,'100',10,'Шкала: максимум','','Шкала: максимум','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','scSqr','Scale: square',3,32,'0',11,'Шкала: квадратична','','Шкала:к вадратичная','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','aMin','Border down alarm',2,32,'0',16,'Границя нижня аварійна','','Граница нижняя аварийная','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','aMax','Border up alarm',2,32,'0',17,'Границя верхня аварійна','','Граница верхняя аварийная','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','wMin','Border down warning',2,32,'0',18,'Границя нижня попереджув.','','Граница нижняя предупр.','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','wMax','Border up warning',2,32,'0',19,'Границя верхня попереджув.','','Граница верхняя предупр.','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','HystBnd','Hysteresis of boders violation',2,32,'0',20,'Гистерезис порушення границь','','Гистерезиз нарушения границ','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','speed','Motion speed (%/cycle)',2,32,'0',21,'Швидкість зміни (%/цикл)','','Скорость изменения (%/цикл)','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','prec','Precision (signs)',1,32,'2',22,'Точність (знаків)','','Точность (знаков)','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','Tf','Filter time, seconds',2,32,'0',24,'Час фільтру, секунд','','Время фильтрации, секунд','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','iAdd','Input addon',2,64,'0',25,'Додаток до входу','','Дополнение ко входу','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','iMult','Input multiplication',2,64,'1',26,'Множник входу','','Множитель входа','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','plcMin','Minimum module scale',2,64,'1',27,'Мінімум шкали модуля','','Минимум шкалы модуля','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','plcMax','Maximum module scale',2,64,'5',28,'Максимум шкали модуля','','Максимум шкалы модуля','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','plcExcess','Allowed scale exceeding, %',2,64,'0',29,'Дозволене перевищення шкали, %','','Допустимое превышение шкалы, %','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','plcImit','PLC imitation',3,64,'0',30,'Імітація ПЛК','','Имитация ПЛК','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','plcImitIn','PLC imitation input',2,128,'Imitation|var',31,'Вхід імітації ПЛК','Імітація|var','Вход имитации ПЛК','Имитация|var');
+INSERT INTO tmplib_base_io VALUES('pidUnif','in','Input',2,128,'Signal|in',0,'Вхід','','Вход','Signal|in');
+INSERT INTO tmplib_base_io VALUES('pidUnif','sp','Setpoint',2,160,'PID|sp',1,'Завдання','ПІД|sp','Задание','ПИД|sp');
+INSERT INTO tmplib_base_io VALUES('pidUnif','var','Variable',2,16,'0',2,'Змінна','','Переменная','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','manIn','Manual input (%)',2,160,'PID|manIn',3,'Ручний ввід (%)','ПІД|manIn','Ручной ввод (%)','ПИД|manIn');
+INSERT INTO tmplib_base_io VALUES('pidUnif','out','Output (%)',2,160,'PID|out',4,'Вихід (%)','ПІД|out','Выход (%)','ПИД|out');
+INSERT INTO tmplib_base_io VALUES('pidUnif','auto','Mode (automate)',3,160,'PID|auto',5,'Режим (автомат)','ПІД|auto','Режим (автомат)','ПИД|auto');
+INSERT INTO tmplib_base_io VALUES('pidUnif','casc','Mode (cascad)',3,160,'PID|casc',6,'Режим (каскад)','ПІД|casc','Режим (каскад)','ПИД|casc');
+INSERT INTO tmplib_base_io VALUES('pidUnif','ed','Dimension',0,32,'',7,'Одиниця виміру','','Единица измерения','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','min','Scale: minimum',2,160,'PID|min',8,'Шкала: мінімум','ПІД|min','Шкала: минимум','ПИД|min');
+INSERT INTO tmplib_base_io VALUES('pidUnif','max','Scale: maximum',2,160,'PID|max',9,'Шкала: максимум','ПІД|max','Шкала: максимум','ПИД|max');
+INSERT INTO tmplib_base_io VALUES('pidUnif','scSqr','Scale: square',3,32,'0',10,'Шкала: квадратична','','Шкала: квадратичная','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','aMin','Border down alarm',2,32,'0',11,'Границя нижня ав.','','Граница нижняя ав.','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','aMax','Border up alarm',2,32,'0',12,'Границя верхня аварійна','','Граница верхняя ав.','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','wMin','Border down warning',2,32,'0',13,'Границя нижня попереджув.','','Граница нижняя пред.','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','wMax','Border up warning',2,32,'0',14,'Границя верхня попереджув.','','Граница верхняя пред.','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','HystBnd','Hysteresis of boders violation',2,32,'0',15,'Гістерезис порушень границь','','Гистерезиз наруш. границ','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','speed','Motion speed (%/cycle)',2,32,'0',16,'Швидкість зміни (%/цикл)','','Скорость изменения (%/цикл)','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','prec','Precision (signs)',1,32,'2',17,'Точність (знаків)','','Точность (знаков)','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','H','Border up warning violation',3,17,'0',18,'Порушення верхньої попереджув. границі','','Нарушение верхней предупредительной границы','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','L','Border down warning violation',3,17,'0',19,'Порушення нижньої попереджув. границі','','Нарушение нижней предупредительной границы','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','HH','Border up alarm violation',3,17,'0',20,'Порушення верхньої аварійної границі','','Нарушение верхней аварийной границы','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','LL','Border down alarm violation',3,17,'0',21,'Порушення нижньої аварійної границі','','Нарушение нижней аварийной границы','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','EVAL','Value is eval',3,17,'0',22,'Значення невірогідне','','Значение недостоверно','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','Tf','Filter time (ms)',2,32,'0',23,'Час фільтру (мс)','','Время фильтрации (мс)','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','Kp','Gain',2,160,'PID|Kp',24,'Kп','ПІД|Kp','Kп','ПИД|Kp');
+INSERT INTO tmplib_base_io VALUES('pidUnif','Ti','Ti (ms)',1,160,'PID|Ti',25,'Tі (мс)','ПІД|Ti','Tи (мс)','ПИД|Ti');
+INSERT INTO tmplib_base_io VALUES('pidUnif','Kd','Gain differential',2,160,'PID|Kd',26,'Кп диференціалу','ПІД|Kd','Кп производной','ПИД|Kd');
+INSERT INTO tmplib_base_io VALUES('pidUnif','Td','Td (ms)',1,160,'PID|Td',27,'Tд (мс)','ПІД|Td','Tд (мс)','ПИД|Td');
+INSERT INTO tmplib_base_io VALUES('pidUnif','Tzd','T differential lag (ms)',1,160,'PID|Tzd',28,'T фільтру диференціалу (мс)','ПІД|Tzd','T задержки дифференциров. (мс)','ПИД|Tzd');
+INSERT INTO tmplib_base_io VALUES('pidUnif','Zi','Insensitivity (%)',2,160,'PID|Zi',29,'Нечутливість (%)','ПІД|Zi','Нечувствительность (%)','ПИД|Zi');
+INSERT INTO tmplib_base_io VALUES('pidUnif','Hup','Upper output border (%)',2,160,'PID|Hup',30,'Верхня границя виходу (%)','ПІД|Hup','Верхняя граница выхода (%)','ПИД|Hup');
+INSERT INTO tmplib_base_io VALUES('pidUnif','Hdwn','Lower output border (%)',2,160,'PID|Hdwn',31,'Нижня границя виходу (%)','ПІД|Hdwn','Нижняя граница выхода (%)','ПИД|Hdwn');
+INSERT INTO tmplib_base_io VALUES('pidUnif','K1','Coefficient of input 1',2,160,'PID|K1',32,'Коеф. входу 1','ПІД|K1','Коэф. входа 1','ПИД|K1');
+INSERT INTO tmplib_base_io VALUES('pidUnif','K2','Coefficient of input 2',2,160,'PID|K2',33,'Коеф. входу 2','ПІД|K2','Коэф. входа 2','ПИД|K2');
+INSERT INTO tmplib_base_io VALUES('pidUnif','K3','Coefficient of input 3',2,160,'PID|K3',34,'Коеф. входу 3','ПІД|K3','Коэф. входа 3','ПИД|K3');
+INSERT INTO tmplib_base_io VALUES('pidUnif','K4','Coefficient of input 4',2,160,'PID|K4',35,'Коеф. входу 4','ПІД|K4','Коэф. входа 4','ПИД|K4');
+INSERT INTO tmplib_base_io VALUES('pidUnif','dmsk','Maximum value on eval (Max/Min)',2,64,'0',36,'Макс. парам. при недостовірності (Макс/Мин)','','Макс. парам. при недост. (Мин/Макс)','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','iAdd','Input addon',2,64,'0',37,'Додаток до входу','','Дополнение ко входу','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','iMult','Input multiplication',2,64,'1',38,'Множник входу','','Множитель ко входу','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','plcMin','Minimum module scale',2,64,'1',39,'Мінімум шкали модуля','','Минимум шкалы модуля','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','plcMax','Maximum module scale',2,64,'5',40,'Максимум шкали модуля','','Максимум шкалы модуля','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','plcExcess','Allowed scale exceeding (%)',2,64,'0',41,'Дозволене перевищення шкали (%)','','Допустимое превышение шкалы модуля (%)','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','plcImit','PLC imitation',3,64,'0',42,'Імітація ПЛК','','Имитация ПЛК','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','plcImitIn','PLC imitation input',2,128,'Imitation|var',43,'Вхід імітації ПЛК','Імітація|var','Вход имитации ПЛК','Имитация|var');
+INSERT INTO tmplib_base_io VALUES('manInUnif','varIn','Variable input',2,32,'0',2,'Введення змінної','','Ввод переменной','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','SHIFR','Code',0,0,'',45,'Шифр','','Шифр','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','this','Object',4,1,'',32,'Об''єкт','','Объект','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','SHIFR','Code',0,0,'',33,'Шифр','','Шифр','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','NAME','Name',0,0,'',34,'Ім''я','','Имя','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','DESCR','Description',0,0,'',35,'Опис','','Описание','');
+INSERT INTO tmplib_base_io VALUES('anUnif','this','Object',4,1,'',27,'Об''єкт','','Объект','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','NAME','Name',0,0,'',46,'Ім''я','','Имя','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','this','Object',4,1,'',44,'Об''єкт','','Объект','');
+INSERT INTO tmplib_base_io VALUES('anUnif','SHIFR','Code',0,0,'',28,'Шифр','','Шифр','');
+INSERT INTO tmplib_base_io VALUES('anUnif','NAME','Name',0,0,'',29,'Ім''я','','Имя','');
+INSERT INTO tmplib_base_io VALUES('anUnif','DESCR','Description',0,0,'',30,'Опис','','Описание','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','DESCR','Description',0,0,'',47,'Опис','','Описание','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','this','Object',4,1,'',50,'Об''єкт','','Объект','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','SHIFR','Code',0,0,'',51,'Шифр','','Шифр','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','NAME','Name',0,0,'',52,'Ім''я','','Имя','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','DESCR','Description',0,0,'',53,'Опис','','Описание','');
+INSERT INTO tmplib_base_io VALUES('anUnif','HystBnd','Hysteresis of boders violation',2,32,'1',15,'Гистерезиз порушення границь','','Гистерезиз нарушения границ','');
+INSERT INTO tmplib_base_io VALUES('anUnif','inProc','Input processing procedure',0,68,'',1,'Вхідна процедура обробки','','Входная процедура обработки','');
+INSERT INTO tmplib_base_io VALUES('anUnif','subMode','Substitute: mode',1,40,'0
 0;1;2
 no;last;substitute',7,'Заміна: режим','0
 0;1;2
 немає;останнє;підстановка','Замена: режим','0
 0;1;2
 нет;последнее;подстановка');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','subVar','Substitute: variable',2,32,'0',8,'Заміна: змінна','','Замена: переменная','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','alSup','Violations',1,40,'0
+INSERT INTO tmplib_base_io VALUES('anUnif','subVar','Substitute: variable',2,32,'0',8,'Заміна: змінна','','Замена: переменная','');
+INSERT INTO tmplib_base_io VALUES('anUnif','alSup','Violations',1,40,'0
 0;1;2
 init NORMA;suppress;save on change',9,'Порушення','0
 0;1;2
 ініціювати НОРМА;придушувати;зберігати при зміні','Нарушения','0
 0;1;2
 Инициировать НОРМА;подавлять;сохранять при смене');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','inProc','Input processing procedure',0,68,'',1,'Вхідна процедура обробки','','Входная процедура обработки','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','subMode','Substitute: mode',1,40,'0
+INSERT INTO tmplib_base_io VALUES('anUnifSt','inProc','Input processing procedure',0,68,'',1,'Вхідна процедура обробки','','Входная процедура обработки','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','subMode','Substitute: mode',1,40,'0
 0;1;2
 no;last;substitute',7,'Заміна: режим','0
 0;1;2
 немає;останнє;підстановка','Замена: режим','0
 0;1;2
 нет;последнее;подстановка');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','subVar','Substitute: variable',2,32,'0',13,'Заміна:змінна','','Замена:переменная','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','alSup','Violations',1,40,'0
+INSERT INTO tmplib_base_io VALUES('anUnifSt','subVar','Substitute: variable',2,32,'0',13,'Заміна:змінна','','Замена:переменная','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','alSup','Violations',1,40,'0
 0;1;2
 init NORMA;suppress;save on change',9,'Порушення','0
 0;1;2
 ініціювати НОРМА;придушувати;зберігати при зміні','Нарушения','0
 0;1;2
 Инициировать НОРМА;подавлять;сохранять при смене');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','alSup','Violations suppress',3,32,'0',7,'Придушення порушень','','Подавление нарушений','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','HystBnd','Hysteresis of boders violation',2,32,'1',12,'Гістерезиз поруш. границь','','Гистерезиз наруш. границ','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','prec','Precision (signs)',1,32,'2',14,'Точність (знаків)','','Точность (знаков)','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','this','Object',4,1,'',22,'Об''єкт','','Объект','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','SHIFR','Code',0,0,'',23,'Шифр','','Шифр','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','NAME','Name',0,0,'',24,'Ім''я','','Имя','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','DESCR','Description',0,0,'',25,'Опис','','Описание','');
-INSERT INTO "tmplib_base_io" VALUES('SNMP','srcAddr','Source object''s address',0,64,'',0,'Адреса вихідного об''єкту','','Адрес исходного объекта','');
-INSERT INTO "tmplib_base_io" VALUES('SNMP','manTables','Manual tables',0,64,'',1,'Ручні таблиці','','Ручные таблицы','');
-INSERT INTO "tmplib_base_io" VALUES('SNMP','items','All items',4,33,'',2,'Всі елементи','','Все элементы','');
-INSERT INTO "tmplib_base_io" VALUES('SNMP','this','Object',4,0,'',3,'Об''єкт','','Объект','');
-INSERT INTO "tmplib_base_io" VALUES('SNMP','SHIFR','Code',0,0,'',4,'Шифр','','Шифр','');
-INSERT INTO "tmplib_base_io" VALUES('SNMP','NAME','Name',0,0,'',5,'Ім''я','','Имя','');
-INSERT INTO "tmplib_base_io" VALUES('SNMP','DESCR','Description',0,0,'',6,'Опис','','Описание','');
-INSERT INTO "tmplib_base_io" VALUES('digAlarm','alrm','Alarm "{st}:{lev}:{mess}"',0,64,'',0,'Сигнал "{st}:{lev}:{mess}"','','Сигнал "{st}:{lev}:{mess}"','');
-INSERT INTO "tmplib_base_io" VALUES('digAlarm','SHIFR','Code',0,0,'',6,'Шифр','','Шифр','');
-INSERT INTO "tmplib_base_io" VALUES('digAlarm','NAME','Name',0,0,'',7,'Ім''я','','Имя','');
-INSERT INTO "tmplib_base_io" VALUES('digAlarm','DESCR','Description',0,0,'',8,'Опис','','Описание','');
-INSERT INTO "tmplib_base_io" VALUES('digAlarm','this','Object',4,0,'',9,'Об''єкт','','Объект','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','log','Logarithmic scale',3,32,'0',18,'Логарифмічна шкала','','Логарифмическая шкала','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','log','Logarithmic scale',3,32,'0',15,'Логарифмічна шкала','','Логарифмическая шкала','');
-INSERT INTO "tmplib_base_io" VALUES('digAlarm','stInv','State inversion',3,64,'',1,'Інверсія стану','','Инверсия состояния','');
-INSERT INTO "tmplib_base_io" VALUES('digAlarm','st_open','State "Opened"',3,16,'',4,'Стан "Відкрито"','','Состояние "Открыто"','');
-INSERT INTO "tmplib_base_io" VALUES('digAlarm','st_close','State "Closed"',3,16,'',5,'Стан "Закрито"','','Состояние "Закрыто"','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','log','Logarithmic scale',3,32,'0',23,'Логарифмічна шкала','','Логарифмическая шкала','');
-INSERT INTO "tmplib_base_io" VALUES('digAlarm','inProc','Input processing procedure',0,68,'',3,'Вхідна процедура обробки','','Входная процедура обработки','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','alDelay','Violations delay, seconds',2,32,'0',10,'Затримка порушень, секунди','','Задержка нарушений, секунды','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','alDelay','Violations delay, seconds',2,32,'',15,'Затримка порушень, секунди','','Задержка нарушений, секунды','');
-INSERT INTO "tmplib_base_io" VALUES('codeState','in','Input',1,144,'Signal|in',0,'Вхід','','Вход','');
-INSERT INTO "tmplib_base_io" VALUES('codeState','inProc','Input processing procedure',0,68,'',2,'Вхідна процедура обробки','','Входная процедура обработки','');
-INSERT INTO "tmplib_base_io" VALUES('codeState','st_text','State "Text"',0,16,'',3,'Стан "Текст"','','Состояние "Текст"','');
-INSERT INTO "tmplib_base_io" VALUES('codeState','stats','States, rows "{code}:{State}"',0,36,'',4,'Стани, рядки "{code}:{State}"','','Состояния, строки "{code}:{State}"','');
-INSERT INTO "tmplib_base_io" VALUES('codeState','SHIFR','Code',0,0,'',8,'Код','','Код','');
-INSERT INTO "tmplib_base_io" VALUES('codeState','NAME','Name',0,0,'',9,'Ім''я','','Имя','');
-INSERT INTO "tmplib_base_io" VALUES('codeState','DESCR','Description',0,0,'',10,'Опис','','Описание','');
-INSERT INTO "tmplib_base_io" VALUES('codeState','this','Object',4,0,'',11,'Об''єкт','','Объект','');
-INSERT INTO "tmplib_base_io" VALUES('ntf','tmOut','Maximum notification timeout, seconds',1,64,'5',2,'','','','');
-INSERT INTO "tmplib_base_io" VALUES('ntf','messLev','Messages level, negative for alarms',1,64,'1',3,'','','','');
-INSERT INTO "tmplib_base_io" VALUES('ntf','messCat','Messages category, template or regular expression',0,64,'al*:*',4,'','','','');
-INSERT INTO "tmplib_base_io" VALUES('ntf','emailState','Email notification current state',0,17,'',5,'','','','');
-INSERT INTO "tmplib_base_io" VALUES('ntf','emailAuth','Auth, empty for disable',0,64,'user:pass',7,'','','','');
-INSERT INTO "tmplib_base_io" VALUES('ntf','emailSender','Sender',0,64,'noreply@oscada.org',8,'','','','');
-INSERT INTO "tmplib_base_io" VALUES('ntf','emailReceiver','Destination receiver address',0,64,'test@oscada.org',9,'','','','');
-INSERT INTO "tmplib_base_io" VALUES('ntf','emailTopic','EMail topic',0,64,'Notification',10,'','','','');
-INSERT INTO "tmplib_base_io" VALUES('ntf','emailMess','EMail message',0,64,'',11,'','','','');
-INSERT INTO "tmplib_base_io" VALUES('ntf','SMSState','SMS notification current state',0,17,'',12,'','','','');
-INSERT INTO "tmplib_base_io" VALUES('ntf','SMSPin','SMS pin, empty for disable',0,64,'1111',14,'','','','');
-INSERT INTO "tmplib_base_io" VALUES('ntf','SMSTel','SMS destination receiver, tel. number',0,64,'+380XXXXXXXXX',15,'','','','');
-INSERT INTO "tmplib_base_io" VALUES('ntf','SMSTextMd','SMS in text mode, else PDU',3,64,'0',16,'','','','');
-INSERT INTO "tmplib_base_io" VALUES('ntf','io','UserPrt: Output IO',4,0,'',0,'','','','');
-INSERT INTO "tmplib_base_io" VALUES('ntf','tr','UserPrt: Transport',4,0,'',1,'','','','');
-INSERT INTO "tmplib_base_io" VALUES('ntf','emailTrAddr','Output transport for SMTP connection, empty for disable',0,64,'Sockets.out_SMTP',6,'','','','');
-INSERT INTO "tmplib_base_io" VALUES('ntf','SMSTrAddr','SMS serial transport, empty for disable',0,64,'Serial.out_SMS',13,'','','','');
-INSERT INTO "tmplib_base_io" VALUES('codeState','out','Output',1,145,'Signal|out',1,'Вихід','','Выход','');
-INSERT INTO "tmplib_base_io" VALUES('codeState','com_text','Command "Text"',0,32,'',5,'Команда "Текст"','','Команда "Текст"','');
-INSERT INTO "tmplib_base_io" VALUES('codeState','coms','Commands-states, rows "{code}:{State}"',0,36,'',6,'Команди-стани, рядки "{code}:{State}"','','Команды-состояния, строки "{code}:{State}"','');
-INSERT INTO "tmplib_base_io" VALUES('codeState','digComs','Commands',0,20,'',7,'Команди','','Команды','');
-INSERT INTO "tmplib_base_io" VALUES('UPS','srcAddr','Source object''s address',0,64,'',0,'Адрес исходного объекта','','Адреса вихідного об''єкту','');
-INSERT INTO "tmplib_base_io" VALUES('UPS','items','All items',4,33,'',1,'Все элементы','','Всі елементи','');
-INSERT INTO "tmplib_base_io" VALUES('UPS','alDelay','Violations delay, seconds',2,32,'0',2,'Задержка нарушений, секунды','','Затримка порушень, секунди','');
-INSERT INTO "tmplib_base_io" VALUES('UPS','bChL','Battery charge low',2,32,'20',3,'Заряд батареи низкий','','Заряд батареї низький','');
-INSERT INTO "tmplib_base_io" VALUES('UPS','bChLL','Battery charge critical',2,32,'5',4,'Заряд батареи критический','','Заряд батареї критичний','');
-INSERT INTO "tmplib_base_io" VALUES('UPS','inVL','Input voltage low',2,32,'210',5,'Низкое входное напряжение','','Низька вхідна напруга','');
-INSERT INTO "tmplib_base_io" VALUES('UPS','inVH','Input voltage high',2,32,'250',6,'Высокое входное напряжение','','Висока вхідна напруга','');
-INSERT INTO "tmplib_base_io" VALUES('UPS','inFLL','Input frequency too low',2,32,'40',7,'Очень низкая входная частота','','Дуже низька вхідна частота','');
-INSERT INTO "tmplib_base_io" VALUES('UPS','inFL','Input frequency low',2,32,'45',8,'Низкая входная частота','','Низька вхідна частота','');
-INSERT INTO "tmplib_base_io" VALUES('UPS','inFH','Input frequency high',2,32,'55',9,'Высокая входная частота','','Висока вхідна частота','');
-INSERT INTO "tmplib_base_io" VALUES('UPS','inFHH','Input frequency too high',2,32,'60',10,'Очень высокая входная частота','','Дуже висока вхідна частота','');
-INSERT INTO "tmplib_base_io" VALUES('UPS','loadH','Load high',2,32,'80',11,'Нагрузка высокая','','Навантаження високе','');
-INSERT INTO "tmplib_base_io" VALUES('UPS','loadHH','Load too high',2,32,'100',12,'Нагрузка очень высокая','','Навантаження дуже високе','');
-INSERT INTO "tmplib_base_io" VALUES('UPS','tH','Temperature high',2,32,'50',13,'Температура высокая','','Температура висока','');
-INSERT INTO "tmplib_base_io" VALUES('UPS','tHH','Temperature too high',2,32,'70',14,'Температура очень высокая','','Температура дуже висока','');
-INSERT INTO "tmplib_base_io" VALUES('UPS','this','Object',4,0,'',15,'Объект','','Об''єкт','');
-INSERT INTO "tmplib_base_io" VALUES('UPS','SHIFR','Code',0,0,'',16,'Шифр','','Шифр','');
-INSERT INTO "tmplib_base_io" VALUES('UPS','NAME','Name',0,0,'',17,'Имя','','Ім''я','');
-INSERT INTO "tmplib_base_io" VALUES('UPS','DESCR','Description',0,0,'',18,'Описание','','Опис','');
-CREATE TABLE 'DAQ_JavaLikeCalc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT 'system' ,"FUNC" TEXT DEFAULT '' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' ,"ITER" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
-CREATE TABLE 'DAQ_LogicLev' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT '' ,"PRM_BD_REFL" TEXT DEFAULT '' ,"PERIOD" INTEGER DEFAULT '0' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
-CREATE TABLE 'flb_web_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
-INSERT INTO "flb_web_io" VALUES('alarms','rules','Rules',0,1,'\n',0,0,'Правила','Правила');
-INSERT INTO "flb_web_io" VALUES('devMon','rez','Result',0,2,'',0,0,'Результат','Результат');
-INSERT INTO "flb_web_io" VALUES('devMon','urlPrms','Address parameters',4,0,'',0,1,'Адрес параметров','Адреса параметрів');
-INSERT INTO "flb_web_io" VALUES('devMon','tmpl','Template',0,0,'',0,2,'Шаблон','Шаблон');
-INSERT INTO "flb_web_io" VALUES('devMon','cnts','POST request''s context',4,0,'',0,3,'Контекст POST-запроса','Контекст POST-запиту');
-INSERT INTO "flb_web_io" VALUES('devMon','user','User',0,0,'',0,4,'Пользователь','Користувач');
-INSERT INTO "flb_web_io" VALUES('devices','rez','Result',0,2,'',0,0,'Результат','Результат');
-INSERT INTO "flb_web_io" VALUES('devices','urlPrms','Address parameters',4,0,'',0,1,'Адрес параметров','Адреса параметрів');
-INSERT INTO "flb_web_io" VALUES('devices','tmpl','Template',0,0,'',0,2,'Шаблон','Шаблон');
-INSERT INTO "flb_web_io" VALUES('devices','cnts','POST request''s context',4,0,'',0,3,'Контекст POST-запроса','Контекст POST-запиту');
-INSERT INTO "flb_web_io" VALUES('devices','user','User',0,0,'',0,4,'Пользователь','Користувач');
-INSERT INTO "flb_web_io" VALUES('mess','rez','Result',0,2,'',0,0,'Результат','Результат');
-INSERT INTO "flb_web_io" VALUES('mess','urlPrms','Address parameters',4,0,'',0,1,'Адрес параметров','Адреса параметрів');
-INSERT INTO "flb_web_io" VALUES('mess','tmpl','Template',0,0,'',0,2,'Шаблон','Шаблон');
-INSERT INTO "flb_web_io" VALUES('mess','cnts','POST request''s context',4,0,'',0,3,'Контекст POST-запроса','Контекст POST-запиту');
-INSERT INTO "flb_web_io" VALUES('mess','user','User',0,0,'',0,4,'Пользователь','Користувач');
-INSERT INTO "flb_web_io" VALUES('report','rez','Result',0,2,'',0,0,'Результат','Результат');
-INSERT INTO "flb_web_io" VALUES('report','urlPrms','Address parameters',4,0,'',0,1,'Адрес параметров','Адреса параметрів');
-INSERT INTO "flb_web_io" VALUES('report','tmpl','Template',0,0,'',0,2,'Шаблон','Шаблон');
-INSERT INTO "flb_web_io" VALUES('report','cnts','POST request''s context',4,0,'',0,3,'Контекст POST-запроса','Контекст POST-запиту');
-INSERT INTO "flb_web_io" VALUES('report','user','User',0,0,'',0,4,'Пользователь','Користувач');
-INSERT INTO "flb_web_io" VALUES('test','f_start','Start the function flag',3,0,'0',0,0,'Флаг запуска функции','Прапорець запуску функції');
-INSERT INTO "flb_web_io" VALUES('test','test','Test',0,1,'',0,1,'Тест','Тест');
-INSERT INTO "flb_web_io" VALUES('timerWrite','rules','Rules',0,1,'\n',0,0,'Правила','Правила');
-INSERT INTO "flb_web_io" VALUES('user','rez','Result',0,2,'',0,0,'Результат','Результат');
-INSERT INTO "flb_web_io" VALUES('user','urlPrms','Address parameters',4,0,'',0,1,'Адрес параметров','Адреса параметрів');
-INSERT INTO "flb_web_io" VALUES('user','tmpl','Template',0,0,'',0,2,'Шаблон','Шаблон');
-INSERT INTO "flb_web_io" VALUES('user','cnts','POST request''s context',4,0,'',0,3,'Контекст POST-запроса','Контекст POST-запиту');
-INSERT INTO "flb_web_io" VALUES('user','user','User',0,0,'',0,4,'Пользователь','Користувач');
-CREATE TABLE 'flb_web' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "flb_web" VALUES('alarms','Alarms','',10,'//> Load rules
+INSERT INTO tmplib_base_io VALUES('manInUnif','alSup','Violations suppress',3,32,'0',7,'Придушення порушень','','Подавление нарушений','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','HystBnd','Hysteresis of boders violation',2,32,'1',12,'Гістерезиз поруш. границь','','Гистерезиз наруш. границ','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','prec','Precision (signs)',1,32,'2',14,'Точність (знаків)','','Точность (знаков)','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','this','Object',4,1,'',22,'Об''єкт','','Объект','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','SHIFR','Code',0,0,'',23,'Шифр','','Шифр','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','NAME','Name',0,0,'',24,'Ім''я','','Имя','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','DESCR','Description',0,0,'',25,'Опис','','Описание','');
+INSERT INTO tmplib_base_io VALUES('SNMP','srcAddr','Source object''s address',0,64,'',0,'Адреса вихідного об''єкту','','Адрес исходного объекта','');
+INSERT INTO tmplib_base_io VALUES('SNMP','manTables','Manual tables',0,64,'',1,'Ручні таблиці','','Ручные таблицы','');
+INSERT INTO tmplib_base_io VALUES('SNMP','items','All items',4,33,'',2,'Всі елементи','','Все элементы','');
+INSERT INTO tmplib_base_io VALUES('SNMP','this','Object',4,0,'',3,'Об''єкт','','Объект','');
+INSERT INTO tmplib_base_io VALUES('SNMP','SHIFR','Code',0,0,'',4,'Шифр','','Шифр','');
+INSERT INTO tmplib_base_io VALUES('SNMP','NAME','Name',0,0,'',5,'Ім''я','','Имя','');
+INSERT INTO tmplib_base_io VALUES('SNMP','DESCR','Description',0,0,'',6,'Опис','','Описание','');
+INSERT INTO tmplib_base_io VALUES('digAlarm','alrm','Alarm "{st}:{lev}:{mess}"',0,64,'',0,'Сигнал "{st}:{lev}:{mess}"','','Сигнал "{st}:{lev}:{mess}"','');
+INSERT INTO tmplib_base_io VALUES('digAlarm','SHIFR','Code',0,0,'',6,'Шифр','','Шифр','');
+INSERT INTO tmplib_base_io VALUES('digAlarm','NAME','Name',0,0,'',7,'Ім''я','','Имя','');
+INSERT INTO tmplib_base_io VALUES('digAlarm','DESCR','Description',0,0,'',8,'Опис','','Описание','');
+INSERT INTO tmplib_base_io VALUES('digAlarm','this','Object',4,0,'',9,'Об''єкт','','Объект','');
+INSERT INTO tmplib_base_io VALUES('anUnif','log','Logarithmic scale',3,32,'0',18,'Логарифмічна шкала','','Логарифмическая шкала','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','log','Logarithmic scale',3,32,'0',15,'Логарифмічна шкала','','Логарифмическая шкала','');
+INSERT INTO tmplib_base_io VALUES('digAlarm','stInv','State inversion',3,64,'',1,'Інверсія стану','','Инверсия состояния','');
+INSERT INTO tmplib_base_io VALUES('digAlarm','st_open','State "Opened"',3,16,'',4,'Стан "Відкрито"','','Состояние "Открыто"','');
+INSERT INTO tmplib_base_io VALUES('digAlarm','st_close','State "Closed"',3,16,'',5,'Стан "Закрито"','','Состояние "Закрыто"','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','log','Logarithmic scale',3,32,'0',23,'Логарифмічна шкала','','Логарифмическая шкала','');
+INSERT INTO tmplib_base_io VALUES('digAlarm','inProc','Input processing procedure',0,68,'',3,'Вхідна процедура обробки','','Входная процедура обработки','');
+INSERT INTO tmplib_base_io VALUES('anUnif','alDelay','Violations delay, seconds',2,32,'0',10,'Затримка порушень, секунди','','Задержка нарушений, секунды','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','alDelay','Violations delay, seconds',2,32,'',15,'Затримка порушень, секунди','','Задержка нарушений, секунды','');
+INSERT INTO tmplib_base_io VALUES('codeState','in','Input',1,144,'Signal|in',0,'Вхід','','Вход','');
+INSERT INTO tmplib_base_io VALUES('codeState','inProc','Input processing procedure',0,68,'',2,'Вхідна процедура обробки','','Входная процедура обработки','');
+INSERT INTO tmplib_base_io VALUES('codeState','st_text','State "Text"',0,16,'',3,'Стан "Текст"','','Состояние "Текст"','');
+INSERT INTO tmplib_base_io VALUES('codeState','stats','States, rows "{code}:{State}"',0,36,'',4,'Стани, рядки "{code}:{State}"','','Состояния, строки "{code}:{State}"','');
+INSERT INTO tmplib_base_io VALUES('codeState','SHIFR','Code',0,0,'',8,'Код','','Код','');
+INSERT INTO tmplib_base_io VALUES('codeState','NAME','Name',0,0,'',9,'Ім''я','','Имя','');
+INSERT INTO tmplib_base_io VALUES('codeState','DESCR','Description',0,0,'',10,'Опис','','Описание','');
+INSERT INTO tmplib_base_io VALUES('codeState','this','Object',4,0,'',11,'Об''єкт','','Объект','');
+INSERT INTO tmplib_base_io VALUES('ntf','tmOut','Maximum notification timeout, seconds',1,64,'5',2,'','','','');
+INSERT INTO tmplib_base_io VALUES('ntf','messLev','Messages level, negative for alarms',1,64,'1',3,'','','','');
+INSERT INTO tmplib_base_io VALUES('ntf','messCat','Messages category, template or regular expression',0,64,'al*:*',4,'','','','');
+INSERT INTO tmplib_base_io VALUES('ntf','emailState','Email notification current state',0,17,'',5,'','','','');
+INSERT INTO tmplib_base_io VALUES('ntf','emailAuth','Auth, empty for disable',0,64,'user:pass',7,'','','','');
+INSERT INTO tmplib_base_io VALUES('ntf','emailSender','Sender',0,64,'noreply@oscada.org',8,'','','','');
+INSERT INTO tmplib_base_io VALUES('ntf','emailReceiver','Destination receiver address',0,64,'test@oscada.org',9,'','','','');
+INSERT INTO tmplib_base_io VALUES('ntf','emailTopic','EMail topic',0,64,'Notification',10,'','','','');
+INSERT INTO tmplib_base_io VALUES('ntf','emailMess','EMail message',0,64,'',11,'','','','');
+INSERT INTO tmplib_base_io VALUES('ntf','SMSState','SMS notification current state',0,17,'',12,'','','','');
+INSERT INTO tmplib_base_io VALUES('ntf','SMSPin','SMS pin, empty for disable',0,64,'1111',14,'','','','');
+INSERT INTO tmplib_base_io VALUES('ntf','SMSTel','SMS destination receiver, tel. number',0,64,'+380XXXXXXXXX',15,'','','','');
+INSERT INTO tmplib_base_io VALUES('ntf','SMSTextMd','SMS in text mode, else PDU',3,64,'0',16,'','','','');
+INSERT INTO tmplib_base_io VALUES('ntf','io','UserPrt: Output IO',4,0,'',0,'','','','');
+INSERT INTO tmplib_base_io VALUES('ntf','tr','UserPrt: Transport',4,0,'',1,'','','','');
+INSERT INTO tmplib_base_io VALUES('ntf','emailTrAddr','Output transport for SMTP connection, empty for disable',0,64,'Sockets.out_SMTP',6,'','','','');
+INSERT INTO tmplib_base_io VALUES('ntf','SMSTrAddr','SMS serial transport, empty for disable',0,64,'Serial.out_SMS',13,'','','','');
+INSERT INTO tmplib_base_io VALUES('codeState','out','Output',1,145,'Signal|out',1,'Вихід','','Выход','');
+INSERT INTO tmplib_base_io VALUES('codeState','com_text','Command "Text"',0,32,'',5,'Команда "Текст"','','Команда "Текст"','');
+INSERT INTO tmplib_base_io VALUES('codeState','coms','Commands-states, rows "{code}:{State}"',0,36,'',6,'Команди-стани, рядки "{code}:{State}"','','Команды-состояния, строки "{code}:{State}"','');
+INSERT INTO tmplib_base_io VALUES('codeState','digComs','Commands',0,20,'',7,'Команди','','Команды','');
+INSERT INTO tmplib_base_io VALUES('UPS','srcAddr','Source object''s address',0,64,'',0,'Адрес исходного объекта','','Адреса вихідного об''єкту','');
+INSERT INTO tmplib_base_io VALUES('UPS','items','All items',4,33,'',1,'Все элементы','','Всі елементи','');
+INSERT INTO tmplib_base_io VALUES('UPS','alDelay','Violations delay, seconds',2,32,'0',2,'Задержка нарушений, секунды','','Затримка порушень, секунди','');
+INSERT INTO tmplib_base_io VALUES('UPS','bChL','Battery charge low',2,32,'20',3,'Заряд батареи низкий','','Заряд батареї низький','');
+INSERT INTO tmplib_base_io VALUES('UPS','bChLL','Battery charge critical',2,32,'5',4,'Заряд батареи критический','','Заряд батареї критичний','');
+INSERT INTO tmplib_base_io VALUES('UPS','inVL','Input voltage low',2,32,'210',5,'Низкое входное напряжение','','Низька вхідна напруга','');
+INSERT INTO tmplib_base_io VALUES('UPS','inVH','Input voltage high',2,32,'250',6,'Высокое входное напряжение','','Висока вхідна напруга','');
+INSERT INTO tmplib_base_io VALUES('UPS','inFLL','Input frequency too low',2,32,'40',7,'Очень низкая входная частота','','Дуже низька вхідна частота','');
+INSERT INTO tmplib_base_io VALUES('UPS','inFL','Input frequency low',2,32,'45',8,'Низкая входная частота','','Низька вхідна частота','');
+INSERT INTO tmplib_base_io VALUES('UPS','inFH','Input frequency high',2,32,'55',9,'Высокая входная частота','','Висока вхідна частота','');
+INSERT INTO tmplib_base_io VALUES('UPS','inFHH','Input frequency too high',2,32,'60',10,'Очень высокая входная частота','','Дуже висока вхідна частота','');
+INSERT INTO tmplib_base_io VALUES('UPS','loadH','Load high',2,32,'80',11,'Нагрузка высокая','','Навантаження високе','');
+INSERT INTO tmplib_base_io VALUES('UPS','loadHH','Load too high',2,32,'100',12,'Нагрузка очень высокая','','Навантаження дуже високе','');
+INSERT INTO tmplib_base_io VALUES('UPS','tH','Temperature high',2,32,'50',13,'Температура высокая','','Температура висока','');
+INSERT INTO tmplib_base_io VALUES('UPS','tHH','Temperature too high',2,32,'70',14,'Температура очень высокая','','Температура дуже висока','');
+INSERT INTO tmplib_base_io VALUES('UPS','this','Object',4,0,'',15,'Объект','','Об''єкт','');
+INSERT INTO tmplib_base_io VALUES('UPS','SHIFR','Code',0,0,'',16,'Шифр','','Шифр','');
+INSERT INTO tmplib_base_io VALUES('UPS','NAME','Name',0,0,'',17,'Имя','','Ім''я','');
+INSERT INTO tmplib_base_io VALUES('UPS','DESCR','Description',0,0,'',18,'Описание','','Опис','');
+CREATE TABLE IF NOT EXISTS 'DAQ_JavaLikeCalc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT 'system' ,"FUNC" TEXT DEFAULT '' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' ,"ITER" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
+CREATE TABLE IF NOT EXISTS 'DAQ_LogicLev' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT '' ,"PRM_BD_REFL" TEXT DEFAULT '' ,"PERIOD" INTEGER DEFAULT '0' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
+CREATE TABLE IF NOT EXISTS 'flb_web_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
+INSERT INTO flb_web_io VALUES('alarms','rules','Rules',0,1,'\n',0,0,'Правила','Правила');
+INSERT INTO flb_web_io VALUES('devMon','rez','Result',0,2,'',0,0,'Результат','Результат');
+INSERT INTO flb_web_io VALUES('devMon','urlPrms','Address parameters',4,0,'',0,1,'Адрес параметров','Адреса параметрів');
+INSERT INTO flb_web_io VALUES('devMon','tmpl','Template',0,0,'',0,2,'Шаблон','Шаблон');
+INSERT INTO flb_web_io VALUES('devMon','cnts','POST request''s context',4,0,'',0,3,'Контекст POST-запроса','Контекст POST-запиту');
+INSERT INTO flb_web_io VALUES('devMon','user','User',0,0,'',0,4,'Пользователь','Користувач');
+INSERT INTO flb_web_io VALUES('devices','rez','Result',0,2,'',0,0,'Результат','Результат');
+INSERT INTO flb_web_io VALUES('devices','urlPrms','Address parameters',4,0,'',0,1,'Адрес параметров','Адреса параметрів');
+INSERT INTO flb_web_io VALUES('devices','tmpl','Template',0,0,'',0,2,'Шаблон','Шаблон');
+INSERT INTO flb_web_io VALUES('devices','cnts','POST request''s context',4,0,'',0,3,'Контекст POST-запроса','Контекст POST-запиту');
+INSERT INTO flb_web_io VALUES('devices','user','User',0,0,'',0,4,'Пользователь','Користувач');
+INSERT INTO flb_web_io VALUES('mess','rez','Result',0,2,'',0,0,'Результат','Результат');
+INSERT INTO flb_web_io VALUES('mess','urlPrms','Address parameters',4,0,'',0,1,'Адрес параметров','Адреса параметрів');
+INSERT INTO flb_web_io VALUES('mess','tmpl','Template',0,0,'',0,2,'Шаблон','Шаблон');
+INSERT INTO flb_web_io VALUES('mess','cnts','POST request''s context',4,0,'',0,3,'Контекст POST-запроса','Контекст POST-запиту');
+INSERT INTO flb_web_io VALUES('mess','user','User',0,0,'',0,4,'Пользователь','Користувач');
+INSERT INTO flb_web_io VALUES('report','rez','Result',0,2,'',0,0,'Результат','Результат');
+INSERT INTO flb_web_io VALUES('report','urlPrms','Address parameters',4,0,'',0,1,'Адрес параметров','Адреса параметрів');
+INSERT INTO flb_web_io VALUES('report','tmpl','Template',0,0,'',0,2,'Шаблон','Шаблон');
+INSERT INTO flb_web_io VALUES('report','cnts','POST request''s context',4,0,'',0,3,'Контекст POST-запроса','Контекст POST-запиту');
+INSERT INTO flb_web_io VALUES('report','user','User',0,0,'',0,4,'Пользователь','Користувач');
+INSERT INTO flb_web_io VALUES('test','f_start','Start the function flag',3,0,'0',0,0,'Флаг запуска функции','Прапорець запуску функції');
+INSERT INTO flb_web_io VALUES('test','test','Test',0,1,'',0,1,'Тест','Тест');
+INSERT INTO flb_web_io VALUES('timerWrite','rules','Rules',0,1,'\n',0,0,'Правила','Правила');
+INSERT INTO flb_web_io VALUES('user','rez','Result',0,2,'',0,0,'Результат','Результат');
+INSERT INTO flb_web_io VALUES('user','urlPrms','Address parameters',4,0,'',0,1,'Адрес параметров','Адреса параметрів');
+INSERT INTO flb_web_io VALUES('user','tmpl','Template',0,0,'',0,2,'Шаблон','Шаблон');
+INSERT INTO flb_web_io VALUES('user','cnts','POST request''s context',4,0,'',0,3,'Контекст POST-запроса','Контекст POST-запиту');
+INSERT INTO flb_web_io VALUES('user','user','User',0,0,'',0,4,'Пользователь','Користувач');
+CREATE TABLE IF NOT EXISTS 'flb_web' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
+INSERT INTO flb_web VALUES('alarms','Alarms','',10,'//> Load rules
 var alarmsTree = SYS.XMLNode("ALARMS");
 alarmsTree.load(rules);
 for(i_rl = 0; i_rl < alarmsTree.childSize(); i_rl++)
@@ -1829,7 +1840,7 @@ for(i_rl = 0; i_rl < alarmsTree.childSize(); i_rl++)
 	alarmsTree.childGet(i_rl).setAttr("err",curErr);	
 }
 rules = alarmsTree.save();',1377261539,'Сигнализации','Сигналізації');
-INSERT INTO "flb_web" VALUES('devMon','Devices monitor','',10,'var treeEl = false;
+INSERT INTO flb_web VALUES('devMon','Devices monitor','',10,'var treeEl = false;
 
 //> Parse template
 var pgTree = SYS.XMLNode();
@@ -1987,7 +1998,7 @@ if(!urlPrms["com"].isEVal())
 //Save template
 rez = pgTree.save();
 //SYS.messDebug("TEST Dev","TEST 00: "+typeof(devLs[formEl["cat"]+"."+itId]));',1377260842,'Монитор устройств','Монітор пристроїв');
-INSERT INTO "flb_web" VALUES('devices','Devices dispatcher','',10,'var treeEl = false;
+INSERT INTO flb_web VALUES('devices','Devices dispatcher','',10,'var treeEl = false;
 
 //> Parse template
 var pgTree = SYS.XMLNode();
@@ -2230,7 +2241,7 @@ else pgTree.getElementBy("edDel","name").setAttr("style","visibility : hidden;")
 //Save template
 rez = pgTree.save();
 //SYS.messDebug("TEST Dev","TEST 00: "+typeof(devLs[formEl["cat"]+"."+itId]));',1377260944,'Диспетчер устройств','Диспетчер пристроїв');
-INSERT INTO "flb_web" VALUES('mess','Alarm messages','',10,'var treeEl = false;
+INSERT INTO flb_web VALUES('mess','Alarm messages','',10,'var treeEl = false;
 
 //> Parse template
 var pgTree = SYS.XMLNode();
@@ -2256,7 +2267,7 @@ for(i = 0; i < messAr.length; i++)
 //Save template
 rez = pgTree.save();
 //SYS.messDebug("TEST Dev","TEST 00: "+typeof(devLs[formEl["cat"]+"."+itId]));',1377261138,'Сообщения сигнализаций','Повідомлення сигналізацій');
-INSERT INTO "flb_web" VALUES('report','Reports','',10,'var treeEl = false;
+INSERT INTO flb_web VALUES('report','Reports','',10,'var treeEl = false;
 var pgDir = "./HouseSpirit/Web/";
 
 //> Parse template
@@ -2361,12 +2372,12 @@ if(cnts.length)
 //Save template
 rez = pgTree.save();
 //SYS.messDebug("TEST Dev","TEST 00: "+typeof(devLs[formEl["cat"]+"."+itId]));',1377261196,'Отчёты','Звіти');
-INSERT INTO "flb_web" VALUES('test','Test','',10,'if(f_start)
+INSERT INTO flb_web VALUES('test','Test','',10,'if(f_start)
 {
 	var req = SYS.XMLNode("send").setAttr("ProtIt","SMS").setAttr("tel","+380679859815").setText("Тестовое сообщение");
 	SYS.Transport.Serial.out_GSM.messIO(req,"UserProtocol");
 }',1377261398,'Тест','Тест');
-INSERT INTO "flb_web" VALUES('timerWrite','Write by the timer','',10,'//> Load rules
+INSERT INTO flb_web VALUES('timerWrite','Write by the timer','',10,'//> Load rules
 var timersTree = SYS.XMLNode("TIMERS");
 timersTree.load(rules);
 for(i_rl = 0; i_rl < timersTree.childSize(); i_rl++)
@@ -2384,7 +2395,7 @@ for(i_rl = 0; i_rl < timersTree.childSize(); i_rl++)
 	curTm.setAttr("tm",max(0,timer-1));
 }
 rules = timersTree.save();',1377261462,'Запись по таймеру','Запис за таймером');
-INSERT INTO "flb_web" VALUES('user','Users dispatcher','',10,'var treeEl = false;
+INSERT INTO flb_web VALUES('user','Users dispatcher','',10,'var treeEl = false;
 
 //> Parse template
 var pgTree = SYS.XMLNode();
@@ -2666,8 +2677,8 @@ if(!isAdmin || cnts.length || urlPrms["selUser"].isEVal() || !urlPrms["selUser"]
 //Save template
 rez = pgTree.save();
 //SYS.messDebug("TEST Dev","TEST 00: "+typeof(devLs[formEl["cat"]+"."+itId]));',1377261537,'Диспетчер пользователей','Диспетчер користувачів');
-CREATE TABLE 'WebUser_uPg' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PROG" TEXT DEFAULT '' ,"uk#PROG" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "WebUser_uPg" VALUES('tmpl','XHTML-template','XHTML-шаблон','Site from XHTML template.','Сайт із XHTML шаблону',1,'JavaLikeCalc.JavaScript
+CREATE TABLE IF NOT EXISTS 'WebUser_uPg' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PROG" TEXT DEFAULT '' ,"uk#PROG" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
+INSERT INTO WebUser_uPg VALUES('tmpl','XHTML-template','XHTML-шаблон','Site from XHTML template.','Сайт із XHTML шаблону',1,'JavaLikeCalc.JavaScript
 var pgDir = "Web/";
 var firstEl = url.parsePath(0);
 var procPg = false;
@@ -2779,309 +2790,309 @@ if(HTTPreq == "GET")
 }
 
 return "404 Not Found";','',1377264714,'Сайт из XHTML шаблона.','XHTML-шаблон');
-CREATE TABLE 'Trs' ("base" TEXT DEFAULT '' ,"uk#base" TEXT DEFAULT '' ,"ru#base" TEXT DEFAULT '' , PRIMARY KEY ("base"));
-INSERT INTO "Trs" VALUES('No data or connection with source','Немає даних або зв''язку із джерелом','Нет данных или связи с источником');
-INSERT INTO "Trs" VALUES('The signal exceed to upper hardware border','Сигнал перевищив верхню апаратну границю','Выход сигнала за верхнюю аппаратную границу');
-INSERT INTO "Trs" VALUES('The signal exceed to bottom hardware border','Сигнал перевищив нижню апаратну границю','Выход сигнала за нижнюю аппаратную границу');
-INSERT INTO "Trs" VALUES('Upper alarm border error','Помилка верхньої аварійної границі','Нарушение верхней аварийной границы');
-INSERT INTO "Trs" VALUES('Lower alarm border error','Помилка нижньої аварійної границі','Нарушение нижней аварийной границы');
-INSERT INTO "Trs" VALUES('Upper warning border error','Помилка верхньої поперджув. границі','Нарушение верхней предупредительной границы');
-INSERT INTO "Trs" VALUES('Lower warning border error','Помилка нижньої поперджув. границі','Нарушение нижней предупредительной границы');
-INSERT INTO "Trs" VALUES('Too big parameter''s motion speed','Дуже велика швидкість зміни параметру','Очень большая скорость изменения параметра');
-INSERT INTO "Trs" VALUES('NORMA','НОРМА','НОРМА');
-INSERT INTO "Trs" VALUES('Step missed','Крок пропущено','Шаг пропущен');
-INSERT INTO "Trs" VALUES('Program terminated','Програму перервано','Программа прервана');
-INSERT INTO "Trs" VALUES('Terminated by user session of the program','Перерваний користувачем сеанс програми','Прерванный пользователем сеанс программы');
-INSERT INTO "Trs" VALUES('Terminated by error session of the program','Перерваний помилкою сеанс програми','Прерванный ошибкой сеанс программы');
-INSERT INTO "Trs" VALUES('Successful session of the program','Вдалий сеанс програми','Успешный сеанс программы');
-INSERT INTO "Trs" VALUES('Command miss: ','Відсутня команда: ','Отсутствует команда: ');
-INSERT INTO "Trs" VALUES('Waiting %1s expired','Очікування %1с вичерпано','Ожидание %1c исчерпано');
-INSERT INTO "Trs" VALUES('Waiting %1s','Очікування %1с','Ожидание %1c');
-INSERT INTO "Trs" VALUES('Background waiting %1s','Фонове очікування %1с','Фоновое ожидание %1c');
-INSERT INTO "Trs" VALUES('No current node present','Поточний вузол відсутній','Текущий узел отсутствует');
-INSERT INTO "Trs" VALUES('No connection to source object','Немає з''єднання із об''єктом джерела','Нет подключения с объектом источника');
-INSERT INTO "Trs" VALUES('Source error','Помилка джерела','Ошибка источника');
-INSERT INTO "Trs" VALUES('Status','Статус','Статус');
-INSERT INTO "Trs" VALUES('On battery','Від батареї','От батареи');
-INSERT INTO "Trs" VALUES('Low battery','Батарею розряджено','Батарея разряжена');
-INSERT INTO "Trs" VALUES('Shutdown load','Скид навантаження','Сброс нагрузки');
-INSERT INTO "Trs" VALUES('ALARM','АВАРІЯ','АВАРИЯ');
-INSERT INTO "Trs" VALUES('None good battery present','Відсутні хорощі батареї','Отсутствуют хорошие батареи');
-INSERT INTO "Trs" VALUES('Battery charge low','Низький заряд батареї','Низкий заряд батареи');
-INSERT INTO "Trs" VALUES('Battery charge critical','Критичний заряд батареї','Критический заряд батареи');
-INSERT INTO "Trs" VALUES('Bad %1 batteries present','Зіпсованих батарей %1','Испорченных батарей %1');
-INSERT INTO "Trs" VALUES('Input voltage low','Низька вхідна напруга','Низкое входное напряжение');
-INSERT INTO "Trs" VALUES('Input voltage high','Висока вхідна напруга','Высокое входное напряжение');
-INSERT INTO "Trs" VALUES('Input frequency too low','Дуже низька вхідна частота','Очень низкая входная частота');
-INSERT INTO "Trs" VALUES('Input frequency too high','Дуже висока вхідна частота','Очень высокая входная частота');
-INSERT INTO "Trs" VALUES('Input frequency low','Низька вхідна частота','Низкая входная частота');
-INSERT INTO "Trs" VALUES('Input frequency high','Висока вхідна частота','Высокая входная частота');
-INSERT INTO "Trs" VALUES('UPS overloaded','ДБЖ перевантажено','ИБП перегружено');
-INSERT INTO "Trs" VALUES('UPS load high','Високе навантаження ДБЖ','Высокая нагрузка ИБП');
-INSERT INTO "Trs" VALUES('UPS overheated','ДБЖ перегрітий','ИБП перегретый');
-INSERT INTO "Trs" VALUES('Temperature high','Висока температура','Высокая температура');
-INSERT INTO "Trs" VALUES('Levitation','Левітація','Левитация');
-INSERT INTO "Trs" VALUES('No Levitation','Не левітація','Не левитация');
-INSERT INTO "Trs" VALUES('Acceleration','Розгін','Разгон');
-INSERT INTO "Trs" VALUES('Normal','Нормальний','Нормальный');
-INSERT INTO "Trs" VALUES('Deceleration (Brake)','Гальмування','Торможение');
-INSERT INTO "Trs" VALUES('Autotest','Автотест','Автотест');
-INSERT INTO "Trs" VALUES('Tuning','Підлаштування','Подстройка');
-INSERT INTO "Trs" VALUES('Tuning Complete','Підлаштування завершене','Подстройка завершена');
-INSERT INTO "Trs" VALUES('Local','Локально','Локально');
-INSERT INTO "Trs" VALUES('Remote','Віддалено','Удалённо');
-INSERT INTO "Trs" VALUES('Start session.','Запуск сеансу.','Запуск сеанса.');
-INSERT INTO "Trs" VALUES('Request for values present list and size.','Запит наявних значень та розмірів','Запрос доступных значений и размеров');
-INSERT INTO "Trs" VALUES('Readed items list write.','Запис переліку элементів для читання.','Запись списка элементов для чтения.');
-INSERT INTO "Trs" VALUES('Write to hour archive for time','Запис до архіву годин на час','Запись в архив часов за время');
-INSERT INTO "Trs" VALUES('Write to day archive for time','Запис до архіву днів на час','Запись в архив дней за время');
-INSERT INTO "Trs" VALUES('Write to result month archive for time','Запис до результуючого архіву місяців на час','Запись в результирующий архив месяцев за время');
-INSERT INTO "Trs" VALUES('Error response','Помилка відповіді','Ошибка ответа');
-INSERT INTO "Trs" VALUES('Quality errors','Помилки якості','Ошибки качетсва');
-INSERT INTO "Trs" VALUES('No a connection','Нема підключення','Нет подключения');
-INSERT INTO "Trs" VALUES('Data list for request empty.','Перелік даних запиту порожній.','Список данных запроса пустой.');
-INSERT INTO "Trs" VALUES('Unknown','Невідомий','Неизвестный');
-INSERT INTO "Trs" VALUES('Deceleration','Гальмування','Торможение');
-INSERT INTO "Trs" VALUES('Stop operation failure','Невдача операції зупинки','Неудача операции останова');
-INSERT INTO "Trs" VALUES('Idling failure','Невдача простою','Неудача простоя');
-INSERT INTO "Trs" VALUES('Regeneration breaking failure','Збій регенерації гальмування','Сбой регенерации торможения');
-INSERT INTO "Trs" VALUES('Deceleration failure','Помилка гальмування','Ошибка торможения');
-INSERT INTO "Trs" VALUES('No connect','Не підключено','Не подключено');
-INSERT INTO "Trs" VALUES('Error or no response.','Помилка або немає відповіді','Ошибка или нет ответа');
-INSERT INTO "Trs" VALUES('CRC error.','Помилка CRC.','Ошибка CRC.');
-INSERT INTO "Trs" VALUES('DCON error.','Помилка DCON.','Ошибка DCON.');
-INSERT INTO "Trs" VALUES('No respond','Немає відповіді','Нет ответа');
-INSERT INTO "Trs" VALUES('No acknowledgment','Немає підтвердження','Нет подтверждения');
-INSERT INTO "Trs" VALUES('Data block short or error','Блок даних короткий або помилка','Блок данных короткий или ошибка');
-INSERT INTO "Trs" VALUES('Block sequence.','Блокувальна послідовність.','Блокирующая последовательность.');
-INSERT INTO "Trs" VALUES('Unknown block end.','Кінець невідомого блоку.','Конец неизвестного блока.');
-INSERT INTO "Trs" VALUES('Not full respond','Неповна відповідь','Неполный ответ');
-INSERT INTO "Trs" VALUES('Data range error.','Помилка діапазону даних','Ошибка диапазона данных');
-INSERT INTO "Trs" VALUES('Unknown error.','Невідома помилка.','Неизвестная ошибка.');
-INSERT INTO "Trs" VALUES('Error set PIN-code.','Помилка встановлення PIN-коду.','Ошибка установки PIN-кода.');
-INSERT INTO "Trs" VALUES('Error set PDU mode.','Помилка встановлення режиму PDU.','Ошибка установки режима PDU.');
-INSERT INTO "Trs" VALUES('Error sent SMS.','Помилка надсилання SMS.','Ошибка отправки SMS.');
-INSERT INTO "Trs" VALUES('Error sent SMS PDU','Помилка надсилання SMS PDU','Ошибка отправки SMS PDU');
-INSERT INTO "Trs" VALUES('Device address out of range 1...254','Адреса пристрою за межою 1...254','Адрес устройства за границей 1...254');
-INSERT INTO "Trs" VALUES('No or error respond','Немає або помилка відповіді','Нет или ошибка ответа');
-INSERT INTO "Trs" VALUES('Device address out of range 1...32','Адреса пристрою за межою 1...32','Адрес устройства за границей 1...32');
-INSERT INTO "Trs" VALUES('Device address out of range 0...254','Адреса пристрою за межою 0...254','Адрес устройства за границей 0...254');
-INSERT INTO "Trs" VALUES('Device address out of range 0...2047','Адреса пристрою за межою 0...2047','Адрес устройства за границей 0...2047');
-INSERT INTO "Trs" VALUES('No or short respond','Немає або коротка відповідь','Нет или короткий ответ');
-INSERT INTO "Trs" VALUES('Device address out of range 0...255','Адреса пристрою за межою 0...255','Адрес устройства за границей 0...255');
-INSERT INTO "Trs" VALUES('No a respond','Немає відповіді','Нет ответа');
-INSERT INTO "Trs" VALUES('CRC error','Помилка CRC','Ошибка CRC');
-INSERT INTO "Trs" VALUES('Signal exceed to upper hardware border','Вихід сигналу за нижню апаратну границю','Выход сигнала за нижнюю аппаратную границу');
-INSERT INTO "Trs" VALUES('Signal exceed to bottom hardware border','Вихід сигналу за верхню апаратну границю','Выход сигнала за верхнюю аппаратную границу');
-INSERT INTO "Trs" VALUES('Request','Запит','Запрос');
-INSERT INTO "Trs" VALUES('Header error','Помилка заголовку','Ошибка заголовка');
-INSERT INTO "Trs" VALUES('Header CRC error','Помилка контрольної суми заголовку','Ошибка контрольной суммы заголовка');
-INSERT INTO "Trs" VALUES('Info block size error','Помилка розміру інформаційного блоку','Ошибка размера информационного блока');
-INSERT INTO "Trs" VALUES('Info block CRC error.','Помилка контрольної суми інформаційного блоку','Ошибка контрольной суммы информационного блока');
-INSERT INTO "Trs" VALUES('Request error','Помилка запиту','Ошибка запроса');
-INSERT INTO "Trs" VALUES('Respond too short or wrong','Відповідь дуже коротка або помилкова','Ответ очень короткий или ошибочный');
-INSERT INTO "Trs" VALUES('Wrong or no a respond.','Помилка або немає відповіді.','Ошибка или нет ответа.');
-INSERT INTO "Trs" VALUES('Message''s length more 255*255','Розмір повідомлення більш за 255*255','Размер сообщения больше чем 255*255');
-INSERT INTO "Trs" VALUES('No data block get','Не отримано блоку даних','Не получено блока данных');
-INSERT INTO "Trs" VALUES('LRC error.','Помилка LRC.','Ошибка LRC.');
-INSERT INTO "Trs" VALUES('Message empty','Повідомлення порожне','Ответ пуст');
-INSERT INTO "Trs" VALUES('Request:','Запит:','Запрос:');
-INSERT INTO "Trs" VALUES('Wrong respond','Помилкова відповідь','Ошибочный ответ');
-INSERT INTO "Trs" VALUES('Respond:','Відповідь:','Ответ:');
-INSERT INTO "Trs" VALUES('Illegal command (CMD code not valid).','','');
-INSERT INTO "Trs" VALUES('Syntax error. (Too many bytes in data field, not enough bytes, etc).','','');
-INSERT INTO "Trs" VALUES('Inhibited.','','');
-INSERT INTO "Trs" VALUES('Obsolete command. No action taken, but not really an error.','','');
-INSERT INTO "Trs" VALUES('Telephone number error.','','');
-INSERT INTO "Trs" VALUES('Long length (%1) of the message.','','');
-INSERT INTO "Trs" VALUES('KS error.','','');
-INSERT INTO "Trs" VALUES('KS error','','');
-INSERT INTO "Trs" VALUES('Request error.','','');
-INSERT INTO "Trs" VALUES('Serial output transport ''%1'' error.','','');
-INSERT INTO "Trs" VALUES('Request: TRANSL_TEMP.','','');
-INSERT INTO "Trs" VALUES('No connection','','');
-INSERT INTO "Trs" VALUES('Output transport ''%1'' error.','','');
-INSERT INTO "Trs" VALUES('Read all data.','','');
-INSERT INTO "Trs" VALUES('Reply is not full','Відповідь не повна','Ответ не полный');
-INSERT INTO "Trs" VALUES('No Problems. The rest below are prioritized.','','');
-INSERT INTO "Trs" VALUES('Frequency of xtal is > Fq or < Fm. Halts all other calculations.','','');
-INSERT INTO "Trs" VALUES('Frequency was bad (previous XtalStat was XPROB_FREQ) and frequency is now in range, but life is less than 3%.','','');
-INSERT INTO "Trs" VALUES('Stability level XtalStab of xtal >= SlvlTrip.','','');
-INSERT INTO "Trs" VALUES('Unable to determine rate because of a computation error, most likely caused by a parameter (density, z-ratio, etc) having a zero or otherwise invalid (non numeric or infinity) value.','','');
-INSERT INTO "Trs" VALUES('XtalQual of xtal >= QlvlTrip.','','');
-INSERT INTO "Trs" VALUES('Transport ''%1'' error.','','');
-INSERT INTO "Trs" VALUES('Request for service info.','','');
-INSERT INTO "Trs" VALUES('Request for counter time and hour archive begin.','','');
-INSERT INTO "Trs" VALUES('Request for dimensions and precisions.','','');
-INSERT INTO "Trs" VALUES('Request for curent values.','','');
-INSERT INTO "Trs" VALUES('Request for hour archive values.','','');
-INSERT INTO "Trs" VALUES('Request for set archive data.','','');
-INSERT INTO "Trs" VALUES('Request for day archive values.','','');
-INSERT INTO "Trs" VALUES('Request for results month archive values.','','');
-INSERT INTO "Trs" VALUES('Request for data read.','','');
-INSERT INTO "Trs" VALUES('Set current','','');
-INSERT INTO "Trs" VALUES('Device address out of range 0...15','','');
-INSERT INTO "Trs" VALUES('Respond too short','','');
-INSERT INTO "Trs" VALUES('Respond too long, possible continuous mode','','');
-INSERT INTO "Trs" VALUES('RS232 synchronization error. ','','');
-INSERT INTO "Trs" VALUES('Incorrect command, e.g. inadmissible address (syntax error). ','','');
-INSERT INTO "Trs" VALUES('Inadmissible read command. ','','');
-INSERT INTO "Trs" VALUES('SP1 status. ','','');
-INSERT INTO "Trs" VALUES('SP2 status. ','','');
-INSERT INTO "Trs" VALUES('Atm. pressure out of range. ','','');
-INSERT INTO "Trs" VALUES('Temperature out of range. ','','');
-INSERT INTO "Trs" VALUES('Cal. mode wrong. ','','');
-INSERT INTO "Trs" VALUES('Pressure underflow. ','','');
-INSERT INTO "Trs" VALUES('Pressure overflow. ','','');
-INSERT INTO "Trs" VALUES('Zero adjust warning. ','','');
-INSERT INTO "Trs" VALUES('PT1000 fault (CTR 101 only). ','','');
-INSERT INTO "Trs" VALUES('Heaterblock overtemp. ','','');
-INSERT INTO "Trs" VALUES('Electronic overtemp. ','','');
-INSERT INTO "Trs" VALUES('Zero adjust error. ','','');
-INSERT INTO "Trs" VALUES('Output transport ''%1'' stoped.','','');
-INSERT INTO "Trs" VALUES('Wrong sequence, rejected','Помилкова послідовність, відкинуто','Ошибочная последовательность, отброшено');
-INSERT INTO "Trs" VALUES('Connection terminated by the input sequence broken, lost input packages, S(R)=%1, S(T)=%2','','');
-INSERT INTO "Trs" VALUES('Connection terminated by not acknowledge transmited package ''%1'' by timeout t1 (%2).','','');
-INSERT INTO "Trs" VALUES('Connection terminated by not confirmed TEST package by timeout t1 (%1).','','');
-INSERT INTO "Trs" VALUES('Error','Помилка','Ошибка');
-INSERT INTO "Trs" VALUES('Good output sequence','','');
-INSERT INTO "Trs" VALUES('Good input sequence','','');
-INSERT INTO "Trs" VALUES('M_SP_NA_1: No the SQ mode implemented yet','','');
-INSERT INTO "Trs" VALUES('M_SP_NA_1: Items number discrepancy to the package size','','');
-INSERT INTO "Trs" VALUES('M_ME_NB_1: No the SQ mode implemented yet','','');
-INSERT INTO "Trs" VALUES('M_ME_NB_1: Items number discrepancy to the package size','','');
-INSERT INTO "Trs" VALUES('C_SC_NA_1: No the SQ mode implemented yet','','');
-INSERT INTO "Trs" VALUES('C_SC_NA_1: Items number discrepancy to the package size','','');
-INSERT INTO "Trs" VALUES('Device address ''%1'' out of range [0...119].','','');
-INSERT INTO "Trs" VALUES('No read result.','','');
-INSERT INTO "Trs" VALUES('No a device present on the bus ''%1''.','','');
-INSERT INTO "Trs" VALUES('1W device','','');
-INSERT INTO "Trs" VALUES('Temperature','','');
-INSERT INTO "Trs" VALUES('User cell [0...65535]','','');
-INSERT INTO "Trs" VALUES('Resolution [9...12]','','');
-INSERT INTO "Trs" VALUES('1:Device missed','','');
-INSERT INTO "Trs" VALUES('3:No a response or the response short.','','');
-INSERT INTO "Trs" VALUES('3:Incomplete response.','','');
-INSERT INTO "Trs" VALUES('4:Request error.','','');
-INSERT INTO "Trs" VALUES('Address ''%1'' out of range [0...255].','','');
-INSERT INTO "Trs" VALUES('Response','','');
-INSERT INTO "Trs" VALUES('Appending variable','Додання змінної','Добавление переменной');
-INSERT INTO "Trs" VALUES('4:Unknown function.','','');
-INSERT INTO "Trs" VALUES('4:Insufficient rights.','','');
-INSERT INTO "Trs" VALUES('4:Invalid function received.','','');
-INSERT INTO "Trs" VALUES('5:Data error...','','');
-INSERT INTO "Trs" VALUES('4:Invalid host''s address received.','','');
-INSERT INTO "Trs" VALUES('5:Operation error.','','');
-INSERT INTO "Trs" VALUES('Wrong login.','','');
-INSERT INTO "Trs" VALUES('No such variable.','','');
-INSERT INTO "Trs" VALUES('Unknown error %1.','','');
-INSERT INTO "Trs" VALUES('Destination:','Мета:','Цель:');
-INSERT INTO "Trs" VALUES('DI0','','');
-INSERT INTO "Trs" VALUES('DI1','','');
-INSERT INTO "Trs" VALUES('DO0','','');
-INSERT INTO "Trs" VALUES('DO1','','');
-INSERT INTO "Trs" VALUES('DS2480 is not detected.','','');
-INSERT INTO "Trs" VALUES('Size mismatch.','','');
-INSERT INTO "Trs" VALUES('day','','');
-INSERT INTO "Trs" VALUES('hour','','');
-INSERT INTO "Trs" VALUES('min','','');
-INSERT INTO "Trs" VALUES('s','','');
-INSERT INTO "Trs" VALUES('ms','','');
-INSERT INTO "Trs" VALUES('us','','');
-INSERT INTO "Trs" VALUES('ns','','');
-INSERT INTO "Trs" VALUES('Allowed variables','Наявно змінних','Доступно переменных');
-INSERT INTO "Trs" VALUES('No data','Немає даних','Нет данных');
-INSERT INTO "Trs" VALUES('Disable ECHO error: %1','','');
-INSERT INTO "Trs" VALUES('Check for PIN-code error: %1','','');
-INSERT INTO "Trs" VALUES('Set PIN error: %1','','');
-INSERT INTO "Trs" VALUES('Set SMS Text mode error: %1','','');
-INSERT INTO "Trs" VALUES('Sent SMS error: %1','','');
-INSERT INTO "Trs" VALUES('Sent SMS PDU error: %1','','');
-INSERT INTO "Trs" VALUES('Set SMS PDU mode error: %1','','');
-INSERT INTO "Trs" VALUES('Impossible connect to the SMTP-server.','','');
-INSERT INTO "Trs" VALUES('No a response.','','');
-INSERT INTO "Trs" VALUES('HELLO error: %1.','','');
-INSERT INTO "Trs" VALUES('Unsupported auth methods: %1.','','');
-INSERT INTO "Trs" VALUES('Auth required: %1.','','');
-INSERT INTO "Trs" VALUES('AUTH error: %1.','','');
-INSERT INTO "Trs" VALUES('AUTH USER error: %1.','','');
-INSERT INTO "Trs" VALUES('AUTH PASS error: %1.','','');
-INSERT INTO "Trs" VALUES('MAIL FROM error: %1.','','');
-INSERT INTO "Trs" VALUES('RCPT TO error: %1.','','');
-INSERT INTO "Trs" VALUES('DATA error: %1.','','');
-INSERT INTO "Trs" VALUES('DATA send error: %1.','','');
-INSERT INTO "Trs" VALUES('Alarm','Сигнал','Сигнал');
-INSERT INTO "Trs" VALUES('Norm','Норма','Норма');
-INSERT INTO "Trs" VALUES('Sent %1. In queue %2.','','');
-INSERT INTO "Trs" VALUES('Error: %1.','','');
-INSERT INTO "Trs" VALUES('Wrong or empty respond to the calibration request.','','');
-INSERT INTO "Trs" VALUES('Wrong or empty respond to the temperature data.','','');
-INSERT INTO "Trs" VALUES('Wrong or empty read respond.','','');
-INSERT INTO "Trs" VALUES('Device address out of range 0...119.','','');
-INSERT INTO "Trs" VALUES('Memory offset out of range 0...8191.','','');
-INSERT INTO "Trs" VALUES('Readed memory size out of range 0...8191.','','');
-INSERT INTO "Trs" VALUES('Not or short respond %1 from %2.','','');
-INSERT INTO "Trs" VALUES('Too long write sequence.','','');
-INSERT INTO "Trs" VALUES('DI','','');
-INSERT INTO "Trs" VALUES('DO','','');
-INSERT INTO "Trs" VALUES('Resolution','','');
-INSERT INTO "Trs" VALUES('AI','','');
-INSERT INTO "Trs" VALUES('Mode','','');
-INSERT INTO "Trs" VALUES('Voltage','','');
-INSERT INTO "Trs" VALUES('Current','','');
-INSERT INTO "Trs" VALUES('Temperature, °С','','');
-INSERT INTO "Trs" VALUES('AI, V','','');
-INSERT INTO "Trs" VALUES('Voltage, V','','');
-INSERT INTO "Trs" VALUES('Current, A','','');
-INSERT INTO "Trs" VALUES('Current A/D','','');
-INSERT INTO "Trs" VALUES('Current Accumulator','','');
-INSERT INTO "Trs" VALUES('Current Accumulator Shadow','','');
-INSERT INTO "Trs" VALUES('Voltage A/D (0-VAD,1-VDD)','','');
-INSERT INTO "Trs" VALUES('Accumulation threshold','','');
-INSERT INTO "Trs" VALUES('Elapsed time meter','','');
-INSERT INTO "Trs" VALUES('Current Offset','','');
-INSERT INTO "Trs" VALUES('Enable Current A/D','','');
-INSERT INTO "Trs" VALUES('Enable Current Accumulator','','');
-INSERT INTO "Trs" VALUES('Enable Current Accumulator Shadow','','');
-INSERT INTO "Trs" VALUES('Disconnect time','','');
-INSERT INTO "Trs" VALUES('End of charge time','','');
-INSERT INTO "Trs" VALUES('No link to external functions on ''%1''.','','');
-INSERT INTO "Trs" VALUES('Unknown device %1 [0-DHT11, 1-DHT22].','','');
-INSERT INTO "Trs" VALUES('Tries number %1 out of range [1...5].','','');
-INSERT INTO "Trs" VALUES('Get data after %1 tries error.','','');
-INSERT INTO "Trs" VALUES('None of good battery present','','');
-INSERT INTO "Trs" VALUES('Error for ''%1'' as an output transport of I2C or a link to external functions of GPIO.','','');
-INSERT INTO "Trs" VALUES('Empty','Порожньо','Пусто');
-INSERT INTO "Trs" VALUES('Wrong or empty respond to the calibration T1-3 or P1-9 request.','','');
-INSERT INTO "Trs" VALUES('Wrong or empty respond to the calibration H1 request.','','');
-INSERT INTO "Trs" VALUES('Wrong or empty respond to the calibration H2-H6 request.','','');
-INSERT INTO "Trs" VALUES('Wrong or empty respond to the pressure data.','','');
-INSERT INTO "Trs" VALUES('Wrong or empty respond to the humidity data.','','');
-INSERT INTO "Trs" VALUES('Error FCS.','Помилка FCS','Ошибка FCS');
-INSERT INTO "Trs" VALUES('Wrong or empty response.','Помилкова або порожня відповідь','Ошибочный или пустой ответ.');
-INSERT INTO "Trs" VALUES('3:No response or the response is short.','3:Немає відповіді або вона закоротка.','3:Нет ответа или он короткий.');
-INSERT INTO "Trs" VALUES('4:Disparity of the request address and the response one.','4:Невідповідність адреси запиту та відповіді.','4:Несоответствие адреса запроса и ответа.');
-INSERT INTO "Trs" VALUES('4:Disparity of the request function and the response one.','4:Невідповідність функції запиту та відповіді.','4:Несоответствие функции запроса и ответа.');
-INSERT INTO "Trs" VALUES('4:Incomplete response.','4:Неповна відповідь.','4:Неполный ответ.');
-INSERT INTO "Trs" VALUES('4:Disparity of the request ID and the response one.','4:Невідповідність ID запиту та відповіді.','4:Несоответствие ID запроса и ответа.');
-INSERT INTO "Trs" VALUES('4:Error CRC.','4:Помилка CRC.','4:Ошибка CRC.');
-INSERT INTO "Trs" VALUES('Channel','Канал','Канал');
-INSERT INTO "Trs" VALUES('value','значення','Значение');
-INSERT INTO "Trs" VALUES('weight','вага','масса');
-INSERT INTO "Trs" VALUES('average flow','середній поток','средний поток');
-INSERT INTO "Trs" VALUES('input','Вхід','Вход');
-INSERT INTO "Trs" VALUES('Error the output transport ''%1''.','Помилка вихідного транспорту ''%1''','Ошибка выходного транспорта ''%1''.');
-INSERT INTO "Trs" VALUES('The address ''%1'' is out of the range [0...99999999].','Адреса ''%1'' поза діапазоном [0...99999999].','Адрес ''%1'' за диапазоном [0...99999999].');
-INSERT INTO "Trs" VALUES('No data.','Немає даних.','Нет данных');
-INSERT INTO "Trs" VALUES('Address out of the range [-2047...255].','','');
-INSERT INTO "Trs" VALUES('Wrong or no response.','','');
-INSERT INTO "Trs" VALUES('Error CRC.','','');
-INSERT INTO "Trs" VALUES('Data size error.','','');
-INSERT INTO "Trs" VALUES('The data size is not equal to pointed one.','','');
-INSERT INTO "Trs" VALUES('Write','','');
-INSERT INTO "Trs" VALUES('uh oh, no thermocouple attached!','','');
-CREATE TABLE 'tmplib_DevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "tmplib_DevLib" VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
+CREATE TABLE IF NOT EXISTS 'Trs' ("base" TEXT DEFAULT '' ,"uk#base" TEXT DEFAULT '' ,"ru#base" TEXT DEFAULT '' , PRIMARY KEY ("base"));
+INSERT INTO Trs VALUES('No data or connection with source','Немає даних або зв''язку із джерелом','Нет данных или связи с источником');
+INSERT INTO Trs VALUES('The signal exceed to upper hardware border','Сигнал перевищив верхню апаратну границю','Выход сигнала за верхнюю аппаратную границу');
+INSERT INTO Trs VALUES('The signal exceed to bottom hardware border','Сигнал перевищив нижню апаратну границю','Выход сигнала за нижнюю аппаратную границу');
+INSERT INTO Trs VALUES('Upper alarm border error','Помилка верхньої аварійної границі','Нарушение верхней аварийной границы');
+INSERT INTO Trs VALUES('Lower alarm border error','Помилка нижньої аварійної границі','Нарушение нижней аварийной границы');
+INSERT INTO Trs VALUES('Upper warning border error','Помилка верхньої поперджув. границі','Нарушение верхней предупредительной границы');
+INSERT INTO Trs VALUES('Lower warning border error','Помилка нижньої поперджув. границі','Нарушение нижней предупредительной границы');
+INSERT INTO Trs VALUES('Too big parameter''s motion speed','Дуже велика швидкість зміни параметру','Очень большая скорость изменения параметра');
+INSERT INTO Trs VALUES('NORMA','НОРМА','НОРМА');
+INSERT INTO Trs VALUES('Step missed','Крок пропущено','Шаг пропущен');
+INSERT INTO Trs VALUES('Program terminated','Програму перервано','Программа прервана');
+INSERT INTO Trs VALUES('Terminated by user session of the program','Перерваний користувачем сеанс програми','Прерванный пользователем сеанс программы');
+INSERT INTO Trs VALUES('Terminated by error session of the program','Перерваний помилкою сеанс програми','Прерванный ошибкой сеанс программы');
+INSERT INTO Trs VALUES('Successful session of the program','Вдалий сеанс програми','Успешный сеанс программы');
+INSERT INTO Trs VALUES('Command miss: ','Відсутня команда: ','Отсутствует команда: ');
+INSERT INTO Trs VALUES('Waiting %1s expired','Очікування %1с вичерпано','Ожидание %1c исчерпано');
+INSERT INTO Trs VALUES('Waiting %1s','Очікування %1с','Ожидание %1c');
+INSERT INTO Trs VALUES('Background waiting %1s','Фонове очікування %1с','Фоновое ожидание %1c');
+INSERT INTO Trs VALUES('No current node present','Поточний вузол відсутній','Текущий узел отсутствует');
+INSERT INTO Trs VALUES('No connection to source object','Немає з''єднання із об''єктом джерела','Нет подключения с объектом источника');
+INSERT INTO Trs VALUES('Source error','Помилка джерела','Ошибка источника');
+INSERT INTO Trs VALUES('Status','Статус','Статус');
+INSERT INTO Trs VALUES('On battery','Від батареї','От батареи');
+INSERT INTO Trs VALUES('Low battery','Батарею розряджено','Батарея разряжена');
+INSERT INTO Trs VALUES('Shutdown load','Скид навантаження','Сброс нагрузки');
+INSERT INTO Trs VALUES('ALARM','АВАРІЯ','АВАРИЯ');
+INSERT INTO Trs VALUES('None good battery present','Відсутні хорощі батареї','Отсутствуют хорошие батареи');
+INSERT INTO Trs VALUES('Battery charge low','Низький заряд батареї','Низкий заряд батареи');
+INSERT INTO Trs VALUES('Battery charge critical','Критичний заряд батареї','Критический заряд батареи');
+INSERT INTO Trs VALUES('Bad %1 batteries present','Зіпсованих батарей %1','Испорченных батарей %1');
+INSERT INTO Trs VALUES('Input voltage low','Низька вхідна напруга','Низкое входное напряжение');
+INSERT INTO Trs VALUES('Input voltage high','Висока вхідна напруга','Высокое входное напряжение');
+INSERT INTO Trs VALUES('Input frequency too low','Дуже низька вхідна частота','Очень низкая входная частота');
+INSERT INTO Trs VALUES('Input frequency too high','Дуже висока вхідна частота','Очень высокая входная частота');
+INSERT INTO Trs VALUES('Input frequency low','Низька вхідна частота','Низкая входная частота');
+INSERT INTO Trs VALUES('Input frequency high','Висока вхідна частота','Высокая входная частота');
+INSERT INTO Trs VALUES('UPS overloaded','ДБЖ перевантажено','ИБП перегружено');
+INSERT INTO Trs VALUES('UPS load high','Високе навантаження ДБЖ','Высокая нагрузка ИБП');
+INSERT INTO Trs VALUES('UPS overheated','ДБЖ перегрітий','ИБП перегретый');
+INSERT INTO Trs VALUES('Temperature high','Висока температура','Высокая температура');
+INSERT INTO Trs VALUES('Levitation','Левітація','Левитация');
+INSERT INTO Trs VALUES('No Levitation','Не левітація','Не левитация');
+INSERT INTO Trs VALUES('Acceleration','Розгін','Разгон');
+INSERT INTO Trs VALUES('Normal','Нормальний','Нормальный');
+INSERT INTO Trs VALUES('Deceleration (Brake)','Гальмування','Торможение');
+INSERT INTO Trs VALUES('Autotest','Автотест','Автотест');
+INSERT INTO Trs VALUES('Tuning','Підлаштування','Подстройка');
+INSERT INTO Trs VALUES('Tuning Complete','Підлаштування завершене','Подстройка завершена');
+INSERT INTO Trs VALUES('Local','Локально','Локально');
+INSERT INTO Trs VALUES('Remote','Віддалено','Удалённо');
+INSERT INTO Trs VALUES('Start session.','Запуск сеансу.','Запуск сеанса.');
+INSERT INTO Trs VALUES('Request for values present list and size.','Запит наявних значень та розмірів','Запрос доступных значений и размеров');
+INSERT INTO Trs VALUES('Readed items list write.','Запис переліку элементів для читання.','Запись списка элементов для чтения.');
+INSERT INTO Trs VALUES('Write to hour archive for time','Запис до архіву годин на час','Запись в архив часов за время');
+INSERT INTO Trs VALUES('Write to day archive for time','Запис до архіву днів на час','Запись в архив дней за время');
+INSERT INTO Trs VALUES('Write to result month archive for time','Запис до результуючого архіву місяців на час','Запись в результирующий архив месяцев за время');
+INSERT INTO Trs VALUES('Error response','Помилка відповіді','Ошибка ответа');
+INSERT INTO Trs VALUES('Quality errors','Помилки якості','Ошибки качетсва');
+INSERT INTO Trs VALUES('No a connection','Нема підключення','Нет подключения');
+INSERT INTO Trs VALUES('Data list for request empty.','Перелік даних запиту порожній.','Список данных запроса пустой.');
+INSERT INTO Trs VALUES('Unknown','Невідомий','Неизвестный');
+INSERT INTO Trs VALUES('Deceleration','Гальмування','Торможение');
+INSERT INTO Trs VALUES('Stop operation failure','Невдача операції зупинки','Неудача операции останова');
+INSERT INTO Trs VALUES('Idling failure','Невдача простою','Неудача простоя');
+INSERT INTO Trs VALUES('Regeneration breaking failure','Збій регенерації гальмування','Сбой регенерации торможения');
+INSERT INTO Trs VALUES('Deceleration failure','Помилка гальмування','Ошибка торможения');
+INSERT INTO Trs VALUES('No connect','Не підключено','Не подключено');
+INSERT INTO Trs VALUES('Error or no response.','Помилка або немає відповіді','Ошибка или нет ответа');
+INSERT INTO Trs VALUES('CRC error.','Помилка CRC.','Ошибка CRC.');
+INSERT INTO Trs VALUES('DCON error.','Помилка DCON.','Ошибка DCON.');
+INSERT INTO Trs VALUES('No respond','Немає відповіді','Нет ответа');
+INSERT INTO Trs VALUES('No acknowledgment','Немає підтвердження','Нет подтверждения');
+INSERT INTO Trs VALUES('Data block short or error','Блок даних короткий або помилка','Блок данных короткий или ошибка');
+INSERT INTO Trs VALUES('Block sequence.','Блокувальна послідовність.','Блокирующая последовательность.');
+INSERT INTO Trs VALUES('Unknown block end.','Кінець невідомого блоку.','Конец неизвестного блока.');
+INSERT INTO Trs VALUES('Not full respond','Неповна відповідь','Неполный ответ');
+INSERT INTO Trs VALUES('Data range error.','Помилка діапазону даних','Ошибка диапазона данных');
+INSERT INTO Trs VALUES('Unknown error.','Невідома помилка.','Неизвестная ошибка.');
+INSERT INTO Trs VALUES('Error set PIN-code.','Помилка встановлення PIN-коду.','Ошибка установки PIN-кода.');
+INSERT INTO Trs VALUES('Error set PDU mode.','Помилка встановлення режиму PDU.','Ошибка установки режима PDU.');
+INSERT INTO Trs VALUES('Error sent SMS.','Помилка надсилання SMS.','Ошибка отправки SMS.');
+INSERT INTO Trs VALUES('Error sent SMS PDU','Помилка надсилання SMS PDU','Ошибка отправки SMS PDU');
+INSERT INTO Trs VALUES('Device address out of range 1...254','Адреса пристрою за межою 1...254','Адрес устройства за границей 1...254');
+INSERT INTO Trs VALUES('No or error respond','Немає або помилка відповіді','Нет или ошибка ответа');
+INSERT INTO Trs VALUES('Device address out of range 1...32','Адреса пристрою за межою 1...32','Адрес устройства за границей 1...32');
+INSERT INTO Trs VALUES('Device address out of range 0...254','Адреса пристрою за межою 0...254','Адрес устройства за границей 0...254');
+INSERT INTO Trs VALUES('Device address out of range 0...2047','Адреса пристрою за межою 0...2047','Адрес устройства за границей 0...2047');
+INSERT INTO Trs VALUES('No or short respond','Немає або коротка відповідь','Нет или короткий ответ');
+INSERT INTO Trs VALUES('Device address out of range 0...255','Адреса пристрою за межою 0...255','Адрес устройства за границей 0...255');
+INSERT INTO Trs VALUES('No a respond','Немає відповіді','Нет ответа');
+INSERT INTO Trs VALUES('CRC error','Помилка CRC','Ошибка CRC');
+INSERT INTO Trs VALUES('Signal exceed to upper hardware border','Вихід сигналу за нижню апаратну границю','Выход сигнала за нижнюю аппаратную границу');
+INSERT INTO Trs VALUES('Signal exceed to bottom hardware border','Вихід сигналу за верхню апаратну границю','Выход сигнала за верхнюю аппаратную границу');
+INSERT INTO Trs VALUES('Request','Запит','Запрос');
+INSERT INTO Trs VALUES('Header error','Помилка заголовку','Ошибка заголовка');
+INSERT INTO Trs VALUES('Header CRC error','Помилка контрольної суми заголовку','Ошибка контрольной суммы заголовка');
+INSERT INTO Trs VALUES('Info block size error','Помилка розміру інформаційного блоку','Ошибка размера информационного блока');
+INSERT INTO Trs VALUES('Info block CRC error.','Помилка контрольної суми інформаційного блоку','Ошибка контрольной суммы информационного блока');
+INSERT INTO Trs VALUES('Request error','Помилка запиту','Ошибка запроса');
+INSERT INTO Trs VALUES('Respond too short or wrong','Відповідь дуже коротка або помилкова','Ответ очень короткий или ошибочный');
+INSERT INTO Trs VALUES('Wrong or no a respond.','Помилка або немає відповіді.','Ошибка или нет ответа.');
+INSERT INTO Trs VALUES('Message''s length more 255*255','Розмір повідомлення більш за 255*255','Размер сообщения больше чем 255*255');
+INSERT INTO Trs VALUES('No data block get','Не отримано блоку даних','Не получено блока данных');
+INSERT INTO Trs VALUES('LRC error.','Помилка LRC.','Ошибка LRC.');
+INSERT INTO Trs VALUES('Message empty','Повідомлення порожне','Ответ пуст');
+INSERT INTO Trs VALUES('Request:','Запит:','Запрос:');
+INSERT INTO Trs VALUES('Wrong respond','Помилкова відповідь','Ошибочный ответ');
+INSERT INTO Trs VALUES('Respond:','Відповідь:','Ответ:');
+INSERT INTO Trs VALUES('Illegal command (CMD code not valid).','','');
+INSERT INTO Trs VALUES('Syntax error. (Too many bytes in data field, not enough bytes, etc).','','');
+INSERT INTO Trs VALUES('Inhibited.','','');
+INSERT INTO Trs VALUES('Obsolete command. No action taken, but not really an error.','','');
+INSERT INTO Trs VALUES('Telephone number error.','','');
+INSERT INTO Trs VALUES('Long length (%1) of the message.','','');
+INSERT INTO Trs VALUES('KS error.','','');
+INSERT INTO Trs VALUES('KS error','','');
+INSERT INTO Trs VALUES('Request error.','','');
+INSERT INTO Trs VALUES('Serial output transport ''%1'' error.','','');
+INSERT INTO Trs VALUES('Request: TRANSL_TEMP.','','');
+INSERT INTO Trs VALUES('No connection','','');
+INSERT INTO Trs VALUES('Output transport ''%1'' error.','','');
+INSERT INTO Trs VALUES('Read all data.','','');
+INSERT INTO Trs VALUES('Reply is not full','Відповідь не повна','Ответ не полный');
+INSERT INTO Trs VALUES('No Problems. The rest below are prioritized.','','');
+INSERT INTO Trs VALUES('Frequency of xtal is > Fq or < Fm. Halts all other calculations.','','');
+INSERT INTO Trs VALUES('Frequency was bad (previous XtalStat was XPROB_FREQ) and frequency is now in range, but life is less than 3%.','','');
+INSERT INTO Trs VALUES('Stability level XtalStab of xtal >= SlvlTrip.','','');
+INSERT INTO Trs VALUES('Unable to determine rate because of a computation error, most likely caused by a parameter (density, z-ratio, etc) having a zero or otherwise invalid (non numeric or infinity) value.','','');
+INSERT INTO Trs VALUES('XtalQual of xtal >= QlvlTrip.','','');
+INSERT INTO Trs VALUES('Transport ''%1'' error.','','');
+INSERT INTO Trs VALUES('Request for service info.','','');
+INSERT INTO Trs VALUES('Request for counter time and hour archive begin.','','');
+INSERT INTO Trs VALUES('Request for dimensions and precisions.','','');
+INSERT INTO Trs VALUES('Request for curent values.','','');
+INSERT INTO Trs VALUES('Request for hour archive values.','','');
+INSERT INTO Trs VALUES('Request for set archive data.','','');
+INSERT INTO Trs VALUES('Request for day archive values.','','');
+INSERT INTO Trs VALUES('Request for results month archive values.','','');
+INSERT INTO Trs VALUES('Request for data read.','','');
+INSERT INTO Trs VALUES('Set current','','');
+INSERT INTO Trs VALUES('Device address out of range 0...15','','');
+INSERT INTO Trs VALUES('Respond too short','','');
+INSERT INTO Trs VALUES('Respond too long, possible continuous mode','','');
+INSERT INTO Trs VALUES('RS232 synchronization error. ','','');
+INSERT INTO Trs VALUES('Incorrect command, e.g. inadmissible address (syntax error). ','','');
+INSERT INTO Trs VALUES('Inadmissible read command. ','','');
+INSERT INTO Trs VALUES('SP1 status. ','','');
+INSERT INTO Trs VALUES('SP2 status. ','','');
+INSERT INTO Trs VALUES('Atm. pressure out of range. ','','');
+INSERT INTO Trs VALUES('Temperature out of range. ','','');
+INSERT INTO Trs VALUES('Cal. mode wrong. ','','');
+INSERT INTO Trs VALUES('Pressure underflow. ','','');
+INSERT INTO Trs VALUES('Pressure overflow. ','','');
+INSERT INTO Trs VALUES('Zero adjust warning. ','','');
+INSERT INTO Trs VALUES('PT1000 fault (CTR 101 only). ','','');
+INSERT INTO Trs VALUES('Heaterblock overtemp. ','','');
+INSERT INTO Trs VALUES('Electronic overtemp. ','','');
+INSERT INTO Trs VALUES('Zero adjust error. ','','');
+INSERT INTO Trs VALUES('Output transport ''%1'' stoped.','','');
+INSERT INTO Trs VALUES('Wrong sequence, rejected','Помилкова послідовність, відкинуто','Ошибочная последовательность, отброшено');
+INSERT INTO Trs VALUES('Connection terminated by the input sequence broken, lost input packages, S(R)=%1, S(T)=%2','','');
+INSERT INTO Trs VALUES('Connection terminated by not acknowledge transmited package ''%1'' by timeout t1 (%2).','','');
+INSERT INTO Trs VALUES('Connection terminated by not confirmed TEST package by timeout t1 (%1).','','');
+INSERT INTO Trs VALUES('Error','Помилка','Ошибка');
+INSERT INTO Trs VALUES('Good output sequence','','');
+INSERT INTO Trs VALUES('Good input sequence','','');
+INSERT INTO Trs VALUES('M_SP_NA_1: No the SQ mode implemented yet','','');
+INSERT INTO Trs VALUES('M_SP_NA_1: Items number discrepancy to the package size','','');
+INSERT INTO Trs VALUES('M_ME_NB_1: No the SQ mode implemented yet','','');
+INSERT INTO Trs VALUES('M_ME_NB_1: Items number discrepancy to the package size','','');
+INSERT INTO Trs VALUES('C_SC_NA_1: No the SQ mode implemented yet','','');
+INSERT INTO Trs VALUES('C_SC_NA_1: Items number discrepancy to the package size','','');
+INSERT INTO Trs VALUES('Device address ''%1'' out of range [0...119].','','');
+INSERT INTO Trs VALUES('No read result.','','');
+INSERT INTO Trs VALUES('No a device present on the bus ''%1''.','','');
+INSERT INTO Trs VALUES('1W device','','');
+INSERT INTO Trs VALUES('Temperature','','');
+INSERT INTO Trs VALUES('User cell [0...65535]','','');
+INSERT INTO Trs VALUES('Resolution [9...12]','','');
+INSERT INTO Trs VALUES('1:Device missed','','');
+INSERT INTO Trs VALUES('3:No a response or the response short.','','');
+INSERT INTO Trs VALUES('3:Incomplete response.','','');
+INSERT INTO Trs VALUES('4:Request error.','','');
+INSERT INTO Trs VALUES('Address ''%1'' out of range [0...255].','','');
+INSERT INTO Trs VALUES('Response','','');
+INSERT INTO Trs VALUES('Appending variable','Додання змінної','Добавление переменной');
+INSERT INTO Trs VALUES('4:Unknown function.','','');
+INSERT INTO Trs VALUES('4:Insufficient rights.','','');
+INSERT INTO Trs VALUES('4:Invalid function received.','','');
+INSERT INTO Trs VALUES('5:Data error...','','');
+INSERT INTO Trs VALUES('4:Invalid host''s address received.','','');
+INSERT INTO Trs VALUES('5:Operation error.','','');
+INSERT INTO Trs VALUES('Wrong login.','','');
+INSERT INTO Trs VALUES('No such variable.','','');
+INSERT INTO Trs VALUES('Unknown error %1.','','');
+INSERT INTO Trs VALUES('Destination:','Мета:','Цель:');
+INSERT INTO Trs VALUES('DI0','','');
+INSERT INTO Trs VALUES('DI1','','');
+INSERT INTO Trs VALUES('DO0','','');
+INSERT INTO Trs VALUES('DO1','','');
+INSERT INTO Trs VALUES('DS2480 is not detected.','','');
+INSERT INTO Trs VALUES('Size mismatch.','','');
+INSERT INTO Trs VALUES('day','','');
+INSERT INTO Trs VALUES('hour','','');
+INSERT INTO Trs VALUES('min','','');
+INSERT INTO Trs VALUES('s','','');
+INSERT INTO Trs VALUES('ms','','');
+INSERT INTO Trs VALUES('us','','');
+INSERT INTO Trs VALUES('ns','','');
+INSERT INTO Trs VALUES('Allowed variables','Наявно змінних','Доступно переменных');
+INSERT INTO Trs VALUES('No data','Немає даних','Нет данных');
+INSERT INTO Trs VALUES('Disable ECHO error: %1','','');
+INSERT INTO Trs VALUES('Check for PIN-code error: %1','','');
+INSERT INTO Trs VALUES('Set PIN error: %1','','');
+INSERT INTO Trs VALUES('Set SMS Text mode error: %1','','');
+INSERT INTO Trs VALUES('Sent SMS error: %1','','');
+INSERT INTO Trs VALUES('Sent SMS PDU error: %1','','');
+INSERT INTO Trs VALUES('Set SMS PDU mode error: %1','','');
+INSERT INTO Trs VALUES('Impossible connect to the SMTP-server.','','');
+INSERT INTO Trs VALUES('No a response.','','');
+INSERT INTO Trs VALUES('HELLO error: %1.','','');
+INSERT INTO Trs VALUES('Unsupported auth methods: %1.','','');
+INSERT INTO Trs VALUES('Auth required: %1.','','');
+INSERT INTO Trs VALUES('AUTH error: %1.','','');
+INSERT INTO Trs VALUES('AUTH USER error: %1.','','');
+INSERT INTO Trs VALUES('AUTH PASS error: %1.','','');
+INSERT INTO Trs VALUES('MAIL FROM error: %1.','','');
+INSERT INTO Trs VALUES('RCPT TO error: %1.','','');
+INSERT INTO Trs VALUES('DATA error: %1.','','');
+INSERT INTO Trs VALUES('DATA send error: %1.','','');
+INSERT INTO Trs VALUES('Alarm','Сигнал','Сигнал');
+INSERT INTO Trs VALUES('Norm','Норма','Норма');
+INSERT INTO Trs VALUES('Sent %1. In queue %2.','','');
+INSERT INTO Trs VALUES('Error: %1.','','');
+INSERT INTO Trs VALUES('Wrong or empty respond to the calibration request.','','');
+INSERT INTO Trs VALUES('Wrong or empty respond to the temperature data.','','');
+INSERT INTO Trs VALUES('Wrong or empty read respond.','','');
+INSERT INTO Trs VALUES('Device address out of range 0...119.','','');
+INSERT INTO Trs VALUES('Memory offset out of range 0...8191.','','');
+INSERT INTO Trs VALUES('Readed memory size out of range 0...8191.','','');
+INSERT INTO Trs VALUES('Not or short respond %1 from %2.','','');
+INSERT INTO Trs VALUES('Too long write sequence.','','');
+INSERT INTO Trs VALUES('DI','','');
+INSERT INTO Trs VALUES('DO','','');
+INSERT INTO Trs VALUES('Resolution','','');
+INSERT INTO Trs VALUES('AI','','');
+INSERT INTO Trs VALUES('Mode','','');
+INSERT INTO Trs VALUES('Voltage','','');
+INSERT INTO Trs VALUES('Current','','');
+INSERT INTO Trs VALUES('Temperature, °С','','');
+INSERT INTO Trs VALUES('AI, V','','');
+INSERT INTO Trs VALUES('Voltage, V','','');
+INSERT INTO Trs VALUES('Current, A','','');
+INSERT INTO Trs VALUES('Current A/D','','');
+INSERT INTO Trs VALUES('Current Accumulator','','');
+INSERT INTO Trs VALUES('Current Accumulator Shadow','','');
+INSERT INTO Trs VALUES('Voltage A/D (0-VAD,1-VDD)','','');
+INSERT INTO Trs VALUES('Accumulation threshold','','');
+INSERT INTO Trs VALUES('Elapsed time meter','','');
+INSERT INTO Trs VALUES('Current Offset','','');
+INSERT INTO Trs VALUES('Enable Current A/D','','');
+INSERT INTO Trs VALUES('Enable Current Accumulator','','');
+INSERT INTO Trs VALUES('Enable Current Accumulator Shadow','','');
+INSERT INTO Trs VALUES('Disconnect time','','');
+INSERT INTO Trs VALUES('End of charge time','','');
+INSERT INTO Trs VALUES('No link to external functions on ''%1''.','','');
+INSERT INTO Trs VALUES('Unknown device %1 [0-DHT11, 1-DHT22].','','');
+INSERT INTO Trs VALUES('Tries number %1 out of range [1...5].','','');
+INSERT INTO Trs VALUES('Get data after %1 tries error.','','');
+INSERT INTO Trs VALUES('None of good battery present','','');
+INSERT INTO Trs VALUES('Error for ''%1'' as an output transport of I2C or a link to external functions of GPIO.','','');
+INSERT INTO Trs VALUES('Empty','Порожньо','Пусто');
+INSERT INTO Trs VALUES('Wrong or empty respond to the calibration T1-3 or P1-9 request.','','');
+INSERT INTO Trs VALUES('Wrong or empty respond to the calibration H1 request.','','');
+INSERT INTO Trs VALUES('Wrong or empty respond to the calibration H2-H6 request.','','');
+INSERT INTO Trs VALUES('Wrong or empty respond to the pressure data.','','');
+INSERT INTO Trs VALUES('Wrong or empty respond to the humidity data.','','');
+INSERT INTO Trs VALUES('Error FCS.','Помилка FCS','Ошибка FCS');
+INSERT INTO Trs VALUES('Wrong or empty response.','Помилкова або порожня відповідь','Ошибочный или пустой ответ.');
+INSERT INTO Trs VALUES('3:No response or the response is short.','3:Немає відповіді або вона закоротка.','3:Нет ответа или он короткий.');
+INSERT INTO Trs VALUES('4:Disparity of the request address and the response one.','4:Невідповідність адреси запиту та відповіді.','4:Несоответствие адреса запроса и ответа.');
+INSERT INTO Trs VALUES('4:Disparity of the request function and the response one.','4:Невідповідність функції запиту та відповіді.','4:Несоответствие функции запроса и ответа.');
+INSERT INTO Trs VALUES('4:Incomplete response.','4:Неповна відповідь.','4:Неполный ответ.');
+INSERT INTO Trs VALUES('4:Disparity of the request ID and the response one.','4:Невідповідність ID запиту та відповіді.','4:Несоответствие ID запроса и ответа.');
+INSERT INTO Trs VALUES('4:Error CRC.','4:Помилка CRC.','4:Ошибка CRC.');
+INSERT INTO Trs VALUES('Channel','Канал','Канал');
+INSERT INTO Trs VALUES('value','значення','Значение');
+INSERT INTO Trs VALUES('weight','вага','масса');
+INSERT INTO Trs VALUES('average flow','середній поток','средний поток');
+INSERT INTO Trs VALUES('input','Вхід','Вход');
+INSERT INTO Trs VALUES('Error the output transport ''%1''.','Помилка вихідного транспорту ''%1''','Ошибка выходного транспорта ''%1''.');
+INSERT INTO Trs VALUES('The address ''%1'' is out of the range [0...99999999].','Адреса ''%1'' поза діапазоном [0...99999999].','Адрес ''%1'' за диапазоном [0...99999999].');
+INSERT INTO Trs VALUES('No data.','Немає даних.','Нет данных');
+INSERT INTO Trs VALUES('Address out of the range [-2047...255].','','');
+INSERT INTO Trs VALUES('Wrong or no response.','','');
+INSERT INTO Trs VALUES('Error CRC.','','');
+INSERT INTO Trs VALUES('Data size error.','','');
+INSERT INTO Trs VALUES('The data size is not equal to pointed one.','','');
+INSERT INTO Trs VALUES('Write','','');
+INSERT INTO Trs VALUES('uh oh, no thermocouple attached!','','');
+CREATE TABLE IF NOT EXISTS 'tmplib_DevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
+INSERT INTO tmplib_DevLib VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
 Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
@@ -3215,7 +3226,7 @@ else {
 }
 
 f_err = t_err;','','',1512240506);
-INSERT INTO "tmplib_DevLib" VALUES('TMH','Power supply for turbomolecular pumps','','','Power supply for turbomolecular pumps of firm SHIMADZU (http://www.shimadzu.com), model EI-R04M.
+INSERT INTO tmplib_DevLib VALUES('TMH','Power supply for turbomolecular pumps','','','Power supply for turbomolecular pumps of firm SHIMADZU (http://www.shimadzu.com), model EI-R04M.
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
 Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
@@ -3395,7 +3406,7 @@ else {
 }
 
 f_err = t_err;','','',1512240506);
-INSERT INTO "tmplib_DevLib" VALUES('TM510x','Elemer TM510x','','','Multichannels thermometer Elemer TM5102 and TM5103 of firm Elemer (http://www.elemer.ru).
+INSERT INTO tmplib_DevLib VALUES('TM510x','Elemer TM510x','','','Multichannels thermometer Elemer TM5102 and TM5103 of firm Elemer (http://www.elemer.ru).
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start) devTp = EVAL_INT;
@@ -3444,7 +3455,7 @@ else {
 }
 
 f_err = t_err;','','',1512240506);
-INSERT INTO "tmplib_DevLib" VALUES('UPS','UPS (obsolete)','','','!!!!: Moved to the template library Main. Will be removed soon
+INSERT INTO tmplib_DevLib VALUES('UPS','UPS (obsolete)','','','!!!!: Moved to the template library Main. Will be removed soon
 Uninterruptible power supply unifying data for provide all the data into single attribute of object type "All items" for next the control as the object with the data provide as table, alarming and allowing set writable attributes. The template aimed for using with module "System" data source as "UPS" and widget "Main.objProps" as the data presenter. The template also you can use as example for create like other data unification as complex object with properties, alarming and writing.
 
 Author: Roman Savochenko <roman@oscada.org>
@@ -3556,7 +3567,7 @@ if(tErr.toInt() && tErr.toInt() != f_err.toInt())	this.alarmSet(DESCR+": "+tErr.
 else if(f_err.toInt() && !tErr.toInt())			this.alarmSet(DESCR+": "+tr("NORMA"), 1);
 f_err = tErr;
 conDelay_ = 0;','','',1561317269);
-INSERT INTO "tmplib_DevLib" VALUES('VKT7','VKT-7','','','Firm "Teplocom" (http://www.teplocom.spb.ru) computer "VKT-7" for complex heat measurement and counting. The device complex enough to provide more parameters, more history and accessed by a nonlinear Serial-based protocol at low speed. The template implements acquisition for all significant parameters, gets for their history by hours, days and result months. Also you can to append easily enough for processing of the remained parameters.
+INSERT INTO tmplib_DevLib VALUES('VKT7','VKT-7','','','Firm "Teplocom" (http://www.teplocom.spb.ru) computer "VKT-7" for complex heat measurement and counting. The device complex enough to provide more parameters, more history and accessed by a nonlinear Serial-based protocol at low speed. The template implements acquisition for all significant parameters, gets for their history by hours, days and result months. Also you can to append easily enough for processing of the remained parameters.
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vladislav Chubuk
 Version: 1.0.0','','',60,0,'JavaLikeCalc.JavaScript
@@ -3912,7 +3923,7 @@ if(t_err.length) {
 	for(var cA in varsLs) arguments[cA] = EVAL_REAL;
 }
 else f_err = errAttrs.length ? "11:"+tr("Quality errors")+": "+errAttrs : "0";','','',1512240506);
-INSERT INTO "tmplib_DevLib" VALUES('SMDP','Sycon Multi Drop Protocol','','','STM devices for resonant frequency measurement for mass of deposited films attached to its surface by Sycon Instruments, Inc. (http://www.sycon.com).
+INSERT INTO tmplib_DevLib VALUES('SMDP','Sycon Multi Drop Protocol','','','STM devices for resonant frequency measurement for mass of deposited films attached to its surface by Sycon Instruments, Inc. (http://www.sycon.com).
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
 Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
@@ -4159,7 +4170,7 @@ else {
 }
 
 f_err = t_err.length ? t_err : "0";','','',1512240506);
-INSERT INTO "tmplib_DevLib" VALUES('IT3','Temperature measurement IT-3','','','Temperature measurement IT-3 from OmskEtalon (http://www.omsketalon.ru).
+INSERT INTO tmplib_DevLib VALUES('IT3','Temperature measurement IT-3','','','Temperature measurement IT-3 from OmskEtalon (http://www.omsketalon.ru).
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
 Version: 1.2.0','','',10,0,'JavaLikeCalc.JavaScript
@@ -4204,7 +4215,7 @@ else {
 
 if(t_err.length) { SYS.messDebug("/IT3/TMPL",tr("Error response")+": "+t_err); f_err = t_err; }
 else f_err = "0";','','',1512240506);
-INSERT INTO "tmplib_DevLib" VALUES('IVE_452HS_02','IVE-452HS-02','','','Power supply of beam-electrons evaporator of "Plasma Tech" Ltd, from Moskov.
+INSERT INTO tmplib_DevLib VALUES('IVE_452HS_02','IVE-452HS-02','','','Power supply of beam-electrons evaporator of "Plasma Tech" Ltd, from Moskov.
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
 Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
@@ -4304,7 +4315,7 @@ if(t_err.length) {
 	f_err = t_err;
 }
 else f_err = "0";','','',1512240506);
-INSERT INTO "tmplib_DevLib" VALUES('OPTRIS','OPTRIS CT/CTL','','','OPTRIS CT/CTL communication interface of "Optris" GmbH, from Berlin.
+INSERT INTO tmplib_DevLib VALUES('OPTRIS','OPTRIS CT/CTL','','','OPTRIS CT/CTL communication interface of "Optris" GmbH, from Berlin.
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
 Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
@@ -4398,7 +4409,7 @@ if(t_err.length) {
 	f_err = t_err;
 }
 else f_err = "0";','','',1512240506);
-INSERT INTO "tmplib_DevLib" VALUES('CTR','CTR 100, 101','','','The RS232C Serial Interface permits the communication between the digital Oerlikon Leybold Vacuum CERAVAC, from Köln.
+INSERT INTO tmplib_DevLib VALUES('CTR','CTR 100, 101','','','The RS232C Serial Interface permits the communication between the digital Oerlikon Leybold Vacuum CERAVAC, from Köln.
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
 Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
@@ -4505,10 +4516,63 @@ if(t_err.length) {
 	f_err = t_err + " " + u_err;
 }
 else f_err = "0: " + u_err;','','',1512240506);
-INSERT INTO "tmplib_DevLib" VALUES('IEC60870','IEC-60870','','','IEC 60870 part 5 is one of the IEC 60870 set of standards which define systems used for telecontrol (supervisory control and data acquisition) in electrical engineering and power system automation applications. Part 5 provides a communication profile for sending basic telecontrol messages between two systems, which uses permanent directly connected data circuits between the systems. The template implements part 104 (Ethernet transport) for client and followed services: STARTDT, STOPDT, TESTFR, Ack, C_IC_NA_1, C_CI_NA_1, C_SC_NA_1, M_SP_NA_1, M_ME_NB_1, C_CS_NA_1. For acquired and control data primarily used an object into attribute "items" for next the control as the object with the data provide as table, alarming and allowing set writable attributes. To the data control by attributes at once you can its describe into "itemsSet". Into the template for the first time used the non request mode of an output transport and free attributes creation wile performing.
+INSERT INTO tmplib_DevLib VALUES('IEC60870','IEC-60870','IEC-60870','','IEC 60870 part 5 is one from the IEC 60870 set of standards which defines systems used for telecontrol (supervisory control and data acquisition) in electrical engineering and power system automation applications. Part 5 provides a communication profile for sending basic telecontrol messages between two systems, which uses permanent directly connected data circuits between the systems.
+
+The template currently implements the part 104 (Ethernet transport) for the client and followed services: STARTDT, STOPDT, TESTFR, Ack, C_IC_NA_1, C_CI_NA_1, C_SC_NA_1, M_SP_NA_1, M_ME_NB_1, C_CS_NA_1.
+
+For the direct definition of the requested data, the "itemsSet" attribute is provided, where they can be defined individually, with a semantic identifier and name, or in a range named by a template. Often, remote systems may not need to determine the data to transmit and send existing or generic ones on their own initiative, and if they do not, have and need to ask for something additional ones, then you need to get a map of the available parameters with the addresses these you enter in this attribute in the format ai|di|do:{IOA}[-{EndIOA}][:a[:{NameBase}]], where:
+- ai|di|do — data type, where:
+  - "ai" — analog inputs, transmitted by the message M_ME_NB_1 and requested by C_SC_NA_1;
+  - "di" — discrete inputs, transmitted by the message M_SP_NA_1 and requested by C_SC_NA_1;
+  - "do" — discrete outputs, transmitted by C_SC_NA_1.
+- {IOA} — parameter address of the range begin;
+- {EndIOA} — the range end (the last item address);
+- a — sign of creating the representative attribute for the parameter or the parameters group;
+- {NameBase} — naming base of the attributes.
+
+Examples of the parameters definition, rows of the attribute "itemsSet":
+- di:100-108:a — discrete inputs in the address range [100...108] with forming the attributes;
+- ai:873-880:a — analog inputs in the address range [873...880] with forming the attributes;
+- do:1-10:a — discrete outputs in the address range [1...10] with forming the attributes.
+
+An object into the attribute "items" is used to accumulate the gathered and controlling data, to next control as an object with the data represent in a table of the widget "Main.objProps", alarming and allowing to set the writable attributes.
+
+The module provides integrated support for time synchronization of PLC by sending the C_CS_NA_1 service command.
+
+In the template for the first time used the not requesting mode of an output transport and the attributes creation in free while performing.
+
 Author: Roman Savochenko <roman@oscada.org>
-Sponsored: Ustijancev Michael.
-Version: 1.0.2','','',10,0,'JavaLikeCalc.JavaScript
+Sponsored: Ustijancev Michael
+Version: 1.1.0
+License: GPLv2','IEC 60870 у частині 5 є одним з набору стандартів IEC 60870 який визначає системи, що використовуються у віддаленому контролі (телемеханіці — диспетчерському контролі та зборі даних) у інженерній електриці та у застосунках автоматизації енергетичних систем. Частина 5 надає комунікаційний профіль для надсилання базових повідомлень віддаленого контролю між двома системами, який використовує постійні прямі підключення даних між системами.
+
+Шаблон наразі реалізує частину 104 (Ethernet транспорт) для клієнту та наступних сервісів: STARTDT, STOPDT, TESTFR, Ack, C_IC_NA_1, C_CI_NA_1, C_SC_NA_1, M_SP_NA_1, M_ME_NB_1, C_CS_NA_1.
+
+Для прямого визначення запитуваних даних передбачено атрибут "itemsSet", де вони можуть визначатися як окремо, зі смисловим ідентифікатором та назвою, або за діапазоном із найменуванням по шаблону. Часто віддалені системи можуть не потребувати визначення даних для передачі та надсилають наявні або основні зі своєї ініціативи та якщо вони цього не роблять, мають та потрібно запитати щось додаткове то вам треба отримати мапу наявних параметрів з адресами які й ввести у цьому атрибуті записами у форматі ai|di|do:{IOA}[-{EndIOA}][:a[:{NameBase}]], де:
+- ai|di|do — тип даних, де:
+  - "ai" — аналогові входи, передані повідомленням M_ME_NB_1 та запитані C_SC_NA_1;
+  - "di" — дискретні входи, передані повідомленням M_SP_NA_1 та запитані C_SC_NA_1;
+  - "do" — дискретні виходи, передавані командою C_SC_NA_1.
+- {IOA} — адреса параметру або початок діапазону;
+- {EndIOA} — кінець (адреса останнього елементу) діапазону;
+- a — ознака створення репрезентативних атрибутів для параметру або групи параметрів;
+- {NameBase} — база назви атрибуту(ів).
+
+Приклади визначення параметрів, рядки атрибуту "itemsSet":
+- di:100-108:a — дискретні входи за діапазоном адрес [100...108] із формуванням атрибутів;
+- ai:873-880:a — аналогові входи за діапазоном адрес [873...880] із формуванням атрибутів;
+- do:1-10:a — дискретні виходи за діапазоном адрес [1...10] із формуванням атрибутів.
+
+Об''єкт у атрибуті "items" використовується для акумулювання зібраних та контрольованих даних задля подальшого контрою як об''єкт із представленням даних у таблиці віджету "Main.objProps", сигналізуючи та дозволяючи встановлювати записувані атрибути.
+
+Модулем надається вбудована підтримка синхронізації часу ПЛК, надсиланням сервісної команди C_CS_NA_1.
+
+У шаблоні вперше використано не запитувальний режим вихідного транспорту та вільне створення атрибутів під час виконання.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Спонсорування: Устьянцев Михайло
+Версія: 1.1.0
+Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	{
 	transport_ = transport;
 	tr = SYS.Transport.nodeAt(transport,".");
@@ -4538,10 +4602,10 @@ if(itemsSet != itemsSet_) {
 		iIt_nmBase = iIt.parse(3, ":");
 		iIt_sDscr = false;
 		if((iIt_EndIOA=iIt_IOA.indexOf("-")) >= 0) {
-			iIt_EndIOA = iIt_IOA.slice(iIt_EndIOA+1).toInt();
-			iIt_IOA = iIt_IOA.slice(0,iIt_EndIOA).toInt();
+			iIt_EndIOA = iIt_IOA.slice(iIt_EndIOA+1).toInt(0);
+			iIt_IOA = iIt_IOA.slice(0,iIt_EndIOA).toInt(0);
 		}
-		else { iIt_IOA = iIt_EndIOA = iIt_IOA.toInt(); iIt_sDscr = iIt_nmBase.length; }
+		else { iIt_IOA = iIt_EndIOA = iIt_IOA.toInt(0); iIt_sDscr = iIt_nmBase.length; }
 		if(iIt_tp == "ai")			{ iIt_nmBase = iIt_nmBase.length ? iIt_nmBase : "AI"; iIt_vtp = "integer,ro"; }
 		else if(iIt_tp == "di")	{ iIt_nmBase = iIt_nmBase.length ? iIt_nmBase : "DI"; iIt_vtp = "boolean,ro"; }
 		else if(iIt_tp == "do")	{ iIt_nmBase = iIt_nmBase.length ? iIt_nmBase : "DO"; iIt_vtp = "boolean"; }
@@ -4733,7 +4797,7 @@ else {
 				ASDU_ = SYS.strFromCharCode(101, 0x01, 0x06, destAddr, destOA&0xFF, destOA>>8, 0x00, 0x00, 0x00, 0x05);
 				C_CI_NA_1 = true; C_CI_NA_1con = false;
 			}
-			else if(!C_CS_NA_1) {
+			else if(syncTimePLC && !C_CS_NA_1) {
 				//Time sync
 				tmMs = 0; tm = SYS.time(tmMs); tmMs = (tm%60)*1000+tmMs/1000;
 				tmMin = tmHour = tmDay = tmMonth = tmYear = tmWDay = tmIsDst = 0;
@@ -4798,8 +4862,8 @@ if(t_err.length) {
 	}
 	f_err = t_err;
 }
-else f_err = "0";','','',1512240506);
-INSERT INTO "tmplib_DevLib" VALUES('SSCP','Shark Slave Communication Protocol','','','Shark Slave Communication Protocol from EnergoCentrum PLUS, s.r.o.
+else f_err = "0";','','',1567952308);
+INSERT INTO tmplib_DevLib VALUES('SSCP','Shark Slave Communication Protocol','','','Shark Slave Communication Protocol from EnergoCentrum PLUS, s.r.o.
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Costumer Faster CZ (http://faster.cz)
 Version: 0.6.2','','',30,0,'JavaLikeCalc.JavaScript
@@ -4987,7 +5051,7 @@ else {
 }
 
 f_err = t_err;','','',1512240506);
-INSERT INTO "tmplib_DevLib" VALUES('m200','Mercury 200','Меркурій 200','Меркурий 200','One phase counter of electricity Mercury 200, 203.2Т, 206 from firm Incotex (http://www.incotexcom.ru).
+INSERT INTO tmplib_DevLib VALUES('m200','Mercury 200','Меркурій 200','Меркурий 200','One phase counter of electricity Mercury 200, 203.2Т, 206 from firm Incotex (http://www.incotexcom.ru).
 Author: Arsen Zakojan <godzilla919@gmail.com>
 Version: 1.0.0','Однофазні лічильники електроенергії Меркурій 200,  203.2Т,  206 компанії Інкотекс (http://www.incotexcom.ru).
 Автор: Арсен Закоян <godzilla919@gmail.com>
@@ -5019,7 +5083,7 @@ else//если ответ получен
 {U =Special.FLibSYS.str2real( req.text().slice(15,17)+req.text().slice(18,20))/10;
 I =Special.FLibSYS.str2real( req.text().slice(21,23)+req.text().slice(24,26))/100;
 P =Special.FLibSYS.str2real( req.text().slice(27,29)+req.text().slice(30,32)+req.text().slice(33,35));}','','',1512240506);
-INSERT INTO "tmplib_DevLib" VALUES('m230','Mercury 230','Меркурій 230','Меркурий 230','Three phase counter of electricity Mercury 230, 231, 232, 233, 234, 236 from firm Incotex (http://www.incotexcom.ru).
+INSERT INTO tmplib_DevLib VALUES('m230','Mercury 230','Меркурій 230','Меркурий 230','Three phase counter of electricity Mercury 230, 231, 232, 233, 234, 236 from firm Incotex (http://www.incotexcom.ru).
 Author: Arsen Zakojan <godzilla919@gmail.com>
 Version: 1.0.0','Трифазні лічильники електроенергії Меркурій 230, 231, 232, 233,  234,  236  компанії Інкотекс (http://www.incotexcom.ru).
 Автор: Арсен Закоян <godzilla919@gmail.com>
@@ -5180,7 +5244,7 @@ SYS.Transport["Serial"]["out_"+transport].messIO(req,"UserProtocol");
 if(!req.text())N1= EVAL_STR;
 else N1 =req.text();}
 ','','',1512240506);
-INSERT INTO "tmplib_DevLib" VALUES('Nik2303I','Nik2303I','','','Three phase counter of electricity NIK 2303 from firm NIK LLC (http://www.nik.net.ua).
+INSERT INTO tmplib_DevLib VALUES('Nik2303I','Nik2303I','','','Three phase counter of electricity NIK 2303 from firm NIK LLC (http://www.nik.net.ua).
 Author: Ruslan Yarmoliuk <rylio74@gmail.com>
 Version: 1.0.0','','',120,0,'JavaLikeCalc.JavaScript
 using Special.FLibSYS;
@@ -5452,9 +5516,17 @@ if(tErr.length) {
 	f_err = tErr;
 }
 else f_err = "0";','','',1512241411);
-INSERT INTO "tmplib_DevLib" VALUES('ModBusScan','ModBus scanner','','','ModBus scanner for Coils (1), Input Coils (2), Registers (3), Input Registers (4); in the range [0...65535].
+INSERT INTO tmplib_DevLib VALUES('ModBusScan','ModBus scanner','Сканер ModBus','Сканер ModBus','ModBus scanner for Coils (1), Input Coils (2), Registers (3), Input Registers (4); in the range [0...65535]. The template useful to examine unknown ModBus devices, scanning their Coils'' and Registers'' map for detecting the available data addresses. The scanning performs per one item, whether it is a coil or a register, to prevent the data unavailability for strict data accessing devices.
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.2','','',240,0,'JavaLikeCalc.JavaScript
+Sponsored by: SVItoVYR LTD
+Version: 1.0.2
+License: GPLv2','Сканер ModBus щодо Кілець (1), Вхідних Кілець (2), Регістрів (3), Вхідних Регістрів (4); у діапазоні [0...65535]. Шаблон корисний для вивчення невідомих пристроїв ModBus, скануванням їх мапи Кілець та Регістрів для виявлення наявних адрес даних. Сканування відбувається по одному елементу, чи то кільцю чи регістру, для попередження недоступності даних на пристроях суворого доступу даних.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Спонсорування: ТОВ "СВІТоВИР"
+Версія: 1.0.2
+Ліцензія: GPLv2','',240,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	res = "";
 	begin = begin_ = end = 0;
@@ -5479,8 +5551,8 @@ for(stTm = SYS.time(); begin < end && begin < 65536 && (SYS.time()-stTm) < lim; 
 		res += begin.toString() + ":\t" + (rez.length?rez:pdu.charCodeAt(2)*256+pdu.charCodeAt(3))  + "\n";
 	}
 }
-type_ = type, begin_ = begin;','','',1539500942);
-INSERT INTO "tmplib_DevLib" VALUES('pulsarM','Pulsar-M','Пульсар-М','Пульсар-М','Pulsar-M counters protocol
+type_ = type, begin_ = begin;','','',1567952035);
+INSERT INTO tmplib_DevLib VALUES('pulsarM','Pulsar-M','Пульсар-М','Пульсар-М','Pulsar-M counters protocol
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Zubarev Dmitry (IP INTEGRAL<http://kip-i-a.pro>)
 Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
@@ -5631,7 +5703,7 @@ else {
 }
 
 f_err = t_err;','','',1542134045);
-INSERT INTO "tmplib_DevLib" VALUES('OWEN','OWEN','','','OWEN data sources implementation in the OWEN protocol. Implemented wholly in the template for the protocol requesting and for dynamic data model of the OWEN data sources'' data with support of the writing and original names of the parameters.
+INSERT INTO tmplib_DevLib VALUES('OWEN','OWEN','','','OWEN data sources implementation in the OWEN protocol. Implemented wholly in the template for the protocol requesting and for dynamic data model of the OWEN data sources'' data with support of the writing and original names of the parameters.
 The field "addr" of the items can be wrote positive, for  the 8 bit address [0...255], and negative, for the 11 bit address[-2047...0].
 The protocol implementing is not finished due to missing for feedback from the developer to resolve this undocumented behavior:
 - МВ110-8А responds error 0x31 for reading "in-t" >1003023331932DCB43 <1010932D4791;
@@ -5865,7 +5937,7 @@ else {
 
 f_err = t_err;
 if(!f_err.toInt())	f_err += t_inf + (t_infW.length?" "+tr("Write")+t_infW:"");','','',1544882666);
-INSERT INTO "tmplib_DevLib" VALUES('DCON_Prt','DCON Protocol + Input AI','','','Input and output part of the protocol DCON implementation with the input part designed for typical AI module at up to 20 channels.
+INSERT INTO tmplib_DevLib VALUES('DCON_Prt','DCON Protocol + Input AI','','','Input and output part of the protocol DCON implementation with the input part designed for typical AI module at up to 20 channels.
 The DCON commands are supported: #AA
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.1','','',10,0,'JavaLikeCalc.JavaScript
@@ -5949,7 +6021,7 @@ if(enCRC) answer += (CRC(answer)&0xFF).toString(16,2);
 answer += "\r";
 
 return true;','','',1551028560);
-INSERT INTO "tmplib_DevLib" VALUES('DCON_Prt_DI','DCON Protocol + Input DI','','','Input and output part of the protocol DCON implementation with the input part designed for typical DI module at up to 32 channels.
+INSERT INTO tmplib_DevLib VALUES('DCON_Prt_DI','DCON Protocol + Input DI','','','Input and output part of the protocol DCON implementation with the input part designed for typical DI module at up to 32 channels.
 The DCON commands are supported: @AA, $AA6
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.1','','',10,0,'JavaLikeCalc.JavaScript
@@ -6038,7 +6110,7 @@ if(enCRC) answer += (CRC(answer)&0xFF).toString(16,2);
 answer += "\r";
 
 return true;','','',1551028549);
-INSERT INTO "tmplib_DevLib" VALUES('DCON_Prt_AO','DCON Protocol + Input AO','','','Input and output part of the protocol DCON implementation with the input part designed for typical AO module at up to 8 channels.
+INSERT INTO tmplib_DevLib VALUES('DCON_Prt_AO','DCON Protocol + Input AO','','','Input and output part of the protocol DCON implementation with the input part designed for typical AO module at up to 8 channels.
 The DCON commands are supported: $AA8N, #AAN{Data}
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.1','','',10,0,'JavaLikeCalc.JavaScript
@@ -6127,7 +6199,7 @@ if(enCRC) answer += (CRC(answer)&0xFF).toString(16,2);
 answer += "\r";
 
 return true;','','',1551028555);
-INSERT INTO "tmplib_DevLib" VALUES('DCON_Prt_DO','DCON Protocol + Input DO','','','Input and output part of the protocol DCON implementation with the input part designed for typical DO module at up to 32 channels.
+INSERT INTO tmplib_DevLib VALUES('DCON_Prt_DO','DCON Protocol + Input DO','','','Input and output part of the protocol DCON implementation with the input part designed for typical DO module at up to 32 channels.
 The DCON commands are supported: @AA, @AA{Data}
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.1','','',10,0,'JavaLikeCalc.JavaScript
@@ -6224,8 +6296,8 @@ if(enCRC) answer += (CRC(answer)&0xFF).toString(16,2);
 answer += "\r";
 
 return true;','','',1551028536);
-CREATE TABLE 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "tmplib_PrescrTempl" VALUES('timer','Timer','Таймер','Таймер','Typical timer. Hold run up to time elapse.','Типовий таймер. Утримує виконання до завершення часу.','Типовой таймер. Удерживает выполнение до завершения времени.',10,0,'JavaLikeCalc.JavaScript
+CREATE TABLE IF NOT EXISTS 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
+INSERT INTO tmplib_PrescrTempl VALUES('timer','Timer','Таймер','Таймер','Typical timer. Hold run up to time elapse.','Типовий таймер. Утримує виконання до завершення часу.','Типовой таймер. Удерживает выполнение до завершения времени.',10,0,'JavaLikeCalc.JavaScript
 //Reset to default
 if(f_start || (!run && tmp1)) { run = pause = error = abort = false; tmp1 = 0; rez = 1; }
 //Run
@@ -6235,7 +6307,7 @@ if(run && !pause) {
 	if(tmp1 <= 0) { rez = "1:"+tr("Waiting %1s expired").replace("%1",arg1.toPrecision(3)); run = false; }
 	else rez = "0:"+tr("Waiting %1s").replace("%1",tmp1.toPrecision(3));
 }','','',1559660663);
-INSERT INTO "tmplib_PrescrTempl" VALUES('backTimer','Background timer','Фоновий таймер','Фоновый таймер','Background timer. Updating parallel with current command.','Фоновий таймер. Оновлення паралельно із поточною командой.','Фоновый таймер. Обновление параллельно с текущей командой.',10,0,'JavaLikeCalc.JavaScript
+INSERT INTO tmplib_PrescrTempl VALUES('backTimer','Background timer','Фоновий таймер','Фоновый таймер','Background timer. Updating parallel with current command.','Фоновий таймер. Оновлення паралельно із поточною командой.','Фоновый таймер. Обновление параллельно с текущей командой.',10,0,'JavaLikeCalc.JavaScript
 //Reset to default
 if(f_start || (!run && tmp1)) { run = pause = error = abort = false; tmp1 = 0; rez = 1; }
 //Run
@@ -6246,7 +6318,7 @@ if(run && !pause) {
 	//if(tmp1 <= 10)	rez = "-1:Waiting "+arg1.toPrecision(3)+"s expired";
 	else rez = "10:"+tr("Background waiting %1s").replace("%1",tmp1.toPrecision(3));
 }','','',1559660663);
-INSERT INTO "tmplib_PrescrTempl" VALUES('manager','Prescriptions manager','','','Prescriptions manager and controller. Used in addition with user interface''s cadre "Prescription: editing" and "Prescription: runtime" for which into a parameter of the controller you must pass that parameters: "mode", "prog", "startTm", "curCom", "comLs", "work".
+INSERT INTO tmplib_PrescrTempl VALUES('manager','Prescriptions manager','','','Prescriptions manager and controller. Used in addition with user interface''s cadre "Prescription: editing" and "Prescription: runtime" for which into a parameter of the controller you must pass that parameters: "mode", "prog", "startTm", "curCom", "comLs", "work".
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsor: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
@@ -6582,8 +6654,8 @@ if(curMode == 1 || curMode == 2) {
 }
 curMode = mode;
 //mode = curMode;','','',1559658615);
-CREATE TABLE 'tmplib_base' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "tmplib_base" VALUES('digAlarm','Alarm discrete','Сигналізація дискретна','Сигнализация дискретная','Alarm from a digital parameter.
+CREATE TABLE IF NOT EXISTS 'tmplib_base' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
+INSERT INTO tmplib_base VALUES('digAlarm','Alarm discrete','Сигналізація дискретна','Сигнализация дискретная','Alarm from a digital parameter.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.1','Сигналізація за дискретним параметром.
@@ -6635,7 +6707,7 @@ if(tErr.toInt() && !f_err.toInt() && this.cntr().status().toInt())	return;
 if(tErr.toInt() && tErr.toInt() != f_err.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), levErr);
 else if(f_err.toInt() && !tErr.toInt())			this.alarmSet(DESCR+": "+tr("NORMA"), 1);
 f_err = tErr;','','',1561317371);
-INSERT INTO "tmplib_base" VALUES('simleBoard','Analog alarm by borders (obsolete)','Сигнал аналоговий за границями (застаріле)','Сигнал аналоговый по границам (устаревшее)','The template of simple parameter included borders and dimension variable.
+INSERT INTO tmplib_base VALUES('simleBoard','Analog alarm by borders (obsolete)','Сигнал аналоговий за границями (застаріле)','Сигнал аналоговый по границам (устаревшее)','The template of simple parameter included borders and dimension variable.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','Шаблон простого параметру з перевіркою границь та одиницею виміру.
@@ -6669,7 +6741,7 @@ else if(aMax>aMin && var<aMin)	f_err="4:Нарушение нижней авар
 else if(wMax>wMin && var>wMax)	f_err="5:Нарушение верхней предупредительной границы";
 else if(wMax>wMin && var<wMin)	f_err="6:Нарушение нижней предупредительной границы";
 else f_err="0";','');
-INSERT INTO "tmplib_base" VALUES('digitBlock','Discrete parameters block (obsolete)','Блок дискр. параметрів (застаріле)','Блок дискр. параметров','The block for union of Discrete parameters for one device control.
+INSERT INTO tmplib_base VALUES('digitBlock','Discrete parameters block (obsolete)','Блок дискр. параметрів (застаріле)','Блок дискр. параметров','The block for union of Discrete parameters for one device control.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','Блок для збору дискретних параметрів, керуючих одним апаратом.
@@ -6693,7 +6765,7 @@ else {
 		if(last_cmd&0x4) { cmdStop = false; last_cmd = last_cmd&(~0x4); }
 	}
 }','','',1416656400);
-INSERT INTO "tmplib_base" VALUES('gasPoint','Flow control point (obsolete)','Витрато-вимірювальний вузол (застаріле)','Расходомерный узел (устаревшее)','','','',10,0,'JavaLikeCalc.JavaScript
+INSERT INTO tmplib_base VALUES('gasPoint','Flow control point (obsolete)','Витрато-вимірювальний вузол (застаріле)','Расходомерный узел (устаревшее)','','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	Q = 0;
 //F=200+(rand(5)-2.5);
 Q += F.isEVal() ? 0 : F/3600;
@@ -6702,7 +6774,7 @@ Q += F.isEVal() ? 0 : F/3600;
 dP = F.isEVal() ? 0 : F/33;
 DS = 1+(rand(0.2)-0.1);
 ','','',1503582557);
-INSERT INTO "tmplib_base" VALUES('manInUnif','Manual input (unified)','Ручний ввід (уніфікований)','Ручной ввод (унифицированный)','Common, representative and unified template of a manual input — an analog output signal.
+INSERT INTO tmplib_base VALUES('manInUnif','Manual input (unified)','Ручний ввід (уніфікований)','Ручной ввод (унифицированный)','Common, representative and unified template of a manual input — an analog output signal.
 The template forms a structure of parameter (complex tag) of the analog output which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object, mostly through the Element cadre control panel.
 
 Functions:
@@ -6778,7 +6850,7 @@ else {
 	else if(f_err.toInt() && !tErr.toInt())			this.alarmSet(DESCR+": "+tr("NORMA"), 1);
 	f_err = tErr;
 }','','',1561317384);
-INSERT INTO "tmplib_base" VALUES('anUnif','Analog signal (unified)','Аналоговий сигнал (уніфікований)','Аналоговый сигнал (унифицированный)','Common, representative and unified template of analog input signals processing. The template forms a structure of complex analog parameter (tag) which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object.
+INSERT INTO tmplib_base VALUES('anUnif','Analog signal (unified)','Аналоговий сигнал (уніфікований)','Аналоговый сигнал (унифицированный)','Common, representative and unified template of analog input signals processing. The template forms a structure of complex analog parameter (tag) which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object.
 Functions:
 - Generic processing of the raw analog input for:
   - simple correction-calibration at the formula "in = iMult*(in+iAdd)";
@@ -6946,7 +7018,7 @@ else {
 	if(toSave) SYS.cntrReq(SYS.XMLNode("save").setAttr("path",this.nodePath()+"/%2fobj").setAttr("force",1));
 	conDelay_ = 0;
 }','','',1561317354);
-INSERT INTO "tmplib_base" VALUES('digitBlockUnif','Discrete block (unified)','Блок дискретних (уніфікований)','Блок дискретных (унифицированный)','Common, representative and unified template of the block for union of Discrete parameters for the common control device.
+INSERT INTO tmplib_base VALUES('digitBlockUnif','Discrete block (unified)','Блок дискретних (уніфікований)','Блок дискретных (унифицированный)','Common, representative and unified template of the block for union of Discrete parameters for the common control device.
 The template forms a structure of discrete parameter-block (complex tag) which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object.
 Functions:
 - Direct obtaining, by link, two states (read only) and three commands (reading and writing).
@@ -6983,7 +7055,7 @@ else {
 		last_cmd = 0;
 	}
 }','','',1441903511);
-INSERT INTO "tmplib_base" VALUES('pidUnifImp','Impulse PID signal (unified, violation statuses)','Імпульсний ПІД сигнал (уніфікований, стани порушень)','ПИД импульсный сигнал (унифицированный, состояния нарушений)','The unified template for process analog signals with properties of impulse PID.
+INSERT INTO tmplib_base VALUES('pidUnifImp','Impulse PID signal (unified, violation statuses)','Імпульсний ПІД сигнал (уніфікований, стани порушень)','ПИД импульсный сигнал (унифицированный, состояния нарушений)','The unified template for process analog signals with properties of impulse PID.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.1','Уніфікований шаблон для обробки аналогового сигналу з властивостями імпульсного ПІД.
@@ -7036,7 +7108,7 @@ else {
 if(!f_err.toInt() && tErr.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), -4);
 else if(f_err.toInt() && !tErr.toInt())	this.alarmSet(DESCR+": "+tr("NORMA"), 1);
 f_err = tErr;','','',1561317417);
-INSERT INTO "tmplib_base" VALUES('anUnifSt','Analog signal (unified, violation statuses)','Аналог. сигнал (уніфікований, стани порушень)','Аналог. сигн. (унифицированный, состояния нарушений)','Common, representative and unified template of analog input signals processing, extended by binary states of indication the violations. The template grounded on the base template "Analog signal (unified)" with its representative structure and some differences characteristic to independent development and expansion.
+INSERT INTO tmplib_base VALUES('anUnifSt','Analog signal (unified, violation statuses)','Аналог. сигнал (уніфікований, стани порушень)','Аналог. сигн. (унифицированный, состояния нарушений)','Common, representative and unified template of analog input signals processing, extended by binary states of indication the violations. The template grounded on the base template "Analog signal (unified)" with its representative structure and some differences characteristic to independent development and expansion.
 Binary states were provided for the convenient use of algorithms of operation at the borders of violations of the parameter object, preferably in the block diagrams of general control algorithms.
 
 Functions:
@@ -7157,7 +7229,7 @@ else {
 	if(toSave) SYS.cntrReq(SYS.XMLNode("save").setAttr("path",this.nodePath()+"/%2fobj").setAttr("force",1));
 	conDelay_ = 0;
 }','','',1562421007);
-INSERT INTO "tmplib_base" VALUES('pidUnif','PID signal (unified, violation statuses)','ПІД сигнал (уніфікований, стани порушень)','ПИД сигнал (унифицированный, состояния нарушений)','The unified template for process analog signals with properties of PID.
+INSERT INTO tmplib_base VALUES('pidUnif','PID signal (unified, violation statuses)','ПІД сигнал (уніфікований, стани порушень)','ПИД сигнал (унифицированный, состояния нарушений)','The unified template for process analog signals with properties of PID.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.1','Уніфікований шаблон для обробки аналогового сигналу з властивостями ПІД.
@@ -7210,7 +7282,7 @@ else {
 if(!f_err.toInt() && tErr.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), -4);
 else if(f_err.toInt() && !tErr.toInt())	this.alarmSet(DESCR+": "+tr("NORMA"), 1);
 f_err = tErr;','','',1561317477);
-INSERT INTO "tmplib_base" VALUES('SNMP','SNMP','','','SNMP unifying data is to provide all the data into the single attribute "All items" of the object type for next control as object with the data providing as a table, alarming and allowing to set for writable attributes. The template designed for using with the data source module "SNMP" as an "SNMP device" and the widget "Main.objProps" as the data presenter. The template you can use also as an example to create other data unification as the complex object with properties, alarming and writing.
+INSERT INTO tmplib_base VALUES('SNMP','SNMP','','','SNMP unifying data is to provide all the data into the single attribute "All items" of the object type for next control as object with the data providing as a table, alarming and allowing to set for writable attributes. The template designed for using with the data source module "SNMP" as an "SNMP device" and the widget "Main.objProps" as the data presenter. The template you can use also as an example to create other data unification as the complex object with properties, alarming and writing.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.1','','',10,0,'JavaLikeCalc.JavaScript
@@ -7296,7 +7368,7 @@ tErr = tErr.length ? ""+alLev+":"+tErr : "0";
 if(tErr.toInt() && tErr.toInt() != f_err.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), -(2+alLev));
 else if(f_err.toInt() && !tErr.toInt())			this.alarmSet(DESCR+": "+tr("NORMA"), 1);
 f_err = tErr;','','',1561317493);
-INSERT INTO "tmplib_base" VALUES('codeState','Code state','Стан за кодом','Состояние по коду','A variant of the common, representative and unified template of the block for union of Discrete parameters, expanded by more than two states and three commands that can be encoded by an integer value.
+INSERT INTO tmplib_base VALUES('codeState','Code state','Стан за кодом','Состояние по коду','A variant of the common, representative and unified template of the block for union of Discrete parameters, expanded by more than two states and three commands that can be encoded by an integer value.
 The template forms a structure of parameter (complex tag) which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object.
 
 Functions:
@@ -7402,7 +7474,7 @@ if(tErr.toInt() && !f_err.toInt() && this.cntr().status().toInt())	return;
 if(tErr.toInt() && tErr.toInt() != f_err.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), levErr);
 else if(f_err.toInt() && !tErr.toInt())			this.alarmSet(DESCR+": "+tr("NORMA"), 1);
 f_err = tErr;','','',1561317508);
-INSERT INTO "tmplib_base" VALUES('ntf','Notificator by SMS, EMail(SMTP)','','','The complex template of the notification, contains of parts of the dispatcher and the output user protocol of notification by EMail(SMTP) and SMS.
+INSERT INTO tmplib_base VALUES('ntf','Notificator by SMS, EMail(SMTP)','','','The complex template of the notification, contains of parts of the dispatcher and the output user protocol of notification by EMail(SMTP) and SMS.
 
 The dispatcher can be performed for pointed messages of the message buffer of OpenSCADA and applied on the Logical level or the controller object of the module JavaLikeCalc.
 
@@ -7712,7 +7784,7 @@ else {
 	SMSState = tr("Sent %1. In queue %2.").replace("%1",SMSSentN.toString()).replace("%2",SMSQueueN.toString());
 	if(SMSErr.length) SMSState += " "+tr("Error: %1.").replace("%1",SMSErr);
 }','','',1550428714);
-INSERT INTO "tmplib_base" VALUES('UPS','','','','Uninterruptible power supply unifying data for provide all the data into single attribute of object type "All items" for next the control as the object with the data provide as table, alarming and allowing set writable attributes. The template aimed for using with module "System" data source as "UPS" and widget "Main.objProps" as the data presenter. The template also you can use as example for create like other data unification as complex object with properties, alarming and writing.
+INSERT INTO tmplib_base VALUES('UPS','','','','Uninterruptible power supply unifying data for provide all the data into single attribute of object type "All items" for next the control as the object with the data provide as table, alarming and allowing set writable attributes. The template aimed for using with module "System" data source as "UPS" and widget "Main.objProps" as the data presenter. The template also you can use as example for create like other data unification as complex object with properties, alarming and writing.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.2.1','','',10,0,'JavaLikeCalc.JavaScript
@@ -7823,8 +7895,8 @@ if(tErr.toInt() && tErr.toInt() != f_err.toInt())	this.alarmSet(DESCR+": "+tErr.
 else if(f_err.toInt() && !tErr.toInt())			this.alarmSet(DESCR+": "+tr("NORMA"), 1);
 f_err = tErr;
 conDelay_ = 0;','','',1561317526);
-CREATE TABLE 'lib_Controllers' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "lib_Controllers" VALUES('prescr','Prescriptions manager (obsolete)','','','!!!!: Moved and replaced by the template PrescrTempl.manager. Will be removed soon
+CREATE TABLE IF NOT EXISTS 'lib_Controllers' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
+INSERT INTO lib_Controllers VALUES('prescr','Prescriptions manager (obsolete)','','','!!!!: Moved and replaced by the template PrescrTempl.manager. Will be removed soon
 Prescriptions manager and controller. Used in addition with user interface''s cadre "Prescription: editing" and "Prescription: runtime" for which into a parameter of the controller you must pass that parameters: "mode", "prog", "startTm", "curCom", "comLs", "work".
 
 Author: Roman Savochenko <roman@oscada.org>
@@ -8159,7 +8231,7 @@ if(curMode == 1 || curMode == 2) {
 }
 curMode = mode;
 //mode = curMode;','','',1559660641);
-INSERT INTO "lib_Controllers" VALUES('test','test','test','','Different tests of the JavaLikeCalc language for execution into the controller mode.
+INSERT INTO lib_Controllers VALUES('test','test','test','','Different tests of the JavaLikeCalc language for execution into the controller mode.
 
 Author: Roman Savochenko
 Version: 1.0.0
@@ -8290,7 +8362,7 @@ for( var i_rw = 0; i_rw < DBTbl.length; i_rw++ )
     rec += DBTbl[i_rw][i_fld]+"\t";
   SYS.messDebug("TEST DB","Row "+i_rw+": "+rec);
 }*/','','',1560101779);
-INSERT INTO "lib_Controllers" VALUES('test1','test1','','test1','Different tests of the JavaLikeCalc language for execution into the controller mode.
+INSERT INTO lib_Controllers VALUES('test1','test1','','test1','Different tests of the JavaLikeCalc language for execution into the controller mode.
 
 Author: Roman Savochenko
 Version: 1.0.0','','',1,10,0,'//clc=0;
@@ -8315,7 +8387,7 @@ Version: 1.0.0','','',1,10,0,'//clc=0;
 //Close value archive
 //Special.FLibSYS.avalClose(a_id);
 //p_tm=c_tm;','','',1560101785);
-INSERT INTO "lib_Controllers" VALUES('ntfDispatch','Notifications dispatcher (obsolete)','','','!!!!: Replaced by the complex template Main.ntf. Will be removed soon
+INSERT INTO lib_Controllers VALUES('ntfDispatch','Notifications dispatcher (obsolete)','','','!!!!: Replaced by the complex template Main.ntf. Will be removed soon
 Notifications dispatcher by EMail and SMS for pointed messages of OpenSCADA messages buffer.
 
 Author: Roman Savochenko <roman@oscada.org>
@@ -8421,8 +8493,8 @@ else {
 	SMSState = tr("Sent %1. In queue %2.").replace("%1",SMSSentN.toString()).replace("%2",SMSQueueN.toString());
 	if(SMSErr.length) SMSState += " "+tr("Error: %1.").replace("%1",SMSErr);
 }','','',1560101769);
-CREATE TABLE 'lib_servProc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "lib_servProc" VALUES('procArh','Archives recalculation','Перерахунок архівів','Пересчёт архивов','Value archives recalculation.
+CREATE TABLE IF NOT EXISTS 'lib_servProc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
+INSERT INTO lib_servProc VALUES('procArh','Archives recalculation','Перерахунок архівів','Пересчёт архивов','Value archives recalculation.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','','',1,600,0,'using Special.FLibSYS;
@@ -8467,7 +8539,7 @@ while( begwtm<endtm )
     a_dst.copy(bf_dst,begwtm,0,endwtm,0);
     begwtm = endwtm;
 }','','',1560097197);
-INSERT INTO "lib_servProc" VALUES('crc16','CRC 16','','','Standard Cyclic Redundancy Check (CRC) with free setting the polynomial, by default 0x8005. It isn''t actual more by the common CRC implementing.
+INSERT INTO lib_servProc VALUES('crc16','CRC 16','','','Standard Cyclic Redundancy Check (CRC) with free setting the polynomial, by default 0x8005. It isn''t actual more by the common CRC implementing.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','','',1,10,0,'out = 0xFFFF;
@@ -8475,7 +8547,7 @@ for(i = 0; i < in.length; i++) {
   out = out^in.charCodeAt(i);
   for(j = 0; j < 8; j++) out = (out&1) ? ((out>>1)^poly) : out >> 1;
 }','','',1560097197);
-INSERT INTO "lib_servProc" VALUES('releaseTests','TEST: Release','Тести випуску','Тесты выпуска','Set of formal tests of the OpenSCADA releases:
+INSERT INTO lib_servProc VALUES('releaseTests','TEST: Release','Тести випуску','Тесты выпуска','Set of formal tests of the OpenSCADA releases:
   - 0:System
   - 1:Security User/Group tests
   - 2:Transport subsystem tests
@@ -9167,7 +9239,7 @@ SYS.fileWrite("ReleaseTests.html", "<?xml version=''1.0'' ?>\n"
 	"</TABLE>\n"
 	"</body>"
 	"</html>");','','',1560097197);
-INSERT INTO "lib_servProc" VALUES('archPackFStests','TEST: Packing of the archiver on FS','','','Tests set for packing of the value archives to File System, to check the optimization algorithm. The stages are provided:
+INSERT INTO lib_servProc VALUES('archPackFStests','TEST: Packing of the archiver on FS','','','Tests set for packing of the value archives to File System, to check the optimization algorithm. The stages are provided:
   - Stage 0: Filling the main values: "1,1,10,10,100,100,1000,1000,10000,10000,EVAL"
   - Stage 1: Changing to different value 20: "1,1,20,10,100,100,1000,1000,10000,10000,EVAL"
   - Stage 2: Setting a value for merging (equal) to the up (10): "1,1,20,10,10,100,1000,1000,10000,10000,EVAL"
@@ -9236,7 +9308,7 @@ if(step < 0 || step == 8) {
 	buf = vArhBuf(1, 10, per*1000000, true, true);
 	buf.set(10000, tm+9*per, 0); arh.copy(buf, buf.begin(), 0, buf.end(), 0, archiver);
 }','','',1560097170);
-INSERT INTO "lib_servProc" VALUES('wacko2media','EXT: WackoWiki to MediaWiki','','','Procedure of conversion Wiki-dialect from WackoWiki to MediaWiki. Used to move OpenSCADA Wiki to MediaWiki.
+INSERT INTO lib_servProc VALUES('wacko2media','EXT: WackoWiki to MediaWiki','','','Procedure of conversion Wiki-dialect from WackoWiki to MediaWiki. Used to move OpenSCADA Wiki to MediaWiki.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.0','','',1,10,0,'dbO = SYS.BD.MySQL[ndb];
@@ -9335,7 +9407,7 @@ for(pos = 0; pos < ibuf.length; ) {
 }
 
 return obuf;','','',1560098890);
-INSERT INTO "lib_servProc" VALUES('docOffLine','EXT: Off-line documentation','','','Procedure of forming the offline documentation of OpenSCADA from Wiki by reading and processing the specified Wiki pages on different languages, currently it is: English, Ukrainian, Russian.
+INSERT INTO lib_servProc VALUES('docOffLine','EXT: Off-line documentation','','','Procedure of forming the offline documentation of OpenSCADA from Wiki by reading and processing the specified Wiki pages on different languages, currently it is: English, Ukrainian, Russian.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','','',1,300,0,'trNm = "offLine";
@@ -9494,8 +9566,8 @@ for(var ip in pgsOprc) {
 }
 
 res = "0: Fetched and processed pages="+pCnt+"; images="+imgCnt+"; links="+lnkCnt+"; languages="+lngCnt;','','',1560097197);
-CREATE TABLE 'flb_regEl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "flb_regEl" VALUES('pidUnif','PID (unified)','ПІД (уніфікований)','ПИД (унифицированный)','Composite-unified analog and pulse PID. At the heart of the regulator is core a standard analog PID controller from the library FLibComplex1 and the implementation of the PWM for the pulse part.
+CREATE TABLE IF NOT EXISTS 'flb_regEl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
+INSERT INTO flb_regEl VALUES('pidUnif','PID (unified)','ПІД (уніфікований)','ПИД (унифицированный)','Composite-unified analog and pulse PID. At the heart of the regulator is core a standard analog PID controller from the library FLibComplex1 and the implementation of the PWM for the pulse part.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','Суміщений-уніфікований аналоговий та імпульсний ПІД-регулятор. У основі регулятора лежить мова стандартного аналогового ПІД-регулятора з бібліотеки "FLibComplex1" та реалізація ШІМ для імпульсної частини.
@@ -9540,7 +9612,7 @@ if(impAnImit) {
 	return max(0,min(100,out));
 }
 return impAnOut;','','',1560101809);
-INSERT INTO "flb_regEl" VALUES('pidUnifD','PID dynamic','ПІД динамічний','ПИД динамический','Completely identical to the unified PID regulator is implemented dynamically on JavaLikeCalc. The dynamic implementation allows you to easily adapt the regulator to the desired requirements, simply editing it.
+INSERT INTO flb_regEl VALUES('pidUnifD','PID dynamic','ПІД динамічний','ПИД динамический','Completely identical to the unified PID regulator is implemented dynamically on JavaLikeCalc. The dynamic implementation allows you to easily adapt the regulator to the desired requirements, simply editing it.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','Повністю ідентичний уніфікованому ПІД регулятор, реалізований динамічно на JavaLikeCalc. Динамічна реалізація дозволяє легко адаптувати регулятор під потрібні вимоги, просто відредагувати його.','Полностью идентичный унифицированному ПИД регулятор, реализованный динамически на JavaLikeCalc. Динамическая реализация позволяет легко адаптировать регулятор под нужные требования, просто отредактировав его.',1,10,0,'if(f_start) {
@@ -9633,7 +9705,7 @@ if(impAnImit > 0) {
 	return max(0, min(100,out));
 }
 return max(0, min(100,impAnOut));','','',1560104664);
-INSERT INTO "flb_regEl" VALUES('pidImp','PID pulse','ПІД імпульсний','ПИД импульсный','Specialized pulse PID regulator is implemented on a special algorithm with compensation of double integration.
+INSERT INTO flb_regEl VALUES('pidImp','PID pulse','ПІД імпульсний','ПИД импульсный','Specialized pulse PID regulator is implemented on a special algorithm with compensation of double integration.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','Спеціалізований імпульсний ПІД регулятор реалізований за особливим алгоритмом з компенсацією подвійного інтегрування.
@@ -9718,8 +9790,8 @@ if(impAnImit) {
 	return max(0, min(100,out));
 }
 return impAnOut;','','',1560104660);
-CREATE TABLE 'flb_doc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
-INSERT INTO "flb_doc" VALUES('getVal','Getting value from archive','Запит значення архіву','Запрос знач. архива','Query the value for a specified time from the assigned archive and issuing the result with the specified number of decimal points.
+CREATE TABLE IF NOT EXISTS 'flb_doc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
+INSERT INTO flb_doc VALUES('getVal','Getting value from archive','Запит значення архіву','Запрос знач. архива','Query the value for a specified time from the assigned archive and issuing the result with the specified number of decimal points.
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.1','Запит значення на визначений час з вказаного архіву та видача результату з вказаною кількістю знаків після точки.
 Автор: Роман Савоченко <roman@oscada.org>
@@ -9744,7 +9816,7 @@ if(prec < 0)	return val;
 if(val.isEVal())	return tr("Empty");
 if(typeof(val) == "real")	return val.toFixed(prec);
 return val;','','',1501145635);
-INSERT INTO "flb_doc" VALUES('sumVal','Sum values of archive','Сума значень архіву','Сумма знач. архива','Calculating the sum of values ​​for a specified period of time an archive and issuing results with the specified number of decimal points.
+INSERT INTO flb_doc VALUES('sumVal','Sum values of archive','Сума значень архіву','Сумма знач. архива','Calculating the sum of values ​​for a specified period of time an archive and issuing results with the specified number of decimal points.
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.0','Обчислення суми значень за проміжок часу визначеного архіву та видача результату з вказаною кількістю знаків після точки.
 Автор: Роман Савоченко <roman@oscada.org>
@@ -9767,7 +9839,7 @@ if(prec < 0)	return val;
 if(val.isEVal())	return tr("Empty");
 if(typeof(val) == "real")	return val.toFixed(prec);
 return val;','','',1501231568);
-INSERT INTO "flb_doc" VALUES('averVal','Average value of archive','Середнє значення архіву','Среднее знач. архива','Calculate the average value over a specified period of time an archive and issuing results with the specified number of decimal points.
+INSERT INTO flb_doc VALUES('averVal','Average value of archive','Середнє значення архіву','Среднее знач. архива','Calculate the average value over a specified period of time an archive and issuing results with the specified number of decimal points.
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.0','Обчислення середнього значення за проміжок часу визначеного архіву та видача результату з вказаною кількістю знаків після точки.
 Автор: Роман Савоченко <roman@oscada.org>
@@ -9798,8 +9870,8 @@ if(prec < 0)	return val;
 if(val.isEVal())	return tr("Empty");
 if(typeof(val) == "real")	return val.toFixed(prec);
 return val;','','',1501228052);
-CREATE TABLE 'tmplib_LowDevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
-INSERT INTO "tmplib_LowDevLib" VALUES('1602A','GPIO|I2C: 1602A(HD44780)','LCD Module 1602A, STN, BLUB, 16 Character x 2 Line,  5 x 8 Dots, by the direct (Raspberry PI BCM2835 GPIO) or I2C (PCF8574) wiring.
+CREATE TABLE IF NOT EXISTS 'tmplib_LowDevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
+INSERT INTO tmplib_LowDevLib VALUES('1602A','GPIO|I2C: 1602A(HD44780)','LCD Module 1602A, STN, BLUB, 16 Character x 2 Line,  5 x 8 Dots, by the direct (Raspberry PI BCM2835 GPIO) or I2C (PCF8574) wiring.
 Conditions: Default planing policy but realtime one preferred.
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.1',10,0,'JavaLikeCalc.JavaScript
@@ -9867,7 +9939,7 @@ else if(ln1 != ln1_ || ln2 != ln2_) {
 }
 
 f_err = t_err;',1509990639);
-INSERT INTO "tmplib_LowDevLib" VALUES('1W_DS9097','One Wire by DS9097','One Wire sensors bus implementing by 1Wire-adapter DS9097. Supported direct and parasite powering for the temperature sensors.
+INSERT INTO tmplib_LowDevLib VALUES('1W_DS9097','One Wire by DS9097','One Wire sensors bus implementing by 1Wire-adapter DS9097. Supported direct and parasite powering for the temperature sensors.
 Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not tested), DS2413, DS2408, DS2450, DS2438.
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.2.1',30,0,'JavaLikeCalc.JavaScript
@@ -10308,7 +10380,7 @@ else {
 }
 
 f_err = t_err;',1509990639);
-INSERT INTO "tmplib_LowDevLib" VALUES('1W_DS9097U','One Wire by DS9097U','One Wire sensors bus implementing by 1Wire-adapter DS9097U. Supported direct and parasite powering for the temperature sensors.
+INSERT INTO tmplib_LowDevLib VALUES('1W_DS9097U','One Wire by DS9097U','One Wire sensors bus implementing by 1Wire-adapter DS9097U. Supported direct and parasite powering for the temperature sensors.
 Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not tested), DS2413, DS2408, DS2450, DS2438.
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.2.1',30,0,'JavaLikeCalc.JavaScript
@@ -10779,7 +10851,7 @@ else {
 }
 
 f_err = t_err;',1509990639);
-INSERT INTO "tmplib_LowDevLib" VALUES('BMP180','I2C: BMP180','I2C Pressure and Temperature sensor. Connect through a Serial output transport into the I2C mode.
+INSERT INTO tmplib_LowDevLib VALUES('BMP180','I2C: BMP180','I2C Pressure and Temperature sensor. Connect through a Serial output transport into the I2C mode.
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.1',10,0,'JavaLikeCalc.JavaScript
 //Initial set
@@ -10860,7 +10932,7 @@ else {
 
 if(t_err.toInt() && !f_err.toInt()) t = p = EVAL;
 f_err = t_err;',1509990639);
-INSERT INTO "tmplib_LowDevLib" VALUES('DHT','GPIO: DHT11,22 (AM23XX)','Digital Temperature and Humidity Sensor for models: DHT11, DHT12, AM2302, AM2320, ...
+INSERT INTO tmplib_LowDevLib VALUES('DHT','GPIO: DHT11,22 (AM23XX)','Digital Temperature and Humidity Sensor for models: DHT11, DHT12, AM2302, AM2320, ...
 The module designed for the sensors connect through GPIO, mostly it''s Raspberry PI BCM2835 GPIO.
 Conditions: Exclusively realtime planing in the priority 199 (FIFO-99).
 Author: Roman Savochenko <roman@oscada.org>
@@ -10938,7 +11010,7 @@ else {
 
 if(t_err.toInt() && !f_err.toInt()) t = h = EVAL;
 f_err = t_err;',1509373346);
-INSERT INTO "tmplib_LowDevLib" VALUES('DS3231','I2C: DS1307,DS3231','I2C RTC chips DS1307,DS3231 with Temperature sensor and calibration for DS3231. Connects through a Serial output transport into the I2C mode.
+INSERT INTO tmplib_LowDevLib VALUES('DS3231','I2C: DS1307,DS3231','I2C RTC chips DS1307,DS3231 with Temperature sensor and calibration for DS3231. Connects through a Serial output transport into the I2C mode.
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.0',10,0,'JavaLikeCalc.JavaScript
 //Set transport
@@ -11081,7 +11153,7 @@ else {
 
 if(t_err.toInt() && !f_err.toInt()) t = p = EVAL;
 f_err = t_err;',1541249292);
-INSERT INTO "tmplib_LowDevLib" VALUES('PCF8574','I2C: PCF8574','I2C 8-bit 8DIO. Connect through a Serial output transport into the I2C mode.
+INSERT INTO tmplib_LowDevLib VALUES('PCF8574','I2C: PCF8574','I2C 8-bit 8DIO. Connect through a Serial output transport into the I2C mode.
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.1',10,0,'JavaLikeCalc.JavaScript
 //Set transport
@@ -11122,7 +11194,7 @@ if(t_err.toInt() && !f_err.toInt())
 	di0 = di1 = di2 = di3 = di4 = di5 = di6 = di7 = EVAL;
 
 f_err = t_err;',1509990639);
-INSERT INTO "tmplib_LowDevLib" VALUES('PCF8591','I2C: PCF8591','I2C 8-bit 4xA/D and D/A converter. Connect through a Serial output transport into the I2C mode.
+INSERT INTO tmplib_LowDevLib VALUES('PCF8591','I2C: PCF8591','I2C 8-bit 4xA/D and D/A converter. Connect through a Serial output transport into the I2C mode.
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.1',10,0,'JavaLikeCalc.JavaScript
 //Set transport
@@ -11157,7 +11229,7 @@ if(t_err.toInt() && !f_err.toInt())
 		arguments["ai"+i] = EVAL;
 
 f_err = t_err;',1509908745);
-INSERT INTO "tmplib_LowDevLib" VALUES('BME280','I2C: BME280','I2C Pressure, Temperature and Humidity sensor. Connect through a Serial output transport into the I2C mode.
+INSERT INTO tmplib_LowDevLib VALUES('BME280','I2C: BME280','I2C Pressure, Temperature and Humidity sensor. Connect through a Serial output transport into the I2C mode.
 Author: Arcadiy Kisel, Roman Savochenko <roman@oscada.org>
 Version: 1.0.1',10,0,'JavaLikeCalc.JavaScript
 //Initial set
@@ -11280,7 +11352,7 @@ else {
 if(t_err.toInt() && !f_err.toInt()) t = p = h = EVAL;
 
 f_err = t_err;',1509989860);
-INSERT INTO "tmplib_LowDevLib" VALUES('SHT3x','I2C: SHT3x','Digital Temperature and Humidity Sensor for the models: SHT30
+INSERT INTO tmplib_LowDevLib VALUES('SHT3x','I2C: SHT3x','Digital Temperature and Humidity Sensor for the models: SHT30
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0',10,0,'JavaLikeCalc.JavaScript
 //Set transport
@@ -11323,7 +11395,7 @@ else {
 }
 
 f_err = t_err;',1542469153);
-INSERT INTO "tmplib_LowDevLib" VALUES('ADS111x','I2C: ADS101x, ADS111x','I2C 12/16-bit 4xA/D converter. Connect through a Serial output transport into the I2C mode.
+INSERT INTO tmplib_LowDevLib VALUES('ADS111x','I2C: ADS101x, ADS111x','I2C 12/16-bit 4xA/D converter. Connect through a Serial output transport into the I2C mode.
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.1',10,0,'JavaLikeCalc.JavaScript
 //Set transport
@@ -11368,7 +11440,7 @@ if(t_err.toInt() && !f_err.toInt())
 		arguments["ai"+i] = EVAL;
 
 f_err = t_err;',1549528595);
-INSERT INTO "tmplib_LowDevLib" VALUES('MCP4725','I2C: MCP4725','I2C 12-bit D/A converter. Connect through a Serial output transport into the I2C mode.
+INSERT INTO tmplib_LowDevLib VALUES('MCP4725','I2C: MCP4725','I2C 12-bit D/A converter. Connect through a Serial output transport into the I2C mode.
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0',10,0,'JavaLikeCalc.JavaScript
 //Set transport
@@ -11405,7 +11477,7 @@ else {
 if(t_err.toInt() && !f_err.toInt())	ao_ = EVAL;
 
 f_err = t_err;',1549488136);
-INSERT INTO "tmplib_LowDevLib" VALUES('MAX6675','GPIO: MAX6675','Cold-Junction-Compensated K-Thermocouple-to-Digital Converter (0°C to +1024°C). The module designed for the sensors connect through softSPI by GPIO, mostly it''s Raspberry PI BCM2835 GPIO.
+INSERT INTO tmplib_LowDevLib VALUES('MAX6675','GPIO: MAX6675','Cold-Junction-Compensated K-Thermocouple-to-Digital Converter (0°C to +1024°C). The module designed for the sensors connect through softSPI by GPIO, mostly it''s Raspberry PI BCM2835 GPIO.
 Conditions: Exclusively realtime planing in the priority 199 (FIFO-99).
 Author: Arcadiy Kisel <arcsin@online.ua>
 Version: 0.1.0',10,0,'JavaLikeCalc.JavaScript
@@ -11454,8 +11526,8 @@ else	t = (v>>3)*0.25;
 
 if(t_err.toInt() && !f_err.toInt()) t = EVAL;
 f_err = t_err;',1550995458);
-CREATE TABLE 'tmplib_tests' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
-INSERT INTO "tmplib_tests" VALUES('ai_simple','Simple AI','Простий AI','Простой AI','Simple analog parameter.','Простий аналоговий параметр.','Простой аналоговый параметр.',10,0,'JavaLikeCalc.JavaScript
+CREATE TABLE IF NOT EXISTS 'tmplib_tests' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
+INSERT INTO tmplib_tests VALUES('ai_simple','Simple AI','Простий AI','Простой AI','Simple analog parameter.','Простий аналоговий параметр.','Простой аналоговый параметр.',10,0,'JavaLikeCalc.JavaScript
 val=val_cod;
 if(val!=EVAL_REAL)
 {
@@ -11468,7 +11540,7 @@ if(val!=EVAL_REAL)
   else if(bWUp!=bWDwn && val<bWDwn)	f_err="106:Lower warning border violation";
   else f_err="0";
 }',0);
-INSERT INTO "tmplib_tests" VALUES('ai_man','Manual input of AI','Ручний ввід AI','Ручной ввод AI','Manual input of a standard analog parameter.','Стандартний аналоговий параметр ручного вводу.','Стандартный аналоговый параметр ручного ввода.',10,0,'JavaLikeCalc.JavaScript
+INSERT INTO tmplib_tests VALUES('ai_man','Manual input of AI','Ручний ввід AI','Ручной ввод AI','Manual input of a standard analog parameter.','Стандартний аналоговий параметр ручного вводу.','Стандартный аналоговый параметр ручного ввода.',10,0,'JavaLikeCalc.JavaScript
 //Check and write new value
 if(val!=val_o)
 {
@@ -11491,9 +11563,9 @@ if(val!=EVAL_REAL)
   else if(bWUp!=bWDwn && val<bWDwn)	f_err="106:Lower warning border violation";
   else f_err="0";
 }',0);
-INSERT INTO "tmplib_tests" VALUES('test','Test','Тест','Тест','S7 controller testing','Тестування контролера S7','Тестирование контроллера S7',10,0,'
+INSERT INTO tmplib_tests VALUES('test','Test','Тест','Тест','S7 controller testing','Тестування контролера S7','Тестирование контроллера S7',10,0,'
 ',1539451468);
-INSERT INTO "tmplib_tests" VALUES('gasPoint','Flow control point','','','','','',10,0,'JavaLikeCalc.JavaScript
+INSERT INTO tmplib_tests VALUES('gasPoint','Flow control point','','','','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	Q = 0;
 //F=200+(rand(5)-2.5);
 Q += F.isEVal() ? 0 : F/3600;
@@ -11502,8 +11574,8 @@ Q += F.isEVal() ? 0 : F/3600;
 dP = F.isEVal() ? 0 : F/33;
 DS = 1+(rand(0.2)-0.1);
 ',1561831602);
-CREATE TABLE 'UserProtocol_uPrt' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"DAQTmpl" TEXT DEFAULT '' ,"WaitReqTm" INTEGER DEFAULT '0' ,"InPROG" TEXT DEFAULT '' ,"OutPROG" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '0' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
-INSERT INTO "UserProtocol_uPrt" VALUES('SMS','SMS (obsolete)','','','!!!!: Replaced by the complex template Main.ntf. Will be removed soon
+CREATE TABLE IF NOT EXISTS 'UserProtocol_uPrt' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"DAQTmpl" TEXT DEFAULT '' ,"WaitReqTm" INTEGER DEFAULT '0' ,"InPROG" TEXT DEFAULT '' ,"OutPROG" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '0' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
+INSERT INTO UserProtocol_uPrt VALUES('SMS','SMS (obsolete)','','','!!!!: Replaced by the complex template Main.ntf. Will be removed soon
 Provides operations with SMS by GSM-modem connected as serial device. For now supported only sending SMS messages to a number of remote cell phone or GSM modem.
 Author: Roman Savochenko <roman@oscada.org>
 Version: 2.1.1','','',1,'',0,'','JavaLikeCalc.JavaScript
@@ -11589,7 +11661,7 @@ if(io.name() == "send") {
 	}
 	io.setAttr("err", "0");
 }',0,1550073193);
-INSERT INTO "UserProtocol_uPrt" VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Protocol level of typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
+INSERT INTO UserProtocol_uPrt VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Protocol level of typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
 Version: 1.0.0','','',1,'',0,'','JavaLikeCalc.JavaScript
@@ -11656,7 +11728,7 @@ for(i_k = 1; i_k <= k; i_k++) {
 		return;
 	}
 }',0,1509283349);
-INSERT INTO "UserProtocol_uPrt" VALUES('TMH','Power supply for turbomolecular pumps','','','Protocol level of power supply for turbomolecular pumps of firm SHIMADZU (http://www.shimadzu.com), model EI-R04M.
+INSERT INTO UserProtocol_uPrt VALUES('TMH','Power supply for turbomolecular pumps','','','Protocol level of power supply for turbomolecular pumps of firm SHIMADZU (http://www.shimadzu.com), model EI-R04M.
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
 Version: 1.0.0','','',1,'',0,'','JavaLikeCalc.JavaScript
@@ -11690,7 +11762,7 @@ CRC = 0;
 for(i = 0; i < (resp.length-3); i++) CRC += resp.charCodeAt(i);
 if((CRC&0xFF) != resp.slice(resp.length-3,resp.length-1).toInt(16)) { io.setAttr("err","6:"+tr("CRC error.")); return; }
 io.setText(resp.slice(4,resp.length-3));',0,1509283419);
-INSERT INTO "UserProtocol_uPrt" VALUES('VKT7','VKT-7','','','Protocol level of firm "Teplocom" (http://www.teplocom.spb.ru) computer "VKT-7" for complex heat measurement and counting. The device complex enough to provide more parameters, more history and accessed by a nonlinear Serial-based protocol at low speed. The template implements acquisition for all significant parameters, gets for their history by hours, days and result months. Also you can to append easily enough for processing of the remained parameters.
+INSERT INTO UserProtocol_uPrt VALUES('VKT7','VKT-7','','','Protocol level of firm "Teplocom" (http://www.teplocom.spb.ru) computer "VKT-7" for complex heat measurement and counting. The device complex enough to provide more parameters, more history and accessed by a nonlinear Serial-based protocol at low speed. The template implements acquisition for all significant parameters, gets for their history by hours, days and result months. Also you can to append easily enough for processing of the remained parameters.
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vladislav Chubuk
 Version: 1.0.0','','',1,'',0,'','JavaLikeCalc.JavaScript
@@ -11735,7 +11807,7 @@ if(KS != ((resp.charCodeAt(resp.length-1)<<8)|resp.charCodeAt(resp.length-2)))
 if(resp.charCodeAt(1)&0x80)
 { io.setAttr("err","7:"+resp.charCodeAt(2)+":"+tr("Request error.")); return; }
 io.setText(resp.slice(1,-2));',0,1509283495);
-INSERT INTO "UserProtocol_uPrt" VALUES('TM510x','Elemer TM510x','','','Protocol level of multichannels thermometer Elemer TM5102 and TM5103 of firm Elemer (http://www.elemer.ru).
+INSERT INTO UserProtocol_uPrt VALUES('TM510x','Elemer TM510x','','','Protocol level of multichannels thermometer Elemer TM5102 and TM5103 of firm Elemer (http://www.elemer.ru).
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','','',1,'',0,'','JavaLikeCalc.JavaScript
 //Request form:
@@ -11779,7 +11851,7 @@ for(i = 1; i < min(KSpos+1,resp.length); i++) {
 }
 if(KS != resp.slice(KSpos+1).toInt(10)) { io.setAttr("err","6:"+tr("KS error.")); return; }
 io.setText(resp.slice(resp.indexOf(";")+1,KSpos));',0,1509283413);
-INSERT INTO "UserProtocol_uPrt" VALUES('SMDP','Sycon Multi Drop Protocol','','','Protocol level of STM devices for resonant frequency measurement for mass of deposited films attached to its surface by Sycon Instruments, Inc. (http://www.sycon.com)
+INSERT INTO UserProtocol_uPrt VALUES('SMDP','Sycon Multi Drop Protocol','','','Protocol level of STM devices for resonant frequency measurement for mass of deposited films attached to its surface by Sycon Instruments, Inc. (http://www.sycon.com)
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
 Version: 1.0.0','','',1,'',0,'','JavaLikeCalc.JavaScript
@@ -11830,7 +11902,7 @@ else if(errCd == 4) io.setAttr("err",""+(10+errCd)+":Err_range: "+tr("Data range
 else if(errCd == 5) io.setAttr("err",""+(10+errCd)+":Err_inhibited: "+tr("Inhibited."));
 else if(errCd == 6) io.setAttr("err",""+(10+errCd)+":Err_obso: "+tr("Obsolete command. No action taken, but not really an error."));
 else io.setAttr("err",""+(10+errCd)+":"+tr("Unknown error."));',0,1509283368);
-INSERT INTO "UserProtocol_uPrt" VALUES('IT3','Temperature measurement IT-3','','','Protocol level of temperature measurement IT-3 from OmskEtalon (http://www.omsketalon.ru).
+INSERT INTO UserProtocol_uPrt VALUES('IT3','Temperature measurement IT-3','','','Protocol level of temperature measurement IT-3 from OmskEtalon (http://www.omsketalon.ru).
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
 Version: 1.2.0','','',1,'',0,'JavaLikeCalc.JavaScript
@@ -11931,7 +12003,7 @@ for(blkOff = 0, blkLen = 0; blkOff < resp.length; blkOff += 6+blkLen) {
 	{ io.setAttr("err","5:"+resp.charCodeAt(blkOff+7)+":"+tr("Request error")); return; }
 	io.setText(resp.slice(blkOff+6,blkOff+6+blkLen));
 }',0,1472721683);
-INSERT INTO "UserProtocol_uPrt" VALUES('IVE_452HS_02','IVE-452HS-02','IVE-452HS-02','','Protocol level of power supply of beam-electrons evaporator of "Plasma Tech" Ltd, from Moskov.
+INSERT INTO UserProtocol_uPrt VALUES('IVE_452HS_02','IVE-452HS-02','IVE-452HS-02','','Protocol level of power supply of beam-electrons evaporator of "Plasma Tech" Ltd, from Moskov.
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
 Version: 1.0.0','','',1,'',0,'','JavaLikeCalc.JavaScript
@@ -11964,7 +12036,7 @@ for(KS = 0, i = 0; i < resp.length-1; i++)	KS += resp.charCodeAt(i);
 KS = 0x100-KS&0xFF;
 if(resp.charCodeAt(resp.length-1) != KS )	{ io.setAttr("err","3:"+tr("CRC error")); return; }
 io.setText(resp.slice(1,resp.length-1));',0,1509285266);
-INSERT INTO "UserProtocol_uPrt" VALUES('OPTRIS','OPTRIS CT/CTL','','','Protocol level of OPTRIS CT/CTL communication interface of "Optris" GmbH, from Berlin.
+INSERT INTO UserProtocol_uPrt VALUES('OPTRIS','OPTRIS CT/CTL','','','Protocol level of OPTRIS CT/CTL communication interface of "Optris" GmbH, from Berlin.
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
 Version: 1.0.0','','',1,'',0,'','JavaLikeCalc.JavaScript
@@ -11990,7 +12062,7 @@ while(resp.length && (tresp=tr.messIO("")).length) resp += tresp;
 SYS.messDebug("/OPTRIS/PRT","Respond: "+SYS.strDecode(resp,"Bin"," "));
 if(resp.length <= 0) { io.setAttr("err","3:"+tr("No a respond")); return; }
 io.setText(resp);',0,1509286719);
-INSERT INTO "UserProtocol_uPrt" VALUES('CTR','CTR 100, 101','CTR 100, 101','','Protocol part of the RS232C Serial Interface permits the communication between the digital Oerlikon Leybold Vacuum CERAVAC, from Köln.
+INSERT INTO UserProtocol_uPrt VALUES('CTR','CTR 100, 101','CTR 100, 101','','Protocol part of the RS232C Serial Interface permits the communication between the digital Oerlikon Leybold Vacuum CERAVAC, from Köln.
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
 Version: 1.0.0','Protocol part of the RS232C Serial Interface permits the communication between the digital Oerlikon Leybold Vacuum CERAVAC, from Köln.
@@ -12016,7 +12088,7 @@ if(resp.length > 9)	{ io.setAttr("err","4:"+tr("Respond too long, possible conti
 for(CS = 0, i = 1; i < resp.length-1; i++)	CS += resp.charCodeAt(i);
 if(resp.charCodeAt(resp.length-1) != (CS&0xFF))	{ io.setAttr("err","5:"+tr("CRC error")); return; }
 io.setText(resp.slice(1,resp.length-1));',0,1509287419);
-INSERT INTO "UserProtocol_uPrt" VALUES('SMTP','SMTP (obsolete)','SMTP','','!!!!: Replaced by the complex template Main.ntf. Will be removed soon
+INSERT INTO UserProtocol_uPrt VALUES('SMTP','SMTP (obsolete)','SMTP','','!!!!: Replaced by the complex template Main.ntf. Will be removed soon
 Provides EMAIL sending by the protocol SMTP.
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','Provides EMAIL sending by the protocol SMTP.
@@ -12115,7 +12187,7 @@ while(rez.length && rez.slice(-2) != "\x0D\x0A" && (trez=tr.messIO("")).length) 
 
 //Disconnect from the SMTP-server
 tr.start(false);',0,1550073190);
-INSERT INTO "UserProtocol_uPrt" VALUES('AT24CXX','I2C: AT24C{32|64}','','','Provides operations with EEPROM memory based on I2C chips AT24C32 (4KB) and AT24C64 (8KB). Supported random reading and writing.
+INSERT INTO UserProtocol_uPrt VALUES('AT24CXX','I2C: AT24C{32|64}','','','Provides operations with EEPROM memory based on I2C chips AT24C32 (4KB) and AT24C64 (8KB). Supported random reading and writing.
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','','',1,'',0,'','JavaLikeCalc.JavaScript
 //Request form:
@@ -12149,7 +12221,7 @@ if(io.name() == "write") {
 	tr.messIO(SYS.strFromCharCode(addr,off>>8,off&0xFF)+io.text(), 0, 0);
 	return;
 }',0,1479654824);
-INSERT INTO "UserProtocol_uPrt" VALUES('m200','Mercury 200','','Меркурий 200','Protocol level of one phase counter of electricity Mercury 200, 203.2Т, 206 from firm Incotex (http://www.incotexcom.ru).
+INSERT INTO UserProtocol_uPrt VALUES('m200','Mercury 200','','Меркурий 200','Protocol level of one phase counter of electricity Mercury 200, 203.2Т, 206 from firm Incotex (http://www.incotexcom.ru).
 Author: Arsen Zakojan <godzilla919@gmail.com>
 Version: 1.0.0','','Протокольный уровень однофазных счетчиков электроэнергии Меркурий 200,  203.2Т,  206 компании Инкотекс (http://www.incotexcom.ru).
 Автор: Арсен Закоян <godzilla919@gmail.com>
@@ -12190,7 +12262,7 @@ if((CRCans==CRC1)&&(request.charCodeAt(0)==answer.charCodeAt(0))&&(request.charC
 //k++;}
 io.setText(Special.FLibSYS.strDec4Bin(resp));
 ',1,1509290174);
-INSERT INTO "UserProtocol_uPrt" VALUES('m230','Mercury 230','','Меркурий 230','Protocol level of three phase counter of electricity Mercury 230, 231, 232, 233, 234, 236 from firm Incotex (http://www.incotexcom.ru).
+INSERT INTO UserProtocol_uPrt VALUES('m230','Mercury 230','','Меркурий 230','Protocol level of three phase counter of electricity Mercury 230, 231, 232, 233, 234, 236 from firm Incotex (http://www.incotexcom.ru).
 Author: Arsen Zakojan <godzilla919@gmail.com>
 Version: 1.0.0','','Протокольный уровень трехфазных счетчиков электроэнергии Меркурий 230, 231, 232, 233,  234,  236  компании Инкотекс (http://www.incotexcom.ru).
 Автор: Арсен Закоян <godzilla919@gmail.com>
@@ -12276,7 +12348,7 @@ else if((request.charCodeAt(1)==0x08)&&(request.charCodeAt(2)==0x16)&&(request.c
 else if((request.charCodeAt(1)==0x08)&&(request.charCodeAt(2)==0x00)&&(answer.length==8))
  io.setText(b1.toInt(16).toString(10,2,)+b2.toInt(16).toString(10,2,)+b3.toInt(16).toString(10,2,)+b4.toInt(16).toString(10,2,));
 ;}',1,1509290179);
-INSERT INTO "UserProtocol_uPrt" VALUES('NIK2303','NIK2303','','','Protocol level of three phase counter of electricity NIK 2303 from firm NIK LLC (http://www.nik.net.ua).
+INSERT INTO UserProtocol_uPrt VALUES('NIK2303','NIK2303','','','Protocol level of three phase counter of electricity NIK 2303 from firm NIK LLC (http://www.nik.net.ua).
 Author: Ruslan Yarmoliuk <rylio74@gmail.com>
 Version: 1.0.1','','',1,'',0,'','JavaLikeCalc.JavaScript
 //Protocol NIK 2303
@@ -12368,106 +12440,106 @@ if(FCS != ((resp.charCodeAt(resp.length-1)<<8)+ resp.charCodeAt(resp.length-2)))
 io.setText(resp.slice(10,resp.length-2));
 io.setAttr("cntr", resp[7]);
 io.setAttr("err", "0");',1,1512240522);
-CREATE TABLE 'tmplib_LowDevLib_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '0' ,"FLAGS" INTEGER DEFAULT '0' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '0' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
-INSERT INTO "tmplib_LowDevLib_io" VALUES('1602A','transport','Transport of the I2C, Serial (i2c) or
+CREATE TABLE IF NOT EXISTS 'tmplib_LowDevLib_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '0' ,"FLAGS" INTEGER DEFAULT '0' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '0' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
+INSERT INTO tmplib_LowDevLib_io VALUES('1602A','transport','Transport of the I2C, Serial (i2c) or
 GPIO address with function put(), mostly it''s BCM2835 (DAQ.BCM2835.pi.pi)',0,64,'i2c',0,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('1602A','addr','I2C device address [0...119]',1,64,'39',1,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('1602A','RS','GPIO Pin: Reset',1,64,'7',2,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('1602A','E','GPIO Pin: Enable',1,64,'8',3,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('1602A','D4','GPIO Pin: Data4',1,64,'25',4,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('1602A','D5','GPIO Pin: Data5',1,64,'24',5,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('1602A','D6','GPIO Pin: Data6',1,64,'23',6,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('1602A','D7','GPIO Pin: Data7',1,64,'18',7,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('1602A','ln1','Line 1',0,32,'',8,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('1602A','ln2','Line 2',0,32,'',9,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('1W_DS9097','transport','Transport of the One Wire bus, Serial',0,64,'oneWire',0,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('1W_DS9097','tmResc','Rescan period, s',2,64,'60',1,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('1W_DS9097','tryEVAL','Tries after which set value to EVAL',1,64,'3',2,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('1W_DS9097','power','Power, for temperature',3,16,'',3,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('1W_DS9097','this','Object',4,0,'',4,'Об''єкт','Объект');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('1W_DS9097U','transport','Transport of the One Wire bus, Serial',0,64,'oneWire',0,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('1W_DS9097U','tmResc','Rescan period, s',2,64,'60',1,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('1W_DS9097U','tryEVAL','Tries after which set value to EVAL',1,64,'3',2,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('1W_DS9097U','power','Power, for temperature',3,16,'',3,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('1W_DS9097U','isData','In data mode',3,0,'0',4,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('1W_DS9097U','this','Object',4,0,'',5,'Об''єкт','Объект');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('BMP180','transport','Transport of the I2C, Serial',0,64,'i2c',0,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('BMP180','addr','Device address [0...119]',1,64,'119',1,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('BMP180','oss','Oversampling setting (0...3)',1,64,'0',2,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('BMP180','t','T, °С',2,16,'',3,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('BMP180','p','P, Pa',2,16,'',4,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('DHT','addr','GPIO address with functions mode(), get() and put(), mostly it''s BCM2835',0,64,'DAQ.GPIO.io.pi',0,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('DHT','pin','IO pin number of the GPIO',1,64,'17',1,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('DHT','tries','Tries [1...5]',1,64,'2',2,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('DHT','dev','Device (0-DHT11, 1-DHT22)',1,64,'1',3,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('DHT','t','T, °С',2,16,'',4,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('DHT','h','H, %',2,16,'',5,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('DS3231','transport','Transport of the I2C, Serial',0,64,'i2c',0,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('DS3231','addr','Device address [0...119]',1,64,'104',1,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('DS3231','tm','Date and time, YYYY-MM-DDTHH:mm:SS',0,32,'',3,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('DS3231','pSQW','Enable SQUARE-WAVE OUTPUT',3,32,'',4,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','transport','Transport of the I2C, Serial',0,64,'i2c',0,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','addr','Device address [0...119]',1,64,'39',1,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','di0','DI0',3,16,'',2,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','di1','DI1',3,16,'',3,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','di2','DI2',3,16,'',4,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','di3','DI3',3,16,'',5,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','di4','DI4',3,16,'',6,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','di5','DI5',3,16,'',7,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','di6','DI6',3,16,'',8,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','di7','DI7',3,16,'',9,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','do0','DO0',3,33,'',10,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','do1','DO1',3,33,'',11,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','do2','DO2',3,33,'',12,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','do3','DO3',3,33,'',13,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','do4','DO4',3,33,'',14,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','do5','DO5',3,33,'',15,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','do6','DO6',3,33,'',16,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','do7','DO7',3,33,'',17,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8591','transport','Transport of the I2C, Serial',0,64,'i2c',0,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8591','addr','Device address [0...119]',1,64,'72',1,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8591','vRef','Reference voltage, V',2,64,'3.2',2,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8591','ai0','AI0',2,16,'',3,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8591','ai1','AI1',2,16,'',4,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8591','ai2','AI2',2,16,'',5,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8591','ai3','AI3',2,16,'',6,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8591','ao','AO',2,32,'',7,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('BME280','transport','Transport of the I2C, Serial',0,64,'i2c',0,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('BME280','addr','Device address [0...119]',1,64,'118',1,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('BME280','oss','Oversampling setting (0...7)',1,64,'3',2,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('BME280','t','T, °С',2,16,'',3,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('BME280','p','P, Pa',2,16,'',4,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('BME280','h','H, %',2,16,'',5,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('DS3231','mode','Mode',1,40,'0
+INSERT INTO tmplib_LowDevLib_io VALUES('1602A','addr','I2C device address [0...119]',1,64,'39',1,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1602A','RS','GPIO Pin: Reset',1,64,'7',2,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1602A','E','GPIO Pin: Enable',1,64,'8',3,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1602A','D4','GPIO Pin: Data4',1,64,'25',4,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1602A','D5','GPIO Pin: Data5',1,64,'24',5,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1602A','D6','GPIO Pin: Data6',1,64,'23',6,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1602A','D7','GPIO Pin: Data7',1,64,'18',7,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1602A','ln1','Line 1',0,32,'',8,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1602A','ln2','Line 2',0,32,'',9,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097','transport','Transport of the One Wire bus, Serial',0,64,'oneWire',0,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097','tmResc','Rescan period, s',2,64,'60',1,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097','tryEVAL','Tries after which set value to EVAL',1,64,'3',2,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097','power','Power, for temperature',3,16,'',3,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097','this','Object',4,0,'',4,'Об''єкт','Объект');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097U','transport','Transport of the One Wire bus, Serial',0,64,'oneWire',0,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097U','tmResc','Rescan period, s',2,64,'60',1,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097U','tryEVAL','Tries after which set value to EVAL',1,64,'3',2,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097U','power','Power, for temperature',3,16,'',3,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097U','isData','In data mode',3,0,'0',4,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097U','this','Object',4,0,'',5,'Об''єкт','Объект');
+INSERT INTO tmplib_LowDevLib_io VALUES('BMP180','transport','Transport of the I2C, Serial',0,64,'i2c',0,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('BMP180','addr','Device address [0...119]',1,64,'119',1,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('BMP180','oss','Oversampling setting (0...3)',1,64,'0',2,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('BMP180','t','T, °С',2,16,'',3,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('BMP180','p','P, Pa',2,16,'',4,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('DHT','addr','GPIO address with functions mode(), get() and put(), mostly it''s BCM2835',0,64,'DAQ.GPIO.io.pi',0,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('DHT','pin','IO pin number of the GPIO',1,64,'17',1,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('DHT','tries','Tries [1...5]',1,64,'2',2,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('DHT','dev','Device (0-DHT11, 1-DHT22)',1,64,'1',3,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('DHT','t','T, °С',2,16,'',4,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('DHT','h','H, %',2,16,'',5,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('DS3231','transport','Transport of the I2C, Serial',0,64,'i2c',0,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('DS3231','addr','Device address [0...119]',1,64,'104',1,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('DS3231','tm','Date and time, YYYY-MM-DDTHH:mm:SS',0,32,'',3,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('DS3231','pSQW','Enable SQUARE-WAVE OUTPUT',3,32,'',4,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('PCF8574','transport','Transport of the I2C, Serial',0,64,'i2c',0,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('PCF8574','addr','Device address [0...119]',1,64,'39',1,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('PCF8574','di0','DI0',3,16,'',2,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('PCF8574','di1','DI1',3,16,'',3,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('PCF8574','di2','DI2',3,16,'',4,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('PCF8574','di3','DI3',3,16,'',5,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('PCF8574','di4','DI4',3,16,'',6,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('PCF8574','di5','DI5',3,16,'',7,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('PCF8574','di6','DI6',3,16,'',8,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('PCF8574','di7','DI7',3,16,'',9,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('PCF8574','do0','DO0',3,33,'',10,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('PCF8574','do1','DO1',3,33,'',11,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('PCF8574','do2','DO2',3,33,'',12,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('PCF8574','do3','DO3',3,33,'',13,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('PCF8574','do4','DO4',3,33,'',14,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('PCF8574','do5','DO5',3,33,'',15,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('PCF8574','do6','DO6',3,33,'',16,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('PCF8574','do7','DO7',3,33,'',17,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('PCF8591','transport','Transport of the I2C, Serial',0,64,'i2c',0,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('PCF8591','addr','Device address [0...119]',1,64,'72',1,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('PCF8591','vRef','Reference voltage, V',2,64,'3.2',2,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('PCF8591','ai0','AI0',2,16,'',3,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('PCF8591','ai1','AI1',2,16,'',4,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('PCF8591','ai2','AI2',2,16,'',5,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('PCF8591','ai3','AI3',2,16,'',6,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('PCF8591','ao','AO',2,32,'',7,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('BME280','transport','Transport of the I2C, Serial',0,64,'i2c',0,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('BME280','addr','Device address [0...119]',1,64,'118',1,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('BME280','oss','Oversampling setting (0...7)',1,64,'3',2,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('BME280','t','T, °С',2,16,'',3,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('BME280','p','P, Pa',2,16,'',4,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('BME280','h','H, %',2,16,'',5,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('DS3231','mode','Mode',1,40,'0
 0;1
 DS3231;DS1307',2,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('DS3231','this','Parameter',4,0,'',6,'Параметр','Параметр');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('DS3231','pSQWf','SQUARE-WAVE OUTPUT frequency',1,32,'',5,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('SHT3x','transport','Transport of the I2C, Serial',0,64,'i2c',0,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('SHT3x','addr','Device address [0...119]',1,64,'68',1,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('SHT3x','H','Humidity',2,16,'',2,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('SHT3x','T','Temperature',2,16,'',3,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('ADS111x','transport','Transport of the I2C, Serial',0,64,'i2c',0,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('ADS111x','addr','Device address [0...119]',1,64,'72',1,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('ADS111x','range','Range, ±V',1,40,'2
+INSERT INTO tmplib_LowDevLib_io VALUES('DS3231','this','Parameter',4,0,'',6,'Параметр','Параметр');
+INSERT INTO tmplib_LowDevLib_io VALUES('DS3231','pSQWf','SQUARE-WAVE OUTPUT frequency',1,32,'',5,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('SHT3x','transport','Transport of the I2C, Serial',0,64,'i2c',0,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('SHT3x','addr','Device address [0...119]',1,64,'68',1,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('SHT3x','H','Humidity',2,16,'',2,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('SHT3x','T','Temperature',2,16,'',3,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('ADS111x','transport','Transport of the I2C, Serial',0,64,'i2c',0,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('ADS111x','addr','Device address [0...119]',1,64,'72',1,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('ADS111x','range','Range, ±V',1,40,'2
 0;1;2;3;4;5
 6.144;4.096;2.048;1.024;0.512;0.256',2,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('ADS111x','ai0','AI0',2,16,'',3,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('ADS111x','ai1','AI1',2,16,'',4,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('ADS111x','ai2','AI2',2,16,'',5,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('ADS111x','ai3','AI3',2,16,'',6,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('MCP4725','transport','Transport of the I2C, Serial',0,64,'i2c',0,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('MCP4725','addr','Device address [0...119]',1,64,'96',1,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('MCP4725','vRef','Reference voltage, V',2,64,'3.2',2,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('MCP4725','ao','AO',2,32,'',3,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('MAX6675','addr','GPIO address with functions mode(), get() and put(), mostly it''s BCM2835',0,64,'DAQ.GPIO.io.pi',0,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('MAX6675','pin_cs','CS pin number of the GPIO',1,64,'8',1,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('MAX6675','pin_sclk','SCLK pin number of the GPIO',1,64,'11',2,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('MAX6675','pin_miso','MISO pin number of the GPIO',1,64,'9',3,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('MAX6675','t','T, °С',2,17,'',4,'','');
-CREATE TABLE 'techApp' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
-INSERT INTO "techApp" VALUES('lag','Lag','Затримка','Запаздывание','Lag model. Can be used for lag imitation of the sensor variables.','Модель затримки. Може використовуватися для імітації запізнення значень давачів.','Модель задержки. Может использоваться для имитации запаздывания значений датчиков.',1,10,0,'out -= (out-in)/(t_lg*f_frq);',1556609878);
-INSERT INTO "techApp" VALUES('noise','Noise: 2 harmonic + rand','Шум: 2 гармоніки + випадковий.','Шум: 2 гармоники + случайное','Noise model. Contains three parts:
+INSERT INTO tmplib_LowDevLib_io VALUES('ADS111x','ai0','AI0',2,16,'',3,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('ADS111x','ai1','AI1',2,16,'',4,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('ADS111x','ai2','AI2',2,16,'',5,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('ADS111x','ai3','AI3',2,16,'',6,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('MCP4725','transport','Transport of the I2C, Serial',0,64,'i2c',0,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('MCP4725','addr','Device address [0...119]',1,64,'96',1,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('MCP4725','vRef','Reference voltage, V',2,64,'3.2',2,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('MCP4725','ao','AO',2,32,'',3,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('MAX6675','addr','GPIO address with functions mode(), get() and put(), mostly it''s BCM2835',0,64,'DAQ.GPIO.io.pi',0,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('MAX6675','pin_cs','CS pin number of the GPIO',1,64,'8',1,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('MAX6675','pin_sclk','SCLK pin number of the GPIO',1,64,'11',2,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('MAX6675','pin_miso','MISO pin number of the GPIO',1,64,'9',3,'','');
+INSERT INTO tmplib_LowDevLib_io VALUES('MAX6675','t','T, °С',2,17,'',4,'','');
+CREATE TABLE IF NOT EXISTS 'techApp' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
+INSERT INTO techApp VALUES('lag','Lag','Затримка','Запаздывание','Lag model. Can be used for lag imitation of the sensor variables.','Модель затримки. Може використовуватися для імітації запізнення значень давачів.','Модель задержки. Может использоваться для имитации запаздывания значений датчиков.',1,10,0,'out -= (out-in)/(t_lg*f_frq);',1556609878);
+INSERT INTO techApp VALUES('noise','Noise: 2 harmonic + rand','Шум: 2 гармоніки + випадковий.','Шум: 2 гармоники + случайное','Noise model. Contains three parts:
 - first harmonic part;
 - second harmonic part;
 - noise based on generator of the randomize numbers.','Модель шуму. Містить три складові:
@@ -12479,7 +12551,7 @@ INSERT INTO "techApp" VALUES('noise','Noise: 2 harmonic + rand','Шум: 2 га�
 - шум на основе генератора случайных чисел.',1,10,0,'tmp_g1 = (tmp_g1 > 6.28) ? 0 : tmp_g1+6.28/(per_g1*f_frq);
 tmp_g2 = (tmp_g2 > 6.28) ? 0 : tmp_g2+6.28/(per_g2*f_frq);
 out = off + a_g1*sin(tmp_g1) + a_g2*sin(tmp_g2) + a_rnd*(rand(2)-1);',1556609878);
-INSERT INTO "techApp" VALUES('ballCrane','Ball crane','Кульовий кран','Шаровый кран','Model of the ball crane. Includes for the going and estrangement time.','Модель кульового крану. Включає час ходу та час відриву.','Модель шарового крана. Включает время хода и время отрыва.',1,10,0,'if(!(st_close && !com) && !(st_open && com)) {
+INSERT INTO techApp VALUES('ballCrane','Ball crane','Кульовий кран','Шаровый кран','Model of the ball crane. Includes for the going and estrangement time.','Модель кульового крану. Включає час ходу та час відриву.','Модель шарового крана. Включает время хода и время отрыва.',1,10,0,'if(!(st_close && !com) && !(st_open && com)) {
   tmp_up = (pos > 0 && pos < 100) ? 0 : (tmp_up>0&&lst_com==com)?tmp_up-1/f_frq:t_up;
   pos += (tmp_up > 0) ? 0 : (100*(com?1:-1))/(t_full*f_frq);
   pos = (pos > 100) ? 100 : (pos<0)?0:pos;
@@ -12487,11 +12559,11 @@ INSERT INTO "techApp" VALUES('ballCrane','Ball crane','Кульовий кран
   st_close = (pos <= 0) ? true : false;
   lst_com = com;
 }',1556609878);
-INSERT INTO "techApp" VALUES('separator','Separator','Сепаратор','Сепаратор','Separator model with two phases, liquid and gas.','Модель сепаратору з двома фазами, рідинною та газовою.','Модель сепаратора с двумя фазами, жидкой и газовой.',1,10,0,'Flq = max(0, Fi*PercLq);
+INSERT INTO techApp VALUES('separator','Separator','Сепаратор','Сепаратор','Separator model with two phases, liquid and gas.','Модель сепаратору з двома фазами, рідинною та газовою.','Модель сепаратора с двумя фазами, жидкой и газовой.',1,10,0,'Flq = max(0, Fi*PercLq);
 DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, 293, Si, Fo+Flq, Po, 293, So, lo, Q0, 0.95, 0.01, f_frq);
 Llq = max(0, min(100,Llq+0.27*(Flq-Fo_lq)/(Vap*Qlq*f_frq)));
 Po_lq = Po + Llq*Vap/Qlq;',1556609878);
-INSERT INTO "techApp" VALUES('valve','Valve','Клапан','Клапан','Valve model, includes:
+INSERT INTO techApp VALUES('valve','Valve','Клапан','Клапан','Valve model, includes:
 - two valves in the one;
 - super-critical speed;
 - temperature changing at the throttling;
@@ -12519,16 +12591,16 @@ if(noBack) Fi = max(0, Fi);
 Po = max(0, min(100,Po+0.27*(Fi-Fo)/(Q0*Kpr*So*lo*f_frq)));
 
 To = max(0, min(2e3,To+(abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*f_frq)));',1556609878);
-INSERT INTO "techApp" VALUES('lagClean','Lag: clean','Затримка: чиста','Задержка: чистая','Model of clean(transportable) lag. Realizes by incorporating several links of a simple delay. Appointed for lags into long pipes.','Модель чистої(транспортної) затримки. Реалізується шляхом включення декількох ланок простої затримки. Призначено для імітації затримок у довгих трубопроводах.','Модель чистого(транспортного) запаздывания. Реализуется путём включения нескольких простых звеньев запаздывания. Предназначен для имитации запаздывания в длинных трубопроводах.',1,10,0,'cl1 -= (cl1-in)/(t_lg*f_frq/4);
+INSERT INTO techApp VALUES('lagClean','Lag: clean','Затримка: чиста','Задержка: чистая','Model of clean(transportable) lag. Realizes by incorporating several links of a simple delay. Appointed for lags into long pipes.','Модель чистої(транспортної) затримки. Реалізується шляхом включення декількох ланок простої затримки. Призначено для імітації затримок у довгих трубопроводах.','Модель чистого(транспортного) запаздывания. Реализуется путём включения нескольких простых звеньев запаздывания. Предназначен для имитации запаздывания в длинных трубопроводах.',1,10,0,'cl1 -= (cl1-in)/(t_lg*f_frq/4);
 cl2 -= (cl2-cl1)/(t_lg*f_frq/4);
 cl3 -= (cl3-cl2)/(t_lg*f_frq/4);
 out -= (out-cl3)/(t_lg*f_frq/4);',1556609878);
-INSERT INTO "techApp" VALUES('net','Network: load','Мережа: навантаження','Сеть: нагрузка','Loading with constant pressure on the network. Contains a parameter for connection the noise.','Навантаження з фіксованим тиском мережі. Містить параметр для підключення шуму.','Нагрузка с фиксированным давлением сети. Содержит параметр для подключения шума.',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, 293, So, EVAL_REAL, Po, 293, So, 10, Q0, Kpr, 0.01, f_frq);',1556609878);
-INSERT INTO "techApp" VALUES('src_press','Source: pressure','Джерело: тиск','Источник: давление','Source of the constant pressure. Contains a parameter for connection the noise.','Джерело з фіксованим тиском. Містить параметр для підключення шуму.','Источник с фиксированным давлением. Содержит параметр для подключения шума.',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fit, Pi*Noise, 293, So, Fo, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);',1556609878);
-INSERT INTO "techApp" VALUES('cooler','Air cooler','Повітряний холодильник','Воздушный холодильник','Model of the air cooler for gas flow.','Модель повітряного охолоджувача газового потоку.','Модель воздушного охладителя газового потока.',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, 293, Si, Fo, Po, 293, So, lo, Q0, 0.95, 0.01, f_frq);
+INSERT INTO techApp VALUES('net','Network: load','Мережа: навантаження','Сеть: нагрузка','Loading with constant pressure on the network. Contains a parameter for connection the noise.','Навантаження з фіксованим тиском мережі. Містить параметр для підключення шуму.','Нагрузка с фиксированным давлением сети. Содержит параметр для подключения шума.',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, 293, So, EVAL_REAL, Po, 293, So, 10, Q0, Kpr, 0.01, f_frq);',1556609878);
+INSERT INTO techApp VALUES('src_press','Source: pressure','Джерело: тиск','Источник: давление','Source of the constant pressure. Contains a parameter for connection the noise.','Джерело з фіксованим тиском. Містить параметр для підключення шуму.','Источник с фиксированным давлением. Содержит параметр для подключения шума.',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fit, Pi*Noise, 293, So, Fo, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);',1556609878);
+INSERT INTO techApp VALUES('cooler','Air cooler','Повітряний холодильник','Воздушный холодильник','Model of the air cooler for gas flow.','Модель повітряного охолоджувача газового потоку.','Модель воздушного охладителя газового потока.',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, 293, Si, Fo, Po, 293, So, lo, Q0, 0.95, 0.01, f_frq);
 Qr = Q0 + Q0*0.95*(Pi-1);
 To += (Fi*(Ti-To)+Wc*(Tair-To)/Rt)/(Ct*(Si*li+So*lo)*Qr*f_frq);',1556609878);
-INSERT INTO "techApp" VALUES('compressor','Gas compressor','Компресор газовий','Компрессор газовый','Model of the gas compressor. Implements the surge effect.
+INSERT INTO techApp VALUES('compressor','Gas compressor','Компресор газовий','Компрессор газовый','Model of the gas compressor. Implements the surge effect.
 The surge counts from the dynamic-gas curve, and next there counts the surge margin coefficient.','Модель газового компресора. Враховує ефект помпажу.
 Помпаж розраховується за газово-динамічною кривою, виходячи з якої розраховується коефіцієнт запасу за помпажем.','Модель газового компрессора. Учитывает эффект помпажа. Помпаж вычисляется по газо-динамической кривой, исходя из которой получается коэффициент запаса по помпажу.',1,10,0,'Pmax = max(Pi, Po);
 Pmin = min(Pi, Po);
@@ -12542,23 +12614,23 @@ Fit -= (Fit-Fi)/max(1,(lo*f_frq)/max(1e-4,abs(Fi/(Qrf*So))));
 Po = max(0, min(100,Po+0.27*(Fi-Fo)/(Q0*Kpr*So*lo*f_frq)));
 
 To += (abs(Fi)*(Ti*pow(Po/Pi,0.3)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*(V+So*lo)*Qr*f_frq);',1556609878);
-INSERT INTO "techApp" VALUES('src_flow','Source: flow','Джерело: витрати','Источник: расход','Source of the constant flow. Contains a parameter for connection the noise.','Джерело з фіксованими витратами. Містить параметр для підключення шуму.','Источник с фиксированным расходом. Содержит параметр для подключения шума.',1,10,0,'Po = max(0, min(100,Po+0.27*(Noise*Fi-Fo)/(Q0*Kpr*So*lo*f_frq)));',1556609878);
-INSERT INTO "techApp" VALUES('pipe1_1','Pipe 1->1','Труба 1->1','Труба 1->1','Model of the pipe by the scheme "1 -> 1".','Модель вузла труб за схемою "1 -> 1".','Модель узла труб по схеме "1 -> 1".',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, 293, So, Ft1, Pti, 293, So, 0.33*lo, Q0, Kpr, 0.01, f_frq);
+INSERT INTO techApp VALUES('src_flow','Source: flow','Джерело: витрати','Источник: расход','Source of the constant flow. Contains a parameter for connection the noise.','Джерело з фіксованими витратами. Містить параметр для підключення шуму.','Источник с фиксированным расходом. Содержит параметр для подключения шума.',1,10,0,'Po = max(0, min(100,Po+0.27*(Noise*Fi-Fo)/(Q0*Kpr*So*lo*f_frq)));',1556609878);
+INSERT INTO techApp VALUES('pipe1_1','Pipe 1->1','Труба 1->1','Труба 1->1','Model of the pipe by the scheme "1 -> 1".','Модель вузла труб за схемою "1 -> 1".','Модель узла труб по схеме "1 -> 1".',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, 293, So, Ft1, Pti, 293, So, 0.33*lo, Q0, Kpr, 0.01, f_frq);
 DAQ.JavaLikeCalc.lib_techApp.pipeBase(Ft1, Pti, 293, So, Fto, Pt1, 293, So, 0.33*lo, Q0, Kpr, 0.01, f_frq);
 DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fto, Pt1, 293, So, Fo, Po, 293, So, 0.33*lo, Q0, Kpr, 0.01, f_frq);',1556609878);
-INSERT INTO "techApp" VALUES('pipe1_2','Pipe 1->2','Труба 1->2','Труба 1->2','Model of the pipe by the scheme "1 -> 2".','Модель вузла труб за схемою "1 -> 2".','Модель узла труб по схеме "1 -> 2".',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(F1tmp, Pi, 293, So1, Fo1, Po1, 293, So1, lo1, Q0, Kpr, 0.01, f_frq);
+INSERT INTO techApp VALUES('pipe1_2','Pipe 1->2','Труба 1->2','Труба 1->2','Model of the pipe by the scheme "1 -> 2".','Модель вузла труб за схемою "1 -> 2".','Модель узла труб по схеме "1 -> 2".',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(F1tmp, Pi, 293, So1, Fo1, Po1, 293, So1, lo1, Q0, Kpr, 0.01, f_frq);
 DAQ.JavaLikeCalc.lib_techApp.pipeBase(F2tmp, Pi, 293, So2, Fo2, Po2, 293, So2, lo2, Q0, Kpr, 0.01, f_frq);
 Fi = F1tmp + F2tmp;',1556609878);
-INSERT INTO "techApp" VALUES('pipe1_3','Pipe 1->3','Труба 1->3','Труба 1->3','Model of the pipe by the scheme "1 -> 3".','Модель вузла труб за схемою "1 -> 3".','Модель узла труб по схеме "1 -> 3".',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(F1tmp, Pi, 293, So1, Fo1, Po1, 293, So1, lo1, Q0, Kpr, 0.01, f_frq);
+INSERT INTO techApp VALUES('pipe1_3','Pipe 1->3','Труба 1->3','Труба 1->3','Model of the pipe by the scheme "1 -> 3".','Модель вузла труб за схемою "1 -> 3".','Модель узла труб по схеме "1 -> 3".',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(F1tmp, Pi, 293, So1, Fo1, Po1, 293, So1, lo1, Q0, Kpr, 0.01, f_frq);
 DAQ.JavaLikeCalc.lib_techApp.pipeBase(F2tmp, Pi, 293, So2, Fo2, Po2, 293, So2, lo2, Q0, Kpr, 0.01, f_frq);
 DAQ.JavaLikeCalc.lib_techApp.pipeBase(F3tmp, Pi, 293, So3, Fo3, Po3, 293, So3, lo3, Q0, Kpr, 0.01, f_frq);
 Fi = F1tmp + F2tmp + F3tmp;',1556609878);
-INSERT INTO "techApp" VALUES('pipe1_4','Pipe 1->4','Труба 1->4','Труба 1->4','Model of the pipe by the scheme "1 -> 4".','Модель вузла труб за схемою "1 -> 4".','Модель узла труб по схеме "1 -> 4".',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(F1tmp, Pi, 293, So1, Fo1, Po1, 293, So1, lo1, Q0, Kpr, 0.01, f_frq);
+INSERT INTO techApp VALUES('pipe1_4','Pipe 1->4','Труба 1->4','Труба 1->4','Model of the pipe by the scheme "1 -> 4".','Модель вузла труб за схемою "1 -> 4".','Модель узла труб по схеме "1 -> 4".',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(F1tmp, Pi, 293, So1, Fo1, Po1, 293, So1, lo1, Q0, Kpr, 0.01, f_frq);
 DAQ.JavaLikeCalc.lib_techApp.pipeBase(F2tmp, Pi, 293, So2, Fo2, Po2, 293, So2, lo2, Q0, Kpr, 0.01, f_frq);
 DAQ.JavaLikeCalc.lib_techApp.pipeBase(F3tmp, Pi, 293, So3, Fo3, Po3, 293, So3, lo3, Q0, Kpr, 0.01, f_frq);
 DAQ.JavaLikeCalc.lib_techApp.pipeBase(F4tmp, Pi, 293, So4, Fo4, Po4, 293, So4, lo4, Q0, Kpr, 0.01, f_frq);
 Fi = F1tmp + F2tmp + F3tmp + F4tmp;',1556609878);
-INSERT INTO "techApp" VALUES('valveMech','Valve: processing mechanism','Клапан: виконавчий механізм','Клапан: исполнительный механизм','Model of the valve processing mechanism. Includes the going and estrangement time.','Модель виконавчого механізму клапана. Включає час ходу та час відриву.','Модель исполнительного механизма клапана. Включает время хода и время отрыва.',1,10,0,'if((pos >= 99 && com >= 99) || (pos <= 1 && com <= 1)) {
+INSERT INTO techApp VALUES('valveMech','Valve: processing mechanism','Клапан: виконавчий механізм','Клапан: исполнительный механизм','Model of the valve processing mechanism. Includes the going and estrangement time.','Модель виконавчого механізму клапана. Включає час ходу та час відриву.','Модель исполнительного механизма клапана. Включает время хода и время отрыва.',1,10,0,'if((pos >= 99 && com >= 99) || (pos <= 1 && com <= 1)) {
   tmp_up = t_up;
   if( pos >= 99) { pos = 100; st_open = true; }
   else { pos = 0; st_close = true; }
@@ -12570,14 +12642,14 @@ else {
   pos += (lst_com-pos)/(0.5*t_full*f_frq);
 }
 pos_sensor += (pos-pos_sensor)/(t_sensor*f_frq);',1556609878);
-INSERT INTO "techApp" VALUES('diaphragm','Diaphragm','Діафрагма','Диафрагма','Diaphragm model.','Модель діафрагми.','Модель диафрагмы.',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, 293, Sdf, Fo, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
+INSERT INTO techApp VALUES('diaphragm','Diaphragm','Діафрагма','Диафрагма','Diaphragm model.','Модель діафрагми.','Модель диафрагмы.',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, 293, Sdf, Fo, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
 dP -= (dP-100*(Pi-Po))/f_frq;',1556609878);
-INSERT INTO "techApp" VALUES('pipe3_1','Pipe 3->1','Труба 3->1','Труба 3->1','Model of the pipe by the scheme "3 -> 1".','Модель вузла труб за схемою "3 -> 1".','Модель узла труб по схеме "3 -> 1".',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi1, Pi1, 293, Si1, EVAL_REAL, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
+INSERT INTO techApp VALUES('pipe3_1','Pipe 3->1','Труба 3->1','Труба 3->1','Model of the pipe by the scheme "3 -> 1".','Модель вузла труб за схемою "3 -> 1".','Модель узла труб по схеме "3 -> 1".',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi1, Pi1, 293, Si1, EVAL_REAL, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
 DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi2, Pi2, 293, Si2, EVAL_REAL, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
 DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi3, Pi3, 293, Si3, EVAL_REAL, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
 Po = max(0, min(100,Po+0.27*(Fi1+Fi2+Fi3-Fo)/(Q0*Kpr*So*lo*f_frq)));
 To = max(0, To+(Fi1*(Ti1-To)+Fi2*(Ti2-To)+Fi3*(Ti3-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Q0*f_frq));',1556609878);
-INSERT INTO "techApp" VALUES('pipeBase','Pipe-base','Труба-база','Труба-база','Implementation of the basic foundations of the pipe model:
+INSERT INTO techApp VALUES('pipeBase','Pipe-base','Труба-база','Труба-база','Implementation of the basic foundations of the pipe model:
 - flow in the pipe, taking into account: the speed, pressure difference, resistance due to friction and the critical flow;
 - calculation of the pressure;
 - accounting for the environment density and degree of the compressibility for both gases and liquids.','Реалізація базових основ моделі труби:
@@ -12592,12 +12664,12 @@ Qr = Q0+Q0*Kpr*(Pmax-1);
 Fit = 630*(4*Si*So*Qr/(Ktr*lo*1.7724*Si+4*So*Qr))*sign(Pi-Po)*pow(Qr*(Pmax-max(Pmax*0.528,Pmin)),0.5);
 Fi -= (Fi-Fit)/max(1,(lo*f_frq)/max(1,abs(Fit/(Qr*So))));
 if(!Fo.isEVal()) Po = max(0, min(100,Po+0.27*(Fi-Fo)/(Q0*Kpr*So*lo*f_frq)));',1556609878);
-INSERT INTO "techApp" VALUES('heatExch','Heat exchanger','Теплообмінник','Теплообменник','Model of the heat exchanger, calculating the heat exchange of the two streams.','Модель теплообміннику, що розраховує теплообмін двох потоків.','Модель теплообменника, рассчитывающая теплообмен двух потоков.',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi1, Pi1, Ti1, Si1, Fo1, Po1, 293, So1, lo1, Q0i1, Kpr1, 0.01, f_frq);
+INSERT INTO techApp VALUES('heatExch','Heat exchanger','Теплообмінник','Теплообменник','Model of the heat exchanger, calculating the heat exchange of the two streams.','Модель теплообміннику, що розраховує теплообмін двох потоків.','Модель теплообменника, рассчитывающая теплообмен двух потоков.',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi1, Pi1, Ti1, Si1, Fo1, Po1, 293, So1, lo1, Q0i1, Kpr1, 0.01, f_frq);
 DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi2, Pi2, Ti2, Si2, Fo2, Po2, 293, So2, lo2, Q0i2, Kpr2, 0.01, f_frq);
 
 To1 = max(0, min(1e4,(Fi1*Ti1*Ci1+ki*Fi2*Ti2*Ci2)/(Fi1*Ci1+ki*Fi2*Ci2)));
 To2 = max(0, min(1e4,(ki*Fi1*Ti1*Ci1+Fi2*Ti2*Ci2)/(ki*Fi1*Ci1+Fi2*Ci2)));',1556609878);
-INSERT INTO "techApp" VALUES('boilerBarrel','Boiler: barrel','Котел: барабан','Котёл: барабан','The model of the boiler''s barrel. ','Модель барабану котлоагрегату.','Модель барабана котлоагрегата.',1,10,0,'// Water
+INSERT INTO techApp VALUES('boilerBarrel','Boiler: barrel','Котел: барабан','Котёл: барабан','The model of the boiler''s barrel. ','Модель барабану котлоагрегату.','Модель барабана котлоагрегата.',1,10,0,'// Water
 DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi1, Pi1, 293, Si1, EVAL_REAL, Po1, 293, So1, lo1, 1e3, 0.001, 0.01, f_frq);
 Fi1 = max(0, Fi1);
 
@@ -12620,7 +12692,7 @@ Po1 = max(0, min(100,Po1+0.27*(Fstm-Fo)/(1.2*0.98*((1-Lo/100)*Vi1+So1*lo1)*f_frq
 
 // Smoke gas
 DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi2, Pi2, 293, Si2, Fo2, Po2, 293, Si2, 30, 1.2, 0.98, 0.01, f_frq);',1556609878);
-INSERT INTO "techApp" VALUES('boilerBurner','Boiler: burner','Котел: топка','Котёл: топка','The fire-chamber model of the boiler unit, which operates on three types of fuel, initially is: blast-furnace, coke and natural gases.','Модель топки котлоагрегату, який працює на трьох видах палива, початково це: доменний, коксовий та природний гази.','Модель топки котлоагрегата, работающего на трех видах топлива, исходно это: доменный, коксовый и природный газы.',1,10,0,'using DAQ.JavaLikeCalc.lib_techApp;
+INSERT INTO techApp VALUES('boilerBurner','Boiler: burner','Котел: топка','Котёл: топка','The fire-chamber model of the boiler unit, which operates on three types of fuel, initially is: blast-furnace, coke and natural gases.','Модель топки котлоагрегату, який працює на трьох видах палива, початково це: доменний, коксовий та природний гази.','Модель топки котлоагрегата, работающего на трех видах топлива, исходно это: доменный, коксовый и природный газы.',1,10,0,'using DAQ.JavaLikeCalc.lib_techApp;
 pipeBase(Fi1, Pi1, Ti1, Si1, EVAL_REAL, Po, 293, So, lo, 1.2, 0.95, 0.01, f_frq); Fi1 = max(0, Fi1);
 pipeBase(Fi2, Pi2, Ti2, Si2, EVAL_REAL, Po, 293, So, lo, 0.7, 0.95, 0.01, f_frq); Fi2 = max(0, Fi2);
 pipeBase(Fi3, Pi3, Ti3, Si3, EVAL_REAL, Po, 293, So, lo, 1.33, 0.95, 0.01, f_frq); Fi3 = max(0, Fi3);
@@ -12636,7 +12708,7 @@ delta_t = Q/(F_DG*1.047);
 To = max(0, min(2000,(delta_t+(Ti4-273)+(Ti3-273)*(Fi3/Fi1)+(Ti2-273)*(Fi2/Fi1)+(Ti1-273)*(Fi1/Fi4))+273));
 
 Po = max(0, min(10,Po+0.27*(F_DG-Fo)/(1.2*0.95*(So*lo+V)*f_frq)));',1556609878);
-INSERT INTO "techApp" VALUES('pipe2_1','Pipe 2->1','Труба 2->1','Труба 2->1','Model of the pipe by the scheme "2 -> 1".','Модель вузла труб за схемою "2 -> 1".','Модель узла труб по схеме "2 -> 1".',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi1, Pi1, 293, Si1, EVAL_REAL, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
+INSERT INTO techApp VALUES('pipe2_1','Pipe 2->1','Труба 2->1','Труба 2->1','Model of the pipe by the scheme "2 -> 1".','Модель вузла труб за схемою "2 -> 1".','Модель узла труб по схеме "2 -> 1".',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi1, Pi1, 293, Si1, EVAL_REAL, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
 DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi2, Pi2, 293, Si2, EVAL_REAL, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
 Po = max(0, min(100,Po+0.27*(Fi1+Fi2-Fo)/(Q0*Kpr*So*lo*f_frq)));
 To = max(0, To+(Fi1*(Ti1-To)+Fi2*(Ti2-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Q0*f_frq));',1556609878);

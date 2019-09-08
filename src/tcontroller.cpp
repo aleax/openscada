@@ -467,17 +467,18 @@ void TController::cntrCmdProc( XMLNode *opt )
     if(a_path == "/serv/mess" && ctrChkNode(opt,"get")) {
 	vector<TMess::SRec> rez;
 	time_t	tm	= strtoul(opt->attr("tm").c_str(), 0, 10);
-	if(!tm)	{ tm = time(NULL)-1; opt->setAttr("tm", i2s(tm+1)); }	//-1 for waranty all curent date get without doubles
+	//-1 for waranty all curent date get without doubles and losses
+	if(!tm)	{ tm = redntUse(TController::Any) ? SYS->archive().at().rdTm() : time(NULL)-1; opt->setAttr("tm", i2s(tm)); }
 	time_t	tm_grnd	= strtoul(opt->attr("tm_grnd").c_str(), 0, 10);
 	int	lev	= s2i(opt->attr("lev"));
 	SYS->archive().at().messGet(tm_grnd, tm, rez, "/("+catsPat()+")/", lev, "");
-	for(unsigned i_r = 0; i_r < rez.size(); i_r++)
+	for(unsigned iR = 0; iR < rez.size(); iR++)
 	    opt->childAdd("el")->
-		setAttr("time", u2s(rez[i_r].time))->
-		setAttr("utime", u2s(rez[i_r].utime))->
-		setAttr("cat", rez[i_r].categ)->
-		setAttr("lev", i2s(rez[i_r].level))->
-		setText(rez[i_r].mess);
+		setAttr("time", u2s(rez[iR].time))->
+		setAttr("utime", u2s(rez[iR].utime))->
+		setAttr("cat", rez[iR].categ)->
+		setAttr("lev", i2s(rez[iR].level))->
+		setText(rez[iR].mess);
     }
 
     //Get page info
@@ -615,12 +616,12 @@ void TController::cntrCmdProc( XMLNode *opt )
 	XMLNode *n_cat  = ctrMkNode("list",opt,-1,"/mess/mess/1","",R_R___,"root",SDAQ_ID);
 	XMLNode *n_lvl  = ctrMkNode("list",opt,-1,"/mess/mess/2","",R_R___,"root",SDAQ_ID);
 	XMLNode *n_mess = ctrMkNode("list",opt,-1,"/mess/mess/3","",R_R___,"root",SDAQ_ID);
-	for(int i_rec = rec.size()-1; i_rec >= 0; i_rec--) {
-	    if(n_tm)	n_tm->childAdd("el")->setText(i2s(rec[i_rec].time));
-	    if(n_tmu)	n_tmu->childAdd("el")->setText(i2s(rec[i_rec].utime));
-	    if(n_cat)	n_cat->childAdd("el")->setText(rec[i_rec].categ);
-	    if(n_lvl)	n_lvl->childAdd("el")->setText(i2s(rec[i_rec].level));
-	    if(n_mess)	n_mess->childAdd("el")->setText(rec[i_rec].mess);
+	for(int iRec = rec.size()-1; iRec >= 0; iRec--) {
+	    if(n_tm)	n_tm->childAdd("el")->setText(i2s(rec[iRec].time));
+	    if(n_tmu)	n_tmu->childAdd("el")->setText(i2s(rec[iRec].utime));
+	    if(n_cat)	n_cat->childAdd("el")->setText(rec[iRec].categ);
+	    if(n_lvl)	n_lvl->childAdd("el")->setText(i2s(rec[iRec].level));
+	    if(n_mess)	n_mess->childAdd("el")->setText(rec[iRec].mess);
 	}
     }
     else TCntrNode::cntrCmdProc(opt);

@@ -212,12 +212,13 @@ rez = klapNotLin(prm1, prm2, ..., prmN);</pre>
 <li> <i>delete</i> — delete/free of an object or its properties, while: internal variables are set in EVAL, external ones are replaced by an empty object, and the properties of the object are cleared.</li></ul>
 <h4><span class="mw-headline" id="Conditional_operators"><span class="mw-headline-number">1.4.1</span> Conditional operators</span></h4>
 <p>The language supports two types of conditions. First — this is the operation of condition for use within the expression, second — a global, based on the conditional operators.
-</p><p>The condition inside an expression is based on the operations '?' and ':'. As an example we'll write the following practical expression <b>st_open = (pos&gt;=100)&nbsp;?</b>
+</p><p>The condition inside an expression is based on the operations '?' and ':'. As an example we'll write the following practical expression:
 </p>
-<pre>true&nbsp;: false;<b>, which reads as: "If the variable <i>pos</i> greater than or equal to </b>100<b>, the variable <i>st_open</i> is set to </b>true<b>, otherwise — to </b>false<b>".</b>
-</pre>
-<p>The global condition is based on the conditional operators "if" and "else". As an example, we can show the same expression, but recorded in another way <b>if(pos&gt;100) st_open = true; else st_open = false;</b>.
+<pre style="white-space: pre-wrap;">st_open = (pos &gt;= 100)&nbsp;? true&nbsp;: false;</pre>
+<p>Which reads as — if the variable <i>pos</i> greater than or equal to <b>100</b>, the variable <i>st_open</i> is set to <b>true</b>, otherwise — to <b>false</b>.
+</p><p>The global condition is based on the conditional operators "if" and "else". As an example, we can show the same expression, but recorded in another way:
 </p>
+<pre style="white-space: pre-wrap;">if(pos &gt; 100) st_open = true; else st_open = false;</pre>
 <h4><span class="mw-headline" id="Loops"><span class="mw-headline-number">1.4.2</span> Loops</span></h4>
 <p>Two types of the loops are supported: <b>while</b>, <b>for</b> and <b>for-in</b>. The syntax of the loops corresponds to the programming languages: C++, Java and JavaScript.
 </p><p>Loop <b>while</b> is written generally as follows: <b>while({condition}) {body of the loop};</b><br />

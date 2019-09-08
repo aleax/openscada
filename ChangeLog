@@ -1,3 +1,30 @@
+2019-09-08 Roman (stable)
+- !!:DB.LibsDB.OscadaLibs: The ".dump" command of sqlite3 3.27 significantly changed, needed now for the parameter "--newlines
+    !!:DevLib.{ModBusScan,IEC60870}: Revised and appended during the documenting.
+	Appended for the option "syncTimePLC" to controll the PLC synchronization.
+	The IOA address is set for allow DEC, HEX and OCT views of the determining.
+- !!:DB.LibsDB.vcaBase: Main.alarmsAct: Revised during the documenting.
+	FIX: Fixed for processing the custom fields.
+    FIX:Main.grph_panel: Fixed for tipTool and tipStatus content of the button "To cursor".
+- !:TArchives: The objects TMArchivator and TArchiveS appended of the function redntTm() and rdTm()
+	to obtain last time of the message archives redundancy.
+    FIX: TArchiveS::messGet() and the OpenSCADA control service "/serv/mess" are limited in the end time for time(NULL)-1,
+	for the current time.
+    !!: Placing messages to the archives of the redundancy procedure TMArchivator::redntDataUpdate() changed to use the function put(),
+	to do this operation atomically for all obtained messages under a lock.
+- DAQ.TController: The service "/serv/mess" changed to obtain the last message time from the last redundancy operation time
+    for controller objects under redundancy and time(NULL)-1 else.
+- !:Archive.DBArch: The messages archiver object appended by a RW-lock of the put(), get() operations.
+- !:Archive.FSArch: The messages archiver object is set to use globally the RW-lock in writing into put() 
+- !:DAQ.DAQGate: The next time of the messages redundancy is set to s2i(prmNd->attr("tm"))+1
+    due to the returned time must be completed in the messages.
+- !!:FIX:UI.Vision: Manual scalling of the runtime window (for fullscreen or maximize) improved and fixed in processing
+	the sign isResizeManual - it is cleaned in the end of the processing cycle and set just in the function fullUpdatePgs(),
+	what must prevent of returning the window mode to one in the data model after manual resize, especially for big system fonts.
+    FIX: Fix by workaround of false warning dialogs of changing the inherited widget precedure,
+	which became actual on Qt 5.11 at the higlight rules setting, also for blocked events, through checking the text difference.
+
+
 2019-09-01 Roman (stable)
 - SYS.Android: The building SDK parameters set to "<uses-sdk android:minSdkVersion="19" android:targetSdkVersion="21"/>".
 - !!!:FIX:UI.QTStarter: Fixed in crash at the event QContextMenuEvent call for not QWidget, into UI.Vision runtime mostly.

@@ -78,7 +78,7 @@
 <p>До початку програмування у OpenSCADA Ви маєте вивчити структуру об'єктів програми (Об'єктна модель) у <a href="Program_manual.html" title="Special:MyLanguage/Documents/Program manual">посібнику по програмі OpenSCADA</a> та на рисунку 1.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1202px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_uk.png"><img class="thumbimage" height="542" src="files/Oscada_UserOM_uk.png" width="1200" /></a>  <div class="thumbcaption">Рис. 1. Користувацька об'єктна модель ядра OpenSCADA.</div></div></div></div>
-<p>З цього документу Ви побачите, що Ви можете, як користувач, програмувати наступні частини OpenSCADA:
+<p>З цього документу Ви побачите, що можете, як користувач, програмувати наступні частини OpenSCADA:
 </p>
 <ul><li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#Virtual" title="Special:MyLanguage/Documents/DAQ">Джерела логічного рівня підсистеми "Збір даних"</a>.</li>
 <li> Транспортні протоколи, доступні для користувацького програмування, такі як: <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">Користувацький протокол</a>, <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus вузли типу "Данні"</a>, <a href="Modules/WebUser.html" title="Special:MyLanguage/Modules/WebUser">Web-інтерфейси від користувача</a>, ...</li>
@@ -191,10 +191,13 @@
 <li> <i>delete</i> — видалення/звільнення об'єкту або його властивостей, при цьому: внутрішні змінні встановлюються у EVAL, зовнішні замінюються порожнім об'єктом, а властивості об'єкту очищуються.</li></ul>
 <h4><span class="mw-headline" id=".D0.A3.D0.BC.D0.BE.D0.B2.D0.BD.D1.96_.D0.BE.D0.BF.D0.B5.D1.80.D0.B0.D1.82.D0.BE.D1.80.D0.B8"><span class="mw-headline-number">1.4.1</span> Умовні оператори</span></h4>
 <p>Мовою підтримуються два типи умов. Перший — це операції умови для використання всередині виразу, другий — глобальний, заснований на умовних операторах.
-</p><p>Умова всередині виразу будується на операціях '?' та ':'. У якості прикладу можна записати наступний практичний вираз <b>st_open =</b>
-(pos&gt;=100)&nbsp;? true&nbsp;: false;<b>, що читається як: "Якщо змінна <i>pos</i> більша або дорівнює </b>100<b>, тоді змінній <i>st_open</i> привласнюється значення </b>true<b>, інакше — </b>false<b>".</b>
-</p><p>Глобальна умова будується на основі умовних операторів "if" та "else". У якості прикладу можна привести той-же вираз, але записаний у інший спосіб <b>if(pos&gt;100) st_open = true; else st_open = false;</b>.
+</p><p>Умова всередині виразу будується на операціях '?' та ':'. У якості прикладу можна записати наступний практичний вираз:
 </p>
+<pre style="white-space: pre-wrap;">st_open = (pos &gt;= 100)&nbsp;? true&nbsp;: false;</pre>
+<p>Що читається як — якщо змінна <i>pos</i> більша або дорівнює <b>100</b>, тоді змінній <i>st_open</i> привласнюється значення <b>true</b>, інакше — <b>false</b>.
+</p><p>Глобальна умова будується на основі умовних операторів "if" та "else". У якості прикладу можна привести той-же вираз, але записаний у інший спосіб:
+</p>
+<pre style="white-space: pre-wrap;">if(pos &gt; 100) st_open = true; else st_open = false;</pre>
 <h4><span class="mw-headline" id=".D0.A6.D0.B8.D0.BA.D0.BB.D0.B8"><span class="mw-headline-number">1.4.2</span> Цикли</span></h4>
 <p>Підтримується три типи циклів: <b>while</b>, <b>for</b> та <b>for-in</b>. Синтаксис циклів відповідає мовам програмування: C++, Java та JavaScript.
 </p><p>Цикл <b>while</b>, загалом, записується наступним чином: <b>while({умова}) {тіло циклу};</b><br />
@@ -816,10 +819,12 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 </td></tr>
 
 <tr>
-<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Devices" title="Special:MyLanguage/Libs/Devices">Industrial devices library</a> </td>
+<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Devices" title="Special:MyLanguage/Libs/Devices">Бібліотека промислових пристроїв</a>
+</td>
 <td> 2.2 </td>
 <td> GPLv2 </td>
-<td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.tmplb_DevLib </td>
+<td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.tmplb_DevLib
+</td>
 <td> en, uk, ru
 </td></tr>
 
