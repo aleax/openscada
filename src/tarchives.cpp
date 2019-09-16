@@ -488,7 +488,7 @@ void TArchiveS::messPut( const vector<TMess::SRec> &recs, const string &arch, bo
 time_t TArchiveS::messGet( time_t bTm, time_t eTm, vector<TMess::SRec> &recs,
     const string &category, int8_t level, const string &arch, time_t upTo )
 {
-    time_t result = fmin(eTm, TSYS::curTime()/1000000 - 1);	//Means successful buffers processing, -1 for waranty all curent date get without doubles and losses
+    time_t result = fmin(eTm, (time_t)(TSYS::curTime()/1000000) - 1);	//Means successful buffers processing, -1 for waranty all curent date get without doubles and losses
     recs.clear();
 
     map<string, bool> archMap;
@@ -624,7 +624,7 @@ time_t TArchiveS::rdTm( )
 	if(arch.at().startStat() && arch.at().redntUse()) rez = fmax(rez, arch.at().redntTm());
     }
 
-    return rez ? rez : TSYS::curTime()/1000000 - 1;
+    return rez ? rez : (time_t)(TSYS::curTime()/1000000) - 1;
 }
 
 bool TArchiveS::rdProcess( XMLNode *reqSt )
@@ -963,7 +963,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	    int    lev     = s2i(opt->attr("lev"));
 	    vector<TMess::SRec> rez;
 
-	    if(!tm) tm = TSYS::curTime()/1000000 - 1;	//-1 for waranty all curent date get without doubles and losses
+	    if(!tm) tm = (time_t)(TSYS::curTime()/1000000) - 1;	//-1 for waranty all curent date get without doubles and losses
 	    opt->setAttr("tm", ll2s(messGet(tm_grnd,tm,rez,cat,(TMess::Type)lev,arch)));
 	    for(unsigned iR = 0; iR < rez.size(); iR++)
 		opt->childAdd("el")->
@@ -1096,7 +1096,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",R_R___,"root",SARH_ID)) {
 	    vector<TMess::SRec> rec;
 	    time_t gtm = s2i(TBDS::genDBGet(nodePath()+"messTm","0",opt->attr("user")));
-	    if(!gtm) gtm = TSYS::curTime()/1000000;
+	    if(!gtm) gtm = (time_t)(TSYS::curTime()/1000000);
 	    int gsz = s2i(TBDS::genDBGet(nodePath()+"messSize","60",opt->attr("user")));
 	    messGet(gtm-gsz, gtm, rec,
 		TBDS::genDBGet(nodePath()+"messCat","",opt->attr("user")),
@@ -1578,7 +1578,7 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/mess/mess" && runSt && ctrChkNode(opt,"get",R_R___,"root",SARH_ID)) {
 	vector<TMess::SRec> rec;
 	time_t end = s2i(TBDS::genDBGet(nodePath()+"messTm","0",opt->attr("user")));
-	if(!end) end = TSYS::curTime()/1000000;
+	if(!end) end = (time_t)(TSYS::curTime()/1000000);
 	time_t beg = end - s2i(TBDS::genDBGet(nodePath()+"messSize","10",opt->attr("user")));
 	string cat = TBDS::genDBGet(nodePath()+"messCat","",opt->attr("user"));
 	char   lev = s2i(TBDS::genDBGet(nodePath()+"messLev","0",opt->attr("user")));

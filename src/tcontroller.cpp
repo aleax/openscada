@@ -468,7 +468,7 @@ void TController::cntrCmdProc( XMLNode *opt )
 	vector<TMess::SRec> rez;
 	time_t	tm	= strtoul(opt->attr("tm").c_str(), 0, 10);
 	//-1 for waranty all curent date get without doubles and losses
-	if(!tm)	{ tm = redntUse(TController::Any) ? SYS->archive().at().rdTm() : TSYS::curTime()/1000000 - 1; opt->setAttr("tm", i2s(tm)); }
+	if(!tm)	{ tm = redntUse(TController::Any) ? SYS->archive().at().rdTm() : (time_t)(TSYS::curTime()/1000000) - 1; opt->setAttr("tm", i2s(tm)); }
 	time_t	tm_grnd	= strtoul(opt->attr("tm_grnd").c_str(), 0, 10);
 	int	lev	= s2i(opt->attr("lev"));
 	SYS->archive().at().messGet(tm_grnd, tm, rez, "/("+catsPat()+")/", lev, "");
@@ -607,7 +607,7 @@ void TController::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/mess/mess" && ctrChkNode(opt,"get",R_R___,"root",SDAQ_ID)) {
 	vector<TMess::SRec> rec;
 	time_t gtm = s2i(TBDS::genDBGet(SYS->daq().at().nodePath()+"messTm","0",opt->attr("user")));
-	if(!gtm) gtm = TSYS::curTime()/1000000;
+	if(!gtm) gtm = (time_t)(TSYS::curTime()/1000000);
 	int gsz = s2i(TBDS::genDBGet(SYS->daq().at().nodePath()+"messSize","60",opt->attr("user")));
 	SYS->archive().at().messGet(gtm-gsz, gtm, rec, "/("+catsPat()+")/", messLev(), "");
 

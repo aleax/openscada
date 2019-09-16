@@ -1,4 +1,5 @@
 2019-09-16 Roman (stable)
+- !!:FIX:Archive,DAQ.Controller,Special.FLibSYS: Fixed for TSYS::curTime()/1000000 conversion to time_t for 32 bit architectures.
 - !:SYS.Android: Behaviour in work on Android observed in use the environment variable QT_SCALE_FACTOR, what set to 1.5 and
     the default font "Helvetica,12,-1" with QScrollBar CSS rule are removed.
 - !:DB.LibsDB.OscadaLibs: DevLib.IEC60870: Appended for the package M_ME_TF_1 support which is not tested yet
