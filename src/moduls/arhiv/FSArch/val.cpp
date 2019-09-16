@@ -1,7 +1,7 @@
 
 //OpenSCADA module Archive.FSArch file: val.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -59,8 +59,6 @@ TCntrNode &ModVArch::operator=( const TCntrNode &node )
 
     return *this;
 }
-
-string ModVArch::infoDBnm( )	{ return MOD_ID "_Val_"+id()+"_info"; }
 
 double ModVArch::curCapacity( )
 {
@@ -142,17 +140,31 @@ void ModVArch::start( )
 
     //Create and/or update the SQLite info file, special for the archiver and placed with main files of the archiver
     if(!startStat() && packInfoFiles()) {
+	infoTbl = "";
 	try {
-	    if(!SYS->db().at().at("SQLite").at().openStat(infoDBnm())) SYS->db().at().at("SQLite").at().open(infoDBnm());
-	    AutoHD<TBD> tSQLite = SYS->db().at().at("SQLite").at().at(infoDBnm());
-	    tSQLite.at().setName(TSYS::strMess(_("%s: Val: %s: information"),MOD_ID,id().c_str()));
-	    tSQLite.at().setDscr(TSYS::strMess(_("Local information DB for the value archiver '%s'. "
-		"Created automatically then don't modify, save and remove it!"),id().c_str()));
-	    tSQLite.at().setAddr(addr()+"/info.db");
-	    tSQLite.at().enable();
-	    tSQLite.at().modifClr();
-	    infoTbl = "SQLite."+infoDBnm()+"."+TSYS::strParse(mod->filesDB(),2,".");
-	} catch(TError&) { infoTbl = ""; }
+	    AutoHD<TTypeBD> SQLite = SYS->db().at().at("SQLite");
+	    // Search for the info table
+	    vector<string> ls;
+	    SQLite.at().list(ls);
+	    for(int iL = 0; iL < ls.size() && infoTbl.empty(); iL++)
+		if(SQLite.at().at(ls[iL]).at().addr() == addr()+"/info.db")
+		    infoTbl = "SQLite."+ls[iL]+"."+TSYS::strParse(mod->filesDB(),2,".");
+	    if(infoTbl.empty()) {
+		string iDBnm = MOD_ID "_Val_"+id()+"_info";
+		while(true) {
+		    AutoHD<TBD> infoDB = SQLite.at().at((iDBnm=SQLite.at().open(iDBnm)));
+		    if(infoDB.at().addr().size()) { iDBnm = TSYS::strLabEnum(iDBnm); continue; }
+		    infoDB.at().setName(TSYS::strMess(_("%s: Val: %s: information"),MOD_ID,id().c_str()));
+		    infoDB.at().setDscr(TSYS::strMess(_("Local information DB for the value archiver '%s'. "
+			"Created automatically then don't modify, save and remove it!"),id().c_str()));
+		    infoDB.at().setAddr(addr()+"/info.db");
+		    infoDB.at().enable();
+		    infoDB.at().modifClr();
+		    infoTbl = "SQLite."+iDBnm+"."+TSYS::strParse(mod->filesDB(),2,".");
+		    break;
+		}
+	    }
+	} catch(TError&) { }
     }
 
     //Start getting data cycle
@@ -307,7 +319,7 @@ void ModVArch::checkArchivator( bool now, bool toLimits )
 
 	// Scan opened directory
 	while(readdir_r(IdDir,scan_dirent,&scan_rez) == 0 && scan_rez) {
-	    if(strcmp(scan_rez->d_name,"..") == 0 || strcmp(scan_rez->d_name,".") == 0) continue;
+	    if(strcmp(scan_rez->d_name,"..") == 0 || strcmp(scan_rez->d_name,".") == 0 || strcmp(scan_rez->d_name,"info.db") == 0) continue;
 
 	    string	ArhNm;
 	    TFld::Type	ArhTp;

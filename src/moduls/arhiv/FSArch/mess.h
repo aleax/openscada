@@ -114,8 +114,6 @@ class ModMArch: public TMArchivator
 
 	TCntrNode &operator=( const TCntrNode &node );
 
-	string infoDBnm( );
-
 	time_t begin();
 	time_t end();
 	bool put( vector<TMess::SRec> &mess, bool force = false );

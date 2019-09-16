@@ -2128,10 +2128,10 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/val/tm") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD)) {
 	    opt->setText(TBDS::genDBGet(owner().nodePath()+"vaTm","0",opt->attr("user")));
-	    if(!s2i(opt->text())) opt->setText(i2s(time(NULL)));
+	    if(!s2i(opt->text())) opt->setText(i2s(TSYS::curTime()/1000000));
 	}
 	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))
-	    TBDS::genDBSet(owner().nodePath()+"vaTm",(s2i(opt->text())>=time(NULL))?"0":opt->text(),opt->attr("user"));
+	    TBDS::genDBSet(owner().nodePath()+"vaTm",(s2i(opt->text())>=TSYS::curTime()/1000000)?"0":opt->text(),opt->attr("user"));
     }
     else if(a_path == "/val/utm") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genDBGet(owner().nodePath()+"vaTm_u","0",opt->attr("user")));
@@ -2178,7 +2178,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/val/val" && ctrChkNode(opt,"get",R_R___,"root",SARH_ID,SEC_RD)) {
 	int64_t end = (int64_t)s2i(TBDS::genDBGet(owner().nodePath()+"vaTm","0",opt->attr("user")))*1000000;
-	if(!(end/1000000)) end = (int64_t)time(NULL) * 1000000;
+	if(!(end/1000000)) end = (TSYS::curTime()/1000000) * 1000000;
 	end += s2i(TBDS::genDBGet(owner().nodePath()+"vaTm_u","0",opt->attr("user")));
 	int64_t beg = end - (int64_t)(s2r(TBDS::genDBGet(owner().nodePath()+"vaSize","1",opt->attr("user")))*1e6);
 
@@ -2204,9 +2204,9 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	int vPctH = vmin(800, vmax(50,s2i(TBDS::genDBGet(owner().nodePath()+"vPctH","230",opt->attr("user")))));
 	double vMax = s2r(TBDS::genDBGet(owner().nodePath()+"vMax","0",opt->attr("user")));
 	double vMin = s2r(TBDS::genDBGet(owner().nodePath()+"vMin","0",opt->attr("user")));
-	int64_t end = (int64_t) s2i(TBDS::genDBGet(owner().nodePath()+"vaTm",i2s(time(NULL)),opt->attr("user")))*1000000+
+	int64_t end = (int64_t) s2i(TBDS::genDBGet(owner().nodePath()+"vaTm",i2s(TSYS::curTime()/1000000),opt->attr("user")))*1000000+
 				s2i(TBDS::genDBGet(owner().nodePath()+"vaTm_u","0",opt->attr("user")));
-	if(!(end/1000000))	end = (int64_t)time(NULL) * 1000000;
+	if(!(end/1000000))	end = (TSYS::curTime()/1000000) * 1000000;
 	int64_t beg = end - (int64_t)(s2r(TBDS::genDBGet(owner().nodePath()+"vaSize","1",opt->attr("user")))*1e6);
 
 	string tp = "png";

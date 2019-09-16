@@ -488,7 +488,7 @@ void TArchiveS::messPut( const vector<TMess::SRec> &recs, const string &arch, bo
 time_t TArchiveS::messGet( time_t bTm, time_t eTm, vector<TMess::SRec> &recs,
     const string &category, int8_t level, const string &arch, time_t upTo )
 {
-    time_t result = fmin(eTm, time(NULL)-1);	//Means successful buffers processing, -1 for waranty all curent date get without doubles and losses
+    time_t result = fmin(eTm, TSYS::curTime()/1000000 - 1);	//Means successful buffers processing, -1 for waranty all curent date get without doubles and losses
     recs.clear();
 
     map<string, bool> archMap;
@@ -624,7 +624,7 @@ time_t TArchiveS::rdTm( )
 	if(arch.at().startStat() && arch.at().redntUse()) rez = fmax(rez, arch.at().redntTm());
     }
 
-    return rez ? rez : time(NULL) - 1;
+    return rez ? rez : TSYS::curTime()/1000000 - 1;
 }
 
 bool TArchiveS::rdProcess( XMLNode *reqSt )
@@ -639,19 +639,6 @@ bool TArchiveS::rdProcess( XMLNode *reqSt )
 	return true;
     }
 
-    //Alarms initial obtain
-    if(mRdFirst) {
-	XMLNode req("get"); req.setAttr("path", nodePath()+"/%2fserv%2fmess")->setAttr("lev","-1");
-	if(SYS->rdStRequest(req).size()) {
-	    mRdFirst = false;
-	    // Process the result
-	    for(unsigned iEl = 0; iEl < req.childSize(); ++iEl) {
-		XMLNode *el = req.childGet(iEl);
-		messPut(s2ll(el->attr("time")), s2i(el->attr("utime")), el->attr("cat"), s2i(el->attr("lev")), el->text(), ALRM_ARCH_NM);
-	    }
-	}
-    }
-
     //Planing archivers running and process requests to remote run ones
     map<string,TSYS::SStat> sts = SYS->rdSts();
     map<string,TSYS::SStat>::iterator sit;
@@ -659,11 +646,14 @@ bool TArchiveS::rdProcess( XMLNode *reqSt )
 
     vector<string> cls;
     rdActArchMList(cls);
+
+    bool isRdArchPresent = false;
+
     for(unsigned iC = 0; iC < cls.size(); iC++) {
 	AutoHD<TMArchivator> arch = at(TSYS::strParse(cls[iC],0,".")).at().messAt(TSYS::strParse(cls[iC],1,"."));
 
 	// Process remote running archivers, before the redundancy status change
-	if(arch.at().startStat() && arch.at().redntUse()) arch.at().redntDataUpdate();
+	if(arch.at().startStat() && arch.at().redntUse()) { arch.at().redntDataUpdate(); isRdArchPresent = true; }
 
 	// Check archiver running plane
 	if(!arch.at().redntMode()) arch.at().setRedntUse(false);
@@ -707,6 +697,19 @@ bool TArchiveS::rdProcess( XMLNode *reqSt )
 	    res.release();
 	}
 	arch.free();
+    }
+
+    //Alarms initial obtain
+    if(mRdFirst && isRdArchPresent) {
+	XMLNode req("get"); req.setAttr("path", nodePath()+"/%2fserv%2fmess")->setAttr("lev","-1");
+	if(SYS->rdStRequest(req).size()) {
+	    mRdFirst = false;
+	    // Process the result
+	    for(unsigned iEl = 0; iEl < req.childSize(); ++iEl) {
+		XMLNode *el = req.childGet(iEl);
+		messPut(s2ll(el->attr("time")), s2i(el->attr("utime")), el->attr("cat"), s2i(el->attr("lev")), el->text(), ALRM_ARCH_NM);
+	    }
+	}
     }
 
     return true;
@@ -960,7 +963,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	    int    lev     = s2i(opt->attr("lev"));
 	    vector<TMess::SRec> rez;
 
-	    if(!tm) tm = time(NULL)-1;	//-1 for waranty all curent date get without doubles and losses
+	    if(!tm) tm = TSYS::curTime()/1000000 - 1;	//-1 for waranty all curent date get without doubles and losses
 	    opt->setAttr("tm", ll2s(messGet(tm_grnd,tm,rez,cat,(TMess::Type)lev,arch)));
 	    for(unsigned iR = 0; iR < rez.size(); iR++)
 		opt->childAdd("el")->
@@ -1050,10 +1053,10 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/m_arch/view/tm") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD)) {
 	    opt->setText(TBDS::genDBGet(nodePath()+"messTm","0",opt->attr("user")));
-	    if(!s2i(opt->text()))	opt->setText(i2s(time(NULL)));
+	    if(!s2i(opt->text()))	opt->setText(i2s(TSYS::curTime()/1000000));
 	}
 	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))
-	    TBDS::genDBSet(nodePath()+"messTm",(s2i(opt->text())>=time(NULL))?"0":opt->text(),opt->attr("user"));
+	    TBDS::genDBSet(nodePath()+"messTm",(s2i(opt->text())>=TSYS::curTime()/1000000)?"0":opt->text(),opt->attr("user"));
     }
     else if(a_path == "/m_arch/view/size") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"messSize","60",opt->attr("user")));
@@ -1093,7 +1096,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",R_R___,"root",SARH_ID)) {
 	    vector<TMess::SRec> rec;
 	    time_t gtm = s2i(TBDS::genDBGet(nodePath()+"messTm","0",opt->attr("user")));
-	    if(!gtm) gtm = time(NULL);
+	    if(!gtm) gtm = TSYS::curTime()/1000000;
 	    int gsz = s2i(TBDS::genDBGet(nodePath()+"messSize","60",opt->attr("user")));
 	    messGet(gtm-gsz, gtm, rec,
 		TBDS::genDBGet(nodePath()+"messCat","",opt->attr("user")),
@@ -1280,7 +1283,7 @@ void TTypeArchivator::cntrCmdProc( XMLNode *opt )
 //************************************************
 TMArchivator::TMArchivator(const string &iid, const string &idb, TElem *cf_el) :
     TConfig(cf_el), runSt(false), messHead(-1), mId(cfg("ID")), mLevel(cfg("LEVEL")), mStart(cfg("START").getBd()),
-    mDB(idb), mRdUse(true), mRdFirst(true), mRdTm(0)
+    mDB(idb), mRdUse(true), mRdFirst(true), mRdTm(0), mRdEqTm(0)
 {
     mId = iid;
 }
@@ -1358,14 +1361,27 @@ void TMArchivator::redntDataUpdate( )
     //Send request to first active station for this controller
     if(owner().owner().rdStRequest(workId(),req,"",!mRdFirst).empty()) return;
     mRdFirst = false;
-    mRdTm = s2ll(req.attr("tm"))+1;
 
-    //Process the result
+    //Processing the result
     mess.clear();
     XMLNode *mO = NULL;
+    time_t mRdTm_ = 0;
     for(unsigned iM = 0; iM < req.childSize(); ++iM)
-	if((mO=req.childGet(iM)) && mO->name() == "it")
+	if((mO=req.childGet(iM)) && mO->name() == "it") {
 	    mess.push_back(TMess::SRec(s2ll(mO->attr("tm")),s2i(mO->attr("tmu")),mO->attr("cat"),s2i(mO->attr("lev")),mO->text()));
+	    mRdTm_ = fmax(mRdTm_, mess.back().time);
+	}
+
+    // The bottom time border processing
+    //  The new algorithm
+    if(mRdTm_ > mRdTm)	{ mRdTm = mRdTm_; mRdEqTm = 0; }
+    else if(mRdTm_ && (++mRdEqTm) > 2)	{ mRdTm++; mRdEqTm = 0; }
+
+    //  The old algorithm
+    //mRdTm = s2ll(req.attr("tm"))+1;
+
+    if(mess_lev() == TMess::Debug)
+	mess_debug(nodePath().c_str(), "Redundancy %s: %d", TSYS::atime2str(mRdTm).c_str(), req.childSize());
 
     put(mess, true);
     owner().owner().messPut(mess, ALRM_ARCH_NM);	//Just for alarms
@@ -1383,7 +1399,9 @@ void TMArchivator::stop( )
 {
     owner().owner().setActMess(this, false);
     runSt = false;
+
     messHead = -1;
+    mRdEqTm = 0;
 }
 
 bool TMArchivator::put( vector<TMess::SRec> &mess, bool force )
@@ -1540,10 +1558,10 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/mess/tm") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD)) {
 	    opt->setText(TBDS::genDBGet(nodePath()+"messTm","0",opt->attr("user")));
-	    if(!s2i(opt->text()))	opt->setText(i2s(time(NULL)));
+	    if(!s2i(opt->text()))	opt->setText(i2s(TSYS::curTime()/1000000));
 	}
 	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))
-	    TBDS::genDBSet(nodePath()+"messTm",(s2i(opt->text())>=time(NULL))?"0":opt->text(),opt->attr("user"));
+	    TBDS::genDBSet(nodePath()+"messTm",(s2i(opt->text())>=TSYS::curTime()/1000000)?"0":opt->text(),opt->attr("user"));
     }
     else if(a_path == "/mess/size") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"messSize","10",opt->attr("user")));
@@ -1560,7 +1578,7 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/mess/mess" && runSt && ctrChkNode(opt,"get",R_R___,"root",SARH_ID)) {
 	vector<TMess::SRec> rec;
 	time_t end = s2i(TBDS::genDBGet(nodePath()+"messTm","0",opt->attr("user")));
-	if(!end) end = time(NULL);
+	if(!end) end = TSYS::curTime()/1000000;
 	time_t beg = end - s2i(TBDS::genDBGet(nodePath()+"messSize","10",opt->attr("user")));
 	string cat = TBDS::genDBGet(nodePath()+"messCat","",opt->attr("user"));
 	char   lev = s2i(TBDS::genDBGet(nodePath()+"messLev","0",opt->attr("user")));

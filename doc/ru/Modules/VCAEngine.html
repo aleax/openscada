@@ -31,7 +31,7 @@
 <td> <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
 <td> Движок Среды Визуализации и Управления
 </td>
-<td> 5.9 </td>
+<td> 5.10 </td>
 <td> GPL2 </td>
 <td> ui_VCAEngine.so </td>
 <td> en,uk,ru,de </td>
@@ -2973,6 +2973,7 @@ nw.attrSet("geomX", 50).attrSet("geomY", 50);
 </pre>
 <ul><li> <i>bool wdgDel( string wid )</i> — удаляет виджет <i>wid</i>.</li>
 <li> <i>TCntrNodeObj wdgAt( string wid, bool byPath = false )</i> — подключается к дочернему или глобальному виджету, посредством пути <i>byPath</i>. В случае глобального подключения можно использовать абсолютный или относительный путь к виджету. Точкой отсчёта абсолютного адреса выступает объект корня модуля "VCAEngine", а значит, первым элементом абсолютного адреса является идентификатор сеанса, который опускается. Относительный адрес берёт отсчёт от текущего виджета. Специальным элементом относительного адреса является элемент вышестоящего узла "..".</li>
+<li> <i>Array attrList()</i> — перечень атрибутов виджета.</li>
 <li> <i>bool attrPresent( string attr )</i> — проверяет атрибут виджета <i>attr</i> на факт присутствия.</li>
 <li> <i>ElTp attr( string attr, bool fromSess = false )</i> — значение атрибута виджета <i>attr</i> или из сеанса <i>fromSess</i>. Для отсутствующих атрибутов возвращается пустая строка.</li>
 <li> <i>TCntrNodeObj attrSet( string attr, ElTp vl, bool toSess = false )</i> — устанавливает значение <i>vl</i> в атрибут виджета <i>attr</i> или в сеанс, для <i>toSess</i>. Возвращает текущий объект, для конкатенации функций установки.</li>

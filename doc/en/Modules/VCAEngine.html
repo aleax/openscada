@@ -31,7 +31,7 @@
 <td> <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
 <td> Visual control area engine
 </td>
-<td> 5.9 </td>
+<td> 5.10 </td>
 <td> GPL2 </td>
 <td> ui_VCAEngine.so </td>
 <td> en,uk,ru,de </td>
@@ -2915,6 +2915,7 @@ nw.attrSet("geomX", 50).attrSet("geomY", 50);
 </pre>
 <ul><li> <i>bool wdgDel( string wid )</i> — deletes the widget <i>wid</i>.</li>
 <li> <i>TCntrNodeObj wdgAt( string wid, bool byPath = false )</i> — attaches to child or global widget, by the path <i>byPath</i>. In the case of global connection, you can use absolute or relative path to the widget. For starting point of the absolute address acts the root object of the module "VCAEngine", which means the first element of the absolute address is session identifier, which is ignored. The relative address takes the countdown from the current widget. Special element of the relative address is an element of parent node "..".</li>
+<li> <i>Array attrList()</i> — list of the widget attributes.</li>
 <li> <i>bool attrPresent( string attr )</i> — checks to presence fact of the attribute <i>attr</i> of the widget.</li>
 <li> <i>ElTp attr( string attr, bool fromSess = false )</i> — value of the attribute <i>attr</i> of the widget or from the session <i>fromSess</i>. For missing attributes will be return empty string.</li>
 <li> <i>TCntrNodeObj attrSet( string attr, ElTp vl, bool toSess = false )</i> — sets the value <i>vl</i> to the attribute <i>attr</i> of the widget or to the session, by <i>toSess</i>. The object is returned for the function concatenation.</li>

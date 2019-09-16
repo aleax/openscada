@@ -225,7 +225,7 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
     // archivator  - concrete archiver select for FFT processing;
     // vlOnEVAL    - replacing EVAL value; for same <vlOnEVAL> is EVAL used previous actual value for the EVAL replace.
     if(id == "FFT" && prms.size() >= 2) {
-	int64_t etm = 1000000ll * (!prms[0].getI() ? time(NULL) : prms[0].getI()) + ((prms.size()>=4) ? prms[3].getI() : 0);
+	int64_t etm = 1000000ll * (!prms[0].getI() ? TSYS::curTime()/1000000 : prms[0].getI()) + ((prms.size()>=4) ? prms[3].getI() : 0);
 	int64_t btm = etm - (int64_t)(1e6*prms[1].getR());
 	int fftN = 0, iN = 0, bufEVAL = 0;
 	double *fftIn = NULL, tVl,

@@ -31,7 +31,7 @@
 <td> <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
 <td> Рушій Середовища Візуалізації та Управління
 </td>
-<td> 5.9 </td>
+<td> 5.10 </td>
 <td> GPL2 </td>
 <td> ui_VCAEngine.so </td>
 <td> en,uk,ru,de </td>
@@ -2973,6 +2973,7 @@ nw.attrSet("geomX", 50).attrSet("geomY", 50);
 </pre>
 <ul><li> <i>bool wdgDel( string wid )</i> — видаляє віджет <i>wid</i>.</li>
 <li> <i>TCntrNodeObj wdgAt( string wid, bool byPath = false )</i> — підключається до дочірнього або глобального віджету, за посередництвом шляху <i>byPath</i>. У випадку глобального підключення можна використати абсолютний або відносний шлях до віджету. Точкою відліку абсолютної адреси виступає об'єкт кореня модуля "VCAEngine", а значить, першим елементом абсолютної адреси є ідентифікатор сеансу, який опускається. Відносна адреса бере відлік від поточного віджету. Спеціальним елементом відносної адреси є елемент вищестоящого вузла "..".</li>
+<li> <i>Array attrList()</i> — перелік атрибутів віджету.</li>
 <li> <i>bool attrPresent( string attr )</i> — перевіряє атрибут віджета <i>attr</i> на факт присутності.</li>
 <li> <i>ElTp attr( string attr, bool fromSess = false )</i> — значення атрибуту віджету <i>attr</i> або з сеансу <i>fromSess</i>. Для відсутніх атрибутів повертає порожній рядок.</li>
 <li> <i>TCntrNodeObj attrSet( string attr, ElTp vl, bool toSess = false )</i> — встановлює значення <i>vl</i> у атрибут віджету <i>attr</i> або сеанс, для <i>toSess</i>. Повертає поточний об'єкт, для конкатенації функцій встановлення.</li>

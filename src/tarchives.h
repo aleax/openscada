@@ -134,6 +134,7 @@ class TMArchivator : public TCntrNode, public TConfig
 	unsigned mRdUse  : 1;
 	unsigned mRdFirst: 1;
 	time_t	mRdTm;
+	unsigned mRdEqTm;
 };
 
 //************************************************

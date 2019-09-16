@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"4.1.5"
+#define MOD_VER		"4.1.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")
@@ -405,7 +405,7 @@ BFunc *TpContr::bFuncGet( const char *nm )
 //* Contr: Controller object                      *
 //*************************************************
 Contr::Contr( string name_c, const string &daq_db, ::TElem *cfgelem ) :
-    ::TController(name_c, daq_db, cfgelem), TPrmTempl::Impl(this, ("JavaLikeCalc_"+name_c).c_str()),
+    ::TController(name_c, daq_db, cfgelem), TPrmTempl::Impl(this, ("JavaLikeCalc_"+name_c).c_str(), false),
     prcSt(false), callSt(false), endrunReq(false), isDAQTmpl(false), chkLnkNeed(false),
     mPrior(cfg("PRIOR").getId()), mIter(cfg("ITER").getId()), idFreq(-1), idStart(-1), idStop(-1), mPer(1e9)
 {

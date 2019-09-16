@@ -136,13 +136,14 @@ class attrList : public TFunction
 		AutoHD<Widget> nd = nodePrev()->nodeAt(val->getS(1));
 		nd.at().attrList(ls);
 		if(val->getB(2))
-		for(unsigned i_a = 0; i_a < ls.size(); )
-		    if(nd.at().attrAt(ls[i_a]).at().flgGlob()&Attr::IsUser) ls.erase(ls.begin()+i_a);
-		    else i_a++;
-	    }
-	    catch(TError err) { }
-	    for(unsigned i_a = 0; i_a < ls.size(); i_a++) sls += ls[i_a]+"\n";
-	    val->setS(0,sls);
+		    for(unsigned iA = 0; iA < ls.size(); )
+			if(nd.at().attrAt(ls[iA]).at().flgGlob()&Attr::IsUser) ls.erase(ls.begin()+iA);
+			else iA++;
+	    } catch(TError err) { }
+
+	    for(unsigned iA = 0; iA < ls.size(); iA++) sls += ls[iA]+"\n";
+
+	    val->setS(0, sls);
 	}
 };
 

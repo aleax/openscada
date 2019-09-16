@@ -1,3 +1,26 @@
+2019-09-16 Roman (stable)
+- !:SYS.Android: Behaviour in work on Android observed in use the environment variable QT_SCALE_FACTOR, what set to 1.5 and
+    the default font "Helvetica,12,-1" with QScrollBar CSS rule are removed.
+- !:DB.LibsDB.OscadaLibs: DevLib.IEC60870: Appended for the package M_ME_TF_1 support which is not tested yet
+    and treat of the output transport timeouts depending the template periodicity.
+- !!:DB.LibsDB.vcaBase: Main.alarmsSt: Revised during the documenting.
+- !!!!:Archive,DAQ.DAQGate: The messages bottom time border processing for redundancy and the DAQGate changed
+    to use time of the last message to repeat it requesting for two time, to prevent the messages lost on the border.
+    !!: The first alarms obtaining in the messages redundancy enabled only for presence the message archives in the redundancy.
+- !!:Archive,DAQ.Controller,Special.FLibSYS: For the current time of messages and values mostly used TSYS::curTime()/1000000 instead time(NULL)
+    due to the message and value time is in microseconds and mark by TSYS::curTime().
+- DB: The function TTypeBD::open() return changed allways to the requested ID for already presented nodes.
+- !:Archive.{FSArch,DBArch}: Access control to the message put() and get() functions restored to the first one,
+    due to changing the messages bottom time border processing in the redundancy and DAQ.DAQGate.
+- !!!:FIX:Archive.FSArch: Fixed for the info.db processing by using the DB address as
+    a unique essence instead limited DB-identifier, what currently is named through indexing the equal ones.
+    !!!:FIX: The message archives also prevented for the empty info.db clearing, put new messages before the first checking
+	and the first checking in whole after the object stop.
+- !:FIX:DAQ.JavaLikeCalc: The controller objects are restored in a possibility of edition of
+    the controler object procedures after it enable.
+- !:UI.VCAEngine: The runtime widget appened of the user API function attrList() of obtaining list of the widget attributes.
+
+
 2019-09-08 Roman (stable)
 - !!:DB.LibsDB.OscadaLibs: The ".dump" command of sqlite3 3.27 significantly changed, needed now for the parameter "--newlines
     !!:DevLib.{ModBusScan,IEC60870}: Revised and appended during the documenting.

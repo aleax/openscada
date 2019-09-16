@@ -597,7 +597,7 @@ TTypeBD::~TTypeBD( )
 
 string TTypeBD::open( const string &iid )
 {
-    if(openStat(iid)) return "";
+    if(openStat(iid)) return iid;
 
     return chldAdd(mDB, openBD(TSYS::strEncode(sTrm(iid),TSYS::oscdID)));
 }

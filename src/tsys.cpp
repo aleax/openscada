@@ -3464,6 +3464,10 @@ int main( int argc, char *argv[] )
 {
     int rez = 0;
 
+#if defined(__ANDROID__)
+    setenv("QT_SCALE_FACTOR", "1.5", 1);
+#endif
+
     //Same load and start the core object TSYS
     SYS = new TSYS(argc, argv, NULL);
     try {

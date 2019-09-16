@@ -3091,6 +3091,14 @@ INSERT INTO Trs VALUES('Data size error.','','');
 INSERT INTO Trs VALUES('The data size is not equal to pointed one.','','');
 INSERT INTO Trs VALUES('Write','','');
 INSERT INTO Trs VALUES('uh oh, no thermocouple attached!','','');
+INSERT INTO Trs VALUES('M_SP_NA_1: The SQ-mode is not implemented yet','','');
+INSERT INTO Trs VALUES('M_SP_NA_1: Items number is discrepancy to the package size','','');
+INSERT INTO Trs VALUES('M_ME_NB_1: The SQ-mode is not implemented yet','','');
+INSERT INTO Trs VALUES('M_ME_NB_1: Items number is discrepancy to the package size','','');
+INSERT INTO Trs VALUES('M_ME_TF_1: The SQ-mode is not implemented yet','','');
+INSERT INTO Trs VALUES('M_ME_TF_1: Items number is discrepancy to the package size','','');
+INSERT INTO Trs VALUES('C_SC_NA_1: The SQ-mode is not implemented yet','','');
+INSERT INTO Trs VALUES('C_SC_NA_1: Items number is discrepancy to the package size','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_DevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO tmplib_DevLib VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
 Author: Roman Savochenko <roman@oscada.org>
@@ -4518,11 +4526,11 @@ if(t_err.length) {
 else f_err = "0: " + u_err;','','',1512240506);
 INSERT INTO tmplib_DevLib VALUES('IEC60870','IEC-60870','IEC-60870','','IEC 60870 part 5 is one from the IEC 60870 set of standards which defines systems used for telecontrol (supervisory control and data acquisition) in electrical engineering and power system automation applications. Part 5 provides a communication profile for sending basic telecontrol messages between two systems, which uses permanent directly connected data circuits between the systems.
 
-The template currently implements the part 104 (Ethernet transport) for the client and followed services: STARTDT, STOPDT, TESTFR, Ack, C_IC_NA_1, C_CI_NA_1, C_SC_NA_1, M_SP_NA_1, M_ME_NB_1, C_CS_NA_1.
+The template currently implements the part 104 (Ethernet transport) for the client and followed services: STARTDT, STOPDT, TESTFR, Ack, C_IC_NA_1 (100), C_CI_NA_1 (101), C_SC_NA_1 (45), M_SP_NA_1 (1), M_ME_NB_1 (11), M_ME_TF_1(36), C_CS_NA_1 (103).
 
 For the direct definition of the requested data, the "itemsSet" attribute is provided, where they can be defined individually, with a semantic identifier and name, or in a range named by a template. Often, remote systems may not need to determine the data to transmit and send existing or generic ones on their own initiative, and if they do not, have and need to ask for something additional ones, then you need to get a map of the available parameters with the addresses these you enter in this attribute in the format ai|di|do:{IOA}[-{EndIOA}][:a[:{NameBase}]], where:
 - ai|di|do — data type, where:
-  - "ai" — analog inputs, transmitted by the message M_ME_NB_1 and requested by C_SC_NA_1;
+  - "ai" — analog inputs, transmitted by the message M_ME_NB_1, M_ME_TF_1 and requested by C_SC_NA_1;
   - "di" — discrete inputs, transmitted by the message M_SP_NA_1 and requested by C_SC_NA_1;
   - "do" — discrete outputs, transmitted by C_SC_NA_1.
 - {IOA} — parameter address of the range begin;
@@ -4543,10 +4551,10 @@ In the template for the first time used the not requesting mode of an output tra
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Ustijancev Michael
-Version: 1.1.0
+Version: 1.2.0
 License: GPLv2','IEC 60870 у частині 5 є одним з набору стандартів IEC 60870 який визначає системи, що використовуються у віддаленому контролі (телемеханіці — диспетчерському контролі та зборі даних) у інженерній електриці та у застосунках автоматизації енергетичних систем. Частина 5 надає комунікаційний профіль для надсилання базових повідомлень віддаленого контролю між двома системами, який використовує постійні прямі підключення даних між системами.
 
-Шаблон наразі реалізує частину 104 (Ethernet транспорт) для клієнту та наступних сервісів: STARTDT, STOPDT, TESTFR, Ack, C_IC_NA_1, C_CI_NA_1, C_SC_NA_1, M_SP_NA_1, M_ME_NB_1, C_CS_NA_1.
+Шаблон наразі реалізує частину 104 (Ethernet транспорт) для клієнту та наступних сервісів: STARTDT, STOPDT, TESTFR, Ack, C_IC_NA_1 (100), C_CI_NA_1 (101), C_SC_NA_1 (45), M_SP_NA_1 (1), M_ME_NB_1 (11), C_CS_NA_1 (103).
 
 Для прямого визначення запитуваних даних передбачено атрибут "itemsSet", де вони можуть визначатися як окремо, зі смисловим ідентифікатором та назвою, або за діапазоном із найменуванням по шаблону. Часто віддалені системи можуть не потребувати визначення даних для передачі та надсилають наявні або основні зі своєї ініціативи та якщо вони цього не роблять, мають та потрібно запитати щось додаткове то вам треба отримати мапу наявних параметрів з адресами які й ввести у цьому атрибуті записами у форматі ai|di|do:{IOA}[-{EndIOA}][:a[:{NameBase}]], де:
 - ai|di|do — тип даних, де:
@@ -4571,12 +4579,12 @@ License: GPLv2','IEC 60870 у частині 5 є одним з набору с�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Устьянцев Михайло
-Версія: 1.1.0
+Версія: 1.2.0
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
+using Special.FLibSYS;
+
 if(f_start)	{
-	transport_ = transport;
-	tr = SYS.Transport.nodeAt(transport,".");
-	if(tr) tr.start(false);
+	transport_ = "", tr = false;
 	itemsSet_ = "";
 	tmRetr_ = tmRetr;
 	t1_ = t1__ = t2_ = t3_ = w_ = 0;
@@ -4591,7 +4599,9 @@ if(f_start)	{
 	C_IC_NA_1con = C_CS_NA_1 = C_CS_NA_1con = C_CI_NA_1 = C_CI_NA_1con = false;
 	items = new Object();
 	oAVals = new Object();
+	return;
 }
+if(f_stop)	return;
 
 //Items set changing process
 if(itemsSet != itemsSet_) {
@@ -4629,7 +4639,7 @@ t_err = "";
 if(!tr || transport != transport_)	{
 	tr = SYS.Transport.nodeAt(transport, ".");
 	transport_ = transport;
-	if(tr) tr.start(false);
+	if(tr) { tr.timings("5:"+(0.1/f_frq).toPrecision(2)); tr.start(false); }
 	itemsSet_ = "";
 	tmRetr_ = tmRetr;
 	STARTDT_act = false;
@@ -4705,8 +4715,8 @@ else {
 			}
 			else if(ASDU_id == 103 && ASDU_reas == 7)	C_CS_NA_1con = true;
 			else if(ASDU_id == 1) {	//M_SP_NA_1, Single-point information
-				if(ASDU_els&0x80) SYS.messDebug("/IEC60870",tr("M_SP_NA_1: No the SQ mode implemented yet"));
-				else if((10+ASDU_els*4) != seqSz)	SYS.messDebug("/IEC60870",tr("M_SP_NA_1: Items number discrepancy to the package size"));
+				if(ASDU_els&0x80) SYS.messDebug("/IEC60870",tr("M_SP_NA_1: The SQ-mode is not implemented yet"));
+				else if((10+ASDU_els*4) != seqSz)	SYS.messDebug("/IEC60870",tr("M_SP_NA_1: Items number is discrepancy to the package size"));
 				else for(iEl = 0, iOff = 12; iEl < ASDU_els; iEl++, iOff+=4) {
 					IOA = (bufIn.charCodeAt(iOff+2)<<16) + (bufIn.charCodeAt(iOff+1)<<8) + bufIn.charCodeAt(iOff);
 					SIQ = bufIn.charCodeAt(iOff+3);
@@ -4722,9 +4732,9 @@ else {
 				}
 			}
 			else if(ASDU_id == 11) {	//M_ME_NB_1, Measured value, scaled value
-				if(ASDU_els&0x80) SYS.messDebug("/IEC60870",tr("M_ME_NB_1: No the SQ mode implemented yet"));
-				else if((10+ASDU_els*6) != seqSz)	SYS.messDebug("/IEC60870",tr("M_ME_NB_1: Items number discrepancy to the package size"));
-				else for(iEl = 0, iOff = 12; iEl < ASDU_els; iEl++, iOff+=6) {
+				if(ASDU_els&0x80) SYS.messDebug("/IEC60870",tr("M_ME_NB_1: The SQ-mode is not implemented yet"));
+				else if((10+ASDU_els*6) != seqSz)	SYS.messDebug("/IEC60870",tr("M_ME_NB_1: Items number is discrepancy to the package size"));
+				else for(iEl = 0, iOff = 12; iEl < ASDU_els; iEl++, iOff += 6) {
 					IOA = (bufIn.charCodeAt(iOff+2)<<16) + (bufIn.charCodeAt(iOff+1)<<8) + bufIn.charCodeAt(iOff);
 					val = (bufIn.charCodeAt(iOff+4)<<8) + bufIn.charCodeAt(iOff+3);
 					if(val > 32767) val -= 65536;
@@ -4737,13 +4747,40 @@ else {
 						itW.wr = false; itW.alarm = 0;
 					}
 					items[aid].val = val;
-					items[aid].SIQ = SIQ;	//For a specific quality processing
+					items[aid].SIQ = SIQ;	//For specific quality processing
 					if((aO=this[aid])) aO.set(items[aid].val, 0, 0, true);
 				}
 			}
+			else if(ASDU_id == 36) {	//M_ME_TF_1, Measured value, short real value with timestamp
+				if(ASDU_els&0x80) SYS.messDebug("/IEC60870",tr("M_ME_TF_1: The SQ-mode is not implemented yet"));
+				else if((10+ASDU_els*15) != seqSz)	SYS.messDebug("/IEC60870",tr("M_ME_TF_1: Items number is discrepancy to the package size"));
+				else for(iEl = 0, iOff = 12; iEl < ASDU_els; iEl++, iOff += 15) {
+					IOA = (bufIn.charCodeAt(iOff+2)<<16) + (bufIn.charCodeAt(iOff+1)<<8) + bufIn.charCodeAt(iOff);
+					val = floatMergeWord(bufIn.charCodeAt(iOff+3)*256+bufIn.charCodeAt(iOff+4), bufIn.charCodeAt(iOff+5)*256+bufIn.charCodeAt(iOff+6));
+					SIQ = bufIn.charCodeAt(iOff+7);
+					aid = "ai"+IOA;
+
+					if(items[aid].isEVal()) {
+						items[aid] = itW = new Object();
+						itW.descr = "AI["+IOA+"]";
+						itW.wr = false; itW.alarm = 0;
+					}
+					// Getting the timestamp
+					ttm_ms = bufIn.charCodeAt(iOff+9)*256 + bufIn.charCodeAt(iOff+8);
+					ttm = SYS.mktime(ttm_ms/1000, bufIn.charCodeAt(iOff+10)&0x3F, bufIn.charCodeAt(iOff+11)&0x1F,
+						bufIn.charCodeAt(iOff+12)&0x1F, (bufIn.charCodeAt(iOff+13)&0x0F)-1, 2000+(bufIn.charCodeAt(iOff+13)&0x7F));
+
+					items[aid].val = val;
+					items[aid].SIQ = SIQ;	//For specific quality processing
+					if((aO=this[aid])) {
+						aO.set(items[aid].val, 0, 0, true);
+						if(aO.arch())	aO.arch().setVal(1e6*ttm+1000*floor(ttm_ms/1000), items[aid].val);
+					}
+				}
+			}
 			else if(ASDU_id == 45) {	//C_SC_NA_1, Single-point confirm
-				if(ASDU_els&0x80) SYS.messDebug("/IEC60870", tr("C_SC_NA_1: No the SQ mode implemented yet"));
-				else if((10+ASDU_els*4) != seqSz)	SYS.messDebug("/IEC60870", tr("C_SC_NA_1: Items number discrepancy to the package size"));
+				if(ASDU_els&0x80) SYS.messDebug("/IEC60870", tr("C_SC_NA_1: The SQ-mode is not implemented yet"));
+				else if((10+ASDU_els*4) != seqSz)	SYS.messDebug("/IEC60870", tr("C_SC_NA_1: Items number is discrepancy to the package size"));
 				else for(iEl = 0, iOff = 12; iEl < ASDU_els; iEl++, iOff+=4) {
 					IOA = (bufIn.charCodeAt(iOff+2)<<16) + (bufIn.charCodeAt(iOff+1)<<8) + bufIn.charCodeAt(iOff);
 					SIQ = bufIn.charCodeAt(iOff+3);
@@ -4842,9 +4879,9 @@ else {
 		else break;
 	}
 
-	if(t1_)		t1_ += 1/f_frq;
+	if(t1_)	t1_ += 1/f_frq;
 	if(t1__)	t1__ += 1/f_frq;
-	if(t2_)		t2_ += 1/f_frq;
+	if(t2_)	t2_ += 1/f_frq;
 	t3_ += 1/f_frq;
 }
 
@@ -4862,7 +4899,7 @@ if(t_err.length) {
 	}
 	f_err = t_err;
 }
-else f_err = "0";','','',1567952308);
+else f_err = "0";','','',1568278655);
 INSERT INTO tmplib_DevLib VALUES('SSCP','Shark Slave Communication Protocol','','','Shark Slave Communication Protocol from EnergoCentrum PLUS, s.r.o.
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Costumer Faster CZ (http://faster.cz)

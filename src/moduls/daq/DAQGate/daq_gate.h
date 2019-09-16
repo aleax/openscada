@@ -155,7 +155,8 @@ class TMdContr: public TController
 	    StHd( ) : cntr(0) { lstMess.clear(); }
 
 	    float cntr;
-	    map<string, time_t> lstMess;
+	    map<string, time_t>	lstMess;
+	    map<string, int>	lstMessCnt;
 	};
 	class SPrmsStack
 	{

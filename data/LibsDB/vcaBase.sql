@@ -1819,7 +1819,7 @@ INSERT INTO wlb_Main_incl VALUES('alarmsSt','go_prev_sizeLim','/wlb_originals/wd
 INSERT INTO wlb_Main_incl VALUES('alarmsSt','go_report','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;img;','');
 INSERT INTO wlb_Main_incl VALUES('alarmsSt','lab_fltr','/wlb_originals/wdg_Text','owner;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;bordWidth;font;text;','');
 INSERT INTO wlb_Main_incl VALUES('alarmsSt','lab_sort','/wlb_originals/wdg_Text','owner;en;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;bordWidth;font;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('alarmsSt','quittMass','/wlb_originals/wdg_FormEl','owner;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;','');
+INSERT INTO wlb_Main_incl VALUES('alarmsSt','quietMass','/wlb_originals/wdg_FormEl','owner;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;','');
 INSERT INTO wlb_Main_incl VALUES('alarmsSt','size','/wlb_originals/wdg_FormEl','owner;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;','');
 INSERT INTO wlb_Main_incl VALUES('alarmsSt','sizeLim','/wlb_originals/wdg_Text','owner;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;','');
 INSERT INTO wlb_Main_incl VALUES('alarmsSt','sort','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
@@ -2158,8 +2158,8 @@ INSERT INTO wlb_Main_io VALUES('RootPgSo','geomY','244',32,'','','cvt_sound','',
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomW','36',32,'','','cvt_sound','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomH','33',32,'','','cvt_sound','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomZ','31',32,'','','cvt_sound','','','','','','');
-INSERT INTO wlb_Main_io VALUES('RootPgSo','tipTool','Quittantion sound',32,'','','cvt_sound','Квітація звуком','','Квитация звуком','','','');
-INSERT INTO wlb_Main_io VALUES('RootPgSo','tipStatus','Press for quittantion alarms by sound',32,'','','cvt_sound','Натиснути для квітації порушення звуком','','Нажать для квитации нарушения звуком','','','');
+INSERT INTO wlb_Main_io VALUES('RootPgSo','tipTool','Quietantion sound',32,'','','cvt_sound','Квітація звуком','','Квитация звуком','','','');
+INSERT INTO wlb_Main_io VALUES('RootPgSo','tipStatus','Press for quietantion alarms by sound',32,'','','cvt_sound','Натиснути для квітації порушення звуком','','Нажать для квитации нарушения звуком','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','lineWdth','1',32,'','','h_line','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','lineStyle','0',32,'','','h_line','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomZ','8',32,'','','h_line','','','','','','');
@@ -3544,8 +3544,8 @@ INSERT INTO wlb_Main_io VALUES('RootPgSo','geomY','244',32,'','','cvt_alarm','',
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomW','36',32,'','','cvt_alarm','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomH','33',32,'','','cvt_alarm','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomZ','30',32,'','','cvt_alarm','','','','','','');
-INSERT INTO wlb_Main_io VALUES('RootPgSo','tipTool','Quittantion buzz',32,'','','cvt_alarm','Квітація гудком','','Квитация гудком','','','');
-INSERT INTO wlb_Main_io VALUES('RootPgSo','tipStatus','Press for quittantion alarms by buzz',32,'','','cvt_alarm','Натиснути для квітації порушення гудком','','Нажать для квитации нарушения гудком','','','');
+INSERT INTO wlb_Main_io VALUES('RootPgSo','tipTool','Quietantion buzz',32,'','','cvt_alarm','Квітація гудком','','Квитация гудком','','','');
+INSERT INTO wlb_Main_io VALUES('RootPgSo','tipStatus','Press for quietantion alarms by buzz',32,'','','cvt_alarm','Натиснути для квітації порушення гудком','','Нажать для квитации нарушения гудком','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','active','1',40,'','','cvt_alarm','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','elType','3',32,'','','cvt_alarm','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','img','aAlarm',0,'','','cvt_alarm','','','','','','');
@@ -3566,8 +3566,8 @@ INSERT INTO wlb_Main_io VALUES('RootPgSo','geomY','244',32,'','','cvt_light','',
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomW','36',32,'','','cvt_light','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomH','33',32,'','','cvt_light','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomZ','29',32,'','','cvt_light','','','','','','');
-INSERT INTO wlb_Main_io VALUES('RootPgSo','tipTool','Quittantion light',32,'','','cvt_light','Квітація світла','','Квитация света','','','');
-INSERT INTO wlb_Main_io VALUES('RootPgSo','tipStatus','Press for quittantion alarms by light',32,'','','cvt_light','Натиснути для квітації порушення світлом','','Нажать для квитации нарушения светом','','','');
+INSERT INTO wlb_Main_io VALUES('RootPgSo','tipTool','Quietantion light',32,'','','cvt_light','Квітація світла','','Квитация света','','','');
+INSERT INTO wlb_Main_io VALUES('RootPgSo','tipStatus','Press for quietantion alarms by light',32,'','','cvt_light','Натиснути для квітації порушення світлом','','Нажать для квитации нарушения светом','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','active','1',40,'','','cvt_light','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','elType','3',32,'','','cvt_light','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','img','aLight',0,'','','cvt_light','','','','','','');
@@ -6823,7 +6823,7 @@ Version: 1.2.0',32,'','','','Елемент "Рецепт: просте вико
 Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.2.0','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsAct','contextMenu','Quittance:qtc',32,'','','','Підтвердження:qtc','','Подтверждение:qtc','','','');
-INSERT INTO wlb_Main_io VALUES('alarmsAct','evProc','usr_goquitt::open:/pg_control/pg_ElCadr',32,'','','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsAct','evProc','usr_goquiet::open:/pg_control/pg_ElCadr',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsAct','set','',8,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsAct','value','',8,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','owner','root:UI',32,'','','','','','','','','');
@@ -6833,7 +6833,7 @@ INSERT INTO wlb_Main_io VALUES('alarmsSt','geomY','62',32,'','','','','','','','
 INSERT INTO wlb_Main_io VALUES('alarmsSt','geomW','900',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','geomH','550',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','geomZ','22',32,'','','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('alarmsSt','evProc','usr_goquitt:/alarms:open:/pg_control/pg_ElCadr
+INSERT INTO wlb_Main_io VALUES('alarmsSt','evProc','usr_goquiet:/alarms:open:/pg_control/pg_ElCadr
 ws_BtPress:/go_report:open:/pg_control/pg_dialogReport',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','pgOpenSrc','',40,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','pgGrp','so',32,'','','','','','','','','');
@@ -7123,17 +7123,17 @@ INSERT INTO wlb_Main_io VALUES('alarmsSt','bordWidth','1',32,'','','lab_sort',''
 INSERT INTO wlb_Main_io VALUES('alarmsSt','font','Arial 15',32,'','','lab_sort','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','alignment','8',32,'','','lab_sort','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','text','Sort by:',32,'','','lab_sort','Сортувати за:','','Сортировать по:','','','');
-INSERT INTO wlb_Main_io VALUES('alarmsSt','owner','root:UI',32,'','','quittMass','','','','','','');
-INSERT INTO wlb_Main_io VALUES('alarmsSt','name','Mass quittance',32,'','','quittMass','Масове підтвердження','','Массовое подтверждение','','','');
-INSERT INTO wlb_Main_io VALUES('alarmsSt','geomX','3',32,'','','quittMass','','','','','','');
-INSERT INTO wlb_Main_io VALUES('alarmsSt','geomY','2',32,'','','quittMass','','','','','','');
-INSERT INTO wlb_Main_io VALUES('alarmsSt','geomW','120',32,'','','quittMass','','','','','','');
-INSERT INTO wlb_Main_io VALUES('alarmsSt','geomH','18',32,'','','quittMass','','','','','','');
-INSERT INTO wlb_Main_io VALUES('alarmsSt','geomZ','22',32,'','','quittMass','','','','','','');
-INSERT INTO wlb_Main_io VALUES('alarmsSt','tipTool','Mass quittance for visible violations',32,'','','quittMass','Масове підтвердження видимих порушень','','Массовое подтверждение видимых нарушений','','','');
-INSERT INTO wlb_Main_io VALUES('alarmsSt','active','1',32,'','','quittMass','','','','','','');
-INSERT INTO wlb_Main_io VALUES('alarmsSt','elType','3',32,'','','quittMass','','','','','','');
-INSERT INTO wlb_Main_io VALUES('alarmsSt','font','Arial 13',0,'','','quittMass','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsSt','owner','root:UI',32,'','','quietMass','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsSt','name','Mass quietance',32,'','','quietMass','Масове підтвердження','','Массовое подтверждение','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsSt','geomX','3',32,'','','quietMass','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsSt','geomY','2',32,'','','quietMass','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsSt','geomW','120',32,'','','quietMass','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsSt','geomH','18',32,'','','quietMass','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsSt','geomZ','22',32,'','','quietMass','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsSt','tipTool','Mass quietance for visible violations',32,'','','quietMass','Масове підтвердження видимих порушень','','Массовое подтверждение видимых нарушений','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsSt','active','1',32,'','','quietMass','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsSt','elType','3',32,'','','quietMass','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsSt','font','Arial 13',0,'','','quietMass','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','owner','root:UI',32,'','','size','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','geomX','555',32,'','','size','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','geomY','1',32,'','','size','','','','','','');
@@ -7585,10 +7585,121 @@ License: GPLv2',32,'','','','Елемент на рисунку 1.5 слугує
 Спонсирование: Устьянцев Михаил
 Версия: 1.1.1
 Лицензия: GPLv2','','','');
-INSERT INTO wlb_Main_io VALUES('alarmsSt','dscr','The cadre "Alarms state table".
+INSERT INTO wlb_Main_io VALUES('alarmsSt','dscr','The element-frame serves to display the violations history and to update their dynamically for the current time in a full-format tabular form, to highlight them in color and text and the possibility of multilevel filtering. The violations are obtained from the buffer of current-active violations of OpenSCADA and archive(s), specified in the configuration field <alArch>. In fact, the element implements the primitive "Protocol" functions for violations and extension opportunities.
+
+The frame in general contains elements:
+- the messages table — the main area;
+- a button of the mass quietance — the top left;
+- a combobox of selection of the data model level sort rule, it provides sorting by the selected column from the list defined in <colms> and by default this is time, as the second criterion (last on the top) — the next one top left;
+- a navigation panel at the messages history-archive — the top centre and right, consisting of:
+  - the top-end time of the data;
+  - size — depth of the data requesting;
+  - the buttons of fast listing — per one and five intervals-depths forward and backward and at the current time;
+  - a button to quickly move to the next part of a large query interval, divided by the limit on the number of messages in the table — for very dense-active messages generation;
+  - a button to call-form of the report document for the actual table''s data.
+- elements of the five-level filter with displaying the next level at activation the last one, by selecting a column from the list of specified ones in <colms> — the top after the previous one.
+
+According to the announced list of the control elements, message sorting can be modified by the user, both by the built-in column sorting mechanism of a single visualizer and at the data model level, if such function the visualizer is not provided. Considering the basic purpose of the frame is the status of the violations (ie history), the default sorting rule is the "last" to the messages top.
+
+The frame is created, and is usually used, in pair with the widget of dynamically display the active violations, which is completed with main features of this frame but only for active violations and in the small widget.
+
+The main user extension is the ability to define visible table fields from a list of options:
+- atm — time of the violation appearing;
+- qttm — time of the violation confirmation (quietation), for quieted violations;
+- nrmtm — time of coming-returning the violation to the state "NORMA";
+- lev — level of the violation;
+- cat — category of the violation;
+- mess — full and unparsed text of the violation message;
+- prm — address of the DAQ-parameter of the data source;
+- dscr — description of the violation from the source DAQ-parameter;
+- dscrCust{N} — description of the user field N;
+- alrm — text of the violation;
+- cmnt — commentary of the violation.
+
+This frame and its fields generally represent the structure of the violation message, which is described in detail in the Program manual.
+
+As you can see from the list of possible table fields, this item supports confirmation (quietation), commenting, and user fields.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.0',32,'','','','','','','','','');
+Sponsored by: Ustijancev Michael
+Version: 1.2.0
+License: GPLv2',32,'','','','Елемент-кадр слугує для відображення історії порушень та динамічного їх оновлення на поточний час у повноформатному табличному вигляді, із виділенням їх за кольором та текстом та можливістю багаторівневого фільтрування. Порушення отримуються із буферу поточних-активних порушень OpenSCADA та архіву(ів), визначеного конфігураційним полем <alArch>. Фактично елемент реалізує функції примітиву "Протокол" для порушень та із розширенням можливостей.
+
+Загалом кадр містить елементи:
+- таблиця повідомлень — основне поле;
+- кнопка масової квітації — угорі ліворуч;
+- комбобокс обрання правила сортування рівня моделі даних, передбачає сортування за обраним стовпчиком із переліку визначених у <colms> та по замовченню це час, як другий критерій, (останнє нагорі) — наступний нагорі ліворуч;
+- панель навігації за історією-архівом повідомлень — нагорі у центрі та праворуч, у складі:
+  - часу вершини даних;
+  - розміру — глибини запиту даних;
+  - кнопок швидкого гортання — на один та п''ять інтервалів-глибин уперед та назад та у поточний час;
+  - кнопка швидкого переходу до наступної частини великого інтервалу запиту, поділеного за лімітом на кількість повідомлень у таблиці — для дуже щільного-активної генерації повідомлень;
+  - кнопка виклику-формування звітного документу за поточними даними таблиці.
+- елементи п''ятирівневого фільтру із відображенням елементів наступного рівня за активацією останнього, шляхом обрання стовпчику із переліку визначених у <colms> — нагорі після попереднього.
+
+Згідно до оголошеного переліку елементів контролю, сортування повідомлень може змінюватися користувачем, як шляхом вбудованого механізму сортування стовпчиків окремо взятого візуалізатору, так і на рівні моделі даних, якщо візуалізатором такої функції не передбачено. Враховуючи основне призначення кадру — стан порушень (тобто історія), типовим правилом сортування є "останні" для повідомлень нагорі.
+
+Кадр створено, та він зазвичай використовується, у парі з віджетом динамічного відображення активних порушень, який наділено основними функціями цього кадру, але лише для активних порушень та у малому віджеті.
+
+Основним користувацьким розширенням є можливість визначення видимих полів таблиці із переліку варіантів:
+- atm — час виникнення порушення;
+- qttm — час підтвердження (квітації) порушення, для підтверджених порушень;
+- nrmtm — час переходу-повернення порушення у стан "НОРМА";
+- lev — рівень порушення;
+- cat — категорія порушення;
+- mess — повний та нерозібраний текст повідомлення порушення;
+- prm — адреса DAQ-параметру джерела порушення;
+- dscr — опис порушення із DAQ-параметру джерела;
+- dscrCust{N} — опис користувацького поля N;
+- alrm — текст порушення;
+- cmnt — коментар до порушення.
+
+Цей кадр та його поля загалом репрезентують структуру повідомлення порушення, яку детально описано у посібнику користувача.
+
+Як можна бачити із переліку можливих полів таблиці, цей кадр підтримує механізм підтвердження (квітації), коментування та користувацькі поля.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Спонсорування: Устьянцев Михайло
+Версія: 1.2.0
+Ліцензія: GPLv2','','Элемент-кадр служит для отображения истории нарушений и динамического их обновление для текущего времени в полноформатном табличном виде, с выделением их цветом и текстом и возможностью многоуровневого фильтрования. Нарушения получаются из буфера текущих-активных сообщений OpenSCADA и архива(ов), определённого конфигурационным полем <alArch>. Фактически элемент реализует функции примитива "Протокол" для нарушений и с расширением возможностей.
+
+В целом кадр содержит элементы:
+- таблица сообщений — основное поле;
+- кнопка массовой квитации — вверху слева;
+- комбобокс выбора правила сортирования уровня модели данных, предусматривает сортировку по выбранной колонке из перечня определённых в <colms> и по умолчанию это время, как второй критерий, (последнее вверху) — следующий вверху слева;
+- панель навигации по истории-архиву сообщений — вверху в центре и справа, в составе:
+  - времени вершины данных;
+  - размера — глубины запроса данных;
+  - кнопок быстрого перелистывания — на один или пять интервалов-глубин вперед и назад и в текущее время;
+  - кнопка быстрого перехода к следующей части большого интервала запроса, разделённого по лимиту на количество сообщений в таблице — для очень плотной-активной генерации сообщений;
+  - кнопка вызова-формирования отчётного документа для текущих данных таблицы.
+- элементы пятиуровневого фильтра с отображением элементов следующего уровня по активации последнего, путём выбора колонки из перечня определённых в <colms> — вверху после предыдущего.
+
+Согласно объявленному перечню элементов контроля, сортировка сообщений может меняться пользователем, как путём встроенного механизма сортировки колонок отдельно взятого визуализатора, так и на уровне модели данных, если визуализатором такой функции не предусмотрено. Учитывая основное назначение кадра — состояние нарушений (т.е. история), типовым правилом сортировки является "последние" для сообщений сверху.
+
+Кадр создан, и он обычно используется, в паре с виджетом динамического отображения активных нарушений, который наделён основными функциями этого кадра, но только для активных нарушений и в малом виджете.
+
+Основным пользовательским расширением является возможность определения видимых полей таблицы из перечня вариантов:
+- atm — время возникновения нарушения;
+- qttm — время подтверждения (квитации) нарушения, для подтверждённых нарушений;
+- nrmtm — время перехода-возврата нарушения в состояние "НОРМА";
+- lev — уровень нарушения;
+- cat — категория нарушения;
+- mess — полный и неразобранный текст сообщения нарушения;
+- prm — адрес DAQ-параметра источника нарушения;
+- dscr — описание нарушения из DAQ-параметра источника;
+- dscrCust{N} — описание пользовательского поля N;
+- alrm — текст нарушения;
+- cmnt — комментарий к нарушению.
+
+Этот кадр и его поля в целом представляют структуру сообщения нарушения, которая детально описана в руководстве пользователя.
+
+Как можно видеть из перечня возможных полей таблицы, этот элемент поддерживает механизм подтверждения (квитации), комментирования и пользовательские поля.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Спонсирование: Устьянцев Михаил
+Версия: 1.2.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','view','7',32,'','','pass','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','backColor','black',96,'backColorVal','','trnd1','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph10','bordColor','#000000',32,'','','trnd1','','','','','','');
@@ -10704,9 +10815,9 @@ INSERT INTO wlb_Main_uio VALUES('alarmsAct','expOnFocus','Expand on focus: pixel
 INSERT INTO wlb_Main_uio VALUES('alarmsAct','expOnItems','Expand on focus: items (<=0-disabled)',131073,'0|',8,'','','','Розширяти при фокусі: елементів (<=0-відключено)','','','Расширять при фокусе: элементов (<=0-отключено)','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsAct','formDtTm','Data and time format (%Y-%m-%d %H.%M.%S[.%MS,%US])',131077,'%Y-%m-%d %H.%M.%S.%MS',8,'','','','Формат дати та часу (%Y-%m-%d %H.%M.%S[.%MS,%US])','','','Формат даты и времени (%Y-%m-%d %H.%M.%S[.%MS,%US])','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsAct','hHdrVis','Show header: horizontal',131072,'0',8,'','','','Показувати заголовок: горизонтальний','','','Показывать заголовок: горизонтальный','','','','');
-INSERT INTO wlb_Main_uio VALUES('alarmsAct','highLght','Highlight rules, {lev}{quitt}:{color}:{font}:{fontColor}',131205,'5:gray
+INSERT INTO wlb_Main_uio VALUES('alarmsAct','highLght','Highlight rules, {lev}{quiet}:{color}:{font}:{fontColor}',131205,'5:gray
 4:red
-1:yellow',8,'','','','Правила підсвітлення, {lev}{quitt}:{color}:{font}:{fontColor}','','','Правила подсветки, {lev}{quitt}:{color}:{font}:{fontColor}','','','','');
+1:yellow',8,'','','','Правила підсвітлення, {lev}{quiet}:{color}:{font}:{fontColor}','','','Правила подсветки, {lev}{quiet}:{color}:{font}:{fontColor}','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsAct','vHdrVis','Show header: vertical',131072,'0',8,'','','','Показувати заголовок: вертикальний','','','Показывать заголовок: вертикальный','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrPaspExt','hideAttrs','Attributes list of the passport to hide',131077,'',10,'<page>|paspHideAttrs','','','Перелік атрибутів паспорту для приховування','','','Перечень атрибутов паспорта для скрытия','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrPaspExt','name_','For save original name',131077,'',8,'','','','Для збереження оригінальної назви','','','Для сохранения исходного наименования','','','','');
@@ -10722,17 +10833,17 @@ INSERT INTO wlb_Main_uio VALUES('alarmsSt','colDscrCustNames','Names list of the
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','colms','Columns, by '','' (atm,qttm,nrmtm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)',131077,'atm,qttm,nrmtm,lev,prm,dscr,alrm,cmnt',8,'','','','Стовпчики, за '','' (atm,qttm,nrmtm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)','atm,qttm,nrmtm,lev,prm,dscr,alrm,cmnt','','Колонки, по '','' (atm,qttm,nrmtm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','formDtTm','Data and time format (%Y-%m-%d %H.%M.%S[.%MS,%US])',131077,'%Y-%m-%d %H.%M.%S.%MS',8,'','','','Data and time format (%Y-%m-%d %H.%M.%S[.%MS,%US])','%Y-%m-%d %H.%M.%S.%MS','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','hHdrVis','Show header: horizontal',131072,'1',8,'','','','Show header: horizontal','','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('alarmsSt','highLght','Highlight rules, {lev}{quitt}{act}:{color}:{font}:{fontColor}',131205,'501:gray
+INSERT INTO wlb_Main_uio VALUES('alarmsSt','highLght','Highlight rules, {lev}{quiet}{act}:{color}:{font}:{fontColor}',131205,'501:gray
 401:red
 101:yellow
 511:gray:Arial 11 0 1
 411:red:Arial 11 0 1
-111:yellow:Arial 11 0 1',8,'','','','Правила підсвітлення, {lev}{quitt}{act}:{color}:{font}:{fontColor}','501:gray
+111:yellow:Arial 11 0 1',8,'','','','Правила підсвітлення, {lev}{quiet}{act}:{color}:{font}:{fontColor}','501:gray
 401:red
 101:yellow
 511:gray:Arial 11 0 1
 411:red:Arial 11 0 1
-111:yellow:Arial 11 0 1','','Правила подсветки, {lev}{quitt}{act}:{color}:{font}:{fontColor}','','','','');
+111:yellow:Arial 11 0 1','','Правила подсветки, {lev}{quiet}{act}:{color}:{font}:{fontColor}','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','messLim','Messages limit, quantity',131073,'1000|',8,'','','','Обмеження повідомлень, кількість','','','Ограничение сообщений, количество','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','vHdrVis','Show header: vertical',131072,'1',8,'','','','','','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','DESCR','Quittance: description',131077,'',8,'','','alarms','Підтвердження: опис','','','Подтверждение: описание','','','','');
@@ -22021,7 +22132,7 @@ if(f_start) {
 	highLght_ = new Array();
 	for(off = 0; (iH=highLght.parse(0,"\n",off)).length; ) {
 		iHo = new Object();
-		iHo.lev = iH.slice(0,1).toInt(); iHo.quitt = iH.slice(1,2).toInt()?1:0;
+		iHo.lev = iH.slice(0,1).toInt(); iHo.quiet = iH.slice(1,2).toInt()?1:0;
 		iHo.color = iH.parse(1,":"); iHo.font = iH.parse(2,":"); iHo.fontColor = iH.parse(3,":");
 		highLght_.push(iHo);
 	}
@@ -22070,7 +22181,7 @@ if(((cnt++)%(f_frq*1) == 0 || f_start || toUpdate) && !f_stop) {
 		for(iHgl = false, iH = 0; iH < highLght_.length && !iHgl; iH++) {
 			iHo = highLght_[iH];
 			//this.messInfo("TEST 00: lev: "+iM.level+":"+iHo.lev);
-			if(abs(iM.level) >= iHo.lev && (iM.mess.parse(3,messItSep).length?1:0) == iHo.quitt)
+			if(abs(iM.level) >= iHo.lev && (iM.mess.parse(3,messItSep).length?1:0) == iHo.quiet)
 				iHgl = iHo;
 		}
 		items += "<r"+(iHgl?" color=''"+iHgl.color+"'' font=''"+iHgl.font+"'' fontColor=''"+iHgl.fontColor+"''":"")+"><i>"+iMid+"</i>";
@@ -22115,7 +22226,7 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 	if(abs(expOnFocus) && sval == "ws_FocusIn" && expOnItems >= 0 && sortAr.length > expOnItems && geomH == geomH_) {
 		if(expOnFocus < 0) geomY += expOnFocus;
 		geomH += abs(expOnFocus);
-		if(value.length) event += "usr_goquitt\n";
+		if(value.length) event += "usr_goquiet\n";
 	}
 	else if(abs(expOnFocus) && sval == "ws_FocusOut" && expOnItems >= 0 && sortAr.length > expOnItems && geomH != geomH_) {
 		if(expOnFocus < 0) geomY -= expOnFocus;
@@ -22126,7 +22237,7 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 		NAME = iM.mess.parse(0, messItSep);
 		DESCR = iM.mess.parse(1, messItSep) + " -> " + iM.mess.parse(2, messItSep);
 		st_open = iM.mess.parse(3, messItSep).length;
-		if(value.length) event += "usr_goquitt\n";
+		if(value.length) event += "usr_goquiet\n";
 	}
 	else if(( (sval == "usr_qtc" && (iM=curAlMess[value])) ||
 					(sval.slice(0,12) == "ws_TableEdit" && colms.parse(sval.parse(2,"_").toInt()-1,",") == "qttm" && (iM=curAlMess[sortAr[sval.parse(3,"_").toInt()].parse(1,"\n").toInt()])) )
@@ -22222,7 +22333,7 @@ if(f_start) {
 	highLght_ = new Array();
 	for(off = 0; (iH=highLght.parse(0,"\n",off)).length; ) {
 		iHo = new Object();
-		iHo.lev = iH.slice(0,1).toInt(); iHo.quitt = iH.slice(1,2).toInt()?1:0; iHo.act = iH.slice(2,3).toInt()?1:0;
+		iHo.lev = iH.slice(0,1).toInt(); iHo.quiet = iH.slice(1,2).toInt()?1:0; iHo.act = iH.slice(2,3).toInt()?1:0;
 		iHo.color = iH.parse(1,":"); iHo.font = iH.parse(2,":"); iHo.fontColor = iH.parse(3,":");
 		highLght_.push(iHo);
 	}
@@ -22295,7 +22406,7 @@ if((((cnt++)%(f_frq*1) == 0 && !wTm) || f_start || toUpdate) && !f_stop) {
 			if(!iMoA.isEVal() && !iMoA.mess.parse(4,messItSep).length) {	//Renewal state set for not marked as NORMAL
 				iMoA.mess = iMoA.mess.parse(0,messItSep)+messItSep+iMoA.mess.parse(1,messItSep)+messItSep+iMoA.mess.parse(2,messItSep)+messItSep+iMoA.mess.parse(3,messItSep)+messItSep+
 						tr("Renewal")+messItSep+iMoA.mess.parse(5,messItSep);
-				/*if(iMoA.mess.parse(3,messItSep).length && !iMo.mess.parse(3,messItSep).length)	//Inherit the quittance fact from the previous
+				/*if(iMoA.mess.parse(3,messItSep).length && !iMo.mess.parse(3,messItSep).length)	//Inherit the quietance fact from the previous
 					iMo.mess = iMo.mess.parse(0,messItSep)+messItSep+iMo.mess.parse(1,messItSep)+messItSep+iMo.mess.parse(2,messItSep)+messItSep+iMoA.mess.parse(3,messItSep)+messItSep+
 						iMo.mess.parse(4,messItSep)+messItSep+iMo.mess.parse(5,messItSep);
 				if(iMoA.mess.parse(5,messItSep).length && !iMo.mess.parse(5,messItSep).length)	//Inherit the comment from the previous
@@ -22307,7 +22418,7 @@ if((((cnt++)%(f_frq*1) == 0 && !wTm) || f_start || toUpdate) && !f_stop) {
 			als.push(iMo);
 			iAppend++;
 		}
-		else if(!(iMoA=cAls[iMo.categ]).isEVal()) {	//Norma or quittance
+		else if(!(iMoA=cAls[iMo.categ]).isEVal()) {	//Norma or quietance
 			/*if(iMo.mess.parse(2,messItSep).match("\\s*(.+?)\\s*$")[1] == tr("QUITANCE")) {
 				if(!iMoA.mess.parse(3,messItSep).length)	//Fill for missed
 					iMoA.mess = iMoA.mess.parse(0,messItSep)+messItSep+iMoA.mess.parse(1,messItSep)+messItSep+iMoA.mess.parse(2,messItSep)+messItSep+
@@ -22426,7 +22537,7 @@ if((((cnt++)%(f_frq*1) == 0 && !wTm) || f_start || toUpdate) && !f_stop) {
 			//Check for higlight properties match
 			for(iHgl = false, iH = 0; iH < highLght_.length && !iHgl; iH++) {
 				iHo = highLght_[iH];
-				if(abs(iM.level) >= iHo.lev && (iM.mess.parse(3,messItSep).length?1:0) == iHo.quitt &&
+				if(abs(iM.level) >= iHo.lev && (iM.mess.parse(3,messItSep).length?1:0) == iHo.quiet &&
 																 ((wTm||iM.mess.parse(4,messItSep).length)?0:1) == iHo.act)
 					iHgl = iHo;
 			}
@@ -22515,7 +22626,7 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 	isFirst = isSec = false;
 	if(sval == "ws_FocusIn:/alarms") {
 		alarms_geomY = fTopOrig; alarms_geomH += fTop-fTopOrig;
-		if(alarms_value.length) event += "usr_goquitt:/alarms\n";
+		if(alarms_value.length) event += "usr_goquiet:/alarms\n";
 	}
 	else if(sval == "ws_FocusOut:/alarms")	{ alarms_geomY = fTop; alarms_geomH -= fTop-fTopOrig; }
 	else if(( (sval == "usr_qtc:/alarms" && (iM=als[alarms_value])) ||
@@ -22537,13 +22648,13 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 		toUpdate = true;
 		alarms_com = false;
 	}
-	else if(sval == "ws_BtPress:/quittMass")	toMassQuitt = toUpdate = true;
+	else if(sval == "ws_BtPress:/quietMass")	toMassQuitt = toUpdate = true;
 	else if(sval == "ws_TableChangeSel:/alarms") {
 		iM = als[alarms_value];
 		alarms_NAME = iM.mess.parse(0, messItSep);
 		alarms_DESCR = iM.mess.parse(1, messItSep) + " -> " + iM.mess.parse(2, messItSep);
 		alarms_st_open = iM.mess.parse(3, messItSep).length;
-		if(alarms_value.length) event += "usr_goquitt:/alarms\n";
+		if(alarms_value.length) event += "usr_goquiet:/alarms\n";
 	}
 	else if(sval.slice(0,12) == "ws_TableEdit" && colms.parse(sval.parse(2,"_").toInt()-1,",") == "cmnt") {
 		iM = als[sortAr[sval.parse(3,"_").toInt()].parse(1,"\n").toInt()];
@@ -22600,7 +22711,7 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 }
 
 time_value = wTm ? wTm : SYS.time();
-//go_cur_active = wTm;','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1567951255);
+//go_cur_active = wTm;','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1568579670);
 INSERT INTO wlb_Main VALUES('ImgLab','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAN
 EklEQVR4nOWb6W5dyXWFv7XPcCfegRRHiZJIiZRavE31QLtjuQ1ET+GH8O88gB8gT2IgzxD/cAAD
 toLYgdyA3XHakhrd7pZkURTHe0+t/LiUqO5I1MBBRrKAQxI8VXVWrbNr195VdQSY/8fI93//M/Dr

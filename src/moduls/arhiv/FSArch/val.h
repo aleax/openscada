@@ -1,7 +1,7 @@
 
 //OpenSCADA module Archive.FSArch file: val.h
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -190,7 +190,6 @@ class ModVArch: public TVArchivator
 
 	TCntrNode &operator=( const TCntrNode &node );
 
-	string infoDBnm( );
 	double curCapacity( );
 
 	double	fileTimeSize( )	{ return time_size; }

@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.1.4"
+#define MOD_VER		"2.2.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -437,9 +437,27 @@ void *TMdContr::Task( void *icntr )
 			XMLNode *m = prmNd->childGet(iM);
 			SYS->archive().at().messPut(s2i(m->attr("time")), s2i(m->attr("utime")), m->attr("cat"), s2i(m->attr("lev")), m->text());
 		    }
+
+		    // The bottom time border processing
 		    for(map<string, time_t>::iterator iLM = cntr.mStatWork[iSt].second.lstMess.begin();
 								iLM != cntr.mStatWork[iSt].second.lstMess.end(); ++iLM)
-			iLM->second = iLM->second ? s2i(prmNd->attr("tm"))+1 : SYS->sysTm()-3600*cntr.restDtTm();
+			//  The new algorithm, not tested yet !!!!
+			if(!iLM->second) iLM->second = SYS->sysTm()-3600*cntr.restDtTm();
+			else {
+			    time_t mRdTm = iLM->second, mRdTm_ = s2i(prmNd->attr("tm"));
+			    int mRdEqTm = cntr.mStatWork[iSt].second.lstMessCnt[iLM->first];
+			    if(mRdTm_ > mRdTm)	{ mRdTm = mRdTm_; mRdEqTm = 0; }
+			    else if(prmNd->childSize() && (++mRdEqTm) > 2)	{ mRdTm++; mRdEqTm = 0; }
+			    iLM->second = mRdTm;
+			    cntr.mStatWork[iSt].second.lstMessCnt[iLM->first] = mRdEqTm;
+
+			    if(mess_lev() == TMess::Debug)
+				mess_debug(cntr.nodePath().c_str(), "Redundancy for '%s': %s: %d",
+				    iLM->first.c_str(), TSYS::atime2str(mRdTm).c_str(), prmNd->childSize());
+			}
+
+			//  The old algorithm
+			//iLM->second = iLM->second ? s2i(prmNd->attr("tm"))+1 : SYS->sysTm()-3600*cntr.restDtTm();
 		}
 		TSYS::taskSleep(SYS->rdTaskPer()*1e9);
 	    }
@@ -561,12 +579,34 @@ void *TMdContr::Task( void *icntr )
 				SYS->archive().at().messPut(s2i(m->attr("time")), s2i(m->attr("utime")),
 				    cntr.mStatWork[iSt].first+":"+m->attr("cat"), s2i(m->attr("lev")), m->text());
 			    }
-			    cntr.mStatWork[iSt].second.lstMess[aMod+"/"+aCntr] =
+
+			    // The bottom time border processing
+			    //  The new algorithm
+			    if(!cntr.mStatWork[iSt].second.lstMess[aMod+"/"+aCntr])
+				cntr.mStatWork[iSt].second.lstMess[aMod+"/"+aCntr] =
+				cntr.mStatWork[iSt].second.lstMess["<<redundant>>"] = SYS->sysTm()-3600*cntr.restDtTm();
+			    else {
+				time_t	mRdTm = cntr.mStatWork[iSt].second.lstMess[aMod+"/"+aCntr],
+					mRdTm_ = s2i(prmNd->attr("tm"));
+				int mRdEqTm = cntr.mStatWork[iSt].second.lstMessCnt[aMod+"/"+aCntr];
+				if(mRdTm_ > mRdTm)		{ mRdTm = mRdTm_; mRdEqTm = 0; }
+				else if(prmNd->childSize() && (++mRdEqTm) > 2)	{ mRdTm++; mRdEqTm = 0; }
+				cntr.mStatWork[iSt].second.lstMess[aMod+"/"+aCntr] =
+				cntr.mStatWork[iSt].second.lstMess["<<redundant>>"] = mRdTm;
+				cntr.mStatWork[iSt].second.lstMessCnt[aMod+"/"+aCntr] = mRdEqTm;
+
+				if(mess_lev() == TMess::Debug)
+				    mess_debug(cntr.nodePath().c_str(), "Gate proceeding for '%s': %s: %d",
+					(aMod+"/"+aCntr).c_str(), TSYS::atime2str(mRdTm).c_str(), prmNd->childSize());
+			    }
+
+			    //  The old algorithm
+			    /*cntr.mStatWork[iSt].second.lstMess[aMod+"/"+aCntr] =
 				cntr.mStatWork[iSt].second.lstMess[aMod+"/"+aCntr] ? s2i(prmNd->attr("tm"))+1 :
 										    SYS->sysTm()-3600*cntr.restDtTm();
 			    cntr.mStatWork[iSt].second.lstMess["<<redundant>>"] =
 				cntr.mStatWork[iSt].second.lstMess["<<redundant>>"] ? s2i(prmNd->attr("tm"))+1 :
-										    SYS->sysTm()-3600*cntr.restDtTm();
+										    SYS->sysTm()-3600*cntr.restDtTm();*/
 			}
 			else {
 			    TMdPrm &prm = cntr.pHd[s2i(prmNd->attr("lcPs"))].at();

@@ -56,8 +56,6 @@ TCntrNode &ModMArch::operator=( const TCntrNode &node )
     return *this;
 }
 
-string ModMArch::infoDBnm( )	{ return MOD_ID "_Mess_"+id()+"_info"; }
-
 void ModMArch::load_( )
 {
     //TMArchivator::load_();
@@ -131,17 +129,31 @@ void ModMArch::start( )
 
     //Create and/or update the SQLite info file, special for the archivator and placed with main files of the archivator
     if(!startStat() && packInfoFiles()) {
+	infoTbl = "";
 	try {
-	    if(!SYS->db().at().at("SQLite").at().openStat(infoDBnm())) SYS->db().at().at("SQLite").at().open(infoDBnm());
-	    AutoHD<TBD> infoDB = SYS->db().at().at("SQLite").at().at(infoDBnm());
-	    infoDB.at().setName(TSYS::strMess(_("%s: Mess: %s: information"),MOD_ID,id().c_str()));
-	    infoDB.at().setDscr(TSYS::strMess(_("Local information DB for the message archiver '%s'. "
-		"Created automatically then don't modify, save and remove it!"),id().c_str()));
-	    infoDB.at().setAddr(addr()+"/info.db");
-	    infoDB.at().enable();
-	    infoDB.at().modifClr();
-	    infoTbl = "SQLite."+infoDBnm()+"."+TSYS::strParse(mod->filesDB(),2,".");
-	} catch(TError&) { infoTbl = ""; }
+	    AutoHD<TTypeBD> SQLite = SYS->db().at().at("SQLite");
+	    // Search for the info table
+	    vector<string> ls;
+	    SQLite.at().list(ls);
+	    for(int iL = 0; iL < ls.size() && infoTbl.empty(); iL++)
+		if(SQLite.at().at(ls[iL]).at().addr() == addr()+"/info.db")
+		    infoTbl = "SQLite."+ls[iL]+"."+TSYS::strParse(mod->filesDB(),2,".");
+	    if(infoTbl.empty()) {
+		string iDBnm = MOD_ID "_Mess_"+id()+"_info";
+		while(true) {
+		    AutoHD<TBD> infoDB = SQLite.at().at((iDBnm=SQLite.at().open(iDBnm)));
+		    if(infoDB.at().addr().size()) { iDBnm = TSYS::strLabEnum(iDBnm); continue; }
+		    infoDB.at().setName(TSYS::strMess(_("%s: Mess: %s: information"),MOD_ID,id().c_str()));
+		    infoDB.at().setDscr(TSYS::strMess(_("Local information DB for the message archiver '%s'. "
+			"Created automatically then don't modify, save and remove it!"),id().c_str()));
+		    infoDB.at().setAddr(addr()+"/info.db");
+		    infoDB.at().enable();
+		    infoDB.at().modifClr();
+		    infoTbl = "SQLite."+iDBnm+"."+TSYS::strParse(mod->filesDB(),2,".");
+		    break;
+		}
+	    }
+	} catch(TError&) { }
     }
 
     //First scan dir
@@ -161,6 +173,7 @@ void ModMArch::stop( )
     while(files.size()) { delete files[0]; files.pop_front(); }
 
     if(curSt)	infoTbl = "";
+    mLstCheck = 0;
 }
 
 time_t ModMArch::begin( )
@@ -187,9 +200,10 @@ bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
 
     int64_t t_cnt = TSYS::curTime();
 
-    ResAlloc res(mRes, true /*false*/);	//true for processing the messages group as one
+    ResAlloc res(mRes, false);
 
     if(!runSt) throw err_sys(_("Archive is not started!"));
+    if(!mLstCheck)	return false;
 
     bool wrOK = true;
     for(unsigned iM = 0; iM < mess.size(); iM++) {
@@ -208,7 +222,7 @@ bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
 	    }
 	//If going a new data then create new file
 	if(iF >= 0) {
-	    //res.request(true);
+	    res.request(true);
 	    time_t f_beg = mess[iM].time;
 	    if(iF < (int)files.size() && f_beg > files[iF]->end() && (f_beg-files[iF]->end()) < (mTimeSize*24*60*60/3))
 		f_beg = files[iF]->end()+1;
@@ -233,7 +247,7 @@ bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
 		return false;
 	    }
 	    // Allow parallel read access
-	    //res.request(false);
+	    res.request(false);
 	    wrOK = files[iF]->put(mess[iM]) && wrOK;
 	}
     }
@@ -282,7 +296,7 @@ void ModMArch::checkArchivator( bool now )
 		*scan_dirent = (dirent*)malloc(offsetof(dirent,d_name) + NAME_MAX + 1);
 
 	while(readdir_r(IdDir,scan_dirent,&scan_rez) == 0 && scan_rez) {
-	    if(strcmp(scan_rez->d_name,"..") == 0 || strcmp(scan_rez->d_name,".") == 0) continue;
+	    if(strcmp(scan_rez->d_name,"..") == 0 || strcmp(scan_rez->d_name,".") == 0 || strcmp(scan_rez->d_name,"info.db") == 0) continue;
 	    string NameArhFile = addr() + "/" + scan_rez->d_name;
 
 	    stat(NameArhFile.c_str(), &file_stat);

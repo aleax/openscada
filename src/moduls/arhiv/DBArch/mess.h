@@ -76,8 +76,6 @@ class ModMArch: public TMArchivator
 		needMeta;
 
 	TElem	reqEl;				//Requests structure
-
-	ResRW	mRes;				//Resource to access;
 };
 
 }

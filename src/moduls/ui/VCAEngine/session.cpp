@@ -2236,6 +2236,18 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 	} catch(TError &err) { }
 	return false;
     }
+    // Array attrList() - list attributes of the widget.
+    if(iid == "attrList") {
+	TArrayObj *rez = new TArrayObj();
+	try {
+	    vector<string> ls;
+	    attrList(ls);
+	    for(unsigned iA = 0, iAa = 0; iA < ls.size(); iA++)
+		rez->arSet(iAa++, ls[iA]);
+	} catch(...){ }
+
+	return rez;
+    }
     // bool attrPresent(string attr) - check for attribute <attr> present.
     //  attr - checked attribute
     if(iid == "attrPresent" && prms.size())	return attrPresent(prms[0].getS());
