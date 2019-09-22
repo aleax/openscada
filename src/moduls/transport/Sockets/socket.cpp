@@ -61,7 +61,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"3.2.1"
+#define MOD_VER		"3.2.2"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -1337,7 +1337,7 @@ int TSocketOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int ti
     fd_set rw_fd;
     int reqTry = 0,
 	iB = 0;
-    bool noReq = (time < 0),
+    bool notReq = (time < 0),
 	 writeReq = false;
     time = abs(time);
 
@@ -1360,7 +1360,7 @@ repeate:
 
 	    // Input buffer clear
 	    char tbuf[100];
-	    while(!noReq && read(sockFd,tbuf,sizeof(tbuf)) > 0) ;
+	    while(!notReq && read(sockFd,tbuf,sizeof(tbuf)) > 0) ;
 	    // Write request
 	    if(mTmRep && (TSYS::curTime()-mLstReqTm) < (1000*mTmRep))
 		TSYS::sysSleep(1e-6*((1e3*mTmRep)-(TSYS::curTime()-mLstReqTm)));
@@ -1377,7 +1377,7 @@ repeate:
 		    stop();
 		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Error writing: %s"), err.c_str());
 		    if(logLen()) pushLogMess(TSYS::strMess(_("Error writing: %s"), err.c_str()));
-		    if(noReq) throw TError(nodePath().c_str(),_("Error writing: %s"), err.c_str());
+		    if(notReq) throw TError(nodePath().c_str(),_("Error writing: %s"), err.c_str());
 		    start();
 		    goto repeate;
 		}
@@ -1392,7 +1392,7 @@ repeate:
 
 	    if(mess_lev() == TMess::Debug) stRespTm = SYS->curTime();
 	}
-	else if(!noReq) time = mTmNext;
+	else if(!notReq) time = mTmNext;
 	if(!time) time = 5000;
 
 	//Read reply
@@ -1401,9 +1401,11 @@ repeate:
 	    FD_ZERO(&rw_fd); FD_SET(sockFd, &rw_fd);
 	    kz = select(sockFd+1, &rw_fd, NULL, NULL, &tv);
 	    if(kz == 0) {
-		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Reading timeouted."));
-		if(logLen()) pushLogMess(_("Reading timeouted."));
-		if(writeReq && !noReq) stop();
+		if(!notReq) {
+		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Reading timeouted."));
+		    if(logLen()) pushLogMess(_("Reading timeouted."));
+		    if(writeReq) stop();
+		}
 		mLstReqTm = TSYS::curTime();
 		throw TError(nodePath().c_str(),_("Timeouted!"));
 	    }
@@ -1426,7 +1428,7 @@ repeate:
 		// * Force wait any data in the request mode or EAGAIN
 		// * No wait any data in the not request mode but it can get the data later
 		/*bool stZero = false;
-		for(int iRtr = 0; (((iB=read(sockFd,iBuf,iLen)) == 0 && !noReq) || (iB < 0 && errno == EAGAIN)) && iRtr < mTmNext; ++iRtr) {
+		for(int iRtr = 0; (((iB=read(sockFd,iBuf,iLen)) == 0 && !notReq) || (iB < 0 && errno == EAGAIN)) && iRtr < mTmNext; ++iRtr) {
 		    stZero = (iB == 0);
 		    if(iRtr == 1 && iB == 0) {	//Check for same socket's errors
 			int sockError = 0, sockLen = sizeof(sockError);
@@ -1440,13 +1442,13 @@ repeate:
 		// * Force errors
 		// * Retry if any data was wrote but no a reply there into the request mode
 		// * !!: Zero can be also after disconection by peer and possible undetected here for the not request mode
-		if(iB < 0 || (iB == 0 && writeReq && !noReq)) {
+		if(iB < 0 || (iB == 0 && writeReq && !notReq)) {
 		    err = (iB < 0) ? TSYS::strMess("%s (%d)",strerror(errno),errno) : TSYS::strMess(_("No data by: %s (%d)"),strerror(errno),errno);
 		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Error reading: %s"), err.c_str());
 		    if(logLen()) pushLogMess(TSYS::strMess(_("Error reading: %s"), err.c_str()));
 		    stop();
 		    // * Pass to retry into the request mode and on the successful writing
-		    if(!writeReq || noReq) throw TError(nodePath().c_str(),_("Error reading: %s"), err.c_str());
+		    if(!writeReq || notReq) throw TError(nodePath().c_str(),_("Error reading: %s"), err.c_str());
 		    start();
 		    goto repeate;
 		}

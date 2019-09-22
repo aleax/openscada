@@ -708,7 +708,9 @@ void *TMdContr::Task( void *icntr )
 		//Get data from blocks to parameters or calc for logical type parameters
 		MtxAlloc prmRes(cntr.enRes, true);
 		for(unsigned iP = 0; iP < cntr.pHd.size(); iP++)
-		    cntr.pHd[iP].at().upVal(isStart, isStop, cntr.period()?(1e9/(float)cntr.period()):-1);
+		    cntr.pHd[iP].at().upValStd();
+		for(unsigned iP = 0; iP < cntr.pHd.size(); iP++)
+		    cntr.pHd[iP].at().upValLog(isStart, isStop, cntr.period()?(1e9/(float)cntr.period()):-1);
 		prmRes.unlock();
 
 		cntr.tmDelay = vmax(0, cntr.tmDelay-(cntr.period()?(1e-9*(float)cntr.period()):1));
@@ -850,7 +852,9 @@ void *TMdContr::Task( void *icntr )
 	    //Get data from blocks to parameters or calc for logical type parameters
 	    MtxAlloc prmRes(cntr.enRes, true);
 	    for(unsigned iP = 0; iP < cntr.pHd.size(); iP++)
-		cntr.pHd[iP].at().upVal(isStart, isStop, cntr.period()?(1e9/(float)cntr.period()):(-1e-6*(t_cnt-t_prev)));
+		cntr.pHd[iP].at().upValStd();
+	    for(unsigned iP = 0; iP < cntr.pHd.size(); iP++)
+		cntr.pHd[iP].at().upValLog(isStart, isStop, cntr.period()?(1e9/(float)cntr.period()):(-1e-6*(t_cnt-t_prev)));
 	    isStart = false;
 	    prmRes.unlock();
 
@@ -1115,7 +1119,7 @@ void TMdPrm::enable( )
 	    if(id_this >= 0) lCtx->setO(id_this, new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
 
 	    // First call
-	    if(owner().startStat() && !owner().redntUse()) upVal(true, false, 0);
+	    if(owner().startStat() && !owner().redntUse()) upValLog(true, false, 0);
 
 	} catch(TError &err) { disable(); throw; }
 
@@ -1133,7 +1137,7 @@ void TMdPrm::disable( )
     if(!enableStat())  return;
 
     owner().prmEn(this, false);	//Remove from process
-    if(lCtx && lCtx->func() && owner().startStat() && !owner().redntUse()) upVal(false, true, 0);
+    if(lCtx && lCtx->func() && owner().startStat() && !owner().redntUse()) upValLog(false, true, 0);
 
     TParamContr::disable();
 
@@ -1194,64 +1198,72 @@ void TMdPrm::saveIO( )
     }
 }
 
-void TMdPrm::upVal( bool first, bool last, double frq )
+void TMdPrm::upValStd( )
 {
+    if(!isStd()) return;
+
     MtxString w_err(dataRes());
     AutoHD<TVal> pVal;
     vector<string> ls;
 
-    if(isStd()) {
-	elem().fldList(ls);
-	for(unsigned iEl = 0; iEl < ls.size(); iEl++) {
-	    pVal = vlAt(ls[iEl]);
-	    if(!(pVal.at().fld().flg()&TVal::DirRead) || (pVal.at().fld().flg()&TVal::Dynamic)) continue;
-	    pVal.at().set(owner().getVal(pVal.at().fld().reserve(),w_err),0,true);
-	}
+    elem().fldList(ls);
+    for(unsigned iEl = 0; iEl < ls.size(); iEl++) {
+	pVal = vlAt(ls[iEl]);
+	if(!(pVal.at().fld().flg()&TVal::DirRead) || (pVal.at().fld().flg()&TVal::Dynamic)) continue;
+	pVal.at().set(owner().getVal(pVal.at().fld().reserve(),w_err), 0, true);
     }
-    else if(isLogic())
-	try {
-	    if(lCtx->chkLnkNeed && !first && !last)	lCtx->chkLnkNeed = lCtx->initLnks(true);
-
-	    //Set fixed system attributes
-	    if(lCtx->idFreq >= 0)	lCtx->setR(lCtx->idFreq, frq);
-	    if(lCtx->idStart >= 0)	lCtx->setB(lCtx->idStart, first || lCtx->isChangedProg(true));
-	    if(lCtx->idStop >= 0)	lCtx->setB(lCtx->idStop, last);
-	    if(lCtx->idSh >= 0)		lCtx->setS(lCtx->idSh, id());
-	    if(lCtx->idNm >= 0)		lCtx->setS(lCtx->idNm, name());
-	    if(lCtx->idDscr >= 0)	lCtx->setS(lCtx->idDscr, descr());
-
-	    //Get input links
-	    lCtx->inputLinks();
-
-	    //Calc template
-	    lCtx->setMdfChk(true);
-	    lCtx->calc();
-	    modif();
-
-	    //Put output links
-	    lCtx->outputLinks();
-
-	    //Put fixed system attributes
-	    if(lCtx->idNm >= 0)  setName(lCtx->getS(lCtx->idNm));
-	    if(lCtx->idDscr >= 0)setDescr(lCtx->getS(lCtx->idDscr));
-
-	    //Attribute's values update
-	    elem().fldList(ls);
-	    for(unsigned iEl = 0; iEl < ls.size(); iEl++) {
-		int id_lnk = lCtx->lnkId(ls[iEl]);
-		if(id_lnk >= 0 && !lCtx->lnkActive(id_lnk)) id_lnk = -1;
-		pVal = vlAt(ls[iEl]);
-		if(pVal.at().fld().flg()&TVal::Dynamic)	continue;
-		if(id_lnk < 0) pVal.at().set(lCtx->get(lCtx->ioId(ls[iEl])), 0, true);
-		else pVal.at().set(lCtx->lnkInput(id_lnk), 0, true);
-	    }
-	} catch(TError &err) {
-	    mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
-	    mess_warning(nodePath().c_str(),_("Error of the calculation template."));
-	}
 
     //Alarm set
     acqErr.setVal(w_err.getVal());
+}
+
+void TMdPrm::upValLog( bool first, bool last, double frq )
+{
+    if(!isLogic())	return;
+
+    AutoHD<TVal> pVal;
+    vector<string> ls;
+
+    try {
+	if(lCtx->chkLnkNeed && !first && !last)	lCtx->chkLnkNeed = lCtx->initLnks(true);
+
+	//Set fixed system attributes
+	if(lCtx->idFreq >= 0)	lCtx->setR(lCtx->idFreq, frq);
+	if(lCtx->idStart >= 0)	lCtx->setB(lCtx->idStart, first || lCtx->isChangedProg(true));
+	if(lCtx->idStop >= 0)	lCtx->setB(lCtx->idStop, last);
+	if(lCtx->idSh >= 0)	lCtx->setS(lCtx->idSh, id());
+	if(lCtx->idNm >= 0)	lCtx->setS(lCtx->idNm, name());
+	if(lCtx->idDscr >= 0)	lCtx->setS(lCtx->idDscr, descr());
+
+	//Get input links
+	lCtx->inputLinks();
+
+	//Calc template
+	lCtx->setMdfChk(true);
+	lCtx->calc();
+	modif();
+
+	//Put output links
+	lCtx->outputLinks();
+
+	//Put fixed system attributes
+	if(lCtx->idNm >= 0)  setName(lCtx->getS(lCtx->idNm));
+	if(lCtx->idDscr >= 0)setDescr(lCtx->getS(lCtx->idDscr));
+
+	//Attribute's values update
+	elem().fldList(ls);
+	for(unsigned iEl = 0; iEl < ls.size(); iEl++) {
+	    int id_lnk = lCtx->lnkId(ls[iEl]);
+	    if(id_lnk >= 0 && !lCtx->lnkActive(id_lnk)) id_lnk = -1;
+	    pVal = vlAt(ls[iEl]);
+	    if(pVal.at().fld().flg()&TVal::Dynamic)	continue;
+	    if(id_lnk < 0) pVal.at().set(lCtx->get(lCtx->ioId(ls[iEl])), 0, true);
+	    else pVal.at().set(lCtx->lnkInput(id_lnk), 0, true);
+	}
+    } catch(TError &err) {
+	mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
+	mess_warning(nodePath().c_str(),_("Error of the calculation template."));
+    }
 }
 
 TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )

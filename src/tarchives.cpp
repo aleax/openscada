@@ -453,7 +453,7 @@ void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, 
 	//Check for the archiver headers to messages buffer
 	for(unsigned iM = 0; iM < actMess.size(); iM++) {
 	    int &messHead = actMess[iM].at().messHead;
-	    if(messHead >= 0 && messHead == (int)headBuf && ++messHead >= (int)mBuf.size()) messHead = 0;
+	    if(messHead >= 0 && messHead == (int)headBuf && (++messHead) >= (int)mBuf.size()) messHead = 0;
 	}
 	res.unlock();
     }
@@ -513,7 +513,7 @@ time_t TArchiveS::messGet( time_t bTm, time_t eTm, vector<TMess::SRec> &recs,
 		else if(FTM(recs[iM]) < FTM(mBuf[iBuf])) break;
 	    recs.insert(recs.begin()+iP, mBuf[iBuf]);
 	}
-	if(++iBuf >= mBuf.size()) iBuf = 0;
+	if((++iBuf) >= mBuf.size()) iBuf = 0;
 	if(iBuf == headBuf) break;
     }
     res.unlock();
@@ -558,7 +558,7 @@ time_t TArchiveS::messBeg( const string &arch )
 	unsigned iBuf = headBuf;
 	while(!arch.size() || arch == BUF_ARCH_NM) {
 	    rez = rez ? vmin(rez,mBuf[iBuf].time) : mBuf[iBuf].time;
-	    if(++iBuf >= mBuf.size()) iBuf = 0;
+	    if((++iBuf) >= mBuf.size()) iBuf = 0;
 	    if(iBuf == headBuf) break;
 	}
 	if(!arch.empty()) return rez;
@@ -589,7 +589,7 @@ time_t TArchiveS::messEnd( const string &arch )
 	unsigned iBuf = headBuf;
 	while(!arch.size() || arch == BUF_ARCH_NM) {
 	    rez = rez ? vmax(rez,mBuf[iBuf].time) : mBuf[iBuf].time;
-	    if(++iBuf >= mBuf.size()) iBuf = 0;
+	    if((++iBuf) >= mBuf.size()) iBuf = 0;
 	    if(iBuf == headBuf) break;
 	}
 	if(!arch.empty()) return rez;
@@ -772,9 +772,8 @@ void TArchiveS::setMessBufLen( unsigned len )
 	if(headBuf >= mBuf.size())	headBuf = 0;
 	for(unsigned iM = 0; iM < actMess.size(); iM++) {
 	    int &messHead = actMess[iM].at().messHead;
-	    if(messHead >= 0 && messHead >= (int)mBuf.size()) messHead = mBuf.size()-1;
+	    if(messHead >= 0 && messHead >= (int)mBuf.size()) messHead = 0;	//mBuf.size()-1;
 	}
-	//if(headLstread >= mBuf.size())	headLstread = mBuf.size()-1;
     }
     while(mBuf.size() < len) mBuf.insert(mBuf.begin() + headBuf, TMess::SRec());
     modif();
@@ -823,26 +822,25 @@ void *TArchiveS::ArhMessTask( void *param )
 	    int &messHead = mArh.at().messHead;
 	    if(messHead < 0 && ((messHead=arh.headBuf+1) >= (int)arh.mBuf.size() || !arh.mBuf[messHead].time)) messHead = 0;
 	    if(messHead == (int)arh.headBuf)	continue;
-	    try {
-		// Get new messages
-		unsigned newHeadLstread = arh.headBuf;
-		unsigned iM = messHead;
-		vector<TMess::SRec> oMess;
-		while(iM != newHeadLstread) {
-		    oMess.push_back(arh.mBuf[iM]);
-		    if(++iM >= arh.mBuf.size()) iM = 0;
-		}
-		res.unlock();
 
-		bool rez = mArh.at().put(oMess);
+	    // Get new messages
+	    unsigned newHeadLstread = arh.headBuf;
+	    vector<TMess::SRec> oMess;
+	    for(unsigned iM2 = messHead; iM2 != newHeadLstread; ) {
+		oMess.push_back(arh.mBuf[iM2]);
+		if((++iM2) >= arh.mBuf.size()) iM2 = 0;
+	    }
+	    res.unlock();
 
-		res.lock();
-		if(rez) messHead = newHeadLstread;
-	    } catch(TError &err) {
+	    bool rez = false;
+	    try { rez = mArh.at().put(oMess); }
+	    catch(TError &err) {
 		mess_err(err.cat.c_str(), "%s", err.mess.c_str());
 		arh.mess_sys(TMess::Error, _("Message buffer process error."));
 	    }
+
 	    res.lock();
+	    if(rez) messHead = newHeadLstread;
 	}
 	res.unlock();
 

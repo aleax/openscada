@@ -1498,8 +1498,8 @@ void VisItProp::tabChanged( int itb )
 		    req.childAdd("SnthHgl")->setAttr("path",TSYS::strEncode(proc_text->objectName().toStdString(),TSYS::PathEl));
 		    if(!owner()->cntrIfCmd(req)) {
 			proc_text->blockSignals(true);
-			proc_text->setText(req.childGet(0)->text().c_str());
 			proc_text->setSnthHgl(*req.childGet(1));
+			proc_text->setText(req.childGet(0)->text().c_str());
 			proc_text->setProperty("inherited", (bool)s2i(req.childGet(0)->attr("inherited")));
 			proc_text->setProperty("redefined", (bool)s2i(req.childGet(0)->attr("redefined")));
 			proc_text->setProperty("redefAccept", false);

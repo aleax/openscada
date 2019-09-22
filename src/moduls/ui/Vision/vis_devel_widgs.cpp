@@ -285,8 +285,8 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 					cur_it->child(ga_id)->setData(s2i(sval));
 	    else if(stp == "real")	cur_it->child(ga_id)->setData(s2r(sval));
 	    else if(stp == "str") {
-		cur_it->child(ga_id)->setData(sval.c_str());
 		if(req.childSize() > 1)	cur_it->child(ga_id)->setSnthHgl(req.childGet(1)->save());
+		cur_it->child(ga_id)->setData(sval.c_str());
 	    }
 	    // Get selected list
 	    if(gnd->attr("dest") == "select" || gnd->attr("dest") == "sel_ed") {
@@ -734,12 +734,12 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
 	    QSizePolicy sp(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	    sp.setVerticalStretch(3);
 	    tEd->setSizePolicy(sp);
-	    tEd->setText(it->data().toString());
 	    if(!it->snthHgl().empty()) {
 		XMLNode rules;
 		rules.load(it->snthHgl());
 		tEd->setSnthHgl(rules);
 	    }
+	    tEd->setText(it->data().toString());
 	    dlg.edLay()->addWidget(tEd, 1, 0, 1, 2);
 	    //dlg.resize(700,400);
 	    if(dlg.exec() == QDialog::Accepted && it->data().toString() != tEd->text())

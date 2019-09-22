@@ -544,7 +544,7 @@ void TextEdit::setText( const QString &text )
 void TextEdit::setSnthHgl( XMLNode nd )
 {
     int scrollPos = edFld->verticalScrollBar()->value();
-    if(!sntHgl) sntHgl = new SyntxHighl(edFld->document());
+    if(!sntHgl)	sntHgl = new SyntxHighl(edFld->document());
     sntHgl->setSnthHgl(nd);
     edFld->verticalScrollBar()->setValue(scrollPos);
 }

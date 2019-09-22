@@ -4639,7 +4639,7 @@ t_err = "";
 if(!tr || transport != transport_)	{
 	tr = SYS.Transport.nodeAt(transport, ".");
 	transport_ = transport;
-	if(tr) { tr.timings("5:"+(0.1/f_frq).toPrecision(2)); tr.start(false); }
+	if(tr) tr.start(false);
 	itemsSet_ = "";
 	tmRetr_ = tmRetr;
 	STARTDT_act = false;

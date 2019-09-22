@@ -119,10 +119,10 @@ class TTrOut: public TTransportOut
 	string getStatus( );
 
 	string timings( )			{ return mTimings; }
-	bool noStopOnProceed( )			{ return mNoStopOnProceed; }
+	bool notStopOnProceed( )		{ return mNotStopOnProceed; }
 
 	void setTimings( const string &vl );
-	void setNoStopOnProceed( bool vl )	{ mNoStopOnProceed = vl; modif(); }
+	void setNotStopOnProceed( bool vl )	{ mNotStopOnProceed = vl; modif(); }
 
 	// Modem functions
 	int	mdmTm( )			{ return mMdmTm; }
@@ -177,7 +177,7 @@ class TTrOut: public TTransportOut
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
-	bool	mNoStopOnProceed;
+	bool	mNotStopOnProceed;
 	string	mDevPort, mTimings;
 	int	fd;
 	int64_t	mLstReqTm, mKeepAliveLstTm;

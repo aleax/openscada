@@ -1701,18 +1701,17 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 
 	    // Fill Edit
 	    if(lab)	lab->setText((t_s.attr("dscr")+":").c_str());
-	    if(edit && !edit->isChanged()) {
-		if(rezReq >= 0) {
-		    mod->setHelp(t_s.attr("help"), selPath+"/"+br_path, edit);
-		    edit->setText(getPrintVal(data_req.text()).c_str());
-		}
-
-		//Request syntax higlihgt
+	    if(edit && !edit->isChanged() && rezReq >= 0) {
+		//Requesting the syntax higlihgt
 		if(s2i(t_s.attr("SnthHgl"))) {
 		    XMLNode hgl_req("SnthHgl");
 		    hgl_req.setAttr("path",br_path);
 		    if(!cntrIfCmd(hgl_req)) edit->setSnthHgl(hgl_req);
 		}
+
+		mod->setHelp(t_s.attr("help"), selPath+"/"+br_path, edit);
+
+		edit->setText(getPrintVal(data_req.text()).c_str());
 	    }
 	}
 	//View Data-Time fields

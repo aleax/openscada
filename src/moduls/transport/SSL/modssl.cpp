@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.3.1"
+#define MOD_VER		"2.3.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1 are supported.")
@@ -1086,7 +1086,7 @@ int TSocketOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int ti
     string err = _("Unknown error");
     int	 ret = 0, reqTry = 0;;
     char err_[255];
-    bool noReq = (time < 0),
+    bool notReq = (time < 0),
 	 writeReq = false;
     time = abs(time);
 
@@ -1103,7 +1103,7 @@ repeate:
     if(oBuf != NULL && oLen > 0) {
 	if(!time) time = mTmCon;
 	// Input buffer clear
-	while(!noReq && BIO_read(conn,err_,sizeof(err_)) > 0) ;
+	while(!notReq && BIO_read(conn,err_,sizeof(err_)) > 0) ;
 	// Write request
 	do { ret = BIO_write(conn, oBuf, oLen); } while(ret < 0 && SSL_get_error(ssl,ret) == SSL_ERROR_WANT_WRITE);
 	if(ret <= 0) {
@@ -1111,7 +1111,7 @@ repeate:
 	    stop();
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Error writing: %s"), err.c_str());
 	    if(logLen()) pushLogMess(TSYS::strMess(_("Error writing: %s"), err.c_str()));
-	    if(noReq) throw TError(nodePath().c_str(), _("Error writing: %s"), err.c_str());
+	    if(notReq) throw TError(nodePath().c_str(), _("Error writing: %s"), err.c_str());
 	    start();
 	    goto repeate;
 	}
@@ -1124,7 +1124,7 @@ repeate:
 
 	if(mess_lev() == TMess::Debug) stRespTm = SYS->curTime();
     }
-    else if(!noReq) time = mTmNext;
+    else if(!notReq) time = mTmNext;
     if(!time) time = 5000;
 
     //Read reply
@@ -1136,7 +1136,7 @@ repeate:
 	    stop();
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Error reading: %s"), err.c_str());
 	    if(logLen()) pushLogMess(TSYS::strMess(_("Error reading: %s"), err.c_str()));
-	    if(!writeReq || noReq) throw TError(nodePath().c_str(),_("Error reading: %s"), err.c_str());
+	    if(!writeReq || notReq) throw TError(nodePath().c_str(),_("Error reading: %s"), err.c_str());
 	    start();
 	    goto repeate;
 	}
@@ -1155,8 +1155,11 @@ repeate:
 	    FD_ZERO(&rd_fd); FD_SET(sockFd, &rd_fd);
 	    kz = select(sockFd+1, &rd_fd, NULL, NULL, &tv);
 	    if(kz == 0) {
-		if(writeReq && !noReq) stop();
-		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Reading timeouted."));
+		if(!notReq) {
+		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Reading timeouted."));
+		    if(logLen()) pushLogMess(_("Reading timeouted."));
+		    if(writeReq) stop();
+		}
 		throw TError(nodePath().c_str(),_("Reading timeouted."));
 	    }
 	    else if(kz < 0) {
@@ -1176,7 +1179,7 @@ repeate:
 		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Error reading: %s"), err.c_str());
 		    if(logLen()) pushLogMess(TSYS::strMess(_("Error reading: %s"),err.c_str()));
 		    // * Pass to retry into the request mode and on the successful writing
-		    if(!writeReq || noReq) throw TError(nodePath().c_str(),_("Error reading: %s"), err.c_str());
+		    if(!writeReq || notReq) throw TError(nodePath().c_str(),_("Error reading: %s"), err.c_str());
 		    start();
 		    goto repeate;
 		}

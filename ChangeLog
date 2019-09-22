@@ -1,3 +1,19 @@
+2019-09-22 Roman (stable)
+- !:FIX:DB.LibsDB.OscadaLibs: DevLib.IEC60870: Cleaned in treat the output transport timeouts setting directly in the template
+    due to use the not requesting mode.
+- !!:DB.LibsDB.vcaBase: The "Main" library appended of the alarms frame "Alarms — report (alarmsStReport)".
+- FIX:Archives.Mess: Processing of the message buffer resize some fixed in checking the archiver headers
+    and improved in the same processing code.
+- Transports: Some spare rules of the syntax highlighting of the log messages are commented.
+- !:FIX:DAQ.ModBus: The common function upVal() is separated to two separated functions upValStd() and upValLog()
+    of separate updating the parameter types for the "Standard" firstly and the "Logical type" in the last,
+    for cases of using data of the "Standard" type parameters in the "Logical" ones.
+- Transports.{Sockets,SSL,Serial}: The debugs and exchanging log are cleaned from the timeouted messages in the not requesting mode.
+- FIX:Transports.Serial: Some fixed for the original messages.
+- FIX:UI.{QTCfg,Vision}: Fixed in processing the syntax highlighting of the text fields to load firstly the syntax rules and next the text,
+    to prevent the text corruption in some cases, detected into the transport exchanging log and Qt 5.11.
+
+
 2019-09-16 Roman (stable)
 - !!:FIX:Archive,DAQ.Controller,Special.FLibSYS: Fixed for TSYS::curTime()/1000000 conversion to time_t for 32 bit architectures.
 - !:SYS.Android: Behaviour in work on Android observed in use the environment variable QT_SCALE_FACTOR, what set to 1.5 and

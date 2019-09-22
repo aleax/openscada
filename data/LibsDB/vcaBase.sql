@@ -56,17 +56,17 @@ INSERT INTO VCALibs VALUES('Main','Main elements','Provides the library of the m
 
 Founded: September 2007
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.6.1
+Version: 1.7.0
 License: GPLv2','wlb_Main','','Основні елементи','Бібліотека створюється для надання основних елементів користувацького інтерфейсу. Будується бібліотека на основі примітивів віджетів та мови внутрішнього програмування JavaLikeCalc.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Засновано: Вересень 2007
-Версія: 1.6.1
+Версія: 1.7.0
 Ліцензія: GPLv2','Основные элементы','Библиотека создаётся для предоставления основных элементов пользовательского интерфейса. Строится библиотека на основе примитивов виджетов и языка внутреннего программирования JavaLikeCalc.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Основано: Сентябрь 2007
-Версия: 1.6.1
+Версия: 1.7.0
 Лицензия: GPLv2');
 INSERT INTO VCALibs VALUES('mnEls','Mnemo elements','User interface''s main elements library.','wlb_mnEls','','Елементи мнемосхеми','Бібліотека основних елементів інтерфейсу користувача.','Элементы мнемосхемы','Библиотека основных элементов пользовательского интерфейса.');
 INSERT INTO VCALibs VALUES('doc','Documents','Documents library.
@@ -1859,6 +1859,8 @@ INSERT INTO wlb_Main_incl VALUES('graphCalc','lab_result','/wlb_originals/wdg_Te
 INSERT INTO wlb_Main_incl VALUES('graphCalc','result','/wlb_originals/wdg_FormEl','owner;geomX;geomY;geomW;geomH;geomZ;elType;value;font;','');
 INSERT INTO wlb_Main_incl VALUES('graphCalc','title','/wlb_originals/wdg_Text','geomX;geomY;geomW;geomH;geomZ;font;alignment;text;numbArg;','');
 INSERT INTO wlb_Main_incl VALUES('grph_panel','curstime','/wlb_originals/wdg_FormEl','owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;','');
+INSERT INTO wlb_Main_incl VALUES('alarmsStReport','apply','/wlb_originals/wdg_FormEl','owner;name;active;geomX;geomY;geomW;geomH;geomZ;elType;img;font;','');
+INSERT INTO wlb_Main_incl VALUES('alarmsStReport','doc','/wlb_originals/wdg_Document','owner;active;geomX;geomY;geomW;geomH;style;doc;font;','');
 CREATE TABLE IF NOT EXISTS 'wlb_Main_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO wlb_Main_io VALUES('ElCadr','name','Element cadr',32,'','','','Елемент кадр','','Элемент кадр','','','');
 INSERT INTO wlb_Main_io VALUES('ElCadr','geomW','110',32,'','','','','','','','','');
@@ -6834,7 +6836,7 @@ INSERT INTO wlb_Main_io VALUES('alarmsSt','geomW','900',32,'','','','','','','',
 INSERT INTO wlb_Main_io VALUES('alarmsSt','geomH','550',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','geomZ','22',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','evProc','usr_goquiet:/alarms:open:/pg_control/pg_ElCadr
-ws_BtPress:/go_report:open:/pg_control/pg_dialogReport',32,'','','','','','','','','');
+ws_BtPress:/go_report:open:/pg_control/pg_alarmsStReport',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','pgOpenSrc','',40,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','pgGrp','so',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','backColor','grey',96,'','','','','','','','','');
@@ -7114,7 +7116,7 @@ INSERT INTO wlb_Main_io VALUES('alarmsSt','owner','root:UI',32,'','','lab_sort',
 INSERT INTO wlb_Main_io VALUES('alarmsSt','en','0',32,'','','lab_sort','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','geomX','3',32,'','','lab_sort','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','geomY','2',32,'','','lab_sort','','','','','','');
-INSERT INTO wlb_Main_io VALUES('alarmsSt','geomW','324',32,'','','lab_sort','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsSt','geomW','374',32,'','','lab_sort','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','geomH','18',32,'','','lab_sort','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','geomZ','1',32,'','','lab_sort','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','geomMargin','1',32,'','','lab_sort','','','','','','');
@@ -7127,7 +7129,7 @@ INSERT INTO wlb_Main_io VALUES('alarmsSt','owner','root:UI',32,'','','quietMass'
 INSERT INTO wlb_Main_io VALUES('alarmsSt','name','Mass quietance',32,'','','quietMass','Масове підтвердження','','Массовое подтверждение','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','geomX','3',32,'','','quietMass','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','geomY','2',32,'','','quietMass','','','','','','');
-INSERT INTO wlb_Main_io VALUES('alarmsSt','geomW','120',32,'','','quietMass','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsSt','geomW','170',32,'','','quietMass','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','geomH','18',32,'','','quietMass','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','geomZ','22',32,'','','quietMass','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','tipTool','Mass quietance for visible violations',32,'','','quietMass','Масове підтвердження видимих порушень','','Массовое подтверждение видимых нарушений','','','');
@@ -7158,7 +7160,7 @@ INSERT INTO wlb_Main_io VALUES('alarmsSt','alignment','8',32,'','','sizeLim','',
 INSERT INTO wlb_Main_io VALUES('alarmsSt','text','',40,'','','sizeLim','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','owner','root:UI',32,'','','sort','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','en','0',32,'','','sort','','','','','','');
-INSERT INTO wlb_Main_io VALUES('alarmsSt','geomX','125',32,'','','sort','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsSt','geomX','175',32,'','','sort','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','geomY','3',32,'','','sort','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','geomW','201',32,'','','sort','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','geomH','16',32,'','','sort','','','','','','');
@@ -8030,6 +8032,60 @@ License: GPLv2',32,'','','','Елемент-кадр реалізує прост
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсирование: Лаборатория Вакуумных Технологий <http://e-beam.ru/>
+Версия: 1.0.0
+Лицензия: GPLv2','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsStReport','owner','root:UI',32,'','','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsStReport','name','Alarms — report',32,'','','','Порушення — звіт','','Нарушения — отчёт','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsStReport','geomW','800',32,'','','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsStReport','geomH','600',32,'','','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsStReport','pgGrp','fl',32,'','','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsStReport','backColor','lightgray',32,'','','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsStReport','bordWidth','1',32,'','','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsStReport','owner','root:UI',32,'','','apply','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsStReport','name','OK',32,'','','apply','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsStReport','geomX','688',32,'','','apply','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsStReport','geomY','578',32,'','','apply','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsStReport','geomW','110',32,'','','apply','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsStReport','geomH','20',32,'','','apply','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsStReport','geomZ','1',32,'','','apply','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsStReport','active','1',32,'','','apply','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsStReport','elType','3',32,'','','apply','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsStReport','img','apply',0,'','','apply','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsStReport','font','Arial 15',0,'','','apply','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsStReport','owner','root:UI',32,'','','doc','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsStReport','geomX','1',32,'','','doc','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsStReport','geomY','1',32,'','','doc','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsStReport','geomW','798',32,'','','doc','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsStReport','geomH','575',32,'','','doc','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsStReport','active','1',32,'','','doc','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsStReport','style','body { background-color: white; }
+svg text { font-family: Arial; font-size: 8px; }
+p.tblHdr { margin-bottom: 0px; }
+TABLE.data { border-collapse: collapse; }
+TABLE.data TH { background-color: #e6e6e6; border: 1px solid black; }
+TABLE.data TD { text-align: center; border: 1px solid black;}',32,'','','doc','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsStReport','doc','',34,'','wdg:../a_doc','doc','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsStReport','font','Arial 8',32,'','','doc','','','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsStReport','dscr','The element-frame implements a dialog to display a report document based on a list of violations received from the full-format frame of presenting the violations history.
+
+The main purpose and function of this frame is to provide an opportunity to print the violations history table and export data from it.
+
+Author: Roman Savochenko <roman@oscada.org>
+Sponsored by: Ustijancev Michael
+Version: 1.0.0
+License: GPLv2',32,'','','','Елемент-кадр реалізує діалог відображення звітного документу, побудованого із переліку отриманих порушень кадру повноформатного представлення історії порушень.
+
+Основним призначенням та функцією цього кадру є надання можливості роздрукувати таблицю історії порушень та експортувати з неї дані.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Спонсорування: Устьянцев Михайло
+Версія: 1.0.0
+Ліцензія: GPLv2','','Элемент-кадр реализует диалог отображения отчётного документа, построенного из перечня полученных нарушений кадром полноформатного представления истории нарушений.
+
+Основным назначением и функцией этого кадра является предоставление возможности распечатать таблицу истории нарушений и экспортировать из неё данные.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Спонсирование: Устьянцев Михаил
 Версия: 1.0.0
 Лицензия: GPLv2','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_Main_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
@@ -10900,6 +10956,7 @@ INSERT INTO wlb_Main_uio VALUES('cntrPaspExt','labColorGrph7','Graph color: 7',1
 INSERT INTO wlb_Main_uio VALUES('cntrPaspExt','labColorGrph8','Graph color: 8',147461,'yellow',64,'','','','','','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrPaspExt','labColorGrph9','Graph color: 9',147461,'lightyellow',64,'','','','','','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrPaspExt','labColorGrph10','Graph color: 10',147461,'darkcyan',64,'','','','','','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('alarmsStReport','doc','Document',131205,'',2,'<page>|report','','','','Документ','','','Документ','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_doc_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO wlb_doc_incl VALUES('docGasNodeDayA','doc','/wlb_doc/wdg_doc/wdg_doc','perm;geomZ;style;tmpl;doc;bTime;time;process;n;vCur;aCur;aSize;',2);
 INSERT INTO wlb_doc_incl VALUES('docGasNodeMonthA','doc','/wlb_doc/wdg_doc/wdg_doc','perm;geomZ;style;tmpl;doc;bTime;time;process;n;vCur;aCur;aSize;',2);
@@ -22711,7 +22768,7 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 }
 
 time_value = wTm ? wTm : SYS.time();
-//go_cur_active = wTm;','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1568579670);
+//go_cur_active = wTm;','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1568897202);
 INSERT INTO wlb_Main VALUES('ImgLab','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAN
 EklEQVR4nOWb6W5dyXWFv7XPcCfegRRHiZJIiZRavE31QLtjuQ1ET+GH8O88gB8gT2IgzxD/cAAD
 toLYgdyA3XHakhrd7pZkURTHe0+t/LiUqO5I1MBBRrKAQxI8VXVWrbNr195VdQSY/8fI93//M/Dr
@@ -23097,6 +23154,17 @@ if(toCalc)	{
 	result_value = rez ? inPrcArgs.result : inPrcErr;
 	toCalc = false;
 }','','',500,'owner;name;dscr;geomW;geomH;pgOpenSrc;pgGrp;backColor;bordWidth;',1565536317);
+INSERT INTO wlb_Main VALUES('alarmsStReport','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAwCAIAAAAuKetIAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
+AA7EAAAOxAGVKw4bAAAAqUlEQVRoge3PQQqDMBRF0ZjvtDj4ZP/LysBJnRSh+WBaG+sgpEsQ7OAh
+vLOCe7sYo6q6azKzXlVDCOiS8zw64F8cQOMAGgfQOIDGATQOoHEAjQNoHEDjABoH0DiAxgE0DqBx
+AI0DaBxA4wAaB9A4gMYBtMsP9OM4ppTQGQfinFsnS3sW9x6K7mUbNIiXdUm9mdVa0YUHpulRnZ/b
+3XeSy/bdyu31EZF9zT9OVjILd/qtqAAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
+//Events for commands process
+for(off = 0, ev_rez = ""; (ev_cur=event.parse(0,"\n",off)).length; ) {
+	if(ev_cur == "ws_BtPress:/apply")	this.attrSet("pgOpen",false);
+	else ev_rez += ev_cur + "\n";
+}
+event = ev_rez;','','',500,'owner;name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1568902608);
 CREATE TABLE IF NOT EXISTS 'wlb_mnEls' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_mnEls VALUES('El_round_square1','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABaBJREFUeJztm11MU1cAx/+tZVB0027ysctqN2SYKDoEP8aD05XE6hQB
