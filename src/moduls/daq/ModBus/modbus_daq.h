@@ -43,7 +43,7 @@ using namespace OSCADA;
 #define DAQ_NAME	"ModBus"
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"2.4.0"
+#define DAQ_MVER	"2.4.1"
 #define DAQ_AUTHORS	_("Roman Savochenko")
 #define DAQ_DESCR	_("Provides implementation of the client ModBus service. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported.")
 #define DAQ_LICENSE	"GPL2"
@@ -167,6 +167,8 @@ class TMdContr: public TController
 	bool setValRs( const map<int,int> &regs, MtxString &err );	//Set multiply registers
 	bool setValC( char val, int addr, MtxString &err );		//Set coins value
 	string modBusReq( string &pdu );
+
+	void redntDataUpdate( );
 
     protected:
 	//Methods

@@ -443,7 +443,7 @@ void TMdPrm::enable( )
     if(owner().enableStat() || !owner().prmEnErr) {
 	void *ss =  snmp_sess_open(owner().getSess());
 	if(ss) {
-	    try { upVal(ss,true); }
+	    try { upVal(ss, true); }
 	    catch(TError &err) {
 		owner().prmEnErr = true;
 		mess_err(nodePath().c_str(),"%s",err.mess.c_str());
@@ -483,8 +483,8 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
     try {
     for(unsigned ioid = 0; ioid < lsOID().size(); ioid++) {
 	oid_root_len = oid_next_len = lsOID()[ioid].size()/sizeof(oid);
-	memmove(oid_root,lsOID()[ioid].data(),oid_root_len*sizeof(oid));
-	memmove(oid_next,oid_root,oid_root_len*sizeof(oid));
+	memmove(oid_root, lsOID()[ioid].data(), oid_root_len*sizeof(oid));
+	memmove(oid_next, oid_root, oid_root_len*sizeof(oid));
 
 	bool isScalar = oid_root_len && (oid_root[oid_root_len-1] == 0);
 	bool running = true;
@@ -651,8 +651,7 @@ void TMdPrm::parseOIDList( const string &ioid )
     ls_oid.clear();
 
     string sel;
-    for(int ioff = 0; (sel=TSYS::strSepParse(OIDList(),0,'\n',&ioff)).size(); )
-    {
+    for(int ioff = 0; (sel=TSYS::strSepParse(OIDList(),0,'\n',&ioff)).size(); ) {
 	if(sel[0] == '#') continue;
 	tmpoid_len = MAX_OID_LEN;
 	if(snmp_parse_oid(sel.c_str(),tmpoid,&tmpoid_len))

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-23 09:38+0300\n"
+"POT-Creation-Date: 2019-09-28 20:05+0300\n"
 "PO-Revision-Date: 2010-10-10 23:11+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -109,6 +109,7 @@ msgstr ""
 "Verbrauchte Zeit: %s[%s]. Gelesen %g(%g) Register, %g(%g) Bits. Geschrieben "
 "%g Register, %g Bits. Fehler in der Verbindung %g, in der Antwort %g."
 
+#, c-format
 msgid "Connection to the data source: %s."
 msgstr "Verbindung zur Datenquelle: %s."
 
@@ -118,8 +119,8 @@ msgstr "STOP"
 msgid "10:Error of connection or no response."
 msgstr "10:Verbindungsfehler oder keine Antwort."
 
-msgid "4:Server failure."
-msgstr "4:Serverfehler."
+msgid "IN REDUNDANCY"
+msgstr "IN REDUNDANZ"
 
 msgid "15:Error in size of response PDU."
 msgstr "15:Fehler in der Größe der Antwort-PDU."
@@ -361,6 +362,9 @@ msgstr ""
 
 msgid "3:Illegal value of the data in the request."
 msgstr "3:Illegale Datenwert in der Anfrage."
+
+msgid "4:Server failure."
+msgstr "4:Serverfehler."
 
 msgid "5:Request requires too long time for execute."
 msgstr "5:Anfrage benötigt zu viel Zeit für die Ausführung."

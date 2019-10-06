@@ -235,8 +235,8 @@ class TArchiveS : public TSubSYS
 	AutoHD<TTypeArchivator> at( const string &name ) const		{ return modAt(name); }
 
 	// Message archive function
-	void messPut( time_t tm, int utm, const string &categ, int8_t level, const string &mess, const string &arch = "", bool force = false );
-	void messPut( const vector<TMess::SRec> &recs, const string &arch = "", bool force = false );
+	void messPut( time_t tm, int utm, const string &categ, int8_t level, const string &mess, const string &arch = "" );
+	void messPut( const vector<TMess::SRec> &recs, const string &arch = "" );
 	time_t messGet( time_t bTm, time_t eTm, vector<TMess::SRec> &recs, const string &category = "",
 	    int8_t level = TMess::Debug, const string &arch = "", time_t upTo = 0 );
 	time_t messBeg( const string &arch = "" );

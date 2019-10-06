@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-23 09:38+0300\n"
+"POT-Creation-Date: 2019-09-28 20:05+0300\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -104,6 +104,7 @@ msgstr ""
 "Витрачено часу: %s[%s]. Прочитано %g(%g) регістрів, %g(%g) бітів. Записано "
 "%g регістрів, %g бітів. Помилок з'єднання %g, відповіді %g."
 
+#, c-format
 msgid "Connection to the data source: %s."
 msgstr "Підключення до джерела даних: %s."
 
@@ -113,8 +114,8 @@ msgstr "ЗУПИНЕНО"
 msgid "10:Error of connection or no response."
 msgstr "10:Помилка з'єднання або немає відповіді."
 
-msgid "4:Server failure."
-msgstr "4:Збій серверу"
+msgid "IN REDUNDANCY"
+msgstr "РЕЗЕРВУВАННЯ"
 
 msgid "15:Error in size of response PDU."
 msgstr "13:Помилка розміру PDU відповіді."
@@ -350,6 +351,9 @@ msgstr "2:Адреса запиту недозволена або межа за�
 
 msgid "3:Illegal value of the data in the request."
 msgstr "3:Нелегальне значення даних у запиті."
+
+msgid "4:Server failure."
+msgstr "4:Збій серверу"
 
 msgid "5:Request requires too long time for execute."
 msgstr "5:Запит вимагає дуже багато часу для виконання."

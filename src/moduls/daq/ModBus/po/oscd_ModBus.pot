@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-23 09:38+0300\n"
+"POT-Creation-Date: 2019-09-28 20:05+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -112,7 +112,7 @@ msgstr ""
 msgid "10:Error of connection or no response."
 msgstr ""
 
-msgid "4:Server failure."
+msgid "IN REDUNDANCY"
 msgstr ""
 
 msgid "15:Error in size of response PDU."
@@ -287,6 +287,9 @@ msgid "2:Request address is not allowed or the query range is too large."
 msgstr ""
 
 msgid "3:Illegal value of the data in the request."
+msgstr ""
+
+msgid "4:Server failure."
 msgstr ""
 
 msgid "5:Request requires too long time for execute."

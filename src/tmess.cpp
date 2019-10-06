@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tmess.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -193,7 +193,7 @@ void TMess::putArg( const char *categ, int8_t level, const char *fmt, va_list ap
 #endif
 
     if((mLogDir&DIR_ARCHIVE) && SYS->present("Archive"))
-	SYS->archive().at().messPut(ctm/1000000, ctm%1000000, categ, level, mess);
+	SYS->archive().at().messPut(ctm/1000000, ctm%1000000, categ, level, mess, BUF_ARCH_NM);
 }
 
 void TMess::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &recs, const string &category, int8_t level )

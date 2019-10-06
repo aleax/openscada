@@ -95,7 +95,7 @@ class TController : public TCntrNode, public TConfig
 	void disable( );
 
 	// Parameters
-	void list( vector<string> &list ) const		{ chldList(mPrm,list); }
+	void list( vector<string> &list ) const	{ chldList(mPrm, list); }
 	bool present( const string &id ) const	{ return chldPresent(mPrm, id); }
 	string add( const string &id, unsigned type );
 	void del( const string &id, int full = TParamContr::RM_Exit )	{ chldDel(mPrm, id, -1, full); }

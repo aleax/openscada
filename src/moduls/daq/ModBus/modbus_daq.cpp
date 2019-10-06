@@ -149,7 +149,7 @@ string TMdContr::getStatus( )
 	    else val += TSYS::strMess(_("Next acquisition by the cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	    val += TSYS::strMess(_("Spent time: %s[%s]. Read %g(%g) registers, %g(%g) coils. Wrote %g registers, %g coils. Errors of connection %g, of response %g."),
 			tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(), tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str(),
-			numRReg,numRRegIn,numRCoil,numRCoilIn,numWReg,numWCoil,numErrCon,numErrResp);
+			numRReg, numRRegIn, numRCoil, numRCoilIn, numWReg, numWCoil, numErrCon, numErrResp);
 	}
     }
 
@@ -689,6 +689,17 @@ string TMdContr::modBusReq( string &pdu )
     return "";
 }
 
+void TMdContr::redntDataUpdate( )
+{
+    TController::redntDataUpdate();
+
+    //Cleaning the direct connection alarms
+    if(tmDelay > 0) {
+	alarmSet(TSYS::strMess(_("Connection to the data source: %s."),_("IN REDUNDANCY")), TMess::Info);
+	tmDelay = 0;
+    }
+}
+
 void *TMdContr::Task( void *icntr )
 {
     string pdu;
@@ -741,6 +752,7 @@ void *TMdContr::Task( void *icntr )
 
 	    ResAlloc res(cntr.reqRes, false);
 
+	    if(cntr.tmDelay > 0) continue;
 	    //Get coils
 	    for(unsigned iB = 0; !isStart && !isStop && iB < cntr.acqBlksCoil.size(); iB++) {
 		if(cntr.endrunReq) break;
@@ -1336,7 +1348,7 @@ void TMdPrm::vlGet( TVal &val )
     if(owner().redntUse()) return;
 
     if(val.name() == "err") {
-	if(acqErr.getVal().size()) val.setS(acqErr.getVal(),0,true);
+	if(acqErr.getVal().size()) val.setS(acqErr.getVal(), 0, true);
 	else if(lCtx && lCtx->idErr >= 0) val.setS(lCtx->getS(lCtx->idErr),0,true);
 	else val.setS("0",0,true);
     }

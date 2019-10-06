@@ -44,6 +44,7 @@
 
 #define BUF_ARCH_NM	"<buffer>"
 #define ALRM_ARCH_NM	"<alarms>"
+#define ALRM_ARCH_CH_NM	"<alarmsChange>"
 #define DB_CFG		"<cfg>"
 #define DB_NULL		"<NULL>"
 

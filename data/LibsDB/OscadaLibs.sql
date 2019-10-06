@@ -1654,7 +1654,7 @@ no;last;substitute',7,'Заміна: режим','0
 INSERT INTO tmplib_base_io VALUES('anUnif','subVar','Substitute: variable',2,32,'0',8,'Заміна: змінна','','Замена: переменная','');
 INSERT INTO tmplib_base_io VALUES('anUnif','alSup','Violations',1,40,'0
 0;1;2
-init NORMA;suppress;save on change',9,'Порушення','0
+init NORM;suppress;save on change',9,'Порушення','0
 0;1;2
 ініціювати НОРМА;придушувати;зберігати при зміні','Нарушения','0
 0;1;2
@@ -1670,7 +1670,7 @@ no;last;substitute',7,'Заміна: режим','0
 INSERT INTO tmplib_base_io VALUES('anUnifSt','subVar','Substitute: variable',2,32,'0',13,'Заміна:змінна','','Замена:переменная','');
 INSERT INTO tmplib_base_io VALUES('anUnifSt','alSup','Violations',1,40,'0
 0;1;2
-init NORMA;suppress;save on change',9,'Порушення','0
+init NORM;suppress;save on change',9,'Порушення','0
 0;1;2
 ініціювати НОРМА;придушувати;зберігати при зміні','Нарушения','0
 0;1;2
@@ -1732,25 +1732,25 @@ INSERT INTO tmplib_base_io VALUES('codeState','out','Output',1,145,'Signal|out',
 INSERT INTO tmplib_base_io VALUES('codeState','com_text','Command "Text"',0,32,'',5,'Команда "Текст"','','Команда "Текст"','');
 INSERT INTO tmplib_base_io VALUES('codeState','coms','Commands-states, rows "{code}:{State}"',0,36,'',6,'Команди-стани, рядки "{code}:{State}"','','Команды-состояния, строки "{code}:{State}"','');
 INSERT INTO tmplib_base_io VALUES('codeState','digComs','Commands',0,20,'',7,'Команди','','Команды','');
-INSERT INTO tmplib_base_io VALUES('UPS','srcAddr','Source object''s address',0,64,'',0,'Адрес исходного объекта','','Адреса вихідного об''єкту','');
-INSERT INTO tmplib_base_io VALUES('UPS','items','All items',4,33,'',1,'Все элементы','','Всі елементи','');
-INSERT INTO tmplib_base_io VALUES('UPS','alDelay','Violations delay, seconds',2,32,'0',2,'Задержка нарушений, секунды','','Затримка порушень, секунди','');
-INSERT INTO tmplib_base_io VALUES('UPS','bChL','Battery charge low',2,32,'20',3,'Заряд батареи низкий','','Заряд батареї низький','');
-INSERT INTO tmplib_base_io VALUES('UPS','bChLL','Battery charge critical',2,32,'5',4,'Заряд батареи критический','','Заряд батареї критичний','');
-INSERT INTO tmplib_base_io VALUES('UPS','inVL','Input voltage low',2,32,'210',5,'Низкое входное напряжение','','Низька вхідна напруга','');
-INSERT INTO tmplib_base_io VALUES('UPS','inVH','Input voltage high',2,32,'250',6,'Высокое входное напряжение','','Висока вхідна напруга','');
-INSERT INTO tmplib_base_io VALUES('UPS','inFLL','Input frequency too low',2,32,'40',7,'Очень низкая входная частота','','Дуже низька вхідна частота','');
-INSERT INTO tmplib_base_io VALUES('UPS','inFL','Input frequency low',2,32,'45',8,'Низкая входная частота','','Низька вхідна частота','');
-INSERT INTO tmplib_base_io VALUES('UPS','inFH','Input frequency high',2,32,'55',9,'Высокая входная частота','','Висока вхідна частота','');
-INSERT INTO tmplib_base_io VALUES('UPS','inFHH','Input frequency too high',2,32,'60',10,'Очень высокая входная частота','','Дуже висока вхідна частота','');
-INSERT INTO tmplib_base_io VALUES('UPS','loadH','Load high',2,32,'80',11,'Нагрузка высокая','','Навантаження високе','');
-INSERT INTO tmplib_base_io VALUES('UPS','loadHH','Load too high',2,32,'100',12,'Нагрузка очень высокая','','Навантаження дуже високе','');
-INSERT INTO tmplib_base_io VALUES('UPS','tH','Temperature high',2,32,'50',13,'Температура высокая','','Температура висока','');
-INSERT INTO tmplib_base_io VALUES('UPS','tHH','Temperature too high',2,32,'70',14,'Температура очень высокая','','Температура дуже висока','');
-INSERT INTO tmplib_base_io VALUES('UPS','this','Object',4,0,'',15,'Объект','','Об''єкт','');
+INSERT INTO tmplib_base_io VALUES('UPS','srcAddr','Source object''s address',0,64,'',0,'Адреса вихідного об''єкту','','Адрес исходного объекта','');
+INSERT INTO tmplib_base_io VALUES('UPS','items','All items',4,33,'',1,'Всі елементи','','Все элементы','');
+INSERT INTO tmplib_base_io VALUES('UPS','alDelay','Violations delay, seconds',2,32,'0',2,'Затримка порушень, секунди','','Задержка нарушений, секунды','');
+INSERT INTO tmplib_base_io VALUES('UPS','bChL','Battery charge low',2,32,'20',3,'Заряд батареї низький','','Заряд батареи низкий','');
+INSERT INTO tmplib_base_io VALUES('UPS','bChLL','Battery charge critical',2,32,'5',4,'Заряд батареї критичний','','Заряд батареи критический','');
+INSERT INTO tmplib_base_io VALUES('UPS','inVL','Input voltage low',2,32,'210',5,'Низька вхідна напруга','','Низкое входное напряжение','');
+INSERT INTO tmplib_base_io VALUES('UPS','inVH','Input voltage high',2,32,'250',6,'Висока вхідна напруга','','Высокое входное напряжение','');
+INSERT INTO tmplib_base_io VALUES('UPS','inFLL','Input frequency too low',2,32,'40',7,'Дуже низька вхідна частота','','Очень низкая входная частота','');
+INSERT INTO tmplib_base_io VALUES('UPS','inFL','Input frequency low',2,32,'45',8,'Низька вхідна частота','','Низкая входная частота','');
+INSERT INTO tmplib_base_io VALUES('UPS','inFH','Input frequency high',2,32,'55',9,'Висока вхідна частота','','Высокая входная частота','');
+INSERT INTO tmplib_base_io VALUES('UPS','inFHH','Input frequency too high',2,32,'60',10,'Дуже висока вхідна частота','','Очень высокая входная частота','');
+INSERT INTO tmplib_base_io VALUES('UPS','loadH','Load high',2,32,'80',11,'Навантаження високе','','Нагрузка высокая','');
+INSERT INTO tmplib_base_io VALUES('UPS','loadHH','Load too high',2,32,'100',12,'Навантаження дуже високе','','Нагрузка очень высокая','');
+INSERT INTO tmplib_base_io VALUES('UPS','tH','Temperature high',2,32,'50',13,'Температура висока','','Температура высокая','');
+INSERT INTO tmplib_base_io VALUES('UPS','tHH','Temperature too high',2,32,'70',14,'Температура дуже висока','','Температура очень высокая','');
+INSERT INTO tmplib_base_io VALUES('UPS','this','Object',4,0,'',15,'Об''єкт','','Объект','');
 INSERT INTO tmplib_base_io VALUES('UPS','SHIFR','Code',0,0,'',16,'Шифр','','Шифр','');
-INSERT INTO tmplib_base_io VALUES('UPS','NAME','Name',0,0,'',17,'Имя','','Ім''я','');
-INSERT INTO tmplib_base_io VALUES('UPS','DESCR','Description',0,0,'',18,'Описание','','Опис','');
+INSERT INTO tmplib_base_io VALUES('UPS','NAME','Name',0,0,'',17,'Ім''я','','Имя','');
+INSERT INTO tmplib_base_io VALUES('UPS','DESCR','Description',0,0,'',18,'Опис','','Описание','');
 CREATE TABLE IF NOT EXISTS 'DAQ_JavaLikeCalc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT 'system' ,"FUNC" TEXT DEFAULT '' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' ,"ITER" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 CREATE TABLE IF NOT EXISTS 'DAQ_LogicLev' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT '' ,"PRM_BD_REFL" TEXT DEFAULT '' ,"PERIOD" INTEGER DEFAULT '0' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 CREATE TABLE IF NOT EXISTS 'flb_web_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
@@ -3091,14 +3091,7 @@ INSERT INTO Trs VALUES('Data size error.','','');
 INSERT INTO Trs VALUES('The data size is not equal to pointed one.','','');
 INSERT INTO Trs VALUES('Write','','');
 INSERT INTO Trs VALUES('uh oh, no thermocouple attached!','','');
-INSERT INTO Trs VALUES('M_SP_NA_1: The SQ-mode is not implemented yet','','');
-INSERT INTO Trs VALUES('M_SP_NA_1: Items number is discrepancy to the package size','','');
-INSERT INTO Trs VALUES('M_ME_NB_1: The SQ-mode is not implemented yet','','');
-INSERT INTO Trs VALUES('M_ME_NB_1: Items number is discrepancy to the package size','','');
-INSERT INTO Trs VALUES('M_ME_TF_1: The SQ-mode is not implemented yet','','');
-INSERT INTO Trs VALUES('M_ME_TF_1: Items number is discrepancy to the package size','','');
-INSERT INTO Trs VALUES('C_SC_NA_1: The SQ-mode is not implemented yet','','');
-INSERT INTO Trs VALUES('C_SC_NA_1: Items number is discrepancy to the package size','','');
+INSERT INTO Trs VALUES('Items number is discrepancy to the package size','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_DevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO tmplib_DevLib VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
 Author: Roman Savochenko <roman@oscada.org>
@@ -3463,7 +3456,7 @@ else {
 }
 
 f_err = t_err;','','',1512240506);
-INSERT INTO tmplib_DevLib VALUES('UPS','UPS (obsolete)','','','!!!!: Moved to the template library Main. Will be removed soon
+INSERT INTO tmplib_DevLib VALUES('UPS','UPS (moved)','','','!!!!: Moved to the template library Main. Will be removed soon
 Uninterruptible power supply unifying data for provide all the data into single attribute of object type "All items" for next the control as the object with the data provide as table, alarming and allowing set writable attributes. The template aimed for using with module "System" data source as "UPS" and widget "Main.objProps" as the data presenter. The template also you can use as example for create like other data unification as complex object with properties, alarming and writing.
 
 Author: Roman Savochenko <roman@oscada.org>
@@ -4526,11 +4519,11 @@ if(t_err.length) {
 else f_err = "0: " + u_err;','','',1512240506);
 INSERT INTO tmplib_DevLib VALUES('IEC60870','IEC-60870','IEC-60870','','IEC 60870 part 5 is one from the IEC 60870 set of standards which defines systems used for telecontrol (supervisory control and data acquisition) in electrical engineering and power system automation applications. Part 5 provides a communication profile for sending basic telecontrol messages between two systems, which uses permanent directly connected data circuits between the systems.
 
-The template currently implements the part 104 (Ethernet transport) for the client and followed services: STARTDT, STOPDT, TESTFR, Ack, C_IC_NA_1 (100), C_CI_NA_1 (101), C_SC_NA_1 (45), M_SP_NA_1 (1), M_ME_NB_1 (11), M_ME_TF_1(36), C_CS_NA_1 (103).
+The template currently implements the part 104 (Ethernet transport) for the client and followed services: STARTDT, STOPDT, TESTFR, Ack, C_IC_NA_1 (100), C_CI_NA_1 (101), C_SC_NA_1 (45), M_SP_NA_1 (1), M_ME_NB_1 (11), M_ME_NC_1 (13), M_ME_TF_1 (36), C_CS_NA_1 (103). For information ones, the sequential (SQ) mode enabling and disabling are supported.
 
 For the direct definition of the requested data, the "itemsSet" attribute is provided, where they can be defined individually, with a semantic identifier and name, or in a range named by a template. Often, remote systems may not need to determine the data to transmit and send existing or generic ones on their own initiative, and if they do not, have and need to ask for something additional ones, then you need to get a map of the available parameters with the addresses these you enter in this attribute in the format ai|di|do:{IOA}[-{EndIOA}][:a[:{NameBase}]], where:
 - ai|di|do — data type, where:
-  - "ai" — analog inputs, transmitted by the message M_ME_NB_1, M_ME_TF_1 and requested by C_SC_NA_1;
+  - "ai" — analog inputs, transmitted by the message M_ME_NB_1, M_ME_NC_1, M_ME_TF_1 and requested by C_SC_NA_1;
   - "di" — discrete inputs, transmitted by the message M_SP_NA_1 and requested by C_SC_NA_1;
   - "do" — discrete outputs, transmitted by C_SC_NA_1.
 - {IOA} — parameter address of the range begin;
@@ -4551,14 +4544,14 @@ In the template for the first time used the not requesting mode of an output tra
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Ustijancev Michael
-Version: 1.2.0
+Version: 1.3.0
 License: GPLv2','IEC 60870 у частині 5 є одним з набору стандартів IEC 60870 який визначає системи, що використовуються у віддаленому контролі (телемеханіці — диспетчерському контролі та зборі даних) у інженерній електриці та у застосунках автоматизації енергетичних систем. Частина 5 надає комунікаційний профіль для надсилання базових повідомлень віддаленого контролю між двома системами, який використовує постійні прямі підключення даних між системами.
 
-Шаблон наразі реалізує частину 104 (Ethernet транспорт) для клієнту та наступних сервісів: STARTDT, STOPDT, TESTFR, Ack, C_IC_NA_1 (100), C_CI_NA_1 (101), C_SC_NA_1 (45), M_SP_NA_1 (1), M_ME_NB_1 (11), C_CS_NA_1 (103).
+Шаблон наразі реалізує частину 104 (Ethernet транспорт) для клієнту та наступних сервісів: STARTDT, STOPDT, TESTFR, Ack, C_IC_NA_1 (100), C_CI_NA_1 (101), C_SC_NA_1 (45), M_SP_NA_1 (1), M_ME_NB_1 (11), M_ME_NC_1 (13), M_ME_TF_1 (36), C_CS_NA_1 (103). Для інформаційних сервісів підтримується ввімкнення та вимкнення послідовного (SQ) режиму.
 
 Для прямого визначення запитуваних даних передбачено атрибут "itemsSet", де вони можуть визначатися як окремо, зі смисловим ідентифікатором та назвою, або за діапазоном із найменуванням по шаблону. Часто віддалені системи можуть не потребувати визначення даних для передачі та надсилають наявні або основні зі своєї ініціативи та якщо вони цього не роблять, мають та потрібно запитати щось додаткове то вам треба отримати мапу наявних параметрів з адресами які й ввести у цьому атрибуті записами у форматі ai|di|do:{IOA}[-{EndIOA}][:a[:{NameBase}]], де:
 - ai|di|do — тип даних, де:
-  - "ai" — аналогові входи, передані повідомленням M_ME_NB_1 та запитані C_SC_NA_1;
+  - "ai" — аналогові входи, передані повідомленням M_ME_NB_1, M_ME_NC_1, M_ME_TF_1 та запитані C_SC_NA_1;
   - "di" — дискретні входи, передані повідомленням M_SP_NA_1 та запитані C_SC_NA_1;
   - "do" — дискретні виходи, передавані командою C_SC_NA_1.
 - {IOA} — адреса параметру або початок діапазону;
@@ -4579,7 +4572,7 @@ License: GPLv2','IEC 60870 у частині 5 є одним з набору с�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Устьянцев Михайло
-Версія: 1.2.0
+Версія: 1.3.0
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 using Special.FLibSYS;
 
@@ -4616,7 +4609,7 @@ if(itemsSet != itemsSet_) {
 			iIt_IOA = iIt_IOA.slice(0,iIt_EndIOA).toInt(0);
 		}
 		else { iIt_IOA = iIt_EndIOA = iIt_IOA.toInt(0); iIt_sDscr = iIt_nmBase.length; }
-		if(iIt_tp == "ai")			{ iIt_nmBase = iIt_nmBase.length ? iIt_nmBase : "AI"; iIt_vtp = "integer,ro"; }
+		if(iIt_tp == "ai")			{ iIt_nmBase = iIt_nmBase.length ? iIt_nmBase : "AI"; iIt_vtp = "real,ro"; }
 		else if(iIt_tp == "di")	{ iIt_nmBase = iIt_nmBase.length ? iIt_nmBase : "DI"; iIt_vtp = "boolean,ro"; }
 		else if(iIt_tp == "do")	{ iIt_nmBase = iIt_nmBase.length ? iIt_nmBase : "DO"; iIt_vtp = "boolean"; }
 		else continue;
@@ -4672,15 +4665,15 @@ else {
 			bufIn = "";
 			break;
 		}
-		if(bufIn.length < 6 || (bufIn.length-2) < seqSz)	break;	//Not full, wait
+		if(bufIn.length < 6 || (bufIn.length-2) < seqSz)	break;		//Not full, wait
 
 		SYS.messDebug("/IEC60870",tr("Good input sequence")+": "+SYS.strDecode(bufIn.slice(0,seqSz+2),"Bin"," "));
 
 		cntRx_ = -1;
 		sB1 = bufIn.charCodeAt(2);
 		if((sB1&0x3) == 0x3 && (sB1&0x40))			TESTFR_Act = true;	//U (TESTFR, Act)
-		else if((sB1&0x3) == 0x3 && (sB1&0x80))	t1__ = 0;					//U (TESTFR, Con)
-		else if((sB1&0x3) == 0x3 && (sB1&0x08)) {	//U (STARTDT, Con)
+		else if((sB1&0x3) == 0x3 && (sB1&0x80))	t1__ = 0;				//U (TESTFR, Con)
+		else if((sB1&0x3) == 0x3 && (sB1&0x08)) {								//U (STARTDT, Con)
 			STARTDT_con = true;
 			t1_ = t1__ = t2_ = t3_ = 0;
 			cntTx = cntRx = 0;
@@ -4697,29 +4690,32 @@ else {
 			cntRx_ = bufIn.charCodeAt(5)*128 + (bufIn.charCodeAt(4)>>1);
 			ASDU_id = bufIn.charCodeAt(6);
 			ASDU_els = bufIn.charCodeAt(7);			//7=SQ, 0...6=number
-			ASDU_reas = bufIn.charCodeAt(8);		//7=TEST, 6=P/N, 0...5=number
+			ASDU_reas = bufIn.charCodeAt(8);			//7=TEST, 6=P/N, 0...5=number
 			ASDU_addr = bufIn.charCodeAt(9);
 			ASDU_OA = bufIn.charCodeAt(11)*256 + bufIn.charCodeAt(10);
 			//destAddr = ASDU_addr, destOA = ASDU_OA;
+			isSQ = ASDU_els&0x80;
+			ASDU_els = ASDU_els&0x7F;
+
 			cntRx = (cntRx+1)&0x7FFF;
 			t2_ = 1/f_frq;	
 			w_++;
 
 			if(ASDU_id == 100) {
 				if(ASDU_reas == 7)			C_IC_NA_1con = true;	//ActCon
-				else if(ASDU_reas == 10)	C_IC_NA_1 = -1;// 1;				//ActTerm, repeate after 1 second
+				else if(ASDU_reas == 10)	C_IC_NA_1 = -1;// 1;	//ActTerm, repeate after 1 second
 			}
 			else if(ASDU_id == 101) {
 				if(ASDU_reas == 7)			C_CI_NA_1con = true;	//ActCon
-				//else if(ASDU_reas == 10)	C_CI_NA_1 = false;		//ActTerm, repeate after some timeout
+				//else if(ASDU_reas == 10)	C_CI_NA_1 = false;	//ActTerm, repeate after some timeout
 			}
 			else if(ASDU_id == 103 && ASDU_reas == 7)	C_CS_NA_1con = true;
 			else if(ASDU_id == 1) {	//M_SP_NA_1, Single-point information
-				if(ASDU_els&0x80) SYS.messDebug("/IEC60870",tr("M_SP_NA_1: The SQ-mode is not implemented yet"));
-				else if((10+ASDU_els*4) != seqSz)	SYS.messDebug("/IEC60870",tr("M_SP_NA_1: Items number is discrepancy to the package size"));
-				else for(iEl = 0, iOff = 12; iEl < ASDU_els; iEl++, iOff+=4) {
-					IOA = (bufIn.charCodeAt(iOff+2)<<16) + (bufIn.charCodeAt(iOff+1)<<8) + bufIn.charCodeAt(iOff);
-					SIQ = bufIn.charCodeAt(iOff+3);
+				if((10+4+(ASDU_els-1)*(isSQ?1:4)) != seqSz)	SYS.messDebug("/IEC60870","M_SP_NA_1: "+tr("Items number is discrepancy to the package size"));
+				else for(iEl = 0, iOff = 12; iEl < ASDU_els; iEl++, iOff += 1) {
+					if(!isSQ || !iEl)	{ IOA = (bufIn.charCodeAt(iOff+2)<<16) + (bufIn.charCodeAt(iOff+1)<<8) + bufIn.charCodeAt(iOff); iOff += 3; }
+					else IOA++;
+					SIQ = bufIn.charCodeAt(iOff);
 					aid = "di"+IOA;
 					if(items[aid].isEVal()) {
 						items[aid] = itW = new Object();
@@ -4732,13 +4728,13 @@ else {
 				}
 			}
 			else if(ASDU_id == 11) {	//M_ME_NB_1, Measured value, scaled value
-				if(ASDU_els&0x80) SYS.messDebug("/IEC60870",tr("M_ME_NB_1: The SQ-mode is not implemented yet"));
-				else if((10+ASDU_els*6) != seqSz)	SYS.messDebug("/IEC60870",tr("M_ME_NB_1: Items number is discrepancy to the package size"));
-				else for(iEl = 0, iOff = 12; iEl < ASDU_els; iEl++, iOff += 6) {
-					IOA = (bufIn.charCodeAt(iOff+2)<<16) + (bufIn.charCodeAt(iOff+1)<<8) + bufIn.charCodeAt(iOff);
-					val = (bufIn.charCodeAt(iOff+4)<<8) + bufIn.charCodeAt(iOff+3);
+				if((10+6+(ASDU_els-1)*(isSQ?3:6)) != seqSz)	SYS.messDebug("/IEC60870","M_ME_NB_1: "+tr("Items number is discrepancy to the package size"));
+				else for(iEl = 0, iOff = 12; iEl < ASDU_els; iEl++, iOff += 3) {
+					if(!isSQ || !iEl)	{ IOA = (bufIn.charCodeAt(iOff+2)<<16) + (bufIn.charCodeAt(iOff+1)<<8) + bufIn.charCodeAt(iOff); iOff += 3; }
+					else IOA++;
+					val = (bufIn.charCodeAt(iOff+1)<<8) + bufIn.charCodeAt(iOff);
 					if(val > 32767) val -= 65536;
-					SIQ = bufIn.charCodeAt(iOff+5);
+					SIQ = bufIn.charCodeAt(iOff+2);
 					aid = "ai"+IOA;
 
 					if(items[aid].isEVal()) {
@@ -4751,13 +4747,33 @@ else {
 					if((aO=this[aid])) aO.set(items[aid].val, 0, 0, true);
 				}
 			}
+			else if(ASDU_id == 13) {	//M_ME_NC_1, Measured value, short real value
+				if((10+8+(ASDU_els-1)*(isSQ?5:8)) != seqSz)	SYS.messDebug("/IEC60870","M_ME_NC_1: "+tr("Items number is discrepancy to the package size"));
+				else for(iEl = 0, iOff = 12; iEl < ASDU_els; iEl++, iOff += 5) {
+					if(!isSQ || !iEl)	{ IOA = (bufIn.charCodeAt(iOff+2)<<16) + (bufIn.charCodeAt(iOff+1)<<8) + bufIn.charCodeAt(iOff); iOff += 3; }
+					else IOA++;
+					val = floatMergeWord(bufIn.charCodeAt(iOff+1)*256+bufIn.charCodeAt(iOff), bufIn.charCodeAt(iOff+3)*256+bufIn.charCodeAt(iOff+2));
+					SIQ = bufIn.charCodeAt(iOff+4);
+					aid = "ai"+IOA;
+
+					if(items[aid].isEVal()) {
+						items[aid] = itW = new Object();
+						itW.descr = "AI["+IOA+"]";
+						itW.wr = false; itW.alarm = 0;
+					}
+
+					items[aid].val = val;
+					items[aid].SIQ = SIQ;	//For specific quality processing
+					if((aO=this[aid]))	aO.set(items[aid].val, 0, 0, true);
+				}
+			}
 			else if(ASDU_id == 36) {	//M_ME_TF_1, Measured value, short real value with timestamp
-				if(ASDU_els&0x80) SYS.messDebug("/IEC60870",tr("M_ME_TF_1: The SQ-mode is not implemented yet"));
-				else if((10+ASDU_els*15) != seqSz)	SYS.messDebug("/IEC60870",tr("M_ME_TF_1: Items number is discrepancy to the package size"));
-				else for(iEl = 0, iOff = 12; iEl < ASDU_els; iEl++, iOff += 15) {
-					IOA = (bufIn.charCodeAt(iOff+2)<<16) + (bufIn.charCodeAt(iOff+1)<<8) + bufIn.charCodeAt(iOff);
-					val = floatMergeWord(bufIn.charCodeAt(iOff+3)*256+bufIn.charCodeAt(iOff+4), bufIn.charCodeAt(iOff+5)*256+bufIn.charCodeAt(iOff+6));
-					SIQ = bufIn.charCodeAt(iOff+7);
+				if((10+15+(ASDU_els-1)*(isSQ?12:15)) != seqSz)	SYS.messDebug("/IEC60870","M_ME_TF_1: "+tr("Items number is discrepancy to the package size"));
+				else for(iEl = 0, iOff = 12; iEl < ASDU_els; iEl++, iOff += 12) {
+					if(!isSQ || !iEl)	{ IOA = (bufIn.charCodeAt(iOff+2)<<16) + (bufIn.charCodeAt(iOff+1)<<8) + bufIn.charCodeAt(iOff); iOff += 3; }
+					else IOA++;
+					val = floatMergeWord(bufIn.charCodeAt(iOff+1)*256+bufIn.charCodeAt(iOff), bufIn.charCodeAt(iOff+3)*256+bufIn.charCodeAt(iOff+2));
+					SIQ = bufIn.charCodeAt(iOff+4);
 					aid = "ai"+IOA;
 
 					if(items[aid].isEVal()) {
@@ -4766,9 +4782,9 @@ else {
 						itW.wr = false; itW.alarm = 0;
 					}
 					// Getting the timestamp
-					ttm_ms = bufIn.charCodeAt(iOff+9)*256 + bufIn.charCodeAt(iOff+8);
-					ttm = SYS.mktime(ttm_ms/1000, bufIn.charCodeAt(iOff+10)&0x3F, bufIn.charCodeAt(iOff+11)&0x1F,
-						bufIn.charCodeAt(iOff+12)&0x1F, (bufIn.charCodeAt(iOff+13)&0x0F)-1, 2000+(bufIn.charCodeAt(iOff+13)&0x7F));
+					ttm_ms = bufIn.charCodeAt(iOff+6)*256 + bufIn.charCodeAt(iOff+5);
+					ttm = SYS.mktime(ttm_ms/1000, bufIn.charCodeAt(iOff+7)&0x3F, bufIn.charCodeAt(iOff+8)&0x1F,
+						bufIn.charCodeAt(iOff+9)&0x1F, (bufIn.charCodeAt(iOff+10)&0x0F)-1, 2000+(bufIn.charCodeAt(iOff+11)&0x7F));
 
 					items[aid].val = val;
 					items[aid].SIQ = SIQ;	//For specific quality processing
@@ -4779,11 +4795,11 @@ else {
 				}
 			}
 			else if(ASDU_id == 45) {	//C_SC_NA_1, Single-point confirm
-				if(ASDU_els&0x80) SYS.messDebug("/IEC60870", tr("C_SC_NA_1: The SQ-mode is not implemented yet"));
-				else if((10+ASDU_els*4) != seqSz)	SYS.messDebug("/IEC60870", tr("C_SC_NA_1: Items number is discrepancy to the package size"));
-				else for(iEl = 0, iOff = 12; iEl < ASDU_els; iEl++, iOff+=4) {
-					IOA = (bufIn.charCodeAt(iOff+2)<<16) + (bufIn.charCodeAt(iOff+1)<<8) + bufIn.charCodeAt(iOff);
-					SIQ = bufIn.charCodeAt(iOff+3);
+				if((10+4+(ASDU_els-1)*(isSQ?1:4)) != seqSz)	SYS.messDebug("/IEC60870", "C_SC_NA_1: "+tr("Items number is discrepancy to the package size"));
+				else for(iEl = 0, iOff = 12; iEl < ASDU_els; iEl++, iOff += 1) {
+					if(!isSQ || !iEl)	{ IOA = (bufIn.charCodeAt(iOff+2)<<16) + (bufIn.charCodeAt(iOff+1)<<8) + bufIn.charCodeAt(iOff); iOff += 3; }
+					else IOA++;
+					SIQ = bufIn.charCodeAt(iOff);
 					aid = "do" + IOA;
 					items[aid].val = SIQ&0x01;
 					items[aid].SIQ = SIQ;	//For a specific quality processing
@@ -4899,7 +4915,7 @@ if(t_err.length) {
 	}
 	f_err = t_err;
 }
-else f_err = "0";','','',1568278655);
+else f_err = "0";','','',1570108580);
 INSERT INTO tmplib_DevLib VALUES('SSCP','Shark Slave Communication Protocol','','','Shark Slave Communication Protocol from EnergoCentrum PLUS, s.r.o.
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Costumer Faster CZ (http://faster.cz)
@@ -6740,7 +6756,7 @@ else {
 }
 
 //Alarms forming
-if(tErr.toInt() && !f_err.toInt() && this.cntr().status().toInt())	return;
+if(tErr.toInt() && tErr.toInt() != f_err.toInt() && this.cntr().status().toInt())	return;
 if(tErr.toInt() && tErr.toInt() != f_err.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), levErr);
 else if(f_err.toInt() && !tErr.toInt())			this.alarmSet(DESCR+": "+tr("NORMA"), 1);
 f_err = tErr;','','',1561317371);
@@ -6882,7 +6898,7 @@ if(!tErr) {
 //Alarms forming
 if(alSup)	f_err = "0";
 else {
-	if(tErr.toInt() && !f_err.toInt() && this.cntr().status().toInt())	return;
+	if(tErr.toInt() && tErr.toInt() != f_err.toInt() && this.cntr().status().toInt())	return;
 	if(tErr.toInt() && tErr.toInt() != f_err.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), levErr);
 	else if(f_err.toInt() && !tErr.toInt())			this.alarmSet(DESCR+": "+tr("NORMA"), 1);
 	f_err = tErr;
@@ -6906,7 +6922,7 @@ Functions:
   - plcImit, plcImitIn [IN] — IOs of the simple imitation;
   - levErr, tErr [IN|OUT] — alarm level [-7...0] and text of the error (the attribute "err" format).
 - Simple substitution for the variable subVar at the error (not valid) input variable (EVAL) in the modes: "no", "last" and "substitute".
-- Processing the result variable var for violation some borders and criteria, generating the alarms and proper setting the attribute err. The alarm borders can have some hysteresis HystBnd, can be delayed for the time alDelay and can be worked in the modes alSup: "init NORMA", "suppress", "save on change". Next borders and criteria are provided:
+- Processing the result variable var for violation some borders and criteria, generating the alarms and proper setting the attribute err. The alarm borders can have some hysteresis HystBnd, can be delayed for the time alDelay and can be worked in the modes alSup: "init NORM", "suppress", "save on change". Next borders and criteria are provided:
   - missing for data or connection with source at the EVAL input value — error code 1 and alarm level 5;
   - exceeding the input value of the hardware border — error code 1,2 and alarm level 5;
   - exceeding the end variable of the alarm border [aMin...aMax] — error code 3,4 and alarm level 4;
@@ -7044,7 +7060,7 @@ else {
 //Alarms forming
 if(alSup == 1)	f_err = "0";
 else {
-	if(tErr.toInt() && !f_err.toInt() && this.cntr().status().toInt())	return;
+	if(tErr.toInt() && tErr.toInt() != f_err.toInt() && this.cntr().status().toInt())	return;
 	if(alDelay > 0 && conDelay_ <= 0 && tErr.toInt() != f_err.toInt())	tErr1 = tErr.toInt();
 	if(alDelay > 0 && conDelay_ > 0 && tErr.toInt() != tErr1)	{ conDelay_ = 0; tErr1 = tErr.toInt(); }
 	if(alDelay > 0 && conDelay_ < alDelay){ conDelay_ += 1/f_frq; return; }
@@ -7255,7 +7271,7 @@ else {
 //Alarms forming
 if(alSup == 1)	f_err = "0";
 else {
-	if(tErr.toInt() && !f_err.toInt() && this.cntr().status().toInt())	return;
+	if(tErr.toInt() && tErr.toInt() != f_err.toInt() && this.cntr().status().toInt())	return;
 	if(alDelay > 0 && conDelay_ <= 0 && tErr.toInt() != f_err.toInt())	tErr1 = tErr.toInt();
 	if(alDelay > 0 && conDelay_ > 0 && tErr.toInt() != tErr1)	{ conDelay_ = 0; tErr1 = tErr.toInt(); }
 	if(alDelay > 0 && conDelay_ < alDelay){ conDelay_ += 1/f_frq; return; }
@@ -7319,10 +7335,17 @@ else {
 if(!f_err.toInt() && tErr.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), -4);
 else if(f_err.toInt() && !tErr.toInt())	this.alarmSet(DESCR+": "+tr("NORMA"), 1);
 f_err = tErr;','','',1561317477);
-INSERT INTO tmplib_base VALUES('SNMP','SNMP','','','SNMP unifying data is to provide all the data into the single attribute "All items" of the object type for next control as object with the data providing as a table, alarming and allowing to set for writable attributes. The template designed for using with the data source module "SNMP" as an "SNMP device" and the widget "Main.objProps" as the data presenter. The template you can use also as an example to create other data unification as the complex object with properties, alarming and writing.
+INSERT INTO tmplib_base VALUES('SNMP','Network devices by SNMP','Мережеві пристрої за SNMP','Сетевые устройства по SNMP','Data combination of a device, accessible by the protocol SNMP, in a complex object of the attribute "All items". The template designed to use together with the DAQ-module "SNMP" and to represent this data by the frame "Object properties" as a complex object with properties, signalling at single borders and writing. Considering the great specificity and variety of SNMP-accessible devices, this template is actually a billet and an example of creating a template based on it to a corresponding device with a specific to it processing of input properties, forming of violations and write capability.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.1','','',10,0,'JavaLikeCalc.JavaScript
+Sponsored by: PAC HARTRON
+Version: 1.0.1
+License: GPLv2','Об''єднання даних пристрою, доступного за протоколом SNMP, у комплексному об''єкті атрибуту "Всі елементи". Шаблон розроблено для використання із модулем джерела даних "SNMP" та представлення цих даних кадром "Властивості об''єкту" як комплексний об''єкт із властивостями, сигналізацією за окремими границями та записом. Враховуючи велику специфіку та розмаїття пристроїв доступних за протоколом SNMP, цей шаблон фактично є заготовкою та прикладом створення на його основі шаблону до відповідного пристрою із специфічною до нього обробкою вхідних властивостей, формування порушень та можливістю запису.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Спонсорування: ПАС ХАРТРОН
+Версія: 1.0.1
+Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	{ srcPrm = false; items = new Object(); }
 
 alLev = 0;
@@ -7404,7 +7427,7 @@ tErr = tErr.length ? ""+alLev+":"+tErr : "0";
 //Alarms forming
 if(tErr.toInt() && tErr.toInt() != f_err.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), -(2+alLev));
 else if(f_err.toInt() && !tErr.toInt())			this.alarmSet(DESCR+": "+tr("NORMA"), 1);
-f_err = tErr;','','',1561317493);
+f_err = tErr;','','',1570376926);
 INSERT INTO tmplib_base VALUES('codeState','Code state','Стан за кодом','Состояние по коду','A variant of the common, representative and unified template of the block for union of Discrete parameters, expanded by more than two states and three commands that can be encoded by an integer value.
 The template forms a structure of parameter (complex tag) which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object.
 
@@ -7507,7 +7530,7 @@ else {
 }
 
 //Alarms forming
-if(tErr.toInt() && !f_err.toInt() && this.cntr().status().toInt())	return;
+if(tErr.toInt() && tErr.toInt() != f_err.toInt() && this.cntr().status().toInt())	return;
 if(tErr.toInt() && tErr.toInt() != f_err.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), levErr);
 else if(f_err.toInt() && !tErr.toInt())			this.alarmSet(DESCR+": "+tr("NORMA"), 1);
 f_err = tErr;','','',1561317508);
@@ -7821,10 +7844,17 @@ else {
 	SMSState = tr("Sent %1. In queue %2.").replace("%1",SMSSentN.toString()).replace("%2",SMSQueueN.toString());
 	if(SMSErr.length) SMSState += " "+tr("Error: %1.").replace("%1",SMSErr);
 }','','',1550428714);
-INSERT INTO tmplib_base VALUES('UPS','','','','Uninterruptible power supply unifying data for provide all the data into single attribute of object type "All items" for next the control as the object with the data provide as table, alarming and allowing set writable attributes. The template aimed for using with module "System" data source as "UPS" and widget "Main.objProps" as the data presenter. The template also you can use as example for create like other data unification as complex object with properties, alarming and writing.
+INSERT INTO tmplib_base VALUES('UPS','Uninterruptible Power Supply','Джерело Безперебійного Живлення','Источник Бесперебойного Питания','Data combination of the Uninterruptible Power Supply in a complex object of the attribute "All items". The template designed to use together with the DAQ-module "System" in the part "UPS" and to represent this data by the frame "Object properties" as a complex object with properties, signalling at single borders and writing.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.1','','',10,0,'JavaLikeCalc.JavaScript
+Sponsored by: DIYA LTD
+Version: 1.1.2
+License: GPLv2','Об''єднання даних Джерела Безперебійного Живлення у комплексному об''єкті атрибуту "Всі елементи". Шаблон розроблено для використання із модулем джерела даних "Система" у частині "ДБЖ" та представлення цих даних кадром "Властивості об''єкту" як комплексний об''єкт із властивостями, сигналізацією за окремими границями та записом.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Спонсоровано: ТОВ "ДІЯ"
+Версія: 1.1.2
+Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	{ srcPrm = false; items = new Object(); conDelay_ = 0; }
 
 alLev = 0;
@@ -7931,9 +7961,9 @@ if(alDelay > 0 && conDelay_ < alDelay){ conDelay_ += 1/f_frq; return; }
 if(tErr.toInt() && tErr.toInt() != f_err.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), -(2+alLev));
 else if(f_err.toInt() && !tErr.toInt())			this.alarmSet(DESCR+": "+tr("NORMA"), 1);
 f_err = tErr;
-conDelay_ = 0;','','',1561317526);
+conDelay_ = 0;','','',1570376879);
 CREATE TABLE IF NOT EXISTS 'lib_Controllers' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO lib_Controllers VALUES('prescr','Prescriptions manager (obsolete)','','','!!!!: Moved and replaced by the template PrescrTempl.manager. Will be removed soon
+INSERT INTO lib_Controllers VALUES('prescr','Prescriptions manager (moved)','','','!!!!: Moved and replaced by the template PrescrTempl.manager. Will be removed soon
 Prescriptions manager and controller. Used in addition with user interface''s cadre "Prescription: editing" and "Prescription: runtime" for which into a parameter of the controller you must pass that parameters: "mode", "prog", "startTm", "curCom", "comLs", "work".
 
 Author: Roman Savochenko <roman@oscada.org>
@@ -8424,7 +8454,7 @@ Version: 1.0.0','','',1,10,0,'//clc=0;
 //Close value archive
 //Special.FLibSYS.avalClose(a_id);
 //p_tm=c_tm;','','',1560101785);
-INSERT INTO lib_Controllers VALUES('ntfDispatch','Notifications dispatcher (obsolete)','','','!!!!: Replaced by the complex template Main.ntf. Will be removed soon
+INSERT INTO lib_Controllers VALUES('ntfDispatch','Notifications dispatcher (replaced)','','','!!!!: Replaced by the complex template Main.ntf. Will be removed soon
 Notifications dispatcher by EMail and SMS for pointed messages of OpenSCADA messages buffer.
 
 Author: Roman Savochenko <roman@oscada.org>
@@ -11612,7 +11642,7 @@ dP = F.isEVal() ? 0 : F/33;
 DS = 1+(rand(0.2)-0.1);
 ',1561831602);
 CREATE TABLE IF NOT EXISTS 'UserProtocol_uPrt' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"DAQTmpl" TEXT DEFAULT '' ,"WaitReqTm" INTEGER DEFAULT '0' ,"InPROG" TEXT DEFAULT '' ,"OutPROG" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '0' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
-INSERT INTO UserProtocol_uPrt VALUES('SMS','SMS (obsolete)','','','!!!!: Replaced by the complex template Main.ntf. Will be removed soon
+INSERT INTO UserProtocol_uPrt VALUES('SMS','SMS (replaced)','','','!!!!: Replaced by the complex template Main.ntf. Will be removed soon
 Provides operations with SMS by GSM-modem connected as serial device. For now supported only sending SMS messages to a number of remote cell phone or GSM modem.
 Author: Roman Savochenko <roman@oscada.org>
 Version: 2.1.1','','',1,'',0,'','JavaLikeCalc.JavaScript
@@ -12125,7 +12155,7 @@ if(resp.length > 9)	{ io.setAttr("err","4:"+tr("Respond too long, possible conti
 for(CS = 0, i = 1; i < resp.length-1; i++)	CS += resp.charCodeAt(i);
 if(resp.charCodeAt(resp.length-1) != (CS&0xFF))	{ io.setAttr("err","5:"+tr("CRC error")); return; }
 io.setText(resp.slice(1,resp.length-1));',0,1509287419);
-INSERT INTO UserProtocol_uPrt VALUES('SMTP','SMTP (obsolete)','SMTP','','!!!!: Replaced by the complex template Main.ntf. Will be removed soon
+INSERT INTO UserProtocol_uPrt VALUES('SMTP','SMTP (replaced)','SMTP','','!!!!: Replaced by the complex template Main.ntf. Will be removed soon
 Provides EMAIL sending by the protocol SMTP.
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','Provides EMAIL sending by the protocol SMTP.

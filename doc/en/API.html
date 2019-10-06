@@ -277,6 +277,7 @@ Information variables of the program:
 <li> <i>SERV_TASK_PER</i> — Service task period (10 seconds)</li>
 <li> <i>BUF_ARCH_NM</i> — The archive buffer name ("&lt;buffer&gt;").</li>
 <li> <i>ALRM_ARCH_NM</i> — The alarms table name ("&lt;alarms&gt;").</li>
+<li> <i>ALRM_ARCH_CH_NM</i> — The alarms table name ("&lt;alarmsChange&gt;") just for changing.</li>
 <li> <i>__func__</i> — The full name of the calling function.</li>
 <li> <i>vmin (a,b)</i> — Determination of the minimum value.</li>
 <li> <i>vmax (a,b)</i> — Definition of the maximum value.</li></ul>
@@ -1163,8 +1164,8 @@ Structure of template links (class — TPrmTempl::Impl::SLnk):
 <li> <i>void setActMess( TMArchivator *a, bool val );</i> — Setting of the messages archivator <i>a</i> into the active status <i>val</i>. Active archivator will be provided by the subsystem with the flow of messages.</li>
 <li> <i>void setActVal( TVArchive *a, bool val );</i> — Setting of the value archive <i>a</i> into the active status <i>val</i>. Active archive will be provided by the subsystem with the periodic flow of values (is determined by the periodicity of the archive).</li>
 <li> <i>AutoHD&lt;TTypeArchivator&gt; at( const string &amp;name );</i> — Connection/addressing to the archiver's type (module) <i>name</i>.</li>
-<li> <i>void messPut( time_t tm, int utm, const string &amp;categ, int8_t level, const string &amp;mess, const string &amp;arch = "", bool force = false );</i> — Location of the value <i>mess</i> with the level <i>level</i> of the category <i>categ</i> and time <i>tm+utm</i> into the buffer, and then into the messages' archive or direct to the pointed archivators <i>arch</i> (separated by symbol ';'). <i>force</i> for direct writing to the archivator omit the redundancy.</li>
-<li> <i>void messPut( const vector&lt;TMess::SRec&gt; &amp;recs, const string &amp;arch = "", bool force = false );</i> — Location of the group of values <i>recs</i> into the buffer, and then into the messages' archive or direct to the pointed archivators <i>arch</i> (separated by symbol ';'). <i>force</i> for direct writing to the archivator omit the redundancy.</li>
+<li> <i>void messPut( time_t tm, int utm, const string &amp;categ, int8_t level, const string &amp;mess, const string &amp;arch = "" );</i> — Location of the value <i>mess</i> with the level <i>level</i> of the category <i>categ</i> and time <i>tm+utm</i> into the buffer, and then into the messages' archive or direct to the pointed archivators <i>arch</i> (separated by symbol ';').</li>
+<li> <i>void messPut( const vector&lt;TMess::SRec&gt; &amp;recs, const string &amp;arch = "" );</i> — Location of the group of values <i>recs</i> into the buffer, and then into the messages' archive or direct to the pointed archivators <i>arch</i> (separated by symbol ';').</li>
 <li> <i>time_t messGet( time_t bTm, time_t eTm, vector&lt;TMess::SRec&gt; &amp;recs, const string &amp;category = "", int8_t level = TMess::Debug, const string &amp;arch = "", time_t upTo = 0 );</i> — Values' request <i>reqs</i> for the specified period of time <i>bTm, eTm</i> for the specified category (by the template) <i>category</i> and level <i>level</i> from the archivators <i>arch</i> (separated by symbol ';'). Return time of the request stop, useful for continue from the point.</li>
 <li> <i>time_t messBeg( const string &amp;arch = "" );</i> — Beginning of the messages' archive as a whole or for the specified archiver <i>arch</i>.</li>
 <li> <i>time_t messEnd( const string &amp;arch = "" );</i> — End of the messages' archive as a whole or for the specified archiver <i>arch</i>.</li>
@@ -2284,7 +2285,7 @@ Error values for the different data types (define):
 </p><p>The container can also gather into the single request several information structures and dynamic parts, thereby optimizing the time of the request especially on the high latency network interfaces.
 </p><p>Overall control interface is built from individual components of the dynamic tree. Hierarchical inheritance from the TCntrNode object allows to realize multi-level addition of the configuration of the control interface. General view of the dynamic node tree is shown in Fig. 8.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="360" src="files/800px-Oscada_UserOM.png" srcset="/wiki/images/6/67/Oscada_UserOM.png 1.5x, /wiki/images/6/67/Oscada_UserOM.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM.png" title="Enlarge" /></div>Fig. 8. Example of a dynamic tree of the nodes in OpenSCADA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="360" src="files/800px-Oscada_UserOM.png" srcset="/wiki/images/6/67/Oscada_UserOM.png 1.5x, /wiki/images/6/67/Oscada_UserOM.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM.png" title="Збільшити" /></div>Fig. 8. Example of a dynamic tree of the nodes in OpenSCADA.</div></div></div></div>
 <p>System's nodes, containing data for the control interface of the system must also be connected to the dynamic tree of objects. 
 </p><p>Connection of the node to the dynamic tree is done as follows:
 </p>

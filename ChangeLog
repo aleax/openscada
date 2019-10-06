@@ -1,3 +1,20 @@
+2019-10-06 Roman (stable)
+- FIX:DB.LibsDB.OscadaLibs: Some original messages are fixed.
+    FIX:base.UPS: Fixed for the translation inverting.
+    base.{UPS,SNMP}: Revised during the documenting.
+    !!:DevLib.IEC60870: Appended for the package M_ME_NC_1 support, expanded for the SQ-mode support,
+	texted for M_ME_TF_1 and M_ME_NC_1, M_ME_NB_1 in the SQ-mode, set AI to "real".
+    FIX:base.{digAlarm,manInUnif,anUnif,anUnifSt,codeState}: Fixed for blocking individual EVAL violations at a global PLC-object violation.
+- !!:DB.LibsDB.vcaBase: The "Main" library appended of the alarms widget "Object properties (objProps)".
+- SYS: The special archive's name appended for the name ALRM_ARCH_CH_NM ("<alarmsChange>") of just changing the presented alarms.
+- !!!!:Archives: The service "/serv/mess" in put is improved to independent writing to the archive and just to update the presented alarms.
+    !!: TArchiveS::messPut() cleaned from the argument "force".
+    !!: Messages of the function's Mess->put() macroses "message", "mess_info", ... directly reordered to the buffer writing and
+	to prevent of direct writing to the archives.
+- !:DAQ.ModBus: Appended for the test behavior of closing PLC alarms at it moving to the redundancy.
+    Prevented from spare coils requesting after wrong asynchronous writing.
+
+
 2019-09-22 Roman (stable)
 - !:FIX:DB.LibsDB.OscadaLibs: DevLib.IEC60870: Cleaned in treat the output transport timeouts setting directly in the template
     due to use the not requesting mode.

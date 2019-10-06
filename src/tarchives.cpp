@@ -244,7 +244,7 @@ string TArchiveS::valAdd( const string &iid, const string &idb )
     return chldAdd(mAval, new TVArchive(TSYS::strEncode(sTrm(iid),TSYS::oscdID),idb,&aValE()));
 }
 
-string TArchiveS::optDescr(  )
+string TArchiveS::optDescr( )
 {
     return TSYS::strMess(_(
 	"======================== Subsystem \"Archives-History\" options ===================\n"
@@ -420,7 +420,7 @@ void TArchiveS::perSYSCall( unsigned int cnt )
     TSubSYS::perSYSCall(cnt);
 }
 
-void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, const string &mess, const string &arch, bool force )
+void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, const string &mess, const string &arch )
 {
     map<string, bool> archMap;
     string tVl;
@@ -428,13 +428,14 @@ void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, 
 
     MtxAlloc res(mRes);
     //Alarms processing. For level less 0 alarm is set
-    if(archMap.empty() || archMap[BUF_ARCH_NM] || archMap[ALRM_ARCH_NM]) {
+    if(archMap.empty() || archMap[BUF_ARCH_NM] || archMap[ALRM_ARCH_NM] || archMap[ALRM_ARCH_CH_NM]) {
 	res.lock();
 	map<string,TMess::SRec>::iterator p = mAlarms.find(categ);
 	if(p != mAlarms.end() && level < 0 && abs(level) == p->second.level && SYS->rdEnable() &&
-		mess == p->second.mess && FTM2(tm,utm) >= FTM(p->second))
+		    mess == p->second.mess && FTM2(tm,utm) >= FTM(p->second))
 	    return;		//Prevent for update equal alarm in redundancy
-	if(level < 0 && (p == mAlarms.end() || FTM2(tm,utm) >= FTM(p->second) || SYS->rdEnable()))
+	if(level < 0 && ((p == mAlarms.end() && !archMap[ALRM_ARCH_CH_NM]) ||
+		(p != mAlarms.end() && (FTM2(tm,utm) >= FTM(p->second) || SYS->rdEnable()))))
 	    mAlarms[categ] = TMess::SRec(tm, utm, categ, (TMess::Type)abs(level), mess);
 	if(level >= 0 && p != mAlarms.end() && FTM2(tm,utm) >= FTM(p->second)) mAlarms.erase(p);
 	res.unlock();
@@ -469,7 +470,7 @@ void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, 
 	    for(unsigned iO = 0; iO < oLst.size(); iO++) {
 		AutoHD<TMArchivator> archtor = at(tLst[iT]).at().messAt(oLst[iO]);
 		if(archtor.at().startStat() && (!archMap.size() || archMap[archtor.at().workId()]))
-		    try { archtor.at().put(ml,force); }
+		    try { archtor.at().put(ml); }
 		    catch(TError &er) {
 			mess_sys(TMess::Error, _("Put message to the archiver '%s' error: %s"),
 					(tLst[iT]+"."+oLst[iO]).c_str(), er.mess.c_str());
@@ -479,10 +480,10 @@ void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, 
     }
 }
 
-void TArchiveS::messPut( const vector<TMess::SRec> &recs, const string &arch, bool force )
+void TArchiveS::messPut( const vector<TMess::SRec> &recs, const string &arch )
 {
     for(unsigned iR = 0; iR < recs.size(); iR++)
-	messPut(recs[iR].time, recs[iR].utime, recs[iR].categ, recs[iR].level, recs[iR].mess, arch, force);
+	messPut(recs[iR].time, recs[iR].utime, recs[iR].categ, recs[iR].level, recs[iR].mess, arch);
 }
 
 time_t TArchiveS::messGet( time_t bTm, time_t eTm, vector<TMess::SRec> &recs,
@@ -1493,8 +1494,9 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 	    for(unsigned iM = 0; iM < opt->childSize(); ++iM)
 		if((mO=opt->childGet(iM)) && mO->name() == "it")
 		    mess.push_back(TMess::SRec(s2ll(mO->attr("tm")),s2i(mO->attr("tmu")),mO->attr("cat"),s2i(mO->attr("lev")),mO->text()));
-	    if(s2i(opt->attr("redundancy"))) owner().owner().messPut(mess, workId() + ";" ALRM_ARCH_NM, true);
-	    else put(mess);
+	    bool isRd = s2i(opt->attr("redundancy"));
+	    if(isRd) owner().owner().messPut(mess, ALRM_ARCH_CH_NM);	//just to update the presented alarms
+	    put(mess, isRd);
 	    opt->childClear("it");
 	}
 	return;

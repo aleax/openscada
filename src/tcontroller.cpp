@@ -130,7 +130,7 @@ string TController::getStatus( )
 	    if(!rSt.empty()) {
 		if(rSt.find(mess) == string::npos) {
 		    int rOff = 0;
-		    rez.replace(0,1,TSYS::strSepParse(rSt,0,':',&rOff));
+		    rez.replace(0, 1, TSYS::strSepParse(rSt,0,':',&rOff));
 		    mess.append(rSt.substr(rOff));
 		}
 		else mess = _("Your redundancy settings are incorrect and the controller often enables-disables the redundancy!");

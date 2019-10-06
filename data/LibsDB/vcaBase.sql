@@ -6714,10 +6714,22 @@ Version: 1.5.0',32,'','','','Кадр "Панель контролю графі�
 
 Автор: Роман Савоченко<roman@oscada.org>
 Версия: 1.5.0','','','');
-INSERT INTO wlb_Main_io VALUES('objProps','dscr','Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.0',32,'','','','Автор: Роман Савоченко<roman@oscada.org>
-Версія: 1.1.0','','Автор: Роман Савоченко<roman@oscada.org>
-Версия: 1.1.0','','','');
+INSERT INTO wlb_Main_io VALUES('objProps','dscr','The element serves to display the properties of the data source in tabular form and to highlight them in color, as an object, and to allow the values of the recordable properties to be changed. This element also generates violation notifications according to the features of the object. The element generally uses and represents a representative structure "Complex objects" of the DAQ-templates.
+
+Author: Roman Savochenko <roman@oscada.org>
+Sponsored by: PAC HARTRON
+Version: 1.1.0
+License: GPLv2',32,'','','','Елемент слугує для відображення властивостей джерела даних у табличному вигляді та із виділенням їх кольором, як об''єкт, та надання можливості зміни значення властивостей із правом запису. Також цей елемент генерує повідомлення про порушення згідно до особливостей об''єкту. Елемент загалом використовує та представляє представницьку структуру DAQ-шаблонів "Комплексний об''єкт".
+
+Автор: Роман Савоченко <roman@oscada.org>
+Спонсоровано: ПАТ ХАРТРОН
+Версія: 1.1.0
+Ліцензія: GPLv2','','Элемент служит для отображения свойств источника данных в табличном виде и с выделением их цветом, как объект, и предоставления возможности изменения значения свойств с правом записи. Также этот элемент генерирует сообщения про нарушения согласно особенностям объекта. Элемент в целом использует и предоставляет представительскую структуру DAQ-шаблонов "Комплексный объект".
+
+Автор: Роман Савоченко <roman@oscada.org>
+Спонсировано: ПАТ ХАРТРОН
+Версия: 1.1.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomW','78.1',32,'','','h_line','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','perm','438',32,'','','pgSel','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomX','911',32,'','','pgSel','','','','','','');
@@ -21881,7 +21893,7 @@ for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 	else if(sval == "ws_LnAccept:/set" && (it=objItems[props_value])) it.set = set_value;
 	else ev_rez += sval+"\n";
 }
-event = ev_rez;','','',1000,'perm;name;dscr;geomW;geomH;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1558790771);
+event = ev_rez;','','',1000,'perm;name;dscr;geomW;geomH;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1570377057);
 INSERT INTO wlb_Main VALUES('grpGraph10','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAE
 xklEQVRYhdVYTW/bRhCd2S8uRVESJbOCZCSAgThBTknR3Jrmnj+R/5Kf2EvgwEacOkod24q+SIHk
 krvbA22akW0ILQSknNO+p/cWXM2sZih8//69ylSSJo7jGGPiOG6327ooALHlulEcE0IAQCmVJAn8
