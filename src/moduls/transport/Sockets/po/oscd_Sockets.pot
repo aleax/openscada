@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-17 22:08+0200\n"
+"POT-Creation-Date: 2019-10-09 21:29+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -222,10 +222,11 @@ msgstr ""
 
 msgid ""
 "Socket's input transport has the address format:\n"
-"  [TCP:]{addr}:{port}:{mode} - TCP socket:\n"
+"  [TCP:]{addr}:{port}:{mode}[:{IDmess}] - TCP socket:\n"
 "    addr - address for socket to be opened, empty or \"*\" address opens socket for all interfaces; there may be as the symbolic representation as well as IPv4 \"127.0.0.1\" or IPv6 \"[::1]\";\n"
 "    port - network port on which the socket is opened, indication of the character name of the port, according to /etc/services is available;\n"
-"    mode - mode of operation: 0 - break connections; 1(default) - keep alive; 2 - initiative connections.\n"
+"    mode - mode of operation: 0 - break connections; 1(default) - keep alive; 2 - initiative connections;\n"
+"    IDmess - identification message of the initiative connection - the mode 2.\n"
 "  UDP:{addr}:{port} - UDP socket:\n"
 "    addr - address for socket to be opened, empty or \"*\" address opens socket for all interfaces; there may be as the symbolic representation as well as IPv4 \"127.0.0.1\" or IPv6 \"[::1]\";\n"
 "    port - network port on which the socket is opened, indication of the character name of the port, according to /etc/services is available.\n"
@@ -297,6 +298,9 @@ msgstr ""
 
 #, c-format
 msgid "Response time %s[%s]. "
+msgstr ""
+
+msgid "The force socket is deactivated!"
 msgstr ""
 
 #, c-format

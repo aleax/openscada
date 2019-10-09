@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/Sockets</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Sockets/ru" title="Модули/Sockets (95% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Sockets/uk" title="Модулі/Sockets (95% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Sockets/ru" title="Модули/Sockets (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Sockets/uk" title="Модулі/Sockets (100% translated)">українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -31,7 +31,7 @@
 <td> <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a> </td>
 <td> Sockets
 </td>
-<td> 3.2 </td>
+<td> 3.3 </td>
 <td> GPL2 </td>
 <td> tr_Sockets.so </td>
 <td> en,uk,ru,de </td>
@@ -84,7 +84,7 @@
 <tr>
 <td>TCP</td>
 <td>
-<p><b>[TCP:]{addr}:{port}:{mode}</b><br />
+<p><b>[TCP:]{addr}:{port}:{mode}[:{IDmess}]</b><br />
 where:
 </p>
 <ul><li> <i>addr</i> – address for socket to be opened, empty or "*" address opens socket for all interfaces. There may be as the symbolic representation as well as IPv4 "<b>127.0.0.1</b>" or IPv6 "<b>[::1]</b>".</li>
@@ -92,7 +92,8 @@ where:
 <li> <i>mode</i> – mode of the input socket working:
 <ul><li> <b>0</b> — force closing the connection after the session reception-response.</li>
 <li> <b>1</b>(default) — do not close, only by the KeepAlive parameters.</li>
-<li> <b>2</b> — initiative connection. Enables the mode of connecting this input transport to the remote host (address instead of local) and switching to the listening state of this host. The "Keep alive timeout" value is used as the timeout of the re-connection of this transport in the absence of activity in order to restore the possibly lost connection.</li></ul></li></ul>
+<li> <b>2</b> — initiative connection. Enables the mode of connecting this input transport to the remote host (address instead of local) and switching to the listening state of this host. The "Keep alive timeout" value is used as the timeout of the re-connection of this transport in the absence of activity in order to restore the possibly lost connection.</li></ul></li>
+<li> <i>IDmess</i> — identification message of the initiative connection — the mode 2.</li></ul>
 <p>Example: "<b>TCP::10001:1</b>" — the TCP socket is available on all interfaces, opened on port 10001 and the connection does not break.
 </p>
 </td></tr>

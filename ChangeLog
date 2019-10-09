@@ -1,3 +1,18 @@
+2019-10-09 Roman (stable)
+- !!!:DB.LibsDB.OscadaLibs: The "base" templates library appended of the template "initCon_ModBus"
+    of processing assigned output transports of the initial Sockets' conections of the DAQ-module "ModBus".
+- !!:FIX:DAQ.ModBus: Fixed for the logical level parameters default error.
+    !!: Expanded in the DAQ part to work with wrong or empty connection transport, to allow it set-change from external procedures,
+    like to the previous one. Allowed to select the empty transport.
+- !!!:FIX:Transport.Sockets: Fixed in processing the output transports with the addres "SOCK:{N}" of the initiative connections
+	to clean up the address by setting it to "SOCK:-1", then preventing of the restarting possibility with using already
+	closed socket's handler but possible allocated by another part of the program.
+    FIX: Input transports fixed in the status information for the establishing and processing the initiative connections.
+    Address of the input transports in the TCP-mode can be expanded for addon parameters and currently
+    the next one after the mode field is identification message of the initiative connection into the mode 2,
+    so this mode expanded for sending identification messages after establish the initiative connections.
+
+
 2019-10-06 Roman (stable)
 - FIX:DB.LibsDB.OscadaLibs: Some original messages are fixed.
     FIX:base.UPS: Fixed for the translation inverting.

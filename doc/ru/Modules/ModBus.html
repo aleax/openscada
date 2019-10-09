@@ -31,7 +31,7 @@
 <td> <a href="../Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> </td>
 <td> ModBus
 </td>
-<td> 2.4 </td>
+<td> 2.5 </td>
 <td> GPL2 </td>
 <td> daq_ModBus.so </td>
 <td> en,uk,ru,de </td>
@@ -268,7 +268,7 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <li> Имя таблиц хранения конфигурации параметров контроллера стандартного и логического типа.</li>
 <li> Политика планирования и приоритет задачи сбора данных.</li>
 <li> ModBus протокол, используемый для опроса физического устройства (TCP/IP, RTU или ASCII).</li>
-<li> Адрес исходящего транспорта из списка сконфигурированных <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#TransportOut" title="Special:MyLanguage/Documents/Program manual">исходящих транспортов</a> в подсистеме "Транспорты" OpenSCADA. Типовой порт ModuBus/TCP это 502.</li>
+<li> Адрес исходящего транспорта из списка сконфигурированных <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#TransportOut" title="Special:MyLanguage/Documents/Program manual">исходящих транспортов</a> в подсистеме "Транспорты" OpenSCADA. Типовой порт ModuBus/TCP это 502. Поле может быть установлено в пустое и изменено во время исполнения. </li>
 <li> ModBus узел назначения. В случае с протоколами RTU и ASCII это индивидуальный адрес физического устройства, а для TCP/IP это идентификатор единицы.</li>
 <li> Объединение фрагментов регистров. Стандартные функции <b>1</b>-<b>4</b> позволяют запросить сразу несколько смежных регистров или битов. Такая стратегия часто позволяет оптимизировать трафик и время. Однако, нужные регистры не всегда расположены смежно друг к другу и данная опция позволяет собирать их в блоки до 100 регистров или 1600 битов.</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> К установке данного параметра нужно подходить с осторожностью, поскольку не все устройства поддерживают доступ к регистрам между фрагментами.</dd></dl>

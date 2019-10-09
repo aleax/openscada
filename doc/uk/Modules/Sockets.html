@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Модулі/Sockets</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSockets&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/Sockets" title="Modules/Sockets">Modules/Sockets</a> and the translation is 95% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Sockets" title="Modules/Sockets (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Sockets/ru" title="Модули/Sockets (95% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSockets&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/Sockets" title="Modules/Sockets">Modules/Sockets</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Sockets" title="Modules/Sockets (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Sockets/ru" title="Модули/Sockets (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -31,7 +31,7 @@
 <td> <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a> </td>
 <td> Сокети
 </td>
-<td> 3.2 </td>
+<td> 3.3 </td>
 <td> GPL2 </td>
 <td> tr_Sockets.so </td>
 <td> en,uk,ru,de </td>
@@ -57,22 +57,22 @@
 </p><p>Діалог конфігурації вхідного сокету зображено на рисунку 1.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:812px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_in_uk.png"><img class="thumbimage" height="787" src="../files/Sockets_in_uk.png" width="810" /></a>  <div class="thumbcaption">Рис.1. Діалог конфігурації вхідного сокету.</div></div></div></div>
-<p>This dialog allows you to set:
+<p>За допомогою цього діалогу можна встановити:
 </p>
-<ul><li> State of the transport, that is: status, "Running", name of the database (containing the configuration) and information about the active connections.</li>
-<li> Identifier, name and description of the transport.</li>
-<li> Address of the transport. The format of the address is listed in the table below.</li>
-<li> Selecting of the transport protocols.</li></ul>
-<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Empty value of the protocols selection switches the transport mode to creating the associated output transports for each connection to that input.</dd>
-<dd>The associated output transports mode for the input transport demands for presence some external for the transport procedure, which serve as the protocol and which must go through all the associated output transports and do requests to read or write-read.</dd>
-<dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> The procedure missing will necessarily come to growing the associated output transports by miss an essence, which stops transports with closed connections and the ability to next remove the stopped output transports by this input.</dd></dl>
-<ul><li> State "Running", in which the transport must be switched at start up. </li>
-<li> Priority of the transport tasks .</li>
-<li> Maximum segment size (MSS), for limit the transmitted packages size (segments TCP) on bad link channels. Set to 0 for disabling the user limit for size.</li>
-<li> Input buffer size, Queue length of the sockets, Maximum number of clients and Maximum number of clients per host.</li>
-<li> Keep alive requests — closing the connection after specified number of the requests. Zero value for disabling — never closes.</li>
-<li> Keep alive timeout, seconds — closing the connection after missing requests within a specified time. Zero value for disabling — never closes.</li></ul>
-<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Disabling this feature is not recommended because the TCP/IP network property does not guarantee the server notification about the disconnection, say in the event of a power failure on the client. As a result, the opened client connections can remain <span style="color:red">forever</span>, and when the limit is reached the server will stop accepting new ones!</dd></dl>
+<ul><li> Стан транспорту, а саме: статус, "Виконується", ім'я БД (яка містить конфігурацію) та інформація про поточні підключення.</li>
+<li> Ідентифікатор, ім'я та опис транспорту.</li>
+<li> Адреса транспорту. Формат адреси описано у таблиці нижче.</li>
+<li> Обрання транспортних протоколів.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Порожнє значення обрання протоколу перемикає транспорт у режим створення асоційованого вихідного транспорту для кожного підключення на цей вхідний.</dd>
+<dd>Режим асоційованих вихідних транспортів для вхідного передбачає наявність деякої зовнішньої до транспорту процедури, яка виконує роль протоколу, та яка має "обходити" всі асоційовані вихідні транспорти, та виконувати запит на читання або запис-читання.</dd>
+<dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Відсутність такої процедури неминуче призведе до росту асоційованих вихідних транспортів через відсутність сутності, яка зупиняє транспорти із закритими підключеннями та можливістю наступного видалення зупинених вихідних транспортів цим вхідним.</dd></dl>
+<ul><li> Стан "Виконується", у який переводити транспорт при запуску.</li>
+<li> Пріоритет задач транспорту.</li>
+<li> Максимальний розмір сегмента (MSS), для обмеження розміру пакетів що відсилаються (сегментів TCP) на поганих каналах зв'язку. Встановити в 0 для зняття користувацького обмеження розміру.</li>
+<li> Розмір вхідного буферу, Довжина черги сокетів, Максимальна кількість клієнтів та Максимальна кількість клієнтів за хостами (для TCP).</li>
+<li> Keep alive запитів — закриття підключення після визначеної кількості запитів. Нульове значення для вимкнення — не закривається ніколи.</li>
+<li> Keep alive час очікування, в секундах — закриття підключення після відсутності запитів протягом визначеного часу. Нульове значення для вимкнення — не закривається ніколи.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Вимикати цю функцію не рекомендується оскільки властивість мереж TCP/IP не гарантує повідомлення серверу про відключення з'єднання, скажемо у випадку зникнення живлення на клієнті. У результаті чого можуть <span style="color: red">назавжди</span> залишатися відкритими клієнтські підключення, а при досягненні ліміту сервер припинить приймати нові!</dd></dl>
 <p>Особливості формування адреси вхідних сокетів приведено у таблиці нижче:
 </p>
 <table class="wikitable">
@@ -84,7 +84,7 @@
 <tr>
 <td> TCP </td>
 <td>
-<p><b>[TCP:]{addr}:{port}:{mode}</b><br />
+<p><b>[TCP:]{addr}:{port}:{mode}[:{IDmess}]</b><br />
 де:
 </p>
 <ul><li> <i>addr</i> — адреса відкриття сокету, порожня або "*" адреса відкриває сокет на всіх інтерфейсах. Допускаються як символьне, так й IPv4 "<b>127.0.0.1</b>" або IPv6 "<b>[::1]</b>" представлення адреси.</li>
@@ -92,7 +92,8 @@
 <li> <i>mode</i> — режим роботи вхідного сокету:
 <ul><li> <b>0</b> — примусово розривати з'єднання після сеансу прийом-відповідь.</li>
 <li> <b>1</b>(типово) — не розривати з'єднання, тільки з урахуванням параметрів KeepAlive.</li>
-<li> <b>2</b> — ініціативне підключення. Включає режим ініціативи підключення цього вхідного транспорту до віддаленого хосту (адреса замість локального) та перехід у режим очікування запитів від цього хосту. Значення "Keep alive час очікування" використовується як таймаут перепідключення даного транспорту за відсутності активності з метою відновлення можливо втраченого підключення.</li></ul></li></ul>
+<li> <b>2</b> — ініціативне підключення. Включає режим ініціативи підключення цього вхідного транспорту до віддаленого хосту (адреса замість локального) та перехід у режим очікування запитів від цього хосту. Значення "Keep alive час очікування" використовується як таймаут перепідключення даного транспорту за відсутності активності з метою відновлення можливо втраченого підключення.</li></ul></li>
+<li> <i>IDmess</i> — ідентифікуюче повідомлення ініціативного підключення — режим 2.</li></ul>
 <p>Приклад: "<b>TCP::10001:1</b>" — TCP-сокет доступний на всіх інтерфейсах, відкритий на порту 10001 та з'єднання не розриває.
 </p>
 </td></tr>

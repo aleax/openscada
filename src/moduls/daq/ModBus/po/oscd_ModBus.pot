@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-28 20:05+0300\n"
+"POT-Creation-Date: 2019-10-09 20:51+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -119,6 +119,10 @@ msgid "15:Error in size of response PDU."
 msgstr ""
 
 msgid "OK"
+msgstr ""
+
+#, c-format
+msgid "10:Generic error: %s."
 msgstr ""
 
 msgid "Default port of the ModuBus/TCP is 502."

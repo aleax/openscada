@@ -61,7 +61,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"3.2.2"
+#define MOD_VER		"3.3.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -199,7 +199,8 @@ string TSocketIn::getStatus( )
 	if(type == SOCK_TCP || type == SOCK_UDP)
 	    rez += TSYS::strMess(_("Connections %d, opened %d, last %s, closed by the limit %d. "),
 				connNumb, (protocols().empty()?assTrs().size():clId.size()), atm2s(lastConn()).c_str(), clsConnByLim);
-	rez += TSYS::strMess(_("%s traffic in %s, out %s. "),
+	if(protocols().size())
+	    rez += TSYS::strMess(_("%s traffic in %s, out %s. "),
 				s_type.c_str(), TSYS::cpct2str(trIn).c_str(), TSYS::cpct2str(trOut).c_str());
 	if(mess_lev() == TMess::Debug)
 	    rez += TSYS::strMess(_("Processing time %s[%s]. "), tm2s(1e-6*prcTm).c_str(), tm2s(1e-6*prcTmMax).c_str());
@@ -323,6 +324,7 @@ void TSocketIn::start( )
 			    else rez = -1;
 			}
 			if(rez) throw TError(nodePath().c_str(), _("Error connecting the %s socket: '%s (%d)'!"), s_type.c_str(), strerror(errno), errno);
+			else if(addon.size()) write(sockFd, addon.data(), addon.size());	//Writing the identification sequence
 		    }
 		    else if(bind(sockFd,(sockaddr*)&addrs[iA],sizeof(addrs[iA])) == -1) {	//Waiting a connection
 			int rez = errno;
@@ -521,11 +523,13 @@ unsigned TSocketIn::forksPerHost( const string &sender )
 bool TSocketIn::cfgChange( TCfg &co, const TVariant &pc )
 {
     if(co.name() == "ADDR" && co.getS() != pc.getS()) {
+	int off = 0;
 	mMode = 0;
 	string s_type = TSYS::strParse(co.getS(), 0, ":");
 	if(s_type == S_NM_TCP) {
 	    type = SOCK_TCP;
-	    mMode = (s_type=TSYS::strParse(co.getS(),3,":")).size() ? s2i(s_type) : 1;
+	    mMode = (s_type=TSYS::strParse(co.getS(),3,":",&off)).size() ? s2i(s_type) : 1;
+	    addon = (off < co.getS().size()) ? co.getS().substr(off) : "";
 	}
 	else if(s_type == S_NM_UDP)	type = SOCK_UDP;
 	else if(s_type == S_NM_UNIX) {
@@ -535,7 +539,8 @@ bool TSocketIn::cfgChange( TCfg &co, const TVariant &pc )
 	else if(s_type == S_NM_RAWCAN)	type = SOCK_RAWCAN;
 	else {
 	    type = SOCK_TCP;
-	    mMode = (s_type=TSYS::strParse(co.getS(),2,":")).size() ? s2i(s_type) : 1;
+	    mMode = (s_type=TSYS::strParse(co.getS(),2,":",&off)).size() ? s2i(s_type) : 1;
+	    addon = (off < co.getS().size()) ? co.getS().substr(off) : "";
 	}
     }
 
@@ -591,8 +596,10 @@ void *TSocketIn::Task( void *sock_in )
 		}
 		//Create presenting the client connection output transport
 		if(sock->protocols().empty() && sock->assTrs(true).size() <= sock->maxFork()) {
-		    sock->assTrO("SOCK:"+i2s(sockFdCL));
+		    string outTrId = sock->assTrO("SOCK:"+i2s(sockFdCL));
+		    ((AutoHD<TSocketOut>)sock->owner().outAt(outTrId)).at().connAddr = sender;
 		    sock->connNumb++;
+		    sock->connTm = time(NULL);
 		    continue;
 		}
 
@@ -940,15 +947,16 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TTransportIn::cntrCmdProc(opt);
-	if(ctrMkNode("area",opt,1,"/prm/st",_("State")) && protocols().size() && clId.size())
+	if(ctrMkNode("area",opt,1,"/prm/st",_("State")) && protocols().size() && clId.size() && !(type == SOCK_TCP && mode() == 2))
 	    ctrMkNode("list", opt, -1, "/prm/st/conns", _("Active connections"), R_R_R_, "root", STR_ID);
 	ctrRemoveNode(opt, "/prm/cfg/A_PRMS");
 	ctrMkNode("fld", opt, -1, "/prm/cfg/ADDR", EVAL_STR, startStat()?R_R_R_:RWRWR_, "root", STR_ID, 1, "help",
 	    _("Socket's input transport has the address format:\n"
-	    "  [TCP:]{addr}:{port}:{mode} - TCP socket:\n"
+	    "  [TCP:]{addr}:{port}:{mode}[:{IDmess}] - TCP socket:\n"
 	    "    addr - address for socket to be opened, empty or \"*\" address opens socket for all interfaces; there may be as the symbolic representation as well as IPv4 \"127.0.0.1\" or IPv6 \"[::1]\";\n"
 	    "    port - network port on which the socket is opened, indication of the character name of the port, according to /etc/services is available;\n"
-	    "    mode - mode of operation: 0 - break connections; 1(default) - keep alive; 2 - initiative connections.\n"
+	    "    mode - mode of operation: 0 - break connections; 1(default) - keep alive; 2 - initiative connections;\n"
+	    "    IDmess - identification message of the initiative connection - the mode 2.\n"
 	    "  UDP:{addr}:{port} - UDP socket:\n"
 	    "    addr - address for socket to be opened, empty or \"*\" address opens socket for all interfaces; there may be as the symbolic representation as well as IPv4 \"127.0.0.1\" or IPv6 \"[::1]\";\n"
 	    "    port - network port on which the socket is opened, indication of the character name of the port, according to /etc/services is available.\n"
@@ -1162,7 +1170,8 @@ void TSocketOut::start( int itmCon )
     if(type == SOCK_FORCE) {
 	sockFd = s2i(TSYS::strParse(addr_,0,":",&aOff));
 	int rez;
-	if((rez=fcntl(sockFd,F_GETFL,0)) < 0 || fcntl(sockFd,F_SETFL,rez|O_NONBLOCK) < 0) {
+	if(sockFd < 0)	throw TError(nodePath().c_str(), _("The force socket is deactivated!"));
+	else if((rez=fcntl(sockFd,F_GETFL,0)) < 0 || fcntl(sockFd,F_SETFL,rez|O_NONBLOCK) < 0) {
 	    close(sockFd);
 	    throw TError(nodePath().c_str(), _("Error the force socket %d using: '%s (%d)'!"), sockFd, strerror(errno), errno);
 	}
@@ -1321,6 +1330,9 @@ void TSocketOut::stop( )
     if(sockFd >= 0) {
 	shutdown(sockFd, SHUT_RDWR);
 	close(sockFd);
+	sockFd = -1;
+	//To prevent of reusing the closed socket at a possible start
+	if(type == SOCK_FORCE)	{ runSt = false; setAddr("SOCK:-1"); modifClr(); }
     }
     runSt = false;
 

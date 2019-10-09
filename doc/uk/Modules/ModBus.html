@@ -31,7 +31,7 @@
 <td> <a href="../Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> </td>
 <td> ModBus
 </td>
-<td> 2.4 </td>
+<td> 2.5 </td>
 <td> GPL2 </td>
 <td> daq_ModBus.so </td>
 <td> en,uk,ru,de </td>
@@ -268,7 +268,7 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <li> Ім'я таблиць зберігання конфігурації параметрів контролеру стандартного та логічного типу.</li>
 <li> Політика планування та пріоритет задачі збору даних.</li>
 <li> ModBus протокол, який використовується для опитування фізичного пристрою (TCP/IP, RTU або ASCII).</li>
-<li> Адреса вихідного транспорту з переліку <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#TransportOut" title="Special:MyLanguage/Documents/Program manual">вихідних транспортів</a> підсистеми "Транспорти" OpenSCADA. Типовий порт ModuBus/TCP це 502.</li>
+<li> Адреса вихідного транспорту з переліку <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#TransportOut" title="Special:MyLanguage/Documents/Program manual">вихідних транспортів</a> підсистеми "Транспорти" OpenSCADA. Типовий порт ModuBus/TCP це 502. Поле може бути встановлено у порожнє та змінено під час виконання. </li>
 <li> ModBus вузол призначення. У випадку з протоколами RTU та ASCII це індивідуальна адреса фізичного пристрою, а для TCP/IP це ідентифікатор одиниці.</li>
 <li> Об'єднання фрагментів регістрів. Стандартні функції <b>1</b>-<b>4</b> дозволяють запитати одразу декілька суміжних регістрів або бітів. Така стратегія часто дозволяє оптимізувати трафік та час. Однак, потрібні регістри не завжди розташовані суміжно один до одного та така опція дозволяє збирати їх у блоки до 100 регістрів або 1600 бітів.</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> До встановлення цього параметру треба підходити з обережністю, оскільки не всі пристрої підтримують доступ до регістрів між фрагментами.</dd></dl>

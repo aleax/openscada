@@ -31,7 +31,7 @@
 <td> <a href="../Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> </td>
 <td> ModBus
 </td>
-<td> 2.4 </td>
+<td> 2.5 </td>
 <td> GPL2 </td>
 <td> daq_ModBus.so </td>
 <td> en,uk,ru,de </td>
@@ -268,7 +268,7 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <li> Names of tables of storing the configuration of the parameters of the controller object for standard and logical types.</li>
 <li> Policy of scheduling and priority of the data acquisition task.</li>
 <li> ModBus protocol, used for requesting the real device (TCP/IP, RTU or ASCII).</li>
-<li> Address of the output transport from the list of configured <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#TransportOut" title="Special:MyLanguage/Documents/Program manual">output transports</a> in the "Transports" subsystem of OpenSCADA. Default port of the ModuBus/TCP is 502.</li>
+<li> Address of the output transport from a list of configured <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#TransportOut" title="Special:MyLanguage/Documents/Program manual">output transports</a> in the "Transports" subsystem of OpenSCADA. Default port of the ModuBus/TCP is 502. The field may be set to empty and be changed at the runtime.</li>
 <li> ModBus destination node. In the case of protocols RTU and ASCII this is the unique address of the physical device, and when TCP/IP this is the identifier of the unity.</li>
 <li> Merging of the data fragments. Standard functions <b>1</b>-<b>4</b> let to request at once multiple adjacent registers or bits. This strategy often allows to optimize the traffic and time. However, the required registers are not always located adjacent to each other, this option allows you to gather them in blocks of up to 100 registers, or 1600 bits.</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Installing of this parameter must be approached with caution, since not all devices support access to the registers between fragments.</dd></dl>

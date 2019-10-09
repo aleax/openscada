@@ -712,8 +712,8 @@ void *TMdContr::Task( void *icntr )
     bool isStop  = false;
     int64_t t_cnt = 0, t_prev = TSYS::curTime();
 
-    try {
-	while(true) {
+    while(true) {
+	try {
 	    if(!cntr.redntUse()) {
 	    if(cntr.tmDelay > 0) {
 		//Get data from blocks to parameters or calc for logical type parameters
@@ -882,15 +882,17 @@ void *TMdContr::Task( void *icntr )
 	    //Calc acquisition process time
 	    t_prev = t_cnt;
 	    cntr.callSt = false;
-	    }
 
-	    if(isStop) break;
+	    }	// !cntr.redntUse()
 
-	    TSYS::taskSleep(cntr.period(), cntr.period() ? "" : cntr.cron());
+	} catch(TError &err) { cntr.setCntrDelay(TSYS::strMess(_("10:Generic error: %s."), err.mess.c_str())); /*mess_err(err.cat.c_str(), err.mess.c_str());*/ }
 
-	    if(cntr.endrunReq) isStop = true;
-	}
-    } catch(TError &err) { mess_err(err.cat.c_str(), err.mess.c_str()); }
+	if(isStop) break;
+
+	TSYS::taskSleep(cntr.period(), cntr.period() ? "" : cntr.cron());
+
+	if(cntr.endrunReq) isStop = true;
+    }
 
     cntr.prcSt = false;
 
@@ -925,7 +927,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TController::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/PROT",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",EVAL_STR,RWRWR_,"root",SDAQ_ID,
 	    4,"tp","str","dest","select","select","/cntr/cfg/trLst","help",_("Default port of the ModuBus/TCP is 502."));
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/NODE",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/MAX_BLKSZ",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
@@ -944,6 +946,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     //Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/cntr/cfg/trLst" && ctrChkNode(opt)) {
+	opt->childAdd("el")->setText("");
 	vector<string> sls;
 	SYS->transport().at().outTrList(sls);
 	for(unsigned iS = 0; iS < sls.size(); iS++)
@@ -1276,6 +1279,8 @@ void TMdPrm::upValLog( bool first, bool last, double frq )
 	mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_warning(nodePath().c_str(),_("Error of the calculation template."));
     }
+
+    acqErr.setVal("");	//But it is not used for the type
 }
 
 TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
@@ -1349,7 +1354,7 @@ void TMdPrm::vlGet( TVal &val )
 
     if(val.name() == "err") {
 	if(acqErr.getVal().size()) val.setS(acqErr.getVal(), 0, true);
-	else if(lCtx && lCtx->idErr >= 0) val.setS(lCtx->getS(lCtx->idErr),0,true);
+	else if(lCtx && lCtx->idErr >= 0) val.setS(lCtx->getS(lCtx->idErr), 0, true);
 	else val.setS("0",0,true);
     }
 }

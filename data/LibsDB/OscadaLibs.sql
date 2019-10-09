@@ -1751,6 +1751,9 @@ INSERT INTO tmplib_base_io VALUES('UPS','this','Object',4,0,'',15,'Об''єкт'
 INSERT INTO tmplib_base_io VALUES('UPS','SHIFR','Code',0,0,'',16,'Шифр','','Шифр','');
 INSERT INTO tmplib_base_io VALUES('UPS','NAME','Name',0,0,'',17,'Ім''я','','Имя','');
 INSERT INTO tmplib_base_io VALUES('UPS','DESCR','Description',0,0,'',18,'Опис','','Описание','');
+INSERT INTO tmplib_base_io VALUES('initCon_ModBus','inTransport','Input transport',0,64,'initCon',0,'','','','');
+INSERT INTO tmplib_base_io VALUES('initCon_ModBus','outTrTm','Output transport timeouts',0,64,'10:0.1',1,'','','','');
+INSERT INTO tmplib_base_io VALUES('initCon_ModBus','prcTr','Processed transports',4,17,'',2,'','','','');
 CREATE TABLE IF NOT EXISTS 'DAQ_JavaLikeCalc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT 'system' ,"FUNC" TEXT DEFAULT '' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' ,"ITER" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 CREATE TABLE IF NOT EXISTS 'DAQ_LogicLev' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT '' ,"PRM_BD_REFL" TEXT DEFAULT '' ,"PERIOD" INTEGER DEFAULT '0' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 CREATE TABLE IF NOT EXISTS 'flb_web_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
@@ -3092,6 +3095,7 @@ INSERT INTO Trs VALUES('The data size is not equal to pointed one.','','');
 INSERT INTO Trs VALUES('Write','','');
 INSERT INTO Trs VALUES('uh oh, no thermocouple attached!','','');
 INSERT INTO Trs VALUES('Items number is discrepancy to the package size','','');
+INSERT INTO Trs VALUES('Input transport ''%1'' error.','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_DevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO tmplib_DevLib VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
 Author: Roman Savochenko <roman@oscada.org>
@@ -7962,6 +7966,53 @@ if(tErr.toInt() && tErr.toInt() != f_err.toInt())	this.alarmSet(DESCR+": "+tErr.
 else if(f_err.toInt() && !tErr.toInt())			this.alarmSet(DESCR+": "+tr("NORMA"), 1);
 f_err = tErr;
 conDelay_ = 0;','','',1570376879);
+INSERT INTO tmplib_base VALUES('initCon_ModBus','Initial connections controller: ModBus','','','','','',10,0,'JavaLikeCalc.JavaScript
+if(f_start) {
+	inTransport_ = "", inTr = EVAL;
+	prcTr = new Object();
+}
+
+//Check for the transport change and connect
+tErr = "";
+if(inTr.isEVal() || inTransport != inTransport_)	{
+	inTr = SYS.Transport.Sockets["in_"+inTransport];
+	inTransport_ = inTransport;
+}
+
+if(inTr.isEVal())	tErr = "1:"+tr("Input transport ''%1'' error.").replace("%1",inTransport);
+else {
+	outTrs = inTr.assTrsList();
+	for(iTr = 0; iTr < outTrs.length; iTr++) {
+		oTrNm = outTrs[iTr];
+		// The transport is present and active
+		if(!(oTrO=SYS.Transport.Sockets["out_"+oTrNm]).isEVal() && oTrO.start()) {
+			//  and not registered
+			if(prcTr[oTrNm].isEVal()) {
+				//   reading the source identifier
+				idSeq = oTrO.messIO("").parse(0, ":");
+				//   stop for empty-missed identification or missed PLC object
+				if(!idSeq.length || (PLC_O=SYS.DAQ.ModBus[idSeq]).isEVal() || ((tVl=PLC_O.cfg("ADDR").parse(1)).length && tVl != oTrNm && !outTrs[tVl].isEVal()))
+					oTrO.start(false);
+				//   connect the transport to a PLC object
+				else  {
+					if(outTrTm.length)	oTrO.timings(outTrTm);
+					prcTr[oTrNm] = idSeq;
+					PLC_O.cfgSet("ADDR", "Sockets."+oTrNm);
+				}
+			}
+		}
+		// is not present or active
+		else if(!prcTr[oTrNm].isEVal() && !(PLC_O=SYS.DAQ.ModBus[prcTr[oTrNm]]).isEVal()) {
+			delete prcTr[oTrNm];
+			PLC_O.cfgSet("ADDR", "");
+		}
+	}
+	delete oTrO;
+}
+
+//Error set
+if(tErr.length)	f_err = tErr;
+else f_err = "0";','','',1570642647);
 CREATE TABLE IF NOT EXISTS 'lib_Controllers' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO lib_Controllers VALUES('prescr','Prescriptions manager (moved)','','','!!!!: Moved and replaced by the template PrescrTempl.manager. Will be removed soon
 Prescriptions manager and controller. Used in addition with user interface''s cadre "Prescription: editing" and "Prescription: runtime" for which into a parameter of the controller you must pass that parameters: "mode", "prog", "startTm", "curCom", "comLs", "work".

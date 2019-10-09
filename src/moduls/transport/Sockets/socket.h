@@ -143,6 +143,7 @@ class TSocketIn: public TTransportIn
 	string		path;			//Path to file socket for UNIX socket
 	string		host;			//Host for TCP/UDP sockets
 	string		port;			//Port for TCP/UDP sockets
+	string		addon;
 
 	unsigned short	mMode,			//Mode for TCP/UNIX sockets (0 - no hand; 1 - hand connect; 2 - initiative connection)
 			mMSS,			//MSS
@@ -169,6 +170,8 @@ class TSocketIn: public TTransportIn
 //************************************************
 class TSocketOut: public TTransportOut
 {
+    friend class TSocketIn;
+
     public:
 	/* Open output socket <name> for locale <address>
 	 * address : <type:<specific>>
