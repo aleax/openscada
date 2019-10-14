@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Siemens DAQ and Beckhoff")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"3.1.4"
+#define MOD_VER		"3.1.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol)\
  and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the\
@@ -1565,7 +1565,7 @@ void TMdContr::redntDataUpdate( )
     req.setAttr("path","/");
     for(unsigned i_prm = 0; i_prm < req.childSize(); )
 	if(s2i(req.childGet(i_prm)->attr("err"))) req.childDel(i_prm);
-	else { req.childGet(i_prm)->setName("set"); i_prm++; }
+	else { req.childGet(i_prm)->setName("set")->setAttr("reforwardRedundOff", "1"); i_prm++; }
     cntrCmd(&req);
 }
 
@@ -1837,13 +1837,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     if(!enableStat() || !owner().startStat())	{ vo.setS(EVAL_STR, 0, true); return; }
 
     //Send to active reserve station
-    if(owner().redntUse()) {
-	if(vl == pvl) return;
-	XMLNode req("set");
-	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
-	SYS->daq().at().rdStRequest(owner().workId(),req);
-	return;
-    }
+    if(vlSetRednt(vo,vl,pvl))	return;
 
     //Direct write
     try {

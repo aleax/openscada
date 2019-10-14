@@ -36,7 +36,7 @@
 #define MOD_NAME	_("Diamond DAQ boards")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.1.12"
+#define MOD_VER		"2.1.13"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides an access to \"Diamond Systems\" DAQ boards. Includes main support for all generic boards.")
 #define LICENSE		"GPL2"
@@ -348,12 +348,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     if(vl.isEVal() || vl == pvl) return;
 
     //Send to active reserve station
-    if(owner().redntUse()) {
-	XMLNode req("set");
-	req.setAttr("path", nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id", vo.name())->setText(vl.getS());
-	SYS->daq().at().rdStRequest(owner().workId(), req);
-	return;
-    }
+    if(vlSetRednt(vo,vl,pvl))	return;
 
     //Direct write
     ResAlloc res(devRes, true);

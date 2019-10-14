@@ -339,6 +339,19 @@ void TParamContr::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     type().vlSet(this, vo, vl, pvl);
 }
 
+bool TParamContr::vlSetRednt( TVal &vo, const TVariant &vl, const TVariant &pvl )
+{
+    if(!owner().redntUse()) return false;
+    if(vl == pvl) return true;
+
+    XMLNode req("set");
+    req.setAttr("path", nodePath(0,true)+"/%2fserv%2fattr")->setAttr("reforwardRedundOff", "1")
+	->childAdd("el")->setAttr("id", vo.name())->setText(vl.getS());
+    SYS->daq().at().rdStRequest(owner().workId(), req);
+
+    return true;
+}
+
 void TParamContr::vlArchMake( TVal &val )
 {
     if(!val.arch().freeStat())	val.arch().at().setDB(owner().DB());

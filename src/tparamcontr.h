@@ -104,6 +104,7 @@ class TParamContr : public TConfig, public TValue
 
 	void vlGet( TVal &vo );
 	void vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl );
+	bool vlSetRednt( TVal &vo, const TVariant &vl, const TVariant &pvl );
 	void vlArchMake( TVal &val );
 
 	virtual void setType( const string &tpId );

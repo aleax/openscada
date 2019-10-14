@@ -1749,13 +1749,9 @@ void TMdPrm::vlSet(TVal &vo, const TVariant &vl, const TVariant &pvl)
 
     if(vl.isEVal() || vl == pvl) return;
 
-//Send to active reserve station
-    if(owner().redntUse()) {
-	XMLNode req("set");
-	req.setAttr("path", nodePath(0, true) + "/%2fserv%2fattr")->childAdd("el")->setAttr("id", vo.name())->setText(vl.getS());
-	SYS->daq().at().rdStRequest(owner().workId(), req);
-	return;
-    }
+    //Send to active reserve station
+    if(vlSetRednt(vo,vl,pvl))	return;
+
     if(mDA) {
 	if(mDA->setVal(vo)) {
 	    modif();

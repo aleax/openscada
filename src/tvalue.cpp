@@ -212,17 +212,20 @@ void TValue::cntrCmdProc( XMLNode *opt )
 
 		AutoHD<TVArchive> arch = vl.at().arch();
 		int64_t vper = arch.at().period(BUF_ARCH_NM);
-		int64_t reqBeg = (s2ll(aNd->attr("tm"))/vper+1)*vper;
-		int64_t vbeg = vmax(reqBeg,arch.at().begin(BUF_ARCH_NM));
+		int64_t reqBeg = s2ll(aNd->attr("tm"));	//!!!! Some spare request of the last requested value
+							//     to prevent EVAL here at the connection lose
+				//(s2ll(aNd->attr("tm"))/vper+1)*vper;
+		int64_t vBufBeg = arch.at().begin(BUF_ARCH_NM);
+		int64_t vbeg = vmax(reqBeg, vBufBeg);
 		int64_t vend = arch.at().end(BUF_ARCH_NM);
 
 		//  Longing to equivalent archivators
-		if(vbeg == arch.at().begin(BUF_ARCH_NM)) {
+		if(vbeg == vBufBeg) {
 		    vector<string> archLs;
 		    arch.at().archivatorList(archLs);
 		    for(unsigned iA1 = 0; iA1 < archLs.size(); iA1++)
 			if(arch.at().period(archLs[iA1]) == vper)
-			    vbeg = vmax(reqBeg,arch.at().begin(archLs[iA1]));
+			    vbeg = vmax(reqBeg, arch.at().begin(archLs[iA1]));
 		}
 		aNd->setAttr("tm", ll2s(vbeg))->setAttr("per", ll2s(vper));
 

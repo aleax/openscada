@@ -1,3 +1,14 @@
+2019-10-14 Roman (stable)
+- DB.LibsDB.OscadaLibs: The new template "initCon_ModBus" renamed to "initConsAssignTrs" before the unification to the logic-level sources.
+- !!:DB.LibsDB.vcaBase: Main.calendar: Revised during the documenting.
+- !!!!:FIX:Archives: The redundancy and DAQ.DAQGate restored for writing the big value archive's blocks, mostly in restoring the value archive parts.
+- !!!:DAQ.*: Writing values in the redundancy is unified under the new function vlSetRednt(),
+    where used the attribute "reforwardRedundOff" setting to prevent of the different redundancy mechanisms using twice.
+    !!: The service "get:/serv/attr" expanded to some spare request of the last requested value to prevent EVAL here at the connection lose.
+- FIX:DAQ.{LogicLev,Siemens}: The specific redundancy of the templates execution context is fixed by using the attribute "reforwardRedundOff" setting
+    to prevent of the different redundancy mechanisms using twice.
+
+
 2019-10-09 Roman (stable)
 - !!!:DB.LibsDB.OscadaLibs: The "base" templates library appended of the template "initCon_ModBus"
     of processing assigned output transports of the initial Sockets' conections of the DAQ-module "ModBus".

@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Logical level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.0.0"
+#define MOD_VER		"2.0.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the pure logical level of the DAQ parameters.")
 #define LICENSE		"GPL2"
@@ -272,7 +272,7 @@ void TMdContr::redntDataUpdate( )
     req.setAttr("path", "/");
     for(unsigned iPrm = 0; iPrm < req.childSize(); ) {
 	if(s2i(req.childGet(iPrm)->attr("err"))) { req.childDel(iPrm); continue; }
-	req.childGet(iPrm)->setName("set");
+	req.childGet(iPrm)->setName("set")->setAttr("reforwardRedundOff", "1");
 	iPrm++;
     }
     cntrCmd(&req);
@@ -552,13 +552,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     if(!enableStat() || !owner().startStat())	{ vo.setS(EVAL_STR, 0, true); return; }
 
     //Send to active reserve station
-    if(owner().redntUse()) {
-	if(vl == pvl) return;
-	XMLNode req("set");
-	req.setAttr("path", nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id", vo.name())->setText(vl.getS());
-	SYS->daq().at().rdStRequest(owner().workId(), req);
-	return;
-    }
+    if(vlSetRednt(vo,vl,pvl))	return;
 
     //Direct write
     try {

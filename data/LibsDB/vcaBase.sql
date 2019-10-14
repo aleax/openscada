@@ -6067,7 +6067,7 @@ August (8)
 September (9)
 October (10)
 November (11)
-December (12)',0,'','','month','Січень (1)
+December (12)',8,'','','month','Січень (1)
 Лютий (2)
 Березень (3)
 Квітень (4)
@@ -6539,7 +6539,7 @@ INSERT INTO wlb_Main_io VALUES('calendar','geomH','22',32,'','','year','','','',
 INSERT INTO wlb_Main_io VALUES('calendar','geomZ','2',32,'','','year','','','','','','');
 INSERT INTO wlb_Main_io VALUES('calendar','active','1',32,'','','year','','','','','','');
 INSERT INTO wlb_Main_io VALUES('calendar','elType','4',32,'','','year','','','','','','');
-INSERT INTO wlb_Main_io VALUES('calendar','value','2013',0,'','','year','','','','','','');
+INSERT INTO wlb_Main_io VALUES('calendar','value','2013',8,'','','year','','','','','','');
 INSERT INTO wlb_Main_io VALUES('calendar','items','2015
 2014
 2013
@@ -10969,6 +10969,7 @@ INSERT INTO wlb_Main_uio VALUES('cntrPaspExt','labColorGrph8','Graph color: 8',1
 INSERT INTO wlb_Main_uio VALUES('cntrPaspExt','labColorGrph9','Graph color: 9',147461,'lightyellow',64,'','','','','','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrPaspExt','labColorGrph10','Graph color: 10',147461,'darkcyan',64,'','','','','','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsStReport','doc','Document',131205,'',2,'<page>|report','','','','Документ','','','Документ','','','');
+INSERT INTO wlb_Main_uio VALUES('calendar','selTime','Selected time',131073,'0|',8,'','','','Обраний час','','','Выбранное время','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_doc_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO wlb_doc_incl VALUES('docGasNodeDayA','doc','/wlb_doc/wdg_doc/wdg_doc','perm;geomZ;style;tmpl;doc;bTime;time;process;n;vCur;aCur;aSize;',2);
 INSERT INTO wlb_doc_incl VALUES('docGasNodeMonthA','doc','/wlb_doc/wdg_doc/wdg_doc','perm;geomZ;style;tmpl;doc;bTime;time;process;n;vCur;aCur;aSize;',2);
@@ -22104,7 +22105,7 @@ if(f_start) {
 	maxDayInMonth = 30;			//Maximum days into selected month
 	selTime = SYS.time();		//Selected time, ordered to days
 	prevTime = 0;					//Previous time for detect time selection change
-	cntr = 0;							//Global counter for update period limit for some parts
+	cntr = 0;						//Global counter for update period limit for some parts
 }
 
 //Years list update
@@ -22166,7 +22167,7 @@ if(selTime != prevTime) {
 	prevTime = selTime;
 }
 
-cntr++;','','',-1,'name;geomW;geomH;backColor;',1429388056);
+cntr++;','','',-1,'name;geomW;geomH;backColor;',1570990300);
 INSERT INTO wlb_Main VALUES('alarmsAct','iVBORw0KGgoAAAANSUhEUgAAAEAAAAALCAYAAADP9otxAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABRlJREFUSImVlstyHLcVhj+ggb5Pz4UcUTETzciWHcelhV3lcrkqT5EX
 yMtkn1W8yz7JC6TyGrZTklKKbYU3iaJIzq2ne7rRQBbTHHI4cqpyNl0H58eP/xwcAC3+8Oe//SPr
@@ -24624,11 +24625,11 @@ INSERT INTO prj_archBrowser VALUES('/archBrowser/so/1','doc','','root',0,'
 INSERT INTO prj_archBrowser VALUES('/archBrowser/so/1/doc','messRep','','/wlb_doc/wdg_docMessRep',0,'','','',-1,0,'owner;geomYsc;archLs;messCat;',1495719828);
 INSERT INTO prj_archBrowser VALUES('/archBrowser/control','graphCalc','','/wlb_Main/wdg_graphCalc',0,'','','',-1,0,'owner;',1563002360);
 CREATE TABLE IF NOT EXISTS 'prj_tmplSO' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
-INSERT INTO prj_tmplSO VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;',1562827392);
+INSERT INTO prj_tmplSO VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;',1570990224);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so','1','','root',1,'
 ','
 ','
-',-1,5,'name;dscr;geomX;',1559660517);
+',-1,5,'name;dscr;geomX;',1570990146);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so','2','','root',1,'
 ','
 ','',-1,5,'name;',1546704070);
@@ -24647,8 +24648,8 @@ INSERT INTO prj_tmplSO VALUES('/tmplSO/control','treeSelect','','/wlb_Main/wdg_t
 INSERT INTO prj_tmplSO VALUES('/tmplSO/control','cntrPasp','','/wlb_Main/wdg_cntrPaspExt',0,'','','',-1,0,'owner;perm;name;geomZ;pName;',1494598746);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/control','cntrPaspOld','','/wlb_Main/wdg_cntrPasp',0,'','','',-1,0,'owner;perm;geomZ;pName;',1494596514);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1','view1','','root',0,'
-','','',-1,5,'owner;perm;name;dscr;geomZ;',1559660517);
-INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1/view1','1','','/wlb_test/wdg_mn_gen',0,'','','',-1,0,'owner;perm;name;pgOpen;pgNoOpenProc;pgGrp;',1559660517);
+','','',-1,5,'owner;perm;name;dscr;geomZ;',1570990146);
+INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1/view1','1','','/wlb_test/wdg_mn_gen',0,'','','',-1,0,'owner;perm;name;pgOpen;pgNoOpenProc;pgGrp;',1570990146);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1/view1','10','','/wlb_Main/wdg_prescrRun',0,'','','',-1,0,'owner;perm;pgNoOpenProc;prExtCurCom;prExtMode;prExtProg;prExtStartTm;prExtWork;',1559660517);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1/view1','11','','/wlb_Main/wdg_prescrEdit',0,'','','',-1,0,'owner;perm;prExtComLs;',1559660517);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1','view2','','/wlb_Main/wdg_grpGraph',0,'','','',-1,2,'owner;perm;geomZ;pgGrp;',1546704070);

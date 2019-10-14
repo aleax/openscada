@@ -36,7 +36,7 @@
 #define MOD_NAME	_("BFN module")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.6.16"
+#define MOD_VER		"0.6.17"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Support Big Farm Net (BFN) modules for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com).")
 #define LICENSE		"GPL2"
@@ -521,7 +521,7 @@ void *TMdContr::Task( void *icntr )
 
 	    //Update controller's data
 	    ResAlloc res(cntr.en_res,false);
-	    for(unsigned i_p=0; i_p < cntr.p_hd.size() && !cntr.redntUse() && !cntr.endrun_req; i_p++) {
+	    for(unsigned i_p = 0; i_p < cntr.p_hd.size() && !cntr.redntUse() && !cntr.endrun_req; i_p++) {
 		//Get current data
 		XMLNode reqCodeData("GetCodeData");
 		reqCodeData.childAdd("lHouseComputerId")->setText(TSYS::strParse(cntr.p_hd[i_p].at().id(),1,"_hc"));

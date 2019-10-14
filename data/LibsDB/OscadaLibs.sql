@@ -1751,9 +1751,9 @@ INSERT INTO tmplib_base_io VALUES('UPS','this','Object',4,0,'',15,'Об''єкт'
 INSERT INTO tmplib_base_io VALUES('UPS','SHIFR','Code',0,0,'',16,'Шифр','','Шифр','');
 INSERT INTO tmplib_base_io VALUES('UPS','NAME','Name',0,0,'',17,'Ім''я','','Имя','');
 INSERT INTO tmplib_base_io VALUES('UPS','DESCR','Description',0,0,'',18,'Опис','','Описание','');
-INSERT INTO tmplib_base_io VALUES('initCon_ModBus','inTransport','Input transport',0,64,'initCon',0,'','','','');
-INSERT INTO tmplib_base_io VALUES('initCon_ModBus','outTrTm','Output transport timeouts',0,64,'10:0.1',1,'','','','');
-INSERT INTO tmplib_base_io VALUES('initCon_ModBus','prcTr','Processed transports',4,17,'',2,'','','','');
+INSERT INTO tmplib_base_io VALUES('initConsAssignTrs','inTransport','Input transport',0,64,'initCon',0,'','','','');
+INSERT INTO tmplib_base_io VALUES('initConsAssignTrs','outTrTm','Output transport timeouts',0,64,'10:0.1',1,'','','','');
+INSERT INTO tmplib_base_io VALUES('initConsAssignTrs','prcTr','Processed transports',4,17,'',2,'','','','');
 CREATE TABLE IF NOT EXISTS 'DAQ_JavaLikeCalc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT 'system' ,"FUNC" TEXT DEFAULT '' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' ,"ITER" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 CREATE TABLE IF NOT EXISTS 'DAQ_LogicLev' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT '' ,"PRM_BD_REFL" TEXT DEFAULT '' ,"PERIOD" INTEGER DEFAULT '0' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 CREATE TABLE IF NOT EXISTS 'flb_web_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
@@ -7966,7 +7966,7 @@ if(tErr.toInt() && tErr.toInt() != f_err.toInt())	this.alarmSet(DESCR+": "+tErr.
 else if(f_err.toInt() && !tErr.toInt())			this.alarmSet(DESCR+": "+tr("NORMA"), 1);
 f_err = tErr;
 conDelay_ = 0;','','',1570376879);
-INSERT INTO tmplib_base VALUES('initCon_ModBus','Initial connections controller: ModBus','','','','','',10,0,'JavaLikeCalc.JavaScript
+INSERT INTO tmplib_base VALUES('initConsAssignTrs','Initiative connections processing for assigned output transports','Опрацювання ініціативних підключень щодо асоціативних вихідних транспортів','','','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	inTransport_ = "", inTr = EVAL;
 	prcTr = new Object();

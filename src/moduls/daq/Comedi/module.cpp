@@ -37,7 +37,7 @@
 #define MOD_NAME	_("DAQ boards by Comedi")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.0.13"
+#define MOD_VER		"1.0.14"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("ISA, PCI, PCMCIA, USB DAQ boards collection by Comedi(http://www.comedi.org).")
 #define LICENSE		"GPL2"
@@ -252,12 +252,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     if(vl.isEVal() || vl == pvl) return;
 
     //Send to active reserve station
-    if(owner().redntUse()) {
-	XMLNode req("set");
-	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
-	SYS->daq().at().rdStRequest(owner().workId(),req);
-	return;
-    }
+    if(vlSetRednt(vo,vl,pvl))	return;
 
     //Direct write
     ResAlloc res(dev_res, true);

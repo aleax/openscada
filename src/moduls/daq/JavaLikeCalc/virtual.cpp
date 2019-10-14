@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"4.1.6"
+#define MOD_VER		"4.1.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")
@@ -952,13 +952,7 @@ void Prm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     if(!enableStat())	return;
 
     //Send to active reserve station
-    if(owner().redntUse()) {
-	if(vl == pvl) return;
-	XMLNode req("set");
-	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
-	SYS->daq().at().rdStRequest(owner().workId(),req);
-	return;
-    }
+    if(vlSetRednt(vo,vl,pvl))	return;
 
     //Direct write
     try {

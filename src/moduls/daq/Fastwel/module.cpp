@@ -36,7 +36,7 @@
 #define MOD_NAME	_("Fastwel IO")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.1.15"
+#define MOD_VER		"0.1.16"
 #define AUTHORS		_("Maxim Kochetkov")
 #define DESCRIPTION	_("Fastwel IO FBUS client implementation")
 #define LICENSE		"GPL2"
@@ -977,13 +977,9 @@ void TMdPrm::vlSet(TVal & vo, const TVariant & vl, const TVariant & pvl)
 
     if(vl.isEVal() || vl == pvl) return;
 
-//Send to active reserve station
-    if(owner().redntUse()) {
-	XMLNode req("set");
-	req.setAttr("path", nodePath(0, true) + "/%2fserv%2fattr")->childAdd("el")->setAttr("id", vo.name())->setText(vl.getS());
-	SYS->daq().at().rdStRequest(owner().workId(), req);
-	return;
-    }
+    //Send to active reserve station
+    if(vlSetRednt(vo,vl,pvl))	return;
+
     switch(mModDesc.type) {
     case FIO_MODULE_DIM718:
 	if(vo.name().compare(0, 2, "DO") == 0) {

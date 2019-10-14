@@ -1226,7 +1226,8 @@ void TVArchive::setVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string 
 {
     //Check for put to buffer
     if(((arch.empty() && TValBuf::end()) || arch == BUF_ARCH_NM) && iend > TValBuf::begin()) {
-	bool onlyBuf = (ibeg >= TValBuf::end());
+	bool onlyBuf = (ibeg >= TValBuf::end()) &&
+	    (iend-ibeg)/TValBuf::period() <= TValBuf::size();	//!!!! Allow for writing new data blocks in the redundancy and DAQGate
 	TValBuf::setVals(buf, vmax(ibeg,iend-TValBuf::size()*TValBuf::period()), iend);
 	if(arch == BUF_ARCH_NM || onlyBuf) return;	//To prevent spare writings direct to the archivers
     }

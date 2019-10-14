@@ -862,15 +862,9 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     if(!enableStat() || !owner().startStat())	{ vo.setS(EVAL_STR, 0, true); return; }
 
     //Send to active reserve station
-    if(owner().redntUse()) {
-	if(vl == pvl) return;
-	XMLNode req("set");
-	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
-	SYS->daq().at().rdStRequest(owner().workId(),req);
-	return;
-    }
+    if(vlSetRednt(vo,vl,pvl))	return;
 
-    if(vl.isEVal() || vl == pvl) return;
+    if(vl.isEVal() || vl == pvl)return;
 
     //Direct write
     XML_N req("opc.tcp");

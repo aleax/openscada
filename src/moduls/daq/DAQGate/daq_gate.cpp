@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.2.0"
+#define MOD_VER		"2.2.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -422,7 +422,7 @@ void *TMdContr::Task( void *icntr )
 		    int tm_grnd = cntr.mStatWork[iSt].second.lstMess["<<redundant>>"];
 		    XMLNode *reqCh = req.childAdd("get")->setAttr("path", "/sub_Archive/%2fserv%2fmess")->
 				setAttr("tm_grnd", i2s(tm_grnd))->
-				setAttr("cat", cntr.mStatWork[iSt].first+":*")->setAttr("lev",cntr.mMessLev);
+				setAttr("cat", cntr.mStatWork[iSt].first+":*")->setAttr("lev", cntr.mMessLev);
 		    // Alarms force request
 		    if(!tm_grnd && cntr.mMessLev.getI() >= 0) reqCh->setAttr("lev", i2s(-cntr.mMessLev.getI()));
 		    else reqCh->setAttr("lev", cntr.mMessLev.getS());
@@ -536,7 +536,7 @@ void *TMdContr::Task( void *icntr )
 				    rC++;
 				}
 				if(!vl.at().arch().freeStat())
-				    prmNd->childAdd("ael")->setAttr("id",listV[iV])->
+				    prmNd->childAdd("ael")->setAttr("id", listV[iV])->
 					setAttr("tm", ll2s(vmax(vl.at().arch().at().end(""),TSYS::curTime()-(int64_t)(3.6e9*cntr.restDtTm()))));
 			    }
 			    if(sepReq && !prmNd->childSize()) { req.childDel(prmNd); prm.isPrcOK = true; }	//Pass request and mark by processed
@@ -630,8 +630,8 @@ void *TMdContr::Task( void *icntr )
 				    int64_t per = atoll(aNd->attr("per").c_str());
 				    TValBuf buf(vl.at().arch().at().valType(), 0, per, false, true);
 				    for(unsigned iV = 0; iV < aNd->childSize(); iV++)
-					buf.setS(aNd->childGet(iV)->text(),btm+per*iV);
-				    vl.at().arch().at().setVals(buf,buf.begin(),buf.end(),"");
+					buf.setS(aNd->childGet(iV)->text(), btm+per*iV);
+				    vl.at().arch().at().setVals(buf, buf.begin(), buf.end(), "");
 				}
 			    }
 			}
@@ -954,16 +954,11 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     if(!enableStat() || !owner().startStat())	{ vo.setI(EVAL_INT, 0, true); return; }
     if(vl.isEVal() || vl == pvl) return;
 
-    XMLNode req("set");
-
     //Send to active reserve station
-    if(owner().redntUse()) {
-	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
-	SYS->daq().at().rdStRequest(owner().workId(), req);
-	return;
-    }
+    if(vlSetRednt(vo,vl,pvl))	return;
 
     //Direct write
+    XMLNode req("set");
     string scntr;
     for(int c_off = 0; (scntr=TSYS::strSepParse(stats(),0,';',&c_off)).size(); )
 	try {
