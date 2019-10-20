@@ -2356,10 +2356,10 @@ void TSYS::taskSleep( int64_t per, const string &icron, int64_t *lag )
 	if(!per) per = 1000000000ll;
 	clockid_t clkId = SYS->clockRT() ? CLOCK_REALTIME : CLOCK_MONOTONIC;
 	clock_gettime(clkId, &spTm);
+	int64_t off = (stsk && SYS->taskInvPhs() > 1) ? per*(stsk->phase%SYS->taskInvPhs())/SYS->taskInvPhs() : 0;	//phasing offset
 	int64_t cur_tm = (int64_t)spTm.tv_sec*1000000000ll + spTm.tv_nsec,
-		pnt_tm = (cur_tm/per + 1)*per,
-		wake_tm = 0,
-		off = (stsk && SYS->taskInvPhs() > 1) ? per*(stsk->phase%SYS->taskInvPhs())/SYS->taskInvPhs() : 0;	//phasing offset
+		pnt_tm = ((cur_tm-off)/per + 1)*per,
+		wake_tm = 0;
 	do {
 	    spTm.tv_sec = (pnt_tm+off)/1000000000ll; spTm.tv_nsec = (pnt_tm+off)%1000000000ll;
 	    if(clock_nanosleep(clkId,TIMER_ABSTIME,&spTm,NULL)) return;

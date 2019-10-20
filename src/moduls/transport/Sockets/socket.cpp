@@ -61,7 +61,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"3.3.0"
+#define MOD_VER		"3.3.1"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -1109,6 +1109,8 @@ void TSocketOut::load_( )
 
 void TSocketOut::save_( )
 {
+    if(type == SOCK_FORCE) return;
+
     XMLNode prmNd("prms");
     prmNd.setAttr("tms", timings());
     prmNd.setAttr("attempts", i2s(attempts()));

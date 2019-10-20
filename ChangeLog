@@ -1,3 +1,12 @@
+2019-10-20 Roman (stable)
+- !!:DB.LibsDB.OscadaLibs: base.ntf: Revised and translated during the documenting.
+    !!:base.initConsAssignTrs: Expanded to work with any type of the source objects, that is DAQ-modules and logical level controllers and parameters.
+	Translated and documented.
+- !!:FIX:SYS: Fixed in the phased tasks aligning to prevent of groving twice the real task periodicity at the high load and for big phases.
+- FIX:Transport.Sockets: The output transports in the type "Forced sockets" prevented from saving.
+- UI.QTCfg: Adapted for the correct redundancy in the generic commands and the repeating operations, clearing the attribute "reforwardRedundReq".
+
+
 2019-10-14 Roman (stable)
 - DB.LibsDB.OscadaLibs: The new template "initCon_ModBus" renamed to "initConsAssignTrs" before the unification to the logic-level sources.
 - !!:DB.LibsDB.vcaBase: Main.calendar: Revised during the documenting.

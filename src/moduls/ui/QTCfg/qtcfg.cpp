@@ -2336,7 +2336,7 @@ int ConfApp::cntrIfCmd( XMLNode &node )
 			    TSYS::strMess(_("Send the command '%s' to other selected nodes \"%s\"?"), node.name().c_str(), selNds.c_str()).c_str(),
 			    QMessageBox::Apply|QMessageBox::Cancel, QMessageBox::Apply);
 		    for(int off = 0; questRes == QMessageBox::Apply && (reqPath=TSYS::strLine(selNds,0,&off)).size(); ) {
-			node.setAttr("path", reqPath+"/"+reqPathEl);
+			node.setAttr("path", reqPath+"/"+reqPathEl)->setAttr("reforwardRedundReq", "");
 			cntrIfCmdHosts(node);
 			//SYS->transport().at().cntrIfCmd(node, "UIQtCfg", wUser->user().toStdString());
 		    }

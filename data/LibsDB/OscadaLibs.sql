@@ -12,18 +12,18 @@ INSERT INTO ParamTemplLibs VALUES('base','Main library','Основна бібл
 
 Author: Roman Savochenko <roman@oscada.org>
 Founded: 2006
-Version: 1.1.1
+Version: 1.2.1
 License: GPLv2
 DOC: Libs_Main|Libs/Main','Бібліотеку створено для надання основних шаблонів опрацювання DAQ-джерел та похідних сервісів.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Засновано: 2006
-Версія: 1.1.1
+Версія: 1.2.1
 Ліцензія: GPLv2','tmplib_base','Основная библиотека','Библиотека создана для предоставления основных шаблонов обработки DAQ-источников и производных сервисов.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Основано: 2006
-Версия: 1.1.1
+Версия: 1.2.1
 Лицензия: GPLv2');
 INSERT INTO ParamTemplLibs VALUES('DevLib','Devices','Бібліотека пристроїв','The user protocol devices library created to provide access to industrial device''s data through network, like to common industrial automation devices and wide resources counters, with protocols simple enough to implement into the User Protocol module, using the presented complex protocols (ModBus, OPC_UA, HTTP) or directly on the internal like to Java language.
 
@@ -347,7 +347,7 @@ INSERT INTO lib_Controllers_io VALUES('ntfDispatch','emailReceiver','Destination
 INSERT INTO lib_Controllers_io VALUES('ntfDispatch','SMSTel','SMS destination receiver, tel. number',0,0,'+380XXXXXXXXX',0,13,'','','','');
 INSERT INTO lib_Controllers_io VALUES('ntfDispatch','emailState','Email notification current state',0,1,'',0,3,'','','','');
 INSERT INTO lib_Controllers_io VALUES('ntfDispatch','SMSState','SMS notification current state',0,1,'',0,10,'','','','');
-INSERT INTO lib_Controllers_io VALUES('ntfDispatch','SMSTextMd','SMS in text mode, else PDU',3,0,'0',0,14,'','','','');
+INSERT INTO lib_Controllers_io VALUES('ntfDispatch','SMSTextMd','SMS in the text mode, else PDU',3,0,'0',0,14,'','','','');
 INSERT INTO lib_Controllers_io VALUES('ntfDispatch','messLev','Messages level, negative for alarms',1,0,'1',0,1,'','','','');
 INSERT INTO lib_Controllers_io VALUES('ntfDispatch','messCat','Messages category, template or regular expression',0,0,'al*:*',0,2,'','','','');
 CREATE TABLE IF NOT EXISTS 'lib_servProc_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DEF" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DEF" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
@@ -1711,23 +1711,23 @@ INSERT INTO tmplib_base_io VALUES('codeState','SHIFR','Code',0,0,'',8,'Код','
 INSERT INTO tmplib_base_io VALUES('codeState','NAME','Name',0,0,'',9,'Ім''я','','Имя','');
 INSERT INTO tmplib_base_io VALUES('codeState','DESCR','Description',0,0,'',10,'Опис','','Описание','');
 INSERT INTO tmplib_base_io VALUES('codeState','this','Object',4,0,'',11,'Об''єкт','','Объект','');
-INSERT INTO tmplib_base_io VALUES('ntf','tmOut','Maximum notification timeout, seconds',1,64,'5',2,'','','','');
-INSERT INTO tmplib_base_io VALUES('ntf','messLev','Messages level, negative for alarms',1,64,'1',3,'','','','');
-INSERT INTO tmplib_base_io VALUES('ntf','messCat','Messages category, template or regular expression',0,64,'al*:*',4,'','','','');
-INSERT INTO tmplib_base_io VALUES('ntf','emailState','Email notification current state',0,17,'',5,'','','','');
-INSERT INTO tmplib_base_io VALUES('ntf','emailAuth','Auth, empty for disable',0,64,'user:pass',7,'','','','');
-INSERT INTO tmplib_base_io VALUES('ntf','emailSender','Sender',0,64,'noreply@oscada.org',8,'','','','');
-INSERT INTO tmplib_base_io VALUES('ntf','emailReceiver','Destination receiver address',0,64,'test@oscada.org',9,'','','','');
-INSERT INTO tmplib_base_io VALUES('ntf','emailTopic','EMail topic',0,64,'Notification',10,'','','','');
-INSERT INTO tmplib_base_io VALUES('ntf','emailMess','EMail message',0,64,'',11,'','','','');
-INSERT INTO tmplib_base_io VALUES('ntf','SMSState','SMS notification current state',0,17,'',12,'','','','');
-INSERT INTO tmplib_base_io VALUES('ntf','SMSPin','SMS pin, empty for disable',0,64,'1111',14,'','','','');
-INSERT INTO tmplib_base_io VALUES('ntf','SMSTel','SMS destination receiver, tel. number',0,64,'+380XXXXXXXXX',15,'','','','');
-INSERT INTO tmplib_base_io VALUES('ntf','SMSTextMd','SMS in text mode, else PDU',3,64,'0',16,'','','','');
-INSERT INTO tmplib_base_io VALUES('ntf','io','UserPrt: Output IO',4,0,'',0,'','','','');
-INSERT INTO tmplib_base_io VALUES('ntf','tr','UserPrt: Transport',4,0,'',1,'','','','');
-INSERT INTO tmplib_base_io VALUES('ntf','emailTrAddr','Output transport for SMTP connection, empty for disable',0,64,'Sockets.out_SMTP',6,'','','','');
-INSERT INTO tmplib_base_io VALUES('ntf','SMSTrAddr','SMS serial transport, empty for disable',0,64,'Serial.out_SMS',13,'','','','');
+INSERT INTO tmplib_base_io VALUES('ntf','tmOut','Maximum notification timeout, seconds',1,64,'5',2,'Максимальний таймаут повідомлення, секунд','','Максимальный таймаут сообщения, секунд','');
+INSERT INTO tmplib_base_io VALUES('ntf','messLev','Messages level, negative for alarms',1,64,'1',3,'Рівень повідомлень, негативний для порушень','','Уровень сообщений, негативный для нарушений','');
+INSERT INTO tmplib_base_io VALUES('ntf','messCat','Messages category, template or regular expression',0,64,'al*:*',4,'Категорія повідомлень, шаблон або регулярний вираз','','Категория сообщений, шаблон или регулярное выражение','');
+INSERT INTO tmplib_base_io VALUES('ntf','emailState','Email notification current state',0,17,'',5,'Поточний стан повідомлення Ел.поштою','','Текущее состояние уведомления Эл.почтой','');
+INSERT INTO tmplib_base_io VALUES('ntf','emailAuth','Auth, empty for disable',0,64,'user:pass',7,'Автентифікація, порожньо для вимкнення','','Аутентификация, пусто для выключения','');
+INSERT INTO tmplib_base_io VALUES('ntf','emailSender','Sender',0,64,'noreply@oscada.org',8,'Відправник','','Отправитель','');
+INSERT INTO tmplib_base_io VALUES('ntf','emailReceiver','Destination receiver address',0,64,'test@oscada.org',9,'Адреса призначення одержувача','','Адрес назначения получателя','');
+INSERT INTO tmplib_base_io VALUES('ntf','emailTopic','EMail topic',0,64,'Notification',10,'Тема Ел.пошти','Повідомлення','Тема Эл.почты','Уведомление');
+INSERT INTO tmplib_base_io VALUES('ntf','emailMess','EMail message',0,64,'',11,'Повідомлення Ел.пошти','','Сообщение Эл.почты','');
+INSERT INTO tmplib_base_io VALUES('ntf','SMSState','SMS notification current state',0,17,'',12,'Поточний стан повідомлення SMS','','Текущее состояние уведомления SMS','');
+INSERT INTO tmplib_base_io VALUES('ntf','SMSPin','SMS-pin, empty for disable',0,64,'1111',14,'Пін-код SMS, порожньо для вимкнення','','Пин-код SMS, пусто для выключения','');
+INSERT INTO tmplib_base_io VALUES('ntf','SMSTel','SMS destination receiver, tel. number',0,64,'+380XXXXXXXXX',15,'Адреса одержувача SMS, номер телефону','','Адрес получателя SMS, номер телефона','');
+INSERT INTO tmplib_base_io VALUES('ntf','SMSTextMd','SMS in the text mode, else PDU',3,64,'0',16,'SMS у текстовому режимі, інакше PDU','','SMS в текстовом режиме, иначе PDU','');
+INSERT INTO tmplib_base_io VALUES('ntf','io','UserPrt: Output IO',4,0,'',0,'UserPrt: Вихідний ВВ','','UserPrt: Выходной ВВ','');
+INSERT INTO tmplib_base_io VALUES('ntf','tr','UserPrt: Transport',4,0,'',1,'UserPrt: Транспорт','','UserPrt: Транспорт','');
+INSERT INTO tmplib_base_io VALUES('ntf','emailTrAddr','Output transport for SMTP connection, empty for disable',0,64,'Sockets.out_SMTP',6,'Вихідний транспорт SMTP підключень, порожньо для вимкнення','','Выходной транспорт SMTP подключений, пусто для выключения','');
+INSERT INTO tmplib_base_io VALUES('ntf','SMSTrAddr','SMS serial transport, empty for disable',0,64,'Serial.out_SMS',13,'Послідовний транспорт SMS, порожньо для вимкнення','','Последовательный транспорт SMS, пусто для выключения','');
 INSERT INTO tmplib_base_io VALUES('codeState','out','Output',1,145,'Signal|out',1,'Вихід','','Выход','');
 INSERT INTO tmplib_base_io VALUES('codeState','com_text','Command "Text"',0,32,'',5,'Команда "Текст"','','Команда "Текст"','');
 INSERT INTO tmplib_base_io VALUES('codeState','coms','Commands-states, rows "{code}:{State}"',0,36,'',6,'Команди-стани, рядки "{code}:{State}"','','Команды-состояния, строки "{code}:{State}"','');
@@ -1751,9 +1751,10 @@ INSERT INTO tmplib_base_io VALUES('UPS','this','Object',4,0,'',15,'Об''єкт'
 INSERT INTO tmplib_base_io VALUES('UPS','SHIFR','Code',0,0,'',16,'Шифр','','Шифр','');
 INSERT INTO tmplib_base_io VALUES('UPS','NAME','Name',0,0,'',17,'Ім''я','','Имя','');
 INSERT INTO tmplib_base_io VALUES('UPS','DESCR','Description',0,0,'',18,'Опис','','Описание','');
-INSERT INTO tmplib_base_io VALUES('initConsAssignTrs','inTransport','Input transport',0,64,'initCon',0,'','','','');
-INSERT INTO tmplib_base_io VALUES('initConsAssignTrs','outTrTm','Output transport timeouts',0,64,'10:0.1',1,'','','','');
-INSERT INTO tmplib_base_io VALUES('initConsAssignTrs','prcTr','Processed transports',4,17,'',2,'','','','');
+INSERT INTO tmplib_base_io VALUES('initConsAssignTrs','inTransport','Input transport',0,64,'InitiateCons',0,'Вхідний транспорт','','Входной транспорт','');
+INSERT INTO tmplib_base_io VALUES('initConsAssignTrs','outTrTm','Output transport timeouts',0,64,'10:0.1',1,'Таймаути вихідних транспортів','','Таймауты выходных транспортов','');
+INSERT INTO tmplib_base_io VALUES('initConsAssignTrs','prcTr','Processed transports',4,17,'',3,'Опрацьовані транспорти','','Обработанные транспорты','');
+INSERT INTO tmplib_base_io VALUES('initConsAssignTrs','srcObjPath','Source object path',0,64,'ModBus:%2fcntr%2fcfg%2fADDR',2,'Шлях об''єкту джерела','','Путь объекта источника','');
 CREATE TABLE IF NOT EXISTS 'DAQ_JavaLikeCalc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT 'system' ,"FUNC" TEXT DEFAULT '' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' ,"ITER" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 CREATE TABLE IF NOT EXISTS 'DAQ_LogicLev' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT '' ,"PRM_BD_REFL" TEXT DEFAULT '' ,"PERIOD" INTEGER DEFAULT '0' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 CREATE TABLE IF NOT EXISTS 'flb_web_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
@@ -3005,29 +3006,29 @@ INSERT INTO Trs VALUES('us','','');
 INSERT INTO Trs VALUES('ns','','');
 INSERT INTO Trs VALUES('Allowed variables','Наявно змінних','Доступно переменных');
 INSERT INTO Trs VALUES('No data','Немає даних','Нет данных');
-INSERT INTO Trs VALUES('Disable ECHO error: %1','','');
-INSERT INTO Trs VALUES('Check for PIN-code error: %1','','');
-INSERT INTO Trs VALUES('Set PIN error: %1','','');
-INSERT INTO Trs VALUES('Set SMS Text mode error: %1','','');
-INSERT INTO Trs VALUES('Sent SMS error: %1','','');
-INSERT INTO Trs VALUES('Sent SMS PDU error: %1','','');
-INSERT INTO Trs VALUES('Set SMS PDU mode error: %1','','');
-INSERT INTO Trs VALUES('Impossible connect to the SMTP-server.','','');
-INSERT INTO Trs VALUES('No a response.','','');
-INSERT INTO Trs VALUES('HELLO error: %1.','','');
-INSERT INTO Trs VALUES('Unsupported auth methods: %1.','','');
-INSERT INTO Trs VALUES('Auth required: %1.','','');
-INSERT INTO Trs VALUES('AUTH error: %1.','','');
-INSERT INTO Trs VALUES('AUTH USER error: %1.','','');
-INSERT INTO Trs VALUES('AUTH PASS error: %1.','','');
-INSERT INTO Trs VALUES('MAIL FROM error: %1.','','');
-INSERT INTO Trs VALUES('RCPT TO error: %1.','','');
-INSERT INTO Trs VALUES('DATA error: %1.','','');
-INSERT INTO Trs VALUES('DATA send error: %1.','','');
+INSERT INTO Trs VALUES('Error disabling ECHO: %1','Помилка вимкнення ЛУНИ: %1','Ошибка отключения ЕХО: %1');
+INSERT INTO Trs VALUES('Error checking for PIN-code: %1','Помилка перевірки PIN-коду: %1','Ошибка проверки PIN-кода: %1');
+INSERT INTO Trs VALUES('Error setting PIN: %1','Помилка встановлення PIN: %1','Ошибка установки PIN: %1');
+INSERT INTO Trs VALUES('Error setting the SMS Text mode: %1','Помилка встановлення текстового режиму SMS: %1','Ошибка установки текстового режима SMS: %1');
+INSERT INTO Trs VALUES('Error sending SMS: %1','Помилка надсилання SMS: %1','Ошибка отправки SMS: %1');
+INSERT INTO Trs VALUES('Error sending SMS PDU: %1','Помилка надсилання SMS PDU: %1','Ошибка отправки SMS PDU: %1');
+INSERT INTO Trs VALUES('Error setting the SMS PDU mode: %1','Помилка встановлення SMS PDU режиму: %1','Ошибка установки SMS PDU режима: %1');
+INSERT INTO Trs VALUES('Impossible connect to the SMTP-server.','Неможливо під''єднатися до SMTP-серверу.','Невозможно подключиться к SMTP-серверу.');
+INSERT INTO Trs VALUES('No response.','Немає відповіді.','Нет ответа.');
+INSERT INTO Trs VALUES('Error HELLO: %1.','Помилка HELLO: %1.','Ошибка HELLO: %1.');
+INSERT INTO Trs VALUES('Unsupported auth methods: %1.','Непідтримуваний метод автентифікації: %1.','Неподдерживаемый метод аутентификации: %1.');
+INSERT INTO Trs VALUES('Auth required: %1.','Потрібна автентифікація: %1.','Необходима аутентификация: %1.');
+INSERT INTO Trs VALUES('AUTH error: %1.','Помилка автентифікації: %1.','Ошибка аутентификации: %1.');
+INSERT INTO Trs VALUES('AUTH USER error: %1.','Помилка користувача автентифікації: %1.','Ошибка пользователя аутентификации: %1.');
+INSERT INTO Trs VALUES('AUTH PASS error: %1.','Помилка пароля автентифікації: %1.','Ошибка пароля аутентификации: %1.');
+INSERT INTO Trs VALUES('MAIL FROM error: %1.','Помилка MAIL FROM: %1.','Ошибка MAIL FROM: %1.');
+INSERT INTO Trs VALUES('RCPT TO error: %1.','Помилка RCPT TO: %1.','Ошибка RCPT TO: %1.');
+INSERT INTO Trs VALUES('DATA error: %1.','Помилка даних: %1.','Ошибка данных: %1.');
+INSERT INTO Trs VALUES('DATA send error: %1.','Помилка надсилання даних: %1.','Ошибка отправки данных: %1.');
 INSERT INTO Trs VALUES('Alarm','Сигнал','Сигнал');
 INSERT INTO Trs VALUES('Norm','Норма','Норма');
-INSERT INTO Trs VALUES('Sent %1. In queue %2.','','');
-INSERT INTO Trs VALUES('Error: %1.','','');
+INSERT INTO Trs VALUES('Sent %1. In queue %2.','Надіслано %1. У черзі %2.','Отправлено %1. В очереди %2.');
+INSERT INTO Trs VALUES('Error: %1.','Помилка: %1.','Ошибка: %1.');
 INSERT INTO Trs VALUES('Wrong or empty respond to the calibration request.','','');
 INSERT INTO Trs VALUES('Wrong or empty respond to the temperature data.','','');
 INSERT INTO Trs VALUES('Wrong or empty read respond.','','');
@@ -3087,15 +3088,18 @@ INSERT INTO Trs VALUES('input','Вхід','Вход');
 INSERT INTO Trs VALUES('Error the output transport ''%1''.','Помилка вихідного транспорту ''%1''','Ошибка выходного транспорта ''%1''.');
 INSERT INTO Trs VALUES('The address ''%1'' is out of the range [0...99999999].','Адреса ''%1'' поза діапазоном [0...99999999].','Адрес ''%1'' за диапазоном [0...99999999].');
 INSERT INTO Trs VALUES('No data.','Немає даних.','Нет данных');
-INSERT INTO Trs VALUES('Address out of the range [-2047...255].','','');
-INSERT INTO Trs VALUES('Wrong or no response.','','');
-INSERT INTO Trs VALUES('Error CRC.','','');
-INSERT INTO Trs VALUES('Data size error.','','');
-INSERT INTO Trs VALUES('The data size is not equal to pointed one.','','');
-INSERT INTO Trs VALUES('Write','','');
-INSERT INTO Trs VALUES('uh oh, no thermocouple attached!','','');
-INSERT INTO Trs VALUES('Items number is discrepancy to the package size','','');
-INSERT INTO Trs VALUES('Input transport ''%1'' error.','','');
+INSERT INTO Trs VALUES('Address out of the range [-2047...255].','Адреса поза діапазону [-2047...255].','Адрес вне диапазона [-2047...255].');
+INSERT INTO Trs VALUES('Wrong or no response.','Помилкове або немає відповіді.','Ошибочное или нет ответа.');
+INSERT INTO Trs VALUES('Error CRC.','Помилка CRC.','Ошибка CRC.');
+INSERT INTO Trs VALUES('Data size error.','Помилка розміру даних.','Ошибка размера данных.');
+INSERT INTO Trs VALUES('The data size is not equal to pointed one.','Розмір даних не відповідає вказаному.','Размер данных не соответствует указанному.');
+INSERT INTO Trs VALUES('Write','Запис','Запись');
+INSERT INTO Trs VALUES('uh oh, no thermocouple attached!','ух ох, не підключено термопари','ух ох, не подключена термопара');
+INSERT INTO Trs VALUES('Items number is discrepancy to the package size','Кількість елементів не відповідає розміру пакета','Количество элементов не соответствует размеру пакета');
+INSERT INTO Trs VALUES('Input transport ''%1'' error.','Помилка вхідного транспорту ''%1''.','Ошибка входного транспорта ''%1''.');
+INSERT INTO Trs VALUES('Error the source object path ''%1''.','Помилковий шлях ''%1'' об''єкту джерела.','Ошибка пути ''%1'' объекта источника.');
+INSERT INTO Trs VALUES('The control field path is empty.','Шлях поля контролю порожній.','Путь контрольного поля пуст.');
+INSERT INTO Trs VALUES('The requested identificator ''%1'' is mіssing in the container ''%2'' of the data source objects!','Запитаний ідентифікатор ''%1'' відсутній у контейнері ''%2'' об''єктів джерел!','Запрошенный идентификатор ''%1'' отсутствует в контейнере ''%2'' объектов источников!');
 CREATE TABLE IF NOT EXISTS 'tmplib_DevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO tmplib_DevLib VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
 Author: Roman Savochenko <roman@oscada.org>
@@ -7538,17 +7542,29 @@ if(tErr.toInt() && tErr.toInt() != f_err.toInt() && this.cntr().status().toInt()
 if(tErr.toInt() && tErr.toInt() != f_err.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), levErr);
 else if(f_err.toInt() && !tErr.toInt())			this.alarmSet(DESCR+": "+tr("NORMA"), 1);
 f_err = tErr;','','',1561317508);
-INSERT INTO tmplib_base VALUES('ntf','Notificator by SMS, EMail(SMTP)','','','The complex template of the notification, contains of parts of the dispatcher and the output user protocol of notification by EMail(SMTP) and SMS.
+INSERT INTO tmplib_base VALUES('ntf','Notificator by SMS, EMail(SMTP)','Повідомлювач за SMS, EMail(SMTP)','Уведомитель посредством SMS, EMail(SMTP)','The complex template of the notification contains of parts of the dispatcher and the output user protocol of notification by EMail(SMTP) and SMS.
 
-The dispatcher can be performed for pointed messages of the message buffer of OpenSCADA and applied on the Logical level or the controller object of the module JavaLikeCalc.
+THE DISPATCHER can be performed for pointed messages of the message buffer of OpenSCADA and applied on the Logical level or the controller object of the module JavaLikeCalc.
 
-The output user protocol part "SMS" provides operations with SMS by a GSM-modem connected as serial device. For now supported only sending SMS messages to a number of remote cell phone or GSM modem. For sending there are supported: ECHO disable, PIN check and set, sending in PDU and Text mode.
+THE OUTPUT USER PROTOCOL PART "SMS" provides operations with SMS by a GSM-modem connected as serial device. For now, there supported only sending SMS messages to a number of remote cell phone or GSM-modem. For sending there are supported: ECHO disable, PIN check and set, sending in PDU and the Text mode.
 
-The output user protocol part "SMTP" provides operations with a SMTP server for receiving EMails.
+THE OUTPUT USER PROTOCOL PART "SMTP" provides operations with a SMTP-server for delivering EMails by their sending through TCP-Socket or SSL. For now, there are supported: TCP, SSL, AUTH, topic encoding for UTF-8.
 
 Author: Roman Savochenko <roman@oscada.org>
-Sponsor: Oleksandr Knestyapin <olexanderrr@gmail.com>
-Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
+Sponsored by: SVItoVYR LTD
+Version: 1.0.0
+License: GPLv2','Комплексний шаблон повідомлення містить частини диспетчеру та вихідний користувацький протокол повідомлення за EMail(SMTP) та SMS.
+
+ДИСПЕТЧЕР може виконуватися для вказаних повідомлень буферу повідомлень OpenSCADA та застосовується на Логічному рівні або об''єкті контролеру модуля JavaLikeCalc.
+
+"SMS" ЧАСТИНА ВИХІДНОГО КОРИСТУВАЦЬКОГО ПРОТОКОЛУ надає операції із SMS за допомогою GSM-модему, підключеного як послідовний пристрій. Наразі підтримується лише відправка SMS повідомлень на номер віддаленого мобільного телефону або GSM-модему. Для надсилання підтримується: вимкнення ЛУНИ, перевірка та встановлення PIN, надсилання у PDU та текстовому режимі.
+
+"SMTP" ЧАСТИНА ВИХІДНОГО КОРИСТУВАЦЬКОГО ПРОТОКОЛУ надає операції із SMTP-сервером щодо доставки електронної пошти відправленням через TCP-Сокет або SSL. Наразі підтримуються: TCP, SSL, AUTH, кодування теми у UTF-8.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Спонсоровано: ТОВ "СВІТоВИР АВТоМАТИК"
+Версія: 1.0.0
+Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	io = tr = EVAL;
 
 //-----------------------------------------------
@@ -7577,9 +7593,9 @@ function SMTP( ) {
 	//Send HELLO
 	rez = tr.messIO("EHLO "+SYS.system("hostname -f").parse(0,"\n")+"\x0D\x0A");
 	while(rez.length && rez.slice(-2) != "\x0D\x0A" && (trez=tr.messIO("")).length) rez += trez;
-	if(!rez.length)	{ io.setAttr("err", "100:"+tr("No a response.")); return; }
+	if(!rez.length)	{ io.setAttr("err", "100:"+tr("No response.")); return; }
 	for(off = 0; (sit=rez.parse(0,"\x0D\x0A",off)).length; )
-		if(sit.toInt() != 250)	{ io.setAttr("err", "101:"+tr("HELLO error: %1.").replace("%1",sit)); return; }
+		if(sit.toInt() != 250)	{ io.setAttr("err", "101:"+tr("Error HELLO: %1.").replace("%1",sit)); return; }
 		else if(sit.indexOf("AUTH LOGIN") >= 0) {
 			if(sit.indexOf("PLAIN") < 0)	{ io.setAttr("err", "101:"+tr("Unsupported auth methods: %1.").replace("%1",sit)); return; }
 			else if(!auth.length)			{ io.setAttr("err", "101:"+tr("Auth required: %1.").replace("%1",sit)); return; }
@@ -7589,36 +7605,36 @@ function SMTP( ) {
 	if(auth.length) {
 		rez = tr.messIO("AUTH LOGIN\x0D\x0A");
 		while(rez.length && rez.slice(-2) != "\x0D\x0A" && (trez=tr.messIO("")).length) rez += trez;
-		if(!rez.length)	{ io.setAttr("err", "100:"+tr("No a response.")); return; }
+		if(!rez.length)	{ io.setAttr("err", "100:"+tr("No response.")); return; }
 		if(rez.toInt() != 334)	{ io.setAttr("err", "102:"+tr("AUTH error: %1.").replace("%1",rez)); return; }
 
 		rez = tr.messIO(SYS.strEncode(io.attr("auth").parse(0,":"),"Base64")+"\x0D\x0A");
 		while(rez.length && rez.slice(-2) != "\x0D\x0A" && (trez=tr.messIO("")).length) rez += trez;
-		if(!rez.length)	{ io.setAttr("err", "100:"+tr("No a response.")); return; }
+		if(!rez.length)	{ io.setAttr("err", "100:"+tr("No response.")); return; }
 		if(rez.toInt() != 334)	{ io.setAttr("err", "102:"+tr("AUTH USER error: %1.").replace("%1",rez)); return; }
 
 		rez = tr.messIO(SYS.strEncode(io.attr("auth").parse(1,":"),"Base64")+"\x0D\x0A");
 		while(rez.length && rez.slice(-2) != "\x0D\x0A" && (trez=tr.messIO("")).length) rez += trez;
-		if(!rez.length)	{ io.setAttr("err", "100:"+tr("No a response.")); return; }
+		if(!rez.length)	{ io.setAttr("err", "100:"+tr("No response.")); return; }
 		if(rez.toInt() != 235)	{ io.setAttr("err", "102:"+tr("AUTH PASS error: %1.").replace("%1",rez)); return; }
 	}
 
 	//Send FROM
 	rez = tr.messIO("MAIL FROM:<"+io.attr("from")+">\x0D\x0A");
 	while(rez.length && rez.slice(-2) != "\x0D\x0A" && (trez=tr.messIO("")).length) rez += trez;
-	if(!rez.length)	{ io.setAttr("err", "100:"+tr("No a response.")); return; }
+	if(!rez.length)	{ io.setAttr("err", "100:"+tr("No response.")); return; }
 	if(rez.toInt() != 250)	{ io.setAttr("err", "103:"+tr("MAIL FROM error: %1.").replace("%1",rez)); return; }
 
 	//Send TO
 	rez = tr.messIO("RCPT TO:<"+io.attr("to")+">\x0D\x0A");
 	while(rez.length && rez.slice(-2) != "\x0D\x0A" && (trez=tr.messIO("")).length) rez += trez;
-	if(!rez.length)	{ io.setAttr("err", "100:"+tr("No a response.")); return; }
+	if(!rez.length)	{ io.setAttr("err", "100:"+tr("No response.")); return; }
 	if(rez.toInt() != 250)	{ io.setAttr("err", "104:"+tr("RCPT TO error: %1.").replace("%1",rez)); return; }
 
 	//Prepare and send DATA
 	rez = tr.messIO("DATA\x0D\x0A");
 	while(rez.length && rez.slice(-2) != "\x0D\x0A" && (trez=tr.messIO("")).length) rez += trez;
-	if(!rez.length)	{ io.setAttr("err", "100:"+tr("No a response.")); return; }
+	if(!rez.length)	{ io.setAttr("err", "100:"+tr("No response.")); return; }
 	if(rez.toInt() != 354)	{ io.setAttr("err", "105:"+tr("DATA error: %1.").replace("%1",rez)); return; }
 
 	// Req version
@@ -7636,7 +7652,7 @@ function SMTP( ) {
 				"\x0D\x0A.\x0D\x0A";	//End for code 354
 	rez = tr.messIO(data);
 	while(rez.length && rez.slice(-2) != "\x0D\x0A" && (trez=tr.messIO("")).length) rez += trez;
-	if(!rez.length)	{ io.setAttr("err", "100:"+tr("No a response.")); return; }
+	if(!rez.length)	{ io.setAttr("err", "100:"+tr("No response.")); return; }
 	if(rez.toInt() != 250)	{ io.setAttr("err", "105:"+tr("DATA send error: %1.").replace("%1",rez)); return; }
 
 	//Send QUIT
@@ -7673,7 +7689,7 @@ function SMS( ) {
 		rez = tr.messIO("ATE0\r");
 		while(rez.length && (trez=tr.messIO("")).length) rez += trez;
 		if(rez.indexOf("OK\r") < 0) {
-			io.setAttr("err", "101:"+tr("Disable ECHO error: %1").replace("%1",rez));
+			io.setAttr("err", "101:"+tr("Error disabling ECHO: %1").replace("%1",rez));
 			return;
 		}
 
@@ -7682,11 +7698,11 @@ function SMS( ) {
 			//Check for PIN
 			rez = tr.messIO("AT+CPIN?\r");
 			while(rez.length && (trez=tr.messIO("")).length) rez += trez;
-			if(rez.indexOf("OK\r") < 0)	{ io.setAttr("err", "102:"+tr("Check for PIN-code error: %1").replace("%1",rez)); return; }
+			if(rez.indexOf("OK\r") < 0)	{ io.setAttr("err", "102:"+tr("Error checking for PIN-code: %1").replace("%1",rez)); return; }
 			if(rez.indexOf("+CPIN: READY\r") < 0) {	//PIN is needed
 				rez = tr.messIO("AT+CPIN="+io.attr("pin")+"\r");
 				while(rez.length && (trez=tr.messIO("")).length) rez += trez;
-				if(rez.indexOf("OK\r") < 0)	{ io.setAttr("err", "102:"+tr("Set PIN error: %1").replace("%1",rez)); return; }
+				if(rez.indexOf("OK\r") < 0)	{ io.setAttr("err", "102:"+tr("Error setting PIN: %1").replace("%1",rez)); return; }
 			}
 		}
 
@@ -7694,22 +7710,22 @@ function SMS( ) {
 			//Switch to Text SMS mode
 			rez = tr.messIO("AT+CMGF=1\r");
 			while(rez.length && (trez=tr.messIO("")).length) rez += trez;
-			if(rez.indexOf("OK\r") < 0)	{ io.setAttr("err", "103:"+tr("Set SMS Text mode error: %1").replace("%1",rez)); return; }
+			if(rez.indexOf("OK\r") < 0)	{ io.setAttr("err", "103:"+tr("Error setting the SMS Text mode: %1").replace("%1",rez)); return; }
 
 			//Send the Telephone number
 			rez = tr.messIO("AT+CMGS=\""+tel+"\"\r");
 			while(rez.length && (trez=tr.messIO("")).length) rez += trez;
-			if(rez.indexOf(">") < 0)	{ io.setAttr("err", "104:"+tr("Sent SMS error: %1").replace("%1",rez)); return; }
+			if(rez.indexOf(">") < 0)	{ io.setAttr("err", "104:"+tr("Error sending SMS: %1").replace("%1",rez)); return; }
 			rez = tr.messIO(io.text()+"\x1A");
 			while(rez.length && (trez=tr.messIO("")).length) rez += trez;
 			//for(var iTr = 0; iTr < 100 && rez.indexOf("OK\r") < 0; iTr++) rez += tr.messIO("");	//Up to 10 seconds wait for reply
-			if(rez.indexOf("OK\r") < 0)	{ io.setAttr("err", "104:"+tr("Sent SMS PDU error: %1").replace("%1",rez)); return; }
+			if(rez.indexOf("OK\r") < 0)	{ io.setAttr("err", "104:"+tr("Error sending SMS PDU: %1").replace("%1",rez)); return; }
 		}
 		else {	//SMS in the PDU mode
 			// Switch to PDU SMS mode
 			rez = tr.messIO("AT+CMGF=0\r");
 			while(rez.length && (trez=tr.messIO("")).length) rez += trez;
-			if(rez.indexOf("OK\r") < 0)	{ io.setAttr("err", "103:"+tr("Set SMS PDU mode error: %1").replace("%1",rez)); return; }
+			if(rez.indexOf("OK\r") < 0)	{ io.setAttr("err", "103:"+tr("Error setting the SMS PDU mode: %1").replace("%1",rez)); return; }
 
 			//Prepare PDU
 			pdu = "001100";	//SMS center number (default) + SMS-Submit
@@ -7729,11 +7745,11 @@ function SMS( ) {
 			// Send the PDU message
 			rez = tr.messIO("AT+CMGS="+(pdu.length/2-1)+"\r");
 			while(rez.length && (trez=tr.messIO("")).length) rez += trez;
-			if(rez.indexOf(">") < 0)	{ io.setAttr("err", "104:"+tr("Sent SMS error: %1").replace("%1",rez)); return; }
+			if(rez.indexOf(">") < 0)	{ io.setAttr("err", "104:"+tr("Error sending SMS: %1").replace("%1",rez)); return; }
 			rez = tr.messIO(pdu+"\x1A");
 			while(rez.length && (trez=tr.messIO("")).length) rez += trez;
 			//for(var iTr = 0; iTr < 100 && rez.indexOf("OK\r") < 0; iTr++) rez += tr.messIO("");	//Up to 10 seconds wait for reply
-			if(rez.indexOf("OK\r") < 0)	{ io.setAttr("err", "104:"+tr("Sent SMS PDU error: %1").replace("%1",rez)); return; }
+			if(rez.indexOf("OK\r") < 0)	{ io.setAttr("err", "104:"+tr("Error sending SMS PDU: %1").replace("%1",rez)); return; }
 			//SYS.messDebug("TEST SMS","PDU REZ :"+rez);
 		}
 		io.setAttr("err", "0");
@@ -7966,7 +7982,43 @@ if(tErr.toInt() && tErr.toInt() != f_err.toInt())	this.alarmSet(DESCR+": "+tErr.
 else if(f_err.toInt() && !tErr.toInt())			this.alarmSet(DESCR+": "+tr("NORMA"), 1);
 f_err = tErr;
 conDelay_ = 0;','','',1570376879);
-INSERT INTO tmplib_base VALUES('initConsAssignTrs','Initiative connections processing for assigned output transports','Опрацювання ініціативних підключень щодо асоціативних вихідних транспортів','','','','',10,0,'JavaLikeCalc.JavaScript
+INSERT INTO tmplib_base VALUES('initConsAssignTrs','Initiative connections processing for assigned output transports','Опрацювання ініціативних підключень щодо асоціативних вихідних транспортів','Обработка инициативных подключений на предмет ассоциативных выходных транспортов','The template of processing input initiative connections was created to provide the latest chain of implementation and support for conception of data acquisition in the passive mode and the initiative connection, that is — the control of associative connections, created by the input transport at each connection.
+
+The function of creation associative output transports at connections is currently only supported by the module "Sockets" and for TCP-sockets.
+
+The control of associative transport means:
+  - obtaining a list of the associative transports, by the function assTrsList() of the input transports;
+  - reading from new transports (opened) of identification information, which currently represents only the source object identifier;
+    - search, by the received identifier, the source object and assigning to it of this transport;
+    - registering in the attribute "prcTr" of the object type.
+  - checking of existing transports for their closure (detachment), for which performed the deregistration in the attribute "prcTr" of the object type and the establishment of the source object in the empty value; disconnected output associated transports are reused by the input one upon receiving a new connection then it is switched on.
+
+The template can control the containers of data source objects, constructed both as DAQ-objects of the controllers and logical level parameters, what representing the data source and having a transport address definition field, and what generally defined by the configuration field "srcObjPath" of the format {CntrAddr}:{TrCntrFldAddr}, where:
+  - CntrAddr — container address, for example: "ModBus" — for DAQ-objects of the controllers, "LogicLev.CntrPLC" — for logical level parameters;
+  - TrCntrFldAddr — address of the transport control field in the source object, for example — "%2fcntr%2fcfg%2fADDR" for "ModBus"; what can be obtained in a configurator at the history of pointing on the control field in the status line.
+
+Author: Roman Savochenko <roman@oscada.org>
+Sponsored by: BLUE STAR GROUP Ltd
+Version: 1.1.0
+License: GPLv2','Шаблон служби опрацювання вхідних ініціативних підключень створено для надання останньої ланки реалізації та підтримки концепції збору даних у пасивному режимі та ініціативного підключення, а саме — контролю асоціативних транспортів, створюваних вхідним транспортом за кожним підключенням.
+
+Функцію створення вихідних асоціативних транспортів за підключенням на вхідний наразі підтримує лише модуль транспортів "Сокети" та для TCP-сокетів.
+
+Контроль асоціативних транспортів передбачає:
+  - отримання переліку асоціативних транспортів, функцією вхідного транспорту assTrsList();
+  - читання із нових транспортів (відкритих) ідентифікаційної інформації, яка наразі репрезентує тільки ідентифікатор об''єкту джерела;
+    - пошук, за отриманим ідентифікатором, об''єкта джерела та призначення йому адреси цього транспорту;
+    - реєстрацію у атрибуті об''єктного типу "prcTr".
+  - перевірка діючих транспортів на предмет їх закриття (від''єднання), щодо чого здійснюється дереєстрація у атрибуті об''єктного типу "prcTr" та встановлення об''єкту джерела порожнього значення; вимкнені вихідні асоціативні транспорти повторно використовуються вхідним за отриманням нового підключення, після чого він вмикається.
+
+Шаблон може керувати контейнерами об''єктів джерел даних, побудованих як у вигляді DAQ-об''єктів контролерів, так і параметрів логічного рівня, що репрезентують джерело даних та мають поле визначення адреси транспорту та що загалом визначається конфігураційним полем "srcObjPath" із форматом {CntrAddr}:{TrCntrFldAddr}, де:
+  - CntrAddr — адреса контейнеру, наприклад: "ModBus" — для DAQ-об''єктів контролерів, "LogicLev.CntrPLC" — для параметрів логічного рівня;
+  - TrCntrFldAddr — адреса поля контролю транспорту у об''єкті джерела, наприклад — "%2fcntr%2fcfg%2fADDR" для "ModBus"; що може бути отримано у конфігураторі за історією наведення на поля контролю у рядку статусу.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Спонсорування: ТОВ BLUE STAR GROUP
+Версія: 1.1.0
+Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	inTransport_ = "", inTr = EVAL;
 	prcTr = new Object();
@@ -7980,7 +8032,13 @@ if(inTr.isEVal() || inTransport != inTransport_)	{
 }
 
 if(inTr.isEVal())	tErr = "1:"+tr("Input transport ''%1'' error.").replace("%1",inTransport);
+else if(!(CNTR_O=SYS.DAQ.nodeAt(srcObjPath.parse(0,":"),".")))
+	tErr = "2:"+tr("Error the source object path ''%1''.").replace("%1", srcObjPath.parse(0,":"));
+else if(!(CntrFldPath=srcObjPath.parse(1,":")).length)
+	tErr = "3:"+tr("The control field path is empty.");
 else {
+	isLogPrm = srcObjPath.parse(0,":").parse(1).length;
+
 	outTrs = inTr.assTrsList();
 	for(iTr = 0; iTr < outTrs.length; iTr++) {
 		oTrNm = outTrs[iTr];
@@ -7991,20 +8049,29 @@ else {
 				//   reading the source identifier
 				idSeq = oTrO.messIO("").parse(0, ":");
 				//   stop for empty-missed identification or missed PLC object
-				if(!idSeq.length || (PLC_O=SYS.DAQ.ModBus[idSeq]).isEVal() || ((tVl=PLC_O.cfg("ADDR").parse(1)).length && tVl != oTrNm && !outTrs[tVl].isEVal()))
+				if(!idSeq.length || (PLC_O=CNTR_O[(isLogPrm?"prm_":"")+idSeq]).isEVal())	{
 					oTrO.start(false);
-				//   connect the transport to a PLC object
-				else  {
-					if(outTrTm.length)	oTrO.timings(outTrTm);
-					prcTr[oTrNm] = idSeq;
-					PLC_O.cfgSet("ADDR", "Sockets."+oTrNm);
+					if(idSeq.length)
+						SYS.messNote("initConsAssignTrs", tr("The requested identificator ''%1'' is mіssing in the container ''%2'' of the data source objects!").replace("%1",idSeq).replace("%2",srcObjPath.parse(0,":")));
+					continue;
 				}
+
+				req = SYS.XMLNode("get").setAttr("path",PLC_O.nodePath()+"/"+CntrFldPath);
+				SYS.cntrReq(req);
+				//   stop for not empty and not equal value and register already the transports
+				if(((tVl=req.text()).length && tVl != oTrNm && !outTrs[tVl].isEVal()))	{ oTrO.start(false); continue; }
+
+				//   connect the transport to a PLC object
+				if(outTrTm.length)	oTrO.timings(outTrTm);
+				prcTr[oTrNm] = idSeq;
+				req.setName("set").setText("Sockets."+oTrNm);
+				SYS.cntrReq(req);
 			}
 		}
 		// is not present or active
-		else if(!prcTr[oTrNm].isEVal() && !(PLC_O=SYS.DAQ.ModBus[prcTr[oTrNm]]).isEVal()) {
+		else if(!prcTr[oTrNm].isEVal() && !(PLC_O=CNTR_O[(isLogPrm?"prm_":"")+prcTr[oTrNm]]).isEVal()) {
 			delete prcTr[oTrNm];
-			PLC_O.cfgSet("ADDR", "");
+			SYS.cntrReq(SYS.XMLNode("set").setAttr("path",PLC_O.nodePath()+"/"+CntrFldPath).setText(""));
 		}
 	}
 	delete oTrO;
@@ -8012,7 +8079,7 @@ else {
 
 //Error set
 if(tErr.length)	f_err = tErr;
-else f_err = "0";','','',1570642647);
+else f_err = "0";','','',1571249552);
 CREATE TABLE IF NOT EXISTS 'lib_Controllers' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO lib_Controllers VALUES('prescr','Prescriptions manager (moved)','','','!!!!: Moved and replaced by the template PrescrTempl.manager. Will be removed soon
 Prescriptions manager and controller. Used in addition with user interface''s cadre "Prescription: editing" and "Prescription: runtime" for which into a parameter of the controller you must pass that parameters: "mode", "prog", "startTm", "curCom", "comLs", "work".
@@ -11716,18 +11783,18 @@ if(io.name() == "send") {
 	//Disable ECHO
 	rez = tr.messIO("ATE0\r");
 	while(rez.length && (trez=tr.messIO("")).length) rez += trez;
-	if(rez.indexOf("OK\r") < 0)	{ io.setAttr("err", "101:"+tr("Disable ECHO error: %1").replace("%1",rez)); return; }
+	if(rez.indexOf("OK\r") < 0)	{ io.setAttr("err", "101:"+tr("Error disabling ECHO: %1").replace("%1",rez)); return; }
 
 	//Set PIN
 	if(io.attr("pin").length) {
 		//Check for PIN
 		rez = tr.messIO("AT+CPIN?\r");
 		while(rez.length && (trez=tr.messIO("")).length) rez += trez;
-		if(rez.indexOf("OK\r") < 0)	{ io.setAttr("err", "102:"+tr("Check for PIN-code error: %1").replace("%1",rez)); return; }
+		if(rez.indexOf("OK\r") < 0)	{ io.setAttr("err", "102:"+tr("Error checking for PIN-code: %1").replace("%1",rez)); return; }
 		if(rez.indexOf("+CPIN: READY\r") < 0) {	//PIN is needed
 			rez = tr.messIO("AT+CPIN="+io.attr("pin")+"\r");
 			while(rez.length && (trez=tr.messIO("")).length) rez += trez;
-			if(rez.indexOf("OK\r") < 0)	{ io.setAttr("err", "102:"+tr("Set PIN error: %1").replace("%1",rez)); return; }
+			if(rez.indexOf("OK\r") < 0)	{ io.setAttr("err", "102:"+tr("Error setting PIN: %1").replace("%1",rez)); return; }
 		}
 	}
 
@@ -11735,22 +11802,22 @@ if(io.name() == "send") {
 		//Switch to Text SMS mode
 		rez = tr.messIO("AT+CMGF=1\r");
 		while(rez.length && (trez=tr.messIO("")).length) rez += trez;
-		if(rez.indexOf("OK\r") < 0)	{ io.setAttr("err", "103:"+tr("Set SMS Text mode error: %1").replace("%1",rez)); return; }
+		if(rez.indexOf("OK\r") < 0)	{ io.setAttr("err", "103:"+tr("Error setting the SMS Text mode: %1").replace("%1",rez)); return; }
 
 		//Send the Telephone number
 		rez = tr.messIO("AT+CMGS=\""+tel+"\"\r");
 		while(rez.length && (trez=tr.messIO("")).length) rez += trez;
-		if(rez.indexOf(">") < 0)	{ io.setAttr("err", "104:"+tr("Sent SMS error: %1").replace("%1",rez)); return; }
+		if(rez.indexOf(">") < 0)	{ io.setAttr("err", "104:"+tr("Error sending SMS: %1").replace("%1",rez)); return; }
 		rez = tr.messIO(io.text()+"\x1A");
 		while(rez.length && (trez=tr.messIO("")).length) rez += trez;
 		//for(var iTr = 0; iTr < 100 && rez.indexOf("OK\r") < 0; iTr++) rez += tr.messIO("");	//Up to 10 seconds wait for reply
-		if(rez.indexOf("OK\r") < 0)	{ io.setAttr("err", "104:"+tr("Sent SMS PDU error: %1").replace("%1",rez)); return; }
+		if(rez.indexOf("OK\r") < 0)	{ io.setAttr("err", "104:"+tr("Error sending SMS PDU: %1").replace("%1",rez)); return; }
 	}
 	else {	//SMS in the PDU mode
 		// Switch to PDU SMS mode
 		rez = tr.messIO("AT+CMGF=0\r");
 		while(rez.length && (trez=tr.messIO("")).length) rez += trez;
-		if(rez.indexOf("OK\r") < 0)	{ io.setAttr("err", "103:"+tr("Set SMS PDU mode error: %1").replace("%1",rez)); return; }
+		if(rez.indexOf("OK\r") < 0)	{ io.setAttr("err", "103:"+tr("Error setting the SMS PDU mode: %1").replace("%1",rez)); return; }
 
 		//Prepare PDU
 		pdu = "001100";	//SMS center number (default) + SMS-Submit
@@ -11770,11 +11837,11 @@ if(io.name() == "send") {
 		// Send the PDU message
 		rez = tr.messIO("AT+CMGS="+(pdu.length/2-1)+"\r");
 		while(rez.length && (trez=tr.messIO("")).length) rez += trez;
-		if(rez.indexOf(">") < 0)	{ io.setAttr("err", "104:"+tr("Sent SMS error: %1").replace("%1",rez)); return; }
+		if(rez.indexOf(">") < 0)	{ io.setAttr("err", "104:"+tr("Error sending SMS: %1").replace("%1",rez)); return; }
 		rez = tr.messIO(pdu+"\x1A");
 		while(rez.length && (trez=tr.messIO("")).length) rez += trez;
 		//for(var iTr = 0; iTr < 100 && rez.indexOf("OK\r") < 0; iTr++) rez += tr.messIO("");	//Up to 10 seconds wait for reply
-		if(rez.indexOf("OK\r") < 0)	{ io.setAttr("err", "104:"+tr("Sent SMS PDU error: %1").replace("%1",rez)); return; }
+		if(rez.indexOf("OK\r") < 0)	{ io.setAttr("err", "104:"+tr("Error sending SMS PDU: %1").replace("%1",rez)); return; }
 		//SYS.messDebug("TEST SMS","PDU REZ :"+rez);
 	}
 	io.setAttr("err", "0");
@@ -12235,9 +12302,9 @@ auth = io.attr("auth");
 //Send HELLO
 rez = tr.messIO("EHLO "+SYS.system("hostname -f").parse(0,"\n")+"\x0D\x0A");
 while(rez.length && rez.slice(-2) != "\x0D\x0A" && (trez=tr.messIO("")).length) rez += trez;
-if(!rez.length)	{ io.setAttr("err", "100:"+tr("No a response.")); return; }
+if(!rez.length)	{ io.setAttr("err", "100:"+tr("No response.")); return; }
 for(off = 0; (sit=rez.parse(0,"\x0D\x0A",off)).length; )
-	if(sit.toInt() != 250)	{ io.setAttr("err", "101:"+tr("HELLO error: %1.").replace("%1",sit)); return; }
+	if(sit.toInt() != 250)	{ io.setAttr("err", "101:"+tr("Error HELLO: %1.").replace("%1",sit)); return; }
 	else if(sit.indexOf("AUTH LOGIN") >= 0) {
 		if(sit.indexOf("PLAIN") < 0)	{ io.setAttr("err", "101:"+tr("Unsupported auth methods: %1.").replace("%1",sit)); return; }
 		else if(!auth.length)				{ io.setAttr("err", "101:"+tr("Auth required: %1.").replace("%1",sit)); return; }
@@ -12247,36 +12314,36 @@ for(off = 0; (sit=rez.parse(0,"\x0D\x0A",off)).length; )
 if(auth.length) {
 	rez = tr.messIO("AUTH LOGIN\x0D\x0A");
 	while(rez.length && rez.slice(-2) != "\x0D\x0A" && (trez=tr.messIO("")).length) rez += trez;
-	if(!rez.length)	{ io.setAttr("err", "100:"+tr("No a response.")); return; }
+	if(!rez.length)	{ io.setAttr("err", "100:"+tr("No response.")); return; }
 	if(rez.toInt() != 334)	{ io.setAttr("err", "102:"+tr("AUTH error: %1.").replace("%1",rez)); return; }
 
 	rez = tr.messIO(SYS.strEncode(io.attr("auth").parse(0,":"),"Base64")+"\x0D\x0A");
 	while(rez.length && rez.slice(-2) != "\x0D\x0A" && (trez=tr.messIO("")).length) rez += trez;
-	if(!rez.length)	{ io.setAttr("err", "100:"+tr("No a response.")); return; }
+	if(!rez.length)	{ io.setAttr("err", "100:"+tr("No response.")); return; }
 	if(rez.toInt() != 334)	{ io.setAttr("err", "102:"+tr("AUTH USER error: %1.").replace("%1",rez)); return; }
 
 	rez = tr.messIO(SYS.strEncode(io.attr("auth").parse(1,":"),"Base64")+"\x0D\x0A");
 	while(rez.length && rez.slice(-2) != "\x0D\x0A" && (trez=tr.messIO("")).length) rez += trez;
-	if(!rez.length)	{ io.setAttr("err", "100:"+tr("No a response.")); return; }
+	if(!rez.length)	{ io.setAttr("err", "100:"+tr("No response.")); return; }
 	if(rez.toInt() != 235)	{ io.setAttr("err", "102:"+tr("AUTH PASS error: %1.").replace("%1",rez)); return; }
 }
 
 //Send FROM
 rez = tr.messIO("MAIL FROM:<"+io.attr("from")+">\x0D\x0A");
 while(rez.length && rez.slice(-2) != "\x0D\x0A" && (trez=tr.messIO("")).length) rez += trez;
-if(!rez.length)	{ io.setAttr("err", "100:"+tr("No a response.")); return; }
+if(!rez.length)	{ io.setAttr("err", "100:"+tr("No response.")); return; }
 if(rez.toInt() != 250)	{ io.setAttr("err", "103:"+tr("MAIL FROM error: %1.").replace("%1",rez)); return; }
 
 //Send TO
 rez = tr.messIO("RCPT TO:<"+io.attr("to")+">\x0D\x0A");
 while(rez.length && rez.slice(-2) != "\x0D\x0A" && (trez=tr.messIO("")).length) rez += trez;
-if(!rez.length)	{ io.setAttr("err", "100:"+tr("No a response.")); return; }
+if(!rez.length)	{ io.setAttr("err", "100:"+tr("No response.")); return; }
 if(rez.toInt() != 250)	{ io.setAttr("err", "104:"+tr("RCPT TO error: %1.").replace("%1",rez)); return; }
 
 //Prepare and send DATA
 rez = tr.messIO("DATA\x0D\x0A");
 while(rez.length && rez.slice(-2) != "\x0D\x0A" && (trez=tr.messIO("")).length) rez += trez;
-if(!rez.length)	{ io.setAttr("err", "100:"+tr("No a response.")); return; }
+if(!rez.length)	{ io.setAttr("err", "100:"+tr("No response.")); return; }
 if(rez.toInt() != 354)	{ io.setAttr("err", "105:"+tr("DATA error: %1.").replace("%1",rez)); return; }
 
 // Req version
@@ -12294,7 +12361,7 @@ data = "Message-ID: <"+rand(999999).toString()+"."+rand(999999999).toString()+"-
 			"\x0D\x0A.\x0D\x0A";	//End for code 354
 rez = tr.messIO(data);
 while(rez.length && rez.slice(-2) != "\x0D\x0A" && (trez=tr.messIO("")).length) rez += trez;
-if(!rez.length)	{ io.setAttr("err", "100:"+tr("No a response.")); return; }
+if(!rez.length)	{ io.setAttr("err", "100:"+tr("No response.")); return; }
 if(rez.toInt() != 250)	{ io.setAttr("err", "105:"+tr("DATA send error: %1.").replace("%1",rez)); return; }
 
 //Send QUIT
