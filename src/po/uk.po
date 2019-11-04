@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-14 18:27+0300\n"
+"POT-Creation-Date: 2019-11-04 11:00+0200\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -341,9 +341,6 @@ msgstr "Конфігурація"
 #, c-format
 msgid "Requested %d records for time %s."
 msgstr "Запитано %d записів протягом %s."
-
-msgid "No value."
-msgstr "Значення відсутнє."
 
 #, c-format
 msgid ""
@@ -1348,8 +1345,8 @@ msgstr "Включення"
 msgid "Controller is not running!"
 msgstr "Контролер не запущено!"
 
-msgid "Frequency of calculation of the function (Hz)"
-msgstr "Частота обчислення функції (Гц)"
+msgid "Frequency of calculation of the function, Hz"
+msgstr "Частота обчислення функції, Гц"
 
 msgid "Function start flag"
 msgstr "Прапорець запуску функції"
@@ -2652,6 +2649,9 @@ msgstr "Встановлено назву проекту у:"
 
 msgid "already started."
 msgstr "вже запущено."
+
+#~ msgid "No value."
+#~ msgstr "Значення відсутнє."
 
 #~ msgid "Error entity. Pos: %d"
 #~ msgstr "Помилка сутності. Поз: %d"

@@ -5306,7 +5306,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     }
     clrMrk = TWEB::colorResolve(im, sclMarkColor);
 
-    //Calc horizontal scale
+    //Calc and draw the horizontal scale
     int64_t hDiv = 1;					//Horisontal scale divisor
     int hmax_ln = tArW / (int)((sclHor&FD_MARKS && mrkWidth)?mrkWidth:15.0*vmin(xSc,ySc));
     if(hmax_ln >= 2) {
@@ -5367,7 +5367,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 		gdImageStringFTEx(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0.0, 0, 0, (char*)lab_dt.c_str(), &strex);
 		markBrd = tArX + tArW - (brect[2]-brect[6]);
 		markY += (brect[3] - brect[7]);
-		endMarkBrd = markBrd;
+		endMarkBrd = vmin(endMarkBrd, markBrd);
 		gdImageStringFTEx(im, NULL, clrMrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0.0, markBrd, markY, (char*)lab_dt.c_str(), &strex);
 	    }
 

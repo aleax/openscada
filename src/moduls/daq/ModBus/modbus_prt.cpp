@@ -484,8 +484,13 @@ bool TProtIn::mess( const string &ireqst, string &answer )
     bool isBuf = false;
 
 retry:
+    bool isASCII = (reqst.size() > 3 && reqst[0] == ':' && reqst.substr(reqst.size()-2,2) == "\x0D\x0A");
+    bool isRTU = (reqst.size() > 3 && reqst.size() <= 256 &&
+		modPrt->CRC16(reqst.substr(0,reqst.size()-2)) == (uint16_t)((reqst[reqst.size()-2]<<8)+(uint8_t)reqst[reqst.size()-1]));
+    bool isTCP = (reqst.size() > 7 && reqst.size() <= 260 &&
+		reqst.size() == (unsigned)((unsigned short)(reqst[4]<<8)|(unsigned char)reqst[5])+6);
     // ASCII check
-    if(reqst.size() > 3 && reqst[0] == ':' && reqst.substr(reqst.size()-2,2) == "\x0D\x0A") {
+    if(isASCII) {
 	prt = "ASCII";
 	string req = modPrt->ASCIIToData(reqst.substr(1,reqst.size()-3));
 	if(modPrt->LRC(req.substr(0,req.size()-1)) != (uint8_t)req[req.size()-1]) return false;
@@ -493,17 +498,13 @@ retry:
 	pdu = req.substr(1, req.size()-2);
     }
     // RTU check
-    else if(reqst.size() > 3 && reqst.size() <= 256 &&
-	modPrt->CRC16(reqst.substr(0,reqst.size()-2)) == (uint16_t)((reqst[reqst.size()-2]<<8)+(uint8_t)reqst[reqst.size()-1]))
-    {
+    else if((isRTU && !isTCP) || (isRTU && isTCP && srcTr().at().owner().modId() == "Serial")) {
 	prt = "RTU";
 	node = reqst[0];
 	pdu = reqst.substr(1, reqst.size()-3);
     }
     // TCP check
-    else if(reqst.size() > 7 && reqst.size() <= 260 &&
-	reqst.size() == (unsigned)((unsigned short)(reqst[4]<<8)|(unsigned char)reqst[5])+6)
-    {
+    else if(isTCP) {
 	prt = "TCP";
 	node = reqst[6];
 	pdu = reqst.substr(7);
@@ -544,7 +545,7 @@ retry:
 	answer.reserve(pdu.size()+3);
 	answer += (uint8_t)node;		//Unit identifier
 	answer += pdu;
-	uint16_t crc = modPrt->CRC16( answer );
+	uint16_t crc = modPrt->CRC16(answer);
 	answer += crc>>8;
 	answer += crc;
     }
@@ -623,7 +624,7 @@ void Node::postEnable( int flag )
 {
     //Create default IOs
     if(flag&TCntrNode::NodeConnect) {
-	ioIns(new IO("f_frq",_("Frequency of calculation of the function (Hz)"),IO::Real,TPrmTempl::LockAttr,"1000",false), 0);
+	ioIns(new IO("f_frq",_("Frequency of calculation of the function, Hz"),IO::Real,TPrmTempl::LockAttr,"1000",false), 0);
 	ioIns(new IO("f_start",_("Function start flag"),IO::Boolean,TPrmTempl::LockAttr,"0",false), 1);
 	ioIns(new IO("f_stop",_("Function stop flag"),IO::Boolean,TPrmTempl::LockAttr,"0",false), 2);
     }

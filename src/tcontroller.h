@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tcontroller.h
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -114,7 +114,7 @@ class TController : public TCntrNode, public TConfig
 	virtual void redntDataUpdate( );
 
 	virtual string catsPat( );	//Individual categories pattern for messages of the controller
-	void alarmSet( const string &mess, int lev = -TMess::Crit, const string &prm = "" );
+	void alarmSet( const string &mess, int lev = -TMess::Crit, const string &prm = "", bool force = false );
 
 	TTypeDAQ &owner( ) const;
 

@@ -406,9 +406,11 @@ TVariant TParamContr::objFuncCall( const string &iid, vector<TVariant> &prms, co
 {
     // TCntrNodeObj cntr() - get the controller node
     if(iid == "cntr")	return new TCntrNodeObj(AutoHD<TCntrNode>(&owner()), user);
-    // bool alarmSet( string mess, int lev = -5 ) - set alarm to message <mess> and level <lev>.
+    // bool alarmSet( string mess, int lev = -5, bool force = false ) -
+    //		set alarm to message <mess> and level <lev> and omit the presence control at <force>.
     if(iid == "alarmSet" && prms.size() >= 1) {
-	owner().alarmSet(prms[0].getS(), (prms.size() >= 2) ? prms[1].getI() : -TMess::Crit, id()+"\n"+name());
+	owner().alarmSet(prms[0].getS(), (prms.size() >= 2) ? prms[1].getI() : -TMess::Crit,
+	    id()+"\n"+name(), (prms.size() >= 3) ? prms[2].getB() : false);
 	return true;
     }
 

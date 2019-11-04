@@ -412,9 +412,9 @@ string TController::catsPat( )
     //return "/^(al"+owner().modId()+":"+id()+"(\\.|$)|"+nodePath()+")/";
 }
 
-void TController::alarmSet( const string &mess, int lev, const string &prm )
+void TController::alarmSet( const string &mess, int lev, const string &prm, bool force )
 {
-    if(lev >= 0 || !redntUse(TController::Any)) {
+    if(force || !redntUse(TController::Any)) {
 	string	pId = TSYS::strLine(prm, 0);
 	string	pNm = TSYS::strLine(prm, 1);
 	string	aCat = "al" + owner().modId() + ":" + id();
@@ -425,6 +425,15 @@ void TController::alarmSet( const string &mess, int lev, const string &prm )
 	    if(pNm.size()) pId += " > " + pNm;
 	    aMess = pId + ((prm.size() && !pNm.size())?" > ":": ") + aMess;
 	}
+
+	//Checking for presence at set and missing at unset
+	if(!force) {
+	    vector<TMess::SRec> recs;
+	    SYS->archive().at().messGet(0, SYS->sysTm(), recs, aCat, -1, ALRM_ARCH_NM);
+	    if((lev >= 0 && !recs.size()) || (lev < 0 && recs.size() && aMess == recs[0].mess && lev == recs[0].level))
+		return;
+	}
+
 	message(aCat.c_str(), lev, aMess.c_str());
     }
 }
@@ -437,9 +446,11 @@ TVariant TController::objFuncCall( const string &iid, vector<TVariant> &prms, co
     if(iid == "descr")	return descr();
     // string status( ) - get controller status.
     if(iid == "status")	return getStatus();
-    // bool alarmSet( string mess, int lev = -5, string prm = "" ) - set alarm to message <mess> and level <lev> for parameter <prm>.
+    // bool alarmSet( string mess, int lev = -5, string prm = "", bool force = false ) -
+    //		set alarm to message <mess> and level <lev> for parameter <prm> and omit the presence control at <force>.
     if(iid == "alarmSet" && prms.size() >= 1) {
-	alarmSet(prms[0].getS(), (prms.size() >= 2) ? prms[1].getI() : -TMess::Crit, (prms.size() >= 3) ? prms[2].getS() : "");
+	alarmSet(prms[0].getS(), (prms.size() >= 2) ? prms[1].getI() : -TMess::Crit,
+	    (prms.size() >= 3) ? prms[2].getS() : "", (prms.size() >= 4) ? prms[3].getB() : false);
 	return true;
     }
     // bool enable( bool newSt = EVAL ) - get enable status or change it by argument 'newSt' assign.

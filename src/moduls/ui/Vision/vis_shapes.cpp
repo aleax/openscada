@@ -3262,7 +3262,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
     }
     mrkPen.setColor(shD->sclMarkColor);	//Restore mark color
 
-    //Calc horizontal scale
+    //Calc and draw the horizontal scale
     int64_t hDiv = 1;	//Horisontal scale divisor
     int hmax_ln = tAr.width() / (int)((sclHor&FD_MARKS)?mrkWidth:15*vmin(w->xScale(true),w->yScale(true)));
     if(hmax_ln >= 2) {

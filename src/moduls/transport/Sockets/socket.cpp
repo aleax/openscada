@@ -61,7 +61,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"3.3.1"
+#define MOD_VER		"3.3.2"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -1415,13 +1415,18 @@ repeate:
 	    FD_ZERO(&rw_fd); FD_SET(sockFd, &rw_fd);
 	    kz = select(sockFd+1, &rw_fd, NULL, NULL, &tv);
 	    if(kz == 0) {
+		err = _("Reading timeouted.");
 		if(!notReq) {
-		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Reading timeouted."));
-		    if(logLen()) pushLogMess(_("Reading timeouted."));
-		    if(writeReq) stop();
+		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), err.c_str());
+		    if(logLen()) pushLogMess(err.c_str());
+		    if(writeReq) {
+			//stop();
+			if(reqTry >= attempts()) stop();
+			else goto repeate;
+		    }
 		}
 		mLstReqTm = TSYS::curTime();
-		throw TError(nodePath().c_str(),_("Timeouted!"));
+		throw TError(nodePath().c_str(), err.c_str());
 	    }
 	    else if(kz < 0) {
 		err = TSYS::strMess("%s (%d)", strerror(errno), errno);
@@ -1455,7 +1460,8 @@ repeate:
 
 		// * Force errors
 		// * Retry if any data was wrote but no a reply there into the request mode
-		// * !!: Zero can be also after disconection by peer and possible undetected here for the not request mode
+		// * !!: Zero can be also after disconection by peer and possible undetected here for the not request mode,
+		//	what can be easily tested on stopping the ModBus input service
 		if(iB < 0 || (iB == 0 && writeReq && !notReq)) {
 		    err = (iB < 0) ? TSYS::strMess("%s (%d)",strerror(errno),errno) : TSYS::strMess(_("No data by: %s (%d)"),strerror(errno),errno);
 		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Error reading: %s"), err.c_str());

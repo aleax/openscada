@@ -557,7 +557,7 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <li> <i>string name( )</i> — ім'я об'єкту контролера.</li>
 <li> <i>string descr( )</i> — опис об'єкту та контролеру.</li>
 <li> <i>string status( )</i> — статус контролеру.</li>
-<li> <i>bool alarmSet( string mess, int lev = -5, string prm = "" )</i> — встановлює/знімає порушення <i>mess</i> з рівнем <i>lev</i> (негативне для встановлення інакше зняття), для параметру <i>prm</i> (<b>{PrmId}\n{PrmNm}</b>). Функція формує порушення з категорією <b>al{ModId}:{CntrId}[.{PrmId}]</b> та текстом <b>{CntrNm} &gt; {PrmNm}: {MessText}</b>, де 
+<li> <i>bool alarmSet( string mess, int lev = -5, string prm = "", bool force = false )</i> — встановлює/знімає порушення <i>mess</i> з рівнем <i>lev</i> (негативне для встановлення інакше зняття), для параметру <i>prm</i> (<b>{PrmId}\n{PrmNm}</b>). Очищення порушень, так як і встановлення, працює у режимі перемикача, що передбачає пропуск повідомлень очищення до буферу повідомлень, та саме очищення, лише за наявності відповідного порушення, що може бути вимкнено встановленням <i>force</i>. Функція формує порушення з категорією <b>al{ModId}:{CntrId}[.{PrmId}]</b> та текстом <b>{CntrNm} &gt; {PrmNm}: {MessText}</b>, де 
 <ul><li> <i>ModId</i> — ідентифікатор модуля;</li>
 <li> <i>CntrId</i> — ідентифікатор об'єкту контролера;</li>
 <li> <i>PrmId</i> — ідентифікатор параметру, з аргументу <i>prm</i>;</li>
@@ -571,7 +571,7 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <ul><li> <i>ElTp cfg( string nm )</i> — отримує значення конфігураційного поля <i>nm</i> об'єкту.</li>
 <li> <i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">доступ до відповідної підсистеми</span>] — встановлює конфігураційне поля <i>nm</i> об'єкту у значення <i>val</i>.</li>
 <li> <i>TCntrNodeObj cntr( )</i> — повертає об'єкт контролеру цього параметру, незалежно від вкладеності.</li>
-<li> <i>bool alarmSet( string mess, int lev = -5 )</i> — встановлює/знімає порушення <i>mess</i> з рівнем <i>lev</i> (негативне для встановлення інакше зняття) для цього параметру.</li></ul>
+<li> <i>bool alarmSet( string mess, int lev = -5, bool force = false )</i> — встановлює/знімає порушення <i>mess</i> з рівнем <i>lev</i> (негативне для встановлення інакше зняття) для цього параметру. Очищення порушень, так як і встановлення, працює у режимі перемикача, що передбачає пропуск повідомлень очищення до буферу повідомлень, та саме очищення, лише за наявності відповідного порушення, що може бути вимкнено встановленням <i>force</i>.</li></ul>
 <p>Функції об'єкту атрибута параметра контролера (SYS.DAQ["Modul"]["Controller"]["Parameter"]["Attribute"]):
 </p>
 <ul><li> <i>ElTp get( int tm = 0, int utm = 0, bool sys = false )</i> — запитує значення атрибуту на час <i>tm.utm</i> та ознакою системного доступу <i>sys</i>. Атрибути часу <i>tm.utm</i> є також виходами, відтак реальний час отриманого значення розміщується у них, якщо це змінні.</li>
@@ -811,9 +811,9 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 </td></tr>
 
 <tr>
-<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main" title="Special:MyLanguage/Libs/Main">Основна бібліотека</a>
+<td> <a href="Libs_Main.html" title="Special:MyLanguage/Libs/Main">Основна бібліотека</a>
 </td>
-<td> 1.2 </td>
+<td> 2.0 </td>
 <td> GPLv2 </td>
 <td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.tmplb_base </td>
 <td> en, uk, ru

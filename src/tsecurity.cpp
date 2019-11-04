@@ -46,14 +46,14 @@ TSecurity::TSecurity( ) : TSubSYS(SSEC_ID,_("Security"), false)
     userEl.fldAdd(new TFld("DESCR",_("Full name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
     userEl.fldAdd(new TFld("LONGDESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"1000"));
     userEl.fldAdd(new TFld("PASS",_("Password"),TFld::String,0,"100"));
-    userEl.fldAdd(new TFld("LANG",_("Language"),TFld::String,0,"15"));
+    userEl.fldAdd(new TFld("LANG",_("Language"),TFld::String,0,"50"));
     userEl.fldAdd(new TFld("PICTURE",_("User picture"),TFld::String,0,"100000"));
 
     //Group BD structure
     grpEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
     grpEl.fldAdd(new TFld("DESCR",_("Full name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
     grpEl.fldAdd(new TFld("LONGDESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"1000"));
-    grpEl.fldAdd(new TFld("USERS",_("Users"),TFld::String,0,"200"));
+    grpEl.fldAdd(new TFld("USERS",_("Users"),TFld::String,0,"1000000"));
 }
 
 void TSecurity::postEnable( int flag )

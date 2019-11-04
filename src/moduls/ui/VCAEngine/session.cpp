@@ -1619,7 +1619,7 @@ void SessWdg::setProcess( bool val, bool lastFirstCalc )
 	fio.setStor(calcProgStors());
 
 	//  Add generic io
-	fio.ioIns(new IO("f_frq","Frequency of calculation of the function (Hz)",IO::Real,IO::Default,"1000",false), SpIO_Frq);
+	fio.ioIns(new IO("f_frq","Frequency of calculation of the function, Hz",IO::Real,IO::Default,"1000",false), SpIO_Frq);
 	fio.ioIns(new IO("f_start","Function start flag",IO::Boolean,IO::Default,"0",false), SpIO_Start);
 	fio.ioIns(new IO("f_stop","Function stop flag",IO::Boolean,IO::Default,"0",false), SpIO_Stop);
 	fio.ioIns(new IO("this","This widget's object for access to user's API",IO::Object,IO::Default), SpIO_This);

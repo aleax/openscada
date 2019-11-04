@@ -522,7 +522,7 @@ void Contr::loadFunc( bool onlyVl )
 
 	//Creating special IO
 	if(!isDAQTmpl) {
-	    if(func()->ioId("f_frq") < 0)	func()->ioIns(new IO("f_frq",_("Frequency of calculation of the function (Hz)"),IO::Real,0,"1000",false),0);
+	    if(func()->ioId("f_frq") < 0)	func()->ioIns(new IO("f_frq",_("Frequency of calculation of the function, Hz"),IO::Real,0,"1000",false),0);
 	    if(func()->ioId("f_start") < 0)	func()->ioIns(new IO("f_start",_("Function start flag"),IO::Boolean,0,"0",false),1);
 	    if(func()->ioId("f_stop") < 0)	func()->ioIns(new IO("f_stop",_("Function stop flag"),IO::Boolean,0,"0",false),2);
 	    if(func()->ioId("this") < 0)	func()->ioIns(new IO("this",_("Link to the object of this controller"),IO::Object,0,"0",false),3);

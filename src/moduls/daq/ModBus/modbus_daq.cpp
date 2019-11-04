@@ -81,7 +81,7 @@ void TTpContr::postEnable( int flag )
     tpPrmAt(t_prm).fldAdd(new TFld("TMPL",_("Parameter template"),TFld::String,TCfg::NoVal,"50",""));
     //  Parameter template IO DB structure
     elPrmIO.fldAdd(new TFld("PRM_ID",_("Parameter ID"),TFld::String,TCfg::Key,i2s(atoi(OBJ_ID_SZ)*6).c_str()));
-    elPrmIO.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    elPrmIO.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(s2i(OBJ_ID_SZ)*1.5).c_str()));
     elPrmIO.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TFld::NoFlag,"1000000"));
 }
 
@@ -443,8 +443,12 @@ bool TMdContr::setVal( const TVariant &val, const string &addr, MtxString &w_err
     string aids = TSYS::strParse(addr, 0, ":", &off);
     int aid = strtol(aids.c_str(), NULL, 0);
 
-    //Will be wrote after the connection return
-    if(chkAssync && mAsynchWr) { MtxAlloc resAsWr(dataRes(), true); asynchWrs[addr] = val.getS(); return true; }
+    //Registering for the later common writing in the asynchronous mode and pass updating the just writed values
+    if(chkAssync) {
+	dataRes().lock(); asynchWrs[addr] = val.getS(); dataRes().unlock();
+	if(mAsynchWr)	return true;
+    }
+    //if(chkAssync && mAsynchWr) { MtxAlloc resAsWr(dataRes(), true); asynchWrs[addr] = val.getS(); return true; }
 
     //For direct writing we need the good connection in any event
     if(tmDelay > 0) {
@@ -739,7 +743,7 @@ void *TMdContr::Task( void *icntr )
 	    if(!cntr.period())	t_cnt = TSYS::curTime();
 
 	    //Write asynchronous writings queue
-	    MtxAlloc resAsWr(cntr.dataRes(), true);
+	    /*MtxAlloc resAsWr(cntr.dataRes(), true);
 	    map<string,string> aWrs = cntr.asynchWrs;
 	    cntr.asynchWrs.clear();
 	    resAsWr.unlock();
@@ -748,11 +752,11 @@ void *TMdContr::Task( void *icntr )
 		if(asWrErr.size() && cntr.asynchWrs.find(iw->first) == cntr.asynchWrs.end()) cntr.asynchWrs[iw->first] = iw->second;
 		if(!asWrErr.size() && !cntr.setVal(iw->second,iw->first,asWrErr)) { cntr.setCntrDelay(asWrErr); resAsWr.lock(); }
 	    }
-	    resAsWr.unlock();
+	    resAsWr.unlock();*/
 
 	    ResAlloc res(cntr.reqRes, false);
 
-	    if(cntr.tmDelay > 0) continue;
+	    //if(cntr.tmDelay > 0) continue;
 	    //Get coils
 	    for(unsigned iB = 0; !isStart && !isStop && iB < cntr.acqBlksCoil.size(); iB++) {
 		if(cntr.endrunReq) break;
@@ -844,7 +848,7 @@ void *TMdContr::Task( void *icntr )
 		pdu += (char)((cntr.acqBlksIn[iB].val.size()/2)>>8);	//Number of registers MSB
 		pdu += (char)(cntr.acqBlksIn[iB].val.size()/2);	//Number of registers LSB
 		// Request to remote server
-		cntr.acqBlksIn[iB].err.setVal( cntr.modBusReq(pdu));
+		cntr.acqBlksIn[iB].err.setVal(cntr.modBusReq(pdu));
 		if(cntr.acqBlksIn[iB].err.getVal().empty()) {
 		    if(cntr.acqBlksIn[iB].val.size() != (pdu.size()-2))
 			cntr.acqBlksIn[iB].err.setVal(_("15:Error in size of response PDU."));
@@ -869,6 +873,20 @@ void *TMdContr::Task( void *icntr )
 		cntr.pHd[iP].at().upValLog(isStart, isStop, cntr.period()?(1e9/(float)cntr.period()):(-1e-6*(t_cnt-t_prev)));
 	    isStart = false;
 	    prmRes.unlock();
+
+	    //Writing the asynchronous writings' queue
+	    MtxAlloc resAsWr(cntr.dataRes(), true);
+	    map<string,string> aWrs = cntr.asynchWrs;
+	    cntr.asynchWrs.clear();
+	    resAsWr.unlock();
+	    if(cntr.mAsynchWr) {
+		MtxString asWrErr(cntr.dataRes());
+		for(map<string,string>::iterator iw = aWrs.begin(); !isStart && !isStop && iw != aWrs.end(); ++iw) {
+		    if(asWrErr.size() && cntr.asynchWrs.find(iw->first) == cntr.asynchWrs.end()) cntr.asynchWrs[iw->first] = iw->second;
+		    if(!asWrErr.size() && !cntr.setVal(iw->second,iw->first,asWrErr)) { cntr.setCntrDelay(asWrErr); resAsWr.lock(); }
+		}
+		resAsWr.unlock();
+	    }
 
 	    //Generic acquisition alarm generate
 	    if(cntr.tmDelay <= 0) {
@@ -919,6 +937,15 @@ TVariant TMdContr::objFuncCall( const string &iid, vector<TVariant> &prms, const
 	return rez;
     }
     return TController::objFuncCall(iid, prms, user);
+}
+
+bool TMdContr::inWr( const string &addr )
+{
+    dataRes().lock();
+    bool rez = (asynchWrs.find(addr) != asynchWrs.end());
+    dataRes().unlock();
+
+    return rez;
 }
 
 void TMdContr::cntrCmdProc( XMLNode *opt )
@@ -1224,7 +1251,7 @@ void TMdPrm::upValStd( )
     elem().fldList(ls);
     for(unsigned iEl = 0; iEl < ls.size(); iEl++) {
 	pVal = vlAt(ls[iEl]);
-	if(!(pVal.at().fld().flg()&TVal::DirRead) || (pVal.at().fld().flg()&TVal::Dynamic)) continue;
+	if(!(pVal.at().fld().flg()&TVal::DirRead) || (pVal.at().fld().flg()&TVal::Dynamic) || owner().inWr(pVal.at().fld().reserve())) continue;
 	pVal.at().set(owner().getVal(pVal.at().fld().reserve(),w_err), 0, true);
     }
 

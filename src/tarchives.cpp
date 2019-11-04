@@ -520,15 +520,17 @@ time_t TArchiveS::messGet( time_t bTm, time_t eTm, vector<TMess::SRec> &recs,
     res.unlock();
 
     //Get records from the archives
-    vector<string> tLst, oLst;
-    modList(tLst);
-    for(unsigned iT = 0; level >= 0 && iT < tLst.size(); iT++) {
-	at(tLst[iT]).at().messList(oLst);
-	for(unsigned iO = 0; iO < oLst.size() && SYS->sysTm() < upTo; iO++) {
-	    AutoHD<TMArchivator> archtor = at(tLst[iT]).at().messAt(oLst[iO]);
-	    if(archtor.at().startStat() && (!archMap.size() || archMap[archtor.at().workId()]))
-		//!! But possible only one archiver, from all, processing and next continued by the limit
-		result = fmin(result, archtor.at().get(bTm,eTm,recs,category,level,arch.size()?upTo:0));
+    if(arch != BUF_ARCH_NM && arch != ALRM_ARCH_NM) {
+	vector<string> tLst, oLst;
+	modList(tLst);
+	for(unsigned iT = 0; level >= 0 && iT < tLst.size(); iT++) {
+	    at(tLst[iT]).at().messList(oLst);
+	    for(unsigned iO = 0; iO < oLst.size() && SYS->sysTm() < upTo; iO++) {
+		AutoHD<TMArchivator> archtor = at(tLst[iT]).at().messAt(oLst[iO]);
+		if(archtor.at().startStat() && (!archMap.size() || archMap[archtor.at().workId()]))
+		    //!! But possible only one archiver, from all, processing and next continued by the limit
+		    result = fmin(result, archtor.at().get(bTm,eTm,recs,category,level,arch.size()?upTo:0));
+	    }
 	}
     }
 
@@ -1357,7 +1359,7 @@ void TMArchivator::redntDataUpdate( )
     req.setAttr("path", nodePath()+"/%2fserv%2fmess")->
 	setAttr("bTm", ll2s(mRdTm/* vmax(0,end()+1-(mRdFirst?owner().owner().rdRestDtOverTm()*86400:0))*/));
 
-    //Send request to first active station for this controller
+    //Send request to first active station for the archiver
     if(owner().owner().rdStRequest(workId(),req,"",!mRdFirst).empty()) return;
     mRdFirst = false;
 

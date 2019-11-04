@@ -1,0 +1,3123 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Libs/Main - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Libs/Main</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Libs/Main/uk" title="Бібліотеки/Основна (100% translated)">українська</a></div></div>
+<table class="wikitable">
+
+<tr>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="Libs_Main.html" title="Special:MyLanguage/Libs/Main">Main library</a>
+</td>
+<td> 2.0 </td>
+<td> GPLv2 </td>
+<td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.tmplb_base </td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td>
+<td> Library of the main templates of the DAQ sources processing and related services.
+<ul><li> <b>Founded</b>: 2006</li></ul>
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Templates_of_standard_structures_of_the_DAQ-parameters"><span class="tocnumber">1</span> <span class="toctext">Templates of standard structures of the DAQ-parameters</span></a>
+<ul>
+<li class="toclevel-2"><a href="#Analog_signal_.28unified.29_.28anUnif.29"><span class="tocnumber">1.1</span> <span class="toctext">Analog signal (unified) (anUnif)</span></a></li>
+<li class="toclevel-2"><a href="#Analog_signal_.28unified.2C_violation_statuses.29_.28anUnifSt.29"><span class="tocnumber">1.2</span> <span class="toctext">Analog signal (unified, violation statuses) (anUnifSt)</span></a></li>
+<li class="toclevel-2"><a href="#Manual_input_.28unified.29_.28manInUnif.29"><span class="tocnumber">1.3</span> <span class="toctext">Manual input (unified) (manInUnif)</span></a></li>
+<li class="toclevel-2"><a href="#Discrete_block_.28unified.29_.28digitBlockUnif.29"><span class="tocnumber">1.4</span> <span class="toctext">Discrete block (unified) (digitBlockUnif)</span></a></li>
+<li class="toclevel-2"><a href="#Alarm_discrete_.28digAlarm.29"><span class="tocnumber">1.5</span> <span class="toctext">Alarm discrete (digAlarm)</span></a></li>
+<li class="toclevel-2"><a href="#Code_state_.28codeState.29"><span class="tocnumber">1.6</span> <span class="toctext">Code state (codeState)</span></a></li>
+<li class="toclevel-2"><a href="#PID_signal_.28unified.2C_violation_statuses.29_.28pidUnif.29"><span class="tocnumber">1.7</span> <span class="toctext">PID signal (unified, violation statuses) (pidUnif)</span></a></li>
+<li class="toclevel-2"><a href="#Impulse_PID_signal_.28unified.2C_violation_statuses.29_.28pidUnifImp.29"><span class="tocnumber">1.8</span> <span class="toctext">Impulse PID signal (unified, violation statuses) (pidUnifImp)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-2"><a href="#Templates_of_the_complex_objects"><span class="tocnumber">2</span> <span class="toctext"><span>Templates of the complex objects</span></span></a>
+<ul>
+<li class="toclevel-2"><a href="#Uninterruptible_Power_Supply_.28UPS.29"><span class="tocnumber">2.1</span> <span class="toctext">Uninterruptible Power Supply (UPS)</span></a></li>
+<li class="toclevel-2"><a href="#Network_devices_by_SNMP_.28SNMP.29"><span class="tocnumber">2.2</span> <span class="toctext">Network devices by SNMP (SNMP)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-3"><a href="#Services"><span class="tocnumber">3</span> <span class="toctext">Services</span></a>
+<ul>
+<li class="toclevel-2"><a href="#Notificator_by_SMS.2C_EMail.28SMTP.29_.28ntf.29"><span class="tocnumber">3.1</span> <span class="toctext">Notificator by SMS, EMail(SMTP) (ntf)</span></a></li>
+<li class="toclevel-2"><a href="#Initiative_connections_processing_for_assigned_output_transports_.28initConsAssignTrs.29"><span class="tocnumber">3.2</span> <span class="toctext">Initiative connections processing for assigned output transports (initConsAssignTrs)</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<p>The library was created to provide main templates of the DAQ-sources processing and related services.
+</p><p>The template's names and their parameters are available in languages: English, Ukrainian and Russian. Their source code wrote in human language independent mode with calls for the translations by function <i>tr()</i> and the message's translation also allowed for English, Ukrainian and Russian.
+</p><p>For connection the library to a project of the OpenSCADA station you can obtain the database file as:
+</p>
+<ul><li> supplied with a ready and proper package of the Linux distribution like to "openscada-libdb-main", "openscada-LibDB.Main";</li>
+<li> directly taken for most actual one from <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">the subversion repository</a> and converted to the DB SQLite file in the way:</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 15px">
+$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql
+$ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
+</pre>
+<ul><li> downloaded for <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">the one attached here</a>.</li></ul>
+<p>This obtained file next you can place into the project directory of the station and create the database object for the DB module "SQLite", registering the database file in the configuration.
+</p><p>For the DAQ-templates at generic you need create a device representing object into <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">the Logical Level module</a> and select proper template from the templates library. Next, to correct configuration, follow to specific of the template into the individual description.
+</p>
+<h2><span class="mw-headline" id="Templates_of_standard_structures_of_the_DAQ-parameters"><span class="mw-headline-number">1</span> Templates of standard structures of the DAQ-parameters</span></h2>
+<table class="wikitable">
+
+<tr>
+<td> <span id="anUnif" title="#anUnif"><h3><span class="mw-headline" id="Analog_signal_.28unified.29_.28anUnif.29"><span class="mw-headline-number">1.1</span> Analog signal (unified) (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#anUnif" title="Special:MyLanguage/Libs/Main">anUnif</a>)</span></h3></span>
+</td>
+<td> 2.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainAnUnifOp.png" title="Result and the operative setup."><img alt="Result and the operative setup." height="742" src="files/LibsMainAnUnifOp.png" width="391" /></a></div>
+<p>Common, representative and unified template of analog input signals processing. The template forms a structure of analog parameter (complex tag) which can be easily connected to most widgets and cadres of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_graphical_elements" title="Special:MyLanguage/Libs/Main graphical elements">the main elements library of the user interface</a> just pointing the parameter object.
+</p><p>The representative structure of analog parameters (complex tags) is:
+</p>
+<ul><li> "Variable (<b>var</b>)" — end variable of the parameter — engineeric real value, allowed and suitable for archiving.</li>
+<li> "Error (<b>err</b>)" — obligatory attribute of any parameter, consist of the combination of the error code and short text description, like to "2:No data or connection with source". The template reserves next error codes:
+<ul><li> <b>1, 2</b> — hardware errors, when the data mostly wrong;</li>
+<li> <b>3, 4</b> — alarm border errors;</li>
+<li> <b>5, 6</b> — warning border errors;</li>
+<li> <b>7</b> — the speed error of the variable changing.</li></ul></li>
+<li> "Violations suppress (<b>alSup</b>) and delay (<b>alDelay</b>)" — violations generic control for suppressing and delaying.</li>
+<li> "Scale: minimum (<b>min</b>)" and "Scale: maximum (<b>max</b>)" — main scale of the end variable, the output of which causes a hardware border error. The scale is also used as a scale of the variable trend display on the graphs.</li>
+<li> "Logarithmic scale (<b>log</b>)" — the scale sign of the variable trend display on the graphs in the logarithmic scale.</li>
+<li> "Dimension (<b>ed</b>)" — dimension (unit of measurement) of the variable.</li>
+<li> "Precision (<b>prec</b>)" — number signs after the dot, for positive values, and precision (signs in whole), for negative ones, to display the real end variable on the screen.</li></ul>
+<p><b><u>Functions</u></b><br />
+</p>
+<ul><li> Generic processing of the raw analog input for:</li></ul>
+<dl><dd><ul><li> simple correction-calibration at the formula "<b>in</b> = <b>iMult</b>*(<b>in</b>+<b>iAdd</b>)";</li>
+<li> scaling from the hardware border [<b>plcMin</b>...<b>plcMax</b>] to the main border [<b>min</b>...<b>max</b>], applying the square scale <b>scSqr</b>;</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> The hardware borders can be inverted ones and disabled in whole for equal values of the maximum and minimum, when the main border only used.</dd></dl>
+<ul><li> permission to exceed the border for the input value on the value of <b>plcExcess</b> percent;</li>
+<li> filtering the input value changing in the time <b>Tf</b>.</li></ul></dd></dl>
+<ul><li> Simple imitation of the analog input, setting <b>plcImit</b> and linking the imitation-simulation source in <b>plcImitIn</b>.</li></ul>
+<dl><dd><dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Missing the link <b>plcImitIn</b> (EVAL) causes to generating random analog input</dd></dl></dd></dl>
+<ul><li> Complex preprocessing and complete generation-imitation of the analog input on the internal programming language of OpenSCADA into the configuration IO <b>inProc</b>, where you can operate next service parameters:</li></ul>
+<dl><dd><ul><li> <i>in</i> [IN|OUT] — the same raw analog input IO;</li>
+<li> <i>var</i> [IN] — the end variable IO;</li>
+<li> <i>min</i>, <i>max</i> [IN] — the main border IOs;</li>
+<li> <i>plcMin</i>, <i>plcMax</i> [IN] — the hardware border IOs;</li>
+<li> <i>plcImit</i>, <i>plcImitIn</i> [IN] — IOs of the simple imitation;</li>
+<li> <i>levErr</i>, <i>tErr</i> [IN|OUT] — alarm level [-7...0] and text of the error (the attribute "err" format);</li>
+<li> <i>f_frq</i> [IN] — frequency of calculation, the template IO;</li>
+<li> <i>this</i> [IN] — reference to the parameter object, what executing the template;</li>
+<li> <i>ctx</i> [IN] — object of the user context, what saved between the execution cycles.</li></ul></dd></dl>
+<ul><li> Simple substitution for the variable <b>subVar</b> at the error (not valid) input variable (EVAL) in the modes: "no", "last" and "substitute".</li>
+<li> Processing the result variable <b>var</b> for violation some borders and criteria, generating the alarms and proper setting the attribute <b>err</b>. The alarm borders can have some hysteresis <b>HystBnd</b>, can be delayed on the time <b>alDelay</b> and can be suppressed setting <b>alSup</b>. Next borders and criteria are provided:</li></ul>
+<dl><dd><ul><li> missing for data or connection with source at the EVAL input value — error code 1 and alarm level 5;</li>
+<li> exceeding the input value of the hardware border — error code 1,2 and alarm level 5;</li>
+<li> exceeding the end variable of the alarm border [<b>aMin</b>...<b>aMax</b>] — error code 3,4 and alarm level 4;</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Disabled at setting for equal or inverted values of the border</dd></dl>
+<ul><li> exceeding the end variable of the warning border [<b>wMin</b>...<b>wMax</b>] — error code 5,6 and alarm level 2;</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Disabled at setting for equal or inverted values of the border</dd></dl>
+<ul><li> big motion <b>speed</b> of the end variable — error code 7 and alarm level 2.</li></ul></dd></dl>
+<p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> in </td>
+<td> Input </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Link </td>
+<td> Input|var
+</td></tr>
+<tr>
+<td> inProc </td>
+<td> Input processing procedure </td>
+<td> Text </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td>
+</td></tr>
+<tr>
+<td> var </td>
+<td> Variable </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> ed </td>
+<td> Dimension </td>
+<td> String </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> min </td>
+<td> Scale: minimum </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> max </td>
+<td> Scale: maximum </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 100
+</td></tr>
+<tr>
+<td> scSqr </td>
+<td> Scale: square </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> subMode </td>
+<td> Substitute: mode </td>
+<td> Integer numbers selection </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0<br />
+<p>0;1;2<br />
+no;last;substitute<br />
+</p>
+</td></tr>
+<tr>
+<td> subVar </td>
+<td> Substitute: variable </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> alSup </td>
+<td> Violations suppress </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> alDelay </td>
+<td> Violations delay, seconds </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> aMin </td>
+<td> Border down alarm </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> aMax </td>
+<td> Border up alarm </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> wMin </td>
+<td> Border down warning </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> wMax </td>
+<td> Border up warning </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> HystBnd </td>
+<td> Hysteresis of borders violation </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 1
+</td></tr>
+<tr>
+<td> speed </td>
+<td> Motion speed,&nbsp;%/cycle </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> prec </td>
+<td> Precision, signs </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 2
+</td></tr>
+<tr>
+<td> log </td>
+<td> Logarithmic scale </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Tf </td>
+<td> Filter time, seconds </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> iAdd </td>
+<td> Input addition </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> iMult </td>
+<td> Input multiplication </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 1
+</td></tr>
+<tr>
+<td> plcMin </td>
+<td> Minimum module scale </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> plcMax </td>
+<td> Maximum module scale </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> plcExcess </td>
+<td> Allowed scale exceeding,&nbsp;% </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> plcImit </td>
+<td> PLC imitation </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> plcImitIn </td>
+<td> PLC imitation input </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Link </td>
+<td> Imitation|var
+</td></tr>
+<tr>
+<td> this </td>
+<td> Object </td>
+<td> Object </td>
+<td> Output </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> SHIFR </td>
+<td> Code </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> NAME </td>
+<td> Name </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> DESCR </td>
+<td> Description </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Frequency of calculation of the function, Hz </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainAnUnifCfg.png" title="Configuration."><img alt="Configuration." height="452" src="files/LibsMainAnUnifCfg.png" width="385" /></a></div>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>2. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select this template for it. Enable the parameter.</dd>
+<dd>3. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>Input</i> — <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">link to a source of the "raw" signal</a>.</li>
+<li> <i>Input processing procedure</i> — form for the complex preprocessing and complete generation of the analog input on the internal programming language of OpenSCADA. It is optional and should be defined in complex cases, for example:</li></ul>
+<dl><dd><ul><li> simple and transparent preprocessing to bring the percentage of UPS load to power that can be done with <b>iMult</b> also:</li></ul></dd></dl></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 40pt">
+in = 490*in/100;	//the UPS has 480W </pre>
+<dl><dd><dl><dd><ul><li> implementing of the input signal counter — consumed electricity of the UPS:</li></ul></dd></dl></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 40pt">
+//Checking for the data validity
+if(ctx.cntr.isEVal())	ctx.cntr = this.var.get();
+if(!in.isEVal()) {
+	pUPS = 33;
+	if(ctx.cntr.isEVal())	ctx.cntr = (pUPS+in)/(3600*f_frq);
+	else ctx.cntr += (pUPS+in)/(3600*f_frq);
+}
+
+//Checking for the next month reset
+month = 0; SYS.localtime(SYS.time(), 0, 0, 0, 0, month);
+if(!ctx.month.isEVal() &amp;&amp; month&nbsp;!= ctx.month)	ctx.cntr = 0;
+ctx.month = month;
+
+in = ctx.cntr; </pre>
+<dl><dd><dl><dd><ul><li> generating of the extended violations — processing for the external signals related to the source:</li></ul></dd></dl></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 40pt">
+gO = this.cntr().prm_grps;
+if(SYS.DAQ.JavaLikeCalc.lib_aviary.sensorError(gO.prm_generic.PRG_Input_Err_T_room_S.get(),levErr,tErr));
+else if(!(tVl=gO.prm_alarms.PRG_Alarm_T_max.get()).isEVal() &amp;&amp; tVl)
+	levErr = -4, tErr = "11:above the set limit";
+else if(!(tVl=gO.prm_alarms.PRG_Alarm_T_min.get()).isEVal() &amp;&amp; tVl)
+	levErr = -4, tErr = "11:below the set limit"; </pre>
+<dl><dd><ul><li> <i>Minimum and maximum of the module scale</i> — must be set at the case of significant difference the hardware and the generic scales, for example:</li></ul>
+<dl><dd><ul><li> the input is raw and measured in value of the current [4...20]mA, here it is necessary to specify 4 and 20 mA;</li>
+<li> the previous case where it is necessary to simply and transparently calibrate the end value — with a precision device set 4mA and 20mA and indicate here the real measured values of the "raw" signal.</li></ul></dd></dl>
+<ul><li> <i>Input addition and multiplication</i> — use for easy and linear correction of the input, for example:</li></ul>
+<dl><dd><ul><li> calibration for the end value, which is less transparent and these coefficients should be calculated according to the formulas:</li></ul>
+<dl><dd> <b>iAdd = ((plcMin*precMeasMax)/plcMax - precMeasMin)*(plcMax/(plcMax-plcMin))</b></dd>
+<dd> <b>iMult = (plcMax - plcMin) / (precMeasMax - precMeasMin)</b></dd></dl></dd></dl>
+<ul><li> <i>Allowed scale exceeding</i> — set if necessary to exceed the value of the main border, and when this scale starts to perform the recommendation function, say for the initial display of the trend on this scale.</li>
+<li> <i>PLC imitation and the imitation input</i> — define at the need to simulate the input as required in the functions.</li></ul></dd>
+<dd>4. RESULT: Launching the controller object (where this parameter is created) and if it has not been started, we must get the operational data in the tab "Attributes" for: variable, error status; and the generation of violations if the state of the error is nonzero.</dd>
+<dd>5. In process of the working, through the tab "Attributes" of operational data, in addition to obtaining the result, it is possible to perform operative setup and control on:
+<ul><li> <i>Scale: minimum and maximum</i> — strictly <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> set to the range of data changes by availability and according to the hardware border, otherwise the value will be distorted! In the absence of the hardware border, this, the main border, is arbitrary and advisory, although exceeding of the border by the value will be also accompanied by a violation.</li>
+<li> <i>Scale: square</i> — set if the hardware border is square one.</li>
+<li> <i>Filter time</i> — set the filtering time for noisy signals.</li>
+<li> <i>Substitute: mode and variable</i> — set the desired substitution mode at invalidity the variable.</li>
+<li> <i>Violations suppress</i> — set at the need of the parameter violations complete suppression — to disable their generation in whole.</li>
+<li> <i>Violations delay</i> — set the delay time for the generation of the violations, to exclude frequent generation, characteristic to uncertain sources of data, characterized by short-term loss of communication.</li>
+<li> <i>Border up/down alarm/warning</i> — set when it is necessary to generate violations at the exceeding of the alarm/warning borders.</li>
+<li> <i>Hysteresis of borders violation</i> — set the hysteresis of removing the violation, that is, removal of the violations occurs at the specified percentage later, in order to prevent the frequent generation by fluctuating the value near the border.</li>
+<li> <i>Motion speed</i> — set if it is necessary to warn about fast change of value.</li>
+<li> <i>Name, Description, Dimension, Precision, Logarithmic scale</i> — set this information as needed when displayed, or as an element of the passport.</li></ul></dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="anUnifSt" title="#anUnifSt"><h3><span class="mw-headline" id="Analog_signal_.28unified.2C_violation_statuses.29_.28anUnifSt.29"><span class="mw-headline-number">1.2</span> Analog signal (unified, violation statuses) (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#anUnifSt" title="Special:MyLanguage/Libs/Main">anUnifSt</a>)</span></h3></span>
+</td>
+<td> 1.2 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru  
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>Common, representative and unified template of analog input signals processing, extended by binary states of indication the violations. The template grounded on the base template "<a href="#anUnif">Analog signal (unified)</a>" with its representative structure and some differences characteristic to independent development and expansion.
+</p><p>Binary states were provided for the convenient use of algorithms of operation at the borders of violations of the parameter object, preferably in <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">the block diagrams</a> of general control algorithms.
+</p><p><b><u>Functions</u></b><br />
+Mostly the same as the basic template "<a href="#anUnif">Analog signal (unified)</a>" and the borderline signs are additionally provided: "H", "L", "HH", "LL", "EVAL".
+</p><p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td colspan="7"> Template IOs of "<a href="#anUnif">Analog signal (unified)</a>"
+</td></tr>
+<tr>
+<td> H </td>
+<td> Border up warning violation </td>
+<td> Boolean </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> L </td>
+<td> Border down warning violation </td>
+<td> Boolean </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> HH </td>
+<td> Border up alarm violation </td>
+<td> Boolean </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> LL </td>
+<td> Border down alarm violation </td>
+<td> Boolean </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> EVAL </td>
+<td> Error value </td>
+<td> Boolean </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr></table>
+<p><b><u>Configuring and using</u></b><br />
+Completely identical to "<a href="#anUnif">Analog signal (unified)</a>]" with the difference of using the borderline signs: "H", "L", "HH", "LL", "EVAL"; which can be connected to external computing.
+</p><p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="manInUnif" title="#manInUnif"><h3><span class="mw-headline" id="Manual_input_.28unified.29_.28manInUnif.29"><span class="mw-headline-number">1.3</span> Manual input (unified) (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#manInUnif" title="Special:MyLanguage/Libs/Main">manInUnif</a>)</span></h3></span>
+</td>
+<td> 1.2 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainManInUnifOp.png" title="Result and the operative setup."><img alt="Result and the operative setup." height="679" src="files/LibsMainManInUnifOp.png" width="374" /></a></div>
+<p>Common, representative and unified template of a manual input and an analog output signal. The template forms a structure of parameter (complex tag) of the manual input what can be easily connected to most widgets and cadres of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_graphical_elements" title="Special:MyLanguage/Libs/Main graphical elements">the main elements library of the user interface</a> just pointing the parameter object, the control mostly can be performed through the <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_graphical_elements#ElCadr" title="Special:MyLanguage/Libs/Main graphical elements">Element cadre</a> control panel.
+</p><p>The representative structure of the parameter (complex tag) of the manual input is:
+</p>
+<ul><li> "Variable (<b>var</b>)" — end variable of the parameter — engineeric real value, allowed and suitable for archiving.</li>
+<li> "Variable input (<b>varIn</b>)" — attribute for entering a new engineering value, which in the next falls into the variable.</li>
+<li> "Error (<b>err</b>)" — obligatory attribute of any parameter, consist of the combination of the error code and short text description, like to "2:No data or connection with source". The template reserves next error codes:
+<ul><li> <b>1, 2</b> — hardware errors, when the data mostly wrong;</li>
+<li> <b>3, 4</b> — alarm border errors;</li>
+<li> <b>5, 6</b> — warning border errors;</li>
+<li> <b>7</b> — the speed error of the variable changing.</li></ul></li>
+<li> "Violations suppress (<b>alSup</b>) and delay (<b>alDelay</b>)" — violations generic control for suppressing and delaying.</li>
+<li> "Scale: minimum (<b>min</b>)" and "Scale: maximum (<b>max</b>)" — main scale of the end variable, the output of which causes a hardware border error. The scale is also used as a scale of the variable trend display on the graphs.</li>
+<li> "Logarithmic scale (<b>log</b>)" — the scale sign of the variable trend display on the graphs in the logarithmic scale.</li>
+<li> "Dimension (<b>ed</b>)" — dimension (unit of measurement) of the variable.</li>
+<li> "Precision (<b>prec</b>)" — number signs after the dot, for positive values, and precision (signs in whole), for negative ones, to display the real end variable on the screen.</li></ul>
+<p><b><u>Functions</u></b><br />
+</p>
+<ul><li> Generic processing of the raw analog input for:</li></ul>
+<dl><dd><ul><li> simple correction-calibration at the formula "<b>in</b> = <b>iMult</b>*(<b>in</b>+<b>iAdd</b>)";</li>
+<li> scaling from the hardware border [<b>plcMin</b>...<b>plcMax</b>] to the main border [<b>min</b>...<b>max</b>], applying the square scale <b>scSqr</b>;</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> The hardware borders can be inverted ones and disabled in whole for equal values of the maximum and minimum, when the main border only used.</dd></dl>
+<ul><li> permission to exceed the border for the input value on the value of <b>plcExcess</b> percent;</li>
+<li> filtering the input value changing in the time <b>Tf</b>.</li></ul></dd></dl>
+<ul><li> Processing the result variable <b>var</b> for violation some borders and criteria, generating the alarms and proper setting the attribute <b>err</b>. The alarm borders can have some hysteresis <b>HystBnd</b>, can be delayed on the time <b>alDelay</b> and can be suppressed setting <b>alSup</b>. Next borders and criteria are provided:</li></ul>
+<dl><dd><ul><li> missing for data or connection with source at the EVAL input value — error code 1 and alarm level 5;</li>
+<li> exceeding the input value of the hardware border — error code 1,2 and alarm level 5;</li>
+<li> exceeding the end variable of the alarm border [<b>aMin</b>...<b>aMax</b>] — error code 3,4 and alarm level 4;</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Disabled at setting for equal or inverted values of the border</dd></dl>
+<ul><li> exceeding the end variable of the warning border [<b>wMin</b>...<b>wMax</b>] — error code 5,6 and alarm level 2;</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Disabled at setting for equal or inverted values of the border</dd></dl>
+<ul><li> big motion <b>speed</b> of the end variable — error code 7 and alarm level 2.</li></ul></dd></dl>
+<ul><li> Reverse conversion of the engineered variable value and writing to the output.</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> In the absence of the "Input/Output" connection, the writing is not performed and there is the stand-alone operation.</dd></dl>
+<p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> inout </td>
+<td> Input/Output </td>
+<td> Real </td>
+<td> Output </td>
+<td> Not attribute</td>
+<td> Link </td>
+<td> Parameter|var
+</td></tr>
+<tr>
+<td> var </td>
+<td> Variable </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> varIn </td>
+<td> Variable input </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> ed </td>
+<td> Dimension </td>
+<td> String </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> min </td>
+<td> Scale: minimum </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> max </td>
+<td> Scale: maximum </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 100
+</td></tr>
+<tr>
+<td> scSqr </td>
+<td> Scale: square </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> alSup </td>
+<td> Violations suppress </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> alDelay </td>
+<td> Violations delay, seconds </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> aMin </td>
+<td> Border down alarm </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> aMax </td>
+<td> Border up alarm </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> wMin </td>
+<td> Border down warning </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> wMax </td>
+<td> Border up warning </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> HystBnd </td>
+<td> Hysteresis of borders violation </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 1
+</td></tr>
+<tr>
+<td> speed </td>
+<td> Motion speed,&nbsp;%/cycle </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> prec </td>
+<td> Precision, signs </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 2
+</td></tr>
+<tr>
+<td> log </td>
+<td> Logarithmic scale </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Tf </td>
+<td> Filter time, seconds </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> iAdd </td>
+<td> Input addition </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> iMult </td>
+<td> Input multiplication </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 1
+</td></tr>
+<tr>
+<td> plcMin </td>
+<td> Minimum module scale </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> plcMax </td>
+<td> Maximum module scale </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> plcExcess </td>
+<td> Allowed scale exceeding,&nbsp;% </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> this </td>
+<td> Object </td>
+<td> Object </td>
+<td> Output </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> SHIFR </td>
+<td> Code </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> NAME </td>
+<td> Name </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> DESCR </td>
+<td> Description </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Frequency of calculation of the function, Hz </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainManInUnifCfg.png" title="Configuration."><img alt="Configuration." height="299" src="files/LibsMainManInUnifCfg.png" width="381" /></a></div>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>2. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select this template for it. Enable the parameter.</dd>
+<dd>3. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>Input/Output</i> — <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">link to a source of the "raw" IO signal</a>, or do not link for the stand-alone mode.</li>
+<li> <i>Minimum and maximum of the module scale</i> — must be set at the case of significant difference the hardware and the generic scales, for example see the template "<a href="#anUnif">Analog signal (unified)</a>".</li>
+<li> <i>Input addition and multiplication</i> — use for easy and linear correction of the input, for example see the template "<a href="#anUnif">Analog signal (unified)</a>".</li>
+<li> <i>Allowed scale exceeding</i> — set if necessary to exceed the value of the main border, and when this scale starts to perform the recommendation function, say for the initial display of the trend on this scale.</li></ul></dd>
+<dd>4. RESULT: Launching the controller object (where this parameter is created) and if it has not been started, we must get the operational data in the tab "Attributes" for: variable, error status; and the generation of violations if the state of the error is nonzero; and it will be allowed to set new values.</dd>
+<dd>5. In process of the working, through the tab "Attributes" of operational data, in addition to obtaining the result, it is possible to perform operative setup and control on:
+<ul><li> <i>Scale: minimum and maximum</i> — strictly <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> set to the range of data changes by availability and according to the hardware border, otherwise the value will be distorted! In the absence of the hardware border, this, the main border, is arbitrary and advisory, although exceeding of the border by the value will be also accompanied by a violation.</li>
+<li> <i>Scale: square</i> — set if the hardware border is square one.</li>
+<li> <i>Filter time</i> — set the filtering time for noisy signals.</li>
+<li> <i>Violations suppress</i> — set at the need of the parameter violations complete suppression — to disable their generation in whole.</li>
+<li> <i>Violations delay</i> — set the delay time for the generation of the violations, to exclude frequent generation, characteristic to uncertain sources of data, characterized by short-term loss of communication.</li>
+<li> <i>Border up/down alarm/warning</i> — set when it is necessary to generate violations at the exceeding of the alarm/warning borders.</li>
+<li> <i>Hysteresis of borders violation</i> — set the hysteresis of removing the violation, that is, removal of the violations occurs at the specified percentage later, in order to prevent the frequent generation by fluctuating the value near the border.</li>
+<li> <i>Motion speed</i> — set if it is necessary to warn about fast change of value.</li>
+<li> <i>Name, Description, Dimension, Precision, Logarithmic scale</i> — set this information as needed when displayed, or as an element of the passport.</li></ul></dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="digitBlockUnif" title="#digitBlockUnif"><h3><span class="mw-headline" id="Discrete_block_.28unified.29_.28digitBlockUnif.29"><span class="mw-headline-number">1.4</span> Discrete block (unified) (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#digitBlockUnif" title="Special:MyLanguage/Libs/Main">digitBlockUnif</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainDigitBlockUnifOp.png" title="Result and the operative setup."><img alt="Result and the operative setup." height="343" src="files/LibsMainDigitBlockUnifOp.png" width="282" /></a></div>
+<p>Common, representative and unified template of the block for union of Discrete parameters for the common control device. The template forms a structure of discrete parameter-block (complex tag) which can be easily connected to most widgets and cadres of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_graphical_elements" title="Special:MyLanguage/Libs/Main graphical elements">the main elements library of the user interface</a> just pointing the parameter object.
+</p><p>The representative structure of discrete parameters (complex tags) is a latch object with two characteristic states and three commands, which in the final representation may have a different meaning and name:
+</p>
+<ul><li> "State "Opened" (<b>st_open</b>)" — the state "Opened" of the latch. Is the primary status signal that can be used without the next one, when <b>1 (true)</b> is "Opened", and <b>0 (false)</b> is 'Closed'.</li>
+<li> "State "Closed" (<b>st_close</b>)" — the state "Closed".</li>
+<li> "Command "Open" (<b>com</b>)" — the command "Open" of the latch. Is the primary command signal that can be used without the next one, when <b>1 (true)</b> is "Open", and <b>0 (false)</b> is 'Close'.</li>
+<li> "Command "Close" (<b>close</b>)" — the command "Close" of the latch.</li>
+<li> "Command "Stop" (<b>stop</b>)" — the command "Stop" of the latch.</li></ul>
+<p><b><u>Functions</u></b><br />
+</p>
+<ul><li> Direct obtaining, by link, of the two states (read only) and three commands (reading and writing).</li>
+<li> Possibility of holding the commands for a certain time and removing them.</li>
+<li> Ability to redefine the states and commands by <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_graphical_elements" title="Special:MyLanguage/Libs/Main graphical elements">the appropriate settings of the interface elements</a>, such as <i>digStts</i>, for statuses, and <i>digComs</i>, for commands.</li></ul>
+<p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> com </td>
+<td> Command "Open" </td>
+<td> Boolean </td>
+<td> Output </td>
+<td> Full access </td>
+<td> Link </td>
+<td>com
+</td></tr>
+<tr>
+<td> close </td>
+<td> Command "Close" </td>
+<td> Boolean </td>
+<td> Output </td>
+<td> Full access </td>
+<td> Link </td>
+<td>close
+</td></tr>
+<tr>
+<td> stop </td>
+<td> Command "Stop" </td>
+<td> Boolean </td>
+<td> Output </td>
+<td> Full access </td>
+<td> Link </td>
+<td>stop
+</td></tr>
+<tr>
+<td> st_open </td>
+<td> State "Opened" </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Link </td>
+<td>st_open
+</td></tr>
+<tr>
+<td> st_close </td>
+<td> State "Closed" </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Link </td>
+<td>st_close
+</td></tr>
+<tr>
+<td> tCmd </td>
+<td> Time to hold the command, seconds </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 5
+</td></tr>
+<tr>
+<td> last_cmd </td>
+<td> Last command </td>
+<td> Integer </td>
+<td> Output </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> w_tm </td>
+<td> Process command counter </td>
+<td> Real </td>
+<td> Output </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Frequency of calculation of the function, Hz </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainDigitBlockUnifCfg.png" title="Configuration."><img alt="Configuration." height="301" src="files/LibsMainDigitBlockUnifCfg.png" width="410" /></a></div>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>2. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select this template for it. Enable the parameter.</dd>
+<dd>3. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> All the states and commands — <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">link to a source of the "raw" signal</a>.</li>
+<li> <i>Time to hold the command, seconds</i> — set the desired hold value or 0 to disable this feature.</li></ul></dd>
+<dd>4. RESULT: Launching the controller object (where this parameter is created) and if it has not been started, we must get the operational data in the tab "Attributes" for: states and commands.</dd>
+<dd>5. In process of the working, through the tab "Attributes" of operational data, in addition to obtaining the result, it is possible to perform operative control, performing the commands:</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="digAlarm" title="#digAlarm"><h3><span class="mw-headline" id="Alarm_discrete_.28digAlarm.29"><span class="mw-headline-number">1.5</span> Alarm discrete (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#digAlarm" title="Special:MyLanguage/Libs/Main">digAlarm</a>)</span></h3></span>
+</td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainDigAlarmOp.png" title="Result and the operative setup."><img alt="Result and the operative setup." height="371" src="files/LibsMainDigAlarmOp.png" width="348" /></a></div>
+<p>Common, representative and unified template of separate discrete parameter (complex tag) processing with formation of signaling by the defined criterion. The template forms a structure of discrete parameter (complex tag) which can be easily connected to most widgets and cadres of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_graphical_elements" title="Special:MyLanguage/Libs/Main graphical elements">the main elements library of the user interface</a> just pointing the parameter object.
+</p><p>The template provides some fields of <a href="#digitBlockUnif">the representative structure of the discrete parameters</a> and adds the error field:
+</p>
+<ul><li> "State "Opened" (<b>st_open</b>)" — the state "Opened".</li>
+<li> "State "Closed" (<b>st_close</b>)" — the state "Closed".</li>
+<li> "Error (<b>err</b>)" — obligatory attribute of any parameter, consist of the combination of the error code and short text description, like to "2:No data or connection with source". The template reserves next error codes:
+<ul><li> <b>1</b> — hardware errors, when the data mostly wrong;</li>
+<li> <b>3</b> — violation of the specified condition.</li></ul></li>
+<li> "Violations suppress (<b>alSup</b>) and delay (<b>alDelay</b>)" — violations generic control for suppressing and delaying.</li></ul>
+<p><b><u>Functions</u></b><br />
+</p>
+<ul><li> Direct obtaining, by link, of the initial state and formation of two representative states with the possibility of their inversion <b>stInv</b>.</li>
+<li> Complex preprocessing and complete generation-imitation of the discrete input on the internal programming language of OpenSCADA into the configuration IO <b>inProc</b>, where you can operate next service parameters:</li></ul>
+<dl><dd><ul><li> <i>in</i> [IN|OUT] — the same raw discrete input IO;</li>
+<li> <i>levErr</i>, <i>tErr</i> [IN|OUT] — alarm level [-7...0] and text of the error (the attribute "err" format);</li>
+<li> <i>f_frq</i> [IN] — frequency of calculation, the template IO;</li>
+<li> <i>this</i> [IN] — reference to the parameter object, what executing the template;</li>
+<li> <i>ctx</i> [IN] — object of the user context, what saved between the execution cycles.</li></ul></dd></dl>
+<ul><li> Processing of the discrete input <b>in</b> for the purpose of creating a violation and correspondingly setting the attribute <b>err</b>, at the condition "<b>{st}:{lev}:{mess}</b>", that is generation violation of the level <i>lev</i> and the text <i>mess</i> for the input status <i>st</i> (0|1). What can be delayed on the time <b>alDelay</b> and can be suppressed setting <b>alSup</b>.</li></ul>
+<p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> alrm </td>
+<td> Alarm "{st}:{lev}:{mess}" </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td>
+</td></tr>
+<tr>
+<td> stInv </td>
+<td> State inversion </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td>
+</td></tr>
+<tr>
+<td> in </td>
+<td> Input </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Link </td>
+<td> Input|in
+</td></tr>
+<tr>
+<td> inProc </td>
+<td> Input processing procedure </td>
+<td> Text </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td>
+</td></tr>
+<tr>
+<td> alSup </td>
+<td> Violations suppress </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> alDelay </td>
+<td> Violations delay, seconds </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> st_open </td>
+<td> State "Opened" </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> st_close </td>
+<td> State "Closed" </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> SHIFR </td>
+<td> Code </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> NAME </td>
+<td> Name </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> DESCR </td>
+<td> Description </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> this </td>
+<td> Object </td>
+<td> Object </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Frequency of calculation of the function, Hz </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainDigAlarmCfg.png" title="Configuration."><img alt="Configuration." height="309" src="files/LibsMainDigAlarmCfg.png" width="418" /></a></div>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>2. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select this template for it. Enable the parameter.</dd>
+<dd>3. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> "Alarm "{st}:{lev}:{mess}" — define the criterion for the violation formation, leave blank to disable the violations generation.</li>
+<li> "State inversion" — set to invert the representative attributes, that is, "st_open" set for "in" equal to <b>false</b>.</li>
+<li> <i>Input</i> — <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">link to a source of the "raw" signal</a>.</li>
+<li> <i>Input processing procedure</i> — form for the complex preprocessing and complete generation of the discrete input on the internal programming language of OpenSCADA. For example:</li></ul>
+<dl><dd><ul><li> complete creation for a complex status:</li></ul></dd></dl></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 40pt">
+gO = this.cntr().prm_grps;
+status = gO.prm_generic.PRG_Input_Err_T_Zone1_S.get();
+in = gO.prm_generic.SET_CalcFan_UseSensor_T1.get() ||&nbsp;!(status == 0 || status == 2 || status == 3); </pre>
+<dl><dd>4. RESULT: Launching the controller object (where this parameter is created) and if it has not been started, we must get the operational data in the tab "Attributes" for: variable, error status; and the generation of violations if the state of the error is nonzero.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="codeState" title="#codeState"><h3><span class="mw-headline" id="Code_state_.28codeState.29"><span class="mw-headline-number">1.6</span> Code state (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#codeState" title="Special:MyLanguage/Libs/Main">codeState</a>)</span></h3></span>
+</td>
+<td> 1.2 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainCodeStateOp.png" title="Result and the operative setup."><img alt="Result and the operative setup." height="649" src="files/LibsMainCodeStateOp.png" width="323" /></a></div>
+<p>A variant of <a href="#digitBlockUnif">the common, representative and unified template of the block for union of Discrete parameters</a>, expanded by more than two states and three commands that can be encoded by an integer value. The template forms a structure of parameter (complex tag) which can be easily connected to most widgets and cadres of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_graphical_elements" title="Special:MyLanguage/Libs/Main graphical elements">the main elements library of the user interface</a> just pointing the parameter object.
+</p><p>The representative structure of the parameter (complex tag) of the code state is:
+</p>
+<ul><li> "State "Text" (<b>st_text</b>)" — text description of the state.</li>
+<li> "Command "Text" (<b>com_text</b>)" — text of the command.</li>
+<li> "Commands (<b>digComs</b>)" — common list of the allowed commands, to form the selecting.</li>
+<li> "Error (<b>err</b>)" — obligatory attribute of any parameter, consist of the combination of the error code and short text description, like to "2:No data or connection with source". The template reserves next error codes:
+<ul><li> <b>1</b> — hardware errors, when the data mostly wrong.</li></ul></li>
+<li> "Violations suppress (<b>alSup</b>) and delay (<b>alDelay</b>)" — violations generic control for suppressing and delaying.</li></ul>
+<p><b><u>Functions</u></b><br />
+</p>
+<ul><li> Direct receiving, by link, the status code and the command (read only), as well as setting the status text according to the list of states <i>stats</i>.</li>
+<li> Working out the text of the command <i>com_text</i> to find it in the general list <i>coms</i> of commands and issuing the received command code to the output.</li>
+<li> Generating from the general list <i>coms</i> of commands the list of commands to be selected in <i>digComs</i>.</li>
+<li> Complex processing and complete generation-imitation of the code state, as well as processing the code or the command text for targeted actions, on the internal programming language of OpenSCADA into the configuration IO <b>inProc</b>, where you can operate next service parameters:</li></ul>
+<dl><dd><ul><li> <i>in</i> [IN|OUT] — IO of the code state;</li>
+<li> <i>text</i> [OUT] — direct text status setting;</li>
+<li> <i>coms</i> [IN] — list of available commands, of the corresponded IO;</li>
+<li> <i>com_text</i> [IN|OUT] — text of the received command;</li>
+<li> <i>levErr</i>, <i>tErr</i> [IN|OUT] — alarm level [-7...0] and text of the error (the attribute "err" format);</li>
+<li> <i>f_frq</i> [IN] — frequency of the calculation, the template IO;</li>
+<li> <i>this</i> [IN] — reference to the parameter object, what executing the template;</li>
+<li> <i>ctx</i> [IN] — object of the user context, what saved between the execution cycles.</li></ul></dd></dl>
+<ul><li> Formation of the violation and the corresponding setting of the attribute <b>err</b>, provided at setting in the processing procedure or lack of the communication (<i>in</i> = EVAL). What can be delayed on the time <b>alDelay</b> and can be suppressed setting <b>alSup</b>.</li></ul>
+<p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> in </td>
+<td> Input </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Link </td>
+<td> Signal|in
+</td></tr>
+<tr>
+<td> out </td>
+<td> Output </td>
+<td> Integer </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Link </td>
+<td> Signal|out
+</td></tr>
+<tr>
+<td> inProc </td>
+<td> Input processing procedure </td>
+<td> Text </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td>
+</td></tr>
+<tr>
+<td> alSup </td>
+<td> Violations suppress </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> alDelay </td>
+<td> Violations delay, seconds </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> st_text </td>
+<td> State "Text" </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> stats </td>
+<td> States, rows "{code}:{State}" </td>
+<td> Text </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> com_text </td>
+<td> Command "Text" </td>
+<td> String </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> coms </td>
+<td> Commands-states, rows "{code}:{State}" </td>
+<td> Text </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> digComs </td>
+<td> Commands </td>
+<td> Text </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> SHIFR </td>
+<td> Code </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> NAME </td>
+<td> Name </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> DESCR </td>
+<td> Description </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> this </td>
+<td> Object </td>
+<td> Object </td>
+<td> Output </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Frequency of calculation of the function, Hz </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainCodeStateCfg.png" title="Configuration."><img alt="Configuration." height="303" src="files/LibsMainCodeStateCfg.png" width="324" /></a></div>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>2. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select this template for it. Enable the parameter.</dd>
+<dd>3. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>Input</i> and <i>Output</i> — <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">link to a source of the "raw" signal</a>.</li>
+<li> <i>Input processing procedure</i> — form for the processing and complete generation-imitation of the input, and issuing of the specific output, on the internal programming language of OpenSCADA. For example:</li></ul>
+<dl><dd><ul><li> complete creation for the state code and alarms forming:</li></ul></dd></dl></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 40pt">
+gO = this.cntr().prm_grps;
+if(gO.prm_fansControl.PRG_CntrFan_AutoMode_G1.get().isEVal())	in = 4;
+else {
+  if(!(tVl=gO.prm_fansControl.PRG_CntrFan_Alarm_ThermalRelay.get()).isEVal() &amp;&amp; tVl)
+    levErr = -4, tErr = "11:alarm";
+  if(gO.prm_fansControl.PRG_CntrFan_AutoMode_G1.get())
+    in = gO.prm_fansControl.PRG_CntrFan_On_G1.get()&nbsp;? 1&nbsp;: 2;
+  else in = 3;
+} </pre>
+<dl><dd><dl><dd><ul><li> forming the clock time text and issuing the time synchronization — direct status text setting and issuing for specific commands:</li></ul></dd></dl></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 40pt">
+curTm = SYS.time();
+text = SYS.strftime(curTm, "%H։%M&nbsp;%d.%m.%Y");
+gO = this.cntr().prm_grps;
+if(!(tVl=gO.prm_other.PRG_RTC_UNIX.get()).isEVal()) {
+  text += " ("+(tVl-curTm).toString(10,0,true)+")";
+}
+
+if(com_text.length &amp;&amp;&nbsp;!com_text.isEVal() &amp;&amp; (tVl=coms.match("^([^:]+):"+com_text,"m")).length &amp;&amp; tVl[1] == 1) {
+  gO.prm_other.SET_RTC_New_UNIX.set(curTm);
+  gO.prm_other.KEY_RTC_set_time.set(true);
+} </pre>
+<dl><dd>4. RESULT: Launching the controller object (where this parameter is created) and if it has not been started, we must get the operational data in the tab "Attributes" for: input, output, code-input state, error status; and the generation of violations if the state of the error is nonzero.</dd>
+<dd>5. In process of the working, through the tab "Attributes" of operational data, in addition to obtaining the result, it is possible to perform operative control, performing the commands:
+<ul><li> <i>States</i> — set to list of accordance with its status code to text.</li>
+<li> <i>Commands-states</i> — set to list of accordance with its status-command code to text.</li>
+<li> <i>Command "Text"</i> — set in the command text, which is described in the command list, for the code conversion and issuance.</li>
+<li> <i>Violations suppress</i> — set at the need of the parameter violations complete suppression — to disable their generation in whole.</li>
+<li> <i>Violations delay</i> — set the delay time for the generation of the violations, to exclude frequent generation, characteristic to uncertain sources of data, characterized by short-term loss of communication.</li></ul></dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="pidUnif" title="#pidUnif"><h3><span class="mw-headline" id="PID_signal_.28unified.2C_violation_statuses.29_.28pidUnif.29"><span class="mw-headline-number">1.7</span> PID signal (unified, violation statuses) (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#pidUnif" title="Special:MyLanguage/Libs/Main">pidUnif</a>)</span></h3></span>
+</td>
+<td> 1.2 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainPidUnifOp.png" title="Result and the operative setup."><img alt="Result and the operative setup." height="959" src="files/LibsMainPidUnifOp.png" width="386" /></a></div>
+<p>Common, representative and unified template of an interface to the Proportional Integral Differential (PID) regulator based on the common analog input signal, extended by binary states of indication the violations. The template forms a structure of the analog PID-regulator which can be easily connected to some cadres and widgets of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_graphical_elements" title="Special:MyLanguage/Libs/Main graphical elements">the main elements library of the user interface</a> just pointing the parameter object.
+</p><p>The representative structure of the analog PID-regulators is:
+</p>
+<ul><li> "Variable (<b>var</b>)" — end variable of the parameter — engineeric real value, allowed and suitable for archiving.</li>
+<li> "Error (<b>err</b>)" — obligatory attribute of any parameter, consist of the combination of the error code and short text description, like to "2:No data or connection with source". The template reserves next error codes:
+<ul><li> <b>1, 2</b> — hardware errors, when the data mostly wrong;</li>
+<li> <b>3, 4</b> — alarm border errors;</li>
+<li> <b>5, 6</b> — warning border errors;</li>
+<li> <b>7</b> — the speed error of the variable changing.</li></ul></li>
+<li> "Violations suppress (<b>alSup</b>) and delay (<b>alDelay</b>)" — violations generic control for suppressing and delaying.</li>
+<li> "Setpoint (<b>sp</b>)" — setpoint for the analog signal value achievement in the automatic mode.</li>
+<li> "Manual input (<b>manIn</b>)" — attribute for entering a new output value, which in the next falls into the output at the manual mode.</li>
+<li> "Output (<b>out</b>)" — output (control signal) of the PID-regulator.</li>
+<li> "Mode: automate (<b>auto</b>)" — the PID-regulator mode "Automatic".</li>
+<li> "Mode: cascade (<b>casc</b>)" — the PID-regulator mode "Cascade".</li>
+<li> "Scale: minimum (<b>min</b>)" and "Scale: maximum (<b>max</b>)" — main scale of the end variable, the output of which causes a hardware border error. The scale is also used as a scale of the variable trend display on the graphs.</li>
+<li> "Logarithmic scale (<b>log</b>)" — the scale sign of the variable trend display on the graphs in the logarithmic scale.</li>
+<li> "Dimension (<b>ed</b>)" — dimension (unit of measurement) of the variable.</li>
+<li> "Precision (<b>prec</b>)" — number signs after the dot, for positive values, and precision (signs in whole), for negative ones, to display the real end variable on the screen.</li></ul>
+<p><b><u>Functions</u></b><br />
+</p>
+<ul><li> Generic processing of the raw analog input for:</li></ul>
+<dl><dd><ul><li> simple correction-calibration at the formula "<b>in</b> = <b>iMult</b>*(<b>in</b>+<b>iAdd</b>)";</li>
+<li> scaling from the hardware border [<b>plcMin</b>...<b>plcMax</b>] to the main border [<b>min</b>...<b>max</b>], applying the square scale <b>scSqr</b>;</li>
+<li> permission to exceed the border for the input value on the value of <b>plcExcess</b> percent;</li>
+<li> filtering the input value changing in the time <b>Tf</b>.</li></ul></dd></dl>
+<ul><li> Simple imitation of the analog input, setting <b>plcImit</b> and linking the imitation-simulation source in <b>plcImitIn</b>.</li>
+<li> Processing the result variable <b>var</b> for violation some borders and criteria, generating the alarms and proper setting the attribute <b>err</b>. The alarm borders can have some hysteresis <b>HystBnd</b>, can be delayed on the time <b>alDelay</b> and can be suppressed setting <b>alSup</b>. Next borders and criteria are provided:</li></ul>
+<dl><dd><ul><li> missing for data or connection with source at the EVAL input value — error code 1 and alarm level 5;</li>
+<li> exceeding the input value of the hardware border — error code 1,2 and alarm level 5;</li>
+<li> exceeding the end variable of the alarm border [<b>aMin</b>...<b>aMax</b>] — error code 3,4 and alarm level 4;</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Disabled at setting for equal or inverted values of the border</dd></dl>
+<ul><li> exceeding the end variable of the warning border [<b>wMin</b>...<b>wMax</b>] — error code 5,6 and alarm level 2;</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Disabled at setting for equal or inverted values of the border</dd></dl>
+<ul><li> big motion <b>speed</b> of the end variable — error code 7 and alarm level 2.</li></ul></dd></dl>
+<ul><li> Transmission of the PID-specific information, control and coefficient attributes to and from the PLC or other data source with the regulation.</li></ul>
+<ul><li> <b>Sponsored by:</b> <a class="external text" href="http://diyaorg.dp.ua" rel="nofollow noreferrer noopener" target="_blank">DIYA LTD</a></li></ul>
+<p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> in </td>
+<td> Input </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Link </td>
+<td> Signal|in
+</td></tr>
+<tr>
+<td> sp </td>
+<td> Setpoint </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Link </td>
+<td> PID|sp
+</td></tr>
+<tr>
+<td> var </td>
+<td> Variable </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> manIn </td>
+<td> Manual input,&nbsp;% </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Link </td>
+<td> PID|manIn
+</td></tr>
+<tr>
+<td> out </td>
+<td> Output,&nbsp;% </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Link </td>
+<td> PID|out
+</td></tr>
+<tr>
+<td> auto </td>
+<td> Mode: automate </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Link </td>
+<td> PID|auto
+</td></tr>
+<tr>
+<td> casc </td>
+<td> Mode: cascade </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Link </td>
+<td> PID|casc
+</td></tr>
+<tr>
+<td> ed </td>
+<td> Dimension </td>
+<td> String </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> min </td>
+<td> Scale: minimum </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Link </td>
+<td> PID|min
+</td></tr>
+<tr>
+<td> max </td>
+<td> Scale: maximum </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Link </td>
+<td> PID|max
+</td></tr>
+<tr>
+<td> scSqr </td>
+<td> Scale: square </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> alSup </td>
+<td> Violations suppress </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> alDelay </td>
+<td> Violations delay, seconds </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> aMin </td>
+<td> Border down alarm </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> aMax </td>
+<td> Border up alarm </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> wMin </td>
+<td> Border down warning </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> wMax </td>
+<td> Border up warning </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> HystBnd </td>
+<td> Hysteresis of borders violation </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> speed </td>
+<td> Motion speed,&nbsp;%/cycle </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> prec </td>
+<td> Precision, signs </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 2
+</td></tr>
+<tr>
+<td> log </td>
+<td> Logarithmic scale </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> H </td>
+<td> Border up warning violation </td>
+<td> Boolean </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> L </td>
+<td> Border down warning violation </td>
+<td> Boolean </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> HH </td>
+<td> Border up alarm violation </td>
+<td> Boolean </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> LL </td>
+<td> Border down alarm violation </td>
+<td> Boolean </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> EVAL </td>
+<td> Value is error </td>
+<td> Boolean </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Tf </td>
+<td> Filter time, milliseconds </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Kp </td>
+<td> Gain </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Link </td>
+<td> PID|Kp
+</td></tr>
+<tr>
+<td> Ti </td>
+<td> Ti, milliseconds </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Link </td>
+<td> PID|Ti
+</td></tr>
+<tr>
+<td> Kd </td>
+<td> Gain differential </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Link </td>
+<td> PID|Kd
+</td></tr>
+<tr>
+<td> Td </td>
+<td> Td, milliseconds </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Link </td>
+<td> PID|Td
+</td></tr>
+<tr>
+<td> Tzd </td>
+<td> T differential lag, milliseconds </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Link </td>
+<td> PID|Tzd
+</td></tr>
+<tr>
+<td> Zi </td>
+<td> Insensitivity,&nbsp;% </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Link </td>
+<td> PID|Zi
+</td></tr>
+<tr>
+<td> Hup </td>
+<td> Upper output border,&nbsp;% </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Link </td>
+<td> PID|Hup
+</td></tr>
+<tr>
+<td> Hdwn </td>
+<td> Lower output border,&nbsp;% </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Link </td>
+<td> PID|Hdwn
+</td></tr>
+<tr>
+<td> K1 </td>
+<td> Coefficient of input 1 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Link </td>
+<td> PID|K1
+</td></tr>
+<tr>
+<td> K2 </td>
+<td> Coefficient of input 2 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Link </td>
+<td> PID|K2
+</td></tr>
+<tr>
+<td> K3 </td>
+<td> Coefficient of input 3 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Link </td>
+<td> PID|K3
+</td></tr>
+<tr>
+<td> K4 </td>
+<td> Coefficient of input 4 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Link </td>
+<td> PID|K4
+</td></tr>
+<tr>
+<td> iAdd </td>
+<td> Input addition </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> iMult </td>
+<td> Input multiplication </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 1
+</td></tr>
+<tr>
+<td> plcMin </td>
+<td> Minimum module scale </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 1
+</td></tr>
+<tr>
+<td> plcMax </td>
+<td> Maximum module scale </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 5
+</td></tr>
+<tr>
+<td> plcExcess </td>
+<td> Allowed scale exceeding,&nbsp;% </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> plcImit </td>
+<td> PLC imitation </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> plcImitIn </td>
+<td> PLC imitation input </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Link </td>
+<td> Imitation|var
+</td></tr>
+<tr>
+<td> this </td>
+<td> Object </td>
+<td> Object </td>
+<td> Output </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> SHIFR </td>
+<td> Code </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> NAME </td>
+<td> Name </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> DESCR </td>
+<td> Description </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Frequency of calculation of the function, Hz </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainPidUnifCfg.png" title="Configuration."><img alt="Configuration." height="885" src="files/LibsMainPidUnifCfg.png" width="506" /></a></div>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>2. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select this template for it. Enable the parameter.</dd>
+<dd>3. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>Input</i> — <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">link to a source of the "raw" analog signal</a>.</li>
+<li> <i>Setpoint</i>, <i>Manual input</i>, <i>Output</i>, <i>Mode: automate</i>, <i>Mode: cascade</i>, <i>Scale: minimum</i>, <i>Scale: maximum</i>, <i>Gain</i>, <i>Ti</i>, <i>Gain differential</i>, <i>Td</i>, <i>T differential lag</i>, <i>Insensitivity</i>, <i>Upper output border</i>, <i>Lower output border</i>, <i>Coefficient of input 1</i>, <i>Coefficient of input 2</i>, <i>Coefficient of input 3</i>, <i>Coefficient of input 4</i> — <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">link to a source of the PID-regulator</a>.</li>
+<li> <i>Input addition and multiplication</i> — use for easy and linear correction of the input, for example see the template "<a href="#anUnif">Analog signal (unified)</a>".</li>
+<li> <i>Allowed scale exceeding</i> — set if necessary to exceed the value of the main border, and when this scale starts to perform the recommendation function, say for the initial display of the trend on this scale.</li>
+<li> <i>PLC imitation and the imitation input</i> — define at the need to simulate the input as required in the functions.</li></ul></dd>
+<dd>4. RESULT: Launching the controller object (where this parameter is created) and if it has not been started, we must get the operational data in the tab "Attributes" for: variable, error status; and the generation of violations if the state of the error is nonzero. Also we will get all the PID-specific attributes.</dd>
+<dd>5. In process of the working, through the tab "Attributes" of operational data, in addition to obtaining the result, it is possible to perform operative setup and control on:
+<ul><li> <i>Scale: minimum and maximum</i> — strictly <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> set to the range of data changes by availability and according to the hardware border, otherwise the value will be distorted!</li>
+<li> <i>Scale: square</i> — set if the hardware border is square one.</li>
+<li> <i>Filter time</i> — set the filtering time for noisy signals.</li>
+<li> <i>Violations suppress</i> — set at the need of the parameter violations complete suppression — to disable their generation in whole.</li>
+<li> <i>Violations delay</i> — set the delay time for the generation of the violations, to exclude frequent generation, characteristic to uncertain sources of data, characterized by short-term loss of communication.</li>
+<li> <i>Border up/down alarm/warning</i> — set when it is necessary to generate violations at the exceeding of the alarm/warning borders.</li>
+<li> <i>Hysteresis of borders violation</i> — set the hysteresis of removing the violation, that is, removal of the violations occurs at the specified percentage later, in order to prevent the frequent generation by fluctuating the value near the border.</li>
+<li> <i>Motion speed</i> — set if it is necessary to warn about fast change of value.</li>
+<li> <i>Name, Description, Dimension, Precision, Logarithmic scale</i> — set this information as needed when displayed, or as an element of the passport.</li></ul></dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="pidUnifImp" title="#pidUnifImp"><h3><span class="mw-headline" id="Impulse_PID_signal_.28unified.2C_violation_statuses.29_.28pidUnifImp.29"><span class="mw-headline-number">1.8</span> Impulse PID signal (unified, violation statuses) (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#pidUnifImp" title="Special:MyLanguage/Libs/Main">pidUnifImp</a>)</span></h3></span>
+</td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>Common, representative and unified template of an interface to the Proportional Integral Differential (PID) regulator based on the common analog input signal but with the PWM-output, extended by binary states of indication the violations and mostly like to the template <a href="#pidUnif">PID signal (unified, violation statuses)</a>. The template forms a structure of the impulse PID-regulator which can be easily connected to some cadres of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_graphical_elements" title="Special:MyLanguage/Libs/Main graphical elements">the main elements library of the user interface</a> just pointing the parameter object.
+</p><p>The representative structure of the impulse PID-regulators is mostly equal to the template "<a href="#pidUnif">PID signal (unified, violation statuses)</a>" and contains a number of attributes specific to the pulse output and the attribute of determining the operation of this regulator in the analog mode, that is, this template is even more generalizable:
+</p>
+<ul><li> "Impulse output up (<b>impQup</b>)" and "Impulse output down (<b>impQdwn</b>)" — signals of the PWM-output.</li>
+<li> "Mode: analog (<b>analog</b>)" — a sign of working the regulator in the analog output mode.</li></ul>
+<p><b><u>Functions</u></b><br />
+Mostly the same as the basic template "<a href="#pidUnif">PID signal (unified, violation statuses)</a>" and the impulse-specific attributes are additionally provided: "Impulse output up", "Impulse output down", "Mode: analog", "T impulses period", "T minimal impulse", "Impulse rate factor".
+</p>
+<ul><li> <b>Sponsored by:</b> <a class="external text" href="http://diyaorg.dp.ua" rel="nofollow noreferrer noopener" target="_blank">DIYA LTD</a></li></ul>
+<p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td colspan="7"> Template IOs of "<a href="#pidUnif">PID signal (unified, violation statuses)</a>"
+</td></tr>
+<tr>
+<td> impQup </td>
+<td> Impulse output up </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Link </td>
+<td> PID|impQupTm
+</td></tr>
+<tr>
+<td> impQdwn </td>
+<td> Impulse output down </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Link </td>
+<td> PID|impQdwnTm
+</td></tr>
+<tr>
+<td> analog </td>
+<td> Mode: analog </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Link </td>
+<td> PID|analog
+</td></tr>
+<tr>
+<td> TImpPer </td>
+<td> T impulses period, milliseconds </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Link </td>
+<td> PID|TImpPer
+</td></tr>
+<tr>
+<td> TImpMin </td>
+<td> T minimal impulse, milliseconds </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Link </td>
+<td> PID|TImpMin
+</td></tr>
+<tr>
+<td> KImpRfact </td>
+<td> Impulse rate factor </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Link </td>
+<td> PID|KImpRfact
+</td></tr></table>
+<p><b><u>Configuring and using</u></b><br />
+Mostly the same as the basic template "<a href="#anUnif">Analog signal (unified)</a>" with the difference of using the impulse specific output: "Impulse output up", "Impulse output down", "Mode: analog", "T impulses period", "T minimal impulse", "Impulse rate factor".
+</p>
+<h2><span class="mw-headline" id="Templates_of_the_complex_objects"><span class="mw-headline-number">2</span> <span id="ComplexObject" title="#ComplexObject">Templates of the complex objects</span></span></h2>
+<p>In some cases where an object is only a part of a common automated system and does not require deep detailing to the level of signals and parameters (complex tag) around them, including without the need for archiving, it is convenient to unify them in one representative object of the data source OpenSCADA with appropriate consolidated view and object control as a set of simple attributes with violation elements. Such consolidation often occurs around specialised data sources, whose access to data is usually implemented through a separate exchanging protocol, but without unifying the transmission of this data to the level of visualisation and signalling by a separate attribute of the object.
+</p><p>In general, the representative structure of a complex object is:
+</p>
+<ul><li> "All items (<b>items</b>)" — common object-type attribute where the attributes of a physical object are directly described by object-type attributes in <b>items</b> and with defined descriptive attributes in each
+<ul><li> <i>id</i> — attribute identifier;</li>
+<li> <i>descr</i> — text description of the attribute;</li>
+<li> <i>wr</i> — a sign of the possibility of writing or a list of value variants to their selection, through the symbol ';';</li>
+<li> <i>alarm</i> — violation code:
+<ul><li> 0 — no violation — "NORM";</li>
+<li> 1 — violation level "WARNING";</li>
+<li> 2 — violation level "ALARM";</li></ul></li>
+<li> <i>val</i> — attribute value;</li>
+<li> <i>set</i> — attribute value to set the attributes accessible to write.</li></ul></li>
+<li> "Error (<b>err</b>)" — obligatory attribute of common violation status of the object in general, consist of the combination of the error code and short text description, like to "2:No data or connection with source". The template reserves next error codes:
+<ul><li> <b>1</b> — violation level "WARNING";</li>
+<li> <b>2</b> — violation level "ALARM";</li>
+<li> <b>3</b> — unreliability or lack of data.</li></ul></li>
+<li> "Violations suppress (<b>alSup</b>) and delay (<b>alDelay</b>)" — violations generic control for suppressing and delaying.</li></ul>
+<p>Generally, it is advisable to create such template (a layer above the physical data source object) above a raw data source that provides this data in attributes and without processing, and this template therefore performs:
+</p>
+<ul><li> collection of these attributes of the raw source into <b>items</b>;</li>
+<li> processing of properties of the attributes;</li>
+<li> control and transmitting of commands of the values setting;</li>
+<li> processing of the violation conditions at single attributes and at the object in whole, together with which these violations can be fixed in <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#ArchMess" title="Special:MyLanguage/Documents/Program manual">the table of actual violations</a>, typically by <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/User_API#SYS.DAQ" title="Special:MyLanguage/Documents/User API">the function alarmSet()</a>.</li></ul>
+<p>In addition to complex object templates, this object-control mechanism can be implemented by templates for implementing <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLev" title="Special:MyLanguage/Documents/DAQ">the logical level of data access</a>, such as in <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Devices#IEC60870" title="Special:MyLanguage/Libs/Devices">IEC60870</a>.
+</p><p>To represent the data of the object-control mechanism, there currently provided the appropriate <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_graphical_elements#objProps" title="Special:MyLanguage/Libs/Main graphical elements">Object properties frame</a>, which provides these properties as a table-list with illumination of the violations and the possibility to change the selected and accessible to edit row-properties.
+</p><p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="UPS" title="#UPS"><h3><span class="mw-headline" id="Uninterruptible_Power_Supply_.28UPS.29"><span class="mw-headline-number">2.1</span> Uninterruptible Power Supply (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#UPS" title="Special:MyLanguage/Libs/Main">UPS</a>)</span></h3></span>
+</td>
+<td> 1.3 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainUPSOp.png" title="Result and the operative setup."><img alt="Result and the operative setup." height="747" src="files/LibsMainUPSOp.png" width="402" /></a></div>
+<p>Data combination of the Uninterruptible Power Supply in a complex object of the attribute "All items". The template designed to use together with the DAQ-module "<a href="Modules/System.html" title="Special:MyLanguage/Modules/System">System</a>" in the part "UPS" and to represent this data by the frame "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_graphical_elements#objProps" title="Special:MyLanguage/Libs/Main graphical elements">Object properties</a>" as a complex object with properties, signalling at single borders and writing.
+</p>
+<ul><li> <b>Sponsored by:</b> <a class="external text" href="http://diyaorg.dp.ua" rel="nofollow noreferrer noopener" target="_blank">DIYA LTD</a></li></ul>
+<p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> srcAddr </td>
+<td> Source object's address </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td>
+</td></tr>
+<tr>
+<td> alSup </td>
+<td> Violations suppress </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> alDelay </td>
+<td> Violations delay, seconds </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> items </td>
+<td> All items </td>
+<td> Object </td>
+<td> Output </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> bChL </td>
+<td> Battery charge low </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 20
+</td></tr>
+<tr>
+<td> bChLL </td>
+<td> Battery charge critical </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 5
+</td></tr>
+<tr>
+<td> inVL </td>
+<td> Input voltage low </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 210
+</td></tr>
+<tr>
+<td> inVH </td>
+<td> Input voltage high </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 250
+</td></tr>
+<tr>
+<td> inFLL </td>
+<td> Input frequency too low </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 40
+</td></tr>
+<tr>
+<td> inFL </td>
+<td> Input frequency low </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 45
+</td></tr>
+<tr>
+<td> inFH </td>
+<td> Input frequency high </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 55
+</td></tr>
+<tr>
+<td> inFHH </td>
+<td> Input frequency too high </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 60
+</td></tr>
+<tr>
+<td> loadH </td>
+<td> Load high </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 80
+</td></tr>
+<tr>
+<td> loadHH </td>
+<td> Load too high </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 100
+</td></tr>
+<tr>
+<td> tH </td>
+<td> Temperature high </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 50
+</td></tr>
+<tr>
+<td> tHH </td>
+<td> Temperature too high </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 70
+</td></tr>
+<tr>
+<td> this </td>
+<td> Object </td>
+<td> Object </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> SHIFR </td>
+<td> Code </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> NAME </td>
+<td> Name </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> DESCR </td>
+<td> Description </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Frequency of calculation of the function, Hz </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainUPSCfg.png" title="Configuration."><img alt="Configuration." height="172" src="files/LibsMainUPSCfg.png" width="356" /></a></div>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create a source controller object into the module "<a href="Modules/System.html" title="Special:MyLanguage/Modules/System">System</a>" and set its Identifier like to "SYSData".</dd>
+<dd>2. Create a source parameter object into the previous controller object and set its Identifier like to "UPS".</dd>
+<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for it. Enable the parameter.</dd>
+<dd>5. In the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>Source object's address</i> — to address of the source UPS parameter object (see to step 1) like to "System.SYSData.UPS".</li></ul></dd>
+<dd>6. RESULT: When running the controller object (where this parameter was created) and if it was not started, we must obtain, in the parameter attribute <i>items</i>, this object with all the attributes and their properties. In case of some violations, we will get the corresponding information in the attribute of the parameter <i>err</i>, for which you can adjust the attributes of the boundaries of the corresponding violations.</dd>
+<dd>7. Into the visual interfaces developing of the module <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> place the frame "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_graphical_elements#objProps" title="Special:MyLanguage/Libs/Main graphical elements">Object properties</a>" to any page and link it to the parameter object, created into step 4.</dd>
+<dd>8. RESULT: Into runtime of the page you get a table with data of the object, notifications about violations into the header and the possibility to set of writable properties.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="SNMP" title="#SNMP"><h3><span class="mw-headline" id="Network_devices_by_SNMP_.28SNMP.29"><span class="mw-headline-number">2.2</span> Network devices by SNMP (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#SNMP" title="Special:MyLanguage/Libs/Main">SNMP</a>)</span></h3></span>
+</td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainSNMPOp.png" title="Result and the operative setup."><img alt="Result and the operative setup." height="526" src="files/LibsMainSNMPOp.png" width="441" /></a></div>
+<p>Data combination of a device, accessible by the protocol SNMP, in a complex object of the attribute "All items". The template designed to use together with the DAQ-module "<a href="Modules/SNMP.html" title="Special:MyLanguage/Modules/SNMP">SNMP</a>" and to represent this data by the frame "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_graphical_elements#objProps" title="Special:MyLanguage/Libs/Main graphical elements">Object properties</a>" as a complex object with properties, signalling at single borders and writing. Considering the great specificity and variety of SNMP-accessible devices, this template is actually a billet and an example of creating a template based on it to a corresponding device with a specific to it processing of input properties, forming of violations and write capability.
+</p>
+<ul><li> <b>Sponsored by:</b> PAC HARTRON</li></ul>
+<p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> srcAddr </td>
+<td> Source object's address </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td>
+</td></tr>
+<tr>
+<td> manTables </td>
+<td> Manual tables </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td>
+</td></tr>
+<tr>
+<td> alSup </td>
+<td> Violations suppress </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> alDelay </td>
+<td> Violations delay, seconds </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> items </td>
+<td> All items </td>
+<td> Object </td>
+<td> Output </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> this </td>
+<td> Object </td>
+<td> Object </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> SHIFR </td>
+<td> Code </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> NAME </td>
+<td> Name </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> DESCR </td>
+<td> Description </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Frequency of calculation of the function, Hz </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainSNMPCfg.png" title="Configuration."><img alt="Configuration." height="205" src="files/LibsMainSNMPCfg.png" width="359" /></a></div>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create a source controller object into the module "<a href="Modules/SNMP.html" title="Special:MyLanguage/Modules/SNMP">SNMP</a>" and set its Identifier like to "SYSData".</dd>
+<dd>2. Create a source parameter object into the previous controller object and set its Identifier like to "DEV".</dd>
+<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for it. Enable the parameter.</dd>
+<dd>5. In the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>Source object's address</i> — to address of the source SNMP device parameter object (see to step 1) like to "SNMP.SYSData.DEV".</li>
+<li> <i>Manual tables</i> — enter manually some static MIB-variables.</li></ul></dd>
+<dd>6. RESULT: When running the controller object (where this parameter was created) and if it was not started, we must obtain, in the parameter attribute <i>items</i>, this object with all the attributes and their properties. In case of some violations, we will get the corresponding information in the attribute of the parameter <i>err</i>, for which you can adjust the attributes of the boundaries of the corresponding violations.</dd>
+<dd>7. Into the visual interfaces developing of the module <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> place the frame "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_graphical_elements#objProps" title="Special:MyLanguage/Libs/Main graphical elements">Object properties</a>" to any page and link it to the parameter object, created into step 4.</dd>
+<dd>8. RESULT: Into runtime of the page you get a table with data of the object, notifications about violations into the header and the possibility to set of writable properties.</dd></dl>
+<h2><span class="mw-headline" id="Services"><span class="mw-headline-number">3</span> Services</span></h2>
+<table class="wikitable">
+
+<tr>
+<td> <span id="ntf" title="#ntf"><h3><span class="mw-headline" id="Notificator_by_SMS.2C_EMail.28SMTP.29_.28ntf.29"><span class="mw-headline-number">3.1</span> Notificator by SMS, EMail(SMTP) (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#ntf" title="Special:MyLanguage/Libs/Main">ntf</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * =&gt; <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">UserProtocol</a> </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The complex template of the notification contains of parts of the dispatcher and the output user protocol of notification by EMail(SMTP) and SMS.
+</p>
+<ul><li> <b>Sponsored by:</b> SVItoVYR LTD</li></ul>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainNtfOp.png" title="Result and the operative setup."><img alt="Result and the operative setup." height="519" src="files/LibsMainNtfOp.png" width="551" /></a></div>
+<p><b>THE DISPATCHER</b> can be performed for pointed messages of the message buffer of OpenSCADA and applied on <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLev" title="Special:MyLanguage/Documents/DAQ">the Logical level</a> or the controller object of <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">the module JavaLikeCalc</a>.
+</p><p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> io </td>
+<td> UserPrt: Output IO </td>
+<td> Object </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> tr </td>
+<td> UserPrt: Transport </td>
+<td> Object </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> tmOut </td>
+<td> Maximum notification timeout, seconds </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 5
+</td></tr>
+<tr>
+<td> messLev </td>
+<td> Messages level, negative for alarms </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 1
+</td></tr>
+<tr>
+<td> messCat </td>
+<td> Messages category, template or regular expression </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> al*:*
+</td></tr>
+<tr>
+<td> emailState </td>
+<td> Email notification current state </td>
+<td> String </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> emailTrAddr </td>
+<td> Output transport for SMTP connection, empty for disable </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> Sockets.out_SMTP
+</td></tr>
+<tr>
+<td> emailAuth </td>
+<td> Auth, empty for disable </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> user:pass
+</td></tr>
+<tr>
+<td> emailSender </td>
+<td> Sender </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> noreply@oscada.org
+</td></tr>
+<tr>
+<td> emailReceiver </td>
+<td> Destination receiver address </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> test@oscada.org
+</td></tr>
+<tr>
+<td> emailTopic </td>
+<td> EMail topic </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> Notification
+</td></tr>
+<tr>
+<td> emailMess </td>
+<td> EMail message </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td>
+</td></tr>
+<tr>
+<td> SMSState </td>
+<td> SMS notification current state </td>
+<td> String </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> SMSTrAddr </td>
+<td> SMS serial transport, empty for disable </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> Serial.out_SMS
+</td></tr>
+<tr>
+<td> SMSPin </td>
+<td> SMS-pin, empty for disable </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 1111
+</td></tr>
+<tr>
+<td> SMSTel </td>
+<td> SMS destination receiver, tel. number </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> +380XXXXXXXXX
+</td></tr>
+<tr>
+<td> SMSTextMd </td>
+<td> SMS in the text mode, else PDU </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Frequency of calculation of the function, Hz </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainNtfCfg.png" title="Configuration."><img alt="Configuration." height="477" src="files/LibsMainNtfCfg.png" width="546" /></a></div>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create a parameter in a controller object of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLev" title="Special:MyLanguage/Documents/DAQ">the Logical Level</a> or a controller object in <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">the module DAQ.JavaLikeCalc</a>.</dd>
+<dd>2. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" and set its Identifier like to "SMS", one transport suitable for more receivers.</dd>
+<dd>3. Set for proper address, only for the <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> device. The serial port speed, asynchronous data format and timeouts will adjusted by the function.</dd>
+<dd>4. Create an output transport of the type "<a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>" or "<a href="Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">SSL</a>" and set its Identifier like to "SMTP", one transport suitable for more receivers. </dd>
+<dd>5. Set-up for proper address, for Sockets(25) or SSL(465). The transport timeouts will be adjusted by the function.</dd>
+<dd>6. In the tab "Template configuration" you need to set:
+<ul><li> Maximum notification timeout, seconds.</li>
+<li> Messages level, negative for alarms.</li>
+<li> Messages category, template or regular expression.</li>
+<li> Output transport for SMTP connection, empty for disable.</li>
+<li> Auth, empty for disable.</li>
+<li> Sender.</li>
+<li> Destination receiver address.</li>
+<li> EMail topic.</li>
+<li> EMail message.</li>
+<li> SMS serial transport, empty for disable.</li>
+<li> SMS-pin, empty for disable.</li>
+<li> SMS destination receiver, tel. number.</li>
+<li> SMS in the text mode, else PDU.</li></ul></dd>
+<dd>7. RESULT: Sending for the pointed messages at SMS or EMail(SMTP).</dd></dl>
+<p><b>THE OUTPUT USER PROTOCOL PART "SMS"</b> provides operations with SMS by a GSM-modem connected as serial device. For now, there supported only sending SMS messages to a number of remote cell phone or GSM-modem. For sending there are supported: ECHO disable, PIN check and set, sending in PDU and the Text mode.<br />
+</p><p><b><u>Output user protocol's XML-request structure</u></b><br />
+<b>&lt;cmd pin="1111" tel="+380XXXXXXXXX" text="{0|1}" err="1:Error"&gt;{SMSText}&lt;/cmd&gt;</b>
+</p>
+<dl><dd><i>cmd</i> — command, for now only "send" allowed;</dd>
+<dd><i>pin</i> — PIN-code to the SIM-card access;</dd>
+<dd><i>tel</i> — telephone number of the receiver (remote cell phone or GSM-modem);</dd>
+<dd><i>text{0,1}</i> — SMS in the text mode, only ASCII;</dd>
+<dd><i>SMSText</i> — the message text;</dd>
+<dd><i>err</i> — sets for the request result.</dd></dl>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" and set its Identifier like to "SMS", one transport suitable for more receivers.</dd>
+<dd>2. Set for proper address. The serial port speed, asynchronous data format and timeouts will adjusted by the function.</dd>
+<dd>3. Create of needed <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">user protocol object</a> based on the templates, with Identifier like to "SMS".</dd>
+<dd>4. Place some requesting commands directly into presented or a new internal OpenSCADA-procedure like to:</dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px">
+req = SYS.XMLNode("send"); req.setAttr("ProtIt","SMS").setAttr("pin","1111").setAttr("tel","+380XXXXXXXXX").setText("Notify message");
+SYS.Transport.Serial.out_SMS.messIO(req, "UserProtocol");
+rez = req.attr("err").toInt()&nbsp;? req.attr("err")&nbsp;: "OK";
+</pre>
+<dl><dd>5. RESULT: In the variable <i>rez</i> you will get "OK" if no errors occur and the message successfully transmitted to the receiver.</dd></dl>
+<p><b>THE OUTPUT USER PROTOCOL PART "SMTP"</b> provides operations with a SMTP-server for delivering EMails by their sending through TCP-Socket or SSL. For now, there are supported: TCP, SSL, AUTH, topic encoding for UTF-8.<br />
+</p><p><b><u>Output user protocol's XML request structure</u></b><br />
+<b>&lt;send auth="{user}:{pass}" from="{FromAddr}" to="{ToAddr}" topic="{My Topic}" err="1:Error"&gt;{MessageText}&lt;/send&gt;</b>
+</p>
+<dl><dd><i>topic</i> — topic of the message;</dd>
+<dd><i>from</i> — sender address;</dd>
+<dd><i>to</i> — destination address of the receiver;</dd>
+<dd><i>auth</i> — authenticate user and password;</dd>
+<dd><i>MessageText</i> — text of the message;</dd>
+<dd><i>err</i> — sets for the request result.</dd></dl>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an output transport of the type "<a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>" or "<a href="Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">SSL</a>" and set its Identifier like to "SMTP", one transport suitable for more receivers. </dd>
+<dd>2. Set-up for proper address, for Sockets(25) or SSL(465). The transport timeouts will be adjusted by the function.</dd>
+<dd>3. Create of needed <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">user protocol object</a> based on the templates, with Identifier like to "SMTP".</dd>
+<dd>4. Place some requesting commands directly into allowed or a new internal OpenSCADA procedure like to:</dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px">
+req = SYS.XMLNode("send"); req.setAttr("ProtIt","SMTP").setAttr("from","noreply@oscada.org").setAttr("to","oscada@oscada.org").setAttr("topic","My topic").setText("My message");
+SYS.Transport.Sockets.out_SMTP.messIO(req, "UserProtocol");
+rez = req.attr("err").toInt()&nbsp;? req.attr("err")&nbsp;: "OK";
+</pre>
+<dl><dd>5. RESULT: In the variable <i>rez</i> you will get "OK" if no errors occur and the message successfully transmitted to the receiver.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="initConsAssignTrs" title="#initConsAssignTrs"><h3><span class="mw-headline" id="Initiative_connections_processing_for_assigned_output_transports_.28initConsAssignTrs.29"><span class="mw-headline-number">3.2</span> Initiative connections processing for assigned output transports (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#initConsAssignTrs" title="Special:MyLanguage/Libs/Main">initConsAssignTrs</a>)</span></h3></span>
+</td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainInitConsAssignTrsOp.png" title="Result and the operative setup."><img alt="Result and the operative setup." height="388" src="files/LibsMainInitConsAssignTrsOp.png" width="360" /></a></div>
+<p>The template of processing input initiative connections was created to provide the latest chain of implementation and support for <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#PassiveAndInitiative" title="Special:MyLanguage/Documents/DAQ">conception of data acquisition in the passive mode and the initiative connection</a>, that is — the control of associative connections, created by the input transport at each connection.
+</p><p>The function of creation associative output transports at connections is currently only supported by <a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">the module "Sockets"</a> and for TCP-sockets.
+</p><p>The control of associative transport means:
+</p>
+<ul><li> obtaining a list of the associative transports, by the function <i>assTrsList()</i> of the input transports;</li>
+<li> reading from new transports (opened) of identification information, which currently represents only the source object identifier;
+<ul><li> search, by the received identifier, the source object and assigning to it of this transport;</li>
+<li> registering in the attribute "prcTr" of the object type.</li></ul></li>
+<li> checking of existing transports for their closure (detachment), for which performed the deregistration in the attribute "prcTr" of the object type and the establishment of the source object in the empty value; disconnected output associated transports are reused by the input one upon receiving a new connection then it is switched on.</li></ul>
+<p>The template can control the containers of data source objects, constructed both as DAQ-objects of the controllers and logical level parameters, what representing the data source and having a transport address definition field, and what generally defined by the configuration field "srcObjPath" of the format <b>{CntrAddr}:{TrCntrFldAddr}</b>, where:
+</p>
+<ul><li> <i>CntrAddr</i> — container address, for example: "ModBus" — for DAQ-objects of the controllers, "LogicLev.CntrPLC" — for logical level parameters;</li>
+<li> <i>TrCntrFldAddr</i> — address of the transport control field in the source object, for example — "%2fcntr%2fcfg%2fADDR" for "ModBus"; what can be obtained in a configurator at the history of pointing on the control field in the status line.</li></ul>
+<ul><li> <b>Sponsored by:</b> BLUE STAR GROUP Ltd</li></ul>
+<p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> inTransport </td>
+<td> Input transport </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> InitiateCons
+</td></tr>
+<tr>
+<td> outTrTm </td>
+<td> Output transport timeouts </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 10:0.1
+</td></tr>
+<tr>
+<td> srcObjPath </td>
+<td> Source object path </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> ModBus:%2fcntr%2fcfg%2fADDR
+</td></tr>
+<tr>
+<td> prcTr </td>
+<td> Processed transports </td>
+<td> Object </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Frequency of calculation of the function, Hz </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainInitConsAssignTrsCfg.png" title="Configuration."><img alt="Configuration." height="226" src="files/LibsMainInitConsAssignTrsCfg.png" width="393" /></a></div>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an input transport of receiving the initiative connections of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/Sockets#InTr" title="Special:MyLanguage/Modules/Sockets">the module "Sockets"</a> with the name like to "InitiateCons".</dd>
+<dd>2. Set the previously created transport to the needed address of opening the input socket and move it to the mode of creating the associative output transports, leaving the protocol field in empty.</dd>
+<dd>3. Provide a container of the data sources to which associative transports must be connected, which can be either a DAQ-module (such as "DAQ.ModBus"), or a logical controller (such as "DAQ.LogicLev.Sources"), or a parameter in it (such as "DAQ.LogicLev.PLC.Sources"), with logical level parameters representing the data source.</dd>
+<dd>4. For this template, create and run <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any available with the required scheduling properties.</dd>
+<dd>5. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select this template for it. Enable the parameter.</dd>
+<dd>6. In the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>Input transport</i> — to value of the identifier of the input transport, created in the item 1, like to "InitiateCons;</li>
+<li> <i>Output transport timeouts</i> — increase the first digit for very slow connections and typical is normal in most situations</li>
+<li> <i>Source objects path</i> — set according to the item 3, for the first part, and to the control field path, for the second part, for example, and typically for for "ModBus", is — "ModBus:%2fcntr%2fcfg%2fADDR".</li></ul></dd>
+<dd>6. RESULT: Starting the controller object (where this parameter was created) and if it was not started, we should get, in the attribute <i>prcTr</i> of the parameter for information about the processed and therefore successfully transport-linked data sources. In case of some violations, we will get the corresponding information in the attribute <i>err</i> of the parameter. The absence of a representative object for the received identifier is placed in the protocol of messages.</dd></dl>
+
+
+
+
+
+
+</div></body>
+</html>

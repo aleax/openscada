@@ -1,3 +1,27 @@
+2019-11-04 Roman (stable)
+- !!!!:DB.LibsDB.OscadaLibs: The templates library "Main library (base)" is finished in it form-documenting and translation to ukrainian.
+    !!:regEl.{pidUnif,pidUnifD},base.{manInUnif,anUnif,anUnifSt,manInUnif,digAlarm,codeState,pidUnif,pidUnifImp,SNMP,UPS}:
+	Revised and translated during of documenting the templates base.{pidUnif,pidUnifImp}.
+    base.digAlarm: Appended for the template description.
+    !!!!:base.{anUnif,anUnifSt,manInUnif,digAlarm,codeState,pidUnif,pidUnifImp,SNMP,UPS}:
+	Moved under the unified alarms forming and controlling mechanism.
+    !!:web: The JavaLikeCalc library "web" of the WEB functions appended for start implementation of diagrams building in SVG,
+	for reports and the user web-interfaces.
+- Archives: TArchiveS::messGet() allowed to reading only the buffer or the allarms table, mostly to fast control the alarms presence.
+- !!!!:DAQ: alarmSet() expanded by implementing the alarms triggering conception, which means also of passing messages to the buffer
+    of clearance the alarms only at the alarms presence.
+- Security: The user's DB-field "LANG" size expanded up to 50 and the user's group's DB-field "USERS" size expanded up to 1000000, for more users support.
+- !!:FIX:DAQ.{LogicLev,ModBus,Siemens,FT3}: The template's implementation DB-field "ID" size of the IOs expanded up to 1.5x of the base size (30).
+- Protocol.ModBus: The protocol variant recognising for input requests some improved for detecting difference RTU and TCP variants,
+    appending to that the transport type.
+- !!!!:DAQ.ModBus: The asynchronous writing moved to the after requesting stage with oppresing the writen values changing in the attributes,
+    before the writing buffer clearance.
+- !:Transport.{Sockets,SSL}: The output transport improved in using the tries after the error "Reading timeouted." of responsing to request.
+- !!:Transport.SSL: Appended for treating NO_*_METHOD for TLS1, TLS1_1, TLS1_2, DTLS1 and for direct support DTLSv1_2.
+- FIX:UI.QTCfg: Fixed for empty item name for one item selection and in the item deletion dialog.
+- FIX:UI.WebVision: The view "Trends" of the primitive "Diagram" fixed in endMarkBrd of the endpoint date and time.
+
+
 2019-10-20 Roman (stable)
 - !!:DB.LibsDB.OscadaLibs: base.ntf: Revised and translated during the documenting.
     !!:base.initConsAssignTrs: Expanded to work with any type of the source objects, that is DAQ-modules and logical level controllers and parameters.

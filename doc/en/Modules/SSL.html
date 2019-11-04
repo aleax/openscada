@@ -31,15 +31,15 @@
 <td> <a href="../Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">SSL</a> </td>
 <td> SSL
 </td>
-<td> 2.3 </td>
+<td> 2.4 </td>
 <td> GPL2 </td>
 <td> tr_SSL.so </td>
 <td> en,uk,ru,de </td>
 <td> x86,x86_64,ARM
 </td>
 <td> Transport </td>
-<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2009) — this page translation</i></font> </td>
-<td> Provides transport based on the secure sockets' layer. OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1 are supported.
+<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2009) — this page initial translation</i></font> </td>
+<td> Provides transport based on the secure sockets' layer. OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2 are supported.
 </td></tr></table>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
@@ -49,7 +49,7 @@
 </ul>
 </div>
 
-<p>The module provides support for secure sockets layer (SSL) based transports to the program. The module is based on the library <a class="external text" href="http://www.openssl.org" rel="nofollow noreferrer noopener" target="_blank">OpenSSL</a>. Input and output transport protocols SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1 are supported; the general list of which depends on their availability in the OpenSSL library and, in the absence of a direct specification, it is selected for most relevant and safe.
+<p>The module provides support for secure sockets layer (SSL) based transports to the program. The module is based on the library <a class="external text" href="http://www.openssl.org" rel="nofollow noreferrer noopener" target="_blank">OpenSSL</a>. Input and output transport protocols SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2 are supported; the general list of which depends on their availability in the OpenSSL library and, in the absence of a direct specification, it is selected for most relevant and safe.
 </p><p>You can add new input and output safe sockets through the configuration of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Transports" title="Special:MyLanguage/Documents/Program manual">the transport subsystem</a> in any OpenSCADA configurator.
 </p>
 <h2><span class="mw-headline" id="Input_transports"><span class="mw-headline-number">1</span> Input transports</span></h2>
@@ -65,7 +65,7 @@
 <li> Address of the transport in the format "<b>{addr}:{port}[:{mode}]</b>", where:
 <ul><li> <i>addr</i> — address to open SSL, it must be one of the addresses of the host. Empty or "*" address opens SSL for all interfaces. There may be as the symbolic representation as well as IPv4 "<b>127.0.0.1</b>" or IPv6 "<b>[::1]</b>".</li>
 <li> <i>port</i> — network port on which the SSL is opened, indication of the character name of the port, according to <i>/etc/services</i> is available.</li>
-<li> <i>mode</i> — SSL-mode and version (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1), by default and in error, the safest and most appropriate one is used.</li></ul></li>
+<li> <i>mode</i> — SSL-mode and version (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1, DTLSv1_2), by default and in error, the safest and most appropriate one is used.</li></ul></li>
 <li> Selecting of the transport protocols.</li>
 <li> State "Running", in which the transport must be translated at boot. </li>
 <li> Certificates, private SSL key and password of the private SSL key.</li>
@@ -87,7 +87,7 @@
 <li> Address of the transport in the format "<b>{addr}[,{addrN}]:{port}[:{mode}]</b>", where:
 <ul><li> <i>addr</i> — address with which the connection is made. There may be as the symbolic representation as well as IPv4 "<b>127.0.0.1</b>" or IPv6 "<b>[::1]</b>".</li>
 <li> <i>port</i> — network port with which the connection is made. Indication of the character name of the port according to <i>/etc/services</i> is available.</li>
-<li> <i>mode</i> — SSL-mode and version (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1), by default and in error, the safest and most appropriate one is used.</li></ul></li>
+<li> <i>mode</i> — SSL-mode and version (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1, DTLSv1_2), by default and in error, the safest and most appropriate one is used.</li></ul></li>
 <li> The state "Running", in which the transport must be translated at boot. </li>
 <li> Certificates, private SSL key and password of the private SSL key.</li>
 <li> Connection timings in the format "<b>{conn}:{next}</b>", where:

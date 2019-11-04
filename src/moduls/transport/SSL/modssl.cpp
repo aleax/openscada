@@ -41,10 +41,10 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.3.2"
+#define MOD_VER		"2.4.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer.\
- OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1 are supported.")
+ OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2 are supported.")
 #define LICENSE		"GPL2"
 //************************************************
 
@@ -170,7 +170,7 @@ string TTransSock::outAddrHelp( )
     return string(_("SSL output transport has the address format \"{addr}[,{addrN}]:{port}[:{mode}]\", where:\n"
 	"    addr - address with which the connection is made; there may be as the symbolic representation as well as IPv4 \"127.0.0.1\" or IPv6 \"[::1]\";\n"
 	"    port - network port with which the connection is made; indication of the character name of the port according to /etc/services is available;\n"
-	"    mode - SSL-mode and version (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1), by default and in error, the safest and most appropriate one is used.")) +
+	"    mode - SSL-mode and version (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1, DTLSv1_2), by default and in error, the safest and most appropriate one is used.")) +
 	"\n\n|| " + outTimingsHelp() + "\n\n|| " + outAttemptsHelp();
 }
 
@@ -331,13 +331,27 @@ void *TSocketIn::Task( void *sock_in )
     if(ssl_method == "SSLv3")		meth = SSLv3_server_method();
     else
 #endif
+#ifndef OPENSSL_NO_TLS1_METHOD
 	if(ssl_method == "TLSv1")	meth = TLSv1_server_method();
     else
+#endif
 #if OPENSSL_VERSION_NUMBER >= 0x1000114fL
+# ifndef OPENSSL_NO_TLS1_1_METHOD
 	 if(ssl_method == "TLSv1_1")	meth = TLSv1_1_server_method();
-    else if(ssl_method == "TLSv1_2")	meth = TLSv1_2_server_method();
-    else if(ssl_method == "DTLSv1")	meth = DTLSv1_server_method();
     else
+# endif
+# ifndef OPENSSL_NO_TLS1_2_METHOD
+	 if(ssl_method == "TLSv1_2")	meth = TLSv1_2_server_method();
+    else
+# endif
+# ifndef OPENSSL_NO_DTLS1_METHOD
+	 if(ssl_method == "DTLSv1")	meth = DTLSv1_server_method();
+    else
+# endif
+# ifndef OPENSSL_NO_DTLS1_2_METHOD
+	 if(ssl_method == "DTLSv1_2")	meth = DTLSv1_2_server_method();
+    else
+# endif
 #endif
 	 meth = SSLv23_server_method();
 
@@ -721,7 +735,7 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	    "    addr - address to open SSL, it must be one of the addresses of the host; empty or \"*\" address opens SSL for all interfaces; "
 	    "there may be as the symbolic representation as well as IPv4 \"127.0.0.1\" or IPv6 \"[::1]\";\n"
 	    "    port - network port on which the SSL is opened, indication of the character name of the port, according to /etc/services is available;\n"
-	    "    mode - SSL-mode and version (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1), by default and in error, the safest and most appropriate one is used."));
+	    "    mode - SSL-mode and version (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1, DTLSv1_2), by default and in error, the safest and most appropriate one is used."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/PROT",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",STR_ID);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/certKey",_("Certificates and private key"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,4,
 	    "tp","str","cols","90","rows","7","help",_("SSL PAM certificates chain and private key."));
@@ -897,13 +911,27 @@ void TSocketOut::start( int tmCon )
     if(ssl_method == "SSLv3")		meth = SSLv3_client_method();
     else
 #endif
+#ifndef OPENSSL_NO_TLS1_METHOD
 	if(ssl_method == "TLSv1")	meth = TLSv1_client_method();
     else
+#endif
 #if OPENSSL_VERSION_NUMBER >= 0x1000114fL
+# ifndef OPENSSL_NO_TLS1_1_METHOD
 	 if(ssl_method == "TLSv1_1")	meth = TLSv1_1_client_method();
-    else if(ssl_method == "TLSv1_2")	meth = TLSv1_2_client_method();
-    else if(ssl_method == "DTLSv1")	meth = DTLSv1_client_method();
     else
+# endif
+# ifndef OPENSSL_NO_TLS1_2_METHOD
+	 if(ssl_method == "TLSv1_2")	meth = TLSv1_2_client_method();
+    else
+# endif
+# ifndef OPENSSL_NO_DTLS1_METHOD
+	if(ssl_method == "DTLSv1")	meth = DTLSv1_client_method();
+    else
+# endif
+# ifndef OPENSSL_NO_DTLS1_2_METHOD
+	if(ssl_method == "DTLSv1_2")	meth = DTLSv1_2_client_method();
+    else
+# endif
 #endif
 	 meth = SSLv23_client_method();
 
@@ -1155,12 +1183,17 @@ repeate:
 	    FD_ZERO(&rd_fd); FD_SET(sockFd, &rd_fd);
 	    kz = select(sockFd+1, &rd_fd, NULL, NULL, &tv);
 	    if(kz == 0) {
+		err = _("Reading timeouted.");
 		if(!notReq) {
-		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Reading timeouted."));
-		    if(logLen()) pushLogMess(_("Reading timeouted."));
-		    if(writeReq) stop();
+		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), err.c_str());
+		    if(logLen()) pushLogMess(err.c_str());
+		    if(writeReq) {
+			//stop();
+			if(reqTry >= attempts()) stop();
+			else goto repeate;
+		    }
 		}
-		throw TError(nodePath().c_str(),_("Reading timeouted."));
+		throw TError(nodePath().c_str(), err.c_str());
 	    }
 	    else if(kz < 0) {
 		err = TSYS::strMess("%s (%d)", strerror(errno), errno);

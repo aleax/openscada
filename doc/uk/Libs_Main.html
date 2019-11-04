@@ -1,0 +1,3123 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Бібліотеки/Основна - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../en/files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="uk">Бібліотеки/Основна</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FMain&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Main" title="Libs/Main">Libs/Main</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Libs/Main" title="Libs/Main (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+<table class="wikitable">
+
+<tr>
+<th> Назва </th>
+<th> Версія </th>
+<th> Ліцензія </th>
+<th> Джерело </th>
+<th> Мови </th>
+<th> Автор </th>
+<th> Опис
+</th></tr>
+
+<tr>
+<td> <a href="Libs_Main.html" title="Special:MyLanguage/Libs/Main">Основна бібліотека</a>
+</td>
+<td> 2.0 </td>
+<td> GPLv2 </td>
+<td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.tmplb_base </td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td>
+<td> Бібліотека основних шаблонів опрацювання DAQ джерел та похідних сервісів.
+<ul><li> <b>Засновано</b>: 2006</li></ul>
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.A8.D0.B0.D0.B1.D0.BB.D0.BE.D0.BD.D0.B8_.D1.81.D1.82.D0.B0.D0.BD.D0.B4.D0.B0.D1.80.D1.82.D0.BD.D0.B8.D1.85_.D1.81.D1.82.D1.80.D1.83.D0.BA.D1.82.D1.83.D1.80_DAQ-.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.96.D0.B2"><span class="tocnumber">1</span> <span class="toctext">Шаблони стандартних структур DAQ-параметрів</span></a>
+<ul>
+<li class="toclevel-2"><a href="#.D0.90.D0.BD.D0.B0.D0.BB.D0.BE.D0.B3.D0.BE.D0.B2.D0.B8.D0.B9_.D1.81.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB_.28.D1.83.D0.BD.D1.96.D1.84.D1.96.D0.BA.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B9.29_.28anUnif.29"><span class="tocnumber">1.1</span> <span class="toctext">Аналоговий сигнал (уніфікований) (anUnif)</span></a></li>
+<li class="toclevel-2"><a href="#.D0.90.D0.BD.D0.B0.D0.BB.D0.BE.D0.B3.D0.BE.D0.B2.D0.B8.D0.B9_.D1.81.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB_.28.D1.83.D0.BD.D1.96.D1.84.D1.96.D0.BA.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B9.2C_.D1.81.D1.82.D0.B0.D0.BD.D0.B8_.D0.BF.D0.BE.D1.80.D1.83.D1.88.D0.B5.D0.BD.D1.8C.29_.28anUnifSt.29"><span class="tocnumber">1.2</span> <span class="toctext">Аналоговий сигнал (уніфікований, стани порушень) (anUnifSt)</span></a></li>
+<li class="toclevel-2"><a href="#.D0.A0.D1.83.D1.87.D0.BD.D0.B8.D0.B9_.D0.B2.D0.B2.D1.96.D0.B4_.28.D1.83.D0.BD.D1.96.D1.84.D1.96.D0.BA.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B9.29_.28manInUnif.29"><span class="tocnumber">1.3</span> <span class="toctext">Ручний ввід (уніфікований) (manInUnif)</span></a></li>
+<li class="toclevel-2"><a href="#.D0.94.D0.B8.D1.81.D0.BA.D1.80.D0.B5.D1.82.D0.BD.D0.B8.D0.B9_.D0.B1.D0.BB.D0.BE.D0.BA_.28.D1.83.D0.BD.D1.96.D1.84.D1.96.D0.BA.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B9.29_.28digitBlockUnif.29"><span class="tocnumber">1.4</span> <span class="toctext">Дискретний блок (уніфікований) (digitBlockUnif)</span></a></li>
+<li class="toclevel-2"><a href="#.D0.A1.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB.D1.96.D0.B7.D0.B0.D1.86.D1.96.D1.8F_.D0.B4.D0.B8.D1.81.D0.BA.D1.80.D0.B5.D1.82.D0.BD.D0.B0_.28digAlarm.29"><span class="tocnumber">1.5</span> <span class="toctext">Сигналізація дискретна (digAlarm)</span></a></li>
+<li class="toclevel-2"><a href="#.D0.A1.D1.82.D0.B0.D0.BD_.D0.B7.D0.B0_.D0.BA.D0.BE.D0.B4.D0.BE.D0.BC_.28codeState.29"><span class="tocnumber">1.6</span> <span class="toctext">Стан за кодом (codeState)</span></a></li>
+<li class="toclevel-2"><a href="#.D0.9F.D0.86.D0.94_.D1.81.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB_.28.D1.83.D0.BD.D1.96.D1.84.D1.96.D0.BA.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B9.2C_.D1.81.D1.82.D0.B0.D0.BD.D0.B8_.D0.BF.D0.BE.D1.80.D1.83.D1.88.D0.B5.D0.BD.D1.8C.29_.28pidUnif.29"><span class="tocnumber">1.7</span> <span class="toctext">ПІД сигнал (уніфікований, стани порушень) (pidUnif)</span></a></li>
+<li class="toclevel-2"><a href="#.D0.86.D0.BC.D0.BF.D1.83.D0.BB.D1.8C.D1.81.D0.BD.D0.B8.D0.B9_.D0.9F.D0.86.D0.94_.D1.81.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB_.28.D1.83.D0.BD.D1.96.D1.84.D1.96.D0.BA.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B9.2C_.D1.81.D1.82.D0.B0.D0.BD.D0.B8_.D0.BF.D0.BE.D1.80.D1.83.D1.88.D0.B5.D0.BD.D1.8C.29_.28pidUnifImp.29"><span class="tocnumber">1.8</span> <span class="toctext">Імпульсний ПІД сигнал (уніфікований, стани порушень) (pidUnifImp)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.A8.D0.B0.D0.B1.D0.BB.D0.BE.D0.BD.D0.B8_.D0.BA.D0.BE.D0.BC.D0.BF.D0.BB.D0.B5.D0.BA.D1.81.D0.BD.D0.B8.D1.85_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82.D1.96.D0.B2"><span class="tocnumber">2</span> <span class="toctext"><span>Шаблони комплексних об'єктів</span></span></a>
+<ul>
+<li class="toclevel-2"><a href="#.D0.94.D0.B6.D0.B5.D1.80.D0.B5.D0.BB.D0.BE_.D0.91.D0.B5.D0.B7.D0.BF.D0.B5.D1.80.D0.B5.D0.B1.D1.96.D0.B9.D0.BD.D0.BE.D0.B3.D0.BE_.D0.96.D0.B8.D0.B2.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F_.28UPS.29"><span class="tocnumber">2.1</span> <span class="toctext">Джерело Безперебійного Живлення (UPS)</span></a></li>
+<li class="toclevel-2"><a href="#.D0.9C.D0.B5.D1.80.D0.B5.D0.B6.D0.B5.D0.B2.D1.96_.D0.BF.D1.80.D0.B8.D1.81.D1.82.D1.80.D0.BE.D1.97_.D0.B7.D0.B0_SNMP_.28SNMP.29"><span class="tocnumber">2.2</span> <span class="toctext">Мережеві пристрої за SNMP (SNMP)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-3"><a href="#.D0.A1.D0.B5.D1.80.D0.B2.D1.96.D1.81.D0.B8"><span class="tocnumber">3</span> <span class="toctext">Сервіси</span></a>
+<ul>
+<li class="toclevel-2"><a href="#.D0.9F.D0.BE.D0.B2.D1.96.D0.B4.D0.BE.D0.BC.D0.BB.D1.8E.D0.B2.D0.B0.D1.87_.D0.B7.D0.B0_SMS.2C_EMail.28SMTP.29_.28ntf.29"><span class="tocnumber">3.1</span> <span class="toctext">Повідомлювач за SMS, EMail(SMTP) (ntf)</span></a></li>
+<li class="toclevel-2"><a href="#.D0.9E.D0.BF.D1.80.D0.B0.D1.86.D1.8E.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_.D1.96.D0.BD.D1.96.D1.86.D1.96.D0.B0.D1.82.D0.B8.D0.B2.D0.BD.D0.B8.D1.85_.D0.BF.D1.96.D0.B4.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D1.8C_.D1.89.D0.BE.D0.B4.D0.BE_.D0.B0.D1.81.D0.BE.D1.86.D1.96.D0.B0.D1.82.D0.B8.D0.B2.D0.BD.D0.B8.D1.85_.D0.B2.D0.B8.D1.85.D1.96.D0.B4.D0.BD.D0.B8.D1.85_.D1.82.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D1.96.D0.B2_.28initConsAssignTrs.29"><span class="tocnumber">3.2</span> <span class="toctext">Опрацювання ініціативних підключень щодо асоціативних вихідних транспортів (initConsAssignTrs)</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<p>Бібліотеку створено для надання основних шаблонів опрацювання DAQ-джерел та похідних сервісів.
+</p><p>Назви шаблонів та їх параметрів доступні на мовах: Англійська, Українська та Російська. Їх вихідний код написано у мово(людська)-незалежному режимі з викликом функції перекладу <i>tr()</i> та переклад цих повідомлень також доступний Англійською, Українською та Російською.
+</p><p>Для підключення бібліотеки до проекту станції OpenSCADA Ви можете отримати файл БД як:
+</p>
+<ul><li> такий що постачається з готовим та відповідним пакетом дистрибутиву Linux на кшталт "openscada-libdb-main", "openscada-LibDB.Main";</li>
+<li> найбільш актуальний та безпосередньо отриманий з <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">репозиторію subversion</a>, перетворений у файл БД SQLite шляхом:</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 15px">
+$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql
+$ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
+</pre>
+<ul><li> завантаження <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">прикріпленого тут</a>.</li></ul>
+<p>Цей завантажений файл Ви надалі можете розмістити у теці проекту станції та створити об'єкт бази даних модуля БД "SQLite", зареєструвавши файл бази даних у конфігурації.
+</p><p>Для DAQ-шаблонів загалом Вам треба створити представницький об'єкт пристрою у <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">модулі Логічного Рівня</a> та обрати відповідний шаблон з бібліотеки шаблонів. Далі, для коректної конфігурації, дотримуйтесь специфіки шаблону у особистому описі.
+</p>
+<h2><span class="mw-headline" id=".D0.A8.D0.B0.D0.B1.D0.BB.D0.BE.D0.BD.D0.B8_.D1.81.D1.82.D0.B0.D0.BD.D0.B4.D0.B0.D1.80.D1.82.D0.BD.D0.B8.D1.85_.D1.81.D1.82.D1.80.D1.83.D0.BA.D1.82.D1.83.D1.80_DAQ-.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.96.D0.B2"><span class="mw-headline-number">1</span> Шаблони стандартних структур DAQ-параметрів</span></h2>
+<table class="wikitable">
+
+<tr>
+<td> <span id="anUnif" title="#anUnif"><h3><span class="mw-headline" id=".D0.90.D0.BD.D0.B0.D0.BB.D0.BE.D0.B3.D0.BE.D0.B2.D0.B8.D0.B9_.D1.81.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB_.28.D1.83.D0.BD.D1.96.D1.84.D1.96.D0.BA.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B9.29_.28anUnif.29"><span class="mw-headline-number">1.1</span> Аналоговий сигнал (уніфікований) (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#anUnif" title="Special:MyLanguage/Libs/Main">anUnif</a>)</span></h3></span>
+</td>
+<td> 2.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainAnUnifOp_uk.png" title="Результат та оперативні налаштування."><img alt="Результат та оперативні налаштування." height="736" src="files/LibsMainAnUnifOp_uk.png" width="402" /></a></div>
+<p>Загальний, представницький та уніфікований шаблон обробки аналогових вхідних сигналів. Шаблон формує структуру аналогового параметру (складного тегу) який може бути легко підключений до більшості віджетів та кадрів <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_graphical_elements" title="Special:MyLanguage/Libs/Main graphical elements">бібліотеки основних елементів інтерфейсу користувача</a> просто вказавши об'єкт параметру.
+</p><p>Представницькою структурою аналогового параметру (складного тегу) є:
+</p>
+<ul><li> "Змінна (<b>var</b>)" — кінцева змінна параметру — інженерне реальне значення, доступне та придатне до архівації.</li>
+<li> "Помилка (<b>err</b>)" — обов'язковий атрибут будь якого параметру, що містить комбінацію коду помилки та короткого опису, на кшталт "2:Немає даних або підключення до джерела". Шаблон резервує наступні коди помилок:
+<ul><li> <b>1, 2</b> — помилки обладнання, коли дані переважно помилкові;</li>
+<li> <b>3, 4</b> — помилки аварійної границі;</li>
+<li> <b>5, 6</b> — помилки попереджувальної границі;</li>
+<li> <b>7</b> — помилка швидкості зміни змінної.</li></ul></li>
+<li> "Придушення (<b>alSup</b>) та затримка (<b>alDelay</b>) порушень" — загальний контроль порушень щодо придушення та затримки.</li>
+<li> "Шкала: мінімум (<b>min</b>)" та "Шкала: максимум (<b>max</b>)" — головна шкала кінцевої змінної, вихід за яку призводить до помилки апаратної границі. Шкала також використовується як шкала відображення тренду змінної на графіках.</li>
+<li> "Логарифмічна шкала (<b>log</b>)" — ознака відображення тренду змінної на графіках у логарифмічній шкалі.</li>
+<li> "Одиниця виміру (<b>ed</b>)" — одиниця виміру змінної.</li>
+<li> "Точність (<b>prec</b>)" — кількість знаків після крапки, для позитивних значень, та точність (знаків загалом), для негативних, для відображення реальної кінцевої змінної на екрані.</li></ul>
+<p><b><u>Функції</u></b><br />
+</p>
+<ul><li> Загальне опрацювання аналогового входу щодо:</li></ul>
+<dl><dd><ul><li> проста корекція-калібрування за формулою "<b>in</b> = <b>iMult</b>*(<b>in</b>+<b>iAdd</b>)";</li>
+<li> масштабування від апаратної границі [<b>plcMin</b>...<b>plcMax</b>] у головну границю [<b>min</b>...<b>max</b>], враховуючи квадратичну шкалу <b>scSqr</b>;</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Апаратні границі може бути інвертовано та взагалі вимкнено однаковими значеннями максимуму та мінімуму, коли використовується тільки головна шкала.</dd></dl>
+<ul><li> дозвіл на перевищення границі вхідним значенням на величину <b>plcExcess</b> відсотків;</li>
+<li> фільтрування зміни вхідного значення на час <b>Tf</b>.</li></ul></dd></dl>
+<ul><li> Проста імітація аналогового входу, встановленням <b>plcImit</b> та підключенням джерела імітації-симуляції до <b>plcImitIn</b>.</li></ul>
+<dl><dd><dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Відсутність зв'язка <b>plcImitIn</b> (EVAL) призводить до генерації випадкового аналогового входу</dd></dl></dd></dl>
+<ul><li> Складна передобробка та повна генерація-імітація аналогового входу на внутрішній мові програмування OpenSCADA у конфігураційному ВВ <b>inProc</b>, де Ви можете оперувати наступними сервісними параметрами:</li></ul>
+<dl><dd><ul><li> <i>in</i> [IN|OUT] — той самий сирий аналоговий ВВ;</li>
+<li> <i>var</i> [IN] — ВВ кінцевої змінної;</li>
+<li> <i>min</i>, <i>max</i> [IN] — ВВ головної шкали;</li>
+<li> <i>plcMin</i>, <i>plcMax</i> [IN] — ВВ апаратної шкали;</li>
+<li> <i>plcImit</i>, <i>plcImitIn</i> [IN] — ВВ простої імітації;</li>
+<li> <i>levErr</i>, <i>tErr</i> [IN|OUT] — рівень аварії [-7...0] та текст помилки (формат атрибуту "err");</li>
+<li> <i>f_frq</i> [IN] — частота обчислення, шаблонний ВВ;</li>
+<li> <i>this</i> [IN] — посилання на об'єкт параметру, що виконує шаблон;</li>
+<li> <i>ctx</i> [IN] — об'єкт користувацького контексту, що зберігається між циклами виклику.</li></ul></dd></dl>
+<ul><li> Проста підстановка значення <b>subVar</b> за помилкою (недостовірністю) вхідної змінної (EVAL) у режимах: "немає", "останнє" та "підстановка".</li>
+<li> Опрацювання кінцевої змінної <b>var</b> на предмет порушення деяких границь та критеріїв, генеруючи аварії та відповідно встановлюючи атрибут <b>err</b>. Границі аварії можуть мати деякий гістерезис <b>HystBnd</b>, можуть бути затримані на час <b>alDelay</b> та можуть бути придушені встановленням <b>alSup</b>. Надаються наступні границі та критерії:</li></ul>
+<dl><dd><ul><li> відсутність даних або підключення до джерела за вхідним значенням EVAL — код помилки 1 та рівень аварії 5;</li>
+<li> перевищення апаратної границі вхідним значенням — код помилки 1,2 та рівень аварії 5;</li>
+<li> перевищення аварійної границі кінцевою змінною [<b>aMin</b>...<b>aMax</b>] — код помилки 3,4 та рівень аварії 4;</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Вимикається встановленням однакових або інверсних значень границі</dd></dl>
+<ul><li> перевищення попереджувальної границі кінцевою змінною [<b>wMin</b>...<b>wMax</b>] — код помилки 5,6 та рівень аварії 2;</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Вимикається встановленням однакових або інверсних значень границі</dd></dl>
+<ul><li> велика швидкість зміни <b>speed</b> кінцевої змінної — код помилки 7 та рівень аварії 2.</li></ul></dd></dl>
+<p><b><u>ВВ шаблону</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Атрибут </th>
+<th> Конфігурація </th>
+<th> Значення
+</th></tr>
+<tr>
+<td> in </td>
+<td> Вхід </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Зв'язок </td>
+<td> Вхід|var
+</td></tr>
+<tr>
+<td> inProc </td>
+<td> Вхідна процедура обробки </td>
+<td> Текст </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td>
+</td></tr>
+<tr>
+<td> var </td>
+<td> Змінна </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Тільки читання </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> ed </td>
+<td> Одиниця виміру </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> min </td>
+<td> Шкала: мінімум </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> max </td>
+<td> Шкала: максимум </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 100
+</td></tr>
+<tr>
+<td> scSqr </td>
+<td> Шкала: квадратична </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> subMode </td>
+<td> Заміна: режим </td>
+<td> Вибір цілих чисел </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0<br />
+<p>0;1;2<br />
+немає;останнє;підстановка
+</p>
+</td></tr>
+<tr>
+<td> subVar </td>
+<td> Заміна: змінна </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> alSup </td>
+<td> Придушення порушень </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> alDelay </td>
+<td> Затримка порушень, секунди </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> aMin </td>
+<td> Границя нижня аварійна </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> aMax </td>
+<td> Границя верхня аварійна </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> wMin </td>
+<td> Границя нижня попереджув. </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> wMax </td>
+<td> Границя верхня попереджув. </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> HystBnd </td>
+<td> Гистерезис порушення границь </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 1
+</td></tr>
+<tr>
+<td> speed </td>
+<td> Швидкість зміни,&nbsp;%/цикл </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> prec </td>
+<td> Точність, знаків </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 2
+</td></tr>
+<tr>
+<td> log </td>
+<td> Логарифмічна шкала </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Tf </td>
+<td> Час фільтру, секунд </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> iAdd </td>
+<td> Додаток до входу </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> 0
+</td></tr>
+<tr>
+<td> iMult </td>
+<td> Множник входу </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> 1
+</td></tr>
+<tr>
+<td> plcMin </td>
+<td> Мінімум шкали модуля </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> 0
+</td></tr>
+<tr>
+<td> plcMax </td>
+<td> Максимум шкали модуля </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> 0
+</td></tr>
+<tr>
+<td> plcExcess </td>
+<td> Дозволене перевищення шкали,&nbsp;% </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> 0
+</td></tr>
+<tr>
+<td> plcImit </td>
+<td> Імітація ПЛК </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> 0
+</td></tr>
+<tr>
+<td> plcImitIn </td>
+<td> Вхід імітації ПЛК </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Зв'язок </td>
+<td> Імітація|var
+</td></tr>
+<tr>
+<td> this </td>
+<td> Об'єкт </td>
+<td> Об'єкт </td>
+<td> Вихід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> SHIFR </td>
+<td> Шифр </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> NAME </td>
+<td> Ім'я </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> DESCR </td>
+<td> Опис </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Помилка функції </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення функції, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Прапорець запуску функції </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Прапорець зупинки функції </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainAnUnifCfg_uk.png" title="Конфігурація."><img alt="Конфігурація." height="448" src="files/LibsMainAnUnifCfg_uk.png" width="446" /></a></div>
+<p><b><u>Конфігурація та використання</u></b><br />
+</p>
+<dl><dd>1. Створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь-який наявний з потрібними властивостями планування.</dd>
+<dd>2. Створити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного параметру</a> та обрати цей шаблон для нього. Ввімкнути параметр.</dd>
+<dd>3. У вкладці "Конфігурація шаблону" об'єкту логічного параметру Ви маєте встановити:
+<ul><li> <i>Вхід</i> — <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">зв'язати із джерелом "сирого" сигналу</a>.</li>
+<li> <i>Вхідна процедура обробки</i> — сформувати для складної передобробки та повної генерації-імітації аналогового входу на внутрішній мові програмування OpenSCADA. Є необов'язковою та має визначатися за складних випадків, наприклад:</li></ul>
+<dl><dd><ul><li> проста та прозора попередня обробка з приведення відсотків навантаження ДБЖ до потужності, що можна зробити і за допомогою <b>iMult</b>:</li></ul></dd></dl></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 40pt">
+in = 490*in/100;	//the UPS has 480W </pre>
+<dl><dd><dl><dd><ul><li> реалізація лічильника вхідного сигналу — спожитої електрики ДБЖ:</li></ul></dd></dl></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 40pt">
+//Checking for the data validity
+if(ctx.cntr.isEVal())	ctx.cntr = this.var.get();
+if(!in.isEVal()) {
+	pUPS = 33;
+	if(ctx.cntr.isEVal())	ctx.cntr = (pUPS+in)/(3600*f_frq);
+	else ctx.cntr += (pUPS+in)/(3600*f_frq);
+}
+
+//Checking for the next month reset
+month = 0; SYS.localtime(SYS.time(), 0, 0, 0, 0, month);
+if(!ctx.month.isEVal() &amp;&amp; month&nbsp;!= ctx.month)	ctx.cntr = 0;
+ctx.month = month;
+
+in = ctx.cntr; </pre>
+<dl><dd><dl><dd><ul><li> генерації розширених порушень — обробка зовнішніх сигналів, пов'язаних з джерелом:</li></ul></dd></dl></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 40pt">
+gO = this.cntr().prm_grps;
+if(SYS.DAQ.JavaLikeCalc.lib_aviary.sensorError(gO.prm_generic.PRG_Input_Err_T_room_S.get(),levErr,tErr));
+else if(!(tVl=gO.prm_alarms.PRG_Alarm_T_max.get()).isEVal() &amp;&amp; tVl)
+	levErr = -4, tErr = "11:above the set limit";
+else if(!(tVl=gO.prm_alarms.PRG_Alarm_T_min.get()).isEVal() &amp;&amp; tVl)
+	levErr = -4, tErr = "11:below the set limit"; </pre>
+<dl><dd><ul><li> <i>Мінімум та максимум шкали модуля</i> — має вказуватися у випадку значного розходження апаратної шкали із загальною, наприклад:</li></ul>
+<dl><dd><ul><li> вхід сирий та вимірюється значенням струму [4...20]мА, тобто тут треба вказати 4 та 20 мА;</li>
+<li> попередній випадок де треба просто та прозоро відкалібрувати покази — зразковим приладом задаємо 4мА та 20мА та вказуємо тут реальні виміряні значення "сирого" сигналу.</li></ul></dd></dl>
+<ul><li> <i>Додаток та множник до входу</i> — використати для простої лінійної корекції входу, наприклад:</li></ul>
+<dl><dd><ul><li> калібрування показів, що менш прозоро та ці коефіцієнти мають вираховуватися за формулами:</li></ul>
+<dl><dd> <b>iAdd = ((plcMin*precMeasMax)/plcMax - precMeasMin)*(plcMax/(plcMax-plcMin))</b></dd>
+<dd> <b>iMult = (plcMax - plcMin) / (precMeasMax - precMeasMin)</b></dd></dl></dd></dl>
+<ul><li> <i>Дозволене перевищення шкали</i> — встановити за потреби перевищення значенням загальної шкали та коли ця шкала починає виконувати рекомендавчу функцію, скажемо для початкового відображення історії у цій шкалі.</li>
+<li> <i>Імітація та вхід імітації ПЛК</i> — визначити за потреби імітації входу згідно опису у функціях.</li></ul></dd>
+<dd>4. РЕЗУЛЬТАТ: Запустивши об'єкт контролеру (де створено цей параметр) та якщо він не був запущений, маємо отримати оперативні дані у вкладці "Атрибути", для: змінної, стану помилки; та генерацію порушень, якщо стан помилки ненульовий.</dd>
+<dd>5. У процесі роботи, через вкладку оперативних даних "Атрибути", окрім отримання результату можна здійснювати оперативне налаштування та контроль щодо:
+<ul><li> <i>Шкала: мінімум та максимум</i> — суворо <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> встановити у діапазон зміни даних за наявністю та відповідно до апаратної границі, інакше значення буде викривлене! За відсутності апаратної границі ця, основна границя, є довільною та дорадчою, хоча вихід значення за неї також супроводжується порушенням.</li>
+<li> <i>Шкала: квадратична</i> — встановити якщо апаратна шкала квадратична.</li>
+<li> <i>Час фільтру</i> — встановити у час фільтрації для зашумлених сигналів.</li>
+<li> <i>Заміна: режим та змінна</i> — встановити у потрібний режим підстановки-заміни значення за недостовірною змінною.</li>
+<li> <i>Придушення порушень</i> — встановити за потреби повного придушення порушень параметру — вимкнути їх генерацію взагалі.</li>
+<li> <i>Затримка порушень</i> — встановити час затримки генерації порушення, для виключення частої генерації, характерної для непевних джерел даних, що відрізняються короткочасною втратою зв'язку.</li>
+<li> <i>Границя верхня/нижня аварійна/попереджувальна</i> — встановити коли треба генерувати порушення за виходом за аварійну/попереджувальну границі.</li>
+<li> <i>Гистерезис порушення границь</i> — встановити у гістерезис зняття порушення, тобто зняття порушення відбувається на вказаний відсоток пізніше, щоб запобігти частій генерації за коливанням значення біля границі.</li>
+<li> <i>Швидкість зміни</i> — встановити якщо треба попереджати про швидку зміну значення.</li>
+<li> <i>Назва, Опис, Одиниця виміру, Точність, Логарифмічна шкала</i> — встановити за потреби такої інформації при відображені, або як елементи паспорту.</li></ul></dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="anUnifSt" title="#anUnifSt"><h3><span class="mw-headline" id=".D0.90.D0.BD.D0.B0.D0.BB.D0.BE.D0.B3.D0.BE.D0.B2.D0.B8.D0.B9_.D1.81.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB_.28.D1.83.D0.BD.D1.96.D1.84.D1.96.D0.BA.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B9.2C_.D1.81.D1.82.D0.B0.D0.BD.D0.B8_.D0.BF.D0.BE.D1.80.D1.83.D1.88.D0.B5.D0.BD.D1.8C.29_.28anUnifSt.29"><span class="mw-headline-number">1.2</span> Аналоговий сигнал (уніфікований, стани порушень) (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#anUnifSt" title="Special:MyLanguage/Libs/Main">anUnifSt</a>)</span></h3></span>
+</td>
+<td> 1.2 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru  
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Загальний, представницький та уніфікований шаблон обробки аналогових вхідних сигналів, розширений бінарними станами індикації порушень. Шаблон засновано на базовому шаблоні "<a href="#anUnif">Аналоговий сигнал (уніфікований)</a>" з відповідною до нього представницькою структурою та деякими відмінностями, характерними до незалежного розвитку та розширення.
+</p><p>Бінарні стани передбачалося для зручного використання у алгоритмах роботи за границями порушення об'єкту параметру, переважно у <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">блокових схемах</a> загальних алгоритмів керування.
+</p><p><b><u>Функції</u></b><br />
+Переважно відповідають базовому шаблону "<a href="#anUnif">Аналоговий сигнал (уніфікований)</a>" та додатково надаються ознаки порушень границь: "H", "L", "HH", "LL", "EVAL".
+</p><p><b><u>ВВ шаблону</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Атрибут </th>
+<th> Конфігурація </th>
+<th> Значення
+</th></tr>
+<tr>
+<td colspan="7"> ВВ шаблону "<a href="#anUnif">Аналоговий сигнал (уніфікований)</a>"
+</td></tr>
+<tr>
+<td> H </td>
+<td> Порушення верхньої попереджув. границі </td>
+<td> Логічний </td>
+<td> Вихід </td>
+<td> Тільки читання </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> L </td>
+<td> Порушення нижньої попереджув. границі </td>
+<td> Логічний </td>
+<td> Вихід </td>
+<td> Тільки читання </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> HH </td>
+<td> Порушення верхньої аварійної границі </td>
+<td> Логічний </td>
+<td> Вихід </td>
+<td> Тільки читання </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> LL </td>
+<td> Порушення нижньої аварійної границі </td>
+<td> Логічний </td>
+<td>Вихід </td>
+<td> Тільки читання </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> EVAL </td>
+<td> Помилка значення </td>
+<td> Логічний </td>
+<td> Вихід </td>
+<td> Тільки читання </td>
+<td> Змінна </td>
+<td>
+</td></tr></table>
+<p><b><u>Конфігурація та використання</u></b><br />
+Повністю ідентичне базовому "<a href="#anUnif">Аналоговий сигнал (уніфікований)</a>" за відмінністю використання ознак порушень границь: "H", "L", "HH", "LL", "EVAL"; на які можна під'єднуватися із зовнішніх обчислень.
+</p><p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="manInUnif" title="#manInUnif"><h3><span class="mw-headline" id=".D0.A0.D1.83.D1.87.D0.BD.D0.B8.D0.B9_.D0.B2.D0.B2.D1.96.D0.B4_.28.D1.83.D0.BD.D1.96.D1.84.D1.96.D0.BA.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B9.29_.28manInUnif.29"><span class="mw-headline-number">1.3</span> Ручний ввід (уніфікований) (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#manInUnif" title="Special:MyLanguage/Libs/Main">manInUnif</a>)</span></h3></span>
+</td>
+<td> 1.2 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainManInUnifOp_uk.png" title="Результат та оперативні налаштування."><img alt="Результат та оперативні налаштування." height="679" src="files/LibsMainManInUnifOp_uk.png" width="382" /></a></div>
+<p>Загальний, представницький та уніфікований шаблон ручного вводу та сигналу аналогового виходу. Шаблон формує структуру параметру (складного тегу) ручного вводу, який може бути легко підключений до більшості віджетів та кадрів <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_graphical_elements" title="Special:MyLanguage/Libs/Main graphical elements">бібліотеки основних елементів інтерфейсу користувача</a> просто вказавши об'єкт параметру, контроль переважно можна здійснювати через панель контролю <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_graphical_elements#ElCadr" title="Special:MyLanguage/Libs/Main graphical elements">Елемент кадр</a>.
+</p><p>Представницькою структурою параметру (складного тегу) ручного вводу є:
+</p>
+<ul><li> "Змінна (<b>var</b>)" — кінцева змінна параметру — інженерне реальне значення, доступне та придатне до архівації.</li>
+<li> "Введення змінної (<b>varIn</b>)" — атрибут введення нового інженерного значення, який надалі потрапляє до змінної.</li>
+<li> "Помилка (<b>err</b>)" — обов'язковий атрибут будь якого параметру, що містить комбінацію коду помилки та короткого опису, на кшталт "2:Немає даних або підключення до джерела". Шаблон резервує наступні коди помилок:
+<ul><li> <b>1, 2</b> — помилки обладнання, коли дані переважно помилкові;</li>
+<li> <b>3, 4</b> — помилки аварійної границі;</li>
+<li> <b>5, 6</b> — помилки попереджувальної границі;</li>
+<li> <b>7</b> — помилка швидкості зміни змінної.</li></ul></li>
+<li> "Придушення (<b>alSup</b>) та затримка (<b>alDelay</b>) порушень" — загальний контроль порушень щодо придушення та затримки.</li>
+<li> "Шкала: мінімум (<b>min</b>)" та "Шкала: максимум (<b>max</b>)" — головна шкала кінцевої змінної, вихід за яку призводить до помилки апаратної границі. Шкала також використовується як шкала відображення тренду змінної на графіках.</li>
+<li> "Логарифмічна шкала (<b>log</b>)" — ознака відображення тренду змінної на графіках у логарифмічній шкалі.</li>
+<li> "Одиниця виміру (<b>ed</b>)" — одиниця виміру змінної.</li>
+<li> "Точність (<b>prec</b>)" — кількість знаків після крапки, для позитивних значень, та точність (знаків загалом), для негативних, для відображення реальної кінцевої змінної на екрані.</li></ul>
+<p><b><u>Функції</u></b><br />
+</p>
+<ul><li> Загальне опрацювання аналогового входу щодо:</li></ul>
+<dl><dd><ul><li> проста корекція-калібрування за формулою "<b>in</b> = <b>iMult</b>*(<b>in</b>+<b>iAdd</b>)";</li>
+<li> масштабування від апаратної границі [<b>plcMin</b>...<b>plcMax</b>] у головну границю [<b>min</b>...<b>max</b>], враховуючи квадратичну шкалу <b>scSqr</b>;</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Апаратні границі може бути інвертовано та взагалі вимкнено однаковими значеннями максимуму та мінімуму, коли використовується тільки головна шкала.</dd></dl>
+<ul><li> дозвіл на перевищення границі вхідним значенням на величину <b>plcExcess</b> відсотків;</li>
+<li> фільтрування зміни вхідного значення на час <b>Tf</b>.</li></ul></dd></dl>
+<ul><li> Опрацювання кінцевої змінної <b>var</b> на предмет порушення деяких границь та критеріїв, генеруючи аварії та відповідно встановлюючи атрибут <b>err</b>. Границі аварії можуть мати деякий гістерезис <b>HystBnd</b>, можуть бути затримані на час <b>alDelay</b> та можуть бути придушені встановленням <b>alSup</b>. Надаються наступні границі та критерії:</li></ul>
+<dl><dd><ul><li> відсутність даних або підключення до джерела за вхідним значенням EVAL — код помилки 1 та рівень аварії 5;</li>
+<li> перевищення апаратної границі вхідним значенням — код помилки 1,2 та рівень аварії 5;</li>
+<li> перевищення аварійної границі кінцевою змінною [<b>aMin</b>...<b>aMax</b>] — код помилки 3,4 та рівень аварії 4;</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Вимикається встановленням однакових або інверсних значень границі</dd></dl>
+<ul><li> перевищення попереджувальної границі кінцевою змінною [<b>wMin</b>...<b>wMax</b>] — код помилки 5,6 та рівень аварії 2;</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Вимикається встановленням однакових або інверсних значень границі</dd></dl>
+<ul><li> велика швидкість зміни <b>speed</b> кінцевої змінної — код помилки 7 та рівень аварії 2.</li></ul></dd></dl>
+<ul><li> Зворотне перетворення введеного інженерного значення змінної та запис у вихід.</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> За відсутності підключення "Входу/Виходу" запису не здійснюється та відбувається автономна робота.</dd></dl>
+<p><b><u>ВВ шаблону</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Атрибут </th>
+<th> Конфігурація </th>
+<th> Значення
+</th></tr>
+<tr>
+<td> inout </td>
+<td> Вхід/Вихід </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> Не атрибут </td>
+<td> Зв'язок </td>
+<td> Parameter|var
+</td></tr>
+<tr>
+<td> var </td>
+<td> Змінна </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Тільки читання </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> varIn </td>
+<td> Введення змінної </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> ed </td>
+<td> Одиниця виміру </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> min </td>
+<td> Шкала: мінімум </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> max </td>
+<td> Шкала: максимум </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 100
+</td></tr>
+<tr>
+<td> scSqr </td>
+<td> Шкала: квадратична </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> alSup </td>
+<td> Придушення порушень </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> alDelay </td>
+<td> Затримка порушень, секунди </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> aMin </td>
+<td> Границя нижня аварійна </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> aMax </td>
+<td> Границя верхня аварійна </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> wMin </td>
+<td> Границя нижня попереджув. </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> wMax </td>
+<td> Границя верхня попереджув. </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> HystBnd </td>
+<td> Гистерезис порушення границь </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 1
+</td></tr>
+<tr>
+<td> speed </td>
+<td> Швидкість зміни,&nbsp;%/цикл </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> prec </td>
+<td> Точність, знаків </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 2
+</td></tr>
+<tr>
+<td> log </td>
+<td> Логарифмічна шкала </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Tf </td>
+<td> Час фільтру, секунд </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> iAdd </td>
+<td> Додаток до входу </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> 0
+</td></tr>
+<tr>
+<td> iMult </td>
+<td> Множник входу </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> 1
+</td></tr>
+<tr>
+<td> plcMin </td>
+<td> Мінімум шкали модуля </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> 0
+</td></tr>
+<tr>
+<td> plcMax </td>
+<td> Максимум шкали модуля </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> 0
+</td></tr>
+<tr>
+<td> plcExcess </td>
+<td> Дозволене перевищення шкали,&nbsp;% </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> 0
+</td></tr>
+<tr>
+<td> this </td>
+<td> Об'єкт </td>
+<td> Об'єкт </td>
+<td> Вихід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> SHIFR </td>
+<td> Шифр </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> NAME </td>
+<td> Ім'я </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> DESCR </td>
+<td> Опис </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Помилка функції </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення функції, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Прапорець запуску функції </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Прапорець зупинки функції </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainManInUnifCfg_uk.png" title="Конфігурація."><img alt="Конфігурація." height="298" src="files/LibsMainManInUnifCfg_uk.png" width="439" /></a></div>
+<p><b><u>Конфігурація та використання</u></b><br />
+</p>
+<dl><dd>1. Створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь-який наявний з потрібними властивостями планування.</dd>
+<dd>2. Створити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного параметру</a> та обрати цей шаблон для нього. Ввімкнути параметр.</dd>
+<dd>3. У вкладці "Конфігурація шаблону" об'єкту логічного параметру Ви маєте встановити:
+<ul><li> <i>Вхід/Вихід</i> — <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">зв'язати із джерелом "сирого" сигналу ВВ</a>, або не прив'язувати для автономного режиму.</li>
+<li> <i>Мінімум та максимум шкали модуля</i> — має вказуватися у випадку значного розходження апаратної шкали із загальною, для прикладу дивіться шаблон "<a href="#anUnif">Аналоговий сигнал (уніфікований)</a>".</li>
+<li> <i>Додаток та множник до входу</i> — використати для простої лінійної корекції входу, для прикладу дивіться шаблон "<a href="#anUnif">Аналоговий сигнал (уніфікований)</a>".</li>
+<li> <i>Дозволене перевищення шкали</i> — встановити за потреби перевищення значенням загальної шкали та коли ця шкала починає виконувати рекомендавчу функцію, скажемо для початкового відображення історії у цій шкалі.</li></ul></dd>
+<dd>4. РЕЗУЛЬТАТ: Запустивши об'єкт контролеру (де створено цей параметр) та якщо він не був запущений, маємо отримати оперативні дані у вкладці "Атрибути", для: змінної, стану помилки; та генерацію порушень, якщо стан помилки ненульовий; та він буде доступний до встановлення нових значень.</dd>
+<dd>5. У процесі роботи, через вкладку оперативних даних "Атрибути", окрім отримання результату можна здійснювати оперативне налаштування та контроль щодо:
+<ul><li> <i>Шкала: мінімум та максимум</i> — суворо <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> встановити у діапазон зміни даних за наявністю та відповідно до апаратної границі, інакше значення буде викривлене! За відсутності апаратної границі ця, основна границя, є довільною та дорадчою, хоча вихід значення за неї також супроводжується порушенням.</li>
+<li> <i>Шкала: квадратична</i> — встановити якщо апаратна шкала квадратична.</li>
+<li> <i>Час фільтру</i> — встановити у час фільтрації для зашумлених сигналів.</li>
+<li> <i>Придушення порушень</i> — встановити за потреби повного придушення порушень параметру — вимкнути їх генерацію взагалі.</li>
+<li> <i>Затримка порушень</i> — встановити час затримки генерації порушення, для виключення частої генерації, характерної для непевних джерел даних, що відрізняються короткочасною втратою зв'язку.</li>
+<li> <i>Границя верхня/нижня аварійна/попереджувальна</i> — встановити коли треба генерувати порушення за виходом за аварійну/попереджувальну границі.</li>
+<li> <i>Гистерезис порушення границь</i> — встановити у гістерезис зняття порушення, тобто зняття порушення відбувається на вказаний відсоток пізніше, щоб запобігти частій генерації за коливанням значення біля границі.</li>
+<li> <i>Швидкість зміни</i> — встановити якщо треба попереджати про швидку зміну значення.</li>
+<li> <i>Назва, Опис, Одиниця виміру, Точність (знаків), Логарифмічна шкала</i> — встановити за потреби такої інформації при відображені, або як елементи паспорту.</li></ul></dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="digitBlockUnif" title="#digitBlockUnif"><h3><span class="mw-headline" id=".D0.94.D0.B8.D1.81.D0.BA.D1.80.D0.B5.D1.82.D0.BD.D0.B8.D0.B9_.D0.B1.D0.BB.D0.BE.D0.BA_.28.D1.83.D0.BD.D1.96.D1.84.D1.96.D0.BA.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B9.29_.28digitBlockUnif.29"><span class="mw-headline-number">1.4</span> Дискретний блок (уніфікований) (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#digitBlockUnif" title="Special:MyLanguage/Libs/Main">digitBlockUnif</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainDigitBlockUnifOp_uk.png" title="Результат та оперативні налаштування."><img alt="Результат та оперативні налаштування." height="346" src="files/LibsMainDigitBlockUnifOp_uk.png" width="308" /></a></div>
+<p>Загальний, представницький та уніфікований шаблон блоку поєднання дискретних параметрів у пристрій загального контролю. Шаблон формує структуру дискретного параметру-блоку (складного тегу) який може бути легко підключений до більшості віджетів та кадрів <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_graphical_elements" title="Special:MyLanguage/Libs/Main graphical elements">бібліотеки основних елементів інтерфейсу користувача</a> просто вказавши об'єкт параметру.
+</p><p>Представницькою структурою дискретного параметру (складного тегу) є об'єкт засувки із характерними двома станами та трьома командами, які у кінцевому представленні можуть мати інше значення та назву:
+</p>
+<ul><li> "Стан "Відкрито" (<b>st_open</b>)" — стан засувки "Відкрито". Є первинним сигналом стану, який може використовуватися без наступного, коли <b>1 (true)</b> — "Відкрито", а <b>0 (false)</b> — "Закрито".</li>
+<li> "Стан "Закрито" (<b>st_close</b>)" — стан засувки "Відкрито".</li>
+<li> "Команда "Відкрити" (<b>com</b>)" — команда засувки "Відкрити". Є первинним сигналом команди, який може використовуватися без наступного, коли <b>1 (true)</b> — "Відкрити", а <b>0 (false)</b> — "Закрити".</li>
+<li> "Команда "Закрити" (<b>close</b>)" — команда засувки "Закрити".</li>
+<li> "Команда "Зупинити" (<b>stop</b>)" — команда засувки "Зупинити".</li></ul>
+<p><b><u>Функції</u></b><br />
+</p>
+<ul><li> Пряме отримання, за посиланням, двох станів (тільки читання) та трьох команд (читання та запис).</li>
+<li> Можливість утримання команди протягом визначеного часу та зняття їх.</li>
+<li> Можливість перевизначення станів та команд <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_graphical_elements" title="Special:MyLanguage/Libs/Main graphical elements">відповідним налаштуванням елементів інтерфейсу</a>, як то <i>digStts</i>, для статусів, та <i>digComs</i>, для команд.</li></ul>
+<p><b><u>ВВ шаблону</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Атрибут </th>
+<th> Конфігурація </th>
+<th> Значення
+</th></tr>
+<tr>
+<td> com </td>
+<td> Команда "Відкрити" </td>
+<td> Логічний </td>
+<td> Вихід </td>
+<td> Повний доступ </td>
+<td> Зв'язок </td>
+<td> Кран|com
+</td></tr>
+<tr>
+<td> close </td>
+<td> Команда "Закрити" </td>
+<td> Логічний </td>
+<td> Вихід </td>
+<td> Повний доступ </td>
+<td> Зв'язок </td>
+<td> Кран|close
+</td></tr>
+<tr>
+<td> stop </td>
+<td> Команда "Зупинити" </td>
+<td> Логічний </td>
+<td> Вихід </td>
+<td> Повний доступ </td>
+<td> Зв'язок </td>
+<td> Кран|stop
+</td></tr>
+<tr>
+<td> st_open </td>
+<td> Стан "Відкрито" </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Тільки читання </td>
+<td> Зв'язок </td>
+<td> Кран|st_open
+</td></tr>
+<tr>
+<td> st_close </td>
+<td> Стан "Закрито" </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Тільки читання </td>
+<td> Зв'язок </td>
+<td> Кран|st_close
+</td></tr>
+<tr>
+<td> tCmd </td>
+<td> Час утримання команди, секунди </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> 5
+</td></tr>
+<tr>
+<td> last_cmd </td>
+<td> Остання команда </td>
+<td> Цілий </td>
+<td> Вихід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> w_tm </td>
+<td> Лічильник обробки команди </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Помилка функції </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення функції, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Прапорець запуску функції </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Прапорець зупинки функції </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainDigitBlockUnifCfg_uk.png" title="Конфігурація."><img alt="Конфігурація." height="298" src="files/LibsMainDigitBlockUnifCfg_uk.png" width="403" /></a></div>
+<p><b><u>Конфігурація та використання</u></b><br />
+</p>
+<dl><dd>1. Створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь-який наявний з потрібними властивостями планування.</dd>
+<dd>2. Створити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного параметру</a> та обрати цей шаблон для нього. Ввімкнути параметр.</dd>
+<dd>3. У вкладці "Конфігурація шаблону" об'єкту логічного параметру Ви маєте встановити:
+<ul><li> Всі стани та команди — <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">зв'язати із джерелом "сирого" сигналу</a>.</li>
+<li> <i>Час утримання команди, секунди</i> — встановити у потрібне значення утримання або у 0 для вимкнення цієї функції.</li></ul></dd>
+<dd>4. РЕЗУЛЬТАТ: Запустивши об'єкт контролеру (де створено цей параметр) та якщо він не був запущений, маємо отримати оперативні дані у вкладці "Атрибути", для: станів та команд.</dd>
+<dd>5. У процесі роботи, через вкладку оперативних даних "Атрибути", окрім отримання результату можна здійснювати оперативний контроль, видачею команд.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="digAlarm" title="#digAlarm"><h3><span class="mw-headline" id=".D0.A1.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB.D1.96.D0.B7.D0.B0.D1.86.D1.96.D1.8F_.D0.B4.D0.B8.D1.81.D0.BA.D1.80.D0.B5.D1.82.D0.BD.D0.B0_.28digAlarm.29"><span class="mw-headline-number">1.5</span> Сигналізація дискретна (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#digAlarm" title="Special:MyLanguage/Libs/Main">digAlarm</a>)</span></h3></span>
+</td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainDigAlarmOp_uk.png" title="Результат та оперативні налаштування."><img alt="Результат та оперативні налаштування." height="373" src="files/LibsMainDigAlarmOp_uk.png" width="382" /></a></div>
+<p>Загальний, представницький шаблон обробки окремого дискретного параметру (складного тегу) із формування сигналізації за визначеним критерієм. Шаблон формує структуру дискретного параметру (складного тегу) який може бути легко підключений до більшості віджетів та кадрів <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_graphical_elements" title="Special:MyLanguage/Libs/Main graphical elements">бібліотеки основних елементів інтерфейсу користувача</a> просто вказавши об'єкт параметру.
+</p><p>Шаблон надає окремі поля <a href="#digitBlockUnif">представницької структури дискретного параметру</a> та додає поле помилки:
+</p>
+<ul><li> "Стан "Відкрито" (<b>st_open</b>)" — стан "Відкрито".</li>
+<li> "Стан "Закрито" (<b>st_close</b>)" — стан "Відкрито".</li>
+<li> "Помилка (<b>err</b>)" — обов'язковий атрибут будь якого параметру, що містить комбінацію коду помилки та короткого опису, на кшталт "1:Немає даних або підключення до джерела". Шаблон резервує наступні коди помилок:
+<ul><li> <b>1</b> — помилки обладнання, коли дані переважно помилкові;</li>
+<li> <b>3</b> — порушення за визначеної умови.</li></ul></li>
+<li> "Придушення (<b>alSup</b>) та затримка (<b>alDelay</b>) порушень" — загальний контроль порушень щодо придушення та затримки.</li></ul>
+<p><b><u>Функції</u></b><br />
+</p>
+<ul><li> Пряме отримання, за посиланням, первинного стану та формування двох репрезентативних станів з можливістю їх інверсії <b>stInv</b>.</li>
+<li> Складна передобробка та повна генерація-імітація дискретного входу на внутрішній мові програмування OpenSCADA у конфігураційному ВВ <b>inProc</b>, де Ви можете оперувати наступними сервісними параметрами:</li></ul>
+<dl><dd><ul><li> <i>in</i> [IN|OUT] — той самий сирий дискретний ВВ;</li>
+<li> <i>levErr</i>, <i>tErr</i> [IN|OUT] — рівень аварії [-7...0] та текст помилки (формат атрибуту "err");</li>
+<li> <i>f_frq</i> [IN] — частота обчислення, шаблонний ВВ;</li>
+<li> <i>this</i> [IN] — посилання на об'єкт параметру, що виконує шаблон;</li>
+<li> <i>ctx</i> [IN] — об'єкт користувацького контексту, що зберігається між циклами виклику.</li></ul></dd></dl>
+<ul><li> Опрацювання дискретного входу <b>in</b> на предмет формування порушення та відповідного встановлення атрибуту <b>err</b>, за умови "<b>{st}:{lev}:{mess}</b>", тобто генерація порушення з рівнем <i>lev</i> та текстом <i>mess</i> за стану входу <i>st</i> (0|1). Що може бути затримано на час <b>alDelay</b> та придушено встановленням <b>alSup</b>.</li></ul>
+<p><b><u>ВВ шаблону</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Атрибут </th>
+<th> Конфігурація </th>
+<th> Значення
+</th></tr>
+<tr>
+<td> alrm </td>
+<td> Сигнал "{st}:{lev}:{mess}" </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td>
+</td></tr>
+<tr>
+<td> stInv </td>
+<td> Інверсія стану </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td>
+</td></tr>
+<tr>
+<td> in </td>
+<td> Вхід </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Тільки читання </td>
+<td> Зв'язок </td>
+<td> Input|in
+</td></tr>
+<tr>
+<td> inProc </td>
+<td> Вхідна процедура обробки </td>
+<td> Текст </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td>Константа </td>
+<td>
+</td></tr>
+<tr>
+<td> alSup </td>
+<td> Придушення порушень </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> alDelay </td>
+<td> Затримка порушень, секунди </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> st_open </td>
+<td> Стан "Відкрито" </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Тільки читання </td>
+<td>Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> st_close </td>
+<td> Стан "Закрито" </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Тільки читання </td>
+<td>Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> SHIFR </td>
+<td> Шифр </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> NAME </td>
+<td> Ім'я </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> DESCR </td>
+<td> Опис </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> this </td>
+<td> Об'єкт </td>
+<td> Об'єкт </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Помилка функції </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення функції, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Прапорець запуску функції </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Прапорець зупинки функції </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainDigAlarmCfg_uk.png" title="Конфігурація."><img alt="Конфігурація." height="312" src="files/LibsMainDigAlarmCfg_uk.png" width="411" /></a></div>
+<p><b><u>Конфігурація та використання</u></b><br />
+</p>
+<dl><dd>1. Створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь-який наявний з потрібними властивостями планування.</dd>
+<dd>2. Створити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного параметру</a> та обрати цей шаблон для нього. Ввімкнути параметр.</dd>
+<dd>3. У вкладці "Конфігурація шаблону" об'єкту логічного параметру Ви маєте встановити:
+<ul><li> "Сигнал "{st}:{lev}:{mess}" — визначити критерій формування порушення, залишити порожнім для вимкнення генерації порушень.</li>
+<li> "Інверсія стану" — встановити для інвертування репрезентативних атрибутів, тобто "st_open" встановити за "in" рівного <b>false</b>.</li>
+<li> "Вхід" — <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">зв'язати із джерелом "сирого" сигналу</a>.</li>
+<li> <i>Вхідна процедура обробки</i> — сформувати для складної передобробки та повної генерації-імітації дискретного входу на внутрішній мові програмування OpenSCADA. Наприклад:</li></ul>
+<dl><dd><ul><li> повне створення складного статусу:</li></ul></dd></dl></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 40pt">
+gO = this.cntr().prm_grps;
+status = gO.prm_generic.PRG_Input_Err_T_Zone1_S.get();
+in = gO.prm_generic.SET_CalcFan_UseSensor_T1.get() ||&nbsp;!(status == 0 || status == 2 || status == 3); </pre>
+<dl><dd>4. РЕЗУЛЬТАТ: Запустивши об'єкт контролеру (де створено цей параметр) та якщо він не був запущений, маємо отримати оперативні дані у вкладці "Атрибути", для: змінної, стану помилки; та генерацію порушень, якщо стан помилки ненульовий.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="codeState" title="#codeState"><h3><span class="mw-headline" id=".D0.A1.D1.82.D0.B0.D0.BD_.D0.B7.D0.B0_.D0.BA.D0.BE.D0.B4.D0.BE.D0.BC_.28codeState.29"><span class="mw-headline-number">1.6</span> Стан за кодом (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#codeState" title="Special:MyLanguage/Libs/Main">codeState</a>)</span></h3></span>
+</td>
+<td> 1.2 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainCodeStateOp_uk.png" title="Результат та оперативні налаштування."><img alt="Результат та оперативні налаштування." height="654" src="files/LibsMainCodeStateOp_uk.png" width="325" /></a></div>
+<p>Варіант <a href="#digitBlockUnif">загального, представницького та уніфікованого шаблону блоку поєднання дискретних параметрів</a>, розширений більш ніж двома станами та трьома командами які можна закодувати цілим значенням. Шаблон формує структуру параметру (складного тегу) стану за кодом який може бути легко підключений до більшості віджетів та кадрів <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_graphical_elements" title="Special:MyLanguage/Libs/Main graphical elements">бібліотеки основних елементів інтерфейсу користувача</a> просто вказавши об'єкт параметру.
+</p><p>Представницькою структурою параметру (складного тегу) стану за кодом є:
+</p>
+<ul><li> "Стан "Текст" (<b>st_text</b>)" — текстовий опис стану.</li>
+<li> "Команда "Текст" (<b>com_text</b>)" — текст команди.</li>
+<li> "Команди (<b>digComs</b>)" — загальний перелік можливих команд, для формування обрання.</li>
+<li> "Помилка (<b>err</b>)" — обов'язковий атрибут будь якого параметру, що містить комбінацію коду помилки та короткого опису, на кшталт "1:Немає даних або підключення до джерела". Шаблон резервує наступні коди помилок:
+<ul><li> <b>1</b> — помилки обладнання, коли дані переважно помилкові.</li></ul></li>
+<li> "Придушення (<b>alSup</b>) та затримка (<b>alDelay</b>) порушень" — загальний контроль порушень щодо придушення та затримки.</li></ul>
+<p><b><u>Функції</u></b><br />
+</p>
+<ul><li> Пряме отримання, за посиланням, коду стану та команди (тільки читання), а також встановлення тексту стану згідно до переліку станів <i>stats</i>.</li>
+<li> Опрацювання тексту команди <i>com_text</i> на предмет пошуку її у загальному переліку команд <i>coms</i> та видача отриманого коду команди на вихід.</li>
+<li> Формування із загальному переліку команд <i>coms</i> переліку команд для обрання у <i>digComs</i>.</li>
+<li> Складна обробка та повна генерація-імітація коду стану, а також обробка коду або тексту команди для цільових дій, на внутрішній мові програмування OpenSCADA у конфігураційному ВВ <b>inProc</b>, де Ви можете оперувати наступними сервісними параметрами:</li></ul>
+<dl><dd><ul><li> <i>in</i> [IN|OUT] — ВВ коду статусу;</li>
+<li> <i>text</i> [OUT] — пряме встановлення тексту статусу;</li>
+<li> <i>coms</i> [IN] — перелік наявних команд, відповідного ВВ;</li>
+<li> <i>com_text</i> [IN|OUT] — текст отриманої команди;</li>
+<li> <i>levErr</i>, <i>tErr</i> [IN|OUT] — рівень аварії [-7...0] та текст помилки (формат атрибуту "err");</li>
+<li> <i>f_frq</i> [IN] — частота обчислення, шаблонний ВВ;</li>
+<li> <i>this</i> [IN] — посилання на об'єкт параметру, що виконує шаблон;</li>
+<li> <i>ctx</i> [IN] — об'єкт користувацького контексту, що зберігається між циклами виклику.</li></ul></dd></dl>
+<ul><li> Формування порушення та відповідне встановлення атрибуту <b>err</b>, за умови встановлення у процедурі обробки або відсутності зв'язку (<i>in</i> = EVAL). Що може бути затримано на час <b>alDelay</b> та придушено встановленням <b>alSup</b>.</li></ul>
+<p><b><u>ВВ шаблону</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Атрибут </th>
+<th> Конфігурація </th>
+<th> Значення
+</th></tr>
+<tr>
+<td> in </td>
+<td> Вхід </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> Тільки читання </td>
+<td> Зв'язок </td>
+<td> Signal|in
+</td></tr>
+<tr>
+<td> out </td>
+<td> Вихід </td>
+<td> Цілий </td>
+<td> Вихід </td>
+<td> Тільки читання </td>
+<td> Зв'язок </td>
+<td> Signal|out
+</td></tr>
+<tr>
+<td> inProc </td>
+<td> Вхідна процедура обробки </td>
+<td> Текст </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td>Константа </td>
+<td>
+</td></tr>
+<tr>
+<td> alSup </td>
+<td> Придушення порушень </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> alDelay </td>
+<td> Затримка порушень, секунди </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> st_text </td>
+<td> Стан "Текст" </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Тільки читання </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> stats </td>
+<td> Стани, рядки "{code}:{State}" </td>
+<td> Текст </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> com_text </td>
+<td> Команда "Текст" </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td>Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> coms </td>
+<td> Команди-стани, рядки "{code}:{State}" </td>
+<td> Текст </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> digComs </td>
+<td> Команди </td>
+<td> Текст </td>
+<td> Вхід </td>
+<td> Тільки читання </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> SHIFR </td>
+<td> Код </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> NAME </td>
+<td> Ім'я </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> DESCR </td>
+<td> Опис </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> this </td>
+<td> Об'єкт </td>
+<td> Об'єкт </td>
+<td> Вихід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Помилка функції </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення функції, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Прапорець запуску функції </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Прапорець зупинки функції </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainCodeStateCfg_uk.png" title="Конфігурація."><img alt="Конфігурація." height="298" src="files/LibsMainCodeStateCfg_uk.png" width="326" /></a></div>
+<p><b><u>Конфігурація та використання</u></b><br />
+</p>
+<dl><dd>1. Створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь-який наявний з потрібними властивостями планування.</dd>
+<dd>2. Створити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного параметру</a> та обрати цей шаблон для нього. Ввімкнути параметр.</dd>
+<dd>3. У вкладці "Конфігурація шаблону" об'єкту логічного параметру Ви маєте встановити:
+<ul><li> <i>Вхід</i> та <i>Вихід</i> — <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">зв'язати із джерелом "сирого" сигналу</a>.</li>
+<li> <i>Вхідна процедура обробки</i> — сформувати для обробки та повної генерації-імітації входу, та видачі специфічного виходу, на внутрішній мові програмування OpenSCADA. Наприклад:</li></ul>
+<dl><dd><ul><li> повне створення коду статусу та формування порушення:</li></ul></dd></dl></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 40pt">
+gO = this.cntr().prm_grps;
+if(gO.prm_fansControl.PRG_CntrFan_AutoMode_G1.get().isEVal())	in = 4;
+else {
+  if(!(tVl=gO.prm_fansControl.PRG_CntrFan_Alarm_ThermalRelay.get()).isEVal() &amp;&amp; tVl)
+    levErr = -4, tErr = "11:alarm";
+  if(gO.prm_fansControl.PRG_CntrFan_AutoMode_G1.get())
+    in = gO.prm_fansControl.PRG_CntrFan_On_G1.get()&nbsp;? 1&nbsp;: 2;
+  else in = 3;
+} </pre>
+<dl><dd><dl><dd><ul><li> формування тексту часу годинника та виклик синхронізації часу — пряме встановлення тексту статусу та виконання специфічних команд:</li></ul></dd></dl></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 40pt">
+curTm = SYS.time();
+text = SYS.strftime(curTm, "%H։%M&nbsp;%d.%m.%Y");
+gO = this.cntr().prm_grps;
+if(!(tVl=gO.prm_other.PRG_RTC_UNIX.get()).isEVal()) {
+  text += " ("+(tVl-curTm).toString(10,0,true)+")";
+}
+
+if(com_text.length &amp;&amp;&nbsp;!com_text.isEVal() &amp;&amp; (tVl=coms.match("^([^:]+):"+com_text,"m")).length &amp;&amp; tVl[1] == 1) {
+  gO.prm_other.SET_RTC_New_UNIX.set(curTm);
+  gO.prm_other.KEY_RTC_set_time.set(true);
+} </pre>
+<dl><dd>4. РЕЗУЛЬТАТ: Запустивши об'єкт контролеру (де створено цей параметр) та якщо він не був запущений, маємо отримати оперативні дані у вкладці "Атрибути", для: входу, виходу, стану за кодом-входом, стану помилки; та генерацію порушень, якщо стан помилки ненульовий.</dd>
+<dd>5. У процесі роботи, через вкладку оперативних даних "Атрибути", окрім отримання результату можна здійснювати оперативне налаштування та контроль щодо:
+<ul><li> <i>Стани</i> — встановити у перелік відповідності коду стану до його тексту.</li>
+<li> <i>Команди-стани</i> — встановити у перелік відповідності коду стану-команди до його тексту.</li>
+<li> <i>Команда "Текст"</i> — встановити у текст команди, яку описано у переліку команд, для перетворення у код та видачі.</li>
+<li> <i>Придушення порушень</i> — встановити за потреби повного придушення порушень параметру — вимкнути їх генерацію взагалі.</li>
+<li> <i>Затримка порушень</i> — встановити час затримки генерації порушення, для виключення частої генерації, характерної для непевних джерел даних, що відрізняються короткочасною втратою зв'язку.</li></ul></dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="pidUnif" title="#pidUnif"><h3><span class="mw-headline" id=".D0.9F.D0.86.D0.94_.D1.81.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB_.28.D1.83.D0.BD.D1.96.D1.84.D1.96.D0.BA.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B9.2C_.D1.81.D1.82.D0.B0.D0.BD.D0.B8_.D0.BF.D0.BE.D1.80.D1.83.D1.88.D0.B5.D0.BD.D1.8C.29_.28pidUnif.29"><span class="mw-headline-number">1.7</span> ПІД сигнал (уніфікований, стани порушень) (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#pidUnif" title="Special:MyLanguage/Libs/Main">pidUnif</a>)</span></h3></span>
+</td>
+<td> 1.2 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainPidUnifOp_uk.png" title="Результат та оперативні налаштування."><img alt="Результат та оперативні налаштування." height="886" src="files/LibsMainPidUnifOp_uk.png" width="414" /></a></div>
+<p>Загальний, представницький та уніфікований шаблон інтерфейсу до Пропорційного Інтегрального Диференційного (ПІД) регулятору заснованому на аналоговому вхідному сигналі, розширеному бінарними станами індикації порушень. Шаблон формує структуру аналогового ПІД-регулятору, який може бути легко підключений до деяких кадрів та віджетів <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_graphical_elements" title="Special:MyLanguage/Libs/Main graphical elements">бібліотеки основних елементів інтерфейсу користувача</a>, просто вказавши об'єкт параметру.
+</p><p>Представницькою структурою аналогового ПІД-регулятору є:
+</p>
+<ul><li> "Змінна (<b>var</b>)" — кінцева змінна параметру — інженерне реальне значення, доступне та придатне до архівації.</li>
+<li> "Помилка (<b>err</b>)" — обов'язковий атрибут будь якого параметру, що містить комбінацію коду помилки та короткого опису, на кшталт "2:Немає даних або підключення до джерела". Шаблон резервує наступні коди помилок:
+<ul><li> <b>1, 2</b> — помилки обладнання, коли дані переважно помилкові;</li>
+<li> <b>3, 4</b> — помилки аварійної границі;</li>
+<li> <b>5, 6</b> — помилки попереджувальної границі;</li>
+<li> <b>7</b> — помилка швидкості зміни змінної.</li></ul></li>
+<li> "Придушення (<b>alSup</b>) та затримка (<b>alDelay</b>) порушень" — загальний контроль порушень щодо придушення та затримки.</li>
+<li> "Завдання (<b>sp</b>)" — завдання для досягнення значенням аналоговим сигналом у автоматичному режимі.</li>
+<li> "Ручний ввід (<b>manIn</b>)" — атрибут введення нового значення виходу, яке надалі потрапляє до виходу у ручному режимі.</li>
+<li> "Вихід (<b>out</b>)" — вихід (сигнал контролю) ПІД-регулятору.</li>
+<li> "Режим: автомат (<b>auto</b>)" — режим "Автомат" ПІД-регулятору.</li>
+<li> "Режим: каскад (<b>casc</b>)" — режим "Каскад" ПІД-регулятору.</li>
+<li> "Шкала: мінімум (<b>min</b>)" та "Шкала: максимум (<b>max</b>)" — головна шкала кінцевої змінної, вихід за яку призводить до помилки апаратної границі. Шкала також використовується як шкала відображення тренду змінної на графіках.</li>
+<li> "Логарифмічна шкала (<b>log</b>)" — ознака відображення тренду змінної на графіках у логарифмічній шкалі.</li>
+<li> "Одиниця виміру (<b>ed</b>)" — одиниця виміру змінної.</li>
+<li> "Точність (<b>prec</b>)" — кількість знаків після крапки, для позитивних значень, та точність (знаків загалом), для негативних, для відображення реальної кінцевої змінної на екрані.</li></ul>
+<p><b><u>Функції</u></b><br />
+</p>
+<ul><li> Загальне опрацювання аналогового входу щодо:</li></ul>
+<dl><dd><ul><li> проста корекція-калібрування за формулою "<b>in</b> = <b>iMult</b>*(<b>in</b>+<b>iAdd</b>)";</li>
+<li> масштабування від апаратної границі [<b>plcMin</b>...<b>plcMax</b>] у головну границю [<b>min</b>...<b>max</b>], враховуючи квадратичну шкалу <b>scSqr</b>;</li>
+<li> дозвіл на перевищення границі вхідним значенням на величину <b>plcExcess</b> відсотків;</li>
+<li> фільтрування зміни вхідного значення на час <b>Tf</b>.</li></ul></dd></dl>
+<ul><li> Проста імітація аналогового входу, встановленням <b>plcImit</b> та підключенням джерела імітації-симуляції до <b>plcImitIn</b>.</li>
+<li> Опрацювання кінцевої змінної <b>var</b> на предмет порушення деяких границь та критеріїв, генеруючи аварії та відповідно встановлюючи атрибут <b>err</b>. Границі аварії можуть мати деякий гістерезис <b>HystBnd</b>, можуть бути затримані на час <b>alDelay</b> та можуть бути придушені встановленням <b>alSup</b>. Надаються наступні границі та критерії:</li></ul>
+<dl><dd><ul><li> відсутність даних або підключення до джерела за вхідним значенням EVAL — код помилки 1 та рівень аварії 5;</li>
+<li> перевищення апаратної границі вхідним значенням — код помилки 1,2 та рівень аварії 5;</li>
+<li> перевищення аварійної границі кінцевою змінною [<b>aMin</b>...<b>aMax</b>] — код помилки 3,4 та рівень аварії 4;</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Вимикається встановленням однакових або інверсних значень границі</dd></dl>
+<ul><li> перевищення попереджувальної границі кінцевою змінною [<b>wMin</b>...<b>wMax</b>] — код помилки 5,6 та рівень аварії 2;</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Вимикається встановленням однакових або інверсних значень границі</dd></dl>
+<ul><li> велика швидкість зміни <b>speed</b> кінцевої змінної — код помилки 7 та рівень аварії 2.</li></ul></dd></dl>
+<ul><li> Передавання специфічної ПІД інформації, контролю та атрибутів коефіцієнтів до та з ПЛК або іншого джерела даних із регулюванням.</li></ul>
+<ul><li> <b>Спонсоровано:</b> <a class="external text" href="http://diyaorg.dp.ua" rel="nofollow noreferrer noopener" target="_blank">ТОВ "ДІЯ"</a></li></ul>
+<p><b><u>ВВ шаблону</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Атрибут </th>
+<th> Конфігурація </th>
+<th> Значення
+</th></tr>
+<tr>
+<td> in </td>
+<td> Вхід </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Зв'язок </td>
+<td> Signal|in
+</td></tr>
+<tr>
+<td> sp </td>
+<td> Завдання </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Зв'язок </td>
+<td> ПІД|sp
+</td></tr>
+<tr>
+<td> var </td>
+<td> Змінна </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Тільки читання </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> manIn </td>
+<td> Ручний ввід,&nbsp;% </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Зв'язок </td>
+<td> ПІД|manIn
+</td></tr>
+<tr>
+<td> out </td>
+<td> Вихід,&nbsp;% </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Зв'язок </td>
+<td> ПІД|out
+</td></tr>
+<tr>
+<td> auto </td>
+<td> Режим: автомат </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Зв'язок </td>
+<td> ПІД|auto
+</td></tr>
+<tr>
+<td> casc </td>
+<td> Режим: каскад </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Зв'язок </td>
+<td> ПІД|casc
+</td></tr>
+<tr>
+<td> ed </td>
+<td> Одиниця виміру </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> min </td>
+<td> Шкала: мінімум </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Зв'язок </td>
+<td> ПІД|min
+</td></tr>
+<tr>
+<td> max </td>
+<td> Шкала: максимум </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Зв'язок </td>
+<td> ПІД|max
+</td></tr>
+<tr>
+<td> scSqr </td>
+<td> Шкала: квадратична </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> alSup </td>
+<td> Придушення порушень </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> alDelay </td>
+<td> Затримка порушень, секунди </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> aMin </td>
+<td> Границя нижня аварійна </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> aMax </td>
+<td> Границя верхня аварійна </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> wMin </td>
+<td> Границя нижня попереджув. </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> wMax </td>
+<td> Границя верхня попереджув. </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> HystBnd </td>
+<td> Гістерезис порушень границь </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> speed </td>
+<td> Швидкість зміни,&nbsp;%/цикл </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> prec </td>
+<td> Точність, знаків </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 2
+</td></tr>
+<tr>
+<td> log </td>
+<td> Логарифмічна шкала </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td>Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> H </td>
+<td> Порушення верхньої попереджув. границі </td>
+<td> Логічний </td>
+<td> Вихід </td>
+<td>Тільки читання </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> L </td>
+<td> Порушення нижньої попереджув. границі </td>
+<td> Логічний </td>
+<td> Вихід </td>
+<td>Тільки читання </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> HH </td>
+<td> Порушення верхньої аварійної границі </td>
+<td> Логічний </td>
+<td> Вихід </td>
+<td>Тільки читання </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> LL </td>
+<td> Порушення нижньої аварійної границі </td>
+<td> Логічний </td>
+<td> Вихід </td>
+<td> Тільки читання </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> EVAL </td>
+<td> Значення невірогідне </td>
+<td> Логічний </td>
+<td> Вихід </td>
+<td> Тільки читання </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Tf </td>
+<td> Час фільтру, мілісекунд </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Kp </td>
+<td> Kп </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Зв'язок </td>
+<td> ПІД|Kp
+</td></tr>
+<tr>
+<td> Ti </td>
+<td> Tі, мілісекунд </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Зв'язок </td>
+<td>ПІД|Ti
+</td></tr>
+<tr>
+<td> Kd </td>
+<td> Кп диференціалу </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Зв'язок </td>
+<td> ПІД|Kd
+</td></tr>
+<tr>
+<td> Td </td>
+<td> Tд, мілісекунд </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Зв'язок </td>
+<td> ПІД|Td
+</td></tr>
+<tr>
+<td> Tzd </td>
+<td> T фільтру диференціалу, мілісекунд </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Зв'язок </td>
+<td> ПІД|Tzd
+</td></tr>
+<tr>
+<td> Zi </td>
+<td> Нечутливість,&nbsp;% </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Зв'язок </td>
+<td> ПІД|Zi
+</td></tr>
+<tr>
+<td> Hup </td>
+<td> Верхня границя виходу,&nbsp;% </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Зв'язок </td>
+<td> ПІД|Hup
+</td></tr>
+<tr>
+<td> Hdwn </td>
+<td> Нижня границя виходу,&nbsp;% </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Зв'язок </td>
+<td> ПІД|Hdwn
+</td></tr>
+<tr>
+<td> K1 </td>
+<td> Коефіцієнт входу 1 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td>Зв'язок </td>
+<td> ПІД|K1
+</td></tr>
+<tr>
+<td> K2 </td>
+<td> Коефіцієнт входу 2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Зв'язок </td>
+<td> ПІД|K2
+</td></tr>
+<tr>
+<td> K3 </td>
+<td> Коефіцієнт входу 3 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Зв'язок </td>
+<td> ПІД|K3
+</td></tr>
+<tr>
+<td> K4 </td>
+<td> Коефіцієнт входу 4 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Зв'язок </td>
+<td> ПІД|K4
+</td></tr>
+<tr>
+<td> iAdd </td>
+<td> Додаток до входу </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> 0
+</td></tr>
+<tr>
+<td> iMult </td>
+<td> Множник входу </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> 1
+</td></tr>
+<tr>
+<td> plcMin </td>
+<td> Мінімум шкали модуля </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> 1
+</td></tr>
+<tr>
+<td> plcMax </td>
+<td> Максимум шкали модуля </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> 5
+</td></tr>
+<tr>
+<td> plcExcess </td>
+<td> Дозволене перевищення шкали,&nbsp;% </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> 0
+</td></tr>
+<tr>
+<td> plcImit </td>
+<td> Імітація ПЛК </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> 0
+</td></tr>
+<tr>
+<td> plcImitIn </td>
+<td> Вхід імітації ПЛК </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Зв'язок </td>
+<td> Імітація|var
+</td></tr>
+<tr>
+<td> this </td>
+<td> Об'єкт </td>
+<td> Об'єкт </td>
+<td> Вихід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> SHIFR </td>
+<td> Шифр </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> NAME </td>
+<td> Ім'я </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> DESCR </td>
+<td> Опис </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення функції, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Помилка функції </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>0
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Прапорець запуску функції </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Прапорець зупинки функції </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainPidUnifCfg_uk.png" title="Конфігурація."><img alt="Конфігурація." height="883" src="files/LibsMainPidUnifCfg_uk.png" width="425" /></a></div>
+<p><b><u>Конфігурація та використання</u></b><br />
+</p>
+<dl><dd>1. Створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь-який наявний з потрібними властивостями планування.</dd>
+<dd>2. Створити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного параметру</a> та обрати цей шаблон для нього. Ввімкнути параметр.</dd>
+<dd>3. У вкладці "Конфігурація шаблону" об'єкту логічного параметру Ви маєте встановити:
+<ul><li> <i>Вхід</i> — <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">зв'язати із джерелом "сирого" аналогового сигналу</a>.</li>
+<li> <i>Завдання</i>, <i>Ручний ввід</i>, <i>Вихід</i>, <i>Режим: автомат</i>, <i>Режим: каскад</i>, <i>Шкала: мінімум</i>, <i>Шкала: максимум</i>, <i>Kп</i>, <i>Tі</i>, <i>Кп диференціалу</i>, <i>Tд</i>, <i>T фільтру диференціалу, мілісекунд</i>, <i>Нечутливість</i>, <i>Верхня границя виходу</i>, <i>Нижня границя виходу</i>, <i>Коефіцієнт входу 1</i>, <i>Коефіцієнт входу 2</i>, <i>Коефіцієнт входу 3</i>, <i>Коефіцієнт входу 4</i> — <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">зв'язати із джерелом ПІД-регулятору</a>.</li>
+<li> <i>Додаток та множник до входу</i> — використати для простої лінійної корекції входу, для прикладу дивіться шаблон "<a href="#anUnif">Аналоговий сигнал (уніфікований)</a>".</li>
+<li> <i>Дозволене перевищення шкали</i> — встановити за потреби перевищення значенням загальної шкали та коли ця шкала починає виконувати рекомендавчу функцію, скажемо для початкового відображення історії у цій шкалі.</li>
+<li> <i>Імітація та вхід імітації ПЛК</i> — визначити за потреби імітації входу згідно опису у функціях.</li></ul></dd>
+<dd>4. РЕЗУЛЬТАТ: Запустивши об'єкт контролеру (де створено цей параметр) та якщо він не був запущений, маємо отримати оперативні дані у вкладці "Атрибути", для: змінної, стану помилки; та генерацію порушень, якщо стан помилки ненульовий. Також отримаємо всі ПІД-специфічні атрибути.</dd>
+<dd>5. У процесі роботи, через вкладку оперативних даних "Атрибути", окрім отримання результату можна здійснювати оперативне налаштування та контроль щодо:
+<ul><li> <i>Шкала: мінімум та максимум</i> — суворо <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> встановити у діапазон зміни даних за наявністю та відповідно до апаратної границі, інакше значення буде викривлене! </li>
+<li> <i>Шкала: квадратична</i> — встановити якщо апаратна шкала квадратична.</li>
+<li> <i>Час фільтру</i> — встановити у час фільтрації для зашумлених сигналів.</li>
+<li> <i>Придушення порушень</i> — встановити за потреби повного придушення порушень параметру — вимкнути їх генерацію взагалі.</li>
+<li> <i>Затримка порушень</i> — встановити час затримки генерації порушення, для виключення частої генерації, характерної для непевних джерел даних, що відрізняються короткочасною втратою зв'язку.</li>
+<li> <i>Границя верхня/нижня аварійна/попереджувальна</i> — встановити коли треба генерувати порушення за виходом за аварійну/попереджувальну границі.</li>
+<li> <i>Гистерезис порушення границь</i> — встановити у гістерезис зняття порушення, тобто зняття порушення відбувається на вказаний відсоток пізніше, щоб запобігти частій генерації за коливанням значення біля границі.</li>
+<li> <i>Швидкість зміни</i> — встановити якщо треба попереджати про швидку зміну значення.</li>
+<li> <i>Назва, Опис, Одиниця виміру, Точність, Логарифмічна шкала</i> — встановити за потреби такої інформації при відображені, або як елементи паспорту.</li></ul></dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="pidUnifImp" title="#pidUnifImp"><h3><span class="mw-headline" id=".D0.86.D0.BC.D0.BF.D1.83.D0.BB.D1.8C.D1.81.D0.BD.D0.B8.D0.B9_.D0.9F.D0.86.D0.94_.D1.81.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB_.28.D1.83.D0.BD.D1.96.D1.84.D1.96.D0.BA.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B9.2C_.D1.81.D1.82.D0.B0.D0.BD.D0.B8_.D0.BF.D0.BE.D1.80.D1.83.D1.88.D0.B5.D0.BD.D1.8C.29_.28pidUnifImp.29"><span class="mw-headline-number">1.8</span> Імпульсний ПІД сигнал (уніфікований, стани порушень) (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#pidUnifImp" title="Special:MyLanguage/Libs/Main">pidUnifImp</a>)</span></h3></span>
+</td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Загальний, представницький та уніфікований шаблон інтерфейсу до Пропорційного Інтегрального Диференційного (ПІД) регулятору заснованому на аналоговому вхідному сигналі але із ШІМ-виходом, розширеному бінарними станами індикації порушень та переважно схоже на шаблон <a href="#pidUnif">ПІД сигнал (уніфікований, стани порушень)</a>. Шаблон формує структуру імпульсного ПІД-регулятору, який може бути легко підключений до деяких кадрів та віджетів <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_graphical_elements" title="Special:MyLanguage/Libs/Main graphical elements">бібліотеки основних елементів інтерфейсу користувача</a>, просто вказавши об'єкт параметру.
+</p><p>Представницька структура імпульсних ПІД-регуляторів переважно еквівалентна шаблону "<a href="#pidUnif">ПІД сигнал (уніфікований, стани порушень)</a>" та містить низку атрибутів, специфічних до імпульсного виходу та атрибут визначення роботи цього регулятору у аналоговому режимі, тобто цей шаблон є навіть більш узагальнювальним:
+</p>
+<ul><li> "Імпульсний вихід у гору (<b>impQup</b>)" та "Імпульсний вихід до низу (<b>impQdwn</b>)" — сигнали ШІМ-виходу.</li>
+<li> "Режим: аналоговий (<b>analog</b>)" — ознака роботи регулятору у режимі аналогового виходу.</li></ul>
+<p><b><u>Функції</u></b><br />
+Переважно те саме що у базового шаблону "<a href="#pidUnif">ПІД сигнал (уніфікований, стани порушень)</a>" та додатково надаються імпульсно-специфічні атрибути: "Імпульсний вихід у гору", "Імпульсний вихід до низу", "Режим: аналоговий", "T період імпульсів", "Мінімальна довжина імпульсу", "Рейтинг фактор імпульсів".
+</p>
+<ul><li> <b>Спонсоровано:</b> <a class="external text" href="http://diyaorg.dp.ua" rel="nofollow noreferrer noopener" target="_blank">ТОВ "ДІЯ"</a></li></ul>
+<p><b><u>ВВ шаблону</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Атрибут </th>
+<th> Конфігурація </th>
+<th> Значення
+</th></tr>
+<tr>
+<td colspan="7"> ВВ шаблону "<a href="#anUnif">ПІД сигнал (уніфікований, стани порушень)</a>"
+</td></tr>
+<tr>
+<td> impQup </td>
+<td> Імпульсний вихід у гору </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Тільки читання </td>
+<td> Зв'язок </td>
+<td> ПІД|impQupTm
+</td></tr>
+<tr>
+<td> impQdwn </td>
+<td> Імпульсний вихід до низу </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Тільки читання </td>
+<td> Зв'язок </td>
+<td> ПІД|impQdwnTm
+</td></tr>
+<tr>
+<td> analog </td>
+<td> Режим: аналоговий </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Тільки читання </td>
+<td> Зв'язок </td>
+<td> ПІД|analog
+</td></tr>
+<tr>
+<td> TImpPer </td>
+<td> T період імпульсів, мілісекунд </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Зв'язок </td>
+<td> ПІД|TImpPer
+</td></tr>
+<tr>
+<td> TImpMin </td>
+<td> Мінімальна довжина імпульсу, мілісекунд </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Зв'язок </td>
+<td> ПІД|TImpMin
+</td></tr>
+<tr>
+<td> KImpRfact </td>
+<td> Рейтинг фактор імпульсів </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Зв'язок </td>
+<td> ПІД|KImpRfact
+</td></tr></table>
+<p><b><u>Конфігурація та використання</u></b><br />
+Переважно те саме що у базового шаблону "<a href="#pidUnif">ПІД сигнал (уніфікований, стани порушень)</a>" із відмінністю використання імпульсо-специфічного виходу: "Імпульсний вихід у гору", "Імпульсний вихід до низу", "Режим: аналоговий", "T період імпульсів", "Мінімальна довжина імпульсу", "Рейтинг фактор імпульсів".
+</p>
+<h2><span class="mw-headline" id=".D0.A8.D0.B0.D0.B1.D0.BB.D0.BE.D0.BD.D0.B8_.D0.BA.D0.BE.D0.BC.D0.BF.D0.BB.D0.B5.D0.BA.D1.81.D0.BD.D0.B8.D1.85_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82.D1.96.D0.B2"><span class="mw-headline-number">2</span> <span id="ComplexObject" title="#ComplexObject">Шаблони комплексних об'єктів</span></span></h2>
+<p>У окремих випадках, коли деякий об'єкт є лише частиною загальної автоматизованої системи та такий що не потребує глибокої деталізації до рівня сигналів та параметрів (складного тегу) довкола них, включно без потреби архівації, їх зручно уніфікувати у одному представницькому об'єкті джерела даних OpenSCADA із відповідним консолідованим представленням та контролем об'єкту, як набору простих атрибутів із елементами сигналізації. Така консолідація часто відбувається довкола спеціалізованих джерел даних, доступ до даних яких зазвичай й реалізуються окремим протоколом обміну, але без уніфікації передачі цих даних на рівень візуалізації та сигналізації за окремим атрибутом об'єкту.
+</p><p>Загалом, представницькою структурою комплексного об'єкту є:
+</p>
+<ul><li> "Всі елементи (<b>items</b>)" — спільний атрибут об'єктного типу де атрибути фізичного об'єкту прямо описуються атрибутами об'єктного типу у <b>items</b> та із визначеними описовими атрибутами у кожному:
+<ul><li> <i>id</i> — ідентифікатор атрибуту;</li>
+<li> <i>descr</i> — текстовий опис атрибуту;</li>
+<li> <i>wr</i> — ознака можливості запису до атрибуту або перелік варіантів значень для їх обрання, через символ ';';</li>
+<li> <i>alarm</i> — код порушення:
+<ul><li> 0 — відсутність порушення — "НОРМА";</li>
+<li> 1 — порушення рівня "ПОПЕРЕДЖЕННЯ";</li>
+<li> 2 — порушення рівня "АВАРІЯ";</li></ul></li>
+<li> <i>val</i> — значення атрибуту;</li>
+<li> <i>set</i> — значення атрибуту для встановлення атрибутів доступних для запису.</li></ul></li>
+<li> "Помилка (<b>err</b>)" — обов'язковий атрибут загального статусу порушення за об'єктом цілком, що містить комбінацію коду помилки та короткого опису, на кшталт "2:Немає даних або підключення до джерела". Зарезервовано наступні коди помилок:
+<ul><li> <b>1</b> — порушення рівня "ПОПЕРЕДЖЕННЯ";</li>
+<li> <b>2</b> — порушення рівня "АВАРІЯ";</li>
+<li> <b>3</b> — недостовірність або відсутність даних.</li></ul></li>
+<li> "Придушення (<b>alSup</b>) та затримка (<b>alDelay</b>) порушень" — загальний контроль порушень щодо придушення та затримки.</li></ul>
+<p>Узагальнюючи, такий шаблон (прошарок над об'єктом фізичних джерел даних) доцільно створювати над джерелом сирих даних, яке надає ці дані у вигляді атрибутів та без обробки, та цей шаблон відтак здійснює:
+</p>
+<ul><li> збірку цих атрибутів сирого джерела до <b>items</b>;</li>
+<li> опрацювання властивостей атрибутів;</li>
+<li> перевірку та передачу команд встановлення значень;</li>
+<li> опрацювання умов порушень як за окремими атрибутами так і загалом за об'єктом, разом з яким ці порушення можуть фіксуватися у <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#ArchMess" title="Special:MyLanguage/Documents/Program manual">таблиці поточних порушень</a>, зазвичай <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/User_API#SYS.DAQ" title="Special:MyLanguage/Documents/User API">функцією alarmSet()</a>.</li></ul>
+<p>Окрім шаблонів комплексного об'єкту цей механізм загально-об'єктного контролю може реалізовуватися шаблонами реалізації <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLev" title="Special:MyLanguage/Documents/DAQ">логічного рівня доступу до даних</a>, як то у <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Devices#IEC60870" title="Special:MyLanguage/Libs/Devices">IEC60870</a>.
+</p><p>Для представлення даних механізму загально-об'єктного контролю наразі надається відповідний <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_graphical_elements#objProps" title="Special:MyLanguage/Libs/Main graphical elements">кадр "Властивості об'єкту"</a>, який надає ці властивості у вигляді таблиці-переліку із підсвіченням порушень та можливістю зміни обраних та редагованих властивостей-рядків.
+</p><p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="UPS" title="#UPS"><h3><span class="mw-headline" id=".D0.94.D0.B6.D0.B5.D1.80.D0.B5.D0.BB.D0.BE_.D0.91.D0.B5.D0.B7.D0.BF.D0.B5.D1.80.D0.B5.D0.B1.D1.96.D0.B9.D0.BD.D0.BE.D0.B3.D0.BE_.D0.96.D0.B8.D0.B2.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F_.28UPS.29"><span class="mw-headline-number">2.1</span> Джерело Безперебійного Живлення (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#UPS" title="Special:MyLanguage/Libs/Main">UPS</a>)</span></h3></span>
+</td>
+<td> 1.3 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainUPSOp_uk.png" title="Результат та оперативні налаштування."><img alt="Результат та оперативні налаштування." height="749" src="files/LibsMainUPSOp_uk.png" width="385" /></a></div>
+<p>Об'єднання даних Джерела Безперебійного Живлення у комплексному об'єкті атрибуту "Всі елементи". Шаблон розроблено для використання із модулем джерела даних "<a href="Modules/System.html" title="Special:MyLanguage/Modules/System">Система</a>" у частині "ДБЖ" та представлення цих даних <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_graphical_elements#objProps" title="Special:MyLanguage/Libs/Main graphical elements">кадром "Властивості об'єкту"</a> як комплексний об'єкт із властивостями, сигналізацією за окремими границями та записом.
+</p>
+<ul><li> <b>Спонсоровано:</b> <a class="external text" href="http://diyaorg.dp.ua" rel="nofollow noreferrer noopener" target="_blank">ТОВ "ДІЯ"</a></li></ul>
+<p><b><u>ВВ шаблону</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Атрибут </th>
+<th> Конфігурація </th>
+<th> Значення
+</th></tr>
+<tr>
+<td> srcAddr </td>
+<td> Адреса вихідного об'єкту </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td>
+</td></tr>
+<tr>
+<td> alSup </td>
+<td> Придушення порушень </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td>Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> alDelay </td>
+<td> Затримка порушень, секунди </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> items </td>
+<td> Всі елементи </td>
+<td> Об'єкт </td>
+<td> Вихід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> bChL </td>
+<td> Заряд батареї низький </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 20
+</td></tr>
+<tr>
+<td> bChLL </td>
+<td> Заряд батареї критичний </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 5
+</td></tr>
+<tr>
+<td> inVL </td>
+<td> Низька вхідна напруга </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 210
+</td></tr>
+<tr>
+<td> inVH </td>
+<td> Висока вхідна напруга </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 250
+</td></tr>
+<tr>
+<td> inFLL </td>
+<td> Дуже низька вхідна частота </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 40
+</td></tr>
+<tr>
+<td> inFL </td>
+<td> Низька вхідна частота </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 45
+</td></tr>
+<tr>
+<td> inFH </td>
+<td> Висока вхідна частота </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 55
+</td></tr>
+<tr>
+<td> inFHH </td>
+<td> Дуже висока вхідна частота </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 60
+</td></tr>
+<tr>
+<td> loadH </td>
+<td> Навантаження високе </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 80
+</td></tr>
+<tr>
+<td> loadHH </td>
+<td> Навантаження дуже високе </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 100
+</td></tr>
+<tr>
+<td> tH </td>
+<td> Температура висока </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 50
+</td></tr>
+<tr>
+<td> tHH </td>
+<td> Температура дуже висока </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 70
+</td></tr>
+<tr>
+<td> this </td>
+<td> Об'єкт </td>
+<td> Об'єкт </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> SHIFR </td>
+<td> Шифр </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> NAME </td>
+<td> Ім'я </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> DESCR </td>
+<td> Опис </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Прапорець зупинки функції </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення функції, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Помилка функції </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Прапорець запуску функції </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainUPSCfg_uk.png" title="Конфігурація."><img alt="Конфігурація." height="170" src="files/LibsMainUPSCfg_uk.png" width="382" /></a></div>
+<p><b><u>Конфігурація та використання</u></b><br />
+</p>
+<dl><dd>1. Створити об'єкт контролеру джерела у модулі "<a href="Modules/System.html" title="Special:MyLanguage/Modules/System">Система</a>" та встановити його Ідентифікатор на кшталт "SYSData".</dd>
+<dd>2. Створити об'єкт параметру джерела у попередньо створеному об'єкті контролера та встановити його Ідентифікатор на кшталт "UPS".</dd>
+<dd>3. Створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь-який наявний з потрібними властивостями планування.</dd>
+<dd>4. Створити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного параметру</a> та обрати цей шаблон для нього. Ввімкнути параметр.</dd>
+<dd>5. У вкладці "Конфігурація шаблону" об'єкту логічного параметру Ви маєте встановити:
+<ul><li> <i>Адреса вихідного об'єкту</i> — у адресу об'єкту вихідного параметру ДБЖ (дивіться крок 1), на кшталт "System.SYSData.UPS".</li></ul></dd>
+<dd>6. РЕЗУЛЬТАТ: Запустивши об'єкт контролеру (де створено цей параметр) та якщо він не був запущений, маємо отримати, у атрибуті параметру <i>items</i>, цей об'єкт з усіма атрибутами та їх властивостями. У випадку деяких порушень отримаємо відповідну інформацію у атрибуті параметру <i>err</i>, стосовно чого ви можете налаштувати атрибути границь відповідних порушень.</dd>
+<dd>7. У візуальному інтерфейсі розробки модуля <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> розташуйте кадр "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_graphical_elements#objProps" title="Special:MyLanguage/Libs/Main graphical elements">Властивості об'єкту</a>" до будь-якої сторінки та зв'яжіть його із об'єктом цього параметру, створеного на кроці 4.</dd>
+<dd>8. РЕЗУЛЬТАТ: При виконанні сторінки ви отримаєте таблицю з даними об'єкту, повідомленням про порушення у заголовку та об'єкті сигналізації та можливістю встановлення властивостей доступних до запису.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="SNMP" title="#SNMP"><h3><span class="mw-headline" id=".D0.9C.D0.B5.D1.80.D0.B5.D0.B6.D0.B5.D0.B2.D1.96_.D0.BF.D1.80.D0.B8.D1.81.D1.82.D1.80.D0.BE.D1.97_.D0.B7.D0.B0_SNMP_.28SNMP.29"><span class="mw-headline-number">2.2</span> Мережеві пристрої за SNMP (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#SNMP" title="Special:MyLanguage/Libs/Main">SNMP</a>)</span></h3></span>
+</td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainSNMPOp_uk.png" title="Результат та оперативні налаштування."><img alt="Результат та оперативні налаштування." height="531" src="files/LibsMainSNMPOp_uk.png" width="368" /></a></div>
+<p>Об'єднання даних пристрою, доступного за протоколом SNMP, у комплексному об'єкті атрибуту "Всі елементи". Шаблон розроблено для використання із модулем джерела даних "<a href="Modules/SNMP.html" title="Special:MyLanguage/Modules/SNMP">SNMP</a>" та представлення цих даних <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_graphical_elements#objProps" title="Special:MyLanguage/Libs/Main graphical elements">кадром "Властивості об'єкту"</a> як комплексний об'єкт із властивостями, сигналізацією за окремими границями та записом. Враховуючи велику специфіку та розмаїття пристроїв доступних за протоколом SNMP, цей шаблон фактично є заготовкою та прикладом створення на його основі шаблону до відповідного пристрою із специфічною до нього обробкою вхідних властивостей, формування порушень та можливістю запису.
+</p>
+<ul><li> <b>Спонсорувано:</b> ПАС ХАРТРОН</li></ul>
+<p><b><u>ВВ шаблону</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Атрибут </th>
+<th> Конфігурація </th>
+<th> Значення
+</th></tr>
+<tr>
+<td> srcAddr </td>
+<td> Адреса вихідного об'єкту </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td>
+</td></tr>
+<tr>
+<td> manTables </td>
+<td> Ручні таблиці </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td>
+</td></tr>
+<tr>
+<td> alSup </td>
+<td> Придушення порушень </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td>Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> alDelay </td>
+<td> Затримка порушень, секунди </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> items </td>
+<td> Всі елементи </td>
+<td> Об'єкт </td>
+<td> Вихід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> this </td>
+<td> Об'єкт </td>
+<td> Об'єкт </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> SHIFR </td>
+<td> Шифр </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> NAME </td>
+<td> Ім'я </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> DESCR </td>
+<td> Опис </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Помилка функції </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Прапорець запуску функції </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Прапорець зупинки функції </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення функції, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 1000
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainSNMPCfg_uk.png" title="Конфігурація."><img alt="Конфігурація." height="197" src="files/LibsMainSNMPCfg_uk.png" width="370" /></a></div>
+<p><b><u>Конфігурація та використання</u></b><br />
+</p>
+<dl><dd>1. Створити об'єкт контролеру джерела у модулі "<a href="Modules/SNMP.html" title="Special:MyLanguage/Modules/SNMP">SNMP</a>" та встановити його Ідентифікатор на кшталт "SYSData".</dd>
+<dd>2. Створити об'єкт параметру джерела у попередньо створеному об'єкті контролера та встановити його Ідентифікатор на кшталт "DEV".</dd>
+<dd>3. Створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь-який наявний з потрібними властивостями планування.</dd>
+<dd>4. Створити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного параметру</a> та обрати цей шаблон для нього. Ввімкнути параметр.</dd>
+<dd>5. У вкладці "Конфігурація шаблону" об'єкту логічного параметру Ви маєте встановити:
+<ul><li> <i>Адреса вихідного об'єкту</i> — у адресу об'єкту параметру вихідного пристрою SNMP (дивіться крок 1), на кшталт "SNMP.SYSData.DEV";</li>
+<li> <i>Ручні таблиці</i> — вручну введіть деякі статичні MIB-змінні.</li></ul></dd>
+<dd>6. РЕЗУЛЬТАТ: Запустивши об'єкт контролеру (де створено цей параметр) та якщо він не був запущений, маємо отримати, у атрибуті параметру <i>items</i>, цей об'єкт з усіма атрибутами та їх властивостями. У випадку деяких порушень отримаємо відповідну інформацію у атрибуті параметру <i>err</i>, стосовно чого ви можете налаштувати атрибути границь відповідних порушень.</dd>
+<dd>7. У візуальному інтерфейсі розробки модуля <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> розташуйте <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_graphical_elements#objProps" title="Special:MyLanguage/Libs/Main graphical elements">кадр "Властивості об'єкту"</a> до будь-якої сторінки та зв'яжіть його із об'єктом цього параметру, створеного на кроці 4.</dd>
+<dd>8. РЕЗУЛЬТАТ: При виконанні сторінки ви отримаєте таблицю з даними об'єкту, повідомленням про порушення у заголовку та об'єкті сигналізації та можливістю встановлення властивостей доступних до запису.</dd></dl>
+<h2><span class="mw-headline" id=".D0.A1.D0.B5.D1.80.D0.B2.D1.96.D1.81.D0.B8"><span class="mw-headline-number">3</span> Сервіси</span></h2>
+<table class="wikitable">
+
+<tr>
+<td> <span id="ntf" title="#ntf"><h3><span class="mw-headline" id=".D0.9F.D0.BE.D0.B2.D1.96.D0.B4.D0.BE.D0.BC.D0.BB.D1.8E.D0.B2.D0.B0.D1.87_.D0.B7.D0.B0_SMS.2C_EMail.28SMTP.29_.28ntf.29"><span class="mw-headline-number">3.1</span> Повідомлювач за SMS, EMail(SMTP) (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#ntf" title="Special:MyLanguage/Libs/Main">ntf</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * =&gt; <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">UserProtocol</a> </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Комплексний шаблон повідомлення містить частини диспетчеру та вихідний користувацький протокол повідомлення за EMail(SMTP) та SMS.
+</p>
+<ul><li> <b>Спонсоровано:</b> ТОВ "СВІТоВИР АВТоМАТИК"</li></ul>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainNtfOp_uk.png" title="Результат та оперативні налаштування."><img alt="Результат та оперативні налаштування." height="527" src="files/LibsMainNtfOp_uk.png" width="600" /></a></div>
+<p><b>ДИСПЕТЧЕР</b> може виконуватися для вказаних повідомлень буферу повідомлень OpenSCADA та застосовується на <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLev" title="Special:MyLanguage/Documents/DAQ">Логічному рівні</a> або об'єкті контролеру <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">модуля JavaLikeCalc</a>.
+</p><p><b><u>ВВ шаблону</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Атрибут </th>
+<th> Конфігурація </th>
+<th> Значення
+</th></tr>
+<tr>
+<td> io </td>
+<td> UserPrt: Вихідний ВВ </td>
+<td> Об'єкт </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> tr </td>
+<td> UserPrt: Транспорт </td>
+<td> Об'єкт </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> tmOut </td>
+<td> Максимальний таймаут повідомлення, секунд </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> 5
+</td></tr>
+<tr>
+<td> messLev </td>
+<td> Рівень повідомлень, негативний для порушень </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> 1
+</td></tr>
+<tr>
+<td> messCat </td>
+<td> Категорія повідомлень, шаблон або регулярний вираз </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> al*:*
+</td></tr>
+<tr>
+<td> emailState </td>
+<td> Поточний стан повідомлення Ел.поштою </td>
+<td> Рядок </td>
+<td> Вихід </td>
+<td> Тільки читання </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> emailTrAddr </td>
+<td> Вихідний транспорт SMTP підключень, порожньо для вимкнення </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> Sockets.out_SMTP
+</td></tr>
+<tr>
+<td> emailAuth </td>
+<td> Автентифікація, порожньо для вимкнення </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> user:pass
+</td></tr>
+<tr>
+<td> emailSender </td>
+<td> Відправник </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> noreply@oscada.org
+</td></tr>
+<tr>
+<td> emailReceiver </td>
+<td> Адреса призначення одержувача </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> test@oscada.org
+</td></tr>
+<tr>
+<td> emailTopic </td>
+<td> Тема Ел.пошти </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> Повідомлення
+</td></tr>
+<tr>
+<td> emailMess </td>
+<td> Повідомлення Ел.пошти </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td>
+</td></tr>
+<tr>
+<td> SMSState </td>
+<td> Поточний стан повідомлення SMS </td>
+<td> Рядок </td>
+<td> Вихід </td>
+<td> Тільки читання </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> SMSTrAddr </td>
+<td> Послідовний транспорт SMS, порожньо для вимкнення </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> Serial.out_SMS
+</td></tr>
+<tr>
+<td> SMSPin </td>
+<td> Пін-код SMS, порожньо для вимкнення </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> 1111
+</td></tr>
+<tr>
+<td> SMSTel </td>
+<td> Адреса одержувача SMS, номер телефону </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> +380XXXXXXXXX
+</td></tr>
+<tr>
+<td> SMSTextMd </td>
+<td> SMS у текстовому режимі, інакше PDU </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення функції, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Прапорець запуску функції </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Помилка функції </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Прапорець зупинки функції </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainNtfCfg_uk.png" title="Конфігурація."><img alt="Конфігурація." height="475" src="files/LibsMainNtfCfg_uk.png" width="620" /></a></div>
+<p><b><u>Конфігурація та використання</u></b><br />
+</p>
+<dl><dd>1. Створити параметр у об'єкті контролеру <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLev" title="Special:MyLanguage/Documents/DAQ">Логічного рівня</a> або об'єкт контролеру у <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">модулі DAQ.JavaLikeCalc</a>.</dd>
+<dd>2. Створити вихідний транспорт типу "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Послідовний</a>" та встановити його Ідентифікатор на кшталт "SMS", один транспорт підходить для багатьох одержувачів.</dd>
+<dd>3. Встановити властиву адресу, тільки для <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Послідовного</a> пристрою. Швидкість, формат асинхронних даних та таймаути послідовного порту будуть налаштовані функцією.</dd>
+<dd>4. Створити вихідний транспорт типу "<a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Сокети</a>" або "<a href="Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">SSL</a>" та встановити його Ідентифікатор на кшталт "SMTP", один транспорт підходить для багатьох одержувачів.</dd>
+<dd>5. Встановити властиву адресу, для Сокетів(25) або SSL(465). Таймаути транспорту будуть налаштовані функцією.</dd>
+<dd>6. У вкладці "Конфігурація шаблону" ви маєте встановити:
+<ul><li> Максимальний таймаут повідомлення, секунд.</li>
+<li> Рівень повідомлень, негативний для порушень.</li>
+<li> Категорія повідомлень, шаблон або регулярний вираз.</li>
+<li> Вихідний транспорт SMTP підключень, порожньо для вимкнення.</li>
+<li> Автентифікація, порожньо для вимкнення.</li>
+<li> Відправник.</li>
+<li> Адреса призначення одержувача.</li>
+<li> Тема Ел.пошти.</li>
+<li> Повідомлення Ел.пошти.</li>
+<li> Послідовний транспорт SMS, порожньо для вимкнення.</li>
+<li> Пін-код SMS, порожньо для вимкнення.</li>
+<li> Адреса одержувача SMS, номер телефону.</li>
+<li> SMS у текстовому режимі, інакше PDU.</li></ul></dd>
+<dd>7. РЕЗУЛЬТАТ: Надсилання вказаних повідомлень як SMS або EMail(SMTP).</dd></dl>
+<p><b>"SMS" ЧАСТИНА ВИХІДНОГО КОРИСТУВАЦЬКОГО ПРОТОКОЛУ</b> надає операції із SMS за допомогою GSM-модему, підключеного як послідовний пристрій. Наразі підтримується лише відправка SMS повідомлень на номер віддаленого мобільного телефону або GSM-модему. Для надсилання підтримується: вимкнення ЛУНИ, перевірка та встановлення PIN, надсилання у PDU та текстовому режимі.<br />
+</p><p><b><u>Структура XML-запиту вихідного користувацького протоколу</u></b><br />
+<b>&lt;cmd pin="1111" tel="+380XXXXXXXXX" text="{0|1}" err="1:Error"&gt;{SMSText}&lt;/cmd&gt;</b>
+</p>
+<dl><dd><i>cmd</i> — команда, наразі наявне лише "send";</dd>
+<dd><i>pin</i> — PIN-код для доступу до SIM-карти;</dd>
+<dd><i>tel</i> — номер телефону одержувача (віддалений номер телефону або GSM-модем);</dd>
+<dd><i>text{0,1}</i> — SMS у текстовому режимі, лише ASCII;</dd>
+<dd><i>SMSText</i> — текст повідомлення;</dd>
+<dd><i>err</i> — встановлюється у результат запиту.</dd></dl>
+<p><b><u>Конфігурація та використання</u></b><br />
+</p>
+<dl><dd>1. Створити вихідний транспорт типу "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Послідовний</a>" та встановити його Ідентифікатор на кшталт "SMS", один транспорт підходить для багатьох одержувачів.</dd>
+<dd>2. Встановити властиву адресу. Швидкість, формат асинхронних даних та таймаути послідовного порту будуть налаштовані функцією.</dd>
+<dd>3. Створити потрібний <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">об'єкт користувацького протоколу</a> заснованого на шаблонах, із Ідентифікатором на кшталт "SMS".</dd>
+<dd>4. Розмістити деякі команди запиту безпосередньо у наявній або новій внутрішній процедурі OpenSCADA на кшталт:</dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px">
+req = SYS.XMLNode("send"); req.setAttr("ProtIt","SMS").setAttr("pin","1111").setAttr("tel","+380XXXXXXXXX").setText("Notify message");
+SYS.Transport.Serial.out_SMS.messIO(req, "UserProtocol");
+rez = req.attr("err").toInt()&nbsp;? req.attr("err")&nbsp;: "OK";
+</pre>
+<dl><dd>5. РЕЗУЛЬТАТ: У змінній <i>rez</i> ви отримаєте "OK" якщо не виникло жодної помилки та повідомлення вдало надіслано одержувачу.</dd></dl>
+<p><b>"SMTP" ЧАСТИНА ВИХІДНОГО КОРИСТУВАЦЬКОГО ПРОТОКОЛУ</b> надає операції із SMTP-сервером щодо доставки електронної пошти відправленням через TCP-Сокет або SSL. Наразі підтримуються: TCP, SSL, AUTH, кодування теми у UTF-8.<br />
+</p><p><b><u>Структура XML-запиту вихідного користувацького протоколу</u></b><br />
+<b>&lt;send auth="{user}:{pass}" from="{FromAddr}" to="{ToAddr}" topic="{My Topic}" err="1:Error"&gt;{MessageText}&lt;/send&gt;</b>
+</p>
+<dl><dd><i>topic</i> — тема повідомлення;</dd>
+<dd><i>from</i> — адреса відправника;</dd>
+<dd><i>to</i> — адреса призначення отримувача;</dd>
+<dd><i>auth</i> — користувач та пароль отримувача;</dd>
+<dd><i>MessageText</i> — текст повідомлення;</dd>
+<dd><i>err</i> — встановлюється у результат запиту.</dd></dl>
+<p><b><u>Конфігурація та використання</u></b><br />
+</p>
+<dl><dd>1. Створити вихідний транспорт типу "<a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Сокети</a>" або "<a href="Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">SSL</a>" та встановити його Ідентифікатор на кшталт "SMTP", один транспорт підходить для багатьох одержувачів.</dd>
+<dd>2. Встановити властиву адресу, для Сокетів(25) або SSL(465). Таймаути транспорту будуть налаштовані функцією.</dd>
+<dd>3. Створити потрібний <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">об'єкт користувацького протоколу</a> заснованого на шаблонах, із Ідентифікатором на кшталт "SMTP".</dd>
+<dd>4. Розмістити деякі команди запиту безпосередньо у наявній або новій внутрішній процедурі OpenSCADA на кшталт:</dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px">
+req = SYS.XMLNode("send"); req.setAttr("ProtIt","SMTP").setAttr("from","noreply@oscada.org").setAttr("to","oscada@oscada.org").setAttr("topic","My topic").setText("My message");
+SYS.Transport.Sockets.out_SMTP.messIO(req, "UserProtocol");
+rez = req.attr("err").toInt()&nbsp;? req.attr("err")&nbsp;: "OK";
+</pre>
+<dl><dd>5. РЕЗУЛЬТАТ: У змінній <i>rez</i> ви отримаєте "OK" якщо не виникло жодної помилки та повідомлення вдало надіслано одержувачу.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="initConsAssignTrs" title="#initConsAssignTrs"><h3><span class="mw-headline" id=".D0.9E.D0.BF.D1.80.D0.B0.D1.86.D1.8E.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_.D1.96.D0.BD.D1.96.D1.86.D1.96.D0.B0.D1.82.D0.B8.D0.B2.D0.BD.D0.B8.D1.85_.D0.BF.D1.96.D0.B4.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D1.8C_.D1.89.D0.BE.D0.B4.D0.BE_.D0.B0.D1.81.D0.BE.D1.86.D1.96.D0.B0.D1.82.D0.B8.D0.B2.D0.BD.D0.B8.D1.85_.D0.B2.D0.B8.D1.85.D1.96.D0.B4.D0.BD.D0.B8.D1.85_.D1.82.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D1.96.D0.B2_.28initConsAssignTrs.29"><span class="mw-headline-number">3.2</span> Опрацювання ініціативних підключень щодо асоціативних вихідних транспортів (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#initConsAssignTrs" title="Special:MyLanguage/Libs/Main">initConsAssignTrs</a>)</span></h3></span>
+</td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainInitConsAssignTrsOp_uk.png" title="Результат та оперативні налаштування."><img alt="Результат та оперативні налаштування." height="388" src="files/LibsMainInitConsAssignTrsOp_uk.png" width="346" /></a></div>
+<p>Шаблон служби опрацювання вхідних ініціативних підключень створено для надання останньої ланки реалізації та підтримки <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#PassiveAndInitiative" title="Special:MyLanguage/Documents/DAQ">концепції збору даних у пасивному режимі та ініціативного підключення</a>, а саме — контролю асоціативних транспортів, створюваних вхідним транспортом за кожним підключенням.
+</p><p>Функцію створення вихідних асоціативних транспортів за підключенням на вхідний наразі підтримує лише <a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">модуль транспортів "Сокети"</a> та для TCP-сокетів.
+</p><p>Контроль асоціативних транспортів передбачає:
+</p>
+<ul><li> отримання переліку асоціативних транспортів, функцією вхідного транспорту <i>assTrsList()</i>;</li>
+<li> читання із нових транспортів (відкритих) ідентифікаційної інформації, яка наразі репрезентує тільки ідентифікатор об'єкту джерела;
+<ul><li> пошук, за отриманим ідентифікатором, об'єкта джерела та призначення йому адреси цього транспорту;</li>
+<li> реєстрацію у атрибуті об'єктного типу "prcTr".</li></ul></li>
+<li> перевірка діючих транспортів на предмет їх закриття (від'єднання), щодо чого здійснюється дереєстрація у атрибуті об'єктного типу "prcTr" та встановлення об'єкту джерела порожнього значення; вимкнені вихідні асоціативні транспорти повторно використовуються вхідним за отриманням нового підключення, після чого він вмикається.</li></ul>
+<p>Шаблон може керувати контейнерами об'єктів джерел даних, побудованих як у вигляді DAQ-об'єктів контролерів, так і параметрів логічного рівня, що репрезентують джерело даних та мають поле визначення адреси транспорту та що загалом визначається конфігураційним полем "srcObjPath" із форматом <b>{CntrAddr}:{TrCntrFldAddr}</b>, де:
+</p>
+<ul><li> <i>CntrAddr</i> — адреса контейнеру, наприклад: "ModBus" — для DAQ-об'єктів контролерів, "LogicLev.CntrPLC" — для параметрів логічного рівня;</li>
+<li> <i>TrCntrFldAddr</i> — адреса поля контролю транспорту у об'єкті джерела, наприклад — "%2fcntr%2fcfg%2fADDR" для "ModBus"; що може бути отримано у конфігураторі за історією наведення на поля контролю у рядку статусу.</li></ul>
+<ul><li> <b>Спонсорувано:</b> ТОВ BLUE STAR GROUP</li></ul>
+<p><b><u>ВВ шаблону</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Атрибут </th>
+<th> Конфігурація </th>
+<th> Значення
+</th></tr>
+<tr>
+<td> inTransport </td>
+<td> Вхідний транспорт </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Постійна </td>
+<td> InitiateCons
+</td></tr>
+<tr>
+<td> outTrTm </td>
+<td> Таймаути вихідних транспортів </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Постійна </td>
+<td> 10:0.1
+</td></tr>
+<tr>
+<td> srcObjPath </td>
+<td> Шлях об'єкту джерела </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Постійна </td>
+<td> ModBus:%2fcntr%2fcfg%2fADDR
+</td></tr>
+<tr>
+<td> prcTr </td>
+<td> Опрацьовані транспорти </td>
+<td> Об'єкт </td>
+<td> Вихід </td>
+<td> Тільки читання </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Помилка функції </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Прапорець запуску функції </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Прапорець зупинки функції </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення функції, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 1000
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainInitConsAssignTrsCfg_uk.png" title="Конфігурація."><img alt="Конфігурація." height="227" src="files/LibsMainInitConsAssignTrsCfg_uk.png" width="425" /></a></div>
+<p><b><u>Конфігурація та використання</u></b><br />
+</p>
+<dl><dd>1. Створити вхідний транспорт прийняття ініціативних підключень у <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/Sockets#InTr" title="Special:MyLanguage/Modules/Sockets">модулі "Сокети"</a> із назвою на кшталт "InitiateCons".</dd>
+<dd>2. Встановити, для попередньо створеного транспорту, потрібну адресу відкриття вхідного сокету та перевести його у режим створення асоціативних вихідних транспортів, залишивши поле протоколу порожнім.</dd>
+<dd>3. Передбачити контейнер джерел даних до яких асоціативні транспорти мають під'єднуватися, який може бути або DAQ-модулем (як то "DAQ.ModBus"), або логічним контролером (як то "DAQ.LogicLev.Sources"), чи параметром у ньому (як то "DAQ.LogicLev.PLC.Sources"), із вмістом параметрів логічного рівня, що представляють джерело даних.</dd>
+<dd>4. Для цього шаблону, створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь-який наявний з потрібними властивостями планування.</dd>
+<dd>5. Створити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного параметру</a> та обрати цей шаблон для нього. Ввімкнути параметр.</dd>
+<dd>6. У вкладці "Конфігурація шаблону" об'єкту логічного параметру треба встановити:
+<ul><li> <i>Вхідний транспорт</i> — у значення ідентифікатору вхідного транспорту, створеного у пункті 1, на кшталт "InitiateCons;</li>
+<li> <i>Таймаути вихідних транспортів</i> — збільшити першу цифру для дуже повільних підключень та типове є нормальним для більшості ситуацій;</li>
+<li> <i>Шлях об'єктів джерела</i> — встановити згідно до пункту 3, для першої частини, та у шлях до контрольного поля, для другої частини, наприклад, та типово для "ModBus", це — "ModBus:%2fcntr%2fcfg%2fADDR".</li></ul></dd>
+<dd>6. РЕЗУЛЬТАТ: Запустивши об'єкт контролеру (де створено цей параметр) та якщо він не був запущений, маємо отримати, у атрибуті параметру <i>prcTr</i> інформацію о вдало опрацьованих, а відтак і вдало пов'язаних із транспортом джерелах даних. У випадку деяких порушень отримаємо відповідну інформацію у атрибуті параметру <i>err</i>. Інформація про відсутність представницького об'єкту для отриманого ідентифікатору поміщається у протоколі порушень.</dd></dl>
+
+
+
+
+
+
+</div></body>
+</html>

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-09 20:51+0300\n"
+"POT-Creation-Date: 2019-11-04 11:03+0200\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -123,6 +123,7 @@ msgstr "15:Ошибка размера PDU ответа."
 msgid "OK"
 msgstr "НОРМА"
 
+#, c-format
 msgid "10:Generic error: %s."
 msgstr "10:Общая ошибка: %s."
 
@@ -398,8 +399,8 @@ msgstr "Размер отчёта"
 msgid "Use zero for the report disabling"
 msgstr "Использовать ноль для отключения отчёта"
 
-msgid "Frequency of calculation of the function (Hz)"
-msgstr "Частота вычисления функции (Гц)"
+msgid "Frequency of calculation of the function, Hz"
+msgstr "Частота вычисления функции, Гц"
 
 msgid "Function start flag"
 msgstr "Флаг запуска функции"

@@ -31,7 +31,7 @@
 <td> <a href="../Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> </td>
 <td> ModBus
 </td>
-<td> 2.5 </td>
+<td> 2.6 </td>
 <td> GPL2 </td>
 <td> daq_ModBus.so </td>
 <td> en,uk,ru,de </td>
@@ -273,8 +273,8 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <li> Merging of the data fragments. Standard functions <b>1</b>-<b>4</b> let to request at once multiple adjacent registers or bits. This strategy often allows to optimize the traffic and time. However, the required registers are not always located adjacent to each other, this option allows you to gather them in blocks of up to 100 registers, or 1600 bits.</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Installing of this parameter must be approached with caution, since not all devices support access to the registers between fragments.</dd></dl>
 <ul><li> Using the multi-items writing functions (<b>15</b>, <b>16</b>). Instead one-item writing will be used the multi-items functions.</li>
-<li> Asynchronous write. Enables writing changes to the controller asynchronously, in the general acquisition cycle and before the data acquisition itself.</li></ul>
-<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> This mode also prevents for lost the writing data at the connection lost and the wrote data will be transmitted just the connection will be restored.</dd></dl>
+<li> Asynchronous write. Enables asynchronously writing of the changes to the controller, in the general acquisition cycle and after the data acquisition itself, blocking of reading the written values on one cycle (before the writing buffer clearing).</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> This mode also prevents for lost the writing data at the connection lost and the wrote data will be transmitted just the connection will be restored. At that, this blocks the reading of the just written data to allow the PLC time to accept changes.</dd></dl>
 <ul><li> Timeout of connection in milliseconds. Specifies the time interval during which the answer is expected. If there is zero waiting time the transport waiting time by default is used. Allows taking into account individual properties of the controller in the common network.</li>
 <li> Timeout of restore in seconds. Specifies the time interval after which the re-attempt of the request to previously inaccessible device is done.</li>
 <li> Request tries for the protocols RTU and ASCII. Indicates the number of attempts by the repetition of the request in case of incomplete or damaged answer.</li>

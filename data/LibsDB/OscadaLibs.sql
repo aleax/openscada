@@ -12,18 +12,18 @@ INSERT INTO ParamTemplLibs VALUES('base','Main library','Основна бібл
 
 Author: Roman Savochenko <roman@oscada.org>
 Founded: 2006
-Version: 1.2.1
+Version: 2.0.0
 License: GPLv2
 DOC: Libs_Main|Libs/Main','Бібліотеку створено для надання основних шаблонів опрацювання DAQ-джерел та похідних сервісів.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Засновано: 2006
-Версія: 1.2.1
+Версія: 2.0.0
 Ліцензія: GPLv2','tmplib_base','Основная библиотека','Библиотека создана для предоставления основных шаблонов обработки DAQ-источников и производных сервисов.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Основано: 2006
-Версия: 1.2.1
+Версия: 2.0.0
 Лицензия: GPLv2');
 INSERT INTO ParamTemplLibs VALUES('DevLib','Devices','Бібліотека пристроїв','The user protocol devices library created to provide access to industrial device''s data through network, like to common industrial automation devices and wide resources counters, with protocols simple enough to implement into the User Protocol module, using the presented complex protocols (ModBus, OPC_UA, HTTP) or directly on the internal like to Java language.
 
@@ -174,28 +174,28 @@ INSERT INTO flb_regEl_io VALUES('pidUnif','sp','Setpoint','Завдання',2,0
 INSERT INTO flb_regEl_io VALUES('pidUnif','max','Scale: maximum','Шкала: максимум',2,0,'100','',0,2,'Шкала: максимум','');
 INSERT INTO flb_regEl_io VALUES('pidUnif','min','Scale: minimum','Шкала: мінімум',2,0,'0','',0,3,'Шкала: минимум','');
 INSERT INTO flb_regEl_io VALUES('pidUnif','manIn','Manual input','Ручний ввід',2,0,'0','',0,4,'Ручной ввод','');
-INSERT INTO flb_regEl_io VALUES('pidUnif','out','Output (%)','Вихід (%)',2,2,'0','',0,5,'Выход (%)','');
-INSERT INTO flb_regEl_io VALUES('pidUnif','impQup','Impulse output up','Імп. вихід у гору',3,1,'0','',0,6,'Имп. выход вверх','');
-INSERT INTO flb_regEl_io VALUES('pidUnif','impQdwn','Impulse output down','Імп. вихід до низу',3,1,'0','',0,7,'Имп. выход вниз','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','out','Output, %','Вихід, %',2,2,'0','',0,5,'Выход, %','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','impQup','Impulse output up','Імпульсний вихід у гору',3,1,'0','',0,6,'Импульсный выход вверх','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','impQdwn','Impulse output down','Імпульсний вихід до низу',3,1,'0','',0,7,'Имп. выход вниз','');
 INSERT INTO flb_regEl_io VALUES('pidUnif','analog','Analog','Аналоговий',3,0,'1','',0,8,'Аналоговый','');
 INSERT INTO flb_regEl_io VALUES('pidUnif','auto','Automate','Автомат',3,0,'0','',0,9,'Автомат','');
 INSERT INTO flb_regEl_io VALUES('pidUnif','casc','Cascade','Каскад',3,0,'0','',0,10,'Каскад','');
 INSERT INTO flb_regEl_io VALUES('pidUnif','Kp','Gain','Kп',2,0,'1','',0,11,'Kп','');
-INSERT INTO flb_regEl_io VALUES('pidUnif','Ti','Ti (ms)','Tі (мс)',1,0,'1000','',0,12,'Tи (мс)','');
-INSERT INTO flb_regEl_io VALUES('pidUnif','Td','Td (ms)','Tд (мс)',1,0,'0','',0,14,'Tд (мс)','');
-INSERT INTO flb_regEl_io VALUES('pidUnif','TImpPer','T impulses period (ms)','T період імпульсів (мс)',1,0,'5000','',0,16,'T период импульса (мс)','');
-INSERT INTO flb_regEl_io VALUES('pidUnif','TImpMin','T minimal impulse (ms)','Мінімальна довжина імпульсу (мс)',1,0,'500','',0,17,'T минимальная длина импульса (мс)','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','Ti','Ti, milliseconds','Tі, мілісекунд',1,0,'1000','',0,12,'Tи, миллисекунд','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','Td','Td, milliseconds','Tд, мілісекунд',1,0,'0','',0,14,'Tд, миллисекунд','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','TImpPer','T impulses period, milliseconds','T період імпульсів, мілісекунд',1,0,'5000','',0,16,'T период импульса, миллисекунд','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','TImpMin','T minimal impulse, milliseconds','Мінімальна довжина імпульсу, мілісекунд',1,0,'500','',0,17,'T минимальная длина импульса, миллисекунд','');
 INSERT INTO flb_regEl_io VALUES('pidUnif','KImpRfact','Impulse rate factor','Рейтинг фактор імпульсів',2,0,'1','',0,18,'Рейтинг фактор импульса','');
-INSERT INTO flb_regEl_io VALUES('pidUnif','Hup','Upper output border (%)','Верхня границя виходу (%)',2,0,'100','',0,19,'Верхняя граница выхода (%)','');
-INSERT INTO flb_regEl_io VALUES('pidUnif','Hdwn','Lower output border (%)','Нижня границя виходу (%)',2,0,'0','',0,20,'Нижняя граница выхода (%)','');
-INSERT INTO flb_regEl_io VALUES('pidUnif','Zi','Insensitivity (%)','Нечутливість (%)',2,0,'0','',0,21,'Нечувствительность (%)','');
-INSERT INTO flb_regEl_io VALUES('pidUnif','K1','Coefficient of input 1','Коеф. входу 1',2,0,'0','',0,23,'Коэф. входа 1','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','Hup','Upper output border, %','Верхня границя виходу, %',2,0,'100','',0,19,'Верхняя граница выхода, %','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','Hdwn','Lower output border, %','Нижня границя виходу, %',2,0,'0','',0,20,'Нижняя граница выхода, %','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','Zi','Insensitivity, %','Нечутливість, %',2,0,'0','',0,21,'Нечувствительность, %','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','K1','Coefficient of input 1','Коефіцієнт входу 1',2,0,'0','',0,23,'Коэффициент входа 1','');
 INSERT INTO flb_regEl_io VALUES('pidUnif','in1','Input 1','Вхід 1',2,0,'0','',0,24,'Вход 1','');
-INSERT INTO flb_regEl_io VALUES('pidUnif','K2','Coefficient of input 2','Коеф. входу 2',2,0,'0','',0,25,'Коэф. входа 2','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','K2','Coefficient of input 2','Коефіцієнт входу 2',2,0,'0','',0,25,'Коэффициент входа 2','');
 INSERT INTO flb_regEl_io VALUES('pidUnif','in2','Input 2','Вхід 2',2,0,'0','',0,26,'Вход 2','');
-INSERT INTO flb_regEl_io VALUES('pidUnif','K3','Coefficient of input 3','Коеф. входу 3',2,0,'0','',0,27,'Коэф. входа 3','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','K3','Coefficient of input 3','Коефіцієнт входу 3',2,0,'0','',0,27,'Коэффициент входа 3','');
 INSERT INTO flb_regEl_io VALUES('pidUnif','in3','Input 3','Вхід 3',2,0,'0','',0,28,'Вход 3','');
-INSERT INTO flb_regEl_io VALUES('pidUnif','K4','Coefficient of input 4','Коеф. входу 4',2,0,'0','',0,29,'Коэф. входа 4','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','K4','Coefficient of input 4','Коефіцієнт входу 4',2,0,'0','',0,29,'Коэффициент входа 4','');
 INSERT INTO flb_regEl_io VALUES('pidUnif','in4','Input 4','Вхід 4',2,0,'0','',0,30,'Вход 4','');
 INSERT INTO flb_regEl_io VALUES('pidUnif','impAnOut','Analog position of impulse regulator','Аналогове положення імпульсного регулятора',2,0,'0','',0,31,'Аналоговое положение импульсного регулятора','');
 INSERT INTO flb_regEl_io VALUES('pidUnif','int','Integral accumulation','Накопичення інтегралу',2,1,'0','',1,38,'Накопление интеграла','');
@@ -208,36 +208,36 @@ INSERT INTO flb_regEl_io VALUES('pidUnifD','sp','Setpoint','Завдання',2,
 INSERT INTO flb_regEl_io VALUES('pidUnifD','max','Scale: maximum','Шкала: максимум',2,0,'100','',0,2,'Шкала: максимум','');
 INSERT INTO flb_regEl_io VALUES('pidUnifD','min','Scale: minimum','Шкала: мінімум',2,0,'0','',0,3,'Шкала: минимум','');
 INSERT INTO flb_regEl_io VALUES('pidUnifD','manIn','Manual input','Ручний ввід',2,0,'0','',0,4,'Ручной ввод','');
-INSERT INTO flb_regEl_io VALUES('pidUnifD','out','Output (%)','Вихід (%)',2,2,'0','',0,5,'Выход (%)','');
-INSERT INTO flb_regEl_io VALUES('pidUnifD','impQup','Impulse output up','Імп. вихід у гору',3,1,'0','',0,6,'Имп. выход вверх','');
-INSERT INTO flb_regEl_io VALUES('pidUnifD','impQdwn','Impulse output down','Імп. вихід до низу',3,1,'0','',0,7,'Имп. выход вниз','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','out','Output, %','Вихід, %',2,2,'0','',0,5,'Выход, %','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','impQup','Impulse output up','Імпульсний вихід у гору',3,1,'0','',0,6,'Импульсный выход вверх','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','impQdwn','Impulse output down','Імпульсний вихід до низу',3,1,'0','',0,7,'Имп. выход вниз','');
 INSERT INTO flb_regEl_io VALUES('pidUnifD','analog','Analog','Аналоговий',3,0,'1','',0,8,'Аналоговый','');
 INSERT INTO flb_regEl_io VALUES('pidUnifD','auto','Automat','Автомат',3,0,'0','',0,9,'Автомат','');
 INSERT INTO flb_regEl_io VALUES('pidUnifD','casc','Cascade','Каскад',3,0,'0','',0,10,'Каскад','');
 INSERT INTO flb_regEl_io VALUES('pidUnifD','Kp','Gain','Kп',2,0,'1','',0,11,'Kп','');
-INSERT INTO flb_regEl_io VALUES('pidUnifD','Ti','Ti (ms)','Tі (мс)',1,0,'1000','',0,12,'Tи (мс)','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','Ti','Ti, milliseconds','Tі, мілісекунд',1,0,'1000','',0,12,'Tи, миллисекунд','');
 INSERT INTO flb_regEl_io VALUES('pidUnifD','Kd','Gain differential','Кп диференціалу',2,0,'1','',0,13,'Кп производной','');
-INSERT INTO flb_regEl_io VALUES('pidUnifD','Td','Td (ms)','Tд (мс)',1,0,'0','',0,14,'Tд (мс)','');
-INSERT INTO flb_regEl_io VALUES('pidUnifD','Tzd','T differential lag (ms)','T фільтру диференціалу (мс)',1,0,'0','',0,15,'T задержки дифференциров. (мс)','');
-INSERT INTO flb_regEl_io VALUES('pidUnifD','TImpPer','T impulses period (ms)','T період імпульсів (мс)',1,0,'5000','',0,16,'T период импульса (мс)','');
-INSERT INTO flb_regEl_io VALUES('pidUnifD','TImpMin','T minimal impulse (ms)','Мінімальна довжина імпульсу (мс)',1,0,'500','',0,17,'T минимальная длина импульса (мс)','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','Td','Td, milliseconds','Tд, мілісекунд',1,0,'0','',0,14,'Tд, миллисекунд','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','Tzd','T differential lag, milliseconds','T фільтру диференціалу, мілісекунд',1,0,'0','',0,15,'T задержки дифференциала, миллисекунд','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','TImpPer','T impulses period, milliseconds','T період імпульсів, мілісекунд',1,0,'5000','',0,16,'T период импульса, миллисекунд','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','TImpMin','T minimal impulse, milliseconds','Мінімальна довжина імпульсу, мілісекунд',1,0,'500','',0,17,'T минимальная длина импульса, миллисекунд','');
 INSERT INTO flb_regEl_io VALUES('pidUnifD','KImpRfact','Impulse rate factor','Рейтинг фактор імпульсів',2,0,'1','',0,18,'Рейтинг фактор импульса','');
-INSERT INTO flb_regEl_io VALUES('pidUnifD','Hup','Upper output border (%)','Верхня границя виходу (%)',2,0,'100','',0,19,'Верхняя граница выхода (%)','');
-INSERT INTO flb_regEl_io VALUES('pidUnifD','Hdwn','Lower output border (%)','Нижня границя виходу (%)',2,0,'0','',0,20,'Нижняя граница выхода (%)','');
-INSERT INTO flb_regEl_io VALUES('pidUnifD','Zi','Insensitivity (%)','Нечутливість (%)',2,0,'0','',0,21,'Нечувствительность (%)','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','Hup','Upper output border, %','Верхня границя виходу, %',2,0,'100','',0,19,'Верхняя граница выхода, %','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','Hdwn','Lower output border, %','Нижня границя виходу, %',2,0,'0','',0,20,'Нижняя граница выхода, %','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','Zi','Insensitivity, %','Нечутливість, %',2,0,'0','',0,21,'Нечувствительность, %','');
 INSERT INTO flb_regEl_io VALUES('pidUnifD','followSp','Follow to variable by setpoint into manual','Відслідковувати завданням за змінною у ручному',3,0,'1','',0,22,'Следить заданием за переменной в ручном','');
-INSERT INTO flb_regEl_io VALUES('pidUnifD','K1','Coefficient of input 1','Коеф. входу 1',2,0,'0','',0,23,'Коэф. входа 1','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','K1','Coefficient of input 1','Коефіцієнт входу 1',2,0,'0','',0,23,'Коэффициент входа 1','');
 INSERT INTO flb_regEl_io VALUES('pidUnifD','in1','Input 1','Вхід 1',2,0,'0','',0,24,'Вход 1','');
-INSERT INTO flb_regEl_io VALUES('pidUnifD','K2','Coefficient of input 2','Коеф. входу 2',2,0,'0','',0,25,'Коэф. входа 2','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','K2','Coefficient of input 2','Коефіцієнт входу 2',2,0,'0','',0,25,'Коэффициент входа 2','');
 INSERT INTO flb_regEl_io VALUES('pidUnifD','in2','Input 2','Вхід 2',2,0,'0','',0,26,'Вход 2','');
-INSERT INTO flb_regEl_io VALUES('pidUnifD','K3','Coefficient of input 3','Коеф. входу 3',2,0,'0','',0,27,'Коэф. входа 3','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','K3','Coefficient of input 3','Коефіцієнт входу 3',2,0,'0','',0,27,'Коэффициент входа 3','');
 INSERT INTO flb_regEl_io VALUES('pidUnifD','in3','Input 3','Вхід 3',2,0,'0','',0,28,'Вход 3','');
-INSERT INTO flb_regEl_io VALUES('pidUnifD','K4','Coefficient of input 4','Коеф. входу 4',2,0,'0','',0,29,'Коэф. входа 4','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','K4','Coefficient of input 4','Коефіцієнт входу 4',2,0,'0','',0,29,'Коэффициент входа 4','');
 INSERT INTO flb_regEl_io VALUES('pidUnifD','in4','Input 4','Вхід 4',2,0,'0','',0,30,'Вход 4','');
 INSERT INTO flb_regEl_io VALUES('pidUnifD','impAnOut','Real analog position of impulse regulator, [0...100], -1 - disable','Аналогове положення імпульсного регулятора',2,0,'-1','',0,33,'Аналоговое положение импульсного регулятора или ск','');
 INSERT INTO flb_regEl_io VALUES('pidUnif','Kd','Gain differential','Кп диференціалу',2,0,'1','',0,13,'Кп производной','');
 INSERT INTO flb_regEl_io VALUES('pidUnifD','impAnImit','Full stroke time for analog position imitation, s','Імітація аналогового положення',2,0,'-1','',0,34,'Имитация аналогового положения','');
-INSERT INTO flb_regEl_io VALUES('pidUnifD','impQupTm','Imp. output up lag for GUI','Імп. вихід вгору утримано для GUI',3,1,'0','',0,35,'Имп. выход вверх удерж. для GUI','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','impQupTm','Imp. output up lag for GUI','Імп. вихід вгору утримано для GUI',3,1,'0','',0,35,'Импульсный выход вверх удерж. для GUI','');
 INSERT INTO flb_regEl_io VALUES('pidUnifD','impQdwnTm','Imp. output down lag for GUI','Імп. вихід додолу утримано для GUI',3,1,'0','',0,36,'Имп. выход вниз удерж. для GUI','');
 INSERT INTO flb_regEl_io VALUES('pidUnifD','f_frq','Calculation frequency, Hz','Частота обчислення, Гц',2,0,'1','',1,37,'Частота вычисления, Гц','');
 INSERT INTO flb_regEl_io VALUES('pidUnifD','f_start','First start','Перший запуск',3,0,'0','',1,38,'Первый запуск','');
@@ -247,10 +247,10 @@ INSERT INTO flb_regEl_io VALUES('pidUnifD','perLag','New impulse generation time
 INSERT INTO flb_regEl_io VALUES('pidUnifD','integ','Integral accumulation','Накопичення інтегралу',2,1,'0','',1,42,'Накопление интеграла','');
 INSERT INTO flb_regEl_io VALUES('pidUnifD','difer','Differential accumulation','Накопичення диференціалу',2,1,'0','',1,43,'Накопление производной','');
 INSERT INTO flb_regEl_io VALUES('pidUnifD','dlag','Differential lag accumulation','Фільтр диференціалу',2,1,'0','',1,44,'Накопление задержки производной','');
-INSERT INTO flb_regEl_io VALUES('pidUnif','Tzd','T differential lag (ms)','T фільтру диференціалу (мс)',1,0,'0','',0,15,'T задержки дифференциров. (мс)','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','Tzd','T differential lag, milliseconds','T фільтру диференціалу, мілісекунд',1,0,'0','',0,15,'T задержки дифференциала, миллисекунд','');
 INSERT INTO flb_regEl_io VALUES('pidUnif','followSp','Follow to variable by setpoint into manual','Відслідковувати завданням за змінною у ручному',3,0,'1','',0,22,'Следить заданием за переменной в ручном','');
 INSERT INTO flb_regEl_io VALUES('pidUnif','impAnImit','Analog position imitation','Імітація аналогового положення',3,0,'0','',0,32,'Имитация аналогового положения','');
-INSERT INTO flb_regEl_io VALUES('pidUnif','impQupTm','Imp. output up lag for GUI',' Імп. вихід вгору утримано для GUI',1,1,'0','',0,33,'Имп. выход вверх удерж. для GUI','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','impQupTm','Imp. output up lag for GUI',' Імп. вихід вгору утримано для GUI',1,1,'0','',0,33,'Импульсный выход вверх удерж. для GUI','');
 INSERT INTO flb_regEl_io VALUES('pidUnif','impQdwnTm','Imp. output down lag for GUI','Імп. вихід додолу утримано для GUI',1,1,'0','',0,34,'Имп. выход вниз удерж. для GUI','');
 INSERT INTO flb_regEl_io VALUES('pidUnif','f_frq','Calculation frequency, Hz','Частота обчислення, Гц',1,0,'1','',1,35,'Частота вычисления, Гц','');
 INSERT INTO flb_regEl_io VALUES('pidUnif','f_start','First start','Перший запуск',3,0,'0','',1,36,'Первый запуск','');
@@ -260,36 +260,36 @@ INSERT INTO flb_regEl_io VALUES('pidImp','sp','Setpoint','Завдання',2,0,
 INSERT INTO flb_regEl_io VALUES('pidImp','max','Scale: maximum','Шкала: максимум',2,0,'100','',0,2,'Шкала: максимум','');
 INSERT INTO flb_regEl_io VALUES('pidImp','min','Scale: minimum','Шкала: мінімум',2,0,'0','',0,3,'Шкала: минимум','');
 INSERT INTO flb_regEl_io VALUES('pidImp','manIn','Manual input','Ручний ввід',2,0,'0','',0,4,'Ручной ввод','');
-INSERT INTO flb_regEl_io VALUES('pidImp','out','Output (%)','Вихід (%)',2,2,'0','',0,5,'Выход (%)','');
+INSERT INTO flb_regEl_io VALUES('pidImp','out','Output, %','Вихід, %',2,2,'0','',0,5,'Выход, %','');
 INSERT INTO flb_regEl_io VALUES('pidImp','outPID','PID output','Вихід ПІД',2,1,'0','',0,6,'Выход ПИД','');
-INSERT INTO flb_regEl_io VALUES('pidImp','impQup','Impulse output up','Імп. вихід у гору',3,1,'0','',0,7,'Имп. выход вверх','');
-INSERT INTO flb_regEl_io VALUES('pidImp','impQdwn','Impulse output down','Імп. вихід до низу',3,1,'0','',0,8,'Имп. выход вниз','');
+INSERT INTO flb_regEl_io VALUES('pidImp','impQup','Impulse output up','Імпульсний вихід у гору',3,1,'0','',0,7,'Импульсный выход вверх','');
+INSERT INTO flb_regEl_io VALUES('pidImp','impQdwn','Impulse output down','Імпульсний вихід до низу',3,1,'0','',0,8,'Имп. выход вниз','');
 INSERT INTO flb_regEl_io VALUES('pidImp','auto','Automate','Автомат',3,0,'0','',0,9,'Автомат','');
 INSERT INTO flb_regEl_io VALUES('pidImp','casc','Cascade','Каскад',3,0,'0','',0,10,'Каскад','');
 INSERT INTO flb_regEl_io VALUES('pidImp','Kp','Gain','Kп',2,0,'1','',0,11,'Kп','');
 INSERT INTO flb_regEl_io VALUES('pidImp','Ki','Gain integration','Кп інтегралу',2,0,'1','',0,12,'Кп интеграла','');
-INSERT INTO flb_regEl_io VALUES('pidImp','Ti','Ti (ms)','Tі (мс)',1,0,'1000','',0,13,'Tи (мс)','');
+INSERT INTO flb_regEl_io VALUES('pidImp','Ti','Ti, milliseconds','Tі, мілісекунд',1,0,'1000','',0,13,'Tи, миллисекунд','');
 INSERT INTO flb_regEl_io VALUES('pidImp','Kd','Gain differential','Кп диференціалу',2,0,'1','',0,14,'Кп производной','');
-INSERT INTO flb_regEl_io VALUES('pidImp','Td','Td (ms)','Tд (мс)',1,0,'0','',0,15,'Tд (мс)','');
-INSERT INTO flb_regEl_io VALUES('pidImp','Tzd','T differential lag (ms)','T фільтру диференціалу (мс)',1,0,'0','',0,16,'T задержки дифференциров. (мс)','');
-INSERT INTO flb_regEl_io VALUES('pidImp','TImpPer','T impulses period (ms)','T період імпульсів (мс)',1,0,'5000','',0,17,'T период импульса (мс)','');
-INSERT INTO flb_regEl_io VALUES('pidImp','TImpMin','T minimal impulse (ms)','Мінімальна довжина імпульсу (мс)',1,0,'500','',0,18,'T минимальная длина импульса (мс)','');
+INSERT INTO flb_regEl_io VALUES('pidImp','Td','Td, milliseconds','Tд, мілісекунд',1,0,'0','',0,15,'Tд, миллисекунд','');
+INSERT INTO flb_regEl_io VALUES('pidImp','Tzd','T differential lag, milliseconds','T фільтру диференціалу, мілісекунд',1,0,'0','',0,16,'T задержки дифференциала, миллисекунд','');
+INSERT INTO flb_regEl_io VALUES('pidImp','TImpPer','T impulses period, milliseconds','T період імпульсів, мілісекунд',1,0,'5000','',0,17,'T период импульса, миллисекунд','');
+INSERT INTO flb_regEl_io VALUES('pidImp','TImpMin','T minimal impulse, milliseconds','Мінімальна довжина імпульсу, мілісекунд',1,0,'500','',0,18,'T минимальная длина импульса, миллисекунд','');
 INSERT INTO flb_regEl_io VALUES('pidImp','KImpRfact','Impulse rate factor','Рейтинг фактор імпульсів',2,0,'1','',0,19,'Рейтинг фактор импульса','');
-INSERT INTO flb_regEl_io VALUES('pidImp','Hup','Upper output border (%)','Верхня границя виходу (%)',2,0,'100','',0,20,'Верхняя граница выхода (%)','');
-INSERT INTO flb_regEl_io VALUES('pidImp','Hdwn','Lower output border (%)','Нижня границя виходу (%)',2,0,'0','',0,21,'Нижняя граница выхода (%)','');
-INSERT INTO flb_regEl_io VALUES('pidImp','Zi','Insensitivity (%)','Нечутливість (%)',2,0,'0','',0,22,'Нечувствительность (%)','');
+INSERT INTO flb_regEl_io VALUES('pidImp','Hup','Upper output border, %','Верхня границя виходу, %',2,0,'100','',0,20,'Верхняя граница выхода, %','');
+INSERT INTO flb_regEl_io VALUES('pidImp','Hdwn','Lower output border, %','Нижня границя виходу, %',2,0,'0','',0,21,'Нижняя граница выхода, %','');
+INSERT INTO flb_regEl_io VALUES('pidImp','Zi','Insensitivity, %','Нечутливість, %',2,0,'0','',0,22,'Нечувствительность, %','');
 INSERT INTO flb_regEl_io VALUES('pidImp','followSp','Follow to variable by setpoint into manual','Відслідковувати завданням за змінною у ручному',3,0,'1','',0,23,'Следить заданием за переменной в ручном','');
-INSERT INTO flb_regEl_io VALUES('pidImp','K1','Coefficient of input 1','Коеф. входу 1',2,0,'0','',0,24,'Коэф. входа 1','');
+INSERT INTO flb_regEl_io VALUES('pidImp','K1','Coefficient of input 1','Коефіцієнт входу 1',2,0,'0','',0,24,'Коэффициент входа 1','');
 INSERT INTO flb_regEl_io VALUES('pidImp','in1','Input 1','Вхід 1',2,0,'0','',0,25,'Вход 1','');
-INSERT INTO flb_regEl_io VALUES('pidImp','K2','Coefficient of input 2','Коеф. входу 2',2,0,'0','',0,26,'Коэф. входа 2','');
+INSERT INTO flb_regEl_io VALUES('pidImp','K2','Coefficient of input 2','Коефіцієнт входу 2',2,0,'0','',0,26,'Коэффициент входа 2','');
 INSERT INTO flb_regEl_io VALUES('pidImp','in2','Input 2','Вхід 2',2,0,'0','',0,27,'Вход 2','');
-INSERT INTO flb_regEl_io VALUES('pidImp','K3','Coefficient of input 3','Коеф. входу 3',2,0,'0','',0,28,'Коэф. входа 3','');
+INSERT INTO flb_regEl_io VALUES('pidImp','K3','Coefficient of input 3','Коефіцієнт входу 3',2,0,'0','',0,28,'Коэффициент входа 3','');
 INSERT INTO flb_regEl_io VALUES('pidImp','in3','Input 3','Вхід 3',2,0,'0','',0,29,'Вход 3','');
-INSERT INTO flb_regEl_io VALUES('pidImp','K4','Coefficient of input 4','Коеф. входу 4',2,0,'0','',0,30,'Коэф. входа 4','');
+INSERT INTO flb_regEl_io VALUES('pidImp','K4','Coefficient of input 4','Коефіцієнт входу 4',2,0,'0','',0,30,'Коэффициент входа 4','');
 INSERT INTO flb_regEl_io VALUES('pidImp','in4','Input 4','Вхід 4',2,0,'0','',0,31,'Вход 4','');
 INSERT INTO flb_regEl_io VALUES('pidImp','impAnOut','Analog position of impulse regulator','Аналогове положення імпульсного регулятора',2,0,'0','',0,32,'Аналоговое положение импульсного регулятора или ск','');
 INSERT INTO flb_regEl_io VALUES('pidImp','impAnImit','Analog position imitation','Імітація аналогового положення',3,0,'0','',0,33,'Имитация аналогового положения','');
-INSERT INTO flb_regEl_io VALUES('pidImp','impQupTm','Imp. output up lag for GUI','Імп. вихід вгору утримано для GUI',1,1,'0','',0,34,'Имп. выход вверх удерж. для GUI','');
+INSERT INTO flb_regEl_io VALUES('pidImp','impQupTm','Imp. output up lag for GUI','Імп. вихід вгору утримано для GUI',1,1,'0','',0,34,'Импульсный выход вверх удерж. для GUI','');
 INSERT INTO flb_regEl_io VALUES('pidImp','impQdwnTm','Imp. output down lag for GUI','Імп. вихід додолу утримано для GUI',1,1,'0','',0,35,'Имп. выход вниз удерж. для GUI','');
 INSERT INTO flb_regEl_io VALUES('pidImp','f_frq','Calculation frequency, Hz','Частота обчислення, Гц',2,0,'1','',1,36,'Частота вычисления, Гц','');
 INSERT INTO flb_regEl_io VALUES('pidImp','f_start','First start','Перший запуск',3,0,'0','',1,37,'Первый запуск','');
@@ -434,6 +434,7 @@ Modules/FLibSYS:en,uk,ru:Modules/FLibSYS.html
 Modules/SystemTests:en,uk,ru:Modules/SystemTests.html
 Modules/FLibMath:en,uk,ru:Modules/FLibMath.html
 Modules/FLibComplex1:en,uk,ru:Modules/FLibComplex1.html
+Libs/Main:en,uk:Libs_Main.html
 Libs/Technological_apparatuses:en,uk,ru:Libs_Technological_apparatuses.html',0,3,'','','','');
 INSERT INTO lib_servProc_io VALUES('docOffLine','pagesCur','Current pages list of "{wiki}:{langs}:{dest}", for empty here used "pages"',0,4,'',0,4,'','','','');
 INSERT INTO lib_servProc_io VALUES('docOffLine','res','Result',0,1,'',0,0,'','','','');
@@ -1466,17 +1467,17 @@ INSERT INTO tmplib_base_io VALUES('manInUnif','ed','Dimension',0,32,'',3,'Оди
 INSERT INTO tmplib_base_io VALUES('manInUnif','min','Scale: minimum',2,32,'0',4,'Шкала: мінімум','','Шкала: минимум','');
 INSERT INTO tmplib_base_io VALUES('manInUnif','max','Scale: maximum',2,32,'100',5,'Шкала: максимум','','Шкала: максимум','');
 INSERT INTO tmplib_base_io VALUES('manInUnif','scSqr','Scale: square',3,0,'0',6,'Шкала: квадратична','','Шкала: квадратичная','');
-INSERT INTO tmplib_base_io VALUES('manInUnif','aMin','Border down alarm',2,32,'0',8,'Границя нижня аварійна','','Граница нижняя аварийная','');
-INSERT INTO tmplib_base_io VALUES('manInUnif','aMax','Border up alarm',2,32,'0',9,'Границя верхня аварійна','','Граница верхняя аварийная','');
-INSERT INTO tmplib_base_io VALUES('manInUnif','wMin','Border down warning',2,32,'0',10,'Границя нижня попереджув.','','Граница нижняя предупр.','');
-INSERT INTO tmplib_base_io VALUES('manInUnif','wMax','Border up warning',2,32,'0',11,'Границя верхня попереджув.','','Граница верхняя предупр.','');
-INSERT INTO tmplib_base_io VALUES('manInUnif','speed','Motion speed (%/cycle)',2,32,'0',13,'Швидкість зміни (%/цикл)','','Скорость изменения (%/цикл)','');
-INSERT INTO tmplib_base_io VALUES('manInUnif','Tf','Filter time, seconds',2,32,'0',16,'Час фільтру, секунд','','Время фильтрации, секунд','');
-INSERT INTO tmplib_base_io VALUES('manInUnif','iAdd','Input addon',2,64,'0',17,'Додаток до входу','','Дополнение ко входу','');
-INSERT INTO tmplib_base_io VALUES('manInUnif','iMult','Input multiplication',2,64,'1',18,'Множник входу','','Множитель входуа','');
-INSERT INTO tmplib_base_io VALUES('manInUnif','plcMin','Minimum module scale',2,64,'0',19,'Мінімум шкали модуля','','Минимум шкалы модуля','');
-INSERT INTO tmplib_base_io VALUES('manInUnif','plcMax','Maximum module scale',2,64,'0',20,'Максимум шкали модуля','','Максимум шкалы модуля','');
-INSERT INTO tmplib_base_io VALUES('manInUnif','plcExcess','Allowed scale exceeding, %',2,64,'0',21,'Дозволене перевищення шкали, %','','Допустимое превышение шкалы модуля, %','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','aMin','Border down alarm',2,32,'0',9,'Границя нижня аварійна','','Граница нижняя аварийная','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','aMax','Border up alarm',2,32,'0',10,'Границя верхня аварійна','','Граница верхняя аварийная','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','wMin','Border down warning',2,32,'0',11,'Границя нижня попереджув.','','Граница нижняя предупр.','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','wMax','Border up warning',2,32,'0',12,'Границя верхня попереджув.','','Граница верхняя предупр.','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','speed','Motion speed, %/cycle',2,32,'0',14,'Швидкість зміни, %/цикл','','Скорость изменения, %/цикл','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','Tf','Filter time, seconds',2,32,'0',17,'Час фільтру, секунд','','Время фильтрации, секунд','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','iAdd','Input addition',2,64,'0',18,'Додаток до входу','','Дополнение ко входу','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','iMult','Input multiplication',2,64,'1',19,'Множник входу','','Множитель входуа','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','plcMin','Minimum module scale',2,64,'0',20,'Мінімум шкали модуля','','Минимум шкалы модуля','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','plcMax','Maximum module scale',2,64,'0',21,'Максимум шкали модуля','','Максимум шкалы модуля','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','plcExcess','Allowed scale exceeding, %',2,64,'0',22,'Дозволене перевищення шкали, %','','Допустимое превышение шкалы модуля, %','');
 INSERT INTO tmplib_base_io VALUES('anUnif','in','Input',2,128,'Input|var',0,'Вхід','Вхід|var','Вход','Вход|var');
 INSERT INTO tmplib_base_io VALUES('anUnif','var','Variable',2,16,'0',2,'Змінна','','Переменная','');
 INSERT INTO tmplib_base_io VALUES('anUnif','ed','Dimension',0,32,'',3,'Одиниця виміру','','Единица измерения','');
@@ -1487,8 +1488,8 @@ INSERT INTO tmplib_base_io VALUES('anUnif','aMin','Border down alarm',2,32,'0',1
 INSERT INTO tmplib_base_io VALUES('anUnif','aMax','Border up alarm',2,32,'0',12,'Границя верхня аварійна','','Граница верхняя аварийная','');
 INSERT INTO tmplib_base_io VALUES('anUnif','wMin','Border down warning',2,32,'0',13,'Границя нижня попереджув.','','Граница нижняя предупр.','');
 INSERT INTO tmplib_base_io VALUES('anUnif','wMax','Border up warning',2,32,'0',14,'Границя верхня попереджув.','','Граница верхняя предупр.','');
-INSERT INTO tmplib_base_io VALUES('anUnif','speed','Motion speed (%/cycle)',2,32,'0',16,'Швидкість зміни (%/цикл)','','Скорость изменения (%/цикл)','');
-INSERT INTO tmplib_base_io VALUES('anUnif','prec','Precision (signs)',1,32,'2',17,'Точність (знаків)','','Точность (знаков)','');
+INSERT INTO tmplib_base_io VALUES('anUnif','speed','Motion speed, %/cycle',2,32,'0',16,'Швидкість зміни, %/цикл','','Скорость изменения, %/цикл','');
+INSERT INTO tmplib_base_io VALUES('anUnif','prec','Precision, signs',1,32,'2',17,'Точність, знаків','','Точность, знаков','');
 INSERT INTO tmplib_base_io VALUES('anUnif','Tf','Filter time, seconds',2,32,'0',19,'Час фільтру, секунд','','Время фильтрации, секунд','');
 INSERT INTO tmplib_base_io VALUES('anUnif','iAdd','Input addition',2,64,'0',20,'Додаток до входу','','Дополнение ко входу','');
 INSERT INTO tmplib_base_io VALUES('anUnif','iMult','Input multiplication',2,64,'1',21,'Множник входу','','Множитель входа','');
@@ -1508,140 +1509,138 @@ INSERT INTO tmplib_base_io VALUES('digitBlockUnif','w_tm','Process command count
 INSERT INTO tmplib_base_io VALUES('pidUnifImp','in','Input',2,128,'Signal|in',0,'Вхід','','Вход','Signal|in');
 INSERT INTO tmplib_base_io VALUES('pidUnifImp','sp','Setpoint',2,160,'PID|sp',1,'Завдання','ПІД|sp','Задание','ПИД|sp');
 INSERT INTO tmplib_base_io VALUES('pidUnifImp','var','Variable',2,16,'0',2,'Змінна','','Переменная','');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','manIn','Manual input (%)',2,160,'PID|manIn',3,'Ручний ввід (%)','ПІД|manIn','Ручной ввод (%)','ПИД|manIn');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','out','Output (%)',2,144,'PID|out',4,'Вихід (%)','ПІД|out','Выход (%)','ПИД|out');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','impQup','Impulse output up',3,144,'PID|impQupTm',5,'Імп. вихід у гору','ПІД|impQupTm','Имп. выход вверх','ПИД|impQupTm');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','impQdwn','Impulse output down',3,144,'PID|impQdwnTm',6,'Імп. вихід до низу','ПІД|impQdwnTm','Имп. выход вниз','ПИД|impQdwnTm');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','auto','Mode (automate)',3,160,'PID|auto',7,'Режим (автомат)','ПІД|auto','Режим (автомат)','ПИД|auto');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','analog','Analog',3,144,'PID|analog',8,'Аналоговий','ПІД|analog','Аналоговый','ПИД|analog');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','manIn','Manual input, %',2,160,'PID|manIn',3,'Ручний ввід, %','ПІД|manIn','Ручной ввод, %','ПИД|manIn');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','out','Output, %',2,144,'PID|out',4,'Вихід, %','ПІД|out','Выход, %','ПИД|out');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','impQup','Impulse output up',3,144,'PID|impQupTm',5,'Імпульсний вихід у гору','ПІД|impQupTm','Импульсный выход вверх','ПИД|impQupTm');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','impQdwn','Impulse output down',3,144,'PID|impQdwnTm',6,'Імпульсний вихід до низу','ПІД|impQdwnTm','Имп. выход вниз','ПИД|impQdwnTm');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','auto','Mode: automate',3,160,'PID|auto',7,'Режим: автомат','ПІД|auto','Режим: автомат','ПИД|auto');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','analog','Mode: analog',3,144,'PID|analog',8,'Режим: аналоговий','ПІД|analog','Режим: аналоговый','ПИД|analog');
 INSERT INTO tmplib_base_io VALUES('pidUnifImp','ed','Dimension',0,32,'',9,'Одиниця виміру','','Единица измерения','');
 INSERT INTO tmplib_base_io VALUES('pidUnifImp','min','Scale: minimum',2,160,'PID|min',10,'Шкала: мінімум','ПІД|min','Шкала: минимум','ПИД|min');
 INSERT INTO tmplib_base_io VALUES('pidUnifImp','max','Scale: maximum',2,160,'PID|max',11,'Шкала: максимум','ПІД|max','Шкала: максимум','ПИД|max');
 INSERT INTO tmplib_base_io VALUES('pidUnifImp','scSqr','Scale: square',3,32,'0',12,'Шкала: квадратична','','Шкала: квадратичная','');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','aMin','Border down alarm',2,32,'0',13,'Границя нижня ав.','','Граница нижняя ав.','');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','aMax','Border up alarm',2,32,'0',14,'Границя верхня аварійна','','Граница верхняя ав.','');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','wMin','Border down warning',2,32,'0',15,'Границя нижня попереджув.','','Граница нижняя пред.','');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','wMax','Border up warning',2,32,'0',16,'Границя верхня попереджув.','','Граница верхняя пред.','');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','HystBnd','Hysteresis of boders violation',2,32,'0',17,'Гістерезис порушень границь','','Гистерезиз наруш. границ','');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','speed','Motion speed (%/cycle)',2,32,'0',18,'Швидкість зміни (%/цикл)','','Скорость изменения (%/цикл)','');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','prec','Precision (signs)',1,32,'2',19,'Точність (знаків)','','Точность (знаков)','');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','H','Border up warning violation',3,17,'0',20,'Порушення верхньої попереджув. границі','','Нарушение верхней предупредительной границы','');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','L','Border down warning violation',3,17,'0',21,'Порушення нижньої попереджув. границі','','Нарушение нижней предупредительной границы','');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','HH','Border up alarm violation',3,17,'0',22,'Порушення верхньої аварійної границі','','Нарушение верхней аварийной границы','');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','LL','Border down alarm violation',3,17,'0',23,'Порушення нижньої аварійної границі','','Нарушение нижней аварийной границы','');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','EVAL','Value is eval',3,17,'0',24,'Значення невірогідне','','Значение недостоверно','');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','Tf','Filter time (ms)',2,32,'0',25,'Час фільтру (мс)','','Время фильтрации (мс)','');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','Kp','Gain',2,160,'PID|Kp',26,'Kп','ПІД|Kp','Kп','ПИД|Kp');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','Ki','Gain integration',2,160,'PID|Ki',27,'Кп інтегралу','ПІД|Ki','Кп интеграла','ПИД|Ki');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','Ti','Ti (ms)',1,160,'PID|Ti',28,'Tі (мс)','ПІД|Ti','Tи (мс)','ПИД|Ti');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','Kd','Gain differential',2,160,'PID|Kd',29,'Кп диференціалу','ПІД|Kd','Кп производной','ПИД|Kd');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','Td','Td (ms)',1,160,'PID|Td',30,'Tд (мс)','ПІД|Td','Tд (мс)','ПИД|Td');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','Tzd','T differential lag (ms)',1,160,'PID|Tzd',31,'T фільтру диференціалу (мс)','ПІД|Tzd','T задержки дифференциров. (мс)','ПИД|Tzd');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','TImpPer','T impulses period (ms)',1,160,'PID|TImpPer',32,'T період імпульсів (мс)','ПІД|TImpPer','T период импульса (мс)','ПИД|TImpPer');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','TImpMin','T minimal impulse (ms)',1,160,'PID|TImpMin',33,'Мінімальна довжина імпульсу (мс)','ПІД|TImpMin','T минимальная длина импульса (мс)','ПИД|TImpMin');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','KImpRfact','Impulse rate factor',2,160,'PID|KImpRfact',34,'Рейтинг фактор імпульсів','ПІД|KImpRfact','Рейтинг фактор импульса','ПИД|KImpRfact');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','Zi','Insensitivity (%)',2,160,'PID|Zi',35,'Нечутливість (%)','ПІД|Zi','Нечувствительность (%)','ПИД|Zi');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','Hup','Upper output border (%)',2,160,'PID|Hup',36,'Верхня границя виходу (%)','ПІД|Hup','Верхняя граница выхода (%)','ПИД|Hup');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','Hdwn','Lower output border (%)',2,160,'PID|Hdwn',37,'Нижня границя виходу (%)','ПІД|Hdwn','Нижняя граница выхода (%)','ПИД|Hdwn');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','K1','Coefficient of input 1',2,160,'PID|K1',38,'Коеф. входу 1','ПІД|K1','Коэф. входа 1','ПИД|K1');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','K2','Coefficient of input 2',2,160,'PID|K2',39,'Коеф. входу 2','ПІД|K2','Коэф. входа 2','ПИД|K2');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','K3','Coefficient of input 3',2,160,'PID|K3',40,'Коеф. входу 3','ПІД|K3','Коэф. входа 3','ПИД|K3');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','K4','Coefficient of input 4',2,160,'PID|K4',41,'Коеф. входу 4','ПІД|K4','Коэф. входа 4','ПИД|K4');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','dmsk','Maximum value on eval (Max/Min)',2,64,'0',42,'Макс. парам. при недостовірності (Макс/Мин)','','Макс. парам. при недост. (Мин/Макс)','');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','iAdd','Input addon',2,64,'0',43,'Додаток до входу','','Дополнение ко входу','');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','iMult','Input multiplication',2,64,'1',44,'Множник входу','','Множитель ко входу','');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','plcMin','Minimum module scale',2,64,'1',45,'Мінімум шкали модуля','','Минимум шкалы модуля','');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','plcMax','Maximum module scale',2,64,'5',46,'Максимум шкали модуля','','Максимум шкалы модуля','');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','plcExcess','Allowed scale exceeding (%)',2,64,'0',47,'Дозволене перевищення шкали (%)','','Допустимое превышение шкалы модуля (%)','');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','plcImit','PLC imitation',3,64,'0',48,'Імітація ПЛК','','Имитация ПЛК','');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','plcImitIn','PLC imitation input',2,128,'Imitation|var',49,'Вхід імітації ПЛК','Імітація|var','Вход имитации ПЛК','Имитация|var');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','aMin','Border down alarm',2,32,'0',15,'Границя нижня аварійна','','Граница нижняя аварийная','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','aMax','Border up alarm',2,32,'0',16,'Границя верхня аварійна','','Граница верхняя аварийная','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','wMin','Border down warning',2,32,'0',17,'Границя нижня попереджув.','','Граница нижняя предупр.','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','wMax','Border up warning',2,32,'0',18,'Границя верхня попереджув.','','Граница верхняя предупр.','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','HystBnd','Hysteresis of borders violation',2,32,'0',19,'Гістерезис порушень границь','','Гистерезиз наруш. границ','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','speed','Motion speed, %/cycle',2,32,'0',20,'Швидкість зміни, %/цикл','','Скорость изменения, %/цикл','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','prec','Precision, signs',1,32,'2',21,'Точність, знаків','','Точность, знаков','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','H','Border up warning violation',3,17,'0',23,'Порушення верхньої попереджув. границі','','Нарушение верхней предупредительной границы','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','L','Border down warning violation',3,17,'0',24,'Порушення нижньої попереджув. границі','','Нарушение нижней предупредительной границы','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','HH','Border up alarm violation',3,17,'0',25,'Порушення верхньої аварійної границі','','Нарушение верхней аварийной границы','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','LL','Border down alarm violation',3,17,'0',26,'Порушення нижньої аварійної границі','','Нарушение нижней аварийной границы','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','EVAL','Value is error',3,17,'0',27,'Значення помилкове','','Значение ошибочное','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','Tf','Filter time, milliseconds',2,32,'0',28,'Час фільтру, мілісекунд','','Время фильтра, миллисекунд','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','Kp','Gain',2,160,'PID|Kp',29,'Kп','ПІД|Kp','Kп','ПИД|Kp');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','Ki','Gain integration',2,160,'PID|Ki',30,'Кп інтегралу','ПІД|Ki','Кп интеграла','ПИД|Ki');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','Ti','Ti, milliseconds',1,160,'PID|Ti',31,'Tі, мілісекунд','ПІД|Ti','Tи, миллисекунд','ПИД|Ti');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','Kd','Gain differential',2,160,'PID|Kd',32,'Кп диференціалу','ПІД|Kd','Кп производной','ПИД|Kd');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','Td','Td, milliseconds',1,160,'PID|Td',33,'Tд, мілісекунд','ПІД|Td','Tд, миллисекунд','ПИД|Td');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','Tzd','T differential lag, milliseconds',1,160,'PID|Tzd',34,'T фільтру диференціалу, мілісекунд','ПІД|Tzd','T задержки дифференциала, миллисекунд','ПИД|Tzd');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','TImpPer','T impulses period, milliseconds',1,160,'PID|TImpPer',35,'T період імпульсів, мілісекунд','ПІД|TImpPer','T период импульса, миллисекунд','ПИД|TImpPer');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','TImpMin','T minimal impulse, milliseconds',1,160,'PID|TImpMin',36,'Мінімальна довжина імпульсу, мілісекунд','ПІД|TImpMin','T минимальная длина импульса, миллисекунд','ПИД|TImpMin');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','KImpRfact','Impulse rate factor',2,160,'PID|KImpRfact',37,'Рейтинг фактор імпульсів','ПІД|KImpRfact','Рейтинг фактор импульса','ПИД|KImpRfact');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','Zi','Insensitivity, %',2,160,'PID|Zi',38,'Нечутливість, %','ПІД|Zi','Нечувствительность, %','ПИД|Zi');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','Hup','Upper output border, %',2,160,'PID|Hup',39,'Верхня границя виходу, %','ПІД|Hup','Верхняя граница выхода, %','ПИД|Hup');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','Hdwn','Lower output border, %',2,160,'PID|Hdwn',40,'Нижня границя виходу, %','ПІД|Hdwn','Нижняя граница выхода, %','ПИД|Hdwn');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','K1','Coefficient of input 1',2,160,'PID|K1',41,'Коефіцієнт входу 1','ПІД|K1','Коэффициент входа 1','ПИД|K1');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','K2','Coefficient of input 2',2,160,'PID|K2',42,'Коефіцієнт входу 2','ПІД|K2','Коэффициент входа 2','ПИД|K2');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','K3','Coefficient of input 3',2,160,'PID|K3',43,'Коефіцієнт входу 3','ПІД|K3','Коэффициент входа 3','ПИД|K3');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','K4','Coefficient of input 4',2,160,'PID|K4',44,'Коефіцієнт входу 4','ПІД|K4','Коэффициент входа 4','ПИД|K4');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','iAdd','Input addition',2,64,'0',45,'Додаток до входу','','Дополнение ко входу','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','iMult','Input multiplication',2,64,'1',46,'Множник входу','','Множитель ко входу','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','plcMin','Minimum module scale',2,64,'1',47,'Мінімум шкали модуля','','Минимум шкалы модуля','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','plcMax','Maximum module scale',2,64,'5',48,'Максимум шкали модуля','','Максимум шкалы модуля','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','plcExcess','Allowed scale exceeding, %',2,64,'0',49,'Дозволене перевищення шкали, %','','Допустимое превышение шкалы модуля, %','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','plcImit','PLC imitation',3,64,'0',50,'Імітація ПЛК','','Имитация ПЛК','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','plcImitIn','PLC imitation input',2,128,'Imitation|var',51,'Вхід імітації ПЛК','Імітація|var','Вход имитации ПЛК','Имитация|var');
 INSERT INTO tmplib_base_io VALUES('anUnifSt','in','Input',2,128,'Input|var',0,'Вхід','Вхід|var','Вход','Вход|var');
 INSERT INTO tmplib_base_io VALUES('anUnifSt','var','Variable',2,16,'0',2,'Змінна','','Переменная','');
 INSERT INTO tmplib_base_io VALUES('anUnifSt','H','Border up warning violation',3,17,'',3,'Порушення верхньої попереджув. границі','','Нарушение верхней предупредительной границы','');
 INSERT INTO tmplib_base_io VALUES('anUnifSt','L','Border down warning violation',3,17,'',4,'Порушення нижньої попереджув. границі','','Нарушение нижней предупредительной границы','');
 INSERT INTO tmplib_base_io VALUES('anUnifSt','HH','Border up alarm violation',3,17,'',5,'Порушення верхньої аварійної границі','','Нарушение верхней аварийной границы','');
 INSERT INTO tmplib_base_io VALUES('anUnifSt','LL','Border down alarm violation',3,17,'',6,'Порушення нижньої аварійної границі','','Нарушение нижней аварийной границы','');
-INSERT INTO tmplib_base_io VALUES('anUnifSt','EVAL','Error value',3,17,'',7,'Помилка значення','','Ошибка значения','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','EVAL','Error value',3,17,'',39,'Помилка значення','','Ошибка значения','');
 INSERT INTO tmplib_base_io VALUES('anUnifSt','ed','Dimension',0,32,'',8,'Одиниця виміру','','Единица измерения','');
 INSERT INTO tmplib_base_io VALUES('anUnifSt','min','Scale: minimum',2,32,'0',9,'Шкала: мінімум','','Шкала: минимум','');
 INSERT INTO tmplib_base_io VALUES('anUnifSt','max','Scale: maximum',2,32,'100',10,'Шкала: максимум','','Шкала: максимум','');
 INSERT INTO tmplib_base_io VALUES('anUnifSt','scSqr','Scale: square',3,32,'0',11,'Шкала: квадратична','','Шкала:к вадратичная','');
-INSERT INTO tmplib_base_io VALUES('anUnifSt','aMin','Border down alarm',2,32,'0',16,'Границя нижня аварійна','','Граница нижняя аварийная','');
-INSERT INTO tmplib_base_io VALUES('anUnifSt','aMax','Border up alarm',2,32,'0',17,'Границя верхня аварійна','','Граница верхняя аварийная','');
-INSERT INTO tmplib_base_io VALUES('anUnifSt','wMin','Border down warning',2,32,'0',18,'Границя нижня попереджув.','','Граница нижняя предупр.','');
-INSERT INTO tmplib_base_io VALUES('anUnifSt','wMax','Border up warning',2,32,'0',19,'Границя верхня попереджув.','','Граница верхняя предупр.','');
-INSERT INTO tmplib_base_io VALUES('anUnifSt','HystBnd','Hysteresis of boders violation',2,32,'0',20,'Гистерезис порушення границь','','Гистерезиз нарушения границ','');
-INSERT INTO tmplib_base_io VALUES('anUnifSt','speed','Motion speed (%/cycle)',2,32,'0',21,'Швидкість зміни (%/цикл)','','Скорость изменения (%/цикл)','');
-INSERT INTO tmplib_base_io VALUES('anUnifSt','prec','Precision (signs)',1,32,'2',22,'Точність (знаків)','','Точность (знаков)','');
-INSERT INTO tmplib_base_io VALUES('anUnifSt','Tf','Filter time, seconds',2,32,'0',24,'Час фільтру, секунд','','Время фильтрации, секунд','');
-INSERT INTO tmplib_base_io VALUES('anUnifSt','iAdd','Input addon',2,64,'0',25,'Додаток до входу','','Дополнение ко входу','');
-INSERT INTO tmplib_base_io VALUES('anUnifSt','iMult','Input multiplication',2,64,'1',26,'Множник входу','','Множитель входа','');
-INSERT INTO tmplib_base_io VALUES('anUnifSt','plcMin','Minimum module scale',2,64,'1',27,'Мінімум шкали модуля','','Минимум шкалы модуля','');
-INSERT INTO tmplib_base_io VALUES('anUnifSt','plcMax','Maximum module scale',2,64,'5',28,'Максимум шкали модуля','','Максимум шкалы модуля','');
-INSERT INTO tmplib_base_io VALUES('anUnifSt','plcExcess','Allowed scale exceeding, %',2,64,'0',29,'Дозволене перевищення шкали, %','','Допустимое превышение шкалы, %','');
-INSERT INTO tmplib_base_io VALUES('anUnifSt','plcImit','PLC imitation',3,64,'0',30,'Імітація ПЛК','','Имитация ПЛК','');
-INSERT INTO tmplib_base_io VALUES('anUnifSt','plcImitIn','PLC imitation input',2,128,'Imitation|var',31,'Вхід імітації ПЛК','Імітація|var','Вход имитации ПЛК','Имитация|var');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','aMin','Border down alarm',2,32,'0',15,'Границя нижня аварійна','','Граница нижняя аварийная','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','aMax','Border up alarm',2,32,'0',16,'Границя верхня аварійна','','Граница верхняя аварийная','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','wMin','Border down warning',2,32,'0',17,'Границя нижня попереджув.','','Граница нижняя предупр.','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','wMax','Border up warning',2,32,'0',18,'Границя верхня попереджув.','','Граница верхняя предупр.','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','HystBnd','Hysteresis of boders violation',2,32,'0',19,'Гистерезис порушення границь','','Гистерезиз нарушения границ','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','speed','Motion speed, %/cycle',2,32,'0',20,'Швидкість зміни, %/цикл','','Скорость изменения, %/цикл','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','prec','Precision, signs',1,32,'2',21,'Точність, знаків','','Точность, знаков','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','Tf','Filter time, seconds',2,32,'0',23,'Час фільтру, секунд','','Время фильтрации, секунд','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','iAdd','Input addition',2,64,'0',24,'Додаток до входу','','Дополнение ко входу','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','iMult','Input multiplication',2,64,'1',25,'Множник входу','','Множитель входа','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','plcMin','Minimum module scale',2,64,'1',26,'Мінімум шкали модуля','','Минимум шкалы модуля','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','plcMax','Maximum module scale',2,64,'5',27,'Максимум шкали модуля','','Максимум шкалы модуля','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','plcExcess','Allowed scale exceeding, %',2,64,'0',28,'Дозволене перевищення шкали, %','','Допустимое превышение шкалы, %','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','plcImit','PLC imitation',3,64,'0',29,'Імітація ПЛК','','Имитация ПЛК','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','plcImitIn','PLC imitation input',2,128,'Imitation|var',30,'Вхід імітації ПЛК','Імітація|var','Вход имитации ПЛК','Имитация|var');
 INSERT INTO tmplib_base_io VALUES('pidUnif','in','Input',2,128,'Signal|in',0,'Вхід','','Вход','Signal|in');
 INSERT INTO tmplib_base_io VALUES('pidUnif','sp','Setpoint',2,160,'PID|sp',1,'Завдання','ПІД|sp','Задание','ПИД|sp');
 INSERT INTO tmplib_base_io VALUES('pidUnif','var','Variable',2,16,'0',2,'Змінна','','Переменная','');
-INSERT INTO tmplib_base_io VALUES('pidUnif','manIn','Manual input (%)',2,160,'PID|manIn',3,'Ручний ввід (%)','ПІД|manIn','Ручной ввод (%)','ПИД|manIn');
-INSERT INTO tmplib_base_io VALUES('pidUnif','out','Output (%)',2,160,'PID|out',4,'Вихід (%)','ПІД|out','Выход (%)','ПИД|out');
-INSERT INTO tmplib_base_io VALUES('pidUnif','auto','Mode (automate)',3,160,'PID|auto',5,'Режим (автомат)','ПІД|auto','Режим (автомат)','ПИД|auto');
-INSERT INTO tmplib_base_io VALUES('pidUnif','casc','Mode (cascad)',3,160,'PID|casc',6,'Режим (каскад)','ПІД|casc','Режим (каскад)','ПИД|casc');
+INSERT INTO tmplib_base_io VALUES('pidUnif','manIn','Manual input, %',2,160,'PID|manIn',3,'Ручний ввід, %','ПІД|manIn','Ручной ввод, %','ПИД|manIn');
+INSERT INTO tmplib_base_io VALUES('pidUnif','out','Output, %',2,160,'PID|out',4,'Вихід, %','ПІД|out','Выход, %','ПИД|out');
+INSERT INTO tmplib_base_io VALUES('pidUnif','auto','Mode: automate',3,160,'PID|auto',5,'Режим: автомат','ПІД|auto','Режим: автомат','ПИД|auto');
+INSERT INTO tmplib_base_io VALUES('pidUnif','casc','Mode: cascade',3,160,'PID|casc',6,'Режим: каскад','ПІД|casc','Режим: каскад','ПИД|casc');
 INSERT INTO tmplib_base_io VALUES('pidUnif','ed','Dimension',0,32,'',7,'Одиниця виміру','','Единица измерения','');
 INSERT INTO tmplib_base_io VALUES('pidUnif','min','Scale: minimum',2,160,'PID|min',8,'Шкала: мінімум','ПІД|min','Шкала: минимум','ПИД|min');
 INSERT INTO tmplib_base_io VALUES('pidUnif','max','Scale: maximum',2,160,'PID|max',9,'Шкала: максимум','ПІД|max','Шкала: максимум','ПИД|max');
 INSERT INTO tmplib_base_io VALUES('pidUnif','scSqr','Scale: square',3,32,'0',10,'Шкала: квадратична','','Шкала: квадратичная','');
-INSERT INTO tmplib_base_io VALUES('pidUnif','aMin','Border down alarm',2,32,'0',11,'Границя нижня ав.','','Граница нижняя ав.','');
-INSERT INTO tmplib_base_io VALUES('pidUnif','aMax','Border up alarm',2,32,'0',12,'Границя верхня аварійна','','Граница верхняя ав.','');
-INSERT INTO tmplib_base_io VALUES('pidUnif','wMin','Border down warning',2,32,'0',13,'Границя нижня попереджув.','','Граница нижняя пред.','');
-INSERT INTO tmplib_base_io VALUES('pidUnif','wMax','Border up warning',2,32,'0',14,'Границя верхня попереджув.','','Граница верхняя пред.','');
-INSERT INTO tmplib_base_io VALUES('pidUnif','HystBnd','Hysteresis of boders violation',2,32,'0',15,'Гістерезис порушень границь','','Гистерезиз наруш. границ','');
-INSERT INTO tmplib_base_io VALUES('pidUnif','speed','Motion speed (%/cycle)',2,32,'0',16,'Швидкість зміни (%/цикл)','','Скорость изменения (%/цикл)','');
-INSERT INTO tmplib_base_io VALUES('pidUnif','prec','Precision (signs)',1,32,'2',17,'Точність (знаків)','','Точность (знаков)','');
-INSERT INTO tmplib_base_io VALUES('pidUnif','H','Border up warning violation',3,17,'0',18,'Порушення верхньої попереджув. границі','','Нарушение верхней предупредительной границы','');
-INSERT INTO tmplib_base_io VALUES('pidUnif','L','Border down warning violation',3,17,'0',19,'Порушення нижньої попереджув. границі','','Нарушение нижней предупредительной границы','');
-INSERT INTO tmplib_base_io VALUES('pidUnif','HH','Border up alarm violation',3,17,'0',20,'Порушення верхньої аварійної границі','','Нарушение верхней аварийной границы','');
-INSERT INTO tmplib_base_io VALUES('pidUnif','LL','Border down alarm violation',3,17,'0',21,'Порушення нижньої аварійної границі','','Нарушение нижней аварийной границы','');
-INSERT INTO tmplib_base_io VALUES('pidUnif','EVAL','Value is eval',3,17,'0',22,'Значення невірогідне','','Значение недостоверно','');
-INSERT INTO tmplib_base_io VALUES('pidUnif','Tf','Filter time (ms)',2,32,'0',23,'Час фільтру (мс)','','Время фильтрации (мс)','');
-INSERT INTO tmplib_base_io VALUES('pidUnif','Kp','Gain',2,160,'PID|Kp',24,'Kп','ПІД|Kp','Kп','ПИД|Kp');
-INSERT INTO tmplib_base_io VALUES('pidUnif','Ti','Ti (ms)',1,160,'PID|Ti',25,'Tі (мс)','ПІД|Ti','Tи (мс)','ПИД|Ti');
-INSERT INTO tmplib_base_io VALUES('pidUnif','Kd','Gain differential',2,160,'PID|Kd',26,'Кп диференціалу','ПІД|Kd','Кп производной','ПИД|Kd');
-INSERT INTO tmplib_base_io VALUES('pidUnif','Td','Td (ms)',1,160,'PID|Td',27,'Tд (мс)','ПІД|Td','Tд (мс)','ПИД|Td');
-INSERT INTO tmplib_base_io VALUES('pidUnif','Tzd','T differential lag (ms)',1,160,'PID|Tzd',28,'T фільтру диференціалу (мс)','ПІД|Tzd','T задержки дифференциров. (мс)','ПИД|Tzd');
-INSERT INTO tmplib_base_io VALUES('pidUnif','Zi','Insensitivity (%)',2,160,'PID|Zi',29,'Нечутливість (%)','ПІД|Zi','Нечувствительность (%)','ПИД|Zi');
-INSERT INTO tmplib_base_io VALUES('pidUnif','Hup','Upper output border (%)',2,160,'PID|Hup',30,'Верхня границя виходу (%)','ПІД|Hup','Верхняя граница выхода (%)','ПИД|Hup');
-INSERT INTO tmplib_base_io VALUES('pidUnif','Hdwn','Lower output border (%)',2,160,'PID|Hdwn',31,'Нижня границя виходу (%)','ПІД|Hdwn','Нижняя граница выхода (%)','ПИД|Hdwn');
-INSERT INTO tmplib_base_io VALUES('pidUnif','K1','Coefficient of input 1',2,160,'PID|K1',32,'Коеф. входу 1','ПІД|K1','Коэф. входа 1','ПИД|K1');
-INSERT INTO tmplib_base_io VALUES('pidUnif','K2','Coefficient of input 2',2,160,'PID|K2',33,'Коеф. входу 2','ПІД|K2','Коэф. входа 2','ПИД|K2');
-INSERT INTO tmplib_base_io VALUES('pidUnif','K3','Coefficient of input 3',2,160,'PID|K3',34,'Коеф. входу 3','ПІД|K3','Коэф. входа 3','ПИД|K3');
-INSERT INTO tmplib_base_io VALUES('pidUnif','K4','Coefficient of input 4',2,160,'PID|K4',35,'Коеф. входу 4','ПІД|K4','Коэф. входа 4','ПИД|K4');
-INSERT INTO tmplib_base_io VALUES('pidUnif','dmsk','Maximum value on eval (Max/Min)',2,64,'0',36,'Макс. парам. при недостовірності (Макс/Мин)','','Макс. парам. при недост. (Мин/Макс)','');
-INSERT INTO tmplib_base_io VALUES('pidUnif','iAdd','Input addon',2,64,'0',37,'Додаток до входу','','Дополнение ко входу','');
-INSERT INTO tmplib_base_io VALUES('pidUnif','iMult','Input multiplication',2,64,'1',38,'Множник входу','','Множитель ко входу','');
-INSERT INTO tmplib_base_io VALUES('pidUnif','plcMin','Minimum module scale',2,64,'1',39,'Мінімум шкали модуля','','Минимум шкалы модуля','');
-INSERT INTO tmplib_base_io VALUES('pidUnif','plcMax','Maximum module scale',2,64,'5',40,'Максимум шкали модуля','','Максимум шкалы модуля','');
-INSERT INTO tmplib_base_io VALUES('pidUnif','plcExcess','Allowed scale exceeding (%)',2,64,'0',41,'Дозволене перевищення шкали (%)','','Допустимое превышение шкалы модуля (%)','');
-INSERT INTO tmplib_base_io VALUES('pidUnif','plcImit','PLC imitation',3,64,'0',42,'Імітація ПЛК','','Имитация ПЛК','');
-INSERT INTO tmplib_base_io VALUES('pidUnif','plcImitIn','PLC imitation input',2,128,'Imitation|var',43,'Вхід імітації ПЛК','Імітація|var','Вход имитации ПЛК','Имитация|var');
+INSERT INTO tmplib_base_io VALUES('pidUnif','aMin','Border down alarm',2,32,'0',13,'Границя нижня аварійна','','Граница нижняя аварийная','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','aMax','Border up alarm',2,32,'0',14,'Границя верхня аварійна','','Граница верхняя аварийная','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','wMin','Border down warning',2,32,'0',15,'Границя нижня попереджув.','','Граница нижняя предупр.','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','wMax','Border up warning',2,32,'0',16,'Границя верхня попереджув.','','Граница верхняя предупр.','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','HystBnd','Hysteresis of boders violation',2,32,'0',17,'Гістерезис порушень границь','','Гистерезиз наруш. границ','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','speed','Motion speed, %/cycle',2,32,'0',18,'Швидкість зміни, %/цикл','','Скорость изменения, %/цикл','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','prec','Precision, signs',1,32,'2',19,'Точність, знаків','','Точность, знаков','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','H','Border up warning violation',3,17,'0',21,'Порушення верхньої попереджув. границі','','Нарушение верхней предупредительной границы','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','L','Border down warning violation',3,17,'0',22,'Порушення нижньої попереджув. границі','','Нарушение нижней предупредительной границы','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','HH','Border up alarm violation',3,17,'0',23,'Порушення верхньої аварійної границі','','Нарушение верхней аварийной границы','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','LL','Border down alarm violation',3,17,'0',24,'Порушення нижньої аварійної границі','','Нарушение нижней аварийной границы','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','EVAL','Value is eval',3,17,'0',25,'Значення невірогідне','','Значение недостоверно','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','Tf','Filter time, milliseconds',2,32,'0',26,'Час фільтру, мілісекунд','','Время фильтра, миллисекунд','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','Kp','Gain',2,160,'PID|Kp',27,'Kп','ПІД|Kp','Kп','ПИД|Kp');
+INSERT INTO tmplib_base_io VALUES('pidUnif','Ti','Ti, milliseconds',1,160,'PID|Ti',28,'Tі, мілісекунд','ПІД|Ti','Tи, миллисекунд','ПИД|Ti');
+INSERT INTO tmplib_base_io VALUES('pidUnif','Kd','Gain differential',2,160,'PID|Kd',29,'Кп диференціалу','ПІД|Kd','Кп производной','ПИД|Kd');
+INSERT INTO tmplib_base_io VALUES('pidUnif','Td','Td, milliseconds',1,160,'PID|Td',30,'Tд, мілісекунд','ПІД|Td','Tд, миллисекунд','ПИД|Td');
+INSERT INTO tmplib_base_io VALUES('pidUnif','Tzd','T differential lag, milliseconds',1,160,'PID|Tzd',31,'T фільтру диференціалу, мілісекунд','ПІД|Tzd','T задержки дифференциала, миллисекунд','ПИД|Tzd');
+INSERT INTO tmplib_base_io VALUES('pidUnif','Zi','Insensitivity, %',2,160,'PID|Zi',32,'Нечутливість, %','ПІД|Zi','Нечувствительность, %','ПИД|Zi');
+INSERT INTO tmplib_base_io VALUES('pidUnif','Hup','Upper output border, %',2,160,'PID|Hup',33,'Верхня границя виходу, %','ПІД|Hup','Верхняя граница выхода, %','ПИД|Hup');
+INSERT INTO tmplib_base_io VALUES('pidUnif','Hdwn','Lower output border, %',2,160,'PID|Hdwn',34,'Нижня границя виходу, %','ПІД|Hdwn','Нижняя граница выхода, %','ПИД|Hdwn');
+INSERT INTO tmplib_base_io VALUES('pidUnif','K1','Coefficient of input 1',2,160,'PID|K1',35,'Коефіцієнт входу 1','ПІД|K1','Коэффициент входа 1','ПИД|K1');
+INSERT INTO tmplib_base_io VALUES('pidUnif','K2','Coefficient of input 2',2,160,'PID|K2',36,'Коефіцієнт входу 2','ПІД|K2','Коэффициент входа 2','ПИД|K2');
+INSERT INTO tmplib_base_io VALUES('pidUnif','K3','Coefficient of input 3',2,160,'PID|K3',37,'Коефіцієнт входу 3','ПІД|K3','Коэффициент входа 3','ПИД|K3');
+INSERT INTO tmplib_base_io VALUES('pidUnif','K4','Coefficient of input 4',2,160,'PID|K4',38,'Коефіцієнт входу 4','ПІД|K4','Коэффициент входа 4','ПИД|K4');
+INSERT INTO tmplib_base_io VALUES('pidUnif','iAdd','Input addition',2,64,'0',39,'Додаток до входу','','Дополнение ко входу','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','iMult','Input multiplication',2,64,'1',40,'Множник входу','','Множитель ко входу','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','plcMin','Minimum module scale',2,64,'1',41,'Мінімум шкали модуля','','Минимум шкалы модуля','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','plcMax','Maximum module scale',2,64,'5',42,'Максимум шкали модуля','','Максимум шкалы модуля','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','plcExcess','Allowed scale exceeding, %',2,64,'0',43,'Дозволене перевищення шкали, %','','Допустимое превышение шкалы модуля, %','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','plcImit','PLC imitation',3,64,'0',44,'Імітація ПЛК','','Имитация ПЛК','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','plcImitIn','PLC imitation input',2,128,'Imitation|var',45,'Вхід імітації ПЛК','Імітація|var','Вход имитации ПЛК','Имитация|var');
 INSERT INTO tmplib_base_io VALUES('manInUnif','varIn','Variable input',2,32,'0',2,'Введення змінної','','Ввод переменной','');
-INSERT INTO tmplib_base_io VALUES('pidUnif','SHIFR','Code',0,0,'',45,'Шифр','','Шифр','');
-INSERT INTO tmplib_base_io VALUES('anUnifSt','this','Object',4,1,'',32,'Об''єкт','','Объект','');
-INSERT INTO tmplib_base_io VALUES('anUnifSt','SHIFR','Code',0,0,'',33,'Шифр','','Шифр','');
-INSERT INTO tmplib_base_io VALUES('anUnifSt','NAME','Name',0,0,'',34,'Ім''я','','Имя','');
-INSERT INTO tmplib_base_io VALUES('anUnifSt','DESCR','Description',0,0,'',35,'Опис','','Описание','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','SHIFR','Code',0,0,'',47,'Шифр','','Шифр','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','this','Object',4,1,'',31,'Об''єкт','','Объект','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','SHIFR','Code',0,0,'',32,'Шифр','','Шифр','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','NAME','Name',0,0,'',33,'Ім''я','','Имя','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','DESCR','Description',0,0,'',34,'Опис','','Описание','');
 INSERT INTO tmplib_base_io VALUES('anUnif','this','Object',4,1,'',27,'Об''єкт','','Объект','');
-INSERT INTO tmplib_base_io VALUES('pidUnif','NAME','Name',0,0,'',46,'Ім''я','','Имя','');
-INSERT INTO tmplib_base_io VALUES('pidUnif','this','Object',4,1,'',44,'Об''єкт','','Объект','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','NAME','Name',0,0,'',48,'Ім''я','','Имя','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','this','Object',4,1,'',46,'Об''єкт','','Объект','');
 INSERT INTO tmplib_base_io VALUES('anUnif','SHIFR','Code',0,0,'',28,'Шифр','','Шифр','');
 INSERT INTO tmplib_base_io VALUES('anUnif','NAME','Name',0,0,'',29,'Ім''я','','Имя','');
 INSERT INTO tmplib_base_io VALUES('anUnif','DESCR','Description',0,0,'',30,'Опис','','Описание','');
-INSERT INTO tmplib_base_io VALUES('pidUnif','DESCR','Description',0,0,'',47,'Опис','','Описание','');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','this','Object',4,1,'',50,'Об''єкт','','Объект','');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','SHIFR','Code',0,0,'',51,'Шифр','','Шифр','');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','NAME','Name',0,0,'',52,'Ім''я','','Имя','');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','DESCR','Description',0,0,'',53,'Опис','','Описание','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','DESCR','Description',0,0,'',49,'Опис','','Описание','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','this','Object',4,1,'',52,'Об''єкт','','Объект','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','SHIFR','Code',0,0,'',53,'Шифр','','Шифр','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','NAME','Name',0,0,'',54,'Ім''я','','Имя','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','DESCR','Description',0,0,'',55,'Опис','','Описание','');
 INSERT INTO tmplib_base_io VALUES('anUnif','HystBnd','Hysteresis of boders violation',2,32,'1',15,'Гистерезиз порушення границь','','Гистерезиз нарушения границ','');
 INSERT INTO tmplib_base_io VALUES('anUnif','inProc','Input processing procedure',0,68,'',1,'Вхідна процедура обробки','','Входная процедура обработки','');
 INSERT INTO tmplib_base_io VALUES('anUnif','subMode','Substitute: mode',1,40,'0
@@ -1652,13 +1651,7 @@ no;last;substitute',7,'Заміна: режим','0
 0;1;2
 нет;последнее;подстановка');
 INSERT INTO tmplib_base_io VALUES('anUnif','subVar','Substitute: variable',2,32,'0',8,'Заміна: змінна','','Замена: переменная','');
-INSERT INTO tmplib_base_io VALUES('anUnif','alSup','Violations',1,40,'0
-0;1;2
-init NORM;suppress;save on change',9,'Порушення','0
-0;1;2
-ініціювати НОРМА;придушувати;зберігати при зміні','Нарушения','0
-0;1;2
-Инициировать НОРМА;подавлять;сохранять при смене');
+INSERT INTO tmplib_base_io VALUES('anUnif','alSup','Violations suppress',3,32,'',9,'Придушення порушень','','Подавление нарушений','');
 INSERT INTO tmplib_base_io VALUES('anUnifSt','inProc','Input processing procedure',0,68,'',1,'Вхідна процедура обробки','','Входная процедура обработки','');
 INSERT INTO tmplib_base_io VALUES('anUnifSt','subMode','Substitute: mode',1,40,'0
 0;1;2
@@ -1667,50 +1660,44 @@ no;last;substitute',7,'Заміна: режим','0
 немає;останнє;підстановка','Замена: режим','0
 0;1;2
 нет;последнее;подстановка');
-INSERT INTO tmplib_base_io VALUES('anUnifSt','subVar','Substitute: variable',2,32,'0',13,'Заміна:змінна','','Замена:переменная','');
-INSERT INTO tmplib_base_io VALUES('anUnifSt','alSup','Violations',1,40,'0
-0;1;2
-init NORM;suppress;save on change',9,'Порушення','0
-0;1;2
-ініціювати НОРМА;придушувати;зберігати при зміні','Нарушения','0
-0;1;2
-Инициировать НОРМА;подавлять;сохранять при смене');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','subVar','Substitute: variable',2,32,'0',12,'Заміна:змінна','','Замена:переменная','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','alSup','Violations suppress',3,32,'',13,'Придушення порушень','','Подавление нарушений','');
 INSERT INTO tmplib_base_io VALUES('manInUnif','alSup','Violations suppress',3,32,'0',7,'Придушення порушень','','Подавление нарушений','');
-INSERT INTO tmplib_base_io VALUES('manInUnif','HystBnd','Hysteresis of boders violation',2,32,'1',12,'Гістерезиз поруш. границь','','Гистерезиз наруш. границ','');
-INSERT INTO tmplib_base_io VALUES('manInUnif','prec','Precision (signs)',1,32,'2',14,'Точність (знаків)','','Точность (знаков)','');
-INSERT INTO tmplib_base_io VALUES('manInUnif','this','Object',4,1,'',22,'Об''єкт','','Объект','');
-INSERT INTO tmplib_base_io VALUES('manInUnif','SHIFR','Code',0,0,'',23,'Шифр','','Шифр','');
-INSERT INTO tmplib_base_io VALUES('manInUnif','NAME','Name',0,0,'',24,'Ім''я','','Имя','');
-INSERT INTO tmplib_base_io VALUES('manInUnif','DESCR','Description',0,0,'',25,'Опис','','Описание','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','HystBnd','Hysteresis of boders violation',2,32,'1',13,'Гістерезиз поруш. границь','','Гистерезиз наруш. границ','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','prec','Precision, signs',1,32,'2',15,'Точність, знаків','','Точность, знаков','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','this','Object',4,1,'',23,'Об''єкт','','Объект','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','SHIFR','Code',0,0,'',24,'Шифр','','Шифр','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','NAME','Name',0,0,'',25,'Ім''я','','Имя','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','DESCR','Description',0,0,'',26,'Опис','','Описание','');
 INSERT INTO tmplib_base_io VALUES('SNMP','srcAddr','Source object''s address',0,64,'',0,'Адреса вихідного об''єкту','','Адрес исходного объекта','');
 INSERT INTO tmplib_base_io VALUES('SNMP','manTables','Manual tables',0,64,'',1,'Ручні таблиці','','Ручные таблицы','');
-INSERT INTO tmplib_base_io VALUES('SNMP','items','All items',4,33,'',2,'Всі елементи','','Все элементы','');
-INSERT INTO tmplib_base_io VALUES('SNMP','this','Object',4,0,'',3,'Об''єкт','','Объект','');
-INSERT INTO tmplib_base_io VALUES('SNMP','SHIFR','Code',0,0,'',4,'Шифр','','Шифр','');
-INSERT INTO tmplib_base_io VALUES('SNMP','NAME','Name',0,0,'',5,'Ім''я','','Имя','');
-INSERT INTO tmplib_base_io VALUES('SNMP','DESCR','Description',0,0,'',6,'Опис','','Описание','');
+INSERT INTO tmplib_base_io VALUES('SNMP','items','All items',4,33,'',4,'Всі елементи','','Все элементы','');
+INSERT INTO tmplib_base_io VALUES('SNMP','this','Object',4,0,'',5,'Об''єкт','','Объект','');
+INSERT INTO tmplib_base_io VALUES('SNMP','SHIFR','Code',0,0,'',6,'Шифр','','Шифр','');
+INSERT INTO tmplib_base_io VALUES('SNMP','NAME','Name',0,0,'',7,'Ім''я','','Имя','');
+INSERT INTO tmplib_base_io VALUES('SNMP','DESCR','Description',0,0,'',8,'Опис','','Описание','');
 INSERT INTO tmplib_base_io VALUES('digAlarm','alrm','Alarm "{st}:{lev}:{mess}"',0,64,'',0,'Сигнал "{st}:{lev}:{mess}"','','Сигнал "{st}:{lev}:{mess}"','');
-INSERT INTO tmplib_base_io VALUES('digAlarm','SHIFR','Code',0,0,'',6,'Шифр','','Шифр','');
-INSERT INTO tmplib_base_io VALUES('digAlarm','NAME','Name',0,0,'',7,'Ім''я','','Имя','');
-INSERT INTO tmplib_base_io VALUES('digAlarm','DESCR','Description',0,0,'',8,'Опис','','Описание','');
-INSERT INTO tmplib_base_io VALUES('digAlarm','this','Object',4,0,'',9,'Об''єкт','','Объект','');
+INSERT INTO tmplib_base_io VALUES('digAlarm','SHIFR','Code',0,0,'',8,'Шифр','','Шифр','');
+INSERT INTO tmplib_base_io VALUES('digAlarm','NAME','Name',0,0,'',9,'Ім''я','','Имя','');
+INSERT INTO tmplib_base_io VALUES('digAlarm','DESCR','Description',0,0,'',10,'Опис','','Описание','');
+INSERT INTO tmplib_base_io VALUES('digAlarm','this','Object',4,0,'',11,'Об''єкт','','Объект','');
 INSERT INTO tmplib_base_io VALUES('anUnif','log','Logarithmic scale',3,32,'0',18,'Логарифмічна шкала','','Логарифмическая шкала','');
-INSERT INTO tmplib_base_io VALUES('manInUnif','log','Logarithmic scale',3,32,'0',15,'Логарифмічна шкала','','Логарифмическая шкала','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','log','Logarithmic scale',3,32,'0',16,'Логарифмічна шкала','','Логарифмическая шкала','');
 INSERT INTO tmplib_base_io VALUES('digAlarm','stInv','State inversion',3,64,'',1,'Інверсія стану','','Инверсия состояния','');
-INSERT INTO tmplib_base_io VALUES('digAlarm','st_open','State "Opened"',3,16,'',4,'Стан "Відкрито"','','Состояние "Открыто"','');
-INSERT INTO tmplib_base_io VALUES('digAlarm','st_close','State "Closed"',3,16,'',5,'Стан "Закрито"','','Состояние "Закрыто"','');
-INSERT INTO tmplib_base_io VALUES('anUnifSt','log','Logarithmic scale',3,32,'0',23,'Логарифмічна шкала','','Логарифмическая шкала','');
+INSERT INTO tmplib_base_io VALUES('digAlarm','st_open','State "Opened"',3,16,'',6,'Стан "Відкрито"','','Состояние "Открыто"','');
+INSERT INTO tmplib_base_io VALUES('digAlarm','st_close','State "Closed"',3,16,'',7,'Стан "Закрито"','','Состояние "Закрыто"','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','log','Logarithmic scale',3,32,'0',22,'Логарифмічна шкала','','Логарифмическая шкала','');
 INSERT INTO tmplib_base_io VALUES('digAlarm','inProc','Input processing procedure',0,68,'',3,'Вхідна процедура обробки','','Входная процедура обработки','');
 INSERT INTO tmplib_base_io VALUES('anUnif','alDelay','Violations delay, seconds',2,32,'0',10,'Затримка порушень, секунди','','Задержка нарушений, секунды','');
-INSERT INTO tmplib_base_io VALUES('anUnifSt','alDelay','Violations delay, seconds',2,32,'',15,'Затримка порушень, секунди','','Задержка нарушений, секунды','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','alDelay','Violations delay, seconds',2,32,'',14,'Затримка порушень, секунди','','Задержка нарушений, секунды','');
 INSERT INTO tmplib_base_io VALUES('codeState','in','Input',1,144,'Signal|in',0,'Вхід','','Вход','');
 INSERT INTO tmplib_base_io VALUES('codeState','inProc','Input processing procedure',0,68,'',2,'Вхідна процедура обробки','','Входная процедура обработки','');
-INSERT INTO tmplib_base_io VALUES('codeState','st_text','State "Text"',0,16,'',3,'Стан "Текст"','','Состояние "Текст"','');
-INSERT INTO tmplib_base_io VALUES('codeState','stats','States, rows "{code}:{State}"',0,36,'',4,'Стани, рядки "{code}:{State}"','','Состояния, строки "{code}:{State}"','');
-INSERT INTO tmplib_base_io VALUES('codeState','SHIFR','Code',0,0,'',8,'Код','','Код','');
-INSERT INTO tmplib_base_io VALUES('codeState','NAME','Name',0,0,'',9,'Ім''я','','Имя','');
-INSERT INTO tmplib_base_io VALUES('codeState','DESCR','Description',0,0,'',10,'Опис','','Описание','');
-INSERT INTO tmplib_base_io VALUES('codeState','this','Object',4,0,'',11,'Об''єкт','','Объект','');
+INSERT INTO tmplib_base_io VALUES('codeState','st_text','State "Text"',0,16,'',5,'Стан "Текст"','','Состояние "Текст"','');
+INSERT INTO tmplib_base_io VALUES('codeState','stats','States, rows "{code}:{State}"',0,36,'',6,'Стани, рядки "{code}:{State}"','','Состояния, строки "{code}:{State}"','');
+INSERT INTO tmplib_base_io VALUES('codeState','SHIFR','Code',0,0,'',10,'Код','','Код','');
+INSERT INTO tmplib_base_io VALUES('codeState','NAME','Name',0,0,'',11,'Ім''я','','Имя','');
+INSERT INTO tmplib_base_io VALUES('codeState','DESCR','Description',0,0,'',12,'Опис','','Описание','');
+INSERT INTO tmplib_base_io VALUES('codeState','this','Object',4,0,'',13,'Об''єкт','','Объект','');
 INSERT INTO tmplib_base_io VALUES('ntf','tmOut','Maximum notification timeout, seconds',1,64,'5',2,'Максимальний таймаут повідомлення, секунд','','Максимальный таймаут сообщения, секунд','');
 INSERT INTO tmplib_base_io VALUES('ntf','messLev','Messages level, negative for alarms',1,64,'1',3,'Рівень повідомлень, негативний для порушень','','Уровень сообщений, негативный для нарушений','');
 INSERT INTO tmplib_base_io VALUES('ntf','messCat','Messages category, template or regular expression',0,64,'al*:*',4,'Категорія повідомлень, шаблон або регулярний вираз','','Категория сообщений, шаблон или регулярное выражение','');
@@ -1729,32 +1716,46 @@ INSERT INTO tmplib_base_io VALUES('ntf','tr','UserPrt: Transport',4,0,'',1,'User
 INSERT INTO tmplib_base_io VALUES('ntf','emailTrAddr','Output transport for SMTP connection, empty for disable',0,64,'Sockets.out_SMTP',6,'Вихідний транспорт SMTP підключень, порожньо для вимкнення','','Выходной транспорт SMTP подключений, пусто для выключения','');
 INSERT INTO tmplib_base_io VALUES('ntf','SMSTrAddr','SMS serial transport, empty for disable',0,64,'Serial.out_SMS',13,'Послідовний транспорт SMS, порожньо для вимкнення','','Последовательный транспорт SMS, пусто для выключения','');
 INSERT INTO tmplib_base_io VALUES('codeState','out','Output',1,145,'Signal|out',1,'Вихід','','Выход','');
-INSERT INTO tmplib_base_io VALUES('codeState','com_text','Command "Text"',0,32,'',5,'Команда "Текст"','','Команда "Текст"','');
-INSERT INTO tmplib_base_io VALUES('codeState','coms','Commands-states, rows "{code}:{State}"',0,36,'',6,'Команди-стани, рядки "{code}:{State}"','','Команды-состояния, строки "{code}:{State}"','');
-INSERT INTO tmplib_base_io VALUES('codeState','digComs','Commands',0,20,'',7,'Команди','','Команды','');
+INSERT INTO tmplib_base_io VALUES('codeState','com_text','Command "Text"',0,32,'',7,'Команда "Текст"','','Команда "Текст"','');
+INSERT INTO tmplib_base_io VALUES('codeState','coms','Commands-states, rows "{code}:{State}"',0,36,'',8,'Команди-стани, рядки "{code}:{State}"','','Команды-состояния, строки "{code}:{State}"','');
+INSERT INTO tmplib_base_io VALUES('codeState','digComs','Commands',0,20,'',9,'Команди','','Команды','');
 INSERT INTO tmplib_base_io VALUES('UPS','srcAddr','Source object''s address',0,64,'',0,'Адреса вихідного об''єкту','','Адрес исходного объекта','');
-INSERT INTO tmplib_base_io VALUES('UPS','items','All items',4,33,'',1,'Всі елементи','','Все элементы','');
+INSERT INTO tmplib_base_io VALUES('UPS','items','All items',4,33,'',3,'Всі елементи','','Все элементы','');
 INSERT INTO tmplib_base_io VALUES('UPS','alDelay','Violations delay, seconds',2,32,'0',2,'Затримка порушень, секунди','','Задержка нарушений, секунды','');
-INSERT INTO tmplib_base_io VALUES('UPS','bChL','Battery charge low',2,32,'20',3,'Заряд батареї низький','','Заряд батареи низкий','');
-INSERT INTO tmplib_base_io VALUES('UPS','bChLL','Battery charge critical',2,32,'5',4,'Заряд батареї критичний','','Заряд батареи критический','');
-INSERT INTO tmplib_base_io VALUES('UPS','inVL','Input voltage low',2,32,'210',5,'Низька вхідна напруга','','Низкое входное напряжение','');
-INSERT INTO tmplib_base_io VALUES('UPS','inVH','Input voltage high',2,32,'250',6,'Висока вхідна напруга','','Высокое входное напряжение','');
-INSERT INTO tmplib_base_io VALUES('UPS','inFLL','Input frequency too low',2,32,'40',7,'Дуже низька вхідна частота','','Очень низкая входная частота','');
-INSERT INTO tmplib_base_io VALUES('UPS','inFL','Input frequency low',2,32,'45',8,'Низька вхідна частота','','Низкая входная частота','');
-INSERT INTO tmplib_base_io VALUES('UPS','inFH','Input frequency high',2,32,'55',9,'Висока вхідна частота','','Высокая входная частота','');
-INSERT INTO tmplib_base_io VALUES('UPS','inFHH','Input frequency too high',2,32,'60',10,'Дуже висока вхідна частота','','Очень высокая входная частота','');
-INSERT INTO tmplib_base_io VALUES('UPS','loadH','Load high',2,32,'80',11,'Навантаження високе','','Нагрузка высокая','');
-INSERT INTO tmplib_base_io VALUES('UPS','loadHH','Load too high',2,32,'100',12,'Навантаження дуже високе','','Нагрузка очень высокая','');
-INSERT INTO tmplib_base_io VALUES('UPS','tH','Temperature high',2,32,'50',13,'Температура висока','','Температура высокая','');
-INSERT INTO tmplib_base_io VALUES('UPS','tHH','Temperature too high',2,32,'70',14,'Температура дуже висока','','Температура очень высокая','');
-INSERT INTO tmplib_base_io VALUES('UPS','this','Object',4,0,'',15,'Об''єкт','','Объект','');
-INSERT INTO tmplib_base_io VALUES('UPS','SHIFR','Code',0,0,'',16,'Шифр','','Шифр','');
-INSERT INTO tmplib_base_io VALUES('UPS','NAME','Name',0,0,'',17,'Ім''я','','Имя','');
-INSERT INTO tmplib_base_io VALUES('UPS','DESCR','Description',0,0,'',18,'Опис','','Описание','');
+INSERT INTO tmplib_base_io VALUES('UPS','bChL','Battery charge low',2,32,'20',4,'Заряд батареї низький','','Заряд батареи низкий','');
+INSERT INTO tmplib_base_io VALUES('UPS','bChLL','Battery charge critical',2,32,'5',5,'Заряд батареї критичний','','Заряд батареи критический','');
+INSERT INTO tmplib_base_io VALUES('UPS','inVL','Input voltage low',2,32,'210',6,'Низька вхідна напруга','','Низкое входное напряжение','');
+INSERT INTO tmplib_base_io VALUES('UPS','inVH','Input voltage high',2,32,'250',7,'Висока вхідна напруга','','Высокое входное напряжение','');
+INSERT INTO tmplib_base_io VALUES('UPS','inFLL','Input frequency too low',2,32,'40',8,'Дуже низька вхідна частота','','Очень низкая входная частота','');
+INSERT INTO tmplib_base_io VALUES('UPS','inFL','Input frequency low',2,32,'45',9,'Низька вхідна частота','','Низкая входная частота','');
+INSERT INTO tmplib_base_io VALUES('UPS','inFH','Input frequency high',2,32,'55',10,'Висока вхідна частота','','Высокая входная частота','');
+INSERT INTO tmplib_base_io VALUES('UPS','inFHH','Input frequency too high',2,32,'60',11,'Дуже висока вхідна частота','','Очень высокая входная частота','');
+INSERT INTO tmplib_base_io VALUES('UPS','loadH','Load high',2,32,'80',12,'Навантаження високе','','Нагрузка высокая','');
+INSERT INTO tmplib_base_io VALUES('UPS','loadHH','Load too high',2,32,'100',13,'Навантаження дуже високе','','Нагрузка очень высокая','');
+INSERT INTO tmplib_base_io VALUES('UPS','tH','Temperature high',2,32,'50',14,'Температура висока','','Температура высокая','');
+INSERT INTO tmplib_base_io VALUES('UPS','tHH','Temperature too high',2,32,'70',15,'Температура дуже висока','','Температура очень высокая','');
+INSERT INTO tmplib_base_io VALUES('UPS','this','Object',4,0,'',16,'Об''єкт','','Объект','');
+INSERT INTO tmplib_base_io VALUES('UPS','SHIFR','Code',0,0,'',17,'Шифр','','Шифр','');
+INSERT INTO tmplib_base_io VALUES('UPS','NAME','Name',0,0,'',18,'Ім''я','','Имя','');
+INSERT INTO tmplib_base_io VALUES('UPS','DESCR','Description',0,0,'',19,'Опис','','Описание','');
 INSERT INTO tmplib_base_io VALUES('initConsAssignTrs','inTransport','Input transport',0,64,'InitiateCons',0,'Вхідний транспорт','','Входной транспорт','');
 INSERT INTO tmplib_base_io VALUES('initConsAssignTrs','outTrTm','Output transport timeouts',0,64,'10:0.1',1,'Таймаути вихідних транспортів','','Таймауты выходных транспортов','');
 INSERT INTO tmplib_base_io VALUES('initConsAssignTrs','prcTr','Processed transports',4,17,'',3,'Опрацьовані транспорти','','Обработанные транспорты','');
 INSERT INTO tmplib_base_io VALUES('initConsAssignTrs','srcObjPath','Source object path',0,64,'ModBus:%2fcntr%2fcfg%2fADDR',2,'Шлях об''єкту джерела','','Путь объекта источника','');
+INSERT INTO tmplib_base_io VALUES('SNMP','alSup','Violations suppress',3,32,'',2,'Придушення порушень','','Подавление нарушений','');
+INSERT INTO tmplib_base_io VALUES('SNMP','alDelay','Violations delay, seconds',2,32,'0',3,'Затримка порушень, секунди','','Задержка нарушений, секунды','');
+INSERT INTO tmplib_base_io VALUES('UPS','alSup','Violations suppress',3,32,'',1,'Придушення порушень','','Подавление нарушений','');
+INSERT INTO tmplib_base_io VALUES('codeState','alSup','Violations suppress',3,32,'',3,'Придушення порушень','','Подавление нарушений','');
+INSERT INTO tmplib_base_io VALUES('codeState','alDelay','Violations delay, seconds',2,32,'0',4,'Затримка порушень, секунди','','Задержка нарушений, секунды','');
+INSERT INTO tmplib_base_io VALUES('digAlarm','alSup','Violations suppress',3,32,'',4,'Придушення порушень','','Подавление нарушений','');
+INSERT INTO tmplib_base_io VALUES('digAlarm','alDelay','Violations delay, seconds',2,32,'0',5,'Затримка порушень, секунди','','Задержка нарушений, секунды','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','alDelay','Violations delay, seconds',3,32,'',8,'Затримка порушень, секунди','','Задержка нарушений, секунды','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','alSup','Violations suppress',3,32,'0',11,'Придушення порушень','','Подавление нарушений','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','alDelay','Violations delay, seconds',2,32,'0',12,'Затримка порушень, секунди','','Задержка нарушений, секунды','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','log','Logarithmic scale',3,32,'0',20,'Логарифмічна шкала','','Логарифмическая шкала','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','alSup','Violations suppress',3,32,'0',13,'Придушення порушень','','Подавление нарушений','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','alDelay','Violations delay, seconds',2,32,'0',14,'Затримка порушень, секунди','','Задержка нарушений, секунды','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','log','Logarithmic scale',3,32,'0',22,'Логарифмічна шкала','','Логарифмическая шкала','');
 CREATE TABLE IF NOT EXISTS 'DAQ_JavaLikeCalc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT 'system' ,"FUNC" TEXT DEFAULT '' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' ,"ITER" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 CREATE TABLE IF NOT EXISTS 'DAQ_LogicLev' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT '' ,"PRM_BD_REFL" TEXT DEFAULT '' ,"PERIOD" INTEGER DEFAULT '0' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 CREATE TABLE IF NOT EXISTS 'flb_web_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
@@ -1787,900 +1788,27 @@ INSERT INTO flb_web_io VALUES('user','urlPrms','Address parameters',4,0,'',0,1,'
 INSERT INTO flb_web_io VALUES('user','tmpl','Template',0,0,'',0,2,'Шаблон','Шаблон');
 INSERT INTO flb_web_io VALUES('user','cnts','POST request''s context',4,0,'',0,3,'Контекст POST-запроса','Контекст POST-запиту');
 INSERT INTO flb_web_io VALUES('user','user','User',0,0,'',0,4,'Пользователь','Користувач');
-CREATE TABLE IF NOT EXISTS 'flb_web' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO flb_web VALUES('alarms','Alarms','',10,'//> Load rules
-var alarmsTree = SYS.XMLNode("ALARMS");
-alarmsTree.load(rules);
-for(i_rl = 0; i_rl < alarmsTree.childSize(); i_rl++)
-{
-	if(!alarmsTree.childGet(i_rl).text().length) continue;
-	var subId = alarmsTree.childGet(i_rl).attr("id").parse(0,".");
-	var devId =  alarmsTree.childGet(i_rl).attr("id").parse(1,".");
-	var curAttrVal = SYS.DAQ.ModBus.ZegBee[subId][devId].get();
-	var curErr = "";
-	if(curAttrVal.isEVal()) curErr = "Value error. Perhaps the device is missing.";
-	else
-	{
-		var progArgs = new Object();
-		progArgs.err = "";
-		progArgs.x = curAttrVal;
-		SYS.DAQ.funcCall("JavaLikeCalc.JavaScript",progArgs,alarmsTree.childGet(i_rl).text());
-		if(progArgs.err.length) curErr = progArgs.err;
-	}
-	//> Create alarm
-	if(curErr.length && curErr != alarmsTree.childGet(i_rl).attr("err"))
-	{
-		SYS.message("ALARM:House:"+alarmsTree.childGet(i_rl).attr("id"),-4,curErr);
-		//>> Send SMS for new alarm messages to users
-		var smsReq = SYS.XMLNode("send").setAttr("ProtIt","SMS").setText(alarmsTree.childGet(i_rl).attr("id")+": "+curErr);
-		var userLst = SYS.XMLNode("get").setAttr("path","/sub_Security/grp_Web/%2fprm%2fusers");
-		SYS.cntrReq(userLst);
-		for(var i = 0; i < userLst.childSize(); i++)
-		{
-			var isSelAdmin = SYS.Security.access(userLst.childGet(i).text(),4,"root","WebRoot",0440);
-			var treeEl = SYS.XMLNode("get").setAttr("path","/sub_Security/usr_"+userLst.childGet(i).text()+"/%2fprm%2fldscr");
-			SYS.cntrReq(treeEl);
-			var re = treeEl.text().match("SMS:\\s+([^\\n]*)");
-			if(!re.length || re[1] != "true") continue;
-			if(!isSelAdmin)
-			{
-				re=treeEl.text().match("sub_"+subId+":\\s+([^\\n]*)");
-				if(!re.length || re[1] == "--") continue;
-			}
-			re = treeEl.text().match("TEL:\\s+([^\\n]*)");
-			if(!re.length) continue;
-			var telLs = re[1].split(new RegExp("\\s+"));
-			for(var i_t = 0; i_t < telLs.length; i_t++)
-			{
-				smsReq.setAttr("tel",telLs[i_t]);
-				SYS.Transport.Serial.out_GSM.messIO(smsReq,"UserProtocol");
-				if(smsReq.attr("err") != "0") SYS.messWarning("SMS send",smsReq.attr("err"));
-			}
-		}
-	}
-	//> Clear alarm
-	else if(!curErr.length && !alarmsTree.childGet(i_rl).attr("err").isEVal())
-		SYS.message("ALARM:House:"+alarmsTree.childGet(i_rl).attr("id"),1,"Norma");
-	alarmsTree.childGet(i_rl).setAttr("err",curErr);	
-}
-rules = alarmsTree.save();',1377261539,'Сигнализации','Сигналізації');
-INSERT INTO flb_web VALUES('devMon','Devices monitor','',10,'var treeEl = false;
-
-//> Parse template
-var pgTree = SYS.XMLNode();
-var err = pgTree.load(tmpl,false,true);
-
-//> Access
-var isAdmin = SYS.Security.access(user,4,"root","WebRoot",0440);
-treeEl = SYS.XMLNode("get").setAttr("path","/sub_Security/usr_"+user+"/%2fprm%2fldscr");
-SYS.cntrReq(treeEl);
-re=treeEl.text().match("sub_"+pgTree.attr("class")+":\\s+([^\\n]*)");
-var subAccess = re.length ? re[1] : "--";
-
-//> Devices list place to template
-var cntrPrm = SYS.DAQ.ModBus.ZegBee[pgTree.attr("class")];
-catAttrReq = SYS.XMLNode("get").setAttr("path","/DAQ/ModBus/ZegBee/"+pgTree.attr("class")+"/%2fprm%2fcfg%2fATTR_LS");
-SYS.cntrReq(catAttrReq);
-catAttrLs = catAttrReq.text();
-
-//> Direct requests by XML process
-if(!urlPrms["com"].isEVal())
-{
-	var xmlRespTree = SYS.XMLNode(urlPrms["com"]);
-	if(urlPrms["com"] == "info")
-	{
-		//> Get timers
-		var timersList = SYS.XMLNode("get").setAttr("path","/sub_DAQ/mod_JavaLikeCalc/cntr_timers/prm_rules/%2fval%2fvar");
-		SYS.cntrReq(timersList);
-		var timersTree = SYS.XMLNode("TIMERS");
-		timersTree.load(timersList.text());
-
-		//> Devices process
-		for(var off = 0; (catAttrId=catAttrLs.parse(0,"\n",off)).length; )
-		{
-			if((catAttrId.parse(2,":") == "r" && (isAdmin || subAccess != "--")) || (catAttrId.parse(2,":") == "rw" && (isAdmin || subAccess == "rw")))
-			{
-				var xmlRespEl = xmlRespTree.childAdd(catAttrId.parse(5,":")).setAttr("name",catAttrId.parse(4,":")).setAttr("id",catAttrId.parse(3,":")).setAttr("acs",catAttrId.parse(2,":"));
-				if(catAttrId.parse(5,":") == "bin")
-					xmlRespEl.setAttr("vl1",catAttrId.parse(6,":")).setAttr("nm1",catAttrId.parse(7,":"))
-								  .setAttr("vl2",catAttrId.parse(8,":")).setAttr("nm2",catAttrId.parse(9,":")).setAttr("sensorPos",catAttrId.parse(10,":"));
-				else if(catAttrId.parse(5,":") == "dec") xmlRespEl.setAttr("ed",catAttrId.parse(6,":")).setAttr("sensorPos",catAttrId.parse(8,":"));;
-				//> Timer get
-				var timerNd = timersTree.getElementBy(pgTree.attr("class")+"."+catAttrId.parse(3,":"));
-				if(typeof(timerNd)=="XMLNode" && timerNd.attr("tm").toInt(10) > 0) xmlRespEl.setAttr("tm",timerNd.attr("tm"));
-			}
-		}
-	}
-	else if(urlPrms["com"] == "vals")
-		for(var off = 0; (catAttrId=catAttrLs.parse(0,"\n",off)).length; )
-		{
-			if((catAttrId.parse(2,":") == "r" && (isAdmin || subAccess != "--")) || (catAttrId.parse(2,":") == "rw" && (isAdmin || subAccess == "rw")))
-			{
-				var curAttrVal = cntrPrm[catAttrId.parse(3,":")].get();
-				var xmlRespEl = xmlRespTree.childAdd(catAttrId.parse(5,":")).setAttr("id",catAttrId.parse(3,":"));
-				//>>> Value error
-				if(curAttrVal.isEVal()) xmlRespEl.setAttr("val","<err>").setText("Ошибка");
-				else
-				{
-					xmlRespEl.setAttr("val",curAttrVal);
-					//>>> Prepare value for different type
-					if(catAttrId.parse(5,":") == "dec")
-					{
-						//>>>> Calc by formule add
-						var calcProg = catAttrId.parse(7,":").replace("%3A",":");
-						if(calcProg.length && catAttrId.parse(2,":") != "rw")
-						{
-							var progArgs = new Object();
-							progArgs.y = curAttrVal;
-							progArgs.x = curAttrVal;
-							SYS.DAQ.funcCall("JavaLikeCalc.JavaScript",progArgs,calcProg);
-							curAttrVal = progArgs.y;
-						}
-						xmlRespEl.setText(curAttrVal);
-					}
-					else if(catAttrId.parse(5,":") == "bin")
-					{
-						if(curAttrVal == catAttrId.parse(6,":").replace("%3A",":")) curAttrVal = catAttrId.parse(7,":").replace("%3A",":");
- 						else if(curAttrVal == catAttrId.parse(8,":").replace("%3A",":")) curAttrVal = catAttrId.parse(9,":").replace("%3A",":");
-						else curAttrVal = "Неизвестно";
-						xmlRespEl.setText(curAttrVal);
-					}
-				}
-			}
-		}
-	else if(urlPrms["com"] == "set")
-		for(var off = 0; (catAttrId=catAttrLs.parse(0,"\n",off)).length; )
-		{
-			if(catAttrId.parse(2,":") != "rw" || catAttrId.parse(3,":") != urlPrms["dev"]) continue;
-			var setVal = EVAL_BOOL;
-			if(catAttrId.parse(5,":") == "bin")
-			{
-				if(urlPrms["val"] != cntrPrm[urlPrms["dev"]].get())	setVal = urlPrms["val"];
-			}
-			else if(catAttrId.parse(5,":") == "dec")
-			{
-				var calcProg = catAttrId.parse(7,":").replace("%3A",":");
-				if(!calcProg.length)
-				{
-					if(urlPrms["val"] != cntrPrm[urlPrms["dev"]].get()) setVal = urlPrms["val"];
-				}
-				else
-				{
-					var progArgs = new Object();
-					progArgs.y = urlPrms["val"];
-					progArgs.x = urlPrms["val"];
-					SYS.DAQ.funcCall("JavaLikeCalc.JavaScript",progArgs,calcProg);
-					setVal = progArgs.y;
-				}
-			}
-			if(!setVal.isEVal())
-			{				
-				if(urlPrms["tm"].toInt(10) <= 0)
-				{
-					cntrPrm[urlPrms["dev"]].set(setVal);
-					SYS.message("SET:House:"+pgTree.attr("class")+"."+urlPrms["dev"],2,user+": "+pgTree.attr("class")+"."+urlPrms["dev"]+": установлен в: "+setVal);
-				}
-				else
-				{
-					var timersList = SYS.XMLNode("get").setAttr("path","/sub_DAQ/mod_JavaLikeCalc/cntr_timers/prm_rules/%2fval%2fvar");
-					SYS.cntrReq(timersList);
-					var timersTree = SYS.XMLNode("TIMERS");
-					timersTree.load(timersList.text());
-
-					var timerNd = timersTree.getElementBy(pgTree.attr("class")+"."+urlPrms["dev"]);
-					if(typeof(timerNd) != "XMLNode") timerNd = timersTree.childAdd("timer").setAttr("id",pgTree.attr("class")+"."+urlPrms["dev"]);
-					timerNd.setAttr("tm",urlPrms["tm"]).setAttr("user",user).setText(setVal);
-					timersList = SYS.XMLNode("set").setAttr("path","/sub_DAQ/mod_JavaLikeCalc/cntr_timers/prm_rules/%2fval%2fvar").setText(timersTree.save());
-					SYS.cntrReq(timersList);
-					SYS.message("SET:House:"+pgTree.attr("class")+"."+urlPrms["dev"],2,user+": "+pgTree.attr("class")+"."+urlPrms["dev"]+": установка в: "+setVal+", по таймеру: "+urlPrms["tm"]+"секунд.");
-				}
-			}
-			break;
-		}
-	else if(urlPrms["com"] == "timerClear")
-		for(var off = 0; (catAttrId=catAttrLs.parse(0,"\n",off)).length; )
-		{
-			if(catAttrId.parse(2,":") != "rw" || catAttrId.parse(3,":") != urlPrms["dev"]) continue;
-			var timersList = SYS.XMLNode("get").setAttr("path","/sub_DAQ/mod_JavaLikeCalc/cntr_timers/prm_rules/%2fval%2fvar");
-			SYS.cntrReq(timersList);
-			var timersTree = SYS.XMLNode("TIMERS");
-			timersTree.load(timersList.text());
-
-			var timerNd = timersTree.getElementBy(pgTree.attr("class")+"."+urlPrms["dev"]);
-			if(typeof(timerNd) == "XMLNode")
-			{
-				timerNd.setAttr("tm",0);
-				timersList = SYS.XMLNode("set").setAttr("path","/sub_DAQ/mod_JavaLikeCalc/cntr_timers/prm_rules/%2fval%2fvar").setText(timersTree.save());
-				SYS.cntrReq(timersList);
-			}
-			break;
-		}
-
-	return "200 OK\nContent-Type:text/xml\n\n"+xmlRespTree.save();
-}
-
-//Save template
-rez = pgTree.save();
-//SYS.messDebug("TEST Dev","TEST 00: "+typeof(devLs[formEl["cat"]+"."+itId]));',1377260842,'Монитор устройств','Монітор пристроїв');
-INSERT INTO flb_web VALUES('devices','Devices dispatcher','',10,'var treeEl = false;
-
-//> Parse template
-var pgTree = SYS.XMLNode();
-var err = pgTree.load(tmpl,false,true);
-
-//> Get categories list
-var catLs = SYS.XMLNode("get").setAttr("path","/DAQ/ModBus/ZegBee/%2fprm%2fprm");
-SYS.cntrReq(catLs);
-
-//> Get devices list
-var devLs = new Object();
-for(var i = 0; i < catLs.childSize(); i++)
-{
-	var curCat = catLs.childGet(i).attr("id");
-	catAttrReq = SYS.XMLNode("get").setAttr("path","/DAQ/ModBus/ZegBee/"+curCat+"/%2fprm%2fcfg%2fATTR_LS");
-	SYS.cntrReq(catAttrReq);
-	catAttrLs = catAttrReq.text();
-	for(var off = 0; (catAttrId=catAttrLs.parse(0,"\n",off)).length; )
-		devLs[curCat+"."+catAttrId.parse(3,":")] = true;
-}
-
-//> Process page
-//>> Place categories list
-if(typeof(treeEl=pgTree.getElementBy("cat","name")) == "XMLNode")
-	for(var i = 0; i < catLs.childSize(); i++)
-		treeEl.childAdd("OPTION").setAttr("value",catLs.childGet(i).attr("id")).setText(catLs.childGet(i).text());
-
-//> Check POST content for commands
-if(cnts.length)
-{
-	var formEl = new Object();
-	re = new RegExp("name=\"(.+)\"");
-	//>> POST form elements process
-	for(var i = 0; i < cnts.length; i++)
-		formEl[re.exec(cnts[i].attr("Content-Disposition"))[1]] = cnts[i].text();
-	//>> Check for apply
-	if(!formEl["apply"].isEVal())
-	{
-		var applyOK = true;
-		//>> ID: Check for correct form''s values
-		var itId = formEl["id"].match("[^\\s].+[^\\s]");
-		if(!itId.length)
-		{
-			treeEl = pgTree.getElementBy("idNm","name");
-			treeEl.childAdd("br");
-			treeEl.childAdd("span").setAttr("style","color : red;").setText("(Пустое значение недопустимо)");
-			itId = "";
-			applyOK = false;
-		}
-		else itId = itId[0];
-		pgTree.getElementBy("id","name").setAttr("value",itId);
-
-		//>> Name: Check for correct form''s values
-		var itName = formEl["name"].match("[^\\s].+[^\\s]");
-		if(!itName.length)
-		{
-			treeEl = pgTree.getElementBy("nameNm","name");
-			treeEl.childAdd("br");
-			treeEl.childAdd("span").setAttr("style","color : red;").setText("(Пустое значение недопустимо)");
-			itName = "";
-			applyOK = false;
-		}
-		else itName = itName[0];
-		pgTree.getElementBy("name","name").setAttr("value",itName);
-
-		//>> Address: Check for correct form''s values
-		var itAddr = formEl["addr"].toInt();
-		if(itAddr < 0 || itAddr > 65535)
-		{
-			treeEl = pgTree.getElementBy("addrNm","name");
-			treeEl.childAdd("br");
-			treeEl.childAdd("span").setAttr("style","color : red;").setText("(Адрес ModBus должен быть в диапазоне (1-65535))");
-			applyOK = false;
-		}
-		pgTree.getElementBy("addr","name").setAttr("value",itAddr);
-
-		//>> Type: Check for correct form''s values
-		pgTree.getElementBy(formEl["type"],"value").setAttr("selected","selected");
-
-		//>> sensorPos: Check for correct form''s values
-		pgTree.getElementBy("sensorPos","name").setAttr("value",formEl["sensorPos"]);
-
-		//>> Category: Check for correct form''s values
-		pgTree.getElementBy(formEl["cat"],"value").setAttr("selected","selected");
-
-		//>> Data type: 
-		pgTree.getElementBy(formEl["typeData"],"value").setAttr("selected","selected");
-		pgTree.getElementBy("in1").setAttr("style","display: "+((formEl["typeData"] == "bin")?"":"none"));
-		pgTree.getElementBy("in2").setAttr("style","display: "+((formEl["typeData"] == "bin")?"":"none"));
-		pgTree.getElementBy("ed").setAttr("style","display: "+((formEl["typeData"] == "dec")?"":"none"));
-		pgTree.getElementBy("formul").setAttr("style","display: "+((formEl["typeData"] == "dec")?"":"none"));
-
-		//>> Binary type properties
-		pgTree.getElementBy("in1","name").setAttr("value",formEl["in1"]);
-		pgTree.getElementBy("view1","name").setAttr("value",formEl["view1"]);
-		pgTree.getElementBy("in2","name").setAttr("value",formEl["in2"]);
-		pgTree.getElementBy("view2","name").setAttr("value",formEl["view2"]);
-
-		//>> Digital type properties
-		pgTree.getElementBy("ed","name").setAttr("value",formEl["ed"]);
-		pgTree.getElementBy("formul","name").setAttr("value",formEl["formul"]);	
-
-		//>> Alarm
-		pgTree.getElementBy("alarm","name").childGet(0).setText(formEl["alarm"]);
-
-		//> Add or update device
-		if(applyOK)
-		{
-			//>> Get curent attributes list for category
-			catAttrReq = SYS.XMLNode("get").setAttr("path","/DAQ/ModBus/ZegBee/"+formEl["cat"]+"/%2fprm%2fcfg%2fATTR_LS");
-			SYS.cntrReq(catAttrReq);
-			catAttrLs = catAttrReq.text();
-			var newAttrReq = "R:"+itAddr+":"+(formEl["type"]=="out"?"rw":"r")+":"+itId+":"+itName.replace(":","%3A")+":"+formEl["typeData"];
-			if(formEl["typeData"] == "bin") newAttrReq += ":"+formEl["in1"].replace(":","%3A")+":"+formEl["view1"].replace(":","%3A")+":"+formEl["in2"].replace(":","%3A")+":"+formEl["view2"].replace(":","%3A");
-			else if(formEl["typeData"] == "dec") newAttrReq += ":"+formEl["ed"].replace(":","%3A")+":"+formEl["formul"].replace(":","%3A");
-			newAttrReq += ":"+formEl["sensorPos"]+"\n";
-			//>> Append record
-			var isAppend = typeof(devLs[formEl["cat"]+"."+itId]) == "null";
-			if(isAppend)
-			{
-				catAttrLs += newAttrReq;
-				devLs[formEl["cat"]+"."+itId] = true;
-			}
-			//>> Replace
-			else catAttrLs = catAttrLs.replace(new RegExp("R:[^:]*:[^:]*:"+itId+":[^\n]*\n"),newAttrReq);
-			//>> Write new attributes list
-			catAttrReq = SYS.XMLNode("CntrReqs").setAttr("path","/DAQ/ModBus/ZegBee/"+formEl["cat"]);
-			catAttrReq.childAdd("set").setAttr("path","/%2fprm%2fcfg%2fATTR_LS").setText(catAttrLs);
-			catAttrReq.childAdd("set").setAttr("path","/%2fprm%2fst%2fen").setText(0);
-			catAttrReq.childAdd("set").setAttr("path","/%2fprm%2fst%2fen").setText(1);
-			catAttrReq.childAdd("save").setAttr("path","/%2fobj");
-			//XMLNode("set").setAttr("path","/DAQ/ModBus/ZegBee/"+formEl["cat"]+"/%2fprm%2fcfg%2fATTR_LS").setText(catAttrLs);
-			SYS.cntrReq(catAttrReq);
-			//>> Set message about correct apply
-			treeEl=pgTree.getElementBy("mess","name");
-			treeEl.childAdd("span").setAttr("style","color : green;").setText(
-				isAppend?"Новое устройство успешно добавлено. Можно продолжать.":"Устройство успешно обновлено. Можно продолжать.");
-			//>> Set alarm procedure
-			var alarmsList = SYS.XMLNode("get").setAttr("path","/sub_DAQ/mod_JavaLikeCalc/cntr_alarms/prm_rules/%2fval%2fvar");
-			SYS.cntrReq(alarmsList);
-			var alarmsTree = SYS.XMLNode("ALARMS");
-			alarmsTree.load(alarmsList.text());
-			var alarmNd = alarmsTree.getElementBy(formEl["cat"]+"."+formEl["id"]);
-			if(typeof(alarmNd)=="XMLNode") alarmNd.setText(formEl["alarm"]);
-			else alarmsTree.childAdd("it").setAttr("id",formEl["cat"]+"."+formEl["id"]).setText(formEl["alarm"]);
-			alarmsList = SYS.XMLNode("CntrReqs").setAttr("path","/sub_DAQ/mod_JavaLikeCalc/cntr_alarms/prm_rules");
-			alarmsList.childAdd("set").setAttr("path","/%2fval%2fvar").setText(alarmsTree.save());
-			alarmsList.childAdd("save").setAttr("path","/%2fobj");
-			SYS.cntrReq(alarmsList);
-		}
-		//> Form error
-		else
-		{
-			treeEl=pgTree.getElementBy("mess","name");
-			treeEl.childAdd("span").setAttr("style","color : red;").setText("Ошибка в формировании формы! Исправьте отмеченные поля и повторите.");
-		}
-	}
-	else if(!formEl["edDel"].isEVal())
-	{
-		if(formEl["edId"].length && typeof(devLs[formEl["edId"]]) != "null")
-		{
-			//>> Get curent attributes list for category
-			catAttrReq = SYS.XMLNode("get").setAttr("path","/DAQ/ModBus/ZegBee/"+(formEl["edId"].parse(0))+"/%2fprm%2fcfg%2fATTR_LS");
-			SYS.cntrReq(catAttrReq);
-			catAttrLs = catAttrReq.text();
-			catAttrLs = catAttrLs.replace(new RegExp("R:[^:]*:[^:]*:"+formEl["edId"].parse(1)+":[^\n]*\n"),"");
-			//>> Write new attributes list
-			catAttrReq = SYS.XMLNode("set").setAttr("path","/DAQ/ModBus/ZegBee/"+(formEl["edId"].parse(0))+"/%2fprm%2fcfg%2fATTR_LS").setText(catAttrLs);
-			SYS.cntrReq(catAttrReq);
-			//>> Set message about correct apply
-			treeEl=pgTree.getElementBy("mess","name");
-			treeEl.childAdd("span").setAttr("style","color : green;").setText("Устройство успешно удалено. Можно продолжать.");
-			devLs[formEl["edId"]] = false;
-		}
-		else
-		{
-			treeEl=pgTree.getElementBy("mess","name");
-			treeEl.childAdd("span").setAttr("style","color : red;").setText("Устройство для удаления отсутствует.");
-		}
-	}
-}
-
-//>> Devices list place to template
-treeEl=pgTree.getElementBy("edId","name");
-treeEl.childAdd("OPTION");
-for(var i_o in devLs)
-	if(devLs[i_o]) treeEl.childAdd("OPTION").setAttr("value",i_o).setText(i_o);
-
-//>> Load variables for select device
-if(!cnts.length && !urlPrms["selDev"].isEVal() && urlPrms["selDev"].length) 
-{
-	//> Select device
-	pgTree.getElementBy(urlPrms["selDev"],"value").setAttr("selected","selected");
-	//> Load values for select device
-	catAttrReq = SYS.XMLNode("get").setAttr("path","/DAQ/ModBus/ZegBee/"+(urlPrms["selDev"].parse(0))+"/%2fprm%2fcfg%2fATTR_LS");
-	SYS.cntrReq(catAttrReq);
-	catAttrLs = catAttrReq.text().match("R:([^:]*):([^:]*):"+urlPrms["selDev"].parse(1)+":([^\n]*)");
-	//>> ID: Check for correct form''s values
-	pgTree.getElementBy("id","name").setAttr("value",urlPrms["selDev"].parse(1));
-	//>> Name: Check for correct form''s values
-	pgTree.getElementBy("name","name").setAttr("value",catAttrLs[3].parse(0,":").replace("%3A",":"));
-	//>> Address: Check for correct form''s values
-	pgTree.getElementBy("addr","name").setAttr("value",catAttrLs[1]);
-	//>> Type: Check for correct form''s values
-	pgTree.getElementBy(((catAttrLs[2]=="rw")?"out":"sensor"),"value").setAttr("selected","selected");
-	//>> Category: Check for correct form''s values
-	pgTree.getElementBy(urlPrms["selDev"].parse(0),"value").setAttr("selected","selected");
-	//>> Data type: 
-	var dtType = catAttrLs[3].parse(1,":");
-	pgTree.getElementBy(dtType,"value").setAttr("selected","selected");
-	if(dtType == "bin")
-	{
-		pgTree.getElementBy("in1","name").setAttr("value",catAttrLs[3].parse(2,":").replace("%3A",":"));
-		pgTree.getElementBy("view1","name").setAttr("value",catAttrLs[3].parse(3,":").replace("%3A",":"));
-		pgTree.getElementBy("in2","name").setAttr("value",catAttrLs[3].parse(4,":").replace("%3A",":"));
-		pgTree.getElementBy("view2","name").setAttr("value",catAttrLs[3].parse(5,":").replace("%3A",":"));
-		pgTree.getElementBy("sensorPos","name").setAttr("value",catAttrLs[3].parse(6,":"));
-	}
-	else if(dtType == "dec")
-	{
-		pgTree.getElementBy("ed","name").setAttr("value",catAttrLs[3].parse(2,":").replace("%3A",":"));
-		pgTree.getElementBy("formul","name").setAttr("value",catAttrLs[3].parse(3,":").replace("%3A",":"));
-		pgTree.getElementBy("sensorPos","name").setAttr("value",catAttrLs[3].parse(4,":"));
-	}
-	pgTree.getElementBy("in1").setAttr("style","display: "+((dtType == "bin")?"":"none"));
-	pgTree.getElementBy("in2").setAttr("style","display: "+((dtType == "bin")?"":"none"));
-	pgTree.getElementBy("ed").setAttr("style","display: "+((dtType == "dec")?"":"none"));
-	pgTree.getElementBy("formul").setAttr("style","display: "+((dtType == "dec")?"":"none"));
-
-	//>> Get alarm procedure
-	alarmsList = SYS.XMLNode("get").setAttr("path","/sub_DAQ/mod_JavaLikeCalc/cntr_alarms/prm_rules/%2fval%2fvar");
-	SYS.cntrReq(alarmsList);
-	var alarmsTree = SYS.XMLNode();
-	alarmsTree.load(alarmsList.text());
-	var alarmNd = alarmsTree.getElementBy(urlPrms["selDev"]);
-	pgTree.getElementBy("alarm","name").childGet(0).setText((typeof(alarmNd)=="XMLNode")?alarmNd.text():"");
-}
-else pgTree.getElementBy("edDel","name").setAttr("style","visibility : hidden;");
-
-//Save template
-rez = pgTree.save();
-//SYS.messDebug("TEST Dev","TEST 00: "+typeof(devLs[formEl["cat"]+"."+itId]));',1377260944,'Диспетчер устройств','Диспетчер пристроїв');
-INSERT INTO flb_web VALUES('mess','Alarm messages','',10,'var treeEl = false;
-
-//> Parse template
-var pgTree = SYS.XMLNode();
-var err = pgTree.load(tmpl,false,true);
-treeEl = pgTree.getElementBy("mess");
-
-var curTime = SYS.time();
-var messAr = SYS.Archive.messGet(curTime,curTime,"ALARM:House:*",-1);
-var trEl = treeEl.childAdd("tr");
-trEl.childAdd("th").setText("Время");
-trEl.childAdd("th").setText("Категория");
-trEl.childAdd("th").setText("Уровень");
-trEl.childAdd("th").setText("Сообщение");
-for(i = 0; i < messAr.length; i++)
-{
-	var trEl = treeEl.childAdd("tr");
-	trEl.childAdd("td").setAttr("class","mTm").setText(SYS.strftime(messAr[i].tm));
-	trEl.childAdd("td").setAttr("class","mCat").setText(messAr[i].categ);
-	trEl.childAdd("td").setAttr("class","mLev").setText(messAr[i].level);
-	trEl.childAdd("td").setAttr("class","mMess").setText(messAr[i].mess);
-}
-
-//Save template
-rez = pgTree.save();
-//SYS.messDebug("TEST Dev","TEST 00: "+typeof(devLs[formEl["cat"]+"."+itId]));',1377261138,'Сообщения сигнализаций','Повідомлення сигналізацій');
-INSERT INTO flb_web VALUES('report','Reports','',10,'var treeEl = false;
-var pgDir = "./HouseSpirit/Web/";
-
-//> Parse template
-var pgTree = SYS.XMLNode();
-var err = pgTree.load(tmpl,false,true);
-
-//> Load default values
-pgTree.getElementBy("btm","name").setAttr("value",SYS.strftime(SYS.time()));
-pgTree.getElementBy("etm","name").setAttr("value",SYS.strftime(SYS.time()));
-var catLs = SYS.XMLNode("get").setAttr("path","/DAQ/ModBus/ZegBee/%2fprm%2fprm");
-SYS.cntrReq(catLs);
-treeEl = pgTree.getElementBy("subsys");
-for(var i = 0; i < catLs.childSize(); i++)
-{
-	treeEl.childAdd("span").setText(catLs.childGet(i).text());
-	treeEl.childAdd("input").setAttr("type","checkbox").setAttr("name",catLs.childGet(i).attr("id"));
-	treeEl.childAdd("br");
-}
-
-//> Check POST content for commands - forming report
-if(cnts.length)
-{
-	var formEl = new Object();
-	var re = new RegExp("name=\"(.+)\"");
-	//>> POST form elements process
-	for(i_c = 0; i_c < cnts.length; i_c++)
-		formEl[re.exec(cnts[i_c].attr("Content-Disposition"))[1]] = cnts[i_c].text();
-
-	//>> Check for apply
-	if(!formEl["show"].isEVal())
-	{
-		var reqRule = "";
-		var applyOK = true;
-		//>> Time: begin and end time check
-		var btm = SYS.strptime(formEl["btm"]);
-		pgTree.getElementBy("btm","name").setAttr("value",SYS.strftime(btm));
-		var etm = SYS.strptime(formEl["etm"]);
-		pgTree.getElementBy("etm","name").setAttr("value",SYS.strftime(etm));
-
-		//>> System
-		if(formEl["sys"].length)
-		{
-			pgTree.getElementBy("sys","name").setAttr("checked","checked");
-			reqRule = "\\/sub_Protocol\\/mod_HTTP\\/";
-		}
-
-		//>> Subsystems
-		var catLs = SYS.XMLNode("get").setAttr("path","/DAQ/ModBus/ZegBee/%2fprm%2fprm");
-		SYS.cntrReq(catLs);
-		for(var i = 0; i < catLs.childSize(); i++)
-		{
-			var subId = catLs.childGet(i).attr("id");
-			if(formEl[subId].length)
-			{
-				pgTree.getElementBy(subId,"name").setAttr("checked","checked");
-				if(reqRule.length) reqRule += "|";
-				reqRule += "(ALARM|SET)\\:House\\:"+subId;
-			}
-		}
-
-		//>> Report generate
-		if(btm < etm && (etm-btm) < (365*24*60*60) && reqRule.length)
-		{
-			var messAr = SYS.Archive.messGet(btm,etm,"/("+reqRule+")/",1);
-			treeEl = pgTree.getElementBy("report");
-			var trEl = treeEl.childAdd("tr");
-			trEl.childAdd("th").setText("Время");
-			trEl.childAdd("th").setText("Категория");
-			trEl.childAdd("th").setText("Уровень");
-			trEl.childAdd("th").setText("Сообщение");
-			for(i = 0; i < messAr.length; i++)
-			{
-				var trEl = treeEl.childAdd("tr");
-				trEl.childAdd("td").setAttr("class","mTm").setText(SYS.strftime(messAr[i].tm));
-				trEl.childAdd("td").setAttr("class","mCat").setText(messAr[i].categ);
-				trEl.childAdd("td").setAttr("class","mLev").setText(messAr[i].level);
-				trEl.childAdd("td").setAttr("class","mMess").setText(messAr[i].mess);
-			}
-			//>> Save report to file
-			var saveFile = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"+
-					"<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n"+
-					"<html xmlns=''http://www.w3.org/1999/xhtml''>\n"+
-					"<head>\n"+
-					"  <meta http-equiv=''Content-Type'' content=''text/html; charset=UTF-8''/>\n"+
-					"  <title>Отчёт</title>\n"+
-					"  <style type=''text/css''>\n"+
-					"    #report { width: 100%; border: 1px solid black; border-collapse: collapse; empty-cells: show; }\n"+
-					"    #report TH { border: 1px solid black; background-color: #E6E6E6; }\n"+
-					"    #report TD { border: 1px solid black; }\n"+
-					"    #report .mTm { white-space: nowrap; }\n"+
-					"    #report .mLev { text-align: center; }\n"+
-					"  </style>\n"+
-					"</head>\n"+
-					"<body>\n"+treeEl.save()+"\n</body>\n"+
-					"</html>";
-			SYS.fileWrite(pgDir+"reports/rep_"+user+".html",saveFile);
-			pgTree.getElementBy("saveFile").setAttr("href","reports/rep_"+user+".html").setText("rep_"+user+".html");
-		}
-	}
-}
-
-//Save template
-rez = pgTree.save();
-//SYS.messDebug("TEST Dev","TEST 00: "+typeof(devLs[formEl["cat"]+"."+itId]));',1377261196,'Отчёты','Звіти');
-INSERT INTO flb_web VALUES('test','Test','',10,'if(f_start)
-{
-	var req = SYS.XMLNode("send").setAttr("ProtIt","SMS").setAttr("tel","+380679859815").setText("Тестовое сообщение");
-	SYS.Transport.Serial.out_GSM.messIO(req,"UserProtocol");
-}',1377261398,'Тест','Тест');
-INSERT INTO flb_web VALUES('timerWrite','Write by the timer','',10,'//> Load rules
-var timersTree = SYS.XMLNode("TIMERS");
-timersTree.load(rules);
-for(i_rl = 0; i_rl < timersTree.childSize(); i_rl++)
-{
-	var curTm = timersTree.childGet(i_rl);
-	if(!curTm.text().length) continue;
-	var subId = curTm.attr("id").parse(0);
-	var devId = curTm.attr("id").parse(1);
-	var timer = curTm.attr("tm").toInt(10);
-	if(timer && max(0,timer-1) == 0)
-	{
-		SYS.DAQ.ModBus.ZegBee[subId][devId].set(curTm.text());
-		SYS.message("SET:House:"+curTm.attr("id"),2,curTm.attr("user")+": "+curTm.attr("id")+": установлен в: "+curTm.text());
-	}
-	curTm.setAttr("tm",max(0,timer-1));
-}
-rules = timersTree.save();',1377261462,'Запись по таймеру','Запис за таймером');
-INSERT INTO flb_web VALUES('user','Users dispatcher','',10,'var treeEl = false;
-
-//> Parse template
-var pgTree = SYS.XMLNode();
-var err = pgTree.load(tmpl,false,true);
-var isAdmin = SYS.Security.access(user,4,"root","WebRoot",0440);
-var curUser = user;
-
-//> Check POST content for commands
-if(cnts.length)
-{
-	var formEl = new Object();
-	re = new RegExp("name=\"(.+)\"");
-	//>> POST form elements process
-	for(var i = 0; i < cnts.length; i++)
-		formEl[re.exec(cnts[i].attr("Content-Disposition"))[1]] = cnts[i].text();
-	//>> Check for apply
-	if(!formEl["apply"].isEVal())
-	{
-		var applyOK = true;
-		//>> Login: Check for correct form''s values
-		if(!(userLogin=formEl["login"].match("[^\\s].+[^\\s]")).length)
-		{
-			treeEl = pgTree.getElementBy("loginNm","name");
-			treeEl.childAdd("br");
-			treeEl.childAdd("span").setAttr("style","color : red;").setText("(Пустое значение недопустимо)");
-			userLogin = "";
-			applyOK = false;
-		}
-		else userLogin = userLogin[0];
-		if(userLogin.isEVal()) userLogin = user;
-		pgTree.getElementBy("login","name").setAttr("value",userLogin);
-		var isUserPres = (typeof(SYS.Security.nodeAt("usr_"+userLogin)) == "TCntrNode");
-		var isWebUser = isUserPres && SYS.Security.access(userLogin,4,"root","Web",0440);
-		var isWebRootUser = isUserPres && SYS.Security.access(userLogin,4,"root","WebRoot",0440);
-		if(isUserPres && !(isWebUser||isWebRootUser)) applyOK = false;
-		if(!isAdmin && userLogin != user) applyOK = false;
-
-		//>> Name: Check for correct form''s values
-		var userName = formEl["fio"].match("[^\\s].+[^\\s]");
-		if(!userName.length)
-		{
-			treeEl = pgTree.getElementBy("fioNm","name");
-			treeEl.childAdd("br");
-			treeEl.childAdd("span").setAttr("style","color : red;").setText("(Пустое значение недопустимо)");
-			userName = "";
-			applyOK = false;
-		}
-		else userName = userName[0];
-		pgTree.getElementBy("fio","name").setAttr("value",userName);
-
-		//>> Password: Check for correct form''s values
-		if((!isUserPres && formEl["pass"].length < 8) || (isUserPres && formEl["pass"].length && formEl["pass"].length < 8))
-		{
-			treeEl = pgTree.getElementBy("passNm","name");
-			treeEl.childAdd("br");
-			treeEl.childAdd("span").setAttr("style","color : red;").setText("(Пароль должен быть более 8 символов)");
-			userName = "";
-			applyOK = false;
-		}
-
-		if(isAdmin)
-		{
-			//>> Telepfons list, SMS send and report view
-			pgTree.getElementBy("tel","name").setAttr("value",formEl["tel"]);
-			if(formEl["sms"].length) pgTree.getElementBy("sms","name").setAttr("checked","checked");
-			if(formEl["report"].length) pgTree.getElementBy("report","name").setAttr("checked","checked");
-
-			if(!isWebRootUser)
-			{
-				//>> Subsystem''s permition
-				var catLs = SYS.XMLNode("get").setAttr("path","/DAQ/ModBus/ZegBee/%2fprm%2fprm");
-				SYS.cntrReq(catLs);
-				treeEl = pgTree.getElementBy("sub_access");
-				for(var i = 0; i < catLs.childSize(); i++)
-				{
-					var subId = "sub_"+catLs.childGet(i).attr("id");
-					treeEl.childAdd("span").setText(catLs.childGet(i).text());
-					treeEl.childAdd("br");
-					treeEl1 = treeEl.childAdd("select").setAttr("name",subId);
-					treeEl.childAdd("br");
-					treeEl2 = treeEl1.childAdd("option").setAttr("value","--").setText("Нет доступа");
-					if(formEl[subId] == "--") treeEl2.setAttr("selected","selected");
-					treeEl2 = treeEl1.childAdd("option").setAttr("value","r-").setText("Наблюдение");
-					if(formEl[subId] == "r-") treeEl2.setAttr("selected","selected");
-					treeEl2 = treeEl1.childAdd("option").setAttr("value","rw").setText("Управление");
-					if(formEl[subId] == "rw") treeEl2.setAttr("selected","selected");
-				}
-			}
-			else
-			{
-				//> Session life time
-				treeEl = pgTree.getElementBy("sub_access");
-				treeEl.childAdd("span").setText("Время жизни сеанса аутентификации (минут)");
-				treeEl.childAdd("br");
-				treeEl.childAdd("input").setAttr("type","text").setAttr("name","sesAuth").setAttr("value",formEl["sesAuth"]);
-			}
-		}
-
-		//> Add or update user
-		if(applyOK)
-		{
-			//> Create new user if no present
-			if(!isUserPres)
-			{
-				userReq = SYS.XMLNode("CntrReqs").setAttr("path","/sub_Security");
-				userReq.childAdd("add").setAttr("path","%2fusgr%2fusers").setText(userLogin);
-				userReq.childAdd("add").setAttr("path","/grp_Web/%2fprm%2fusers").setText(userLogin);
-				SYS.cntrReq(userReq); 
-			}
-			//> Set user''s properties
-			userReq = SYS.XMLNode("CntrReqs").setAttr("path","/sub_Security/usr_"+userLogin);
-			userReq.childAdd("set").setAttr("path","%2fprm%2fdscr").setText(userName);
-			if(formEl["pass"].length)
-				userReq.childAdd("set").setAttr("path","%2fprm%2fpass").setText(formEl["pass"]);
-			if(isAdmin)
-			{
-				var descrVal = "TEL: "+formEl["tel"]+"\n"+
-							"SMS: "+(formEl["sms"].length?"true":"false")+"\n"+
-							"Report: "+(formEl["report"].length?"true":"false")+"\n";
-				if(!isWebRootUser)
-				{
-					//>> Subsystem''s permition
-					for(var i = 0; i < catLs.childSize(); i++)
-					{
-						var subId = "sub_"+catLs.childGet(i).attr("id");
-						descrVal += subId+": "+formEl[subId]+"\n";
-					}
-				}
-				else
-				{
-					var sessLife = SYS.XMLNode("CntrReqs").setAttr("path","/sub_Protocol/mod_HTTP");
-					sessLife.childAdd("set").setAttr("path","/%2fprm%2flf_tm").setText(max(1,formEl["sesAuth"].toInt()));
-					sessLife.childAdd("save").setAttr("path","/%2fobj");
-					SYS.cntrReq(sessLife);
-
-				}
-				userReq.childAdd("set").setAttr("path","%2fprm%2fldscr").setText(descrVal);
-			}
-			userReq.childAdd("save").setAttr("path","/%2fobj");
-			SYS.cntrReq(userReq); 
-			//>> Set message about correct apply
-			treeEl=pgTree.getElementBy("mess","name");
-			treeEl.childAdd("span").setAttr("style","color : green;").setText(
-				(!isUserPres)?"Новый пользователь успешно добавлен. Можно продолжать.":"Пользователь успешно обновлен. Можно продолжать.");
-		}
-		//> Form error
-		else
-		{
-			treeEl=pgTree.getElementBy("mess","name").childAdd("span").setAttr("style","color : red;");
-			if(!isAdmin && userLogin != user) treeEl.setText("Обычный пользователь может редактировать только собственную учётную запись.");
-			else if(isUserPres && !isWebUser) treeEl.setText("Пользователь присутствует, но не является Web-пользователем. Измените логин пользователя и повторите.");
-			else treeEl.setText("Ошибка в формировании формы! Исправьте отмеченные поля и повторите.");
-		}
-	}
-	else if(!formEl["edDel"].isEVal())
-	{
-		var isWebUser = SYS.Security.access(formEl["edLogin"],4,"root","Web",0440);
-		var isWebRootUser = SYS.Security.access(formEl["edLogin"],4,"root","WebRoot",0440);
-		if(isWebUser && !isWebRootUser)
-		{
-			userReq = SYS.XMLNode("CntrReqs").setAttr("path","/sub_Security");
-			userReq.childAdd("del").setAttr("path","%2fusgr%2fusers").setText(formEl["edLogin"]);
-			userReq.childAdd("del").setAttr("path","/grp_Web/%2fprm%2fusers").setText(formEl["edLogin"]);
-			userReq.childAdd("save").setAttr("path","/%2fobj");
-			SYS.cntrReq(userReq); 
-
-			//>> Set message about correct remove
-			treeEl=pgTree.getElementBy("mess","name");
-			treeEl.childAdd("span").setAttr("style","color : green;").setText("Пользователь успешно удален. Можно продолжать.");
-		}
-		else
-		{
-			treeEl=pgTree.getElementBy("mess","name").childAdd("span").setAttr("style","color : red;");
-			if(isWebRootUser) treeEl.setText("Удаление суперпользователя недопустимо!");
-			else treeEl.setText("Пользователь для удаления отсутствует.");
-		}
-	}
-}
-
-//>> Load variables for select device
-if(isAdmin)
-{
-	//> Load users list
-	var userLst = SYS.XMLNode("get").setAttr("path","/sub_Security/grp_Web/%2fprm%2fusers");
-	SYS.cntrReq(userLst);
-
-	treeEl = pgTree.getElementBy("edLogin","name");
-	treeEl.childAdd("OPTION").setAttr("value","").setText("");
-	treeEl.childAdd("OPTION").setAttr("value","new").setText("Новый пользователь");
-	for(var i = 0; i < userLst.childSize(); i++)
-	{
-		treeEl1 = SYS.XMLNode("get").setAttr("path","/sub_Security/usr_"+userLst.childGet(i).text()+"/%2fprm%2fdscr");
-		SYS.cntrReq(treeEl1);
-		treeEl.childAdd("OPTION").setAttr("value",userLst.childGet(i).text()).setText(treeEl1.text());
-	}
-}
-else
-{
-	//> Hide select input and block login edit
-	pgTree.getElementBy("edLogin","name").setAttr("style","display : none;");
-	pgTree.getElementBy("login","name").setAttr("disabled","disabled");
-	pgTree.getElementBy("tel").setAttr("style","visibility : hidden;");
-	pgTree.getElementBy("sms").setAttr("style","visibility : hidden;");
-	pgTree.getElementBy("report").setAttr("style","visibility : hidden;");
-}
-
-if(!cnts.length || !formEl["edDel"].isEVal())
-{
-	if(!urlPrms["selUser"].isEVal() && urlPrms["selUser"].length)
-	{
-		curUser = urlPrms["selUser"];
-		pgTree.getElementBy(curUser,"value").setAttr("selected","selected");
-	}
-	var isSelAdmin = SYS.Security.access(curUser,4,"root","WebRoot",0440);
-
-	//> Connect to user object
-	//>> User login
-	pgTree.getElementBy("login","name").setAttr("value",curUser);
-	if(isAdmin && SYS.Security.access(curUser,4,"root","WebRoot",0440))
-	{
-		pgTree.getElementBy("login","name").setAttr("disabled","disabled");
-		pgTree.getElementBy("edDel","name").setAttr("style","display : none;");
-	}
-	//>> User FN
-	treeEl = SYS.XMLNode("get").setAttr("path","/sub_Security/usr_"+curUser+"/%2fprm%2fdscr");
-	SYS.cntrReq(treeEl);
-	pgTree.getElementBy("fio","name").setAttr("value",treeEl.text());
-	if(isAdmin)
-	{
-		//>> Description
-		treeEl = SYS.XMLNode("get").setAttr("path","/sub_Security/usr_"+curUser+"/%2fprm%2fldscr");
-		SYS.cntrReq(treeEl);
-		//>> Phones, SMS and repor
-		re=treeEl.text().match("TEL:\\s+([^\\n]*)");
-		pgTree.getElementBy("tel","name").setAttr("value",re.length ? re[1] : "");
-		re=treeEl.text().match("SMS:\\s+([^\\n]*)");
-		if(re.length && re[1] == "true") pgTree.getElementBy("sms","name").setAttr("checked","checked");
-		re=treeEl.text().match("Report:\\s+([^\\n]*)");
-		if(re.length && re[1] == "true") pgTree.getElementBy("report","name").setAttr("checked","checked");
-		//>> Subsystem''s permition
-		if(!isSelAdmin)
-		{
-			var catLs = SYS.XMLNode("get").setAttr("path","/DAQ/ModBus/ZegBee/%2fprm%2fprm");
-			SYS.cntrReq(catLs);
-			treeEl1 = pgTree.getElementBy("sub_access");
-			for(var i = 0; i < catLs.childSize(); i++)
-			{
-				var subId = "sub_"+catLs.childGet(i).attr("id");
-				re=treeEl.text().match(subId+":\\s+([^\\n]*)");
-				treeEl1.childAdd("span").setText(catLs.childGet(i).text());
-				treeEl1.childAdd("br");
-				treeEl2 = treeEl1.childAdd("select").setAttr("name",subId);
-				treeEl1.childAdd("br");
-				treeEl3 = treeEl2.childAdd("option").setAttr("value","--").setText("Нет доступа");
-				if(re.length && re[1] == "--") treeEl3.setAttr("selected","selected");
-				treeEl3 = treeEl2.childAdd("option").setAttr("value","r-").setText("Наблюдение");
-				if(re.length && re[1] == "r-") treeEl3.setAttr("selected","selected");
-				treeEl3 = treeEl3.childAdd("option").setAttr("value","rw").setText("Управление");
-				if(re.length && re[1] == "rw") treeEl3.setAttr("selected","selected");
-			}
-		}
-		else
-		{
-			//> Session life time
-			treeEl1 = pgTree.getElementBy("sub_access");
-			treeEl1.childAdd("span").setText("Время жизни сеанса аутентификации (минут)");
-			treeEl1.childAdd("br");
-			var sessLife = SYS.XMLNode("get").setAttr("path","/sub_Protocol/mod_HTTP/%2fprm%2flf_tm");
-			SYS.cntrReq(sessLife);
-			treeEl1.childAdd("input").setAttr("type","text").setAttr("name","sesAuth").setAttr("value",sessLife.text());
-		}
-	}
-}
-
-//> Delete button hide
-if(!isAdmin || cnts.length || urlPrms["selUser"].isEVal() || !urlPrms["selUser"].length)
-	pgTree.getElementBy("edDel","name").setAttr("style","display : none;");
-
-//Save template
-rez = pgTree.save();
-//SYS.messDebug("TEST Dev","TEST 00: "+typeof(devLs[formEl["cat"]+"."+itId]));',1377261537,'Диспетчер пользователей','Диспетчер користувачів');
+INSERT INTO flb_web_io VALUES('diagram','res','Result',0,6,'',0,0,'','');
+INSERT INTO flb_web_io VALUES('diagram','srcs','Sources',0,4,'/DAQ/LogicLev/gen/F3/var:0:100:#ae77c3
+/Archive/va_CPULoad_load:0:100:darkcyan',0,3,'','');
+INSERT INTO flb_web_io VALUES('diagram','tmpl','SVG-template',0,4,'<svg xmlns="http://www.w3.org/2000/svg" version="1.1" style="font-family: Times; font-size: 12px;">
+    <style type="text/css">
+	    #scVert rect { fill: gray; stroke: none; }
+	    #scVert text { fill: gray; stroke: none; }
+	    #scHor rect { fill: gray; stroke: none; }
+	    #scHor text { fill: gray; stroke: none; }
+	    #drawArea path { stroke-width: 1; fill: none; }
+    </style>
+    <!--Draw grid and markers-->
+    <g id="scVert" />
+    <g id="scHor" />
+    <!--Curves area -->
+    <g id="drawArea" />
+</svg>',0,6,'','');
+INSERT INTO flb_web_io VALUES('diagram','hsz','Horizontal size, pixels',1,0,'600',0,4,'','');
+INSERT INTO flb_web_io VALUES('diagram','vsz','Vertical size, pixels',1,0,'400',0,5,'','');
+INSERT INTO flb_web_io VALUES('diagram','end','End time, seconds',2,0,'0',0,1,'','');
+INSERT INTO flb_web_io VALUES('diagram','size','Size, seconds',2,0,'3600',0,2,'','');
 CREATE TABLE IF NOT EXISTS 'WebUser_uPg' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PROG" TEXT DEFAULT '' ,"uk#PROG" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO WebUser_uPg VALUES('tmpl','XHTML-template','XHTML-шаблон','Site from XHTML template.','Сайт із XHTML шаблону',1,'JavaLikeCalc.JavaScript
 var pgDir = "Web/";
@@ -3100,6 +2228,7 @@ INSERT INTO Trs VALUES('Input transport ''%1'' error.','Помилка вхід�
 INSERT INTO Trs VALUES('Error the source object path ''%1''.','Помилковий шлях ''%1'' об''єкту джерела.','Ошибка пути ''%1'' объекта источника.');
 INSERT INTO Trs VALUES('The control field path is empty.','Шлях поля контролю порожній.','Путь контрольного поля пуст.');
 INSERT INTO Trs VALUES('The requested identificator ''%1'' is mіssing in the container ''%2'' of the data source objects!','Запитаний ідентифікатор ''%1'' відсутній у контейнері ''%2'' об''єктів джерел!','Запрошенный идентификатор ''%1'' отсутствует в контейнере ''%2'' объектов источников!');
+INSERT INTO Trs VALUES('SUPPRESSED','ПРИДУШЕНО','ПОДАВЛЕНО');
 CREATE TABLE IF NOT EXISTS 'tmplib_DevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO tmplib_DevLib VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
 Author: Roman Savochenko <roman@oscada.org>
@@ -6716,18 +5845,55 @@ if(curMode == 1 || curMode == 2) {
 curMode = mode;
 //mode = curMode;','','',1559658615);
 CREATE TABLE IF NOT EXISTS 'tmplib_base' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO tmplib_base VALUES('digAlarm','Alarm discrete','Сигналізація дискретна','Сигнализация дискретная','Alarm from a digital parameter.
+INSERT INTO tmplib_base VALUES('digAlarm','Alarm discrete','Сигналізація дискретна','Сигнализация дискретная','Common, representative and unified template of separate discrete parameter (complex tag) processing with formation of signaling by the defined criterion. The template forms a structure of discrete parameter (complex tag) which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object.
+
+The template provides some fields of the representative structure of the discrete parameters and adds the error field:
+- "State "Opened" (st_open)" — the state "Opened".
+- "State "Closed" (st_close)" — the state "Closed".
+- "Error (err)" — obligatory attribute of any parameter, consist of the combination of the error code and short text description, like to "2:No data or connection with source". The template reserves next error codes:
+  - 1 — hardware errors, when the data mostly wrong;
+  - 3 — violation of the specified condition.
+
+Functions:
+- Direct obtaining, by link, of the initial state and formation of two representative states with the possibility of their inversion stInv.
+- Complex preprocessing and complete generation-imitation of the discrete input on the internal programming language of OpenSCADA into the configuration IO inProc, where you can operate next service parameters:
+  - in [IN|OUT] — the same raw discrete input IO;
+  - levErr, tErr [IN|OUT] — alarm level [-7...0] and text of the error (the attribute "err" format);
+  - f_frq [IN] — frequency of calculation, the template IO;
+  - this [IN] — reference to the parameter object, what executing the template;
+  - ctx [IN] — object of the user context, what saved between the execution cycles.
+- Processing of the discrete input in for the purpose of creating a violation and correspondingly setting the attribute err, at the condition "{st}:{lev}:{mess}", that is generation violation of the level lev and the text mess for the input status st (0|1).
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.1','Сигналізація за дискретним параметром.
+Version: 1.1.0
+License: GPLv2','Загальний, представницький шаблон обробки окремого дискретного параметру (складного тегу) із формування сигналізації за визначеним критерієм. Шаблон формує структуру дискретного параметру (складного тегу) який може бути легко підключений до більшості віджетів та кадрів бібліотеки основних елементів інтерфейсу користувача просто вказавши об''єкт параметру.
+
+Шаблон надає окремі поля представницької структури дискретного параметру та додає поле помилки:
+- "Стан "Відкрито" (st_open)" — стан "Відкрито".
+- "Стан "Закрито" (st_close)" — стан "Відкрито".
+- "Помилка (err)" — обов''язковий атрибут будь якого параметру, що містить комбінацію коду помилки та короткого опису, на кшталт "1:Немає даних або підключення до джерела". Шаблон резервує наступні коди помилок:
+  - 1 — помилки обладнання, коли дані переважно помилкові;
+  - 3 — порушення за визначеної умови.
+
+Функції
+- Пряме отримання, за посиланням, первинного стану та формування двох репрезентативних станів з можливістю їх інверсії stInv.
+- Складна передобробка та повна генерація-імітація дискретного входу на внутрішній мові програмування OpenSCADA у конфігураційному ВВ inProc, де Ви можете оперувати наступними сервісними параметрами:
+  - in [IN|OUT] — той самий сирий дискретний ВВ;
+  - levErr, tErr [IN|OUT] — рівень аварії [-7...0] та текст помилки (формат атрибуту "err");
+  - f_frq [IN] — частота обчислення, шаблонний ВВ;
+  - this [IN] — посилання на об''єкт параметру, що виконує шаблон;
+  - ctx [IN] — об''єкт користувацького контексту, що зберігається між циклами виклику.
+- Опрацювання дискретного входу in на предмет формування порушення та відповідного встановлення атрибуту err, за умови "{st}:{lev}:{mess}", тобто генерація порушення з рівнем lev та текстом mess за стану входу st (0|1).
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.0.1','Сигнализация по дискретному параметру.
+Версія: 1.1.0
+Ліцензія: GPLv2','Сигнализация по дискретному параметру.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.0.1',10,0,'JavaLikeCalc.JavaScript
+Версия: 1.1.0',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	f_err = "0";
+	alDelay_ = 0;
 	//Prepare data for preprocessing
 	inPrcId = this.nodePath("_");
 	inPrcLng = "JavaLikeCalc.JavaScript";
@@ -6764,10 +5930,20 @@ else {
 }
 
 //Alarms forming
-if(tErr.toInt() && tErr.toInt() != f_err.toInt() && this.cntr().status().toInt())	return;
-if(tErr.toInt() && tErr.toInt() != f_err.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), levErr);
-else if(f_err.toInt() && !tErr.toInt())			this.alarmSet(DESCR+": "+tr("NORMA"), 1);
-f_err = tErr;','','',1561317371);
+if(alSup) {
+	if(f_err.toInt())	this.alarmSet(DESCR+": "+tr("SUPPRESSED"), 1);
+	f_err = "0";
+}
+else {
+	if(tErr.toInt() && tErr.toInt() != f_err.toInt() && this.cntr().status().toInt())	return;
+	if(alDelay > 0 && alDelay_ <= 0 && tErr.toInt() != f_err.toInt())	tErr1 = tErr.toInt();
+	if(alDelay > 0 && alDelay_ > 0 && tErr.toInt() != tErr1)	{ alDelay_ = 0; tErr1 = tErr.toInt(); }
+	if(alDelay > 0 && alDelay_ < alDelay){ alDelay_ += 1/f_frq; return; }
+	if(tErr.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), levErr);
+	else	this.alarmSet(DESCR+": "+tr("NORMA"), 1);
+	f_err = tErr;
+	alDelay_ = 0;
+}','','',1572284562);
 INSERT INTO tmplib_base VALUES('simleBoard','Analog alarm by borders (obsolete)','Сигнал аналоговий за границями (застаріле)','Сигнал аналоговый по границам (устаревшее)','The template of simple parameter included borders and dimension variable.
 
 Author: Roman Savochenko <roman@oscada.org>
@@ -6842,17 +6018,17 @@ Functions:
 Mostly the same as the basic template "Analog signal (unified)" and the value entering attribute is additionally provided.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.1
+Version: 1.1.0
 License: GPLv2','Загальний, представницький та уніфікований шаблон ручного вводу — сигналу аналогового виходу.
 Шаблон формує структуру параметру (складного тегу) аналогового виходу який може бути легко підключений до більшості віджетів та кадрів бібліотеки основних елементів інтерфейсу користувача просто вказавши об''єкт параметру, переважно через панель контролю Елемент кадр.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.0.1
+Версія: 1.1.0
 Ліцензія: GPLv2','Унифицированный шаблон ручного ввода сигнала.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.0.1',10,0,'JavaLikeCalc.JavaScript
-if(f_start)	f_err = "0";
+Версия: 1.1.0',10,0,'JavaLikeCalc.JavaScript
+if(f_start)	{ f_err = "0"; alDelay_ = 0; }
 
 pMax = plcMax; pMin = plcMin;	//Copy for local modifies using
 if(passIn=(pMax==pMin)) { pMax = max/iMult - iAdd; pMin = min/iMult - iAdd; }
@@ -6904,13 +6080,20 @@ if(!tErr) {
 }
 
 //Alarms forming
-if(alSup)	f_err = "0";
+if(alSup) {
+	if(f_err.toInt())	this.alarmSet(DESCR+": "+tr("SUPPRESSED"), 1);
+	f_err = "0";
+}
 else {
 	if(tErr.toInt() && tErr.toInt() != f_err.toInt() && this.cntr().status().toInt())	return;
-	if(tErr.toInt() && tErr.toInt() != f_err.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), levErr);
-	else if(f_err.toInt() && !tErr.toInt())			this.alarmSet(DESCR+": "+tr("NORMA"), 1);
+	if(alDelay > 0 && alDelay_ <= 0 && tErr.toInt() != f_err.toInt())	tErr1 = tErr.toInt();
+	if(alDelay > 0 && alDelay_ > 0 && tErr.toInt() != tErr1)	{ alDelay_ = 0; tErr1 = tErr.toInt(); }
+	if(alDelay > 0 && alDelay_ < alDelay){ alDelay_ += 1/f_frq; return; }
+	if(tErr.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), levErr);
+	else	this.alarmSet(DESCR+": "+tr("NORMA"), 1);
 	f_err = tErr;
-}','','',1561317384);
+	alDelay_ = 0;
+}','','',1572284562);
 INSERT INTO tmplib_base VALUES('anUnif','Analog signal (unified)','Аналоговий сигнал (уніфікований)','Аналоговый сигнал (унифицированный)','Common, representative and unified template of analog input signals processing. The template forms a structure of complex analog parameter (tag) which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object.
 Functions:
 - Generic processing of the raw analog input for:
@@ -6940,7 +6123,7 @@ Functions:
   - big motion speed of the end variable — error code 7 and alarm level 2.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.0.1
+Version: 2.1.0
 License: GPLv2','Загальний, представницький та уніфікований шаблон обробки аналогових вхідних сигналів. Шаблон формує структуру складного аналогового параметру (тегу) який може бути легко підключений до більшості віджетів та кадрів бібліотеки основних елементів інтерфейсу користувача просто вказавши об''єкт параметру.
 Функції:
 - Загальне опрацювання аналогового входу щодо:
@@ -6970,16 +6153,15 @@ License: GPLv2','Загальний, представницький та уні�
   - велика швидкість зміни speed кінцевої змінної — код помилки 7 та рівень аварії 2.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.0.1
+Версія: 2.1.0
 Ліцензія: GPLv2','Общий, представительский и унифицированный шаблон обработки аналоговых входных сигналов. Шаблон формирует структуру сложного аналогового параметра (тега) который может быть легко подключенный к большинству виджетов и кадров библиотеки основных элементов интерфейса пользователя просто указав объект параметра.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 2.0.1
+Версия: 2.1.0
 Лицензия: GPLv2',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
-	if(alSup == 0) f_err = "0";
 	prevVar = EVAL_REAL;
-	conDelay_ = 0;
+	alDelay_ = 0;
 	//Prepare data for preprocessing
 	inPrcId = this.nodePath("_");
 	inPrcLng = "JavaLikeCalc.JavaScript";
@@ -7020,7 +6202,6 @@ if(inProc.length)	{
 
 //Input data check and postprocess
 if(in.isEVal()) {
-	//if(alDelay > 0 && conDelay_ < alDelay){ conDelay_ += 1/f_frq; return; }
 	tErr = "1:"+tr("No data or connection with source"); levErr = -5;
 	var = EVAL_REAL;
 	if(subMode == 1) var = prevVar;
@@ -7066,19 +6247,20 @@ else {
 }
 
 //Alarms forming
-if(alSup == 1)	f_err = "0";
+if(alSup) {
+	if(f_err.toInt())	this.alarmSet(DESCR+": "+tr("SUPPRESSED"), 1);
+	f_err = "0";
+}
 else {
 	if(tErr.toInt() && tErr.toInt() != f_err.toInt() && this.cntr().status().toInt())	return;
-	if(alDelay > 0 && conDelay_ <= 0 && tErr.toInt() != f_err.toInt())	tErr1 = tErr.toInt();
-	if(alDelay > 0 && conDelay_ > 0 && tErr.toInt() != tErr1)	{ conDelay_ = 0; tErr1 = tErr.toInt(); }
-	if(alDelay > 0 && conDelay_ < alDelay){ conDelay_ += 1/f_frq; return; }
-	if(tErr.toInt() && tErr.toInt() != f_err.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), levErr);
-	else if(f_err.toInt() && !tErr.toInt())			this.alarmSet(DESCR+": "+tr("NORMA"), 1);
-	toSave = (alSup == 2 && f_err != tErr);
+	if(alDelay > 0 && alDelay_ <= 0 && tErr.toInt() != f_err.toInt())	tErr1 = tErr.toInt();
+	if(alDelay > 0 && alDelay_ > 0 && tErr.toInt() != tErr1)	{ alDelay_ = 0; tErr1 = tErr.toInt(); }
+	if(alDelay > 0 && alDelay_ < alDelay){ alDelay_ += 1/f_frq; return; }
+	if(tErr.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), levErr);
+	else	this.alarmSet(DESCR+": "+tr("NORMA"), 1);
 	f_err = tErr;
-	if(toSave) SYS.cntrReq(SYS.XMLNode("save").setAttr("path",this.nodePath()+"/%2fobj").setAttr("force",1));
-	conDelay_ = 0;
-}','','',1561317354);
+	alDelay_ = 0;
+}','','',1572284562);
 INSERT INTO tmplib_base VALUES('digitBlockUnif','Discrete block (unified)','Блок дискретних (уніфікований)','Блок дискретных (унифицированный)','Common, representative and unified template of the block for union of Discrete parameters for the common control device.
 The template forms a structure of discrete parameter-block (complex tag) which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object.
 Functions:
@@ -7116,17 +6298,35 @@ else {
 		last_cmd = 0;
 	}
 }','','',1441903511);
-INSERT INTO tmplib_base VALUES('pidUnifImp','Impulse PID signal (unified, violation statuses)','Імпульсний ПІД сигнал (уніфікований, стани порушень)','ПИД импульсный сигнал (унифицированный, состояния нарушений)','The unified template for process analog signals with properties of impulse PID.
+INSERT INTO tmplib_base VALUES('pidUnifImp','Impulse PID signal (unified, violation statuses)','Імпульсний ПІД сигнал (уніфікований, стани порушень)','ПИД импульсный сигнал (унифицированный, состояния нарушений)','Common, representative and unified template of an interface to the Proportional Integral Differential (PID) regulator based on the common analog input signal but with the PWM-output, extended by binary states of indication the violations and mostly like to the template PID signal (unified, violation statuses). The template forms a structure of the impulse PID-regulator which can be easily connected to some cadres of the main elements library of the user interface just pointing the parameter object.
+
+The representative structure of the impulse PID-regulators is mostly equal to the template "PID signal (unified, violation statuses)" and contains a number of attributes specific to the pulse output and the attribute of determining the operation of this regulator in the analog mode, that is, this template is even more generalizable:
+- "Impulse output up (impQup)" and "Impulse output down (impQdwn)" — signals of the PWM-output.
+- "Mode: analog (analog)" — a sign of working the regulator in the analog output mode.
+
+Functions:
+Mostly the same as the basic template "PID signal (unified, violation statuses)" and the impulse-specific attributes are additionally provided: "Impulse output up", "Impulse output down", "Mode: analog", "T impulses period", "T minimal impulse", "Impulse rate factor".
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.1','Уніфікований шаблон для обробки аналогового сигналу з властивостями імпульсного ПІД.
+Sponsored by: DIYA LTD
+Version: 1.1.0
+License: GPLv2','Загальний, представницький та уніфікований шаблон інтерфейсу до Пропорційного Інтегрального Диференційного (ПІД) регулятору заснованому на аналоговому вхідному сигналі але із ШІМ-виходом, розширеному бінарними станами індикації порушень та переважно схоже на шаблон ПІД сигнал (уніфікований, стани порушень). Шаблон формує структуру імпульсного ПІД-регулятору, який може бути легко підключений до деяких кадрів та віджетів бібліотеки основних елементів інтерфейсу користувача, просто вказавши об''єкт параметру.
+
+Представницька структура імпульсних ПІД-регуляторів переважно еквівалентна шаблону "ПІД сигнал (уніфікований, стани порушень)" та містить низку атрибутів, специфічних до імпульсного виходу та атрибут визначення роботи цього регулятору у аналоговому режимі, тобто цей шаблон є навіть більш узагальнювальним:
+- "Імпульсний вихід у гору (impQup)" та "Імпульсний вихід до низу (impQdwn)" — сигнали ШІМ-виходу.
+- "Режим: аналоговий (analog)" — ознака роботи регулятору у режимі аналогового виходу.
+
+Функції:
+Переважно те саме що у базового шаблону "ПІД сигнал (уніфікований, стани порушень)" та додатково надаються імпульсно-специфічні атрибути: "Імпульсний вихід у гору", "Імпульсний вихід до низу", "Режим: аналоговий", "T період імпульсів", "Мінімальна довжина імпульсу", "Рейтинг фактор імпульсів".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.0.1','Унифицированный шаблон обработки аналогового сигнала со свойствами импульсного ПИД.
-
-Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.0.1',10,0,'JavaLikeCalc.JavaScript
-if(f_start) f_err = "0";
+Спонсоровано: ТОВ "ДІЯ"
+Версія: 1.1.0
+Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
+if(f_start) {
+	f_err = "0";
+	alDelay_ = 0;
+}
 
 if(plcImit) {
 	if(!plcImitIn.isEVal()) in = plcImitIn;
@@ -7141,10 +6341,7 @@ if(in > (plcMax+plcExcess*(plcMax-plcMin)/100))
 { tErr = "1:"+tr("Signal exceed to upper hardware border"); var = max+plcExcess*(max-min)/100; }
 else if(in < (plcMin-plcExcess*(plcMax-plcMin)/100))
 { tErr = "2:"+tr("Signal exceed to bottom hardware border"); var = min-plcExcess*(max-min)/100; }
-if(tErr) {
-	//var = dmsk ? max+plcExcess*(max-min)/100 : min-plcExcess*(max-min)/100;
-	EVAL = true;
-}
+if(tErr)	EVAL = true;
 else {
 	vCalibr = iMult*(in+iAdd);
 
@@ -7166,9 +6363,21 @@ else {
 	else EVAL = HH = H = LL = L = false;
 }
 
-if(!f_err.toInt() && tErr.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), -4);
-else if(f_err.toInt() && !tErr.toInt())	this.alarmSet(DESCR+": "+tr("NORMA"), 1);
-f_err = tErr;','','',1561317417);
+//Alarms forming
+if(alSup) {
+	if(f_err.toInt())	this.alarmSet(DESCR+": "+tr("SUPPRESSED"), 1);
+	f_err = "0";
+}
+else {
+	if(tErr.toInt() && tErr.toInt() != f_err.toInt() && this.cntr().status().toInt())	return;
+	if(alDelay > 0 && alDelay_ <= 0 && tErr.toInt() != f_err.toInt())	tErr1 = tErr.toInt();
+	if(alDelay > 0 && alDelay_ > 0 && tErr.toInt() != tErr1)	{ alDelay_ = 0; tErr1 = tErr.toInt(); }
+	if(alDelay > 0 && alDelay_ < alDelay){ alDelay_ += 1/f_frq; return; }
+	if(tErr.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), -4);
+	else	this.alarmSet(DESCR+": "+tr("NORMA"), 1);
+	f_err = tErr;
+	alDelay_ = 0;
+}','','',1572862020);
 INSERT INTO tmplib_base VALUES('anUnifSt','Analog signal (unified, violation statuses)','Аналог. сигнал (уніфікований, стани порушень)','Аналог. сигн. (унифицированный, состояния нарушений)','Common, representative and unified template of analog input signals processing, extended by binary states of indication the violations. The template grounded on the base template "Analog signal (unified)" with its representative structure and some differences characteristic to independent development and expansion.
 Binary states were provided for the convenient use of algorithms of operation at the borders of violations of the parameter object, preferably in the block diagrams of general control algorithms.
 
@@ -7176,7 +6385,7 @@ Functions:
 Mostly the same as the basic "Analog signal (unified)" and the borderline signs are additionally provided: "H", "L", "HH", "LL", "EVAL".
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.0
+Version: 1.2.0
 License: GPLv2','Загальний, представницький та уніфікований шаблон обробки аналогових вхідних сигналів, розширений бінарними станами індикації порушень. Шаблон засновано на базовому шаблоні "Аналоговий сигнал (уніфікований)" з відповідною до нього представницькою структурою та деякими відмінностями, характерними до незалежного розвитку та розширення.
 Бінарні стани передбачалося для зручного використання у алгоритмах роботи за границями порушення об''єкту параметру, переважно у блокових схемах загальних алгоритмів керування.
 
@@ -7184,15 +6393,14 @@ License: GPLv2','Загальний, представницький та уні�
 Переважно відповідають базовому шаблону "Аналоговий сигнал (уніфікований)" та додатково надаються ознаки порушень границь: "H", "L", "HH", "LL", "EVAL".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.1.0
+Версія: 1.2.0
 Ліцензія: GPLv2','Унифицированный шаблон обработки аналогового входного сигнала.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.1.0',10,0,'JavaLikeCalc.JavaScript
+Версия: 1.2.0',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
-	if(alSup == 0) f_err = "0";
 	prevVar = EVAL_REAL;
-	conDelay_ = 0;
+	alDelay_ = 0;
 	//Prepare data for preprocessing
 	inPrcId = this.nodePath("_");
 	inPrcLng = "JavaLikeCalc.JavaScript";
@@ -7230,7 +6438,6 @@ levErr = 0;
 tErr = "0";
 //Input data check and postprocess
 if(in.isEVal()) {
-	//if(alDelay > 0 && conDelay_ < alDelay){ conDelay_ += 1/f_frq; return; }
 	tErr = "1:"+tr("No data or connection with source"); levErr = -5;
 	var = EVAL_REAL;
 	if(subMode == 1) var = prevVar;
@@ -7277,30 +6484,104 @@ else {
 }
 
 //Alarms forming
-if(alSup == 1)	f_err = "0";
+if(alSup) {
+	if(f_err.toInt())	this.alarmSet(DESCR+": "+tr("SUPPRESSED"), 1);
+	f_err = "0";
+}
 else {
 	if(tErr.toInt() && tErr.toInt() != f_err.toInt() && this.cntr().status().toInt())	return;
-	if(alDelay > 0 && conDelay_ <= 0 && tErr.toInt() != f_err.toInt())	tErr1 = tErr.toInt();
-	if(alDelay > 0 && conDelay_ > 0 && tErr.toInt() != tErr1)	{ conDelay_ = 0; tErr1 = tErr.toInt(); }
-	if(alDelay > 0 && conDelay_ < alDelay){ conDelay_ += 1/f_frq; return; }
-	if(tErr.toInt() && tErr.toInt() != f_err.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), levErr);
-	else if(f_err.toInt() && !tErr.toInt())			this.alarmSet(DESCR+": "+tr("NORMA"), 1);
-	toSave = (alSup == 2 && f_err != tErr);
+	if(alDelay > 0 && alDelay_ <= 0 && tErr.toInt() != f_err.toInt())	tErr1 = tErr.toInt();
+	if(alDelay > 0 && alDelay_ > 0 && tErr.toInt() != tErr1)	{ alDelay_ = 0; tErr1 = tErr.toInt(); }
+	if(alDelay > 0 && alDelay_ < alDelay){ alDelay_ += 1/f_frq; return; }
+	if(tErr.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), levErr);
+	else	this.alarmSet(DESCR+": "+tr("NORMA"), 1);
 	f_err = tErr;
-	if(toSave) SYS.cntrReq(SYS.XMLNode("save").setAttr("path",this.nodePath()+"/%2fobj").setAttr("force",1));
-	conDelay_ = 0;
-}','','',1562421007);
-INSERT INTO tmplib_base VALUES('pidUnif','PID signal (unified, violation statuses)','ПІД сигнал (уніфікований, стани порушень)','ПИД сигнал (унифицированный, состояния нарушений)','The unified template for process analog signals with properties of PID.
+	alDelay_ = 0;
+}','','',1572284562);
+INSERT INTO tmplib_base VALUES('pidUnif','PID signal (unified, violation statuses)','ПІД сигнал (уніфікований, стани порушень)','ПИД сигнал (унифицированный, состояния нарушений)','Common, representative and unified template of an interface to the Proportional Integral Differential (PID) regulator based on the common analog input signal, extended by binary states of indication the violations. The template forms a structure of the analog PID-regulator which can be easily connected to some cadres and widgets of the main elements library of the user interface just pointing the parameter object.
+
+The representative structure of the analog PID-regulators is:
+- "Variable (var)" — end variable of the parameter — engineeric real value, allowed and suitable for archiving.
+- "Error (err)" — obligatory attribute of any parameter, consist of the combination of the error code and short text description, like to "2:No data or connection with source". The template reserves next error codes:
+  - 1, 2 — hardware errors, when the data mostly wrong;
+  - 3, 4 — alarm border errors;
+  - 5, 6 — warning border errors;
+  - 7 — the speed error of the variable changing.
+- "Violations suppress (alSup) and delay (alDelay)" — violations generic control for suppressing and delaying.
+- "Setpoint (sp)" — setpoint for the analog signal value achievement in the automatic mode.
+- "Manual input (manIn)" — attribute for entering a new output value, which in the next falls into the output at the manual mode.
+- "Output (out)" — output (control signal) of the PID-regulator.
+- "Mode: automate (auto)" — the PID-regulator mode "Automatic".
+- "Mode: cascade (casc)" — the PID-regulator mode "Cascade".
+- "Scale: minimum (min)" and "Scale: maximum (max)" — main scale of the end variable, the output of which causes a hardware border error. The scale is also used as a scale of the variable trend display on the graphs.
+- "Logarithmic scale (log)" — the scale sign of the variable trend display on the graphs in the logarithmic scale.
+- "Dimension (ed)" — dimension (unit of measurement) of the variable.
+- "Precision (prec)" — number signs after the dot, for positive values, and precision (signs in whole), for negative ones, to display the real end variable on the screen.
+
+Functions:
+- Generic processing of the raw analog input for:
+  - simple correction-calibration at the formula "in = iMult*(in+iAdd)";
+  - scaling from the hardware border [plcMin...plcMax] to the main border [min...max], applying the square scale scSqr;
+  - permission to exceed the border for the input value on the value of plcExcess percent;
+  - filtering the input value changing in the time Tf.
+- Processing the result variable var for violation some borders and criteria, generating the alarms and proper setting the attribute err. The alarm borders can have some hysteresis HystBnd and can be suppressed setting alSup. Next borders and criteria are provided:
+- missing for data or connection with source at the EVAL input value — error code 1 and alarm level 5;
+- exceeding the input value of the hardware border — error code 1,2 and alarm level 5;
+- exceeding the end variable of the alarm border [aMin...aMax] — error code 3,4 and alarm level 4;
+  !!! Disabled at setting for equal or inverted values of the border
+- exceeding the end variable of the warning border [wMin...wMax] — error code 5,6 and alarm level 2;
+  !!! Disabled at setting for equal or inverted values of the border
+big motion speed of the end variable — error code 7 and alarm level 2.
+- Transmission of the PID-specific information, control and coefficient attributes to and from the PLC or other data source with the regulation.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.1','Уніфікований шаблон для обробки аналогового сигналу з властивостями ПІД.
+Sponsored by: DIYA LTD
+Version: 1.2.0
+License: GPLv2','Загальний, представницький та уніфікований шаблон інтерфейсу до Пропорційного Інтегрального Диференційного (ПІД) регулятору заснованому на аналоговому вхідному сигналі, розширеному бінарними станами індикації порушень. Шаблон формує структуру аналогового ПІД-регулятору, який може бути легко підключений до деяких кадрів та віджетів бібліотеки основних елементів інтерфейсу користувача, просто вказавши об''єкт параметру.
+
+Представницькою структурою аналогового ПІД-регулятору є:
+- "Змінна (var)" — кінцева змінна параметру — інженерне реальне значення, доступне та придатне до архівації.
+- "Помилка (err)" — обов''язковий атрибут будь якого параметру, що містить комбінацію коду помилки та короткого опису, на кшталт "2:Немає даних або підключення до джерела". Шаблон резервує наступні коди помилок:
+  - 1, 2 — помилки обладнання, коли дані переважно помилкові;
+  - 3, 4 — помилки аварійної границі;
+  - 5, 6 — помилки попереджувальної границі;
+  - 7 — помилка швидкості зміни змінної.
+- "Придушення (alSup) та затримка (alDelay) порушень" — загальний контроль порушень щодо придушення та затримки.
+- "Завдання (sp)" — завдання для досягнення значенням аналоговим сигналом у автоматичному режимі.
+- "Ручний ввід (manIn)" — атрибут введення нового значення виходу, яке надалі потрапляє до виходу у ручному режимі.
+- "Вихід (out)" — вихід (сигнал контролю) ПІД-регулятору.
+- "Режим: автомат (auto)" — режим "Автомат" ПІД-регулятору.
+- "Режим: каскад (casc)" — режим "Каскад" ПІД-регулятору.
+- "Шкала: мінімум (min)" та "Шкала: максимум (max)" — головна шкала кінцевої змінної, вихід за яку призводить до помилки апаратної границі. Шкала також використовується як шкала відображення тренду змінної на графіках.
+- "Логарифмічна шкала (log)" — ознака відображення тренду змінної на графіках у логарифмічній шкалі.
+- "Одиниця виміру (ed)" — одиниця виміру змінної.
+- "Точність (prec)" — кількість знаків після крапки, для позитивних значень, та точність (знаків загалом), для негативних, для відображення реальної кінцевої змінної на екрані.
+
+Функції:
+- Загальне опрацювання аналогового входу щодо:
+  - проста корекція-калібрування за формулою "in = iMult*(in+iAdd)";
+  - масштабування від апаратної границі [plcMin...plcMax] у головну границю [min...max], враховуючи квадратичну шкалу scSqr;
+  - дозвіл на перевищення границі вхідним значенням на величину plcExcess відсотків;
+  - фільтрування зміни вхідного значення на час Tf.
+- Проста імітація аналогового входу, встановленням plcImit та підключенням джерела імітації-симуляції до plcImitIn.
+- Опрацювання кінцевої змінної var на предмет порушення деяких границь та критеріїв, генеруючи аварії та відповідно встановлюючи атрибут err. Границі аварії можуть мати деякий гістерезис HystBnd, можуть бути затримані на час alDelay та можуть бути придушені встановленням alSup. Надаються наступні границі та критерії:
+  - відсутність даних або підключення до джерела за вхідним значенням EVAL — код помилки 1 та рівень аварії 5;
+  - перевищення апаратної границі вхідним значенням — код помилки 1,2 та рівень аварії 5;
+  - перевищення аварійної границі кінцевою змінною [aMin...aMax] — код помилки 3,4 та рівень аварії 4;
+￼ !!! Вимикається встановленням однакових або інверсних значень границі
+  - перевищення попереджувальної границі кінцевою змінною [wMin...wMax] — код помилки 5,6 та рівень аварії 2;
+￼ !!! Вимикається встановленням однакових або інверсних значень границі
+  - велика швидкість зміни speed кінцевої змінної — код помилки 7 та рівень аварії 2.
+- Передавання специфічної ПІД інформації, контролю та атрибутів коефіцієнтів до та з ПЛК або іншого джерела даних із регулюванням.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.0.1','Унифицированный шаблон обработки аналогового сигнала со свойствами ПИД.
-
-Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.0.1',10,0,'JavaLikeCalc.JavaScript
-if(f_start) f_err = "0";
+Спонсоровано: ТОВ "ДІЯ"
+Версія: 1.2.0
+Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
+if(f_start) {
+	f_err = "0";
+	alDelay_ = 0;
+}
 
 if(plcImit) {
 	if(!plcImitIn.isEVal()) in = plcImitIn;
@@ -7315,10 +6596,7 @@ if(in > (plcMax+plcExcess*(plcMax-plcMin)/100))
 { tErr = "1:"+tr("Signal exceed to upper hardware border"); var = max+plcExcess*(max-min)/100; }
 else if(in < (plcMin-plcExcess*(plcMax-plcMin)/100))
 { tErr = "2:"+tr("Signal exceed to bottom hardware border"); var = min-plcExcess*(max-min)/100; }
-if(tErr) {
-	//var = dmsk ? max+plcExcess*(max-min)/100 : min-plcExcess*(max-min)/100;
-	EVAL = true;
-}
+if(tErr)	EVAL = true;
 else {
 	vCalibr = iMult*(in+iAdd);
 
@@ -7340,21 +6618,33 @@ else {
 	else EVAL = HH = H = LL = L = false;
 }
 
-if(!f_err.toInt() && tErr.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), -4);
-else if(f_err.toInt() && !tErr.toInt())	this.alarmSet(DESCR+": "+tr("NORMA"), 1);
-f_err = tErr;','','',1561317477);
+//Alarms forming
+if(alSup) {
+	if(f_err.toInt())	this.alarmSet(DESCR+": "+tr("SUPPRESSED"), 1);
+	f_err = "0";
+}
+else {
+	if(tErr.toInt() && tErr.toInt() != f_err.toInt() && this.cntr().status().toInt())	return;
+	if(alDelay > 0 && alDelay_ <= 0 && tErr.toInt() != f_err.toInt())	tErr1 = tErr.toInt();
+	if(alDelay > 0 && alDelay_ > 0 && tErr.toInt() != tErr1)	{ alDelay_ = 0; tErr1 = tErr.toInt(); }
+	if(alDelay > 0 && alDelay_ < alDelay){ alDelay_ += 1/f_frq; return; }
+	if(tErr.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), -4);
+	else	this.alarmSet(DESCR+": "+tr("NORMA"), 1);
+	f_err = tErr;
+	alDelay_ = 0;
+}','','',1572861425);
 INSERT INTO tmplib_base VALUES('SNMP','Network devices by SNMP','Мережеві пристрої за SNMP','Сетевые устройства по SNMP','Data combination of a device, accessible by the protocol SNMP, in a complex object of the attribute "All items". The template designed to use together with the DAQ-module "SNMP" and to represent this data by the frame "Object properties" as a complex object with properties, signalling at single borders and writing. Considering the great specificity and variety of SNMP-accessible devices, this template is actually a billet and an example of creating a template based on it to a corresponding device with a specific to it processing of input properties, forming of violations and write capability.
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: PAC HARTRON
-Version: 1.0.1
+Version: 1.1.0
 License: GPLv2','Об''єднання даних пристрою, доступного за протоколом SNMP, у комплексному об''єкті атрибуту "Всі елементи". Шаблон розроблено для використання із модулем джерела даних "SNMP" та представлення цих даних кадром "Властивості об''єкту" як комплексний об''єкт із властивостями, сигналізацією за окремими границями та записом. Враховуючи велику специфіку та розмаїття пристроїв доступних за протоколом SNMP, цей шаблон фактично є заготовкою та прикладом створення на його основі шаблону до відповідного пристрою із специфічною до нього обробкою вхідних властивостей, формування порушень та можливістю запису.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: ПАС ХАРТРОН
-Версія: 1.0.1
+Версія: 1.1.0
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
-if(f_start)	{ srcPrm = false; items = new Object(); }
+if(f_start)	{ srcPrm = false; items = new Object(); alDelay_ = 0; }
 
 alLev = 0;
 tErr = "";
@@ -7433,9 +6723,20 @@ else {
 tErr = tErr.length ? ""+alLev+":"+tErr : "0";
 
 //Alarms forming
-if(tErr.toInt() && tErr.toInt() != f_err.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), -(2+alLev));
-else if(f_err.toInt() && !tErr.toInt())			this.alarmSet(DESCR+": "+tr("NORMA"), 1);
-f_err = tErr;','','',1570376926);
+if(alSup) {
+	if(f_err.toInt())	this.alarmSet(DESCR+": "+tr("SUPPRESSED"), 1);
+	f_err = "0";
+}
+else {
+	if(tErr.toInt() && tErr.toInt() != f_err.toInt() && this.cntr().status().toInt())	return;
+	if(alDelay > 0 && alDelay_ <= 0 && tErr.toInt() != f_err.toInt())	tErr1 = tErr.toInt();
+	if(alDelay > 0 && alDelay_ > 0 && tErr.toInt() != tErr1)	{ alDelay_ = 0; tErr1 = tErr.toInt(); }
+	if(alDelay > 0 && alDelay_ < alDelay){ alDelay_ += 1/f_frq; return; }
+	if(tErr.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), -(2+alLev));
+	else	this.alarmSet(DESCR+": "+tr("NORMA"), 1);
+	f_err = tErr;
+	alDelay_ = 0;
+}','','',1572284562);
 INSERT INTO tmplib_base VALUES('codeState','Code state','Стан за кодом','Состояние по коду','A variant of the common, representative and unified template of the block for union of Discrete parameters, expanded by more than two states and three commands that can be encoded by an integer value.
 The template forms a structure of parameter (complex tag) which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object.
 
@@ -7455,7 +6756,7 @@ Functions:
 - Formation of the violation and the corresponding setting of the attribute err, provided at setting in the processing procedure or lack of the communication (in = EVAL).
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.2
+Version: 1.2.0
 License: GPLv2','Варіант загального, представницького та уніфікованого шаблону блоку поєднання дискретних параметрів, розширений більш ніж двома станами та трьома командами які можна закодувати цілим значенням.
 Шаблон формує структуру параметру (складного тегу) стану за кодом який може бути легко підключений до більшості віджетів та кадрів бібліотеки основних елементів інтерфейсу користувача просто вказавши об''єкт параметру.
 
@@ -7475,13 +6776,14 @@ License: GPLv2','Варіант загального, представницьк
 - Формування порушення та відповідне встановлення атрибуту err, за умови встановлення у процедурі обробки або відсутності зв''язку (in = EVAL).
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.1.2
+Версія: 1.2.0
 Ліцензія: GPLv2','Формирование состояния по коду
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.1.2',10,0,'JavaLikeCalc.JavaScript
+Версия: 1.2.0',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	f_err = "0";
+	alDelay_ = 0;
 	//Prepare data for preprocessing
 	inPrcId = this.nodePath("_");
 	inPrcLng = "JavaLikeCalc.JavaScript";
@@ -7538,10 +6840,20 @@ else {
 }
 
 //Alarms forming
-if(tErr.toInt() && tErr.toInt() != f_err.toInt() && this.cntr().status().toInt())	return;
-if(tErr.toInt() && tErr.toInt() != f_err.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), levErr);
-else if(f_err.toInt() && !tErr.toInt())			this.alarmSet(DESCR+": "+tr("NORMA"), 1);
-f_err = tErr;','','',1561317508);
+if(alSup) {
+	if(f_err.toInt())	this.alarmSet(DESCR+": "+tr("SUPPRESSED"), 1);
+	f_err = "0";
+}
+else {
+	if(tErr.toInt() && tErr.toInt() != f_err.toInt() && this.cntr().status().toInt())	return;
+	if(alDelay > 0 && alDelay_ <= 0 && tErr.toInt() != f_err.toInt())	tErr1 = tErr.toInt();
+	if(alDelay > 0 && alDelay_ > 0 && tErr.toInt() != tErr1)	{ alDelay_ = 0; tErr1 = tErr.toInt(); }
+	if(alDelay > 0 && alDelay_ < alDelay){ alDelay_ += 1/f_frq; return; }
+	if(tErr.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), levErr);
+	else	this.alarmSet(DESCR+": "+tr("NORMA"), 1);
+	f_err = tErr;
+	alDelay_ = 0;
+}','','',1572284562);
 INSERT INTO tmplib_base VALUES('ntf','Notificator by SMS, EMail(SMTP)','Повідомлювач за SMS, EMail(SMTP)','Уведомитель посредством SMS, EMail(SMTP)','The complex template of the notification contains of parts of the dispatcher and the output user protocol of notification by EMail(SMTP) and SMS.
 
 THE DISPATCHER can be performed for pointed messages of the message buffer of OpenSCADA and applied on the Logical level or the controller object of the module JavaLikeCalc.
@@ -7868,14 +7180,14 @@ INSERT INTO tmplib_base VALUES('UPS','Uninterruptible Power Supply','Джере�
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: DIYA LTD
-Version: 1.1.2
+Version: 1.3.0
 License: GPLv2','Об''єднання даних Джерела Безперебійного Живлення у комплексному об''єкті атрибуту "Всі елементи". Шаблон розроблено для використання із модулем джерела даних "Система" у частині "ДБЖ" та представлення цих даних кадром "Властивості об''єкту" як комплексний об''єкт із властивостями, сигналізацією за окремими границями та записом.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсоровано: ТОВ "ДІЯ"
-Версія: 1.1.2
+Версія: 1.3.0
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
-if(f_start)	{ srcPrm = false; items = new Object(); conDelay_ = 0; }
+if(f_start)	{ srcPrm = false; items = new Object(); alDelay_ = 0; }
 
 alLev = 0;
 tErr = "";
@@ -7975,13 +7287,20 @@ else {
 tErr = tErr.length ? ""+alLev+":"+tErr : "0";
 
 //Alarms forming
-if(alDelay > 0 && conDelay_ <= 0 && tErr.toInt() != f_err.toInt())	tErr1 = tErr.toInt();
-if(alDelay > 0 && conDelay_ > 0 && tErr.toInt() != tErr1)	{ conDelay_ = 0; tErr1 = tErr.toInt(); }
-if(alDelay > 0 && conDelay_ < alDelay){ conDelay_ += 1/f_frq; return; }
-if(tErr.toInt() && tErr.toInt() != f_err.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), -(2+alLev));
-else if(f_err.toInt() && !tErr.toInt())			this.alarmSet(DESCR+": "+tr("NORMA"), 1);
-f_err = tErr;
-conDelay_ = 0;','','',1570376879);
+if(alSup) {
+	if(f_err.toInt())	this.alarmSet(DESCR+": "+tr("SUPPRESSED"), 1);
+	f_err = "0";
+}
+else {
+	if(tErr.toInt() && tErr.toInt() != f_err.toInt() && this.cntr().status().toInt())	return;
+	if(alDelay > 0 && alDelay_ <= 0 && tErr.toInt() != f_err.toInt())	tErr1 = tErr.toInt();
+	if(alDelay > 0 && alDelay_ > 0 && tErr.toInt() != tErr1)	{ alDelay_ = 0; tErr1 = tErr.toInt(); }
+	if(alDelay > 0 && alDelay_ < alDelay){ alDelay_ += 1/f_frq; return; }
+	if(tErr.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), -(2+alLev));
+	else	this.alarmSet(DESCR+": "+tr("NORMA"), 1);
+	f_err = tErr;
+	alDelay_ = 0;
+}','','',1572284562);
 INSERT INTO tmplib_base VALUES('initConsAssignTrs','Initiative connections processing for assigned output transports','Опрацювання ініціативних підключень щодо асоціативних вихідних транспортів','Обработка инициативных подключений на предмет ассоциативных выходных транспортов','The template of processing input initiative connections was created to provide the latest chain of implementation and support for conception of data acquisition in the passive mode and the initiative connection, that is — the control of associative connections, created by the input transport at each connection.
 
 The function of creation associative output transports at connections is currently only supported by the module "Sockets" and for TCP-sockets.
@@ -11747,7 +11066,7 @@ if(val!=EVAL_REAL)
   else if(bWUp!=bWDwn && val>bWUp)	f_err="105:Upper warning border violation";
   else if(bWUp!=bWDwn && val<bWDwn)	f_err="106:Lower warning border violation";
   else f_err="0";
-}',0);
+}',1572510316);
 INSERT INTO tmplib_tests VALUES('test','Test','Тест','Тест','S7 controller testing','Тестування контролера S7','Тестирование контроллера S7',10,0,'
 ',1539451468);
 INSERT INTO tmplib_tests VALUES('gasPoint','Flow control point','','','','','',10,0,'JavaLikeCalc.JavaScript
@@ -12278,7 +11597,7 @@ Provides EMAIL sending by the protocol SMTP.
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','Provides EMAIL sending by the protocol SMTP.
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.0','',1,'',0,'','JavaLikeCalc.JavaScript
+Version: 1.0.0','',1,'',0,'','JavaLikeCalc.JavaScript
 //Request form:
 //<send auth="{user}:{pass}" from="{FromAddr}" to="{ToAddr}" topic="{My Topic}" err="1:Error">{MessageText}</send>
 //  topic - the message topic;
@@ -12897,4 +12216,1093 @@ INSERT INTO techApp VALUES('pipe2_1','Pipe 2->1','Труба 2->1','Труба 2
 DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi2, Pi2, 293, Si2, EVAL_REAL, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
 Po = max(0, min(100,Po+0.27*(Fi1+Fi2-Fo)/(Q0*Kpr*So*lo*f_frq)));
 To = max(0, To+(Fi1*(Ti1-To)+Fi2*(Ti2-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Q0*f_frq));',1556609878);
+CREATE TABLE IF NOT EXISTS 'flb_web' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
+INSERT INTO flb_web VALUES('alarms','Alarms','Сигнализации','Сигналізації','',1,10,0,'//> Load rules
+var alarmsTree = SYS.XMLNode("ALARMS");
+alarmsTree.load(rules);
+for(i_rl = 0; i_rl < alarmsTree.childSize(); i_rl++)
+{
+	if(!alarmsTree.childGet(i_rl).text().length) continue;
+	var subId = alarmsTree.childGet(i_rl).attr("id").parse(0,".");
+	var devId =  alarmsTree.childGet(i_rl).attr("id").parse(1,".");
+	var curAttrVal = SYS.DAQ.ModBus.ZegBee[subId][devId].get();
+	var curErr = "";
+	if(curAttrVal.isEVal()) curErr = "Value error. Perhaps the device is missing.";
+	else
+	{
+		var progArgs = new Object();
+		progArgs.err = "";
+		progArgs.x = curAttrVal;
+		SYS.DAQ.funcCall("JavaLikeCalc.JavaScript",progArgs,alarmsTree.childGet(i_rl).text());
+		if(progArgs.err.length) curErr = progArgs.err;
+	}
+	//> Create alarm
+	if(curErr.length && curErr != alarmsTree.childGet(i_rl).attr("err"))
+	{
+		SYS.message("ALARM:House:"+alarmsTree.childGet(i_rl).attr("id"),-4,curErr);
+		//>> Send SMS for new alarm messages to users
+		var smsReq = SYS.XMLNode("send").setAttr("ProtIt","SMS").setText(alarmsTree.childGet(i_rl).attr("id")+": "+curErr);
+		var userLst = SYS.XMLNode("get").setAttr("path","/sub_Security/grp_Web/%2fprm%2fusers");
+		SYS.cntrReq(userLst);
+		for(var i = 0; i < userLst.childSize(); i++)
+		{
+			var isSelAdmin = SYS.Security.access(userLst.childGet(i).text(),4,"root","WebRoot",0440);
+			var treeEl = SYS.XMLNode("get").setAttr("path","/sub_Security/usr_"+userLst.childGet(i).text()+"/%2fprm%2fldscr");
+			SYS.cntrReq(treeEl);
+			var re = treeEl.text().match("SMS:\\s+([^\\n]*)");
+			if(!re.length || re[1] != "true") continue;
+			if(!isSelAdmin)
+			{
+				re=treeEl.text().match("sub_"+subId+":\\s+([^\\n]*)");
+				if(!re.length || re[1] == "--") continue;
+			}
+			re = treeEl.text().match("TEL:\\s+([^\\n]*)");
+			if(!re.length) continue;
+			var telLs = re[1].split(new RegExp("\\s+"));
+			for(var i_t = 0; i_t < telLs.length; i_t++)
+			{
+				smsReq.setAttr("tel",telLs[i_t]);
+				SYS.Transport.Serial.out_GSM.messIO(smsReq,"UserProtocol");
+				if(smsReq.attr("err") != "0") SYS.messWarning("SMS send",smsReq.attr("err"));
+			}
+		}
+	}
+	//> Clear alarm
+	else if(!curErr.length && !alarmsTree.childGet(i_rl).attr("err").isEVal())
+		SYS.message("ALARM:House:"+alarmsTree.childGet(i_rl).attr("id"),1,"Norma");
+	alarmsTree.childGet(i_rl).setAttr("err",curErr);	
+}
+rules = alarmsTree.save();',1377261539);
+INSERT INTO flb_web VALUES('devMon','Devices monitor','Монитор устройств','Монітор пристроїв','',1,10,0,'var treeEl = false;
+
+//> Parse template
+var pgTree = SYS.XMLNode();
+var err = pgTree.load(tmpl,false,true);
+
+//> Access
+var isAdmin = SYS.Security.access(user,4,"root","WebRoot",0440);
+treeEl = SYS.XMLNode("get").setAttr("path","/sub_Security/usr_"+user+"/%2fprm%2fldscr");
+SYS.cntrReq(treeEl);
+re=treeEl.text().match("sub_"+pgTree.attr("class")+":\\s+([^\\n]*)");
+var subAccess = re.length ? re[1] : "--";
+
+//> Devices list place to template
+var cntrPrm = SYS.DAQ.ModBus.ZegBee[pgTree.attr("class")];
+catAttrReq = SYS.XMLNode("get").setAttr("path","/DAQ/ModBus/ZegBee/"+pgTree.attr("class")+"/%2fprm%2fcfg%2fATTR_LS");
+SYS.cntrReq(catAttrReq);
+catAttrLs = catAttrReq.text();
+
+//> Direct requests by XML process
+if(!urlPrms["com"].isEVal())
+{
+	var xmlRespTree = SYS.XMLNode(urlPrms["com"]);
+	if(urlPrms["com"] == "info")
+	{
+		//> Get timers
+		var timersList = SYS.XMLNode("get").setAttr("path","/sub_DAQ/mod_JavaLikeCalc/cntr_timers/prm_rules/%2fval%2fvar");
+		SYS.cntrReq(timersList);
+		var timersTree = SYS.XMLNode("TIMERS");
+		timersTree.load(timersList.text());
+
+		//> Devices process
+		for(var off = 0; (catAttrId=catAttrLs.parse(0,"\n",off)).length; )
+		{
+			if((catAttrId.parse(2,":") == "r" && (isAdmin || subAccess != "--")) || (catAttrId.parse(2,":") == "rw" && (isAdmin || subAccess == "rw")))
+			{
+				var xmlRespEl = xmlRespTree.childAdd(catAttrId.parse(5,":")).setAttr("name",catAttrId.parse(4,":")).setAttr("id",catAttrId.parse(3,":")).setAttr("acs",catAttrId.parse(2,":"));
+				if(catAttrId.parse(5,":") == "bin")
+					xmlRespEl.setAttr("vl1",catAttrId.parse(6,":")).setAttr("nm1",catAttrId.parse(7,":"))
+								  .setAttr("vl2",catAttrId.parse(8,":")).setAttr("nm2",catAttrId.parse(9,":")).setAttr("sensorPos",catAttrId.parse(10,":"));
+				else if(catAttrId.parse(5,":") == "dec") xmlRespEl.setAttr("ed",catAttrId.parse(6,":")).setAttr("sensorPos",catAttrId.parse(8,":"));;
+				//> Timer get
+				var timerNd = timersTree.getElementBy(pgTree.attr("class")+"."+catAttrId.parse(3,":"));
+				if(typeof(timerNd)=="XMLNode" && timerNd.attr("tm").toInt(10) > 0) xmlRespEl.setAttr("tm",timerNd.attr("tm"));
+			}
+		}
+	}
+	else if(urlPrms["com"] == "vals")
+		for(var off = 0; (catAttrId=catAttrLs.parse(0,"\n",off)).length; )
+		{
+			if((catAttrId.parse(2,":") == "r" && (isAdmin || subAccess != "--")) || (catAttrId.parse(2,":") == "rw" && (isAdmin || subAccess == "rw")))
+			{
+				var curAttrVal = cntrPrm[catAttrId.parse(3,":")].get();
+				var xmlRespEl = xmlRespTree.childAdd(catAttrId.parse(5,":")).setAttr("id",catAttrId.parse(3,":"));
+				//>>> Value error
+				if(curAttrVal.isEVal()) xmlRespEl.setAttr("val","<err>").setText("Ошибка");
+				else
+				{
+					xmlRespEl.setAttr("val",curAttrVal);
+					//>>> Prepare value for different type
+					if(catAttrId.parse(5,":") == "dec")
+					{
+						//>>>> Calc by formule add
+						var calcProg = catAttrId.parse(7,":").replace("%3A",":");
+						if(calcProg.length && catAttrId.parse(2,":") != "rw")
+						{
+							var progArgs = new Object();
+							progArgs.y = curAttrVal;
+							progArgs.x = curAttrVal;
+							SYS.DAQ.funcCall("JavaLikeCalc.JavaScript",progArgs,calcProg);
+							curAttrVal = progArgs.y;
+						}
+						xmlRespEl.setText(curAttrVal);
+					}
+					else if(catAttrId.parse(5,":") == "bin")
+					{
+						if(curAttrVal == catAttrId.parse(6,":").replace("%3A",":")) curAttrVal = catAttrId.parse(7,":").replace("%3A",":");
+ 						else if(curAttrVal == catAttrId.parse(8,":").replace("%3A",":")) curAttrVal = catAttrId.parse(9,":").replace("%3A",":");
+						else curAttrVal = "Неизвестно";
+						xmlRespEl.setText(curAttrVal);
+					}
+				}
+			}
+		}
+	else if(urlPrms["com"] == "set")
+		for(var off = 0; (catAttrId=catAttrLs.parse(0,"\n",off)).length; )
+		{
+			if(catAttrId.parse(2,":") != "rw" || catAttrId.parse(3,":") != urlPrms["dev"]) continue;
+			var setVal = EVAL_BOOL;
+			if(catAttrId.parse(5,":") == "bin")
+			{
+				if(urlPrms["val"] != cntrPrm[urlPrms["dev"]].get())	setVal = urlPrms["val"];
+			}
+			else if(catAttrId.parse(5,":") == "dec")
+			{
+				var calcProg = catAttrId.parse(7,":").replace("%3A",":");
+				if(!calcProg.length)
+				{
+					if(urlPrms["val"] != cntrPrm[urlPrms["dev"]].get()) setVal = urlPrms["val"];
+				}
+				else
+				{
+					var progArgs = new Object();
+					progArgs.y = urlPrms["val"];
+					progArgs.x = urlPrms["val"];
+					SYS.DAQ.funcCall("JavaLikeCalc.JavaScript",progArgs,calcProg);
+					setVal = progArgs.y;
+				}
+			}
+			if(!setVal.isEVal())
+			{				
+				if(urlPrms["tm"].toInt(10) <= 0)
+				{
+					cntrPrm[urlPrms["dev"]].set(setVal);
+					SYS.message("SET:House:"+pgTree.attr("class")+"."+urlPrms["dev"],2,user+": "+pgTree.attr("class")+"."+urlPrms["dev"]+": установлен в: "+setVal);
+				}
+				else
+				{
+					var timersList = SYS.XMLNode("get").setAttr("path","/sub_DAQ/mod_JavaLikeCalc/cntr_timers/prm_rules/%2fval%2fvar");
+					SYS.cntrReq(timersList);
+					var timersTree = SYS.XMLNode("TIMERS");
+					timersTree.load(timersList.text());
+
+					var timerNd = timersTree.getElementBy(pgTree.attr("class")+"."+urlPrms["dev"]);
+					if(typeof(timerNd) != "XMLNode") timerNd = timersTree.childAdd("timer").setAttr("id",pgTree.attr("class")+"."+urlPrms["dev"]);
+					timerNd.setAttr("tm",urlPrms["tm"]).setAttr("user",user).setText(setVal);
+					timersList = SYS.XMLNode("set").setAttr("path","/sub_DAQ/mod_JavaLikeCalc/cntr_timers/prm_rules/%2fval%2fvar").setText(timersTree.save());
+					SYS.cntrReq(timersList);
+					SYS.message("SET:House:"+pgTree.attr("class")+"."+urlPrms["dev"],2,user+": "+pgTree.attr("class")+"."+urlPrms["dev"]+": установка в: "+setVal+", по таймеру: "+urlPrms["tm"]+"секунд.");
+				}
+			}
+			break;
+		}
+	else if(urlPrms["com"] == "timerClear")
+		for(var off = 0; (catAttrId=catAttrLs.parse(0,"\n",off)).length; )
+		{
+			if(catAttrId.parse(2,":") != "rw" || catAttrId.parse(3,":") != urlPrms["dev"]) continue;
+			var timersList = SYS.XMLNode("get").setAttr("path","/sub_DAQ/mod_JavaLikeCalc/cntr_timers/prm_rules/%2fval%2fvar");
+			SYS.cntrReq(timersList);
+			var timersTree = SYS.XMLNode("TIMERS");
+			timersTree.load(timersList.text());
+
+			var timerNd = timersTree.getElementBy(pgTree.attr("class")+"."+urlPrms["dev"]);
+			if(typeof(timerNd) == "XMLNode")
+			{
+				timerNd.setAttr("tm",0);
+				timersList = SYS.XMLNode("set").setAttr("path","/sub_DAQ/mod_JavaLikeCalc/cntr_timers/prm_rules/%2fval%2fvar").setText(timersTree.save());
+				SYS.cntrReq(timersList);
+			}
+			break;
+		}
+
+	return "200 OK\nContent-Type:text/xml\n\n"+xmlRespTree.save();
+}
+
+//Save template
+rez = pgTree.save();
+//SYS.messDebug("TEST Dev","TEST 00: "+typeof(devLs[formEl["cat"]+"."+itId]));',1377260842);
+INSERT INTO flb_web VALUES('devices','Devices dispatcher','Диспетчер устройств','Диспетчер пристроїв','',1,10,0,'var treeEl = false;
+
+//> Parse template
+var pgTree = SYS.XMLNode();
+var err = pgTree.load(tmpl,false,true);
+
+//> Get categories list
+var catLs = SYS.XMLNode("get").setAttr("path","/DAQ/ModBus/ZegBee/%2fprm%2fprm");
+SYS.cntrReq(catLs);
+
+//> Get devices list
+var devLs = new Object();
+for(var i = 0; i < catLs.childSize(); i++)
+{
+	var curCat = catLs.childGet(i).attr("id");
+	catAttrReq = SYS.XMLNode("get").setAttr("path","/DAQ/ModBus/ZegBee/"+curCat+"/%2fprm%2fcfg%2fATTR_LS");
+	SYS.cntrReq(catAttrReq);
+	catAttrLs = catAttrReq.text();
+	for(var off = 0; (catAttrId=catAttrLs.parse(0,"\n",off)).length; )
+		devLs[curCat+"."+catAttrId.parse(3,":")] = true;
+}
+
+//> Process page
+//>> Place categories list
+if(typeof(treeEl=pgTree.getElementBy("cat","name")) == "XMLNode")
+	for(var i = 0; i < catLs.childSize(); i++)
+		treeEl.childAdd("OPTION").setAttr("value",catLs.childGet(i).attr("id")).setText(catLs.childGet(i).text());
+
+//> Check POST content for commands
+if(cnts.length)
+{
+	var formEl = new Object();
+	re = new RegExp("name=\"(.+)\"");
+	//>> POST form elements process
+	for(var i = 0; i < cnts.length; i++)
+		formEl[re.exec(cnts[i].attr("Content-Disposition"))[1]] = cnts[i].text();
+	//>> Check for apply
+	if(!formEl["apply"].isEVal())
+	{
+		var applyOK = true;
+		//>> ID: Check for correct form''s values
+		var itId = formEl["id"].match("[^\\s].+[^\\s]");
+		if(!itId.length)
+		{
+			treeEl = pgTree.getElementBy("idNm","name");
+			treeEl.childAdd("br");
+			treeEl.childAdd("span").setAttr("style","color : red;").setText("(Пустое значение недопустимо)");
+			itId = "";
+			applyOK = false;
+		}
+		else itId = itId[0];
+		pgTree.getElementBy("id","name").setAttr("value",itId);
+
+		//>> Name: Check for correct form''s values
+		var itName = formEl["name"].match("[^\\s].+[^\\s]");
+		if(!itName.length)
+		{
+			treeEl = pgTree.getElementBy("nameNm","name");
+			treeEl.childAdd("br");
+			treeEl.childAdd("span").setAttr("style","color : red;").setText("(Пустое значение недопустимо)");
+			itName = "";
+			applyOK = false;
+		}
+		else itName = itName[0];
+		pgTree.getElementBy("name","name").setAttr("value",itName);
+
+		//>> Address: Check for correct form''s values
+		var itAddr = formEl["addr"].toInt();
+		if(itAddr < 0 || itAddr > 65535)
+		{
+			treeEl = pgTree.getElementBy("addrNm","name");
+			treeEl.childAdd("br");
+			treeEl.childAdd("span").setAttr("style","color : red;").setText("(Адрес ModBus должен быть в диапазоне (1-65535))");
+			applyOK = false;
+		}
+		pgTree.getElementBy("addr","name").setAttr("value",itAddr);
+
+		//>> Type: Check for correct form''s values
+		pgTree.getElementBy(formEl["type"],"value").setAttr("selected","selected");
+
+		//>> sensorPos: Check for correct form''s values
+		pgTree.getElementBy("sensorPos","name").setAttr("value",formEl["sensorPos"]);
+
+		//>> Category: Check for correct form''s values
+		pgTree.getElementBy(formEl["cat"],"value").setAttr("selected","selected");
+
+		//>> Data type: 
+		pgTree.getElementBy(formEl["typeData"],"value").setAttr("selected","selected");
+		pgTree.getElementBy("in1").setAttr("style","display: "+((formEl["typeData"] == "bin")?"":"none"));
+		pgTree.getElementBy("in2").setAttr("style","display: "+((formEl["typeData"] == "bin")?"":"none"));
+		pgTree.getElementBy("ed").setAttr("style","display: "+((formEl["typeData"] == "dec")?"":"none"));
+		pgTree.getElementBy("formul").setAttr("style","display: "+((formEl["typeData"] == "dec")?"":"none"));
+
+		//>> Binary type properties
+		pgTree.getElementBy("in1","name").setAttr("value",formEl["in1"]);
+		pgTree.getElementBy("view1","name").setAttr("value",formEl["view1"]);
+		pgTree.getElementBy("in2","name").setAttr("value",formEl["in2"]);
+		pgTree.getElementBy("view2","name").setAttr("value",formEl["view2"]);
+
+		//>> Digital type properties
+		pgTree.getElementBy("ed","name").setAttr("value",formEl["ed"]);
+		pgTree.getElementBy("formul","name").setAttr("value",formEl["formul"]);	
+
+		//>> Alarm
+		pgTree.getElementBy("alarm","name").childGet(0).setText(formEl["alarm"]);
+
+		//> Add or update device
+		if(applyOK)
+		{
+			//>> Get curent attributes list for category
+			catAttrReq = SYS.XMLNode("get").setAttr("path","/DAQ/ModBus/ZegBee/"+formEl["cat"]+"/%2fprm%2fcfg%2fATTR_LS");
+			SYS.cntrReq(catAttrReq);
+			catAttrLs = catAttrReq.text();
+			var newAttrReq = "R:"+itAddr+":"+(formEl["type"]=="out"?"rw":"r")+":"+itId+":"+itName.replace(":","%3A")+":"+formEl["typeData"];
+			if(formEl["typeData"] == "bin") newAttrReq += ":"+formEl["in1"].replace(":","%3A")+":"+formEl["view1"].replace(":","%3A")+":"+formEl["in2"].replace(":","%3A")+":"+formEl["view2"].replace(":","%3A");
+			else if(formEl["typeData"] == "dec") newAttrReq += ":"+formEl["ed"].replace(":","%3A")+":"+formEl["formul"].replace(":","%3A");
+			newAttrReq += ":"+formEl["sensorPos"]+"\n";
+			//>> Append record
+			var isAppend = typeof(devLs[formEl["cat"]+"."+itId]) == "null";
+			if(isAppend)
+			{
+				catAttrLs += newAttrReq;
+				devLs[formEl["cat"]+"."+itId] = true;
+			}
+			//>> Replace
+			else catAttrLs = catAttrLs.replace(new RegExp("R:[^:]*:[^:]*:"+itId+":[^\n]*\n"),newAttrReq);
+			//>> Write new attributes list
+			catAttrReq = SYS.XMLNode("CntrReqs").setAttr("path","/DAQ/ModBus/ZegBee/"+formEl["cat"]);
+			catAttrReq.childAdd("set").setAttr("path","/%2fprm%2fcfg%2fATTR_LS").setText(catAttrLs);
+			catAttrReq.childAdd("set").setAttr("path","/%2fprm%2fst%2fen").setText(0);
+			catAttrReq.childAdd("set").setAttr("path","/%2fprm%2fst%2fen").setText(1);
+			catAttrReq.childAdd("save").setAttr("path","/%2fobj");
+			//XMLNode("set").setAttr("path","/DAQ/ModBus/ZegBee/"+formEl["cat"]+"/%2fprm%2fcfg%2fATTR_LS").setText(catAttrLs);
+			SYS.cntrReq(catAttrReq);
+			//>> Set message about correct apply
+			treeEl=pgTree.getElementBy("mess","name");
+			treeEl.childAdd("span").setAttr("style","color : green;").setText(
+				isAppend?"Новое устройство успешно добавлено. Можно продолжать.":"Устройство успешно обновлено. Можно продолжать.");
+			//>> Set alarm procedure
+			var alarmsList = SYS.XMLNode("get").setAttr("path","/sub_DAQ/mod_JavaLikeCalc/cntr_alarms/prm_rules/%2fval%2fvar");
+			SYS.cntrReq(alarmsList);
+			var alarmsTree = SYS.XMLNode("ALARMS");
+			alarmsTree.load(alarmsList.text());
+			var alarmNd = alarmsTree.getElementBy(formEl["cat"]+"."+formEl["id"]);
+			if(typeof(alarmNd)=="XMLNode") alarmNd.setText(formEl["alarm"]);
+			else alarmsTree.childAdd("it").setAttr("id",formEl["cat"]+"."+formEl["id"]).setText(formEl["alarm"]);
+			alarmsList = SYS.XMLNode("CntrReqs").setAttr("path","/sub_DAQ/mod_JavaLikeCalc/cntr_alarms/prm_rules");
+			alarmsList.childAdd("set").setAttr("path","/%2fval%2fvar").setText(alarmsTree.save());
+			alarmsList.childAdd("save").setAttr("path","/%2fobj");
+			SYS.cntrReq(alarmsList);
+		}
+		//> Form error
+		else
+		{
+			treeEl=pgTree.getElementBy("mess","name");
+			treeEl.childAdd("span").setAttr("style","color : red;").setText("Ошибка в формировании формы! Исправьте отмеченные поля и повторите.");
+		}
+	}
+	else if(!formEl["edDel"].isEVal())
+	{
+		if(formEl["edId"].length && typeof(devLs[formEl["edId"]]) != "null")
+		{
+			//>> Get curent attributes list for category
+			catAttrReq = SYS.XMLNode("get").setAttr("path","/DAQ/ModBus/ZegBee/"+(formEl["edId"].parse(0))+"/%2fprm%2fcfg%2fATTR_LS");
+			SYS.cntrReq(catAttrReq);
+			catAttrLs = catAttrReq.text();
+			catAttrLs = catAttrLs.replace(new RegExp("R:[^:]*:[^:]*:"+formEl["edId"].parse(1)+":[^\n]*\n"),"");
+			//>> Write new attributes list
+			catAttrReq = SYS.XMLNode("set").setAttr("path","/DAQ/ModBus/ZegBee/"+(formEl["edId"].parse(0))+"/%2fprm%2fcfg%2fATTR_LS").setText(catAttrLs);
+			SYS.cntrReq(catAttrReq);
+			//>> Set message about correct apply
+			treeEl=pgTree.getElementBy("mess","name");
+			treeEl.childAdd("span").setAttr("style","color : green;").setText("Устройство успешно удалено. Можно продолжать.");
+			devLs[formEl["edId"]] = false;
+		}
+		else
+		{
+			treeEl=pgTree.getElementBy("mess","name");
+			treeEl.childAdd("span").setAttr("style","color : red;").setText("Устройство для удаления отсутствует.");
+		}
+	}
+}
+
+//>> Devices list place to template
+treeEl=pgTree.getElementBy("edId","name");
+treeEl.childAdd("OPTION");
+for(var i_o in devLs)
+	if(devLs[i_o]) treeEl.childAdd("OPTION").setAttr("value",i_o).setText(i_o);
+
+//>> Load variables for select device
+if(!cnts.length && !urlPrms["selDev"].isEVal() && urlPrms["selDev"].length) 
+{
+	//> Select device
+	pgTree.getElementBy(urlPrms["selDev"],"value").setAttr("selected","selected");
+	//> Load values for select device
+	catAttrReq = SYS.XMLNode("get").setAttr("path","/DAQ/ModBus/ZegBee/"+(urlPrms["selDev"].parse(0))+"/%2fprm%2fcfg%2fATTR_LS");
+	SYS.cntrReq(catAttrReq);
+	catAttrLs = catAttrReq.text().match("R:([^:]*):([^:]*):"+urlPrms["selDev"].parse(1)+":([^\n]*)");
+	//>> ID: Check for correct form''s values
+	pgTree.getElementBy("id","name").setAttr("value",urlPrms["selDev"].parse(1));
+	//>> Name: Check for correct form''s values
+	pgTree.getElementBy("name","name").setAttr("value",catAttrLs[3].parse(0,":").replace("%3A",":"));
+	//>> Address: Check for correct form''s values
+	pgTree.getElementBy("addr","name").setAttr("value",catAttrLs[1]);
+	//>> Type: Check for correct form''s values
+	pgTree.getElementBy(((catAttrLs[2]=="rw")?"out":"sensor"),"value").setAttr("selected","selected");
+	//>> Category: Check for correct form''s values
+	pgTree.getElementBy(urlPrms["selDev"].parse(0),"value").setAttr("selected","selected");
+	//>> Data type: 
+	var dtType = catAttrLs[3].parse(1,":");
+	pgTree.getElementBy(dtType,"value").setAttr("selected","selected");
+	if(dtType == "bin")
+	{
+		pgTree.getElementBy("in1","name").setAttr("value",catAttrLs[3].parse(2,":").replace("%3A",":"));
+		pgTree.getElementBy("view1","name").setAttr("value",catAttrLs[3].parse(3,":").replace("%3A",":"));
+		pgTree.getElementBy("in2","name").setAttr("value",catAttrLs[3].parse(4,":").replace("%3A",":"));
+		pgTree.getElementBy("view2","name").setAttr("value",catAttrLs[3].parse(5,":").replace("%3A",":"));
+		pgTree.getElementBy("sensorPos","name").setAttr("value",catAttrLs[3].parse(6,":"));
+	}
+	else if(dtType == "dec")
+	{
+		pgTree.getElementBy("ed","name").setAttr("value",catAttrLs[3].parse(2,":").replace("%3A",":"));
+		pgTree.getElementBy("formul","name").setAttr("value",catAttrLs[3].parse(3,":").replace("%3A",":"));
+		pgTree.getElementBy("sensorPos","name").setAttr("value",catAttrLs[3].parse(4,":"));
+	}
+	pgTree.getElementBy("in1").setAttr("style","display: "+((dtType == "bin")?"":"none"));
+	pgTree.getElementBy("in2").setAttr("style","display: "+((dtType == "bin")?"":"none"));
+	pgTree.getElementBy("ed").setAttr("style","display: "+((dtType == "dec")?"":"none"));
+	pgTree.getElementBy("formul").setAttr("style","display: "+((dtType == "dec")?"":"none"));
+
+	//>> Get alarm procedure
+	alarmsList = SYS.XMLNode("get").setAttr("path","/sub_DAQ/mod_JavaLikeCalc/cntr_alarms/prm_rules/%2fval%2fvar");
+	SYS.cntrReq(alarmsList);
+	var alarmsTree = SYS.XMLNode();
+	alarmsTree.load(alarmsList.text());
+	var alarmNd = alarmsTree.getElementBy(urlPrms["selDev"]);
+	pgTree.getElementBy("alarm","name").childGet(0).setText((typeof(alarmNd)=="XMLNode")?alarmNd.text():"");
+}
+else pgTree.getElementBy("edDel","name").setAttr("style","visibility : hidden;");
+
+//Save template
+rez = pgTree.save();
+//SYS.messDebug("TEST Dev","TEST 00: "+typeof(devLs[formEl["cat"]+"."+itId]));',1377260944);
+INSERT INTO flb_web VALUES('mess','Alarm messages','Сообщения сигнализаций','Повідомлення сигналізацій','',1,10,0,'var treeEl = false;
+
+//> Parse template
+var pgTree = SYS.XMLNode();
+var err = pgTree.load(tmpl,false,true);
+treeEl = pgTree.getElementBy("mess");
+
+var curTime = SYS.time();
+var messAr = SYS.Archive.messGet(curTime,curTime,"ALARM:House:*",-1);
+var trEl = treeEl.childAdd("tr");
+trEl.childAdd("th").setText("Время");
+trEl.childAdd("th").setText("Категория");
+trEl.childAdd("th").setText("Уровень");
+trEl.childAdd("th").setText("Сообщение");
+for(i = 0; i < messAr.length; i++)
+{
+	var trEl = treeEl.childAdd("tr");
+	trEl.childAdd("td").setAttr("class","mTm").setText(SYS.strftime(messAr[i].tm));
+	trEl.childAdd("td").setAttr("class","mCat").setText(messAr[i].categ);
+	trEl.childAdd("td").setAttr("class","mLev").setText(messAr[i].level);
+	trEl.childAdd("td").setAttr("class","mMess").setText(messAr[i].mess);
+}
+
+//Save template
+rez = pgTree.save();
+//SYS.messDebug("TEST Dev","TEST 00: "+typeof(devLs[formEl["cat"]+"."+itId]));',1377261138);
+INSERT INTO flb_web VALUES('report','Reports','Отчёты','Звіти','',1,10,0,'var treeEl = false;
+var pgDir = "./HouseSpirit/Web/";
+
+//> Parse template
+var pgTree = SYS.XMLNode();
+var err = pgTree.load(tmpl,false,true);
+
+//> Load default values
+pgTree.getElementBy("btm","name").setAttr("value",SYS.strftime(SYS.time()));
+pgTree.getElementBy("etm","name").setAttr("value",SYS.strftime(SYS.time()));
+var catLs = SYS.XMLNode("get").setAttr("path","/DAQ/ModBus/ZegBee/%2fprm%2fprm");
+SYS.cntrReq(catLs);
+treeEl = pgTree.getElementBy("subsys");
+for(var i = 0; i < catLs.childSize(); i++)
+{
+	treeEl.childAdd("span").setText(catLs.childGet(i).text());
+	treeEl.childAdd("input").setAttr("type","checkbox").setAttr("name",catLs.childGet(i).attr("id"));
+	treeEl.childAdd("br");
+}
+
+//> Check POST content for commands - forming report
+if(cnts.length)
+{
+	var formEl = new Object();
+	var re = new RegExp("name=\"(.+)\"");
+	//>> POST form elements process
+	for(i_c = 0; i_c < cnts.length; i_c++)
+		formEl[re.exec(cnts[i_c].attr("Content-Disposition"))[1]] = cnts[i_c].text();
+
+	//>> Check for apply
+	if(!formEl["show"].isEVal())
+	{
+		var reqRule = "";
+		var applyOK = true;
+		//>> Time: begin and end time check
+		var btm = SYS.strptime(formEl["btm"]);
+		pgTree.getElementBy("btm","name").setAttr("value",SYS.strftime(btm));
+		var etm = SYS.strptime(formEl["etm"]);
+		pgTree.getElementBy("etm","name").setAttr("value",SYS.strftime(etm));
+
+		//>> System
+		if(formEl["sys"].length)
+		{
+			pgTree.getElementBy("sys","name").setAttr("checked","checked");
+			reqRule = "\\/sub_Protocol\\/mod_HTTP\\/";
+		}
+
+		//>> Subsystems
+		var catLs = SYS.XMLNode("get").setAttr("path","/DAQ/ModBus/ZegBee/%2fprm%2fprm");
+		SYS.cntrReq(catLs);
+		for(var i = 0; i < catLs.childSize(); i++)
+		{
+			var subId = catLs.childGet(i).attr("id");
+			if(formEl[subId].length)
+			{
+				pgTree.getElementBy(subId,"name").setAttr("checked","checked");
+				if(reqRule.length) reqRule += "|";
+				reqRule += "(ALARM|SET)\\:House\\:"+subId;
+			}
+		}
+
+		//>> Report generate
+		if(btm < etm && (etm-btm) < (365*24*60*60) && reqRule.length)
+		{
+			var messAr = SYS.Archive.messGet(btm,etm,"/("+reqRule+")/",1);
+			treeEl = pgTree.getElementBy("report");
+			var trEl = treeEl.childAdd("tr");
+			trEl.childAdd("th").setText("Время");
+			trEl.childAdd("th").setText("Категория");
+			trEl.childAdd("th").setText("Уровень");
+			trEl.childAdd("th").setText("Сообщение");
+			for(i = 0; i < messAr.length; i++)
+			{
+				var trEl = treeEl.childAdd("tr");
+				trEl.childAdd("td").setAttr("class","mTm").setText(SYS.strftime(messAr[i].tm));
+				trEl.childAdd("td").setAttr("class","mCat").setText(messAr[i].categ);
+				trEl.childAdd("td").setAttr("class","mLev").setText(messAr[i].level);
+				trEl.childAdd("td").setAttr("class","mMess").setText(messAr[i].mess);
+			}
+			//>> Save report to file
+			var saveFile = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"+
+					"<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n"+
+					"<html xmlns=''http://www.w3.org/1999/xhtml''>\n"+
+					"<head>\n"+
+					"  <meta http-equiv=''Content-Type'' content=''text/html; charset=UTF-8''/>\n"+
+					"  <title>Отчёт</title>\n"+
+					"  <style type=''text/css''>\n"+
+					"    #report { width: 100%; border: 1px solid black; border-collapse: collapse; empty-cells: show; }\n"+
+					"    #report TH { border: 1px solid black; background-color: #E6E6E6; }\n"+
+					"    #report TD { border: 1px solid black; }\n"+
+					"    #report .mTm { white-space: nowrap; }\n"+
+					"    #report .mLev { text-align: center; }\n"+
+					"  </style>\n"+
+					"</head>\n"+
+					"<body>\n"+treeEl.save()+"\n</body>\n"+
+					"</html>";
+			SYS.fileWrite(pgDir+"reports/rep_"+user+".html",saveFile);
+			pgTree.getElementBy("saveFile").setAttr("href","reports/rep_"+user+".html").setText("rep_"+user+".html");
+		}
+	}
+}
+
+//Save template
+rez = pgTree.save();
+//SYS.messDebug("TEST Dev","TEST 00: "+typeof(devLs[formEl["cat"]+"."+itId]));',1377261196);
+INSERT INTO flb_web VALUES('test','Test','Тест','Тест','',1,10,0,'if(f_start)
+{
+	var req = SYS.XMLNode("send").setAttr("ProtIt","SMS").setAttr("tel","+380679859815").setText("Тестовое сообщение");
+	SYS.Transport.Serial.out_GSM.messIO(req,"UserProtocol");
+}',1377261398);
+INSERT INTO flb_web VALUES('timerWrite','Write by the timer','Запись по таймеру','Запис за таймером','',1,10,0,'//> Load rules
+var timersTree = SYS.XMLNode("TIMERS");
+timersTree.load(rules);
+for(i_rl = 0; i_rl < timersTree.childSize(); i_rl++)
+{
+	var curTm = timersTree.childGet(i_rl);
+	if(!curTm.text().length) continue;
+	var subId = curTm.attr("id").parse(0);
+	var devId = curTm.attr("id").parse(1);
+	var timer = curTm.attr("tm").toInt(10);
+	if(timer && max(0,timer-1) == 0)
+	{
+		SYS.DAQ.ModBus.ZegBee[subId][devId].set(curTm.text());
+		SYS.message("SET:House:"+curTm.attr("id"),2,curTm.attr("user")+": "+curTm.attr("id")+": установлен в: "+curTm.text());
+	}
+	curTm.setAttr("tm",max(0,timer-1));
+}
+rules = timersTree.save();',1377261462);
+INSERT INTO flb_web VALUES('user','Users dispatcher','Диспетчер пользователей','Диспетчер користувачів','',1,10,0,'var treeEl = false;
+
+//> Parse template
+var pgTree = SYS.XMLNode();
+var err = pgTree.load(tmpl,false,true);
+var isAdmin = SYS.Security.access(user,4,"root","WebRoot",0440);
+var curUser = user;
+
+//> Check POST content for commands
+if(cnts.length)
+{
+	var formEl = new Object();
+	re = new RegExp("name=\"(.+)\"");
+	//>> POST form elements process
+	for(var i = 0; i < cnts.length; i++)
+		formEl[re.exec(cnts[i].attr("Content-Disposition"))[1]] = cnts[i].text();
+	//>> Check for apply
+	if(!formEl["apply"].isEVal())
+	{
+		var applyOK = true;
+		//>> Login: Check for correct form''s values
+		if(!(userLogin=formEl["login"].match("[^\\s].+[^\\s]")).length)
+		{
+			treeEl = pgTree.getElementBy("loginNm","name");
+			treeEl.childAdd("br");
+			treeEl.childAdd("span").setAttr("style","color : red;").setText("(Пустое значение недопустимо)");
+			userLogin = "";
+			applyOK = false;
+		}
+		else userLogin = userLogin[0];
+		if(userLogin.isEVal()) userLogin = user;
+		pgTree.getElementBy("login","name").setAttr("value",userLogin);
+		var isUserPres = (typeof(SYS.Security.nodeAt("usr_"+userLogin)) == "TCntrNode");
+		var isWebUser = isUserPres && SYS.Security.access(userLogin,4,"root","Web",0440);
+		var isWebRootUser = isUserPres && SYS.Security.access(userLogin,4,"root","WebRoot",0440);
+		if(isUserPres && !(isWebUser||isWebRootUser)) applyOK = false;
+		if(!isAdmin && userLogin != user) applyOK = false;
+
+		//>> Name: Check for correct form''s values
+		var userName = formEl["fio"].match("[^\\s].+[^\\s]");
+		if(!userName.length)
+		{
+			treeEl = pgTree.getElementBy("fioNm","name");
+			treeEl.childAdd("br");
+			treeEl.childAdd("span").setAttr("style","color : red;").setText("(Пустое значение недопустимо)");
+			userName = "";
+			applyOK = false;
+		}
+		else userName = userName[0];
+		pgTree.getElementBy("fio","name").setAttr("value",userName);
+
+		//>> Password: Check for correct form''s values
+		if((!isUserPres && formEl["pass"].length < 8) || (isUserPres && formEl["pass"].length && formEl["pass"].length < 8))
+		{
+			treeEl = pgTree.getElementBy("passNm","name");
+			treeEl.childAdd("br");
+			treeEl.childAdd("span").setAttr("style","color : red;").setText("(Пароль должен быть более 8 символов)");
+			userName = "";
+			applyOK = false;
+		}
+
+		if(isAdmin)
+		{
+			//>> Telepfons list, SMS send and report view
+			pgTree.getElementBy("tel","name").setAttr("value",formEl["tel"]);
+			if(formEl["sms"].length) pgTree.getElementBy("sms","name").setAttr("checked","checked");
+			if(formEl["report"].length) pgTree.getElementBy("report","name").setAttr("checked","checked");
+
+			if(!isWebRootUser)
+			{
+				//>> Subsystem''s permition
+				var catLs = SYS.XMLNode("get").setAttr("path","/DAQ/ModBus/ZegBee/%2fprm%2fprm");
+				SYS.cntrReq(catLs);
+				treeEl = pgTree.getElementBy("sub_access");
+				for(var i = 0; i < catLs.childSize(); i++)
+				{
+					var subId = "sub_"+catLs.childGet(i).attr("id");
+					treeEl.childAdd("span").setText(catLs.childGet(i).text());
+					treeEl.childAdd("br");
+					treeEl1 = treeEl.childAdd("select").setAttr("name",subId);
+					treeEl.childAdd("br");
+					treeEl2 = treeEl1.childAdd("option").setAttr("value","--").setText("Нет доступа");
+					if(formEl[subId] == "--") treeEl2.setAttr("selected","selected");
+					treeEl2 = treeEl1.childAdd("option").setAttr("value","r-").setText("Наблюдение");
+					if(formEl[subId] == "r-") treeEl2.setAttr("selected","selected");
+					treeEl2 = treeEl1.childAdd("option").setAttr("value","rw").setText("Управление");
+					if(formEl[subId] == "rw") treeEl2.setAttr("selected","selected");
+				}
+			}
+			else
+			{
+				//> Session life time
+				treeEl = pgTree.getElementBy("sub_access");
+				treeEl.childAdd("span").setText("Время жизни сеанса аутентификации (минут)");
+				treeEl.childAdd("br");
+				treeEl.childAdd("input").setAttr("type","text").setAttr("name","sesAuth").setAttr("value",formEl["sesAuth"]);
+			}
+		}
+
+		//> Add or update user
+		if(applyOK)
+		{
+			//> Create new user if no present
+			if(!isUserPres)
+			{
+				userReq = SYS.XMLNode("CntrReqs").setAttr("path","/sub_Security");
+				userReq.childAdd("add").setAttr("path","%2fusgr%2fusers").setText(userLogin);
+				userReq.childAdd("add").setAttr("path","/grp_Web/%2fprm%2fusers").setText(userLogin);
+				SYS.cntrReq(userReq); 
+			}
+			//> Set user''s properties
+			userReq = SYS.XMLNode("CntrReqs").setAttr("path","/sub_Security/usr_"+userLogin);
+			userReq.childAdd("set").setAttr("path","%2fprm%2fdscr").setText(userName);
+			if(formEl["pass"].length)
+				userReq.childAdd("set").setAttr("path","%2fprm%2fpass").setText(formEl["pass"]);
+			if(isAdmin)
+			{
+				var descrVal = "TEL: "+formEl["tel"]+"\n"+
+							"SMS: "+(formEl["sms"].length?"true":"false")+"\n"+
+							"Report: "+(formEl["report"].length?"true":"false")+"\n";
+				if(!isWebRootUser)
+				{
+					//>> Subsystem''s permition
+					for(var i = 0; i < catLs.childSize(); i++)
+					{
+						var subId = "sub_"+catLs.childGet(i).attr("id");
+						descrVal += subId+": "+formEl[subId]+"\n";
+					}
+				}
+				else
+				{
+					var sessLife = SYS.XMLNode("CntrReqs").setAttr("path","/sub_Protocol/mod_HTTP");
+					sessLife.childAdd("set").setAttr("path","/%2fprm%2flf_tm").setText(max(1,formEl["sesAuth"].toInt()));
+					sessLife.childAdd("save").setAttr("path","/%2fobj");
+					SYS.cntrReq(sessLife);
+
+				}
+				userReq.childAdd("set").setAttr("path","%2fprm%2fldscr").setText(descrVal);
+			}
+			userReq.childAdd("save").setAttr("path","/%2fobj");
+			SYS.cntrReq(userReq); 
+			//>> Set message about correct apply
+			treeEl=pgTree.getElementBy("mess","name");
+			treeEl.childAdd("span").setAttr("style","color : green;").setText(
+				(!isUserPres)?"Новый пользователь успешно добавлен. Можно продолжать.":"Пользователь успешно обновлен. Можно продолжать.");
+		}
+		//> Form error
+		else
+		{
+			treeEl=pgTree.getElementBy("mess","name").childAdd("span").setAttr("style","color : red;");
+			if(!isAdmin && userLogin != user) treeEl.setText("Обычный пользователь может редактировать только собственную учётную запись.");
+			else if(isUserPres && !isWebUser) treeEl.setText("Пользователь присутствует, но не является Web-пользователем. Измените логин пользователя и повторите.");
+			else treeEl.setText("Ошибка в формировании формы! Исправьте отмеченные поля и повторите.");
+		}
+	}
+	else if(!formEl["edDel"].isEVal())
+	{
+		var isWebUser = SYS.Security.access(formEl["edLogin"],4,"root","Web",0440);
+		var isWebRootUser = SYS.Security.access(formEl["edLogin"],4,"root","WebRoot",0440);
+		if(isWebUser && !isWebRootUser)
+		{
+			userReq = SYS.XMLNode("CntrReqs").setAttr("path","/sub_Security");
+			userReq.childAdd("del").setAttr("path","%2fusgr%2fusers").setText(formEl["edLogin"]);
+			userReq.childAdd("del").setAttr("path","/grp_Web/%2fprm%2fusers").setText(formEl["edLogin"]);
+			userReq.childAdd("save").setAttr("path","/%2fobj");
+			SYS.cntrReq(userReq); 
+
+			//>> Set message about correct remove
+			treeEl=pgTree.getElementBy("mess","name");
+			treeEl.childAdd("span").setAttr("style","color : green;").setText("Пользователь успешно удален. Можно продолжать.");
+		}
+		else
+		{
+			treeEl=pgTree.getElementBy("mess","name").childAdd("span").setAttr("style","color : red;");
+			if(isWebRootUser) treeEl.setText("Удаление суперпользователя недопустимо!");
+			else treeEl.setText("Пользователь для удаления отсутствует.");
+		}
+	}
+}
+
+//>> Load variables for select device
+if(isAdmin)
+{
+	//> Load users list
+	var userLst = SYS.XMLNode("get").setAttr("path","/sub_Security/grp_Web/%2fprm%2fusers");
+	SYS.cntrReq(userLst);
+
+	treeEl = pgTree.getElementBy("edLogin","name");
+	treeEl.childAdd("OPTION").setAttr("value","").setText("");
+	treeEl.childAdd("OPTION").setAttr("value","new").setText("Новый пользователь");
+	for(var i = 0; i < userLst.childSize(); i++)
+	{
+		treeEl1 = SYS.XMLNode("get").setAttr("path","/sub_Security/usr_"+userLst.childGet(i).text()+"/%2fprm%2fdscr");
+		SYS.cntrReq(treeEl1);
+		treeEl.childAdd("OPTION").setAttr("value",userLst.childGet(i).text()).setText(treeEl1.text());
+	}
+}
+else
+{
+	//> Hide select input and block login edit
+	pgTree.getElementBy("edLogin","name").setAttr("style","display : none;");
+	pgTree.getElementBy("login","name").setAttr("disabled","disabled");
+	pgTree.getElementBy("tel").setAttr("style","visibility : hidden;");
+	pgTree.getElementBy("sms").setAttr("style","visibility : hidden;");
+	pgTree.getElementBy("report").setAttr("style","visibility : hidden;");
+}
+
+if(!cnts.length || !formEl["edDel"].isEVal())
+{
+	if(!urlPrms["selUser"].isEVal() && urlPrms["selUser"].length)
+	{
+		curUser = urlPrms["selUser"];
+		pgTree.getElementBy(curUser,"value").setAttr("selected","selected");
+	}
+	var isSelAdmin = SYS.Security.access(curUser,4,"root","WebRoot",0440);
+
+	//> Connect to user object
+	//>> User login
+	pgTree.getElementBy("login","name").setAttr("value",curUser);
+	if(isAdmin && SYS.Security.access(curUser,4,"root","WebRoot",0440))
+	{
+		pgTree.getElementBy("login","name").setAttr("disabled","disabled");
+		pgTree.getElementBy("edDel","name").setAttr("style","display : none;");
+	}
+	//>> User FN
+	treeEl = SYS.XMLNode("get").setAttr("path","/sub_Security/usr_"+curUser+"/%2fprm%2fdscr");
+	SYS.cntrReq(treeEl);
+	pgTree.getElementBy("fio","name").setAttr("value",treeEl.text());
+	if(isAdmin)
+	{
+		//>> Description
+		treeEl = SYS.XMLNode("get").setAttr("path","/sub_Security/usr_"+curUser+"/%2fprm%2fldscr");
+		SYS.cntrReq(treeEl);
+		//>> Phones, SMS and repor
+		re=treeEl.text().match("TEL:\\s+([^\\n]*)");
+		pgTree.getElementBy("tel","name").setAttr("value",re.length ? re[1] : "");
+		re=treeEl.text().match("SMS:\\s+([^\\n]*)");
+		if(re.length && re[1] == "true") pgTree.getElementBy("sms","name").setAttr("checked","checked");
+		re=treeEl.text().match("Report:\\s+([^\\n]*)");
+		if(re.length && re[1] == "true") pgTree.getElementBy("report","name").setAttr("checked","checked");
+		//>> Subsystem''s permition
+		if(!isSelAdmin)
+		{
+			var catLs = SYS.XMLNode("get").setAttr("path","/DAQ/ModBus/ZegBee/%2fprm%2fprm");
+			SYS.cntrReq(catLs);
+			treeEl1 = pgTree.getElementBy("sub_access");
+			for(var i = 0; i < catLs.childSize(); i++)
+			{
+				var subId = "sub_"+catLs.childGet(i).attr("id");
+				re=treeEl.text().match(subId+":\\s+([^\\n]*)");
+				treeEl1.childAdd("span").setText(catLs.childGet(i).text());
+				treeEl1.childAdd("br");
+				treeEl2 = treeEl1.childAdd("select").setAttr("name",subId);
+				treeEl1.childAdd("br");
+				treeEl3 = treeEl2.childAdd("option").setAttr("value","--").setText("Нет доступа");
+				if(re.length && re[1] == "--") treeEl3.setAttr("selected","selected");
+				treeEl3 = treeEl2.childAdd("option").setAttr("value","r-").setText("Наблюдение");
+				if(re.length && re[1] == "r-") treeEl3.setAttr("selected","selected");
+				treeEl3 = treeEl3.childAdd("option").setAttr("value","rw").setText("Управление");
+				if(re.length && re[1] == "rw") treeEl3.setAttr("selected","selected");
+			}
+		}
+		else
+		{
+			//> Session life time
+			treeEl1 = pgTree.getElementBy("sub_access");
+			treeEl1.childAdd("span").setText("Время жизни сеанса аутентификации (минут)");
+			treeEl1.childAdd("br");
+			var sessLife = SYS.XMLNode("get").setAttr("path","/sub_Protocol/mod_HTTP/%2fprm%2flf_tm");
+			SYS.cntrReq(sessLife);
+			treeEl1.childAdd("input").setAttr("type","text").setAttr("name","sesAuth").setAttr("value",sessLife.text());
+		}
+	}
+}
+
+//> Delete button hide
+if(!isAdmin || cnts.length || urlPrms["selUser"].isEVal() || !urlPrms["selUser"].length)
+	pgTree.getElementBy("edDel","name").setAttr("style","display : none;");
+
+//Save template
+rez = pgTree.save();
+//SYS.messDebug("TEST Dev","TEST 00: "+typeof(devLs[formEl["cat"]+"."+itId]));',1377261537);
+INSERT INTO flb_web VALUES('diagram','Diagram','','','',1,10,0,'im = SYS.XMLNode();
+im.load(tmpl, false, 3);
+if(!(drawArea=im.getElementBy("drawArea")) ||
+		!(scVert=im.getElementBy("scVert")) ||
+		!(scHor=im.getElementBy("scHor")))
+	return "";
+
+//Getting the trends data
+trends = new Array();
+for(off = 0; (tEl=srcs.parseLine(0,off)).length; ) {
+	elO = new Object();
+	elO.addr = tEl.parse(0, ":");
+	if(!(srcO=SYS.nodeAt(elO.addr)))	continue;
+	if(typeof(srcO) == "TCntrNode:TVal")	srcO = srcO.arch();
+	if(typeof(srcO) != "TCntrNode:TVArchive")	continue;
+	elO.srcO = srcO;
+	elO.min = tEl.parse(1, ":"); elO.max = tEl.parse(2, ":");
+	elO.color = tEl.parse(3, ":");
+	trends.push(elO);
+}
+
+im.setAttr("width", hsz).setAttr("height", vsz).setAttr("viewBox", "0 0 "+hsz+" "+vsz);
+
+mrkFontSize = 12;	//????
+mrkFontWRange = 0.7;
+mrkWidth = 5*mrkFontSize*mrkFontWRange;
+mrkHeight = mrkFontSize;
+
+tArMrg = 2;
+tArX	= tArMrg;
+tArW	= hsz - tArX - tArMrg;
+tArY	= tArMrg;
+tArH	= vsz - tArY - tArMrg - mrkHeight*2;
+
+scVert.childAdd("rect").setAttr("x",tArX).setAttr("y",tArY).setAttr("width",1).setAttr("height",tArH);
+scVert.childAdd("rect").setAttr("x",tArX+tArW).setAttr("y",tArY).setAttr("width",1).setAttr("height",tArH);
+scHor.childAdd("rect").setAttr("x",tArX).setAttr("y",tArY+tArH).setAttr("width",tArW).setAttr("height",1);
+scHor.childAdd("rect").setAttr("x",tArX).setAttr("y",tArY).setAttr("width",tArW).setAttr("height",1);
+
+if(!end)	end = SYS.time();
+begin = end - size;
+reqPer = size/vsz;
+
+//Calc and draw the horizontal scale
+hDiv = 1;			//Horisontal scale divisor
+hmax_ln = tArW / mrkWidth;
+if(hmax_ln >= 2) {
+	hvLev = 0;
+	hLen = end - begin;
+
+	if(hLen/2635200 >= 5)		{ hvLev = 7; hDiv = 2635200; }	//Month a unstrict interval !!!! to implement !!!!
+	else if(hLen/86400 >= 5)	{ hvLev = 6; hDiv =   86400; }	//More days and no time in the scale
+	else if(hLen/86400 >= 2)	{ hvLev = 5; hDiv =   86400; }	//Days
+	else if(hLen/3600 >= 2)	{ hvLev = 4; hDiv =    3600; }	//Hours
+	else if(hLen/60 >= 2)		{ hvLev = 3; hDiv =      60; }	//Minutes
+	else if(hLen/1 >= 2)		{ hvLev = 2; hDiv =       1; }	//Seconds
+	else if(hLen/0.001 >= 2)	{ hvLev = 1; hDiv =   0.001; }	//Milliseconds
+
+	hDiv_ = hDiv;
+	while(hLen/hDiv_ > hmax_ln)	hDiv_ *= 10;
+	while(hLen/hDiv_ < hmax_ln/5 && (hDiv_/5)%hDiv == 0) hDiv_ /= 5;
+	while(hLen/hDiv_ < hmax_ln/2 && (hvLev < 6 || (hDiv_/2)%hDiv == 0)) hDiv_ /= 2;
+	hDiv = hDiv_;
+
+	UTChourDt = SYS.strptimegm(SYS.strftime(end)) - end;
+
+	// Draw the horisontal grid and markers
+	tm_t = 0;
+	lab_tm = lab_dt = "";
+	//  Draw full trend''s data and time to the trend end position
+	begMarkBrd = -5;
+	endMarkBrd = tArX + tArW;
+
+	lab_dt = SYS.strftime(end, "%d-%m-%Y");
+	if((end%60) == 0 && (end-floor(end)) == 0)
+		lab_tm = SYS.strftime(end, "%H:%M");
+	else if((end-floor(end)) == 0)
+		lab_tm = SYS.strftime(end, "%H:%M:%S");
+	else lab_tm = SYS.strftime(end, "%H:%M:%S")+"."+(end-floor(end));
+
+	if(hvLev < 6) {
+		scHor.childAdd("text").setAttr("text-anchor","end").setAttr("stroke","none")
+			.setAttr("fill", "black")
+			.setAttr("x",tArX+tArW).setAttr("y",tArY+tArH+2*mrkHeight).setText(lab_tm);
+		endMarkBrd = min(endMarkBrd, tArX + tArW - mrkFontSize*lab_tm.length*mrkFontWRange);
+	}
+	scHor.childAdd("text").setAttr("text-anchor","end").setAttr("stroke","none")
+		.setAttr("fill", "black")
+		.setAttr("x",tArX+tArW).setAttr("y",tArY+tArH+mrkHeight).setText(lab_dt);
+	endMarkBrd = min(endMarkBrd, tArX + tArW - mrkFontSize*lab_dt.length*mrkFontWRange);
+}
+
+//  Draw grid and/or markers
+first_m = true;
+ttm1 = new Object();
+for(i_h = begin; true; ) {
+	//   Draw grid
+	h_pos = tArX + tArW*(i_h-begin)/(end-begin);
+
+	if(i_h > begin && i_h < end)
+		scHor.childAdd("rect").setAttr("x",h_pos.toFixed(2)).setAttr("y",(tArY+tArH-3).toFixed(2)).setAttr("width",1).setAttr("height",6);
+
+	//   Draw markers
+	if(!((i_h+UTChourDt)%hDiv) && i_h != end) {
+		if(first_m)	SYS.localtime(begin-(end-begin), ttm1.sec, ttm1.min, ttm1.hour, ttm1.mday, ttm1.mon);
+		ttm = new Object();
+		SYS.localtime(i_h, ttm.sec, ttm.min, ttm.hour, ttm.mday, ttm.mon);
+
+		chLev = 0;
+		if((ttm.mon-ttm1.mon) || (ttm.year-ttm1.year)) chLev = 5;
+		else if(ttm.mday-ttm1.mday)	chLev = 4;
+		else if(ttm.hour-ttm1.hour)	chLev = 3;
+		else if(ttm.min-ttm1.min)		chLev = 2;
+		else if(ttm.sec-ttm1.sec)		chLev = 1;
+
+		//Checking for the data presence
+		lab_dt = lab_tm = "";
+		//Date
+		if(/*hvLev == 5 ||*/ chLev >= 4)
+			lab_dt = SYS.strftime(i_h, (chLev>=5)?"%d-%m-%Y":"%d");
+		//Hours and minuts
+		if((hvLev == 4 || hvLev == 3 || ttm.hour || ttm.min) && !ttm.sec)
+			lab_tm = SYS.strftime(i_h, "%H:%M");
+		//Seconds
+		else if((hvLev == 2 || ttm.sec) && !((i_h-floor(i_h))*1e6))
+			lab_tm = (chLev >= 2) ? SYS.strftime(i_h, "%H:%M:%S") : SYS.strftime(i_h, "%S");
+		//Milliseconds
+		else if(hvLev <= 1 || (i_h-floor(i_h))*1e6)
+			lab_tm = (chLev >= 2) ? SYS.strftime(i_h, "%H:%M:%S")+(i_h-floor(i_h)) :
+						(chLev >= 1) ? SYS.strftime(i_h, "%S")+"."+(i_h-floor(i_h))+tr("s") :
+											(1e3*i_h).toPrecision(6)+tr("ms");
+
+		endPosTm = endPosDt = 0, markY = tArY + tArH + mrkHeight;
+		if(hvLev < 6) {
+			if(lab_tm.length) {
+				wdth = mrkFontSize*lab_tm.length*mrkFontWRange;
+				tpos = max(h_pos-wdth/2, 0);
+				if((tpos+wdth) < endMarkBrd && tpos > begMarkBrd) {
+					scHor.childAdd("text").setAttr("text-anchor","middle").setAttr("stroke","none")
+						.setAttr("fill", "black")
+						.setAttr("x",h_pos.toFixed(2)).setAttr("y",markY.toFixed(2)).setText(lab_tm);
+					endPosTm = tpos+wdth;
+				}
+			}
+			markY += mrkHeight;
+		}
+		if(lab_dt.size()) {
+			wdth = mrkFontSize*lab_dt.length*mrkFontWRange;
+			tpos = max(h_pos-wdth/2, 0);
+			if((tpos+wdth) < endMarkBrd && tpos > begMarkBrd) {
+				scHor.childAdd("text").setAttr("text-anchor","middle").setAttr("stroke","none")
+					.setAttr("fill", "black")
+					.setAttr("x",h_pos.toFixed(2)).setAttr("y",markY.toFixed(2)).setText(lab_dt);
+				endPosDt = tpos+wdth;
+			}
+		}
+		begMarkBrd = max(begMarkBrd, max(endPosTm,endPosDt));
+		ttm1 = ttm;
+		first_m = false;
+	}
+
+	//   Next
+	if(i_h >= end) break;
+	i_h = floor((i_h+UTChourDt)/hDiv)*hDiv + hDiv - UTChourDt;
+	if(i_h > end)	i_h = end;
+}
+
+//Drawing the trends
+for(iTr = 0; iTr < trends.length; iTr++) {
+	elO = trends[iTr];
+	trBeg = begin*1e6; trPer = reqPer*1e6;
+	dataAr = elO.srcO.getVals(trBeg, end*1e6, trPer);
+
+	trPath = 0; prev_vl = EVAL; prev_pos = 0;
+	for(iDt = 0; iDt < dataAr.length; iDt++) {
+		c_val = dataAr[iDt];
+		c_tm = 1e-6*(trBeg + iDt*trPer);
+		if(c_tm < begin)	continue;
+		c_pos = floor(tArX + tArW*(c_tm-begin)/(end-begin));
+		if(!c_val.isEVal()) {
+			c_vpos = floor(tArY + tArH - tArH*(c_val-elO.min)/(elO.max-elO.min));
+			if(!trPath) trPath = drawArea.childAdd("path").setAttr("stroke", elO.color);
+			if(prev_vl.isEVal()) trPath.setAttr("d", trPath.attr("d")+"M"+c_pos+","+c_vpos);
+			else trPath.setAttr("d",trPath.attr("d")+"L"+c_pos+","+c_vpos);
+		}
+		else if(!prev_vl.isEVal()) {
+			c_vpos = floor(tArY + tArH - tArH*(prev_vl-elO.min)/(elO.max-elO.min));
+			trPath.setAttr("d", trPath.attr("d")+"L"+prev_pos+".1,"+c_vpos+".1");
+		}
+		prev_vl = c_val; prev_pos = c_pos;
+	}
+	//res += elO.addr+": ["+SYS.strftime(trBeg/1e6)+"-"+SYS.strftime(end)+"]("+reqPer+"->"+(trPer/1e6)+")"+dataAr.length+"\n";
+}
+
+return im.save();',1572715023);
 COMMIT;

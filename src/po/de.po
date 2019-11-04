@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-14 18:27+0300\n"
+"POT-Creation-Date: 2019-11-04 11:00+0200\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -347,9 +347,6 @@ msgstr "Konfiguration"
 #, c-format
 msgid "Requested %d records for time %s."
 msgstr "Fordert %d Datensätze für Zeit %s."
-
-msgid "No value."
-msgstr "Kein Wert."
 
 #, c-format
 msgid ""
@@ -1356,8 +1353,8 @@ msgstr "Einbeziehung"
 msgid "Controller is not running!"
 msgstr "Controller ist nicht gestartet!"
 
-msgid "Frequency of calculation of the function (Hz)"
-msgstr "Frequenz der Berechnung der Funktion (Hz)"
+msgid "Frequency of calculation of the function, Hz"
+msgstr "Frequenz der Berechnung der Funktion, Hz"
 
 msgid "Function start flag"
 msgstr "Schalter fürs Startens der Funktion"
@@ -2670,6 +2667,9 @@ msgstr "Stellen Sie den Namen des Projekts an:"
 
 msgid "already started."
 msgstr "begonnen."
+
+#~ msgid "No value."
+#~ msgstr "Kein Wert."
 
 #~ msgid "Error entity. Pos: %d"
 #~ msgstr "Entity Fehler. Pos: %d"

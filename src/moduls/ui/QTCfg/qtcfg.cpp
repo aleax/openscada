@@ -672,7 +672,7 @@ void ConfApp::itDel( const string &iit )
     string rmits = iit, rmit, rmits_lim = iit;
     if(iit.empty()) {
 	QList<QTreeWidgetItem *> sel_ls = CtrTree->selectedItems();
-	if(sel_ls.size() <= 1) rmits = selPath;
+	if(sel_ls.size() <= 1) rmits = rmits_lim = selPath;
 	else for(int iEl = 0; iEl < sel_ls.size(); iEl++) {
 	    rmit = sel_ls.at(iEl)->text(2).toStdString() + ((iEl<(sel_ls.size()-1))?"\n":"");
 	    rmits += rmit;
