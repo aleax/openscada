@@ -348,6 +348,8 @@ void *TSocketIn::Task( void *sock_in )
 	 if(ssl_method == "DTLSv1")	meth = DTLSv1_server_method();
     else
 # endif
+#endif
+#if OPENSSL_VERSION_NUMBER >= 0x1010104fL
 # ifndef OPENSSL_NO_DTLS1_2_METHOD
 	 if(ssl_method == "DTLSv1_2")	meth = DTLSv1_2_server_method();
     else
@@ -928,6 +930,8 @@ void TSocketOut::start( int tmCon )
 	if(ssl_method == "DTLSv1")	meth = DTLSv1_client_method();
     else
 # endif
+#endif
+#if OPENSSL_VERSION_NUMBER >= 0x1010104fL
 # ifndef OPENSSL_NO_DTLS1_2_METHOD
 	if(ssl_method == "DTLSv1_2")	meth = DTLSv1_2_client_method();
     else
