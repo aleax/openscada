@@ -31,7 +31,7 @@
 <td> <a href="../Modules/FLibSYS.html" title="Special:MyLanguage/Modules/FLibSYS">FLibSYS</a> </td>
 <td> Системные функции
 </td>
-<td> 1.6 </td>
+<td> 1.7 </td>
 <td> GPL2 </td>
 <td> spec_FLibSYS.so </td>
 <td> en,uk,ru,de </td>
@@ -1144,7 +1144,8 @@ messPut("Пример", 0, "strPath2Sep(): "+test);</pre>
 <td> 0
 </td></tr></table>
 <h3><span class="mw-headline" id=".D0.A6.D0.B8.D0.BA.D0.BB.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.B8.D0.B9_.D0.98.D0.B7.D0.B1.D1.8B.D1.82.D0.BE.D1.87.D0.BD.D1.8B.D0.B9_.D0.9A.D0.BE.D0.B4_.28CRC.29"><span class="mw-headline-number">3.15</span> <span id="CRC" title="#CRC">Циклический Избыточный Код (CRC)</span></span></h3>
-<p><i>Описание:</i> Унифицированная реализация Циклического Избыточного Кода для длин 8-64 бит.<br />
+<p><i>Описание:</i> Унифицированная и полная реализация Циклического Избыточного Кода для длин 1-64 бит с нормальным полиномом, начальным CRC, входной и выходной последовательностью, и XOR для выхода.<br />
+Также поддерживается предыдущая нотация этой функции, где реверсивний полином размещается в позиции ширины <i>width</i>!<br />
 <i>Параметры:</i>
 </p>
 <table class="wikitable">
@@ -1159,7 +1160,7 @@ messPut("Пример", 0, "strPath2Sep(): "+test);</pre>
 <tr>
 <td> rez </td>
 <td> Результат </td>
-<td> Целое </td>
+<td> Целый </td>
 <td> Возврат </td>
 <td>
 </td></tr>
@@ -1171,13 +1172,6 @@ messPut("Пример", 0, "strPath2Sep(): "+test);</pre>
 <td>
 </td></tr>
 <tr>
-<td> poly </td>
-<td> Полином (реверсивный) </td>
-<td> Целый </td>
-<td> Вход </td>
-<td> 40961 (0xA001)
-</td></tr>
-<tr>
 <td> width </td>
 <td> Ширина </td>
 <td> Целый </td>
@@ -1185,11 +1179,39 @@ messPut("Пример", 0, "strPath2Sep(): "+test);</pre>
 <td> 16
 </td></tr>
 <tr>
+<td> poly </td>
+<td> Полином </td>
+<td> Целый </td>
+<td> Вход </td>
+<td> 32773 (0x8005)
+</td></tr>
+<tr>
 <td> init </td>
-<td> Инициализация </td>
+<td> Нач.значение </td>
 <td> Целый </td>
 <td> Вход </td>
 <td> -1 (0xFFFFFFFFFFFFFFFF)
+</td></tr>
+<tr>
+<td> RefIn </td>
+<td> Последовательность входа </td>
+<td> Логический </td>
+<td> Вход </td>
+<td> 1
+</td></tr>
+<tr>
+<td> RefOut </td>
+<td> Последовательность выхода </td>
+<td> Логический </td>
+<td> Вход </td>
+<td> 1
+</td></tr>
+<tr>
+<td> XorOut </td>
+<td> XOR для выхода </td>
+<td> Целый </td>
+<td> Вход </td>
+<td> 0
 </td></tr></table>
 <h3><span class="mw-headline" id=".D0.A1.D0.BB.D0.B5.D0.BF.D0.BE.D0.BA_.D1.81.D0.BE.D0.BE.D0.B1.D1.89.D0.B5.D0.BD.D0.B8.D1.8F_5_.28MD5.29"><span class="mw-headline-number">3.16</span> Слепок сообщения 5 (MD5)</span></h3>
 <p><i>Описание:</i> Расчёт слепка сообщения 5 для данных <i>data</i>.<br />

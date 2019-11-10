@@ -190,7 +190,7 @@ uint16_t TProt::CRC16( const string &mbap )
     uint8_t hi = 0xFF;
     uint8_t lo = 0xFF;
     uint16_t index;
-    for(unsigned i_b = 0; i_b < mbap.size(); i_b++) {
+    for(unsigned i_b = 0; i_b < mbap.size(); ++i_b) {
 	index = lo^(uint8_t)mbap[i_b];
 	lo = hi^CRCHi[index];
 	hi = CRCLo[index];
@@ -201,7 +201,7 @@ uint16_t TProt::CRC16( const string &mbap )
 uint8_t TProt::LRC( const string &mbap )
 {
     uint8_t ch = 0;
-    for(unsigned i_b = 0; i_b < mbap.size(); i_b++)
+    for(unsigned i_b = 0; i_b < mbap.size(); ++i_b)
 	ch += (uint8_t)mbap[i_b];
 
     return -ch;

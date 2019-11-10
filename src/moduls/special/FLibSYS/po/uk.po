@@ -1,13 +1,13 @@
 # OpenSCADA.Special.FLibSYS translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.Special.FLibSYS package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2018.
+# Roman Savochenko <rom_as@oscada.org>, 2005-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.FLibSYS 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-22 19:57+0300\n"
+"POT-Creation-Date: 2019-11-10 17:55+0200\n"
 "PO-Revision-Date: 2007-10-24 18:37+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -314,22 +314,38 @@ msgstr "Вилучення мантиси та експоненти з реал�
 msgid "Data"
 msgstr "Дані"
 
-msgid "Polynomial (reversion)"
-msgstr "Поліном (реверсіоний)"
-
 msgid "Width"
 msgstr "Ширина"
 
+msgid "Polynomial"
+msgstr "Поліном"
+
 msgid "Initial"
 msgstr "Поч. значення"
+
+msgid "Reference input"
+msgstr "Послідовність входу"
+
+msgid "Reference output"
+msgstr "Послідовність виходу"
+
+msgid "XOR for output"
+msgstr "XOR для виходу"
 
 msgid "Cyclic Redundancy Code (CRC)"
 msgstr "Циклічний Надмірний Код (CRC)"
 
 msgid ""
-"Unified implementing of the Cyclic Redundancy Code for the width in 8-64 "
-"bits."
-msgstr "Уніфікована реалізація Циклічного Надмірного Коду для ширини 8-64 біт."
+"Unified and completed implementing of the Cyclic Redundancy Code for the "
+"width in 1-64 bits with normal polynomial, the initial CRC, the input and "
+"output reference, and the XOR for output.\n"
+"The previous notation of the function is supported also, where the reversed "
+"polynomial is placed in the <width> place!"
+msgstr ""
+"Уніфікована та повна реалізація Циклічного Надмірного Коду для ширини 1-64 "
+"біт з нормальним поліномом, початковим CRC, вхідною та вихідною "
+"послідовністю, та XOR для виходу.\n"
+"Також підтримується попередня нотація цієї функції, де реверсивний поліном розміщується у позиції ширини <width>!"
 
 msgid "Message Digest 5 (MD5)"
 msgstr "Зліпок повідомлення 5 (MD5)"

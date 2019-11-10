@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-22 22:15+0300\n"
+"POT-Creation-Date: 2019-11-10 17:55+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -292,19 +292,30 @@ msgstr ""
 msgid "Data"
 msgstr ""
 
-msgid "Polynomial (reversion)"
+msgid "Width"
 msgstr ""
 
-msgid "Width"
+msgid "Polynomial"
 msgstr ""
 
 msgid "Initial"
 msgstr ""
 
+msgid "Reference input"
+msgstr ""
+
+msgid "Reference output"
+msgstr ""
+
+msgid "XOR for output"
+msgstr ""
+
 msgid "Cyclic Redundancy Code (CRC)"
 msgstr ""
 
-msgid "Unified implementing of the Cyclic Redundancy Code for the width in 8-64 bits."
+msgid ""
+"Unified and completed implementing of the Cyclic Redundancy Code for the width in 1-64 bits with normal polynomial, the initial CRC, the input and output reference, and the XOR for output.\n"
+"The previous notation of the function is supported also, where the reversed polynomial is placed in the <width> place!"
 msgstr ""
 
 msgid "Message Digest 5 (MD5)"

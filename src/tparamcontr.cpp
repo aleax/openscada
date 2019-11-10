@@ -410,7 +410,7 @@ TVariant TParamContr::objFuncCall( const string &iid, vector<TVariant> &prms, co
     //		set alarm to message <mess> and level <lev> and omit the presence control at <force>.
     if(iid == "alarmSet" && prms.size() >= 1) {
 	owner().alarmSet(prms[0].getS(), (prms.size() >= 2) ? prms[1].getI() : -TMess::Crit,
-	    id()+"\n"+name(), (prms.size() >= 3) ? prms[2].getB() : false);
+	    ownerPath(true)+"\n"+name(), (prms.size() >= 3) ? prms[2].getB() : false);
 	return true;
     }
 

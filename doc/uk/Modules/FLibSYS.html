@@ -31,7 +31,7 @@
 <td> <a href="../Modules/FLibSYS.html" title="Special:MyLanguage/Modules/FLibSYS">FLibSYS</a> </td>
 <td> Системні функції
 </td>
-<td> 1.6 </td>
+<td> 1.7 </td>
 <td> GPL2 </td>
 <td> spec_FLibSYS.so </td>
 <td> en,uk,ru,de </td>
@@ -1144,7 +1144,8 @@ messPut("Приклад", 0, "strPath2Sep(): "+test);</pre>
 <td> 0
 </td></tr></table>
 <h3><span class="mw-headline" id=".D0.A6.D0.B8.D0.BA.D0.BB.D1.96.D1.87.D0.BD.D0.B8.D0.B9_.D0.9D.D0.B0.D0.B4.D0.BC.D1.96.D1.80.D0.BD.D0.B8.D0.B9_.D0.9A.D0.BE.D0.B4_.28CRC.29"><span class="mw-headline-number">3.15</span> <span id="CRC" title="#CRC">Циклічний Надмірний Код (CRC)</span></span></h3>
-<p><i>Опис:</i> Уніфікована реалізація Циклічного Надмірного Коду для ширини 8-64 біт.<br />
+<p><i>Опис:</i> Уніфікована та повна реалізація Циклічного Надмірного Коду для ширини 1-64 біт з нормальним поліномом, початковим CRC, вхідною та вихідною послідовністю, та XOR для виходу.<br />
+Також підтримується попередня нотація цієї функції, де реверсивний поліном розміщується у позиції ширини <i>width</i>!<br />
 <i>Параметри:</i>
 </p>
 <table class="wikitable">
@@ -1159,7 +1160,7 @@ messPut("Приклад", 0, "strPath2Sep(): "+test);</pre>
 <tr>
 <td> rez </td>
 <td> Результат </td>
-<td> Ціле </td>
+<td> Цілий </td>
 <td> Повернення </td>
 <td>
 </td></tr>
@@ -1171,13 +1172,6 @@ messPut("Приклад", 0, "strPath2Sep(): "+test);</pre>
 <td>
 </td></tr>
 <tr>
-<td> poly </td>
-<td> Поліном (реверсивний) </td>
-<td> Цілий </td>
-<td> Вхід </td>
-<td> 40961 (0xA001)
-</td></tr>
-<tr>
 <td> width </td>
 <td> Ширина </td>
 <td> Цілий </td>
@@ -1185,11 +1179,39 @@ messPut("Приклад", 0, "strPath2Sep(): "+test);</pre>
 <td> 16
 </td></tr>
 <tr>
+<td> poly </td>
+<td> Поліном </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> 32773 (0x8005)
+</td></tr>
+<tr>
 <td> init </td>
-<td> Ініціалізація </td>
+<td> Поч. значення </td>
 <td> Цілий </td>
 <td> Вхід </td>
 <td> -1 (0xFFFFFFFFFFFFFFFF)
+</td></tr>
+<tr>
+<td> RefIn </td>
+<td> Послідовність входу </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> 1
+</td></tr>
+<tr>
+<td> RefOut </td>
+<td> Послідовність виходу </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> 1
+</td></tr>
+<tr>
+<td> XorOut </td>
+<td> XOR для виходу </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> 0
 </td></tr></table>
 <h3><span class="mw-headline" id=".D0.97.D0.BB.D1.96.D0.BF.D0.BE.D0.BA_.D0.BF.D0.BE.D0.B2.D1.96.D0.B4.D0.BE.D0.BC.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F_5_.28MD5.29"><span class="mw-headline-number">3.16</span> Зліпок повідомлення 5 (MD5)</span></h3>
 <p><i>Опис:</i> Обчислення зліпка повідомлення 5 для даних <i>data</i>.<br />

@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.4.0"
+#define MOD_VER		"2.4.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2 are supported.")
@@ -349,7 +349,7 @@ void *TSocketIn::Task( void *sock_in )
     else
 # endif
 #endif
-#if OPENSSL_VERSION_NUMBER >= 0x1010104fL
+#if OPENSSL_VERSION_NUMBER >= 0x1010006fL
 # ifndef OPENSSL_NO_DTLS1_2_METHOD
 	 if(ssl_method == "DTLSv1_2")	meth = DTLSv1_2_server_method();
     else
@@ -931,7 +931,7 @@ void TSocketOut::start( int tmCon )
     else
 # endif
 #endif
-#if OPENSSL_VERSION_NUMBER >= 0x1010104fL
+#if OPENSSL_VERSION_NUMBER >= 0x1010006fL
 # ifndef OPENSSL_NO_DTLS1_2_METHOD
 	if(ssl_method == "DTLSv1_2")	meth = DTLSv1_2_client_method();
     else

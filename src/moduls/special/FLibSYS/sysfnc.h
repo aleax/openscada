@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.FLibSYS file: sysfnc.h
 /***************************************************************************
- *   Copyright (C) 2005-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -539,25 +539,49 @@ class CRC : public TFunction
 	CRC( ) : TFunction("CRC", SSPC_ID) {
 	    ioAdd(new IO("rez",_("Result"),IO::Integer,IO::Return));
 	    ioAdd(new IO("data",_("Data"),IO::String,IO::Default));
-	    ioAdd(new IO("poly",_("Polynomial (reversion)"),IO::Integer,IO::Default,"40961"));	//0xA001
 	    ioAdd(new IO("width",_("Width"),IO::Integer,IO::Default,"16"));
+	    ioAdd(new IO("poly",_("Polynomial"),IO::Integer,IO::Default,"32773"));	//0x8005
 	    ioAdd(new IO("init",_("Initial"),IO::Integer,IO::Default,"-1"));	//0xFFFFFFFFFFFFFFFF
+	    ioAdd(new IO("RefIn",_("Reference input"),IO::Boolean,IO::Default,"1"));
+	    ioAdd(new IO("RefOut",_("Reference output"),IO::Boolean,IO::Default,"1"));
+	    ioAdd(new IO("XorOut",_("XOR for output"),IO::Integer,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Cyclic Redundancy Code (CRC)"); }
-	string descr( )	{ return _("Unified implementing of the Cyclic Redundancy Code for the width in 8-64 bits."); }
+	string descr( )	{ return _("Unified and completed implementing of the Cyclic Redundancy Code "
+	    "for the width in 1-64 bits with normal polynomial, the initial CRC, "
+	    "the input and output reference, and the XOR for output.\n"
+	    "The previous notation of the function is supported also, where the reversed polynomial is placed in the <width> place!"); }
+
+	uint64_t reflect( uint64_t crc, int wdth ) {
+	    uint64_t rez = 0;
+	    for(unsigned i = 0; i < wdth; i++)
+		rez |= ((crc>>i)&1) << (wdth-i-1);
+	    return rez;
+	}
 
 	void calc( TValFunc *val ) {
-	    int wdth = vmin(64, vmax(1,val->getI(3)));
+	    //Input parameters
+	    uint64_t wdth = val->getI(2);
+	    uint64_t pat = val->getI(3);
+	    // Old fashion prototype compability with using reversed pattern
+	    if((wdth < 1 || wdth > 64) && pat >= 1 && pat <= 64) { char wdth_ = pat; pat = wdth; wdth = wdth_; }
+	    else if(wdth < 1 || wdth > 64) { val->setI(0, 0); return; }
+	    else pat = reflect(pat, wdth);
 	    uint64_t mask = 0xFFFFFFFFFFFFFFFFull >> (64-wdth);
+	    pat = pat & mask;
 	    uint64_t CRC = val->getI(4) & mask;
-	    uint64_t pat = val->getI(2) & mask;
+	    bool RefIn = val->getB(5);
+	    bool RefOut = val->getB(6);
+	    uint64_t XorOut = val->getI(7) & mask;
 	    string data = val->getS(1);
+	    //Same calculation
 	    for(unsigned i = 0; i < data.size(); i++) {
-		CRC ^= (uint8_t)data[i];
-		for(char j = 0; j < 8; j++) CRC = (CRC&1) ? (CRC>>1)^pat : (CRC>>1);
+		CRC ^= RefIn ? (uint8_t)data[i] : reflect((uint8_t)data[i],8);
+		for(char j = 0; j < 8; ++j) CRC = (CRC&1) ? (CRC>>1)^pat : (CRC>>1);
 	    }
-	    val->setI(0, (int64_t)CRC);
+	    if(!RefOut)	CRC = reflect(CRC, wdth);
+	    val->setI(0, (int64_t)((CRC&mask)^XorOut));
 	}
 };
 

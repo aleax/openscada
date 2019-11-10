@@ -1,3 +1,13 @@
+2019-11-10 Roman (stable)
+- !!!!:DB.LibsDB.OscadaLibs: The templates library "DevLib" appended for the DNP3 initial implementation,
+    just for the function Special.FLibSYS.CRC() testing and expanding now.
+- !:FIX:DAQ: alarmSet() is changed to use complete parameter ID-path,
+    to prevent collisions in alarms from parameters with even IDs but different levels.
+- !!!:Special.FLibSYS: The function CRC of implementing the Cyclic Redundancy Code is completed by using normal polynomials,
+    the input and output references and the XOR for output, during the protocol DNP3 implementing.
+- FIX:Transport.SSL: Some closerer verision of support DTLS1_2 is set - 0x1010006fL.
+
+
 2019-11-04 Roman (stable)
 - FIX:Transport.SSL: Fixed for building with DTLSv1_2 in the old environments.
 

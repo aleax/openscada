@@ -1,13 +1,13 @@
 # OpenSCADA.Special.FLibSYS translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.Special.FLibSYS package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2018.
+# Roman Savochenko <rom_as@oscada.org>, 2005-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.FLibSYS 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-22 19:57+0300\n"
+"POT-Creation-Date: 2019-11-10 17:55+0200\n"
 "PO-Revision-Date: 2007-10-24 18:37+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -314,23 +314,38 @@ msgstr "Извлечение мантиссы и экспоненты из ве�
 msgid "Data"
 msgstr "Данные"
 
-msgid "Polynomial (reversion)"
-msgstr "Полином (реверсивный)"
-
 msgid "Width"
 msgstr "Ширина"
 
+msgid "Polynomial"
+msgstr "Полином"
+
 msgid "Initial"
 msgstr "Нач.значение"
+
+msgid "Reference input"
+msgstr "Последовательность входа"
+
+msgid "Reference output"
+msgstr "Последовательность выхода"
+
+msgid "XOR for output"
+msgstr "XOR для выхода"
 
 msgid "Cyclic Redundancy Code (CRC)"
 msgstr "Циклический Избыточный Код (CRC)"
 
 msgid ""
-"Unified implementing of the Cyclic Redundancy Code for the width in 8-64 "
-"bits."
+"Unified and completed implementing of the Cyclic Redundancy Code for the "
+"width in 1-64 bits with normal polynomial, the initial CRC, the input and "
+"output reference, and the XOR for output.\n"
+"The previous notation of the function is supported also, where the reversed "
+"polynomial is placed in the <width> place!"
 msgstr ""
-"Унифицированная реализация Циклического Избыточного Кода для длин 8-64 бит."
+"Унифицированная и полная реализация Циклического Избыточного Кода для длин "
+"1-64 бит с нормальным полиномом, начальным CRC, входной и выходной "
+"последовательностью, и XOR для выхода.\n"
+"Также поддерживается предыдущая нотация этой функции, где реверсивний полином размещается в позиции ширины <width>!"
 
 msgid "Message Digest 5 (MD5)"
 msgstr "Слепок сообщения 5 (MD5)"
@@ -482,6 +497,7 @@ msgid ""
 msgstr ""
 "Получение объекта буфера значений для временного хранения значений и "
 "выполнения промежуточных операций над кадрами данных."
+
 
 msgid "XML: Node"
 msgstr "XML: Узел"

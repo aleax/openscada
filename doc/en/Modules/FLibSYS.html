@@ -31,14 +31,14 @@
 <td> <a href="../Modules/FLibSYS.html" title="Special:MyLanguage/Modules/FLibSYS">FLibSYS</a> </td>
 <td> System functions
 </td>
-<td> 1.6 </td>
+<td> 1.7 </td>
 <td> GPL2 </td>
 <td> spec_FLibSYS.so </td>
 <td> en,uk,ru,de </td>
 <td> x86,x86_64,ARM
 </td>
 <td> Special </td>
-<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2009) — the page translation</i></font> </td>
+<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2009) — the page initial translation</i></font> </td>
 <td> Provides a library of the system functions of the user programming area of OpenSCADA.
 </td></tr></table>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
@@ -1141,7 +1141,8 @@ messPut("Example", 0, "strPath2Sep(): "+test);</pre>
 <td> 0
 </td></tr></table>
 <h3><span class="mw-headline" id="Cyclic_Redundancy_Code_.28CRC.29"><span class="mw-headline-number">3.15</span> <span id="CRC" title="#CRC">Cyclic Redundancy Code (CRC)</span></span></h3>
-<p><i>Description:</i> Unified implementing of the Cyclic Redundancy Code for the width in 8-64 bits.<br />
+<p><i>Description:</i> Unified and completed implementing of the Cyclic Redundancy Code for the width in 1-64 bits with normal polynomial, the initial CRC, the input and output reference, and the XOR for output.<br />
+The previous notation of the function is supported also, where the reversed polynomial is placed in the <i>width</i> place!<br />
 <i>Parameters:</i>
 </p>
 <table class="wikitable">
@@ -1168,13 +1169,6 @@ messPut("Example", 0, "strPath2Sep(): "+test);</pre>
 <td>
 </td></tr>
 <tr>
-<td> poly </td>
-<td> Polynomial (reversion) </td>
-<td> Integer </td>
-<td> Input </td>
-<td> 40961 (0xA001)
-</td></tr>
-<tr>
 <td> width </td>
 <td> Width </td>
 <td> Integer </td>
@@ -1182,11 +1176,39 @@ messPut("Example", 0, "strPath2Sep(): "+test);</pre>
 <td> 16
 </td></tr>
 <tr>
+<td> poly </td>
+<td> Polynomial </td>
+<td> Integer </td>
+<td> Input </td>
+<td> 32773 (0x8005)
+</td></tr>
+<tr>
 <td> init </td>
 <td> Initial </td>
 <td> Integer </td>
 <td> Input </td>
 <td> -1 (0xFFFFFFFFFFFFFFFF)
+</td></tr>
+<tr>
+<td> RefIn </td>
+<td> Reference input </td>
+<td> Bool </td>
+<td> Input </td>
+<td> 1
+</td></tr>
+<tr>
+<td> RefOut </td>
+<td> Reference output </td>
+<td> Bool </td>
+<td> Input </td>
+<td> 1
+</td></tr>
+<tr>
+<td> XorOut </td>
+<td> XOR for output </td>
+<td> Integer </td>
+<td> Input </td>
+<td> 0
 </td></tr></table>
 <h3><span class="mw-headline" id="Message_Digest_5_.28MD5.29"><span class="mw-headline-number">3.16</span> Message Digest 5 (MD5)</span></h3>
 <p><i>Description:</i> Calculating for the message Digest 5 of the <i>data</i>.<br />
