@@ -2760,7 +2760,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	string rez;
 	int st = 0;
 	string tp = "";
-	if(prms.size() && prms[0].type() == TVariant::String) st = 1, tp = prms[0].getS();
+	if(prms.size() && prms[0].type() == TVariant::String) st = 1, tp = TSYS::strEncode(prms[0].getS(),TSYS::ToLower);
 	if(tp.find("utf-16") == 0) {
 	    uint16_t tvl = 0;
 	    for(unsigned iP = st; iP < prms.size(); iP++) {

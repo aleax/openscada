@@ -1,3 +1,9 @@
+2019-11-19 Roman (stable)
+- !!!!:FIX:DB.LibsDB.OscadaLibs: DevLib.IEC60870: Fixed to send STOPDT at the template stop.
+    !!!!:DevLib.DNP3: Finished in the protocol implementation, tested with outstation-demo from opendnp3.
+- FIX:SYS: The user API function strFromCharUTF() for the case-insensitivity in the UTF name.
+
+
 2019-11-10 Roman (stable)
 - !!!!:DB.LibsDB.OscadaLibs: The templates library "DevLib" appended for the DNP3 initial implementation,
     just for the function Special.FLibSYS.CRC() testing and expanding now.
