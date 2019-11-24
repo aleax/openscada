@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Модулі/Рушій Середовища Візуалізації та Управління (СВУ)</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FVCAEngine&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/VCAEngine" title="Modules/VCAEngine">Modules/VCAEngine</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/VCAEngine" title="Modules/VCAEngine (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/VCAEngine/ru" title="Модули/Движок Среды Визуализации и Управлений (СВУ) (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FVCAEngine&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/VCAEngine" title="Modules/VCAEngine">Modules/VCAEngine</a> and the translation is 98% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/VCAEngine" title="Modules/VCAEngine (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/VCAEngine/ru" title="Модули/Движок Среды Визуализации и Управлений (СВУ) (98% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -31,15 +31,15 @@
 <td> <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
 <td> Рушій Середовища Візуалізації та Управління
 </td>
-<td> 5.10 </td>
+<td> 5.11 </td>
 <td> GPL2 </td>
 <td> ui_VCAEngine.so </td>
 <td> en,uk,ru,de </td>
 <td> x86,x86_64,ARM
 </td>
 <td> UI </td>
-<td> Роман Савоченко </td>
-<td> Загальний рушій середовища візуалізації та керування.
+<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2011-2012) — the page initial translation</i></font> </td>
+<td> The main engine of the visual control area.
 </td></tr></table>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
@@ -219,7 +219,7 @@
 <ul><li> "Сторінка верхнього рівня" -&gt; "Сторінка нижнього рівня"</li>
 <li> "Віджет нижнього рівня" -&gt; "Віджет верхнього рівня"</li></ul>
 <p>Така політика дозволяє обходити сторінки відповідно до їх ієрархії, а повідомленням у віджетах "спливати" нагору за одну ітерацію.
-</p><p>Сеанси підтримують багатомовність на рівні <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/API#CntrNode" title="Special:MyLanguage/Documents/API">інтерфейсу управління OpenSCADA</a>, яка залежить від значень загальних атрибутів "lang" та "user", та які візуалізатор може встановлювати згідно до своєї мови. Ця функція вмикається <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Config" title="Special:MyLanguage/Documents/Program manual">динамічним перекладом повідомлень OpenSCADA</a>.
+</p><p>Сеанси підтримують багатомовність на рівні <a href="../../en/API.html#CntrNode" title="Special:MyLanguage/Documents/API">інтерфейсу управління OpenSCADA</a>, яка залежить від значень загальних атрибутів "lang" та "user", та які візуалізатор може встановлювати згідно до своєї мови. Ця функція вмикається <a href="../Program_manual.html#Config" title="Special:MyLanguage/Documents/Program manual">динамічним перекладом повідомлень OpenSCADA</a>.
 </p><p><br />
 </p>
 <h3><span class="mw-headline" id=".D0.A1.D1.82.D0.B8.D0.BB.D1.96"><span class="mw-headline-number">3.4</span> Стилі</span></h3>
@@ -821,7 +821,7 @@ if test $en = 1 -a -s $res; then play -q $res; fi
 <li> атрибути параметру можуть надавати дані п'яти типів: Логічний, Цілий, Реальний, Рядок та Об'єкт;</li>
 <li> атрибути параметру можуть мати архів (історію);</li>
 <li> атрибути параметру можуть бути на читання, запис та з повним доступом.</li></ol>
-<p>Враховуючи перший пункт, треба забезпечити можливість групового призначення посилання. Для цього використовуємо <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLev" title="Special:MyLanguage/Documents/DAQ">концепцію логічного рівня</a>.
+<p>Враховуючи перший пункт, треба забезпечити можливість групового призначення посилання. Для цього використовуємо <a href="../DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">концепцію логічного рівня</a>.
 </p><p>Згідно до пункту 2, зв'язки забезпечують прозоре перетворення типів та не потребують спеціальної конфігурації.
 </p><p>Для задоволення можливості доступу до архівам, згідно до пункту 3, зв'язки виконують перевірку типу атрибуту та, у випадку підключення до "Адреси", до значення поміщається адреса зв'язку.
 </p><p>У термінах СВУ, динамічні зв'язки та конфігурація динаміки є одним процесом, для опису конфігурації якого передбачено вкладку "Обробка" віджетів. Вкладка містить таблицю конфігурації властивостей атрибутів та текст процедури обчислення віджету.
@@ -3182,7 +3182,7 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 <td>
 </td></tr></table>
 <h4><span class="mw-headline" id=".D0.A1.D0.B5.D1.80.D0.B2.D1.96.D1.81.D0.BD.D1.96_.D1.96.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D0.B8_OpenSCADA"><span class="mw-headline-number">3.11.2</span> Сервісні інтерфейси OpenSCADA</span></h4>
-<p>Сервісні інтерфейси це інтерфейси доступу до OpenSCADA за посередництвом <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/API#CntrNode" title="Special:MyLanguage/Documents/API">інтерфейсу управління OpenSCADA</a>. Даний механізм покладено у основу всіх механізмів обміну всередині OpenSCADA, реалізованих за посередництвом слабких зв'язків та стандартного протоколу обміну OpenSCADA.
+<p>Сервісні інтерфейси це інтерфейси доступу до OpenSCADA за посередництвом <a href="../../en/API.html#CntrNode" title="Special:MyLanguage/Documents/API">інтерфейсу управління OpenSCADA</a>. Даний механізм покладено у основу всіх механізмів обміну всередині OpenSCADA, реалізованих за посередництвом слабких зв'язків та стандартного протоколу обміну OpenSCADA.
 </p>
 <h5><span class="mw-headline" id=".D0.94.D0.BE.D1.81.D1.82.D1.83.D0.BF_.D0.B4.D0.BE_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D1.8C_.D0.B0.D1.82.D1.80.D0.B8.D0.B1.D1.83.D1.82.D1.96.D0.B2_.D0.B5.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.96.D0.B2_.D0.B2.D1.96.D0.B7.D1.83.D0.B0.D0.BB.D1.96.D0.B7.D0.B0.D1.86.D1.96.D1.97_.28.D0.B2.D1.96.D0.B4.D0.B6.D0.B5.D1.82.D0.B8.29"><span class="mw-headline-number">3.11.2.1</span> Доступ до значень атрибутів елементів візуалізації (віджети)</span></h5>
 <p>З метою надання уніфікованого, групового та порівняно швидкого доступу до значень атрибутів візуальних елементів, передбачено сервісну функція візуального елементу "/serv/attr" та команди отримання-установки значень атрибутів:
@@ -3360,7 +3360,7 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 <p>За допомогою цієї сторінки можна встановити:
 </p>
 <ul><li> Стан елементу, а саме: "Ввімкнено", кількість використання, батьківський елемент та перехід до нього, дата та час останьої модифікації.</li>
-<li> Стан режиму сеансу виконання: "Відкрито", "Обробка" та використано часу при виконанні піддерева та елемента, у <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Config" title="Special:MyLanguage/Documents/Program manual">режимі налагодження</a>.</li>
+<li> Стан режиму сеансу виконання: "Відкрито", "Обробка" та використано часу при виконанні піддерева та елемента, у <a href="../Program_manual.html#Config" title="Special:MyLanguage/Documents/Program manual">режимі налагодження</a>.</li>
 <li> Ідентифікатор, тип, корінь, шлях, ім'я, опис та іконка елементу.</li>
 <li> Команда — очистити зміни.</li>
 <li> Команда — опустити зміни віджета його предку.</li></ul>

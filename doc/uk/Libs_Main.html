@@ -84,7 +84,7 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <table class="wikitable">
 
 <tr>
-<td> <span id="anUnif" title="#anUnif"><h3><span class="mw-headline" id=".D0.90.D0.BD.D0.B0.D0.BB.D0.BE.D0.B3.D0.BE.D0.B2.D0.B8.D0.B9_.D1.81.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB_.28.D1.83.D0.BD.D1.96.D1.84.D1.96.D0.BA.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B9.29_.28anUnif.29"><span class="mw-headline-number">1.1</span> Аналоговий сигнал (уніфікований) (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#anUnif" title="Special:MyLanguage/Libs/Main">anUnif</a>)</span></h3></span>
+<td> <span id="anUnif" title="#anUnif"><h3><span class="mw-headline" id=".D0.90.D0.BD.D0.B0.D0.BB.D0.BE.D0.B3.D0.BE.D0.B2.D0.B8.D0.B9_.D1.81.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB_.28.D1.83.D0.BD.D1.96.D1.84.D1.96.D0.BA.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B9.29_.28anUnif.29"><span class="mw-headline-number">1.1</span> Аналоговий сигнал (уніфікований) (<a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">anUnif</a>)</span></h3></span>
 </td>
 <td> 2.1 </td>
 <td> GPLv2 </td>
@@ -474,7 +474,7 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <dl><dd>1. Створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь-який наявний з потрібними властивостями планування.</dd>
 <dd>2. Створити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного параметру</a> та обрати цей шаблон для нього. Ввімкнути параметр.</dd>
 <dd>3. У вкладці "Конфігурація шаблону" об'єкту логічного параметру Ви маєте встановити:
-<ul><li> <i>Вхід</i> — <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">зв'язати із джерелом "сирого" сигналу</a>.</li>
+<ul><li> <i>Вхід</i> — <a href="DAQ.html#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">зв'язати із джерелом "сирого" сигналу</a>.</li>
 <li> <i>Вхідна процедура обробки</i> — сформувати для складної передобробки та повної генерації-імітації аналогового входу на внутрішній мові програмування OpenSCADA. Є необов'язковою та має визначатися за складних випадків, наприклад:</li></ul>
 <dl><dd><ul><li> проста та прозора попередня обробка з приведення відсотків навантаження ДБЖ до потужності, що можна зробити і за допомогою <b>iMult</b>:</li></ul></dd></dl></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 40pt">
@@ -529,7 +529,7 @@ else if(!(tVl=gO.prm_alarms.PRG_Alarm_T_min.get()).isEVal() &amp;&amp; tVl)
 <table class="wikitable">
 
 <tr>
-<td> <span id="anUnifSt" title="#anUnifSt"><h3><span class="mw-headline" id=".D0.90.D0.BD.D0.B0.D0.BB.D0.BE.D0.B3.D0.BE.D0.B2.D0.B8.D0.B9_.D1.81.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB_.28.D1.83.D0.BD.D1.96.D1.84.D1.96.D0.BA.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B9.2C_.D1.81.D1.82.D0.B0.D0.BD.D0.B8_.D0.BF.D0.BE.D1.80.D1.83.D1.88.D0.B5.D0.BD.D1.8C.29_.28anUnifSt.29"><span class="mw-headline-number">1.2</span> Аналоговий сигнал (уніфікований, стани порушень) (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#anUnifSt" title="Special:MyLanguage/Libs/Main">anUnifSt</a>)</span></h3></span>
+<td> <span id="anUnifSt" title="#anUnifSt"><h3><span class="mw-headline" id=".D0.90.D0.BD.D0.B0.D0.BB.D0.BE.D0.B3.D0.BE.D0.B2.D0.B8.D0.B9_.D1.81.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB_.28.D1.83.D0.BD.D1.96.D1.84.D1.96.D0.BA.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B9.2C_.D1.81.D1.82.D0.B0.D0.BD.D0.B8_.D0.BF.D0.BE.D1.80.D1.83.D1.88.D0.B5.D0.BD.D1.8C.29_.28anUnifSt.29"><span class="mw-headline-number">1.2</span> Аналоговий сигнал (уніфікований, стани порушень) (<a href="Libs_Main.html#anUnifSt" title="Special:MyLanguage/Libs/Main">anUnifSt</a>)</span></h3></span>
 </td>
 <td> 1.2 </td>
 <td> GPLv2 </td>
@@ -610,7 +610,7 @@ else if(!(tVl=gO.prm_alarms.PRG_Alarm_T_min.get()).isEVal() &amp;&amp; tVl)
 <table class="wikitable">
 
 <tr>
-<td> <span id="manInUnif" title="#manInUnif"><h3><span class="mw-headline" id=".D0.A0.D1.83.D1.87.D0.BD.D0.B8.D0.B9_.D0.B2.D0.B2.D1.96.D0.B4_.28.D1.83.D0.BD.D1.96.D1.84.D1.96.D0.BA.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B9.29_.28manInUnif.29"><span class="mw-headline-number">1.3</span> Ручний ввід (уніфікований) (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#manInUnif" title="Special:MyLanguage/Libs/Main">manInUnif</a>)</span></h3></span>
+<td> <span id="manInUnif" title="#manInUnif"><h3><span class="mw-headline" id=".D0.A0.D1.83.D1.87.D0.BD.D0.B8.D0.B9_.D0.B2.D0.B2.D1.96.D0.B4_.28.D1.83.D0.BD.D1.96.D1.84.D1.96.D0.BA.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B9.29_.28manInUnif.29"><span class="mw-headline-number">1.3</span> Ручний ввід (уніфікований) (<a href="Libs_Main.html#manInUnif" title="Special:MyLanguage/Libs/Main">manInUnif</a>)</span></h3></span>
 </td>
 <td> 1.2 </td>
 <td> GPLv2 </td>
@@ -951,7 +951,7 @@ else if(!(tVl=gO.prm_alarms.PRG_Alarm_T_min.get()).isEVal() &amp;&amp; tVl)
 <dl><dd>1. Створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь-який наявний з потрібними властивостями планування.</dd>
 <dd>2. Створити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного параметру</a> та обрати цей шаблон для нього. Ввімкнути параметр.</dd>
 <dd>3. У вкладці "Конфігурація шаблону" об'єкту логічного параметру Ви маєте встановити:
-<ul><li> <i>Вхід/Вихід</i> — <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">зв'язати із джерелом "сирого" сигналу ВВ</a>, або не прив'язувати для автономного режиму.</li>
+<ul><li> <i>Вхід/Вихід</i> — <a href="DAQ.html#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">зв'язати із джерелом "сирого" сигналу ВВ</a>, або не прив'язувати для автономного режиму.</li>
 <li> <i>Мінімум та максимум шкали модуля</i> — має вказуватися у випадку значного розходження апаратної шкали із загальною, для прикладу дивіться шаблон "<a href="#anUnif">Аналоговий сигнал (уніфікований)</a>".</li>
 <li> <i>Додаток та множник до входу</i> — використати для простої лінійної корекції входу, для прикладу дивіться шаблон "<a href="#anUnif">Аналоговий сигнал (уніфікований)</a>".</li>
 <li> <i>Дозволене перевищення шкали</i> — встановити за потреби перевищення значенням загальної шкали та коли ця шкала починає виконувати рекомендавчу функцію, скажемо для початкового відображення історії у цій шкалі.</li></ul></dd>
@@ -971,7 +971,7 @@ else if(!(tVl=gO.prm_alarms.PRG_Alarm_T_min.get()).isEVal() &amp;&amp; tVl)
 <table class="wikitable">
 
 <tr>
-<td> <span id="digitBlockUnif" title="#digitBlockUnif"><h3><span class="mw-headline" id=".D0.94.D0.B8.D1.81.D0.BA.D1.80.D0.B5.D1.82.D0.BD.D0.B8.D0.B9_.D0.B1.D0.BB.D0.BE.D0.BA_.28.D1.83.D0.BD.D1.96.D1.84.D1.96.D0.BA.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B9.29_.28digitBlockUnif.29"><span class="mw-headline-number">1.4</span> Дискретний блок (уніфікований) (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#digitBlockUnif" title="Special:MyLanguage/Libs/Main">digitBlockUnif</a>)</span></h3></span> </td>
+<td> <span id="digitBlockUnif" title="#digitBlockUnif"><h3><span class="mw-headline" id=".D0.94.D0.B8.D1.81.D0.BA.D1.80.D0.B5.D1.82.D0.BD.D0.B8.D0.B9_.D0.B1.D0.BB.D0.BE.D0.BA_.28.D1.83.D0.BD.D1.96.D1.84.D1.96.D0.BA.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B9.29_.28digitBlockUnif.29"><span class="mw-headline-number">1.4</span> Дискретний блок (уніфікований) (<a href="Libs_Main.html#digitBlockUnif" title="Special:MyLanguage/Libs/Main">digitBlockUnif</a>)</span></h3></span> </td>
 <td> 1.0 </td>
 <td> GPLv2 </td>
 <td> * </td>
@@ -1120,7 +1120,7 @@ else if(!(tVl=gO.prm_alarms.PRG_Alarm_T_min.get()).isEVal() &amp;&amp; tVl)
 <dl><dd>1. Створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь-який наявний з потрібними властивостями планування.</dd>
 <dd>2. Створити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного параметру</a> та обрати цей шаблон для нього. Ввімкнути параметр.</dd>
 <dd>3. У вкладці "Конфігурація шаблону" об'єкту логічного параметру Ви маєте встановити:
-<ul><li> Всі стани та команди — <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">зв'язати із джерелом "сирого" сигналу</a>.</li>
+<ul><li> Всі стани та команди — <a href="DAQ.html#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">зв'язати із джерелом "сирого" сигналу</a>.</li>
 <li> <i>Час утримання команди, секунди</i> — встановити у потрібне значення утримання або у 0 для вимкнення цієї функції.</li></ul></dd>
 <dd>4. РЕЗУЛЬТАТ: Запустивши об'єкт контролеру (де створено цей параметр) та якщо він не був запущений, маємо отримати оперативні дані у вкладці "Атрибути", для: станів та команд.</dd>
 <dd>5. У процесі роботи, через вкладку оперативних даних "Атрибути", окрім отримання результату можна здійснювати оперативний контроль, видачею команд.</dd></dl>
@@ -1129,7 +1129,7 @@ else if(!(tVl=gO.prm_alarms.PRG_Alarm_T_min.get()).isEVal() &amp;&amp; tVl)
 <table class="wikitable">
 
 <tr>
-<td> <span id="digAlarm" title="#digAlarm"><h3><span class="mw-headline" id=".D0.A1.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB.D1.96.D0.B7.D0.B0.D1.86.D1.96.D1.8F_.D0.B4.D0.B8.D1.81.D0.BA.D1.80.D0.B5.D1.82.D0.BD.D0.B0_.28digAlarm.29"><span class="mw-headline-number">1.5</span> Сигналізація дискретна (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#digAlarm" title="Special:MyLanguage/Libs/Main">digAlarm</a>)</span></h3></span>
+<td> <span id="digAlarm" title="#digAlarm"><h3><span class="mw-headline" id=".D0.A1.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB.D1.96.D0.B7.D0.B0.D1.86.D1.96.D1.8F_.D0.B4.D0.B8.D1.81.D0.BA.D1.80.D0.B5.D1.82.D0.BD.D0.B0_.28digAlarm.29"><span class="mw-headline-number">1.5</span> Сигналізація дискретна (<a href="Libs_Main.html#digAlarm" title="Special:MyLanguage/Libs/Main">digAlarm</a>)</span></h3></span>
 </td>
 <td> 1.1 </td>
 <td> GPLv2 </td>
@@ -1323,7 +1323,7 @@ else if(!(tVl=gO.prm_alarms.PRG_Alarm_T_min.get()).isEVal() &amp;&amp; tVl)
 <dd>3. У вкладці "Конфігурація шаблону" об'єкту логічного параметру Ви маєте встановити:
 <ul><li> "Сигнал "{st}:{lev}:{mess}" — визначити критерій формування порушення, залишити порожнім для вимкнення генерації порушень.</li>
 <li> "Інверсія стану" — встановити для інвертування репрезентативних атрибутів, тобто "st_open" встановити за "in" рівного <b>false</b>.</li>
-<li> "Вхід" — <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">зв'язати із джерелом "сирого" сигналу</a>.</li>
+<li> "Вхід" — <a href="DAQ.html#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">зв'язати із джерелом "сирого" сигналу</a>.</li>
 <li> <i>Вхідна процедура обробки</i> — сформувати для складної передобробки та повної генерації-імітації дискретного входу на внутрішній мові програмування OpenSCADA. Наприклад:</li></ul>
 <dl><dd><ul><li> повне створення складного статусу:</li></ul></dd></dl></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 40pt">
@@ -1336,7 +1336,7 @@ in = gO.prm_generic.SET_CalcFan_UseSensor_T1.get() ||&nbsp;!(status == 0 || stat
 <table class="wikitable">
 
 <tr>
-<td> <span id="codeState" title="#codeState"><h3><span class="mw-headline" id=".D0.A1.D1.82.D0.B0.D0.BD_.D0.B7.D0.B0_.D0.BA.D0.BE.D0.B4.D0.BE.D0.BC_.28codeState.29"><span class="mw-headline-number">1.6</span> Стан за кодом (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#codeState" title="Special:MyLanguage/Libs/Main">codeState</a>)</span></h3></span>
+<td> <span id="codeState" title="#codeState"><h3><span class="mw-headline" id=".D0.A1.D1.82.D0.B0.D0.BD_.D0.B7.D0.B0_.D0.BA.D0.BE.D0.B4.D0.BE.D0.BC_.28codeState.29"><span class="mw-headline-number">1.6</span> Стан за кодом (<a href="Libs_Main.html#codeState" title="Special:MyLanguage/Libs/Main">codeState</a>)</span></h3></span>
 </td>
 <td> 1.2 </td>
 <td> GPLv2 </td>
@@ -1551,7 +1551,7 @@ in = gO.prm_generic.SET_CalcFan_UseSensor_T1.get() ||&nbsp;!(status == 0 || stat
 <dl><dd>1. Створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь-який наявний з потрібними властивостями планування.</dd>
 <dd>2. Створити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного параметру</a> та обрати цей шаблон для нього. Ввімкнути параметр.</dd>
 <dd>3. У вкладці "Конфігурація шаблону" об'єкту логічного параметру Ви маєте встановити:
-<ul><li> <i>Вхід</i> та <i>Вихід</i> — <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">зв'язати із джерелом "сирого" сигналу</a>.</li>
+<ul><li> <i>Вхід</i> та <i>Вихід</i> — <a href="DAQ.html#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">зв'язати із джерелом "сирого" сигналу</a>.</li>
 <li> <i>Вхідна процедура обробки</i> — сформувати для обробки та повної генерації-імітації входу, та видачі специфічного виходу, на внутрішній мові програмування OpenSCADA. Наприклад:</li></ul>
 <dl><dd><ul><li> повне створення коду статусу та формування порушення:</li></ul></dd></dl></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 40pt">
@@ -1589,7 +1589,7 @@ if(com_text.length &amp;&amp;&nbsp;!com_text.isEVal() &amp;&amp; (tVl=coms.match
 <table class="wikitable">
 
 <tr>
-<td> <span id="pidUnif" title="#pidUnif"><h3><span class="mw-headline" id=".D0.9F.D0.86.D0.94_.D1.81.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB_.28.D1.83.D0.BD.D1.96.D1.84.D1.96.D0.BA.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B9.2C_.D1.81.D1.82.D0.B0.D0.BD.D0.B8_.D0.BF.D0.BE.D1.80.D1.83.D1.88.D0.B5.D0.BD.D1.8C.29_.28pidUnif.29"><span class="mw-headline-number">1.7</span> ПІД сигнал (уніфікований, стани порушень) (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#pidUnif" title="Special:MyLanguage/Libs/Main">pidUnif</a>)</span></h3></span>
+<td> <span id="pidUnif" title="#pidUnif"><h3><span class="mw-headline" id=".D0.9F.D0.86.D0.94_.D1.81.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB_.28.D1.83.D0.BD.D1.96.D1.84.D1.96.D0.BA.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B9.2C_.D1.81.D1.82.D0.B0.D0.BD.D0.B8_.D0.BF.D0.BE.D1.80.D1.83.D1.88.D0.B5.D0.BD.D1.8C.29_.28pidUnif.29"><span class="mw-headline-number">1.7</span> ПІД сигнал (уніфікований, стани порушень) (<a href="Libs_Main.html#pidUnif" title="Special:MyLanguage/Libs/Main">pidUnif</a>)</span></h3></span>
 </td>
 <td> 1.2 </td>
 <td> GPLv2 </td>
@@ -2141,8 +2141,8 @@ if(com_text.length &amp;&amp;&nbsp;!com_text.isEVal() &amp;&amp; (tVl=coms.match
 <dl><dd>1. Створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь-який наявний з потрібними властивостями планування.</dd>
 <dd>2. Створити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного параметру</a> та обрати цей шаблон для нього. Ввімкнути параметр.</dd>
 <dd>3. У вкладці "Конфігурація шаблону" об'єкту логічного параметру Ви маєте встановити:
-<ul><li> <i>Вхід</i> — <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">зв'язати із джерелом "сирого" аналогового сигналу</a>.</li>
-<li> <i>Завдання</i>, <i>Ручний ввід</i>, <i>Вихід</i>, <i>Режим: автомат</i>, <i>Режим: каскад</i>, <i>Шкала: мінімум</i>, <i>Шкала: максимум</i>, <i>Kп</i>, <i>Tі</i>, <i>Кп диференціалу</i>, <i>Tд</i>, <i>T фільтру диференціалу, мілісекунд</i>, <i>Нечутливість</i>, <i>Верхня границя виходу</i>, <i>Нижня границя виходу</i>, <i>Коефіцієнт входу 1</i>, <i>Коефіцієнт входу 2</i>, <i>Коефіцієнт входу 3</i>, <i>Коефіцієнт входу 4</i> — <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">зв'язати із джерелом ПІД-регулятору</a>.</li>
+<ul><li> <i>Вхід</i> — <a href="DAQ.html#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">зв'язати із джерелом "сирого" аналогового сигналу</a>.</li>
+<li> <i>Завдання</i>, <i>Ручний ввід</i>, <i>Вихід</i>, <i>Режим: автомат</i>, <i>Режим: каскад</i>, <i>Шкала: мінімум</i>, <i>Шкала: максимум</i>, <i>Kп</i>, <i>Tі</i>, <i>Кп диференціалу</i>, <i>Tд</i>, <i>T фільтру диференціалу, мілісекунд</i>, <i>Нечутливість</i>, <i>Верхня границя виходу</i>, <i>Нижня границя виходу</i>, <i>Коефіцієнт входу 1</i>, <i>Коефіцієнт входу 2</i>, <i>Коефіцієнт входу 3</i>, <i>Коефіцієнт входу 4</i> — <a href="DAQ.html#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">зв'язати із джерелом ПІД-регулятору</a>.</li>
 <li> <i>Додаток та множник до входу</i> — використати для простої лінійної корекції входу, для прикладу дивіться шаблон "<a href="#anUnif">Аналоговий сигнал (уніфікований)</a>".</li>
 <li> <i>Дозволене перевищення шкали</i> — встановити за потреби перевищення значенням загальної шкали та коли ця шкала починає виконувати рекомендавчу функцію, скажемо для початкового відображення історії у цій шкалі.</li>
 <li> <i>Імітація та вхід імітації ПЛК</i> — визначити за потреби імітації входу згідно опису у функціях.</li></ul></dd>
@@ -2162,7 +2162,7 @@ if(com_text.length &amp;&amp;&nbsp;!com_text.isEVal() &amp;&amp; (tVl=coms.match
 <table class="wikitable">
 
 <tr>
-<td> <span id="pidUnifImp" title="#pidUnifImp"><h3><span class="mw-headline" id=".D0.86.D0.BC.D0.BF.D1.83.D0.BB.D1.8C.D1.81.D0.BD.D0.B8.D0.B9_.D0.9F.D0.86.D0.94_.D1.81.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB_.28.D1.83.D0.BD.D1.96.D1.84.D1.96.D0.BA.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B9.2C_.D1.81.D1.82.D0.B0.D0.BD.D0.B8_.D0.BF.D0.BE.D1.80.D1.83.D1.88.D0.B5.D0.BD.D1.8C.29_.28pidUnifImp.29"><span class="mw-headline-number">1.8</span> Імпульсний ПІД сигнал (уніфікований, стани порушень) (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#pidUnifImp" title="Special:MyLanguage/Libs/Main">pidUnifImp</a>)</span></h3></span>
+<td> <span id="pidUnifImp" title="#pidUnifImp"><h3><span class="mw-headline" id=".D0.86.D0.BC.D0.BF.D1.83.D0.BB.D1.8C.D1.81.D0.BD.D0.B8.D0.B9_.D0.9F.D0.86.D0.94_.D1.81.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB_.28.D1.83.D0.BD.D1.96.D1.84.D1.96.D0.BA.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B9.2C_.D1.81.D1.82.D0.B0.D0.BD.D0.B8_.D0.BF.D0.BE.D1.80.D1.83.D1.88.D0.B5.D0.BD.D1.8C.29_.28pidUnifImp.29"><span class="mw-headline-number">1.8</span> Імпульсний ПІД сигнал (уніфікований, стани порушень) (<a href="Libs_Main.html#pidUnifImp" title="Special:MyLanguage/Libs/Main">pidUnifImp</a>)</span></h3></span>
 </td>
 <td> 1.1 </td>
 <td> GPLv2 </td>
@@ -2277,15 +2277,15 @@ if(com_text.length &amp;&amp;&nbsp;!com_text.isEVal() &amp;&amp; (tVl=coms.match
 <ul><li> збірку цих атрибутів сирого джерела до <b>items</b>;</li>
 <li> опрацювання властивостей атрибутів;</li>
 <li> перевірку та передачу команд встановлення значень;</li>
-<li> опрацювання умов порушень як за окремими атрибутами так і загалом за об'єктом, разом з яким ці порушення можуть фіксуватися у <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#ArchMess" title="Special:MyLanguage/Documents/Program manual">таблиці поточних порушень</a>, зазвичай <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/User_API#SYS.DAQ" title="Special:MyLanguage/Documents/User API">функцією alarmSet()</a>.</li></ul>
-<p>Окрім шаблонів комплексного об'єкту цей механізм загально-об'єктного контролю може реалізовуватися шаблонами реалізації <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLev" title="Special:MyLanguage/Documents/DAQ">логічного рівня доступу до даних</a>, як то у <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Devices#IEC60870" title="Special:MyLanguage/Libs/Devices">IEC60870</a>.
+<li> опрацювання умов порушень як за окремими атрибутами так і загалом за об'єктом, разом з яким ці порушення можуть фіксуватися у <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">таблиці поточних порушень</a>, зазвичай <a href="User_API.html#SYS.DAQ" title="Special:MyLanguage/Documents/User API">функцією alarmSet()</a>.</li></ul>
+<p>Окрім шаблонів комплексного об'єкту цей механізм загально-об'єктного контролю може реалізовуватися шаблонами реалізації <a href="DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">логічного рівня доступу до даних</a>, як то у <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Devices#IEC60870" title="Special:MyLanguage/Libs/Devices">IEC60870</a>.
 </p><p>Для представлення даних механізму загально-об'єктного контролю наразі надається відповідний <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_graphical_elements#objProps" title="Special:MyLanguage/Libs/Main graphical elements">кадр "Властивості об'єкту"</a>, який надає ці властивості у вигляді таблиці-переліку із підсвіченням порушень та можливістю зміни обраних та редагованих властивостей-рядків.
 </p><p><br />
 </p>
 <table class="wikitable">
 
 <tr>
-<td> <span id="UPS" title="#UPS"><h3><span class="mw-headline" id=".D0.94.D0.B6.D0.B5.D1.80.D0.B5.D0.BB.D0.BE_.D0.91.D0.B5.D0.B7.D0.BF.D0.B5.D1.80.D0.B5.D0.B1.D1.96.D0.B9.D0.BD.D0.BE.D0.B3.D0.BE_.D0.96.D0.B8.D0.B2.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F_.28UPS.29"><span class="mw-headline-number">2.1</span> Джерело Безперебійного Живлення (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#UPS" title="Special:MyLanguage/Libs/Main">UPS</a>)</span></h3></span>
+<td> <span id="UPS" title="#UPS"><h3><span class="mw-headline" id=".D0.94.D0.B6.D0.B5.D1.80.D0.B5.D0.BB.D0.BE_.D0.91.D0.B5.D0.B7.D0.BF.D0.B5.D1.80.D0.B5.D0.B1.D1.96.D0.B9.D0.BD.D0.BE.D0.B3.D0.BE_.D0.96.D0.B8.D0.B2.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F_.28UPS.29"><span class="mw-headline-number">2.1</span> Джерело Безперебійного Живлення (<a href="Libs_Main.html#UPS" title="Special:MyLanguage/Libs/Main">UPS</a>)</span></h3></span>
 </td>
 <td> 1.3 </td>
 <td> GPLv2 </td>
@@ -2544,7 +2544,7 @@ if(com_text.length &amp;&amp;&nbsp;!com_text.isEVal() &amp;&amp; (tVl=coms.match
 <table class="wikitable">
 
 <tr>
-<td> <span id="SNMP" title="#SNMP"><h3><span class="mw-headline" id=".D0.9C.D0.B5.D1.80.D0.B5.D0.B6.D0.B5.D0.B2.D1.96_.D0.BF.D1.80.D0.B8.D1.81.D1.82.D1.80.D0.BE.D1.97_.D0.B7.D0.B0_SNMP_.28SNMP.29"><span class="mw-headline-number">2.2</span> Мережеві пристрої за SNMP (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#SNMP" title="Special:MyLanguage/Libs/Main">SNMP</a>)</span></h3></span>
+<td> <span id="SNMP" title="#SNMP"><h3><span class="mw-headline" id=".D0.9C.D0.B5.D1.80.D0.B5.D0.B6.D0.B5.D0.B2.D1.96_.D0.BF.D1.80.D0.B8.D1.81.D1.82.D1.80.D0.BE.D1.97_.D0.B7.D0.B0_SNMP_.28SNMP.29"><span class="mw-headline-number">2.2</span> Мережеві пристрої за SNMP (<a href="Libs_Main.html#SNMP" title="Special:MyLanguage/Libs/Main">SNMP</a>)</span></h3></span>
 </td>
 <td> 1.1 </td>
 <td> GPLv2 </td>
@@ -2704,7 +2704,7 @@ if(com_text.length &amp;&amp;&nbsp;!com_text.isEVal() &amp;&amp; (tVl=coms.match
 <table class="wikitable">
 
 <tr>
-<td> <span id="ntf" title="#ntf"><h3><span class="mw-headline" id=".D0.9F.D0.BE.D0.B2.D1.96.D0.B4.D0.BE.D0.BC.D0.BB.D1.8E.D0.B2.D0.B0.D1.87_.D0.B7.D0.B0_SMS.2C_EMail.28SMTP.29_.28ntf.29"><span class="mw-headline-number">3.1</span> Повідомлювач за SMS, EMail(SMTP) (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#ntf" title="Special:MyLanguage/Libs/Main">ntf</a>)</span></h3></span> </td>
+<td> <span id="ntf" title="#ntf"><h3><span class="mw-headline" id=".D0.9F.D0.BE.D0.B2.D1.96.D0.B4.D0.BE.D0.BC.D0.BB.D1.8E.D0.B2.D0.B0.D1.87_.D0.B7.D0.B0_SMS.2C_EMail.28SMTP.29_.28ntf.29"><span class="mw-headline-number">3.1</span> Повідомлювач за SMS, EMail(SMTP) (<a href="Libs_Main.html#ntf" title="Special:MyLanguage/Libs/Main">ntf</a>)</span></h3></span> </td>
 <td> 1.0 </td>
 <td> GPLv2 </td>
 <td> * =&gt; <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">UserProtocol</a> </td>
@@ -2716,7 +2716,7 @@ if(com_text.length &amp;&amp;&nbsp;!com_text.isEVal() &amp;&amp; (tVl=coms.match
 <p>Комплексний шаблон повідомлення містить частини диспетчеру та вихідний користувацький протокол повідомлення за EMail(SMTP) та SMS.
 </p>
 <ul><li> <b>Спонсоровано:</b> ТОВ "СВІТоВИР АВТоМАТИК"</li></ul>
-<p><b>ДИСПЕТЧЕР</b> може виконуватися для вказаних повідомлень буферу повідомлень OpenSCADA та застосовується на <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLev" title="Special:MyLanguage/Documents/DAQ">Логічному рівні</a> або об'єкті контролеру <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">модуля JavaLikeCalc</a>.
+<p><b>ДИСПЕТЧЕР</b> може виконуватися для вказаних повідомлень буферу повідомлень OpenSCADA та застосовується на <a href="DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">Логічному рівні</a> або об'єкті контролеру <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">модуля JavaLikeCalc</a>.
 </p><p><b><u>ВВ шаблону</u></b><br />
 </p>
 <table class="wikitable">
@@ -2922,7 +2922,7 @@ if(com_text.length &amp;&amp;&nbsp;!com_text.isEVal() &amp;&amp; (tVl=coms.match
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainNtfCfg_uk.png" title="Конфігурація."><img alt="Конфігурація." height="475" src="files/LibsMainNtfCfg_uk.png" width="620" /></a></div>
 <p><b><u>Конфігурація та використання</u></b><br />
 </p>
-<dl><dd>1. Створити параметр у об'єкті контролеру <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLev" title="Special:MyLanguage/Documents/DAQ">Логічного рівня</a> або об'єкт контролеру у <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">модулі DAQ.JavaLikeCalc</a>.</dd>
+<dl><dd>1. Створити параметр у об'єкті контролеру <a href="DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">Логічного рівня</a> або об'єкт контролеру у <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">модулі DAQ.JavaLikeCalc</a>.</dd>
 <dd>2. Створити вихідний транспорт типу "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Послідовний</a>" та встановити його Ідентифікатор на кшталт "SMS", один транспорт підходить для багатьох одержувачів.</dd>
 <dd>3. Встановити властиву адресу, тільки для <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Послідовного</a> пристрою. Швидкість, формат асинхронних даних та таймаути послідовного порту будуть налаштовані функцією.</dd>
 <dd>4. Створити вихідний транспорт типу "<a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Сокети</a>" або "<a href="Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">SSL</a>" та встановити його Ідентифікатор на кшталт "SMTP", один транспорт підходить для багатьох одержувачів.</dd>
@@ -2991,7 +2991,7 @@ rez = req.attr("err").toInt()&nbsp;? req.attr("err")&nbsp;: "OK";
 <table class="wikitable">
 
 <tr>
-<td> <span id="initConsAssignTrs" title="#initConsAssignTrs"><h3><span class="mw-headline" id=".D0.9E.D0.BF.D1.80.D0.B0.D1.86.D1.8E.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_.D1.96.D0.BD.D1.96.D1.86.D1.96.D0.B0.D1.82.D0.B8.D0.B2.D0.BD.D0.B8.D1.85_.D0.BF.D1.96.D0.B4.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D1.8C_.D1.89.D0.BE.D0.B4.D0.BE_.D0.B0.D1.81.D0.BE.D1.86.D1.96.D0.B0.D1.82.D0.B8.D0.B2.D0.BD.D0.B8.D1.85_.D0.B2.D0.B8.D1.85.D1.96.D0.B4.D0.BD.D0.B8.D1.85_.D1.82.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D1.96.D0.B2_.28initConsAssignTrs.29"><span class="mw-headline-number">3.2</span> Опрацювання ініціативних підключень щодо асоціативних вихідних транспортів (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main#initConsAssignTrs" title="Special:MyLanguage/Libs/Main">initConsAssignTrs</a>)</span></h3></span>
+<td> <span id="initConsAssignTrs" title="#initConsAssignTrs"><h3><span class="mw-headline" id=".D0.9E.D0.BF.D1.80.D0.B0.D1.86.D1.8E.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_.D1.96.D0.BD.D1.96.D1.86.D1.96.D0.B0.D1.82.D0.B8.D0.B2.D0.BD.D0.B8.D1.85_.D0.BF.D1.96.D0.B4.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D1.8C_.D1.89.D0.BE.D0.B4.D0.BE_.D0.B0.D1.81.D0.BE.D1.86.D1.96.D0.B0.D1.82.D0.B8.D0.B2.D0.BD.D0.B8.D1.85_.D0.B2.D0.B8.D1.85.D1.96.D0.B4.D0.BD.D0.B8.D1.85_.D1.82.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D1.96.D0.B2_.28initConsAssignTrs.29"><span class="mw-headline-number">3.2</span> Опрацювання ініціативних підключень щодо асоціативних вихідних транспортів (<a href="Libs_Main.html#initConsAssignTrs" title="Special:MyLanguage/Libs/Main">initConsAssignTrs</a>)</span></h3></span>
 </td>
 <td> 1.1 </td>
 <td> GPLv2 </td>
@@ -3001,7 +3001,7 @@ rez = req.attr("err").toInt()&nbsp;? req.attr("err")&nbsp;: "OK";
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
 </td></tr></table>
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainInitConsAssignTrsOp_uk.png" title="Результат та оперативні налаштування."><img alt="Результат та оперативні налаштування." height="388" src="files/LibsMainInitConsAssignTrsOp_uk.png" width="346" /></a></div>
-<p>Шаблон служби опрацювання вхідних ініціативних підключень створено для надання останньої ланки реалізації та підтримки <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#PassiveAndInitiative" title="Special:MyLanguage/Documents/DAQ">концепції збору даних у пасивному режимі та ініціативного підключення</a>, а саме — контролю асоціативних транспортів, створюваних вхідним транспортом за кожним підключенням.
+<p>Шаблон служби опрацювання вхідних ініціативних підключень створено для надання останньої ланки реалізації та підтримки <a href="DAQ.html#PassiveAndInitiative" title="Special:MyLanguage/Documents/DAQ">концепції збору даних у пасивному режимі та ініціативного підключення</a>, а саме — контролю асоціативних транспортів, створюваних вхідним транспортом за кожним підключенням.
 </p><p>Функцію створення вихідних асоціативних транспортів за підключенням на вхідний наразі підтримує лише <a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">модуль транспортів "Сокети"</a> та для TCP-сокетів.
 </p><p>Контроль асоціативних транспортів передбачає:
 </p>
@@ -3103,7 +3103,7 @@ rez = req.attr("err").toInt()&nbsp;? req.attr("err")&nbsp;: "OK";
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainInitConsAssignTrsCfg_uk.png" title="Конфігурація."><img alt="Конфігурація." height="227" src="files/LibsMainInitConsAssignTrsCfg_uk.png" width="425" /></a></div>
 <p><b><u>Конфігурація та використання</u></b><br />
 </p>
-<dl><dd>1. Створити вхідний транспорт прийняття ініціативних підключень у <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/Sockets#InTr" title="Special:MyLanguage/Modules/Sockets">модулі "Сокети"</a> із назвою на кшталт "InitiateCons".</dd>
+<dl><dd>1. Створити вхідний транспорт прийняття ініціативних підключень у <a href="Modules/Sockets.html#InTr" title="Special:MyLanguage/Modules/Sockets">модулі "Сокети"</a> із назвою на кшталт "InitiateCons".</dd>
 <dd>2. Встановити, для попередньо створеного транспорту, потрібну адресу відкриття вхідного сокету та перевести його у режим створення асоціативних вихідних транспортів, залишивши поле протоколу порожнім.</dd>
 <dd>3. Передбачити контейнер джерел даних до яких асоціативні транспорти мають під'єднуватися, який може бути або DAQ-модулем (як то "DAQ.ModBus"), або логічним контролером (як то "DAQ.LogicLev.Sources"), чи параметром у ньому (як то "DAQ.LogicLev.PLC.Sources"), із вмістом параметрів логічного рівня, що представляють джерело даних.</dd>
 <dd>4. Для цього шаблону, створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь-який наявний з потрібними властивостями планування.</dd>

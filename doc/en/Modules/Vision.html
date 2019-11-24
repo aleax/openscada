@@ -31,7 +31,7 @@
 <td> <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> </td>
 <td> Operation user interface (Qt)
 </td>
-<td> 6.4 </td>
+<td> 6.5 </td>
 <td> GPL2 </td>
 <td> ui_Vision.so </td>
 <td> en,uk,ru,de </td>
@@ -153,7 +153,9 @@
 </p>
 <ul><li> "File" — General operations.
 <ul><li> "Load from DB" — uploading the data of the visual element from the database.</li>
+<li> "Load from DB forcibly" — uploading data of the visual element from the database forcibly, not only when it changed.</li>
 <li> "Save to DB" — saving data of visual element to the database.</li>
+<li> "Save to DB forcibly" — saving data of the visual element to the database forcibly, not only when it changed.</li>
 <li> "Close" — closing the editor's window</li>
 <li> "Quit" — quiting the program.</li></ul></li>
 <li> "Edit" — Editing operations of the visual elements.
@@ -297,7 +299,7 @@
 <li> attributes of the parameter can provide information of five types: Boolean, Integer, Real, String and Object;</li>
 <li> attributes of the parameter can have their archive (history);</li>
 <li> attributes of the parameter can be set to read, write and with full access.</li></ol>
-<p>Given the first point, it is necessary to provide the possibility of group-based reference. To do this, we use <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLev" title="Special:MyLanguage/Documents/DAQ">the logical level concept</a>.
+<p>Given the first point, it is necessary to provide the possibility of group-based reference. To do this, we use <a href="../DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">the logical level concept</a>.
 </p><p>The links provide a transparent type conversion and do not require a special configuration.
 </p><p>To satisfy the opportunities for accessing to archives links make check of the attribute type, and in the case of connection to the "Address", the address of the link is put into the value.
 </p><p>In the VCA terms, the dynamic links and configuration of the dynamics are the one process, to describe a configuration of which the tab "Processing" of the widgets is provided (Fig.2.f). The tab contains a table of configuration of the attributes properties and the calculation procedure text of the widget.
@@ -454,7 +456,7 @@
 <li> manual on the VCA project — calls by a click the manual on the visualization project — a file with the name of the identifier of the VCA project.</li></ul></li>
 <li> the panel of user actions, if specified in <a href="#SpecAttrs">the attribute "statLine"</a> — by clicking the left, right and double click forms the even to the main interface page.</li></ul></li>
 <li> In the main field of the status line various messages and assistance messages are displayed.</li></ul>
-<p>The Runtime mode mostly supports multi-language, which depends on the language of the selected user or the execution window, that is if you change the user you will get the Runtime interface at other language of the user. This function enabled for <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#ConfigTr" title="Special:MyLanguage/Documents/Program manual">dynamic messages translation of OpenSCADA</a>.
+<p>The Runtime mode mostly supports multi-language, which depends on the language of the selected user or the execution window, that is if you change the user you will get the Runtime interface at other language of the user. This function enabled for <a href="../Program_manual.html#ConfigTr" title="Special:MyLanguage/Documents/Program manual">dynamic messages translation of OpenSCADA</a>.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1039px;"><a class="image" href="http://oscada.org/wiki/File:Vision_run.png"><img class="thumbimage" height="768" src="../files/Vision_run.png" width="1037" /></a>  <div class="thumbcaption">Fig.3. Main window in the execution mode.</div></div></div></div>
 <h2><span class="mw-headline" id="Presentation_of_the_basic_elements_.28primitives.29"><span class="mw-headline-number">4</span> <span id="Primitives" title="#Primitives">Presentation of the basic elements (primitives)</span></span></h2>

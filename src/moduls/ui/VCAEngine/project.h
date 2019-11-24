@@ -297,6 +297,8 @@ class PageWdg : public Widget, public TConfig
 	void resourceList( vector<string> &ls );
 	string resourceGet( const string &id, string *mime = NULL );
 
+	void procChange( bool src = true );
+
 	AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 ) const;
 
 	void inheritAttr( const string &attr = "" );

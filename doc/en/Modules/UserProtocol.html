@@ -51,7 +51,7 @@
 <p>The module is designed to allow the user to create own implementations of different protocols in internal OpenSCADA language, usually <a href="../Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, without involving low level programming.
 </p><p>The main purpose of the module is to simplify the task of connecting devices of data sources to OpenSCADA, that have limited distribution and/or provide access to their own data on a specific protocol that is usually fairly simple to implement in the internal language of OpenSCADA. For implementation of this the mechanism for the formation of the output request protocol is provided.
 </p><p>In addition to the mechanism of the output request protocol the mechanism for input request protocol is provided, which allows OpenSCADA to process the requests for data get on specific protocols, which simply can be implemented in the internal language of OpenSCADA.
-</p><p>The module provides the ability to create multiple implementations of different protocols in the object "User protocol" (Fig.1), and also use <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#DAQTmpl" title="Special:MyLanguage/Documents/Program manual">standard DAQ templates</a> for that. Using DAQ templates allows you to create complex protocols' libraries and call them in this module multiple times as their implementations, as well as provide the data context of the input template with their connection to the data of the subsystem "Data Acquisition".
+</p><p>The module provides the ability to create multiple implementations of different protocols in the object "User protocol" (Fig.1), and also use <a href="../Program_manual.html#DAQTmpl" title="Special:MyLanguage/Documents/Program manual">standard DAQ templates</a> for that. Using DAQ templates allows you to create complex protocols' libraries and call them in this module multiple times as their implementations, as well as provide the data context of the input template with their connection to the data of the subsystem "Data Acquisition".
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:705px;"><a class="image" href="http://oscada.org/wiki/File:UserProtocol_up_main.png"><img class="thumbimage" height="598" src="../files/UserProtocol_up_main.png" width="703" /></a>  <div class="thumbcaption">Fig.1. Main tab of an object of the module "User protocol".</div></div></div></div>
 <p>The main tab contains the basic settings of the user protocol:
@@ -59,7 +59,7 @@
 <ul><li> Section "State" — contains properties that characterize the state of the protocol: Status, "Enabled", the name of the database containing the configuration and date of the last modification.</li>
 <li> Identifier, name and description of the protocol.</li>
 <li> The state "Enabled", in which the protocol must be translated at boot.</li>
-<li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#DAQTmpl" title="Special:MyLanguage/Documents/Program manual">DAQ-template</a> related to the protocol. Selecting a template here turns off the mode by the direct procedures and access the following options. The DAQ-template mode can work in input, output or both of the requesting modes, related to the required attributes presence.</li>
+<li> <a href="../Program_manual.html#DAQTmpl" title="Special:MyLanguage/Documents/Program manual">DAQ-template</a> related to the protocol. Selecting a template here turns off the mode by the direct procedures and access the following options. The DAQ-template mode can work in input, output or both of the requesting modes, related to the required attributes presence.</li>
 <li> An indication of the complete translation of the procedures text and the language of the input and output procedures. Selecting a language for the input and/or output procedure will enable the appropriate part of the protocol and access the corresponding configuration tabs.</li></ul>
 <h2><span class="mw-headline" id="Input_part_of_the_protocol"><span class="mw-headline-number">1</span> Input part of the protocol</span></h2>
 <p>The input requests protocol is working in cooperation with the input transport and the separate object "User Protocol" is pointing in the configuration field of the transport protocol, together with the UserProtocol module's name. Further, all transport requests will be directed to the direct procedure, or the template procedure, of the protocol request processing (Fig. 2).
@@ -80,7 +80,7 @@
 <li> <i>Transport (tr)</i> &lt;Object&gt; — input transport object.</li></ul>
 <p>The overall scenario of the input requests processing:
 </p>
-<ul><li> Request is formed by the remote station and through the network it gets on <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Communication" title="Special:MyLanguage/Documents/Program manual">the transport of OpenSCADA</a>.</li>
+<ul><li> Request is formed by the remote station and through the network it gets on <a href="../Program_manual.html#Communication" title="Special:MyLanguage/Documents/Program manual">the transport of OpenSCADA</a>.</li>
 <li> OpenSCADA transport sends the request to this module, selected in the protocol's field, and to an object of the user protocol, in the form of the variable's "request" values — for the request sequence and "sender" — for the sender address of the request.</li>
 <li> The execution of the procedure of the input request protocol is started, during which the contents of the variable "request" is analyzed and the response in the variable "answer" is formed. At the end of the procedure's execution the variable "rez" is formed, which indicates the transport to the fact of reception of full request and the formation of the correct answer (false) or to the necessity for the transport to expect for the remaining data (true) — holding the connection.</li>
 <li> If the processing result is "false" and the answer is non-zero, the transport sends the response, and the protocol procedure itself must remove the processed part of the "request", because only it can determine the integrity of the package and the potential presence of it for the beginning of the next one.</li>
@@ -115,7 +115,7 @@ if(enCRC) {
 return 0;
 </pre>
 <h2><span class="mw-headline" id="Output_part_of_the_protocol"><span class="mw-headline-number">2</span> Output part of the protocol</span></h2>
-<p>The output requests protocol is working in cooperation with the output transport and with the separate object of the "User Protocol". The source of the request through the protocol may be <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/User_API#SYSTransport" title="Special:MyLanguage/Documents/User API">a function of the system-wide API of the user programming of the output transport</a> "<b>int messIO(XMLNodeObj req, string prt );</b>", in the parameters of which it must be specified:
+<p>The output requests protocol is working in cooperation with the output transport and with the separate object of the "User Protocol". The source of the request through the protocol may be <a href="../User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">a function of the system-wide API of the user programming of the output transport</a> "<b>int messIO(XMLNodeObj req, string prt );</b>", in the parameters of which it must be specified:
 </p>
 <ul><li> <i>req</i> — request as an XML tree with the structure corresponding to the input format of the implemented protocol;</li>
 <li> <i>prt</i> — name of this module — "UserProtocol".</li></ul>
@@ -166,7 +166,7 @@ if(resp[0]&nbsp;!= "&gt;") { io.setAttr("err","12:"+resp[0]+":"+tr("DCON error."
 io.setAttr("err","");
 io.setText(resp.slice(1,resp.length-3));
 </pre>
-<p>And a procedure of sending the DCON request directly, through the previous protocol procedure. This procedure should be placed in the desired task or an interim function of OpenSCADA, for example, in the procedure of the controller object <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/JavaLikeCalc#Examples" title="Special:MyLanguage/Modules/JavaLikeCalc">DAQ.JavaLikeCalc</a>:
+<p>And a procedure of sending the DCON request directly, through the previous protocol procedure. This procedure should be placed in the desired task or an interim function of OpenSCADA, for example, in the procedure of the controller object <a href="../Modules/JavaLikeCalc.html#Examples" title="Special:MyLanguage/Modules/JavaLikeCalc">DAQ.JavaLikeCalc</a>:
 </p>
 <pre style="white-space: pre-wrap;">
 //Preparing the first request

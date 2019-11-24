@@ -49,7 +49,7 @@
 </div>
 
 <p>The module provides support for sockets based transports to the program. Input and output transports is supported, based on network sockets TCP, UDP, UNIX and RAWCAN.
-</p><p>You can add new input and output sockets through the configuration of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Transports" title="Special:MyLanguage/Documents/Program manual">the transport subsystem</a> in any OpenSCADA configurator.
+</p><p>You can add new input and output sockets through the configuration of <a href="../Program_manual.html#Transports" title="Special:MyLanguage/Documents/Program manual">the transport subsystem</a> in any OpenSCADA configurator.
 </p>
 <h2><span class="mw-headline" id="Input_transports"><span class="mw-headline-number">1</span> <span id="InTr" title="#InTr">Input transports</span></span></h2>
 <p>Configured and running input transport opens the server socket for the expectation of connection of the clients, besides the initiative connections. In the case of the UNIX socket, the UNIX socket file is created. TCP and UNIX sockets are multi-stream, i.e. when the client connects to a socket of these type, the client socket and the new thread are created in which the client is served. Server socket in this moment switches to the waiting for the request from the new client. Thus the parallel service of the clients is achieved. RAWCAN socket accepts CAN frames from the interface according to the configured filter.
@@ -136,7 +136,7 @@ where:
 <li> the sign of the expanded identifier-sender is the presence of the most significant bit (0x80000000).</li></ul>
 <h2><span class="mw-headline" id="Output_transports"><span class="mw-headline-number">2</span> Output transports</span></h2>
 <p>Configured and running output transport opens a connection to the specified server. In the case of destroying the connection, output transport is stopped. In order to resume the connection transport must be re-run, that all protocols do automatically.
-</p><p>The transport supports the direct definition of multiple server addresses and the processing of all IP addresses in which the symbolic address is resolved, which allows you to build <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#Redundancy" title="Special:MyLanguage/Documents/DAQ">vertical redundancy</a> directly by the transport that will be automatically connected to the first available server.
+</p><p>The transport supports the direct definition of multiple server addresses and the processing of all IP addresses in which the symbolic address is resolved, which allows you to build <a href="../DAQ.html#Redundancy" title="Special:MyLanguage/Documents/DAQ">vertical redundancy</a> directly by the transport that will be automatically connected to the first available server.
 </p><p>Main tab of the configuration page of an output socket is shown in Figure 2.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:649px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_out.png"><img class="thumbimage" height="598" src="../files/Sockets_out.png" width="647" /></a>  <div class="thumbcaption">Fig.2. Main tab of the configuration page of an output socket.</div></div></div></div>

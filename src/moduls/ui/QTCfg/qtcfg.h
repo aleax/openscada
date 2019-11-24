@@ -230,7 +230,7 @@ private:
 
     QAction	*actUp, *actPrev, *actNext,
 		*actUpdate, *actStartUpd, *actStopUpd,
-		*actDBLoad, *actDBSave,
+		*actDBLoad, *actDBLoadF, *actDBSave, *actDBSaveF,
 		*actItAdd, *actItDel,
 		*actItCut, *actItCopy, *actItPaste,
 		*actManualPage;

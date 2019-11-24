@@ -204,21 +204,31 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     connect(actNext, SIGNAL(triggered()), this, SLOT(pageNext()));
     //  Load item from db
     if(!ico_t.load(TUIS::icoGet("load",NULL,true).c_str())) ico_t.load(":/images/load.png");
-    actDBLoad = new QAction(QPixmap::fromImage(ico_t),_("Load from the DB"),this);
+    actDBLoad = new QAction(QPixmap::fromImage(ico_t),_("Load from DB"),this);
     actDBLoad->setToolTip(_("Load the item data from DB"));
-    actDBLoad->setWhatsThis(_("The button for loading the item data from the DB"));
-    actDBLoad->setStatusTip(_("Press for loading the item data from the DB."));
+    actDBLoad->setWhatsThis(_("The button for loading the item data from DB"));
+    actDBLoad->setStatusTip(_("Press for loading the item data from DB."));
     actDBLoad->setEnabled(false);
     connect(actDBLoad, SIGNAL(triggered()), this, SLOT(itDBLoad()));
+    actDBLoadF = new QAction(QPixmap::fromImage(ico_t),_("Load from DB forcibly"),this);
+    actDBLoadF->setToolTip(_("Load the item data from DB forcibly"));
+    actDBLoadF->setWhatsThis(_("The button for loading the item data from DB forcibly, not only when it changed"));
+    actDBLoadF->setStatusTip(_("Press for loading the item data from DB forcibly, not only when it changed."));
+    connect(actDBLoadF, SIGNAL(triggered()), this, SLOT(itDBLoad()));
     //  Save item to db
     if(!ico_t.load(TUIS::icoGet("save",NULL,true).c_str())) ico_t.load(":/images/save.png");
-    actDBSave = new QAction(QPixmap::fromImage(ico_t),_("Save to the DB"),this);
+    actDBSave = new QAction(QPixmap::fromImage(ico_t),_("Save to DB"),this);
     actDBSave->setToolTip(_("Save the item data to DB"));
-    actDBSave->setWhatsThis(_("The button for saving the item data to the DB"));
-    actDBSave->setStatusTip(_("Press for saving the item data to the DB."));
+    actDBSave->setWhatsThis(_("The button for saving the item data to DB"));
+    actDBSave->setStatusTip(_("Press for saving the item data to DB."));
     actDBSave->setShortcut(QKeySequence("Ctrl+S"));
     actDBSave->setEnabled(false);
     connect(actDBSave, SIGNAL(triggered()), this, SLOT(itDBSave()));
+    actDBSaveF = new QAction(QPixmap::fromImage(ico_t),_("Save to DB forcibly"),this);
+    actDBSaveF->setToolTip(_("Save the item data to DB forcibly"));
+    actDBSaveF->setWhatsThis(_("The button for saving the item data to DB forcibly, not only when it changed"));
+    actDBSaveF->setStatusTip(_("Press for saving the item data to DB forcibly, not only when it changed."));
+    connect(actDBSaveF, SIGNAL(triggered()), this, SLOT(itDBSave()));
     // Add an item
     if(!ico_t.load(TUIS::icoGet("it_add",NULL,true).c_str())) ico_t.load(":/images/it_add.png");
     actItAdd = new QAction(QPixmap::fromImage(ico_t),_("&Add"),this);
@@ -335,8 +345,10 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     // Create menu "file"
     QMenu *mn_file = menuBar()->addMenu(_("&File"));
     mn_file->addAction(actDBLoad);
+    mn_file->addAction(actDBLoadF);
     mn_file->addAction(actDBSave);
-    mn_file->addSeparator( );
+    mn_file->addAction(actDBSaveF);
+    mn_file->addSeparator();
     mn_file->addAction(actClose);
     mn_file->addAction(actQuit);
     // Create menu "edit"
@@ -611,14 +623,14 @@ void ConfApp::pageNext( )
 
 void ConfApp::itDBLoad( )
 {
-    XMLNode req("load"); req.setAttr("path",selPath+"/%2fobj");
+    XMLNode req("load"); req.setAttr("path", selPath+"/%2fobj")->setAttr("force", (sender()==actDBLoadF)?"1":"");
     if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Info,this);
     pageRefresh();	//Any time but warnings in the deep
 }
 
 void ConfApp::itDBSave( )
 {
-    XMLNode req("save"); req.setAttr("path",selPath+"/%2fobj");
+    XMLNode req("save"); req.setAttr("path",selPath+"/%2fobj")->setAttr("force", (sender()==actDBSaveF)?"1":"");
     if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Info,this);
     else pageRefresh();
 }

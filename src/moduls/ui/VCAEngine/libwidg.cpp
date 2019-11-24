@@ -827,7 +827,7 @@ void LWidget::procChange( bool src )
 {
     if(!src && proc().size()) return;
 
-    //Update heritors procedures
+    //Update heritors' procedures
     for(unsigned iH = 0; iH < mHerit.size(); iH++)
 	if(mHerit[iH].at().enable())
 	    mHerit[iH].at().procChange(false);
@@ -1051,6 +1051,14 @@ string CWidget::resourceGet( const string &id, string *mime )
     if(mime) *mime = mimeType;
 
     return mimeData;
+}
+
+void CWidget::procChange( bool src )
+{
+    //Update heritors' procedures
+    for(unsigned iH = 0; iH < mHerit.size(); iH++)
+	if(mHerit[iH].at().enable())
+	    mHerit[iH].at().procChange(false);
 }
 
 void CWidget::inheritAttr( const string &attr )

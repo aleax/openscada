@@ -140,6 +140,12 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     actDBLoad->setStatusTip(_("Press for loading the item data from the DB."));
     actDBLoad->setEnabled(false);
     connect(actDBLoad, SIGNAL(triggered()), this, SLOT(itDBLoad()));
+    actDBLoadF = new QAction(QPixmap::fromImage(ico_t),_("Load from DB forcibly"),this);
+    actDBLoadF->setToolTip(_("Load the item data from DB forcibly"));
+    actDBLoadF->setWhatsThis(_("The button for loading the item data from the DB forcibly, not only when it changed"));
+    actDBLoadF->setStatusTip(_("Press for loading the item data from the DB forcibly, not only when it changed."));
+    actDBLoadF->setEnabled(false);
+    connect(actDBLoadF, SIGNAL(triggered()), this, SLOT(itDBLoad()));
     //  Save item to db
     if(!ico_t.load(TUIS::icoGet("save",NULL,true).c_str())) ico_t.load(":/images/save.png");
     actDBSave = new QAction(QPixmap::fromImage(ico_t),_("Save to DB"),this);
@@ -149,6 +155,12 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     actDBSave->setShortcut(QKeySequence("Ctrl+S"));
     actDBSave->setEnabled(false);
     connect(actDBSave, SIGNAL(triggered()), this, SLOT(itDBSave()));
+    actDBSaveF = new QAction(QPixmap::fromImage(ico_t),_("Save to DB forcibly"),this);
+    actDBSaveF->setToolTip(_("Save the item data to DB forcibly"));
+    actDBSaveF->setWhatsThis(_("The button for saving the item data to the DB forcibly, not only when it changed"));
+    actDBSaveF->setStatusTip(_("Press for saving the item data to the DB forcibly, not only when it changed."));
+    actDBSaveF->setEnabled(false);
+    connect(actDBSaveF, SIGNAL(triggered()), this, SLOT(itDBSave()));
     //  Start up the project execution
     if(!ico_t.load(TUIS::icoGet("vision_prj_run",NULL,true).c_str())) ico_t.load(":/images/prj_run.png");
     actPrjRun = new QAction(QPixmap::fromImage(ico_t),_("Run project"),this);
@@ -453,7 +465,9 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     //Create menu
     mn_file = menuBar()->addMenu(_("&File"));
     mn_file->addAction(actDBLoad);
+    mn_file->addAction(actDBLoadF);
     mn_file->addAction(actDBSave);
+    mn_file->addAction(actDBSaveF);
     mn_file->addSeparator();
     mn_file->addAction(actClose);
     mn_file->addAction(actQuit);
@@ -956,10 +970,8 @@ void VisDevelop::modifyToolUpdate( const string &wdgs )
 	size_t aPos = cur_wdg.rfind("/a_");
 	if(aPos != string::npos) cur_wdg = cur_wdg.substr(0, aPos);
 	req.setAttr("path", cur_wdg+"/%2fobj");
-	if(!cntrIfCmd(req) && s2i(req.text())) {
-	    actDBLoad->setEnabled(true);
-	    actDBSave->setEnabled(true);
-	}
+	if(!cntrIfCmd(req) && s2i(req.text())) { actDBLoad->setEnabled(true); actDBSave->setEnabled(true); }
+	actDBLoadF->setEnabled(true); actDBSaveF->setEnabled(true);
     }
 }
 
@@ -1026,7 +1038,7 @@ void VisDevelop::itDBLoad( )
 	for(int i_off = 0; (cur_wdg=TSYS::strSepParse(own_wdg,0,';',&i_off)).size(); ) {
 	    // Send load request
 	    XMLNode req("load");
-	    req.setAttr("path",cur_wdg+"/%2fobj");
+	    req.setAttr("path",cur_wdg+"/%2fobj")->setAttr("force", (sender()==actDBLoadF)?"1":"");
 	    if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 	    else emit modifiedItem(cur_wdg);
 	}
@@ -1052,7 +1064,7 @@ void VisDevelop::itDBSave( )
 	    for(int i_off = 0; (cur_wdg=TSYS::strSepParse(own_wdg,0,';',&i_off)).size(); ) {
 		// Send load request
 		XMLNode req("save");
-		req.setAttr("path", cur_wdg+"/%2fobj");
+		req.setAttr("path", cur_wdg+"/%2fobj")->setAttr("force", (sender()==actDBSaveF)?"1":"");
 		if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	    }
 	}

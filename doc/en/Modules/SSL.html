@@ -50,7 +50,7 @@
 </div>
 
 <p>The module provides support for secure sockets layer (SSL) based transports to the program. The module is based on the library <a class="external text" href="http://www.openssl.org" rel="nofollow noreferrer noopener" target="_blank">OpenSSL</a>. Input and output transport protocols SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2 are supported; the general list of which depends on their availability in the OpenSSL library and, in the absence of a direct specification, it is selected for most relevant and safe.
-</p><p>You can add new input and output safe sockets through the configuration of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Transports" title="Special:MyLanguage/Documents/Program manual">the transport subsystem</a> in any OpenSCADA configurator.
+</p><p>You can add new input and output safe sockets through the configuration of <a href="../Program_manual.html#Transports" title="Special:MyLanguage/Documents/Program manual">the transport subsystem</a> in any OpenSCADA configurator.
 </p>
 <h2><span class="mw-headline" id="Input_transports"><span class="mw-headline-number">1</span> Input transports</span></h2>
 <p>The configured and running input transport opens server SSL-socket for the expectation of connection of the clients. SSL-socket is a multi-stream one, i.e. when the client connects, the client SSL-connection and a new stream in which the client is served are created. The server SSL-socket in this moment switches to the waiting for the request from the new client. Thus the parallel service of the clients is achieved.
@@ -76,7 +76,7 @@
 <ul><li> Transport's tasks priority.</li></ul>
 <h2><span class="mw-headline" id="Output_transports"><span class="mw-headline-number">2</span> Output transports</span></h2>
 <p>Configured and running output transport opens a connection to the specified server. In the case of destroying the connection, output transport is stopped. In order to resume the connection transport must be re-run, that all protocols do automatically.
-</p><p>The transport supports the direct definition of multiple server addresses and the processing of all IP addresses in which the symbolic address is resolved, which allows you to build <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#Redundancy" title="Special:MyLanguage/Documents/DAQ">vertical redundancy</a> directly by the transport that will be automatically connected to the first available server.
+</p><p>The transport supports the direct definition of multiple server addresses and the processing of all IP addresses in which the symbolic address is resolved, which allows you to build <a href="../DAQ.html#Redundancy" title="Special:MyLanguage/Documents/DAQ">vertical redundancy</a> directly by the transport that will be automatically connected to the first available server.
 </p><p>Main tab of the configuration page of the output SSL-transport is shown in Figure 2.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:676px;"><a class="image" href="http://oscada.org/wiki/File:SSL_out.png"><img class="thumbimage" height="755" src="../files/SSL_out.png" width="674" /></a>  <div class="thumbcaption">Fig.2. Main tab of the configuration page of the output SSL-transport.</div></div></div></div>

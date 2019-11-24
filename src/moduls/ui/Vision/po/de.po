@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-20 20:44+0300\n"
+"POT-Creation-Date: 2019-11-21 16:54+0200\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -265,6 +265,24 @@ msgstr "Schaltfläche zum Laden der Artikeldaten aus der DB"
 msgid "Press for loading the item data from the DB."
 msgstr "Betätigen um die Artikeldaten aus der DB zu laden."
 
+msgid "Load from DB forcibly"
+msgstr "Laden von der DB gewaltsam"
+
+msgid "Load the item data from DB forcibly"
+msgstr "Laden Sie die Artikeldaten aus der DB gewaltsam"
+
+msgid ""
+"The button for loading the item data from the DB forcibly, not only when it "
+"changed"
+msgstr "Schaltfläche zum zwangsweisen Laden der Artikeldaten aus der DB, nicht nur "
+"beim Ändern"
+
+msgid ""
+"Press for loading the item data from the DB forcibly, not only when it "
+"changed."
+msgstr "Drücken Sie, um die Artikeldaten zwangsweise zu laden, nicht nur, wenn sie "
+"geändert wurden."
+
 msgid "Save to DB"
 msgstr "In DB speichern"
 
@@ -276,6 +294,23 @@ msgstr "Schaltfläche zum Speichern der Elemente in der Datenbank"
 
 msgid "Press for saving the item data to the DB."
 msgstr "Betätigen um die Elemente in der Datenbank zu speichern."
+
+msgid "Save to DB forcibly"
+msgstr "Speichern Sie an die DB gewaltsam"
+
+msgid "Save the item data to DB forcibly"
+msgstr "Sichern Sie die Artikeldaten in der DB gewaltsam"
+
+msgid ""
+"The button for saving the item data to the DB forcibly, not only when it "
+"changed"
+msgstr "Schaltfläche zum zwangsweisen Speichern der Artikeldaten in den DB, nicht "
+"nur bei Änderung"
+
+msgid ""
+"Press for saving the item data to the DB forcibly, not only when it changed."
+msgstr "Drücken Sie, um die Artikeldaten zwangsweise in der Datenbank zu speichern, "
+"nicht nur, wenn sie geändert wurden."
 
 msgid "Run project"
 msgstr "Projekt ausführen"

@@ -1,3 +1,18 @@
+2019-11-24 Roman (stable)
+- !!!!:DB.LibsDB.OscadaLibs: DevLib.IEC60870: Appended for period time and the polling itself, sending tmPoolAll.
+	Unified for moving the input value writing to the single function inVal() and the timestamp obtaining in the function getTm().
+	Appended for support the functions M_SP_TA_1, M_DP_NA_1, M_DP_TA_1.
+    !!:web: The JavaLikeCalc library "XHTML-template" appended for a function of building diagrams "Diagram (diagram)" in SVG, to build in XHTML.
+	This function designed in the features of the primitive "Diagram" of the VCA.
+    !:servProc.docOffLine: The links processing appended for http-tags support (http://URI#{tag}).
+    DevLib.DNP3: Appended for the attributes translation to Ukrainian and Russian.
+- DB.LibsDB.vcaTest: Procedure of the widget test.FormElTests completely rewrote.
+- DAQ.LogicLev: Enabled for the scheduling change at the running.
+- UI.{QTCfg,Vision}: Appended for the buttons of force loading and saving, into the menu.
+- UI.VCAEngine: Appended for tracing the procedure changing in the included procedures also.
+- FIX:UI.{Vision,WebVision}: The view "Trends" of the primitive "Diagram" some improved in form the lowest value of the vertical scale.
+
+
 2019-11-19 Roman (stable)
 - !!!!:FIX:DB.LibsDB.OscadaLibs: DevLib.IEC60870: Fixed to send STOPDT at the template stop.
     !!!!:DevLib.DNP3: Finished in the protocol implementation, tested with outstation-demo from opendnp3.

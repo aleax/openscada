@@ -115,8 +115,8 @@ class VisDevelop : public QMainWindow
 	//Public attributes
 	// Actions
 	//  VCA actions of items
-	QAction *actDBLoad,		//Load item from DB
-		*actDBSave,		//Save item to DB
+	QAction *actDBLoad, *actDBLoadF,//Load item from DB
+		*actDBSave, *actDBSaveF,//Save item to DB
 		*actPrjRun,		//Run project execution from selected project item
 		*actPrjNew,		//New project create
 		*actLibNew,		//New widgets library create

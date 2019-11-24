@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-20 20:44+0300\n"
+"POT-Creation-Date: 2019-11-21 16:54+0200\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -258,6 +258,23 @@ msgstr "Кнопка завантаження даних елементу з Б�
 msgid "Press for loading the item data from the DB."
 msgstr "Натиснути для завантаження даних елементу з БД."
 
+msgid "Load from DB forcibly"
+msgstr "Примусово завантажити з БД"
+
+msgid "Load the item data from DB forcibly"
+msgstr "Примусово завантажити дані елементу з БД"
+
+msgid ""
+"The button for loading the item data from the DB forcibly, not only when it "
+"changed"
+msgstr "Кнопка примусового завантаження даних елементу з БД, не тільки коли змінено"
+
+msgid ""
+"Press for loading the item data from the DB forcibly, not only when it "
+"changed."
+msgstr "Натиснути для примусового завантаження даних елементу з БД, не тільки коли "
+"змінено."
+
 msgid "Save to DB"
 msgstr "Зберегти у БД"
 
@@ -269,6 +286,22 @@ msgstr "Кнопка збереження даних елементу у БД"
 
 msgid "Press for saving the item data to the DB."
 msgstr "Натиснути для збереження даних елементу у БД."
+
+msgid "Save to DB forcibly"
+msgstr "Примусово зберегти у БД"
+
+msgid "Save the item data to DB forcibly"
+msgstr "Примусово зберегти дані елементу у БД"
+
+msgid ""
+"The button for saving the item data to the DB forcibly, not only when it "
+"changed"
+msgstr "Кнопка примусового збереження даних елементу у БД, не тільки коли змінено"
+
+msgid ""
+"Press for saving the item data to the DB forcibly, not only when it changed."
+msgstr "Натиснути для примусового збереження даних елементу у БД, не тільки коли "
+"змінено."
 
 msgid "Run project"
 msgstr "Запустити проект"

@@ -95,7 +95,7 @@
 
 <p>ModBus — комунікаційний протокол, заснований на клієнт-серверній архітектурі. Розроблений фірмою Modicon для використання у контролерах з програмованою логікою (ПЛК). Став стандартом де-факто у промисловості та широко застосовується для організації зв'язку промислового електронного обладнання. Використовується для передачі даних через послідовні лінії зв'язку RS-485, RS-422, RS-232, а також мережі TCP/IP. На цей час підтримується некомерційною організацією ModBus-IDA.
 </p><p>Існує три режими протоколу: ModBus/RTU, ModBus/ASCII та ModBus/TCP. Перші два використовують послідовні лінії зв'язку (переважно RS-485, рідше RS-422/RS-232), останній використовує мережі TCP/IP для передачі даних.
-</p><p>Модуль збору даних надає можливість збирати інформацію з різних джерел за протоколом ModBus у всіх режимах. Також, модулем реалізуються функції горизонтального резервування, а саме — спільної роботи з віддаленою станцією цього-ж рівня. В той же час, модуль протоколу дозволяє сформувати та видати дані за протоколом ModBus у різних режимах та через інтерфейси, які підтримуються модулями <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Communication" title="Special:MyLanguage/Documents/Program manual">підсистеми "Транспорти"</a>.
+</p><p>Модуль збору даних надає можливість збирати інформацію з різних джерел за протоколом ModBus у всіх режимах. Також, модулем реалізуються функції горизонтального резервування, а саме — спільної роботи з віддаленою станцією цього-ж рівня. В той же час, модуль протоколу дозволяє сформувати та видати дані за протоколом ModBus у різних режимах та через інтерфейси, які підтримуються модулями <a href="../Program_manual.html#Communication" title="Special:MyLanguage/Documents/Program manual">підсистеми "Транспорти"</a>.
 </p>
 <h2><span class="mw-headline" id=".D0.97.D0.B0.D0.B3.D0.B0.D0.BB.D1.8C.D0.BD.D0.B8.D0.B9_.D0.BE.D0.BF.D0.B8.D1.81_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.83_ModBus"><span class="mw-headline-number">1</span> Загальний опис протоколу ModBus</span></h2>
 <p>Протокол ModBus/{RTU,ASCII} припускає один ведучий (запити) пристрій у лінії (master), який може передавати команди одному або декільком веденим пристроям (slave), звертаючись до них за унікальною адресою у лінії. Синтаксис команд протоколу дозволяє адресувати 247 пристроїв на одній лінії зв'язку стандарту RS-485 (рідше RS-422 або RS-232). У випадку з режимом TCP, адресація виключена з протоколу, оскільки здійснюється на рівні TCP/IP стека.
@@ -131,14 +131,14 @@
 <td> Резерв для внутрішніх потреб </td>
 <td> 120-255
 </td></tr></table>
-<p>Модулем збору даних використовуються команди <b>3</b> та <b>6(16)</b> для читання та запису регістрів, <b>1</b> та <b>5(15)</b> для читання та запису бітів, <b>2</b> та <b>4</b> для читання біту та регістру входу, відповідно. Для реалізації інших та нетипових команд модулем передбачено функцію <a href="#UserAPI">API користувацького програмування</a>, яку можна викликати з <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLev" title="Special:MyLanguage/Documents/DAQ">процедури шаблону логічного рівня</a>, надсилаючи довільні PDU-пакети та обробляючи отримані у відповідь.
+<p>Модулем збору даних використовуються команди <b>3</b> та <b>6(16)</b> для читання та запису регістрів, <b>1</b> та <b>5(15)</b> для читання та запису бітів, <b>2</b> та <b>4</b> для читання біту та регістру входу, відповідно. Для реалізації інших та нетипових команд модулем передбачено функцію <a href="#UserAPI">API користувацького програмування</a>, яку можна викликати з <a href="../DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">процедури шаблону логічного рівня</a>, надсилаючи довільні PDU-пакети та обробляючи отримані у відповідь.
 </p><p>Модуль протоколу обслуговує запити командами <b>3</b> та <b>6(16)</b> для читання та запису регістрів, <b>1</b> та <b>5(15)</b> для читання та запису бітів.
 </p>
 <h2><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D1.80.D0.B5.D0.B0.D0.BB.D1.96.D0.B7.D0.B0.D1.86.D1.96.D1.97_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.83"><span class="mw-headline-number">2</span> Модуль реалізації протоколу</span></h2>
 <p>Модуль протоколу ModBus містить код реалізації протокольної частини ModBus, а саме — особливості варіантів протоколів ModBus/TCP, ModBus/RTU та ModBus/ASCII. Модуль протоколу, спільно з обраним транспортом, активно використовується модулем збору даних для здійснення безпосередніх запитів. Оскільки модуль протоколу є автономним то, використовуючи його, можна створювати додаткові модулі збору даних за посередництвом нестандартних функцій розширення ModBus різного обладнання автоматизації.
 </p>
 <h3><span class="mw-headline" id="API_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.97_.D0.B2.D0.B8.D1.85.D1.96.D0.B4.D0.BD.D0.B8.D1.85_.D0.B7.D0.B0.D0.BF.D0.B8.D1.82.D1.96.D0.B2"><span class="mw-headline-number">2.1</span> API функції вихідних запитів</span></h3>
-<p>API функції вихідних запитів (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/User_API#SYSTransport" title="Special:MyLanguage/Documents/User API">messIO()</a>) оперують обміном блоками PDU, загорнутими у XML-пакети, з відповідною структурою:
+<p>API функції вихідних запитів (<a href="../User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">messIO()</a>) оперують обміном блоками PDU, загорнутими у XML-пакети, з відповідною структурою:
 </p>
 <ul><li> <b>&lt;{prt} id="{sId}" reqTm="{reqTm}" node="{node}" reqTry="{reqTry}"&gt;{pdu}&lt;/{prt}&gt;</b></li></ul>
 <dl><dd>Де:
@@ -169,11 +169,11 @@
 <li> Ідентифікатор, ім'я та опис вузла.</li>
 <li> Стан "Ввімкнено", у який переводити вузол при завантажені.</li>
 <li> Адреса вузла мережі ModBus від 1 до 247.</li>
-<li> Вхідний транспорт, до мережі якого належить вузол. Обирається із переліку <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#TransportIn" title="Special:MyLanguage/Documents/Program manual">вхідних транспортів</a> підсистеми "Транспорти" OpenSCADA. Вказання символу "*" у якості транспорту робить цей вузол учасником будь якої мережі ModBus з обробкою запитів від будь якого транспорту.</li>
+<li> Вхідний транспорт, до мережі якого належить вузол. Обирається із переліку <a href="../Program_manual.html#TransportIn" title="Special:MyLanguage/Documents/Program manual">вхідних транспортів</a> підсистеми "Транспорти" OpenSCADA. Вказання символу "*" у якості транспорту робить цей вузол учасником будь якої мережі ModBus з обробкою запитів від будь якого транспорту.</li>
 <li> Варіант протоколу ModBus, запити у якому має обробляти вузол, із переліку: Всі, RTU, ASCII, TCP/IP.</li>
 <li> Вибір режиму, у даному випадку це режим "Дані".</li>
 <li> Період обчислення даних у секундах. Вказує період обробки даних, які формуються для запитів, а саме: таблиці даних ModBus, програми обчислення даних та обслуговування посилання на дані OpenSCADA.</li>
-<li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#DAQTmpl" title="Special:MyLanguage/Documents/Program manual">DAQ шаблон</a> або мова прямої процедури. Передбачає обрання шаблону або мови прямої процедури для формування та обчислення таблиць даних ModBus, а також для обслуговування зовнішніх посилань на модель даних підсистеми "Збір Даних".</li></ul>
+<li> <a href="../Program_manual.html#DAQTmpl" title="Special:MyLanguage/Documents/Program manual">DAQ шаблон</a> або мова прямої процедури. Передбачає обрання шаблону або мови прямої процедури для формування та обчислення таблиць даних ModBus, а також для обслуговування зовнішніх посилань на модель даних підсистеми "Збір Даних".</li></ul>
 <p>Вузлом у цьому режимі обробляються наступні стандартні команди протоколу ModBus:
 </p>
 <ul><li> <b>1</b> — читання групи бітів;</li>
@@ -227,10 +227,10 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <li> Ідентифікатор, ім'я та опис вузла.</li>
 <li> Стан "Ввімкнено", у який переводити вузол при завантажені.</li>
 <li> Адрес вузла вхідної мережі ModBus, від 1 до 247.</li>
-<li> Вхідний транспорт, до мережі якого має стосунок вузол. Обирається з переліку <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#TransportIn" title="Special:MyLanguage/Documents/Program manual">вхідних транспортів</a> підсистеми "Транспорти" OpenSCADA. Вказання символу "*" у якості транспорту робить цей вузол учасником будь якої мережі ModBus з обробкою запитів від будь якого транспорту.</li>
+<li> Вхідний транспорт, до мережі якого має стосунок вузол. Обирається з переліку <a href="../Program_manual.html#TransportIn" title="Special:MyLanguage/Documents/Program manual">вхідних транспортів</a> підсистеми "Транспорти" OpenSCADA. Вказання символу "*" у якості транспорту робить цей вузол учасником будь якої мережі ModBus з обробкою запитів від будь якого транспорту.</li>
 <li> Варіант протоколу ModBus, запити у якому має оброблятися вузлом, з переліку: Всі, RTU, ASCII, TCP/IP.</li>
 <li> Вибір режиму, в цьому випадку цей режим "Шлюз вузла".</li>
-<li> Транспорт, у який переспрямовують запит, з переліку <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#TransportOut" title="Special:MyLanguage/Documents/Program manual">вихідних транспортів</a> підсистеми "Транспорти".</li>
+<li> Транспорт, у який переспрямовують запит, з переліку <a href="../Program_manual.html#TransportOut" title="Special:MyLanguage/Documents/Program manual">вихідних транспортів</a> підсистеми "Транспорти".</li>
 <li> Протокол, у якому переспрямовувати запит.</li>
 <li> Адреса вузла мережі ModBus, від 1 до 247, у яку переспрямовується запит.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:679px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prt_node_nodeGwNode_uk.png"><img class="thumbimage" height="676" src="../files/ModBus_prt_node_nodeGwNode_uk.png" width="677" /></a>  <div class="thumbcaption">Рис.5. Вкладка "Вузол" сторінки конфігурації вузла протоколу у режимі "Шлюз вузла".</div></div></div></div>
@@ -240,18 +240,18 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <ul><li> Стан вузла, а саме: статус, "Ввімкнено" та ім'я БД, яка містить конфігурацію.</li>
 <li> Ідентифікатор, ім'я та опис вузла.</li>
 <li> Стан "Ввімкнено", у який переводити вузол при завантажені.</li>
-<li> Вхідний транспорт мережі, з якого переспрямовуються запити. Обирається з переліку <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#TransportIn" title="Special:MyLanguage/Documents/Program manual">вхідних транспортів</a> підсистеми "Транспорти" OpenSCADA.</li>
+<li> Вхідний транспорт мережі, з якого переспрямовуються запити. Обирається з переліку <a href="../Program_manual.html#TransportIn" title="Special:MyLanguage/Documents/Program manual">вхідних транспортів</a> підсистеми "Транспорти" OpenSCADA.</li>
 <li> Варіант протоколу ModBus, запити у якому має обробляти вузол, із переліку: Всі, RTU, ASCII, TCP/IP.</li>
 <li> Вибір режиму, у цьому випадку цей режим "Шлюз мережі".</li>
-<li> Транспорт мережі, у яку переспрямовувати запит, з переліку <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#TransportOut" title="Special:MyLanguage/Documents/Program manual">вихідних транспортів</a> підсистеми "Транспорти".</li>
+<li> Транспорт мережі, у яку переспрямовувати запит, з переліку <a href="../Program_manual.html#TransportOut" title="Special:MyLanguage/Documents/Program manual">вихідних транспортів</a> підсистеми "Транспорти".</li>
 <li> Протокол, у якому переспрямовувати запит.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:679px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prt_node_nodeGwNet_uk.png"><img class="thumbimage" height="628" src="../files/ModBus_prt_node_nodeGwNet_uk.png" width="677" /></a>  <div class="thumbcaption">Рис.6. Вкладка "Вузол" сторінки конфігурації вузла протоколу у режимі "Шлюз мережі".</div></div></div></div>
 <h3><span class="mw-headline" id=".D0.97.D0.B2.D1.96.D1.82_.D0.B7.D0.B0.D0.BF.D0.B8.D1.82.D1.96.D0.B2_ModBus"><span class="mw-headline-number">2.3</span> <span id="Report" title="#Report">Звіт запитів ModBus</span></span></h3>
 <p>Для контролю та діагностики за коректністю здійснення запитів різними компонентами, модулем надається можливість включення звіту запитів, що проходять через модуль протоколу. Звіт включається вказанням ненульової кількості записів у вкладці "Звіт" сторінки модуля протоколу (рис.7).
 </p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Цей механізм переважно є застарілим, оскільки його функції наразі виконуються ядром програми:
 </p>
-<ul><li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#DAQDiagnostic" title="Special:MyLanguage/Documents/Program manual">діагностика джерела даних</a>;</li>
-<li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#TrDiagnostic" title="Special:MyLanguage/Documents/Program manual">протокол трафіку через транспорт</a>.</li></ul>
+<ul><li> <a href="../Program_manual.html#DAQDiagnostic" title="Special:MyLanguage/Documents/Program manual">діагностика джерела даних</a>;</li>
+<li> <a href="../Program_manual.html#TrDiagnostic" title="Special:MyLanguage/Documents/Program manual">протокол трафіку через транспорт</a>.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:709px;"><a class="image" href="http://oscada.org/wiki/File:Modbus_prt_rep_uk.png"><img class="thumbimage" height="628" src="../files/Modbus_prt_rep_uk.png" width="707" /></a>  <div class="thumbcaption">Рис.7. Вкладка "Звіт" сторінки модуля протоколу.</div></div></div></div>
 <h2><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.B7.D0.B1.D0.BE.D1.80.D1.83_.D0.B4.D0.B0.D0.BD.D0.B8.D1.85"><span class="mw-headline-number">3</span> <span id="DAQ" title="#DAQ">Модуль збору даних</span></span></h2>
 <p>Модуль збору даних надає можливість опитування та запису регістрів та бітів пристроїв за посередництвом режимів протоколу TCP, RTU, ASCII та команд запиту <b>1</b> — <b>6</b>, <b>15</b>, <b>16</b>.
@@ -268,7 +268,7 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <li> Ім'я таблиць зберігання конфігурації параметрів контролеру стандартного та логічного типу.</li>
 <li> Політика планування та пріоритет задачі збору даних.</li>
 <li> ModBus протокол, який використовується для опитування фізичного пристрою (TCP/IP, RTU або ASCII).</li>
-<li> Адреса вихідного транспорту з переліку <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#TransportOut" title="Special:MyLanguage/Documents/Program manual">вихідних транспортів</a> підсистеми "Транспорти" OpenSCADA. Типовий порт ModuBus/TCP це 502. Поле може бути встановлено у порожнє та змінено під час виконання. </li>
+<li> Адреса вихідного транспорту з переліку <a href="../Program_manual.html#TransportOut" title="Special:MyLanguage/Documents/Program manual">вихідних транспортів</a> підсистеми "Транспорти" OpenSCADA. Типовий порт ModuBus/TCP це 502. Поле може бути встановлено у порожнє та змінено під час виконання. </li>
 <li> ModBus вузол призначення. У випадку з протоколами RTU та ASCII це індивідуальна адреса фізичного пристрою, а для TCP/IP це ідентифікатор одиниці.</li>
 <li> Об'єднання фрагментів регістрів. Стандартні функції <b>1</b>-<b>4</b> дозволяють запитати одразу декілька суміжних регістрів або бітів. Така стратегія часто дозволяє оптимізувати трафік та час. Однак, потрібні регістри не завжди розташовані суміжно один до одного та така опція дозволяє збирати їх у блоки до 100 регістрів або 1600 бітів.</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> До встановлення цього параметру треба підходити з обережністю, оскільки не всі пристрої підтримують доступ до регістрів між фрагментами.</dd></dl>

@@ -215,6 +215,8 @@ class CWidget : public Widget, public TConfig
 	void resourceList( vector<string> &ls );
 	string resourceGet( const string &id, string *mime = NULL );
 
+	void procChange( bool src = true );
+
 	void inheritAttr( const string &attr = "" );
 
 	LWidget &ownerLWdg( ) const;

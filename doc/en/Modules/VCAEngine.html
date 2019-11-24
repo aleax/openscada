@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/VCAEngine</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/VCAEngine/ru" title="Модули/Движок Среды Визуализации и Управлений (СВУ) (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/VCAEngine/uk" title="Модулі/Рушій Середовища Візуалізації та Управління (СВУ) (100% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/VCAEngine/ru" title="Модули/Движок Среды Визуализации и Управлений (СВУ) (98% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/VCAEngine/uk" title="Модулі/Рушій Середовища Візуалізації та Управління (СВУ) (98% translated)">українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -31,14 +31,14 @@
 <td> <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
 <td> Visual control area engine
 </td>
-<td> 5.10 </td>
+<td> 5.11 </td>
 <td> GPL2 </td>
 <td> ui_VCAEngine.so </td>
 <td> en,uk,ru,de </td>
 <td> x86,x86_64,ARM
 </td>
 <td> UI </td>
-<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2011-2012) — the page translation</i></font> </td>
+<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2011-2012) — the page initial translation</i></font> </td>
 <td> The main engine of the visual control area.
 </td></tr></table>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
@@ -218,7 +218,7 @@
 <ul><li> "Page of the top level" -&gt; "Page of the lower level" </li>
 <li> "Widget of the lower level" -&gt; "Widget of the top level"</li></ul>
 <p>This policy allows to bypass the pages according to their hierarchy, and events in the widgets "climb up" during one iteration.
-</p><p>The sessions support multi-language at the level of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/API#CntrNode" title="Special:MyLanguage/Documents/API">the control interface of OpenSCADA</a>, which depended from values of the generic attributes "lang" and "user" and which visualizer can set in proper way of own language. This function is enabled by <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Config" title="Special:MyLanguage/Documents/Program manual">dynamic messages translation of OpenSCADA</a>.
+</p><p>The sessions support multi-language at the level of <a href="../API.html#CntrNode" title="Special:MyLanguage/Documents/API">the control interface of OpenSCADA</a>, which depended from values of the generic attributes "lang" and "user" and which visualizer can set in proper way of own language. This function is enabled by <a href="../Program_manual.html#Config" title="Special:MyLanguage/Documents/Program manual">dynamic messages translation of OpenSCADA</a>.
 </p><p><br />
 </p>
 <h3><span class="mw-headline" id="Styles"><span class="mw-headline-number">3.4</span> Styles</span></h3>
@@ -823,7 +823,7 @@ if test $en = 1 -a -s $res; then play -q $res; fi
 <li> attributes of the parameter can provide information of five types: Boolean, Integer, Real, String and Object;</li>
 <li> attributes of the parameter can have their archive (history);</li>
 <li> attributes of the parameter can be set to read, write and with full access.</li></ol>
-<p>Given the first point, it is necessary to provide the possibility of group-based reference. To do this, we use <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLev" title="Special:MyLanguage/Documents/DAQ">the logical level concept</a>.
+<p>Given the first point, it is necessary to provide the possibility of group-based reference. To do this, we use <a href="../DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">the logical level concept</a>.
 </p><p>According to point 2, the links provide a transparent type conversion and do not require a special configuration.
 </p><p>To satisfy the opportunities for accessing to archives, in accordance with the item 3, links make check of the attribute type, and in the case of connection to the "Address", the address of the link is put into the value.
 </p><p>In the VCA terms, the dynamic links and configuration of the dynamics are the one process, to describe a configuration of which the tab "Processing" of the widgets is provided. The tab contains a table of configuration of the attributes properties and the calculation procedure text of the widget.
@@ -3124,7 +3124,7 @@ Deprecated, but supported, the API is represented by a group of functions direct
 <td>
 </td></tr></table>
 <h4><span class="mw-headline" id="Service_interfaces_of_OpenSCADA"><span class="mw-headline-number">3.11.2</span> Service interfaces of OpenSCADA</span></h4>
-<p>Service interfaces are the interfaces for access to OpenSCADA through <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/API#CntrNode" title="Special:MyLanguage/Documents/API">the OpenSCADA control interface</a>. This mechanism is the basis of all mechanisms of exchange within OpenSCADA, implemented through weak links and the standard exchange protocol of OpenSCADA .
+<p>Service interfaces are the interfaces for access to OpenSCADA through <a href="../API.html#CntrNode" title="Special:MyLanguage/Documents/API">the OpenSCADA control interface</a>. This mechanism is the basis of all mechanisms of exchange within OpenSCADA, implemented through weak links and the standard exchange protocol of OpenSCADA .
 </p>
 <h5><span class="mw-headline" id="Access_to_the_attributes_values_of_the_visualization_elements_.28widgets.29"><span class="mw-headline-number">3.11.2.1</span> Access to the attributes values of the visualization elements (widgets)</span></h5>
 <p>In order to provide unitized, grouping and relatively fast access to the attributes values of the visual elements, the service function of the visual element "/serv/attr" and get-set commands of values of the attributes are provided:
@@ -3301,7 +3301,7 @@ Deprecated, but supported, the API is represented by a group of functions direct
 <p>From this page you can set:
 </p>
 <ul><li> States of the element, the same: "Enabled", counter of the use, parent element and jump to it, date and time of the last modification.</li>
-<li> States of the runtime session's mode: "Opened", "Process" and spent time on execution of the subtree and item, into the <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Config" title="Special:MyLanguage/Documents/Program manual">debug mode</a>.</li>
+<li> States of the runtime session's mode: "Opened", "Process" and spent time on execution of the subtree and item, into the <a href="../Program_manual.html#Config" title="Special:MyLanguage/Documents/Program manual">debug mode</a>.</li>
 <li> Identifier, type, root, path, name, description and icon of the element.</li>
 <li> Command — clear the widget changes.</li>
 <li> Command — lower down the widget changes to its parent.</li></ul>

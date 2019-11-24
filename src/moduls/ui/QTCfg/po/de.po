@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-29 17:07+0300\n"
+"POT-Creation-Date: 2019-11-21 16:57+0200\n"
 "PO-Revision-Date: 2009-08-20 11:41+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -98,29 +98,66 @@ msgstr "Schaltfläche um zur nächsten Seite zu gelangen"
 msgid "Press for going to the forward page."
 msgstr "Betätigen um zur nächsten Seite zu gelangen."
 
-msgid "Load from the DB"
+msgid "Load from DB"
 msgstr "Laden von der DB"
 
 msgid "Load the item data from DB"
 msgstr "Laden Sie die Artikeldaten aus der DB"
 
-msgid "The button for loading the item data from the DB"
+msgid "The button for loading the item data from DB"
 msgstr "Schaltfläche zum Laden der Artikeldaten aus der DB"
 
-msgid "Press for loading the item data from the DB."
+msgid "Press for loading the item data from DB."
 msgstr "Betätigen zum Laden der Artikeldaten aus der DB."
 
-msgid "Save to the DB"
+msgid "Load from DB forcibly"
+msgstr "Laden von der DB gewaltsam"
+
+msgid "Load the item data from DB forcibly"
+msgstr "Laden Sie die Artikeldaten aus der DB gewaltsam"
+
+msgid ""
+"The button for loading the item data from DB forcibly, not only when it "
+"changed"
+msgstr ""
+"Schaltfläche zum zwangsweisen Laden der Artikeldaten aus der DB, nicht nur "
+"beim Ändern"
+
+msgid ""
+"Press for loading the item data from DB forcibly, not only when it changed."
+msgstr ""
+"Drücken Sie, um die Artikeldaten zwangsweise zu laden, nicht nur, wenn sie "
+"geändert wurden."
+
+msgid "Save to DB"
 msgstr "Speichern Sie an die DB"
 
 msgid "Save the item data to DB"
 msgstr "Sichern Sie die Artikeldaten in der DB"
 
-msgid "The button for saving the item data to the DB"
+msgid "The button for saving the item data to DB"
 msgstr "Schaltfläche zum Speichern der Artikeldaten in der Datenbank"
 
-msgid "Press for saving the item data to the DB."
+msgid "Press for saving the item data to DB."
 msgstr "Betätigen zum Speichern der Artikeldaten in der Datenbank."
+
+msgid "Save to DB forcibly"
+msgstr "Speichern Sie an die DB gewaltsam"
+
+msgid "Save the item data to DB forcibly"
+msgstr "Sichern Sie die Artikeldaten in der DB gewaltsam"
+
+msgid ""
+"The button for saving the item data to DB forcibly, not only when it changed"
+msgstr ""
+"Schaltfläche zum zwangsweisen Speichern der Artikeldaten in den DB, nicht "
+"nur bei Änderung"
+
+msgid ""
+"Press for saving the item data to DB forcibly, not only when it changed."
+msgstr ""
+"Drücken Sie, um die Artikeldaten zwangsweise in der Datenbank zu speichern, "
+"nicht nur, wenn sie geändert wurden."
 
 msgid "&Add"
 msgstr "&Hinzufügen"

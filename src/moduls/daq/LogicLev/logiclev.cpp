@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Logical level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.0.2"
+#define MOD_VER		"2.1.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the pure logical level of the DAQ parameters.")
 #define LICENSE		"GPL2"
@@ -184,6 +184,16 @@ void TMdContr::stop_( )
     if(prcSt) SYS->taskDestroy(nodePath('.',true), &endrunReq);
 }
 
+bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
+{
+    TController::cfgChange(co, pc);
+
+    if(co.fld().name() == "SCHEDULE")
+	mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,1e9*s2r(cron())) : 0;
+
+    return true;
+}
+
 void TMdContr::prmEn( TMdPrm *p, bool val )
 {
     MtxAlloc res(enRes, true);
@@ -284,7 +294,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TController::cntrCmdProc(opt);
 	ctrRemoveNode(opt,"/cntr/cfg/PERIOD");
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),/*startStat()?R_R_R_:*/RWRWR_,"root",SDAQ_ID,4,
 	    "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",cfg("PRIOR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
 	return;

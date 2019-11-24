@@ -2286,7 +2286,7 @@ void ShapeDiagram::makeXYPicture( WdgView *w )
 	prmInGrp++; prmGrpLast = iP;
     }
 
-    // Check for individual parameters and for possibility to merge it to group or create new for no group
+    // Checking for individual parameters and for the possibility to merge their to groups or create a new one for no group
     int prmIndiv = 0, prmIndivSc = -1;
     vector<int>	prmsInd;
     for(unsigned iP = 0; iP < shD->prms.size(); iP += 2) {
@@ -2295,7 +2295,7 @@ void ShapeDiagram::makeXYPicture( WdgView *w )
 	if(!cP.val().size() || !cP.color().isValid() || !(cP.wScale&FD_GRD_MARKS) || (iP+1) >= shD->prms.size() ||
 	    !shD->prms[iP+1].val().size() || !shD->prms[iP+1].color().isValid()) continue;
 
-	//  Check for include to present or create new group and exclude from individual
+	//  Checking for include to the present one or create a new group and exclude from individual ones
 	if((!prmInGrp || (vsMin < vsMax && vmax(fabs((vsMax-cP.adjL)/(vsMax-vsMin)-1),fabs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2)) &&
 	    (cP.mScale&FD_LOG) == (sclVer&FD_LOG))
 	{
@@ -2382,7 +2382,7 @@ void ShapeDiagram::makeXYPicture( WdgView *w )
 	    while(!isLogT && ((cP.adjU-cP.adjL)/vDiv) < vmax_ln/2) vDiv /= 2;
 	    vsMinT = cP.adjL; vsMaxT = cP.adjU;
 	}
-	if(iP < (prmsInd.size()-1))	sclVerT &= ~(FD_GRD);	//Hide grid for no last scale
+	if(iP < (prmsInd.size()-1))	sclVerT &= ~(FD_GRD);	//Hide grid for not last scale
 
 	//Draw vertical grid and markers
 	int markWdth = 0;
@@ -2390,7 +2390,7 @@ void ShapeDiagram::makeXYPicture( WdgView *w )
 	    string labVal;
 	    pnt.setPen(grdPenT);
 	    pnt.drawLine(tAr.x()-1, tAr.y(), tAr.x()-1, tAr.height());
-	    for(double iV = ceil(vsMinT/vDiv)*vDiv; (vsMaxT-iV)/vDiv > -0.1; iV += vDiv) {
+	    for(double iV = floor((vsMinT/vDiv)+0.5)*vDiv; (vsMaxT-iV)/vDiv > -0.1; iV += vDiv) {
 		int v_pos = tAr.y() + tAr.height() - (int)((double)tAr.height()*(iV-vsMinT)/(vsMaxT-vsMinT));
 		if(sclVerT&FD_GRD) { pnt.setPen(grdPen); pnt.drawLine(tAr.x(), v_pos, tAr.x()+tAr.width(), v_pos); }
 		else { pnt.setPen(grdPenT); pnt.drawLine(tAr.x()-3, v_pos, tAr.x()+3, v_pos); }

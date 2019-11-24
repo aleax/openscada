@@ -5187,7 +5187,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	prmInGrp++; prmGrpLast = iP;
     }
 
-    // Check for individual parameters and for possibility to merge it to group or create new for no group
+    // Checking for individual parameters and for the possibility to merge their to groups or create a new one for no group
     int prmIndiv = 0;
     int prmIndivSc = -1;
     vector<int> prmsInd;
@@ -5195,7 +5195,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	TrendObj &cP = trnds[iP];
 	cP.isIndiv = false;
 	if(!cP.val().size() || ((cP.color()>>31)&0x01) || !(cP.wScale&FD_GRD_MARKS)) continue;
-	// Check for include to present or create new group and exclude from individual
+	// Checking for include to the present one or create a new group and exclude from individual ones
 	if((!prmInGrp || (vsMin < vsMax && vmax(fabs((vsMax-cP.adjL)/(vsMax-vsMin)-1),fabs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2)) &&
 	    (cP.mScale&FD_LOG) == (sclVer&FD_LOG))
 	{
@@ -5279,14 +5279,14 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    while(!isLogT && ((cP.adjU-cP.adjL)/vDiv) < vmax_ln/2) vDiv /= 2;
 	    vsMinT = cP.adjL; vsMaxT = cP.adjU;
 	}
-	if(iP < (prmsInd.size()-1))	sclVerT &= ~(FD_GRD);	//Hide grid for no last scale
+	if(iP < (prmsInd.size()-1))	sclVerT &= ~(FD_GRD);	//Hide grid for not last scale
 
 	// Draw vertical grid and markers
 	int markWdth = 0;
 	if(sclVerT&FD_GRD_MARKS) {
 	    string labVal;
 	    gdImageLine(im, tArX-1, tArY, tArX-1, tArH, clrGridT);
-	    for(double iV = ceil(vsMinT/vDiv)*vDiv; (vsMaxT-iV)/vDiv > -0.1; iV += vDiv) {
+	    for(double iV = floor((vsMinT/vDiv)+0.5)*vDiv; (vsMaxT-iV)/vDiv > -0.1; iV += vDiv) {
 		//  Draw grid
 		int v_pos = tArY + tArH - (int)((double)tArH*(iV-vsMinT)/(vsMaxT-vsMinT));
 		if(sclVerT&FD_GRD) gdImageLine(im, tArX, v_pos, tArX+tArW, v_pos, clrGrid);
@@ -5455,7 +5455,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	aVbeg = vmax(tBeg, cP.valBeg());
 	aVend = vmin(tEnd, cP.valEnd());
 	if(aVbeg >= aVend || (cP.color()>>31)&0x01) continue;
-	int aPosBeg = cP.val(aVbeg);;
+	int aPosBeg = cP.val(aVbeg);
 	if(aPosBeg && cP.val()[aPosBeg].tm > aVbeg) aPosBeg--;
 	bool vsPercT = cP.isIndiv ? false : vsPerc;
 	bool isLogT = cP.isIndiv ? (cP.wScale&FD_LOG) : isLog;

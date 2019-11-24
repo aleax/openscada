@@ -59,7 +59,7 @@
 <ul><li> получение дерева исходных текстов из SVN-репозитория проекта:</li></ul>
 <dl><dd>$ svn co <a class="external free" href="http://oscada.org/svn/trunk/OpenSCADA/" rel="nofollow noreferrer noopener" target="_blank">http://oscada.org/svn/trunk/OpenSCADA/</a></dd>
 <dd>$ cd OpenSCADA</dd></dl></dd>
-<dd>3. Удовлетворение зависимостей проекта OpenSCADA для сборки, в соответствии с <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Functions_and_demands#Building" title="Special:MyLanguage/Functions and demands">требованиями</a>.</dd>
+<dd>3. Удовлетворение зависимостей проекта OpenSCADA для сборки, в соответствии с <a href="Functions_and_demands.html#Building" title="Special:MyLanguage/Functions and demands">требованиями</a>.</dd>
 <dd>4. Генерация сборочной системы, при загрузке из SVN-репозитория:
 <dl><dd>$ autoreconf -if</dd></dl></dd></dl>
 <p>Этапы глобальной сборки:
@@ -99,7 +99,7 @@
 <dl><dd>1. Размещение архивов OpenSCADA и файла спецификации в директории сборки RPM (исходные файлы предварительно помещены в текущей директории):
 <dl><dd>$ cp openscada-0.9+r2537.tar.xz openscada-res-0.9+r2537.tar.xz <u>Директория дистрибутива</u>/SOURCES</dd>
 <dd>$ cp openscada.spec <u>Директория дистрибутива</u>/SPECS</dd></dl></dd>
-<dd>2. Удовлетворение зависимостей проекта OpenSCADA для сборки в соответствии с <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Functions_and_demands#Building" title="Special:MyLanguage/Functions and demands">требованиями</a>. Аргументы команды "configure" можно указать в файле "openscada.spec".</dd>
+<dd>2. Удовлетворение зависимостей проекта OpenSCADA для сборки в соответствии с <a href="Functions_and_demands.html#Building" title="Special:MyLanguage/Functions and demands">требованиями</a>. Аргументы команды "configure" можно указать в файле "openscada.spec".</dd>
 <dd>3. Сборка пакетов
 <ul><li> сборка сначала:</li></ul>
 <dl><dd>$ rpmbuild -bb <u>Директория дистрибутива</u>/SPECS/openscada.spec</dd></dl>
@@ -108,7 +108,7 @@
 <dd>4. Пакеты готовы и доступны в директории <b><u>Директория дистрибутива</u>/RPMS</b>  для соответствующей архитектуры.</dd></dl>
 <p>Этапы сборки из SRPMS пакета:
 </p>
-<dl><dd>1. Удовлетворение зависимостей проекта OpenSCADA для сборки в соответствии с <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Functions_and_demands#Building" title="Special:MyLanguage/Functions and demands">требованиями</a>.</dd>
+<dl><dd>1. Удовлетворение зависимостей проекта OpenSCADA для сборки в соответствии с <a href="Functions_and_demands.html#Building" title="Special:MyLanguage/Functions and demands">требованиями</a>.</dd>
 <dd>2. Сборка пакетов (исходные файлы предварительно помещены в текущей директории):
 <dl><dd>$ rpmbuild --rebuild openscada-0.9+r2537.src.rpm</dd></dl></dd>
 <dd>3. Пакеты готовы и доступны в директории <b><u>Директория дистрибутива</u>/RPMS</b>  для соответствующей архитектуры.</dd></dl>
@@ -134,7 +134,7 @@
 <dl><dd>$ ln -s data/debian debian</dd></dl>
 <ul><li> бинарные файлы модулей в отдельных пакетах:</li></ul>
 <dl><dd>$ ln -s data/debian_mod debian</dd></dl></dd>
-<dd>4. Удовлетворение зависимостей проекта OpenSCADA для сборки, в соответствии с <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Functions_and_demands#Building" title="Special:MyLanguage/Functions and demands">требованиями</a>. Аргументы команды "configure" можно указать в файле "debian/rules".</dd>
+<dd>4. Удовлетворение зависимостей проекта OpenSCADA для сборки, в соответствии с <a href="Functions_and_demands.html#Building" title="Special:MyLanguage/Functions and demands">требованиями</a>. Аргументы команды "configure" можно указать в файле "debian/rules".</dd>
 <dd>5. Сборка:
 <ul><li> сборка сначала:</li></ul>
 <dl><dd>$ dpkg-buildpackage -rfakeroot</dd></dl>

@@ -43,7 +43,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"6.4.2"
+#define MOD_VER		"6.5.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
 #define DESCRIPTION	_("Visual operation user interface, based on the Qt library - front-end to the VCA engine.")
 #define LICENSE		"GPL2"

@@ -136,15 +136,15 @@ License: GPLv2','lib_Controllers','Контролери','Програми ко�
 INSERT INTO UserFuncLibs VALUES('web','XHTML-template','Pages processing functions library for XHTML-template user''s Web-interface.
 
 Author: Roman Savochenko
-Version: 0.1.0
+Version: 0.2.0
 License: GPL','flb_web','XHTML-шаблон','Бібліотека функцій обробки сторінок XHTML-шаблонів користувацткого Web-інтерфейсу.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 0.1.0
+Версія: 0.2.0
 Ліцензія: GPL','XHTML-шаблон','Библиотека функций обработки страниц XHTML-шаблонов пользовательского Web-интерфейса.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 0.1.0
+Версия: 0.2.0
 Лицензия: GPL',0);
 CREATE TABLE IF NOT EXISTS 'flb_doc_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DEF" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DEF" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
 INSERT INTO flb_doc_io VALUES('getVal','rez','Result',0,2,'',0,0,'Результат','','Результат','');
@@ -1011,14 +1011,14 @@ INSERT INTO tmplib_DevLib_io VALUES('CTR','zeroSet','Zero set',3,32,'',2,'Уст
 INSERT INTO tmplib_DevLib_io VALUES('IEC60870','transport','Transport',0,64,'Sockets.out_IEC60870',0,'Транспорт','','Транспорт','Sockets.out_IEC60870');
 INSERT INTO tmplib_DevLib_io VALUES('IEC60870','addr','Address, {addr}.{OA}',0,64,'0.5',1,'Адрес, {addr}.{OA}','','Адреса, {addr}.{OA}','0.5');
 INSERT INTO tmplib_DevLib_io VALUES('IEC60870','tmRetr','Retry connection time, seconds',2,64,'10',2,'Время восстановления подключения, секунд','','Час відновлення підключення, секунд','');
-INSERT INTO tmplib_DevLib_io VALUES('IEC60870','t1','Acknowledge lack timeout, seconds',2,64,'1.5',3,'Таймаут подтверждения отсутствия активности, секунд','','Таймаут підтвердження відсутності активності, секунд','');
-INSERT INTO tmplib_DevLib_io VALUES('IEC60870','t2','Acknowledge lack activity timeout, seconds',2,64,'1',4,'Таймаут подтверждения, секунд','','Таймаут підтвердження, секунд','');
-INSERT INTO tmplib_DevLib_io VALUES('IEC60870','t3','Test timeout, seconds',2,64,'2',5,'Таймаут проверки, секунд','','Таймаут перевірки, секунд','');
-INSERT INTO tmplib_DevLib_io VALUES('IEC60870','k','Maximum unconfirmed',1,64,'12',6,'Максимально неподтверждённых','','Максимально непідтверджених','');
-INSERT INTO tmplib_DevLib_io VALUES('IEC60870','w','Maximum no ack',1,64,'8',7,'Максимальное отсутсвие "ack"','','Максимальна відсутність "ack"','');
-INSERT INTO tmplib_DevLib_io VALUES('IEC60870','itemsSet','Items set by: "ai|di|do:{IOA}[-{EndIOA}][:a[:{NameBase}]]"',0,36,'',8,'Небор элементов по: "ai|di|do:{IOA}[-{EndIOA}][:a[:{NameBase}]]"','','Набір елементів за: "ai|di|do:{IOA}[-{EndIOA}][:a[:{NameBase}]]"','');
-INSERT INTO tmplib_DevLib_io VALUES('IEC60870','items','All items',4,33,'',9,'Все элементы','','Всі елементи','');
-INSERT INTO tmplib_DevLib_io VALUES('IEC60870','this','Object',4,0,'',11,'Объект','','Об''єкт','');
+INSERT INTO tmplib_DevLib_io VALUES('IEC60870','t1','Acknowledge lack timeout, seconds',2,64,'1.5',4,'Таймаут подтверждения отсутствия активности, секунд','','Таймаут підтвердження відсутності активності, секунд','');
+INSERT INTO tmplib_DevLib_io VALUES('IEC60870','t2','Acknowledge lack activity timeout, seconds',2,64,'1',5,'Таймаут подтверждения, секунд','','Таймаут підтвердження, секунд','');
+INSERT INTO tmplib_DevLib_io VALUES('IEC60870','t3','Test timeout, seconds',2,64,'2',6,'Таймаут проверки, секунд','','Таймаут перевірки, секунд','');
+INSERT INTO tmplib_DevLib_io VALUES('IEC60870','k','Maximum unconfirmed',1,64,'12',7,'Максимально неподтверждённых','','Максимально непідтверджених','');
+INSERT INTO tmplib_DevLib_io VALUES('IEC60870','w','Maximum no ack',1,64,'8',8,'Максимальное отсутсвие "ack"','','Максимальна відсутність "ack"','');
+INSERT INTO tmplib_DevLib_io VALUES('IEC60870','itemsSet','Items set by: "ai|di|do:{IOA}[-{EndIOA}][:a[:{NameBase}]]"',0,36,'',9,'Набор элементов по: "ai|di|do:{IOA}[-{EndIOA}][:a[:{NameBase}]]"','','Набір елементів за: "ai|di|do:{IOA}[-{EndIOA}][:a[:{NameBase}]]"','');
+INSERT INTO tmplib_DevLib_io VALUES('IEC60870','items','All items',4,33,'',10,'Все элементы','','Всі елементи','');
+INSERT INTO tmplib_DevLib_io VALUES('IEC60870','this','Object',4,0,'',13,'Объект','','Об''єкт','');
 INSERT INTO tmplib_DevLib_io VALUES('SSCP','transport','Transport of the Ethernet network, Sockets',0,64,'SSCP',0,'Транспорт сети Ethernet, Сокеты','','Транспорт мережі Ethernet, Сокети','');
 INSERT INTO tmplib_DevLib_io VALUES('SSCP','addr','Address [0...255]',1,64,'1',1,'Адрес [0...255]','','Адреса [0...255]','');
 INSERT INTO tmplib_DevLib_io VALUES('SSCP','user','User',0,64,'admin',2,'Пользователь','','Користувач','');
@@ -1319,19 +1319,21 @@ INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do28','Input: DO28',3,129,'',
 INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do29','Input: DO29',3,129,'',36,'','','','');
 INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do30','Input: DO30',3,129,'',37,'','','','');
 INSERT INTO tmplib_DevLib_io VALUES('DCON_Prt_DO','do31','Input: DO31',3,129,'',38,'','','','');
-INSERT INTO tmplib_DevLib_io VALUES('IEC60870','syncTimePLC','Sync PLC time',3,32,'',10,'Синхронизация времени ПЛК','','Синхронізація часу ПЛК','');
-INSERT INTO tmplib_DevLib_io VALUES('DNP3','transport','Transport',0,64,'Sockets.out_DNP3',0,'','','','');
-INSERT INTO tmplib_DevLib_io VALUES('DNP3','tmRetr','Retry connection time, seconds',2,64,'10',3,'','','','');
-INSERT INTO tmplib_DevLib_io VALUES('DNP3','itemsSet','Items set by: "ai|ao|cnt|di|do:{pnt}[-{endPnt}][:a[:{NameBase}]]"',0,36,'',6,'','','','');
-INSERT INTO tmplib_DevLib_io VALUES('DNP3','items','All items',4,33,'',7,'','','','');
-INSERT INTO tmplib_DevLib_io VALUES('DNP3','this','Object',4,0,'',11,'','','','');
-INSERT INTO tmplib_DevLib_io VALUES('DNP3','ctx','IO context',4,0,'',9,'','','','');
-INSERT INTO tmplib_DevLib_io VALUES('DNP3','dest','Destination [0...65520]',1,64,'10',1,'','','','');
-INSERT INTO tmplib_DevLib_io VALUES('DNP3','src','Source [0...65520]',1,64,'1',2,'','','','');
-INSERT INTO tmplib_DevLib_io VALUES('DNP3','tr','Output transport',4,0,'',8,'','','','');
-INSERT INTO tmplib_DevLib_io VALUES('DNP3','tmPoolEv','Poll events time, seconds',2,64,'1',4,'','','','');
-INSERT INTO tmplib_DevLib_io VALUES('DNP3','tmPoolAll','Poll all time, seconds',2,64,'60',5,'','','','');
-INSERT INTO tmplib_DevLib_io VALUES('DNP3','oAVals','Output values',4,1,'',10,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('IEC60870','syncTimePLC','Sync PLC time',3,32,'',11,'Синхронизация времени ПЛК','','Синхронізація часу ПЛК','');
+INSERT INTO tmplib_DevLib_io VALUES('DNP3','transport','Transport',0,64,'Sockets.out_DNP3',0,'Транспорт','','Транспорт','');
+INSERT INTO tmplib_DevLib_io VALUES('DNP3','tmRetr','Retry connection time, seconds',2,64,'10',3,'Время восстановления подключения, секунд','','Час відновлення підключення, секунд','');
+INSERT INTO tmplib_DevLib_io VALUES('DNP3','itemsSet','Items set by: "ai|ao|cnt|di|do:{pnt}[-{endPnt}][:a[:{NameBase}]]"',0,36,'',6,'Набор элементов по: "ai|ao|cnt|di|do:{pnt}[-{endPnt}][:a[:{NameBase}]]"','','Набір елементів за: "ai|ao|cnt|di|do:{pnt}[-{endPnt}][:a[:{NameBase}]]"','');
+INSERT INTO tmplib_DevLib_io VALUES('DNP3','items','All items',4,33,'',7,'Все элементы','','Всі елементи','');
+INSERT INTO tmplib_DevLib_io VALUES('DNP3','this','Object',4,0,'',11,'Объект','','Об''єкт','');
+INSERT INTO tmplib_DevLib_io VALUES('DNP3','ctx','IO context',4,0,'',9,'Контекст ВВ','','Контекст ВВ','');
+INSERT INTO tmplib_DevLib_io VALUES('DNP3','dest','Destination [0...65520]',1,64,'10',1,'Назначение [0...65520]','','Призначення [0...65520]','');
+INSERT INTO tmplib_DevLib_io VALUES('DNP3','src','Source [0...65520]',1,64,'1',2,'Источник [0...65520]','','Джерело [0...65520]','');
+INSERT INTO tmplib_DevLib_io VALUES('DNP3','tr','Output transport',4,0,'',8,'Выходной транспорт','','Вихідний транспорт','');
+INSERT INTO tmplib_DevLib_io VALUES('DNP3','tmPoolEv','Poll events time, seconds',2,64,'1',4,'Время опроса событий, секунд','','Час опитування повідомлень, секунд','');
+INSERT INTO tmplib_DevLib_io VALUES('DNP3','tmPoolAll','Poll all time, seconds',2,64,'60',5,'Время опроса всего, секунд','','Час опитування всього, секунд','');
+INSERT INTO tmplib_DevLib_io VALUES('DNP3','oAVals','Output values',4,1,'',10,'Выходные значения','','Вихідні значення','');
+INSERT INTO tmplib_DevLib_io VALUES('IEC60870','tmPoolAll','Poll all time, seconds',2,64,'60',3,'Время опроса всего, секунд','','Час опитування всього, секунд','');
+INSERT INTO tmplib_DevLib_io VALUES('IEC60870','oAVals','Output values',4,0,'',12,'Выходные значения','','Вихідні значення','');
 CREATE TABLE IF NOT EXISTS 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_PrescrTempl_io VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
 INSERT INTO tmplib_PrescrTempl_io VALUES('timer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
@@ -1801,18 +1803,18 @@ INSERT INTO flb_web_io VALUES('user','tmpl','Template',0,0,'',0,2,'Шаблон'
 INSERT INTO flb_web_io VALUES('user','cnts','POST request''s context',4,0,'',0,3,'Контекст POST-запроса','Контекст POST-запиту');
 INSERT INTO flb_web_io VALUES('user','user','User',0,0,'',0,4,'Пользователь','Користувач');
 INSERT INTO flb_web_io VALUES('diagram','res','Result',0,6,'',0,0,'','');
-INSERT INTO flb_web_io VALUES('diagram','srcs','Sources',0,4,'/DAQ/LogicLev/gen/F3/var:0:100:#ae77c3
-/Archive/va_CPULoad_load:0:100:darkcyan',0,3,'','');
-INSERT INTO flb_web_io VALUES('diagram','tmpl','SVG-template',0,4,'<svg xmlns="http://www.w3.org/2000/svg" version="1.1" style="font-family: Times; font-size: 12px;">
+INSERT INTO flb_web_io VALUES('diagram','srcs','Sources',0,4,'/DAQ/LogicLev/gen/F3/var:0:100:#ae77c3:2
+/Archive/va_CPULoad_load:0:0:darkcyan:2',0,3,'','');
+INSERT INTO flb_web_io VALUES('diagram','tmpl','SVG-template',0,4,'<svg xmlns="http://www.w3.org/2000/svg" version="1.1" sclMarkFont="Arial 10" sclHor="2" sclVer="3" sclColor="gray" sclMarkColor="gray">
     <style type="text/css">
-	    #scVert rect { fill: gray; stroke: none; }
-	    #scVert text { fill: gray; stroke: none; }
-	    #scHor rect { fill: gray; stroke: none; }
-	    #scHor text { fill: gray; stroke: none; }
-	    #drawArea path { stroke-width: 1; fill: none; }
+	    #scVer rect { stroke: none; }
+	    #scVer text { stroke: none; }
+	    #scHor rect { stroke: none; }
+	    #scHor text { stroke: none; }
+	    #drawArea path { fill: none; }
     </style>
     <!--Draw grid and markers-->
-    <g id="scVert" />
+    <g id="scVer" />
     <g id="scHor" />
     <!--Curves area -->
     <g id="drawArea" />
@@ -3709,12 +3711,12 @@ if(t_err.length) {
 else f_err = "0: " + u_err;','','',1512240506);
 INSERT INTO tmplib_DevLib VALUES('IEC60870','IEC-60870','IEC-60870','','IEC 60870 part 5 is one from the IEC 60870 set of standards which defines systems used for telecontrol (supervisory control and data acquisition) in electrical engineering and power system automation applications. Part 5 provides a communication profile for sending basic telecontrol messages between two systems, which uses permanent directly connected data circuits between the systems.
 
-The template currently implements the part 104 (Ethernet transport) for the client and followed services: STARTDT, STOPDT, TESTFR, Ack, C_IC_NA_1 (100), C_CI_NA_1 (101), C_SC_NA_1 (45), M_SP_NA_1 (1), M_ME_NB_1 (11), M_ME_NC_1 (13), M_ME_TF_1 (36), C_CS_NA_1 (103). For information ones, the sequential (SQ) mode enabling and disabling are supported.
+The template currently implements the part 104 (Ethernet transport) for the client and followed services: STARTDT, STOPDT, TESTFR, Ack, C_IC_NA_1 (100), C_CI_NA_1 (101), C_SC_NA_1 (45), M_SP_NA_1 (1), M_SP_TA_1 (2), M_DP_NA_1 (3), M_DP_TA_1 (4), M_ME_NB_1 (11), M_ME_NC_1 (13), M_ME_TF_1 (36), C_CS_NA_1 (103). For information ones, the sequential (SQ) mode enabling and disabling are supported.
 
 For the direct definition of the requested data, the "itemsSet" attribute is provided, where they can be defined individually, with a semantic identifier and name, or in a range named by a template. Often, remote systems may not need to determine the data to transmit and send existing or generic ones on their own initiative, and if they do not, have and need to ask for something additional ones, then you need to get a map of the available parameters with the addresses these you enter in this attribute in the format ai|di|do:{IOA}[-{EndIOA}][:a[:{NameBase}]], where:
 - ai|di|do — data type, where:
   - "ai" — analog inputs, transmitted by the message M_ME_NB_1, M_ME_NC_1, M_ME_TF_1 and requested by C_SC_NA_1;
-  - "di" — discrete inputs, transmitted by the message M_SP_NA_1 and requested by C_SC_NA_1;
+  - "di" — discrete inputs, transmitted by the message M_SP_NA_1, M_SP_TA_1, M_DP_NA_1, M_DP_TA_1 and requested by C_SC_NA_1;
   - "do" — discrete outputs, transmitted by C_SC_NA_1.
 - {IOA} — parameter address of the range begin;
 - {EndIOA} — the range end (the last item address);
@@ -3734,7 +3736,7 @@ In the template for the first time used the not requesting mode of an output tra
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Ustijancev Michael
-Version: 1.3.1
+Version: 1.4.0
 License: GPLv2','IEC 60870 у частині 5 є одним з набору стандартів IEC 60870 який визначає системи, що використовуються у віддаленому контролі (телемеханіці — диспетчерському контролі та зборі даних) у інженерній електриці та у застосунках автоматизації енергетичних систем. Частина 5 надає комунікаційний профіль для надсилання базових повідомлень віддаленого контролю між двома системами, який використовує постійні прямі підключення даних між системами.
 
 Шаблон наразі реалізує частину 104 (Ethernet транспорт) для клієнту та наступних сервісів: STARTDT, STOPDT, TESTFR, Ack, C_IC_NA_1 (100), C_CI_NA_1 (101), C_SC_NA_1 (45), M_SP_NA_1 (1), M_ME_NB_1 (11), M_ME_NC_1 (13), M_ME_TF_1 (36), C_CS_NA_1 (103). Для інформаційних сервісів підтримується ввімкнення та вимкнення послідовного (SQ) режиму.
@@ -3764,7 +3766,29 @@ License: GPLv2','IEC 60870 у частині 5 є одним з набору с�
 Спонсорування: Устьянцев Михайло
 Версія: 1.3.1
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
-using Special.FLibSYS;
+function getTm(iSq) {
+	ttm_ms = iSq.charCodeAt(1)*256 + iSq.charCodeAt(0);
+	ttm = SYS.mktime(ttm_ms/1000, iSq.charCodeAt(2)&0x3F, iSq.charCodeAt(3)&0x1F, iSq.charCodeAt(4)&0x1F, (iSq.charCodeAt(5)&0x0F)-1, 2000+(iSq.charCodeAt(6)&0x7F));
+	return ttm + ttm_ms*1e-3;
+}
+
+function inVal(aId, aVal, SIQ, wr, itm) {
+	if(!SIQ.isEVal() && (SIQ&0xF0)) aVal = EVAL;	else SIQ = 0;
+	if(wr.isEVal())	wr = false;
+	if(itm.isEVal())	itm = 0;
+	if(items[aId].isEVal()) {
+		items[aId] = itW = new Object();
+		itW.descr = aId;
+		itW.wr = wr; itW.alarm = 0;
+	} else itW = items[aId];
+	itW.val = aVal;
+	itW.SIQ = SIQ;	//For a specific quality processing
+	if((aO=this[aId])) {
+		aO.set(aVal, 0, 0, true);
+		if(itm && aO.arch())	aO.arch().setVal(1e6*itm, aVal);
+		if(itW.wr) oAVals[aId] = aVal;
+	}
+}
 
 if(f_start)	{
 	transport_ = "", tr = false;
@@ -3893,7 +3917,7 @@ else {
 
 			if(ASDU_id == 100) {
 				if(ASDU_reas == 7)			C_IC_NA_1con = true;	//ActCon
-				else if(ASDU_reas == 10)	C_IC_NA_1 = -1;// 1;	//ActTerm, repeate after 1 second
+				else if(ASDU_reas == 10)	C_IC_NA_1 = tmPoolAll;//-1;// 1;	//ActTerm, repeate after {tmPoolAll} second
 			}
 			else if(ASDU_id == 101) {
 				if(ASDU_reas == 7)			C_CI_NA_1con = true;	//ActCon
@@ -3905,16 +3929,31 @@ else {
 				else for(iEl = 0, iOff = 12; iEl < ASDU_els; iEl++, iOff += 1) {
 					if(!isSQ || !iEl)	{ IOA = (bufIn.charCodeAt(iOff+2)<<16) + (bufIn.charCodeAt(iOff+1)<<8) + bufIn.charCodeAt(iOff); iOff += 3; }
 					else IOA++;
-					SIQ = bufIn.charCodeAt(iOff);
-					aid = "di"+IOA;
-					if(items[aid].isEVal()) {
-						items[aid] = itW = new Object();
-						itW.descr = "DI["+IOA+"]";
-						itW.wr = false; itW.alarm = 0;
-					}
-					items[aid].val = SIQ&0x01;
-					items[aid].SIQ = SIQ;	//For a specific quality processing
-					if((aO=this[aid])) aO.set(items[aid].val, 0, 0, true);
+					inVal("di"+IOA, (SIQ=bufIn.charCodeAt(iOff))&0x01, SIQ);
+				}
+			}
+			else if(ASDU_id == 2) {	//M_SP_TA_1, Single-point information with timestamp
+				if((10+4+(ASDU_els-1)*(isSQ?8:11)) != seqSz)	SYS.messDebug("/IEC60870","M_SP_TA_1: "+tr("Items number is discrepancy to the package size"));
+				else for(iEl = 0, iOff = 12; iEl < ASDU_els; iEl++, iOff += 8) {
+					if(!isSQ || !iEl)	{ IOA = (bufIn.charCodeAt(iOff+2)<<16) + (bufIn.charCodeAt(iOff+1)<<8) + bufIn.charCodeAt(iOff); iOff += 3; }
+					else IOA++;
+					inVal("di"+IOA, (SIQ=bufIn.charCodeAt(iOff))&0x01, SIQ, false, getTm(bufIn.slice(iOff+1,iOff+8)));
+				}
+			}
+			else if(ASDU_id == 3) {	//M_DP_NA_1, Two-element information
+				if((10+4+(ASDU_els-1)*(isSQ?1:4)) != seqSz)	SYS.messDebug("/IEC60870","M_DP_NA_1: "+tr("Items number is discrepancy to the package size"));
+				else for(iEl = 0, iOff = 12; iEl < ASDU_els; iEl++, iOff += 1) {
+					if(!isSQ || !iEl)	{ IOA = (bufIn.charCodeAt(iOff+2)<<16) + (bufIn.charCodeAt(iOff+1)<<8) + bufIn.charCodeAt(iOff); iOff += 3; }
+					else IOA++;
+					inVal("di"+IOA, (((SIQ=bufIn.charCodeAt(iOff))&0x3)==0x3||(SIQ&0x3)==0)?EVAL:(SIQ&0x2)?true:false, SIQ);
+				}
+			}
+			else if(ASDU_id == 4) {	//M_DP_TA_1, Two-element information with timestamp
+				if((10+4+(ASDU_els-1)*(isSQ?8:11)) != seqSz)	SYS.messDebug("/IEC60870","M_DP_TA_1: "+tr("Items number is discrepancy to the package size"));
+				else for(iEl = 0, iOff = 12; iEl < ASDU_els; iEl++, iOff += 8) {
+					if(!isSQ || !iEl)	{ IOA = (bufIn.charCodeAt(iOff+2)<<16) + (bufIn.charCodeAt(iOff+1)<<8) + bufIn.charCodeAt(iOff); iOff += 3; }
+					else IOA++;
+					inVal("di"+IOA, (((SIQ=bufIn.charCodeAt(iOff))&0x3)==0x3||(SIQ&0x3)==0)?EVAL:(SIQ&0x2)?true:false, SIQ, false, getTm(bufIn.slice(iOff+1,iOff+8)));
 				}
 			}
 			else if(ASDU_id == 11) {	//M_ME_NB_1, Measured value, scaled value
@@ -3924,17 +3963,7 @@ else {
 					else IOA++;
 					val = (bufIn.charCodeAt(iOff+1)<<8) + bufIn.charCodeAt(iOff);
 					if(val > 32767) val -= 65536;
-					SIQ = bufIn.charCodeAt(iOff+2);
-					aid = "ai"+IOA;
-
-					if(items[aid].isEVal()) {
-						items[aid] = itW = new Object();
-						itW.descr = "AI["+IOA+"]";
-						itW.wr = false; itW.alarm = 0;
-					}
-					items[aid].val = val;
-					items[aid].SIQ = SIQ;	//For specific quality processing
-					if((aO=this[aid])) aO.set(items[aid].val, 0, 0, true);
+					inVal("ai"+IOA, val, bufIn.charCodeAt(iOff+2));
 				}
 			}
 			else if(ASDU_id == 13) {	//M_ME_NC_1, Measured value, short real value
@@ -3942,19 +3971,7 @@ else {
 				else for(iEl = 0, iOff = 12; iEl < ASDU_els; iEl++, iOff += 5) {
 					if(!isSQ || !iEl)	{ IOA = (bufIn.charCodeAt(iOff+2)<<16) + (bufIn.charCodeAt(iOff+1)<<8) + bufIn.charCodeAt(iOff); iOff += 3; }
 					else IOA++;
-					val = floatMergeWord(bufIn.charCodeAt(iOff+1)*256+bufIn.charCodeAt(iOff), bufIn.charCodeAt(iOff+3)*256+bufIn.charCodeAt(iOff+2));
-					SIQ = bufIn.charCodeAt(iOff+4);
-					aid = "ai"+IOA;
-
-					if(items[aid].isEVal()) {
-						items[aid] = itW = new Object();
-						itW.descr = "AI["+IOA+"]";
-						itW.wr = false; itW.alarm = 0;
-					}
-
-					items[aid].val = val;
-					items[aid].SIQ = SIQ;	//For specific quality processing
-					if((aO=this[aid]))	aO.set(items[aid].val, 0, 0, true);
+					inVal("ai"+IOA, Special.FLibSYS.floatMergeWord(bufIn.charCodeAt(iOff+1)*256+bufIn.charCodeAt(iOff),bufIn.charCodeAt(iOff+3)*256+bufIn.charCodeAt(iOff+2)), bufIn.charCodeAt(iOff+4));
 				}
 			}
 			else if(ASDU_id == 36) {	//M_ME_TF_1, Measured value, short real value with timestamp
@@ -3962,26 +3979,8 @@ else {
 				else for(iEl = 0, iOff = 12; iEl < ASDU_els; iEl++, iOff += 12) {
 					if(!isSQ || !iEl)	{ IOA = (bufIn.charCodeAt(iOff+2)<<16) + (bufIn.charCodeAt(iOff+1)<<8) + bufIn.charCodeAt(iOff); iOff += 3; }
 					else IOA++;
-					val = floatMergeWord(bufIn.charCodeAt(iOff+1)*256+bufIn.charCodeAt(iOff), bufIn.charCodeAt(iOff+3)*256+bufIn.charCodeAt(iOff+2));
-					SIQ = bufIn.charCodeAt(iOff+4);
-					aid = "ai"+IOA;
-
-					if(items[aid].isEVal()) {
-						items[aid] = itW = new Object();
-						itW.descr = "AI["+IOA+"]";
-						itW.wr = false; itW.alarm = 0;
-					}
-					// Getting the timestamp
-					ttm_ms = bufIn.charCodeAt(iOff+6)*256 + bufIn.charCodeAt(iOff+5);
-					ttm = SYS.mktime(ttm_ms/1000, bufIn.charCodeAt(iOff+7)&0x3F, bufIn.charCodeAt(iOff+8)&0x1F,
-						bufIn.charCodeAt(iOff+9)&0x1F, (bufIn.charCodeAt(iOff+10)&0x0F)-1, 2000+(bufIn.charCodeAt(iOff+11)&0x7F));
-
-					items[aid].val = val;
-					items[aid].SIQ = SIQ;	//For specific quality processing
-					if((aO=this[aid])) {
-						aO.set(items[aid].val, 0, 0, true);
-						if(aO.arch())	aO.arch().setVal(1e6*ttm+1000*floor(ttm_ms/1000), items[aid].val);
-					}
+					inVal("ai"+IOA, Special.FLibSYS.floatMergeWord(bufIn.charCodeAt(iOff+1)*256+bufIn.charCodeAt(iOff),bufIn.charCodeAt(iOff+3)*256+bufIn.charCodeAt(iOff+2)), bufIn.charCodeAt(iOff+4),
+						false, getTm(bufIn.slice(iOff+5,iOff+12)));
 				}
 			}
 			else if(ASDU_id == 45) {	//C_SC_NA_1, Single-point confirm
@@ -3989,11 +3988,7 @@ else {
 				else for(iEl = 0, iOff = 12; iEl < ASDU_els; iEl++, iOff += 1) {
 					if(!isSQ || !iEl)	{ IOA = (bufIn.charCodeAt(iOff+2)<<16) + (bufIn.charCodeAt(iOff+1)<<8) + bufIn.charCodeAt(iOff); iOff += 3; }
 					else IOA++;
-					SIQ = bufIn.charCodeAt(iOff);
-					aid = "do" + IOA;
-					items[aid].val = SIQ&0x01;
-					items[aid].SIQ = SIQ;	//For a specific quality processing
-					if((aO=this[aid])) { aO.set(items[aid].val, 0, 0, true); oAVals[aid] = items[aid].val; }
+					inVal("do"+IOA, (SIQ=bufIn.charCodeAt(iOff))&0x01, SIQ);
 				}
 				C_SC_NA_1 = 0;
 			}
@@ -4105,7 +4100,7 @@ if(t_err.length) {
 	}
 	f_err = t_err;
 }
-else f_err = "0";','','',1573561958);
+else f_err = "0";','','',1574605839);
 INSERT INTO tmplib_DevLib VALUES('SSCP','Shark Slave Communication Protocol','','','Shark Slave Communication Protocol from EnergoCentrum PLUS, s.r.o.
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Costumer Faster CZ (http://faster.cz)
@@ -4759,12 +4754,12 @@ if(tErr.length) {
 	f_err = tErr;
 }
 else f_err = "0";','','',1512241411);
-INSERT INTO tmplib_DevLib VALUES('ModBusScan','ModBus scanner','Сканер ModBus','Сканер ModBus','ModBus scanner for Coils (1), Input Coils (2), Registers (3), Input Registers (4); in the range [0...65535]. The template useful to examine unknown ModBus devices, scanning their Coils'' and Registers'' map for detecting the available data addresses. The scanning performs per one item, whether it is a coil or a register, to prevent the data unavailability for strict data accessing devices.
+INSERT INTO tmplib_DevLib VALUES('ModBusScan','ModBus scanner','Сканер ModBus','Сканер ModBus','ModBus scanner for Coils (1), Input Coils (2), Registers (3), Input Registers (4); in the range [0...65535]. The template useful to examine unknown ModBus devices, scanning their Coils'' and Registers'' map for detecting the available data addresses. The scanning performs per one item, whether it is a coil or a register, to prevent the data unavailability for strict data accessing devices. The protocol ModBus itself implemented by the OpenSCADA module DAQ.ModBus, together which the template designed to use.
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: SVItoVYR LTD
 Version: 1.0.2
-License: GPLv2','Сканер ModBus щодо Кілець (1), Вхідних Кілець (2), Регістрів (3), Вхідних Регістрів (4); у діапазоні [0...65535]. Шаблон корисний для вивчення невідомих пристроїв ModBus, скануванням їх мапи Кілець та Регістрів для виявлення наявних адрес даних. Сканування відбувається по одному елементу, чи то кільцю чи регістру, для попередження недоступності даних на пристроях суворого доступу даних.
+License: GPLv2','Сканер ModBus щодо Кілець (1), Вхідних Кілець (2), Регістрів (3), Вхідних Регістрів (4); у діапазоні [0...65535]. Шаблон корисний для вивчення невідомих пристроїв ModBus, скануванням їх мапи Кілець та Регістрів для виявлення наявних адрес даних. Сканування відбувається по одному елементу, чи то кільцю чи регістру, для попередження недоступності даних на пристроях суворого доступу даних. Сам протокол ModBus реалізовано модулем OpenSCADA DAQ.ModBus, разом з яким шаблон і передбачено до використання.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: ТОВ "СВІТоВИР"
@@ -4794,7 +4789,7 @@ for(stTm = SYS.time(); begin < end && begin < 65536 && (SYS.time()-stTm) < lim; 
 		res += begin.toString() + ":\t" + (rez.length?rez:pdu.charCodeAt(2)*256+pdu.charCodeAt(3))  + "\n";
 	}
 }
-type_ = type, begin_ = begin;','','',1567952035);
+type_ = type, begin_ = begin;','','',1574605208);
 INSERT INTO tmplib_DevLib VALUES('pulsarM','Pulsar-M','Пульсар-М','Пульсар-М','Pulsar-M counters protocol
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Zubarev Dmitry (IP INTEGRAL<http://kip-i-a.pro>)
@@ -5180,10 +5175,13 @@ else {
 
 f_err = t_err;
 if(!f_err.toInt())	f_err += t_inf + (t_infW.length?" "+tr("Write")+t_infW:"");','','',1544882666);
-INSERT INTO tmplib_DevLib VALUES('DCON_Prt','DCON Protocol + Input AI','','','Input and output part of the protocol DCON implementation with the input part designed for typical AI module at up to 20 channels.
+INSERT INTO tmplib_DevLib VALUES('DCON_Prt','DCON Protocol + Input AI','','','Input and output part of the protocol DCON implementation with the input part designed for typical AI module at up to 20 channels. The protocol DCON client part also implemented by the OpenSCADA module DAQ.DCON.
+
 The DCON commands are supported: #AA
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.1','','',10,0,'JavaLikeCalc.JavaScript
+Version: 1.0.1
+License: GPLv2','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	io = tr = EVAL;
 
 function CRC( inS ) {
@@ -5263,11 +5261,14 @@ if(req[0] == "#") {	//Commands #AA
 if(enCRC) answer += (CRC(answer)&0xFF).toString(16,2);
 answer += "\r";
 
-return true;','','',1551028560);
-INSERT INTO tmplib_DevLib VALUES('DCON_Prt_DI','DCON Protocol + Input DI','','','Input and output part of the protocol DCON implementation with the input part designed for typical DI module at up to 32 channels.
+return true;','','',1574605398);
+INSERT INTO tmplib_DevLib VALUES('DCON_Prt_DI','DCON Protocol + Input DI','','','Input and output part of the protocol DCON implementation with the input part designed for typical DI module at up to 32 channels. The protocol DCON client part also implemented by the OpenSCADA module DAQ.DCON.
+
 The DCON commands are supported: @AA, $AA6
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.1','','',10,0,'JavaLikeCalc.JavaScript
+Version: 1.0.1
+License: GPLv2','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	io = tr = EVAL;
 
 function CRC( inS ) {
@@ -5352,11 +5353,14 @@ if(req[0] == "@" || (req[0] == "$" && req[3] == "6")) {	//Commands @AA and $AA6
 if(enCRC) answer += (CRC(answer)&0xFF).toString(16,2);
 answer += "\r";
 
-return true;','','',1551028549);
-INSERT INTO tmplib_DevLib VALUES('DCON_Prt_AO','DCON Protocol + Input AO','','','Input and output part of the protocol DCON implementation with the input part designed for typical AO module at up to 8 channels.
+return true;','','',1574605398);
+INSERT INTO tmplib_DevLib VALUES('DCON_Prt_AO','DCON Protocol + Input AO','','','Input and output part of the protocol DCON implementation with the input part designed for typical AO module at up to 8 channels. The protocol DCON client part also implemented by the OpenSCADA module DAQ.DCON.
+
 The DCON commands are supported: $AA8N, #AAN{Data}
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.1','','',10,0,'JavaLikeCalc.JavaScript
+Version: 1.0.1
+License: GPLv2','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	io = tr = EVAL;
 
 function CRC( inS ) {
@@ -5441,11 +5445,14 @@ else answer = "?";	//return true;
 if(enCRC) answer += (CRC(answer)&0xFF).toString(16,2);
 answer += "\r";
 
-return true;','','',1551028555);
-INSERT INTO tmplib_DevLib VALUES('DCON_Prt_DO','DCON Protocol + Input DO','','','Input and output part of the protocol DCON implementation with the input part designed for typical DO module at up to 32 channels.
+return true;','','',1574605398);
+INSERT INTO tmplib_DevLib VALUES('DCON_Prt_DO','DCON Protocol + Input DO','','','Input and output part of the protocol DCON implementation with the input part designed for typical DO module at up to 32 channels. The protocol DCON client part also implemented by the OpenSCADA module DAQ.DCON.
+
 The DCON commands are supported: @AA, @AA{Data}
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.1','','',10,0,'JavaLikeCalc.JavaScript
+Version: 1.0.1
+License: GPLv2','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	io = tr = EVAL;
 
 function CRC( inS ) {
@@ -5538,10 +5545,12 @@ else answer = "?";	//return true;
 if(enCRC) answer += (CRC(answer)&0xFF).toString(16,2);
 answer += "\r";
 
-return true;','','',1551028536);
+return true;','','',1574605398);
 INSERT INTO tmplib_DevLib VALUES('DNP3','Distributed Network Protocol 3','','','Distributed Network Protocol 3 (DNP3) is a set of communications protocols used between components in process automation systems. Its main use is in utilities such as electric and water companies. Usage in other industries is not common. It was developed for communications between various types of data acquisition and control equipment. Competing standards include the older Modbus protocol and the newer IEC 61850 protocol and IEC 61870.
 
-The template implements currently for the client, which tested for the followed functions:
+The template implements currently for the client, which uses the followed functions: Confirm (0x00), Read (0x01), Write (0x02), Enable (0x14) and Disable (0x15) Spontaneous Messages.
+
+And which implements and tested for the followed point-oriented objects (data types):
 - 1.[2] — Binary Input [with status]
 - 2.[1] — Binary Input Changed [w/o time]
 - 3.[2] — Double-bit Input [with status]
@@ -5984,7 +5993,7 @@ if(t_err.toInt()) {
 	}
 }
 f_err = t_err;
-','','',1574187622);
+','','',1574605544);
 CREATE TABLE IF NOT EXISTS 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO tmplib_PrescrTempl VALUES('timer','Timer','Таймер','Таймер','Typical timer. Hold run up to time elapse.','Типовий таймер. Утримує виконання до завершення часу.','Типовой таймер. Удерживает выполнение до завершения времени.',10,0,'JavaLikeCalc.JavaScript
 //Reset to default
@@ -9413,7 +9422,7 @@ return obuf;','','',1560098890);
 INSERT INTO lib_servProc VALUES('docOffLine','EXT: Off-line documentation','','','Procedure of forming the offline documentation of OpenSCADA from Wiki by reading and processing the specified Wiki pages on different languages, currently it is: English, Ukrainian, Russian.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.0','','',1,300,0,'trNm = "offLine";
+Version: 1.1.0','','',1,300,0,'trNm = "offLine";
 docHost = "oscada.org:80";
 docHost_ = "http://" + docHost.parse(0, ":");
 defLang = "en";
@@ -9549,14 +9558,17 @@ for(var ip in pgsOprc) {
 	for(iEl = 0; iEl < anchs.length; iEl++) {
 		href = anchs[iEl].attr("href");
 		if(href[0] == "/") {
+			if((tVl=href.lastIndexOf("#")) >= 0)	hTag = href.slice(tVl), href = href.slice(0, tVl);
+			else hTag = "";
+
 			dynLngPg = (href.indexOf("/wiki/Special:MyLanguage/") == 0) ? href.slice(25) : "";
 			stLngPg = (!dynLngPg.length && href.indexOf("/wiki/") == 0) ? href.slice(6) : "";
 			if(dynLngPg.length && (!(tDst=pgsO[dynLngPg+"/"+pLang]).isEVal() || !(tDst=pgsO[stLngPg]).isEVal()))
-					anchs[iEl].setAttr("href", topDir+tDst);
+					anchs[iEl].setAttr("href", topDir+tDst+hTag);
 			else if(dynLngPg.length && !(tDst=pgsO[dynLngPg+"/"+defLang]).isEVal())
-					anchs[iEl].setAttr("href", topDir+"../"+defLang+"/"+tDst);
+					anchs[iEl].setAttr("href", topDir+"../"+defLang+"/"+tDst+hTag);
 			else {
-				anchs[iEl].setAttr("href", docHost_+href);
+				anchs[iEl].setAttr("href", docHost_+href+hTag);
 				if(!anchs[iEl].attr("class").length)	anchs[iEl].setAttr("class", "external");
 			}
 			lnkCnt++;
@@ -9568,7 +9580,7 @@ for(var ip in pgsOprc) {
 	//SYS.messInfo("OffLine", "TEST 00: pLang="+pLang);
 }
 
-res = "0: Fetched and processed pages="+pCnt+"; images="+imgCnt+"; links="+lnkCnt+"; languages="+lngCnt;','','',1560097197);
+res = "0: Fetched and processed pages="+pCnt+"; images="+imgCnt+"; links="+lnkCnt+"; languages="+lngCnt;','','',1574613959);
 CREATE TABLE IF NOT EXISTS 'flb_regEl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO flb_regEl VALUES('pidUnif','PID (unified)','ПІД (уніфікований)','ПИД (унифицированный)','Composite-unified analog and pulse PID. At the heart of the regulator is core a standard analog PID controller from the library FLibComplex1 and the implementation of the PWM for the pulse part.
 
@@ -13611,28 +13623,48 @@ rez = pgTree.save();
 //SYS.messDebug("TEST Dev","TEST 00: "+typeof(devLs[formEl["cat"]+"."+itId]));',1377261537);
 INSERT INTO flb_web VALUES('diagram','Diagram','','','',1,10,0,'im = SYS.XMLNode();
 im.load(tmpl, false, 3);
-if(!(drawArea=im.getElementBy("drawArea")) ||
-		!(scVert=im.getElementBy("scVert")) ||
-		!(scHor=im.getElementBy("scHor")))
+if(!(drawArea=im.getElementBy("drawArea")) || !(scVer=im.getElementBy("scVer")) || !(scHor=im.getElementBy("scHor")) ||
+		(styles=im.getElementsBy("style")[0]).isEVal())
 	return "";
+
+//Constant
+FD_GRD = 0x1;
+FD_MARKS = 0x2;
+FD_LOG = 0x4;
+
+if(!end)	end = SYS.time();
+begin = end - size;
+reqPer = size/vsz;
 
 //Getting the trends data
 trends = new Array();
 for(off = 0; (tEl=srcs.parseLine(0,off)).length; ) {
 	elO = new Object();
 	elO.addr = tEl.parse(0, ":");
-	if(!(srcO=SYS.nodeAt(elO.addr)))	continue;
-	if(typeof(srcO) == "TCntrNode:TVal")	srcO = srcO.arch();
-	if(typeof(srcO) != "TCntrNode:TVArchive")	continue;
-	elO.srcO = srcO;
+	if(!(elO.srcO=SYS.nodeAt(elO.addr)))	continue;
+	if(typeof(elO.srcO) == "TCntrNode:TVal")	elO.srcO = elO.srcO.arch();
+	if(typeof(elO.srcO) != "TCntrNode:TVArchive")	continue;
 	elO.min = tEl.parse(1, ":"); elO.max = tEl.parse(2, ":");
 	elO.color = tEl.parse(3, ":");
+	elO.scale = tEl.parse(4, ":").toInt();
+	elO.width = max(1, tEl.parse(5,":").toInt());
+	elO.beg = begin*1e6; elO.per = reqPer*1e6;
+	elO.val = elO.srcO.getVals(elO.beg, end*1e6, elO.per);
 	trends.push(elO);
 }
 
 im.setAttr("width", hsz).setAttr("height", vsz).setAttr("viewBox", "0 0 "+hsz+" "+vsz);
 
-mrkFontSize = 12;	//????
+//Getting the labels font
+if(!(tVl=im.attr("sclMarkFont")).length)	tVl = "Arial "+max(5,floor(hsz/50));
+off = 0;
+styles.setText("\ntext { font-family: "+tVl.parse(0," ",off)+"; font-size: "+(mrkFontSize=tVl.parse(0," ",off).toInt())+"px; "
+		"font-weight: "+(tVl.parse(0," ",off).toInt()?"bold":"normal")+"; font-style: "+(tVl.parse(0," ",off).toInt()?"italic":"normal")+"; }" + styles.text());
+sclHor = (tVl=im.attr("sclHor")).length ? tVl.toInt() : FD_MARKS;
+sclVer = (tVl=im.attr("sclVer")).length ? tVl.toInt() : FD_MARKS|FD_GRD;
+if(!(sclColor=im.attr("sclColor")).length)			sclColor = "gray";
+if(!(sclMarkColor=im.attr("sclMarkColor")).length)	sclMarkColor = "gray";
+
 mrkFontWRange = 0.7;
 mrkWidth = 5*mrkFontSize*mrkFontWRange;
 mrkHeight = mrkFontSize;
@@ -13641,20 +13673,144 @@ tArMrg = 2;
 tArX	= tArMrg;
 tArW	= hsz - tArX - tArMrg;
 tArY	= tArMrg;
-tArH	= vsz - tArY - tArMrg - mrkHeight*2;
+tArH	= vsz - tArY - tArMrg;
+if(sclHor&FD_MARKS) {
+	if(tArH < 100) sclHor = sclHor & ~(FD_MARKS);
+	else tArH -= mrkHeight*2;
+}
 
-scVert.childAdd("rect").setAttr("x",tArX).setAttr("y",tArY).setAttr("width",1).setAttr("height",tArH);
-scVert.childAdd("rect").setAttr("x",tArX+tArW).setAttr("y",tArY).setAttr("width",1).setAttr("height",tArH);
-scHor.childAdd("rect").setAttr("x",tArX).setAttr("y",tArY+tArH).setAttr("width",tArW).setAttr("height",1);
-scHor.childAdd("rect").setAttr("x",tArX).setAttr("y",tArY).setAttr("width",tArW).setAttr("height",1);
+//Calculating the vertical scale
+vsPerc = true;			//Vertical scale percent mode
+isLog = sclVer&FD_LOG;		//Logarithmic scale
+vsMax = -3e300, vsMin = 3e300;	//Trend''s vertical scale border
 
-if(!end)	end = SYS.time();
-begin = end - size;
-reqPer = size/vsz;
+// Get main scale for non individual parameters
+prmInGrp = 0, prmGrpLast = -1;
+for(iP = 0, mainPerc = false; iP < trends.length; iP++) {
+	cP = trends[iP];
+	if(!cP.val.length || !cP.color.length) continue;
+	cP.adjU = -3e300, cP.adjL = 3e300;
+	if(cP.max > cP.min)	{ cP.adjL = cP.min; cP.adjU = cP.max; }
+	else for(iDt = 0; iDt < cP.val.length; iDt++)
+		if(!cP.val[iDt].isEVal()) { cP.adjL = min(cP.adjL, cP.val[iDt]); cP.adjU = max(cP.adjU, cP.val[iDt]); }
+
+	cP.wScale = cP.scale&(sclVer|FD_LOG);
+	if(cP.wScale&(FD_MARKS|FD_GRD))	continue;
+
+	//  Check for value border allow
+	if(!mainPerc && (vsMin > vsMax || max(abs((vsMax-cP.adjL)/(vsMax-vsMin)-1),abs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2))
+	{ vsMin = min(vsMin, cP.adjL); vsMax = max(vsMax, cP.adjU); }
+	else { vsMax = -3e300; vsMin = 3e300; mainPerc = true; }
+
+	prmInGrp++; prmGrpLast = iP;
+}
+
+// Checking for individual parameters and for the possibility to merge their to groups or create a new one for no group
+prmIndiv = 0, prmIndivSc = -1, prmsInd = new Array();
+for(iP = 0; iP < trends.length; iP++) {
+	cP = trends[iP];
+	cP.isIndiv = false;
+	if(!cP.val.length || !cP.color.length || !(cP.wScale&(FD_MARKS|FD_GRD))) continue;
+	// Checking for include to the present one or create a new group and exclude from individual ones
+	if((!prmInGrp || (vsMin < vsMax && max(abs((vsMax-cP.adjL)/(vsMax-vsMin)-1),abs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2)) &&
+			(cP.scale&FD_LOG) == (sclVer&FD_LOG))
+	{
+		vsMin = min(vsMin, cP.adjL); vsMax = max(vsMax, cP.adjU);
+		prmInGrp++; prmGrpLast = iP;
+		continue;
+	}
+	cP.isIndiv = true;
+	prmIndiv++;
+	if(prmIndivSc < 0 && (cP.scale&FD_GRD)) prmIndivSc = iP;
+	else prmsInd.push(iP);
+	if(cP.scale&FD_LOG) {
+		cP.adjU = lg(max(1e-100,cP.adjU)); cP.adjL = lg(max(1e-100,cP.adjL));
+		if((cP.adjU-cP.adjL) / abs(cP.adjL+(cP.adjU-cP.adjL)/2) < 0.0001) {
+			wnt_dp = 0.0001*abs(cP.adjL+(cP.adjU-cP.adjL)/2)-(cP.adjU-cP.adjL);
+			cP.adjL -= wnt_dp/2; cP.adjU += wnt_dp/2;
+		}
+	}
+}
+if(prmInGrp) prmsInd.push(-1);
+if(prmIndivSc >= 0) prmsInd.push(prmIndivSc);
+
+// Final main scale adapting
+if(vsMin > vsMax) { vsPerc = true; vsMax = 100; vsMin = isLog ? pow(10,min(0,2-(tArH/150))) : 0; }
+else vsPerc = false;
+if(isLog) {
+	vsMax = lg(max(1e-100,vsMax)); vsMin = lg(max(1e-100,vsMin));
+	if((vsMax-vsMin) / abs(vsMin+(vsMax-vsMin)/2) < 0.0001) {
+		wnt_dp = 0.0001*abs(vsMin+(vsMax-vsMin)/2)-(vsMax-vsMin);
+		vsMin -= wnt_dp/2; vsMax += wnt_dp/2;
+	}
+}
+
+//Draw main and individual vertical scales
+vmax_ln = tArH / ((sclVer&FD_MARKS)?(2*mrkHeight):15);
+for(iP = 0; vmax_ln >= 2 && iP < prmsInd.length; iP++) {	//prmsInd[i]=-1 - for main scale
+	vDiv = 1;
+	if(prmsInd[iP] < 0) {	//Main scale process
+		// Draw the environment
+		vsPercT = vsPerc;
+		isLogT = isLog;
+		sclVerT = sclVer;
+		clrGridT = sclColor;
+		clrMrk = sclMarkColor;
+		if(prmInGrp == 1 && prmGrpLast >= 0)	//Set color for single parameter in main group
+			clrGridT = clrMrk = trends[prmGrpLast].color;
+		// Rounding
+		v_len = vsMax - vsMin;
+		while(v_len > vmax_ln)						{ vDiv *= 10; v_len /= 10; }
+		while(v_len && v_len < vmax_ln/10)	{ vDiv /= 10; v_len *= 10; }
+		vsMin = floor(vsMin/vDiv)*vDiv; vsMax = ceil(vsMax/vDiv)*vDiv;
+		while(!isLogT && ((vsMax-vsMin)/vDiv) < vmax_ln/2) vDiv /= 2;
+		vsMinT = vsMin; vsMaxT = vsMax;
+	}
+	else {	//Individual scale process
+		cP = trends[prmsInd[iP]];
+		// Draw environment
+		vsPercT = false;
+		isLogT = cP.scale&FD_LOG;
+		sclVerT = cP.wScale;
+		clrGridT = clrMrk = cP.color;
+		// Rounding
+		v_len = cP.adjU - cP.adjL;
+		while(v_len > vmax_ln)						{ vDiv *= 10; v_len /= 10; }
+		while(v_len && v_len < vmax_ln/10)	{ vDiv /= 10; v_len *= 10; }
+		cP.adjL = floor(cP.adjL/vDiv)*vDiv; cP.adjU = ceil(cP.adjU/vDiv)*vDiv;
+		while(!isLogT && ((cP.adjU-cP.adjL)/vDiv) < vmax_ln/2) vDiv /= 2;
+		vsMinT = cP.adjL; vsMaxT = cP.adjU;
+	}
+	if(iP < (prmsInd.length-1))	sclVerT = sclVerT&(~FD_GRD);	//Hide grid for not last scale
+
+	// Draw vertical grid and markers
+	markWdth = 0;
+	if(sclVerT&(FD_MARKS|FD_GRD)) {
+		scVer.childAdd("rect").setAttr("fill",clrGridT).setAttr("x",tArX-1).setAttr("y",tArY).setAttr("width",1).setAttr("height",tArH);
+		SYS.messInfo("DG","TEST 00: vsMinT="+vsMinT+"; vDiv="+vDiv+"; iV="+(ceil(vsMinT/vDiv)*vDiv));
+		for(iV = floor((vsMinT/vDiv)+0.5)*vDiv; (vsMaxT-iV)/vDiv > -0.1; iV += vDiv) {
+			//  Draw grid
+			v_pos = tArY + tArH - tArH*(iV-vsMinT)/(vsMaxT-vsMinT);
+			if(sclVerT&FD_GRD)	scVer.childAdd("rect").setAttr("fill",sclColor).setAttr("x",tArX).setAttr("y",floor(v_pos+0.5)).setAttr("width",tArW).setAttr("height",1);
+			else	scVer.childAdd("rect").setAttr("fill",clrGridT).setAttr("x",tArX-3).setAttr("y",floor(v_pos+0.5)).setAttr("width",6).setAttr("height",1);
+			//  Draw markers
+			if(sclVerT&FD_MARKS) {
+				isPerc = vsPercT && ((vsMaxT-iV-vDiv)/vDiv <= -0.1);
+				isMax = (v_pos-1-mrkHeight) < tArY;
+				labVal = (isLogT?pow(10,iV):iV).toPrecision(5) + (isPerc?" %":"");
+				scVer.childAdd("text").setAttr("text-anchor","left").setAttr("stroke","none")
+						.setAttr("fill", clrMrk)
+						.setAttr("x",tArX+2).setAttr("y",floor(v_pos-1+(isMax?mrkHeight:0)+0.5)).setText(labVal);
+				markWdth = max(markWdth, labVal.length*mrkFontSize*mrkFontWRange);
+			}
+		}
+	}
+	if(iP < (prmsInd.length-1)) { tArX += markWdth?(markWdth+5):0; tArW -= markWdth?(markWdth+5):0; }
+}
 
 //Calc and draw the horizontal scale
 hDiv = 1;			//Horisontal scale divisor
-hmax_ln = tArW / mrkWidth;
+hmax_ln = tArW / ((sclHor&FD_MARKS)?mrkWidth:15);
 if(hmax_ln >= 2) {
 	hvLev = 0;
 	hLen = end - begin;
@@ -13676,132 +13832,140 @@ if(hmax_ln >= 2) {
 	UTChourDt = SYS.strptimegm(SYS.strftime(end)) - end;
 
 	// Draw the horisontal grid and markers
-	tm_t = 0;
-	lab_tm = lab_dt = "";
-	//  Draw full trend''s data and time to the trend end position
-	begMarkBrd = -5;
-	endMarkBrd = tArX + tArW;
+	if(sclHor&(FD_MARKS|FD_GRD)) {
+		tm_t = 0;
+		lab_tm = lab_dt = "";
 
-	lab_dt = SYS.strftime(end, "%d-%m-%Y");
-	if((end%60) == 0 && (end-floor(end)) == 0)
-		lab_tm = SYS.strftime(end, "%H:%M");
-	else if((end-floor(end)) == 0)
-		lab_tm = SYS.strftime(end, "%H:%M:%S");
-	else lab_tm = SYS.strftime(end, "%H:%M:%S")+"."+(end-floor(end));
+		//  Draw generic grid line
+		scHor.childAdd("rect").setAttr("fill",sclColor).setAttr("x",floor(tArX+0.5)).setAttr("y",floor(tArY+tArH+0.5)).setAttr("width",floor(tArW+0.5)).setAttr("height",1);
 
-	if(hvLev < 6) {
-		scHor.childAdd("text").setAttr("text-anchor","end").setAttr("stroke","none")
-			.setAttr("fill", "black")
-			.setAttr("x",tArX+tArW).setAttr("y",tArY+tArH+2*mrkHeight).setText(lab_tm);
-		endMarkBrd = min(endMarkBrd, tArX + tArW - mrkFontSize*lab_tm.length*mrkFontWRange);
-	}
-	scHor.childAdd("text").setAttr("text-anchor","end").setAttr("stroke","none")
-		.setAttr("fill", "black")
-		.setAttr("x",tArX+tArW).setAttr("y",tArY+tArH+mrkHeight).setText(lab_dt);
-	endMarkBrd = min(endMarkBrd, tArX + tArW - mrkFontSize*lab_dt.length*mrkFontWRange);
-}
+		//  Draw full trend''s data and time to the trend end position
+		begMarkBrd = -5;
+		endMarkBrd = tArX + tArW;
+		if((sclHor&FD_MARKS) && mrkHeight) {
+			lab_dt = SYS.strftime(end, "%d-%m-%Y");
+			if((end%60) == 0 && (end-floor(end)) == 0)
+				lab_tm = SYS.strftime(end, "%H:%M");
+			else if((end-floor(end)) == 0)
+				lab_tm = SYS.strftime(end, "%H:%M:%S");
+			else lab_tm = SYS.strftime(end, "%H:%M:%S")+"."+(end-floor(end));
 
-//  Draw grid and/or markers
-first_m = true;
-ttm1 = new Object();
-for(i_h = begin; true; ) {
-	//   Draw grid
-	h_pos = tArX + tArW*(i_h-begin)/(end-begin);
+			if(hvLev < 6) {
+				scHor.childAdd("text").setAttr("text-anchor","end").setAttr("stroke","none")
+					.setAttr("fill",sclMarkColor)
+					.setAttr("x",tArX+tArW).setAttr("y",tArY+tArH+2*mrkHeight).setText(lab_tm);
+				endMarkBrd = min(endMarkBrd, tArX + tArW - mrkFontSize*lab_tm.length*mrkFontWRange);
+			}
+			scHor.childAdd("text").setAttr("text-anchor","end").setAttr("stroke","none")
+				.setAttr("fill",sclMarkColor)
+				.setAttr("x",tArX+tArW).setAttr("y",tArY+tArH+mrkHeight).setText(lab_dt);
+			endMarkBrd = min(endMarkBrd, tArX + tArW - mrkFontSize*lab_dt.length*mrkFontWRange);
+		}
 
-	if(i_h > begin && i_h < end)
-		scHor.childAdd("rect").setAttr("x",h_pos.toFixed(2)).setAttr("y",(tArY+tArH-3).toFixed(2)).setAttr("width",1).setAttr("height",6);
+		//  Draw grid and/or markers
+		first_m = true;
+		ttm1 = new Object();
+		for(i_h = begin; true; ) {
+			//   Draw grid
+			h_pos = tArX + tArW*(i_h-begin)/(end-begin);
+			if(sclHor&FD_GRD)
+				scHor.childAdd("rect").setAttr("fill",sclColor).setAttr("x",floor(h_pos+0.5)).setAttr("y",floor(tArY+0.5)).setAttr("width",1).setAttr("height",tArH);
+			else scHor.childAdd("rect").setAttr("fill",sclColor).setAttr("x",floor(h_pos+0.5)).setAttr("y",floor(tArY+tArH-3+0.5)).setAttr("width",1).setAttr("height",6);
 
-	//   Draw markers
-	if(!((i_h+UTChourDt)%hDiv) && i_h != end) {
-		if(first_m)	SYS.localtime(begin-(end-begin), ttm1.sec, ttm1.min, ttm1.hour, ttm1.mday, ttm1.mon);
-		ttm = new Object();
-		SYS.localtime(i_h, ttm.sec, ttm.min, ttm.hour, ttm.mday, ttm.mon);
+			//   Draw markers
+			if((sclHor&FD_MARKS) && !((i_h+UTChourDt)%hDiv) && i_h != end) {
+				if(first_m)	SYS.localtime(begin-(end-begin), ttm1.sec, ttm1.min, ttm1.hour, ttm1.mday, ttm1.mon);
+				ttm = new Object();
+				SYS.localtime(i_h, ttm.sec, ttm.min, ttm.hour, ttm.mday, ttm.mon);
 
-		chLev = 0;
-		if((ttm.mon-ttm1.mon) || (ttm.year-ttm1.year)) chLev = 5;
-		else if(ttm.mday-ttm1.mday)	chLev = 4;
-		else if(ttm.hour-ttm1.hour)	chLev = 3;
-		else if(ttm.min-ttm1.min)		chLev = 2;
-		else if(ttm.sec-ttm1.sec)		chLev = 1;
+				chLev = 0;
+				if((ttm.mon-ttm1.mon) || (ttm.year-ttm1.year)) chLev = 5;
+				else if(ttm.mday-ttm1.mday)	chLev = 4;
+				else if(ttm.hour-ttm1.hour)	chLev = 3;
+				else if(ttm.min-ttm1.min)		chLev = 2;
+				else if(ttm.sec-ttm1.sec)		chLev = 1;
 
-		//Checking for the data presence
-		lab_dt = lab_tm = "";
-		//Date
-		if(/*hvLev == 5 ||*/ chLev >= 4)
-			lab_dt = SYS.strftime(i_h, (chLev>=5)?"%d-%m-%Y":"%d");
-		//Hours and minuts
-		if((hvLev == 4 || hvLev == 3 || ttm.hour || ttm.min) && !ttm.sec)
-			lab_tm = SYS.strftime(i_h, "%H:%M");
-		//Seconds
-		else if((hvLev == 2 || ttm.sec) && !((i_h-floor(i_h))*1e6))
-			lab_tm = (chLev >= 2) ? SYS.strftime(i_h, "%H:%M:%S") : SYS.strftime(i_h, "%S");
-		//Milliseconds
-		else if(hvLev <= 1 || (i_h-floor(i_h))*1e6)
-			lab_tm = (chLev >= 2) ? SYS.strftime(i_h, "%H:%M:%S")+(i_h-floor(i_h)) :
-						(chLev >= 1) ? SYS.strftime(i_h, "%S")+"."+(i_h-floor(i_h))+tr("s") :
-											(1e3*i_h).toPrecision(6)+tr("ms");
+				//Checking for the data presence
+				lab_dt = lab_tm = "";
+				//Date
+				if(/*hvLev == 5 ||*/ chLev >= 4)
+					lab_dt = SYS.strftime(i_h, (chLev>=5)?"%d-%m-%Y":"%d");
+				//Hours and minuts
+				if((hvLev == 4 || hvLev == 3 || ttm.hour || ttm.min) && !ttm.sec)
+					lab_tm = SYS.strftime(i_h, "%H:%M");
+				//Seconds
+				else if((hvLev == 2 || ttm.sec) && !((i_h-floor(i_h))*1e6))
+					lab_tm = (chLev >= 2) ? SYS.strftime(i_h, "%H:%M:%S") : SYS.strftime(i_h, "%S");
+				//Milliseconds
+				else if(hvLev <= 1 || (i_h-floor(i_h))*1e6)
+					lab_tm = (chLev >= 2) ? SYS.strftime(i_h, "%H:%M:%S")+(i_h-floor(i_h)) :
+								(chLev >= 1) ? SYS.strftime(i_h, "%S")+"."+(i_h-floor(i_h))+tr("s") :
+													(1e3*i_h).toPrecision(6)+tr("ms");
 
-		endPosTm = endPosDt = 0, markY = tArY + tArH + mrkHeight;
-		if(hvLev < 6) {
-			if(lab_tm.length) {
-				wdth = mrkFontSize*lab_tm.length*mrkFontWRange;
-				tpos = max(h_pos-wdth/2, 0);
-				if((tpos+wdth) < endMarkBrd && tpos > begMarkBrd) {
-					scHor.childAdd("text").setAttr("text-anchor","middle").setAttr("stroke","none")
-						.setAttr("fill", "black")
-						.setAttr("x",h_pos.toFixed(2)).setAttr("y",markY.toFixed(2)).setText(lab_tm);
-					endPosTm = tpos+wdth;
+				endPosTm = endPosDt = 0, markY = tArY + tArH + mrkHeight;
+				if(hvLev < 6) {
+					if(lab_tm.length) {
+						wdth = mrkFontSize*lab_tm.length*mrkFontWRange;
+						tpos = max(h_pos-wdth/2, 0);
+						if((tpos+wdth) < endMarkBrd && tpos > begMarkBrd) {
+							scHor.childAdd("text").setAttr("text-anchor","middle").setAttr("stroke","none")
+								.setAttr("fill",sclMarkColor)
+								.setAttr("x",floor(h_pos+0.5)).setAttr("y",floor(markY+0.5)).setText(lab_tm);
+							endPosTm = tpos+wdth;
+						}
+					}
+					markY += mrkHeight;
 				}
+				if(lab_dt.size()) {
+					wdth = mrkFontSize*lab_dt.length*mrkFontWRange;
+					tpos = max(h_pos-wdth/2, 0);
+					if((tpos+wdth) < endMarkBrd && tpos > begMarkBrd) {
+						scHor.childAdd("text").setAttr("text-anchor","middle").setAttr("stroke","none")
+							.setAttr("fill",sclMarkColor)
+							.setAttr("x",floor(h_pos+0.5)).setAttr("y",floor(markY+0.5)).setText(lab_dt);
+						endPosDt = tpos+wdth;
+					}
+				}
+				begMarkBrd = max(begMarkBrd, max(endPosTm,endPosDt));
+				ttm1 = ttm;
+				first_m = false;
 			}
-			markY += mrkHeight;
-		}
-		if(lab_dt.size()) {
-			wdth = mrkFontSize*lab_dt.length*mrkFontWRange;
-			tpos = max(h_pos-wdth/2, 0);
-			if((tpos+wdth) < endMarkBrd && tpos > begMarkBrd) {
-				scHor.childAdd("text").setAttr("text-anchor","middle").setAttr("stroke","none")
-					.setAttr("fill", "black")
-					.setAttr("x",h_pos.toFixed(2)).setAttr("y",markY.toFixed(2)).setText(lab_dt);
-				endPosDt = tpos+wdth;
-			}
-		}
-		begMarkBrd = max(begMarkBrd, max(endPosTm,endPosDt));
-		ttm1 = ttm;
-		first_m = false;
-	}
 
-	//   Next
-	if(i_h >= end) break;
-	i_h = floor((i_h+UTChourDt)/hDiv)*hDiv + hDiv - UTChourDt;
-	if(i_h > end)	i_h = end;
+			//   Next
+			if(i_h >= end) break;
+			i_h = floor((i_h+UTChourDt)/hDiv)*hDiv + hDiv - UTChourDt;
+			if(i_h > end)	i_h = end;
+		}
+	}
 }
 
 //Drawing the trends
 for(iTr = 0; iTr < trends.length; iTr++) {
-	elO = trends[iTr];
-	trBeg = begin*1e6; trPer = reqPer*1e6;
-	dataAr = elO.srcO.getVals(trBeg, end*1e6, trPer);
+	cP = trends[iTr];
+
+	isLogT = cP.isIndiv ? (cP.wScale&FD_LOG) : isLog;
+	vsMaxT = cP.isIndiv ? cP.adjU : vsMax;
+	vsMinT = cP.isIndiv ? cP.adjL : vsMin;
 
 	trPath = 0; prev_vl = EVAL; prev_pos = 0;
-	for(iDt = 0; iDt < dataAr.length; iDt++) {
-		c_val = dataAr[iDt];
-		c_tm = 1e-6*(trBeg + iDt*trPer);
+	for(iDt = 0; iDt < cP.val.length; iDt++) {
+		c_val = cP.val[iDt];
+		c_tm = 1e-6*(cP.beg + iDt*cP.per);
 		if(c_tm < begin)	continue;
 		c_pos = floor(tArX + tArW*(c_tm-begin)/(end-begin));
 		if(!c_val.isEVal()) {
-			c_vpos = floor(tArY + tArH - tArH*(c_val-elO.min)/(elO.max-elO.min));
-			if(!trPath) trPath = drawArea.childAdd("path").setAttr("stroke", elO.color);
+			c_vpos = floor(tArY + tArH - tArH*((isLogT?lg(max(1e-100,c_val)):c_val)-vsMinT)/(vsMaxT-vsMinT));
+			if(!trPath) trPath = drawArea.childAdd("path").setAttr("stroke", cP.color).setAttr("stroke-width",cP.width);
 			if(prev_vl.isEVal()) trPath.setAttr("d", trPath.attr("d")+"M"+c_pos+","+c_vpos);
 			else trPath.setAttr("d",trPath.attr("d")+"L"+c_pos+","+c_vpos);
 		}
 		else if(!prev_vl.isEVal()) {
-			c_vpos = floor(tArY + tArH - tArH*(prev_vl-elO.min)/(elO.max-elO.min));
+			c_vpos = floor(tArY + tArH - tArH*((isLogT?lg(max(1e-100,prev_vl)):prev_vl)-vsMinT)/(vsMaxT-vsMinT));
 			trPath.setAttr("d", trPath.attr("d")+"L"+prev_pos+".1,"+c_vpos+".1");
 		}
 		prev_vl = c_val; prev_pos = c_pos;
 	}
-	//res += elO.addr+": ["+SYS.strftime(trBeg/1e6)+"-"+SYS.strftime(end)+"]("+reqPer+"->"+(trPer/1e6)+")"+dataAr.length+"\n";
 }
 
-return im.save();',1572715023);
+return im.save();',1574605017);
 COMMIT;

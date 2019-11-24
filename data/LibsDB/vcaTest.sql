@@ -1605,8 +1605,7 @@ i/RsUL5F03l3ZQcCZIFnz/+QLRUBAHjVYKstzOYw4b4Fm0oiyRaiVxd9YjatJJszaU4RgL+qMNvg
 JL1RW11RvitELblW6otyEzg4ZrbVK7IRGBpYtFXlZwvYcP+CQyEUFIjpQ4YQm05U5AlmVvA47q6V
 55q9lC1grS/K98eAOcdKvSIXJ8Eho61ekc2kQX0L9spsqZSHDCy6c7nsIhlrzBSH4ai2QDJvJ4IJ
 e50i3xagzF5rXVF+NAm43e7/BY4saNTcWQ4yAAAAAElFTkSuQmCC','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
-en=true;','JavaLikeCalc.JavaScript
-en=true;','',-1,'en;active;geomW;geomH;geomMargin;backColor;backImg;','');
+en=true;','','',-1,'en;active;geomW;geomH;geomMargin;backColor;backImg;','');
 INSERT INTO "wlb_test" VALUES('DiagramTest','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAVCAIAAAB5SH/NAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA0SAAANOgHo3ZneAAAEJElEQVRIic2XT28TVxTFf+/NjGc89kw8zv8sSiAWUoBGRSxbShsVsWHb
 bdfdddNKXXXRD9Av0U+AhMSCDcoOKVIjBArUJDFJg03ieOw4sT1j+70uQlJBnMCghvasnvTOvXPO
@@ -1684,43 +1683,12 @@ QbAn1zRtr8hRr6/T6VR/7t/eLYo2/R7VZpP5sXE+uzpyeC7QdrvcW69ybv4Eh91K36iusllvcCwj
 BOPiRe7euYOdLTAyP/USwzscGdvirbfeJrFzmXNoCAx2ghilDk9AHN8hiCJ0VCP0/UiaVi5icLGj
 CQFhcFsIEe3uw4ZhZL1YTUldI47VoNbvebTbzZcf6fMjoVye3VdPvHIF5PXrcHhyddTsa+9EVhzS
 4NThNtIvUH853L27//n6dfgvtsp0SVoZd2EAAAAASUVORK5CYII=','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
-ev_cur = ev_rez = "";
-off=0;
-while(true)
-{
-  ev_cur=Special.FLibSYS.strParse(event,0,"\n",off);
-  if( ev_cur == "" ) break;
-  if( ev_cur == "ws_BtPress:/bt1") bt1_color=(bt1_color=="red")?"green":"red";
-  else ev_rez += (ev_cur+"\n");
-}
-event=ev_rez;
+for(ev_rez = "", off = 0; (ev_cur=event.parseLine(0,off)).length; )
+    if(ev_cur == "ws_BtPress:/bt1") bt1_color = (bt1_color=="red") ? "green" : "red";
+    else ev_rez += (ev_cur+"\n");
+event = ev_rez;
 
-line3_value+=0.1;','JavaLikeCalc.JavaScript
-ev_cur = ev_rez = "";
-off=0;
-while(true)
-{
-  ev_cur=Special.FLibSYS.strParse(event,0,"\n",off);
-  if( ev_cur == "" ) break;
-  SYS.messErr("TEST","Event: "+ev_cur);
-  if( ev_cur == "ws_BtPress:/bt1") bt1_color=(bt1_color=="red")?"green":"red";
-  else ev_rez += (ev_cur+"\n");
-}
-event=ev_rez;
-
-line3_value+=0.1;','JavaLikeCalc.JavaScript
-ev_cur = ev_rez = "";
-off=0;
-while(true)
-{
-  ev_cur=Special.FLibSYS.strParse(event,0,"\n",off);
-  if( ev_cur == "" ) break;
-  if( ev_cur == "ws_BtPress:/bt1") bt1_color=(bt1_color=="red")?"green":"red";
-  else ev_rez += (ev_cur+"\n");
-}
-event=ev_rez;
-
-line3_value+=0.1;',1000,'name;geomW;geomH;backColor;bordWidth;bordColor;',1491065636);
+line3_value += 0.1;','','',1000,'name;geomW;geomH;backColor;bordWidth;bordColor;',1491065636);
 INSERT INTO "wlb_test" VALUES('TextEltests','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAsCAIAAABaPSmoAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA0SAAANOgHo3ZneAAAOmElEQVRogdVYeXRUZZb/va32PZVUtqpsRUISQnYSlkiAgAeEAC5oxL0d
 wTnqGc/0mR45itNnsHva7jPdzIw9PdougESUARFpBBUFAdkSErKQBLKnslZSlapK7e+9b/5IUELY
