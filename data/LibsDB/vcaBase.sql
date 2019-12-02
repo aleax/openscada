@@ -5834,9 +5834,9 @@ INSERT INTO wlb_Main_io VALUES('graphSelPrm','alignment','8',32,'','','lab_log',
 INSERT INTO wlb_Main_io VALUES('graphSelPrm','text','Logarithmic scale:',32,'','','lab_log','Логарифм. шкала:','','Логарифм. шкала:','','','');
 INSERT INTO wlb_Main_io VALUES('graphSelPrm','name','',32,'','','log','','','','','','');
 INSERT INTO wlb_Main_io VALUES('graphSelPrm','geomX','160',32,'','','log','','','','','','');
-INSERT INTO wlb_Main_io VALUES('graphSelPrm','geomY','295',32,'','','log','','','','','','');
-INSERT INTO wlb_Main_io VALUES('graphSelPrm','geomW','25',32,'','','log','','','','','','');
-INSERT INTO wlb_Main_io VALUES('graphSelPrm','geomH','25',32,'','','log','','','','','','');
+INSERT INTO wlb_Main_io VALUES('graphSelPrm','geomY','297.5',32,'','','log','','','','','','');
+INSERT INTO wlb_Main_io VALUES('graphSelPrm','geomW','20',32,'','','log','','','','','','');
+INSERT INTO wlb_Main_io VALUES('graphSelPrm','geomH','20',32,'','','log','','','','','','');
 INSERT INTO wlb_Main_io VALUES('graphSelPrm','geomZ','15',32,'','','log','','','','','','');
 INSERT INTO wlb_Main_io VALUES('graphSelPrm','active','0',40,'','','log','','','','','','');
 INSERT INTO wlb_Main_io VALUES('graphSelPrm','elType','2',32,'','','log','','','','','','');
@@ -10876,8 +10876,8 @@ INSERT INTO wlb_Main_uio VALUES('grpGraph10','sclWin','Scale: by window',131072,
 INSERT INTO wlb_Main_uio VALUES('grpGraph10','sclWinCtx','Scale: by window save context',131078,'<TVarObj>
 </TVarObj>
 ',0,'','','trnd1','Масштаб: контекст вікном','','','Масштаб: контекст окном','','','','');
-INSERT INTO wlb_Main_uio VALUES('grpGraph','perUserSel','Select: save the selection per user',131072,'0',0,'','','','Обрання: зберігати обрання за користувачем','','','Выбор: сохранять выбор по пользователям','','','','');
-INSERT INTO wlb_Main_uio VALUES('grpGraph10','perUserSel','Select: save the selection per user',131072,'0',0,'','','','Обрання: зберігати обрання за користувачем','','','Выбор: сохранять выбор по пользователям','','','','');
+INSERT INTO wlb_Main_uio VALUES('grpGraph','perUserSel','Select: save the selection per user',131072,'0',0,'','','','Вибір: зберігати обрання за користувачем','','','Выбор: сохранять выбор по пользователям','','','','');
+INSERT INTO wlb_Main_uio VALUES('grpGraph10','perUserSel','Select: save the selection per user',131072,'0',0,'','','','Вибір: зберігати обрання за користувачем','','','Выбор: сохранять выбор по пользователям','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsAct','colms','Columns, by '','' (atm,qttm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)',131077,'atm,lev,prm,dscr,alrm',8,'','','','Стовпчики, за '','' (atm,qttm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)','','','Колонки, по '','' (atm,qttm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsAct','expOnFocus','Expand on focus: pixels (0-disabled,>-down,<-up)',131073,'0|',8,'','','','Розширяти при фокусі: пікселів (0-відключено,>-донизу,<-догори)','','','Расширять при фокусе: пикселей (0-отключено,>-вниз,<-вверх)','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsAct','expOnItems','Expand on focus: items (<=0-disabled)',131073,'0|',8,'','','','Розширяти при фокусі: елементів (<=0-відключено)','','','Расширять при фокусе: элементов (<=0-отключено)','','','','');
@@ -19729,7 +19729,7 @@ for(evRez = "", off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
 	else if(evCur == "ws_BtPress:/cancel")	this.attrSet("pgOpen", false);
 	else evRez += evCur+"\n";
 }
-event = evRez;','','',500,'name;dscr;geomW;geomH;pgOpenSrc;pgGrp;backColor;bordWidth;',1565536317);
+event = evRez;','','',500,'name;dscr;geomW;geomH;pgOpenSrc;pgGrp;backColor;bordWidth;',1574861180);
 INSERT INTO wlb_Main VALUES('RootPgSo','iVBORw0KGgoAAAANSUhEUgAAAEAAAAApCAIAAAAK8LgbAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAADVklEQVRYhe2XS28jRRRGbz366U77ETu2Q6QomwCDDBIsZsFi/gISINbJ
 L4QtC1giQLCZSKMZMa9A7JkYP9vVXd1VdYtF24AEEoFN05LPrj7p072nVepWk4uLC6WU7GSA1F96

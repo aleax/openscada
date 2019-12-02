@@ -71,12 +71,12 @@ TCntrNode &TController::operator=( const TCntrNode &node )
     //Parameters copy
     if(src_n->enableStat()) {
 	if(!enableStat()) enable();
-	vector<string> prm_ls;
-	src_n->list(prm_ls);
-	for(unsigned i_p = 0; i_p < prm_ls.size(); i_p++) {
-	    if(!owner().tpPrmPresent(src_n->at(prm_ls[i_p]).at().type().name)) continue;
-	    if(!present(prm_ls[i_p])) add(prm_ls[i_p], owner().tpPrmToId(src_n->at(prm_ls[i_p]).at().type().name));
-	    (TCntrNode&)at(prm_ls[i_p]).at() = (TCntrNode&)src_n->at(prm_ls[i_p]).at();
+	vector<string> prmLs;
+	src_n->list(prmLs);
+	for(unsigned iP = 0; iP < prmLs.size(); iP++) {
+	    if(!owner().tpPrmPresent(src_n->at(prmLs[iP]).at().type().name)) continue;
+	    if(!present(prmLs[iP])) add(prmLs[iP], owner().tpPrmToId(src_n->at(prmLs[iP]).at().type().name));
+	    (TCntrNode&)at(prmLs[iP]).at() = (TCntrNode&)src_n->at(prmLs[iP]).at();
 	    //if(toEnable() && !enableStat()) enable();
 	}
     }
@@ -215,12 +215,12 @@ void TController::enable( )
     //Enable parameters
     vector<string> prm_list;
     list(prm_list);
-    for(unsigned i_prm = 0; i_prm < prm_list.size(); i_prm++)
-	if(at(prm_list[i_prm]).at().toEnable())
-	    try{ at(prm_list[i_prm]).at().enable(); }
+    for(unsigned iPrm = 0; iPrm < prm_list.size(); iPrm++)
+	if(at(prm_list[iPrm]).at().toEnable())
+	    try{ at(prm_list[iPrm]).at().enable(); }
 	    catch(TError &err) {
 		mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
-		mess_sys(TMess::Warning, _("Error turning on the parameter '%s'."), prm_list[i_prm].c_str());
+		mess_sys(TMess::Warning, _("Error turning on the parameter '%s'."), prm_list[iPrm].c_str());
 		enErr = true;
 	    }
 
@@ -242,12 +242,12 @@ void TController::disable( )
     //Disable parameters
     vector<string> prm_list;
     list(prm_list);
-    for(unsigned i_prm = 0; i_prm < prm_list.size(); i_prm++)
-	if(at(prm_list[i_prm]).at().enableStat())
-	    try{ at(prm_list[i_prm]).at().disable(); }
+    for(unsigned iPrm = 0; iPrm < prm_list.size(); iPrm++)
+	if(at(prm_list[iPrm]).at().enableStat())
+	    try{ at(prm_list[iPrm]).at().disable(); }
 	    catch(TError &err) {
 		mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
-		mess_sys(TMess::Warning, _("Error turning off the parameter '%s'."), prm_list[i_prm].c_str());
+		mess_sys(TMess::Warning, _("Error turning off the parameter '%s'."), prm_list[iPrm].c_str());
 	    }
 
     //Disable for children
@@ -291,20 +291,20 @@ void TController::LoadParmCfg( )
     }
 
     //Check for remove items removed from DB
-    if(!SYS->selDB().empty()) {
-	vector<string> it_ls;
-	list(it_ls);
-	for(unsigned i_it = 0; i_it < it_ls.size(); i_it++)
-	    if(itReg.find(it_ls[i_it]) == itReg.end())
-		del(it_ls[i_it]);
+    if(SYS->chkSelDB(SYS->selDB(),true)) {
+	vector<string> itLs;
+	list(itLs);
+	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
+	    if(itReg.find(itLs[iIt]) == itReg.end())
+		del(itLs[iIt]);
     }
 
     //Force load present parameters
-    vector<string> prm_ls;
-    list(prm_ls);
-    for(unsigned i_p = 0; i_p < prm_ls.size(); i_p++) {
-	at(prm_ls[i_p]).at().modifG();
-	at(prm_ls[i_p]).at().load();
+    vector<string> prmLs;
+    list(prmLs);
+    for(unsigned iP = 0; iP < prmLs.size(); iP++) {
+	at(prmLs[iP]).at().modifG();
+	at(prmLs[iP]).at().load();
     }
 }
 

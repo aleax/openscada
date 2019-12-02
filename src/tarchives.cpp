@@ -130,18 +130,18 @@ void TArchiveS::load_( )
 	// Search int DB and create new archivers
 	SYS->db().at().dbList(dbLs, true);
 	dbLs.push_back(DB_CFG);
-	for(unsigned iDB = 0; iDB < dbLs.size(); iDB++)
-	    for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iDB]+"."+subId()+"_mess_proc",nodePath()+subId()+"_mess_proc",fldCnt++,cEl,false,&full); ) {
+	for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
+	    for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iIt]+"."+subId()+"_mess_proc",nodePath()+subId()+"_mess_proc",fldCnt++,cEl,false,&full); ) {
 		id = cEl.cfg("ID").getS();
 		type = cEl.cfg("MODUL").getS();
 		if(!modPresent(type))	continue;
-		if(!at(type).at().messPresent(id)) at(type).at().messAdd(id, (dbLs[iDB]==SYS->workDB())?"*.*":dbLs[iDB]);
+		if(!at(type).at().messPresent(id)) at(type).at().messAdd(id, (dbLs[iIt]==SYS->workDB())?"*.*":dbLs[iIt]);
 		at(type).at().messAt(id).at().load(&cEl);
 		itReg[type+"."+id] = true;
 	    }
 
 	//  Check for remove items removed from DB
-	if(!SYS->selDB().empty()) {
+	if(SYS->chkSelDB(SYS->selDB(),true)) {
 	    vector<string> mLs;
 	    modList(mLs);
 	    for(unsigned iM = 0; iM < mLs.size(); iM++) {
@@ -166,18 +166,18 @@ void TArchiveS::load_( )
 	//  Search into DB and create new archivers
 	SYS->db().at().dbList(dbLs, true);
 	dbLs.push_back(DB_CFG);
-	for(unsigned iDB = 0; iDB < dbLs.size(); iDB++)
-	    for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iDB]+"."+subId()+"_val_proc",nodePath()+subId()+"_val_proc",fldCnt++,cEl,false,&full); ) {
+	for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
+	    for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iIt]+"."+subId()+"_val_proc",nodePath()+subId()+"_val_proc",fldCnt++,cEl,false,&full); ) {
 		id = cEl.cfg("ID").getS();
 		type = cEl.cfg("MODUL").getS();
 		if(!modPresent(type))	continue;
-		if(!at(type).at().valPresent(id)) at(type).at().valAdd(id, (dbLs[iDB]==SYS->workDB())?"*.*":dbLs[iDB]);
+		if(!at(type).at().valPresent(id)) at(type).at().valAdd(id, (dbLs[iIt]==SYS->workDB())?"*.*":dbLs[iIt]);
 		at(type).at().valAt(id).at().load(&cEl);
 		itReg[type+"."+id] = true;
 	    }
 
 	//  Check for remove items removed from DB
-	if(!SYS->selDB().empty()) {
+	if(SYS->chkSelDB(SYS->selDB(),true)) {
 	    vector<string> mLs;
 	    modList(mLs);
 	    for(unsigned iM = 0; iM < mLs.size(); iM++) {
@@ -202,18 +202,18 @@ void TArchiveS::load_( )
 	//  Search into DB and create new archives
 	SYS->db().at().dbList(dbLs, true);
 	dbLs.push_back(DB_CFG);
-	for(unsigned iDB = 0; iDB < dbLs.size(); iDB++)
-	    for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iDB]+"."+subId()+"_val",nodePath()+subId()+"_val",fldCnt++,cEl,false,&full); ) {
+	for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
+	    for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iIt]+"."+subId()+"_val",nodePath()+subId()+"_val",fldCnt++,cEl,false,&full); ) {
 		id = cEl.cfg("ID").getS();
-		if(!valPresent(id)) valAdd(id,(dbLs[iDB]==SYS->workDB())?"*.*":dbLs[iDB]);
+		if(!valPresent(id)) valAdd(id,(dbLs[iIt]==SYS->workDB())?"*.*":dbLs[iIt]);
 		//   For force loading after creation from archiver storage
-		else if(valAt(id).at().DB() == "*.*" && dbLs[iDB] != SYS->workDB()) valAt(id).at().setDB(dbLs[iDB]);
+		else if(valAt(id).at().DB() == "*.*" && dbLs[iIt] != SYS->workDB()) valAt(id).at().setDB(dbLs[iIt]);
 		valAt(id).at().load(&cEl);
 		itReg[id] = true;
 	    }
 
 	//  Check for remove items removed from DB
-	if(!SYS->selDB().empty()) {
+	if(SYS->chkSelDB(SYS->selDB(),true)) {
 	    valList(dbLs);
 	    for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
 		if(itReg.find(dbLs[iIt]) == itReg.end() && SYS->chkSelDB(valAt(dbLs[iIt]).at().DB()))

@@ -1,3 +1,11 @@
+2019-12-02 Roman (stable)
+- !:FIX:DB.LibsDB.OscadaLibs: JavaLikeCalc.web.diagram: Fixed in the horizontal scale (time) building.
+- !:FIX:DB.LibsDB.vcaBase: Main.graphSelPrm: Some fixed in forming the combobox.
+- !!:SYS.*: DB-objects appended for restoring their enabling after the connection lost.
+    !!:The loading from selected DB improved in checking the DB enabling before.
+    The function TSYS::chkSelDB() expanded for checking the DB enabling.
+
+
 2019-11-24 Roman (stable)
 - !!!!:DB.LibsDB.OscadaLibs: DevLib.IEC60870: Appended for period time and the polling itself, sending tmPoolAll.
 	Unified for moving the input value writing to the single function inVal() and the timestamp obtaining in the function getTm().

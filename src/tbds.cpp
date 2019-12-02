@@ -94,17 +94,20 @@ void TBDS::perSYSCall( unsigned int cnt )
 	    at(tdbs[iTDB]).at().list(dbs);
 	    for(unsigned iDB = 0; iDB < dbs.size(); iDB++) {
 		AutoHD<TBD> db = at(tdbs[iTDB]).at().at(dbs[iDB]);
-		db.at().list(tbls);
-		for(unsigned iTbl = 0; iTbl < tbls.size(); iTbl++) {
-		    AutoHD<TTable> tbl = db.at().at(tbls[iTbl]);
-		    if((time(NULL)-tbl.at().lstUse()) > secOld) {
-			tbl.free();
-			db.at().close(tbls[iTbl]);
+		if(db.at().enableStat()) {
+		    //Closing for not used tables
+		    db.at().list(tbls);
+		    for(unsigned iTbl = 0; iTbl < tbls.size(); iTbl++) {
+			AutoHD<TTable> tbl = db.at().at(tbls[iTbl]);
+			if((time(NULL)-tbl.at().lstUse()) > secOld) {
+			    tbl.free();
+			    db.at().close(tbls[iTbl]);
+			}
 		    }
+		    //Checking for transaction close
+		    if(db.at().trTm_ClsOnReq() >= SERV_TASK_PER) db.at().transCloseCheck();
 		}
-
-		//Check for transaction close
-		if(db.at().trTm_ClsOnReq() >= SERV_TASK_PER) db.at().transCloseCheck();
+		else { if(db.at().toEnable() && !db.at().disabledByUser() && !SYS->stopSignal()) db.at().enable(); }
 	    }
 	}
     } catch(...){ }
@@ -643,7 +646,7 @@ void TTypeBD::cntrCmdProc( XMLNode *opt )
 //************************************************
 TBD::TBD( const string &iid, TElem *cf_el ) : TConfig(cf_el), mId(cfg("ID")), mToEn(cfg("EN").getBd()),
     mTrTm_ClsOnOpen(cfg("TRTM_CLS_ON_OPEN").getRd()), mTrTm_ClsOnReq(cfg("TRTM_CLS_ON_REQ").getRd()), mTrPr_ClsTask(cfg("TRPR_CLS_TASK").getId()),
-    mEn(false), userSQLTrans(EVAL_BOOL)
+    mEn(false), userSQLTrans(EVAL_BOOL), mDisByUser(true)
 {
     mId = iid;
     mTbl = grpAdd("tbl_");
@@ -723,7 +726,7 @@ void TBD::enable( )
 {
     if(enableStat()) return;
 
-    mEn = true;
+    mEn = true; mDisByUser = false;
 
     Mess->translReg("", "uapi:"+fullDBName());
 
@@ -839,7 +842,8 @@ void TBD::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Enabled"),RWRWR_,"root",SDB_ID,1,"tp","bool");
 		ctrMkNode("list",opt,-1,"/prm/st/allow_tbls",_("Accessible tables"),RWRW__,"root",SDB_ID,4,
 		    "tp","br","br_pref","tbl_","s_com","del","help",_("Tables in the database, but not open at this time."));
-		ctrMkNode("comm",opt,-1,"/prm/st/load",_("Load the program from this DB"),RWRW__,"root","root");
+		if(enableStat())
+		    ctrMkNode("comm",opt,-1,"/prm/st/load",_("Load the program from this DB"),RWRW__,"root","root");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"))) {
 		TConfig::cntrCmdMake(opt,"/prm/cfg",0,"root",SDB_ID,RWRWR_);
@@ -871,7 +875,10 @@ void TBD::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if(a_path == "/prm/st/st") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDB_ID,SEC_RD))	opt->setText(enableStat()?"1":"0");
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDB_ID,SEC_WR))	s2i(opt->text()) ? enable() : disable();
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDB_ID,SEC_WR)) {
+	    if(s2i(opt->text())) enable();
+	    else { disable(); mDisByUser = true; }
+	}
     }
     else if(a_path == "/prm/st/allow_tbls") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDB_ID,SEC_RD)) {

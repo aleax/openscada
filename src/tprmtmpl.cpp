@@ -842,11 +842,11 @@ void TPrmTmplLib::load_( TConfig *icfg )
     }
 
     //Check for remove items removed from DB
-    if(!SYS->selDB().empty()) {
-	vector<string> it_ls;
-	list(it_ls);
-	for(unsigned i_it = 0; i_it < it_ls.size(); i_it++)
-	    if(itReg.find(it_ls[i_it]) == itReg.end())	del(it_ls[i_it]);
+    if(SYS->chkSelDB(SYS->selDB(),true)) {
+	vector<string> itLs;
+	list(itLs);
+	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
+	    if(itReg.find(itLs[iIt]) == itReg.end())	del(itLs[iIt]);
     }
 }
 

@@ -42,7 +42,7 @@
 #define MOD_NAME	_("Block based calculator")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.8.10"
+#define MOD_VER		"1.8.11"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a block based calculator.")
 #define LICENSE		"GPL2"
@@ -247,12 +247,12 @@ void Contr::load_( )
     }
 
     // Check for remove items removed from DB
-    if(!SYS->selDB().empty()) {
-	vector<string> it_ls;
-	blkList(it_ls);
-	for(unsigned i_it = 0; i_it < it_ls.size(); i_it++)
-	    if(itReg.find(it_ls[i_it]) == itReg.end())
-		blkDel(it_ls[i_it]);
+    if(SYS->chkSelDB(SYS->selDB(),true)) {
+	vector<string> itLs;
+	blkList(itLs);
+	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
+	    if(itReg.find(itLs[iIt]) == itReg.end())
+		blkDel(itLs[iIt]);
     }
 }
 
@@ -364,14 +364,14 @@ void *Contr::Task( void *icontr )
 
 	cntr.hdRes.resRequestR();
 	MtxAlloc sres(cntr.calcRes, true);
-	for(unsigned i_it = 0; (int)i_it < cntr.mIter && !cntr.redntUse(); i_it++)
-	    for(unsigned i_blk = 0; i_blk < cntr.calcBlks.size(); i_blk++)
-		try { cntr.calcBlks[i_blk].at().calc(is_start, is_stop, cntr.period()?((1e9*(double)cntr.iterate())/cntr.period()):(-1e-6*(t_cnt-t_prev))); }
+	for(unsigned iIt = 0; (int)iIt < cntr.mIter && !cntr.redntUse(); iIt++)
+	    for(unsigned iBlk = 0; iBlk < cntr.calcBlks.size(); iBlk++)
+		try { cntr.calcBlks[iBlk].at().calc(is_start, is_stop, cntr.period()?((1e9*(double)cntr.iterate())/cntr.period()):(-1e-6*(t_cnt-t_prev))); }
 		catch(TError &err) {
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    string blck = cntr.calcBlks[i_blk].at().id();
+		    string blck = cntr.calcBlks[iBlk].at().id();
 		    mess_err(cntr.nodePath().c_str(),_("Block '%s' calc error."),blck.c_str());
-		    if(cntr.calcBlks[i_blk].at().errCnt() < 10) continue;
+		    if(cntr.calcBlks[iBlk].at().errCnt() < 10) continue;
 		    cntr.hdRes.resRelease( );
 		    mess_err(cntr.nodePath().c_str(),_("Block '%s' is stopped."),blck.c_str());
 		    cntr.blkAt(blck).at().setProcess(false);
@@ -432,14 +432,14 @@ string Contr::blkAdd( const string &iid )
 
 void Contr::blkProc( const string &id, bool val )
 {
-    unsigned i_blk;
+    unsigned iBlk;
 
     ResAlloc res(hdRes, true);
-    for(i_blk = 0; i_blk < calcBlks.size(); i_blk++)
-	if(calcBlks[i_blk].at().id() == id) break;
+    for(iBlk = 0; iBlk < calcBlks.size(); iBlk++)
+	if(calcBlks[iBlk].at().id() == id) break;
 
-    if(val && i_blk >= calcBlks.size()) calcBlks.push_back(blkAt(id));
-    if(!val && i_blk < calcBlks.size()) calcBlks.erase(calcBlks.begin()+i_blk);
+    if(val && iBlk >= calcBlks.size()) calcBlks.push_back(blkAt(id));
+    if(!val && iBlk < calcBlks.size()) calcBlks.erase(calcBlks.begin()+iBlk);
 }
 
 void Contr::cntrCmdProc( XMLNode *opt )

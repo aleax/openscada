@@ -139,25 +139,25 @@ void TSecurity::load_( )
     try {
 	TConfig g_cfg(&userEl);
 	//g_cfg.cfgViewAll(false);
-	vector<string> db_ls;
+	vector<string> itLs;
 
 	//  Search new into DB and Config-file
-	SYS->db().at().dbList(db_ls, true);
-	db_ls.push_back(DB_CFG);
-	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_user",nodePath()+subId()+"_user",fld_cnt++,g_cfg,false,&full); ) {
+	SYS->db().at().dbList(itLs, true);
+	itLs.push_back(DB_CFG);
+	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek(itLs[iIt]+"."+subId()+"_user",nodePath()+subId()+"_user",fld_cnt++,g_cfg,false,&full); ) {
 		name = g_cfg.cfg("NAME").getS();
-		if(!usrPresent(name))	usrAdd(name, (db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+		if(!usrPresent(name))	usrAdd(name, (itLs[iIt]==SYS->workDB())?"*.*":itLs[iIt]);
 		usrAt(name).at().load(&g_cfg);
 		itReg[name] = true;
 	    }
 
 	//  Check for remove items removed from DB
-	if(!SYS->selDB().empty()) {
-	    usrList(db_ls);
-	    for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
-		if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(usrAt(db_ls[i_it]).at().DB()))
-		    usrDel(db_ls[i_it]);
+	if(SYS->chkSelDB(SYS->selDB(),true)) {
+	    usrList(itLs);
+	    for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
+		if(itReg.find(itLs[iIt]) == itReg.end() && SYS->chkSelDB(usrAt(itLs[iIt]).at().DB()))
+		    usrDel(itLs[iIt]);
 	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
@@ -168,26 +168,26 @@ void TSecurity::load_( )
     try {
 	TConfig g_cfg(&grpEl);
 	//g_cfg.cfgViewAll(false);
-	vector<string> db_ls;
+	vector<string> itLs;
 	itReg.clear();
 
 	//  Search new into DB and Config-file
-	SYS->db().at().dbList(db_ls, true);
-	db_ls.push_back(DB_CFG);
-	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_grp",nodePath()+subId()+"_grp",fld_cnt++,g_cfg,false,&full); ) {
+	SYS->db().at().dbList(itLs, true);
+	itLs.push_back(DB_CFG);
+	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek(itLs[iIt]+"."+subId()+"_grp",nodePath()+subId()+"_grp",fld_cnt++,g_cfg,false,&full); ) {
 		name = g_cfg.cfg("NAME").getS();
-		if(!grpPresent(name))	grpAdd(name,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+		if(!grpPresent(name))	grpAdd(name,(itLs[iIt]==SYS->workDB())?"*.*":itLs[iIt]);
 		grpAt(name).at().load(&g_cfg);
 		itReg[name] = true;
 	    }
 
 	//  Check for remove items removed from DB
-	if(!SYS->selDB().empty()) {
-	    grpList(db_ls);
-	    for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
-		if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(grpAt(db_ls[i_it]).at().DB()))
-		    grpDel(db_ls[i_it]);
+	if(SYS->chkSelDB(SYS->selDB(),true)) {
+	    grpList(itLs);
+	    for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
+		if(itReg.find(itLs[iIt]) == itReg.end() && SYS->chkSelDB(grpAt(itLs[iIt]).at().DB()))
+		    grpDel(itLs[iIt]);
 	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(), "%s", err.mess.c_str());

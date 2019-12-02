@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"4.1.7"
+#define MOD_VER		"4.1.8"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")
@@ -287,18 +287,18 @@ void TpContr::load_( )
 	// Search and create new libraries
 	TConfig cEl(&elLib());
 	//cEl.cfgViewAll(false);
-	vector<string> dbLs;
+	vector<string> itLs;
 	map<string, bool> itReg;
 	vector<vector<string> > full;
 
 	// Search into DB
-	SYS->db().at().dbList(dbLs, true);
-	dbLs.push_back(DB_CFG);
-	for(unsigned iDB = 0; iDB < dbLs.size(); iDB++)
-	    for(int libCnt = 0; SYS->db().at().dataSeek(dbLs[iDB]+"."+libTable(),nodePath()+"lib",libCnt++,cEl,false,&full); ) {
+	SYS->db().at().dbList(itLs, true);
+	itLs.push_back(DB_CFG);
+	for(unsigned iDB = 0; iDB < itLs.size(); iDB++)
+	    for(int libCnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+libTable(),nodePath()+"lib",libCnt++,cEl,false,&full); ) {
 		string l_id = cEl.cfg("ID").getS();
 		if(!lbPresent(l_id)) {
-		    lbReg(new Lib(l_id.c_str(),"",(dbLs[iDB]==SYS->workDB())?"*.*":dbLs[iDB]));
+		    lbReg(new Lib(l_id.c_str(),"",(itLs[iDB]==SYS->workDB())?"*.*":itLs[iDB]));
 		    try {
 			lbAt(l_id).at().load(&cEl);
 			//lbAt(l_id).at().setStart(true);		//Do not try start into the loading but possible broblems like into openscada --help
@@ -308,11 +308,11 @@ void TpContr::load_( )
 	    }
 
 	//  Check for remove items removed from DB
-	if(!SYS->selDB().empty()) {
-	    lbList(dbLs);
-	    for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
-		if(itReg.find(dbLs[iIt]) == itReg.end() && SYS->chkSelDB(lbAt(dbLs[iIt]).at().DB()))
-		    lbUnreg(dbLs[iIt]);
+	if(SYS->chkSelDB(SYS->selDB(),true)) {
+	    lbList(itLs);
+	    for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
+		if(itReg.find(itLs[iIt]) == itReg.end() && SYS->chkSelDB(lbAt(itLs[iIt]).at().DB()))
+		    lbUnreg(itLs[iIt]);
 	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());

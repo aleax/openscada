@@ -201,12 +201,12 @@ void Project::load_( TConfig *icfg )
     }
 
     //Check for remove items removed from the DB
-    if(!SYS->selDB().empty()) {
-	vector<string> it_ls;
-	list(it_ls);
-	for(unsigned iIt = 0; iIt < it_ls.size(); iIt++)
-	    if(itReg.find(it_ls[iIt]) == itReg.end())
-		del(it_ls[iIt]);
+    if(SYS->chkSelDB(SYS->selDB(),true)) {
+	vector<string> itLs;
+	list(itLs);
+	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
+	    if(itReg.find(itLs[iIt]) == itReg.end())
+		del(itLs[iIt]);
     }
 
     mOldDB = TBDS::realDBName(DB());
@@ -1141,12 +1141,12 @@ void Page::load_( TConfig *icfg )
     }
 
     //Check for remove items removed from DB
-    if(!SYS->selDB().empty()) {
-	vector<string> it_ls;
-	pageList(it_ls);
-	for(unsigned iIt = 0; iIt < it_ls.size(); iIt++)
-	    if(itReg.find(it_ls[iIt]) == itReg.end())
-		pageDel(it_ls[iIt]);
+    if(SYS->chkSelDB(SYS->selDB(),true)) {
+	vector<string> itLs;
+	pageList(itLs);
+	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
+	    if(itReg.find(itLs[iIt]) == itReg.end())
+		pageDel(itLs[iIt]);
     }
 
     //Load present pages
@@ -1206,12 +1206,12 @@ void Page::loadIO( )
     }
 
     // Check for remove items removed from the DB
-    if(!SYS->selDB().empty()) {
-	vector<string> it_ls;
-	wdgList(it_ls);
-	for(unsigned iIt = 0; iIt < it_ls.size(); iIt++)
-	    if(itReg.find(it_ls[iIt]) == itReg.end())
-		wdgDel(it_ls[iIt]);
+    if(SYS->chkSelDB(SYS->selDB(),true)) {
+	vector<string> itLs;
+	wdgList(itLs);
+	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
+	    if(itReg.find(itLs[iIt]) == itReg.end())
+		wdgDel(itLs[iIt]);
     }
 }
 

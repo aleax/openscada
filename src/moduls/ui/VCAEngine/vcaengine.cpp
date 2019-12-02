@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"5.11.0"
+#define MOD_VER		"5.11.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -269,15 +269,15 @@ void Engine::load_( )
 	// Search and create new libraries
 	TConfig cEl(&elWdgLib());
 	//cEl.cfgViewAll(false);
-	vector<string> dbLs;
+	vector<string> itLs;
 
 	// Search into DB
-	SYS->db().at().dbList(dbLs, true);
-	dbLs.push_back(DB_CFG);
-	for(unsigned iDB = 0; iDB < dbLs.size(); iDB++)
-	    for(int libCnt = 0; SYS->db().at().dataSeek(dbLs[iDB]+"."+wlbTable(),nodePath()+"LIB",libCnt++,cEl,false,&full); ) {
+	SYS->db().at().dbList(itLs, true);
+	itLs.push_back(DB_CFG);
+	for(unsigned iDB = 0; iDB < itLs.size(); iDB++)
+	    for(int libCnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+wlbTable(),nodePath()+"LIB",libCnt++,cEl,false,&full); ) {
 		string lId = cEl.cfg("ID").getS();
-		if(!wlbPresent(lId)) wlbAdd(lId,"",(dbLs[iDB]==SYS->workDB())?"*.*":dbLs[iDB]);
+		if(!wlbPresent(lId)) wlbAdd(lId,"",(itLs[iDB]==SYS->workDB())?"*.*":itLs[iDB]);
 		wlbAt(lId).at().load(&cEl);
 		itReg[lId] = true;
 		if(mess_lev() == TMess::Debug) {
@@ -287,11 +287,11 @@ void Engine::load_( )
 	    }
 
 	// Check for remove items removed from DB
-	if(!SYS->selDB().empty()) {
-	    wlbList(dbLs);
-	    for(unsigned i_it = 0; i_it < dbLs.size(); i_it++)
-		if(itReg.find(dbLs[i_it]) == itReg.end() && SYS->chkSelDB(wlbAt(dbLs[i_it]).at().DB()))
-		    wlbDel(dbLs[i_it]);
+	if(SYS->chkSelDB(SYS->selDB(),true)) {
+	    wlbList(itLs);
+	    for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
+		if(itReg.find(itLs[iIt]) == itReg.end() && SYS->chkSelDB(wlbAt(itLs[iIt]).at().DB()))
+		    wlbDel(itLs[iIt]);
 	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
@@ -304,17 +304,17 @@ void Engine::load_( )
 	TConfig cEl(&elProject());
 	//cEl.cfgViewAll(false);
 	//cEl.cfg("EN_BY_NEED").setView(true);
-	vector<string> dbLs;
+	vector<string> itLs;
 	itReg.clear();
 
 	// Search into DB
-	SYS->db().at().dbList(dbLs, true);
-	dbLs.push_back(DB_CFG);
-	for(unsigned iDB = 0; iDB < dbLs.size(); iDB++)
-	    for(int lib_cnt = 0; SYS->db().at().dataSeek(dbLs[iDB]+"."+prjTable(),nodePath()+"PRJ",lib_cnt++,cEl,false,&full); ) {
+	SYS->db().at().dbList(itLs, true);
+	itLs.push_back(DB_CFG);
+	for(unsigned iDB = 0; iDB < itLs.size(); iDB++)
+	    for(int lib_cnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+prjTable(),nodePath()+"PRJ",lib_cnt++,cEl,false,&full); ) {
 		string prj_id = cEl.cfg("ID").getS();
 		if(!prjPresent(prj_id)) {
-		    prjAdd(prj_id,"",(dbLs[iDB]==SYS->workDB())?"*.*":dbLs[iDB]);
+		    prjAdd(prj_id,"",(itLs[iDB]==SYS->workDB())?"*.*":itLs[iDB]);
 		    if(cEl.cfg("EN_BY_NEED").getB()) prjAt(prj_id).at().setEnableByNeed();
 		}
 		prjAt(prj_id).at().load(&cEl);
@@ -326,11 +326,11 @@ void Engine::load_( )
 	    }
 
 	// Check for remove items removed from DB
-	if(!SYS->selDB().empty()) {
-	    prjList(dbLs);
-	    for(unsigned i_it = 0; i_it < dbLs.size(); i_it++)
-		if(itReg.find(dbLs[i_it]) == itReg.end() && SYS->chkSelDB(prjAt(dbLs[i_it]).at().DB()))
-		    prjDel(dbLs[i_it]);
+	if(SYS->chkSelDB(SYS->selDB(),true)) {
+	    prjList(itLs);
+	    for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
+		if(itReg.find(itLs[iIt]) == itReg.end() && SYS->chkSelDB(prjAt(itLs[iIt]).at().DB()))
+		    prjDel(itLs[iIt]);
 	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(), "%s", err.mess.c_str());

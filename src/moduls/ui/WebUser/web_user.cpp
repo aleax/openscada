@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.0.2"
+#define MOD_VER		"1.0.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -116,27 +116,27 @@ void TWEB::load_( )
     try {
 	TConfig gCfg(&uPgEl());
 	//gCfg.cfgViewAll(false);
-	vector<string> dbLs;
+	vector<string> itLs;
 	map<string, bool> itReg;
 	vector<vector<string> > full;
 
 	//  Search into DB
-	SYS->db().at().dbList(dbLs, true);
-	dbLs.push_back(DB_CFG);
-	for(unsigned iDB = 0; iDB < dbLs.size(); iDB++)
-	    for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iDB]+"."+modId()+"_uPg",nodePath()+modId()+"_uPg",fldCnt++,gCfg,false,&full); ) {
+	SYS->db().at().dbList(itLs, true);
+	itLs.push_back(DB_CFG);
+	for(unsigned iDB = 0; iDB < itLs.size(); iDB++)
+	    for(int fldCnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+modId()+"_uPg",nodePath()+modId()+"_uPg",fldCnt++,gCfg,false,&full); ) {
 		string id = gCfg.cfg("ID").getS();
-		if(!uPgPresent(id)) uPgAdd(id,(dbLs[iDB]==SYS->workDB())?"*.*":dbLs[iDB]);
+		if(!uPgPresent(id)) uPgAdd(id,(itLs[iDB]==SYS->workDB())?"*.*":itLs[iDB]);
 		uPgAt(id).at().load(&gCfg);
 		itReg[id] = true;
 	    }
 
 	//  Check for remove items removed from DB
-	if(!SYS->selDB().empty()) {
-	    uPgList(dbLs);
-	    for(unsigned i_it = 0; i_it < dbLs.size(); i_it++)
-		if(itReg.find(dbLs[i_it]) == itReg.end() && SYS->chkSelDB(uPgAt(dbLs[i_it]).at().DB()))
-		    uPgDel(dbLs[i_it]);
+	if(SYS->chkSelDB(SYS->selDB(),true)) {
+	    uPgList(itLs);
+	    for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
+		if(itReg.find(itLs[iIt]) == itReg.end() && SYS->chkSelDB(uPgAt(itLs[iIt]).at().DB()))
+		    uPgDel(itLs[iIt]);
 	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());

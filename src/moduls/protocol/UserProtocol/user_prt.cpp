@@ -33,7 +33,7 @@
 #define MOD_NAME	_("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.1.5"
+#define MOD_VER		"1.1.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user protocols on an internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -118,28 +118,28 @@ void TProt::load_( )
     try {
 	TConfig gCfg(&uPrtEl());
 	//gCfg.cfgViewAll(false);
-	vector<string> dbLs;
+	vector<string> itLs;
 	map<string, bool> itReg;
 	vector<vector<string> > full;
 
 	//  Search into DB
-	SYS->db().at().dbList(dbLs, true);
-	dbLs.push_back(DB_CFG);
-	for(unsigned iDB = 0; iDB < dbLs.size(); iDB++)
-	    for(unsigned fldCnt = 0; SYS->db().at().dataSeek(dbLs[iDB]+"."+modId()+"_uPrt",nodePath()+modId()+"_uPrt",fldCnt++,gCfg,false,&full); ) {
+	SYS->db().at().dbList(itLs, true);
+	itLs.push_back(DB_CFG);
+	for(unsigned iDB = 0; iDB < itLs.size(); iDB++)
+	    for(unsigned fldCnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+modId()+"_uPrt",nodePath()+modId()+"_uPrt",fldCnt++,gCfg,false,&full); ) {
 		string id = gCfg.cfg("ID").getS();
-		if(!uPrtPresent(id)) uPrtAdd(id,(dbLs[iDB]==SYS->workDB())?"*.*":dbLs[iDB]);
+		if(!uPrtPresent(id)) uPrtAdd(id,(itLs[iDB]==SYS->workDB())?"*.*":itLs[iDB]);
 		uPrtAt(id).at().load(&gCfg);
 		gCfg.cfg("DAQTmpl").setS("");	//!!!! To prevent the new field from duplicating on different not updated tables.
 		itReg[id] = true;
 	    }
 
 	//  Check for remove items removed from DB
-	if(!SYS->selDB().empty()) {
-	    uPrtList(dbLs);
-	    for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
-		if(itReg.find(dbLs[iIt]) == itReg.end() && SYS->chkSelDB(uPrtAt(dbLs[iIt]).at().DB()))
-		    uPrtDel(dbLs[iIt]);
+	if(SYS->chkSelDB(SYS->selDB(),true)) {
+	    uPrtList(itLs);
+	    for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
+		if(itReg.find(itLs[iIt]) == itReg.end() && SYS->chkSelDB(uPrtAt(itLs[iIt]).at().DB()))
+		    uPrtDel(itLs[iIt]);
 	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(), "%s", err.mess.c_str());

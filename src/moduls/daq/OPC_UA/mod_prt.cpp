@@ -173,27 +173,27 @@ void TProt::load_( )
     try {
 	TConfig gCfg(&endPntEl());
 	//gCfg.cfgViewAll(false);
-	vector<string> dbLs;
+	vector<string> itLs;
 	map<string, bool> itReg;
 	vector<vector<string> > full;
 
 	// Search into DB
-	SYS->db().at().dbList(dbLs, true);
-	dbLs.push_back(DB_CFG);
-	for(unsigned iDb = 0; iDb < dbLs.size(); iDb++)
-	    for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iDb]+"."+modId()+"_ep",nodePath()+modId()+"_ep",fldCnt++,gCfg,false,&full); ) {
+	SYS->db().at().dbList(itLs, true);
+	itLs.push_back(DB_CFG);
+	for(unsigned iDb = 0; iDb < itLs.size(); iDb++)
+	    for(int fldCnt = 0; SYS->db().at().dataSeek(itLs[iDb]+"."+modId()+"_ep",nodePath()+modId()+"_ep",fldCnt++,gCfg,false,&full); ) {
 		string id = gCfg.cfg("ID").getS();
-		if(!epPresent(id)) epAdd(id,(dbLs[iDb]==SYS->workDB())?"*.*":dbLs[iDb]);
+		if(!epPresent(id)) epAdd(id,(itLs[iDb]==SYS->workDB())?"*.*":itLs[iDb]);
 		epAt(id).at().load(&gCfg);
 		itReg[id] = true;
 	    }
 
 	// Check for remove items removed from DB
-	if(!SYS->selDB().empty()) {
-	    epList(dbLs);
-	    for(unsigned i_it = 0; i_it < dbLs.size(); i_it++)
-		if(itReg.find(dbLs[i_it]) == itReg.end() && SYS->chkSelDB(epAt(dbLs[i_it]).at().DB()))
-		    epDel(dbLs[i_it]);
+	if(SYS->chkSelDB(SYS->selDB(),true)) {
+	    epList(itLs);
+	    for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
+		if(itReg.find(itLs[iIt]) == itReg.end() && SYS->chkSelDB(epAt(itLs[iIt]).at().DB()))
+		    epDel(itLs[iIt]);
 	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());

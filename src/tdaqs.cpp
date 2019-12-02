@@ -143,20 +143,20 @@ void TDAQS::load_( )
 	// Search into DB
 	SYS->db().at().dbList(dbLs, true);
 	dbLs.push_back(DB_CFG);
-	for(unsigned iDB = 0; iDB < dbLs.size(); iDB++)
-	    for(int libCnt = 0; SYS->db().at().dataSeek(dbLs[iDB]+"."+tmplLibTable(),nodePath()+"tmplib",libCnt++,cEl,false,&full); ) {
+	for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
+	    for(int libCnt = 0; SYS->db().at().dataSeek(dbLs[iIt]+"."+tmplLibTable(),nodePath()+"tmplib",libCnt++,cEl,false,&full); ) {
 		string l_id = cEl.cfg("ID").getS();
-		if(!tmplLibPresent(l_id)) tmplLibReg(new TPrmTmplLib(l_id.c_str(),"",(dbLs[iDB]==SYS->workDB())?"*.*":dbLs[iDB]));
+		if(!tmplLibPresent(l_id)) tmplLibReg(new TPrmTmplLib(l_id.c_str(),"",(dbLs[iIt]==SYS->workDB())?"*.*":dbLs[iIt]));
 		tmplLibAt(l_id).at().load(&cEl);
 		itReg[l_id] = true;
 	    }
 
 	//  Check for remove items removed from DB
-	if(!SYS->selDB().empty()) {
+	if(SYS->chkSelDB(SYS->selDB(),true)) {
 	    tmplLibList(dbLs);
-	    for(unsigned i_it = 0; i_it < dbLs.size(); i_it++)
-		if(itReg.find(dbLs[i_it]) == itReg.end() && SYS->chkSelDB(tmplLibAt(dbLs[i_it]).at().DB()))
-		    tmplLibUnreg(dbLs[i_it]);
+	    for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
+		if(itReg.find(dbLs[iIt]) == itReg.end() && SYS->chkSelDB(tmplLibAt(dbLs[iIt]).at().DB()))
+		    tmplLibUnreg(dbLs[iIt]);
         }
     } catch(TError &err) {
 	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
@@ -178,11 +178,11 @@ void TDAQS::load_( )
 	    // Search into DB and create new controllers
 	    SYS->db().at().dbList(dbLs, true);
 	    dbLs.push_back(DB_CFG);
-	    for(unsigned iDB = 0; iDB < dbLs.size(); iDB++)
-		for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iDB]+"."+subId()+"_"+wmod.at().modId(),wmod.at().nodePath()+"DAQ",fldCnt++,gCfg,false,&full); ) {
+	    for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
+		for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iIt]+"."+subId()+"_"+wmod.at().modId(),wmod.at().nodePath()+"DAQ",fldCnt++,gCfg,false,&full); ) {
 		    string mId = gCfg.cfg("ID").getS();
 		    try {
-			if(!wmod.at().present(mId)) wmod.at().add(mId,(dbLs[iDB]==SYS->workDB())?"*.*":dbLs[iDB]);
+			if(!wmod.at().present(mId)) wmod.at().add(mId,(dbLs[iIt]==SYS->workDB())?"*.*":dbLs[iIt]);
 			wmod.at().at(mId).at().load(&gCfg);
 			itReg[mId] = true;
 		    } catch(TError &err) {
@@ -193,9 +193,9 @@ void TDAQS::load_( )
 
 	    //  Check for remove items removed from DB
 	    wmod.at().list(dbLs);
-	    for(unsigned i_it = 0; i_it < dbLs.size(); i_it++)
-		if(itReg.find(dbLs[i_it]) == itReg.end() && SYS->chkSelDB(wmod.at().at(dbLs[i_it]).at().DB()))
-		    wmod.at().del(dbLs[i_it]);
+	    for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
+		if(itReg.find(dbLs[iIt]) == itReg.end() && SYS->chkSelDB(wmod.at().at(dbLs[iIt]).at().DB()))
+		    wmod.at().del(dbLs[iIt]);
 	}
     } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 

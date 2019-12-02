@@ -13787,7 +13787,6 @@ for(iP = 0; vmax_ln >= 2 && iP < prmsInd.length; iP++) {	//prmsInd[i]=-1 - for m
 	markWdth = 0;
 	if(sclVerT&(FD_MARKS|FD_GRD)) {
 		scVer.childAdd("rect").setAttr("fill",clrGridT).setAttr("x",tArX-1).setAttr("y",tArY).setAttr("width",1).setAttr("height",tArH);
-		SYS.messInfo("DG","TEST 00: vsMinT="+vsMinT+"; vDiv="+vDiv+"; iV="+(ceil(vsMinT/vDiv)*vDiv));
 		for(iV = floor((vsMinT/vDiv)+0.5)*vDiv; (vsMaxT-iV)/vDiv > -0.1; iV += vDiv) {
 			//  Draw grid
 			v_pos = tArY + tArH - tArH*(iV-vsMinT)/(vsMaxT-vsMinT);
@@ -13825,8 +13824,8 @@ if(hmax_ln >= 2) {
 
 	hDiv_ = hDiv;
 	while(hLen/hDiv_ > hmax_ln)	hDiv_ *= 10;
-	while(hLen/hDiv_ < hmax_ln/5 && (hDiv_/5)%hDiv == 0) hDiv_ /= 5;
-	while(hLen/hDiv_ < hmax_ln/2 && (hvLev < 6 || (hDiv_/2)%hDiv == 0)) hDiv_ /= 2;
+	while(hLen/hDiv_ < hmax_ln/5 && (1e6*hDiv_/5)%(1e6*hDiv) == 0) hDiv_ /= 5;
+	while(hLen/hDiv_ < hmax_ln/2 && (hvLev < 6 || (1e6*hDiv_/2)%(1e6*hDiv) == 0)) hDiv_ /= 2;
 	hDiv = hDiv_;
 
 	UTChourDt = SYS.strptimegm(SYS.strftime(end)) - end;
@@ -13853,12 +13852,12 @@ if(hmax_ln >= 2) {
 			if(hvLev < 6) {
 				scHor.childAdd("text").setAttr("text-anchor","end").setAttr("stroke","none")
 					.setAttr("fill",sclMarkColor)
-					.setAttr("x",tArX+tArW).setAttr("y",tArY+tArH+2*mrkHeight).setText(lab_tm);
+					.setAttr("x",tArX+tArW).setAttr("y",tArY+tArH+mrkHeight).setText(lab_tm);
 				endMarkBrd = min(endMarkBrd, tArX + tArW - mrkFontSize*lab_tm.length*mrkFontWRange);
 			}
 			scHor.childAdd("text").setAttr("text-anchor","end").setAttr("stroke","none")
 				.setAttr("fill",sclMarkColor)
-				.setAttr("x",tArX+tArW).setAttr("y",tArY+tArH+mrkHeight).setText(lab_dt);
+				.setAttr("x",tArX+tArW).setAttr("y",tArY+tArH+2*mrkHeight).setText(lab_dt);
 			endMarkBrd = min(endMarkBrd, tArX + tArW - mrkFontSize*lab_dt.length*mrkFontWRange);
 		}
 
@@ -13873,7 +13872,7 @@ if(hmax_ln >= 2) {
 			else scHor.childAdd("rect").setAttr("fill",sclColor).setAttr("x",floor(h_pos+0.5)).setAttr("y",floor(tArY+tArH-3+0.5)).setAttr("width",1).setAttr("height",6);
 
 			//   Draw markers
-			if((sclHor&FD_MARKS) && !((i_h+UTChourDt)%hDiv) && i_h != end) {
+			if((sclHor&FD_MARKS) && !(1e6*(i_h+UTChourDt)%(1e6*hDiv)) && i_h != end) {
 				if(first_m)	SYS.localtime(begin-(end-begin), ttm1.sec, ttm1.min, ttm1.hour, ttm1.mday, ttm1.mon);
 				ttm = new Object();
 				SYS.localtime(i_h, ttm.sec, ttm.min, ttm.hour, ttm.mday, ttm.mon);
@@ -13895,12 +13894,14 @@ if(hmax_ln >= 2) {
 					lab_tm = SYS.strftime(i_h, "%H:%M");
 				//Seconds
 				else if((hvLev == 2 || ttm.sec) && !((i_h-floor(i_h))*1e6))
-					lab_tm = (chLev >= 2) ? SYS.strftime(i_h, "%H:%M:%S") : SYS.strftime(i_h, "%S");
+					lab_tm = (chLev >= 2) ? SYS.strftime(i_h, "%H:%M:%S") : (i_h%60).toPrecision(6)+tr("s");
 				//Milliseconds
 				else if(hvLev <= 1 || (i_h-floor(i_h))*1e6)
-					lab_tm = (chLev >= 2) ? SYS.strftime(i_h, "%H:%M:%S")+(i_h-floor(i_h)) :
-								(chLev >= 1) ? SYS.strftime(i_h, "%S")+"."+(i_h-floor(i_h))+tr("s") :
+					lab_tm = (chLev >= 2) ? SYS.strftime(i_h, "%H:%M:%S")+(i_h-floor(i_h)).toPrecision(6).slice(1) :
+								(chLev >= 1) ? ((i_h%60)+(i_h-floor(i_h))).toPrecision(6)+tr("s") :
 													(1e3*i_h).toPrecision(6)+tr("ms");
+
+				//SYS.messInfo("DG", "lab_tm="+lab_tm+"; hvLev="+hvLev+"; chLev="+chLev+"; i_h="+i_h);
 
 				endPosTm = endPosDt = 0, markY = tArY + tArH + mrkHeight;
 				if(hvLev < 6) {
@@ -13916,7 +13917,7 @@ if(hmax_ln >= 2) {
 					}
 					markY += mrkHeight;
 				}
-				if(lab_dt.size()) {
+				if(lab_dt.length) {
 					wdth = mrkFontSize*lab_dt.length*mrkFontWRange;
 					tpos = max(h_pos-wdth/2, 0);
 					if((tpos+wdth) < endMarkBrd && tpos > begMarkBrd) {
@@ -13967,5 +13968,5 @@ for(iTr = 0; iTr < trends.length; iTr++) {
 	}
 }
 
-return im.save();',1574605017);
+return im.save();',1575314914);
 COMMIT;

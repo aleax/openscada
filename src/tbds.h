@@ -117,6 +117,7 @@ class TBD : public TCntrNode, public TConfig
 
 	bool enableStat( ) const	{ return mEn; }
 	bool toEnable( )		{ return mToEn; }
+	bool disabledByUser( )		{ return mDisByUser; }
 
 	void setName( const string &inm )	{ cfg("NAME").setS(inm); }
 	void setDscr( const string &idscr )	{ cfg("DESCR").setS(idscr); }
@@ -187,6 +188,8 @@ class TBD : public TCntrNode, public TConfig
 	string	userSQLReq;
 	vector< vector<string> > userSQLResTbl;
 	char	userSQLTrans;
+
+	bool	mDisByUser;	//Disabled by user to prevent of restoring the enabling
 };
 
 //************************************************

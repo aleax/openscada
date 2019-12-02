@@ -100,12 +100,12 @@ TCntrNode &TParamContr::operator=( const TCntrNode &node )
 
 	//Included parameters copy
 	if(mPrm >= 0) {
-	    vector<string> prm_ls;
-	    src_n->list(prm_ls);
-	    for(unsigned iP = 0; iP < prm_ls.size(); iP++) {
-		if(!owner().owner().tpPrmPresent(src_n->at(prm_ls[iP]).at().type().name)) continue;
-		if(!present(prm_ls[iP])) add(prm_ls[iP], owner().owner().tpPrmToId(src_n->at(prm_ls[iP]).at().type().name));
-		(TCntrNode&)at(prm_ls[iP]).at() = (TCntrNode&)src_n->at(prm_ls[iP]).at();
+	    vector<string> prmLs;
+	    src_n->list(prmLs);
+	    for(unsigned iP = 0; iP < prmLs.size(); iP++) {
+		if(!owner().owner().tpPrmPresent(src_n->at(prmLs[iP]).at().type().name)) continue;
+		if(!present(prmLs[iP])) add(prmLs[iP], owner().owner().tpPrmToId(src_n->at(prmLs[iP]).at().type().name));
+		(TCntrNode&)at(prmLs[iP]).at() = (TCntrNode&)src_n->at(prmLs[iP]).at();
 		//if(toEnable() && !enableStat()) enable();
 	    }
 	}
@@ -197,20 +197,20 @@ void TParamContr::LoadParmCfg( )
     }
 
     //Check for remove items removed from the DB
-    if(!SYS->selDB().empty()) {
-	vector<string> it_ls;
-	list(it_ls);
-	for(unsigned i_it = 0; i_it < it_ls.size(); i_it++)
-	    if(itReg.find(it_ls[i_it]) == itReg.end())
-		del(it_ls[i_it]);
+    if(SYS->chkSelDB(SYS->selDB(),true)) {
+	vector<string> itLs;
+	list(itLs);
+	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
+	    if(itReg.find(itLs[iIt]) == itReg.end())
+		del(itLs[iIt]);
     }
 
     //Force load present parameters
-    vector<string> prm_ls;
-    list(prm_ls);
-    for(unsigned iP = 0; iP < prm_ls.size(); iP++) {
-	at(prm_ls[iP]).at().modifG();
-	at(prm_ls[iP]).at().load();
+    vector<string> prmLs;
+    list(prmLs);
+    for(unsigned iP = 0; iP < prmLs.size(); iP++) {
+	at(prmLs[iP]).at().modifG();
+	at(prmLs[iP]).at().load();
     }
 }
 
