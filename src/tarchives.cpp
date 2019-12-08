@@ -249,11 +249,11 @@ string TArchiveS::optDescr( )
     return TSYS::strMess(_(
 	"======================== Subsystem \"Archives-History\" options ===================\n"
 	"------ Parameters of the section '%s' of the configuration file ------\n"
-	"MessBufSize <items>     Size of the messages buffer.\n"
-	"MessPeriod <sec>        Period of the messages archiving.\n"
-	"ValPeriod  <msec>       Period of active archiving of values.\n"
-	"ValPriority <level>     Level of priority of the task of active archiving of values.\n"
-	"RdRestDtOverTm <hours>  Depth of the forced overloading of the reserve history at startup, in hours.\n\n"
+	"MessBufSize    <items>  Size of the messages buffer.\n"
+	"MessPeriod     <sec>    Period of the messages archiving.\n"
+	"ValPeriod      <msec>   Period of active archiving of values.\n"
+	"ValPriority    <level>  Level of priority of the task of active archiving of values.\n"
+	"RdRestDtOverTm <days>   Depth of the forced overloading of the reserve history at startup, in days.\n\n"
 	), nodePath().c_str()) + TSubSYS::optDescr();
 }
 
@@ -1345,10 +1345,10 @@ void TMArchivator::redntDataUpdate( )
     vector<TMess::SRec> mess;
 
     //Init the point from which the archives sync
-    if(!mRdTm) mRdTm = vmax(0, (end()?end():SYS->sysTm())-owner().owner().rdRestDtOverTm()*86400);
+    if(!mRdTm) mRdTm = vmax(0, (end()?end():SYS->sysTm())-(time_t)(owner().owner().rdRestDtOverTm()*86400));
 
     //First start replay of the local archive for active messages
-    if(mRdFirst) {
+    if(mRdFirst && end() > mRdTm) {
 	get(mRdTm, end(), mess);
 	owner().owner().messPut(mess, ALRM_ARCH_NM);
     }

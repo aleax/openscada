@@ -31,7 +31,7 @@
 #define MOD_NAME	_("DB FireBird")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.2.1"
+#define MOD_VER		"2.3.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DBMS FireBird.")
 #define LICENSE		"GPL2"
@@ -284,6 +284,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
     ISC_STATUS_ARRAY status;
 
     try {
+	int repCnt = 0;
 	rep:
 	ISC_STATUS rez = 0;
 	//Prepare statement
@@ -304,7 +305,9 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 		case isc_net_connect_listen_err:
 		case isc_net_write_err: case isc_net_read_err:
 		    //Try to reconnect
-		    try { enable(); goto rep; } catch(TError&) { }
+		    if((repCnt++) < 3)
+			try { enable(); goto rep; } catch(TError&) { }
+		    else mess_warning(nodePath().c_str(), _("Repeated errors of requesting the DB: %s."), getErr(status).c_str());
 
 		    disable();
 		    throw err_sys(_("Error connecting to a DB: %s"), getErr(status).c_str());

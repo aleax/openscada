@@ -102,7 +102,7 @@ void SUNXI::enable( TParamContr *ip )
     if(sunxi_gpio_init() != 0)
 	throw TError(p->nodePath().c_str(),_("Init SUNXI GPIO library error whether that is not SUNXI or there is not access."));
 
-    MtxAlloc res(p->owner().dataRes(), true);
+    MtxAlloc res(p->owner().enRes(), true);
     if(use)	throw TError(p->nodePath().c_str(), _("SUNXI GPIO is already used."));
     use = true;
 

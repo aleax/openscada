@@ -125,6 +125,8 @@ class TVision : public TUI
 	int		mCachePgSz;		//Cached pages number
 
 	int		mScrnCnt;
+
+	ResMtx		mnWindsRes;
 };
 
 extern TVision *mod;

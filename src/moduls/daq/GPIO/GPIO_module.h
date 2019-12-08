@@ -97,6 +97,8 @@ class TMdContr: public TController
     TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem );
     ~TMdContr( );
 
+    ResMtx &enRes( )	{ return mEnRes; }
+
     protected:
     //Methods
     void enable_( );
@@ -107,6 +109,9 @@ class TMdContr: public TController
     private:
     //Methods
     TParamContr *ParamAttach( const string &name, int type );
+
+    //Attributes
+    ResMtx	mEnRes;
 };
 
 //*************************************************

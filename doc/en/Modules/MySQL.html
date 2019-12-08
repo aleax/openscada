@@ -31,7 +31,7 @@
 <td> <a href="../Modules/MySQL.html" title="Special:MyLanguage/Modules/MySQL">MySQL</a> </td>
 <td> DB MySQL
 </td>
-<td> 3.2 </td>
+<td> 3.3 </td>
 <td> GPL2 </td>
 <td> bd_MySQL.so </td>
 <td> en,uk,ru,de </td>
@@ -64,7 +64,7 @@
 <li> <i>port</i> — port, which listening by the DBMS server (default 3306); </li>
 <li> <i>u_sock</i> — UNIX-socket name, for local accessing to the DBMS (/var/lib/mysql/mysql.sock);</li>
 <li> <i>charset-collation-engine</i> — DB <a class="external text" href="https://dev.mysql.com/doc/refman/5.5/en/charset-charsets.html" rel="nofollow noreferrer noopener" target="_blank">charset, collation</a> and <a class="external text" href="https://dev.mysql.com/doc/refman/5.5/en/storage-engines.html" rel="nofollow noreferrer noopener" target="_blank">storage engine</a> for "CREATE DATABASE" and "SET";</li>
-<li> <i>tms</i> — MySQL timeouts in the form "<b>{connect},{read},{write}</b>" and in seconds.</li></ul>
+<li> <i>tms</i> — MySQL timeouts in the form "<b>{connect},{read},{write}</b>" and in seconds, the default value is "10,5,5".</li></ul>
 <p>In the case of local access to the DBMS, within a single host, you need to use a UNIX socket, for example: "<b>;roman; 123456;OpenSCADA;;/var/lib/mysql/mysql.sock;utf8-utf8_general_ci-MyISAM;5,2,2</b>"
 </p><p>In the case of remote access to the DBMS you must use the hostname and port of the DBMS server, for example: "<b>server.nm.org;user;password;OpenSCADA;3306</b>"
 </p>

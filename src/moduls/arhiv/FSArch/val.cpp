@@ -115,7 +115,7 @@ void ModVArch::start( )
     //Checking the archiver folders for duplicates
     if(!startStat()) {
 	string dbl = "";
-	MtxAlloc res(mod->dataRes(), true);
+	MtxAlloc res(mod->enRes(), true);
 	const char *fLock = "fsArchLock";
 	int hd = open((addr()+"/"+fLock).c_str(), O_CREAT|O_TRUNC|O_WRONLY, SYS->permCrtFiles());
 	if(hd >= 0) {

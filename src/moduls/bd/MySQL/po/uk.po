@@ -1,13 +1,13 @@
 # OpenSCADA.DB.MySQL translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.DB.MySQL module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2003-2018.
+# Roman Savochenko <rom_as@oscada.org>, 2003-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.MySQL 1.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-05 14:55+0300\n"
+"POT-Creation-Date: 2019-12-08 19:36+0200\n"
 "PO-Revision-Date: 2007-10-23 12:23+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -39,13 +39,15 @@ msgstr "Помилка запиту до БД: %s"
 msgid "Error opening the table '%s': the DB is disabled."
 msgstr "Помилка відкриття таблиці '%s': БД вимкнено."
 
+msgid "Repeated errors of requesting the DB: '%s (%d)'."
+msgstr "Повторювані помилки запиту БД: '%s (%d)'."
+
 #, c-format
 msgid "Error connecting to the DB: '%s (%d)'!"
 msgstr "Помилка підключення до БД: '%s (%d)'!"
 
-#, c-format
-msgid "Error the query '%s'."
-msgstr "Помилка запиту '%s'."
+msgid "Error the query '%s': '%s (%d)'."
+msgstr "Помилка запиту '%s': '%s (%d)'."
 
 #, c-format
 msgid "Error querying the DB: '%s (%d)'!"

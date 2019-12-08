@@ -1172,8 +1172,8 @@ Structure of template links (class — TPrmTempl::Impl::SLnk):
 <li> <i>time_t messBeg( const string &amp;arch = "" );</i> — Beginning of the messages' archive as a whole or for the specified archiver <i>arch</i>.</li>
 <li> <i>time_t messEnd( const string &amp;arch = "" );</i> — End of the messages' archive as a whole or for the specified archiver <i>arch</i>.</li>
 <li> <i>time_t rdTm( );</i> — Time of the last redundancy operation, maximum for message archivers in the active redundancy.</li>
-<li> <i>float rdRestDtOverTm( );</i> — Overtime of the reserve history reload at start in days.</li>
-<li> <i>void setRdRestDtOverTm( float vl );</i> — Setting of overtime of the reserve history reload at start in days.</li>
+<li> <i>double rdRestDtOverTm( );</i> — Overtime of the reserve history reload at start in days.</li>
+<li> <i>void setRdRestDtOverTm( double vl );</i> — Setting of overtime of the reserve history reload at start in days.</li>
 <li> <i>void rdActArchMList( vector&lt;string&gt; &amp;ls, bool isRun = false );</i> — The list of active message archivators working in the redundancy scheme. When we indicate <i>isRun</i> there will be in the list only running message archvators in this station.</li>
 <li> <i>string rdStRequest( const string &amp;arch, XMLNode &amp;req, const string &amp;prevSt = "", bool toRun = true );</i> — Request <i>req</i> to the redundant station on behalf of the message archivator <i>arch</i>. The station for the request is selected after specified in <i>prevSt</i> for the running remotely message archivators when indicating <i>toRun</i>.</li>
 <li> <i>TElem &amp;messE( );</i> — DB structure of the messages' archivers.</li>

@@ -31,7 +31,7 @@
 <td> <a href="../Modules/MySQL.html" title="Special:MyLanguage/Modules/MySQL">MySQL</a> </td>
 <td> БД MySQL
 </td>
-<td> 3.2 </td>
+<td> 3.3 </td>
 <td> GPL2 </td>
 <td> bd_MySQL.so </td>
 <td> en,uk,ru,de </td>
@@ -64,7 +64,7 @@
 <li> <i>port</i> — порт, який слухає сервер БД (по замовченню 3306);</li>
 <li> <i>u_sock</i> — ім'я UNIX-сокету, у випадку локального доступу до СУБД (/var/lib/mysql/mysql.sock);</li>
 <li> <i>charset-collation-engine</i> — <a class="external text" href="https://dev.mysql.com/doc/refman/5.5/en/charset-charsets.html" rel="nofollow noreferrer noopener" target="_blank">таблиця символів, режим порівняння</a> та <a class="external text" href="https://dev.mysql.com/doc/refman/5.5/en/storage-engines.html" rel="nofollow noreferrer noopener" target="_blank">рушій сховища</a> БД для "CREATE DATABASE" та "SET";</li>
-<li> <i>tms</i> — таймаути MySQL у форматі "<b>{connect},{read},{write}</b>" та секундах.</li></ul>
+<li> <i>tms</i> — таймаути MySQL у форматі "<b>{connect},{read},{write}</b>" та секундах, значення по замовченню "10,5,5".</li></ul>
 <p>У випадку локального доступу до СУБД, у межах одного хосту, треба використовувати UNIX сокет, наприклад: "<b>;user;password;OpenSCADA;;/var/lib/mysql/mysql.sock;utf8-utf8_general_ci-MyISAM;5,2,2</b>"
 </p><p>У випадку віддаленого доступу до СУБД треба використовувати ім'я хосту та порт серверу СУБД, наприклад: "<b>server.nm.org;user;password;OpenSCADA;3306</b>"
 </p>

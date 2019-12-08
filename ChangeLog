@@ -1,3 +1,17 @@
+2019-12-08 Roman (stable)
+- !!:FIX:SYS: The JavaLikeCalc translation by the function tr() fixed in creating the translations table "Trs" and entries here in
+    the simple mode (single language).
+    !!:FIX:The function TSYS::chkSelDB() fixed after expanding for checking the DB enabling, checking the special DBs DB_CFG, "*.*".
+- FIX:Archive: TArchiveS::rdRestDtOverTm() fixed by expanding from the float to double type,
+    due to the precission errors at multiplication on 86400 in reloading from the local archive of the redundancy.
+- !!!!:SYS.Transport,Archive.FSArch,DAQ.{BFN,GPIO,ModBus,OPC_UA},Protocol.{OPC_UA,HTTP,SelfSystem},UI.{VCAEngine,Vision,WebVision}:
+    Some common data resources of dataRes() replaced by own resources, mostly due to the observed locking problems in Protocol.HTTP, DAQ.ModBus.
+- DB.MySQL: The default timeouts set to "10:5:5".
+- !!: DB.{MySQL,FireBird,PostgreSQL}: The connection restoring appended by limit in 3 tries, to prevent of hangs at timeout errors.
+    Tables list obtaining of the DB switched to the indiferent mode to transactions.
+- DAQ.ModBus: Appended for writing into the logical context in the redundant mode.
+
+
 2019-12-02 Roman (stable)
 - !:FIX:DB.LibsDB.OscadaLibs: JavaLikeCalc.web.diagram: Fixed in the horizontal scale (time) building.
 - !:FIX:DB.LibsDB.vcaBase: Main.graphSelPrm: Some fixed in forming the combobox.

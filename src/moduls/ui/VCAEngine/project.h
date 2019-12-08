@@ -150,7 +150,7 @@ class Project : public TCntrNode, public TConfig
 	ResRW	mStRes;
 	map< string, vector<string> >	mStProp;	//Styles' properties
 
-	ResMtx	mFuncM;
+	ResMtx	mFuncM, mHeritRes;
 
 	vector< AutoHD<Session> > mHerit;	//Heritators
 };

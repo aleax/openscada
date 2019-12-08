@@ -155,9 +155,9 @@ void MBD::allowList( vector<string> &list ) const
     if(!enableStat()) return;
     list.clear();
     vector< vector<string> > tbl;
-    const_cast<MBD*>(this)->sqlReq("SELECT name FROM sqlite_master WHERE type IN ('table','view') AND name NOT LIKE 'sqlite_%';", &tbl, false);
-    for(unsigned i_t = 1; i_t < tbl.size(); i_t++)
-	list.push_back(tbl[i_t][0]);
+    const_cast<MBD*>(this)->sqlReq("SELECT name FROM sqlite_master WHERE type IN ('table','view') AND name NOT LIKE 'sqlite_%';", &tbl/*, false*/);
+    for(unsigned iT = 1; iT < tbl.size(); iT++)
+	list.push_back(tbl[iT][0]);
 }
 
 TTable *MBD::openTable( const string &inm, bool create )

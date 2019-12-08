@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB PostgreSQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.2.1"
+#define MOD_VER		"2.3.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2010-2011)")
 #define DESCRIPTION	_("DB module. Provides support of the DBMS PostgreSQL.")
 #define MOD_LICENSE	"GPL2"
@@ -224,8 +224,8 @@ void MBD::allowList( vector<string> &list ) const
 		    "AND n.nspname !~ '^pg_toast' "
 		    "AND pg_catalog.pg_table_is_visible(c.oid)";
     vector< vector<string> > tbl;
-    const_cast<MBD*>(this)->sqlReq(req, &tbl, false);
-    for(unsigned i_t = 1; i_t < tbl.size(); i_t++) list.push_back(tbl[i_t][0]);
+    const_cast<MBD*>(this)->sqlReq(req, &tbl/*, false*/);
+    for(unsigned iT = 1; iT < tbl.size(); iT++) list.push_back(tbl[iT][0]);
 }
 
 TTable *MBD::openTable( const string &inm, bool icreate )
@@ -378,6 +378,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
     if(intoTrans && intoTrans != EVAL_BOOL)	transOpen();
     else if(!intoTrans && reqCnt)		transCommit();
 
+    int repCnt = 0;
 rep:
     int64_t tmBeg = SYS->curTime();
     if((res=PQexec(connection,req.c_str())) == NULL) {
@@ -391,7 +392,9 @@ rep:
 
 	if(PQstatus(connection) != CONNECTION_OK) {
 	    //Try to reconnect
-	    try { enable(); goto rep; } catch(TError&) { }
+	    if((repCnt++) < 3)
+		try { enable(); goto rep; } catch(TError&) { }
+	    else mess_warning(nodePath().c_str(), _("Repeated errors of requesting the DB: '%s (%s)'."), err1.c_str(), err.c_str());
 
 	    //resource.unlock();
 	    disable();

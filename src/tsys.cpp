@@ -943,7 +943,8 @@ void TSYS::unload( )
 bool TSYS::chkSelDB( const string& wDB,  bool isStrong )
 {
     return (selDB().empty() && !isStrong) ||
-	(selDB().size() && SYS->selDB() == TBDS::realDBName(wDB) && ((AutoHD<TBD>)db().at().nodeAt(wDB,0,'.')).at().enableStat());
+	(selDB().size() && SYS->selDB() == TBDS::realDBName(wDB) &&
+	    (wDB == DB_CFG || wDB == "*.*" || ((AutoHD<TBD>)db().at().nodeAt(wDB,0,'.')).at().enableStat()));
 }
 
 void TSYS::setMainCPUs( const string &vl )

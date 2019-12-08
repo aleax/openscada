@@ -34,7 +34,7 @@
 #define MOD_NAME	_("DB MySQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"3.2.1"
+#define MOD_VER		"3.3.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DBMS MySQL.")
 #define MOD_LICENSE	"GPL2"
@@ -150,11 +150,11 @@ void MBD::enable( )
     //Timeouts parse
     off = 0;
     unsigned int tTm;
-    if(!(tTm=s2i(TSYS::strParse(tms,0,",",&off))))	tTm = 1;
+    if(!(tTm=s2i(TSYS::strParse(tms,0,",",&off))))	tTm = 10;
     mysql_options(&connect, MYSQL_OPT_CONNECT_TIMEOUT, &tTm);
-    if(!(tTm=s2i(TSYS::strParse(tms,0,",",&off))))	tTm = 1;
+    if(!(tTm=s2i(TSYS::strParse(tms,0,",",&off))))	tTm = 5;
     mysql_options(&connect, MYSQL_OPT_READ_TIMEOUT, &tTm);
-    if(!(tTm=s2i(TSYS::strParse(tms,0,",",&off))))	tTm = 1;
+    if(!(tTm=s2i(TSYS::strParse(tms,0,",",&off))))	tTm = 5;
     mysql_options(&connect, MYSQL_OPT_WRITE_TIMEOUT, &tTm);
 
     my_bool reconnect = MYSQL_RECONNECT;
@@ -200,9 +200,9 @@ void MBD::allowList( vector<string> &list ) const
     if(!enableStat())	return;
     list.clear();
     vector< vector<string> > tbl;
-    const_cast<MBD*>(this)->sqlReq("SHOW TABLES FROM `"+TSYS::strEncode(bd,TSYS::SQL)+"`", &tbl, false);
-    for(unsigned i_t = 1; i_t < tbl.size(); i_t++)
-	list.push_back(tbl[i_t][0]);
+    const_cast<MBD*>(this)->sqlReq("SHOW TABLES FROM `"+TSYS::strEncode(bd,TSYS::SQL)+"`", &tbl/*, false*/);
+    for(unsigned iT = 1; iT < tbl.size(); iT++)
+	list.push_back(tbl[iT][0]);
 }
 
 TTable *MBD::openTable( const string &inm, bool create )
@@ -233,7 +233,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
     if(intoTrans && intoTrans != EVAL_BOOL) transOpen();
     else if(!intoTrans && reqCnt) transCommit();
 
-    int irez, eNRez;
+    int irez, eNRez, repCnt = 0;
     rep:
     if((irez=mysql_real_query(&connect,req.c_str(),req.size()))) {
 	eNRez = mysql_errno(&connect);
@@ -242,7 +242,9 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 	{
 #if !MYSQL_RECONNECT
 	    //Try to reconnect
-	    try { enable(); goto rep; } catch(TError&) { }
+	    if((repCnt++) < 3)
+		try { enable(); goto rep; } catch(TError&) { }
+	    else mess_warning(nodePath().c_str(), _("Repeated errors of requesting the DB: '%s (%d)'."), mysql_error(&connect), irez);
 #endif
 	    //resource.unlock();
 	    disable();
@@ -255,7 +257,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 		//resource.lock();
 		goto rep;
 	    }
-	    if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("Error the query '%s'."), ireq.c_str());
+	    if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("Error the query '%s': '%s (%d)'."), ireq.c_str(), mysql_error(&connect), irez);
 	    throw err_sys(_("Error querying the DB: '%s (%d)'!"), mysql_error(&connect), irez);
 	}
     }

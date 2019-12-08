@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>. 2010-2018.
+# Roman Savochenko <rom_as@oscada.org>. 2010-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.MySQL 1.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-05 14:55+0300\n"
+"POT-Creation-Date: 2019-12-08 19:36+0200\n"
 "PO-Revision-Date: 2009-08-17 11:32+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -42,13 +42,15 @@ msgstr "Fehler beim Abfragen der DB: %s"
 msgid "Error opening the table '%s': the DB is disabled."
 msgstr "Fehler beim Öffnen der Tabelle '%s': Die DB ist deaktiviert."
 
+msgid "Repeated errors of requesting the DB: '%s (%d)'."
+msgstr "Wiederholte Fehler beim Anfordern der DB: '%s (%d)'."
+
 #, c-format
 msgid "Error connecting to the DB: '%s (%d)'!"
 msgstr "Fehler beim Verbinden mit dem DB: '%s (%d)'!"
 
-#, c-format
-msgid "Error the query '%s'."
-msgstr "Fehler bei der Abfrage '%s'."
+msgid "Error the query '%s': '%s (%d)'."
+msgstr "Fehler bei der Abfrage '%s': '%s (%d)'."
 
 #, c-format
 msgid "Error querying the DB: '%s (%d)'!"

@@ -32,7 +32,7 @@
 #define MOD_NAME	_("Own protocol of OpenSCADA")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.4.0"
+#define MOD_VER		"1.4.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides own OpenSCADA protocol based at XML and the control interface of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -85,7 +85,7 @@ int TProt::sesOpen( const string &user, const string &pass, const string &src )
     string pHash;
     if(!SYS->security().at().usrPresent(user) || !SYS->security().at().usrAt(user).at().auth(pass,&pHash)) return -1;
 
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(authRes, true);
 
     //Check sesions for close old and reuse more other
     unsigned i_oCnt = 0;
@@ -118,13 +118,13 @@ int TProt::sesOpen( const string &user, const string &pass, const string &src )
 
 void TProt::sesClose( int idSes )
 {
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(authRes, true);
     mAuth.erase(idSes);
 }
 
 TProt::SAuth TProt::sesGet( int idSes )
 {
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(authRes, true);
     map<int, SAuth>::iterator aI = mAuth.find(idSes);
     if(aI != mAuth.end()) {
 	time_t cur_tm = time(NULL);
@@ -140,7 +140,7 @@ TProt::SAuth TProt::sesGet( int idSes )
 
 void TProt::sesSet( int idSes, const SAuth &auth )
 {
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(authRes, true);
     mAuth[idSes] = auth;
 }
 
@@ -300,7 +300,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
     //Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/prm/st/auths" && ctrChkNode(opt)) {
-	MtxAlloc res(dataRes(), true);
+	MtxAlloc res(authRes, true);
 	for(map<int,SAuth>::iterator authEl = mAuth.begin(); authEl != mAuth.end(); ++authEl)
 	    opt->childAdd("el")->setText(TSYS::strMess("%s %s(%s)",
 		atm2s(authEl->second.tAuth).c_str(),authEl->second.name.c_str(),authEl->second.src.c_str()));

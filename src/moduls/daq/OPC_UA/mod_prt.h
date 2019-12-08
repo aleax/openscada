@@ -44,7 +44,7 @@ using namespace OPC;
 #define PRT_NAME	_("Server OPC-UA")
 #define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
-#define PRT_MVER	"1.8.9"
+#define PRT_MVER	"1.8.10"
 #define PRT_AUTOR	_("Roman Savochenko")
 #define PRT_DESCR	_("Provides OPC-UA server service implementation.")
 #define PRT_LICENSE	"GPL2"
@@ -166,6 +166,8 @@ class OPCEndPoint: public TCntrNode, public TConfig, public Server::EP
 	string	mDB;
 
 	uint32_t mLimSubScr, mLimMonitItms, mLimRetrQueueTm;
+
+	ResMtx	secRes;
 };
 
 //*************************************************

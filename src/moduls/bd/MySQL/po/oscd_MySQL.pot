@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-02 16:27+0200\n"
+"POT-Creation-Date: 2019-12-08 19:36+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,11 +42,15 @@ msgid "Error opening the table '%s': the DB is disabled."
 msgstr ""
 
 #, c-format
+msgid "Repeated errors of requesting the DB: '%s (%d)'."
+msgstr ""
+
+#, c-format
 msgid "Error connecting to the DB: '%s (%d)'!"
 msgstr ""
 
 #, c-format
-msgid "Error the query '%s'."
+msgid "Error the query '%s': '%s (%d)'."
 msgstr ""
 
 #, c-format

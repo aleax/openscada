@@ -113,7 +113,7 @@ class TTransportIn : public TCntrNode, public TConfig
 	char	&mStart;
 	string	mDB;
 
-	ResMtx	assTrRes;
+	ResMtx	assTrRes, mLogRes;
 	vector<AutoHD<TTransportOut> >	mAssTrO;
 
 	// IO log
@@ -207,7 +207,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	// Reserve parameters
 	time_t	mStartTm;
 	int64_t	mPrm1, mPrm2;
-	ResMtx	mReqRes;
+	ResMtx	mReqRes, mLogRes;
 
 	// IO log
 	int		mLogLen;

@@ -245,8 +245,8 @@ class TArchiveS : public TSubSYS
 	// Redundancy
 	time_t rdTm( );			//Time of the last redundancy operation
 	bool rdProcess( XMLNode *reqSt = NULL );
-	float rdRestDtOverTm( )			{ return mRdRestDtOverTm; }	//In days
-	void setRdRestDtOverTm( float vl )	{ mRdRestDtOverTm = vmin(356,vmax(0,vl)); modif(); }
+	double rdRestDtOverTm( )		{ return mRdRestDtOverTm; }	//In days
+	void setRdRestDtOverTm( double vl )	{ mRdRestDtOverTm = vmin(356, vmax(0,vl)); modif(); }
 	void rdActArchMList( vector<string> &ls, bool isRun = false );
 	string rdStRequest( const string &arch, XMLNode &req, const string &prevSt = "", bool toRun = true );
 
@@ -306,7 +306,7 @@ class TArchiveS : public TSubSYS
 
 	// Redundancy
 	ResRW	mRdRes;
-	float	mRdRestDtOverTm;	//Overtime of the redundant history reload at start in hours
+	double	mRdRestDtOverTm;	//Overtime of the redundant history reload at start in hours
 	map<string, map<string,bool> > mRdArchM;
 	unsigned mRdFirst	: 1;
 };

@@ -189,7 +189,7 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 		    chNd = chldAt(iG, s_br.substr((*chGrp)[iG].id.size()));
 		    break;
 		}
-	    //Go to default thread
+	    //Go to the default thread
 	    if(chNd.freeStat() && chGrp) chNd = chldAt(0, s_br);
 	    res.unlock();
 	    if(!chNd.freeStat()) chNd.at().cntrCmd(opt, 0, path, off);

@@ -742,7 +742,7 @@ vector<AutoHD<TTransportOut> > TTransportIn::assTrs( bool checkForCleanDisabled 
 
 void TTransportIn::setLogLen( int vl )
 {
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(mLogRes, true);
 
     vl = vmax(0, vmin(10000,vl));
     while((int)mLog.size() > vl) mLog.pop_back();
@@ -752,7 +752,7 @@ void TTransportIn::setLogLen( int vl )
 
 void TTransportIn::pushLogMess( const string &vl )
 {
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(mLogRes, true);
 
     if(!logLen()) return;
 
@@ -903,7 +903,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/log/log") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD)) {
-	    MtxAlloc res(dataRes(), true);
+	    MtxAlloc res(mLogRes, true);
 	    for(unsigned iL = 0; iL < mLog.size(); iL++) {
 		int off = 0;
 		int64_t itTm   = s2ll(TSYS::strLine(mLog[iL],0,&off));
@@ -1008,7 +1008,7 @@ void TTransportOut::messProtIO( XMLNode &io, const string &prot )
 
 void TTransportOut::setLogLen( int vl )
 {
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(mLogRes, true);
 
     vl = vmax(0, vmin(10000,vl));
     while((int)mLog.size() > vl) mLog.pop_back();
@@ -1018,7 +1018,7 @@ void TTransportOut::setLogLen( int vl )
 
 void TTransportOut::pushLogMess( const string &vl )
 {
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(mLogRes, true);
 
     if(!logLen()) return;
 
@@ -1247,7 +1247,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/log/log") {
 	if(ctrChkNode(opt,"get",R_R___,"root",STR_ID,SEC_RD)) {
-	    MtxAlloc res(dataRes(), true);
+	    MtxAlloc res(mLogRes, true);
 	    for(unsigned iL = 0; iL < mLog.size(); iL++) {
 		int off = 0;
 		int64_t itTm   = s2ll(TSYS::strLine(mLog[iL],0,&off));

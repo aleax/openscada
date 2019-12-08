@@ -124,6 +124,8 @@ class TWEB: public TUI
 
 	void perSYSCall( unsigned int cnt );
 
+	ResMtx &cacheRes( )	{ return mCacheRes; }
+
     protected:
 	//Methods
 	void load_( );
@@ -149,6 +151,7 @@ class TWEB: public TUI
 	map<string,int> colors;				//Named colors
 
 	ResRW		mSesRes;			//Sessions resource
+	ResMtx		mCacheRes;
 };
 
 extern TWEB *mod;

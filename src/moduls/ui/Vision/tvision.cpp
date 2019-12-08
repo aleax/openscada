@@ -159,7 +159,7 @@ void TVision::postEnable( int flag )
 
 string TVision::uiPropGet( const string &prop, const string &user )
 {
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(mnWindsRes, true);
 
     XMLNode prmNd;
     try {
@@ -172,7 +172,7 @@ string TVision::uiPropGet( const string &prop, const string &user )
 
 void TVision::uiPropSet( const string &prop, const string &vl, const string &user )
 {
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(mnWindsRes, true);
 
     XMLNode prmNd("UI");
     try { prmNd.load(TBDS::genDBGet(nodePath()+"uiProps","",user)); }
@@ -250,7 +250,7 @@ QMainWindow *TVision::openWindow( )
 
 	//QDesktopWidget().screen(1)
 	// Find for already opened run window
-	MtxAlloc res(dataRes(), true);
+	MtxAlloc res(mnWindsRes, true);
 	bool openRunOK = false;
 	for(unsigned iW = 0; !openRunOK && iW < mnWinds.size(); iW++)
 	    openRunOK = (qobject_cast<VisRun*>(mnWinds[iW]) &&
@@ -283,7 +283,7 @@ void TVision::modStop( )
 
     mEndRun = true;
 
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(mnWindsRes, true);
     for(unsigned iW = 0; iW < mnWinds.size(); iW++)
 	while(mnWinds[iW]) {
 	    res.unlock();
@@ -306,7 +306,7 @@ WdgShape *TVision::getWdgShape( const string &iid )
 
 void TVision::regWin( QMainWindow *mwd )
 {
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(mnWindsRes, true);
     unsigned iW;
     for(iW = 0; iW < mnWinds.size(); iW++)
 	if(mnWinds[iW] == NULL) break;
@@ -316,7 +316,7 @@ void TVision::regWin( QMainWindow *mwd )
 
 void TVision::unregWin( QMainWindow *mwd )
 {
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(mnWindsRes, true);
     for(unsigned iW = 0; iW < mnWinds.size(); iW++)
 	if(mnWinds[iW] == mwd) mnWinds[iW] = NULL;
 }
@@ -356,7 +356,7 @@ void TVision::cntrCmdProc( XMLNode *opt )
     if(a_path == "/prm/st/disp_n" && ctrChkNode(opt))		opt->setText(i2s(mScrnCnt));
     else if(a_path == "/prm/st/mnWinds" && ctrChkNode(opt)) {
 	string rez;
-	MtxAlloc res(dataRes(), true);
+	MtxAlloc res(mnWindsRes, true);
 	for(unsigned iW = 0; iW < mnWinds.size(); iW++)
 	    if(dynamic_cast<VisDevelop*>(mnWinds[iW]))	opt->childAdd("el")->setText(TSYS::strMess(_("%d: Development by \"%s\"."),iW,((VisDevelop*)mnWinds[iW])->user().c_str()));
 	    else if(dynamic_cast<VisRun*>(mnWinds[iW]))	{

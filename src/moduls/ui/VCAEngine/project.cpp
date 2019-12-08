@@ -477,7 +477,7 @@ bool Project::stlPropSet( const string &pid, const string &vl, int sid )
 string Project::catsPat( )
 {
     string cat = "/ses_"+id()+"\\d*";
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(mHeritRes, true);
     for(unsigned iH = 0; iH < mHerit.size(); iH++)
 	cat += "|/ses_"+mHerit[iH].at().id();
 
@@ -487,7 +487,7 @@ string Project::catsPat( )
 void Project::heritReg( Session *s )
 {
     //Search for already registered session-heritator
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(mHeritRes, true);
     for(unsigned iH = 0; iH < mHerit.size(); iH++)
 	if(&mHerit[iH].at() == s)	return;
     mHerit.push_back(AutoHD<Session>(s));
@@ -496,7 +496,7 @@ void Project::heritReg( Session *s )
 void Project::heritUnreg( Session *s )
 {
     //Search the session-heritator
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(mHeritRes, true);
     for(unsigned iH = 0; iH < mHerit.size(); iH++)
 	if(&mHerit[iH].at() == s) {
 	    mHerit.erase(mHerit.begin()+iH);
@@ -514,7 +514,7 @@ void Project::pageEnable( const string &pg, bool vl )
     if(pPg.compare(0,3,"pg_") == 0)	pPg = pPg.substr(3);
 
     //Call the connected sessions for add-remove a page
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(mHeritRes, true);
 
     for(unsigned iH = 0; iH < mHerit.size(); iH++)
 	if(pL > 1) {

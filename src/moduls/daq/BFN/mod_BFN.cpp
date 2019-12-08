@@ -36,7 +36,7 @@
 #define MOD_NAME	_("BFN module")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.6.17"
+#define MOD_VER		"0.6.18"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Support Big Farm Net (BFN) modules for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com).")
 #define LICENSE		"GPL2"
@@ -117,7 +117,7 @@ void TTpContr::setSymbDB( const string &idb )
 
 string TTpContr::getSymbolCode(const string &id)
 {
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(mSymbRes, true);
     map<unsigned,string>::iterator is = mSymbCode.find(s2i(id));
     if(is == mSymbCode.end()) return TSYS::strMess(_("Code %s"),id.c_str());
     return is->second;
@@ -125,7 +125,7 @@ string TTpContr::getSymbolCode(const string &id)
 
 TTpContr::AlrmSymb TTpContr::getSymbolAlarm(const string &id)
 {
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(mSymbRes, true);
     map<unsigned,AlrmSymb>::iterator is = mSymbAlrm.find(s2i(id));
     if(is == mSymbAlrm.end()) return AlrmSymb();
     return is->second;
@@ -137,7 +137,7 @@ void TTpContr::load_( )
     string wtbl = MOD_ID"_SymbCode";
     string wdb  = symbDB();
     TConfig c_el(&symbCode_el);
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(mSymbRes, true);
     mSymbCode.clear();
     for(int fld_cnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,nodePath()+wtbl,fld_cnt,c_el); fld_cnt++)
 	mSymbCode[c_el.cfg("ID").getI()] = c_el.cfg("TEXT").getS();
@@ -156,7 +156,7 @@ void TTpContr::save_( )
     string wtbl = MOD_ID"_SymbCode";
     string wdb  = symbDB();
     TConfig c_el(&symbCode_el);
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(mSymbRes, true);
     for(map<unsigned,string>::iterator is = mSymbCode.begin(); is != mSymbCode.end(); is++) {
 	c_el.cfg("ID").setI(is->first);
 	c_el.cfg("TEXT").setS(is->second);
@@ -216,7 +216,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setSymbDB(opt->text());
     }
     else if(a_path == "/symbs/codes") {
-	MtxAlloc res(dataRes(), true);
+	MtxAlloc res(mSymbRes, true);
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    XMLNode *n_id	= ctrMkNode("list",opt,-1,"/symbs/codes/id","");
 	    XMLNode *n_text	= ctrMkNode("list",opt,-1,"/symbs/codes/text","");
@@ -243,7 +243,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 	modif();
     }
     else if(a_path == "/symbs/alrms") {
-	MtxAlloc res(dataRes(), true);
+	MtxAlloc res(mSymbRes, true);
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    XMLNode *n_id	= ctrMkNode("list",opt,-1,"/symbs/alrms/id","");
 	    XMLNode *n_code	= ctrMkNode("list",opt,-1,"/symbs/alrms/code","");

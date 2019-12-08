@@ -107,6 +107,8 @@ class TProt: public TProtocol
 	//Attributes
 	map<int, SAuth>	mAuth;
 	int		mTAuth, mComprLev, mComprBrd, mSingleUserHostLimit;
+
+	ResMtx		authRes;
 };
 
 extern TProt *mod;

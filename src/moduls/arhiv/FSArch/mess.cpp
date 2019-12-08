@@ -104,7 +104,7 @@ void ModMArch::start( )
 {
     if(!startStat()) {
 	string dbl = "";
-	MtxAlloc res(mod->dataRes(), true);
+	MtxAlloc res(mod->enRes(), true);
 	const char *fLock = "fsArchLock";
 	int hd = open((addr()+"/"+fLock).c_str(), O_CREAT|O_TRUNC|O_WRONLY, SYS->permCrtFiles());
 	if(hd >= 0) {
@@ -326,7 +326,7 @@ void ModMArch::checkArchivator( bool now )
 		f_arh->scan = true;
 
 		res.request(true);
-		//  Oldest and broken archives to down
+		//  Oldest and broken archives to the down
 		if(f_arh->err()) files.push_back(f_arh);
 		else {
 		    for(iF = 0; iF < files.size(); iF++)
@@ -666,7 +666,7 @@ void MFileArch::attach( const string &iname, bool full )
 	    mChars = s_char;
 	    mXML = false;
 	    mLoad = true;
-	    fseek(f,0,SEEK_END);
+	    fseek(f, 0, SEEK_END);
 	    mSize = ftell(f);
 
 	    // Delete Node tree

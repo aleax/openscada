@@ -632,7 +632,7 @@ void TMdPrm::disable( )
 
 string TMdPrm::attrPrc( )
 {
-    MtxAlloc res(dataRes());
+    MtxAlloc res(enRes);
 
     bool srchOK = false;
     XML_N req("opc.tcp");
@@ -845,7 +845,7 @@ void TMdPrm::vlGet( TVal &val )
 	//Check remote attributes for error status
 	uint32_t firstErr = 0;
 	vector<uint32_t> astls;
-	MtxAlloc res(dataRes(), true);
+	MtxAlloc res(enRes, true);
 	for(unsigned iA = 0; iA < pEl.fldSize(); iA++) {
 	    astls.push_back(pEl.fldAt(iA).len());
 	    if(pEl.fldAt(iA).len() && !firstErr) firstErr = pEl.fldAt(iA).len();

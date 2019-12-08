@@ -532,8 +532,8 @@
 <p>Each database object contains its own configuration page with the tabs "Data base", "Tables" and "SQL", in case support of SQL-requests. Besides the basic operations you can copy contents of DB by means of the standard function of the objects copying in the configurator. The copying operation of DB contents involves copying of an original database to a destination database, and the contents of the destination database is not cleared before the copy operation. Copying the contents of database is made only when the both databases are enabled, otherwise it will simple copy of the object of the database.
 </p><p>The tab "Data base" (Fig.4.1d) contains the main configuration options of the DB object as follows:
 </p>
-<ul><li> Section "State" — contains the properties which characterize the DB object status:
-<ul><li> <i>Enabled</i> — state "Enabled" of the DB object.</li>
+<ul><li> Section "State" — contains the properties which characterise the DB object status:
+<ul><li> <i>Enabled</i> — state "Enabled" of the DB-object. For network databases this status involves connecting to the DBMS, respectively reflects the fact that there is a connection established and which, when set the sign "To enable", is periodically restored.</li>
 <li> <i>Accessible tables</i> — list of tables that are in the database. Context menu of the property gives the opportunity to physically remove the tables from the database.</li>
 <li> <i>Load the program from this DB</i> — command to make loading from this database. Can be used when transferring data in the database between stations. For example, you can to save a part of one station in an export database, to move physically the DB to another station and to connect it in this subsystem, and to call this command.</li></ul></li>
 <li> Section "Configuration" — contains the following configuration fields:
@@ -618,7 +618,7 @@
 </p>
 <ul><li> Section "State" — contains the settings that characterize the state of the transport:
 <ul><li> <i>Status</i> — information on the current transport's status and statistics of its work. Most modules provide advanced diagnostics in this field when enabled with <a href="#Config">the debuging mode</a>.</li>
-<li> <i>Running</i> — state of the transport "Running".</li>
+<li> <i>Running</i> — state of the transport "Running". Given the network nature of the transports, this state often involves connecting to a remote network node and accordingly reflecting the fact that the connection is present. For output transports, there is no need for the user to be obliged to set this state because it is used by an external entity of the communication protocols, often by the data sources, that try to start the transport beforehand, so by establishing a connection for further exchange, moreover, the transport may be stopped by that entity.</li>
 <li> <i>Transport DB</i> — DB address to store the transport's data.</li></ul></li>
 <li> Section "Configuration" — directly contains the configuration fields:
 <ul><li> <i>Identifier</i> — information on the transport's identifier.</li>
@@ -1515,11 +1515,11 @@ RdRestDtTm &lt;hour&gt;       Depth of recovery time of archive data from the re
 
 ======================== Subsystem "Archives-History" options ===================
 ------ Parameters of the section '/sub_Archive/' of the configuration file ------
-MessBufSize &lt;items&gt;     Size of the messages buffer.
-MessPeriod &lt;sec&gt;        Period of the messages archiving.
-ValPeriod  &lt;msec&gt;       Period of active archiving of values.
-ValPriority &lt;level&gt;     Level of priority of the task of active archiving of values.
-RdRestDtOverTm &lt;hours&gt;  Depth of the forced overloading of the reserve history at startup, in hours.
+MessBufSize    &lt;items&gt;  Size of the messages buffer.
+MessPeriod     &lt;sec&gt;    Period of the messages archiving.
+ValPeriod      &lt;msec&gt;   Period of active archiving of values.
+ValPriority    &lt;level&gt;  Level of priority of the task of active archiving of values.
+RdRestDtOverTm &lt;days&gt;   Depth of the forced overloading of the reserve history at startup, in days.
 
 ======================= Module &lt;Archive:FSArch&gt; options =======================
     --noArchLimit       Disable the limit on number of files.

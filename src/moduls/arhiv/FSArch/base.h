@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Archiver on the file system")
 #define MOD_TYPE	SARH_ID
 #define VER_TYPE	SARH_VER
-#define MOD_VER		"3.3.0"
+#define MOD_VER		"3.3.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The archiver module. Provides functions for messages and values archiving to the file system.")
 #define LICENSE		"GPL2"
@@ -72,6 +72,8 @@ class ModArch: public TTypeArchivator
 
 	void perSYSCall( unsigned int cnt );
 
+	ResMtx &enRes( )	{ return mEnRes; }
+
 	// Attributes
 	bool	noArchLimit;
 
@@ -89,6 +91,8 @@ class ModArch: public TTypeArchivator
 
 	//Attributes
 	TElem	elPackfl;	//Arch files elements
+
+	ResMtx	mEnRes;
 };
 
 extern ModArch *mod;

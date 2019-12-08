@@ -162,7 +162,8 @@ class TProt: public TProtocol
 	int		mTAuth;
 	time_t		lstSesChk;
 
-	vector<SAutoLogin>	mALog;
+	vector<SAutoLogin> mALog;
+	ResMtx		authM;
 };
 
 extern TProt *mod;

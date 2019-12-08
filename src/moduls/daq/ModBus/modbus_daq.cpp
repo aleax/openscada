@@ -179,7 +179,7 @@ void TMdContr::start_( )
 
     //Reenable parameters for data blocks structure update
     // Asynchronous writings queue clean up
-    dataRes().lock(); asynchWrs.clear(); dataRes().unlock();
+    aWrRes.lock(); asynchWrs.clear(); aWrRes.unlock();
 
     // Clear data blocks
     reqRes.resRequestW(true);
@@ -445,10 +445,10 @@ bool TMdContr::setVal( const TVariant &val, const string &addr, MtxString &w_err
 
     //Registering for the later common writing in the asynchronous mode and pass updating the just writed values
     if(chkAssync) {
-	dataRes().lock(); asynchWrs[addr] = val.getS(); dataRes().unlock();
+	aWrRes.lock(); asynchWrs[addr] = val.getS(); aWrRes.unlock();
 	if(mAsynchWr)	return true;
     }
-    //if(chkAssync && mAsynchWr) { MtxAlloc resAsWr(dataRes(), true); asynchWrs[addr] = val.getS(); return true; }
+    //if(chkAssync && mAsynchWr) { MtxAlloc resAsWr(aWrRes, true); asynchWrs[addr] = val.getS(); return true; }
 
     //For direct writing we need the good connection in any event
     if(tmDelay > 0) {
@@ -743,7 +743,7 @@ void *TMdContr::Task( void *icntr )
 	    if(!cntr.period())	t_cnt = TSYS::curTime();
 
 	    //Write asynchronous writings queue
-	    /*MtxAlloc resAsWr(cntr.dataRes(), true);
+	    /*MtxAlloc resAsWr(cntr.aWrRes, true);
 	    map<string,string> aWrs = cntr.asynchWrs;
 	    cntr.asynchWrs.clear();
 	    resAsWr.unlock();
@@ -875,7 +875,7 @@ void *TMdContr::Task( void *icntr )
 	    prmRes.unlock();
 
 	    //Writing the asynchronous writings' queue
-	    MtxAlloc resAsWr(cntr.dataRes(), true);
+	    MtxAlloc resAsWr(cntr.aWrRes, true);
 	    map<string,string> aWrs = cntr.asynchWrs;
 	    cntr.asynchWrs.clear();
 	    resAsWr.unlock();
@@ -941,9 +941,9 @@ TVariant TMdContr::objFuncCall( const string &iid, vector<TVariant> &prms, const
 
 bool TMdContr::inWr( const string &addr )
 {
-    dataRes().lock();
+    aWrRes.lock();
     bool rez = (asynchWrs.find(addr) != asynchWrs.end());
-    dataRes().unlock();
+    aWrRes.unlock();
 
     return rez;
 }
@@ -1393,20 +1393,21 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     if(vl.isEVal() || vl == pvl) return;
 
     //Send to active reserve station
-    if(vlSetRednt(vo,vl,pvl))	return;
+    bool isRdnt = vlSetRednt(vo, vl, pvl);
 
     //Direct write
     bool wrRez = false;
     // Standard type request
-    if(isStd())	wrRez = owner().setVal(vl, vo.fld().reserve(), acqErr, true);
+    if(isStd() && !isRdnt)
+	wrRez = owner().setVal(vl, vo.fld().reserve(), acqErr, true);
     // Logical type request
     else if(isLogic()) {
 	int id_lnk = lCtx->lnkId(vo.name());
 	if(id_lnk >= 0 && !lCtx->lnkActive(id_lnk)) id_lnk = -1;
 	if(id_lnk < 0) { lCtx->set(lCtx->ioId(vo.name()), vl); wrRez = true; }
-	else wrRez = lCtx->lnkOutput(id_lnk, vl);
+	else if(!isRdnt) wrRez = lCtx->lnkOutput(id_lnk, vl);
     }
-    if(!wrRez) vo.setS(EVAL_STR, 0, true);
+    if(!wrRez && !isRdnt) vo.setS(EVAL_STR, 0, true);
 }
 
 void TMdPrm::vlArchMake( TVal &val )

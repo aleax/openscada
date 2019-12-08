@@ -352,7 +352,7 @@ void OPCEndPoint::load_( TConfig *icfg )
     //Security policies parse
     string sp = cfg("SecPolicies").getS();
     string spi;
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(secRes, true);
     mSec.clear();
     for(int off = 0; (spi=TSYS::strParse(sp,0,"\n",&off)).size(); )
 	mSec.push_back(UA::SecuritySetting(TSYS::strParse(spi,0,":"),s2i(TSYS::strParse(spi,1,":"))));
@@ -372,7 +372,7 @@ void OPCEndPoint::save_( )
 {
     //Security policies store
     string sp;
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(secRes, true);
     for(unsigned i_p = 0; i_p < mSec.size(); i_p++)
 	sp += mSec[i_p].policy + ":" + i2s(mSec[i_p].messageMode)+"\n";
     cfg("SecPolicies").setS(sp);
@@ -831,14 +831,14 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD)) {
 	    XMLNode *n_pol	= ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/0","",RWRWR_);
 	    XMLNode *n_mm	= ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/1","",RWRWR_);
-	    MtxAlloc res(dataRes(), true);
+	    MtxAlloc res(secRes, true);
 	    for(unsigned i_p = 0; i_p < mSec.size(); i_p++) {
 		if(n_pol) n_pol->childAdd("el")->setText(mSec[i_p].policy);
 		if(n_mm)  n_mm->childAdd("el")->setText(i2s(mSec[i_p].messageMode));
 	    }
 	    return;
 	}
-	MtxAlloc res(dataRes(), true);
+	MtxAlloc res(secRes, true);
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR)) { mSec.push_back(UA::SecuritySetting("None",MS_None)); modif(); return; }
 	int row = s2i(opt->attr("row"));
 	if(row < 0 || row >= (int)mSec.size()) throw TError(nodePath().c_str(),_("No present selected row."));

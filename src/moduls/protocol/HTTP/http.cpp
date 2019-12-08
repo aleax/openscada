@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.3.1"
+#define MOD_VER		"3.3.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -116,7 +116,7 @@ void TProt::load_( )
     setAllowUsersAuth(TBDS::genDBGet(nodePath()+"AllowUsersAuth",allowUsersAuth()));
     setAuthTime(s2i(TBDS::genDBGet(nodePath()+"AuthTime",i2s(authTime()))));
     // Load auto-login config
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(authM, true);
     XMLNode aLogNd("aLog");
     try {
 	aLogNd.load(TBDS::genDBGet(nodePath()+"AutoLogin"));
@@ -139,10 +139,10 @@ void TProt::save_( )
     TBDS::genDBSet(nodePath()+"AuthTime", i2s(authTime()));
 
     //Save auto-login config
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(authM, true);
     XMLNode aLogNd("aLog");
-    for(unsigned i_n = 0; i_n < mALog.size(); i_n++)
-	aLogNd.childAdd("it")->setAttr("addrs", mALog[i_n].addrs)->setAttr("user", mALog[i_n].user);
+    for(unsigned iN = 0; iN < mALog.size(); iN++)
+	aLogNd.childAdd("it")->setAttr("addrs", mALog[iN].addrs)->setAttr("user", mALog[iN].user);
     TBDS::genDBSet(nodePath()+"AutoLogin", aLogNd.save());
 }
 
@@ -305,7 +305,7 @@ TProtocolIn *TProt::in_open( const string &name )	{ return new TProtIn(name); }
 int TProt::sesOpen( const string &name, const string &srcAddr, const string &userAgent )
 {
     int sess_id;
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(authM, true);
 
     //Get free identifier
     do{ sess_id = rand(); }
@@ -331,7 +331,7 @@ int TProt::sesOpen( const string &name, const string &srcAddr, const string &use
 
 void TProt::sesClose( int sid )
 {
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(authM, true);
     map<int,SAuth>::iterator authEl = mAuth.find(sid);
     if(authEl != mAuth.end()) {
 	mess_info(nodePath().c_str(), _("Exiting the authentication for the user '%s'."), authEl->second.name.c_str());
@@ -353,7 +353,7 @@ string TProt::sesCheck( int sid )
     map<int,SAuth>::iterator authEl = mAuth.find(sid);
 
     //Checking to close of old sessions
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(authM, true);
     if(cur_tm > lstSesChk+10 || (authEl == mAuth.end() && cur_tm > lstSesChk)) {
 	// Loading all sessions into the table of the external authentication sessions
 	if(authSessTbl().size())
@@ -417,10 +417,10 @@ string TProt::sesCheck( int sid )
 string TProt::autoLogGet( const string &sender )
 {
     string addr;
-    MtxAlloc res(dataRes(), true);
-    for(unsigned i_a = 0; sender.size() && i_a < mALog.size(); i_a++)
-	for(int aoff = 0; (addr=TSYS::strParse(mALog[i_a].addrs,0,";",&aoff)).size(); )
-	    if(TRegExp(addr, "p").test(sender)) return mALog[i_a].user;
+    MtxAlloc res(authM, true);
+    for(unsigned iA = 0; sender.size() && iA < mALog.size(); iA++)
+	for(int aoff = 0; (addr=TSYS::strParse(mALog[iA].addrs,0,";",&aoff)).size(); )
+	    if(TRegExp(addr, "p").test(sender)) return mALog[iA].user;
 
     return "";
 }
@@ -582,7 +582,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
     //Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/prm/st/auths" && ctrChkNode(opt)) {
-	MtxAlloc res(dataRes(), true);
+	MtxAlloc res(authM, true);
 	for(map<int,SAuth>::iterator authEl = mAuth.begin(); authEl != mAuth.end(); ++authEl)
 	    opt->childAdd("el")->setText(TSYS::strMess(_("%s %s(%s), by \"%s\""),
 		atm2s(authEl->second.tAuth).c_str(),authEl->second.name.c_str(),authEl->second.addr.c_str(),authEl->second.agent.c_str()));
@@ -628,14 +628,14 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	    XMLNode *n_addrs	= ctrMkNode("list",opt,-1,"/prm/cfg/alog/addrs","");
 	    XMLNode *n_user	= ctrMkNode("list",opt,-1,"/prm/cfg/alog/user","");
 
-	    MtxAlloc res(dataRes(), true);
-	    for(unsigned i_a = 0; i_a < mALog.size(); i_a++) {
-		if(n_addrs)	n_addrs->childAdd("el")->setText(mALog[i_a].addrs);
-		if(n_user)	n_user->childAdd("el")->setText(mALog[i_a].user);
+	    MtxAlloc res(authM, true);
+	    for(unsigned iA = 0; iA < mALog.size(); iA++) {
+		if(n_addrs)	n_addrs->childAdd("el")->setText(mALog[iA].addrs);
+		if(n_user)	n_user->childAdd("el")->setText(mALog[iA].user);
 	    }
 	    return;
 	}
-	MtxAlloc res(dataRes(), true);
+	MtxAlloc res(authM, true);
 	modif();
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR))	mALog.push_back(SAutoLogin());
 	else if(ctrChkNode(opt,"ins",RWRWR_,"root",SPRT_ID,SEC_WR) && (idrow >= 0 || idrow < (int)mALog.size()))

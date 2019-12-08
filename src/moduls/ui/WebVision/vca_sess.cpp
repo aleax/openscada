@@ -309,7 +309,7 @@ void VCASess::objAdd( VCAObj *obj )
 
 void VCASess::pgCacheGet( const string &addr )
 {
-    MtxAlloc res(mod->dataRes(), true);
+    MtxAlloc res(mod->cacheRes(), true);
 
     //Searching for the page <addr> in the cache
     for(unsigned iPg = 0; iPg < mCachePg.size(); iPg++)
@@ -323,7 +323,7 @@ void VCASess::pgCacheProc( const string &addr, bool fClose )
 {
     vector<string> oLs;
 
-    MtxAlloc res(mod->dataRes(), true);
+    MtxAlloc res(mod->cacheRes(), true);
 
     //Appending the page <addr> to the cache
     if(addr.size()) mCachePg.push_front(pair<time_t,string>(fClose?0:SYS->sysTm(),addr));

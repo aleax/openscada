@@ -183,6 +183,8 @@ class TTpContr: public TTypeDAQ
 
 	TElem	symbCode_el,	//Make Symbols of codes container structure
 		symbAlrm_el;	//Make Symbols of alarms container structure
+
+	ResMtx	mSymbRes;
 };
 
 extern TTpContr *mod;

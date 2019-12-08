@@ -84,7 +84,7 @@ msgid ""
 "out %s. "
 msgstr ""
 "Подключений %d, открыто %d, последнее %s, закрыто соединений по лимиту %d. "
-"Трафик входящий %s, исходящий %s. "
+"Трафик входной %s, выходной %s. "
 
 #, c-format
 msgid "Processing time %s[%s]. "
@@ -152,14 +152,14 @@ msgstr "%d:Разорван исключением %s"
 
 #, c-format
 msgid "The new input protocol's object '%s' is created!"
-msgstr "Создано новый объект входящего протокола '%s'!"
+msgstr "Создано новый объект входного протокола '%s'!"
 
 msgid "All protocols is wrong for their initialization."
 msgstr "Ошибка инициализации всех протоколов."
 
 #, c-format
 msgid "The input protocol object '%s' has closed itself!"
-msgstr "Объект входящего протокола '%s' закрылся сам!"
+msgstr "Объект входного протокола '%s' закрылся сам!"
 
 msgid "Error requesting the protocol."
 msgstr "Ошибка запроса протокола."
@@ -247,7 +247,7 @@ msgstr "Приоритет"
 
 #, c-format
 msgid "%s %d(%s): last %s; traffic in %s, out %s; "
-msgstr "%s %d(%s): последний %s; трафик входящий %s, исходящий %s; "
+msgstr "%s %d(%s): последний %s; трафик входной %s, выходной %s; "
 
 #, c-format
 msgid "processing time %s[%s]; "
@@ -259,7 +259,7 @@ msgstr "К хосту '%s'. "
 
 #, c-format
 msgid "Traffic in %s, out %s."
-msgstr "Трафик входящий %s, исходящий %s."
+msgstr "Трафик входной %s, выходной %s."
 
 #, c-format
 msgid "Response time %s[%s]. "

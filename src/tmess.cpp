@@ -278,8 +278,8 @@ string TMess::translGet( const string &base, const string &lang, const string &s
 		    break;
 		}
 		// Create new record into the translation table of the data source
-		else if((iA+1) == addrs.rend() && lang2CodeBase().size()) {
-		    if(lang2CodeBase() == trLang) req.elem().fldDel(req.elem().fldId(tStrVl.c_str()));
+		else if((iA+1) == addrs.rend() /*&& lang2CodeBase().size()*/) {
+		    if(lang2CodeBase().size() && lang2CodeBase() == trLang)	req.elem().fldDel(req.elem().fldId(tStrVl.c_str()));
 		    SYS->db().at().dataSet(*iA+"." mess_TrUApiTbl, "/" mess_TrUApiTbl, req, false, true);
 		}
 	    }
