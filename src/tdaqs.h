@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tdaqs.h
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -73,8 +73,8 @@ class TDAQS : public TSubSYS
 
 	// Redundancy
 	bool rdProcess( XMLNode *reqSt = NULL );
-	float rdRestDtTm( )		{ return mRdRestDtTm; }
-	void setRdRestDtTm( float vl )	{ mRdRestDtTm = vmin(24,vmax(0.01,vl)); modif(); }
+	double rdRestDtTm( )		{ return mRdRestDtTm; }
+	void setRdRestDtTm( double vl )	{ mRdRestDtTm = vmin(24,vmax(0.01,vl)); modif(); }
 	void rdActCntrList( vector<string> &ls, bool isRun = false );
 	string rdStRequest( const string &cntr, XMLNode &req, const string &prevSt = "", bool toRun = true );
 
@@ -102,7 +102,7 @@ class TDAQS : public TSubSYS
 	int	mTmpLib;
 
 	ResRW	mRdRes;
-	float	mRdRestDtTm;			//Depth time of the redundant history restore in hours
+	double	mRdRestDtTm;			//Depth time of the redundant history restore in hours
 	map<string, map<string,bool> > mRdCntr;
 };
 

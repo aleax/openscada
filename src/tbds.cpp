@@ -862,6 +862,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
 		"tp","br","idSz","255","s_com","add,del","br_pref","tbl_",
 		"help",_("Opened tables list.\nAdding and removing tables actually consists of opening and closing tables."));
 	if(enableStat() && ctrMkNode("area",opt,-1,"/sql","SQL",R_R___,"root",SDB_ID)) {
+	    ctrMkNode("fld",opt,-1,"/sql/tm",_("Time"),R_R___,"root",SDB_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/sql/req",_("Request"),RWRW__,"root",SDB_ID,3,"tp","str","cols","100","rows","2");
 	    ctrMkNode("fld",opt,-1,"/sql/trans",_("Transaction"),RWRW__,"root",SDB_ID,4,"tp","dec","dest","select",
 		"sel_id","0;1;2","sel_list",_("Out;Into;No matter"));
@@ -911,6 +912,8 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"add",RWRW__,"root",SDB_ID,SEC_WR))	open(opt->text(), true);
 	if(ctrChkNode(opt,"del",RWRW__,"root",SDB_ID,SEC_WR))	close(opt->text());
     }
+    else if(a_path == "/sql/tm" && ctrChkNode(opt,"get",R_R___,"root",SDB_ID,SEC_RD))
+	opt->setText(TBDS::genDBGet(owner().nodePath()+"ReqTm","0",opt->attr("user")));
     else if(a_path == "/sql/req") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDB_ID))	opt->setText(userSQLReq);
 	if(ctrChkNode(opt,"set",RWRW__,"root",SDB_ID))	userSQLReq = opt->text();
@@ -919,8 +922,11 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDB_ID))	opt->setText(i2s(userSQLTrans));
 	if(ctrChkNode(opt,"set",RWRW__,"root",SDB_ID))	userSQLTrans = s2i(opt->text());
     }
-    else if(a_path == "/sql/send" && enableStat() && ctrChkNode(opt,"set",RWRW__,"root",SDB_ID,SEC_WR))
-	sqlReq(userSQLReq,&userSQLResTbl,userSQLTrans);
+    else if(a_path == "/sql/send" && enableStat() && ctrChkNode(opt,"set",RWRW__,"root",SDB_ID,SEC_WR)) {
+	int64_t stm = TSYS::curTime();
+	sqlReq(userSQLReq, &userSQLResTbl, userSQLTrans);
+	TBDS::genDBSet(owner().nodePath()+"ReqTm", tm2s(1e-6*(TSYS::curTime()-stm)), opt->attr("user"));
+    }
     else if(a_path == "/sql/tbl" && ctrChkNode(opt,"get",R_R___,"root",SDB_ID,SEC_RD))
 	for(unsigned i_r = 0; i_r < userSQLResTbl.size(); i_r++)
 	    for(unsigned i_c = 0; i_c < userSQLResTbl[i_r].size(); i_c++) {

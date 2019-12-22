@@ -56,7 +56,7 @@ INSERT INTO VCALibs VALUES('Main','Main elements','Provides the library of the m
 
 Founded: September 2007
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.7.0
+Version: 1.7.1
 License: GPLv2','wlb_Main','','Основні елементи','Бібліотека створюється для надання основних елементів користувацького інтерфейсу. Будується бібліотека на основі примітивів віджетів та мови внутрішнього програмування JavaLikeCalc.
 
 Автор: Роман Савоченко <roman@oscada.org>
@@ -1862,7 +1862,7 @@ INSERT INTO wlb_Main_incl VALUES('grph_panel','curstime','/wlb_originals/wdg_For
 INSERT INTO wlb_Main_incl VALUES('alarmsStReport','apply','/wlb_originals/wdg_FormEl','owner;name;active;geomX;geomY;geomW;geomH;geomZ;elType;img;font;','');
 INSERT INTO wlb_Main_incl VALUES('alarmsStReport','doc','/wlb_originals/wdg_Document','owner;active;geomX;geomY;geomW;geomH;style;doc;font;','');
 CREATE TABLE IF NOT EXISTS 'wlb_Main_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
-INSERT INTO wlb_Main_io VALUES('ElCadr','name','Element cadr',32,'','','','Елемент кадр','','Элемент кадр','','','');
+INSERT INTO wlb_Main_io VALUES('ElCadr','name','Element cadre',32,'','','','Елемент кадр','','Элемент кадр','','','');
 INSERT INTO wlb_Main_io VALUES('ElCadr','geomW','110',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElCadr','geomH','315',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElCadr','active','1',32,'','','','','','','','','');
@@ -5351,9 +5351,46 @@ INSERT INTO wlb_Main_io VALUES('ElCadr','geomZ','5',32,'','','upMax','','','',''
 INSERT INTO wlb_Main_io VALUES('ElCadr','active','1',32,'','','upMax','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElCadr','elType','3',32,'','','upMax','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElCadr','img','upMax',0,'','','upMax','','','','','','');
-INSERT INTO wlb_Main_io VALUES('ElCadr','dscr','The cadre "Element cadre".
+INSERT INTO wlb_Main_io VALUES('ElCadr','dscr','The element is in fact a universal panel of generic and extended control by different devices for all known and defined representative structures of the basic data of the control systems at the DAQ-templates:
+- analog: analog signal, manual input of the analog signal, PID-regulator (analog and pulse);
+- discrete blocks: valves, automatic shut off valves, motors, fans and switches;
+- arbitrary discrete states.
+
+In the primary function of the pannel — advanced and common control, this item is called from:
+- the primary data representing widgets of this library: "Analog show", "Analog show 1", "Text label", "Image label";
+- the main frames: "Graphics group", "Overview frames panel", "Regulator''s control panel".
+
+If this element using as a control panel is not required, it is firstly in the primary data representing widgets and by their specializing in particular types of data to what a separate panel can be created. Therefore, due to its high universality, due to the support of all known representative structures of DAQ-templates, it is obligatory to use in main frames, as is done in the frame "Contours group".
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.1',32,'','','','','','','','','');
+Version: 1.1.2
+License: GPLv2',32,'','','','Елемент фактично є універсальною панеллю управління та розширеного контролю різними пристроями за усіма відомими та визначеними представницькими структурами базових даних систем управління за DAQ-шаблонами:
+- аналогові: аналоговий сигнал, ручний ввід аналогового сигналу, ПІД-регулятор (аналоговий та імпульсний);
+- дискретні збірки: клапани, відсікачі, засувки, двигуни, вентилятори та різноманітні перемикачі;
+- довільні дискретні стани.
+
+У первинній функції панелі — розширене та загальне керування, цей елемент викликається з:
+- віджетів первинного представлення даних цієї бібліотеки: "Відображення аналогового", "Відображення аналогового 1", "Текстова мітка", "Мітка зображенням";
+- основних кадрів: "Група графіків", "Група оглядових кадрів", "Панель налаштування регулятора".
+
+Якщо використання цього елементу у якості панелі керування не є обов''язковим, у першу чергу у віджетах первинного представлення та через їх спеціалізацію на окремих типах даних, щодо яких можна створити окрему панель. То завдяки високій універсальності, через підтримку всіх відомих репрезентативних структур DAQ-шаблонів, її обов''язково використовувати у основних кадрах, як це зроблено у кадрі "Група контурів".
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.1.2
+Ліцензія: GPLv2','','Элемент фактически является универсальной панелью управления и расширенного контроля различными устройствами по всем известным и определённым представительским структурам базовых данных систем управления по DAQ-шаблонам:
+- аналоговые: аналоговый сигнал, ручной ввод аналогового сигнала, ПИД-регулятор (аналоговый и импульсный);
+- дискретные сборки: клапаны, отсекатели, задвижки, двигатели, вентиляторы и различные переключатели;
+- произвольные дискретные состояния.
+
+В первичной функции панели — расширенное и общее управление, этот элемент вызывается из:
+- виджетов первичного представления данных этой библиотеки: "Отображение аналогового", "Отображение аналогового 1", "Текстовая метка", "Метка изображением";
+- основных кадров: "Группа графиков", "Группа обзорных кадров", "Панель настройки регулятора".
+
+Если использование этого элемента в качестве панели управления не является обязательным, в первую очередь в виджетах первичного представления и через их специализацию на отдельных типах данных, для которых можно создать отдельную панель. То благодаря высокой универсальности, через поддержку всех известных репрезентативных структур DAQ-шаблонов, её обязательно использовать в основных кадрах, как это сделано в кадре "Группа контуров".
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.1.2
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_Main_io VALUES('prescrRunSimple','geomZ','5',32,'','','lib','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrEdit','numbArg','1',32,'','','labProg','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrEdit','arg0tp','2',0,'','','labProg','','','','','','');
@@ -7807,9 +7844,19 @@ Version: 1.1.0',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('doc_panel','dscr','The cadre "Document control panel".
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.2.1',32,'','','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('terminator','dscr','The cadre "Terminator panel".
+INSERT INTO wlb_Main_io VALUES('terminator','dscr','The panel element serves to fill the panel container space when no active visual control element is selected in the main frame, since closing or clearing frames in the container area is not provided, only the replacement.
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.0',32,'','','','','','','','','');
+Version: 1.1.0
+License: GPLv2',32,'','','','Елемент панелі слугує для заповнення простору контейнеру панелей, коли не обрано активного візуального елементу для управління на основному кадрі, оскільки закриття або очищення кадрів у області контейнеру не передбачено, лише заміна.
+
+Автор: Роман Савоченко <roman@oscada,org>
+Версія: 1.1.0
+Ліцензія: GPLv2','','Элемент панели служит для заполнения пространства контейнера панели, когда не выбран активный визуальный элемент для управления на основном кадре, поскольку закрытия или очистки кадров в области контейнера не предусматривается, только замена.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.1.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_Main_io VALUES('grpCadr','prm0width','2',32,'','','trnd1','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpCadr','prm1width','2',0,'','','trnd1','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpCadr','prm2width','2',0,'','','trnd1','','','','','','');
@@ -8099,6 +8146,22 @@ License: GPLv2',32,'','','','Елемент-кадр реалізує діало
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсирование: Устьянцев Михаил
 Версия: 1.0.0
+Лицензия: GPLv2','','','');
+INSERT INTO wlb_Main_io VALUES('calendar','dscr','The element is used to display the month of the calendar by week, which allows you to select the year, month and day, as well as switch to the current day.
+
+Author: Roman Savochenko <roman@oscada.org>
+Sponsored by: SVItoVYR LTD
+Version: 1.0.1
+License: GPLv2',32,'','','','Елемент слугує для відображення місяця календаря за тижнями, який передбачає можливість обрання року, місяця та окремого дня, а також перехід на поточний день.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Спонсоровано: ТОВ "СВІТоВИР АВТоМАТИК"
+Версія: 1.0.1
+Ліцензія: GPLv2','','Элемент служит для отображения месяца календаря по неделям, который предусматривает возможность выбора года, месяца и отдельного дня, а также переход к текущему дню.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Спонсировано: ООО "СВІТоВИР"
+Версия: 1.0.1
 Лицензия: GPLv2','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_Main_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_Main_mime VALUES('pg_next','image/png;6.00684','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAAZiS0dEACwA
@@ -10501,15 +10564,15 @@ xbFjx3bMoFp1tRbbPzAwIM5YmqYRj8eFS7bZbFSrVfF7/3baWzqdDo1GQ7TlabVaFAoF4vE4AwMD
 uFwuLly4gKIot93/+r/CdJdH4v0p6KOPPvroo48++uijjz766KOPPvroo48++uijjz766ONu+B9O
 SzxIVioTXwAAAABJRU5ErkJggg==');
 CREATE TABLE IF NOT EXISTS 'wlb_Main_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
-INSERT INTO wlb_Main_uio VALUES('ElCadr','max','Parameter: maximum',131076,'100|',10,'Parameter|max','','','Параметр: максимум','','','Параметр: максимум','','','','');
-INSERT INTO wlb_Main_uio VALUES('ElCadr','min','Parameter: minimum',131076,'0|',10,'Parameter|min','','','Параметр: мінімум','','','Параметр: минимум','','','','');
-INSERT INTO wlb_Main_uio VALUES('ElCadr','prmAuto','Parameter: automate',131072,'0',14,'Parameter|auto','','','Параметр: автомат','','','Параметр: автомат','','','','');
-INSERT INTO wlb_Main_uio VALUES('ElCadr','prmCasc','Parameter: cascad',131072,'0',14,'Parameter|casc','','','Параметр: каскад','','','Параметр: каскад','','','','');
-INSERT INTO wlb_Main_uio VALUES('ElCadr','prmDemention','Parameter: dimension',131077,'',10,'Parameter|ed','','','Параметр: одиниця виміру','ВІДКР;ЗАКР;СТОП||','','Параметр: единица измерения','ОТКР;ЗАКР;СТОП','','','');
-INSERT INTO wlb_Main_uio VALUES('ElCadr','prmOut','Parameter: output',131076,'0|',14,'Parameter|out','','','Параметр: вихід','','','Параметр: выход','','','','');
-INSERT INTO wlb_Main_uio VALUES('ElCadr','prmShifr','Parameter: code',131077,'',10,'Parameter|NAME','','','Параметр: шифр','ВІДКР;ЗАКР;СТОП||','','Параметр: шифр','ОТКР;ЗАКР;СТОП','','','');
-INSERT INTO wlb_Main_uio VALUES('ElCadr','prmSp','Parameter: set point',131076,'0|',14,'Parameter|sp','','','Параметр: завдання','','','Параметр: задание','','','','');
-INSERT INTO wlb_Main_uio VALUES('ElCadr','prmVar','Parameter: variable',131076,'0|',14,'Parameter|var','','','Параметр: змінна','','','Параметр: переменная','','','','');
+INSERT INTO wlb_Main_uio VALUES('ElCadr','max','Parameter: maximum',131076,'100|',10,'<page>|max','','','Параметр: максимум','','','Параметр: максимум','','','','');
+INSERT INTO wlb_Main_uio VALUES('ElCadr','min','Parameter: minimum',131076,'0|',10,'<page>|min','','','Параметр: мінімум','','','Параметр: минимум','','','','');
+INSERT INTO wlb_Main_uio VALUES('ElCadr','prmAuto','Parameter: automate',131072,'0',14,'<page>|auto','','','Параметр: автомат','','','Параметр: автомат','','','','');
+INSERT INTO wlb_Main_uio VALUES('ElCadr','prmCasc','Parameter: cascade',131072,'0',14,'<page>|casc','','','Параметр: каскад','','','Параметр: каскад','','','','');
+INSERT INTO wlb_Main_uio VALUES('ElCadr','prmDemention','Parameter: dimension',131077,'',10,'<page>|ed','','','Параметр: одиниця виміру','','','Параметр: единица измерения','','','','');
+INSERT INTO wlb_Main_uio VALUES('ElCadr','prmOut','Parameter: output',131076,'0|',14,'<page>|out','','','Параметр: вихід','','','Параметр: выход','','','','');
+INSERT INTO wlb_Main_uio VALUES('ElCadr','prmShifr','Parameter: code',131077,'',10,'<page>|NAME','','','Параметр: шифр','','','Параметр: шифр','','','','');
+INSERT INTO wlb_Main_uio VALUES('ElCadr','prmSp','Parameter: set point',131076,'0|',14,'<page>|sp','','','Параметр: завдання','','','Параметр: задание','','','','');
+INSERT INTO wlb_Main_uio VALUES('ElCadr','prmVar','Parameter: variable',131076,'0|',14,'<page>|var','','','Параметр: змінна','','','Параметр: переменная','','','','');
 INSERT INTO wlb_Main_uio VALUES('grpGraph','min','Minimum',131076,'0|0;0|',10,'Parameter|min','','el8','Мінімум','','','Минимум','','','','');
 INSERT INTO wlb_Main_uio VALUES('grpGraph','max','Maximum',131076,'0|0;0|',10,'Parameter|max','','el8','Максимум','','','Максимум','','','','');
 INSERT INTO wlb_Main_uio VALUES('grpGraph','ed','Dimension',131077,'||',10,'Parameter|ed','','el8','Одиниця виміру','','','Единица измерения','','','','');
@@ -10566,16 +10629,16 @@ INSERT INTO wlb_Main_uio VALUES('ResultGraphEl','p1_name','Parameter1: name',131
 INSERT INTO wlb_Main_uio VALUES('RootPgSo','calcCnt','Calc counter',131073,'1|',8,'','','','Лічильник обчислень','','','Счётчик вычислений','','','','');
 INSERT INTO wlb_Main_uio VALUES('ResultGraphEl','p1_addr','Parameter1: address',196613,NULL,10,'Parameter 1|var','','','Параметр1: адреса','','','Параметр1: адрес','','','','');
 INSERT INTO wlb_Main_uio VALUES('doc_panel','aCur','Archive cursor',131073,'0|',10,'<page>|aCur','','','Курсор архіву','','','Курсор архива','','','','');
-INSERT INTO wlb_Main_uio VALUES('ElCadr','prmCloseSt','Parameter: state - "Closed"',131072,NULL,10,'Parameter|st_close','','','Параметр: стан - "Закрито"','','','Параметр: состояние - "Закрыто"','','','','');
+INSERT INTO wlb_Main_uio VALUES('ElCadr','prmCloseSt','Parameter: state - "Closed"',131072,NULL,10,'<page>|st_close','','','Параметр: стан - "Закрито"','','','Параметр: состояние - "Закрыто"','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrRegul','Zi','Parameter: insensitivity area',131076,'<EVAL>|',14,'Parameter|Zi','','','Параметр: зона нечутливості','','','Параметр: зона нечувствительности','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrRegul','var_addr','Parameter: variable address',196613,NULL,10,'Parameter|var','','','Параметр: адреса змінної','','','Параметр: адрес переменной','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrRegul','var','Parameter: variable',131076,'<EVAL>|',10,'Parameter|var','','','Параметр: змінна','','','Параметр: переменная','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrRegul','Ti','Parameter: time of integration',131076,'<EVAL>|',14,'Parameter|Ti','','','Параметр: час інтегрування','','','Параметр: время интегрирования','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrRegul','Td','Parameter: time of differentiation',131076,'<EVAL>|',14,'Parameter|Td','','','Параметр: час диференцювання','','','Параметр: время дифференцирования','','','','');
-INSERT INTO wlb_Main_uio VALUES('ElCadr','prmOpenSt','Parameter: state - "Opened"',131072,NULL,10,'Parameter|st_open','','','Параметр: стан - "Відкрито"','','','Параметр: состояние - "Открыто"','','','','');
-INSERT INTO wlb_Main_uio VALUES('ElCadr','prmClose','Parameter: command - "Close"',131072,NULL,14,'Parameter|close','','','Параметр: команда - "Закрити"','','','Параметр: команда - "Закрыть"','','','','');
-INSERT INTO wlb_Main_uio VALUES('ElCadr','prmStop','Parameter: command - "Stop"',131072,NULL,14,'Parameter|stop','','','Параметр: команда - "Стоп"','','','Параметр: команда - "Стоп"','','','','');
-INSERT INTO wlb_Main_uio VALUES('ElCadr','prmCom','Parameter: command - "Open"',131072,NULL,14,'Parameter|com','','','Параметр: команда - "Відкрити"','','','Параметр: команда - "Открыть"','','','','');
+INSERT INTO wlb_Main_uio VALUES('ElCadr','prmOpenSt','Parameter: state - "Opened"',131072,NULL,10,'<page>|st_open','','','Параметр: стан - "Відкрито"','','','Параметр: состояние - "Открыто"','','','','');
+INSERT INTO wlb_Main_uio VALUES('ElCadr','prmClose','Parameter: command - "Close"',131072,NULL,14,'<page>|close','','','Параметр: команда - "Закрити"','','','Параметр: команда - "Закрыть"','','','','');
+INSERT INTO wlb_Main_uio VALUES('ElCadr','prmStop','Parameter: command - "Stop"',131072,NULL,14,'<page>|stop','','','Параметр: команда - "Стоп"','','','Параметр: команда - "Стоп"','','','','');
+INSERT INTO wlb_Main_uio VALUES('ElCadr','prmCom','Parameter: command - "Open"',131072,NULL,14,'<page>|com','','','Параметр: команда - "Відкрити"','','','Параметр: команда - "Открыть"','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrRegul','SHIFR','Parameter: code',131077,NULL,10,'Parameter|SHIFR','','','Параметр: шифр','<EVAL>||','','Параметр: шифр','<EVAL>','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrRegul','DESCR','Parameter: description',131077,NULL,10,'Parameter|DESCR','','','Параметр: опис','<EVAL>||','','Параметр: описание','<EVAL>','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrRegul','ed','Parameter: dimension of variable',131077,NULL,10,'Parameter|ed','','','Параметр: одиниця виміру','<EVAL>||','','Параметр: единица измерения','<EVAL>','','','');
@@ -10630,26 +10693,26 @@ INSERT INTO wlb_Main_uio VALUES('grph_panel','curSek','Cursor',139265,'<EVAL>|',
 INSERT INTO wlb_Main_uio VALUES('grph_panel','type','Type',131073,'<EVAL>|',14,'<page>|type','','','Тип','<EVAL>||','','Тип','','','','');
 INSERT INTO wlb_Main_uio VALUES('grph_panel','curUSek','Cursor, usec',131073,'<EVAL>|',14,'<page>|curUSek','','','Курсор, мкс','','','Курсор, мкс','','','','');
 INSERT INTO wlb_Main_uio VALUES('RootPgSo','lastView','Last view',131077,NULL,8,'','','','Останній вигляд',NULL,'','Последний вид','','','','');
-INSERT INTO wlb_Main_uio VALUES('ElCadr','prmManIn','Parameter: manual input',131076,'<EVAL>|',14,'Parameter|manIn','','','Параметр: ручний ввід','','','Параметр: ручной ввод','','','','');
+INSERT INTO wlb_Main_uio VALUES('ElCadr','prmManIn','Parameter: manual input',131076,'<EVAL>|',14,'<page>|manIn','','','Параметр: ручний ввід','','','Параметр: ручной ввод','','','','');
 INSERT INTO wlb_Main_uio VALUES('anShow','pModeA','Parameter: regulator mode: auto',131072,NULL,10,'Parameter|auto','','','Параметр: режим регулятору: автомат','','','Параметр: режим регулятора: автомат','','','','');
 INSERT INTO wlb_Main_uio VALUES('anShow','pModeC','Parameter: regulator mode: cascade',131072,NULL,10,'Parameter|casc','','','Параметр: режим регулятору: каскад','','','Параметр: режим регулятора: каскад','','','','');
 INSERT INTO wlb_Main_uio VALUES('anShow','pPrec','Parameter: precision',131073,'1|',10,'Parameter|prec','','','Параметр: точність','','','Параметр: точность','','','','');
 INSERT INTO wlb_Main_uio VALUES('anShow','redEVAL','Red parameter name in case of failure',131072,NULL,9,'','','','Червоне ім''я параметру у випадку відмови','','','Красное имя параметра в случае отказа','','','','');
 INSERT INTO wlb_Main_uio VALUES('anShow','spName','Speech name',131077,NULL,9,'','','','Ім''я для синтезу',NULL,'','Имя для синтеза',NULL,'','','');
 INSERT INTO wlb_Main_uio VALUES('cntrPasp','pName','Parameter name',196613,'<EVAL>',10,'Parameter|NAME','','','Ім''я параметру','','','Имя параметра','','','','');
-INSERT INTO wlb_Main_uio VALUES('ElCadr','digComs','Parameter: discrete commands',131077,'OPEN;CLOSE;STOP',10,'Parameter|digComs','','','Параметр: дискр. команди','ВІДКР;ЗАКР;СТОП','','Параметр: дискр. команды','ОТКР;ЗАКР;СТОП','','','');
-INSERT INTO wlb_Main_uio VALUES('ElCadr','digStts','Parameter: discrete stats',131077,NULL,10,'Parameter|digStts','','','Параметр: дискр. стани','ВІДКР;ЗАКР;СТОП||','','Параметр: дискр. состояния','ОТКР;ЗАКР;СТОП','','','');
-INSERT INTO wlb_Main_uio VALUES('ElCadr','prmAMax','Parameter: border up alarm',131076,'<EVAL>|',10,'Parameter|aMax','','','Параметр: границя верхня аварійна','','','Параметр: граница верхн. аварийная','','','','');
-INSERT INTO wlb_Main_uio VALUES('ElCadr','prmAMin','Parameter: border down alarm',131076,'<EVAL>|',10,'Parameter|aMin','','','Параметр: границя нижня аварійна','','','Параметр: граница нижн. аварийная','','','','');
-INSERT INTO wlb_Main_uio VALUES('ElCadr','prmAnalog','Parameter: analog regulator',131072,NULL,10,'Parameter|analog','','','Параметр: аналоговий регулятор','','','Параметр: аналоговый регулятор','','','','');
-INSERT INTO wlb_Main_uio VALUES('ElCadr','prmColor','Parameter: border color',131077,NULL,10,'Parameter|color','','','Параметр: колір границі','ВІДКР;ЗАКР;СТОП||','','Параметр: цвет бордюра','ОТКР;ЗАКР;СТОП','','','');
-INSERT INTO wlb_Main_uio VALUES('ElCadr','prmDescr','Parameter: description',131077,NULL,10,'Parameter|DESCR','','','Параметр:опис','ВІДКР;ЗАКР;СТОП||','','Параметр:описание','ОТКР;ЗАКР;СТОП','','','');
-INSERT INTO wlb_Main_uio VALUES('ElCadr','prmId','Parameter: identifier',131077,NULL,10,'Parameter|SHIFR','','','Параметр: ідентифікатор','ВІДКР;ЗАКР;СТОП||','','Параметр: идентификатор','ОТКР;ЗАКР;СТОП','','','');
-INSERT INTO wlb_Main_uio VALUES('ElCadr','prmImpQdwnTm','Parameter: imp. out down',131072,NULL,10,'Parameter|impQdwn','','','Параметр: імпульсний вихід вниз','','','Параметр: выходной импульс вниз','','','','');
-INSERT INTO wlb_Main_uio VALUES('ElCadr','prmImpQupTm','Parameter: imp. out up',131072,NULL,10,'Parameter|impQup','','','Параметр: імпульсний вихід вгору','','','Параметр: выходной импульс вверх','','','','');
-INSERT INTO wlb_Main_uio VALUES('ElCadr','prmPrec','Parameter: precision (signs)',131073,'<EVAL>|',10,'Parameter|prec','','','Параметр: точність (знаків)','','','Параметр: точность (знаков)','','','','');
-INSERT INTO wlb_Main_uio VALUES('ElCadr','prmWMax','Parameter: border up warning',131076,'<EVAL>|',10,'Parameter|wMax','','','Параметр: границя верхня попереджув.','','','Параметр: граница верхняя предупр.','','','','');
-INSERT INTO wlb_Main_uio VALUES('ElCadr','prmWMin','Parameter: border down warning',131076,'<EVAL>|',10,'Parameter|wMin','','','Параметр: границя нижня попереджув.','','','Параметр: граница нижняя предупр.','','','','');
+INSERT INTO wlb_Main_uio VALUES('ElCadr','digComs','Parameter: discrete commands',131077,'OPEN;CLOSE;STOP',10,'<page>|digComs','','','Параметр: дискр. команди','ВІДКР;ЗАКР;СТОП','','Параметр: дискр. команды','ОТКР;ЗАКР;СТОП','','','');
+INSERT INTO wlb_Main_uio VALUES('ElCadr','digStts','Parameter: discrete stats',131077,NULL,10,'<page>|digStts','','','Параметр: дискр. стани','','','Параметр: дискр. состояния','','','','');
+INSERT INTO wlb_Main_uio VALUES('ElCadr','prmAMax','Parameter: border up alarm',131076,'<EVAL>|',10,'<page>|aMax','','','Параметр: границя верхня аварійна','','','Параметр: граница верхн. аварийная','','','','');
+INSERT INTO wlb_Main_uio VALUES('ElCadr','prmAMin','Parameter: border down alarm',131076,'<EVAL>|',10,'<page>|aMin','','','Параметр: границя нижня аварійна','','','Параметр: граница нижн. аварийная','','','','');
+INSERT INTO wlb_Main_uio VALUES('ElCadr','prmAnalog','Parameter: analog regulator',131072,NULL,10,'<page>|analog','','','Параметр: аналоговий регулятор','','','Параметр: аналоговый регулятор','','','','');
+INSERT INTO wlb_Main_uio VALUES('ElCadr','prmColor','Parameter: border color',131077,NULL,10,'<page>|color','','','Параметр: колір границі','','','Параметр: цвет бордюра','','','','');
+INSERT INTO wlb_Main_uio VALUES('ElCadr','prmDescr','Parameter: description',131077,NULL,10,'<page>|DESCR','','','Параметр: опис','','','Параметр: описание','','','','');
+INSERT INTO wlb_Main_uio VALUES('ElCadr','prmId','Parameter: identifier',131077,NULL,10,'<page>|SHIFR','','','Параметр: ідентифікатор','','','Параметр: идентификатор','','','','');
+INSERT INTO wlb_Main_uio VALUES('ElCadr','prmImpQdwnTm','Parameter: imp. out down',131072,NULL,10,'<page>|impQdwn','','','Параметр: імпульсний вихід вниз','','','Параметр: выходной импульс вниз','','','','');
+INSERT INTO wlb_Main_uio VALUES('ElCadr','prmImpQupTm','Parameter: imp. out up',131072,NULL,10,'<page>|impQup','','','Параметр: імпульсний вихід вгору','','','Параметр: выходной импульс вверх','','','','');
+INSERT INTO wlb_Main_uio VALUES('ElCadr','prmPrec','Parameter: precision (signs)',131073,'<EVAL>|',10,'<page>|prec','','','Параметр: точність (знаків)','','','Параметр: точность (знаков)','','','','');
+INSERT INTO wlb_Main_uio VALUES('ElCadr','prmWMax','Parameter: border up warning',131076,'<EVAL>|',10,'<page>|wMax','','','Параметр: границя верхня попереджув.','','','Параметр: граница верхняя предупр.','','','','');
+INSERT INTO wlb_Main_uio VALUES('ElCadr','prmWMin','Parameter: border down warning',131076,'<EVAL>|',10,'<page>|wMin','','','Параметр: границя нижня попереджув.','','','Параметр: граница нижняя предупр.','','','','');
 INSERT INTO wlb_Main_uio VALUES('ElCadr','clearCnt','Clear counter',131073,'<EVAL>||',8,'','','info_out','Лічильник очищень','','','Счётчик очистки','','','','');
 INSERT INTO wlb_Main_uio VALUES('ElCadr','clearCnt','Clear counter',131073,'<EVAL>||',8,'','','info_sp','Лічильник очищень','','','Счётчик очистки','','','','');
 INSERT INTO wlb_Main_uio VALUES('prescrEdit','prExtComLs','Available commands list',131078,'<TVarObj>
@@ -10693,7 +10756,7 @@ INSERT INTO wlb_Main_uio VALUES('ElViewGraph','varEl','Value',131076,'<EVAL>|',8
 INSERT INTO wlb_Main_uio VALUES('ElViewGraph','wMax','Border up warning',131076,'<EVAL>|',10,'Parameter|wMax','','','Границя верхня попереджув.','','','Граница верхняя предупр.','','','','');
 INSERT INTO wlb_Main_uio VALUES('ElViewGraph','wMin','Border down warning',131076,'<EVAL>|',10,'Parameter|wMin','','','Границя нижня попереджув.','','','Граница нижняя предупр.','','','','');
 INSERT INTO wlb_Main_uio VALUES('anShow1','prec','Parameter: precision',131073,'1|',10,'Parameter|prec','','','Параметр: точність','','','Параметр: точность','','','','');
-INSERT INTO wlb_Main_uio VALUES('ElCadr','prmVarIn','Parameter: variable input',131076,'<EVAL>|',14,'Parameter|varIn','','','Параметр: ввід змінної','','','Параметр: ввод переменной','','','','');
+INSERT INTO wlb_Main_uio VALUES('ElCadr','prmVarIn','Parameter: variable input',131076,'<EVAL>|',14,'<page>|varIn','','','Параметр: ввід змінної','','','Параметр: ввод переменной','','','','');
 INSERT INTO wlb_Main_uio VALUES('ElCadr','clearCnt','Clear counter',131073,'<EVAL>||',8,'','','info_var','Лічильник очищень','','','Счётчик очистки','','','','');
 INSERT INTO wlb_Main_uio VALUES('prescrRun','prCnt','Cycles counter',131073,'0|',8,'','','','Лічильник циклів','','','Счётчик циклов','','','','');
 INSERT INTO wlb_Main_uio VALUES('prescrRun','prEndRun','Program:ending',131072,'0',8,'','','','Програма:закінчення','','','Программа:завершение','','','','');
@@ -10766,8 +10829,8 @@ INSERT INTO wlb_Main_uio VALUES('ElViewGraph','log','Logarithmic scale',131072,'
 INSERT INTO wlb_Main_uio VALUES('grph_panel','sclHor','Horizontal scale',131076,'0|',14,'<page>|sclHorScl','','','Горизонтальна шкала','','','Горизонтальная шкала','','','','');
 INSERT INTO wlb_Main_uio VALUES('grph_panel','sclHorOff','Horizontal scale offset',131076,'0|',14,'<page>|sclHorSclOff','','','Зсув горизонтальної шкали','','','Смещение горизонтальной шкалы','','','','');
 INSERT INTO wlb_Main_uio VALUES('TextLab','com_text','Parameter: command text (from digComs)',131077,'',14,'Parameter|com_text','','','Параметр: текст команди (з digComs)','','Parameter|com_text','Параметр: текст команды (из digComs)','','Parameter|com_text','','');
-INSERT INTO wlb_Main_uio VALUES('ElCadr','prmStText','Parameter: status text',131077,'',10,'Parameter|st_text','','','Параметр: текст статусу','','','Параметр: текст статуса','ОТКР;ЗАКР;СТОП','','','');
-INSERT INTO wlb_Main_uio VALUES('ElCadr','prmComText','Parameter:  text of command',131077,'',14,'Parameter|com_text','','','Параметр: текст команди','','','Параметр: текст команды','ОТКР;ЗАКР;СТОП','','','');
+INSERT INTO wlb_Main_uio VALUES('ElCadr','prmStText','Parameter: status text',131077,'',10,'<page>|st_text','','','Параметр: текст статусу','','','Параметр: текст статуса','','','','');
+INSERT INTO wlb_Main_uio VALUES('ElCadr','prmComText','Parameter: text of command',131077,'',14,'<page>|com_text','','','Параметр: текст команди','','','Параметр: текст команды','','','','');
 INSERT INTO wlb_Main_uio VALUES('RootPgSo','notify2','Notification: type 2 (TextSpeech)',131205,'#!/bin/sh
 #flags=queue|qMergeMess
 if test $doRes = 1 -a "x" != "x$mess"; then
@@ -19104,7 +19167,7 @@ INSERT INTO Trs VALUES('Custom','Користув.','Пользов.');
 INSERT INTO Trs VALUES('Renewal','Оновлено','Обновлено');
 INSERT INTO Trs VALUES('Norm on down','Норма при вимкнені','Норма при отключении');
 INSERT INTO Trs VALUES('Alarms report for','Звіт порушень на','Отчёт нарушений на');
-INSERT INTO Trs VALUES('reversed','зарезервовано','зарезервировано');
+INSERT INTO Trs VALUES('reversed','зворотньо','обратно');
 INSERT INTO Trs VALUES('Active','Активне','Активно');
 INSERT INTO Trs VALUES('Alarm','Сигнал','Сигнал');
 INSERT INTO Trs VALUES('Source','Джерело','Источник');
@@ -19434,7 +19497,7 @@ else if(!prmComText.isEVal() || !prmStText.isEVal()) {
 		st_text_en = st_text_text.length;
 		if(st_text_en && com_text_items.indexOf(st_text_text) != -1) com_text_value = st_text_text;
 	}
-}','','',100,'path;name;dscr;active;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1559499436);
+}','','',100,'path;name;dscr;active;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1577036706);
 INSERT INTO wlb_Main VALUES('grpGraph','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAE
 xklEQVRYhdVYTW/bRhCd2S8uRVESJbOCZCSAgThBTknR3Jrmnj+R/5Kf2EvgwEacOkod24q+SIHk
 krvbA22akW0ILQSknNO+p/cWXM2sZih8//69ylSSJo7jGGPiOG6327ooALHlulEcE0IAQCmVJAn8
@@ -20560,7 +20623,7 @@ INSERT INTO wlb_Main VALUES('terminator','iVBORw0KGgoAAAANSUhEUgAAABcAAABACAIAAA
 UoKGOOcwpZTSZ4sCAF3jvSiiiCLKb0rOOcbIzH9WEAC2bTPGzPPMzESUc3bOXdfVdd00TcuyWGvv
 +9Zan+cJAIhIROu6aq2ttY/HOwJACAERvfdKKe/9cRwAQET7vjPzMAylFCLq+56ZY4whhFLKOI6l
 FGPMVxfvPQBYa2u9Ola9ct/L1+UPf2mPKKKIIooooogiiiii/GcFnXNKtRXp3l7PPUhJwkNfYgAA
-AABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'','','',-1,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1552226019);
+AABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'','','',-1,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1577036562);
 INSERT INTO wlb_Main VALUES('grph_panel','iVBORw0KGgoAAAANSUhEUgAAABMAAABACAIAAAB3KNvCAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAJ
 SElEQVRIiZVXW3Ab1Rn+z9HZXe1KslYXS5YU1Y4cHHIxFrSZpgkQGAiQPjBTykzoW5sZOgOdoc9t
 pzy007d2OgQGeEiHKbxAkicKLZcMgUlDxthAXDu+yJd4bUuyLGtXl5W0u2d3Tx82OHbIMOEfzZlz
@@ -22156,10 +22219,10 @@ if(selTime != prevTime) {
 	//Week box update
 	for(i_w = 0, i_d = 1; i_w < 6; i_w++)
 		for(i_wd = 0; i_wd < 7; i_wd++)
-			if((i_w == 0 && i_wd < (selWDay-1)) || i_d > maxDayInMonth)	//Clear cell
+			if((i_w == 0 && i_wd < (((tVl=selWDay-1)<0)?7+tVl:tVl)) || i_d > maxDayInMonth)	//Clear cell
 				this.wdgAt("w"+i_w+"_"+i_wd).attrSet("text","").attrSet("bordWidth","0").attrSet("backColor","");
 			else {
-				this.wdgAt("w"+i_w+"_"+i_wd).attrSet("text",i_d).attrSet("bordWidth","0").attrSet("backColor","lightgray");
+				this.wdgAt("w"+i_w+"_"+i_wd).attrSet("text",i_d).attrSet("bordWidth","0").attrSet("backColor","lightgray-1");
 				if(i_d == selDay)						//Selected day
 					this.wdgAt("w"+i_w+"_"+i_wd).attrSet("text",i_d).attrSet("bordWidth","1").attrSet("backColor","lightgreen");
 				i_d++;
@@ -22167,7 +22230,7 @@ if(selTime != prevTime) {
 	prevTime = selTime;
 }
 
-cntr++;','','',-1,'name;geomW;geomH;backColor;',1570990300);
+cntr++;','','',-1,'name;dscr;geomW;geomH;backColor;',1576678207);
 INSERT INTO wlb_Main VALUES('alarmsAct','iVBORw0KGgoAAAANSUhEUgAAAEAAAAALCAYAAADP9otxAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABRlJREFUSImVlstyHLcVhj+ggb5Pz4UcUTETzciWHcelhV3lcrkqT5EX
 yMtkn1W8yz7JC6TyGrZTklKKbYU3iaJIzq2ne7rRQBbTHHI4cqpyNl0H58eP/xwcAC3+8Oe//SPr

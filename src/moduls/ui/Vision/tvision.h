@@ -61,6 +61,7 @@ class TVision : public TUI
 	string userPass( )			{ return mUserPass; }
 	string runPrjs( )			{ return mRunPrjs; }
 	bool exitLstRunPrjCls( )		{ return mExitLstRunPrjCls; }
+	bool dropCommonWdgStls( )		{ return mDropCommonWdgStls; }
 	string VCAStation( )			{ return mVCAStation; }
 	int restoreTime( )			{ return mRestTime; }
 	double cachePgLife( )			{ return mCachePgLife; }
@@ -71,6 +72,7 @@ class TVision : public TUI
 	void setUserPass( const string &pass )	{ mUserPass = pass; modif(); }
 	void setRunPrjs( const string &prj )	{ mRunPrjs = prj; modif(); }
 	void setExitLstRunPrjCls( bool en )	{ mExitLstRunPrjCls = en; modif(); }
+	void setDropCommonWdgStls( bool en )	{ mDropCommonWdgStls = en; modif(); }
 	void setVCAStation( const string &stat ){ mVCAStation = stat; modif(); }
 	void setRestoreTime( int vl )		{ mRestTime = vl; modif(); }
 	void setCachePgLife( double vl )	{ mCachePgLife = vmax(0, vmin(1000,vl)); modif(); }
@@ -119,6 +121,7 @@ class TVision : public TUI
 	string		mRunPrjs;		//Run projects list on the module start
 	vector<WdgShape*> shapesWdg;
 	bool		mExitLstRunPrjCls,	//Exit program on last run project close
+			mDropCommonWdgStls,	//Drops widget styles to the common one for some specific widgets in the runtime
 			mEndRun;		//End run command. Close all windows
 	int		mRestTime;		//Restore connection time, seconds
 	double		mCachePgLife;		//Cached pages lifetime

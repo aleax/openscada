@@ -97,6 +97,7 @@ class TTransportIn : public TCntrNode, public TConfig
 	bool cfgChange( TCfg &co, const TVariant &pc );
 
 	void load_( TConfig *cfg );
+	void load_( )			{ }
 	void save_( );
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
@@ -163,7 +164,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	void setDB( const string &vl )			{ mDB = vl; modifG(); }
 
 	virtual void start( int time = 0 );
-	virtual void stop( )			{ };
+	virtual void stop( )		{ };
 
 	virtual int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0, int time = 0 )
 	{ return 0; }
@@ -177,7 +178,7 @@ class TTransportOut : public TCntrNode, public TConfig
 
 	TTypeTransport &owner( ) const;
 
-	ResMtx &reqRes( )			{ return mReqRes; }
+	ResMtx &reqRes( )		{ return mReqRes; }
 
     protected:
 	//Methods
@@ -190,6 +191,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
 	void load_( TConfig *cfg );
+	void load_( )			{ }
 	void save_( );
 
 	//Attributes

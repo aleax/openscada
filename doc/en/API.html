@@ -765,8 +765,8 @@ Flags of the queries to the system table (enum – TDBS::ReqGen):
 <li> <i>void tmplLibReg( TPrmTmplLib *lib );</i> — Registration of the parameter's template <i>lib</i>.</li>
 <li> <i>void tmplLibUnreg( const string &amp;id, int flg = 0 );</i> — Deleting/removing of the registration of the parameter's template <i>id</i>.</li>
 <li> <i>AutoHD&lt;TPrmTmplLib&gt; tmplLibAt( const string &amp;id ) const;</i> — Connection to the parameter's template <i>id</i>.</li>
-<li> <i>float rdRestDtTm( );</i> — Maximum depth of the archive data recovery when starting in hours.</li>
-<li> <i>void setRdRestDtTm( float vl );</i> — Set of the maximum depth of the archive data recovery when starting in hours.</li>
+<li> <i>double rdRestDtTm( );</i> — Maximum depth of the archive data recovery when starting in hours.</li>
+<li> <i>void setRdRestDtTm( double vl );</i> — Set of the maximum depth of the archive data recovery when starting in hours.</li>
 <li> <i>void rdActCntrList( vector&lt;string&gt; &amp;ls, bool isRun = false );</i> — The list of active controllers working in the redundancy scheme. When we indicate <i>isRun</i> there will be in the list only running controllers in this station.</li>
 <li> <i>string rdStRequest( const string &amp;cntr, XMLNode &amp;req, const string &amp;prevSt = "", bool toRun = true );</i> — Request <i>req</i> to the redundant station on behalf of the controller <i>cntr</i>. The station for the request is selected after specified in <i>prevSt</i> for the running remote controller when indicating <i>toRun</i>.</li>
 <li> <i>TElem &amp;elLib( );</i> — The structure of the table of the libraries if parameters' templates.</li>

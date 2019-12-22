@@ -1118,7 +1118,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					    for(iW = 0, iD = 1; iW < 6; iW++)
 						for(iWd = 0; iWd < 7; iWd++) {
 						    tdEl = this.children[3].rows[iW+1].cells[iWd];
-						    if((iW == 0 && iWd < (dtSetMBeg.getDay()-1)) || iD > maxDayInMonth)
+						    if((iW == 0 && iWd < ((tVl=dtSetMBeg.getDay()-1)<0?7+tVl:tVl)) || iD > maxDayInMonth)
 						    { tdEl.innerHTML = ""; tdEl.className = ""; tdEl.onclick = null; continue; }
 						    tdEl.innerHTML = iD;
 						    tdEl.className = "active";

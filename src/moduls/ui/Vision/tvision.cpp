@@ -43,7 +43,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"6.5.0"
+#define MOD_VER		"6.6.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
 #define DESCRIPTION	_("Visual operation user interface, based on the Qt library - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -81,7 +81,7 @@ using namespace VISION;
 //* QTCFG::TVision                                *
 //*************************************************
 TVision::TVision( string name ) : TUI(MOD_ID), mVCAStation(dataRes()), mUserStart(dataRes()), mUserPass(dataRes()),
-    mExitLstRunPrjCls(true), mEndRun(false), mRestTime(30), mCachePgLife(1), mCachePgSz(10), mScrnCnt(0)
+    mExitLstRunPrjCls(true), mDropCommonWdgStls(true), mEndRun(false), mRestTime(30), mCachePgLife(1), mCachePgSz(10), mScrnCnt(0)
 {
     mVCAStation = ".";
     mod = this;
@@ -113,6 +113,7 @@ string TVision::optDescr( )
 	"UserPass   <pass>       User password for non-local start.\n"
 	"RunPrjs    <list>       List of projects to be launched at the start of the module.\n"
 	"ExitLstRunPrjCls <0|1>  Exit closing the last completed project (by default 1).\n"
+	"DropCommonWdgStls <0|1> Reset widget styles to common for some specific widgets in runtime, like to buttons (default 1).\n"
 	"CachePgLife <hours>     Lifetime of the pages in the cache (by default 1).\n"
 	"CachePgSz  <numb>       Maximum number of the pages in the cache (by default 10).\n"
 	"VCAstation <id>         The station with the VCA engine ('.' is local).\n"
@@ -131,6 +132,7 @@ void TVision::load_( )
     setUserPass(TBDS::genDBGet(nodePath()+"UserPass",""));
     setRunPrjs(TBDS::genDBGet(nodePath()+"RunPrjs",""));
     setExitLstRunPrjCls(s2i(TBDS::genDBGet(nodePath()+"ExitLstRunPrjCls",i2s(exitLstRunPrjCls()))));
+    setDropCommonWdgStls(s2i(TBDS::genDBGet(nodePath()+"DropCommonWdgStls",i2s(dropCommonWdgStls()))));
     setCachePgLife(s2r(TBDS::genDBGet(nodePath()+"CachePgLife",r2s(cachePgLife()))));
     setCachePgSz(s2i(TBDS::genDBGet(nodePath()+"CachePgSz",i2s(cachePgSz()))));
     setVCAStation(TBDS::genDBGet(nodePath()+"VCAstation","."));
@@ -146,6 +148,7 @@ void TVision::save_( )
     TBDS::genDBSet(nodePath()+"UserPass", userPass());
     TBDS::genDBSet(nodePath()+"RunPrjs", runPrjs());
     TBDS::genDBSet(nodePath()+"ExitLstRunPrjCls", i2s(exitLstRunPrjCls()));
+    TBDS::genDBSet(nodePath()+"DropCommonWdgStls", i2s(dropCommonWdgStls()));
     TBDS::genDBSet(nodePath()+"CachePgLife", r2s(cachePgLife()));
     TBDS::genDBSet(nodePath()+"CachePgSz", i2s(cachePgSz()));
     TBDS::genDBSet(nodePath()+"VCAstation", VCAStation());
@@ -347,6 +350,8 @@ void TVision::cntrCmdProc( XMLNode *opt )
 			 "To open the project window on the desired display (1), use the project name format: 'PrjName-1'.\n"
 			 "To connect to the background or another open session use \"ses_{SesID}\"."));
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/exit_on_lst_run_prj_cls",_("Exit when closing the last running project"),RWRWR_,"root",SUI_ID,1,"tp","bool");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/drop_common_wdg_stls",_("Reset widget styles to common"),RWRWR_,"root",SUI_ID,2,"tp","bool",
+		"help",_("Required for some widget styles like \"gtk\" in some specific widgets in run mode, like buttons for the background color and images."));
 	}
 	return;
     }
@@ -419,6 +424,10 @@ void TVision::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/cfg/exit_on_lst_run_prj_cls") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(exitLstRunPrjCls()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setExitLstRunPrjCls(s2i(opt->text()));
+    }
+    else if(a_path == "/prm/cfg/drop_common_wdg_stls") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(dropCommonWdgStls()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setDropCommonWdgStls(s2i(opt->text()));
     }
     else if(a_path == "/prm/cfg/stationVCA") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(VCAStation());

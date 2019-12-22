@@ -2263,7 +2263,6 @@ void *TSYS::HPrTask( void * )
 
 void *TSYS::RdTask( void * )
 {
-    XMLNode req("CntrReqs");
     vector<string> subLs;
     SYS->list(subLs);
 
@@ -2275,7 +2274,8 @@ void *TSYS::RdTask( void * )
 	    // Live stations and connect to new station process
 	    if(sit->second.isLive || (!sit->second.isLive && sit->second.cnt <= 0)) {
 		// Prepare request to a remote station
-		req.clear()->setAttr("path", "/"+sit->first);
+		XMLNode req("CntrReqs");
+		req.setAttr("path", "/"+sit->first);
 		req.childAdd("st")->setAttr("path","/%2fserv%2fredundant");
 		for(unsigned iSub = 0; iSub < subLs.size(); iSub++)
 		    req.childAdd("st")->setAttr("path","/"+subLs[iSub]+"/%2fserv%2fredundant");

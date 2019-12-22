@@ -45,9 +45,9 @@
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#.D0.9A.D0.BE.D0.BC.D1.83.D0.BD.D1.96.D0.BA.D0.B0.D1.86.D1.96.D0.B9.D0.BD.D1.96_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D0.B8_CIF"><span class="tocnumber">1</span> <span class="toctext">Комунікаційні контролери CIF</span></a></li>
 <li class="toclevel-1 tocsection-2"><a href="#.D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D1.83"><span class="tocnumber">2</span> <span class="toctext">Об'єкт контролеру</span></a></li>
-<li class="toclevel-1 tocsection-3"><a href="#.D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B8"><span class="tocnumber">3</span> <span class="toctext">Параметри</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#.D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B8"><span class="tocnumber">3</span> <span class="toctext"><span>Параметри</span></span></a></li>
 <li class="toclevel-1 tocsection-4"><a href="#.D0.90.D1.81.D0.B8.D0.BD.D1.85.D1.80.D0.BE.D0.BD.D0.BD.D0.B8.D0.B9_.D1.80.D0.B5.D0.B6.D0.B8.D0.BC_.D0.B7.D0.B0.D0.BF.D0.B8.D1.81.D1.83"><span class="tocnumber">4</span> <span class="toctext">Асинхронний режим запису</span></a></li>
-<li class="toclevel-1 tocsection-5"><a href="#.D0.97.D0.B0.D1.83.D0.B2.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F"><span class="tocnumber">5</span> <span class="toctext">Зауваження</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#.D0.97.D0.B0.D1.83.D0.B2.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F"><span class="tocnumber">5</span> <span class="toctext"><span>Зауваження</span></span></a></li>
 <li class="toclevel-1 tocsection-6"><a href="#.D0.9F.D0.BE.D1.81.D0.B8.D0.BB.D0.B0.D0.BD.D0.BD.D1.8F"><span class="tocnumber">6</span> <span class="toctext">Посилання</span></a></li>
 </ul>
 </div>
@@ -94,7 +94,7 @@
 <li> Слот ЦП ПЛК у який встановлено центральний процесор контролеру.</li>
 <li> CIF плата, використана для доступу до промислового контролеру за посередництвом CIF комунікаційних процесорів.</li>
 <li> <a href="../Program_manual.html#Transports" title="Special:MyLanguage/Documents/Program manual">Вихідний транспорт OpenSCADA</a> для протоколу ADS (порт 48898, 801 для AMS) та ISO_TCP (порт 102) для надсилання запитів.</li></ul>
-<h2><span class="mw-headline" id=".D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B8"><span class="mw-headline-number">3</span> Параметри</span></h2>
+<h2><span class="mw-headline" id=".D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B8"><span class="mw-headline-number">3</span> <span id="Parameters" title="#Parameters">Параметри</span></span></h2>
 <p>Враховуючи високу інтелектуальність джерел даних, в особі промислових контролерів фірми Siemens S7-200,300,400,1200, об'єкти параметру виконуються на основі <a href="../DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">шаблонів</a>. Такий підхід дозволяє не обмежуватися жорстким переліком типів параметрів, що обмежує й можливості контролерів, а надати можливість користувачу формувати потрібні йому типи параметрів самостійно або використовувати бібліотеки вже розроблених раніш типів параметрів — шаблонів.
 </p><p>Виходячи із цього модуль надає тільки один тип параметрів — "Логічний". Додатковими конфігураційними полями параметрів цього модуля (рис.4) є поле вибору шаблону параметра.
 </p>
@@ -145,7 +145,7 @@
 <h2><span class="mw-headline" id=".D0.90.D1.81.D0.B8.D0.BD.D1.85.D1.80.D0.BE.D0.BD.D0.BD.D0.B8.D0.B9_.D1.80.D0.B5.D0.B6.D0.B8.D0.BC_.D0.B7.D0.B0.D0.BF.D0.B8.D1.81.D1.83"><span class="mw-headline-number">4</span> Асинхронний режим запису</span></h2>
 <p>Стандартним режимом запису для SCADA-систем, які взаємодіють із PLC, є синхронний, оскільки він дозволяє контролювати коректність завершення операції запису. Однак, у випадку запису множини параметрів одразу, такий підхід не виправданий у зв'язку із надсиланням безлічі мілких запитів у контролер, що його перевантажує та займає тривалий проміжок часу. Вирішенням цієї проблеми є асинхронний запис суміжних значень одним блоком. Такий режим підтримується цим модулем та дозволяє записувати всі параметри одразу суміжними блоками по 240 байт. Читання та запис у такому режимі здійснюється суміжними блоками із періодичністю опитування контролеру.
 </p>
-<h2><span class="mw-headline" id=".D0.97.D0.B0.D1.83.D0.B2.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">5</span> Зауваження</span></h2>
+<h2><span class="mw-headline" id=".D0.97.D0.B0.D1.83.D0.B2.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">5</span> <span id="Notes" title="#Notes">Зауваження</span></span></h2>
 <p>Після цілеспрямованого пошуку було виявлено декілька рішень проблеми комунікації із промисловими контролерами фірми Siemens за посередництвом різних комунікаційних інтерфейсів:
 </p>
 <ul><li> Виявлено достатньо багато рішень від фірми Siemens, які постачаються із рішеннями, які підтримують відкриту ОС "Linux" (<a class="external free" href="http://www.automation.siemens.com/net/html_76/produkte/040_cp_1616.htm" rel="nofollow noreferrer noopener" target="_blank">http://www.automation.siemens.com/net/html_76/produkte/040_cp_1616.htm</a>, ...).</li></ul>

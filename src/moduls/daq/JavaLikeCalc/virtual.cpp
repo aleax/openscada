@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"4.1.8"
+#define MOD_VER		"4.1.9"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")
@@ -846,6 +846,7 @@ bool Contr::cfgChange( TCfg &co, const TVariant &pc )
 {
     TController::cfgChange(co, pc);
 
+    if(co.fld().name() == "FUNC" && enableStat()) disable();
     if(co.fld().name() == "SCHEDULE")
 	mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
 

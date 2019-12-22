@@ -50,10 +50,10 @@
 #include <QScrollBar>
 #include <QHeaderView>
 #if QT_VERSION < 0x050000
-// #include <QPlastiqueStyle>
+# include <QPlastiqueStyle>
 #else
-// #include <QCommonStyle>
-#include <qdrawutil.h>
+# include <QCommonStyle>
+# include <qdrawutil.h>
 #endif
 
 #include "vis_run.h"
@@ -382,7 +382,14 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		//Img
 		QImage img;
 		string backimg = w->resGet(shD->img);
+		wdg->setStyle(NULL);
 		if(!backimg.empty() && img.loadFromData((const uchar*)backimg.data(),backimg.size())) {
+		    if(mod->dropCommonWdgStls())
+#if QT_VERSION < 0x050000
+			wdg->setStyle(new QPlastiqueStyle());
+#else
+			wdg->setStyle(new QCommonStyle());
+#endif
 		    int icSzW = w->width() - w->layout()->margin();
 		    int icSzH = w->height() - w->layout()->margin();
 		    img = img.scaled(w->width()-w->layout()->margin(), w->height()-w->layout()->margin(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -394,10 +401,15 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		QPalette plt;
 		QColor clr = getColor(shD->color);
 		if(clr.isValid()) {
+		    if(mod->dropCommonWdgStls())
+#if QT_VERSION < 0x050000
+			wdg->setStyle(new QPlastiqueStyle());
+#else
+			wdg->setStyle(new QCommonStyle());
+#endif
 		    plt.setColor(QPalette::Button, clr);
 		    wdg->setStyleSheet(QString("background: %1").arg(shD->color.c_str()));
-		}
-		else wdg->setStyleSheet(QString("background: %1").arg(plt.color(QPalette::Button).name()));
+		} else wdg->setStyleSheet(QString("background: %1").arg(plt.color(QPalette::Button).name()));
 		clr = getColor(shD->colorText);
 		if(clr.isValid())	plt.setColor(QPalette::ButtonText, clr);
 		wdg->setPalette(plt);

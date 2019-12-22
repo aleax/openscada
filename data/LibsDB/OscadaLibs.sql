@@ -10068,7 +10068,7 @@ else {
 				//SYS.messInfo("OneWire","devID="+SYS.strDecode(devID,"Bin"," "));
 				if((dO=devLs[devID]).isEVal()) {
 					devLs[devID] = dO = new Object();
-					devFamily = devID.charCodeAt(0); devNm = tr("1W device"); dO.isT = false;
+					devFamily = devID.charCodeAt(0)&0x7F; devNm = tr("1W device"); dO.isT = false;
 					if(devFamily == 0x10)			{ devNm = "DS1820/DS18S20/DS1920"; dO.isT = true; }
 					else if(devFamily == 0x20)	devNm = "DS2450";		//4AI
 					else if(devFamily == 0x22)	{ devNm = "DS1822"; dO.isT = true; }
@@ -10141,7 +10141,7 @@ else {
 		//Process devices for reading current value and set modifable
 		for(devID in devLs) {
 			if((dO=devLs[devID]).isEVal()) continue;
-			devFamily = devID.charCodeAt(0);
+			devFamily = devID.charCodeAt(0)&0x7F;
 			if(dO.isT) {	//Temperature
 				dP = dO.dP;
 				//SYS.messInfo("OneWire","devID="+SYS.strDecode(devID,"Bin"," "));
@@ -10539,7 +10539,7 @@ else {
 				//SYS.messInfo("OneWire","lstDiscr="+lstDiscr+"; devID="+SYS.strDecode(devID,"Bin"," "));
 				if((dO=devLs[devID]).isEVal()) {
 					devLs[devID] = dO = new Object();
-					devFamily = devID.charCodeAt(0); devNm = tr("1W device"); dO.isT = false;
+					devFamily = devID.charCodeAt(0)&0x7F; devNm = tr("1W device"); dO.isT = false;
 					if(devFamily == 0x10)			{ devNm = "DS1820/DS18S20/DS1920"; dO.isT = true; }
 					else if(devFamily == 0x20)	devNm = "DS2450";		//4AI
 					else if(devFamily == 0x22)	{ devNm = "DS1822"; dO.isT = true; }
@@ -10612,7 +10612,7 @@ else {
 		//Process devices for reading current value and set modifable
 		for(devID in devLs) {
 			if((dO=devLs[devID]).isEVal()) continue;
-			devFamily = devID.charCodeAt(0);
+			devFamily = devID.charCodeAt(0)&0x7F;
 			if(dO.isT) {	//Temperature
 				dP = dO.dP;
 				//SYS.messInfo("OneWire","devID="+SYS.strDecode(devID,"Bin"," "));

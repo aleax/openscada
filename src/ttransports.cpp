@@ -665,6 +665,7 @@ TCntrNode &TTransportIn::operator=( const TCntrNode &node )
     exclCopy(*src_n, "ID;");
     cfg("MODULE").setS(owner().modId());
     setDB(src_n->mDB);
+    load_();
 
     return *this;
 }
@@ -945,6 +946,7 @@ TCntrNode &TTransportOut::operator=( const TCntrNode &node )
     exclCopy(*src_n, "ID;");
     cfg("MODULE").setS(owner().modId());
     setDB(src_n->mDB);
+    load_();
 
     return *this;
 }

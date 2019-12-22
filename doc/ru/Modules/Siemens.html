@@ -45,9 +45,9 @@
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#.D0.9A.D0.BE.D0.BC.D0.BC.D1.83.D0.BD.D0.B8.D0.BA.D0.B0.D1.86.D0.B8.D0.BE.D0.BD.D0.BD.D1.8B.D0.B5_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D1.8B_CIF"><span class="tocnumber">1</span> <span class="toctext">Коммуникационные контроллеры CIF</span></a></li>
 <li class="toclevel-1 tocsection-2"><a href="#.D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D0.B0"><span class="tocnumber">2</span> <span class="toctext">Объект контроллера</span></a></li>
-<li class="toclevel-1 tocsection-3"><a href="#.D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.8B"><span class="tocnumber">3</span> <span class="toctext">Параметры</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#.D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.8B"><span class="tocnumber">3</span> <span class="toctext"><span>Параметры</span></span></a></li>
 <li class="toclevel-1 tocsection-4"><a href="#.D0.90.D1.81.D0.B8.D0.BD.D1.85.D1.80.D0.BE.D0.BD.D0.BD.D1.8B.D0.B9_.D1.80.D0.B5.D0.B6.D0.B8.D0.BC_.D0.B7.D0.B0.D0.BF.D0.B8.D1.81.D0.B8"><span class="tocnumber">4</span> <span class="toctext">Асинхронный режим записи</span></a></li>
-<li class="toclevel-1 tocsection-5"><a href="#.D0.97.D0.B0.D0.BC.D0.B5.D1.87.D0.B0.D0.BD.D0.B8.D1.8F"><span class="tocnumber">5</span> <span class="toctext">Замечания</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#.D0.97.D0.B0.D0.BC.D0.B5.D1.87.D0.B0.D0.BD.D0.B8.D1.8F"><span class="tocnumber">5</span> <span class="toctext"><span>Замечания</span></span></a></li>
 <li class="toclevel-1 tocsection-6"><a href="#.D0.A1.D1.81.D1.8B.D0.BB.D0.BA.D0.B8"><span class="tocnumber">6</span> <span class="toctext">Ссылки</span></a></li>
 </ul>
 </div>
@@ -94,7 +94,7 @@
 <li> Слот ЦП ПЛК в который установлен центральный процессор контроллера.</li>
 <li> CIF плата, используемая для доступа к промышленному контроллеру посредством CIF коммуникационных процессоров.</li>
 <li> <a href="../Program_manual.html#Transports" title="Special:MyLanguage/Documents/Program manual">Выходной транспорт OpenSCADA</a> для протокола ADS (порт 48898, 801 для AMS) и ISO_TCP (порт 102) для отправки запросов.</li></ul>
-<h2><span class="mw-headline" id=".D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.8B"><span class="mw-headline-number">3</span> Параметры</span></h2>
+<h2><span class="mw-headline" id=".D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.8B"><span class="mw-headline-number">3</span> <span id="Parameters" title="#Parameters">Параметры</span></span></h2>
 <p>Учитывая высокую интеллектуальность источников данных, в лице промышленных контроллеров фирмы Siemens S7-200,300,400,1200, объекты параметра выполняются на основе <a href="../DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">шаблонов</a>. Данный подход позволяет не ограничиваться жёстким перечнем типов параметров, что ограничивает и возможности контроллеров, а предоставить возможность пользователю формировать нужные ему типы параметров самостоятельно или использовать библиотеки уже разработанных ранее типов параметров — шаблонов.
 </p><p>Исходя из этого модуль предоставляет только один тип параметров — "Логический". Дополнительными конфигурационными полями параметров данного модуля (рис.4) является поле выбора шаблона параметра.
 </p>
@@ -145,7 +145,7 @@
 <h2><span class="mw-headline" id=".D0.90.D1.81.D0.B8.D0.BD.D1.85.D1.80.D0.BE.D0.BD.D0.BD.D1.8B.D0.B9_.D1.80.D0.B5.D0.B6.D0.B8.D0.BC_.D0.B7.D0.B0.D0.BF.D0.B8.D1.81.D0.B8"><span class="mw-headline-number">4</span> Асинхронный режим записи</span></h2>
 <p>Стандартным режимом записи для SCADA-систем, взаимодействующих с PLC, является синхронный, поскольку он позволяет контролировать корректность завершения операции записи. Однако, в случае записи множества параметров сразу, такой подход не оправдан в виду отправки множества мелких запросов в контроллер, что его перегружает и занимает большой интервал времени. Решением этой проблемы является асинхронная запись смежных значений одним блоком. Такой режим поддерживается этим модулем и позволяет записывать все параметры сразу смежными блоками по 240 байт. Чтение и запись в таком режиме производится смежными блоками с периодичностью опроса контроллера.
 </p>
-<h2><span class="mw-headline" id=".D0.97.D0.B0.D0.BC.D0.B5.D1.87.D0.B0.D0.BD.D0.B8.D1.8F"><span class="mw-headline-number">5</span> Замечания</span></h2>
+<h2><span class="mw-headline" id=".D0.97.D0.B0.D0.BC.D0.B5.D1.87.D0.B0.D0.BD.D0.B8.D1.8F"><span class="mw-headline-number">5</span> <span id="Notes" title="#Notes">Замечания</span></span></h2>
 <p>После целенаправленного поиска было обнаружено несколько решений проблемы коммуникации с промышленными контроллерами фирмы Siemens посредством различных коммуникационных интерфейсов:
 </p>
 <ul><li> Обнаружено достаточно много решений от фирмы Siemens, которые поставляются с решениями поддерживающими открытую ОС "Linux" (<a class="external free" href="http://www.automation.siemens.com/net/html_76/produkte/040_cp_1616.htm" rel="nofollow noreferrer noopener" target="_blank">http://www.automation.siemens.com/net/html_76/produkte/040_cp_1616.htm</a>, ...).</li></ul>

@@ -1,3 +1,20 @@
+2019-12-22 Roman (stable)
+- !!:FIX:DB.LibsDB.vcaBase: Main.{terminator,ElCadr}: Revised during the documenting.
+    FIX:Main.calendar: Fixed for month start in Sunday (0) in the weeks form and background of the disabled items.
+    FIX:Fixed for the message "reversed" translation.
+- FIX:DB.LibsDB.OscadaLibs: DevLib.{1W_DS9097,W_DS9097U}: Fixed for the device family detection as the template 0x7F,
+    detected on Last DS2413 with the first byte 0xBA.
+- DB: The SQL-requesting dialog appended for the time measurement.
+- DAQ: TDAQS::rdRestDtTm() expanded from the float to double type.
+- FIX:SYS: The redundancy task fixed moving the declaration "XMLNode req("CntrReqs");" up to the same request,
+    due to the possibility of back reading wrong responses.
+- FIX:Transport: Fixed in the transports copying for additional parameters, by call load_().
+- FIX:DAQ.JavaLikeCalc: Appended for disabling controller objects at changing the function.
+- !:UI.Vision: Appended for an option of the module to drop widget styles to the common one for some specific widgets in the runtime.
+- FIX:UI.WebVision: The views "Data" of the primitive "FormEl" fixed in the calendar for month start in Sunday (0)
+    in the weeks form and background of the disabled items.
+
+
 2019-12-08 Roman (stable)
 - !!:FIX:SYS: The JavaLikeCalc translation by the function tr() fixed in creating the translations table "Trs" and entries here in
     the simple mode (single language).

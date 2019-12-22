@@ -46,7 +46,7 @@
 <li class="toclevel-1 tocsection-1"><a href="#Input_transports"><span class="tocnumber">1</span> <span class="toctext">Input transports</span></a></li>
 <li class="toclevel-1 tocsection-2"><a href="#Output_transports"><span class="tocnumber">2</span> <span class="toctext">Output transports</span></a></li>
 <li class="toclevel-1 tocsection-3"><a href="#User_programming_API"><span class="tocnumber">3</span> <span class="toctext">User programming API</span></a></li>
-<li class="toclevel-1 tocsection-4"><a href="#Notes"><span class="tocnumber">4</span> <span class="toctext">Notes</span></a>
+<li class="toclevel-1 tocsection-4"><a href="#Notes"><span class="tocnumber">4</span> <span class="toctext"><span>Notes</span></span></a>
 <ul>
 <li class="toclevel-2 tocsection-5"><a href="#Virtual.2Flocal_serial_interfaces"><span class="tocnumber">4.1</span> <span class="toctext">Virtual/local serial interfaces</span></a></li>
 <li class="toclevel-2 tocsection-6"><a href="#Serial_interfaces_transferring_through_Ethernet_network"><span class="tocnumber">4.2</span> <span class="toctext">Serial interfaces transferring through Ethernet network</span></a></li>
@@ -166,7 +166,7 @@
 <li> <i>bool DCD()</i> — state of the Data Carrier Detect.</li>
 <li> <i>bool RI()</i> — Ring Indicator.</li>
 <li> <i>int sendbreak( int duration = 0 )</i> — sends to the stream the interruptions with zeros for <i>duration</i> (0 is some default duration).</li></ul>
-<h2><span class="mw-headline" id="Notes"><span class="mw-headline-number">4</span> Notes</span></h2>
+<h2><span class="mw-headline" id="Notes"><span class="mw-headline-number">4</span> <span id="Notes" title="#Notes">Notes</span></span></h2>
 <p>Communications via the serial interfaces have a number of features. The most important feature is the criterion for the end of the message and the waiting time of this criterion. In some protocols, such a criterion is a sign of the end or the specified message size. In other protocols, such a criterion is no data in the input stream for a specified time — the symbol time. In both cases, the criterion waiting time, or the symbol, is a crucial and strongly affects the overall exchange time. Consequently, the smaller this time, the better. Here the problem of hardware and its drivers latency happens.
 </p><p>To check for latency of the exchange channel, thus optimally adjust the symbol time, you can use the interface of the "Request" tab of the output transport. To do this, you need to specify an exemplary request for the protocol, specify "Wait timeout", send a request, and check its integrity. To get a more representative result, you need to repeat the request several times. If there is an incomplete response, then the time of the symbol must be increased, otherwise you can reduce it.
 </p><p>On embedded serial interfaces RS232/422/485 hardware you can achieve low latency — up to several milliseconds. However, on high-loaded systems with many tasks in the real-time priority, latency may become non-deterministic, due to the execution of the service thread of the Linux kernel events in low priority. To solve this problem, you must set a high priority to these threads, which can be done using a script, placing it, for example, in "/etc/rc.local":

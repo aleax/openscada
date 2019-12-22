@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.MySQL 1.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-08 19:36+0200\n"
+"POT-Creation-Date: 2019-12-14 22:13+0200\n"
 "PO-Revision-Date: 2009-08-17 11:32+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -42,6 +42,7 @@ msgstr "Fehler beim Abfragen der DB: %s"
 msgid "Error opening the table '%s': the DB is disabled."
 msgstr "Fehler beim Öffnen der Tabelle '%s': Die DB ist deaktiviert."
 
+#, c-format
 msgid "Repeated errors of requesting the DB: '%s (%d)'."
 msgstr "Wiederholte Fehler beim Anfordern der DB: '%s (%d)'."
 
@@ -49,6 +50,7 @@ msgstr "Wiederholte Fehler beim Anfordern der DB: '%s (%d)'."
 msgid "Error connecting to the DB: '%s (%d)'!"
 msgstr "Fehler beim Verbinden mit dem DB: '%s (%d)'!"
 
+#, c-format
 msgid "Error the query '%s': '%s (%d)'."
 msgstr "Fehler bei der Abfrage '%s': '%s (%d)'."
 

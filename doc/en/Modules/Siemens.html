@@ -38,16 +38,16 @@
 <td> x86,x86_64,ARM
 </td>
 <td> DAQ </td>
-<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2009) — the page translation</i></font> </td>
+<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2009) — the page initial translation</i></font> </td>
 <td> Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol) and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the protocol TwinCAT ADS/AMS due it working with data blocks also.
 </td></tr></table>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#Communication_controllers_CIF"><span class="tocnumber">1</span> <span class="toctext">Communication controllers CIF</span></a></li>
 <li class="toclevel-1 tocsection-2"><a href="#Controller_object"><span class="tocnumber">2</span> <span class="toctext">Controller object</span></a></li>
-<li class="toclevel-1 tocsection-3"><a href="#Parameters"><span class="tocnumber">3</span> <span class="toctext">Parameters</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Parameters"><span class="tocnumber">3</span> <span class="toctext"><span>Parameters</span></span></a></li>
 <li class="toclevel-1 tocsection-4"><a href="#Asynchronous_writing_mode"><span class="tocnumber">4</span> <span class="toctext">Asynchronous writing mode</span></a></li>
-<li class="toclevel-1 tocsection-5"><a href="#Notes"><span class="tocnumber">5</span> <span class="toctext">Notes</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Notes"><span class="tocnumber">5</span> <span class="toctext"><span>Notes</span></span></a></li>
 <li class="toclevel-1 tocsection-6"><a href="#Links"><span class="tocnumber">6</span> <span class="toctext">Links</span></a></li>
 </ul>
 </div>
@@ -94,7 +94,7 @@
 <li> CPU slot of the PLC in which the central processor of the controller is placed.</li>
 <li> CIF card used for access to the industrial controller through CIF communication processors.</li>
 <li> <a href="../Program_manual.html#Transports" title="Special:MyLanguage/Documents/Program manual">OpenSCADA output transport</a> for the protocol ADS (port 48898, 801 for AMS) and ISO_TCP (port 102) for sending requests.</li></ul>
-<h2><span class="mw-headline" id="Parameters"><span class="mw-headline-number">3</span> Parameters</span></h2>
+<h2><span class="mw-headline" id="Parameters"><span class="mw-headline-number">3</span> <span id="Parameters" title="#Parameters">Parameters</span></span></h2>
 <p>Given the high intelligence of data sources, in the face of the industrial controllers of Siemens S7-200,300,400,1200, the parameter objects are executed on the basis of <a href="../DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">templates</a>. This approach allows you not to be restricted to a rigid list of types of parameters, which also restricts the capabilities of controllers, but to allow the user to create the required types of parameters independently, or to use libraries of earlier developed types of parameters — templates.
 </p><p>Based on this, the module provides only one type of parameters — "Logical". The additional configuration fields of the parameters of this module (Fig.4) is the selection field of the parameter template.
 </p>
@@ -145,7 +145,7 @@
 <h2><span class="mw-headline" id="Asynchronous_writing_mode"><span class="mw-headline-number">4</span> Asynchronous writing mode</span></h2>
 <p>The standard writing mode for SCADA systems, which interact with the PLC, is synchronous, because it allows you to control the correctness of the completion of the write operation. However, in the case of writing a set of parameters at once, such the approach is not efficient due to sending a lot of small queries to the controller that overloads it and takes a long range of time. Solving this problem is asynchronous writing of adjacent values by one block. This mode is supported by this module and allows you to write all parameters immediately by adjacent blocks of 240 bytes. Reading and writing in this mode are carried out by adjacent blocks with periodicity of the controller's polling.
 </p>
-<h2><span class="mw-headline" id="Notes"><span class="mw-headline-number">5</span> Notes</span></h2>
+<h2><span class="mw-headline" id="Notes"><span class="mw-headline-number">5</span> <span id="Notes" title="#Notes">Notes</span></span></h2>
 <p>After a targeted search was found a few solutions of the problem of communication with industrial controllers of firm Siemens through various communication interfaces:
 </p>
 <ul><li> Found a lot of solutions from the company Siemens, which supplied with solutions that support the open operating system "Linux" (<a class="external free" href="http://www.automation.siemens.com/net/html_76/produkte/040_cp_1616.htm" rel="nofollow noreferrer noopener" target="_blank">http://www.automation.siemens.com/net/html_76/produkte/040_cp_1616.htm</a>, ...).</li></ul>
@@ -164,7 +164,7 @@
 <tr>
 <td> The connection seems established but the data is not read from the PLC. </td>
 <td> It looks like you are using S7-1200 which has different changes in the security policy:
-<ul><li> Create a data block with compatibility with S7-300/400 and/or disabling this block optimization to appear the offset column. Disable any protection of this data block. </li>
+<ul><li> Create a data block with the compatibility to S7-300/400 and/or disable this block optimisation to appear the offset column. Disable any protection of this data block. </li>
 <li> If you have the LibnoDave message "error 33028 context is not supported. Step7 says: Function not implemented or error in telegram.", you have S7-1200 V4.0 and you must <a class="external text" href="https://sourceforge.net/p/libnodave/discussion/205657/thread/7ec9f370/?limit=25" rel="nofollow noreferrer noopener" target="_blank">grant access for the interface functions Get/Put</a> into the PLC configuration.</li></ul>
 </td></tr></table>
 <h2><span class="mw-headline" id="Links"><span class="mw-headline-number">6</span> Links</span></h2>
