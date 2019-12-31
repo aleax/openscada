@@ -1,3 +1,12 @@
+2019-12-31 Roman (stable)
+- !!:FIX:DB.LibsDB.vcaBase: Main.{grph_panel,doc_panel,cntrPasp,cntrPaspExt,treeSelect}: Revised during the documenting.
+- FIX:Model.{AGLKS.vca,Boiler.St}: Fixed for the original message "Pasport".
+- !:DAQ.JavaLikeCalc: Set to stopped at the program source changing for to apply the changes.
+- FIX:DAQ.{JavaLikeCalc,LogicLev,ModBus,Siemens}: Prevented from double setting of the sign "f_start" at the start.
+- Transport.{Sockets,SSL,Serial}: The "Started" and "Stopped" messages appended the suffix "connected" and "disconnected" respectively.
+- FIX:Transport.{Sockets,SSL}: The "No data" reading message some fixed and expanded.
+
+
 2019-12-22 Roman (stable)
 - !!:FIX:DB.LibsDB.vcaBase: Main.{terminator,ElCadr}: Revised during the documenting.
     FIX:Main.calendar: Fixed for month start in Sunday (0) in the weeks form and background of the disabled items.

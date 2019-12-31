@@ -56,7 +56,7 @@ INSERT INTO VCALibs VALUES('Main','Main elements','Provides the library of the m
 
 Founded: September 2007
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.7.1
+Version: 1.7.2
 License: GPLv2','wlb_Main','','Основні елементи','Бібліотека створюється для надання основних елементів користувацького інтерфейсу. Будується бібліотека на основі примітивів віджетів та мови внутрішнього програмування JavaLikeCalc.
 
 Автор: Роман Савоченко <roman@oscada.org>
@@ -1850,8 +1850,8 @@ INSERT INTO wlb_Main_incl VALUES('RootPgSo','go_view5','/wlb_originals/wdg_FormE
 INSERT INTO wlb_Main_incl VALUES('RootPgSo','go_view6','/wlb_originals/wdg_FormEl','owner;perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;img;','');
 INSERT INTO wlb_Main_incl VALUES('doc_panel','dateBeg','/wlb_originals/wdg_FormEl','owner;perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;value;view;cfg;','');
 INSERT INTO wlb_Main_incl VALUES('grph_panel','dateBeg','/wlb_originals/wdg_FormEl','owner;perm;name;active;geomY;geomW;geomH;geomZ;tipTool;tipStatus;value;view;cfg;','');
-INSERT INTO wlb_Main_incl VALUES('grph_panel','Text2','/wlb_originals/wdg_Text','owner;geomX;geomY;geomW;geomH;geomZ;geomMargin;font;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('doc_panel','Text2','/wlb_originals/wdg_Text','owner;en;geomX;geomY;geomW;geomH;geomZ;geomMargin;font;alignment;text;','');
+INSERT INTO wlb_Main_incl VALUES('grph_panel','Text2','/wlb_originals/wdg_Text','owner;geomX;geomY;geomW;geomH;geomZ;geomMargin;font;wordWrap;alignment;text;','');
+INSERT INTO wlb_Main_incl VALUES('doc_panel','Text2','/wlb_originals/wdg_Text','owner;en;geomX;geomY;geomW;geomH;geomZ;geomMargin;font;wordWrap;alignment;text;','');
 INSERT INTO wlb_Main_incl VALUES('graphCalc','funcCode','/wlb_originals/wdg_FormEl','owner;perm;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;font;','');
 INSERT INTO wlb_Main_incl VALUES('graphCalc','funcLs','/wlb_originals/wdg_FormEl','active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
 INSERT INTO wlb_Main_incl VALUES('graphCalc','lab_funcLs','/wlb_originals/wdg_Text','owner;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;','');
@@ -2458,7 +2458,7 @@ INSERT INTO wlb_Main_io VALUES('cntrRegul','geomH','600',32,'','','','','','',''
 INSERT INTO wlb_Main_io VALUES('cntrRegul','backColor','grey',104,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('cntrRegul','bordWidth','2',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('cntrRegul','pgGrp','so',32,'','','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('doc_panel','geomH','40',32,'','','Text3','','','','','','');
+INSERT INTO wlb_Main_io VALUES('doc_panel','geomH','50',32,'','','Text3','','','','','','');
 INSERT INTO wlb_Main_io VALUES('cntrRegul','arg6cfg','4;f;1',0,'','','info','','','','','','');
 INSERT INTO wlb_Main_io VALUES('cntrRegul','arg7cfg','6;f;3',0,'','','info','','','','','','');
 INSERT INTO wlb_Main_io VALUES('cntrRegul','arg8tp','1',0,'','','info','','','','','','');
@@ -3029,7 +3029,7 @@ INSERT INTO wlb_Main_io VALUES('ElCadr','geomW','51',32,'','','com_open','','','
 INSERT INTO wlb_Main_io VALUES('ElCadr','geomH','30',32,'','','com_open','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElCadr','geomZ','3',32,'','','com_open','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElCadr','tipTool','Open',40,'','','com_open','Відкрити','','Открыть','','','');
-INSERT INTO wlb_Main_io VALUES('doc_panel','name','Document panel',32,'','','','Панель документів','','Панель документов','','','');
+INSERT INTO wlb_Main_io VALUES('doc_panel','name','Panel of documents',32,'','','','Панель документів','','Панель документов','','','');
 INSERT INTO wlb_Main_io VALUES('doc_panel','geomW','110',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('doc_panel','geomH','300',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('doc_panel','pgGrp','cntr',32,'','','','','','','','','');
@@ -3096,7 +3096,7 @@ INSERT INTO wlb_Main_io VALUES('terminator','geomY','68',32,'','','Text1','','',
 INSERT INTO wlb_Main_io VALUES('terminator','geomW','108',32,'','','Text1','','','','','','');
 INSERT INTO wlb_Main_io VALUES('terminator','font','Arial 15',32,'','','Text1','','','','','','');
 INSERT INTO wlb_Main_io VALUES('terminator','text','Control panel',32,'','','Text1','Панель контролю','','Панель контроля','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','name','Graphics group panel',32,'','','','Панель групи графіків','','Панель группы графиков','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','name','Panel of the graphs',32,'','','','Панель групи графіків','','Панель группы графиков','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','110',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','365',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','pgGrp','cntr',32,'','','','','','','','','');
@@ -3177,7 +3177,7 @@ FSArch.1s
 FSArch.1m
 FSArch.1h','','','');
 INSERT INTO wlb_Main_io VALUES('doc_panel','en','1',40,'','','Text3','','','','','','');
-INSERT INTO wlb_Main_io VALUES('doc_panel','geomY','110',32,'','','Text3','','','','','','');
+INSERT INTO wlb_Main_io VALUES('doc_panel','geomY','100',32,'','','Text3','','','','','','');
 INSERT INTO wlb_Main_io VALUES('doc_panel','geomW','108',32,'','','Text3','','','','','','');
 INSERT INTO wlb_Main_io VALUES('doc_panel','geomX','1',32,'','','Text3','','','','','','');
 INSERT INTO wlb_Main_io VALUES('doc_panel','name','',32,'','','tmTp','','','','','','');
@@ -3451,7 +3451,7 @@ line:6:7::c2:::
 line:8:9::c2:::
 line:2:3::c1:::
 line:4:5::c1:::',32,'','','lev_var','','','','','','');
-INSERT INTO wlb_Main_io VALUES('prescrRunSimple','name','Prescription:run (simple)',32,'','','','Рецепт:виконання (простий)','','Рецепт:исполнение (простой)','','','');
+INSERT INTO wlb_Main_io VALUES('prescrRunSimple','name','Prescription: run (simple)',32,'','','','Рецепт: виконання (простий)','','Рецепт: исполнение (простой)','','','');
 INSERT INTO wlb_Main_io VALUES('prescrRunSimple','geomW','250',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrRunSimple','geomH','170',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrRunSimple','backColor','gray',96,'','','','','','','','','');
@@ -6741,16 +6741,19 @@ License: GPLv2',32,'','','','Елемент реалізує діалог кор
 Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.4.0
 Лицензия: GPLv2','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','dscr','The cadre "Graph control panel".
+INSERT INTO wlb_Main_io VALUES('grph_panel','dscr','The element is a specialized panel for dynamic control of basic user properties of the primitive "Diagram". So, the panel allows you to view graphs of the history for the required period of time and the desired resolution, supports: the scale, the selection of archiver for display and the graphs presentation in a spectrum of present frequencies or XY.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.5.0',32,'','','','Кадр "Панель контролю графіків".
+Version: 1.5.1
+License: GPLv2',32,'','','','Елемент є спеціалізованою панеллю динамічного керування основними користувацькими властивостями примітиву "Діаграма". Так, панель дозволяє переглянути графіки історії за потрібний проміжок часу та на потрібну роздільну здатність, підтримується: масштабування шкали, вибір архіваторів для відображення, а також надання графіків у вигляді спектру присутніх частот або XY.
 
-Автор: Роман Савоченко<roman@oscada.org>
-Версія: 1.5.0','','Кадр "Панель контроля графиков".
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.5.1
+Ліцензія: GPLv2','','Элемент является специализированной панелью динамического управления основными пользовательскими свойствами примитива "Диаграмма". Так, панель позволяет просмотреть графики истории за необходимый период времени и в нужном разрешении, поддерживается: масштабирование шкалы, выбор архиваторов для отображения, а также представление графиков в виде спектра присутствующих частот или XY.
 
-Автор: Роман Савоченко<roman@oscada.org>
-Версия: 1.5.0','','','');
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.5.1
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_Main_io VALUES('objProps','dscr','The element serves to display the properties of the data source in tabular form and to highlight them in color, as an object, and to allow the values of the recordable properties to be changed. This element also generates violation notifications according to the features of the object. The element generally uses and represents a representative structure "Complex objects" of the DAQ-templates.
 
 Author: Roman Savochenko <roman@oscada.org>
@@ -6782,22 +6785,82 @@ INSERT INTO wlb_Main_io VALUES('cntrPaspExt','perm','438',32,'','','sel_data',''
 INSERT INTO wlb_Main_io VALUES('cntrPaspExt','perm','438',32,'','','sel_trends','','','','','','');
 INSERT INTO wlb_Main_io VALUES('cntrPaspExt','perm','438',32,'','','sel_view','','','','','','');
 INSERT INTO wlb_Main_io VALUES('cntrPaspExt','perm','438',32,'','','trendsList','','','','','','');
-INSERT INTO wlb_Main_io VALUES('cntrPaspExt','dscr','Extended passport of the standard parameters with functions:
-- Table of attributes of the parameter with their edition for editable ones.
-- Trends for standard and key attributes: var, sp, out, auto, com, st_open, ...
-- Table of the current data.
+INSERT INTO wlb_Main_io VALUES('cntrPaspExt','dscr','The element is an information-control dialog around the data source parameter — an expanded parameter passport. Unlike the simple passport, the expanded one, in addition to information, provides the ability to control the parameter attributes and display the history of the standard attributes in both a trend and a data table.
+
+Information and control for parameter attributes remains the primary function provided in the "View" tab, where the attribute table is formed as their are, with the "Name" and "Value" columns. The table is active and if you select an entry of the accessible to write attribute and at corresponding permissions (root:op), a field for entering new values will be provided at the bottom.
+
+The history is provided in the following two tabs "Trends" and "Data", which may not be available in the absence of the history-archives at standard attributes. The "Trends" tab contains a graphics area, of the primitive "Diagram", on most of the window, and a table at the bottom with the names, colours, and graph scales. The graphs are updated periodically and built with a period of 1 second and a fixed depth of 1 hour. The "Data" tab contains only the "Document" primitive field with a table with attribute values in columns that is updated with a period of 1 second for the history data period and to a depth of 100 records. The following items of the representative parameter structures are considered standard attributes with history:
+- Analog signal:
+  - var — variable.
+- PID-regulator:
+  - sp — setpoint;
+  - out — output;
+  - auto — mode: automate.
+- Discrete assembles:
+  - com — command "Open";
+  - close — command "Close";
+  - stop — command "Stop";
+  - st_open — state "Opened";
+  - st_close — state "closed".
+
+In the trends of the analog parameters building the attributes are separately processed for alarm [aMin...aMax] and warning scales [wMin...wMax], which are also displayed in the graph.
+
+This dialogue is currently the main one and has replaced the simple passport dialogue.
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.0',32,'','','','Розширений паспорт стандартних параметрів з функціями:
-- Таблиця атрибутів параметру з їх редагуванням для редагованих.
-- Тренди для стандартних та ключових атрибутів: var, sp, out, auto, com, st_open, ...
-- Таблиця поточних даних.
+Sponsored by: PAC HARTRON
+Version: 1.2.0
+License: GPLv2',32,'','','','Елемент є інформаційно-контрольним діалогом довкола параметру джерела даних — розширений паспорт параметру. На відміну від простого паспорту, розширений, окрім інформації, надає можливість контролю за атрибутами параметру та відображення історії стандартних атрибутів як у вигляді тренду, так і таблиці даних.
+
+Інформація та контроль за атрибутами параметру залишається основною функцію, яка надається у вкладці "Огляд", де формується таблиця атрибутів як вони є, із стовпчиками "Ім''я" та "Значення". Таблиця активна та за обрання доступних до запису атрибутів, та відповідних прав (root:op), знизу надається поле введення нових значень.
+
+Історія надається у наступних двох вкладках "Тренди" та "Дані", які можуть бути й відсутні за відсутності історії-архівів за стандартними атрибутами. Вкладка "Тренди" містить область графіків, примітив "Діаграма", на більшій частині вікна, та таблицю унизу із назвами, кольором та шкалами графіків. Графіки періодично оновлюються та будуються з періодом 1 секунда, та на фіксовану глибиною у 1 годину. Вкладка "Дані" містить лише поле примітиву "Документ" із таблицею зі значеннями атрибуту у стовпчиках, яка оновлюється з періодом 1 секунда для періоду даних історії та на глибину у 100 записів. Стандартними атрибутами із історією вважаються наступні елементи представницьких структур параметру:
+- Аналоговий сигнал:
+  - var — змінна.
+- ПІД-регулятор:
+  - sp — завдання;
+  - out — вихід;
+  - auto — режим: автомат.
+- Дискретні збірки:
+  - com — команда "Відкрити";
+  - close — команда "Закрити";
+  - stop — команда "Зупинити";
+  - st_open — стан "Відкрито";
+  - st_close — стан "Закрито".
+
+Для побудови трендів аналогових параметрів окремо обробляються атрибути загальної шкали [min...max], а також аварійних [aMin...aMax] та попереджувальних шкал [wMin...wMax], які, зокрема, відображаються й на графіку.
+
+Наразі цей діалог є основним та він замінив простий діалог паспорту.
+
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.2.0','','Расширенный паспорт стандартных параметров с функциями:
-- Таблица атрибутов параметра с их редактированием для редактируемых.
-- Тренды для стандартных и ключевых атрибутов: var, sp, out, auto, com, st_open, ...
-- Таблица текущих данных.
+Спонсоровано: ПАТ ХАРТРОН
+Версія: 1.2.0
+Ліцензія: GPLv2','','Элемент является информационно-контрольным диалогом около параметра источника данных — расширенный паспорт параметра. В отличии от простого паспорта, расширенный, кроме информации, предоставляет возможность контроля атрибутов параметра и отображения истории стандартных атрибутов как в виде тренда, так и таблицы данных.
+
+Информация и контроль атрибутов параметра остаётся основной функцией, которая предоставляется во вкладке "Обзор", где формируется таблица атрибутов как они есть, со столбцами "Имя" и "Значение". Таблица активная и при выборе доступных для записи атрибутов, и соответствующих прав (root:op), внизу предоставляется поле ввода новых значений.
+
+История предоставляется в следующих двух вкладках "Тренды" и "Данные", которые могут и отсутствовать при отсутствии истории-архивов по стандартным атрибутам. Вкладка "Тренды" содержит область графиков, примитив "Диаграмма", на большей части окна, и таблицу внизу с названиями, цветом и шкалами графиков. Графики периодически обновляются и строятся с периодом 1 секунда, и на фиксированную глубину в 1 час. Вкладка "Данные" содержит только поле примитива "Документ" с таблицей со значениями атрибута в столбцах, которая обновляется с периодом 1 секунда для периода данных истории и на глубину в 100 записей. Стандартными атрибутами с историей считаются следующие элементы представительских структур параметра:
+- Аналоговый сигнал:
+  - var — переменная.
+- ПИД-регулятор:
+  - sp — задание;
+  - out — выход;
+  - auto — режим: автомат.
+- Дискретные сборки:
+  - com — команда "Открыть";
+  - close — команда "Закрыть";
+  - stop — команда "Остановить";
+  - st_open — состояние "Открыто";
+  - st_close — состояние "Закрыто".
+
+Для построения трендов аналоговых параметров отдельно обрабатываются атрибуты общей шкалы [min...max], а также аварийные [aMin...aMax] и предупредительные шкалы [wMin...wMax], которые, кроме всего, отображаются и на графике.
+
+На данный момент этот диалог является основным и он заменил простой диалог паспорта.
+
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.2.0','','','');
+Спонсировано: ПАТ ХАРТРОН
+Версия: 1.2.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsAct','owner','root:UI',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsAct','name','Alarms — active',32,'','','','Порушення — активні','','Нарушения — активные','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsAct','geomY','0',40,'','','','','','','','','');
@@ -7841,9 +7904,19 @@ License: GPLv2',32,'','','','Елемент слугує для відображ
 INSERT INTO wlb_Main_io VALUES('cntrRegul','dscr','The cadre "Control cadre of the regulators".
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.0',32,'','','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('doc_panel','dscr','The cadre "Document control panel".
+INSERT INTO wlb_Main_io VALUES('doc_panel','dscr','The element is a specialized panel for dynamic control of basic user properties of the primitive "Document". So, the panel allows you to manage documents and navigate through their histories; supported dynamic and archival documents.
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.1',32,'','','','','','','','','');
+Version: 1.2.2
+License: GPLv2',32,'','','','Елемент є спеціалізованою панеллю динамічного керування основними користувацькими властивостями примітиву "Документ". Так, панель дозволяє керувати документами та здійснювати навігації за їх історією; підтримуються динамічні та архівні документи.
+
+Автор: Роман Савоченко <roman@oscada,org>
+Версія: 1.2.2
+Ліцензія: GPLv2','','Элемент является специализированной панелью динамического управления основными пользовательскими свойствами примитива "Документ". Так, панель позволяет управлять документами и осуществлять навигацию по их истории; поддерживаются динамические и архивные документы.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.2.2
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_Main_io VALUES('terminator','dscr','The panel element serves to fill the panel container space when no active visual control element is selected in the main frame, since closing or clearing frames in the container area is not provided, only the replacement.
 
 Author: Roman Savochenko <roman@oscada.org>
@@ -7919,7 +7992,7 @@ INSERT INTO wlb_Main_io VALUES('doc_panel','geomZ','11',32,'','','Text2','','','
 INSERT INTO wlb_Main_io VALUES('doc_panel','geomMargin','2',32,'','','Text2','','','','','','');
 INSERT INTO wlb_Main_io VALUES('doc_panel','font','Arial 12 0 1',32,'','','Text2','','','','','','');
 INSERT INTO wlb_Main_io VALUES('doc_panel','alignment','10',32,'','','Text2','','','','','','');
-INSERT INTO wlb_Main_io VALUES('doc_panel','text','Begin and depth',32,'','','Text2','Початок і глиб.','','Начало и глуб.','','','');
+INSERT INTO wlb_Main_io VALUES('doc_panel','text','Begin and depth',32,'','','Text2','Початок і глибина','','Начало и глубина','','','');
 INSERT INTO wlb_Main_io VALUES('graphCalc','owner','root:UI',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('graphCalc','name','Graph parameter calculation',32,'','','','Обчислення параметру графіку','','Вычисление параметра графика','','','');
 INSERT INTO wlb_Main_io VALUES('graphCalc','dscr','The element implements a dialog of user calculation of the selected graph parameter for the graphically visible data. The user is given an option to select calculations from the built-in library, the privileged user ("root" or in the "ITW" group) has the opportunity to edit or write their own calculation procedure.
@@ -8071,23 +8144,17 @@ License: GPLv2',32,'','','','Елемент слугує для відображ
 Спонсирование: Винницкая Птицефабрика
 Версия: 1.0.0
 Лицензия: GPLv2','','','');
-INSERT INTO wlb_Main_io VALUES('accept','dscr','The element-frame implements a simple operations'' acception dialog.
-The element contains a message with a question and two buttons "Apply" and "Cancel".
-The dialogue, for example, is used in the frame Users manager to accept the deleting operation.
+INSERT INTO wlb_Main_io VALUES('accept','dscr','The element implements a simple operations'' acception dialog. The dialog contains a message with a question and two buttons "Apply" and "Cancel". The dialogue, for example, is used in the frame Users manager to accept the deleting operation.
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: the Laboratory of Vacuum Technologies <http://e-beam.ru/>
 Version: 1.0.0
-License: GPLv2',32,'','','','Елемент-кадр реалізує простий діалог підтвердження операцій.
-Елемент містить повідомлення з питанням та дві кнопки "Прийняти" та "Скасувати".
-Цей діалог, наприклад, використано у кадрі Менеджер користувачів для підтвердження операції видалення.
+License: GPLv2',32,'','','','Елемент реалізує простий діалог підтвердження операцій. Діалог містить повідомлення з питанням та дві кнопки "Прийняти" й "Скасувати". Цей діалог, наприклад, використано у кадрі Менеджер користувачів для підтвердження операції видалення.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Лабораторія Вакуумних Технологій <http://e-beam.ru/>
 Версія: 1.0.0
-Ліцензія: GPLv2','','Элемент-кадр реализует простейший диалог подтверждения операций.
-Элемент содержит сообщение с вопросом и две кнопки "Принять" и "Отмена".
-Данный диалог, например, использован в кадре Менеджер пользователей для подтверждения операции удаления.
+Ліцензія: GPLv2','','Элемент реализует простейший диалог подтверждения операций. Диалог содержит сообщение с вопросом и две кнопки "Принять" и "Отмена". Данный диалог, например, использован в кадре Менеджер пользователей для подтверждения операции удаления.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсирование: Лаборатория Вакуумных Технологий <http://e-beam.ru/>
@@ -8162,6 +8229,49 @@ License: GPLv2',32,'','','','Елемент слугує для відображ
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсировано: ООО "СВІТоВИР"
 Версия: 1.0.1
+Лицензия: GPLv2','','','');
+INSERT INTO wlb_Main_io VALUES('doc_panel','wordWrap','0',32,'','','Text2','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','wordWrap','0',32,'','','Text2','','','','','','');
+INSERT INTO wlb_Main_io VALUES('cntrPasp','dscr','The element is an information dialog around the parameter of the data source — the parameter passport, accordingly it allows to receive such information as: cipher, name, description, unit of measure, emergency boundaries and other, corresponding to the parameter representative structure — parameter attributes. The dialogue is based on the primitive "Document", whose content is generated dynamically and updated periodically.
+
+In building the passport the attributes are separately processed for alarm [aMin...aMax] and warning scales [wMin...wMax], which combined in a single entry, and can be hidden when turned off.
+
+Currently, this dialogue has actually been replaced by the more functional and expanded passport dialogue and is largely disabled in all template and demonstration projects, though no one interferes with its use if only information is required.
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.0.0
+License: GPLv2',32,'','','','Елемент є інформаційним діалогом довкола параметру джерела даних — паспорт параметру, відповідно він дозволяє отримати такого роду інформацію як: шифр, ім''я, опис, одиницю виміру, аварійні границі та інше, відповідне до представницької структури параметру — атрибути параметру. Діалог побудовано на основі примітиву "Документ", вміст якого формується динамічно та періодично оновлюється.
+
+У побудові паспорту окремо обробляються атрибути аварійних [aMin...aMax] та попереджувальних шкал [wMin...wMax], які поєднуються у одному записі та взагалі можуть приховуватися за умови їх вимкнення.
+
+Наразі цей діалог фактично замінено більш функціональним та розширеним діалогом паспорту та його переважно вимкнено у всіх шаблонних та демонстраційних проектах, хоча ніхто не заважає його використанню, якщо потрібно лише інформацію.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.0.0
+Ліцензія: GPLv2','','Элемент является информационным диалогом около параметра источника данных — паспорт параметра, соответственно он позволяет получить такого рода информацию как: шифр, имя, описание, единица измерения, аварийные границы и другое, согласно представительской структуре параметра — атрибуты параметра. Диалог построен на основе примитива "Документ", содержимое которого формируется динамически и периодически обновляется.
+
+При построении паспорта отдельно обрабатываются атрибуты аварийных [aMin...aMax] и предупредительных шкал [wMin...wMax], которые объединяются в одной записи и в целом могут скрываться при условии их отключения.
+
+На данный момент этот диалог фактически заменён более функциональным и расширенным диалогом паспорта и он в основном отключен во всех шаблонных и демонстрационных проектах, хотя никто не препятствует его использованию, если необходима только информацию.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.0.0
+Лицензия: GPLv2','','','');
+INSERT INTO wlb_Main_io VALUES('treeSelect','dscr','The element implements a simple dialog for selecting an item in a tree. The dialog contains the tree itself and the two buttons "Accept" and "Cancel". This dialog, for example, was used and originally designed for it in the frame "Prescription: run (simple)" for hierarchical selection of an element in a tree.
+
+Author: Roman Savochenko <roman@oscada.org>
+Sponsored by: the Laboratory of Vacuum Technologies
+Version: 1.0.0
+License: GPLv2',32,'','','','Елемент реалізує простий діалог операції обрання пункту у дереві. Діалог містить саме дерево та дві кнопки "Прийняти" й "Скасувати". Цей діалог, наприклад, використано, та первинно для нього розроблявся, у кадрі "Рецепт:виконання (простий)" для ієрархічного обрання елементу у дереві.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Спонсорування: Лабораторія Вакуумних Технологій
+Версія: 1.0.0
+Ліцензія: GPLv2','','Элемент реализует простой диалог операции выбора пункта в дереве. Диалог содержит само дерево и две кнопки "Принять" и "Отменить". Этот диалог, например, использован, и первично для него разрабатывался, в кадре "Рецепт: исполнение (простой)" для иерархического выбора элемента в дереве.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Спонсирование: Лаборатория Вакуумных Технологий
+Версия: 1.0.0
 Лицензия: GPLv2','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_Main_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_Main_mime VALUES('pg_next','image/png;6.00684','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAAZiS0dEACwA
@@ -10691,7 +10801,7 @@ INSERT INTO wlb_Main_uio VALUES('grph_panel','tSize','Trend size',131076,'0|',14
 INSERT INTO wlb_Main_uio VALUES('grph_panel','valArch','Archiver',131077,NULL,14,'<page>|valArch','','','Архіватор','<EVAL>||','','Архиватор','','','','');
 INSERT INTO wlb_Main_uio VALUES('grph_panel','curSek','Cursor',139265,'<EVAL>|',14,'<page>|curSek','','','Курсор','','','Курсор','','','','');
 INSERT INTO wlb_Main_uio VALUES('grph_panel','type','Type',131073,'<EVAL>|',14,'<page>|type','','','Тип','<EVAL>||','','Тип','','','','');
-INSERT INTO wlb_Main_uio VALUES('grph_panel','curUSek','Cursor, usec',131073,'<EVAL>|',14,'<page>|curUSek','','','Курсор, мкс','','','Курсор, мкс','','','','');
+INSERT INTO wlb_Main_uio VALUES('grph_panel','curUSek','Cursor, microseconds',131073,'<EVAL>|',14,'<page>|curUSek','','','Курсор, мікросекунди','','','Курсор, микросекунды','','','','');
 INSERT INTO wlb_Main_uio VALUES('RootPgSo','lastView','Last view',131077,NULL,8,'','','','Останній вигляд',NULL,'','Последний вид','','','','');
 INSERT INTO wlb_Main_uio VALUES('ElCadr','prmManIn','Parameter: manual input',131076,'<EVAL>|',14,'<page>|manIn','','','Параметр: ручний ввід','','','Параметр: ручной ввод','','','','');
 INSERT INTO wlb_Main_uio VALUES('anShow','pModeA','Parameter: regulator mode: auto',131072,NULL,10,'Parameter|auto','','','Параметр: режим регулятору: автомат','','','Параметр: режим регулятора: автомат','','','','');
@@ -10699,7 +10809,7 @@ INSERT INTO wlb_Main_uio VALUES('anShow','pModeC','Parameter: regulator mode: ca
 INSERT INTO wlb_Main_uio VALUES('anShow','pPrec','Parameter: precision',131073,'1|',10,'Parameter|prec','','','Параметр: точність','','','Параметр: точность','','','','');
 INSERT INTO wlb_Main_uio VALUES('anShow','redEVAL','Red parameter name in case of failure',131072,NULL,9,'','','','Червоне ім''я параметру у випадку відмови','','','Красное имя параметра в случае отказа','','','','');
 INSERT INTO wlb_Main_uio VALUES('anShow','spName','Speech name',131077,NULL,9,'','','','Ім''я для синтезу',NULL,'','Имя для синтеза',NULL,'','','');
-INSERT INTO wlb_Main_uio VALUES('cntrPasp','pName','Parameter name',196613,'<EVAL>',10,'Parameter|NAME','','','Ім''я параметру','','','Имя параметра','','','','');
+INSERT INTO wlb_Main_uio VALUES('cntrPasp','pName','Parameter name',196613,NULL,10,'Parameter|NAME','','','Ім''я параметру','','','Имя параметра','','','','');
 INSERT INTO wlb_Main_uio VALUES('ElCadr','digComs','Parameter: discrete commands',131077,'OPEN;CLOSE;STOP',10,'<page>|digComs','','','Параметр: дискр. команди','ВІДКР;ЗАКР;СТОП','','Параметр: дискр. команды','ОТКР;ЗАКР;СТОП','','','');
 INSERT INTO wlb_Main_uio VALUES('ElCadr','digStts','Parameter: discrete stats',131077,NULL,10,'<page>|digStts','','','Параметр: дискр. стани','','','Параметр: дискр. состояния','','','','');
 INSERT INTO wlb_Main_uio VALUES('ElCadr','prmAMax','Parameter: border up alarm',131076,'<EVAL>|',10,'<page>|aMax','','','Параметр: границя верхня аварійна','','','Параметр: граница верхн. аварийная','','','','');
@@ -10789,17 +10899,17 @@ INSERT INTO wlb_Main_uio VALUES('prescrRun','prExtStartTm','Controller:start',13
 INSERT INTO wlb_Main_uio VALUES('prescrRun','prExtWork','Controller:work',131078,'<TVarObj>
 </TVarObj>
 ',10,'Controller|work','','','Контроллер:робоча','||','Controller|work','Контроллер:рабочая','||','Controller|work','','');
-INSERT INTO wlb_Main_uio VALUES('doc_panel','aSize','Archive size',131073,'0|',10,'<page>|aSize','','','Archive size','','','Размер архива','','','','');
+INSERT INTO wlb_Main_uio VALUES('doc_panel','aSize','Archive size',131073,'0|',10,'<page>|aSize','','','Розмір архіву','','','Размер архива','','','','');
 INSERT INTO wlb_Main_uio VALUES('prescrRunSimple','prCnt','Cycles counter',131073,'0|',8,'','','','Лічильник циклів','','','Счётчик циклов','','','','');
 INSERT INTO wlb_Main_uio VALUES('grpGraph','allowSelLst','Select: parameters accessible to select',131205,'',8,'','','','Вибір: параметри дозволені для обрання','','','Выбор: параметры доступные для выбора','','','','');
 INSERT INTO wlb_Main_uio VALUES('graphSelPrm','lWdg','Linked widget',131078,'<TVarObj>
 </TVarObj>
 ',8,'','','','Пов''язаний віджет','','','Связанный виджет','','','','');
-INSERT INTO wlb_Main_uio VALUES('treeSelect','elEvent','Element:event',131077,'||',14,'<page>|event','','','Елемент:подія','','','Элемент:событие','','','','');
-INSERT INTO wlb_Main_uio VALUES('treeSelect','elItems','Element:items list',131205,'||',10,'<page>|items','','','Елемент:перелік елементів','','','Элемент:список элементов','','','','');
+INSERT INTO wlb_Main_uio VALUES('treeSelect','elEvent','Element: event',131077,'',14,'<page>|event','','','Елемент: подія','','','Элемент: событие','','','','');
+INSERT INTO wlb_Main_uio VALUES('treeSelect','elItems','Element: items list',131205,'',10,'<page>|items','','','Елемент: перелік елементів','','','Элемент: список элементов','','','','');
 INSERT INTO wlb_Main_uio VALUES('prescrRunSimple','items','Items for tree',131205,'||',8,'','','lib','Елементи для дерева','','','Элементы дерева','','','','');
 INSERT INTO wlb_Main_uio VALUES('prescrRunSimple','selValue','Selected value',131077,'||',8,'','','lib','Обране значення','','','Выбранное значение','','','','');
-INSERT INTO wlb_Main_uio VALUES('treeSelect','selValue','Element:selected value',131077,'||',14,'<page>|selValue','','','Елемент:обране значення','','','Элемент:выбранное значение','','','','');
+INSERT INTO wlb_Main_uio VALUES('treeSelect','selValue','Element: selected value',131077,'',14,'<page>|selValue','','','Елемент: обране значення','','','Элемент: выбранное значение','','','','');
 INSERT INTO wlb_Main_uio VALUES('TextLab','DESCR','Parameter: description',131077,'',10,'Parameter|DESCR','','','Параметр: опис','','Parameter|DESCR','Параметр: описание','','Parameter|DESCR','','');
 INSERT INTO wlb_Main_uio VALUES('TextLab','NAME','Parameter: name',131077,'',10,'Parameter|NAME','','','Параметр: ім''я','','Parameter|NAME','Параметр: имя','','Parameter|NAME','','');
 INSERT INTO wlb_Main_uio VALUES('TextLab','close','Parameter: close',131072,'0',14,'Parameter|close','','','Параметр: закрити','','Parameter|close','Параметр: закрыть','','Parameter|close','','');
@@ -20531,37 +20641,35 @@ trnd_prm2addr = p3_addr; trnd_prm2bordL = p3_min; trnd_prm2bordU = p3_max; trnd_
 trnd_prm3addr = p4_addr; trnd_prm3bordL = p4_min; trnd_prm3bordU = p4_max; trnd_prm3color = p4_clr;
 trnd_prm4addr = p5_addr; trnd_prm4bordL = p5_min; trnd_prm4bordU = p5_max; trnd_prm4color = p5_clr;','','',1000,'name;dscr;en;geomW;geomH;backColor;bordWidth;bordColor;bordStyle;',1554061756);
 INSERT INTO wlb_Main VALUES('doc_panel','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
-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
-pX4L5CsAAAAASUVORK5CYII=','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
+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
+EN1u9zcd131HdACyZgAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
 curTm = SYS.time();
 if(n == 0 && !time) { time = curTm; bTime = time - 30; }
 size_en = tmTp_en = Text1_en = Text2_en = prev1_en = next1_en = date_en = dateBeg_en = !n;
@@ -20617,57 +20725,53 @@ if(szVal < 60)						{ tmTp_value = tr("s"); size_value = szVal; }
 else if(szVal < 60*60)			{ tmTp_value = tr("m"); size_value = szVal/60; }
 else if(szVal < 24*60*60)	{ tmTp_value = tr("h"); size_value = szVal/(60*60); }
 else									{ tmTp_value = tr("d"); size_value = szVal/(24*60*60); }
-dateBeg_value = date_value - szVal;','','',200,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;bordColor;',1556612053);
+dateBeg_value = date_value - szVal;','','',200,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;bordColor;',1577774869);
 INSERT INTO wlb_Main VALUES('terminator','iVBORw0KGgoAAAANSUhEUgAAABcAAABACAIAAAB+w3u4AAAACXBIWXMAAAx1AAAMdQEteJR1AAAA
 2UlEQVRYhe3QsWrFMAwFUDlVsGWDDa/ZAvn5138K+QEPITVkiSEJ8hvcoUPpUG9Fd5NAh4vU8/mR
 UoKGOOcwpZTSZ4sCAF3jvSiiiCLKb0rOOcbIzH9WEAC2bTPGzPPMzESUc3bOXdfVdd00TcuyWGvv
 +9Zan+cJAIhIROu6aq2ttY/HOwJACAERvfdKKe/9cRwAQET7vjPzMAylFCLq+56ZY4whhFLKOI6l
 FGPMVxfvPQBYa2u9Ola9ct/L1+UPf2mPKKKIIooooogiiiii/GcFnXNKtRXp3l7PPUhJwkNfYgAA
 AABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'','','',-1,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1577036562);
-INSERT INTO wlb_Main VALUES('grph_panel','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
-QmCC','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
+INSERT INTO wlb_Main VALUES('grph_panel','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','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
 curTm = SYS.time();
 tSek = tSek ? tSek : curTm;
 
@@ -20751,7 +20855,7 @@ if(cursor_en && type == 1) cursor_arg0val = tr("Frequency")+":\n"+(1e6/(1e6*curS
 type_value = (type==1)?tr("Spectrum"):((type==2)?tr("XY"):tr("Graph"));
 xScaleInfo_en = xZoomIn_en = xZoomOut_en = xZoomOffRight_en = xZoomOffLeft_en = xZoomDef_en = (type==2);
 selWin_en = (type == 0 && !sclWin.isEVal());
-if(selWin_en)	selWin_value = sclWin;','','',200,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1563041089);
+if(selWin_en)	selWin_value = sclWin;','','',200,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1577775501);
 INSERT INTO wlb_Main VALUES('cntrPasp','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAAYElEQVRoge3PQQ0AIBDAMMC/50MEj4ZkVbDtmVk/OzrgVQNaA1oDWgNa
 A1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgPaBXKq
@@ -20793,7 +20897,7 @@ if(SYS.cntrReq(req) == 0 && req.childSize()) {
 		doc_tmpl += "<tr><td>"+SYS.strEncode(aDscr,"HTML")+"</td><td>"+SYS.strEncode(aVl,"HTML")+"</td></tr>\n";
 	}
 }
-doc_tmpl += "</table></body>";','','',1000,'name;geomW;geomH;pgGrp;backColor;bordWidth;bordColor;bordStyle;',1443604784);
+doc_tmpl += "</table></body>";','','',1000,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;bordColor;bordStyle;',1577775501);
 INSERT INTO wlb_Main VALUES('ElViewGraph','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAiCAIAAABgN0jYAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAC30lEQVRYhe2XbU/aUBSAT1tAC4XCQFGYBeRF3ERwuKkzcYvzhTXbdGZL
 zH6BP88s+7CYZfNlIU6jMqMx07Hgy1BwceIoUKDtPkDMNMuYEWhI+ny7t+eee57b3OYUmZqaikQi
@@ -21549,7 +21653,7 @@ for(off = 0, ev_rez = ""; (ev_cur=event.parse(0,"\n",off)).length; ) {
 	else if(ev_cur == "ws_BtPress:/cancel")	this.attrSet("pgOpen", false);
 	else ev_rez += (ev_cur+"\n");
 }
-event = ev_rez;','','',500,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1567951548);
+event = ev_rez;','','',500,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1577775501);
 INSERT INTO wlb_Main VALUES('treeSelect','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAeCAIAAAATj48OAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAADx0lEQVRYhe2X3W/bVBjGX9vHTh27+XCSJWlamvSLds0qsY1O2kDbQIML
 LiYViRX1DgkEUoS44KITEn8LAuUGcVcxCQbthgasWwordEALydZpLW3WNHbjJE7OsQ8XiQrctI0L
@@ -21581,7 +21685,7 @@ for(off = 0, ev_rez = ""; (ev_cur=event.parse(0,"\n",off)).length; ) {
 	else if(ev_cur == "ws_BtPress:/cancel")	this.attrSet("pgOpen", false);
 	else ev_rez += ev_cur + "\n";
 }
-event = ev_rez;','','',500,'name;geomW;geomH;pgGrp;backColor;bordWidth;',1430414611);
+event = ev_rez;','','',500,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1577775501);
 INSERT INTO wlb_Main VALUES('TextLab','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAXCAIAAAA0gN7GAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAABHUlEQVRYhWNgGOKAkYGBIScnh5ube6BdQjL4+vXrlClTWBgYGDg4ODg5
 OQfaPSSDv3//MjAwMA20MygFox4YaDDqgYEGox4YaDDkPcBCke6/Hx9cv/fszcdfCCFWHgFhKRmu
@@ -21876,7 +21980,7 @@ if(f_start || selTab != prevTab) {
 		else if(wId.indexOf(prevTab) != -1) wObj.attrSet("en",false);
 	}
 	prevTab = selTab;
-}','','',1000,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;bordColor;bordStyle;',1552231399);
+}','','',1000,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;bordColor;bordStyle;',1577775501);
 INSERT INTO wlb_Main VALUES('objProps','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAxCAIAAADldTjtAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAABvUlEQVRoge3av0rDUBTH8V9ubpNqrVrS+BcKWtFFpYidXBycHbvqSwhd
 fAHHvoEv4CIOLnHQRQcFETpYEPG/VVNtaaw1iUNRHDrJ1YNwPtMlwzn3O2S72tLy0tnoGdR6AQ4B

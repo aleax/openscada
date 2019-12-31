@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-22 20:35+0300\n"
+"POT-Creation-Date: 2019-12-23 16:12+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -104,10 +104,10 @@ msgstr ""
 msgid "No response to the initial request '%s'."
 msgstr ""
 
-msgid "Started."
+msgid "Started-connected"
 msgstr ""
 
-msgid "Stopped."
+msgid "Stopped-disconnected"
 msgstr ""
 
 #, c-format
@@ -226,9 +226,6 @@ msgid "Modem no connected"
 msgstr ""
 
 msgid "Stopping."
-msgstr ""
-
-msgid "Stopped"
 msgstr ""
 
 msgid "Unknown error"

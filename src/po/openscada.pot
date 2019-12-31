@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-08 19:05+0200\n"
+"POT-Creation-Date: 2019-12-24 11:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1275,11 +1275,11 @@ msgstr ""
 msgid "Templates"
 msgstr ""
 
-msgid "Transport Protocols"
+msgid "Protocols"
 msgstr ""
 
 msgid ""
-"=============== Subsystem \"Transport protocols\" options =================\n"
+"=============== Subsystem \"Protocols\" options =================\n"
 "\n"
 msgstr ""
 
@@ -1930,7 +1930,7 @@ msgstr ""
 msgid "Transport type"
 msgstr ""
 
-msgid "Transport protocol"
+msgid "Protocol"
 msgstr ""
 
 msgid "User that opens"
@@ -2037,7 +2037,7 @@ msgid "Established: %s. "
 msgstr ""
 
 #, c-format
-msgid "Transport protocol '%s' is missing"
+msgid "Protocol '%s' is missing"
 msgstr ""
 
 msgid "Output transport: "

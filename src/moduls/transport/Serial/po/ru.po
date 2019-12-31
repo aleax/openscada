@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-22 20:35+0300\n"
+"POT-Creation-Date: 2019-12-23 16:12+0200\n"
 "PO-Revision-Date: 2009-03-31 18:28+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -106,8 +106,7 @@ msgstr "Нет ожидаемого ответа, но получено из м�
 
 #, c-format
 msgid "Traffic in %s, out %s. Maximum char timeout %.4g ms. "
-msgstr ""
-"Трафик входной %s, выходной %s. Макс. время ожидания символа %.4g мс. "
+msgstr "Трафик входной %s, выходной %s. Макс. время ожидания символа %.4g мс. "
 
 #, c-format
 msgid "Processing time %s[%s]. "
@@ -141,11 +140,11 @@ msgstr "Ошибка количества стоп битов %d."
 msgid "No response to the initial request '%s'."
 msgstr "Нет ответа на запрос инициализации '%s'."
 
-msgid "Started."
-msgstr "Запущен."
+msgid "Started-connected"
+msgstr "Запущен-подсоединён"
 
-msgid "Stopped."
-msgstr "Остановлен."
+msgid "Stopped-disconnected"
+msgstr "Остановлен-отсоединён"
 
 #, c-format
 msgid "The serial interface received the message '%d'."
@@ -307,9 +306,6 @@ msgstr "Модем не подключился"
 
 msgid "Stopping."
 msgstr "Останов."
-
-msgid "Stopped"
-msgstr "Остановлен"
 
 msgid "Unknown error"
 msgstr "Неизвестная ошибка"

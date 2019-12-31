@@ -72,6 +72,8 @@ void Func::postDisable( int flag )
 bool Func::cfgChange( TCfg &co, const TVariant &pc )
 {
     if(co.name() == "PR_TR") cfg("FORMULA").setNoTransl(!progTr());
+    else if(co.name() == "FORMULA" && startStat() && co.getS() != pc.getS())
+	setStart(false);
     modif();
     return true;
 }
@@ -136,10 +138,6 @@ void Func::setProg( const string &iprg )
     cfg("FORMULA").setS(iprg);
 
     if(owner().DB().empty()) modifClr();
-
-    //Mark the users for the program changing
-    ResAlloc res1(fRes(), false);
-    for(unsigned i = 0; i < used.size(); i++) used[i]->progChange();
 }
 
 void Func::load_( TConfig *icfg )
@@ -299,13 +297,22 @@ void Func::setStart( bool val )
 {
     if(val == runSt) return;
     //Start calcing
-    if(val) progCompile();
+    if(val) {
+	progCompile();
+
+	TFunction::setStart(val);
+
+	//Mark the users for the program changing
+	ResAlloc res1(fRes(), false);
+	for(unsigned i = 0; i < used.size(); i++) used[i]->progChange();
+    }
     //Stop calcing
     else {
 	ResAlloc res(fRes(), true);
 	workClear();
+
+	TFunction::setStart(val);
     }
-    TFunction::setStart(val);
 }
 
 void Func::ioAdd( IO *io )

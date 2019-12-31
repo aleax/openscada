@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.4.2"
+#define MOD_VER		"2.4.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2 are supported.")
@@ -267,7 +267,7 @@ void TSocketIn::start( )
 
     TTransportIn::start();
 
-    if(logLen()) pushLogMess(_("Started"));
+    if(logLen()) pushLogMess(_("Started-connected"));
 }
 
 void TSocketIn::stop( )
@@ -284,7 +284,7 @@ void TSocketIn::stop( )
 
     TTransportIn::stop();
 
-    if(logLen()) pushLogMess(_("Stopped"));
+    if(logLen()) pushLogMess(_("Stopped-disconnected"));
 }
 
 unsigned TSocketIn::forksPerHost( const string &sender )
@@ -1082,7 +1082,7 @@ void TSocketOut::start( int tmCon )
 
     TTransportOut::start();
 
-    if(logLen()) pushLogMess(_("Started"));
+    if(logLen()) pushLogMess(_("Started-connected"));
 }
 
 void TSocketOut::stop( )
@@ -1110,7 +1110,7 @@ void TSocketOut::stop( )
 
     TTransportOut::stop();
 
-    if(logLen()) pushLogMess(_("Stopped"));
+    if(logLen()) pushLogMess(_("Stopped-disconnected"));
 }
 
 int TSocketOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
@@ -1164,7 +1164,7 @@ repeate:
 	ret = BIO_read(conn, iBuf, iLen);
 	if(ret > 0) trIn += ret;
 	else if(ret == 0) {
-	    err = errno ? TSYS::strMess("%s (%d)",strerror(errno),errno) : _("No data");
+	    err = errno ? TSYS::strMess("%s (%d)",strerror(errno),errno) : _("No data, the connection seems closed");
 	    stop();
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Error reading: %s"), err.c_str());
 	    if(logLen()) pushLogMess(TSYS::strMess(_("Error reading: %s"), err.c_str()));
@@ -1211,7 +1211,7 @@ repeate:
 		if(ret == -1)
 		    while((ret=BIO_read(conn,iBuf,iLen)) == -1) sched_yield();
 		if(ret < 0) {
-		    err = (ret < 0) ? TSYS::strMess("%s (%d)",strerror(errno),errno) : _("No data");
+		    err = (ret < 0) ? TSYS::strMess("%s (%d)",strerror(errno),errno) : _("No data, the connection seems closed");
 		    stop();
 		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Error reading: %s"), err.c_str());
 		    if(logLen()) pushLogMess(TSYS::strMess(_("Error reading: %s"),err.c_str()));

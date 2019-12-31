@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-03 18:04+0200\n"
+"POT-Creation-Date: 2019-12-31 09:57+0200\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -134,11 +134,11 @@ msgstr "Ошибка связывания с %s сокетом: '%s (%d)'!"
 msgid "RAWCAN socket binded to '%s'!"
 msgstr "RAWCAN сокет подключен к '%s'!"
 
-msgid "Started"
-msgstr "Запущен"
+msgid "Started-connected"
+msgstr "Запущен-подсоединён"
 
-msgid "Stopped"
-msgstr "Остановлен"
+msgid "Stopped-disconnected"
+msgstr "Остановлен-отсоединён"
 
 #, c-format
 msgid "Restart due to lack of input activity to '%s'."
@@ -453,9 +453,8 @@ msgstr "Время чтения истекло."
 msgid "Error reading (select): %s"
 msgstr "Ошибка чтения (select): %s"
 
-#, c-format
-msgid "No data by: %s (%d)"
-msgstr "Нет данных с: %s (%d)"
+msgid "No data, the connection seems closed"
+msgstr "Нет данных, подключение похоже закрыто"
 
 #, c-format
 msgid "Error reading: %s"

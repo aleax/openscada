@@ -61,7 +61,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"3.3.3"
+#define MOD_VER		"3.3.4"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -414,7 +414,7 @@ void TSocketIn::start( )
 
     TTransportIn::start();
 
-    if(logLen()) pushLogMess(_("Started"));
+    if(logLen()) pushLogMess(_("Started-connected"));
 }
 
 void TSocketIn::stop( )
@@ -435,7 +435,7 @@ void TSocketIn::stop( )
 
     TTransportIn::stop();
 
-    if(logLen()) pushLogMess(_("Stopped"));
+    if(logLen()) pushLogMess(_("Stopped-disconnected"));
 }
 
 void TSocketIn::check( )
@@ -1316,7 +1316,7 @@ void TSocketOut::start( int itmCon )
 
     TTransportOut::start();
 
-    if(logLen()) pushLogMess(_("Started"));
+    if(logLen()) pushLogMess(_("Started-connected"));
 }
 
 void TSocketOut::stop( )
@@ -1340,7 +1340,7 @@ void TSocketOut::stop( )
 
     TTransportOut::stop();
 
-    if(logLen()) pushLogMess(_("Stopped"));
+    if(logLen()) pushLogMess(_("Stopped-disconnected"));
 }
 
 int TSocketOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
@@ -1463,7 +1463,7 @@ repeate:
 		// * !!: Zero can be also after disconection by peer and possible undetected here for the not request mode,
 		//	what can be easily tested on stopping the ModBus input service
 		if(iB < 0 || (iB == 0 && writeReq && !notReq)) {
-		    err = (iB < 0) ? TSYS::strMess("%s (%d)",strerror(errno),errno) : TSYS::strMess(_("No data by: %s (%d)"),strerror(errno),errno);
+		    err = (iB < 0) ? TSYS::strMess("%s (%d)",strerror(errno),errno) : TSYS::strMess(_("No data, the connection seems closed"));
 		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Error reading: %s"), err.c_str());
 		    if(logLen()) pushLogMess(TSYS::strMess(_("Error reading: %s"), err.c_str()));
 		    stop();

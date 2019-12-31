@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-22 20:35+0300\n"
+"POT-Creation-Date: 2019-12-23 16:12+0200\n"
 "PO-Revision-Date: 2009-03-31 18:44+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -140,11 +140,11 @@ msgstr "Помилка кількості стопових бітів %d."
 msgid "No response to the initial request '%s'."
 msgstr "Немає відповіді на запит ініціалізації '%s'."
 
-msgid "Started."
-msgstr "Запущено."
+msgid "Started-connected"
+msgstr "Запущено-під'єднано"
 
-msgid "Stopped."
-msgstr "Зупинено."
+msgid "Stopped-disconnected"
+msgstr "Зупинено-від'єднано"
 
 #, c-format
 msgid "The serial interface received the message '%d'."
@@ -306,9 +306,6 @@ msgstr "Модем не підключено"
 
 msgid "Stopping."
 msgstr "Зупинка."
-
-msgid "Stopped"
-msgstr "Зупинено"
 
 msgid "Unknown error"
 msgstr "Невідома помилка"

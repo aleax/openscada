@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"4.1.9"
+#define MOD_VER		"4.2.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")
@@ -631,7 +631,7 @@ void *Contr::Task( void *icntr )
 	    t_cnt = TSYS::curTime();
 	    //Setting special IO
 	    if(cntr.idFreq >= 0)  cntr.setR(cntr.idFreq, cntr.period()?((float)cntr.iterate()*1e9/(float)cntr.period()):(-1e-6*(t_cnt-t_prev)));
-	    if(cntr.idStart >= 0) cntr.setB(cntr.idStart, is_start || cntr.isChangedProg(true));
+	    if(cntr.idStart >= 0) cntr.setB(cntr.idStart, cntr.isChangedProg(true) || is_start);
 	    if(cntr.idStop >= 0)  cntr.setB(cntr.idStop, is_stop);
 
 	    //Get input links

@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Logical level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.1.0"
+#define MOD_VER		"2.1.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the pure logical level of the DAQ parameters.")
 #define LICENSE		"GPL2"
@@ -655,7 +655,7 @@ void TMdPrm::calc( bool first, bool last, double frq )
 
 	//Set fixed system attributes
 	if(idFreq >= 0)	tmpl->setR(idFreq, frq);
-	if(idStart >= 0)tmpl->setB(idStart, first || tmpl->isChangedProg(true));
+	if(idStart >= 0)tmpl->setB(idStart, tmpl->isChangedProg(true) || first);
 	if(idStop >= 0)	tmpl->setB(idStop, last);
 	if(idSh >= 0)	tmpl->setS(idSh, id());
 	if(idNm >= 0)	tmpl->setS(idNm, name());

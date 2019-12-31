@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-22 20:35+0300\n"
+"POT-Creation-Date: 2019-12-23 16:12+0200\n"
 "PO-Revision-Date: 2011-07-19 20:53+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -144,11 +144,11 @@ msgstr "Fehler die Stoppbits %d."
 msgid "No response to the initial request '%s'."
 msgstr "Keine Antwort auf die erste Anfrage '%s'."
 
-msgid "Started."
-msgstr "Gestartet."
+msgid "Started-connected"
+msgstr "Gestartet-verbunden"
 
-msgid "Stopped."
-msgstr "Gestoppt."
+msgid "Stopped-disconnected"
+msgstr "Gestoppt-getrennt"
 
 #, c-format
 msgid "The serial interface received the message '%d'."
@@ -311,9 +311,6 @@ msgstr "Modem nicht verbunden"
 
 msgid "Stopping."
 msgstr "Stoppen."
-
-msgid "Stopped"
-msgstr "Gestoppt"
 
 msgid "Unknown error"
 msgstr "Unbekannter Fehler"

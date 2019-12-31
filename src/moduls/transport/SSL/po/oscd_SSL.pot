@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-03 18:15+0200\n"
+"POT-Creation-Date: 2019-12-31 09:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -59,10 +59,10 @@ msgstr ""
 msgid "Processing time %s[%s]. "
 msgstr ""
 
-msgid "Started"
+msgid "Started-connected"
 msgstr ""
 
-msgid "Stopped"
+msgid "Stopped-disconnected"
 msgstr ""
 
 #, c-format
@@ -262,7 +262,7 @@ msgstr ""
 msgid "Transmitted to\n"
 msgstr ""
 
-msgid "No data"
+msgid "No data, the connection seems closed"
 msgstr ""
 
 #, c-format

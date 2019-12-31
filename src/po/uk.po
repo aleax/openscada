@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-08 19:05+0200\n"
+"POT-Creation-Date: 2019-12-24 11:38+0200\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -120,6 +120,7 @@ msgstr "Помилка завантаження архіваторів знач�
 msgid "Value archives load error."
 msgstr "Помилка завантаження архівів значень."
 
+#, c-format
 msgid ""
 "======================== Subsystem \"Archives-History\" options "
 "===================\n"
@@ -1468,14 +1469,14 @@ msgstr "Шаблони параметрів"
 msgid "Templates"
 msgstr "Шаблони"
 
-msgid "Transport Protocols"
-msgstr "Транспортні Протоколи"
+msgid "Protocols"
+msgstr "Протоколи"
 
 msgid ""
-"=============== Subsystem \"Transport protocols\" options =================\n"
+"=============== Subsystem \"Protocols\" options =================\n"
 "\n"
 msgstr ""
-"=============== Опції підсистеми \"Транспортні протоколи\" ================\n"
+"=============== Опції підсистеми \"Протоколи\" ================\n"
 "\n"
 
 msgid "Security"
@@ -2269,8 +2270,8 @@ msgstr "Транспорти"
 msgid "Transport type"
 msgstr "Тип транспорту"
 
-msgid "Transport protocol"
-msgstr "Транспортний протокол"
+msgid "Protocol"
+msgstr "Протокол"
 
 msgid "User that opens"
 msgstr "Користувач що відкриває"
@@ -2377,9 +2378,8 @@ msgstr "Лог"
 msgid "Established: %s. "
 msgstr "Встановлено: %s. "
 
-#, c-format
-msgid "Transport protocol '%s' is missing"
-msgstr "Транспортний протокол '%s' відсутній"
+msgid "Protocol '%s' is missing"
+msgstr "Протокол '%s' відсутній"
 
 msgid "Output transport: "
 msgstr "Вихідний транспорт: "
@@ -2648,6 +2648,9 @@ msgstr "Встановлено назву проекту у:"
 
 msgid "already started."
 msgstr "вже запущено."
+
+#~ msgid "Transport protocol"
+#~ msgstr "Транспортний протокол"
 
 #~ msgid "No value."
 #~ msgstr "Значення відсутнє."

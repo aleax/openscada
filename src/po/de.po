@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-08 19:05+0200\n"
+"POT-Creation-Date: 2019-12-24 11:38+0200\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -125,6 +125,7 @@ msgstr "Value-Archivierer laden Fehler."
 msgid "Value archives load error."
 msgstr "Fehler beim Laden des Wertearchivs."
 
+#, c-format
 msgid ""
 "======================== Subsystem \"Archives-History\" options "
 "===================\n"
@@ -1477,14 +1478,14 @@ msgstr "Parametervorlagen"
 msgid "Templates"
 msgstr "Vorlagen"
 
-msgid "Transport Protocols"
-msgstr "Übertragungsprotokolle"
+msgid "Protocols"
+msgstr "Protokolle"
 
 msgid ""
-"=============== Subsystem \"Transport protocols\" options =================\n"
+"=============== Subsystem \"Protocols\" options =================\n"
 "\n"
 msgstr ""
-"============== Optionen des Subsystems \"Übertragungsprotokolle\" "
+"============== Optionen des Subsystems \"Protokolle\" "
 "================\n"
 "\n"
 
@@ -2285,8 +2286,8 @@ msgstr "Übertragungen"
 msgid "Transport type"
 msgstr "Übertragungstypen"
 
-msgid "Transport protocol"
-msgstr "Übertragungsprotokoll"
+msgid "Protocol"
+msgstr "Protokoll"
 
 msgid "User that opens"
 msgstr "Benutzer, der geöffnet wird"
@@ -2393,9 +2394,8 @@ msgstr "Log"
 msgid "Established: %s. "
 msgstr "Etabliert: %s. "
 
-#, c-format
-msgid "Transport protocol '%s' is missing"
-msgstr "Das Transportprotokoll '%s' fehlt"
+msgid "Protocol '%s' is missing"
+msgstr "Das Protokoll '%s' fehlt"
 
 msgid "Output transport: "
 msgstr "Ausgangsübertragung:"
@@ -2666,6 +2666,9 @@ msgstr "Stellen Sie den Namen des Projekts an:"
 
 msgid "already started."
 msgstr "begonnen."
+
+#~ msgid "Transport protocol"
+#~ msgstr "Übertragungsprotokoll"
 
 #~ msgid "No value."
 #~ msgstr "Kein Wert."

@@ -55,7 +55,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.3.3"
+#define MOD_VER		"2.3.4"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov (2016)")
 #define DESCRIPTION	_("Provides transport based on the serial interfaces.\
  It is used for data exchanging via the serial interfaces of the type RS232, RS485, GSM and similar.")
@@ -471,7 +471,7 @@ void TTrIn::start( )
 
     TTransportIn::start();
 
-    if(logLen()) pushLogMess(_("Started."));
+    if(logLen()) pushLogMess(_("Started-connected"));
 }
 
 void TTrIn::stop( )
@@ -493,7 +493,7 @@ void TTrIn::stop( )
 
     TTransportIn::stop();
 
-    if(logLen()) pushLogMess(_("Stopped."));
+    if(logLen()) pushLogMess(_("Stopped-disconnected"));
 }
 
 void *TTrIn::Task( void *tr_in )
@@ -1110,7 +1110,7 @@ void TTrOut::start( int tmCon )
 
     TTransportOut::start();
 
-    if(logLen()) pushLogMess(_("Started."));
+    if(logLen()) pushLogMess(_("Started-connected"));
 }
 
 void TTrOut::stop( )
@@ -1142,7 +1142,7 @@ void TTrOut::stop( )
 
     TTransportOut::stop();
 
-    if(logLen()) pushLogMess(_("Stopped"));
+    if(logLen()) pushLogMess(_("Stopped-disconnected"));
 }
 
 void TTrOut::check( )
