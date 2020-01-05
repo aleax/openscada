@@ -785,7 +785,7 @@ INSERT INTO "LogLevPrm_gen_io" VALUES('CB7','cmdClose','BlockCalc.gen.BC7','',''
 INSERT INTO "LogLevPrm_gen_io" VALUES('CB7','cmdStop','BlockCalc.gen.BC7','','');
 INSERT INTO "LogLevPrm_gen_io" VALUES('CB7','stOpen','BlockCalc.gen.BC7.st_open','','');
 INSERT INTO "LogLevPrm_gen_io" VALUES('CB7','stClose','BlockCalc.gen.BC7.st_close','','');
-INSERT INTO "LogLevPrm_gen_io" VALUES('CB7','tCmd','5','','');
+INSERT INTO "LogLevPrm_gen_io" VALUES('CB7','tCmd','0','','');
 INSERT INTO "LogLevPrm_gen_io" VALUES('CB7','last_cmd','0','','');
 INSERT INTO "LogLevPrm_gen_io" VALUES('CB7','w_tm','0','','');
 INSERT INTO "LogLevPrm_gen_io" VALUES('CB7','f_start','0','','');

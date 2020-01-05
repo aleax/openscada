@@ -1,0 +1,2914 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Бібліотеки/Основні графічні елементи - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../en/files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="uk">Бібліотеки/Основні графічні елементи</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FMain+graphical+elements&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Main_graphical_elements" title="Libs/Main graphical elements">Libs/Main graphical elements</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Libs/Main_graphical_elements" title="Libs/Main graphical elements (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Libs/Main_graphical_elements/ru" title="Библиотеки/Основные графические элементы (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+<table class="wikitable">
+
+<tr>
+<th> Назва </th>
+<th> Версія </th>
+<th> Ліцензія </th>
+<th> Джерело </th>
+<th> Мови </th>
+<th> Автор </th>
+<th> Опис
+</th></tr>
+
+<tr>
+<td> <a href="Libs_Main_graphical_elements.html" title="Special:MyLanguage/Libs/Main graphical elements">Бібліотека основних елементів інтерфейсу користувача</a>
+</td>
+<td> 2.0 </td>
+<td> GPLv2
+</td>
+<td> vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">GZip</a>) &gt; VCA.wlb_Main
+</td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td>
+<td> Надає бібліотеку основних елементів користувацького інтерфейсу загальної та промислової автоматизації.
+<ul><li> <b>Засновано:</b> Вересень 2007</li>
+<li> <b>Початково створено:</b> у <a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/GraphicElementsLibraries/MainElements" rel="nofollow noreferrer noopener" target="_blank">старій Wiki</a></li></ul>
+</td></tr></table>
+<p>Бібліотека створюється для надання основних елементів користувацького інтерфейсу. Будується бібліотека на основі <a href="Modules/VCAEngine.html#WidgetPrimitives" title="Special:MyLanguage/Modules/VCAEngine">примітивів віджетів</a> та мови внутрішнього програмування <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>.
+</p><p>Для підключення бібліотеки до проекту станції OpenSCADA Ви можете отримати файл БД як:
+</p>
+<ul><li> такий що постачається з готовим та відповідним пакетом дистрибутиву Linux на кшталт "openscada-libdb-vca", "openscada-LibDB.VCA";</li>
+<li> найбільш актуальний та безпосередньо отриманий з <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql" rel="nofollow noreferrer noopener" target="_blank">репозиторію subversion</a>, перетворений у файл БД SQLite шляхом:</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 15px">
+$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql
+$ sqlite3 -init vcaBase.sql vcaBase.db .exit
+</pre>
+<ul><li> завантаження <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">прикріпленого тут</a>.</li></ul>
+<p>Бібліотека містить графічні елементи, які часто затребувано при формуванні користувацького інтерфейсу автоматизації технологічних та загальних процесів. Назви елементів та їх текстові параметри доступно на трьох мовах: Англійська, Українська та Російська.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.92.D1.96.D0.B4.D0.B6.D0.B5.D1.82.D0.B8_.E2.80.94_.D0.B3.D1.80.D0.B0.D1.84.D1.96.D1.87.D0.BD.D1.96_.D0.B5.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D0.B8"><span class="tocnumber">1</span> <span class="toctext"><span>Віджети — графічні елементи</span></span></a>
+<ul>
+<li class="toclevel-2"><a href="#.D0.92.D1.96.D0.B4.D0.BE.D0.B1.D1.80.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F_.D0.B0.D0.BD.D0.B0.D0.BB.D0.BE.D0.B3.D0.BE.D0.B2.D0.BE.D0.B3.D0.BE_.28anShow.29"><span class="tocnumber">1.1</span> <span class="toctext">Відображення аналогового (anShow)</span></a></li>
+<li class="toclevel-2"><a href="#.D0.92.D1.96.D0.B4.D0.BE.D0.B1.D1.80.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F_.D0.B0.D0.BD.D0.B0.D0.BB.D0.BE.D0.B3.D0.BE.D0.B2.D0.BE.D0.B3.D0.BE_1_.28anShow1.29.2C_.D0.92.D1.96.D0.B4.D0.BE.D0.B1.D1.80.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F_.D0.B0.D0.BD.D0.B0.D0.BB.D0.BE.D0.B3.D0.BE.D0.B2.D0.BE.D0.B3.D0.BE_1_.28.D0.BA.D0.BE.D1.80.D0.BE.D1.82.D0.BA.D0.B8.D0.B9.29_.28anShow1s.29"><span class="tocnumber">1.2</span> <span class="toctext">Відображення аналогового 1 (anShow1), Відображення аналогового 1 (короткий) (anShow1s)</span></a></li>
+<li class="toclevel-2"><a href="#.D0.A2.D0.B5.D0.BA.D1.81.D1.82.D0.BE.D0.B2.D0.B0_.D0.BC.D1.96.D1.82.D0.BA.D0.B0_.28TextLab.29"><span class="tocnumber">1.3</span> <span class="toctext">Текстова мітка (TextLab)</span></a></li>
+<li class="toclevel-2"><a href="#.D0.9C.D1.96.D1.82.D0.BA.D0.B0_.D0.B7.D0.BE.D0.B1.D1.80.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F.D0.BC_.28ImgLab.29"><span class="tocnumber">1.4</span> <span class="toctext">Мітка зображенням (ImgLab)</span></a></li>
+<li class="toclevel-2"><a href="#.D0.9F.D0.BE.D1.80.D1.83.D1.88.D0.B5.D0.BD.D0.BD.D1.8F_.E2.80.94_.D0.B0.D0.BA.D1.82.D0.B8.D0.B2.D0.BD.D0.B5_.28alarmsAct.29"><span class="tocnumber">1.5</span> <span class="toctext">Порушення — активне (alarmsAct)</span></a></li>
+<li class="toclevel-2"><a href="#.D0.92.D0.BB.D0.B0.D1.81.D1.82.D0.B8.D0.B2.D0.BE.D1.81.D1.82.D1.96_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82.D1.83_.28objProps.29"><span class="tocnumber">1.6</span> <span class="toctext">Властивості об'єкту (objProps)</span></a></li>
+<li class="toclevel-2"><a href="#.D0.9A.D0.B0.D0.BB.D0.B5.D0.BD.D0.B4.D0.B0.D1.80_.28calendar.29"><span class="tocnumber">1.7</span> <span class="toctext">Календар (calendar)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1"><a href="#.D0.9A.D0.BE.D1.80.D0.B5.D0.BD.D0.B5.D0.B2.D0.B0_.D1.81.D1.82.D0.BE.D1.80.D1.96.D0.BD.D0.BA.D0.B0_.28.D0.A1.D0.9E.29_.28RootPgSo.29"><span class="tocnumber">2</span> <span class="toctext">Коренева сторінка (СО) (RootPgSo)</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.9E.D1.81.D0.BD.D0.BE.D0.B2.D0.BD.D1.96_.D0.BA.D0.B0.D0.B4.D1.80.D0.B8"><span class="tocnumber">3</span> <span class="toctext"><span>Основні кадри</span></span></a>
+<ul>
+<li class="toclevel-2"><a href="#.D0.93.D1.80.D1.83.D0.BF.D0.B0_.D0.B3.D1.80.D0.B0.D1.84.D1.96.D0.BA.D1.96.D0.B2_.28grpGraph.29.2C_.D0.93.D1.80.D1.83.D0.BF.D0.B0_.D0.B3.D1.80.D0.B0.D1.84.D1.96.D0.BA.D1.96.D0.B2_10_.28grpGraph10.29"><span class="tocnumber">3.1</span> <span class="toctext">Група графіків (grpGraph), Група графіків 10 (grpGraph10)</span></a>
+<ul>
+<li class="toclevel-3"><a href="#.D0.95.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82_.D0.B3.D1.80.D1.83.D0.BF.D0.B8_.D0.B3.D1.80.D0.B0.D1.84.D1.96.D0.BA.D1.96.D0.B2_.28ElViewGraph.29"><span class="tocnumber">3.1.1</span> <span class="toctext">Елемент групи графіків (ElViewGraph)</span></a></li>
+<li class="toclevel-3"><a href="#.D0.92.D0.B8.D0.B1.D1.96.D1.80_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.83_.D0.B3.D1.80.D0.B0.D1.84.D1.96.D0.BA.D1.83_.28graphSelPrm.29"><span class="tocnumber">3.1.2</span> <span class="toctext">Вибір параметру графіку (graphSelPrm)</span></a></li>
+<li class="toclevel-3"><a href="#.D0.9E.D0.B1.D1.87.D0.B8.D1.81.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.83_.D0.B3.D1.80.D0.B0.D1.84.D1.96.D0.BA.D1.83_.28graphCalc.29"><span class="tocnumber">3.1.3</span> <span class="toctext">Обчислення параметру графіку (graphCalc)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2"><a href="#.D0.93.D1.80.D1.83.D0.BF.D0.B0_.D0.BA.D0.BE.D0.BD.D1.82.D1.83.D1.80.D1.96.D0.B2_.28grpCadr.29"><span class="tocnumber">3.2</span> <span class="toctext">Група контурів (grpCadr)</span></a></li>
+<li class="toclevel-2"><a href="#.D0.93.D1.80.D1.83.D0.BF.D0.B0_.D0.BE.D0.B3.D0.BB.D1.8F.D0.B4.D0.BE.D0.B2.D0.B8.D1.85_.D0.BA.D0.B0.D0.B4.D1.80.D1.96.D0.B2_.28ViewCadr.29"><span class="tocnumber">3.3</span> <span class="toctext">Група оглядових кадрів (ViewCadr)</span></a>
+<ul>
+<li class="toclevel-3"><a href="#.D0.9A.D0.B0.D0.B4.D1.80_.D0.B3.D1.80.D1.83.D0.BF.D0.B8_.D0.BE.D0.B3.D0.BB.D1.8F.D0.B4.D1.83_.28ElViewCadr.29"><span class="tocnumber">3.3.1</span> <span class="toctext">Кадр групи огляду (ElViewCadr)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2"><a href="#.D0.97.D0.B2.D0.B5.D0.B4.D0.B5.D0.BD.D1.96_.D0.B3.D1.80.D0.B0.D1.84.D1.96.D0.BA.D0.B8_.28ResultGraph.29"><span class="tocnumber">3.4</span> <span class="toctext">Зведені графіки (ResultGraph)</span></a>
+<ul>
+<li class="toclevel-3"><a href="#.D0.9A.D0.B0.D0.B4.D1.80_.D0.B7.D0.B2.D0.B5.D0.B4.D0.B5.D0.BD.D0.B8.D1.85_.D0.B3.D1.80.D0.B0.D1.84.D1.96.D0.BA.D1.96.D0.B2_.28ResultGraphEl.29"><span class="tocnumber">3.4.1</span> <span class="toctext">Кадр зведених графіків (ResultGraphEl)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2"><a href="#.D0.9F.D0.B0.D0.BD.D0.B5.D0.BB.D1.8C_.D0.BD.D0.B0.D0.BB.D0.B0.D1.88.D1.82.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_.D1.80.D0.B5.D0.B3.D1.83.D0.BB.D1.8F.D1.82.D0.BE.D1.80.D1.83_.28cntrRegul.29"><span class="tocnumber">3.5</span> <span class="toctext">Панель налаштування регулятору (cntrRegul)</span></a></li>
+<li class="toclevel-2"><a href="#.D0.9F.D0.BE.D1.80.D1.83.D1.88.D0.B5.D0.BD.D0.BD.D1.8F_.E2.80.94_.D1.81.D1.82.D0.B0.D0.BD_.28alarmsSt.29"><span class="tocnumber">3.6</span> <span class="toctext">Порушення — стан (alarmsSt)</span></a>
+<ul>
+<li class="toclevel-3"><a href="#.D0.9F.D0.BE.D1.80.D1.83.D1.88.D0.B5.D0.BD.D0.BD.D1.8F_.E2.80.94_.D0.B7.D0.B2.D1.96.D1.82_.28alarmsStReport.29"><span class="tocnumber">3.6.1</span> <span class="toctext">Порушення — звіт (alarmsStReport)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2"><a href="#.D0.9C.D0.B5.D0.BD.D0.B5.D0.B4.D0.B6.D0.B5.D1.80_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.87.D1.96.D0.B2_.28userManager.29"><span class="tocnumber">3.7</span> <span class="toctext">Менеджер користувачів (userManager)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-3"><a href="#.D0.9F.D0.B0.D0.BD.D0.B5.D0.BB.D1.96_.D1.83.D0.BF.D1.80.D0.B0.D0.B2.D0.BB.D1.96.D0.BD.D0.BD.D1.8F_.D1.82.D0.B0_.D0.BF.D1.80.D0.BE.D1.81.D1.82.D1.96_.D0.B4.D1.96.D0.B0.D0.BB.D0.BE.D0.B3.D0.B8"><span class="tocnumber">4</span> <span class="toctext"><span>Панелі управління та прості діалоги</span></span></a>
+<ul>
+<li class="toclevel-2"><a href="#.D0.A2.D0.B5.D1.80.D0.BC.D1.96.D0.BD.D0.B0.D0.BB.D1.8C.D0.BD.D0.B0_.D0.BF.D0.B0.D0.BD.D0.B5.D0.BB.D1.8C_.28terminator.29"><span class="tocnumber">4.1</span> <span class="toctext">Термінальна панель (terminator)</span></a></li>
+<li class="toclevel-2"><a href="#.D0.95.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82_.D0.BA.D0.B0.D0.B4.D1.80_.28ElCadr.29"><span class="tocnumber">4.2</span> <span class="toctext">Елемент кадр (ElCadr)</span></a></li>
+<li class="toclevel-2"><a href="#.D0.9F.D0.B0.D1.81.D0.BF.D0.BE.D1.80.D1.82.2C_.D1.80.D0.BE.D0.B7.D1.88.D0.B8.D1.80.D0.B5.D0.BD.D0.B8.D0.B9_.28cntrPaspExt.29"><span class="tocnumber">4.3</span> <span class="toctext">Паспорт, розширений (cntrPaspExt)</span></a></li>
+<li class="toclevel-2"><a href="#.D0.9F.D0.B0.D1.81.D0.BF.D0.BE.D1.80.D1.82_.28cntrPasp.29"><span class="tocnumber">4.4</span> <span class="toctext">Паспорт (cntrPasp)</span></a></li>
+<li class="toclevel-2"><a href="#.D0.9F.D0.B0.D0.BD.D0.B5.D0.BB.D1.8C_.D0.B3.D1.80.D0.B0.D1.84.D1.96.D0.BA.D1.96.D0.B2_.28grph_panel.29"><span class="tocnumber">4.5</span> <span class="toctext">Панель графіків (grph_panel)</span></a></li>
+<li class="toclevel-2"><a href="#.D0.9F.D0.B0.D0.BD.D0.B5.D0.BB.D1.8C_.D0.B4.D0.BE.D0.BA.D1.83.D0.BC.D0.B5.D0.BD.D1.82.D1.96.D0.B2_.28doc_panel.29"><span class="tocnumber">4.6</span> <span class="toctext">Панель документів (doc_panel)</span></a></li>
+<li class="toclevel-2"><a href="#.D0.9F.D1.96.D0.B4.D1.82.D0.B2.D0.B5.D1.80.D0.B4.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F_.28accept.29"><span class="tocnumber">4.7</span> <span class="toctext">Підтвердження (accept)</span></a></li>
+<li class="toclevel-2"><a href="#.D0.92.D0.B8.D0.B1.D1.96.D1.80_.D0.B5.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.83_.D1.83_.D0.B4.D0.B5.D1.80.D0.B5.D0.B2.D1.96_.28treeSelect.29"><span class="tocnumber">4.8</span> <span class="toctext">Вибір елементу у дереві (treeSelect)</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id=".D0.92.D1.96.D0.B4.D0.B6.D0.B5.D1.82.D0.B8_.E2.80.94_.D0.B3.D1.80.D0.B0.D1.84.D1.96.D1.87.D0.BD.D1.96_.D0.B5.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D0.B8"><span class="mw-headline-number">1</span> <span id="Widgets" title="#Widgets">Віджети — графічні елементи</span></span></h2>
+<p>Містить елементи-віджети загального застосування, які призначено для розташування на <a href="#MainFrames">основних кадрах</a>. Цима основними кадрами можуть бути й кадри поза цією <a href="#RootPgSo">концепцією об'єктів сигналізації кореневої сторінки "RootPgSo"</a>, але треба враховувати, що вони часто посилаються та викликають ті або інші <a href="#Panels">панелі керування</a>!
+</p><p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="anShow" title="#anShow"><h3><span class="mw-headline" id=".D0.92.D1.96.D0.B4.D0.BE.D0.B1.D1.80.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F_.D0.B0.D0.BD.D0.B0.D0.BB.D0.BE.D0.B3.D0.BE.D0.B2.D0.BE.D0.B3.D0.BE_.28anShow.29"><span class="mw-headline-number">1.1</span> Відображення аналогового (<a href="Libs_Main_graphical_elements.html#anShow" title="Special:MyLanguage/Libs/Main graphical elements">anShow</a>)</span></h3></span> </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Елемент на рисунку 1.1 слугує для відображення поточного значення аналогового параметру та режиму регулятору, якщо параметр є таким. Також цей елемент генерує повідомлення про порушення за відповідними уставками параметру. Елемент загалом використовує та представляє представницьку структуру <a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">DAQ-шаблону "Аналоговий сигнал"</a>.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_AnShow_uk.png"><img class="thumbimage" height="40" src="files/LibMainEls_AnShow_uk.png" width="400" /></a>  <div class="thumbcaption">Рис.1.1. Елемент "Відображення аналогового" у режимі розробки та виконання (зліва праворуч).</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Цей віджет може бути використано розробником при створені мнемосхем з відображенням значень аналогових параметрів та ПІД-регуляторів. Для використання потрібно додати цей віджет на мнемосхему, підлаштувати горизонтальний, вертикальний розмір масштабом та зв'язати з параметром джерела даних.
+</p><p><b><u>Використання — виконання</u></b><br />
+У режимі виконання, у основному полі елементу, відображається назва параметру, режим регулятору (тільки для регулятору) та поточне значення-змінна цього параметру; які, залежно від наявності порушення, відображаються кольором стилю: <i>labColorGood</i>, <i>labColorWarning</i>, <i>labColorAlarm</i>; та яким зображення незквітованого параметру може блимати. За апаратних помилок та недостовірності даних, останнє значення відображається сірим кольором та перекреслюється.
+</p><p>У активному режимі елементу можна отримати <a href="#Passport">паспорт</a>, натиснувши праву клавішу миші на полі віджету. У паспорті будуть представлені всі властивості параметру. За натиском лівої клавіші миші у області панелей з'явиться <a href="#ElCadr">панель управління</a> параметром, та вибір даного віджету буде відображатися блимаючою рамкою.
+</p><p><b><u>Властивості зв'язування та конфігурації</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Конфігурація </th>
+<th> Конфігураційний шаблон </th>
+<th> Опис
+</th></tr>
+<tr>
+<td> pErr </td>
+<td> Параметр: помилка </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|err </td>
+<td> Код та текст помилки за параметром. Використовується для формування сигналізації про порушення. Коди помилок, що обробляються:
+<ul><li> 1,2 — відмова, параметр недостовірний, відображається сірим та перекресленим окрім випадку з <i>redEVAL</i>;</li>
+<li> 3,4 — вище та нижче аварійної границі, відображається кольором стилю <i>labColorAlarm</i>;</li>
+<li> 5,6 — вище та нижче попереджувальної границі, відображається кольором стилю <i>labColorWarning</i>;</li>
+<li> 10,11 — коди користувацьких порушень статусу попередження та аварія, відповідно відображається кольором стилю <i>labColorWarning</i> та <i>labColorAlarm</i>.</li></ul>
+</td></tr>
+<tr>
+<td> pModeA </td>
+<td> Параметр: режим регулятору: автомат </td>
+<td> Логічний </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|auto </td>
+<td> Відображається велика літера "А" ліворуч від значення, при встановленні.
+</td></tr>
+<tr>
+<td> pModeC </td>
+<td> Параметр: режим регулятору: каскад </td>
+<td> Логічний </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|casc </td>
+<td> Відображається велика літера "К" ліворуч від значення, при встановленні.
+</td></tr>
+<tr>
+<td> pName </td>
+<td> Параметр: ім'я </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|NAME </td>
+<td> Коротке найменування параметру, що відображається над значенням та вставляється у повідомлення про порушення.
+</td></tr>
+<tr>
+<td> pPrec </td>
+<td> Параметр: точність </td>
+<td> Цілий </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|prec </td>
+<td> Кількість знаків після точки, для позитивних значень, та точність (знаків загалом), для негативних, для відображення кінцевого реального значення на екрані.
+</td></tr>
+<tr>
+<td> pVal </td>
+<td> Параметр: значення </td>
+<td> Реальний </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|var </td>
+<td> Інженерне реальне значення параметру.
+</td></tr>
+<tr>
+<td> redEVAL </td>
+<td> Червоне ім'я параметру у випадку відмови </td>
+<td> Логічний </td>
+<td>Стала </td>
+<td>  </td>
+<td> По замовченню, колір ім'я при "відмові" (значення EVAL) параметру сірий. Для деяких критичних для технологічного процесу параметрів стан відмови має бути яскраво виражено на мнемосхемі червоним кольором.
+</td></tr>
+<tr>
+<td> spName </td>
+<td> Ім'я для синтезу </td>
+<td> Рядок </td>
+<td> Стала </td>
+<td> </td>
+<td> Ім'я параметру для синтезу мови при формуванні аварійних повідомлень з урахуванням наголосу слів, пауз та інше. Порожнє значення вимикає повідомлення мовою!
+</td></tr></table>
+<table class="wikitable">
+
+<tr>
+<td> <span id="anShow1" title="#anShow1"><h3><span class="mw-headline" id=".D0.92.D1.96.D0.B4.D0.BE.D0.B1.D1.80.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F_.D0.B0.D0.BD.D0.B0.D0.BB.D0.BE.D0.B3.D0.BE.D0.B2.D0.BE.D0.B3.D0.BE_1_.28anShow1.29.2C_.D0.92.D1.96.D0.B4.D0.BE.D0.B1.D1.80.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F_.D0.B0.D0.BD.D0.B0.D0.BB.D0.BE.D0.B3.D0.BE.D0.B2.D0.BE.D0.B3.D0.BE_1_.28.D0.BA.D0.BE.D1.80.D0.BE.D1.82.D0.BA.D0.B8.D0.B9.29_.28anShow1s.29"><span class="mw-headline-number">1.2</span> Відображення аналогового 1 (<a href="Libs_Main_graphical_elements.html#anShow1" title="Special:MyLanguage/Libs/Main graphical elements">anShow1</a>), Відображення аналогового 1 (короткий) (anShow1s)</span></h3></span> </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Елемент на рисунку 1.2 слугує для відображення поточного значення аналогового параметру та короткого префіксу виміряного значення. Також цей елемент генерує повідомлення про порушення за відповідними уставками параметру. Елемент загалом використовує та представляє представницьку структуру <a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">DAQ-шаблону "Аналоговий сигнал"</a>.
+</p><p>Ці два елементи відрізняються один від одного лише початковим горизонтальним розміром, тобто другий "Відображення аналогового 1 (короткий)" є коротким варіантом для дуже коротких випадків та він прямо успадковується від першого.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_anShow1.png"><img class="thumbimage" height="23" src="../en/files/LibMainEls_anShow1.png" width="400" /></a>  <div class="thumbcaption">Рис.1.2. Елемент "Відображення аналогового 1" у режимі розробки та виконання (зліва праворуч).</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Цей віджет може бути використано розробником при створені мнемосхем з відображенням значень аналогових параметрів із префіксом та/або як елемент статичної екранної таблиці. Для використання потрібно додати цей віджет на мнемосхему, підлаштувати горизонтальний, вертикальний розмір масштабом та зв'язати з параметром джерела даних.
+</p><p><b><u>Використання — виконання</u></b><br />
+У режимі виконання, у основному полі елементу, відображається короткий префікс та поточне значення-змінна цього параметру; які, залежно від наявності порушення, відображаються кольором стилю: <i>labColorGood</i>, <i>labColorWarning</i>, <i>labColorAlarm</i>; та яким зображення незквітованого параметру може блимати. За апаратних помилок та недостовірності даних, останнє значення відображається сірим кольором та перекреслюється.
+</p><p>У активному режимі елементу можна отримати <a href="#Passport">паспорт</a>, натиснувши праву клавішу миші на полі віджету. У паспорті будуть представлені всі властивості параметру. За натиском лівої клавіші миші у області панелей з'явиться <a href="#ElCadr">панель управління</a> параметром, та вибір даного віджету буде відображатися блимаючою рамкою.
+</p><p><b><u>Властивості зв'язування та конфігурації</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Конфігурація </th>
+<th> Конфігураційний шаблон </th>
+<th> Опис
+</th></tr>
+<tr>
+<td> pErr </td>
+<td> Параметр: помилка </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|err </td>
+<td> Код та текст помилки за параметром. Використовується для формування сигналізації про порушення. Коди помилок, що обробляються:
+<ul><li> 1,2 — відмова, параметр недостовірний, відображається сірим та перекресленим;</li>
+<li> 3,4 — вище та нижче аварійної границі, відображається кольором стилю <i>labColorAlarm</i>;</li>
+<li> 5,6 — вище та нижче попереджувальної границі, відображається кольором стилю <i>labColorWarning</i>;</li>
+<li> 10,11 — коди користувацьких порушень статусу попередження та аварія, відповідно відображається кольором стилю <i>labColorWarning</i> та <i>labColorAlarm</i>.</li></ul>
+</td></tr>
+<tr>
+<td> pNAME </td>
+<td> Параметр: ім'я </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|NAME </td>
+<td> Коротке найменування параметру, що вставляється у повідомлення про порушення.
+</td></tr>
+<tr>
+<td> prec </td>
+<td> Параметр: точність </td>
+<td> Цілий </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|prec </td>
+<td> Кількість знаків після точки, для позитивних значень, та точність (знаків загалом), для негативних, для відображення кінцевого реального значення на екрані.
+</td></tr>
+<tr>
+<td> pVal </td>
+<td> Параметр: значення </td>
+<td> Реальний </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|var </td>
+<td> Інженерне реальне значення параметру.
+</td></tr>
+<tr>
+<td> spName </td>
+<td> Ім'я для синтезу </td>
+<td> Рядок </td>
+<td> Стала </td>
+<td> </td>
+<td> Ім'я параметру для синтезу мови при формуванні аварійних повідомлень з урахуванням наголосу слів, пауз та інше. Порожнє значення вимикає повідомлення мовою!
+</td></tr>
+<tr>
+<td> pName </td>
+<td> Коротка назва </td>
+<td> Рядок </td>
+<td> Стала </td>
+<td> </td>
+<td> Значення короткої назви-префіксу
+</td></tr>
+<tr>
+<td> pNameSz </td>
+<td> Розмір короткої назви </td>
+<td> Ціле </td>
+<td> Стала </td>
+<td> </td>
+<td> Розмір короткої назви-префіксу, використовуйте 0 для вимкнення поля
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="TextLab" title="#TextLab"><h3><span class="mw-headline" id=".D0.A2.D0.B5.D0.BA.D1.81.D1.82.D0.BE.D0.B2.D0.B0_.D0.BC.D1.96.D1.82.D0.BA.D0.B0_.28TextLab.29"><span class="mw-headline-number">1.3</span> Текстова мітка (<a href="Libs_Main_graphical_elements.html#TextLab" title="Special:MyLanguage/Libs/Main graphical elements">TextLab</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Елемент на рисунку 1.3 слугує для відображення динамічних текстових міток, що формується на основі дискретних сигналів. Також цей елемент генерує повідомлення про порушення за локально визначеною умовою, атрибут <b>ntf</b>. Елемент загалом використовує та представляє представницьку структуру DAQ-шаблонів <a href="Libs_Main.html#digitBlockUnif" title="Special:MyLanguage/Libs/Main">дискретного блоку</a> та <a href="Libs_Main.html#codeState" title="Special:MyLanguage/Libs/Main">стану за кодом</a>.
+</p>
+<ul><li> <b>Спонсорування:</b> <a class="external text" href="http://e-beam.ru" rel="nofollow noreferrer noopener" target="_blank">Лабораторія Вакуумних Технологій</a></li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_TextLab.png"><img class="thumbimage" height="25" src="../en/files/LibMainEls_TextLab.png" width="400" /></a>  <div class="thumbcaption">Рис.1.3. Елемент "Текстова мітка" у режимі розробки та виконання (зліва праворуч).</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Цей віджет може бути використано розробником при створені мнемосхем з відображенням текстових міток та/або як елемент статичної екранної таблиці. Для використання потрібно додати цей віджет на мнемосхему, підлаштувати горизонтальний, вертикальний розмір та зв'язати з параметром джерела даних.
+</p><p><b><u>Використання — виконання</u></b><br />
+У режимі виконання, у основному полі елементу, відображається текстова мітка та на фоні, що відповідає значенням дискретних сигналів параметру та конфігурації станів у атрибуті <b>digStts</b>; де фон, залежно від наявності порушення відповідного до умов атрибуту <b>ntf</b>, встановлюється у колір порушення; та яким зображення незквітованого параметру може блимати. За апаратних помилок та недостовірності даних, фон відображається сірим кольором.
+</p><p>У активному режимі елементу можна отримати <a href="#Passport">паспорт</a>, двічі натиснувши ліву клавішу миші на полі віджету. У паспорті будуть представлені всі властивості параметру. За натиском лівої клавіші миші у області панелей з'явиться <a href="#ElCadr">панель управління</a> параметром, та вибір даного віджету буде відображатися блимаючою рамкою. Команди дублюються у контекстному меню, яке з'являється за натиском правої клавіші миші у області віджету.
+</p><p><b><u>Властивості зв'язування та конфігурації</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Конфігурація </th>
+<th> Конфігураційний шаблон </th>
+<th> Опис
+</th></tr>
+<tr>
+<td> NAME </td>
+<td> Параметр: ім'я </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|NAME </td>
+<td> Коротке найменування параметру, що вставляється у повідомлення про порушення та дії оператору-користувача.
+</td></tr>
+<tr>
+<td> DESCR </td>
+<td> Параметр: опис </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|DESCR </td>
+<td> Опис або розгорнута назва параметру, що вставляється у повідомлення про порушення та дії оператору-користувача.
+</td></tr>
+<tr>
+<td> st_open </td>
+<td> Параметр: статус-відкрито </td>
+<td> Логічний </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|st_open </td>
+<td> Статус параметру "Відкрито" або загальний статус перемикача за відсутності сигналу стану "Закрито".
+</td></tr>
+<tr>
+<td> st_close </td>
+<td> Параметр: статус-закрито </td>
+<td> Логічний </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|st_close </td>
+<td> Статус параметру "Закрито".
+</td></tr>
+<tr>
+<td> st_text </td>
+<td> Параметр: статус (текст) </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|st_text </td>
+<td> Текст стану параметру, за режимом "Стан за кодом".
+</td></tr>
+<tr>
+<td> digStts </td>
+<td> Параметр: статуси </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|digStts </td>
+<td> Конфігурація статусів параметру зі структурою <b>{openedLabel}-{color};{closedLabel}-{color}</b>, для дискретного блоку.
+</td></tr>
+<tr>
+<td> com </td>
+<td> Параметр: команда </td>
+<td> Логічний </td>
+<td> Повний зв'язок </td>
+<td> Parameter|com </td>
+<td> Команда параметру "Відкрити" або загальна команда перемикача за відсутності сигналу команди "Закрити".
+</td></tr>
+<tr>
+<td> close </td>
+<td> Параметр: закрити </td>
+<td> Логічний </td>
+<td> Повний зв'язок </td>
+<td> Parameter|close </td>
+<td> Команда параметру "Закрити".
+</td></tr>
+<tr>
+<td> stop </td>
+<td> Параметр: зупинка </td>
+<td> Логічний </td>
+<td> Повний зв'язок </td>
+<td> Parameter|stop </td>
+<td> Команда параметру "Зупинити".
+</td></tr>
+<tr>
+<td> com_text </td>
+<td> Параметр: текст команди (з digComs) </td>
+<td> Рядок </td>
+<td> Повний зв'язок </td>
+<td> Parameter|com_text </td>
+<td> Текст команди параметру, за режимом "Стан за кодом".
+</td></tr>
+<tr>
+<td> digComs </td>
+<td> Параметр: команди </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|digComs </td>
+<td> Конфігурація команд параметру зі структурою <b>{openLabel}-{color};{closeLabel}-{color};{stopLabel}-{color}</b>, для дискретного блоку, та <b>{com1Label}-{color};{com2Label}-{color};...;{comNLabel}-{color}</b>, для статусу за кодом.
+</td></tr>
+<tr>
+<td> ntf </td>
+<td> Повідомлення "{st}:{modes}:{Текст мови}" </td>
+<td> Рядок </td>
+<td> Стала </td>
+<td> </td>
+<td> Конфігурація формування повідомлення за статусом (st) [0|1] та <a href="Modules/VCAEngine.html#Alarms" title="Special:MyLanguage/Modules/VCAEngine">режимами-методами повідомлення (modes)</a>, як рядок чисел методів, та мовою, якщо вказано такий метод.
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="ImgLab" title="#ImgLab"><h3><span class="mw-headline" id=".D0.9C.D1.96.D1.82.D0.BA.D0.B0_.D0.B7.D0.BE.D0.B1.D1.80.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F.D0.BC_.28ImgLab.29"><span class="mw-headline-number">1.4</span> Мітка зображенням (<a href="Libs_Main_graphical_elements.html#ImgLab" title="Special:MyLanguage/Libs/Main graphical elements">ImgLab</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Елемент на рисунку 1.4 слугує для відображення динамічних міток зображень, що формується на основі дискретних сигналів. Також цей елемент генерує повідомлення про порушення за локально визначеною умовою, атрибут <b>ntf</b>. Елемент загалом використовує та представляє представницьку структуру DAQ-шаблонів <a href="Libs_Main.html#digitBlockUnif" title="Special:MyLanguage/Libs/Main">дискретного блоку</a> та <a href="Libs_Main.html#codeState" title="Special:MyLanguage/Libs/Main">стану за кодом</a>.
+</p>
+<ul><li> <b>Спонсорування:</b> Вінницька Птахофабрика</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_ImgLab.png"><img class="thumbimage" height="53" src="../en/files/LibMainEls_ImgLab.png" width="400" /></a>  <div class="thumbcaption">Рис.1.4. Елемент "Мітка зображенням" у режимі розробки та виконання (зліва праворуч).</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Цей віджет може бути використано розробником при створені мнемосхем з відображенням міток зображення та/або як елемент статичної екранної таблиці. Для використання потрібно додати цей віджет на мнемосхему, підлаштувати горизонтальний, вертикальний розмір та зв'язати з параметром джерела даних.
+</p><p><b><u>Використання — виконання</u></b><br />
+У режимі виконання, у основному полі елементу, відображається зображення мітки на фоні, що відповідає значенням дискретних сигналів параметру та конфігурації станів у атрибуті <b>imgs</b>; де фон, залежно від наявності порушення відповідного до умов атрибуту <b>ntf</b>, встановлюється у колір порушення; та яким зображення незквітованого параметру може блимати. За апаратних помилок та недостовірності даних, фон відображається сірим кольором.
+</p><p>У активному режимі елементу можна отримати <a href="#Passport">паспорт</a>, двічі натиснувши ліву клавішу миші на полі віджету. У паспорті будуть представлені всі властивості параметру. За натиском лівої клавіші миші у області панелей з'явиться <a href="#ElCadr">панель управління</a> параметром, та вибір даного віджету буде відображатися блимаючою рамкою. Команди дублюються у контекстному меню, яке з'являється за натиском правої клавіші миші у області віджету.
+</p><p><b><u>Властивості зв'язування та конфігурації</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Конфігурація </th>
+<th> Конфігураційний шаблон </th>
+<th> Опис
+</th></tr>
+<tr>
+<td> NAME </td>
+<td> Параметр: ім'я </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|NAME </td>
+<td> Коротке найменування параметру, що вставляється у повідомлення про порушення та дії оператору-користувача.
+</td></tr>
+<tr>
+<td> DESCR </td>
+<td> Параметр: опис </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|DESCR </td>
+<td> Опис або розгорнута назва параметру, що вставляється у повідомлення про порушення та дії оператору-користувача.
+</td></tr>
+<tr>
+<td> st_open </td>
+<td> Параметр: статус-відкрито </td>
+<td> Логічний </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|st_open </td>
+<td> Статус параметру "Відкрито" або загальний статус перемикача за відсутності сигналу стану "Закрито".
+</td></tr>
+<tr>
+<td> st_close </td>
+<td> Параметр: статус-закрито </td>
+<td> Логічний </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|st_close </td>
+<td> Статус параметру "Закрито".
+</td></tr>
+<tr>
+<td> st_img </td>
+<td> Параметр: статус "{img}:{bCol}:{blink}" </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|st_text </td>
+<td> Зображення стану параметру, за режимом "Стан за кодом", де:
+<ul><li> <i>img</i> — ім'я зображення, дивіться <a href="Modules/VCAEngine.html#Media" title="Special:MyLanguage/Modules/VCAEngine">атрибути зображення</a>;</li>
+<li> <i>bCol</i> — фоновий колір;</li>
+<li> <i>blink</i> — ознака блимання [0|1] фону.</li></ul>
+</td></tr>
+<tr>
+<td> imgs </td>
+<td> Зображення, для "{openedImage}-{bCol}:{closedImage}-{bCol}:{EVAL}-{bCol}" </td>
+<td> Рядок </td>
+<td> Стала </td>
+<td> </td>
+<td> Конфігурація станів параметру зі структурою <b>{openedLabel}-{color};{closedLabel}-{color};{EVALLabel}-{color}</b>, для дискретного блоку.
+</td></tr>
+<tr>
+<td> digStts </td>
+<td> Параметр: статуси </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|digStts </td>
+<td> Стандартна конфігурація статусів параметру зі структурою <b>{notUsed}-{openedColor};{notUsed}-{closedColor}'<i>, для дискретного блоку та відсутності атрибуту </i></b><i>imgs</i>.
+</td></tr>
+<tr>
+<td> com </td>
+<td> Параметр: команда </td>
+<td> Логічний </td>
+<td> Повний зв'язок </td>
+<td> Parameter|com </td>
+<td> Команда параметру "Відкрити" або загальна команда перемикача за відсутності сигналу команди "Закрити".
+</td></tr>
+<tr>
+<td> close </td>
+<td> Параметр: закрити </td>
+<td> Логічний </td>
+<td> Повний зв'язок </td>
+<td> Parameter|close </td>
+<td> Команда параметру "Закрити".
+</td></tr>
+<tr>
+<td> stop </td>
+<td> Параметр: зупинка </td>
+<td> Логічний </td>
+<td> Повний зв'язок </td>
+<td> Parameter|stop </td>
+<td> Команда параметру "Зупинити".
+</td></tr>
+<tr>
+<td> com_text </td>
+<td> Параметр: текст команди (з digComs) </td>
+<td> Рядок </td>
+<td> Повний зв'язок </td>
+<td> Parameter|com_text </td>
+<td> Текст команди параметру, за режимом "Стан за кодом".
+</td></tr>
+<tr>
+<td> digComs </td>
+<td> Параметр: команди </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|digComs </td>
+<td> Конфігурація команд параметру зі структурою <b>{openLabel}-{color};{closeLabel}-{color};{stopLabel}-{color}</b>, для дискретного блоку, та <b>{com1Label}-{color};{com2Label}-{color};...;{comNLabel}-{color}</b>, для статусу за кодом.
+</td></tr>
+<tr>
+<td> ntf </td>
+<td> Повідомлення "{st}:{modes}:{Текст мови}" </td>
+<td> Рядок </td>
+<td> Стала </td>
+<td> </td>
+<td> Конфігурація формування повідомлення за статусом (st) [0|1] та <a href="Modules/VCAEngine.html#Alarms" title="Special:MyLanguage/Modules/VCAEngine">режимами-методами повідомлення (modes)</a>, як рядок чисел методів, та мовою, якщо вказано такий метод.
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="alarmsAct" title="#alarmsAct"><h3><span class="mw-headline" id=".D0.9F.D0.BE.D1.80.D1.83.D1.88.D0.B5.D0.BD.D0.BD.D1.8F_.E2.80.94_.D0.B0.D0.BA.D1.82.D0.B8.D0.B2.D0.BD.D0.B5_.28alarmsAct.29"><span class="mw-headline-number">1.5</span> Порушення — активне (<a href="Libs_Main_graphical_elements.html#alarmsAct" title="Special:MyLanguage/Libs/Main graphical elements">alarmsAct</a>)</span></h3></span> </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Елемент на рисунку 1.5 слугує для динамічного відображення активних порушень у табличному вигляді та із виділенням їх за кольором та текстом. Порушення отримуються із <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">буферу поточних-активних порушень OpenSCADA</a>. Фактично елемент реалізує функції примітиву "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#ImplProtocol" title="Special:MyLanguage/Sub-projects/VCA">Протокол</a>" для порушень та із розширенням можливостей.
+</p><p>Сортування повідомлень зафіксовано за правилом "активні + найбільший рівень + останні" для повідомлень нагорі, що можна змінити лише редагуванням вихідного тексту елементу.
+</p><p>Для детального вивчення актуальних порушень елементом передбачено функцію збільшення висоти угору або униз за отриманням фокусу.
+</p><p>Елемент створено, та він зазвичай використовується, у парі з <a href="#alarmsSt">кадром повноформатного представлення історії порушень</a>, який наділено більшістю функцій цього елементу, але і для історії порушень.
+</p><p>Основним користувацьким розширенням є можливість визначення видимих полів таблиці із переліку варіантів:
+</p>
+<ul><li> <i>atm</i> — час виникнення порушення;</li>
+<li> <i>qttm</i> — час підтвердження (квітації) порушення, для підтверджених порушень;</li>
+<li> <i>lev</i> — рівень порушення;</li>
+<li> <i>cat</i> — категорія порушення;</li>
+<li> <i>mess</i> — повний та нерозібраний текст повідомлення порушення;</li>
+<li> <i>prm</i> — адреса DAQ-параметру джерела порушення;</li>
+<li> <i>dscr</i> — опис порушення із DAQ-параметру джерела;</li>
+<li> <i>dscrCust{N}</i> — опис користувацького поля <i>N</i>;</li>
+<li> <i>alrm</i> — текст порушення;</li>
+<li> <i>cmnt</i> — коментар до порушення.</li></ul>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Цей елемент та його поля загалом репрезентують структуру повідомлення порушення, яку детально описано у <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">посібнику користувача</a>.
+</p><p>Як можна бачити із переліку можливих полів таблиці, цей елемент підтримує механізм підтвердження (квітації), коментування та користувацькі поля.
+</p>
+<ul><li> <b>Спонсорування:</b> Устьянцев Михайло</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:903px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_alarmsAct_uk.png"><img class="thumbimage" height="170" src="files/LibMainEls_alarmsAct_uk.png" width="901" /></a>  <div class="thumbcaption">Рис.1.5. Елемент "Порушення — активне" у режимі розробки та виконання (згори додолу).</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Цей віджет може бути використано розробником при створені мнемосхем з постійним відображенням активних порушень або для загального їх відображення на <a href="#RootPgSo">кореневій сторінці</a>. Для використання потрібно додати цей віджет на мнемосхему або кореневу сторінку, підлаштувати горизонтальний, вертикальний розмір, налаштувати вертикальне розширення та відкоригувати інші властивості на кшталт переліку та послідовності відображуваних полів таблиці.
+</p><p>Якщо треба виключити функцію підтвердження то ви маєте виключити час підтвердження "qttm" з переліку полів та зробити елемент неактивним.
+</p><p><b><u>Використання — виконання</u></b><br />
+У режимі виконання будується таблиця із переліку активних порушень, за визначеними полями, правилом сортування та виокремлення; вміст якої періодично та динамічно оновлюється. За обранням таблиці, отримання фокусу, її висота може розширюватися, відобразивши більше повідомлень, якщо цю функцію увімкнено та є відповідність умови із визначеної кількості порушень.
+</p><p>Користувачу надається можливість підтвердити порушення, змінивши значення поля часу підтвердження або за допомогою панелі керування, що спливе за обранням елементу та рядка порушення.
+</p><p>Ще користувач може залишити коментар до порушення, відкоригувавши відповідне поле таблиці.
+</p><p><b><u>Властивості зв'язування та конфігурації</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Опис
+</th></tr>
+<tr>
+<td> active </td>
+<td> Активний </td>
+<td> Логічний </td>
+<td> Вимкнути якщо виключено підтвердження, розширення за отримання фокусу та редагування взагалі — суто відображення.
+</td></tr>
+<tr>
+<td> hHdrVis </td>
+<td> Показувати заголовок: горизонтальний </td>
+<td>Логічний </td>
+<td>
+</td></tr>
+<tr>
+<td> vHdrVis </td>
+<td> Показувати заголовок: вертикальний </td>
+<td> Логічний </td>
+<td>
+</td></tr>
+<tr>
+<td> formDtTm </td>
+<td> Формат дати та часу (%Y-%m-%d&nbsp;%H.%M.%S[.%MS,%US]) </td>
+<td> Рядок </td>
+<td> Формат відображення часу порушення та підтвердження.
+</td></tr>
+<tr>
+<td> expOnItems </td>
+<td> Розширяти при фокусі: елементів (&lt;=0-відключено) </td>
+<td> Цілий </td>
+<td> Гранична кількість повідомлень для спрацювання функції розширення елементу, збільшення висоти, за отримання фокусу.
+</td></tr>
+<tr>
+<td> expOnFocus </td>
+<td> Розширяти при фокусі: пікселів (0-відключено,&gt;-донизу,&lt;-догори) </td>
+<td> Цілий </td>
+<td> Встановити у потрібне значення розширення елементу, збільшення висоти, за набуттям фокусу.
+</td></tr>
+<tr>
+<td> colms </td>
+<td> Стовпчики, за ',' (atm,qttm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt) </td>
+<td> Рядок </td>
+<td> Визначити у потрібну послідовність та наповнення полів.
+</td></tr>
+<tr>
+<td> highLght </td>
+<td> Правила підсвітлення, {lev}{quitt}:{color}:{font}:{fontColor} </td>
+<td> Текст </td>
+<td> Правила підсвітлення, де:
+<ul><li> <i>lev</i> — рівень повідомлення [0...7];</li>
+<li> <i>quitt</i> — ознака підтвердження (квітації) повідомлення [0|1];</li>
+<li> <i>color</i> — колір фону рядка з повідомленням;</li>
+<li> <i>font</i> — шрифт тексту рядка з повідомленням;</li>
+<li> <i>fontColor</i> — колір тексту рядка з повідомленням.</li></ul>
+<p>Наприклад:
+</p>
+<pre style="white-space: pre-wrap">
+5:gray
+4:red
+1:yellow
+</pre>
+</td></tr>
+<tr>
+<td> colDscrCustNames </td>
+<td> Перелік назв користувацьких полів, поділених ';' </td>
+<td> Рядок </td>
+<td> За підтримки користувацьких полів, та їх видимістю, тут наводяться їх назви.
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="objProps" title="#objProps"><h3><span class="mw-headline" id=".D0.92.D0.BB.D0.B0.D1.81.D1.82.D0.B8.D0.B2.D0.BE.D1.81.D1.82.D1.96_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82.D1.83_.28objProps.29"><span class="mw-headline-number">1.6</span> Властивості об'єкту (<a href="Libs_Main_graphical_elements.html#objProps" title="Special:MyLanguage/Libs/Main graphical elements">objProps</a>)</span></h3></span> </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Елемент на рисунку 1.6 слугує для відображення властивостей джерела даних у табличному вигляді та із виділенням їх кольором, як об'єкт, та надання можливості зміни значення властивостей із правом запису. Також цей елемент генерує повідомлення про порушення згідно до особливостей об'єкту. Елемент загалом використовує та представляє представницьку структуру DAQ-шаблонів "<a href="Libs_Main.html#ComplexObject" title="Special:MyLanguage/Libs/Main">Комплексний об'єкт</a>".
+</p>
+<ul><li> <b>Спонсоровано:</b> ПАТ ХАРТРОН</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:682px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_objProps_uk.png"><img class="thumbimage" height="383" src="files/LibMainEls_objProps_uk.png" width="680" /></a>  <div class="thumbcaption">Рис.1.6. Елемент "Властивості об'єкту" у режимі розробки та виконання (зліва праворуч).</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Цей віджет може бути використано розробником при створені мнемосхем з консолідованим відображенням об'єкту як ціле та сутності із властивостями. Для використання потрібно додати цей віджет на мнемосхему, підлаштувати горизонтальний, вертикальний розмір масштабом та зв'язати з параметром джерела даних за DAQ-шаблоном "<a href="Libs_Main.html#ComplexObject" title="Special:MyLanguage/Libs/Main">Комплексний об'єкт</a>".
+</p><p><b><u>Використання — виконання</u></b><br />
+У режимі виконання відображається таблиця з властивостями у рядках, де перший стовпчик це назва властивості, а другий її значення. Рядок може підсвічуватися фоном аварійного кольору, у випадку порушення за цією властивістю. Особливе значення має й заголовок віджету де відображається назва об'єкту, фон кольору якого може набувати аварійних кольорів, за наявністю порушень у об'єкта.
+</p><p>Таблиця властивостей є активною та за обранням рядка властивості, що передбачає запис, знизу з'явиться поле встановлення значення властивості.
+</p><p><b><u>Властивості зв'язування та конфігурації</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Конфігурація </th>
+<th> Конфігураційний шаблон </th>
+<th> Опис
+</th></tr>
+<tr>
+<td> objName </td>
+<td> Об'єкт: ім'я </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> Object|NAME </td>
+<td> Ім'я об'єкту для заголовку.
+</td></tr>
+<tr>
+<td> objDescr </td>
+<td> Об'єкт: опис </td>
+<td> Текст </td>
+<td> Вхідний зв'язок </td>
+<td> Object|DESCR </td>
+<td> Опис об'єкту для підказки до заголовку.
+</td></tr>
+<tr>
+<td> objErr </td>
+<td> Об'єкт: помилка </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> Object|err </td>
+<td> Помилка об'єкту для формування повідомлення та підсвітлення заголовку, опрацьовуються коди концепції.
+</td></tr>
+<tr>
+<td> objItems </td>
+<td> Об'єкт: елементи </td>
+<td> Об'єкт </td>
+<td> Вхідний зв'язок </td>
+<td> Object|items </td>
+<td> Описовий об'єкт властивостей фізичного об'єкту, згідно до концепції.
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="calendar" title="#calendar"><h3><span class="mw-headline" id=".D0.9A.D0.B0.D0.BB.D0.B5.D0.BD.D0.B4.D0.B0.D1.80_.28calendar.29"><span class="mw-headline-number">1.7</span> Календар (<a href="Libs_Main_graphical_elements.html#calendar" title="Special:MyLanguage/Libs/Main graphical elements">calendar</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Елемент на рисунку 1.7 слугує для відображення місяця календаря за тижнями, який передбачає можливість обрання року, місяця та окремого дня, а також перехід на поточний день.
+</p>
+<ul><li> <b>Спонсоровано:</b> ТОВ "СВІТоВИР АВТоМАТИК"</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:492px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_calendar_uk.png"><img class="thumbimage" height="190" src="files/LibMainEls_calendar_uk.png" width="490" /></a>  <div class="thumbcaption">Рис.1.7. Елемент "Календар" у режимі розробки та виконання (зліва праворуч).</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Цей віджет може бути використано розробником при створені мнемосхем з відображенням календаря. Для використання потрібно додати цей віджет на мнемосхему, підлаштувати горизонтальний, вертикальний розмір масштабом, та використовувати атрибут "selTime" цього віджету для отримання та встановлення дати.
+</p><p><b><u>Використання — виконання</u></b><br />
+У режимі виконання відображається відповідний до обраного рік, місяць та підсвічено день, відповідно до значення атрибуту "selTime".
+</p><p>Користувач має можливість обрати рік та місяця з переліку, а також день у зображені тижнів. Для швидкого повернення до поточної доби передбачено відповідну кнопку.
+</p><p><b><u>Властивості зв'язування та конфігурації</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Опис
+</th></tr>
+<tr>
+<td> selTime </td>
+<td> Обраний час </td>
+<td> Ціле </td>
+<td> Час календаря у секундах від UNIX-епохи.
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="RootPgSo" title="#RootPgSo"><h2><span class="mw-headline" id=".D0.9A.D0.BE.D1.80.D0.B5.D0.BD.D0.B5.D0.B2.D0.B0_.D1.81.D1.82.D0.BE.D1.80.D1.96.D0.BD.D0.BA.D0.B0_.28.D0.A1.D0.9E.29_.28RootPgSo.29"><span class="mw-headline-number">2</span> Коренева сторінка (СО) (<a href="Libs_Main_graphical_elements.html#RootPgSo" title="Special:MyLanguage/Libs/Main graphical elements">RootPgSo</a>)</span></h2></span> </td>
+<td> 2.2 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Елемент-кадр, представлений на рисунку 2, слугує базою для створення користувацьких інтерфейсів, пачатково для управління технологічними процесами, заснованими на об'єктах сигналізації (СО).
+</p><p>Коренева сторінка містить чотири області:
+</p>
+<ul><li> область кнопок-індикаторів об'єктів сигналізації (нагорі);</li>
+<li> область навігації за видами відображення (праворуч-нагорі);</li>
+<li> контейнер основних кадрів користувацького інтерфейсу (у центрі);</li>
+<li> контейнер панелей управління (праворуч-знизу).</li></ul>
+<p><i>Область кнопок-індикаторів об'єктів сигналізації</i> слугує для надання інформації про наявність порушень у об'єкті сигналізації, а також для перемикання між ними.
+</p><p>Для відображення обраного об'єкту сигналізації використовується колір фону, за стилями: <i>backColorButton</i> та <i>backColorButtonSel</i>. А порушення відображаються кольором тексту, відповідно до стилів: <i>labColorGood</i>, <i>labColorWarning</i>, <i>labColorAlarm</i>; та яким текст незквітованого об'єкту сигналізації може блимати.
+</p><p>Кнопки наразі генеруються динамічно, шляхом копіювання першої та єдиної, відповідно до наявних у дереві проекту віртуальних сторінок об'єктів сигналізації з послідовною цифровою ідентифікацією від 1. Обмеження на кількість кнопок, або об'єктів сигналізації, полягає лише у сумарній довжині назв об'єктів сигналізації, які можна розташувати у два ряди цих кнопок. Тобто, за коротких назв можна отримати до близка 100 об'єктів сигналізація. Якщо об'єкт сигналізації один то навіть ця єдина-базова кнопка ховається.
+</p><p><i>Область навігації за видами відображення</i> — індикація вибору та обрання виду відображення як, наприклад: "Мнемосхеми", "Групи графіків", "Групи контурів", "Документи" та інше; та кнопки гортання або комбобокс прямого обрання кадрів у об'єкті сигналізації.
+</p><p>Простір кнопок видів відображення є динамічним, у сенсі зайняття простору відсутніх, та значення самих видів відображення налаштовується на інше від типового значення, тобто передбачено два основних види відображення (view1 та view2), три допоміжних (view3, view4 та view5), а також один загальний на весь інтерфейс (view6).
+</p><p>Нижче також містяться кнопки квітації, які з'являються за виникнення порушень, а на горі зображення логотипу, яке налаштовується.
+</p><p><i>Контейнер основних кадрів користувацького інтерфейсу</i> — область контейнеру для включення у нього основних кадрів за обранням їх кнопками режимів відображення або зміни об'єкту сигналізації.
+</p><p><i>Контейнер панелей управління</i> — область контейнеру для включення до нього панелей управління різними об'єктами у області контейнеру основних кадрів, наприклад — панель параметру, документу, графіку та інше.
+</p><p>Під контейнером панелей управління розташовується кнопка запуску демонстраційного режиму — режиму за яким здійснюється періодичне перемикання показних кадрів, зміна режимів та інших операцій згідно сценарію.
+</p>
+<ul><li> <b>Спонсорування динамізації:</b> Вінницька Птахофабрика</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1026px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_RootPgSoD_uk.png"><img class="thumbimage" height="670" src="files/LibMainEls_RootPgSoD_uk.png" width="1024" /></a>  <div class="thumbcaption">Рис.2a. Кадр "Коренева сторінка (СО)" у режимі розробки.</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Цей віджет може використовуватися лише у режимі кореневої сторінки, яка має розташовуватися у дереві проекту як елемент "so". Крім цього, довкола головної сторінки має бути розгорнута наступна деревоподібна ієрархія:
+</p>
+<dl><dd> /<b>control</b>/* — логічний контейнер, містить різні панелі управління;</dd>
+<dd> /<b>so</b>/ — цей кадр як контейнер, містить логічні контейнери об'єктів сигналізації:
+<dl><dd> <b>{n}</b>/ — логічний контейнер об'єкту сигналізації <i>n</i> (1...), містить логічні контейнери та шаблони видів відображення:
+<dl><dd> [<b>view1</b>|<b>mn</b>]/* — вид відображення 1 (зазвичай та раніш це мнемосхеми), містить багато сторінок кінцевих кадрів;</dd>
+<dd> [<b>view2</b>|<b>ggraph</b>]/* — вид відображення 2 (зазвичай та раніш це шаблон <a href="#grpGraph">групи графіків</a>), містить багато сторінок кінцевих кадрів;</dd>
+<dd> [<b>view3</b>|<b>gcadr</b>]/* — вид відображення 3 (зазвичай та раніш це шаблон <a href="#grpCadr">групи контурів</a>), містить багато сторінок кінцевих кадрів;</dd>
+<dd> [<b>view4</b>|<b>gview</b>]/* — вид відображення 4 (зазвичай та раніш це шаблон <a href="#ViewCadr">групи оглядових кадрів</a>), містить багато сторінок кінцевих кадрів;</dd>
+<dd> [<b>view5</b>|<b>doc</b>]/* — вид відображення 5 (зазвичай та раніш це логічний контейнер документів), містить багато сторінок кінцевих кадрів;</dd>
+<dd> <b>greg</b>/* — специфічний шаблон сторінки <a href="#cntrRegul">налаштування ПІД-регулятору</a>, містить багато сторінок кінцевої конфігурації ПІД-регуляторів, підключених статично та які викликаються лише кнопкою "ПІД" <a href="#ElCadr">елементу кадру</a>.</dd></dl></dd>
+<dd> [<b>view6</b>|<b>rg</b>]/ — логічний контейнер глобального виду відображення 6 (зазвичай та раніш це <a href="#ResultGrph">зведені графіки</a> — спільні графіки для всього інтерфейсу):
+<dl><dd> [<b>view6</b>|<b>rg</b>]/* — вид відображення 6 (зазвичай та раніш це шаблон <a href="#ResultGrph">зведених графіків</a>), містить багато сторінок кінцевих кадрів.</dd></dl></dd></dl></dd></dl>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Ідентифікатори сторінок видів відображення, вказані як [<b>view1</b>|<b>mn</b>], мають вказуватися у дереві або за новою схемою "view1", або за старою "mn". Їх змішування не підтримується!
+</p><p>У якості тексту кнопок об'єктів сигналізації використовується назва логічного контейнеру з відповідним ідентифікатором <i>n</i>. З опису цього контейнеру також береться і текст спливаючої підказки до цієї кнопки, якщо він не порожній.
+</p><p>Всі подальші налаштування та редагування довкола цього кадру треба здійснювати для його копії-посилання у дереві проекту, та наполегливо не рекомендується редагувати його у бібліотеці, інакше Ви втратите можливість оновлення бібліотеки або ці зміни, при її оновленні!
+</p><p>Текст та підказка кнопок видів відображення змінюються безпосередньо у відповідних властивостях цих віджетів. Швидкі клавіші виду відображення беруться з дужок спливаючої підказки, як то "Графіки (Ctrl+G)", та відповідно обробляються. Для зміни зображення виду відображення достатньо перевизначити іконку відповідного виду, як то "view1", шляхом завантаження зображення з відповідною назвою до Mime-даних проекту.
+</p><p>Зображення логотипу можна змінити так само, як і зображення виду відображення, тобто завантажити до Mime-даних проекту нове зображення із назвою "logo", після чого можна підкоригувати геометрію віджету логотипу під потрібні пропорції. Віджет зображення можна перенести ліворуч, посунувши попередньо кнопку об'єкту сигналізації праворуч на розмір логотипу. Якщо логотип у загалі не потрібен то онуліть ширину його віджету, але не видаляйте його!
+</p><p>Панель навігації та контейнер панелей управління потенційно також можна перенести ліворуч, посунувши контейнер основних кадрів, а може й кнопку об'єкту сигналізації праворуч.
+</p><p>За потреби, кореневу сторінку можна доповнити додатковими елементами, що не потребують особливої обробки, тобто — зміна початкової процедури кадру, що вже є не використанням, а редагуванням. Наприклад, часто коренева сторінка доповнюється <a href="#alarmsAct">загальною таблицею активних порушень</a>, яку можна розташувати під контейнером основних кадрів та на всю його ширину, зменшивши його висоту на потрібний розмір таблиці. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Тут треба зауважити, що зменшення розмірів цього контейнеру, як і будь-якого іншого, призведе до появи полос гортання та-або вимагатиме коригування кадрів розташування у контейнер. У наведенному прикладі цього може бути не потрібно здійснювати, враховуючи розширення контейнеру на невикористані рядки кнопок об'єктів сигналізації.
+</p><p>У випадку відсутності Демо-режиму, можна вимкнути кнопку запуску демонстрації та розширити панель управління.
+</p><p><b><u>Використання — виконання</u></b><br />
+При запуску кадру у режимі виконання, спочатку здійснюється побудова кнопок об'єктів сигналізації, які формуються у два ряди, після чого контейнер основних кадрів розширюється у гору на ряд, якщо вистачило одного, або на два, якщо об'єкт сигналізації один. Далі формуються кнопки видів відображення, наявні з яких активуються та розширюються для заповнення місця відсутніх.
+</p><p>Після динамічного формування, кадр здійснює періодичний контроль за зміною кадру у контейнері основних кадрів, що відображається відповідним кольором фону у кнопці об'єкту сигналізації та виду відображення, до яких кадр належить. Між кнопками гортання оновлюється інформація про загальну кількість кадрів та позицію актуального, а також самі кнопки активуються згідно до можливості гортання у актуальній позиції кадру. Для комбобоксу прямого обрання кадру з переліку, відповідно здійснюється формування актуального переліку кадрів та встановлення назви поточного. Також здійснюється контроль стану порушення-повідомлення за об'єктами сигналізації, який відповідно відображається кольором тексту кнопок об'єкту сигналізації та його миготінням, а також активуються або дизактивуються кнопки квітації.
+</p><p>Зміна кадру у контейнері панелей управління не відстежуються та вони загалом викликаються із інтерфейсу основних кадрів, хіба-що він очищується зі зміною основного кадру шляхом відкриття панелі-заглушки.
+</p><p>З основних дій, кадром надається можливість користувачу обрати об'єкт сигналізації, вид відображення та відповідний кадр. Натиснувши кнопку об'єкту сигналізації, виду відображення, прямо обравши у комбобоксу або погортавши; результатом чого є виклик відповідного кадру у контейнері основних кадрів. Із допоміжних дій, користувач може сквітувати порушення-повідомлення та запустити Демо-режим, якщо він передбачений. Типове налаштування кадру передбачає обслуговування низки гарячих клавіш, як то <b>Ctrl+[1...0]</b> для виклику об'єктів сигналізації від 1 до 10, та <b>Ctrl+[MGCVDR]</b> для виклику відповідних видів відображення.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1026px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_RootPgSoR_uk.png"><img class="thumbimage" height="670" src="files/LibMainEls_RootPgSoR_uk.png" width="1024" /></a>  <div class="thumbcaption">Рис.2b. Кадр "Коренева сторінка (СО)" у режимі виконання.</div></div></div></div>
+<p><b><u>Властивості зв'язування та конфігурації</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Опис
+</th></tr>
+<tr>
+<td> demoPlayProc </td>
+<td> Проц. програвання демо </td>
+<td> Текст </td>
+<td> Процедура на <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">мові JavaLikeCalc</a> для програвання деякої демонстрації. Вмикає кнопку Демо-режиму у режимі виконання. Для прикладу такої процедури дивіться демонстраційні-проекти <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">АГЛКС</a> та <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_Boiler" title="Special:MyLanguage/Using/Model Boiler">Котел</a>!
+</td></tr>
+<tr>
+<td colspan="4"> <i>Специфічні до візуалізатору атрибути для <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">UI.Vision</a> (<a href="Modules/Vision.html#SpecAttrs" title="Special:MyLanguage/Modules/Vision">більше</a>) та <a href="Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">UI.WebVision</a> (<a href="Modules/WebVision.html#SpecAttrs" title="Special:MyLanguage/Modules/WebVision">більше</a>)</i>
+</td></tr>
+<tr>
+<td> keepAspectRatio </td>
+<td> Зберігати пропорцію при масштабуванні </td>
+<td> Логічний </td>
+<td> Зберігати пропорцію сторінок при масштабуванні.
+</td></tr>
+<tr>
+<td> stBarNoShow </td>
+<td> Не показувати рядок статусу </td>
+<td> Логічний </td>
+<td> Приховати рядок статусу головного вікна.
+</td></tr>
+<tr>
+<td colspan="4"> <i>Специфічні до візуалізатору атрибути для <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">UI.Vision</a> (<a href="Modules/Vision.html#SpecAttrs" title="Special:MyLanguage/Modules/Vision">більше</a>)</i>
+</td></tr>
+<tr>
+<td> runWin </td>
+<td> Вікно виконання </td>
+<td> Обрання цілих чисел </td>
+<td> Встановлення режиму виконання головного вікна:
+<ul><li> "Оригінальний розмір (0)".</li>
+<li> "Максимізувати (1)".</li>
+<li> "На весь екран (2)".</li></ul>
+</td></tr>
+<tr>
+<td> statLine </td>
+<td> Елементи рядку статусу </td>
+<td> Текст </td>
+<td> Текстове поле з описом елементів рядка статусу користувача.
+</td></tr>
+<tr>
+<td> winPosCntrSave </td>
+<td> Управління та збереження положення вікон </td>
+<td> Логічний </td>
+<td> Ввімкнення управління та збереження положення вікон виконання.
+</td></tr>
+<tr>
+<td colspan="4"> <i>Основні процедури <a href="Modules/VCAEngine.html#Alarms" title="Special:MyLanguage/Modules/VCAEngine">механізму повідомлень</a></i>
+</td></tr>
+<tr>
+<td> notify2 </td>
+<td> Повідомлення: тип 2 (СинтезМови) </td>
+<td> Текст </td>
+<td>
+</td></tr>
+<tr>
+<td> notifyVisVision0 </td>
+<td> Повідомлення: Vision тип 0 (Світло) </td>
+<td> Текст </td>
+<td>
+</td></tr>
+<tr>
+<td> notifyVisVision1 </td>
+<td> Повідомлення: Vision тип 1 (Гудок) </td>
+<td> Текст </td>
+<td>
+</td></tr>
+<tr>
+<td> notifyVisVision2 </td>
+<td> Повідомлення: Vision тип 2 (СинтезМови) </td>
+<td> Текст </td>
+<td>
+</td></tr></table>
+<h2><span class="mw-headline" id=".D0.9E.D1.81.D0.BD.D0.BE.D0.B2.D0.BD.D1.96_.D0.BA.D0.B0.D0.B4.D1.80.D0.B8"><span class="mw-headline-number">3</span> <span id="MainFrames" title="#MainFrames">Основні кадри</span></span></h2>
+<p>Містить елементи-кадри шаблонного та кінцевого типів, а також елементи-віджети та панелі з яких вони будуються та які дотичні до їх використання. Ці кадри призначено для розташування у дереві сторінок проекту, побудованого за <a href="#RootPgSo">концепцією об'єктів сигналізації кореневої сторінки "RootPgSo"</a>. Однак вони можуть бути розташовані як окремі сутності або у складі власної концепції керування сторінками, але тут треба враховувати, що кадри часто посилаються та викликають ті або інші <a href="#Panels">панелі керування</a> загального застосування та пов'язані елементи!
+</p><p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="grpGraph" title="#grpGraph"><h3><span class="mw-headline" id=".D0.93.D1.80.D1.83.D0.BF.D0.B0_.D0.B3.D1.80.D0.B0.D1.84.D1.96.D0.BA.D1.96.D0.B2_.28grpGraph.29.2C_.D0.93.D1.80.D1.83.D0.BF.D0.B0_.D0.B3.D1.80.D0.B0.D1.84.D1.96.D0.BA.D1.96.D0.B2_10_.28grpGraph10.29"><span class="mw-headline-number">3.1</span> Група графіків (<a href="Libs_Main_graphical_elements.html#grpGraph" title="Special:MyLanguage/Libs/Main graphical elements">grpGraph</a>), Група графіків 10 (grpGraph10)</span></h3></span> </td>
+<td> 1.4 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Елемент-кадр, представлений на рисунку 3.1, слугує для одночасного спостереження трендів та управління параметрами у об'єкті сигналізації, включає у себе як екземпляри віджету "<a href="#ElViewGraph">Елемент групи графіків</a>" кожного параметру (до 8 або 10), так і віджет "Діаграма" для спостереження за графіками параметрів та перегляду історії, а також горизонтальну стрічку гортання для швидкої навігації за доступною історією обраних для відображення параметрів.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1162px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_grpGraphD_uk.png"><img class="thumbimage" height="600" src="files/LibMainEls_grpGraphD_uk.png" width="1160" /></a>  <div class="thumbcaption">Рис.3.1a. Кадр "Група графіків" у режимі розробки.</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Кадр призначено для виконання ролі сторінки-шаблону, а, відповідно, він має безпосередньо розташовуватися у дерево проекту. У проекті-шаблоні "<a href="#RootPgSo">Групи сигналізацій</a>", для кожного об'єкту сигналізації, цей кадр включено у ролі шаблону, що дозволяє створювати на його основі багато сторінок груп графіків. До кожного кадру можуть підключатися до восьми-десяти параметрів, шляхом встановлення зв'язків. Графіки, для яких не буде встановлено зв'язку, будуть приховані при виконанні або доступні для користувацького обрання у випадку наявності переліку обраних параметрів у атрибуті "Вибір: параметри доступні для обрання" (формат переліку описано у <a href="#graphSelPrm">діалозі обрання параметрів</a>).
+</p><p>Глибину трендів у минуле, по замовченню, встановлено у 10 хвилин — для поточного оперативного контролю, що, за потреби, можна змінити безпосередньо відредагувавши відповідне поле віджету діаграми, наприклад, для шаблонної сторінки проекту, щоб воно розповсюдилося на всі кінцеві сторінки.
+</p><p><b><u>Використання — виконання</u></b><br />
+У режимі виконання відображаються графіки, для яких встановлено зв'язки. Керування параметрами з елементів групи графіків детально описано у розділі віджету "<a href="#ElViewGraph">Елемент групи графіків (ElViewGraph)</a>". Додатково можна керувати властивостями відображення графіків, для чого автоматично з цією сторінкою відкривається <a href="#grph_panel">панель управління графіком</a>, або необхідно лівою клавішею миші натиснути у область графіку.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_grpGraphR_uk.png"><img class="thumbimage" height="580" src="files/LibMainEls_grpGraphR_uk.png" width="900" /></a>  <div class="thumbcaption">Рис.3.1b. Кадр "Група графіків" у режимі виконання.</div></div></div></div>
+<p><b><u>Властивості зв'язування та конфігурації</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Конфігурація </th>
+<th> Конфігураційний шаблон </th>
+<th> Опис
+</th></tr>
+<tr>
+<td> name </td>
+<td> Ім'я </td>
+<td> рядок </td>
+<td> Постійна </td>
+<td>  </td>
+<td> Ім'я групи
+</td></tr>
+<tr>
+<td> allowSelLst </td>
+<td> Вибір: параметри дозволені для обрання </td>
+<td> Текст </td>
+<td> Немає </td>
+<td> </td>
+<td> Помістіть сюди параметри для обрання користувачем, переліком DAQ-шляхів до них (детальніше дивіться у діалозі "<a href="#graphSelPrm">Вибір параметру графіку</a>"):
+<pre style="white-space:">
+/LogicLev/proc/prm_CPU/prm_load
+/LogicLev/proc/prm_MEM/prm_use
+/LogicLev/proc/prm_CPU/prm_T </pre>
+</td></tr>
+<tr>
+<td> perUserSel </td>
+<td> Обрання: зберігати обрання за користувачем </td>
+<td> Логічний </td>
+<td> Немає </td>
+<td> </td>
+<td> Встановіть для збереження користувацького вибору окремо
+</td></tr>
+<tr>
+<td colspan="6"> <i>Елемент {n} від 1 до 8(10)</i>
+</td></tr>
+<tr>
+<td> el{n} </td>
+<td colspan="5"> <i>Перелік пов'язаних атрибутів відповідає переліку віджету "Елемент групи графіків (ElViewGraph)"</i>
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="ElViewGraph" title="#ElViewGraph"><h4><span class="mw-headline" id=".D0.95.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82_.D0.B3.D1.80.D1.83.D0.BF.D0.B8_.D0.B3.D1.80.D0.B0.D1.84.D1.96.D0.BA.D1.96.D0.B2_.28ElViewGraph.29"><span class="mw-headline-number">3.1.1</span> Елемент групи графіків (<a href="Libs_Main_graphical_elements.html#ElViewGraph" title="Special:MyLanguage/Libs/Main graphical elements">ElViewGraph</a>)</span></h4></span> </td>
+<td> 1.3 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Елемент-віджет, представлений на рисунку 3.1.1, слугує для створення <a href="#grpGraph">груп графіків</a>. Віджет містить інформацію про параметр, режим регулятору, якщо параметр є таким, одиницю виміру аналогового параметру, а також колір, що відповідає параметру тренда. Віджет загалом використовує та представляє представницьку структуру DAQ-шаблонів "<a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">Аналоговий сигнал</a>" та "<a href="Libs_Main.html#digitBlockUnif" title="Special:MyLanguage/Libs/Main">Дискретний блок</a>".
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_ElViewGraphD_uk.png"><img class="thumbimage" height="60" src="files/LibMainEls_ElViewGraphD_uk.png" width="400" /></a>  <div class="thumbcaption">Рис.3.1.1a. Віджет "Елемент групи графіків" у режимі розробки.</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Хоча даний віджет не призначено для самостійного використання, у відриві від <a href="#grpGraph">групи графіків</a>, використовувати його можна, наприклад, помістивши на мнемосхему та встановивши зв'язок з параметром джерела даних.
+</p><p><b><u>Використання — виконання</u></b><br />
+У режимі виконання, у основному полі елементу, відображається назва параметру, режим регулятору (тільки для регулятору), поточне значення-змінна та одиниця виміру цього параметру; які, залежно від наявності порушення, відображаються кольором стилю: <i>labColorGood</i>, <i>labColorWarning</i>, <i>labColorAlarm</i>. За апаратних помилок та недостовірності даних, останнє значення відображається сірим кольором.
+</p><p>Окрім безпосередньо доступних візуальних даних, надається низка елементів контролю:
+</p>
+<ul><li> "Виділення" — за натиском лівою клавішею миші у області віджету, праворуч з'явиться <a href="#ElCadr">панель управління параметром</a>, а вибір даного віджету буде відображено блимаючою рамкою.</li>
+<li> "Приховати/Показати" — за подвійним натиском у області віджету відбувається перемикання показу-приховування графіку даного елементу.</li>
+<li> "Функції контекстного меню" — за посередництвом контекстного меню надається низка функцій:
+<ul><li> "Паспорт" — отримання <a href="#Passport">паспорту</a> параметра, у якому буде представлено всі його властивості.</li>
+<li> "Приховати/Показати" — перемикання показу або приховування графіку даного елементу, аналогічно до подвійного кліку.</li>
+<li> "Показати один" — одиночний показ графіку обраного параметру у його рідній шкалі, шляхом приховування решти елементів у групі.</li>
+<li> "Показати все" — показ всіх графіків параметрів у групі.</li>
+<li> "Обчислення" — виклик <a href="#graphCalc">діалогу обчислення</a> над видимими даними обраного параметру.</li>
+<li> "Обрати" — виклик <a href="#graphSelPrm">діалогу обрання</a> параметру з переліку доступних для обрання, атрибут "Вибір: параметри дозволені для обрання" кадру-власника. Цей пункт доступний тільки у випадку наявності переліку обрання.</li></ul></li></ul>
+<p>Віджет зберігає обраний користувачем параметр у таблиці сеансу проекту та завантажує параметр при наступному запуску, включно з кольором тренду, типове значення якого зазвичай береться зі стилю.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:336px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_ElViewGraphR_uk.png"><img class="thumbimage" height="60" src="files/LibMainEls_ElViewGraphR_uk.png" width="334" /></a>  <div class="thumbcaption">Рис.3.1.1b. Віджет "Елемент групи графіків" у режимі виконання.</div></div></div></div>
+<p><b><u>Властивості зв'язування та конфігурації</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Конфігурація </th>
+<th> Конфігураційний шаблон </th>
+<th> Опис
+</th></tr>
+<tr>
+<td> name </td>
+<td> Ім'я </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> Parametr|NAME </td>
+<td> Ім'я-шифр параметру, для відображення у полі назви.
+</td></tr>
+<tr>
+<td> dscr </td>
+<td> Опис </td>
+<td> Текст </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|DESCR </td>
+<td> Ім'я параметру, для розташування до tooltip та statusbar.
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Адреса </td>
+<td> Адреса </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|var </td>
+<td> Адреса до атрибуту значення параметру для побудови графіку.
+</td></tr>
+<tr>
+<td> color </td>
+<td> Колір графіку </td>
+<td> Рядок </td>
+<td> Немає </td>
+<td> </td>
+<td> Робочій колір тренду
+</td></tr>
+<tr>
+<td> colorDef </td>
+<td> Типовий колір зі стилю </td>
+<td> Рядок </td>
+<td> Немає </td>
+<td> </td>
+<td> Типовий колір тренду на рівні кадру
+</td></tr>
+<tr>
+<td colspan="6"> <i>Аналогові параметри</i>
+</td></tr>
+<tr>
+<td> ed </td>
+<td> Одиниця виміру </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|ed </td>
+<td>
+</td></tr>
+<tr>
+<td> prec </td>
+<td> Точність </td>
+<td> Цілий </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|prec </td>
+<td> Кількість знаків після точки, для позитивних значень, та точність (знаків загалом), для негативних, для відображення кінцевого реального значення на екрані.
+</td></tr>
+<tr>
+<td> log </td>
+<td> Логарифмічна шкала </td>
+<td> Логічний </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|log </td>
+<td>
+</td></tr>
+<tr>
+<td> max </td>
+<td> Максимум </td>
+<td> Реальний </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|max </td>
+<td> Верхня межа значення параметру.
+</td></tr>
+<tr>
+<td> min </td>
+<td> Мінімум </td>
+<td> Реальний </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|min </td>
+<td> Нижня межа значення параметру.
+</td></tr>
+<tr>
+<td> aMax </td>
+<td> Границя верхня аварійна </td>
+<td> Реальний </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|aMax </td>
+<td>
+</td></tr>
+<tr>
+<td> aMin </td>
+<td> Границя нижня аварійна </td>
+<td> Реальний </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|aMin </td>
+<td>
+</td></tr>
+<tr>
+<td> wMax </td>
+<td> Границя верхня попереджув. </td>
+<td> Реальний </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|wMax </td>
+<td>
+</td></tr>
+<tr>
+<td> wMin </td>
+<td> Границя нижня попереджув. </td>
+<td> Реальний </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|wMin </td>
+<td>
+</td></tr>
+<tr>
+<td> pModeA </td>
+<td> Режим регулятору: автомат </td>
+<td> Логічний </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|auto </td>
+<td> Режим регулятору "Автомат".
+</td></tr>
+<tr>
+<td> pModeC </td>
+<td> Режим регулятору: каскад </td>
+<td> Логічний </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|casc </td>
+<td> Режим регулятору "Каскад".
+</td></tr>
+<tr>
+<td colspan="6"> <i>Дискретні параметри</i>
+</td></tr>
+<tr>
+<td> digComs </td>
+<td> Дискретний: команди </td>
+<td> Рядок </td>
+<td> Постійна </td>
+<td> </td>
+<td> Найменування та колір кнопок команд у форматі <b>{On}[-color]:{Off}[-color][:{Stop}[-color]]</b>. Кольори по замовченню: зелений, червоний та жовтий.
+</td></tr>
+<tr>
+<td> digStts </td>
+<td> Дискретний: стани </td>
+<td> Рядок </td>
+<td> Постійна </td>
+<td> </td>
+<td> Найменування та колір надписів станів у форматі <b>{On}[-color]:{Off}[-color]</b>. Кольори по замовченню: зелений та червоний.
+</td></tr>
+<tr>
+<td> digRevers </td>
+<td> Дискретний: реверс </td>
+<td> Логічний </td>
+<td> Постійна </td>
+<td> </td>
+<td> Реверс дискретного сигналу.
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="graphSelPrm" title="#graphSelPrm"><h4><span class="mw-headline" id=".D0.92.D0.B8.D0.B1.D1.96.D1.80_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.83_.D0.B3.D1.80.D0.B0.D1.84.D1.96.D0.BA.D1.83_.28graphSelPrm.29"><span class="mw-headline-number">3.1.2</span> Вибір параметру графіку (<a href="Libs_Main_graphical_elements.html#graphSelPrm" title="Special:MyLanguage/Libs/Main graphical elements">graphSelPrm</a>)</span></h4></span> </td>
+<td> 1.4 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Елемент, представлений на рисунку 3.1.2, реалізує діалог користувацького вибору джерел даних, часто архівних, для формування графіку у кадрі "<a href="#grpGraph">Група графіків</a>". Вибір надається з переліку вказаного у атрибуті "Вибір: параметри дозволені для обрання (allowSelLst)", кадру-ініціатору. Для обраного джерела можна вказати ім'я, шкалу, логарифмічність, одиницю вимірювання та колір графіку.
+</p><p>У атрибуті "Вибір: параметри дозволені для обрання (allowSelLst)" мають розташовуватися джерела даних у вигляді:
+</p>
+<ul><li> <b>{DAQ_Arh_addr}[:Name[:min:max[:dim]]</b>, де:
+<ul><li> "DAQ_Arh_addr" — адреса параметру, за групового зв'язування, або атрибуту з даними з підсистеми "Збір даних (DAQ)", а також адреса архіву значень, наприклад:
+<ul><li> <b>/LogicLev/gen/prm_F3</b> — адреса параметру "F3";</li>
+<li> <b>/DAQ/System/AutoDA/prm_CPULoad/load</b> — адреса атрибуту "load", параметру "CPULoad";</li>
+<li> <b>/Archive/va_LC21_1_var</b> — адреса архіву "LC21_1_var".</li></ul></li>
+<li> "Name" — назва джерела, для відображення. За групового зв'язування назва буде братися з атрибуту "NAME".</li>
+<li> "min", "max" — шкала відображення. За групового зв'язування шкала буде братися з атрибуту "min" та "max", відповідно. У випадку відсутності шкали (min &gt;= max) вмикається автоматичний вибір шкали.</li>
+<li> "dim" — одиниця виміру параметру, для відображення. За групового зв'язування буде братися з атрибуту "ed".</li></ul></li>
+<li> <b>&lt;varhs&gt;</b> — шаблон групового обрання, при визначені якого до переліку обрання потраплять усе доступні у системі архіви.</li></ul>
+<p>Приклади вмісту атрибуту "Вибір: параметри дозволені для обрання (allowSelLst)":
+</p>
+<pre style="white-space: pre-wrap;">
+/System/AutoDA/prm_CPULoad/load:CPU Load:0:100:%
+/LogicLev/gen/prm_F3
+&lt;varhs&gt;
+</pre>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:610px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_graphSelPrm_uk.png"><img class="thumbimage" height="835" src="files/LibMainEls_graphSelPrm_uk.png" width="608" /></a>  <div class="thumbcaption">Рис.3.1.2. Кадр "Вибір параметру графіка" у режимі розробки та виконання.</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Цей кадр має бути розташовано у логічному контейнері панелей дерева проекту. У "<a href="#grpGraph">Групах графіків</a>", які повинні надавати можливість користувацького вибору джерела, має бути визначено атрибут "Вибір: параметри дозволені для обрання (allowSelLst)", переліком джерел згідно правил визначених вище. Як результат, у контекстному меню <a href="#ElViewGraph">елементу графіка</a> з'явиться пункт "Вибір".
+</p><p><b><u>Використання — виконання</u></b><br />
+Виклик діалогу здійснюється за посередництвом пункту "Вибір", контекстного меню <a href="#ElViewGraph">елементу графіка</a>. Діалогом користувачу надається вибір джерела даних з переліку, а також визначення основних його параметрів: назва, шкала, логарифмічність, одиниця вимірювання та колір графіку. За підтвердження, обрані параметри застосовуються до елементу графіка, замінюючи посилання. Обрання та підтвердження пункту "&lt;Очистити&gt;" призведе до очищення всіх посилань та елементу графіку. У текстовому полі, під переліком, можна швидко знайти потрібний параметр.
+</p><p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="graphCalc" title="#graphCalc"><h4><span class="mw-headline" id=".D0.9E.D0.B1.D1.87.D0.B8.D1.81.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.83_.D0.B3.D1.80.D0.B0.D1.84.D1.96.D0.BA.D1.83_.28graphCalc.29"><span class="mw-headline-number">3.1.3</span> Обчислення параметру графіку (<a href="Libs_Main_graphical_elements.html#graphCalc" title="Special:MyLanguage/Libs/Main graphical elements">graphCalc</a>)</span></h4></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Елемент, представлений на рисунку 3.1.3, реалізує діалог користувацького обчислення параметру обраного графіку для видимих на графіку даних. Користувачу надається можливість обрати обчислення із вбудованої бібліотеки, привілейований користувач ("root" або у групі "ITW") має можливість відредагувати або написати власну процедуру обчислення.
+</p><p>Загалом, вбудована бібліотека наразі містить наступні функції користувацького обчислення:
+</p>
+<ul><li> Сума, на годину.</li>
+<li> Середнє та діапазон.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:610px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_graphCalc_uk.png"><img class="thumbimage" height="630" src="files/LibMainEls_graphCalc_uk.png" width="608" /></a>  <div class="thumbcaption">Рис.3.1.3. Кадр "Обчислення параметру графіку" у режимі розробки та виконання.</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Цей кадр має бути розташовано у логічному контейнері панелей дерева проекту.
+</p><p><b><u>Використання — виконання</u></b><br />
+Виклик діалогу здійснюється за посередництвом пункту "Обчислення", контекстного меню <a href="#ElViewGraph">елементу графіка</a>. Діалогом користувачу надається вибір функції обчислення видимих даних обраного параметру та можливість відредагувати-написати власну функцію, для привілейованого користувача. Результат обчислення розташовується у відповідному текстовому полі.
+</p><p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="grpCadr" title="#grpCadr"><h3><span class="mw-headline" id=".D0.93.D1.80.D1.83.D0.BF.D0.B0_.D0.BA.D0.BE.D0.BD.D1.82.D1.83.D1.80.D1.96.D0.B2_.28grpCadr.29"><span class="mw-headline-number">3.2</span> Група контурів (<a href="Libs_Main_graphical_elements.html#grpCadr" title="Special:MyLanguage/Libs/Main graphical elements">grpCadr</a>)</span></h3></span> </td>
+<td> 1.2 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Елемент-кадр, представлений на рисунку 3.2, слугує для одночасного спостереження та управління контурами декількох параметрів, до восьми, включає у себе як екземпляри віджету "<a href="#ElCadr">Елемент кадр</a>" для кожного контуру, так і <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">примітив "Діаграма"</a> для спостереження за трендами контурів та перегляду історії.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_grpCadrD_uk.png"><img class="thumbimage" height="600" src="files/LibMainEls_grpCadrD_uk.png" width="900" /></a>  <div class="thumbcaption">Рис.3.2a. Кадр "Група контурів" у режимі розробки.</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Кадр призначено для виконання ролі сторінки-шаблону, а, відповідно, він має безпосередньо розташовуватися у дерево проекту. У проекті-шаблоні "<a href="#RootPgSo">Групи сигналізацій</a>", для першого об'єкту сигналізації, цей кадр включено у ролі шаблону, що дозволяє створювати на його основі багато сторінок груп контурів. До кожного кадру можуть підключатися до восьми параметрів, шляхом встановлення зв'язків. Контури та графіки, для яких не буде встановлено зв'язку, будуть приховані при виконанні.
+</p><p>Глибину трендів у минуле, по замовченню, встановлено у 10 хвилин — для поточного оперативного контролю, що, за потреби, можна змінити безпосередньо відредагувавши відповідне поле віджету діаграми, наприклад, для шаблонної сторінки проекту, щоб воно розповсюдилося на всі кінцеві сторінки.
+</p><p><b><u>Використання — виконання</u></b><br />
+У режимі виконання відображаються контури та графіки, для яких встановлено зв'язки. Управління параметрами з контурів детально описано у розділі панелі "<a href="#ElCadr">Елемент кадр</a>". На додачу до цього можна керувати властивостями відображення графіків, для чого потрібно лівою клавішею миші натиснути у області графіку та за допомогою <a href="#grph_panel">панелі управління графіком</a>, що з'явиться, здійснити потрібні дії.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_grpCadrR_uk.png"><img class="thumbimage" height="580" src="files/LibMainEls_grpCadrR_uk.png" width="900" /></a>  <div class="thumbcaption">Рис.3.2b. Кадр "Група контурів" у режимі виконання.</div></div></div></div>
+<p><b><u>Властивості зв'язування та конфігурації</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Конфігурація </th>
+<th> Конфігураційний шаблон </th>
+<th> Опис
+</th></tr>
+<tr>
+<td> grpName </td>
+<td> Ім'я групи </td>
+<td> Рядок </td>
+<td> Стала </td>
+<td> </td>
+<td> Ім'я групи
+</td></tr>
+<tr>
+<td colspan="6"> <i>Елемент {n} от 1 до 8.</i>
+</td></tr>
+<tr>
+<td> el{n} </td>
+<td colspan="5"> <i>Перелік зв'язуваних атрибутів відповідає переліку панелі "Елемент кадр (ElCadr)"</i>
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="ViewCadr" title="#ViewCadr"><h3><span class="mw-headline" id=".D0.93.D1.80.D1.83.D0.BF.D0.B0_.D0.BE.D0.B3.D0.BB.D1.8F.D0.B4.D0.BE.D0.B2.D0.B8.D1.85_.D0.BA.D0.B0.D0.B4.D1.80.D1.96.D0.B2_.28ViewCadr.29"><span class="mw-headline-number">3.3</span> Група оглядових кадрів (<a href="Libs_Main_graphical_elements.html#ViewCadr" title="Special:MyLanguage/Libs/Main graphical elements">ViewCadr</a>)</span></h3></span> </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Елемент-кадр, представлений на рисунку 3.3, слугує для відображення поточних трендів параметрів у окремих кадрах-віджетах кількістю до 24 одиниць (6x4), стосовно яких підтримується масштабування залежно від їх конфігурованої кількості. Кадри-віджети трендів параметрів реалізуються супутнім віджетом "<a href="#ElViewCadr">Кадр оглядової групи</a>".
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_ViewCadrD_uk.png"><img class="thumbimage" height="600" src="files/LibMainEls_ViewCadrD_uk.png" width="900" /></a>  <div class="thumbcaption">Рис.3.3a. Кадр "Група оглядових кадрів" у режимі розробки.</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Кадр призначено для виконання ролі сторінки-шаблону, а, відповідно, він має безпосередньо розташовуватися у дерево проекту. У проекті-шаблоні "<a href="#RootPgSo">Групи сигналізацій</a>", для першого об'єкту сигналізації, цей кадр включено у ролі шаблону, що дозволяє створювати на його основі багато сторінок оглядових груп. До кожного кадру можуть підключатися до 24 параметрів, шляхом встановлення зв'язків. Кадри-віджети, для яких не буде встановлено зв'язку, будуть приховані при виконанні, та здійснено пропорційне масштабування на відсутні повні рядки та стовпчики з метою заповнення всього кадру.
+</p><p><b><u>Використання — виконання</u></b><br />
+У режимі виконання відображаються кадри-віджети, для яких встановлено зв'язки. Управління параметрами з кадрів-віджетів детально описано у розділі віджету "<a href="#ElViewCadr">Кадр оглядової групи</a>".
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_ViewCadrR_uk.png"><img class="thumbimage" height="580" src="files/LibMainEls_ViewCadrR_uk.png" width="900" /></a>  <div class="thumbcaption">Рис.3.3b. Кадр "Група оглядових кадрів" у режимі виконання.</div></div></div></div>
+<p><b><u>Властивості зв'язування та конфігурації</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Конфігурація </th>
+<th> Конфігураційний шаблон </th>
+<th> Опис
+</th></tr>
+<tr>
+<td> name </td>
+<td> Ім'я </td>
+<td> Рядок </td>
+<td> Стала </td>
+<td> </td>
+<td> Ім'я кадру
+</td></tr>
+<tr>
+<td colspan="6"> <i>Кадр-віджет {r}_{c}, де рядки {r} від 1 до 4 та стовпчики {c} від 1 до 6.</i>
+</td></tr>
+<tr>
+<td> el{r}_{c} </td>
+<td colspan="5"> <i>Перелік зв'язуваних атрибутів відповідає переліку віджету "Кадр оглядової групи (ElViewCadr)"</i>
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="ElViewCadr" title="#ElViewCadr"><h4><span class="mw-headline" id=".D0.9A.D0.B0.D0.B4.D1.80_.D0.B3.D1.80.D1.83.D0.BF.D0.B8_.D0.BE.D0.B3.D0.BB.D1.8F.D0.B4.D1.83_.28ElViewCadr.29"><span class="mw-headline-number">3.3.1</span> Кадр групи огляду (<a href="Libs_Main_graphical_elements.html#ElViewCadr" title="Special:MyLanguage/Libs/Main graphical elements">ElViewCadr</a>)</span></h4></span> </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Елемент-віджет, представлений на рисунку 3.3.1, слугує основою <a href="#ViewCadr">групи оглядових кадрів</a> та зазвичай не використовується самостійно. Віджет відображає текстову інформацію про параметр у вигляді найменування та значення, а також тренд параметру за невеликий проміжок часу (2 хвилини) для спостереження за поточною тенденцією поведінки параметру з авто-масштабуванням за шкалою значення.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_ElViewCadr_uk.png"><img class="thumbimage" height="203" src="files/LibMainEls_ElViewCadr_uk.png" width="400" /></a>  <div class="thumbcaption">Рис.3.3.1. Віджет "Кадр групи огляду" у режимі розробки та виконання (зліва праворуч).</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Хоча даний віджет не призначено для самостійного використання, у відриві від <a href="#ViewCadr">групи огляду</a>, використовувати його таки можна, наприклад, помістивши на мнемосхему та встановивши зв'язок з параметром джерела даних.
+</p><p><b><u>Використання — виконання</u></b><br />
+У режимі виконання, у основному полі елементу, відображається назва параметру, поточне значення-змінна та тренд параметру; які завжди відображаються кольором стилю: <i>labColorGood</i>.
+</p><p>У активному режимі елементу можна отримати <a href="#Passport">паспорт</a>, натиснувши праву клавішу миші на полі віджету. У паспорті будуть представлені всі властивості параметру. За натиском лівої клавіші миші у області панелей з'явиться <a href="#ElCadr">панель управління</a> параметром, та вибір даного віджету буде відображатися блимаючою рамкою.
+</p><p><b><u>Властивості зв'язування та конфігурації</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Конфігурація </th>
+<th> Конфігураційний шаблон </th>
+<th> Опис
+</th></tr>
+<tr>
+<td> name </td>
+<td> Ім'я </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|NAME </td>
+<td> Ім'я параметру (шифр) для відображення у полі назви.
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Адреса </td>
+<td> Адреса </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|var </td>
+<td> Адреса до атрибуту значення параметру для побудови тренду.
+</td></tr>
+<tr>
+<td> var </td>
+<td> Змінна </td>
+<td> Реальний </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|var </td>
+<td> Безпосередньо значення параметру для відображення у полі значень.
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="ResultGraph" title="#ResultGraph"><h3><span class="mw-headline" id=".D0.97.D0.B2.D0.B5.D0.B4.D0.B5.D0.BD.D1.96_.D0.B3.D1.80.D0.B0.D1.84.D1.96.D0.BA.D0.B8_.28ResultGraph.29"><span class="mw-headline-number">3.4</span> Зведені графіки (<a href="Libs_Main_graphical_elements.html#ResultGraph" title="Special:MyLanguage/Libs/Main graphical elements">ResultGraph</a>)</span></h3></span> </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Елемент-кадр, представлений на рисунку 3.4, слугує для відображення групи поточних трендів параметрів (до 5) у окремих кадрах-віджетах кількістю до 16 одиниць (4x4), стосовно яких підтримується масштабування залежно від їх конфігурованої кількості. Кадри-віджети трендів параметрів реалізуються супутнім віджетом "<a href="#ResultGraphEl">Кадр зведених графіків</a>".
+</p><p>Разом загальна кількість відображуваних графіків на одному кадрі сягає 80 та він призначений для формування окремого виду відображення, що застосовується поза <a href="#RootPgSo">об'єктів сигналізації</a> — глобально за всім проектом візуалізації.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Кадр не підтримує ніякого керування.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_ResultGraphD_uk.png"><img class="thumbimage" height="600" src="files/LibMainEls_ResultGraphD_uk.png" width="900" /></a>  <div class="thumbcaption">Рис.3.4a. Кадр "Зведені графіки" у режимі розробки.</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Кадр призначено для виконання ролі сторінки-шаблону, а, відповідно, він має безпосередньо розташовуватися у дерево проекту. У проекті-шаблоні "<a href="#RootPgSo">Групи сигналізацій</a>", на рівні кореневої сторінки для нього передбачено спеціальну віртуальну сторінку "Зведені графіки" з шаблоном зведених графіків, що дозволяє створювати на його основі багато сторінок зведених графіків. До кожного кадру можуть підключатися до 80 параметрів, шляхом встановлення зв'язків. Кадри-віджети, для яких не буде встановлено жодного зв'язку, будуть приховані при виконанні, та здійснено пропорційне масштабування на відсутні повні рядки та стовпчики з метою заповнення всього кадру.
+</p><p><b><u>Використання — виконання</u></b><br />
+У режимі виконання відображаються кадри-віджети, для яких встановлено зв'язки.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_ResultGraphR_uk.png"><img class="thumbimage" height="580" src="files/LibMainEls_ResultGraphR_uk.png" width="900" /></a>  <div class="thumbcaption">Рис.3.4b. Кадр "Зведені графіки" у режимі виконання.</div></div></div></div>
+<p><b><u>Властивості зв'язування та конфігурації</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Конфігурація </th>
+<th> Конфігураційний шаблон </th>
+<th> Опис
+</th></tr>
+<tr>
+<td> grpName </td>
+<td> Ім'я групи </td>
+<td> Рядок </td>
+<td> Стала </td>
+<td>  </td>
+<td> Ім'я групи
+</td></tr>
+<tr>
+<td colspan="6"> <i>Кадр-віджет {n} від 1 до 16.</i>
+</td></tr>
+<tr>
+<td> el{n} </td>
+<td colspan="5"> <i>Перелік зв'язуваних атрибутів відповідає віджету "Кадр зведених графіків (ResultGraphEl)".</i>
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="ResultGraphEl" title="#ResultGraphEl"><h4><span class="mw-headline" id=".D0.9A.D0.B0.D0.B4.D1.80_.D0.B7.D0.B2.D0.B5.D0.B4.D0.B5.D0.BD.D0.B8.D1.85_.D0.B3.D1.80.D0.B0.D1.84.D1.96.D0.BA.D1.96.D0.B2_.28ResultGraphEl.29"><span class="mw-headline-number">3.4.1</span> Кадр зведених графіків (<a href="Libs_Main_graphical_elements.html#ResultGraphEl" title="Special:MyLanguage/Libs/Main graphical elements">ResultGraphEl</a>)</span></h4></span> </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Елемент-віджет, представлений на рисунку 3.4.1, слугує основою <a href="#ResultGraph">зведених графіків</a> та зазвичай не використовується самостійно. Віджет відображає назву групи та до п'яти трендів, з їх текстовими мітками, за фіксований проміжок часу (10 хвилин) для спостереження за поточною тенденцією поведінки параметрів.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:462px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_ResultGraphEl_uk.png"><img class="thumbimage" height="142" src="files/LibMainEls_ResultGraphEl_uk.png" width="460" /></a>  <div class="thumbcaption">Рис.3.4.1. Віджет "Кадр зведених графіків" у режимі розробки та виконання (зліва праворуч).</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Хоча даний віджет не призначено для самостійного використання, у відриві від <a href="#ResultGrph">зведених графіків</a>, використовувати його таки можна, наприклад, помістивши на мнемосхему та встановивши зв'язок з параметром джерела даних.
+</p><p><b><u>Використання — виконання</u></b><br />
+У режимі виконання, у основному полі елементу, відображається заголовок групи, заголовки та тренди параметрів у визначених конфігурацією або стилем кольорах.
+</p><p><b><u>Властивості зв'язування та конфігурації</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Конфігурація </th>
+<th> Конфігураційний шаблон </th>
+<th> Опис
+</th></tr>
+<tr>
+<td> title </td>
+<td> Заголовок </td>
+<td> Рядок </td>
+<td> Стала </td>
+<td> </td>
+<td> Відображається нагорі графіку, за відсутності поле графіку розширюється нагору.
+</td></tr>
+<tr>
+<td colspan="6"> <i>Параметр {n} від 1 до 5.</i>
+</td></tr>
+<tr>
+<td> p1_addr </td>
+<td> Параметр{n}: адреса </td>
+<td> Адреса </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter {n}|var </td>
+<td> Адреса до атрибуту значення параметру для побудови графіку {n}.
+</td></tr>
+<tr>
+<td> p1_clr </td>
+<td> Параметр{n}: колір </td>
+<td> Колір </td>
+<td> Зі стиля </td>
+<td> labColorGrph{n} </td>
+<td>
+</td></tr>
+<tr>
+<td> p1_max </td>
+<td> Параметр{n}: максимум </td>
+<td> Реальний </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter {n}|max </td>
+<td> Максимальна границя графіку.
+</td></tr>
+<tr>
+<td> p1_min </td>
+<td> Параметр{n}: мінімум </td>
+<td> Реальний </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter {n}|min </td>
+<td> Мінімальна границя графіку.
+</td></tr>
+<tr>
+<td> p1_name </td>
+<td> Параметр{n}: ім'я </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter {n}|NAME </td>
+<td> Коротке ім'я параметру для відображення у полі ліворуч.
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="cntrRegul" title="#cntrRegul"><h3><span class="mw-headline" id=".D0.9F.D0.B0.D0.BD.D0.B5.D0.BB.D1.8C_.D0.BD.D0.B0.D0.BB.D0.B0.D1.88.D1.82.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_.D1.80.D0.B5.D0.B3.D1.83.D0.BB.D1.8F.D1.82.D0.BE.D1.80.D1.83_.28cntrRegul.29"><span class="mw-headline-number">3.5</span> Панель налаштування регулятору (<a href="Libs_Main_graphical_elements.html#cntrRegul" title="Special:MyLanguage/Libs/Main graphical elements">cntrRegul</a>)</span></h3></span> </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Елемент-кадр, представлений на рисунку 3.5, слугує для налаштування ПІД-регулятору, включає в себе інформацію про параметр-регулятор, поля налаштувань регулятору та <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">примітив "Діаграма"</a>, для спостереження за трендами регулятору та перегляду історії. Кадр загалом використовує та представляє представницьку структуру DAQ-шаблону <a href="Libs_Main.html#pidUnif" title="Special:MyLanguage/Libs/Main">аналогового</a> та <a href="Libs_Main.html#pidUnifImp" title="Special:MyLanguage/Libs/Main">імпульсного</a> ПІД-регуляторів.
+</p>
+<ul><li> <b>Спонсоровано:</b> <a class="external text" href="http://diyaorg.dp.ua" rel="nofollow noreferrer noopener" target="_blank">ТОВ "ДІЯ"</a></li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_cntrRegulD_uk.png"><img class="thumbimage" height="600" src="files/LibMainEls_cntrRegulD_uk.png" width="900" /></a>  <div class="thumbcaption">Рис.3.5a. Кадр "Панель налаштування регулятору" у режимі розробки.</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Кадр може використовуватися як у ролі панелі, що викликається із <a href="#ElCadr">панелі управління параметрами</a>, так і у ролі сторінки-шаблону. Кадр має безпосередньо розташовуватися у дереві проекту, а саме у <a href="#RootPgSo">контейнері панелей</a>, де буде здійснюватися динамічне зв'язування на параметр регулятору. Для створення статичного переліку контурів налаштувань регуляторів, з можливістю подальшого гортання за ними, необхідно розташувати їх до контейнеру контурів регуляторів "greg" кожного <a href="#RootPgSo">об'єкту сигналізації</a> та статично зв'язати з відповідним параметром, а також забезпечити рівність ідентифікатору панелі та пов'язаного параметру.
+</p><p>Глибину трендів у минуле, по замовченню, встановлено у 20 хвилин — для поточного оперативного контролю, що, за потреби, можна змінити безпосередньо відредагувавши відповідне поле віджету діаграми.
+</p><p><b><u>Використання — виконання</u></b><br />
+У режимі виконання відображається:
+</p>
+<ul><li> назва параметру регулятору;</li>
+<li> поле із властивостями регулятору у складі: ідентифікатор, назва, опис, одиниця виміру, завдання, змінна, вихід, шкала та режим;</li>
+<li> коефіцієнти налаштування регулятору: Кп, Кі, Ті, Кд, Тд, Тзд, Зн, Н1, Н2, К1, К2, К3, К4, ТпИ, ТмИ та Rфкт;</li>
+<li> область графіку з відображенням графіків: змінної (зелений, стиль "labColorGrph4"), завдання (синій, стиль "labColorGrph3"), вихід аналоговий (блакитний, стиль "labColorGrph5"), режим регулятору "Автомат" (магента, стиль "labColorGrph7") та дискретні виходи імпульсного регулятору (оранжевий, стиль "labColorGrph2").</li></ul>
+<p>Користувач має можливість змінити коефіцієнти ПІД-регулятору, режим, завдання, вихід та одразу-ж побачити реакцію на графіку. Крім цього, користувач може вивчити історію роботи регулятору, для чого потрібно лівою клавішею миші натиснути у області графіку та, за допомогою <a href="#grph_panel">панелі управління графіком</a>, що з'явилася, здійснити необхідні дії навігації. Для повернення <a href="#ElCadr">панелі параметру регулятора</a> необхідно лівою клавішею миші натиснути у вільну область даного кадру.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_cntrRegulR_uk.png"><img class="thumbimage" height="580" src="files/LibMainEls_cntrRegulR_uk.png" width="900" /></a>  <div class="thumbcaption">Рис.3.5b. Кадр "Панель налаштування регулятору" у режимі виконання.</div></div></div></div>
+<p><b><u>Властивості зв'язування та конфігурації</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Конфігурація </th>
+<th> Конфігураційний шаблон </th>
+<th> Опис
+</th></tr>
+<tr>
+<td> SHIFR </td>
+<td> Параметр: шифр </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|SHIFR </td>
+<td>
+</td></tr>
+<tr>
+<td> NAME </td>
+<td> Параметр: шифр </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|NAME </td>
+<td>
+</td></tr>
+<tr>
+<td> DESCR </td>
+<td> Параметр: опис </td>
+<td> Рядок</td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|DESCR </td>
+<td>
+</td></tr>
+<tr>
+<td> max </td>
+<td> Параметр: максимум шкали </td>
+<td> Реальний </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|max </td>
+<td>
+</td></tr>
+<tr>
+<td> min </td>
+<td> Параметр: мінімум шкали </td>
+<td> Реальний </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|min </td>
+<td>
+</td></tr>
+<tr>
+<td> ed </td>
+<td> Параметр: одиниця виміру </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|ed </td>
+<td>
+</td></tr>
+<tr>
+<td> prec </td>
+<td> Параметр: точність </td>
+<td> Цілий </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|prec </td>
+<td> Кількість знаків після коми у значенні та завданні параметру ПІД.
+</td></tr>
+<tr>
+<td> var </td>
+<td> Параметр: змінна </td>
+<td> Реальний </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|var </td>
+<td>
+</td></tr>
+<tr>
+<td> var_addr </td>
+<td> Параметр: адреса змінної </td>
+<td> Адреса </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|var </td>
+<td> Адреса для побудови графіку змінної.
+</td></tr>
+<tr>
+<td colspan="6"> <i>ПІД-регулятор</i>
+</td></tr>
+<tr>
+<td> auto_addr </td>
+<td> Параметр: автомат </td>
+<td> Адреса </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|auto </td>
+<td> Адреса для побудови графіку режиму "Автомат".
+</td></tr>
+<tr>
+<td> sp </td>
+<td> Параметр: завдання </td>
+<td> Реальний </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|sp </td>
+<td>
+</td></tr>
+<tr>
+<td> sp_addr </td>
+<td> Параметр: адреса завдання </td>
+<td> Адреса </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|sp </td>
+<td> Адреса для побудови графіку завдання.
+</td></tr>
+<tr>
+<td> out </td>
+<td> Параметр: вихід </td>
+<td> Реальний </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|out </td>
+<td>
+</td></tr>
+<tr>
+<td> out_addr </td>
+<td> Параметр: адреса виходу </td>
+<td> Адреса </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|out </td>
+<td> Адреса для побудови графіку аналогового виходу.
+</td></tr>
+<tr>
+<td> Hdwn </td>
+<td> Параметр: нижня границя виходу </td>
+<td> Реальний </td>
+<td> Повний зв'язок </td>
+<td> Parameter|Hdwn </td>
+<td> Обмеження значення аналогового виходу по низу.
+</td></tr>
+<tr>
+<td> Hup </td>
+<td> Параметр: верхня границя виходу </td>
+<td> Реальний </td>
+<td> Повний зв'язок </td>
+<td> Parameter|Hup </td>
+<td> Обмеження значення аналогового виходу по верху.
+</td></tr>
+<tr>
+<td> Kp </td>
+<td> Параметр: коеф. пропорційності </td>
+<td> Реальний </td>
+<td> Повний зв'язок </td>
+<td> Parameter|Kp </td>
+<td>
+</td></tr>
+<tr>
+<td> Ki </td>
+<td> Параметр: коеф. пропорційності інтегралу </td>
+<td> Реальний </td>
+<td> Повний зв'язок </td>
+<td> Parameter|Ki </td>
+<td>
+</td></tr>
+<tr>
+<td> Ti </td>
+<td> Параметр: час інтегрування </td>
+<td> Реальний </td>
+<td> Повний зв'язок </td>
+<td> Parameter|Ti </td>
+<td>
+</td></tr>
+<tr>
+<td> Kd </td>
+<td> Параметр: коеф. пропорційності похідної </td>
+<td> Реальний </td>
+<td> Повний зв'язок </td>
+<td> Parameter|Kd </td>
+<td>
+</td></tr>
+<tr>
+<td> Td </td>
+<td> Параметр: час диференцювання </td>
+<td> Реальний </td>
+<td> Повний зв'язок </td>
+<td> Parameter|Td </td>
+<td>
+</td></tr>
+<tr>
+<td> Tzd </td>
+<td> Параметр: час затримки похідної частини </td>
+<td> Реальний </td>
+<td> Повний зв'язок </td>
+<td> Parameter|Tzd </td>
+<td>
+</td></tr>
+<tr>
+<td> Zi </td>
+<td> Параметр: зона нечутливості </td>
+<td> Реальний </td>
+<td> Повний зв'язок </td>
+<td> Parameter|Zi </td>
+<td>
+</td></tr>
+<tr>
+<td> K1 </td>
+<td> Параметр: коеф. входу 1 </td>
+<td> Реальний </td>
+<td> Повний зв'язок </td>
+<td> Parameter|K1 </td>
+<td>
+</td></tr>
+<tr>
+<td> K2 </td>
+<td> Параметр: коеф. входу 2 </td>
+<td> Реальний </td>
+<td> Повний зв'язок </td>
+<td> Parameter|K2 </td>
+<td>
+</td></tr>
+<tr>
+<td> K3 </td>
+<td> Параметр: коеф. входу 3 </td>
+<td> Реальний </td>
+<td> Повний зв'язок </td>
+<td> Parameter|K3 </td>
+<td>
+</td></tr>
+<tr>
+<td> K4 </td>
+<td> Параметр: коеф. входу 4 </td>
+<td> Реальний </td>
+<td> Повний зв'язок </td>
+<td> Parameter|K4 </td>
+<td>
+</td></tr>
+<tr>
+<td colspan="6"> <i>Імпульсний ПІД-регулятор</i>
+</td></tr>
+<tr>
+<td> impQdwn_addr </td>
+<td> Параметр: адреса імпульсного виходу донизу </td>
+<td> Адреса </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|impQdwn </td>
+<td> Адреса для побудови графіку імпульсного виходу "Вниз".
+</td></tr>
+<tr>
+<td> impQup_addr </td>
+<td> Параметр: адреса імпульсного виходу догори </td>
+<td> Адреса </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|impQup </td>
+<td> Адреса для побудови графіку імпульсного виходу "Вверх".
+</td></tr>
+<tr>
+<td> KImpRfact </td>
+<td> Параметр: рейтинг фактор </td>
+<td> Реальний </td>
+<td> Повний зв'язок </td>
+<td> Parameter|KImpRfact </td>
+<td> Асиметрія у генерації ширини імпульсу вверх та вниз.
+</td></tr>
+<tr>
+<td> TImpMin </td>
+<td> Параметр: мінімальний час імпульсу </td>
+<td> Цілий </td>
+<td> Повний зв'язок </td>
+<td> Parameter|TImpMin </td>
+<td> Генеруються імпульси починаючи з вказаної ширини.
+</td></tr>
+<tr>
+<td> TImpPer </td>
+<td> Параметр: період імпульсів </td>
+<td> Цілий </td>
+<td> Повний зв'язок </td>
+<td> Parameter|TImpPer </td>
+<td> Періодичність повторення генерації імпульсу.
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="alarmsSt" title="#alarmsSt"><h3><span class="mw-headline" id=".D0.9F.D0.BE.D1.80.D1.83.D1.88.D0.B5.D0.BD.D0.BD.D1.8F_.E2.80.94_.D1.81.D1.82.D0.B0.D0.BD_.28alarmsSt.29"><span class="mw-headline-number">3.6</span> Порушення — стан (<a href="Libs_Main_graphical_elements.html#alarmsSt" title="Special:MyLanguage/Libs/Main graphical elements">alarmsSt</a>)</span></h3></span> </td>
+<td> 1.2 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Елемент-кадр на рисунку 3.6 слугує для відображення історії порушень та динамічного їх оновлення на поточний час у повноформатному табличному вигляді, із виділенням їх за кольором та текстом та можливістю багаторівневого фільтрування. Порушення отримуються із <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">буферу поточних-активних порушень OpenSCADA</a> та архіву(ів), визначеного конфігураційним полем <b>alArch</b>. Фактично елемент реалізує функції примітиву "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#ImplProtocol" title="Special:MyLanguage/Sub-projects/VCA">Протокол</a>" для порушень та із розширенням можливостей.
+</p><p>Загалом кадр містить елементи:
+</p>
+<ul><li> таблиця повідомлень — основне поле;</li>
+<li> кнопка масової квітації — угорі ліворуч;</li>
+<li> комбобокс обрання правила сортування рівня моделі даних, передбачає сортування за обраним стовпчиком із переліку визначених у <b>colms</b> та по замовченню це час, як другий критерій, (останнє нагорі) — наступний нагорі ліворуч;</li>
+<li> панель навігації за історією-архівом повідомлень — нагорі у центрі та праворуч, у складі:
+<ul><li> часу вершини даних;</li>
+<li> розміру — глибини запиту даних;</li>
+<li> кнопок швидкого гортання — на один та п'ять інтервалів-глибин уперед та назад та у поточний час;</li>
+<li> кнопка швидкого переходу до наступної частини великого інтервалу запиту, поділеного за лімітом на кількість повідомлень у таблиці — для дуже щільного-активної генерації повідомлень;</li>
+<li> кнопка виклику-формування звітного документу за поточними даними таблиці.</li></ul></li>
+<li> елементи п'ятирівневого фільтру із відображенням елементів наступного рівня за активацією останнього, шляхом обрання стовпчику із переліку визначених у <b>colms</b> — нагорі після попереднього.</li></ul>
+<p>Згідно до оголошеного переліку елементів контролю, сортування повідомлень може змінюватися користувачем, як шляхом вбудованого механізму сортування стовпчиків окремо взятого візуалізатору, так і на рівні моделі даних, якщо візуалізатором такої функції не передбачено. Враховуючи основне призначення кадру — стан порушень (тобто історія), типовим правилом сортування є "останні" для повідомлень нагорі.
+</p><p>Кадр створено, та він зазвичай використовується, у парі з <a href="#alarmsAct">віджетом динамічного відображення активних порушень</a>, який наділено основними функціями цього кадру, але лише для активних порушень та у малому віджеті.
+</p><p>Основним користувацьким розширенням є можливість визначення видимих полів таблиці із переліку варіантів:
+</p>
+<ul><li> <i>atm</i> — час виникнення порушення;</li>
+<li> <i>qttm</i> — час підтвердження (квітації) порушення, для підтверджених порушень;</li>
+<li> <i>nrmtm</i> — час переходу-повернення порушення у стан "НОРМА";</li>
+<li> <i>lev</i> — рівень порушення;</li>
+<li> <i>cat</i> — категорія порушення;</li>
+<li> <i>mess</i> — повний та нерозібраний текст повідомлення порушення;</li>
+<li> <i>prm</i> — адреса DAQ-параметру джерела порушення;</li>
+<li> <i>dscr</i> — опис порушення із DAQ-параметру джерела;</li>
+<li> <i>dscrCust{N}</i> — опис користувацького поля <i>N</i>;</li>
+<li> <i>alrm</i> — текст порушення;</li>
+<li> <i>cmnt</i> — коментар до порушення.</li></ul>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Цей кадр та його поля загалом репрезентують структуру повідомлення порушення, яку детально описано у <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">посібнику користувача</a>.
+</p><p>Як можна бачити із переліку можливих полів таблиці, цей кадр підтримує механізм підтвердження (квітації), коментування та користувацькі поля.
+</p>
+<ul><li> <b>Спонсорування:</b> Устьянцев Михайло</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_alarmsStD_uk.png"><img class="thumbimage" height="550" src="files/LibMainEls_alarmsStD_uk.png" width="900" /></a>  <div class="thumbcaption">Рис.3.6a. Кадр "Порушення — стан" у режимі розробки.</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Віджет призначено для виконання ролі сторінки, а, відповідно, він має безпосередньо розташовуватися у дерево проекту. Після додання, для кадру треба відкоригувати властивості на кшталт переліку та послідовності відображуваних полів таблиці.
+</p><p>Комбобокс обрання правила сортування по замовченню вимкнено із міркувань використання вбудованої функції сортування за стовпчиком таблиці відповідного візуалізатору. Якщо такої функції візуалізатором не надається то увімкніть цей комбобокс.
+</p><p>Якщо треба виключити функцію підтвердження то ви маєте виключити час підтвердження "qttm" з переліку полів та зробити елемент таблиці неактивним.
+</p><p>Побудову звіту за поточними даними у таблиці також, по замовченню, вимкнено. Для увімкненням ви маєте розташувати <a href="#alarmsStReport">кадр звіту порушень</a> у логічному контейнері панелей дерева проекту, а потім увімкнути характерну кнопку генерації звітів у правому верхньому куту цьому кадрі.
+</p><p><b><u>Використання — виконання</u></b><br />
+У режимі виконання будується таблиця із переліку активних порушень, для поточного часу, та порушень з історії за визначеними полями, із контролем та відзначенням активності та правилом виокремлення; вміст якої періодично та динамічно оновлюється для поточного часу.
+</p><p>Визначити часовий проміжок даних у таблиці користувач може за допомогою панелі навігації, вказавши вершину та глибину потрібних даних. У процесі запиту надто щільних проміжків даних читатися буде лише визначена у властивості <b>messLim</b> кількість повідомлень та для переходу до наступного шматка користувач може скористатися кнопкою за панеллю навігації, яка з'явиться у такому випадку.
+</p><p>Отримані у таблиці дані можна відфільтрувати за вмістом відповідно обраного стовпчика, що можна здійснити на до п'яти рівнях, елементи фільтрування яких з'являтимуться за обранням останнього рівня фільтрування.
+</p><p>Користувачу надається можливість підтвердити порушення, змінивши значення поля часу підтвердження або за допомогою панелі керування, що спливе за обранням елементу таблиці та рядка порушення. Також користувач може підтвердити всі активні порушення, натиснувши кнопку масової квітації.
+</p><p>У випадку наявності у візуалізатору функції сортування за стовпчиком, або ввімкнення сортування на рівні моделі даних, користувач може обрати стовпчик за вмістом якого сортувати рядки таблиці.
+</p><p>Ще користувач може залишити коментар до порушення, відкоригувавши відповідне поле таблиці.
+</p><p>Для генерації окремого звіту користувач може натиснути характерну кнопку у правому верхньому куту, якщо таку функцію увімкнено.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_alarmsStR_uk.png"><img class="thumbimage" height="580" src="files/LibMainEls_alarmsStR_uk.png" width="900" /></a>  <div class="thumbcaption">Рис.3.6b. Кадр "Порушення — стан" у режимі виконання.</div></div></div></div>
+<p><b><u>Властивості зв'язування та конфігурації</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Опис
+</th></tr>
+<tr>
+<td> messCat </td>
+<td> Категорія повідомлень </td>
+<td> Рядок </td>
+<td> Категорія опрацьовуваних повідомлень, типово "al*:*".
+</td></tr>
+<tr>
+<td> messLim </td>
+<td> Обмеження повідомлень, кількість </td>
+<td> Цілий </td>
+<td> Максимальна кількість повідомлень у таблиці, типово 1000.
+</td></tr>
+<tr>
+<td> alArch </td>
+<td> Архіватор сигналів, "{ArhMod}.{Arh}" </td>
+<td> Рядок </td>
+<td> Архіватор з якого брати порушення, порожньо для всіх.
+</td></tr>
+<tr>
+<td> alarms.active </td>
+<td> Активний </td>
+<td> Логічний </td>
+<td> Вимкнути якщо виключено підтвердження, розширення за отримання фокусу та редагування взагалі — суто відображення.
+</td></tr>
+<tr>
+<td> hHdrVis </td>
+<td> Показувати заголовок: горизонтальний </td>
+<td>Логічний </td>
+<td>
+</td></tr>
+<tr>
+<td> vHdrVis </td>
+<td> Показувати заголовок: вертикальний </td>
+<td> Логічний </td>
+<td>
+</td></tr>
+<tr>
+<td> formDtTm </td>
+<td> Формат дати та часу (%Y-%m-%d&nbsp;%H.%M.%S[.%MS,%US]) </td>
+<td> Рядок </td>
+<td> Формат відображення часу порушення та підтвердження.
+</td></tr>
+<tr>
+<td> colms </td>
+<td> Стовпчики, за ',' (atm,qttm,nrmtm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt) </td>
+<td> Рядок </td>
+<td> Визначити у потрібну послідовність та наповнення полів.
+</td></tr>
+<tr>
+<td> highLght </td>
+<td> Правила підсвітлення, {lev}{quitt}{act}:{color}:{font}:{fontColor} </td>
+<td> Текст </td>
+<td> Правила підсвітлення, де:
+<ul><li> <i>lev</i> — рівень повідомлення [0...7];</li>
+<li> <i>quitt</i> — ознака підтвердження (квітації) повідомлення [0|1];</li>
+<li> <i>act</i> — ознака активності повідомлення [0|1];</li>
+<li> <i>color</i> — колір фону рядка з повідомленням;</li>
+<li> <i>font</i> — шрифт тексту рядка з повідомленням;</li>
+<li> <i>fontColor</i> — колір тексту рядка з повідомленням.</li></ul>
+<p>Наприклад:
+</p>
+<pre style="white-space: pre-wrap">
+501:gray
+401:red
+101:yellow
+511:gray:Arial 11 0 1
+411:red:Arial 11 0 1
+111:yellow:Arial 11 0 1
+</pre>
+</td></tr>
+<tr>
+<td> colDscrCustNames </td>
+<td> Перелік назв користувацьких полів, поділених ';' </td>
+<td> Рядок </td>
+<td> За підтримки користувацьких полів, та їх видимістю, тут наводяться їх назви.
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="alarmsStReport" title="#alarmsStReport"><h4><span class="mw-headline" id=".D0.9F.D0.BE.D1.80.D1.83.D1.88.D0.B5.D0.BD.D0.BD.D1.8F_.E2.80.94_.D0.B7.D0.B2.D1.96.D1.82_.28alarmsStReport.29"><span class="mw-headline-number">3.6.1</span> Порушення — звіт (<a href="Libs_Main_graphical_elements.html#alarmsStReport" title="Special:MyLanguage/Libs/Main graphical elements">alarmsStReport</a>)</span></h4></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Елемент-кадр, представлений на рисунку 3.6.1, реалізує діалог відображення звітного документу, побудованого із переліку отриманих порушень <a href="#alarmsSt">кадру повноформатного представлення історії порушень</a>.
+</p><p>Основним призначенням та функцією цього кадру є надання можливості роздрукувати таблицю історії порушень та експортувати з неї дані.
+</p>
+<ul><li> <b>Спонсорування:</b> Устьянцев Михайло</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:810px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_alarmsStReport_uk.png"><img class="thumbimage" height="625" src="files/LibMainEls_alarmsStReport_uk.png" width="808" /></a>  <div class="thumbcaption">Рис.3.6.1. Кадр "Порушення — звіт".</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Цей кадр має бути розташовано у логічному контейнері панелей дерева проекту.
+</p><p><b><u>Використання — виконання</u></b><br />
+Виклик діалогу здійснюється за посередництвом характерної кнопки, нагорі праворуч, <a href="#alarmsSt">кадру повноформатного представлення історії порушень</a>. Діалогом надається текст звітного документу та кнопка, унизу праворуч, для його закриття.
+</p><p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="userManager" title="#userManager"><h3><span class="mw-headline" id=".D0.9C.D0.B5.D0.BD.D0.B5.D0.B4.D0.B6.D0.B5.D1.80_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.87.D1.96.D0.B2_.28userManager.29"><span class="mw-headline-number">3.7</span> Менеджер користувачів (<a href="Libs_Main_graphical_elements.html#userManager" title="Special:MyLanguage/Libs/Main graphical elements">userManager</a>)</span></h3></span>
+</td>
+<td> 1.4 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Елемент-кадр, представлений на рисунку 3.7, слугує для надання можливості контролю користувачів з інтерфейсу самого користувача. Тобто, типово ця функція надається програмісту SCADA на рівні <a href="Program_manual.html#CfgSecurity" title="Special:MyLanguage/Documents/Program manual">конфігурації підсистеми "Безпека"</a>, але інколи виникає потреба надання такої можливості з інтерфейсу користувача та із низкою обмежень на контрольованих користувачів та їх групи, що цей кадр здійснює та загалом надає функції:
+</p>
+<ul><li> формування переліку підконтрольних користувачів;</li>
+<li> можливість ознайомлення та зміни інформації користувачів, щодо: ім'я, повного ім'я, опису, паролю та груп;</li>
+<li> додання нових та видалення діючих користувачів.</li></ul>
+<ul><li> <b>Спонсорування:</b> Вінницька Птахофабрика</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_userManagerD_uk.png"><img class="thumbimage" height="550" src="files/LibMainEls_userManagerD_uk.png" width="900" /></a>  <div class="thumbcaption">Рис.3.7a. Кадр "Менеджер користувачів" у режимі розробки.</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Віджет призначено для виконання ролі сторінки, а, відповідно, він має безпосередньо розташовуватися у дерево проекту. Додатково, Ви маєте розташувати <a href="#accept">діалог прийняття</a> до теки панелей проекту та треба здійснити деяку конфігурацію атрибутів, нижче, де жодних зв'язків не передбачено.
+</p><p><b><u>Використання — виконання</u></b><br />
+У режимі виконання формується перелік із доступними користувачами, за обранням яких праворуч надається інформація щодо них, та яку можна змінити. Користувача можна додати та видалити відповідними командами інтерфейсу під переліком користувачів.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_userManagerR_uk.png"><img class="thumbimage" height="639" src="files/LibMainEls_userManagerR_uk.png" width="900" /></a>  <div class="thumbcaption">Рис.3.7b. Кадр "Менеджер користувачів" у режимі виконання.</div></div></div></div>
+<p><b><u>Властивості зв'язування та конфігурації</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Опис
+</th></tr>
+<tr>
+<td> owner </td>
+<td> Власник </td>
+<td> Рядок </td>
+<td> Власник та група кадру, які мають до нього доступ, типово "root:Security" — для надання доступу до кадру треба користувача включити до групи "Security".
+</td></tr>
+<tr>
+<td> perm </td>
+<td> Доступ </td>
+<td> Вибір цілих чисел </td>
+<td> Правила доступу до кадру, типово "RWRW__" — кадр видимий та контрольований лише для користувача "root" та користувачів у групі "Security".
+</td></tr>
+<tr>
+<td> denyUsers </td>
+<td> Заборонене до контролю: користувачі, поділені ';' </td>
+<td> Рядок </td>
+<td> Перелік заборонених до контролю користувачів, типово "root;".
+</td></tr>
+<tr>
+<td> denyGroups </td>
+<td> Заборонене до контролю: групи, поділені ';' </td>
+<td> Рядок </td>
+<td> Перелік заборонених до контролю груп, типово "root;users;Archive;BD;DAQ;ModSched;Protocol;Security;Special;Transport;UI;".
+</td></tr>
+<tr>
+<td> newUseGrps </td>
+<td> Групи новоствореного користувача </td>
+<td> Рядок </td>
+<td> Групи до яких включати користувача автоматично після створення, типово "UI;Guest".
+</td></tr>
+<tr>
+<td> storeDB </td>
+<td> БД зберігання нових користувачів </td>
+<td> Рядок </td>
+<td> БД зберігання новостворених користувачів, типово — робоча.
+</td></tr></table>
+<h2><span class="mw-headline" id=".D0.9F.D0.B0.D0.BD.D0.B5.D0.BB.D1.96_.D1.83.D0.BF.D1.80.D0.B0.D0.B2.D0.BB.D1.96.D0.BD.D0.BD.D1.8F_.D1.82.D0.B0_.D0.BF.D1.80.D0.BE.D1.81.D1.82.D1.96_.D0.B4.D1.96.D0.B0.D0.BB.D0.BE.D0.B3.D0.B8"><span class="mw-headline-number">4</span> <span id="Panels" title="#Panels">Панелі управління та прості діалоги</span></span></h2>
+<p>Містить елементи-кадри панелей управління та простих діалогів, які складно або не потрібно реалізовувати у вигляді панелей. Ці кадри призначено для розташування у відповідній теці панелей дерева проекту, побудованого за <a href="#RootPgSo">концепцією об'єктів сигналізації кореневої сторінки "RootPgSo"</a>. Кадри переважно не призначені для використання окремо, оскільки часто репрезентують специфіку даних до яких надають елементи управління або розширену інформацію, а відтак мають використовуватися разом із ними, окрім випадків уніфікації, узагальнення та розширення контролю примітивами!
+</p><p>Ці елементи переважно відкриваються динамічно, за викликом із елементу-віджету первинного представлення, здійснюючи при цьому <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#LinkingDyn" title="Special:MyLanguage/Sub-projects/VCA">динамічне зв'язування зв'язків панелі у групі "&lt;page&gt;"</a> з віджетом (часто сторінкою), який викликав цю панель. Подальша робота, до закриття, здійснюється із даними віджета, що викликав.
+</p><p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="terminator" title="#terminator"><h3><span class="mw-headline" id=".D0.A2.D0.B5.D1.80.D0.BC.D1.96.D0.BD.D0.B0.D0.BB.D1.8C.D0.BD.D0.B0_.D0.BF.D0.B0.D0.BD.D0.B5.D0.BB.D1.8C_.28terminator.29"><span class="mw-headline-number">4.1</span> Термінальна панель (<a href="Libs_Main_graphical_elements.html#terminator" title="Special:MyLanguage/Libs/Main graphical elements">terminator</a>)</span></h3></span> </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Елемент панелі, представлений на рисунку 4.1, слугує для заповнення простору контейнеру панелей, коли не обрано активного візуального елементу для управління на основному кадрі, оскільки закриття або очищення кадрів у області контейнеру не передбачено, лише заміна.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:302px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_terminatorD_uk.png"><img class="thumbimage" height="300" src="files/LibMainEls_terminatorD_uk.png" width="300" /></a>  <div class="thumbcaption">Рис.4.1. Елемент панелі "Термінальна панель".</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Цей елемент має бути розташовано у логічному контейнері панелей дерева проекту.
+</p><p><b><u>Використання — виконання</u></b><br />
+Виклик панелі здійснюється із <a href="#RootPgSo">головної сторінки "RootPgSo"</a> за зміни об'єкту сигналізації або виду відображення.
+</p><p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="ElCadr" title="#ElCadr"><h3><span class="mw-headline" id=".D0.95.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82_.D0.BA.D0.B0.D0.B4.D1.80_.28ElCadr.29"><span class="mw-headline-number">4.2</span> Елемент кадр (<a href="Libs_Main_graphical_elements.html#ElCadr" title="Special:MyLanguage/Libs/Main graphical elements">ElCadr</a>)</span></h3></span> </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Елемент, представлений на рисунках 4.2, фактично є універсальною панеллю управління та розширеного контролю різними пристроями за усіма відомими та визначеними представницькими структурами базових даних систем управління за DAQ-шаблонами:
+</p>
+<ul><li> аналогові: <a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">аналоговий сигнал</a>, <a href="Libs_Main.html#manInUnif" title="Special:MyLanguage/Libs/Main">ручний ввід аналогового сигналу</a>, ПІД-регулятор (<a href="Libs_Main.html#pidUnif" title="Special:MyLanguage/Libs/Main">аналоговий</a> та <a href="Libs_Main.html#pidUnifImp" title="Special:MyLanguage/Libs/Main">імпульсний</a>);</li>
+<li> <a href="Libs_Main.html#digitBlockUnif" title="Special:MyLanguage/Libs/Main">дискретні збірки</a>: клапани, відсікачі, засувки, двигуни, вентилятори та різноманітні перемикачі;</li>
+<li> <a href="Libs_Main.html#codeState" title="Special:MyLanguage/Libs/Main">довільні дискретні стани</a>.</li></ul>
+<p>У первинній функції панелі — розширене та загальне керування, цей елемент викликається з:
+</p>
+<ul><li> <a href="#Widgets">віджетів первинного представлення даних</a> цієї бібліотеки: "<a href="#anShow">Відображення аналогового</a>", "<a href="#anShow">Відображення аналогового 1</a>", "<a href="#TextLab">Текстова мітка</a>", "<a href="#ImgLab">Мітка зображенням</a>";</li>
+<li> <a href="#MainFrames">основних кадрів</a>: "<a href="#grpGraph">Група графіків</a>", "<a href="#ViewCadr">Група оглядових кадрів</a>", "<a href="#cntrRegul">Панель налаштування регулятора</a>".</li></ul>
+<p>Якщо використання цього елементу у якості панелі керування не є обов'язковим, у першу чергу у віджетах первинного представлення та через їх спеціалізацію на окремих типах даних, щодо яких можна створити окрему панель. То завдяки високій універсальності, через підтримку всіх відомих репрезентативних структур DAQ-шаблонів, її обов'язково використовувати у основних кадрах, як це зроблено у кадрі "<a href="#grpCadr">Група контурів</a>".
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_ElCadrD_uk.png"><img class="thumbimage" height="315" src="files/LibMainEls_ElCadrD_uk.png" width="400" /></a>  <div class="thumbcaption">Рис.4.2a. Віджет "Елемент кадр" у режимі розробки.</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Панель не передбачає спеціальної конфігурації користувачем, вона має лише бути розташована у теці панелей дерева проекту <a href="#RootPgSo">концепції об'єктів сигналізації кореневої сторінки "RootPgSo"</a>, що передбачатиме її динамічний виклик та відкриття у контейнері панелей управління кореневої сторінки.
+</p><p>Ідентифікатор панелі, при розміщені, має зберігатися та рядок її виклику, за отриманням фокусу, у атрибуті обробки подій "evProc" первинного віджету набуде вигляду "ws_FocusIn::open:/pg_control/pg_ElCadr".
+</p><p><b><u>Використання — виконання</u></b><br />
+<i>Покази аналогового параметру</i> — у цьому режимі немає жодного управління, а здійснюється лише відображення одиниці виміру, значення, гістограми значення та найменування параметру.
+</p><p><i>Ручне введення аналогового параметру</i> — крім відображення показів аналогового параметру відображаються кнопки введення нового значення. Введення значення відображається у полі значень нагорі, у підсвіченому прямокутнику. Для підтвердження правильності введення необхідно натиснути лівою клавішею миші у області підсвіченого прямокутника, без чого набране значення буде скинуто через декілька секунд.
+</p><p><i>Режим ПІД-регулятору</i> — до значення змінної та її гістограми додається значення та гістограма завдання та виходу ПІД-регулятору, кнопки для введення нового значення, завдання або виходу, а також кнопки встановлення режиму регулятору та поле відображення поточного режиму. Також, для користувача з відповідними правами ("root:ITW"), доступно кнопку переходу до кадру налаштувань коефіцієнтів ПІД-регулятору. У випадку із імпульсним ПІД-регулятором замість гістограми аналогового виходу відображаються трикутники стану імпульсного виходу "Нагору" та "Додолу", а ручне введення виходу призводить до прямого формування імпульсу, відповідно донизу або додолу.
+</p><p><i>Режим дискретного пристрою</i> — у цьому режимі здійснюється відображення найменування та поля дискретної збірки параметру. Поле дискретної збірки містить поточний стан дискретного пристрою, ліворуч, та кнопки можливих команд пристрою, праворуч. Передбачено два стани пристрою: "Відкрито", "Закрито" та три команди: "Відкрити", "Закрити", "Стоп". Найменування станів та команд може бути встановлено під час налаштування. Зміна стану дискретного пристрою визначається натиском на кнопку відповідної команди. У режимі прямих дискретних станів формується комбобокс із переліком елементів з <i>digComs</i>, поточним станом із <i>st_text</i> та надсиланням команд у <i>com_text</i>.
+</p><p>Кожна дія на цій панелі управління (зміна завдання ПІД-регулятору, зміна стану дискретного параметру, ...) реєструється у журналі (протоколі) втручань згідно до <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">структури повідомлень дій оператору</a>.
+</p><p>Для кожного відображуваного або керованого параметру можна отримати <a href="#Passport">паспорт</a>, шляхом натискання правої клавіші миші на поле контуру. У паспорті буде представлено всі властивості параметру.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:602px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_elcadr_uk.png"><img class="thumbimage" height="375" src="files/LibMainEls_elcadr_uk.png" width="600" /></a>  <div class="thumbcaption">Рис.4.2b. Віджет "Елемент кадр" у режимі виконання.</div></div></div></div>
+<p><b><u>Властивості зв'язування та конфігурації</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Конфігурація </th>
+<th> Конфігураційний шаблон </th>
+<th> Опис
+</th></tr>
+<tr>
+<td> prmId </td>
+<td> Параметр: ідентифікатор </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> &lt;page&gt;|SHIFR </td>
+<td> Ідентифікатор параметру, використовується лише для визначення відповідної сторінки контролю ПІД.
+</td></tr>
+<tr>
+<td> prmShifr </td>
+<td> Параметр: шифр </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> &lt;page&gt;|NAME </td>
+<td> Коротка назва параметру — шифр, для розміщення під фреймом та до дій користувача-оператору.
+</td></tr>
+<tr>
+<td> prmDescr </td>
+<td> Параметр: опис </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> &lt;page&gt;|DESCR </td>
+<td> Опис параметру, для розміщення до дій користувача-оператору.
+</td></tr>
+<tr>
+<td> prmColor </td>
+<td> Параметр: колір границі </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> &lt;page&gt;|color </td>
+<td> Встановлює колір рамки контуру.
+</td></tr>
+<tr>
+<td colspan="6"> <i>Властивості аналогових пристроїв</i>
+</td></tr>
+<tr>
+<td> prmDemention </td>
+<td> Параметр: одиниця виміру </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> &lt;page&gt;|ed </td>
+<td>
+</td></tr>
+<tr>
+<td> prmPrec </td>
+<td> Параметр: точність (знаків) </td>
+<td> Цілий </td>
+<td> Вхідний зв'язок </td>
+<td> &lt;page&gt;|prec </td>
+<td> Кількість знаків після коми значення параметру та крок зміни ручного вводу значення, а також завдання та виходу ПІД регулятору.
+</td></tr>
+<tr>
+<td> prmVar </td>
+<td> Параметр: змінна </td>
+<td> Реальний </td>
+<td> Повний зв'язок </td>
+<td> &lt;page&gt;|var </td>
+<td> Безпосереднє значення аналогового параметру.
+</td></tr>
+<tr>
+<td> max </td>
+<td> Параметр: максимум </td>
+<td> Реальний </td>
+<td> Вхідний зв'язок </td>
+<td> &lt;page&gt;|max </td>
+<td> Максимальна границя значення параметру.
+</td></tr>
+<tr>
+<td> min </td>
+<td> Параметр: мінімум </td>
+<td> Реальний </td>
+<td> Вхідний зв'язок </td>
+<td> &lt;page&gt;|min </td>
+<td> Мінімальна границя значення параметру.
+</td></tr>
+<tr>
+<td> prmAMax </td>
+<td> Параметр: границя верхня аварійна </td>
+<td> Реальний </td>
+<td> Вхідний зв'язок </td>
+<td> &lt;page&gt;|aMax </td>
+<td>
+</td></tr>
+<tr>
+<td> prmAMin </td>
+<td> Параметр: границя нижня аварійна </td>
+<td> Реальний </td>
+<td> Вхідний зв'язок </td>
+<td> &lt;page&gt;|aMin </td>
+<td>
+</td></tr>
+<tr>
+<td> prmWMax </td>
+<td> Параметр: границя верхня попереджув. </td>
+<td> Реальний </td>
+<td> Вхідний зв'язок </td>
+<td> &lt;page&gt;|wMax </td>
+<td>
+</td></tr>
+<tr>
+<td> prmWMin </td>
+<td> Параметр: границя нижня попереджув. </td>
+<td> Реальний </td>
+<td> Вхідний зв'язок </td>
+<td> &lt;page&gt;|wMin </td>
+<td>
+</td></tr>
+<tr>
+<td colspan="6"> <i>Ручний аналоговий ввід</i>
+</td></tr>
+<tr>
+<td> prmVarIn </td>
+<td> Параметр: ввід змінної </td>
+<td> Реальний </td>
+<td> Повний зв'язок </td>
+<td> &lt;page&gt;|varIn </td>
+<td> Вихід ручного вводу значення аналогового параметру. Наявність цього параметру є ознакою того, що параметр визначається як "Ручний аналоговий ввід".
+</td></tr>
+<tr>
+<td colspan="6"> <i>ПІД-регулятор</i>
+</td></tr>
+<tr>
+<td> prmAnalog </td>
+<td> Параметр: аналоговий регулятор </td>
+<td> Логічний </td>
+<td> Вхідний зв'язок </td>
+<td> &lt;page&gt;|analog </td>
+<td> Ознака аналогового регулятору, за відсутності якого регулятор рахується імпульсним.
+</td></tr>
+<tr>
+<td> prmAuto </td>
+<td> Параметр: автомат </td>
+<td> Логічний </td>
+<td> Повний зв'язок </td>
+<td> &lt;page&gt;|auto </td>
+<td> Режим регулятору "Автомат".
+</td></tr>
+<tr>
+<td> prmCasc </td>
+<td> Параметр: каскад </td>
+<td> Логічний </td>
+<td> Повний зв'язок </td>
+<td> &lt;page&gt;|casc </td>
+<td> Режим регулятору "Каскад".
+</td></tr>
+<tr>
+<td> prmSp </td>
+<td> Параметр: завдання </td>
+<td> Реальний </td>
+<td> Повний зв'язок </td>
+<td> &lt;page&gt;|sp </td>
+<td> Завдання ПІД-регулятору, яке може бути встановлено користувачем.
+</td></tr>
+<tr>
+<td> prmImpQdwnTm </td>
+<td> Параметр: імпульсний вихід вниз </td>
+<td> Логічний </td>
+<td> Вхідний зв'язок </td>
+<td> &lt;page&gt;|impQdwn </td>
+<td> Вихід "Донизу" імпульсного регулятору.
+</td></tr>
+<tr>
+<td> prmImpQupTm </td>
+<td> Параметр: імпульсний вихід вгору </td>
+<td> Логічний </td>
+<td> Вхідний зв'язок </td>
+<td> &lt;page&gt;|impQup </td>
+<td> Вихід "Догори" імпульсного регулятору.
+</td></tr>
+<tr>
+<td> prmOut </td>
+<td> Параметр: вихід </td>
+<td> Реальний </td>
+<td> Повний зв'язок </td>
+<td> &lt;page&gt;|out </td>
+<td> Вихід аналогового ПІД-регулятору для відображення та ручного вводу значення виходу ПІД, у ручному режимі.
+</td></tr>
+<tr>
+<td> prmManIn </td>
+<td> Параметр: ручний ввід </td>
+<td> Реальний </td>
+<td> Повний зв'язок </td>
+<td>manIn </td>
+<td> Ручний ввід нового значення виходу ПІД-регулятору у ручному режимі.
+</td></tr>
+<tr>
+<td colspan="6"> <i>Властивості дискретних пристроїв</i>
+</td></tr>
+<tr>
+<td> prmCom </td>
+<td> Параметр: команда - "Відкрити" </td>
+<td> Логічний </td>
+<td> Повний зв'язок </td>
+<td> &lt;page&gt;|com </td>
+<td>
+</td></tr>
+<tr>
+<td> prmClose </td>
+<td> Параметр: команда - "Закрити" </td>
+<td> Логічний </td>
+<td> Повний зв'язок </td>
+<td> &lt;page&gt;|close </td>
+<td>
+</td></tr>
+<tr>
+<td> prmStop </td>
+<td> Параметр: команда - "Стоп" </td>
+<td> Логічний </td>
+<td> Повний зв'язок </td>
+<td> &lt;page&gt;|stop </td>
+<td>
+</td></tr>
+<tr>
+<td> prmComText </td>
+<td> Параметр: текст команди </td>
+<td> Рядок </td>
+<td> Повний зв'язок </td>
+<td>com_text </td>
+<td> Текст команди прямо, отриманий з <i>digComs</i> при формуванні комбобоксу обрання.
+</td></tr>
+<tr>
+<td> digComs </td>
+<td> Параметр: дискр. команди </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> &lt;page&gt;|digComs </td>
+<td> Конфігурація команд параметру зі структурою <b>{openLabel}-{color};{closeLabel}-{color};{stopLabel}-{color}</b>, для дискретного блоку, та <b>{com1Label}-{color};{com2Label}-{color};...;{comNLabel}-{color}</b>, для статусу за кодом. Кольори по замовченню для дискретного блоку: "зелений", "червоний" та "жовтий".
+</td></tr>
+<tr>
+<td> prmOpenSt </td>
+<td> Параметр: стан - "Відкрито" </td>
+<td> Логічний </td>
+<td> Вхідний зв'язок </td>
+<td> &lt;page&gt;|st_open </td>
+<td>
+</td></tr>
+<tr>
+<td> prmCloseSt </td>
+<td> Параметр: стан - "Закрито" </td>
+<td> Логічний </td>
+<td> Вхідний зв'язок </td>
+<td> &lt;page&gt;|st_close </td>
+<td>
+</td></tr>
+<tr>
+<td> prmStText </td>
+<td> Параметр: текст статусу </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> &lt;page&gt;|st_text </td>
+<td> Текст статусу прямо.
+</td></tr>
+<tr>
+<td> digStts </td>
+<td> Параметр: дискр. стани </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> &lt;page&gt;|digStts </td>
+<td> Конфігурація статусів параметру зі структурою <b>{openedLabel}-{color};{closedLabel}-{color}</b>, для дискретного блоку. Кольори по замовченню: "зелений" та "червоний".
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="cntrPaspExt" title="#cntrPaspExt"><h3><span class="mw-headline" id=".D0.9F.D0.B0.D1.81.D0.BF.D0.BE.D1.80.D1.82.2C_.D1.80.D0.BE.D0.B7.D1.88.D0.B8.D1.80.D0.B5.D0.BD.D0.B8.D0.B9_.28cntrPaspExt.29"><span class="mw-headline-number">4.3</span> Паспорт, розширений (<a href="Libs_Main_graphical_elements.html#cntrPaspExt" title="Special:MyLanguage/Libs/Main graphical elements">cntrPaspExt</a>)</span></h3></span> </td>
+<td> 1.2 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Елемент, представлений на рисунку 4.3, є інформаційно-контрольним діалогом довкола параметру джерела даних — розширений паспорт параметру. На відміну від <a href="#cntrPasp">простого паспорту</a>, розширений, окрім інформації, надає можливість контролю за атрибутами параметру та відображення історії стандартних атрибутів як у вигляді тренду, так і таблиці даних.
+</p><p><i>Інформація та контроль</i> за атрибутами параметру залишається основною функцію, яка надається у вкладці "Огляд", де формується таблиця атрибутів як вони є, із стовпчиками "Ім'я" та "Значення". Таблиця активна та за обрання доступних до запису атрибутів, та відповідних прав (root:op), знизу надається поле введення нових значень.
+</p><p><i>Історія</i> надається у наступних двох вкладках "Тренди" та "Дані", які можуть бути й відсутні за відсутності історії-архівів за стандартними атрибутами. Вкладка "Тренди" містить область графіків, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">примітив "Діаграма"</a>, на більшій частині вікна, та таблицю унизу із назвами, кольором та шкалами графіків. Графіки періодично оновлюються та будуються з періодом 1 секунда, та на фіксовану глибиною у 1 годину. Вкладка "Дані" містить лише поле <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Document" title="Special:MyLanguage/Sub-projects/VCA">примітиву "Документ"</a> із таблицею зі значеннями атрибуту у стовпчиках, яка оновлюється з періодом 1 секунда для періоду даних історії та на глибину у 100 записів. Стандартними атрибутами із історією вважаються наступні елементи <a href="Libs_Main.html" title="Special:MyLanguage/Libs/Main">представницьких структур параметру</a>:
+</p>
+<ul><li> <a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">Аналоговий сигнал</a>:
+<ul><li> <b>var</b> — змінна.</li></ul></li>
+<li> <a href="Libs_Main.html#pidUnif" title="Special:MyLanguage/Libs/Main">ПІД-регулятор</a>:
+<ul><li> <b>sp</b> — завдання;</li>
+<li> <b>out</b> — вихід;</li>
+<li> <b>auto</b> — режим: автомат.</li></ul></li>
+<li> <a href="Libs_Main.html#codeState" title="Special:MyLanguage/Libs/Main">Дискретні збірки</a>:
+<ul><li> <b>com</b> — команда "Відкрити";</li>
+<li> <b>close</b> — команда "Закрити";</li>
+<li> <b>stop</b> — команда "Зупинити";</li>
+<li> <b>st_open</b> — стан "Відкрито";</li>
+<li> <b>st_close</b> — стан "Закрито".</li></ul></li></ul>
+<p>Для побудови трендів аналогових параметрів окремо обробляються атрибути загальної шкали [<b>min</b>...<b>max</b>], а також аварійних [<b>aMin</b>...<b>aMax</b>] та попереджувальних шкал [<b>wMin</b>...<b>wMax</b>], які, зокрема, відображаються й на графіку.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Наразі цей діалог є основним та він замінив <a href="#cntrPasp">простий діалог паспорту</a>.
+</p>
+<ul><li> <b>Спонсоровано:</b> ПАТ ХАРТРОН</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1232px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_cntrPaspExt_uk.png"><img class="thumbimage" height="425" src="files/LibMainEls_cntrPaspExt_uk.png" width="1230" /></a>  <div class="thumbcaption">Рис.4.3. Діалог "Паспорт, розширений" у режимі виконання.</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Діалог не передбачає спеціальної конфігурації користувачем, він має лише бути розташований у теці панелей дерева проекту <a href="#RootPgSo">концепції об'єктів сигналізації кореневої сторінки "RootPgSo"</a>, що передбачатиме його динамічний виклик та відкриття, як зовнішнє діалогове вікно.
+</p><p>Ідентифікатор діалогу, при розміщені, має бути змінений у "cntrPasp" та рядок його виклику, за натиском правої клавіші миші, у атрибуті обробки подій "evProc" первинного віджету набуде вигляду "key_mousePresRight::open:/pg_control/pg_cntrPasp".
+</p><p><b><u>Використання — виконання</u></b><br />
+Діалог надає користувачу, у вкладці "Огляд", інформацію довкола параметру джерела даних у вигляді переліку та значень всіх властивостей-атрибутів параметру у таблиці. Де атрибути, доступні до запису, можуть редагуватися відповідно до прав доступу "root:op" у полі редагування, що з'являється знизу за обранням такого атрибуту.
+</p><p>Стосовно історії, користувач може спостерігати тренди у вкладці "Тренди" та дані у вкладці "Дані". Для трендів, користувач може також підсвітити якийсь з них, обравши його у таблиці знизу, та відкоригувати шкалу якщо вона помилкова.
+</p><p><b><u>Властивості зв'язування та конфігурації</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Конфігурація </th>
+<th> Конфігураційний шаблон </th>
+<th> Опис
+</th></tr>
+<tr>
+<td> pName </td>
+<td> Ім'я параметру </td>
+<td> Адреса </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|NAME </td>
+<td> Адреса до назви параметру для звернення до параметру цілком та вилучення всіх його властивостей.
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="cntrPasp" title="#cntrPasp"><h3><span class="mw-headline" id=".D0.9F.D0.B0.D1.81.D0.BF.D0.BE.D1.80.D1.82_.28cntrPasp.29"><span class="mw-headline-number">4.4</span> Паспорт (<a href="Libs_Main_graphical_elements.html#cntrPasp" title="Special:MyLanguage/Libs/Main graphical elements">cntrPasp</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Елемент, представлений на рисунку 4.4, є інформаційним діалогом довкола параметру джерела даних — паспорт параметру, відповідно він дозволяє отримати такого роду інформацію як: шифр, ім'я, опис, одиницю виміру, аварійні границі та інше, відповідне до <a href="Libs_Main.html" title="Special:MyLanguage/Libs/Main">представницької структури параметру</a> — атрибути параметру. Діалог побудовано на основі <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Document" title="Special:MyLanguage/Sub-projects/VCA">примітиву "Документ"</a>, вміст якого формується динамічно та періодично оновлюється.
+</p><p>У побудові паспорту окремо обробляються атрибути аварійних [<b>aMin</b>...<b>aMax</b>] та попереджувальних шкал [<b>wMin</b>...<b>wMax</b>], які поєднуються у одному записі та взагалі можуть приховуватися за умови їх вимкнення.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Наразі цей діалог фактично замінено <a href="#cntrPaspExt">більш функціональним та розширеним діалогом паспорту</a> та його переважно вимкнено у всіх шаблонних та демонстраційних проектах, хоча ніхто не заважає його використанню, якщо потрібно лише інформацію.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:822px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_cntrPasp_uk.png"><img class="thumbimage" height="425" src="files/LibMainEls_cntrPasp_uk.png" width="820" /></a>  <div class="thumbcaption">Рис.4.4. Діалог "Паспорт" у режимі виконання.</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Діалог не передбачає спеціальної конфігурації користувачем, він має лише бути розташований у теці панелей дерева проекту <a href="#RootPgSo">концепції об'єктів сигналізації кореневої сторінки "RootPgSo"</a>, що передбачатиме його динамічний виклик та відкриття, як зовнішнє діалогове вікно.
+</p><p>Ідентифікатор діалогу, при розміщені, має зберігатися та рядок його виклику, за натиском правої клавіші миші, у атрибуті обробки подій "evProc" первинного віджету набуде вигляду "key_mousePresRight::open:/pg_control/pg_cntrPasp".
+</p><p><b><u>Використання — виконання</u></b><br />
+Діалог лише надає користувачу інформацію довкола параметру джерела даних у вигляді переліку та значень всіх властивостей-атрибутів параметру у таблиці.
+</p><p><b><u>Властивості зв'язування та конфігурації</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Конфігурація </th>
+<th> Конфігураційний шаблон </th>
+<th> Опис
+</th></tr>
+<tr>
+<td> pName </td>
+<td> Ім'я параметру </td>
+<td> Адреса </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|NAME </td>
+<td> Адреса до назви параметру для звернення до параметру цілком та вилучення всіх його властивостей.
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="grph_panel" title="#grph_panel"><h3><span class="mw-headline" id=".D0.9F.D0.B0.D0.BD.D0.B5.D0.BB.D1.8C_.D0.B3.D1.80.D0.B0.D1.84.D1.96.D0.BA.D1.96.D0.B2_.28grph_panel.29"><span class="mw-headline-number">4.5</span> Панель графіків (<a href="Libs_Main_graphical_elements.html#grph_panel" title="Special:MyLanguage/Libs/Main graphical elements">grph_panel</a>)</span></h3></span> </td>
+<td> 1.5 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Елемент, представлений на рисунку 4.5, є спеціалізованою панеллю динамічного керування основними користувацькими властивостями <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">примітиву "Діаграма"</a>. Так, панель дозволяє переглянути графіки історії за потрібний проміжок часу та на потрібну роздільну здатність, підтримується: масштабування шкали, вибір архіваторів для відображення, а також надання графіків у вигляді спектру присутніх частот або XY.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_grph_panel_uk.png"><img class="thumbimage" height="365" src="files/LibMainEls_grph_panel_uk.png" width="400" /></a>  <div class="thumbcaption">Рис.4.5. Панель графіків у режимі розробки та виконання (зліва праворуч).</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Панель не передбачає спеціальної конфігурації користувачем, вона має лише бути розташована у теці панелей дерева проекту <a href="#RootPgSo">концепції об'єктів сигналізації кореневої сторінки "RootPgSo"</a>, що передбачатиме її динамічний виклик та відкриття у контейнері панелей управління кореневої сторінки.
+</p><p>Ідентифікатор панелі, при розміщені, має зберігатися та рядок її виклику, за отриманням фокусу, у атрибуті обробки подій "evProc" первинного віджету набуде вигляду "ws_FocusIn::open:/pg_control/pg_grph_panel".
+</p><p><b><u>Використання — виконання</u></b><br />
+За допомогою панелі користувач має можливість:
+</p>
+<ul><li> обрати режим відображення графіків діаграми: "Графік", "Спектр частот", "XY";</li>
+<li> обрати час формування діаграми;</li>
+<li> здійснити навігація за діаграмою на один або п'ять розмірів області графіку;</li>
+<li> встановити час генерації діаграми у поточний час та час курсору;</li>
+<li> отримати інформацію про час або частоту у поточному положенні курсору;</li>
+<li> обрати розмір (глибину) формування графіку або встановити час початку;</li>
+<li> обрати архів, що використовується для побудови графіків, з правами доступу "root:ITW";</li>
+<li> керувати вертикальною та горизонтальною шкалою відображення: збільшення та зменшення масштабу, зсуву шкали нагору та додолу, повернення масштабу до початкового значення;</li>
+<li> перемикати режим масштабування шляхом обрамлення вікном, мишею.</li></ul>
+<p><b><u>Властивості зв'язування та конфігурації</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Конфігурація </th>
+<th> Конфігураційний шаблон </th>
+<th> Опис
+</th></tr>
+<tr>
+<td> tSek </td>
+<td> Час тренду </td>
+<td> ДатаЧас </td>
+<td> Повний зв'язок </td>
+<td> &lt;page&gt;|tSek </td>
+<td>
+</td></tr>
+<tr>
+<td> tSize </td>
+<td> Розмір тренду </td>
+<td> Реальний </td>
+<td> Повний зв'язок </td>
+<td> &lt;page&gt;|tSize </td>
+<td> Часовий розмір-інтервал графіку у історію від часу тренду.
+</td></tr>
+<tr>
+<td> trcPer </td>
+<td> Період слідкування </td>
+<td> Цілий </td>
+<td> Повний зв'язок </td>
+<td> &lt;page&gt;|trcPer </td>
+<td> Період оновлення-слідкування графіку.
+</td></tr>
+<tr>
+<td> type </td>
+<td> Тип </td>
+<td> Цілий </td>
+<td> Повний зв'язок </td>
+<td> &lt;page&gt;|type </td>
+<td> Тип графіку: "Тренд", "Спектр частот", "XY".
+</td></tr>
+<tr>
+<td> valArch </td>
+<td> Архіватор </td>
+<td> Рядок </td>
+<td> Повний зв'язок </td>
+<td> &lt;page&gt;|valArch </td>
+<td>
+</td></tr>
+<tr>
+<td> curSek </td>
+<td> Курсор </td>
+<td> ДатаЧас </td>
+<td> Повний зв'язок </td>
+<td> &lt;page&gt;|curSek </td>
+<td> Час встановлення курсору.
+</td></tr>
+<tr>
+<td> curUSek </td>
+<td> Курсор, мікросекунди </td>
+<td> Цілий </td>
+<td> Повний зв'язок </td>
+<td> &lt;page&gt;|curUSek </td>
+<td> Час встановлення курсору, мікросекунди.
+</td></tr>
+<tr>
+<td> sclVer </td>
+<td> Вертикальний масштаб </td>
+<td> Реальний </td>
+<td> Повний зв'язок </td>
+<td> &lt;page&gt;|sclVerScl </td>
+<td> Відсоток вертикального масштабу.
+</td></tr>
+<tr>
+<td> sclVerOff </td>
+<td> Зміщення вертикального масштабу </td>
+<td> Реальний </td>
+<td> Повний зв'язок </td>
+<td> &lt;page&gt;|sclVerSclOff </td>
+<td> Відсоток зміщення за вертикальною шкалою.
+</td></tr>
+<tr>
+<td> sclHor </td>
+<td> Горизонтальна шкала </td>
+<td> Реальний </td>
+<td> Повний зв'язок </td>
+<td> &lt;page&gt;|sclHorScl </td>
+<td> Відсоток горизонтального масштабу.
+</td></tr>
+<tr>
+<td> sclHorOff </td>
+<td> Зсув горизонтальної шкали </td>
+<td> Реальний </td>
+<td> Повний зв'язок </td>
+<td> &lt;page&gt;|sclHorSclOff </td>
+<td> Відсоток зміщення за горизонтальною шкалою.
+</td></tr>
+<tr>
+<td> sclWin </td>
+<td> Масштаб вікном </td>
+<td> Логічний </td>
+<td> Повний зв'язок </td>
+<td> &lt;page&gt;|sclWin </td>
+<td> Перемикання режиму масштабування вікном.
+</td></tr>
+<tr>
+<td> sclWinCtx </td>
+<td> Масштаб: контекст вікном </td>
+<td> Об'єкт </td>
+<td> Вхідний зв'язок </td>
+<td> &lt;page&gt;|sclWinCtx </td>
+<td> Контекст збереження початкових параметрів масштабування вікном, для повернення.
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="doc_panel" title="#doc_panel"><h3><span class="mw-headline" id=".D0.9F.D0.B0.D0.BD.D0.B5.D0.BB.D1.8C_.D0.B4.D0.BE.D0.BA.D1.83.D0.BC.D0.B5.D0.BD.D1.82.D1.96.D0.B2_.28doc_panel.29"><span class="mw-headline-number">4.6</span> Панель документів (<a href="Libs_Main_graphical_elements.html#doc_panel" title="Special:MyLanguage/Libs/Main graphical elements">doc_panel</a>)</span></h3></span> </td>
+<td> 1.2 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Елемент, представлений на рисунку 4.6, є спеціалізованою панеллю динамічного керування основними користувацькими властивостями <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Document" title="Special:MyLanguage/Sub-projects/VCA">примітиву "Документ"</a>. Так, панель дозволяє керувати документами та здійснювати навігації за їх історією; підтримуються динамічні та архівні документи.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_doc_panel_uk.png"><img class="thumbimage" height="300" src="files/LibMainEls_doc_panel_uk.png" width="400" /></a>  <div class="thumbcaption">Рис.4.6. Панель документів у режимі розробки та виконання (динамічний та архівний), зліва праворуч.</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Панель не передбачає спеціальної конфігурації користувачем, вона має лише бути розташована у теці панелей дерева проекту <a href="#RootPgSo">концепції об'єктів сигналізації кореневої сторінки "RootPgSo"</a>, що передбачатиме її динамічний виклик та відкриття у контейнері панелей управління кореневої сторінки.
+</p><p>Ідентифікатор панелі, при розміщені, має зберігатися та рядок її виклику, за отриманням фокусу, у атрибуті обробки подій "evProc" первинного віджету набуде вигляду "ws_FocusIn::open:/pg_control/pg_doc_panel".
+</p><p><b><u>Використання — виконання</u></b><br />
+Панеллю надаються інструменти, які дещо відрізняються для динамічного та архівного режимів.
+</p><p><i>Динамічним документом</i> передбачається:
+</p>
+<ul><li> обрання часу формування документу;</li>
+<li> обрання розміру (глибини) формування документу або часу початку;</li>
+<li> навігація за документом на один або п'ять розмірів-глибини документу;</li>
+<li> встановлення часу генерації документу у поточний час.</li></ul>
+<p><i>Архівним документом</i> передбачається лише навігація за документами у архіві шляхом їх гортання, а також інформація про поточний та загальну кількість документів у архіві.
+</p><p><b><u>Властивості зв'язування та конфігурації</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Конфігурація </th>
+<th> Конфігураційний шаблон </th>
+<th> Опис
+</th></tr>
+<tr>
+<td colspan="6"> <i>Динамічні документи</i>
+</td></tr>
+<tr>
+<td> time </td>
+<td> Час документа </td>
+<td> ДатаЧас </td>
+<td> Повний зв'язок </td>
+<td> &lt;page&gt;|time </td>
+<td>
+</td></tr>
+<tr>
+<td> bTime </td>
+<td> Початок документа </td>
+<td> ДатаЧас </td>
+<td> Повний зв'язок </td>
+<td> &lt;page&gt;|bTime </td>
+<td>
+</td></tr>
+<tr>
+<td> doc </td>
+<td> Документ </td>
+<td> Рядок </td>
+<td> Повний зв'язок </td>
+<td> &lt;page&gt;|doc </td>
+<td>
+</td></tr>
+<tr>
+<td colspan="6"> <i>Архівні документи</i>
+</td></tr>
+<tr>
+<td> n </td>
+<td> Розмір архіву </td>
+<td> Цілий </td>
+<td> Вхідний зв'язок </td>
+<td> &lt;page&gt;|n </td>
+<td>
+</td></tr>
+<tr>
+<td> vCur </td>
+<td> Курсор відображення </td>
+<td> Цілий </td>
+<td> Повний зв'язок </td>
+<td> &lt;page&gt;|vCur </td>
+<td>
+</td></tr>
+<tr>
+<td> aCur </td>
+<td> Курсор архіву </td>
+<td> Цілий </td>
+<td> Вхідний зв'язок </td>
+<td> &lt;page&gt;|aCur </td>
+<td>
+</td></tr>
+<tr>
+<td> aSize </td>
+<td> Розмір архіву </td>
+<td> Цілий </td>
+<td> Вхідний зв'язок </td>
+<td> &lt;page&gt;|aSize </td>
+<td>
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="accept" title="#accept"><h3><span class="mw-headline" id=".D0.9F.D1.96.D0.B4.D1.82.D0.B2.D0.B5.D1.80.D0.B4.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F_.28accept.29"><span class="mw-headline-number">4.7</span> Підтвердження (<a href="Libs_Main_graphical_elements.html#accept" title="Special:MyLanguage/Libs/Main graphical elements">accept</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Елемент на рисунку 4.7 реалізує простий діалог підтвердження операцій. Діалог містить повідомлення з питанням та дві кнопки "Прийняти" й "Скасувати". Цей діалог, наприклад, використано у кадрі <a href="#userManager">Менеджер користувачів</a> для підтвердження операції видалення.
+</p>
+<ul><li> <b>Спонсорування:</b> <a class="external text" href="http://e-beam.ru" rel="nofollow noreferrer noopener" target="_blank">Лабораторія Вакуумних Технологій</a></li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:652px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_accept_uk.png"><img class="thumbimage" height="169" src="files/LibMainEls_accept_uk.png" width="650" /></a>  <div class="thumbcaption">Рис.4.7. Діалог "Підтвердження" у режимі розробки та виконання.</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Діалог не передбачає спеціальної конфігурації користувачем, він має лише бути розташований у теці панелей дерева проекту <a href="#RootPgSo">концепції об'єктів сигналізації кореневої сторінки "RootPgSo"</a>, що передбачатиме його динамічний виклик та відкриття, як зовнішнє діалогове вікно.
+</p><p>Ідентифікатор діалогу, при розміщені, має зберігатися та рядок його виклику, за натиском кнопки "progDel", у атрибуті обробки подій "evProc" первинного віджету набуде вигляду "ws_BtPress:/progDel:open:/pg_control/pg_accept". З атрибуту "mess" береться повідомлення питання, а у "event" передається сигнал "dlg_Apply", за підтвердження.
+</p><p><b><u>Використання — виконання</u></b><br />
+Виклик діалогу здійснюється із кадру-ініціатору, а закриття відбувається за натиском будь-якої кнопки діалогу. У випадку натиску кнопки "Прийняти" кадру-ініціатору буде надіслано сигнал "dlg_Apply", за яким він може виконати потрібні дії.
+</p><p><b><u>Властивості зв'язування та конфігурації</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Конфігурація </th>
+<th> Конфігураційний шаблон </th>
+<th> Опис
+</th></tr>
+<tr>
+<td> elEvent </td>
+<td> Елемент: подія </td>
+<td> Рядок </td>
+<td> Повний зв'язок </td>
+<td> &lt;page&gt;|event </td>
+<td> Використовується для надсилання повідомлення "dlg_Apply" у випадку підтвердження.
+</td></tr>
+<tr>
+<td> elMess </td>
+<td> Елемент: повідомлення </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> &lt;page&gt;|mess </td>
+<td> Джерело повідомлення питання у діалозі.
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="treeSelect" title="#treeSelect"><h3><span class="mw-headline" id=".D0.92.D0.B8.D0.B1.D1.96.D1.80_.D0.B5.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.83_.D1.83_.D0.B4.D0.B5.D1.80.D0.B5.D0.B2.D1.96_.28treeSelect.29"><span class="mw-headline-number">4.8</span> Вибір елементу у дереві (<a href="Libs_Main_graphical_elements.html#treeSelect" title="Special:MyLanguage/Libs/Main graphical elements">treeSelect</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Елемент на рисунку 4.8 реалізує простий діалог операції обрання пункту у дереві. Діалог містить саме дерево та дві кнопки "Прийняти" й "Скасувати". Цей діалог, наприклад, використано, та первинно для нього розроблявся, у кадрі "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Prescriptions#prescrRunSimple" title="Special:MyLanguage/Libs/Prescriptions">Рецепт:виконання (простий)</a>" для ієрархічного обрання елементу у дереві.
+</p>
+<ul><li> <b>Спонсорування:</b> <a class="external text" href="http://e-beam.ru" rel="nofollow noreferrer noopener" target="_blank">Лабораторія Вакуумних Технологій</a></li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:782px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_treeSelect_uk.png"><img class="thumbimage" height="393" src="files/LibMainEls_treeSelect_uk.png" width="780" /></a>  <div class="thumbcaption">Рис.4.8. Діалог "Вибір елементу у дереві" у режимі розробки та виконання.</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Діалог не передбачає спеціальної конфігурації користувачем, він має лише бути розташований у теці панелей дерева проекту <a href="#RootPgSo">концепції об'єктів сигналізації кореневої сторінки "RootPgSo"</a>, що передбачатиме його динамічний виклик та відкриття, як зовнішнє діалогове вікно.
+</p><p>Ідентифікатор діалогу, при розміщені, має зберігатися та рядок його виклику, за натиском кнопки "lib", у атрибуті обробки подій "evProc" первинного віджету набуде вигляду "ws_BtPress:/lib:open:/pg_control/pg_treeSelect". З атрибуту "items" береться перелік елементів, із "selValue" обране значення, а у "event" передається сигнал "dlg_Apply", за підтвердження.
+</p><p><b><u>Використання — виконання</u></b><br />
+Виклик діалогу здійснюється із кадру-ініціатору, а закриття відбувається за натиском будь-якої кнопки діалогу. У випадку натиску кнопки "Прийняти" кадру-ініціатору буде надіслано сигнал "dlg_Apply", за яким він застосує обраний елемент.
+</p><p><b><u>Властивості зв'язування та конфігурації</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Конфігурація </th>
+<th> Конфігураційний шаблон </th>
+<th> Опис
+</th></tr>
+<tr>
+<td> elEvent </td>
+<td> Елемент: подія </td>
+<td> Рядок </td>
+<td> Повний зв'язок </td>
+<td> &lt;page&gt;|event </td>
+<td> Використовується для надсилання повідомлення "dlg_Apply" у випадку підтвердження.
+</td></tr>
+<tr>
+<td> elItems </td>
+<td> Елемент: перелік елементів </td>
+<td> Текст </td>
+<td> Вхідний зв'язок </td>
+<td> &lt;page&gt;|items </td>
+<td> Джерело переліку елементів у діалозі.
+</td></tr>
+<tr>
+<td> selValue </td>
+<td> Елемент: обране значення </td>
+<td> Рядок </td>
+<td> Повний зв'язок </td>
+<td> &lt;page&gt;|selValue </td>
+<td> Джерело обраного елементу у діалозі.
+</td></tr></table>
+
+
+
+
+
+
+</div></body>
+</html>

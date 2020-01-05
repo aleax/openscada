@@ -56,17 +56,17 @@ INSERT INTO VCALibs VALUES('Main','Main elements','Provides the library of the m
 
 Founded: September 2007
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.7.2
+Version: 2.0.0
 License: GPLv2','wlb_Main','','Основні елементи','Бібліотека створюється для надання основних елементів користувацького інтерфейсу. Будується бібліотека на основі примітивів віджетів та мови внутрішнього програмування JavaLikeCalc.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Засновано: Вересень 2007
-Версія: 1.7.0
+Версія: 2.0.0
 Ліцензія: GPLv2','Основные элементы','Библиотека создаётся для предоставления основных элементов пользовательского интерфейса. Строится библиотека на основе примитивов виджетов и языка внутреннего программирования JavaLikeCalc.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Основано: Сентябрь 2007
-Версия: 1.7.0
+Версия: 2.0.0
 Лицензия: GPLv2');
 INSERT INTO VCALibs VALUES('mnEls','Mnemo elements','User interface''s main elements library.','wlb_mnEls','','Елементи мнемосхеми','Бібліотека основних елементів інтерфейсу користувача.','Элементы мнемосхемы','Библиотека основных элементов пользовательского интерфейса.');
 INSERT INTO VCALibs VALUES('doc','Documents','Documents library.
@@ -2169,7 +2169,7 @@ INSERT INTO wlb_Main_io VALUES('RootPgSo','elLst','line:(1|4):(77|4):::::
 ',32,'','','h_line','line:(1|4):(77|4):::::
 ','','line:(1|4):(77|4):::::
 ','','','');
-INSERT INTO wlb_Main_io VALUES('ElViewCadr','name','Views page''s element',42,'Parameter|NAME','','','Елемент оглядового кадру','','Элемент обзорного кадра','','','');
+INSERT INTO wlb_Main_io VALUES('ElViewCadr','name','Frame of the group of overview',42,'Parameter|NAME','','','Кадр групи огляду','','Кадр группы обзора','','','');
 INSERT INTO wlb_Main_io VALUES('ElViewCadr','geomW','145',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElViewCadr','geomH','140',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElViewCadr','backColor','gray',96,'','','','','','','','','');
@@ -2194,13 +2194,19 @@ INSERT INTO wlb_Main_io VALUES('ElViewCadr','geomY','102',32,'','','text','','',
 INSERT INTO wlb_Main_io VALUES('ElViewCadr','geomW','141',32,'','','text','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElViewCadr','geomH','36',32,'','','text','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpCadr','name','Contours group',32,'','','','Група контурів','','Группа контуров','','','');
-INSERT INTO wlb_Main_io VALUES('grpCadr','dscr','The template cadre "Contours group".
+INSERT INTO wlb_Main_io VALUES('grpCadr','dscr','The element-frame provides for simultaneous monitoring and control of contours of several parameters, up to eight, includes both instances of the widget "Element cadre for each contour, and the primitive "Diagram" to monitor the trends of the contours and viewing history.
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.0',32,'','','','Шаблон сторінок: "Група контурів".
+Version: 1.2.0
+License: GPLv2',32,'','','','Елемент-кадр слугує для одночасного спостереження та управління контурами декількох параметрів, до восьми, включає у себе як екземпляри віджету "Елемент кадр" для кожного контуру, так і примітив "Діаграма" для спостереження за трендами контурів та перегляду історії.
+
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.2.0','','Шаблон страниц: "Группа контуров".
+Версія: 1.2.0
+Ліцензія: GPLv2','','Элемент-кадр служит для одновременного наблюдения и управления контурами нескольких параметров, до восьми, включает в себя как экземпляры виджета "Элемент кадр" для каждого контура, так и примитив "Диаграмма" для наблюдения за трендами контуров и просмотра истории.
+
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.2.0','','','');
+Версия: 1.2.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_Main_io VALUES('grpCadr','geomW','900',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpCadr','geomH','600',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpCadr','backColor','#5A5A5A',96,'backColorFrame','','','','','','','','');
@@ -2313,7 +2319,7 @@ INSERT INTO wlb_Main_io VALUES('anShow','alignment','8',32,'','','name','','',''
 INSERT INTO wlb_Main_io VALUES('anShow','geomX','1',32,'','','name','','','','','','');
 INSERT INTO wlb_Main_io VALUES('anShow','geomY','1',32,'','','name','','','','','','');
 INSERT INTO wlb_Main_io VALUES('anShow','geomW','98',32,'','','name','','','','','','');
-INSERT INTO wlb_Main_io VALUES('ViewCadr','name','Overview frames panel',41,'','','','Група оглядових кадрів','','Группа обзорных кадров','','','');
+INSERT INTO wlb_Main_io VALUES('ViewCadr','name','Group of overview frames',41,'','','','Група оглядових кадрів','','Группа обзорных кадров','','','');
 INSERT INTO wlb_Main_io VALUES('ViewCadr','geomW','900',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ViewCadr','geomH','600',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ViewCadr','backColor','#5A5A5A',96,'backColorFrame','','','','','','','','');
@@ -2861,7 +2867,7 @@ INSERT INTO wlb_Main_io VALUES('ResultGraph','geomW','900',32,'','','','','','',
 INSERT INTO wlb_Main_io VALUES('ResultGraph','geomH','600',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ResultGraph','backColor','#5A5A5A',96,'backColorFrame','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ResultGraph','bordWidth','1',32,'','','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('ResultGraphEl','name','Result graphic''s element',32,'','','','Елемент зведених графіків','','Элемент сводн. графиков','','','');
+INSERT INTO wlb_Main_io VALUES('ResultGraphEl','name','Frame of the result graphics',32,'','','','Кадр зведених графіків','','Кадр сводных графиков','','','');
 INSERT INTO wlb_Main_io VALUES('ResultGraphEl','geomW','225',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ResultGraphEl','geomH','142',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ResultGraphEl','bordWidth','1',32,'','','','','','','','','');
@@ -4506,7 +4512,7 @@ INSERT INTO wlb_Main_io VALUES('grph_panel','font','Arial 15',32,'','','size',''
 INSERT INTO wlb_Main_io VALUES('grph_panel','font','Arial 14',0,'','','tmTp','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','font','Arial 13',32,'','','cursor','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','1',32,'','','line3','','','','','','');
-INSERT INTO wlb_Main_io VALUES('prescrEdit','name','Prescription:edit',32,'','','','Рецепт:редагування','','Рецепт:редактирование','','','');
+INSERT INTO wlb_Main_io VALUES('prescrEdit','name','Prescription: edit',32,'','','','Рецепт: редагування','','Рецепт: редактирование','','','');
 INSERT INTO wlb_Main_io VALUES('prescrEdit','geomW','900',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrEdit','geomH','600',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrEdit','pgGrp','so',32,'','','','','','','','','');
@@ -4858,7 +4864,7 @@ INSERT INTO wlb_Main_io VALUES('prescrEdit','backColor','',32,'','','wPanel','',
 INSERT INTO wlb_Main_io VALUES('prescrEdit','bordWidth','2',32,'','','wPanel','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrEdit','bordColor','#5A5A5A',32,'','','wPanel','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrEdit','bordStyle','8',32,'','','wPanel','','','','','','');
-INSERT INTO wlb_Main_io VALUES('prescrRun','name','Prescription:run',32,'','','','Рецепт:виконання','','Рецепт:исполнение','','','');
+INSERT INTO wlb_Main_io VALUES('prescrRun','name','Prescription: run',32,'','','','Рецепт: виконання','','Рецепт: исполнение','','','');
 INSERT INTO wlb_Main_io VALUES('prescrRun','geomW','900',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrRun','geomH','600',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrRun','evProc','ws_FocusIn:/prog:open:/pg_control/pg_doc_panel',32,'','','','','','','','','');
@@ -7851,18 +7857,70 @@ INSERT INTO wlb_Main_io VALUES('grpGraph10','colorDef','tomato',96,'labColorGrph
 INSERT INTO wlb_Main_io VALUES('grpGraph10','colorDef','magenta',96,'labColorGrph7','','el7','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph10','colorDef','yellow',96,'labColorGrph8','','el8','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph10','colorDef','lightyellow',96,'labColorGrph9','','el9','','','','','','');
-INSERT INTO wlb_Main_io VALUES('ElViewCadr','dscr','Element of the Overview frames panel.
+INSERT INTO wlb_Main_io VALUES('ElViewCadr','dscr','The element-widget serves as the basis for the group of overview frames and is not usually used independently. The widget displays the text information about parameter in the form of the name and value, and a trend of the parameter for small period of time (2 minutes) to observe the current trend of the parameter with auto-scaling on the value scale.
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.0',32,'','','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('ResultGraph','dscr','The template cadre "Result graphics".
+Version: 1.1.0
+License: GPLv2',32,'','','','Елемент-віджет слугує основою групи оглядових кадрів та зазвичай не використовується самостійно. Віджет відображає текстову інформацію про параметр у вигляді найменування та значення, а також тренд параметру за невеликий проміжок часу (2 хвилини) для спостереження за поточною тенденцією поведінки параметру з авто-масштабуванням за шкалою значення.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.1.0
+Ліцензія: GPLv2','','Элемент-виджет служит основой группы обзорных кадров и обычно не используется самостоятельно. Виджет отображает текстовую информацию о параметре в виде наименования и значения, а также тренд параметра за небольшой промежуток времени (2 минуты) для наблюдения за текущей тенденцией поведения параметра с авто-масштабированием по шкале значения.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.1.0
+Лицензия: GPLv2','','','');
+INSERT INTO wlb_Main_io VALUES('ResultGraph','dscr','The element-frame is used to display a group of the current parameter trends (up to 5) in individual frames-widgets with up to 16 units (4x4) for which scaling is supported depending on their configured number. The frames-widgets of the parameter trends are implemented with the satellite widget "Frame of the result graphics".
+
+Summary the total number of displayed graphs in one frame reaches 80, and it is intended to form a separate type of view that is used outside the signal objects — globally for the entire visualization project.
+
+The frame doesn''t support any control!
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.0',32,'','','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('ResultGraphEl','dscr','Element of the Result graphics.
+Version: 1.1.0
+License: GPLv2',32,'','','','Елемент-кадр слугує для відображення групи поточних трендів параметрів (до 5) у окремих кадрах-віджетах кількістю до 16 одиниць (4x4), стосовно яких підтримується масштабування залежно від їх конфігурованої кількості. Кадри-віджети трендів параметрів реалізуються супутнім віджетом "Кадр зведених графіків".
+
+Разом загальна кількість відображуваних графіків на одному кадрі сягає 80 та він призначений для формування окремого виду відображення, що застосовується поза об''єктів сигналізації — глобально за всім проектом візуалізації.
+
+Кадр не підтримує ніякого керування!
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.1.0
+Ліцензія: GPLv2','','Элемент-кадр служит для отображения группы текущих трендов параметров (до 5) в отдельных кадрах-виджетах количеством до 16 единиц (4x4), относительно которых поддерживается масштабирование в зависимости от их конфигурируемого количества. Кадры-виджеты трендов параметров реализуются сопутствующим виджетом "Кадр сводных графиков".
+
+Суммарно общее количество отображаемых графиков на одном кадре достигает 80 и он предназначен для формирования отдельного вида отображения, который применяется за объектами сигнализации — глобально по всему проекту визуализации.
+
+Кадр не поддерживает никакого управления!
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.1.0
+Лицензия: GPLv2','','','');
+INSERT INTO wlb_Main_io VALUES('ResultGraphEl','dscr','The element-widget serves as the basis for the result graphics and is not usually used independently. The widget displays the name of the group and up to five trends, with their text labels, over a fixed period of time (10 minutes) to observe the current trend of the parameters.
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.0',32,'','','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('ViewCadr','dscr','The template cadre "Overview frames panel".
+Version: 1.1.0
+License: GPLv2',32,'','','','Елемент-віджет слугує основою зведених графіків та зазвичай не використовується самостійно. Віджет відображає назву групи та до п''яти трендів, з їх текстовими мітками, за фіксований проміжок часу (10 хвилин) для спостереження за поточною тенденцією поведінки параметрів.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.1.0
+Ліцензія: GPLv2','','Элемент-виджет служит основой сводных графиков и обычно не используется самостоятельно. Виджет отображает название группы и до пяти трендов, с их текстовыми метками, за фиксированный промежуток времени (10 минут) для наблюдения за текущей тенденцией поведения параметров.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.1.0
+Лицензия: GPLv2','','','');
+INSERT INTO wlb_Main_io VALUES('ViewCadr','dscr','The element-frame is used to display the current parameter trends in individual frames-widgets with up to 24 units (6x4) for which scaling is supported depending on their configured number. The frames-widgets of the parameter trends are implemented with the satellite widget "Frame of the group of overview".
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.0',32,'','','','','','','','','');
+Version: 1.1.0
+License: GPLv2',32,'','','','Елемент-кадр слугує для відображення поточних трендів параметрів у окремих кадрах-віджетах кількістю до 24 одиниць (6x4), стосовно яких підтримується масштабування залежно від їх конфігурованої кількості. Кадри-віджети трендів параметрів реалізуються супутнім віджетом "Кадр оглядової групи".
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.1.0
+Ліцензія: GPLv2','','Элемент-кадр служит для отображения текущих трендов параметров в отдельных кадрах-виджетах количеством до 24 единиц (6x4), относительно которых поддерживается масштабирование в зависимости от их конфигурируемого количества. Кадры-виджеты трендов параметров реализуются сопутствующим виджетом "Кадр обзорной группы".
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.1.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_Main_io VALUES('anShow','dscr','The element is used to display the current value of the analog parameter and the regulator mode, if the parameter is a regulator.
 Also this element generates alarms on the corresponding parameter settings.
 The element commonly uses and represents the representative structure of the "Analog signal" DAQ-template.
@@ -7901,9 +7959,22 @@ License: GPLv2',32,'','','','Елемент слугує для відображ
 Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.1.0
 Лицензия: GPLv2','','','');
-INSERT INTO wlb_Main_io VALUES('cntrRegul','dscr','The cadre "Control cadre of the regulators".
+INSERT INTO wlb_Main_io VALUES('cntrRegul','dscr','Element-frame is used for adjustment of PID-regulator, includes information about the parameter-regulator, fields of the regulator''s settings and the "Diagram" primitive, to monitor the trends of the regulator and browsing history.
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.0',32,'','','','','','','','','');
+Sponsored by: DIYA LTD
+Version: 1.1.0
+License: GPLv2',32,'','','','Елемент-кадр слугує для налаштування ПІД-регулятору, включає в себе інформацію про параметр-регулятор, поля налаштувань регулятору та примітив "Діаграма", для спостереження за трендами регулятору та перегляду історії.
+
+Автор: Роман Савоченко <roman@oscada,org>
+Спонсоровано: ТОВ "ДІЯ"
+Версія: 1.1.0
+Ліцензія: GPLv2','','Элемент-кадр служит для настройки ПИД-регулятора, включает в себя информацию о параметре-регуляторе, поля настроек регулятора и примитив "Диаграмма", для наблюдения за трендами регулятора и просмотра истории.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Спонсировано: ООО "ДІЯ"
+Версия: 1.1.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_Main_io VALUES('doc_panel','dscr','The element is a specialized panel for dynamic control of basic user properties of the primitive "Document". So, the panel allows you to manage documents and navigate through their histories; supported dynamic and archival documents.
 
 Author: Roman Savochenko <roman@oscada.org>
@@ -10681,7 +10752,7 @@ INSERT INTO wlb_Main_uio VALUES('ElCadr','prmCasc','Parameter: cascade',131072,'
 INSERT INTO wlb_Main_uio VALUES('ElCadr','prmDemention','Parameter: dimension',131077,'',10,'<page>|ed','','','Параметр: одиниця виміру','','','Параметр: единица измерения','','','','');
 INSERT INTO wlb_Main_uio VALUES('ElCadr','prmOut','Parameter: output',131076,'0|',14,'<page>|out','','','Параметр: вихід','','','Параметр: выход','','','','');
 INSERT INTO wlb_Main_uio VALUES('ElCadr','prmShifr','Parameter: code',131077,'',10,'<page>|NAME','','','Параметр: шифр','','','Параметр: шифр','','','','');
-INSERT INTO wlb_Main_uio VALUES('ElCadr','prmSp','Parameter: set point',131076,'0|',14,'<page>|sp','','','Параметр: завдання','','','Параметр: задание','','','','');
+INSERT INTO wlb_Main_uio VALUES('ElCadr','prmSp','Parameter: set-point',131076,'0|',14,'<page>|sp','','','Параметр: завдання','','','Параметр: задание','','','','');
 INSERT INTO wlb_Main_uio VALUES('ElCadr','prmVar','Parameter: variable',131076,'0|',14,'<page>|var','','','Параметр: змінна','','','Параметр: переменная','','','','');
 INSERT INTO wlb_Main_uio VALUES('grpGraph','min','Minimum',131076,'0|0;0|',10,'Parameter|min','','el8','Мінімум','','','Минимум','','','','');
 INSERT INTO wlb_Main_uio VALUES('grpGraph','max','Maximum',131076,'0|0;0|',10,'Parameter|max','','el8','Максимум','','','Максимум','','','','');
@@ -10753,7 +10824,7 @@ INSERT INTO wlb_Main_uio VALUES('cntrRegul','SHIFR','Parameter: code',131077,NUL
 INSERT INTO wlb_Main_uio VALUES('cntrRegul','DESCR','Parameter: description',131077,NULL,10,'Parameter|DESCR','','','Параметр: опис','<EVAL>||','','Параметр: описание','<EVAL>','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrRegul','ed','Parameter: dimension of variable',131077,NULL,10,'Parameter|ed','','','Параметр: одиниця виміру','<EVAL>||','','Параметр: единица измерения','<EVAL>','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrRegul','Hdwn','Parameter: bottom output border',131076,'<EVAL>|',14,'Parameter|Hdwn','','','Параметр: нижня границя виходу','','','Параметр: нижняя граница выхода','','','','');
-INSERT INTO wlb_Main_uio VALUES('cntrRegul','Hup','Parameter: atop output border',131076,'<EVAL>|',14,'Parameter|Hup','','','Параметр: верхня границя виходу','','','Параметр: верхняя граница выхода','','','','');
+INSERT INTO wlb_Main_uio VALUES('cntrRegul','Hup','Parameter: upper output border',131076,'<EVAL>|',14,'Parameter|Hup','','','Параметр: верхня границя виходу','','','Параметр: верхняя граница выхода','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrRegul','K1','Parameter: input 1 coefficient',131076,'<EVAL>|',14,'Parameter|K1','','','Параметр: коеф. входу 1','','','Параметр: коэф. входа 1','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrRegul','K2','Parameter: input 2 coefficient',131076,'<EVAL>|',14,'Parameter|K2','','','Параметр: коеф. входу 2','','','Параметр: коэф. входа 2','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrRegul','K3','Parameter: input 3 coefficient',131076,'<EVAL>|',14,'Parameter|K3','','','Параметр: коеф. входу 3','','','Параметр: коэф. входа 3','','','','');
@@ -10764,8 +10835,8 @@ INSERT INTO wlb_Main_uio VALUES('cntrRegul','min','Parameter: scale minimum',131
 INSERT INTO wlb_Main_uio VALUES('cntrRegul','out','Parameter: output',131076,'<EVAL>|',10,'Parameter|out','','','Параметр: вихід','','','Параметр: выход','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrRegul','out_addr','Parameter: output address',196613,NULL,10,'Parameter|out','','','Параметр: адреса виходу','','','Параметр: адрес выхода','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrRegul','NAME','Parameter: code',131077,NULL,10,'Parameter|NAME','','','Параметр: шифр','<EVAL>||','','Параметр: шифр','<EVAL>','','','');
-INSERT INTO wlb_Main_uio VALUES('cntrRegul','sp','Parameter: set point',131076,'<EVAL>|',10,'Parameter|sp','','','Параметр: завдання','','','Параметр: задание','','','','');
-INSERT INTO wlb_Main_uio VALUES('cntrRegul','sp_addr','Parameter: set point address',196613,NULL,10,'Parameter|sp','','','Параметр: адреса завдання','','','Параметр: адрес задания','','','','');
+INSERT INTO wlb_Main_uio VALUES('cntrRegul','sp','Parameter: set-point',131076,'<EVAL>|',10,'Parameter|sp','','','Параметр: завдання','','','Параметр: задание','','','','');
+INSERT INTO wlb_Main_uio VALUES('cntrRegul','sp_addr','Parameter: set-point address',196613,NULL,10,'Parameter|sp','','','Параметр: адреса завдання','','','Параметр: адрес задания','','','','');
 INSERT INTO wlb_Main_uio VALUES('ResultGraphEl','p1_min','Parameter1: minimum',131076,'<EVAL>|',10,'Parameter 1|min','','','Параметр1: мінімум','','','Параметр1: минимум','','','','');
 INSERT INTO wlb_Main_uio VALUES('ResultGraph','grpName','Group name',131077,NULL,9,'','','','Ім''я групи','','','Имя группы','','','','');
 INSERT INTO wlb_Main_uio VALUES('ResultGraphEl','p2_addr','Parameter2: address',196613,NULL,10,'Parameter 2|var','','','Параметр2: адреса','','','Параметр2: адрес','','','','');
@@ -10785,11 +10856,11 @@ INSERT INTO wlb_Main_uio VALUES('ResultGraphEl','p5_name','Parameter5: name',131
 INSERT INTO wlb_Main_uio VALUES('ResultGraphEl','p5_max','Parameter5: maximum',131076,'<EVAL>|',10,'Parameter 5|max','','','Параметр5: максимум','','','Параметр5: максимум','','','','');
 INSERT INTO wlb_Main_uio VALUES('ResultGraphEl','p5_min','Parameter5: minimum',131076,'<EVAL>|',10,'Parameter 5|min','','','Параметр5: мінімум','','','Параметр5: минимум','','','','');
 INSERT INTO wlb_Main_uio VALUES('ResultGraphEl','title','Title',131077,NULL,9,'','','','Заголовок','','','Заголовок','','','','');
-INSERT INTO wlb_Main_uio VALUES('ResultGraphEl','p1_clr','Parameter1: color',147461,'#b000b0',72,'labColorGrph1','','','Параметр1: колір','','Параметр 1','Параметр1: цвет','','Параметр 1','','');
-INSERT INTO wlb_Main_uio VALUES('ResultGraphEl','p2_clr','Parameter2: color',147461,'#c75300',72,'labColorGrph2','','','Параметр2: колір','','Параметр 2','Параметр2: цвет','','Параметр 2','','');
-INSERT INTO wlb_Main_uio VALUES('ResultGraphEl','p3_clr','Parameter3: color',147461,'blue',72,'labColorGrph3','','','Параметр3: колір','','Параметр 3','Параметр3: цвет','','Параметр 3','','');
-INSERT INTO wlb_Main_uio VALUES('ResultGraphEl','p4_clr','Parameter4: сolor',147461,'#00ff00',72,'labColorGrph4','','','Параметр4: колір','','Параметр 4','Параметр4: цвет','','Параметр 4','','');
-INSERT INTO wlb_Main_uio VALUES('ResultGraphEl','p5_clr','Parameter5: color',147461,'#06fbff',72,'labColorGrph5','','','Параметр5: колір','','Параметр 5','Параметр5: цвет','','Параметр 5','','');
+INSERT INTO wlb_Main_uio VALUES('ResultGraphEl','p1_clr','Parameter1: color',147461,'#b000b0',72,'labColorGrph1','','','Параметр1: колір','','','Параметр1: цвет','','','','');
+INSERT INTO wlb_Main_uio VALUES('ResultGraphEl','p2_clr','Parameter2: color',147461,'#c75300',72,'labColorGrph2','','','Параметр2: колір','','','Параметр2: цвет','','','','');
+INSERT INTO wlb_Main_uio VALUES('ResultGraphEl','p3_clr','Parameter3: color',147461,'blue',72,'labColorGrph3','','','Параметр3: колір','','','Параметр3: цвет','','','','');
+INSERT INTO wlb_Main_uio VALUES('ResultGraphEl','p4_clr','Parameter4: сolor',147461,'#00ff00',72,'labColorGrph4','','','Параметр4: колір','','','Параметр4: цвет','','','','');
+INSERT INTO wlb_Main_uio VALUES('ResultGraphEl','p5_clr','Parameter5: color',147461,'#06fbff',72,'labColorGrph5','','','Параметр5: колір','','','Параметр5: цвет','','','','');
 INSERT INTO wlb_Main_uio VALUES('doc_panel','bTime','Document begin',139265,'0|',14,'<page>|bTime','','','Початок документа','','','Начало документа','','','','');
 INSERT INTO wlb_Main_uio VALUES('doc_panel','doc','Document',131077,NULL,14,'<page>|doc','','','Документ','','','Документ','','','','');
 INSERT INTO wlb_Main_uio VALUES('doc_panel','n','Archive size',131073,'<EVAL>|',10,'<page>|n','','','Розмір архіву','','','Размер архива','','','','');
@@ -10841,9 +10912,9 @@ INSERT INTO wlb_Main_uio VALUES('cntrRegul','KImpRfact','Parameter: rate factor'
 INSERT INTO wlb_Main_uio VALUES('cntrRegul','Kd','Parameter: coeff. of differential',131076,'<EVAL>|',14,'Parameter|Kd','','','Параметр: коеф. пропорційності похідної','','','Параметр: коэф. пропорциональности производной','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrRegul','Ki','Parameter: coeff. of integration',131076,'<EVAL>|',14,'Parameter|Ki','','','Параметр: коеф. пропорційності інтегралу','','','Параметр: коэф. пропорциональности интеграла','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrRegul','TImpMin','Parameter: minimal impulse time',131073,'<EVAL>|',14,'Parameter|TImpMin','','','Параметр: мінімальний час імпульсу','','','Параметр: минимальное время импульса','','','','');
-INSERT INTO wlb_Main_uio VALUES('cntrRegul','TImpPer','Parameter: impulses periodic',131073,'<EVAL>|',14,'Parameter|TImpPer','','','Параметр: період імпульсів','','','Параметр: период повторения импульсов','','','','');
+INSERT INTO wlb_Main_uio VALUES('cntrRegul','TImpPer','Parameter: pulses period',131073,'<EVAL>|',14,'Parameter|TImpPer','','','Параметр: період імпульсів','','','Параметр: период повторения импульсов','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrRegul','Tzd','Parameter: differential part lag time',131076,'<EVAL>|',14,'Parameter|Tzd','','','Параметр: час затримки похідної частини','','','Параметр: время задержки дифференциальной части','','','','');
-INSERT INTO wlb_Main_uio VALUES('cntrRegul','auto_addr','Parameter: mode',196613,NULL,10,'Parameter|auto','','','Параметр: режим','','','Параметр: режим','','','','');
+INSERT INTO wlb_Main_uio VALUES('cntrRegul','auto_addr','Parameter: auto',196613,NULL,10,'Parameter|auto','','','Параметр: автомат','','','Параметр: автомат','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrRegul','clc','Clock',131073,'<EVAL>|',8,'','','','Годинник','','','Часы','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrRegul','impQdwn_addr','Parameter: address of impulse output down',196613,NULL,10,'Parameter|impQdwn','','','Параметр: адреса імпульсного виходу донизу','','','Параметр: адрес выхода импульса вниз','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrRegul','impQup_addr','Parameter: address of impulse output up',196613,NULL,10,'Parameter|impQup','','','Параметр: адреса імпульсного виходу догори','','','Параметр: адрес выхода импульса вверх','','','','');
@@ -10989,7 +11060,7 @@ INSERT INTO wlb_Main_uio VALUES('RootPgSo','notifyVisVision1','Notification: Vis
 //ico=aAlarm
 if(en) {
 	if((beep=SYS.system("which beep")).length)
-		SYS.system(beep.parse(0,"\n")+" -f 1000 -l 1000000 &\necho $! > aAlarm.pid", true);
+		SYS.system(beep.parse(0,"\n")+" -f 1000 -l 100000 &\necho $! > aAlarm.pid", true);
 	else if((play=SYS.system("which play")).length)
 		SYS.system(play.parse(0,"\n")+" -q -n synth 1000000 sin 1000 gain -20 &\necho $! > aAlarm.pid", true);
 }
@@ -20161,7 +20232,7 @@ BBB+CS9H5hHzt1BEVavJ5MZbmCkHOzs7fwOvrhb+aFJiZAAAAABJRU5ErkJggg==','/wlb_original
 text_arg0val = name;
 text_arg1val = var;
 trnd_prm0addr = addr;
-bordColor = (focus&&bordColor!="silver")?"silver":"gray";','','',1000,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;bordStyle;',1552226019);
+bordColor = (focus&&bordColor!="silver")?"silver":"gray";','','',1000,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;bordStyle;',1578246829);
 INSERT INTO wlb_Main VALUES('grpCadr','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAJ
 50lEQVRYhdWZya4cyXWG/4iMyDmzKmu4M8kWSGijRW/8GN7rSbQTDG/aNuxX8sZuAY1uGw0JQkuC
 piZui2TdoaacY/YieauLVVcgBAFs86zifPFHVA4RJ87JIp999llVlkpr3/etsW3bhmGgtI7CUEpF
@@ -20237,7 +20308,7 @@ for(i = 0; i < 8; i++) {
 						.attrSet("prm"+i+"bordL",el.attr("min")).attrSet("prm"+i+"bordU",el.attr("max"))
 						.attrSet("prm"+i+"color",el.attr("bordColor"));
 	}
-}','','',200,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1554017298);
+}','','',200,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1578246829);
 INSERT INTO wlb_Main VALUES('anShow','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAZCAIAAAAOir+2AAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAF/0lEQVRYhdWW/08bdRjHn8/n7nrXu2tpy1ootmUtDChsK2snk62AsMnG
 5pj1a6LRH4w/+cMS/xT/g4lLNJkxxmjinIvFKduy4QbKgCJQ+pUCLdD1rndt784f6jadQxMDmL1/
@@ -20386,7 +20457,7 @@ if(f_start) {
 			this["wdg_el3_"+j].attrSet("geomY", 30+142*yScale*(rows[0]+rows[1]));
 			this["wdg_el4_"+j].attrSet("geomY", 30+142*yScale*(rows[0]+rows[1]+rows[2]));
 		}
-}','','',1000,'name;dscr;geomW;geomH;backColor;bordWidth;',1552226019);
+}','','',1000,'name;dscr;geomW;geomH;backColor;bordWidth;',1578246314);
 INSERT INTO wlb_Main VALUES('anShow1','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAOCAIAAAAQWY2VAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAEBElEQVRIicWVW0xbdRzHf+ecf6+nLdAeoEAppQXKxdFsDZciSsZlk7GN
 NTM6iYlv+qSJxvjc6JvxwTezmZCYxcy4h7niggZZNU6B4Zgy6dYy6axlXFrKeuXcjw/sgitoTDv9
@@ -20548,7 +20619,7 @@ trnd_prm2bordL = min;
 trnd_prm2bordU = max;
 trnd_prm3addr = auto_addr;
 trnd_prm4addr = impQup_addr;
-trnd_prm5addr = impQdwn_addr;','','',1000,'id;path;name;dscr;active;geomW;geomH;evProc;pgGrp;backColor;bordWidth;',1555251439);
+trnd_prm5addr = impQdwn_addr;','','',1000,'id;path;name;dscr;active;geomW;geomH;evProc;pgGrp;backColor;bordWidth;',1578246829);
 INSERT INTO wlb_Main VALUES('ResultGraph','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAF
 OElEQVRYhc2YTW8TRxiA33fmnZnd9VcSO4EgQW+tVPVSCUGLAAHiQ6I3JISEOHLtpRfE36A/CSEq
 hdKEQogqVNoCdkJI7NiO7f2YeXtwQD2UHXMYtXsb6ZlnPZJ3n53BH+/dc84NBgPHnOd5nueRMXlR
@@ -20602,7 +20673,7 @@ if(f_start) {
 			this["wdg_e"+(3+4*(j-1))].attrSet("geomY", 30+142*yScale*(rows[0]+rows[1]));
 			this["wdg_e"+(4+4*(j-1))].attrSet("geomY", 30+142*yScale*(rows[0]+rows[1]+rows[2]));
 		}
-}','','',1000,'name;dscr;geomW;geomH;backColor;bordWidth;',1552226019);
+}','','',1000,'name;dscr;geomW;geomH;backColor;bordWidth;',1578246829);
 INSERT INTO wlb_Main VALUES('ResultGraphEl','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAoCAIAAADBrGu+AAAACXBIWXMAAAx1AAAMdQEteJR1AAAE
 xUlEQVRYhdWYWW/bRhRG7ywkJZGUqFCKLC+J5TiIlwe3qQ3kB/RfB30uCkRNFQc2EnlRIsXWZpkU
 KZEccmb64CB2arSNVae0D/jCuRzgfOTgDjGo0Wjs7e0hhAzDgPvG3NwcPTw8fPnypeM4T548GQ6H
@@ -20639,7 +20710,7 @@ trnd_prm0addr = p1_addr; trnd_prm0bordL = p1_min; trnd_prm0bordU = p1_max; trnd_
 trnd_prm1addr = p2_addr; trnd_prm1bordL = p2_min; trnd_prm1bordU = p2_max; trnd_prm1color = p2_clr;
 trnd_prm2addr = p3_addr; trnd_prm2bordL = p3_min; trnd_prm2bordU = p3_max; trnd_prm2color = p3_clr;
 trnd_prm3addr = p4_addr; trnd_prm3bordL = p4_min; trnd_prm3bordU = p4_max; trnd_prm3color = p4_clr;
-trnd_prm4addr = p5_addr; trnd_prm4bordL = p5_min; trnd_prm4bordU = p5_max; trnd_prm4color = p5_clr;','','',1000,'name;dscr;en;geomW;geomH;backColor;bordWidth;bordColor;bordStyle;',1554061756);
+trnd_prm4addr = p5_addr; trnd_prm4bordL = p5_min; trnd_prm4bordU = p5_max; trnd_prm4color = p5_clr;','','',1000,'name;dscr;en;geomW;geomH;backColor;bordWidth;bordColor;bordStyle;',1578246829);
 INSERT INTO wlb_Main VALUES('doc_panel','iVBORw0KGgoAAAANSUhEUgAAABcAAABACAIAAAB+w3u4AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAG
 QElEQVRYhe1WTW/TSheeicdxbMeJHROTJi0hfJQWpapE1RWgLgBVSEBZseEHsOcnsGfJT2CBVNRN
 2JQVGzZQiCpRBGqSpk1Jm9R2Yjt2PLHHdzGv8vZy+3Lfe+/mLnoW1szxOY/nfD0euLKyks1mwe8F

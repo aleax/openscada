@@ -1,3 +1,10 @@
+2020-01-05 Roman (stable)
+- !!!!:FIX:DB.LibsDB.vcaBase: The document of the "Main elements library of the user interface" is completed at least.
+    !!!:Main.{grpCadr,ViewCadr,ElViewCadr,ResultGraph,ResultGraphEl,cntrRegul}: Revised during the documenting.
+    Call of the OS utility <beep> fixed by decreasing the length argument to 100000.
+- FIX:Model.AGLKS.St: The template property "tCmd" of the parameter LogLevPrm.gen.CB7 is set to 0.
+
+
 2019-12-31 Roman (stable)
 - !!:FIX:DB.LibsDB.vcaBase: Main.{grph_panel,doc_panel,cntrPasp,cntrPaspExt,treeSelect}: Revised during the documenting.
 - FIX:Model.{AGLKS.vca,Boiler.St}: Fixed for the original message "Pasport".

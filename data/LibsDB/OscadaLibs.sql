@@ -435,7 +435,8 @@ Modules/SystemTests:en,uk,ru:Modules/SystemTests.html
 Modules/FLibMath:en,uk,ru:Modules/FLibMath.html
 Modules/FLibComplex1:en,uk,ru:Modules/FLibComplex1.html
 Libs/Main:en,uk:Libs_Main.html
-Libs/Technological_apparatuses:en,uk,ru:Libs_Technological_apparatuses.html',0,3,'','','','');
+Libs/Technological_apparatuses:en,uk,ru:Libs_Technological_apparatuses.html
+Libs/Main_graphical_elements:en,uk,ru:Libs_Main_graphical_elements.html',0,3,'','','','');
 INSERT INTO lib_servProc_io VALUES('docOffLine','pagesCur','Current pages list of "{wiki}:{langs}:{dest}", for empty here used "pages"',0,4,'',0,4,'','','','');
 INSERT INTO lib_servProc_io VALUES('docOffLine','res','Result',0,1,'',0,0,'','','','');
 INSERT INTO lib_servProc_io VALUES('docOffLine','reqTr','Tries of requests',1,1,'3',0,1,'','','','');

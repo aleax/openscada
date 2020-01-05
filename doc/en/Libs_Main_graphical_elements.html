@@ -1,0 +1,2914 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Libs/Main graphical elements - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Libs/Main graphical elements</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Libs/Main_graphical_elements/ru" title="Библиотеки/Основные графические элементы (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Libs/Main_graphical_elements/uk" title="Бібліотеки/Основні графічні елементи (100% translated)">українська</a></div></div>
+<table class="wikitable">
+
+<tr>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="Libs_Main_graphical_elements.html" title="Special:MyLanguage/Libs/Main graphical elements">Main elements library of the user interface</a>
+</td>
+<td> 2.0 </td>
+<td> GPLv2
+</td>
+<td> vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">GZip</a>) &gt; VCA.wlb_Main
+</td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2011-2012) — the page initial translation</i></font>
+</td>
+<td> Provides the library of the main elements of the user interface of common and the industrial automation.
+<ul><li> <b>Founded:</b> September 2007</li>
+<li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/GraphicElementsLibraries/MainElements" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a></li></ul>
+</td></tr></table>
+<p>The library is created to provide main elements of the user interface. The library is built on the basis <a href="Modules/VCAEngine.html#WidgetPrimitives" title="Special:MyLanguage/Modules/VCAEngine">primitives of the widgets</a> and the internal programming language <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>.
+</p><p>For connection the library to a project of the OpenSCADA station you can obtain the database file as:
+</p>
+<ul><li> supplied with a ready and proper package of the Linux distribution like to "openscada-libdb-vca", "openscada-LibDB.VCA";</li>
+<li> directly taken for most actual one from <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql" rel="nofollow noreferrer noopener" target="_blank">the subversion repository</a> and converted to the DB SQLite file in the way:</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 15px">
+$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql
+$ sqlite3 -init vcaBase.sql vcaBase.db .exit
+</pre>
+<ul><li> downloaded for <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">the one attached here</a>.</li></ul>
+<p>The library contains graphic elements, often need when forming the user interface of the automation of technological and common processes. Names and text options are available in three languages: English, Ukrainian and Russian.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Widgets_.E2.80.94_graphical_elements"><span class="tocnumber">1</span> <span class="toctext"><span>Widgets — graphical elements</span></span></a>
+<ul>
+<li class="toclevel-2"><a href="#Analog_show_.28anShow.29"><span class="tocnumber">1.1</span> <span class="toctext">Analog show (anShow)</span></a></li>
+<li class="toclevel-2"><a href="#Analog_show_1_.28anShow1.29.2C_Analog_show_1_.28short.29_.28anShow1s.29"><span class="tocnumber">1.2</span> <span class="toctext">Analog show 1 (anShow1), Analog show 1 (short) (anShow1s)</span></a></li>
+<li class="toclevel-2"><a href="#Text_label_.28TextLab.29"><span class="tocnumber">1.3</span> <span class="toctext">Text label (TextLab)</span></a></li>
+<li class="toclevel-2"><a href="#Image_label_.28ImgLab.29"><span class="tocnumber">1.4</span> <span class="toctext">Image label (ImgLab)</span></a></li>
+<li class="toclevel-2"><a href="#Alarms_.E2.80.94_active_.28alarmsAct.29"><span class="tocnumber">1.5</span> <span class="toctext">Alarms — active (alarmsAct)</span></a></li>
+<li class="toclevel-2"><a href="#Object_properties_.28objProps.29"><span class="tocnumber">1.6</span> <span class="toctext">Object properties (objProps)</span></a></li>
+<li class="toclevel-2"><a href="#Calendar_.28calendar.29"><span class="tocnumber">1.7</span> <span class="toctext">Calendar (calendar)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1"><a href="#Root_page_.28SO.29_.28RootPgSo.29"><span class="tocnumber">2</span> <span class="toctext">Root page (SO) (RootPgSo)</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Main_frames"><span class="tocnumber">3</span> <span class="toctext"><span>Main frames</span></span></a>
+<ul>
+<li class="toclevel-2"><a href="#Graphics_group_.28grpGraph.29.2C_Graphics_group_10_.28grpGraph10.29"><span class="tocnumber">3.1</span> <span class="toctext">Graphics group (grpGraph), Graphics group 10 (grpGraph10)</span></a>
+<ul>
+<li class="toclevel-3"><a href="#Graphics_group_element_.28ElViewGraph.29"><span class="tocnumber">3.1.1</span> <span class="toctext">Graphics group element (ElViewGraph)</span></a></li>
+<li class="toclevel-3"><a href="#Graph_parameter_selection_.28graphSelPrm.29"><span class="tocnumber">3.1.2</span> <span class="toctext">Graph parameter selection (graphSelPrm)</span></a></li>
+<li class="toclevel-3"><a href="#Graph_parameter_calculation_.28graphCalc.29"><span class="tocnumber">3.1.3</span> <span class="toctext">Graph parameter calculation (graphCalc)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2"><a href="#Contours_group_.28grpCadr.29"><span class="tocnumber">3.2</span> <span class="toctext">Contours group (grpCadr)</span></a></li>
+<li class="toclevel-2"><a href="#Group_of_overview_frames_.28ViewCadr.29"><span class="tocnumber">3.3</span> <span class="toctext">Group of overview frames (ViewCadr)</span></a>
+<ul>
+<li class="toclevel-3"><a href="#Frame_of_the_group_of_overview_.28ElViewCadr.29"><span class="tocnumber">3.3.1</span> <span class="toctext">Frame of the group of overview (ElViewCadr)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2"><a href="#Result_graphics_.28ResultGraph.29"><span class="tocnumber">3.4</span> <span class="toctext">Result graphics (ResultGraph)</span></a>
+<ul>
+<li class="toclevel-3"><a href="#Frame_of_the_result_graphics_.28ResultGraphEl.29"><span class="tocnumber">3.4.1</span> <span class="toctext">Frame of the result graphics (ResultGraphEl)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2"><a href="#Regulator.27s_control_panel_.28cntrRegul.29"><span class="tocnumber">3.5</span> <span class="toctext">Regulator's control panel (cntrRegul)</span></a></li>
+<li class="toclevel-2"><a href="#Alarms_.E2.80.94_state_.28alarmsSt.29"><span class="tocnumber">3.6</span> <span class="toctext">Alarms — state (alarmsSt)</span></a>
+<ul>
+<li class="toclevel-3"><a href="#Alarms_.E2.80.94_report_.28alarmsStReport.29"><span class="tocnumber">3.6.1</span> <span class="toctext">Alarms — report (alarmsStReport)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2"><a href="#Users_manager_.28userManager.29"><span class="tocnumber">3.7</span> <span class="toctext">Users manager (userManager)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-3"><a href="#Control_panels_and_simple_dialogs"><span class="tocnumber">4</span> <span class="toctext"><span>Control panels and simple dialogs</span></span></a>
+<ul>
+<li class="toclevel-2"><a href="#Terminator_panel_.28terminator.29"><span class="tocnumber">4.1</span> <span class="toctext">Terminator panel (terminator)</span></a></li>
+<li class="toclevel-2"><a href="#Element_cadre_.28ElCadr.29"><span class="tocnumber">4.2</span> <span class="toctext">Element cadre (ElCadr)</span></a></li>
+<li class="toclevel-2"><a href="#Passport.2C_extended_.28cntrPaspExt.29"><span class="tocnumber">4.3</span> <span class="toctext">Passport, extended (cntrPaspExt)</span></a></li>
+<li class="toclevel-2"><a href="#Passport_.28cntrPasp.29"><span class="tocnumber">4.4</span> <span class="toctext">Passport (cntrPasp)</span></a></li>
+<li class="toclevel-2"><a href="#Panel_of_the_graphs_.28grph_panel.29"><span class="tocnumber">4.5</span> <span class="toctext">Panel of the graphs (grph_panel)</span></a></li>
+<li class="toclevel-2"><a href="#Panel_of_documents_.28doc_panel.29"><span class="tocnumber">4.6</span> <span class="toctext">Panel of documents (doc_panel)</span></a></li>
+<li class="toclevel-2"><a href="#Accept_.28accept.29"><span class="tocnumber">4.7</span> <span class="toctext">Accept (accept)</span></a></li>
+<li class="toclevel-2"><a href="#Select_item_into_tree_.28treeSelect.29"><span class="tocnumber">4.8</span> <span class="toctext">Select item into tree (treeSelect)</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Widgets_.E2.80.94_graphical_elements"><span class="mw-headline-number">1</span> <span id="Widgets" title="#Widgets">Widgets — graphical elements</span></span></h2>
+<p>Contains general-purpose widgets that are intended to be placed on <a href="#MainFrames">the main frames</a>. These main frames can also be frames outside of this <a href="#RootPgSo">concept of the signal objects of the root page "RootPgSo"</a>, but it should be taken in account that they often refer to and call certain <a href="#Panels">control panels</a>!
+</p><p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="anShow" title="#anShow"><h3><span class="mw-headline" id="Analog_show_.28anShow.29"><span class="mw-headline-number">1.1</span> Analog show (<a href="Libs_Main_graphical_elements.html#anShow" title="Special:MyLanguage/Libs/Main graphical elements">anShow</a>)</span></h3></span> </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The element on Figure 1.1 is used to display the current value of the analog parameter and the regulator mode, if the parameter is a regulator. Also this element generates notifications of violations on the corresponding parameter settings. The element commonly uses and represents the representative structure of <a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">the "Analog signal" DAQ-template</a>.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_AnShow.png"><img class="thumbimage" height="40" src="files/LibMainEls_AnShow.png" width="400" /></a>  <div class="thumbcaption">Fig.1.1. The element "Analog show" in the development and runtime modes (left to right).</div></div></div></div>
+<p><b><u>Using — development</u></b><br />
+This widget can be used by the developer to create mnemonic schemes with displaying of values of the analog parameters and PID-regulators. To use it you need to add this widget to a mnemonic scheme, adjust for the horizontal, vertical size, by scaling, and link to the data source parameter.
+</p><p><b><u>Using — runtime</u></b><br />
+In the runtime mode, in the main field of the element, there are displayed the parameter name, the regulator mode (only for the regulators) and the current value-variable of this parameter; which, depending on the presence of a violation, are displayed in the color style: <i>labColorGood</i>, <i>labColorWarning</i>, <i>labColorAlarm</i>; and in which value the image of the inquieted parameter may blink. At the hardware errors and non validity the data, the last value is grayed out and crossed out.
+</p><p>In the active mode of the element you can obtain <a href="#Passport">the parameter passport</a> clicking the right mouse button on the body of the widget. The passport will present all properties of the parameter. Pressing the left mouse button in the widget body will cause to appear in the panels area for <a href="#ElCadr">control panel</a> of the parameter, and the selection of this widget will be displayed with the blinking frame.
+</p><p><b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Configuration </th>
+<th> Configuration template </th>
+<th> Description
+</th></tr>
+<tr>
+<td> pErr </td>
+<td> Parameter: error </td>
+<td> String </td>
+<td> Input link </td>
+<td> Parameter|err </td>
+<td> Code and text of the parameter error. It is used to generate alarm. The following error codes are processed:
+<ul><li> 1,2 — failure, parameter is not valid, be shown in gray and cross out besides the case with <i>redEVAL</i>;</li>
+<li> 3,4 — above and below the alarm limit, be shown in the styled color <i>labColorAlarm</i>;</li>
+<li> 5,6 — above and below the warning limit, be shown in the styled color <i>labColorWarning</i>;</li>
+<li> 10,11 — the user alarm codes of the statuses warning and alarm, be sown accordingly in the styled color <i>labColorWarning</i> and <i>labColorAlarm</i>.</li></ul>
+</td></tr>
+<tr>
+<td> pModeA </td>
+<td> Parameter: regulator mode: auto </td>
+<td> Boolean </td>
+<td> Input link </td>
+<td> Parameter|auto </td>
+<td> The large letter "A" is displayed on the left when the value checked.
+</td></tr>
+<tr>
+<td> pModeC </td>
+<td> Parameter: regulator mode: cascade </td>
+<td> Boolean </td>
+<td> Input link </td>
+<td> Parameter|casc </td>
+<td> The large letter "C" is displayed on the left when the value checked.
+</td></tr>
+<tr>
+<td> pName </td>
+<td> Parameter: name </td>
+<td> String </td>
+<td> Input link </td>
+<td> Parameter|NAME </td>
+<td> Short name of the parameter displayed over the value and inserted to the alarm messages.
+</td></tr>
+<tr>
+<td> pPrec </td>
+<td> Parameter: precision </td>
+<td> Integer </td>
+<td> Input link </td>
+<td> Parameter|prec </td>
+<td> Number signs after the dot, for positive values, and precision (signs in whole), for negative, to display the real end variable on the screen.
+</td></tr>
+<tr>
+<td> pVal </td>
+<td> Parameter: value </td>
+<td> Real </td>
+<td> Input link </td>
+<td> Parameter|var </td>
+<td> Engineeric real value of the parameter
+</td></tr>
+<tr>
+<td> redEVAL </td>
+<td> Red parameter name in case of failure </td>
+<td> Boolean </td>
+<td> Constant </td>
+<td> </td>
+<td> By default, the color of the parameter's name for the "failure" state (EVAL value) is gray. But some critical for the process parameters must have the "failure" state displayed with the red parameter's name.
+</td></tr>
+<tr>
+<td> spName </td>
+<td> Speech name </td>
+<td> String </td>
+<td> Constant </td>
+<td> </td>
+<td> The parameter name for speech synthesis during the formation of alarm messages taking into account accents of words, pauses, etc. Empty value disables the speech notification!
+</td></tr></table>
+<table class="wikitable">
+
+<tr>
+<td> <span id="anShow1" title="#anShow1"><h3><span class="mw-headline" id="Analog_show_1_.28anShow1.29.2C_Analog_show_1_.28short.29_.28anShow1s.29"><span class="mw-headline-number">1.2</span> Analog show 1 (<a href="Libs_Main_graphical_elements.html#anShow1" title="Special:MyLanguage/Libs/Main graphical elements">anShow1</a>), Analog show 1 (short) (anShow1s)</span></h3></span> </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The element on Figure 1.2 is used to display the current value of the analog parameter and a short prefix of the measured value type. Also this element generates notifications of violations on the corresponding parameter settings. The element commonly uses and represents the representative structure of <a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">the "Analog signal" DAQ-template</a>.
+</p><p>These two elements differ only in their initial horizontal size, that is, the second "Analog show 1 (short)" is a short version for very short cases and it is directly inherited from the first one.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_anShow1.png"><img class="thumbimage" height="23" src="files/LibMainEls_anShow1.png" width="400" /></a>  <div class="thumbcaption">Fig.1.2. The element "Analog show 1" in the development and runtime modes (left to right).</div></div></div></div>
+<p><b><u>Using — development</u></b><br />
+This widget can be used by the developer to create mnemonic schemes with displaying of values of the analog parameters with a prefix and/or as an element of the static screen table. To use it you need to add this widget to a mnemonic scheme, adjust for the horizontal, vertical size, by scaling, and link to the data source parameter.
+</p><p><b><u>Using — runtime</u></b><br />
+In the runtime mode, in the main field of the element, there are displayed the short prefix and the current value-variable of this parameter; which, depending on the presence of a violation, are displayed in the color style: <i>labColorGood</i>, <i>labColorWarning</i>, <i>labColorAlarm</i>; and in which value the image of the inquieted parameter may blink. At the hardware errors and non validity the data, the last value is grayed out and crossed out.
+</p><p>In the active mode of the element you can obtain <a href="#Passport">the parameter passport</a> clicking the right mouse button on the body of the widget. The passport will present all properties of the parameter. Pressing the left mouse button in the widget body will cause to appear in the panels area for <a href="#ElCadr">control panel</a> of the parameter, and the selection of this widget will be displayed with the blinking frame.
+</p><p><b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Configuration </th>
+<th> Configuration template </th>
+<th> Description
+</th></tr>
+<tr>
+<td> pErr </td>
+<td> Parameter: error </td>
+<td> String </td>
+<td> Input link </td>
+<td> Parameter|err </td>
+<td> Code and text of the parameter error. It is used to generate alarm. The following error codes are processed:
+<ul><li> 1,2 — failure, parameter is not valid, be shown in gray and cross out;</li>
+<li> 3,4 — above and below the alarm limit, be shown in the styled color <i>labColorAlarm</i>;</li>
+<li> 5,6 — above and below the warning limit, be shown in the styled color <i>labColorWarning</i>;</li>
+<li> 10,11 — the user alarm codes of the statuses warning and alarm, be sown accordingly in the styled color <i>labColorWarning</i> and <i>labColorAlarm</i>.</li></ul>
+</td></tr>
+<tr>
+<td> pNAME </td>
+<td> Parameter: name </td>
+<td> String </td>
+<td> Input link </td>
+<td> Parameter|NAME </td>
+<td> Short name of the parameter inserted to the alarm messages.
+</td></tr>
+<tr>
+<td> prec </td>
+<td> Parameter: precision </td>
+<td> Integer </td>
+<td> Input link </td>
+<td> Parameter|prec </td>
+<td> Number signs after the dot, for positive values, and precision (signs in whole), for negative, to display the real end variable on the screen.
+</td></tr>
+<tr>
+<td> pVal </td>
+<td> Parameter: value </td>
+<td> Real </td>
+<td> Input link </td>
+<td> Parameter|var </td>
+<td> Engineeric real value of the parameter
+</td></tr>
+<tr>
+<td> spName </td>
+<td> Speech name </td>
+<td> String </td>
+<td> Constant </td>
+<td> </td>
+<td> The parameter name for speech synthesis during the formation of alarm messages taking into account accents of words, pauses, etc. Empty value disables the speech notification!
+</td></tr>
+<tr>
+<td> pName </td>
+<td> Short name </td>
+<td> String </td>
+<td> Constant </td>
+<td> </td>
+<td> Short name-prefix value
+</td></tr>
+<tr>
+<td> pNameSz </td>
+<td> Short name size </td>
+<td> Integer </td>
+<td> Constant </td>
+<td> </td>
+<td> Size of the short name-prefix in pixels, use the zero value to disable the field
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="TextLab" title="#TextLab"><h3><span class="mw-headline" id="Text_label_.28TextLab.29"><span class="mw-headline-number">1.3</span> Text label (<a href="Libs_Main_graphical_elements.html#TextLab" title="Special:MyLanguage/Libs/Main graphical elements">TextLab</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The element on Figure 1.3 is used to display the dynamic text labels, which form on basis of the discrete signals. Also this element generates notifications of violations on the locally defined condition, the attribute <b>ntf</b>. The element commonly uses and represents the representative structure of DAQ-templates of <a href="Libs_Main.html#digitBlockUnif" title="Special:MyLanguage/Libs/Main">the discrete block</a> and <a href="Libs_Main.html#codeState" title="Special:MyLanguage/Libs/Main">the code state</a>.
+</p>
+<ul><li> <b>Sponsored by:</b> <a class="external text" href="http://e-beam.ru" rel="nofollow noreferrer noopener" target="_blank">the Laboratory of Vacuum Technologies</a></li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_TextLab.png"><img class="thumbimage" height="25" src="files/LibMainEls_TextLab.png" width="400" /></a>  <div class="thumbcaption">Fig.1.3. The element "Text label" in the development and runtime modes (left to right).</div></div></div></div>
+<p><b><u>Using — development</u></b><br />
+This widget can be used by the developer to create mnemonic schemes with displaying of text labels and/or as an element of the static screen table. To use it you need to add this widget to a mnemonic scheme, adjust for the horizontal, vertical size and link to the data source parameter.
+</p><p><b><u>Using — runtime</u></b><br />
+In the runtime mode, in the main field of the element, there are displayed the text label, what related to values of the discrete signals of the parameter and the attribute <b>digStts</b> configuration; where the background, depending to availability of a violation related to the attribute <b>ntf</b> condition, sets to the violation color; and to what the inquieted parameter may blink. At the hardware errors and non validity the data, the background shows in the gray color.
+</p><p>In the active mode of the element you can obtain <a href="#Passport">the parameter passport</a> clicking twice the left mouse button on the body of the widget. The passport will present all properties of the parameter. Pressing the left mouse button in the widget body will cause to appear in the panels area for <a href="#ElCadr">control panel</a> of the parameter, and the selection of this widget will be displayed with the blinking frame. The commands are duplicated in the context menu that appears when the right mouse button is pressed in the widget area.
+</p><p><b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Configuration </th>
+<th> Configuration template </th>
+<th> Description
+</th></tr>
+<tr>
+<td> NAME </td>
+<td> Parameter: name </td>
+<td> String </td>
+<td> Input link </td>
+<td> Parameter|NAME </td>
+<td> Short name of the parameter to be inserted in the notification of violations and actions of the user-operator.
+</td></tr>
+<tr>
+<td> DESCR </td>
+<td> Parameter: description </td>
+<td> String </td>
+<td> Input link </td>
+<td> Parameter|DESCR </td>
+<td> Description or long name of the parameter to be inserted in the notification of violations and actions of the user-operator.
+</td></tr>
+<tr>
+<td> st_open </td>
+<td> Parameter: status-open </td>
+<td> Boolean </td>
+<td> Input link </td>
+<td> Parameter|st_open </td>
+<td> The state "Opened" of the parameter or the common state of the switch at missing the state signal "Closed".
+</td></tr>
+<tr>
+<td> st_close </td>
+<td> Parameter: status-close </td>
+<td> Boolean </td>
+<td> Input link </td>
+<td> Parameter|st_close </td>
+<td> The state "Closed" of the parameter
+</td></tr>
+<tr>
+<td> st_text </td>
+<td> Parameter: status (text) </td>
+<td> String </td>
+<td> Input link </td>
+<td> Parameter|st_text </td>
+<td> Text of the parameter state, at the mode "Code state"
+</td></tr>
+<tr>
+<td> digStts </td>
+<td> Parameter: statuses </td>
+<td> String </td>
+<td> Input link </td>
+<td> Parameter|digStts </td>
+<td> Configuration of the parameter statuses with the structure <b>{openedLabel}-{color};{closedLabel}-{color}</b>, for the discrete block.
+</td></tr>
+<tr>
+<td> com </td>
+<td> Parameter: command </td>
+<td> Boolean </td>
+<td> Full link </td>
+<td> Parameter|com </td>
+<td> The command "Open" of the parameter or the common command of the switch at missing the command signal "Close".
+</td></tr>
+<tr>
+<td> close </td>
+<td> Parameter: close </td>
+<td> Boolean </td>
+<td> Full link </td>
+<td> Parameter|close </td>
+<td> The command "Close" of the parameter.
+</td></tr>
+<tr>
+<td> stop </td>
+<td> Parameter: stop </td>
+<td> Boolean </td>
+<td> Full link </td>
+<td> Parameter|stop </td>
+<td> The command "Stop" of the parameter.
+</td></tr>
+<tr>
+<td> com_text </td>
+<td> Parameter: command text (from digComs) </td>
+<td> String </td>
+<td> Full link </td>
+<td> Parameter|com_text </td>
+<td> Text of the parameter command, at the mode "Code state".
+</td></tr>
+<tr>
+<td> digComs </td>
+<td> Parameter: commands </td>
+<td> String </td>
+<td> Input link </td>
+<td> Parameter|digComs </td>
+<td> Configuration of the parameter commands with the structure <b>{openLabel}-{color};{closeLabel}-{color}</b>, for the discrete block, and <b>{com1Label}-{color};{com2Label}-{color};...;{comNLabel}-{color}</b>, for the code status.
+</td></tr>
+<tr>
+<td> ntf </td>
+<td> Notification "{st}:{modes}:{Speech text}" </td>
+<td> String </td>
+<td> Constant </td>
+<td> </td>
+<td> Configuration of the notification forming at the status (st) [0|1] and <a href="Modules/VCAEngine.html#Alarms" title="Special:MyLanguage/Modules/VCAEngine">the notification modes-methods (modes)</a>, as a string of the digital methods, and by the speech, if pointed such method.
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="ImgLab" title="#ImgLab"><h3><span class="mw-headline" id="Image_label_.28ImgLab.29"><span class="mw-headline-number">1.4</span> Image label (<a href="Libs_Main_graphical_elements.html#ImgLab" title="Special:MyLanguage/Libs/Main graphical elements">ImgLab</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The element on Figure 1.4 is used to display the dynamic image labels, which form on basis of the discrete signals. Also this element generates notifications of violations on the locally defined condition, the attribute <b>ntf</b>. The element commonly uses and represents the representative structure of DAQ-templates of <a href="Libs_Main.html#digitBlockUnif" title="Special:MyLanguage/Libs/Main">the discrete block</a> and <a href="Libs_Main.html#codeState" title="Special:MyLanguage/Libs/Main">the code state</a>.
+</p>
+<ul><li> <b>Sponsored by:</b> Vinnica Poultry Farm</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_ImgLab.png"><img class="thumbimage" height="53" src="files/LibMainEls_ImgLab.png" width="400" /></a>  <div class="thumbcaption">Fig.1.4. The element "Image label" in the development and runtime modes (left to right).</div></div></div></div>
+<p><b><u>Using — development</u></b><br />
+This widget can be used by the developer to create mnemonic schemes with displaying of image labels and/or as an element of the static screen table. To use it you need to add this widget to a mnemonic scheme, adjust for the horizontal, vertical size and link to the data source parameter.
+</p><p><b><u>Using — runtime</u></b><br />
+In the runtime mode, in the main field of the element, there are displayed the image label, what related to values of the discrete signals of the parameter and the attribute <b>imgs</b> configuration; where the background, depending to availability of a violation related to the attribute <b>ntf</b> condition, sets to the violation color; and to what the inquieted parameter may blink. At the hardware errors and non validity the data, the background shows in the gray color.
+</p><p>In the active mode of the element you can obtain <a href="#Passport">the parameter passport</a> clicking twice the left mouse button on the body of the widget. The passport will present all properties of the parameter. Pressing the left mouse button in the widget body will cause to appear in the panels area for <a href="#ElCadr">control panel</a> of the parameter, and the selection of this widget will be displayed with the blinking frame. The commands are duplicated in the context menu that appears when the right mouse button is pressed in the widget area.
+</p><p><b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Configuration </th>
+<th> Configuration template </th>
+<th> Description
+</th></tr>
+<tr>
+<td> NAME </td>
+<td> Parameter: name </td>
+<td> String </td>
+<td> Input link </td>
+<td> Parameter|NAME </td>
+<td> Short name of the parameter to be inserted in the notification of violations and actions of the user-operator.
+</td></tr>
+<tr>
+<td> DESCR </td>
+<td> Parameter: description </td>
+<td> String </td>
+<td> Input link </td>
+<td> Parameter|DESCR </td>
+<td> Description or long name of the parameter to be inserted in the notification of violations and actions of the user-operator.
+</td></tr>
+<tr>
+<td> st_open </td>
+<td> Parameter: status-open </td>
+<td> Boolean </td>
+<td> Input link </td>
+<td> Parameter|st_open </td>
+<td> The state "Opened" of the parameter or the common state of the switch at missing the state signal "Closed".
+</td></tr>
+<tr>
+<td> st_close </td>
+<td> Parameter: status-close </td>
+<td> Boolean </td>
+<td> Input link </td>
+<td> Parameter|st_close </td>
+<td> The state "Closed" of the parameter
+</td></tr>
+<tr>
+<td> st_img </td>
+<td> Parameter: status "{img}:{bCol}:{blink}" </td>
+<td> String </td>
+<td> Input link </td>
+<td> Parameter|st_text </td>
+<td> Image of the parameter state, at the mode "Code state", where:
+<ul><li> <i>img</i> — image name, see <a href="Modules/VCAEngine.html#Media" title="Special:MyLanguage/Modules/VCAEngine">the image attributes</a>;</li>
+<li> <i>bCol</i> — background color;</li>
+<li> <i>blink</i> — blink sign [0|1] of the background.</li></ul>
+</td></tr>
+<tr>
+<td> imgs </td>
+<td> Images, for "{openedImage}-{bCol}:{closedImage}-{bCol}:{EVAL}-{bCol}" </td>
+<td> String </td>
+<td> Constant </td>
+<td> </td>
+<td> Configuration of the parameter statuses with the structure <b>{openedLabel}-{color};{closedLabel}-{color};{EVALLabel}-{color}</b>, for the discrete block.
+</td></tr>
+<tr>
+<td> digStts </td>
+<td> Parameter: statuses </td>
+<td> String </td>
+<td> Input link </td>
+<td> Parameter|digStts </td>
+<td> Standard configuration of the parameter statuses with the structure <b>{notUsed}-{openedColor};{notUsed}-{closedColor}'<i>, for the discrete block and missing of the attribute </i></b><i>imgs</i>.
+</td></tr>
+<tr>
+<td> com </td>
+<td> Parameter: command </td>
+<td> Boolean </td>
+<td> Full link </td>
+<td> Parameter|com </td>
+<td> The command "Open" of the parameter or the common command of the switch at missing the command signal "Close".
+</td></tr>
+<tr>
+<td> close </td>
+<td> Parameter: close </td>
+<td> Boolean </td>
+<td> Full link </td>
+<td> Parameter|close </td>
+<td> The command "Close" of the parameter.
+</td></tr>
+<tr>
+<td> stop </td>
+<td> Parameter: stop </td>
+<td> Boolean </td>
+<td> Full link </td>
+<td> Parameter|stop </td>
+<td> The command "Stop" of the parameter.
+</td></tr>
+<tr>
+<td> com_text </td>
+<td> Parameter: command text (from digComs) </td>
+<td> String </td>
+<td> Full link </td>
+<td> Parameter|com_text </td>
+<td> Text of the parameter command, at the mode "Code state".
+</td></tr>
+<tr>
+<td> digComs </td>
+<td> Parameter: commands </td>
+<td> String </td>
+<td> Input link </td>
+<td> Parameter|digComs </td>
+<td> Configuration of the parameter commands with the structure <b>{openLabel}-{color};{closeLabel}-{color};{stopLabel}-{color}</b>, for the discrete block, and <b>{com1Label}-{color};{com2Label}-{color};...;{comNLabel}-{color}</b>, for the code status.
+</td></tr>
+<tr>
+<td> ntf </td>
+<td> Notification "{st}:{modes}:{Speech text}" </td>
+<td> String </td>
+<td> Constant </td>
+<td> </td>
+<td> Configuration of the notification forming at the status (st) [0|1] and <a href="Modules/VCAEngine.html#Alarms" title="Special:MyLanguage/Modules/VCAEngine">the notification modes-methods (modes)</a>, as a string of the digital methods, and by the speech, if pointed such method.
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="alarmsAct" title="#alarmsAct"><h3><span class="mw-headline" id="Alarms_.E2.80.94_active_.28alarmsAct.29"><span class="mw-headline-number">1.5</span> Alarms — active (<a href="Libs_Main_graphical_elements.html#alarmsAct" title="Special:MyLanguage/Libs/Main graphical elements">alarmsAct</a>)</span></h3></span> </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The element in Figure 1.5 serves to dynamically display the active violations in a tabular form and to highlight them in color and text. The violations are obtained from <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">the buffer of current-active violations of OpenSCADA</a>. In fact, the element implements the primitive "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#ImplProtocol" title="Special:MyLanguage/Sub-projects/VCA">Protocol</a>" functions for violations and extension opportunities.
+</p><p>Messages sorting is fixed by the rule "active + highest level + last" to the messages top, which can only be changed by editing the element's source code.
+</p><p>For detailed study of current violations, the element provides a function of increasing the height up or down in focus.
+</p><p>The element is created, and is usually used, in pair with the <a href="#alarmsSt">full-format frame of presenting the violations history</a>, which is completed with most features of this element but also for the violations history.
+</p><p>The main user extension is the ability to define visible table fields from a list of options:
+</p>
+<ul><li> <i>atm</i> — time of the violation appearing;</li>
+<li> <i>qttm</i> — time of the violation confirmation (quietation), for quieted violations;</li>
+<li> <i>lev</i> — level of the violation;</li>
+<li> <i>cat</i> — category of the violation;</li>
+<li> <i>mess</i> — full and unparsed text of the violation message;</li>
+<li> <i>prm</i> — address of the DAQ-parameter of the data source;</li>
+<li> <i>dscr</i> — description of the violation from the source DAQ-parameter;</li>
+<li> <i>dscrCust{N}</i> — description of the user field <i>N</i>;</li>
+<li> <i>alrm</i> — text of the violation;</li>
+<li> <i>cmnt</i> — commentary of the violation.</li></ul>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> This element and its fields generally represent the structure of the violation message, which is described in detail in <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">the Program manual</a>.
+</p><p>As you can see from the list of possible table fields, this item supports confirmation (quietation), commenting, and user fields.
+</p>
+<ul><li> <b>Sponsored by:</b> Ustijancev Michael</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:904px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_alarmsAct.png"><img class="thumbimage" height="170" src="files/LibMainEls_alarmsAct.png" width="902" /></a>  <div class="thumbcaption">Fig.1.5. The element "Alarms — active" in the development and runtime modes (top to down).</div></div></div></div>
+<p><b><u>Using — development</u></b><br />
+This widget can be used by the developer in creating mnemonic schemes with constant display of active violations or for their general display on <a href="#RootPgSo">the root page</a>. To use it you need to add this widget to a mnemonic scheme or the root page, adjust for the horizontal, vertical size, configure vertical extension and adjust other properties, such as the list and the order in which the table fields are displayed.
+</p><p>If you want to exclude the validation function then you have to exclude the validation time "qttm" from the list and make the element inactive.
+</p><p><b><u>Using — runtime</u></b><br />
+In the runtime mode, a table is created to list the active violations, by defined fields, rules of sorting and highlighting; the contents of which are updated periodically and dynamically. When the table is selected and the focus is obtained, its height can be expanded to display more messages if this feature is enabled and the condition accordance is got for a certain number of violations.
+</p><p>The user is given the opportunity to confirm the violation, by changing the value of the confirmation time field or by using the control panel that pops up after selecting the element and the violation item.
+</p><p>The user can also comment on the violation by correcting appropriate field of the table.
+</p><p><b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Description
+</th></tr>
+<tr>
+<td> active </td>
+<td> Active </td>
+<td> Boolean </td>
+<td> Turn off if there disabled confirmation, focus gaining and editing in general — purely displaying.
+</td></tr>
+<tr>
+<td> hHdrVis </td>
+<td> Show header: horizontal </td>
+<td> Boolean </td>
+<td>
+</td></tr>
+<tr>
+<td> vHdrVis </td>
+<td> Show header: vertical </td>
+<td> Boolean </td>
+<td>
+</td></tr>
+<tr>
+<td> formDtTm </td>
+<td> Data and time format (%Y-%m-%d&nbsp;%H.%M.%S[.%MS,%US]) </td>
+<td> String </td>
+<td> Format of displaying the time of violation and confirmation.
+</td></tr>
+<tr>
+<td> expOnItems </td>
+<td> Expand on focus: items (&lt;=0-disabled) </td>
+<td> Integer </td>
+<td> Maximum number of messages to trigger the element expansion, height increasing, at focus gaining.
+</td></tr>
+<tr>
+<td> expOnFocus </td>
+<td> Expand on focus: pixels (0-disabled,&gt;-down,&lt;-up) </td>
+<td> Integer </td>
+<td> Set to the desired value of the element extension, height increasing, at focus gaining.
+</td></tr>
+<tr>
+<td> colms </td>
+<td> Columns, by ',' (atm,qttm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt) </td>
+<td> String </td>
+<td> Determine in the desired sequence and the fields filling.
+</td></tr>
+<tr>
+<td> highLght </td>
+<td> Highlight rules, {lev}{quitt}:{color}:{font}:{fontColor} </td>
+<td> Text </td>
+<td> Highlight rules, where:
+<ul><li> <i>lev</i> — level of the message [0...7];</li>
+<li> <i>quitt</i> — sign of the message confirmation (quietation) [0|1];</li>
+<li> <i>color</i> — background color of the message row;</li>
+<li> <i>font</i> — text font of the message row;</li>
+<li> <i>fontColor</i> — text color of the message row.</li></ul>
+<p>Te example:
+</p>
+<pre style="white-space: pre-wrap">
+5:gray
+4:red
+1:yellow
+</pre>
+</td></tr>
+<tr>
+<td> colDscrCustNames </td>
+<td> Names list of the user fields, separated by ';' </td>
+<td> String </td>
+<td> At the support of user fields and their visibility, their names are given here.
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="objProps" title="#objProps"><h3><span class="mw-headline" id="Object_properties_.28objProps.29"><span class="mw-headline-number">1.6</span> Object properties (<a href="Libs_Main_graphical_elements.html#objProps" title="Special:MyLanguage/Libs/Main graphical elements">objProps</a>)</span></h3></span> </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The element on Figure 1.6 serves to display the properties of the data source in tabular form and to highlight them in color, as an object, and to allow the values of the recordable properties to be changed. This element also generates violation notifications according to the features of the object. The element generally uses and represents a representative structure "<a href="Libs_Main.html#ComplexObject" title="Special:MyLanguage/Libs/Main">Complex objects</a>" of the DAQ-templates.
+</p>
+<ul><li> <b>Sponsored by:</b> PAC HARTRON</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:682px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_objProps.png"><img class="thumbimage" height="383" src="files/LibMainEls_objProps.png" width="680" /></a>  <div class="thumbcaption">Fig.1.6. The element "Object properties" in the development and runtime modes (left to right).</div></div></div></div>
+<p><b><u>Using — development</u></b><br />
+This widget can be used by the developer in creating mnemonic schemes with consolidated rendering of the object as a whole and entity with properties. To use it you need to add this widget to a mnemonic scheme, adjust for the horizontal, vertical size, by scaling, and link to the data source parameter at the DAQ-template "<a href="Libs_Main.html#ComplexObject" title="Special:MyLanguage/Libs/Main">Complex objects</a>".
+</p><p><b><u>Using — runtime</u></b><br />
+In the runtime mode, a table is displayed with properties in the rows where the first column is the property name and the second column is its value. Row can be backlit by an alarm color in case of violation of this property. Of particular importance is the title of the widget, which displays the name of the object background color which can become an emergency color in the presence of violations in the object.
+</p><p>The properties table is active and at selecting the property row, which means the writing, a field for setting the property value will appear below.
+</p><p><b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Configuration </th>
+<th> Configuration template </th>
+<th> Description
+</th></tr>
+<tr>
+<td> objName </td>
+<td> Object: name </td>
+<td> String </td>
+<td> Input link </td>
+<td> Object|NAME </td>
+<td> The object name for the title.
+</td></tr>
+<tr>
+<td> objDescr </td>
+<td> Object: description </td>
+<td> Text </td>
+<td> Input link </td>
+<td> Object|DESCR </td>
+<td> The object description for tooltip to the title.
+</td></tr>
+<tr>
+<td> objErr </td>
+<td> Object: error </td>
+<td> String </td>
+<td> Input link </td>
+<td> Object|err </td>
+<td> The object error to form notifications and to highlight the title, the conception error codes are processed.
+</td></tr>
+<tr>
+<td> objItems </td>
+<td> Object: items </td>
+<td> Object </td>
+<td> Input link </td>
+<td> Object|items </td>
+<td> Descriptive object of the properties of the physical object, according to the concept.
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="calendar" title="#calendar"><h3><span class="mw-headline" id="Calendar_.28calendar.29"><span class="mw-headline-number">1.7</span> Calendar (<a href="Libs_Main_graphical_elements.html#calendar" title="Special:MyLanguage/Libs/Main graphical elements">calendar</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The element on Figure 1.7 is used to display the month of the calendar by week, which allows you to select the year, month and day, as well as switch to the current day.
+</p>
+<ul><li> <b>Sponsored by:</b> SVItoVYR LTD</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:492px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_calendar.png"><img class="thumbimage" height="192" src="files/LibMainEls_calendar.png" width="490" /></a>  <div class="thumbcaption">The element "Calendar" in the development and runtime modes (left to right).</div></div></div></div>
+<p><b><u>Using — development</u></b><br />
+This widget can be used by the developer to create mnemonic schemes with displaying the calendar. To use it you need to add this widget to a mnemonic scheme, adjust for the horizontal, vertical size, by scaling, and use the attribute "selTime" of this widget to obtain and to set the date.
+</p><p><b><u>Using — runtime</u></b><br />
+In the runtime mode, the year, month, and day are displayed according to the "selTime" attribute.
+</p><p>The user can select the year and month from the list, as well as the day in the represented weeks. An appropriate button is provided for a quick return to the current day.
+</p><p><b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Description
+</th></tr>
+<tr>
+<td> selTime </td>
+<td> Selected time </td>
+<td> Integer </td>
+<td> The calendar in seconds from the UNIX-epoch.
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="RootPgSo" title="#RootPgSo"><h2><span class="mw-headline" id="Root_page_.28SO.29_.28RootPgSo.29"><span class="mw-headline-number">2</span> Root page (SO) (<a href="Libs_Main_graphical_elements.html#RootPgSo" title="Special:MyLanguage/Libs/Main graphical elements">RootPgSo</a>)</span></h2></span> </td>
+<td> 2.2 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The element-frame, shown in Figure 2, serves as the basis for the user interfaces creating, initially for control the technological processes, grounded on the signal objects (SO).
+</p><p>The root page contains four areas:
+</p>
+<ul><li> signal objects area of the buttons-indicators (top);</li>
+<li> navigation area by types of view (right-top);</li>
+<li> container of the main frames of the user interface (in the centr);</li>
+<li> container of the control panels (right-bottom).</li></ul>
+<p><i>Signal objects area of the buttons-indicators</i> provides information on the presence of violations in the signal object and for switching between them.
+</p><p>To show the signal objects selection the background color is used, by the styles: <i>backColorButton</i> and <i>backColorButtonSel</i>. And the violations are displayed in the color of the text according to the styles: <i>labColorGood</i>, <i>labColorWarning</i>, <i>labColorAlarm</i>; and in which value the text of the inquieted signal object may blink.
+</p><p>Buttons are currently generated dynamically by copying the first and only, according to the virtual pages of the signal objects in the project tree, with the serial digital identification from 1. The limitation on the number of buttons or signal objects is only the total length of the names of the signal objects that can be placed in two rows of these buttons. That is, for short names we can get up to near 100 signal objects. If the signal object is one, even this single base button is hidden.
+</p><p><i>Navigation area by types of view</i> — indication of the choice and selection of the type of view, such as: "Mnemonic schemes", "Graph groups", "Contour groups", "Documents" and more; and the listing buttons or the direct selection combobox of the frames into the signal object.
+</p><p>The buttons area of the types of view is dynamic, in the sense of occupying the space of the missing ones, and the meaning of the types of view themselves are configured to different from the default value, i.e. there are two main types of view (view1 and view2), three auxiliary (view3, view4 and view5), as well as one common to the whole interface (view6).
+</p><p>Below are also the buttons of quietation those appear in the event of violations, and at the top is a customizable logo.
+</p><p><i>Container of the main frames of the user interface</i> — the area of the container for inclusion in it of the basic frames by their choice of buttons of types of view or change of the signal object.
+</p><p><i>Container of the control panels</i> — container area to include control panels of various objects in the container area of the main frames, for example — panel of the parameter, document, graph and more.
+</p><p>Under the control panels container placed a button to start the demo mode — mode in which performed periodic switching for representative frames, changing regimes and other operations by a scenario.
+</p>
+<ul><li> <b>Sponsored in the dynamization by</b>: Vinnica Poultry Farm</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1026px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_RootPgSoD.png"><img class="thumbimage" height="670" src="files/LibMainEls_RootPgSoD.png" width="1024" /></a>  <div class="thumbcaption">Fig.2a. The "Root page (SO)" frame in the development mode.</div></div></div></div>
+<p><b><u>Using — development</u></b><br />
+This widget can be used only in the root page mode that should be placed in the project's tree as an element "so". Additionally, around the main page should be made following tree hierarchy:
+</p>
+<dl><dd> /<b>control</b>/* — logical container, contains a variety of control panels;</dd>
+<dd> /<b>so</b>/ — this frame as a container, contains of logical containers of the signal objects:
+<dl><dd> <b>{n}</b>/ — logical container of the signal object <i>n</i> (1...), contains logical containers and templates of the types of view:
+<dl><dd> [<b>view1</b>|<b>mn</b>]/* — the type of view 1 (typically and early it is the mnemonic schemes), contains a lot of pages of the end frames;</dd>
+<dd> [<b>view2</b>|<b>ggraph</b>]/* — the type of view 2 (typically and early it is a template of <a href="#grpGraph">the graphics group</a>), contains a lot of pages of the end frames;</dd>
+<dd> [<b>view3</b>|<b>gcadr</b>]/* — the type of view 3 (typically and early it is a template of <a href="#grpCadr">the contours group</a>), contains a lot of pages of the end frames;</dd>
+<dd> [<b>view4</b>|<b>gview</b>]/* — the type of view 4 (typically and early it is a template of <a href="#ViewCadr">the overview frames panel</a>), contains a lot of pages of the end frames;</dd>
+<dd> [<b>view5</b>|<b>doc</b>]/* — the type of view 5 (typically and early it is a logical container of the documents), contains a lot of pages of the end frames;</dd>
+<dd> <b>greg</b>/* — the specific page template of <a href="#cntrRegul">the PID-regulator configuration</a>, contains a lot of pages of the end PID-regulators configuration, statically connected and which are call only by the "PID" button of <a href="#ElCadr">the element cadre</a>.</dd></dl></dd>
+<dd> [<b>view6</b>|<b>rg</b>]/ — logical container of the global type of view 6 (typically and early it is <a href="#ResultGrph">the result graphics</a> — common graphs for the entire interface):
+<dl><dd> [<b>view6</b>|<b>rg</b>]/* — the type of view 6 (typically and early it is a template of <a href="#ResultGrph">the result graphics</a>), contains a lot of pages of the end frames.</dd></dl></dd></dl></dd></dl>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Identifiers of the pages of the types of view, specified as [<b>view1</b>|<b>mn</b>], must be specified in the tree either in the new scheme "view1" or in the old scheme "mn". Mixing is not supported!
+</p><p>As the text of the signal object buttons, there are used name of the logical container with the corresponding <i>n</i> identifier. The description of this container also takes the text of the tooltip to this button if it is not empty. Description of the container also taken into tooltip for this button, if it is not empty.
+</p><p>All further adjustments and edits around this frame must be made for its copy-link in the project tree, and it is strongly not recommended to edit it in the library, otherwise you will lose the ability to update the library or these changes when updating it!
+</p><p>The text and the tooltip of the buttons of the types of view are directly changed in the corresponding properties of these widgets. The fast keys of the type of view are taken from the toolbar brackets, such as "Graphs (Ctrl+G)", and processed accordingly. To change the image of the type of view, it is enough to override the icon of the corresponding view, such as "view1", by loading the image with the appropriate name in the project Mime-data.
+</p><p>You can change the image of the logo in the same way as the image of the type of view, that is, upload a new image called "logo" to the project's Mime-data, and then adjust the geometry of the logo widget to the desired proportions. You can move the image widget to the left by moving the signal object button to the right by the size of the logo. If you do not need the logo at all then to nullify the widget width, but do not remove it!
+</p><p>Potentially, you can also move the navigation bar and the control panel container to the left by moving the main frame container, and maybe the signal object button, to the right.
+</p><p>If necessary, the root page can be appended with additional elements that do not require special processing, that is, changes to the initial procedure of the frame, that is no longer using but editing. For example, the root page is often appended by <a href="#alarmsAct">the generic table of active violations</a>, that can be placed under the main frame container at its entire width, reducing its height by the desired size of the table. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> It should be noted here that reducing the size of this container, like any other, will lead to the appearance of scrollbars and-or will require adjusting the frames of placement in the container. In the example above, this may not be necessary given the extension of the container to unused button rows of the signal objects.
+</p><p>In the absence of the Demo-mode, you may turn off the Demo launch button and expand the control panel.
+</p><p><b><u>Using — runtime</u></b><br />
+When starting the frame in the runtime mode, there are first constructed the buttons of the signal objects, which are formed in two rows, after which the container of the main frames expands up for one row if there is enough one, or for two if the signal object is one. Next, there are formed buttons of the types of view, present of which are activated and expanded to fill the space of the missing ones.
+</p><p>After the dynamic forming, the frame periodically controls the frame change in the main frame container, which is displayed by the corresponding background color in a button of the signal object and the type of view to which the frame belongs. Between the listing buttons, information about the total number of frames and the current position is updated, and the buttons themselves are activated according to the possibility of listing in the current frame position. For the combobox of direct frames selection from list, respectively, the current list of frames is formed and the name of the current one is set. It also monitors the status of violation-notification of the signal objects, which is accordingly displayed by the text color of the buttons of the signal object and its flashing, as well as the quietation buttons are activated or deactivated.
+</p><p>Changing of the frame in the control panel container are not tracked and their are generally called from the main frame interface, unless it is cleared by changing the main frame by opening the panel-terminator.
+</p><p>From the basic actions, the frame allows the user to select the signal object, the type of view and the corresponding frame. By pressing the button of the signal object, the type of view, directly selecting in the combobox or listing; resulting in a call to the corresponding frame in the main frame container. From the ancillary actions, the user can quiet the violation-notification and start the Demo-mode, if one provided. The default frame setting involves servicing a number of hotkeys, such as <b>Ctrl+[1...0]</b> to call the signal objects 1 to 10, and <b>Ctrl+[MGCVDR]</b> to call appropriate types of view.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1026px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_RootPgSoR.png"><img class="thumbimage" height="670" src="files/LibMainEls_RootPgSoR.png" width="1024" /></a>  <div class="thumbcaption">Fig.2b. The "Root page (SO)" frame in the runtime mode.</div></div></div></div>
+<p><b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Description
+</th></tr>
+<tr>
+<td> demoPlayProc </td>
+<td> Procedure of the Demo play </td>
+<td> Text </td>
+<td> A procedure on <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">the JavaLikeCalc language</a> to play some demo. Enables the Demo-mode button in the runtime mode. To an example of such procedure see the demo-projects <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">AGLKS</a> and <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_Boiler" title="Special:MyLanguage/Using/Model Boiler">Boiler</a>!
+</td></tr>
+<tr>
+<td colspan="4"> <i>The visualizer specific attributes common for both <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">UI.Vision</a> (<a href="Modules/Vision.html#SpecAttrs" title="Special:MyLanguage/Modules/Vision">more</a>) and <a href="Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">UI.WebVision</a> (<a href="Modules/WebVision.html#SpecAttrs" title="Special:MyLanguage/Modules/WebVision">more</a>)</i>
+</td></tr>
+<tr>
+<td> keepAspectRatio </td>
+<td> Keep aspect ratio on scale </td>
+<td> Boolean </td>
+<td> Keep aspect ratio of the pages on scale.
+</td></tr>
+<tr>
+<td> stBarNoShow </td>
+<td> Do not show the status bar </td>
+<td> Boolean </td>
+<td> Hide the status bar of the main window.
+</td></tr>
+<tr>
+<td colspan="4"> <i>The visualizer specific attributes for <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">UI.Vision</a> (<a href="Modules/Vision.html#SpecAttrs" title="Special:MyLanguage/Modules/Vision">more</a>)</i>
+</td></tr>
+<tr>
+<td> runWin </td>
+<td> Run window </td>
+<td> Integer numbers selection </td>
+<td> Setting the mode of the main window execution:
+<ul><li> "Original size (0)".</li>
+<li> "Maximize (1)".</li>
+<li> "Full screen (2)".</li></ul>
+</td></tr>
+<tr>
+<td> statLine </td>
+<td> Status line items </td>
+<td> Text </td>
+<td> Text field with description of the status line items.
+</td></tr>
+<tr>
+<td> winPosCntrSave </td>
+<td> Windows position control and save </td>
+<td> Boolean </td>
+<td> Enabling the windows position control and save.
+</td></tr>
+<tr>
+<td colspan="4"> <i>Main procedures of <a href="Modules/VCAEngine.html#Alarms" title="Special:MyLanguage/Modules/VCAEngine">the notification mechanism</a></i>
+</td></tr>
+<tr>
+<td> notify2 </td>
+<td> Notification: type 2 (TextSpeech) </td>
+<td> Text </td>
+<td>
+</td></tr>
+<tr>
+<td> notifyVisVision0 </td>
+<td> Notification: Vision type 0 (Light) </td>
+<td> Text </td>
+<td>
+</td></tr>
+<tr>
+<td> notifyVisVision1 </td>
+<td> Notification: Vision type 1 (Buzzer) </td>
+<td> Text </td>
+<td>
+</td></tr>
+<tr>
+<td> notifyVisVision2 </td>
+<td> Notification: Vision type 2 (TextSpeech) </td>
+<td> Text </td>
+<td>
+</td></tr></table>
+<h2><span class="mw-headline" id="Main_frames"><span class="mw-headline-number">3</span> <span id="MainFrames" title="#MainFrames">Main frames</span></span></h2>
+<p>Contains elements-frames of the template and end types, as well as elements-widgets and panels from which they are built and used. These frames are intended to be placed in the project tree of the pages, built on <a href="#RootPgSo">the concept of the signal objects of the root page "RootPgSo"</a>. However, they may be located as separate entities or as part of your own concept of the page management, but it should be take in account that frames often refer and call certain <a href="#Panels">control panels</a> of the common usage and related elements!
+</p><p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="grpGraph" title="#grpGraph"><h3><span class="mw-headline" id="Graphics_group_.28grpGraph.29.2C_Graphics_group_10_.28grpGraph10.29"><span class="mw-headline-number">3.1</span> Graphics group (<a href="Libs_Main_graphical_elements.html#grpGraph" title="Special:MyLanguage/Libs/Main graphical elements">grpGraph</a>), Graphics group 10 (grpGraph10)</span></h3></span> </td>
+<td> 1.4 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The element-frame, shown in Figure 3.1, is provided for simultaneous observation of trends and control the parameters in the signal object, includes both instances of the widget "<a href="#ElViewGraph">Graphics group element</a>" of each parameter (up to 8 or 10) and <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">the primitive "Diagram"</a> to monitor the parameters' trends and browsing history, and also the scroll bar for fast navigation on allowed history of selected parameters for show.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1162px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_grpGraphD.png"><img class="thumbimage" height="600" src="files/LibMainEls_grpGraphD.png" width="1160" /></a>  <div class="thumbcaption">Fig.3.1a. The "Graphics group" frame in the development mode.</div></div></div></div>
+<p><b><u>Using — development</u></b><br />
+The frame is designed to perform the role of page-template, and should therefore be placed directly in the project's tree. In the project-template "<a href="#RootPgSo">Signal groups</a>", for each signal object, this frame is included in the role of a template that allows you to create on its basis a set of pages of the graphics group. To each frame can be connected up to eight-ten parameters, setting the links. Trends, for which there are not set the links, will be hidden at runtime or allowed for user's selection at case of presence the list of the parameters to select in the attribute "Select: parameters accessible to select" (the list format described in <a href="#graphSelPrm">the parameters selection dialog</a>).
+</p><p>The default trend depth is set at 10 minutes by default — for current operational control, which can be changed directly by editing the corresponding field of the diagram widget, for example, for the project template page, to spread to all end pages.
+</p><p><b><u>Using — runtime</u></b><br />
+In the runtime mode, the trends, for which links have been set, are displayed. Control of the parameters from the graphics group element, described in detail in the section of the "<a href="#ElViewGraph">Graphics group element (ElViewGraph)</a>" widget. Additionally you can control the display properties of graphs, for what, together this page, there automatically opens <a href="#grph_panel">the graph control panel</a> or you have to click the left mouse button in the graph area.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_grpGraphR.png"><img class="thumbimage" height="580" src="files/LibMainEls_grpGraphR.png" width="900" /></a>  <div class="thumbcaption">Fig.3.1b. The "Graphics group" frame in the runtime mode.</div></div></div></div>
+<p><b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Configuration </th>
+<th> Configuration template </th>
+<th> Description
+</th></tr>
+<tr>
+<td> name </td>
+<td> Name </td>
+<td> String </td>
+<td> Constant </td>
+<td>  </td>
+<td> Group name
+</td></tr>
+<tr>
+<td> allowSelLst </td>
+<td> Select: parameters accessible to select </td>
+<td> Text </td>
+<td> No </td>
+<td> </td>
+<td> Place here the parameters for selection by the user in a list of the DAQ-paths to them (for more details see the "<a href="#graphSelPrm">Graph parameter selection</a>" dialog):
+<pre style="white-space:">
+/LogicLev/proc/prm_CPU/prm_load
+/LogicLev/proc/prm_MEM/prm_use
+/LogicLev/proc/prm_CPU/prm_T </pre>
+</td></tr>
+<tr>
+<td> perUserSel </td>
+<td> Select: save the selection per user </td>
+<td> Boolean </td>
+<td> No </td>
+<td> </td>
+<td> Set to save the user selection separately
+</td></tr>
+<tr>
+<td colspan="6"> <i>Element {n} from 1 to 8(10)</i>
+</td></tr>
+<tr>
+<td> el{n} </td>
+<td colspan="5"> <i>List of the linking parameters corresponds to the list of the "Graphics group element (ElViewGraph)" widget</i>
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="ElViewGraph" title="#ElViewGraph"><h4><span class="mw-headline" id="Graphics_group_element_.28ElViewGraph.29"><span class="mw-headline-number">3.1.1</span> Graphics group element (<a href="Libs_Main_graphical_elements.html#ElViewGraph" title="Special:MyLanguage/Libs/Main graphical elements">ElViewGraph</a>)</span></h4></span> </td>
+<td> 1.3 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The element-widget, shown in Figure 3.1.1, is provided to create <a href="#grpGraph">graphics groups</a>. The widget contains information about parameter, the regulator mode, if the parameter is such, the units of analog parameter, as well as the color corresponding to the parameter's trend. The widget commonly uses and represents the representative structure of the DAQ-templates "<a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">Analog signal</a>" and "<a href="Libs_Main.html#digitBlockUnif" title="Special:MyLanguage/Libs/Main">Discrete block</a>".
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_ElViewGraphD.png"><img class="thumbimage" height="60" src="files/LibMainEls_ElViewGraphD.png" width="400" /></a>  <div class="thumbcaption">Fig.3.1.1a. The "Graphics group element" widget in the development mode.</div></div></div></div>
+<p><b><u>Using — development</u></b><br />
+Though this widget is not intended for independent use, in isolation from <a href="#grpGraph">the graphics groups</a>, it can be used, for example, placing it to the mnemonic scheme and linking with the data source parameter.
+</p><p><b><u>Using — runtime</u></b><br />
+In the runtime mode, in the main field of the element, there are displayed the parameter name, the regulator mode (only for the regulators), the current value-variable and the unit of this parameter; which, depending on the presence of a violation, are displayed in the color style: <i>labColorGood</i>, <i>labColorWarning</i>, <i>labColorAlarm</i>. At the hardware errors and non validity the data, the last value is grayed out.
+</p><p>Except the available visual data, a number of control elements are provided:
+</p>
+<ul><li> "Selection" — at pressing the left mouse button in the widget area, in the right side will appear <a href="#ElCadr">the control panel</a>, and the widget selection will be displayed by the border flashing.</li>
+<li> "Hide/Show" — double-clicking in the widget area toggles the show-hiding of the item's graph.</li>
+<li> "Context menu functions" — a number of functions are provided through the context menu:
+<ul><li> "Passport" — getting <a href="#Passport">the passport</a> of the parameter, which will present all it properties.</li>
+<li> "Hide/Show" — toggling the display or hiding of a graph of this element, similar to a double click.</li>
+<li> "Show one" — single graph display of the selected parameter in its native scale by hiding the rest of the items in the group.</li>
+<li> "Show all" — display all parameter graphs in the group.</li>
+<li> "Calculating" — calling <a href="#graphCalc">the calculating dialog</a> above the visible data of the selected parameter.</li>
+<li> "Select" — calling <a href="#graphSelPrm">the selection dialog</a> of parameter from the list of ones available for selection, the attribute "Select: parameters accessible to select" of the owner cadre. This item is only available if a selection list is available.</li></ul></li></ul>
+<p>The widget saves of a user selected parameter in the session table of the project and loads the parameter at next run, include the trend color which default value typically takes from a style.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_ElViewGraphR.png"><img class="thumbimage" height="60" src="files/LibMainEls_ElViewGraphR.png" width="400" /></a>  <div class="thumbcaption">Fig.3.1.1b. The "Graphics group element" widget in the runtime mode.</div></div></div></div>
+<p><b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Configuration </th>
+<th> Configuration template </th>
+<th> Description
+</th></tr>
+<tr>
+<td> name </td>
+<td> Name </td>
+<td> String </td>
+<td> Input link </td>
+<td> Parameter|NAME </td>
+<td> Parameter name-code, to display in the name field.
+</td></tr>
+<tr>
+<td> dscr </td>
+<td> Description </td>
+<td> Text </td>
+<td> Input link </td>
+<td> Parameter|DESCR </td>
+<td> Parameter description, to place in the tooltip and statusbar.
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Address </td>
+<td> Address </td>
+<td> Input link </td>
+<td> Parameter|var </td>
+<td> Address to the parameter attribute for the trend building.
+</td></tr>
+<tr>
+<td> color </td>
+<td> Graphic color </td>
+<td> String </td>
+<td> No </td>
+<td> </td>
+<td> Working color of the trend
+</td></tr>
+<tr>
+<td> colorDef </td>
+<td> Default color from the style </td>
+<td> String </td>
+<td> No </td>
+<td> </td>
+<td> Default color of the trend on the cadre level
+</td></tr>
+<tr>
+<td colspan="6"> <i>Analog parameters</i>
+</td></tr>
+<tr>
+<td> ed </td>
+<td> Dimension </td>
+<td> String </td>
+<td> Input link </td>
+<td> Parameter|ed </td>
+<td>
+</td></tr>
+<tr>
+<td> prec </td>
+<td>  Precision </td>
+<td> Integer </td>
+<td> Input link </td>
+<td> Parameter|prec </td>
+<td> Number signs after the dot, for positive values, and precision (signs in whole), for negative, to display the real end variable on the screen.
+</td></tr>
+<tr>
+<td> log </td>
+<td> Logarithmic scale </td>
+<td> Boolean </td>
+<td> Input link </td>
+<td> Parameter|log </td>
+<td>
+</td></tr>
+<tr>
+<td> max </td>
+<td> Maximum </td>
+<td> Real </td>
+<td> Input link </td>
+<td> Parameter|max </td>
+<td> Upper limit value of the parameter.
+</td></tr>
+<tr>
+<td> min </td>
+<td> Minimum </td>
+<td> Real </td>
+<td> Input link </td>
+<td> Parameter|min </td>
+<td> Minimum limit values of the parameter.
+</td></tr>
+<tr>
+<td> aMax </td>
+<td> Border up alarm </td>
+<td> Real </td>
+<td> Input link </td>
+<td> Parameter|aMax </td>
+<td>
+</td></tr>
+<tr>
+<td> aMin </td>
+<td> Border down alarm </td>
+<td> Real </td>
+<td> Input link </td>
+<td> Parameter|aMin </td>
+<td>
+</td></tr>
+<tr>
+<td> wMax </td>
+<td> Border up warning </td>
+<td> Real </td>
+<td> Input link </td>
+<td> Parameter|wMax </td>
+<td>
+</td></tr>
+<tr>
+<td> wMin </td>
+<td> Border down warning </td>
+<td> Real </td>
+<td> Input link </td>
+<td> Parameter|wMin </td>
+<td>
+</td></tr>
+<tr>
+<td> pModeA </td>
+<td> Regulator mode: auto </td>
+<td> Boolean </td>
+<td> Input link </td>
+<td> Parameter|auto </td>
+<td> The regulator mode "Automatic".
+</td></tr>
+<tr>
+<td> pModeC </td>
+<td> Regulator mode: cascade </td>
+<td> Boolean </td>
+<td> Input link </td>
+<td> Parameter|casc </td>
+<td> The regulator mode "Cascade".
+</td></tr>
+<tr>
+<td colspan="6"> <i>Discrete parameters</i>
+</td></tr>
+<tr>
+<td> digComs </td>
+<td> Digital: commands </td>
+<td> String </td>
+<td> Constant </td>
+<td> </td>
+<td> Names and colors of the buttons of the commands are in the format <b>{On}[-color]:{Off}[-color][:{Stop}[-color]]</b>. Default colors are: green, red and yellow.
+</td></tr>
+<tr>
+<td> digStts </td>
+<td> Digital: states </td>
+<td> String </td>
+<td> Constant </td>
+<td> </td>
+<td> Names and colors of the labels of the states are in the format <b>{On}[-color]:{Off}[-color]</b>. Default colors are: green and red.
+</td></tr>
+<tr>
+<td> digRevers </td>
+<td> Digital: reversion </td>
+<td> Boolean </td>
+<td> Constant </td>
+<td>  </td>
+<td> Discrete signal reverse.
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="graphSelPrm" title="#graphSelPrm"><h4><span class="mw-headline" id="Graph_parameter_selection_.28graphSelPrm.29"><span class="mw-headline-number">3.1.2</span> Graph parameter selection (<a href="Libs_Main_graphical_elements.html#graphSelPrm" title="Special:MyLanguage/Libs/Main graphical elements">graphSelPrm</a>)</span></h4></span> </td>
+<td> 1.4 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The element, shown in Figure 3.1.2, implements a dialog of selection the data source, often the archive ones, for the trend formation in the "<a href="#grpGraph">Graphics group</a>" frame. Selection is provided from the list, specified in the attribute "Select: parameters accessible to select (allowSelLst)" of the frame-initiator. For the selected source you can specify the name, scale, logarithmic scale, dimension and the color of the trend.
+</p><p>In the "Select: parameters accessible to select (allowSelLst)" attribute the data sources should be placed in the following way:
+</p>
+<ul><li> <b>{DAQ_Arh_addr}[:Name[:min:max[:dim]]</b>, where:
+<ul><li> "DAQ_Arh_addr" — address of the parameter, for the group linking, or address of the attribute with data from the "Data acquisition (DAQ)" subsystem, as well as the address of the values' archive, for example:
+<ul><li> <b>/LogicLev/gen/prm_F3</b> — address of the "F3" parameter&nbsp;;</li>
+<li> <b>/DAQ/System/AutoDA/prm_CPULoad/load</b> — address of the "load" attribute of the "CPULoad" parameter;</li>
+<li> <b>/Archive/va_LC21_1_var</b> — address of the "LC21_1_var" archive.</li></ul></li>
+<li> "Name" — name of the source to display. At the group linking the name will be taken from the "NAME" attribute.</li>
+<li> "min", "max" — display scale. At group linking the scale will be taken from the "min" and "max" attributes, respectively. In the case of the scale absence (min &gt;= max) the auto-scale will be enabled.</li>
+<li> "dim" — dimension (measuring unit) of the parameter to display. At the group linking it will be taken from the "ed" attribute.</li></ul></li>
+<li> <b>&lt;varhs&gt;</b> — template of the group selection, if you specify it all available archives in the system will be included into the selection list.</li></ul>
+<p>Examples of the "Select: parameters accessible to select (allowSelLst)" attribute's content:
+</p>
+<pre style="white-space: pre-wrap;">
+/System/AutoDA/prm_CPULoad/load:CPU Load:0:100:%
+/LogicLev/gen/prm_F3
+&lt;varhs&gt;
+</pre>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:610px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_graphSelPrm.png"><img class="thumbimage" height="830" src="files/LibMainEls_graphSelPrm.png" width="608" /></a>  <div class="thumbcaption">Fig.3.1.2. The "Graph parameter selection" frame in the development and runtime mode.</div></div></div></div>
+<p><b><u>Using — development</u></b><br />
+This frame should be placed to the panels' logical container of the project tree. The "Select: parameters accessible to select (allowSelLst)" attribute must be defined to a list of sources according to the rules described above in the "<a href="#grpGraph">Graphics groups</a>", which should provide the selection of the sources by the user. As a result, the "Select" item will appear in the context menu of the <a href="#ElViewGraph">Graphics group element</a>.
+</p><p><b><u>Using — runtime</u></b><br />
+Calling the dialogue is made by the "Select" item of the <a href="#ElViewGraph">Graphics group element</a> context menu. The dialogue provides the user to the possibility of selection the data source from the list, as well as an indication of its basic parameters: name, scale, logarithmic scale, dimension and the color of the trend. When you accept the dialogue the selected parameters are applied to the graphics group element chart, replacing the links. The "&lt;Clear&gt;" item selection and applying causes to clearing all the links and the graph's item. Into a text field under the list you can rapidly find any needed parameter.
+</p><p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="graphCalc" title="#graphCalc"><h4><span class="mw-headline" id="Graph_parameter_calculation_.28graphCalc.29"><span class="mw-headline-number">3.1.3</span> Graph parameter calculation (<a href="Libs_Main_graphical_elements.html#graphCalc" title="Special:MyLanguage/Libs/Main graphical elements">graphCalc</a>)</span></h4></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The element, shown in Figure 3.1.3, implements a dialog of user calculation of the selected graph parameter for the graphically visible data. The user is given an option to select calculations from the built-in library, the privileged user ("root" or in the "ITW" group) has the opportunity to edit or write their own calculation procedure.
+</p><p>In general, the built-in library currently contains the following functions of the user calculation:
+</p>
+<ul><li> Sum, at hour.</li>
+<li> Average and range.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:610px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_graphCalc.png"><img class="thumbimage" height="630" src="files/LibMainEls_graphCalc.png" width="608" /></a>  <div class="thumbcaption">Fig.3.1.3. The "Graph parameter calculation" frame in the development and runtime mode.</div></div></div></div>
+<p><b><u>Using — development</u></b><br />
+This frame should be placed to the panels' logical container of the project tree.
+</p><p><b><u>Using — runtime</u></b><br />
+Calling the dialogue is made by the "Calculation" item of the <a href="#ElViewGraph">Graphics group element</a> context menu. The dialog gives the user the choice of the function of calculation the visible data of the selected parameter and the ability to edit-write their own function, for the privileged user. The calculation result is located in the corresponding text box.
+</p><p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="grpCadr" title="#grpCadr"><h3><span class="mw-headline" id="Contours_group_.28grpCadr.29"><span class="mw-headline-number">3.2</span> Contours group (<a href="Libs_Main_graphical_elements.html#grpCadr" title="Special:MyLanguage/Libs/Main graphical elements">grpCadr</a>)</span></h3></span> </td>
+<td> 1.2 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The element-frame, shown in Figure 3.2, provides for simultaneous monitoring and control of contours of several parameters, up to eight, includes both instances of the widget "<a href="#ElCadr">Element cadre</a> for each contour, and <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">the primitive "Diagram"</a> to monitor the trends of the contours and viewing history.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_grpCadrD.png"><img class="thumbimage" height="600" src="files/LibMainEls_grpCadrD.png" width="900" /></a>  <div class="thumbcaption">Fig.3.2a. The "Contours group" frame in the development mode.</div></div></div></div>
+<p><b><u>Using — development</u></b><br />
+The frame is designed to perform the role of page-template, and should therefore be placed directly in the project's tree. In the project-template "<a href="#RootPgSo">Signal groups</a>", for the first signal object, this frame is included in the role of a template that allows you to create on its basis a set of pages of the contours group. To each frame can be connected up to eight parameters, setting the links. Contours and trends, for which there are not set the links, will be hidden at runtime.
+</p><p>The default trend depth is set at 10 minutes by default — for current operational control, which can be changed directly by editing the corresponding field of the diagram widget, for example, for the project template page, to spread to all end pages.
+</p><p><b><u>Using — runtime</u></b><br />
+In the runtime mode, the contours and trends, for which links have been set, are displayed. Control of the parameters by contours, described in detail in the section of the "<a href="#ElCadr">Element cadre</a>" panel. In addition to this you can control the trends display properties, which requires the left mouse button to click in the trend's area and by means of appeared <a href="#grph_panel">trend's control panel</a> to make the necessary actions.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_grpCadrR.png"><img class="thumbimage" height="580" src="files/LibMainEls_grpCadrR.png" width="900" /></a>  <div class="thumbcaption">Fig.3.2b. The "Contours group" frame in the runtime mode.</div></div></div></div>
+<p><b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Configuration </th>
+<th> Configuration template </th>
+<th> Description
+</th></tr>
+<tr>
+<td> grpName </td>
+<td> Group name </td>
+<td> String </td>
+<td> Constant </td>
+<td>  </td>
+<td> Group's name
+</td></tr>
+<tr>
+<td colspan="6"> <i>Element {n} from 1 to 8.</i>
+</td></tr>
+<tr>
+<td> el{n} </td>
+<td colspan="5"> <i>The list of the linking parameters corresponds to the "Element cadre (ElCadr)" panel</i>
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="ViewCadr" title="#ViewCadr"><h3><span class="mw-headline" id="Group_of_overview_frames_.28ViewCadr.29"><span class="mw-headline-number">3.3</span> Group of overview frames (<a href="Libs_Main_graphical_elements.html#ViewCadr" title="Special:MyLanguage/Libs/Main graphical elements">ViewCadr</a>)</span></h3></span> </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The element-frame shown in Figure 3.3 is used to display the current parameter trends in individual frames-widgets with up to 24 units (6x4) for which scaling is supported depending on their configured number. The frames-widgets of the parameter trends are implemented with the satellite widget "<a href="#ElViewCadr">Frame of the group of overview</a>".
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_ViewCadrD.png"><img class="thumbimage" height="600" src="files/LibMainEls_ViewCadrD.png" width="900" /></a>  <div class="thumbcaption">Fig.3.3a. The "Group of overview frames" frame in the development mode.</div></div></div></div>
+<p><b><u>Using — development</u></b><br />
+The frame is designed to perform the role of page-template, and should therefore be placed directly in the project's tree. In the project-template "<a href="#RootPgSo">Signal groups</a>", for the first signal object, this frame is included in the role of a template that allows you to create on its basis a set of pages of the group of overview. Frames-widgets, for which there are not set the links, will be hidden at runtime and will be performed the proportional scaling to missing full rows and columns to fill the entire frame.
+</p><p><b><u>Using — runtime</u></b><br />
+In the runtime mode, the frames-widgets, for which links have been set, are displayed. Control of the parameters from the frames-widgets, described in detail in the section of the "<a href="#ElViewCadr">Frame of the group of overview</a>" widget.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_ViewCadrR.png"><img class="thumbimage" height="580" src="files/LibMainEls_ViewCadrR.png" width="900" /></a>  <div class="thumbcaption">Fig.3.3b. The "Group of overview frames" frame in the runtime mode.</div></div></div></div>
+<p><b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Configuration </th>
+<th> Configuration template </th>
+<th> Description
+</th></tr>
+<tr>
+<td> name </td>
+<td> Name </td>
+<td> String </td>
+<td> Constant </td>
+<td>  </td>
+<td> Frame's name
+</td></tr>
+<tr>
+<td colspan="6"> <i>Frame-widget {r}_{c},  where {r} — rows from 1 to 4  and {c} - columns from 1 to 6.</i>
+</td></tr>
+<tr>
+<td> el{r}_{c} </td>
+<td colspan="5"> <i>The list of linked parameters corresponds to ones of the "Frame of the group of overview (ElViewCadr)" widget</i>
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="ElViewCadr" title="#ElViewCadr"><h4><span class="mw-headline" id="Frame_of_the_group_of_overview_.28ElViewCadr.29"><span class="mw-headline-number">3.3.1</span> Frame of the group of overview (<a href="Libs_Main_graphical_elements.html#ElViewCadr" title="Special:MyLanguage/Libs/Main graphical elements">ElViewCadr</a>)</span></h4></span> </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The element-widget, shown in Figure 3.3.1, serves as the basis for <a href="#ViewCadr">the group of overview frames</a> and is not usually used independently. The widget displays the text information about parameter in the form of the name and value, and a trend of the parameter for small period of time (2 minutes) to observe the current trend of the parameter with auto-scaling on the value scale.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_ElViewCadr.png"><img class="thumbimage" height="164" src="files/LibMainEls_ElViewCadr.png" width="400" /></a>  <div class="thumbcaption">Fig.3.3.1. The "Frame of the group of overview" widget in the development and runtime modes (left to right).</div></div></div></div>
+<p><b><u>Using — development</u></b><br />
+Though this widget is not intended for independent use, in isolation from <a href="#ViewCadr">the group of overview frames</a>, it can be still used, for example, placing it to the mnemonic scheme and linking with the data source parameter.
+</p><p><b><u>Using — runtime</u></b><br />
+In the runtime mode, the main field of the element displays the parameter name, the current value-variable and the trend of the parameter; which are always displayed in the style color: <i>labColorGood</i>.
+</p><p>In the active mode of the element you can obtain <a href="#Passport">the parameter passport</a> clicking the right mouse button on the body of the widget. The passport will present all properties of the parameter. Pressing the left mouse button in the widget body will cause to appear in the panels area for <a href="#ElCadr">control panel</a> of the parameter, and the selection of this widget will be displayed with the blinking frame.
+</p><p><b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Configuration </th>
+<th> Configuration template </th>
+<th> Description
+</th></tr>
+<tr>
+<td> name </td>
+<td> Name </td>
+<td> String </td>
+<td> Input link </td>
+<td> Parameter|NAME </td>
+<td> Parameter name (code) for display in the name's field.
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Address </td>
+<td> Address </td>
+<td> Input link </td>
+<td> Parameter|var </td>
+<td> Address to the value attribute of the parameter to construct the trend.
+</td></tr>
+<tr>
+<td> var </td>
+<td> Variable </td>
+<td> Real </td>
+<td> Input link </td>
+<td> Parameter|var </td>
+<td> Directly the parameter value to be displayed in the value field.
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="ResultGraph" title="#ResultGraph"><h3><span class="mw-headline" id="Result_graphics_.28ResultGraph.29"><span class="mw-headline-number">3.4</span> Result graphics (<a href="Libs_Main_graphical_elements.html#ResultGraph" title="Special:MyLanguage/Libs/Main graphical elements">ResultGraph</a>)</span></h3></span> </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The element-frame shown in Figure 3.4 is used to display a group of the current parameter trends (up to 5) in individual frames-widgets with up to 16 units (4x4) for which scaling is supported depending on their configured number. The frames-widgets of the parameter trends are implemented with the satellite widget "<a href="#ResultGraphEl">Frame of the result graphics</a>".
+</p><p>Summary the total number of displayed graphs in one frame reaches 80, and it is intended to form a separate type of view that is used outside <a href="#RootPgSo">the signal objects</a> — globally for the entire visualization project.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> The frame doesn't support any control.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_ResultGraphD.png"><img class="thumbimage" height="600" src="files/LibMainEls_ResultGraphD.png" width="900" /></a>  <div class="thumbcaption">Fig.3.4a. The "Result graphics" frame in the development mode.</div></div></div></div>
+<p><b><u>Using — development</u></b><br />
+The frame is designed to perform the role of page-template, and should therefore be placed directly in the project's tree. In the project-template "<a href="#RootPgSo">Signal groups</a>", at the root page level it has a special virtual page "Result graphics" with the result graphics template, that allows you to create on its basis a set of pages of the result graphics. Frames-widgets, for which there are not set any links, will be hidden at runtime and will be performed the proportional scaling to missing full rows and columns to fill the entire frame.
+</p><p><b><u>Using — runtime</u></b><br />
+In the runtime mode, the frames-widgets, for which links have been set, are displayed.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_ResultGraphR.png"><img class="thumbimage" height="580" src="files/LibMainEls_ResultGraphR.png" width="900" /></a>  <div class="thumbcaption">Fig.3.4b. The "Result graphics" frame in the runtime mode.</div></div></div></div>
+<p><b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Configuration </th>
+<th> Configuration template </th>
+<th> Description
+</th></tr>
+<tr>
+<td> grpName </td>
+<td> Group name </td>
+<td> String </td>
+<td> Constant </td>
+<td>  </td>
+<td> Group name
+</td></tr>
+<tr>
+<td colspan="6"> <i>Frame-widget {n} from 1 to 16.</i>
+</td></tr>
+<tr>
+<td> el{n} </td>
+<td colspan="5"> <i>The list of linking parameters corresponds to the "Frame of the result graphics (ResultGraphEl)" widget.</i>
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="ResultGraphEl" title="#ResultGraphEl"><h4><span class="mw-headline" id="Frame_of_the_result_graphics_.28ResultGraphEl.29"><span class="mw-headline-number">3.4.1</span> Frame of the result graphics (<a href="Libs_Main_graphical_elements.html#ResultGraphEl" title="Special:MyLanguage/Libs/Main graphical elements">ResultGraphEl</a>)</span></h4></span> </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The element-widget, shown in Figure 3.4.1, serves as the basis for <a href="#ResultGraph">the result graphics</a> and is not usually used independently. The widget displays the name of the group and up to five trends, with their text labels, over a fixed period of time (10 minutes) to observe the current trend of the parameters.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:462px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_ResultGraphEl.png"><img class="thumbimage" height="142" src="files/LibMainEls_ResultGraphEl.png" width="460" /></a>  <div class="thumbcaption">Fig.3.4.1. The "Frame of the result graphics" widget in the development and runtime modes (left to right).</div></div></div></div>
+<p><b><u>Using — development</u></b><br />
+Though this widget is not intended for independent use, in isolation from <a href="#ResultGrph">the result graphics</a>, it can be still used, for example, placing it to the mnemonic scheme and linking with the data source parameter.
+</p><p><b><u>Using — runtime</u></b><br />
+In the runtime mode, the main element field displays the group header, headers and trends of the parameters in the configuration-defined or styled colors.
+</p><p><b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Configuration </th>
+<th> Configuration template </th>
+<th> Description
+</th></tr>
+<tr>
+<td> title </td>
+<td> Title </td>
+<td> String </td>
+<td> Constant </td>
+<td> </td>
+<td> Displays at the top of the graphs, in the absence the graphs field expands up.
+</td></tr>
+<tr>
+<td colspan="6"> <i>Parameter {n} from 1 to 5.</i>
+</td></tr>
+<tr>
+<td> p1_addr </td>
+<td> Parameter{n}: address </td>
+<td> Address </td>
+<td> Input link </td>
+<td> Parameter {n}|var </td>
+<td> Address to the parameter attribute for plotting the graph {n}.
+</td></tr>
+<tr>
+<td> p1_clr </td>
+<td> Parameter{n}: color </td>
+<td> Color </td>
+<td> From style </td>
+<td> labColorGrph{n} </td>
+<td>
+</td></tr>
+<tr>
+<td> p1_max </td>
+<td> Parameter{n}: maximum </td>
+<td> Real </td>
+<td> Input link </td>
+<td> Parameter {n}|max </td>
+<td> Upper limit of the trend.
+</td></tr>
+<tr>
+<td> p1_min </td>
+<td> Parameter{n}: minimum </td>
+<td> Real </td>
+<td> Input link </td>
+<td> Parameter {n}|min </td>
+<td> Lower limit of the trend.
+</td></tr>
+<tr>
+<td> p1_name </td>
+<td> Parameter{n}: name </td>
+<td> String </td>
+<td> Input link </td>
+<td> Parameter {n}|NAME </td>
+<td> Short name of the parameter to display in the field on the left.
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="cntrRegul" title="#cntrRegul"><h3><span class="mw-headline" id="Regulator.27s_control_panel_.28cntrRegul.29"><span class="mw-headline-number">3.5</span> Regulator's control panel (<a href="Libs_Main_graphical_elements.html#cntrRegul" title="Special:MyLanguage/Libs/Main graphical elements">cntrRegul</a>)</span></h3></span> </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>Element-frame, shown in Figure 3.5, is used for adjustment of PID-regulator, includes information about the parameter-regulator, fields of the regulator's settings and <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">the "Diagram" primitive</a>, to monitor the trends of the regulator and browsing history. The frame commonly uses and represents the representative structure of the DAQ-template for the <a href="Libs_Main.html#pidUnif" title="Special:MyLanguage/Libs/Main">analog</a> and <a href="Libs_Main.html#pidUnifImp" title="Special:MyLanguage/Libs/Main">pulse</a> PID-regulators.
+</p>
+<ul><li> <b>Sponsored by:</b> <a class="external text" href="http://diyaorg.dp.ua" rel="nofollow noreferrer noopener" target="_blank">DIYA LTD</a></li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_cntrRegulD.png"><img class="thumbimage" height="600" src="files/LibMainEls_cntrRegulD.png" width="900" /></a>  <div class="thumbcaption">Fig.3.5a. The "Regulator's control panel" frame in the development mode.</div></div></div></div>
+<p><b><u>Using — Development</u></b><br />
+This frame can be used as a panel, called from <a href="#ElCadr">the control of panel of the parameters</a>, as well as a template-page. The frame should be placed directly in the project's tree, namely to <a href="#RootPgSo">the panels container</a>, where the dynamic linking will be performed to the regulator parameter. To create a static list of contours of the regulators' configuration, with the possibility of listing in it, you must place them in the container "greg" of the regulators' contours of each <a href="#RootPgSo">signal object</a> and statically link them with the corresponding parameter, and to ensure equality of the panel's ID and the linked parameter.
+</p><p>The default trend depth is set at 20 minutes by default — for current operational control, which can be changed directly by editing the corresponding field of the diagram widget.
+</p><p><b><u>Using — runtime</u></b><br />
+In the runtime mode, you can see:
+</p>
+<ul><li> name of the regulator parameter;</li>
+<li> field with the regulator properties in the composition: identifier, name, description, measuring unit, set-point, variable output, scale and mode;</li>
+<li> coefficients of the regulator configuration: Gain, Ci, Ti, Cd, Td, TdLg, Zin, H1, H2, C1, C2, C3, C4, Tpl, Tml and Rfkt;</li>
+<li> the diagram area with displaying the trends: variable (green, the style "labColorGrph4"), set-point (blue, the style "labColorGrph3"), the analog output (cyan, the style "labColorGrph5"), the regulator mode "Automate" (magenta, the style "labColorGrph7") and the digital outputs (orange, the style "labColorGrph2").</li></ul>
+<p>Users have an ability to change the PID-regulator's coefficients, mode, set-point, output and immediately to see the reaction on the diagram. In addition, the user may learn the history of the regulator work, which requires the left mouse button click in the graph area and by means of appeared <a href="#grph_panel">trend's control panel</a> to make the necessary navigation actions. To return <a href="#ElCadr">the control panel of the parameter</a> the left mouse button must be clicked in an empty area of the frame.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_cntrRegulR.png"><img class="thumbimage" height="580" src="files/LibMainEls_cntrRegulR.png" width="900" /></a>  <div class="thumbcaption">Fig.3.5b. The "Regulator's control panel" frame in the runtime mode.</div></div></div></div>
+<p><b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Configuration </th>
+<th> Configuration template </th>
+<th> Description
+</th></tr>
+<tr>
+<td> SHIFR </td>
+<td> Parameter: code </td>
+<td> String </td>
+<td> Input link </td>
+<td> Parameter|SHIFR </td>
+<td>
+</td></tr>
+<tr>
+<td> NAME </td>
+<td> Parameter: code </td>
+<td> String </td>
+<td> Input link </td>
+<td> Parameter|NAME </td>
+<td>
+</td></tr>
+<tr>
+<td> DESCR </td>
+<td> Parameter: description </td>
+<td> String </td>
+<td> Input link </td>
+<td> Parameter|DESCR </td>
+<td>
+</td></tr>
+<tr>
+<td> max </td>
+<td> Parameter: scale maximum </td>
+<td> Real </td>
+<td> Input link </td>
+<td> Parameter|max </td>
+<td>
+</td></tr>
+<tr>
+<td> min </td>
+<td> Parameter: scale minimum </td>
+<td> Real </td>
+<td> Input link </td>
+<td> Parameter|min </td>
+<td>
+</td></tr>
+<tr>
+<td> ed </td>
+<td> Parameter: dimension of variable </td>
+<td> String </td>
+<td> Input link </td>
+<td> Parameter|ed </td>
+<td>
+</td></tr>
+<tr>
+<td> prec </td>
+<td> Parameter: precision </td>
+<td> Integer </td>
+<td> Input link </td>
+<td> Parameter|prec </td>
+<td> Number of digits after coma, placed in value and set-point of the PID.
+</td></tr>
+<tr>
+<td> var </td>
+<td> Parameter: variable </td>
+<td> Real </td>
+<td> Input link </td>
+<td> Parameter|var </td>
+<td>
+</td></tr>
+<tr>
+<td> var_addr </td>
+<td> Parameter: variable address </td>
+<td> Address </td>
+<td> Input link </td>
+<td> Parameter|var </td>
+<td> Address for the trend building of the variable.
+</td></tr>
+<tr>
+<td colspan="6"> <i>PID-regulator</i>
+</td></tr>
+<tr>
+<td> auto_addr </td>
+<td> Parameter: auto </td>
+<td> Address </td>
+<td> Input link </td>
+<td> Parameter|auto </td>
+<td> Address for the trend building of the mode "Auto".
+</td></tr>
+<tr>
+<td> sp </td>
+<td> Parameter: set-point </td>
+<td> Real </td>
+<td> Input link </td>
+<td> Parameter|sp </td>
+<td>
+</td></tr>
+<tr>
+<td> sp_addr </td>
+<td> Parameter: set-point address </td>
+<td> Address </td>
+<td> Input link </td>
+<td> Parameter|sp </td>
+<td> Address for the trend building of the set-point.
+</td></tr>
+<tr>
+<td> out </td>
+<td> Parameter: output </td>
+<td> Real </td>
+<td> Input link </td>
+<td> Parameter|out </td>
+<td>
+</td></tr>
+<tr>
+<td> out_addr </td>
+<td> Parameter: output address </td>
+<td> Address </td>
+<td> Input link </td>
+<td> Parameter|out </td>
+<td> Address for the trend building of the analog output.
+</td></tr>
+<tr>
+<td> Hdwn </td>
+<td> Parameter: bottom output border </td>
+<td> Real </td>
+<td> Full link </td>
+<td> Parameter|Hdwn </td>
+<td> Limit the analog output value at the bottom.
+</td></tr>
+<tr>
+<td> Hup </td>
+<td> Parameter: upper output border </td>
+<td> Real </td>
+<td> Full link </td>
+<td> Parameter|Hup </td>
+<td> Limit the analog output value at the top.
+</td></tr>
+<tr>
+<td> Kp </td>
+<td> Parameter: gain coefficient </td>
+<td> Real </td>
+<td> Full link </td>
+<td> Parameter|Kp </td>
+<td>
+</td></tr>
+<tr>
+<td> Ki </td>
+<td> Parameter: coeff. of integration </td>
+<td> Real </td>
+<td> Full link </td>
+<td> Parameter|Ki </td>
+<td>
+</td></tr>
+<tr>
+<td> Ti </td>
+<td> Parameter: time of integration </td>
+<td> Real </td>
+<td> Full link </td>
+<td> Parameter|Ti </td>
+<td>
+</td></tr>
+<tr>
+<td> Kd </td>
+<td> Parameter: coeff. of differential </td>
+<td> Real </td>
+<td> Full link </td>
+<td> Parameter|Kd </td>
+<td>
+</td></tr>
+<tr>
+<td> Td </td>
+<td> Parameter: time of differentiation </td>
+<td> Real </td>
+<td> Full link </td>
+<td> Parameter|Td </td>
+<td>
+</td></tr>
+<tr>
+<td> Tzd </td>
+<td> Parameter: differential part lag time </td>
+<td> Real </td>
+<td> Full link </td>
+<td> Parameter|Tzd </td>
+<td>
+</td></tr>
+<tr>
+<td> Zi </td>
+<td> Parameter: insensitivity area </td>
+<td> Real </td>
+<td> Full link </td>
+<td> Parameter|Zi </td>
+<td>
+</td></tr>
+<tr>
+<td> K1 </td>
+<td> Parameter: input 1 coefficient </td>
+<td> Real </td>
+<td> Full link </td>
+<td> Parameter|K1 </td>
+<td>
+</td></tr>
+<tr>
+<td> K2 </td>
+<td> Parameter: input 2 coefficient </td>
+<td> Real </td>
+<td> Full link </td>
+<td> Parameter|K2 </td>
+<td>
+</td></tr>
+<tr>
+<td> K3 </td>
+<td> Parameter: input 3 coefficient </td>
+<td> Real </td>
+<td> Full link </td>
+<td> Parameter|K3 </td>
+<td>
+</td></tr>
+<tr>
+<td> K4 </td>
+<td> Parameter: input 4 coefficient </td>
+<td> Real </td>
+<td> Full link </td>
+<td> Parameter|K4 </td>
+<td>
+</td></tr>
+<tr>
+<td colspan="6"> <i>Pulse PID-regulator</i>
+</td></tr>
+<tr>
+<td> impQdwn_addr </td>
+<td> Parameter: address of impulse output down </td>
+<td> Address </td>
+<td> Input link </td>
+<td> Parameter|impQdwn </td>
+<td> Address for the trend building of the pulse output "Down".
+</td></tr>
+<tr>
+<td> impQup_addr </td>
+<td> Parameter: address of impulse output up </td>
+<td> Address </td>
+<td> Input link </td>
+<td> Parameter|impQup </td>
+<td> Address for the trend building of the pulse output "Up".
+</td></tr>
+<tr>
+<td> KImpRfact </td>
+<td> Parameter: rate factor </td>
+<td> Real </td>
+<td> Full link </td>
+<td> Parameter|KImpRfact </td>
+<td> Asymmetry in up and down pulse width generation.
+</td></tr>
+<tr>
+<td> TImpMin </td>
+<td> Parameter: minimal impulse time </td>
+<td> Integer </td>
+<td> Full link </td>
+<td> Parameter|TImpMin </td>
+<td> Pulses are generated from the specified width.
+</td></tr>
+<tr>
+<td> TImpPer </td>
+<td> Parameter: pulses period </td>
+<td> Integer </td>
+<td> Full link </td>
+<td> Parameter|TImpPer </td>
+<td> Periodicity of repetition of pulse generation.
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="alarmsSt" title="#alarmsSt"><h3><span class="mw-headline" id="Alarms_.E2.80.94_state_.28alarmsSt.29"><span class="mw-headline-number">3.6</span> Alarms — state (<a href="Libs_Main_graphical_elements.html#alarmsSt" title="Special:MyLanguage/Libs/Main graphical elements">alarmsSt</a>)</span></h3></span> </td>
+<td> 1.2 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The element-frame in Figure 3.6 serves to display the violations history and to update their dynamically for the current time in a full-format tabular form, to highlight them in color and text and the possibility of multilevel filtering. The violations are obtained from <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">the buffer of current-active violations of OpenSCADA</a> and archive(s), specified in the configuration field <b>alArch</b>. In fact, the element implements the primitive "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#ImplProtocol" title="Special:MyLanguage/Sub-projects/VCA">Protocol</a>" functions for violations and extension opportunities.
+</p><p>The frame in general contains elements:
+</p>
+<ul><li> the messages table — the main area;</li>
+<li> a button of the mass quietance — the top left;</li>
+<li> a combobox of selection of the data model level sort rule, it provides sorting by the selected column from the list defined in <b>colms</b> and by default this is time, as the second criterion (last on the top) — the next one top left;</li>
+<li> a navigation panel at the messages history-archive — the top centre and right, consisting of:
+<ul><li> the top-end time of the data;</li>
+<li> size — depth of the data requesting;</li>
+<li> the buttons of fast listing — per one and five intervals-depths forward and backward and at the current time;</li>
+<li> a button to quickly move to the next part of a large query interval, divided by the limit on the number of messages in the table — for very dense-active messages generation;</li>
+<li> a button to call-form of the report document for the actual table's data.</li></ul></li>
+<li> elements of the five-level filter with displaying the next level at activation the last one, by selecting a column from the list of specified ones in <b>colms</b> — the top after the previous one.</li></ul>
+<p>According to the announced list of the control elements, message sorting can be modified by the user, both by the built-in column sorting mechanism of a single visualizer and at the data model level, if such function the visualizer is not provided. Considering the basic purpose of the frame is the status of the violations (ie history), the default sorting rule is the "last" to the messages top.
+</p><p>The frame is created, and is usually used, in pair with the <a href="#alarmsAct">widget of dynamically display the active violations</a>, which is completed with main features of this frame but only for active violations and in the small widget.
+</p><p>The main user extension is the ability to define visible table fields from a list of options:
+</p>
+<ul><li> <i>atm</i> — time of the violation appearing;</li>
+<li> <i>qttm</i> — time of the violation confirmation (quietation), for quieted violations;</li>
+<li> <i>nrmtm</i> — time of coming-returning the violation to the state "NORM";</li>
+<li> <i>lev</i> — level of the violation;</li>
+<li> <i>cat</i> — category of the violation;</li>
+<li> <i>mess</i> — full and unparsed text of the violation message;</li>
+<li> <i>prm</i> — address of the DAQ-parameter of the data source;</li>
+<li> <i>dscr</i> — description of the violation from the source DAQ-parameter;</li>
+<li> <i>dscrCust{N}</i> — description of the user field <i>N</i>;</li>
+<li> <i>alrm</i> — text of the violation;</li>
+<li> <i>cmnt</i> — commentary of the violation.</li></ul>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> This frame and its fields generally represent the structure of the violation message, which is described in detail in <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">the Program manual</a>.
+</p><p>As you can see from the list of possible table fields, this item supports confirmation (quietation), commenting, and user fields.
+</p>
+<ul><li> <b>Sponsored by:</b> Ustijancev Michael</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_alarmsStD.png"><img class="thumbimage" height="550" src="files/LibMainEls_alarmsStD.png" width="900" /></a>  <div class="thumbcaption">Fig.3.6a. The frame "Alarms — state" in the development mode.</div></div></div></div>
+<p><b><u>Using — development</u></b><br />
+The widget is designed to perform the role of page, and should therefore be placed directly in the project's tree. After adding, the frame must be adjusted for the properties, such as the list and the order in which the table fields are displayed.
+</p><p>The combobox of selecting sorting rule is disabled by default for the sake of using the built-in column sort function of the table of the corresponding visualizer. If this feature is not provided by the visualizer then enable this combo box.
+</p><p>If you want to exclude the validation function then you have to exclude the validation time "qttm" from the list and make the table element inactive.
+</p><p>The report building at the table data is also disabled by default. To enable it, you have to place <a href="#alarmsStReport">the frame of alarms reporting</a> in the logical container of panels of the project tree and then enable the characteristic report generation button in the upper right corner of this frame.
+</p><p><b><u>Using — runtime</u></b><br />
+In the runtime mode, a table is created from the active violations list, for the current time, and violations from the history by defined fields, with the activity control and marking and rules of the highlighting; the contents of which are updated periodically and dynamically for the current time.
+</p><p>The user can use the navigation bar to determine the time interval of the data in the table, specifying the top-end and depth of the required data. In the process of requesting too tight data spaces, only the number of messages specified in the property <b>messLim</b> will be readable, and the user can use the button in the navigation bar, what appears in that case, to move to the next piece.
+</p><p>The data obtained in the table can be filtered by the content of the column selected accordingly, which can be performed at up to five levels, the filter elements of which will appear after the last filter level is selected.
+</p><p>The user is given the opportunity to confirm the violation, by changing the value of the confirmation time field or by using the control panel that pops up after selecting the table element and the violation item. The user may also confirm all active violations by clicking the mass quietance button.
+</p><p>If there is a column sort function in the visualizer, or enable sorting at the data model level, the user can select a column to sort the table rows at that content.
+</p><p>The user may also comment on the violation by correcting appropriate field of the table.
+</p><p>To generate a separate report, the user can click the characteristic button in the top right corner if this feature is enabled.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_alarmsStR.png"><img class="thumbimage" height="580" src="files/LibMainEls_alarmsStR.png" width="900" /></a>  <div class="thumbcaption">Fig.3.6b. The frame "Alarms — state" in the runtime mode.</div></div></div></div>
+<p><b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Description
+</th></tr>
+<tr>
+<td> messCat </td>
+<td> Message category </td>
+<td> String </td>
+<td> Category of the processing messages, typically it is "al*:*".
+</td></tr>
+<tr>
+<td> messLim </td>
+<td> Messages limit, quantity </td>
+<td> Integer </td>
+<td> Maximum quantity of the messages in the table, typically it is 1000.
+</td></tr>
+<tr>
+<td> alArch </td>
+<td> Alarms archiver, "{ArhMod}.{Arh}" </td>
+<td> String </td>
+<td> An archiver from which the violations will be taken, empty for all ones.
+</td></tr>
+<tr>
+<td> alarms.active </td>
+<td> Active </td>
+<td> Boolean </td>
+<td> Turn off if there disabled confirmation, focus gaining and editing in general — purely displaying.
+</td></tr>
+<tr>
+<td> hHdrVis </td>
+<td> Show header: horizontal </td>
+<td> Boolean </td>
+<td>
+</td></tr>
+<tr>
+<td> vHdrVis </td>
+<td> Show header: vertical </td>
+<td> Boolean </td>
+<td>
+</td></tr>
+<tr>
+<td> formDtTm </td>
+<td> Data and time format (%Y-%m-%d&nbsp;%H.%M.%S[.%MS,%US]) </td>
+<td> String </td>
+<td> Format of displaying the time of violation and confirmation.
+</td></tr>
+<tr>
+<td> colms </td>
+<td> Columns, by ',' (atm,qttm,nrmtm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt) </td>
+<td> String </td>
+<td> Determine in the desired sequence and the fields filling.
+</td></tr>
+<tr>
+<td> highLght </td>
+<td> Highlight rules, {lev}{quitt}{act}:{color}:{font}:{fontColor} </td>
+<td> Text </td>
+<td> Highlight rules, where:
+<ul><li> <i>lev</i> — level of the message [0...7];</li>
+<li> <i>quitt</i> — sign of the message confirmation (quietation) [0|1];</li>
+<li> <i>act</i> — sign of the message activity [0|1];</li>
+<li> <i>color</i> — background color of the message row;</li>
+<li> <i>font</i> — text font of the message row;</li>
+<li> <i>fontColor</i> — text color of the message row.</li></ul>
+<p>Te example:
+</p>
+<pre style="white-space: pre-wrap">
+501:gray
+401:red
+101:yellow
+511:gray:Arial 11 0 1
+411:red:Arial 11 0 1
+111:yellow:Arial 11 0 1
+</pre>
+</td></tr>
+<tr>
+<td> colDscrCustNames </td>
+<td> Names list of the user fields, separated by ';' </td>
+<td> String </td>
+<td> At the support of user fields and their visibility, their names are given here.
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="alarmsStReport" title="#alarmsStReport"><h4><span class="mw-headline" id="Alarms_.E2.80.94_report_.28alarmsStReport.29"><span class="mw-headline-number">3.6.1</span> Alarms — report (<a href="Libs_Main_graphical_elements.html#alarmsStReport" title="Special:MyLanguage/Libs/Main graphical elements">alarmsStReport</a>)</span></h4></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The element-frame, shown in Figure 3.6.1, implements a dialog to display a report document based on a list of violations received from <a href="#alarmsSt">the full-format frame of presenting the violations history</a>.
+</p><p>The main purpose and function of this frame is to provide an opportunity to print the violations history table and export data from it.
+</p>
+<ul><li> <b>Sponsored by:</b> Ustijancev Michael</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:810px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_alarmsStReport.png"><img class="thumbimage" height="625" src="files/LibMainEls_alarmsStReport.png" width="808" /></a>  <div class="thumbcaption">Fig.3.6.1. The frame "Alarms — report".</div></div></div></div>
+<p><b><u>Using — development</u></b><br />
+This frame should be placed to the panels' logical container of the project tree.
+</p><p><b><u>Using — runtime</u></b><br />
+Calling the dialogue is made by a characteristic button, at the top right, of <a href="#alarmsSt">the full-format frame of presenting the violations history</a>. The dialog provides the text of the report document and a button at the bottom right to close it.
+</p><p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="userManager" title="#userManager"><h3><span class="mw-headline" id="Users_manager_.28userManager.29"><span class="mw-headline-number">3.7</span> Users manager (<a href="Libs_Main_graphical_elements.html#userManager" title="Special:MyLanguage/Libs/Main graphical elements">userManager</a>)</span></h3></span>
+</td>
+<td> 1.4 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The element-frame, shown in Figure 3.7, serves to control users from the user interface itself. That is, typically this feature is provided to the SCADA programmer at <a href="Program_manual.html#CfgSecurity" title="Special:MyLanguage/Documents/Program manual">the Security subsystem configuration</a>, but sometimes there is a need to provide this capability from the user interface and with a few restrictions on controlled users and their groups that this frame performs and generally provides:
+</p>
+<ul><li> forming a list of controlled users;</li>
+<li> the ability to view and change user information for: name, full name, description, password and groups;</li>
+<li> adding new and deleting existing users.</li></ul>
+<ul><li> <b>Sponsored by:</b> Vinnica Poultry Farm</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_userManagerD.png"><img class="thumbimage" height="550" src="files/LibMainEls_userManagerD.png" width="900" /></a>  <div class="thumbcaption">Fig.3.7a. The "Users manager" frame in the development mode.</div></div></div></div>
+<p><b><u>Using — development</u></b><br />
+The widget is designed to perform the role of a page, and should therefore be placed directly in the project's tree. Additionally, into the panels folder of the project, you need to place <a href="#accept">the acception dialog frame</a> and some attribute configuration is required, below, where no links are provided.
+</p><p><b><u>Using — runtime</u></b><br />
+In the runtime mode, a list is formed with available users and, at their selection, on the right displayed their information that can be changed. The user can be added and removed by the appropriate interface commands under the list of users.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_userManagerR.png"><img class="thumbimage" height="639" src="files/LibMainEls_userManagerR.png" width="900" /></a>  <div class="thumbcaption">Fig.3.7b. The "Users manager" frame in the runtime mode.</div></div></div></div>
+<p><b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Description
+</th></tr>
+<tr>
+<td> owner </td>
+<td> Owner </td>
+<td> String </td>
+<td> Owner and group of the frame that have access to it, typically "root:Security" — to allow the frame to be accessed, the user must be included in the "Security" group.
+</td></tr>
+<tr>
+<td> perm </td>
+<td> Access </td>
+<td> Integer numbers selection </td>
+<td> Frame access rules, typically "RWRW__" — the frame is viewable and controllable only for "root" and users in the "Security" group.
+</td></tr>
+<tr>
+<td> denyUsers </td>
+<td> Deny to control: users, separated by ';' </td>
+<td> String </td>
+<td> A list of do not controlled users, typically "root;".
+</td></tr>
+<tr>
+<td> denyGroups </td>
+<td> Deny to control: groups, separated by ';' </td>
+<td> String </td>
+<td> A list of do not controlled groups, typically "root;users;Archive;BD;DAQ;ModSched;Protocol;Security;Special;Transport;UI;".
+</td></tr>
+<tr>
+<td> newUseGrps </td>
+<td> Groups of new created user </td>
+<td> String </td>
+<td> Groups to which the user is automatically included, after creation, are typically "UI;Guest".
+</td></tr>
+<tr>
+<td> storeDB </td>
+<td> DB of saving new users </td>
+<td> String </td>
+<td> Database of storage of newly created users, by default — the work one.
+</td></tr></table>
+<h2><span class="mw-headline" id="Control_panels_and_simple_dialogs"><span class="mw-headline-number">4</span> <span id="Panels" title="#Panels">Control panels and simple dialogs</span></span></h2>
+<p>Contains elements-frames of control panels and simple dialogues, that are difficult or unnecessary to be implemented as panels. These frames are intended to be placed in the respective panels directory of the project tree, built on <a href="#RootPgSo">the concept of the signal objects of the root page "RootPgSo"</a>. The frames are generally not intended to be used separately, as they often represent the specifics of the data to which their provide control elements or expanded information, and should therefore be used with them, except in the case of unification, generalization and extended control of the primitives!
+</p><p>These elements are mostly opened dynamically upon call from the primary view element-widget, performing in that <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#LinkingDyn" title="Special:MyLanguage/Sub-projects/VCA">the dynamic linking of links in the group "&lt;page&gt;" of the panel</a> with the widget (often page) that called this panel. Further work, until closing, is done with the data of the calling widget.
+</p><p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="terminator" title="#terminator"><h3><span class="mw-headline" id="Terminator_panel_.28terminator.29"><span class="mw-headline-number">4.1</span> Terminator panel (<a href="Libs_Main_graphical_elements.html#terminator" title="Special:MyLanguage/Libs/Main graphical elements">terminator</a>)</span></h3></span> </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The panel element shown in Figure 4.1 serves to fill the panel container space when no active visual control element is selected in the main frame, since closing or clearing frames in the container area is not provided, only the replacement.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_terminatorD.png"><img class="thumbimage" height="300" src="files/LibMainEls_terminatorD.png" width="400" /></a>  <div class="thumbcaption">Fig.4.1. The panel element "Terminator panel".</div></div></div></div>
+<p><b><u>Using — development</u></b><br />
+This element should be placed in the logical container of the project's tree.
+</p><p><b><u>Using — runtime</u></b><br />
+Calling the panel is made from <a href="#RootPgSo">the root page "RootPgSo"</a> by changing the signal object or the type of view.
+</p><p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="ElCadr" title="#ElCadr"><h3><span class="mw-headline" id="Element_cadre_.28ElCadr.29"><span class="mw-headline-number">4.2</span> Element cadre (<a href="Libs_Main_graphical_elements.html#ElCadr" title="Special:MyLanguage/Libs/Main graphical elements">ElCadr</a>)</span></h3></span> </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The element shown in Figures 4.2 is in fact a universal panel of generic and extended control by different devices for all known and defined representative structures of the basic data of the control systems at the DAQ-templates:
+</p>
+<ul><li> analog: <a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">analog signal</a>, <a href="Libs_Main.html#manInUnif" title="Special:MyLanguage/Libs/Main">manual input of the analog signal</a>, PID-regulator (<a href="Libs_Main.html#pidUnif" title="Special:MyLanguage/Libs/Main">analog</a> and <a href="Libs_Main.html#pidUnifImp" title="Special:MyLanguage/Libs/Main">pulse</a>);</li>
+<li> <a href="Libs_Main.html#digitBlockUnif" title="Special:MyLanguage/Libs/Main">discrete blocks</a>: valves, automatic shut off valves, motors, fans and switches;</li>
+<li> <a href="Libs_Main.html#codeState" title="Special:MyLanguage/Libs/Main">arbitrary discrete states</a>.</li></ul>
+<p>In the primary function of the pannel — advanced and common control, this item is called from:
+</p>
+<ul><li> <a href="#Widgets">the primary data representing widgets</a> of this library: "<a href="#anShow">Analog show</a>", "<a href="#anShow">Analog show 1</a>", "<a href="#TextLab">Text label</a>", "<a href="#ImgLab">Image label</a>";</li>
+<li> <a href="#MainFrames">the main frames</a>: "<a href="#grpGraph">Graphics group</a>", "<a href="#ViewCadr">Overview frames panel</a>", "<a href="#cntrRegul">Regulator's control panel</a>".</li></ul>
+<p>If this element using as a control panel is not required, it is firstly in the primary data representing widgets and by their specializing in particular types of data to what a separate panel can be created. Therefore, due to its high universality, due to the support of all known representative structures of DAQ-templates, it is obligatory to use in main frames, as is done in the frame "<a href="#grpCadr">Contours group</a>".
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_ElCadrD.png"><img class="thumbimage" height="315" src="files/LibMainEls_ElCadrD.png" width="400" /></a>  <div class="thumbcaption">Fig.4.2a. The "Element cadre" widget in the development mode.</div></div></div></div>
+<p><b><u>Using — development</u></b><br />
+The panel does not require any special configuration by the user, it should only be located in the panels folder of the project tree of <a href="#RootPgSo">the concept of the signal objects of the root page "RootPgSo"</a>, which will allow it to be dynamically invoked and opened in the control panels container of the root page.
+</p><p>The panel Identifier, when placed, should be saved and its line of call, upon receiving focus, in the events processing attribute "evProc" of the primary widget will look "ws_FocusIn::open:/pg_control/pg_ElCadr".
+</p><p><b><u>Using — runtime</u></b><br />
+<i>Indications of the analog parameter</i> — in this mode, there is no any control, and there are only units displaying, the value's histogram and the name of the parameter.
+</p><p><i>Manual input of the analog parameter</i> — in addition to displaying indications of analog parameters the buttons to enter a new value are displayed. Enter of the value is displayed in the field at the top, in the backlight rectangle. To validate the input, press the left mouse button in the area of the backlight rectangle, without that the typed value will be reset after a few seconds.
+</p><p><i>PID-regulator's mode</i> — to the value of a variable and its histogram are added values and histograms of set-point and out of the PID-regulator, the buttons to enter a new value of the set-point or out, as well as the mode adjustment buttons and the field to display the current mode. Also, for the user with appropriate privileges ("root:ITW"), it is available the button to go to a frame to set the coefficients of the PID-regulator. In the case of pulse PID instead of histogram of the analog output it is displayed the status of pulse output with the help of triangles "Up" and "Down" and the manual entry of output leads to direct formation of pulse, respectively down or up.
+</p><p><i>Mode of the discrete device</i> — in this mode the name and the field of discrete assemble of the parameter are displayed. The field of the discrete assemble contains the current state of discrete device, on the left, and the buttons of commands, on the right. There are two states of the device: "Open", "Closed" and the three commands: "Open", "Close", "Stop". The names of the states and commands can be adjusted during set up. Changing the state of the discrete device is determined by pressing the corresponding command. In direct discrete mode, a combo box is formed with a list of elements from <i>digComs</i>, the current state from <i>st_text</i> and sending commands to <i>com_text</i>.
+</p><p>Every action on this panel (change of PID-regulator set-point, state of the discrete parameter, ...) is recorded in the actions log by the generation of appropriate messages according to <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">the message structure of the operator actions</a>.
+</p><p>For any displayed or controlled parameter the <a href="#Passport">passport</a> can be obtained by clicking the right mouse button on the contour field. The passport will present all the properties of the parameter.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:602px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_elcadr.png"><img class="thumbimage" height="375" src="files/LibMainEls_elcadr.png" width="600" /></a>  <div class="thumbcaption">Fig.4.2b. The "Element cadre" widget in the runtime mode.</div></div></div></div>
+<p><b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Configuration </th>
+<th> Configuration template </th>
+<th> Description
+</th></tr>
+<tr>
+<td> prmId </td>
+<td> Parameter: identifier </td>
+<td> String </td>
+<td> Input link </td>
+<td> &lt;page&gt;|SHIFR </td>
+<td> Identifier of the parameter, used only to detect the appropriate PID-control pages.
+</td></tr>
+<tr>
+<td> prmShifr </td>
+<td> Parameter: code </td>
+<td> String </td>
+<td> Input link </td>
+<td> &lt;page&gt;|NAME </td>
+<td> Short name of the parameter — code, to be placed below the frame and in actions of the user-operator.
+</td></tr>
+<tr>
+<td> prmDescr </td>
+<td> Parameter: description </td>
+<td> String </td>
+<td> Input link </td>
+<td> &lt;page&gt;|DESCR </td>
+<td> Description of the parameter to be placed in actions of the user-operator.
+</td></tr>
+<tr>
+<td> prmColor </td>
+<td> Parameter: border color </td>
+<td> String </td>
+<td> Input link </td>
+<td> &lt;page&gt;|color </td>
+<td> Sets the border color of the contour.
+</td></tr>
+<tr>
+<td colspan="6"> <i>Properties of the Analog Devices</i>
+</td></tr>
+<tr>
+<td> prmDemention </td>
+<td> Parameter: dimension </td>
+<td> String </td>
+<td> Input link </td>
+<td> &lt;page&gt;|ed </td>
+<td>
+</td></tr>
+<tr>
+<td> prmPrec </td>
+<td> Parameter: precision (signs) </td>
+<td> Integer </td>
+<td> Input link </td>
+<td> &lt;page&gt;|prec </td>
+<td> Number of digits after the dot in the parameter value and the step of changing the manual input of the value, as well as the set-point and output of the PID-regulator.
+</td></tr>
+<tr>
+<td> prmVar </td>
+<td> Parameter: variable </td>
+<td> Real </td>
+<td> Full link </td>
+<td> &lt;page&gt;|var </td>
+<td> Directly the value of the analog parameter.
+</td></tr>
+<tr>
+<td> max </td>
+<td> Parameter: maximum </td>
+<td> Real </td>
+<td> Input link </td>
+<td> &lt;page&gt;|max </td>
+<td> Maximum limit of the parameter value.
+</td></tr>
+<tr>
+<td> min </td>
+<td> Parameter: minimum </td>
+<td> Real </td>
+<td> Input link </td>
+<td> &lt;page&gt;|min </td>
+<td> Minimum limit of the parameter value.
+</td></tr>
+<tr>
+<td> prmAMax </td>
+<td> Parameter: border up alarm </td>
+<td> Real </td>
+<td> Input link </td>
+<td> &lt;page&gt;|aMax </td>
+<td>
+</td></tr>
+<tr>
+<td> prmAMin </td>
+<td> Parameter: border down alarm </td>
+<td> Real </td>
+<td> Input link </td>
+<td> &lt;page&gt;|aMin </td>
+<td>
+</td></tr>
+<tr>
+<td> prmWMax </td>
+<td> Parameter: border up warning </td>
+<td> Real </td>
+<td> Input link </td>
+<td> &lt;page&gt;|wMax </td>
+<td>
+</td></tr>
+<tr>
+<td> prmWMin </td>
+<td> Parameter: border down warning </td>
+<td> Real </td>
+<td> Input link </td>
+<td> &lt;page&gt;|wMin </td>
+<td>
+</td></tr>
+<tr>
+<td colspan="6"> <i>Manual Analog Input</i>
+</td></tr>
+<tr>
+<td> prmVarIn </td>
+<td> Parameter: variable input </td>
+<td> Real </td>
+<td> Full link </td>
+<td> &lt;page&gt;|varIn </td>
+<td> Output for manual input of analog parameter value. The presence of this parameter is an indication that the parameter is defined as "Manual Analog Input".
+</td></tr>
+<tr>
+<td colspan="6"> <i>PID-regulator</i>
+</td></tr>
+<tr>
+<td> prmAnalog </td>
+<td> Parameter: analog regulator </td>
+<td> Boolean </td>
+<td> Input link </td>
+<td> &lt;page&gt;|analog </td>
+<td> The indication of the analog regulator, in the absence of which the regulator is considered as impulse.
+</td></tr>
+<tr>
+<td> prmAuto </td>
+<td> Parameter: automate </td>
+<td> Boolean </td>
+<td> Full link </td>
+<td> &lt;page&gt;|auto </td>
+<td> The regulator mode "Automatic".
+</td></tr>
+<tr>
+<td> prmCasc </td>
+<td> Parameter: cascade </td>
+<td> Boolean </td>
+<td> Full link </td>
+<td> &lt;page&gt;|casc </td>
+<td> The regulator mode "Cascade".
+</td></tr>
+<tr>
+<td> prmSp </td>
+<td> Parameter: set-point </td>
+<td> Real </td>
+<td> Full link </td>
+<td> &lt;page&gt;|sp </td>
+<td> The PID-regulator set-point, which can be set by the user.
+</td></tr>
+<tr>
+<td> prmImpQdwnTm </td>
+<td> Parameter: imp. out down </td>
+<td> Boolean </td>
+<td> Input link </td>
+<td> &lt;page&gt;|impQdwn </td>
+<td> The output "Down" of the impulse (PWM) regulator.
+</td></tr>
+<tr>
+<td> prmImpQupTm </td>
+<td> Parameter: imp. out up </td>
+<td> Boolean </td>
+<td> Input link </td>
+<td> &lt;page&gt;|impQup </td>
+<td> The output "Up" of the impulse (PWM) regulator.
+</td></tr>
+<tr>
+<td> prmOut </td>
+<td> Parameter: output </td>
+<td> Real </td>
+<td> Full link </td>
+<td> &lt;page&gt;|out </td>
+<td> Output of the analog PID-regulator to display and manual input of the output value of PID in the manual mode.
+</td></tr>
+<tr>
+<td> prmManIn </td>
+<td> Parameter: manual input </td>
+<td> Real </td>
+<td> Full link </td>
+<td> &lt;page&gt;|manIn </td>
+<td> Manual input of the new output value of the PID-regulator in the manual mode.
+</td></tr>
+<tr>
+<td colspan="6"> <i>Properties of the discrete devices</i>
+</td></tr>
+<tr>
+<td> prmCom </td>
+<td> Parameter: command - "Open" </td>
+<td> Boolean </td>
+<td> Full link </td>
+<td> &lt;page&gt;|com </td>
+<td>
+</td></tr>
+<tr>
+<td> prmClose </td>
+<td> Parameter: command - "Close" </td>
+<td> Boolean </td>
+<td> Full link </td>
+<td> &lt;page&gt;|close </td>
+<td>
+</td></tr>
+<tr>
+<td> prmStop </td>
+<td> Parameter: command - "Stop" </td>
+<td> Boolean </td>
+<td> Full link </td>
+<td> &lt;page&gt;|stop </td>
+<td>
+</td></tr>
+<tr>
+<td> prmComText </td>
+<td> Parameter: text of command </td>
+<td> String </td>
+<td> Full link </td>
+<td> &lt;page&gt;|com_text </td>
+<td> The command text directly, taken from <i>digComs</i> at building the selection combobox.
+</td></tr>
+<tr>
+<td> digComs </td>
+<td> Parameter: discrete commands </td>
+<td> String </td>
+<td> Input link </td>
+<td> &lt;page&gt;|digComs </td>
+<td> Configuration of the parameter commands with the structure <b>{openLabel}-{color};{closeLabel}-{color}</b>, for the discrete block, and <b>{com1Label}-{color};{com2Label}-{color};...;{comNLabel}-{color}</b>, for the code status. Default colours for the discrete block are: "green", "red"  and "yellow".
+</td></tr>
+<tr>
+<td> prmOpenSt </td>
+<td> Parameter: state - "Opened" </td>
+<td> Boolean </td>
+<td> Input link </td>
+<td> &lt;page&gt;|st_open </td>
+<td>
+</td></tr>
+<tr>
+<td> prmCloseSt </td>
+<td> Parameter: state - "Closed" </td>
+<td> Boolean </td>
+<td> Input link </td>
+<td> &lt;page&gt;|st_close </td>
+<td>
+</td></tr>
+<tr>
+<td> prmStText </td>
+<td> Parameter: status text </td>
+<td> String </td>
+<td> Input link </td>
+<td> &lt;page&gt;|st_text </td>
+<td> The status text directly.
+</td></tr>
+<tr>
+<td> digStts </td>
+<td> Parameter: discrete stats </td>
+<td> String </td>
+<td> Input link </td>
+<td> &lt;page&gt;|digStts </td>
+<td> Configuration of the parameter statuses with the structure <b>{openedLabel}-{color};{closedLabel}-{color}</b>, for the discrete block. Default colours are: "green" and "red".
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="cntrPaspExt" title="#cntrPaspExt"><h3><span class="mw-headline" id="Passport.2C_extended_.28cntrPaspExt.29"><span class="mw-headline-number">4.3</span> Passport, extended (<a href="Libs_Main_graphical_elements.html#cntrPaspExt" title="Special:MyLanguage/Libs/Main graphical elements">cntrPaspExt</a>)</span></h3></span> </td>
+<td> 1.2 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The element shown in Figure 4.3 is an information-control dialog around the data source parameter — an expanded parameter passport. Unlike <a href="#cntrPasp">the simple passport</a>, the expanded one, in addition to information, provides the ability to control the parameter attributes and display the history of the standard attributes in both a trend and a data table.
+</p><p><i>Information and control</i> for parameter attributes remains the primary function provided in the "View" tab, where the attribute table is formed as their are, with the "Name" and "Value" columns. The table is active and if you select an entry of the accessible to write attribute and at corresponding permissions (root:op), a field for entering new values will be provided at the bottom.
+</p><p><i>The history</i> is provided in the following two tabs "Trends" and "Data", which may not be available in the absence of the history-archives at standard attributes. The "Trends" tab contains a graphics area, of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">the primitive "Diagram"</a>, on most of the window, and a table at the bottom with the names, colours, and graph scales. The graphs are updated periodically and built with a period of 1 second and a fixed depth of 1 hour. The "Data" tab contains only <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Document" title="Special:MyLanguage/Sub-projects/VCA">the "Document" primitive</a> field with a table with attribute values in columns that is updated with a period of 1 second for the history data period and to a depth of 100 records. The following items of <a href="Libs_Main.html" title="Special:MyLanguage/Libs/Main">the representative parameter structures</a> are considered standard attributes with history:
+</p>
+<ul><li> <a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">Analog signal</a>:
+<ul><li> <b>var</b> — variable.</li></ul></li>
+<li> <a href="Libs_Main.html#pidUnif" title="Special:MyLanguage/Libs/Main">PID-regulator</a>:
+<ul><li> <b>sp</b> — setpoint;</li>
+<li> <b>out</b> — output;</li>
+<li> <b>auto</b> — mode: automate.</li></ul></li>
+<li> <a href="Libs_Main.html#codeState" title="Special:MyLanguage/Libs/Main">Discrete assembles</a>:
+<ul><li> <b>com</b> — command "Open";</li>
+<li> <b>close</b> — command "Close";</li>
+<li> <b>stop</b> — command "Stop";</li>
+<li> <b>st_open</b> — state "Opened";</li>
+<li> <b>st_close</b> — state "closed".</li></ul></li></ul>
+<p>In the trends of the analog parameters building the attributes are separately processed for alarm [<b>aMin</b>...<b>aMax</b>] and warning scales [<b>wMin</b>...<b>wMax</b>], which are also displayed in the graph.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> This dialogue is currently the main one and has replaced <a href="#cntrPasp">the simple passport dialogue</a>.
+</p>
+<ul><li> <b>Sponsored by:</b> PAC HARTRON</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1232px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_cntrPaspExt.png"><img class="thumbimage" height="425" src="files/LibMainEls_cntrPaspExt.png" width="1230" /></a>  <div class="thumbcaption">Fig.4.3. The "Passport, extended" dialogue in the runtime mode.</div></div></div></div>
+<p><b><u>Using — development</u></b><br />
+The dialogue does not require any special configuration by the user, it should only be located in the panels folder of the project tree of <a href="#RootPgSo">the concept of the signal objects of the root page "RootPgSo"</a>, which will allow it to be dynamically invoked and opened as an external dialogue window.
+</p><p>The dialogue Identifier, when placed, should be changed to "cntrPasp" and its line of call, upon pressing right mouse button, in the events processing attribute "evProc" of the primary widget will look "key_mousePresRight::open:/pg_control/pg_cntrPasp".
+</p><p><b><u>Using — runtime</u></b><br />
+The dialogue provides the user in the tab "View" with information about the data source parameter in the list and the values of all the properties-attributes of the parameter in the table. Where writable attributes may be edited at the permissions "root:op" in the appeared at the bottom field for entering new values, at selecting the attribute.
+</p><p>For the history the user may observe the trends in the tab "Trends" and the data in the tab "Data". For the trends the user may also highlight some one, selecting it in the bottom table, and correct the scales if it is wrong.
+</p><p><b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Configuration </th>
+<th> Configuration template </th>
+<th> Description
+</th></tr>
+<tr>
+<td> pName </td>
+<td> Parameter name </td>
+<td> Address </td>
+<td> Input link </td>
+<td> Parameter|NAME </td>
+<td> Address to the parameter's name to refer to the parameter entirely and get all of its properties.
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="cntrPasp" title="#cntrPasp"><h3><span class="mw-headline" id="Passport_.28cntrPasp.29"><span class="mw-headline-number">4.4</span> Passport (<a href="Libs_Main_graphical_elements.html#cntrPasp" title="Special:MyLanguage/Libs/Main graphical elements">cntrPasp</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The element shown in Figure 4.4 is an information dialog around the parameter of the data source — the parameter passport, accordingly it allows to receive such information as: cipher, name, description, unit of measure, emergency boundaries and other, corresponding to <a href="Libs_Main.html" title="Special:MyLanguage/Libs/Main">the parameter representative structure</a> — parameter attributes. The dialogue is based on <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Document" title="Special:MyLanguage/Sub-projects/VCA">the primitive "Document"</a>, whose content is generated dynamically and updated periodically.
+</p><p>In building the passport the attributes are separately processed for alarm [<b>aMin</b>...<b>aMax</b>] and warning scales [<b>wMin</b>...<b>wMax</b>], which combined in a single entry, and can be hidden when turned off.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Currently, this dialogue has actually been replaced by <a href="#cntrPaspExt">the more functional and expanded passport dialogue</a> and is largely disabled in all template and demonstration projects, though no one interferes with its use if only information is required.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:822px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_cntrPasp.png"><img class="thumbimage" height="425" src="files/LibMainEls_cntrPasp.png" width="820" /></a>  <div class="thumbcaption">Fig.4.4. The "Passport" dialogue in the runtime mode.</div></div></div></div>
+<p><b><u>Using — development</u></b><br />
+The dialogue does not require any special configuration by the user, it should only be located in the panels folder of the project tree of <a href="#RootPgSo">the concept of the signal objects of the root page "RootPgSo"</a>, which will allow it to be dynamically invoked and opened as an external dialogue window.
+</p><p>The dialogue Identifier, when placed, should be saved and its line of call, upon pressing right mouse button, in the events processing attribute "evProc" of the primary widget will look "key_mousePresRight::open:/pg_control/pg_cntrPasp".
+</p><p><b><u>Using — runtime</u></b><br />
+The dialogue only provides the user with information about the data source parameter in the list and the values of all the properties-attributes of the parameter in the table.
+</p><p><b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Configuration </th>
+<th> Configuration template </th>
+<th> Description
+</th></tr>
+<tr>
+<td> pName </td>
+<td> Parameter name </td>
+<td> Address </td>
+<td> Input link </td>
+<td> Parameter|NAME </td>
+<td> Address to the parameter's name to refer to the parameter entirely and get all of its properties.
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="grph_panel" title="#grph_panel"><h3><span class="mw-headline" id="Panel_of_the_graphs_.28grph_panel.29"><span class="mw-headline-number">4.5</span> Panel of the graphs (<a href="Libs_Main_graphical_elements.html#grph_panel" title="Special:MyLanguage/Libs/Main graphical elements">grph_panel</a>)</span></h3></span> </td>
+<td> 1.5 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The element shown in Figure 4.5 is a specialized panel for dynamic control of basic user properties of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">the primitive "Diagram"</a>. So, the panel allows you to view graphs of the history for the required period of time and the desired resolution, supports: the scale, the selection of archiver for display and the graphs presentation in a spectrum of present frequencies or XY.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_grph_panel.png"><img class="thumbimage" height="365" src="files/LibMainEls_grph_panel.png" width="400" /></a>  <div class="thumbcaption">Fig.4.5. The panel of the graphs in the development and runtime modes (left to right).</div></div></div></div>
+<p><b><u>Using — development</u></b><br />
+The panel does not require any special configuration by the user, it should only be located in the panels folder of the project tree of <a href="#RootPgSo">the concept of the signal objects of the root page "RootPgSo"</a>, which will allow it to be dynamically invoked and opened in the control panels container of the root page.
+</p><p>The panel Identifier, when placed, should be saved and its line of call, upon receiving focus, in the events processing attribute "evProc" of the primary widget will look "ws_FocusIn::open:/pg_control/pg_grph_panel".
+</p><p><b><u>Using — runtime</u></b><br />
+The panel allows the user to:
+</p>
+<ul><li> select the diagram graphics mode: "Graph", "Spectrum of frequencies", "XY";</li>
+<li> select of the diagram formation time;</li>
+<li> perform of navigation through the diagram for the one or five sizes of the graph area;</li>
+<li> set of the diagram generation time to the current time or in the cursor time;</li>
+<li> get information about the time or frequency in the current cursor's position;</li>
+<li> select of the trend's formation size (depth) or set the begin time;</li>
+<li> select of the archive, used for the trend building, at the access rule "root:ITW";</li>
+<li> control the vertical and horizontal scale of the presentation: zoom in and out the scale, shift the scale up and down, the scale returns to its original value;</li>
+<li> switch of the scale mode by the window drawn by the mouse.</li></ul>
+<p><b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Configuration </th>
+<th> Configuration template </th>
+<th> Description
+</th></tr>
+<tr>
+<td> tSek </td>
+<td> Trend time </td>
+<td> DateTime </td>
+<td> Full link </td>
+<td> &lt;page&gt;|tSek </td>
+<td>
+</td></tr>
+<tr>
+<td> tSize </td>
+<td> Trend size </td>
+<td> Real </td>
+<td> Full link </td>
+<td> &lt;page&gt;|tSize </td>
+<td> Time size-interval of the graph in the history from the trend time.
+</td></tr>
+<tr>
+<td> trcPer </td>
+<td> Trace period </td>
+<td> Integer </td>
+<td> Full link </td>
+<td> &lt;page&gt;|trcPer </td>
+<td> Period of the trend updating-tracing.
+</td></tr>
+<tr>
+<td> type </td>
+<td> Type </td>
+<td> Integer </td>
+<td> Full link </td>
+<td> &lt;page&gt;|type </td>
+<td> Graph's type: "Trend", "Spectrum of frequencies", "XY".
+</td></tr>
+<tr>
+<td> valArch </td>
+<td> Archiver </td>
+<td> String </td>
+<td> Full link </td>
+<td> &lt;page&gt;|valArch </td>
+<td>
+</td></tr>
+<tr>
+<td> curSek </td>
+<td> Cursor </td>
+<td> DateTime </td>
+<td> Full link </td>
+<td> &lt;page&gt;|curSek </td>
+<td> Time of the cursor setting.
+</td></tr>
+<tr>
+<td> curUSek </td>
+<td> Cursor, microseconds </td>
+<td> Integer </td>
+<td> Full link </td>
+<td> &lt;page&gt;|curUSek </td>
+<td> Time of the cursor setting, microseconds.
+</td></tr>
+<tr>
+<td> sclVer </td>
+<td> Vertical scale </td>
+<td> Real </td>
+<td> Full link </td>
+<td> &lt;page&gt;|sclVerScl </td>
+<td> Percentage of the vertical scale.
+</td></tr>
+<tr>
+<td> sclVerOff </td>
+<td> Vertical scale offset </td>
+<td> Real </td>
+<td> Full link </td>
+<td> &lt;page&gt;|sclVerSclOff </td>
+<td> Percentage of the offset on the vertical scale.
+</td></tr>
+<tr>
+<td> sclHor </td>
+<td> Horizontal scale </td>
+<td> Real </td>
+<td> Full link </td>
+<td> &lt;page&gt;|sclHorScl </td>
+<td> Percentage of the horizontal scale.
+</td></tr>
+<tr>
+<td> sclHorOff </td>
+<td> Horizontal scale offset </td>
+<td> Real </td>
+<td> Full link </td>
+<td> &lt;page&gt;|sclHorSclOff </td>
+<td> Percentage of the offset on the horizontal scale.
+</td></tr>
+<tr>
+<td> sclWin </td>
+<td> Scale by window </td>
+<td> Boolean </td>
+<td> Full link </td>
+<td> &lt;page&gt;|sclWin </td>
+<td> Switching the window scaling mode.
+</td></tr>
+<tr>
+<td> sclWinCtx </td>
+<td> Scale: by window save context </td>
+<td> Object </td>
+<td> Input link </td>
+<td> &lt;page&gt;|sclWinCtx </td>
+<td> Context of storing of the original scale parameters for return.
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="doc_panel" title="#doc_panel"><h3><span class="mw-headline" id="Panel_of_documents_.28doc_panel.29"><span class="mw-headline-number">4.6</span> Panel of documents (<a href="Libs_Main_graphical_elements.html#doc_panel" title="Special:MyLanguage/Libs/Main graphical elements">doc_panel</a>)</span></h3></span> </td>
+<td> 1.2 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The element shown in Figure 4.6 is a specialized panel for dynamic control of basic user properties of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Document" title="Special:MyLanguage/Sub-projects/VCA">the primitive "Document"</a>. So, the panel allows you to manage documents and navigate through their histories; supported dynamic and archival documents.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_doc_panel.png"><img class="thumbimage" height="300" src="files/LibMainEls_doc_panel.png" width="400" /></a>  <div class="thumbcaption">Fig.4.6. The panel of the documents in the development and runtime (dynamic and archival) modes, left to right.</div></div></div></div>
+<p><b><u>Using — development</u></b><br />
+The panel does not require any special configuration by the user, it should only be located in the panels folder of the project tree of <a href="#RootPgSo">the concept of the signal objects of the root page "RootPgSo"</a>, which will allow it to be dynamically invoked and opened in the control panels container of the root page.
+</p><p>The panel Identifier, when placed, should be saved and its line of call, upon receiving focus, in the events processing attribute "evProc" of the primary widget will look "ws_FocusIn::open:/pg_control/pg_doc_panel".
+</p><p><b><u>Using — runtime</u></b><br />
+The panel provides tools that are somewhat different for the dynamic and archival modes.
+</p><p><i>The dynamic document</i> provides:
+</p>
+<ul><li> selection of the document formation time;</li>
+<li> selection of the document formation size (depth) or the begin time;</li>
+<li> navigation through the document for one or five sizes-depths of the document;</li>
+<li> setting the generation time of the document to the current time.</li></ul>
+<p><i>The archival document</i> provides only navigation through documents in the archive by listing them, and display current and overall documents.
+</p><p><b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Configuration </th>
+<th> Configuration template </th>
+<th> Description
+</th></tr>
+<tr>
+<td colspan="6"> <i>Dynamic documents</i>
+</td></tr>
+<tr>
+<td> time </td>
+<td> Document time </td>
+<td> DateTime </td>
+<td> Full link </td>
+<td> &lt;page&gt;|time </td>
+<td>
+</td></tr>
+<tr>
+<td> bTime </td>
+<td> Document begin </td>
+<td> DateTime </td>
+<td> Full link </td>
+<td> &lt;page&gt;|bTime </td>
+<td>
+</td></tr>
+<tr>
+<td> doc </td>
+<td> Document </td>
+<td> String </td>
+<td> Full link </td>
+<td> &lt;page&gt;|doc </td>
+<td>
+</td></tr>
+<tr>
+<td colspan="6"> <i>Archive documents</i>
+</td></tr>
+<tr>
+<td> n </td>
+<td> Archive size </td>
+<td> Integer </td>
+<td> Input link </td>
+<td> &lt;page&gt;|n </td>
+<td>
+</td></tr>
+<tr>
+<td> vCur </td>
+<td> View cursor </td>
+<td> Integer </td>
+<td> Full link </td>
+<td> &lt;page&gt;|vCur </td>
+<td>
+</td></tr>
+<tr>
+<td> aCur </td>
+<td> Archive cursor </td>
+<td> Integer </td>
+<td> Input link </td>
+<td> &lt;page&gt;|aCur </td>
+<td>
+</td></tr>
+<tr>
+<td> aSize </td>
+<td> Archive size </td>
+<td> Integer </td>
+<td> Input link </td>
+<td> &lt;page&gt;|aSize </td>
+<td>
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="accept" title="#accept"><h3><span class="mw-headline" id="Accept_.28accept.29"><span class="mw-headline-number">4.7</span> Accept (<a href="Libs_Main_graphical_elements.html#accept" title="Special:MyLanguage/Libs/Main graphical elements">accept</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The element on Figure 4.7 implements a simple operations' acception dialog. The dialog contains a message with a question and two buttons "Apply" and "Cancel". The dialogue, for example, is used in the frame <a href="#userManager">Users manager</a> to accept the deleting operation.
+</p>
+<ul><li> <b>Sponsored by:</b> <a class="external text" href="http://e-beam.ru" rel="nofollow noreferrer noopener" target="_blank">the Laboratory of Vacuum Technologies</a></li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:652px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_accept.png"><img class="thumbimage" height="169" src="files/LibMainEls_accept.png" width="650" /></a>  <div class="thumbcaption">Fig.4.7. The "Accept" dialog in the development and runtime mode.</div></div></div></div>
+<p><b><u>Using — development</u></b><br />
+The dialogue does not require any special configuration by the user, it should only be located in the panels folder of the project tree of <a href="#RootPgSo">the concept of the signal objects of the root page "RootPgSo"</a>, which will allow it to be dynamically invoked and opened as an external dialogue window.
+</p><p>The dialogue Identifier, when placed, should be stored and its line of call, upon pressing the button "progDel", in the events processing attribute "evProc" of the primary widget will look "ws_BtPress:/progDel:open:/pg_control/pg_accept". The question message is taken from the "mess" attribute and the "dlg_Apply" signal is transmitted to the "event" at acception.
+</p><p><b><u>Using — runtime</u></b><br />
+Calling the dialogue is made from the frame-initiator, and closing is made by pressing any button of the dialog. If you click the "Apply" button the "dlg_Apply" signal will be sent to the frame-initiator, by which it can perform the desired actions.
+</p><p><b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Configuration </th>
+<th> Configuration template </th>
+<th> Description
+</th></tr>
+<tr>
+<td> elEvent </td>
+<td> Element: event </td>
+<td> String </td>
+<td> Full link </td>
+<td> &lt;page&gt;|event </td>
+<td> It is used to send the "dlg_Apply" event if accepted.
+</td></tr>
+<tr>
+<td> elMess </td>
+<td> Element: message </td>
+<td> String </td>
+<td> Input link </td>
+<td> &lt;page&gt;|mess </td>
+<td> Source of the question message in the dialogue.
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="treeSelect" title="#treeSelect"><h3><span class="mw-headline" id="Select_item_into_tree_.28treeSelect.29"><span class="mw-headline-number">4.8</span> Select item into tree (<a href="Libs_Main_graphical_elements.html#treeSelect" title="Special:MyLanguage/Libs/Main graphical elements">treeSelect</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The element in Figure 4.8 implements a simple dialog for selecting an item in a tree. The dialog contains the tree itself and the two buttons "Accept" and "Cancel". This dialog, for example, was used and originally designed for it in the frame "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Prescriptions#prescrRunSimple" title="Special:MyLanguage/Libs/Prescriptions">Prescription: run (simple)</a>" for hierarchical selection of an element in a tree.
+</p>
+<ul><li> <b>Sponsored by:</b> <a class="external text" href="http://e-beam.ru" rel="nofollow noreferrer noopener" target="_blank">the Laboratory of Vacuum Technologies</a></li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:782px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_treeSelect.png"><img class="thumbimage" height="389" src="files/LibMainEls_treeSelect.png" width="780" /></a>  <div class="thumbcaption">Fig.4.8. The "Select item into tree" dialog in the development and runtime mode.</div></div></div></div>
+<p><b><u>Using — development</u></b><br />
+The dialogue does not require any special configuration by the user, it should only be located in the panels folder of the project tree of <a href="#RootPgSo">the concept of the signal objects of the root page "RootPgSo"</a>, which will allow it to be dynamically invoked and opened as an external dialogue window.
+</p><p>The dialogue Identifier, when placed, should be stored and its line of call, upon pressing the button "lib", in the events processing attribute "evProc" of the primary widget will look "ws_BtPress:/lib:open:/pg_control/pg_treeSelect". The items list is taken from the "items" attribute, the selected value from "selValue" and the "dlg_Apply" signal is transmitted to the "event" at acception.
+</p><p><b><u>Using — runtime</u></b><br />
+Calling the dialogue is made from the frame-initiator, and closing is made by pressing any button of the dialog. If you click the "Apply" button the "dlg_Apply" signal will be sent to the frame-initiator, by which it will apply the selected item.
+</p><p><b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Configuration </th>
+<th> Configuration template </th>
+<th> Description
+</th></tr>
+<tr>
+<td> elEvent </td>
+<td> Element: event </td>
+<td> String </td>
+<td> Full link </td>
+<td> &lt;page&gt;|event </td>
+<td> It is used to send the "dlg_Apply" event if accepted.
+</td></tr>
+<tr>
+<td> elItems </td>
+<td> Element: items list </td>
+<td> Text </td>
+<td> Input link </td>
+<td> &lt;page&gt;|items </td>
+<td> Source of the items list in the dialogue.
+</td></tr>
+<tr>
+<td> selValue </td>
+<td> Element: selected value </td>
+<td> String </td>
+<td> Full link </td>
+<td> &lt;page&gt;|selValue </td>
+<td> Source of the selected item in the dialogue.
+</td></tr></table>
+
+
+
+
+
+
+</div></body>
+</html>
