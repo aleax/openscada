@@ -1,0 +1,710 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Библиотека/Элементы мнемосхем - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../en/files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="ru">Библиотека/Элементы мнемосхем</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FMnemo+elements&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Mnemo_elements" title="Libs/Mnemo elements">Libs/Mnemo elements</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Libs/Mnemo_elements" title="Libs/Mnemo elements (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Libs/Mnemo_elements/uk" title="Бібліотека/Елементи мнемосхем (100% translated)">українська</a></div></div>
+<table class="wikitable">
+
+<tr>
+<th> Название </th>
+<th> Версия </th>
+<th> Лицензия </th>
+<th> Источник </th>
+<th> Языки </th>
+<th> Автор </th>
+<th> Описание
+</th></tr>
+
+<tr>
+<td> <a href="Libs_Mnemo_elements.html" title="Special:MyLanguage/Libs/Mnemo elements">Библиотека элементов мнемосхем интерфейса пользователя</a>
+</td>
+<td> 1.0 </td>
+<td> GPLv2
+</td>
+<td> vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">GZip</a>) &gt; VCA.wlb_mnEls
+</td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a><br />&nbsp;&nbsp;<font size="-2"><i>Максим Лысенко (2008-2012), Ксения Яшина (2007)</i></font>
+</td>
+<td> Предоставляет библиотеку элементов мнемосхем пользовательского интерфейса промышленной автоматизации.
+<ul><li> <b>Основано:</b> Сентябрь 2007</li>
+<li> <b>Изначально создано:</b> в <a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/GraphicElementsLibraries/MnemoElements" rel="nofollow noreferrer noopener" target="_blank">старой Wiki</a></li></ul>
+</td></tr></table>
+<p>Библиотека создаётся для предоставления элементов мнемосхем пользовательского интерфейса. Строится библиотека на основе <a href="Modules/VCAEngine.html#WidgetPrimitives" title="Special:MyLanguage/Modules/VCAEngine">примитивов виджетов</a> и языка внутреннего программирования <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>.
+</p><p>Для подключения библиотеки к проекту станции OpenSCADA Вы можете получить файл БД как:
+</p>
+<ul><li> такой что поставляется с готовым и соответствующим пакетом дистрибутива Linux вроде "openscada-libdb-vca", "openscada-LibDB.VCA";</li>
+<li> наиболее актуальный и непосредственно полученный из <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql" rel="nofollow noreferrer noopener" target="_blank">репозиторию subversion</a>, преобразованный в файл БД SQLite путём:</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 15px">
+$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql
+$ sqlite3 -init vcaBase.sql vcaBase.db .exit
+</pre>
+<ul><li> загрузка <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">прикреплённого тут</a>.</li></ul>
+<p>Библиотека содержит элементы мнемосхем, которые часто востребованы при формировании пользовательского интерфейса автоматизации технологических процессом. Названия элементов и их текстовые параметры доступны на трёх языках: Английский, Украинский и Российский.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9F.D0.B0.D1.81.D1.81.D0.B8.D0.B2.D0.BD.D1.8B.D0.B5_.D1.8D.D0.BA.D1.80.D0.B0.D0.BD.D0.BD.D1.8B.D0.B5_.D1.8D.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.8B"><span class="tocnumber">1</span> <span class="toctext">Пассивные экранные элементы</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#.D0.AD.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.8B_.D1.82.D1.80.D1.83.D0.B1.D0.BE.D0.BF.D1.80.D0.BE.D0.B2.D0.BE.D0.B4.D0.BE.D0.B2_.D0.B1.D0.B5.D0.B7_.D0.B3.D1.80.D0.B0.D0.B4.D0.B8.D0.B5.D0.BD.D1.82.D0.BD.D0.BE.D0.B3.D0.BE_.D0.B7.D0.B0.D0.BF.D0.BE.D0.BB.D0.BD.D0.B5.D0.BD.D0.B8.D1.8F"><span class="tocnumber">1.1</span> <span class="toctext">Элементы трубопроводов без градиентного заполнения</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#.D0.AD.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.8B_.D1.82.D1.80.D1.83.D0.B1.D0.BE.D0.BF.D1.80.D0.BE.D0.B2.D0.BE.D0.B4.D0.BE.D0.B2_.D1.81_.D0.BE.D0.B1.D1.8A.D1.91.D0.BC.D0.BD.D1.8B.D0.BC_.D0.B7.D0.B0.D0.BF.D0.BE.D0.BB.D0.BD.D0.B5.D0.BD.D0.B8.D0.B5.D0.BC"><span class="tocnumber">1.2</span> <span class="toctext">Элементы трубопроводов с объёмным заполнением</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#.D0.A0.D0.B0.D0.B7.D0.BB.D0.B8.D1.87.D0.BD.D1.8B.D0.B5_.D0.BF.D0.B0.D1.81.D1.81.D0.B8.D0.B2.D0.BD.D1.8B.D0.B5_.D1.8D.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.8B"><span class="tocnumber">1.3</span> <span class="toctext">Различные пассивные элементы</span></a></li>
+<li class="toclevel-2"><a href="#.D0.A1.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB.D0.B8.D0.B7.D0.B0.D1.86.D0.B8.D1.8F_.28El_Alarm.29"><span class="tocnumber">1.4</span> <span class="toctext">Сигнализация (El_Alarm)</span></a></li>
+<li class="toclevel-2"><a href="#.D0.A3.D1.80.D0.BE.D0.B2.D0.B5.D0.BD.D1.8C_.28Level.29"><span class="tocnumber">1.5</span> <span class="toctext">Уровень (Level)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#.D0.90.D0.BA.D1.82.D0.B8.D0.B2.D0.BD.D1.8B.D0.B5_.D1.8D.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.8B.2C_.D0.BA.D0.BE.D1.82.D0.BE.D1.80.D1.8B.D0.B5_.D1.80.D0.B5.D0.BF.D1.80.D0.B5.D0.B7.D0.B5.D0.BD.D1.82.D1.83.D1.8E.D1.82_.D1.80.D0.B0.D0.B7.D0.BB.D0.B8.D1.87.D0.BD.D1.8B.D0.B5_.D1.82.D0.B5.D1.85.D0.BD.D0.BE.D0.BB.D0.BE.D0.B3.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.B8.D0.B5_.D1.83.D1.81.D1.82.D1.80.D0.BE.D0.B9.D1.81.D1.82.D0.B2.D0.B0"><span class="tocnumber">2</span> <span class="toctext">Активные элементы, которые репрезентуют различные технологические устройства</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#.D0.94.D0.B8.D1.81.D0.BA.D1.80.D0.B5.D1.82.D0.BD.D1.8B.D0.B5_.D0.B0.D0.BF.D0.BF.D0.B0.D1.80.D0.B0.D1.82.D1.8B"><span class="tocnumber">2.1</span> <span class="toctext">Дискретные аппараты</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#.D0.90.D0.BD.D0.B0.D0.BB.D0.BE.D0.B3.D0.BE.D0.B2.D1.8B.D0.B5_.D0.B0.D0.BF.D0.BF.D0.B0.D1.80.D0.B0.D1.82.D1.8B"><span class="tocnumber">2.2</span> <span class="toctext">Аналоговые аппараты</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id=".D0.9F.D0.B0.D1.81.D1.81.D0.B8.D0.B2.D0.BD.D1.8B.D0.B5_.D1.8D.D0.BA.D1.80.D0.B0.D0.BD.D0.BD.D1.8B.D0.B5_.D1.8D.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.8B"><span class="mw-headline-number">1</span> Пассивные экранные элементы</span></h2>
+<h3><span class="mw-headline" id=".D0.AD.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.8B_.D1.82.D1.80.D1.83.D0.B1.D0.BE.D0.BF.D1.80.D0.BE.D0.B2.D0.BE.D0.B4.D0.BE.D0.B2_.D0.B1.D0.B5.D0.B7_.D0.B3.D1.80.D0.B0.D0.B4.D0.B8.D0.B5.D0.BD.D1.82.D0.BD.D0.BE.D0.B3.D0.BE_.D0.B7.D0.B0.D0.BF.D0.BE.D0.BB.D0.BD.D0.B5.D0.BD.D0.B8.D1.8F"><span class="mw-headline-number">1.1</span> Элементы трубопроводов без градиентного заполнения</span></h3>
+<p>Элементы на рисунке 1.1 служат для построения трубопроводов любой сложности, необходимой ширины и окраса. По умолчанию они заполнены желтым цветом, а угол поворота составляет 0°.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:727px;"><a class="image" href="http://oscada.org/wiki/File:LibMnemoEls_pipes.png"><img class="thumbimage" height="110" src="../en/files/LibMnemoEls_pipes.png" width="725" /></a>  <div class="thumbcaption">Рис.1.1. Элементы трубы без градиентного заполнения.</div></div></div></div>
+<p>Элементы трубопроводов включают, слева на право:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Имя (идентификатор) </th>
+<th> Версия </th>
+<th> Лицензия </th>
+<th> Автор
+</th></tr>
+<tr>
+<td> Труба-крест (El_Krest) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Труба прямая горизонтальная (El_Pipe_simple) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Труба прямая вертикальная (El_Pipe_simple_vert) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Стрела (El_Strela) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Стрела обратная (El_Obr_Strela) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Труба-угол (El_pipe_1) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Труба-тройник (El_Troinik) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr></table>
+<p><b><u>Использование — разработка</u></b><br />
+Эти виджеты могут быть использованы разработчиком при создании мнемосхем плоских трубопроводов. Атрибутом "Цвет 1" вы можете изменить цвет заполнения элемента. Путём поворота этих виджетов можно получить все необходимые комбинации. Путём масштабирования можно установить нужную ширину труб, где, для прямых участков, масштаб по оси "x" и "y" может быть отличным, определяя соответственно типовую ширину трубы на мнемосхеме и длину отдельного её участка. Для использования необходимо добавить выбранные виджеты на мнемосхему, системно подстроить геометрию и соответствующим образом визуально объединить части трубопроводов. С целью систематизации и упрощения работы вы можете подготовить только первые элементы, а для других частей трубопровода использовать готовые копии этих уже подготовленных и размещённых элементов.
+</p><p><b><u>Использование — исполнение</u></b><br />
+В режиме исполнения эти элементы имеют такой-же вид как и в режиме разработки, поскольку они не являются динамическими.
+</p>
+<h3><span class="mw-headline" id=".D0.AD.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.8B_.D1.82.D1.80.D1.83.D0.B1.D0.BE.D0.BF.D1.80.D0.BE.D0.B2.D0.BE.D0.B4.D0.BE.D0.B2_.D1.81_.D0.BE.D0.B1.D1.8A.D1.91.D0.BC.D0.BD.D1.8B.D0.BC_.D0.B7.D0.B0.D0.BF.D0.BE.D0.BB.D0.BD.D0.B5.D0.BD.D0.B8.D0.B5.D0.BC"><span class="mw-headline-number">1.2</span> Элементы трубопроводов с объёмным заполнением</span></h3>
+<p>Элементы на рисунке 1.2 служат для построения объёмных трубопроводов любой сложности, необходимой ширины и окраса. По умолчанию, полупрозрачный объёмный градиент заполнен желтым цветом.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:714px;"><a class="image" href="http://oscada.org/wiki/File:LibMnemoEls_pipesGrad.png"><img class="thumbimage" height="406" src="../en/files/LibMnemoEls_pipesGrad.png" width="712" /></a>  <div class="thumbcaption">Рис.1.2. Элементы трубопроводов с объёмным заполнением.</div></div></div></div>
+<p>Элементы трубопроводов включают, слева на право и сверху вниз:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Имя (идентификатор) </th>
+<th> Версия </th>
+<th> Лицензия </th>
+<th> Автор
+</th></tr>
+<tr>
+<td> Труба-крест, объёмный (El_Krest_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Труба прямая горизонтальная, объёмная (El_Pipe_simple_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Труба пряма вертикальна, об'ємна (El_Pipe_simple_vert_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> СтрелаГП, объемная (El_Strela_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> СтрелаГЛ, объемная (El_StrelaHL_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> СтрелаВН, объемная (El_StrelaVB_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> СтрелаВВ, объемная (El_StrelaVT_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Стрела обратнаяГЛ, объемная (El_Obr_Strela_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Стрела обратнаяГП, объемная (El_Obr_StrelaHR_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Стрела обратнаяВН, объемная (El_Obr_StrelaVB_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Стрела обратнаяВВ, объемная (El_Obr_StrelaVT_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Труба-уголНЛ, объёмная (El_pipe_1_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Труба-уголНП, объёмная (El_angleBR_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Труба-уголВЛ, объёмная (El_angleTL_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Труба-уголВР, объёмная (El_angleTR_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Труба-тройникВП, объёмный (El_Troinik_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Труба-тройникГН, объёмный (El_TroinikHB_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Труба-тройникГВ, объёмный (El_TroinikHT_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Труба-тройникВЛ, объёмный (El_TroinikVL_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p><b><u>Использование — разработка</u></b><br />
+Эти виджеты могут быть использованы разработчиком при создании мнемосхем объёмных трубопроводов. Атрибутом "Заполнение: цвет" вы можете изменить цвет заполнения элемента. Путём масштабирования можно установить нужную ширину труб, где для прямых участков, масштаб по оси "x" и "y" может быть отличным, определяя соответственно типовую ширину трубы на мнемосхеме и длину отдельного её участка. Для использования необходимо добавить выбранные виджеты на мнемосхему, системно подстроить геометрию и соответствующим образом визуально объединить части трубопроводов. С целью систематизации и упрощения работы вы можете подготовить только первые элементы, а для других частей трубопровода использовать готовые копии этих уже подготовленных и размещённых элементов.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Поворачивать эти виджеты не стоит, поскольку это может вызвать визуальную нестыковку с другими элементами этой категории, ввиду особенности градиентного заполнения. Именно поэтому предусмотрены все четыре ориентации элементов без необходимости поворачивания.
+</p><p><b><u>Использование — исполнение</u></b><br />
+В режиме исполнения эти элементы имеют такой-же вид как и в режиме разработки, поскольку они не являются динамическими.
+</p>
+<h3><span class="mw-headline" id=".D0.A0.D0.B0.D0.B7.D0.BB.D0.B8.D1.87.D0.BD.D1.8B.D0.B5_.D0.BF.D0.B0.D1.81.D1.81.D0.B8.D0.B2.D0.BD.D1.8B.D0.B5_.D1.8D.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.8B"><span class="mw-headline-number">1.3</span> Различные пассивные элементы</span></h3>
+<p>Элементы на рисунке 1.3 служат для использования в составе, или около, трубопроводов.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:714px;"><a class="image" href="http://oscada.org/wiki/File:LibMnemoEls_passive.png"><img class="thumbimage" height="316" src="../en/files/LibMnemoEls_passive.png" width="712" /></a>  <div class="thumbcaption">Рис.1.3. Различные пассивные элементы.</div></div></div></div>
+<p>Различные пассивные элементы включают, слева на право:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Имя (идентификатор) </th>
+<th> Версия </th>
+<th> Лицензия </th>
+<th> Автор
+</th></tr>
+<tr>
+<td colspan="4"> <i>Элементы трубопроводных схем</i>
+</td></tr>
+<tr>
+<td> Ручная задвижка (El_Armatura) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Диафрагма (El_d) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Сепаратор (sep) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Холодильник (cooler) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Змеевик (Teploobm) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td colspan="4"> <i>Части элементов трубопроводных схем</i>
+</td></tr>
+<tr>
+<td> Вентилятор 2 (cooler2) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Ксения Яшина
+</td></tr>
+<tr>
+<td> Скругленный прямоугольник (El_round_square) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Скругленный прямоугольник 1 (El_round_square) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Скругленный прямоугольник, объемный (rnd_sq_gr) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Скругленный прямоугольник 1, объемный (rnd_sq_gr1) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td colspan="4"> <i>Дополнительное</i>
+</td></tr>
+<tr>
+<td> Линия (Line_simple) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Волнистая линия (El_Obriv) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Шкала (Shkala) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Линейка (El_Priamaja) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr></table>
+<p><b><u>Использование — разработка</u></b><br />
+Эти виджеты могут быть использованы разработчиком при создании мнемосхем с трубопроводами. Путём поворота этих виджетов можно получить все необходимые комбинации, для основанных исключительно на основе примитива "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#ElFigure" title="Special:MyLanguage/Sub-projects/VCA">Элементарные фигуры</a>". Путём масштабирования можно установить необходимые геометрические размеры, относительно общих размеров сети труб. Для использования необходимо добавить выбранные виджеты на мнемосхему, системно подстроить геометрию и соответствующим образом визуально присоединить в или между элементами трубопровода. С целью систематизации и упрощения работы вы можете подготовить только первые элементы, а для других частей трубопровода использовать готовые копии этих уже подготовленных и размещённых элементов.
+</p><p><b><u>Использование — исполнение</u></b><br />
+В режиме исполнения эти элементы в основном имеют такой-же вид как и в режиме разработки, поскольку они не являются динамическими. Некоторые элементы, вроде "Вентилятор 2", являются динамическими, но не связываемыми.
+</p><p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="El_Alarm" title="#El_Alarm"><h3><span class="mw-headline" id=".D0.A1.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB.D0.B8.D0.B7.D0.B0.D1.86.D0.B8.D1.8F_.28El_Alarm.29"><span class="mw-headline-number">1.4</span> Сигнализация (<a href="Libs_Mnemo_elements.html#El_Alarm" title="Special:MyLanguage/Libs/Mnemo elements">El_Alarm</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Элемент на рисунке 1.4 служит для отображения дискретного статуса цветом. Также этот элемент генерирует уведомление про нарушения по локально определённому условию, атрибут <b>ntf</b>. Элемент в целом использует и представляет представительскую структуру DAQ-шаблона <a href="../en/Libs_Main.html#digitBlockUnif" title="Special:MyLanguage/Libs/Main">дискретного блока</a>.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMnemoEls_Alarming.png"><img class="thumbimage" height="64" src="../en/files/LibMnemoEls_Alarming.png" width="400" /></a>  <div class="thumbcaption">Рис.1.4. Элемент "Сигнализация" в режиме разработки и выполнения (слева направо).</div></div></div></div>
+<p><b><u>Использование — разработка</u></b><br />
+Этот виджет может быть использован разработчиком при создании мнемосхем с отображением дискретных статусов. Для использования нужно добавить данный виджет на мнемосхему, подстроить горизонтальный, вертикальный размер и связать с параметром источника данных.
+</p><p><b><u>Использование — исполнение</u></b><br />
+В режиме исполнения, в основном поле элемента, отображается круг заполненный цветом, который соответствуют значениям дискретных сигналов параметра и конфигурации состояний в атрибуте <b>digStts</b>; где цвет, зависимо от наличия нарушения соответствующего условию атрибута <b>ntf</b>, устанавливается в цвет нарушения; и которым изображение несквитированного параметра может мигать. При аппаратных ошибках и недостоверности данных, фон отображается серым цветом.
+</p><p><b><u>Свойства связывания и конфигурации</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Идентификатор </th>
+<th> Имя </th>
+<th> Тип </th>
+<th> Конфигурация </th>
+<th> Конфигурационный шаблон </th>
+<th> Описание
+</th></tr>
+<tr>
+<td> NAME </td>
+<td> Имя </td>
+<td> Строка </td>
+<td> Входная связь </td>
+<td> Parameter|NAME </td>
+<td> Краткое наименование параметра, которое вставляется в уведомление про нарушение.
+</td></tr>
+<tr>
+<td> st_open </td>
+<td> Параметр: статус-открыто </td>
+<td> Логический </td>
+<td> Входная связь </td>
+<td> Parameter|st_open </td>
+<td> Статус параметра "Открыто" или общий статус переключателя при отсутствии сигнала статуса "Закрыто".
+</td></tr>
+<tr>
+<td> st_close </td>
+<td> Параметр: статус-закрыт </td>
+<td> Логический </td>
+<td> Входная связь </td>
+<td> Parameter|st_close </td>
+<td> Статус параметра "Закрыто".
+</td></tr>
+<tr>
+<td> digStts </td>
+<td> Статусы </td>
+<td> Строка </td>
+<td> Входная связь </td>
+<td> Parameter|digStts </td>
+<td> Конфигурация статусов параметра со структурой <b>{openedLabel}-{color};{closedLabel}-{color}</b>, для дискретного блока.
+</td></tr>
+<tr>
+<td> ntf </td>
+<td> Уведомление "{сост.}:{режимы}:{Текст речи}" </td>
+<td> Строка </td>
+<td> Постоянная </td>
+<td> </td>
+<td> Конфигурация формирования сообщения по статусу (st) [0|1] и <a href="Modules/VCAEngine.html#Alarms" title="Special:MyLanguage/Modules/VCAEngine">режимам-методам уведомления (modes)</a>, как строка чисел методов, и речью, если указано такой метод.
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="Level" title="#Level"><h3><span class="mw-headline" id=".D0.A3.D1.80.D0.BE.D0.B2.D0.B5.D0.BD.D1.8C_.28Level.29"><span class="mw-headline-number">1.5</span> Уровень (<a href="Libs_Mnemo_elements.html#Level" title="Special:MyLanguage/Libs/Mnemo elements">Level</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> Максим Лисенко, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Элемент на рисунке 1.5 служит для отображения гистограммы значения уровня жидкости в технологических аппаратах. Элемент в целом использует и представляет представительскую структуру <a href="../en/Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">DAQ-шаблона "Аналоговый сигнал"</a>.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMnemoEls_Level.png"><img class="thumbimage" height="150" src="../en/files/LibMnemoEls_Level.png" width="400" /></a>  <div class="thumbcaption">Рис.1.5. Элемент "Уровень" в режиме разработки и выполнения (слева направо).</div></div></div></div>
+<p><b><u>Использование — разработка</u></b><br />
+Этот виджет может быть использован разработчиком при создании мнемосхем с отображением уровней жидкости в технологических аппаратах. Атрибутом "Заполнение: цвет" вы можете изменить цвет заполнения элемента. Путём поворота этого виджета можно получить все необходимые комбинации. Для использования нужно добавить данный виджет на мнемосхему, подстроить геометрию масштабом и связать с параметром источника данных.
+</p><p><b><u>Использование — исполнение</u></b><br />
+В режиме исполнения, в основном поле элемента, отображается полоса гистограммы, которая соответствует аналоговому значению.
+</p><p><b><u>Свойства связывания и конфигурации</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Идентификатор </th>
+<th> Имя </th>
+<th> Тип </th>
+<th> Конфигурация </th>
+<th> Конфигурационный шаблон </th>
+<th> Описание
+</th></tr>
+<tr>
+<td> var </td>
+<td> Значение </td>
+<td> Вещественный </td>
+<td> Входная связь </td>
+<td> Parameter|var </td>
+<td> Инженерное реальное значение параметра.
+</td></tr>
+<tr>
+<td> max </td>
+<td> Максимум </td>
+<td> Вещественный </td>
+<td> Входная связь </td>
+<td> Parameter|max </td>
+<td>Верхняя граница значения параметра.
+</td></tr>
+<tr>
+<td> min </td>
+<td> Минимум </td>
+<td> Вещественный </td>
+<td> Входная связь </td>
+<td> Parameter|min </td>
+<td> Нижняя граница значения параметра.
+</td></tr>
+<tr>
+<td> fillColor </td>
+<td> Заполнение: цвет </td>
+<td> Цвет </td>
+<td> Постоянная </td>
+<td> </td>
+<td>
+</td></tr></table>
+<h2><span class="mw-headline" id=".D0.90.D0.BA.D1.82.D0.B8.D0.B2.D0.BD.D1.8B.D0.B5_.D1.8D.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.8B.2C_.D0.BA.D0.BE.D1.82.D0.BE.D1.80.D1.8B.D0.B5_.D1.80.D0.B5.D0.BF.D1.80.D0.B5.D0.B7.D0.B5.D0.BD.D1.82.D1.83.D1.8E.D1.82_.D1.80.D0.B0.D0.B7.D0.BB.D0.B8.D1.87.D0.BD.D1.8B.D0.B5_.D1.82.D0.B5.D1.85.D0.BD.D0.BE.D0.BB.D0.BE.D0.B3.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.B8.D0.B5_.D1.83.D1.81.D1.82.D1.80.D0.BE.D0.B9.D1.81.D1.82.D0.B2.D0.B0"><span class="mw-headline-number">2</span> Активные элементы, которые репрезентуют различные технологические устройства</span></h2>
+<h3><span class="mw-headline" id=".D0.94.D0.B8.D1.81.D0.BA.D1.80.D0.B5.D1.82.D0.BD.D1.8B.D0.B5_.D0.B0.D0.BF.D0.BF.D0.B0.D1.80.D0.B0.D1.82.D1.8B"><span class="mw-headline-number">2.1</span> Дискретные аппараты</span></h3>
+<p>Элементы на рисунке 2.1 используются для отображения статуса дискретных аппаратов на основе дискретных сигналов, для использования в трубопроводах. Элементы в целом используют и репрезентуют структуру DAQ-шаблона <a href="../en/Libs_Main.html#digitBlockUnif" title="Special:MyLanguage/Libs/Main">дискретного блока</a> в различных визуальных вариантах.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:517px;"><a class="image" href="http://oscada.org/wiki/File:LibMnemoEls_discrApparatus.png"><img class="thumbimage" height="228" src="../en/files/LibMnemoEls_discrApparatus.png" width="515" /></a>  <div class="thumbcaption">Рис.2.1. Элементы дискретных аппаратов в режиме разработки и исполнения (сверху вниз).</div></div></div></div>
+<p>Элементы дискретных аппаратов включают, слева на право:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Имя (идентификатор) </th>
+<th> Версия </th>
+<th> Лицензия </th>
+<th> Автор
+</th></tr>
+<tr>
+<td> Компрессор (Compressor) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>, Максим Лысенко
+</td></tr>
+<tr>
+<td> Компрессор 1 (Compressor_1) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>, Максим Лысенко
+</td></tr>
+<tr>
+<td> Задвижка (El_Zadvizhka) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Задвижка (Zadvizhka) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Шаровый кран (El_Kran_Sh) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p><b><u>Использование — разработка</u></b><br />
+Эти виджеты могут быть использованы разработчиком при создании мнемосхем с отображением и контролем дискретных аппаратов. Для использования нужно добавить данные виджеты на мнемосхему, пропорционально подстроить геометрию и связать с параметром источника данных.
+</p><p><b><u>Использование — исполнение</u></b><br />
+В режиме исполнения, в основном поле элементов, отображается символический образ аппарата с динамическим сигналом дискретного статуса, который соответствует значениям дискретных сигналов параметра и конфигурации состояний в атрибуте <b>digStts</b>. При аппаратных ошибках и недостоверности данных, заполнение отображается серым цветом.
+</p><p>В активном режиме элемента, при нажатии левой клавишей мыши, в области панелей появится <a href="Libs_Main_graphical_elements.html#ElCadr" title="Special:MyLanguage/Libs/Main graphical elements">панель управления параметром</a>, а выбор данного виджета будет отображаться мигающим цветом структуры. Команды дублируются в контекстном меню, которое появляется при нажатии правой клавиши мыши в области виджета.
+</p><p><b><u>Свойства связывания и конфигурации</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Идентификатор </th>
+<th> Имя </th>
+<th> Тип </th>
+<th> Конфигурация </th>
+<th> Конфигурационный шаблон </th>
+<th> Описание
+</th></tr>
+<tr>
+<td> shifr </td>
+<td> Параметр: шифр </td>
+<td> Строка </td>
+<td> Входная связь </td>
+<td> Parameter|NAME </td>
+<td> Краткое наименование параметра, которое вставляется в действия оператора-пользователя.
+</td></tr>
+<tr>
+<td> DESCR </td>
+<td> Описание </td>
+<td> Строка </td>
+<td> Входная связь </td>
+<td> Parameter|DESCR </td>
+<td> Описание или развёрнутое название параметра, которое вставляется в действия оператора-пользователя.
+</td></tr>
+<tr>
+<td> st_open </td>
+<td> Параметр: состояние - "Открыто" </td>
+<td> Логический </td>
+<td> Входная связь </td>
+<td> Parameter|st_open </td>
+<td> Статус параметра "Открыто" или общий статус переключателя при отсутствии сигнала статуса "Закрыто".
+</td></tr>
+<tr>
+<td> st_close </td>
+<td> Параметр: состояние - "Закрыто" </td>
+<td> Логический </td>
+<td> Входная связь </td>
+<td> Parameter|st_close </td>
+<td> Статус параметра "Закрыто".
+</td></tr>
+<tr>
+<td> digStts </td>
+<td> Статусы </td>
+<td> Строка </td>
+<td> Входная связь </td>
+<td> Parameter|digStts </td>
+<td> Конфигурация статусов параметра со структурой <b>{openedLabel}-{color};{closedLabel}-{color}</b>, для дискретного блока.
+</td></tr>
+<tr>
+<td> com </td>
+<td> Параметр: команда - "Открыть" </td>
+<td> Логический </td>
+<td> Полная связь </td>
+<td> Parameter|com </td>
+<td> Команда параметра "Открыть" или общая команда переключателя при отсутствии сигнала команды "Закрыть".
+</td></tr>
+<tr>
+<td> close </td>
+<td> Параметр: команда - "Закрыть" </td>
+<td> Логический </td>
+<td> Полная связь </td>
+<td> Parameter|close </td>
+<td> Команда параметра "Закрыть".
+</td></tr>
+<tr>
+<td> stop </td>
+<td> Параметр: команда - "Стоп" </td>
+<td> Логический </td>
+<td> Полная связь </td>
+<td> Parameter|stop </td>
+<td> Команда параметра "Остановить", для кранов.
+</td></tr>
+<tr>
+<td> digComs </td>
+<td> Команды </td>
+<td> Строка </td>
+<td> Входная связь </td>
+<td> Parameter|digComs </td>
+<td> Конфигурация команд параметра со структурой <b>{openLabel}-{color};{closeLabel}-{color};{stopLabel}-{color}</b>, для дискретного блока, и <b>{com1Label}-{color};{com2Label}-{color};...;{comNLabel}-{color}</b>, для статуса по коду.
+</td></tr></table>
+<h3><span class="mw-headline" id=".D0.90.D0.BD.D0.B0.D0.BB.D0.BE.D0.B3.D0.BE.D0.B2.D1.8B.D0.B5_.D0.B0.D0.BF.D0.BF.D0.B0.D1.80.D0.B0.D1.82.D1.8B"><span class="mw-headline-number">2.2</span> Аналоговые аппараты</span></h3>
+<p>Элементы на рисунке 2.2 используются для отображения статуса аналогових аппаратов и предназначены для использования в трубопроводах. Элементы в целом используют и репрезентуют структуру DAQ-шаблона <a href="../en/Libs_Main.html#pidUnif" title="Special:MyLanguage/Libs/Main">аналоговых ПИД-регуляторов</a> в различных визуальных вариантах.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMnemoEls_analogApparatus.png"><img class="thumbimage" height="258" src="../en/files/LibMnemoEls_analogApparatus.png" width="400" /></a>  <div class="thumbcaption">Рис.2.2. Элементы аналоговых аппаратов в режиме разработки и исполнения (сверху вниз).</div></div></div></div>
+<p>Элементы аналоговых аппаратов включают, слева на право:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Имя (идентификатор) </th>
+<th> Версия </th>
+<th> Лицензия </th>
+<th> Автор
+</th></tr>
+<tr>
+<td> Кран с положением (El_Kran_polozh) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Трёхпозиционный кран (Kran_3_pos) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p><b><u>Использование — разработка</u></b><br />
+Эти виджеты могут быть использованы разработчиком при создании мнемосхем с отображением и контролем аналоговых аппаратов. Для использования нужно добавить данные виджеты на мнемосхему, пропорционально подстроить геометрию и связать с параметром источника данных.
+</p><p><b><u>Использование — исполнение</u></b><br />
+В режиме исполнения, в основном поле элементов, отображается символический образ аппарата с динамическим сигналом, который соответствует значению аналогового параметра.
+</p><p>В активном режиме элемента, при нажатии левой клавишей мыши, в области панелей появится <a href="Libs_Main_graphical_elements.html#ElCadr" title="Special:MyLanguage/Libs/Main graphical elements">панель управления параметром</a>, а выбор данного виджета будет отображаться мигающим цветом структуры.
+</p><p><b><u>Свойства связывания и конфигурации</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Идентификатор </th>
+<th> Имя </th>
+<th> Тип </th>
+<th> Конфигурация </th>
+<th> Конфигурационный шаблон </th>
+<th> Описание
+</th></tr>
+<tr>
+<td> out </td>
+<td> Параметр: положение </td>
+<td> Вещественный </td>
+<td> Входная связь </td>
+<td> Parameter|out </td>
+<td>
+</td></tr></table>
+
+
+
+
+
+
+</div></body>
+</html>

@@ -52,23 +52,50 @@ INSERT INTO PrescrProgs VALUES('Abcdef','');
 INSERT INTO PrescrProgs VALUES('Библ1/Прог123','');
 INSERT INTO PrescrProgs VALUES('Тест12','<prg id="Тест12" wtm="31"><com arg1="10" arg2="0" arg3="0" arg4="0" arg5="0" id="Timer" /><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" id="Background timer"><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer"><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" id="Timer" /><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" id="Background timer" /><com id="New command"><com arg1="123" arg2="0" arg3="0" arg4="0" arg5="0" descr="123456" id="Timer" name="Test timer" /></com></com></com></prg>');
 CREATE TABLE IF NOT EXISTS 'VCALibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO VCALibs VALUES('Main','Main elements','Provides the library of the main elements of the user interface of common and the industrial automation.
+INSERT INTO VCALibs VALUES('Main','Main elements','The library is created to provide main elements of the user interface. The library is built on the basis primitives of the widgets and the internal programming language JavaLikeCalc.
 
-Founded: September 2007
+The library contains graphic elements, often need when forming the user interface of the automation of technological and common processes. Names and text options are available in three languages: English, Ukrainian and Russian.
+
 Author: Roman Savochenko <roman@oscada.org>
+Founded: September 2007
 Version: 2.0.0
 License: GPLv2','wlb_Main','','Основні елементи','Бібліотека створюється для надання основних елементів користувацького інтерфейсу. Будується бібліотека на основі примітивів віджетів та мови внутрішнього програмування JavaLikeCalc.
+
+Бібліотека містить графічні елементи, які часто затребувано при формуванні користувацького інтерфейсу автоматизації технологічних та загальних процесів. Назви елементів та їх текстові параметри доступно на трьох мовах: Англійська, Українська та Російська.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Засновано: Вересень 2007
 Версія: 2.0.0
 Ліцензія: GPLv2','Основные элементы','Библиотека создаётся для предоставления основных элементов пользовательского интерфейса. Строится библиотека на основе примитивов виджетов и языка внутреннего программирования JavaLikeCalc.
 
+Библиотека содержит графические элементы, которые часто востребованы при формировании пользовательского интерфейса автоматизации технологических и общих процессом. Названия элементов и их текстовые параметры доступны на трёх языках: Английский, Украинский и Российский.
+
 Автор: Роман Савоченко <roman@oscada.org>
 Основано: Сентябрь 2007
 Версия: 2.0.0
 Лицензия: GPLv2');
-INSERT INTO VCALibs VALUES('mnEls','Mnemo elements','User interface''s main elements library.','wlb_mnEls','','Елементи мнемосхеми','Бібліотека основних елементів інтерфейсу користувача.','Элементы мнемосхемы','Библиотека основных элементов пользовательского интерфейса.');
+INSERT INTO VCALibs VALUES('mnEls','Mnemo elements','The library is created to provide mnemonic elements of the user interface. The library is built on the basis primitives of the widgets and the internal programming language JavaLikeCalc.
+
+The library contains graphic elements, often need when forming the user interface of the automation of technological processes. Names and text options are available in three languages: English, Ukrainian and Russian.
+
+Author: Roman Savochenko <roman@oscada.org>, Maxim Lysenko (2008-2012), Ksenia Yashina (2007)
+Founded: September 2007
+Version: 1.0.0
+License: GPLv2','wlb_mnEls','','Елементи мнемосхеми','Бібліотека створюється для надання елементів мнемосхем користувацького інтерфейсу. Будується бібліотека на основі примітивів віджетів та мови внутрішнього програмування JavaLikeCalc.
+
+Бібліотека містить графічні елементи, які часто затребувано при формуванні користувацького інтерфейсу автоматизації технологічних процесів. Назви елементів та їх текстові параметри доступно на трьох мовах: Англійська, Українська та Російська.
+
+Автор: Роман Савоченко <roman@oscada.org>, Максим Лисенко (2008-2012), Ксенія Яшина (2007)
+Засновано: Вересень 2007
+Версія: 1.0.0
+Ліцензія: GPLv2','Элементы мнемосхемы','Библиотека создаётся для предоставления элементов мнемосхем пользовательского интерфейса. Строится библиотека на основе примитивов виджетов и языка внутреннего программирования JavaLikeCalc.
+
+Библиотека содержит элементы мнемосхем, которые часто востребованы при формировании пользовательского интерфейса автоматизации технологических процессом. Названия элементов и их текстовые параметры доступны на трёх языках: Английский, Украинский и Российский.
+
+Автор: Роман Савоченко <roman@oscada.org>, Максим Лысенко (2008-2012), Ксения Яшина (2007)
+Основано: Сентябрь 2007
+Версия: 1.0.0
+Лицензия: GPLv2');
 INSERT INTO VCALibs VALUES('doc','Documents','Documents library.
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.1','wlb_doc','','Документи','Бібліотека документів.
@@ -13319,8 +13346,8 @@ fill:(53.42|59.4):(60.26|78.19):(39.74|78.19):(46.58|59.4):c1:
 fill:(40.7|53.68):(21.81|60.26):(21.81|39.74):(40.6|46.59):c1:
 fill:(60|50):(60|50):c2:
 ',32,'','','','','','','','','');
-INSERT INTO wlb_mnEls_io VALUES('rnd_sq_gr1','name','Rounded rectangle (variant 2)',32,'','','','Скругленный прямоугольник(вариант 2)','','Скругленный прямоугольник(вариант 2)','','','');
-INSERT INTO wlb_mnEls_io VALUES('El_round_square1','name','Rounded rectangle',32,'','','','Скруглений прямокутник','','Скругленный прямоугольник','','','');
+INSERT INTO wlb_mnEls_io VALUES('rnd_sq_gr1','name','Rounded rectangle 1, volumetric',32,'','','','Скруглений прямокутник 1, об''ємний','','Скругленный прямоугольник 1, объемный','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_round_square1','name','Rounded rectangle 1',32,'','','','Скруглений прямокутник 1','','Скругленный прямоугольник 1','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_round_square1','geomW','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_round_square1','geomH','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_round_square1','fillColor','lightgrey',32,'','','','','','','','','');
@@ -13412,7 +13439,7 @@ line:(100|75):(0|75):::::
 fill:(0|25):(0|75):(100|75):(100|25):c1:
 ',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Pipe_simple','c1','yellow',0,'','','','','','','','','');
-INSERT INTO wlb_mnEls_io VALUES('El_Kran_polozh','name','Crane and position',32,'','','','Кран з положенням','','Кран с положением','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_Kran_polozh','name','Crane with position',32,'','','','Кран з положенням','','Кран с положением','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Kran_polozh','geomW','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Kran_polozh','geomH','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Kran_polozh','active','1',32,'','','','','','','','','');
@@ -13489,7 +13516,7 @@ line:(5|50):(86|23):::::
 line:(5|50):(86|77):::::
 fill:(5|50):(5|50)::
 ',32,'','','','','','','','','');
-INSERT INTO wlb_mnEls_io VALUES('El_box_Alarm','name','Alarm',32,'','','','Сигнал','','Сигнал','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_box_Alarm','name','Alarm (deprecated)',32,'','','','Сигнал (застаріле)','','Сигнал (устарелое)','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_box_Alarm','geomW','70',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_box_Alarm','geomH','28',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_box_Alarm','backColor','',32,'','','','','','','','','');
@@ -13539,7 +13566,7 @@ line:(25|75):(0|75):::::
 fill:(0|25):(25|25):(25|0):(75|0):(75|25):(100|25):(100|75):(75|75):(75|100):(25|100):(25|75):(0|75):c1:
 ',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Krest','c1','yellow',0,'','','','','','','','','');
-INSERT INTO wlb_mnEls_io VALUES('El_Obriv','name','Bluff-line',32,'','','','Обрив','','Обрыв','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_Obriv','name','Wave-line',32,'','','','Хвиляста лінія','','Волнистая линия','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Obriv','geomW','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Obriv','geomH','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Obriv','lineWdth','5',32,'','','','','','','','','');
@@ -13595,7 +13622,7 @@ INSERT INTO wlb_mnEls_io VALUES('El_Alarm','fillColor','lime',40,'','','','','',
 INSERT INTO wlb_mnEls_io VALUES('El_Alarm','elLst','arc:(5|17):(5|17):(20|19):(22|4):(5|17):::::
 fill:(5|17):(5|17)::
 ',32,'','','','','','','','','');
-INSERT INTO wlb_mnEls_io VALUES('El_Armatura','name','Valve',32,'','','','Засувка','','Задвижка','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_Armatura','name','Manual valve',32,'','','','Ручна засувка','','Ручная задвижка','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Armatura','geomW','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Armatura','geomH','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Armatura','lineClr','black-127',32,'','','','','','','','','');
@@ -13634,7 +13661,7 @@ INSERT INTO wlb_mnEls_io VALUES('Kran_3_pos','lineWdth','1',32,'','','','','',''
 INSERT INTO wlb_mnEls_io VALUES('El_Kran_polozh','c1','#d3d3d3',8,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Kran_Sh','c1','#d3d3d3',8,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Kran_Sh','evProc','ws_FocusIn::open:/pg_control/pg_ElCadr',32,'','','','','','','','','');
-INSERT INTO wlb_mnEls_io VALUES('El_Pipe_simple_vert_gr','name','Vertical pipe line(volumed)',32,'','','','Труба пряма вертикальна (об''ємна)','','Труба прямая вертикальная(объёмная)','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_Pipe_simple_vert_gr','name','Vertical pipe line, volumetric',32,'','','','Труба пряма вертикальна, об''ємна','','Труба прямая вертикальная, объёмная','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Pipe_simple_vert_gr','geomW','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Pipe_simple_vert_gr','geomH','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Pipe_simple_vert_gr','lineClr','',32,'','','','','','','','','');
@@ -13645,7 +13672,7 @@ line:(75|100):(25|100)::white-0:::
 line:(75|0):(75|100):::::
 line:(25|100):(25|0):::::
 fill:(25|0):(75|0):(75|100):(25|100)::',32,'','','','','','','','','');
-INSERT INTO wlb_mnEls_io VALUES('El_Strela_gr','name','ArrowHR(volumed)',32,'','','','СтрілаГП(об''ємна)','','СтрелаГП(объемная)','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_Strela_gr','name','ArrowHR, volumetric',32,'','','','СтрілаГП, об''ємна','','СтрелаГП, объемная','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Strela_gr','geomW','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Strela_gr','geomH','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Strela_gr','lineClr','',32,'','','','','','','','','');
@@ -13663,7 +13690,7 @@ line:(65|75):(75|50)::#ffffff-0:::
 fill:(65|25):(65|5):(95|50):(65|95):(65|75):(75|50)::conL
 fill:(0|25):(0|75):(65|75):(75|50):(65|25)::
 ',32,'','','','','','','','','');
-INSERT INTO wlb_mnEls_io VALUES('El_pipe_1_gr','name','Pipe-angleBL(volumed)',32,'','','','Труба-кутНЛ(об''ємна)','','Труба-уголНЛ(объёмная)','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_pipe_1_gr','name','Pipe-angleBL, volumetric',32,'','','','Труба-кутНЛ, об''ємна','','Труба-уголНЛ, объёмная','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_pipe_1_gr','geomW','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_pipe_1_gr','geomH','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_pipe_1_gr','lineClr','',32,'','','','','','','','','');
@@ -13678,7 +13705,7 @@ line:(25|75):(75|25)::white-0:::
 fill:(0|25):(0|75):(25|75):(75|25)::h_31
 fill:(75|100):(25|100):(25|75):(75|25)::v_31
 ',32,'','','','','','','','','');
-INSERT INTO wlb_mnEls_io VALUES('El_Troinik_gr','name','Pipe-teeVR(volumed)',32,'','','','Труба-трійникВП(об''ємний)','','Труба-тройникВП(объёмный)','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_Troinik_gr','name','Pipe-teeVR, volumetric',32,'','','','Труба-трійникВП, об''ємний','','Труба-тройникВП, объёмный','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Troinik_gr','geomW','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Troinik_gr','geomH','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Troinik_gr','lineClr','',32,'','','','','','','','','');
@@ -13696,7 +13723,7 @@ line:(50|50):(75|75)::white-0:::
 fill:(25|0):(75|0):(75|25):(50|50):(75|75):(75|100):(25|100)::v_31
 fill:(100|25):(100|75):(75|75):(50|50):(75|25)::h_31
 ',32,'','','','','','','','','');
-INSERT INTO wlb_mnEls_io VALUES('El_Krest_gr','name','Pipe-cross(volumed)',32,'','','','Труба-хрест(об''ємний)','','Труба-крест(объёмный)','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_Krest_gr','name','Pipe-cross, volumetric',32,'','','','Труба-хрест, об''ємний','','Труба-крест, объёмный','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Krest_gr','geomW','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Krest_gr','geomH','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Krest_gr','lineClr','',32,'','','','','','','','','');
@@ -13722,7 +13749,7 @@ fill:(25|0):(75|0):(75|25):(50|50):(25|25)::v_31
 fill:(100|25):(100|75):(75|75):(50|50):(75|25)::h_31
 fill:(75|100):(25|100):(25|75):(50|50):(75|75)::v_31
 ',32,'','','','','','','','','');
-INSERT INTO wlb_mnEls_io VALUES('El_Obr_Strela_gr','name','Back arrowHL(volumed)',32,'','','','Стріла оберненаГЛ(об''ємна)','','Стрела обратнаяГЛ(объемная)','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_Obr_Strela_gr','name','Back arrowHL, volumetric',32,'','','','Стріла оберненаГЛ, об''ємна','','Стрела обратнаяГЛ, объемная','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Obr_Strela_gr','geomW','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Obr_Strela_gr','geomH','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Obr_Strela_gr','lineClr','',32,'','','','','','','','','');
@@ -13738,7 +13765,7 @@ line:(65|25):(80|50)::white-0
 line:(65|75):(80|50)::white-0
 fill:(0|75):(0|25):(65|25):(80|50):(65|75)::
 fill:(65|25):(99|5):(99|95):(65|75):(80|50)::',32,'','','','','','','','','');
-INSERT INTO wlb_mnEls_io VALUES('El_Pipe_simple_gr','name','Pipe-line horizontal(volumed)',32,'','','','Труба пряма горизонтальна(об''ємна)','','Труба прямая горизонтальная(объёмная)','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_Pipe_simple_gr','name','Pipe-line horizontal, volumetric',32,'','','','Труба пряма горизонтальна, об''ємна','','Труба прямая горизонтальная, объёмная','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Pipe_simple_gr','geomW','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Pipe_simple_gr','geomH','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Pipe_simple_gr','lineClr','',32,'','','','','','','','','');
@@ -13766,7 +13793,11 @@ INSERT INTO wlb_mnEls_io VALUES('El_Pipe_simple_gr','lineWdth','0',32,'','','','
 INSERT INTO wlb_mnEls_io VALUES('El_Troinik_gr','geomXsc','1',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Armatura','c1','#d3d3d3',0,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Armatura','geomXsc','1',32,'','','','','','','','','');
-INSERT INTO wlb_mnEls_io VALUES('El_Kran_Sh','dscr','',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_Kran_Sh','dscr','The elements is used to display the discrete apparatus'' status on basis of the discrete signals, for use in pipelines. The elements commonly use and represent the representative structure of the DAQ-template of the discrete block in different visual variants.
+
+Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
+Version: 1.0.0
+License: GPLv2',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Kran_Sh','contextMenu','Open:open
 Close:close',40,'','','','Відкрити:open
 Закрити:close','','Открыть:open
@@ -13812,7 +13843,7 @@ fill:(50|25):(90|25):(90|50):(50|50):c1:h_31
 fill:(25|50):(25|50):c1:rad_127
 fill:(40|50):(40|50)::
 ',32,'','','','','','','','','');
-INSERT INTO wlb_mnEls_io VALUES('rnd_sq_gr','name','Rounded rectangle(valuable)',32,'','','','Скругленный прямоугольник(объемный)','','Скругленный прямоугольник(объемный)','','','');
+INSERT INTO wlb_mnEls_io VALUES('rnd_sq_gr','name','Rounded rectangle, volumetric',32,'','','','Скруглений прямокутник, об''ємний','','Скругленный прямоугольник, объемный','','','');
 INSERT INTO wlb_mnEls_io VALUES('rnd_sq_gr','geomW','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('rnd_sq_gr','geomH','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('rnd_sq_gr','fillColor','lightgrey',32,'','','','','','','','','');
@@ -13871,7 +13902,7 @@ INSERT INTO wlb_mnEls_io VALUES('Level','p1x','35',0,'','','','','','','','','')
 INSERT INTO wlb_mnEls_io VALUES('Level','p1y','45',8,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('Level','p2x','45',0,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('Level','p2y','45',8,'','','','','','','','','');
-INSERT INTO wlb_mnEls_io VALUES('Teploobm','name','Zmejev_hor',32,'','','','Змійовик горизонт.','','Змеевик горизонт.','','','');
+INSERT INTO wlb_mnEls_io VALUES('Teploobm','name','Coil pipe',32,'','','','Змійовик','','Змеевик','','','');
 INSERT INTO wlb_mnEls_io VALUES('Teploobm','geomW','200',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('Teploobm','geomH','200',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('Teploobm','lineWdth','20',32,'','','','','','','','','');
@@ -13942,12 +13973,12 @@ INSERT INTO wlb_mnEls_io VALUES('Kran_3_pos','p1y','59',8,'','','','','','','','
 INSERT INTO wlb_mnEls_io VALUES('Kran_3_pos','p2x','70',0,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('Kran_3_pos','p2y','59',8,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('Kran_3_pos','c1','#d3d3d3',8,'','','','','','','','','');
-INSERT INTO wlb_mnEls_io VALUES('El_Obr_StrelaVB_gr','name','Back arrowVB(volumed)',32,'','','','Стріла оберненаВН(об''ємна)','','Стрела обратнаяВН(объемная)','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_Obr_StrelaVB_gr','name','Back arrowVB, volumetric',32,'','','','Стріла оберненаВН, об''ємна','','Стрела обратнаяВН, объемная','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_d','name','Diaphragm',32,'','','','Діафрагма','','Диафрагма','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Krest','name','Pipe-cross',32,'','','','Труба-хрест','','Труба-крест','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_TroinikVL_gr','geomYsc','1',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('Zadvizhka','geomXsc','1',32,'','','','','','','','','');
-INSERT INTO wlb_mnEls_io VALUES('El_StrelaHL_gr','name','ArrowHL(volumed)',32,'','','','СтрілаГЛ(об''ємна)','','СтрелаГЛ(объемная)','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_StrelaHL_gr','name','ArrowHL, volumetric',32,'','','','СтрілаГЛ, об''ємна','','СтрелаГЛ, объемная','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_StrelaHL_gr','geomW','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_StrelaHL_gr','geomH','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_StrelaHL_gr','lineWdth','0',32,'','','','','','','','','');
@@ -13967,7 +13998,7 @@ line:(35|75):(25|50)::#ffffff-0:::
 fill:(35|5):(35|25):(25|50):(35|75):(35|95):(5|50)::conR
 fill:(100|25):(100|75):(35|75):(25|50):(35|25)::
 ',32,'','','','','','','','','');
-INSERT INTO wlb_mnEls_io VALUES('El_StrelaVT_gr','name','ArrowVT(volumed)',32,'','','','СтрілаВВ(об''ємна)','','СтрелаВВ(объемная)','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_StrelaVT_gr','name','ArrowVT, volumetric',32,'','','','СтрілаВВ, об''ємна','','СтрелаВВ, объемная','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_StrelaVT_gr','geomW','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_StrelaVT_gr','geomH','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_StrelaVT_gr','lineWdth','0',32,'','','','','','','','','');
@@ -13987,7 +14018,7 @@ line:(75|35):(50|25)::#ffffff-0:::
 fill:(5|35):(25|35):(50|25):(75|35):(95|35):(50|5)::conT
 fill:(25|100):(75|100):(75|35):(50|25):(25|35)::
 ',32,'','','','','','','','','');
-INSERT INTO wlb_mnEls_io VALUES('El_angleBR_gr','name','Pipe-angleBR(volumed)',32,'','','','Труба-кутНП(об''ємна)','','Труба-уголНП(объёмная)','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_angleBR_gr','name','Pipe-angleBR, volumetric',32,'','','','Труба-кутНП, об''ємна','','Труба-уголНП, объёмная','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_angleBR_gr','geomW','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_angleBR_gr','geomH','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_angleBR_gr','lineWdth','0',32,'','','','','','','','','');
@@ -14003,7 +14034,7 @@ line:(75|75):(100|75):::::
 line:(25|25):(75|75)::#ffffff-0:::
 fill:(25|100):(75|100):(75|75):(25|25)::v_31
 fill:(100|25):(100|75):(75|75):(25|25)::h_31',32,'','','','','','','','','');
-INSERT INTO wlb_mnEls_io VALUES('El_TroinikHT_gr','name','Pipe-teeHT(volumed)',32,'','','','Труба-трійникГВ(об''ємний)','','Труба-тройникГВ(объёмный)','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_TroinikHT_gr','name','Pipe-teeHT, volumetric',32,'','','','Труба-трійникГВ, об''ємний','','Труба-тройникГВ, объёмный','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_TroinikHT_gr','geomW','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_TroinikHT_gr','geomH','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_TroinikHT_gr','lineWdth','0',32,'','','','','','','','','');
@@ -14022,7 +14053,7 @@ line:(50|50):(25|25)::#ffffff-0:::
 line:(50|50):(75|25)::#ffffff-0:::
 fill:(0|25):(0|75):(100|75):(100|25):(75|25):(50|50):(25|25)::h_31
 fill:(25|0):(75|0):(75|25):(50|50):(25|25)::v_31',32,'','','','','','','','','');
-INSERT INTO wlb_mnEls_io VALUES('El_TroinikVL_gr','name','Pipe-teeVL(volumed)',32,'','','','Труба-трійникВЛ(об''ємний)','','Труба-тройникВЛ(объёмный)','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_TroinikVL_gr','name','Pipe-teeVL, volumetric',32,'','','','Труба-трійникВЛ, об''ємний','','Труба-тройникВЛ, объёмный','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_TroinikVL_gr','geomW','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_TroinikVL_gr','geomH','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_TroinikVL_gr','lineWdth','0',32,'','','','','','','','','');
@@ -14041,7 +14072,7 @@ line:(50|50):(25|25)::#ffffff-0:::
 line:(50|50):(25|75)::#ffffff-0:::
 fill:(25|0):(75|0):(75|100):(25|100):(25|75):(50|50):(25|25)::v_31
 fill:(0|25):(0|75):(25|75):(50|50):(25|25)::h_31',32,'','','','','','','','','');
-INSERT INTO wlb_mnEls_io VALUES('El_angleTL_gr','name','Pipe-angleTL(volumed)',32,'','','','Труба-кутВЛ(об''ємна)','','Труба-уголВЛ(объёмная)','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_angleTL_gr','name','Pipe-angleTL, volumetric',32,'','','','Труба-кутВЛ, об''ємна','','Труба-уголВЛ, объёмная','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_angleTL_gr','geomW','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_angleTL_gr','geomH','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_angleTL_gr','lineWdth','0',32,'','','','','','','','','');
@@ -14057,7 +14088,7 @@ line:(25|25):(25|0):::::
 line:(25|25):(75|75)::#ffffff-0:::
 fill:(25|0):(75|0):(75|75):(25|25)::v_31
 fill:(0|25):(0|75):(75|75):(25|25)::h_31',32,'','','','','','','','','');
-INSERT INTO wlb_mnEls_io VALUES('El_Obr_StrelaVT_gr','name','Back arrowVT(volumed)',32,'','','','Стріла оберненаВР(об''ємна)','','Стрела обратнаяВВ(объемная)','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_Obr_StrelaVT_gr','name','Back arrowVT, volumetric',32,'','','','Стріла оберненаВР, об''ємна','','Стрела обратнаяВВ, объемная','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Obr_StrelaVT_gr','geomW','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Obr_StrelaVT_gr','geomH','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Obr_StrelaVT_gr','lineWdth','0',32,'','','','','','','','','');
@@ -14076,7 +14107,7 @@ line:(75|65):(50|75)::#ffffff-0:::
 fill:(25|65):(5|99):(95|99):(75|65):(50|75)::
 fill:(25|0):(75|0):(75|65):(50|75):(25|65)::
 ',32,'','','','','','','','','');
-INSERT INTO wlb_mnEls_io VALUES('El_StrelaVB_gr','name','ArrowVB(volumed)',32,'','','','СтрілаВН(об''ємна)','','СтрелаВН(объемная)','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_StrelaVB_gr','name','ArrowVB, volumetric',32,'','','','СтрілаВН, об''ємна','','СтрелаВН, объемная','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_StrelaVB_gr','geomW','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_StrelaVB_gr','geomH','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_StrelaVB_gr','lineWdth','0',32,'','','','','','','','','');
@@ -14096,7 +14127,7 @@ line:(75|65):(50|75)::#ffffff-0:::
 fill:(5|65):(25|65):(50|75):(75|65):(95|65):(50|95)::conD
 fill:(25|0):(75|0):(75|65):(50|75):(25|65)::
 ',32,'','','','','','','','','');
-INSERT INTO wlb_mnEls_io VALUES('El_angleTR_gr','name','Pipe-angleTR(volumed)',32,'','','','Труба-кутВП(об''ємна)','','Труба-уголВР(объёмная)','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_angleTR_gr','name','Pipe-angleTR, volumetric',32,'','','','Труба-кутВП, об''ємна','','Труба-уголВР, объёмная','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_angleTR_gr','geomW','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_angleTR_gr','geomH','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_angleTR_gr','lineWdth','0',32,'','','','','','','','','');
@@ -14112,7 +14143,7 @@ line:(75|25):(75|0):::::
 line:(25|75):(75|25)::#ffffff-0:::
 fill:(25|0):(75|0):(75|25):(25|75)::v_31
 fill:(100|25):(100|75):(25|75):(75|25)::h_31',32,'','','','','','','','','');
-INSERT INTO wlb_mnEls_io VALUES('El_TroinikHB_gr','name','Pipe-teeHB(volumed)',32,'','','','Труба-трійникГН(об''ємний)','','Труба-тройникГН(объёмный)','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_TroinikHB_gr','name','Pipe-teeHB, volumetric',32,'','','','Труба-трійникГН, об''ємний','','Труба-тройникГН, объёмный','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_TroinikHB_gr','geomW','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_TroinikHB_gr','geomH','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_TroinikHB_gr','lineWdth','0',32,'','','','','','','','','');
@@ -14149,7 +14180,7 @@ line:(75|35):(50|25)::#ffffff-0:::
 fill:(25|100):(75|100):(75|35):(50|25):(25|35)::
 fill:(75|35):(95|0):(5|0):(25|35):(50|25)::
 ',32,'','','','','','','','','');
-INSERT INTO wlb_mnEls_io VALUES('El_Obr_StrelaHR_gr','name','Back arrowHR(volumed)',32,'','','','Стріла оберненаГП(об''ємна)','','Стрела обратнаяГП(объемная)','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_Obr_StrelaHR_gr','name','Back arrowHR, volumetric',32,'','','','Стріла оберненаГП, об''ємна','','Стрела обратнаяГП, объемная','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Obr_StrelaHR_gr','geomW','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Obr_StrelaHR_gr','geomH','100',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Obr_StrelaHR_gr','lineWdth','0',32,'','','','','','','','','');
@@ -14191,6 +14222,233 @@ INSERT INTO wlb_mnEls_io VALUES('El_Kran_polozh','c2','#0000ff',0,'','','','',''
 INSERT INTO wlb_mnEls_io VALUES('El_Zadvizhka','evProc','ws_FocusIn::open:/pg_control/pg_ElCadr',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('Zadvizhka','evProc','ws_FocusIn::open:/pg_control/pg_ElCadr',32,'','','','','','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Kran_polozh','perm','438',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_Alarm','lineClr','gray-100',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_Alarm','fillImg','led',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('Compressor','dscr','The elements is used to display the discrete apparatus'' status on basis of the discrete signals, for use in pipelines. The elements commonly use and represent the representative structure of the DAQ-template of the discrete block in different visual variants.
+
+Author: Roman Savochenko <roman@oscada.org>, Maxim Lysenko
+Version: 1.0.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_Alarm','dscr','The element is used to display the discrete status by color. Also this element generates notifications of violations on the locally defined condition, the attribute "ntf". The element commonly uses and represents the representative structure of the DAQ-template of the discrete block.
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.0.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_Armatura','dscr','The elements are for use in, or around, pipelines.
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.0.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_Kran_polozh','dscr','The elements is used to display the analog apparatus'' status and intended for use in pipelines. The elements commonly use and represent the representative structure of the DAQ-template of the analog PID-regulators in different visual variants.
+
+Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
+Version: 1.0.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_Krest','dscr','The elements serve to construct pipelines of any complexity, required width and color. By default, they are filled in yellow and the angle of rotation is 0°.
+
+Author: Maxim Lysenko
+Version: 1.0.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_Krest_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
+
+Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
+Version: 1.1.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_Obr_Strela','dscr','The elements serve to construct pipelines of any complexity, required width and color. By default, they are filled in yellow and the angle of rotation is 0°.
+
+Author: Maxim Lysenko
+Version: 1.0.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_Obr_StrelaHR_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
+
+Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
+Version: 1.1.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_Obr_StrelaVB_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
+
+Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
+Version: 1.1.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_Obr_StrelaVT_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
+
+Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
+Version: 1.1.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_Obr_Strela_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
+
+Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
+Version: 1.1.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_Obriv','dscr','The elements are for use in, or around, pipelines.
+
+Author: Maxim Lysenko
+Version: 1.0.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_Pipe_simple','dscr','The elements serve to construct pipelines of any complexity, required width and color. By default, they are filled in yellow and the angle of rotation is 0°.
+
+Author: Maxim Lysenko
+Version: 1.0.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_Pipe_simple_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
+
+Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
+Version: 1.1.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_Pipe_simple_vert','dscr','The elements serve to construct pipelines of any complexity, required width and color. By default, they are filled in yellow and the angle of rotation is 0°.
+
+Author: Maxim Lysenko
+Version: 1.0.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_Pipe_simple_vert_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
+
+Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
+Version: 1.1.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_Priamaja','dscr','The elements are for use in, or around, pipelines.
+
+Author: Maxim Lysenko
+Version: 1.0.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_Strela','dscr','The elements serve to construct pipelines of any complexity, required width and color. By default, they are filled in yellow and the angle of rotation is 0°.
+
+Author: Maxim Lysenko
+Version: 1.0.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_StrelaHL_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
+
+Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
+Version: 1.1.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_StrelaVB_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
+
+Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
+Version: 1.1.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_StrelaVT_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
+
+Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
+Version: 1.1.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_Strela_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
+
+Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
+Version: 1.1.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_Troinik','dscr','The elements serve to construct pipelines of any complexity, required width and color. By default, they are filled in yellow and the angle of rotation is 0°.
+
+Author: Maxim Lysenko
+Version: 1.0.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_TroinikHB_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
+
+Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
+Version: 1.1.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_TroinikHT_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
+
+Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
+Version: 1.1.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_TroinikVL_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
+
+Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
+Version: 1.1.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_Troinik_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
+
+Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
+Version: 1.1.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_angleBR_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
+
+Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
+Version: 1.1.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_angleTL_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
+
+Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
+Version: 1.1.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_angleTR_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
+
+Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
+Version: 1.1.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_d','dscr','The elements are for use in, or around, pipelines.
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.0.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_pipe_1','dscr','The elements serve to construct pipelines of any complexity, required width and color. By default, they are filled in yellow and the angle of rotation is 0°.
+
+Author: Maxim Lysenko
+Version: 1.0.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_pipe_1_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
+
+Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
+Version: 1.1.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_round_square','dscr','The elements are for use in, or around, pipelines.
+
+Author: Maxim Lysenko
+Version: 1.0.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('El_round_square1','dscr','The elements are for use in, or around, pipelines.
+
+Author: Maxim Lysenko
+Version: 1.0.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('Kran_3_pos','dscr','The elements is used to display the analog apparatus'' status and intended for use in pipelines. The elements commonly use and represent the representative structure of the DAQ-template of the analog PID-regulators in different visual variants.
+
+Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
+Version: 1.0.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('Level','dscr','The element is used to display a value histogram of levels of liquid in the technological apparatus. The element commonly uses and represents the representative structure of the "Analog signal" DAQ-template.
+
+Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
+Version: 1.0.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('Line_simple','dscr','The elements are for use in, or around, pipelines.
+
+Author: Maxim Lysenko
+Version: 1.0.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('Shkala','dscr','The elements are for use in, or around, pipelines.
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.0.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('Teploobm','dscr','The elements are for use in, or around, pipelines.
+
+Author: Maxim Lysenko
+Version: 1.0.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('cooler','dscr','The elements are for use in, or around, pipelines.
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.0.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('cooler2','dscr','The elements are for use in, or around, pipelines.
+
+Author: Ksenia Yashina
+Version: 1.0.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('rnd_sq_gr','dscr','The elements are for use in, or around, pipelines.
+
+Author: Maxim Lysenko
+Version: 1.0.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('rnd_sq_gr1','dscr','The elements are for use in, or around, pipelines.
+
+Author: Maxim Lysenko
+Version: 1.0.0
+License: GPLv2',32,'','','','','','','','','');
+INSERT INTO wlb_mnEls_io VALUES('sep','dscr','The elements are for use in, or around, pipelines.
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.0.0
+License: GPLv2',32,'','','','','','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_mnEls_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_mnEls_mime VALUES('h_31','image/png;0.339844','iVBORw0KGgoAAAANSUhEUgAAAAEAAAAfCAYAAAAmyadiAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A
 /wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9kCFBAUG+SzySYAAAAZdEVYdENv
@@ -19206,21 +19464,104 @@ AaDRCPaNx6yqAKSHAJpgh/QsQAmAN8Y30guAJIFGIwGg0b4lMUCqAlpdBJG2wh4R8BoC9eYAJII/
 jUYCQKMR7GOP94QCRj4fQgBQTx8FfgI+jUYCQKN9exIgjpcfAc6RHIJa9z4JevpSeU16/zQaCQCN
 RguoADlI9jYSaoULUsOLR6b5IUSA4E+jkQDQaAT5IBGoefboYCEEaFvevSfp1yR+j3DQaDQSABqN
 JKDh6XsKQKp4/FGwRUIACBnoLWGk0WgfYP8fDKeTagzhBTUAAAAASUVORK5CYII=');
+INSERT INTO wlb_mnEls_mime VALUES('led','image/png;6.2207','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');
 CREATE TABLE IF NOT EXISTS 'wlb_mnEls_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
-INSERT INTO wlb_mnEls_uio VALUES('Level','var','Value',131076,'<EVAL>||',10,'Parameter|var','','','Значення','','','Значение','','','','');
-INSERT INTO wlb_mnEls_uio VALUES('Level','min','Minimum',131076,'0||',10,'Parameter|min','','','Мінімум','','','Минимум','','','','');
+INSERT INTO wlb_mnEls_uio VALUES('Level','var','Value',131076,'<EVAL>|',10,'Parameter|var','','','Значення','','','Значение','','','','');
+INSERT INTO wlb_mnEls_uio VALUES('Level','min','Minimum',131076,'0|',10,'Parameter|min','','','Мінімум','','','Минимум','','','','');
 INSERT INTO wlb_mnEls_uio VALUES('El_Zadvizhka','com','Parameter: command - "Open"',131072,'0||',14,'Parameter|com','','','Параметр: команда - "Відкрити"','','','Параметр: команда - "Открыть"','','','','');
-INSERT INTO wlb_mnEls_uio VALUES('El_Kran_polozh','out','Parameter:position',131076,'0|',10,'Parameter|out','','','Параметр:положення','','','Параметр:положение','','','','');
-INSERT INTO wlb_mnEls_uio VALUES('El_box_Alarm','prmSignal','Parameter:signal',131073,'0|0;0|',8,'','','','Параметр:сигнал','','','Параметр:сигнал','','','','');
+INSERT INTO wlb_mnEls_uio VALUES('El_Kran_polozh','out','Parameter: position',131076,'0|',10,'Parameter|out','','','Параметр: положення','','','Параметр: положение','','','','');
+INSERT INTO wlb_mnEls_uio VALUES('El_box_Alarm','prmSignal','Parameter: signal',131073,'0|0;0|',8,'','','','Параметр: сигнал','','','Параметр: сигнал','','','','');
 INSERT INTO wlb_mnEls_uio VALUES('El_Kran_Sh','com','Parameter: command - "Open"',131072,'0',14,'Parameter|com','','','Параметр: команда - "Відкрити"','','','Параметр: команда - "Открыть"','','','','');
 INSERT INTO wlb_mnEls_uio VALUES('El_Kran_Sh','st_open','Parameter: state - "Opened"',131072,NULL,10,'Parameter|st_open','','','Параметр: стан - "Відкрито"','','','Параметр: состояние - "Открыто"','','','','');
 INSERT INTO wlb_mnEls_uio VALUES('El_Kran_Sh','st_close','Parameter: state - "Closed"',131072,NULL,10,'Parameter|st_close','','','Параметр: стан - "Закрито"','','','Параметр: состояние - "Закрыто"','','','','');
 INSERT INTO wlb_mnEls_uio VALUES('El_Kran_Sh','shifr','Parameter: code',131077,NULL,10,'Parameter|NAME','','','Параметр: шифр','','','Параметр: шифр','<EVAL>','','','');
-INSERT INTO wlb_mnEls_uio VALUES('Level','max','Maximum',131076,'100||',10,'Parameter|max','','','Максимум','','','Максимум','','','','');
+INSERT INTO wlb_mnEls_uio VALUES('Level','max','Maximum',131076,'100|',10,'Parameter|max','','','Максимум','','','Максимум','','','','');
 INSERT INTO wlb_mnEls_uio VALUES('Zadvizhka','com','Parameter: command - "Open"',131072,'0||',14,'Parameter|com','','','Параметр: команда - "Відкрити"','','','Параметр: команда - "Открыть"','','','','');
-INSERT INTO wlb_mnEls_uio VALUES('Kran_3_pos','out','Parameter:position',131076,'0|0;0|',10,'Parameter|out','','','Параметр:положення','','','Параметр:положение','','','','');
-INSERT INTO wlb_mnEls_uio VALUES('cooler2','speed','Rotation speed',131073,'<EVAL>|0;0|',8,'','','','Швидкість обертання','','','Скорость вращения','','','','');
-INSERT INTO wlb_mnEls_uio VALUES('Compressor','com','Parameter: command - "Open"',131072,'<EVAL>',14,'Parameter|com','','','Параметр: команда - "Відкрити"','','','Параметр: команда - "Открыть"','','','','');
+INSERT INTO wlb_mnEls_uio VALUES('Kran_3_pos','out','Parameter: position',131076,'0|',10,'Parameter|out','','','Параметр: положення','','','Параметр: положение','','','','');
+INSERT INTO wlb_mnEls_uio VALUES('cooler2','speed','Rotation speed',131073,'<EVAL>|',8,'','','','Швидкість обертання','','','Скорость вращения','','','','');
+INSERT INTO wlb_mnEls_uio VALUES('Compressor','com','Parameter: command - "Open"',131072,NULL,14,'Parameter|com','','','Параметр: команда - "Відкрити"','','','Параметр: команда - "Открыть"','','','','');
 INSERT INTO wlb_mnEls_uio VALUES('Compressor','shifr','Parameter: code',131077,'',10,'Parameter|NAME','','','Параметр: шифр','||','','Параметр: шифр','','','','');
 INSERT INTO wlb_mnEls_uio VALUES('Compressor','st_close','Parameter: state - "Closed"',131072,'0',10,'Parameter|st_close','','','Параметр: стан - "Закрито"','','','Параметр: состояние - "Закрыто"','','','','');
 INSERT INTO wlb_mnEls_uio VALUES('Compressor','st_open','Parameter: state - "Opened"',131072,'0',10,'Parameter|st_open','','','Параметр: стан - "Відкрито"','','','Параметр: состояние - "Открыто"','','','','');
@@ -19250,11 +19591,11 @@ INSERT INTO wlb_mnEls_uio VALUES('El_Kran_Sh','close','Parameter: command - "Clo
 INSERT INTO wlb_mnEls_uio VALUES('El_Zadvizhka','close','Parameter: command - "Close"',131072,'0||',14,'Parameter|close','','','Параметр: команда - "Закрити"','','','Параметр: команда - "Закрыть"','','','','');
 INSERT INTO wlb_mnEls_uio VALUES('Zadvizhka','close','Parameter: command - "Close"',131072,'0||',14,'Parameter|close','','','Параметр: команда - "Закрити"','','','Параметр: команда - "Закрыть"','','','','');
 INSERT INTO wlb_mnEls_uio VALUES('El_Kran_Sh','stop','Parameter: command - "Stop"',131072,'0',14,'Parameter|stop','','','Параметр: команда - "Стоп"','','','Параметр: команда - "Стоп"','','','','');
-INSERT INTO wlb_mnEls_uio VALUES('El_Alarm','NAME','Name',131077,'||',10,'Parameter|NAME','','','Ім''я','','','Имя','','','','');
-INSERT INTO wlb_mnEls_uio VALUES('El_Alarm','st_open','Parameter: status-open',131072,'0||',10,'Parameter|st_open','','','Параметр: статус-відкрито','','','Параметр: статус-открыто','','','','');
-INSERT INTO wlb_mnEls_uio VALUES('El_Alarm','st_close','Parameter: status-close',131072,'0||',10,'Parameter|st_close','','','Параметр: статус-закрито','','','Параметр: статус-закрыт','','','','');
-INSERT INTO wlb_mnEls_uio VALUES('El_Alarm','ntf','Notification "{st}:{modes}:{Speech text}"',131077,'||',9,'','','','Повідомлення "{стан}:{режими}:{Текст мови}"','','','Уведомление "{сост.}:{режимы}:{Текст речи}"','','','','');
-INSERT INTO wlb_mnEls_uio VALUES('El_Alarm','digStts','Statuses',131077,'||',10,'Parameter|digStts','','','Статуси','','','Статусы','','','','');
+INSERT INTO wlb_mnEls_uio VALUES('El_Alarm','NAME','Name',131077,'',10,'Parameter|NAME','','','Ім''я','','','Имя','','','','');
+INSERT INTO wlb_mnEls_uio VALUES('El_Alarm','st_open','Parameter: status-open',131072,'0',10,'Parameter|st_open','','','Параметр: статус-відкрито','','','Параметр: статус-открыто','','','','');
+INSERT INTO wlb_mnEls_uio VALUES('El_Alarm','st_close','Parameter: status-close',131072,'0',10,'Parameter|st_close','','','Параметр: статус-закрито','','','Параметр: статус-закрыт','','','','');
+INSERT INTO wlb_mnEls_uio VALUES('El_Alarm','ntf','Notification "{st}:{modes}:{Speech text}"',131077,'',9,'','','','Повідомлення "{стан}:{режими}:{Текст мови}"','','','Уведомление "{сост.}:{режимы}:{Текст речи}"','','','','');
+INSERT INTO wlb_mnEls_uio VALUES('El_Alarm','digStts','Statuses',131077,'',10,'Parameter|digStts','','','Статуси','','','Статусы','','','','');
 INSERT INTO wlb_mnEls_uio VALUES('Compressor','DESCR','Description',131077,'',10,'Parameter|DESCR','','','Опис','','','Описание','','','','');
 INSERT INTO wlb_mnEls_uio VALUES('El_Kran_Sh','DESCR','Description',131077,'',10,'Parameter|DESCR','','','Опис','','','Описание','','','','');
 CREATE TABLE IF NOT EXISTS 'Trs' ("base" TEXT DEFAULT '' ,"uk#base" TEXT DEFAULT '' ,"ru#base" TEXT DEFAULT '' , PRIMARY KEY ("base"));
@@ -23443,12 +23784,12 @@ NTmu0Wq1uPvnXWiuap5vtXhiYiIavzoFo9EYPTuOGR8fx/DwML45fz5o26D7Bf5bb7/tg2201+tF
 QUHBrF4/4PF4UFdXB5VSBclrrwYd4SH35OKFC7h27Rqam5ufz5BDbDYbqqur8e769dhXtS+kfUMh
 B5CcmiJoaW5G160u6HQ6TE1NRW7KAXa7HefOncO6tetw7PNjIZ8X0ba5th9b6Z9++Rk0TaPqmX8w
 kGZgYAB6vR5xcXE4XF2DJW/KwupTxPsG+3p76a/PnoV5xIwN721ASkpKpJeKmDt37qD3Xi8+3LMH
-GzduBPVGGvf7BtnQtGhoPp4VFAoFslZmRaUPMV5U/gV1zLxB5L2WMAAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;fillColor;elLst;','');
+GzduBPVGGvf7BtnQtGhoPp4VFAoFslZmRaUPMV5U/gV1zLxB5L2WMAAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;fillColor;elLst;',1579024297);
 INSERT INTO wlb_mnEls VALUES('El_pipe_1','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAALFJREFUeJzt2lEKgCAABNE1PGV2vPKadYeMBnHevzEs+JWJJEmSJEla
 TWktNx0x5N5z9V7eHq/n+WXN/442dn77JmNeDkAH0ByADqA5AB1AcwA6gOYAdADNAegAmgPQATQH
 oANoDkAH0ByADqA5AB1AcwA6gOYAdADNAegA2vID1KPtY18oPTP/Yq8jjwuSZPYHFstfAQegA2gO
-QAfQHIAOoDkAHUBzADqA5gB0AG35AR45IA4M55rBLAAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;fillColor;elLst;c1;','');
+QAfQHIAOoDkAHUBzADqA5gB0AG35AR45IA4M55rBLAAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;fillColor;elLst;c1;',1579024297);
 INSERT INTO wlb_mnEls VALUES('sep','iVBORw0KGgoAAAANSUhEUgAAAC4AAABACAYAAABlR0UdAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAACUZJREFUaIHVmn00lNsex78jRl6GpFq5UVY40R9JL+tYcrq6uQeH8ZaX
 oytCTF5ypboLXd0KNTUUViONMtUapzd1nQadu8oqlNXbhKZTKF0OeQ2tpfF2ZN8/rDsrxwwzY1Cf
@@ -23492,13 +23833,13 @@ paWlxNbWljAYDEKj0UhWVpY40mw2m+jr6xNlbPuYMrWvaoiJiQk5cOCAWJDP5xMAxM/Pb0yK2NjY
 kIz0yRemZoz4uHiipqZGeDweEQqF5Pnz54TJZJKqqiqxdFBQEDE3Nye/NTQqRVzh/Sqf88/9+zE8
 PAwejwdzc3Ooq6vD2dlZfFwgEKCgoACPHz7CUuNls5fXkugX9RFNTU0SHh4+Jj2uX79OFi9eTJS9
 fU9p03gNLU3Kf279goqKCjQ1NYnLCwoK4Ep3xbncXAp1rvqXFe3P+Sq3qAJf8aZgYGa2Yf8Ph7v4
-yGafCI8AAAAASUVORK5CYII=','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;lineWdth;fillColor;elLst;','');
+yGafCI8AAAAASUVORK5CYII=','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;lineWdth;fillColor;elLst;',1579024297);
 INSERT INTO wlb_mnEls VALUES('El_Troinik','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAANVJREFUeJzt2cEJwzAQBVE5uJC4DbkTqz3HbSo9WIeH0B/QcWEY2Iu2
 lEFaK71399p19RH/z2iA2UkALaBJAC2gSQAtoEkALaBJAC2gSQAtoEkALaDZtcAw21NaK6//BKYP
 cN9j88uvQAJoAU0CaAFNAmgBTQJoAU0CaAFNAmgBTQJoAU0CaAFNAmgBTQJoAU0CaAFNAmgBTQJo
 AU0CaAHN8gGmP48fx7ectb6enz7AWWv5Pc/2dn75FUgALaBJAC2gSQAtoEkALaBJAC2gSQAtoFk+
-wB8rCWhDyrseRgAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;fillColor;elLst;c1;','');
+wB8rCWhDyrseRgAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;fillColor;elLst;c1;',1579024297);
 INSERT INTO wlb_mnEls VALUES('El_Zadvizhka','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAACOdJREFUeJztmn1wVNUZh5+79+aGkE+igUFigBCNRJFgYkEqEIOYIFSD
 FFCpAQ3Fr5mOYHaTKG0Sg8iaUIkDJTgJAdQOUAqoAyJQoFR0UiMtiQ0YhIBoWiGmxLr52L0f/aNN
@@ -23545,11 +23886,11 @@ INSERT INTO wlb_mnEls VALUES('El_Pipe_simple_vert','iVBORw0KGgoAAAANSUhEUgAAAEAA
 AAAOxAAADsQBlSsOGwAAAKVJREFUeJzt0MEJADEQgMBwZSb917FXRB5DQMG/uNYl56yZcZ6956b/
 ux3wOg3QAZoG6ABNA3SApgE6QNMAHaBpgA7QNEAHaBqgAzQN0AGaBugATQN0gKYBOkDTAB2gaYAO
 0DRAB2gaoAM0DdABmgboAE0DdICmATpA0wAdoGmADtA0QAdoGqADNA3QAZoG6ABNA3SApgE6QNMA
-HaBpgA7QNEAHaH7l8mDlvmutRwAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;fillColor;elLst;c1;','');
+HaBpgA7QNEAHaH7l8mDlvmutRwAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;fillColor;elLst;c1;',1579024297);
 INSERT INTO wlb_mnEls VALUES('El_Pipe_simple','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAAHZJREFUeJzt2UERACEQA0E4meBfBydjHtutYCrfrAUAAABMs+9dr44o
 7fdmD/DVATUD1AE1A9QBNQPUATUD1AE1A9QBNQPUATUD1AE1A9QBNQPUATUD1AE1A9QBNQPUATUD
-1AE1A9QBtfED7HvO6HscAAAABvoBWK0HADpIXW4AAAAASUVORK5CYII=','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;fillColor;elLst;c1;','');
+1AE1A9QBtfED7HvO6HscAAAABvoBWK0HADpIXW4AAAAASUVORK5CYII=','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;fillColor;elLst;c1;',1579024297);
 INSERT INTO wlb_mnEls VALUES('El_Kran_polozh','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAADfRJREFUeJztW3twFHWe//T7MTPJJJk8JpPIUyAGqq7uTjnA9Y7HoXuu
 f511JVt1d7ruHqC8gnCUIMqqPCTs6S5wd24dlhYocHKEFaNy7OKK66k8L8QHLqgk0byZJPPqnvl1
@@ -23616,7 +23957,7 @@ oZVJFlY98gj+Jh1urgcFRYWjYjKZ6PRx7Ud05apHcPlyO7xer+scFwFaXIOu65gzew4euP/+QQ01
 3cgonzaV+fqrr+lvf3sUv9q+vVckcHDg1QN0/759NNIVueHe+gwVXvvNa/Ts6TPfWfm+x2Dxf/fV
 GxmkZDnxAAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',0,'JavaLikeCalc.JavaScript
 c1 = (focus && c1=="#d3d3d3") ? "#00ddff" : "#d3d3d3";
-p1y = p2y = 90 - (out.isEVal()?0:55*max(0,min(100,out))/100);','','',1000,'perm;name;active;geomW;geomH;evProc;lineWdth;lineClr;elLst;p1x;p1y;p2x;p2y;c1;c2;',1443604784);
+p1y = p2y = 90 - (out.isEVal()?0:55*max(0,min(100,out))/100);','','',1000,'perm;name;dscr;active;geomW;geomH;evProc;lineWdth;lineClr;elLst;p1x;p1y;p2x;p2y;c1;c2;',1579024297);
 INSERT INTO wlb_mnEls VALUES('El_round_square','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABPRJREFUeJztml1Mm1UYx58WOrpOirpxwyxVJEBsZSi9ITNhMpJyAROk
 SFYyL/i4cRnZgCVTwYtxN2WJICxxGbAMxQFTaEnGvGBLdN2AyafCYKzAZkpB+rlSSkt4vBHCS9vR
@@ -23640,7 +23981,7 @@ L0qKxWKI5kXD4/EJvwxBoVBA5Rdf7u4hRr0BExIS0N9CuN58HfMkkt07r1ltKOvswqbGJr8JYGFe
 jecrKlCn0XrPOTMzExuvNaJt1bqng1hZNmPux7l49fur3vVcVC+gSCTCutq6PRvA0uI/mJGRgVWV
 lb5xnFEqMf14OrbcaEGrZXVPBaHTaPH0Z6ex7FwZLr8wuezm0VUYeZcMh4aHgcFgQNVXVbRepxkZ
 GkaZXA5razYoKiyC6Df5bvl4LD8xPo71DQ2g02oh+6Ns4PP5nj7KY+78egf6+vqhQCqF1NRUiHrj
-sNvt8UrvdbR34NzcnDce5RZisRiE7woD8kJXEFL8C0zX/ISq4ohqAAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;elLst;','');
+sNvt8UrvdbR34NzcnDce5RZisRiE7woD8kJXEFL8C0zX/ISq4ohqAAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;elLst;',1579024297);
 INSERT INTO wlb_mnEls VALUES('cooler','iVBORw0KGgoAAAANSUhEUgAAADMAAABACAYAAAC3F09FAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAACbdJREFUaIHVmltQU9cax/9bAiTgTIUptpaEUbwUn/rADLZaSysVR61w
 hIA6eGQqIiQggQQMJELVaFA7QOSSSxPCLRFFPdqeM3WmT72enk6bqR16ehEIoEC8AEF6KNUg33mp
@@ -23686,7 +24027,7 @@ G4uvv/4aEfMjkCJMxciNYVYy5BOM69ZtMugNpFAqsGPHDmRnZ3vUfteuXYiIiMCGjRth0Bt8PsDt
 07FGq9WKnNwcZGZmori42OP2wcHBKCkpQVVVFXJycxDk40aX15lpqK+ngkIJsrKykJ+f75OJvLw8
 ZGVlQVJUiPq6eq+z49XAO2G10t937EBaWhqUSqW3sR/Q4cOH0dHRgbbWNmRsz/DYm0cNfvzhB/rw
 wwtQKBVYtmwZsrOzWd0DdblcMBqNuHTpEqqrqpCXn++/RVupXE4AHssVEhJC7SfaPXrl/g+Q9FFp
-wZMczQAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;lineWdth;fillColor;elLst;','');
+wZMczQAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;lineWdth;fillColor;elLst;',1579024297);
 INSERT INTO wlb_mnEls VALUES('El_Obr_Strela','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAAvpJREFUeJztmk1IVGEUht9bN8jBVJLohywbRbQ2bvpRw0VYSNGiRg2c
 0cCEghkFWwghYSbaJlNBx4Z+CB0FU7NNkgkRTlk0FkEUONjPIkcdC00hR6c6rYbKUked5nSv3wN3
@@ -23702,7 +24043,7 @@ EQK4A3AjBHAH4EYI4A7AjRDAHYCbZS9ANugzuTP4xK7dXUhOHkF8vH/nyo1NTYq4MW4y9lDXvXrI
 XASHrJEAoN/hIIO+EIasTqSmTvrUq/gN+JXomBipsem2NOIqg8Ggwfj4/D2q2ICZZB8/LQFAZORB
 0mo7kJMze62qNmAm+abr2BrRierqtRgY+HuNKjfAy/qNGyQAeNLzmMy1Ddh/wIzg4N9rVC3Ay57E
 BMn9ZZLqGzajvb0eKSk/3y0LAQCwWhMkAYDzwwA5nU7uOIL/hh/e3f4IkO35oQAAAABJRU5ErkJg
-gg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;fillColor;elLst;c1;','');
+gg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;fillColor;elLst;c1;',1579024297);
 INSERT INTO wlb_mnEls VALUES('El_d','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAACjxJREFUeJztm31Mk9cex79Ai2W2vPjSVCgUBEWiGJ3KBVeckmwdjhhJ
 FApTHFUq6HbNbjJWo1zfoiLMOdT5ArsQwQkCgiZo1o1lvl157Vy0iYDVAsVSwNvyYqVQ2HP/MDap
@@ -23750,7 +24091,7 @@ h0dEOF0sLMKePXsglUonvUvodDoUFxdD+UyJs2fO2uU8QNIvMye+OUG0tbWB7csGj8cjw6RZNBoN
 qqur0aVSYUvSFrt/lHgNaf8Mtbe2EY2SRhQWFWHz5s2g0+mkbXLSarXo6+vDb7/9hlZ5KxL4fISH
 h4+Z29uKQ36bO5aZSRSXlCAiIgI0Gg0CgcAuO3K5HD///DOkUil8vL2xadMmk/n8RHHYf4Md7Qqi
 t7cXer0eh48cMZznfcQDg8EwW04qlaLpURMAICRkAeLjXq0qczgco5UcsnD4n6NvUpCfT6jVGrPX
-V0ZEIOK9lZOu62/+qvwfEjiv5s/xttkAAAAASUVORK5CYII=','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;fillColor;elLst;','');
+V0ZEIOK9lZOu62/+qvwfEjiv5s/xttkAAAAASUVORK5CYII=','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;fillColor;elLst;',1579024297);
 INSERT INTO wlb_mnEls VALUES('El_box_Alarm','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAZCAYAAACB6CjhAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAA/9JREFUWIXtlm1MlWUYx3/PeTgcEBg45P1FD2+CIQQVCaOk3MxgkFhO
 ajFzk4GzJnzINtfUTceHJkM0JZI8LqfAXBAUWMiqMWyOrRSTMwLkMMCjBDFGwHnjnLsPNjcODLBg
@@ -23813,7 +24154,7 @@ El_text_alarm_text="Останов";
 INSERT INTO wlb_mnEls VALUES('Line_simple','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAAGxJREFUeJzt0DEOAjEMBEAfoo5c5CWpgccDL8oH7hqErqChSaRoRnKx
 crN2BAAAAAAAAADr287h/XztvfdZXYYopcTtcd9+Lltre0QsPZ8bvy5/vW9B13PIzKi1zuoyRGbO
-rgAAAAAAAADAcAfyrEKWCSUb8QAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;lineWdth;elLst;','');
+rgAAAAAAAADAcAfyrEKWCSUb8QAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;lineWdth;elLst;',1579024297);
 INSERT INTO wlb_mnEls VALUES('El_Priamaja','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAA06AAANOgEDIh6FAAAB
 VElEQVRoge3asY6CQBSF4TtwE0KDsZKSUEDspvL9H2FaOgMFUBEqQiCOxWyIcc1uHIuzbO5XIUE5
 f6MUEgkslaZpFEXoGZ7meWat9el0Qi/x1Pc9a63LskQv8VRVFWutL5cLeomnOI45TdMsy9BLPNV1
@@ -23821,13 +24162,13 @@ HaA3fEoC0CQATQLQJABNAtAkAE0C0CQATQLQmIjGcUTPeFuSJEopImJrbdM06D1vO5/PYRiSC6jr
 Gr3nbUVR7Dvgdru5AyaiYRigY3xYa90BE9G6rtAxPnYfsGEiWpbl6az7htoq3ctH1trHk9uVL9/+
 g+1D3MUvb/T9sueAw+Hw653+mi2JlVJ5nmPXeAiCr2eIvQa4HwH6DwFEdDweoWM+svunUQlAkwA0
 CUCTADQJQJMANAlAkwA0CUDjruuu1yt6hqeu69gYM00TeomnqqrYGNO2LXqJp77vd//XY/QEcQdM
-mGr1E4A/HQAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;lineClr;elLst;','');
+mGr1E4A/HQAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;lineClr;elLst;',1579024297);
 INSERT INTO wlb_mnEls VALUES('El_Krest','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAANhJREFUeJzt29EJhDAQBuHNcYWcbWgnpj2xzVwPRvgQ/4G8Twb2IbCp
 mqT3GmO40/d9zPh/ZgM8nQTQApoE0AKaBNACmgTQApoE0AKaBNACmgTQAppv7zX1nt62u1Qu0s6a
 uUMbYy7A03n9CCSAFtAkgBbQJIAW0CSAFtAkgBbQJIAW0CSAFtAkgBbQJIAW0CSAFtAkgBbQJIAW
 0CSAFtAkgBbQvD5Am923r3bWcdxkc4Fl+dW2rk4gHyYeTgJoAU0CaAFNAmgBTQJoAU0CaAFNAmgB
-zesD/AHIVM3bU8agFAAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;fillColor;elLst;c1;','');
+zesD/AHIVM3bU8agFAAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;fillColor;elLst;c1;',1579024297);
 INSERT INTO wlb_mnEls VALUES('El_Obriv','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAAt5JREFUeJzt1jtMk1EUB/BjQ7AVEkgoLB3oRKALBsIAKSRY8xVcGHCw
 X2ekCMEIm6AkECmDTDLxSOQhSAIapTAodVN5bZTyEIvU2ha1UFBqAZO/G4K0lGco8fySu3zfyb33
@@ -23842,7 +24183,7 @@ Morb5eXIyc7ZtzNKb5Wi8WEjvi19PfDGZ6dn0FBv3DVPQkIC3pjN23OEzS+x0/EFDoeD+vr76Glv
 L9nt9oBxKpWKpFIpEREZiospKzNrT8zs3Cw9qK8nr9dLNptt+3lcXBz1dHeToNWGTd4BLdhsqKut
 g+6G7ljfITtHTEwMzMPm8Gj7g/qxugbb/Ee0tbZBrVYjMTHx0IlLJBLcq64O+hEW3q3wj4mxcYxP
 TBARkdU6RY+amoLG6kWR1OpsioiIoKKbRUHzPFcF2GnTvwG/3x/0fWRkJEkvyc5tfowxxhhjjDHG
-GGOMMcYYO3l/AH3Lr9YCg1QCAAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;lineWdth;elLst;','');
+GGOMMcYYO3l/AH3Lr9YCg1QCAAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;lineWdth;elLst;',1579024297);
 INSERT INTO wlb_mnEls VALUES('Shkala','iVBORw0KGgoAAAANSUhEUgAAABQAAABACAYAAAAallfsAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAAwxJREFUWIXtmN1LU2Ecx7872zFxipvOfCFtQjht1HK9zDRDDZKwl9mW
 XQle7CroKuiq/gCvgjCNUHKQF1mugZFBWnazQNIUXzK8ULPNvbipm25uc3u6UMdePHm0iwz3hcPh
@@ -23858,7 +24199,7 @@ XnjZJlTX3eIAgOOXkcw6/Sg6mw/D+zYEThfA8dOGZTsfDjodIpolcEu+pTl0NjVhzn0IOfLrKJMm
 f6fEgQcSGP8UiQP/AZC5L6+YSV9XB3pG7DhZfRv1VVLQ2/ThaDEmNA6P4N24B7WXJejRvsFigF1C
 RqDZwUXuCQXKSktxjF6GlaEPswb6gwTrQQJwKFCEgGVA5jVMT/LBMmGB1cSFmRIgg3Emy4S5kkwk
 z7yF5t5jpJWeZ9eHEfWbRa1SEYWiJOSv1tSgSHp8V8UiYvL46BhZsNtDvlAiQWZ21l9Vn7h2r9/P
-fDulF/USOgAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',1,'','','',-1,'name;geomW;geomH;backColor;','');
+fDulF/USOgAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',1,'','','',-1,'name;dscr;geomW;geomH;backColor;',1579024297);
 INSERT INTO wlb_mnEls VALUES('El_Strela','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAA+tJREFUeJztmn9MlHUcx186lHAL07ZAwaI2oRJckBC6IJV/JLTNCmuc
 tiJrlT8ySjbbbbTZP8riZptdNf6hhg6iFXYH/NW8Q0Vki1w/FI4Gh54TsRB/nFBe3/5oV2MeHHf3
@@ -23878,29 +24219,60 @@ wVvcPT8xpN/jcZtNZVo9kzS5+vqorj5FYWHg8eFhaGvdyYGP3wntbIAqsn5iFQ5HYNvfvInYvz9F
 hHtOSPkWaGqCzEc/Z1lWZljVVxqAxwMD/eXk5+fr/SjaarIWkHG+SVkHNDbew/PPfRlxHmUBHGnO
 Y+OzwQ9ABJNyAEZG4IOqLGo+qpOSTzkAPT2zuXfhVpIWLZLyzVcKQHc3HGvfxc5db0ub8CgDwOcD
 uz2RZza8LjWvMgDq6xPJXdFAxiMPS53uKgPA5XqMdcXFxpzrB9OPP3SLQIcbYoopcv0D6b+nFDyD
-BvUAAAAASUVORK5CYII=','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;fillColor;elLst;c1;','');
-INSERT INTO wlb_mnEls VALUES('El_Alarm','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
-AAAOxAAADsQBlSsOGwAABGVJREFUeJzt20tsVHUUx/EP5VFK25lQJTUUSwVCMSlocNGEqBAlGmIT
-q4su0LhCY2QBC4ys6s6FCxM1krglBDFRIASNC0IocWETwyuIUwwlNFSghLY8+qClXBd3LMbQ18yd
-Xiv3exYzk5k5/989//O/8597ziUhISEh4dFl1jSN8yLeyOF7ndiLP6OV84A5hXKMxVgEVmhQavuU
-PYxoc12Ha9owgg7cilJkITNgB94CWyyyVdWUPVw0oFmHswZwG804FqHGSDNgHl7BcvCmBk96Fqwn
-+2xqLFLiHbU6cc+AX72t1TPZd1twKm/VETEP1VIOSwukBXYJIrVegc1Z32mBMjtRhqJ8hM+O5PDZ
-JOVjH1nrXeUasQ4VEXknVFqNjWhEoNIZS5FBb65u810CKaxVr9Fyr3kZ9Xl6HIu5//J9w2o3lDmn
-wyVHcLZAI49LHY7bql+vwFDEaT+e9Qv87J41buGTXA8gnyXQaJX3fKBeg7TaPL1NlbkoUeQJxRYq
-c9JSXENXoYdOoc4qezQJZKZx1seyPQJr3LLUdtTI88Q4ERtwXLMumWwqxm1dwuWwSTs+E/46TIqp
-JO08bFKvSaNXNUh7TpiKcVOKRYqMWCilTLsSQ+7gapTDpHHA6wI9sc/52HZAuE9g22QOqqBrZSYw
-2SWwTKmXrLfRC5ZYJ1wQ/0VuogcLdOp0C924m6/b96X0+saQOwL3Y0/0sW1IuG3eqh/HhXuVMZns
-TrDYLGnzhSec/zJzhWerOUpQboIsn+gcMB8rrVBlddbxTKEKdUpUqhVem8iJldhni8vOZFNrpthl
-gf361ckIr008lImWQAlqlWYzYCZRhaeUmK02++qhPPI/g0kA4hYQN0kA4hYQN0kA4hYQN0kA4hYQ
-N0kA4hYQN498ACa6IjSCa9KKnPO0SlROg6ooOIC9Ov3ha90O4VI+7rZJCy84zhTbJsBJRqvJDyVZ
-ApP8XLF5Bj2mwpAKNQrbW5IPF/AtTmnxu+/RKmyuyJukLvB/ZCoBGEarPq1+MuxCoSTlSKiOc64I
-/EBhFC5QarOU3shbYPK1v1toUg4Le0kmVbqZakV/2LA+d11UrFyHGjXCgnmctOBLA36zW7s9OI2h
-Qg+7Q52M/fpdjmnW+4X9Cc26hFWgDYU+6H+yWKUmdTI+jSkAGYEmgVX2CEtgU87FfJpabuvTo8uw
-csW61agQbWfYeLTgkOuOOijjO2EG5F0EzZUHxdMe4T5hMOLZvi9wJ+u7x6SLnxMRVVtTtzlOu67a
-j5Y4KNw21UbkHfrxBb7CQZy3W6fPhX2COc98VBvadn2uOqIaV8Ayq41k22aXk1Np7SZOZB8HDTvq
-hCNZ/2EYjuWpO3IWCOc+rdyu0bbWnTmm/RmB57M+UnqV2jzqP6IWjaj/0vSPPrttH9rACettz+F+
-gT6drtrrpk5hmv8izIfImK4bJjbjwxy+1yZskT8frZwHTFcAHjdOiXocBoQ3SQxGKychISEhISEB
-fwFOqpSSuh+D/wAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',1,'JavaLikeCalc.JavaScript
+BvUAAAAASUVORK5CYII=','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;fillColor;elLst;c1;',1579024297);
+INSERT INTO wlb_mnEls VALUES('El_Alarm','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
+NrCBDfjif244P8uw79NUAAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',1,'JavaLikeCalc.JavaScript
 if(f_start)	isErr = false, alBlnk = false;
 
 //Display typical for st_open
@@ -23925,7 +24297,7 @@ if(alarmSt&0x100) {
 	if(!(alarmSt&0x10000) || alBlnk)	fillColor = isErr ? "red" : fillColor;
 	else fillColor = "gray";
 	alBlnk = !alBlnk;
-}','','',1000,'name;geomW;geomH;fillColor;elLst;',1414600281);
+}','','',1000,'name;dscr;geomW;geomH;lineClr;fillColor;fillImg;elLst;',1579024297);
 INSERT INTO wlb_mnEls VALUES('El_Armatura','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAC3BJREFUeJztWXmMVdUd/u4959zlLTMDs7IN4DDQAoMyDAoRCkYIiwxF
 jRibYsLSJdIgrctfojU1NdGkLgW1YEpBY0SII4vRxoKM0hhETNgEii0UGIEqzrx5y93Ovad/3GXe
@@ -23979,7 +24351,7 @@ STdMQvO8eWi6fqJ078qVl5XYN4Gqa9GinDj+D/Hqpk3YvmM7bNuGrsegaSo0TS34mR57gUw6A8uy
 oKoqZs6cieHDh+P2229HLB6/qlb861A/aqRkGaaYMKERu3btwoEDB/DFxUzf/xgxTRO6rmPY0KGY
 MWMGrh13La4ZUSctuvvuy/rwlwqhI/5z/oI4euwo1q9fj7NtbQX3FAhw64IFiOkxzJo1C8nSku/U
 iveFqprqiMvWljeETOS+bi+iiCKKKKKIIooooogiiiiiiO87/gtGlXGvPTLytAAAAABJRU5ErkJg
-gg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;geomXsc;geomYsc;lineClr;fillColor;elLst;c1;','');
+gg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;geomXsc;geomYsc;lineClr;fillColor;elLst;c1;',1579024297);
 INSERT INTO wlb_mnEls VALUES('El_Kran_Sh','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAC5pJREFUeJztWmmMI1e1/qrurcVVLtvlpW1sv0zPSpQEEWZAYhHkCRSQ
 kie9gIJQBghBgITgBwmLglgDKCCkJyKBnvIWEpYIEYknHmITCBS2X0hD4EcYepjuTqen7XG3226v
@@ -24082,14 +24454,14 @@ for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 	}
 	else ev_rez += sval+"\n";
 }
-event = ev_rez;','','',1000,'name;dscr;active;geomW;geomH;contextMenu;evProc;lineWdth;lineClr;fillColor;elLst;c1;',1546001532);
+event = ev_rez;','','',1000,'name;dscr;active;geomW;geomH;contextMenu;evProc;lineWdth;lineClr;fillColor;elLst;c1;',1579024297);
 INSERT INTO wlb_mnEls VALUES('El_Pipe_simple_vert_gr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAAS9JREFUeJztm0FOwlAYBoe+iqRAPAI7DiE38QJ4JvZyB+9VmhALuigG
 0Z1dTIzfJH/en/eSZjL7ThjJasX7ZgNNM8y8gfli2JfL633TwGJxu89mUFXQ93A4QNfdnod22NvL
 XddB217P4xFK9cTLfj/5rX81NsBfJwFsAZsEsAVsEsAWsEkAW8AmAWwBmwSwBWwSwBawSQBbwCYB
 bAGbBLAFbBLAFrBJAFvAJgFsAZsEsAVsEsAWsEkAW8AmAWwBmwSwBWwSwBawSQBbwCYBbAGbBLAF
 bBLAFrBJAFvAJgFsAZsEsAVsEsAWsEkAW8AmAWwBmwSwBWz+fYB67AfW60eet1tKgbr+MgXqu+te
-6m/vNZQCE+A8hfspPCyhPw2/03/OqYe3y/nj7QS73eso/w9J4z9odzl/TQAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;lineWdth;lineClr;bordClr;fillColor;fillImg;elLst;',1421231121);
+6m/vNZQCE+A8hfspPCyhPw2/03/OqYe3y/nj7QS73eso/w9J4z9odzl/TQAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;lineWdth;lineClr;bordClr;fillColor;fillImg;elLst;',1579024297);
 INSERT INTO wlb_mnEls VALUES('El_Strela_gr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAByhJREFUeJztmntslWcdxz/v5Vx6O21x60pLKftDNxwkDsPKhokbJmZk
 ZAtky+Y2XEZQN7msMk00MV4SE8X9ZTLoXBxQiDO1k7GrAZMpyLZkzo1E0RVaLDBbCrS25/q+73nf
@@ -24123,7 +24495,7 @@ lXB6CE4Nwfp135yS8wC2ZT5crj2HhqO9vVRW/IWmJoV3DgGlzq+nB+67dyPtm741JedBrtA/8ejY
 YPzvMZ4vJa+/Hx59ZA1LliyZtl1tbgTzpdN3peyNDMPhw7Bt+zZj1nWfmnYoa0NA4EsTlPel3o+O
 1rGzc9eM7WpDgO/LSqVgaBDmzLmNR1dP/AeIiaAPAYGooKcHGhoW0rmjMxS7+hDgw8gIDA2ZPPTg
 WhqbZodSwrWpAp4L/zgMTz7Rzsb2p0LrX7RRgIy9CdY8/vVQ7WpDQDKZoKuri5vm3xxq96oNAc3N
-n+Pu5cu1aN1Dx6EPPlQn+o9rdXV3Dbrgv3lN+07k6CaRAAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;lineWdth;lineClr;bordClr;fillColor;fillImg;elLst;','');
+n+Pu5cu1aN1Dx6EPPlQn+o9rdXV3Dbrgv3lN+07k6CaRAAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;lineWdth;lineClr;bordClr;fillColor;fillImg;elLst;',1579024297);
 INSERT INTO wlb_mnEls VALUES('El_pipe_1_gr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAAeBJREFUeJztmk1uwjAQhV+SSYr4UY/QHYcoPQkXoGdiX+7QfXsjQEJ2
 ki5MRERpWuGfmajzSRFIEePJ8xsbOwYURVEURVEURVEURflvZE9PaLmT8OFltcbbbpfd+3tarUKm
@@ -24134,7 +24506,7 @@ SCC5A4iAokjb5hBJHUDkLkkkc4DEhwcAOuwjt5DJs32fuCWQye35DtpHLIGqkv3wQEQHEDkBpBNe
 gFZ2zV9D+8CDYElAIdz2fYI6gAigkfR8RxAHZMKnuiEoxAvGPJc/2v8EFfnaK8DH5w5jfsVOPocL
 AGDsBywE7AfxogJwJ8CNCsCdADcqAHcC3KgA3AlwowJwJ8CNCsCdADfeq/jl8hmvmw2K4rIF3u0M
 UXn5XtDV/fMGSgagqYCHCnhcuKOw3UkRa91hKXP+/HavBrbbd6/8vwBaD4YVGNE/mAAAAABJRU5E
-rkJggg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;lineWdth;lineClr;bordWdth;bordClr;fillColor;elLst;',1421231121);
+rkJggg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;lineWdth;lineClr;bordWdth;bordClr;fillColor;elLst;',1579024297);
 INSERT INTO wlb_mnEls VALUES('El_Troinik_gr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAAi5JREFUeJztm12OmzAURg/gZEZMoi4h85RFwE66gcya5r3ZQ99baRaU
 MD/FcR8u6TTRtGoB+9qSP8nCAoG/e3JtZJsUTNRmg2tbqGspdzXcraS+Xr+fr2tYrS7rt7dQltD3
@@ -24146,7 +24518,7 @@ p2UkAJyD52c4ncK2exMLAJDgX17CQvi0jggASPAhM6G3kQGAsJnQ9xECgHCZEC0AkOC7DpxHCFED
 AAneZ3ewsQOAIRM8dYcfKQAAfwNjEhlwlg8IUb4G/6bzwDgXhOgHwY90fkXOMXdIEgBI8HNkQrIA
 QIJ/e5uWCTa1MeBazsHT0z1t04y6//Hxa9oAANqmyX+YmKIMQNuAtjIAbQPaygC0DWgrA9A2oK0M
 QNuAtjIAbQPamjwb3G4bHnY72Ws3v5Vq+A5vqFfm6vrwNUiB7NLeLGWvrreyUHEutpfVW9t/cM3K
-lHaKfgK1nMAD15RhnAAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;geomXsc;lineWdth;lineClr;bordClr;fillColor;elLst;',1421231121);
+lHaKfgK1nMAD15RhnAAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;geomXsc;lineWdth;lineClr;bordClr;fillColor;elLst;',1579024297);
 INSERT INTO wlb_mnEls VALUES('El_Krest_gr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAAtpJREFUeJztm01u2zAQhZ+osWLINrrJ3l35ENJNcgHnTNnXd+g+AXIg
 WYlT/nRBq5GFOk3EIQcF+AGEBRsmH59nSJGUCwSy3cK1LVDXvqxqYLX215vN+/t1DazXl9fLJaAU
@@ -24161,7 +24533,7 @@ JmgdOwUC1/MucjoYDVAXMQWqKnxhYy3QR0qHXzEjgIhvGyvWwGiiGODirOpimKANQB3zILhg3roe
 MwyMXCawD4LEeGhxjWGK5Fg7aM0UAcXMqW4uzvFEgtYAnU7hgpRKt401YC3w9hYWCcYAVKq7ICGP
 T4egI+oQnAOen7+jbZpZ3394+AkK+bMBgNkPJ3DRNk3+w0QI2QBpAdJkA6QFSJMNkBYgTTZAWoA0
 2QBpAdJkA6QFSBO8it/tGtzv9/6snUalPD+Hd74uafL5eQOlgD+lvan8WZ02fqNiKEb73Vuj//KZ
-8UvaEH4DDMXoM/a8K5cAAAAASUVORK5CYII=','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;lineWdth;lineClr;fillColor;elLst;',1421231121);
+8UvaEH4DDMXoM/a8K5cAAAAASUVORK5CYII=','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;lineWdth;lineClr;fillColor;elLst;',1579024297);
 INSERT INTO wlb_mnEls VALUES('El_Obr_Strela_gr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABIVJREFUeJztm0tMXFUYx3/3waMww2NI29ihg1RJodJYrZoqqWVR2oUu
 rEUX2sZETU2MtcJGaqKUkHRh2Wmjm9ZiohLFRRMpTZqKCbTVQiyVpgqSdnhETEoRYYDyuPe4uJkU
@@ -24183,13 +24555,13 @@ TUOid4TCPLghXwneuCnaLpzni1N1bN78B5mZsZ0KG6aEBoBlQvhz6Y5a0XWtnqKi3qh1pOoBi/Fn
 d7d4r/INMjI68flCET8pKt8rUQ9YjIKNGxWAxm+/E01nTiDEWSI57ndNBsxnamJSVFQeZGjoPMkp
 Qdauvf+1+191SQbMZ1V6mgLQcbldNJ9t5NcrdeTkGAueGJuyNsFIeOKpJxWA458eFy0t33BruI38
 /P9fY7ixBBZisH9AtHf8wtGjlTyw7i+8Xutp0FsH6t39n6EwuYH1yp4Xy5X2jn7lsS0VdHVZp0lC
-ipeEHSY0Ni6u/dYlnn9uh/j8s0+WowV3afqhaXkbsALwH2K7cwytvf3BAAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;lineWdth;lineClr;bordClr;fillColor;fillImg;elLst;','');
+ipeEHSY0Ni6u/dYlnn9uh/j8s0+WowV3afqhaXkbsALwH2K7cwytvf3BAAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;lineWdth;lineClr;bordClr;fillColor;fillImg;elLst;',1579024297);
 INSERT INTO wlb_mnEls VALUES('El_Pipe_simple_gr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAANtJREFUeJzt2tFtwlAQRNExb0IQwUoJ/FFE6IQUQPqXjYSyTihjPvae
 Cq5Wu/bPkwAAAAAAQDfT+az/dETK5fIlX6/pjJyf+10+HtMZOWOo9wBsyR/tB3BKZ+TY3U9gSJ7n
 dEaO37pvACfQfADDkk/8BdIZOQyAE5B8OKQzcsaQvNulM3ImSa5KZ+T87SWvazoj530v+fFIZ+R8
 zs03oLbmG1DVfQNK8rqkM3Kqmp/AVpKXxifwywY0H0Btkhc+gumMnCo2QH4+0xk52yZN37db2/cB
-AAAAAAA09QLqBj01adTh5wAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;lineWdth;lineClr;bordClr;fillColor;fillImg;elLst;',1421231121);
+AAAAAAA09QLqBj01adTh5wAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;lineWdth;lineClr;bordClr;fillColor;fillImg;elLst;',1579024297);
 INSERT INTO wlb_mnEls VALUES('rnd_sq_gr1','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAAvZJREFUeJztmk1PE0EYx/99mW0ihZKUbRZoNSSlnCQppniiUS/4FfCG
 XwKTkshHsN6QcoOe5SwpSOgJTnggouGEvF0grCZ0u9vx5MnOWLo72J2d3/WZ2TzPf5/nmZcMoFAo
@@ -24204,7 +24576,7 @@ EGQBVAlYlufO/A9clEATd3hG1LO4WAUsGVqAu2VQggRw1wRlwFUTlOE0GHgBXJVAoAWQ4S4AcHEf
 0Gg00HLYk/1C4EvAsV3sA3jp4xdsp4sMyGbHUVmtIJ/PC3HqvnAcB2dnZxhIJNraufu8oaEh+nhy
 EoOMyX7g+PgY04UCViqVuz2WBoD1tTX6dmkJExM5Md4J5va2gcPDQ3w/+oYH8b62sXJ7QHGmiJGR
 ERwcfEE6nUZ/fxyhUO/fD7RaDk5OfuD6+hqv5+eZwQMdHnW2a1t0+cMyPm1uIpVKeeepIEzTxMvZ
-WZTflbnBA3c46/0yf1LWk/NeYyCRwNSTKQnOsQqFQiGY30UIFUU/JGR5AAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;fillColor;fillImg;elLst;','');
+WZTflbnBA3c46/0yf1LWk/NeYyCRwNSTKQnOsQqFQiGY30UIFUU/JGR5AAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;fillColor;fillImg;elLst;',1579024297);
 INSERT INTO wlb_mnEls VALUES('Compressor','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABylJREFUeJztWk1oG0kW/rq7qttW+0+yg1aKLcfEPhgJO0sIBAw7kISQ
 cXKYhN29LHvYy8CSHVjmsqc5DDMszGWYy573NDCHBZ92wTgLgU0CCgkJdhwPCTGOkNdSxlhGsRz1
@@ -24277,7 +24649,7 @@ for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 	}
 	else ev_rez += sval+"\n";
 }
-event = ev_rez;','','',1000,'name;active;geomW;geomH;contextMenu;evProc;fillColor;elLst;c1;',1443604128);
+event = ev_rez;','','',1000,'name;dscr;active;geomW;geomH;contextMenu;evProc;fillColor;elLst;c1;',1579024297);
 INSERT INTO wlb_mnEls VALUES('cooler2','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAB9ZJREFUeJztWntQVNcZ/7EPFgSU50oRsqxKQUREalGsVKlJg5CUgmJi
 dWw7jszUcaa2Q20lM21o2ulMZ5qmFnUsPsc4lIiSqIk4IgQStMlGHstL2GV5rMDy2Df7Fr/+kYYU
@@ -24318,7 +24690,7 @@ GWIxYpcKn5/8fq4oqm9YWI+6G2644YYbzxH+DWqCRVJSGbkrAAAAAElFTkSuQmCC','/wlb_original
 if (orient < 360) orient+=speed;
 else if( orient >= 360 ) orient = 0;
 
-','','',-1,'name;geomW;geomH;lineWdth;lineClr;orient;elLst;c1;c2;','');
+','','',-1,'name;dscr;geomW;geomH;lineWdth;lineClr;orient;elLst;c1;c2;',1579024297);
 INSERT INTO wlb_mnEls VALUES('rnd_sq_gr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAACmRJREFUeJztW11sFNcV/mbuzGJsloUWcLExNtu1kVoXg5uSh9Ka4rqW
 wk9BpQQCSKmSUCJ+kr6RKn3BUSH0qZEhSKVNnggBVNQktQWR+pP+pGnUKEatEVILwYANxg+2l7V3
@@ -24367,7 +24739,7 @@ ELQPU6MGwGsBwiWuXLmCjsMdEwoPTOGNkcE7d/kTG9Yjk8lg6dKlvmMpQIFKlMhem/ECwLn9/tDl
 y5fx/N696Hjllel9ZQYArl+7xnft3g3LspBIJHwFkQ3IFCWZIjlvjUndXsDu9Q0NDaF1XSs6Dh9G
 RXzO9AMg6N3fvMMP/fgl5HI5JJNJe6IIL0rKlE6nMTg4iIb6epx8/SSW1tVOiZEH5vpKby8/fuIE
 enp6HDOMmjRCQBnDwf0H0NLSgqol1aV/bzCIzp87z2/cuDEdU02J2tvb0fiVxpkxvUf0P0L/BVQo
-xYz2BoVnAAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;fillColor;fillImg;elLst;','');
+xYz2BoVnAAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;fillColor;fillImg;elLst;',1579024297);
 INSERT INTO wlb_mnEls VALUES('Zadvizhka','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAD2VJREFUeJztW3uQW9dZ/+nec596v1ZaSfau7XWzfuVh43EIbNwBkpKE
 IQ2kU2pCSKeFaZthkpRAOrSlCUzoMMPgNgVSShNoSiFMQ2nTNqEJtA5M2jExWye217tr73pXXsnS
@@ -24451,7 +24823,7 @@ l7xunbRwPx6njlerJvsWISzxBa2rU9fguEArAAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigu
 crd = 95;
 if(!(var.isEVal() || max.isEVal() || min.isEVal()))
 	crd = crd - 90*(max(min,min(max,var))-min)/(max-min);
-p1y = p2y = crd;','','',-1,'name;geomW;geomH;fillColor;elLst;p1x;p1y;p2x;p2y;',1399228390);
+p1y = p2y = crd;','','',-1,'name;dscr;geomW;geomH;fillColor;elLst;p1x;p1y;p2x;p2y;',1579024297);
 INSERT INTO wlb_mnEls VALUES('Teploobm','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAACg5JREFUeJzlm9lyW8cRhr/ZsBGkBC7aTFuLt7jsSLZl5zmSi1w775Hk
 ZfICeYikUpVKlSt0ZLkkJbIUS6QocxNBHCxnllyQhHCImSMAVEl29N+wCJye7vlPd09Pz0DYQR6y
@@ -24498,7 +24870,7 @@ fuMekOi7TwXXR9y5g7pxo/zyNeA3N3EbG7Pp2dhALa8gzl94sUm3bxEG40tskQDvT50Eh3i6if9m
 DXP90+Qb8rs75Le+IZxCp1tbw9wAVUJCfvs27unT6HehsApQ3q2dFn5jA9/tYj78CDWyLgdrye/d
 xT58cOrb5eDpf/01+to1zJWriJGNkt/fp/+vNcJ++p7SsfZhKfzSPOAIbnub/G9/faljRvXcu0v/
 3vS3RgulcCB+IPH/jMBYEny5HvBTRyEJOucY5LPfuvw54viFazg8kelmL/s3OT9tHG+LhwR0Tnn/
-/ueGAgHtdpv79++/VoNeNY5/MS/e9J/P/w9VHMGNMVAODQAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;lineWdth;lineClr;fillColor;fillImg;elLst;','');
+/ueGAgHtdpv79++/VoNeNY5/MS/e9J/P/w9VHMGNMVAODQAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;lineWdth;lineClr;fillColor;fillImg;elLst;',1579024297);
 INSERT INTO wlb_mnEls VALUES('El_StrelaHL_gr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAB0BJREFUeJztm39slHcdx1/Pc/f8urve9cq13UbLgK1lIgSiC5S1EONw
 MWZEJtG5Ebe4LWuH2bJBIsaZIInGdRETFx2R4Y9CMieMDWgkOmch6pTpoptLmAmQhR/SH6uD/qDt
@@ -24533,7 +24905,7 @@ QjqjkQuIIpyUet/87c3EYtdz6oQQkHEhmwE3rfACUAZhkgTcXF+nbfz6Uxw7DueHpFV2/UYpKD3B
 pPu3u1av5v77HuLoURg8XyBABYSASQ+y4uUJretMp9q2bTuVlfITOR3wvABoYYr0Y+lUKsWuX+3i
 3LlyursVblYFJgSKMsoMm4YGsKyhQXX3HCYRF0UYBBR1hrN7125m3rCYd98NRjcIRSagZlatdued
 X6avL0Q6XcydA4bHH/+asu1g/NdYSfDGX/+mUqnU9CUA4JXf/FaNDA1PXwKuISD4L6ouUUm3d/Jw
-AAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;lineWdth;lineClr;bordClr;fillColor;fillImg;elLst;',1421231121);
+AAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;lineWdth;lineClr;bordClr;fillColor;fillImg;elLst;',1579024297);
 INSERT INTO wlb_mnEls VALUES('Compressor_1','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAACexJREFUeJztm2tMk1kax/8F2lKqUJBSqJFLxgAVB9FFi0LjijBV3Jjs
 Rl02UUMIwQ+NgDduiTtgVC7JZgMkS2azjhvCBxUHhBAkUtRqQZoaGSyEmwFMCwoECnTaUih1Pwim
@@ -24639,7 +25011,7 @@ if(  out!=EVAL_REAL )
 {
   crd=74.0-50.0*(out/100.0);
   p1y=p2y=crd;
-}','','',1000,'name;active;geomW;geomH;contextMenu;evProc;lineWdth;lineClr;fillColor;elLst;p1x;p1y;p2x;p2y;c1;','');
+}','','',1000,'name;dscr;active;geomW;geomH;contextMenu;evProc;lineWdth;lineClr;fillColor;elLst;p1x;p1y;p2x;p2y;c1;',1579024297);
 INSERT INTO wlb_mnEls VALUES('El_StrelaVT_gr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAByxJREFUeJztm2tsHGcVhp/dnfvu+paNHV+SkNqtQLZBlUor7IAqgpJQ
 qZaDhNoklUrr0JRbJRLRBFqERCtUftgVqD/ATgBXNEINUptERQIRipBI4ogIB6OENu4PO64dX5rE
@@ -24673,7 +25045,7 @@ MnNSFqaZ4MivX2Pr9m2hWwRITkwq13UXlJ36TxXS2JgPbLUESCal7pX7CB3t7QvibBjG/Beqm0og
 VhBf8L5640Z8/UFT0yJ3vObfDoveCv+vIBDAbwJ+IxDAbwJ+IxDAbwJ+IxDAbwJ+IxDAbwJ+IxDA
 bwJ+IxDAbwJ+IxDAbwJ+IxDAbwJ+IxDAbwJ+IxDAbwJ+IxDAbwJ+IxDAbwJ+IxDAbwJ+IxDAbwJ+
 IxDAbwJ+IxDAbwJ+IxDAbwJ+4/9egCX/Y+Seexp4eu9eIpH8P0A0TZ4K1/T8eUT7j89zf5gIAa4h
-j94WxuUxW+8J8kwGshmYyx1v+SwL7e2/XxL/fwPPA353nDe92AAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;lineWdth;lineClr;bordClr;fillColor;fillImg;elLst;',1421231121);
+j94WxuUxW+8J8kwGshmYyx1v+SwL7e2/XxL/fwPPA353nDe92AAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;lineWdth;lineClr;bordClr;fillColor;fillImg;elLst;',1579024297);
 INSERT INTO wlb_mnEls VALUES('El_angleBR_gr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAAeBJREFUeJztmktuwjAQQF8+LT9V3XCArjhEOBCciX25Q2/AiaBqY9LF
 EBUh1AWxPRN1nhQJKcKZeZpxsA04juM4juM4juM4jvPfKIYOsFjQLZcxQsnPatVQDx1kuYSmgWKw
@@ -24684,7 +25056,7 @@ JAAk+ZyV0AZjAiBvJbStQQGQrxLMCgBJ/niELqEE0wJAkk/ZDsG6ALhUQqJ2+B6DAEg3MY6iAnpS
 SDD5GvyLfmKMJcH8JHiP/hUZY+0wSgEgyceohNEKAEn+62tYJYSxzQG3dB0cDm+sm+ah7+92H+MW
 ALBuGt73+4f3lYzsz+rhArQD0MYFaAegjQvQDkAbF6AdgDYuQDsAbVyAdgDaDF4NrlYN281Gztrr
 q6u6/A/v8rmqb+7Xcj5fIKe0k2c5q2uDbFT0V2hl9za0d+4FWdIO4Qc7dJtHCjpkqwAAAABJRU5E
-rkJggg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;lineWdth;lineClr;bordClr;fillColor;elLst;',1421231121);
+rkJggg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;lineWdth;lineClr;bordClr;fillColor;elLst;',1579024297);
 INSERT INTO wlb_mnEls VALUES('El_TroinikHT_gr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAAeJJREFUeJztmlFuozAQhj9gkkYE1Je+562H2NwkPUB7sc1J2hsBUlTT
 7IOblkRKdxcbTyvmkywsHmZ+/8zYSiAjkM2G43YLZenHuoR15ed1/Xm/LKGqzuerFeQ5OAdtC113
@@ -24695,7 +25067,7 @@ RDEhg+XSj9jIYsIKOBF0OmRxdvtrTNoCQ8aaMOXi4b0FUhgA/9+/U/T8JYWAVBOcAtf41z1h6id/
 lidVBZz4mwmpFv+RK7UBcN2EFGV/mS9pCwy5NGGx8CMlIiCrVdqkQ06nQ577V+WpKQqQVD9gvkJL
 QwaIczrJvwNvS5C21Zahx80SpOu0ZehxW8+8Alw/8wpwbu4V4EDaRluGHs7NvAV6B9LMuAVerQJm
 boDrQRrbBLVl6OGcVQByOGjL0KPvIXvY7YK+DzAMwzAMwzAMwzAM48fxB/TcZYf6rTXxAAAAAElF
-TkSuQmCC','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;lineWdth;lineClr;bordClr;fillColor;elLst;',1421231121);
+TkSuQmCC','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;lineWdth;lineClr;bordClr;fillColor;elLst;',1579024297);
 INSERT INTO wlb_mnEls VALUES('El_TroinikVL_gr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAAgRJREFUeJztm0tugzAURS/mQSMC6qRzZllE2Uk2kK4p82YPnbc7AiRU
 0nTgoHyqVGpsuA/VR0IgkOzL4RkSJ0RwpCxxqCogy+yyzIBlbreL4rQ/y4A8v9xeLABjgL4HmgZo
@@ -24706,7 +25078,7 @@ WiTIYsHrXMPTQbRcCRbS97zOjeEPBWkaTsdJYv8hwkbaltCpWAEamLwCRHR9Kpy0AkTsoonJKkDj
 yQOANPXIPUT6yv6ccYdApPfKD0g94hBIU90nD4xYASJWgHb8CzjoHvPXSO35JpgIECsv+3O8VoAI
 IDO58gNeKiBS/qj7Dek690aM0X+3v4XEZu3UwPvHDj5+YmchLi8bAPaFCV9hGPzz+aAgIAgIAtgB
 2AQB7ABsggB2ADZBADsAmyCAHYCN87f41eoZL5sN4vg0BT7MDEly2o7l6vhxAiUC8JUCDynwWAD9
-3r5OPyz7Hvg8rn8c2wPb7ZtT/m8H4mfcREYf9AAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;geomXsc;geomYsc;lineWdth;lineClr;bordClr;fillColor;elLst;',1421231121);
+3r5OPyz7Hvg8rn8c2wPb7ZtT/m8H4mfcREYf9AAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;geomXsc;geomYsc;lineWdth;lineClr;bordClr;fillColor;elLst;',1579024297);
 INSERT INTO wlb_mnEls VALUES('El_angleTL_gr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAAZFJREFUeJztmM2qgzAQRj91FhJ1173vUd+k71efMBEEqXfhDbXQu7jm
 ZyYwB4rBxcxw+iUBKwQyjtinCTDm+HUG6PpjPQzv98YAff+5blugroFtA5wDluXz6eyxtr/vlgWw
@@ -24715,7 +25087,7 @@ FLjdYo3CA01TeJHq8ucIfsiYOIVKlRBNAHB83ioN6iIKAMqTQF0fv2hJEqJugTOlSKBhSFe8BAnJ
 EuCRfjskFwDIlpBFAAA0TZ4+/4X6BLfAX0g8E7IlwCNNQnYBgCwJWbfAGSkSqG35mku4HUjKP8EF
 bRv3CMAe9EkmDHKOr/kZLgm0LDyNv/F65e8pJgGe3EkQlQBPziSIS4BnzySBnM3T6Ao5kiByC5xJ
 fSaQFboFzqRMgvgEeFJJKEYAkEYCWcGH4DdiSygqAZ6YEopLgCfW7UDrGqcQBzEkUFM/wqswcr/f
-8Zxn7jEURVEURVEURVEUpSR+AEYBY37PALAFAAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;lineWdth;lineClr;bordClr;fillColor;elLst;','');
+8Zxn7jEURVEURVEURVEUpSR+AEYBY37PALAFAAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;lineWdth;lineClr;bordClr;fillColor;elLst;',1579024297);
 INSERT INTO wlb_mnEls VALUES('El_Obr_StrelaVT_gr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABCVJREFUeJztml9oU1ccx785N0nTJLdWq2IbNLGgLxlsdi8bRX0bA/ey
 B1/mZLDBnjZYCzIdwz8r9UGFIUzcBrZ24B+26hCckZXqhv+m6Zib4NqubLGtf7C2jOaPJu3N2cOJ
@@ -24736,7 +25108,7 @@ Lkw4u6ir03Dp8imMDo8UlVBUQDKe4J1dXyEUyhQ7vKhgDHj8+CqifTeLHy/WGY1GMTh4etE9+OYi
 FALa21uLHpslYDh2j39+uBVr1ix0LHtZVf8Ae3bv4InJuO6jMEvA0S+PgvPf4HbbF84OVHUaZ78/
 iFgspuvXCfjz7l3+Y8/hRf/gm4t164Cduz7Q9el+gO5v389fCAdQWws4mHiAMAYoM9pMKegvfM3E
 WKVI/8xaxvIX5xD/+vy/5f760rSCvlxbK6zNivqsljumza7juZr+/kmsXt2ILW9scQDAf2iFUFwH
-gii+AAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;lineWdth;lineClr;bordClr;fillColor;fillImg;elLst;','');
+gii+AAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;lineWdth;lineClr;bordClr;fillColor;fillImg;elLst;',1579024297);
 INSERT INTO wlb_mnEls VALUES('El_StrelaVB_gr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABvFJREFUeJztm2twVVcVx3/73nPvzftlJQ9I0ilgA4UZwLFCcAanX0po
 09hp8Ul8pNBp1aEInxxn/Cg49YvjaFQUCQyZBukAM8KM/VArrbaSDo2VNqlBpSQkIS9yk/s6j9zt
@@ -24769,7 +25141,7 @@ ykofpLHxSzz7zDOEcyILznfR399eefll3fyVR9myJcXq1WlqauC++6C8XEaI8TG4fBnevwyDgzAy
 CsMj0NMTZunST3Ls6DGqa2sWjeei/yHy6YceUn19CbVyxXc43gH/+JtibBSmJrNFbmwchoahfwDO
 d8Lbb1fwy4O/5dy5V9ViOg93IQIyiE/FdGdnJ4fb9rFu/QXWrJGaMDgIXV3w5pvQ22vw2e272b59
 Bxs+vuGucLtrAmRw5fL7uvWnrcTiP2T9+iSjo3DxIlwb+gQPP/x59u7bd9c5eYJTJzv01q0b9LZt
-ZbqxcYse6L86p7+1/m9w5jdnPpyO+/gvwT8BTVwu8EvOGvcAAAAASUVORK5CYII=','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;lineWdth;lineClr;bordClr;fillColor;fillImg;elLst;','');
+ZbqxcYse6L86p7+1/m9w5jdnPpyO+/gvwT8BTVwu8EvOGvcAAAAASUVORK5CYII=','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;lineWdth;lineClr;bordClr;fillColor;fillImg;elLst;',1579024297);
 INSERT INTO wlb_mnEls VALUES('El_angleTR_gr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAAcZJREFUeJztmltugzAQRS/GpBFJ1CXwl0WUnaQLSDfWrKTdESBV2NCP
 SZsSpS+wPbY0RxqBkPCMD7YRjwwLqSqMdQ2UJcWmBDZb2t/tLsfLEthup/vrNaAUYAzQtkDXTbdt
@@ -24779,7 +25151,7 @@ BHAXwI3mLmApL68nVBXGOefu9w/pCsgyeplS1/PbeDoe0xWgNcUS8jzRKaA1Fe+inbQEjEChAe2g
 5n+E6vxnrjCp/kaIYX+dLxoBRUERkmgEKEWfykMTzcOQYnotk4FZwDBQsOVfMQroewpO7rgEGANY
 y5F5yv2OQYAxFDFgbGABfR9P5wGqJZgAa4AugmH/lTACxvOVZ17wbuFdwDjGNeevsb4FxHCr+4ne
 pwBr6Y/OmPE2AmK5z/+Gl9ugsYBpXbfqB+eLYCpX/gOnAmJf8G7hTMAw0K/rqWEtPRIv4vFwmPVt
-XhAEQRAEQRAEQRAENt4BJU2DcDzjFicAAAAASUVORK5CYII=','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;lineWdth;lineClr;bordClr;fillColor;elLst;',1421231121);
+XhAEQRAEQRAEQRAENt4BJU2DcDzjFicAAAAASUVORK5CYII=','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;lineWdth;lineClr;bordClr;fillColor;elLst;',1579024297);
 INSERT INTO wlb_mnEls VALUES('El_TroinikHB_gr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAAfdJREFUeJztmk1OwzAQhV/iSagKFUeAVQ+R3oQLtGdiT+/AHqQeqA1Q
 /MPCjQSI3yT2W2Q+yVLVqPLz68xYHgdQFEVRFEVRFEVRFGVqFFdXCGwRLJbLBrJasWXw2KzXkPmc
@@ -24790,7 +25162,7 @@ AsX//vnPhMTp4Cwg+4QpUNf9F9/hPdAmSofXlBEgEg0Yg1SF0SUxIPTL+d9IYYJ1gOxHLoKVxE5L
 CrrCOJYJoxdBkdhnS0m3RY5xdrB2pAgoem51fQlhnEiwFpCXl+GCynJ4tf8v3gPH47BIcA4QU94M
 EvLwuAXrij0EYLe7xqppev3+9vYecrfdFkNEsF+wWDUNhqxhwv2giBrAFsBGDWALYKMGsAWwUQPY
 AtioAWwBbNQAtgA2g0/xy2WDzXod79rl3TCn9/BOn418en5qoBSIt7Rndbyrsy42KrrhbOzeOvvF
-MxePtEN4AwHvv+EGGKr8AAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;lineWdth;lineClr;bordClr;fillColor;elLst;',1421231121);
+MxePtEN4AwHvv+EGGKr8AAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;lineWdth;lineClr;bordClr;fillColor;elLst;',1579024297);
 INSERT INTO wlb_mnEls VALUES('El_Obr_StrelaVB_gr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABGZJREFUeJztml1MW1UAx3+XfkFHQQkYSXQUA2wuMTJkm8okIrC4sGQf
 ZZENcRM/GANj/IpLTFxiYpw+LMYQE2d80hf1wfio843t1WUjbmZJMxKLoxQKqwza3t7Wh0NHaVk/
@@ -24812,7 +25184,7 @@ X/5MXZ0Q4HTCJidYbbrzZCX5PXHzprgsXC64fXsnTz35jO5j6hYA0LGnU6mpIZGc5kYSDouZYCmq
 03XtJ9F9CdwrmAJkB5CNKUB2ANmYAmQHkI0pQHYA2ZgCZAeQjSlAdgDZmAJkB5CNKUB2ANmYAmQH
 kI0pQHYA2ZgCZAeQjSlAdgDZmAJkB5CNKUB2ANmYAmQHkI0pQHYA2ZgCZAeQjSlAdgDZmAJkB5DN
 mt4TBGhoeJoTAwNYLOJ11jvFIl6YTK5brGn1VrBYQAHidnDYodwlXpGNxZaLFgN1aZlRp8G5c7+s
-Kf+/Dzppg+o1cSIAAAAASUVORK5CYII=','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;lineWdth;lineClr;bordClr;fillColor;fillImg;elLst;',1421231121);
+Kf+/Dzppg+o1cSIAAAAASUVORK5CYII=','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;lineWdth;lineClr;bordClr;fillColor;fillImg;elLst;',1579024297);
 INSERT INTO wlb_mnEls VALUES('El_Obr_StrelaHR_gr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABFFJREFUeJztm19sU1Ucxz+nvf0HdFPCjEv8s5qJPAmyAf7BqesUCZih
 G5GBheHUjUkyTSDO+GAwMfjCNPBAxJj44JMvJgR4WUJiGp5MnNNlW0hIKm6yP7Qr3b/+u70+XEvm
@@ -24834,7 +25206,7 @@ z1PxmG/ZH5VIEZBKwUD/JjZs2Esw+IkIBg/mHponchIQi8HoaAmRyBOc/uoHJe74fGzJpHmYsdjr
 qv2KbJa7jgDDgKE/Kygv9xP8qQuPx4PD5SyI4gFEa+t/7wN0HcJhO6GQl2++7qZ665aCKXoutkTC
 fHCZew0OQnRiO3X+0/T0REWhFg/ztsLxOExMlPJBx7dsqd7GQ488XLCFZ9F03XwouHoVtj/XTPuR
 AP46f8EXfpva2rXG7l0vGH2//W5MxSaL7n+DXLxwsfiKXmGF2/wNfJ+S+T2G+UMAAAAASUVORK5C
-YII=','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;geomW;geomH;lineWdth;lineClr;bordClr;fillColor;fillImg;elLst;',1421231121);
+YII=','/wlb_originals/wdg_ElFigure',1,'','','',-1,'name;dscr;geomW;geomH;lineWdth;lineClr;bordClr;fillColor;fillImg;elLst;',1579024297);
 CREATE TABLE IF NOT EXISTS 'prj_archBrowser' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
 INSERT INTO prj_archBrowser VALUES('/archBrowser','control','','root',1,'
 ','

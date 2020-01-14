@@ -1,5 +1,11 @@
+2020-01-14 Roman (stable)
+- !!!!:DB.LibsDB.vcaBase: The document of the "Mnemonic elements library of the user interface" is completed
+    and appended to the offline.
+
+
 2020-01-05 Roman (stable)
-- !!!!:FIX:DB.LibsDB.vcaBase: The document of the "Main elements library of the user interface" is completed at least.
+- !!!!:FIX:DB.LibsDB.vcaBase: The document of the "Main elements library of the user interface" is completed at least
+	and appended to the offline.
     !!!:Main.{grpCadr,ViewCadr,ElViewCadr,ResultGraph,ResultGraphEl,cntrRegul}: Revised during the documenting.
     Call of the OS utility <beep> fixed by decreasing the length argument to 100000.
 - FIX:Model.AGLKS.St: The template property "tCmd" of the parameter LogLevPrm.gen.CB7 is set to 0.

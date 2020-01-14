@@ -1,0 +1,710 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Libs/Mnemo elements - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Libs/Mnemo elements</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Libs/Mnemo_elements/ru" title="Библиотека/Элементы мнемосхем (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Libs/Mnemo_elements/uk" title="Бібліотека/Елементи мнемосхем (100% translated)">українська</a></div></div>
+<table class="wikitable">
+
+<tr>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="Libs_Mnemo_elements.html" title="Special:MyLanguage/Libs/Mnemo elements">Mnemonic elements library of the user interface</a>
+</td>
+<td> 1.0 </td>
+<td> GPLv2
+</td>
+<td> vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">GZip</a>) &gt; VCA.wlb_mnEls
+</td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2008-2012), Ksenia Yashina (2007)</i></font>
+</td>
+<td> Provides the mnemonic elements library of the user interface of the industrial automation.
+<ul><li> <b>Founded:</b> September 2007</li>
+<li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/GraphicElementsLibraries/MnemoElements" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a></li></ul>
+</td></tr></table>
+<p>The library is created to provide mnemonic elements of the user interface. The library is built on the basis <a href="Modules/VCAEngine.html#WidgetPrimitives" title="Special:MyLanguage/Modules/VCAEngine">primitives of the widgets</a> and the internal programming language <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>.
+</p><p>For connection the library to a project of the OpenSCADA station you can obtain the database file as:
+</p>
+<ul><li> supplied with a ready and proper package of the Linux distribution like to "openscada-libdb-vca", "openscada-LibDB.VCA";</li>
+<li> directly taken for most actual one from <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql" rel="nofollow noreferrer noopener" target="_blank">the subversion repository</a> and converted to the DB SQLite file in the way:</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 15px">
+$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql
+$ sqlite3 -init vcaBase.sql vcaBase.db .exit
+</pre>
+<ul><li> downloaded for <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">the one attached here</a>.</li></ul>
+<p>The library contains graphic elements, often need when forming the user interface of the automation of technological processes. Names and text options are available in three languages: English, Ukrainian and Russian.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Passive_screen_elements"><span class="tocnumber">1</span> <span class="toctext">Passive screen elements</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Elements_of_pipelines_without_the_gradient_fill"><span class="tocnumber">1.1</span> <span class="toctext">Elements of pipelines without the gradient fill</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Elements_of_pipelines_with_volumetric_filling"><span class="tocnumber">1.2</span> <span class="toctext">Elements of pipelines with volumetric filling</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Different_passive_elements"><span class="tocnumber">1.3</span> <span class="toctext">Different passive elements</span></a></li>
+<li class="toclevel-2"><a href="#Alarming_.28El_Alarm.29"><span class="tocnumber">1.4</span> <span class="toctext">Alarming (El_Alarm)</span></a></li>
+<li class="toclevel-2"><a href="#Level_.28Level.29"><span class="tocnumber">1.5</span> <span class="toctext">Level (Level)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#Active_elements.2C_representing_various_technological_devices"><span class="tocnumber">2</span> <span class="toctext">Active elements, representing various technological devices</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#Discrete_apparatus"><span class="tocnumber">2.1</span> <span class="toctext">Discrete apparatus</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Analog_apparatus"><span class="tocnumber">2.2</span> <span class="toctext">Analog apparatus</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Passive_screen_elements"><span class="mw-headline-number">1</span> Passive screen elements</span></h2>
+<h3><span class="mw-headline" id="Elements_of_pipelines_without_the_gradient_fill"><span class="mw-headline-number">1.1</span> Elements of pipelines without the gradient fill</span></h3>
+<p>The elements in Figure 1.1 serve to construct pipelines of any complexity, required width and color. By default, they are filled in yellow and the angle of rotation is 0°.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:727px;"><a class="image" href="http://oscada.org/wiki/File:LibMnemoEls_pipes.png"><img class="thumbimage" height="110" src="files/LibMnemoEls_pipes.png" width="725" /></a>  <div class="thumbcaption">Fig.1.1. Elements of the pipeline without the gradient fill.</div></div></div></div>
+<p>The pipeline elements include, from the left to the right:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Name (identifier) </th>
+<th> Version </th>
+<th> License </th>
+<th> Author
+</th></tr>
+<tr>
+<td> Pipe-cross (El_Krest) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> Pipe-line horizontal (El_Pipe_simple) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> Pipe-line vertical (El_Pipe_simple_vert) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> Arrow (El_Strela) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> Back arrow (El_Obr_Strela) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> Pipe-angle (El_pipe_1) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> Pipe-tee (El_Troinik) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr></table>
+<p><b><u>Using — development</u></b><br />
+These widgets can be used by the developer to create mnemonic schemes of the plain pipelines. By the attribute "Color 1" you can change the element filling color. By rotation these widgets you can get all the needed combinations. By scaling, you can set the desired pipe width where, for straight sections, the "x" and "y" axis scales may be different, determining the typical pipe width on the mnemonic scheme and the length of its individual section, respectively. To use it you need to add selected ones to a mnemonic scheme, systematically adjust for the geometry and visually connect the needed parts of the pipelines properly. For the purpose of systematic and simplified work, you may prepare only first elements and for other pipeline parts use ready copies of these already prepared and placed elements.
+</p><p><b><u>Using — runtime</u></b><br />
+In the runtime mode, these elements look the same as in the development mode because they are not dynamic.
+</p>
+<h3><span class="mw-headline" id="Elements_of_pipelines_with_volumetric_filling"><span class="mw-headline-number">1.2</span> Elements of pipelines with volumetric filling</span></h3>
+<p>The elements in Figure 1.2 serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:714px;"><a class="image" href="http://oscada.org/wiki/File:LibMnemoEls_pipesGrad.png"><img class="thumbimage" height="406" src="files/LibMnemoEls_pipesGrad.png" width="712" /></a>  <div class="thumbcaption">Fig.1.2. Elements of pipelines with volumetric filling.</div></div></div></div>
+<p>The pipeline elements include, from the left to the right and from the top to the bottom:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Name (identifier) </th>
+<th> Version </th>
+<th> License </th>
+<th> Author
+</th></tr>
+<tr>
+<td> Pipe-cross, volumetric (El_Krest_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> Pipe-line horizontal, volumetric (El_Pipe_simple_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> Vertical pipe line, volumetric (El_Pipe_simple_vert_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> ArrowHR, volumetric (El_Strela_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> ArrowHL, volumetric (El_StrelaHL_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> ArrowVB, volumetric (El_StrelaVB_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> ArrowVT, volumetric (El_StrelaVT_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> Back arrowHL, volumetric (El_Obr_Strela_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> Back arrowHR, volumetric (El_Obr_StrelaHR_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> Back arrowVB, volumetric (El_Obr_StrelaVB_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> Back arrowVT, volumetric (El_Obr_StrelaVT_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> Pipe-angleBL, volumetric (El_pipe_1_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> Pipe-angleBR, volumetric (El_angleBR_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> Pipe-angleTL, volumetric (El_angleTL_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> Pipe-angleTR, volumetric (El_angleTR_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> Pipe-teeVR, volumetric (El_Troinik_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> Pipe-teeHB, volumetric (El_TroinikHB_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> Pipe-teeHT, volumetric (El_TroinikHT_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> Pipe-teeVL, volumetric (El_TroinikVL_gr) </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p><b><u>Using — development</u></b><br />
+These widgets can be used by the developer to create mnemonic schemes of the volumetric pipelines. By the attribute "Fill: color" you can change the element filling color. By scaling, you can set the desired pipe width where, for straight sections, the "x" and "y" axis scales may be different, determining the typical pipe width on the mnemonic scheme and the length of its individual section, respectively. To use it you need to add selected ones to a mnemonic scheme, systematically adjust for the geometry and visually connect the needed parts of the pipelines properly. For the purpose of systematic and simplified work, you may prepare only first elements and for other pipeline parts use ready copies of these already prepared and placed elements.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> It is not necessary to rotate these widgets as this may cause visual contradiction with other elements of this category, due to the specific of gradient filling. That is why all four element orientations are provided without the need for rotation.
+</p><p><b><u>Using — runtime</u></b><br />
+In the runtime mode, these elements look the same as in the development mode because they are not dynamic.
+</p>
+<h3><span class="mw-headline" id="Different_passive_elements"><span class="mw-headline-number">1.3</span> Different passive elements</span></h3>
+<p>The elements in Figure 1.3 are for use in, or around, pipelines.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:714px;"><a class="image" href="http://oscada.org/wiki/File:LibMnemoEls_passive.png"><img class="thumbimage" height="316" src="files/LibMnemoEls_passive.png" width="712" /></a>  <div class="thumbcaption">Fig.1.3. Different passive elements.</div></div></div></div>
+<p>The different passive elements include, from the left to the right:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Name (identifier) </th>
+<th> Version </th>
+<th> License </th>
+<th> Author
+</th></tr>
+<tr>
+<td colspan="4"> <i>Elements of the pipe schemes</i>
+</td></tr>
+<tr>
+<td> Manual valve (El_Armatura) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> Diaphragm (El_d) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> Separator (sep) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> Cooler (cooler) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> Coil pipe (Teploobm) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td colspan="4"> <i>Parts of elements of the pipe schemes</i>
+</td></tr>
+<tr>
+<td> Cooler 2 (cooler2) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Ksenia Yashina
+</td></tr>
+<tr>
+<td> Rounded rectangle (El_round_square) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> Rounded rectangle 1 (El_round_square1) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> Rounded rectangle, volumetric (rnd_sq_gr) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> Rounded rectangle 1, volumetric (rnd_sq_gr1) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td colspan="4"> <i>Additional</i>
+</td></tr>
+<tr>
+<td> Line (Line_simple) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> Wave-line (El_Obriv) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> Scale (Shkala) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> Ruler (El_Priamaja) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr></table>
+<p><b><u>Using — development</u></b><br />
+These widgets can be used by the developer to create mnemonic schemes with the pipelines. By rotating these widgets, you can get all the combinations you want, based solely on the primitive "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#ElFigure" title="Special:MyLanguage/Sub-projects/VCA">Elementary Figures</a>". By scaling, you can set the desired geometric dimensions relative to the overall dimensions of the pipe network. To use it you need to add selected ones to a mnemonic scheme, systematically adjust for the geometry and properly visually connect into or between the pipeline elements. For the purpose of systematic and simplified work, you may prepare only first elements and for other pipeline parts use ready copies of these already prepared and placed elements.
+</p><p><b><u>Using — runtime</u></b><br />
+In the runtime mode, these elements look mostly the same as in the development mode because they are not dynamic. Some elements, as "Cooler 2", are dynamic but are not linked.
+</p><p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="El_Alarm" title="#El_Alarm"><h3><span class="mw-headline" id="Alarming_.28El_Alarm.29"><span class="mw-headline-number">1.4</span> Alarming (<a href="Libs_Mnemo_elements.html#El_Alarm" title="Special:MyLanguage/Libs/Mnemo elements">El_Alarm</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The element on Figure 1.4 is used to display the discrete status by color. Also this element generates notifications of violations on the locally defined condition, the attribute <b>ntf</b>. The element commonly uses and represents the representative structure of the DAQ-template of <a href="Libs_Main.html#digitBlockUnif" title="Special:MyLanguage/Libs/Main">the discrete block</a>.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMnemoEls_Alarming.png"><img class="thumbimage" height="64" src="files/LibMnemoEls_Alarming.png" width="400" /></a>  <div class="thumbcaption">Fig.1.4. The element "Alarming" in the development and runtime modes (left to right).</div></div></div></div>
+<p><b><u>Using — development</u></b><br />
+This widget can be used by the developer to create mnemonic schemes with displaying of discrete statuses. To use it you need to add this widget to a mnemonic scheme, proportionally adjust for the geometry and link to the data source parameter.
+</p><p><b><u>Using — runtime</u></b><br />
+In the runtime mode, in the main field of the element, there are displayed a circle filled by colour, what related to values of the discrete signals of the parameter and the attribute <b>digStts</b> configuration; where the colour, depending to availability of a violation related to the attribute <b>ntf</b> condition, sets to the violation color; and to what the inquieted parameter may blink. At the hardware errors and non validity the data, it fills in the gray color.
+</p><p><b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Configuration </th>
+<th> Configuration template </th>
+<th> Description
+</th></tr>
+<tr>
+<td> NAME </td>
+<td> Name </td>
+<td> String </td>
+<td> Input link </td>
+<td> Parameter|NAME </td>
+<td> Short name of the parameter to be inserted in the notification of violations.
+</td></tr>
+<tr>
+<td> st_open </td>
+<td> Parameter: status-open </td>
+<td> Boolean </td>
+<td> Input link </td>
+<td> Parameter|st_open </td>
+<td> The state "Opened" of the parameter or the common state of the switch at missing the state signal "Closed".
+</td></tr>
+<tr>
+<td> st_close </td>
+<td> Parameter: status-close </td>
+<td> Boolean </td>
+<td> Input link </td>
+<td> Parameter|st_close </td>
+<td> The state "Closed" of the parameter
+</td></tr>
+<tr>
+<td> digStts </td>
+<td> Statuses </td>
+<td> String </td>
+<td> Input link </td>
+<td> Parameter|digStts </td>
+<td> Configuration of the parameter statuses with the structure <b>{openedLabel}-{color};{closedLabel}-{color}</b>, for the discrete block.
+</td></tr>
+<tr>
+<td> ntf </td>
+<td> Notification "{st}:{modes}:{Speech text}" </td>
+<td> String </td>
+<td> Constant </td>
+<td> </td>
+<td> Configuration of the notification forming at the status (st) [0|1] and <a href="Modules/VCAEngine.html#Alarms" title="Special:MyLanguage/Modules/VCAEngine">the notification modes-methods (modes)</a>, as a string of the digital methods, and by the speech, if pointed such method.
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="Level" title="#Level"><h3><span class="mw-headline" id="Level_.28Level.29"><span class="mw-headline-number">1.5</span> Level (<a href="Libs_Mnemo_elements.html#Level" title="Special:MyLanguage/Libs/Mnemo elements">Level</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> Maxim Lysenko, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The element on Figure 1.5 is used to display a value histogram of levels of liquid in the technological apparatus. The element commonly uses and represents the representative structure of <a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">the "Analog signal" DAQ-template</a>.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMnemoEls_Level.png"><img class="thumbimage" height="150" src="files/LibMnemoEls_Level.png" width="400" /></a>  <div class="thumbcaption">Fig.1.5. The element "Level" in the development and runtime modes (left to right).</div></div></div></div>
+<p><b><u>Using — development</u></b><br />
+This widget can be used by the developer to create mnemonic schemes with displaying levels of liquid in the technological apparatus. By the attribute "Fill: color" you can change the bar filling color. By rotation this widget you can get all the needed combinations. To use it you need to add this widget to a mnemonic scheme, adjust for the geometry by the scale and link to the data source parameter.
+</p><p><b><u>Using — runtime</u></b><br />
+In the runtime mode, in the main field of the element, there are displayed a histogram bar, what related to the analog value.
+</p><p><b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Configuration </th>
+<th> Configuration template </th>
+<th> Description
+</th></tr>
+<tr>
+<td> var </td>
+<td> Value </td>
+<td> Real </td>
+<td> Input link </td>
+<td> Parameter|var </td>
+<td> Engineeric real value of the parameter.
+</td></tr>
+<tr>
+<td> max </td>
+<td> Maximum </td>
+<td> Real </td>
+<td> Input link </td>
+<td> Parameter|max </td>
+<td> Upper limit value of the parameter.
+</td></tr>
+<tr>
+<td> min </td>
+<td> Minimum </td>
+<td> Real </td>
+<td> Input link </td>
+<td> Parameter|min </td>
+<td> Minimum limit values of the parameter.
+</td></tr>
+<tr>
+<td> fillColor </td>
+<td> Fill: color </td>
+<td> Color </td>
+<td> Constant </td>
+<td> </td>
+<td>
+</td></tr></table>
+<h2><span class="mw-headline" id="Active_elements.2C_representing_various_technological_devices"><span class="mw-headline-number">2</span> Active elements, representing various technological devices</span></h2>
+<h3><span class="mw-headline" id="Discrete_apparatus"><span class="mw-headline-number">2.1</span> Discrete apparatus</span></h3>
+<p>The elements on Figure 2.1 is used to display the discrete apparatus' status on basis of the discrete signals, for use in pipelines. The elements commonly use and represent the representative structure of the DAQ-template of the <a href="Libs_Main.html#digitBlockUnif" title="Special:MyLanguage/Libs/Main">discrete block</a> in different visual variants.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:517px;"><a class="image" href="http://oscada.org/wiki/File:LibMnemoEls_discrApparatus.png"><img class="thumbimage" height="228" src="files/LibMnemoEls_discrApparatus.png" width="515" /></a>  <div class="thumbcaption">Fig.2.1. Discrete apparatus' elements in the development and runtime modes (top to bottom).</div></div></div></div>
+<p>The discrete apparatus' elements include, from the left to the right:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Name (identifier) </th>
+<th> Version </th>
+<th> License </th>
+<th> Author
+</th></tr>
+<tr>
+<td> Compressor (Compressor) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>, Maxim Lysenko
+</td></tr>
+<tr>
+<td> Compressor 1 (Compressor_1) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>, Maxim Lysenko
+</td></tr>
+<tr>
+<td> Bolt (El_Zadvizhka) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> Crane (Zadvizhka) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> Ball crane (El_Kran_Sh) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p><b><u>Using — development</u></b><br />
+This widgets can be used by the developer to create mnemonic schemes with displaying and control of the discrete apparatus. To use their you need to add these widgets to a mnemonic scheme, proportionally adjust for the geometry and link to the data source parameter.
+</p><p><b><u>Using — runtime</u></b><br />
+In the runtime mode, in the main field of the elements, there are represented the apparatus symbolic shape with a dynamic sign of the discrete status, what related to values of the discrete signals of the parameter and the attribute <b>digStts</b> configuration. At the hardware errors and non validity the data, it fills in the gray color.
+</p><p>In the active mode of the element, pressing the left mouse button in the widget body will cause to appear in the panels area for <a href="Libs_Main_graphical_elements.html#ElCadr" title="Special:MyLanguage/Libs/Main graphical elements">control panel</a> of the parameter, and the selection of this widget will be displayed with the blinking structure color. The commands are duplicated in the context menu that appears when the right mouse button is pressed in the widget area.
+</p><p><b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Configuration </th>
+<th> Configuration template </th>
+<th> Description
+</th></tr>
+<tr>
+<td> shifr </td>
+<td> Parameter: code </td>
+<td> String </td>
+<td> Input link </td>
+<td> Parameter|NAME </td>
+<td> Short name of the parameter to be inserted in actions of the user-operator.
+</td></tr>
+<tr>
+<td> DESCR </td>
+<td> Description </td>
+<td> String </td>
+<td> Input link </td>
+<td> Parameter|DESCR </td>
+<td> Description or long name of the parameter to be inserted in actions of the user-operator.
+</td></tr>
+<tr>
+<td> st_open </td>
+<td> Parameter: state - "Opened" </td>
+<td> Boolean </td>
+<td> Input link </td>
+<td> Parameter|st_open </td>
+<td> The state "Opened" of the parameter or the common state of the switch at missing the state signal "Closed".
+</td></tr>
+<tr>
+<td> st_close </td>
+<td> Parameter: state - "Closed" </td>
+<td> Boolean </td>
+<td> Input link </td>
+<td> Parameter|st_close </td>
+<td> The state "Closed" of the parameter.
+</td></tr>
+<tr>
+<td> digStts </td>
+<td> Statuses </td>
+<td> String </td>
+<td> Input link </td>
+<td> Parameter|digStts </td>
+<td> Configuration of the parameter statuses with the structure <b>{openedLabel}-{color};{closedLabel}-{color}</b>, for the discrete block.
+</td></tr>
+<tr>
+<td> com </td>
+<td> Parameter: command - "Open" </td>
+<td> Boolean </td>
+<td> Full link </td>
+<td> Parameter|com </td>
+<td> The command "Open" of the parameter or the common command of the switch at missing the command signal "Close".
+</td></tr>
+<tr>
+<td> close </td>
+<td> Parameter: command - "Close" </td>
+<td> Boolean </td>
+<td> Full link </td>
+<td> Parameter|close </td>
+<td> The command "Close" of the parameter.
+</td></tr>
+<tr>
+<td> stop </td>
+<td> Parameter: command - "Stop" </td>
+<td> Boolean </td>
+<td> Full link </td>
+<td> Parameter|stop </td>
+<td> The command "Stop" of the parameter, for cranes.
+</td></tr>
+<tr>
+<td> digComs </td>
+<td> Commands </td>
+<td> String </td>
+<td> Input link </td>
+<td> Parameter|digComs </td>
+<td> Configuration of the parameter commands with the structure <b>{openLabel}-{color};{closeLabel}-{color}</b>, for the discrete block, and <b>{com1Label}-{color};{com2Label}-{color};...;{comNLabel}-{color}</b>, for the code status.
+</td></tr></table>
+<h3><span class="mw-headline" id="Analog_apparatus"><span class="mw-headline-number">2.2</span> Analog apparatus</span></h3>
+<p>The elements on Figure 2.2 is used to display the analog apparatus' status and intended for use in pipelines. The elements commonly use and represent the representative structure of the DAQ-template of <a href="Libs_Main.html#pidUnif" title="Special:MyLanguage/Libs/Main">the analog PID-regulators</a> in different visual variants.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMnemoEls_analogApparatus.png"><img class="thumbimage" height="258" src="files/LibMnemoEls_analogApparatus.png" width="400" /></a>  <div class="thumbcaption">Fig.2.2. Analog apparatus' elements in the development and runtime modes (top to bottom).</div></div></div></div>
+<p>The analog apparatus' elements include, from the left to the right:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Name (identifier) </th>
+<th> Version </th>
+<th> License </th>
+<th> Author
+</th></tr>
+<tr>
+<td> Crane with position (El_Kran_polozh) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> Three-positioned crane (Kran_3_pos) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p><b><u>Using — development</u></b><br />
+This widgets can be used by the developer to create mnemonic schemes with displaying and control of the analog apparatus. To use their you need to add these widgets to a mnemonic scheme, proportionally adjust for the geometry and link to the data source parameter.
+</p><p><b><u>Using — runtime</u></b><br />
+In the runtime mode, in the main field of the elements, there are represented the apparatus symbolic shape with a dynamic sign, what related to values of the analog parameter.
+</p><p>In the active mode of the element, pressing the left mouse button in the widget body will cause to appear in the panels area for <a href="Libs_Main_graphical_elements.html#ElCadr" title="Special:MyLanguage/Libs/Main graphical elements">control panel</a> of the parameter, and the selection of this widget will be displayed with the blinking structure color.
+</p><p><b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Configuration </th>
+<th> Configuration template </th>
+<th> Description
+</th></tr>
+<tr>
+<td> out </td>
+<td> Parameter: position </td>
+<td> Real </td>
+<td> Input link </td>
+<td> Parameter|out </td>
+<td>
+</td></tr></table>
+
+
+
+
+
+
+</div></body>
+</html>
