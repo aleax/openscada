@@ -7,11 +7,11 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="files/doc.css" rel="stylesheet" /></head>
-<body><div id="mw_header">
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../en/files/Logo-big.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/Program manual</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/Program_manual/ru" title="Документы/Руководство по программе (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/Program_manual/uk" title="Документи/Посібник по програмі (100% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Program_manual.html" title="Документы/Руководство по программе (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Program_manual.html" title="Документи/Посібник по програмі (100% translated)">українська</a></div></div>
 <p><i>Author:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2012) — the page initial translation</i></font>
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
@@ -227,25 +227,27 @@
 </p>
 <ul><li> <a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">sockets (TCP/UDP/UNIX)</a>;</li>
 <li> <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">serial interfaces</a>;</li>
-<li> <a href="Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">channels, includes encrypted ones</a>;</li>
-<li> shared memory.</li></ul>
-<p>The subsystem "Transport" includes support for input and output transports. Input transports are designed to serve external requests and send replies. Output transports, by contrast, are designed to send messages and wait for a responses. Therefore, input transports contain configuration of local station as a server, and output transports contain configuration of a remote server. That sort of specialization is typical for the "request-response" mechanism, however, currently input and output transports support the independent transmission and reception of data. Modules of the subsystem "Transports" implement support for both input and output transports.
-</p><p>The "Transport protocols" subsystem is designed to structure data received from the "Transports" subsystem, is a continuation of the subsystem "Transports" and performs functions of checking structure and integrity of received data. A special configuration field is provided to determine protocol with which transport must operate. Modular object contained in the "Protocols" subsystem is protocol itself. For example, transport protocols can be and are:
+<li> <a href="Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">encrypted channels</a>.</li></ul>
+<p>The subsystem "Transport" includes support for input and output transports. Input transports are designed to serve external requests and send replies. Output transports, by contrast, are designed to send messages and wait for a responses. Therefore, input transports contain configuration of local station, as a listening server, and output transports contain configuration of a remote server to connect. That sort of specialization is typical for the "request-response" mechanism, however, currently input and output transports support the independent transmission and reception of data. Modules of the subsystem "Transports" implement support for both input and output transports.
+</p><p>The "Transport protocols" subsystem is designed to structure data received from the "Transports" subsystem, why has the name, is a continuation of the subsystem "Transports" and performs functions of checking structure and integrity of received data. In global notation, this subsystem contains and implements <b>COMMUNICATION</b> protocols! A special configuration field is provided to determine protocol with which transport must operate. Modular object contained in the "Protocols" subsystem is protocol itself. For example, transport protocols can be and are:
 </p>
 <ul><li> <a href="Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">self OpenSCADA protocol</a>;</li>
 <li> <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a>;</li>
+<li> <a href="Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC-UA</a>;</li>
 <li> <a href="Modules/DCON.html" title="Special:MyLanguage/Modules/DCON">DCON</a>;</li>
-<li> <a href="Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Hyper Text Transfer Protocol</a>.</li></ul>
+<li> <a href="Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Hyper Text Transfer Protocol</a>;</li>
+<li> <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">user protocols</a>, which are implemented into OpenSCADA itself on <a href="DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">the logical level</a>, and what, together of the <a href="DAQ.html#JavaLikeCalc" title="Special:MyLanguage/Documents/DAQ">internal language</a> advancing, has become a priority one.</li></ul>
 <p>The full sequence of incoming communication session for typical "request-response" protocols can be written as follows:
 </p>
-<ul><li> a message from an external system comes to a transport;</li>
+<ul><li> an external system connects to the input transport;</li>
+<li> a message from an external system comes to a transport;</li>
 <li> the transport transmits the message to a relating protocol by creating a new protocol object;</li>
 <li> the protocol checks the integrity of the data;</li>
 <li> if all the data came, then notify the transport about stopping of data waiting and send it an answer, otherwise tell that it should expect more;</li>
-<li> the transport, receiving confirmation, sends the answer and deletes the object of the protocol;</li>
+<li> the transport, receiving confirmation, sends the answer and deletes the object of the protocol, if this is not the keep alive mode;</li>
 <li> if there is no confirmation, the transport continues to wait for the data, and in case of its receipt, it transmits to the saved object of the protocol.</li></ul>
 <p>Protocols are also supported for output transports and assume the function of communication with transport and implementation of features of these protocols, when preparing data for the transmission and analysis of responses. The external interface for accessing protocols, from code of other modules and the OpenSCADA programming environment, implements in an XML tree with its own structure for each protocol module. Such a mechanism allows for transparent access to external systems through transports, simply by specifying the name of the protocol by which to serve transmission.
-</p><p>Thanks to the standard access (API) to transports in OpenSCADA, it's easy to change the way data is exchanged without affecting the exchanging programs themselves. For example, in the case of a local exchange, you can use faster transport based on UNIX sockets or shared memory, and in the case of exchanging over the Internet and local network using TCP or UDP sockets.
+</p><p>Thanks to the standard access to transports in OpenSCADA, it's easy to change the way data is exchanged without affecting the exchanging programs themselves. For example, in the case of a local exchange, you can use faster transport based on UNIX-sockets and in the case of exchanging over the Internet and local network use TCP- or UDP-sockets.
 </p>
 <h3><span class="mw-headline" id="User_interfaces.2C_the_subsystem_.22User_Interfaces.22"><span class="mw-headline-number">1.7</span> User interfaces, the subsystem "User Interfaces"</span></h3>
 <p>SCADA systems, as a class, provide for user interfaces presence. In OpenSCADA for user interfaces, the subsystem "User Interfaces" is provided, which means not only the visualization environment that the end user must work with, but all that is relevant to the user, for example:
@@ -1711,5 +1713,5 @@ PNGCompLev   &lt;lev&gt;      Compression level [-1..9] of the creating PNG-imag
 
 
 
-</div></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/en">Documents/Program_manual/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">січня 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2659</td></tr></table></body>
 </html>

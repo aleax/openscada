@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tuis.h
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -72,6 +72,7 @@ class TUIS : public TSubSYS
 	static string icoGet( const string &inm, string *tp = NULL, bool retPath = false );
 	// Return the EXEC command by default to open the document
 	static string docGet( const string &inm, string *tp = NULL, unsigned opt = 0 );
+	static string docKeyGet( const string &itxt );
 
 	static string mimeGet( const string &inm, const string &fDt, const string &orig = "" );
 

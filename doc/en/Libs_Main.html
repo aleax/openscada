@@ -7,11 +7,11 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="files/doc.css" rel="stylesheet" /></head>
-<body><div id="mw_header">
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../en/files/Logo-big.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Libs/Main</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Libs/Main/uk" title="Бібліотеки/Основна (100% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Libs_Main.html" title="Бібліотеки/Основна (100% translated)">українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -37,6 +37,20 @@
 <td> Library of the main templates of the DAQ sources processing and related services.
 <ul><li> <b>Founded</b>: 2006</li></ul>
 </td></tr></table>
+<p>The library was created to provide main templates of the DAQ-sources processing and related services.
+</p><p>The template's names and their parameters are available in languages: English, Ukrainian and Russian. Their source code wrote in the human-language independent mode with calls for the translations by the function <i>tr()</i> and the message's translation also allowed for English, Ukrainian and Russian.
+</p><p>For connection the library to a project of the OpenSCADA station you can obtain the database file as:
+</p>
+<ul><li> supplied with a ready and proper package of the Linux distribution like to "openscada-libdb-main", "openscada-LibDB.Main";</li>
+<li> directly taken for most actual one from <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">the subversion repository</a> and converted to the DB SQLite file in the way:</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 15px">
+$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql
+$ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
+</pre>
+<ul><li> downloaded for <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">the one attached here</a>.</li></ul>
+<p>This obtained file next you can place into the project directory of the station and create the database object for the DB module "SQLite", registering the database file in the configuration.
+</p><p>For the DAQ-templates at generic you need create a device representing object into <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">the Logical Level module</a> and select proper template from the templates library. Next, to correct configuration, follow to specific of the template into the individual description.
+</p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#Templates_of_standard_structures_of_the_DAQ-parameters"><span class="tocnumber">1</span> <span class="toctext">Templates of standard structures of the DAQ-parameters</span></a>
@@ -66,20 +80,6 @@
 </ul>
 </div>
 
-<p>The library was created to provide main templates of the DAQ-sources processing and related services.
-</p><p>The template's names and their parameters are available in languages: English, Ukrainian and Russian. Their source code wrote in human language independent mode with calls for the translations by function <i>tr()</i> and the message's translation also allowed for English, Ukrainian and Russian.
-</p><p>For connection the library to a project of the OpenSCADA station you can obtain the database file as:
-</p>
-<ul><li> supplied with a ready and proper package of the Linux distribution like to "openscada-libdb-main", "openscada-LibDB.Main";</li>
-<li> directly taken for most actual one from <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">the subversion repository</a> and converted to the DB SQLite file in the way:</li></ul>
-<pre style="white-space: pre-wrap; margin-left: 15px">
-$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql
-$ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
-</pre>
-<ul><li> downloaded for <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">the one attached here</a>.</li></ul>
-<p>This obtained file next you can place into the project directory of the station and create the database object for the DB module "SQLite", registering the database file in the configuration.
-</p><p>For the DAQ-templates at generic you need create a device representing object into <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">the Logical Level module</a> and select proper template from the templates library. Next, to correct configuration, follow to specific of the template into the individual description.
-</p>
 <h2><span class="mw-headline" id="Templates_of_standard_structures_of_the_DAQ-parameters"><span class="mw-headline-number">1</span> Templates of standard structures of the DAQ-parameters</span></h2>
 <table class="wikitable">
 
@@ -108,6 +108,16 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <li> "Logarithmic scale (<b>log</b>)" — the scale sign of the variable trend display on the graphs in the logarithmic scale.</li>
 <li> "Dimension (<b>ed</b>)" — dimension (unit of measurement) of the variable.</li>
 <li> "Precision (<b>prec</b>)" — number signs after the dot, for positive values, and precision (signs in whole), for negative ones, to display the real end variable on the screen.</li></ul>
+<p>Significant graphical shapes representing the structure:
+</p>
+<ul><li> <a href="Libs_Main_graphical_elements.html" title="Special:MyLanguage/Libs/Main graphical elements">Main elements library of the user interface</a>:
+<ul><li> <a href="Libs_Main_graphical_elements.html#anShow" title="Special:MyLanguage/Libs/Main graphical elements">Analog show</a></li>
+<li> <a href="Libs_Main_graphical_elements.html#anShow1" title="Special:MyLanguage/Libs/Main graphical elements">Analog show 1</a>, <a href="Libs_Main_graphical_elements.html#anShow1s" title="Special:MyLanguage/Libs/Main graphical elements">Analog show 1 (short)</a></li>
+<li> <a href="Libs_Main_graphical_elements.html#ElViewGraph" title="Special:MyLanguage/Libs/Main graphical elements">Graphics group element</a></li>
+<li> <a href="Libs_Main_graphical_elements.html#ElCadr" title="Special:MyLanguage/Libs/Main graphical elements">Element cadre</a></li>
+<li> <a href="Libs_Main_graphical_elements.html#cntrPaspExt" title="Special:MyLanguage/Libs/Main graphical elements">Passport, extended</a></li></ul></li>
+<li> <a href="Libs_Mnemo_elements.html" title="Special:MyLanguage/Libs/Mnemo elements">Mnemonic elements library of the user interface</a>:
+<ul><li> <a href="Libs_Mnemo_elements.html#Level" title="Special:MyLanguage/Libs/Mnemo elements">Level</a></li></ul></li></ul>
 <p><b><u>Functions</u></b><br />
 </p>
 <ul><li> Generic processing of the raw analog input for:</li></ul>
@@ -635,6 +645,10 @@ Completely identical to "<a href="#anUnif">Analog signal (unified)</a>]" with th
 <li> "Logarithmic scale (<b>log</b>)" — the scale sign of the variable trend display on the graphs in the logarithmic scale.</li>
 <li> "Dimension (<b>ed</b>)" — dimension (unit of measurement) of the variable.</li>
 <li> "Precision (<b>prec</b>)" — number signs after the dot, for positive values, and precision (signs in whole), for negative ones, to display the real end variable on the screen.</li></ul>
+<p>Significant graphical shapes representing the structure:
+</p>
+<ul><li> <a href="Libs_Main_graphical_elements.html" title="Special:MyLanguage/Libs/Main graphical elements">Main elements library of the user interface</a>:
+<ul><li> <a href="Libs_Main_graphical_elements.html#ElCadr" title="Special:MyLanguage/Libs/Main graphical elements">Element cadre</a></li></ul></li></ul>
 <p><b><u>Functions</u></b><br />
 </p>
 <ul><li> Generic processing of the raw analog input for:</li></ul>
@@ -988,6 +1002,17 @@ Completely identical to "<a href="#anUnif">Analog signal (unified)</a>]" with th
 <li> "Command "Open" (<b>com</b>)" — the command "Open" of the latch. Is the primary command signal that can be used without the next one, when <b>1 (true)</b> is "Open", and <b>0 (false)</b> is 'Close'.</li>
 <li> "Command "Close" (<b>close</b>)" — the command "Close" of the latch.</li>
 <li> "Command "Stop" (<b>stop</b>)" — the command "Stop" of the latch.</li></ul>
+<p>Significant graphical shapes representing the structure:
+</p>
+<ul><li> <a href="Libs_Main_graphical_elements.html" title="Special:MyLanguage/Libs/Main graphical elements">Main elements library of the user interface</a>:
+<ul><li> <a href="Libs_Main_graphical_elements.html#TextLab" title="Special:MyLanguage/Libs/Main graphical elements">Text label</a></li>
+<li> <a href="Libs_Main_graphical_elements.html#ImgLab" title="Special:MyLanguage/Libs/Main graphical elements">Image label</a></li>
+<li> <a href="Libs_Main_graphical_elements.html#ElViewGraph" title="Special:MyLanguage/Libs/Main graphical elements">Graphics group element</a></li>
+<li> <a href="Libs_Main_graphical_elements.html#ElCadr" title="Special:MyLanguage/Libs/Main graphical elements">Element cadre</a></li>
+<li> <a href="Libs_Main_graphical_elements.html#cntrPaspExt" title="Special:MyLanguage/Libs/Main graphical elements">Passport, extended</a></li></ul></li>
+<li> <a href="Libs_Mnemo_elements.html" title="Special:MyLanguage/Libs/Mnemo elements">Mnemonic elements library of the user interface</a>:
+<ul><li> <a href="Libs_Mnemo_elements.html#El_Alarm" title="Special:MyLanguage/Libs/Mnemo elements">Alarming</a></li>
+<li> <a href="Libs_Mnemo_elements.html#discrApps" title="Special:MyLanguage/Libs/Mnemo elements">Discrete apparatus</a></li></ul></li></ul>
 <p><b><u>Functions</u></b><br />
 </p>
 <ul><li> Direct obtaining, by link, of the two states (read only) and three commands (reading and writing).</li>
@@ -1355,6 +1380,12 @@ in = gO.prm_generic.SET_CalcFan_UseSensor_T1.get() ||&nbsp;!(status == 0 || stat
 <li> "Error (<b>err</b>)" — obligatory attribute of any parameter, consist of the combination of the error code and short text description, like to "2:No data or connection with source". The template reserves next error codes:
 <ul><li> <b>1</b> — hardware errors, when the data mostly wrong.</li></ul></li>
 <li> "Violations suppress (<b>alSup</b>) and delay (<b>alDelay</b>)" — violations generic control for suppressing and delaying.</li></ul>
+<p>Significant graphical shapes representing the structure:
+</p>
+<ul><li> <a href="Libs_Main_graphical_elements.html" title="Special:MyLanguage/Libs/Main graphical elements">Main elements library of the user interface</a>:
+<ul><li> <a href="Libs_Main_graphical_elements.html#TextLab" title="Special:MyLanguage/Libs/Main graphical elements">Text label</a></li>
+<li> <a href="Libs_Main_graphical_elements.html#ImgLab" title="Special:MyLanguage/Libs/Main graphical elements">Image label</a></li>
+<li> <a href="Libs_Main_graphical_elements.html#ElCadr" title="Special:MyLanguage/Libs/Main graphical elements">Element cadre</a></li></ul></li></ul>
 <p><b><u>Functions</u></b><br />
 </p>
 <ul><li> Direct receiving, by link, the status code and the command (read only), as well as setting the status text according to the list of states <i>stats</i>.</li>
@@ -1618,6 +1649,14 @@ if(com_text.length &amp;&amp;&nbsp;!com_text.isEVal() &amp;&amp; (tVl=coms.match
 <li> "Logarithmic scale (<b>log</b>)" — the scale sign of the variable trend display on the graphs in the logarithmic scale.</li>
 <li> "Dimension (<b>ed</b>)" — dimension (unit of measurement) of the variable.</li>
 <li> "Precision (<b>prec</b>)" — number signs after the dot, for positive values, and precision (signs in whole), for negative ones, to display the real end variable on the screen.</li></ul>
+<p>Significant graphical shapes representing the structure:
+</p>
+<ul><li> <a href="Libs_Main_graphical_elements.html" title="Special:MyLanguage/Libs/Main graphical elements">Main elements library of the user interface</a>:
+<ul><li> <a href="Libs_Main_graphical_elements.html#cntrRegul" title="Special:MyLanguage/Libs/Main graphical elements">Regulator's control panel</a></li>
+<li> <a href="Libs_Main_graphical_elements.html#ElCadr" title="Special:MyLanguage/Libs/Main graphical elements">Element cadre</a></li>
+<li> <a href="Libs_Main_graphical_elements.html#cntrPaspExt" title="Special:MyLanguage/Libs/Main graphical elements">Passport, extended</a></li></ul></li>
+<li> <a href="Libs_Mnemo_elements.html" title="Special:MyLanguage/Libs/Mnemo elements">Mnemonic elements library of the user interface</a>:
+<ul><li> <a href="Libs_Mnemo_elements.html#analogApps" title="Special:MyLanguage/Libs/Mnemo elements">Analog apparatus</a></li></ul></li></ul>
 <p><b><u>Functions</u></b><br />
 </p>
 <ul><li> Generic processing of the raw analog input for:</li></ul>
@@ -3119,5 +3158,5 @@ rez = req.attr("err").toInt()&nbsp;? req.attr("err")&nbsp;: "OK";
 
 
 
-</div></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main/en">Libs/Main/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">січня 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2659</td></tr></table></body>
 </html>

@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel_widgs.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2020 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1319,12 +1319,25 @@ void WdgTree::selectItem( bool force )
     //Get current widget
     string work_wdg;
     QTreeWidgetItem *cur_el = sel_ls.at(0);
+
+    // Get the document key
+    if(cur_el) {
+	QString doc = cur_el->data(0, Qt::UserRole).toString();
+	owner()->actManualLib->setEnabled(doc.size());
+	if(doc.size()) {
+	    owner()->actManualLib->setProperty("doc", doc);
+	    owner()->actManualLib->setText(QString(_("Manual on '%1'")).arg(cur_el->text(0)));
+	}
+	else owner()->actManualLib->setText(_("Manual on ..."));
+    }
+
+    // Main process
     while(cur_el) {
 	work_wdg.insert(0,string(cur_el->parent()?"/wdg_":"/wlb_")+cur_el->text(2).toStdString());
 	cur_el = cur_el->parent();
     }
 
-    emit selectItem(work_wdg,force);
+    emit selectItem(work_wdg, force);
 }
 
 void WdgTree::updateTree( const string &vca_it, bool initial )
@@ -1436,6 +1449,7 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
 	nit->setText(0, wlbN->text().c_str());
 	nit->setText(1, _("Library"));
 	nit->setText(2, wlbId.c_str());
+	nit->setData(0, Qt::UserRole, wlbN->attr("doc").c_str());
 
 	// Add toolbars and menus
 	if(vca_lev != 3) {
@@ -1623,7 +1637,11 @@ void WdgTree::ctrTreePopup( )
     popup.addSeparator();
     popup.addAction(owner()->actDBLoad);
     popup.addAction(owner()->actDBSave);
-    popup.addSeparator();
+	popup.addSeparator();
+    if(owner()->actManualLib->isEnabled()) {
+	popup.addAction(owner()->actManualLib);
+	popup.addSeparator();
+    }
 
     //Reload action
     QImage ico_t;

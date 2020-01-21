@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel.h
 /***************************************************************************
- *   Copyright (C) 2006-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2020 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -155,7 +155,9 @@ class VisDevelop : public QMainWindow
 		*actWinTile,		//Tile windows
 		*actWinCascade,		//Cascade windows
 		*actWinNext,		//Select next window
-		*actWinPrevious;	//Select previous window
+		*actWinPrevious,	//Select previous window
+	//  Manuals
+		*actManualLib;		//Selected library manual
 	QActionGroup	*actGrpWdgAdd;	//Add widgets action group
 
 	// Toolbars

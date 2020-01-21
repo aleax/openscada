@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2020 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -102,8 +102,15 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     actQtAbout->setWhatsThis(_("The button for getting the using Qt information"));
     actQtAbout->setStatusTip(_("Press for getting the using Qt information."));
     connect(actQtAbout, SIGNAL(triggered()), this, SLOT(aboutQt()));
-    //  Vision manual
+    //  Manuals
     if(!ico_t.load(TUIS::icoGet("manual",NULL,true).c_str())) ico_t.load(":/images/manual.png");
+    //  Selected project manual
+    actManualLib = new QAction(QPixmap::fromImage(ico_t), _("Manual on ..."), this);
+    actManualLib->setWhatsThis(_("The button for getting the library manual"));
+    actManualLib->setStatusTip(_("Press for getting the library manual."));
+    actManualLib->setEnabled(false);
+    connect(actManualLib, SIGNAL(triggered()), this, SLOT(enterManual()));
+    //  Vision manual
     QAction *actManual = new QAction(QPixmap::fromImage(ico_t),QString(_("Manual on '%1'")).arg(mod->modId().c_str()),this);
     actManual->setProperty("doc", "Modules/Vision|Modules/Vision");
     actManual->setShortcut(Qt::Key_F1);
@@ -527,6 +534,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     mn_help->addAction(actManualVCA);
     mn_help->addAction(actManualSYS);
     mn_help->addSeparator();
+    mn_help->addAction(actManualLib);
     mn_help->addAction(actWhatIs);
     // QTStarter
     emit makeStarterMenu();
@@ -983,6 +991,7 @@ void VisDevelop::modifyGlbStUpdate( const string &it, bool check )
 	XMLNode req("modify");
 	req.setAttr("path", "/%2fobj");
 	mStModify->setText((!cntrIfCmd(req) && s2i(req.text()))?"*":" ");
+
     }
 
     //if(!actDBLoad->isEnabled() && it.size())

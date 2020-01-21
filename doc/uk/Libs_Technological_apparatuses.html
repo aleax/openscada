@@ -7,11 +7,11 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../en/files/doc.css" rel="stylesheet" /></head>
-<body><div id="mw_header">
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../en/files/Logo-big.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Бібліотека/Технологічні апарати</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FTechnological+apparatuses&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Technological_apparatuses" title="Libs/Technological apparatuses">Libs/Technological apparatuses</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Libs/Technological_apparatuses" title="Libs/Technological apparatuses (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Libs/Technological_apparatuses/ru" title="Библиотека/Технологические аппараты (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FTechnological+apparatuses&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Technological_apparatuses" title="Libs/Technological apparatuses">Libs/Technological apparatuses</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_Technological_apparatuses.html" title="Libs/Technological apparatuses (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Libs_Technological_apparatuses.html" title="Библиотека/Технологические аппараты (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -41,6 +41,20 @@
 <li> <b>Початково створено:</b> <a class="external text" href="http://wiki.oscada.org/HomePageUk/Using/APIFunctionLibs/TechApp" rel="nofollow noreferrer noopener" target="_blank">у старій Wiki</a></li>
 <li> <b>Використано:</b> моделями <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">АГЛКС</a> та <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_Boiler" title="Special:MyLanguage/Using/Model Boiler">Котел</a></li></ul>
 </td></tr></table>
+<p>Бібліотека створюється для надання моделей апаратів технологічних процесів. Бібліотека не є статичною, а будується на основі модуля <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, який дозволяє створювати обчислення на мові схожій на Java.
+</p><p>Для адресації до функцій цієї бібліотеки можна використати статичну адресу виклику <b>DAQ.JavaLikeCalc.lib_techApp.{Func}()</b> або динамічну <b>SYS.DAQ.JavaLikeCalc["lib_techApp"]["{Func}"].call()</b>, <b>SYS.DAQ.JavaLikeCalc["lib_techApp"].{Func}()</b>.
+Де <i>{Func}</i> — ідентифікатор функції у бібліотеці.
+</p><p>Для підключення бібліотеки до проекту станції OpenSCADA Ви можете отримати файл БД як:
+</p>
+<ul><li> такий що постачається з готовим та відповідним пакетом дистрибутиву Linux на кшталт "openscada-libdb-main", "openscada-LibDB.Main";</li>
+<li> найбільш актуальний та безпосередньо отриманий з <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">репозиторію subversion</a>, перетворений у файл БД SQLite шляхом:</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 15px">
+$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql
+$ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
+</pre>
+<ul><li> завантаження <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">прикріпленого тут</a>.</li></ul>
+<p>Цей завантажений файл Ви надалі можете розмістити у теці проекту станції та створити об'єкт бази даних модуля БД "SQLite", зареєструвавши файл бази даних у конфігурації.
+</p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#.D0.9A.D0.BE.D0.BD.D1.86.D0.B5.D0.BF.D1.86.D1.96.D1.8F"><span class="tocnumber">1</span> <span class="toctext">Концепція</span></a></li>
@@ -74,20 +88,6 @@
 </ul>
 </div>
 
-<p>Бібліотека створюється для надання моделей апаратів технологічних процесів. Бібліотека не є статичною, а будується на основі модуля <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, який дозволяє створювати обчислення на мові схожій на Java.
-</p><p>Для адресації до функцій цієї бібліотеки можна використати статичну адресу виклику <b>DAQ.JavaLikeCalc.lib_techApp.{Func}()</b> або динамічну <b>SYS.DAQ.JavaLikeCalc["lib_techApp"]["{Func}"].call()</b>, <b>SYS.DAQ.JavaLikeCalc["lib_techApp"].{Func}()</b>.
-Де <i>{Func}</i> — ідентифікатор функції у бібліотеці.
-</p><p>Для підключення бібліотеки до проекту станції OpenSCADA Ви можете отримати файл БД як:
-</p>
-<ul><li> такий що постачається з готовим та відповідним пакетом дистрибутиву Linux на кшталт "openscada-libdb-main", "openscada-LibDB.Main";</li>
-<li> найбільш актуальний та безпосередньо отриманий з <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">репозиторію subversion</a>, перетворений у файл БД SQLite шляхом:</li></ul>
-<pre style="white-space: pre-wrap; margin-left: 15px">
-$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql
-$ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
-</pre>
-<ul><li> завантаження <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">прикріпленого тут</a>.</li></ul>
-<p>Цей завантажений файл Ви надалі можете розмістити у теці проекту станції та створити об'єкт бази даних модуля БД "SQLite", зареєструвавши файл бази даних у конфігурації.
-</p>
 <h2><span class="mw-headline" id=".D0.9A.D0.BE.D0.BD.D1.86.D0.B5.D0.BF.D1.86.D1.96.D1.8F"><span class="mw-headline-number">1</span> Концепція</span></h2>
 <p>У основі моделі кожного апарату лежить обчислення витрат на вході та тиску на виході, виходячи із тиску на вході та витрат на виході. Загалом, моделі апаратів технологічних процесів описуються різницевими рівняннями для дискретних машин.
 </p><p>На основі функцій цієї бібліотеки можна легко та швидко будувати моделі технологічних процесів у модулі <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">BlockCalc</a> шляхом поєднання блоків згідно до технологічної схеми. Приклад поєднання частини апаратів технологічної схеми наведено на рисунку 1.
@@ -3680,5 +3680,5 @@ To2 = max(0, min(1e4,(ki*Fi1*Ti1*Ci1+Fi2*Ti2*Ci2)/(ki*Fi1*Ci1+Fi2*Ci2)));
 
 
 
-</div></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Technological_apparatuses/uk">Libs/Technological_apparatuses/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">січня 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2659</td></tr></table></body>
 </html>

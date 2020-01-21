@@ -7,11 +7,11 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../en/files/doc.css" rel="stylesheet" /></head>
-<body><div id="mw_header">
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../en/files/Logo-big.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Документы/Руководство по программе</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FProgram+manual&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/Program_manual" title="Documents/Program manual">Documents/Program manual</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/Program_manual" title="Documents/Program manual (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/Program_manual/uk" title="Документи/Посібник по програмі (100% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FProgram+manual&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/Program_manual" title="Documents/Program manual">Documents/Program manual</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Program_manual.html" title="Documents/Program manual (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Program_manual.html" title="Документи/Посібник по програмі (100% translated)">українська</a></div></div>
 <p><i>Автор:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
@@ -227,25 +227,27 @@
 </p>
 <ul><li> <a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">сокеты (TCP/UDP/UNIX)</a>;</li>
 <li> <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">последовательные интерфейсы</a>;</li>
-<li> <a href="Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">каналы, включая с шифрованием</a>;</li>
-<li> разделяемая память.</li></ul>
-<p>Подсистема "Транспорты" включает поддержку входных и выходных транспортов. Входные транспорты предназначены для обслуживания внешних запросов и отправки ответов. Выходные транспорты наоборот предназначены для отправки сообщений и ожидания ответов. Соответственно входные транспорты содержат конфигурацию локальной станции как сервера, а выходные транспорты содержат конфигурацию удалённого сервера. Такая специализация характерна для типового механизма "запрос-ответ", однако на данное время входные и выходные транспорты поддерживают независимую передачу и приём данных. Модули подсистемы "Транспорты" реализуют поддержку как входных, так и выходных транспортов.
-</p><p>Подсистема "Транспортные протоколы" предназначена для структуризации данных, полученных от подсистемы "Транспорты", является продолжением подсистемы "Транспорты" и осуществляет функции проверки структуры и целостности полученных данных. Для указания протокола вмести с которым должен работать транспорт предусмотрено специальное конфигурационное поле. Модульным объектом, который содержится в подсистеме "Протоколы", является сам протокол. Например, транспортными протоколами могут быть и есть:
+<li> <a href="Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">шифрованные каналы</a>.</li></ul>
+<p>Подсистема "Транспорты" включает поддержку входных и выходных транспортов. Входные транспорты предназначены для обслуживания внешних запросов и отправки ответов. Выходные транспорты наоборот предназначены для отправки сообщений и ожидания ответов. Соответственно входные транспорты содержат конфигурацию локальной станции, как сервера прослушивания запросов, а выходные транспорты содержат конфигурацию удалённого сервера, для подключения. Такая специализация характерна для типового механизма "запрос-ответ", однако на данное время входные и выходные транспорты поддерживают независимую передачу и приём данных. Модули подсистемы "Транспорты" реализуют поддержку как входных, так и выходных транспортов.
+</p><p>Подсистема "Транспортные протоколы" предназначена для структуризации данных, полученных от подсистемы "Транспорты", является продолжением подсистемы "Транспорты", от чего имеет такое название, и осуществляет функции проверки структуры и целостности полученных данных. В глобальной нотации, эта подсистема содержит и реализует <b>КОММУНИКАЦИОННЫЕ</b> протоколы! Для указания протокола, вмести с которым должен работать транспорт, предусмотрено специальное конфигурационное поле. Модульным объектом, который содержится в подсистеме "Протоколы", является сам протокол. Например, транспортными протоколами могут быть и есть:
 </p>
 <ul><li> <a href="Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">собственный протокол OpenSCADA</a>;</li>
 <li> <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a>;</li>
+<li> <a href="Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC-UA</a>;</li>
 <li> <a href="Modules/DCON.html" title="Special:MyLanguage/Modules/DCON">DCON</a>;</li>
-<li> <a href="Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">протокол передачи гипертекста (HTTP)</a>.</li></ul>
+<li> <a href="Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">протокол передачи гипертекста (HTTP)</a>;</li>
+<li> <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">пользовательские протоколы</a>, которые реализуются в самой OpenSCADA на <a href="DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">логическом уровне</a>, и который, с развитием <a href="DAQ.html#JavaLikeCalc" title="Special:MyLanguage/Documents/DAQ">внутреннего языка</a>, стал приоритетным.</li></ul>
 <p>Полную последовательность сеанса входной связи для типовых протоколов режима "запрос-ответ" можно записать следующим образом:
 </p>
-<ul><li> сообщение от внешней системы поступает транспорту;</li>
+<ul><li> внешняя система подключается ко входному транспорту;</li>
+<li> сообщение от внешней системы поступает транспорту;</li>
 <li> транспорт передаёт сообщение связанному с ним протоколу путём создания нового объекта протокола;</li>
 <li> протокол проверяет целостность данных;</li>
 <li> если пришли все данные то сообщить транспорту про прекращение ожидания данных и передать ему ответ иначе сообщить, что нужно ожидать ещё;</li>
-<li> транспорт, получив подтверждение, отправляет ответ и удаляет объект протокола;</li>
+<li> транспорт, получив подтверждение, отправляет ответ и удаляет объект протокола, если это не режим сохранения подключения;</li>
 <li> если подтверждения нет то транспорт продолжает ожидание данных и в случае их поступления передаёт сохранённому объекту протокола.</li></ul>
 <p>Протоколы также поддерживаются для выходных транспортов и берут на себя функцию общения с транспортом и реализацию особенностей этих протоколов, при подготовке данных к передаче и разборе ответов. Внешний интерфейс доступа к протоколам, из кода других модулей и окружения программирования OpenSCADA, реализуется в XML дереве с собственной структурой для каждого протокольного модуля. Такой механизм позволяет выполнять прозрачный доступ к внешним системам, посредством транспортов, просто указывая имя протокола с помощью которого обслуживать передачу.
-</p><p>Благодаря стандартному доступу (API) к транспортам в OpenSCADA можно легко менять способ обмена данными не затрагивая самих программ, которые обмениваются. Например, в случае локального обмена можно использовать более быстрый транспорт на основе UNIX-сокетов или разделяемой памяти, а в случае обмена через интернет и локальную сеть использовать TCP или UDP сокеты.
+</p><p>Благодаря стандартному доступу к транспортам в OpenSCADA, можно легко менять способ обмена данными не затрагивая самих программ, которые обмениваются. Например, в случае локального обмена, можно использовать более быстрый транспорт на основе UNIX-сокетов, а в случае обмена через интернет и локальную сеть использовать TCP- или UDP-сокеты.
 </p>
 <h3><span class="mw-headline" id=".D0.98.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D1.8B_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8F.2C_.D0.BF.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.98.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D1.8B_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8F.22"><span class="mw-headline-number">1.7</span> Интерфейсы пользователя, подсистема "Интерфейсы пользователя"</span></h3>
 <p>SCADA-системы, как класс, предусматривают наличие интерфейсов пользователя. В OpenSCADA для предоставления пользовательских интерфейсов предусмотрена подсистема "Пользовательские интерфейсы" под которой предусматривается не только среда визуализации, с которой должен работать конечный пользователя, но и всё, что имеет отношение к пользователю, например:
@@ -1714,5 +1716,5 @@ PNGCompLev   &lt;уров.&gt;    Уровень сжатия [-1..9] созда
 
 
 
-</div></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/ru">Documents/Program_manual/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">січня 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2659</td></tr></table></body>
 </html>

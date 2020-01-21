@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-18 17:57+0200\n"
+"POT-Creation-Date: 2020-01-21 20:34+0200\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -240,6 +240,15 @@ msgstr "Кнопка для отримання інформації про Qt"
 
 msgid "Press for getting the using Qt information."
 msgstr "Натиснути для отримання інформації про Qt."
+
+msgid "Manual on ..."
+msgstr "Підручник на ..."
+
+msgid "The button for getting the library manual"
+msgstr "Кнопка отримання підручника бібліотеки"
+
+msgid "Press for getting the library manual."
+msgstr "Натиснути для отримання підручника бібліотеки."
 
 msgid "Manual on '%1'"
 msgstr "Підручник на '%1'"

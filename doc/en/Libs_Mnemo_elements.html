@@ -7,11 +7,11 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="files/doc.css" rel="stylesheet" /></head>
-<body><div id="mw_header">
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../en/files/Logo-big.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Libs/Mnemo elements</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Libs/Mnemo_elements/ru" title="Библиотека/Элементы мнемосхем (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Libs/Mnemo_elements/uk" title="Бібліотека/Елементи мнемосхем (100% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Libs_Mnemo_elements.html" title="Библиотека/Элементы мнемосхем (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Libs_Mnemo_elements.html" title="Бібліотека/Елементи мнемосхем (100% translated)">українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -40,7 +40,8 @@
 <ul><li> <b>Founded:</b> September 2007</li>
 <li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/GraphicElementsLibraries/MnemoElements" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a></li></ul>
 </td></tr></table>
-<p>The library is created to provide mnemonic elements of the user interface. The library is built on the basis <a href="Modules/VCAEngine.html#WidgetPrimitives" title="Special:MyLanguage/Modules/VCAEngine">primitives of the widgets</a> and the internal programming language <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>.
+<p>The library is created to provide mnemonic elements of the user interface and it contains graphic elements, often need when forming the user interface of the automation of technological processes. The library is built on the basis <a href="Modules/VCAEngine.html#WidgetPrimitives" title="Special:MyLanguage/Modules/VCAEngine">primitives of the widgets</a> and the internal programming language <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>.
+</p><p>The element's names and their parameters are available in languages: English, Ukrainian and Russian. Their source code wrote in the human-language independent mode with calls for the translations by the function <i>tr()</i> and the message's translation also allowed for English, Ukrainian and Russian.
 </p><p>For connection the library to a project of the OpenSCADA station you can obtain the database file as:
 </p>
 <ul><li> supplied with a ready and proper package of the Linux distribution like to "openscada-libdb-vca", "openscada-LibDB.VCA";</li>
@@ -50,7 +51,7 @@ $ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql
 $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </pre>
 <ul><li> downloaded for <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">the one attached here</a>.</li></ul>
-<p>The library contains graphic elements, often need when forming the user interface of the automation of technological processes. Names and text options are available in three languages: English, Ukrainian and Russian.
+<p>This obtained file next you can place into the project directory of the station and create the database object for the DB module "SQLite", registering the database file in the configuration.
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
@@ -65,8 +66,8 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </li>
 <li class="toclevel-1 tocsection-5"><a href="#Active_elements.2C_representing_various_technological_devices"><span class="tocnumber">2</span> <span class="toctext">Active elements, representing various technological devices</span></a>
 <ul>
-<li class="toclevel-2 tocsection-6"><a href="#Discrete_apparatus"><span class="tocnumber">2.1</span> <span class="toctext">Discrete apparatus</span></a></li>
-<li class="toclevel-2 tocsection-7"><a href="#Analog_apparatus"><span class="tocnumber">2.2</span> <span class="toctext">Analog apparatus</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Discrete_apparatus"><span class="tocnumber">2.1</span> <span class="toctext"><span>Discrete apparatus</span></span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Analog_apparatus"><span class="tocnumber">2.2</span> <span class="toctext"><span>Analog apparatus</span></span></a></li>
 </ul>
 </li>
 </ul>
@@ -516,7 +517,7 @@ In the runtime mode, in the main field of the element, there are displayed a his
 <td>
 </td></tr></table>
 <h2><span class="mw-headline" id="Active_elements.2C_representing_various_technological_devices"><span class="mw-headline-number">2</span> Active elements, representing various technological devices</span></h2>
-<h3><span class="mw-headline" id="Discrete_apparatus"><span class="mw-headline-number">2.1</span> Discrete apparatus</span></h3>
+<h3><span class="mw-headline" id="Discrete_apparatus"><span class="mw-headline-number">2.1</span> <span id="discrApps" title="#discrApps">Discrete apparatus</span></span></h3>
 <p>The elements on Figure 2.1 is used to display the discrete apparatus' status on basis of the discrete signals, for use in pipelines. The elements commonly use and represent the representative structure of the DAQ-template of the <a href="Libs_Main.html#digitBlockUnif" title="Special:MyLanguage/Libs/Main">discrete block</a> in different visual variants.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:517px;"><a class="image" href="http://oscada.org/wiki/File:LibMnemoEls_discrApparatus.png"><img class="thumbimage" height="228" src="files/LibMnemoEls_discrApparatus.png" width="515" /></a>  <div class="thumbcaption">Fig.2.1. Discrete apparatus' elements in the development and runtime modes (top to bottom).</div></div></div></div>
@@ -649,7 +650,7 @@ In the runtime mode, in the main field of the elements, there are represented th
 <td> Parameter|digComs </td>
 <td> Configuration of the parameter commands with the structure <b>{openLabel}-{color};{closeLabel}-{color}</b>, for the discrete block, and <b>{com1Label}-{color};{com2Label}-{color};...;{comNLabel}-{color}</b>, for the code status.
 </td></tr></table>
-<h3><span class="mw-headline" id="Analog_apparatus"><span class="mw-headline-number">2.2</span> Analog apparatus</span></h3>
+<h3><span class="mw-headline" id="Analog_apparatus"><span class="mw-headline-number">2.2</span> <span id="analogApps" title="#analogApps">Analog apparatus</span></span></h3>
 <p>The elements on Figure 2.2 is used to display the analog apparatus' status and intended for use in pipelines. The elements commonly use and represent the representative structure of the DAQ-template of <a href="Libs_Main.html#pidUnif" title="Special:MyLanguage/Libs/Main">the analog PID-regulators</a> in different visual variants.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMnemoEls_analogApparatus.png"><img class="thumbimage" height="258" src="files/LibMnemoEls_analogApparatus.png" width="400" /></a>  <div class="thumbcaption">Fig.2.2. Analog apparatus' elements in the development and runtime modes (top to bottom).</div></div></div></div>
@@ -706,5 +707,5 @@ In the runtime mode, in the main field of the elements, there are represented th
 
 
 
-</div></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Mnemo_elements/en">Libs/Mnemo_elements/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">січня 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2659</td></tr></table></body>
 </html>

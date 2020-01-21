@@ -7,11 +7,11 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../files/doc.css" rel="stylesheet" /></head>
-<body><div id="mw_header">
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../../en/files/Logo-big.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/Vision</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Vision/ru" title="Модули/Vision (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Vision/uk" title="Модулі/Vision (100% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/Vision.html" title="Модули/Vision (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/Vision.html" title="Модулі/Vision (100% translated)">українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -31,7 +31,7 @@
 <td> <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> </td>
 <td> Operation user interface (Qt)
 </td>
-<td> 6.6 </td>
+<td> 6.7 </td>
 <td> GPL2 </td>
 <td> ui_Vision.so </td>
 <td> en,uk,ru,de </td>
@@ -130,6 +130,7 @@
 <li> "Paste visual item" — paste of the visual element.</li>
 <li> "Load from DB" — uploading data of the visual element from the database.</li>
 <li> "Save to DB" — saving data of the visual element to the database.</li>
+<li> "Manual on ..." — call manual on the selected library.</li>
 <li> "Refresh libraries" — rereading of the configuration and composition of the libraries from the data model.</li></ul></li>
 <li> Tree of the projects pages. Provides the mechanism for "Drag and drop" for creation of the user frames based on the libraries elements. For flexible control, the context menu is supported with the following items:
 <ul><li> "Run project" — starting up of the chosen project execution.</li>
@@ -214,9 +215,10 @@
 <li> "Help" — Help for OpenSCADA and this module.
 <ul><li> "About" — information about this module.</li>
 <li> "About Qt" — Information about the Qt library, used by this module.</li>
-<li> "Manual on 'Vision'" — call the manual on this module.</li>
-<li> "Manual on 'VCAEngine'" — call the manual on the engine of the visualization and control area.</li>
-<li> "Manual on 'OpenSCADA 0.9.0'" — call the manual on OpenSCADA in whole.</li>
+<li> "Manual on 'Vision'" — call manual on this module.</li>
+<li> "Manual on 'VCAEngine'" — call manual on the engine of the visualization and control area.</li>
+<li> "Manual on 'OpenSCADA 0.9.0'" — call manual on OpenSCADA in whole.</li>
+<li> "Manual on ..." — call manual on the selected library.</li>
 <li> "What's this" — query of the description of the elements of the window's interface.</li></ul></li>
 <li> "QTStarter" — Menu item, created by the module for running the Qt library modules. Contains start buttons for UI modules OpenSCADA, based on the Qt library. This option allows you to open several instances of the windows of this module or other modules.</li></ul>
 <p>Above, under menu, or on the sides, there are the toolbars. Toolbars can be hidden or located, which is controlled in the menu item "View". The following toolbars are provided:
@@ -928,5 +930,5 @@ An example of editing a frame based on this primitive is shown in Figure 2.a, an
 
 
 
-</div></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Vision/en">Modules/Vision/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">січня 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2659</td></tr></table></body>
 </html>

@@ -7,11 +7,11 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="files/doc.css" rel="stylesheet" /></head>
-<body><div id="mw_header">
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../en/files/Logo-big.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Libs/Technological apparatuses</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Libs/Technological_apparatuses/ru" title="Библиотека/Технологические аппараты (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Libs/Technological_apparatuses/uk" title="Бібліотека/Технологічні апарати (100% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Libs_Technological_apparatuses.html" title="Библиотека/Технологические аппараты (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Libs_Technological_apparatuses.html" title="Бібліотека/Технологічні апарати (100% translated)">українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -41,6 +41,19 @@
 <li> <b>Initially created:</b> <a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/APIFunctionLibs/TechApp" rel="nofollow noreferrer noopener" target="_blank">in the old Wiki</a></li>
 <li> <b>Used by:</b> the simulator <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">AGLKS</a> and <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_Boiler" title="Special:MyLanguage/Using/Model Boiler">Boiler</a></li></ul>
 </td></tr></table>
+<p>The library is created to provide models of devices of the technological processes. The library is not static, but based on the module <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, allowing to create calculations on the Java-like language.
+</p><p>To address the library functions you can use the static call address <b>DAQ.JavaLikeCalc.lib_techApp.{Func}()</b> or dynamic <b>SYS.DAQ.JavaLikeCalc["lib_techApp"]["{Func}"].call()</b>, <b>SYS.DAQ.JavaLikeCalc["lib_techApp"].{Func}()</b>". Where {Func} — function identifier in the library.
+</p><p>For connection the library to a project of the OpenSCADA station you can obtain the database file as:
+</p>
+<ul><li> supplied with a ready and proper package of the Linux distribution like to "openscada-libdb-main", "openscada-LibDB.Main";</li>
+<li> directly taken for most actual one from <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">the subversion repository</a> and converted to the DB SQLite file in way:</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 15px">
+$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql
+$ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
+</pre>
+<ul><li> downloaded for <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">the one attached here</a>.</li></ul>
+<p>This obtained file next you can place into the project directory of the station and create the database object for the DB module "SQLite", registering the database file in the configuration.
+</p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#Conception"><span class="tocnumber">1</span> <span class="toctext">Conception</span></a></li>
@@ -74,19 +87,6 @@
 </ul>
 </div>
 
-<p>The library is created to provide models of devices of the technological processes. The library is not static, but based on the module <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, allowing to create calculations on the Java-like language.
-</p><p>To address the library functions you can use the static call address <b>DAQ.JavaLikeCalc.lib_techApp.{Func}()</b> or dynamic <b>SYS.DAQ.JavaLikeCalc["lib_techApp"]["{Func}"].call()</b>, <b>SYS.DAQ.JavaLikeCalc["lib_techApp"].{Func}()</b>". Where {Func} — function identifier in the library.
-</p><p>For connection the library to a project of the OpenSCADA station you can obtain the database file as:
-</p>
-<ul><li> supplied with a ready and proper package of the Linux distribution like to "openscada-libdb-main", "openscada-LibDB.Main";</li>
-<li> directly taken for most actual one from <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">the subversion repository</a> and converted to the DB SQLite file in way:</li></ul>
-<pre style="white-space: pre-wrap; margin-left: 15px">
-$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql
-$ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
-</pre>
-<ul><li> downloaded for <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">the one attached here</a>.</li></ul>
-<p>This obtained file next you can place into the project directory of the station and create the database object for the DB module "SQLite", registering the database file in the configuration.
-</p>
 <h2><span class="mw-headline" id="Conception"><span class="mw-headline-number">1</span> Conception</span></h2>
 <p>The basis of the model of each apparatus is the calculation of the input flow and output pressure, based on the input pressure and output flow. In general, models of the technological devices are described by difference equations for discrete machines.
 </p><p>Basing on the functions of this library you can easily and quickly build models of technological processes in the module <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">BlockCalc</a>, combining the blocks in accordance with the technological scheme. Example of combination of several devices of the technological scheme is shown in Figure 1.
@@ -3679,5 +3679,5 @@ To2 = max(0, min(1e4,(ki*Fi1*Ti1*Ci1+Fi2*Ti2*Ci2)/(ki*Fi1*Ci1+Fi2*Ci2)));
 
 
 
-</div></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Technological_apparatuses/en">Libs/Technological_apparatuses/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">січня 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2659</td></tr></table></body>
 </html>

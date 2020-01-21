@@ -1,5 +1,5 @@
 .mw-pt-translate-header{font-size:x-small;text-align:center}
-.mw-pt-languages{display:table;border:1px solid rgb(170,170,170);background:rgb(246,249,237) none repeat scroll 0 0;border-collapse:collapse;line-height:1.2;width:100%;clear:both;overflow:auto}
+.mw-pt-languages{display:table;border:1px solid rgb(170,170,170);background:rgb(246,249,237) none repeat scroll 0 0;border-collapse:collapse;line-height:1.2;/*width:100%;clear:both;*/overflow:auto;margin-bottom:10pt;}
 .mw-pt-languages-label{display:table-cell;border-right:1px solid rgb(170,170,170);padding:0.5em;background:rgb(238,243,226) none repeat scroll 0 0;font-weight:bold;width:15%}
 .mw-pt-languages-list{padding-left:0.5em;padding-bottom:0.7em;display:table-cell;width:80%}
 .mw-pt-languages-list a{white-space:nowrap}
@@ -69,7 +69,7 @@ h1,h2{margin:1.0em 0 0.5rem 0}
 h3,h4,h5,h6{margin:0.75em 0 0.25rem 0}
 ul,dl{margin:0}
 p{margin:0.4rem 0 0 0}
-body,.mw-body,table.wikitable,#toc,div.thumbinner,table.wikitable > * > tr > th{background:transparent}
+body,.mw-body,table.wikitable,#toc,div.thumbinner,table.wikitable > * > tr > th{background:white}
 .mw-body a.external.text:after,.mw-body a.external.autonumber:after{content:""}
 .mw-topboxes,.printfooter,#contentSub{display:none}
 .mw-pt-translate-header + hr{display:none}

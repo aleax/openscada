@@ -53,24 +53,30 @@ Version: 1.4.0
 License: GPLv2 mostly
 DOC: Libs_LowLevelDevices|Libs/LowLevelDevices','','tmplib_LowDevLib','Низкоуровневые устройства','');
 CREATE TABLE IF NOT EXISTS 'UserFuncLibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"PROG_TR" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO UserFuncLibs VALUES('techApp','Technological devices','Library of models of the technological apparatuses.
+INSERT INTO UserFuncLibs VALUES('techApp','Technological apparatuses','The library is created to provide models of devices of the technological processes. The library is not static, but based on the module JavaLikeCalc, allowing to create calculations on the Java-like language.
+
+To address the library functions you can use the static call address DAQ.JavaLikeCalc.lib_techApp.{Func}() or dynamic SYS.DAQ.JavaLikeCalc["lib_techApp"]["{Func}"].call(), SYS.DAQ.JavaLikeCalc["lib_techApp"].{Func}()". Where {Func} — function identifier in the library.
 
 Founded: October 2005
 Author: Roman Savochenko <roman@oscada.org>, Maxim Lysenko (2007,2010), Ksenia Yashina (2007)
-Version: 2.0.0
-License: GPL
-DOC: Libs_Technological_apparatuses|Libs/Technological_apparatuses','techApp','Технологічні апарати','Бібліотека моделей апаратів технологічних процесів.
+Version: 2.0.1
+License: GPLv2
+DOC: Libs_Technological_apparatuses|Libs/Technological_apparatuses','techApp','Технологічні апарати','Бібліотека створюється для надання моделей апаратів технологічних процесів. Бібліотека не є статичною, а будується на основі модуля JavaLikeCalc, який дозволяє створювати обчислення на мові схожій на Java.
+
+Для адресації до функцій цієї бібліотеки можна використати статичну адресу виклику DAQ.JavaLikeCalc.lib_techApp.{Func}() або динамічну SYS.DAQ.JavaLikeCalc["lib_techApp"]["{Func}"].call(), SYS.DAQ.JavaLikeCalc["lib_techApp"].{Func}(). Де {Func} — ідентифікатор функції у бібліотеці.
 
 Засновано: Жовтень 2005
 Автор: Роман Савоченко <roman@oscada.org>, Максим Лисенко (2007,2010), Ксенія Яшина (2007)
-Версія: 2.0.0
-Ліцензія: GPL
-DOC: Libs_Technological_apparatuses|Libs/Technological_apparatuses','Технологические аппараты','Библиотека моделей аппаратов технологических процессов.
+Версія: 2.0.1
+Ліцензія: GPLv2
+DOC: Libs_Technological_apparatuses|Libs/Technological_apparatuses','Технологические аппараты','Библиотека создаётся для предоставления моделей аппаратов технологических процессов. Библиотека не является статической, а строится на основе модуля JavaLikeCalc, позволяющего создавать вычисления на Java-подобном языке.
+
+Для адресации к функции этой библиотеки можно использовать статический адрес вызова DAQ.JavaLikeCalc.lib_techApp.{Func}() или динамический SYS.DAQ.JavaLikeCalc["lib_techApp"]["{Func}"].call(), SYS.DAQ.JavaLikeCalc["lib_techApp"].{Func}(). Где {Func} — идентификатор функции в библиотеке.
 
 Основан: Октябрь 2005
 Автор: Роман Савоченко <roman@oscada.org>, Максим Лысенко (2007,2010), Ксения Яшина (2007)
-Версия: 2.0.0
-Лицензия: GPL
+Версия: 2.0.1
+Лицензия: GPLv2
 DOC: Libs_Technological_apparatuses|Libs/Technological_apparatuses',0);
 INSERT INTO UserFuncLibs VALUES('servProc','Service procedures','Library of service procedures for different using.
 
@@ -91,22 +97,37 @@ DOC: Libs_Service_procedures|Libs/Service_procedures','Сервисные про
 Версия: 1.2.1
 Лицензия: GPLv2
 DOC: Libs_Service_procedures|Libs/Service_procedures',1);
-INSERT INTO UserFuncLibs VALUES('doc','Report''s documents','Library of functions to facilitate the implementation of typical computations the primitive form of reporting documentation VCA "Document".
+INSERT INTO UserFuncLibs VALUES('doc','Reports'' and documents'' library','The service functions of the frames of reports and documents are intended to perform the characteristic tasks of obtaining reporting data, for which you need to perform some verification or counting, for example, to check the validity and to summarize. Forming complex data, such as charts embedded in a document, can also be a service function.
+
+To address the library functions you can use the static call address DAQ.JavaLikeCalc.lib_doc.{Func}() or dynamic SYS.DAQ.JavaLikeCalc["lib_doc"]["{Func}"].call(), SYS.DAQ.JavaLikeCalc["lib_doc"].{Func}()". Where {Func} — function identifier in the library.
+
+The element''s names and their parameters are available in languages: English, Ukrainian and Russian. Their source code wrote in human-language independent mode with calls for the translations by the function tr() and the message''s translation also allowed for English, Ukrainian and Russian.
 
 Founded: January 2008
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.0
-License: GPL','flb_doc','Звітна документація','Бібліотека функцій для полегшення виконання типових обчислень примітиву формування звітної документації СВУ "Документ".
+Version: 2.0.0
+License: GPLv2
+DOC: Libs_Documents|Libs/Documents','flb_doc','Бібліотека звітів та документів','Сервісні функції кадрів звітів та документів призначено для виконання характерних задач отримання звітних даних, для чого треба здійснювати якусь перевірку або підрахунок, наприклад, перевіряти достовірність та підсумовувати. Сервісною функцією може бути й формування складних даних, як то вбудованих у документ діаграм.
+
+Для адресації до функцій цієї бібліотеки можна використати статичну адресу виклику DAQ.JavaLikeCalc.lib_doc.{Func}() або динамічну SYS.DAQ.JavaLikeCalc["lib_doc"]["{Func}"].call(), SYS.DAQ.JavaLikeCalc["lib_doc"].{Func}(). Де {Func} — ідентифікатор функції у бібліотеці.
+
+Назви елементів та їх параметрів доступні на мовах: Англійська, Українська та Російська. Їх вихідний код написано у мово(людська)-незалежному режимі з викликом функції перекладу tr() та переклад цих повідомлень також доступний Англійською, Українською та Російською.
 
 Засновано: січень 2008р
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.1.0
-Ліцензія: GPL','Отчётная документация','Библиотека функций для облегчения выполнения типовых вычислений примитива формирования отчётной документации СВУ "Документ".
+Версія: 2.0.0
+Ліцензія: GPLv2
+DOC: Libs_Documents|Libs/Documents','Библиотека отчётов и документов','Сервисные функции кадров отчётов и документов предназначены для выполнения характерных задач получения отчётных данных, для чего нужно осуществлять какую-то проверку или подсчёт, например, проверять достоверность и суммировать. Сервисной функцией может быть и формирование сложных данных, вроде встраиваемых в документ диаграмм.
+
+Для адресации к функции этой библиотеки можно использовать статический адрес вызова DAQ.JavaLikeCalc.lib_doc.{Func}() или динамический SYS.DAQ.JavaLikeCalc["lib_doc"]["{Func}"].call(), SYS.DAQ.JavaLikeCalc["lib_doc"].{Func}(). Где {Func} — идентификатор функции в библиотеке.
+
+Названия элементов и их параметров доступны на языках: Английский, Украинский и Российский. Их исходный код написан в языко(человеческий)-независимом режиме с вызовом функции перевода tr() и перевод этих сообщений также доступен Английским, Украинским и Российским.
 
 Основано: январь 2008г
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.1.0
-Лицензия: GPL',1);
+Версия: 2.0.0
+Лицензия: GPLv2
+DOC: Libs_Documents|Libs/Documents',1);
 INSERT INTO UserFuncLibs VALUES('regEl','Regulation elements','Regulation elements library.
 
 Author: Roman Savochenko <roman@oscada.org>
@@ -149,8 +170,8 @@ License: GPL','flb_web','XHTML-шаблон','Бібліотека функці�
 CREATE TABLE IF NOT EXISTS 'flb_doc_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DEF" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DEF" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
 INSERT INTO flb_doc_io VALUES('getVal','rez','Result',0,2,'',0,0,'Результат','','Результат','');
 INSERT INTO flb_doc_io VALUES('getVal','addr','Address',0,0,'',0,1,'Адреса','','Адрес','');
-INSERT INTO flb_doc_io VALUES('getVal','time','Time (s)',1,0,'',0,2,'Час (сек.)','','Время (сек.)','');
-INSERT INTO flb_doc_io VALUES('getVal','uTime','Time (us)',1,0,'',0,3,'Час (мксек.)','','Время (мксек.)','');
+INSERT INTO flb_doc_io VALUES('getVal','time','Time, seconds',1,0,'',0,2,'Час, секунд','','Время, секунд','');
+INSERT INTO flb_doc_io VALUES('getVal','uTime','Time, microseconds',1,0,'',0,3,'Час, мікросекунди','','Время, микросекунды','');
 INSERT INTO flb_doc_io VALUES('getVal','prec','Signs after dot',1,0,'3',0,4,'Знаків після коми','','Знаков после запятой','');
 INSERT INTO flb_doc_io VALUES('getVal','archtor','Archiver',0,0,'',0,5,'Архіватор','','Архиватор','');
 INSERT INTO flb_doc_io VALUES('sumVal','rez','Result',0,2,'',0,0,'Результат','','Результат','');
@@ -159,15 +180,36 @@ INSERT INTO flb_doc_io VALUES('averVal','addr','Address',0,0,'',0,1,'Адрес�
 INSERT INTO flb_doc_io VALUES('averVal','rez','Result',0,2,'',0,0,'Результат','','Результат','');
 INSERT INTO flb_doc_io VALUES('sumVal','prec','Signs after dot',1,0,'3',0,4,'Знаків після коми','','Знаков после запятой','');
 INSERT INTO flb_doc_io VALUES('sumVal','archtor','Archiver',0,0,'',0,5,'Архіватор','','Архиватор','');
-INSERT INTO flb_doc_io VALUES('sumVal','bTime','Begin time (s)',1,0,'',0,2,'Час початку (сек.)','','Время начала (сек.)','');
-INSERT INTO flb_doc_io VALUES('sumVal','eTime','End time (s)',1,0,'',0,3,'Час кінця (сек.)','','Время конца (сек.)','');
-INSERT INTO flb_doc_io VALUES('averVal','bTime','Begin time (s)',1,0,'',0,2,'Час початку (сек.)','','Время начала (сек.)','');
-INSERT INTO flb_doc_io VALUES('averVal','eTime','End time (s)',1,0,'',0,3,'Час кінця (сек.)','','Время конца (сек.)','');
+INSERT INTO flb_doc_io VALUES('sumVal','bTime','Begin time, seconds',1,0,'',0,2,'Час початку, секунд','','Время начала, секунд','');
+INSERT INTO flb_doc_io VALUES('sumVal','eTime','End time, seconds',1,0,'',0,3,'Час кінця, секунд','','Время конца, секунд','');
+INSERT INTO flb_doc_io VALUES('averVal','bTime','Begin time, seconds',1,0,'',0,2,'Час початку, секунд','','Время начала, секунд','');
+INSERT INTO flb_doc_io VALUES('averVal','eTime','End time, seconds',1,0,'',0,3,'Час кінця, секунд','','Время конца, секунд','');
 INSERT INTO flb_doc_io VALUES('averVal','prec','Signs after dot',1,0,'3',0,4,'Знаків після коми','','Знаков после запятой','');
 INSERT INTO flb_doc_io VALUES('averVal','archtor','Archiver',0,0,'',0,5,'Архіватор','','Архиватор','');
 INSERT INTO flb_doc_io VALUES('getVal','strong','Precisely',3,0,'0',0,6,'Точно','','Точно','');
-INSERT INTO flb_doc_io VALUES('getVal','tryTo','Пробовать значение до {микросек}',1,0,'0',0,7,'','','Пробовать значение до {микросек}','');
-INSERT INTO flb_doc_io VALUES('averVal','actPerc','Процент активных значений',2,1,'',0,6,'','','Процент активных значений','');
+INSERT INTO flb_doc_io VALUES('getVal','tryTo','Try value up to, microseconds',1,0,'0',0,7,'Пробувати значення до, мікросекунди','','Пробовать значение до, микросекунды','');
+INSERT INTO flb_doc_io VALUES('averVal','actPerc','Percent of the actual values',2,1,'',0,6,'Відсоток актуальних значень','','Процент актуальных значений','');
+INSERT INTO flb_doc_io VALUES('diagram','res','Result',0,6,'',0,0,'Результат','','Результат','');
+INSERT INTO flb_doc_io VALUES('diagram','end','End time, seconds',2,0,'0',0,1,'Час кінця, секунд','','Время конца, секунд','');
+INSERT INTO flb_doc_io VALUES('diagram','size','Size, seconds',2,0,'3600',0,2,'Розмір, секунд','','Размер, секунд','');
+INSERT INTO flb_doc_io VALUES('diagram','srcs','Sources',0,4,'/DAQ/LogicLev/gen/F3/var:0:100:#ae77c3:2
+/Archive/va_CPULoad_load:0:0:darkcyan:2',0,3,'Джерела','','Источники','');
+INSERT INTO flb_doc_io VALUES('diagram','hsz','Horizontal size, pixels',1,0,'600',0,4,'Горизонтальний розмір, пікселів','','Горизонтальный размер, пикселей','');
+INSERT INTO flb_doc_io VALUES('diagram','vsz','Vertical size, pixels',1,0,'400',0,5,'Вертикальний розмір, пікселів','','Вертикальный размер, пикселей','');
+INSERT INTO flb_doc_io VALUES('diagram','tmpl','SVG-template',0,4,'<svg xmlns="http://www.w3.org/2000/svg" version="1.1" sclMarkFont="Arial 10" sclHor="2" sclVer="3" sclColor="gray" sclMarkColor="gray">
+    <style type="text/css">
+	    #scVer rect { stroke: none; }
+	    #scVer text { stroke: none; }
+	    #scHor rect { stroke: none; }
+	    #scHor text { stroke: none; }
+	    #drawArea path { fill: none; }
+    </style>
+    <!--Draw grid and markers-->
+    <g id="scVer" />
+    <g id="scHor" />
+    <!--Curves area -->
+    <g id="drawArea" />
+</svg>',0,6,'Шаблон','','Шаблон','');
 CREATE TABLE IF NOT EXISTS 'flb_regEl_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"uk#DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DEF" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
 INSERT INTO flb_regEl_io VALUES('pidUnif','var','Variable','Змінна',2,0,'0','',0,0,'Переменная','');
 INSERT INTO flb_regEl_io VALUES('pidUnif','sp','Setpoint','Завдання',2,0,'0','',0,1,'Задание','');
@@ -368,7 +410,7 @@ INSERT INTO lib_servProc_io VALUES('archPackFStests','archiver','Archiver addres
 INSERT INTO lib_servProc_io VALUES('wacko2media','ndb','MySQL DB id',0,0,'wiki',0,0,'','','','');
 INSERT INTO lib_servProc_io VALUES('wacko2media','wpg','Wiki page',0,0,'HomePageUk/Doc/SQLite',0,1,'','','','');
 INSERT INTO lib_servProc_io VALUES('wacko2media','rez','Result',0,6,'',0,2,'','','','');
-INSERT INTO lib_servProc_io VALUES('docOffLine','resDir','Results directory',0,0,'/home/roman/ext/work/Projects/OpenSCADA/doc/',0,2,'','','','');
+INSERT INTO lib_servProc_io VALUES('docOffLine','resDir','Results directory',0,0,'/home/roman/ext/work/Projects/OpenSCADA/doc/',0,3,'','','','');
 INSERT INTO lib_servProc_io VALUES('docOffLine','pages','Pages list of "{wiki}:{langs}:{dest}"',0,4,'Documents:en,uk,ru:index.html
 Documents/Release_0.9:en,uk,ru:Release_0.9.html
 About:en,uk,ru:About.html
@@ -437,11 +479,12 @@ Modules/FLibComplex1:en,uk,ru:Modules/FLibComplex1.html
 Libs/Main:en,uk:Libs_Main.html
 Libs/Technological_apparatuses:en,uk,ru:Libs_Technological_apparatuses.html
 Libs/Main_graphical_elements:en,uk,ru:Libs_Main_graphical_elements.html
-Libs/Mnemo_elements:en,uk,ru:Libs_Mnemo_elements.html',0,3,'','','','');
-INSERT INTO lib_servProc_io VALUES('docOffLine','pagesCur','Current pages list of "{wiki}:{langs}:{dest}", for empty here used "pages"',0,4,'',0,4,'','','','');
+Libs/Mnemo_elements:en,uk,ru:Libs_Mnemo_elements.html',0,4,'','','','');
+INSERT INTO lib_servProc_io VALUES('docOffLine','pagesCur','Current pages list of "{wiki}:{langs}:{dest}", for empty here used "pages"',0,5,'',0,5,'','','','');
 INSERT INTO lib_servProc_io VALUES('docOffLine','res','Result',0,1,'',0,0,'','','','');
-INSERT INTO lib_servProc_io VALUES('docOffLine','reqTr','Tries of requests',1,1,'3',0,1,'','','','');
+INSERT INTO lib_servProc_io VALUES('docOffLine','reqTr','Tries of the requests',1,1,'3',0,2,'','','','');
 INSERT INTO lib_servProc_io VALUES('releaseTests','rezF','Result for HTML file',0,5,'',1,2,'','','','');
+INSERT INTO lib_servProc_io VALUES('docOffLine','prgVer','Program version',0,0,'',0,1,'','','','');
 CREATE TABLE IF NOT EXISTS 'techApp_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DEF" TEXT DEFAULT '' ,"uk#DEF" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
 INSERT INTO techApp_io VALUES('lag','out','Output',2,2,'0',0,0,'Вихід','Выход','','');
 INSERT INTO techApp_io VALUES('lag','in','Input',2,0,'0',0,1,'Вхід','Вход','','');
@@ -9424,10 +9467,18 @@ return obuf;','','',1560098890);
 INSERT INTO lib_servProc VALUES('docOffLine','EXT: Off-line documentation','','','Procedure of forming the offline documentation of OpenSCADA from Wiki by reading and processing the specified Wiki pages on different languages, currently it is: English, Ukrainian, Russian.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.0','','',1,300,0,'trNm = "offLine";
+Version: 1.2.0','','',1,300,0,'trNm = "offLine";
 docHost = "oscada.org:80";
-docHost_ = "http://" + docHost.parse(0, ":");
+docHost_ = "http://" + docHost.parse(0,":");
 defLang = "en";
+
+SYS.cntrReq((req=SYS.XMLNode("get").setAttr("path","/%2fgen%2fprog")));
+prgNm = req.text();
+if(!prgVer.length) {
+	SYS.cntrReq((req=SYS.XMLNode("get").setAttr("path","/%2fgen%2fver")));
+	prgVer = req.text();
+}
+docData = SYS.strftime(SYS.time(), "%B %Y");
 
 //Check and connect to self transport
 tr = SYS.Transport.Sockets.nodeAt("out_"+trNm);
@@ -9475,9 +9526,11 @@ if(pagesCur.length) {
 } else pgsOprc = pgsO;
 
 //Pages fetching and processing
+isError = false;
 for(var ip in pgsOprc) {
 	pLang = ip.lastIndexOf("/"); pWiki = ip.slice(0, pLang); pLang = ip.slice(pLang+1);
 	pOffLn = pgsO[ip];
+	if(isError)	{ pagesCur += pWiki+":"+pLang+":"+pOffLn+"\n"; continue; }
 
 	// Take folders configuration
 	dstDir = topDir = "";
@@ -9494,11 +9547,16 @@ for(var ip in pgsOprc) {
 	// Request the documentation page
 	req = SYS.XMLNode("GET").setAttr("Host",docHost).setAttr("URI","/wiki/index.php?title="+ip.replace("/"+defLang,"")+"&printable=yes");
 	// Load the documentation page to a XML tree
+	stTm = SYS.mtime();
 	for(iTr = 0; iTr < reqTr; iTr++)
 		if(!(rez=tr.messIO(req,"HTTP")).length && req.text().length) break;
 	//if(req.text().length < 10)
 	//	SYS.messInfo("OffLine", "TEST 00: rez="+rez+"; length="+req.text().length);
-	if(iTr == reqTr)	{ res = "1: Page "+ip+" load error in "+reqTr+" tries"; return; }
+	if(iTr == reqTr)	{
+		res = "1: Page "+ip+" load error in "+reqTr+" tries and "+1e-3*(SYS.mtime()-stTm)+" seconds";
+		isError = true; pagesCur = pWiki+":"+pLang+":"+pOffLn+"\n";
+		continue;
+	}
 
 	docTree = SYS.XMLNode();
 	rez1 = docTree.load(req.text(), false, 0x01);
@@ -9535,18 +9593,36 @@ for(var ip in pgsOprc) {
 	body.clear(true);
 	body.childAdd(header); body.childAdd(cnt);
 
+	// Languages area processing
+	if((lngSelAr=body.getElementBy("mw-pt-languages noprint","class"))) {
+		lngSelAr.childDel(0);
+		lngSelAr.setAttr("class", "mw-pt-languages");
+		anchs = lngSelAr.getElementsBy("a");
+		for(iEl = 0; iEl < anchs.length; iEl++) {
+			href = anchs[iEl].attr("href");
+			tVl = href.slice(href.lastIndexOf("/")+1);
+			anchs[iEl].setAttr("href", topDir+"../"+(dirsO[tVl] == true?tVl:defLang)+"/"+pOffLn);
+		}
+	}
+
 	// Images processing
 	imgs = body.getElementsBy("img");
-	for(iEl = 0; iEl < imgs.length; iEl++)
+	for(iEl = 0; iEl < imgs.length && !isError; iEl++)
 		if((tVl=imgs[iEl].attr("src").match("^/.*/(.*)$")).length) {
 			isDef = false;
 			if(imgsO[pLang+":"+tVl[1]] != true && (pLang == defLang || (isDef=imgsO[defLang+":"+tVl[1]]) != true)) {
 				req = SYS.XMLNode("GET").setAttr("Host",docHost).setAttr("URI",imgs[iEl].attr("src"));
+
+				stTm = SYS.mtime();
 				for(iTr = 0; iTr < reqTr; iTr++)
 					if(!(rez=tr.messIO(req,"HTTP")).length && req.text().length) break;
 				//if(req.text().length < 10)
 				//	SYS.messInfo("OffLine", "TEST 01: rez="+rez+"; length="+req.text().length);
-				if(iTr == reqTr)	{ res = "1: Image ''"+req.attr("URI")+"'' load error in "+reqTr+" tries"; return; }
+				if(iTr == reqTr)	{
+					res = "1: Image ''"+req.attr("URI")+"'' load error in "+reqTr+" tries and "+1e-3*(SYS.mtime()-stTm)+" seconds";
+					isError = true; pagesCur = pWiki+":"+pLang+":"+pOffLn+"\n";
+					break;
+				}
 				SYS.fileWrite(resDir+pLang+"/files/"+tVl[1], req.text());
 				imgsO[pLang+":"+tVl[1]] = true;
 				imgCnt++;
@@ -9554,6 +9630,7 @@ for(var ip in pgsOprc) {
 			//SYS.messInfo("DOC", "pLang="+pLang+"; file="+tVl[1]+"; isP="+isP);
 			imgs[iEl].setAttr("src", topDir+((isDef==true)?"../"+defLang+"/":"")+"files/"+tVl[1]);
 		}
+	if(isError)	continue;
 
 	// Links processing
 	anchs = body.getElementsBy("a");
@@ -9577,12 +9654,19 @@ for(var ip in pgsOprc) {
 		}
 	}
 
+	// Appending the custom header and footer
+	body.childIns(0, "div").load("<div class=''floatright''><a href=''"+docHost_+"''><img alt=''"+prgNm+"'' src=''"+topDir+"../en/files/Logo-big.png'' /></a></div>");
+	body.childAdd("table").load("<table style=''border-top: dotted 2px #999999; margin-top: 20pt; color: gray;'' width=''100%''><tr>"
+		"<td style=''text-align: left;'' width=''40%''><a href=''"+docHost_+"/wiki/"+pWiki+"/"+pLang+"''>"+pWiki+"/"+pLang+"</a> - <a href=''"+docHost_+"/en/main/about-the-project/licenses/''>GFDL</a></td>"
+		"<td style=''text-align: center;''>"+docData+"</td>"
+		"<td style=''text-align: right;'' width=''40%''>"+prgNm+" "+prgVer+"</td></tr></table>", false, 0x01);
+
 	docTree.save(0x3C0, resDir+pLang+"/"+pOffLn);
 	pCnt++;
 	//SYS.messInfo("OffLine", "TEST 00: pLang="+pLang);
 }
 
-res = "0: Fetched and processed pages="+pCnt+"; images="+imgCnt+"; links="+lnkCnt+"; languages="+lngCnt;','','',1574613959);
+if(!isError)	pagesCur = "", res = "0: Fetched and processed pages="+pCnt+"; images="+imgCnt+"; links="+lnkCnt+"; languages="+lngCnt;','','',1579619800);
 CREATE TABLE IF NOT EXISTS 'flb_regEl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO flb_regEl VALUES('pidUnif','PID (unified)','ПІД (уніфікований)','ПИД (унифицированный)','Composite-unified analog and pulse PID. At the heart of the regulator is core a standard analog PID controller from the library FLibComplex1 and the implementation of the PWM for the pulse part.
 
@@ -9808,13 +9892,37 @@ if(impAnImit) {
 }
 return impAnOut;','','',1560104660);
 CREATE TABLE IF NOT EXISTS 'flb_doc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
-INSERT INTO flb_doc VALUES('getVal','Getting value from archive','Запит значення архіву','Запрос знач. архива','Query the value for a specified time from the assigned archive and issuing the result with the specified number of decimal points.
+INSERT INTO flb_doc VALUES('getVal','Getting value from the value archive','Отримання значення з архіву значень','Получение значения из архива значений','Query the value for the specified time (time:uTime) from the assigned archiver archtor (FSArch.1m) and issuing results with the specified number of digits prec after the dot.
+
+The function works with the DAQ-parameter attribute objects to which the archive is attached and the address addr is written to it in full path, like "/DAQ/LogicLev/gen/prm_F3/a_var". For the empty archtor, the request will be made generally to everyone with the archive buffer periodicity!
+
+In the process of obtaining a value, the time of this value may be different from the requested one, if the archive is not currently present and returns the closest value, preventing why you may by setting strong. When you need to get the closest valid value in a controlled way, for counters to example, you have the "tryTo" time argument to which to look for the closest valid value. The time in tryTo may be both lesser and bigger than the request time.
+
+Initially, the result is presented as a string of real value with a certain number of digits prec after the dot, and with the value "Empty" for not valid values, allowing it to be inserted into the document without further processing. However, at requiring of additional processing and specific formatting, the result can be obtained with an unformatted real value, for prec less than 0.
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.1','Запит значення на визначений час з вказаного архіву та видача результату з вказаною кількістю знаків після точки.
+Version: 1.1.2
+License: GPLv2','Запит значення за визначений час (time:uTime) із пов''язаного архіватору archtor (FSArch.1m) та формування результату із визначеною кількістю знаків prec після коми.
+
+Функція працює із об''єктами атрибутів DAQ-параметрів до яких підключено архів, та адреса addr до нього записується повним шляхом на кшталт "/DAQ/LogicLev/gen/prm_F3/a_var". Для порожнього archtor запит буде здійснюватися загально до усіх із періодичністю буферу архіву.
+
+У процесі отримання значення, час цього значення може відрізнятися від запитаного, якщо архів на цей час відсутній та повертається найближче, запобігти чому можна встановивши strong. Коли-ж таки потрібно контрольовано отримати найближче достовірне значення, наприклад для лічильників, то передбачено аргумент часу tryTo до якого шукати найближче достовірне значення. Час у tryTo може бути як більше, так і менше за час запиту.
+
+Первинно, результат надається у вигляді рядка реального значення із визначеною кількістю знаків prec після коми, та із значенням "Порожньо" для недостовірних значень, що дозволяє вставляти його до документу без додаткової обробки. Однак, за потреби додаткової обробки та специфічного форматування, результат можна отримати неформатованим реальним значенням, для prec менше 0.
+
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.1.1','Запрос значения на указанное время из установленного архива и выдача результата с указанным количеством знаков после точки.
+Версія: 1.1.2
+Ліцензія: GPLv2','Запрос значения за определённое время (time:uTime) из связанного архиватора archtor (FSArch.1m) и формирование результата с определённым количеством знаков prec после запятой.
+
+Функция работает с объектами атрибутов DAQ-параметров к которым подключён архив, и адрес addr к нему записывается полным путём вроде "/DAQ/LogicLev/gen/prm_F3/a_var". Для пустого archtor запрос будет осуществляться в целом ко всем с периодичностью буфера архива.
+
+В процессе получения значения, время этого значения может отличаться от запрошенного, если архив на это время отсутствует и возвращается ближайшее, предотвратить что можно установив strong. Когда таки необходимо контролировано получить ближайшее достоверное значение, например для счётчиков, то предусмотрен аргумент времени tryTo до которого искать ближайшее достоверное значение. Время в tryTo может быть как больше, так и меньше времени запроса.
+
+Первично, результат предоставляется в виде строки вещественного значения с определённым количеством знаков prec после запятой, и с значением "Пусто" для недостоверных значений, что позволяет вставлять его в документ без дополнительной обработки. Однако, при необходимости дополнительной обработки и специфического форматирования, результат можно получить неформатированным вещественным значением, для prec менше 0.
+
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.1.1',1,10,0,'srcTime = time*1e6 + uTime;
+Версия: 1.1.2
+Лицензия: GPLv2',1,10,0,'srcTime = time*1e6 + uTime;
 aO = SYS.nodeAt(addr).arch();
 if(aO) {
 	if(!tryTo || tryTo == srcTime)	val = aO.getVal(srcTime, false, archtor);
@@ -9832,14 +9940,38 @@ if(aO) {
 if(prec < 0)	return val;
 if(val.isEVal())	return tr("Empty");
 if(typeof(val) == "real")	return val.toFixed(prec);
-return val;','','',1501145635);
-INSERT INTO flb_doc VALUES('sumVal','Sum values of archive','Сума значень архіву','Сумма знач. архива','Calculating the sum of values ​​for a specified period of time an archive and issuing results with the specified number of decimal points.
+return val;','','',1579609648);
+INSERT INTO flb_doc VALUES('sumVal','Sum values of the value archive','Підсумок значень архіву значень','Сумма значений архива значений','Calculate the summary value over a specified period of the time [bTime...eTime], for the archiver archtor (FSArch.1m) data and issuing results with the specified number of digits prec after the dot.
+
+The function works with the DAQ-parameter attribute objects to which the archive is attached and the address addr is written to it in full path, like "/DAQ/LogicLev/gen/prm_F3/a_var". For the empty archtor, the request will be made generally to everyone with the archive buffer periodicity!
+
+In the process of calculation, the data in the archive is checked for validity.
+
+Initially, the result is presented as a string of real value with a certain number of digits prec after the dot, and with the value "Empty" for not valid values, allowing it to be inserted into the document without further processing. However, at requiring of additional processing and specific formatting, the result can be obtained with an unformatted real value, for prec less than 0.
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.0','Обчислення суми значень за проміжок часу визначеного архіву та видача результату з вказаною кількістю знаків після точки.
+Version: 1.1.1
+License: GPLv2','Обчислення суми значень за вказаний період часу [bTime...eTime], для даних архіватору archtor (FSArch.1m) та формування результату із визначеною кількістю знаків prec після коми.
+
+Функція працює із об''єктами атрибутів DAQ-параметрів до яких підключено архів, та адреса addr до нього записується повним шляхом на кшталт "/DAQ/LogicLev/gen/prm_F3/a_var". Для порожнього archtor запит буде здійснюватися загально до усіх із періодичністю буферу архіву.
+
+У процесі підрахунку здійснюється перевірка даних у архіві на предмет достовірності.
+
+Первинно, результат надається у вигляді рядка реального значення із визначеною кількістю знаків prec після коми, та із значенням "Порожньо" для недостовірних значень, що дозволяє вставляти його до документу без додаткової обробки. Однак, за потреби додаткової обробки та специфічного форматування, результат можна отримати неформатованим реальним значенням, для prec менше 0.
+
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.1.0','Вычисление суммы значений за промежуток времени указанного архива и выдача результата с указанным количеством знаков после точки.
+Версія: 1.1.1
+Ліцензія: GPLv2','Вычисление суммы значений за указанный период времени [bTime...eTime], для данных архиватора archtor (FSArch.1m) и формирование результата с определённым количеством знаков prec после запятой.
+
+Функция работает с объектами атрибутов DAQ-параметров к которым подключён архив, и адрес addr к нему записывается полным путём вроде "/DAQ/LogicLev/gen/prm_F3/a_var". Для пустого archtor запрос будет осуществляться в целом ко всем с периодичностью буфера архива.
+
+В процессе расчёта осуществляется проверка данных в архиве на предмет достоверности.
+
+Первично, результат предоставляется в виде строки вещественного значения с определённым количеством знаков prec после запятой, и с значением "Пусто" для недостоверных значений, что позволяет вставлять его в документ без дополнительной обработки. Однако, при необходимости дополнительной обработки и специфического форматирования, результат можно получить неформатированным вещественным значением, для prec менше 0.
+
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.1.0',1,10,0,'val = 0;
+Версия: 1.1.1
+Лицензия: GPLv2',1,10,0,'val = 0;
 aO = SYS.nodeAt(addr).arch();
 if(aO) {
 	bTime = bTime*1e6; eTime = eTime*1e6;
@@ -9855,14 +9987,38 @@ if(aO) {
 if(prec < 0)	return val;
 if(val.isEVal())	return tr("Empty");
 if(typeof(val) == "real")	return val.toFixed(prec);
-return val;','','',1501231568);
-INSERT INTO flb_doc VALUES('averVal','Average value of archive','Середнє значення архіву','Среднее знач. архива','Calculate the average value over a specified period of time an archive and issuing results with the specified number of decimal points.
+return val;','','',1579609896);
+INSERT INTO flb_doc VALUES('averVal','Average value of the value archive','Середнє значення архіву значень','Среднее значение архива значений','Calculate the average value over a specified period of the time [bTime...eTime], for the archiver archtor (FSArch.1m) data and issuing results with the specified number of digits prec after the dot.
+
+The function works with the DAQ-parameter attribute objects to which the archive is attached and the address addr is written to it in full path, like "/DAQ/LogicLev/gen/prm_F3/a_var". For the empty archtor, the request will be made generally to everyone with the archive buffer periodicity!
+
+In the process of calculation, the data in the archive is checked for validity and the value of the percentage of reliable data actPerc that participated in the result is formed. In general, you should use intermediate archivers — medium quality archivers, so that there is not too much data in a given interval to reduce performance, and that it does not have one value at all.
+
+Initially, the result is presented as a string of real value with a certain number of digits prec after the dot, and with the value "Empty" for not valid values, allowing it to be inserted into the document without further processing. However, at requiring of additional processing and specific formatting, the result can be obtained with an unformatted real value, for prec less than 0.
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.0','Обчислення середнього значення за проміжок часу визначеного архіву та видача результату з вказаною кількістю знаків після точки.
+Version: 1.1.1
+License: GPLv2','Обчислення середнього значення за вказаний період часу [bTime...eTime], для даних архіватору archtor (FSArch.1m) та формування результату із визначеною кількістю знаків prec після коми.
+
+Функція працює із об''єктами атрибутів DAQ-параметрів до яких підключено архів, та адреса addr до нього записується повним шляхом на кшталт "/DAQ/LogicLev/gen/prm_F3/a_var". Для порожнього archtor запит буде здійснюватися загально до усіх із періодичністю буферу архіву.
+
+У процесі підрахунку здійснюється перевірка даних у архіві на предмет достовірності та формується значення відсотку достовірних даних actPerc, що прийняли участь у отримані результату. Загалом, варто використовувати проміжні архіватори — архіватори середньої якості, щоб даних у ньому, за визначений інтервал, не було забагато для зниження продуктивності, та щоб це не було взагалі одне значення.
+
+Первинно, результат надається у вигляді рядка реального значення із визначеною кількістю знаків prec після коми, та із значенням "Порожньо" для недостовірних значень, що дозволяє вставляти його до документу без додаткової обробки. Однак, за потреби додаткової обробки та специфічного форматування, результат можна отримати неформатованим реальним значенням, для prec менше 0.
+
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.1.0','Вычисление среднего значения за промежуток времени указанного архива и выдача результата с указанным количеством знаков после точки.
+Версія: 1.1.1
+Ліцензія: GPLv2','Вычисление среднего значения за указанный период времени [bTime...eTime], для данных архиватора archtor (FSArch.1m) и формирование результата с определённым количеством знаков prec после запятой.
+
+Функция работает с объектами атрибутов DAQ-параметров к которым подключён архив, и адрес addr к нему записывается полным путём вроде "/DAQ/LogicLev/gen/prm_F3/a_var". Для пустого archtor запрос будет осуществляться в целом ко всем с периодичностью буфера архива.
+
+В процессе расчёта осуществляется проверка данных в архиве на предмет достоверности и формируется значение процента достоверных данных actPerc, которые приняли участие в получении результата. В целом, стоит использовать промежуточные архиваторы — архиваторы среднего качества, чтобы данных в нём, за указанный интервал, не было очень много для понижения производительности, и чтобы это не было вообще одне значение.
+
+Первично, результат предоставляется в виде строки вещественного значения с определённым количеством знаков prec после запятой, и с значением "Пусто" для недостоверных значений, что позволяет вставлять его в документ без дополнительной обработки. Однако, при необходимости дополнительной обработки и специфического форматирования, результат можно получить неформатированным вещественным значением, для prec менше 0.
+
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.1.0',1,10,0,'val = EVAL;
+Версия: 1.1.1
+Лицензия: GPLv2',1,10,0,'val = EVAL;
 actPerc = 0;
 aO = SYS.nodeAt(addr).arch();
 if(aO) {
@@ -9886,7 +10042,418 @@ if(aO) {
 if(prec < 0)	return val;
 if(val.isEVal())	return tr("Empty");
 if(typeof(val) == "real")	return val.toFixed(prec);
-return val;','','',1501228052);
+return val;','','',1579609632);
+INSERT INTO flb_doc VALUES('diagram','Diagram','Діаграма','Диаграмма','Building trends diagram to SVG, which may be builtin next to the XHTML-document, for specified period of the time [(end-size)...end] and from the sources srcs.
+
+The diagram forming code is based on code of the primitive "Diagram" of the visualisers, and which was quite simply migrated from C++ to the JavaLikeCalc embedded language. Currently, only trends have been moved-implemented!
+
+The appearance of the diagram is determined by its dimensions hsz*vsz and the source SVG-template tmpl, a number attributes of the root tag of which has special meaning and corresponding to the primitive "Diagram":
+- Scale: Markers: font (sclMarkFont), by default "Arial 10".
+- Scale: horizontal (sclHor), by default "Markers (2)" and generally provided: "No draw (0)", "Grid (1)", "Markers (2)", "Grid and markers (3)".
+- Scale: vertical (sclVer), by default "Grid and markers (3)" and generally provided: "No draw (0)", "Grid (1)", "Markers (2)", "Grid and markers (3)", "Grid (log) (5)", "Markers (log) (6)", "Grid and markers (log) (7)".
+- Scale: color (sclColor), by default "gray".
+- Scale: Markers: color (sclMarkColor), by default "gray".
+
+Currently, only value archives can be used as a data source, either directly to them or through the DAQ-parameter attribute with the archive. The number of data sources is not directly limited and is written in separate lines of the argument srcs in the format "{addr}:{min}:{max}:{color}[:{scale}[:{width}]]", where:
+- addr — address to the value archive or attributes of the DAQ-parameter, for example: "/Archive/va_CPULoad_load", "/DAQ/LogicLev/gen/F3/var";
+- min, max — minimum and maximum of the scale, in the scale absence (min >= max), it will be calculated from the real data;
+- color — colour of the trend curve;
+- scale — separate definition of the trend scale, by default "Global (0)" and generally provided: "Global (0)", "Markers (2)", "Grid and markers (3)", "Markers (log) (6)", "Grid and markers (log) (7)".
+- width — width of the trend curve, by default 2.
+
+Author: Roman Savochenko <roman@oscada.org>
+Sponsored by: Magomed
+Version: 1.0.0
+License: GPLv2','Побудова діаграми трендів у SVG, яка може надалі вбудовуватися у XHTML-документу, для даних за вказаний період часу [(end-size)...end] та із джерел srcs.
+
+Код формування діаграми засновано на коді примітиву "Діаграма" візуалізаторів, та який було доволі просто перенесено із мови C++ на вбудовану мову JavaLikeCalc. Наразі перенесено-реалізовано лише тренди!
+
+Вигляд діаграми визначається її розмірами hsz*vsz та початковим SVG-шаблоном tmpl, низка атрибутів кореневого тегу якого мають особливе значення та які відповідають примітиву "Діаграма":
+- Шкала: Маркери: шрифт (sclMarkFont), по замовченню "Arial 10".
+- Шкала: горизонтальна (sclHor), по замовченню "Маркери (2)" та загалом передбачено: "Не зображувати (0)", "Ґратка (1)", "Маркери (2)", "Ґратка та маркери (3)".
+- Шкала: вертикальна (sclVer), по замовченню "Ґратка та маркери (3)" та загалом передбачено: "Не зображувати (0)", "Ґратка (1)", "Маркери (2)", "Ґратка та маркери (3)", "Ґратка (лог) (5)", "Маркери (лог) (6)", "Ґратка та маркери (лог) (7)".
+- Шкала: колір (sclColor), по замовченню "gray".
+- Шкала: Маркери: колір (sclMarkColor), по замовченню "gray".
+
+У якості джерела даних наразі можуть використовуватися лише архіви значень, прямою адресою до них або через атрибут DAQ-параметру з архівом. Кількість джерел даних прямо не обмежене та вони записуються окремими рядками аргументу srcs із форматом "{addr}:{min}:{max}:{color}[:{scale}[:{width}]]", де:
+- addr — адреса до архіву значень або атрибуту DAQ-параметру, наприклад: "/Archive/va_CPULoad_load", "/DAQ/LogicLev/gen/F3/var";
+- min, max — мінімум та максимум шкали, за відсутності шкали (min >= max) вона буде вираховуватися із реальних даних;
+- color — колір кривої тренду;
+- scale — окреме визначення шкали тренду, по замовченню "Глобально (0)" та загалом передбачено: "Глобально (0)", "Маркери (2)", "Ґратка та маркери (3)", "Маркери (лог) (6)", "Ґратка та маркери (лог) (7)".
+- width — ширина кривої тренду, по замовченню 2.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Спонсоровано: Магомед
+Версія: 1.0.0
+Ліцензія: GPLv2','Построение диаграммы трендов в SVG, которая может далее встраиваться в XHTML-документ, для данных за указанный период времени [(end-size)...end] и из источников srcs.
+
+Код формирования диаграммы основан на коде примитива "Диаграмма" визуализаторов, и который был довольно просто перенесен с языка C++ на встроенный язык JavaLikeCalc. Сейчас перенесено-реализовано только тренды!
+
+Вид диаграммы определяется её размерами hsz*vsz и исходным SVG-шаблоном tmpl, ряд атрибутов кореневого тега которого имеют особое значение и которые соответствуют примитиву "Диаграмма":
+- Шкала: Маркеры: шрифт (sclMarkFont), по умолчанию "Arial 10".
+- Шкала: горизонтальная (sclHor), по умолчанию "Маркеры (2)" и в целом предусмотрено: "Не рисовать (0)", "Решетка (1)", "Маркеры (2)", "Решетка и маркеры (3)".
+- Шкала: вертикальная (sclVer), по умолчанию "Решетка и маркеры (3)" и в целом предусмотрено: "Не рисовать (0)", "Решетка (1)", "Маркеры (2)", "Решетка и маркеры (3)", "Решетка (лог) (5)", "Маркеры (лог) (6)", "Решетка и маркеры (лог) (7)".
+- Шкала: цвет (sclColor), по умолчанию "gray".
+- Шкала: Маркеры: цвет (sclMarkColor), по умолчанию "gray".
+
+В качестве источника данных на данный момент могут использоваться только архивы значений, прямым адресом к ним или через атрибут DAQ-параметра с архивом. Количество источников данных прямо не ограничено и они записываются отдельными строками аргумента srcs с форматом "{addr}:{min}:{max}:{color}[:{scale}[:{width}]]", где:
+- addr — адрес к архиву значений или атрибуту DAQ-параметра, например: "/Archive/va_CPULoad_load", "/DAQ/LogicLev/gen/F3/var";
+- min, max — минимум и максимум шкалы, при отсутствии шкалы (min >= max) она будет вычисляться из реальных данных;
+- color — цвет кривой тренда;
+- scale — отдельное определение шкалы тренда, по умолчанию "Глобально (0)" и в целом предусмотрено: "Глобально (0)", "Маркеры (2)", "Решетка и маркеры (3)", "Маркеры (лог) (6)", "Решетка и маркеры (лог) (7)".
+- width — ширина кривой тренда, по умолчанию 2.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Спонсировано: Магомед
+Версия: 1.0.0
+Лицензия: GPLv2',1,10,0,'im = SYS.XMLNode();
+im.load(tmpl, false, 3);
+if(!(drawArea=im.getElementBy("drawArea")) || !(scVer=im.getElementBy("scVer")) || !(scHor=im.getElementBy("scHor")) ||
+		(styles=im.getElementsBy("style")[0]).isEVal())
+	return "";
+
+//Constant
+FD_GRD = 0x1;
+FD_MARKS = 0x2;
+FD_LOG = 0x4;
+
+if(!end)	end = SYS.time();
+begin = end - size;
+reqPer = size/vsz;
+
+//Getting the trends data
+trends = new Array();
+for(off = 0; (tEl=srcs.parseLine(0,off)).length; ) {
+	elO = new Object();
+	elO.addr = tEl.parse(0, ":");
+	if(!(elO.srcO=SYS.nodeAt(elO.addr)))	continue;
+	if(typeof(elO.srcO) == "TCntrNode:TVal")	elO.srcO = elO.srcO.arch();
+	if(typeof(elO.srcO) != "TCntrNode:TVArchive")	continue;
+	elO.min = tEl.parse(1, ":"); elO.max = tEl.parse(2, ":");
+	elO.color = tEl.parse(3, ":");
+	elO.scale = tEl.parse(4, ":").toInt();
+	elO.width = max(1, tEl.parse(5,":").toInt());
+	elO.beg = begin*1e6; elO.per = reqPer*1e6;
+	elO.val = elO.srcO.getVals(elO.beg, end*1e6, elO.per);
+	trends.push(elO);
+}
+
+im.setAttr("width", hsz).setAttr("height", vsz).setAttr("viewBox", "0 0 "+hsz+" "+vsz);
+
+//Getting the labels font
+if(!(tVl=im.attr("sclMarkFont")).length)	tVl = "Arial "+max(5,floor(hsz/50));
+off = 0;
+styles.setText("\ntext { font-family: "+tVl.parse(0," ",off)+"; font-size: "+(mrkFontSize=tVl.parse(0," ",off).toInt())+"px; "
+		"font-weight: "+(tVl.parse(0," ",off).toInt()?"bold":"normal")+"; font-style: "+(tVl.parse(0," ",off).toInt()?"italic":"normal")+"; }" + styles.text());
+sclHor = (tVl=im.attr("sclHor")).length ? tVl.toInt() : FD_MARKS;
+sclVer = (tVl=im.attr("sclVer")).length ? tVl.toInt() : FD_MARKS|FD_GRD;
+if(!(sclColor=im.attr("sclColor")).length)			sclColor = "gray";
+if(!(sclMarkColor=im.attr("sclMarkColor")).length)	sclMarkColor = "gray";
+
+mrkFontWRange = 0.7;
+mrkWidth = 5*mrkFontSize*mrkFontWRange;
+mrkHeight = mrkFontSize;
+
+tArMrg = 2;
+tArX	= tArMrg;
+tArW	= hsz - tArX - tArMrg;
+tArY	= tArMrg;
+tArH	= vsz - tArY - tArMrg;
+if(sclHor&FD_MARKS) {
+	if(tArH < 100) sclHor = sclHor & ~(FD_MARKS);
+	else tArH -= mrkHeight*2;
+}
+
+//Calculating the vertical scale
+vsPerc = true;			//Vertical scale percent mode
+isLog = sclVer&FD_LOG;		//Logarithmic scale
+vsMax = -3e300, vsMin = 3e300;	//Trend''s vertical scale border
+
+// Get main scale for non individual parameters
+prmInGrp = 0, prmGrpLast = -1;
+for(iP = 0, mainPerc = false; iP < trends.length; iP++) {
+	cP = trends[iP];
+	if(!cP.val.length || !cP.color.length) continue;
+	cP.adjU = -3e300, cP.adjL = 3e300;
+	if(cP.max > cP.min)	{ cP.adjL = cP.min; cP.adjU = cP.max; }
+	else for(iDt = 0; iDt < cP.val.length; iDt++)
+		if(!cP.val[iDt].isEVal()) { cP.adjL = min(cP.adjL, cP.val[iDt]); cP.adjU = max(cP.adjU, cP.val[iDt]); }
+
+	cP.wScale = cP.scale&(sclVer|FD_LOG);
+	if(cP.wScale&(FD_MARKS|FD_GRD))	continue;
+
+	//  Check for value border allow
+	if(!mainPerc && (vsMin > vsMax || max(abs((vsMax-cP.adjL)/(vsMax-vsMin)-1),abs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2))
+	{ vsMin = min(vsMin, cP.adjL); vsMax = max(vsMax, cP.adjU); }
+	else { vsMax = -3e300; vsMin = 3e300; mainPerc = true; }
+
+	prmInGrp++; prmGrpLast = iP;
+}
+
+// Checking for individual parameters and for the possibility to merge their to groups or create a new one for no group
+prmIndiv = 0, prmIndivSc = -1, prmsInd = new Array();
+for(iP = 0; iP < trends.length; iP++) {
+	cP = trends[iP];
+	cP.isIndiv = false;
+	if(!cP.val.length || !cP.color.length || !(cP.wScale&(FD_MARKS|FD_GRD))) continue;
+	// Checking for include to the present one or create a new group and exclude from individual ones
+	if((!prmInGrp || (vsMin < vsMax && max(abs((vsMax-cP.adjL)/(vsMax-vsMin)-1),abs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2)) &&
+			(cP.scale&FD_LOG) == (sclVer&FD_LOG))
+	{
+		vsMin = min(vsMin, cP.adjL); vsMax = max(vsMax, cP.adjU);
+		prmInGrp++; prmGrpLast = iP;
+		continue;
+	}
+	cP.isIndiv = true;
+	prmIndiv++;
+	if(prmIndivSc < 0 && (cP.scale&FD_GRD)) prmIndivSc = iP;
+	else prmsInd.push(iP);
+	if(cP.scale&FD_LOG) {
+		cP.adjU = lg(max(1e-100,cP.adjU)); cP.adjL = lg(max(1e-100,cP.adjL));
+		if((cP.adjU-cP.adjL) / abs(cP.adjL+(cP.adjU-cP.adjL)/2) < 0.0001) {
+			wnt_dp = 0.0001*abs(cP.adjL+(cP.adjU-cP.adjL)/2)-(cP.adjU-cP.adjL);
+			cP.adjL -= wnt_dp/2; cP.adjU += wnt_dp/2;
+		}
+	}
+}
+if(prmInGrp) prmsInd.push(-1);
+if(prmIndivSc >= 0) prmsInd.push(prmIndivSc);
+
+// Final main scale adapting
+if(vsMin > vsMax) { vsPerc = true; vsMax = 100; vsMin = isLog ? pow(10,min(0,2-(tArH/150))) : 0; }
+else vsPerc = false;
+if(isLog) {
+	vsMax = lg(max(1e-100,vsMax)); vsMin = lg(max(1e-100,vsMin));
+	if((vsMax-vsMin) / abs(vsMin+(vsMax-vsMin)/2) < 0.0001) {
+		wnt_dp = 0.0001*abs(vsMin+(vsMax-vsMin)/2)-(vsMax-vsMin);
+		vsMin -= wnt_dp/2; vsMax += wnt_dp/2;
+	}
+}
+
+//Draw main and individual vertical scales
+vmax_ln = tArH / ((sclVer&FD_MARKS)?(2*mrkHeight):15);
+for(iP = 0; vmax_ln >= 2 && iP < prmsInd.length; iP++) {	//prmsInd[i]=-1 - for main scale
+	vDiv = 1;
+	if(prmsInd[iP] < 0) {	//Main scale process
+		// Draw the environment
+		vsPercT = vsPerc;
+		isLogT = isLog;
+		sclVerT = sclVer;
+		clrGridT = sclColor;
+		clrMrk = sclMarkColor;
+		if(prmInGrp == 1 && prmGrpLast >= 0)	//Set color for single parameter in main group
+			clrGridT = clrMrk = trends[prmGrpLast].color;
+		// Rounding
+		v_len = vsMax - vsMin;
+		while(v_len > vmax_ln)						{ vDiv *= 10; v_len /= 10; }
+		while(v_len && v_len < vmax_ln/10)	{ vDiv /= 10; v_len *= 10; }
+		vsMin = floor(vsMin/vDiv)*vDiv; vsMax = ceil(vsMax/vDiv)*vDiv;
+		while(!isLogT && ((vsMax-vsMin)/vDiv) < vmax_ln/2) vDiv /= 2;
+		vsMinT = vsMin; vsMaxT = vsMax;
+	}
+	else {	//Individual scale process
+		cP = trends[prmsInd[iP]];
+		// Draw environment
+		vsPercT = false;
+		isLogT = cP.scale&FD_LOG;
+		sclVerT = cP.wScale;
+		clrGridT = clrMrk = cP.color;
+		// Rounding
+		v_len = cP.adjU - cP.adjL;
+		while(v_len > vmax_ln)						{ vDiv *= 10; v_len /= 10; }
+		while(v_len && v_len < vmax_ln/10)	{ vDiv /= 10; v_len *= 10; }
+		cP.adjL = floor(cP.adjL/vDiv)*vDiv; cP.adjU = ceil(cP.adjU/vDiv)*vDiv;
+		while(!isLogT && ((cP.adjU-cP.adjL)/vDiv) < vmax_ln/2) vDiv /= 2;
+		vsMinT = cP.adjL; vsMaxT = cP.adjU;
+	}
+	if(iP < (prmsInd.length-1))	sclVerT = sclVerT&(~FD_GRD);	//Hide grid for not last scale
+
+	// Draw vertical grid and markers
+	markWdth = 0;
+	if(sclVerT&(FD_MARKS|FD_GRD)) {
+		scVer.childAdd("rect").setAttr("fill",clrGridT).setAttr("x",tArX-1).setAttr("y",tArY).setAttr("width",1).setAttr("height",tArH);
+		for(iV = floor((vsMinT/vDiv)+0.5)*vDiv; (vsMaxT-iV)/vDiv > -0.1; iV += vDiv) {
+			//  Draw grid
+			v_pos = tArY + tArH - tArH*(iV-vsMinT)/(vsMaxT-vsMinT);
+			if(sclVerT&FD_GRD)	scVer.childAdd("rect").setAttr("fill",sclColor).setAttr("x",tArX).setAttr("y",floor(v_pos+0.5)).setAttr("width",tArW).setAttr("height",1);
+			else	scVer.childAdd("rect").setAttr("fill",clrGridT).setAttr("x",tArX-3).setAttr("y",floor(v_pos+0.5)).setAttr("width",6).setAttr("height",1);
+			//  Draw markers
+			if(sclVerT&FD_MARKS) {
+				isPerc = vsPercT && ((vsMaxT-iV-vDiv)/vDiv <= -0.1);
+				isMax = (v_pos-1-mrkHeight) < tArY;
+				labVal = (isLogT?pow(10,iV):iV).toPrecision(5) + (isPerc?" %":"");
+				scVer.childAdd("text").setAttr("text-anchor","left").setAttr("stroke","none")
+						.setAttr("fill", clrMrk)
+						.setAttr("x",tArX+2).setAttr("y",floor(v_pos-1+(isMax?mrkHeight:0)+0.5)).setText(labVal);
+				markWdth = max(markWdth, labVal.length*mrkFontSize*mrkFontWRange);
+			}
+		}
+	}
+	if(iP < (prmsInd.length-1)) { tArX += markWdth?(markWdth+5):0; tArW -= markWdth?(markWdth+5):0; }
+}
+
+//Calc and draw the horizontal scale
+hDiv = 1;			//Horisontal scale divisor
+hmax_ln = tArW / ((sclHor&FD_MARKS)?mrkWidth:15);
+if(hmax_ln >= 2) {
+	hvLev = 0;
+	hLen = end - begin;
+
+	if(hLen/2635200 >= 5)		{ hvLev = 7; hDiv = 2635200; }	//Month a unstrict interval !!!! to implement !!!!
+	else if(hLen/86400 >= 5)	{ hvLev = 6; hDiv =   86400; }	//More days and no time in the scale
+	else if(hLen/86400 >= 2)	{ hvLev = 5; hDiv =   86400; }	//Days
+	else if(hLen/3600 >= 2)	{ hvLev = 4; hDiv =    3600; }	//Hours
+	else if(hLen/60 >= 2)		{ hvLev = 3; hDiv =      60; }	//Minutes
+	else if(hLen/1 >= 2)		{ hvLev = 2; hDiv =       1; }	//Seconds
+	else if(hLen/0.001 >= 2)	{ hvLev = 1; hDiv =   0.001; }	//Milliseconds
+
+	hDiv_ = hDiv;
+	while(hLen/hDiv_ > hmax_ln)	hDiv_ *= 10;
+	while(hLen/hDiv_ < hmax_ln/5 && (1e6*hDiv_/5)%(1e6*hDiv) == 0) hDiv_ /= 5;
+	while(hLen/hDiv_ < hmax_ln/2 && (hvLev < 6 || (1e6*hDiv_/2)%(1e6*hDiv) == 0)) hDiv_ /= 2;
+	hDiv = hDiv_;
+
+	UTChourDt = SYS.strptimegm(SYS.strftime(end)) - end;
+
+	// Draw the horisontal grid and markers
+	if(sclHor&(FD_MARKS|FD_GRD)) {
+		tm_t = 0;
+		lab_tm = lab_dt = "";
+
+		//  Draw generic grid line
+		scHor.childAdd("rect").setAttr("fill",sclColor).setAttr("x",floor(tArX+0.5)).setAttr("y",floor(tArY+tArH+0.5)).setAttr("width",floor(tArW+0.5)).setAttr("height",1);
+
+		//  Draw full trend''s data and time to the trend end position
+		begMarkBrd = -5;
+		endMarkBrd = tArX + tArW;
+		if((sclHor&FD_MARKS) && mrkHeight) {
+			lab_dt = SYS.strftime(end, "%d-%m-%Y");
+			if((end%60) == 0 && (end-floor(end)) == 0)
+				lab_tm = SYS.strftime(end, "%H:%M");
+			else if((end-floor(end)) == 0)
+				lab_tm = SYS.strftime(end, "%H:%M:%S");
+			else lab_tm = SYS.strftime(end, "%H:%M:%S")+"."+(end-floor(end));
+
+			if(hvLev < 6) {
+				scHor.childAdd("text").setAttr("text-anchor","end").setAttr("stroke","none")
+					.setAttr("fill",sclMarkColor)
+					.setAttr("x",tArX+tArW).setAttr("y",tArY+tArH+mrkHeight).setText(lab_tm);
+				endMarkBrd = min(endMarkBrd, tArX + tArW - mrkFontSize*lab_tm.length*mrkFontWRange);
+			}
+			scHor.childAdd("text").setAttr("text-anchor","end").setAttr("stroke","none")
+				.setAttr("fill",sclMarkColor)
+				.setAttr("x",tArX+tArW).setAttr("y",tArY+tArH+2*mrkHeight).setText(lab_dt);
+			endMarkBrd = min(endMarkBrd, tArX + tArW - mrkFontSize*lab_dt.length*mrkFontWRange);
+		}
+
+		//  Draw grid and/or markers
+		first_m = true;
+		ttm1 = new Object();
+		for(i_h = begin; true; ) {
+			//   Draw grid
+			h_pos = tArX + tArW*(i_h-begin)/(end-begin);
+			if(sclHor&FD_GRD)
+				scHor.childAdd("rect").setAttr("fill",sclColor).setAttr("x",floor(h_pos+0.5)).setAttr("y",floor(tArY+0.5)).setAttr("width",1).setAttr("height",tArH);
+			else scHor.childAdd("rect").setAttr("fill",sclColor).setAttr("x",floor(h_pos+0.5)).setAttr("y",floor(tArY+tArH-3+0.5)).setAttr("width",1).setAttr("height",6);
+
+			//   Draw markers
+			if((sclHor&FD_MARKS) && !(1e6*(i_h+UTChourDt)%(1e6*hDiv)) && i_h != end) {
+				if(first_m)	SYS.localtime(begin-(end-begin), ttm1.sec, ttm1.min, ttm1.hour, ttm1.mday, ttm1.mon);
+				ttm = new Object();
+				SYS.localtime(i_h, ttm.sec, ttm.min, ttm.hour, ttm.mday, ttm.mon);
+
+				chLev = 0;
+				if((ttm.mon-ttm1.mon) || (ttm.year-ttm1.year)) chLev = 5;
+				else if(ttm.mday-ttm1.mday)	chLev = 4;
+				else if(ttm.hour-ttm1.hour)	chLev = 3;
+				else if(ttm.min-ttm1.min)		chLev = 2;
+				else if(ttm.sec-ttm1.sec)		chLev = 1;
+
+				//Checking for the data presence
+				lab_dt = lab_tm = "";
+				//Date
+				if(/*hvLev == 5 ||*/ chLev >= 4)
+					lab_dt = SYS.strftime(i_h, (chLev>=5)?"%d-%m-%Y":"%d");
+				//Hours and minuts
+				if((hvLev == 4 || hvLev == 3 || ttm.hour || ttm.min) && !ttm.sec)
+					lab_tm = SYS.strftime(i_h, "%H:%M");
+				//Seconds
+				else if((hvLev == 2 || ttm.sec) && !((i_h-floor(i_h))*1e6))
+					lab_tm = (chLev >= 2) ? SYS.strftime(i_h, "%H:%M:%S") : (i_h%60).toPrecision(6)+tr("s");
+				//Milliseconds
+				else if(hvLev <= 1 || (i_h-floor(i_h))*1e6)
+					lab_tm = (chLev >= 2) ? SYS.strftime(i_h, "%H:%M:%S")+(i_h-floor(i_h)).toPrecision(6).slice(1) :
+								(chLev >= 1) ? ((i_h%60)+(i_h-floor(i_h))).toPrecision(6)+tr("s") :
+													(1e3*i_h).toPrecision(6)+tr("ms");
+
+				//SYS.messInfo("DG", "lab_tm="+lab_tm+"; hvLev="+hvLev+"; chLev="+chLev+"; i_h="+i_h);
+
+				endPosTm = endPosDt = 0, markY = tArY + tArH + mrkHeight;
+				if(hvLev < 6) {
+					if(lab_tm.length) {
+						wdth = mrkFontSize*lab_tm.length*mrkFontWRange;
+						tpos = max(h_pos-wdth/2, 0);
+						if((tpos+wdth) < endMarkBrd && tpos > begMarkBrd) {
+							scHor.childAdd("text").setAttr("text-anchor","middle").setAttr("stroke","none")
+								.setAttr("fill",sclMarkColor)
+								.setAttr("x",floor(h_pos+0.5)).setAttr("y",floor(markY+0.5)).setText(lab_tm);
+							endPosTm = tpos+wdth;
+						}
+					}
+					markY += mrkHeight;
+				}
+				if(lab_dt.length) {
+					wdth = mrkFontSize*lab_dt.length*mrkFontWRange;
+					tpos = max(h_pos-wdth/2, 0);
+					if((tpos+wdth) < endMarkBrd && tpos > begMarkBrd) {
+						scHor.childAdd("text").setAttr("text-anchor","middle").setAttr("stroke","none")
+							.setAttr("fill",sclMarkColor)
+							.setAttr("x",floor(h_pos+0.5)).setAttr("y",floor(markY+0.5)).setText(lab_dt);
+						endPosDt = tpos+wdth;
+					}
+				}
+				begMarkBrd = max(begMarkBrd, max(endPosTm,endPosDt));
+				ttm1 = ttm;
+				first_m = false;
+			}
+
+			//   Next
+			if(i_h >= end) break;
+			i_h = floor((i_h+UTChourDt)/hDiv)*hDiv + hDiv - UTChourDt;
+			if(i_h > end)	i_h = end;
+		}
+	}
+}
+
+//Drawing the trends
+for(iTr = 0; iTr < trends.length; iTr++) {
+	cP = trends[iTr];
+
+	isLogT = cP.isIndiv ? (cP.wScale&FD_LOG) : isLog;
+	vsMaxT = cP.isIndiv ? cP.adjU : vsMax;
+	vsMinT = cP.isIndiv ? cP.adjL : vsMin;
+
+	trPath = 0; prev_vl = EVAL; prev_pos = 0;
+	for(iDt = 0; iDt < cP.val.length; iDt++) {
+		c_val = cP.val[iDt];
+		c_tm = 1e-6*(cP.beg + iDt*cP.per);
+		if(c_tm < begin)	continue;
+		c_pos = floor(tArX + tArW*(c_tm-begin)/(end-begin));
+		if(!c_val.isEVal()) {
+			c_vpos = floor(tArY + tArH - tArH*((isLogT?lg(max(1e-100,c_val)):c_val)-vsMinT)/(vsMaxT-vsMinT));
+			if(!trPath) trPath = drawArea.childAdd("path").setAttr("stroke", cP.color).setAttr("stroke-width",cP.width);
+			if(prev_vl.isEVal()) trPath.setAttr("d", trPath.attr("d")+"M"+c_pos+","+c_vpos);
+			else trPath.setAttr("d",trPath.attr("d")+"L"+c_pos+","+c_vpos);
+		}
+		else if(!prev_vl.isEVal()) {
+			c_vpos = floor(tArY + tArH - tArH*((isLogT?lg(max(1e-100,prev_vl)):prev_vl)-vsMinT)/(vsMaxT-vsMinT));
+			trPath.setAttr("d", trPath.attr("d")+"L"+prev_pos+".1,"+c_vpos+".1");
+		}
+		prev_vl = c_val; prev_pos = c_pos;
+	}
+}
+
+return im.save();','','',1579609892);
 CREATE TABLE IF NOT EXISTS 'tmplib_LowDevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 INSERT INTO tmplib_LowDevLib VALUES('1602A','GPIO|I2C: 1602A(HD44780)','LCD Module 1602A, STN, BLUB, 16 Character x 2 Line,  5 x 8 Dots, by the direct (Raspberry PI BCM2835 GPIO) or I2C (PCF8574) wiring.
 Conditions: Default planing policy but realtime one preferred.
@@ -13623,7 +14190,7 @@ if(!isAdmin || cnts.length || urlPrms["selUser"].isEVal() || !urlPrms["selUser"]
 //Save template
 rez = pgTree.save();
 //SYS.messDebug("TEST Dev","TEST 00: "+typeof(devLs[formEl["cat"]+"."+itId]));',1377261537);
-INSERT INTO flb_web VALUES('diagram','Diagram','','','',1,10,0,'im = SYS.XMLNode();
+INSERT INTO flb_web VALUES('diagram','Diagram (moved)','','','!!!!: Moved to the functions library "Report''s documents". Will be removed soon!',1,10,0,'im = SYS.XMLNode();
 im.load(tmpl, false, 3);
 if(!(drawArea=im.getElementBy("drawArea")) || !(scVer=im.getElementBy("scVer")) || !(scHor=im.getElementBy("scHor")) ||
 		(styles=im.getElementsBy("style")[0]).isEVal())
@@ -13970,5 +14537,5 @@ for(iTr = 0; iTr < trends.length; iTr++) {
 	}
 }
 
-return im.save();',1575314914);
+return im.save();',1579332448);
 COMMIT;

@@ -7,11 +7,11 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../../en/files/doc.css" rel="stylesheet" /></head>
-<body><div id="mw_header">
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../../en/files/Logo-big.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Модулі/Протокол користувача</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FUserProtocol&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/UserProtocol" title="Modules/UserProtocol">Modules/UserProtocol</a> and the translation is 92% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/UserProtocol" title="Modules/UserProtocol (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/UserProtocol/ru" title="Модули/Протокол пользователя (92% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FUserProtocol&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/UserProtocol" title="Modules/UserProtocol">Modules/UserProtocol</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/UserProtocol.html" title="Modules/UserProtocol (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/UserProtocol.html" title="Модули/Протокол пользователя (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -37,13 +37,13 @@
 <td> en,uk,ru,de </td>
 <td> x86,x86_64,ARM
 </td>
-<td> Protocol </td>
-<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2010) — the page initial translation</i></font> </td>
-<td> Provides for creating your own user protocols on internal OpenSCADA language.
+<td> Протокол </td>
+<td> Роман Савоченко </td>
+<td> Забезпечує створення власних протоколів користувача на внутрішній мові OpenSCADA.
 </td></tr></table>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
-<li class="toclevel-1 tocsection-1"><a href="#Input_part_of_the_protocol"><span class="tocnumber">1</span> <span class="toctext">Input part of the protocol</span></a></li>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.92.D1.85.D1.96.D0.B4.D0.BD.D0.B0_.D1.87.D0.B0.D1.81.D1.82.D0.B8.D0.BD.D0.B0_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.83"><span class="tocnumber">1</span> <span class="toctext">Вхідна частина протоколу</span></a></li>
 <li class="toclevel-1 tocsection-2"><a href="#.D0.92.D0.B8.D1.85.D1.96.D0.B4.D0.BD.D0.B0_.D1.87.D0.B0.D1.81.D1.82.D0.B8.D0.BD.D0.B0_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.83"><span class="tocnumber">2</span> <span class="toctext">Вихідна частина протоколу</span></a></li>
 </ul>
 </div>
@@ -61,8 +61,8 @@
 <li> Стан "Ввімкнено", у який переводити протокол при завантажені.</li>
 <li> <a href="../Program_manual.html#DAQTmpl" title="Special:MyLanguage/Documents/Program manual">DAQ шаблон</a>, пов'язаний з протоколом. Обрання шаблону тут вимикає режим роботи за прямими процедурами та доступ до наступних опцій. Режим DAQ-шаблону може працювати у вхідному, вихідному або обох режимах запиту, залежно від наявності необхідних атрибутів.</li>
 <li> Ознака повного перекладу тексту процедур та мови вхідної та вихідної процедур. Обрання мови для вхідної та/або вихідної процедури вмикає відповідну частину протоколу та відкриває доступ до відповідних вкладок конфігурації.</li></ul>
-<h2><span class="mw-headline" id="Input_part_of_the_protocol"><span class="mw-headline-number">1</span> Input part of the protocol</span></h2>
-<p>The input requests protocol is working in cooperation with the input transport and the separate object "User Protocol" is pointing in the configuration field of protocol of the transport, together with the UserProtocol module's name. Further, all transport requests will be directed to the direct procedure, or the template procedure, of the protocol request processing (Fig. 2).
+<h2><span class="mw-headline" id=".D0.92.D1.85.D1.96.D0.B4.D0.BD.D0.B0_.D1.87.D0.B0.D1.81.D1.82.D0.B8.D0.BD.D0.B0_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.83"><span class="mw-headline-number">1</span> Вхідна частина протоколу</span></h2>
+<p>Протокол вхідних запитів працює у кооперації з вхідним транспортом та окремий об'єкт "Користувацького протоколу" визначається у полі конфігурації протоколу транспорту, разом з іменем модуля UserProtocol. Надалі всі запити до транспорту будуть спрямовуватися до прямої процедури, або процедури шаблону, з обробки запиту протоколу (рис.2).
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:842px;"><a class="image" href="http://oscada.org/wiki/File:UserProtocol_up_in_uk.png"><img class="thumbimage" height="687" src="../files/UserProtocol_up_in_uk.png" width="840" /></a>  <div class="thumbcaption">Рис.2. Вкладка конфігурації та контролю вхідних запитів.</div></div></div></div>
 <p>Вкладка конфігурації та контролю вхідних запитів містить:
@@ -126,7 +126,7 @@ return 0;
 </p><p>Для прямої процедури обробки предвизначено, та обов'язкові або опціональні до створення у шаблоні, наступні атрибути обміну:
 </p>
 <ul><li> <i><b>Вихідний ВВ (io)</b></i> &lt;Об'єкт::XMLNode&gt; — XML вузол обміну з клієнтом, через який протокол приймає запити та до якого поміщається результат у форматі, який реалізується процедурою;</li>
-<li> <i><b>Транспорт (tr)</b></i> &lt;Об'єкт&gt; — об'єкт транспорту, призначено для виклику функції транспорту <i>string messIO( string mess, real timeOut = 1000 );</i> — <b>tr.messIO(req)</b>.</li></ul>
+<li> <i><b>Транспорт (tr)</b></i> &lt;Об'єкт&gt; — об'єкт транспорту, призначено для виклику функції транспорту <i>string messIO( string mess, real timeOut = 1000 );</i> — <b>tr.messIO(req)</b>, блокується на час виклику процедури.</li></ul>
 <p>Загальний сценарій формування вихідного запиту:
 </p>
 <ul><li> Формування XML-дерева відповідно до структури, яка реалізується протоколом, та вказання ідентифікатору користувацького протоколу у атрибуті "ProtIt".</li>
@@ -187,5 +187,5 @@ if(!req.attr("err").length) SYS.messDebug("TEST REQ","RES: "+req.text());
 
 
 
-</div></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/UserProtocol/uk">Modules/UserProtocol/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">січня 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2659</td></tr></table></body>
 </html>

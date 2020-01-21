@@ -1,3 +1,21 @@
+2020-01-21 Roman (stable)
+- !!!!:DB.LibsDB.OscadaLibs: JavaLikeCalc.doc: The libary revised during the documenting and appended
+	for the function "Diagram (diagram)" of the diagrams building to SVG.
+    !!:servProc.docOffLine: significantly expanded for detailing the error messages and placing
+	the unfinished pages to the argument "pagesCur" for continue the termination.
+	The final documents appended for the header and footer with the common OpenSCADA information
+	    and the language selector enabling.
+    JavaLikeCalc.techApp: some updated for the description.
+- DOC: The common CSS-styles file of the offline documentation "doc/en/files/doc.css" improved to disable
+    the transparen background color and some properties of the language selector.
+- DB.LibsDB.vcaBase: The VCA library "Main" and "mnEls" some updated for the description.
+    Elements of the VCA library "mnEls" completed in their translated description.
+- !!:FIX:SYS,DAQ.JavaLikeCalc,UI.VCAEngine: Fixed in the offline documentation declaration for "User_API".
+- !!:UI: The inline documentation declaration from description some nodes is unified in the function TUIS::docKeyGet().
+    !!: TUIS::docGet() appended by a code of checking the LTS build and using the LTS frozen documentation on the OpenSCADA file-server.
+- UI.{VCAEngine,Vision}: Appended for support the inline documentation declaration from description of the VCA-libraries.
+
+
 2020-01-14 Roman (stable)
 - !!!!:DB.LibsDB.vcaBase: The document of the "Mnemonic elements library of the user interface" is completed
     and appended to the offline.

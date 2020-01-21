@@ -52,50 +52,56 @@ INSERT INTO PrescrProgs VALUES('Abcdef','');
 INSERT INTO PrescrProgs VALUES('Библ1/Прог123','');
 INSERT INTO PrescrProgs VALUES('Тест12','<prg id="Тест12" wtm="31"><com arg1="10" arg2="0" arg3="0" arg4="0" arg5="0" id="Timer" /><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" id="Background timer"><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer"><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" id="Timer" /><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" id="Background timer" /><com id="New command"><com arg1="123" arg2="0" arg3="0" arg4="0" arg5="0" descr="123456" id="Timer" name="Test timer" /></com></com></com></prg>');
 CREATE TABLE IF NOT EXISTS 'VCALibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO VCALibs VALUES('Main','Main elements','The library is created to provide main elements of the user interface. The library is built on the basis primitives of the widgets and the internal programming language JavaLikeCalc.
+INSERT INTO VCALibs VALUES('Main','Main elements','The library is created to provide main elements of the user interface and it contains graphic elements, often need when forming the user interface of the automation of technological and common processes. The library is built on the basis primitives of the widgets and the internal programming language JavaLikeCalc.
 
-The library contains graphic elements, often need when forming the user interface of the automation of technological and common processes. Names and text options are available in three languages: English, Ukrainian and Russian.
+The element''s names and their parameters are available in languages: English, Ukrainian and Russian. Their source code wrote in the human-language independent mode with calls for the translations by the function tr() and the message''s translation also allowed for English, Ukrainian and Russian.
 
 Author: Roman Savochenko <roman@oscada.org>
 Founded: September 2007
-Version: 2.0.0
-License: GPLv2','wlb_Main','','Основні елементи','Бібліотека створюється для надання основних елементів користувацького інтерфейсу. Будується бібліотека на основі примітивів віджетів та мови внутрішнього програмування JavaLikeCalc.
+Version: 2.0.1
+License: GPLv2
+DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','wlb_Main','','Основні елементи','Бібліотека створюється для надання основних елементів користувацького інтерфейсу та містить графічні елементи, які часто затребувано при формуванні користувацького інтерфейсу автоматизації технологічних та загальних процесів. Будується бібліотека на основі примітивів віджетів та мови внутрішнього програмування JavaLikeCalc.
 
-Бібліотека містить графічні елементи, які часто затребувано при формуванні користувацького інтерфейсу автоматизації технологічних та загальних процесів. Назви елементів та їх текстові параметри доступно на трьох мовах: Англійська, Українська та Російська.
+Назви елементів та їх параметрів доступні на мовах: Англійська, Українська та Російська. Їх вихідний код написано у мово(людська)-незалежному режимі з викликом функції перекладу tr() та переклад цих повідомлень також доступний Англійською, Українською та Російською.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Засновано: Вересень 2007
-Версія: 2.0.0
-Ліцензія: GPLv2','Основные элементы','Библиотека создаётся для предоставления основных элементов пользовательского интерфейса. Строится библиотека на основе примитивов виджетов и языка внутреннего программирования JavaLikeCalc.
+Версія: 2.0.1
+Ліцензія: GPLv2
+DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','Основные элементы','Библиотека создаётся для предоставления основных элементов пользовательского интерфейса и содержит графические элементы, которые часто востребованы при формировании пользовательского интерфейса автоматизации технологических и общих процессом. Строится библиотека на основе примитивов виджетов и языка внутреннего программирования JavaLikeCalc.
 
-Библиотека содержит графические элементы, которые часто востребованы при формировании пользовательского интерфейса автоматизации технологических и общих процессом. Названия элементов и их текстовые параметры доступны на трёх языках: Английский, Украинский и Российский.
+Названия элементов и их параметров доступны на языках: Английский, Украинский и Российский. Их исходный код написан в языко(человеческий)-независимом режиме с вызовом функции перевода tr() и перевод этих сообщений также доступен Английским, Украинским и Российским.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Основано: Сентябрь 2007
-Версия: 2.0.0
-Лицензия: GPLv2');
-INSERT INTO VCALibs VALUES('mnEls','Mnemo elements','The library is created to provide mnemonic elements of the user interface. The library is built on the basis primitives of the widgets and the internal programming language JavaLikeCalc.
+Версия: 2.0.1
+Лицензия: GPLv2
+DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements');
+INSERT INTO VCALibs VALUES('mnEls','Mnemo elements','The library is created to provide mnemonic elements of the user interface and it contains graphic elements, often need when forming the user interface of the automation of technological processes. The library is built on the basis primitives of the widgets and the internal programming language JavaLikeCalc.
 
-The library contains graphic elements, often need when forming the user interface of the automation of technological processes. Names and text options are available in three languages: English, Ukrainian and Russian.
+The element''s names and their parameters are available in languages: English, Ukrainian and Russian. Their source code wrote in the human-language independent mode with calls for the translations by the function tr() and the message''s translation also allowed for English, Ukrainian and Russian.
 
 Author: Roman Savochenko <roman@oscada.org>, Maxim Lysenko (2008-2012), Ksenia Yashina (2007)
 Founded: September 2007
-Version: 1.0.0
-License: GPLv2','wlb_mnEls','','Елементи мнемосхеми','Бібліотека створюється для надання елементів мнемосхем користувацького інтерфейсу. Будується бібліотека на основі примітивів віджетів та мови внутрішнього програмування JavaLikeCalc.
+Version: 1.0.1
+License: GPLv2
+DOC: Libs_Mnemo_elements|Libs/Mnemo_elements','wlb_mnEls','','Елементи мнемосхеми','Бібліотека створюється для надання елементів мнемосхем користувацького інтерфейсу та містить графічні елементи, які часто затребувано при формуванні користувацького інтерфейсу автоматизації технологічних процесів. Будується бібліотека на основі примітивів віджетів та мови внутрішнього програмування JavaLikeCalc.
 
-Бібліотека містить графічні елементи, які часто затребувано при формуванні користувацького інтерфейсу автоматизації технологічних процесів. Назви елементів та їх текстові параметри доступно на трьох мовах: Англійська, Українська та Російська.
+Назви елементів та їх параметрів доступні на мовах: Англійська, Українська та Російська. Їх вихідний код написано у мово(людська)-незалежному режимі з викликом функції перекладу tr() та переклад цих повідомлень також доступний Англійською, Українською та Російською.
 
 Автор: Роман Савоченко <roman@oscada.org>, Максим Лисенко (2008-2012), Ксенія Яшина (2007)
 Засновано: Вересень 2007
-Версія: 1.0.0
-Ліцензія: GPLv2','Элементы мнемосхемы','Библиотека создаётся для предоставления элементов мнемосхем пользовательского интерфейса. Строится библиотека на основе примитивов виджетов и языка внутреннего программирования JavaLikeCalc.
+Версія: 1.0.1
+Ліцензія: GPLv2
+DOC: Libs_Mnemo_elements|Libs/Mnemo_elements','Элементы мнемосхемы','Библиотека создаётся для предоставления элементов мнемосхем пользовательского интерфейса и содержит элементы мнемосхем, которые часто востребованы при формировании пользовательского интерфейса автоматизации технологических процессом. Строится библиотека на основе примитивов виджетов и языка внутреннего программирования JavaLikeCalc.
 
-Библиотека содержит элементы мнемосхем, которые часто востребованы при формировании пользовательского интерфейса автоматизации технологических процессом. Названия элементов и их текстовые параметры доступны на трёх языках: Английский, Украинский и Российский.
+Названия элементов и их параметров доступны на языках: Английский, Украинский и Российский. Их исходный код написан в языко(человеческий)-независимом режиме с вызовом функции перевода tr() и перевод этих сообщений также доступен Английским, Украинским и Российским.
 
 Автор: Роман Савоченко <roman@oscada.org>, Максим Лысенко (2008-2012), Ксения Яшина (2007)
 Основано: Сентябрь 2007
-Версия: 1.0.0
-Лицензия: GPLv2');
+Версия: 1.0.1
+Лицензия: GPLv2
+DOC: Libs_Mnemo_elements|Libs/Mnemo_elements');
 INSERT INTO VCALibs VALUES('doc','Documents','Documents library.
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.1','wlb_doc','','Документи','Бібліотека документів.
@@ -13797,7 +13803,15 @@ INSERT INTO wlb_mnEls_io VALUES('El_Kran_Sh','dscr','The elements is used to dis
 
 Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
 Version: 1.0.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи використовуються для відображення статусу дискретних апаратів на основі дискретних сигналів, для використання в трубопроводах. Елементи загалом використовують та репрезентують структуру DAQ-шаблону дискретного блоку у різних візуальних варіантах.
+
+Автор: Максим Лисенко, Роман Савоченко <roman@oscada.org>
+Версія: 1.0.0
+Ліцензія: GPLv2','','Элементы используются для отображения статуса дискретных аппаратов на основе дискретных сигналов, для использования в трубопроводах. Элементы в целом используют и репрезентуют структуру DAQ-шаблона дискретного блока в различных визуальных вариантах.
+
+Автор: Максим Лисенко, Роман Савоченко <roman@oscada.org>
+Версия: 1.0.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Kran_Sh','contextMenu','Open:open
 Close:close',40,'','','','Відкрити:open
 Закрити:close','','Открыть:open
@@ -14228,227 +14242,587 @@ INSERT INTO wlb_mnEls_io VALUES('Compressor','dscr','The elements is used to dis
 
 Author: Roman Savochenko <roman@oscada.org>, Maxim Lysenko
 Version: 1.0.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи використовуються для відображення статусу дискретних апаратів на основі дискретних сигналів, для використання в трубопроводах. Елементи загалом використовують та репрезентують структуру DAQ-шаблону дискретного блоку у різних візуальних варіантах.
+
+Автор: Роман Савоченко <roman@oscada.org>, Максим Лисенко
+Версія: 1.0.0
+Ліцензія: GPLv2','','Элементы используются для отображения статуса дискретных аппаратов на основе дискретных сигналов, для использования в трубопроводах. Элементы в целом используют и репрезентуют структуру DAQ-шаблона дискретного блока в различных визуальных вариантах.
+
+Автор: Роман Савоченко <roman@oscada.org>, Максим Лысенко
+Версия: 1.0.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Alarm','dscr','The element is used to display the discrete status by color. Also this element generates notifications of violations on the locally defined condition, the attribute "ntf". The element commonly uses and represents the representative structure of the DAQ-template of the discrete block.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елемент слугує для відображення дискретного статусу кольором. Також цей елемент генерує повідомлення про порушення за локально визначеною умовою, атрибут "ntf". Елемент загалом використовує та представляє представницьку структуру DAQ-шаблону дискретного блоку.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.0.0
+Ліцензія: GPLv2','','Элемент служит для отображения дискретного статуса цветом. Также этот элемент генерирует уведомление про нарушения по локально определённому условию, атрибут "ntf". Элемент в целом использует и представляет представительскую структуру DAQ-шаблона дискретного блока.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.0.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Armatura','dscr','The elements are for use in, or around, pipelines.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для використання у складі, або довкола, трубопроводів.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.0.0
+Ліцензія: GPLv2','','Элементы служат для использования в составе, или около, трубопроводов.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.0.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Kran_polozh','dscr','The elements is used to display the analog apparatus'' status and intended for use in pipelines. The elements commonly use and represent the representative structure of the DAQ-template of the analog PID-regulators in different visual variants.
 
 Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
 Version: 1.0.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи використовуються для відображення статусу аналогових апаратів та призначені для використання в трубопроводах. Елементи загалом використовують та репрезентують структуру DAQ-шаблону аналогових ПІД-регуляторів у різних візуальних варіантах.
+
+Автор: Максим Лисенко, Роман Савоченко <roman@oscada.org>
+Версія: 1.0.0
+Ліцензія: GPLv2','','Элементы используются для отображения статуса аналогових аппаратов и предназначены для использования в трубопроводах. Элементы в целом используют и репрезентуют структуру DAQ-шаблона аналоговых ПИД-регуляторов в различных визуальных вариантах.
+
+Автор: Максим Лысенко, Роман Савоченко <roman@oscada.org>
+Версия: 1.0.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Krest','dscr','The elements serve to construct pipelines of any complexity, required width and color. By default, they are filled in yellow and the angle of rotation is 0°.
 
 Author: Maxim Lysenko
 Version: 1.0.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для побудови трубопроводів будь-якої складності, потрібної ширини та забарвлення. По замовченню їх залито жовтим кольором, а кут повороту складає 0°.
+
+Автор: Максим Лисенко
+Версія: 1.0.0
+Ліцензія: GPLv2','','Элементы служат для построения трубопроводов любой сложности, необходимой ширины и окраса. По умолчанию они заполнены желтым цветом, а угол поворота составляет 0°.
+
+Автор: Максим Лысенко
+Версия: 1.0.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Krest_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
 
 Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
 Version: 1.1.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для побудови об''ємних трубопроводів будь-якої складності, потрібної ширини та забарвлення. По замовченню, напівпрозорий об''ємний градієнт залито жовтим кольором.
+
+Автор: Максим Лисенко, Роман Савоченко <roman@oscada.org>
+Версія: 1.1.0
+Ліцензія: GPLv2','','Элементы служат для построения объёмных трубопроводов любой сложности, необходимой ширины и окраса. По умолчанию, полупрозрачный объёмный градиент заполнен желтым цветом.
+
+Автор: Максим Лысенко, Роман Савоченко <roman@oscada.org>
+Версия: 1.1.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Obr_Strela','dscr','The elements serve to construct pipelines of any complexity, required width and color. By default, they are filled in yellow and the angle of rotation is 0°.
 
 Author: Maxim Lysenko
 Version: 1.0.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для побудови трубопроводів будь-якої складності, потрібної ширини та забарвлення. По замовченню їх залито жовтим кольором, а кут повороту складає 0°.
+
+Автор: Максим Лисенко
+Версія: 1.0.0
+Ліцензія: GPLv2','','Элементы служат для построения трубопроводов любой сложности, необходимой ширины и окраса. По умолчанию они заполнены желтым цветом, а угол поворота составляет 0°.
+
+Автор: Максим Лысенко
+Версия: 1.0.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Obr_StrelaHR_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
 
 Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
 Version: 1.1.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для побудови об''ємних трубопроводів будь-якої складності, потрібної ширини та забарвлення. По замовченню, напівпрозорий об''ємний градієнт залито жовтим кольором.
+
+Автор: Максим Лисенко, Роман Савоченко <roman@oscada.org>
+Версія: 1.1.0
+Ліцензія: GPLv2','','Элементы служат для построения объёмных трубопроводов любой сложности, необходимой ширины и окраса. По умолчанию, полупрозрачный объёмный градиент заполнен желтым цветом.
+
+Автор: Максим Лысенко, Роман Савоченко <roman@oscada.org>
+Версия: 1.1.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Obr_StrelaVB_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
 
 Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
 Version: 1.1.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для побудови об''ємних трубопроводів будь-якої складності, потрібної ширини та забарвлення. По замовченню, напівпрозорий об''ємний градієнт залито жовтим кольором.
+
+Автор: Максим Лисенко, Роман Савоченко <roman@oscada.org>
+Версія: 1.1.0
+Ліцензія: GPLv2','','Элементы служат для построения объёмных трубопроводов любой сложности, необходимой ширины и окраса. По умолчанию, полупрозрачный объёмный градиент заполнен желтым цветом.
+
+Автор: Максим Лысенко, Роман Савоченко <roman@oscada.org>
+Версия: 1.1.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Obr_StrelaVT_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
 
 Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
 Version: 1.1.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для побудови об''ємних трубопроводів будь-якої складності, потрібної ширини та забарвлення. По замовченню, напівпрозорий об''ємний градієнт залито жовтим кольором.
+
+Автор: Максим Лисенко, Роман Савоченко <roman@oscada.org>
+Версія: 1.1.0
+Ліцензія: GPLv2','','Элементы служат для построения объёмных трубопроводов любой сложности, необходимой ширины и окраса. По умолчанию, полупрозрачный объёмный градиент заполнен желтым цветом.
+
+Автор: Максим Лысенко, Роман Савоченко <roman@oscada.org>
+Версия: 1.1.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Obr_Strela_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
 
 Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
 Version: 1.1.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для побудови об''ємних трубопроводів будь-якої складності, потрібної ширини та забарвлення. По замовченню, напівпрозорий об''ємний градієнт залито жовтим кольором.
+
+Автор: Максим Лисенко, Роман Савоченко <roman@oscada.org>
+Версія: 1.1.0
+Ліцензія: GPLv2','','Элементы служат для построения объёмных трубопроводов любой сложности, необходимой ширины и окраса. По умолчанию, полупрозрачный объёмный градиент заполнен желтым цветом.
+
+Автор: Максим Лысенко, Роман Савоченко <roman@oscada.org>
+Версия: 1.1.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Obriv','dscr','The elements are for use in, or around, pipelines.
 
 Author: Maxim Lysenko
 Version: 1.0.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для використання у складі, або довкола, трубопроводів.
+
+Автор: Максим Лисенко
+Версія: 1.0.0
+Ліцензія: GPLv2','','Элементы служат для использования в составе, или около, трубопроводов.
+
+Автор: Максим Лысенко
+Версия: 1.0.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Pipe_simple','dscr','The elements serve to construct pipelines of any complexity, required width and color. By default, they are filled in yellow and the angle of rotation is 0°.
 
 Author: Maxim Lysenko
 Version: 1.0.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для побудови трубопроводів будь-якої складності, потрібної ширини та забарвлення. По замовченню їх залито жовтим кольором, а кут повороту складає 0°.
+
+Автор: Максим Лисенко
+Версія: 1.0.0
+Ліцензія: GPLv2','','Элементы служат для построения трубопроводов любой сложности, необходимой ширины и окраса. По умолчанию они заполнены желтым цветом, а угол поворота составляет 0°.
+
+Автор: Максим Лысенко
+Версия: 1.0.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Pipe_simple_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
 
 Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
 Version: 1.1.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для побудови об''ємних трубопроводів будь-якої складності, потрібної ширини та забарвлення. По замовченню, напівпрозорий об''ємний градієнт залито жовтим кольором.
+
+Автор: Максим Лисенко, Роман Савоченко <roman@oscada.org>
+Версія: 1.1.0
+Ліцензія: GPLv2','','Элементы служат для построения объёмных трубопроводов любой сложности, необходимой ширины и окраса. По умолчанию, полупрозрачный объёмный градиент заполнен желтым цветом.
+
+Автор: Максим Лысенко, Роман Савоченко <roman@oscada.org>
+Версия: 1.1.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Pipe_simple_vert','dscr','The elements serve to construct pipelines of any complexity, required width and color. By default, they are filled in yellow and the angle of rotation is 0°.
 
 Author: Maxim Lysenko
 Version: 1.0.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для побудови трубопроводів будь-якої складності, потрібної ширини та забарвлення. По замовченню їх залито жовтим кольором, а кут повороту складає 0°.
+
+Автор: Максим Лисенко
+Версія: 1.0.0
+Ліцензія: GPLv2','','Элементы служат для построения трубопроводов любой сложности, необходимой ширины и окраса. По умолчанию они заполнены желтым цветом, а угол поворота составляет 0°.
+
+Автор: Максим Лысенко
+Версия: 1.0.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Pipe_simple_vert_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
 
 Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
 Version: 1.1.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для побудови об''ємних трубопроводів будь-якої складності, потрібної ширини та забарвлення. По замовченню, напівпрозорий об''ємний градієнт залито жовтим кольором.
+
+Автор: Максим Лисенко, Роман Савоченко <roman@oscada.org>
+Версія: 1.1.0
+Ліцензія: GPLv2','','Элементы служат для построения объёмных трубопроводов любой сложности, необходимой ширины и окраса. По умолчанию, полупрозрачный объёмный градиент заполнен желтым цветом.
+
+Автор: Максим Лысенко, Роман Савоченко <roman@oscada.org>
+Версия: 1.1.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Priamaja','dscr','The elements are for use in, or around, pipelines.
 
 Author: Maxim Lysenko
 Version: 1.0.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для використання у складі, або довкола, трубопроводів.
+
+Автор: Максим Лисенко
+Версія: 1.0.0
+Ліцензія: GPLv2','','Элементы служат для использования в составе, или около, трубопроводов.
+
+Автор: Максим Лысенко
+Версия: 1.0.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Strela','dscr','The elements serve to construct pipelines of any complexity, required width and color. By default, they are filled in yellow and the angle of rotation is 0°.
 
 Author: Maxim Lysenko
 Version: 1.0.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для побудови трубопроводів будь-якої складності, потрібної ширини та забарвлення. По замовченню їх залито жовтим кольором, а кут повороту складає 0°.
+
+Автор: Максим Лисенко
+Версія: 1.0.0
+Ліцензія: GPLv2','','Элементы служат для построения трубопроводов любой сложности, необходимой ширины и окраса. По умолчанию они заполнены желтым цветом, а угол поворота составляет 0°.
+
+Автор: Максим Лысенко
+Версия: 1.0.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_StrelaHL_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
 
 Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
 Version: 1.1.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для побудови об''ємних трубопроводів будь-якої складності, потрібної ширини та забарвлення. По замовченню, напівпрозорий об''ємний градієнт залито жовтим кольором.
+
+Автор: Максим Лисенко, Роман Савоченко <roman@oscada.org>
+Версія: 1.1.0
+Ліцензія: GPLv2','','Элементы служат для построения объёмных трубопроводов любой сложности, необходимой ширины и окраса. По умолчанию, полупрозрачный объёмный градиент заполнен желтым цветом.
+
+Автор: Максим Лысенко, Роман Савоченко <roman@oscada.org>
+Версия: 1.1.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_StrelaVB_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
 
 Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
 Version: 1.1.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для побудови об''ємних трубопроводів будь-якої складності, потрібної ширини та забарвлення. По замовченню, напівпрозорий об''ємний градієнт залито жовтим кольором.
+
+Автор: Максим Лисенко, Роман Савоченко <roman@oscada.org>
+Версія: 1.1.0
+Ліцензія: GPLv2','','Элементы служат для построения объёмных трубопроводов любой сложности, необходимой ширины и окраса. По умолчанию, полупрозрачный объёмный градиент заполнен желтым цветом.
+
+Автор: Максим Лысенко, Роман Савоченко <roman@oscada.org>
+Версия: 1.1.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_StrelaVT_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
 
 Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
 Version: 1.1.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для побудови об''ємних трубопроводів будь-якої складності, потрібної ширини та забарвлення. По замовченню, напівпрозорий об''ємний градієнт залито жовтим кольором.
+
+Автор: Максим Лисенко, Роман Савоченко <roman@oscada.org>
+Версія: 1.1.0
+Ліцензія: GPLv2','','Элементы служат для построения объёмных трубопроводов любой сложности, необходимой ширины и окраса. По умолчанию, полупрозрачный объёмный градиент заполнен желтым цветом.
+
+Автор: Максим Лысенко, Роман Савоченко <roman@oscada.org>
+Версия: 1.1.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Strela_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
 
 Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
 Version: 1.1.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для побудови об''ємних трубопроводів будь-якої складності, потрібної ширини та забарвлення. По замовченню, напівпрозорий об''ємний градієнт залито жовтим кольором.
+
+Автор: Максим Лисенко, Роман Савоченко <roman@oscada.org>
+Версія: 1.1.0
+Ліцензія: GPLv2','','Элементы служат для построения объёмных трубопроводов любой сложности, необходимой ширины и окраса. По умолчанию, полупрозрачный объёмный градиент заполнен желтым цветом.
+
+Автор: Максим Лысенко, Роман Савоченко <roman@oscada.org>
+Версия: 1.1.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Troinik','dscr','The elements serve to construct pipelines of any complexity, required width and color. By default, they are filled in yellow and the angle of rotation is 0°.
 
 Author: Maxim Lysenko
 Version: 1.0.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для побудови трубопроводів будь-якої складності, потрібної ширини та забарвлення. По замовченню їх залито жовтим кольором, а кут повороту складає 0°.
+
+Автор: Максим Лисенко
+Версія: 1.0.0
+Ліцензія: GPLv2','','Элементы служат для построения трубопроводов любой сложности, необходимой ширины и окраса. По умолчанию они заполнены желтым цветом, а угол поворота составляет 0°.
+
+Автор: Максим Лысенко
+Версия: 1.0.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_TroinikHB_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
 
 Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
 Version: 1.1.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для побудови об''ємних трубопроводів будь-якої складності, потрібної ширини та забарвлення. По замовченню, напівпрозорий об''ємний градієнт залито жовтим кольором.
+
+Автор: Максим Лисенко, Роман Савоченко <roman@oscada.org>
+Версія: 1.1.0
+Ліцензія: GPLv2','','Элементы служат для построения объёмных трубопроводов любой сложности, необходимой ширины и окраса. По умолчанию, полупрозрачный объёмный градиент заполнен желтым цветом.
+
+Автор: Максим Лысенко, Роман Савоченко <roman@oscada.org>
+Версия: 1.1.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_TroinikHT_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
 
 Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
 Version: 1.1.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для побудови об''ємних трубопроводів будь-якої складності, потрібної ширини та забарвлення. По замовченню, напівпрозорий об''ємний градієнт залито жовтим кольором.
+
+Автор: Максим Лисенко, Роман Савоченко <roman@oscada.org>
+Версія: 1.1.0
+Ліцензія: GPLv2','','Элементы служат для построения объёмных трубопроводов любой сложности, необходимой ширины и окраса. По умолчанию, полупрозрачный объёмный градиент заполнен желтым цветом.
+
+Автор: Максим Лысенко, Роман Савоченко <roman@oscada.org>
+Версия: 1.1.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_TroinikVL_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
 
 Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
 Version: 1.1.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для побудови об''ємних трубопроводів будь-якої складності, потрібної ширини та забарвлення. По замовченню, напівпрозорий об''ємний градієнт залито жовтим кольором.
+
+Автор: Максим Лисенко, Роман Савоченко <roman@oscada.org>
+Версія: 1.1.0
+Ліцензія: GPLv2','','Элементы служат для построения объёмных трубопроводов любой сложности, необходимой ширины и окраса. По умолчанию, полупрозрачный объёмный градиент заполнен желтым цветом.
+
+Автор: Максим Лысенко, Роман Савоченко <roman@oscada.org>
+Версия: 1.1.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Troinik_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
 
 Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
 Version: 1.1.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для побудови об''ємних трубопроводів будь-якої складності, потрібної ширини та забарвлення. По замовченню, напівпрозорий об''ємний градієнт залито жовтим кольором.
+
+Автор: Максим Лисенко, Роман Савоченко <roman@oscada.org>
+Версія: 1.1.0
+Ліцензія: GPLv2','','Элементы служат для построения объёмных трубопроводов любой сложности, необходимой ширины и окраса. По умолчанию, полупрозрачный объёмный градиент заполнен желтым цветом.
+
+Автор: Максим Лысенко, Роман Савоченко <roman@oscada.org>
+Версия: 1.1.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_angleBR_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
 
 Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
 Version: 1.1.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для побудови об''ємних трубопроводів будь-якої складності, потрібної ширини та забарвлення. По замовченню, напівпрозорий об''ємний градієнт залито жовтим кольором.
+
+Автор: Максим Лисенко, Роман Савоченко <roman@oscada.org>
+Версія: 1.1.0
+Ліцензія: GPLv2','','Элементы служат для построения объёмных трубопроводов любой сложности, необходимой ширины и окраса. По умолчанию, полупрозрачный объёмный градиент заполнен желтым цветом.
+
+Автор: Максим Лысенко, Роман Савоченко <roman@oscada.org>
+Версия: 1.1.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_angleTL_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
 
 Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
 Version: 1.1.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для побудови об''ємних трубопроводів будь-якої складності, потрібної ширини та забарвлення. По замовченню, напівпрозорий об''ємний градієнт залито жовтим кольором.
+
+Автор: Максим Лисенко, Роман Савоченко <roman@oscada.org>
+Версія: 1.1.0
+Ліцензія: GPLv2','','Элементы служат для построения объёмных трубопроводов любой сложности, необходимой ширины и окраса. По умолчанию, полупрозрачный объёмный градиент заполнен желтым цветом.
+
+Автор: Максим Лысенко, Роман Савоченко <roman@oscada.org>
+Версия: 1.1.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_angleTR_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
 
 Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
 Version: 1.1.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для побудови об''ємних трубопроводів будь-якої складності, потрібної ширини та забарвлення. По замовченню, напівпрозорий об''ємний градієнт залито жовтим кольором.
+
+Автор: Максим Лисенко, Роман Савоченко <roman@oscada.org>
+Версія: 1.1.0
+Ліцензія: GPLv2','','Элементы служат для построения объёмных трубопроводов любой сложности, необходимой ширины и окраса. По умолчанию, полупрозрачный объёмный градиент заполнен желтым цветом.
+
+Автор: Максим Лысенко, Роман Савоченко <roman@oscada.org>
+Версия: 1.1.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_d','dscr','The elements are for use in, or around, pipelines.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для використання у складі, або довкола, трубопроводів.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.0.0
+Ліцензія: GPLv2','','Элементы служат для использования в составе, или около, трубопроводов.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.0.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_pipe_1','dscr','The elements serve to construct pipelines of any complexity, required width and color. By default, they are filled in yellow and the angle of rotation is 0°.
 
 Author: Maxim Lysenko
 Version: 1.0.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для побудови трубопроводів будь-якої складності, потрібної ширини та забарвлення. По замовченню їх залито жовтим кольором, а кут повороту складає 0°.
+
+Автор: Максим Лисенко
+Версія: 1.0.0
+Ліцензія: GPLv2','','Элементы служат для построения трубопроводов любой сложности, необходимой ширины и окраса. По умолчанию они заполнены желтым цветом, а угол поворота составляет 0°.
+
+Автор: Максим Лысенко
+Версия: 1.0.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_pipe_1_gr','dscr','The elements serve to construct volumetric pipelines of any complexity, required width and color. By default, the transparent volumetric gradient is filled in yellow.
 
 Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
 Version: 1.1.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для побудови об''ємних трубопроводів будь-якої складності, потрібної ширини та забарвлення. По замовченню, напівпрозорий об''ємний градієнт залито жовтим кольором.
+
+Автор: Максим Лисенко, Роман Савоченко <roman@oscada.org>
+Версія: 1.1.0
+Ліцензія: GPLv2','','Элементы служат для построения объёмных трубопроводов любой сложности, необходимой ширины и окраса. По умолчанию, полупрозрачный объёмный градиент заполнен желтым цветом.
+
+Автор: Максим Лысенко, Роман Савоченко <roman@oscada.org>
+Версия: 1.1.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_round_square','dscr','The elements are for use in, or around, pipelines.
 
 Author: Maxim Lysenko
 Version: 1.0.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для використання у складі, або довкола, трубопроводів.
+
+Автор: Максим Лисенко
+Версія: 1.0.0
+Ліцензія: GPLv2','','Элементы служат для использования в составе, или около, трубопроводов.
+
+Автор: Максим Лысенко
+Версия: 1.0.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_round_square1','dscr','The elements are for use in, or around, pipelines.
 
 Author: Maxim Lysenko
 Version: 1.0.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для використання у складі, або довкола, трубопроводів.
+
+Автор: Максим Лисенко
+Версія: 1.0.0
+Ліцензія: GPLv2','','Элементы служат для использования в составе, или около, трубопроводов.
+
+Автор: Максим Лысенко
+Версия: 1.0.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('Kran_3_pos','dscr','The elements is used to display the analog apparatus'' status and intended for use in pipelines. The elements commonly use and represent the representative structure of the DAQ-template of the analog PID-regulators in different visual variants.
 
 Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
 Version: 1.0.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи використовуються для відображення статусу аналогових апаратів та призначені для використання в трубопроводах. Елементи загалом використовують та репрезентують структуру DAQ-шаблону аналогових ПІД-регуляторів у різних візуальних варіантах.
+
+Автор: Максим Лисенко, Роман Савоченко <roman@oscada.org>
+Версія: 1.0.0
+Ліцензія: GPLv2','','Элементы используются для отображения статуса аналогових аппаратов и предназначены для использования в трубопроводах. Элементы в целом используют и репрезентуют структуру DAQ-шаблона аналоговых ПИД-регуляторов в различных визуальных вариантах.
+
+Автор: Максим Лысенко, Роман Савоченко <roman@oscada.org>
+Версия: 1.0.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('Level','dscr','The element is used to display a value histogram of levels of liquid in the technological apparatus. The element commonly uses and represents the representative structure of the "Analog signal" DAQ-template.
 
 Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
 Version: 1.0.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елемент слугує для відображення гістограми значення рівня рідини у технологічних апаратах. Елемент загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал".
+
+Автор: Максим Лисенко, Роман Савоченко <roman@oscada.org>
+Версія: 1.0.0
+Ліцензія: GPLv2','','Элемент служит для отображения гистограммы значения уровня жидкости в технологических аппаратах. Элемент в целом использует и представляет представительскую структуру DAQ-шаблона "Аналоговый сигнал".
+
+Автор: Максим Лысенко, Роман Савоченко <roman@oscada.org>
+Версия: 1.0.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('Line_simple','dscr','The elements are for use in, or around, pipelines.
 
 Author: Maxim Lysenko
 Version: 1.0.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для використання у складі, або довкола, трубопроводів.
+
+Автор: Максим Лисенко
+Версія: 1.0.0
+Ліцензія: GPLv2','','Элементы служат для использования в составе, или около, трубопроводов.
+
+Автор: Максим Лысенко
+Версия: 1.0.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('Shkala','dscr','The elements are for use in, or around, pipelines.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для використання у складі, або довкола, трубопроводів.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.0.0
+Ліцензія: GPLv2','','Элементы служат для использования в составе, или около, трубопроводов.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.0.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('Teploobm','dscr','The elements are for use in, or around, pipelines.
 
 Author: Maxim Lysenko
 Version: 1.0.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для використання у складі, або довкола, трубопроводів.
+
+Автор: Максим Лисенко
+Версія: 1.0.0
+Ліцензія: GPLv2','','Элементы служат для использования в составе, или около, трубопроводов.
+
+Автор: Максим Лысенко
+Версия: 1.0.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('cooler','dscr','The elements are for use in, or around, pipelines.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для використання у складі, або довкола, трубопроводів.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.0.0
+Ліцензія: GPLv2','','Элементы служат для использования в составе, или около, трубопроводов.
+
+Автор: Максим Лысенко
+Версия: 1.0.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('cooler2','dscr','The elements are for use in, or around, pipelines.
 
 Author: Ksenia Yashina
 Version: 1.0.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для використання у складі, або довкола, трубопроводів.
+
+Автор: Ксенія Яшина
+Версія: 1.0.0
+Ліцензія: GPLv2','','Элементы служат для использования в составе, или около, трубопроводов.
+
+Автор: Ксения Яшина
+Версия: 1.0.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('rnd_sq_gr','dscr','The elements are for use in, or around, pipelines.
 
 Author: Maxim Lysenko
 Version: 1.0.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для використання у складі, або довкола, трубопроводів.
+
+Автор: Максим Лисенко
+Версія: 1.0.0
+Ліцензія: GPLv2','','Элементы служат для использования в составе, или около, трубопроводов.
+
+Автор: Максим Лысенко
+Версия: 1.0.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('rnd_sq_gr1','dscr','The elements are for use in, or around, pipelines.
 
 Author: Maxim Lysenko
 Version: 1.0.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для використання у складі, або довкола, трубопроводів.
+
+Автор: Максим Лисенко
+Версія: 1.0.0
+Ліцензія: GPLv2','','Элементы служат для использования в составе, или около, трубопроводов.
+
+Автор: Максим Лысенко
+Версия: 1.0.0
+Лицензия: GPLv2','','','');
 INSERT INTO wlb_mnEls_io VALUES('sep','dscr','The elements are for use in, or around, pipelines.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0
-License: GPLv2',32,'','','','','','','','','');
+License: GPLv2',32,'','','','Елементи слугують для використання у складі, або довкола, трубопроводів.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.0.0
+Ліцензія: GPLv2','','Элементы служат для использования в составе, или около, трубопроводов.
+
+Автор: Максим Лысенко
+Версия: 1.0.0
+Лицензия: GPLv2','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_mnEls_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_mnEls_mime VALUES('h_31','image/png;0.339844','iVBORw0KGgoAAAANSUhEUgAAAAEAAAAfCAYAAAAmyadiAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A
 /wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9kCFBAUG+SzySYAAAAZdEVYdENv

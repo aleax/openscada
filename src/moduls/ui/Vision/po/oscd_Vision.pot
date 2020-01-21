@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-18 18:38+0200\n"
+"POT-Creation-Date: 2020-01-21 20:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -191,6 +191,15 @@ msgid "The button for getting the using Qt information"
 msgstr ""
 
 msgid "Press for getting the using Qt information."
+msgstr ""
+
+msgid "Manual on ..."
+msgstr ""
+
+msgid "The button for getting the library manual"
+msgstr ""
+
+msgid "Press for getting the library manual."
 msgstr ""
 
 msgid "Manual on '%1'"

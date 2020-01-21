@@ -7,11 +7,11 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../en/files/doc.css" rel="stylesheet" /></head>
-<body><div id="mw_header">
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../en/files/Logo-big.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Бібліотеки/Основна</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FMain&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Main" title="Libs/Main">Libs/Main</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Libs/Main" title="Libs/Main (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FMain&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Main" title="Libs/Main">Libs/Main</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_Main.html" title="Libs/Main (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -37,6 +37,20 @@
 <td> Бібліотека основних шаблонів опрацювання DAQ джерел та похідних сервісів.
 <ul><li> <b>Засновано</b>: 2006</li></ul>
 </td></tr></table>
+<p>Бібліотеку створено для надання основних шаблонів опрацювання DAQ-джерел та похідних сервісів.
+</p><p>Назви шаблонів та їх параметрів доступні на мовах: Англійська, Українська та Російська. Їх вихідний код написано у мово(людська)-незалежному режимі з викликом функції перекладу <i>tr()</i> та переклад цих повідомлень також доступний Англійською, Українською та Російською.
+</p><p>Для підключення бібліотеки до проекту станції OpenSCADA Ви можете отримати файл БД як:
+</p>
+<ul><li> такий що постачається з готовим та відповідним пакетом дистрибутиву Linux на кшталт "openscada-libdb-main", "openscada-LibDB.Main";</li>
+<li> найбільш актуальний та безпосередньо отриманий з <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">репозиторію subversion</a>, перетворений у файл БД SQLite шляхом:</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 15px">
+$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql
+$ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
+</pre>
+<ul><li> завантаження <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">прикріпленого тут</a>.</li></ul>
+<p>Цей завантажений файл Ви надалі можете розмістити у теці проекту станції та створити об'єкт бази даних модуля БД "SQLite", зареєструвавши файл бази даних у конфігурації.
+</p><p>Для DAQ-шаблонів загалом Вам треба створити представницький об'єкт пристрою у <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">модулі Логічного Рівня</a> та обрати відповідний шаблон з бібліотеки шаблонів. Далі, для коректної конфігурації, дотримуйтесь специфіки шаблону у особистому описі.
+</p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#.D0.A8.D0.B0.D0.B1.D0.BB.D0.BE.D0.BD.D0.B8_.D1.81.D1.82.D0.B0.D0.BD.D0.B4.D0.B0.D1.80.D1.82.D0.BD.D0.B8.D1.85_.D1.81.D1.82.D1.80.D1.83.D0.BA.D1.82.D1.83.D1.80_DAQ-.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.96.D0.B2"><span class="tocnumber">1</span> <span class="toctext">Шаблони стандартних структур DAQ-параметрів</span></a>
@@ -66,20 +80,6 @@
 </ul>
 </div>
 
-<p>Бібліотеку створено для надання основних шаблонів опрацювання DAQ-джерел та похідних сервісів.
-</p><p>Назви шаблонів та їх параметрів доступні на мовах: Англійська, Українська та Російська. Їх вихідний код написано у мово(людська)-незалежному режимі з викликом функції перекладу <i>tr()</i> та переклад цих повідомлень також доступний Англійською, Українською та Російською.
-</p><p>Для підключення бібліотеки до проекту станції OpenSCADA Ви можете отримати файл БД як:
-</p>
-<ul><li> такий що постачається з готовим та відповідним пакетом дистрибутиву Linux на кшталт "openscada-libdb-main", "openscada-LibDB.Main";</li>
-<li> найбільш актуальний та безпосередньо отриманий з <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">репозиторію subversion</a>, перетворений у файл БД SQLite шляхом:</li></ul>
-<pre style="white-space: pre-wrap; margin-left: 15px">
-$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql
-$ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
-</pre>
-<ul><li> завантаження <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">прикріпленого тут</a>.</li></ul>
-<p>Цей завантажений файл Ви надалі можете розмістити у теці проекту станції та створити об'єкт бази даних модуля БД "SQLite", зареєструвавши файл бази даних у конфігурації.
-</p><p>Для DAQ-шаблонів загалом Вам треба створити представницький об'єкт пристрою у <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">модулі Логічного Рівня</a> та обрати відповідний шаблон з бібліотеки шаблонів. Далі, для коректної конфігурації, дотримуйтесь специфіки шаблону у особистому описі.
-</p>
 <h2><span class="mw-headline" id=".D0.A8.D0.B0.D0.B1.D0.BB.D0.BE.D0.BD.D0.B8_.D1.81.D1.82.D0.B0.D0.BD.D0.B4.D0.B0.D1.80.D1.82.D0.BD.D0.B8.D1.85_.D1.81.D1.82.D1.80.D1.83.D0.BA.D1.82.D1.83.D1.80_DAQ-.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.96.D0.B2"><span class="mw-headline-number">1</span> Шаблони стандартних структур DAQ-параметрів</span></h2>
 <table class="wikitable">
 
@@ -108,6 +108,16 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <li> "Логарифмічна шкала (<b>log</b>)" — ознака відображення тренду змінної на графіках у логарифмічній шкалі.</li>
 <li> "Одиниця виміру (<b>ed</b>)" — одиниця виміру змінної.</li>
 <li> "Точність (<b>prec</b>)" — кількість знаків після крапки, для позитивних значень, та точність (знаків загалом), для негативних, для відображення реальної кінцевої змінної на екрані.</li></ul>
+<p>Значні графічні образи представлення структури:
+</p>
+<ul><li> <a href="Libs_Main_graphical_elements.html" title="Special:MyLanguage/Libs/Main graphical elements">Бібліотека основних елементів інтерфейсу користувача</a>:
+<ul><li> <a href="Libs_Main_graphical_elements.html#anShow" title="Special:MyLanguage/Libs/Main graphical elements">Відображення аналогового</a></li>
+<li> <a href="Libs_Main_graphical_elements.html#anShow1" title="Special:MyLanguage/Libs/Main graphical elements">Відображення аналогового 1</a>, <a href="Libs_Main_graphical_elements.html#anShow1s" title="Special:MyLanguage/Libs/Main graphical elements">Відображення аналогового 1 (короткий)</a></li>
+<li> <a href="Libs_Main_graphical_elements.html#ElViewGraph" title="Special:MyLanguage/Libs/Main graphical elements">Елемент групи графіків</a></li>
+<li> <a href="Libs_Main_graphical_elements.html#ElCadr" title="Special:MyLanguage/Libs/Main graphical elements">Елемент кадр</a></li>
+<li> <a href="Libs_Main_graphical_elements.html#cntrPaspExt" title="Special:MyLanguage/Libs/Main graphical elements">Паспорт, розширений</a></li></ul></li>
+<li> <a href="Libs_Mnemo_elements.html" title="Special:MyLanguage/Libs/Mnemo elements">Бібліотека елементів мнемосхем інтерфейсу користувача</a>:
+<ul><li> <a href="Libs_Mnemo_elements.html#Level" title="Special:MyLanguage/Libs/Mnemo elements">Рівень</a></li></ul></li></ul>
 <p><b><u>Функції</u></b><br />
 </p>
 <ul><li> Загальне опрацювання аналогового входу щодо:</li></ul>
@@ -635,6 +645,10 @@ else if(!(tVl=gO.prm_alarms.PRG_Alarm_T_min.get()).isEVal() &amp;&amp; tVl)
 <li> "Логарифмічна шкала (<b>log</b>)" — ознака відображення тренду змінної на графіках у логарифмічній шкалі.</li>
 <li> "Одиниця виміру (<b>ed</b>)" — одиниця виміру змінної.</li>
 <li> "Точність (<b>prec</b>)" — кількість знаків після крапки, для позитивних значень, та точність (знаків загалом), для негативних, для відображення реальної кінцевої змінної на екрані.</li></ul>
+<p>Значні графічні образи представлення структури:
+</p>
+<ul><li> <a href="Libs_Main_graphical_elements.html" title="Special:MyLanguage/Libs/Main graphical elements">Бібліотека основних елементів інтерфейсу користувача</a>:
+<ul><li> <a href="Libs_Main_graphical_elements.html#ElCadr" title="Special:MyLanguage/Libs/Main graphical elements">Елемент кадр</a></li></ul></li></ul>
 <p><b><u>Функції</u></b><br />
 </p>
 <ul><li> Загальне опрацювання аналогового входу щодо:</li></ul>
@@ -988,6 +1002,17 @@ else if(!(tVl=gO.prm_alarms.PRG_Alarm_T_min.get()).isEVal() &amp;&amp; tVl)
 <li> "Команда "Відкрити" (<b>com</b>)" — команда засувки "Відкрити". Є первинним сигналом команди, який може використовуватися без наступного, коли <b>1 (true)</b> — "Відкрити", а <b>0 (false)</b> — "Закрити".</li>
 <li> "Команда "Закрити" (<b>close</b>)" — команда засувки "Закрити".</li>
 <li> "Команда "Зупинити" (<b>stop</b>)" — команда засувки "Зупинити".</li></ul>
+<p>Значні графічні образи представлення структури:
+</p>
+<ul><li> <a href="Libs_Main_graphical_elements.html" title="Special:MyLanguage/Libs/Main graphical elements">Бібліотека основних елементів інтерфейсу користувача</a>:
+<ul><li> <a href="Libs_Main_graphical_elements.html#TextLab" title="Special:MyLanguage/Libs/Main graphical elements">Текстова мітка</a></li>
+<li> <a href="Libs_Main_graphical_elements.html#ImgLab" title="Special:MyLanguage/Libs/Main graphical elements">Мітка зображенням</a></li>
+<li> <a href="Libs_Main_graphical_elements.html#ElViewGraph" title="Special:MyLanguage/Libs/Main graphical elements">Елемент групи графіків</a></li>
+<li> <a href="Libs_Main_graphical_elements.html#ElCadr" title="Special:MyLanguage/Libs/Main graphical elements">Елемент кадр</a></li>
+<li> <a href="Libs_Main_graphical_elements.html#cntrPaspExt" title="Special:MyLanguage/Libs/Main graphical elements">Паспорт, розширений</a></li></ul></li>
+<li> <a href="Libs_Mnemo_elements.html" title="Special:MyLanguage/Libs/Mnemo elements">Бібліотека елементів мнемосхем інтерфейсу користувача</a>:
+<ul><li> <a href="Libs_Mnemo_elements.html#El_Alarm" title="Special:MyLanguage/Libs/Mnemo elements">Сигналізація</a></li>
+<li> <a href="Libs_Mnemo_elements.html#discrApps" title="Special:MyLanguage/Libs/Mnemo elements">Дискретні апарати</a></li></ul></li></ul>
 <p><b><u>Функції</u></b><br />
 </p>
 <ul><li> Пряме отримання, за посиланням, двох станів (тільки читання) та трьох команд (читання та запис).</li>
@@ -1355,6 +1380,12 @@ in = gO.prm_generic.SET_CalcFan_UseSensor_T1.get() ||&nbsp;!(status == 0 || stat
 <li> "Помилка (<b>err</b>)" — обов'язковий атрибут будь якого параметру, що містить комбінацію коду помилки та короткого опису, на кшталт "1:Немає даних або підключення до джерела". Шаблон резервує наступні коди помилок:
 <ul><li> <b>1</b> — помилки обладнання, коли дані переважно помилкові.</li></ul></li>
 <li> "Придушення (<b>alSup</b>) та затримка (<b>alDelay</b>) порушень" — загальний контроль порушень щодо придушення та затримки.</li></ul>
+<p>Значні графічні образи представлення структури:
+</p>
+<ul><li> <a href="Libs_Main_graphical_elements.html" title="Special:MyLanguage/Libs/Main graphical elements">Бібліотека основних елементів інтерфейсу користувача</a>:
+<ul><li> <a href="Libs_Main_graphical_elements.html#TextLab" title="Special:MyLanguage/Libs/Main graphical elements">Текстова мітка</a></li>
+<li> <a href="Libs_Main_graphical_elements.html#ImgLab" title="Special:MyLanguage/Libs/Main graphical elements">Мітка зображенням</a></li>
+<li> <a href="Libs_Main_graphical_elements.html#ElCadr" title="Special:MyLanguage/Libs/Main graphical elements">Елемент кадр</a></li></ul></li></ul>
 <p><b><u>Функції</u></b><br />
 </p>
 <ul><li> Пряме отримання, за посиланням, коду стану та команди (тільки читання), а також встановлення тексту стану згідно до переліку станів <i>stats</i>.</li>
@@ -1618,6 +1649,14 @@ if(com_text.length &amp;&amp;&nbsp;!com_text.isEVal() &amp;&amp; (tVl=coms.match
 <li> "Логарифмічна шкала (<b>log</b>)" — ознака відображення тренду змінної на графіках у логарифмічній шкалі.</li>
 <li> "Одиниця виміру (<b>ed</b>)" — одиниця виміру змінної.</li>
 <li> "Точність (<b>prec</b>)" — кількість знаків після крапки, для позитивних значень, та точність (знаків загалом), для негативних, для відображення реальної кінцевої змінної на екрані.</li></ul>
+<p>Значні графічні образи представлення структури:
+</p>
+<ul><li> <a href="Libs_Main_graphical_elements.html" title="Special:MyLanguage/Libs/Main graphical elements">Бібліотека основних елементів інтерфейсу користувача</a>:
+<ul><li> <a href="Libs_Main_graphical_elements.html#cntrRegul" title="Special:MyLanguage/Libs/Main graphical elements">Панель налаштування регулятору</a></li>
+<li> <a href="Libs_Main_graphical_elements.html#ElCadr" title="Special:MyLanguage/Libs/Main graphical elements">Елемент кадр</a></li>
+<li> <a href="Libs_Main_graphical_elements.html#cntrPaspExt" title="Special:MyLanguage/Libs/Main graphical elements">Паспорт, розширений</a></li></ul></li>
+<li> <a href="Libs_Mnemo_elements.html" title="Special:MyLanguage/Libs/Mnemo elements">Бібліотека елементів мнемосхем інтерфейсу користувача</a>:
+<ul><li> <a href="Libs_Mnemo_elements.html#analogApps" title="Special:MyLanguage/Libs/Mnemo elements">Аналогові апарати</a></li></ul></li></ul>
 <p><b><u>Функції</u></b><br />
 </p>
 <ul><li> Загальне опрацювання аналогового входу щодо:</li></ul>
@@ -3119,5 +3158,5 @@ rez = req.attr("err").toInt()&nbsp;? req.attr("err")&nbsp;: "OK";
 
 
 
-</div></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main/uk">Libs/Main/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">січня 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2659</td></tr></table></body>
 </html>
