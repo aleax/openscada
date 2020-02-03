@@ -961,7 +961,7 @@ When starting the frame in the runtime mode, there are first constructed the but
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1162px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_grpGraphD.png"><img class="thumbimage" height="600" src="files/LibMainEls_grpGraphD.png" width="1160" /></a>  <div class="thumbcaption">Fig.3.1a. The "Graphics group" frame in the development mode.</div></div></div></div>
 <p><b><u>Using — development</u></b><br />
 The frame is designed to perform the role of page-template, and should therefore be placed directly in the project's tree. In the project-template "<a href="#RootPgSo">Signal groups</a>", for each signal object, this frame is included in the role of a template that allows you to create on its basis a set of pages of the graphics group. To each frame can be connected up to eight-ten parameters, setting the links. Trends, for which there are not set the links, will be hidden at runtime or allowed for user's selection at case of presence the list of the parameters to select in the attribute "Select: parameters accessible to select" (the list format described in <a href="#graphSelPrm">the parameters selection dialog</a>).
-</p><p>The default trend depth is set at 10 minutes by default — for current operational control, which can be changed directly by editing the corresponding field of the diagram widget, for example, for the project template page, to spread to all end pages.
+</p><p>The default trend depth in the past is set at 10 minutes — for current operational control, which can be changed directly by editing the corresponding field of the diagram widget, for example, for the project template page, to spread to all end pages.
 </p><p><b><u>Using — runtime</u></b><br />
 In the runtime mode, the trends, for which links have been set, are displayed. Control of the parameters from the graphics group element, described in detail in the section of the "<a href="#ElViewGraph">Graphics group element (ElViewGraph)</a>" widget. Additionally you can control the display properties of graphs, for what, together this page, there automatically opens <a href="#grph_panel">the graph control panel</a> or you have to click the left mouse button in the graph area.
 </p>
@@ -1295,7 +1295,7 @@ Calling the dialogue is made by the "Calculation" item of the <a href="#ElViewGr
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_grpCadrD.png"><img class="thumbimage" height="600" src="files/LibMainEls_grpCadrD.png" width="900" /></a>  <div class="thumbcaption">Fig.3.2a. The "Contours group" frame in the development mode.</div></div></div></div>
 <p><b><u>Using — development</u></b><br />
 The frame is designed to perform the role of page-template, and should therefore be placed directly in the project's tree. In the project-template "<a href="#RootPgSo">Signal groups</a>", for the first signal object, this frame is included in the role of a template that allows you to create on its basis a set of pages of the contours group. To each frame can be connected up to eight parameters, setting the links. Contours and trends, for which there are not set the links, will be hidden at runtime.
-</p><p>The default trend depth is set at 10 minutes by default — for current operational control, which can be changed directly by editing the corresponding field of the diagram widget, for example, for the project template page, to spread to all end pages.
+</p><p>The default trend depth in the past is set at 10 minutes — for current operational control, which can be changed directly by editing the corresponding field of the diagram widget, for example, for the project template page, to spread to all end pages.
 </p><p><b><u>Using — runtime</u></b><br />
 In the runtime mode, the contours and trends, for which links have been set, are displayed. Control of the parameters by contours, described in detail in the section of the "<a href="#ElCadr">Element cadre</a>" panel. In addition to this you can control the trends display properties, which requires the left mouse button to click in the trend's area and by means of appeared <a href="#grph_panel">trend's control panel</a> to make the necessary actions.
 </p>
@@ -1389,7 +1389,7 @@ In the runtime mode, the frames-widgets, for which links have been set, are disp
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
 </td></tr></table>
-<p>The element-widget, shown in Figure 3.3.1, serves as the basis for <a href="#ViewCadr">the group of overview frames</a> and is not usually used independently. The widget displays the text information about parameter in the form of the name and value, and a trend of the parameter for small period of time (2 minutes) to observe the current trend of the parameter with auto-scaling on the value scale.
+<p>The element-widget, shown in Figure 3.3.1, serves as the basis for <a href="#ViewCadr">the group of overview frames</a> and is not usually used independently. The widget displays the text information about parameter in the form of the name and value, and a trend of the parameter for small period of time (2 minutes) to observe the current trend of the parameter with auto-scaling on the value scale. The widget commonly uses and represents the representative structure of the DAQ-template "<a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">Analog signal</a>".
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_ElViewCadr.png"><img class="thumbimage" height="164" src="files/LibMainEls_ElViewCadr.png" width="400" /></a>  <div class="thumbcaption">Fig.3.3.1. The "Frame of the group of overview" widget in the development and runtime modes (left to right).</div></div></div></div>
 <p><b><u>Using — development</u></b><br />
@@ -1497,7 +1497,7 @@ In the runtime mode, the frames-widgets, for which links have been set, are disp
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
 </td></tr></table>
-<p>The element-widget, shown in Figure 3.4.1, serves as the basis for <a href="#ResultGraph">the result graphics</a> and is not usually used independently. The widget displays the name of the group and up to five trends, with their text labels, over a fixed period of time (10 minutes) to observe the current trend of the parameters.
+<p>The element-widget, shown in Figure 3.4.1, serves as the basis for <a href="#ResultGraph">the result graphics</a> and is not usually used independently. The widget displays the name of the group and up to five trends, with their text labels, over a fixed period of time (10 minutes) to observe the current trend of the parameters. The widget commonly uses and represents the representative structure of the DAQ-template "<a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">Analog signal</a>".
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:462px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_ResultGraphEl.png"><img class="thumbimage" height="142" src="files/LibMainEls_ResultGraphEl.png" width="460" /></a>  <div class="thumbcaption">Fig.3.4.1. The "Frame of the result graphics" widget in the development and runtime modes (left to right).</div></div></div></div>
 <p><b><u>Using — development</u></b><br />
@@ -1528,7 +1528,7 @@ In the runtime mode, the main element field displays the group header, headers a
 <td colspan="6"> <i>Parameter {n} from 1 to 5.</i>
 </td></tr>
 <tr>
-<td> p1_addr </td>
+<td> p{n}_addr </td>
 <td> Parameter{n}: address </td>
 <td> Address </td>
 <td> Input link </td>
@@ -1536,7 +1536,7 @@ In the runtime mode, the main element field displays the group header, headers a
 <td> Address to the parameter attribute for plotting the graph {n}.
 </td></tr>
 <tr>
-<td> p1_clr </td>
+<td> p{n}_clr </td>
 <td> Parameter{n}: color </td>
 <td> Color </td>
 <td> From style </td>
@@ -1544,7 +1544,7 @@ In the runtime mode, the main element field displays the group header, headers a
 <td>
 </td></tr>
 <tr>
-<td> p1_max </td>
+<td> p{n}_max </td>
 <td> Parameter{n}: maximum </td>
 <td> Real </td>
 <td> Input link </td>
@@ -1552,7 +1552,7 @@ In the runtime mode, the main element field displays the group header, headers a
 <td> Upper limit of the trend.
 </td></tr>
 <tr>
-<td> p1_min </td>
+<td> p{n}_min </td>
 <td> Parameter{n}: minimum </td>
 <td> Real </td>
 <td> Input link </td>
@@ -1560,7 +1560,7 @@ In the runtime mode, the main element field displays the group header, headers a
 <td> Lower limit of the trend.
 </td></tr>
 <tr>
-<td> p1_name </td>
+<td> p{n}_name </td>
 <td> Parameter{n}: name </td>
 <td> String </td>
 <td> Input link </td>
@@ -1586,7 +1586,7 @@ In the runtime mode, the main element field displays the group header, headers a
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_cntrRegulD.png"><img class="thumbimage" height="600" src="files/LibMainEls_cntrRegulD.png" width="900" /></a>  <div class="thumbcaption">Fig.3.5a. The "Regulator's control panel" frame in the development mode.</div></div></div></div>
 <p><b><u>Using — Development</u></b><br />
 This frame can be used as a panel, called from <a href="#ElCadr">the control of panel of the parameters</a>, as well as a template-page. The frame should be placed directly in the project's tree, namely to <a href="#RootPgSo">the panels container</a>, where the dynamic linking will be performed to the regulator parameter. To create a static list of contours of the regulators' configuration, with the possibility of listing in it, you must place them in the container "greg" of the regulators' contours of each <a href="#RootPgSo">signal object</a> and statically link them with the corresponding parameter, and to ensure equality of the panel's ID and the linked parameter.
-</p><p>The default trend depth is set at 20 minutes by default — for current operational control, which can be changed directly by editing the corresponding field of the diagram widget.
+</p><p>The default trend depth in the past is set at 20 minutes — for current operational control, which can be changed directly by editing the corresponding field of the diagram widget.
 </p><p><b><u>Using — runtime</u></b><br />
 In the runtime mode, you can see:
 </p>
@@ -2911,5 +2911,5 @@ Calling the dialogue is made from the frame-initiator, and closing is made by pr
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/en">Libs/Main_graphical_elements/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">січня 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2659</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/en">Libs/Main_graphical_elements/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2660</td></tr></table></body>
 </html>

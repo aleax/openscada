@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tprmtmpl.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -615,7 +615,7 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
     //Get page info
     if(opt->name() == "info" && ctrMkNode("area",opt,-1,pref.c_str(),_("Template configuration"))) {
 	vector<string> list;
-	ctrMkNode("fld",opt,-1,(pref+"/attr_only").c_str(),_("Only attributes are to be shown"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+	ctrMkNode("fld",opt,-1,(pref+"/attr_only").c_str(),_("Show attributes"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 	if(ctrMkNode("area",opt,-1,(pref+"/prm").c_str(),_("Parameters")))
 	    for(int iIO = 0; iIO < ioSize(); iIO++) {
 		if(!(func()->io(iIO)->flg()&(TPrmTempl::CfgLink|TPrmTempl::CfgConst)))

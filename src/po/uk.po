@@ -1,13 +1,13 @@
 # OpenSCADA core translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA package.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2003-2019.
+# Roman Savochenko <rom_as@oscada.org>, 2003-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-24 11:38+0200\n"
+"POT-Creation-Date: 2020-02-03 20:41+0200\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -1406,8 +1406,8 @@ msgstr "Помилковий ID параметру."
 msgid "Template configuration"
 msgstr "Конфігурація шаблону"
 
-msgid "Only attributes are to be shown"
-msgstr "Показувати тільки атрибути"
+msgid "Show attributes"
+msgstr "Показати атрибути"
 
 msgid "Error, recursive linking."
 msgstr "Помилка, рекурсивне підключення."
@@ -1469,14 +1469,14 @@ msgstr "Шаблони параметрів"
 msgid "Templates"
 msgstr "Шаблони"
 
-msgid "Protocols"
-msgstr "Протоколи"
+msgid "Transport Protocols"
+msgstr "Транспортні протоколи"
 
 msgid ""
-"=============== Subsystem \"Protocols\" options =================\n"
+"=============== Subsystem \"Transport protocols\" options =================\n"
 "\n"
 msgstr ""
-"=============== Опції підсистеми \"Протоколи\" ================\n"
+"=============== Опції підсистеми \"Транспортні протоколи\" ================\n"
 "\n"
 
 msgid "Security"
@@ -1947,12 +1947,10 @@ msgstr "Це не завдання OpenSCADA!"
 msgid "Task %u unexpected terminated by an exception."
 msgstr "Завдання %u несподівано перервано виключенням."
 
-#, c-format
-msgid "Redundant station '%s' up."
+msgid "Redundant station '%s' is up."
 msgstr "Резервна станція '%s' доступна."
 
-#, c-format
-msgid "Redundant station '%s' down."
+msgid "Redundant station '%s' is down."
 msgstr "Резервна станція '%s' недоступна."
 
 #, c-format
@@ -2270,8 +2268,8 @@ msgstr "Транспорти"
 msgid "Transport type"
 msgstr "Тип транспорту"
 
-msgid "Protocol"
-msgstr "Протокол"
+msgid "Transport protocol"
+msgstr "Транспортний протокол"
 
 msgid "User that opens"
 msgstr "Користувач що відкриває"
@@ -2378,8 +2376,9 @@ msgstr "Лог"
 msgid "Established: %s. "
 msgstr "Встановлено: %s. "
 
-msgid "Protocol '%s' is missing"
-msgstr "Протокол '%s' відсутній"
+#, c-format
+msgid "Transport protocol '%s' is missing"
+msgstr "Транспортний протокол '%s' відсутній"
 
 msgid "Output transport: "
 msgstr "Вихідний транспорт: "
@@ -2648,21 +2647,3 @@ msgstr "Встановлено назву проекту у:"
 
 msgid "already started."
 msgstr "вже запущено."
-
-#~ msgid "Transport protocol"
-#~ msgstr "Транспортний протокол"
-
-#~ msgid "No value."
-#~ msgstr "Значення відсутнє."
-
-#~ msgid "Error entity. Pos: %d"
-#~ msgstr "Помилка сутності. Поз: %d"
-
-#~ msgid "The node '%s' is already present."
-#~ msgstr "Вузол '%s' вже присутній."
-
-#~ msgid "Error opening 'iconv': %s"
-#~ msgstr "Помилка відкриття 'iconv': %s"
-
-#~ msgid "Error converting input sequence: %s"
-#~ msgstr "Помилка перетворення вхідної послідовності: %s"

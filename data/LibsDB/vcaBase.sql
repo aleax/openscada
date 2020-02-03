@@ -102,13 +102,37 @@ DOC: Libs_Mnemo_elements|Libs/Mnemo_elements','Элементы мнемосхе
 Версия: 1.0.1
 Лицензия: GPLv2
 DOC: Libs_Mnemo_elements|Libs/Mnemo_elements');
-INSERT INTO VCALibs VALUES('doc','Documents','Documents library.
+INSERT INTO VCALibs VALUES('doc','Documents','Contains elements-frames of the documents of the template and end types, what intended to be placed in the "Documents" part (the type of view) of the project tree of the pages, built on the concept of the signal objects of the root page "RootPgSo". However, they may be located as separate entities or as a part of your own concept of the page management, but it should be take in account that frames often refer and call the panel of documents!
+
+The library is created to provide report and document elements-frames of the user interface and it contains graphic elements, often need when forming the user interface of the automation of technological and common processes. The library is mostly built on the basis the primitive "Document" and the internal programming language JavaLikeCalc, for the related functions also.
+
+The element''s names and their parameters are available in languages: English, Ukrainian and Russian. Their source code wrote in human-language independent mode with calls for the translations by the function tr() and the message''s translation also allowed for English, Ukrainian and Russian.
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.1','wlb_doc','','Документи','Бібліотека документів.
+Founded: January 2008
+Version: 2.0.0
+License: GPLv2
+DOC: Libs_Documents|Libs/Documents','wlb_doc','','Документи','Містить елементи-кадри документів шаблонного та кінцевого типів, що призначені для розташування у розділі "Документи" (вид відображення) дерева сторінок проекту, побудованого за концепцією об''єктів сигналізації кореневої сторінки "RootPgSo". Однак, вони можуть бути розташовані як окремі сутності або у складі власної концепції керування сторінками, але тут треба враховувати, що кадри часто посилаються та викликають панель документів!
+
+Бібліотека створюється для надання елементів-кадрів звітів та документів користувацького інтерфейсу та містить графічні елементи, які часто затребувано при формуванні користувацького інтерфейсу автоматизації технологічних та загальних процесів. Будується бібліотека на основі примітивів віджетів та мови внутрішнього програмування JavaLikeCalc, також для пов''язаних функцій.
+
+Назви елементів та їх параметрів доступні на мовах: Англійська, Українська та Російська. Їх вихідний код написано у мово(людська)-незалежному режимі з викликом функції перекладу tr() та переклад цих повідомлень також доступний Англійською, Українською та Російською.
+
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.1.1','Документы','Библиотека документов.
+Засновано: Січень 2008
+Версія: 2.0.0
+Ліцензія: GPLv2
+DOC: Libs_Documents|Libs/Documents','Документы','Содержит элементы-кадры документов шаблонного и конечного типов, которые предназначены для размещения в разделе "Документы" (вид отображения) дерева страниц проекта, построенного по концепции объектов сигнализации корневой страницы "RootPgSo". Однако, они могут быть размещены как отдельные сущности или в составе собственной концепции управления страницами, но тут нужно учитывать, что кадры часто ссылаются и вызывают панель документов!
+
+Библиотека создаётся для предоставления элементов-кадров отчётов и документов пользовательского интерфейса и содержит графические элементы, которые часто востребованы при формировании пользовательского интерфейса автоматизации технологических и общих процессом. Строится библиотека на основе примитивов виджетов и языка внутреннего программирования JavaLikeCalc, также для связанных функций.
+
+Названия элементов и их параметров доступны на языках: Английский, Украинский и Российский. Их исходный код написан в языко(человеческий)-независимом режиме с вызовом функции перевода tr() и перевод этих сообщений также доступен Английским, Украинским и Российским.
+
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.1.1');
+Основано: Январь 2008
+Версия: 2.0.0
+Лицензия: GPLv2
+DOC: Libs_Documents|Libs/Documents');
 CREATE TABLE IF NOT EXISTS 'prj_archBrowser_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO prj_archBrowser_incl VALUES('/prj_archBrowser/pg_control/pg_graphSelPrm','color','/wlb_Main/wdg_graphSelPrm/wdg_color','value;');
 INSERT INTO prj_archBrowser_incl VALUES('/prj_archBrowser/pg_control/pg_graphSelPrm','dim','/wlb_Main/wdg_graphSelPrm/wdg_dim','value;');
@@ -11198,7 +11222,7 @@ INSERT INTO wlb_Main_uio VALUES('alarmsSt','digComs','Quittance: commands',13107
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','digStts','Quittance: statuses',131077,'QUITT-blue',0,'','','alarms','Підтвердження: стани','ПІДТВ-blue','','Подтверждение: состояния','ПОДТВ-blue','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','st_open','Quittance: state',131072,'0',8,'','','alarms','Підтвердження: стан','','','Подтверждение: состояние','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','report','Report',131205,'',8,'','','go_report','Звіт','','','Отчёт','','','','');
-INSERT INTO wlb_Main_uio VALUES('alarmsSt','messCat','Message category',131077,'al*:*',8,'','','','Категорія повідомлень','al*:*','','Категория сообщения','','','','');
+INSERT INTO wlb_Main_uio VALUES('alarmsSt','messCat','Message category',131077,'al*:*',8,'','','','Категорія повідомлень','al*:*','','Категория сообщений','','','','');
 INSERT INTO wlb_Main_uio VALUES('ImgLab','DESCR','Parameter: description',131077,'',10,'Parameter|DESCR','','','Параметр: опис','','Parameter|DESCR','Параметр: описание','','Parameter|DESCR','','');
 INSERT INTO wlb_Main_uio VALUES('ImgLab','NAME','Parameter: name',131077,'',10,'Parameter|NAME','','','Параметр: ім''я','','Parameter|NAME','Параметр: имя','','Parameter|NAME','','');
 INSERT INTO wlb_Main_uio VALUES('ImgLab','close','Parameter: close',131072,'0',14,'Parameter|close','','','Параметр: закрити','','Parameter|close','Параметр: закрыть','','Parameter|close','','');
@@ -11250,14 +11274,13 @@ INSERT INTO wlb_Main_uio VALUES('calendar','selTime','Selected time',131073,'0|'
 CREATE TABLE IF NOT EXISTS 'wlb_doc_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO wlb_doc_incl VALUES('docGasNodeDayA','doc','/wlb_doc/wdg_doc/wdg_doc','perm;geomZ;style;tmpl;doc;bTime;time;process;n;vCur;aCur;aSize;',2);
 INSERT INTO wlb_doc_incl VALUES('docGasNodeMonthA','doc','/wlb_doc/wdg_doc/wdg_doc','perm;geomZ;style;tmpl;doc;bTime;time;process;n;vCur;aCur;aSize;',2);
-INSERT INTO wlb_doc_incl VALUES('docUsersSet','doc','/wlb_doc/wdg_docDin/wdg_doc','perm;style;tmpl;',2);
-INSERT INTO wlb_doc_incl VALUES('doc','doc','/wlb_originals/wdg_Document','active;geomX;geomY;geomW;geomH;geomZ;tmpl;n;vCur;',2);
-INSERT INTO wlb_doc_incl VALUES('docGasNodeMgn','doc','/wlb_doc/wdg_docDin/wdg_doc','perm;style;tmpl;',2);
-INSERT INTO wlb_doc_incl VALUES('docGasNodeDayOrder','doc','/wlb_doc/wdg_doc/wdg_doc','perm;geomZ;style;tmpl;bTime;time;process;n;aCur;',2);
-INSERT INTO wlb_doc_incl VALUES('docDin','doc','/wlb_originals/wdg_Document','active;geomX;geomY;geomW;geomH;geomYsc;tmpl;doc;bTime;time;',2);
-INSERT INTO wlb_doc_incl VALUES('docRepSm2','doc','/wlb_doc/wdg_docDin/wdg_doc','perm;geomY;style;tmpl;font;',2);
-INSERT INTO wlb_doc_incl VALUES('docAlarmsRep','doc','/wlb_doc/wdg_docDin/wdg_doc','perm;style;tmpl;',0);
-INSERT INTO wlb_doc_incl VALUES('docMessRep','doc','/wlb_doc/wdg_docDin/wdg_doc','owner;perm;geomY;geomH;style;tmpl;font;','');
+INSERT INTO wlb_doc_incl VALUES('docUsersSet','doc','/wlb_doc/wdg_docDin/wdg_doc','perm;tmpl;',2);
+INSERT INTO wlb_doc_incl VALUES('doc','doc','/wlb_originals/wdg_Document','active;geomX;geomY;geomW;geomH;geomZ;style;tmpl;n;vCur;',2);
+INSERT INTO wlb_doc_incl VALUES('docRepInstVals','doc','/wlb_doc/wdg_docDin/wdg_doc','perm;tmpl;',2);
+INSERT INTO wlb_doc_incl VALUES('docDin','doc','/wlb_originals/wdg_Document','active;geomX;geomY;geomW;geomH;geomYsc;style;tmpl;doc;bTime;time;',2);
+INSERT INTO wlb_doc_incl VALUES('docRep2WorkSh','doc','/wlb_doc/wdg_docDin/wdg_doc','perm;geomX;geomY;geomW;geomH;tmpl;font;',2);
+INSERT INTO wlb_doc_incl VALUES('docAlarmsRep','doc','/wlb_doc/wdg_docDin/wdg_doc','perm;tmpl;',0);
+INSERT INTO wlb_doc_incl VALUES('docMessRep','doc','/wlb_doc/wdg_docDin/wdg_doc','owner;perm;geomY;geomH;tmpl;font;','');
 INSERT INTO wlb_doc_incl VALUES('docMessRep','fltr','/wlb_originals/wdg_FormEl','owner;name;active;geomX;geomY;geomW;geomH;geomZ;value;font;','');
 INSERT INTO wlb_doc_incl VALUES('docMessRep','fltrCol','/wlb_originals/wdg_FormEl','owner;name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
 INSERT INTO wlb_doc_incl VALUES('docMessRep','lab_fltr','/wlb_originals/wdg_Text','owner;name;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;bordWidth;font;alignment;text;','');
@@ -11466,12 +11489,15 @@ INSERT INTO wlb_doc_io VALUES('docGasNodeMonthA','bTime','0',40,'','','doc','','
 INSERT INTO wlb_doc_io VALUES('docGasNodeMonthA','time','0',40,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docGasNodeMonthA','n','10',34,'','wdg:../a_n','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docGasNodeMonthA','aCur','0',32,'','wdg:../a_aCur','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docUsersSet','name','Log of interruptions',32,'','','','Журнал дій','','Журнал вмешательств','','','');
+INSERT INTO wlb_doc_io VALUES('docUsersSet','name','Protocol of interruptions',32,'','','','Протокол втручань','','Протокол вмешательств','','','');
 INSERT INTO wlb_doc_io VALUES('docUsersSet','tmpl','<body docProcLang="JavaLikeCalc.JavaScript">
-<h1>Log of interruptions</h1>
+<h1>Protocol of interruptions <?dp return tr("Protocol of interruptions"); ?></h1>
 <TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data">
-  <TR><TH colspan="7" align="left">Interruptions at <?dp return "Interruptions at "+SYS.strftime(bTime)+" — "+SYS.strftime(time);?></TH></TR>
-  <TR><TH>Date</TH><TH>Time</TH><TH>User</TH><TH>Source</TH><TH>Description</TH><TH>Old value</TH><TH>New value</TH></TR>
+  <TR><TH colspan="7" align="left">User interruptions at <?dp return tr("User interruptions at %1").replace("%1",SYS.strftime(bTime)+" — "+SYS.strftime(time));?></TH></TR>
+  <TR>
+	<TH>Date</TH><TH>Time</TH><TH>User</TH><TH>Source</TH><TH>Description</TH><TH>Old value</TH><TH>New value</TH>
+     <?dp return "<TH>"+tr("Date")+"</TH><TH>"+tr("Time")+"</TH><TH>"+tr("User")+"</TH><TH>"+tr("Source")+"</TH><TH>"+tr("Description")+"</TH><TH>"+tr("Old value")+"</TH><TH>"+tr("New value")+"</TH>"; ?>
+  </TR>
   <TR docAMess="2:OP*" docRevers="1">
 	<?dp return "<TD>"+SYS.strftime(mTime,"%d %m")+"</TD>"+
 		"<TD>"+SYS.strftime(mTime,"%H:%M:%S")+"</TD>"+
@@ -11482,39 +11508,8 @@ INSERT INTO wlb_doc_io VALUES('docUsersSet','tmpl','<body docProcLang="JavaLikeC
 		"<TD>"+mVal.parse(3,":")+"</TD>";?>
   </TR>
 </TABLE>
-</body>',32,'','','doc','<body docProcLang="JavaLikeCalc.JavaScript">
-<h1>Журнал дій</h1>
-<TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data">
-  <TR><TH colspan="7" align="left">Дії за <?dp return "Дії за "+SYS.strftime(bTime)+" — "+SYS.strftime(time);?></TH></TR>
-  <TR><TH>Дата</TH><TH>Час</TH><TH>Користувач</TH><TH>Джерело</TH><TH>Опис</TH><TH>Старе знач.</TH><TH>Нове знач.</TH></TR>
-  <TR docAMess="2:OP*" docRevers="1">
-	<?dp return "<TD>"+SYS.strftime(mTime,"%d %m")+"</TD>"+
-		"<TD>"+SYS.strftime(mTime,"%H:%M:%S")+"</TD>"+
-		"<TD>"+Special.FLibSYS.strEnc2HTML(mCat.parse(1,":"))+"</TD>"+
-		"<TD>"+Special.FLibSYS.strEnc2HTML(mVal.parse(0,":"))+"</TD>"+
-		"<TD>"+Special.FLibSYS.strEnc2HTML(mVal.parse(1,":"))+"</TD>"+
-		"<TD>"+mVal.parse(2,":")+"</TD>"+
-		"<TD>"+mVal.parse(3,":")+"</TD>";?>
-  </TR>
-</TABLE>
-</body>','','<body docProcLang="JavaLikeCalc.JavaScript">
-<h1>Журнал вмешательств</h1>
-<TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data">
-  <TR><TH colspan="7" align="left">Вмешательство за <?dp return "Вмешательство за "+SYS.strftime(bTime)+" — "+SYS.strftime(time);?></TH></TR>
-  <TR><TH>Дата</TH><TH>Время</TH><TH>Пользователь</TH><TH>Источник</TH><TH>Описание</TH><TH>Старое знач.</TH><TH>Новое знач.</TH></TR>
-  <TR docAMess="2:OP*" docRevers="1">
-	<?dp return "<TD>"+SYS.strftime(mTime,"%d %m")+"</TD>"+
-		"<TD>"+SYS.strftime(mTime,"%H:%M:%S")+"</TD>"+
-		"<TD>"+Special.FLibSYS.strEnc2HTML(mCat.parse(1,":"))+"</TD>"+
-		"<TD>"+Special.FLibSYS.strEnc2HTML(mVal.parse(0,":"))+"</TD>"+
-		"<TD>"+Special.FLibSYS.strEnc2HTML(mVal.parse(1,":"))+"</TD>"+
-		"<TD>"+mVal.parse(2,":")+"</TD>"+
-		"<TD>"+mVal.parse(3,":")+"</TD>";?>
-  </TR>
-</TABLE>
-</body>','','','');
+</body>',32,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docGasNodeDayA','process','0',40,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeDayOrder','process','0',40,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docGasNodeMonthA','process','0',40,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docAlarmsRep','style','TABLE.data { border-collapse: collapse; }
 TABLE.data TH { background-color: #e6e6e6; border: 1px solid black; }
@@ -11522,10 +11517,12 @@ TABLE.data TD { white-space: normal; border: 1px solid black;}',32,'','','doc','
 INSERT INTO wlb_doc_io VALUES('docAlarmsRep','name','Protocol of violations',32,'','','','Протокол порушень','','Протокол нарушений','','','');
 INSERT INTO wlb_doc_io VALUES('docAlarmsRep','perm','438',32,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docAlarmsRep','tmpl','<body docProcLang="JavaLikeCalc.JavaScript">
-<h1>Protocol of violations</h1>
+<h1>Protocol of violations <?dp return tr("Protocol of violations"); ?></h1>
 <TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data">
-  <TR><TH colspan="5" align="left">Violations at <?dp return "Violations at "+SYS.strftime(bTime)+" — "+SYS.strftime(time);?></TH></TR>
-  <TR><TH>Date</TH><TH>Time</TH><TH>Source</TH><TH>Violation</TH><TH>Value</TH></TR>
+  <TR><TH colspan="5" align="left">Violations at <?dp return tr("Violations at %1").replace("%1",SYS.strftime(bTime)+" — "+SYS.strftime(time));?></TH></TR>
+  <TR><TH>Date</TH><TH>Time</TH><TH>Source</TH><TH>Violation</TH><TH>Value</TH>
+   <?dp return "<TH>"+tr("Date")+"</TH><TH>"+tr("Time")+"</TH><TH>"+tr("Source")+"</TH><TH>"+tr("Violation")+"</TH><TH>"+tr("Value")+"</TH>"; ?>
+  </TR>
   <TR docAMess="@@messCat@@" docRevers="1">
 	<?dp return "<TD><center style=''white-space: nowrap;''>"+SYS.strftime(mTime,"%d %m")+"</center></TD>"+
 		"<TD><center style=''white-space: nowrap;''>"+SYS.strftime(mTime,"%H:%M:%S")+"</center></TD>"+
@@ -11534,34 +11531,8 @@ INSERT INTO wlb_doc_io VALUES('docAlarmsRep','tmpl','<body docProcLang="JavaLike
 		"<TD>"+Special.FLibSYS.strEnc2HTML(mVal.parse(2,":"))+"</TD>";?>
   </TR>
 </TABLE>
-</body>',40,'','','doc','<body docProcLang="JavaLikeCalc.JavaScript">
-<h1>Протокол порушень</h1>
-<TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data">
-  <TR><TH colspan="5" align="left">Порушення за <?dp return "Порушення за "+SYS.strftime(bTime)+" — "+SYS.strftime(time);?></TH></TR>
-  <TR><TH>Дата</TH><TH>Час</TH><TH>Джерело</TH><TH>Порушення</TH><TH>Значення</TH></TR>
-  <TR docAMess="@@messCat@@" docRevers="1">
-	<?dp return "<TD><center style=''white-space: nowrap;''>"+SYS.strftime(mTime,"%d %m")+"</center></TD>"+
-		"<TD><center style=''white-space: nowrap;''>"+SYS.strftime(mTime,"%H:%M:%S")+"</center></TD>"+
-		"<TD><center>"+Special.FLibSYS.strEnc2HTML(mVal.parse(0,":"))+"</center></TD>"+
-		"<TD>"+Special.FLibSYS.strEnc2HTML(mVal.parse(1,":"))+"</TD>"+
-		"<TD>"+Special.FLibSYS.strEnc2HTML(mVal.parse(2,":"))+"</TD>";?>
-  </TR>
-</TABLE>
-</body>','','<body docProcLang="JavaLikeCalc.JavaScript">
-<h1>Протокол нарушений</h1>
-<TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data">
-  <TR><TH colspan="5" align="left">Нарушения за <?dp return "Нарушения за "+SYS.strftime(bTime)+" — "+SYS.strftime(time);?></TH></TR>
-  <TR><TH>Дата</TH><TH>Время</TH><TH>Источник</TH><TH>Нарушение</TH><TH>Значение</TH></TR>
-  <TR docAMess="@@messCat@@" docRevers="1">
-	<?dp return "<TD><center style=''white-space: nowrap;''>"+SYS.strftime(mTime,"%d %m")+"</center></TD>"+
-		"<TD><center style=''white-space: nowrap;''>"+SYS.strftime(mTime,"%H:%M:%S")+"</center></TD>"+
-		"<TD><center>"+Special.FLibSYS.strEnc2HTML(mVal.parse(0,":"))+"</center></TD>"+
-		"<TD>"+Special.FLibSYS.strEnc2HTML(mVal.parse(1,":"))+"</TD>"+
-		"<TD>"+Special.FLibSYS.strEnc2HTML(mVal.parse(2,":"))+"</TD>";?>
-  </TR>
-</TABLE>
-</body>','','','');
-INSERT INTO wlb_doc_io VALUES('doc','name','Document (archive)',32,'','','','Документ (архів)','','Документ (архив)','','','');
+</body>',40,'','','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('doc','name','Document - archival',32,'','','','Документ - архівний','','Документ - архивный','','','');
 INSERT INTO wlb_doc_io VALUES('doc','geomW','900',32,'','','','','','','','','');
 INSERT INTO wlb_doc_io VALUES('doc','geomH','600',32,'','','','','','','','','');
 INSERT INTO wlb_doc_io VALUES('doc','backColor','#5A5A5A',96,'backColorFrame','','','','','','','','');
@@ -11576,20 +11547,20 @@ INSERT INTO wlb_doc_io VALUES('doc','active','1',32,'','','doc','','','','','','
 INSERT INTO wlb_doc_io VALUES('doc','tmpl','<body docProcLang="JavaLikeCalc.JavaScript">
 <h1>Table of average over day values</h1>
 
-<TABLE border="1" cellpadding="2" cellspacing="0" width="100%">
+<TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data" export="1">
   <TR align="center" valign="center">
-    <TD>View</TD><TD>Compare</TD><TD>Reports print</TD><TD>Point configuration</TD><TD>Archivation</TD><TD>Options</TD><TD>?</TD>
+    <TH>View</TH><TH>Compare</TH><TH>Reports print</TH><TH>Point configuration</TH><TH>Archivation</TH><TH>Options</TH><TH>?</TH>
   </TR>
   <TR align="center" valign="center">
-    <TD colspan="2">&nbsp;</TD><TD colspan="2">Information over day</TD>
-    <TD colspan="3" rowspan="2">DD MM YYYY<?dp return Special.FLibSYS.tmFStr(time,"%d %m %Y");?></TD>
+    <TH colspan="2">&nbsp;</TH><TH colspan="2">Information over day</TH>
+    <TH colspan="3" rowspan="2">DD MM YYYY<?dp return Special.FLibSYS.tmFStr(time,"%d %m %Y");?></TH>
   </TR>
-  <TR align="center" valign="center"><TD colspan="2">&nbsp;</TD><TD colspan="2">Information over month</TD></TR>
-  <TR align="center" valign="center"><TD colspan="7">
+  <TR align="center" valign="center"><TH colspan="2">&nbsp;</TH><TH colspan="2">Information over month</TH></TR>
+  <TR align="center" valign="center"><TH colspan="7">
 Days data over XXXXX Calculator # Pipeline #.<?dp return "Day data over "+Special.FLibSYS.tmFStr(time,"%m %Y")+" Calculator # Pipeline #.";?>
-  </TD></TR>
-  <TR><TD>Date</TD><TD colspan="2">Capacity</TD><TD>Aver. pressure diff.</TD><TD>St. pressure</TD><TD>Aver. temp.</TD><TD>Density</TD></TR>
-  <TR><TD>&nbsp;</TD><TD colspan="2">1000x m3</TD><TD>kgF/m2</TD><TD>kgF/cm</TD><TD>grad.C</TD><TD>kg/m3</TD></TR>
+  </TH></TR>
+  <TR><TH>Date</TH><TH colspan="2">Capacity</TH><TH>Aver. pressure diff.</TH><TH>St. pressure</TH><TH>Aver. temp.</TH><TH>Density</TH></TR>
+  <TR><TH>&nbsp;</TH><TH colspan="2">1000x m3</TH><TH>kgF/m2</TH><TH>kgF/cm</TH><TH>grad.C</TH><TH>kg/m3</TH></TR>
   <TR docRept="86400">
     <TD>DD MM YYYY<?dp return Special.FLibSYS.tmFStr(rTime-rPer,"%d %m %Y");?></TD>
     <TD colspan="2">XXX.XXX<?dp return DAQ.JavaLikeCalc.lib_doc.averVal(pQ,rTime-rPer,rTime,2,"FSArch.1h");?></TD>
@@ -11603,455 +11574,130 @@ Days data over XXXXX Calculator # Pipeline #.<?dp return "Day data over "+Specia
     <TD colspan="4">&nbsp;</TD>
   </TR>
 </TABLE>
-</body>',32,'','','doc','<body docProcLang="JavaLikeCalc.JavaScript">
-<h1>Таблиця середньодобових значень</h1>
-
-<TABLE border="1" cellpadding="2" cellspacing="0" width="100%">
-  <TR align="center" valign="center">
-    <TD>Перегляд</TD><TD>Порівняння</TD><TD>Друк звітів</TD><TD>Налаштування вузла</TD><TD>Архівація</TD><TD>Налаштування</TD><TD>?</TD>
-  </TR>
-  <TR align="center" valign="center">
-    <TD colspan="2">&nbsp;</TD><TD colspan="2">Інформація за день</TD>
-    <TD colspan="3" rowspan="2">DD MM YYYY<?dp return Special.FLibSYS.tmFStr(time,"%d %m %Y");?></TD>
-  </TR>
-  <TR align="center" valign="center"><TD colspan="2">&nbsp;</TD><TD colspan="2">Інформація за місяць</TD></TR>
-  <TR align="center" valign="center"><TD colspan="7">
-Добові дані за XXXXX Обчислювач # Трубопровід #.
-<?dp return "Добові дані за "+Special.FLibSYS.tmFStr(time,"%d %m %Y")+" Обчислювач # Трубопровід #.";?>
-  </TD></TR>
-  <TR><TD>Дата</TD><TD colspan="2">Об''єм</TD><TD>Сер. переп.</TD><TD>Ст. тиск</TD><TD>Сер. темп.</TD><TD>Щільність</TD></TR>
-  <TR><TD>&nbsp;</TD><TD colspan="2">Тис. м3</TD><TD>кГс/м2</TD><TD>кГс/см</TD><TD>град.С</TD><TD>кг/м3</TD></TR>
-  <TR docRept="86400">
-    <TD>DD MM YYYY<?dp return Special.FLibSYS.tmFStr(rTime,"%d %m %Y");?></TD>
-    <TD colspan="2">XXX.XXX</TD>
-    <TD>XXX.X</TD>
-    <TD>X.XX</TD>
-    <TD>XX.XX</TD>
-    <TD>X.XXX</TD>
-  </TR>
-  <TR><TD>Разом</TD><TD colspan="2">XXXX.XXX (тис.м3)</TD><TD colspan="4">&nbsp;</TD></TR>
-</TABLE>
-</body>','','<body docProcLang="JavaLikeCalc.JavaScript">
-<h1>Таблица среднесуточных значений</h1>
-
-<TABLE border="1" cellpadding="2" cellspacing="0" width="100%">
-  <TR align="center" valign="center">
-    <TD>Просмотр</TD><TD>Сравнения</TD><TD>Печать отчётов</TD><TD>Конфигурация узла</TD><TD>Архивация</TD><TD>Настройки</TD><TD>?</TD>
-  </TR>
-  <TR align="center" valign="center">
-    <TD colspan="2">&nbsp;</TD><TD colspan="2">Информация за день</TD>
-    <TD colspan="3" rowspan="2">DD MM YYYY<?dp return Special.FLibSYS.tmFStr(time,"%d %m %Y");?></TD>
-  </TR>
-  <TR align="center" valign="center"><TD colspan="2">&nbsp;</TD><TD colspan="2">Информация за месяц</TD></TR>
-  <TR align="center" valign="center"><TD colspan="7">
-Суточные данные за XXXXX Вычислитель # Трубопровод #.
-<?dp return "Суточные данные за "+Special.FLibSYS.tmFStr(time,"%d %m %Y")+" Вычислитель # Трубопровод #.";?>
-  </TD></TR>
-  <TR><TD>Дата</TD><TD colspan="2">Объём</TD><TD>Ср. переп.</TD><TD>Ст. давл.</TD><TD>Ср. темп.</TD><TD>Плотность</TD></TR>
-  <TR><TD>&nbsp;</TD><TD colspan="2">Тыс. м3</TD><TD>кГс/м2</TD><TD>кГс/см</TD><TD>град.С</TD><TD>кг/м3</TD></TR>
-  <TR docRept="86400">
-    <TD>DD MM YYYY<?dp return Special.FLibSYS.tmFStr(rTime,"%d %m %Y");?></TD>
-    <TD colspan="2">XXX.XXX</TD>
-    <TD>XXX.X</TD>
-    <TD>X.XX</TD>
-    <TD>XX.XX</TD>
-    <TD>X.XXX</TD>
-  </TR>
-  <TR><TD>Всего</TD><TD colspan="2">XXXX.XXX (тыс.м3)</TD><TD colspan="4">&nbsp;</TD></TR>
-</TABLE>
-</body>','','','');
+</body>',32,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('doc','n','1',40,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('doc','vCur','0',8,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('doc','geomX','3',32,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeMgn','name','Gas contol instantaneous values table',32,'','','','Таблиця миттевих значень витратовимірювального вузла','','Таблица мгновенных значений расходомерного узла','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeMgn','tmpl','<body docProcLang="JavaLikeCalc.JavaScript">
-<h1>Table of accumulation instantaneous values of "<b><?dp return pTitle;?></b>"</h1>
+INSERT INTO wlb_doc_io VALUES('docRepInstVals','name','Instantaneous values report',32,'','','','Звіт миттєвих значень','','Отчёт мгновенных значений','','','');
+INSERT INTO wlb_doc_io VALUES('docRepInstVals','tmpl','<body docProcLang="JavaLikeCalc.JavaScript">
+<center>
+<h2>Table of the instantaneous values of</h2>
+<?dp return "<h2>"+tr("Table of the instantaneous values of \"%1\"").replace("%1",title)+"</h2><span>"+SYS.strftime(time)+"</span>";?>
+</center>
+
+<div>
+	<?dp
+		for(iP = 0, srcs = ""; iP < params.length; iP++) srcs += params[iP].var+":0:0:"+params[iP].color+"\n";
+		return DAQ.JavaLikeCalc.lib_doc.diagram(time, time-bTime, srcs, 800, 300);
+	?>
+</div>
+<br/>
+
 <TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data" export="1">
-  <TR align="left" valign="center"><TH colspan="7">Accumulated values for: DD MM YYYY<?dp return "Accumulated values for: "+Special.FLibSYS.tmFStr(time,"%d %m %Y");?></TH></TR>
-  <TR><TH>Date</TH><TH>Time</TH><TH>Flow</TH><TH>Capacity</TH><TH>Pressure</TH><TH>Temperatura</TH><TH>Pressure diff.</TH></TR>
-  <TR><TH colspan="2">&nbsp;</TH><TH>m3/h</TH><TH>m3</TH><TH>kgF/cm2</TH><TH>grad.C</TH><TH>kgF/cm2</TH></TR>
-  <TR docRept="1">
-	<?dp return "<TD>"+Special.FLibSYS.tmFStr(rTime,"%d %m %Y")+"</TD>"+
-		"<TD>"+Special.FLibSYS.tmFStr(rTime,"%H:%M:%S")+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(pF,rTime,0,2,"",true)+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(pQ,rTime,0,3,"",true)+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(pP,rTime,0,3,"",true)+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(pT,rTime,0,3,"",true)+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(pDP,rTime,0,3,"",true)+"</TD>";?>
+  <TR>
+	<TH>Date</TH><TH>Time</TH><TH>Flow</TH><TH>Capacity</TH><TH>Pressure</TH><TH>Temperatura</TH><TH>Pressure diff.</TH>
+	<?dp
+		rez = "<TH>"+tr("Date")+"</TH><TH>"+tr("Time")+"</TH>";
+		for(iP = 0; iP < params.length; iP++)
+			rez += "<TH style=''color: "+params[iP].color+";''>"+SYS.strEncode(params[iP].name, "HTML")+"</TH>";
+		return rez; ?>
+  </TR>
+  <TR>
+	<TH colspan="2">&nbsp;</TH><TH>m3/h</TH><TH>m3</TH><TH>kgF/cm2</TH><TH>grad.C</TH><TH>kgF/cm2</TH>
+	<?dp
+		rez = "<TH colspan=''2''>&nbsp;</TH>";
+		for(iP = 0; iP < params.length; iP++)
+			rez += "<TH>"+SYS.strEncode(params[iP].ed, "HTML")+"</TH>";
+		return rez; ?>
+  </TR>
+  <TR docRept="@@valPer@@" docRevers="1">
+	<?dp 
+		rez = "<TD>"+SYS.strftime(rTime,"%d %m %Y")+"</TD><TD>"+SYS.strftime(rTime,"%H:%M:%S")+"</TD>";
+		for(iP = 0; iP < params.length; iP++)
+			rez += "<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(params[iP].var, rTime, 0, params[iP].prec,"",true)+"</TD>";
+		return rez; ?>
   </TR>
 </TABLE>
-</body>',32,'','','doc','<body docProcLang="JavaLikeCalc.JavaScript">
-<h1>Таблиця накопичення миттевих значень "<b><?dp return pTitle;?></b>"</h1>
+</body>',40,'','','doc','<body docProcLang="JavaLikeCalc.JavaScript">
+<center>
+<h2>Table of the instantaneous values of</h2>
+<?dp return "<h2>"+tr("Table of the instantaneous values of \"%1\"").replace("%1",title)+"</h2><span>"+SYS.strftime(time)+"</span>";?>
+</center>
+
+<div>
+	<?dp
+		for(iP = 0, srcs = ""; iP < params.length; iP++) srcs += params[iP].var+":0:0:"+params[iP].color+"\n";
+		return DAQ.JavaLikeCalc.lib_doc.diagram(time, time-bTime, srcs, 800, 300);
+	?>
+</div>
+<br/>
+
 <TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data" export="1">
-  <TR align="left" valign="center"><TH colspan="7">Накопичені значення за обч. # тр-пров # за: DD MM YYYY<?dp return "Накопичені значення за обч. # тр-пров # за: "+Special.FLibSYS.tmFStr(time,"%d %m %Y");?></TH></TR>
-  <TR><TH>Дата</TH><TH>Час</TH><TH>Витрати</TH><TH>Об''єм</TH><TH>Тиск</TH><TH>Температура</TH><TH>Перепад</TH></TR>
-  <TR><TH colspan="2">&nbsp;</TH><TH>м3/ч</TH><TH>м3</TH><TH>кГс/см2</TH><TH>град.С</TH><TH>кГс/см2</TH></TR>
-  <TR docRept="1">
-	<?dp return "<TD>"+Special.FLibSYS.tmFStr(rTime,"%d %m %Y")+"</TD>"+
-		"<TD>"+Special.FLibSYS.tmFStr(rTime,"%H:%M:%S")+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(pF,rTime,0,2,"",true)+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(pQ,rTime,0,3,"",true)+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(pP,rTime,0,3,"",true)+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(pT,rTime,0,3,"",true)+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(pDP,rTime,0,3,"",true)+"</TD>";?>
+  <TR>
+	<TH>Date</TH><TH>Time</TH><TH>Flow</TH><TH>Capacity</TH><TH>Pressure</TH><TH>Temperatura</TH><TH>Pressure diff.</TH>
+	<?dp
+		rez = "<TH>"+tr("Date")+"</TH><TH>"+tr("Time")+"</TH>";
+		for(iP = 0; iP < params.length; iP++)
+			rez += "<TH style=''color: "+params[iP].color+";''>"+SYS.strEncode(params[iP].name, "HTML")+"</TH>";
+		return rez; ?>
+  </TR>
+  <TR>
+	<TH colspan="2">&nbsp;</TH><TH>m3/h</TH><TH>m3</TH><TH>kgF/cm2</TH><TH>grad.C</TH><TH>kgF/cm2</TH>
+	<?dp
+		rez = "<TH colspan=''2''>&nbsp;</TH>";
+		for(iP = 0; iP < params.length; iP++)
+			rez += "<TH>"+SYS.strEncode(params[iP].ed, "HTML")+"</TH>";
+		return rez; ?>
+  </TR>
+  <TR docRept="@@valPer@@" docRevers="1">
+	<?dp 
+		rez = "<TD>"+SYS.strftime(rTime,"%d %m %Y")+"</TD><TD>"+SYS.strftime(rTime,"%H:%M:%S")+"</TD>";
+		for(iP = 0; iP < params.length; iP++)
+			rez += "<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(params[iP].var, rTime, 0, params[iP].prec,"",true)+"</TD>";
+		return rez; ?>
   </TR>
 </TABLE>
 </body>','','<body docProcLang="JavaLikeCalc.JavaScript">
-<h1>Таблица накопленных мгновенных значений "<b><?dp return pTitle;?></b>"</h1>
+<center>
+<h2>Table of the instantaneous values of</h2>
+<?dp return "<h2>"+tr("Table of the instantaneous values of \"%1\"").replace("%1",title)+"</h2><span>"+SYS.strftime(time)+"</span>";?>
+</center>
+
+<div>
+	<?dp
+		for(iP = 0, srcs = ""; iP < params.length; iP++) srcs += params[iP].var+":0:0:"+params[iP].color+"\n";
+		return DAQ.JavaLikeCalc.lib_doc.diagram(time, time-bTime, srcs, 800, 300);
+	?>
+</div>
+<br/>
+
 <TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data" export="1">
-  <TR align="left" valign="center"><TH colspan="7">Накопленые значения по выч. # тр-пров # за: DD MM YYYY<?dp return "Накопленые значения по выч. # тр-пров # за: "+Special.FLibSYS.tmFStr(time,"%d %m %Y");?></TH></TR>
-  <TR><TH>Дата</TH><TH>Время</TH><TH>Расход</TH><TH>Объём</TH><TH>давл.</TH><TH>Температура</TH><TH>Перепад</TH></TR>
-  <TR><TH colspan="2">&nbsp;</TH><TH>м3/ч</TH><TH>м3</TH><TH>кГс/см2</TH><TH>град.С</TH><TH>кГс/см2</TH></TR>
-  <TR docRept="1">
-	<?dp return "<TD>"+Special.FLibSYS.tmFStr(rTime,"%d %m %Y")+"</TD>"+
-		"<TD>"+Special.FLibSYS.tmFStr(rTime,"%H:%M:%S")+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(pF,rTime,0,2,"",true)+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(pQ,rTime,0,3,"",true)+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(pP,rTime,0,3,"",true)+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(pT,rTime,0,3,"",true)+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(pDP,rTime,0,3,"",true)+"</TD>";?>
+  <TR>
+	<TH>Date</TH><TH>Time</TH><TH>Flow</TH><TH>Capacity</TH><TH>Pressure</TH><TH>Temperatura</TH><TH>Pressure diff.</TH>
+	<?dp
+		rez = "<TH>"+tr("Date")+"</TH><TH>"+tr("Time")+"</TH>";
+		for(iP = 0; iP < params.length; iP++)
+			rez += "<TH style=''color: "+params[iP].color+";''>"+SYS.strEncode(params[iP].name, "HTML")+"</TH>";
+		return rez; ?>
+  </TR>
+  <TR>
+	<TH colspan="2">&nbsp;</TH><TH>m3/h</TH><TH>m3</TH><TH>kgF/cm2</TH><TH>grad.C</TH><TH>kgF/cm2</TH>
+	<?dp
+		rez = "<TH colspan=''2''>&nbsp;</TH>";
+		for(iP = 0; iP < params.length; iP++)
+			rez += "<TH>"+SYS.strEncode(params[iP].ed, "HTML")+"</TH>";
+		return rez; ?>
+  </TR>
+  <TR docRept="@@valPer@@" docRevers="1">
+	<?dp 
+		rez = "<TD>"+SYS.strftime(rTime,"%d %m %Y")+"</TD><TD>"+SYS.strftime(rTime,"%H:%M:%S")+"</TD>";
+		for(iP = 0; iP < params.length; iP++)
+			rez += "<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(params[iP].var, rTime, 0, params[iP].prec,"",true)+"</TD>";
+		return rez; ?>
   </TR>
 </TABLE>
 </body>','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeDayOrder','name','Day report of flowcontrol point',32,'','','','Добовий звіт витратовимірювального вузла','','Суточный отчёт расходомерного узла','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeDayOrder','geomZ','1',32,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeDayOrder','tmpl','<body docProcLang="JavaLikeCalc.JavaScript">
-<center>
-<big><u>______________________<?dp return pEnterpr; ?></u></big><br/>
-(enterprise name, where flowmeter located)
-<h2>DAY REPORT</h2>
-<p>over  "________________"</p>
-<table cellpadding="0" cellspacing="0">
-<TR><TD>made</TD><TD>________&nbsp;</TD><TD>&nbsp;___________</TD></TR>
-<TR><TD></TD><TD><center><font size="-2">(date)</font></center></TD><TD><center><font size="-2">(time)</font></center></TD></TR>
-</table>
-
-<br/>
-
-<table cellpadding="0" cellspacing="0">
-<TR><TD>"FLOWTEC-TM"</TD><TD>&nbsp;<u>________________________<?dp return pTitle; ?></u>&nbsp;</TD><TD width="20pt"></TD><TD>Pipeline</TD><TD>&nbsp;___________</TD></TR>
-<TR align="center"><TD></TD><TD><font size="-2">(calculator or corrector name)</font></TD><TD colspan="2"></TD><TD><font size="-2">(thread name)</font></TD></TR>
-</table>
-
-<h4>The flowmeter characterisation included standard narrowing:</h4>
-
-<table width="90%">
-<TR>
-<TD>
-  <table>
-    <TR><TD>Contract hour</TD><TD width="5pt"></TD><TD><b>HH:MM<?dp return SYS.strftime(time,"%H %M");?></b></TD></TR>
-    <TR><TD>Molar part of N<sub>2</sub>, %</TD><TD></TD><TD><b>XX.XXX<?dp return cMoldN;?></b></TD></TR>
-    <TR><TD>Molar part of CO2<sub>2</sub>, %</TD><TD></TD><TD><b>XX.XXX<?dp return cMolsCO2;?></b></TD></TR>
-    <TR><TD>Pipe diameter, mm</TD><TD></TD><TD><b>XX.XXX<?dp return cDTr;?></b></TD></TR>
-    <TR><TD>Diameter of narrowing, mm</TD><TD></TD><TD><b>XX.XXX<?dp return сDSu;?></b></TD></TR>
-  </table>
-</TD>
-<TD>
-  <table style="border-right-style : solid; border-right-width : 1px; border-left-style : solid; border-left-width : 1px;">
-    <TR><TD>Sensor''s type</TD><TD width="5pt"></TD><TD><b>Corner<?dp return сOtbTp;?></b></TD></TR>
-    <TR><TD>Ct. of harshness</TD><TD></TD><TD><b>X.XXXX<?dp return cKsh;?></b></TD></TR>
-    <TR><TD>Ct of blunting</TD><TD></TD><TD><b>X.XXXX<?dp return cKtup;?></b></TD></TR>
-    <TR><TD>Coefficient L (alpha)</TD><TD></TD><TD><b>X.XXXXXX<?dp return cKL;?></b></TD></TR>
-    <TR><TD>Relative square of narrowing</TD><TD></TD><TD><b>X.XXXX<?dp return cSotn;?></b></TD></TR>
-  </table>
-</TD>
-<TD>
-  <table>
-    <TR><TD>Atm. pressure, kPa</TD><TD width="5pt"></TD><TD><b>XXX.X<?dp return cPatm;?></b></TD></TR>
-    <TR><TD>Cuting, kPa</TD><TD></TD><TD><b>XXX.X<?dp return cPots;?></b></TD></TR>
-    <TR><TD>Upper border, kPa</TD><TD></TD><TD><b>XXX.XX<?dp return cDPup;?></b></TD></TR>
-    <TR><TD>Trigger threshold, kPa</TD><TD></TD><TD><b>XXX.XX<?dp return cPperekl;?></b></TD></TR>
-    <TR><TD>Dynamic ductility, kgF/m<sup>2</sup></TD><TD></TD><TD><b>X.XXXXXX<?dp return cVsDin;?></b></TD></TR>
-  </table>
-</TD>
-</TR>
-</table>
-
-<h3>Hours data</h3>
-<TABLE border="1" cellpadding="2" cellspacing="0" class="data" export="1">
-  <TR valign="center">
-    <TH>Date</TH><TH colspan="2">Time</TH><TH rowspan="2">Capacity,<br />m3</TH>
-   <TH rowspan="2">Aver. pressure diff.,<br/>kgF/m2</TH><TH rowspan="2">Average pressure,<br/>kgF/cm</TH><TH rowspan="2">Average temperatura,<br/>°С</TH><TH rowspan="2">Average density ,<br/>kg.m<sup>3</sup></TH></TR>
-  <TR align="center" valign="center"><TH>&nbsp;</TH><TH>begin</TH><TH>end</TH></TR>
-  <TR docRept="3600" align="center" valign="center">
-<?dp using DAQ.JavaLikeCalc.lib_doc;
-	if(!(V1=getVal(pQ,rTime-rPer,0,-1,arch,false,rTime*1e6)).isEVal())	V1 = V1.toReal();
-	if(!(V2=getVal(pQ,rTime,0,-1,arch,false,(rTime-rPer)*1e6)).isEVal())	V2 = V2.toReal();
-	return "<TD>"+SYS.strftime(rTime,"%d %m")+"</TD>"+
-		"<TD>"+SYS.strftime(rTime-rPer,"%H:%M")+"</TD><TD>"+SYS.strftime(rTime,"%H:%M")+"</TD>"+
-		"<TD>"+((V1.isEVal() || V2.isEVal())?"Empty":abs(V2-V1).toFixed(3))+"</TD>"+
-		"<TD>"+averVal(pDP,rTime-rPer,rTime,2,arch)+"</TD>"+
-		"<TD>"+averVal(pP,rTime-rPer,rTime,2,arch)+"</TD>"+
-		"<TD>"+averVal(pT,rTime-rPer,rTime,2,arch)+"</TD>"+
-		"<TD>"+averVal(pDS,rTime-rPer,rTime,2,arch)+"</TD>";?>
-  </TR>
-  <TR align="center" valign="center"><TD colspan="3">Summary</TD>
-	<TD>XXXXXX.XXX
-<?dp using DAQ.JavaLikeCalc.lib_doc;
-	if(!(V1=getVal(pQ,bTime,0,-1,arch,false,time*1e6)).isEVal())	V1 = V1.toReal();
-	if(!(V2=getVal(pQ,time,0,-1,arch,false,bTime*1e6)).isEVal())	V2 = V2.toReal();
-	return ((V1.isEVal() || V2.isEVal())?"Empty":abs(V2-V1).toFixed(3));?>
-    </TD><TD colspan="4">&nbsp;</TD></TR>
-</TABLE>
-
-<h4>Diagnostic alarm''s messages</h4>
-<TABLE border="1" cellpadding="2" cellspacing="0" class="data">
-  <TR align="center" valign="center"><TH>Date</TH><TH>Time</TH><TH>Alarm message</TH></TR>
-  <TR align="center" valign="center" docAMess="3:*">
-	<?dp return "<TD>"+Special.FLibSYS.tmFStr(mTime,"%d %m %Y")+"</TD>"+
-		"<TD>"+Special.FLibSYS.tmFStr(mTime,"%H:%M:%S")+"</TD>"
-		"<TD>"+Special.FLibSYS.strEnc2HTML(mVal)+"</TD>";?>
-  </TR>
-</TABLE>
-
-<h4>Operator interruption''s messages</h4>
-<TABLE border="1" cellpadding="2" cellspacing="0" class="data">
-  <TR align="center" valign="center"><TH rowspan="2">Date</TH><TH rowspan="2">Time</TH><TH rowspan="2">Changing parameter''s name</TH><TH colspan="2">Parameter''s value</TH></TR>
-  <TR align="center" valign="center"><TH>Previous</TH><TH>New</TH></TR>
-  <TR align="center" valign="center" docAMess="2:OP*">
-	<?dp return "<TD>"+Special.FLibSYS.tmFStr(mTime,"%d %m %Y")+"</TD>"+
-		"<TD>"+Special.FLibSYS.tmFStr(mTime,"%H:%M:%S")+"</TD>"+
-		"<TD>"+Special.FLibSYS.strEnc2HTML(Special.FLibSYS.strParse(mVal,0,":"))+"</TD>"+
-		"<TD>"+Special.FLibSYS.strParse(mVal,2,":")+"</TD>"+
-		"<TD>"+Special.FLibSYS.strParse(mVal,3,":")+"</TD>";?>
-  </TR>
-</TABLE>
-<br/>
-<table>
-  <TR><TD>The supplier side&nbsp;_______________________</TD></TR>
-  <TR><TD>The consumer side&nbsp;_______________________</TD></TR>
-</table>
-<br/>
-<table><TR><TD width="50%"></TD><TD>Day report end over "_________"</TD></TR></table>
-
-</center>
-
-</body>',32,'','','doc','<body docProcLang="JavaLikeCalc.JavaScript">
-<center>
-<big><u>______________________<?dp return pEnterpr; ?></u></big><br/>
-(найменування підприємства, на якому встановлено витратовимірювач)
-<h2>ДОБОВИЙ ЗВІТ</h2>
-<p>за  "__________________"</p>
-<table cellpadding="0" cellspacing="0">
-<TR><TD>складено</TD><TD>________&nbsp;</TD><TD>&nbsp;___________</TD></TR>
-<TR><TD></TD><TD><center><font size="-2">(дата)</font></center></TD><TD><center><font size="-2">(час)</font></center></TD></TR>
-</table>
-
-<br/>
-
-<table cellpadding="0" cellspacing="0">
-<TR><TD>"ФЛОУТЕК-ТМ"</TD><TD>&nbsp;<u>________________________<?dp return pTitle; ?></u>&nbsp;</TD><TD width="20pt"></TD><TD>Трубопровід</TD><TD>&nbsp;___________</TD></TR>
-<TR align="center"><TD></TD><TD><font size="-2">(ім''я обчислювача або коректора)</font></TD><TD colspan="2"></TD><TD><font size="-2">(ім''я нитки)</font></TD></TR>
-</table>
-
-<h4>Характиристики Витратовиміру зі стандартним звужуючим пристроєм:</h4>
-
-<table width="90%">
-<TR>
-<TD>
-  <table>
-    <TR><TD>Контрактна година</TD><TD width="5pt"></TD><TD><b>ГГ:ХХ<?dp return SYS.strftime(time,"%H %M");?></b></TD></TR>
-    <TR><TD>Мол. доля N<sub>2</sub>, %</TD><TD></TD><TD><b>XX.XXX<?dp return cMoldN;?></b></TD></TR>
-    <TR><TD>Мол. доля CO<sub>2</sub>, %</TD><TD></TD><TD><b>XX.XXX<?dp return cMolsCO2;?></b></TD></TR>
-    <TR><TD>Діаметр труби, мм</TD><TD></TD><TD><b>XX.XXX<?dp return cDTr;?></b></TD></TR>
-    <TR><TD>Діаметр ЗП, мм</TD><TD></TD><TD><b>XX.XXX<?dp return сDSu;?></b></TD></TR>
-  </table>
-</TD>
-<TD>
-  <table style="border-right-style : solid; border-right-width : 1px; border-left-style : solid; border-left-width : 1px;">
-    <TR><TD>Тип відбору</TD><TD width="5pt"></TD><TD><b>Кутовий<?dp return сOtbTp;?></b></TD></TR>
-    <TR><TD>К-т шорсткості</TD><TD></TD><TD><b>X.XXXX<?dp return cKsh;?></b></TD></TR>
-    <TR><TD>К-т притуплення</TD><TD></TD><TD><b>X.XXXX<?dp return cKtup;?></b></TD></TR>
-    <TR><TD>К-т L (альфа)</TD><TD></TD><TD><b>X.XXXXXX<?dp return cKL;?></b></TD></TR>
-    <TR><TD>Відн. площина ЗП</TD><TD></TD><TD><b>X.XXXX<?dp return cSotn;?></b></TD></TR>
-  </table>
-</TD>
-<TD>
-  <table>
-    <TR><TD>Атм. тиск, кПа</TD><TD width="5pt"></TD><TD><b>XXX.X<?dp return cPatm;?></b></TD></TR>
-    <TR><TD>Відсічка, кПа</TD><TD></TD><TD><b>XXX.X<?dp return cPots;?></b></TD></TR>
-    <TR><TD>Верхн. предел ПД, кПа</TD><TD></TD><TD><b>XXX.XX<?dp return cDPup;?></b></TD></TR>
-    <TR><TD>Поріг переключ., кПа</TD><TD></TD><TD><b>XXX.XX<?dp return cPperekl;?></b></TD></TR>
-    <TR><TD>Дин. вязкість, кгс/м<sup>2</sup></TD><TD></TD><TD><b>X.XXXXXX<?dp return cVsDin;?></b></TD></TR>
-  </table>
-</TD>
-</TR>
-</table>
-
-<h3>Дані за годину</h3>
-<TABLE border="1" cellpadding="2" cellspacing="0" class="data" export="1">
-  <TR align="center" valign="center">
-    <TH>Дата</TH><TH colspan="2">Час</TH><TH rowspan="2">Об''єм,<br />м3</TH>
-   <TH rowspan="2">Сер. різниця тиску,<br/>кГс/м2</TH><TH rowspan="2">Середній тиск,<br/>кГс/см</TH><TH rowspan="2">Середня температура,<br/>°С</TH><TH rowspan="2">Середня щільність,<br/>кг.м<sup>3</sup></TH></TR>
-  <TR align="center" valign="center"><TH>&nbsp;</TH><TH>початок</TH><TH>кінець</TH></TR>
-  <TR docRept="3600" align="center" valign="center">
-<?dp using DAQ.JavaLikeCalc.lib_doc;
-	if(!(V1=getVal(pQ,rTime-rPer,0,-1,arch,false,rTime*1e6)).isEVal())	V1 = V1.toReal();
-	if(!(V2=getVal(pQ,rTime,0,-1,arch,false,(rTime-rPer)*1e6)).isEVal())	V2 = V2.toReal();
-	return "<TD>"+SYS.strftime(rTime,"%d %m")+"</TD>"+
-		"<TD>"+SYS.strftime(rTime-rPer,"%H:%M")+"</TD><TD>"+SYS.strftime(rTime,"%H:%M")+"</TD>"+
-		"<TD>"+((V1.isEVal() || V2.isEVal())?"Порожньо":abs(V2-V1).toFixed(3))+"</TD>"+
-		"<TD>"+averVal(pDP,rTime-rPer,rTime,2,arch)+"</TD>"+
-		"<TD>"+averVal(pP,rTime-rPer,rTime,2,arch)+"</TD>"+
-		"<TD>"+averVal(pT,rTime-rPer,rTime,2,arch)+"</TD>"+
-		"<TD>"+averVal(pDS,rTime-rPer,rTime,2,arch)+"</TD>";?>  </TR>
-  <TR align="center" valign="center"><TD colspan="3">Загалом</TD>
-	<TD>XXXXXX.XXX
-<?dp using DAQ.JavaLikeCalc.lib_doc;
-	if(!(V1=getVal(pQ,bTime,0,-1,arch,false,time*1e6)).isEVal())	V1 = V1.toReal();
-	if(!(V2=getVal(pQ,time,0,-1,arch,false,bTime*1e6)).isEVal())	V2 = V2.toReal();
-	return ((V1.isEVal() || V2.isEVal())?"Порожньо":abs(V2-V1).toFixed(3));?>
-    </TD><TD colspan="4">&nbsp;</TD></TR>
-</TABLE>
-
-<h4>Діагностичні повідомлення про нештатні ситуації</h4>
-<TABLE border="1" cellpadding="2" cellspacing="0" class="data">
-  <TR align="center" valign="center"><TH>Дата</TH><TH>Час</TH><TH>Повідомлення про нештатну ситуацію</TH></TR>
-  <TR align="center" valign="center" docAMess="3:*">
-	<?dp return "<TD>"+Special.FLibSYS.tmFStr(mTime,"%d %m %Y")+"</TD>"+
-		"<TD>"+Special.FLibSYS.tmFStr(mTime,"%H:%M:%S")+"</TD>"
-		"<TD>"+Special.FLibSYS.strEnc2HTML(mVal)+"</TD>";?>
-  </TR>
-</TABLE>
-
-<h4>Повідомлення про дії оператора</h4>
-<TABLE border="1" cellpadding="2" cellspacing="0" class="data">
-  <TR align="center" valign="center"><TH rowspan="2">Дата</TH><TH rowspan="2">Час</TH><TH rowspan="2">Найменування зміненого параметра</TH><TH colspan="2">Значення параметра</TH></TR>
-  <TR align="center" valign="center"><TH>Минуле</TH><TH>Нове</TH></TR>
-  <TR align="center" valign="center" docAMess="2:OP*">
-	<?dp return "<TD>"+Special.FLibSYS.tmFStr(mTime,"%d %m %Y")+"</TD>"+
-		"<TD>"+Special.FLibSYS.tmFStr(mTime,"%H:%M:%S")+"</TD>"+
-		"<TD>"+Special.FLibSYS.strEnc2HTML(Special.FLibSYS.strParse(mVal,0,":"))+"</TD>"+
-		"<TD>"+Special.FLibSYS.strParse(mVal,2,":")+"</TD>"+
-		"<TD>"+Special.FLibSYS.strParse(mVal,3,":")+"</TD>";?>
-  </TR>
-</TABLE>
-<br/>
-<table>
-  <TR><TD>Представник постачальника&nbsp;_______________________</TD></TR>
-  <TR><TD>Представник споживача&nbsp;_______________________</TD></TR>
-</table>
-<br/>
-<table><TR><TD width="50%"></TD><TD>Кінець добового звіту за "_________"</TD></TR></table>
-
-</center>
-
-</body>','','<body docProcLang="JavaLikeCalc.JavaScript">
-<center>
-<big><u>______________________<?dp return pEnterpr; ?></u></big><br/>
-(наименование предприятия, на котором установлен расходомер)
-<h2>СУТОЧНЫЙ ОТЧЁТ</h2>
-<p>за  "____________________"</p>
-<table cellpadding="0" cellspacing="0">
-<TR><TD>составлен</TD><TD>________&nbsp;</TD><TD>&nbsp;___________</TD></TR>
-<TR><TD></TD><TD><center><font size="-2">(дата)</font></center></TD><TD><center><font size="-2">(время)</font></center></TD></TR>
-</table>
-
-<br/>
-
-<table cellpadding="0" cellspacing="0">
-<TR><TD>"ФЛОУТЭК-ТМ"</TD><TD>&nbsp;<u>________________________<?dp return pTitle; ?></u>&nbsp;</TD><TD width="20pt"></TD><TD>Трубопровод</TD><TD>&nbsp;___________</TD></TR>
-<TR align="center"><TD></TD><TD><font size="-2">(имя вычислителя или корректора)</font></TD><TD colspan="2"></TD><TD><font size="-2">(имя нитки)</font></TD></TR>
-</table>
-
-<h4>Характеристики Расходомера со стандартным сужающим устройством:</h4>
-
-<table width="90%">
-<TR>
-<TD>
-  <table>
-    <TR><TD>Контрактный час</TD><TD width="5pt"></TD><TD><b>ЧЧ:ММ<?dp return SYS.strftime(time,"%H %M");?></b></TD></TR>
-    <TR><TD>Мол. доля N<sub>2</sub>, %</TD><TD></TD><TD><b>XX.XXX<?dp return cMoldN;?></b></TD></TR>
-    <TR><TD>Мол. доля CO<sub>2</sub>, %</TD><TD></TD><TD><b>XX.XXX<?dp return cMolsCO2;?></b></TD></TR>
-    <TR><TD>Диаметр трубы, мм</TD><TD></TD><TD><b>XX.XXX<?dp return cDTr;?></b></TD></TR>
-    <TR><TD>Диаметр СУ, мм</TD><TD></TD><TD><b>XX.XXX<?dp return сDSu;?></b></TD></TR>
-  </table>
-</TD>
-<TD>
-  <table style="border-right-style : solid; border-right-width : 1px; border-left-style : solid; border-left-width : 1px;">
-    <TR><TD>Тип отбора</TD><TD width="5pt"></TD><TD><b>Угловой<?dp return сOtbTp;?></b></TD></TR>
-    <TR><TD>К-т шероховатости</TD><TD></TD><TD><b>X.XXXX<?dp return cKsh;?></b></TD></TR>
-    <TR><TD>К-т притупления</TD><TD></TD><TD><b>X.XXXX<?dp return cKtup;?></b></TD></TR>
-    <TR><TD>К-т L (альфа)</TD><TD></TD><TD><b>X.XXXXXX<?dp return cKL;?></b></TD></TR>
-    <TR><TD>Отн. площадь СУ</TD><TD></TD><TD><b>X.XXXX<?dp return cSotn;?></b></TD></TR>
-  </table>
-</TD>
-<TD>
-  <table>
-    <TR><TD>Атм. давление, кПа</TD><TD width="5pt"></TD><TD><b>XXX.X<?dp return cPatm;?></b></TD></TR>
-    <TR><TD>Отсечка, кПа</TD><TD></TD><TD><b>XXX.X<?dp return cPots;?></b></TD></TR>
-    <TR><TD>Верхн. предел ПД, кПа</TD><TD></TD><TD><b>XXX.XX<?dp return cDPup;?></b></TD></TR>
-    <TR><TD>Порог переключ., кПа</TD><TD></TD><TD><b>XXX.XX<?dp return cPperekl;?></b></TD></TR>
-    <TR><TD>Дин. вязкость, кгс/м<sup>2</sup></TD><TD></TD><TD><b>X.XXXXXX<?dp return cVsDin;?></b></TD></TR>
-  </table>
-</TD>
-</TR>
-</table>
-
-<h3>Часовые данные</h3>
-<TABLE border="1" cellpadding="2" cellspacing="0" class="data" export="1">
-  <TR align="center" valign="center">
-    <TH>Дата</TH><TH colspan="2">Время</TH><TH rowspan="2">Объём,<br />м3</TH>
-   <TH rowspan="2">Ср. разность давления,<br/>кГс/м2</TH><TH rowspan="2">Среднее давление,<br/>кГс/см</TH><TH rowspan="2">Средняя температура,<br/>°С</TH><TH rowspan="2">Средняя плотность,<br/>кг.м<sup>3</sup></TH></TR>
-  <TR align="center" valign="center"><TH>&nbsp;</TH><TH>начало</TH><TH>конец</TH></TR>
-  <TR docRept="3600" align="center" valign="center">
-<?dp using DAQ.JavaLikeCalc.lib_doc;
-	if(!(V1=getVal(pQ,rTime-rPer,0,-1,arch,false,rTime*1e6)).isEVal())	V1 = V1.toReal();
-	if(!(V2=getVal(pQ,rTime,0,-1,arch,false,(rTime-rPer)*1e6)).isEVal())	V2 = V2.toReal();
-	return "<TD>"+SYS.strftime(rTime,"%d %m")+"</TD>"+
-		"<TD>"+SYS.strftime(rTime-rPer,"%H:%M")+"</TD><TD>"+SYS.strftime(rTime,"%H:%M")+"</TD>"+
-		"<TD>"+((V1.isEVal() || V2.isEVal())?"Пусто":abs(V2-V1).toFixed(3))+"</TD>"+
-		"<TD>"+averVal(pDP,rTime-rPer,rTime,2,arch)+"</TD>"+
-		"<TD>"+averVal(pP,rTime-rPer,rTime,2,arch)+"</TD>"+
-		"<TD>"+averVal(pT,rTime-rPer,rTime,2,arch)+"</TD>"+
-		"<TD>"+averVal(pDS,rTime-rPer,rTime,2,arch)+"</TD>";?>  </TR>
-  <TR align="center" valign="center"><TD colspan="3">Суммарно</TD>
-	<TD>XXXXXX.XXX
-<?dp using DAQ.JavaLikeCalc.lib_doc;
-	if(!(V1=getVal(pQ,bTime,0,-1,arch,false,time*1e6)).isEVal())	V1 = V1.toReal();
-	if(!(V2=getVal(pQ,time,0,-1,arch,false,bTime*1e6)).isEVal())	V2 = V2.toReal();
-	return ((V1.isEVal() || V2.isEVal())?"Пусто":abs(V2-V1).toFixed(3));?>
-    </TD><TD colspan="4">&nbsp;</TD></TR>
-</TABLE>
-
-<h4>Диагностические сообщения о нештатных ситуациях</h4>
-<TABLE border="1" cellpadding="2" cellspacing="0" class="data">
-  <TR align="center" valign="center"><TH>Дата</TH><TH>Время</TH><TH>Сообщение о нештатной ситуации</TH></TR>
-  <TR align="center" valign="center" docAMess="3:*">
-	<?dp return "<TD>"+Special.FLibSYS.tmFStr(mTime,"%d %m %Y")+"</TD>"+
-		"<TD>"+Special.FLibSYS.tmFStr(mTime,"%H:%M:%S")+"</TD>"
-		"<TD>"+Special.FLibSYS.strEnc2HTML(mVal)+"</TD>";?>
-  </TR>
-</TABLE>
-
-<h4>Сообщения о вмешательствах оператора</h4>
-<TABLE border="1" cellpadding="2" cellspacing="0" class="data">
-  <TR align="center" valign="center"><TH rowspan="2">Дата</TH><TH rowspan="2">Время</TH><TH rowspan="2">Наименование изменённого параметра</TH><TH colspan="2">Значение параметра</TH></TR>
-  <TR align="center" valign="center"><TH>Прежнее</TH><TH>Новое</TH></TR>
-  <TR align="center" valign="center" docAMess="2:OP*">
-	<?dp return "<TD>"+Special.FLibSYS.tmFStr(mTime,"%d %m %Y")+"</TD>"+
-		"<TD>"+Special.FLibSYS.tmFStr(mTime,"%H:%M:%S")+"</TD>"+
-		"<TD>"+Special.FLibSYS.strEnc2HTML(Special.FLibSYS.strParse(mVal,0,":"))+"</TD>"+
-		"<TD>"+Special.FLibSYS.strParse(mVal,2,":")+"</TD>"+
-		"<TD>"+Special.FLibSYS.strParse(mVal,3,":")+"</TD>";?>
-  </TR>
-</TABLE>
-<br/>
-<table>
-  <TR><TD>Представитель поставщика&nbsp;_______________________</TD></TR>
-  <TR><TD>Представитель потребителя&nbsp;_______________________</TD></TR>
-</table>
-<br/>
-<table><TR><TD width="50%"></TD><TD>Конец суточного отчёта за "__________"</TD></TR></table>
-
-</center>
-
-</body>','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeDayOrder','bTime','0',40,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeDayOrder','time','0',40,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeDayOrder','n','10',40,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeDayOrder','aCur','0',40,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docDin','name','Document (dynamic)',32,'','','','Документ (динамічний)','','Документ (динамический)','','','');
+INSERT INTO wlb_doc_io VALUES('docDin','name','Document - dynamic',32,'','','','Документ - динамічний','','Документ- динамический','','','');
 INSERT INTO wlb_doc_io VALUES('docDin','geomW','900',32,'','','','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docDin','geomH','600',32,'','','','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docDin','backColor','#5A5A5A',96,'backColorFrame','','','','','','','','');
@@ -12065,19 +11711,19 @@ INSERT INTO wlb_doc_io VALUES('docDin','geomH','593',32,'','','doc','','','','',
 INSERT INTO wlb_doc_io VALUES('docDin','geomYsc','1',32,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docDin','active','1',32,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docDin','tmpl','<body docProcLang="JavaLikeCalc.JavaScript">
-<h1>Table of accumulation instantaneous values</h1>
-<TABLE border="1" cellpadding="2" cellspacing="0" width="100%">
+<h1>Table of the instantaneous values accumulation</h1>
+<TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data" export="1">
   <TR align="center" valign="center">
-    <TD>View</TD><TD>Compare</TD><TD>&nbsp;</TD><TD>Point configuration</TD><TD>Archivation</TD><TD>Options</TD><TD>?</TD>
+    <TH>View</TH><TH>Compare</TH><TH>&nbsp;</TH><TH>Point configuration</TH><TH>Archivation</TH><TH>Options</TH><TH>?</TH>
   </TR>
   <TR align="center" valign="center">
-    <TD colspan="2">&nbsp;</TD><TD colspan="2">Information over day</TD>
-    <TD colspan="3" rowspan="2">DD MM YYYY<?dp return Special.FLibSYS.tmFStr(time,"%d %m %Y");?></TD>
+    <TH colspan="2">&nbsp;</TH><TH colspan="2">Information over day</TH>
+    <TH colspan="3" rowspan="2">DD MM YYYY<?dp return Special.FLibSYS.tmFStr(time,"%d %m %Y");?></TH>
   </TR>
-  <TR align="center" valign="center"><TD colspan="2">&nbsp;</TD><TD colspan="2">Information over month</TD></TR>
-  <TR align="center" valign="center"><TD colspan="7">Accumulated values by calculator # pipeline #</TD></TR>
-  <TR><TD>Date</TD><TD>Time</TD><TD>Flow</TD><TD>Day capacity</TD><TD>Pressure</TD><TD>Temperatura</TD><TD>Pressure diff.</TD></TR>
-  <TR><TD colspan="2">&nbsp;</TD><TD>1000x m3/h</TD><TD>1000x m3</TD><TD>kgF/cm2</TD><TD>grad.C</TD><TD>kgF/cm2</TD></TR>
+  <TR align="center" valign="center"><TH colspan="2">&nbsp;</TH><TH colspan="2">Information over month</TH></TR>
+  <TR align="center" valign="center"><TH colspan="7">Accumulated values by the calculator # pipeline #</TH></TR>
+  <TR><TH>Date</TH><TH>Time</TH><TH>Flow</TH><TH>Day capacity</TH><TH>Pressure</TH><TH>Temperatura</TH><TH>Pressure diff.</TH></TR>
+  <TR><TH colspan="2">&nbsp;</TH><TH>1000x m3/h</TH><TH>1000x m3</TH><TH>kgF/cm2</TH><TH>grad.C</TH><TH>kgF/cm2</TH></TR>
   <TR docRept="1">
     <TD>DD MM YYYY<?dp return Special.FLibSYS.tmFStr(rTime,"%d %m %Y");?></TD>
     <TD>hh:mm:ss<?dp return Special.FLibSYS.tmFStr(rTime,"%H:%M:%S");?></TD>
@@ -12088,634 +11734,109 @@ INSERT INTO wlb_doc_io VALUES('docDin','tmpl','<body docProcLang="JavaLikeCalc.J
     <TD>XXX.XXX<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(pDP,rTime,0,3,"",true);?></TD>
   </TR>
 </TABLE>
-</body>',32,'','','doc','<body docProcLang="JavaLikeCalc.JavaScript">
-<h1>Таблиця накопичення миттевих значень</h1>
-<TABLE border="1" cellpadding="2" cellspacing="0" width="100%">
-  <TR align="center" valign="center">
-    <TD>Перегляд</TD><TD>Порівняння</TD><TD>&nbsp;</TD><TD>Конфігурація вузла</TD><TD>Архівація</TD><TD>Налаштування</TD><TD>?</TD>
-  </TR>
-  <TR align="center" valign="center">
-    <TD colspan="2">&nbsp;</TD><TD colspan="2">Інформація за добу</TD>
-    <TD colspan="3" rowspan="2">DD MM YYYY<?dp return Special.FLibSYS.tmFStr(time,"%d %m %Y");?></TD>
-  </TR>
-  <TR align="center" valign="center"><TD colspan="2">&nbsp;</TD><TD colspan="2">Інформація за місяць</TD></TR>
-  <TR align="center" valign="center"><TD colspan="7">Накопичені дані за обчисл. # тр-пров #</TD></TR>
-  <TR><TD>Дата</TD><TD>Час</TD><TD>Витрати</TD><TD>Доб. Об''єм</TD><TD>Тиск</TD><TD>Температура</TD><TD>Перепад</TD></TR>
-  <TR><TD colspan="2">&nbsp;</TD><TD>тис.м3</TD><TD>тис.м3</TD><TD>кГс/см2</TD><TD>град.С</TD><TD>кГс/см2</TD></TR>
-  <TR docRept="1s">
-    <TD>DD MM YYYY<?dp return Special.FLibSYS.tmFStr(rTime,"%d %m %Y");?></TD>
-    <TD>hh:mm:ss<?dp return Special.FLibSYS.tmFStr(rTime,"%H:%M:%S");?></TD>
-    <TD>XX.XXX<?dp return "Special.FLibSYS.vFormat(prmF,\"f:5.3\");"?></TD>
-    <TD>X.XXX<?dp return "Special.FLibSYS.vFormat(prmQ,\"f:4.3\");"?></TD>
-    <TD>X.XXX<?dp return "Special.FLibSYS.vFormat(prmP,\"f:4.3\");"?></TD>
-    <TD>X.XXX<?dp return "Special.FLibSYS.vFormat(prmT,\"f:4.3\");?></TD>
-    <TD>XXX.XXX<?dp return "Special.FLibSYS.vFormat(prmDP,\"f:6.3\");?></TD>
-  </TR>
-</TABLE>
-</body>','','<body docProcLang="JavaLikeCalc.JavaScript">
-<h1>Таблица накопленных мгновенных значений</h1>
-<TABLE border="1" cellpadding="2" cellspacing="0" width="100%">
-  <TR align="center" valign="center">
-    <TD>Просмотр</TD><TD>Сравнения</TD><TD>&nbsp;</TD><TD>Конфигурация узла</TD><TD>Архивация</TD><TD>Настройки</TD><TD>?</TD>
-  </TR>
-  <TR align="center" valign="center">
-    <TD colspan="2">&nbsp;</TD><TD colspan="2">Информация за день</TD>
-    <TD colspan="3" rowspan="2">DD MM YYYY<?dp return Special.FLibSYS.tmFStr(time,"%d %m %Y");?></TD>
-  </TR>
-  <TR align="center" valign="center"><TD colspan="2">&nbsp;</TD><TD colspan="2">Информация за месяц</TD></TR>
-  <TR align="center" valign="center"><TD colspan="7">Накопленые значения по выч. # тр-пров #</TD></TR>
-  <TR><TD>Дата</TD><TD>Время</TD><TD>Расход</TD><TD>Сут. Объём</TD><TD>давл.</TD><TD>Температура</TD><TD>Перепад</TD></TR>
-  <TR><TD colspan="2">&nbsp;</TD><TD>тыс.м3</TD><TD>тыс.м3</TD><TD>кГс/см2</TD><TD>град.С</TD><TD>кГс/см2</TD></TR>
-  <TR docRept="1s">
-    <TD>DD MM YYYY<?dp return Special.FLibSYS.tmFStr(rTime,"%d %m %Y");?></TD>
-    <TD>hh:mm:ss<?dp return Special.FLibSYS.tmFStr(rTime,"%H:%M:%S");?></TD>
-    <TD>XX.XXX<?dp return Special.FLibSYS.vFormat(prmF,"f:5.3");"?></TD>
-    <TD>X.XXX<?dp return Special.FLibSYS.vFormat(prmQ,"f:4.3");"?></TD>
-    <TD>X.XXX<?dp return Special.FLibSYS.vFormat(prmP,"f:4.3");"?></TD>
-    <TD>X.XXX<?dp return Special.FLibSYS.vFormat(prmT,"f:4.3");?></TD>
-    <TD>XXX.XXX<?dp return Special.FLibSYS.vFormat(prmDP,"f:6.3");?></TD>
-  </TR>
-</TABLE>
-</body>','','','');
+</body>',32,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docDin','doc','',40,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docDin','bTime','0',40,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docDin','time','0',40,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docGasNodeDayA','evProc','ws_FocusIn::open:/pg_control/pg_doc_panel',32,'','','','','','','','','');
-INSERT INTO wlb_doc_io VALUES('doc','dscr','Base of an archive document.
+INSERT INTO wlb_doc_io VALUES('doc','dscr','The frame is a template of documents of the archive type and it is provided as an example and for building own archive documents on it basis. The main specific of that document type is the periodic generating on the VCA-session level (in the background) and placing the final and ready to view documents to an archive, the VCA-project''s session DB-table "prj_{ProjID}_ses".
+
+The main advantage of this document type is the lowest load on CPU during the generation, which can be multi-step one during the main generation period, and the fast view, which involves simply opening the ready documents from the archive. But this document type has a significant disadvantage, which is the constant execution of single project session in the background and the absence of which leads to the omission of the documents generation in the archive.
+
+Therefore, documents of this type are appropriated to use on the stationary AWPs of the operators, even if it is a reproduction from the visualisation server, and are useless in the WEB-interface!
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.0',32,'','','','Основа архівного документу.
+Version: 1.2.0
+License: GPLv2',32,'','','','Кадр є шаблоном документу архівного типу, він надається як приклад та для побудови власних архівних документів на його основі. Основною специфікою документу цього типу є періодична генерація на рівні СВУ-сеансу (у фоні) та розміщення фінальних та готових документів у архіві, таблиця БД сеансу СВУ-проекту "prj_{ProjID}_ses".
+
+Основною перевагою цього типу документу є найменше навантаження на процесор протягом генерації, яка може бути багатокроковою протягом основного періоду генерації, та швидкий перегляд, який передбачає просте відкриття готових документів із архіву. Але цей тип документу має суттєвий недолік, який полягає у постійному виконані єдиного сеансу проекту у фоні та відсутність якого призводить до пропуску генерації документів у архів.
+
+Відтак, документи такого типу доцільні до використання на стаціонарних АРМ оператору, навіть якщо це відтворення із серверу візуалізації, та малокорисні у WEB-інтерфейсі!
+
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.0.0','','Основа архивного документа.
-Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.0.0','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeDayOrder','dscr','Full day report of the flow-control point.
+Версія: 1.2.0
+Ліцензія: GPLv2','','','','','');
+INSERT INTO wlb_doc_io VALUES('docDin','dscr','The frame is a template of documents of the dynamic type and it is provided as an example and for building own dynamic documents on it basis. The main specific of that document type is the synchronous generating at the requesting-opening.
+
+The main advantage of this document type is the maximal actuality of the data and the document language, for the multilingual interfaces, that is the possibility of generating for the specified date and time. But this document type has a significant disadvantage, which is the high CPU load and long time of the synchronous generation for big archival data.
+
+Therefore, documents of this type are allowed to use on every types of the interfaces, include the WEB-interfaces, but some documents based on big archival data require for not slow processing systems!
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.0',32,'','','','Повний добовий звіт вузла контролю витрат.
+Version: 1.2.0
+License: GPLv2',32,'','','','Кадр є шаблоном документу динамічного типу, він надається як приклад та для побудови власних динамічних документів на його основі. Основною специфікою документу цього типу є синхронна генерація за запитом-відкриттям.
+
+Основною перевагою цього типу документу є максимальна актуальність даних та мови документу, для багатомовних інтерфейсів, тобто можливість генерації на визначену дату та час. Але цей тип документу має суттєвий недолік, який полягає у високому навантажені процесору та тривалому часі синхронної генерації для великих архівних даних.
+
+Відтак, документи такого типу дозволено до використання на всіх типах інтерфейсів, включно з WEB-інтерфейсами, але деякі документи, засновані на великих архівних даних, потребують не повільних обчислювальних систем!
+
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.0.0','','Полный суточный отчёт узла контроля расхода.
-Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.0.0','','','');
-INSERT INTO wlb_doc_io VALUES('docDin','dscr','Base of dynamic documents.
-Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.0',32,'','','','Основа динамічного документу.
-Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.0.0','','Основа динамического документа.
-Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.0.0','','','');
+Версія: 1.2.0
+Ліцензія: GPLv2','','','','','');
 INSERT INTO wlb_doc_io VALUES('doc','evProc','ws_FocusIn:/doc:open:/pg_control/pg_doc_panel',32,'','','','ws_FocusIn:/doc:open:/pg_control/pg_doc_panel','','ws_FocusIn:/doc:open:/pg_control/pg_doc_panel','','','');
 INSERT INTO wlb_doc_io VALUES('docDin','evProc','ws_FocusIn:/doc:open:/pg_control/pg_doc_panel',32,'','','','ws_FocusIn:/doc:open:/pg_control/pg_doc_panel','','ws_FocusIn:/doc:open:/pg_control/pg_doc_panel','','','');
-INSERT INTO wlb_doc_io VALUES('docRepSm2','name','Report to 2 shift',32,'','','','Звіт на дві зміни','','Рапорт на 2 смены','','','');
-INSERT INTO wlb_doc_io VALUES('docRepSm2','geomXsc','1.19',32,'','','','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docRepSm2','geomYsc','1.1',32,'','','','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docRepSm2','geomY','3.91',32,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docRepSm2','tmpl','<body docProcLang="JavaLikeCalc.JavaScript">
-<h1> Machinist raport </h1>
+INSERT INTO wlb_doc_io VALUES('docRep2WorkSh','name','Report of two working shifts',32,'','','','Звіт двох робочих змін','','Рапорт двух рабочих смен','','','');
+INSERT INTO wlb_doc_io VALUES('docRep2WorkSh','geomXsc','1',32,'','','','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRep2WorkSh','geomYsc','1',32,'','','','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRep2WorkSh','geomY','1',32,'','','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRep2WorkSh','tmpl','<body docProcLang="JavaLikeCalc.JavaScript">
+<h1> Report of two working shifts <?dp return tr("Report of two working shifts"); ?> </h1>
 <TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data">
-  <TR><TH colspan="16">DD MM YYYY hh.mm.ss   at DD MM YYYY (shift 1)
-    <?dp using Special.FLibSYS;
-	curHour=curDay=curMonth=curYear=0;
-	tmDate(time,0,0,curHour,curDay,curMonth,curYear);
-             if( curHour < 8 ) tmDate(time-24*60*60,0,0,curHour,curDay,curMonth,curYear);
-	smN = (curHour>20||curHour<8)?2:1;
-	smBeg = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" "+(smN==1?8:20)+":0:0","%Y-%m-%d %H:%M:%S");
-	return tmFStr(tmTime(),"%d %m %Y %H:%M:%S")+"   at "+tmFStr(time,"%d %m %Y")+" (shift "+smN+")";
-    ?>
-  </TH></TR>
+  <TR><TH colspan=''16''>DD MM YYYY hh.mm.ss   at DD MM YYYY (shift 1)</TH></TR>
+  <TR><TH rowspan=''2''>Code</TH><TH rowspan=''2''>Name</TH><TH rowspan=''2''>Dimension</TH><TH colspan=''12''>Hours</TH><TH rowspan=''2''>Sum</TH></TR>
+  <TR><TH>08-09</TH><TH>09-10</TH><TH>10-11</TH><TH>11-12</TH><TH>12-13</TH><TH>13-14</TH><TH>14-15</TH><TH>15-16</TH><TH>16-17</TH><TH>17-18</TH><TH>18-19</TH><TH>19-20</TH></TR>
   <TR>
-	<TH><center>Code</center></TH>
-	<TH><center>Name</center></TH>
-	<TH><center>Dimension</center></TH>
-	<TH><center>08-09h<?dp return (smN==1)?"08-09h":"20-21h"; ?></center></TH>
-	<TH><center>09-10h<?dp return (smN==1)?"09-10h":"21-22h"; ?></center></TH>
-	<TH><center>10-11h<?dp return (smN==1)?"10-11h":"22-23h"; ?></center></TH>
-	<TH><center>11-12h<?dp return (smN==1)?"11-12h":"23-00h"; ?></center></TH>
-	<TH><center>12-13h<?dp return (smN==1)?"12-13h":"00-01h"; ?></center></TH>
-	<TH><center>13-14h<?dp return (smN==1)?"13-14h":"01-02h"; ?></center></TH>
-	<TH><center>14-15h<?dp return (smN==1)?"14-15h":"02-03h"; ?></center></TH>
-	<TH><center>15-16h<?dp return (smN==1)?"15-16h":"03-04h"; ?></center></TH>
-	<TH><center>16-17h<?dp return (smN==1)?"16-17h":"04-05h"; ?></center></TH>
-	<TH><center>17-18h<?dp return (smN==1)?"17-18h":"05-06h"; ?></center></TH>
-	<TH><center>18-19h<?dp return (smN==1)?"18-19h":"06-07h"; ?></center></TH>
-	<TH><center>19-20h<?dp return (smN==1)?"19-20h":"07-08h"; ?></center></TH>
-	<TH><center>At shift</center></TH>
+	<TD style=''text-align: center''>Prm{N}</TD><TD>Parameter {N}</TD><TD style=''text-align: center''>Dimension</TD>
+	<TD style=''text-align: center''>-----</TD><TD style=''text-align: center''>-----</TD><TD style=''text-align: center''>-----</TD><TD style=''text-align: center''>-----</TD><TD style=''text-align: center''>-----</TD><TD style=''text-align: center''>-----</TD>
+	<TD style=''text-align: center''>-----</TD><TD style=''text-align: center''>-----</TD><TD style=''text-align: center''>-----</TD><TD style=''text-align: center''>-----</TD><TD style=''text-align: center''>-----</TD><TD style=''text-align: center''>-----</TD>
+	<TD style=''text-align: center''>-----</TD>
   </TR>
-  <TR>
-	<TD><center>Prm1<?dp return Special.FLibSYS.strEnc2HTML(p1_sh); ?></center></TD>
-	<TD>Parameter 1<?dp return Special.FLibSYS.strEnc2HTML(p1_nm); ?></TD>
-	<TD><center>Dimens<?dp return Special.FLibSYS.strEnc2HTML(p1_ed); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg,0,p1_prec,"FSArch.1h"); ?> </center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg+3600,0,p1_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg+2*3600,0,p1_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg+3*3600,0,p1_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg+4*3600,0,p1_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg+5*3600,0,p1_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg+6*3600,0,p1_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg+7*3600,0,p1_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg+8*3600,0,p1_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg+9*3600,0,p1_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg+10*3600,0,p1_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg+11*3600,0,p1_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return (EVAL_BOOL != p1_flSum && p1_flSum) ? DAQ.JavaLikeCalc.lib_doc.sumVal(p1_val,smBeg,smBeg+3600*12,p1_prec,"FSArch.1h") : ""; ?></center></TD>
-  </TR>
-  <TR>
-	<TD><center>Prm2<?dp return Special.FLibSYS.strEnc2HTML(p2_sh); ?></center></TD>
-	<TD>Parameter 2<?dp return Special.FLibSYS.strEnc2HTML(p2_nm); ?></TD>
-	<TD><center>Dimens<?dp return Special.FLibSYS.strEnc2HTML(p2_ed); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg,0,p2_prec,"FSArch.1h"); ?> </center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg+3600,0,p2_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg+2*3600,0,p2_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg+3*3600,0,p2_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg+4*3600,0,p2_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg+5*3600,0,p2_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg+6*3600,0,p2_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg+7*3600,0,p2_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg+8*3600,0,p2_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg+9*3600,0,p2_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg+10*3600,0,p2_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg+11*3600,0,p2_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return (EVAL_BOOL != p2_flSum && p2_flSum) ? DAQ.JavaLikeCalc.lib_doc.sumVal(p2_val,smBeg,smBeg+3600*12,p2_prec,"FSArch.1h") : ""; ?></center></TD>
-  </TR>
-  <TR>
-	<TD><center>Prm3<?dp return Special.FLibSYS.strEnc2HTML(p3_sh); ?></center></TD>
-	<TD>Parameter 3<?dp return Special.FLibSYS.strEnc2HTML(p3_nm); ?></TD>
-	<TD><center>Dimens<?dp return Special.FLibSYS.strEnc2HTML(p3_ed); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg,0,p3_prec,"FSArch.1h"); ?> </center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg+3600,0,p3_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg+2*3600,0,p3_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg+3*3600,0,p3_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg+4*3600,0,p3_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg+5*3600,0,p3_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg+6*3600,0,p3_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg+7*3600,0,p3_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg+8*3600,0,p3_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg+9*3600,0,p3_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg+10*3600,0,p3_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg+11*3600,0,p3_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return (EVAL_BOOL != p3_flSum && p3_flSum) ? DAQ.JavaLikeCalc.lib_doc.sumVal(p3_val,smBeg,smBeg+3600*12,p3_prec,"FSArch.1h") : ""; ?></center></TD>
-  </TR>
-  <TR>
-	<TD><center>Prm4<?dp return Special.FLibSYS.strEnc2HTML(p4_sh); ?></center></TD>
-	<TD>Parameter 4<?dp return Special.FLibSYS.strEnc2HTML(p4_nm); ?></TD>
-	<TD><center>Dimens<?dp return Special.FLibSYS.strEnc2HTML(p4_ed); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg,0,p4_prec,"FSArch.1h"); ?> </center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg+3600,0,p4_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg+2*3600,0,p4_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg+3*3600,0,p4_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg+4*3600,0,p4_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg+5*3600,0,p4_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg+6*3600,0,p4_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg+7*3600,0,p4_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg+8*3600,0,p4_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg+9*3600,0,p4_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg+10*3600,0,p4_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg+11*3600,0,p4_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return (EVAL_BOOL != p4_flSum && p4_flSum) ? DAQ.JavaLikeCalc.lib_doc.sumVal(p4_val,smBeg,smBeg+3600*12,p4_prec,"FSArch.1h") : ""; ?></center></TD>
-  </TR>
-  <TR>
-	<TD><center>Prm5<?dp return Special.FLibSYS.strEnc2HTML(p5_sh); ?></center></TD>
-	<TD>Parameter 5<?dp return Special.FLibSYS.strEnc2HTML(p5_nm); ?></TD>
-	<TD><center>Dimens<?dp return Special.FLibSYS.strEnc2HTML(p5_ed); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg,0,p5_prec,"FSArch.1h"); ?> </center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg+3600,0,p5_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg+2*3600,0,p5_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg+3*3600,0,p5_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg+4*3600,0,p5_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg+5*3600,0,p5_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg+6*3600,0,p5_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg+7*3600,0,p5_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg+8*3600,0,p5_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg+9*3600,0,p5_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg+10*3600,0,p5_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg+11*3600,0,p5_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return (EVAL_BOOL != p5_flSum && p5_flSum) ? DAQ.JavaLikeCalc.lib_doc.sumVal(p5_val,smBeg,smBeg+3600*12,p5_prec,"FSArch.1h") : ""; ?></center></TD>
-  </TR>
-  <TR>
-	<TD><center>Prm6<?dp return Special.FLibSYS.strEnc2HTML(p6_sh); ?></center></TD>
-	<TD>Parameter 6<?dp return Special.FLibSYS.strEnc2HTML(p6_nm); ?></TD>
-	<TD><center>Dimens<?dp return Special.FLibSYS.strEnc2HTML(p6_ed); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg,0,p6_prec,"FSArch.1h"); ?> </center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg+3600,0,p6_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg+2*3600,0,p6_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg+3*3600,0,p6_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg+4*3600,0,p6_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg+5*3600,0,p6_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg+6*3600,0,p6_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg+7*3600,0,p6_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg+8*3600,0,p6_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg+9*3600,0,p6_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg+10*3600,0,p6_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg+11*3600,0,p6_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return (EVAL_BOOL != p6_flSum && p6_flSum) ? DAQ.JavaLikeCalc.lib_doc.sumVal(p6_val,smBeg,smBeg+3600*12,p6_prec,"FSArch.1h") : ""; ?></center></TD>
-  </TR>
-  <TR>
-	<TD><center>Prm7<?dp return Special.FLibSYS.strEnc2HTML(p7_sh); ?></center></TD>
-	<TD>Parameter 7<?dp return Special.FLibSYS.strEnc2HTML(p7_nm); ?></TD>
-	<TD><center>Dimens<?dp return Special.FLibSYS.strEnc2HTML(p7_ed); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg,0,p7_prec,"FSArch.1h"); ?> </center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg+3600,0,p7_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg+2*3600,0,p7_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg+3*3600,0,p7_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg+4*3600,0,p7_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg+5*3600,0,p7_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg+6*3600,0,p7_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg+7*3600,0,p7_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg+8*3600,0,p7_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg+9*3600,0,p7_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg+10*3600,0,p7_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg+11*3600,0,p7_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return (EVAL_BOOL != p7_flSum && p7_flSum) ? DAQ.JavaLikeCalc.lib_doc.sumVal(p7_val,smBeg,smBeg+3600*12,p7_prec,"FSArch.1h") : ""; ?></center></TD>
-  </TR>
-  <TR>
-	<TD><center>Prm8<?dp return Special.FLibSYS.strEnc2HTML(p8_sh); ?></center></TD>
-	<TD>Parameter 8<?dp return Special.FLibSYS.strEnc2HTML(p8_nm); ?></TD>
-	<TD><center>Dimens<?dp return Special.FLibSYS.strEnc2HTML(p8_ed); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg,0,p8_prec,"FSArch.1h"); ?> </center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg+3600,0,p8_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg+2*3600,0,p8_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg+3*3600,0,p8_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg+4*3600,0,p8_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg+5*3600,0,p8_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg+6*3600,0,p8_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg+7*3600,0,p8_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg+8*3600,0,p8_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg+9*3600,0,p8_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg+10*3600,0,p8_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg+11*3600,0,p8_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return (EVAL_BOOL != p8_flSum && p8_flSum) ? DAQ.JavaLikeCalc.lib_doc.sumVal(p8_val,smBeg,smBeg+3600*12,p8_prec,"FSArch.1h") : ""; ?></center></TD>
-  </TR>
+
+<?dp
+	curHour = curDay = curMonth = curYear = 0;
+	stH = max(0, min(11,stH));
+	SYS.localtime(time, 0, 0, curHour, curDay, curMonth, curYear);
+	if(curHour < stH) SYS.localtime(time-24*60*60, 0, 0, curHour, curDay, curMonth, curYear);
+	smN = (curHour >= (stH+12) || curHour < stH) ? 2 : 1;
+	smBeg = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" "+(smN==1?stH:stH+12)+":0:0", "%Y-%m-%d %H:%M:%S");
+	res = "<TR><TH colspan=''16''>"+tr("%1   at %2 (shift %3, start hour %4)").replace("%1",SYS.strftime(SYS.time(),"%d %m %Y %H:%M:%S")).replace("%2",SYS.strftime(time,"%d %m %Y")).replace("%3",smN.toString()).replace("%4",stH.toString())+"</TH></TR>"
+			"<TR><TH rowspan=''2''>"+tr("Code")+"</TH><TH rowspan=''2''>"+tr("Name")+"</TH><TH rowspan=''2''>"+tr("Dimension")+"</TH><TH colspan=''12''>"+tr("Hours")+"</TH><TH rowspan=''2''>"+tr("Sum")+"</TH></TR>";
+	res += "<TR>";
+	for(iH = 0; iH < 12; iH++)
+		res += "<TH>"+((smN==1)?(stH+iH).toString(10,2)+"-"+(stH+iH+1).toString(10,2):
+					((tVl=stH+iH+12)<24?tVl:tVl-24).toString(10,2)+"-"+((tVl=stH+iH+13)<24?tVl:tVl-24).toString(10,2))+"</TH>";
+	res += "</TR>";
+	for(iP = 1; iP <= 10; iP++) {
+		pSh = arguments["p"+iP+"_sh"], pNm = arguments["p"+iP+"_nm"], pVal = arguments["p"+iP+"_val"],
+		pEd = arguments["p"+iP+"_ed"], pPrec = arguments["p"+iP+"_prec"], pSum = arguments["p"+iP+"_flSum"];
+		if(pVal.isEVal() || !pVal.length || pSh.isEVal() || !pSh.length || pNm.isEVal() || !pNm.length)	continue;
+		res += "<TR><TD style=''text-align: center''>"+SYS.strEncode(pSh,"HTML")+"</TD>"
+					"<TD>"+SYS.strEncode(pNm,"HTML")+"</TD>"
+					"<TD style=''text-align: center''>"+SYS.strEncode(pEd,"HTML")+"</TD>";
+		for(iH = 0; iH < 12; iH++)
+			res += "<TD style=''text-align: center''>"+DAQ.JavaLikeCalc.lib_doc.getVal(pVal,smBeg+iH*3600,0,pPrec,arch,true)+"</TD>";
+		res += "<TD style=''text-align: center''>"+((pSum == true)?DAQ.JavaLikeCalc.lib_doc.sumVal(pVal,smBeg,smBeg+3600*12,pPrec,arch):"")+"</TD>";
+		res += "</TR>";
+	}
+
+	return res;
+?>
 </TABLE>
 <BR/>
-<p>Shift chief: __________________________ </p>
-</body>',32,'','','doc','<body docProcLang="JavaLikeCalc.JavaScript">
-<h1>Звіт машиніста</h1>
-<TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data">
-  <TR><TH colspan="16">DD MM YYYY hh.mm.ss   за DD MM YYYY (зміна 1)
-    <?dp using Special.FLibSYS;
-	curHour=curDay=curMonth=curYear=0;
-	tmDate(time,0,0,curHour,curDay,curMonth,curYear);
-             if( curHour < 8 ) tmDate(time-24*60*60,0,0,curHour,curDay,curMonth,curYear);
-	smN = (curHour>20||curHour<8)?2:1;
-	smBeg = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" "+(smN==1?8:20)+":0:0","%Y-%m-%d %H:%M:%S");
-	return tmFStr(tmTime(),"%d %m %Y %H:%M:%S")+"   за "+tmFStr(time,"%d %m %Y")+" (зміна "+smN+")";
-    ?>
-  </TH></TR>
-  <TR>
-	<TH><center>Шифр</center></TH>
-	<TH><center>Найменування</center></TH>
-	<TH><center>Од.виміру</center></TH>
-	<TH><center>08-09г<?dp return (smN==1)?"08-09г":"20-21г"; ?></center></TH>
-	<TH><center>09-10г<?dp return (smN==1)?"09-10г":"21-22г"; ?></center></TH>
-	<TH><center>10-11г<?dp return (smN==1)?"10-11г":"22-23г"; ?></center></TH>
-	<TH><center>11-12г<?dp return (smN==1)?"11-12г":"23-00г"; ?></center></TH>
-	<TH><center>12-13г<?dp return (smN==1)?"12-13г":"00-01г"; ?></center></TH>
-	<TH><center>13-14г<?dp return (smN==1)?"13-14г":"01-02г"; ?></center></TH>
-	<TH><center>14-15г<?dp return (smN==1)?"14-15г":"02-03г"; ?></center></TH>
-	<TH><center>15-16г<?dp return (smN==1)?"15-16г":"03-04г"; ?></center></TH>
-	<TH><center>16-17г<?dp return (smN==1)?"16-17г":"04-05г"; ?></center></TH>
-	<TH><center>17-18г<?dp return (smN==1)?"17-18г":"05-06г"; ?></center></TH>
-	<TH><center>18-19г<?dp return (smN==1)?"18-19г":"06-07г"; ?></center></TH>
-	<TH><center>19-20г<?dp return (smN==1)?"19-20г":"07-08г"; ?></center></TH>
-	<TH><center>За зміну</center></TH>
-  </TR>
-  <TR>
-	<TD><center>Prm1<?dp return Special.FLibSYS.strEnc2HTML(p1_sh); ?></center></TD>
-	<TD>Параметр 1<?dp return Special.FLibSYS.strEnc2HTML(p1_nm); ?></TD>
-	<TD><center>Од<?dp return Special.FLibSYS.strEnc2HTML(p1_ed); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg,0,p1_prec,"FSArch.1h"); ?> </center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg+3600,0,p1_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg+2*3600,0,p1_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg+3*3600,0,p1_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg+4*3600,0,p1_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg+5*3600,0,p1_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg+6*3600,0,p1_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg+7*3600,0,p1_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg+8*3600,0,p1_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg+9*3600,0,p1_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg+10*3600,0,p1_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg+11*3600,0,p1_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return (EVAL_BOOL != p1_flSum && p1_flSum) ? DAQ.JavaLikeCalc.lib_doc.sumVal(p1_val,smBeg,smBeg+3600*12,p1_prec,"FSArch.1h") : ""; ?></center></TD>
-  </TR>
-  <TR>
-	<TD><center>Prm2<?dp return Special.FLibSYS.strEnc2HTML(p2_sh); ?></center></TD>
-	<TD>Параметр 2<?dp return Special.FLibSYS.strEnc2HTML(p2_nm); ?></TD>
-	<TD><center>Од<?dp return Special.FLibSYS.strEnc2HTML(p2_ed); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg,0,p2_prec,"FSArch.1h"); ?> </center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg+3600,0,p2_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg+2*3600,0,p2_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg+3*3600,0,p2_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg+4*3600,0,p2_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg+5*3600,0,p2_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg+6*3600,0,p2_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg+7*3600,0,p2_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg+8*3600,0,p2_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg+9*3600,0,p2_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg+10*3600,0,p2_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg+11*3600,0,p2_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return (EVAL_BOOL != p2_flSum && p2_flSum) ? DAQ.JavaLikeCalc.lib_doc.sumVal(p2_val,smBeg,smBeg+3600*12,p2_prec,"FSArch.1h") : ""; ?></center></TD>
-  </TR>
-  <TR>
-	<TD><center>Prm3<?dp return Special.FLibSYS.strEnc2HTML(p3_sh); ?></center></TD>
-	<TD>Параметр 3<?dp return Special.FLibSYS.strEnc2HTML(p3_nm); ?></TD>
-	<TD><center>Од<?dp return Special.FLibSYS.strEnc2HTML(p3_ed); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg,0,p3_prec,"FSArch.1h"); ?> </center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg+3600,0,p3_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg+2*3600,0,p3_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg+3*3600,0,p3_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg+4*3600,0,p3_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg+5*3600,0,p3_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg+6*3600,0,p3_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg+7*3600,0,p3_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg+8*3600,0,p3_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg+9*3600,0,p3_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg+10*3600,0,p3_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg+11*3600,0,p3_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return (EVAL_BOOL != p3_flSum && p3_flSum) ? DAQ.JavaLikeCalc.lib_doc.sumVal(p3_val,smBeg,smBeg+3600*12,p3_prec,"FSArch.1h") : ""; ?></center></TD>
-  </TR>
-  <TR>
-	<TD><center>Prm4<?dp return Special.FLibSYS.strEnc2HTML(p4_sh); ?></center></TD>
-	<TD>Параметр 4<?dp return Special.FLibSYS.strEnc2HTML(p4_nm); ?></TD>
-	<TD><center>Од<?dp return Special.FLibSYS.strEnc2HTML(p4_ed); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg,0,p4_prec,"FSArch.1h"); ?> </center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg+3600,0,p4_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg+2*3600,0,p4_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg+3*3600,0,p4_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg+4*3600,0,p4_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg+5*3600,0,p4_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg+6*3600,0,p4_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg+7*3600,0,p4_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg+8*3600,0,p4_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg+9*3600,0,p4_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg+10*3600,0,p4_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg+11*3600,0,p4_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return (EVAL_BOOL != p4_flSum && p4_flSum) ? DAQ.JavaLikeCalc.lib_doc.sumVal(p4_val,smBeg,smBeg+3600*12,p4_prec,"FSArch.1h") : ""; ?></center></TD>
-  </TR>
-  <TR>
-	<TD><center>Prm5<?dp return Special.FLibSYS.strEnc2HTML(p5_sh); ?></center></TD>
-	<TD>Параметр 5<?dp return Special.FLibSYS.strEnc2HTML(p5_nm); ?></TD>
-	<TD><center>Од<?dp return Special.FLibSYS.strEnc2HTML(p5_ed); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg,0,p5_prec,"FSArch.1h"); ?> </center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg+3600,0,p5_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg+2*3600,0,p5_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg+3*3600,0,p5_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg+4*3600,0,p5_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg+5*3600,0,p5_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg+6*3600,0,p5_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg+7*3600,0,p5_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg+8*3600,0,p5_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg+9*3600,0,p5_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg+10*3600,0,p5_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg+11*3600,0,p5_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return (EVAL_BOOL != p5_flSum && p5_flSum) ? DAQ.JavaLikeCalc.lib_doc.sumVal(p5_val,smBeg,smBeg+3600*12,p5_prec,"FSArch.1h") : ""; ?></center></TD>
-  </TR>
-  <TR>
-	<TD><center>Prm6<?dp return Special.FLibSYS.strEnc2HTML(p6_sh); ?></center></TD>
-	<TD>Параметр 6<?dp return Special.FLibSYS.strEnc2HTML(p6_nm); ?></TD>
-	<TD><center>Од<?dp return Special.FLibSYS.strEnc2HTML(p6_ed); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg,0,p6_prec,"FSArch.1h"); ?> </center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg+3600,0,p6_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg+2*3600,0,p6_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg+3*3600,0,p6_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg+4*3600,0,p6_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg+5*3600,0,p6_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg+6*3600,0,p6_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg+7*3600,0,p6_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg+8*3600,0,p6_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg+9*3600,0,p6_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg+10*3600,0,p6_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg+11*3600,0,p6_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return (EVAL_BOOL != p6_flSum && p6_flSum) ? DAQ.JavaLikeCalc.lib_doc.sumVal(p6_val,smBeg,smBeg+3600*12,p6_prec,"FSArch.1h") : ""; ?></center></TD>
-  </TR>
-  <TR>
-	<TD><center>Prm7<?dp return Special.FLibSYS.strEnc2HTML(p7_sh); ?></center></TD>
-	<TD>Параметр 7<?dp return Special.FLibSYS.strEnc2HTML(p7_nm); ?></TD>
-	<TD><center>Од<?dp return Special.FLibSYS.strEnc2HTML(p7_ed); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg,0,p7_prec,"FSArch.1h"); ?> </center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg+3600,0,p7_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg+2*3600,0,p7_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg+3*3600,0,p7_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg+4*3600,0,p7_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg+5*3600,0,p7_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg+6*3600,0,p7_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg+7*3600,0,p7_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg+8*3600,0,p7_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg+9*3600,0,p7_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg+10*3600,0,p7_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg+11*3600,0,p7_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return (EVAL_BOOL != p7_flSum && p7_flSum) ? DAQ.JavaLikeCalc.lib_doc.sumVal(p7_val,smBeg,smBeg+3600*12,p7_prec,"FSArch.1h") : ""; ?></center></TD>
-  </TR>
-  <TR>
-	<TD><center>Prm8<?dp return Special.FLibSYS.strEnc2HTML(p8_sh); ?></center></TD>
-	<TD>Параметр 8<?dp return Special.FLibSYS.strEnc2HTML(p8_nm); ?></TD>
-	<TD><center>Од<?dp return Special.FLibSYS.strEnc2HTML(p8_ed); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg,0,p8_prec,"FSArch.1h"); ?> </center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg+3600,0,p8_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg+2*3600,0,p8_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg+3*3600,0,p8_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg+4*3600,0,p8_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg+5*3600,0,p8_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg+6*3600,0,p8_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg+7*3600,0,p8_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg+8*3600,0,p8_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg+9*3600,0,p8_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg+10*3600,0,p8_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg+11*3600,0,p8_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return (EVAL_BOOL != p8_flSum && p8_flSum) ? DAQ.JavaLikeCalc.lib_doc.sumVal(p8_val,smBeg,smBeg+3600*12,p8_prec,"FSArch.1h") : ""; ?></center></TD>
-  </TR>
-</TABLE>
-<BR/>
-<p>Начальник зміни: __________________________ </p>
-</body>','','<body docProcLang="JavaLikeCalc.JavaScript">
-<h1>Рапорт машиниста</h1>
-<TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data">
-  <TR><TH colspan="16">DD MM YYYY hh.mm.ss   за DD MM YYYY (смена 1)
-    <?dp using Special.FLibSYS;
-	curHour=curDay=curMonth=curYear=0;
-	tmDate(time,0,0,curHour,curDay,curMonth,curYear);
-             if( curHour < 8 ) tmDate(time-24*60*60,0,0,curHour,curDay,curMonth,curYear);
-	smN = (curHour>20||curHour<8)?2:1;
-	smBeg = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" "+(smN==1?8:20)+":0:0","%Y-%m-%d %H:%M:%S");
-	return tmFStr(tmTime(),"%d %m %Y %H:%M:%S")+"   за "+tmFStr(time,"%d %m %Y")+" (смена "+smN+")";
-    ?>
-  </TH></TR>
-  <TR>
-	<TH><center>Шифр</center></TH>
-	<TH><center>Наименование</center></TH>
-	<TH><center>Ед.изм.</center></TH>
-	<TH><center>08-09ч<?dp return (smN==1)?"08-09ч":"20-21ч"; ?></center></TH>
-	<TH><center>09-10ч<?dp return (smN==1)?"09-10ч":"21-22ч"; ?></center></TH>
-	<TH><center>10-11ч<?dp return (smN==1)?"10-11ч":"22-23ч"; ?></center></TH>
-	<TH><center>11-12ч<?dp return (smN==1)?"11-12ч":"23-00ч"; ?></center></TH>
-	<TH><center>12-13ч<?dp return (smN==1)?"12-13ч":"00-01ч"; ?></center></TH>
-	<TH><center>13-14ч<?dp return (smN==1)?"13-14ч":"01-02ч"; ?></center></TH>
-	<TH><center>14-15ч<?dp return (smN==1)?"14-15ч":"02-03ч"; ?></center></TH>
-	<TH><center>15-16ч<?dp return (smN==1)?"15-16ч":"03-04ч"; ?></center></TH>
-	<TH><center>16-17ч<?dp return (smN==1)?"16-17ч":"04-05ч"; ?></center></TH>
-	<TH><center>17-18ч<?dp return (smN==1)?"17-18ч":"05-06ч"; ?></center></TH>
-	<TH><center>18-19ч<?dp return (smN==1)?"18-19ч":"06-07ч"; ?></center></TH>
-	<TH><center>19-20ч<?dp return (smN==1)?"19-20ч":"07-08ч"; ?></center></TH>
-	<TH><center>За смену</center></TH>
-  </TR>
-  <TR>
-	<TD><center>Prm1<?dp return Special.FLibSYS.strEnc2HTML(p1_sh); ?></center></TD>
-	<TD>Параметр 1<?dp return Special.FLibSYS.strEnc2HTML(p1_nm); ?></TD>
-	<TD><center>Ед<?dp return Special.FLibSYS.strEnc2HTML(p1_ed); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg,0,p1_prec,"FSArch.1h"); ?> </center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg+3600,0,p1_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg+2*3600,0,p1_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg+3*3600,0,p1_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg+4*3600,0,p1_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg+5*3600,0,p1_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg+6*3600,0,p1_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg+7*3600,0,p1_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg+8*3600,0,p1_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg+9*3600,0,p1_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg+10*3600,0,p1_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p1_val,smBeg+11*3600,0,p1_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return (EVAL_BOOL != p1_flSum && p1_flSum) ? DAQ.JavaLikeCalc.lib_doc.sumVal(p1_val,smBeg,smBeg+3600*12,p1_prec,"FSArch.1h") : ""; ?></center></TD>
-  </TR>
-  <TR>
-	<TD><center>Prm2<?dp return Special.FLibSYS.strEnc2HTML(p2_sh); ?></center></TD>
-	<TD>Параметр 2<?dp return Special.FLibSYS.strEnc2HTML(p2_nm); ?></TD>
-	<TD><center>Ед<?dp return Special.FLibSYS.strEnc2HTML(p2_ed); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg,0,p2_prec,"FSArch.1h"); ?> </center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg+3600,0,p2_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg+2*3600,0,p2_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg+3*3600,0,p2_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg+4*3600,0,p2_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg+5*3600,0,p2_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg+6*3600,0,p2_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg+7*3600,0,p2_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg+8*3600,0,p2_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg+9*3600,0,p2_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg+10*3600,0,p2_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p2_val,smBeg+11*3600,0,p2_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return (EVAL_BOOL != p2_flSum && p2_flSum) ? DAQ.JavaLikeCalc.lib_doc.sumVal(p2_val,smBeg,smBeg+3600*12,p2_prec,"FSArch.1h") : ""; ?></center></TD>
-  </TR>
-  <TR>
-	<TD><center>Prm3<?dp return Special.FLibSYS.strEnc2HTML(p3_sh); ?></center></TD>
-	<TD>Параметр 3<?dp return Special.FLibSYS.strEnc2HTML(p3_nm); ?></TD>
-	<TD><center>Ед<?dp return Special.FLibSYS.strEnc2HTML(p3_ed); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg,0,p3_prec,"FSArch.1h"); ?> </center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg+3600,0,p3_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg+2*3600,0,p3_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg+3*3600,0,p3_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg+4*3600,0,p3_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg+5*3600,0,p3_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg+6*3600,0,p3_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg+7*3600,0,p3_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg+8*3600,0,p3_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg+9*3600,0,p3_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg+10*3600,0,p3_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p3_val,smBeg+11*3600,0,p3_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return (EVAL_BOOL != p3_flSum && p3_flSum) ? DAQ.JavaLikeCalc.lib_doc.sumVal(p3_val,smBeg,smBeg+3600*12,p3_prec,"FSArch.1h") : ""; ?></center></TD>
-  </TR>
-  <TR>
-	<TD><center>Prm4<?dp return Special.FLibSYS.strEnc2HTML(p4_sh); ?></center></TD>
-	<TD>Параметр 4<?dp return Special.FLibSYS.strEnc2HTML(p4_nm); ?></TD>
-	<TD><center>Ед<?dp return Special.FLibSYS.strEnc2HTML(p4_ed); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg,0,p4_prec,"FSArch.1h"); ?> </center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg+3600,0,p4_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg+2*3600,0,p4_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg+3*3600,0,p4_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg+4*3600,0,p4_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg+5*3600,0,p4_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg+6*3600,0,p4_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg+7*3600,0,p4_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg+8*3600,0,p4_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg+9*3600,0,p4_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg+10*3600,0,p4_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p4_val,smBeg+11*3600,0,p4_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return (EVAL_BOOL != p4_flSum && p4_flSum) ? DAQ.JavaLikeCalc.lib_doc.sumVal(p4_val,smBeg,smBeg+3600*12,p4_prec,"FSArch.1h") : ""; ?></center></TD>
-  </TR>
-  <TR>
-	<TD><center>Prm5<?dp return Special.FLibSYS.strEnc2HTML(p5_sh); ?></center></TD>
-	<TD>Параметр 5<?dp return Special.FLibSYS.strEnc2HTML(p5_nm); ?></TD>
-	<TD><center>Ед<?dp return Special.FLibSYS.strEnc2HTML(p5_ed); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg,0,p5_prec,"FSArch.1h"); ?> </center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg+3600,0,p5_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg+2*3600,0,p5_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg+3*3600,0,p5_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg+4*3600,0,p5_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg+5*3600,0,p5_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg+6*3600,0,p5_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg+7*3600,0,p5_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg+8*3600,0,p5_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg+9*3600,0,p5_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg+10*3600,0,p5_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p5_val,smBeg+11*3600,0,p5_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return (EVAL_BOOL != p5_flSum && p5_flSum) ? DAQ.JavaLikeCalc.lib_doc.sumVal(p5_val,smBeg,smBeg+3600*12,p5_prec,"FSArch.1h") : ""; ?></center></TD>
-  </TR>
-  <TR>
-	<TD><center>Prm6<?dp return Special.FLibSYS.strEnc2HTML(p6_sh); ?></center></TD>
-	<TD>Параметр 6<?dp return Special.FLibSYS.strEnc2HTML(p6_nm); ?></TD>
-	<TD><center>Ед<?dp return Special.FLibSYS.strEnc2HTML(p6_ed); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg,0,p6_prec,"FSArch.1h"); ?> </center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg+3600,0,p6_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg+2*3600,0,p6_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg+3*3600,0,p6_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg+4*3600,0,p6_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg+5*3600,0,p6_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg+6*3600,0,p6_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg+7*3600,0,p6_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg+8*3600,0,p6_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg+9*3600,0,p6_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg+10*3600,0,p6_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p6_val,smBeg+11*3600,0,p6_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return (EVAL_BOOL != p6_flSum && p6_flSum) ? DAQ.JavaLikeCalc.lib_doc.sumVal(p6_val,smBeg,smBeg+3600*12,p6_prec,"FSArch.1h") : ""; ?></center></TD>
-  </TR>
-  <TR>
-	<TD><center>Prm7<?dp return Special.FLibSYS.strEnc2HTML(p7_sh); ?></center></TD>
-	<TD>Параметр 7<?dp return Special.FLibSYS.strEnc2HTML(p7_nm); ?></TD>
-	<TD><center>Ед<?dp return Special.FLibSYS.strEnc2HTML(p7_ed); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg,0,p7_prec,"FSArch.1h"); ?> </center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg+3600,0,p7_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg+2*3600,0,p7_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg+3*3600,0,p7_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg+4*3600,0,p7_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg+5*3600,0,p7_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg+6*3600,0,p7_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg+7*3600,0,p7_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg+8*3600,0,p7_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg+9*3600,0,p7_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg+10*3600,0,p7_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p7_val,smBeg+11*3600,0,p7_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return (EVAL_BOOL != p7_flSum && p7_flSum) ? DAQ.JavaLikeCalc.lib_doc.sumVal(p7_val,smBeg,smBeg+3600*12,p7_prec,"FSArch.1h") : ""; ?></center></TD>
-  </TR>
-  <TR>
-	<TD><center>Prm8<?dp return Special.FLibSYS.strEnc2HTML(p8_sh); ?></center></TD>
-	<TD>Параметр 8<?dp return Special.FLibSYS.strEnc2HTML(p8_nm); ?></TD>
-	<TD><center>Ед<?dp return Special.FLibSYS.strEnc2HTML(p8_ed); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg,0,p8_prec,"FSArch.1h"); ?> </center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg+3600,0,p8_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg+2*3600,0,p8_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg+3*3600,0,p8_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg+4*3600,0,p8_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg+5*3600,0,p8_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg+6*3600,0,p8_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg+7*3600,0,p8_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg+8*3600,0,p8_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg+9*3600,0,p8_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg+10*3600,0,p8_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return DAQ.JavaLikeCalc.lib_doc.getVal(p8_val,smBeg+11*3600,0,p8_prec,"FSArch.1h"); ?></center></TD>
-	<TD><center>-----<?dp return (EVAL_BOOL != p8_flSum && p8_flSum) ? DAQ.JavaLikeCalc.lib_doc.sumVal(p8_val,smBeg,smBeg+3600*12,p8_prec,"FSArch.1h") : ""; ?></center></TD>
-  </TR>
-</TABLE>
-<BR/>
-<p>Начальник смены: __________________________ </p>
-</body>','','','');
-INSERT INTO wlb_doc_io VALUES('docRepSm2','font','Arial 9',32,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeMgn','perm','438',32,'','','doc','','','','','','');
+<p>Working shift chief: __________________________ <?dp return tr("Working shift chief:")+"__________________________";?> </p>
+</body>',32,'','','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRep2WorkSh','font','Arial 8',32,'','','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepInstVals','perm','438',32,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docUsersSet','perm','438',32,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docGasNodeDayA','perm','438',32,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docGasNodeMonthA','perm','438',32,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeDayOrder','perm','438',32,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docRepSm2','perm','438',32,'','','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRep2WorkSh','perm','438',32,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docUsersSet','style','TABLE.data { border-collapse: collapse; }
 TABLE.data TH { background-color: #e6e6e6; border: 1px solid black; }
 TABLE.data TD { white-space: nowrap; border: 1px solid black;}',32,'','','doc','TH { background-color: #e6e6e6; }
 TD { white-space: nowrap; }','','TH { background-color: #e6e6e6; }
 TD { white-space: nowrap; }','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeMgn','style','TABLE.data { border-collapse: collapse; }
+INSERT INTO wlb_doc_io VALUES('docRepInstVals','style','TABLE.data { border-collapse: collapse; }
 TABLE.data TH { background-color: #e6e6e6; border: 1px solid black; }
 TABLE.data TD { white-space: nowrap; border: 1px solid black;}',32,'','','doc','TH { background-color: #e6e6e6; }
 TD { white-space: nowrap; }','','TH { background-color: #e6e6e6; }
@@ -12725,17 +11846,12 @@ TABLE.data TH { background-color: #e6e6e6; border: 1px solid black; }
 TABLE.data TD { white-space: nowrap; border: 1px solid black;}',32,'','','doc','TH { background-color: #e6e6e6; }
 TD { white-space: nowrap; }','','TH { background-color: #e6e6e6; }
 TD { white-space: nowrap; }','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeDayOrder','style','TABLE.data { border-collapse: collapse; }
-TABLE.data TH { background-color: #e6e6e6; border: 1px solid black; }
-TABLE.data TD { white-space: nowrap; border: 1px solid black;}',32,'','','doc','TH { background-color: #e6e6e6; }
-TD { white-space: nowrap; }','','TH { background-color: #e6e6e6; }
-TD { white-space: nowrap; }','','','');
 INSERT INTO wlb_doc_io VALUES('docGasNodeMonthA','style','TABLE.data { border-collapse: collapse; }
 TABLE.data TH { background-color: #e6e6e6; border: 1px solid black; }
 TABLE.data TD { white-space: nowrap; border: 1px solid black;}',32,'','','doc','TH { background-color: #e6e6e6; }
 TD { white-space: nowrap; }','','TH { background-color: #e6e6e6; }
 TD { white-space: nowrap; }','','','');
-INSERT INTO wlb_doc_io VALUES('docRepSm2','style','TABLE.data { border-collapse: collapse; }
+INSERT INTO wlb_doc_io VALUES('docRep2WorkSh','style','TABLE.data { border-collapse: collapse; }
 TABLE.data TH { background-color: #e6e6e6; border: 1px solid black; }
 TABLE.data TD { white-space: nowrap; border: 1px solid black;}',32,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docMessRep','owner','root:UI',32,'','','','','','','','','');
@@ -12749,10 +11865,13 @@ INSERT INTO wlb_doc_io VALUES('docMessRep','style','TABLE.data { border-collapse
 TABLE.data TH { background-color: #e6e6e6; border: 1px solid black; }
 TABLE.data TD { border: 1px solid black; text-align: center; }',32,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docMessRep','tmpl','<body docProcLang="JavaLikeCalc.JavaScript">
-<h1>Protocol of messages</h1>
+<h1>Protocol of messages <?dp return tr("Protocol of messages"); ?></h1>
 <TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data">
-  <TR><TH colspan="6" align="left">Message at <?dp return "Message at "+SYS.strftime(bTime)+" — "+SYS.strftime(time);?></TH></TR>
-  <TR><TH>Date</TH><TH>Time</TH><TH>Lev.</TH><TH>Source</TH><TH>Description</TH><TH>Value</TH></TR>
+  <TR><TH colspan="6" align="left">Message at <?dp return tr("Message at %1").replace("%1",SYS.strftime(bTime)+" — "+SYS.strftime(time));?></TH></TR>
+  <TR>
+	<TH>Date</TH><TH>Time</TH><TH>Lev.</TH><TH>Source</TH><TH>Description</TH><TH>Value</TH>
+     <?dp return "<TH>"+tr("Date")+"</TH><TH>"+tr("Time")+"</TH><TH>"+tr("Level")+"</TH><TH>"+tr("Source")+"</TH><TH>"+tr("Description")+"</TH><TH>"+tr("Value")+"</TH>";?>
+  </TR>
   <TR docAMess="@@messCat@@" docAMessArchs="@@archLs@@" docRevers="1">
   <!--<TR docAMess="1:al*:*" docRevers="1">-->
 <?dp
@@ -12795,101 +11914,7 @@ return "<TD style=''white-space: nowrap; ''>"+SYS.strftime(mTime,"%d %m")+"</TD>
 ?>
   </TR>
 </TABLE>
-</body>',40,'','','doc','<body docProcLang="JavaLikeCalc.JavaScript">
-<h1>Протокол повідомлень</h1>
-<TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data">
-  <TR><TH colspan="6" align="left">Повідомлення на <?dp return "Повідомлення на "+SYS.strftime(bTime)+" — "+SYS.strftime(time);?></TH></TR>
-  <TR><TH>Дата</TH><TH>Час</TH><TH>Рівень</TH><TH>Джерело</TH><TH>Опис</TH><TH>Значення</TH></TR>
-  <TR docAMess="@@messCat@@" docAMessArchs="@@archLs@@" docRevers="1">
-  <!--<TR docAMess="1:al*:*" docRevers="1">-->
-<?dp
-mValPrm = mVal.parse(0, ": "); mValDscr = mVal.parse(1, ": "); mValVal = mVal.parse(2, ": ");
-
-srcO = mCat.match("^al(.+):([^\\.]+)|^(.+):al");
-tVl = "";
-//From remote station
-if(srcO.length == 4 && (tVl=sourceCache[srcO[3]]).isEVal()) {
-	req = SYS.XMLNode("get").setAttr("path","/Transport/%2fsub%2fehost").setAttr("upRiseSYS",1);
-	SYS.cntrReq(req);
-	for(iTr = 0; req.childSize() && iTr < req.childGet(0).childSize(); iTr++)
-		if(req.childGet(0).childGet(iTr).text() == srcO[3]) {
-			sourceCache[srcO[3]] = tVl = req.childGet(1).childGet(iTr).text();
-			break;
-		}
-}
-if(tVl.length)	mValPrm = tVl + " > " + mValPrm;
-
-if(mCat.slice(0,2) == "OP") mValVal += " -> "+mVal.parse(3,":");
-else if(mCat[0] == "/")	mValDscr = mVal, mValPrm = mCat;
-if(fltr.length && !fltrCol.isEVal() && (
-	(fltrCol == "dttm" && SYS.strftime(mTime,"%d %m %H:%M:%S").indexOf(fltr) < 0) ||
-	//(fltrCol == "lev" && abs(mLev).toString().indexOf(fltr) < 0) ||
-	(fltrCol == "lev" && ((fltr.toInt() > 0 && abs(mLev) < fltr.toInt()) || (fltr.toInt() < 0 &&  mLev > fltr.toInt()))) ||
-	(fltrCol == "prm" && mValPrm.indexOf(fltr) < 0) ||
-	(fltrCol == "dscr" && mValDscr.indexOf(fltr) < 0) ||
-	(fltrCol == "alrm" && mValVal.indexOf(fltr) < 0))) return "";
-if(mCat[0] == "/") return "<TD style=''white-space: nowrap; ''>"+SYS.strftime(mTime,"%d %m")+"</TD>"+
-		"<TD>"+SYS.strftime(mTime,"%H:%M:%S")+"</TD>"+
-		"<TD>"+mLev+"</TD>"+
-		"<TD>"+SYS.strEncode(mValPrm,"HTML")+"</TD>"+
-		"<TD colspan=''2''>"+SYS.strEncode(mValDscr,"HTML")+"</TD>";
-return "<TD style=''white-space: nowrap; ''>"+SYS.strftime(mTime,"%d %m")+"</TD>"+
-		"<TD>"+SYS.strftime(mTime,"%H:%M:%S")+"</TD>"+
-		"<TD>"+mLev+"</TD>"+
-		"<TD>"+SYS.strEncode(mValPrm,"HTML")+"</TD>"+
-		"<TD>"+SYS.strEncode(mValDscr,"HTML")+"</TD>"+
-		"<TD>"+SYS.strEncode(mValVal,"HTML")+"</TD>";
-?>
-  </TR>
-</TABLE>
-</body>','','<body docProcLang="JavaLikeCalc.JavaScript">
-<h1>Протокол сообщений</h1>
-<TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data">
-  <TR><TH colspan="6" align="left">Сообщения на <?dp return "Сообщения на "+SYS.strftime(bTime)+" — "+SYS.strftime(time);?></TH></TR>
-  <TR><TH>Дата</TH><TH>Время</TH><TH>Уровень</TH><TH>Источник</TH><TH>Описание</TH><TH>Значение</TH></TR>
-  <TR docAMess="@@messCat@@" docAMessArchs="@@archLs@@" docRevers="1">
-  <!--<TR docAMess="1:al*:*" docRevers="1">-->
-<?dp
-mValPrm = mVal.parse(0, ": "); mValDscr = mVal.parse(1, ": "); mValVal = mVal.parse(2, ": ");
-
-srcO = mCat.match("^al(.+):([^\\.]+)|^(.+):al");
-tVl = "";
-//From remote station
-if(srcO.length == 4 && (tVl=sourceCache[srcO[3]]).isEVal()) {
-	req = SYS.XMLNode("get").setAttr("path","/Transport/%2fsub%2fehost").setAttr("upRiseSYS",1);
-	SYS.cntrReq(req);
-	for(iTr = 0; req.childSize() && iTr < req.childGet(0).childSize(); iTr++)
-		if(req.childGet(0).childGet(iTr).text() == srcO[3]) {
-			sourceCache[srcO[3]] = tVl = req.childGet(1).childGet(iTr).text();
-			break;
-		}
-}
-if(tVl.length)	mValPrm = tVl + " > " + mValPrm;
-
-if(mCat.slice(0,2) == "OP") mValVal += " -> "+mVal.parse(3,":");
-else if(mCat[0] == "/")	mValDscr = mVal, mValPrm = mCat;
-if(fltr.length && !fltrCol.isEVal() && (
-	(fltrCol == "dttm" && SYS.strftime(mTime,"%d %m %H:%M:%S").indexOf(fltr) < 0) ||
-	//(fltrCol == "lev" && abs(mLev).toString().indexOf(fltr) < 0) ||
-	(fltrCol == "lev" && ((fltr.toInt() > 0 && abs(mLev) < fltr.toInt()) || (fltr.toInt() < 0 &&  mLev > fltr.toInt()))) ||
-	(fltrCol == "prm" && mValPrm.indexOf(fltr) < 0) ||
-	(fltrCol == "dscr" && mValDscr.indexOf(fltr) < 0) ||
-	(fltrCol == "alrm" && mValVal.indexOf(fltr) < 0))) return "";
-if(mCat[0] == "/") return "<TD style=''white-space: nowrap; ''>"+SYS.strftime(mTime,"%d %m")+"</TD>"+
-		"<TD>"+SYS.strftime(mTime,"%H:%M:%S")+"</TD>"+
-		"<TD>"+mLev+"</TD>"+
-		"<TD>"+SYS.strEncode(mValPrm,"HTML")+"</TD>"+
-		"<TD colspan=''2''>"+SYS.strEncode(mValDscr,"HTML")+"</TD>";
-return "<TD style=''white-space: nowrap; ''>"+SYS.strftime(mTime,"%d %m")+"</TD>"+
-		"<TD>"+SYS.strftime(mTime,"%H:%M:%S")+"</TD>"+
-		"<TD>"+mLev+"</TD>"+
-		"<TD>"+SYS.strEncode(mValPrm,"HTML")+"</TD>"+
-		"<TD>"+SYS.strEncode(mValDscr,"HTML")+"</TD>"+
-		"<TD>"+SYS.strEncode(mValVal,"HTML")+"</TD>";
-?>
-  </TR>
-</TABLE>
-</body>','','','');
+</body>',40,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docMessRep','font','Arial 8',32,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docMessRep','owner','root:UI',32,'','','fltr','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docMessRep','name','',32,'','','fltr','','','','','','');
@@ -12941,14 +11966,15 @@ INSERT INTO wlb_doc_io VALUES('docMessRep','bordWidth','1',32,'','','lab_fltr','
 INSERT INTO wlb_doc_io VALUES('docMessRep','font','Arial 15',32,'','','lab_fltr','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docMessRep','alignment','8',32,'','','lab_fltr','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docMessRep','text','Filter:',32,'','','lab_fltr','Фільтр:','','Фильтр:','','','');
-INSERT INTO wlb_doc_io VALUES('docAlarmsRep','dscr','Standard protocol of violations
+INSERT INTO wlb_doc_io VALUES('docAlarmsRep','dscr','The document is provided for generating a report of the violations. The document is the dynamic type, so you can specify the data time and depth. The document commonly uses and represents the messages structure "Violations". As a data source of this document is the message archive.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.1',32,'','','','Стандартний протокол порушень
+Version: 1.5.0
+License: GPLv2',32,'','','','Документ слугує для генерації звіту з порушень. Документ динамічного типу, відтак ви можете визначити час та глибину даних. Документ загалом використовує та представляє структуру повідомлень "Порушення". У якості джерела даних документу виступає архів повідомлень.
+
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.0.0','','Стандартный протокол нарушений
-Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.0.0','','','');
+Версія: 1.5.0
+Ліцензія: GPLv2','','','','','');
 INSERT INTO wlb_doc_io VALUES('docGasNodeDayA','dscr','Table of hour-averaged values of the flow-control point. Based on the archival mode document, but supports the both modes - dynamic and archival.
 The custom configuration fields in the tab "Links":
 "n" - the mode of the document, set to 0 for the dynamic mode and some archive size for the archival mode.
@@ -12974,13 +12000,15 @@ Version: 2.2.0',32,'','','','Таблиця середніх за годину �
 "doc.Point" - параметр узла учёта расхода с группой атрибутов.
 Автор: Роман Савоченко <roman@oscada.org>
 Версия: 2.1.0','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeMgn','dscr','Instantaneous values table of the gas control node. Based on the dynamic document.
+INSERT INTO wlb_doc_io VALUES('docRepInstVals','dscr','The document is provided for generating a report of the instantaneous values in view of the trends diagram and the data table. The document is the dynamic type, so you can specify the data time and depth. The document commonly uses and represents the representative structure of the DAQ-template "Analog signal". As a data source of this document is the value archives of the DAQ-parameters.
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.0',32,'','','','Таблиця миттєвих значень вузла контролю газу. Засновано на динамічному документі.
+Version: 2.0.0
+License: GPLv2',32,'','','','Документ слугує для генерації звіту миттєвих значень у вигляді діаграми трендів та таблиці даних. Документ динамічного типу, відтак ви можете визначити час та глибину даних. Документ загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал". У якості джерела даних документу виступають архіви значень DAQ-параметрів.
+
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.0.0','','Таблица мгновенных значений узла контроля газа. Основана на динамическом документе.
-Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.0.0','','','');
+Версія: 2.0.0
+Ліцензія: GPLv2','','','','','');
 INSERT INTO wlb_doc_io VALUES('docGasNodeMonthA','dscr','Table of day-averaged values of the flow-control point. Based on the archival mode document, but supports the both modes - dynamic and archival.
 The custom configuration fields in the tab "Links":
 "n" - the mode of the document, set to 0 for the dynamic mode and some archive size for the archival mode.
@@ -13006,29 +12034,41 @@ Version: 2.2.0',32,'','','','Таблиця середніх за добу зн�
 "doc.Point" - параметр узла учёта расхода с группой атрибутов.
 Автор: Роман Савоченко <roman@oscada.org>
 Версия: 2.1.0','','','');
-INSERT INTO wlb_doc_io VALUES('docMessRep','dscr','Generic messages report allowed for filtering both in static and dynamic. Based on the dynamic document.
+INSERT INTO wlb_doc_io VALUES('docMessRep','dscr','The document is provided for generating a report of different sort messages together, including: "Violations", "User-operator actions" and "System". The document is the dynamic type, so you can specify the data time and depth. The document so commonly uses and represents the messages structures: "Violations", "User-operator actions" and "System". As a data source of this document is the message archive.
+
+The document also provides a simple filtering for selected criteria: "Disabled", "Date and time (dttm)", "Level (lev)", "Parameter (prm)", "Description (dscr)", "Value (alrm)".
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.0',32,'','','','Загальний звіт повідомлень, допускає фільтрацію як статично так і динамічно. Заснований на динамічному документі.
+Sponsored by: Ustijancev Michael
+Version: 1.5.0
+License: GPLv2',32,'','','','Документ слугує для генерації звіту різного сорту повідомлень разом, включаючи: "Порушення", "Дії користувача-оператора" та "Системні". Документ динамічного типу, відтак ви можете визначити час та глибину даних. Документ загалом використовує та представляє структури повідомлень: "Порушення", "Дії користувача-оператора" та "Системні". У якості джерела даних документу виступає архів повідомлень.
+
+Документ також надає просту фільтрацію за обраним критерієм: "Вимкнено", "Дата та час (dttm)", "Рівень (lev)", "Параметр (prm)", "Опис (dscr)", "Значення (alrm)".
+
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.1.0','','Общий отчёт сообщений, допускает фильтрацию как статически так и динамически. Основан на динамическом документе.
-Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.1.0','','','');
-INSERT INTO wlb_doc_io VALUES('docRepSm2','dscr','2 shift report. Based on the dynamic document.
-Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.0',32,'','','','Звіт на дві зміни. Заснований на динамічному документі.
-Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.1.0','','Отчёт на две смены. Основан на динамическом документе.
-Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.1.0','','','');
-INSERT INTO wlb_doc_io VALUES('docUsersSet','dscr','Log of user interruptions. Based on the dynamic document.
+Спонсорування: Устьянцев Михайло
+Версія: 1.5.0
+Ліцензія: GPLv2','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRep2WorkSh','dscr','The document is provided for generating a report of the hour values of up to 10 parameters for two working shift of day with the result sum for flows and related parameters. The document is the dynamic type, so you can specify the data time and depth (fixed). The document commonly uses and represents the representative structure of the DAQ-template "Analog signal". As a data source of this document is the value archives of the DAQ-parameters.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.1',32,'','','','Протокол дій користувача. Заснований на динамічному документі.
+Sponsored by: DIYA LTD (http://diyaorg.dp.ua/)
+Version: 2.0.0
+License: GPLv2',32,'','','','Документ слугує для генерації звіту годинних значень до 10 параметрів двох робочих змін доби із результатною сумою для потоків та схожих параметрів. Документ динамічного типу, відтак ви можете визначити час та глибину (фіксована) даних. Документ загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал". У якості джерела даних документу виступають архіви значень DAQ-параметрів.
+
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.2.0','','Протокол действий пользователя. Основан на динамическом документе.
+Спонсоровано: ТОВ "ДІЯ" (http://diyaorg.dp.ua/)
+Версія: 2.0.0
+Ліцензія: GPLv2','','','','','');
+INSERT INTO wlb_doc_io VALUES('docUsersSet','dscr','The document is provided for generating a report of the user interruptions. The document is the dynamic type, so you can specify the data time and depth. The document commonly uses and represents the messages structure "User-operator actions". As a data source of this document is the message archive.
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.5.0
+License: GPLv2',32,'','','','Документ слугує для генерації звіту з втручань користувача. Документ динамічного типу, відтак ви можете визначити час та глибину даних. Документ загалом використовує та представляє структуру повідомлень "Дії користувача-оператора". У якості джерела даних документу виступає архів повідомлень.
+
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.2.0','','','');
+Версія: 1.5.0
+Ліцензія: GPLv2','','','','','');
 INSERT INTO wlb_doc_io VALUES('docGasNodeDayA','aSize','0',32,'','wdg:../a_aSize','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docGasNodeDayA','doc','',40,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docGasNodeMonthA','doc','',40,'','','doc','','','','','','');
@@ -13162,6 +12202,16 @@ INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomZ','3',32,'','','year','',
 INSERT INTO wlb_doc_io VALUES('docResourcesYear','elType','4',32,'','','year','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docResourcesYear','value','2019',0,'','','year','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docResourcesYear','font','Arial 20',0,'','','year','','','','','','');
+INSERT INTO wlb_doc_io VALUES('doc','style','TABLE.data { border-collapse: collapse; }
+TABLE.data TH { background-color: #e6e6e6; border: 1px solid black; }
+TABLE.data TD { white-space: nowrap; border: 1px solid black;}',32,'','','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docDin','style','TABLE.data { border-collapse: collapse; }
+TABLE.data TH { background-color: #e6e6e6; border: 1px solid black; }
+TABLE.data TD { white-space: nowrap; border: 1px solid black;}',32,'','','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRep2WorkSh','geomH','576',32,'','','','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRep2WorkSh','geomX','1',32,'','','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRep2WorkSh','geomW','898',32,'','','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRep2WorkSh','geomH','574',32,'','','doc','','','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_doc_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO wlb_doc_uio VALUES('docGasNodeDayA','lastDay','Last day',131073,'-1|',8,'','','','Останній день','','','Последний день','','','','');
 INSERT INTO wlb_doc_uio VALUES('docGasNodeDayA','lastHour','Last hour',131073,'-1|',8,'','','','Остання година','','','Последний час','','','','');
@@ -13180,106 +12230,80 @@ INSERT INTO wlb_doc_uio VALUES('docGasNodeMonthA','pQ','Point: volume',196613,NU
 INSERT INTO wlb_doc_uio VALUES('docGasNodeMonthA','pP','Point: pressure',196613,NULL,2,'Point|P','','doc','Вузол: тиск','','','Узел: давление','','','','');
 INSERT INTO wlb_doc_uio VALUES('docGasNodeMonthA','pDS','Point: density',196613,NULL,2,'Point|DS','','doc','Вузол: щільність','','','Узел: плотность','','','','');
 INSERT INTO wlb_doc_uio VALUES('docGasNodeMonthA','pDP','Point: pressure diff.',196613,NULL,2,'Point|dP','','doc','Вузол: перепад','','','Узел: перепад','','','','');
-INSERT INTO wlb_doc_uio VALUES('docUsersSet','pT','Point: temperature',196613,'<EVAL>',2,'Point|T','','doc','Вузол: температура','','','Узел: температура','','Point|T','','');
-INSERT INTO wlb_doc_uio VALUES('docUsersSet','pQ','Point: volume',196613,'<EVAL>',2,'Point|Q','','doc','Вузол: об''єм','','','Узел: объём','','Point|Q','','');
-INSERT INTO wlb_doc_uio VALUES('docUsersSet','pP','Point: pressure',196613,'<EVAL>',2,'Point|P','','doc','Вузол: тиск','','','Узел: давление','','Point|P','','');
-INSERT INTO wlb_doc_uio VALUES('docUsersSet','pF','Point: flow',196613,'<EVAL>',2,'Point|F','','doc','Вузол: витрати','','','Узел: расход','','','','');
-INSERT INTO wlb_doc_uio VALUES('docUsersSet','pDP','Point: pressure diff.',196613,'<EVAL>',2,'Point|dP','','doc','Вузол: перепад','','','Узел: перепад','','Point|dP','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeMgn','pT','Point: temperature',196613,NULL,2,'Point|T','','doc','Вузол: температура','','','Узел: температура','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeMgn','pQ','Point: volume',196613,NULL,2,'Point|Q','','doc','Вузол: об''єм','','','Узел: объём','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeMgn','pP','Point: pressure',196613,NULL,2,'Point|P','','doc','Вузол: тиск','','','Узел: давление','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeMgn','pF','Point: flow',196613,NULL,2,'Point|F','','doc','Вузол: витрати','','','Узел: расход','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeMgn','pDP','Point: pressure diff.',196613,NULL,2,'Point|dP','','doc','Вузол: перепад','','','Узел: перепад','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayOrder','lastDay','Last day',131073,'-1|',8,'','','','Остання доба','','','Последний день','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayOrder','lastHour','Last hour',131073,'-1|',8,'','','','Остання година','','','Последний час','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayOrder','lastMin','Last minute',131073,'-1|',8,'','','','Остання хвилина','','','Последняя минута','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayOrder','сOtbTp','Point: sensor''s type',131077,NULL,1,'','','doc','Вузол: тип відбору','','','Узел: тип отбора','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayOrder','сDSu','Point: diameter of narrowing',131076,'<EVAL>|',1,'','','doc','Вузол: діаметр ЗП','','','Узел: диаметр СУ','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayOrder','pQ','Point: volume',196613,NULL,2,'Point|Q','','doc','Вузол: об''єм','','','Узел: объём','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayOrder','pT','Point: temperature',196613,NULL,2,'Point|T','','doc','Вузол: температура','','','Узел: температура','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayOrder','pP','Point: pressure',196613,NULL,2,'Point|P','','doc','Вузол: тиск','','','Узел: давление','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayOrder','pDS','Point: density',196613,NULL,2,'Point|DS','','doc','Вузол: щільність','','','Узел: плотность','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayOrder','pDP','Point: pressure diff.',196613,NULL,2,'Point|dP','','doc','Вузол: перепад','','','Узел: перепад','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayOrder','cVsDin','Point: dynamic ductility',131076,'<EVAL>|',1,'','','doc','Вузол: динамічна в''язкість','','','Узел: динамическая вязкость','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayOrder','cSotn','Point: relative square of narrowing',131076,'<EVAL>|',1,'','','doc','Вузол: відн. площина ЗП','','','Узел: отн. площадь СУ','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayOrder','cPperekl','Point: trigger threshold',131076,'<EVAL>|',1,'','','doc','Вузол: поріг переключення','','','Узел: порог переключения','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayOrder','cPots','Point: cuting',131076,'<EVAL>|',1,'','','doc','Вузол: відсічка','','','Узел: отсечка','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayOrder','cPatm','Point: atm. pressure',131076,'<EVAL>|',1,'','','doc','Вузол: атм. тиск','','','Узел: атм. давление','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayOrder','cMolsCO2','Point: molar part of CO2',131076,'<EVAL>|',1,'','','doc','Вузол: молярна доля CO2','','','Узел: молярная доля CO2','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayOrder','cDPup','Point: upper border',131076,'<EVAL>|',1,'','','doc','Вузол: верхня межа','','','Узел: верхний предел','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayOrder','cDTr','Point: pipe diameter',131076,'<EVAL>|',1,'','','doc','Вузол: діаметр труби','','','Узел: диаметр трубы','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayOrder','cKL','Point: coefficient L (alpha)',131076,'<EVAL>|',1,'','','doc','Вузол: коефіцієнт L (альфа)','','','Узел: коэффициент L (альфа)','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayOrder','cKsh','Point: coefficient of harshness',131076,'<EVAL>|',1,'','','doc','Вузол: коефіцієнт шорсткості','','','Узел: коэффициент шерохов.','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayOrder','cKtup','Point: coefficient of blunting',131076,'<EVAL>|',1,'','','doc','Вузол: коефіцієнт притупл.','','','Узел: коэффициент притупл.','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayOrder','cMoldN','Point: molar part of N',131076,'<EVAL>|',1,'','','doc','Вузол: молярна доля N2','','','Узел: молярная доля N2','','','','');
 INSERT INTO wlb_doc_uio VALUES('docGasNodeDayA','closeDoc','Close document',131072,'0',8,'','','','Закриття документа','','','Закрывать документ','','','','');
 INSERT INTO wlb_doc_uio VALUES('docGasNodeMonthA','closeDoc','Close document',131072,'0',8,'','','','Закриття документа','','','Закрытие документа','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayOrder','closeDoc','Close document',131072,NULL,8,'','','','Закриття документа','','','Закрытие документа','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p1_ed','Parameter1: dimens',131077,'<EVAL>||',2,'Parameter 1|ed','','doc','Параметр1: од.виміру','','','Параметр1: ед.изм.','<EVAL>','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p2_ed','Parameter2: dimens',131077,'<EVAL>||',2,'Parameter 2|ed','','doc','Параметр2: од.виміру','','','Параметр2: ед.изм.','<EVAL>','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p3_ed','Parameter3: dimens',131077,'<EVAL>||',2,'Parameter 3|ed','','doc','Параметр3: од.виміру','','','Параметр3: ед.изм.','<EVAL>','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p4_ed','Parameter4: dimens',131077,'<EVAL>||',2,'Parameter 4|ed','','doc','Параметр4: од.виміру','','','Параметр4: ед.изм.','<EVAL>','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p5_ed','Parameter5: dimens',131077,'<EVAL>||',2,'Parameter 5|ed','','doc','Параметр5: од.виміру','','','Параметр5: ед.изм.','<EVAL>','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p6_ed','Parameter6: dimens',131077,'<EVAL>||',2,'Parameter 6|ed','','doc','Параметр6: од.виміру','','','Параметр6: ед.изм.','<EVAL>','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p7_ed','Parameter7: dimens',131077,'<EVAL>||',2,'Parameter 7|ed','','doc','Параметр7: од.виміру','','','Параметр7: ед.изм.','<EVAL>','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p8_ed','Parameter8: dimens',131077,'<EVAL>||',2,'Parameter 8|ed','','doc','Параметр8: од.виміру','','','Параметр8: ед.изм.','<EVAL>','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p1_flSum','Parameter1: sum flag',131072,'<EVAL>',1,'Parameter 1|flSum','','doc','Параметр1: показник сумування','','','Параметр1: признак суммировать','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p2_flSum','Parameter2: sum flag',131072,'<EVAL>',1,'Parameter 2|flSum','','doc','Параметр2: показник сумування','','','Параметр2: признак суммировать','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p3_flSum','Parameter3: sum flag',131072,'<EVAL>',1,'Parameter 3|flSum','','doc','Параметр3: показник сумування','','','Параметр3: признак суммировать','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p4_flSum','Parameter4: sum flag',131072,'<EVAL>',1,'Parameter 4|flSum','','doc','Параметр4: показник сумування','','','Параметр4: признак суммировать','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p5_flSum','Parameter5: sum flag',131072,'<EVAL>',1,'Parameter 5|flSum','','doc','Параметр5: показник сумування','','','Параметр5: признак суммировать','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p6_flSum','Parameter6: sum flag',131072,'<EVAL>',1,'Parameter 6|flSum','','doc','Параметр6: показник сумування','','','Параметр6: признак суммировать','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p7_flSum','Parameter7: sum flag',131072,'<EVAL>',1,'Parameter 7|flSum','','doc','Параметр7: показник сумування','','','Параметр7: признак суммировать','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p8_flSum','Parameter8: sum flag',131072,'<EVAL>',1,'Parameter 8|flSum','','doc','Параметр8: показник сумування','','','Параметр8: признак суммировать','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','smBeg','Shift begin',131073,'<EVAL>|',0,'','','doc','Початок зміни','','','Начало смены','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','smN','Shift',131073,'<EVAL>|',0,'','','doc','Зміна','','','Смена','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p1_nm','Parameter1: description',131077,'<EVAL>||',2,'Parameter 1|DESCR','','doc','Параметр1: опис','','','Параметр1: описание','<EVAL>','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p2_nm','Parameter2: description',131077,'<EVAL>||',2,'Parameter 2|DESCR','','doc','Параметр2: опис','','','Параметр2: описание','<EVAL>','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p3_nm','Parameter3: description',131077,'<EVAL>||',2,'Parameter 3|DESCR','','doc','Параметр3: опис','','','Параметр3: описание','<EVAL>','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p4_nm','Parameter4: description',131077,'<EVAL>||',2,'Parameter 4|DESCR','','doc','Параметр4: опис','','','Параметр4: описание','<EVAL>','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p5_nm','Parameter5: description',131077,'<EVAL>||',2,'Parameter 5|DESCR','','doc','Параметр5: опис','','','Параметр5: описание','<EVAL>','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p6_nm','Parameter6: description',131077,'<EVAL>||',2,'Parameter 6|DESCR','','doc','Параметр6: опис','','','Параметр6: описание','<EVAL>','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p7_nm','Parameter7: description',131077,'<EVAL>||',2,'Parameter 7|DESCR','','doc','Параметр7: опис','','','Параметр7: описание','<EVAL>','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p8_nm','Parameter8: description',131077,'<EVAL>||',2,'Parameter 8|DESCR','','doc','Параметр8: опис','','','Параметр8: описание','<EVAL>','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p1_prec','Parameter1: precision',131073,'<EVAL>|',2,'Parameter 1|prec','','doc','Параметр1: точність','','','Параметр1: точность','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p2_prec','Parameter2: precision',131073,'<EVAL>|',2,'Parameter 2|prec','','doc','Параметр2: точність','','','Параметр2: точность','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p3_prec','Parameter3: precision',131073,'<EVAL>|',2,'Parameter 3|prec','','doc','Параметр3: точність','','','Параметр3: точность','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p4_prec','Parameter4: precision',131073,'<EVAL>|',2,'Parameter 4|prec','','doc','Параметр4: точність','','','Параметр4: точность','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p5_prec','Parameter5: precision',131073,'<EVAL>|',2,'Parameter 5|prec','','doc','Параметр5: точність','','','Параметр5: точность','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p6_prec','Parameter6: precision',131073,'<EVAL>|',2,'Parameter 6|prec','','doc','Параметр6: точність','','','Параметр6: точность','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p7_prec','Parameter7: precision',131073,'<EVAL>|',2,'Parameter 7|prec','','doc','Параметр7: точність','','','Параметр7: точность','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p8_prec','Parameter8: precision',131073,'<EVAL>|',2,'Parameter 8|prec','','doc','Параметр8: точність','','','Параметр8: точность','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p1_sh','Parameter1: code',131077,'<EVAL>||',2,'Parameter 1|NAME','','doc','Параметр1: шифр','','','Параметр1: шифр','<EVAL>','Parameter 1|NAME','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p2_sh','Parameter2: code',131077,'<EVAL>||',2,'Parameter 2|NAME','','doc','Параметр2: шифр','','','Параметр2: шифр','<EVAL>','Parameter 2|NAME','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p3_sh','Parameter3: code',131077,'<EVAL>||',2,'Parameter 3|NAME','','doc','Параметр3: шифр','','','Параметр3: шифр','<EVAL>','Parameter 3|NAME','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p4_sh','Parameter4: code',131077,'<EVAL>||',2,'Parameter 4|NAME','','doc','Параметр4: шифр','','','Параметр4: шифр','<EVAL>','Parameter 4|NAME','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p5_sh','Parameter5: code',131077,'<EVAL>||',2,'Parameter 5|NAME','','doc','Параметр5: шифр','','','Параметр5: шифр','<EVAL>','Parameter 5|NAME','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p6_sh','Parameter6: code',131077,'<EVAL>||',2,'Parameter 6|NAME','','doc','Параметр6: шифр','','','Параметр6: шифр','<EVAL>','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p7_sh','Parameter7: code',131077,'<EVAL>||',2,'Parameter 7|NAME','','doc','Параметр7: шифр','','','Параметр7: шифр','<EVAL>','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p8_sh','Parameter8: code',131077,'<EVAL>||',2,'Parameter 8|NAME','','doc','Параметр8: шифр','','','Параметр8: шифр','<EVAL>','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p1_val','Parameter1: value',196613,'<EVAL>',2,'Parameter 1|var','','doc','Параметр1: значення','','','Параметр1: значение','','Parameter 1|var','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p2_val','Parameter2: value',196613,'<EVAL>',2,'Parameter 2|var','','doc','Параметр2: значення','','','Параметр2: значение','','Parameter 2|var','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p3_val','Parameter3: value',196613,'<EVAL>',2,'Parameter 3|var','','doc','Параметр3: значення','','','Параметр3: значение','','Parameter 3|var','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p4_val','Parameter4: value',196613,'<EVAL>',2,'Parameter 4|var','','doc','Параметр4: значення','','','Параметр4: значение','','Parameter 4|var','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p5_val','Parameter5: value',196613,'<EVAL>',2,'Parameter 5|var','','doc','Параметр5: значення','','','Параметр5: значение','','Parameter 5|var','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p6_val','Parameter6: value',196613,'<EVAL>',2,'Parameter 6|var','','doc','Параметр6: значення','','','Параметр6: значение','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p7_val','Parameter7: value',196613,'<EVAL>',2,'Parameter 7|var','','doc','Параметр7: значення','','','Параметр7: значение','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepSm2','p8_val','Parameter8: value',196613,'<EVAL>',2,'Parameter 8|var','','doc','Параметр8: значення','','','Параметр8: значение','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p1_ed','Parameter 1: dimension',131077,'',2,'Parameter1|ed','','doc','Параметр 1: од.виміру','','','Параметр 1: ед.измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p2_ed','Parameter 2: dimension',131077,'',2,'Parameter2|ed','','doc','Параметр 2: од.виміру','','','Параметр 2: ед.измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p3_ed','Parameter 3: dimension',131077,'',2,'Parameter3|ed','','doc','Параметр 3: од.виміру','','','Параметр 3: ед.измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p4_ed','Parameter 4: dimension',131077,'',2,'Parameter4|ed','','doc','Параметр 4: од.виміру','','','Параметр 4: ед.измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p5_ed','Parameter 5: dimension',131077,'',2,'Parameter5|ed','','doc','Параметр 5: од.виміру','','','Параметр 5: ед.измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p6_ed','Parameter 6: dimension',131077,'',2,'Parameter6|ed','','doc','Параметр 6: од.виміру','','','Параметр 6: ед.измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p7_ed','Parameter 7: dimension',131077,'',2,'Parameter7|ed','','doc','Параметр 7: од.виміру','','','Параметр 7: ед.измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p8_ed','Parameter 8: dimension',131077,'',2,'Parameter8|ed','','doc','Параметр 8: од.виміру','','','Параметр 8: ед.измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p9_ed','Parameter 9: dimension',131077,'',2,'Parameter9|ed','','doc','Параметр 9: од.виміру','','','Параметр 9: ед.измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p10_ed','Parameter 10: dimension',131077,'',2,'Parameter10|ed','','doc','Параметр 10: од.виміру','','','Параметр 10: ед.измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p1_flSum','Parameter 1: sum flag',131072,NULL,1,'Parameter1|flSum','','doc','Параметр 1: показник підсумку','','','Параметр 1: признак суммы','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p2_flSum','Parameter 2: sum flag',131072,NULL,1,'Parameter2|flSum','','doc','Параметр 2: показник підсумку','','','Параметр 2: признак суммы','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p3_flSum','Parameter 3: sum flag',131072,NULL,1,'Parameter3|flSum','','doc','Параметр 3: показник підсумку','','','Параметр 3: признак суммы','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p4_flSum','Parameter 4: sum flag',131072,NULL,1,'Parameter4|flSum','','doc','Параметр 4: показник підсумку','','','Параметр 4: признак суммы','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p5_flSum','Parameter 5: sum flag',131072,NULL,1,'Parameter5|flSum','','doc','Параметр 5: показник підсумку','','','Параметр 5: признак суммы','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p6_flSum','Parameter 6: sum flag',131072,NULL,1,'Parameter6|flSum','','doc','Параметр 6: показник підсумку','','','Параметр 6: признак суммы','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p7_flSum','Parameter 7: sum flag',131072,NULL,1,'Parameter7|flSum','','doc','Параметр 7: показник підсумку','','','Параметр 7: признак суммы','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p8_flSum','Parameter 8: sum flag',131072,NULL,1,'Parameter8|flSum','','doc','Параметр 8: показник підсумку','','','Параметр 8: признак суммы','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p9_flSum','Parameter 9: sum flag',131072,NULL,1,'Parameter9|flSum','','doc','Параметр 9: показник підсумку','','','Параметр 9: признак суммы','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p10_flSum','Parameter 10: sum flag',131072,NULL,1,'Parameter10|flSum','','doc','Параметр 10: показник підсумку','','','Параметр 10: признак суммы','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','smBeg','Shift begin',131073,'<EVAL>|',0,'','','doc','Початок зміни','','','Начало смены','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','smN','Shift',131073,'<EVAL>|',0,'','','doc','Зміна','','','Смена','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p1_nm','Parameter 1: description',131077,'',2,'Parameter1|DESCR','','doc','Параметр 1: опис','','','Параметр 1: описание','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p2_nm','Parameter 2: description',131077,'',2,'Parameter2|DESCR','','doc','Параметр 2: опис','','','Параметр 2: описание','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p3_nm','Parameter 3: description',131077,'',2,'Parameter3|DESCR','','doc','Параметр 3: опис','','','Параметр 3: описание','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p4_nm','Parameter 4: description',131077,'',2,'Parameter4|DESCR','','doc','Параметр 4: опис','','','Параметр 4: описание','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p5_nm','Parameter 5: description',131077,'',2,'Parameter5|DESCR','','doc','Параметр 5: опис','','','Параметр 5: описание','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p6_nm','Parameter 6: description',131077,'',2,'Parameter6|DESCR','','doc','Параметр 6: опис','','','Параметр 6: описание','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p7_nm','Parameter 7: description',131077,'',2,'Parameter7|DESCR','','doc','Параметр 7: опис','','','Параметр 7: описание','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p8_nm','Parameter 8: description',131077,'',2,'Parameter8|DESCR','','doc','Параметр 8: опис','','','Параметр 8: описание','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p9_nm','Parameter 9: description',131077,'',2,'Parameter9|DESCR','','doc','Параметр 9: опис','','','Параметр 9: описание','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p10_nm','Parameter 10: description',131077,'',2,'Parameter10|DESCR','','doc','Параметр 10: опис','','','Параметр 10: описание','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p1_prec','Parameter 1: precision',131073,'0|',2,'Parameter1|prec','','doc','Параметр 1: точність','','','Параметр 1: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p2_prec','Parameter 2: precision',131073,'0|',2,'Parameter2|prec','','doc','Параметр 2: точність','','','Параметр 2: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p3_prec','Parameter 3: precision',131073,'0|',2,'Parameter3|prec','','doc','Параметр 3: точність','','','Параметр 3: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p4_prec','Parameter 4: precision',131073,'0|',2,'Parameter4|prec','','doc','Параметр 4: точність','','','Параметр 4: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p5_prec','Parameter 5: precision',131073,'0|',2,'Parameter5|prec','','doc','Параметр 5: точність','','','Параметр 5: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p6_prec','Parameter 6: precision',131073,'0|',2,'Parameter6|prec','','doc','Параметр 6: точність','','','Параметр 6: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p7_prec','Parameter 7: precision',131073,'0|',2,'Parameter7|prec','','doc','Параметр 7: точність','','','Параметр 7: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p8_prec','Parameter 8: precision',131073,'0|',2,'Parameter8|prec','','doc','Параметр 8: точність','','','Параметр 8: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p9_prec','Parameter 9: precision',131073,'0|',2,'Parameter9|prec','','doc','Параметр 9: точність','','','Параметр 9: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p10_prec','Parameter 10: precision',131073,'0|',2,'Parameter10|prec','','doc','Параметр 10: точність','','','Параметр 10: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p1_sh','Parameter 1: code',131077,'',2,'Parameter1|NAME','','doc','Параметр 1: шифр','','','Параметр 1: шифр','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p2_sh','Parameter 2: code',131077,'',2,'Parameter2|NAME','','doc','Параметр 2: шифр','','','Параметр 2: шифр','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p3_sh','Parameter 3: code',131077,'',2,'Parameter3|NAME','','doc','Параметр 3: шифр','','','Параметр 3: шифр','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p4_sh','Parameter 4: code',131077,'',2,'Parameter4|NAME','','doc','Параметр 4: шифр','','','Параметр 4: шифр','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p5_sh','Parameter 5: code',131077,'',2,'Parameter5|NAME','','doc','Параметр 5: шифр','','','Параметр 5: шифр','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p6_sh','Parameter 6: code',131077,'',2,'Parameter6|NAME','','doc','Параметр 6: шифр','','','Параметр 6: шифр','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p7_sh','Parameter 7: code',131077,'',2,'Parameter7|NAME','','doc','Параметр 7: шифр','','','Параметр 7: шифр','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p8_sh','Parameter 8: code',131077,'',2,'Parameter8|NAME','','doc','Параметр 8: шифр','','','Параметр 8: шифр','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p9_sh','Parameter 9: code',131077,'',2,'Parameter9|NAME','','doc','Параметр 9: шифр','','','Параметр 9: шифр','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p10_sh','Parameter 10: code',131077,'',2,'Parameter10|NAME','','doc','Параметр 10: шифр','','','Параметр 10: шифр','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p1_val','Parameter 1: value',196613,'',2,'Parameter1|var','','doc','Параметр 1: значення','','','Параметр 1: значение','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p2_val','Parameter 2: value',196613,'',2,'Parameter2|var','','doc','Параметр 2: значення','','','Параметр 2: значение','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p3_val','Parameter 3: value',196613,'',2,'Parameter3|var','','doc','Параметр 3: значення','','','Параметр 3: значение','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p4_val','Parameter 4: value',196613,'',2,'Parameter4|var','','doc','Параметр 4: значення','','','Параметр 4: значение','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p5_val','Parameter 5: value',196613,'',2,'Parameter5|var','','doc','Параметр 5: значення','','','Параметр 5: значение','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p6_val','Parameter 6: value',196613,'',2,'Parameter6|var','','doc','Параметр 6: значення','','','Параметр 6: значение','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p7_val','Parameter 7: value',196613,'',2,'Parameter7|var','','doc','Параметр 7: значення','','','Параметр 7: значение','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p8_val','Parameter 8: value',196613,'',2,'Parameter8|var','','doc','Параметр 8: значення','','','Параметр 8: значение','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p9_val','Parameter 9: value',196613,'',2,'Parameter9|var','','doc','Параметр 9: значення','','','Параметр 9: значение','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p10_val','Parameter 10: value',196613,'',2,'Parameter10|var','','doc','Параметр 10: значення','','','Параметр 10: значение','','','','');
 INSERT INTO wlb_doc_uio VALUES('docMessRep','archLs','Archivers list, "{ArhMod}.{Arh}[;{ArhModN}.{ArhN}]"',131077,'FSArch.arch;FSArch.arch1',8,'','','','Перелік архіваторів, "{ArhMod}.{Arh}[;{ArhModN}.{ArhN}]"','','','Перечень архиваторов, "{ArhMod}.{Arh}[;{ArhModN}.{ArhN}]"','','','','');
-INSERT INTO wlb_doc_uio VALUES('docMessRep','messCat','Messages category',131077,'1:/^(al|OP|/sub_UI/mod_VCAEngine)/',8,'','','','Категорія повідомлень','','','Категория сообщений','','','','');
+INSERT INTO wlb_doc_uio VALUES('docMessRep','messCat','Message category',131077,'1:/^(al|OP|/sub_UI/mod_VCAEngine)/',8,'','','','Категорія повідомлень','','','Категория сообщений','','','','');
 INSERT INTO wlb_doc_uio VALUES('docMessRep','fltr','Filter: value',131077,NULL,2,'','wdg:../wdg_fltr/a_value','doc','Фільтр: значення','','','Фільтр: значение','','','','');
 INSERT INTO wlb_doc_uio VALUES('docMessRep','fltrCol','Filter: by column',131077,NULL,8,'','','doc','Фільтр: за стовпчиками','','','Фильтр: по колонкам','','','','');
 INSERT INTO wlb_doc_uio VALUES('docGasNodeDayA','repHour','Report hour',131073,'9|',9,'','','','Звітний час','','','Отчётный час','','','','');
 INSERT INTO wlb_doc_uio VALUES('docGasNodeDayA','arch','Archiver',131077,'FSArch.1m',1,'','','doc','Архіватор','','','Архиватор','','','','');
 INSERT INTO wlb_doc_uio VALUES('docGasNodeMonthA','repHour','Report hour',131073,'9|',9,'','','','Звітний час','','','Отчётный час','','','','');
 INSERT INTO wlb_doc_uio VALUES('docGasNodeMonthA','arch','Archiver',131077,'FSArch.1m',1,'','','doc','Архіватор','','','Архиватор','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeMgn','pTitle','Point: title',131077,'',1,'','','doc','Вузол: заголовок','','','Узол: заголовок','','','','');
 INSERT INTO wlb_doc_uio VALUES('docGasNodeDayA','pTitle','Point: title',131077,'',1,'','','doc','Вузол: заголовок','','','Узол: заголовок','','','','');
 INSERT INTO wlb_doc_uio VALUES('docGasNodeMonthA','pTitle','Point: title',131077,'',1,'','','doc','Вузол: заголовок','','','Узол: заголовок','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayOrder','pEnterpr','Point: enterprise',131077,'',1,'','','doc','Вузол: підприємство','','','Узел: предприятие','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayOrder','pTitle','Point: title',131077,'',1,'','','doc','Вузол: заголовок','','','Узол: заголовок','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayOrder','arch','Archiver',131077,'FSArch.1m',1,'','','doc','Архіватор','','','Архиватор','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayOrder','repHour','Report hour',131073,'9|',9,'','','','Звітний час','','','Отчётный час','','','','');
 INSERT INTO wlb_doc_uio VALUES('docGasNodeDayA','time','Time: current',139265,'0|',8,'','','','','','','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docGasNodeDayA','vCur','Archive: cursor: view',131073,'0|',6,'','wdg:wdg_doc/a_vCur','','Архів: курсор: огляд','','','Архив: курсор: обзор','','','','');
 INSERT INTO wlb_doc_uio VALUES('docGasNodeDayA','n','Archive length, 0 for the dynamic mode',131073,'100|',9,'','','','Розмір архіву, 0 для динамічного режиму','','','Размер архива, 0 для динамического режима','','','','');
@@ -13292,7 +12316,7 @@ INSERT INTO wlb_doc_uio VALUES('docGasNodeMonthA','time','Time: current',139265,
 INSERT INTO wlb_doc_uio VALUES('docGasNodeMonthA','bTime','Time: begin',139265,'0|',8,'','','','','','','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docGasNodeMonthA','aSize','Archive: size',131073,'0|',2,'','wdg:wdg_doc/a_aSize','','Архів: розмір','','','Архив: размер','','','','');
 INSERT INTO wlb_doc_uio VALUES('docGasNodeMonthA','aCur','Archive: cursor: current',131073,'0|',2,'','wdg:wdg_doc/a_aCur','','Архів: курсор: поточний','','','Архив: курсор: текущий','','','','');
-INSERT INTO wlb_doc_uio VALUES('docAlarmsRep','messCat','Message category',131077,'1:al*:*',8,'','','','Категорія повідомлень','','','Категория сообщения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docAlarmsRep','messCat','Message category',131077,'1:al*:*',8,'','','','Категорія повідомлень','','','Категория сообщений','','','','');
 INSERT INTO wlb_doc_uio VALUES('docMessRep','sourceCache','Source cache',131078,'<TVarObj>
 </TVarObj>
 ',0,'','','doc','Кеш джерел','','','Кеш источников','','','','');
@@ -13315,6 +12339,52 @@ INSERT INTO wlb_doc_uio VALUES('docResourcesYear','pP','Point: pressure',196613,
 INSERT INTO wlb_doc_uio VALUES('docResourcesYear','pQ','Point: volume',196613,NULL,2,'Point|Q','','doc','','','','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docResourcesYear','pT','Point: temperature',196613,NULL,2,'Point|T','','doc','','','','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docResourcesYear','pTitle','Point: title',131077,'',1,'','','doc','','','','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p1var','Parameter 1: variable',196613,'',2,'Parameter1|var','','doc','Параметр 1: змінна','','Parameter1|var','Параметр 1: переменная','','Parameter1|var','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p1ed','Parameter 1: dimension',131077,'',2,'Parameter1|ed','','doc','Параметр 1: одиниця виміру','','Parameter1|ed','Параметр 1: единица измерения','','Parameter1|ed','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p1name','Parameter 1: name',131077,'',2,'Parameter1|NAME','','doc','Параметр 1: назва','','Parameter1|NAME','Параметр 1: имя','','Parameter1|NAME','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p2var','Parameter 2: variable',196613,'',2,'Parameter2|var','','doc','Параметр 2: змінна','','Parameter2|var','Параметр 2: переменная','','Parameter2|var','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p3var','Parameter 3: variable',196613,'',2,'Parameter3|var','','doc','Параметр 3: змінна','','Parameter3|var','Параметр 3: переменная','','Parameter3|var','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p4var','Parameter 4: variable',196613,'',2,'Parameter4|var','','doc','Параметр 4: змінна','','Parameter4|var','Параметр 4: переменная','','Parameter4|var','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p5var','Parameter 5: variable',196613,'',2,'Parameter5|var','','doc','Параметр 5: змінна','','Parameter5|var','Параметр 5: переменная','','Parameter5|var','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p6var','Parameter 6: variable',196613,'',2,'Parameter6|var','','doc','Параметр 6: змінна','','Parameter6|var','Параметр 6: переменная','','Parameter6|var','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p7var','Parameter 7: variable',196613,'',2,'Parameter7|var','','doc','Параметр 7: змінна','','Parameter7|var','Параметр 7: переменная','','Parameter7|var','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p8var','Parameter 8: variable',196613,'',2,'Parameter8|var','','doc','Параметр 8: змінна','','Parameter8|var','Параметр 8: переменная','','Parameter8|var','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p9var','Parameter 9: variable',196613,'',2,'Parameter9|var','','doc','Параметр 9: змінна','','Parameter9|var','Параметр 9: переменная','','Parameter9|var','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p10var','Parameter 10: variable',196613,'',2,'Parameter10|var','','doc','Параметр 10: змінна','','Parameter10|var','Параметр 10: переменная','','Parameter10|var','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p2ed','Parameter 2: dimension',131077,'',2,'Parameter2|ed','','doc','Параметр 2: одиниця виміру','','Parameter2|ed','Параметр 2: единица измерения','','Parameter2|ed','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p3ed','Parameter 3: dimension',131077,'',2,'Parameter3|ed','','doc','Параметр 3: одиниця виміру','','Parameter3|ed','Параметр 2: единица измерения','','Parameter3|ed','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p4ed','Parameter 4: dimension',131077,'',2,'Parameter4|ed','','doc','Параметр 4: одиниця виміру','','Parameter4|ed','Параметр 4: единица измерения','','Parameter4|ed','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p5ed','Parameter 5: dimension',131077,'',2,'Parameter5|ed','','doc','Параметр 5: одиниця виміру','','Parameter5|ed','Параметр 5: единица измерения','','Parameter5|ed','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p6ed','Parameter 6: dimension',131077,'',2,'Parameter6|ed','','doc','Параметр 6: одиниця виміру','','Parameter6|ed','Параметр 6: единица измерения','','Parameter6|ed','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p7ed','Parameter 7: dimension',131077,'',2,'Parameter7|ed','','doc','Параметр 7: одиниця виміру','','Parameter7|ed','Параметр 7: единица измерения','','Parameter7|ed','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p8ed','Parameter 8: dimension',131077,'',2,'Parameter8|ed','','doc','Параметр 8: одиниця виміру','','Parameter8|ed','Параметр 8: единица измерения','','Parameter8|ed','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p9ed','Parameter 9: dimension',131077,'',2,'Parameter9|ed','','doc','Параметр 9: одиниця виміру','','Parameter9|ed','Параметр 9: единица измерения','','Parameter9|ed','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p10ed','Parameter 10: dimension',131077,'',2,'Parameter10|ed','','doc','Параметр 10: одиниця виміру','','Parameter10|ed','Параметр 10: единица измерения','','Parameter10|ed','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p2name','Parameter 2: name',131077,'',2,'Parameter2|NAME','','doc','Параметр 2: назва','','Parameter2|NAME','Параметр 2: имя','','Parameter2|NAME','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p3name','Parameter 3: name',131077,'',2,'Parameter3|NAME','','doc','Параметр 3: назва','','Parameter3|NAME','Параметр 3: имя','','Parameter3|NAME','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p4name','Parameter 4: name',131077,'',2,'Parameter4|NAME','','doc','Параметр 4: назва','','Parameter4|NAME','Параметр 4: имя','','Parameter4|NAME','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p5name','Parameter 5: name',131077,'',2,'Parameter5|NAME','','doc','Параметр 5: назва','','Parameter5|NAME','Параметр 5: имя','','Parameter5|NAME','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p6name','Parameter 6: name',131077,'',2,'Parameter6|NAME','','doc','Параметр 6: назва','','Parameter6|NAME','Параметр 6: имя','','Parameter6|NAME','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p7name','Parameter 7: name',131077,'',2,'Parameter7|NAME','','doc','Параметр 7: назва','','Parameter7|NAME','Параметр 7: имя','','Parameter7|NAME','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p8name','Parameter 8: name',131077,'',2,'Parameter8|NAME','','doc','Параметр 8: назва','','Parameter8|NAME','Параметр 8: имя','','Parameter8|NAME','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p9name','Parameter 9: name',131077,'',2,'Parameter9|NAME','','doc','Параметр 9: назва','','Parameter9|NAME','Параметр 9: имя','','Parameter9|NAME','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p10name','Parameter 10: name',131077,'',2,'Parameter10|NAME','','doc','Параметр 10: назва','','Parameter10|NAME','Параметр 10: имя','','Parameter10|NAME','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p1prec','Parameter 1: precision',131073,'0|',2,'Parameter1|prec','','doc','Параметр 1: точність','','Parameter1|prec','Параметр 1: точность','','Parameter1|prec','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p2prec','Parameter 2: precision',131073,'0|',2,'Parameter2|prec','','doc','Параметр 2: точність','','Parameter2|prec','Параметр 2: точность','','Parameter2|prec','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p3prec','Parameter 3: precision',131073,'0|',2,'Parameter3|prec','','doc','Параметр 3: точність','','Parameter3|prec','Параметр 3: точность','','Parameter3|prec','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p4prec','Parameter 4: precision',131073,'0|',2,'Parameter4|prec','','doc','Параметр 4: точність','','Parameter4|prec','Параметр 4: точность','','Parameter4|prec','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p5prec','Parameter 5: precision',131073,'0|',2,'Parameter5|prec','','doc','Параметр 5: точність','','Parameter5|prec','Параметр 5: точность','','Parameter5|prec','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p6prec','Parameter 6: precision',131073,'0|',2,'Parameter6|prec','','doc','Параметр 6: точність','','Parameter6|prec','Параметр 6: точность','','Parameter6|prec','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p7prec','Parameter 7: precision',131073,'0|',2,'Parameter7|prec','','doc','Параметр 7: точність','','Parameter7|prec','Параметр 7: точность','','Parameter7|prec','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p8prec','Parameter 8: precision',131073,'0|',2,'Parameter8|prec','','doc','Параметр 8: точність','','Parameter8|prec','Параметр 8: точность','','Parameter8|prec','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p9prec','Parameter 9: precision',131073,'0|',2,'Parameter9|prec','','doc','Параметр 9: точність','','Parameter9|prec','Параметр 9: точность','','Parameter9|prec','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p10prec','Parameter 10: precision',131073,'0|',2,'Parameter10|prec','','doc','Параметр 10: точність','','Parameter10|prec','Параметр 10: точность','','Parameter10|prec','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','title','Title',131077,'',1,'','','doc','Заголовок','','','Заголовок','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','params','Parameters container in the process',131078,'<TVarObj>
+</TVarObj>
+',8,'','','doc','Контейнер опрацьованих параметрів','','','Контейнер параметров в обработке','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','arch','Archiver',131077,'FSArch.1h',1,'','','doc','Архіватор','','','Архиватор','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','stH','Start hour',131073,'8|',1,'','','doc','Початкова година','','','Начальный час','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_mnEls_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO wlb_mnEls_incl VALUES('El_box_Alarm','El_text_alarm','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;alignment;text;',2);
 INSERT INTO wlb_mnEls_incl VALUES('El_box_Alarm','box_alarm','/wlb_mnEls/wdg_El_Alarm','name;geomX;geomY;geomW;geomH;geomXsc;geomYsc;geomZ;fillColor;elLst;',2);
@@ -20074,6 +19144,25 @@ INSERT INTO Trs VALUES('Error connecting to the widget ''%1''!','Помилка 
 INSERT INTO Trs VALUES('Calculation for the parameter "%1" archive at the data range [%2...%3] and the archiver "%4"','Обчислення архіву параметру "%1" на інтервалі даних [%2...%3] та для архіватору "%4"','Вычисление архива параметра "%1" на интервале данных [%2...%3] и для архиватора "%4"');
 INSERT INTO Trs VALUES('Sum, at hour','Сума, на годину','Сумма, за час');
 INSERT INTO Trs VALUES('Average and range','Середнє та діапазон','Среднее и диапазон');
+INSERT INTO Trs VALUES('Date','Дата','Дата');
+INSERT INTO Trs VALUES('Table of the instantaneous values of "%1"','Таблиця миттєвих значень "%1"','Таблица мгновенных значений "%1"');
+INSERT INTO Trs VALUES('Protocol of violations','Протокол порушень','Протокол нарушений');
+INSERT INTO Trs VALUES('Violations at %1','Порушення на %1','Нарушения за %1');
+INSERT INTO Trs VALUES('Violation','Порушення','Нарушение');
+INSERT INTO Trs VALUES('Protocol of interruptions','Протокол втручань','Протокол вмешательств');
+INSERT INTO Trs VALUES('User interruptions at %1','Втручання коистувача на %1','Вмешательства пользователя на %1');
+INSERT INTO Trs VALUES('User','Користувач','Пользователь');
+INSERT INTO Trs VALUES('Old value','Старе значення','Старое значение');
+INSERT INTO Trs VALUES('New value','Нове значення','Новое значение');
+INSERT INTO Trs VALUES('Protocol of messages','Протокол повідомлень','Протокол сообщений');
+INSERT INTO Trs VALUES('Message at %1','Повідомлення на %1','Сообщения за %1');
+INSERT INTO Trs VALUES('Level','Рівень','Уровень');
+INSERT INTO Trs VALUES('Report of two working shifts','Звіт двох робочих змін','Рапорт двух рабочих смен');
+INSERT INTO Trs VALUES('Code','Шифр','Шифр');
+INSERT INTO Trs VALUES('Working shift chief:','Начальник робочої зміни:','Начальник рабочей смены:');
+INSERT INTO Trs VALUES('%1   at %2 (shift %3, start hour %4)','%1   за %2 (зміна %3, початкова година %4)','%1   на %2 (смена %3, начальный час %4)');
+INSERT INTO Trs VALUES('Hours','Години','Часы');
+INSERT INTO Trs VALUES('Sum','Сума','Сумма');
 CREATE TABLE IF NOT EXISTS 'wlb_Main' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_Main VALUES('ElCadr','iVBORw0KGgoAAAANSUhEUgAAABcAAABACAIAAAB+w3u4AAAACXBIWXMAAA06AAANOgEDIh6FAAAE
 z0lEQVRYhdWX32/TVhTHv7Zv7NhO08RpcBLaauqPTcC0PYAQQkKTGJrGwx54QPsD2Z/AH8CkFiak
@@ -25795,139 +24884,216 @@ else if(curMin != lastMin && !(curMin%5))	{
 		doc_bTime = SYS.strptime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 "+repHour+":0:0", "%Y-%m-%d %H:%M:%S");
 	else doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-1 "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
 }','','',1000,'name;dscr;evProc;',1552226019);
-INSERT INTO wlb_doc VALUES('docUsersSet','','/wlb_doc/wdg_docDin',0,'JavaLikeCalc.JavaScript
-if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-24*3600; }','','',-1,'name;dscr;',1561315880);
-INSERT INTO wlb_doc VALUES('doc','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','/wlb_originals/wdg_Box',0,'
+INSERT INTO wlb_doc VALUES('docUsersSet','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAC
+fklEQVRYhe2V0UrrQBBAt93ZuEnTNLVUSa0BW5Aq6A/4K/6A/+dX+CaaQsUHfSgiYquGJtlNsnMf
+FooPIpcLda+w5ynsTCZzNplN4/LycjQakd9JkiRwcHBwdHT0ZVgppZQCAESsqopS2mw2vylX1zWl
+dDOtfk2aplBV1fn5+dnZ2Wg0cl337u4uDMMoiqqqQsTFYhHH8f39fbvdLoqCMfb4+DiZTBzHeX19
+RUTGWJ7nOzs7Dw8PWZaNx+OiKBDx9PR0PB7/gAO9uLg4PDwcDAZBEBBCAEAI4fs+IQQR+/2+UkpK
+OZlMlFJ6jx3HiaIIADzPK4ri+vp6b2+v2+0iouM4jUaDUlrXdRzHm+5+Pp83kiQ5Pj7e9JM2xNXV
+Fby9vd3c3LTbbUJIVVV6/3S4KArOub7++e/7b0jTFKSU8/n8+fk5iqLlcpnnueu6hJCnp6ft7W09
+xIPBABH/wxclhAClVBzHiEgI4ZyfnJx8fHwEQeD7vpTS9/3d3d0sy4IgmE6ndV0j4nA4TNM0CIKX
+l5csyxzHqevadd1er6fv1dVvb287nY7ruovFAhE555TS4XCoozpTKZUkCSLu7+8vl0vP8zjnYRiu
+Ewghs9nM8zzf98uyfH9/b7Va/X6fMUYIQcQmADDGWq2WEIJSCgBbW1uMsV6vh4hCCMaYXuGcr4dY
+r3S73bIspZT6eF1najqdjlJKCAEAUkpEzPN8HdWZjuOEYcg514eHEKLZbH5O0HUAoCzLsiwJIZ+L
+AMCvH+Lvfky/AitgGitgGitgGitgGitgGitgGitgGitgGitgGitgGitgGitgGitgGitgGitgGphO
+p6vVynQb/8hsNvsDB/ItKMoqpeIAAAAASUVORK5CYII=','/wlb_doc/wdg_docDin',0,'JavaLikeCalc.JavaScript
+if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-24*3600; }','','',-1,'name;dscr;',1580750144);
+INSERT INTO wlb_doc VALUES('doc','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
+8/8AIf16rsAifj4AAAAASUVORK5CYII=','/wlb_originals/wdg_Box',0,'
 ','
 ','
-',-1,'name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;',1552226019);
-INSERT INTO wlb_doc VALUES('docGasNodeMgn','','/wlb_doc/wdg_docDin',1,'','','',-1,'name;dscr;',1552226019);
-INSERT INTO wlb_doc VALUES('docGasNodeDayOrder','','/wlb_doc/wdg_doc',0,'JavaLikeCalc.JavaScript
-//Document generation one in hour
-curMin = curHour = curDay = curMonth = curYear = 0;
-SYS.localtime(SYS.time(), 0, curMin, curHour, curDay, curMonth, curYear);
-if(!doc_bTime) {
-	doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
-	if(curHour < repHour)	doc_bTime -= 24*60*60;
-}
-if(lastHour < 0 || lastDay < 0 || lastMin < 0) SYS.localtime(doc_bTime, 0, lastMin, lastHour, lastDay);
+',-1,'name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;',1580750144);
+INSERT INTO wlb_doc VALUES('docRepInstVals','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAC
+2ElEQVRYhe2US0vrQBiG55aknbZpgkWjRUHxAqIgIv4Cf0bxF7p04Up0IdSCUJAUSqsUYr1QMTVN
+rMl0krMYCAcO9lDPYo6QZxHIfG9mvieZDDw9PV1bWwM/E9u2gW3bySzc39+Px+PBYDAYDMSI67rv
+7+/9fj+9TZIkiqIwDJMk+fj44Jx/NVs6ieDp6WmmZq6vr8ms0s1m8+LiYjgccs51Xd/Z2Tk7O6vV
+aicnJxjjo6OjZrPpeR7nvFgsPj8/K4piWZbv+77vW5blui6ldG9vz3Gcfr8fBEGlUkEIbWxsdLtd
+SmmtVpupH2jb9vb29qwa/wmNRgPJ7uFfIZzz0Wgku41vEscxeX19LZfL9Xpd07S5uTnLsiaTyePj
+o+/7GOPV1dXJZGIYxtXVlWmahJDNzc3hcGgYxt3dHWMsSZJ8Pv/y8rK7u0spFaXb29s4jnO5XBzH
+EMJSqVStVkUJANDr9Rhjvu9rmiaawBiLX6VYLAIA0mS9XqeUqqrKOUcI6bruOA5C6PDwUAi8vb3h
+4+NjVVUBAAghTdMQQowxjDEAAEJIKQ2CACFECCGEKIpCCBmNRgghzrnneRhjQoiqqoSQOI5FKU1C
+CEUVQihKURQlSYIxZowxxgqFAkJIxCCE4vhKk7lcDiGkKEqSJJqmiXkopYqiMMaiKHJdlyCETNM0
+TfOrz0QIKZVKl5eX5XI5DMP19XUAgHhkYWHh/Px8cXFxf38/zZum2el0PM/7/PzUdT2O40qlsrKy
+Ikrp9ebmZjweO46zvLy8tbWl6/rvi6bJVqvVbrfz+bxhGN1ud35+/uDgII31ej3YaDSq1eqUfcYY
+UxRl+sifpTAMxQv76qkwDMUW+uuKU5KdTocUCoWlpaUpAv8zDw8PP/4YzQRkkwnIJhOQTSYgm0xA
+NpmAbDIB2WQCsskEZJMJyCYTkE0mIJtMQDaZgGx+vABptVpBEMhu45u02+1fCNjg1WlAidUAAAAA
+SUVORK5CYII=','/wlb_doc/wdg_docDin',1,'JavaLikeCalc.JavaScript
+if(f_start) {
+	//Init the avialable parameters
+	colors = new Array("#ae77c3", "orange", "blue", "#199696", "#3264C8", "tomato", "magenta", "#B6B600", "#69695C", "darkcyan");
+	params = new Array();
+	dtPeriod = 1;
+	for(iP = 1; iP <= 10; iP++) {
+		pO = new Object();
+		pO.name = this.doc.attr("p"+iP+"name");
+		pO.var = this.doc.attr("p"+iP+"var");
+		pO.ed = this.doc.attr("p"+iP+"ed");
+		if(pO.ed.isEVal())	pO.ed = "";
+		pO.prec = this.doc.attr("p"+iP+"prec");
+		pO.color = colors[iP-1];
+		if(pO.prec.isEVal())	pO.prec = 0;
+		if(!pO.name.isEVal() && pO.name.length && !pO.var.isEVal() && (aO=SYS.nodeAt(pO.var).arch())) {
+			params.push(pO);
+			dtPeriod = max(dtPeriod, ceil(1e-6*aO.period()));
+		}
+	}
+	doc_tmpl = doc_tmpl.replace("@@valPer@@", dtPeriod.toString());
+	this.doc.attrSet("params", params);
 
-//Archive last not closed document
-if(closeDoc == true) { if(!doc_process) doc_aCur = -1, closeDoc = false; }
-else if(doc_time && doc_time < doc_bTime) {
-	closeDoc = true;  
-	SYS.localtime(doc_time, 0, 0, curHour, curDay, curMonth, curYear);
-	doc_time = doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
-	if(curHour >= repHour) doc_time += 24*60*60; else doc_bTime -= 24*60*60;
-}
-//Archive the document
-else if(curDay != lastDay && curHour == repHour && curMin >= 3) {
-	closeDoc = true;
-	doc_time = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
-	lastDay = curDay;
-}
-//Periodic notfull update
-else if(curMin != lastMin && !(curMin%5)) {
-	lastMin = curMin;
-	doc_time = SYS.time() - 5*60;
-	SYS.localtime(doc_time, 0, 0, curHour, curDay, curMonth, curYear);
-	doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
-	if(curHour < repHour) doc_bTime -= 24*60*60;
-}','','',1000,'name;dscr;',1552226019);
-INSERT INTO wlb_doc VALUES('docDin','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','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
-if(f_start){ doc_doc = ""; doc_time = SYS.time(); doc_bTime = doc_time-120; }','','',1000,'name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;',1552226019);
-INSERT INTO wlb_doc VALUES('docRepSm2','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAnCAIAAAAw+tlrAAAACXBIWXMAAA2wAAANYQHlRq2kAAAE
-kUlEQVRYhe1Yy24UORS9frvc1dR0EiYiA0uWrIcVEvNx/FF+IF/ASC1YIEEklKwiIrqqq+yyfT2L
-m9QUITCjWUyD1Eetlts+Pr4vX0vNXr169ezZM2st/IRYr9eyaZqFcxeXl8MwHB//enLy25+vXwsh
-cs4FoGmaJ08eD8Pw8uUfu7b2HjDGZNM0B4eHRw8fGmOklCGE358/11qH4BEL59w5xxh7+/Zt8N5W
-9vHjJ7s2+29sNhtprT05Obn+9Onw8JAxdnV1pZXCUpxbOOeMMduuw4LHx8cAcHV1dXl5eXR0hIht
-2xbEX1arnLP3XimltfbexxibpkHE7XabUmqaBgC6rqNY9H2fc67rmjHWti0ROOftZiOVqqqKlK21
-xhgiHBwcAMD19XUpuFodpJRCCDHG5XJZSpEAwBirXMUYA4DlcgkApRQAMFozxrgQiivOOSKuVisA
-4JwzxpbLZc4ZAIQQlD3GmJRSCEFkrbXWmvSttUqpUoq1FhGVUjlnMpdzLoSonCMCKQshSilVVdFx
-iOic45wDgFKKxOmnBABrLV1iWpjnCBEphPNVck8pRZOcc5ony4gspZwmOedz8iQ+n3TO3SHMjbmj
-MJ0CABwA2rb9+PFjCOH9+/dv3rw5Pz+/uLig5RACAJx/+AAAVB4hhJzzlEfvPQD0fV9KCSGklLz3
-NL5DQETvPSL2fU/KpEaEYRioFEsppOa9/5YabbyJlBCirms/DMvlcuGcUso5J6Ws65oYdV0v6gX9
-NFrn2yAhouA8jONisWCMVVXFGDPGpJSMMVQYRKjrmjNmrOWcV1UlhXCLBQBorUspMca6roXgSmkh
-xGKxINpcjcqScz6OY13X4ziWUmhe5py7rtv2fdu2276nNSFE13UUGADYdtuu6/q+jzEiIhUoZTPG
-OA9wuoX3no6cCClnyoD3HksZhoHU6CINw6B1DCGUUoZhQMRhGCa1EAJjbFKjjTHGnPPNJZZSUMys
-tVIKpb64CZVz325lO4YEAM65MXZqJlprRJyT6NYCADUKipnWmjFGIaGMAwB1ISLfS6DyuDlbSrhN
-srWWCFM1fkeNNhL4xEPEgjiOY855sphAcgCQUiIJAIgxppRoTFcNAHLO4zh+TQghUFAQcbp/KaV0
-q0bn/ku1uRmceJ8/f6bQbjabtm2Hvp87EOM4pWLy7c74+4R5Sr8Yf0X4zhHzsE5jyTmXUjpX0Uth
-rbHWGHPzMuScrbVCSGttzpmqi3NOcnRNjTGImV6oqW9QJyACLVlr6SEDAFKjgkwp0RJ1fWttKXhH
-DQD4Lay1ZAD1OkkSw+C99zGlGOnTUb6o5U/gnOecpy4khKD5GJNSicgxRpqfE2h++k4p5ZwZY3Q6
-gTE2V0spCSFijJxzWp2rUYBKKez09PTFixdTXqZy/3rm3vH/QPgWGQDOzs5uHjL4OWGMkdvt9t27
-d0IIKeU4jgDl0aOTnNO9G6SQ9Ij+OJAPHjx4+vTprs347+D/TPmxsXdg19g7sGvsHdg19g7sGnsH
-do29A7vG3oFdY+/ArrF3YNeQ6/X6zl8pPxHW6/Vf51IEmfDmKAQAAAAASUVORK5CYII=','/wlb_doc/wdg_docDin',0,'JavaLikeCalc.JavaScript
-if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-12*3600; }','','',-1,'name;dscr;geomXsc;geomYsc;',1552226019);
-INSERT INTO wlb_doc VALUES('docAlarmsRep','','/wlb_doc/wdg_docDin',0,'JavaLikeCalc.JavaScript
+	doc_doc = ""; doc_time = SYS.time(); doc_bTime = doc_time-120;
+}','JavaLikeCalc.JavaScript
+if(f_start) {
+	//Init the avialable parameters
+	colors = new Array("#ae77c3", "orange", "blue", "#199696", "#3264C8", "tomato", "magenta", "#B6B600", "#69695C", "darkcyan");
+	params = new Array();
+	dtPeriod = 1;
+	for(iP = 1; iP <= 10; iP++) {
+		pO = new Object();
+		pO.name = this.doc.attr("p"+iP+"name");
+		pO.var = this.doc.attr("p"+iP+"var");
+		pO.ed = this.doc.attr("p"+iP+"ed");
+		if(pO.ed.isEVal())	pO.ed = "";
+		pO.prec = this.doc.attr("p"+iP+"prec");
+		pO.color = colors[iP-1];
+		if(pO.prec.isEVal())	pO.prec = 0;
+		if(!pO.name.isEVal() && pO.name.length && !pO.var.isEVal() && (aO=SYS.nodeAt(pO.var).arch())) {
+			params.push(pO);
+			dtPeriod = max(dtPeriod, ceil(1e-6*aO.period()));
+		}
+	}
+	doc_tmpl = doc_tmpl.replace("@@valPer@@", dtPeriod.toString());
+	this.doc.attrSet("params", params);
+
+	doc_doc = ""; doc_time = SYS.time(); doc_bTime = doc_time-120;
+}','JavaLikeCalc.JavaScript
+if(f_start) {
+	//Init the avialable parameters
+	colors = new Array("#ae77c3", "orange", "blue", "#199696", "#3264C8", "tomato", "magenta", "#B6B600", "#69695C", "darkcyan");
+	params = new Array();
+	dtPeriod = 1;
+	for(iP = 1; iP <= 10; iP++) {
+		pO = new Object();
+		pO.name = this.doc.attr("p"+iP+"name");
+		pO.var = this.doc.attr("p"+iP+"var");
+		pO.ed = this.doc.attr("p"+iP+"ed");
+		if(pO.ed.isEVal())	pO.ed = "";
+		pO.prec = this.doc.attr("p"+iP+"prec");
+		pO.color = colors[iP-1];
+		if(pO.prec.isEVal())	pO.prec = 0;
+		if(!pO.name.isEVal() && pO.name.length && !pO.var.isEVal() && (aO=SYS.nodeAt(pO.var).arch())) {
+			params.push(pO);
+			dtPeriod = max(dtPeriod, ceil(1e-6*aO.period()));
+		}
+	}
+	doc_tmpl = doc_tmpl.replace("@@valPer@@", dtPeriod.toString());
+	this.doc.attrSet("params", params);
+
+	doc_doc = ""; doc_time = SYS.time(); doc_bTime = doc_time-120;
+}',-1,'name;dscr;',1580750144);
+INSERT INTO wlb_doc VALUES('docDin','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','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
+if(f_start){ doc_doc = ""; doc_time = SYS.time(); doc_bTime = doc_time-120; }','','',1000,'name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;',1580750144);
+INSERT INTO wlb_doc VALUES('docRep2WorkSh','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAnCAIAAAAw+tlrAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAC
+uUlEQVRYhe2UzUvkMBiHkyaZmta2UmIV5iIzo85J0H/c/8CT4kEED1I8dEaLTntoLU7b6Vf64aGw
+yC7LggOGhT6XhB8keZ/kJfDy8nI6nYL/E9u28f7+fhAE0+m0bVsIoe/7Z2dnjuOoqso5p5QahrFe
+rxFCnPMgCGRZNk2TECJJ0mKxSNOUMXZ0dGSa5s8LZFmG+8G2bd/3x+MxpTQIAs/zLi4uHh8fi6KY
+zWZvb2+yLFdVled513WO41iWhRCKoggA0Lat67pCBAAA8O7ubjKZCDl7e2zbxnEcl2W5zS7X19d7
+e3txHGuaVhSFLMt1Xdd1rWkaxhgA4LquZVlRFFmWVRSFpmm+7zPGEEKnp6fbHB3HMW6aZrlcep6n
+KMrBwYGmaVEULRYLjPH5+TkAwHEcz/M0TWvbFiFkmqbv+1mWMcaapiGEvL+/Hx4ehmGYJEnXdYqi
+ZFm2Xq8ZY6vVCkIoyzLGGGP8+vp6cnLy8vJCCAnDkDF2c3OTpulsNnt+fjYMAwBACKmqKgzD4+Pj
+5XK5u7srSRLGOM/zj4+P+Xzuui4AAGNsGEbbtvDq6sowDAhhXdf9hXVdBwDY2dmpqooxliRJkiSE
+EAAApZQQQiltmqaqKl3XN5sNpTRN069hlmWyLG82G0VROOf9a/wWcs51Xc/znBCSZVkfjkajsiwh
+hH2oqmpZloqixHFMCOlDXdeLokAIIYTu7+/h7e3tZDLhnCOEuq77ZSJJUi/KOW+apn8yhJAkSb0M
+57yffJ1vGXZd1zRNf4//XAUAeHh4wKqqWpa1TSMKhFKK4zh+enqq63o0GvUff285Ho/7XvqTvqF/
+uNa/gXVdn8/nosv4PpLoArZlEBDNICCaQUA0g4BoBgHRDAKiGQREMwiIZhAQzSAgmkFANIOAaAYB
+0eDVaqUoiugyvonv+5860YM6/4UAQgAAAABJRU5ErkJggg==','/wlb_doc/wdg_docDin',0,'JavaLikeCalc.JavaScript
+if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-12*3600; }','','',-1,'name;dscr;geomH;geomXsc;geomYsc;',1580750144);
+INSERT INTO wlb_doc VALUES('docAlarmsRep','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAC
+JklEQVRYhe2V0YqyQBTHRz1uWlYGWSQRVBDVTdfRq/QCvV9P0UUXRVERREG3Flk06jhnLwSJ/RYW
+PpaGhfldqec/zvmBZ1Sm02mr1SJ/k9VqBc1ms9frfVvmnHPOAQARGWO6rsdxrGkaY0xVVVVVERER
+VVV9c98pvu8DY2w8Ho9Go1arZZrmbrezbbtWqzHGENHzvEajsd/v8/l8sVicz+fD4XCxWLiuG0XR
++Xy2LKvdbm82m3q9PhgMqtXqmx20yWTS6XRc1y0UCoQQAAiCwLIsQggiOo7DOQ/DsNvtBkFQLBYV
+RUHEMAxN00xilmV5nlculxHxzQLn81lZrVb9fv+du/4is9kMrtfrYrHI5XJxHHPODcNIasnnLra/
+H/F9H8IwPB6Pt9vt+XyapkkpNQzDcZxsNttut0V3+ANBEADnPG10s9k4joOI9XqdEHK5XG63WzIb
+iLhcLm3bBgDXdZN8Wk04HA6GYSTnlWVZyYR8mySEnE6nOI4VRYnjWNd1wzAqlcpr4HXJ/X6/XC6U
+0mw2W6vV0nMPEQEAdF1P7vP5PKX04+MjfZLJZNJrx3Eopcl+/1YJIbZt+74fBIGu65qmvZa+JAkh
+pVLper1SSgGAMRZF0ZfA6xLbtj3PQ8Tk5akAAPz5IRb2D/otpIBopIBopIBopIBopIBopIBopIBo
+pIBopIBopIBopIBopIBopIBopIBopIBoYL1ePx4P0W38J9vt9hNb+PqiwbvxYAAAAABJRU5ErkJg
+gg==','/wlb_doc/wdg_docDin',0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	doc_time = SYS.time();
 	doc_bTime = doc_time-24*3600;
 	doc_tmpl = doc_tmpl.replace("@@messCat@@", messCat);
-}','','',-1,'name;dscr;backColor;bordWidth;',1561315880);
-INSERT INTO wlb_doc VALUES('docMessRep','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAnCAIAAAAw+tlrAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
-AA7EAAAOxAGVKw4bAAACc0lEQVRYhe2Vy27TQBSGz7EnNq2bOObipE0DEhECVaxAsCsIcEGwKk9C
-n6QvgES76iPQB0BI7FCpFC5Jm2IUpW0CLqGNL2N7WIwU3Jso3QyV5lt4cebYPt+vGRvn5+fL5TKc
-TVzXJSXbNk2zUCgAQJqmiqLwtZhSlRBEDMNQ13VKKSG5OKa5XC6JYwZACBE6PABAEARk0Pdevlp0
-HOeX1wuiRNfUvGnpmtZqfnngzLxfWY3D8PqNax9WVisTttvuaTnEJGJkVFPZSOF83+vNzj5HFOZA
-tBFjbu5FHAadzohpXdjxvo8ZRgqYH7tVLJqVifGybQMkt+/cpcGePV7d3toq2xcHYYSMFYpWrzsm
-bHYAAMClpaVqtSp2iFPTaDSI7w+63a4xOur7gVk0GYMkjgqmRYgqery/4/s+SVNGabTZ+bk3CHb6
-/XO6nsb0UmlcVXB4oLNkD/pJ6sdxwn7GGADgMYcsSRKiKMr09D0A+Pyxvt7a2I3TZ08fA4DneZZl
-AUCr2Vxbb8WAT2YcxD/1tWZze2uzcuXq5cmJbD/n29eNT401BRESuusHRr7oPLyfffe+fsZeLy8T
-xG7vR3mycnNqqlSy+UoURZRSwzAA4N3bN51tL583HOcRX0VEXFhYqNVqPBJe5cFEUaRpGs+Ax3Cg
-nqYpj4bHM6xnk+PX7GOHHO5njAEDQEDEYeRJkjDG+Cf7wCQAUK/Xia7rvFtV9216XdeHlkfWj+s/
-8q7DnLA/+7c53KNp2j/s2v8TKSAaKSAaKSAaKSAaKSAaKSAaKSAaKSAaKSAaKSAaKSAaKSAaKSCa
-My9AXNcNgkD0GKek3W7/Bp/iDqa0OsGCAAAAAElFTkSuQmCC','/wlb_doc/wdg_docDin',0,'JavaLikeCalc.JavaScript
+}','','',-1,'name;dscr;backColor;bordWidth;',1580750144);
+INSERT INTO wlb_doc VALUES('docMessRep','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAnCAIAAAAw+tlrAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAC
+IUlEQVRYhe2VzcriMBhGkzRpYxOpWF0UBPEHBFG8C+/C+/KaXIggggpuxIWKINZGRZtkFh2k8y1m
+BmcgM5Cza/K85TmUNHA0GpVKJUopYyyKok6nwzmP45gxxjn3fR/8iBBiu932ej3wDzCfzzEhBEKI
+EMIYa62TJInjWEophEAIKaW+zCiltNZpmhpp/AWlFFwsFt1u13STD5lMJjhN0/F43O/30zQNgkAp
+RQg5nU6tVms2m/V6vf1+Tyl1XVdK+Xq9lFJSyna7Xa1WTfcHAAAEABgOh77vF4tFCKFSCkIYhqHW
+Oooix3GklIQQKeX1eo3j+HQ6BUEghDDd/DtwOp3WajXTNT5kvV7jy+Wy2WwYY8/nkzGWpulgMDBd
+7He5XC5YKZUdYiHE4XDAGJ/PZwBAkiSccwCA1nq5XFJK6/U6Qui9pbXebrflcrlYLObzAIDj8SiE
+8DyPMRYEQbaYD7xZr9eUUq21ECL7j7uumw/kp3a7nRCiUqmEYZitaK1xoVBgjAEAXNd1HIcQkj0i
+hAqFQpZrNptKKc45hPC9lR0Sz/OyuyKfj6Lodrs5juN5HqU0W8wH3jQajazH4/HwPI9zTgjJB/JT
+tVrtfr/7vv++nSilOAiCer3+8y/1y8DH/OGbD4cD+ltVTGEFTGMFTGMFTGMFTGMFTGMFTGMFTGMF
+TGMFTGMFTGMFTGMFTGMFTPPfC+DFYpEkiekaH7Jarb4BVAjgKDXSgusAAAAASUVORK5CYII=','/wlb_doc/wdg_docDin',0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	doc_time = SYS.time();
 	doc_bTime = doc_time-24*3600;
@@ -25945,7 +25111,7 @@ for(off = 0, ev_rez = ""; (sval=event.parse(0,"\n",off)).length; ) {
 	else if(sval == "ws_LnAccept:/fltr")		{ doc_doc = ""; doc_time = 0; }
 	else ev_rez += sval+"\n";
 }
-event = ev_rez;','','',-1,'owner;name;dscr;geomH;backColor;',1561315796);
+event = ev_rez;','','',-1,'owner;name;dscr;geomH;backColor;',1580750144);
 INSERT INTO wlb_doc VALUES('docResourcesYear','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAE
 UklEQVRYhe1TyY4TVxS99w01enZX242h1crgQEACReldWJBvIZ8X1uySiAU/EKEIQmhQD+7BrrZd
 rqpXb8rCjVNpGiGRRaUln9U9R+de3VP3Ff70+HGv15NSTuK43WoBgNY6F2I0GsH/CT8+enTz5gAR

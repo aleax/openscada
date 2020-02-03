@@ -1,7 +1,7 @@
 
 //OpenSCADA file: ttransports.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -442,9 +442,9 @@ int TTransportS::cntrIfCmd( XMLNode &node, const string &senderPref, const strin
     //Connection to the transport
     off = 0;
     string user = TSYS::strLine(iuser, 0, &off), rqUser = TSYS::strLine(iuser, 0, &off), rqPass = TSYS::strLine(iuser, 0, &off);
-    TTransportS::ExtHost host = extHostGet(user.empty()?"*":user, station);
+    TTransportS::ExtHost host = extHostGet((user.empty()?"*":user), station);
     bool rqDir = (rqUser.size() && rqUser != host.user) || (rqUser == host.user && rqPass.size());
-    node.setAttr("rqDir", i2s(rqDir))->setAttr("rqUser", rqDir?rqUser:host.user)->setAttr("rqPass", rqDir?rqPass:host.pass);
+    node.setAttr("rqDir", i2s(rqDir))->setAttr("rqUser", (rqDir?rqUser:host.user))->setAttr("rqPass", rqDir?rqPass:host.pass);
     AutoHD<TTransportOut> tr = extHost(host, senderPref);
     if(tr.at().startStat() && host.mdf > tr.at().startTm()) { tr.at().stop(); node.setAttr("rqAuthForce","1"); }
     if(!tr.at().startStat()) tr.at().start(s2i(node.attr("conTm")));

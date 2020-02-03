@@ -25,19 +25,21 @@ DOC: Libs_Main|Libs/Main','Бібліотеку створено для нада
 Основано: 2006
 Версия: 2.0.0
 Лицензия: GPLv2');
-INSERT INTO ParamTemplLibs VALUES('DevLib','Devices','Бібліотека пристроїв','The user protocol devices library created to provide access to industrial device''s data through network, like to common industrial automation devices and wide resources counters, with protocols simple enough to implement into the User Protocol module, using the presented complex protocols (ModBus, OPC_UA, HTTP) or directly on the internal like to Java language.
+INSERT INTO ParamTemplLibs VALUES('DevLib','Industrial devices','Промислові пристрої','The user protocol devices library created to provide access to industrial device''s data through network, like to common industrial automation devices and wide resources counters, with protocols simple enough to implement into the User Protocol module, using the presented complex protocols (ModBus, OPC_UA, HTTP) or directly on the internal like to Java language.
+
+The template''s names and their parameters are available in languages: English, Ukrainian and Russian. Their source code wrote in the human-language independent mode with calls for the translations by the function tr() and the message''s translation also allowed for English, Ukrainian and Russian.
 
 Author: Roman Savochenko <roman@oscada.org>, Constantine (IrmIngeneer) (2018), Arsen Zakojan (2017), Ruslan Yarmoliuk (2017)
 Founded: January 2010
 Version: 2.3.0
-License: GPLv2 mostly
+License: GPLv2
 DOC: Libs_Devices|Libs/Devices','Бібліотеку пристроїв користувацьких протоколів створено для надання доступу до даних промислових пристроїв через мережу із доволі простим протоколом, на кшталт пристроїв загальної промислової автоматики та лічильників різних ресурсів, із протоколом достатньо простим до реалізації у модулі користувацького протоколу, з використанням наявних комплексних протоколів (ModBus, OPC_UA, HTTP) або безпосередньо на внутрішній мові подібній до Java.
 
 Автор: Роман Савоченко <roman@oscada.org>, Константин (IrmIngeneer) (2018), Арсен Закоян (2017), Руслан Ярмолюк (2017)
 Засновано: Січень 2010
 Версія: 2.3.0
-Ліцензія: переважно GPLv2
-DOC: Libs_Devices|Libs/Devices','tmplib_DevLib','Библиотека устройств','');
+Ліцензія: GPLv2
+DOC: Libs_Devices|Libs/Devices','tmplib_DevLib','Промышленные устройства','');
 INSERT INTO ParamTemplLibs VALUES('PrescrTempl','Prescriptions','Шаблони рецепту','Library of the prescriptions.
 
 Author: Roman Savochenko <roman@oscada.org>
@@ -479,7 +481,8 @@ Modules/FLibComplex1:en,uk,ru:Modules/FLibComplex1.html
 Libs/Main:en,uk:Libs_Main.html
 Libs/Technological_apparatuses:en,uk,ru:Libs_Technological_apparatuses.html
 Libs/Main_graphical_elements:en,uk,ru:Libs_Main_graphical_elements.html
-Libs/Mnemo_elements:en,uk,ru:Libs_Mnemo_elements.html',0,4,'','','','');
+Libs/Mnemo_elements:en,uk,ru:Libs_Mnemo_elements.html
+Libs/Documents:en,uk,ru:Libs_Documents.html',0,4,'','','','');
 INSERT INTO lib_servProc_io VALUES('docOffLine','pagesCur','Current pages list of "{wiki}:{langs}:{dest}", for empty here used "pages"',0,5,'',0,5,'','','','');
 INSERT INTO lib_servProc_io VALUES('docOffLine','res','Result',0,1,'',0,0,'','','','');
 INSERT INTO lib_servProc_io VALUES('docOffLine','reqTr','Tries of the requests',1,1,'3',0,2,'','','','');
@@ -1487,12 +1490,12 @@ INSERT INTO tmplib_tests_io VALUES('test','in2','Input2',1,160,'DB Test|8|r8',3,
 INSERT INTO tmplib_tests_io VALUES('test','in1','Input1',1,160,'DB Test|6|i4',2,'Вхід1','DB Тест|6','Вход1','DB Тест|6');
 INSERT INTO tmplib_tests_io VALUES('test','in','Input',1,160,'DB Test|4',1,'Вхід','DB Тест|4','Вход','DB Тест|4');
 INSERT INTO tmplib_tests_io VALUES('test','di','DI',3,160,'DB Test|2.1',0,'','','','');
-INSERT INTO tmplib_tests_io VALUES('gasPoint','F','Flow (m3/h)',2,144,'F|var',0,'','','','');
-INSERT INTO tmplib_tests_io VALUES('gasPoint','Q','Volume (m3)',2,16,'0',1,'','','','');
-INSERT INTO tmplib_tests_io VALUES('gasPoint','P','Pressure (kgH/sm2)',2,144,'P|var',2,'','','','');
-INSERT INTO tmplib_tests_io VALUES('gasPoint','T','Temperature (°C)',2,144,'T|var',3,'','','','');
-INSERT INTO tmplib_tests_io VALUES('gasPoint','dP','Differential pressure (kgH/m2)',2,16,'0',4,'','','','');
-INSERT INTO tmplib_tests_io VALUES('gasPoint','DS','Density (kg/m3)',2,16,'0',5,'','','','');
+INSERT INTO tmplib_tests_io VALUES('gasPoint','F','Flow, m3/h',2,144,'F|var',0,'Витрати, м3/год','','Расход, м3/ч','');
+INSERT INTO tmplib_tests_io VALUES('gasPoint','Q','Volume, m3',2,16,'0',1,'Об''єм, м3','','Объём, м3','');
+INSERT INTO tmplib_tests_io VALUES('gasPoint','P','Pressure, kgH/sm2',2,144,'P|var',2,'Тиск, кГс/см2','','Давление, кГс/см2','');
+INSERT INTO tmplib_tests_io VALUES('gasPoint','T','Temperature, °C',2,144,'T|var',3,'Температура, °С','','Температура, °С','');
+INSERT INTO tmplib_tests_io VALUES('gasPoint','dP','Differential pressure, kgH/m2',2,16,'0',4,'Перепад, кГс/м2','','Перепад, кГс/м2','');
+INSERT INTO tmplib_tests_io VALUES('gasPoint','DS','Density, kg/m3',2,16,'0',5,'Щильність, кг/м3','','Плотность, кг/м3','');
 CREATE TABLE IF NOT EXISTS 'tmplib_base_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_base_io VALUES('digAlarm','in','Input',3,144,'Input|in',2,'Вхід','','Вход','');
 INSERT INTO tmplib_base_io VALUES('simleBoard','in','Input',2,128,'Parameter|var',0,'Вхід','','Вход','');
@@ -1514,12 +1517,6 @@ INSERT INTO tmplib_base_io VALUES('digitBlock','stClose','State "Closed"',3,144,
 INSERT INTO tmplib_base_io VALUES('digitBlock','tCmd','Time for hold the command, seconds',1,32,'5',5,'Час утримання команди, секунди','','Время удерж. команды, секунды','');
 INSERT INTO tmplib_base_io VALUES('digitBlock','last_cmd','Last command',1,1,'0',6,'Остання команда','','Последняя команда','');
 INSERT INTO tmplib_base_io VALUES('digitBlock','w_tm','Process command counter',2,1,'0',7,'Лічильник опрацювання команди','','Счётчик отраб. команды','');
-INSERT INTO tmplib_base_io VALUES('gasPoint','DS','Density (kg/m3)',2,16,'0',5,'Щильність (кг/м3)','','Плотность (кг/м3)','');
-INSERT INTO tmplib_base_io VALUES('gasPoint','dP','Differential pressure (kgH/m2)',2,16,'0',4,'Перепад (кГс/м2)','','Перепад (кГс/м2)','');
-INSERT INTO tmplib_base_io VALUES('gasPoint','T','Temperature (°C)',2,144,'T|var',3,'Температура (°С)','','Температура (°С)','');
-INSERT INTO tmplib_base_io VALUES('gasPoint','P','Pressure (kgH/sm2)',2,144,'P|var',2,'Тиск (кГс/см2)','','Давление (кГс/см2)','');
-INSERT INTO tmplib_base_io VALUES('gasPoint','Q','Volume (m3)',2,16,'0',1,'Об''єм (м3)','','Объём (м3)','');
-INSERT INTO tmplib_base_io VALUES('gasPoint','F','Flow (m3/h)',2,144,'F|var',0,'Витрати (м3/ч)','','Расход (м3/ч)','');
 INSERT INTO tmplib_base_io VALUES('manInUnif','inout','Input/Output',2,129,'Parameter|var',0,'Вхід/Вихід','','Вход/Выход','');
 INSERT INTO tmplib_base_io VALUES('manInUnif','var','Variable',2,16,'0',1,'Змінна','','Переменная','');
 INSERT INTO tmplib_base_io VALUES('manInUnif','ed','Dimension',0,32,'',3,'Одиниця виміру','','Единица измерения','');
@@ -2253,7 +2250,7 @@ INSERT INTO Trs VALUES('Tries number %1 out of range [1...5].','','');
 INSERT INTO Trs VALUES('Get data after %1 tries error.','','');
 INSERT INTO Trs VALUES('None of good battery present','','');
 INSERT INTO Trs VALUES('Error for ''%1'' as an output transport of I2C or a link to external functions of GPIO.','','');
-INSERT INTO Trs VALUES('Empty','Порожньо','Пусто');
+INSERT INTO Trs VALUES('Empty','Пусто','Пусто');
 INSERT INTO Trs VALUES('Wrong or empty respond to the calibration T1-3 or P1-9 request.','','');
 INSERT INTO Trs VALUES('Wrong or empty respond to the calibration H1 request.','','');
 INSERT INTO Trs VALUES('Wrong or empty respond to the calibration H2-H6 request.','','');
@@ -2330,10 +2327,12 @@ INSERT INTO Trs VALUES('Parameters Invalid or Out of Range','','');
 INSERT INTO Trs VALUES('Requested Objects Unknown','','');
 INSERT INTO Trs VALUES('Function Code not implemented','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_DevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO tmplib_DevLib VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
+INSERT INTO tmplib_DevLib VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data acquisition by SCU750 Cotrol Unit protocol.
+
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
-Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
+Version: 1.0.0
+License: GPLv2','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	version = "";
 	operModes = new Object();
@@ -2463,11 +2462,13 @@ else {
 	}
 }
 
-f_err = t_err;','','',1512240506);
+f_err = t_err;','','',1580047532);
 INSERT INTO tmplib_DevLib VALUES('TMH','Power supply for turbomolecular pumps','','','Power supply for turbomolecular pumps of firm SHIMADZU (http://www.shimadzu.com), model EI-R04M.
+
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
-Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
+Version: 1.0.0
+License: GPLv2','','',10,0,'JavaLikeCalc.JavaScript
 tr = SYS.Transport.Serial.nodeAt("out_"+transport);
 req = SYS.XMLNode("mess").setAttr("ProtIt","TMH").setAttr("addr",addr);
 
@@ -2643,10 +2644,12 @@ else {
 	else MP_Z = req.text().slice(4).toInt();
 }
 
-f_err = t_err;','','',1512240506);
-INSERT INTO tmplib_DevLib VALUES('TM510x','Elemer TM510x','','','Multichannels thermometer Elemer TM5102 and TM5103 of firm Elemer (http://www.elemer.ru).
+f_err = t_err;','','',1580047532);
+INSERT INTO tmplib_DevLib VALUES('TM510x','Elemer TM510x','','','Multi-channels thermometer Elemer TM5102 and TM5103 of the firm Elemer (http://www.elemer.ru).
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
+Version: 1.0.0
+License: GPLv2','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start) devTp = EVAL_INT;
 
 tr = SYS.Transport.Serial.nodeAt("out_"+transport);
@@ -2692,7 +2695,7 @@ else {
 	}
 }
 
-f_err = t_err;','','',1512240506);
+f_err = t_err;','','',1580047532);
 INSERT INTO tmplib_DevLib VALUES('UPS','UPS (moved)','','','!!!!: Moved to the template library Main. Will be removed soon
 Uninterruptible power supply unifying data for provide all the data into single attribute of object type "All items" for next the control as the object with the data provide as table, alarming and allowing set writable attributes. The template aimed for using with module "System" data source as "UPS" and widget "Main.objProps" as the data presenter. The template also you can use as example for create like other data unification as complex object with properties, alarming and writing.
 
@@ -2806,9 +2809,11 @@ else if(f_err.toInt() && !tErr.toInt())			this.alarmSet(DESCR+": "+tr("NORMA"), 
 f_err = tErr;
 conDelay_ = 0;','','',1561317269);
 INSERT INTO tmplib_DevLib VALUES('VKT7','VKT-7','','','Firm "Teplocom" (http://www.teplocom.spb.ru) computer "VKT-7" for complex heat measurement and counting. The device complex enough to provide more parameters, more history and accessed by a nonlinear Serial-based protocol at low speed. The template implements acquisition for all significant parameters, gets for their history by hours, days and result months. Also you can to append easily enough for processing of the remained parameters.
+
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vladislav Chubuk
-Version: 1.0.0','','',60,0,'JavaLikeCalc.JavaScript
+Version: 1.0.0
+License: GPLv2','','',60,0,'JavaLikeCalc.JavaScript
 using Special.FLibSYS;
 
 if(f_start) {
@@ -3160,11 +3165,13 @@ if(t_err.length) {
 	f_err = t_err;
 	for(var cA in varsLs) arguments[cA] = EVAL_REAL;
 }
-else f_err = errAttrs.length ? "11:"+tr("Quality errors")+": "+errAttrs : "0";','','',1512240506);
-INSERT INTO tmplib_DevLib VALUES('SMDP','Sycon Multi Drop Protocol','','','STM devices for resonant frequency measurement for mass of deposited films attached to its surface by Sycon Instruments, Inc. (http://www.sycon.com).
+else f_err = errAttrs.length ? "11:"+tr("Quality errors")+": "+errAttrs : "0";','','',1580047532);
+INSERT INTO tmplib_DevLib VALUES('SMDP','Sycon Multi Drop Protocol','','','STM devices for resonant frequency measurement for mass of deposited films attached to their surface by Sycon Instruments, Inc. (http://www.sycon.com).
+
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
-Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
+Version: 1.0.0
+License: GPLv2','','',10,0,'JavaLikeCalc.JavaScript
 if(f_stop) return;
 if(f_start) {
 	cnt = 0;
@@ -3407,11 +3414,13 @@ else {
 	XtalLife_C = (t_err=req.attr("err")).length ? EVAL_INT : req.text().slice(2).toInt(10);
 }
 
-f_err = t_err.length ? t_err : "0";','','',1512240506);
+f_err = t_err.length ? t_err : "0";','','',1580047251);
 INSERT INTO tmplib_DevLib VALUES('IT3','Temperature measurement IT-3','','','Temperature measurement IT-3 from OmskEtalon (http://www.omsketalon.ru).
+
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
-Version: 1.2.0','','',10,0,'JavaLikeCalc.JavaScript
+Version: 1.2.0
+License: GPLv2','','',10,0,'JavaLikeCalc.JavaScript
 if(mdPass)	{
 	if(f_start) { f_err = EVAL; this.cnt.set(0, 0, 0, true); cnt_ = 0; tDl = 5; }
 	if((cnt=this.cnt.get()) != cnt_)	{ tDl = 5; cnt_ = cnt; }
@@ -3452,11 +3461,13 @@ else {
 }
 
 if(t_err.length) { SYS.messDebug("/IT3/TMPL",tr("Error response")+": "+t_err); f_err = t_err; }
-else f_err = "0";','','',1512240506);
+else f_err = "0";','','',1580046256);
 INSERT INTO tmplib_DevLib VALUES('IVE_452HS_02','IVE-452HS-02','','','Power supply of beam-electrons evaporator of "Plasma Tech" Ltd, from Moskov.
+
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
-Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
+Version: 1.0.0
+License: GPLv2','','',10,0,'JavaLikeCalc.JavaScript
 //Set transport
 if(f_start) {
 	addr_ = addr;
@@ -3552,11 +3563,13 @@ if(t_err.length) {
 	SYS.messDebug("/IVE452HS02/TMPL",tr("Error response")+": "+t_err);
 	f_err = t_err;
 }
-else f_err = "0";','','',1512240506);
+else f_err = "0";','','',1580046355);
 INSERT INTO tmplib_DevLib VALUES('OPTRIS','OPTRIS CT/CTL','','','OPTRIS CT/CTL communication interface of "Optris" GmbH, from Berlin.
+
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
-Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
+Version: 1.0.0
+License: GPLv2','','',10,0,'JavaLikeCalc.JavaScript
 //Set transport
 if(f_start) {
 	transport_ = transport;
@@ -3646,11 +3659,13 @@ if(t_err.length) {
 	SYS.messDebug("/OPTRIS/TMPL",tr("Error response")+": "+t_err);
 	f_err = t_err;
 }
-else f_err = "0";','','',1512240506);
+else f_err = "0";','','',1580047532);
 INSERT INTO tmplib_DevLib VALUES('CTR','CTR 100, 101','','','The RS232C Serial Interface permits the communication between the digital Oerlikon Leybold Vacuum CERAVAC, from Köln.
+
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
-Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
+Version: 1.0.0
+License: GPLv2','','',10,0,'JavaLikeCalc.JavaScript
 //Set transport
 if(f_start) {
 	transport_ = transport;
@@ -3753,7 +3768,7 @@ if(t_err.length) {
 	press = EVAL_REAL;
 	f_err = t_err + " " + u_err;
 }
-else f_err = "0: " + u_err;','','',1512240506);
+else f_err = "0: " + u_err;','','',1580045150);
 INSERT INTO tmplib_DevLib VALUES('IEC60870','IEC-60870','IEC-60870','','IEC 60870 part 5 is one from the IEC 60870 set of standards which defines systems used for telecontrol (supervisory control and data acquisition) in electrical engineering and power system automation applications. Part 5 provides a communication profile for sending basic telecontrol messages between two systems, which uses permanent directly connected data circuits between the systems.
 
 The template currently implements the part 104 (Ethernet transport) for the client and followed services: STARTDT, STOPDT, TESTFR, Ack, C_IC_NA_1 (100), C_CI_NA_1 (101), C_SC_NA_1 (45), M_SP_NA_1 (1), M_SP_TA_1 (2), M_DP_NA_1 (3), M_DP_TA_1 (4), M_ME_NB_1 (11), M_ME_NC_1 (13), M_ME_TF_1 (36), C_CS_NA_1 (103). For information ones, the sequential (SQ) mode enabling and disabling are supported.
@@ -4147,9 +4162,11 @@ if(t_err.length) {
 }
 else f_err = "0";','','',1574605839);
 INSERT INTO tmplib_DevLib VALUES('SSCP','Shark Slave Communication Protocol','','','Shark Slave Communication Protocol from EnergoCentrum PLUS, s.r.o.
+
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Costumer Faster CZ (http://faster.cz)
-Version: 0.6.2','','',30,0,'JavaLikeCalc.JavaScript
+Version: 0.6.2
+License: GPLv2','','',30,0,'JavaLikeCalc.JavaScript
 //Same request to the device
 function req(tr, addr, func, data) {
 	req = SYS.strFromCharCode(addr, (func>>8)&0xFF, func&0xFF, (data.length>>8)&0xFF, data.length&0xFF) + data;
@@ -4333,10 +4350,12 @@ else {
 	}
 }
 
-f_err = t_err;','','',1512240506);
-INSERT INTO tmplib_DevLib VALUES('m200','Mercury 200','Меркурій 200','Меркурий 200','One phase counter of electricity Mercury 200, 203.2Т, 206 from firm Incotex (http://www.incotexcom.ru).
+f_err = t_err;','','',1580047300);
+INSERT INTO tmplib_DevLib VALUES('m200','Mercury 200','Меркурій 200','Меркурий 200','One phase counter of electricity Mercury 200, 203.2Т, 206 from the firm "Incotex" (http://www.incotexcom.ru)
+
 Author: Arsen Zakojan <godzilla919@gmail.com>
-Version: 1.0.0','Однофазні лічильники електроенергії Меркурій 200,  203.2Т,  206 компанії Інкотекс (http://www.incotexcom.ru).
+Version: 1.0.0
+License: GPLv2','Однофазні лічильники електроенергії Меркурій 200,  203.2Т,  206 компанії Інкотекс (http://www.incotexcom.ru).
 Автор: Арсен Закоян <godzilla919@gmail.com>
 Версія 1.0.0','Однофазные счетчики электроэнергии Меркурий 200,  203.2Т,  206 компании Инкотекс (http://www.incotexcom.ru).
 Автор: Арсен Закоян <godzilla919@gmail.com>
@@ -4365,10 +4384,12 @@ if(req.text().length <14){U= EVAL_STR;I= EVAL_STR;P= EVAL_STR;}//если нет
 else//если ответ получен
 {U =Special.FLibSYS.str2real( req.text().slice(15,17)+req.text().slice(18,20))/10;
 I =Special.FLibSYS.str2real( req.text().slice(21,23)+req.text().slice(24,26))/100;
-P =Special.FLibSYS.str2real( req.text().slice(27,29)+req.text().slice(30,32)+req.text().slice(33,35));}','','',1512240506);
-INSERT INTO tmplib_DevLib VALUES('m230','Mercury 230','Меркурій 230','Меркурий 230','Three phase counter of electricity Mercury 230, 231, 232, 233, 234, 236 from firm Incotex (http://www.incotexcom.ru).
+P =Special.FLibSYS.str2real( req.text().slice(27,29)+req.text().slice(30,32)+req.text().slice(33,35));}','','',1580047532);
+INSERT INTO tmplib_DevLib VALUES('m230','Mercury 230','Меркурій 230','Меркурий 230','Three phase counter of electricity Mercury 230, 231, 232, 233, 234, 236 from the firm "Incotex" (http://www.incotexcom.ru).
+
 Author: Arsen Zakojan <godzilla919@gmail.com>
-Version: 1.0.0','Трифазні лічильники електроенергії Меркурій 230, 231, 232, 233,  234,  236  компанії Інкотекс (http://www.incotexcom.ru).
+Version: 1.0.0
+License: GPLv2','Трифазні лічильники електроенергії Меркурій 230, 231, 232, 233,  234,  236  компанії Інкотекс (http://www.incotexcom.ru).
 Автор: Арсен Закоян <godzilla919@gmail.com>
 Версія 1.0','Трехфазные счетчики электроэнергии Меркурий 230, 231, 232, 233,  234,  236  компании Инкотекс (http://www.incotexcom.ru).
 Автор: Арсен Закоян <godzilla919@gmail.com>
@@ -4526,10 +4547,12 @@ req = SYS.XMLNode().setAttr("ProtIt","m230").setAttr("netaddr",netaddr).setAttr(
 SYS.Transport["Serial"]["out_"+transport].messIO(req,"UserProtocol");
 if(!req.text())N1= EVAL_STR;
 else N1 =req.text();}
-','','',1512240506);
+','','',1580047532);
 INSERT INTO tmplib_DevLib VALUES('Nik2303I','Nik2303I','','','Three phase counter of electricity NIK 2303 from firm NIK LLC (http://www.nik.net.ua).
+
 Author: Ruslan Yarmoliuk <rylio74@gmail.com>
-Version: 1.0.0','','',120,0,'JavaLikeCalc.JavaScript
+Version: 1.0.0
+License: GPLv2','','',120,0,'JavaLikeCalc.JavaScript
 using Special.FLibSYS;
 
 if(f_start) {
@@ -4798,7 +4821,7 @@ if(tErr.length) {
 	SYS.messDebug("/NIK2303I/TMPL",tr("Error response")+": "+tErr);
 	f_err = tErr;
 }
-else f_err = "0";','','',1512241411);
+else f_err = "0";','','',1580046416);
 INSERT INTO tmplib_DevLib VALUES('ModBusScan','ModBus scanner','Сканер ModBus','Сканер ModBus','ModBus scanner for Coils (1), Input Coils (2), Registers (3), Input Registers (4); in the range [0...65535]. The template useful to examine unknown ModBus devices, scanning their Coils'' and Registers'' map for detecting the available data addresses. The scanning performs per one item, whether it is a coil or a register, to prevent the data unavailability for strict data accessing devices. The protocol ModBus itself implemented by the OpenSCADA module DAQ.ModBus, together which the template designed to use.
 
 Author: Roman Savochenko <roman@oscada.org>
@@ -4835,10 +4858,12 @@ for(stTm = SYS.time(); begin < end && begin < 65536 && (SYS.time()-stTm) < lim; 
 	}
 }
 type_ = type, begin_ = begin;','','',1574605208);
-INSERT INTO tmplib_DevLib VALUES('pulsarM','Pulsar-M','Пульсар-М','Пульсар-М','Pulsar-M counters protocol
+INSERT INTO tmplib_DevLib VALUES('pulsarM','Pulsar-M','Пульсар-М','Пульсар-М','Pulsar-M counters protocol.
+
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored: Zubarev Dmitry (IP INTEGRAL<http://kip-i-a.pro>)
-Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
+Version: 1.0.0
+License: GPLv2','','',10,0,'JavaLikeCalc.JavaScript
 //Same request to the device
 function req(tr, iaddr, func, data) {
 	addr_ = iaddr.toString(10).toInt(16);
@@ -4985,14 +5010,18 @@ else {
 	}
 }
 
-f_err = t_err;','','',1542134045);
+f_err = t_err;','','',1580047532);
 INSERT INTO tmplib_DevLib VALUES('OWEN','OWEN','','','OWEN data sources implementation in the OWEN protocol. Implemented wholly in the template for the protocol requesting and for dynamic data model of the OWEN data sources'' data with support of the writing and original names of the parameters.
-The field "addr" of the items can be wrote positive, for  the 8 bit address [0...255], and negative, for the 11 bit address[-2047...0].
+
+The field "addr" of the items can be wrote positive, for the 8 bit address [0...255], and negative, for the 11 bit address[-2047...0].
+
 The protocol implementing is not finished due to missing for feedback from the developer to resolve this undocumented behavior:
-- МВ110-8А responds error 0x31 for reading "in-t" >1003023331932DCB43 <1010932D4791;
-- and error 0x34 for it writing >1003023334932D2A42 <1001932D0BEDBC.
+- МВ110-8А responds error 0x31 for reading "in-t": >1003023331932DCB43 <1010932D4791;
+- and error 0x34 for it writing: >1003023334932D2A42 <1001932D0BEDBC
+
 Author: Roman Savochenko <roman@oscada.org>, Constantine (IrmIngeneer)
-Version: 0.8.1','','',30,0,'JavaLikeCalc.JavaScript
+Version: 0.8.1
+License: GPLv2','','',30,0,'JavaLikeCalc.JavaScript
 function hash(data, isName) {
 	for(CRC = 0, i = 0; i < data.length; i++) {
 		b = data.charCodeAt(i);
@@ -5219,8 +5248,8 @@ else {
 }
 
 f_err = t_err;
-if(!f_err.toInt())	f_err += t_inf + (t_infW.length?" "+tr("Write")+t_infW:"");','','',1544882666);
-INSERT INTO tmplib_DevLib VALUES('DCON_Prt','DCON Protocol + Input AI','','','Input and output part of the protocol DCON implementation with the input part designed for typical AI module at up to 20 channels. The protocol DCON client part also implemented by the OpenSCADA module DAQ.DCON.
+if(!f_err.toInt())	f_err += t_inf + (t_infW.length?" "+tr("Write")+t_infW:"");','','',1580047532);
+INSERT INTO tmplib_DevLib VALUES('DCON_Prt','DCON Protocol + Input AI','','','Input and output parts of the protocol DCON implementation with the input part designed for typical AI modules at up to 20 channels. The protocol DCON client part also implemented by the OpenSCADA module DAQ.DCON.
 
 The DCON commands are supported: #AA
 
@@ -5306,8 +5335,8 @@ if(req[0] == "#") {	//Commands #AA
 if(enCRC) answer += (CRC(answer)&0xFF).toString(16,2);
 answer += "\r";
 
-return true;','','',1574605398);
-INSERT INTO tmplib_DevLib VALUES('DCON_Prt_DI','DCON Protocol + Input DI','','','Input and output part of the protocol DCON implementation with the input part designed for typical DI module at up to 32 channels. The protocol DCON client part also implemented by the OpenSCADA module DAQ.DCON.
+return true;','','',1580046089);
+INSERT INTO tmplib_DevLib VALUES('DCON_Prt_DI','DCON Protocol + Input DI','','','Input and output parts of the protocol DCON implementation with the input part designed for typical DI modules at up to 32 channels. The protocol DCON client part also implemented by the OpenSCADA module DAQ.DCON.
 
 The DCON commands are supported: @AA, $AA6
 
@@ -5398,8 +5427,8 @@ if(req[0] == "@" || (req[0] == "$" && req[3] == "6")) {	//Commands @AA and $AA6
 if(enCRC) answer += (CRC(answer)&0xFF).toString(16,2);
 answer += "\r";
 
-return true;','','',1574605398);
-INSERT INTO tmplib_DevLib VALUES('DCON_Prt_AO','DCON Protocol + Input AO','','','Input and output part of the protocol DCON implementation with the input part designed for typical AO module at up to 8 channels. The protocol DCON client part also implemented by the OpenSCADA module DAQ.DCON.
+return true;','','',1580047532);
+INSERT INTO tmplib_DevLib VALUES('DCON_Prt_AO','DCON Protocol + Input AO','','','Input and output parts of the protocol DCON implementation with the input part designed for typical AO modules at up to 8 channels. The protocol DCON client part also implemented by the OpenSCADA module DAQ.DCON.
 
 The DCON commands are supported: $AA8N, #AAN{Data}
 
@@ -5490,8 +5519,8 @@ else answer = "?";	//return true;
 if(enCRC) answer += (CRC(answer)&0xFF).toString(16,2);
 answer += "\r";
 
-return true;','','',1574605398);
-INSERT INTO tmplib_DevLib VALUES('DCON_Prt_DO','DCON Protocol + Input DO','','','Input and output part of the protocol DCON implementation with the input part designed for typical DO module at up to 32 channels. The protocol DCON client part also implemented by the OpenSCADA module DAQ.DCON.
+return true;','','',1580047532);
+INSERT INTO tmplib_DevLib VALUES('DCON_Prt_DO','DCON Protocol + Input DO','','','Input and output parts of the protocol DCON implementation with the input part designed for typical DO modules at up to 32 channels. The protocol DCON client part also implemented by the OpenSCADA module DAQ.DCON.
 
 The DCON commands are supported: @AA, @AA{Data}
 
@@ -5590,7 +5619,7 @@ else answer = "?";	//return true;
 if(enCRC) answer += (CRC(answer)&0xFF).toString(16,2);
 answer += "\r";
 
-return true;','','',1574605398);
+return true;','','',1580047532);
 INSERT INTO tmplib_DevLib VALUES('DNP3','Distributed Network Protocol 3','','','Distributed Network Protocol 3 (DNP3) is a set of communications protocols used between components in process automation systems. Its main use is in utilities such as electric and water companies. Usage in other industries is not common. It was developed for communications between various types of data acquisition and control equipment. Competing standards include the older Modbus protocol and the newer IEC 61850 protocol and IEC 61870.
 
 The template implements currently for the client, which uses the followed functions: Confirm (0x00), Read (0x01), Write (0x02), Enable (0x14) and Disable (0x15) Spontaneous Messages.
@@ -6555,15 +6584,6 @@ else {
 		if(last_cmd&0x4) { cmdStop = false; last_cmd = last_cmd&(~0x4); }
 	}
 }','','',1416656400);
-INSERT INTO tmplib_base VALUES('gasPoint','Flow control point (obsolete)','Витрато-вимірювальний вузол (застаріле)','Расходомерный узел (устаревшее)','','','',10,0,'JavaLikeCalc.JavaScript
-if(f_start)	Q = 0;
-//F=200+(rand(5)-2.5);
-Q += F.isEVal() ? 0 : F/3600;
-//P=9+(rand(2)-1);
-//T=15+(rand(2)-1);
-dP = F.isEVal() ? 0 : F/33;
-DS = 1+(rand(0.2)-0.1);
-','','',1503582557);
 INSERT INTO tmplib_base VALUES('manInUnif','Manual input (unified)','Ручний ввід (уніфікований)','Ручной ввод (унифицированный)','Common, representative and unified template of a manual input — an analog output signal.
 The template forms a structure of parameter (complex tag) of the analog output which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object, mostly through the Element cadre control panel.
 
@@ -10063,7 +10083,7 @@ Currently, only value archives can be used as a data source, either directly to 
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Magomed
-Version: 1.0.0
+Version: 1.0.1
 License: GPLv2','Побудова діаграми трендів у SVG, яка може надалі вбудовуватися у XHTML-документу, для даних за вказаний період часу [(end-size)...end] та із джерел srcs.
 
 Код формування діаграми засновано на коді примітиву "Діаграма" візуалізаторів, та який було доволі просто перенесено із мови C++ на вбудовану мову JavaLikeCalc. Наразі перенесено-реалізовано лише тренди!
@@ -10084,7 +10104,7 @@ License: GPLv2','Побудова діаграми трендів у SVG, яка
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсоровано: Магомед
-Версія: 1.0.0
+Версія: 1.0.1
 Ліцензія: GPLv2','Построение диаграммы трендов в SVG, которая может далее встраиваться в XHTML-документ, для данных за указанный период времени [(end-size)...end] и из источников srcs.
 
 Код формирования диаграммы основан на коде примитива "Диаграмма" визуализаторов, и который был довольно просто перенесен с языка C++ на встроенный язык JavaLikeCalc. Сейчас перенесено-реализовано только тренды!
@@ -10105,7 +10125,7 @@ License: GPLv2','Побудова діаграми трендів у SVG, яка
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсировано: Магомед
-Версия: 1.0.0
+Версия: 1.0.1
 Лицензия: GPLv2',1,10,0,'im = SYS.XMLNode();
 im.load(tmpl, false, 3);
 if(!(drawArea=im.getElementBy("drawArea")) || !(scVer=im.getElementBy("scVer")) || !(scHor=im.getElementBy("scHor")) ||
@@ -10429,13 +10449,29 @@ if(hmax_ln >= 2) {
 for(iTr = 0; iTr < trends.length; iTr++) {
 	cP = trends[iTr];
 
+	vsPercT = cP.isIndiv ? false : vsPerc;
 	isLogT = cP.isIndiv ? (cP.wScale&FD_LOG) : isLog;
 	vsMaxT = cP.isIndiv ? cP.adjU : vsMax;
 	vsMinT = cP.isIndiv ? cP.adjL : vsMin;
 
+	// Prepare border for percent trend
+	bordL = cP.min;
+	bordU = cP.max;
+	if(vsPercT && bordL >= bordU) {
+		bordU = -3e300, bordL = 3e300;
+		for(iDt = 0; iDt < cP.val.length; iDt++) {
+			c_val = cP.val[iDt];
+			if(!c_val.isEVal()) { bordL = min(bordL, c_val); bordU = max(bordU, c_val); }
+		}
+		vMarg = (bordU-bordL)/10;
+		bordL -= vMarg;
+		bordU += vMarg;
+	}
+
 	trPath = 0; prev_vl = EVAL; prev_pos = 0;
 	for(iDt = 0; iDt < cP.val.length; iDt++) {
 		c_val = cP.val[iDt];
+		if(vsPercT && !c_val.isEVal()) c_val = 100*(c_val-bordL)/(bordU-bordL);
 		c_tm = 1e-6*(cP.beg + iDt*cP.per);
 		if(c_tm < begin)	continue;
 		c_pos = floor(tArX + tArW*(c_tm-begin)/(end-begin));
@@ -10453,7 +10489,7 @@ for(iTr = 0; iTr < trends.length; iTr++) {
 	}
 }
 
-return im.save();','','',1579609892);
+return im.save();','','',1580305083);
 CREATE TABLE IF NOT EXISTS 'tmplib_LowDevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 INSERT INTO tmplib_LowDevLib VALUES('1602A','GPIO|I2C: 1602A(HD44780)','LCD Module 1602A, STN, BLUB, 16 Character x 2 Line,  5 x 8 Dots, by the direct (Raspberry PI BCM2835 GPIO) or I2C (PCF8574) wiring.
 Conditions: Default planing policy but realtime one preferred.

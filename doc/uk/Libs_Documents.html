@@ -1,0 +1,859 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Бібліотеки/Документи - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../en/files/doc.css" rel="stylesheet" /></head>
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../en/files/Logo-big.png" /></a></div><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="uk">Бібліотеки/Документи</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FDocuments&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Documents" title="Libs/Documents">Libs/Documents</a> and the translation is 96% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_Documents.html" title="Libs/Documents (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--med" href="../ru/Libs_Documents.html" title="Библиотеки/Документы (44% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../en/files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> Forming the VCA-part ...
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Назва </th>
+<th> Версія </th>
+<th> Ліцензія </th>
+<th> Джерело </th>
+<th> Мови </th>
+<th> Автор </th>
+<th> Опис
+</th></tr>
+
+<tr>
+<td> <a href="Libs_Documents.html" title="Special:MyLanguage/Libs/Documents">Бібліотека звітів та документів</a>
+</td>
+<td> 2.0, 2.0 </td>
+<td> GPLv2 </td>
+<td>
+<p>OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.JavaLikeCalc.doc<br />
+vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">GZip</a>) &gt; VCA.wlb_doc
+</p>
+</td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td>
+<td> Надає комбіновану бібліотеку звітів, документів та пов'язаних функцій загальної та промислової автоматизації.
+<ul><li> <b>Засновано:</b> Січень 2008</li>
+<li> <b>Початково створено, для функцій:</b> у <a class="external text" href="http://wiki.oscada.org/HomePageUk/Using/APIFunctionLibs/LibDoc" rel="nofollow noreferrer noopener" target="_blank">старій Wiki</a></li></ul>
+</td></tr></table>
+<p>Бібліотека створюється для надання елементів-кадрів звітів та документів користувацького інтерфейсу та містить графічні елементи, які часто затребувано при формуванні користувацького інтерфейсу автоматизації технологічних та загальних процесів. Будується бібліотека на основі <a href="Modules/VCAEngine.html#WidgetPrimitives" title="Special:MyLanguage/Modules/VCAEngine">примітивів віджетів</a> та мови внутрішнього програмування <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, також для пов'язаних функцій.
+</p><p>Назви елементів та їх параметрів доступні на мовах: Англійська, Українська та Російська. Їх вихідний код написано у мово(людська)-незалежному режимі з викликом функції перекладу <i>tr()</i> та переклад цих повідомлень також доступний Англійською, Українською та Російською.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.94.D0.BE.D0.BA.D1.83.D0.BC.D0.B5.D0.BD.D1.82.D0.B8"><span class="tocnumber">1</span> <span class="toctext">Документи</span></a>
+<ul>
+<li class="toclevel-2"><a href="#.D0.94.D0.BE.D0.BA.D1.83.D0.BC.D0.B5.D0.BD.D1.82_-_.D0.B0.D1.80.D1.85.D1.96.D0.B2.D0.BD.D0.B8.D0.B9_.28doc.29"><span class="tocnumber">1.1</span> <span class="toctext">Документ - архівний (doc)</span></a>
+<ul>
+<li class="toclevel-3"><a href="#Hour-averaged_values_of_the_flow-control_point_.28docGasNodeDayA.29"><span class="tocnumber">1.1.1</span> <span class="toctext">Hour-averaged values of the flow-control point (docGasNodeDayA)</span></a></li>
+<li class="toclevel-3"><a href="#Day-averaged_values_of_the_flow-control_point_.28docGasNodeMonthA.29"><span class="tocnumber">1.1.2</span> <span class="toctext">Day-averaged values of the flow-control point (docGasNodeMonthA)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2"><a href="#.D0.94.D0.BE.D0.BA.D1.83.D0.BC.D0.B5.D0.BD.D1.82_-_.D0.B4.D0.B8.D0.BD.D0.B0.D0.BC.D1.96.D1.87.D0.BD.D0.B8.D0.B9_.28docDin.29"><span class="tocnumber">1.2</span> <span class="toctext">Документ - динамічний (docDin)</span></a>
+<ul>
+<li class="toclevel-3"><a href="#.D0.97.D0.B2.D1.96.D1.82_.D0.BC.D0.B8.D1.82.D1.82.D1.94.D0.B2.D0.B8.D1.85_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D1.8C_.28docRepInstVals.29"><span class="tocnumber">1.2.1</span> <span class="toctext">Звіт миттєвих значень (docRepInstVals)</span></a></li>
+<li class="toclevel-3"><a href="#.D0.9F.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB_.D0.BF.D0.BE.D1.80.D1.83.D1.88.D0.B5.D0.BD.D1.8C_.28docAlarmsRep.29"><span class="tocnumber">1.2.2</span> <span class="toctext">Протокол порушень (docAlarmsRep)</span></a></li>
+<li class="toclevel-3"><a href="#.D0.9F.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB_.D0.B2.D1.82.D1.80.D1.83.D1.87.D0.B0.D0.BD.D1.8C_.28docUsersSet.29"><span class="tocnumber">1.2.3</span> <span class="toctext">Протокол втручань (docUsersSet)</span></a></li>
+<li class="toclevel-3"><a href="#.D0.9F.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB_.D0.BF.D0.BE.D0.B2.D1.96.D0.B4.D0.BE.D0.BC.D0.BB.D0.B5.D0.BD.D1.8C_.28docMessRep.29"><span class="tocnumber">1.2.4</span> <span class="toctext">Протокол повідомлень (docMessRep)</span></a></li>
+<li class="toclevel-3"><a href="#.D0.97.D0.B2.D1.96.D1.82_.D0.B4.D0.B2.D0.BE.D1.85_.D1.80.D0.BE.D0.B1.D0.BE.D1.87.D0.B8.D1.85_.D0.B7.D0.BC.D1.96.D0.BD_.28docRep2WorkSh.29"><span class="tocnumber">1.2.5</span> <span class="toctext">Звіт двох робочих змін (docRep2WorkSh)</span></a></li>
+<li class="toclevel-3"><a href="#Year_report_of_the_resources-counters_.28docResourcesYear.29"><span class="tocnumber">1.2.6</span> <span class="toctext">Year report of the resources-counters (docResourcesYear)</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.A1.D0.B5.D1.80.D0.B2.D1.96.D1.81.D0.BD.D1.96_.D0.BF.D0.BE.D0.B2.27.D1.8F.D0.B7.D0.B0.D0.BD.D1.96_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.97"><span class="tocnumber">2</span> <span class="toctext"><span>Сервісні пов'язані функції</span></span></a>
+<ul>
+<li class="toclevel-2"><a href="#.D0.9E.D1.82.D1.80.D0.B8.D0.BC.D0.B0.D0.BD.D0.BD.D1.8F_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D0.BD.D1.8F_.D0.B7_.D0.B0.D1.80.D1.85.D1.96.D0.B2.D1.83_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D1.8C_.28getVal.29"><span class="tocnumber">2.1</span> <span class="toctext">Отримання значення з архіву значень (getVal)</span></a></li>
+<li class="toclevel-2"><a href="#.D0.A1.D0.B5.D1.80.D0.B5.D0.B4.D0.BD.D1.94_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D0.BD.D1.8F_.D0.B0.D1.80.D1.85.D1.96.D0.B2.D1.83_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D1.8C_.28averVal.29"><span class="tocnumber">2.2</span> <span class="toctext">Середнє значення архіву значень (averVal)</span></a></li>
+<li class="toclevel-2"><a href="#.D0.9F.D1.96.D0.B4.D1.81.D1.83.D0.BC.D0.BE.D0.BA_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D1.8C_.D0.B0.D1.80.D1.85.D1.96.D0.B2.D1.83_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D1.8C_.28sumVal.29"><span class="tocnumber">2.3</span> <span class="toctext">Підсумок значень архіву значень (sumVal)</span></a></li>
+<li class="toclevel-2"><a href="#.D0.94.D1.96.D0.B0.D0.B3.D1.80.D0.B0.D0.BC.D0.B0_.28diagram.29"><span class="tocnumber">2.4</span> <span class="toctext">Діаграма (diagram)</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id=".D0.94.D0.BE.D0.BA.D1.83.D0.BC.D0.B5.D0.BD.D1.82.D0.B8"><span class="mw-headline-number">1</span> Документи</span></h2>
+<p>Містить елементи-кадри документів шаблонного та кінцевого типів, що призначені для розташування у розділі "Документи" (вид відображення) дерева сторінок проекту, побудованого за <a href="Libs_Main_graphical_elements.html#RootPgSo" title="Special:MyLanguage/Libs/Main graphical elements">концепцією об'єктів сигналізації кореневої сторінки "RootPgSo"</a>. Однак, вони можуть бути розташовані як окремі сутності або у складі власної концепції керування сторінками, але тут треба враховувати, що кадри часто посилаються та викликають <a href="Libs_Main_graphical_elements.html#doc_panel" title="Special:MyLanguage/Libs/Main graphical elements">панель документів</a>!
+</p><p>Для підключення частини бібліотеки до проекту станції OpenSCADA ви можете отримати файл БД як:
+</p>
+<ul><li> такий що постачається з готовим та відповідним пакетом дистрибутиву Linux на кшталт "openscada-libdb-vca", "openscada-LibDB.VCA";</li>
+<li> найбільш актуальний та безпосередньо отриманий з <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql" rel="nofollow noreferrer noopener" target="_blank">репозиторію subversion</a>, перетворений у файл БД SQLite шляхом:</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 15px">
+$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql
+$ sqlite3 -init vcaBase.sql vcaBase.db .exit
+</pre>
+<ul><li> завантаження <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">прикріпленого тут</a>.</li></ul>
+<p>Цей отриманий файл Ви надалі можете розмістити у теці проекту станції та створити об'єкт бази даних модуля БД "SQLite", зареєструвавши файл бази даних у конфігурації.
+</p><p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="doc" title="#doc"><h3><span class="mw-headline" id=".D0.94.D0.BE.D0.BA.D1.83.D0.BC.D0.B5.D0.BD.D1.82_-_.D0.B0.D1.80.D1.85.D1.96.D0.B2.D0.BD.D0.B8.D0.B9_.28doc.29"><span class="mw-headline-number">1.1</span> Документ - архівний (<a href="Libs_Documents.html#doc" title="Special:MyLanguage/Libs/Documents">doc</a>)</span></h3></span> </td>
+<td> 1.2 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Кадр, представлений на рисунку 1.1, є шаблоном документу архівного типу, він надається як приклад та для побудови власних архівних документів на його основі. Основною специфікою документу цього типу є періодична генерація на рівні СВУ-сеансу (у фоні) та розміщення фінальних та готових документів у архіві, таблиця БД сеансу СВУ-проекту "prj_{ProjID}_ses".
+</p><p>Основною перевагою цього типу документу є найменше навантаження на процесор протягом генерації, яка може бути багатокроковою протягом основного періоду генерації, та швидкий перегляд, який передбачає просте відкриття готових документів із архіву. Але цей тип документу має суттєвий недолік, який полягає у постійному виконані єдиного сеансу проекту у фоні та відсутність якого призводить до пропуску генерації документів у архів.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Відтак, документи такого типу доцільні до використання на стаціонарних АРМ оператору, навіть якщо це відтворення із серверу візуалізації, та малокорисні у WEB-інтерфейсі!
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibDocuments_doc.png"><img class="thumbimage" height="600" src="../en/files/LibDocuments_doc.png" width="900" /></a>  <div class="thumbcaption">Рис.1.1. Кадр "Документ - архівний" у режимі розробки.</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Кадр може бути використано виключно як основу для створення власних документів архівного типу, для чого ви маєте його скопіювати або успадкувати, обравши відповідну опцію у діалозі копіювання. Далі ви маєте відредагувати шаблон документу, у відповідному атрибуті, згідно до потреб вашого документу та написати власну процедуру періодичного та покрокового формування документів із записом їх до архіву, зразок якої можна отримати у кінцевих документів, що засновані на цьому.
+</p><p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="docGasNodeDayA" title="#docGasNodeDayA"><h4><span class="mw-headline" id="Hour-averaged_values_of_the_flow-control_point_.28docGasNodeDayA.29"><span class="mw-headline-number">1.1.1</span> Hour-averaged values of the flow-control point (<a href="Libs_Documents.html#docGasNodeDayA" title="Special:MyLanguage/Libs/Documents">docGasNodeDayA</a>)</span></h4></span> </td>
+<td> 2.2 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="docGasNodeMonthA" title="#docGasNodeMonthA"><h4><span class="mw-headline" id="Day-averaged_values_of_the_flow-control_point_.28docGasNodeMonthA.29"><span class="mw-headline-number">1.1.2</span> Day-averaged values of the flow-control point (<a href="Libs_Documents.html#docGasNodeMonthA" title="Special:MyLanguage/Libs/Documents">docGasNodeMonthA</a>)</span></h4></span> </td>
+<td> 2.2 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="docDin" title="#docDin"><h3><span class="mw-headline" id=".D0.94.D0.BE.D0.BA.D1.83.D0.BC.D0.B5.D0.BD.D1.82_-_.D0.B4.D0.B8.D0.BD.D0.B0.D0.BC.D1.96.D1.87.D0.BD.D0.B8.D0.B9_.28docDin.29"><span class="mw-headline-number">1.2</span> Документ - динамічний (<a href="Libs_Documents.html#docDin" title="Special:MyLanguage/Libs/Documents">docDin</a>)</span></h3></span> </td>
+<td> 1.2 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Кадр, представлений на рисунку 1.2, є шаблоном документу динамічного типу, він надається як приклад та для побудови власних динамічних документів на його основі. Основною специфікою документу цього типу є синхронна генерація за запитом-відкриттям.
+</p><p>Основною перевагою цього типу документу є максимальна актуальність даних та мови документу, для багатомовних інтерфейсів, тобто можливість генерації на визначену дату та час. Але цей тип документу має суттєвий недолік, який полягає у високому навантажені процесору та тривалому часі синхронної генерації для великих архівних даних.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Відтак, документи такого типу дозволено до використання на всіх типах інтерфейсів, включно з WEB-інтерфейсами, але деякі документи, засновані на великих архівних даних, потребують не повільних обчислювальних систем!
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibDocuments_docDin.png"><img class="thumbimage" height="600" src="../en/files/LibDocuments_docDin.png" width="900" /></a>  <div class="thumbcaption">Рис.1.2. Кадр "Документ - динамічний" у режимі розробки.</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Кадр може бути використано виключно як основу для створення власних документів динамічного типу, для чого ви маєте його скопіювати або успадкувати, обравши відповідну опцію у діалозі копіювання. Далі ви маєте відредагувати шаблон документу, у відповідному атрибуті, згідно до потреб вашого документу та написати власну загальну процедуру генерації документу, якщо її не вбудовано до шаблону документу.
+</p><p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="docRepInstVals" title="#docRepInstVals"><h4><span class="mw-headline" id=".D0.97.D0.B2.D1.96.D1.82_.D0.BC.D0.B8.D1.82.D1.82.D1.94.D0.B2.D0.B8.D1.85_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D1.8C_.28docRepInstVals.29"><span class="mw-headline-number">1.2.1</span> Звіт миттєвих значень (<a href="Libs_Documents.html#docRepInstVals" title="Special:MyLanguage/Libs/Documents">docRepInstVals</a>)</span></h4></span> </td>
+<td> 2.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Документ, представлений на рисунку 1.2.1, слугує для генерації звіту миттєвих значень у вигляді діаграми трендів та таблиці даних. Документ динамічного типу, відтак ви можете визначити час та глибину даних. Документ загалом використовує та представляє представницьку структуру DAQ-шаблону "<a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">Аналоговий сигнал</a>". У якості джерела даних документу виступають <a href="Program_manual.html#ArchVals" title="Special:MyLanguage/Documents/Program manual">архіви значень</a> DAQ-параметрів.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibDocuments_docRepInstVals_uk.png"><img class="thumbimage" height="580" src="files/LibDocuments_docRepInstVals_uk.png" width="900" /></a>  <div class="thumbcaption">Рис.1.2.1. Документ "Звіт миттєвих значень" у режимі виконання.</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Документ призначено для виконання ролі сторінки-шаблону, а, відповідно, він має безпосередньо розташовуватися у дерево проекту. До кожного документу може підключатися до десяти параметрів, шляхом встановлення зв'язків. Елементи, для яких не буде встановлено зв'язку, будуть приховані при виконанні. Типова глибина документу у минуле встановлена у 10 хвилин.
+</p><p><b><u>Використання — виконання</u></b><br />
+У режимі виконання відображаються елементи, для яких встановлено зв'язки. Додатково ви можете керувати властивостями відображення документу, для чого використовується <a href="Libs_Main_graphical_elements.html#doc_panel" title="Special:MyLanguage/Libs/Main graphical elements">панель управління документом</a>, викликати яку можна натиснувши ліву клавішу миші у області документу.
+</p><p><b><u>Властивості зв'язування та конфігурації</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Конфігурація </th>
+<th> Конфігураційний шаблон </th>
+<th> Опис
+</th></tr>
+<tr>
+<td colspan="6"> <i>Віджет документу (doc)</i>
+</td></tr>
+<tr>
+<td> title </td>
+<td> Заголовок </td>
+<td> Рядок </td>
+<td> Стала </td>
+<td> </td>
+<td> Заголовок звіту
+</td></tr>
+<tr>
+<td colspan="6"> <i>Параметр {n} від 1 до 10.</i>
+</td></tr>
+<tr>
+<td> p{n}name </td>
+<td> Параметр {n}: назва </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter{n}|NAME </td>
+<td> Назва параметру у заголовку таблиці.
+</td></tr>
+<tr>
+<td> p{n}var </td>
+<td> Параметр {n}: змінна </td>
+<td> Адреса </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter{n}|var </td>
+<td> Адреса до атрибуту параметру із архівом значень.
+</td></tr>
+<tr>
+<td> p{n}ed </td>
+<td> Параметр {n}: одиниця виміру </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter{n}|ed </td>
+<td>
+</td></tr>
+<tr>
+<td> p{n}prec </td>
+<td> Параметр {n}: точність </td>
+<td> Цілий </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter{n}|prec </td>
+<td>
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="docAlarmsRep" title="#docAlarmsRep"><h4><span class="mw-headline" id=".D0.9F.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB_.D0.BF.D0.BE.D1.80.D1.83.D1.88.D0.B5.D0.BD.D1.8C_.28docAlarmsRep.29"><span class="mw-headline-number">1.2.2</span> Протокол порушень (<a href="Libs_Documents.html#docAlarmsRep" title="Special:MyLanguage/Libs/Documents">docAlarmsRep</a>)</span></h4></span> </td>
+<td> 1.5 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Документ, представлений на рисунку 1.2.2, слугує для генерації звіту з порушень. Документ динамічного типу, відтак ви можете визначити час та глибину даних. Документ загалом використовує та представляє структуру повідомлень "<a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">Порушення</a>". У якості джерела даних документу виступає <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">архів повідомлень</a>.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibDocuments_docAlarmsRep_uk.png"><img class="thumbimage" height="580" src="files/LibDocuments_docAlarmsRep_uk.png" width="900" /></a>  <div class="thumbcaption">Рис.1.2.2. Документ "Протокол порушень" у режимі виконання.</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Документ призначено для виконання ролі сторінки-шаблону, а, відповідно, він має безпосередньо розташовуватися у дерево проекту. До кожного документу може бути встановлено власний рівень повідомлень та категорію опрацьовуваних порушень у атрибуті "Категорія повідомлень (<b>messCat</b>)", який по замовченню є загальним "1:al*:*" та може бути спеціалізованим до джерел даних. Типова глибина документу у минуле встановлена у 1 день.
+</p><p><b><u>Використання — виконання</u></b><br />
+У режимі виконання відображаються визначені повідомлення про порушення. Додатково ви можете керувати властивостями відображення документу, для чого використовується <a href="Libs_Main_graphical_elements.html#doc_panel" title="Special:MyLanguage/Libs/Main graphical elements">панель управління документом</a>, викликати яку можна натиснувши ліву клавішу миші у області документу.
+</p><p><b><u>Властивості зв'язування та конфігурації</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Опис
+</th></tr>
+<tr>
+<td> messCat </td>
+<td> Категорія повідомлень </td>
+<td> Рядок </td>
+<td> Запитаний рівень та категорія повідомлень про порушення, типово "1:al*:*".
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="docUsersSet" title="#docUsersSet"><h4><span class="mw-headline" id=".D0.9F.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB_.D0.B2.D1.82.D1.80.D1.83.D1.87.D0.B0.D0.BD.D1.8C_.28docUsersSet.29"><span class="mw-headline-number">1.2.3</span> Протокол втручань (<a href="Libs_Documents.html#docUsersSet" title="Special:MyLanguage/Libs/Documents">docUsersSet</a>)</span></h4></span> </td>
+<td> 1.5 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Документ, представлений на рисунку 1.2.3, слугує для генерації звіту з втручань користувача. Документ динамічного типу, відтак ви можете визначити час та глибину даних. Документ загалом використовує та представляє структуру повідомлень "<a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">Дії користувача-оператора</a>". У якості джерела даних документу виступає <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">архів повідомлень</a>.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibDocuments_docUsersSet_uk.png"><img class="thumbimage" height="580" src="files/LibDocuments_docUsersSet_uk.png" width="900" /></a>  <div class="thumbcaption">Рис.1.2.3. Документ "Протокол втручань" у режимі виконання.</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Документ призначено для виконання ролі сторінки, а, відповідно, він має безпосередньо розташовуватися у дерево проекту. Документ не передбачає жодної конфігурації оскільки повідомлення про втручання є загальними. Типова глибина документу у минуле встановлена у 1 день.
+</p><p><b><u>Використання — виконання</u></b><br />
+У режимі виконання відображаються повідомлення про втручання користувачів. Додатково ви можете керувати властивостями відображення документу, для чого використовується <a href="Libs_Main_graphical_elements.html#doc_panel" title="Special:MyLanguage/Libs/Main graphical elements">панель управління документом</a>, викликати яку можна натиснувши ліву клавішу миші у області документу.
+</p><p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="docMessRep" title="#docMessRep"><h4><span class="mw-headline" id=".D0.9F.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB_.D0.BF.D0.BE.D0.B2.D1.96.D0.B4.D0.BE.D0.BC.D0.BB.D0.B5.D0.BD.D1.8C_.28docMessRep.29"><span class="mw-headline-number">1.2.4</span> Протокол повідомлень (<a href="Libs_Documents.html#docMessRep" title="Special:MyLanguage/Libs/Documents">docMessRep</a>)</span></h4></span> </td>
+<td> 1.5 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Документ, представлений на рисунку 1.2.4, слугує для генерації звіту <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">різного сорту повідомлень</a> разом, включаючи: "Порушення", "Дії користувача-оператора" та "Системні". Документ динамічного типу, відтак ви можете визначити час та глибину даних. Документ загалом використовує та представляє <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">структури повідомлень</a>: "Порушення", "Дії користувача-оператора" та "Системні". У якості джерела даних документу виступає <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">архів повідомлень</a>.
+</p><p>Документ також надає просту фільтрацію за обраним критерієм: "Вимкнено", "Дата та час (dttm)", "Рівень (lev)", "Параметр (prm)", "Опис (dscr)", "Значення (alrm)".
+</p>
+<ul><li> <b>Спонсорування:</b> Устьянцев Михайло</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibDocuments_docMessRep_uk.png"><img class="thumbimage" height="580" src="files/LibDocuments_docMessRep_uk.png" width="900" /></a>  <div class="thumbcaption">Рис.1.2.4. Документ "Протокол повідомлень" у режимі виконання.</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Документ призначено для виконання ролі сторінки-шаблону, а, відповідно, він має безпосередньо розташовуватися у дерево проекту.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> До кожного документу може бути встановлено власний рівень та категорію опрацьовуваних повідомлень у атрибуті "Категорія повідомлень (<b>messCat</b>)", який, по замовченню, є загальним "1:/^(al|OP|/sub_UI/mod_VCAEngine)/" та може бути спеціалізованим під себе. Також ви можете визначити архіватори виключного використання, встановленням атрибуту "Перелік архіваторів (<b>archLs</b>)". Типова глибина документу у минуле встановлена у 1 день.
+</p><p><b><u>Використання — виконання</u></b><br />
+У режимі виконання відображаються визначені повідомлення. Додатково ви можете керувати властивостями відображення документу, для чого використовується <a href="Libs_Main_graphical_elements.html#doc_panel" title="Special:MyLanguage/Libs/Main graphical elements">панель управління документом</a>, викликати яку можна натиснувши ліву клавішу миші у області документу.
+</p><p>Обранням критерію фільтрації та веденням тексту повідомлень потрібних для представлення, користувач може побачити лише потрібні повідомлення.
+</p><p><b><u>Властивості зв'язування та конфігурації</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Опис
+</th></tr>
+<tr>
+<td> messCat </td>
+<td> Категорія повідомлень </td>
+<td> Рядок </td>
+<td> Запитаний рівень та категорія повідомлень, типово "1:/^(al|OP|/sub_UI/mod_VCAEngine)/".
+</td></tr>
+<tr>
+<td> archLs </td>
+<td> Перелік архіваторів, "{ArhMod}.{Arh}[;{ArhModN}.{ArhN}]" </td>
+<td> Рядок </td>
+<td> Перелік архіваторів повідомлень, лише з яких повідомлення будуть запитуватися, встановіть порожнім для загального доступу.
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="docRep2WorkSh" title="#docRep2WorkSh"><h4><span class="mw-headline" id=".D0.97.D0.B2.D1.96.D1.82_.D0.B4.D0.B2.D0.BE.D1.85_.D1.80.D0.BE.D0.B1.D0.BE.D1.87.D0.B8.D1.85_.D0.B7.D0.BC.D1.96.D0.BD_.28docRep2WorkSh.29"><span class="mw-headline-number">1.2.5</span> Звіт двох робочих змін (<a href="Libs_Documents.html#docRep2WorkSh" title="Special:MyLanguage/Libs/Documents">docRep2WorkSh</a>)</span></h4></span> </td>
+<td> 2.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Документ, представлений на рисунку 1.2.5, слугує для генерації звіту годинних значень до 10 параметрів двох робочих змін доби із результатною сумою для потоків та схожих параметрів. Документ динамічного типу, відтак ви можете визначити час та глибину (фіксована) даних. Документ загалом використовує та представляє представницьку структуру DAQ-шаблону "<a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">Аналоговий сигнал</a>". У якості джерела даних документу виступають <a href="Program_manual.html#ArchVals" title="Special:MyLanguage/Documents/Program manual">архіви значень</a> DAQ-параметрів.
+</p>
+<ul><li> <b>Спонсоровано:</b> <a class="external text" href="http://diyaorg.dp.ua" rel="nofollow noreferrer noopener" target="_blank">ТОВ "ДІЯ"</a></li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibDocuments_docRep2WorkSh_uk.png"><img class="thumbimage" height="580" src="files/LibDocuments_docRep2WorkSh_uk.png" width="900" /></a>  <div class="thumbcaption">Рис.1.2.5. Документ "Звіт двох робочих змін" у режимі виконання.</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Документ призначено для виконання ролі сторінки-шаблону, а, відповідно, він має безпосередньо розташовуватися у дерево проекту. До кожного документу може підключатися до десяти параметрів, шляхом встановлення зв'язків. Елементи, для яких не буде встановлено зв'язку, будуть приховані при виконанні.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Також ви маєте визначити архіватор одно-годинних значень у атрибуті "Архіватор (<b>arch</b>)", яким обслуговуються вказані параметри, оскільки цей документ потребує таких даних. Якщо початок першої робочої зміни відрізняється від 8 (восьмої) години, то ви маєте потрібну годину вказати у атрибуті "Початкова година (<b>stH</b>)".
+</p><p><b><u>Використання — виконання</u></b><br />
+У режимі виконання відображаються елементи, для яких встановлено зв'язки. Додатково ви можете керувати властивостями відображення документу, для чого використовується <a href="Libs_Main_graphical_elements.html#doc_panel" title="Special:MyLanguage/Libs/Main graphical elements">панель управління документом</a>, викликати яку можна натиснувши ліву клавішу миші у області документу. Оскільки глибину документу у історію зафіксовано на значенні 12 годин (одна робоча зміна), користувач може лише змінити час документу!
+</p><p><b><u>Властивості зв'язування та конфігурації</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Конфігурація </th>
+<th> Конфігураційний шаблон </th>
+<th> Опис
+</th></tr>
+<tr>
+<td colspan="6"> <i>Віджет документу (doc)</i>
+</td></tr>
+<tr>
+<td> stH </td>
+<td> Початкова година </td>
+<td> Цілий </td>
+<td> Стала </td>
+<td> </td>
+<td> Початковий час робочої зміни, від 0 до 11 годин, по замовченню 8.
+</td></tr>
+<tr>
+<td> arch </td>
+<td> Архіватор </td>
+<td> Рядок </td>
+<td> Стала </td>
+<td> </td>
+<td> Одно-годинний архіватор, по замовченню "FSArch.1h".
+</td></tr>
+<tr>
+<td colspan="6"> <i>Параметр {n} від 1 до 10.</i>
+</td></tr>
+<tr>
+<td> p{n}_sh </td>
+<td> Параметр {n}: шифр </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter{n}|NAME </td>
+<td> Шифр параметру у таблиці.
+</td></tr>
+<tr>
+<td> p{n}_nm </td>
+<td> Параметр {n}: опис </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter{n}|DESCR </td>
+<td> Опис параметру у таблиці.
+</td></tr>
+<tr>
+<td> p{n}_val </td>
+<td> Параметр {n}: значення </td>
+<td> Адреса </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter{n}|var </td>
+<td> Адреса до атрибуту параметру із архівом значень.
+</td></tr>
+<tr>
+<td> p{n}_ed </td>
+<td> Параметр {n}: од.виміру </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter{n}|ed </td>
+<td>
+</td></tr>
+<tr>
+<td> p{n}_prec </td>
+<td> Параметр {n}: точність </td>
+<td> Цілий </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter{n}|prec </td>
+<td>
+</td></tr>
+<tr>
+<td> p{n}_flSum </td>
+<td> Параметр {n}: показник підсумку </td>
+<td> Логічний </td>
+<td> Стала </td>
+<td> Parameter{n}|flSum </td>
+<td> Ознака обчислення суми значень параметру для робочої зміни.
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="docResourcesYear" title="#docResourcesYear"><h4><span class="mw-headline" id="Year_report_of_the_resources-counters_.28docResourcesYear.29"><span class="mw-headline-number">1.2.6</span> Year report of the resources-counters (<a href="Libs_Documents.html#docResourcesYear" title="Special:MyLanguage/Libs/Documents">docResourcesYear</a>)</span></h4></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<h2><span class="mw-headline" id=".D0.A1.D0.B5.D1.80.D0.B2.D1.96.D1.81.D0.BD.D1.96_.D0.BF.D0.BE.D0.B2.27.D1.8F.D0.B7.D0.B0.D0.BD.D1.96_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.97"><span class="mw-headline-number">2</span> <span id="ServFunc" title="#ServFunc">Сервісні пов'язані функції</span></span></h2>
+<p>Сервісні функції кадрів звітів та документів призначено для виконання характерних задач отримання звітних даних, для чого треба здійснювати якусь перевірку або підрахунок, наприклад, перевіряти достовірність та підсумовувати. Сервісною функцією може бути й формування складних даних, як то вбудованих у документ діаграм.
+</p><p>Для адресації до функцій цієї бібліотеки можна використати статичну адресу виклику <b>DAQ.JavaLikeCalc.lib_doc.{Func}()</b> або динамічну <b>SYS.DAQ.JavaLikeCalc["lib_doc"]["{Func}"].call()</b>, <b>SYS.DAQ.JavaLikeCalc["lib_doc"].{Func}()</b>.
+Де <i>{Func}</i> — ідентифікатор функції у бібліотеці.
+</p><p>Для підключення частини бібліотеки до проекту станції OpenSCADA ви можете отримати файл БД як:
+</p>
+<ul><li> такий що постачається з готовим та відповідним пакетом дистрибутиву Linux на кшталт "openscada-libdb-main", "openscada-LibDB.Main";</li>
+<li> найбільш актуальний та безпосередньо отриманий з <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">репозиторію subversion</a>, перетворений у файл БД SQLite шляхом:</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 15px">
+$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql
+$ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
+</pre>
+<ul><li> завантаження <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">прикріпленого тут</a>.</li></ul>
+<p>Цей завантажений файл Ви надалі можете розмістити у теці проекту станції та створити об'єкт бази даних модуля БД "SQLite", зареєструвавши файл бази даних у конфігурації.
+</p><p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="getVal" title="#getVal"><h3><span class="mw-headline" id=".D0.9E.D1.82.D1.80.D0.B8.D0.BC.D0.B0.D0.BD.D0.BD.D1.8F_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D0.BD.D1.8F_.D0.B7_.D0.B0.D1.80.D1.85.D1.96.D0.B2.D1.83_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D1.8C_.28getVal.29"><span class="mw-headline-number">2.1</span> Отримання значення з архіву значень (<a href="Libs_Documents.html#getVal" title="Special:MyLanguage/Libs/Documents">getVal</a>)</span></h3></span> </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Запит значення за визначений час (<i>time</i>:<i>uTime</i>) із пов'язаного архіватору <i>archtor</i> (FSArch.1m) та формування результату із визначеною кількістю знаків <i>prec</i> після коми.
+</p><p>Функція працює із об'єктами атрибутів DAQ-параметрів до яких підключено архів, та адреса <i>addr</i> до нього записується повним шляхом на кшталт "/DAQ/LogicLev/gen/prm_F3/a_var". Для порожнього <i>archtor</i> запит буде здійснюватися загально до усіх із періодичністю буферу архіву.
+</p><p>У процесі отримання значення, час цього значення може відрізнятися від запитаного, якщо архів на цей час відсутній та повертається найближче, запобігти чому можна встановивши <i>strong</i>. Коли-ж таки потрібно контрольовано отримати найближче достовірне значення, наприклад для лічильників, то передбачено аргумент часу <i>tryTo</i> до якого шукати найближче достовірне значення. Час у <i>tryTo</i> може бути як більше, так і менше за час запиту.
+</p><p>Первинно, результат надається у вигляді рядка реального значення із визначеною кількістю знаків <i>prec</i> після коми, та із значенням "Порожньо" для недостовірних значень, що дозволяє вставляти його до документу без додаткової обробки. Однак, за потреби додаткової обробки та специфічного форматування, результат можна отримати неформатованим реальним значенням, для <i>prec</i> менше 0.
+</p><p><b><u>Параметри</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Прихований </th>
+<th> По замовченню
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Результат </td>
+<td> Рядок </td>
+<td> Повернення </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Адреса </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> time </td>
+<td> Час, секунд </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> uTime </td>
+<td> Час, мікросекунди </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> prec </td>
+<td> Знаків після коми </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 3
+</td></tr>
+<tr>
+<td> archtor </td>
+<td> Архіватор </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> strong </td>
+<td> Точно </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> tryTo </td>
+<td> Пробувати значення до, мікросекунди </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="averVal" title="#averVal"><h3><span class="mw-headline" id=".D0.A1.D0.B5.D1.80.D0.B5.D0.B4.D0.BD.D1.94_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D0.BD.D1.8F_.D0.B0.D1.80.D1.85.D1.96.D0.B2.D1.83_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D1.8C_.28averVal.29"><span class="mw-headline-number">2.2</span> Середнє значення архіву значень (<a href="Libs_Documents.html#averVal" title="Special:MyLanguage/Libs/Documents">averVal</a>)</span></h3></span> </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Обчислення середнього значення за вказаний період часу [<i>bTime</i>...<i>eTime</i>], для даних архіватору <i>archtor</i> (FSArch.1m) та формування результату із визначеною кількістю знаків <i>prec</i> після коми.
+</p><p>Функція працює із об'єктами атрибутів DAQ-параметрів до яких підключено архів, та адреса <i>addr</i> до нього записується повним шляхом на кшталт "/DAQ/LogicLev/gen/prm_F3/a_var". Для порожнього <i>archtor</i> запит буде здійснюватися загально до усіх із періодичністю буферу архіву.
+</p><p>У процесі підрахунку здійснюється перевірка даних у архіві на предмет достовірності та формується значення відсотку достовірних даних <i>actPerc</i>, що прийняли участь у отримані результату. Загалом, варто використовувати проміжні архіватори — архіватори середньої якості, щоб даних у ньому, за визначений інтервал, не було забагато для зниження продуктивності, та щоб це не було взагалі одне значення.
+</p><p>Первинно, результат надається у вигляді рядка реального значення із визначеною кількістю знаків <i>prec</i> після коми, та із значенням "Порожньо" для недостовірних значень, що дозволяє вставляти його до документу без додаткової обробки. Однак, за потреби додаткової обробки та специфічного форматування, результат можна отримати неформатованим реальним значенням, для <i>prec</i> менше 0.
+</p><p><b><u>Параметри</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Прихований </th>
+<th> По замовченню
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Результат </td>
+<td> Рядок </td>
+<td> Повернення </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Адреса </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> bTime </td>
+<td> Час початку, секунд </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> eTime </td>
+<td> Час кінця, секунд </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> prec </td>
+<td> Знаків після коми </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 3
+</td></tr>
+<tr>
+<td> archtor </td>
+<td> Архіватор </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> actPerc </td>
+<td> Відсоток актуальних значень </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td>
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="sumVal" title="#sumVal"><h3><span class="mw-headline" id=".D0.9F.D1.96.D0.B4.D1.81.D1.83.D0.BC.D0.BE.D0.BA_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D1.8C_.D0.B0.D1.80.D1.85.D1.96.D0.B2.D1.83_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D1.8C_.28sumVal.29"><span class="mw-headline-number">2.3</span> Підсумок значень архіву значень (<a href="Libs_Documents.html#sumVal" title="Special:MyLanguage/Libs/Documents">sumVal</a>)</span></h3></span> </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Обчислення суми значень за вказаний період часу [<i>bTime</i>...<i>eTime</i>], для даних архіватору <i>archtor</i> (FSArch.1m) та формування результату із визначеною кількістю знаків <i>prec</i> після коми.
+</p><p>Функція працює із об'єктами атрибутів DAQ-параметрів до яких підключено архів, та адреса <i>addr</i> до нього записується повним шляхом на кшталт "/DAQ/LogicLev/gen/prm_F3/a_var". Для порожнього <i>archtor</i> запит буде здійснюватися загально до усіх із періодичністю буферу архіву.
+</p><p>У процесі підрахунку здійснюється перевірка даних у архіві на предмет достовірності.
+</p><p>Первинно, результат надається у вигляді рядка реального значення із визначеною кількістю знаків <i>prec</i> після коми, та із значенням "Порожньо" для недостовірних значень, що дозволяє вставляти його до документу без додаткової обробки. Однак, за потреби додаткової обробки та специфічного форматування, результат можна отримати неформатованим реальним значенням, для <i>prec</i> менше 0.
+</p><p><b><u>Параметри</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Прихований </th>
+<th> По замовченню
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Результат </td>
+<td> Рядок </td>
+<td> Повернення </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Адреса </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> bTime </td>
+<td> Час початку, секунд </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> eTime </td>
+<td> Час кінця, секунд </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> prec </td>
+<td> Знаків після коми </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 3
+</td></tr>
+<tr>
+<td> archtor </td>
+<td> Архіватор </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> false </td>
+<td>
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="diagram" title="#diagram"><h3><span class="mw-headline" id=".D0.94.D1.96.D0.B0.D0.B3.D1.80.D0.B0.D0.BC.D0.B0_.28diagram.29"><span class="mw-headline-number">2.4</span> Діаграма (<a href="Libs_Documents.html#diagram" title="Special:MyLanguage/Libs/Documents">diagram</a>)</span></h3></span> </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Побудова діаграми трендів у SVG, яка може надалі вбудовуватися у XHTML-документу, для даних за вказаний період часу [(<i>end</i>-<i>size</i>)...<i>end</i>] та із джерел <i>srcs</i>.
+</p><p>Код формування діаграми засновано на коді примітиву "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">Діаграма</a>" візуалізаторів, та який було доволі просто перенесено із мови C++ на <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">вбудовану мову JavaLikeCalc</a>. Наразі перенесено-реалізовано лише тренди!
+</p><p>Вигляд діаграми визначається її розмірами <i>hsz</i>*<i>vsz</i> та початковим SVG-шаблоном <i>tmpl</i>, низка атрибутів кореневого тегу якого мають особливе значення та які відповідають примітиву "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">Діаграма</a>":
+</p>
+<ul><li> Шкала: Маркери: шрифт (sclMarkFont), по замовченню "Arial 10".</li>
+<li> Шкала: горизонтальна (sclHor), по замовченню "Маркери (2)" та загалом передбачено: "Не зображувати (0)", "Ґратка (1)", "Маркери (2)", "Ґратка та маркери (3)".</li>
+<li> Шкала: вертикальна (sclVer), по замовченню "Ґратка та маркери (3)" та загалом передбачено: "Не зображувати (0)", "Ґратка (1)", "Маркери (2)", "Ґратка та маркери (3)", "Ґратка (лог) (5)", "Маркери (лог) (6)", "Ґратка та маркери (лог) (7)".</li>
+<li> Шкала: колір (sclColor), по замовченню "gray".</li>
+<li> Шкала: Маркери: колір	(sclMarkColor), по замовченню "gray".</li></ul>
+<p>У якості джерела даних наразі можуть використовуватися лише архіви значень, прямою адресою до них або через атрибут DAQ-параметру з архівом. Кількість джерел даних прямо не обмежене та вони записуються окремими рядками аргументу <i>srcs</i> із форматом "<b>{addr}:{min}:{max}:{color}[:{scale}[:{width}]]</b>", де:
+</p>
+<ul><li> <b>addr</b> — адреса до архіву значень або атрибуту DAQ-параметру, наприклад: "/Archive/va_CPULoad_load", "/DAQ/LogicLev/gen/F3/var";</li>
+<li> <b>min</b>, <b>max</b> — мінімум та максимум шкали, за відсутності шкали (<b>min</b> &gt;= <b>max</b>) вона буде вираховуватися із реальних даних;</li>
+<li> <b>color</b> — колір кривої тренду;</li>
+<li> <b>scale</b> — окреме визначення шкали тренду, по замовченню "Глобально (0)" та загалом передбачено: "Глобально (0)", "Маркери (2)", "Ґратка та маркери (3)", "Маркери (лог) (6)", "Ґратка та маркери (лог) (7)".</li>
+<li> <b>width</b> — ширина кривої тренду, по замовченню 2.</li></ul>
+<ul><li> <b>Спонсоровано:</b> Магомед</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibDocuments_docRepInstVals_uk.png"><img class="thumbimage" height="580" src="files/LibDocuments_docRepInstVals_uk.png" width="900" /></a>  <div class="thumbcaption">Рис.2.4. Типовий результат функції "Діаграма" у XHTML-документі.</div></div></div></div>
+<p><b><u>Параметри</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Прихований </th>
+<th> По замовченню
+</th></tr>
+<tr>
+<td> res </td>
+<td> Результат </td>
+<td> Текст </td>
+<td> Повернення </td>
+<td> false </td>
+<td>
+</td></tr>
+<tr>
+<td> end </td>
+<td> Час кінця, секунд </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> size </td>
+<td> Розмір, секунд </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 3600
+</td></tr>
+<tr>
+<td> srcs </td>
+<td> Джерела </td>
+<td> Текст </td>
+<td> Вхід </td>
+<td> false </td>
+<td>
+<pre style="white-space: pre-wrap;">
+/DAQ/LogicLev/gen/F3/var:0:100:#ae77c3:2
+/Archive/va_CPULoad_load:0:0:darkcyan:2
+</pre>
+</td></tr>
+<tr>
+<td> hsz </td>
+<td> Горизонтальний розмір, пікселів </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 600
+</td></tr>
+<tr>
+<td> vsz </td>
+<td> Вертикальний розмір, пікселів </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 400
+</td></tr>
+<tr>
+<td> tmpl </td>
+<td> Шаблон </td>
+<td> Текст </td>
+<td> Вхід </td>
+<td> false </td>
+<td>
+<pre style="white-space: pre-wrap;">
+&lt;svg xmlns="http://www.w3.org/2000/svg" version="1.1" sclMarkFont="Arial 10" sclHor="2" sclVer="3" sclColor="gray" sclMarkColor="gray"&gt;
+    &lt;style type="text/css"&gt;
+	    #scVer rect { stroke: none; }
+	    #scVer text { stroke: none; }
+	    #scHor rect { stroke: none; }
+	    #scHor text { stroke: none; }
+	    #drawArea path { fill: none; }
+    &lt;/style&gt;
+    &lt;!--Draw grid and markers--&gt;
+    &lt;g id="scVer" /&gt;
+    &lt;g id="scHor" /&gt;
+    &lt;!--Curves area --&gt;
+    &lt;g id="drawArea" /&gt;
+&lt;/svg&gt;
+</pre>
+</td></tr></table>
+
+
+
+
+
+
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Documents/uk">Libs/Documents/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2660</td></tr></table></body>
+</html>

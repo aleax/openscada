@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tsys.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -2301,9 +2301,9 @@ void *TSYS::RdTask( void * )
 	    // Reconnect counter process
 	    if(!sit->second.isLive && sit->second.cnt > 0) sit->second.cnt -= SYS->rdTaskPer();
 	    if(sit->second.isLive != sit->second.isLivePrev) {
-		if(sit->second.isLive) SYS->mess_sys(TMess::Notice, _("Redundant station '%s' up."),
+		if(sit->second.isLive) SYS->mess_sys(TMess::Notice, _("Redundant station '%s' is up."),
 						SYS->transport().at().extHostGet("*",sit->first).name.c_str());
-		else SYS->mess_sys(TMess::Warning, _("Redundant station '%s' down."),
+		else SYS->mess_sys(TMess::Warning, _("Redundant station '%s' is down."),
 						SYS->transport().at().extHostGet("*",sit->first).name.c_str());
 		sit->second.isLivePrev = sit->second.isLive;
 	    }

@@ -1,3 +1,20 @@
+2020-02-03 Roman (stable)
+- !!:FIX:DB.LibsDB.OscadaLibs: doc.diagram: Fixed and improved in the trends building at the generic percent scale, calculated automatically.
+    JavaLikeCalc.DevLib renamed to "Industrial devices" and descriptions of most items are updated.
+    The forming now document "Reports' and documents' library" appended to offline.
+    The "gasPoint" item removed from the template library "base".
+- !!!!:DB.LibsDB.vcaBase: doc.{doc,docDin,docRep2WorkSh(renamed docRepSm2),docAlarmsRep,docRepInstVals(renamed docGasNodeMgn),docMessRep,docUsersSet}:
+	Revised during the documenting and made the dynamic translation by tr().
+    !!!!: doc.{docRepInstVals,docRep2WorkSh}: Significantly rewrote, improved and made secondly usable allowing of DAQ-parameters connecting.
+    DB.LibsDB.vcaBase.doc.docGasNodeDayOrder moved to DB.LibsDB.vcaTest.test.docTestGasNodeDayRep.
+- FIX:Model.AGLKS.Model: Some fixed in the Ukrainian translation.
+- Model.AGLKS.St: Some parameters appended for archiving "FSArch.1s".
+- Model.AGLKS.vca: Updated for links to renamed document frames.
+- SYS,DAQ: Some original messages and "Only attributes are to be shown" renamed to "Show attributes".
+- DAQ.LogicLev: Updated in the translations.
+- !:FIX:UI.VCAEngine: Fixed in the User API function tr() work from documents.
+
+
 2020-01-21 Roman (stable)
 - !!!!:DB.LibsDB.OscadaLibs: JavaLikeCalc.doc: The libary revised during the documenting and appended
 	for the function "Diagram (diagram)" of the diagrams building to SVG.

@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: libwidg.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2020 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -591,6 +591,7 @@ string LWidget::calcProgStors( const string &attr )
     string rez = parent().freeStat() ? "" : parent().at().calcProgStors(attr);
     if(((attr.size() && attrAt(attr).at().modif()) || (!attr.size() && proc().size())) && rez.find(ownerLib().DB()) == string::npos)
 	rez = ownerLib().DB() + ";" + rez;
+
     return rez;
 }
 
@@ -966,7 +967,14 @@ string CWidget::calcLang( ) const	{ return parent().freeStat() ? "" : parent().a
 
 string CWidget::calcProg( ) const	{ return parent().freeStat() ? "" : parent().at().calcProg(); }
 
-string CWidget::calcProgStors( const string &attr ){ return parent().freeStat() ? "" : parent().at().calcProgStors(attr); }
+string CWidget::calcProgStors( const string &attr )
+{
+    string rez = parent().freeStat() ? "" : parent().at().calcProgStors(attr);
+    if(attr.size() && attrAt(attr).at().modif() && rez.find(ownerLWdg().ownerLib().DB()) == string::npos)
+	rez = ownerLWdg().ownerLib().DB() + ";" + rez;
+
+    return rez;
+}
 
 int CWidget::calcPer( ) const	{ return parent().freeStat() ? 0 : parent().at().calcPer(); }
 

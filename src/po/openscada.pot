@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-24 11:38+0200\n"
+"POT-Creation-Date: 2020-02-03 20:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1232,7 +1232,7 @@ msgstr ""
 msgid "Template configuration"
 msgstr ""
 
-msgid "Only attributes are to be shown"
+msgid "Show attributes"
 msgstr ""
 
 msgid "Error, recursive linking."
@@ -1275,11 +1275,11 @@ msgstr ""
 msgid "Templates"
 msgstr ""
 
-msgid "Protocols"
+msgid "Transport Protocols"
 msgstr ""
 
 msgid ""
-"=============== Subsystem \"Protocols\" options =================\n"
+"=============== Subsystem \"Transport protocols\" options =================\n"
 "\n"
 msgstr ""
 
@@ -1643,11 +1643,11 @@ msgid "Task %u unexpected terminated by an exception."
 msgstr ""
 
 #, c-format
-msgid "Redundant station '%s' up."
+msgid "Redundant station '%s' is up."
 msgstr ""
 
 #, c-format
-msgid "Redundant station '%s' down."
+msgid "Redundant station '%s' is down."
 msgstr ""
 
 #, c-format
@@ -1930,7 +1930,7 @@ msgstr ""
 msgid "Transport type"
 msgstr ""
 
-msgid "Protocol"
+msgid "Transport protocol"
 msgstr ""
 
 msgid "User that opens"
@@ -2037,7 +2037,7 @@ msgid "Established: %s. "
 msgstr ""
 
 #, c-format
-msgid "Protocol '%s' is missing"
+msgid "Transport protocol '%s' is missing"
 msgstr ""
 
 msgid "Output transport: "

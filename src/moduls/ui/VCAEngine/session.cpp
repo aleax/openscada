@@ -1971,7 +1971,7 @@ void SessWdg::calc( bool first, bool last, int pos )
 
     if(!((ownerSess()->calcClk()+pos)%vmax(1,10000/ownerSess()->period())) /*|| first*/) prcElListUpdate( );
 
-    //Calculate include widgets
+    //Calculate included widgets
     MtxAlloc resDt(ownerSess()->dataResSes(), true);
     for(unsigned iL = 0; iL < mWdgChldAct.size(); iL++)
 	try {

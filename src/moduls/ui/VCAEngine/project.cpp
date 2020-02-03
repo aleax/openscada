@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: project.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1065,6 +1065,7 @@ string Page::calcProgStors( const string &attr )
     string rez = parent().freeStat() ? "" : parent().at().calcProgStors(attr);
     if(((attr.size() && attrAt(attr).at().modif()) || (!attr.size() && proc().size())) && rez.find(ownerProj()->DB()) == string::npos)
 	rez = ownerProj()->DB() + ";" + rez;
+
     return rez;
 }
 
@@ -1777,7 +1778,14 @@ string PageWdg::calcLang( ) const	{ return parent().freeStat() ? "" : parent().a
 
 string PageWdg::calcProg( ) const	{ return parent().freeStat() ? "" : parent().at().calcProg(); }
 
-string PageWdg::calcProgStors( const string &attr ) { return parent().freeStat() ? "" : parent().at().calcProgStors(attr); }
+string PageWdg::calcProgStors( const string &attr )
+{
+    string rez = parent().freeStat() ? "" : parent().at().calcProgStors(attr);
+    if(attr.size() && attrAt(attr).at().modif() && rez.find(ownerPage().ownerProj()->DB()) == string::npos)
+	rez = ownerPage().ownerProj()->DB() + ";" + rez;
+
+    return rez;
+}
 
 int PageWdg::calcPer( ) const	{ return parent().freeStat() ? 0 : parent().at().calcPer(); }
 

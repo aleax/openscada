@@ -1281,7 +1281,7 @@ SurgeCM302.Hup:Hup
 SurgeCM302.Hdwn:Hdwn');
 CREATE TABLE 'gen_prm' ("SHIFR" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '' ,"IO" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"ru#IO" TEXT DEFAULT '' ,"uk#IO" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR"));
 INSERT INTO "gen_prm" VALUES('F2','F2','Gas flow through the diaphragm PP1',1,'PP1.Fi:var:Variable','','Витрати газу через діафрагму PP1','','Расход газа через диафрагму PP1','PP1.Fi:var:Переменная','PP1.Fi:var:Змінна');
-INSERT INTO "gen_prm" VALUES('F3','F3','Gas flow through the pipe to Glinsk',1,'pipeGlinsk.Fi:var:Variable','','Витрати газу через трубу на Глінск','','Расход газа через трубу на Глинск','pipeGlinsk.Fi:var:Переменная','pipeGlinsk.Fi:var:Змінна');
+INSERT INTO "gen_prm" VALUES('F3','F3','Gas flow through the pipe to Glinsk',1,'pipeGlinsk.Fi:var:Variable','','Витрати газу через трубу на Глінськ','','Расход газа через трубу на Глинск','pipeGlinsk.Fi:var:Переменная','pipeGlinsk.Fi:var:Змінна');
 INSERT INTO "gen_prm" VALUES('F4','F4','Gas flow through the diaphragm PP5',1,'PP5.Fi:var:Variable','','Витрати газу через діафрагму PP5','','Расход газа через диафрагму PP5','PP5.Fi:var:Переменная','PP5.Fi:var:Змінна');
 INSERT INTO "gen_prm" VALUES('BC21','BC21','Control block of the ball crane BC21',1,'G_BC21.com:com
 G_BC21.st_open:st_open
@@ -1289,7 +1289,7 @@ G_BC21.st_close:st_close','КК21','Блок керування кульовим
 INSERT INTO "gen_prm" VALUES('BC22','BC22','Control block of the ball crane BC22',1,'G_BC22.com:com
 G_BC22.st_open:st_open
 G_BC22.st_close:st_close','КК22','Блок керування кульовим краном КК22','КШ22','Блок управления шарового крана КШ22','','');
-INSERT INTO "gen_prm" VALUES('PT0804','PT0804','Gas pressure in the pipe to Glinsk',1,'pipeGlinsk.Pi:var:Variable','','Тиск газу у трубі на Глінск','','Давление в трубе на Глинск','pipeGlinsk.Pi:var:Переменная','pipeGlinsk.Pi:var:Змінна');
+INSERT INTO "gen_prm" VALUES('PT0804','PT0804','Gas pressure in the pipe to Glinsk',1,'pipeGlinsk.Pi:var:Variable','','Тиск газу у трубі на Глінськ','','Давление в трубе на Глинск','pipeGlinsk.Pi:var:Переменная','pipeGlinsk.Pi:var:Змінна');
 INSERT INTO "gen_prm" VALUES('F7_8','F7_8','Gas flow through the diaphragm PP7',1,'PP7.Fi:var:Variable','','Витрати газу через діафрагму PP7','','Расход газа через диафрагму PP7','PP7.Fi:var:Переменная','PP7.Fi:var:Змінна');
 INSERT INTO "gen_prm" VALUES('L1','L1','Liquid level in the separator C2',1,'C2.Llq:var:Variable','L1','Рівень рідини у сепараторі C2','L1','Уровень жидкости в сепараторе C2','C2.Llq:var:Переменная','C2.Llq:var:Змінна');
 INSERT INTO "gen_prm" VALUES('T_PP1','T_PP1','Gas temperature at the diaphragm PP1',1,'PCV1.To:var:Variable','','Температура газу на діафрагмі PP1','','Температура газа на диафрагме PP1','PCV1.To:var:Переменная','PCV1.To:var:Змінна');
@@ -1298,7 +1298,7 @@ INSERT INTO "gen_prm" VALUES('T_PP5','T_PP5','Gas temperature at the diaphragm P
 INSERT INTO "gen_prm" VALUES('P_PP1','P_PP1','Gas pressure at the diaphragm PP1',1,'PP1.Po:var:Variable','','Тиск газу на діафрагмі PP1','','Давление газа на диафрагме PP1','PP1.Po:var:Переменная','PP1.Po:var:Змінна');
 INSERT INTO "gen_prm" VALUES('P_PP3','P_PP3','Gas pressure at the diaphragm PP3',1,'PP3.Po:var:Variable','','Тиск газу на діафрагмі PP3','','Давление газа на диафрагме PP3','PP3.Po:var:Переменная','PP3.Po:var:Змінна');
 INSERT INTO "gen_prm" VALUES('P_PP5','P_PP5','Gas pressure at the diaphragm PP5',1,'PP5.Po:var:Variable','','Тиск газу на діафрагмі PP5','','Давление газа на диафрагме PP5','PP5.Po:var:Переменная','PP5.Po:var:Змінна');
-INSERT INTO "gen_prm" VALUES('P3','P3','Gas pressure in the pipe to Glinsk',1,'pipeGlinsk.Pi:var:Variable','','Тиск газу у трубі на Глінск','','Давление в трубе на Глинск','pipeGlinsk.Pi:var:Переменная','pipeGlinsk.Pi:var:Змінна');
+INSERT INTO "gen_prm" VALUES('P3','P3','Gas pressure in the pipe to Glinsk',1,'pipeGlinsk.Pi:var:Variable','','Тиск газу у трубі на Глінськ','','Давление в трубе на Глинск','pipeGlinsk.Pi:var:Переменная','pipeGlinsk.Pi:var:Змінна');
 INSERT INTO "gen_prm" VALUES('P4','P4','Gas pressure at the diaphragm PP5',1,'PP5.Po:var:Variable','','Тиск газу на діафрагмі PP5','','Давление газа на диафрагме PP5','PP5.Po:var:Переменная','PP5.Po:var:Змінна');
 INSERT INTO "gen_prm" VALUES('PT1606','PT1606','Gas pressure in the separator С1',1,'C1.Po:var:Variable','','Тиск газу у сепараторі С1','','Давление газа в сепараторе С1','C1.Po:var:Переменная','C1.Po:var:Змінна');
 INSERT INTO "gen_prm" VALUES('Pi','Pi','Gas pressure at the input of the CS',1,'BC1.Pi:var:Variable','','Тиск газу на вході у КС','','Давление газа на входе КС','BC1.Pi:var:Переменная','BC1.Pi:var:Змінна');
@@ -5092,12 +5092,12 @@ INSERT INTO "gen_blcks" VALUES('netHPG','Net of HPG','Мережа ГВТ','Се
 INSERT INTO "gen_blcks" VALUES('BC21','BC21','КК21','КШ21','Ball crane armature for BC21 и BC22','Арматура кульових кранів КК21 та КК22','Арматура шаровых кранов КШ21 и КШ22','DAQ.JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
 INSERT INTO "gen_blcks" VALUES('noisePP3','PP3 noise','Шум PP3','Шум PP3','Flow source noise for diaphragms PP3','Шум джерела витрат діафрагми PP3','Шум источника расхода диафрагмы PP3','DAQ.JavaLikeCalc.lib_techApp.fnc_noise',1,1,'',0);
 INSERT INTO "gen_blcks" VALUES('G_PCV2','PCV2 (control mechanism)','КРТ2 (вик. механізм)','КРД2 (исп. механизм)','','','','DAQ.JavaLikeCalc.lib_techApp.fnc_lagClean',1,1,'',0);
-INSERT INTO "gen_blcks" VALUES('netGlinsk','Glinsk (net)','Глінск (мережа)','Глинск (сеть)','','','','DAQ.JavaLikeCalc.lib_techApp.fnc_net',1,1,'',0);
+INSERT INTO "gen_blcks" VALUES('netGlinsk','Glinsk (net)','Глінськ (мережа)','Глинск (сеть)','','','','DAQ.JavaLikeCalc.lib_techApp.fnc_net',1,1,'',0);
 INSERT INTO "gen_blcks" VALUES('G_BC6','BC6 (control mechanism)','КК6 (вик. механізм)','КШ6 (исп. механизм)','Control mechanism of ball crane BC6.','Виконавчий механізм кульового крану КК6.','Исполнительный механизм шарового крана КШ6.','DAQ.JavaLikeCalc.lib_techApp.fnc_ballCrane',1,1,'',0);
 INSERT INTO "gen_blcks" VALUES('P_PCV2','P_PCV2 (Pressure sensor)','P КРТ2 (Давач тиску)','P КРД2 (Датчик давления)','','','','DAQ.JavaLikeCalc.lib_techApp.fnc_lag',1,1,'',0);
 INSERT INTO "gen_blcks" VALUES('SrcGas','','','','Gas source to compressor station','Джерело газу на компресорну станцію.','Источник газа на компрессорную станцию','DAQ.JavaLikeCalc.lib_techApp.src_press',1,1,'',0);
 INSERT INTO "gen_blcks" VALUES('PCV1','PCV1','КРТ1','КРД1','The crane for regulation the input pressure of  the compressor low pressure.','Клапан, який регулює вхідний тиск на всасі компресорів низького тиску.','Клапан, регулирующий входное давление на всасе компресоров низкого давления.','DAQ.JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
-INSERT INTO "gen_blcks" VALUES('pipeGlinsk','Pipe to Glinsk','Труба на Глінск','Труба на Глинск','','','','DAQ.JavaLikeCalc.lib_techApp.fnc_pipe1_1',1,1,'',0);
+INSERT INTO "gen_blcks" VALUES('pipeGlinsk','Pipe to Glinsk','Труба на Глінськ','Труба на Глинск','','','','DAQ.JavaLikeCalc.lib_techApp.fnc_pipe1_1',1,1,'',0);
 INSERT INTO "gen_blcks" VALUES('PCV2','PCV2','КРТ2','КРД2','','','','DAQ.JavaLikeCalc.lib_techApp.fnc_valve',1,1,'',0);
 INSERT INTO "gen_blcks" VALUES('PCV4','PCV4','КРТ4','КРД4','The control crane on outgo to GHP.','Регулюючий клапан на виході у ГВТ.','Регулирующий клапан на выходе в ГВД.','DAQ.JavaLikeCalc.lib_techApp.valve',1,1,'',0);
 INSERT INTO "gen_blcks" VALUES('G_BC7','BC7 (control mechanism)','КК7 (вик. механізм)','КШ7 (исп. механизм)','Control mechanism of ball crane BC7.','Виконавчий механізм кульового крану КК7.','Исполнительный механизм шарового крана КШ7.','DAQ.JavaLikeCalc.lib_techApp.fnc_ballCrane',1,1,'',0);
