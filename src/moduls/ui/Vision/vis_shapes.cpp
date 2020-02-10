@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_shapes.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -2170,7 +2170,7 @@ void ShapeDiagram::loadData( WdgView *w, bool full )
     ShpDt *shD = (ShpDt*)w->shpData;
 
     XMLNode req("set");
-    req.setAttr("path", w->id()+"/%2fserv%2fattr")->setAttr("noUser", "1");
+    req.setAttr("path", w->id()+"/%2fserv%2fattr")->setAttr("noUser", "1")->setAttr("reforwardRedundOff", "1");
     for(unsigned iP = 0; iP < shD->prms.size(); iP++) {
 	shD->prms[iP].loadData(full);
 	if(shD->prms[iP].arh_beg && shD->prms[iP].arh_end)
@@ -3381,7 +3381,8 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 			if(lab_tm.size()) {
 			    wdth = pnt.fontMetrics().width(lab_tm.c_str());
 			    tpos = vmax(h_pos-wdth/2,0);
-			    if((tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3)) {
+			    if(first_m || (tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3)) {
+				if(first_m) tpos = vmax(begMarkBrd, tpos);
 				pnt.drawText(tpos, markY, lab_tm.c_str());
 				endPosTm = tpos+wdth;
 			    }
@@ -3391,7 +3392,8 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		    if(lab_dt.size()) {
 			wdth = pnt.fontMetrics().width(lab_dt.c_str());
 			tpos = vmax(h_pos-wdth/2, 0);
-			if((tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3)) {
+			if(first_m || (tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3)) {
+			    if(first_m) tpos = vmax(begMarkBrd, tpos);
 			    pnt.drawText(tpos, markY, lab_dt.c_str());
 			    endPosDt = tpos+wdth;
 			}
@@ -3720,7 +3722,7 @@ void ShapeDiagram::setCursor( WdgView *w, int64_t itm )
 	shD->holdCur = (curTime==shD->tTime);
 
 	XMLNode req("set");
-	req.setAttr("path",w->id()+"/%2fserv%2fattr")->setAttr("noUser", "1");
+	req.setAttr("path",w->id()+"/%2fserv%2fattr")->setAttr("noUser", "1")->setAttr("reforwardRedundOff", "1");
 	req.childAdd("el")->setAttr("id","curSek")->setText(i2s(curTime/1000000));
 	req.childAdd("el")->setAttr("id","curUSek")->setText(i2s(curTime%1000000));
 
@@ -3747,7 +3749,7 @@ void ShapeDiagram::setCursor( WdgView *w, int64_t itm )
 	shD->curTime = 1e6/curFrq;
 
 	XMLNode req("set");
-	req.setAttr("path",w->id()+"/%2fserv%2fattr")->setAttr("noUser", "1");
+	req.setAttr("path",w->id()+"/%2fserv%2fattr")->setAttr("noUser", "1")->setAttr("reforwardRedundOff", "1");
 	req.childAdd("el")->setAttr("id","curSek")->setText(i2s(shD->curTime/1000000));
 	req.childAdd("el")->setAttr("id","curUSek")->setText(i2s(shD->curTime%1000000));
 

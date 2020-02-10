@@ -1,9 +1,9 @@
 
 //OpenSCADA module UI.WebVision file: vca_sess.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2008 by Yashina Kseniya (ksu@oscada.org)	   *
- *		   2007-2012 by Lysenko Maxim (mlisenko@oscada.org)	   *
- *		   2007-2019 by Roman Savochenko (rom_as@oscada.org)	   *
+ *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>	   *
+ *		   2007-2012 by Lysenko Maxim, <mlisenko@oscada.org>	   *
+ *		   2007-2008 by Yashina Kseniya, <ksu@oscada.org>	   *
  *									   *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -5414,7 +5414,8 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 			if(lab_tm.size()) {
 			    wdth = brect[2]-brect[6];
 			    tpos = vmax(h_pos-wdth/2, 0);
-			    if((tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3)) {
+			    if(first_m || (tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3)) {
+				if(first_m) tpos = vmax(begMarkBrd, tpos);
 				gdImageStringFTEx(im, NULL, clrMrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0, tpos, markY, (char*)lab_tm.c_str(), &strex);
 				endPosTm = tpos+wdth;
 			    }
@@ -5425,7 +5426,8 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 			markY += (brect[3] - brect[7]);
 			wdth = brect[2]-brect[6];
 			tpos = vmax(h_pos-wdth/2, 0);
-			if((tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3)) {
+			if(first_m || (tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3)) {
+			    if(first_m) tpos = vmax(begMarkBrd, tpos);
 			    gdImageStringFTEx(im, NULL, clrMrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0, tpos, markY, (char*)lab_dt.c_str(), &strex);
 			    endPosDt = tpos+wdth;
 			}

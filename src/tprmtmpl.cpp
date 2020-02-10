@@ -447,8 +447,11 @@ bool TPrmTempl::Impl::lnkInit( int num, bool checkNoLink )
     MtxAlloc res(lnkRes, true);
     map<int,SLnk>::iterator it = lnks.find(num);
 
-    if(it == lnks.end() || it->second.addr.empty() || it->second.addr.compare(0,4,"val:") == 0 || (checkNoLink && !it->second.con.freeStat()))
+    if(it == lnks.end() || it->second.addr.empty() || it->second.addr.compare(0,4,"val:") == 0 || (checkNoLink && !it->second.con.freeStat())) {
+	//Cleaning the generic and specific links at clearing the address or it setting to "val:"
+	if(it != lnks.end())	{ it->second.con.free(); it->second.addrSpec = ""; }
 	return false;
+    }
     it->second.con.free();
     it->second.objOff = 0;
     string addr = it->second.addr, aAddr;

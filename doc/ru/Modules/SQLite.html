@@ -31,7 +31,7 @@
 <td> <a href="../Modules/SQLite.html" title="Special:MyLanguage/Modules/SQLite">SQLite</a> </td>
 <td> БД SQLite
 </td>
-<td> 2.6 </td>
+<td> 2.7 </td>
 <td> GPL2 </td>
 <td> bd_SQLite.so </td>
 <td> en,uk,ru,de </td>
@@ -41,6 +41,9 @@
 <td> Роман Савоченко </td>
 <td> Модуль БД. Предоставляет поддержку БД SQLite.
 </td></tr></table>
+<p>Модуль предоставляет в OpenSCADA поддержку БД SQLite. БД SQLite является небольшой и встраиваемой БД, поддерживающей SQL-запросы. БД SQLite распространяется под свободной лицензии. Ознакомиться с БД можно на сайте БД — <a class="external free" href="http://sqlite.org" rel="nofollow noreferrer noopener" target="_blank">http://sqlite.org</a>. Модуль основан на библиотеке API производителя БД языка "C". Модуль позволяет выполнять действия над базами данных, таблицами и содержимым таблиц.
+</p><p>Модуль на данный момент поддерживает конкурентную работу с совместными файлами БД, вроде библиотек, из различных процессов OpenSCADA, путём корректной обработки блокирования файлов. Т.е. вы будете получать предупреждения пока файл будет оставаться заблокированным, и сможете удачно записать в него как только он будет освобождён закрытием транзакции блокирующим процессом.
+</p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#.D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D0.B8.D0.B8_.D0.BD.D0.B0.D0.B4_.D0.91.D0.94"><span class="tocnumber">1</span> <span class="toctext">Операции над БД</span></a></li>
@@ -51,8 +54,6 @@
 </ul>
 </div>
 
-<p>Модуль предоставляет в OpenSCADA поддержку БД SQLite. БД SQLite является небольшой и встраиваемой БД, поддерживающей SQL-запросы. БД SQLite распространяется под свободной лицензии. Ознакомиться с БД можно на сайте БД — <a class="external free" href="http://sqlite.org" rel="nofollow noreferrer noopener" target="_blank">http://sqlite.org</a>. Модуль основан на библиотеке API производителя БД языка "C". Модуль позволяет выполнять действия над базами данных, таблицами и содержимым таблиц.
-</p>
 <h2><span class="mw-headline" id=".D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D0.B8.D0.B8_.D0.BD.D0.B0.D0.B4_.D0.91.D0.94"><span class="mw-headline-number">1</span> Операции над БД</span></h2>
 <p>Поддерживаются операции открытия и закрытия БД, с возможностью создания новой БД при открытии и удаления существующей при закрытии. В терминах подсистемы "БД" OpenSCADA, открытием БД является её регистрация для последующего использования программой. Также, поддерживается операция запроса перечня таблиц в БД.
 </p><p>БД SQLite адресуется путём указания имени файла БД в формате: "<b>{FileDBPath}</b>". Где:
@@ -147,5 +148,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/SQLite/ru">Modules/SQLite/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2660</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/SQLite/ru">Modules/SQLite/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2661</td></tr></table></body>
 </html>

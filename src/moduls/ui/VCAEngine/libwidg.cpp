@@ -709,7 +709,7 @@ void LWidget::loadIO( )
 	    continue;
 	}
 	if(!wdgPresent(sid))
-	    try{ wdgAdd(sid,"",""); }
+	    try{ wdgAdd(sid, "", ""); }
 	    catch(TError &err) { mess_err(err.cat.c_str(),err.mess.c_str()); }
 
 	wdgAt(sid).at().load(&cEl);

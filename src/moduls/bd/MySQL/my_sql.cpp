@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.MySQL file: my_sql.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,7 +34,7 @@
 #define MOD_NAME	_("DB MySQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"3.3.0"
+#define MOD_VER		"3.3.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DBMS MySQL.")
 #define MOD_LICENSE	"GPL2"
@@ -222,8 +222,8 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 {
     MYSQL_RES *res = NULL;
 
-    if(tbl) tbl->clear();
     if(!enableStat()) return;
+    if(tbl) tbl->clear();
 
     string req = Mess->codeConvOut(cd_pg.c_str(), ireq);
 

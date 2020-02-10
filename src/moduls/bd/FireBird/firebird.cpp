@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.FireBird file: firebird.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,7 +31,7 @@
 #define MOD_NAME	_("DB FireBird")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.3.0"
+#define MOD_VER		"2.3.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DBMS FireBird.")
 #define LICENSE		"GPL2"
@@ -266,8 +266,8 @@ void MBD::transCloseCheck( )
 
 void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTrans )
 {
-    if(tbl) tbl->clear();
     if(!enableStat()) return;
+    if(tbl) tbl->clear();
 
     if(intoTrans && intoTrans != EVAL_BOOL)	transOpen();
     else if(!intoTrans && htrans)		transCommit();

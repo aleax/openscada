@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tcntrnode.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -219,6 +219,7 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 		try{ while((lstStat=SYS->rdStRequest(*opt,lstStat,true)).size()) ; }
 		catch(TError &) { }
 	    }
+	    opt->attrDel("reforwardRedundReq");
 	}
     } catch(TError &err) {
 	if(err.cat == "warning") opt->setAttr("rez", "1");

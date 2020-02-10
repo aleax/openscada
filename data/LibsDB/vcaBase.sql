@@ -11272,8 +11272,8 @@ INSERT INTO wlb_Main_uio VALUES('cntrPaspExt','labColorGrph10','Graph color: 10'
 INSERT INTO wlb_Main_uio VALUES('alarmsStReport','doc','Document',131205,'',2,'<page>|report','','','','Документ','','','Документ','','','');
 INSERT INTO wlb_Main_uio VALUES('calendar','selTime','Selected time',131073,'0|',8,'','','','Обраний час','','','Выбранное время','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_doc_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
-INSERT INTO wlb_doc_incl VALUES('docGasNodeDayA','doc','/wlb_doc/wdg_doc/wdg_doc','perm;geomZ;style;tmpl;doc;bTime;time;process;n;vCur;aCur;aSize;',2);
-INSERT INTO wlb_doc_incl VALUES('docGasNodeMonthA','doc','/wlb_doc/wdg_doc/wdg_doc','perm;geomZ;style;tmpl;doc;bTime;time;process;n;vCur;aCur;aSize;',2);
+INSERT INTO wlb_doc_incl VALUES('docRepDay','doc','/wlb_doc/wdg_doc/wdg_doc','perm;geomZ;tmpl;doc;bTime;time;process;n;vCur;aCur;aSize;',2);
+INSERT INTO wlb_doc_incl VALUES('docRepMonth','doc','/wlb_doc/wdg_doc/wdg_doc','perm;geomZ;tmpl;doc;bTime;time;process;n;vCur;aCur;aSize;',2);
 INSERT INTO wlb_doc_incl VALUES('docUsersSet','doc','/wlb_doc/wdg_docDin/wdg_doc','perm;tmpl;',2);
 INSERT INTO wlb_doc_incl VALUES('doc','doc','/wlb_originals/wdg_Document','active;geomX;geomY;geomW;geomH;geomZ;style;tmpl;n;vCur;',2);
 INSERT INTO wlb_doc_incl VALUES('docRepInstVals','doc','/wlb_doc/wdg_docDin/wdg_doc','perm;tmpl;',2);
@@ -11284,211 +11284,144 @@ INSERT INTO wlb_doc_incl VALUES('docMessRep','doc','/wlb_doc/wdg_docDin/wdg_doc'
 INSERT INTO wlb_doc_incl VALUES('docMessRep','fltr','/wlb_originals/wdg_FormEl','owner;name;active;geomX;geomY;geomW;geomH;geomZ;value;font;','');
 INSERT INTO wlb_doc_incl VALUES('docMessRep','fltrCol','/wlb_originals/wdg_FormEl','owner;name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
 INSERT INTO wlb_doc_incl VALUES('docMessRep','lab_fltr','/wlb_originals/wdg_Text','owner;name;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;bordWidth;font;alignment;text;','');
-INSERT INTO wlb_doc_incl VALUES('docResourcesYear','data','/wlb_originals/wdg_FormEl','geomX;geomY;geomW;geomH;geomZ;elType;items;','');
-INSERT INTO wlb_doc_incl VALUES('docResourcesYear','doc','/wlb_doc/wdg_doc/wdg_doc','owner;perm;geomY;geomH;geomZ;style;tmpl;doc;font;bTime;time;process;n;vCur;aCur;aSize;','');
-INSERT INTO wlb_doc_incl VALUES('docResourcesYear','lab_set','/wlb_originals/wdg_Text','owner;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;bordWidth;font;alignment;text;','');
-INSERT INTO wlb_doc_incl VALUES('docResourcesYear','name','/wlb_originals/wdg_Text','owner;geomX;geomY;geomW;geomH;geomZ;font;color;alignment;text;numbArg;arg0tp;arg0val;','');
-INSERT INTO wlb_doc_incl VALUES('docResourcesYear','set_item','/wlb_originals/wdg_FormEl','owner;geomX;geomY;geomW;geomH;geomZ;elType;value;font;','');
-INSERT INTO wlb_doc_incl VALUES('docResourcesYear','set_month','/wlb_originals/wdg_FormEl','owner;geomX;geomY;geomW;geomH;geomZ;elType;value;font;','');
-INSERT INTO wlb_doc_incl VALUES('docResourcesYear','set_val','/wlb_originals/wdg_FormEl','geomX;geomY;geomW;geomH;geomZ;view;font;','');
-INSERT INTO wlb_doc_incl VALUES('docResourcesYear','trnd','/wlb_originals/wdg_Diagram','geomX;geomY;geomW;geomH;geomZ;prm0val;','');
-INSERT INTO wlb_doc_incl VALUES('docResourcesYear','year','/wlb_originals/wdg_FormEl','geomX;geomY;geomH;geomZ;elType;value;font;','');
+INSERT INTO wlb_doc_incl VALUES('docRepYear','lab_set','/wlb_originals/wdg_Text','owner;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;bordWidth;font;alignment;text;','');
+INSERT INTO wlb_doc_incl VALUES('docRepYear','name','/wlb_originals/wdg_Text','owner;geomX;geomY;geomW;geomH;geomZ;font;color;alignment;text;numbArg;','');
+INSERT INTO wlb_doc_incl VALUES('docRepYear','set_item','/wlb_originals/wdg_FormEl','owner;active;geomX;geomY;geomW;geomH;geomZ;elType;value;font;','');
+INSERT INTO wlb_doc_incl VALUES('docRepYear','set_month','/wlb_originals/wdg_FormEl','owner;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
+INSERT INTO wlb_doc_incl VALUES('docRepYear','set_val','/wlb_originals/wdg_FormEl','active;geomX;geomY;geomW;geomH;geomZ;view;font;','');
+INSERT INTO wlb_doc_incl VALUES('docRepYear','year','/wlb_originals/wdg_FormEl','active;geomX;geomY;geomH;geomZ;elType;value;items;font;','');
+INSERT INTO wlb_doc_incl VALUES('docRepYear','doc','/wlb_doc/wdg_doc/wdg_doc','owner;perm;geomY;geomH;geomZ;tmpl;doc;bTime;time;process;n;','');
 CREATE TABLE IF NOT EXISTS 'wlb_doc_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
-INSERT INTO wlb_doc_io VALUES('docGasNodeDayA','name','Hour-averaged values of the flow-control point',32,'','','','Середні за годину значення витратовимірювального вузла','','Среднечасовые значения расходомерного узла','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeDayA','geomZ','1',32,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeDayA','tmpl','<body docProcLang="JavaLikeCalc.JavaScript">
-<h1>Table of average over hour values of "<b><?dp return pTitle;?></b>"</h1>
+INSERT INTO wlb_doc_io VALUES('docRepDay','name','Day report of the hour-averaged values',32,'','','','Добовий звіт середніх за годину значень','','Суточный отчёт среднечасовых значений','','','');
+INSERT INTO wlb_doc_io VALUES('docRepDay','geomZ','1',32,'','','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepDay','tmpl','<body docProcLang="JavaLikeCalc.JavaScript">
+
+<center>
+<h1>Average over hour values of ""</h1>
+<?dp return "<h1>"+tr("Average over hour values of \"%1\"").replace("%1",title)+"</h1><span>"+SYS.strftime(time-params.repHour*3600-1,"%d %B %Y")+"</span>";?>
+</center>
+
+<div>
+	<?dp if(!enGraph) return "";
+		for(iP = 0, srcs = ""; iP < params.length; iP++)
+			if(!params[iP].min.isEVal() && !params[iP].max.isEVal())
+				srcs += params[iP].var+":"+params[iP].min+":"+params[iP].max+":"+params[iP].color+":0:2\n";
+		return srcs.length ? DAQ.JavaLikeCalc.lib_doc.diagram(time, time-bTime, srcs, 800, 300, arch) : "";
+	?>
+</div>
+<br/>
 
 <TABLE class="data" width="100%" export="1">
-	<TR align="left" valign="center"><TH colspan="7">The operation date over XXX Calculator # Pipeline #.<?dp return "The operation date over "+SYS.strftime(time-1,"%d %m %Y")+" Calculator # Pipeline #.";?>
-	</TH></TR>
-	<TR><TH>Date</TH><TH>Time</TH><TH>Capacity</TH><TH>Aver. pressure diff.</TH><TH>St. pressure</TH><TH>Aver. temp.</TH><TH>Density</TH></TR>
-	<TR><TH>&nbsp;</TH><TH>begin&nbsp;&nbsp;end</TH><TH>m3</TH><TH>kgF/m2</TH><TH>kgF/cm</TH><TH>grad.C</TH><TH>kg/m3</TH></TR>
-	<TR docRept="3600">
-<?dp using DAQ.JavaLikeCalc.lib_doc;
-	if((rTime-rPer) > SYS.time())	return;
-	if(!(V1=getVal(pQ,rTime-rPer,0,-1,arch,false,rTime*1e6)).isEVal())	V1 = V1.toReal();
-	if(!(V2=getVal(pQ,rTime,0,-1,arch,false,(rTime-rPer)*1e6)).isEVal())	V2 = V2.toReal();
-	return "<TD>"+SYS.strftime(rTime,"%d %m")+"</TD>"+
-		"<TD>"+SYS.strftime(rTime-rPer,"%H:%M")+"&nbsp;&nbsp;"+SYS.strftime(rTime,"%H:%M")+"</TD>"+
-		"<TD>"+((V1.isEVal() || V2.isEVal())?"Empty":abs(V2-V1).toFixed(3))+"</TD>"+
-		"<TD>"+averVal(pDP,rTime-rPer,rTime,2,arch)+"</TD>"+
-		"<TD>"+averVal(pP,rTime-rPer,rTime,2,arch)+"</TD>"+
-		"<TD>"+averVal(pT,rTime-rPer,rTime,2,arch)+"</TD>"+
-		"<TD>"+averVal(pDS,rTime-rPer,rTime,2,arch)+"</TD>";?>
-	</TR>
-	<TR><TD colspan="2">Summary</TD>
-	<TD>XXXXXX.XXX
-<?dp using DAQ.JavaLikeCalc.lib_doc;
-	if(!(V1=getVal(pQ,bTime,0,-1,arch,false,time*1e6)).isEVal())	V1 = V1.toReal();
-	if(!(V2=getVal(pQ,time,0,-1,arch,false,bTime*1e6)).isEVal())	V2 = V2.toReal();
-	return ((V1.isEVal() || V2.isEVal())?"Empty":abs(V2-V1).toFixed(3));?>
-</TD>
-	<TD colspan="4">&nbsp;</TD></TR>
+  <TR>
+	<TH>Date</TH><TH>Time</TH><TH>Capacity</TH><TH>Aver. pressure diff.</TH><TH>St. pressure</TH><TH>Aver. temp.</TH><TH>Density</TH>
+	<?dp
+		rez = "<TH>"+tr("Date")+"</TH><TH>"+tr("Time")+"</TH>";
+		for(iP = 0; iP < params.length; iP++)
+			rez += "<TH style=''color: "+(enGraph?params[iP].color:"black")+";''>"+SYS.strEncode(params[iP].name, "HTML")+"</TH>";
+		return rez; ?>
+  </TR>
+  <TR>
+	<TH>&nbsp;</TH><TH>begin&nbsp;&nbsp;end</TH><TH>m3</TH><TH>kgF/m2</TH><TH>kgF/cm</TH><TH>grad.C</TH><TH>kg/m3</TH>
+	<?dp
+		rez = "<TH>&nbsp;</TH><TH>"+tr("begin")+"&nbsp;&nbsp;"+tr("end")+"</TH>";
+		for(iP = 0; iP < params.length; iP++)
+			rez += "<TH>"+SYS.strEncode(params[iP].ed, "HTML")+"</TH>";
+		return rez; ?>
+  </TR>
+  <TR docRept="3600">
+  <?dp using DAQ.JavaLikeCalc.lib_doc;
+	if((rTime-rPer) > SYS.time())	return "";
+	rez = "<TD style=''text-align: center;''>"+SYS.strftime(rTime,"%d %m")+"</TD>"+
+		"<TD style=''text-align: center;''>"+SYS.strftime(rTime-rPer,"%H:%M")+"&nbsp;&nbsp;"+SYS.strftime(rTime,"%H:%M")+"</TD>";
+	for(iP = 0; iP < params.length; iP++)
+		if(params[iP].isCntr == true) {
+			if(!(V1=getVal(params[iP].var,rTime-rPer,0,-1,arch,false,rTime*1e6)).isEVal())	V1 = V1.toReal();
+			if(!(V2=getVal(params[iP].var,rTime,0,-1,arch,false,(rTime-rPer)*1e6)).isEVal())	V2 = V2.toReal();
+			rez += "<TD style=''text-align: center;''>"+((V1.isEVal() || V2.isEVal())?tr("Empty"):abs(V2-V1).toFixed(params[iP].prec))+"</TD>";
+		} else rez += "<TD style=''text-align: center;''>"+averVal(params[iP].var,rTime-rPer,rTime,params[iP].prec,arch)+"</TD>";
+	return rez; ?>
+  </TR>
+  <TR>
+  <?dp using DAQ.JavaLikeCalc.lib_doc;
+	rez = "<TD colspan=''2'' style=''text-align: center;''>"+tr("Summary")+"</TD>";
+	for(iP = 0; iP < params.length; iP++)
+		if(params[iP].isCntr == true) {
+			if(!(V1=getVal(params[iP].var,bTime,0,-1,arch,false,time*1e6)).isEVal())	V1 = V1.toReal();
+			if(!(V2=getVal(params[iP].var,time,0,-1,arch,false,bTime*1e6)).isEVal())	V2 = V2.toReal();
+			rez += "<TD style=''text-align: center;''>"+((V1.isEVal() || V2.isEVal())?tr("Empty"):abs(V2-V1).toFixed(3))+"</TD>";
+		} else rez += "<TD/>";
+	return rez; ?>
+  </TR>
 </TABLE>
-</body>',32,'','','doc','<body docProcLang="JavaLikeCalc.JavaScript">
-<h1>Таблиця усереднених за годину значень для "<b><?dp return pTitle;?></b>"</h1>
+</body>',32,'','','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepDay','bTime','0',40,'','','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepDay','time','0',40,'','','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepDay','n','10',34,'','wdg:../a_n','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepDay','aCur','0',32,'','wdg:../a_aCur','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepMonth','name','Month report of the day-averaged values',32,'','','','Місячний звіт середніх за добу значень','','Месячный отчёт среднесуточных значений','','','');
+INSERT INTO wlb_doc_io VALUES('docRepMonth','geomZ','1',32,'','','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepMonth','tmpl','<body docProcLang="JavaLikeCalc.JavaScript">
+
+<center>
+<h1>Average over day values of ""</h1>
+<?dp return "<h1>"+tr("Average over day values of \"%1\"").replace("%1",title)+"</h1><span>"+SYS.strftime(time-params.repHour*3600-1,"%B %Y")+"</span>";?>
+</center>
+
+<div>
+	<?dp if(!enGraph) return "";
+		for(iP = 0, srcs = ""; iP < params.length; iP++)
+			if(!params[iP].min.isEVal() && !params[iP].max.isEVal())
+				srcs += params[iP].var+":"+params[iP].min+":"+params[iP].max+":"+params[iP].color+":0:2\n";
+		return srcs.length ? DAQ.JavaLikeCalc.lib_doc.diagram(time, time-bTime, srcs, 800, 300, arch) : "";
+	?>
+</div>
+<br/>
 
 <TABLE class="data" width="100%" export="1">
-	<TR align="left" valign="center"><TH colspan="7">Оперативні дані за XXX Обчислювач # Трубопровід #.
-<?dp return "Оперативні дані за "+SYS.strftime(time-1,"%d %m %Y")+" Обчислювач # Трубопровід #.";?>
-	</TH></TR>
-	<TR><TH>Дата</TH><TH>Час</TH><TH>Об''єм</TH><TH>Сер. переп.</TH><TH>Ст. тиск</TH><TH>Сер. темп.</TH><TH>Щільність</TH></TR>
-	<TR><TH>&nbsp;</TH><TH>поч.&nbsp;&nbsp;кін.</TH><TH>м3</TH><TH>кГс/м2</TH><TH>кГс/см</TH><TH>град.С</TH><TH>кг/м3</TH></TR>
-	<TR docRept="3600">
-<?dp using DAQ.JavaLikeCalc.lib_doc;
+  <TR>
+	<TH>Date</TH><TH>Capacity</TH><TH>Aver. pressure diff.</TH><TH>St. pressure</TH><TH>Aver. temp.</TH><TH>Density</TH>
+	<?dp
+		rez = "<TH>"+tr("Date")+"</TH>";
+		for(iP = 0; iP < params.length; iP++)
+			rez += "<TH style=''color: "+(enGraph?params[iP].color:"black")+";''>"+SYS.strEncode(params[iP].name, "HTML")+"</TH>";
+		return rez; ?>
+  </TR>
+  <TR>
+	<TH>&nbsp;</TH><TH>m3</TH><TH>kgF/m2</TH><TH>kgF/cm</TH><TH>grad.C</TH><TH>kg/m3</TH>
+	<?dp
+		rez = "<TH>&nbsp;</TH>";
+		for(iP = 0; iP < params.length; iP++)
+			rez += "<TH>"+SYS.strEncode(params[iP].ed, "HTML")+"</TH>";
+		return rez; ?>
+  </TR>
+  <TR docRept="86400">
+  <?dp using DAQ.JavaLikeCalc.lib_doc;
 	if((rTime-rPer) > SYS.time())	return;
-	if(!(V1=getVal(pQ,rTime-rPer,0,-1,arch,false,rTime*1e6)).isEVal())	V1 = V1.toReal();
-	if(!(V2=getVal(pQ,rTime,0,-1,arch,false,(rTime-rPer)*1e6)).isEVal())	V2 = V2.toReal();
-	return "<TD>"+SYS.strftime(rTime,"%d %m")+"</TD>"+
-		"<TD>"+SYS.strftime(rTime-rPer,"%H:%M")+"&nbsp;&nbsp;"+SYS.strftime(rTime,"%H:%M")+"</TD>"+
-		"<TD>"+((V1.isEVal() || V2.isEVal())?"Порожньо":abs(V2-V1).toFixed(3))+"</TD>"+
-		"<TD>"+averVal(pDP,rTime-rPer,rTime,2,arch)+"</TD>"+
-		"<TD>"+averVal(pP,rTime-rPer,rTime,2,arch)+"</TD>"+
-		"<TD>"+averVal(pT,rTime-rPer,rTime,2,arch)+"</TD>"+
-		"<TD>"+averVal(pDS,rTime-rPer,rTime,2,arch)+"</TD>";?>
-	</TR>
-	<TR><TD colspan="2">Разом</TD>
-	<TD>XXXXXX.XXX
-<?dp using DAQ.JavaLikeCalc.lib_doc;
-	if(!(V1=getVal(pQ,bTime,0,-1,arch,false,time*1e6)).isEVal())	V1 = V1.toReal();
-	if(!(V2=getVal(pQ,time,0,-1,arch,false,bTime*1e6)).isEVal())	V2 = V2.toReal();
-	return ((V1.isEVal() || V2.isEVal())?"Порожньо":abs(V2-V1).toFixed(3));?>
-</TD>
-	<TD colspan="4">&nbsp;</TD></TR>
+	rez = "<TD style=''text-align: center;''>"+SYS.strftime(rTime-rPer,"%d %m %Y")+"</TD>";
+	for(iP = 0; iP < params.length; iP++)
+		if(params[iP].isCntr == true) {
+			if(!(V1=getVal(params[iP].var,rTime-rPer,0,-1,arch,false,rTime*1e6)).isEVal())	V1 = V1.toReal();
+			if(!(V2=getVal(params[iP].var,rTime,0,-1,arch,false,(rTime-rPer)*1e6)).isEVal())	V2 = V2.toReal();
+			rez += "<TD style=''text-align: center;''>"+((V1.isEVal() || V2.isEVal())?tr("Empty"):abs(V2-V1).toFixed(params[iP].prec))+"</TD>";
+		} else rez += "<TD style=''text-align: center;''>"+averVal(params[iP].var,rTime-rPer,rTime,params[iP].prec,arch)+"</TD>";
+	return rez; ?>
+  </TR>
+  <TR><?dp using DAQ.JavaLikeCalc.lib_doc;
+	rez = "<TD style=''text-align: center;''>"+tr("Summary")+"</TD>";
+	for(iP = 0; iP < params.length; iP++)
+		if(params[iP].isCntr == true) {
+			if(!(V1=getVal(params[iP].var,bTime,0,-1,arch,false,time*1e6)).isEVal())	V1 = V1.toReal();
+			if(!(V2=getVal(params[iP].var,time,0,-1,arch,false,bTime*1e6)).isEVal())	V2 = V2.toReal();
+			rez += "<TD style=''text-align: center;''>"+((V1.isEVal() || V2.isEVal())?tr("Empty"):abs(V2-V1).toFixed(params[iP].prec)) + "</TD>";
+		} else rez += "<TD/>";
+	return rez; ?>
+  </TR>
 </TABLE>
-</body>','','<body docProcLang="JavaLikeCalc.JavaScript">
-<h1>Таблица среднечасовых значений для "<b><?dp return pTitle;?></b>"</h1>
-
-<TABLE class="data" width="100%" export="1">
-	<TR align="left" valign="center"><TH colspan="7">Оперативные данные за XXX Вычислитель # Трубопровод #.
-<?dp return "Оперативные данные за "+SYS.strftime(time-1,"%d %m %Y")+" Вычислитель # Трубопровод #.";?>
-	</TH></TR>
-	<TR><TH>Дата</TH><TH>Время</TH><TH>Объём</TH><TH>Ср. переп.</TH><TH>Ст. давл.</TH><TH>Ср. темп.</TH><TH>Плотность</TH></TR>
-	<TR><TH>&nbsp;</TH><TH>нач.&nbsp;&nbsp;кон.</TH><TH>м3</TH><TH>кГс/м2</TH><TH>кГс/см</TH><TH>град.С</TH><TH>кг/м3</TH></TR>
-	<TR docRept="3600">
-<?dp using DAQ.JavaLikeCalc.lib_doc;
-	if((rTime-rPer) > SYS.time())	return;
-	if(!(V1=getVal(pQ,rTime-rPer,0,-1,arch,false,rTime*1e6)).isEVal())	V1 = V1.toReal();
-	if(!(V2=getVal(pQ,rTime,0,-1,arch,false,(rTime-rPer)*1e6)).isEVal())	V2 = V2.toReal();
-	return "<TD>"+SYS.strftime(rTime,"%d %m")+"</TD>"+
-		"<TD>"+SYS.strftime(rTime-rPer,"%H:%M")+"&nbsp;&nbsp;"+SYS.strftime(rTime,"%H:%M")+"</TD>"+
-		"<TD>"+((V1.isEVal() || V2.isEVal())?"Пусто":abs(V2-V1).toFixed(3))+"</TD>"+
-		"<TD>"+averVal(pDP,rTime-rPer,rTime,2,arch)+"</TD>"+
-		"<TD>"+averVal(pP,rTime-rPer,rTime,2,arch)+"</TD>"+
-		"<TD>"+averVal(pT,rTime-rPer,rTime,2,arch)+"</TD>"+
-		"<TD>"+averVal(pDS,rTime-rPer,rTime,2,arch)+"</TD>";?>
-	</TR>
-	<TR><TD colspan="2">Всего</TD>
-	<TD>XXXXXX.XXX
-<?dp using DAQ.JavaLikeCalc.lib_doc;
-	if(!(V1=getVal(pQ,bTime,0,-1,arch,false,time*1e6)).isEVal())	V1 = V1.toReal();
-	if(!(V2=getVal(pQ,time,0,-1,arch,false,bTime*1e6)).isEVal())	V2 = V2.toReal();
-	return ((V1.isEVal() || V2.isEVal())?"Пусто":abs(V2-V1).toFixed(3));?>
-</TD>
-	<TD colspan="4">&nbsp;</TD></TR>
-</TABLE>
-</body>','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeDayA','bTime','0',40,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeDayA','time','0',40,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeDayA','n','10',34,'','wdg:../a_n','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeDayA','aCur','0',32,'','wdg:../a_aCur','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeMonthA','name','Day-averaged values of the flow-control point',32,'','','','Середньодобові значення витратовимірювального вузла','','Cреднесуточные значения расходомерного узла','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeMonthA','geomZ','1',32,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeMonthA','tmpl','<body docProcLang="JavaLikeCalc.JavaScript">
-<h1>Table of average over day values of "<b><?dp return pTitle;?></b>"</h1>
-
-<TABLE class="data" width="100%" export="1">
-	<TR align="left" valign="center"><TH colspan="7">Days data over XXXXX Calculator # Pipeline #.<?dp return "Day data over "+SYS.strftime(time-1,"%m %Y")+" Calculator # Pipeline #.";?>
-  </TH></TR>
-	<TR><TH>Date</TH><TH colspan="2">Capacity</TH><TH>Aver. pressure diff.</TH><TH>St. pressure</TH><TH>Aver. temp.</TH><TH>Density</TH></TR>
-  	<TR><TH>&nbsp;</TH><TH colspan="2">m3</TH><TH>kgF/m2</TH><TH>kgF/cm</TH><TH>grad.C</TH><TH>kg/m3</TH></TR>
-	<TR docRept="86400">
-<?dp using DAQ.JavaLikeCalc.lib_doc;
-	if((rTime-rPer) > SYS.time())	return;
-	if(!(V1=getVal(pQ,rTime-rPer,0,-1,arch,false,rTime*1e6)).isEVal())	V1 = V1.toReal();
-	if(!(V2=getVal(pQ,rTime,0,-1,arch,false,(rTime-rPer)*1e6)).isEVal())	V2 = V2.toReal();
-	return "<TD>"+SYS.strftime(rTime-rPer,"%d %m %Y")+"</TD>"+
-		"<TD colspan=''2''>"+((V1.isEVal() || V2.isEVal())?"Empty":abs(V2-V1).toFixed(3))+"</TD>"+
-		"<TD>"+averVal(pDP,rTime-rPer,rTime,2,arch)+"</TD>"+
-		"<TD>"+averVal(pP,rTime-rPer,rTime,2,arch)+"</TD>"+
-		"<TD>"+averVal(pT,rTime-rPer,rTime,2,arch)+"</TD>"+
-		"<TD>"+averVal(pDS,rTime-rPer,rTime,2,arch)+"</TD>";?>
-	</TR>
-	<TR><TD>Summary</TD>
-	<TD colspan="2">XXXXXX.XXX
-<?dp using DAQ.JavaLikeCalc.lib_doc;
-	if(!(V1=getVal(pQ,bTime,0,-1,arch,false,time*1e6)).isEVal())	V1 = V1.toReal();
-	if(!(V2=getVal(pQ,time,0,-1,arch,false,bTime*1e6)).isEVal())	V2 = V2.toReal();
-	return ((V1.isEVal() || V2.isEVal())?"Empty":abs(V2-V1).toFixed(3));?>
-</TD>
-	<TD colspan="4">&nbsp;</TD></TR>
-</TABLE>
-</body>',32,'','','doc','<body docProcLang="JavaLikeCalc.JavaScript">
-<h1>Таблиця середньодобових значень для "<b><?dp return pTitle;?></b>"</h1>
-
-<TABLE class="data" width="100%" export="1">
-	<TR align="left" valign="center"><TH colspan="7">Добові дані за XXXXX Обчислювач # Трубопровід #.
-<?dp return "Добові дані за "+SYS.strftime(time-1,"%m %Y")+" Обчислювач # Трубопровід #.";?>
-  </TH></TR>
-	<TR><TH>Дата</TH><TH colspan="2">Об''єм</TH><TH>Сер. переп.</TH><TH>Ст. тиск</TH><TH>Сер. темп.</TH><TH>Щільність</TH></TR>
-	<TR><TH>&nbsp;</TH><TH colspan="2">м3</TH><TH>кГс/м2</TH><TH>кГс/см</TH><TH>град.С</TH><TH>кг/м3</TH></TR>
-	<TR docRept="86400">
-<?dp using DAQ.JavaLikeCalc.lib_doc;
-	if((rTime-rPer) > SYS.time())	return;
-	if(!(V1=getVal(pQ,rTime-rPer,0,-1,arch,false,rTime*1e6)).isEVal())	V1 = V1.toReal();
-	if(!(V2=getVal(pQ,rTime,0,-1,arch,false,(rTime-rPer)*1e6)).isEVal())	V2 = V2.toReal();
-	return "<TD>"+SYS.strftime(rTime-rPer,"%d %m %Y")+"</TD>"+
-		"<TD colspan=''2''>"+((V1.isEVal() || V2.isEVal())?"Порожньо":abs(V2-V1).toFixed(3))+"</TD>"+
-		"<TD>"+averVal(pDP,rTime-rPer,rTime,2,arch)+"</TD>"+
-		"<TD>"+averVal(pP,rTime-rPer,rTime,2,arch)+"</TD>"+
-		"<TD>"+averVal(pT,rTime-rPer,rTime,2,arch)+"</TD>"+
-		"<TD>"+averVal(pDS,rTime-rPer,rTime,2,arch)+"</TD>";?>
-	</TR>
-	<TR><TD>Разом</TD>
-	<TD colspan="2">XXXXXX.XXX
-<?dp using DAQ.JavaLikeCalc.lib_doc;
-	if(!(V1=getVal(pQ,bTime,0,-1,arch,false,time*1e6)).isEVal())	V1 = V1.toReal();
-	if(!(V2=getVal(pQ,time,0,-1,arch,false,bTime*1e6)).isEVal())	V2 = V2.toReal();
-	return ((V1.isEVal() || V2.isEVal())?"Порожньо":abs(V2-V1).toFixed(3));?>
-</TD>
-	<TD colspan="4">&nbsp;</TD></TR>
-</TABLE>
-</body>','','<body docProcLang="JavaLikeCalc.JavaScript">
-<h1>Таблица среднесуточных значений для "<b><?dp return pTitle;?></b>"</h1>
-
-<TABLE class="data" width="100%" export="1">
-	<TR align="left" valign="center"><TH colspan="7">Суточные данные за XXXXX Вычислитель # Трубопровод #.
-<?dp return "Суточные данные за "+SYS.strftime(time-1,"%m %Y")+" Вычислитель # Трубопровод #.";?>
-  </TH></TR>
-	<TR><TH>Дата</TH><TH colspan="2">Объём</TH><TH>Ср. переп.</TH><TH>Ст. давл.</TH><TH>Ср. темп.</TH><TH>Плотность</TH></TR>
-	<TR><TH>&nbsp;</TH><TH colspan="2">м3</TH><TH>кГс/м2</TH><TH>кГс/см</TH><TH>град.С</TH><TH>кг/м3</TH></TR>
-	<TR docRept="86400">
-<?dp using DAQ.JavaLikeCalc.lib_doc;
-	if((rTime-rPer) > SYS.time())	return;
-	if(!(V1=getVal(pQ,rTime-rPer,0,-1,arch,false,rTime*1e6)).isEVal())	V1 = V1.toReal();
-	if(!(V2=getVal(pQ,rTime,0,-1,arch,false,(rTime-rPer)*1e6)).isEVal())	V2 = V2.toReal();
-	return "<TD>"+SYS.strftime(rTime-rPer,"%d %m %Y")+"</TD>"+
-		"<TD colspan=''2''>"+((V1.isEVal() || V2.isEVal())?"Пусто":abs(V2-V1).toFixed(3))+"</TD>"+
-		"<TD>"+averVal(pDP,rTime-rPer,rTime,2,arch)+"</TD>"+
-		"<TD>"+averVal(pP,rTime-rPer,rTime,2,arch)+"</TD>"+
-		"<TD>"+averVal(pT,rTime-rPer,rTime,2,arch)+"</TD>"+
-		"<TD>"+averVal(pDS,rTime-rPer,rTime,2,arch)+"</TD>";?>
-	</TR>
-	<TR><TD>Всего</TD>
-	<TD colspan="2">XXXXXX.XXX
-<?dp using DAQ.JavaLikeCalc.lib_doc;
-	if(!(V1=getVal(pQ,bTime,0,-1,arch,false,time*1e6)).isEVal())	V1 = V1.toReal();
-	if(!(V2=getVal(pQ,time,0,-1,arch,false,bTime*1e6)).isEVal())	V2 = V2.toReal();
-	return ((V1.isEVal() || V2.isEVal())?"Пусто":abs(V2-V1).toFixed(3));?>
-</TD>
-	<TD colspan="4">&nbsp;</TD></TR>
-</TABLE>
-</body>','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeMonthA','bTime','0',40,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeMonthA','time','0',40,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeMonthA','n','10',34,'','wdg:../a_n','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeMonthA','aCur','0',32,'','wdg:../a_aCur','doc','','','','','','');
+</body>',32,'','','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepMonth','bTime','0',40,'','','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepMonth','time','0',40,'','','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepMonth','n','10',34,'','wdg:../a_n','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepMonth','aCur','0',32,'','wdg:../a_aCur','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docUsersSet','name','Protocol of interruptions',32,'','','','Протокол втручань','','Протокол вмешательств','','','');
 INSERT INTO wlb_doc_io VALUES('docUsersSet','tmpl','<body docProcLang="JavaLikeCalc.JavaScript">
 <h1>Protocol of interruptions <?dp return tr("Protocol of interruptions"); ?></h1>
@@ -11509,8 +11442,8 @@ INSERT INTO wlb_doc_io VALUES('docUsersSet','tmpl','<body docProcLang="JavaLikeC
   </TR>
 </TABLE>
 </body>',32,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeDayA','process','0',40,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeMonthA','process','0',40,'','','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepDay','process','0',40,'','','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepMonth','process','0',40,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docAlarmsRep','style','TABLE.data { border-collapse: collapse; }
 TABLE.data TH { background-color: #e6e6e6; border: 1px solid black; }
 TABLE.data TD { white-space: normal; border: 1px solid black;}',32,'','','doc','','','','','','');
@@ -11581,14 +11514,16 @@ INSERT INTO wlb_doc_io VALUES('doc','geomX','3',32,'','','doc','','','','','',''
 INSERT INTO wlb_doc_io VALUES('docRepInstVals','name','Instantaneous values report',32,'','','','Звіт миттєвих значень','','Отчёт мгновенных значений','','','');
 INSERT INTO wlb_doc_io VALUES('docRepInstVals','tmpl','<body docProcLang="JavaLikeCalc.JavaScript">
 <center>
-<h2>Table of the instantaneous values of</h2>
-<?dp return "<h2>"+tr("Table of the instantaneous values of \"%1\"").replace("%1",title)+"</h2><span>"+SYS.strftime(time)+"</span>";?>
+<h1>Instantaneous values of ""</h1>
+<?dp return "<h1>"+tr("Instantaneous values of \"%1\"").replace("%1",title)+"</h1><span>"+SYS.strftime(time)+"</span>";?>
 </center>
 
 <div>
-	<?dp
-		for(iP = 0, srcs = ""; iP < params.length; iP++) srcs += params[iP].var+":0:0:"+params[iP].color+"\n";
-		return DAQ.JavaLikeCalc.lib_doc.diagram(time, time-bTime, srcs, 800, 300);
+	<?dp if(!enGraph) return "";
+		for(iP = 0, srcs = ""; iP < params.length; iP++)
+			if(!params[iP].min.isEVal() && !params[iP].max.isEVal())
+				srcs += params[iP].var+":"+params[iP].min+":"+params[iP].max+":"+params[iP].color+":0:2\n";
+		return srcs.length ? DAQ.JavaLikeCalc.lib_doc.diagram(time, time-bTime, srcs, 800, 300) : "";
 	?>
 </div>
 <br/>
@@ -11599,7 +11534,7 @@ INSERT INTO wlb_doc_io VALUES('docRepInstVals','tmpl','<body docProcLang="JavaLi
 	<?dp
 		rez = "<TH>"+tr("Date")+"</TH><TH>"+tr("Time")+"</TH>";
 		for(iP = 0; iP < params.length; iP++)
-			rez += "<TH style=''color: "+params[iP].color+";''>"+SYS.strEncode(params[iP].name, "HTML")+"</TH>";
+			rez += "<TH style=''color: "+(enGraph?params[iP].color:"black")+";''>"+SYS.strEncode(params[iP].name, "HTML")+"</TH>";
 		return rez; ?>
   </TR>
   <TR>
@@ -11612,91 +11547,13 @@ INSERT INTO wlb_doc_io VALUES('docRepInstVals','tmpl','<body docProcLang="JavaLi
   </TR>
   <TR docRept="@@valPer@@" docRevers="1">
 	<?dp 
-		rez = "<TD>"+SYS.strftime(rTime,"%d %m %Y")+"</TD><TD>"+SYS.strftime(rTime,"%H:%M:%S")+"</TD>";
+		rez = "<TD style=''text-align: center;''>"+SYS.strftime(rTime,"%d %m %Y")+"</TD><TD  style=''text-align: center;''>"+SYS.strftime(rTime,"%H:%M:%S")+"</TD>";
 		for(iP = 0; iP < params.length; iP++)
-			rez += "<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(params[iP].var, rTime, 0, params[iP].prec,"",true)+"</TD>";
+			rez += "<TD  style=''text-align: center;''>"+DAQ.JavaLikeCalc.lib_doc.getVal(params[iP].var, rTime, 0, params[iP].prec,"",true)+"</TD>";
 		return rez; ?>
   </TR>
 </TABLE>
-</body>',40,'','','doc','<body docProcLang="JavaLikeCalc.JavaScript">
-<center>
-<h2>Table of the instantaneous values of</h2>
-<?dp return "<h2>"+tr("Table of the instantaneous values of \"%1\"").replace("%1",title)+"</h2><span>"+SYS.strftime(time)+"</span>";?>
-</center>
-
-<div>
-	<?dp
-		for(iP = 0, srcs = ""; iP < params.length; iP++) srcs += params[iP].var+":0:0:"+params[iP].color+"\n";
-		return DAQ.JavaLikeCalc.lib_doc.diagram(time, time-bTime, srcs, 800, 300);
-	?>
-</div>
-<br/>
-
-<TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data" export="1">
-  <TR>
-	<TH>Date</TH><TH>Time</TH><TH>Flow</TH><TH>Capacity</TH><TH>Pressure</TH><TH>Temperatura</TH><TH>Pressure diff.</TH>
-	<?dp
-		rez = "<TH>"+tr("Date")+"</TH><TH>"+tr("Time")+"</TH>";
-		for(iP = 0; iP < params.length; iP++)
-			rez += "<TH style=''color: "+params[iP].color+";''>"+SYS.strEncode(params[iP].name, "HTML")+"</TH>";
-		return rez; ?>
-  </TR>
-  <TR>
-	<TH colspan="2">&nbsp;</TH><TH>m3/h</TH><TH>m3</TH><TH>kgF/cm2</TH><TH>grad.C</TH><TH>kgF/cm2</TH>
-	<?dp
-		rez = "<TH colspan=''2''>&nbsp;</TH>";
-		for(iP = 0; iP < params.length; iP++)
-			rez += "<TH>"+SYS.strEncode(params[iP].ed, "HTML")+"</TH>";
-		return rez; ?>
-  </TR>
-  <TR docRept="@@valPer@@" docRevers="1">
-	<?dp 
-		rez = "<TD>"+SYS.strftime(rTime,"%d %m %Y")+"</TD><TD>"+SYS.strftime(rTime,"%H:%M:%S")+"</TD>";
-		for(iP = 0; iP < params.length; iP++)
-			rez += "<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(params[iP].var, rTime, 0, params[iP].prec,"",true)+"</TD>";
-		return rez; ?>
-  </TR>
-</TABLE>
-</body>','','<body docProcLang="JavaLikeCalc.JavaScript">
-<center>
-<h2>Table of the instantaneous values of</h2>
-<?dp return "<h2>"+tr("Table of the instantaneous values of \"%1\"").replace("%1",title)+"</h2><span>"+SYS.strftime(time)+"</span>";?>
-</center>
-
-<div>
-	<?dp
-		for(iP = 0, srcs = ""; iP < params.length; iP++) srcs += params[iP].var+":0:0:"+params[iP].color+"\n";
-		return DAQ.JavaLikeCalc.lib_doc.diagram(time, time-bTime, srcs, 800, 300);
-	?>
-</div>
-<br/>
-
-<TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data" export="1">
-  <TR>
-	<TH>Date</TH><TH>Time</TH><TH>Flow</TH><TH>Capacity</TH><TH>Pressure</TH><TH>Temperatura</TH><TH>Pressure diff.</TH>
-	<?dp
-		rez = "<TH>"+tr("Date")+"</TH><TH>"+tr("Time")+"</TH>";
-		for(iP = 0; iP < params.length; iP++)
-			rez += "<TH style=''color: "+params[iP].color+";''>"+SYS.strEncode(params[iP].name, "HTML")+"</TH>";
-		return rez; ?>
-  </TR>
-  <TR>
-	<TH colspan="2">&nbsp;</TH><TH>m3/h</TH><TH>m3</TH><TH>kgF/cm2</TH><TH>grad.C</TH><TH>kgF/cm2</TH>
-	<?dp
-		rez = "<TH colspan=''2''>&nbsp;</TH>";
-		for(iP = 0; iP < params.length; iP++)
-			rez += "<TH>"+SYS.strEncode(params[iP].ed, "HTML")+"</TH>";
-		return rez; ?>
-  </TR>
-  <TR docRept="@@valPer@@" docRevers="1">
-	<?dp 
-		rez = "<TD>"+SYS.strftime(rTime,"%d %m %Y")+"</TD><TD>"+SYS.strftime(rTime,"%H:%M:%S")+"</TD>";
-		for(iP = 0; iP < params.length; iP++)
-			rez += "<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(params[iP].var, rTime, 0, params[iP].prec,"",true)+"</TD>";
-		return rez; ?>
-  </TR>
-</TABLE>
-</body>','','','');
+</body>',40,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docDin','name','Document - dynamic',32,'','','','Документ - динамічний','','Документ- динамический','','','');
 INSERT INTO wlb_doc_io VALUES('docDin','geomW','900',32,'','','','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docDin','geomH','600',32,'','','','','','','','','');
@@ -11738,7 +11595,7 @@ INSERT INTO wlb_doc_io VALUES('docDin','tmpl','<body docProcLang="JavaLikeCalc.J
 INSERT INTO wlb_doc_io VALUES('docDin','doc','',40,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docDin','bTime','0',40,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docDin','time','0',40,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeDayA','evProc','ws_FocusIn::open:/pg_control/pg_doc_panel',32,'','','','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepDay','evProc','ws_FocusIn::open:/pg_control/pg_doc_panel',32,'','','','','','','','','');
 INSERT INTO wlb_doc_io VALUES('doc','dscr','The frame is a template of documents of the archive type and it is provided as an example and for building own archive documents on it basis. The main specific of that document type is the periodic generating on the VCA-session level (in the background) and placing the final and ready to view documents to an archive, the VCA-project''s session DB-table "prj_{ProjID}_ses".
 
 The main advantage of this document type is the lowest load on CPU during the generation, which can be multi-step one during the main generation period, and the fast view, which involves simply opening the ready documents from the archive. But this document type has a significant disadvantage, which is the constant execution of single project session in the background and the absence of which leads to the omission of the documents generation in the archive.
@@ -11828,8 +11685,8 @@ INSERT INTO wlb_doc_io VALUES('docRep2WorkSh','tmpl','<body docProcLang="JavaLik
 INSERT INTO wlb_doc_io VALUES('docRep2WorkSh','font','Arial 8',32,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepInstVals','perm','438',32,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docUsersSet','perm','438',32,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeDayA','perm','438',32,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeMonthA','perm','438',32,'','','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepDay','perm','438',32,'','','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepMonth','perm','438',32,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRep2WorkSh','perm','438',32,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docUsersSet','style','TABLE.data { border-collapse: collapse; }
 TABLE.data TH { background-color: #e6e6e6; border: 1px solid black; }
@@ -11841,12 +11698,12 @@ TABLE.data TH { background-color: #e6e6e6; border: 1px solid black; }
 TABLE.data TD { white-space: nowrap; border: 1px solid black;}',32,'','','doc','TH { background-color: #e6e6e6; }
 TD { white-space: nowrap; }','','TH { background-color: #e6e6e6; }
 TD { white-space: nowrap; }','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeDayA','style','TABLE.data { border-collapse: collapse; }
+INSERT INTO wlb_doc_io VALUES('docRepDay','style','TABLE.data { border-collapse: collapse; }
 TABLE.data TH { background-color: #e6e6e6; border: 1px solid black; }
 TABLE.data TD { white-space: nowrap; border: 1px solid black;}',32,'','','doc','TH { background-color: #e6e6e6; }
 TD { white-space: nowrap; }','','TH { background-color: #e6e6e6; }
 TD { white-space: nowrap; }','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeMonthA','style','TABLE.data { border-collapse: collapse; }
+INSERT INTO wlb_doc_io VALUES('docRepMonth','style','TABLE.data { border-collapse: collapse; }
 TABLE.data TH { background-color: #e6e6e6; border: 1px solid black; }
 TABLE.data TD { white-space: nowrap; border: 1px solid black;}',32,'','','doc','TH { background-color: #e6e6e6; }
 TD { white-space: nowrap; }','','TH { background-color: #e6e6e6; }
@@ -11975,31 +11832,21 @@ License: GPLv2',32,'','','','Документ слугує для генерац
 Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.5.0
 Ліцензія: GPLv2','','','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeDayA','dscr','Table of hour-averaged values of the flow-control point. Based on the archival mode document, but supports the both modes - dynamic and archival.
-The custom configuration fields in the tab "Links":
-"n" - the mode of the document, set to 0 for the dynamic mode and some archive size for the archival mode.
-"repHour" - the report hour, which is 9 by default.
-"doc.arch" - the used archiver for build the document, which is "FSArch.1m" by default.
-"doc.pTitle" - the document (a parameter of the flow-control point) title.
-"doc.Point" - the parameter of the flow-control point with group of attributes.
+INSERT INTO wlb_doc_io VALUES('docRepDay','dscr','The document is provided for generating a day report of the hour-averaged values in view of the trends diagram and the data table. The document is initially the archival type but in time it is made dynamic also, so, depending from the execution mode, you can whether select a ready document from the archive or specify the data time and depth. The document commonly uses and represents the representative structure of the DAQ-template "Analog signal". As a data source of this document is the value archives of the DAQ-parameters.
+
+Working in the primary archival mode performed with the 5 minutes period, when during an hour an one record-row data is formed. The last one record-row is closed at the 5 minute of a new hour (14:05 for example) and a new one record-row is started. Whole and complete document is archived at the 3 minute of the "Report hour (repHour)" of the next day (09:03 for example).
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.2.0',32,'','','','Таблиця середніх за годину значень вузла контролю витрат. Заснований на архівному документі, але підтримує обидва режими - динамічний та архівний.
-Користувацькі конфігураційні поля у вкладці "Зв''язки":
-"n" - режим документу, встановіть у 0 для динамічного режиму та деякий розмір архіву для архівного режиму.
-"repHour" - час звіту, який по замовченю 9.
-"doc.arch" - архіватор користувача для формування документу, який по замовченю "FSArch.1m".
-"doc.pTitle" - заголовок документу (параметр вузла обліку витрат).
-"doc.Point" - параметр вузла обліку витрат з групою атрибутів.
+Sponsored for the dynamization by: BLUE STAR GROUP Ltd
+Version: 3.0.0
+License: GPLv2',32,'','','','Документ слугує для генерації добового звіту середніх за годину значень у вигляді діаграми трендів та таблиці даних. Документ початково архівного типу, та з часом він зроблений і динамічним, відтак, залежно від режиму виконання, ви можете або обирати готові документи із архіву або визначити час та глибину даних. Документ загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал". У якості джерела даних документу виступають архіви значень DAQ-параметрів.
+
+Робота у первинному архівному режимі відбувається із періодом 5 хвилин, коли протягом години формується один запис-рядок. Останній запис-рядок закривається на п''ятій хвилині нової години (наприклад, 14:05) та розпочинається новий запис-рядок. Весь та завершений документ архівується на третій хвилині "Звітного часу (repHour)" наступного дня (наприклад, 09:03).
+
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.1.0','','Таблица средних за час значений узла контроля расхода. Основан на архивном документе, но поддерживает оба режима - динамический и архивный.
-Пользовательские конфигурационные поля во вкладке "Связи":
-"n" - режим документа, установить в 0 для динамического режима и некоторый размер архива для архивного режима.
-"repHour" - отчётный час, который по умолчанию 9.
-"doc.arch" - архиватор пользователя для формирования документа, который по умолчанию "FSArch.1m".
-"doc.pTitle" - заголовок документа (параметр узла учёта расхода).
-"doc.Point" - параметр узла учёта расхода с группой атрибутов.
-Автор: Роман Савоченко <roman@oscada.org>
-Версия: 2.1.0','','','');
+Спонсоровано щодо динамізації: ТОВ BLUE STAR GROUP
+Версія: 3.0.0
+Ліцензія: GPLv2','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepInstVals','dscr','The document is provided for generating a report of the instantaneous values in view of the trends diagram and the data table. The document is the dynamic type, so you can specify the data time and depth. The document commonly uses and represents the representative structure of the DAQ-template "Analog signal". As a data source of this document is the value archives of the DAQ-parameters.
 
 Author: Roman Savochenko <roman@oscada.org>
@@ -12009,31 +11856,21 @@ License: GPLv2',32,'','','','Документ слугує для генерац
 Автор: Роман Савоченко <roman@oscada.org>
 Версія: 2.0.0
 Ліцензія: GPLv2','','','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeMonthA','dscr','Table of day-averaged values of the flow-control point. Based on the archival mode document, but supports the both modes - dynamic and archival.
-The custom configuration fields in the tab "Links":
-"n" - the mode of the document, set to 0 for the dynamic mode and some archive size for the archival mode.
-"repHour" - the report hour, which is 9 by default.
-"doc.arch" - the used archiver, for build the document, which is "FSArch.1m" by default.
-"doc.pTitle" - the document (a parameter of the flow-control point) title.
-"doc.Point" - the parameter of the flow-control point with group of attributes.
+INSERT INTO wlb_doc_io VALUES('docRepMonth','dscr','The document is provided for generating a month report of the day-averaged values in view of the trends diagram and the data table. The document is initially the archival type but in time it is made dynamic also, so, depending from the execution mode, you can whether select a ready document from the archive or specify the data time and depth. The document commonly uses and represents the representative structure of the DAQ-template "Analog signal". As a data source of this document is the value archives of the DAQ-parameters.
+
+Working in the primary archival mode performed with the 5 minutes period, when during a day an one record-row data is formed. The last one record-row is closed at the 5 minute of a new day (05 09:05 for example) and a new one record-row is started. Whole and complete document is archived at the 3 minute of the "Report hour (repHour)" of the next month (05 09:03 for example).
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.2.0',32,'','','','Таблиця середніх за добу значень вузла контролю витрат. Заснований на архівному документі, але підтримує обидва режими - динамічний та архівний.
-Користувацькі конфігураційні поля у вкладці "Зв''язки":
-"n" - режим документу, встановіть у 0 для динамічного режиму та деякий розмір архіву для архівного режиму.
-"repHour" - час звіту, який по замовченю 9.
-"doc.arch" - архіватор користувача для формування документу, який по замовченю "FSArch.1m".
-"doc.pTitle" - заголовок документу (параметр вузла обліку витрат).
-"doc.Point" - параметр вузла обліку витрат з групою атрибутів.
+Sponsored for the dynamization by: BLUE STAR GROUP Ltd
+Version: 3.0.0
+License: GPLv2',32,'','','','Документ слугує для генерації місячного звіту середніх за добу значень у вигляді діаграми трендів та таблиці даних. Документ початково архівного типу, та з часом він зроблений і динамічним, відтак, залежно від режиму виконання, ви можете або обирати готові документи із архіву або визначити час та глибину даних. Документ загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал". У якості джерела даних документу виступають архіви значень DAQ-параметрів.
+
+Робота у первинному архівному режимі відбувається із періодом 5 хвилин, коли протягом доби формується один запис-рядок. Останній запис-рядок закривається на п''ятій хвилині нової доби (наприклад, 05 09:05) та розпочинається новий запис-рядок. Весь та завершений документ архівується на третій хвилині "Звітного часу (repHour)" наступного місяця (наприклад, 05 09:03).
+
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.1.0','','Таблица средних за сутки значений узла контроля расхода. Основан на архивном документе, но поддерживает оба режима - динамический и архивный.
-Пользовательские конфигурационные поля во вкладке "Связи":
-"n" - режим документа, установить в 0 для динамического режима и некоторый размер архива для архивного режима.
-"repHour" - отчётный час, который по умолчанию 9.
-"doc.arch" - архиватор пользователя для формирования документа, который по умолчанию "FSArch.1m".
-"doc.pTitle" - заголовок документа (параметр узла учёта расхода).
-"doc.Point" - параметр узла учёта расхода с группой атрибутов.
-Автор: Роман Савоченко <roman@oscada.org>
-Версия: 2.1.0','','','');
+Спонсоровано щодо динамізації: ТОВ BLUE STAR GROUP
+Версія: 3.0.0
+Ліцензія: GPLv2','','','','','');
 INSERT INTO wlb_doc_io VALUES('docMessRep','dscr','The document is provided for generating a report of different sort messages together, including: "Violations", "User-operator actions" and "System". The document is the dynamic type, so you can specify the data time and depth. The document so commonly uses and represents the messages structures: "Violations", "User-operator actions" and "System". As a data source of this document is the message archive.
 
 The document also provides a simple filtering for selected criteria: "Disabled", "Date and time (dttm)", "Level (lev)", "Parameter (prm)", "Description (dscr)", "Value (alrm)".
@@ -12069,139 +11906,79 @@ License: GPLv2',32,'','','','Документ слугує для генерац
 Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.5.0
 Ліцензія: GPLv2','','','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeDayA','aSize','0',32,'','wdg:../a_aSize','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeDayA','doc','',40,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeMonthA','doc','',40,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeDayA','vCur','0',32,'','wdg:../a_vCur','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeMonthA','evProc','ws_FocusIn::open:/pg_control/pg_doc_panel',32,'','','','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeMonthA','vCur','0',32,'','wdg:../a_vCur','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeMonthA','aSize','0',32,'','wdg:../a_aSize','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepDay','aSize','0',32,'','wdg:../a_aSize','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepDay','doc','',40,'','','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepMonth','doc','',40,'','','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepDay','vCur','0',32,'','wdg:../a_vCur','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepMonth','evProc','ws_FocusIn::open:/pg_control/pg_doc_panel',32,'','','','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepMonth','vCur','0',32,'','wdg:../a_vCur','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepMonth','aSize','0',32,'','wdg:../a_aSize','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docMessRep','backColor','#5A5A5A',96,'','','','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docAlarmsRep','backColor','#5A5A5A',96,'backColorFrame','','','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docAlarmsRep','bordWidth','1',32,'','','','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docGasNodeDayA','backColor','#5A5A5A',96,'backColorFrame','','','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','owner','root:UI',32,'','','','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','name','Year report of the resources-counters',32,'','','','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','dscr','Year report of the resources-counters
+INSERT INTO wlb_doc_io VALUES('docRepDay','backColor','#5A5A5A',96,'backColorFrame','','','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','owner','root:UI',32,'','','','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','name','Year report of the month values',32,'','','','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','dscr','Year report of the resources-counters
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0',32,'','','','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','evProc','ws_FocusIn::open:/pg_control/pg_doc_panel',32,'','','','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomX','5',32,'','','data','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomY','478',32,'','','data','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomW','890',32,'','','data','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomH','120',32,'','','data','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomZ','8',32,'','','data','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','elType','9',32,'','','data','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','items','<tbl colsWdthFit="1">
- <h><s>Parameter</s><s>January (1)</s><s>February (2)</s><s>Mar (3)</s><s>April (4)</s><s>May (5)</s><s>Jun (6)</s><s>Jul (7)</s><s>August (8)</s><s>September (9)</s><s>October (10)</s><s>November (11)</s><s>December (12)</s><s>Summary</s></h>
- <r><s>Natural Gas, m3</s><r>150</r><r>150</r><r>150</r><r>150</r><r>150</r><r>150</r><r>150</r><r>150</r><r>150</r><r>150</r><r>150</r><r>150</r><r>1500</r></r>
- <r><s>Electricity, kW*h</s><r>120</r><r>120</r><r>120</r><r>120</r><r>120</r><r>120</r><r>120</r><r>120</r><r>120</r><r>120</r><r>120</r><r>120</r><r>1200</r></r>
- <r><s>Water 1, m3</s><r>5</r><r>5</r><r>5</r><r>5</r><r>5</r><r>5</r><r>5</r><r>5</r><r>5</r><r>5</r><r>5</r><r>5</r><r>50</r></r>
- <r><s>Water 2, m3</s><r>5</r><r>5</r><r>5</r><r>5</r><r>5</r><r>5</r><r>5</r><r>5</r><r>5</r><r>5</r><r>5</r><r>5</r><r>50</r></r>
- <r><s>Water full, m3</s><r>10</r><r>10</r><r>10</r><r>10</r><r>10</r><r>10</r><r>10</r><r>10</r><r>10</r><r>10</r><r>10</r><r>10</r><r>100</r></r>
-</tbl>',0,'','','data','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','owner','root:UI',32,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','perm','438',32,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomY','315',32,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomH','285',32,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomZ','1',32,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','style','TABLE.data { border-collapse: collapse; }
-TABLE.data TH { background-color: #e6e6e6; border: 1px solid black; }
-TABLE.data TD { white-space: nowrap; border: 1px solid black;}',32,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','tmpl','<body docProcLang="JavaLikeCalc.JavaScript">
-<TABLE class="data" width="100%" export="1">
-	<TR><TH>Month</TH><TH>Natural gas</TH><TH>Water flow 1</TH><TH>Water flow 2</TH><TH>Electricity</TH></TR>
-  	<TR><TH>&nbsp;</TH><TH>m3</TH><TH>m3</TH><TH>m3</TH><TH>kW*hour</TH></TR>
-
-  	<TR><TD>January (1)</TD><TD>200</TD><TD>5</TD><TD>4</TD><TD>190</TD></TR>
-  	<TR><TD>February (2)</TD><TD>200</TD><TD>5</TD><TD>4</TD><TD>190</TD></TR>
-  	<TR><TD>Mar (3)</TD><TD>200</TD><TD>5</TD><TD>4</TD><TD>190</TD></TR>
-  	<TR><TD>April (4)</TD><TD>200</TD><TD>5</TD><TD>4</TD><TD>190</TD></TR>
-  	<TR><TD>May (5)</TD><TD>200</TD><TD>5</TD><TD>4</TD><TD>190</TD></TR>
-  	<TR><TD>Jun (6)</TD><TD>200</TD><TD>5</TD><TD>4</TD><TD>190</TD></TR>
-  	<TR><TD>Jul (7)</TD><TD>200</TD><TD>5</TD><TD>4</TD><TD>190</TD></TR>
-  	<TR><TD>August (8)</TD><TD>200</TD><TD>5</TD><TD>4</TD><TD>190</TD></TR>
-  	<TR><TD>September (9)</TD><TD>200</TD><TD>5</TD><TD>4</TD><TD>190</TD></TR>
-  	<TR><TD>October (10)</TD><TD>200</TD><TD>5</TD><TD>4</TD><TD>190</TD></TR>
-  	<TR><TD>November (11)</TD><TD>200</TD><TD>5</TD><TD>4</TD><TD>190</TD></TR>
-  	<TR><TD>December (12)</TD><TD>200</TD><TD>5</TD><TD>4</TD><TD>190</TD></TR>
-
-	<TR><TD>Summary</TD><TD>2000</TD><TD>50</TD><TD>40</TD><TD>1900</TD></TR>
-</TABLE>
-</body>',32,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','doc','',40,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','font','Arial 10',32,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','bTime','0',40,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','time','0',40,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','process','0',40,'','','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','n','10',34,'','wdg:../a_n','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','vCur','0',32,'','wdg:../a_vCur','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','aCur','0',32,'','wdg:../a_aCur','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','aSize','0',32,'','wdg:../a_aSize','doc','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','owner','root:UI',32,'','','lab_set','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomX','2.5',32,'','','lab_set','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomY','575',32,'','','lab_set','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomW','894',32,'','','lab_set','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomH','25',32,'','','lab_set','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomZ','5',32,'','','lab_set','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomMargin','1',32,'','','lab_set','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','backColor','lightgray-127',32,'','','lab_set','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','bordWidth','1',32,'','','lab_set','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','font','Arial 15',32,'','','lab_set','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','alignment','8',32,'','','lab_set','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','text','Manual setting for:',32,'','','lab_set','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','owner','root:UI',32,'','','name','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomX','5',32,'','','name','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomY','0',32,'','','name','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomW','567',32,'','','name','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomH','23',32,'','','name','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomZ','2',32,'','','name','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','font','Arial 20',32,'','','name','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','color','snow',96,'labColor','','name','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','alignment','8',32,'','','name','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','text','Year report: %1',32,'','','name','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','numbArg','1',32,'','','name','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','arg0tp','2',0,'','','name','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','arg0val','',8,'','','name','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','owner','root:UI',32,'','','set_item','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomX','180',32,'','','set_item','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomY','575',32,'','','set_item','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomW','445',32,'','','set_item','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomH','25',32,'','','set_item','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomZ','6',32,'','','set_item','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','elType','4',32,'','','set_item','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','value','Natural Gas',0,'','','set_item','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','font','Arial 15',0,'','','set_item','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','owner','root:UI',32,'','','set_month','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomX','630',32,'','','set_month','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomY','575',32,'','','set_month','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomW','120',32,'','','set_month','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomH','25',32,'','','set_month','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomZ','6',32,'','','set_month','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','elType','4',32,'','','set_month','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','value','January (1)',0,'','','set_month','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','font','Arial 15',0,'','','set_month','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomX','755',32,'','','set_val','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomY','575',32,'','','set_val','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomW','140',32,'','','set_val','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomH','25',32,'','','set_val','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomZ','7',32,'','','set_val','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','view','3',32,'','','set_val','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','font','Arial 15',32,'','','set_val','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomX','5',32,'','','trnd','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomY','29',32,'','','trnd','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomW','890',32,'','','trnd','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomH','445',32,'','','trnd','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomZ','1',32,'','','trnd','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','prm0val',NULL,32,'','','trnd','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomX','795',32,'','','year','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomY','0',32,'','','year','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomH','23',32,'','','year','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','geomZ','3',32,'','','year','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','elType','4',32,'','','year','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','value','2019',0,'','','year','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docResourcesYear','font','Arial 20',0,'','','year','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','evProc','',32,'','','','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','owner','root:UI',32,'','','lab_set','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','geomX','274.5',32,'','','lab_set','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','geomY','0',32,'','','lab_set','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','geomW','622',32,'','','lab_set','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','geomH','30',32,'','','lab_set','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','geomZ','5',32,'','','lab_set','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','geomMargin','1',32,'','','lab_set','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','backColor','lightgray-127',32,'','','lab_set','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','bordWidth','1',32,'','','lab_set','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','font','Arial 15',32,'','','lab_set','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','alignment','8',32,'','','lab_set','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','text','',32,'','','lab_set','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','owner','root:UI',32,'','','name','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','geomX','5',32,'','','name','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','geomY','0',32,'','','name','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','geomW','162',32,'','','name','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','geomH','30',32,'','','name','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','geomZ','2',32,'','','name','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','font','Arial 20',32,'','','name','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','color','snow',96,'labColor','','name','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','alignment','8',32,'','','name','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','text','Report for year:',32,'','','name','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','numbArg','0',32,'','','name','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','owner','root:UI',32,'','','set_item','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','geomX','400',32,'','','set_item','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','geomY','2.5',32,'','','set_item','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','geomW','355',32,'','','set_item','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','geomH','25',32,'','','set_item','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','geomZ','6',32,'','','set_item','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','elType','4',32,'','','set_item','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','value','Natural Gas',0,'','','set_item','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','font','Arial 15',0,'','','set_item','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','owner','root:UI',32,'','','set_month','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','geomX','280',32,'','','set_month','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','geomY','2.5',32,'','','set_month','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','geomW','120',32,'','','set_month','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','geomH','25',32,'','','set_month','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','geomZ','6',32,'','','set_month','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','elType','4',32,'','','set_month','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','value','January (1)',0,'','','set_month','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','font','Arial 15',0,'','','set_month','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','geomX','755',32,'','','set_val','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','geomY','2.5',32,'','','set_val','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','geomW','140',32,'','','set_val','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','geomH','25',32,'','','set_val','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','geomZ','7',32,'','','set_val','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','view','3',32,'','','set_val','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','font','Arial 15',32,'','','set_val','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','geomX','170',32,'','','year','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','geomY','2.5',32,'','','year','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','geomH','25',32,'','','year','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','geomZ','3',32,'','','year','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','elType','4',32,'','','year','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','value','2019',8,'','','year','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','font','Arial 20',0,'','','year','','','','','','');
 INSERT INTO wlb_doc_io VALUES('doc','style','TABLE.data { border-collapse: collapse; }
 TABLE.data TH { background-color: #e6e6e6; border: 1px solid black; }
 TABLE.data TD { white-space: nowrap; border: 1px solid black;}',32,'','','doc','','','','','','');
@@ -12212,26 +11989,109 @@ INSERT INTO wlb_doc_io VALUES('docRep2WorkSh','geomH','576',32,'','','','','',''
 INSERT INTO wlb_doc_io VALUES('docRep2WorkSh','geomX','1',32,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRep2WorkSh','geomW','898',32,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRep2WorkSh','geomH','574',32,'','','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','owner','root:UI',32,'','','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','perm','438',32,'','','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','geomY','33',32,'','','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','geomH','563',32,'','','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','geomZ','7',32,'','','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','tmpl','<body docProcLang="JavaLikeCalc.JavaScript">
+
+<center>
+<h1>Month values of ""</h1>
+<?dp return "<h1>"+tr("Month values of \"%1\"").replace("%1",title)+"</h1><span>"+SYS.strftime(time-1,"%Y")+"</span>";?>
+</center>
+
+<div>
+	<?dp if(!enGraph) return "";
+		for(iP = 0, srcs = ""; iP < params.length; iP++)
+			if(!params[iP].min.isEVal() && !params[iP].max.isEVal())
+				srcs += params[iP].var+":"+params[iP].min+":"+params[iP].max+":"+params[iP].color+":0:2\n";
+		return srcs.length ? DAQ.JavaLikeCalc.lib_doc.diagram(time, time-bTime, srcs, 800, 300, arch) : "";
+	?>
+</div>
+<br/>
+
+<TABLE class="data" width="100%" export="1" docAppend="1">
+  <TR>
+	<TH>Date</TH><TH>Capacity</TH><TH>Aver. pressure diff.</TH><TH>St. pressure</TH><TH>Aver. temp.</TH><TH>Density</TH>
+	<?dp
+		rez = "<TH>"+tr("Date")+"</TH>";
+		for(iP = 0; iP < params.length; iP++)
+			rez += "<TH style=''color: "+(enGraph?params[iP].color:"black")+";''>"+SYS.strEncode(params[iP].name, "HTML")+"</TH>";
+		return rez; ?>
+  </TR>
+  <TR>
+	<TH>&nbsp;</TH><TH>m3</TH><TH>kgF/m2</TH><TH>kgF/cm</TH><TH>grad.C</TH><TH>kg/m3</TH>
+	<?dp
+		rez = "<TH>&nbsp;</TH>";
+		for(iP = 0; iP < params.length; iP++)
+			rez += "<TH>"+SYS.strEncode(params[iP].ed, "HTML")+"</TH>";
+		return rez; ?>
+  </TR>
+  <?dp using DAQ.JavaLikeCalc.lib_doc;
+	rez = "";
+	bYear = 0;
+	SYS.localtime(bTime, 0, 0, 0, 0, 0, bYear);
+	tTime = tTime_ = SYS.mktime(0, 0, 0, 1, 0, bYear);
+	for(iMonth = 0; tTime < time && tTime < SYS.time() && iMonth < 12; tTime = tTime_) {
+		iMonth++;
+		tTime_ = SYS.mktime(0, 0, 0, 1, iMonth, bYear);
+		rez_ = "<TD style=''text-align: center;''>"+SYS.strftime(tTime,"%B")+"</TD>";
+		for(iP = 0; iP < params.length; iP++)
+			if(params[iP].isCntr == true) {
+				if(!(V1=getVal(params[iP].var,tTime,0,-1,arch,false,tTime_*1e6)).isEVal())	V1 = V1.toReal();
+				if(!(V2=getVal(params[iP].var,tTime_,0,-1,arch,false,tTime*1e6)).isEVal())	V2 = V2.toReal();
+				rez_ += "<TD style=''text-align: center;''>"+((V1.isEVal() || V2.isEVal())?tr("Empty"):abs(V2-V1).toFixed(params[iP].prec))+"</TD>";
+			} else rez_ += "<TD style=''text-align: center;''>"+averVal(params[iP].var,tTime,tTime_,params[iP].prec,arch)+"</TD>";
+		rez = "<TR>" + rez_ + "</TR>" + rez;		
+	}
+
+	rez_ = "", presentCntr = false;
+	for(iP = 0; iP < params.length; iP++)
+		if(params[iP].isCntr == true) {
+			presentCntr = true;
+			if(!(V1=getVal(params[iP].var,bTime,0,-1,arch,false,time*1e6)).isEVal())	V1 = V1.toReal();
+			if(!(V2=getVal(params[iP].var,time,0,-1,arch,false,bTime*1e6)).isEVal())	V2 = V2.toReal();
+			rez_ += "<TD style=''text-align: center;''>"+((V1.isEVal() || V2.isEVal())?tr("Empty"):abs(V2-V1).toFixed(params[iP].prec)) + "</TD>";
+		} else rez_ += "<TD/>";
+	if(presentCntr) rez += "<TR><TD style=''text-align: center;''>"+tr("Summary")+"</TD>"+rez_+"</TR>";
+
+	return rez;
+  ?>
+</TABLE>
+</body>',32,'','','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','doc','',40,'','','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','bTime','0',40,'','','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','time','0',40,'','','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','process','0',40,'','','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','n','0',32,'','wdg:../a_n','doc','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','items','',8,'','','year','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','active','1',32,'','','year','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','active','1',32,'','','set_item','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','active','1',32,'','','set_month','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','items','January (1)
+February (2)
+Marth (3)
+April (4)
+May (5)
+Juny (6)
+July (7)
+August (8)
+September (9)
+October (10)
+November (11)
+December (12)',0,'','','set_month','','','','','','');
+INSERT INTO wlb_doc_io VALUES('docRepYear','active','1',32,'','','set_val','','','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_doc_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayA','lastDay','Last day',131073,'-1|',8,'','','','Останній день','','','Последний день','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayA','lastHour','Last hour',131073,'-1|',8,'','','','Остання година','','','Последний час','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayA','lastMin','Last minute',131073,'-1|',8,'','','','Остання хвилина','','','Последняя минута','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayA','pT','Point: temperature',196613,NULL,2,'Point|T','','doc','Вузол: температура','','','Узел: температура','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayA','pQ','Point: volume',196613,NULL,2,'Point|Q','','doc','Вузол: об''єм','','','Узел: объём','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayA','pP','Point: pressure',196613,NULL,2,'Point|P','','doc','Вузол: тиск','','','Узел: давление','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayA','pDS','Point: density',196613,NULL,2,'Point|DS','','doc','Вузол: щільність','','','Узел: плотность','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayA','pDP','Point: pressure diff.',196613,NULL,2,'Point|dP','','doc','Вузол: перепад','','','Узел: перепад','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeMonthA','lastDay','Last day',131073,'-1|',8,'','','','Останній день','','','Последний день','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeMonthA','lastHour','Last hour',131073,'-1|',8,'','','','Остання година','','','Последний час','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeMonthA','lastMin','Last minute',131073,'-1|',8,'','','','Остання хвилина','','','Последняя минута','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeMonthA','lastMonth','Last month',131073,'-1|',8,'','','','Останній місяць','','','Последний месяц','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeMonthA','pT','Point: temperature',196613,NULL,2,'Point|T','','doc','Вузол: температура','','','Узел: температура','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeMonthA','pQ','Point: volume',196613,NULL,2,'Point|Q','','doc','Вузол: об''єм','','','Узел: объём','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeMonthA','pP','Point: pressure',196613,NULL,2,'Point|P','','doc','Вузол: тиск','','','Узел: давление','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeMonthA','pDS','Point: density',196613,NULL,2,'Point|DS','','doc','Вузол: щільність','','','Узел: плотность','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeMonthA','pDP','Point: pressure diff.',196613,NULL,2,'Point|dP','','doc','Вузол: перепад','','','Узел: перепад','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayA','closeDoc','Close document',131072,'0',8,'','','','Закриття документа','','','Закрывать документ','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeMonthA','closeDoc','Close document',131072,'0',8,'','','','Закриття документа','','','Закрытие документа','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','lastDay','Last day',131073,'-1|',8,'','','','Останній день','','','Последний день','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','lastHour','Last hour',131073,'-1|',8,'','','','Остання година','','','Последний час','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','lastMin','Last minute',131073,'-1|',8,'','','','Остання хвилина','','','Последняя минута','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','lastDay','Last day',131073,'-1|',8,'','','','Останній день','','','Последний день','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','lastHour','Last hour',131073,'-1|',8,'','','','Остання година','','','Последний час','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','lastMin','Last minute',131073,'-1|',8,'','','','Остання хвилина','','','Последняя минута','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','lastMonth','Last month',131073,'-1|',8,'','','','Останній місяць','','','Последний месяц','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','closeDoc','Close document',131072,'0',8,'','','','Закриття документа','','','Закрывать документ','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','closeDoc','Close document',131072,'0',8,'','','','Закриття документа','','','Закрытие документа','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p1_ed','Parameter 1: dimension',131077,'',2,'Parameter1|ed','','doc','Параметр 1: од.виміру','','','Параметр 1: ед.измерения','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p2_ed','Parameter 2: dimension',131077,'',2,'Parameter2|ed','','doc','Параметр 2: од.виміру','','','Параметр 2: ед.измерения','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p3_ed','Parameter 3: dimension',131077,'',2,'Parameter3|ed','','doc','Параметр 3: од.виміру','','','Параметр 3: ед.измерения','','','','');
@@ -12298,47 +12158,28 @@ INSERT INTO wlb_doc_uio VALUES('docMessRep','archLs','Archivers list, "{ArhMod}.
 INSERT INTO wlb_doc_uio VALUES('docMessRep','messCat','Message category',131077,'1:/^(al|OP|/sub_UI/mod_VCAEngine)/',8,'','','','Категорія повідомлень','','','Категория сообщений','','','','');
 INSERT INTO wlb_doc_uio VALUES('docMessRep','fltr','Filter: value',131077,NULL,2,'','wdg:../wdg_fltr/a_value','doc','Фільтр: значення','','','Фільтр: значение','','','','');
 INSERT INTO wlb_doc_uio VALUES('docMessRep','fltrCol','Filter: by column',131077,NULL,8,'','','doc','Фільтр: за стовпчиками','','','Фильтр: по колонкам','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayA','repHour','Report hour',131073,'9|',9,'','','','Звітний час','','','Отчётный час','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayA','arch','Archiver',131077,'FSArch.1m',1,'','','doc','Архіватор','','','Архиватор','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeMonthA','repHour','Report hour',131073,'9|',9,'','','','Звітний час','','','Отчётный час','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeMonthA','arch','Archiver',131077,'FSArch.1m',1,'','','doc','Архіватор','','','Архиватор','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayA','pTitle','Point: title',131077,'',1,'','','doc','Вузол: заголовок','','','Узол: заголовок','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeMonthA','pTitle','Point: title',131077,'',1,'','','doc','Вузол: заголовок','','','Узол: заголовок','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayA','time','Time: current',139265,'0|',8,'','','','','','','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayA','vCur','Archive: cursor: view',131073,'0|',6,'','wdg:wdg_doc/a_vCur','','Архів: курсор: огляд','','','Архив: курсор: обзор','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayA','n','Archive length, 0 for the dynamic mode',131073,'100|',9,'','','','Розмір архіву, 0 для динамічного режиму','','','Размер архива, 0 для динамического режима','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayA','bTime','Time: begin',139265,'0|',8,'','','','','','','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayA','aSize','Archive: size',131073,'0|',2,'','wdg:wdg_doc/a_aSize','','Архів: розмір','','','Архив: размер','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeDayA','aCur','Archive: cursor: current',131073,'0|',2,'','wdg:wdg_doc/a_aCur','','Архів: курсор: поточний','','','Архив: курсор: текущий','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeMonthA','n','Archive length, 0 for the dynamic mode',131073,'100|',9,'','','','Розмір архіву, 0 для динамічного режиму','','','Размер архива, 0 для динамического режима','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeMonthA','vCur','Archive: cursor: view',131073,'0|',6,'','wdg:wdg_doc/a_vCur','','Архів: курсор: огляд','','','Архив: курсор: обзор','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeMonthA','time','Time: current',139265,'0|',8,'','','','','','','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeMonthA','bTime','Time: begin',139265,'0|',8,'','','','','','','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeMonthA','aSize','Archive: size',131073,'0|',2,'','wdg:wdg_doc/a_aSize','','Архів: розмір','','','Архив: размер','','','','');
-INSERT INTO wlb_doc_uio VALUES('docGasNodeMonthA','aCur','Archive: cursor: current',131073,'0|',2,'','wdg:wdg_doc/a_aCur','','Архів: курсор: поточний','','','Архив: курсор: текущий','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','repHour','Report hour',131073,'9|',9,'','','','Звітний час','','','Отчётный час','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','arch','Archiver',131077,'FSArch.1m',1,'','','doc','Архіватор','','','Архиватор','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','repHour','Report hour',131073,'9|',9,'','','','Звітний час','','','Отчётный час','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','arch','Archiver',131077,'FSArch.1m',1,'','','doc','Архіватор','','','Архиватор','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','title','Title',131077,'',1,'','','doc','Заголовок','','','Заголовок','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','title','Title',131077,'',1,'','','doc','Заголовок','','','Заголовок','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','time','Time: current',139265,'0|',8,'','','','','','','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','vCur','Archive: cursor: view',131073,'0|',6,'','wdg:wdg_doc/a_vCur','','Архів: курсор: огляд','','','Архив: курсор: обзор','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','n','Archive length, 0 for the dynamic mode',131073,'100|',9,'','','','Розмір архіву, 0 для динамічного режиму','','','Размер архива, 0 для динамического режима','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','bTime','Time: begin',139265,'0|',8,'','','','','','','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','aSize','Archive: size',131073,'0|',2,'','wdg:wdg_doc/a_aSize','','Архів: розмір','','','Архив: размер','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','aCur','Archive: cursor: current',131073,'0|',2,'','wdg:wdg_doc/a_aCur','','Архів: курсор: поточний','','','Архив: курсор: текущий','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','n','Archive length, 0 for the dynamic mode',131073,'100|',9,'','','','Розмір архіву, 0 для динамічного режиму','','','Размер архива, 0 для динамического режима','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','vCur','Archive: cursor: view',131073,'0|',6,'','wdg:wdg_doc/a_vCur','','Архів: курсор: огляд','','','Архив: курсор: обзор','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','time','Time: current',139265,'0|',8,'','','','','','','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','bTime','Time: begin',139265,'0|',8,'','','','','','','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','aSize','Archive: size',131073,'0|',2,'','wdg:wdg_doc/a_aSize','','Архів: розмір','','','Архив: размер','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','aCur','Archive: cursor: current',131073,'0|',2,'','wdg:wdg_doc/a_aCur','','Архів: курсор: поточний','','','Архив: курсор: текущий','','','','');
 INSERT INTO wlb_doc_uio VALUES('docAlarmsRep','messCat','Message category',131077,'1:al*:*',8,'','','','Категорія повідомлень','','','Категория сообщений','','','','');
 INSERT INTO wlb_doc_uio VALUES('docMessRep','sourceCache','Source cache',131078,'<TVarObj>
 </TVarObj>
 ',0,'','','doc','Кеш джерел','','','Кеш источников','','','','');
-INSERT INTO wlb_doc_uio VALUES('docResourcesYear','aCur','Archive: cursor: current',131073,'0|',2,'','wdg:wdg_doc/a_aCur','','','','','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docResourcesYear','aSize','Archive: size',131073,'0|',2,'','wdg:wdg_doc/a_aSize','','','','','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docResourcesYear','bTime','Time: begin',139265,'0|',8,'','','','','','','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docResourcesYear','closeDoc','Close document',131072,'0',8,'','','','','','','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docResourcesYear','lastDay','Last day',131073,'-1|',8,'','','','','','','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docResourcesYear','lastHour','Last hour',131073,'-1|',8,'','','','','','','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docResourcesYear','lastMin','Last minute',131073,'-1|',8,'','','','','','','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docResourcesYear','lastMonth','Last month',131073,'-1|',8,'','','','','','','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docResourcesYear','n','Archive length, 0 for the dynamic mode',131073,'100|',9,'','','','','','','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docResourcesYear','repHour','Report hour',131073,'9|',9,'','','','','','','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docResourcesYear','time','Time: current',139265,'0|',8,'','','','','','','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docResourcesYear','vCur','Archive: cursor: view',131073,'0|',6,'','wdg:wdg_doc/a_vCur','','','','','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docResourcesYear','arch','Archiver',131077,'FSArch.1m',1,'','','doc','','','','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docResourcesYear','pDP','Point: pressure diff.',196613,NULL,2,'Point|dP','','doc','','','','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docResourcesYear','pDS','Point: density',196613,NULL,2,'Point|DS','','doc','','','','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docResourcesYear','pP','Point: pressure',196613,NULL,2,'Point|P','','doc','','','','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docResourcesYear','pQ','Point: volume',196613,NULL,2,'Point|Q','','doc','','','','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docResourcesYear','pT','Point: temperature',196613,NULL,2,'Point|T','','doc','','','','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docResourcesYear','pTitle','Point: title',131077,'',1,'','','doc','','','','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p1var','Parameter 1: variable',196613,'',2,'Parameter1|var','','doc','Параметр 1: змінна','','Parameter1|var','Параметр 1: переменная','','Parameter1|var','','');
 INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p1ed','Parameter 1: dimension',131077,'',2,'Parameter1|ed','','doc','Параметр 1: одиниця виміру','','Parameter1|ed','Параметр 1: единица измерения','','Parameter1|ed','','');
 INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p1name','Parameter 1: name',131077,'',2,'Parameter1|NAME','','doc','Параметр 1: назва','','Parameter1|NAME','Параметр 1: имя','','Parameter1|NAME','','');
@@ -12379,12 +12220,257 @@ INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p7prec','Parameter 7: precision
 INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p8prec','Parameter 8: precision',131073,'0|',2,'Parameter8|prec','','doc','Параметр 8: точність','','Parameter8|prec','Параметр 8: точность','','Parameter8|prec','','');
 INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p9prec','Parameter 9: precision',131073,'0|',2,'Parameter9|prec','','doc','Параметр 9: точність','','Parameter9|prec','Параметр 9: точность','','Parameter9|prec','','');
 INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p10prec','Parameter 10: precision',131073,'0|',2,'Parameter10|prec','','doc','Параметр 10: точність','','Parameter10|prec','Параметр 10: точность','','Parameter10|prec','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p1min','Parameter 1: minimum',196613,'',2,'Parameter1|min','','doc','Параметр 1: мінімум','','','Параметр 1: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p1max','Parameter 1: maximum',196613,'',2,'Parameter1|max','','doc','Параметр 1: максимум','','','Параметр 1: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p2min','Parameter 2: minimum',196613,'',2,'Parameter2|min','','doc','Параметр 2: мінімум','','','Параметр 2: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p2max','Parameter 2: maximum',196613,'',2,'Parameter2|max','','doc','Параметр 2: максимум','','','Параметр 2: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p3min','Parameter 3: minimum',196613,'',2,'Parameter3|min','','doc','Параметр 3: мінімум','','','Параметр 3: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p3max','Parameter 3: maximum',196613,'',2,'Parameter3|max','','doc','Параметр 3: максимум','','','Параметр 3: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p4min','Parameter 4: minimum',196613,'',2,'Parameter4|min','','doc','Параметр 4: мінімум','','','Параметр 4: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p4max','Parameter 4: maximum',196613,'',2,'Parameter4|max','','doc','Параметр 4: максимум','','','Параметр 4: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p5min','Parameter 5: minimum',196613,'',2,'Parameter5|min','','doc','Параметр 5: мінімум','','','Параметр 5: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p5max','Parameter 5: maximum',196613,'',2,'Parameter5|max','','doc','Параметр 5: максимум','','','Параметр 5: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p6min','Parameter 6: minimum',196613,'',2,'Parameter6|min','','doc','Параметр 6: мінімум','','','Параметр 6: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p6max','Parameter 6: maximum',196613,'',2,'Parameter6|max','','doc','Параметр 6: максимум','','','Параметр 6: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p7min','Parameter 7: minimum',196613,'',2,'Parameter7|min','','doc','Параметр 7: мінімум','','','Параметр 7: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p7max','Parameter 7: maximum',196613,'',2,'Parameter7|max','','doc','Параметр 7: максимум','','','Параметр 7: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p8min','Parameter 8: minimum',196613,'',2,'Parameter8|min','','doc','Параметр 8: мінімум','','','Параметр 8: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p8max','Parameter 8: maximum',196613,'',2,'Parameter8|max','','doc','Параметр 8: максимум','','','Параметр 8: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p9min','Parameter 9: minimum',196613,'',2,'Parameter9|min','','doc','Параметр 9: мінімум','','','Параметр 9: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p9max','Parameter 9: maximum',196613,'',2,'Parameter9|max','','doc','Параметр 9: максимум','','','Параметр 9: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p10min','Parameter 10: minimum',196613,'',2,'Parameter10|min','','doc','Параметр 10: мінімум','','','Параметр 10: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p10max','Parameter 10: maximum',196613,'',2,'Parameter10|max','','doc','Параметр 10: максимум','','','Параметр 10: максимум','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepInstVals','title','Title',131077,'',1,'','','doc','Заголовок','','','Заголовок','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepInstVals','params','Parameters container in the process',131078,'<TVarObj>
 </TVarObj>
 ',8,'','','doc','Контейнер опрацьованих параметрів','','','Контейнер параметров в обработке','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','arch','Archiver',131077,'FSArch.1h',1,'','','doc','Архіватор','','','Архиватор','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','stH','Start hour',131073,'8|',1,'','','doc','Початкова година','','','Начальный час','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p1name','Parameter 1: name',131077,'',2,'Parameter1|NAME','','doc','Параметр 1: назва','','','Параметр 1: имя','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p1ed','Parameter 1: dimension',131077,'',2,'Parameter1|ed','','doc','Параметр 1: одиниця виміру','','','Параметр 1: единица измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p1var','Parameter 1: variable',196613,'',2,'Parameter1|var','','doc','Параметр 1: змінна','','','Параметр 1: переменная','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p1prec','Parameter 1: precision',131073,'0|',2,'Parameter1|prec','','doc','Параметр 1: точність','','','Параметр 1: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p1cntr','Parameter 1: is counter',131072,'0',1,'Parameter1|isCntr','','doc','Параметр 1: це лічильник','','','Параметр 1: это счётчик','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p2name','Parameter 2: name',131077,'',2,'Parameter2|NAME','','doc','Параметр 2: назва','','','Параметр 2: имя','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p2ed','Parameter 2: dimension',131077,'',2,'Parameter2|ed','','doc','Параметр 2: одиниця виміру','','','Параметр 2: единица измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p2var','Parameter 2: variable',196613,'',2,'Parameter2|var','','doc','Параметр 2: змінна','','','Параметр 2: переменная','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p2prec','Parameter 2: precision',131073,'0|',2,'Parameter2|prec','','doc','Параметр 2: точність','','','Параметр 2: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p2cntr','Parameter 2: is counter',131072,'0',1,'Parameter2|isCntr','','doc','Параметр 2: це лічильник','','','Параметр 2: это счётчик','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p3name','Parameter 3: name',131077,'',2,'Parameter3|NAME','','doc','Параметр 3: назва','','','Параметр 3: имя','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p3ed','Parameter 3: dimension',131077,'',2,'Parameter3|ed','','doc','Параметр 3: одиниця виміру','','','Параметр 3: единица измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p3var','Parameter 3: variable',196613,'',2,'Parameter3|var','','doc','Параметр 3: змінна','','','Параметр 3: переменная','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p3prec','Parameter 3: precision',131073,'0|',2,'Parameter3|prec','','doc','Параметр 3: точність','','','Параметр 3: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p3cntr','Parameter 3: is counter',131072,'0',1,'Parameter3|isCntr','','doc','Параметр 3: це лічильник','','','Параметр 3: это счётчик','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p4name','Parameter 4: name',131077,'',2,'Parameter4|NAME','','doc','Параметр 4: назва','','','Параметр 4: имя','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p4ed','Parameter 4: dimension',131077,'',2,'Parameter4|ed','','doc','Параметр 4: одиниця виміру','','','Параметр 4: единица измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p4var','Parameter 4: variable',196613,'',2,'Parameter4|var','','doc','Параметр 4: змінна','','','Параметр 4: переменная','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p4prec','Parameter 4: precision',131073,'0|',2,'Parameter4|prec','','doc','Параметр 4: точність','','','Параметр 4: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p4cntr','Parameter 4: is counter',131072,'0',1,'Parameter4|isCntr','','doc','Параметр 4: це лічильник','','','Параметр 4: это счётчик','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p5name','Parameter 5: name',131077,'',2,'Parameter5|NAME','','doc','Параметр 5: назва','','','Параметр 5: имя','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p5ed','Parameter 5: dimension',131077,'',2,'Parameter5|ed','','doc','Параметр 5: одиниця виміру','','','Параметр 5: единица измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p5var','Parameter 5: variable',196613,'',2,'Parameter5|var','','doc','Параметр 5: змінна','','','Параметр 5: переменная','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p5prec','Parameter 5: precision',131073,'0|',2,'Parameter5|prec','','doc','Параметр 5: точність','','','Параметр 5: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p5cntr','Parameter 5: is counter',131072,'0',1,'Parameter5|isCntr','','doc','Параметр 5: це лічильник','','','Параметр 5: это счётчик','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p6name','Parameter 6: name',131077,'',2,'Parameter6|NAME','','doc','Параметр 6: назва','','','Параметр 6: имя','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p6ed','Parameter 6: dimension',131077,'',2,'Parameter6|ed','','doc','Параметр 6: одиниця виміру','','','Параметр 6: единица измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p6var','Parameter 6: variable',196613,'',2,'Parameter6|var','','doc','Параметр 6: змінна','','','Параметр 6: переменная','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p6prec','Parameter 6: precision',131073,'0|',2,'Parameter6|prec','','doc','Параметр 6: точність','','','Параметр 6: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p6cntr','Parameter 6: is counter',131072,'0',1,'Parameter6|isCntr','','doc','Параметр 6: це лічильник','','','Параметр 6: это счётчик','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p7name','Parameter 7: name',131077,'',2,'Parameter7|NAME','','doc','Параметр 7: назва','','','Параметр 7: имя','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p7ed','Parameter 7: dimension',131077,'',2,'Parameter7|ed','','doc','Параметр 7: одиниця виміру','','','Параметр 7: единица измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p7var','Parameter 7: variable',196613,'',2,'Parameter7|var','','doc','Параметр 7: змінна','','','Параметр 7: переменная','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p7prec','Parameter 7: precision',131073,'0|',2,'Parameter7|prec','','doc','Параметр 7: точність','','','Параметр 7: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p7cntr','Parameter 7: is counter',131072,'0',1,'Parameter7|isCntr','','doc','Параметр 7: це лічильник','','','Параметр 7: это счётчик','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p8name','Parameter 8: name',131077,'',2,'Parameter8|NAME','','doc','Параметр 8: назва','','','Параметр 8: имя','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p8ed','Parameter 8: dimension',131077,'',2,'Parameter8|ed','','doc','Параметр 8: одиниця виміру','','','Параметр 8: единица измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p8var','Parameter 8: variable',196613,'',2,'Parameter8|var','','doc','Параметр 8: змінна','','','Параметр 8: переменная','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p8prec','Parameter 8: precision',131073,'0|',2,'Parameter8|prec','','doc','Параметр 8: точність','','','Параметр 8: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p8cntr','Parameter 8: is counter',131072,'0',1,'Parameter8|isCntr','','doc','Параметр 8: це лічильник','','','Параметр 8: это счётчик','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p9name','Parameter 9: name',131077,'',2,'Parameter9|NAME','','doc','Параметр 9: назва','','','Параметр 9: имя','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p9ed','Parameter 9: dimension',131077,'',2,'Parameter9|ed','','doc','Параметр 9: одиниця виміру','','','Параметр 9: единица измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p9var','Parameter 9: variable',196613,'',2,'Parameter9|var','','doc','Параметр 9: змінна','','','Параметр 9: переменная','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p9prec','Parameter 9: precision',131073,'0|',2,'Parameter9|prec','','doc','Параметр 9: точність','','','Параметр 9: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p9cntr','Parameter 9: is counter',131072,'0',1,'Parameter9|isCntr','','doc','Параметр 9: це лічильник','','','Параметр 9: это счётчик','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p10name','Parameter 10: name',131077,'',2,'Parameter10|NAME','','doc','Параметр 10: назва','','','Параметр 10: имя','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p10ed','Parameter 10: dimension',131077,'',2,'Parameter10|ed','','doc','Параметр 10: одиниця виміру','','','Параметр 10: единица измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p10var','Parameter 10: variable',196613,'',2,'Parameter10|var','','doc','Параметр 10: змінна','','','Параметр 10: переменная','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p10prec','Parameter 10: precision',131073,'0|',2,'Parameter10|prec','','doc','Параметр 10: точність','','','Параметр 10: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p10cntr','Parameter 10: is counter',131072,'0',1,'Parameter10|isCntr','','doc','Параметр 10: це лічильник','','','Параметр 10: это счётчик','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p1min','Parameter 1: minimum',196613,'',2,'Parameter1|min','','doc','Параметр 1: мінімум','','','Параметр 1: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p1max','Parameter 1: maximum',196613,'',2,'Parameter1|max','','doc','Параметр 1: максимум','','','Параметр 1: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p2min','Parameter 2: minimum',196613,'',2,'Parameter2|min','','doc','Параметр 2: мінімум','','','Параметр 2: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p2max','Parameter 2: maximum',196613,'',2,'Parameter2|max','','doc','Параметр 2: максимум','','','Параметр 2: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p3min','Parameter 3: minimum',196613,'',2,'Parameter3|min','','doc','Параметр 3: мінімум','','','Параметр 3: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p3max','Parameter 3: maximum',196613,'',2,'Parameter3|max','','doc','Параметр 3: максимум','','','Параметр 3: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p4min','Parameter 4: minimum',196613,'',2,'Parameter4|min','','doc','Параметр 4: мінімум','','','Параметр 4: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p4max','Parameter 4: maximum',196613,'',2,'Parameter4|max','','doc','Параметр 4: максимум','','','Параметр 4: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p5min','Parameter 5: minimum',196613,'',2,'Parameter5|min','','doc','Параметр 5: мінімум','','','Параметр 5: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p5max','Parameter 5: maximum',196613,'',2,'Parameter5|max','','doc','Параметр 5: максимум','','','Параметр 5: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p6min','Parameter 6: minimum',196613,'',2,'Parameter6|min','','doc','Параметр 6: мінімум','','','Параметр 6: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p6max','Parameter 6: maximum',196613,'',2,'Parameter6|max','','doc','Параметр 6: максимум','','','Параметр 6: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p7min','Parameter 7: minimum',196613,'',2,'Parameter7|min','','doc','Параметр 7: мінімум','','','Параметр 7: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p7max','Parameter 7: maximum',196613,'',2,'Parameter7|max','','doc','Параметр 7: максимум','','','Параметр 7: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p8min','Parameter 8: minimum',196613,'',2,'Parameter8|min','','doc','Параметр 8: мінімум','','','Параметр 8: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p8max','Parameter 8: maximum',196613,'',2,'Parameter8|max','','doc','Параметр 8: максимум','','','Параметр 8: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p9min','Parameter 9: minimum',196613,'',2,'Parameter9|min','','doc','Параметр 9: мінімум','','','Параметр 9: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p9max','Parameter 9: maximum',196613,'',2,'Parameter9|max','','doc','Параметр 9: максимум','','','Параметр 9: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p10min','Parameter 10: minimum',196613,'',2,'Parameter10|min','','doc','Параметр 10: мінімум','','','Параметр 10: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','p10max','Parameter 10: maximum',196613,'',2,'Parameter10|max','','doc','Параметр 10: максимум','','','Параметр 10: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','params','Parameters container in the process',131078,'<TVarObj>
+</TVarObj>
+',0,'','','doc','Контейнер опрацьованих параметрів','','','Контейнер параметров в обработке','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p1name','Parameter 1: name',131077,'',2,'Parameter1|NAME','','doc','Параметр 1: назва','','','Параметр 1: имя','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p1ed','Parameter 1: dimension',131077,'',2,'Parameter1|ed','','doc','Параметр 1: одиниця виміру','','','Параметр 1: единица измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p1var','Parameter 1: variable',196613,'',2,'Parameter1|var','','doc','Параметр 1: змінна','','','Параметр 1: переменная','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p1prec','Parameter 1: precision',131073,'0|',2,'Parameter1|prec','','doc','Параметр 1: точність','','','Параметр 1: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p1cntr','Parameter 1: is counter',131072,'0',1,'Parameter1|isCntr','','doc','Параметр 1: це лічильник','','','Параметр 1: это счётчик','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p2name','Parameter 2: name',131077,'',2,'Parameter2|NAME','','doc','Параметр 2: назва','','','Параметр 2: имя','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p2ed','Parameter 2: dimension',131077,'',2,'Parameter2|ed','','doc','Параметр 2: одиниця виміру','','','Параметр 2: единица измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p2var','Parameter 2: variable',196613,'',2,'Parameter2|var','','doc','Параметр 2: змінна','','','Параметр 2: переменная','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p2prec','Parameter 2: precision',131073,'0|',2,'Parameter2|prec','','doc','Параметр 2: точність','','','Параметр 2: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p2cntr','Parameter 2: is counter',131072,'0',1,'Parameter2|isCntr','','doc','Параметр 2: це лічильник','','','Параметр 2: это счётчик','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p3name','Parameter 3: name',131077,'',2,'Parameter3|NAME','','doc','Параметр 3: назва','','','Параметр 3: имя','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p3ed','Parameter 3: dimension',131077,'',2,'Parameter3|ed','','doc','Параметр 3: одиниця виміру','','','Параметр 3: единица измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p3var','Parameter 3: variable',196613,'',2,'Parameter3|var','','doc','Параметр 3: змінна','','','Параметр 3: переменная','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p3prec','Parameter 3: precision',131073,'0|',2,'Parameter3|prec','','doc','Параметр 3: точність','','','Параметр 3: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p3cntr','Parameter 3: is counter',131072,'0',1,'Parameter3|isCntr','','doc','Параметр 3: це лічильник','','','Параметр 3: это счётчик','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p4name','Parameter 4: name',131077,'',2,'Parameter4|NAME','','doc','Параметр 4: назва','','','Параметр 4: имя','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p4ed','Parameter 4: dimension',131077,'',2,'Parameter4|ed','','doc','Параметр 4: одиниця виміру','','','Параметр 4: единица измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p4var','Parameter 4: variable',196613,'',2,'Parameter4|var','','doc','Параметр 4: змінна','','','Параметр 4: переменная','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p4prec','Parameter 4: precision',131073,'0|',2,'Parameter4|prec','','doc','Параметр 4: точність','','','Параметр 4: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p4cntr','Parameter 4: is counter',131072,'0',1,'Parameter4|isCntr','','doc','Параметр 4: це лічильник','','','Параметр 4: это счётчик','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p5name','Parameter 5: name',131077,'',2,'Parameter5|NAME','','doc','Параметр 5: назва','','','Параметр 5: имя','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p5ed','Parameter 5: dimension',131077,'',2,'Parameter5|ed','','doc','Параметр 5: одиниця виміру','','','Параметр 5: единица измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p5var','Parameter 5: variable',196613,'',2,'Parameter5|var','','doc','Параметр 5: змінна','','','Параметр 5: переменная','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p5prec','Parameter 5: precision',131073,'0|',2,'Parameter5|prec','','doc','Параметр 5: точність','','','Параметр 5: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p5cntr','Parameter 5: is counter',131072,'0',1,'Parameter5|isCntr','','doc','Параметр 5: це лічильник','','','Параметр 5: это счётчик','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p6name','Parameter 6: name',131077,'',2,'Parameter6|NAME','','doc','Параметр 6: назва','','','Параметр 6: имя','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p6ed','Parameter 6: dimension',131077,'',2,'Parameter6|ed','','doc','Параметр 6: одиниця виміру','','','Параметр 6: единица измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p6var','Parameter 6: variable',196613,'',2,'Parameter6|var','','doc','Параметр 6: змінна','','','Параметр 6: переменная','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p6prec','Parameter 6: precision',131073,'0|',2,'Parameter6|prec','','doc','Параметр 6: точність','','','Параметр 6: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p6cntr','Parameter 6: is counter',131072,'0',1,'Parameter6|isCntr','','doc','Параметр 6: це лічильник','','','Параметр 6: это счётчик','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p7name','Parameter 7: name',131077,'',2,'Parameter7|NAME','','doc','Параметр 7: назва','','','Параметр 7: имя','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p7ed','Parameter 7: dimension',131077,'',2,'Parameter7|ed','','doc','Параметр 7: одиниця виміру','','','Параметр 7: единица измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p7var','Parameter 7: variable',196613,'',2,'Parameter7|var','','doc','Параметр 7: змінна','','','Параметр 7: переменная','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p7prec','Parameter 7: precision',131073,'0|',2,'Parameter7|prec','','doc','Параметр 7: точність','','','Параметр 7: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p7cntr','Parameter 7: is counter',131072,'0',1,'Parameter7|isCntr','','doc','Параметр 7: це лічильник','','','Параметр 7: это счётчик','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p8name','Parameter 8: name',131077,'',2,'Parameter8|NAME','','doc','Параметр 8: назва','','','Параметр 8: имя','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p8ed','Parameter 8: dimension',131077,'',2,'Parameter8|ed','','doc','Параметр 8: одиниця виміру','','','Параметр 8: единица измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p8var','Parameter 8: variable',196613,'',2,'Parameter8|var','','doc','Параметр 8: змінна','','','Параметр 8: переменная','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p8prec','Parameter 8: precision',131073,'0|',2,'Parameter8|prec','','doc','Параметр 8: точність','','','Параметр 8: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p8cntr','Parameter 8: is counter',131072,'0',1,'Parameter8|isCntr','','doc','Параметр 8: це лічильник','','','Параметр 8: это счётчик','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p9name','Parameter 9: name',131077,'',2,'Parameter9|NAME','','doc','Параметр 9: назва','','','Параметр 9: имя','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p9ed','Parameter 9: dimension',131077,'',2,'Parameter9|ed','','doc','Параметр 9: одиниця виміру','','','Параметр 9: единица измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p9var','Parameter 9: variable',196613,'',2,'Parameter9|var','','doc','Параметр 9: змінна','','','Параметр 9: переменная','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p9prec','Parameter 9: precision',131073,'0|',2,'Parameter9|prec','','doc','Параметр 9: точність','','','Параметр 9: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p9cntr','Parameter 9: is counter',131072,'0',1,'Parameter9|isCntr','','doc','Параметр 9: це лічильник','','','Параметр 9: это счётчик','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p10name','Parameter 10: name',131077,'',2,'Parameter10|NAME','','doc','Параметр 10: назва','','','Параметр 10: имя','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p10ed','Parameter 10: dimension',131077,'',2,'Parameter10|ed','','doc','Параметр 10: одиниця виміру','','','Параметр 10: единица измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p10var','Parameter 10: variable',196613,'',2,'Parameter10|var','','doc','Параметр 10: змінна','','','Параметр 10: переменная','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p10prec','Parameter 10: precision',131073,'0|',2,'Parameter10|prec','','doc','Параметр 10: точність','','','Параметр 10: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p10cntr','Parameter 10: is counter',131072,'0',1,'Parameter10|isCntr','','doc','Параметр 10: це лічильник','','','Параметр 10: это счётчик','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p1min','Parameter 1: minimum',196613,'',2,'Parameter1|min','','doc','Параметр 1: мінімум','','','Параметр 1: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p1max','Parameter 1: maximum',196613,'',2,'Parameter1|max','','doc','Параметр 1: максимум','','','Параметр 1: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p2min','Parameter 2: minimum',196613,'',2,'Parameter2|min','','doc','Параметр 2: мінімум','','','Параметр 2: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p2max','Parameter 2: maximum',196613,'',2,'Parameter2|max','','doc','Параметр 2: максимум','','','Параметр 2: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p3min','Parameter 3: minimum',196613,'',2,'Parameter3|min','','doc','Параметр 3: мінімум','','','Параметр 3: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p3max','Parameter 3: maximum',196613,'',2,'Parameter3|max','','doc','Параметр 3: максимум','','','Параметр 3: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p4min','Parameter 4: minimum',196613,'',2,'Parameter4|min','','doc','Параметр 4: мінімум','','','Параметр 4: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p4max','Parameter 4: maximum',196613,'',2,'Parameter4|max','','doc','Параметр 4: максимум','','','Параметр 4: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p5min','Parameter 5: minimum',196613,'',2,'Parameter5|min','','doc','Параметр 5: мінімум','','','Параметр 5: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p5max','Parameter 5: maximum',196613,'',2,'Parameter5|max','','doc','Параметр 5: максимум','','','Параметр 5: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p6min','Parameter 6: minimum',196613,'',2,'Parameter6|min','','doc','Параметр 6: мінімум','','','Параметр 6: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p6max','Parameter 6: maximum',196613,'',2,'Parameter6|max','','doc','Параметр 6: максимум','','','Параметр 6: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p7min','Parameter 7: minimum',196613,'',2,'Parameter7|min','','doc','Параметр 7: мінімум','','','Параметр 7: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p7max','Parameter 7: maximum',196613,'',2,'Parameter7|max','','doc','Параметр 7: максимум','','','Параметр 7: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p8min','Parameter 8: minimum',196613,'',2,'Parameter8|min','','doc','Параметр 8: мінімум','','','Параметр 8: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p8max','Parameter 8: maximum',196613,'',2,'Parameter8|max','','doc','Параметр 8: максимум','','','Параметр 8: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p9min','Parameter 9: minimum',196613,'',2,'Parameter9|min','','doc','Параметр 9: мінімум','','','Параметр 9: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p9max','Parameter 9: maximum',196613,'',2,'Parameter9|max','','doc','Параметр 9: максимум','','','Параметр 9: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p10min','Parameter 10: minimum',196613,'',2,'Parameter10|min','','doc','Параметр 10: мінімум','','','Параметр 10: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','p10max','Parameter 10: maximum',196613,'',2,'Parameter10|max','','doc','Параметр 10: максимум','','','Параметр 10: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','params','Parameters container in the process',131078,'<TVarObj>
+</TVarObj>
+',0,'','','doc','Контейнер опрацьованих параметрів','','','Контейнер параметров в обработке','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','enGraph','Enable graph',131072,'1',1,'','','doc','Ввімкнути графік','','','Включить график','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepDay','enGraph','Enable graph',131072,'1',1,'','','doc','Ввімкнути графік','','','Включить график','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepMonth','enGraph','Enable graph',131072,'1',1,'','','doc','Ввімкнути графік','','','Включить график','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','arch','Archiver',131077,'FSArch.1h',1,'','','doc','Архіватор','','','Архиватор','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','enGraph','Enable graph',131072,'1',1,'','','doc','Ввімкнути графік','','','Включить график','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p1name','Parameter 1: name',131077,'',2,'Parameter1|NAME','','doc','Параметр 1: назва','','','Параметр 1: имя','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p1ed','Parameter 1: dimension',131077,'',2,'Parameter1|ed','','doc','Параметр 1: одиниця виміру','','','Параметр 1: единица измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p1var','Parameter 1: variable',196613,'',2,'Parameter1|var','','doc','Параметр 1: змінна','','','Параметр 1: переменная','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p1prec','Parameter 1: precision',131073,'0|',2,'Parameter1|prec','','doc','Параметр 1: точність','','','Параметр 1: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p1cntr','Parameter 1: is counter',131072,'0',1,'Parameter1|isCntr','','doc','Параметр 1: це лічильник','','','Параметр 1: это счётчик','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p2name','Parameter 2: name',131077,'',2,'Parameter2|NAME','','doc','Параметр 2: назва','','','Параметр 2: имя','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p2ed','Parameter 2: dimension',131077,'',2,'Parameter2|ed','','doc','Параметр 2: одиниця виміру','','','Параметр 2: единица измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p2var','Parameter 2: variable',196613,'',2,'Parameter2|var','','doc','Параметр 2: змінна','','','Параметр 2: переменная','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p2prec','Parameter 2: precision',131073,'0|',2,'Parameter2|prec','','doc','Параметр 2: точність','','','Параметр 2: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p2cntr','Parameter 2: is counter',131072,'0',1,'Parameter2|isCntr','','doc','Параметр 2: це лічильник','','','Параметр 2: это счётчик','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p3name','Parameter 3: name',131077,'',2,'Parameter3|NAME','','doc','Параметр 3: назва','','','Параметр 3: имя','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p3ed','Parameter 3: dimension',131077,'',2,'Parameter3|ed','','doc','Параметр 3: одиниця виміру','','','Параметр 3: единица измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p3var','Parameter 3: variable',196613,'',2,'Parameter3|var','','doc','Параметр 3: змінна','','','Параметр 3: переменная','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p3prec','Parameter 3: precision',131073,'0|',2,'Parameter3|prec','','doc','Параметр 3: точність','','','Параметр 3: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p3cntr','Parameter 3: is counter',131072,'0',1,'Parameter3|isCntr','','doc','Параметр 3: це лічильник','','','Параметр 3: это счётчик','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p4name','Parameter 4: name',131077,'',2,'Parameter4|NAME','','doc','Параметр 4: назва','','','Параметр 4: имя','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p4ed','Parameter 4: dimension',131077,'',2,'Parameter4|ed','','doc','Параметр 4: одиниця виміру','','','Параметр 4: единица измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p4var','Parameter 4: variable',196613,'',2,'Parameter4|var','','doc','Параметр 4: змінна','','','Параметр 4: переменная','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p4prec','Parameter 4: precision',131073,'0|',2,'Parameter4|prec','','doc','Параметр 4: точність','','','Параметр 4: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p4cntr','Parameter 4: is counter',131072,'0',1,'Parameter4|isCntr','','doc','Параметр 4: це лічильник','','','Параметр 4: это счётчик','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p5name','Parameter 5: name',131077,'',2,'Parameter5|NAME','','doc','Параметр 5: назва','','','Параметр 5: имя','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p5ed','Parameter 5: dimension',131077,'',2,'Parameter5|ed','','doc','Параметр 5: одиниця виміру','','','Параметр 5: единица измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p5var','Parameter 5: variable',196613,'',2,'Parameter5|var','','doc','Параметр 5: змінна','','','Параметр 5: переменная','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p5prec','Parameter 5: precision',131073,'0|',2,'Parameter5|prec','','doc','Параметр 5: точність','','','Параметр 5: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p5cntr','Parameter 5: is counter',131072,'0',1,'Parameter5|isCntr','','doc','Параметр 5: це лічильник','','','Параметр 5: это счётчик','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p6name','Parameter 6: name',131077,'',2,'Parameter6|NAME','','doc','Параметр 6: назва','','','Параметр 6: имя','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p6ed','Parameter 6: dimension',131077,'',2,'Parameter6|ed','','doc','Параметр 6: одиниця виміру','','','Параметр 6: единица измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p6var','Parameter 6: variable',196613,'',2,'Parameter6|var','','doc','Параметр 6: змінна','','','Параметр 6: переменная','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p6prec','Parameter 6: precision',131073,'0|',2,'Parameter6|prec','','doc','Параметр 6: точність','','','Параметр 6: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p6cntr','Parameter 6: is counter',131072,'0',1,'Parameter6|isCntr','','doc','Параметр 6: це лічильник','','','Параметр 6: это счётчик','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p7name','Parameter 7: name',131077,'',2,'Parameter7|NAME','','doc','Параметр 7: назва','','','Параметр 7: имя','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p7ed','Parameter 7: dimension',131077,'',2,'Parameter7|ed','','doc','Параметр 7: одиниця виміру','','','Параметр 7: единица измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p7var','Parameter 7: variable',196613,'',2,'Parameter7|var','','doc','Параметр 7: змінна','','','Параметр 7: переменная','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p7prec','Parameter 7: precision',131073,'0|',2,'Parameter7|prec','','doc','Параметр 7: точність','','','Параметр 7: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p7cntr','Parameter 7: is counter',131072,'0',1,'Parameter7|isCntr','','doc','Параметр 7: це лічильник','','','Параметр 7: это счётчик','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p8name','Parameter 8: name',131077,'',2,'Parameter8|NAME','','doc','Параметр 8: назва','','','Параметр 8: имя','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p8ed','Parameter 8: dimension',131077,'',2,'Parameter8|ed','','doc','Параметр 8: одиниця виміру','','','Параметр 8: единица измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p8var','Parameter 8: variable',196613,'',2,'Parameter8|var','','doc','Параметр 8: змінна','','','Параметр 8: переменная','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p8prec','Parameter 8: precision',131073,'0|',2,'Parameter8|prec','','doc','Параметр 8: точність','','','Параметр 8: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p8cntr','Parameter 8: is counter',131072,'0',1,'Parameter8|isCntr','','doc','Параметр 8: це лічильник','','','Параметр 8: это счётчик','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p9name','Parameter 9: name',131077,'',2,'Parameter9|NAME','','doc','Параметр 9: назва','','','Параметр 9: имя','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p9ed','Parameter 9: dimension',131077,'',2,'Parameter9|ed','','doc','Параметр 9: одиниця виміру','','','Параметр 9: единица измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p9var','Parameter 9: variable',196613,'',2,'Parameter9|var','','doc','Параметр 9: змінна','','','Параметр 9: переменная','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p9prec','Parameter 9: precision',131073,'0|',2,'Parameter9|prec','','doc','Параметр 9: точність','','','Параметр 9: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p9cntr','Parameter 9: is counter',131072,'0',1,'Parameter9|isCntr','','doc','Параметр 9: це лічильник','','','Параметр 9: это счётчик','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p10name','Parameter 10: name',131077,'',2,'Parameter10|NAME','','doc','Параметр 10: назва','','','Параметр 10: имя','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p10ed','Parameter 10: dimension',131077,'',2,'Parameter10|ed','','doc','Параметр 10: одиниця виміру','','','Параметр 10: единица измерения','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p10var','Parameter 10: variable',196613,'',2,'Parameter10|var','','doc','Параметр 10: змінна','','','Параметр 10: переменная','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p10prec','Parameter 10: precision',131073,'0|',2,'Parameter10|prec','','doc','Параметр 10: точність','','','Параметр 10: точность','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p10cntr','Parameter 10: is counter',131072,'0',1,'Parameter10|isCntr','','doc','Параметр 10: це лічильник','','','Параметр 10: это счётчик','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p1min','Parameter 1: minimum',196613,'',2,'Parameter1|min','','doc','Параметр 1: мінімум','','','Параметр 1: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p1max','Parameter 1: maximum',196613,'',2,'Parameter1|max','','doc','Параметр 1: максимум','','','Параметр 1: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p2min','Parameter 2: minimum',196613,'',2,'Parameter2|min','','doc','Параметр 2: мінімум','','','Параметр 2: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p2max','Parameter 2: maximum',196613,'',2,'Parameter2|max','','doc','Параметр 2: максимум','','','Параметр 2: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p3min','Parameter 3: minimum',196613,'',2,'Parameter3|min','','doc','Параметр 3: мінімум','','','Параметр 3: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p3max','Parameter 3: maximum',196613,'',2,'Parameter3|max','','doc','Параметр 3: максимум','','','Параметр 3: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p4min','Parameter 4: minimum',196613,'',2,'Parameter4|min','','doc','Параметр 4: мінімум','','','Параметр 4: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p4max','Parameter 4: maximum',196613,'',2,'Parameter4|max','','doc','Параметр 4: максимум','','','Параметр 4: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p5min','Parameter 5: minimum',196613,'',2,'Parameter5|min','','doc','Параметр 5: мінімум','','','Параметр 5: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p5max','Parameter 5: maximum',196613,'',2,'Parameter5|max','','doc','Параметр 5: максимум','','','Параметр 5: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p6min','Parameter 6: minimum',196613,'',2,'Parameter6|min','','doc','Параметр 6: мінімум','','','Параметр 6: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p6max','Parameter 6: maximum',196613,'',2,'Parameter6|max','','doc','Параметр 6: максимум','','','Параметр 6: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p7min','Parameter 7: minimum',196613,'',2,'Parameter7|min','','doc','Параметр 7: мінімум','','','Параметр 7: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p7max','Parameter 7: maximum',196613,'',2,'Parameter7|max','','doc','Параметр 7: максимум','','','Параметр 7: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p8min','Parameter 8: minimum',196613,'',2,'Parameter8|min','','doc','Параметр 8: мінімум','','','Параметр 8: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p8max','Parameter 8: maximum',196613,'',2,'Parameter8|max','','doc','Параметр 8: максимум','','','Параметр 8: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p9min','Parameter 9: minimum',196613,'',2,'Parameter9|min','','doc','Параметр 9: мінімум','','','Параметр 9: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p9max','Parameter 9: maximum',196613,'',2,'Parameter9|max','','doc','Параметр 9: максимум','','','Параметр 9: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p10min','Parameter 10: minimum',196613,'',2,'Parameter10|min','','doc','Параметр 10: мінімум','','','Параметр 10: минимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p10max','Parameter 10: maximum',196613,'',2,'Parameter10|max','','doc','Параметр 10: максимум','','','Параметр 10: максимум','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','params','Parameters container in the process',131078,'<TVarObj>
+</TVarObj>
+',0,'','','doc','Контейнер опрацьованих параметрів','','','Контейнер параметров в обработке','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','title','Title',131077,'',1,'','','doc','Заголовок','','','Заголовок','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_mnEls_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO wlb_mnEls_incl VALUES('El_box_Alarm','El_text_alarm','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;alignment;text;',2);
 INSERT INTO wlb_mnEls_incl VALUES('El_box_Alarm','box_alarm','/wlb_mnEls/wdg_El_Alarm','name;geomX;geomY;geomW;geomH;geomXsc;geomYsc;geomZ;fillColor;elLst;',2);
@@ -19145,7 +19231,6 @@ INSERT INTO Trs VALUES('Calculation for the parameter "%1" archive at the data r
 INSERT INTO Trs VALUES('Sum, at hour','Сума, на годину','Сумма, за час');
 INSERT INTO Trs VALUES('Average and range','Середнє та діапазон','Среднее и диапазон');
 INSERT INTO Trs VALUES('Date','Дата','Дата');
-INSERT INTO Trs VALUES('Table of the instantaneous values of "%1"','Таблиця миттєвих значень "%1"','Таблица мгновенных значений "%1"');
 INSERT INTO Trs VALUES('Protocol of violations','Протокол порушень','Протокол нарушений');
 INSERT INTO Trs VALUES('Violations at %1','Порушення на %1','Нарушения за %1');
 INSERT INTO Trs VALUES('Violation','Порушення','Нарушение');
@@ -19163,6 +19248,14 @@ INSERT INTO Trs VALUES('Working shift chief:','Начальник робочої
 INSERT INTO Trs VALUES('%1   at %2 (shift %3, start hour %4)','%1   за %2 (зміна %3, початкова година %4)','%1   на %2 (смена %3, начальный час %4)');
 INSERT INTO Trs VALUES('Hours','Години','Часы');
 INSERT INTO Trs VALUES('Sum','Сума','Сумма');
+INSERT INTO Trs VALUES('The operation data at %1','Оперативні дані за %1','Оперативные данные на %1');
+INSERT INTO Trs VALUES('Summary','Сумарно','Суммарно');
+INSERT INTO Trs VALUES('begin','початок','начало');
+INSERT INTO Trs VALUES('end','кінець','конец');
+INSERT INTO Trs VALUES('Average over hour values of "%1"','Середні за годину значення за "%1"','Среднечасовые значения на "%1"');
+INSERT INTO Trs VALUES('Average over day values of "%1"','Середні за добу значення за "%1"','Среднесуточные значения на "%1"');
+INSERT INTO Trs VALUES('Month values of "%1"','Місячні значення за "%1"','Месячные значения на "%1"');
+INSERT INTO Trs VALUES('Instantaneous values of "%1"','Миттєві значення "%1"','Мгновенные значения "%1"');
 CREATE TABLE IF NOT EXISTS 'wlb_Main' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_Main VALUES('ElCadr','iVBORw0KGgoAAAANSUhEUgAAABcAAABACAIAAAB+w3u4AAAACXBIWXMAAA06AAANOgEDIh6FAAAE
 z0lEQVRYhdWX32/TVhTHv7Zv7NhO08RpcBLaauqPTcC0PYAQQkKTGJrGwx54QPsD2Z/AH8CkFiak
@@ -24745,8 +24838,29 @@ INSERT INTO prj_tmplSO VALUES('/tmplSO/so/view6','view6','','/wlb_Main/wdg_Resul
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so/view6/view6','1','','..',0,'','','',-1,0,'owner;name;grpName;',1554062066);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/control','graphCalc','','/wlb_Main/wdg_graphCalc',0,'','','',-1,0,'owner;',1562746129);
 CREATE TABLE IF NOT EXISTS 'wlb_doc' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO wlb_doc VALUES('docGasNodeDayA','','/wlb_doc/wdg_doc',0,'JavaLikeCalc.JavaScript
+INSERT INTO wlb_doc VALUES('docRepDay','','/wlb_doc/wdg_doc',0,'JavaLikeCalc.JavaScript
 if(f_start) {
+	//Init the avialable parameters
+	colors = new Array("#ae77c3", "orange", "blue", "#199696", "#3264C8", "tomato", "magenta", "#B6B600", "#69695C", "darkcyan");
+	params = new Array();
+	params.repHour = repHour;
+	for(iP = 1; iP <= 10; iP++) {
+		pO = new Object();
+		pO.name = this.doc.attr("p"+iP+"name");
+		pO.var = this.doc.attr("p"+iP+"var");
+		pO.ed = this.doc.attr("p"+iP+"ed");
+		if(pO.ed.isEVal())	pO.ed = "";
+		pO.prec = this.doc.attr("p"+iP+"prec");
+		pO.min = this.doc.attr("p"+iP+"min");
+		pO.max = this.doc.attr("p"+iP+"max");
+		pO.isCntr = this.doc.attr("p"+iP+"cntr");
+		pO.color = colors[iP-1];
+		if(pO.prec.isEVal())	pO.prec = 0;
+		if(!pO.name.isEVal() && pO.name.length && !pO.var.isEVal() && (aO=SYS.nodeAt(pO.var).arch()))
+			params.push(pO);
+	}
+	this.doc.attrSet("params", params);
+
 	if(!n) { time = SYS.time(); lastTime = 0; }
 	return;
 }
@@ -24805,9 +24919,30 @@ else if(curMin != lastMin && !(curMin%5)) {
 	SYS.localtime(doc_time, 0, 0, curHour, curDay, curMonth, curYear);
 	doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
 	if(curHour < repHour) doc_bTime -= 24*60*60;
-}','','',1000,'name;dscr;evProc;backColor;',1552226019);
-INSERT INTO wlb_doc VALUES('docGasNodeMonthA','','/wlb_doc/wdg_doc',0,'JavaLikeCalc.JavaScript
+}','','',1000,'name;dscr;evProc;backColor;',1581274696);
+INSERT INTO wlb_doc VALUES('docRepMonth','','/wlb_doc/wdg_doc',0,'JavaLikeCalc.JavaScript
 if(f_start) {
+	//Init the avialable parameters
+	colors = new Array("#ae77c3", "orange", "blue", "#199696", "#3264C8", "tomato", "magenta", "#B6B600", "#69695C", "darkcyan");
+	params = new Array();
+	params.repHour = repHour;
+	for(iP = 1; iP <= 10; iP++) {
+		pO = new Object();
+		pO.name = this.doc.attr("p"+iP+"name");
+		pO.var = this.doc.attr("p"+iP+"var");
+		pO.ed = this.doc.attr("p"+iP+"ed");
+		if(pO.ed.isEVal())	pO.ed = "";
+		pO.prec = this.doc.attr("p"+iP+"prec");
+		pO.min = this.doc.attr("p"+iP+"min");
+		pO.max = this.doc.attr("p"+iP+"max");
+		pO.isCntr = this.doc.attr("p"+iP+"cntr");
+		pO.color = colors[iP-1];
+		if(pO.prec.isEVal())	pO.prec = 0;
+		if(!pO.name.isEVal() && pO.name.length && !pO.var.isEVal() && (aO=SYS.nodeAt(pO.var).arch()))
+			params.push(pO);
+	}
+	this.doc.attrSet("params", params);
+
 	if(!n) { time = SYS.time(); lastTime = 0; }
 	return;
 }
@@ -24883,7 +25018,7 @@ else if(curMin != lastMin && !(curMin%5))	{
 	if(curDay == 1 && curHour < repHour)
 		doc_bTime = SYS.strptime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 "+repHour+":0:0", "%Y-%m-%d %H:%M:%S");
 	else doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-1 "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
-}','','',1000,'name;dscr;evProc;',1552226019);
+}','','',1000,'name;dscr;evProc;',1581274696);
 INSERT INTO wlb_doc VALUES('docUsersSet','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAC
 fklEQVRYhe2V0UrrQBBAt93ZuEnTNLVUSa0BW5Aq6A/4K/6A/+dX+CaaQsUHfSgiYquGJtlNsnMf
 FooPIpcLda+w5ynsTCZzNplN4/LycjQakd9JkiRwcHBwdHT0ZVgppZQCAESsqopS2mw2vylX1zWl
@@ -24946,7 +25081,7 @@ TfOrz0QIKZVKl5eX5XI5DMP19XUAgHhkYWHh/Px8cXFxf38/zZum2el0PM/7/PzUdT2O40qlsrKy
 Ikrp9ebmZjweO46zvLy8tbWl6/rvi6bJVqvVbrfz+bxhGN1ud35+/uDgII31ej3YaDSq1eqUfcYY
 UxRl+sifpTAMxQv76qkwDMUW+uuKU5KdTocUCoWlpaUpAv8zDw8PP/4YzQRkkwnIJhOQTSYgm0xA
 NpmAbDIB2WQCsskEZJMJyCYTkE0mIJtMQDaZgGx+vABptVpBEMhu45u02+1fCNjg1WlAidUAAAAA
-SUVORK5CYII=','/wlb_doc/wdg_docDin',1,'JavaLikeCalc.JavaScript
+SUVORK5CYII=','/wlb_doc/wdg_docDin',0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	//Init the avialable parameters
 	colors = new Array("#ae77c3", "orange", "blue", "#199696", "#3264C8", "tomato", "magenta", "#B6B600", "#69695C", "darkcyan");
@@ -24959,6 +25094,8 @@ if(f_start) {
 		pO.ed = this.doc.attr("p"+iP+"ed");
 		if(pO.ed.isEVal())	pO.ed = "";
 		pO.prec = this.doc.attr("p"+iP+"prec");
+		pO.min = this.doc.attr("p"+iP+"min");
+		pO.max = this.doc.attr("p"+iP+"max");
 		pO.color = colors[iP-1];
 		if(pO.prec.isEVal())	pO.prec = 0;
 		if(!pO.name.isEVal() && pO.name.length && !pO.var.isEVal() && (aO=SYS.nodeAt(pO.var).arch())) {
@@ -25018,7 +25155,7 @@ if(f_start) {
 	this.doc.attrSet("params", params);
 
 	doc_doc = ""; doc_time = SYS.time(); doc_bTime = doc_time-120;
-}',-1,'name;dscr;',1580750144);
+}',-1,'name;dscr;',1581234829);
 INSERT INTO wlb_doc VALUES('docDin','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAG
 f0lEQVRYhe1XS28TPRe2PddkZjKZJG1J2tKGQAlpERSWrCq27Fmx4d/wb5BAQgLBigVCLFg0CSml
 jXpLmtsMnfvF9rewFCJKCx+b8Ep5FlF8fC7z+Bz72PDly5fXrl0D/03U63W+XC7funULAJAkCYQQ
@@ -25112,104 +25249,66 @@ for(off = 0, ev_rez = ""; (sval=event.parse(0,"\n",off)).length; ) {
 	else ev_rez += sval+"\n";
 }
 event = ev_rez;','','',-1,'owner;name;dscr;geomH;backColor;',1580750144);
-INSERT INTO wlb_doc VALUES('docResourcesYear','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAE
-UklEQVRYhe1TyY4TVxS99w01enZX242h1crgQEACReldWJBvIZ8X1uySiAU/EKEIQmhQD+7BrrZd
-rqpXb8rCjVNpGiGRRaUln9U9R+de3VP3Ff70+HGv15NSTuK43WoBgNY6F2I0GsH/CT8+enTz5gAR
-AfHhDw8BIEnmz58/Z2mWTSaTRqOhlEqSpN1uCyGUUq7rVr3zvzAajZIkqdVCRPzt11+W4uvXf+Fg
-MDg6Oqp2uc/G1tYWM8YYY6re5DNhjCFV7/BfsQ5QNdYBqsY6QNVYB6ga6wBVYx2gaqwDVI11gKpx
-/QNsbm5WvcPnIwgCQsg1PgLitX9CeN0DXPsLrANUjnWAqrEOUDXwyZOfs8UiiiLHdQghvucba4wx
-iAgASmlrLaWEIJkn8+l0Gm1EjusopQihCKC0AgDX9bIs8zw3js8D33c9TykJFiilSIiSUhvDOQNA
-a4wxZhLHUbShtUYkiGitMcYQQjh3pJSMUSWV0moynjSbTc/zKKNKaQDre36W55QSBBSFODw8ZDKI
-xmTj9zcjh7HC2G+++mLY4SI+brfb9Vrdgp3P5tpoznin2yFITk9Pm40moWQ2m7uuwzmXhUyztN/v
-KakopWEYaqWVVq1WazKZJEnS6XRd10HEg4PDer0GAIPBgFAyPZ+KQiCSrX5fCLFIF0II13Udx+ne
-7ABA3IkXiwXjzHGcTrutjSGIJyenxlrH4dvbt4qiYH+MZqS15fW/nOaKU3xxJlmRDjv1weAWAMTn
-MeU8cGqdTmdJw3qdco6Iruv5QdButd6+e+t6frcb7e/vI9Io6u293WOMSaUtkO3tnVqtBgBv9t60
-250bN26srn94NGo0Gr3NHgC4nn86HodB2O/3V4YkPajXG71eb6W8+vOVVvr27dtLOp3O2P2m9L0T
-gog1Evh+LoTnuotkLgsBAKoossXCaCWLcEnTRWK15pynaYJgZeAXea6NloUQIstzIQsh8lyAdTlP
-F/PQ91yHA4DIMlUUy7FL5FnKKF0pIsvAGFm0S4aMIMiiVW7J0mzVorVmfhAgYrS56ThOmqZ37t57
-+fLlg7v3LhoKyRw3iqJLNI7jlU65c2c4BAAk7P6DbwGAO+5wOIzjuF/qdTx/OByW/7+w1vi6pHhB
-eMkQhLVLitL2u+93Pc9bUs4dRglyxhhBtMZhlFPkjHCKFw6KBK6gZX3lv1Rc7i2NvVL5pKE8eUkJ
-ASaVlkqHRTEeTzY2No6OTxHp3rv95VvMCzUen9UarfcXuKBlPRfy+HTcbDaVtgdHx91uN8uLk7OJ
-1rrcu0jzs3Fcq9dX20xnyfksWX3OZJGO42kYhivDbL6IpzPfD/5JgHTv3f7Ozs77gxh8+vTp7u7u
-kltrEVEpxRi7cJTqMr3Sc6n4WO/HlE8aPlSePXvG8jzXWpdNiLhSVrXveQDgcL7UV8WV4rIoez6k
-ZaWQ0uH8SoMoirJCKbXWAoC11hhjjfkbm6ZFmUS8PqQAAAAASUVORK5CYII=','/wlb_doc/wdg_doc',0,'JavaLikeCalc.JavaScript
+INSERT INTO wlb_doc VALUES('docRepYear','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAD
+f0lEQVRYhe2WzUvrShiHZ95M2qZprGkTbYsUUatiwYULu3QhFMStKxfn/HEuxYXuBN2Ii1IUddGC
+VRGs2tbW2ERT8jm5i0ApnHvPveqFcCDPbvL+3mGezDAJ/vnjRzweNy0LAKjr8jyvahoAMACe571/
+fFBKt7e3bdvmeZ5lWUmSEEKO4+zv729tbXmehzHGGDuOwzBMPB53HMcwDNd1GYYBANM0I5EIy7KR
+SAR9Etd1LcsaDAaDwWBiYgIAhqX39/e7u7vz83MSjcVkWfaftjsdjuMQQilRdFzXsm3LtimlPM9T
+SjmOA4BcLocQMgyD53mGYVRVdV3X8zxZlj3PS6fThmFEo9FWq2XbdiQSEQRBVVVZltPp9GcFTNPE
+GL++vjIMk8vlWJYdlnRd7/V6HMfhvb29fD7/2akRQpRSSukXGv9HGo0GWVxcXFpaCnYdXwYAyDen
+2NnZ8U9XoVBoNptvb2+maZZKJZZlCSGKotzc3MiyLIoipXRsbCyVSjWbzUqlsrm5+fj4KElSsVj8
+lsM3BVZXVwVB0HW90+m0221KqSRJrVZLluVGo3FyciJJ0sPDQ71eNwyjVqv1er1WqzU/Pz87O7u2
+tvbN1SOEcK1W+3OPULVa/e4OBA4xDKPT6QzH/v39t9HflH7Df+n618w/BSzLIpqmJRKJw8PD8fHx
+qampyclJURQvLy/7/b5pmqlU6unpqVQqZbPZfr8viiJCSFGUarUajUaLxeLV1RUhBABs2yaEZLPZ
+s7MzSZLK5TLGGCHkd7muu7u7u7GxcXR0lM/nFUXhOM4wjPX1dYZh/Ey32724uACAlZWVarVKCNF1
+vVwucxznBw4ODnieRwgZhrGwsDA3N6dpGj4+Ps5kMkMnVVWTySRCyLZtXdcppclkEmMMAMPSKM/P
+zwDAsmwsFrMsyzccZbRLURTXdW3bTiaThJBoNPpr5uPjA2NsWZbjOIIgxGKxYUDTNABwHAchRAhJ
+JBL39/cEAEZ3hxDiDwHg9PS0UCgMv9PD0iidTufl5WVmZkZV1Vwu5/9ojDLa1e122+12JpPpdruE
+kOXl5V8zlUollUoBgCRJwzfrB/r9/u3tLc/zgiBMT0/7vyrhLRQ0oUDQhAJBEwoETSgQNKFA0IQC
+QRMKBE0oEDShQNCEAkETCgRNKBA0oUDQ/PECpF6v67oe9DK+yPX19V9cfaZn+qxMfgAAAABJRU5E
+rkJggg==','/wlb_doc/wdg_doc',0,'JavaLikeCalc.JavaScript
 if(f_start) {
-	if(!n) { time = SYS.time(); lastTime = 0; }
-	return;
-}
-
-curMin = curHour = curDay = curMonth = curYear = 0;
-
-for(off = 0, ev_rez = ""; (ev_cur=event.parse(0,"\n",off)).length; )
-	if(ev_cur == "ws_FocusIn:/doc")	ev_rez += "ws_FocusIn";
-	else ev_rez += ev_cur;
-event = ev_rez;
-
-//Build the document dynamically
-if(!n) {
-	if(time == lastTime)	return;
-
-	if(abs(time-lastTime) == 30*24*60*60)	time -= 10*24*60*60;
-
-	time = min(time, SYS.time());
-
-	SYS.localtime(time, 0, curMin, curHour, curDay, curMonth, curYear);
-	if(curDay == 1 && (curHour < repHour || (curHour == repHour && !curMin))) {
-		doc_bTime = SYS.mktime(0, 0, repHour, 1, curMonth ? curMonth-1 : 11, curMonth?curYear:curYear-1);
-		doc_time = SYS.mktime(0, 0, repHour, 1, curMonth, curYear);
+	//Init the avialable parameters
+	colors = new Array("#ae77c3", "orange", "blue", "#199696", "#3264C8", "tomato", "magenta", "#B6B600", "#69695C", "darkcyan");
+	params = new Array();
+	for(iP = 1; iP <= 10; iP++) {
+		pO = new Object();
+		pO.name = this.doc.attr("p"+iP+"name");
+		pO.var = this.doc.attr("p"+iP+"var");
+		pO.ed = this.doc.attr("p"+iP+"ed");
+		if(pO.ed.isEVal())	pO.ed = "";
+		pO.prec = this.doc.attr("p"+iP+"prec");
+		pO.min = this.doc.attr("p"+iP+"min");
+		pO.max = this.doc.attr("p"+iP+"max");
+		pO.isCntr = this.doc.attr("p"+iP+"cntr");
+		pO.color = colors[iP-1];
+		if(pO.prec.isEVal())	pO.prec = 0;
+		if(!pO.name.isEVal() && pO.name.length && !pO.var.isEVal() && (aO=SYS.nodeAt(pO.var).arch()))
+			params.push(pO);
 	}
-	else	{
-		doc_bTime = SYS.mktime(0, 0, repHour, 1, curMonth, curYear);
-		doc_time = SYS.mktime(0, 0, repHour, 1, curMonth+1, curYear);
-	}
+	this.doc.attrSet("params", params);
 
-	time = lastTime = doc_time;
-	bTime = time - 30*24*60*60; // doc_bTime;
-	doc_doc = "";
+	curYear = 0;
+	SYS.localtime(SYS.time(), 0, 0, 0, 0, 0, curYear);
+	year_value = curYear;
+	year_items = "";
+	while(curYear > year_value.toInt()-10)	year_items += (year_items.length?"\n":"")+(curYear--);
+
+	toBuild = true;
 
 	return;
 }
 
-//Document generation one per hour 
-curMin = curHour = curDay = curMonth = curYear = 0;
-SYS.localtime(SYS.time(), 0, curMin, curHour, curDay, curMonth, curYear);
-if(!doc_bTime) {
-	if(curDay == 1 && curHour < repHour)
-		doc_bTime = SYS.strptime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
-	else doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-1 "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
-}
-if(lastHour < 0 || lastDay < 0 || lastMin < 0 || lastMonth < 0)
-	SYS.localtime(doc_bTime, 0, lastMin, lastHour, lastDay, lastMonth);
+for(off = 0; (ev_cur=event.parse(0,"\n",off)).length; )
+	//this.messInfo("ev_cur="+ev_cur);
+	if(ev_cur == "ws_CombChange:/year")	toBuild = true;
 
-//Archive last not closed document
-if(closeDoc == true) { if(!doc_process)	{ this.doc.attrSet("aCur", -1);/*doc_aCur = -1;*/ closeDoc = false; } }
-else if(doc_time && doc_time < doc_bTime)	{
-	closeDoc = true;
-	SYS.localtime(doc_time, 0, 0, 0, curDay, curMonth, curYear);
-	if(curDay == 1 && curHour < repHour) {
-		doc_time = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-1 "+repHour+":0:0", "%Y-%m-%d %H:%M:%S");
-		doc_bTime = SYS.strptime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 "+repHour+":0:0", "%Y-%m-%d %H:%M:%S");
-	}
-	else {
-		doc_time = SYS.strptime(""+((curMonth==11)?(curYear+1):curYear)+"-"+((curMonth==11)?1:curMonth+2)+"-1 "+repHour+":0:0", "%Y-%m-%d %H:%M:%S");
-		doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-1 "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
-	}
-}
-// Archive the document
-else if(curMonth != lastMonth && curDay >= 1 && curHour >= repHour && curMin >= 3)	{
-	closeDoc = true;
-	doc_time = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-1 "+repHour+":0:0", "%Y-%m-%d %H:%M:%S");
-	lastMonth = curMonth;
-}
-// Periodic not full update
-else if(curMin != lastMin && !(curMin%5))	{
-	lastMin = curMin;
-	doc_time = SYS.time() - 5*60;
-	SYS.localtime(doc_time, 0, 0, curHour, curDay, curMonth, curYear);
-	if(curDay == 1 && curHour < repHour)
-		doc_bTime = SYS.strptime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 "+repHour+":0:0", "%Y-%m-%d %H:%M:%S");
-	else doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-1 "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
-}','','',1000,'owner;name;dscr;evProc;',1560241735);
+if(toBuild) {
+	toBuild = false;
+
+	doc_bTime = SYS.mktime(0, 0, 0, 1, 0, year_value.toInt());
+	doc_time = SYS.mktime(0, 0, 0, 1, 0, year_value.toInt()+1)-1;
+}','','',1000,'owner;name;dscr;evProc;',1581273164);
 CREATE TABLE IF NOT EXISTS 'VCAPrjs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"USER" TEXT DEFAULT 'root' ,"GRP" TEXT DEFAULT 'UI' ,"PERMIT" INTEGER DEFAULT '436' ,"PER" INTEGER DEFAULT '100' ,"STYLE" INTEGER DEFAULT '-1' ,"EN_BY_NEED" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 INSERT INTO VCAPrjs VALUES('tmplSO','Signal groups (template)','Групи сигналізації (шаблон)','Группы сигнализаций (шаблон)','The projects'' template of visualisation based on signal groups.
 Author: Roman Savochenko <roman@oscada.org>

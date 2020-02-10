@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_run.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -347,6 +347,8 @@ void VisRun::initHost( )
 
 int VisRun::cntrIfCmd( XMLNode &node, bool glob, bool main )
 {
+    node.setAttr("reforwardRedundOff", "1");	//To prevent for redundancy
+
     if(masterPg() && conErr && (!main || (time(NULL)-conErr->property("tm").toLongLong()) < conErr->property("tmRest").toInt())) {
 	if(main && conErr->property("labTmpl").toString().size())
 	    conErr->setText(conErr->property("labTmpl").toString().arg(conErr->property("tmRest").toInt()-(time(NULL)-conErr->property("tm").toLongLong())));

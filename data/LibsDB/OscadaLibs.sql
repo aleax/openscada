@@ -19,12 +19,14 @@ DOC: Libs_Main|Libs/Main','Бібліотеку створено для нада
 Автор: Роман Савоченко <roman@oscada.org>
 Засновано: 2006
 Версія: 2.0.0
-Ліцензія: GPLv2','tmplib_base','Основная библиотека','Библиотека создана для предоставления основных шаблонов обработки DAQ-источников и производных сервисов.
+Ліцензія: GPLv2
+DOC: Libs_Main|Libs/Main','tmplib_base','Основная библиотека','Библиотека создана для предоставления основных шаблонов обработки DAQ-источников и производных сервисов.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Основано: 2006
 Версия: 2.0.0
-Лицензия: GPLv2');
+Лицензия: GPLv2
+DOC: Libs_Main|Libs/Main');
 INSERT INTO ParamTemplLibs VALUES('DevLib','Industrial devices','Промислові пристрої','The user protocol devices library created to provide access to industrial device''s data through network, like to common industrial automation devices and wide resources counters, with protocols simple enough to implement into the User Protocol module, using the presented complex protocols (ModBus, OPC_UA, HTTP) or directly on the internal like to Java language.
 
 The template''s names and their parameters are available in languages: English, Ukrainian and Russian. Their source code wrote in the human-language independent mode with calls for the translations by the function tr() and the message''s translation also allowed for English, Ukrainian and Russian.
@@ -211,7 +213,8 @@ INSERT INTO flb_doc_io VALUES('diagram','tmpl','SVG-template',0,4,'<svg xmlns="h
     <g id="scHor" />
     <!--Curves area -->
     <g id="drawArea" />
-</svg>',0,6,'Шаблон','','Шаблон','');
+</svg>',0,7,'Шаблон','','Шаблон','');
+INSERT INTO flb_doc_io VALUES('diagram','arch','Archiver',0,0,'',0,6,'Архіватор','','Архиватор','');
 CREATE TABLE IF NOT EXISTS 'flb_regEl_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"uk#DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DEF" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
 INSERT INTO flb_regEl_io VALUES('pidUnif','var','Variable','Змінна',2,0,'0','',0,0,'Переменная','');
 INSERT INTO flb_regEl_io VALUES('pidUnif','sp','Setpoint','Завдання',2,0,'0','',0,1,'Задание','');
@@ -6560,7 +6563,7 @@ else if(aMax>aMin && var<aMin)	f_err="4:Нарушение нижней авар
 else if(wMax>wMin && var>wMax)	f_err="5:Нарушение верхней предупредительной границы";
 else if(wMax>wMin && var<wMin)	f_err="6:Нарушение нижней предупредительной границы";
 else f_err="0";','');
-INSERT INTO tmplib_base VALUES('digitBlock','Discrete parameters block (obsolete)','Блок дискр. параметрів (застаріле)','Блок дискр. параметров','The block for union of Discrete parameters for one device control.
+INSERT INTO tmplib_base VALUES('digitBlock','Discrete parameters block (obsolete)','Блок дискр. параметрів (застаріле)','Блок дискр. параметров (устарелое)','The block for union of Discrete parameters for one device control.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','Блок для збору дискретних параметрів, керуючих одним апаратом.
@@ -10154,7 +10157,7 @@ for(off = 0; (tEl=srcs.parseLine(0,off)).length; ) {
 	elO.scale = tEl.parse(4, ":").toInt();
 	elO.width = max(1, tEl.parse(5,":").toInt());
 	elO.beg = begin*1e6; elO.per = reqPer*1e6;
-	elO.val = elO.srcO.getVals(elO.beg, end*1e6, elO.per);
+	elO.val = elO.srcO.getVals(elO.beg, end*1e6, elO.per, arch);
 	trends.push(elO);
 }
 
@@ -10354,15 +10357,17 @@ if(hmax_ln >= 2) {
 				lab_tm = SYS.strftime(end, "%H:%M:%S");
 			else lab_tm = SYS.strftime(end, "%H:%M:%S")+"."+(end-floor(end));
 
+			markY = tArY + tArH + mrkHeight;
 			if(hvLev < 6) {
 				scHor.childAdd("text").setAttr("text-anchor","end").setAttr("stroke","none")
 					.setAttr("fill",sclMarkColor)
-					.setAttr("x",tArX+tArW).setAttr("y",tArY+tArH+mrkHeight).setText(lab_tm);
+					.setAttr("x",tArX+tArW).setAttr("y",markY).setText(lab_tm);
 				endMarkBrd = min(endMarkBrd, tArX + tArW - mrkFontSize*lab_tm.length*mrkFontWRange);
+				markY += mrkHeight;
 			}
 			scHor.childAdd("text").setAttr("text-anchor","end").setAttr("stroke","none")
 				.setAttr("fill",sclMarkColor)
-				.setAttr("x",tArX+tArW).setAttr("y",tArY+tArH+2*mrkHeight).setText(lab_dt);
+				.setAttr("x",tArX+tArW).setAttr("y",markY).setText(lab_dt);
 			endMarkBrd = min(endMarkBrd, tArX + tArW - mrkFontSize*lab_dt.length*mrkFontWRange);
 		}
 
@@ -10408,16 +10413,17 @@ if(hmax_ln >= 2) {
 
 				//SYS.messInfo("DG", "lab_tm="+lab_tm+"; hvLev="+hvLev+"; chLev="+chLev+"; i_h="+i_h);
 
-				endPosTm = endPosDt = 0, markY = tArY + tArH + mrkHeight;
+				endPosTm = endPosDt = begMarkBrd, markY = tArY + tArH + mrkHeight;
 				if(hvLev < 6) {
 					if(lab_tm.length) {
 						wdth = mrkFontSize*lab_tm.length*mrkFontWRange;
 						tpos = max(h_pos-wdth/2, 0);
-						if((tpos+wdth) < endMarkBrd && tpos > begMarkBrd) {
+						if(first_m || (tpos+wdth) < endMarkBrd && tpos > begMarkBrd) {
+							if(first_m)	tpos = max(begMarkBrd, tpos);
 							scHor.childAdd("text").setAttr("text-anchor","middle").setAttr("stroke","none")
 								.setAttr("fill",sclMarkColor)
-								.setAttr("x",floor(h_pos+0.5)).setAttr("y",floor(markY+0.5)).setText(lab_tm);
-							endPosTm = tpos+wdth;
+								.setAttr("x",floor(tpos+wdth/2+0.5)).setAttr("y",floor(markY+0.5)).setText(lab_tm);
+							endPosTm = tpos + wdth;
 						}
 					}
 					markY += mrkHeight;
@@ -10425,11 +10431,12 @@ if(hmax_ln >= 2) {
 				if(lab_dt.length) {
 					wdth = mrkFontSize*lab_dt.length*mrkFontWRange;
 					tpos = max(h_pos-wdth/2, 0);
-					if((tpos+wdth) < endMarkBrd && tpos > begMarkBrd) {
+					if(first_m || (tpos+wdth) < endMarkBrd && tpos > begMarkBrd) {
+						if(first_m)	tpos = max(begMarkBrd, tpos);
 						scHor.childAdd("text").setAttr("text-anchor","middle").setAttr("stroke","none")
 							.setAttr("fill",sclMarkColor)
-							.setAttr("x",floor(h_pos+0.5)).setAttr("y",floor(markY+0.5)).setText(lab_dt);
-						endPosDt = tpos+wdth;
+							.setAttr("x",floor(tpos+wdth/2+0.5)).setAttr("y",floor(markY+0.5)).setText(lab_dt);
+						endPosDt = tpos + wdth;
 					}
 				}
 				begMarkBrd = max(begMarkBrd, max(endPosTm,endPosDt));
@@ -10489,7 +10496,7 @@ for(iTr = 0; iTr < trends.length; iTr++) {
 	}
 }
 
-return im.save();','','',1580305083);
+return im.save();','','',1580925166);
 CREATE TABLE IF NOT EXISTS 'tmplib_LowDevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 INSERT INTO tmplib_LowDevLib VALUES('1602A','GPIO|I2C: 1602A(HD44780)','LCD Module 1602A, STN, BLUB, 16 Character x 2 Line,  5 x 8 Dots, by the direct (Raspberry PI BCM2835 GPIO) or I2C (PCF8574) wiring.
 Conditions: Default planing policy but realtime one preferred.

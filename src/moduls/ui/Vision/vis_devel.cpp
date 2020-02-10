@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2020 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1587,9 +1587,9 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 
 		req.clear()->setName("set")->setAttr("path", "/%2fprm%2fcfg%2fcp%2fcp")->
 		    setAttr("src", s_elp+"/"+s_el)->setAttr("dst", d_elp+"/"+d_el);
-		if(cntrIfCmd(req))
-		    mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
-		else {
+		int err = cntrIfCmd(req);
+		if(err)	mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
+		if(!err || err == 1) {	//Not errors or warnings
 		    if(it_nm.size()) {
 			req.clear()->setName("set")->setText(it_nm);
 			if(d_el.substr(0,4) == "prj_" || d_el.substr(0,4) == "wlb_")

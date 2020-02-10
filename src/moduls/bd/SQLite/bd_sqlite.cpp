@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.SQLite file: bd_sqlite.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.6.1"
+#define MOD_VER		"2.7.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -119,7 +119,13 @@ void MBD::postDisable( int flag )
 void MBD::enable( )
 {
     MtxAlloc res(connRes, true);
-    if(enableStat()) return;
+
+    //Reconnecting
+    if(enableStat()) {
+	sqlite3_close(m_db);
+	mEn = false;
+	//return;
+    }
 
     string fnm = TSYS::strSepParse(addr(), 0, ';');
     remove((fnm+"-journal").c_str());
@@ -176,8 +182,8 @@ void MBD::sqlReq( const string &req, vector< vector<string> > *tbl, char intoTra
     int rc, nrow = 0, ncol = 0;
     char **result = NULL;
 
-    if(tbl) tbl->clear();
     if(!enableStat())	return;
+    if(tbl) tbl->clear();	//!! Clean only for enabled DB due to the possibility of wrong cleaning the table structure
 
     MtxAlloc res(connRes, true);//!! Moved before the transaction checking for prevent the "BEGIN;" and "COMMIT;"
 				//   request's sequence breakage on high concurrency access activity
@@ -186,12 +192,24 @@ void MBD::sqlReq( const string &req, vector< vector<string> > *tbl, char intoTra
     if(intoTrans && intoTrans != EVAL_BOOL) transOpen();
     else if(!intoTrans && reqCnt) transCommit();
 
+    int repCnt = 0;
+rep:
     //Put the request
     if(mess_lev() == TMess::Debug) mess_debug((nodePath()+"tracing/").c_str(), _("Request: \"%s\""), req.c_str());
     rc = sqlite3_get_table(m_db, Mess->codeConvOut(cd_pg.c_str(),req).c_str(), &result, &nrow, &ncol, &zErrMsg);
     if(rc != SQLITE_OK) {
 	string err = _("Unknown error");
 	if(zErrMsg) { err = zErrMsg; sqlite3_free(zErrMsg); }
+
+	if(rc == SQLITE_BUSY) {	//Treat locked DBs
+	    //Try to reconnect
+	    if((repCnt++) < 3)
+		try { enable(); goto rep; } catch(TError&) { }
+	    else mess_warning(nodePath().c_str(), _("Repeated errors of requesting the DB: %s(%d)."), err.c_str(), rc);
+
+	    disable();
+	}
+
 	if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("Error of the request \"%s\": %s(%d)"), req.c_str(), err.c_str(), rc);
 	throw err_sys(100+rc, _("Error of the request \"%s\": %s(%d)"), TSYS::strEncode(req,TSYS::Limit,"50").c_str(), err.c_str(), rc);
     }

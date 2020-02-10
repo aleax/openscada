@@ -1,3 +1,25 @@
+2020-02-10 Roman (stable)
+- !!:FIX:DB.LibsDB.OscadaLibs: The JavaLikeCalc function doc.diagram fixed and improved for:
+	- appending the argument "Archiver (arch)" after the geometry arguments;
+	- fixing the main date position of the horizontal scale at the time part missing;
+	- fixing of show the first-left date-time item.
+    FIX: The templates library "Main library (base)" fixed for the link to its documentation.
+    FIX: The template "Discrete parameters block (base.digitBlock)" fixed for the mark "obsolete".
+- !!!!:DB.LibsDB.vcaBase,Model.AGLKS.vca: doc.{docRepDay(renamed docGasNodeDayA),docRepMonth(renamed docGasNodeMonthA),docRepYear(renamed docResourcesYear)}:
+	Revised during the documenting and made the dynamic translation by tr().
+    !!!!: doc.{docRepDay,docRepMonth}: Significantly rewrote, improved and made secondly usable allowing of DAQ-parameters connecting.
+    doc.docRepInstVals: The parameter attributes appended by "Minimum (min)" and "Maximum (max)" for trends.
+    doc.docRepYear: Advanced for implementing the main functions.
+- FIX:SYS,UI.QTCfg: The redundancy reforwarding fixed in early cleaning "reforwardRedundReq" just after the requests processing.
+- !:FIX:DAQ: The logical level links, include the specific ones also, in the template configuration fixed
+    in their cleaning at the links' value changing to <empty> or "val:".
+- !!:DB.SQLite: Appended for correct treating the locking of the SQLite DB files, at accessing to common libraries from different processes.
+- !!:FIX:DB.{SQLite,MySQL,PostgreSQL,FireBird}: Prevented from wrong cleaning the table information for disabled DBs.
+- FIX:UI.Vision: Fixed in updating the target page after copying items caused to a warning of their restoring from the parent base.
+- !:FIX:UI.{Vision,WebVision}: The runtime requests appended for "reforwardRedundOff"="1" to prevent their redundancy.
+    The view "Trend" of the primitive "Diagram" fixed in show the first-left date-time item.
+
+
 2020-02-03 Roman (stable)
 - !!:FIX:DB.LibsDB.OscadaLibs: doc.diagram: Fixed and improved in the trends building at the generic percent scale, calculated automatically.
     JavaLikeCalc.DevLib renamed to "Industrial devices" and descriptions of most items are updated.

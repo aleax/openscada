@@ -31,7 +31,7 @@
 <td> <a href="../Modules/SQLite.html" title="Special:MyLanguage/Modules/SQLite">SQLite</a> </td>
 <td> DB SQLite
 </td>
-<td> 2.6 </td>
+<td> 2.7 </td>
 <td> GPL2 </td>
 <td> bd_SQLite.so </td>
 <td> en,uk,ru,de </td>
@@ -41,6 +41,9 @@
 <td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2009) — the page initial translation</i></font> </td>
 <td> BD module. Provides support of the BD SQLite.
 </td></tr></table>
+<p>The module gives to OpenSCADA support of DB SQLite. DB SQLite is a small and embedded database, which supports the SQL-queries. SQLite DB is distributed under a free license. To familiarize with the database it is possible on the database website — <a class="external free" href="http://sqlite.org" rel="nofollow noreferrer noopener" target="_blank">http://sqlite.org</a>. The module is based on the library with API of the manufacturer of DB SQLite on the language "C". The module allows you to perform operations over databases, tables and contents of tables.
+</p><p>The module supports currently the concurrent work with common DB files, like to the libraries, from different processes of OpenSCADA by correct treating the files locking. So you will get warning messages while a DB file is locked, but you can successful write to it once it will be released by the transaction closing of a blocking process.
+</p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#Operations_over_the_database"><span class="tocnumber">1</span> <span class="toctext">Operations over the database</span></a></li>
@@ -51,8 +54,6 @@
 </ul>
 </div>
 
-<p>The module gives to OpenSCADA support of DB SQLite. DB SQLite is a small and embedded database, which supports the SQL-queries. SQLite DB is distributed under a free license. To familiarize with the database it is possible on the database website — <a class="external free" href="http://sqlite.org" rel="nofollow noreferrer noopener" target="_blank">http://sqlite.org</a>. The module is based on the library with API of the manufacturer of DB SQLite on the language "C". The module allows you to perform operations over databases, tables and contents of tables.
-</p>
 <h2><span class="mw-headline" id="Operations_over_the_database"><span class="mw-headline-number">1</span> Operations over the database</span></h2>
 <p>The operations of opening and closing of the database is supported, with the possibility of creating a new database when you open and delete existing at the close. In terms of the subsystem "DB" of OpenSCADA, opening of DB is its registration for further using of the program. It also supports the operation of requesting the list of tables in the database.
 </p><p>The SQLite database is addressed by specifying the name of the database file in the following format "<b>{FileDBPath}</b>". Where:
@@ -147,5 +148,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/SQLite/en">Modules/SQLite/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2660</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/SQLite/en">Modules/SQLite/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2661</td></tr></table></body>
 </html>
