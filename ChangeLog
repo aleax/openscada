@@ -1,3 +1,9 @@
+2020-02-11 Roman (stable)
+- !:DB.LibsDB.OscadaLibs: doc.diagram: Appended for the big time range interval per month support.
+- !:FIX:Model.AGLKS.St: Fixed in transfering to SQL, appending the option --newlines to sqlite3, but only that is supported by old sqlite3 versions.
+- !:UI.{Vision,WebVision}: The view "Trends" of the primitive "Diagram" appended for the big time range interval per month support.
+
+
 2020-02-10 Roman (stable)
 - !!:FIX:DB.LibsDB.OscadaLibs: The JavaLikeCalc function doc.diagram fixed and improved for:
 	- appending the argument "Archiver (arch)" after the geometry arguments;

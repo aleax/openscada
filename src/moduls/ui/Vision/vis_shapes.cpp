@@ -2949,16 +2949,16 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 		pnt.drawText(markBrd,tAr.y()+tAr.height()+mrkHeight,labH.c_str());
 	    }
 	    //  Draw grid and/or markers
-	    for(double i_h = fftBeg; (fftEnd-i_h)/hDiv > -0.1; i_h += hDiv) {
+	    for(double iH = fftBeg; (fftEnd-iH)/hDiv > -0.1; iH += hDiv) {
 		//   Draw grid
 		pnt.setPen(grdPen);
-		int h_pos = tAr.x()+(int)((double)tAr.width()*(i_h-fftBeg)/(fftEnd-fftBeg));
+		int h_pos = tAr.x()+(int)((double)tAr.width()*(iH-fftBeg)/(fftEnd-fftBeg));
 		if(sclHor&FD_GRD) pnt.drawLine(h_pos, tAr.y(), h_pos, tAr.y()+tAr.height());
 		else pnt.drawLine(h_pos, tAr.y()+tAr.height()-3, h_pos, tAr.y()+tAr.height()+3);
 
 		if(sclHor&FD_MARKS) {
 		    pnt.setPen(mrkPen);
-		    labH = TSYS::strMess("%0.5g", i_h/labDiv);
+		    labH = TSYS::strMess("%0.5g", iH/labDiv);
 		    int wdth = pnt.fontMetrics().width(labH.c_str());
 		    int tpos = vmax(h_pos-wdth/2, 0);
 		    if((tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3))
@@ -3321,10 +3321,10 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		pnt.setPen(mrkPen);
 		tm_t = tPict/1000000;
 		localtime_r(&tm_t, &ttm);
-		lab_dt = TSYS::strMess("%d-%02d-%d",ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900);
-		if(ttm.tm_sec == 0 && tPict%1000000 == 0) lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
-		else if(tPict%1000000 == 0) lab_tm = TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec);
-		else lab_tm = TSYS::strMess("%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(tPict%1000000)/1e6);
+		lab_dt = TSYS::strMess("%d-%02d-%d", ttm.tm_mday, ttm.tm_mon+1, ttm.tm_year+1900);
+		if(ttm.tm_sec == 0 && tPict%1000000 == 0) lab_tm = TSYS::strMess("%d:%02d", ttm.tm_hour, ttm.tm_min);
+		else if(tPict%1000000 == 0) lab_tm = TSYS::strMess("%d:%02d:%02d", ttm.tm_hour, ttm.tm_min, ttm.tm_sec);
+		else lab_tm = TSYS::strMess("%d:%02d:%g", ttm.tm_hour, ttm.tm_min, (float)ttm.tm_sec+(float)(tPict%1000000)/1e6);
 
 		int markBrd = 0, markY = tAr.y()+tAr.height()+mrkHeight;
 		if(hvLev < 6) {
@@ -3339,19 +3339,20 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    }
 	    //  Drawing the grid and/or markers
 	    bool first_m = true;
-	    for(int64_t i_h = tBeg; true; ) {
+	    for(int64_t iH = tBeg; true; ) {
 		//   Drawing the grid
 		pnt.setPen(grdPen);
-		int h_pos = tAr.x()+tAr.width()*(i_h-tBeg)/(tPict-tBeg);
+		int h_pos = tAr.x()+tAr.width()*(iH-tBeg)/(tPict-tBeg);
 		if(sclHor&FD_GRD) pnt.drawLine(h_pos, tAr.y(), h_pos, tAr.y()+tAr.height());
 		else pnt.drawLine(h_pos, tAr.y()+tAr.height()-3, h_pos, tAr.y()+tAr.height()+3);
 
-		if(sclHor&FD_MARKS && !((i_h+UTChourDt)%hDiv) && i_h != tPict) {
+		if(sclHor&FD_MARKS && (!((iH+UTChourDt)%hDiv) || hvLev >= 7) && iH != tPict) {
 		    if(first_m) tm_t = (tBeg-(tEnd-tBeg))/1000000, localtime_r(&tm_t, &ttm1);
-		    tm_t = i_h/1000000; localtime_r(&tm_t, &ttm);
+		    tm_t = iH/1000000; localtime_r(&tm_t, &ttm);
 
 		    int chLev = 0;
-		    if((ttm.tm_mon-ttm1.tm_mon) || (ttm.tm_year-ttm1.tm_year)) chLev = 5;
+		    if(ttm.tm_year-ttm1.tm_year)	chLev = 6;
+		    else if(ttm.tm_mon-ttm1.tm_mon)	chLev = 5;
 		    else if(ttm.tm_mday-ttm1.tm_mday)	chLev = 4;
 		    else if(ttm.tm_hour-ttm1.tm_hour)	chLev = 3;
 		    else if(ttm.tm_min-ttm1.tm_min)	chLev = 2;
@@ -3360,20 +3361,22 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		    //Check for data present
 		    lab_dt.clear(), lab_tm.clear();
 		    //Date
-		    if(/*hvLev == 5 ||*/ chLev >= 4)
+		    if(hvLev == 7)
+			lab_dt = TSYS::atime2str(iH/1000000, (chLev>=6)?"%B %Y":"%B");
+		    else if(/*hvLev == 5 ||*/ chLev >= 4)
 			lab_dt = TSYS::strMess((chLev>=5?"%d-%02d-%d":"%d"), ttm.tm_mday, ttm.tm_mon+1, ttm.tm_year+1900);
 		    //Hours and minuts
 		    if((hvLev == 4 || hvLev == 3 || ttm.tm_hour || ttm.tm_min) && !ttm.tm_sec)
 			lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
 		    //Seconds
-		    else if((hvLev == 2 || ttm.tm_sec) && !(i_h%1000000))
+		    else if((hvLev == 2 || ttm.tm_sec) && !(iH%1000000))
 			lab_tm = chLev >= 2 ? TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec) :
 					      TSYS::strMess(_("%ds"),ttm.tm_sec);
 		    //Milliseconds
-		    else if(hvLev <= 1 || i_h%1000000)
-			lab_tm = chLev >= 2 ? TSYS::strMess("%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(i_h%1000000)/1e6) :
-				 chLev >= 1 ? TSYS::strMess(_("%gs"),(float)ttm.tm_sec+(float)(i_h%1000000)/1e6) :
-					      TSYS::strMess(_("%gms"),(double)(i_h%1000000)/1000.);
+		    else if(hvLev <= 1 || iH%1000000)
+			lab_tm = chLev >= 2 ? TSYS::strMess("%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(iH%1000000)/1e6) :
+				 chLev >= 1 ? TSYS::strMess(_("%gs"),(float)ttm.tm_sec+(float)(iH%1000000)/1e6) :
+					      TSYS::strMess(_("%gms"),(double)(iH%1000000)/1000.);
 
 		    int wdth, tpos, endPosTm = 0, endPosDt = 0, markY = tAr.y()+tAr.height()+mrkHeight;
 		    pnt.setPen(mrkPen);
@@ -3403,9 +3406,16 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		    first_m = false;
 		}
 		//   Next
-		if(i_h >= tPict) break;
-		i_h = ((i_h+UTChourDt)/hDiv)*hDiv + hDiv - UTChourDt;
-		if(i_h > tPict)	i_h = tPict;
+		if(iH >= tPict) break;
+		if(hvLev >= 7) {	//Per month
+		    tm_t = iH/1000000;
+		    localtime_r(&tm_t, &ttm);
+		    ttm.tm_sec = ttm.tm_min = ttm.tm_hour = 0;
+		    ttm.tm_mday = 1; ttm.tm_mon++;
+		    ttm.tm_wday = ttm.tm_yday = ttm.tm_isdst = -1;
+		    iH = 1000000ll * mktime(&ttm);
+		} else iH = ((iH+UTChourDt)/hDiv)*hDiv + hDiv - UTChourDt;
+		iH = vmin(tPict, iH);
 	    }
 	}
     }

@@ -109,7 +109,7 @@ The element''s names and their parameters are available in languages: English, U
 
 Founded: January 2008
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.0.0
+Version: 2.0.1
 License: GPLv2
 DOC: Libs_Documents|Libs/Documents','flb_doc','Бібліотека звітів та документів','Сервісні функції кадрів звітів та документів призначено для виконання характерних задач отримання звітних даних, для чого треба здійснювати якусь перевірку або підрахунок, наприклад, перевіряти достовірність та підсумовувати. Сервісною функцією може бути й формування складних даних, як то вбудованих у документ діаграм.
 
@@ -119,7 +119,7 @@ DOC: Libs_Documents|Libs/Documents','flb_doc','Бібліотека звітів
 
 Засновано: січень 2008р
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.0.0
+Версія: 2.0.1
 Ліцензія: GPLv2
 DOC: Libs_Documents|Libs/Documents','Библиотека отчётов и документов','Сервисные функции кадров отчётов и документов предназначены для выполнения характерных задач получения отчётных данных, для чего нужно осуществлять какую-то проверку или подсчёт, например, проверять достоверность и суммировать. Сервисной функцией может быть и формирование сложных данных, вроде встраиваемых в документ диаграмм.
 
@@ -129,7 +129,7 @@ DOC: Libs_Documents|Libs/Documents','Библиотека отчётов и до
 
 Основано: январь 2008г
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 2.0.0
+Версия: 2.0.1
 Лицензия: GPLv2
 DOC: Libs_Documents|Libs/Documents',1);
 INSERT INTO UserFuncLibs VALUES('regEl','Regulation elements','Regulation elements library.
@@ -2184,13 +2184,13 @@ INSERT INTO Trs VALUES('DO0','','');
 INSERT INTO Trs VALUES('DO1','','');
 INSERT INTO Trs VALUES('DS2480 is not detected.','','');
 INSERT INTO Trs VALUES('Size mismatch.','','');
-INSERT INTO Trs VALUES('day','','');
-INSERT INTO Trs VALUES('hour','','');
-INSERT INTO Trs VALUES('min','','');
-INSERT INTO Trs VALUES('s','','');
-INSERT INTO Trs VALUES('ms','','');
-INSERT INTO Trs VALUES('us','','');
-INSERT INTO Trs VALUES('ns','','');
+INSERT INTO Trs VALUES('day','день','день');
+INSERT INTO Trs VALUES('hour','год','час');
+INSERT INTO Trs VALUES('min','хвил','мин');
+INSERT INTO Trs VALUES('s','с','с');
+INSERT INTO Trs VALUES('ms','мс','мс');
+INSERT INTO Trs VALUES('us','мкс','мкс');
+INSERT INTO Trs VALUES('ns','нс','нс');
 INSERT INTO Trs VALUES('Allowed variables','Наявно змінних','Доступно переменных');
 INSERT INTO Trs VALUES('No data','Немає даних','Нет данных');
 INSERT INTO Trs VALUES('Error disabling ECHO: %1','Помилка вимкнення ЛУНИ: %1','Ошибка отключения ЕХО: %1');
@@ -10086,7 +10086,7 @@ Currently, only value archives can be used as a data source, either directly to 
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Magomed
-Version: 1.0.1
+Version: 1.2.0
 License: GPLv2','Побудова діаграми трендів у SVG, яка може надалі вбудовуватися у XHTML-документу, для даних за вказаний період часу [(end-size)...end] та із джерел srcs.
 
 Код формування діаграми засновано на коді примітиву "Діаграма" візуалізаторів, та який було доволі просто перенесено із мови C++ на вбудовану мову JavaLikeCalc. Наразі перенесено-реалізовано лише тренди!
@@ -10107,7 +10107,7 @@ License: GPLv2','Побудова діаграми трендів у SVG, яка
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсоровано: Магомед
-Версія: 1.0.1
+Версія: 1.2.0
 Ліцензія: GPLv2','Построение диаграммы трендов в SVG, которая может далее встраиваться в XHTML-документ, для данных за указанный период времени [(end-size)...end] и из источников srcs.
 
 Код формирования диаграммы основан на коде примитива "Диаграмма" визуализаторов, и который был довольно просто перенесен с языка C++ на встроенный язык JavaLikeCalc. Сейчас перенесено-реализовано только тренды!
@@ -10128,8 +10128,14 @@ License: GPLv2','Побудова діаграми трендів у SVG, яка
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсировано: Магомед
-Версия: 1.0.1
-Лицензия: GPLv2',1,10,0,'im = SYS.XMLNode();
+Версия: 1.2.0
+Лицензия: GPLv2',1,10,0,'function strChars(inS) {
+	for(inSz = 0, off = 0; off < inS.length; inSz++)
+		inS.charAt(off, "UTF-8");
+	return inSz;
+}
+
+im = SYS.XMLNode();
 im.load(tmpl, false, 3);
 if(!(drawArea=im.getElementBy("drawArea")) || !(scVer=im.getElementBy("scVer")) || !(scHor=im.getElementBy("scHor")) ||
 		(styles=im.getElementsBy("style")[0]).isEVal())
@@ -10330,14 +10336,6 @@ if(hmax_ln >= 2) {
 	else if(hLen/1 >= 2)		{ hvLev = 2; hDiv =       1; }	//Seconds
 	else if(hLen/0.001 >= 2)	{ hvLev = 1; hDiv =   0.001; }	//Milliseconds
 
-	hDiv_ = hDiv;
-	while(hLen/hDiv_ > hmax_ln)	hDiv_ *= 10;
-	while(hLen/hDiv_ < hmax_ln/5 && (1e6*hDiv_/5)%(1e6*hDiv) == 0) hDiv_ /= 5;
-	while(hLen/hDiv_ < hmax_ln/2 && (hvLev < 6 || (1e6*hDiv_/2)%(1e6*hDiv) == 0)) hDiv_ /= 2;
-	hDiv = hDiv_;
-
-	UTChourDt = SYS.strptimegm(SYS.strftime(end)) - end;
-
 	// Draw the horisontal grid and markers
 	if(sclHor&(FD_MARKS|FD_GRD)) {
 		tm_t = 0;
@@ -10371,24 +10369,34 @@ if(hmax_ln >= 2) {
 			endMarkBrd = min(endMarkBrd, tArX + tArW - mrkFontSize*lab_dt.length*mrkFontWRange);
 		}
 
+
+		hDiv_ = hDiv;
+		while(hLen/hDiv_ > hmax_ln)	hDiv_ *= 10;
+		while(hLen/hDiv_ < hmax_ln/5 && (1e6*hDiv_/5)%(1e6*hDiv) == 0) hDiv_ /= 5;
+		while(hLen/hDiv_ < hmax_ln/2 && (hvLev < 6 || (1e6*hDiv_/2)%(1e6*hDiv) == 0)) hDiv_ /= 2;
+		hDiv = hDiv_;
+
+		UTChourDt = SYS.strptimegm(SYS.strftime(end)) - end;
+
 		//  Draw grid and/or markers
 		first_m = true;
 		ttm1 = new Object();
-		for(i_h = begin; true; ) {
+		for(iH = begin; true; ) {
 			//   Draw grid
-			h_pos = tArX + tArW*(i_h-begin)/(end-begin);
+			h_pos = tArX + tArW*(iH-begin)/(end-begin);
 			if(sclHor&FD_GRD)
 				scHor.childAdd("rect").setAttr("fill",sclColor).setAttr("x",floor(h_pos+0.5)).setAttr("y",floor(tArY+0.5)).setAttr("width",1).setAttr("height",tArH);
 			else scHor.childAdd("rect").setAttr("fill",sclColor).setAttr("x",floor(h_pos+0.5)).setAttr("y",floor(tArY+tArH-3+0.5)).setAttr("width",1).setAttr("height",6);
 
 			//   Draw markers
-			if((sclHor&FD_MARKS) && !(1e6*(i_h+UTChourDt)%(1e6*hDiv)) && i_h != end) {
+			if((sclHor&FD_MARKS) && (!(1e6*(iH+UTChourDt)%(1e6*hDiv)) || hvLev >= 7) && iH != end) {
 				if(first_m)	SYS.localtime(begin-(end-begin), ttm1.sec, ttm1.min, ttm1.hour, ttm1.mday, ttm1.mon);
 				ttm = new Object();
-				SYS.localtime(i_h, ttm.sec, ttm.min, ttm.hour, ttm.mday, ttm.mon);
+				SYS.localtime(iH, ttm.sec, ttm.min, ttm.hour, ttm.mday, ttm.mon);
 
 				chLev = 0;
-				if((ttm.mon-ttm1.mon) || (ttm.year-ttm1.year)) chLev = 5;
+				if(ttm.year-ttm1.year)			chLev = 6;
+				else if(ttm.mon-ttm1.mon) 	chLev = 5;
 				else if(ttm.mday-ttm1.mday)	chLev = 4;
 				else if(ttm.hour-ttm1.hour)	chLev = 3;
 				else if(ttm.min-ttm1.min)		chLev = 2;
@@ -10397,26 +10405,28 @@ if(hmax_ln >= 2) {
 				//Checking for the data presence
 				lab_dt = lab_tm = "";
 				//Date
-				if(/*hvLev == 5 ||*/ chLev >= 4)
-					lab_dt = SYS.strftime(i_h, (chLev>=5)?"%d-%m-%Y":"%d");
+				if(hvLev == 7)
+					lab_dt = SYS.strftime(iH, (chLev>=6)?"%B %Y":"%B");
+				else if(/*hvLev == 5 ||*/ chLev >= 4)
+					lab_dt = SYS.strftime(iH, (chLev>=5)?"%d-%m-%Y":"%d");
 				//Hours and minuts
 				if((hvLev == 4 || hvLev == 3 || ttm.hour || ttm.min) && !ttm.sec)
-					lab_tm = SYS.strftime(i_h, "%H:%M");
+					lab_tm = SYS.strftime(iH, "%H:%M");
 				//Seconds
-				else if((hvLev == 2 || ttm.sec) && !((i_h-floor(i_h))*1e6))
-					lab_tm = (chLev >= 2) ? SYS.strftime(i_h, "%H:%M:%S") : (i_h%60).toPrecision(6)+tr("s");
+				else if((hvLev == 2 || ttm.sec) && !((iH-floor(iH))*1e6))
+					lab_tm = (chLev >= 2) ? SYS.strftime(iH, "%H:%M:%S") : (iH%60).toPrecision(6)+tr("s");
 				//Milliseconds
-				else if(hvLev <= 1 || (i_h-floor(i_h))*1e6)
-					lab_tm = (chLev >= 2) ? SYS.strftime(i_h, "%H:%M:%S")+(i_h-floor(i_h)).toPrecision(6).slice(1) :
-								(chLev >= 1) ? ((i_h%60)+(i_h-floor(i_h))).toPrecision(6)+tr("s") :
-													(1e3*i_h).toPrecision(6)+tr("ms");
+				else if(hvLev <= 1 || (iH-floor(iH))*1e6)
+					lab_tm = (chLev >= 2) ? SYS.strftime(iH, "%H:%M:%S")+(iH-floor(iH)).toPrecision(6).slice(1) :
+								(chLev >= 1) ? ((iH%60)+(iH-floor(iH))).toPrecision(6)+tr("s") :
+													(1e3*iH).toPrecision(6)+tr("ms");
 
-				//SYS.messInfo("DG", "lab_tm="+lab_tm+"; hvLev="+hvLev+"; chLev="+chLev+"; i_h="+i_h);
+				//SYS.messInfo("DG", "lab_tm="+lab_tm+"; hvLev="+hvLev+"; chLev="+chLev+"; iH="+iH);
 
 				endPosTm = endPosDt = begMarkBrd, markY = tArY + tArH + mrkHeight;
 				if(hvLev < 6) {
 					if(lab_tm.length) {
-						wdth = mrkFontSize*lab_tm.length*mrkFontWRange;
+						wdth = mrkFontSize*strChars(lab_tm)*mrkFontWRange;
 						tpos = max(h_pos-wdth/2, 0);
 						if(first_m || (tpos+wdth) < endMarkBrd && tpos > begMarkBrd) {
 							if(first_m)	tpos = max(begMarkBrd, tpos);
@@ -10429,7 +10439,7 @@ if(hmax_ln >= 2) {
 					markY += mrkHeight;
 				}
 				if(lab_dt.length) {
-					wdth = mrkFontSize*lab_dt.length*mrkFontWRange;
+					wdth = mrkFontSize*strChars(lab_dt)*mrkFontWRange;
 					tpos = max(h_pos-wdth/2, 0);
 					if(first_m || (tpos+wdth) < endMarkBrd && tpos > begMarkBrd) {
 						if(first_m)	tpos = max(begMarkBrd, tpos);
@@ -10445,9 +10455,13 @@ if(hmax_ln >= 2) {
 			}
 
 			//   Next
-			if(i_h >= end) break;
-			i_h = floor((i_h+UTChourDt)/hDiv)*hDiv + hDiv - UTChourDt;
-			if(i_h > end)	i_h = end;
+			if(iH >= end) break;
+			if(hvLev >= 7) {	//Per month
+				curYear = curMonth = 0;
+				SYS.localtime(iH, 0, 0, 0, 0, curMonth, curYear);
+				iH = SYS.mktime(0, 0, 0, 1, curMonth+1, curYear);
+			} else iH = floor((iH+UTChourDt)/hDiv)*hDiv + hDiv - UTChourDt;
+			iH = min(end, iH);
 		}
 	}
 }
@@ -10496,7 +10510,7 @@ for(iTr = 0; iTr < trends.length; iTr++) {
 	}
 }
 
-return im.save();','','',1580925166);
+return im.save();','','',1581442262);
 CREATE TABLE IF NOT EXISTS 'tmplib_LowDevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 INSERT INTO tmplib_LowDevLib VALUES('1602A','GPIO|I2C: 1602A(HD44780)','LCD Module 1602A, STN, BLUB, 16 Character x 2 Line,  5 x 8 Dots, by the direct (Raspberry PI BCM2835 GPIO) or I2C (PCF8574) wiring.
 Conditions: Default planing policy but realtime one preferred.
