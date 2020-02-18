@@ -753,7 +753,7 @@ string TPrmTempl::Impl::lnkHelp( )
 //* TPrmTmplLib                                   *
 //*************************************************
 TPrmTmplLib::TPrmTmplLib( const string &id, const string &name, const string &lib_db ) :
-    TConfig(&SYS->daq().at().elLib()), run_st(false), mId(cfg("ID")), work_lib_db(lib_db)
+    TConfig(&SYS->daq().at().elLib()), runSt(false), mId(cfg("ID")), work_lib_db(lib_db)
 {
     mId = id;
     setName( name );
@@ -871,7 +871,7 @@ void TPrmTmplLib::start( bool val )
 	    isErr = true;
 	}
 
-    run_st = val;
+    runSt = val;
 
     if(isErr)	throw err_sys(_("Error starting some templates."));
 }

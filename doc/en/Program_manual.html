@@ -12,7 +12,33 @@
 </div>
 			<h1 id="firstHeading" lang="en">Documents/Program manual</h1>
 		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Program_manual.html" title="Документы/Руководство по программе (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Program_manual.html" title="Документи/Посібник по програмі (100% translated)">українська</a></div></div>
-<p><i>Author:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2012) — the page initial translation</i></font>
+<div style="float:right; border:1px solid gray; width:300px; padding:2px;">
+<ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2012) — the page initial translation</i></font></li>
+<li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/ProgrammManual" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a></li></ul>
+</div>
+<p>This document is a manual of the "open source" program called "OpenSCADA". OpenSCADA represents a SCADA system built on the principles of modularity, multiplatformity and scalability.
+</p><p>As a policy of the development of the program there uses "open source" principle. This choice was done at needs of creation of a free, reliable and publicly available SCADA system. This policy allows to bring together a significant number of developers, enthusiasts and other interested persons to develop, test, improve, distribute and use the program, thus minimizing and distribution of efforts and financial costs.
+</p><p>OpenSCADA is designed for acquisition, archiving, visualization of information, performing of control actions and for other related operations charactered for full-featured SCADA systems. Due to the high level of abstraction and modularization the program can be used in a variety of related industries.
+</p><p>OpenSCADA <a href="About.html#Using" title="Special:MyLanguage/About">can be and used</a> now at:
+</p>
+<ul><li> industrial facilities as a full featured SCADA system or telemechanics;</li>
+<li> dynamic models, imitators and training apparatus of technological processes into the real-time;</li>
+<li> machine tools and industrial robots;</li>
+<li> agricultural dispatching and control systems, poultry-yards;</li>
+<li> embedded and mobile systems — environments of execution Programming Logical Controllers (PLC), robots, ...;</li>
+<li> server equipment monitoring;</li>
+<li> smart houses and home automation.</li></ul>
+<p>In the role of the common operating system (program platform) for development and using there was selected Linux OS, which is an optimal solution of the following issues:
+</p>
+<ul><li> reliability — a large part of servers and clusters running on GNU/Linux OS;</li>
+<li> flexibility/scalability — due to its openness and modularity Linux allows to build solutions to meet any requirements;</li>
+<li> availability — due to being under the license GPL the software is a fully free (libre) operational system and for high qualified users it can be also a non-cost one;</li>
+<li> popularity, advancement, support and prevalence — the system is in active development by many enthusiasts, firms and government agencies throughout the world, and is gaining wide support on the personal and the corporate marketplace.</li></ul>
+<p>While the project currently develops under the principles of multiplatformity then there is no most problem for porting the project to other operational systems (program platforms) and hardware platforms. That is planned to future and mostly already done for some platforms.
+</p><p>At the heart of the program is a modular core. And depending on what modules are installed the program can be configured to operate in role of variety servers, clients and both clients and servers in the same time and into the same program. It allows for implementation of the client-server architecture on the same components/modules, saving machine memory, disk space and expensive programming time.
+</p><p>Server configurations of the program were designed for issuing control actions and acquisition, processing, archiving, logging information from different sources and this information providing also to clients (UI, GUI, TUI ...). The modular architecture allows for expanding of server's functionality without it restarting.
+</p><p>Client configurations can be built on different graphics libraries (GUI/TUI ToolKits), as using the program core and its modules (by adding to it an user interface module), or as an independent application connected the OpenSCADA core as a library.
+</p><p>The flexible configuration of the program allows for user to build solutions to meet specific requirements of reliability, functionality and capacity-complexity.
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
@@ -72,30 +98,6 @@
 </ul>
 </div>
 
-<p>This document is a manual of the "open source" program called "OpenSCADA". OpenSCADA represents a SCADA system built on the principles of modularity, multiplatformity and scalability.
-</p><p>As a policy of the development of the program there uses "open source" principle. This choice was done at needs of creation of a free, reliable and publicly available SCADA system. This policy allows to bring together a significant number of developers, enthusiasts and other interested persons to develop, test, improve, distribute and use the program, thus minimizing and distribution of efforts and financial costs.
-</p><p>OpenSCADA is designed for acquisition, archiving, visualization of information, performing of control actions and for other related operations charactered for full-featured SCADA systems. Due to the high level of abstraction and modularization the program can be used in a variety of related industries.
-</p><p>OpenSCADA <a href="About.html#Using" title="Special:MyLanguage/About">can be and used</a> now at:
-</p>
-<ul><li> industrial facilities as a full featured SCADA system or telemechanics;</li>
-<li> dynamic models, imitators and training apparatus of technological processes into the real-time;</li>
-<li> machine tools and industrial robots;</li>
-<li> agricultural dispatching and control systems, poultry-yards;</li>
-<li> embedded and mobile systems — environments of execution Programming Logical Controllers (PLC), robots, ...;</li>
-<li> server equipment monitoring;</li>
-<li> smart houses and home automation.</li></ul>
-<p>In the role of the common operating system (program platform) for development and using there was selected Linux OS, which is an optimal solution of the following issues:
-</p>
-<ul><li> reliability — a large part of servers and clusters running on GNU/Linux OS;</li>
-<li> flexibility/scalability — due to its openness and modularity Linux allows to build solutions to meet any requirements;</li>
-<li> availability — due to being under the license GPL the software is a fully free (libre) operational system and for high qualified users it can be also a non-cost one;</li>
-<li> popularity, advancement, support and prevalence — the system is in active development by many enthusiasts, firms and government agencies throughout the world, and is gaining wide support on the personal and the corporate marketplace.</li></ul>
-<p>While the project currently develops under the principles of multiplatformity then there is no most problem for porting the project to other operational systems (program platforms) and hardware platforms. That is planned to future and mostly already done for some platforms.
-</p><p>At the heart of the program is a modular core. And depending on what modules are installed the program can be configured to operate in role of variety servers, clients and both clients and servers in the same time and into the same program. It allows for implementation of the client-server architecture on the same components/modules, saving machine memory, disk space and expensive programming time.
-</p><p>Server configurations of the program were designed for issuing control actions and acquisition, processing, archiving, logging information from different sources and this information providing also to clients (UI, GUI, TUI ...). The modular architecture allows for expanding of server's functionality without it restarting.
-</p><p>Client configurations can be built on different graphics libraries (GUI/TUI ToolKits), as using the program core and its modules (by adding to it an user interface module), or as an independent application connected the OpenSCADA core as a library.
-</p><p>The flexible configuration of the program allows for user to build solutions to meet specific requirements of reliability, functionality and capacity-complexity.
-</p>
 <h2><span class="mw-headline" id="Architecture_and_functions"><span class="mw-headline-number">1</span> <span id="ArchFunc" title="#ArchFunc">Architecture and functions</span></span></h2>
 <p>About actual functions and demands of OpenSCADA you can read on the page "<a href="Functions_and_demands.html" title="Special:MyLanguage/Functions and demands">Functions and demands</a>" but in this document we will learn the common functions and properties of the program.
 </p>
@@ -182,37 +184,42 @@
 </p><p>The strict structure of the category and the text of the message is not intended, and the user can create them for their own messages arbitrarily, but account should be taken of the structure of system messages and messages defined by <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs" title="Special:MyLanguage/Libs">standard OpenSCADA libraries</a> to prevent intersection with them, or targeting expanding:
 </p>
 <ul><li> <b>System</b>, are generates by the OpenSCADA objects-nodes:</li></ul>
-<dl><dd> CATEGORY: defines a typical path to the message node, for example — "/sub_DAQ/mod_LogicLev/cntr_gen/"
+<dl><dd> CATEGORY: defines a typical path to the message node, for example — "/sub_DAQ/mod_LogicLev/cntr_gen/", where:
 <ul><li> "/*/*" — the typical template-sign of a system message based on a delimiter character of a path element that can be directly used in the category filter to determine only the <a class="external" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_ma_main_uk.png" title="File:QTCfg subsys arch mod ma main uk.png">system message archive</a>.</li></ul></dd>
-<dd> TEXT: contains the path of the name of the message node and the same message in the format <b>{NodeNmPath}: {message}</b>, for example — "AGLKS &gt; Data Acquisition &gt; LogicLev &gt; gen: Controller starting."</dd></dl>
+<dd> TEXT: contains the path of the name of the message node and the same message in the format "<b>{NodeNmPath}: {message}</b>", for example — "AGLKS &gt; Data Acquisition &gt; LogicLev &gt; gen: Controller starting.".</dd></dl>
 <ul><li> <b>Transferred</b>, messages that was received from the hierarchically lower station of OpenSCADA (like PLC):</li></ul>
-<dl><dd> CATEGORY: the controller object ID of the module <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQ.DAQGate</a> is added to the start of the received message category, for example — "loop:alModBus:testTCP":
+<dl><dd> CATEGORY: the controller object ID of the module <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQ.DAQGate</a> is added to the start of the received message category, for example — "loop:alModBus:testTCP", where:
 <ul><li> "loop:*" — the typical template-sign of a remote message based on the controller object identifier of the DAQ.DAQGate module that can be directly used in the category filter to determine only the <a class="external" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_ma_main_uk.png" title="File:QTCfg subsys arch mod ma main uk.png">remote message archive of this source</a>.</li></ul></dd></dl>
 <ul><li> <b>Violations</b>, are generated by the data source or its procedures using the function <i>alarmSet()</i> of <a href="API.html#TController" title="Special:MyLanguage/Documents/API">the OpenSCADA API</a> and <a href="User_API.html#SYS.DAQ" title="Special:MyLanguage/Documents/User API">the User API</a>:</li></ul>
-<dl><dd> CATEGORY: defines the ID-address of the source in the format <b>al{ModId}:{CntrId}[.{PrmId}]</b>, for example — "alLogicLev:gen.F_PP1"
+<dl><dd> CATEGORY: defines the ID-address of the source in the format "<b>al{ModId}:{CntrId}[.{PrmId}]</b>", for example — "alLogicLev:gen.F_PP1", where:
 <ul><li> "al*" — the typical template-sign of a violation message based on the first two characters of the word "alarm", which can be directly used in the category filter to determine only <a class="external" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_ma_main_uk.png" title="File:QTCfg subsys arch mod ma main uk.png">the archive of violations</a>;</li>
 <li> <i>ModId</i> — identifier of the module;</li>
 <li> <i>CntrId</i> — identifier of the controller object;</li>
 <li> <i>PrmId</i> — identifier of the parameter.</li></ul></dd>
-<dd> TEXT: <b>{CntrNm} &gt; {PrmNm}: {MessText}</b>, for example — "Mainstation &gt; F_PP1: Gas flow through the diaphragm PP1: Upper warning border error"
+<dd> TEXT: "<b>{CntrNm} &gt; {PrmNm}: {MessText}</b>", for example — "Mainstation &gt; F_PP1: Gas flow through the diaphragm PP1: Upper warning border error", where:
 <ul><li> <i>CntrNm</i> — name of the controller object;</li>
 <li> <i>PrmNm</i> — name of the parameter.</li>
-<li> <i>MessText</i> — text of the message, which has the substructure <b>{Viol}: {Value}[: {QuietTime}[: {NormTime} [: {Comment}]]]</b></li></ul>
-<dl><dd><ul><li> <i>Viol</i> — description of the violation, which some frames, such as <a href="Libs_Main_graphical_elements.html#alarmsAct" title="Special:MyLanguage/Libs/Main graphical elements">Main.alarmsAct</a> and <a href="Libs_Main_graphical_elements.html#alarmsSt" title="Special:MyLanguage/Libs/Main graphical elements">Main.alarmsSt</a>, can expand by custom fields in the form <b>[[{CustDscr1} =&gt; {CustDscr2} =&gt; ... =&gt; {CustDscrN}]]</b>;</li>
+<li> <i>MessText</i> — text of the message, which has the substructure "<b>{Viol}: {Value}[: {QuietTime}[: {NormTime} [: {Comment}]]]</b>", where:</li></ul>
+<dl><dd><ul><li> <i>Viol</i> — description of the violation, which some frames, such as <a href="Libs_Main_graphical_elements.html#alarmsAct" title="Special:MyLanguage/Libs/Main graphical elements">Main.alarmsAct</a> and <a href="Libs_Main_graphical_elements.html#alarmsSt" title="Special:MyLanguage/Libs/Main graphical elements">Main.alarmsSt</a>, can expand by custom fields in the form "<b>[[{CustDscr1} =&gt; {CustDscr2} =&gt; ... =&gt; {CustDscrN}]]</b>";</li>
 <li> <i>Value</i> — value of the violation;</li>
 <li> <i>QuietTime</i> — quietance time;</li>
 <li> <i>NormTime</i> — time of return to the NORM-state, set here after quietation-acquiring already NORM message;</li>
 <li> <i>Comment</i> — commentary of the issue.</li></ul></dd></dl></dd></dl>
 <ul><li> <b>User-operator actions</b>, are generated by the widget procedure at the determined actions of the user-operator, which must be recorded in the protocol of user-operator:</li></ul>
-<dl><dd> CATEGORY: defines the user and the characteristic source (usually the DAQ-subsystem parameter) for which actions are made, in the format <b>OP:{user}:{src}</b>, for example — "OP:roman:PC_PCV1"
+<dl><dd> CATEGORY: defines the user and the characteristic source (usually the DAQ-subsystem parameter) for which actions are made, in the format "<b>OP:{user}:{src}</b>", for example — "OP:roman:PC_PCV1", where:
 <ul><li> "OP:*" — the typical pattern-sign of the user-operator action message based on the first two characters of the word "operator" that can be directly used in the category filter to determine only <a class="external" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_ma_main_uk.png" title="File:QTCfg subsys arch mod ma main uk.png">operator's archive of operations</a>;</li>
 <li> <i>user</i> — OpenSCADA user;</li>
 <li> <i>src</i> — characteristic source, usually the parameter of the subsystem "Data acquisition", if necessary, supplemented by a hierarchy of DAQ-parameters up to the controller object.</li></ul></dd>
-<dd> TEXT: description of the action in the format <b>{src}&nbsp;: {name}&nbsp;: [{oldVal}]&nbsp;: {newVal}</b>, for example — "'PC_PCV1'. Setpoint&nbsp;: Regulator of the input pressure of the CS&nbsp;: 5.8&nbsp;: 6.0"
+<dd> TEXT: description of the action in the format "<b>{src}&nbsp;: {name}&nbsp;: [{oldVal}]&nbsp;: {newVal}</b>", for example — "'PC_PCV1'. Setpoint&nbsp;: Regulator of the input pressure of the CS&nbsp;: 5.8&nbsp;: 6.0", where:
 <ul><li> <i>src</i> — the source name, usually the parameter object with the details, and if necessary, is supplemented by the hierarchy of the DAQ-parameters up to the controller object;</li>
 <li> <i>name</i> — name of the source, usually it is a controller object;</li>
 <li> <i>oldVal</i> — old value, can be missed;</li>
 <li> <i>newVal</i> — new value or action.</li></ul></dd></dl>
+<ul><li> <b>Value in message</b> — the measured values what manually entered, that are originally introduced in the document frame "<a href="Libs_Documents.html#docRepYear" title="Special:MyLanguage/Libs/Documents">Year report of the month values (docRepYear)</a>":</li></ul>
+<dl><dd> CATEGORY: defines the source ID <i>SrcID</i> in the form "<b>val{SrcID}</b>", where:
+<ul><li> "val*" — the typical template-sign of a value, that can be directly used in the category filter to determine only the values in messages;</li>
+<li> <i>SrcID</i> — source identifier.</li></ul></dd>
+<dd> TEXT: the parameter <i>Name</i> and <i>Value</i> in the form "<b>{Name}: {Value}</b>".</dd></dl>
 <ul><li> <b>Prescriptions execution</b> — <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> waiting of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Prescriptions" title="Special:MyLanguage/Libs/Prescriptions">the prescription document</a> forming ...</li></ul>
 <h4><span class="mw-headline" id="Values"><span class="mw-headline-number">1.5.2</span> <span id="ArchVals" title="#ArchVals">Values</span></span></h4>
 <p>OpenSCADA values archives act as independent components that include buffers processed by archivers. The main parameter of the values archives is data source, in the role of which may be attributes of the parameters of the subsystem "DAQ", as well as other external data sources (passive mode). Other data sources may be network archivers of remote OpenSCADA stations, OpenSCADA programming environment, and more.
@@ -553,7 +560,7 @@
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:702px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_db_mod_db_db.png"><img class="thumbimage" height="676" src="files/QTCfg_subsys_db_mod_db_db.png" width="700" /></a>  <div class="thumbcaption">Fig. 4.1d. The tab "Data base" of the DB object of the module of the subsystem "DB".</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:683px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_db_mod_db_tbl.png"><img class="thumbimage" height="635" src="files/QTCfg_subsys_db_mod_db_tbl.png" width="681" /></a>  <div class="thumbcaption">Fig. 4.1e. The tab "Tables" of the DB object of the module of the subsystem "DB".</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1117px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_db_mod_db_sql.png"><img class="thumbimage" height="814" src="files/QTCfg_subsys_db_mod_db_sql.png" width="1115" /></a>  <div class="thumbcaption">Fig. 4.1f. The tab "SQL" of the DB object of the module of the subsystem "DB".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1115px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_db_mod_db_sql.png"><img class="thumbimage" height="814" src="files/QTCfg_subsys_db_mod_db_sql.png" width="1113" /></a>  <div class="thumbcaption">Fig. 4.1f. The tab "SQL" of the DB object of the module of the subsystem "DB".</div></div></div></div>
 <p>Page of examination of contents of tables contains only one the tab "Table". The tab "Table" (Fig.4.1g) contains a field of the name of the table and a table with the contents. The Table of contents provides following functions:  
 </p>
 <ul><li> redaction of content of cells of the table;</li>
@@ -598,9 +605,11 @@
 <p>The tab "Modules" (Fig.4.1a) contains a list of modules in the subsystem "Transports" and it is identical for all modular subsystems.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:941px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_tr_sub.png"><img class="thumbimage" height="451" src="files/QTCfg_subsys_tr_sub.png" width="939" /></a>  <div class="thumbcaption">Fig. 4.3a. The tab "Subsystem" of the root page of the subsystem "Transports".</div></div></div></div>
-<p>Each module of the subsystem "Transports" provides a configuration page with the tabs "Transports" and "Module". This tab "Transports" (Fig.4.3b) contains a list of input and output transports registered by the module. Context menu of the transports lists provides the user with the possibility to add, delete and move to the desired transport. On the "Module" tab it is provided the information about the module of subsystem "Transports" (Fig.4.1c), whose structure is identical for all modules.
+<p>Each module of the subsystem "Transports" provides a configuration page with the tabs "Transports" and "Module".
+</p><p>The tab "Transports" (Fig.4.3b) contains a list of input and output transports registered by the module. Context menu of the transports lists provides the user with the possibility to add, delete and move to the desired transport. The output transports also provide a keep alive function of closing the transports at inactivity. Set it to 0 to disable this function!
+</p><p>On the "Module" tab it is provided the information about the module of subsystem "Transports" (Fig.4.1c), whose structure is identical for all modules.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:628px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_tr_mod_tr.png"><img class="thumbimage" height="499" src="files/QTCfg_subsys_tr_mod_tr.png" width="626" /></a>  <div class="thumbcaption">Fig. 4.3b. The tab "Transports" of the module of the subsystem "Transports".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:683px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_tr_mod_tr.png"><img class="thumbimage" height="558" src="files/QTCfg_subsys_tr_mod_tr.png" width="681" /></a>  <div class="thumbcaption">Fig. 4.3b. The tab "Transports" of the module of the subsystem "Transports".</div></div></div></div>
 <p>Each transport contains its own configuration page with the tab "Transport". This tab contains basic transport settings. <span id="TransportIn" title="#TransportIn">Input transport</span> (Fig.4.3c) contains:
 </p>
 <ul><li> Section "State" — contains the settings that characterize the state of the transport:
@@ -1713,5 +1722,5 @@ PNGCompLev   &lt;lev&gt;      Compression level [-1..9] of the creating PNG-imag
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/en">Documents/Program_manual/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2661</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/en">Documents/Program_manual/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2663</td></tr></table></body>
 </html>

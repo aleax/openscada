@@ -796,7 +796,8 @@ void LWidget::wdgAdd( const string &wid, const string &name, const string &path,
 	if(mHerit[iH].at().enable())
 	    mHerit[iH].at().inheritIncl(wid);
 
-    if(toRestoreInher)	throw TError("warning", _("Restoring '%s' from the base container!"), wid.c_str());
+    if(toRestoreInher)
+	throw TError(TError::Core_CntrWarning, nodePath().c_str(), _("Restoring '%s' from the base container!"), wid.c_str());
 }
 
 AutoHD<CWidget> LWidget::wdgAt( const string &wdg ) const	{ return Widget::wdgAt(wdg); }

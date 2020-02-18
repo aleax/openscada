@@ -1,7 +1,8 @@
 
 //OpenSCADA module DAQ.MMS file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2013-2017,2019 by Roman Savochenko, <rom_as@oscada.org> *
+ *   Copyright (C) 2013-2017,2019-2020                                     *
+ *                      by Roman Savochenko, <roman@oscada.org>            *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,7 +38,7 @@
 #define MOD_NAME	_("MMS(IEC-9506)")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.3.21"
+#define MOD_VER		"1.4.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("MMS(IEC-9506) client implementation.")
 #define LICENSE		"GPL2"
@@ -600,7 +601,7 @@ string TMdPrm::attrPrc( )
 
 	// Request value for the type obtain
 	if(vtp < 0) {
-	    if(s2i(conErr) == 10)	continue;
+	    if(s2i(conErr) == TError::Tr_Connect)	continue;
 	    value->setAttr("itemId", TSYS::pathLev(var,1));
 	    if(TSYS::pathLev(var,0) != "*") value->setAttr("domainId", TSYS::pathLev(var,0));
 	    owner().reqService(valCntr);

@@ -122,7 +122,7 @@ void Lib::modStart( )
     list(lst);
     for(unsigned i_l = 0; i_l < lst.size(); i_l++)
 	at(lst[i_l]).at().setStart(true);
-    run_st = true;
+    runSt = true;
 }
 
 void Lib::modStop( )
@@ -131,7 +131,7 @@ void Lib::modStop( )
     list(lst);
     for(unsigned i_l = 0; i_l < lst.size(); i_l++)
 	at(lst[i_l]).at().setStart(false);
-    run_st = false;
+    runSt = false;
 }
 
 TVariant Lib::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )

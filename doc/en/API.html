@@ -12,8 +12,7 @@
 </div>
 			<h1 id="firstHeading" lang="en">Documents/API</h1>
 		</div><div class="mw-pt-languages" dir="ltr" id="mw-content-text" lang="en">
-<p><i>Author:</i> <a href="../en/API.html" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2012) — the page initial translation</i></font>
-</p><p>This page describes an application programming interface (API) of OpenSCADA.
+<p>This page describes an application programming interface (API) of OpenSCADA.
 </p><p>OpenSCADA is the project of an open SCADA-system based on the modular principle. The document contains an exhaustive description of the internal system architecture of OpenSCADA. In addition to information on the architecture the background information on methods and attributes of the system is provided.<br />
 The document is intended for programmers wishing to understand the architecture of OpenSCADA and develop extensions for it. The document is not intended for users and integrators of OpenSCADA!
 </p><p>For understanding of this document it is necessary for you to know the concept of Object Oriented Programming (OOP) and Universal Modeling Language (UML), and for the possibility of studying the source code of the project it is required the knowledge of programming language C++. In addition, the document contains the mentioning of the following technologies: relational databases, XML.
@@ -21,7 +20,7 @@ The document is intended for programmers wishing to understand the architecture 
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="../en/API.html"><span class="tocnumber">1</span> <span class="toctext">The internal structure, OpenSCADA API</span></a></li>
-<li class="toclevel-1 tocsection-2"><a href="../en/API.html"><span class="tocnumber">2</span> <span class="toctext">The overall structure of the system. Modularity (TSubSYS, TModule)</span></a>
+<li class="toclevel-1 tocsection-2"><a href="../en/API.html"><span class="tocnumber">2</span> <span class="toctext">The overall structure of the system. Modularity (TSYS, TSubSYS, TModule)</span></a>
 <ul>
 <li class="toclevel-2 tocsection-3"><a href="../en/API.html"><span class="tocnumber">2.1</span> <span class="toctext"><span>The root object system (TSYS)</span></span></a></li>
 <li class="toclevel-2 tocsection-4"><a href="../en/API.html"><span class="tocnumber">2.2</span> <span class="toctext"><span>Object of the messages system (TMess)</span></span></a></li>
@@ -145,45 +144,46 @@ The document is intended for programmers wishing to understand the architecture 
 <li class="toclevel-2 tocsection-77"><a href="../en/API.html"><span class="tocnumber">14.5</span> <span class="toctext"><span>Object of the dynamic tree node (TCntrNode)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-78"><a href="../en/API.html"><span class="tocnumber">15</span> <span class="toctext">XML in OpenSCADA (XMLNode)</span></a>
+<li class="toclevel-1 tocsection-78"><a href="../en/API.html"><span class="tocnumber">15</span> <span class="toctext">Resources locking in OpenSCADA (Res, ResAlloc, ResMtx, MtxAlloc, AutoHD)</span></a>
 <ul>
-<li class="toclevel-2 tocsection-79"><a href="../en/API.html"><span class="tocnumber">15.1</span> <span class="toctext"><span>XML-tag (XMLNode)</span></span></a></li>
+<li class="toclevel-2 tocsection-79"><a href="../en/API.html"><span class="tocnumber">15.1</span> <span class="toctext"><span>Resource R/W lock object (ResRW)</span></span></a></li>
+<li class="toclevel-2 tocsection-80"><a href="../en/API.html"><span class="tocnumber">15.2</span> <span class="toctext"><span>Automatic resource RW unlock object (ResAlloc)</span></span></a></li>
+<li class="toclevel-2 tocsection-81"><a href="../en/API.html"><span class="tocnumber">15.3</span> <span class="toctext"><span>Template (AutoHD)</span></span></a></li>
+<li class="toclevel-2 tocsection-82"><a href="../en/API.html"><span class="tocnumber">15.4</span> <span class="toctext"><span>Resources allocation object, by mutex (ResMtx)</span></span></a></li>
+<li class="toclevel-2 tocsection-83"><a href="../en/API.html"><span class="tocnumber">15.5</span> <span class="toctext"><span>Object of the string with the access shared by the resource (ResString)</span></span></a></li>
+<li class="toclevel-2 tocsection-84"><a href="../en/API.html"><span class="tocnumber">15.6</span> <span class="toctext"><span>Conditional variable object, by mutex (CondVar)</span></span></a></li>
+<li class="toclevel-2 tocsection-85"><a href="../en/API.html"><span class="tocnumber">15.7</span> <span class="toctext"><span>Object of automatic unlock POSIX mutex (MtxAlloc)</span></span></a></li>
+<li class="toclevel-2 tocsection-86"><a href="../en/API.html"><span class="tocnumber">15.8</span> <span class="toctext"><span>Object of the string with the access shared by the global the data resource (mutex) (MtxString)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-80"><a href="../en/API.html"><span class="tocnumber">16</span> <span class="toctext">Resources in OpenSCADA (Res, ResAlloc, ResMtx, MtxAlloc, AutoHD)</span></a>
+<li class="toclevel-1 tocsection-87"><a href="../en/API.html"><span class="tocnumber">16</span> <span class="toctext">Other generic objects (XMLNode, TError)</span></a>
 <ul>
-<li class="toclevel-2 tocsection-81"><a href="../en/API.html"><span class="tocnumber">16.1</span> <span class="toctext"><span>Resource R/W lock object (ResRW)</span></span></a></li>
-<li class="toclevel-2 tocsection-82"><a href="../en/API.html"><span class="tocnumber">16.2</span> <span class="toctext"><span>Automatic resource RW unlock object (ResAlloc)</span></span></a></li>
-<li class="toclevel-2 tocsection-83"><a href="../en/API.html"><span class="tocnumber">16.3</span> <span class="toctext"><span>Template (AutoHD)</span></span></a></li>
-<li class="toclevel-2 tocsection-84"><a href="../en/API.html"><span class="tocnumber">16.4</span> <span class="toctext"><span>Resources allocation object, by mutex (ResMtx)</span></span></a></li>
-<li class="toclevel-2 tocsection-85"><a href="../en/API.html"><span class="tocnumber">16.5</span> <span class="toctext"><span>Object of the string with the access shared by the resource (ResString)</span></span></a></li>
-<li class="toclevel-2 tocsection-86"><a href="../en/API.html"><span class="tocnumber">16.6</span> <span class="toctext"><span>Conditional variable object, by mutex (CondVar)</span></span></a></li>
-<li class="toclevel-2 tocsection-87"><a href="../en/API.html"><span class="tocnumber">16.7</span> <span class="toctext"><span>Object of automatic unlock POSIX mutex (MtxAlloc)</span></span></a></li>
-<li class="toclevel-2 tocsection-88"><a href="../en/API.html"><span class="tocnumber">16.8</span> <span class="toctext"><span>Object of the string with the access shared by the global the data resource (mutex) (MtxString)</span></span></a></li>
+<li class="toclevel-2 tocsection-88"><a href="../en/API.html"><span class="tocnumber">16.1</span> <span class="toctext"><span>XML-tag (XMLNode)</span></span></a></li>
+<li class="toclevel-2 tocsection-89"><a href="../en/API.html"><span class="tocnumber">16.2</span> <span class="toctext"><span>Error exception (TError)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-89"><a href="../en/API.html"><span class="tocnumber">17</span> <span class="toctext">Organization and structure of the database of the system components</span></a>
+<li class="toclevel-1 tocsection-90"><a href="../en/API.html"><span class="tocnumber">17</span> <span class="toctext">Organization and structure of the database of the system components</span></a>
 <ul>
-<li class="toclevel-2 tocsection-90"><a href="../en/API.html"><span class="tocnumber">17.1</span> <span class="toctext">System tables</span></a></li>
-<li class="toclevel-2 tocsection-91"><a href="../en/API.html"><span class="tocnumber">17.2</span> <span class="toctext">Tables of the "Data acquisition" subsystem</span></a></li>
-<li class="toclevel-2 tocsection-92"><a href="../en/API.html"><span class="tocnumber">17.3</span> <span class="toctext">Tables of the "Transports" subsystem</span></a></li>
-<li class="toclevel-2 tocsection-93"><a href="../en/API.html"><span class="tocnumber">17.4</span> <span class="toctext">Tables of the "Archives" subsystem</span></a></li>
-<li class="toclevel-2 tocsection-94"><a href="../en/API.html"><span class="tocnumber">17.5</span> <span class="toctext">Tables of the "Security" subsystem</span></a></li>
-<li class="toclevel-2 tocsection-95"><a href="../en/API.html"><span class="tocnumber">17.6</span> <span class="toctext">The structure of the databases of the modules</span></a></li>
+<li class="toclevel-2 tocsection-91"><a href="../en/API.html"><span class="tocnumber">17.1</span> <span class="toctext">System tables</span></a></li>
+<li class="toclevel-2 tocsection-92"><a href="../en/API.html"><span class="tocnumber">17.2</span> <span class="toctext">Tables of the "Data acquisition" subsystem</span></a></li>
+<li class="toclevel-2 tocsection-93"><a href="../en/API.html"><span class="tocnumber">17.3</span> <span class="toctext">Tables of the "Transports" subsystem</span></a></li>
+<li class="toclevel-2 tocsection-94"><a href="../en/API.html"><span class="tocnumber">17.4</span> <span class="toctext">Tables of the "Archives" subsystem</span></a></li>
+<li class="toclevel-2 tocsection-95"><a href="../en/API.html"><span class="tocnumber">17.5</span> <span class="toctext">Tables of the "Security" subsystem</span></a></li>
+<li class="toclevel-2 tocsection-96"><a href="../en/API.html"><span class="tocnumber">17.6</span> <span class="toctext">The structure of the databases of the modules</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-96"><a href="../en/API.html"><span class="tocnumber">18</span> <span class="toctext">Service functions of the OpenSCADA control interface</span></a>
+<li class="toclevel-1 tocsection-97"><a href="../en/API.html"><span class="tocnumber">18</span> <span class="toctext"><span>Service functions of the OpenSCADA control interface</span></span></a>
 <ul>
-<li class="toclevel-2 tocsection-97"><a href="../en/API.html"><span class="tocnumber">18.1</span> <span class="toctext">Group access to the values of the parameter's attributes of the subsystem "Data acquisition", as well as to the detailed information</span></a></li>
-<li class="toclevel-2 tocsection-98"><a href="../en/API.html"><span class="tocnumber">18.2</span> <span class="toctext">Access to archived data of the archives of messages</span></a></li>
-<li class="toclevel-2 tocsection-99"><a href="../en/API.html"><span class="tocnumber">18.3</span> <span class="toctext">Access to archived data of the values' archive</span></a></li>
+<li class="toclevel-2 tocsection-98"><a href="../en/API.html"><span class="tocnumber">18.1</span> <span class="toctext">Group access to the values of the parameter's attributes of the subsystem "Data acquisition", as well as to the detailed information</span></a></li>
+<li class="toclevel-2 tocsection-99"><a href="../en/API.html"><span class="tocnumber">18.2</span> <span class="toctext">Access to archived data of the archives of messages</span></a></li>
+<li class="toclevel-2 tocsection-100"><a href="../en/API.html"><span class="tocnumber">18.3</span> <span class="toctext">Access to archived data of the values' archive</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-100"><a href="../en/API.html"><span class="tocnumber">19</span> <span class="toctext"><span>API of modules of modular subsystems</span></span></a></li>
-<li class="toclevel-1 tocsection-101"><a href="../en/API.html"><span class="tocnumber">20</span> <span class="toctext">Debugging and Testing OpenSCADA</span></a></li>
-<li class="toclevel-1 tocsection-102"><a href="../en/API.html"><span class="tocnumber">21</span> <span class="toctext">Rules for design and commenting of the sources of OpenSCADA and its modules</span></a></li>
-<li class="toclevel-1 tocsection-103"><a href="../en/API.html"><span class="tocnumber">22</span> <span class="toctext">Сonventional signs in the text and source code</span></a></li>
-<li class="toclevel-1 tocsection-104"><a href="../en/API.html"><span class="tocnumber">23</span> <span class="toctext">Links</span></a></li>
+<li class="toclevel-1 tocsection-101"><a href="../en/API.html"><span class="tocnumber">19</span> <span class="toctext"><span>API of modules of the modular subsystems</span></span></a></li>
+<li class="toclevel-1 tocsection-102"><a href="../en/API.html"><span class="tocnumber">20</span> <span class="toctext">Debugging and Testing OpenSCADA</span></a></li>
+<li class="toclevel-1 tocsection-103"><a href="../en/API.html"><span class="tocnumber">21</span> <span class="toctext">Rules for design and commenting of the sources of OpenSCADA and its modules</span></a></li>
+<li class="toclevel-1 tocsection-104"><a href="../en/API.html"><span class="tocnumber">22</span> <span class="toctext">Сonventional signs in the text and source code</span></a></li>
+<li class="toclevel-1 tocsection-105"><a href="../en/API.html"><span class="tocnumber">23</span> <span class="toctext">Links</span></a></li>
 </ul>
 </div>
 
@@ -191,7 +191,7 @@ The document is intended for programmers wishing to understand the architecture 
 <p>For the purpose of visual and affordable perception of OpenSCADA architecture in general the Figure 1 shows the static class diagram of OpenSCADA on the universal modeling language (UML). Based on the chart it is clear that OpenSCADA contains modular subsystems: "Archives", "Databases", "Transports", "Transport protocols", "User interfaces", "Data acquisition" and "Special", as well as subsystems: "Safety" and "Module's management". The chart graphically presents the relationship between modular subsystems and modules.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:718px;"><a class="image" href="../en/API.html"><img class="thumbimage" height="836" src="files/API_uml_classdep.png" width="716" /></a>  <div class="thumbcaption">Fig. 1. Static class diagram.</div></div></div></div>
-<h2><span class="mw-headline" id="The_overall_structure_of_the_system._Modularity_.28TSubSYS.2C_TModule.29"><span class="mw-headline-number">2</span> The overall structure of the system. Modularity (TSubSYS, TModule)</span></h2>
+<h2><span class="mw-headline" id="The_overall_structure_of_the_system._Modularity_.28TSYS.2C_TSubSYS.2C_TModule.29"><span class="mw-headline-number">2</span> The overall structure of the system. Modularity (TSYS, TSubSYS, TModule)</span></h2>
 <p>The root, from which we construct the whole system is the object of TSYS. The root contains a subsystem (TSubSYS). Subsystems can be: the ordinary and modular. The difference between the modular subsystems is clearly shown in Fig. 1. Thus, the modular subsystems necessarily contain a list of modular structures (TModule), such as subsystem TArchiveS contain modular objects TTypeArchivator. At the same time, the normal subsystem does not contain such objects. For example TSecurity  subsystem (Figure 2).
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:703px;"><a class="image" href="../en/API.html"><img class="thumbimage" height="360" src="files/Oscada_struct.png" width="701" /></a>  <div class="thumbcaption">Fig. 2. Hierarchical structure of OpenSCADA.</div></div></div></div>
@@ -411,7 +411,7 @@ Information variables of the program:
 <li> <i>ResRW &amp;cfgRes( );</i> — Access to config file tree resource locking.</li></ul>
 <p><b>Public attributes:</b>
 </p>
-<ul><li> <i>static bool finalKill</i> — Sign "The final killing of". It is used for forced disconnection of blocked objects on the the final stage of shutdown.</li></ul>
+<ul><li> <i>static bool finalKill;</i> — Sign "The final killing of". It is used for forced disconnection of blocked objects on the the final stage of shutdown.</li></ul>
 <p><b>Short calls for global functions into "OSCADA" namespace:</b>
 </p>
 <ul><li> <i>template &lt;class fVal&gt; fVal fmin( fVal a, fVal b ); template &lt;class fVal&gt; fVal fmax( fVal a, fVal b );</i> — functional templates for obtain of two values minimum and maximum.</li>
@@ -859,8 +859,8 @@ Redundancy modes (enum TController::Redundant):
 <li> <i>TTypeDAQ &amp;owner( ) const;</i> — The type of the data source (module) - the owner of the controller.</li></ul>
 <p><b>Protected attributes:</b>
 </p>
-<ul><li> <i>bool en_st;</i> — Sign "Enable".</li>
-<li> <i>bool run_st;</i> — Sign "Running".</li></ul>
+<ul><li> <i>bool enSt;</i> — The sign "Enable".</li>
+<li> <i>bool runSt;</i> — The sign "Running".</li></ul>
 <p><b>Protected methods:</b>
 </p>
 <ul><li> <i>virtual void enable_(  );</i> — Enabling of the controller. Intercepted by the child.</li>
@@ -1356,7 +1356,7 @@ The data acquisition mode/source (struct — TVArchive::SrcMode):
 <li> <i>TTypeArchivator&amp;owner( ) const;</i> — Archiver's type – the owner of the messages' archiver.</li></ul>
 <p><b>Protected attributes:</b>
 </p>
-<ul><li> <i>bool run_st;</i> — Sign "Run".</li>
+<ul><li> <i>bool runSt;</i> — The sign "Running".</li>
 <li> <i>int messHead;</i> — The pointer to last read message of the messages buffer.</li></ul>
 <p><b>Protected methods:</b>
 </p>
@@ -1409,9 +1409,10 @@ The data acquisition mode/source (struct — TVArchive::SrcMode):
 <li> <i>virtual void pushAccumVals( );</i> — Push the accumulated by the archivation task values, for the accumulated archivators.</li></ul>
 <p><b>Protected attributes:</b>
 </p>
-<ul><li> <i>Res a_res</i> — Resource of the archiving process.</li>
-<li> <i>bool run_st</i> — Sign "Archive is run".</li>
-<li> <i>vector&lt;TVArchEl *&gt; arch_el;</i> — Array of elements of archives.</li></ul>
+<ul><li> <i>ResRW archRes;</i> — Resource locker of the archiving process.</li>
+<li> <i>bool runSt;</i> — The sign "Archiver is run".</li>
+<li> <i>bool endrunReq;</i> — The sign "End run request to the archiver task".</li>
+<li> <i>vector&lt;TVArchEl *&gt; archEl;</i> — Array of elements of archives in the archiver.</li></ul>
 <h3><span class="mw-headline" id="The_object_of_the_archive.27s_element_in_the_archiver_.28TVArchEl.29"><span class="mw-headline-number">5.7</span> <span id="TVArchEl" title="#TVArchEl">The object of the archive's element in the archiver (TVArchEl)</span></span></h3>
 <table class="wikitable">
 
@@ -1515,6 +1516,8 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>void outDel( const string &amp;id, bool complete = false );</i> — Deleting of the output transport. It is possible to completely delete with the database included, by setting the <i>complete</i> sign.</li>
 <li> <i>AutoHD&lt;TTransportOut&gt; outAt( const string &amp;id ) const;</i> — Connection to the output transport.</li>
 <li> <i>virtual string outAddrHelp( );</i> — Address format help of the output transport.</li>
+<li> <i>int outKeepAliveTm( );</i> — Output transport keep alive time, 0 for disable.</li>
+<li> <i>void setOutKeepAliveTm( int vl );</i> — Set the output transport keep alive time, 0 for disable.</li>
 <li> <i>TTransportS &amp;owner( ) const;</i> — "Transports" subsystem - the owner of the transport's type.</li></ul>
 <p><b>Protected methods:</b>
 </p>
@@ -1567,7 +1570,7 @@ External hosts mode (enum — ExtHost::Mode):
 <ul><li> <i>string assTrO( const string &amp;addr );</i> — The assigned output transport creation with address <i>addr</i>.</li></ul>
 <p><b>Protected attributes:</b>
 </p>
-<ul><li> <i>bool run_st;</i> — The sign "Run".</li></ul>
+<ul><li> <i>bool runSt;</i> — The sign "Running".</li></ul>
 <h3><span class="mw-headline" id="The_object_of_the_output_transports_.28TTransportOut.29"><span class="mw-headline-number">6.4</span> <span id="TTransportOut" title="#TTransportOut">The object of the output transports (TTransportOut)</span></span></h3>
 <table class="wikitable">
 
@@ -1594,6 +1597,7 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>bool toStart( );</i> — Sign "To start".</li>
 <li> <i>bool startStat( );</i> — Status "Running".</li>
 <li> <i>time_t startTm( );</i> — Status "Time of starting/connection".</li>
+<li> <i>int64_t lstReqTm( );</i> — Status "Last request time".</li>
 <li> <i>virtual string getStatus( );</i> — Getting the status of the transport.</li>
 <li> <i>string DB( );</i> — Transport's DB address.</li>
 <li> <i>string tbl( );</i> — Transport's DB table.</li>
@@ -1618,7 +1622,8 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>ResMtx &amp;reqRes( );</i> — The requesting resource, needs to global lock into protocols with fragments receiving.</li></ul>
 <p><b>Protected attributes:</b>
 </p>
-<ul><li> <i>bool run_st;</i> — The sign "Running".</li></ul>
+<ul><li> <i>bool runSt;</i> — The sign "Running".</li>
+<li> <i>int64_t mLstReqTm;</i> — The last request time.</li></ul>
 <h2><span class="mw-headline" id="Subsystem_.22Communication_interfaces.27_protocols.22_.28TProtocolS.29"><span class="mw-headline-number">7</span> <span id="TProtocolS" title="#TProtocolS">Subsystem "Communication interfaces' protocols" (TProtocolS)</span></span></h2>
 <p>Subsystem "Communication interfaces' protocols" is presented by the TProtocolS object, which contains modular objects of the separate protocols TProtocol on the a subsystem's level. Each protocol contains objects of the opened sessions of the input protocols TProtocolIn.
 </p><p>TProtocolS object provides an access to the both: the input and the output protocols of the individual types of transport protocols. The inner side of output protocol based on the steaming principle with the individual structure of the stream for each implementation of the protocol.
@@ -1715,7 +1720,7 @@ Requests parameters (enum — GetOpts):
 </td></tr></table>
 <p><b>Protected attributes:</b>
 </p>
-<ul><li> <i>bool run_st;</i> — The sign "Running".</li></ul>
+<ul><li> <i>bool runSt;</i> — The sign "Running".</li></ul>
 <h2><span class="mw-headline" id="Subsystem_.22Specials.22_.28TSpecialS.29"><span class="mw-headline-number">9</span> Subsystem "Specials" (TSpecialS)</span></h2>
 <p>The subsystem "Specials" is presented by TSpecialS object, which contains modular objects of TSpecial special on the subsystem's level.
 </p>
@@ -1742,7 +1747,7 @@ Requests parameters (enum — GetOpts):
 </td></tr></table>
 <p><b>Protected attributes:</b>
 </p>
-<ul><li> <i>bool run_st;</i> — The sign "Running".</li></ul>
+<ul><li> <i>bool runSt;</i> — The sign "Running".</li></ul>
 <h2><span class="mw-headline" id="Subsystem_.22Security.22_.28TSe.D1.81urity.29"><span class="mw-headline-number">10</span> Subsystem "Security" (TSeсurity)</span></h2>
 <p>Security subsystem is presented by an object TSesurity, which contains group objects of TGroup and users TUser.
 </p><p>User object TUser contains user information and checks the authenticity of the user in accordance with the specified password.
@@ -2281,7 +2286,7 @@ Error values for the different data types (define):
 </p><p>The container can also gather into the single request several information structures and dynamic parts, thereby optimizing the time of the request especially on the high latency network interfaces.
 </p><p>Overall control interface is built from individual components of the dynamic tree. Hierarchical inheritance from the TCntrNode object allows to realize multi-level addition of the configuration of the control interface. General view of the dynamic node tree is shown in Fig. 8.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="../en/API.html"><img class="thumbimage" height="360" src="files/800px-Oscada_UserOM.png" srcset="/wiki/images/6/67/Oscada_UserOM.png 1.5x, /wiki/images/6/67/Oscada_UserOM.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="../en/API.html" title="Enlarge" /></div>Fig. 8. Example of a dynamic tree of the nodes in OpenSCADA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="../en/API.html"><img class="thumbimage" height="360" src="files/800px-Oscada_UserOM.png" srcset="/wiki/images/6/67/Oscada_UserOM.png 1.5x, /wiki/images/6/67/Oscada_UserOM.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="../en/API.html" title="Збільшити" /></div>Fig. 8. Example of a dynamic tree of the nodes in OpenSCADA.</div></div></div></div>
 <p>System's nodes, containing data for the control interface of the system must also be connected to the dynamic tree of objects. 
 </p><p>Connection of the node to the dynamic tree is done as follows:
 </p>
@@ -2946,10 +2951,87 @@ Named rights of access to control elements (define):
 <li> <i>virtual void load_( ); virtual void load_( TConfig *cfg );</i> — The function of the node specific loading, for ready configuration <i>cfg</i> also.</li>
 <li> <i>virtual void load__( );</i> — The function of the node specific loading in the loading end.</li>
 <li> <i>virtual void save_( );</i> — The function of the saving child node calling.</li></ul>
-<h2><span class="mw-headline" id="XML_in_OpenSCADA_.28XMLNode.29"><span class="mw-headline-number">15</span> XML in OpenSCADA (XMLNode)</span></h2>
-<p>XML in the OpenSACDA system is represented by the object of the XML-tag — XMLNode.
+<h2><span class="mw-headline" id="Resources_locking_in_OpenSCADA_.28Res.2C_ResAlloc.2C_ResMtx.2C_MtxAlloc.2C_AutoHD.29"><span class="mw-headline-number">15</span> Resources locking in OpenSCADA (Res, ResAlloc, ResMtx, MtxAlloc, AutoHD)</span></h2>
+<p>Most of the units and subsystems of OpenSCADA are dynamic, ie they allow the creation/deletion/configuration while the system is working. Taking into account the multi-threading of the system, this functionality imposes stringent requirements for synchronization of threads. For synchronization in the system the resources are used, functions of which are localized in the objects "Res" and "ResAlloc". Object "Res" provides storage of the resource, providing the functions of capture/release for the read and write. In object "ResAlloc" the automatic release of the resource functions are implemented. Automatic resource involves the creation of a local resource object with its automatic release at fracture (in the destructor). Using of automatic resource makes the work with resources when using the exceptions much easier.
+</p><p>Any dynamic system object is inherited from "TCntrNode" object, which contains a mechanism to connect via the "AutoHD" template. The main function of the template is to store the link to the object and the capture of the resource, excluding the deleting of the object at the time of use. Template supports copying the resource and its release in case of destruction of the template object. For clarity of the access to the objects generated by "TCntrNode" the "AutoHD" template supports casting, based on the dynamic cast.
 </p>
-<h3><span class="mw-headline" id="XML-tag_.28XMLNode.29"><span class="mw-headline-number">15.1</span> <span id="XMLNode" title="#XMLNode">XML-tag (XMLNode)</span></span></h3>
+<h3><span class="mw-headline" id="Resource_R.2FW_lock_object_.28ResRW.29"><span class="mw-headline-number">15.1</span> <span id="ResRW" title="#ResRW">Resource R/W lock object (ResRW)</span></span></h3>
+<p><b>Public methods:</b>
+</p>
+<ul><li> <i>ResRW( );</i> — Initialization of the resource.</li>
+<li> <i>static void resRequestW( long tm = 0 );</i> — Request the resource for writing/modification with wait timeout <i>tm</i> (in milliseconds).</li>
+<li> <i>bool resTryW( );</i> — Request try the resource for writing/modification. On success return "true" else "false".</li>
+<li> <i>static void resRequestR( long tm = 0 );</i> — Request the resource for reading with wait timeout <i>tm</i> (in milliseconds).</li>
+<li> <i>bool resTryR( );</i> — Request try the resource for reading. On success return "true" else "false".</li>
+<li> <i>static void resRelease( );</i> — Release of the resource.</li></ul>
+<h3><span class="mw-headline" id="Automatic_resource_RW_unlock_object_.28ResAlloc.29"><span class="mw-headline-number">15.2</span> <span id="ResAlloc" title="#ResAlloc">Automatic resource RW unlock object (ResAlloc)</span></span></h3>
+<p><b>Public methods:</b>
+</p>
+<ul><li> <i>ResAlloc( ResRW &amp;rid );</i> — Initialization of the automatically released resource for the previously selected identifier  <i>rid</i>.</li>
+<li> <i>ResAlloc( ResRW &amp;rid, bool write, long tm = 0 );</i> — Initialization of the automatically released resource for the previously selected identifier <i>rid</i>. With the specification of the resource type <i>write</i> (read/write).</li>
+<li> <i>void request( bool write = false, long tm = 0 ); void lock( bool write = false, unsigned short tm = 0 );</i> — Request of the resource in the specified mode <i>write</i> (read/write).</li>
+<li> <i>void release( ); void unlock( );</i> — Release of the resource.</li></ul>
+<h3><span class="mw-headline" id="Template_.28AutoHD.29"><span class="mw-headline-number">15.3</span> <span id="AutoHD" title="#AutoHD">Template (AutoHD)</span></span></h3>
+<p><b>Public methods:</b>
+</p>
+<ul><li> <i>AutoHD( );</i> — Initializing without linkage to the object.</li>
+<li> <i>AutoHD( ORes *node, const string &amp;who = "" );</i> — Initialization with the linkage to the object <i>node</i>. The object must contain the function AHDConnect() and AHDDisConnect().</li>
+<li> <i>AutoHD( const AutoHD &amp;hd );</i> — Copyng constructor.</li>
+<li> <i>template &lt;class ORes1&gt; AutoHD( const AutoHD&lt;ORes1&gt; &amp;hd_s, bool nosafe = false );</i> — Сast constructor in safe mode casting (by help dynamic_cast). Return free resource on impossible cast.</li>
+<li> <i>ORes &amp;at( ) const;</i> — Getting the object by the resource. </li>
+<li> <i>AutoHD &amp;operator=(const AutoHD &amp;hd);</i> — Copying of the resources.</li>
+<li> <i>bool operator==(const AutoHD &amp;hd);</i> — Compare objects into resource by pointer.</li>
+<li> <i>void free( );</i> — Release of the resource.</li>
+<li> <i>bool freeStat( ) const;</i> — The sign "The resource is free".</li></ul>
+<h3><span class="mw-headline" id="Resources_allocation_object.2C_by_mutex_.28ResMtx.29"><span class="mw-headline-number">15.4</span> <span id="ResMtx" title="#ResMtx">Resources allocation object, by mutex (ResMtx)</span></span></h3>
+<p><b>Public methods:</b>
+</p>
+<ul><li> <i>ResMtx( bool isRecurs = true );</i> — Initialization of a mutex object with recursion <i>isRecurs</i>.</li>
+<li> <i>void lock( );</i> — Mutex lock. Return zero at the success.</li>
+<li> <i>void unlock( );</i> — Mutex unlock. Return zero at the success.</li>
+<li> <i>int tryLock( );</i> — Mutex try lock, without wait for free. Return zero at success.</li>
+<li> <i>pthread_mutex_t &amp;mtx( );</i> — Direct link to the mutex structure.</li></ul>
+<h3><span class="mw-headline" id="Object_of_the_string_with_the_access_shared_by_the_resource_.28ResString.29"><span class="mw-headline-number">15.5</span> <span id="ResString" title="#ResString">Object of the string with the access shared by the resource (ResString)</span></span></h3>
+<p><b>Public methods:</b>
+</p>
+<ul><li> <i>explicit ResString( const string &amp;vl = "" );</i> — Initialization of the string with the specified value <i>vl</i>.</li>
+<li> <i>ResString &amp;operator=( const string &amp;val );</i> — Function for implicit conversion from <i>std::string</i>.</li>
+<li> <i>operator string( );</i> — Function for implicit conversion to <i>std::string</i>.</li>
+<li> <i>size_t size( );</i> — The string size.</li>
+<li> <i>bool empty( );</i> — The string empty.</li>
+<li> <i>void setVal( const string &amp;vl );</i> — Setting the string's value to <i>vl</i>.</li>
+<li> <i>const string &amp;getVal( );</i> — Getting the string's value.</li>
+<li> <i>const string &amp;getValRef( );</i> — Getting a direct reference to the string <i>std::string</i>. The resource is ignored when you use this function!</li></ul>
+<h3><span class="mw-headline" id="Conditional_variable_object.2C_by_mutex_.28CondVar.29"><span class="mw-headline-number">15.6</span> <span id="CondVar" title="#CondVar">Conditional variable object, by mutex (CondVar)</span></span></h3>
+<p><b>Public methods:</b>
+</p>
+<ul><li> <i>CondVar( );</i> — Initialization of the conditional variable.</li>
+<li> <i>int wait( ResMtx &amp;mtx, unsigned short tm = 0 );</i> — wait for the conditional variable wake up for the timeout <i>tm</i> with the mutex <i>mtx</i>.</li>
+<li> <i>int wakeOne( );</i> — wake up one thread.</li>
+<li> <i>int wakeAll( );</i> — wake up all threads.</li></ul>
+<h3><span class="mw-headline" id="Object_of_automatic_unlock_POSIX_mutex_.28MtxAlloc.29"><span class="mw-headline-number">15.7</span> <span id="MtxAlloc" title="#MtxAlloc">Object of automatic unlock POSIX mutex (MtxAlloc)</span></span></h3>
+<p><b>Public methods:</b>
+</p>
+<ul><li> <i>MtxAlloc( ResMtx &amp;iM, bool lock = false );</i> — Initialization of automatic unlock mutex for early allocated identifier <i>iM</i>. With the <i>lock</i> set at a creation.</li>
+<li> <i>int lock( );</i> — The resource lock. Return zero at the success.</li>
+<li> <i>int unlock( );</i> — The resource unlock. Return zero at the success.</li>
+<li> <i>int tryLock( );</i> — The resource try lock, without wait for free. Return zero at the success.</li></ul>
+<h3><span class="mw-headline" id="Object_of_the_string_with_the_access_shared_by_the_global_the_data_resource_.28mutex.29_.28MtxString.29"><span class="mw-headline-number">15.8</span> <span id="MtxString" title="#MtxString">Object of the string with the access shared by the global the data resource (mutex) (MtxString)</span></span></h3>
+<p><b>Public methods:</b>
+</p>
+<ul><li> <i>MtxString( ResMtx &amp;iM );</i> — The string initialization with the access sharing by resource <i>iM</i>.</li>
+<li> <i>MtxString &amp;operator=( const string &amp;val );</i> — Function for implicit conversion from <i>std::string</i>.</li>
+<li> <i>operator string( );</i> — Function for implicit conversion to <i>std::string</i>.</li>
+<li> <i>size_t size( );</i> — The string size.</li>
+<li> <i>bool empty( );</i> — The string empty.</li>
+<li> <i>void setVal( const string &amp;vl );</i> — Setting the string's value to <i>vl</i>.</li>
+<li> <i>const string &amp;getVal( );</i> — Getting the string's value.</li>
+<li> <i>const string &amp;getValRef( );</i> — Getting a direct reference to the string <i>std::string</i>. The resource is ignored when you use this function!</li></ul>
+<h2><span class="mw-headline" id="Other_generic_objects_.28XMLNode.2C_TError.29"><span class="mw-headline-number">16</span> Other generic objects (XMLNode, TError)</span></h2>
+<p>XML in OpenSACDA is represented by the object of the XML-tag — XMLNode.
+</p><p>Errors of the exceptions are handled by the error object "TError".
+</p>
+<h3><span class="mw-headline" id="XML-tag_.28XMLNode.29"><span class="mw-headline-number">16.1</span> <span id="XMLNode" title="#XMLNode">XML-tag (XMLNode)</span></span></h3>
 <p><b>Data:</b><br />
 Options for XML-file loading (enum — XMLNode::LoadFlgs):
 </p>
@@ -3000,82 +3082,31 @@ Options for XML-file loading (enum — XMLNode::LoadFlgs):
 <li> <i>void getElementsBy( const string &amp;tag, const string &amp;attr, const string &amp;val, TArrayObj *rez );</i> — get elements array <i>rez</i> from the tree by <i>tag</i> (empty for all) and attribute <i>attr</i> value <i>val</i> (empty for pass).</li>
 <li> <i>XMLNode* parent( );</i> — Parent tag of the tag.</li>
 <li> <i>XMLNode* root( );</i> — Root tag of the tag.</li></ul>
-<h2><span class="mw-headline" id="Resources_in_OpenSCADA_.28Res.2C_ResAlloc.2C_ResMtx.2C_MtxAlloc.2C_AutoHD.29"><span class="mw-headline-number">16</span> Resources in OpenSCADA (Res, ResAlloc, ResMtx, MtxAlloc, AutoHD)</span></h2>
-<p>Most of the units and subsystems of OpenSCADA are dynamic, ie they allow the creation/deletion/configuration while the system is working. Taking into account the multi-threading of the system, this functionality imposes stringent requirements for synchronization of threads. For synchronization in the system the resources are used, functions of which are localized in the objects "Res" and "ResAlloc". Object "Res" provides storage of the resource, providing the functions of capture/release for the read and write. In object "ResAlloc" the automatic release of the resource functions are implemented. Automatic resource involves the creation of a local resource object with its automatic release at fracture (in the destructor). Using of automatic resource makes the work with resources when using the exceptions much easier.
-</p><p>Any dynamic system object is inherited from "TCntrNode" object, which contains a mechanism to connect via the "AutoHD" template. The main function of the template is to store the link to the object and the capture of the resource, excluding the deleting of the object at the time of use. Template supports copying the resource and its release in case of destruction of the template object. For clarity of the access to the objects generated by "TCntrNode" the "AutoHD" template supports casting, based on the dynamic cast.
+<h3><span class="mw-headline" id="Error_exception_.28TError.29"><span class="mw-headline-number">16.2</span> <span id="TError" title="#TError">Error exception (TError)</span></span></h3>
+<p><b>Data:</b><br />
+Error codes (enum — TError::Codes):
 </p>
-<h3><span class="mw-headline" id="Resource_R.2FW_lock_object_.28ResRW.29"><span class="mw-headline-number">16.1</span> <span id="ResRW" title="#ResRW">Resource R/W lock object (ResRW)</span></span></h3>
+<ul><li> <i>TError::NoCode (0)</i>, <i>TError::NoError (0)</i> — no error;</li>
+<li> <i>TError::Core_CntrWarning (1)</i> — Core level, warning of the control interface;</li>
+<li> <i>TError::Core_CntrError (2)</i> — Core level, error of the control interface;</li>
+<li> <i>TError::Core_RWLock_EDEADLK (3)</i> — Core level, deadlock of the RWLock;</li>
+<li> <i>TError::Core_TaskCrt (4)</i> — Core level, error the task-thread creation;</li>
+<li> <i>TError::Tr_Connect (10)</i> — Transport level, error connection;</li>
+<li> <i>TError::Tr_UnknownHost (11)</i> — Transport level, unknown host;</li>
+<li> <i>TError::DB_SQL_Connect (20)</i> — DB level, error the SQL-connection;</li>
+<li> <i>TError::DB_SQL_Query (21)</i> — DB level, error the SQL-query;</li>
+<li> <i>TError::Arch_Val_OldBufVl (30)</i> — Archives level, old value placing to the value buffer;</li>
+<li> <i>TError::EXT (100)</i> — Extended errors of OpenSCADA modules to use as TError::EXT+{N}.</li></ul>
 <p><b>Public methods:</b>
 </p>
-<ul><li> <i>ResRW( );</i> — Initialization of the resource.</li>
-<li> <i>static void resRequestW( long tm = 0 );</i> — Request the resource for writing/modification with wait timeout <i>tm</i> (in milliseconds).</li>
-<li> <i>bool resTryW( );</i> — Request try the resource for writing/modification. On success return "true" else "false".</li>
-<li> <i>static void resRequestR( long tm = 0 );</i> — Request the resource for reading with wait timeout <i>tm</i> (in milliseconds).</li>
-<li> <i>bool resTryR( );</i> — Request try the resource for reading. On success return "true" else "false".</li>
-<li> <i>static void resRelease( );</i> — Release of the resource.</li></ul>
-<h3><span class="mw-headline" id="Automatic_resource_RW_unlock_object_.28ResAlloc.29"><span class="mw-headline-number">16.2</span> <span id="ResAlloc" title="#ResAlloc">Automatic resource RW unlock object (ResAlloc)</span></span></h3>
-<p><b>Public methods:</b>
+<ul><li> <i>TError( );</i> — Default-empty constructor.</li>
+<li> <i>TError( const char *cat, const char *mess, ... );</i> — Initialization of the error with the category <i>cat</i> and the message <i>mess</i> + arguments.</li>
+<li> <i>TError( int cod, const char *cat, const char *mess, ... );</i> — Initialization of the error with the <i>code</i>, the category <i>cat</i> and the message <i>mess</i> + arguments.</li></ul>
+<p><b>Public attributes:</b>
 </p>
-<ul><li> <i>ResAlloc( ResRW &amp;rid );</i> — Initialization of the automatically released resource for the previously selected identifier  <i>rid</i>.</li>
-<li> <i>ResAlloc( ResRW &amp;rid, bool write, long tm = 0 );</i> — Initialization of the automatically released resource for the previously selected identifier <i>rid</i>. With the specification of the resource type <i>write</i> (read/write).</li>
-<li> <i>void request( bool write = false, long tm = 0 ); void lock( bool write = false, unsigned short tm = 0 );</i> — Request of the resource in the specified mode <i>write</i> (read/write).</li>
-<li> <i>void release( ); void unlock( );</i> — Release of the resource.</li></ul>
-<h3><span class="mw-headline" id="Template_.28AutoHD.29"><span class="mw-headline-number">16.3</span> <span id="AutoHD" title="#AutoHD">Template (AutoHD)</span></span></h3>
-<p><b>Public methods:</b>
-</p>
-<ul><li> <i>AutoHD( );</i> — Initializing without linkage to the object.</li>
-<li> <i>AutoHD( ORes *node, const string &amp;who = "" );</i> — Initialization with the linkage to the object <i>node</i>. The object must contain the function AHDConnect() and AHDDisConnect().</li>
-<li> <i>AutoHD( const AutoHD &amp;hd );</i> — Copyng constructor.</li>
-<li> <i>template &lt;class ORes1&gt; AutoHD( const AutoHD&lt;ORes1&gt; &amp;hd_s, bool nosafe = false );</i> — Сast constructor in safe mode casting (by help dynamic_cast). Return free resource on impossible cast.</li>
-<li> <i>ORes &amp;at( ) const;</i> — Getting the object by the resource. </li>
-<li> <i>AutoHD &amp;operator=(const AutoHD &amp;hd);</i> — Copying of the resources.</li>
-<li> <i>bool operator==(const AutoHD &amp;hd);</i> — Compare objects into resource by pointer.</li>
-<li> <i>void free( );</i> — Release of the resource.</li>
-<li> <i>bool freeStat( ) const;</i> — The sign "The resource is free".</li></ul>
-<h3><span class="mw-headline" id="Resources_allocation_object.2C_by_mutex_.28ResMtx.29"><span class="mw-headline-number">16.4</span> <span id="ResMtx" title="#ResMtx">Resources allocation object, by mutex (ResMtx)</span></span></h3>
-<p><b>Public methods:</b>
-</p>
-<ul><li> <i>ResMtx( bool isRecurs = true );</i> — Initialization of a mutex object with recursion <i>isRecurs</i>.</li>
-<li> <i>void lock( );</i> — Mutex lock. Return zero at the success.</li>
-<li> <i>void unlock( );</i> — Mutex unlock. Return zero at the success.</li>
-<li> <i>int tryLock( );</i> — Mutex try lock, without wait for free. Return zero at success.</li>
-<li> <i>pthread_mutex_t &amp;mtx( );</i> — Direct link to the mutex structure.</li></ul>
-<h3><span class="mw-headline" id="Object_of_the_string_with_the_access_shared_by_the_resource_.28ResString.29"><span class="mw-headline-number">16.5</span> <span id="ResString" title="#ResString">Object of the string with the access shared by the resource (ResString)</span></span></h3>
-<p><b>Public methods:</b>
-</p>
-<ul><li> <i>explicit ResString( const string &amp;vl = "" );</i> — Initialization of the string with the specified value <i>vl</i>.</li>
-<li> <i>ResString &amp;operator=( const string &amp;val );</i> — Function for implicit conversion from <i>std::string</i>.</li>
-<li> <i>operator string( );</i> — Function for implicit conversion to <i>std::string</i>.</li>
-<li> <i>size_t size( );</i> — The string size.</li>
-<li> <i>bool empty( );</i> — The string empty.</li>
-<li> <i>void setVal( const string &amp;vl );</i> — Setting the string's value to <i>vl</i>.</li>
-<li> <i>const string &amp;getVal( );</i> — Getting the string's value.</li>
-<li> <i>const string &amp;getValRef( );</i> — Getting a direct reference to the string <i>std::string</i>. The resource is ignored when you use this function!</li></ul>
-<h3><span class="mw-headline" id="Conditional_variable_object.2C_by_mutex_.28CondVar.29"><span class="mw-headline-number">16.6</span> <span id="CondVar" title="#CondVar">Conditional variable object, by mutex (CondVar)</span></span></h3>
-<p><b>Public methods:</b>
-</p>
-<ul><li> <i>CondVar( );</i> — Initialization of the conditional variable.</li>
-<li> <i>int wait( ResMtx &amp;mtx, unsigned short tm = 0 );</i> — wait for the conditional variable wake up for the timeout <i>tm</i> with the mutex <i>mtx</i>.</li>
-<li> <i>int wakeOne( );</i> — wake up one thread.</li>
-<li> <i>int wakeAll( );</i> — wake up all threads.</li></ul>
-<h3><span class="mw-headline" id="Object_of_automatic_unlock_POSIX_mutex_.28MtxAlloc.29"><span class="mw-headline-number">16.7</span> <span id="MtxAlloc" title="#MtxAlloc">Object of automatic unlock POSIX mutex (MtxAlloc)</span></span></h3>
-<p><b>Public methods:</b>
-</p>
-<ul><li> <i>MtxAlloc( ResMtx &amp;iM, bool lock = false );</i> — Initialization of automatic unlock mutex for early allocated identifier <i>iM</i>. With the <i>lock</i> set at a creation.</li>
-<li> <i>int lock( );</i> — The resource lock. Return zero at the success.</li>
-<li> <i>int unlock( );</i> — The resource unlock. Return zero at the success.</li>
-<li> <i>int tryLock( );</i> — The resource try lock, without wait for free. Return zero at the success.</li></ul>
-<h3><span class="mw-headline" id="Object_of_the_string_with_the_access_shared_by_the_global_the_data_resource_.28mutex.29_.28MtxString.29"><span class="mw-headline-number">16.8</span> <span id="MtxString" title="#MtxString">Object of the string with the access shared by the global the data resource (mutex) (MtxString)</span></span></h3>
-<p><b>Public methods:</b>
-</p>
-<ul><li> <i>MtxString( ResMtx &amp;iM );</i> — The string initialization with the access sharing by resource <i>iM</i>.</li>
-<li> <i>MtxString &amp;operator=( const string &amp;val );</i> — Function for implicit conversion from <i>std::string</i>.</li>
-<li> <i>operator string( );</i> — Function for implicit conversion to <i>std::string</i>.</li>
-<li> <i>size_t size( );</i> — The string size.</li>
-<li> <i>bool empty( );</i> — The string empty.</li>
-<li> <i>void setVal( const string &amp;vl );</i> — Setting the string's value to <i>vl</i>.</li>
-<li> <i>const string &amp;getVal( );</i> — Getting the string's value.</li>
-<li> <i>const string &amp;getValRef( );</i> — Getting a direct reference to the string <i>std::string</i>. The resource is ignored when you use this function!</li></ul>
+<ul><li> <i>int cod;</i> — The error code.</li>
+<li> <i>string cat;</i> — The error category.</li>
+<li> <i>string mess;</i> — The error message.</li></ul>
 <h2><span class="mw-headline" id="Organization_and_structure_of_the_database_of_the_system_components"><span class="mw-headline-number">17</span> Organization and structure of the database of the system components</span></h2>
 <p>Nodes and subsystems of OpenSCADA may have their own tables in the database to store their own data. The structure of tables is individual and determined by the &lt;TConfig&gt; object. Nodes and subsystems must create and configure the &lt;TConfig&gt; object under their demands.
 </p>
@@ -3516,8 +3547,9 @@ Options for XML-file loading (enum — XMLNode::LoadFlgs):
 <h3><span class="mw-headline" id="The_structure_of_the_databases_of_the_modules"><span class="mw-headline-number">17.6</span> The structure of the databases of the modules</span></h3>
 <p>Each module can have its own database tables to store individual data. Structure of database tables of the modules can be formed freely, based on internal needs.
 </p>
-<h2><span class="mw-headline" id="Service_functions_of_the_OpenSCADA_control_interface"><span class="mw-headline-number">18</span> Service functions of the OpenSCADA control interface</span></h2>
-<p>Service functions — is an interface to access OpenSCADA through the OpenSCADA control interface from external systems. This mechanism is the basis for all exchange mechanisms within OpenSCADA, implemented through weak links and standard exchange protocol of OpenSCADA. Its main advantage is the priority processing and the possibility of using non-standard packaging data. For access to normal data you can use the standard commands of the control interface.
+<h2><span class="mw-headline" id="Service_functions_of_the_OpenSCADA_control_interface"><span class="mw-headline-number">18</span> <span id="ServFunc" title="#ServFunc">Service functions of the OpenSCADA control interface</span></span></h2>
+<p>Service functions is an interface to access OpenSCADA through <a href="../en/API.html">the OpenSCADA control interface</a> from external systems. This mechanism is the basis for all exchange mechanisms within OpenSCADA, implemented through weak links and <a href="../en/API.html" title="Special:MyLanguage/Modules/SelfSystem">the standard-self exchange protocol of OpenSCADA</a>. Its main advantage is the priority processing and the possibility of using non-standard packaging data. For access to normal data you can use <a href="../en/API.html">the standard commands</a> of the control interface.
+</p><p><a class="image" href="../en/API.html"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Not all service functions-requests are described here so to familiarise all presented you must see to the function <i>cntrCmdProc()</i> of proper parts of OpenSCADA in <a class="external text" href="../en/API.html" rel="nofollow noreferrer noopener" target="_blank">the project sources</a>.
 </p>
 <h3><span class="mw-headline" id="Group_access_to_the_values_of_the_parameter.27s_attributes_of_the_subsystem_.22Data_acquisition.22.2C_as_well_as_to_the_detailed_information"><span class="mw-headline-number">18.1</span> Group access to the values of the parameter's attributes of the subsystem "Data acquisition", as well as to the detailed information</span></h3>
 <p>These requests let you to obtain detailed information about the parameters of the subsystem "Data acquisition", to acquire the values of all attributes of the parameters, and also to make the group setting. Detailed information about requests is given in Table 23.
@@ -3816,7 +3848,7 @@ Options for XML-file loading (enum — XMLNode::LoadFlgs):
 <td> </td>
 <td>
 </td></tr></table>
-<h2><span class="mw-headline" id="API_of_modules_of_modular_subsystems"><span class="mw-headline-number">19</span> <span id="ModAPI" title="#ModAPI">API of modules of modular subsystems</span></span></h2>
+<h2><span class="mw-headline" id="API_of_modules_of_the_modular_subsystems"><span class="mw-headline-number">19</span> <span id="ModAPI" title="#ModAPI">API of modules of the modular subsystems</span></span></h2>
 <p>Modules in OpenSCADA are implemented as shared libraries. As it was previously mentioned, one such library can contain many modules of OpenSCADA subsystems, actually acting as a container.
 </p><p>The first step in connecting the shared (SO — shared object) libraries is the connection of the initialization functions. These functions should be defined as usual "C" functions to avoid distortion of function names. Usually this is done as follows:
 </p>
@@ -4080,5 +4112,5 @@ extern "C"
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2661</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2663</td></tr></table></body>
 </html>

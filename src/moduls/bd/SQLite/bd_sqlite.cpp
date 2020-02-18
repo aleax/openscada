@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.7.1"
+#define MOD_VER		"2.8.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -211,7 +211,7 @@ rep:
 	}
 
 	if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("Error of the request \"%s\": %s(%d)"), req.c_str(), err.c_str(), rc);
-	throw err_sys(100+rc, _("Error of the request \"%s\": %s(%d)"), TSYS::strEncode(req,TSYS::Limit,"50").c_str(), err.c_str(), rc);
+	throw err_sys(TError::EXT+rc, _("Error of the request \"%s\": %s(%d)"), TSYS::strEncode(req,TSYS::Limit,"50").c_str(), err.c_str(), rc);
     }
     if(tbl && ncol > 0) {
 	vector<string> row;
@@ -555,7 +555,7 @@ void MTable::fieldSet( TConfig &cfg )
     //Query
     try { owner().sqlReq(req, NULL, true); }
     catch(TError &err) {
-	if((err.cod-100) == SQLITE_READONLY) {
+	if((err.cod-TError::EXT) == SQLITE_READONLY) {
 	    err.mess = err.mess + " " + _("The DB is into the Read only mode!");
 	    throw;
 	}

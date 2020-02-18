@@ -2237,7 +2237,7 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 	XMLNode req("chlds");
 	req.setAttr("path",path+"/%2fobj")->setAttr("grp",grpId);
 	if(cntrIfCmd(req)) {
-	    //if(s2i(req.attr("rez")) == 10) initHosts();
+	    //if(s2i(req.attr("rez")) == TError::Tr_Connect) initHosts();
 	    mod->postMess(req.attr("mcat"), req.text(), TUIMod::Error, this);
 	    return;
 	}
@@ -2358,7 +2358,7 @@ int ConfApp::cntrIfCmd( XMLNode &node )
 	return rez;
     } catch(TError &err) {
 	node.childClear();
-	node.setAttr("mcat",err.cat)->setAttr("rez","10")->setText(err.mess);
+	node.setAttr("mcat",err.cat)->setAttr("rez",i2s(TError::Tr_Connect))->setText(err.mess);
     }
 
     return s2i(node.attr("rez"));
@@ -2378,7 +2378,7 @@ int ConfApp::cntrIfCmdHosts( XMLNode &node )
     //No the host present
     if(!iHost) {
 	node.childClear();
-	node.setAttr("mcat",mod->nodePath())->setAttr("rez","11")->setText(TSYS::strMess(_("Unknown host '%s'."),hostId.c_str()));
+	node.setAttr("mcat",mod->nodePath())->setAttr("rez",i2s(TError::Tr_UnknownHost))->setText(TSYS::strMess(_("Unknown host '%s'."),hostId.c_str()));
 	return s2i(node.attr("rez"));
     }
 
@@ -3230,7 +3230,7 @@ void SCADAHost::run( )
 
 		lnkOK = true;
 	    }
-	    else if(rez/* == 10*/) {
+	    else if(rez/* == TError::Tr_Connect*/) {
 		img = imgDisConnect;
 		toolTip = req.text().c_str();
 
@@ -3250,7 +3250,7 @@ void SCADAHost::run( )
 	    if(lnkOK) lnkOK = (rez=cntrIfCmd(*req,wuser)) != 10;
 	    else {
 		req->childClear();
-		req->setAttr("mcat",mod->nodePath()+"/"+id.toStdString())->setAttr("rez","10")->setText(_("No connection is established"));
+		req->setAttr("mcat",mod->nodePath()+"/"+id.toStdString())->setAttr("rez",i2s(TError::Tr_Connect))->setText(_("No connection is established"));
 	    }
 	    mtx.lock();
 	    reqDone = *done = true;
@@ -3271,7 +3271,7 @@ int SCADAHost::cntrIfCmd( XMLNode &node, const QString &iuser )
 	return rez;
     } catch(TError &err) {
 	node.childClear();
-	node.setAttr("mcat",err.cat)->setAttr("rez","10")->setText(err.mess);
+	node.setAttr("mcat",err.cat)->setAttr("rez",i2s(TError::Tr_Connect))->setText(err.mess);
 	tm = 0;		//Check the link immediately
     }
 

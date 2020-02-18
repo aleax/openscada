@@ -107,19 +107,19 @@ void ModMArch::start( )
     AutoHD<TBD> db = SYS->db().at().nodeAt(wdb,0,'.');
     if( !db.at().enableStat( ) ) db.at().enable();
 
-    run_st = true;
+    runSt = true;
 }
 
 //!!! Inherited (virtual) stop archivator functions.
 void ModMArch::stop( )
 {
-    run_st = false;
+    runSt = false;
 }
 
 //!!! Put data virtual functions for place data to archive.
 void ModMArch::put( vector<TMess::SRec> &mess )
 {
-    if(!run_st) throw TError(nodePath().c_str(),_("Archive is not started!"));
+    if(!runSt) throw TError(nodePath().c_str(),_("Archive is not started!"));
 
     //!!! Code for place data to archive.
 }
@@ -127,7 +127,7 @@ void ModMArch::put( vector<TMess::SRec> &mess )
 //!!! Get data virtual functions for request data from archive.
 void ModMArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category, char level )
 {
-    if( !run_st ) throw TError(nodePath().c_str(),_("Archive is not started!"));
+    if(!runSt) throw TError(nodePath().c_str(),_("Archive is not started!"));
 
     //!!! Code for request data from archive.
 }

@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tarchval.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -613,7 +613,8 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, int64_t tm )
 	    (*buf.grid)[wcur] = value;
 	    return;
 	}
-	else if(npos < 0) throw TError("ValBuf", _("The grid mode doesn't support inserting too old values %lld (%lld-%lld)."), tm, beg, end);
+	else if(npos < 0)
+	    throw TError(TError::Arch_Val_OldBufVl, "ValBuf", _("The grid mode doesn't support inserting too old values %lld (%lld-%lld)."), tm, beg, end);
 	else {
 	    TpVal fillVl = eval;
 	    if(fillLast && buf.grid->size()) fillVl = cur ? (*buf.grid)[cur-1] : (*buf.grid)[buf.grid->size()-1];
@@ -647,7 +648,8 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, int64_t tm )
     else if(per) {
 	int npos = (tm-end)/per;
 	// Set value
-	if(npos < 0) throw TError("ValBuf", _("The grid mode doesn't support inserting old values."));
+	if(npos < 0)
+	    throw TError(TError::Arch_Val_OldBufVl, "ValBuf", _("The grid mode doesn't support inserting too old values."));
 	else {
 	    if(hgResTm) {
 		SHg b_el;
@@ -802,7 +804,8 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, int64_t tm )
     else {
 	if(hgResTm) {
 	    SHg b_el = { tm, value };
-	    if(tm < beg && size && (int)buf.tmHigh->size() >= size) throw TError("ValBuf", _("Insert a very old value to the buffer."));
+	    if(tm < beg && size && (int)buf.tmHigh->size() >= size)
+		throw TError(TError::Arch_Val_OldBufVl, "ValBuf", _("Inserting too old values to the buffer."));
 	    int c_pos = 0;
 
 	    // Half divider
@@ -835,7 +838,8 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, int64_t tm )
 	}
 	else {
 	    SLw b_el = { (time_t)(tm/1000000ll), value };
-	    if(tm < beg && size && (int)buf.tmLow->size() >= size) throw TError("ValBuf", _("Insert a very old value to the buffer."));
+	    if(tm < beg && size && (int)buf.tmLow->size() >= size)
+		throw TError(TError::Arch_Val_OldBufVl, "ValBuf", _("Inserting too old values to the buffer."));
 	    int c_pos = 0;
 	    // Half divider
 	    int d_win = buf.tmLow->size()/2;
@@ -1237,7 +1241,8 @@ void TVArchive::setVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string 
     for(unsigned iA = 0; iA < archEl.size(); iA++)
 	if((arch.empty() || arch == archEl[iA]->archivator().workId()))
 		//&& (!archEl[iA]->lastGet() || ibeg < archEl[iA]->lastGet()))	//!!!! Impossible write direct else
-	    archEl[iA]->setVals(buf, ibeg, iend/*vmin(iend,archEl[iA]->lastGet())*/);
+	    try { archEl[iA]->setVals(buf, ibeg, iend/*vmin(iend,archEl[iA]->lastGet())*/); }
+	    catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 }
 
 void TVArchive::getActiveData( const int64_t &tm )
@@ -1355,7 +1360,7 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 	h_w_start, h_w_size,	//Trend window horizontal start and size
 	v_w_start, v_w_size;	//Trend window vertical start and size
     string sclMarkFont = "Times";
-    int mrkFontSize = 8, begMarkBrd = -1, endMarkBrd = 0;
+    int mrkFontSize = 10, begMarkBrd = -1, endMarkBrd = 0;
 
     //Check and get data
     if(ibeg >= iend || valType() == TFld::String) return rez;

@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.Siemens file: siemens.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Siemens DAQ and Beckhoff")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"3.1.7"
+#define MOD_VER		"3.2.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol)\
  and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the\
@@ -478,7 +478,7 @@ string TMdContr::getStatus( )
 	if(tmDelay > -1) {
 	    rez += (conErr.getVal().size() ? conErr.getVal(): string(_("Error connecting."))) + " ";
 	    if(tmDelay) rez += TSYS::strMess(_("Restoring in %.6g s. "), tmDelay);
-	    rez.replace(0, 1, i2s(ConnErrCode));
+	    rez.replace(0, 1, i2s(TError::Tr_Connect));
 	}
 	else {
 	    if(callSt)	rez += TSYS::strMess(_("Acquisition. "));
@@ -775,7 +775,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 		if(res == DRV_DEV_GET_TIMEOUT)	throw TError(_("ReadDB"), _("Timeout the get request."));
 		if(tMsg.f == 17)	throw TError(_("ReadDB"), _("There is no response from the remote station."));
 		if(tMsg.f == 18)	throw TError(_("ReadDB"), _("Master is out of the logical token ring."));
-		if(tMsg.f == 0x85)	throw TError(11, _("ReadDB"), _("Error the specified offset address or DB."));
+		if(tMsg.f == 0x85)	throw TError(TError::EXT+1, _("ReadDB"), _("Error the specified offset address or DB."));
 
 		//printf("Get DB %d:%d DB%d.%d(%d) -- %d\n",mDev,vmax(0,vmin(126,s2i(addr()))),n_db,offset,buffer.size(),tMsg.f);
 
@@ -807,7 +807,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 		if((rez=daveReadBytes(dc,daveDB,n_db,offset,buffer.size(),NULL))) {
 		    if(rez == daveResTimeout) throw TError("ReadDB", _("Error connecting."));
 		    if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), _("Error reading the block %d: %s."), n_db, daveStrerror(rez));
-		    throw TError(11, "ReadDB", _("Error the DB %d: %s."), n_db, daveStrerror(rez));
+		    throw TError(TError::EXT+1, "ReadDB", _("Error the DB %d: %s."), n_db, daveStrerror(rez));
 		}
 		buffer.replace(0, buffer.size(), (char*)dc->resultPointer, buffer.size());	//!!!! But assign() temporary the block size changes
 		break;
@@ -859,11 +859,11 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 		ADS_ReadResp *ADSreadResp = (ADS_ReadResp *)(AmsHD+1);
 		resp_len = sizeof(AMS_TCP_HEAD)+sizeof(AMS_HEAD);
 		if(full_len < resp_len || AmsHD->com != 2 || AmsHD->stFlgs != 0x05)	throw TError("ReadDB", _("Error the server response."));
-		if(AmsHD->errCod) throw TError(11, "ReadDB", _("Error the server response: %d."), AmsHD->errCod);
-		if(full_len < (resp_len+=sizeof(ADS_ReadResp)))	throw TError(12, "ReadDB", _("Error the server response."));
-		if(ADSreadResp->res) throw TError(13, "ReadDB", _("Error the server response: %d."), ADSreadResp->res);
+		if(AmsHD->errCod) throw TError(TError::EXT+1, "ReadDB", _("Error the server response: %d."), AmsHD->errCod);
+		if(full_len < (resp_len+=sizeof(ADS_ReadResp)))	throw TError(TError::EXT+2, "ReadDB", _("Error the server response."));
+		if(ADSreadResp->res) throw TError(TError::EXT+3, "ReadDB", _("Error the server response: %d."), ADSreadResp->res);
 		if(ADSreadResp->len != buffer.size() || full_len < (int)(resp_len+ADSreadResp->len))
-		    throw TError(14, "ReadDB", _("Error the server response."));
+		    throw TError(TError::EXT+4, "ReadDB", _("Error the server response."));
 		buffer.replace(0, buffer.size(), res+resp_len, buffer.size());	//!!!! But assign() temporary the block size changes
 
 		break;
@@ -881,8 +881,8 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 	numR += buffer.size();
     } catch(TError &er) {
 	if(er.cat.size()) er.mess = er.cat + ":" + er.mess;
-	if(!er.cod) er.cod = ConnErrCode;
-	if(er.cod == ConnErrCode) setCntrDelay(er.mess);
+	if(!er.cod) er.cod = TError::Tr_Connect;
+	if(er.cod == TError::Tr_Connect) setCntrDelay(er.mess);
 	er.mess = i2s(er.cod) + ":" + er.mess;
 	if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), "%s", er.mess.c_str());
 	throw er;
@@ -942,7 +942,7 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 		if(res == DRV_DEV_GET_TIMEOUT)	throw TError("WriteDB", _("Timeout getting request."));
 		if(tMsg.f == 17)	throw TError(_("WriteDB"), _("There is no response from the remote station."));
 		if(tMsg.f == 18)	throw TError(_("WriteDB"), _("Master is out of the logical token ring."));
-		if(tMsg.f == 0x85)	throw TError(11, _("WriteDB"), _("Error the specified offset address or DB."));
+		if(tMsg.f == 0x85)	throw TError(TError::EXT+1, _("WriteDB"), _("Error the specified offset address or DB."));
 		break;
 	    }
 	    case ISO_TCP:
@@ -955,7 +955,7 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 		if((rez=daveWriteBytes(dc,daveDB,n_db,offset,buffer.size(),(char*)buffer.c_str()))) {
 		    if(rez == daveResTimeout) throw TError("WriteDB", _("Error connecting."));
 		    if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), _("Error writing the block %d: %s."), n_db, daveStrerror(rez));
-		    throw TError(11, "WriteDB", _("Error the DB %d: %s."), n_db, daveStrerror(rez));
+		    throw TError(TError::EXT+1, "WriteDB", _("Error the DB %d: %s."), n_db, daveStrerror(rez));
 		}
 		break;
 	    }
@@ -1006,9 +1006,9 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 		ADS_WriteResp *ADSwriteResp = (ADS_WriteResp *)(AmsHD+1);
 		resp_len = sizeof(AMS_TCP_HEAD)+sizeof(AMS_HEAD);
 		if(full_len < resp_len || AmsHD->com != 3 || AmsHD->stFlgs != 0x05) throw TError("WriteDB", _("Error the server response."));
-		if(AmsHD->errCod) throw TError(11, "WriteDB", _("Error the server response: %d."), AmsHD->errCod);
-		if(full_len < (resp_len+=sizeof(ADS_WriteResp)))	throw TError(12, "WriteDB", _("Error the server response."));
-		if(ADSwriteResp->res) throw TError(13, "WriteDB", _("Error the server response: %d."), ADSwriteResp->res);
+		if(AmsHD->errCod) throw TError(TError::EXT+1, "WriteDB", _("Error the server response: %d."), AmsHD->errCod);
+		if(full_len < (resp_len+=sizeof(ADS_WriteResp)))	throw TError(TError::EXT+2, "WriteDB", _("Error the server response."));
+		if(ADSwriteResp->res) throw TError(TError::EXT+3, "WriteDB", _("Error the server response: %d."), ADSwriteResp->res);
 
 		break;
 	    }
@@ -1023,8 +1023,8 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 	numW += buffer.size();
     } catch(TError &er) {
 	if(er.cat.size()) er.mess = er.cat + ":" + er.mess;
-	if(!er.cod) er.cod = ConnErrCode;
-	if(er.cod == ConnErrCode) setCntrDelay(er.mess);
+	if(!er.cod) er.cod = TError::Tr_Connect;
+	if(er.cod == TError::Tr_Connect) setCntrDelay(er.mess);
 	er.mess = i2s(er.cod) + ":" + er.mess;
 	if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), "%s", er.mess.c_str());
 	throw er;
@@ -1243,21 +1243,21 @@ void TMdContr::protIO( XMLNode &io )
 		    // Data part
 		    uint8_t iDErr = iN(tpkt, off, 1);
 		    if(iDErr != 0xFF) {
-			if(iDErr == 3)		throw TError(12, io.attr("id").c_str(), _("An attempt to access outside the DB '%s' (200 family), %s(%s)."),
+			if(iDErr == 3)		throw TError(TError::EXT+2, io.attr("id").c_str(), _("An attempt to access outside the DB '%s' (200 family), %s(%s)."),
 					io.attr("db").c_str(), io.attr("off").c_str(), io.attr("size").c_str());
-			else if(iDErr == 5)	throw TError(12, io.attr("id").c_str(), _("An attempt to access outside the DB '%s', %s(%s)."),
+			else if(iDErr == 5)	throw TError(TError::EXT+2, io.attr("id").c_str(), _("An attempt to access outside the DB '%s', %s(%s)."),
 					io.attr("db").c_str(), io.attr("off").c_str(), io.attr("size").c_str());
-			else if(iDErr == 10)	throw TError(11, io.attr("id").c_str(), _("The DB '%s' doesn't exist."), io.attr("db").c_str());
-			else throw TError(13, io.attr("id").c_str(), _("Unknown error accessing to DB, %xh."), iDErr);
+			else if(iDErr == 10)	throw TError(TError::EXT+1, io.attr("id").c_str(), _("The DB '%s' doesn't exist."), io.attr("db").c_str());
+			else throw TError(TError::EXT+3, io.attr("id").c_str(), _("Unknown error accessing to DB, %xh."), iDErr);
 		    }
 		    char iDLenTp = iN(tpkt, off, 1);
 		    uint16_t iDLen = iN(tpkt, off, 2);
 		    if(iDLenTp == 4) iDLen = iDLen/8;	//len is in bits, adjust
 		    else if(iDLenTp == 9) ;		//len is already in bytes, ok
 		    else if(iDLenTp == 3) ;		//len is in bits, but there is a byte per result bit, ok
-		    else throw TError(14, io.attr("id").c_str(), _("Unknown data encoding type, %d."), iDLenTp);
+		    else throw TError(TError::EXT+4, io.attr("id").c_str(), _("Unknown data encoding type, %d."), iDLenTp);
 		    if((off+iDLen) != (int)tpkt.size())
-			throw TError(15, io.attr("id").c_str(), _("Inconsistency in the size of the data block to the response size, %d(%d)."),
+			throw TError(TError::EXT+5, io.attr("id").c_str(), _("Inconsistency in the size of the data block to the response size, %d(%d)."),
 								    (off+iDLen), tpkt.size());
 		    io.setText(tpkt.substr(off));
 		    break;
@@ -1269,10 +1269,10 @@ void TMdContr::protIO( XMLNode &io )
 		    // Data part
 		    uint8_t iDErr = iN(tpkt, off, 1);
 		    if(iDErr != 0xFF) {
-			if(iDErr == 5) throw TError(12, io.attr("id").c_str(), _("An attempt to access outside the DB '%s', %s(%s)."),
+			if(iDErr == 5) throw TError(TError::EXT+2, io.attr("id").c_str(), _("An attempt to access outside the DB '%s', %s(%s)."),
 					io.attr("db").c_str(), io.attr("off").c_str(), io.attr("size").c_str());
-			else if(iDErr == 10) throw TError(11, io.attr("id").c_str(), _("The DB '%s' doesn't exist."), io.attr("db").c_str());
-			else throw TError(13, io.attr("id").c_str(), _("Unknown error accessing to DB, %xh."), iDErr);
+			else if(iDErr == 10) throw TError(TError::EXT+1, io.attr("id").c_str(), _("The DB '%s' doesn't exist."), io.attr("db").c_str());
+			else throw TError(TError::EXT+3, io.attr("id").c_str(), _("Unknown error accessing to DB, %xh."), iDErr);
 		    }
 		    break;
 		}
@@ -1296,7 +1296,7 @@ TVariant TMdContr::getVal( const string &iaddr, ResString &err)
 {
     if(tmDelay > 0) {
 	if(err.getVal().empty())
-	    err = TSYS::strMess("%d:%s", ConnErrCode, conErr.getVal().c_str());
+	    err = TSYS::strMess("%d:%s", TError::Tr_Connect, conErr.getVal().c_str());
 	return EVAL_REAL;
     }
 
@@ -1355,7 +1355,7 @@ TVariant TMdContr::getVal( const string &iaddr, ResString &err)
 void TMdContr::setVal( const TVariant &ivl, const string &iaddr, ResString &err )
 {
     if(tmDelay > 0) {
-	if(err.getVal().empty()) err = TSYS::strMess("%d:%s", ConnErrCode, conErr.getVal().c_str());
+	if(err.getVal().empty()) err = TSYS::strMess("%d:%s", TError::Tr_Connect, conErr.getVal().c_str());
 	return;
     }
     if(ivl.isEVal())	return;

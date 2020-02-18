@@ -1,7 +1,7 @@
 
 //OpenSCADA file: resalloc.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -59,7 +59,8 @@ void ResRW::resRequestW( unsigned short tm )
 	wtm.tv_sec += tm/1000 + wtm.tv_nsec/1000000000; wtm.tv_nsec = wtm.tv_nsec%1000000000;
 	rez = pthread_rwlock_timedwrlock(&rwc, &wtm);
     }
-    if(rez == EDEADLK) throw TError(10, "ResRW", _("The resource tries to tightly block the thread!"));
+    if(rez == EDEADLK)
+	throw TError(TError::Core_RWLock_EDEADLK, "ResRW", _("The resource tries to tightly block the thread!"));
     else if(tm && rez == ETIMEDOUT) throw TError("ResRW", _("Resource is timeouted!"));
 #if !__GLIBC_PREREQ(2,4)
     wThr = pthread_self();
@@ -70,7 +71,7 @@ bool ResRW::resTryW( )
 {
     int rez = pthread_rwlock_trywrlock(&rwc);
     if(rez == EBUSY) return false;
-    else if(rez == EDEADLK) throw TError(10, "ResRW", _("The resource tries to tightly block the thread!"));
+    else if(rez == EDEADLK) throw TError(TError::Core_RWLock_EDEADLK, "ResRW", _("The resource tries to tightly block the thread!"));
     return true;
 }
 
@@ -91,15 +92,17 @@ void ResRW::resRequestR( unsigned short tm )
 	wtm.tv_sec += tm/1000 + wtm.tv_nsec/1000000000; wtm.tv_nsec = wtm.tv_nsec%1000000000;
 	rez = pthread_rwlock_timedrdlock(&rwc,&wtm);
     }
-    if(rez == EDEADLK) throw TError(10,"ResRW",_("The resource tries to tightly block the thread!"));
-    else if(tm && rez == ETIMEDOUT) throw TError("ResRW",_("Resource is timeouted!"));
+    if(rez == EDEADLK)
+	throw TError(TError::Core_RWLock_EDEADLK, "ResRW", _("The resource tries to tightly block the thread!"));
+    else if(tm && rez == ETIMEDOUT) throw TError("ResRW", _("Resource is timeouted!"));
 }
 
 bool ResRW::resTryR( )
 {
     int rez = pthread_rwlock_tryrdlock(&rwc);
     if(rez == EBUSY) return false;
-    else if(rez == EDEADLK) throw TError(10,"ResRW",_("The resource tries to tightly block the thread!"));
+    else if(rez == EDEADLK)
+	throw TError(TError::Core_RWLock_EDEADLK, "ResRW", _("The resource tries to tightly block the thread!"));
     return true;
 }
 
@@ -128,7 +131,7 @@ void ResAlloc::request( bool write, unsigned short tm )
 	if(write) mId.resRequestW(tm);
 	else mId.resRequestR(tm);
 	mAlloc = true;
-    } catch(TError &err) { if(err.cod!=10) throw; }
+    } catch(TError &err) { if(err.cod != TError::Core_RWLock_EDEADLK) throw; }
 }
 
 void ResAlloc::release( )
@@ -218,7 +221,7 @@ int MtxAlloc::lock( )
 {
     if(mLock) return 0;
     int rez = m.lock();
-    if(!rez) mLock = true;
+    if(rez == 0) mLock = true;
 
     return rez;
 }
@@ -227,7 +230,7 @@ int MtxAlloc::tryLock( )
 {
     if(mLock) return 0;
     int rez = m.tryLock();
-    if(!rez) mLock = true;
+    if(rez == 0) mLock = true;
 
     return rez;
 }
@@ -236,7 +239,7 @@ int MtxAlloc::unlock( )
 {
     if(!mLock) return 0;
     int rez = m.unlock();
-    if(!rez) mLock = false;
+    if(rez == 0) mLock = false;
 
     return rez;
 }

@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.SelfSystem file: self.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2016,2020 by Roman Savochenko, <roman@oscada.org>  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,7 +32,7 @@
 #define MOD_NAME	_("Own protocol of OpenSCADA")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.4.1"
+#define MOD_VER		"1.5.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides own OpenSCADA protocol based at XML and the control interface of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -402,7 +402,7 @@ bool TProtIn::mess( const string &request, string &answer )
 		try { SYS->transport().at().cntrIfCmd(req_node, "Reforward", auth.name); }
 		catch(TError &err) {
 		    req_node.childClear();
-		    req_node.setAttr("mcat",err.cat)->setAttr("rez","10")->setText(err.mess);
+		    req_node.setAttr("mcat",err.cat)->setAttr("rez",i2s(TError::Tr_Connect))->setText(err.mess);
 		}
 	    }
 	    else {

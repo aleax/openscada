@@ -1,7 +1,7 @@
 
 //OpenSCADA file: terror.h
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018,2020 by Roman Savochenko, <roman@oscada.org>  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,10 +34,25 @@ namespace OSCADA
 class TError
 {
     public:
+	//Data
+	enum Codes {
+	    NoCode = 0, NoError = 0,
+	    Core_CntrWarning = 1,
+	    Core_CntrError = 2,
+	    Core_RWLock_EDEADLK = 3,
+	    Core_TaskCrt = 4,
+	    Tr_Connect = 10,
+	    Tr_UnknownHost = 11,
+	    DB_SQL_Connect = 20,
+	    DB_SQL_Query = 21,
+	    Arch_Val_OldBufVl = 30,
+	    EXT = 100
+	};
+
 	//Methods
-	TError( ) : cod(0)	{ }
-	TError( const char *cat, const char *fmt, ... );
-	TError( int cod, const char *cat, const char *fmt, ... );
+	TError( ) : cod(NoCode)	{ }
+	TError( const char *cat, const char *mess, ... );
+	TError( int cod, const char *cat, const char *mess, ... );
 
 	//Attributes
 	int	cod;

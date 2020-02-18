@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebCfgD file: web_cfg.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2008-2017,2020 by Roman Savochenko, <roman@oscada.org>  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -40,7 +40,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.3.4"
+#define MOD_VER		"1.4.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the WEB-based configurator of OpenSCADA. The technologies are used: XHTML, CSS and JavaScript.")
 #define LICENSE		"GPL2"
@@ -408,7 +408,7 @@ int TWEB::cntrIfCmd( XMLNode &node, const string &user )
     //	    node.name() == "load" || node.name() == "save" || node.name() == "copy")
     //	node.setAttr("primaryCmd", "1");
     try { return SYS->transport().at().cntrIfCmd(node,"UIWebCfg",user); }
-    catch(TError &err) { node.setAttr("mcat",err.cat)->setAttr("rez","10")->setText(err.mess); }
+    catch(TError &err) { node.setAttr("mcat",err.cat)->setAttr("rez",i2s(TError::Tr_Connect))->setText(err.mess); }
 
     return s2i(node.attr("rez"));
 }

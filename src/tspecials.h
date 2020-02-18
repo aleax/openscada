@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tspecials.h
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,7 +21,7 @@
 #ifndef TSPECIALS_H
 #define TSPECIALS_H
 
-#define SSPC_VER	20		//SpecialS type modules version
+#define SSPC_VER	21		//SpecialS type modules version
 #define SSPC_ID		"Special"
 
 #include <string>
@@ -46,7 +46,7 @@ class TSpecial : public TModule
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
 	//Attributes
-	bool  run_st;
+	bool  runSt;
 };
 
 //*************************************************

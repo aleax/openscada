@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.SSL file: modssl.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2008-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.4.3"
+#define MOD_VER		"2.5.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2 are supported.")
@@ -157,6 +157,8 @@ void TTransSock::dyn_destroy_function( struct CRYPTO_dynlock_value *l, const cha
 
 void TTransSock::load_( )
 {
+    TTypeTransport::load_();
+
     //Load parameters from command line
 
 }
@@ -1054,6 +1056,7 @@ void TSocketOut::start( int tmCon )
 		    getnameinfo((sockaddr*)&addrs[iA], sizeof(addrs[iA]), aBuf, sizeof(aBuf), 0, 0, NI_NUMERICHOST);
 		    connAddr = aBuf;
 		} else connAddr = inet_ntoa(((sockaddr_in*)&addrs[iA])->sin_addr);
+
 	    } catch(TError &err) {
 		aErr = err.mess;
 		if(conn)	BIO_reset(conn);
@@ -1077,6 +1080,8 @@ void TSocketOut::start( int tmCon )
 	if(logLen()) pushLogMess(TSYS::strMess(_("Error starting: %s"),err.mess.c_str()));
 	throw;
     }
+
+    mLstReqTm = TSYS::curTime();
 
     runSt = true;
 
@@ -1127,7 +1132,7 @@ int TSocketOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int ti
     if(!runSt) throw TError(nodePath().c_str(), _("Transport is not started!"));
 
 repeate:
-    if(reqTry++ >= attempts())	throw TError(nodePath().c_str(), _("Error requesting: %s"), err.c_str());
+    if(reqTry++ >= attempts())	{ mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(), _("Error requesting: %s"), err.c_str()); }
 
     int64_t stRespTm = 0;
 
@@ -1197,6 +1202,7 @@ repeate:
 			else goto repeate;
 		    }
 		}
+		mLstReqTm = TSYS::curTime();
 		throw TError(nodePath().c_str(), err.c_str());
 	    }
 	    else if(kz < 0) {
@@ -1204,6 +1210,7 @@ repeate:
 		stop();
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Error reading (select): %s"), err.c_str());
 		if(logLen()) pushLogMess(TSYS::strMess(_("Error reading (select): %s"), err.c_str()));
+		mLstReqTm = TSYS::curTime();
 		throw TError(nodePath().c_str(),_("Error reading (select): %s"), err.c_str());
 	    }
 	    else if(FD_ISSET(sockFd,&rd_fd)) {
@@ -1230,6 +1237,8 @@ repeate:
 	    }
 	}
     }
+
+    mLstReqTm = TSYS::curTime();
 
     return vmax(0, ret);
 }

@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.Siemens file: siemens.h
 /***************************************************************************
- *   Copyright (C) 2006-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,6 @@
 #define _(mess) mod->I18N(mess)
 
 #define MaxLenReq	240
-#define ConnErrCode	10
 
 using std::string;
 using std::vector;

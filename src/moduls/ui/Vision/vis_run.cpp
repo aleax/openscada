@@ -377,7 +377,7 @@ int VisRun::cntrIfCmd( XMLNode &node, bool glob, bool main )
     else rez = mod->cntrIfCmd(node, user(), password(), VCAStation(), glob);
 
     //Display error message about connection error
-    if(rez == 10 && main && masterPg()) {
+    if(rez == TError::Tr_Connect && main && masterPg()) {
 	if(!conErr) {
 	    //Create error message
 	    conErr = new QLabel(masterPg());
@@ -1227,7 +1227,7 @@ void VisRun::initSess( const string &iprjSes_it, bool icrSessForce )
     if(work_sess.empty()) req.setAttr("prj", src_prj);
     else req.setAttr("sess", work_sess);
     if(cntrIfCmd(req)) {
-	if(!(conErr && s2i(req.attr("rez")) == 10)) {	//Need check for prevent the warning dialog and the run closing by the session creation wait
+	if(!(conErr && s2i(req.attr("rez")) == TError::Tr_Connect)) {	//Need check for prevent the warning dialog and the run closing by the session creation wait
 	    mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	    close();
 	}

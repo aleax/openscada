@@ -1,13 +1,13 @@
 # OpenSCADA core translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA package.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2003-2020.
+# Roman Savochenko <roman@oscada.org>, 2003-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-05 09:56+0200\n"
+"POT-Creation-Date: 2020-02-14 11:00+0200\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -349,11 +349,13 @@ msgstr ""
 "Не підтримується вставка дуже старих повідомлень у режимі прив'язки до сітки "
 "%lld (%lld-%lld)."
 
-msgid "The grid mode doesn't support inserting old values."
+#, fuzzy
+msgid "The grid mode doesn't support inserting too old values."
 msgstr ""
 "Не підтримується вставка старих повідомлень у режимі прив'язки до сітки."
 
-msgid "Insert a very old value to the buffer."
+#, fuzzy
+msgid "Inserting too old values to the buffer."
 msgstr "Вставка дуже старого значення до буфера."
 
 #, c-format
@@ -2346,6 +2348,19 @@ msgstr "Вхідний транспорт"
 msgid "Output transport"
 msgstr "Вихідний транспорт"
 
+msgid "List"
+msgstr "Перелік"
+
+msgid "Keep alive timeout, seconds"
+msgstr "Час життя, секунд"
+
+msgid ""
+"Time of inactivity in the output transport for it closing/disconnection. Set "
+"to 0 to disable the transports closing!"
+msgstr ""
+"Час бездіяльності у вихідному транспорті для його закриття/відключення. "
+"Встановіть 0, щоб відключити закриття транспорту!"
+
 msgid "Started. "
 msgstr "Запущено. "
 
@@ -2375,8 +2390,8 @@ msgid "Log"
 msgstr "Лог"
 
 #, c-format
-msgid "Established: %s. "
-msgstr "Встановлено: %s. "
+msgid "Established: %s. Last: %s. "
+msgstr "Встановлено: %s. Останнє: %s. "
 
 #, c-format
 msgid "Transport protocol '%s' is missing"

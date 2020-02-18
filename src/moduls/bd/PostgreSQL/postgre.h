@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.PostgreSQL file: postgre.h
 /***************************************************************************
- *   Copyright (C) 2013-2019 by Roman Savochenko, rom_as@oscada.org        *
+ *   Copyright (C) 2013-2020 by Roman Savochenko, roman@oscada.org         *
  *                 2010-2011 by Maxim Lysenko, mlisenko@oscada.org         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -82,9 +82,6 @@ class MBD : public TBD
     friend class MTable;
 
     public:
-	//Data
-	enum SQLerrs { SQL_CONN = 1, SQL_QUERY = 2 };
-
 	//Public methods
 	MBD( string iid, TElem *cf_el );
 	~MBD( );

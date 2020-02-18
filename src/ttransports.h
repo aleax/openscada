@@ -21,7 +21,7 @@
 #ifndef TTRANSPORTS_H
 #define TTRANSPORTS_H
 
-#define STR_VER		21		//TransportS type modules version
+#define STR_VER		22		//TransportS type modules version
 #define STR_ID		"Transport"
 
 #include <string>
@@ -146,6 +146,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	bool	toStart( )		{ return mStart; }
 	bool	startStat( ) const	{ return runSt; }
 	time_t	startTm( )		{ return mStartTm; }
+	int64_t	lstReqTm( )		{ return mLstReqTm; }
 	virtual	string getStatus( );
 
 	string DB( )		{ return mDB; }
@@ -197,6 +198,8 @@ class TTransportOut : public TCntrNode, public TConfig
 	//Attributes
 	bool	runSt;
 
+	int64_t	mLstReqTm;
+
     private:
 	//Methods
 	const char *nodeName( ) const	{ return mId.getSd(); }
@@ -243,11 +246,18 @@ class TTypeTransport: public TModule
 	AutoHD<TTransportOut> outAt( const string &id ) const	{ return chldAt(mOut, id); }
 	virtual	string outAddrHelp( )				{ return ""; }
 
+	int outKeepAliveTm( )		{ return mOutKeepAliveTm; }
+	void setOutKeepAliveTm( int vl ){ mOutKeepAliveTm = vmax(0, vl); modif(); }
+
+	void perSYSCall( unsigned int cnt );
+
 	TTransportS &owner( ) const;
 
     protected:
 	//Methods
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+	void load_( );
+	void save_( );
 
 	virtual TTransportIn  *In( const string &name, const string &db )
 	{ throw TError(nodePath().c_str(),_("Input transport is not supported!")); }
@@ -256,7 +266,8 @@ class TTypeTransport: public TModule
 
     private:
 	//Attributes
-	int	mIn, mOut;
+	int	mIn, mOut,
+		mOutKeepAliveTm;	//Output transports keep alive timeout
 };
 
 //************************************************

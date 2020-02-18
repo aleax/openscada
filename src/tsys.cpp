@@ -2060,7 +2060,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 	}
 	if(!pAttr) pthread_attr_destroy(pthr_attr);
 
-	if(rez) throw err_sys(1, _("Error %d creation a task."), rez);
+	if(rez) throw err_sys(TError::Core_TaskCrt, _("Error %d creation a task."), rez);
 
 	//Wait for thread structure initialization finish for not detachable tasks
 	while(!(htsk.flgs&STask::Detached) && !htsk.thr) TSYS::sysSleep(1e-3); //sched_yield(); !!! don't use for hard realtime systems with high priority

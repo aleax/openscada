@@ -3990,7 +3990,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 		curVal = EVAL_REAL;
 	}
 	else curPos = maxPos+1;
-	if(curPos < 0 || curPos > (maxPos+1)) break;	//Out of range exit
+	if(curPos < 0 || curPos > (maxPos+1)) break;	//Exit for out of the range
 	for(int stPos = prevPos; prevPos < curPos; prevPos++)
 	    if(toAprox && prevVal != EVAL_REAL && curVal != EVAL_REAL)
 		buf.push_back(SHg(bbeg+prevPos*bper,prevVal+(curVal-prevVal)*(prevPos-stPos)/(curPos-stPos)));

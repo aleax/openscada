@@ -1,3 +1,26 @@
+2020-02-18 Roman (stable)
+- !!!!:DB.LibsDB.{OscadaLibs,vcaBase}: The document of the "Reports' and documents' library" is completed.
+- !!!:FIX:DB.LibsDB.OscadaLibs: doc.diagram: Fixed in limiting the draw at the vertical area size.
+    !!!: Appended for the trends build from directly specified data.
+- !!!!:DB.LibsDB.vcaBase: doc.docRepYear: Completed in creating by implementing:
+	enter values in the manual mode, support for the manual values storing into the message archive, their display in the table and diagram.
+    Main.{grph_panel,doc_panel}: The size enter range expanded to [0.1...366], for the possibility to embrace one year time interval.
+- !!!!:SYS,DB.{PostgreSQL,SQLite},DAQ.{MMS,Siemens},Protocol.SelfSystem,UI.{QTCfg,VCAEngine,Vision,WebCfgD}:
+	TError appended for naming the error codes in the enum "Codes", which used everywhere.
+    !!:Modules version of the subsystem Special rose to 21, of the subsystem Transports rose to 22.
+    Core library version rose to 4:3:0.
+- Archives,DAQ: The value archive buffer errors of inserting too old values appended for the error code TError::Arch_Val_OldBufVl and it
+    processing in TValue for cleaning the wrong buffers.
+- Archives: TVArchive::setVals() appended for the exceptions processing to prevent of interruptions the whole process at writing to one archiver.
+    Font size of the builtin diagrams builder of the values increased to 10 pixels.
+- DAQ: The redundancy processing procedure TController::redntDataUpdate() appended for the exceptions processing
+    to prevent of not starting the DAQ-controller objects at errors in the archivers, mostly in Archive.DBArch.
+- DAQ,Special: The attribut "run_st" in TPrmTmplLib and TSpecial renamed to runSt.
+- !!!:Transports,Transport.*: Appended for a service of closing output transports at the keep alive (inactivity) time.
+    !!: Unified for the last request time control of the output transpors.
+- !!!!:FIX:Transport.Serial: Fixed for the Modem mode of the output tansports in the correct processing the function ResMtx::tryLock() result.
+
+
 2020-02-11 Roman (stable)
 - !:DB.LibsDB.OscadaLibs: doc.diagram: Appended for the big time range interval per month support.
 - !:FIX:Model.AGLKS.St: Fixed in transfering to SQL, appending the option --newlines to sqlite3, but only that is supported by old sqlite3 versions.

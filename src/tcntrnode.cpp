@@ -222,8 +222,8 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 	    opt->attrDel("reforwardRedundReq");
 	}
     } catch(TError &err) {
-	if(err.cat == "warning") opt->setAttr("rez", "1");
-	else opt->setAttr("rez", "2");
+	if(err.cod == TError::Core_CntrWarning) opt->setAttr("rez", i2s(err.cod));
+	else opt->setAttr("rez", i2s(TError::Core_CntrError));
 	opt->childClear();
 	opt->setAttr("mcat", err.cat);
 	opt->setText(err.mess);
@@ -874,7 +874,7 @@ XMLNode *TCntrNode::_ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const ch
     if(obj->name() == "info")	obj = nd->childGet(0, true);
     if(!obj) {
 	obj = nd->childAdd();
-	nd->setAttr("rez", "0");
+	nd->setAttr("rez", i2s(TError::NoError));
     }
 
     //Go to element
@@ -964,8 +964,8 @@ bool TCntrNode::ctrChkNode( XMLNode *nd, const char *cmd, int perm, const char *
     if(((char)perm&mode) != mode && SYS->security().at().access(nd->attr("user"),mode,user,grp,perm) != mode)
 	throw TError("ContrItfc", _("Error accessing item '%s'!"), nd->attr("path").c_str());
     if(warn && !s2i(nd->attr("force")))
-	throw TError("warning", _("Warning element '%s'! %s"), nd->attr("path").c_str(),warn);
-    nd->setAttr("rez","0");
+	throw TError(TError::Core_CntrWarning, "ContrItfc", _("Warning element '%s'! %s"), nd->attr("path").c_str(),warn);
+    nd->setAttr("rez", i2s(TError::NoError));
 
     return true;
 }

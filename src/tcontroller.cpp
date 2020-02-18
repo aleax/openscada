@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tcontroller.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -379,29 +379,31 @@ void TController::redntDataUpdate( )
 	    AutoHD<TVal> vl;
 	    if(prm.at().vlPresent(aNd->attr("id"))) vl = prm.at().vlAt(aNd->attr("id"));
 
-	    if(aNd->name() == "el" && !vl.freeStat()) { vl.at().setS(aNd->text(),atoll(aNd->attr("tm").c_str()),true); vl.at().setReqFlg(false); }
-	    else if(aNd->name() == "ael" && !vl.freeStat() && !vl.at().arch().freeStat() && aNd->childSize()) {
-		int64_t btm = atoll(aNd->attr("tm").c_str());
-		int64_t per = atoll(aNd->attr("per").c_str());
-		TValBuf buf(vl.at().arch().at().valType(),0,per,false,true);
-		for(unsigned i_v = 0; i_v < aNd->childSize(); i_v++)
-		    buf.setS(aNd->childGet(i_v)->text(),btm+per*i_v);
-		vl.at().arch().at().setVals(buf, buf.begin(), buf.end(), "");
-	    }
-	    else if(aNd->name() == "del" && prm.at().dynElCntr()) {
-		MtxAlloc res(prm.at().dynElCntr()->resEl(), true);
-		TFld::Type tp = (TFld::Type)s2i(aNd->attr("type"));
-		unsigned flg = s2i(aNd->attr("flg"));
-		if(vl.freeStat()) prm.at().dynElCntr()->fldAdd(new TFld(aNd->attr("id").c_str(),aNd->attr("name").c_str(),tp,flg,"","",
-									aNd->attr("values").c_str(),aNd->attr("selNames").c_str()));
-		else {
-		    unsigned aId = prm.at().dynElCntr()->fldId(aNd->attr("id"), true);
-		    prm.at().dynElCntr()->fldAt(aId).setDescr(aNd->attr("name"));
-		    prm.at().dynElCntr()->fldAt(aId).setFlg(prm.at().dynElCntr()->fldAt(aId).flg()^((prm.at().dynElCntr()->fldAt(aId).flg()^flg)&(TFld::Selectable|TFld::SelEdit)));
-		    prm.at().dynElCntr()->fldAt(aId).setValues(aNd->attr("values"));
-		    prm.at().dynElCntr()->fldAt(aId).setSelNames(aNd->attr("selNames"));
+	    try {
+		if(aNd->name() == "el" && !vl.freeStat()) { vl.at().setS(aNd->text(),atoll(aNd->attr("tm").c_str()),true); vl.at().setReqFlg(false); }
+		else if(aNd->name() == "ael" && !vl.freeStat() && !vl.at().arch().freeStat() && aNd->childSize()) {
+		    int64_t btm = atoll(aNd->attr("tm").c_str());
+		    int64_t per = atoll(aNd->attr("per").c_str());
+		    TValBuf buf(vl.at().arch().at().valType(), 0, per, false, true);
+		    for(unsigned i_v = 0; i_v < aNd->childSize(); i_v++)
+			buf.setS(aNd->childGet(i_v)->text(),btm+per*i_v);
+		    vl.at().arch().at().setVals(buf, buf.begin(), buf.end(), "");
 		}
-	    }
+		else if(aNd->name() == "del" && prm.at().dynElCntr()) {
+		    MtxAlloc res(prm.at().dynElCntr()->resEl(), true);
+		    TFld::Type tp = (TFld::Type)s2i(aNd->attr("type"));
+		    unsigned flg = s2i(aNd->attr("flg"));
+		    if(vl.freeStat()) prm.at().dynElCntr()->fldAdd(new TFld(aNd->attr("id").c_str(),aNd->attr("name").c_str(),tp,flg,"","",
+									    aNd->attr("values").c_str(),aNd->attr("selNames").c_str()));
+		    else {
+			unsigned aId = prm.at().dynElCntr()->fldId(aNd->attr("id"), true);
+			prm.at().dynElCntr()->fldAt(aId).setDescr(aNd->attr("name"));
+			prm.at().dynElCntr()->fldAt(aId).setFlg(prm.at().dynElCntr()->fldAt(aId).flg()^((prm.at().dynElCntr()->fldAt(aId).flg()^flg)&(TFld::Selectable|TFld::SelEdit)));
+			prm.at().dynElCntr()->fldAt(aId).setValues(aNd->attr("values"));
+			prm.at().dynElCntr()->fldAt(aId).setSelNames(aNd->attr("selNames"));
+		    }
+		}
+	    } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 	}
     }
 }

@@ -1,7 +1,7 @@
 
 //OpenSCADA file: terror.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2014,2020 by Roman Savochenko, <roman@oscada.org>  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,7 +37,7 @@ TError::TError( const char *icat, const char *fmt, ... )
     vsnprintf(str,sizeof(str),fmt,argptr);
     va_end(argptr);
 
-    cod  = 0;
+    cod  = NoCode;
     mess = str;
     cat  = icat;
 }
@@ -47,7 +47,7 @@ TError::TError( int icod, const char *icat, const char *fmt, ... )
     char str[1024];			//!!!!
     va_list argptr;
 
-    va_start(argptr,fmt);
+    va_start(argptr, fmt);
     vsnprintf(str,sizeof(str),fmt,argptr);
     va_end(argptr);
 

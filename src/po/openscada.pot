@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-05 09:56+0200\n"
+"POT-Creation-Date: 2020-02-18 16:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -315,10 +315,10 @@ msgstr ""
 msgid "The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
 msgstr ""
 
-msgid "The grid mode doesn't support inserting old values."
+msgid "The grid mode doesn't support inserting too old values."
 msgstr ""
 
-msgid "Insert a very old value to the buffer."
+msgid "Inserting too old values to the buffer."
 msgstr ""
 
 #, c-format
@@ -2004,6 +2004,15 @@ msgstr ""
 msgid "Output transport"
 msgstr ""
 
+msgid "List"
+msgstr ""
+
+msgid "Keep alive timeout, seconds"
+msgstr ""
+
+msgid "Time of inactivity in the output transport for it closing/disconnection. Set to 0 to disable the transports closing!"
+msgstr ""
+
 msgid "Started. "
 msgstr ""
 
@@ -2033,7 +2042,7 @@ msgid "Log"
 msgstr ""
 
 #, c-format
-msgid "Established: %s. "
+msgid "Established: %s. Last: %s. "
 msgstr ""
 
 #, c-format

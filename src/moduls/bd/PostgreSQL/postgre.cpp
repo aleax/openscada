@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB PostgreSQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.3.1"
+#define MOD_VER		"2.4.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2010-2011)")
 #define DESCRIPTION	_("DB module. Provides support of the DBMS PostgreSQL.")
 #define MOD_LICENSE	"GPL2"
@@ -383,7 +383,7 @@ rep:
     int64_t tmBeg = SYS->curTime();
     if((res=PQexec(connection,req.c_str())) == NULL) {
 	if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("ERR CON for: %s"), ireq.c_str());
-	throw err_sys(SQL_CONN, _("Error connecting the DB: %s"), PQerrorMessage(connection));
+	throw err_sys(TError::DB_SQL_Connect, _("Error connecting the DB: %s"), PQerrorMessage(connection));
     }
     if(PQresultStatus(res) != PGRES_COMMAND_OK && PQresultStatus(res) != PGRES_TUPLES_OK) {
 	string  err = PQresStatus(PQresultStatus(res)),
@@ -399,12 +399,12 @@ rep:
 	    //resource.unlock();
 	    disable();
 	    if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("ERR CON_st for: %s"), ireq.c_str());
-	    throw err_sys(SQL_CONN, _("Error connecting the DB: '%s (%s)'!"), err1.c_str(), err.c_str());
+	    throw err_sys(TError::DB_SQL_Connect, _("Error connecting the DB: '%s (%s)'!"), err1.c_str(), err.c_str());
 	}
 	if(mess_lev() == TMess::Debug)
 	    mess_sys(TMess::Debug, _("ERR QUERY (con=%d;res=%d;tr=%d) for: %s"),
 		PQstatus(connection), PQresultStatus(res), PQtransactionStatus(connection), ireq.c_str());
-	throw err_sys(SQL_QUERY, _("Error querying the DB: '%s (%s)'!"), err1.c_str(), err.c_str());
+	throw err_sys(TError::DB_SQL_Query, _("Error querying the DB: '%s (%s)'!"), err1.c_str(), err.c_str());
     }
     if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("OK (tr=%d) for: %s"), PQtransactionStatus(connection), ireq.c_str());
 
@@ -897,7 +897,7 @@ void MTable::fieldFix( TConfig &cfg, bool trPresent, bool recurse )
 	}
 	//Drop unfixable table
 	catch(TError &err) {
-	    if(err.cod == MBD::SQL_CONN || recurse) throw;
+	    if(err.cod == TError::DB_SQL_Connect || recurse) throw;
 	    owner().sqlReq("DROP TABLE \"" + TSYS::strEncode(name(),TSYS::SQL,"\"")+ "\"");
 	    owner().create(name(), true);
 	    owner().getStructDB(name(), tblStrct);

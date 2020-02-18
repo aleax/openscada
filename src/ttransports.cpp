@@ -561,7 +561,7 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* TTypeTransport                               *
 //************************************************
-TTypeTransport::TTypeTransport( const string &id ) : TModule(id)
+TTypeTransport::TTypeTransport( const string &id ) : TModule(id), mOutKeepAliveTm(0)
 {
     mIn = grpAdd("in_");
     mOut = grpAdd("out_");
@@ -595,8 +595,12 @@ void TTypeTransport::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,0,"/tr",_("Transports"))) {
 	    ctrMkNode("list",opt,-1,"/tr/in",_("Input"),RWRWR_,"root",STR_ID,5,
 		"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","in_","idSz",OBJ_ID_SZ);
-	    ctrMkNode("list",opt,-1,"/tr/out",_("Output"),RWRWR_,"root",STR_ID,5,
-		"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","out_","idSz",OBJ_ID_SZ);
+	    if(ctrMkNode("area",opt,-1,"/tr/out",_("Output"))) {
+		ctrMkNode("list",opt,-1,"/tr/out/list",_("List"),RWRWR_,"root",STR_ID,5,
+		    "tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","out_","idSz",OBJ_ID_SZ);
+		ctrMkNode("fld",opt,-1,"/tr/out/keepAlive",_("Keep alive timeout, seconds"),RWRWR_,"root",STR_ID,3,"tp","dec","min","0","max","3600",
+		    "help",_("Time of inactivity in the output transport for it closing/disconnection. Set to 0 to disable the transports closing!"));
+	    }
 	}
 	return;
     }
@@ -611,7 +615,7 @@ void TTypeTransport::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"add",RWRWR_,"root",STR_ID,SEC_WR))	{ opt->setAttr("id", inAdd(opt->attr("id"))); inAt(opt->attr("id")).at().setName(opt->text()); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",STR_ID,SEC_WR))	inDel(opt->attr("id"),true);
     }
-    else if(a_path == "/br/out_" || a_path == "/tr/out") {
+    else if(a_path == "/br/out_" || a_path == "/tr/out" || a_path == "/tr/out/list") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD)) {
 	    outList(list);
 	    for(unsigned iA = 0; iA < list.size(); iA++)
@@ -620,7 +624,38 @@ void TTypeTransport::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"add",RWRWR_,"root",STR_ID,SEC_WR))	{ opt->setAttr("id", outAdd(opt->attr("id"))); outAt(opt->attr("id")).at().setName(opt->text()); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",STR_ID,SEC_WR))	outDel(opt->attr("id"),true);
     }
+    if(a_path == "/tr/out/keepAlive") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(i2s(outKeepAliveTm()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setOutKeepAliveTm(s2i(opt->text()));
+    }
     else TModule::cntrCmdProc(opt);
+}
+
+void TTypeTransport::load_( )
+{
+    //Load parameters
+    setOutKeepAliveTm(s2i(TBDS::genDBGet(nodePath()+"OutKeepAliveTm",i2s(outKeepAliveTm()))));
+}
+
+void TTypeTransport::save_( )
+{
+    //Save parameters
+    TBDS::genDBSet(nodePath()+"OutKeepAliveTm",i2s(outKeepAliveTm()));
+}
+
+void TTypeTransport::perSYSCall( unsigned int cnt )
+{
+    //Check all output transports
+    vector<string> ls;
+    outList(ls);
+    for(unsigned iL = 0; outKeepAliveTm() && iL < ls.size(); iL++) {
+	AutoHD<TTransportOut> outTr = outAt(ls[iL]);
+
+	int reRs = 1;
+	bool toStop = (outTr.at().startStat() && (reRs=outTr.at().reqRes().tryLock()) == 0 && (TSYS::curTime()-outTr.at().lstReqTm())/1000000 > outKeepAliveTm());
+	if(reRs == 0) outTr.at().reqRes().unlock();
+	if(toStop) try { outTr.at().stop(); } catch(TError &err) { }
+    }
 }
 
 //************************************************
@@ -927,7 +962,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 //* TTransportOut                                *
 //************************************************
 TTransportOut::TTransportOut( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), runSt(false), mId(cfg("ID")), mStart(cfg("START").getBd()),
+    TConfig(el), runSt(false), mLstReqTm(0), mId(cfg("ID")), mStart(cfg("START").getBd()),
     mDB(idb), mStartTm(0), mPrm1(0), mPrm2(0), mReqRes(true), mLogLen(0)
 {
     mId = iid;
@@ -980,7 +1015,8 @@ bool TTransportOut::cfgChange( TCfg &co, const TVariant &pc )
 
 string TTransportOut::getStatus( )
 {
-    return (startStat()?_("Started. "):_("Stoped. ")) + TSYS::strMess(_("Established: %s. "), atm2s(startTm(),"%d-%m-%Y %H:%M:%S").c_str());
+    return (startStat()?_("Started. "):_("Stoped. ")) +
+	TSYS::strMess(_("Established: %s. Last: %s. "), atm2s(startTm(),"%d-%m-%Y %H:%M:%S").c_str(), atm2s(1e-6*lstReqTm(),"%d-%m-%Y %H:%M:%S").c_str());
 }
 
 void TTransportOut::load_( TConfig *icfg )

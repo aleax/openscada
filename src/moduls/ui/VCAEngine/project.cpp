@@ -1333,7 +1333,8 @@ void Page::wdgAdd( const string &wid, const string &name, const string &ipath, b
 	if(mHerit[i_h].at().enable())
 	    mHerit[i_h].at().inheritIncl(wid);
 
-    if(toRestoreInher)	throw TError("warning", _("Restoring '%s' from the base container!"), wid.c_str());
+    if(toRestoreInher)
+	throw TError(TError::Core_CntrWarning, nodePath().c_str(), _("Restoring '%s' from the base container!"), wid.c_str());
 }
 
 AutoHD<Widget> Page::wdgAt( const string &wdg, int lev, int off ) const

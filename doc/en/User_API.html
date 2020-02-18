@@ -12,7 +12,21 @@
 </div>
 			<h1 id="firstHeading" lang="en">Documents/User API</h1>
 		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/User_API.html" title="Документация/API пользователя (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/User_API.html" title="Документація/API користувача (100% translated)">українська</a></div></div>
-<p><i>Author:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2012) — the page initial translation</i></font>
+<div style="float:right; border:1px solid gray; width:300px; padding:2px;">
+<ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2012) — the page initial translation</i></font></li>
+<li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/ProgrammManual" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a></li></ul>
+</div>
+<p>Before programming in OpenSCADA, you must examine the object structure of the program (Object Model) in <a href="Program_manual.html" title="Special:MyLanguage/Documents/Program manual">OpenSCADA Program Manual</a> and in Figure 1.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1202px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="540" src="files/Oscada_UserOM.png" width="1200" /></a>  <div class="thumbcaption">Fig. 1. User object model of the core OpenSCADA.</div></div></div></div>
+<p>From this document you will see that you can program next parts of OpenSCADA as the user:
+</p>
+<ul><li> <a href="DAQ.html#Virtual" title="Special:MyLanguage/Documents/DAQ">Logical level sources of the subsystem "DAQ"</a>.</li>
+<li> Transport protocols allowed for user programming that is: <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">User protocol</a>, <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus nodes of the type "Data"</a>, <a href="Modules/WebUser.html" title="Special:MyLanguage/Modules/WebUser">Web-interfaces from the user</a>, ...</li>
+<li> <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">Visual Control Area (VCA)</a> in procedures of the widgets.</li></ul>
+<p>User programming API is the tree of the OpenSCADA objects (Fig.1), every object of which can provide own list of properties and functions. Properties and functions of the objects can be used by the user in procedures on the languages of the user programming of OpenSCADA.
+</p><p>Currently OpenSCADA provides only one language of the text programming — <a href="#JavaLikeCalc">JavaLikeCalc</a> then you must learn it also before the starting! The entry point for access to the objects of OpenSCADA (Fig.1) from the user programming language JavaLikeCalc is the reserved word "SYS" of the root OpenSCADA object. For example, to access the function of output transport you should write: <b>SYS.Transport.Serial.out_ModBus.messIO(mess);</b>.
+</p><p>API of the objects provided by the modules is described in the own documentation of the modules and here links to their are provided.
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
@@ -75,18 +89,6 @@
 </ul>
 </div>
 
-<p>Before programming in OpenSCADA, you must examine the object structure of the program (Object Model) in <a href="Program_manual.html" title="Special:MyLanguage/Documents/Program manual">OpenSCADA Program Manual</a> and in Figure 1.
-</p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1202px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="540" src="files/Oscada_UserOM.png" width="1200" /></a>  <div class="thumbcaption">Fig. 1. User object model of the core OpenSCADA.</div></div></div></div>
-<p>From this document you will see that you can program next parts of OpenSCADA as the user:
-</p>
-<ul><li> <a href="DAQ.html#Virtual" title="Special:MyLanguage/Documents/DAQ">Logical level sources of the subsystem "DAQ"</a>.</li>
-<li> Transport protocols allowed for user programming that is: <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">User protocol</a>, <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus nodes of the type "Data"</a>, <a href="Modules/WebUser.html" title="Special:MyLanguage/Modules/WebUser">Web-interfaces from the user</a>, ...</li>
-<li> <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">Visual Control Area (VCA)</a> in procedures of the widgets.</li></ul>
-<p>User programming API is the tree of the OpenSCADA objects (Fig.1), every object of which can provide own list of properties and functions. Properties and functions of the objects can be used by the user in procedures on the languages of the user programming of OpenSCADA.
-</p><p>Currently OpenSCADA provides only one language of the text programming — <a href="#JavaLikeCalc">JavaLikeCalc</a> then you must learn it also before the starting! The entry point for access to the objects of OpenSCADA (Fig.1) from the user programming language JavaLikeCalc is the reserved word "SYS" of the root OpenSCADA object. For example, to access the function of output transport you should write: <b>SYS.Transport.Serial.out_ModBus.messIO(mess);</b>.
-</p><p>API of the objects provided by the modules is described in the own documentation of the modules and here links to their are provided.
-</p>
 <h2><span class="mw-headline" id="The_user_programming_language_JavaLikeCalc"><span class="mw-headline-number">1</span> <span id="JavaLikeCalc" title="#JavaLikeCalc"><a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">The user programming language JavaLikeCalc</a></span></span></h2>
 <h3><span class="mw-headline" id="Elements_of_the_language"><span class="mw-headline-number">1.1</span> Elements of the language</span></h3>
 <p><i>Keywords:</i> if, else, while, for, break, continue, return, function, using, true, false.<br />
@@ -410,7 +412,7 @@ var OK = re.test("12/30/1969"); </pre></li>
 <li><i>int message( string cat, int level, string mess );</i> — forms of the system message <i>mess</i> with the category <i>cat</i>, level <i>level</i> (-7...7). The negative value of the level forms the alarms.</li>
 <li><i>int messDebug( string cat, string mess ); int messInfo( string cat, string mess ); int messNote( string cat, string mess ); int messWarning( string cat, string mess ); int messErr( string cat, string mess ); int messCrit( string cat, string mess ); int messAlert( string cat, string mess ); int messEmerg( string cat, string mess );</i> — forms of the system message <i>mess</i> with the category <i>cat</i> and the appropriate level by the name.</li>
 <li><i>XMLNodeObj XMLNode( string name = "" );</i> — creates of the XML node object with the <i>name</i>.</li>
-<li><i>string cntrReq( XMLNodeObj req, string stat = "" );</i> — sends of <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API#h919-1" rel="nofollow noreferrer noopener" target="_blank">the control interface</a> request to the program-system via XML. The usual request is written as <b>&lt;get path="/OPath/%2felem"/&gt;</b>. If the station <i>stat</i> is indicated into the request then the request will be send to this external station. The address into the attribute "path" you can obtain into an OpenSCADA configurator, that is into the status line where the address appear at the mouse cursor point to a field of configuration or information. Some examples of common queries, more examples in <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Service_procedures#releaseTests" title="Special:MyLanguage/Libs/Service procedures">releaseTests()</a>:<ul>
+<li><i>string cntrReq( XMLNodeObj req, string stat = "" );</i> — sends of <a href="API.html#CntrNode" title="Special:MyLanguage/Documents/API">the control interface</a> request to the program-system via XML. The usual request is written as <b>&lt;get path="/OPath/%2felem"/&gt;</b>. If the station <i>stat</i> is indicated into the request then the request will be send to this external station. The address into the attribute "path" you can obtain into an OpenSCADA configurator, that is into the status line where the address appear at the mouse cursor point to a field of configuration or information. Some examples of common queries, more examples in <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Service_procedures#releaseTests" title="Special:MyLanguage/Libs/Service procedures">releaseTests()</a>:<ul>
  <li>Reading a value of the element (the user name "test"):
 <pre style="white-space: pre-wrap;">
 req = SYS.XMLNode("get").setAttr("path","/sub_Security/usr_test/%2fprm%2fDESCR");
@@ -903,7 +905,7 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 <tr>
 <td> <a href="Libs_Documents.html" title="Special:MyLanguage/Libs/Documents">Reports' and documents' library</a>
 </td>
-<td> 2.0, 2.0 </td>
+<td> 2.0, 2.1 </td>
 <td> GPLv2 </td>
 <td>
 <p>OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.JavaLikeCalc.doc<br />
@@ -934,5 +936,5 @@ vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/en">Documents/User_API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2661</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/en">Documents/User_API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2663</td></tr></table></body>
 </html>

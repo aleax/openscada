@@ -43,7 +43,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"6.8.0"
+#define MOD_VER		"6.9.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
 #define DESCRIPTION	_("Visual operation user interface, based on the Qt library - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -221,7 +221,7 @@ QMainWindow *TVision::openWindow( )
 	    (VCAStation() != "." && !(err=mod->cntrIfCmd(req,userStart(),userPass(),VCAStation(),true)))))
 										//!!! But for remote same the request has the athentification
 	while(true) {
-	    if(err == 10)	{ postMess(nodePath().c_str(),_("Error connecting to remote station!")); return NULL; }
+	    if(err == TError::Tr_Connect) { postMess(nodePath().c_str(),_("Error connecting to remote station!")); return NULL; }
 	    DlgUser d_usr(userStart().c_str(), userPass().c_str(), VCAStation().c_str());
 	    int rez = d_usr.exec();
 	    if(rez == DlgUser::SelCancel) return NULL;
@@ -485,7 +485,7 @@ int TVision::cntrIfCmd( XMLNode &node, const string &user, const string &passwor
 	return rez;
     } catch(TError &err) {
 	node.childClear();
-	node.setAttr("mcat", err.cat)->setAttr("rez", "10")->setText(err.mess);
+	node.setAttr("mcat", err.cat)->setAttr("rez", i2s(TError::Tr_Connect))->setText(err.mess);
     }
 
     return s2i(node.attr("rez"));

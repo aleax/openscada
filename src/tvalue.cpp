@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tvalue.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -700,7 +700,10 @@ void TVal::setS( const string &value, int64_t tm, bool sys )
 	    //Set to archive
 	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr)
 		try{ mArch.at().setS(value,time()); }
-		catch(TError &err) { mess_sys(TMess::Error, _("Error writing a value to the archive: %s"), err.mess.c_str()); }
+		catch(TError &err) {
+		    if(err.cod == TError::Arch_Val_OldBufVl) mArch.at().clear();
+		    mess_sys(TMess::Error, _("Error writing a value to the archive: %s"), err.mess.c_str());
+		}
 	    break;
 	}
 	default: break;
@@ -729,7 +732,10 @@ void TVal::setI( int64_t value, int64_t tm, bool sys )
 	    //Set to archive
 	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr)
 		try{ mArch.at().setI(value,time()); }
-		catch(TError &err) { mess_sys(TMess::Error, _("Error writing a value to the archive: %s"), err.mess.c_str()); }
+		catch(TError &err) {
+		    if(err.cod == TError::Arch_Val_OldBufVl) mArch.at().clear();
+		    mess_sys(TMess::Error, _("Error writing a value to the archive: %s"), err.mess.c_str());
+		}
 	    break;
 	}
 	default: break;
@@ -758,7 +764,10 @@ void TVal::setR( double value, int64_t tm, bool sys )
 	    //Set to archive
 	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr)
 		try{ mArch.at().setR(value, time()); }
-		catch(TError &err) { mess_sys(TMess::Error, _("Error writing a value to the archive: %s"), err.mess.c_str()); }
+		catch(TError &err) {
+		    if(err.cod == TError::Arch_Val_OldBufVl) mArch.at().clear();
+		    mess_sys(TMess::Error, _("Error writing a value to the archive: %s"), err.mess.c_str());
+		}
 	    break;
 	}
 	default: break;
@@ -785,7 +794,10 @@ void TVal::setB( char value, int64_t tm, bool sys )
 	    //Set to archive
 	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr)
 		try{ mArch.at().setB(value,time()); }
-		catch(TError &err) { mess_sys(TMess::Error, _("Error writing a value to the archive: %s"), err.mess.c_str()); }
+		catch(TError &err) {
+		    if(err.cod == TError::Arch_Val_OldBufVl) mArch.at().clear();
+		    mess_sys(TMess::Error, _("Error writing a value to the archive: %s"), err.mess.c_str());
+		}
 	    break;
 	}
 	default: break;

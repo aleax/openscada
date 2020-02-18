@@ -88,7 +88,7 @@ TTest::TTest( string name ) : TSpecial(MOD_ID)
 
 TTest::~TTest()
 {
-    if(run_st) modStop();
+    if(runSt) modStop();
 }
 
 void TTest::postEnable( int flag )
@@ -183,12 +183,12 @@ void TTest::load_( )
 
 void TTest::modStart(  )
 {
-    if(!run_st) SYS->taskCreate(nodePath('.',true), 0, Task, this);
+    if(!runSt) SYS->taskCreate(nodePath('.',true), 0, Task, this);
 }
 
 void TTest::modStop(  )
 {
-    if(run_st) SYS->taskDestroy(nodePath('.',true), &endrun);
+    if(runSt) SYS->taskDestroy(nodePath('.',true), &endrun);
 }
 
 void *TTest::Task( void *CfgM )
@@ -196,7 +196,7 @@ void *TTest::Task( void *CfgM )
     int count = 0, i_cnt = 0;
 
     TTest *tst = (TTest*)CfgM;
-    tst->run_st = true;
+    tst->runSt = true;
     tst->endrun = false;
 
     //Task counter
@@ -228,7 +228,7 @@ void *TTest::Task( void *CfgM )
 	}
 	TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
     }
-    tst->run_st = false;
+    tst->runSt = false;
 
     return NULL;
 }

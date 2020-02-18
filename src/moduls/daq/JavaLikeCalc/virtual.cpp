@@ -385,8 +385,6 @@ void TpContr::cntrCmdProc( XMLNode *opt )
     else TTypeDAQ::cntrCmdProc(opt);
 }
 
-
-
 NConst *TpContr::constGet( const char *nm )
 {
     for(unsigned i_cst = 0; i_cst < mConst.size(); i_cst++)

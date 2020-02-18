@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.Serial file: mod_serial.cpp
 /***************************************************************************
- *   Copyright (C) 2009-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2009-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -55,7 +55,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.3.4"
+#define MOD_VER		"2.4.1"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov (2016)")
 #define DESCRIPTION	_("Provides transport based on the serial interfaces.\
  It is used for data exchanging via the serial interfaces of the type RS232, RS485, GSM and similar.")
@@ -120,6 +120,8 @@ AutoHD<TTrOut> TTr::outAt( const string &name )	{ return TTypeTransport::outAt(n
 
 void TTr::load_( )
 {
+    TTypeTransport::load_();
+
     //Load parameters from command line
 
 }
@@ -164,11 +166,13 @@ void TTr::devUnLock( const string &dn )
 
 void TTr::perSYSCall( unsigned int cnt )
 {
+    TTypeTransport::perSYSCall(cnt);
+
     //Check all output transports
     vector<string> ls;
-    mod->outList(ls);
-    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-	try{ mod->outAt(ls[i_l]).at().check(); }
+    outList(ls);
+    for(unsigned iL = 0; iL < ls.size(); iL++)
+	try{ outAt(ls[iL]).at().check(); }
 	catch(TError &err) { }
 }
 
@@ -789,7 +793,7 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 //* TTrOut					 *
 //************************************************
 TTrOut::TTrOut(string name, const string &idb, TElem *el) :
-    TTransportOut(name,idb,el), mNotStopOnProceed(false), fd(-1), mLstReqTm(0), mKeepAliveLstTm(0), trIn(0), trOut(0),
+    TTransportOut(name,idb,el), mNotStopOnProceed(false), fd(-1), mKeepAliveLstTm(0), trIn(0), trOut(0),
     mMdmTm(30), mMdmLifeTime(30), mMdmPreInit(0.5), mMdmPostInit(1), mMdmInitStr1("ATZ"), mMdmInitStr2(""), mMdmInitResp("OK"),
     mMdmDialStr("ATDT"), mMdmCnctResp("CONNECT"), mMdmBusyResp("BUSY"), mMdmNoCarResp("NO CARRIER"), mMdmNoDialToneResp("NO DIALTONE"),
     mMdmExit("+++"), mMdmHangUp("+++ATH"), mMdmHangUpResp("OK"),
@@ -1147,9 +1151,9 @@ void TTrOut::stop( )
 
 void TTrOut::check( )
 {
-    bool reRs = false;
-    bool toStop = (mMdmMode && mMdmDataMode && (reRs=reqRes().tryLock()) && (TSYS::curTime()-mLstReqTm)/1000000 > mdmLifeTime());
-    if(reRs) reqRes().unlock();
+    int reRs = 1;
+    bool toStop = (mMdmMode && mMdmDataMode && (reRs=reqRes().tryLock()) == 0 && (TSYS::curTime()-mLstReqTm)/1000000 > mdmLifeTime());
+    if(reRs == 0) reqRes().unlock();
     if(toStop) stop();
 }
 

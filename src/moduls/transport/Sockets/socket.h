@@ -231,7 +231,6 @@ class TSocketOut: public TTransportOut
 	string		connAddr;
 	uint64_t	trIn, trOut;		//Traffic in and out counter
 	float		respTm, respTmMax;
-	int64_t		mLstReqTm;
 };
 
 //************************************************

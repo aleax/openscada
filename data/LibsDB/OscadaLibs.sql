@@ -109,7 +109,7 @@ The element''s names and their parameters are available in languages: English, U
 
 Founded: January 2008
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.0.1
+Version: 2.0.2
 License: GPLv2
 DOC: Libs_Documents|Libs/Documents','flb_doc','Бібліотека звітів та документів','Сервісні функції кадрів звітів та документів призначено для виконання характерних задач отримання звітних даних, для чого треба здійснювати якусь перевірку або підрахунок, наприклад, перевіряти достовірність та підсумовувати. Сервісною функцією може бути й формування складних даних, як то вбудованих у документ діаграм.
 
@@ -119,7 +119,7 @@ DOC: Libs_Documents|Libs/Documents','flb_doc','Бібліотека звітів
 
 Засновано: січень 2008р
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.0.1
+Версія: 2.0.2
 Ліцензія: GPLv2
 DOC: Libs_Documents|Libs/Documents','Библиотека отчётов и документов','Сервисные функции кадров отчётов и документов предназначены для выполнения характерных задач получения отчётных данных, для чего нужно осуществлять какую-то проверку или подсчёт, например, проверять достоверность и суммировать. Сервисной функцией может быть и формирование сложных данных, вроде встраиваемых в документ диаграмм.
 
@@ -129,7 +129,7 @@ DOC: Libs_Documents|Libs/Documents','Библиотека отчётов и до
 
 Основано: январь 2008г
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 2.0.1
+Версия: 2.0.2
 Лицензия: GPLv2
 DOC: Libs_Documents|Libs/Documents',1);
 INSERT INTO UserFuncLibs VALUES('regEl','Regulation elements','Regulation elements library.
@@ -10086,7 +10086,7 @@ Currently, only value archives can be used as a data source, either directly to 
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Magomed
-Version: 1.2.0
+Version: 1.3.0
 License: GPLv2','Побудова діаграми трендів у SVG, яка може надалі вбудовуватися у XHTML-документу, для даних за вказаний період часу [(end-size)...end] та із джерел srcs.
 
 Код формування діаграми засновано на коді примітиву "Діаграма" візуалізаторів, та який було доволі просто перенесено із мови C++ на вбудовану мову JavaLikeCalc. Наразі перенесено-реалізовано лише тренди!
@@ -10107,7 +10107,7 @@ License: GPLv2','Побудова діаграми трендів у SVG, яка
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсоровано: Магомед
-Версія: 1.2.0
+Версія: 1.3.0
 Ліцензія: GPLv2','Построение диаграммы трендов в SVG, которая может далее встраиваться в XHTML-документ, для данных за указанный период времени [(end-size)...end] и из источников srcs.
 
 Код формирования диаграммы основан на коде примитива "Диаграмма" визуализаторов, и который был довольно просто перенесен с языка C++ на встроенный язык JavaLikeCalc. Сейчас перенесено-реализовано только тренды!
@@ -10128,7 +10128,7 @@ License: GPLv2','Побудова діаграми трендів у SVG, яка
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсировано: Магомед
-Версия: 1.2.0
+Версия: 1.3.0
 Лицензия: GPLv2',1,10,0,'function strChars(inS) {
 	for(inSz = 0, off = 0; off < inS.length; inSz++)
 		inS.charAt(off, "UTF-8");
@@ -10155,15 +10155,35 @@ trends = new Array();
 for(off = 0; (tEl=srcs.parseLine(0,off)).length; ) {
 	elO = new Object();
 	elO.addr = tEl.parse(0, ":");
-	if(!(elO.srcO=SYS.nodeAt(elO.addr)))	continue;
-	if(typeof(elO.srcO) == "TCntrNode:TVal")	elO.srcO = elO.srcO.arch();
-	if(typeof(elO.srcO) != "TCntrNode:TVArchive")	continue;
 	elO.min = tEl.parse(1, ":"); elO.max = tEl.parse(2, ":");
 	elO.color = tEl.parse(3, ":");
 	elO.scale = tEl.parse(4, ":").toInt();
 	elO.width = max(1, tEl.parse(5,":").toInt());
 	elO.beg = begin*1e6; elO.per = reqPer*1e6;
-	elO.val = elO.srcO.getVals(elO.beg, end*1e6, elO.per, arch);
+	if((elO.srcO=SYS.nodeAt(elO.addr))) {
+		if(typeof(elO.srcO) == "TCntrNode:TVal")	elO.srcO = elO.srcO.arch();
+		if(typeof(elO.srcO) != "TCntrNode:TVArchive")	continue;
+		elO.val = elO.srcO.getVals(elO.beg, end*1e6, elO.per, arch);
+	}
+	else if(!(dDt=SYS.XMLNode()).load(elO.addr).toInt() && dDt.name() == "d") {
+		elO.val = new Array();
+		isSec = dDt.attr("s").toInt();
+		isAprox = dDt.attr("aprox").toInt();
+		elO.per = dDt.attr("per").toInt() * (isSec?1e6:1);
+		for(prevPos = 0, prevVal = EVAL, maxPos = floor(1e6*(end-begin)/elO.per), off1 = 0; true; ) {
+			if((svl=dDt.text().parse(0,",",off1)).length)
+				curPos = svl.parse(0,"=").toInt(), curVal = ((curVal=svl.parse(1,"="))==EVAL)?EVAL:curVal.toReal();
+			else curPos = maxPos+1;
+			for(stPos = prevPos; prevPos < curPos; prevPos++)
+				if(isAprox && !prevVal.isEVal() && !curVal.isEVal())
+					elO.val.push(prevVal+(curVal-prevVal)*(prevPos-stPos)/(curPos-stPos));
+				else elO.val.push(prevVal);
+			if(prevPos > maxPos)	break;
+			prevVal = curVal;
+		}
+	}
+	else continue;
+
 	trends.push(elO);
 }
 
@@ -10497,20 +10517,20 @@ for(iTr = 0; iTr < trends.length; iTr++) {
 		if(c_tm < begin)	continue;
 		c_pos = floor(tArX + tArW*(c_tm-begin)/(end-begin));
 		if(!c_val.isEVal()) {
-			c_vpos = floor(tArY + tArH - tArH*((isLogT?lg(max(1e-100,c_val)):c_val)-vsMinT)/(vsMaxT-vsMinT));
+			c_vpos = max(tArY,min(tArY+tArH,floor(tArY + tArH - tArH*((isLogT?lg(max(1e-100,c_val)):c_val)-vsMinT)/(vsMaxT-vsMinT))));
 			if(!trPath) trPath = drawArea.childAdd("path").setAttr("stroke", cP.color).setAttr("stroke-width",cP.width);
 			if(prev_vl.isEVal()) trPath.setAttr("d", trPath.attr("d")+"M"+c_pos+","+c_vpos);
 			else trPath.setAttr("d",trPath.attr("d")+"L"+c_pos+","+c_vpos);
 		}
 		else if(!prev_vl.isEVal()) {
-			c_vpos = floor(tArY + tArH - tArH*((isLogT?lg(max(1e-100,prev_vl)):prev_vl)-vsMinT)/(vsMaxT-vsMinT));
+			c_vpos = max(tArY,min(tArY+tArH,floor(tArY + tArH - tArH*((isLogT?lg(max(1e-100,prev_vl)):prev_vl)-vsMinT)/(vsMaxT-vsMinT))));
 			trPath.setAttr("d", trPath.attr("d")+"L"+prev_pos+".1,"+c_vpos+".1");
 		}
 		prev_vl = c_val; prev_pos = c_pos;
 	}
 }
 
-return im.save();','','',1581442262);
+return im.save();','','',1581943347);
 CREATE TABLE IF NOT EXISTS 'tmplib_LowDevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 INSERT INTO tmplib_LowDevLib VALUES('1602A','GPIO|I2C: 1602A(HD44780)','LCD Module 1602A, STN, BLUB, 16 Character x 2 Line,  5 x 8 Dots, by the direct (Raspberry PI BCM2835 GPIO) or I2C (PCF8574) wiring.
 Conditions: Default planing policy but realtime one preferred.

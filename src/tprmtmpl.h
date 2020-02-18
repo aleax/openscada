@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tprmtmpl.h
 /***************************************************************************
- *   Copyright (C) 2005-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -169,7 +169,7 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 	string	tbl( )		{ return cfg("DB").getS(); }
 	string	fullDB( )	{ return DB()+'.'+tbl(); }
 
-	bool startStat( ) const	{ return run_st; }
+	bool startStat( ) const	{ return runSt; }
 	void start( bool val );
 
 	void setName( const string &vl );
@@ -202,7 +202,7 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 	const char *nodeName( ) const	{ return mId.getSd(); }
 
 	//Attributes
-	bool	run_st;
+	bool	runSt;
 	int	m_ptmpl;
 	TCfg	&mId;
 	string	work_lib_db;

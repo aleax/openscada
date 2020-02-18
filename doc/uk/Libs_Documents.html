@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Бібліотеки/Документи</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FDocuments&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Documents" title="Libs/Documents">Libs/Documents</a> and the translation is 99% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_Documents.html" title="Libs/Documents (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--low" href="../ru/Libs_Documents.html" title="Библиотеки/Документы (37% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FDocuments&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Documents" title="Libs/Documents">Libs/Documents</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_Documents.html" title="Libs/Documents (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--low" href="../ru/Libs_Documents.html" title="Библиотеки/Документы (35% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -27,7 +27,7 @@
 <tr>
 <td> <a href="Libs_Documents.html" title="Special:MyLanguage/Libs/Documents">Бібліотека звітів та документів</a>
 </td>
-<td> 2.0, 2.0 </td>
+<td> 2.0, 2.1 </td>
 <td> GPLv2 </td>
 <td>
 <p>OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.JavaLikeCalc.doc<br />
@@ -62,7 +62,7 @@ vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA
 <li class="toclevel-3"><a href="#.D0.9F.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB_.D0.B2.D1.82.D1.80.D1.83.D1.87.D0.B0.D0.BD.D1.8C_.28docUsersSet.29"><span class="tocnumber">1.2.3</span> <span class="toctext">Протокол втручань (docUsersSet)</span></a></li>
 <li class="toclevel-3"><a href="#.D0.9F.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB_.D0.BF.D0.BE.D0.B2.D1.96.D0.B4.D0.BE.D0.BC.D0.BB.D0.B5.D0.BD.D1.8C_.28docMessRep.29"><span class="tocnumber">1.2.4</span> <span class="toctext">Протокол повідомлень (docMessRep)</span></a></li>
 <li class="toclevel-3"><a href="#.D0.97.D0.B2.D1.96.D1.82_.D0.B4.D0.B2.D0.BE.D1.85_.D1.80.D0.BE.D0.B1.D0.BE.D1.87.D0.B8.D1.85_.D0.B7.D0.BC.D1.96.D0.BD_.28docRep2WorkSh.29"><span class="tocnumber">1.2.5</span> <span class="toctext">Звіт двох робочих змін (docRep2WorkSh)</span></a></li>
-<li class="toclevel-3"><a href="#Year_report_of_the_month_values_.28docRepMonth.29"><span class="tocnumber">1.2.6</span> <span class="toctext">Year report of the month values (docRepMonth)</span></a></li>
+<li class="toclevel-3"><a href="#.D0.A0.D1.96.D1.87.D0.BD.D0.B8.D0.B9_.D0.B7.D0.B2.D1.96.D1.82_.D0.BC.D1.96.D1.81.D1.8F.D1.87.D0.BD.D0.B8.D1.85_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D1.8C_.28docRepYear.29"><span class="tocnumber">1.2.6</span> <span class="toctext">Річний звіт місячних значень (docRepYear)</span></a></li>
 </ul>
 </li>
 </ul>
@@ -230,6 +230,14 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <td>
 </td></tr>
 <tr>
+<td> p{n}cntr </td>
+<td> Параметр {n}: це лічильник </td>
+<td> Логічний </td>
+<td> Стала </td>
+<td> Parameter{n}|isCntr </td>
+<td> Встановлюється для лічильників з метою отримання значень як різницю.
+</td></tr>
+<tr>
 <td> p{n}max </td>
 <td> Параметр {n}: максимум </td>
 <td> Адреса </td>
@@ -363,6 +371,14 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <td> Вхідний зв'язок </td>
 <td> Parameter{n}|prec </td>
 <td>
+</td></tr>
+<tr>
+<td> p{n}cntr </td>
+<td> Параметр {n}: це лічильник </td>
+<td> Логічний </td>
+<td> Стала </td>
+<td> Parameter{n}|isCntr </td>
+<td> Встановлюється для лічильників з метою отримання значень як різницю.
 </td></tr>
 <tr>
 <td> p{n}max </td>
@@ -717,16 +733,140 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <table class="wikitable">
 
 <tr>
-<td> <span id="docRepMonth" title="#docRepMonth"><h4><span class="mw-headline" id="Year_report_of_the_month_values_.28docRepMonth.29"><span class="mw-headline-number">1.2.6</span> Year report of the month values (<a href="Libs_Documents.html#docRepMonth" title="Special:MyLanguage/Libs/Documents">docRepMonth</a>)</span></h4></span> </td>
+<td> <span id="docRepYear" title="#docRepYear"><h4><span class="mw-headline" id=".D0.A0.D1.96.D1.87.D0.BD.D0.B8.D0.B9_.D0.B7.D0.B2.D1.96.D1.82_.D0.BC.D1.96.D1.81.D1.8F.D1.87.D0.BD.D0.B8.D1.85_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D1.8C_.28docRepYear.29"><span class="mw-headline-number">1.2.6</span> Річний звіт місячних значень (<a href="Libs_Documents.html#docRepYear" title="Special:MyLanguage/Libs/Documents">docRepYear</a>)</span></h4></span> </td>
 <td> 1.0 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk, ru 
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
 </td></tr></table>
-<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Waiting the creating ...
-</p><p><br />
+<p>Документ, представлений на рисунку 1.2.6, слугує для генерації добового звіту місячних значень у вигляді діаграми трендів та таблиці даних. Документ динамічного типу. Документ загалом використовує та представляє представницьку структуру DAQ-шаблону "<a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">Аналоговий сигнал</a>". У якості джерела даних документу виступають переважно <a href="Program_manual.html#ArchVals" title="Special:MyLanguage/Documents/Program manual">архіви значень</a> DAQ-параметрів.
+</p><p>Документом вперше запроваджено ручне введення архівних значень великого інтервалу часу вимірювання, яким у цьому випадку є місяць, як недетермінований інтервал. Найбільшу актуальність ця функція становить для лічильників, які з тієї або іншої причини неможливо підключити до системи прямо, із безперервним вимірюванням або періодичним вивантаженням ділянок архіву. Визначення параметру до ручного вводу здійснюється встановленням постійної <b>isMan</b> відповідного параметру, що вмикає елементи форми нагорі документу, за відповідних прав ("root" або у групі "ITW"), та доступ до даних для таблиці та тренду суворо за інтервалом документу — місяць, як і їх введення.
+</p><p>Зберігання введених вручну даних здійснюється або традиційно у архів значень, із записом лише одного значення на представницький інтервал, тобто із недостовірними значеннями між ними; або окремим записом зі значенням у архіві повідомлень, що також запроваджено цим документом вперше:
+</p>
+<dl><dd> КАТЕГОРІЯ: визначає ID джерела <i>SrcID</i> у форматі "<b>val{SrcID}</b>", де:
+<ul><li> "val*" — типовий шаблон-ознака значення, який може бути безпосередньо використано у фільтрі категорії для визначення суто значень у повідомленнях;</li>
+<li> <i>SrcID</i> — ідентифікатор джерела, що безпосередньо вводиться постійною у адресі параметру <b>var</b>.</li></ul></dd>
+<dd> ТЕКСТ: назва <i>Name</i> та значення <i>Value</i> параметру у форматі "<b>{Name}: {Value}</b>".</dd></dl>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibDocuments_docRepYear_uk.png"><img class="thumbimage" height="580" src="files/LibDocuments_docRepYear_uk.png" width="900" /></a>  <div class="thumbcaption">Рис.1.2.6. Документ "Річний звіт місячних значень" у режимі виконання.</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Документ призначено для виконання ролі сторінки-шаблону, а, відповідно, він має безпосередньо розташовуватися у дерево проекту. До кожного документу може підключатися до десяти параметрів, шляхом встановлення зв'язків. Елементи, для яких не буде встановлено зв'язку, будуть приховані при виконанні.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Для кожного документу можна встановити:
+</p>
+<ul><li> атрибут "Архіватор (<b>arch</b>)" у потрібний архіватор значень та повідомлень зі значенням у формі <b>{ValArch};{MessArch}</b>, які обслуговують визначені параметри; ви не маєте використовувати архіватори із якістю гірше за одну добу для значень;</li>
+<li> атрибут "Ввімкнути графік (<b>enGraph</b>)" для ввімкнення/вимкнення графіку;</li>
+<li> атрибут "Заголовок (<b>title</b>)" у специфічний заголовок документу.</li></ul>
+<p><b><u>Використання — виконання</u></b><br />
+У режимі виконання відображаються елементи, для яких встановлено зв'язки. Рік формування документу доступно до обрання на горі цього документу, від поточного та на десять років у глиб.
+</p><p>За наявності прав ("root" або у групі "ITW") користувач має можливість введення значень параметрів із позначкою ручного введення (<b>isMan</b>) за допомогою елементів форми нагорі, де можна обрати місяць, параметр та значення, яке буде записано одразу після підтвердження та відображено у документі.
+</p><p><b><u>Властивості зв'язування та конфігурації</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Конфігурація </th>
+<th> Конфігураційний шаблон </th>
+<th> Опис
+</th></tr>
+<tr>
+<td colspan="6"> <i>Віджет документу (doc)</i>
+</td></tr>
+<tr>
+<td> arch </td>
+<td> Архіватор, {ValArch};{MessArch} </td>
+<td> Рядок </td>
+<td> Стала </td>
+<td> </td>
+<td> Архіватор значень та повідомлень зі значенням у формі <b>{ValArch};{MessArch}</b>, по замовченню та найліпше використовувати одно-годинний архіватор "FSArch.1h".
+</td></tr>
+<tr>
+<td> title </td>
+<td> Заголовок </td>
+<td> Рядок </td>
+<td> Стала </td>
+<td> </td>
+<td> Заголовок звіту
+</td></tr>
+<tr>
+<td> enGraph </td>
+<td> Ввімкнути графік </td>
+<td> Логічний </td>
+<td> Стала </td>
+<td> </td>
+<td> Ввімкнено по замовченню.
+</td></tr>
+<tr>
+<td colspan="6"> <i>Параметр {n} від 1 до 10.</i>
+</td></tr>
+<tr>
+<td> p{n}name </td>
+<td> Параметр {n}: назва </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter{n}|NAME </td>
+<td> Назва параметру у заголовку таблиці.
+</td></tr>
+<tr>
+<td> p{n}var </td>
+<td> Параметр {n}: змінна </td>
+<td> Адреса </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter{n}|var </td>
+<td> Адреса до атрибуту параметру із архівом значень або ідентифікатор параметру (<b>val:{PrmId}</b>) для ручного запису значень із збереженням у архіві повідомлень.
+</td></tr>
+<tr>
+<td> p{n}ed </td>
+<td> Параметр {n}: одиниця виміру </td>
+<td> Рядок </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter{n}|ed </td>
+<td>
+</td></tr>
+<tr>
+<td> p{n}prec </td>
+<td> Параметр {n}: точність </td>
+<td> Цілий </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter{n}|prec </td>
+<td>
+</td></tr>
+<tr>
+<td> p{n}cntr </td>
+<td> Параметр {n}: це лічильник </td>
+<td> Логічний </td>
+<td> Стала </td>
+<td> Parameter{n}|isCntr </td>
+<td> Встановлюється для лічильників з метою отримання значень як різницю.
+</td></tr>
+<tr>
+<td> p{n}max </td>
+<td> Параметр {n}: максимум </td>
+<td> Адреса </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter{n}|max </td>
+<td> Використано для визначення шкали параметру на графіку.
+</td></tr>
+<tr>
+<td> p{n}min </td>
+<td> Параметр {n}: мінімум </td>
+<td> Адреса </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter{n}|min </td>
+<td> Використано для визначення шкали параметру на графіку.
+</td></tr>
+<tr>
+<td> p{n}isMan </td>
+<td> Параметр {n}: ручний </td>
+<td> Логічний </td>
+<td> Стала </td>
+<td> Parameter{n}|isMan </td>
+<td> Позначає параметр як до ручного введення.
+</td></tr></table>
+<p><br />
 </p>
 <h2><span class="mw-headline" id=".D0.A1.D0.B5.D1.80.D0.B2.D1.96.D1.81.D0.BD.D1.96_.D0.BF.D0.BE.D0.B2.27.D1.8F.D0.B7.D0.B0.D0.BD.D1.96_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.97"><span class="mw-headline-number">2</span> <span id="ServFunc" title="#ServFunc">Сервісні пов'язані функції</span></span></h2>
 <p>Сервісні функції кадрів звітів та документів призначено для виконання характерних задач отримання звітних даних, для чого треба здійснювати якусь перевірку або підрахунок, наприклад, перевіряти достовірність та підсумовувати. Сервісною функцією може бути й формування складних даних, як то вбудованих у документ діаграм.
@@ -1002,11 +1142,12 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <table class="wikitable">
 
 <tr>
-<td> <span id="diagram" title="#diagram"><h3><span class="mw-headline" id=".D0.94.D1.96.D0.B0.D0.B3.D1.80.D0.B0.D0.BC.D0.B0_.28diagram.29"><span class="mw-headline-number">2.4</span> Діаграма (<a href="Libs_Documents.html#diagram" title="Special:MyLanguage/Libs/Documents">diagram</a>)</span></h3></span> </td>
-<td> 1.1 </td>
+<td> <span id="diagram" title="#diagram"><h3><span class="mw-headline" id=".D0.94.D1.96.D0.B0.D0.B3.D1.80.D0.B0.D0.BC.D0.B0_.28diagram.29"><span class="mw-headline-number">2.4</span> Діаграма (<a href="Libs_Documents.html#diagram" title="Special:MyLanguage/Libs/Documents">diagram</a>)</span></h3></span>
+</td>
+<td> 1.3 </td>
 <td> GPLv2 </td>
 <td> * </td>
-<td> en, uk, ru 
+<td> en, uk, ru
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
 </td></tr></table>
@@ -1021,7 +1162,9 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <li> Шкала: Маркери: колір	(sclMarkColor), по замовченню "gray".</li></ul>
 <p>У якості джерела даних наразі можуть використовуватися лише архіви значень, прямою адресою до них або через атрибут DAQ-параметру з архівом. Кількість джерел даних прямо не обмежене та вони записуються окремими рядками аргументу <i>srcs</i> із форматом "<b>{addr}:{min}:{max}:{color}[:{scale}[:{width}]]</b>", де:
 </p>
-<ul><li> <b>addr</b> — адреса до архіву значень або атрибуту DAQ-параметру, наприклад: "/Archive/va_CPULoad_load", "/DAQ/LogicLev/gen/F3/var";</li>
+<ul><li> <b>addr</b> — адреса до:
+<ul><li> архіву значень ("/Archive/va_CPULoad_load") або атрибуту DAQ-параметру ("/DAQ/LogicLev/gen/F3/var");</li>
+<li> прямі дані у формі "<b>&lt;d s='1' aprox='1' per='1'&gt;{p0}={pV0},{p1}={pV1},...,{pN}={pVN}&lt;/d&gt;</b>", встановленням атрибуту "s" можна вказати на період у секундах; "aprox" — апроксимувати перехід від однієї точки до іншої замість підставки попереднього значення у всі точки періодичності від упаковки.</li></ul></li>
 <li> <b>min</b>, <b>max</b> — мінімум та максимум шкали, за відсутності шкали (<b>min</b> &gt;= <b>max</b>) вона буде вираховуватися із реальних даних;</li>
 <li> <b>color</b> — колір кривої тренду;</li>
 <li> <b>scale</b> — окреме визначення шкали тренду, по замовченню "Глобально (0)" та загалом передбачено: "Глобально (0)", "Маркери (2)", "Ґратка та маркери (3)", "Маркери (лог) (6)", "Ґратка та маркери (лог) (7)".</li>
@@ -1130,5 +1273,5 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Documents/uk">Libs/Documents/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2661</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Documents/uk">Libs/Documents/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2663</td></tr></table></body>
 </html>

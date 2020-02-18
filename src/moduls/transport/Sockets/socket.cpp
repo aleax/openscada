@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.Sockets file: socket.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -61,7 +61,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"3.3.4"
+#define MOD_VER		"3.4.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -118,15 +118,18 @@ void TTransSock::postEnable( int flag )
 
 void TTransSock::load_( )
 {
+    TTypeTransport::load_();
+
     //Load parameters from command line
 
 }
 
 void TTransSock::perSYSCall( unsigned int cnt )
 {
-    vector<string> trls;
+    TTypeTransport::perSYSCall(cnt);
 
     //Iniciative input protocols check for restart/reconnect need.
+    vector<string> trls;
     inList(trls);
     for(unsigned iTr = 0; !SYS->stopSignal() && iTr < trls.size(); iTr++)
 	((AutoHD<TSocketIn>)inAt(trls[iTr])).at().check();
@@ -1045,7 +1048,7 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 //* TSocketOut                                   *
 //************************************************
 TSocketOut::TSocketOut( string name, const string &idb, TElem *el ) :
-    TTransportOut(name, idb, el), mAttemts(2), mMSS(0), sockFd(-1), type(SOCK_TCP), mLstReqTm(0)
+    TTransportOut(name, idb, el), mAttemts(2), mMSS(0), sockFd(-1), type(SOCK_TCP)
 {
     setAddr("localhost:10005");
     setTimings("5:1");
@@ -1488,7 +1491,7 @@ repeate:
 
     if(prevTmOut) setTmCon(prevTmOut);
 
-    if(mTmRep)	mLstReqTm = TSYS::curTime();
+    mLstReqTm = TSYS::curTime();
 
     return vmax(0, iB);
 }
