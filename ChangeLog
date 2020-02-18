@@ -1,4 +1,8 @@
 2020-02-18 Roman (stable)
+- FIX:DAQ.ICP_DAS: Fixed for build with the error code TError::NoError, at previous define NoError in i8014W.h.
+
+
+2020-02-18 Roman (stable)
 - !!!!:DB.LibsDB.{OscadaLibs,vcaBase}: The document of the "Reports' and documents' library" is completed.
 - !!!:FIX:DB.LibsDB.OscadaLibs: doc.diagram: Fixed in limiting the draw at the vertical area size.
     !!!: Appended for the trends build from directly specified data.
