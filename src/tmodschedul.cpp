@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tmodschedul.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -74,7 +74,7 @@ string TModSchedul::optDescr( )
 	"ModAllow   <list>       List of the shared libraries allowed for the automatic loading, attaching and starting (bd_DBF.so;daq_JavaLikeCalc.so).\n"
 	"                        Uses '*' value to allow all the modules.\n"
 	"ModDeny    <list>       List of the shared libraries denied for the automatic loading, attaching and starting (bd_DBF.so;daq_JavaLikeCalc.so).\n"
-	"ChkPer     <sec>        Period of the checking for new shared libraries(modules), in seconds. Set zero to disable.\n\n"
+	"ChkPer     <seconds>    Period of the checking for new shared libraries(modules), 0 to disable.\n\n"
 	), nodePath().c_str()) + TSubSYS::optDescr();
 }
 

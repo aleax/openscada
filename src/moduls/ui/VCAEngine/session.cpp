@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: session.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1092,6 +1092,14 @@ SessPage::~SessPage( )
 
 }
 
+void SessPage::postEnable( int flag )
+{
+    SessWdg::postEnable(flag);
+
+    //Force linking for the possibility of hot deletion
+    linkToParent();
+}
+
 string SessPage::path( ) const		{ return path(false); }
 
 string SessPage::path( bool orig ) const{ return (!pathAsOpen.getVal().size() || orig) ? ownerFullId(true)+"/pg_"+id() : pathAsOpen.getVal(); }
@@ -1099,7 +1107,7 @@ string SessPage::path( bool orig ) const{ return (!pathAsOpen.getVal().size() ||
 string SessPage::getStatus( )
 {
     string rez = SessWdg::getStatus();
-    if(attrAt("pgOpen").at().getB())	rez += _("Opened. ");
+    if(enable() && attrAt("pgOpen").at().getB()) rez += _("Opened. ");
 
     return rez;
 }
@@ -1160,7 +1168,6 @@ void SessPage::setEnable( bool val, bool force )
 	    pageDel(pg_ls[iL]);
 
 	SessWdg::setEnable(false);
-	mDisMan = true;
     }
 }
 
@@ -1187,7 +1194,7 @@ AutoHD<Page> SessPage::parent( ) const
 {
     if(!enable()) {
 	if(parentNm() == "..") return AutoHD<TCntrNode>(nodePrev());
-	else return mod->nodeAt(parentNm());
+	else return mod->nodeAt(parentNm(), 0, 0, 0, true);
     }
     return Widget::parent();
 }
@@ -1510,6 +1517,15 @@ bool SessPage::cntrCmdGeneric( XMLNode *opt )
 	    opt->setText(i2s(attrAt("pgOpen").at().getB()));
 	if(ctrChkNode(opt,"set",RWRWR_,owner().c_str(),grp().c_str(),SEC_WR))
 	    attrAt("pgOpen").at().setB(s2i(opt->text()));
+    }
+    else if(a_path == "/wdg/st/en") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(enable()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR)) {
+	    bool toEn = s2i(opt->text());
+	    if(toEn)	mDisMan = false;
+	    setEnable(toEn);
+	    if(!toEn)	mDisMan = true;
+	}
     }
     else if((a_path == "/br/pg_" || a_path == "/page/page") && ctrChkNode(opt)) {
 	vector<string> lst;

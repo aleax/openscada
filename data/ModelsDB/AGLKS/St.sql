@@ -1806,7 +1806,7 @@ R103 = 65536*(AT101_2_Ti-273)/150;
 R104 = 65536*(AT101_2_To-273)/100;','','Serial.exlar','RTU',10);
 INSERT INTO ModBus_node VALUES('gate','','','','','','',0,2,'Sockets.testModBus','*',1,1.0,1,'','','','Serial.exlar','RTU',1);
 CREATE TABLE IF NOT EXISTS 'Archive_val_proc' ("ID" TEXT DEFAULT '' ,"MODUL" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '0' ,"ADDR" TEXT DEFAULT '' ,"V_PER" DOUBLE DEFAULT '1' ,"A_PER" INTEGER DEFAULT '60' ,"SEL_PR" INTEGER DEFAULT '10' ,"A_PRMS" TEXT DEFAULT '' , PRIMARY KEY ("ID","MODUL"));
-INSERT INTO Archive_val_proc VALUES('1m','FSArch','','','','Minute''s archive','Хвилинний архів','Минутный архив',1,'ARCHIVES/VAL/1m',60.0,60,10,'<prms TmSize="8600" NFiles="100" MaxCapacity="1000" Round="0.01" PackTm="10" CheckTm="60" PackInfoFiles="0" />
+INSERT INTO Archive_val_proc VALUES('1m','FSArch','','','','Minute''s archive','Хвилинний архів','Минутный архив',1,'ARCHIVES/VAL/1m',60.0,60,10,'<prms TmSize="8600" NFiles="100" MaxCapacity="1000" Round="0.01" PackTm="10" CheckTm="60" PackInfoFiles="1" />
 ');
 INSERT INTO Archive_val_proc VALUES('1s','FSArch','','','','Second''s archive','Секундний архів','Секундный архив',1,'ARCHIVES/VAL/1s',1.0,60,10,'<prms TmSize="720" NFiles="100" MaxCapacity="5000" Round="0.01" PackTm="10" CheckTm="60" PackInfoFiles="1" />
 ');
@@ -1941,7 +1941,7 @@ INSERT INTO Archive_val VALUES('PT0503_var','','','','','','',1,2,'LogicLev.gen.
 CREATE TABLE IF NOT EXISTS 'SYS' ("user" TEXT DEFAULT '' ,"id" TEXT DEFAULT '' ,"val" TEXT DEFAULT '' ,"uk#val" TEXT DEFAULT '' , PRIMARY KEY ("user","id"));
 INSERT INTO SYS VALUES('root','/sub_Protocol/mod_HTTP/AuthTime','10','');
 INSERT INTO SYS VALUES('root','/sub_Protocol/mod_HTTP/AutoLogin','<aLog><it addrs="*" user="user" /></aLog>','');
-INSERT INTO SYS VALUES('roman','/sub_UI/mod_QTCfg/st','1912:996:AAAA/wAAAAEAAAACAAABTwAABh8B/////wEAAAABAA==','');
+INSERT INTO SYS VALUES('roman','/sub_UI/mod_QTCfg/st','1272:653:AAAA/wAAAAEAAAACAAABTwAABh8B/////wEAAAABAA==','');
 INSERT INTO SYS VALUES('roman','/sub_UI/mod_Vision/uiProps','<UI devWinState="AAAA/wAAAAD9AAAAAQAAAAAAAAFdAAACf/wCAAAAAvwAAAA7AAABPQAAAHkA////+gAAAAECAAAAAvsAAAAQAFAAcgBvAGoAVAByAGUAZQEAAAAA/////wAAAFkA////+wAAAA4AVwBkAGcAVAByAGUAZQEAAAAA/////wAAAFkA/////AAAAX4AAAE8AAAAeQD////6AAAAAAIAAAAC+wAAABgASQBuAHMAcABBAHQAdAByAEQAbwBjAGsBAAAAAP////8AAABZAP////sAAAAWAEkAbgBzAHAATABuAGsARABvAGMAawEAAAAA/////wAAAFkA////AAADnQAAAn8AAAAEAAAABAAAAAgAAAAI/AAAAAEAAAACAAAACQAAABgAdgBpAHMASQB0AFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAAAAAAAAAABYAdwBkAGcAVABvAG8AbABWAGkAZQB3AAAAAfr/////AAAAAAAAAAAAAAASAGUAbABGAGkAZwBUAG8AbwBsAAAAAAD/////AAAAAAAAAAAAAAAKAEEARwBMAEsAUwAAAAAA/////wAAAAAAAAAAAAAACABNAGEAaQBuAAAAAAD/////AAAAAAAAAAAAAAAGAGQAbwBjAAAAAAD/////AAAAAAAAAAAAAAAKAG0AbgBFAGwAcwAAAAAA/////wAAAAAAAAAAAAAAEgBvAHIAaQBnAGkAbgBhAGwAcwEAAAH6/////wAAAAAAAAAAAAAACAB0AGUAcwB0AAAAAAD/////AAAAAAAAAAA=:1280:720" InDlgStTextEd="1912:996" dlgPropLibProjState="800:600" dlgPropVisItState="800:600:AAAA/wAAAAEAAAACAAAA8QAAAPEB/////wEAAAACAA==" />
 ','');
 INSERT INTO SYS VALUES('roman','/sub_UI/mod_VCAEngine/wdgAttr','doc','');
@@ -2207,12 +2207,12 @@ INSERT INTO LogLevPrm_prescription_io VALUES('manager','f_err','0','');
 INSERT INTO LogLevPrm_prescription_io VALUES('manager','f_frq','4.96115016937256','');
 INSERT INTO LogLevPrm_prescription_io VALUES('manager','f_stop','0','');
 CREATE TABLE IF NOT EXISTS 'Archive_mess_proc' ("ID" TEXT DEFAULT '' ,"MODUL" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '0' ,"CATEG" TEXT DEFAULT '' ,"LEVEL" INTEGER DEFAULT '0' ,"ADDR" TEXT DEFAULT '' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"A_PRMS" TEXT DEFAULT '' , PRIMARY KEY ("ID","MODUL"));
-INSERT INTO Archive_mess_proc VALUES('NetRequsts','FSArch','','','','Requests to server through transport Sockets.','Запити до сервера через транспорт Sockets.','Запросы к серверу через транспорт Sockets.',1,'/sub_Transport/mod_Sockets*',1,'ARCHIVES/MESS/Net/',0,'<high>','<prms XML="0" MSize="1024" NFiles="30" TmSize="30" PackTm="10" CheckTm="60" PackInfoFiles="0" PrevDbl="0" />
+INSERT INTO Archive_mess_proc VALUES('alarms','FSArch','Alarms','Порушення','Нарушения','','','',1,'al*',1,'ARCHIVES/MESS/alarms',0,'<high>','<prms XML="0" MSize="1024" NFiles="30" TmSize="30" PackTm="10" CheckTm="60" PackInfoFiles="0" PrevDbl="1" PrevDblTmCatLev="1" />
 ');
-INSERT INTO Archive_mess_proc VALUES('test','FSArch','Test','Тест','Тест','','','',1,'*',0,'ARCHIVES/MESS/TEST/',0,'<high>','<prms XML="0" MSize="1024" NFiles="30" TmSize="30" PackTm="10" CheckTm="60" PackInfoFiles="0" PrevDbl="0" />
+INSERT INTO Archive_mess_proc VALUES('actions','FSArch','User actions','Дії користувача','Действия пользователя','','','',1,'OP:*',1,'ARCHIVES/MESS/actions',0,'<high>','<prms XML="1" MSize="1024" NFiles="30" TmSize="30" PackTm="10" CheckTm="60" PackInfoFiles="0" PrevDbl="0" PrevDblTmCatLev="0" />
 ');
-INSERT INTO Archive_mess_proc VALUES('StatErrors','FSArch','','','','Local errors'' archive','Архів локальних помилок','Архив локальных ощибок',1,'/*',4,'ARCHIVES/MESS/stError/',0,'<high>','<prms XML="1" MSize="300" NFiles="10" TmSize="30" PackTm="10" CheckTm="60" PackInfoFiles="0" PrevDbl="0" />
+INSERT INTO Archive_mess_proc VALUES('SYS','FSArch','System','Система','Система','','','',1,'/*',0,'ARCHIVES/MESS/SYS',0,'<high>','<prms XML="0" MSize="10240" NFiles="30" TmSize="30" PackTm="10" CheckTm="60" PackInfoFiles="1" PrevDbl="0" PrevDblTmCatLev="0" />
 ');
-INSERT INTO Archive_mess_proc VALUES('test','DBArch','','','','','','',1,'*',0,'SQLite.arch',0,'<high>','<prms Size="1" TmAsStr="0" />
+INSERT INTO Archive_mess_proc VALUES('SYS','DBArch','System','Система','Система','','','',1,'/*',1,'SQLite.arch',0,'<high>','<prms Size="1" TmAsStr="0" />
 ');
 COMMIT;

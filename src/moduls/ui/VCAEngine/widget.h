@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: widget.h
 /***************************************************************************
- *   Copyright (C) 2006-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -206,6 +206,7 @@ class Widget : public TCntrNode
 	// Enable stat
 	bool enable( ) const;
 	virtual void setEnable( bool val, bool force = false );
+	void linkToParent( );
 
 	// Inheritance methods
 	virtual string parentNm( ) const { return mParentNm; }	//Parent widget name

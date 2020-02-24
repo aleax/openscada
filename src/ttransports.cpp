@@ -561,7 +561,7 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* TTypeTransport                               *
 //************************************************
-TTypeTransport::TTypeTransport( const string &id ) : TModule(id), mOutKeepAliveTm(0)
+TTypeTransport::TTypeTransport( const string &id ) : TModule(id), mOutLifeTime(0)
 {
     mIn = grpAdd("in_");
     mOut = grpAdd("out_");
@@ -584,6 +584,15 @@ string TTypeTransport::outAdd( const string &iid, const string &idb )
     return chldAdd(mOut, Out(TSYS::strEncode(sTrm(iid),TSYS::oscdID),idb));
 }
 
+string TTypeTransport::optDescr( )
+{
+    return TSYS::strMess(_(
+	"======================= Module <%s:%s> options =======================\n"
+	"---- Parameters of the module section '%s' of the configuration file ----\n"
+	"OutLifeTime  <seconds>  Output transports lifetime (by default 0 seconds), 0 to disable the function.\n\n"
+	), mModType.c_str(), modId().c_str(), nodePath().c_str());
+}
+
 void TTypeTransport::cntrCmdProc( XMLNode *opt )
 {
     vector<string> list;
@@ -598,7 +607,7 @@ void TTypeTransport::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/tr/out",_("Output"))) {
 		ctrMkNode("list",opt,-1,"/tr/out/list",_("List"),RWRWR_,"root",STR_ID,5,
 		    "tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","out_","idSz",OBJ_ID_SZ);
-		ctrMkNode("fld",opt,-1,"/tr/out/keepAlive",_("Keep alive timeout, seconds"),RWRWR_,"root",STR_ID,3,"tp","dec","min","0","max","3600",
+		ctrMkNode("fld",opt,-1,"/tr/out/keepAlive",_("Lifetime, seconds"),RWRWR_,"root",STR_ID,4,"tp","dec","min","0","max","3600",
 		    "help",_("Time of inactivity in the output transport for it closing/disconnection. Set to 0 to disable the transports closing!"));
 	    }
 	}
@@ -625,8 +634,8 @@ void TTypeTransport::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"del",RWRWR_,"root",STR_ID,SEC_WR))	outDel(opt->attr("id"),true);
     }
     if(a_path == "/tr/out/keepAlive") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(i2s(outKeepAliveTm()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setOutKeepAliveTm(s2i(opt->text()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(i2s(outLifeTime()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setOutLifeTime(s2i(opt->text()));
     }
     else TModule::cntrCmdProc(opt);
 }
@@ -634,13 +643,13 @@ void TTypeTransport::cntrCmdProc( XMLNode *opt )
 void TTypeTransport::load_( )
 {
     //Load parameters
-    setOutKeepAliveTm(s2i(TBDS::genDBGet(nodePath()+"OutKeepAliveTm",i2s(outKeepAliveTm()))));
+    setOutLifeTime(s2i(TBDS::genDBGet(nodePath()+"OutLifeTime",i2s(outLifeTime()))));
 }
 
 void TTypeTransport::save_( )
 {
     //Save parameters
-    TBDS::genDBSet(nodePath()+"OutKeepAliveTm",i2s(outKeepAliveTm()));
+    TBDS::genDBSet(nodePath()+"OutLifeTime",i2s(outLifeTime()));
 }
 
 void TTypeTransport::perSYSCall( unsigned int cnt )
@@ -648,11 +657,11 @@ void TTypeTransport::perSYSCall( unsigned int cnt )
     //Check all output transports
     vector<string> ls;
     outList(ls);
-    for(unsigned iL = 0; outKeepAliveTm() && iL < ls.size(); iL++) {
+    for(unsigned iL = 0; outLifeTime() && iL < ls.size(); iL++) {
 	AutoHD<TTransportOut> outTr = outAt(ls[iL]);
 
 	int reRs = 1;
-	bool toStop = (outTr.at().startStat() && (reRs=outTr.at().reqRes().tryLock()) == 0 && (TSYS::curTime()-outTr.at().lstReqTm())/1000000 > outKeepAliveTm());
+	bool toStop = (outTr.at().startStat() && (reRs=outTr.at().reqRes().tryLock()) == 0 && (TSYS::curTime()-outTr.at().lstReqTm())/1000000 > outLifeTime());
 	if(reRs == 0) outTr.at().reqRes().unlock();
 	if(toStop) try { outTr.at().stop(); } catch(TError &err) { }
     }

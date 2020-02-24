@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tarchives.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -249,10 +249,10 @@ string TArchiveS::optDescr( )
     return TSYS::strMess(_(
 	"======================== Subsystem \"Archives-History\" options ===================\n"
 	"------ Parameters of the section '%s' of the configuration file ------\n"
-	"MessBufSize    <items>  Size of the messages buffer.\n"
-	"MessPeriod     <sec>    Period of the messages archiving.\n"
-	"ValPeriod      <msec>   Period of active archiving of values.\n"
-	"ValPriority    <level>  Level of priority of the task of active archiving of values.\n"
+	"MessBufSize  <items>    Size of the messages buffer.\n"
+	"MessPeriod   <seconds>  Period of the messages archiving.\n"
+	"ValPeriod    <mseconds> Period of active archiving of values.\n"
+	"ValPriority  <level>    Level of priority of the task of active archiving of values.\n"
 	"RdRestDtOverTm <days>   Depth of the forced overloading of the reserve history at startup, in days.\n\n"
 	), nodePath().c_str()) + TSubSYS::optDescr();
 }

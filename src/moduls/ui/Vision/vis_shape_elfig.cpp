@@ -1,9 +1,9 @@
 
 //OpenSCADA module UI.VISION file: vis_shape_elfig.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2008 by Yashina Kseniya <ksu@oscada.org>
+ *   Copyright (C) 2012-2015,2020 by Roman Savochenko <roman@oscada.org>
  *		   2007-2012 by Lysenko Maxim <mlisenko@oscada.org>
- *		   2012-2015 by Roman Savochenko <rom_as@oscada.org>
+ *		   2007-2008 by Yashina Kseniya <ksu@oscada.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -138,7 +138,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val, const 
 	    rel_list = true;
 	    break;
 	case A_ElFigOrient: elFD->orient = s2r(val); rel_list = true;	break;
-	case A_ElFigMirror: elFD->mirror = s2r(val); rel_list = true;	break;
+	case A_ElFigMirror: elFD->mirror = s2i(val); rel_list = true;	break;
 	case A_ElFigElLst: elFD->elLst = val.c_str(); rel_list = true;	break;
 	default:
 	    if(uiPrmPos >= A_ElFigIts) {

@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: widget.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -156,6 +156,14 @@ void Widget::preDisable( int flag )
 
     //Disable widget
     if(enable()) setEnable(false);
+
+    //Force unlinking
+    if(!parent().freeStat()) {
+	//Unregister heritater
+	parent().at().heritUnreg(this);
+	//Disconnect parent widget
+	mParent.free();
+    }
 }
 
 string Widget::rootId( ) const	{ return parent().freeStat() ? "" : parent().at().rootId(); }
@@ -257,16 +265,7 @@ void Widget::setEnable( bool val, bool force )
     if(val) {
 	if(parentNm() != "root") {
 	    try {
-		if(sTrm(parentNm()).empty() || parentNm() == path())
-		    throw TError(nodePath().c_str(),_("Parent item is empty or equal to itself!"));
-		if(!mParent.freeStat()) ;	//connected early due to the parent name/address specific
-		else if(parentNm() == "..") mParent = AutoHD<TCntrNode>(nodePrev());
-		else mParent = mod->nodeAt(parentNm());
-
-		if(isLink() && dynamic_cast<Widget*>(nodePrev()) && mParent.at().path() == ((Widget*)nodePrev())->path()) {
-		    mParent.free();
-		    throw TError(nodePath().c_str(),_("Parent is identical to the owner for the link!"));
-		}
+		linkToParent();
 
 		//Check for enable parent widget and enable if not
 		if(!parent().at().enable()) parent().at().setEnable(true);
@@ -274,9 +273,6 @@ void Widget::setEnable( bool val, bool force )
 		//Inherit
 		inheritAttr();
 		inheritIncl();
-
-		//Register of heritater
-		parent().at().heritReg(this);
 	    } catch(TError &err) {
 		mess_err(nodePath().c_str(),_("Error enabling the widget: %s"),err.mess.c_str());
 		mParent.free();
@@ -333,6 +329,23 @@ void Widget::setEnable( bool val, bool force )
 	    }
 
     mEnable = val;
+}
+
+void Widget::linkToParent( )
+{
+    if(sTrm(parentNm()).empty() || parentNm() == path())
+	throw TError(nodePath().c_str(),_("Parent item is empty or equal to itself!"));
+    if(!mParent.freeStat()) ;	//connected early due to the parent name/address specific
+    else if(parentNm() == "..") mParent = AutoHD<TCntrNode>(nodePrev());
+    else mParent = mod->nodeAt(parentNm());
+
+    if(isLink() && dynamic_cast<Widget*>(nodePrev()) && mParent.at().path() == ((Widget*)nodePrev())->path()) {
+	mParent.free();
+	throw TError(nodePath().c_str(),_("Parent is identical to the owner for the link!"));
+    }
+
+    //Register of heritater
+    parent().at().heritReg(this);
 }
 
 void Widget::setParentNm( const string &isw )
@@ -626,9 +639,9 @@ void Widget::attrDel( const string &attr, bool allInher  )
     try {
 	mtxAttr().lock();
 	map<string, Attr* >::iterator p = mAttrs.find(attr);
-	if(p == mAttrs.end())	throw TError(nodePath().c_str(), _("Attribute '%s' is not present!"), attr.c_str());
+	if(p == mAttrs.end())	throw TError(nodePath().c_str(), _("Attribute '%s' is not present."), attr.c_str());
 	for(int i_c = 0; i_c < 100 && p->second->mConn; i_c++)	TSYS::sysSleep(0.01);
-	if(p->second->mConn) throw TError(nodePath().c_str(), _("Deleting attribute '%s' has not been released!"), attr.c_str());
+	if(p->second->mConn) throw TError(nodePath().c_str(), _("Deleting attribute '%s' has not been released."), attr.c_str());
 
 	int pos = p->second->mOi;
 	for(map<string, Attr* >::iterator p1 = mAttrs.begin(); p1 != mAttrs.end(); ++p1)
@@ -655,7 +668,7 @@ AutoHD<Attr> Widget::attrAt( const string &attr, int lev ) const
 	map<string, Attr* >::const_iterator p = mAttrs.find(attr);
 	if(p == mAttrs.end()) {
 	    const_cast<Widget*>(this)->mtxAttr().unlock();
-	    throw TError(nodePath().c_str(),_("Attribute '%s' is not present!"), attr.c_str());
+	    throw TError(nodePath().c_str(),_("Attribute '%s' is not present."), attr.c_str());
 	}
 	AutoHD<Attr> rez(p->second);
 	const_cast<Widget*>(this)->mtxAttr().unlock();
@@ -1281,7 +1294,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 		    !(srcwdg.at().attrAt(a_ls[iA]).at().flgSelf()&Attr::CfgConst))
 		{
 		    sel = srcwdg.at().attrAt(a_ls[iA]).at().cfgVal();
-		    if(!custom && sel.find(cfg_val) != 0) custom = true;
+		    if(!custom && sel.size() && sel.find(cfg_val) != 0) custom = true;
 		    rez += sel+", ";
 		}
 	    if(cfg_val.empty())	rez = "";

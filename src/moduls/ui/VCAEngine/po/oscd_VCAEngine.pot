@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-04 11:00+0200\n"
+"POT-Creation-Date: 2020-02-20 17:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1487,11 +1487,11 @@ msgid "Adding a new attribute '%s' exceeds the number %d!"
 msgstr ""
 
 #, c-format
-msgid "Attribute '%s' is not present!"
+msgid "Attribute '%s' is not present."
 msgstr ""
 
 #, c-format
-msgid "Deleting attribute '%s' has not been released!"
+msgid "Deleting attribute '%s' has not been released."
 msgstr ""
 
 msgid ""
@@ -1620,10 +1620,6 @@ msgid "Procedure"
 msgstr ""
 
 msgid "New attribute"
-msgstr ""
-
-#, c-format
-msgid "Attribute '%s' is not present."
 msgstr ""
 
 #, c-format

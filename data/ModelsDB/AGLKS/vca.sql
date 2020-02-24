@@ -15,18 +15,18 @@ CREATE TABLE IF NOT EXISTS 'prj_AGLKS_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DE
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so','pgCont','/wlb_Main/wdg_RootPgSo/wdg_pgCont','geomY;geomH;geomZ;pgGrp;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so','infoW','/wlb_Main/wdg_RootPgSo/wdg_infoW','pgGrp;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph','trnd1','/wlb_Main/wdg_grpGraph/wdg_trnd1','curSek;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','el1','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_el1','name;dscr;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','el2','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_el2','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','el3','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_el3','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','el4','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_el4','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','el5','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_el5','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','el6','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_el6','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','el7','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_el7','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','el8','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_el8','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','el1','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_el1','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','el2','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_el2','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','el3','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_el3','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','el4','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_el4','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','el5','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_el5','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','el6','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_el6','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','el7','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_el7','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','el8','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_el8','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','trnd1','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_trnd1','curSek;sclWin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','el3','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_el3','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','el2','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_el2','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','el1','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_el1','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','el3','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_el3','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','el2','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_el2','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','el1','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_el1','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_control/pg_cntrRegul','tiPer','/wlb_Main/wdg_cntrRegul/wdg_tiPer','value;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_1','doc','/wlb_doc/wdg_docRepInstVals/wdg_doc','p1ed;p1name;p1prec;p1var;p2ed;p2max;p2min;p2name;p2prec;p2var;p3ed;p3max;p3min;p3name;p3prec;p3var;p4ed;p4max;p4min;p4name;p4prec;p4var;p5ed;p5max;p5min;p5name;p5prec;p5var;p6ed;p6max;p6min;p6name;p6prec;p6var;title;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_control/pg_cntrRegul','trnd','/wlb_Main/wdg_cntrRegul/wdg_trnd','curSek;',2);
@@ -77,13 +77,13 @@ INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_gview/pg_1','el1_2',
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_gview/pg_1','el1_3','/prj_AGLKS/pg_so/pg_1/pg_gview/wdg_el1_3','name;addr;var;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_gview/pg_1','el1_4','/prj_AGLKS/pg_so/pg_1/pg_gview/wdg_el1_4','name;addr;var;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph','trnd1','/wlb_Main/wdg_grpGraph/wdg_trnd1','curSek;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','el7','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_el7','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','el6','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_el6','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','el5','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_el5','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','el2','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_el2','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','el3','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_el3','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','el4','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_el4','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','el1','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_el1','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','el7','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_el7','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','el6','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_el6','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','el5','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_el5','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','el2','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_el2','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','el3','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_el3','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','el4','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_el4','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','el1','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_el1','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_2/pg_mn/pg_CM101','F_PP101','/wlb_AGLKS/wdg_CM101/wdg_F_PP101','pErr;pNAME;pName;pVal;prec;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_2/pg_mn/pg_CM101','F_PP102','/wlb_AGLKS/wdg_CM101/wdg_F_PP102','pErr;pNAME;pName;pVal;prec;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_2/pg_mn/pg_CM101','KPP101','/wlb_AGLKS/wdg_CM101/wdg_KPP101','out;',2);
@@ -121,14 +121,14 @@ INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_rg/pg_rg/pg_1','e6','/prj
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_rg/pg_rg/pg_1','e7','/prj_AGLKS/pg_so/pg_rg/pg_rg/wdg_e7','p1_addr;p1_max;p1_min;p1_name;p2_addr;p2_max;p2_min;p2_name;p3_addr;p3_max;p3_min;p3_name;p4_addr;p4_max;p4_min;p4_name;p5_addr;p5_max;p5_min;p5_name;title;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_rg/pg_rg/pg_1','e8','/prj_AGLKS/pg_so/pg_rg/pg_rg/wdg_e8','p1_addr;p1_max;p1_min;p1_name;p2_addr;p2_max;p2_min;p2_name;p3_addr;p3_max;p3_min;p3_name;title;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph','trnd1','/wlb_Main/wdg_grpGraph/wdg_trnd1','curSek;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','el1','/prj_AGLKS/pg_so/pg_3/pg_ggraph/wdg_el1','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','el2','/prj_AGLKS/pg_so/pg_3/pg_ggraph/wdg_el2','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','el3','/prj_AGLKS/pg_so/pg_3/pg_ggraph/wdg_el3','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','el4','/prj_AGLKS/pg_so/pg_3/pg_ggraph/wdg_el4','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','el5','/prj_AGLKS/pg_so/pg_3/pg_ggraph/wdg_el5','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','el6','/prj_AGLKS/pg_so/pg_3/pg_ggraph/wdg_el6','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','el7','/prj_AGLKS/pg_so/pg_3/pg_ggraph/wdg_el7','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','el8','/prj_AGLKS/pg_so/pg_3/pg_ggraph/wdg_el8','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','el1','/prj_AGLKS/pg_so/pg_3/pg_ggraph/wdg_el1','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','el2','/prj_AGLKS/pg_so/pg_3/pg_ggraph/wdg_el2','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','el3','/prj_AGLKS/pg_so/pg_3/pg_ggraph/wdg_el3','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','el4','/prj_AGLKS/pg_so/pg_3/pg_ggraph/wdg_el4','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','el5','/prj_AGLKS/pg_so/pg_3/pg_ggraph/wdg_el5','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','el6','/prj_AGLKS/pg_so/pg_3/pg_ggraph/wdg_el6','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','el7','/prj_AGLKS/pg_so/pg_3/pg_ggraph/wdg_el7','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','el8','/prj_AGLKS/pg_so/pg_3/pg_ggraph/wdg_el8','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','trnd1','/prj_AGLKS/pg_so/pg_3/pg_ggraph/wdg_trnd1','curSek;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_3/pg_mn/pg_CM101','F_PP101','/wlb_AGLKS/wdg_CM101/wdg_F_PP101','pErr;pNAME;pName;pVal;prec;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_3/pg_mn/pg_CM101','F_PP102','/wlb_AGLKS/wdg_CM101/wdg_F_PP102','pErr;pNAME;pName;pVal;prec;',2);
@@ -178,20 +178,20 @@ INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_control/pg_cntrRegul','zn','/wl
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_control/pg_cntrRegul','tiMin','/wlb_Main/wdg_cntrRegul/wdg_tiMin','value;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_control/pg_cntrRegul','h1','/wlb_Main/wdg_cntrRegul/wdg_h1','value;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_control/pg_cntrRegul','h2','/wlb_Main/wdg_cntrRegul/wdg_h2','value;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','el8','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_el8','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','el8','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_el8','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','trnd1','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_trnd1','curSek;sclWin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','el4','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_el4','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','el4','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_el4','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','el5','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_el5','name;aMax;aMin;addr;color;digComs;digStts;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','trnd1','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_trnd1','curSek;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','trnd1','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_trnd1','curSek;sclWin;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph','trnd1','/wlb_Main/wdg_grpGraph/wdg_trnd1','curSek;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','el1','/prj_AGLKS/pg_so/pg_4/pg_ggraph/wdg_el1','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','el2','/prj_AGLKS/pg_so/pg_4/pg_ggraph/wdg_el2','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','el3','/prj_AGLKS/pg_so/pg_4/pg_ggraph/wdg_el3','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','el4','/prj_AGLKS/pg_so/pg_4/pg_ggraph/wdg_el4','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','el5','/prj_AGLKS/pg_so/pg_4/pg_ggraph/wdg_el5','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','el6','/prj_AGLKS/pg_so/pg_4/pg_ggraph/wdg_el6','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','el7','/prj_AGLKS/pg_so/pg_4/pg_ggraph/wdg_el7','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','el8','/prj_AGLKS/pg_so/pg_4/pg_ggraph/wdg_el8','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','el1','/prj_AGLKS/pg_so/pg_4/pg_ggraph/wdg_el1','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','el2','/prj_AGLKS/pg_so/pg_4/pg_ggraph/wdg_el2','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','el3','/prj_AGLKS/pg_so/pg_4/pg_ggraph/wdg_el3','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','el4','/prj_AGLKS/pg_so/pg_4/pg_ggraph/wdg_el4','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','el5','/prj_AGLKS/pg_so/pg_4/pg_ggraph/wdg_el5','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','el6','/prj_AGLKS/pg_so/pg_4/pg_ggraph/wdg_el6','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','el7','/prj_AGLKS/pg_so/pg_4/pg_ggraph/wdg_el7','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','el8','/prj_AGLKS/pg_so/pg_4/pg_ggraph/wdg_el8','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','trnd1','/prj_AGLKS/pg_so/pg_4/pg_ggraph/wdg_trnd1','curSek;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_4/pg_mn/pg_1','F_PP101','/wlb_AGLKS/wdg_CM101/wdg_F_PP101','pErr;pNAME;pName;pVal;prec;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_4/pg_mn/pg_1','F_PP102','/wlb_AGLKS/wdg_CM101/wdg_F_PP102','pErr;pNAME;pName;pVal;prec;',2);
@@ -276,23 +276,23 @@ INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_5/pg_mn/pg_CM101','P_CM10
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_5/pg_mn/pg_CM101','txtPP101','/wlb_AGLKS/wdg_CM101/wdg_txtPP101','text;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_5/pg_mn/pg_CM101','txtPP102','/wlb_AGLKS/wdg_CM101/wdg_txtPP102','text;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph','trnd1','/wlb_Main/wdg_grpGraph/wdg_trnd1','curSek;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','el1','/prj_AGLKS/pg_so/pg_5/pg_ggraph/wdg_el1','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','el2','/prj_AGLKS/pg_so/pg_5/pg_ggraph/wdg_el2','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','el3','/prj_AGLKS/pg_so/pg_5/pg_ggraph/wdg_el3','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','el4','/prj_AGLKS/pg_so/pg_5/pg_ggraph/wdg_el4','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','el5','/prj_AGLKS/pg_so/pg_5/pg_ggraph/wdg_el5','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','el6','/prj_AGLKS/pg_so/pg_5/pg_ggraph/wdg_el6','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','el7','/prj_AGLKS/pg_so/pg_5/pg_ggraph/wdg_el7','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','el8','/prj_AGLKS/pg_so/pg_5/pg_ggraph/wdg_el8','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','el1','/prj_AGLKS/pg_so/pg_5/pg_ggraph/wdg_el1','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','el2','/prj_AGLKS/pg_so/pg_5/pg_ggraph/wdg_el2','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','el3','/prj_AGLKS/pg_so/pg_5/pg_ggraph/wdg_el3','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','el4','/prj_AGLKS/pg_so/pg_5/pg_ggraph/wdg_el4','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','el5','/prj_AGLKS/pg_so/pg_5/pg_ggraph/wdg_el5','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','el6','/prj_AGLKS/pg_so/pg_5/pg_ggraph/wdg_el6','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','el7','/prj_AGLKS/pg_so/pg_5/pg_ggraph/wdg_el7','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','el8','/prj_AGLKS/pg_so/pg_5/pg_ggraph/wdg_el8','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph','trnd1','/wlb_Main/wdg_grpGraph/wdg_trnd1','curSek;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','el1','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_el1','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','el2','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_el2','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','el3','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_el3','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','el4','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_el4','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','el5','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_el5','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','el6','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_el6','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','el7','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_el7','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','el8','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_el8','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','el1','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_el1','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','el2','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_el2','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','el3','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_el3','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','el4','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_el4','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','el5','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_el5','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','el6','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_el6','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','el7','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_el7','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','el8','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_el8','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','trnd1','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_trnd1','curSek;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_6/pg_mn/pg_CM101','F_PP101','/wlb_AGLKS/wdg_CM101/wdg_F_PP101','pErr;pNAME;pName;pVal;prec;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_6/pg_mn/pg_CM101','F_PP102','/wlb_AGLKS/wdg_CM101/wdg_F_PP102','pErr;pNAME;pName;pVal;prec;',2);
@@ -335,14 +335,14 @@ INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_6/pg_mn/pg_CM101','P_CM10
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_6/pg_mn/pg_CM101','txtPP101','/wlb_AGLKS/wdg_CM101/wdg_txtPP101','text;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_6/pg_mn/pg_CM101','txtPP102','/wlb_AGLKS/wdg_CM101/wdg_txtPP102','text;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph','trnd1','/wlb_Main/wdg_grpGraph/wdg_trnd1','curSek;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','el1','/prj_AGLKS/pg_so/pg_3/pg_ggraph/wdg_el1','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','el2','/prj_AGLKS/pg_so/pg_3/pg_ggraph/wdg_el2','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','el3','/prj_AGLKS/pg_so/pg_3/pg_ggraph/wdg_el3','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','el4','/prj_AGLKS/pg_so/pg_3/pg_ggraph/wdg_el4','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','el5','/prj_AGLKS/pg_so/pg_3/pg_ggraph/wdg_el5','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','el6','/prj_AGLKS/pg_so/pg_3/pg_ggraph/wdg_el6','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','el7','/prj_AGLKS/pg_so/pg_3/pg_ggraph/wdg_el7','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','el8','/prj_AGLKS/pg_so/pg_3/pg_ggraph/wdg_el8','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','el1','/prj_AGLKS/pg_so/pg_3/pg_ggraph/wdg_el1','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','el2','/prj_AGLKS/pg_so/pg_3/pg_ggraph/wdg_el2','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','el3','/prj_AGLKS/pg_so/pg_3/pg_ggraph/wdg_el3','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','el4','/prj_AGLKS/pg_so/pg_3/pg_ggraph/wdg_el4','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','el5','/prj_AGLKS/pg_so/pg_3/pg_ggraph/wdg_el5','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','el6','/prj_AGLKS/pg_so/pg_3/pg_ggraph/wdg_el6','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','el7','/prj_AGLKS/pg_so/pg_3/pg_ggraph/wdg_el7','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','el8','/prj_AGLKS/pg_so/pg_3/pg_ggraph/wdg_el8','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','trnd1','/prj_AGLKS/pg_so/pg_3/pg_ggraph/wdg_trnd1','curSek;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_7/pg_mn/pg_CM101','F_PP101','/wlb_AGLKS/wdg_CM101/wdg_F_PP101','pErr;pNAME;pName;pVal;prec;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_7/pg_mn/pg_CM101','F_PP102','/wlb_AGLKS/wdg_CM101/wdg_F_PP102','pErr;pNAME;pName;pVal;prec;',2);
@@ -503,13 +503,13 @@ INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','name','G
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','pModeA',NULL,34,'Parameter|auto','prm:/LogicLev/gen/T_PP3','el3','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','pModeC',NULL,34,'Parameter|casc','prm:/LogicLev/gen/T_PP3','el3','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','wMax',NULL,34,'Parameter|wMax','prm:/LogicLev/gen/T_PP1/wMax','el2','','','','','','');
-INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','prec',NULL,34,'Parameter|prec','prm:/LogicLev/gen/T_PP1','el2','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','prec',NULL,34,'Parameter|prec','prm:/LogicLev/gen/T_PP1/prec','el2','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','ed',NULL,34,'Parameter|ed','prm:/LogicLev/gen/Ti/ed','el1','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','max',NULL,42,'Parameter|max','prm:/LogicLev/gen/Ti/max','el1','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','min',NULL,42,'Parameter|min','prm:/LogicLev/gen/Ti/min','el1','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','pModeA',NULL,34,'Parameter|auto','prm:/LogicLev/gen/Ti','el1','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','pModeC',NULL,34,'Parameter|casc','prm:/LogicLev/gen/Ti','el1','','','','','','');
-INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','prec',NULL,34,'Parameter|prec','prm:/LogicLev/gen/Ti','el1','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','prec',NULL,34,'Parameter|prec','prm:/LogicLev/gen/Ti/prec','el1','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','wMax',NULL,34,'Parameter|wMax','prm:/LogicLev/gen/Ti/wMax','el1','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','wMin',NULL,34,'Parameter|wMin','prm:/LogicLev/gen/Ti/wMin','el1','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','name','Graphics group element',42,'Parameter|NAME','prm:/LogicLev/gen/T_PP1/NAME','el2','Елемент групи графіків','','','Элемент группы графиков','','');
@@ -1518,7 +1518,7 @@ INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','addr',NU
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/CM101/TE1313_1','el6','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/CM101/TE1313_1','el6','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/CM101/TE1313_1','el6','','','','','','');
-INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','prec',NULL,34,'Parameter|prec','prm:/LogicLev/gen/T_PP3','el3','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','prec',NULL,34,'Parameter|prec','prm:/LogicLev/gen/T_PP3/prec','el3','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/CM101/TE1313_1','el6','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/CM101/TE1313_1/ed','el6','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/CM101/TE1313_1/max','el6','','','','','','');
@@ -1752,14 +1752,14 @@ INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeA',
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/LogicLev/gen/P_PP1','el3','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/LogicLev/gen/P_PP1/aMax','el3','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/LogicLev/gen/P_PP1/aMin','el3','','','','','','');
-INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/LogicLev/gen/P_PP1','el3','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/LogicLev/gen/P_PP1/prec','el3','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/LogicLev/gen/P_PP1/wMax','el3','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/LogicLev/gen/P_PP1/wMin','el3','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/LogicLev/gen/P_PP3','el4','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/LogicLev/gen/P_PP3','el4','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/LogicLev/gen/P_PP3/aMax','el4','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/LogicLev/gen/P_PP3/aMin','el4','','','','','','');
-INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/LogicLev/gen/P_PP3','el4','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/LogicLev/gen/P_PP3/prec','el4','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/LogicLev/gen/P_PP3/wMax','el4','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/LogicLev/gen/P_PP3/wMin','el4','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/gen_cntr/PC_PCV2/auto','el5','','','','','','');
@@ -1773,7 +1773,7 @@ INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeA',
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/LogicLev/gen/P_PP5','el6','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/LogicLev/gen/P_PP5/aMax','el6','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/LogicLev/gen/P_PP5/aMin','el6','','','','','','');
-INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/LogicLev/gen/P_PP5','el6','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/LogicLev/gen/P_PP5/prec','el6','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/LogicLev/gen/P_PP5/wMax','el6','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/LogicLev/gen/P_PP5/wMin','el6','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/gen_cntr/PC_PCV3/auto','el7','','','','','','');
@@ -1787,7 +1787,7 @@ INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeA',
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/LogicLev/gen/F_PP1','el8','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/LogicLev/gen/F_PP1/aMax','el8','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/LogicLev/gen/F_PP1/aMin','el8','','','','','','');
-INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/LogicLev/gen/F_PP1','el8','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/LogicLev/gen/F_PP1/prec','el8','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/LogicLev/gen/F_PP1/wMax','el8','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/LogicLev/gen/F_PP1/wMin','el8','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/CM102/ST8612','el1','','','','','','');
@@ -1883,7 +1883,7 @@ INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','max',NUL
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','min',NULL,42,'Parameter|min','prm:/LogicLev/gen/T_PP5/min','el4','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','pModeA',NULL,34,'Parameter|auto','prm:/LogicLev/gen/T_PP5','el4','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','pModeC',NULL,34,'Parameter|casc','prm:/LogicLev/gen/T_PP5','el4','','','','','','');
-INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','prec',NULL,34,'Parameter|prec','prm:/LogicLev/gen/T_PP5','el4','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','prec',NULL,34,'Parameter|prec','prm:/LogicLev/gen/T_PP5/prec','el4','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','wMax',NULL,34,'Parameter|wMax','prm:/LogicLev/gen/T_PP5/wMax','el4','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','wMin',NULL,34,'Parameter|wMin','prm:/LogicLev/gen/T_PP5/wMin','el4','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/CM102cntr/BC112/NAME','el5','Елемент групи графіків','','','Элемент группы графиков','','');
@@ -1910,7 +1910,7 @@ INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','pErr','<EVAL
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/LogicLev/gen/Ti','Ti','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/LogicLev/gen/Ti','Ti','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','pPrec','<EVAL>',34,'Parameter|prec','val:1','Ti','','','','','','');
-INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','curSek','1262785012',8,'','','trnd1','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','curSek','1262785012',40,'','','trnd1','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','prec','1',34,'Parameter|prec','val:3','T_PP1','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','prec','1',34,'Parameter|prec','prm:/LogicLev/gen/F_PP1/prec','F_PP1','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','prec','1',34,'Parameter|prec','val:3','T_PP3','','','','','','');
@@ -3409,6 +3409,128 @@ INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_4','p4max','',3
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_4','p4min','',34,'Parameter4|min','val:-50','doc','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_4','p5max','',34,'Parameter5|max','val:2','doc','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_4','p5min','',34,'Parameter5|min','val:0','doc','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_3','n','0',41,'','','','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_4','n','0',41,'','','','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/LogicLev/gen/Pi/log','el1','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/gen_cntr/PC_PCV1/DESCR','el2','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/gen_cntr/PC_PCV1','el2','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/LogicLev/gen/P_PP1/DESCR','el3','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/LogicLev/gen/P_PP1/log','el3','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/LogicLev/gen/P_PP3/DESCR','el4','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/LogicLev/gen/P_PP3/log','el4','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/gen_cntr/PC_PCV2/DESCR','el5','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/gen_cntr/PC_PCV2','el5','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/LogicLev/gen/P_PP5/DESCR','el6','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/LogicLev/gen/P_PP5/log','el6','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/gen_cntr/PC_PCV3/DESCR','el7','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/gen_cntr/PC_PCV3','el7','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/LogicLev/gen/F_PP1/DESCR','el8','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/LogicLev/gen/F_PP1/log','el8','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','dscr','',34,'Parameter|DESCR','prm:/LogicLev/gen/Ti/DESCR','el1','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','log','0',34,'Parameter|log','prm:/LogicLev/gen/Ti/log','el1','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','dscr','',34,'Parameter|DESCR','prm:/LogicLev/gen/T_PP1/DESCR','el2','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','log','0',34,'Parameter|log','prm:/LogicLev/gen/T_PP1/log','el2','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','dscr','',34,'Parameter|DESCR','prm:/LogicLev/gen/T_PP3/DESCR','el3','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','log','0',34,'Parameter|log','prm:/LogicLev/gen/T_PP3/log','el3','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','dscr','',34,'Parameter|DESCR','prm:/LogicLev/gen/T_PP5/DESCR','el4','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','log','0',34,'Parameter|log','prm:/LogicLev/gen/T_PP5/log','el4','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','sclWin','0',160,'','','trnd1','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM101/ST8612/DESCR','el1','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM101/ST8612','el1','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM101/F101/DESCR','el2','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM101/F101','el2','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM101/P101/DESCR','el3','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM101/P101','el3','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM101/PT1006_1/DESCR','el4','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM101/PT1006_1','el4','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM101/PT0204/DESCR','el5','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM101/PT0204','el5','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM101/TE1313_1/DESCR','el6','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM101/TE1313_1','el6','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM101/TE1314_1/DESCR','el7','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM101/TE1314_1','el7','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM101/TE1314_2/DESCR','el8','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM101/TE1314_2','el8','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM102/ST8612/DESCR','el1','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM102/ST8612','el1','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM102/F103/DESCR','el2','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM102/F103','el2','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM102/P103/DESCR','el3','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM102/P103','el3','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM102/PT1006_1/DESCR','el4','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM102/PT1006_1','el4','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM102/PT0204/DESCR','el5','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM102/PT0204','el5','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM102/TE1313_1/DESCR','el6','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM102/TE1313_1','el6','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM102/TE1314_1/DESCR','el7','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM102/TE1314_1','el7','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM102/TE1314_2/DESCR','el8','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM102/TE1314_2','el8','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM201/ST8612/DESCR','el1','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM201/ST8612','el1','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM201/F101/DESCR','el2','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM201/F101','el2','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM201/P101/DESCR','el3','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM201/P101','el3','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM201/PT1006_1/DESCR','el4','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM201/PT1006_1','el4','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM201/PT0204/DESCR','el5','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM201/PT0204','el5','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM201/TE1313_1/DESCR','el6','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM201/TE1313_1','el6','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM201/TE1314_1/DESCR','el7','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM201/TE1314_1','el7','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM201/TE1314_2/DESCR','el8','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM201/TE1314_2','el8','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM202/ST8612/DESCR','el1','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM202/ST8612','el1','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM202/F103/DESCR','el2','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM202/F103','el2','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM202/P103/DESCR','el3','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM202/P103','el3','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM202/PT1006_1/DESCR','el4','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM202/PT1006_1','el4','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM202/PT0204/DESCR','el5','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM202/PT0204','el5','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM202/TE1313_1/DESCR','el6','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM202/TE1313_1','el6','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM202/TE1314_1/DESCR','el7','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM202/TE1314_1','el7','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM202/TE1314_2/DESCR','el8','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM202/TE1314_2','el8','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM301/ST8612/DESCR','el1','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM301/ST8612','el1','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM301/F101/DESCR','el2','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM301/F101','el2','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM301/P101/DESCR','el3','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM301/P101','el3','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM301/PT1006_1/DESCR','el4','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM301/PT1006_1','el4','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM301/PT0204/DESCR','el5','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM301/PT0204','el5','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM301/TE1313_1/DESCR','el6','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM301/TE1313_1','el6','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM301/TE1314_1/DESCR','el7','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM301/TE1314_1','el7','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM301/TE1314_2/DESCR','el8','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM301/TE1314_2','el8','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM302/ST8612/DESCR','el1','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM302/ST8612','el1','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM302/F103/DESCR','el2','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM302/F103','el2','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM302/P103/DESCR','el3','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM302/P103','el3','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM302/PT1006_1/DESCR','el4','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM302/PT1006_1','el4','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM302/PT0204/DESCR','el5','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM302/PT0204','el5','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM302/TE1313_1/DESCR','el6','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM302/TE1313_1','el6','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM302/TE1314_1/DESCR','el7','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM302/TE1314_1','el7','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','dscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM302/TE1314_2/DESCR','el8','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','log','0',34,'Parameter|log','prm:/BlockCalc/CM302/TE1314_2','el8','','','','','','');
 CREATE TABLE IF NOT EXISTS 'prj_AGLKS_stl' ("ID" TEXT DEFAULT '' ,"V_0" TEXT DEFAULT '' ,"V_1" TEXT DEFAULT '' ,"V_2" TEXT DEFAULT '' ,"V_3" TEXT DEFAULT '' ,"V_4" TEXT DEFAULT '' ,"V_5" TEXT DEFAULT '' ,"V_6" TEXT DEFAULT '' ,"V_7" TEXT DEFAULT '' ,"V_8" TEXT DEFAULT '' ,"V_9" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO prj_AGLKS_stl VALUES('<Styles>','Default','Light','','','','','','','','');
 INSERT INTO prj_AGLKS_stl VALUES('backColor','gray','ivory','','','','','','','','');
@@ -5899,19 +6021,19 @@ CREATE TABLE IF NOT EXISTS 'wlb_AGLKS_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT D
 CREATE TABLE IF NOT EXISTS 'wlb_AGLKS_uio' ("IDW" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","IDC","ID"));
 INSERT INTO wlb_AGLKS_uio VALUES('comprEn','','pVar','Variable',131073,'<EVAL>|0;0|',10,'Parameter|var','','Переменная','','','','Змінна','','','');
 CREATE TABLE IF NOT EXISTS 'prj_AGLKS' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
-INSERT INTO prj_AGLKS VALUES('/AGLKS','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;demoPlayProc;',1580920441);
-INSERT INTO prj_AGLKS VALUES('/AGLKS/so','1','','root',1,'','','',-1,5,'name;dscr;geomX;',1580920441);
-INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1552226019);
-INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/ggraph','1','','..',1,'','','',-1,0,'name;dscr;',1552226019);
-INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/ggraph','2','','..',1,'','','',-1,0,'name;dscr;',1551624161);
+INSERT INTO prj_AGLKS VALUES('/AGLKS','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;demoPlayProc;',1582550254);
+INSERT INTO prj_AGLKS VALUES('/AGLKS/so','1','','root',1,'','','',-1,5,'name;dscr;geomX;',1582550254);
+INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1582550254);
+INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/ggraph','1','','..',1,'','','',-1,0,'name;dscr;',1582550254);
+INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/ggraph','2','','..',1,'','','',-1,0,'name;dscr;',1582550254);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1','doc','','root',1,'
 ','
 ','
-',-1,5,'name;dscr;',1580920441);
+',-1,5,'name;dscr;',1582544092);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/doc','1','','/wlb_doc/wdg_docRepInstVals',1,'','','',-1,0,'name;geomYsc;',1580920441);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/doc','2','','/wlb_doc/wdg_docUsersSet',1,'','','',-1,0,'geomYsc;',1400852515);
-INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/doc','3','','/wlb_doc/wdg_docRepDay',1,'','','',-1,0,'name;geomYsc;pgNoOpenProc;',1580920441);
-INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/doc','4','','/wlb_doc/wdg_docRepMonth',1,'','','',-1,0,'name;geomYsc;pgNoOpenProc;',1580920441);
+INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/doc','3','','/wlb_doc/wdg_docRepDay',1,'','','',-1,0,'name;geomYsc;pgNoOpenProc;n;',1582543524);
+INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/doc','4','','/wlb_doc/wdg_docRepMonth',1,'','','',-1,0,'name;geomYsc;pgNoOpenProc;n;',1582543531);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/doc','5','','/wlb_test/wdg_docTestGasNodeDayRep',1,'','','',-1,0,'name;geomYsc;',1580649241);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1','mn','','root',1,'','','',-1,5,'name;dscr;',1560142498);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/mn','1','','/wlb_AGLKS/wdg_KCH_MN1',1,'','','',-1,0,'name;pgOpen;pgNoOpenProc;pgGrp;',1522592964);
@@ -5922,8 +6044,8 @@ INSERT INTO prj_AGLKS VALUES('/AGLKS/so','rg','','root',1,'','','',-1,5,'name;',
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/rg','rg','','/wlb_Main/wdg_ResultGraph',1,'','','',-1,2,'name;geomYsc;pgGrp;grpName;',1554066600);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1','gview','','/wlb_Main/wdg_ViewCadr',1,'','','',-1,2,'dscr;geomYsc;evProc;pgGrp;',1400851728);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/gview','1','','..',1,'','','',-1,0,'name;dscr;','');
-INSERT INTO prj_AGLKS VALUES('/AGLKS/so','2','','root',1,'','','',-1,5,'name;dscr;',1553365967);
-INSERT INTO prj_AGLKS VALUES('/AGLKS/so/2','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1551624161);
+INSERT INTO prj_AGLKS VALUES('/AGLKS/so','2','','root',1,'','','',-1,5,'name;dscr;',1582550254);
+INSERT INTO prj_AGLKS VALUES('/AGLKS/so/2','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1582550254);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/2','mn','','root',1,'','','',-1,5,'name;dscr;',1553365967);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/2/mn','CM101','','/wlb_AGLKS/wdg_CM101',1,'','','',-1,0,'name;pgGrp;',1553365967);
 INSERT INTO prj_AGLKS VALUES('/AGLKS','control','','root',1,'','','',-1,5,'name;',1563002297);
@@ -5936,21 +6058,21 @@ INSERT INTO prj_AGLKS VALUES('/AGLKS/so/rg/rg','1','','..',1,'','','',-1,0,'name
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so','3','','root',1,'
 ','
 ','
-',-1,5,'name;dscr;',1554066378);
-INSERT INTO prj_AGLKS VALUES('/AGLKS/so/3','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1551624161);
-INSERT INTO prj_AGLKS VALUES('/AGLKS/so/3/ggraph','1','','..',1,'','','',-1,0,'name;dscr;',1551624161);
+',-1,5,'name;dscr;',1582550254);
+INSERT INTO prj_AGLKS VALUES('/AGLKS/so/3','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1582550254);
+INSERT INTO prj_AGLKS VALUES('/AGLKS/so/3/ggraph','1','','..',1,'','','',-1,0,'name;dscr;',1582550254);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/3','mn','','root',1,'
 ','
 ','
 ',-1,5,'name;dscr;',1554066378);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/3/mn','CM101','','/wlb_AGLKS/wdg_CM101',1,'','','',-1,0,'name;pgGrp;',1554066378);
-INSERT INTO prj_AGLKS VALUES('/AGLKS/so/2/ggraph','1','','..',1,'','','',-1,0,'name;dscr;',1551624161);
+INSERT INTO prj_AGLKS VALUES('/AGLKS/so/2/ggraph','1','','..',1,'','','',-1,0,'name;dscr;',1582550254);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so','4','','root',1,'
 ','
 ','
-',-1,5,'name;dscr;',1554066407);
-INSERT INTO prj_AGLKS VALUES('/AGLKS/so/4','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1551624161);
-INSERT INTO prj_AGLKS VALUES('/AGLKS/so/4/ggraph','1','','..',1,'','','',-1,0,'name;dscr;',1551624161);
+',-1,5,'name;dscr;',1582550254);
+INSERT INTO prj_AGLKS VALUES('/AGLKS/so/4','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1582550254);
+INSERT INTO prj_AGLKS VALUES('/AGLKS/so/4/ggraph','1','','..',1,'','','',-1,0,'name;dscr;',1582550254);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/4','mn','','root',1,'
 ','
 ','
@@ -5960,9 +6082,9 @@ INSERT INTO prj_AGLKS VALUES('/AGLKS/so/5/mn','CM101','','/wlb_AGLKS/wdg_CM101',
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so','5','','root',1,'
 ','
 ','
-',-1,5,'name;dscr;',1554066437);
-INSERT INTO prj_AGLKS VALUES('/AGLKS/so/5','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1551624161);
-INSERT INTO prj_AGLKS VALUES('/AGLKS/so/5/ggraph','1','','..',1,'','','',-1,0,'name;dscr;',1551624161);
+',-1,5,'name;dscr;',1582550254);
+INSERT INTO prj_AGLKS VALUES('/AGLKS/so/5','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1582550254);
+INSERT INTO prj_AGLKS VALUES('/AGLKS/so/5/ggraph','1','','..',1,'','','',-1,0,'name;dscr;',1582550254);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/5','mn','','root',1,'
 ','
 ','
@@ -5970,9 +6092,9 @@ INSERT INTO prj_AGLKS VALUES('/AGLKS/so/5','mn','','root',1,'
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so','6','','root',1,'
 ','
 ','
-',-1,5,'name;dscr;',1554066462);
-INSERT INTO prj_AGLKS VALUES('/AGLKS/so/6','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1551624161);
-INSERT INTO prj_AGLKS VALUES('/AGLKS/so/6/ggraph','1','','..',1,'','','',-1,0,'name;dscr;',1551624161);
+',-1,5,'name;dscr;',1582550254);
+INSERT INTO prj_AGLKS VALUES('/AGLKS/so/6','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1582550254);
+INSERT INTO prj_AGLKS VALUES('/AGLKS/so/6/ggraph','1','','..',1,'','','',-1,0,'name;dscr;',1582550254);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/6','mn','','root',1,'
 ','
 ','
@@ -5981,9 +6103,9 @@ INSERT INTO prj_AGLKS VALUES('/AGLKS/so/6/mn','CM101','','/wlb_AGLKS/wdg_CM101',
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so','7','','root',1,'
 ','
 ','
-',-1,5,'name;dscr;',1554066488);
-INSERT INTO prj_AGLKS VALUES('/AGLKS/so/7','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1553365967);
-INSERT INTO prj_AGLKS VALUES('/AGLKS/so/7/ggraph','1','','..',1,'','','',-1,0,'name;dscr;',1553365967);
+',-1,5,'name;dscr;',1582550254);
+INSERT INTO prj_AGLKS VALUES('/AGLKS/so/7','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1582550254);
+INSERT INTO prj_AGLKS VALUES('/AGLKS/so/7/ggraph','1','','..',1,'','','',-1,0,'name;dscr;',1582550254);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/7','mn','','root',1,'
 ','
 ','
@@ -5999,11 +6121,11 @@ CREATE TABLE IF NOT EXISTS 'VCAPrjs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT 
 INSERT INTO VCAPrjs VALUES('AGLKS','AGLKS','АГЛКС','АГЛКС','The project of visualisation AGLKS.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.1.0','Проект візуалізації Анастасіївської Газо-Ліфтної компресорної станції.
+Version: 2.1.2','Проект візуалізації Анастасіївської Газо-Ліфтної компресорної станції.
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.1.0','Проект визуализации Анастасиевской Газо-Лифтной компрессорной станции.
+Версія: 2.1.2','Проект визуализации Анастасиевской Газо-Лифтной компрессорной станции.
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 2.1.0','prj_AGLKS','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA
+Версия: 2.1.2','prj_AGLKS','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA
 HXRFWHRDb21tZW50AENyZWF0ZWQgd2l0aCBUaGUgR0lNUO9kJW4AABEsSURBVHic7Vp7cFzVef+d
 c+/duw/tQ6u1bEn2rh8YSwbHYIuHecQmgkBVCG1pnKYUA8Mr00JppqUkHdq0mUzaNPxFOulMO4Fm
 ilsIhRYbsBvigmXAtWWZyLIl6+WHXqtdvXb12L177z3n9I9777KSJXltWTiZ+pvZ0eicc8893+/8
@@ -6196,7 +6318,7 @@ else c1 = (pVar<1) ? "red" : "green";',1000,'name;geomW;geomH;fillColor;elLst;c1
 CREATE TABLE IF NOT EXISTS 'prj_AGLKS_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','statLine','','Status line items',131205,'',128,'','');
 INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','runWin','','Run window',131089,'0|0;1;2|Original size;Maximize;Full screen',128,'','');
-INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','keepAspectRatio','','Keep aspect ratio on scale',131072,'1',128,'','');
+INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','keepAspectRatio','','Keep aspect ratio on scale',131072,'1',0,'','');
 INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','stBarNoShow','','Not show status bar',131072,'0',128,'','');
-INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','winPosCntrSave','','Windows position control and save',131072,'1',128,'','');
+INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','winPosCntrSave','','Windows position control and save',131072,'1',0,'','');
 COMMIT;

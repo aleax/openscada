@@ -1926,7 +1926,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		case TFld::Real: {
 		    float round_perc = s2r(opt->attr("round_perc"));
 		    int   real_prec  = s2i(opt->attr("real_prec"));
-		    if(!real_prec) real_prec = 10;
+		    if(!real_prec) real_prec = 15;
 		    double tval_pr = EVAL_REAL, tval_pr1 = EVAL_REAL;
 		    while(ibeg <= iend) {
 			double tval = buf.getR(&ibeg, true);

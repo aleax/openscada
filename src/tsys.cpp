@@ -513,10 +513,10 @@ string TSYS::optDescr( )
 	"TaskInvPhs <n>		Number of phases of the task invoking, 1 to disable the phasing.\n"
 	"ClockRT    <0|1>	Sets the clock source to use to REALTIME (otherwise MONOTONIC), which is problematic one at the system clock modification.\n"
 	"SaveAtExit <0|1>	Save the program at exit.\n"
-	"SavePeriod <sec>	Period of the program saving, in seconds. Set zero to disable.\n"
+	"SavePeriod <seconds>	Period of the program saving, 0 to disable.\n"
 	"RdStLevel  <lev>	Level of the redundancy of the current station.\n"
-	"RdTaskPer  <sec>	Call period of the redundancy task, in seconds.\n"
-	"RdRestConnTm <sec>	Time to restore connection to \"dead\" reserve station, in seconds.\n"
+	"RdTaskPer  <seconds>	Call period of the redundancy task.\n"
+	"RdRestConnTm <seconds>	Time to restore connection to \"dead\" reserve station.\n"
 	"RdStList   <list>	Redundant stations list, separated symbol ';' (st1;st2).\n"
 	"RdPrimCmdTr <0|1>	Enables the transmission of primary commands to the reserve stations.\n\n"),
 	PACKAGE_NAME, VERSION, buf.sysname, buf.release, name().c_str(), id().c_str());

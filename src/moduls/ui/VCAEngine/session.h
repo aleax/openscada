@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: session.h
 /***************************************************************************
- *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -393,6 +393,8 @@ class SessPage : public SessWdg
 
     protected:
 	//Methods
+	void postEnable( int flag );
+
 	bool cntrCmdGeneric( XMLNode *opt );
 
 	bool attrChange( Attr &cfg, TVariant prev );

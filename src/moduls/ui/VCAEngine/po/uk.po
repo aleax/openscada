@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-14 22:37+0300\n"
+"POT-Creation-Date: 2020-02-20 17:23+0200\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -1822,12 +1822,11 @@ msgid "Adding a new attribute '%s' exceeds the number %d!"
 msgstr "Додання нового атрибуту '%s' превищує кількість %d!"
 
 #, c-format
-msgid "Attribute '%s' is not present!"
+msgid "Attribute '%s' is not present."
 msgstr "Атрибут '%s' відсутній!"
 
-#, c-format
-msgid "Deleting attribute '%s' has not been released!"
-msgstr "Видаляємий атрибут '%s' не було звільнено!"
+msgid "Deleting attribute '%s' has not been released."
+msgstr "Видаляємий атрибут '%s' не було звільнено."
 
 msgid ""
 "Image name in the form \"[{src}:]{name}\", where:\n"
@@ -2022,10 +2021,6 @@ msgstr "Процедура"
 
 msgid "New attribute"
 msgstr "Новий атрибут"
-
-#, c-format
-msgid "Attribute '%s' is not present."
-msgstr "Атрибут '%s' відсутній!"
 
 #, c-format
 msgid "Unable to delete non-user attribute '%s'."

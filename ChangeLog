@@ -1,3 +1,36 @@
+2020-02-24 Roman (stable)
+- FIX:DB.LibsDB.OscadaLibs: doc.diagram: Fixed All entries of SVG tag "text-anchor" value "left" to "start".
+    Improved to align in the left the first horizontal scale item.
+- FIX:DB.LibsDB.OscadaLibs.doc.diagram,UI.{Vision,WebVision}: Fixed in processing the percent scale for single or even values.
+- !!!:FIX:DB.LibsDB.vcaBase: Main.{alarmsAct,alarmsSt}: Fixed in using the view "Table" of the primitive "Diagram"
+	for using the attribute "fontColor" instead the correct "colorText".
+    !!!: doc.docRepYear: Significantly improved for:
+	- the counters support: display both the counter interval value and the original value, display the resume row;
+	- the manual input support;
+	- appending of configuration the document depth of the selecting.
+    doc.{docRepInstVals,docRepDay,docRepMonth,docRepYear}:
+	Improved for centering the diagram area and by appending the scale information near the measurement unit.
+    Main.ElViewGraph: Some improved for expanding the value field to all widget width and the default precision set in 6.
+- !!!:Model.AGLKS.St: FSArch.1m: The strange and temporary message archivers removed:
+	FSArch.{NetRequsts,test,StatErrors}, DBArch.test and added the actual ones: FSArch.{alarms,actions,SYS}, DBArch.SYS.
+    The information files or DB using is enabled for the packed files.
+- Model.AGLKS.vca: The report documents of Day and Month report switched to the dynamic mode, for Web mostly.
+    All graphic groups of the project AGLKS relinked for refresh.
+- SYS: "<sec>" in the help to the configuration-file parameters renamed to <seconds> and the help improved in whole.
+- SYS,UI.QTStarter: Some source files cleaned from spare header files.
+- Archive: Default precision of the service "/serv/val" values set to 15.
+- DB: TBDS appended for configuration of the option lifetime of the inactive tables closing.
+- Transports: The new service functions outKeepAliveTm() renamed to outLifeTime() and placed to the command-line help.
+- Archive.=Tmpl=: TSYS::real2str() replaced by r2s().
+- !!!:FIX:Archive.FSArch: The XML mode of the messages appended by the positions cache.
+    !!!:FIX: The messages archivation is significantly improved and fixed in placing several different messages in even time.
+- !!!:FIX:UI.VCAEngine: Fixed in deletion the project pages in time of the project execution, to prevent the objects lock and
+    their early linking for removing the session pages together the project pages.
+    FIX: Fixed in wrong group links display as "Custom: ..." for some empty links presence.
+- !!:UI.{Vision,WebVision}: Disabled in limiting the requested archive values precision of the primitive "Diagram", for long counters.
+- UI.WebVision: Enabled for the limited implementation of mirroring the primitive "ElFigure" images.
+
+
 2020-02-18 Roman (stable)
 - FIX:DAQ.ICP_DAS: Fixed for build with the error code TError::NoError, at previous define NoError in i8014W.h.
 

@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: libwidg.h
 /***************************************************************************
- *   Copyright (C) 2006-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -71,8 +71,8 @@ class WidgetLib : public TCntrNode, public TConfig
 	void mimeDataDel( const string &id, const string &idb = "" );
 
 	// Widgets
-	void list( vector<string> &ls ) const		{ chldList(mWdg,ls); }
-	bool present( const string &id ) const		{ return chldPresent(mWdg,id); }
+	void list( vector<string> &ls ) const		{ chldList(mWdg, ls); }
+	bool present( const string &id ) const		{ return chldPresent(mWdg, id); }
 	AutoHD<LWidget> at( const string &id ) const;
 	string add( const string &id, const string &name, const string &orig = "" );
 	void add( LWidget *iwdg );

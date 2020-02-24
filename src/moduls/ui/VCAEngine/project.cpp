@@ -1532,7 +1532,7 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 	    pageAt(opt->attr("id")).at().setOwner(opt->attr("user"));
 	    pageAt(opt->attr("id")).at().manCrt = true;
 	}
-	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	pageDel(opt->attr("id"),true);
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	pageDel(opt->attr("id"), true);
     }
     else if(a_path == "/page/nmb" && ctrChkNode(opt)) {
 	vector<string> c_list;

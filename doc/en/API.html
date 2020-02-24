@@ -627,6 +627,8 @@ Flags of the queries to the system table (enum – TDBS::ReqGen):
 <ul><li> <i>int subVer( );</i> — Subsystem version.</li>
 <li> <i>static string realDBName( const string &amp;bdn );</i> — Conversion of the full template name of the database or table (of view *.*.myTbl) in the real name. Actually the replacement of the special elements '*' by the elements of the working DB.</li>
 <li> <i>void dbList( vector&lt;string&gt; &amp;ls, bool checkSel = false );</i> — A list of available databases.. <i>checkSel</i> points to the necessity to verify the fact of boot from the selected database and to insert to the db list the only selected one.</li>
+<li> <i>int tblLifeTime( );</i> — Lifetime of the inactive tables closing, in seconds.</li>
+<li> <i>void setTblLifeTime( int vl );</i> — Sets lifetime of the inactive tables closing in <i>vl</i> seconds.</li>
 <li> <i>AutoHD&lt;TTable&gt; open( const string &amp;bdn, bool create = false );</i> — Opening the table <i>bdn</i> of the DB by its full path with the creation <i>create</i> in the case of its absence.</li>
 <li> <i>void close( const string &amp;bdn, bool del = false );</i> — Closing the table <i>bdn</i> of the DB by its full path with the possibility of deleting of it after closing <i>del</i>.</li>
 <li> <i>bool dataSeek( const string &amp;bdn, const string &amp;path, int lev, TConfig &amp;cfg, bool forceCfg = false, vector&lt; vector&lt;string&gt; &gt; *full = NULL );</i> — Total scanning of the records of the data source. The configuration file of the DB is the source if data. In the case of DB absence the configuration file is used. If the DB name <i>bdn</i> or path <i>path</i> to the configuration file are not indicated, their processing is skipped. <i>full</i> defines before a record for it's result preloading in whole and significant acceleration.</li>
@@ -1516,8 +1518,8 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>void outDel( const string &amp;id, bool complete = false );</i> — Deleting of the output transport. It is possible to completely delete with the database included, by setting the <i>complete</i> sign.</li>
 <li> <i>AutoHD&lt;TTransportOut&gt; outAt( const string &amp;id ) const;</i> — Connection to the output transport.</li>
 <li> <i>virtual string outAddrHelp( );</i> — Address format help of the output transport.</li>
-<li> <i>int outKeepAliveTm( );</i> — Output transport keep alive time, 0 for disable.</li>
-<li> <i>void setOutKeepAliveTm( int vl );</i> — Set the output transport keep alive time, 0 for disable.</li>
+<li> <i>int outLifeTime( );</i> — Output transport lifetime, 0 for disable.</li>
+<li> <i>void setOutKeepAliveTm( int vl );</i> — Set the output transport lifetime, 0 for disable.</li>
 <li> <i>TTransportS &amp;owner( ) const;</i> — "Transports" subsystem - the owner of the transport's type.</li></ul>
 <p><b>Protected methods:</b>
 </p>
@@ -4112,5 +4114,5 @@ extern "C"
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2663</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">лютого 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2665</td></tr></table></body>
 </html>

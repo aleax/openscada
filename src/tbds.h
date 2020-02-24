@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tbds.h
 /***************************************************************************
- *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -248,6 +248,8 @@ class TBDS : public TSubSYS, public TElem
 
 	static string realDBName( const string &bdn );
 	void dbList( vector<string> &ls, bool checkSel = false );
+	int tblLifeTime( )	{ return mTblLifeTime; }
+	void setTblLifeTime( int vl )	{ mTblLifeTime = vmax(10, vmin(1000,vl)); modif(); }
 
 	void perSYSCall( unsigned int cnt );
 
@@ -276,14 +278,16 @@ class TBDS : public TSubSYS, public TElem
 
     protected:
 	void load_( );
+	void save_( );
 
     private:
 	//Private methods
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Private attributes
 	TElem	elDB;
 	bool	mSYSStPref;
+	int	mTblLifeTime;			//Tables lifetime
 };
 
 }

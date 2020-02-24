@@ -1,7 +1,7 @@
 
 //OpenSCADA module Archive.FSArch file: mess.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -779,22 +779,24 @@ bool MFileArch::put( TMess::SRec mess )
     }
 
     if(xmlM()) {
-	unsigned iCh;
-	for(iCh = 0; iCh < mNode->childSize(); iCh++) {
+	unsigned iSet = mNode->childSize();
+	int64_t lastTm = 0;
+	for(unsigned iCh = cacheGet(FTM(mess)), passCnt = 0; iCh < mNode->childSize(); iCh++) {
 	    XMLNode *xIt = mNode->childGet(iCh);
-	    long xTm = strtol(xIt->attr("tm").c_str(),(char **)NULL,16);
-	    if(xTm > mess.time)	break;
-	    else if((owner().prevDbl() || owner().prevDblTmCatLev()) && xTm == mess.time && s2i(xIt->attr("tmu")) == mess.utime &&
-		    xIt->attr("cat") == mess.categ && xIt->text() == mess.mess)
-		return true;
-	    else if(owner().prevDblTmCatLev() && xTm == mess.time && s2i(xIt->attr("tmu")) == mess.utime && xIt->attr("cat") == mess.categ) {
-		xIt->setText(mess.mess);
-		mWrite = true;
-		return true;
+	    int64_t xTm = FTM2(strtol(xIt->attr("tm").c_str(),(char **)NULL,16), s2i(xIt->attr("tmu")));
+	    if(xTm >= FTM(mess)) {
+		if(iSet >= mNode->childSize())	iSet = iCh;
+		if(xTm > FTM(mess))	break;
 	    }
+	    if((owner().prevDbl() || owner().prevDblTmCatLev()) && xTm == FTM(mess) && s2i(xIt->attr("lv")) == mess.level && xIt->attr("cat") == mess.categ)
+		if(xIt->text() == mess.mess) return true;
+		else if(owner().prevDblTmCatLev()) { xIt->setText(mess.mess); mWrite = true; return true; }
+	    //  Adding too big positions to the cache
+	    if((passCnt++) > CACHE_POS && xTm != lastTm) { cacheSet(xTm, iCh); passCnt = 0; }
+	    lastTm = xTm;
 	}
 
-	XMLNode *cl_node = mNode->childIns(iCh, "m");
+	XMLNode *cl_node = mNode->childIns(iSet, "m");
 	cl_node->setAttr("tm", i2s(mess.time,TSYS::Hex))->
 		 setAttr("tmu", i2s(mess.utime))->
 		 setAttr("lv", i2s(mess.level))->
@@ -836,13 +838,14 @@ bool MFileArch::put( TMess::SRec mess )
 		int tLev = 0;
 		char tCat[1001];
 		if((sscanf(buf,"%x:%d %d %1000s",&tTm,&tTmU,&tLev,tCat)) < 4) continue;
+		int64_t xTm = FTM2(tTm, tTmU);
 
-		if(tTm > mess.time || (tTm == mess.time && (int)tTmU > mess.utime)) {
-		    mv_beg = ftell(f) - strlen(buf);
-		    break;
+		if(xTm >= FTM(mess)) {
+		    if(!mv_beg)	mv_beg = ftell(f) - strlen(buf);
+		    if(xTm > FTM(mess)) break;
 		}
 		if(tTm == mess.time && s_buf == buf) { fclose(f); return true; }
-		if(owner().prevDblTmCatLev() && tTm == mess.time && (int)tTmU == mess.utime && tLev == mess.level &&
+		if(owner().prevDblTmCatLev() && xTm == FTM(mess) && tLev == mess.level &&
 		    TSYS::strDecode(Mess->codeConvIn(mChars,tCat),TSYS::HttpURL) == mess.categ)
 		{
 		    if(s_buf.size() < strlen(buf))
@@ -869,23 +872,24 @@ bool MFileArch::put( TMess::SRec mess )
 	//Put message to inwards
 	else {
 	    if(fOK && !mv_beg) {
-		// Get want position
+		// Get need position
 		long c_off = cacheGet(FTM(mess));
 		if(c_off) fseek(f,c_off,SEEK_SET);
 		else fOK = (fgets(buf,bufSz,f) != NULL);
 
 		// Check mess records
-		int pass_cnt = 0;
-		time_t last_tm = 0;
+		int passCnt = 0;
+		int64_t lastTm = 0;
 		while(!mv_beg && fgets(buf,bufSz,f) != NULL) {
 		    sscanf(buf, "%x:%d %*d", &tTm, &tTmU);
-		    if(tTm > mess.time || (tTm == mess.time && (int)tTmU > mess.utime)) mv_beg = ftell(f) - strlen(buf);
-		    //  Add too big position to cache
-		    else if((pass_cnt++) > CACHE_POS && tTm != last_tm) {
-			cacheSet(((int64_t)tTm*1000000)+tTmU, ftell(f)-strlen(buf));
-			pass_cnt = 0;
+		    int64_t xTm = FTM2(tTm, tTmU);
+		    if(xTm >= FTM(mess)) mv_beg = ftell(f) - strlen(buf);
+		    //  Adding too big positions to the cache
+		    else if((passCnt++) > CACHE_POS && xTm != lastTm) {
+			cacheSet(xTm, ftell(f)-strlen(buf));
+			passCnt = 0;
 		    }
-		    last_tm = tTm;
+		    lastTm = xTm;
 		}
 	    }
 	    if(fOK && mv_beg) {
@@ -906,8 +910,8 @@ bool MFileArch::put( TMess::SRec mess )
 		fseek(f, mv_beg, SEEK_SET);
 		fOK = fOK && (fwrite(s_buf.c_str(),s_buf.size(),1,f) == 1);
 		cacheUpdate(FTM(mess), mv_off);
-		//  Put last value to cache
-		cacheSet(FTM(mess), mv_beg, true);
+		//  Put the last value to the cache
+		//cacheSet(FTM(mess), mv_beg, true);	//!!!! This may be wrong for several records with the equal time
 	    }
 	}
 	fseek(f, 0, SEEK_END);
@@ -950,22 +954,23 @@ time_t MFileArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const 
     eTm = vmin(eTm, end());
     time_t result = bTm;
     if(xmlM()) {
-	for(unsigned iCh = 0; iCh < mNode->childSize() && time(NULL) < upTo; iCh++) {
+	int64_t lastTm = 0;
+	for(unsigned iCh = cacheGet((int64_t)bTm*1000000), passCnt = 0; iCh < mNode->childSize() && time(NULL) < upTo; iCh++) {
 	    //Find messages
 	    bRec.time = strtol(mNode->childGet(iCh)->attr("tm").c_str(), (char**)NULL, 16);
+	    bRec.utime = s2i(mNode->childGet(iCh)->attr("tmu"));
 	    if(bRec.time > eTm) break;
 	    if(bRec.time >= bTm) {
 		result = bRec.time;
 		bRec.level = (TMess::Type)s2i(mNode->childGet(iCh)->attr("lv"));
 		bRec.categ = mNode->childGet(iCh)->attr("cat");
 		if(abs(bRec.level) < level || !re.test(bRec.categ)) continue;
-		bRec.utime = s2i(mNode->childGet(iCh)->attr("tmu"));
 		bRec.mess  = mNode->childGet(iCh)->text();
 		bool equal = false;
-		int i_p = mess.size();
+		int iP = mess.size();
 		for(int iM = mess.size()-1; iM >= 0; iM--) {
-		    if(FTM(mess[iM]) > FTM(bRec)) i_p = iM;
-		    else if(FTM(mess[iM]) == FTM(bRec) && bRec.level == mess[iM].level &&
+		    if(FTM(mess[iM]) > FTM(bRec)) iP = iM;
+		    else if(FTM(mess[iM]) == FTM(bRec) && bRec.level == mess[iM].level && bRec.categ == mess[iM].categ &&
 			    (owner().prevDblTmCatLev() || bRec.mess == mess[iM].mess)) {
 			if(owner().prevDblTmCatLev()) mess[iM] = bRec;	//Replace previous as the archieved is priority
 			equal = true;
@@ -973,8 +978,13 @@ time_t MFileArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const 
 		    }
 		    else if(FTM(mess[iM]) < FTM(bRec)) break;
 		}
-		if(!equal) mess.insert(mess.begin()+i_p, bRec);
+		if(!equal) mess.insert(mess.begin()+iP, bRec);
 	    }
+	    if((passCnt++) > CACHE_POS && FTM(bRec) != lastTm) {
+		cacheSet(FTM(bRec), iCh);
+		passCnt = 0;
+	    }
+	    lastTm = FTM(bRec);
 	}
     }
     else {
@@ -990,8 +1000,8 @@ time_t MFileArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const 
 	if(c_off) fseek(f, c_off, SEEK_SET);
 	else rdOK = (fgets(buf,bufSz,f) != NULL);
 	//Check mess records
-	int pass_cnt = 0;
-	time_t last_tm = 0;
+	int passCnt = 0;
+	int64_t lastTm = 0;
 	while((rdOK=(fgets(buf,bufSz,f)!=NULL)) && time(NULL) < upTo) {
 	    char stm[51]; int off = 0, bLev;
 	    if(sscanf(buf,"%50s %d",stm,&bLev) != 2) continue;
@@ -1009,23 +1019,23 @@ time_t MFileArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const 
 		if(!re.test(bRec.categ)) continue;
 		// Check to equal messages and inserting
 		bool equal = false;
-		int i_p = mess.size();
+		int iP = mess.size();
 		for(int iM = mess.size()-1; iM >= 0; iM--)
-		    if(FTM(mess[iM]) > FTM(bRec)) i_p = iM;
-		    else if(FTM(mess[iM]) == FTM(bRec) && bRec.level == mess[iM].level &&
+		    if(FTM(mess[iM]) > FTM(bRec)) iP = iM;
+		    else if(FTM(mess[iM]) == FTM(bRec) && bRec.level == mess[iM].level && bRec.categ == mess[iM].categ &&
 			    (owner().prevDblTmCatLev() || bRec.mess == mess[iM].mess)) {
 			if(owner().prevDblTmCatLev()) mess[iM] = bRec;	//Replace previous as the archieved is priority
 			equal = true;
 			break;
 		    }
 		    else if(FTM(mess[iM]) < FTM(bRec)) break;
-		if(!equal) mess.insert(mess.begin()+i_p, bRec);
+		if(!equal) mess.insert(mess.begin()+iP, bRec);
 	    }
-	    else if((pass_cnt++) > CACHE_POS && bRec.time != last_tm) {
+	    else if((passCnt++) > CACHE_POS && FTM(bRec) != lastTm) {
 		cacheSet(FTM(bRec), ftell(f)-strlen(buf));
-		pass_cnt = 0;
+		passCnt = 0;
 	    }
-	    last_tm = bRec.time;
+	    lastTm = FTM(bRec);
 	}
 	fclose(f);
     }

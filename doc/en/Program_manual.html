@@ -606,10 +606,10 @@
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:941px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_tr_sub.png"><img class="thumbimage" height="451" src="files/QTCfg_subsys_tr_sub.png" width="939" /></a>  <div class="thumbcaption">Fig. 4.3a. The tab "Subsystem" of the root page of the subsystem "Transports".</div></div></div></div>
 <p>Each module of the subsystem "Transports" provides a configuration page with the tabs "Transports" and "Module".
-</p><p>The tab "Transports" (Fig.4.3b) contains a list of input and output transports registered by the module. Context menu of the transports lists provides the user with the possibility to add, delete and move to the desired transport. The output transports also provide a keep alive function of closing the transports at inactivity. Set it to 0 to disable this function!
+</p><p>The tab "Transports" (Fig.4.3b) contains a list of input and output transports registered by the module. Context menu of the transports lists provides the user with the possibility to add, delete and move to the desired transport. The output transports also provide a lifetime function of closing the transports at inactivity. Set it to 0 to disable this function!
 </p><p>On the "Module" tab it is provided the information about the module of subsystem "Transports" (Fig.4.1c), whose structure is identical for all modules.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:683px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_tr_mod_tr.png"><img class="thumbimage" height="558" src="files/QTCfg_subsys_tr_mod_tr.png" width="681" /></a>  <div class="thumbcaption">Fig. 4.3b. The tab "Transports" of the module of the subsystem "Transports".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:682px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_tr_mod_tr.png"><img class="thumbimage" height="559" src="files/QTCfg_subsys_tr_mod_tr.png" width="680" /></a>  <div class="thumbcaption">Fig. 4.3b. The tab "Transports" of the module of the subsystem "Transports".</div></div></div></div>
 <p>Each transport contains its own configuration page with the tab "Transport". This tab contains basic transport settings. <span id="TransportIn" title="#TransportIn">Input transport</span> (Fig.4.3c) contains:
 </p>
 <ul><li> Section "State" — contains the settings that characterize the state of the transport:
@@ -1489,32 +1489,35 @@ MainCPUs   &lt;list&gt;       Main list of the using CPUs, separated by ':'.
 TaskInvPhs &lt;n&gt;          Number of phases of the task invoking, 1 to disable the phasing.
 ClockRT    &lt;0|1&gt;        Sets the clock source to use to REALTIME (otherwise MONOTONIC), which is problematic one at the system clock modification.
 SaveAtExit &lt;0|1&gt;        Save the program at exit.
-SavePeriod &lt;sec&gt;        Period of the program saving, in seconds. Set zero to disable.
+SavePeriod &lt;seconds&gt;    Period of the program saving, 0 to disable.
 RdStLevel  &lt;lev&gt;        Level of the redundancy of the current station.
-RdTaskPer  &lt;sec&gt;        Call period of the redundancy task, in seconds.
-RdRestConnTm &lt;sec&gt;      Time to restore connection to "dead" reserve station, in seconds.
+RdTaskPer  &lt;seconds&gt;    Call period of the redundancy task.
+RdRestConnTm &lt;seconds&gt;  Time to restore connection to "dead" reserve station.
 RdStList   &lt;list&gt;       Redundant stations list, separated symbol ';' (st1;st2).
 RdPrimCmdTr &lt;0|1&gt;       Enables the transmission of primary commands to the reserve stations.
 
-=================== Subsystem "Modules scheduler" options =================
-    --modPath=&lt;path&gt;    Directories with the modules, separated by ';', they can include a files' template at the end.
------- Parameters of the section '/sub_ModSched/' of the configuration file ------
-ModPath    &lt;path&gt;       Directories with the modules, separated by ';', they can include a files' template at the end.
-                        This is a synonym of the system wide parameter "ModDir"
-ModAllow   &lt;list&gt;       List of the shared libraries allowed for the automatic loading, attaching and starting (bd_DBF.so;daq_JavaLikeCalc.so).
-                        Uses '*' value to allow all the modules.
-ModDeny    &lt;list&gt;       List of the shared libraries denied for the automatic loading, attaching and starting (bd_DBF.so;daq_JavaLikeCalc.so).
-ChkPer     &lt;sec&gt;        Period of the checking for new shared libraries(modules), in seconds. Set zero to disable.
-
 ========================= Subsystem "DB" options ========================
 ------ Parameters of the section '/sub_BD/' of the configuration file ------
-SYSStPref  &lt;0|1&gt;        Use the station ID in the common table (SYS).
+SYSStPref    &lt;0|1&gt;      Use the station ID in the common table (SYS).
+TblLifeTime  &lt;seconds&gt;  Tables lifetime (by default 600 seconds).
 
 ======================= Subsystem "Security" options ====================
 
 ======================= Subsystem "Transports" options ==================
 
-=============== Subsystem "Transport protocols" options =================
+======================= Module &lt;Transport:Sockets&gt; options =======================
+---- Parameters of the module section '/sub_Transport/mod_Sockets/' of the configuration file ----
+OutLifeTime  &lt;seconds&gt;  Output transports lifetime (by default 0 seconds), 0 to disable the function.
+
+======================= Module &lt;Transport:Serial&gt; options =======================
+---- Parameters of the module section '/sub_Transport/mod_Serial/' of the configuration file ----
+OutLifeTime  &lt;seconds&gt;  Output transports lifetime (by default 0 seconds), 0 to disable the function.
+
+======================= Module &lt;Transport:SSL&gt; options =======================
+---- Parameters of the module section '/sub_Transport/mod_SSL/' of the configuration file ----
+OutLifeTime  &lt;seconds&gt;  Output transports lifetime (by default 0 seconds), 0 to disable the function.
+
+=============== Subsystem "Transport Protocols" options =================
 
 ======================= Module &lt;Protocol:HTTP&gt; options =======================
 ---- Parameters of the module section '/sub_Protocol/mod_HTTP/' of the configuration file ----
@@ -1526,10 +1529,10 @@ RdRestDtTm &lt;hour&gt;       Depth of recovery time of archive data from the re
 
 ======================== Subsystem "Archives-History" options ===================
 ------ Parameters of the section '/sub_Archive/' of the configuration file ------
-MessBufSize    &lt;items&gt;  Size of the messages buffer.
-MessPeriod     &lt;sec&gt;    Period of the messages archiving.
-ValPeriod      &lt;msec&gt;   Period of active archiving of values.
-ValPriority    &lt;level&gt;  Level of priority of the task of active archiving of values.
+MessBufSize  &lt;items&gt;    Size of the messages buffer.
+MessPeriod   &lt;seconds&gt;  Period of the messages archiving.
+ValPeriod    &lt;mseconds&gt; Period of active archiving of values.
+ValPriority  &lt;level&gt;    Level of priority of the task of active archiving of values.
 RdRestDtOverTm &lt;days&gt;   Depth of the forced overloading of the reserve history at startup, in days.
 
 ======================= Module &lt;Archive:FSArch&gt; options =======================
@@ -1648,6 +1651,16 @@ SessLimit    &lt;numb&gt;     Maximum number of the sessions (by default 5).
 CachePgLife  &lt;hours&gt;    Lifetime of the pages in the cache (by default 1).
 CachePgSz    &lt;numb&gt;     Maximum number of the pages in the cache (by default 10).
 PNGCompLev   &lt;lev&gt;      Compression level [-1..9] of the creating PNG-images.
+
+=================== Subsystem "Modules scheduler" options =================
+    --modPath=&lt;path&gt;    Directories with the modules, separated by ';', they can include a files' template at the end.
+------ Parameters of the section '/sub_ModSched/' of the configuration file ------
+ModPath    &lt;path&gt;       Directories with the modules, separated by ';', they can include a files' template at the end.
+                        This is a synonym of the system wide parameter "ModDir"
+ModAllow   &lt;list&gt;       List of the shared libraries allowed for the automatic loading, attaching and starting (bd_DBF.so;daq_JavaLikeCalc.so).
+                        Uses '*' value to allow all the modules.
+ModDeny    &lt;list&gt;       List of the shared libraries denied for the automatic loading, attaching and starting (bd_DBF.so;daq_JavaLikeCalc.so).
+ChkPer     &lt;seconds&gt;    Period of the checking for new shared libraries(modules), 0 to disable.
 </pre>
 <h2><span class="mw-headline" id="Startup_and_execution"><span class="mw-headline-number">5</span> <span id="Startup" title="#Startup">Startup and execution</span></span></h2>
 <p>OpenSCADA is from the beginning a program that can be started from the console or terminal by typing <b>openscada</b>. In this way, the program will start with its action messages in this console and the console lock on the user actions waiting, which is the default startup mode in the console-terminal and can be used to operative debugging and control the result of actions and errors. In addition to the typical mode, there are also two other modes that are defined by the transmission of <a href="#CfgFilePrm">options to the startup command</a>:
@@ -1722,5 +1735,5 @@ PNGCompLev   &lt;lev&gt;      Compression level [-1..9] of the creating PNG-imag
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/en">Documents/Program_manual/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2663</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/en">Documents/Program_manual/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">лютого 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2665</td></tr></table></body>
 </html>

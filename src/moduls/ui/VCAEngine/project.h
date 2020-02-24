@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: project.h
 /***************************************************************************
- *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -217,7 +217,7 @@ class Page : public Widget, public TConfig
 	AutoHD<Page> pageAt( const string &id ) const;
 	string pageAdd( const string &id, const string &name, const string &orig = "" );
 	void pageAdd( Page *iwdg );
-	void pageDel( const string &id, bool full = false )	{ chldDel( mPage, id, -1, full ); }
+	void pageDel( const string &id, bool full = false )	{ chldDel(mPage, id, -1, full); }
 
 	// Data access
 	void resourceList( vector<string> &ls );

@@ -634,7 +634,8 @@ Point VCAElFigure::scaleRotate( const Point point, double xScale, double yScale,
 	else center = Point(rRnd(width/2), rRnd(height/2));
 	rpnt.x = rpnt.x - center.x;
 	rpnt.y = rpnt.y - center.y;
-	rpnt = rotate( rpnt, orient);
+	if(mirror) rpnt.x = -rpnt.x;	//Mirror
+	rpnt = rotate(rpnt, orient);
 	rpnt.x = rpnt.x + center.x;
 	rpnt.y = rpnt.y + center.y;
     }
@@ -657,7 +658,8 @@ Point VCAElFigure::unscaleUnrotate( const Point point, double xScale, double ySc
 	else center = Point(rRnd(width/2), rRnd(height/2));
 	rpnt.x = rpnt.x - center.x;
 	rpnt.y = rpnt.y - center.y;
-	rpnt = rotate( rpnt, 360 - orient );
+	rpnt = rotate(rpnt, 360 - orient);
+	if(mirror) rpnt.x = -rpnt.x;	//Mirror
 	rpnt.x = rpnt.x + center.x;
 	rpnt.y = rpnt.y + center.y;
     }
@@ -4298,6 +4300,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const SSess &ses )
 		break;
 	    case A_ElFigFillImg: imgDef = reqEl->text(); rel_list = true;	break;
 	    case A_ElFigOrient: orient = s2r(reqEl->text()); rel_list = true;	break;
+	    case A_ElFigMirror: mirror = s2i(reqEl->text()); rel_list = true;	break;
 	    case A_ElFigElLst: elLst = reqEl->text(); rel_list = true;		break;
 	    default:
 		if(uiPrmPos >= A_ElFigIts)
@@ -5491,6 +5494,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 		ipos++;
 	    }
 	    float vMarg = (bordU-bordL)/10;
+	    if(vMarg == 0) vMarg = 0.5;
 	    bordL -= vMarg;
 	    bordU += vMarg;
 	}
@@ -6435,8 +6439,8 @@ void VCADiagram::makeXYPicture( SSess &ses )
 
 	    XMLNode req("set");
 	    req.setAttr("path",path()+"/%2fserv%2fattr")->setAttr("noUser", "1");
-	    req.childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",iT))->setText(r2s(cP.val()[iVpos].val,6));
-	    req.childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",iT+1))->setText(r2s(cPX.val()[iVposX].val,6));
+	    req.childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",iT))->setText(r2s(cP.val()[iVpos].val));
+	    req.childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",iT+1))->setText(r2s(cPX.val()[iVposX].val));
 	    req.childAdd("el")->setAttr("id","curSek")->setText(i2s(aVend/1000000));
 	    req.childAdd("el")->setAttr("id","curUSek")->setText(i2s(aVend%1000000));
 	    mod->cntrIfCmd(req, ses.user);
@@ -6614,7 +6618,7 @@ void VCADiagram::setCursor( int64_t itm, const string& user )
 		val = trnds[iP].val()[vpos].val;
 	    }
 	    if(val != trnds[iP].curVal())
-		req.childAdd("el")->setAttr("id","prm"+i2s(iP)+"val")->setText(r2s(val,6));
+		req.childAdd("el")->setAttr("id","prm"+i2s(iP)+"val")->setText(r2s(val));
 	}
 	mod->cntrIfCmd(req, user);
     }
@@ -6636,7 +6640,7 @@ void VCADiagram::setCursor( int64_t itm, const string& user )
 	    if(vpos >= 1 && vpos < (trnds[iP].fftN/2+1))
 		val = trnds[iP].fftOut[0][0]/trnds[iP].fftN +
 		    pow(pow(trnds[iP].fftOut[vpos][0],2)+pow(trnds[iP].fftOut[vpos][1],2),0.5)/(trnds[iP].fftN/2+1);
-	    req.childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",iP))->setText(r2s(val,6));
+	    req.childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",iP))->setText(r2s(val));
 	}
 #endif
 	mod->cntrIfCmd(req, user);
@@ -6822,7 +6826,7 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
 	    setAttr("tm_grnd", ll2s(tTimeGrnd))->
 	    setAttr("per", ll2s(wantPer))->
 	    setAttr("mode", "1")->
-	    setAttr("real_prec", "6")->
+	    //setAttr("real_prec", "6")->
 	    setAttr("round_perc", "0");//r2s(100/(float)owner().height));
 
 	if(mod->cntrIfCmd(req,user,false)) return;

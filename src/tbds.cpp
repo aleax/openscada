@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tbds.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -30,7 +30,7 @@ using namespace OSCADA;
 //************************************************
 //* TBDS                                         *
 //************************************************
-TBDS::TBDS( ) : TSubSYS(SDB_ID,_("Data Bases"),true), mSYSStPref(true)
+TBDS::TBDS( ) : TSubSYS(SDB_ID,_("Data Bases"),true), mSYSStPref(true), mTblLifeTime(600)
 {
     //Generic system DB
     fldAdd(new TFld("user","User",TFld::String,TCfg::Key,OBJ_ID_SZ));
@@ -85,9 +85,7 @@ void TBDS::dbList( vector<string> &ls, bool checkSel )
 
 void TBDS::perSYSCall( unsigned int cnt )
 {
-    int secOld = 600;
     vector<string> tdbs, dbs, tbls;
-
     try {
 	modList(tdbs);
 	for(unsigned iTDB = 0; iTDB < tdbs.size(); iTDB++) {
@@ -99,7 +97,7 @@ void TBDS::perSYSCall( unsigned int cnt )
 		    db.at().list(tbls);
 		    for(unsigned iTbl = 0; iTbl < tbls.size(); iTbl++) {
 			AutoHD<TTable> tbl = db.at().at(tbls[iTbl]);
-			if((time(NULL)-tbl.at().lstUse()) > secOld) {
+			if((time(NULL)-tbl.at().lstUse()) > tblLifeTime()) {
 			    tbl.free();
 			    db.at().close(tbls[iTbl]);
 			}
@@ -492,7 +490,7 @@ string TBDS::genDBGet( const string &path, const string &oval, const string &use
     bool bd_ok = false;
     string rez = oval;
 
-    //Get from generic DB
+    //Try getting from the generic DB
     if(SYS->present(SDB_ID) && !(rFlg&TBDS::OnlyCfg)) {
 	AutoHD<TBDS> dbs = SYS->db();
 	AutoHD<TTable> tbl = dbs.at().open(SYS->db().at().fullDBSYS());
@@ -510,7 +508,7 @@ string TBDS::genDBGet( const string &path, const string &oval, const string &use
     }
 
     if(!bd_ok) {
-	//Get from config-file
+	//Get from the config-file
 	ResAlloc res(SYS->cfgRes(), false);
 	XMLNode *tgtN = NULL;
 	if(rFlg&TBDS::UseTranslate) {
@@ -529,15 +527,16 @@ string TBDS::optDescr( )
     return TSYS::strMess(_(
 	"========================= Subsystem \"DB\" options ========================\n"
 	"------ Parameters of the section '%s' of the configuration file ------\n"
-	"SYSStPref  <0|1>        Use the station ID in the common table (SYS).\n\n"
+	"SYSStPref    <0|1>      Use the station ID in the common table (SYS).\n"
+	"TblLifeTime  <seconds>  Tables lifetime (by default 600 seconds).\n\n"
 	),nodePath().c_str()) + TSubSYS::optDescr();
 }
 
 void TBDS::load_( )
 {
-    //Load parameters from command line
+    //Load parameters from the command line
 
-    //Load parameters from config-file
+    //Load parameters from the config-file
     mSYSStPref = (bool)s2i(TBDS::genDBGet(nodePath()+"SYSStPref",(mSYSStPref?"1":"0"),"root",TBDS::OnlyCfg));
 
     //DB open
@@ -570,6 +569,15 @@ void TBDS::load_( )
 	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
 	mess_sys(TMess::Error, _("Error finding and opening a new database."));
     }
+
+    //Load parameters from the table "SYS" or the config-file
+    setTblLifeTime(s2i(TBDS::genDBGet(nodePath()+"TblLifeTime",i2s(tblLifeTime()))));
+}
+
+void TBDS::save_( )
+{
+    //Save parameters to the table "SYS"
+    TBDS::genDBSet(nodePath()+"TblLifeTime",i2s(tblLifeTime()));
 }
 
 void TBDS::cntrCmdProc( XMLNode *opt )
@@ -577,12 +585,19 @@ void TBDS::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TSubSYS::cntrCmdProc(opt);
+	if(ctrMkNode("area",opt,0,"/sub",_("Subsystem"),R_R_R_))
+	    ctrMkNode("fld",opt,-1,"/sub/tblKeepAlive",_("Tables lifetime, seconds"),RWRWR_,"root",STR_ID,4,
+		"tp","dec", "min","10", "max","1000", "help",_("Time of inactivity in the tables for it closing."));
 	return;
     }
 
     //Process command to page
     string a_path = opt->attr("path");
-    TSubSYS::cntrCmdProc(opt);
+    if(a_path == "/sub/tblKeepAlive") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(i2s(tblLifeTime()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setTblLifeTime(s2i(opt->text()));
+    }
+    else TSubSYS::cntrCmdProc(opt);
 }
 
 //************************************************

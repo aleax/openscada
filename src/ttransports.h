@@ -1,7 +1,7 @@
 
 //OpenSCADA file: ttransports.h
 /***************************************************************************
- *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -246,8 +246,8 @@ class TTypeTransport: public TModule
 	AutoHD<TTransportOut> outAt( const string &id ) const	{ return chldAt(mOut, id); }
 	virtual	string outAddrHelp( )				{ return ""; }
 
-	int outKeepAliveTm( )		{ return mOutKeepAliveTm; }
-	void setOutKeepAliveTm( int vl ){ mOutKeepAliveTm = vmax(0, vl); modif(); }
+	int outLifeTime( )		{ return mOutLifeTime; }
+	void setOutLifeTime( int vl )	{ mOutLifeTime = vmax(0, vl); modif(); }
 
 	void perSYSCall( unsigned int cnt );
 
@@ -255,6 +255,7 @@ class TTypeTransport: public TModule
 
     protected:
 	//Methods
+	string optDescr( );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 	void load_( );
 	void save_( );
@@ -267,7 +268,7 @@ class TTypeTransport: public TModule
     private:
 	//Attributes
 	int	mIn, mOut,
-		mOutKeepAliveTm;	//Output transports keep alive timeout
+		mOutLifeTime;	//Output transports lifetime
 };
 
 //************************************************

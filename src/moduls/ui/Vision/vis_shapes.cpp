@@ -2652,6 +2652,7 @@ void ShapeDiagram::makeXYPicture( WdgView *w )
 		}
 	    }
 	    float vMarg = (bordU-bordL)/10;
+	    if(vMarg == 0) vMarg = 0.5;
 	    bordL -= vMarg;
 	    bordU += vMarg;
 	}
@@ -2712,8 +2713,8 @@ void ShapeDiagram::makeXYPicture( WdgView *w )
 	    pnt.drawLine(c_hpos-trpen.width()*3, c_vpos+trpen.width()*3, c_hpos+trpen.width()*3, c_vpos-trpen.width()*3);
 
 	    AttrValS attrs;
-	    attrs.push_back(std::make_pair(TSYS::strMess("prm%dval",iT),r2s(cP.val()[iVpos].val,6)));
-	    attrs.push_back(std::make_pair(TSYS::strMess("prm%dval",iT+1),r2s(cPX.val()[iVposX].val,6)));
+	    attrs.push_back(std::make_pair(TSYS::strMess("prm%dval",iT),r2s(cP.val()[iVpos].val)));
+	    attrs.push_back(std::make_pair(TSYS::strMess("prm%dval",iT+1),r2s(cPX.val()[iVposX].val)));
 	    attrs.push_back(std::make_pair("curSek",i2s(aVend/1000000)));
 	    attrs.push_back(std::make_pair("curUSek",i2s(aVend%1000000)));
 	    w->attrsSet(attrs);
@@ -3748,7 +3749,7 @@ void ShapeDiagram::setCursor( WdgView *w, int64_t itm )
 		val = shD->prms[iP].val()[vpos].val;
 	    }
 	    if(val != shD->prms[iP].curVal()) {
-		req.childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",iP))->setText(r2s(val,6));
+		req.childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",iP))->setText(r2s(val));
 		shD->prms[iP].setCurVal(val);
 	    }
 	}
@@ -3773,7 +3774,7 @@ void ShapeDiagram::setCursor( WdgView *w, int64_t itm )
 	    if(vpos >= 1 && vpos < (shD->prms[iP].fftN/2+1))
 		val = shD->prms[iP].fftOut[0][0]/shD->prms[iP].fftN +
 		    pow(pow(shD->prms[iP].fftOut[vpos][0],2)+pow(shD->prms[iP].fftOut[vpos][1],2),0.5)/(shD->prms[iP].fftN/2+1);
-	    req.childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",iP))->setText(r2s(val,6));
+	    req.childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",iP))->setText(r2s(val));
 	    shD->prms[iP].setCurVal(val);
 	}
 #endif
@@ -3964,7 +3965,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 	    setAttr("tm_grnd", ll2s(tTimeGrnd))->
 	    setAttr("per", ll2s(wantPer))->
 	    setAttr("mode", "1")->
-	    setAttr("real_prec", "6")->
+	    //setAttr("real_prec", "6")->
 	    setAttr("round_perc", "0");//r2s(100/(float)view->size().height()));
 
 	if(view->cntrIfCmd(req,true)) return;

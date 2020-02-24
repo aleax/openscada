@@ -110,7 +110,7 @@ The element''s names and their parameters are available in languages: English, U
 
 Author: Roman Savochenko <roman@oscada.org>
 Founded: January 2008
-Version: 2.1.0
+Version: 2.1.1
 License: GPLv2
 DOC: Libs_Documents|Libs/Documents','wlb_doc','','Документи','Містить елементи-кадри документів шаблонного та кінцевого типів, що призначені для розташування у розділі "Документи" (вид відображення) дерева сторінок проекту, побудованого за концепцією об''єктів сигналізації кореневої сторінки "RootPgSo". Однак, вони можуть бути розташовані як окремі сутності або у складі власної концепції керування сторінками, але тут треба враховувати, що кадри часто посилаються та викликають панель документів!
 
@@ -120,7 +120,7 @@ DOC: Libs_Documents|Libs/Documents','wlb_doc','','Документи','Міст�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Засновано: Січень 2008
-Версія: 2.1.0
+Версія: 2.1.1
 Ліцензія: GPLv2
 DOC: Libs_Documents|Libs/Documents','Документы','Содержит элементы-кадры документов шаблонного и конечного типов, которые предназначены для размещения в разделе "Документы" (вид отображения) дерева страниц проекта, построенного по концепции объектов сигнализации корневой страницы "RootPgSo". Однако, они могут быть размещены как отдельные сущности или в составе собственной концепции управления страницами, но тут нужно учитывать, что кадры часто ссылаются и вызывают панель документов!
 
@@ -130,7 +130,7 @@ DOC: Libs_Documents|Libs/Documents','Документы','Содержит эл�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Основано: Январь 2008
-Версия: 2.1.0
+Версия: 2.1.1
 Лицензия: GPLv2
 DOC: Libs_Documents|Libs/Documents');
 CREATE TABLE IF NOT EXISTS 'prj_archBrowser_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID"));
@@ -4309,9 +4309,9 @@ INSERT INTO wlb_Main_io VALUES('ElViewGraph','color','gray',40,'','','lb_sfr',''
 INSERT INTO wlb_Main_io VALUES('ElViewGraph','alignment','8',32,'','','lb_sfr','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElViewGraph','text','No data',40,'','','lb_sfr','Немає даних','','Нет данных','','','');
 INSERT INTO wlb_Main_io VALUES('ElViewGraph','name','',32,'','','lb_val','','','','','','');
-INSERT INTO wlb_Main_io VALUES('ElViewGraph','geomX','20',32,'','','lb_val','','','','','','');
+INSERT INTO wlb_Main_io VALUES('ElViewGraph','geomX','0',32,'','','lb_val','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElViewGraph','geomY','19',32,'','','lb_val','','','','','','');
-INSERT INTO wlb_Main_io VALUES('ElViewGraph','geomW','90',32,'','','lb_val','','','','','','');
+INSERT INTO wlb_Main_io VALUES('ElViewGraph','geomW','110',32,'','','lb_val','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElViewGraph','geomH','20',32,'','','lb_val','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElViewGraph','font','Arial 18 1 0 0 0',32,'','','lb_val','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElViewGraph','color','gray',40,'','','lb_val','','','','','','');
@@ -4320,7 +4320,7 @@ INSERT INTO wlb_Main_io VALUES('ElViewGraph','text','%1',32,'','','lb_val','',''
 INSERT INTO wlb_Main_io VALUES('ElViewGraph','numbArg','1',32,'','','lb_val','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElViewGraph','arg0tp','2',0,'','','lb_val','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElViewGraph','arg0val','-',8,'','','lb_val','','','','','','');
-INSERT INTO wlb_Main_io VALUES('ElViewGraph','arg0cfg','10',0,'','','lb_val','10','','','','','');
+INSERT INTO wlb_Main_io VALUES('ElViewGraph','arg0cfg','12',0,'','','lb_val','10','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','en','1',40,'','','play','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrRunSimple','bordColor','gray',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrRunSimple','bordStyle','6',32,'','','','','','','','','');
@@ -4328,15 +4328,15 @@ INSERT INTO wlb_Main_io VALUES('prescrRunSimple','name','',32,'','','btPass','',
 INSERT INTO wlb_Main_io VALUES('ElViewGraph','dscr','Element is provided to create graphics groups. Element contains information about a parameter, the regulator mode, if the parameter is such, the units of analog parameter, as well as the color corresponding to the parameter''s trend. The element commonly uses and represents the representative structure of the DAQ-templates "Analog signal" and "Discrete block".
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.3.1
+Version: 1.3.2
 License: GPLv2',42,'Parameter|DESCR','','','Елемент слугує для створення груп графіків. Елемент містить інформацію про параметр, режим регулятору, якщо параметр є таким, одиницю виміру аналогового параметру, а також колір, що відповідає параметру тренда. Елемент загалом використовує та представляє представницьку структуру DAQ-шаблонів "Аналоговий сигнал" та "Дискретний блок".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.3.1
+Версія: 1.3.2
 Ліцензія: GPLv2','Parameter|DESCR','Элемент служит для создания групп графиков. Элемент содержит информацию о параметре, режиме регулятора, если параметр является таковым, единице измерения аналогового параметра, а также цвет, соответствующий параметру тренда. Элемент в целом использует и представляет представительскую структуру DAQ-шаблонов "Аналоговый сигнал" и "Дискретный блок".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.3.1
+Версия: 1.3.2
 Лицензия: GPLv2','Parameter|DESCR','','');
 INSERT INTO wlb_Main_io VALUES('ElViewGraph','tipStatus','',40,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrRunSimple','geomX','71.508',32,'','','btPass','','','','','','');
@@ -7710,7 +7710,7 @@ As you can see from the list of possible table fields, this item supports confir
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Ustijancev Michael
-Version: 1.1.1
+Version: 1.1.2
 License: GPLv2',32,'','','','Елемент на рисунку 1.5 слугує для динамічного відображення активних порушень у табличному вигляді та із виділенням їх за кольором та текстом. Порушення отримуються із буферу поточних-активних порушень OpenSCADA. Фактично елемент реалізує функції примітиву "Протокол" для порушень та із розширенням можливостей.
 
 Для детального вивчення актуальних порушень елементом передбачено функцію збільшення висоти угору або униз за отриманням фокусу.
@@ -7735,7 +7735,7 @@ License: GPLv2',32,'','','','Елемент на рисунку 1.5 слугує
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Устьянцев Михайло
-Версія: 1.1.1
+Версія: 1.1.2
 Ліцензія: GPLv2','','Элемент на рисунке 1.5 служит для динамического отображения активных нарушений в табличном виде и с выделением их цветом и текстом. Нарушения получаются из буфера текущих-активных нарушений OpenSCADA. Фактически элемент реализует функции примитива "Протокол" для нарушений и с расширением возможностей.
 
 Для детального изучения актуальных нарушений элементом предусмотрено функцию увеличения высоты вверх или вниз при получении фокуса.
@@ -7760,7 +7760,7 @@ License: GPLv2',32,'','','','Елемент на рисунку 1.5 слугує
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсирование: Устьянцев Михаил
-Версия: 1.1.1
+Версия: 1.1.2
 Лицензия: GPLv2','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','dscr','The element-frame serves to display the violations history and to update their dynamically for the current time in a full-format tabular form, to highlight them in color and text and the possibility of multilevel filtering. The violations are obtained from the buffer of current-active violations of OpenSCADA and archive(s), specified in the configuration field <alArch>. In fact, the element implements the primitive "Protocol" functions for violations and extension opportunities.
 
@@ -7799,7 +7799,7 @@ As you can see from the list of possible table fields, this item supports confir
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Ustijancev Michael
-Version: 1.2.0
+Version: 1.2.1
 License: GPLv2',32,'','','','Елемент-кадр слугує для відображення історії порушень та динамічного їх оновлення на поточний час у повноформатному табличному вигляді, із виділенням їх за кольором та текстом та можливістю багаторівневого фільтрування. Порушення отримуються із буферу поточних-активних порушень OpenSCADA та архіву(ів), визначеного конфігураційним полем <alArch>. Фактично елемент реалізує функції примітиву "Протокол" для порушень та із розширенням можливостей.
 
 Загалом кадр містить елементи:
@@ -7837,7 +7837,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для від�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Устьянцев Михайло
-Версія: 1.2.0
+Версія: 1.2.1
 Ліцензія: GPLv2','','Элемент-кадр служит для отображения истории нарушений и динамического их обновление для текущего времени в полноформатном табличном виде, с выделением их цветом и текстом и возможностью многоуровневого фильтрования. Нарушения получаются из буфера текущих-активных сообщений OpenSCADA и архива(ов), определённого конфигурационным полем <alArch>. Фактически элемент реализует функции примитива "Протокол" для нарушений и с расширением возможностей.
 
 В целом кадр содержит элементы:
@@ -7875,7 +7875,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для від�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсирование: Устьянцев Михаил
-Версия: 1.2.0
+Версия: 1.2.1
 Лицензия: GPLv2','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','view','7',32,'','','pass','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','backColor','black',96,'backColorVal','','trnd1','','','','','','');
@@ -11301,14 +11301,14 @@ INSERT INTO wlb_doc_io VALUES('docRepDay','tmpl','<body docProcLang="JavaLikeCal
 <?dp return "<h1>"+tr("Average over hour values of \"%1\"").replace("%1",title)+"</h1><span>"+SYS.strftime(time-params.repHour*3600-1,"%d %B %Y")+"</span>";?>
 </center>
 
-<div>
+<div width="100%"><div style="margin-left: auto; margin-right: auto; width: fit-content;">
 	<?dp if(!enGraph) return "";
 		for(iP = 0, srcs = ""; iP < params.length; iP++)
 			if(!params[iP].min.isEVal() && !params[iP].max.isEVal())
 				srcs += params[iP].var+":"+params[iP].min+":"+params[iP].max+":"+params[iP].color+":0:2\n";
 		return srcs.length ? DAQ.JavaLikeCalc.lib_doc.diagram(time, time-bTime, srcs, 800, 300, arch) : "";
 	?>
-</div>
+</div></div>
 <br/>
 
 <TABLE class="data" width="100%" export="1">
@@ -11324,8 +11324,10 @@ INSERT INTO wlb_doc_io VALUES('docRepDay','tmpl','<body docProcLang="JavaLikeCal
 	<TH>&nbsp;</TH><TH>begin&nbsp;&nbsp;end</TH><TH>m3</TH><TH>kgF/m2</TH><TH>kgF/cm</TH><TH>grad.C</TH><TH>kg/m3</TH>
 	<?dp
 		rez = "<TH>&nbsp;</TH><TH>"+tr("begin")+"&nbsp;&nbsp;"+tr("end")+"</TH>";
-		for(iP = 0; iP < params.length; iP++)
-			rez += "<TH>"+SYS.strEncode(params[iP].ed, "HTML")+"</TH>";
+		for(iP = 0; iP < params.length; iP++) {
+			pO = params[iP];
+			rez += "<TH>"+((enGraph && pO.min < pO.max)?"["+pO.min+"..."+pO.max+"] ":"")+SYS.strEncode(pO.ed, "HTML")+"</TH>";
+		}
 		return rez; ?>
   </TR>
   <TR docRept="3600">
@@ -11367,14 +11369,14 @@ INSERT INTO wlb_doc_io VALUES('docRepMonth','tmpl','<body docProcLang="JavaLikeC
 <?dp return "<h1>"+tr("Average over day values of \"%1\"").replace("%1",title)+"</h1><span>"+SYS.strftime(time-params.repHour*3600-1,"%B %Y")+"</span>";?>
 </center>
 
-<div>
+<div width="100%"><div style="margin-left: auto; margin-right: auto; width: fit-content;">
 	<?dp if(!enGraph) return "";
 		for(iP = 0, srcs = ""; iP < params.length; iP++)
 			if(!params[iP].min.isEVal() && !params[iP].max.isEVal())
 				srcs += params[iP].var+":"+params[iP].min+":"+params[iP].max+":"+params[iP].color+":0:2\n";
 		return srcs.length ? DAQ.JavaLikeCalc.lib_doc.diagram(time, time-bTime, srcs, 800, 300, arch) : "";
 	?>
-</div>
+</div></div>
 <br/>
 
 <TABLE class="data" width="100%" export="1">
@@ -11390,8 +11392,10 @@ INSERT INTO wlb_doc_io VALUES('docRepMonth','tmpl','<body docProcLang="JavaLikeC
 	<TH>&nbsp;</TH><TH>m3</TH><TH>kgF/m2</TH><TH>kgF/cm</TH><TH>grad.C</TH><TH>kg/m3</TH>
 	<?dp
 		rez = "<TH>&nbsp;</TH>";
-		for(iP = 0; iP < params.length; iP++)
-			rez += "<TH>"+SYS.strEncode(params[iP].ed, "HTML")+"</TH>";
+		for(iP = 0; iP < params.length; iP++) {
+			pO = params[iP];
+			rez += "<TH>"+((enGraph && pO.min < pO.max)?"["+pO.min+"..."+pO.max+"] ":"")+SYS.strEncode(pO.ed, "HTML")+"</TH>";
+		}
 		return rez; ?>
   </TR>
   <TR docRept="86400">
@@ -11518,14 +11522,14 @@ INSERT INTO wlb_doc_io VALUES('docRepInstVals','tmpl','<body docProcLang="JavaLi
 <?dp return "<h1>"+tr("Instantaneous values of \"%1\"").replace("%1",title)+"</h1><span>"+SYS.strftime(time)+"</span>";?>
 </center>
 
-<div>
+<div width="100%"><div style="margin-left: auto; margin-right: auto; width: fit-content;">
 	<?dp if(!enGraph) return "";
 		for(iP = 0, srcs = ""; iP < params.length; iP++)
 			if(!params[iP].min.isEVal() && !params[iP].max.isEVal())
 				srcs += params[iP].var+":"+params[iP].min+":"+params[iP].max+":"+params[iP].color+":0:2\n";
 		return srcs.length ? DAQ.JavaLikeCalc.lib_doc.diagram(time, time-bTime, srcs, 800, 300) : "";
 	?>
-</div>
+</div></div>
 <br/>
 
 <TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data" export="1">
@@ -11541,8 +11545,10 @@ INSERT INTO wlb_doc_io VALUES('docRepInstVals','tmpl','<body docProcLang="JavaLi
 	<TH colspan="2">&nbsp;</TH><TH>m3/h</TH><TH>m3</TH><TH>kgF/cm2</TH><TH>grad.C</TH><TH>kgF/cm2</TH>
 	<?dp
 		rez = "<TH colspan=''2''>&nbsp;</TH>";
-		for(iP = 0; iP < params.length; iP++)
-			rez += "<TH>"+SYS.strEncode(params[iP].ed, "HTML")+"</TH>";
+		for(iP = 0; iP < params.length; iP++) {
+			pO = params[iP];
+			rez += "<TH>"+((enGraph && pO.min < pO.max)?"["+pO.min+"..."+pO.max+"] ":"")+SYS.strEncode(pO.ed, "HTML")+"</TH>";
+		}
 		return rez; ?>
   </TR>
   <TR docRept="@@valPer@@" docRevers="1">
@@ -11838,23 +11844,23 @@ Working in the primary archival mode performed with the 5 minutes period, when d
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored for the dynamization by: BLUE STAR GROUP Ltd
-Version: 3.0.0
+Version: 3.1.0
 License: GPLv2',32,'','','','Документ слугує для генерації добового звіту середніх за годину значень у вигляді діаграми трендів та таблиці даних. Документ початково архівного типу, та з часом він зроблений і динамічним, відтак, залежно від режиму виконання, ви можете або обирати готові документи із архіву або визначити час та глибину даних. Документ загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал". У якості джерела даних документу виступають архіви значень DAQ-параметрів.
 
 Робота у первинному архівному режимі відбувається із періодом 5 хвилин, коли протягом години формується один запис-рядок. Останній запис-рядок закривається на п''ятій хвилині нової години (наприклад, 14:05) та розпочинається новий запис-рядок. Весь та завершений документ архівується на третій хвилині "Звітного часу (repHour)" наступного дня (наприклад, 09:03).
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсоровано щодо динамізації: ТОВ BLUE STAR GROUP
-Версія: 3.0.0
+Версія: 3.1.0
 Ліцензія: GPLv2','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepInstVals','dscr','The document is provided for generating a report of the instantaneous values in view of the trends diagram and the data table. The document is the dynamic type, so you can specify the data time and depth. The document commonly uses and represents the representative structure of the DAQ-template "Analog signal". As a data source of this document is the value archives of the DAQ-parameters.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.0.0
+Version: 2.1.0
 License: GPLv2',32,'','','','Документ слугує для генерації звіту миттєвих значень у вигляді діаграми трендів та таблиці даних. Документ динамічного типу, відтак ви можете визначити час та глибину даних. Документ загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал". У якості джерела даних документу виступають архіви значень DAQ-параметрів.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.0.0
+Версія: 2.1.0
 Ліцензія: GPLv2','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepMonth','dscr','The document is provided for generating a month report of the day-averaged values in view of the trends diagram and the data table. The document is initially the archival type but in time it is made dynamic also, so, depending from the execution mode, you can whether select a ready document from the archive or specify the data time and depth. The document commonly uses and represents the representative structure of the DAQ-template "Analog signal". As a data source of this document is the value archives of the DAQ-parameters.
 
@@ -11862,14 +11868,14 @@ Working in the primary archival mode performed with the 5 minutes period, when d
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored for the dynamization by: BLUE STAR GROUP Ltd
-Version: 3.0.0
+Version: 3.1.0
 License: GPLv2',32,'','','','Документ слугує для генерації місячного звіту середніх за добу значень у вигляді діаграми трендів та таблиці даних. Документ початково архівного типу, та з часом він зроблений і динамічним, відтак, залежно від режиму виконання, ви можете або обирати готові документи із архіву або визначити час та глибину даних. Документ загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал". У якості джерела даних документу виступають архіви значень DAQ-параметрів.
 
 Робота у первинному архівному режимі відбувається із періодом 5 хвилин, коли протягом доби формується один запис-рядок. Останній запис-рядок закривається на п''ятій хвилині нової доби (наприклад, 05 09:05) та розпочинається новий запис-рядок. Весь та завершений документ архівується на третій хвилині "Звітного часу (repHour)" наступного місяця (наприклад, 05 09:03).
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсоровано щодо динамізації: ТОВ BLUE STAR GROUP
-Версія: 3.0.0
+Версія: 3.1.0
 Ліцензія: GPLv2','','','','','');
 INSERT INTO wlb_doc_io VALUES('docMessRep','dscr','The document is provided for generating a report of different sort messages together, including: "Violations", "User-operator actions" and "System". The document is the dynamic type, so you can specify the data time and depth. The document so commonly uses and represents the messages structures: "Violations", "User-operator actions" and "System". As a data source of this document is the message archive.
 
@@ -11929,8 +11935,10 @@ Manually entered data is stored or traditionally in an archive of values, with o
   - SrcID — source identifier, what directly entered by a constant in the parameter address var.
 - TEXT: the parameter Name and Value in the form "{Name}: {Value}".
 
+The message archiver of the module FSArch must be set for the next attributes to correct work perform together this document: set "Prevent duplicates", "Consider duplicates and prevent, for equal time, category, level" and set "Time size of the archive files" to 3660 days. The module DBArch must work without such kind specific.
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.0
+Version: 1.1.1
 License: GPLv2',32,'','','','Документ слугує для генерації добового звіту місячних значень у вигляді діаграми трендів та таблиці даних. Документ динамічного типу. Документ загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал". У якості джерела даних документу виступають переважно архіви значень DAQ-параметрів.
 
 Документом вперше запроваджено ручне введення архівних значень великого інтервалу часу вимірювання, яким у цьому випадку є місяць, як недетермінований інтервал. Найбільшу актуальність ця функція становить для лічильників, які з тієї або іншої причини неможливо підключити до системи прямо, із безперервним вимірюванням або періодичним вивантаженням ділянок архіву. Визначення параметру до ручного вводу здійснюється встановленням постійної isMan відповідного параметру, що вмикає елементи форми нагорі документу, за відповідних прав ("root" або у групі "ITW"), та доступ до даних для таблиці та тренду суворо за інтервалом документу — місяць, як і їх введення.
@@ -11941,8 +11949,10 @@ License: GPLv2',32,'','','','Документ слугує для генерац
   - SrcID — ідентифікатор джерела, що безпосередньо вводиться постійною у адресі параметру var.
 - ТЕКСТ: назва Name та значення Value параметру у форматі "{Name}: {Value}".
 
+Архіватор повідомлень модуля FSArch має бути встановлено у наступних атрибутах для здійснення коректної роботи разом із цим документом: встановити "Запобігати дублікатам", "Вважати дублікатами та запобігати, для рівного часу, категорії, рівня" та встановити "Розмір файлів за часом" у 3660 діб. Модуль DBArch має працювати без такого роду специфіки.
+
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.0.0
+Версія: 1.1.1
 Ліцензія: GPLv2','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepYear','evProc','',32,'','','','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepYear','owner','root:ITW',32,'','','lab_set','','','','','','');
@@ -12022,14 +12032,14 @@ INSERT INTO wlb_doc_io VALUES('docRepYear','tmpl','<body docProcLang="JavaLikeCa
 <?dp return "<h1>"+tr("Month values of \"%1\"").replace("%1",title)+"</h1><span>"+SYS.strftime(time-1,"%Y")+"</span>";?>
 </center>
 
-<div>
+<div width="100%"><div style="margin-left: auto; margin-right: auto; width: fit-content;">
 	<?dp if(!enGraph) return "";
 		for(iP = 0, srcs = ""; iP < params.length; iP++)
 			if(!(pO=params[iP]).min.isEVal() && !pO.max.isEVal())
 				srcs += (pO.trData.length?pO.trData:pO.var)+":"+pO.min+":"+pO.max+":"+pO.color+":0:2\n";
 		return srcs.length ? DAQ.JavaLikeCalc.lib_doc.diagram(time, time-bTime, srcs, 800, 300, arch.parse(0,";")) : "";
 	?>
-</div>
+</div></div>
 <br/>
 
 <TABLE class="data" width="100%" export="1" docAppend="1">
@@ -12045,8 +12055,10 @@ INSERT INTO wlb_doc_io VALUES('docRepYear','tmpl','<body docProcLang="JavaLikeCa
 	<TH>&nbsp;</TH><TH>m3</TH><TH>kgF/m2</TH><TH>kgF/cm</TH><TH>grad.C</TH><TH>kg/m3</TH>
 	<?dp
 		rez = "<TH>&nbsp;</TH>";
-		for(iP = 0; iP < params.length; iP++)
-			rez += "<TH>"+SYS.strEncode(params[iP].ed, "HTML")+"</TH>";
+		for(iP = 0; iP < params.length; iP++) {
+			pO = params[iP];
+			rez += "<TH>"+((enGraph && pO.min < pO.max)?"["+pO.min+"..."+pO.max+"] ":"")+SYS.strEncode(pO.ed, "HTML")+"</TH>";
+		}
 		return rez; ?>
   </TR>
   <?dp using DAQ.JavaLikeCalc.lib_doc;
@@ -12059,8 +12071,13 @@ INSERT INTO wlb_doc_io VALUES('docRepYear','tmpl','<body docProcLang="JavaLikeCa
 		iMonth++; tTime_ = SYS.mktime(0, 0, 0, 1, iMonth, bYear);
 		rez_ = "<TD style=''text-align: center;''>"+SYS.strftime(tTime,"%B")+"</TD>";
 		for(iP = 0; iP < params.length; iP++)
-			if((pO=params[iP]).isMan)
-				rez_ += "<TD style=''text-align: center;''>"+((tVl=pO.manData[tTime_GM]).isEVal()?tr("Empty"):tVl.toFixed(pO.prec))+"</TD>";
+			if((pO=params[iP]).isMan) {
+				if(pO.isCntr)
+					rez_ += "<TD style=''text-align: center;''>"+
+						((tVl=pO.cntrData[tTime_GM]).isEVal()?tr("Empty"):tVl.toFixed(pO.prec))+
+						(showOrigCntr?" ("+((tVl=pO.manData[tTime_GM]).isEVal()?tr("Empty"):tVl.toFixed(pO.prec))+")":"")+"</TD>";
+				else rez_ += "<TD style=''text-align: center;''>"+((tVl=pO.manData[tTime_GM]).isEVal()?tr("Empty"):tVl.toFixed(pO.prec))+"</TD>";
+			}
 			else if(pO.isCntr) {
 				if(!(V1=getVal(pO.var,tTime,0,-1,arch.parse(0,";"),false,tTime_*1e6)).isEVal())	V1 = V1.toReal();
 				if(!(V2=getVal(pO.var,tTime_,0,-1,arch.parse(0,";"),false,tTime*1e6)).isEVal())	V2 = V2.toReal();
@@ -12072,13 +12089,14 @@ INSERT INTO wlb_doc_io VALUES('docRepYear','tmpl','<body docProcLang="JavaLikeCa
 	rez_ = "", presentCntr = false;
 	for(iP = 0; iP < params.length; iP++)
 		if(!(pO=params[iP]).isCntr)	rez_ += "<TD/>";
-		else if(!pO.isMan) {
+		else {
 			presentCntr = true;
-			if(!(V1=getVal(pO.var,bTime,0,-1,arch.parse(0,";"),false,time*1e6)).isEVal())	V1 = V1.toReal();
-			if(!(V2=getVal(pO.var,time,0,-1,arch.parse(0,";"),false,bTime*1e6)).isEVal())	V2 = V2.toReal();
-			rez_ += "<TD style=''text-align: center;''>"+((V1.isEVal() || V2.isEVal())?tr("Empty"):abs(V2-V1).toFixed(pO.prec)) + "</TD>";
+			if(!pO.isMan) {
+				if(!(V1=getVal(pO.var,bTime,0,-1,arch.parse(0,";"),false,time*1e6)).isEVal())	V1 = V1.toReal();
+				if(!(V2=getVal(pO.var,time,0,-1,arch.parse(0,";"),false,bTime*1e6)).isEVal())	V2 = V2.toReal();
+				rez_ += "<TD style=''text-align: center;''>"+((V1.isEVal() || V2.isEVal())?tr("Empty"):abs(V2-V1).toFixed(pO.prec)) + "</TD>";
+			} else rez_ += "<TD style=''text-align: center;''>"+(pO.manResCntr.isEVal()?tr("Empty"):pO.manResCntr.toFixed(pO.prec))+"</TD>";
 		}
-		else rez_ += "<TD style=''text-align: center;''>"+(pO.manResCntr.isEVal()?tr("Empty"):pO.manResCntr.toFixed(pO.prec))+"</TD>";
 	if(presentCntr) rez += "<TR><TD style=''text-align: center;''>"+tr("Summary")+"</TD>"+rez_+"</TR>";
 
 	return rez;
@@ -12535,6 +12553,8 @@ INSERT INTO wlb_doc_uio VALUES('docRepYear','p7isMan','Parameter 7: is manual',1
 INSERT INTO wlb_doc_uio VALUES('docRepYear','p8isMan','Parameter 8: is manual',131072,'0',1,'Parameter8|isMan','','doc','Параметр 8: ручний','','','Параметр 8: ручной','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','p9isMan','Parameter 9: is manual',131072,'0',1,'Parameter9|isMan','','doc','Параметр 9: ручний','','','Параметр 9: ручной','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','p10isMan','Parameter 10: is manual',131072,'0',1,'Parameter10|isMan','','doc','Параметр 10: ручний','','','Параметр 10: ручной','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','showOrigCntr','Show original counter',131072,'0',1,'','','doc','Показати оригінальний лічильник','','','Показать оригинальный счётчик','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','depth','Depth to select, years',131073,'10|',9,'','','doc','Глибина для обрання, років','','','Глубина для выбора, лет','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_mnEls_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO wlb_mnEls_incl VALUES('El_box_Alarm','El_text_alarm','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;alignment;text;',2);
 INSERT INTO wlb_mnEls_incl VALUES('El_box_Alarm','box_alarm','/wlb_mnEls/wdg_El_Alarm','name;geomX;geomY;geomW;geomH;geomXsc;geomYsc;geomZ;fillColor;elLst;',2);
@@ -20975,7 +20995,7 @@ if(allowSel && ((en && name.isEVal()) || !loadFromSess)) {
 lb_sfr_text = name;
 if(varEl.isEVal()) lb_val_arg0val = "-";
 else if(!digStts.isEVal() && digStts.length) lb_val_arg0val = (varEl^digRevers) ? digStts.parse(0,";").parse(0,"-") : digStts.parse(1,";").parse(0,"-");
-else lb_val_arg0val = prec.isEVal() ? varEl.toPrecision(9) : ((prec < 0) ? varEl.toPrecision(abs(prec)) : varEl.toFixed(prec));
+else lb_val_arg0val = prec.isEVal() ? varEl.toPrecision(6) : ((prec < 0) ? varEl.toPrecision(abs(prec)) : varEl.toFixed(prec));
 lb_val_color = lb_sfr_color = lb_ed_color = labColorGood;
 if(varEl.isEVal() || (!min.isEVal() && max > min && varEl < min) || (!max.isEVal() && max > min && varEl > max)) lb_val_color = lb_sfr_color = lb_ed_color =  "grey";
 else if(!aMax.isEVal() && !aMin.isEVal() && aMax > aMin && (varEl >= aMax || varEl <= aMin)) lb_val_color = lb_sfr_color = lb_ed_color =  labColorAlarm;
@@ -21030,7 +21050,7 @@ if(!wMin.isEVal() && !wMax.isEVal() && wMax > wMin) tipTool += tr("Warning borde
 if(!dscr.isEVal()) {
 	tipTool += tr("Description")+": "+dscr+"\n";
 	tipStatus = dscr;
-}','','',500,'path;perm;name;dscr;en;active;geomW;geomH;tipTool;tipStatus;contextMenu;evProc;backColor;bordWidth;bordColor;bordStyle;',1565538848);
+}','','',500,'path;perm;name;dscr;en;active;geomW;geomH;tipTool;tipStatus;contextMenu;evProc;backColor;bordWidth;bordColor;bordStyle;',1582550191);
 INSERT INTO wlb_Main VALUES('prescrEdit','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAF
 gUlEQVRYhe1ZTW8TRxh+52N37fVXDLGd1FEUEomQEqGmUpB66YkjvfYf9HfAkUt/Ab+BUwuX0N4L
 QUV1cdzg2ASEnQTbWcf27uzXTA/TLmaduhslrlUpz2G1fuaZ1/PMzM6+M4vu378Pn6Ldbuu6rmka
@@ -22453,7 +22473,7 @@ if(((cnt++)%(f_frq*1) == 0 || f_start || toUpdate) && !f_stop) {
 			if(abs(iM.level) >= iHo.lev && (iM.mess.parse(3,messItSep).length?1:0) == iHo.quiet)
 				iHgl = iHo;
 		}
-		items += "<r"+(iHgl?" color=''"+iHgl.color+"'' font=''"+iHgl.font+"'' fontColor=''"+iHgl.fontColor+"''":"")+"><i>"+iMid+"</i>";
+		items += "<r"+(iHgl?" color=''"+iHgl.color+"'' font=''"+iHgl.font+"'' colorText=''"+iHgl.fontColor+"''":"")+"><i>"+iMid+"</i>";
 		for(vC = "", off = 0; (vC=colms.parse(0,",",off)).length; )
 			if(vC == "atm")	items += "<s>"+SYS.strftime(iM.tm,formDtTm.replace("%MS",(iM.utm/1000).toString(10,3)).replace("%US",iM.utm.toString(10,6)))+"</s>";
 			else if(vC == "qttm")	items += ((tVl=iM.mess.parse(3,messItSep)).length ? "<s>"+tVl+"</s>" : "<b edit=''1''>0</b>");
@@ -22810,7 +22830,7 @@ if((((cnt++)%(f_frq*1) == 0 && !wTm) || f_start || toUpdate) && !f_stop) {
 																 ((wTm||iM.mess.parse(4,messItSep).length)?0:1) == iHo.act)
 					iHgl = iHo;
 			}
-			aRow = "<r"+(iHgl?" color=''"+iHgl.color+"'' font=''"+iHgl.font+"'' fontColor=''"+iHgl.fontColor+"''":"")+"><i>"+iMid+"</i>";
+			aRow = "<r"+(iHgl?" color=''"+iHgl.color+"'' font=''"+iHgl.font+"'' colorText=''"+iHgl.fontColor+"''":"")+"><i>"+iMid+"</i>";
 			if(makeReport) repRow = "<tr>\n";
 			for(vC = "", off = 0, isMatch = true; isMatch && (vC=colms.parse(0,",",off)).length; ) {
 				if(vC == "atm")			{ sVl = SYS.strftime(iM.tm,formDtTm.replace("%MS",(iM.utm/1000).toString(10,3)).replace("%US",iM.utm.toString(10,6))); aRow += "<s>"+sVl+"</s>"; }
@@ -24983,7 +25003,7 @@ else if(curMin != lastMin && !(curMin%5)) {
 	SYS.localtime(doc_time, 0, 0, curHour, curDay, curMonth, curYear);
 	doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
 	if(curHour < repHour) doc_bTime -= 24*60*60;
-}','','',1000,'name;dscr;evProc;backColor;',1581274696);
+}','','',1000,'name;dscr;evProc;backColor;',1582472916);
 INSERT INTO wlb_doc VALUES('docRepMonth','','/wlb_doc/wdg_doc',0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	//Init the avialable parameters
@@ -25082,7 +25102,7 @@ else if(curMin != lastMin && !(curMin%5))	{
 	if(curDay == 1 && curHour < repHour)
 		doc_bTime = SYS.strptime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 "+repHour+":0:0", "%Y-%m-%d %H:%M:%S");
 	else doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-1 "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
-}','','',1000,'name;dscr;evProc;',1581274696);
+}','','',1000,'name;dscr;evProc;',1582472916);
 INSERT INTO wlb_doc VALUES('docUsersSet','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAC
 fklEQVRYhe2V0UrrQBBAt93ZuEnTNLVUSa0BW5Aq6A/4K/6A/+dX+CaaQsUHfSgiYquGJtlNsnMf
 FooPIpcLda+w5ynsTCZzNplN4/LycjQakd9JkiRwcHBwdHT0ZVgppZQCAESsqopS2mw2vylX1zWl
@@ -25219,7 +25239,7 @@ if(f_start) {
 	this.doc.attrSet("params", params);
 
 	doc_doc = ""; doc_time = SYS.time(); doc_bTime = doc_time-120;
-}',-1,'name;dscr;',1581234829);
+}',-1,'name;dscr;',1582472916);
 INSERT INTO wlb_doc VALUES('docDin','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAG
 f0lEQVRYhe1XS28TPRe2PddkZjKZJG1J2tKGQAlpERSWrCq27Fmx4d/wb5BAQgLBigVCLFg0CSml
 jXpLmtsMnfvF9rewFCJKCx+b8Ep5FlF8fC7z+Bz72PDly5fXrl0D/03U63W+XC7funULAJAkCYQQ
@@ -25363,7 +25383,8 @@ if(f_start) {
 	SYS.localtime(SYS.time(), 0, 0, 0, 0, 0, curYear);
 	year_value = curYear;
 	year_items = "";
-	while(curYear > year_value.toInt()-10)	year_items += (year_items.length?"\n":"")+(curYear--);
+	while(curYear > year_value.toInt()-doc_depth)
+		year_items += (year_items.length?"\n":"")+(curYear--);
 
 	toBuild = true;
 
@@ -25393,40 +25414,44 @@ if(toBuild) {
 
 	//Setting the document time
 	doc_bTime = SYS.mktime(0, 0, 0, 1, 0, year_value.toInt());
-	doc_time = SYS.mktime(0, 0, 0, 1, 0, year_value.toInt()+1)-1;
+	doc_time = ((eTime=SYS.mktime(0, 0, 0, 1, 0, year_value.toInt()+1)-1) == doc_time) ? 0 : eTime;
 	doc_doc = "";
 
-	//this.messInfo("bTime="+doc_bTime+"; time="+doc_time+"; bTimeCntr="+SYS.mktime(0, 0, 0, 1, -1, year_value.toInt()));
+	//this.messInfo("bTime="+doc_bTime+"; time="+eTime+"; bTimeCntr="+SYS.mktime(0, 0, 0, 1, -1, year_value.toInt()));
 
 	//Loading the manual data
 	for(messVals = false, iP = 0; iP < params.length; iP++) {
 		if(!(pO=params[iP]).isMan)	continue;
 		pO.manData = new Object();
+		pO.cntrData = new Object();
 		pO.trData = "";
 		if(pO.isMess) {
-			if(!messVals)
-				messVals = SYS.Archive.messGet(SYS.mktime(0,0,0,1,(pO.isCntr?-1:0),year_value.toInt()),
-											doc_time, "val*", 1, this.doc.attr("arch").parse(1,";"));
-			for(iM = 0, firstV = lastV = EVAL; iM < messVals.length; ) {
-				if((mO=messVals[iM]).categ != "val"+pO.mId)	continue;
-				mVl = mO.mess.parse(1, ": ").toReal();
-				if(!pO.isCntr)				pO.manData[mO.tm] = mVl;
-				else if(!lastV.isEVal())	pO.manData[mO.tm] = mVl - lastV;
-				if(firstV.isEVal())	firstV = mVl;
-				lastV = mVl;
-				iM++;
-				curPos = floor((mO.tm-doc_bTime)/86400);
-				if(!pO.manData[mO.tm].isEVal()) {
-					pO.trData += (pO.trData.length?",":"") + curPos.toString() + "=" + pO.manData[mO.tm];
-					curPos++;
-				}
-				if(iM >= messVals.length)
-					pO.trData += (pO.trData.length?",":"") + curPos.toString() + "=" + SYS.strEncode(EVAL,"HTML");
+			if(!messVals) {
+				bTime = SYS.timegm(0, 0, 0, 1, 0, year_value.toInt());
+				eTime = SYS.timegm(0, 0, 0, 1, 0, year_value.toInt()+1);
+				messVals = SYS.Archive.messGet(SYS.timegm(0,0,0,1,-1,year_value.toInt()),
+											eTime, "val*", 1, this.doc.attr("arch").parse(1,";"));
+				//this.messInfo("bTime="+SYS.timegm(0,0,0,1,-1,year_value.toInt())+"; eTime="+eTime+"; messVals.len="+messVals.length+"; messVals="+messVals);
 			}
-			if(pO.isCntr && !lastV.isEVal())	pO.manResCntr = lastV - firstV;
+			for(iM = 0, firstV = lastV = EVAL; iM < messVals.length; iM++) {
+				if((mO=messVals[iM]).categ != "val"+pO.mId || (!pO.isCntr && mO.tm < bTime))	continue;
+				pO.manData[mO.tm] = finVl = mVl = mO.mess.parse(1, ": ").toReal();
+				if(pO.isCntr) { if(!lastV.isEVal())	pO.cntrData[mO.tm] = finVl = mVl - lastV; else finVl = EVAL; }
+				if(firstV.isEVal())	firstV = mVl;
+				if(mO.tm < eTime)	lastV = mVl;
+				if(!finVl.isEVal()) {
+					curPos = floor((mO.tm-bTime)/86400);
+					pO.trData += (pO.trData.length?",":"") + curPos.toString() + "=" + finVl;
+				}
+			}
+			if(!lastV.isEVal()) {
+				if(pO.isCntr) pO.manResCntr = lastV - firstV;
+				pO.trData += (pO.trData.length?",":"") + (curPos+30).toString() + "=" + SYS.strEncode(EVAL,"HTML");
+			}
 		}
 		else {
 			aO = SYS.nodeAt(pO.var).arch();
+			bTime = SYS.timegm(0, 0, 0, 1, 0, year_value.toInt());
 			tTime = SYS.timegm(0, 0, 0, 1, (pO.isCntr?-1:0), year_value.toInt());
 			time = SYS.timegm(0, 0, 0, 1, 0, year_value.toInt()+1)-1;
 
@@ -25436,7 +25461,7 @@ if(toBuild) {
 				if(!pO.isCntr)				pO.manData[tTime] = vVl;
 				else if(!lastV.isEVal())	pO.manData[tTime] = vVl - lastV;
 
-				curPos = floor((tTime-doc_bTime)/86400);
+				curPos = floor((tTime-bTime)/86400);
 				if(!pO.manData[tTime].isEVal()) {
 					pO.trData += (pO.trData.length?",":"") + curPos.toString() + "=" + pO.manData[tTime];
 					curPos++;
@@ -25455,13 +25480,15 @@ if(toBuild) {
 				if(firstV.isEVal())	firstV = vVl;
 				lastV = vVl;
 			}
-			//if(iMonth < 12) pO.trData += "," + ((doc_time-doc_bTime)/86400).toString() + "=" + SYS.strEncode(EVAL,"HTML");
+			//if(iMonth < 12) pO.trData += "," + ((eTime-bTime)/86400).toString() + "=" + SYS.strEncode(EVAL,"HTML");
 			if(pO.isCntr && !lastV.isEVal())	pO.manResCntr = lastV - firstV;
 		}
-		if(pO.trData.length)
+		if(pO.trData.length) {
 			pO.trData = "<d s=''1'' aprox=''1'' per=''86400''>"+pO.trData+"</d>";
+			//this.messInfo("pO.trData="+pO.trData);
+		}
 	}
-}','','',1000,'owner;name;dscr;evProc;',1581963821);
+}','','',1000,'owner;name;dscr;evProc;',1582473407);
 CREATE TABLE IF NOT EXISTS 'VCAPrjs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"USER" TEXT DEFAULT 'root' ,"GRP" TEXT DEFAULT 'UI' ,"PERMIT" INTEGER DEFAULT '436' ,"PER" INTEGER DEFAULT '100' ,"STYLE" INTEGER DEFAULT '-1' ,"EN_BY_NEED" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 INSERT INTO VCAPrjs VALUES('tmplSO','Signal groups (template)','Групи сигналізації (шаблон)','Группы сигнализаций (шаблон)','The projects'' template of visualisation based on signal groups.
 Author: Roman Savochenko <roman@oscada.org>

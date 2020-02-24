@@ -211,6 +211,7 @@ class VCAElFigure : public VCAObj
 	string	elLst;
 	double	orient;		//The orientation angle
 	bool	active,		//Active diagram
+		mirror,
 		rel_list;
 	gdImagePtr im;
 
