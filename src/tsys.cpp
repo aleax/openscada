@@ -59,7 +59,8 @@ pthread_key_t TSYS::sTaskKey;
 TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char **)argb), envp((const char **)env),
     mUser("root"), mConfFile(sysconfdir_full "/oscada.xml"), mId("InitSt"),
     mModDir(oscd_moddir_full), mIcoDir("icons;" oscd_datadir_full "/icons"), mDocDir("docs;" oscd_datadir_full "/docs"),
-    mWorkDB(DB_CFG), mTaskInvPhs(10), mSaveAtExit(false), mSavePeriod(0), isLoaded(false), rootModifCnt(0), sysModifFlgs(0), mStopSignal(0), mN_CPU(1),
+    mWorkDB(DB_CFG), mTaskInvPhs(10), mSaveAtExit(false), mSavePeriod(0), mModifCalc(false), isLoaded(false),
+    rootModifCnt(0), sysModifFlgs(0), mStopSignal(0), mN_CPU(1),
     mainPthr(0), mSysTm(0), mClockRT(false), mPrjCustMode(true), mPrjNm(dataRes()),
     mRdStLevel(0), mRdRestConnTm(10), mRdTaskPer(1), mRdPrimCmdTr(false)
 {
@@ -514,6 +515,7 @@ string TSYS::optDescr( )
 	"ClockRT    <0|1>	Sets the clock source to use to REALTIME (otherwise MONOTONIC), which is problematic one at the system clock modification.\n"
 	"SaveAtExit <0|1>	Save the program at exit.\n"
 	"SavePeriod <seconds>	Period of the program saving, 0 to disable.\n"
+	"ModifCalc  <0|1>	Set modification for the calculated objects.\n"
 	"RdStLevel  <lev>	Level of the redundancy of the current station.\n"
 	"RdTaskPer  <seconds>	Call period of the redundancy task.\n"
 	"RdRestConnTm <seconds>	Time to restore connection to \"dead\" reserve station.\n"
@@ -683,8 +685,9 @@ void TSYS::cfgPrmLoad( )
     setDocDir(TBDS::genDBGet(nodePath()+"DocDir",docDir(),"root",TBDS::OnlyCfg), true);
     setMainCPUs(TBDS::genDBGet(nodePath()+"MainCPUs",mainCPUs()));
     setTaskInvPhs(s2i(TBDS::genDBGet(nodePath()+"TaskInvPhs",i2s(taskInvPhs()))));
-    setSaveAtExit(s2i(TBDS::genDBGet(nodePath()+"SaveAtExit","0")));
-    setSavePeriod(s2i(TBDS::genDBGet(nodePath()+"SavePeriod","0")));
+    setSaveAtExit(s2i(TBDS::genDBGet(nodePath()+"SaveAtExit",i2s(saveAtExit()))));
+    setSavePeriod(s2i(TBDS::genDBGet(nodePath()+"SavePeriod",i2s(savePeriod()))));
+    setModifCalc(s2i(TBDS::genDBGet(nodePath()+"ModifCalc",i2s(modifCalc()))));
 
     //Redundancy parameters
     setRdStLevel(s2i(TBDS::genDBGet(nodePath()+"RdStLevel",i2s(rdStLevel()))));
@@ -808,6 +811,7 @@ void TSYS::save_( )
     TBDS::genDBSet(nodePath()+"TaskInvPhs", i2s(taskInvPhs()));
     TBDS::genDBSet(nodePath()+"SaveAtExit", i2s(saveAtExit()));
     TBDS::genDBSet(nodePath()+"SavePeriod", i2s(savePeriod()));
+    TBDS::genDBSet(nodePath()+"ModifCalc", i2s(modifCalc()));
 
     //Redundancy parameters
     TBDS::genDBSet(nodePath()+"RdStLevel", i2s(rdStLevel()), "root", TBDS::OnlyCfg);
@@ -2939,6 +2943,9 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		"help",_("Select for the program automatic saving to DB on exit."));
 	    ctrMkNode("fld",opt,-1,"/gen/savePeriod",_("Period the program saving"),RWRWR_,"root","root",2,"tp","dec",
 		"help",_("Use not a zero period (seconds) to periodically save program changes to the DB."));
+	    ctrMkNode("fld",opt,-1,"/gen/modifCalc",_("Set modification for the calculated objects"),RWRWR_,"root","root",2,"tp","bool",
+		"help",_("Most suitable for the production systems together with the previous configuration properties, for the calculation context saving.\n"
+			 "But it is inconvinient in the development mode, all time reminding for the saving need."));
 	    ctrMkNode("fld",opt,-1,"/gen/lang",_("Language"),RWRWR_,"root","root",1,"tp","str");
 	    if(ctrMkNode("area",opt,-1,"/gen/mess",_("Messages"),R_R_R_)) {
 		ctrMkNode("fld",opt,-1,"/gen/mess/lev",_("Least level"),RWRWR_,"root","root",6,"tp","dec","len","1","dest","select",
@@ -3086,6 +3093,10 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/gen/savePeriod") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(i2s(savePeriod()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setSavePeriod(s2i(opt->text()));
+    }
+    else if(a_path == "/gen/modifCalc") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(i2s(modifCalc()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setModifCalc(s2i(opt->text()));
     }
     else if(a_path == "/gen/workdir") {
 	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(workDir());

@@ -278,7 +278,7 @@ void TParamContr::save_( )
 
 bool TParamContr::cfgChange( TCfg &co, const TVariant &pc )
 {
-    modif();
+    if(co.getS() != pc.getS()) modif();
     return type().cfgChange(this, co);
 }
 

@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.SNMP file: snmp.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -47,7 +47,7 @@
 #define MOD_NAME	_("SNMP client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.9.4"
+#define MOD_VER		"0.9.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides an implementation of the client of SNMP-service.")
 #define LICENSE		"GPL2"
@@ -551,7 +551,7 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
 		    // Set value
 		    if(!onlyInit) {
 			AutoHD<TVal> attr = vlAt(soid);
-			
+
 			switch(var->type)
 			{
 			    case ASN_BOOLEAN: attr.at().setB((bool)*var->val.integer, 0, true);	break;

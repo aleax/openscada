@@ -1,7 +1,7 @@
 
 //OpenSCADA module Archive.FSArch file: val.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -112,8 +112,14 @@ bool ModVArch::cfgChange( TCfg &co, const TVariant &pc )
 
 void ModVArch::start( )
 {
-    //Checking the archiver folders for duplicates
     if(!startStat()) {
+	//Open/create the archive directory
+	DIR *IdDir = opendir(addr().c_str());
+	if(IdDir == NULL && mkdir(addr().c_str(),SYS->permCrtFiles(true)))
+	    throw err_sys(_("Cannot create the archive directory '%s'."), addr().c_str());
+	closedir(IdDir);
+
+	//Checking the archiver folders for duplicates
 	string dbl = "";
 	MtxAlloc res(mod->enRes(), true);
 	const char *fLock = "fsArchLock";
@@ -305,12 +311,9 @@ void ModVArch::checkArchivator( bool now, bool toLimits )
 
     //Archivator's folder check for new files attach and present files pack needs
     if(now || isTm) {
-	// Open/create new directory
+	// Open/create the archive directory
 	DIR *IdDir = opendir(addr().c_str());
-	if(IdDir == NULL) {
-	    if(mkdir(addr().c_str(),SYS->permCrtFiles(true))) throw err_sys(_("Can not create the directory '%s'."), addr().c_str());
-	    IdDir = opendir(addr().c_str());
-	}
+	if(IdDir == NULL) throw err_sys(_("The archive directory '%s' is not present."), addr().c_str());
 
 	// Find archive files for no present archives and create it.
 	struct stat file_stat;

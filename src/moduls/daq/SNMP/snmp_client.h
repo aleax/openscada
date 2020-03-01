@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.SNMP file: snmp_client.h
 /***************************************************************************
- *   Copyright (C) 2006-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -105,11 +105,11 @@ class TMdContr: public TController
 	string	secPrivProto( );
 	string	secPrivPass( );
 
-	void	setSecLev(const string &vl);
-	void	setSecAuthProto(const string &vl);
-	void	setSecAuthPass(const string &vl);
-	void	setSecPrivProto(const string &vl);
-	void	setSecPrivPass(const string &vl);
+	void	setSecLev( const string &vl );
+	void	setSecAuthProto( const string &vl );
+	void	setSecAuthPass( const string &vl );
+	void	setSecPrivProto( const string &vl );
+	void	setSecPrivPass( const string &vl );
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 

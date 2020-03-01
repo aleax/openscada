@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: os_contr.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -50,7 +50,7 @@
 #define MOD_NAME	_("System DA")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.3.7"
+#define MOD_VER		"2.3.8"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides data acquisition from the OS. Supported OS Linux data sources: HDDTemp, Sensors, Uptime, Memory, CPU, UPS etc.")
 #define LICENSE		"GPL2"
@@ -339,6 +339,7 @@ void TMdPrm::enable( )
     cfg("TYPE").setS(cfg("TYPE").getS());
     TParamContr::enable();
     ((TMdContr&)owner()).prmEn(id(), true);	//Put to process
+    if(autoC())	modifClr();
 }
 
 void TMdPrm::disable( )

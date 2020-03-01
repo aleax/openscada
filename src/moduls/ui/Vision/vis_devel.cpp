@@ -974,7 +974,7 @@ void VisDevelop::modifyToolUpdate( const string &wdgs )
     //Request modify flag for select widgets
     string cur_wdg;
     XMLNode req("modify");
-    for(int i_off = 0; (cur_wdg=TSYS::strSepParse(wdgs,0,';',&i_off)).size(); ) {
+    for(int iOff = 0; (cur_wdg=TSYS::strSepParse(wdgs,0,';',&iOff)).size(); ) {
 	size_t aPos = cur_wdg.rfind("/a_");
 	if(aPos != string::npos) cur_wdg = cur_wdg.substr(0, aPos);
 	req.setAttr("path", cur_wdg+"/%2fobj");
@@ -1044,7 +1044,7 @@ void VisDevelop::itDBLoad( )
 	    _("Loading the visual items data from the DB"), false, false);
     if(dlg.exec() == QDialog::Accepted) {
 	string cur_wdg;
-	for(int i_off = 0; (cur_wdg=TSYS::strSepParse(own_wdg,0,';',&i_off)).size(); ) {
+	for(int iOff = 0; (cur_wdg=TSYS::strSepParse(own_wdg,0,';',&iOff)).size(); ) {
 	    // Send load request
 	    XMLNode req("load");
 	    req.setAttr("path",cur_wdg+"/%2fobj")->setAttr("force", (sender()==actDBLoadF)?"1":"");
@@ -1070,7 +1070,7 @@ void VisDevelop::itDBSave( )
 		_("Saving the visual items data to the DB"), false, false);
 	if(dlg.exec() == QDialog::Accepted) {
 	    string cur_wdg;
-	    for(int i_off = 0; (cur_wdg=TSYS::strSepParse(own_wdg,0,';',&i_off)).size(); ) {
+	    for(int iOff = 0; (cur_wdg=TSYS::strSepParse(own_wdg,0,';',&iOff)).size(); ) {
 		// Send load request
 		XMLNode req("save");
 		req.setAttr("path", cur_wdg+"/%2fobj")->setAttr("force", (sender()==actDBSaveF)?"1":"");
@@ -1147,29 +1147,27 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt, const string &i
 	return;
 
     //Count level
-    int p_el_cnt = 0;
-    for(int i_off = 0; TSYS::pathLev(own_wdg,0,true,&i_off).size(); p_el_cnt++) ;
+    int pElCnt = 0;
+    for(int iOff = 0; TSYS::pathLev(own_wdg,0,true,&iOff).size(); pElCnt++) ;
     string sid1 = TSYS::pathLev(own_wdg, 0);
 
     //Make request id and name dialog
     InputDlg dlg(this, cact->icon(), _("Enter the identifier and the name of the new widget/page."), _("Creating a widget/page"), true, true);
     dlg.setIdLen(30);
 
-    if(p_el_cnt > 1 && iWid.empty()) {
-	// New include item id generator
+    if(pElCnt > 1 && iWid.empty()) {
+	//  New include item id generator
 	//  Present include widgets list request
 	if(!sid1.compare(0,4,"prj_") && pnt.isNull()) req.setAttr("path", own_wdg+"/%2fpage%2fpage");
 	else req.setAttr("path", own_wdg+"/%2finclwdg%2fwdg");
 	if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	else {
 	    //  Get parent widget id
-	    string base_nm = "item";
-	    if(!par_nm.empty())	base_nm = TSYS::pathLev(par_nm,1,true).substr(4);
-	    unsigned i_c = 1, iW = 0;
-	    while(iW < req.childSize())
-		if(req.childGet(iW)->attr("id") == base_nm+i2s(i_c))	{ iW = 0; i_c++; }
-		else iW++;
-	    dlg.setId((base_nm+i2s(i_c)).c_str());
+	    string baseNm = "item";
+	    if(!par_nm.empty())	baseNm = TSYS::pathLev(par_nm,1,true).substr(4);
+	    for(int iW = 0; iW < req.childSize(); iW++)
+		if(req.childGet(iW)->attr("id") == baseNm) { baseNm = TSYS::strLabEnum(baseNm); iW = -1; }
+	    dlg.setId(baseNm.c_str());
 	}
     }
 
@@ -1182,7 +1180,7 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt, const string &i
 	req.clear()->setName("add");
 	string new_wdg;
 	if(!sid1.compare(0,4,"wlb_")) {
-	    if(p_el_cnt == 1) req.setAttr("path", own_wdg+"/%2fwdg%2fwdg")->setAttr("id", w_id)->setText(w_nm);
+	    if(pElCnt == 1) req.setAttr("path", own_wdg+"/%2fwdg%2fwdg")->setAttr("id", w_id)->setText(w_nm);
 	    else req.setAttr("path", own_wdg+"/%2finclwdg%2fwdg")->setAttr("id", w_id)->setText(w_nm);
 	    new_wdg = own_wdg + "/wdg_";
 	}
@@ -1254,14 +1252,14 @@ void VisDevelop::visualItDel( const string &itms, bool chNoWr )
     for(int w_off = 0; (del_wdg=TSYS::strSepParse(work_wdg_loc,0,';',&w_off)).size(); ) {
 	//Get owner object path and deleted item identifier
 	string it_own, it_id;
-	int p_el_cnt = 0;
-	string it_tmp = TSYS::pathLev(del_wdg,p_el_cnt++);
+	int pElCnt = 0;
+	string it_tmp = TSYS::pathLev(del_wdg,pElCnt++);
 	do {
 	    it_own= it_own+(it_id.empty() ? "" : ("/"+it_id));
 	    it_id = it_tmp;
 	}
-	while((it_tmp=TSYS::pathLev(del_wdg,p_el_cnt++)).size());
-	p_el_cnt--;
+	while((it_tmp=TSYS::pathLev(del_wdg,pElCnt++)).size());
+	pElCnt--;
 
 	XMLNode req("del");
 	string sid1 = TSYS::pathLev(it_own,0);
@@ -1271,11 +1269,11 @@ void VisDevelop::visualItDel( const string &itms, bool chNoWr )
 	    else if(!it_id.compare(0,4,"prj_")) req.setAttr("path","/%2fprm%2fcfg%2fprj")->setAttr("id",it_id.substr(4));
 	}
 	else if(!sid1.compare(0,4,"wlb_")) {
-	    if(p_el_cnt <= 2) req.setAttr("path", it_own+"/%2fwdg%2fwdg")->setAttr("id", it_id.substr(4));
+	    if(pElCnt <= 2) req.setAttr("path", it_own+"/%2fwdg%2fwdg")->setAttr("id", it_id.substr(4));
 	    else req.setAttr("path", it_own+"/%2finclwdg%2fwdg")->setAttr("id", it_id.substr(4));
 	}
 	else if(!sid1.compare(0,4,"prj_")) {
-	    if(p_el_cnt <= 2) req.setAttr("path", it_own+"/%2fpage%2fpage")->setAttr("id", it_id.substr(3));
+	    if(pElCnt <= 2) req.setAttr("path", it_own+"/%2fpage%2fpage")->setAttr("id", it_id.substr(3));
 	    else if(!it_id.compare(0,3,"pg_")) req.setAttr("path", it_own+"/%2fpage%2fpage")->setAttr("id", it_id.substr(3));
 	    else req.setAttr("path", it_own+"/%2finclwdg%2fwdg")->setAttr("id", it_id.substr(4));
 	}
@@ -1285,7 +1283,7 @@ void VisDevelop::visualItDel( const string &itms, bool chNoWr )
 
 	//Send remove context
 	if(cntrIfCmd(req))	mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
-	else if(p_el_cnt < 3)	emit modifiedItem(del_wdg);
+	else if(pElCnt < 3)	emit modifiedItem(del_wdg);
 	else {
 	    if(!lst_wdg.empty() && lst_wdg != it_own)	emit modifiedItem(lst_wdg);
 	    lst_wdg = it_own;

@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.OPC_UA file: mod_daq.cpp
 /***************************************************************************
- *   Copyright (C) 2009-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2009-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -172,6 +172,7 @@ void TMdContr::enable_( )
 	SYS->transport().at().at(TSYS::strParse(trName,0,".")).at().outAdd(TSYS::strParse(trName,1,".").substr(4));
 	tr = SYS->transport().at().nodeAt(trName, 0, '.');
 	tr.at().setDscr(TSYS::strMess(_("OPC UA automatic created transport for '%s' controller."),id().c_str()));
+	tr.at().modifClr();
     }
     enSt = true;
     setEndPoint(endPoint());
@@ -224,12 +225,12 @@ void TMdContr::prmEn( const string &id, bool val )
 {
     MtxAlloc res(enRes, true);
 
-    unsigned i_prm;
-    for(i_prm = 0; i_prm < pHd.size(); i_prm++)
-	if(pHd[i_prm].at().id() == id) break;
+    unsigned iPrm;
+    for(iPrm = 0; iPrm < pHd.size(); iPrm++)
+	if(pHd[iPrm].at().id() == id) break;
 
-    if(val && i_prm >= pHd.size()) pHd.push_back(at(id));
-    if(!val && i_prm < pHd.size()) pHd.erase(pHd.begin()+i_prm);
+    if(val && iPrm >= pHd.size()) pHd.push_back(at(id));
+    if(!val && iPrm < pHd.size()) pHd.erase(pHd.begin()+iPrm);
     if(startStat()) mPCfgCh = true;
 }
 
@@ -261,14 +262,14 @@ void *TMdContr::Task( void *icntr )
 		req.childClear();
 		req.childAdd("node")->setAttr("prmId", "OPC_UA_Server")->setAttr("prmAttr", "ServerStatus_State")->
 		    setAttr("nodeId", i2s(OpcUa_Server_ServerStatus_State))->setAttr("attributeId", i2s(AId_Value));
-		for(unsigned i_p = 0; i_p < cntr.pHd.size(); i_p++) {
-		    if(firstCall || cntr.tmDelay == 0) cntr.pHd[i_p].at().attrPrc();
-		    cntr.pHd[i_p].at().vlList(als);
-		    for(unsigned i_a = 0; i_a < als.size(); i_a++) {
-			nId = TSYS::strLine(cntr.pHd[i_p].at().vlAt(als[i_a]).at().fld().reserve(), 0);
+		for(unsigned iP = 0; iP < cntr.pHd.size(); iP++) {
+		    if(firstCall || cntr.tmDelay == 0) cntr.pHd[iP].at().attrPrc();
+		    cntr.pHd[iP].at().vlList(als);
+		    for(unsigned iA = 0; iA < als.size(); iA++) {
+			nId = TSYS::strLine(cntr.pHd[iP].at().vlAt(als[iA]).at().fld().reserve(), 0);
 			if(nId.empty())	continue;
-			req.childAdd("node")->setAttr("prmId", cntr.pHd[i_p].at().id())->
-			    setAttr("prmAttr", als[i_a])->setAttr("nodeId", nId)->setAttr("attributeId", i2s(AId_Value));
+			req.childAdd("node")->setAttr("prmId", cntr.pHd[iP].at().id())->
+			    setAttr("prmAttr", als[iA])->setAttr("nodeId", nId)->setAttr("attributeId", i2s(AId_Value));
 		    }
 		}
 		cntr.mPCfgCh = false;
@@ -282,15 +283,15 @@ void *TMdContr::Task( void *icntr )
 	    int ndSt = 0;
 	    AutoHD<TVal> vl;
 	    res.lock();
-	    for(unsigned i_c = 0, i_p = 0, varTp = 0; i_c < req.childSize() && i_p < cntr.pHd.size(); i_c++) {
+	    for(unsigned i_c = 0, iP = 0, varTp = 0; i_c < req.childSize() && iP < cntr.pHd.size(); i_c++) {
 		XML_N *cnX = req.childGet(i_c);
 		if(cnX->attr("prmId") == "OPC_UA_Server" && cnX->attr("prmAttr") == "ServerStatus_State")
 		{ cntr.servSt = strtoul(cnX->text().c_str(),NULL,10); continue; }
-		while(cnX->attr("prmId") != cntr.pHd[i_p].at().id()) i_p++;
-		if(i_p >= cntr.pHd.size()) break;
-		if(cntr.pHd[i_p].at().vlPresent(cnX->attr("prmAttr"))) {
+		while(cnX->attr("prmId") != cntr.pHd[iP].at().id()) iP++;
+		if(iP >= cntr.pHd.size()) break;
+		if(cntr.pHd[iP].at().vlPresent(cnX->attr("prmAttr"))) {
 		    ndSt = strtol(cnX->attr("Status").c_str(),NULL,0);
-		    vl = cntr.pHd[i_p].at().vlAt(cnX->attr("prmAttr"));
+		    vl = cntr.pHd[iP].at().vlAt(cnX->attr("prmAttr"));
 		    if((varTp=s2i(cnX->attr("VarTp")))&OpcUa_Array && !isErr && !ndSt) {
 			TArrayObj *curArr = new TArrayObj();
 			string vEl;
@@ -358,7 +359,7 @@ bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
 	if(co.fld().name() == "SCHEDULE")
 	    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
 	else if(co.name() == "EndPoint" && enableStat()) {
-	    tr.at().setAddr("TCP:"+epParse());
+	    tr.at().setAddr("TCP:"+epParse()); tr.at().modifClr();
 	    ResAlloc res(nodeRes(), false);
 	    SecuritySetting ss("", -1);
 	    if(epLst.find(co.getS()) != epLst.end()) ss = epLst[co.getS()];
@@ -462,8 +463,8 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	if(stP != string::npos && stC != string::npos) cNodeId = TSYS::strDecode(mBrwsVar.substr(stP+1,stC-stP-1));
 
 	XML_N req("opc.tcp"); req.setAttr("id", "Read")->setAttr("timestampsToReturn", i2s(TS_NEITHER));
-	for(int i_a = 1; i_a <= 22; i_a++)
-	    req.childAdd("node")->setAttr("nodeId", cNodeId)->setAttr("attributeId", i2s(i_a));
+	for(int iA = 1; iA <= 22; iA++)
+	    req.childAdd("node")->setAttr("nodeId", cNodeId)->setAttr("attributeId", i2s(iA));
 	reqService(req);
 	if(!req.attr("err").empty()) {
 	    //mess_err(nodePath().c_str(), "%s", req.attr("err").c_str());
@@ -471,11 +472,11 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	}
 
 	// Get result
-	for(unsigned i_a = 0; i_a < req.childSize(); i_a++) {
-	    if(strtol(req.childGet(i_a)->attr("Status").c_str(),NULL,0)) continue;
+	for(unsigned iA = 0; iA < req.childSize(); iA++) {
+	    if(strtol(req.childGet(iA)->attr("Status").c_str(),NULL,0)) continue;
 	    string nANm = _("Unknown");
-	    string nAVl = req.childGet(i_a)->text();
-	    switch(i_a+1) {
+	    string nAVl = req.childGet(iA)->text();
+	    switch(iA+1) {
 		case AId_NodeId: nANm = _("NodeId");	break;
 		case AId_NodeClass:
 		    nANm = _("NodeClass");
@@ -673,10 +674,10 @@ string TMdPrm::attrPrc( )
 
 	    res.lock();
 	    // Find for already presented attribute
-	    for(unsigned i_a = 0; i_a < pEl.fldSize() && !srchOK; i_a++)
-		if(TSYS::strLine(pEl.fldAt(i_a).reserve(),0) == snd) {
-		    if(pEl.fldAt(i_a).type() != vtp)
-			try { pEl.fldDel(i_a); break; }
+	    for(unsigned iA = 0; iA < pEl.fldSize() && !srchOK; iA++)
+		if(TSYS::strLine(pEl.fldAt(iA).reserve(),0) == snd) {
+		    if(pEl.fldAt(iA).type() != vtp)
+			try { pEl.fldDel(iA); break; }
 			catch(TError &err) { }
 		    srchOK = true;
 		}
@@ -684,11 +685,8 @@ string TMdPrm::attrPrc( )
 	    // Create new attribute
 	    if(!srchOK) {
 		//  Prepare attribute id
-		string aid = TSYS::strEncode(req.childGet(1)->text(), TSYS::oscdID);
-		if(vlPresent(aid))
-		    for(int i_v = 1; true; i_v++)
-			if(!vlPresent(aid+i2s(i_v)))
-			{ aid += i2s(i_v); break; }
+		string aid = TSYS::strEncode((isdigit(req.childGet(1)->text()[0])?TSYS::strParse(req.childGet(1)->text(),1,":"):req.childGet(1)->text()), TSYS::oscdID);
+		while(vlPresent(aid))	aid = TSYS::strLabEnum(aid);
 
 		//  Value type prepare
 		TFld::Type vtp = TFld::String;
@@ -703,7 +701,7 @@ string TMdPrm::attrPrc( )
 		// Browse name
 		string aNm = req.childGet(2)->text();
 		size_t nmPos = aNm.find(":");
-		if(nmPos!=string::npos) aNm.erase(0,nmPos+1);
+		if(nmPos!=string::npos) aNm.erase(0, nmPos+1);
 
 		//  Flags prepare
 		unsigned vflg = TVal::DirWrite;
@@ -723,12 +721,12 @@ string TMdPrm::attrPrc( )
 
     //Find for delete attribute
     res.lock();
-    for(unsigned i_a = 0, i_p; i_a < pEl.fldSize(); ) {
-	for(i_p = 0; i_p < als.size(); i_p++)
-	    if(TSYS::strLine(pEl.fldAt(i_a).reserve(),0) == als[i_p])	break;
-	if(i_p >= als.size())
-	    try{ pEl.fldDel(i_a); continue; } catch(TError &err) { }
-	i_a++;
+    for(unsigned iA = 0, iP; iA < pEl.fldSize(); ) {
+	for(iP = 0; iP < als.size(); iP++)
+	    if(TSYS::strLine(pEl.fldAt(iA).reserve(),0) == als[iP])	break;
+	if(iP >= als.size())
+	    try{ pEl.fldDel(iA); continue; } catch(TError &err) { }
+	iA++;
     }
 
     return "";

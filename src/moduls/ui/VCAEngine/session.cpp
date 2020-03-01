@@ -46,6 +46,8 @@ Session::Session( const string &iid, const string &iproj ) : mAlrmRes(true), mCa
 
 Session::~Session( )
 {
+    modifClr();
+
     for(map<uint8_t,Notify*>::iterator iN = mNotify.begin(); iN != mNotify.end(); ++iN) delete iN->second;
 }
 
@@ -1545,6 +1547,8 @@ SessWdg::SessWdg( const string &iid, const string &iparent, Session *isess ) :
     Widget(iid,iparent), TValFunc(iid+"_wdg",NULL), tmCalc(0), tmCalcMax(0),
     mProc(false), inLnkGet(true), mToEn(false), mMdfClc(0), mCalcClk(isess->calcClk()), mCalcRes(true), mSess(isess)
 {
+    modifClr();
+
     BACrtHoldOvr = true;
 }
 
@@ -2459,9 +2463,9 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	    parent().at().modif();
 	}
 	if(parent().at().attrPresent(tStr))
-	    parent().at().attrAt(tStr).at().setFlgSelf((Attr::SelfAttrFlgs)(parent().at().attrAt(tStr).at().flgSelf()|Attr::VizerSpec));
+	    parent().at().attrAt(tStr).at().setFlgSelf((Attr::SelfAttrFlgs)(parent().at().attrAt(tStr).at().flgSelf()|Attr::VizerSpec), true);
 	if(attrPresent(tStr)) {
-	    attrAt(tStr).at().setFlgSelf((Attr::SelfAttrFlgs)(attrAt(tStr).at().flgSelf()|Attr::VizerSpec));
+	    attrAt(tStr).at().setFlgSelf((Attr::SelfAttrFlgs)(attrAt(tStr).at().flgSelf()|Attr::VizerSpec), true);
 	    attrAt(tStr).at().setModif(modifVal(attrAt(tStr).at()));	//Force set modify for allow load next
 	}
     }

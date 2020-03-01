@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.BlockCalc file: block.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2017,2020 by Roman Savochenko, <roman@oscada.org>  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -148,17 +148,17 @@ void Block::saveIO( )
     string bd_tbl = owner().cfg("BLOCK_SH").getS()+"_io";
     string bd = owner().DB()+"."+bd_tbl;
 
-    for(unsigned i_ln = 0; i_ln < mLnk.size(); i_ln++)
+    for(unsigned iLn = 0; iLn < mLnk.size(); iLn++)
 	try {
-	    cfg.cfg("ID").setS(func()->io(i_ln)->id());
-	    cfg.cfg("TLNK").setI(mLnk[i_ln].tp);				//Type link
-	    cfg.cfg("LNK").setS((mLnk[i_ln].tp == FREE)?"":mLnk[i_ln].lnk);	//Link
-	    cfg.cfg("VAL").setS(getS(i_ln));					//Value
+	    cfg.cfg("ID").setS(func()->io(iLn)->id());
+	    cfg.cfg("TLNK").setI(mLnk[iLn].tp);				//Type link
+	    cfg.cfg("LNK").setS((mLnk[iLn].tp == FREE)?"":mLnk[iLn].lnk);	//Link
+	    cfg.cfg("VAL").setS(getS(iLn));					//Value
 
 	    SYS->db().at().dataSet(bd,mod->nodePath()+bd_tbl,cfg);
 	} catch(TError &err) {
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	    mess_err(nodePath().c_str(),_("Block link '%s' save error."),func()->io(i_ln)->id().c_str());
+	    mess_err(nodePath().c_str(),_("Block link '%s' save error."),func()->io(iLn)->id().c_str());
 	}
 }
 
@@ -187,7 +187,7 @@ void Block::setEnable( bool val )
 	//saveIO();
 
 	// Clean IO
-	for(unsigned i_ln = 0; i_ln < mLnk.size(); i_ln++) setLink(i_ln, SET, FREE);
+	for(unsigned iLn = 0; iLn < mLnk.size(); iLn++) setLink(iLn, SET, FREE);
 	mLnk.clear();
 
 	// Free func
@@ -203,7 +203,7 @@ void Block::setProcess( bool val )
 
     //Connect links
     if(val && !process()) {
-	for(unsigned i_ln = 0; i_ln < mLnk.size(); i_ln++) setLink(i_ln, INIT);
+	for(unsigned iLn = 0; iLn < mLnk.size(); iLn++) setLink(iLn, INIT);
 	if(owner().startStat()) calc(true, false, 0);
 	owner().blkProc(id(), val);
     }
@@ -211,7 +211,7 @@ void Block::setProcess( bool val )
     if(!val && process()) {
 	owner().blkProc(id(), val);
 	if(owner().startStat()) calc(false, true, 0);
-	for(unsigned i_ln = 0; i_ln < mLnk.size(); i_ln++) setLink(i_ln, DEINIT);
+	for(unsigned iLn = 0; iLn < mLnk.size(); iLn++) setLink(iLn, DEINIT);
     }
     mProcess = val;
 }
@@ -312,27 +312,27 @@ void Block::calc( bool first, bool last, double frq )
     lnkRes.resRequestR();
     try {
 	// Get input links
-	for(unsigned i_ln = 0; i_ln < mLnk.size(); i_ln++)
-	    switch(mLnk[i_ln].tp) {
+	for(unsigned iLn = 0; iLn < mLnk.size(); iLn++)
+	    switch(mLnk[iLn].tp) {
 		case I_LOC: case I_GLB:
-		    if(mLnk[i_ln].iblk->wBl.freeStat()) break;
-		    if(mLnk[i_ln].iblk->wBl.at().enable()) {
+		    if(mLnk[iLn].iblk->wBl.freeStat()) break;
+		    if(mLnk[iLn].iblk->wBl.at().enable()) {
 			//  Early disconnected link init try
-			if(mLnk[i_ln].iblk->wId == -100) {
+			if(mLnk[iLn].iblk->wId == -100) {
 			    lnkRes.resRelease();
-			    try{ setLink(i_ln, INIT); } catch(...) { setLink(i_ln, DEINIT); }
+			    try{ setLink(iLn, INIT); } catch(...) { setLink(iLn, DEINIT); }
 			    lnkRes.resRequestR();
-			    if(mLnk[i_ln].iblk->wBl.freeStat()) break;
+			    if(mLnk[iLn].iblk->wBl.freeStat()) break;
 			}
 			//  Use link
-			set(i_ln,mLnk[i_ln].iblk->wBl.at().get(mLnk[i_ln].iblk->wId));
+			set(iLn,mLnk[iLn].iblk->wBl.at().get(mLnk[iLn].iblk->wId));
 		    }
 		    //  Check for link disable need
-		    else mLnk[i_ln].iblk->wId = -100;
+		    else mLnk[iLn].iblk->wId = -100;
 		    break;
 		case I_PRM:
-		    if(mLnk[i_ln].aprm->freeStat()) break;
-		    set(i_ln, mLnk[i_ln].aprm->at().get());
+		    if(mLnk[iLn].aprm->freeStat()) break;
+		    set(iLn, mLnk[iLn].aprm->at().get());
 		    break;
 		default: break;
 	    }
@@ -348,33 +348,33 @@ void Block::calc( bool first, bool last, double frq )
     try {
 	setMdfChk(outLnkWrChs());
 	TValFunc::calc();
-	modif();
+	if(SYS->modifCalc()) modif();
     } catch(TError &err) { mErrCnt++; throw; }
 
     //Put values to output links
     lnkRes.resRequestR();
     try {
-	for(unsigned i_ln = 0; i_ln < mLnk.size(); i_ln++)
-	    switch(mLnk[i_ln].tp) {
+	for(unsigned iLn = 0; iLn < mLnk.size(); iLn++)
+	    switch(mLnk[iLn].tp) {
 		case O_LOC: case O_GLB:
-		    if(mLnk[i_ln].iblk->wBl.freeStat() || (outLnkWrChs() && !ioMdf(i_ln))) break;
-		    if(mLnk[i_ln].iblk->wBl.at().enable()) {
+		    if(mLnk[iLn].iblk->wBl.freeStat() || (outLnkWrChs() && !ioMdf(iLn))) break;
+		    if(mLnk[iLn].iblk->wBl.at().enable()) {
 			//Early disconnected link init try
-			if(mLnk[i_ln].iblk->wId == -100) {
+			if(mLnk[iLn].iblk->wId == -100) {
 			    lnkRes.resRelease();
-			    try{ setLink(i_ln, INIT); } catch(...) { setLink(i_ln, DEINIT); }
+			    try{ setLink(iLn, INIT); } catch(...) { setLink(iLn, DEINIT); }
 			    lnkRes.resRequestR();
-			    if(mLnk[i_ln].iblk->wBl.freeStat()) break;
+			    if(mLnk[iLn].iblk->wBl.freeStat()) break;
 			}
 			//Use link
-			mLnk[i_ln].iblk->wBl.at().set(mLnk[i_ln].iblk->wId,get(i_ln));
+			mLnk[iLn].iblk->wBl.at().set(mLnk[iLn].iblk->wId,get(iLn));
 		    }
 		    //Check for link disable need
-		    else mLnk[i_ln].iblk->wId = -100;
+		    else mLnk[iLn].iblk->wId = -100;
 		    break;
 		case O_PRM:
-		    if(mLnk[i_ln].aprm->freeStat() || (outLnkWrChs() && !ioMdf(i_ln))) break;
-		    mLnk[i_ln].aprm->at().set(get(i_ln));
+		    if(mLnk[iLn].aprm->freeStat() || (outLnkWrChs() && !ioMdf(iLn))) break;
+		    mLnk[iLn].aprm->at().set(get(iLn));
 		    break;
 		default: break;
 	    }

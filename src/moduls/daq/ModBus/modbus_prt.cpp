@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.ModBus file: modbus_prt.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2008-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1317,7 +1317,7 @@ void *Node::Task( void *ind )
 	TSYS::taskSleep((int64_t)(1e9*nd.period()));
 	if(nd.endRun) isStop = true;
 	isStart = false;
-	nd.modif();
+	if(SYS->modifCalc()) nd.modif();
     }
 
     nd.prcSt = false;

@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.ModBus file: modbus_daq.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1283,14 +1283,14 @@ void TMdPrm::upValLog( bool first, bool last, double frq )
 	//Calc template
 	lCtx->setMdfChk(true);
 	lCtx->calc();
-	modif();
+	if(SYS->modifCalc()) modif();
 
 	//Put output links
 	lCtx->outputLinks();
 
 	//Put fixed system attributes
-	if(lCtx->idNm >= 0)  setName(lCtx->getS(lCtx->idNm));
-	if(lCtx->idDscr >= 0)setDescr(lCtx->getS(lCtx->idDscr));
+	if(lCtx->idNm >= 0 && lCtx->ioMdf(lCtx->idNm)) setName(lCtx->getS(lCtx->idNm));
+	if(lCtx->idDscr >= 0 && lCtx->ioMdf(lCtx->idDscr)) setDescr(lCtx->getS(lCtx->idDscr));
 
 	//Attribute's values update
 	elem().fldList(ls);

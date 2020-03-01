@@ -233,8 +233,6 @@ class Session : public TCntrNode
 	// Styles
 	int		mStyleIdW;
 	map<string, string>	mStProp;	//Styles' properties
-
-
 };
 
 //************************************************

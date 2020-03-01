@@ -1,3 +1,24 @@
+2020-03-01 Roman (stable)
+- !!:DB.LibsDB.vcaBase: doc.docRepYear: Significantly improved for:
+	- appended for the option "showOrigCntr" to show the original counter values;
+	- the time column aligned to the left;
+	- expanded in the counters processing for the manual entering to a value archive.
+    doc.{docRepDay,docRepMonth,docRepYear}: The "Result" row is set for "font-weight: bold;".
+    Main.{anShow,anShow1}: Appended for the tooltip with the parameter and its errors description.
+- !!:DB.LibsDB.vcaElectroEls: The full restructuration of the libraries was started for
+    true documenting, revision and translation.
+- !:Model.AGLKS.vca: The analog parameters and graphics is relinked.
+- !!!!:SYS,DAQ.{BlockCalc,LogicLev,ModBus,OPC_UA,Siemens,System},Protocol.ModBus:
+    Unified and cleand for the objects modification control, moving the calculation context modification to the option "modifCalc".
+- !!!!:UI.VCAEngine: The projects sessions of the VCA moved at least from the modification control.
+    Prevented from save the value of inherited and linked attributes, seems it have not a sense but can significantly use the storage.
+- !:FIX:Transports: Fix the terminating the transports loading at try to connect the missing transport modules.
+- FIX:Archive.FSArch: The archive folder creation moved in the begin, before the locking and the info.db creating.
+- DAQ.OPC_UA: Forming for ID of the parameter attributes moved under the generic enumeration function TSYS::strLabEnum() and
+    the qualifier digit is removed.
+- UI.Vision: The items ID generation at placing pages to the project changed to start from the source page original ID, not index 1.
+
+
 2020-02-24 Roman (stable)
 - FIX:DB.LibsDB.OscadaLibs: doc.diagram: Fixed All entries of SVG tag "text-anchor" value "left" to "start".
     Improved to align in the left the first horizontal scale item.

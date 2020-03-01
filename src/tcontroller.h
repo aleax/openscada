@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tcontroller.h
 /***************************************************************************
- *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -133,9 +133,9 @@ class TController : public TCntrNode, public TConfig
 
 	virtual TParamContr *ParamAttach( const string &name, int type );
 
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
-	bool cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
 	void preDisable( int flag );		//Disable if delete
 	void postDisable( int flag );		//Delete all DB if flag 1

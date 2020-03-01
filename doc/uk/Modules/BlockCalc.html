@@ -37,28 +37,18 @@
 
 <tr>
 <td> <a href="../Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">BlockCalc</a> </td>
-<td> Блоковий обчислювач </td>
-<td> 1.7 </td>
+<td> Блоковий обчислювач
+</td>
+<td> 1.9 </td>
 <td> GPL2 </td>
 <td> daq_BlockCalc.so </td>
 <td> en,uk,ru,de </td>
 <td> x86,x86_64,ARM
 </td>
 <td> DAQ </td>
-<td> Роман Савоченко<br />Максим Лисенко (2012) — переклад цієї сторінки </td>
+<td> Роман Савоченко<br />&nbsp;&nbsp;<font size="-2"><i>Максим Лисенко (2012) — переклад цієї сторінки</i></font> </td>
 <td> Надає блоковий обчислювач.
 </td></tr></table>
-<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
-<ul>
-<li class="toclevel-1 tocsection-1"><a href="#.D0.9A.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.8F"><span class="tocnumber">1</span> <span class="toctext">Контролер модуля</span></a></li>
-<li class="toclevel-1 tocsection-2"><a href="#.D0.91.D0.BB.D0.BE.D0.BA.D0.BE.D0.B2.D0.B0_.D1.81.D1.85.D0.B5.D0.BC.D0.B0_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D0.B0"><span class="tocnumber">2</span> <span class="toctext">Блокова схема контролера</span></a></li>
-<li class="toclevel-1 tocsection-3"><a href="#.D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B8_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D1.83"><span class="tocnumber">3</span> <span class="toctext">Параметри контролеру</span></a></li>
-<li class="toclevel-1 tocsection-4"><a href="#.D0.9A.D0.BE.D0.BF.D1.96.D1.8E.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_.D0.B1.D0.BB.D0.BE.D0.BA.D0.BE.D0.B2.D0.B8.D1.85_.D1.81.D1.85.D0.B5.D0.BC"><span class="tocnumber">4</span> <span class="toctext">Копіювання блокових схем</span></a></li>
-<li class="toclevel-1 tocsection-5"><a href="#API_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F"><span class="tocnumber">5</span> <span class="toctext">API користувацького програмування</span></a></li>
-<li class="toclevel-1 tocsection-6"><a href="#.D0.9F.D0.BE.D1.81.D0.B8.D0.BB.D0.B0.D0.BD.D0.BD.D1.8F"><span class="tocnumber">6</span> <span class="toctext">Посилання</span></a></li>
-</ul>
-</div>
-
 <p>Модуль підсистеми "DAQ" BlockCalc надає в систему OpenSCADA механізм створення користувацьких обчислень. Механізм обчислень ґрунтується на формальній мові блокових схем (функціональних блоків).
 </p><p>Також модулем реалізуються функції горизонтального резервування, а саме спільної роботи з віддаленою станцією цього ж рівня. Крім синхронізації значень і архівів атрибутів параметрів модулем здійснюється синхронізація значень блоків блокової схеми, з метою безударного підхоплення алгоритмів.
 </p><p>Мови блокового програмування ґрунтуються на понятті блокових схем (функціональних блоків). При чому в залежності від сутності блоку блокові схеми можуть бути: логічними схемами, схемами релейного логіки, моделлю технологічного процесу та інше. Суть блокової схеми полягає в тому, що вона містить перелік блоків і зв'язки між ними.
@@ -73,6 +63,17 @@
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:639px;"><a class="image" href="http://oscada.org/wiki/File:BlockCalc_model_uk.png"><img class="thumbimage" height="210" src="../files/BlockCalc_model_uk.png" width="637" /></a>  <div class="thumbcaption">Рис. 1. Загальні зв'язки між блоками блокової схеми.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:601px;"><a class="image" href="http://oscada.org/wiki/File:BlockCalc_links.png"><img class="thumbimage" height="162" src="../../en/files/BlockCalc_links.png" width="599" /></a>  <div class="thumbcaption">Рис. 2. Деталізовані зв'язки між блоками.</div></div></div></div>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9A.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.8F"><span class="tocnumber">1</span> <span class="toctext">Контролер модуля</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.91.D0.BB.D0.BE.D0.BA.D0.BE.D0.B2.D0.B0_.D1.81.D1.85.D0.B5.D0.BC.D0.B0_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D0.B0"><span class="tocnumber">2</span> <span class="toctext">Блокова схема контролера</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#.D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B8_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D1.83"><span class="tocnumber">3</span> <span class="toctext">Параметри контролеру</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#.D0.9A.D0.BE.D0.BF.D1.96.D1.8E.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_.D0.B1.D0.BB.D0.BE.D0.BA.D0.BE.D0.B2.D0.B8.D1.85_.D1.81.D1.85.D0.B5.D0.BC"><span class="tocnumber">4</span> <span class="toctext">Копіювання блокових схем</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#API_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F"><span class="tocnumber">5</span> <span class="toctext">API користувацького програмування</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#.D0.9F.D0.BE.D1.81.D0.B8.D0.BB.D0.B0.D0.BD.D0.BD.D1.8F"><span class="tocnumber">6</span> <span class="toctext">Посилання</span></a></li>
+</ul>
+</div>
+
 <h2><span class="mw-headline" id=".D0.9A.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.8F"><span class="mw-headline-number">1</span> Контролер модуля</span></h2>
 <p>Кожен контролер цього модуля містить блокову схему, яку він обраховує із зазначеним періодом. Для надання обчислених даних в систему OpenSCADA в контролері можуть створюватися параметри. Приклад вкладки конфігурації контролера даного типу зображений на рис.3.
 </p>
@@ -159,5 +160,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/BlockCalc/uk">Modules/BlockCalc/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">лютого 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2665</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/BlockCalc/uk">Modules/BlockCalc/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2666</td></tr></table></body>
 </html>

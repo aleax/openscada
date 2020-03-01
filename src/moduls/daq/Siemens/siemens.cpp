@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Siemens DAQ and Beckhoff")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"3.2.0"
+#define MOD_VER		"3.2.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol)\
  and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the\
@@ -1887,14 +1887,14 @@ void TMdPrm::calc( bool first, bool last, double frq )
 	//Calc template
 	setMdfChk(true);
 	TValFunc::calc();
-	modif();
+	if(SYS->modifCalc()) modif();
 
 	//Put output links
 	outputLinks();
 
 	//Put fixed system attributes
-	if(idNm >= 0)	setName(getS(idNm));
-	if(idDscr >= 0)setDescr(getS(idDscr));
+	if(idNm >= 0 && ioMdf(idNm))	setName(getS(idNm));
+	if(idDscr >= 0 && ioMdf(idDscr))setDescr(getS(idDscr));
 
     } catch(TError &err) {
 	mess_warning(err.cat.c_str(),"%s",err.mess.c_str());

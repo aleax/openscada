@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"5.13.3"
+#define MOD_VER		"6.0.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -563,15 +563,19 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
 	//Main attributes storing
 	if((attr.at().flgSelf()&Attr::IsInher) || !(attr.at().flgGlob()&Attr::IsUser)) {
 	    cEl.cfg("ID").setS(als[iA]);
-	    cEl.cfg("IO_VAL").setNoTransl(!attr.at().isTransl());
-	    cEl.cfg("IO_VAL").setS(attr.at().getS());
+	    if((attr.at().flgSelf()&Attr::IsInher) && (attr.at().flgSelf()&(Attr::CfgConst|Attr::CfgLnkIn|Attr::CfgLnkOut)) && attr.at().cfgVal().size())
+		cEl.cfg("IO_VAL").setS("");	//!!!! Do not save the original value of the inherited and linked attributes
+	    else {
+		cEl.cfg("IO_VAL").setNoTransl(!attr.at().isTransl());
+		cEl.cfg("IO_VAL").setS(attr.at().getS());
+	    }
 	    cEl.cfg("SELF_FLG").setI(attr.at().flgSelf());
 	    cEl.cfg("CFG_TMPL").setS(attr.at().cfgTempl());
 	    cEl.cfg("CFG_VAL").setNoTransl(!attr.at().isTransl(true));
 	    cEl.cfg("CFG_VAL").setS(attr.at().cfgVal());
-	    SYS->db().at().dataSet(fullDB+"_io",nodePath()+tbl+"_io",cEl,false,true);
+	    SYS->db().at().dataSet(fullDB+"_io", nodePath()+tbl+"_io", cEl, false, true);
 	}
-	//User attributes store
+	//User attributes storing
 	else if(!ldGen) {
 	    cElu.cfg("ID").setS(als[iA]);
 	    cElu.cfg("IO_VAL").setNoTransl(!attr.at().isTransl());
@@ -586,7 +590,7 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
 	    cElu.cfg("CFG_TMPL").setS(attr.at().cfgTempl());
 	    cElu.cfg("CFG_VAL").setNoTransl(!attr.at().isTransl(true));
 	    cElu.cfg("CFG_VAL").setS(attr.at().cfgVal());
-	    SYS->db().at().dataSet(fullDB+"_uio",nodePath()+tbl+"_uio",cElu,false,true);
+	    SYS->db().at().dataSet(fullDB+"_uio",nodePath()+tbl+"_uio", cElu, false, true);
 	}
     }
 

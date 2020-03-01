@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.ModBus file: modbus_daq.h
 /***************************************************************************
- *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -43,7 +43,7 @@ using namespace OSCADA;
 #define DAQ_NAME	"ModBus"
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"2.7.1"
+#define DAQ_MVER	"2.7.2"
 #define DAQ_AUTHORS	_("Roman Savochenko")
 #define DAQ_DESCR	_("Provides implementation of the client ModBus service. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported.")
 #define DAQ_LICENSE	"GPL2"

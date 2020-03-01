@@ -639,3 +639,9 @@ void TController::cntrCmdProc( XMLNode *opt )
     }
     else TCntrNode::cntrCmdProc(opt);
 }
+
+bool TController::cfgChange( TCfg &co, const TVariant &pc )
+{
+    if(co.getS() != pc.getS()) modif();
+    return true;
+}

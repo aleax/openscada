@@ -103,6 +103,13 @@ bool ModMArch::cfgChange( TCfg &co, const TVariant &pc )
 void ModMArch::start( )
 {
     if(!startStat()) {
+	//Open/create the archive directory
+	DIR *IdDir = opendir(addr().c_str());
+	if(IdDir == NULL && mkdir(addr().c_str(),SYS->permCrtFiles(true)))
+	    throw err_sys(_("Cannot create the archive directory '%s'."), addr().c_str());
+	closedir(IdDir);
+
+	//Checking the archiver folders for duplicates
 	string dbl = "";
 	MtxAlloc res(mod->enRes(), true);
 	const char *fLock = "fsArchLock";
@@ -281,11 +288,8 @@ void ModMArch::checkArchivator( bool now )
 {
     if(now || time(NULL) > mLstCheck + checkTm()*60) {
 	DIR *IdDir = opendir(addr().c_str());
-	if(IdDir == NULL) {
-	    if(mkdir(addr().c_str(),SYS->permCrtFiles(true)))
-		throw err_sys(_("Can not create the directory '%s'."), addr().c_str());
-	    IdDir = opendir(addr().c_str());
-	}
+	if(IdDir == NULL) throw err_sys(_("The archive directory '%s' is not present."), addr().c_str());
+
 	//Clean scan flag
 	ResAlloc res(mRes, false);
 	for(unsigned iF = 0; iF < files.size(); iF++) files[iF]->scan = false;

@@ -1495,7 +1495,7 @@ Version: 1.2.0','Библиотека элементов электрическ�
 Автор: Роман Савоченко <roman@oscada.org>, Максим Лисенко (2010)
 Версія: 1.2.0','wlb_ElectroEls','');
 CREATE TABLE 'wlb_ElectroEls_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '0' ,"CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','name','','One-way key','Ключ однополосный','Ключ однополосний',32,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','name','','One-way key (deprecated)','Ключ однополосный (устарелое)','Ключ однополосний (застаріле)',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','dscr','','One-way key, according to GOST 2.755-87
 Author: Maxim Lysenko
 Version: 1.0.0','Ключ однополосный, по ГОСТ 2.755-87
@@ -1547,7 +1547,7 @@ INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','p4x','','70','','',8,'',''
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','p4y','','105','','',8,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','c1','','#000000','','',8,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','s1','','1','','',0,'','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','name','','One-way key, open','Ключ однополосный, разомкн.','Ключ однополосний, роз''єдн.',32,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','name','','One-way key, open (deprecated)','Ключ однополосный, разомкн. (устарелое)','Ключ однополосний, роз''єдн. (застаріле)',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','dscr','','One-way key, normally open, according to GOST 2.755-87
 Author: Maxim Lysenko
 Version: 1.0.0','Ключ однополосный, нормально разомкнутый, по ГОСТ 2.755-87
@@ -1598,7 +1598,7 @@ INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','p4x','','116','','',8,
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','p4y','','86','','',8,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','c1','','#000000','','',0,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','s1','','1','','',0,'','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','name','','Key-protection','Ключ-предохр.','Ключ-запобіжник',32,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','name','','Key-protection (deprecated)','Ключ-предохр. (устарелое)','Ключ-запобіжник (застаріле)',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','dscr','','Key-protection
 Author: Maxim Lysenko
 Version: 1.0.0','Ключ-предохранитель
@@ -1650,7 +1650,7 @@ INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','p4x','','60','','',8,'',''
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','p4y','','105','','',8,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','c1','','#000000','','',8,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','s1','','1','','',0,'','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','name','','Key-protection, open','Ключ-предохр., разомкн.','Ключ-запобіжн., роз''єдн.',32,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','name','','Key-protection, open (deprecated)','Ключ-предохр., разомкн. (устарелое)','Ключ-запобіжн., роз''єдн. (застаріле)',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','geomW','','150','','',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','geomH','','150','','',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','lineClr','','','','',32,'','','','','','');
@@ -1693,7 +1693,7 @@ INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','p4x','','116','','',8,
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','p4y','','99','','',8,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','c1','','#000000','','',0,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','s1','','1','','',0,'','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','name','','One-way key, auto.','Ключ однополосный, авт.','Ключ однополосний, авт.',32,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','name','','One-way key, auto. (deprecated)','Ключ однополосный, авт. (устарелое)','Ключ однополосний, авт. (застаріле)',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','dscr','','One-way key, automatic, according to GOST 2.755-87
 Author: Maxim Lysenko
 Version: 1.0.0','Ключ однополосный, автоматический, по ГОСТ 2.755-87
@@ -1757,7 +1757,7 @@ INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','p8x','','70','','',8,'',''
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','p8y','','105','','',8,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','c1','','#000000','','',8,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','s1','','1','','',0,'','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','name','','One-way key, auto, open','Ключ однополосный, авт., разомкн.','Ключ однополосний, авт., раз''єднан.',32,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','name','','One-way key, auto, open (deprecated)','Ключ однополосный, авт., разомкн. (устарелое)','Ключ однополосний, авт., раз''єднан. (застаріле)',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','dscr','','One-way key, automatic, open, according to GOST 2.755-87
 Author: Maxim Lysenko
 Version: 1.0.0','Ключ однополосный, автоматический, разомкнутый, по ГОСТ 2.755-87
@@ -1820,8 +1820,8 @@ INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','p8x','','119','','',0,
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','p8y','','89','','',0,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','c1','','#000000','','',0,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','s1','','1','','',0,'','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','name','','Two-way key, auto.','Ключ двухполосный, авт.','Ключ двополосний, авт.',32,'','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','dscr','','Еwo-way key, automatic, according to GOST 2.755-87
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','name','','Two-way key, auto. (deprecated)','Ключ двухполосный, авт. (устарелое)','Ключ двополосний, авт. (застаріле)',32,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','dscr','','Two-way key, automatic, according to GOST 2.755-87
 Author: Maxim Lysenko
 Version: 1.0.0','Ключ двухполосный, автоматический, по ГОСТ 2.755-87
 Автор: Максим Лысенко
@@ -1928,8 +1928,8 @@ INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','p18x','','220','','',8,'',
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','p18y','','85','','',8,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','c1','','#000000','','',8,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','s1','','1','','',0,'','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','name','','Two-way key, auto., open','Ключ двухполосный, авт., разомкн.','Ключ двополосний, авт., раз''єднан.',32,'','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','dscr','','Еwo-way key, automatic, open, according to GOST 2.755-87
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','name','','Two-way key, auto., open (deprecated)','Ключ двухполосный, авт., разомкн. (устарелое)','Ключ двополосний, авт., раз''єднан. (застаріле)',32,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','dscr','','Two-way key, automatic, open, according to GOST 2.755-87
 Author: Maxim Lysenko
 Version: 1.0.0','Ключ двухполосный, автоматический, разомкнутый, по ГОСТ 2.755-87
 Автор: Максим Лысенко
@@ -2034,7 +2034,7 @@ INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','p17y','','58','','',0,
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','p18x','','250','','',0,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','p18y','','70','','',0,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','s1','','1','','',0,'','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','name','','Switch with neutral positions, open','Переключ. с нейтральным полож., разомкнут','Перемик. з нейтральним полож., роз''єдн.',32,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','name','','Switch with neutral positions, open (deprecated)','Переключ. с нейтральным полож., разомкнут (устарелое)','Перемик. з нейтральним полож., роз''єдн. (застаріле)',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','dscr','','Switch with neutral central position, open
 Author: Maxim Lysenko
 Version: 1.0.0','Переключатель с нейтральным центральным положением, разомкнут
@@ -2096,7 +2096,7 @@ INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','p4x','','70','','',8,'',''
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','p4y','','85','','',8,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','c1','','','','',8,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','s1','','1','','',0,'','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','name','','Switch with neutral positions.','Переключ. с нейтральным полож.','Перемик. з нейтральним полож.',32,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','name','','Switch with neutral positions (deprecated)','Переключ. с нейтральным полож. (устарелое)','Перемик. з нейтральним полож. (застаріле)',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','geomW','','150','','',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','geomH','','150','','',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','lineClr','','','','',32,'','','','','','');
@@ -2150,7 +2150,7 @@ INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','p4x','','24','','',8,'
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','p4y','','76','','',8,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','c1','','#808080','','',0,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','s1','','1','','',0,'','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','name','','Key-protection 2','Ключ-предохр. 2','Ключ-запобіжн. 2',32,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','name','','Key-protection 2 (deprecated)','Ключ-предохр. 2 (устарелое)','Ключ-запобіжн. 2 (застаріле)',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','dscr','','Key-protection 2, according to GOST 2.755-87
 Author: Maxim Lysenko
 Version: 1.0.0','Ключ-предохранитель 2, по ГОСТ 2.755-87
@@ -2206,7 +2206,7 @@ INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','p6x','','75','','',8,'',''
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','p6y','','105','','',8,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','c1','','#000000','','',8,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','s1','','1','','',0,'','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','name','','Key-protection 2, open','Ключ-предохр. 2, разомкн.','Ключ-запобіжн. 2, роз''єдн.',32,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','name','','Key-protection 2, open (deprecated)','Ключ-предохр. 2, разомкн. (устарелое)','Ключ-запобіжн. 2, роз''єдн. (застаріле)',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','dscr','','Key-protection 2, open, according to GOST 2.755-87
 Author: Maxim Lysenko
 Version: 1.0.0','Ключ-предохранитель, разомкнутый, по ГОСТ 2.755-87
@@ -2261,7 +2261,7 @@ INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','p8x','','125','','',0,
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','p8y','','90','','',0,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','c1','','#000000','','',0,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','s1','','1','','',0,'','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','name','','One-way key, circle','Ключ однополосный, круг','Ключ однополосний, коло',32,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','name','','One-way key, circle (deprecated)','Ключ однополосный, круг (устарелое)','Ключ однополосний, коло (застаріле)',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','dscr','','One-way key, circle, according to GOST 2.755-87
 Author: Maxim Lysenko
 Version: 1.0.0','Ключ однополосный, круг, по ГОСТ 2.755-87
@@ -2306,7 +2306,7 @@ INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','p4x','','70','','',8,'','',''
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','p4y','','105','','',8,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','c1','','#000000','','',0,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','s1','','1','','',0,'','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','name','','One-way key, circle, open','Ключ однополосный, круг, разомкн.','Ключ однополосний, коло, роз''єдн.',32,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','name','','One-way key, circle, open (deprecated)','Ключ однополосный, круг, разомкн. (устарелое)','Ключ однополосний, коло, роз''єдн. (застаріле)',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','dscr','','One-way key, circle, open, according to GOST 2.755-87
 Author: Maxim Lysenko
 Version: 1.0.0','Ключ однополосный, круг, разомкн., по ГОСТ 2.755-87
@@ -2351,7 +2351,7 @@ INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','p4x','','116','','',8,'',
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','p4y','','86','','',8,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','c1','','#000000','','',0,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','s1','','1','','',0,'','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','name','','Key-protection, circle','Ключ-предохр., круг','Ключ-запобіжн., коло',32,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','name','','Key-protection, circle (deprecated)','Ключ-предохр., круг (устарелое)','Ключ-запобіжн., коло (застаріле)',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','dscr','','Key-protection, circle
 Author: Maxim Lysenko
 Version: 1.0.0','Ключ-предохранитель, круг
@@ -2396,7 +2396,7 @@ INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','p4x','','60','','',8,'','',''
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','p4y','','105','','',8,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','c1','','#000000','','',0,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','s1','','1','','',0,'','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','name','','Key-protection, circle, open.','Ключ-предохр., круг, разомкн.','Ключ-запобіжн., коло, роз''єдн.',32,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','name','','Key-protection, circle, open. (deprecated)','Ключ-предохр., круг, разомкн. (устарелое)','Ключ-запобіжн., коло, роз''єдн. (застаріле)',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','geomW','','150','','',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','geomH','','150','','',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','lineClr','','','','',32,'','','','','','');
@@ -2434,7 +2434,7 @@ INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','p4x','','116','','',8,'',
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','p4y','','99','','',8,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','c1','','#000000','','',0,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','s1','','1','','',0,'','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','name','','One-way key, auto, circle','Ключ однополосный, авт., круг','Ключ однополосний, авт., коло',32,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','name','','One-way key, auto, circle (deprecated)','Ключ однополосный, авт., круг (устарелое)','Ключ однополосний, авт., коло (застаріле)',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','dscr','','One-way key, automatic, circle, according to GOST 2.755-87
 Author: Maxim Lysenko
 Version: 1.0.0','Ключ однополосный, автоматический, круг, по ГОСТ 2.755-87
@@ -2491,7 +2491,7 @@ INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','p8x','','70','','',0,'','',''
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','p8y','','105','','',0,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','c1','','#000000','','',0,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','s1','','1','','',0,'','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','name','','One-way key, auto, circle, open.','Ключ однополосный, авт., круг, разомкн.','Ключ однополосний, авт., коло, роз''єдн.',32,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','name','','One-way key, auto, circle, open. (deprecated)','Ключ однополосный, авт., круг, разомкн. (устарелое)','Ключ однополосний, авт., коло, роз''єдн. (застаріле)',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','dscr','','One-way key, automatic, circle, open, according to GOST 2.755-87
 Author: Maxim Lysenko
 Version: 1.0.0','Ключ однополосный, автоматический, круг, разомкнутый, по ГОСТ 2.755-87
@@ -2548,7 +2548,7 @@ INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','p8x','','119','','',0,'',
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','p8y','','89','','',0,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','c1','','#000000','','',0,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','s1','','1','','',0,'','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_h','name','','Switch','Выключатель','Вимикач',32,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_h','name','','Switch (deprecated)','Выключатель (устарелое)','Вимикач (застаріле)',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_h','dscr','','Switch
 Author: Maxim Lysenko
 Version: 1.0.0','Выключатель
@@ -2623,7 +2623,7 @@ line:(79.214|50):(71|50):::::
 fill:(31|15):(39.214|21.428):(39.214|78.571):(31|85)::
 fill:(51|30):(59.214|36.429):(59.214|63.571):(51|70)::
 ','','',32,'','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_lhor','name','','El. Connection hor.','Эл. соединение, гор.','Ел. з''єднання, гор.',32,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_lhor','name','','Electric horizontal connector','Электрическое горизонтальное соединение','Електричне горизонтальне з''єднання',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_lhor','dscr','','Conductive connection, line or tire, horizontal, according to GOST 2.723-68
 Author: Maxim Lysenko
 Version: 1.0.0','Токопроводящая связь, линия или шина, горизонтальная, по ГОСТ 2.723-68
@@ -2639,7 +2639,7 @@ line:(100|45):(100|55):::::
 line:(100|55):(0|55):::::
 line:(0|55):(0|45):::::
 fill:(0|45):(100|45):(100|55):(0|55)::','','',32,'','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_lvert','name','','El. Connection vert.','Эл. соединение, верт.','Ел. з''єднання, верт.',32,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_lvert','name','','Electric vertical connector','Электрическое вертикальное соединение','Електричне вертикальне з''єднання',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_lvert','dscr','','Conductive connection, line or tire, vertical, according to GOST 2.723-68
 Author: Maxim Lysenko
 Version: 1.0.0','Токопроводящая связь, линия или шина, вертикальная, по ГОСТ 2.723-68
@@ -3061,7 +3061,7 @@ line:(50|70.312):(32.5|84.375):::::
 line:(50|47.5):(50|70.312):::::
 line:(66.875|84.375):(50|70.312):::::
 ','','',32,'','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('trTrianglStarH','name','','Tr: triangle in star, hor.','Тр.: треуг. в звезда, гор.','Тр.: трикутник у зірку, гор.',32,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('trTrianglStarH','name','','Tr: triangle in star, horizontal','Тр.: треуг. в звезда, горизонтально','Тр.: трикутник у зірку, горизонтально',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('trTrianglStarH','dscr','','Transformer three-phase, triangle in star, horizontal
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','Трансформатор трёхфазный, треугольник в звезду, горизонтальный

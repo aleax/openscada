@@ -54,14 +54,14 @@ void TValue::detElem( TElem *el ) { vlElemDet(el); }
 
 void TValue::addFld( TElem *el, unsigned id_val )
 {
-    int i_off = lCfg;
-    for(unsigned i_e = 0; i_e < elem.size(); i_e++)
-	if(elem[i_e]->elName() == el->elName()) break;
-	else i_off += elem[i_e]->fldSize();
+    int iOff = lCfg;
+    for(unsigned iE = 0; iE < elem.size(); iE++)
+	if(elem[iE]->elName() == el->elName()) break;
+	else iOff += elem[iE]->fldSize();
 
     TVal *vl = vlNew();
     vl->setFld(el->fldAt(id_val));
-    chldAdd(mVl, vl, i_off+id_val);
+    chldAdd(mVl, vl, iOff+id_val);
 }
 
 void TValue::delFld( TElem *el, unsigned id_val )
@@ -114,21 +114,21 @@ void TValue::vlElemAtt( TElem *ValEl )
 
 void TValue::vlElemDet( TElem *ValEl )
 {
-    for(unsigned i_e = 0; i_e < elem.size(); i_e++)
-	if(elem[i_e] == ValEl) {
-	    for(unsigned iElem = 0; iElem < elem[i_e]->fldSize(); iElem++)
-		delFld(elem[i_e], iElem);
-	    elem[i_e]->valDet(this);
-	    elem.erase(elem.begin()+i_e);
+    for(unsigned iE = 0; iE < elem.size(); iE++)
+	if(elem[iE] == ValEl) {
+	    for(unsigned iElem = 0; iElem < elem[iE]->fldSize(); iElem++)
+		delFld(elem[iE], iElem);
+	    elem[iE]->valDet(this);
+	    elem.erase(elem.begin()+iE);
 	    return;
 	}
 }
 
 TElem &TValue::vlElem( const string &name )
 {
-    for(unsigned i_e = 0; i_e < elem.size(); i_e++)
-	if(elem[i_e]->elName() == name)
-	    return *elem[i_e];
+    for(unsigned iE = 0; iE < elem.size(); iE++)
+	if(elem[iE]->elName() == name)
+	    return *elem[iE];
     throw err_sys(_("Element '%s' is missing!"), name.c_str());
 }
 
@@ -377,6 +377,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 TVal::TVal( ) : mCfg(false), mReqFlg(false), mResB1(false), mResB2(false), mTime(0)
 {
     src.fld = NULL;
+    modifClr();
 }
 
 TVal::TVal( TFld &fld ) : mCfg(false), mTime(0)
@@ -390,6 +391,7 @@ TVal::TVal( TFld &fld ) : mCfg(false), mTime(0)
 TVal::TVal( TCfg &cfg ) : mCfg(false), mTime(0)
 {
     src.fld = NULL;
+    modifClr();
 
     setCfg(cfg);
 }
@@ -416,7 +418,7 @@ void TVal::setFld( TFld &fld )
 	    case TFld::Object:	delete val.o;	break;
 	    default: break;
 	}
-    if(!mCfg && src.fld && src.fld->flg()&TFld::SelfFld) delete src.fld;
+    if(!mCfg && src.fld && (src.fld->flg()&TFld::SelfFld)) delete src.fld;
 
     //Chek for self field for dynamic elements
     if(fld.flg()&TFld::SelfFld) {

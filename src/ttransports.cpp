@@ -117,7 +117,8 @@ void TTransportS::load_( )
 	    for(int fld_cnt = 0; SYS->db().at().dataSeek(itLs[iIt]+"."+subId()+"_in",nodePath()+subId()+"_in",fld_cnt++,c_el,false,&full); ) {
 		id   = c_el.cfg("ID").getS();
 		type = c_el.cfg("MODULE").getS();
-		if(modPresent(type) && !at(type).at().inPresent(id))
+		if(!modPresent(type))	continue;
+		if(!at(type).at().inPresent(id))
 		    at(type).at().inAdd(id,(itLs[iIt]==SYS->workDB())?"*.*":itLs[iIt]);
 		at(type).at().inAt(id).at().load(&c_el);
 		itReg[type+"."+id] = true;
@@ -153,7 +154,8 @@ void TTransportS::load_( )
 	    for(int fld_cnt = 0; SYS->db().at().dataSeek(itLs[iIt]+"."+subId()+"_out",nodePath()+subId()+"_out",fld_cnt++,c_el,false,&full); ) {
 		id = c_el.cfg("ID").getS();
 		type = c_el.cfg("MODULE").getS();
-		if(modPresent(type) && !at(type).at().outPresent(id))
+		if(!modPresent(type))	continue;
+		if(!at(type).at().outPresent(id))
 		    at(type).at().outAdd(id,(itLs[iIt]==SYS->workDB())?"*.*":itLs[iIt]);
 		at(type).at().outAt(id).at().load(&c_el);
 		itReg[type+"."+id] = true;

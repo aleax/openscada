@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tsys.h
 /***************************************************************************
- *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -192,6 +192,7 @@ class TSYS : public TCntrNode
 	int	taskInvPhs( )	{ return mTaskInvPhs; }
 	bool	saveAtExit( )	{ return mSaveAtExit; }
 	int	savePeriod( )	{ return mSavePeriod; }
+	bool	modifCalc( )	{ return mModifCalc; }
 
 	void	setWorkDB( const string &wdb )	{ mWorkDB = wdb; modifG(); }
 	void	setSelDB( const string &vl )	{ mSelDB = vl; }
@@ -200,6 +201,7 @@ class TSYS : public TCntrNode
 	void	setTaskInvPhs( int vl );
 	void	setSaveAtExit( bool vl )	{ mSaveAtExit = vl; modif(); }
 	void	setSavePeriod( int vl )		{ mSavePeriod = vmax(0,vl); modif(); }
+	void	setModifCalc( bool vl )		{ mModifCalc = vl; modif(); }
 
 	bool	chkSelDB( const string& wDB, bool isStrong = false );
 
@@ -428,6 +430,7 @@ class TSYS : public TCntrNode
 	int	mTaskInvPhs;	// Number of phases of the task invoking
 	bool	mSaveAtExit;	// Save at exit
 	int	mSavePeriod;	// Save period (s) for periodic system saving to DB
+	bool	mModifCalc;	// Set modification for the calculated objects
 
 	bool	isLoaded;
 
