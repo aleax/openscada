@@ -1,7 +1,7 @@
 
 //OpenSCADA file: telem.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -42,7 +42,7 @@ TElem &TElem::operator=( const TElem &src )
 {
     fldClear();
 
-    for(int iEl = 0; iEl < src.fldSize(); iEl++)
+    for(unsigned iEl = 0; iEl < src.fldSize(); iEl++)
 	fldAdd(new TFld(src.fldAt(iEl)));
 
     return *this;

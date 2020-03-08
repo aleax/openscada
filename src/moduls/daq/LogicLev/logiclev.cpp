@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Logical level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.1.3"
+#define MOD_VER		"2.1.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the pure logical level of the DAQ parameters.")
 #define LICENSE		"GPL2"
@@ -399,14 +399,12 @@ void TMdPrm::enable( )
 	    }
 	}
 	else if(isStd() && !tmpl->func()) {
-	    bool to_make = false;
 	    //unsigned fId = 0;
 	    string prm = cfg("PRM").getS();
 	    if(!tmpl->func() && prm.size()) {
 		tmpl->setFunc(&SYS->daq().at().tmplLibAt(TSYS::strSepParse(prm,0,'.')).at().
 					       at(TSYS::strSepParse(prm,1,'.')).at().func().at());
 		tmpl->setVfName(id()+"_tmplprm");
-		to_make = true;
 	    }
 	    // Init attrubutes
 	    if(tmpl->func()) {

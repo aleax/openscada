@@ -61,7 +61,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"3.4.0"
+#define MOD_VER		"3.4.1"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -299,7 +299,7 @@ void TSocketIn::start( )
 	aRes.unlock();
 
 	// Try for all addresses
-	for(int iA = 0; iA < addrs.size(); iA++) {
+	for(unsigned iA = 0; iA < addrs.size(); iA++) {
 	    try {
 		if(type == SOCK_TCP) {
 		    if((sockFd=socket((((sockaddr*)&addrs[iA])->sa_family==AF_INET6)?PF_INET6:PF_INET,SOCK_STREAM,0)) == -1)
@@ -532,7 +532,7 @@ bool TSocketIn::cfgChange( TCfg &co, const TVariant &pc )
 	if(s_type == S_NM_TCP) {
 	    type = SOCK_TCP;
 	    mMode = (s_type=TSYS::strParse(co.getS(),3,":",&off)).size() ? s2i(s_type) : 1;
-	    addon = (off < co.getS().size()) ? co.getS().substr(off) : "";
+	    addon = (off < (int)co.getS().size()) ? co.getS().substr(off) : "";
 	}
 	else if(s_type == S_NM_UDP)	type = SOCK_UDP;
 	else if(s_type == S_NM_UNIX) {
@@ -543,7 +543,7 @@ bool TSocketIn::cfgChange( TCfg &co, const TVariant &pc )
 	else {
 	    type = SOCK_TCP;
 	    mMode = (s_type=TSYS::strParse(co.getS(),2,":",&off)).size() ? s2i(s_type) : 1;
-	    addon = (off < co.getS().size()) ? co.getS().substr(off) : "";
+	    addon = (off < (int)co.getS().size()) ? co.getS().substr(off) : "";
 	}
     }
 
@@ -747,7 +747,7 @@ void *TSocketIn::ClTask( void *s_inf )
 
 	    unsigned poolPrt = 0;
 	    if((actPrts=s.s->prtInit(prot_in,s.sock,s.sender)))
-		for(int iP = 0; iP < prot_in.size(); iP++)
+		for(unsigned iP = 0; iP < prot_in.size(); iP++)
 		    if(!prot_in[iP].freeStat() && (poolPrt=prot_in[iP].at().waitReqTm()))
 			break;
 	    if(poolPrt) { tv.tv_sec = poolPrt/1000; tv.tv_usec = (poolPrt%1000)*1000; }
@@ -832,7 +832,7 @@ void *TSocketIn::ClTask( void *s_inf )
     }
 
     //Close protocol on broken connection
-    for(int iP = 0; iP < prot_in.size(); iP++) {
+    for(unsigned iP = 0; iP < prot_in.size(); iP++) {
 	if(prot_in[iP].freeStat())	continue;
 	try {
 	    string n_pr = prot_in[iP].at().name();
@@ -857,13 +857,13 @@ int TSocketIn::prtInit( vector< AutoHD<TProtocolIn> > &prot_in, int sock, const 
     string prts = protocols(), prt, subPrt;
     int iActP = 0;
     for(int off = 0, iP = 0; (prt=TSYS::strParse(prts,0,";",&off)).size(); iP++) {
-	if(iP < prot_in.size() && !prot_in[iP].freeStat()) { iActP++; continue; }
+	if(iP < (int)prot_in.size() && !prot_in[iP].freeStat()) { iActP++; continue; }
 	try {
 	    AutoHD<TProtocol> proto = SYS->protocol().at().modAt(TSYS::strParse(prt,0,"."));
 	    subPrt = TSYS::strParse(prt, 1, ".");
 	    string n_pr = id() + i2s(sock) + (subPrt.size()?"#"+subPrt:"");
 	    if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, this, sender+"\n"+i2s(sock));
-	    if(iP < prot_in.size()) prot_in[iP] = proto.at().at(n_pr);
+	    if(iP < (int)prot_in.size()) prot_in[iP] = proto.at().at(n_pr);
 	    else prot_in.push_back(proto.at().at(n_pr));
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("The new input protocol's object '%s' is created!"), n_pr.c_str());
 	    iActP++;
@@ -886,7 +886,7 @@ int TSocketIn::messPut( int sock, string &request, string &answer, const string 
     int iActP = 0;
     string n_pr, tAnsw;
 
-    for(int iP = 0; iP < prot_in.size(); iP++, answer += tAnsw, tAnsw = "") {
+    for(unsigned iP = 0; iP < prot_in.size(); iP++, answer += tAnsw, tAnsw = "") {
 	if(prot_in[iP].freeStat())	continue;
 	AutoHD<TProtocol> proto;
 	try {
@@ -1211,7 +1211,7 @@ void TSocketOut::start( int itmCon )
 	    aRes.unlock();
 
 	    // Try for all addresses
-	    for(int iA = 0; iA < addrs.size(); iA++) {
+	    for(unsigned iA = 0; iA < addrs.size(); iA++) {
 		try {
 		    //Create socket
 		    if(type == SOCK_TCP) {

@@ -1394,7 +1394,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 	    int lVal = s2i(opt1), off = 0;
 	    if(!lVal) sout = in;
 	    else {
-		for(int oL = 0, cL = 0; off < in.size() && oL < lVal; oL++)
+		for(int oL = 0, cL = 0; off < (int)in.size() && oL < lVal; oL++)
 		    off += (cL=Mess->getUTF8(in,off)) ? cL : 1;
 		sout = in.substr(0, off);
 	    }

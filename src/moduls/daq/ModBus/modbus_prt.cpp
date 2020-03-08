@@ -580,8 +580,8 @@ retry:
 //*************************************************
 Node::Node( const string &iid, const string &idb, TElem *el ) :
     TFunction("ModBusNode_"+iid), TConfig(el), data(NULL), isDAQTmpl(false),
-    mId(cfg("ID")), mName(cfg("NAME")), mDscr(cfg("DESCR")), mPer(cfg("DT_PER").getRd()), mAEn(cfg("EN").getBd()), mTimeStamp(cfg("TIMESTAMP").getId()),
-    mEn(false), mDB(idb), prcSt(false), endRun(false), cntReq(0)
+    mId(cfg("ID")), mName(cfg("NAME")), mDscr(cfg("DESCR")), mPer(cfg("DT_PER").getRd()), mAEn(cfg("EN").getBd()), mEn(false),
+    mTimeStamp(cfg("TIMESTAMP").getId()), mDB(idb), prcSt(false), endRun(false), cntReq(0)
 {
     mId = iid;
 

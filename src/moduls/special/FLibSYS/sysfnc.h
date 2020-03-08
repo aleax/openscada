@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.FLibSYS file: sysfnc.h
 /***************************************************************************
- *   Copyright (C) 2005-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -555,7 +555,7 @@ class CRC : public TFunction
 
 	uint64_t reflect( uint64_t crc, int wdth ) {
 	    uint64_t rez = 0;
-	    for(unsigned i = 0; i < wdth; i++)
+	    for(int i = 0; i < wdth; i++)
 		rez |= ((crc>>i)&1) << (wdth-i-1);
 	    return rez;
 	}

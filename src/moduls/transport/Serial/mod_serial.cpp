@@ -55,7 +55,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.4.1"
+#define MOD_VER		"2.4.2"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov (2016)")
 #define DESCRIPTION	_("Provides transport based on the serial interfaces.\
  It is used for data exchanging via the serial interfaces of the type RS232, RS485, GSM and similar.")
@@ -590,12 +590,12 @@ void *TTrIn::Task( void *tr_in )
 	string prts = tr->protocols(), prt, subPrt, tAnsw;
 	for(int off = 0, iP = 0; (prt=TSYS::strParse(prts,0,";",&off)).size(); iP++, answ += tAnsw, tAnsw = "") {
 	    try {
-		if(iP >= prot_in.size() || prot_in[iP].freeStat()) {
+		if(iP >= (int)prot_in.size() || prot_in[iP].freeStat()) {
 		    AutoHD<TProtocol> proto = SYS->protocol().at().modAt(TSYS::strParse(prt,0,"."));
 		    subPrt = TSYS::strParse(prt, 1, ".");
 		    string n_pr = tr->id() + i2s(tr->fd) + (subPrt.size()?"#"+subPrt:"");
 		    if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, tr, "\n"+i2s(tr->fd));
-		    if(iP < prot_in.size()) prot_in[iP] = proto.at().at(n_pr);
+		    if(iP < (int)prot_in.size()) prot_in[iP] = proto.at().at(n_pr);
 		    else prot_in.push_back(proto.at().at(n_pr));
 		}
 
@@ -669,7 +669,7 @@ void *TTrIn::Task( void *tr_in )
     }
 
     //Close protocol
-    for(int iP = 0; iP < prot_in.size(); iP++) {
+    for(unsigned iP = 0; iP < prot_in.size(); iP++) {
 	if(prot_in[iP].freeStat())	continue;
 	try {
 	    string n_pr = prot_in[iP].at().name();

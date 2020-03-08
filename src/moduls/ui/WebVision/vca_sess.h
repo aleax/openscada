@@ -1,9 +1,9 @@
 
 //OpenSCADA module UI.WebVision file: vca_sess.h
 /***************************************************************************
- *   Copyright (C) 2007-2008 by Yashina Kseniya (ksu@oscada.org)	   *
- *		   2007-2012 by Lysenko Maxim (mlisenko@oscada.org)	   *
- *		   2007-2019 by Roman Savochenko (rom_as@oscada.org)	   *
+ *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>	   *
+ *		   2007-2012 by Lysenko Maxim, <mlisenko@oscada.org>	   *
+ *		   2007-2008 by Yashina Kseniya, <ksu@oscada.org>	   *
  *									   *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -191,8 +191,8 @@ class VCAElFigure : public VCAObj
 	void dashDot( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3, Point el_p4, Point el_p5, Point el_p6, int  clr_el, double el_width, int type, int style  );
 	void dashDotFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3, Point el_p4, Point el_p5, Point el_p6, int  clr_el, int clr_el_line, double el_width, double el_border_width, int type, double wdt, double wdt_1, double xScale, double yScale  );
 	void paintFill( gdImagePtr im, Point pnt, InundationItem &in_item );
-	Point unscaleUnrotate( Point point, double xScale, double yScale, bool flag_scale, bool flag_rotate );
-	Point scaleRotate( Point point, double xScale, double yScale, bool flag_scale, bool flag_rotate );
+	Point unscaleUnrotate( Point point, double xScale, double yScale, bool flag_scale = true, bool flag_rotate = true, bool flag_mirror = true );
+	Point scaleRotate( Point point, double xScale, double yScale, bool flag_scale = true, bool flag_rotate = true, bool flag_mirror = true );
 	int drawElF( SSess &ses, double xSc, double ySc, Point clickPnt );
 	//Attributes
 	double	width,		//Widget geometry

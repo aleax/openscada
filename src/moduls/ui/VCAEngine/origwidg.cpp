@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: origwidg.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1625,9 +1625,10 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
     //Process instructions
     if(xcur->childGet("<?dp",0,true)) {
 	if(!s2i(xcur->attr("docAppend")))
-	    for(unsigned i_t = 0; i_t < xcur->childSize(); )
+	    for(unsigned i_t = 0; i_t < xcur->childSize(); ) {
 		if(xcur->childGet(i_t)->name().compare(0,4,"<?dp") != 0) xcur->childDel(i_t);
 		else i_t++;
+	    }
 	//Call procedures
 	for(int i_t = 0; i_t < (int)xcur->childSize(); i_t++) {
 	    XMLNode *curPrc = xcur->childGet(i_t);

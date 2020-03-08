@@ -128,7 +128,7 @@ void ModVArch::start( )
 	    write(hd, "1", 1);
 	    vector<string> ls;
 	    mod->valList(ls);
-	    for(int iL = 0; iL < ls.size() && dbl.empty(); iL++) {
+	    for(unsigned iL = 0; iL < ls.size() && dbl.empty(); iL++) {
 		AutoHD<TVArchivator> vAt = mod->valAt(ls[iL]);
 		if(vAt.at().id() == id() || !vAt.at().startStat())	continue;
 		int hd1 = open((vAt.at().addr()+"/"+fLock).c_str(), O_RDONLY);
@@ -152,7 +152,7 @@ void ModVArch::start( )
 	    // Search for the info table
 	    vector<string> ls;
 	    SQLite.at().list(ls);
-	    for(int iL = 0; iL < ls.size() && infoTbl.empty(); iL++)
+	    for(unsigned iL = 0; iL < ls.size() && infoTbl.empty(); iL++)
 		if(SQLite.at().at(ls[iL]).at().addr() == addr()+"/info.db")
 		    infoTbl = "SQLite."+ls[iL]+"."+TSYS::strParse(mod->filesDB(),2,".");
 	    if(infoTbl.empty()) {

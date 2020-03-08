@@ -1545,7 +1545,7 @@ bool SessPage::cntrCmdGeneric( XMLNode *opt )
 //************************************************
 SessWdg::SessWdg( const string &iid, const string &iparent, Session *isess ) :
     Widget(iid,iparent), TValFunc(iid+"_wdg",NULL), tmCalc(0), tmCalcMax(0),
-    mProc(false), inLnkGet(true), mToEn(false), mMdfClc(0), mCalcClk(isess->calcClk()), mCalcRes(true), mSess(isess)
+    mProc(false), inLnkGet(true), mToEn(false), mCalcClk(isess->calcClk()), mMdfClc(0), mCalcRes(true), mSess(isess)
 {
     modifClr();
 

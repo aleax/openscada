@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: vcaFuncs.h
 /***************************************************************************
- *   Copyright (C) 2009-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2009-2014,2020 by Roman Savochenko, <roman@oscada.org>  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -136,9 +136,10 @@ class attrList : public TFunction
 		AutoHD<Widget> nd = nodePrev()->nodeAt(val->getS(1));
 		nd.at().attrList(ls);
 		if(val->getB(2))
-		    for(unsigned iA = 0; iA < ls.size(); )
+		    for(unsigned iA = 0; iA < ls.size(); ) {
 			if(nd.at().attrAt(ls[iA]).at().flgGlob()&Attr::IsUser) ls.erase(ls.begin()+iA);
 			else iA++;
+		    }
 	    } catch(TError err) { }
 
 	    for(unsigned iA = 0; iA < ls.size(); iA++) sls += ls[iA]+"\n";

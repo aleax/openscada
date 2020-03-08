@@ -265,7 +265,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val, const 
 
 		    //   Prebuild the current arc.
 		    if(elTp == ShT_Arc)
-			CtrlMotionPos_4 = getArcStartEnd(pnts[p[0]], pnts[p[1]], pnts[p[2]], pnts[p[3]], pnts[p[4]]);
+			CtrlMotionPos_4 = getArcStartEnd(w, pnts[p[0]], pnts[p[1]], pnts[p[2]], pnts[p[3]], pnts[p[4]]);
 
 		    //   Building the path of the line and adding it to container
 		    shapeItems.push_back(ShapeItem(newPath,newPath,p[0],p[1],p[2],p[3],p[4],CtrlMotionPos_4,
@@ -421,7 +421,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val, const 
 					    (shapeItems[inundation_fig_num[p]].type == ShT_Arc && shapeItems[j].type == ShT_Bezier)) && inundation_fig_num[p] != j)
 					inundation_fig_num[p] = j;
 				}
-				if(flag_push_back) inundation_fig_num.push_back(j);
+			    if(flag_push_back) inundation_fig_num.push_back(j);
 			}
 		    QPainterPath temp_path = createInundationPath(inundation_fig_num, pnts, w);
 		    inundation_fig_num = inundationSort(temp_path, inundation_fig_num, w);
@@ -481,9 +481,9 @@ void ShapeElFigure::shapeSave( WdgView *w )
     AttrValS stAttrs;
 
     //Building attributes for all el_figures and fills for el_figures
-    for(int i_s = 0; i_s < shapeItems.size(); i_s++) {
+    for(int iS = 0; iS < shapeItems.size(); iS++) {
 	int nPnts = 0;
-	switch(shapeItems[i_s].type) {
+	switch(shapeItems[iS].type) {
 	    case ShT_Line:   elList += "line:"; nPnts = 2;	break;
 	    case ShT_Arc:    elList += "arc:"; nPnts = 5;	break;
 	    case ShT_Bezier: elList += "bezier:"; nPnts = 4;	break;
@@ -495,11 +495,11 @@ void ShapeElFigure::shapeSave( WdgView *w )
 	for(int iP = 0; iP < nPnts; iP++) {
 	    short tP = 0;
 	    switch(iP) {
-		case 0: tP = shapeItems[i_s].n1;	break;
-		case 1: tP = shapeItems[i_s].n2;	break;
-		case 2: tP = shapeItems[i_s].n3;	break;
-		case 3: tP = shapeItems[i_s].n4;	break;
-		case 4: tP = shapeItems[i_s].n5;	break;
+		case 0: tP = shapeItems[iS].n1;	break;
+		case 1: tP = shapeItems[iS].n2;	break;
+		case 2: tP = shapeItems[iS].n3;	break;
+		case 3: tP = shapeItems[iS].n4;	break;
+		case 4: tP = shapeItems[iS].n5;	break;
 	    }
 	    if(tP > 0) elList += i2s(tP);
 	    else if(tP <= SpI_StatIts) elList += "(" + r2s(rRnd(pnts[tP].x(),POS_PREC_DIG)) + "|" + r2s(rRnd(pnts[tP].y(),POS_PREC_DIG)) +")";
@@ -507,35 +507,35 @@ void ShapeElFigure::shapeSave( WdgView *w )
 	}
 
 	// Line width
-	if(shapeItems[i_s].width <= SpI_StatIts && (int)rRnd(widths[shapeItems[i_s].width]) != (int)rRnd(widths[SpI_DefLine]))
-	    elList += i2s(rRnd(widths[shapeItems[i_s].width]));
-	else if(shapeItems[i_s].width > 0) elList += "w" + i2s(shapeItems[i_s].width);
+	if(shapeItems[iS].width <= SpI_StatIts && (int)rRnd(widths[shapeItems[iS].width]) != (int)rRnd(widths[SpI_DefLine]))
+	    elList += i2s(rRnd(widths[shapeItems[iS].width]));
+	else if(shapeItems[iS].width > 0) elList += "w" + i2s(shapeItems[iS].width);
 	elList += ":";
 
 	// Line color
-	if(shapeItems[i_s].lineColor <= SpI_StatIts && colors[shapeItems[i_s].lineColor].rgba() != colors[SpI_DefLine].rgba())
-	    elList += colors[shapeItems[i_s].lineColor].name().toStdString() +
-		((colors[shapeItems[i_s].lineColor].alpha()<255)?("-"+i2s(colors[shapeItems[i_s].lineColor].alpha())):string(""));
-	else if(shapeItems[i_s].lineColor > 0) elList += "c" + i2s(shapeItems[i_s].lineColor);
+	if(shapeItems[iS].lineColor <= SpI_StatIts && colors[shapeItems[iS].lineColor].rgba() != colors[SpI_DefLine].rgba())
+	    elList += colors[shapeItems[iS].lineColor].name().toStdString() +
+		((colors[shapeItems[iS].lineColor].alpha()<255)?("-"+i2s(colors[shapeItems[iS].lineColor].alpha())):string(""));
+	else if(shapeItems[iS].lineColor > 0) elList += "c" + i2s(shapeItems[iS].lineColor);
 	elList += ":";
 
 	// Border width
-	if(shapeItems[i_s].borderWidth <= SpI_StatIts && (int)rRnd(widths[shapeItems[i_s].borderWidth]) != (int)rRnd(widths[SpI_DefBord]))
-	    elList += i2s((int)rRnd(widths[shapeItems[i_s].borderWidth]));
-	else if(shapeItems[i_s].borderWidth > 0) elList += "w" + i2s(shapeItems[i_s].borderWidth);
+	if(shapeItems[iS].borderWidth <= SpI_StatIts && (int)rRnd(widths[shapeItems[iS].borderWidth]) != (int)rRnd(widths[SpI_DefBord]))
+	    elList += i2s((int)rRnd(widths[shapeItems[iS].borderWidth]));
+	else if(shapeItems[iS].borderWidth > 0) elList += "w" + i2s(shapeItems[iS].borderWidth);
 	elList += ":";
 
 	// Border color
-	if(shapeItems[i_s].borderColor <= SpI_StatIts && colors[shapeItems[i_s].borderColor].rgba() != colors[SpI_DefLine].rgba())
-	    elList += colors[shapeItems[i_s].borderColor].name().toStdString() +
-		((colors[shapeItems[i_s].borderColor].alpha()<255)?("-"+i2s(colors[shapeItems[i_s].borderColor].alpha())):string(""));
-	else if(shapeItems[i_s].borderColor > 0) elList += "c" + i2s(shapeItems[i_s].borderColor);
+	if(shapeItems[iS].borderColor <= SpI_StatIts && colors[shapeItems[iS].borderColor].rgba() != colors[SpI_DefLine].rgba())
+	    elList += colors[shapeItems[iS].borderColor].name().toStdString() +
+		((colors[shapeItems[iS].borderColor].alpha()<255)?("-"+i2s(colors[shapeItems[iS].borderColor].alpha())):string(""));
+	else if(shapeItems[iS].borderColor > 0) elList += "c" + i2s(shapeItems[iS].borderColor);
 	elList += ":";
 
 	// Line style
-	if(shapeItems[i_s].style <= SpI_StatIts && styles[shapeItems[i_s].style] != styles[SpI_DefLine])
-	    elList += i2s(styles[shapeItems[i_s].style]-1);
-	else if(shapeItems[i_s].style > 0) elList += "s" + i2s(shapeItems[i_s].style);
+	if(shapeItems[iS].style <= SpI_StatIts && styles[shapeItems[iS].style] != styles[SpI_DefLine])
+	    elList += i2s(styles[shapeItems[iS].style]-1);
+	else if(shapeItems[iS].style > 0) elList += "s" + i2s(shapeItems[iS].style);
 	elList += "\n";
     }
 
@@ -671,9 +671,8 @@ void ShapeElFigure::shapeSave( WdgView *w )
 	    if(wdt_prev != wdt_next)
 		chCtx.childAdd("attr")->setAttr("id", "w"+i2s(pi->first))->setAttr("prev", r2s(wdt_prev,POS_PREC_DIG))->setText(r2s(wdt_next,POS_PREC_DIG));
 	}
-	else
-	    chCtx.childAdd("attr")->setAttr("id", "w"+i2s(pi->first))->setAttr("prev", "0")->setText(r2s(wdt_next,POS_PREC_DIG));
-	    stAttrs.push_back(std::make_pair("w"+i2s(pi->first),r2s(rRnd(pi->second,POS_PREC_DIG))));
+	else chCtx.childAdd("attr")->setAttr("id", "w"+i2s(pi->first))->setAttr("prev", "0")->setText(r2s(wdt_next,POS_PREC_DIG));
+	stAttrs.push_back(std::make_pair("w"+i2s(pi->first),r2s(rRnd(pi->second,POS_PREC_DIG))));
     }
     elFD->shapeWidths_temp = elFD->shapeWidths;
 
@@ -743,50 +742,49 @@ void ShapeElFigure::shapeSave( WdgView *w )
     devW->setSelect(true, false);
 }
 
-//!!!! Continue for the code cleun up from here !!!!
 void ShapeElFigure::initShapeItems( const QPointF &pos, QVector<int> &items_array, WdgView *w )
 {
     ElFigDt *elFD = (ElFigDt*)w->shpData;
     QVector<ShapeItem> &shapeItems = elFD->shapeItems;
     PntMap &pnts = elFD->shapePnts;
-    for(int i = 0; i < items_array.size(); i++)
-	if(shapeItems[items_array[i]].type == 2)
-	{
-	    //> Detecting if the start or end point of this arc matches the start or end point of the other arc and, if so, add this point to the map again
-	    for(int j = 0; j < shapeItems.size(); j++)
-	    {
-		if((shapeItems[j].n1 == shapeItems[items_array[i]].n1 || shapeItems[j].n1 == shapeItems[items_array[i]].n2) &&
-			items_array[i] != j && shapeItems[j].type == ShT_Arc)
+    for(int i = 0; i < items_array.size(); i++) {
+	//Detecting if the start or end point of this arc matches the start or end point of the other arc and, if so, add this point to the map again
+	//!!!! Commented to allow the arcs binding, for images like to the sector diagrams
+	/*if(shapeItems[items_array[i]].type == ShT_Arc)
+	    for(int j = 0; j < shapeItems.size(); j++) {
+		if(items_array[i] == j || shapeItems[j].type != ShT_Arc)	continue;
+		if(shapeItems[j].n1 == shapeItems[items_array[i]].n1 || shapeItems[j].n1 == shapeItems[items_array[i]].n2)
 		    shapeItems[j].n1 = elFD->appendPoint(pnts[shapeItems[j].n1], true);
-		if((shapeItems[j].n2 == shapeItems[items_array[i]].n1 || shapeItems[j].n2 == shapeItems[items_array[i]].n2) &&
-			items_array[i] != j && shapeItems[j].type == ShT_Arc)
+		if(shapeItems[j].n2 == shapeItems[items_array[i]].n2 || shapeItems[j].n2 == shapeItems[items_array[i]].n1)
 		    shapeItems[j].n2 = elFD->appendPoint(pnts[shapeItems[j].n2], true);
-	    }
-	    elFD->cntMoveItemTo	= 1;
-	    elFD->cntShp	= 1;
-	    elFD->fCtrlMove	= false;
-	    elFD->fCtrl		= true;
-	    elFD->offset		= QPointF( );
-	    elFD->index		= items_array[i];
-	    elFD->itInMotion	= &shapeItems[elFD->index];
-	    moveItemTo(pos, w);
-	}
-    for( int i=0; i < items_array.size(); i++ )
-	if( shapeItems[items_array[i]].type != 2 )
-	{
-	    elFD->cntMoveItemTo = 1;
-	    elFD->cntShp     = 1;
-	    elFD->fCtrlMove   = false;
-	    elFD->fCtrl	= true;
-	    elFD->offset = QPointF();
-	    elFD->index	    = items_array[i];
-	    elFD->itInMotion = &shapeItems[elFD->index];
-	    moveItemTo(pos, w);
-	}
+	    }*/
+	elFD->cntMoveItemTo = 1;
+	elFD->cntShp	= 1;
+	elFD->fCtrlMove	= false;
+	elFD->fCtrl	= true;
+	elFD->offset	= QPointF();
+	elFD->index	= items_array[i];
+	elFD->itInMotion = &shapeItems[elFD->index];
+	moveItemTo(pos, w);
+    }
 }
 
-QPointF ShapeElFigure::getArcStartEnd( QPointF pBeg, QPointF pEnd, QPointF pCntr1, QPointF pCntr2, QPointF pCntr3 )
+//!!!! Continue for the code cleun up from here !!!!
+QPointF ShapeElFigure::getArcStartEnd( WdgView *w, QPointF pBeg, QPointF pEnd, QPointF pCntr1, QPointF pCntr2, QPointF pCntr3 )
 {
+    DevelWdgView *devW = qobject_cast<DevelWdgView*>(w);
+    ElFigDt	*elFD = (ElFigDt*)w->shpData;
+
+    //Mirroring
+    if(elFD->mirror && (!devW || !devW->edit())) {
+	QPointF tPnt = scaleRotate(pBeg, w, false, false);
+	pBeg	= scaleRotate(pEnd, w, false, false);
+	pEnd	= tPnt;
+	pCntr1	= scaleRotate(pCntr1, w, false, false);
+	pCntr2	= scaleRotate(pCntr2, w, false, false);
+	pCntr3	= scaleRotate(pCntr3, w, false, false);
+    }
+
     double a = length(pCntr3, pCntr1),
 	   //b = length(pCntr2, pCntr1),
 	   ang = angle(QLineF(pCntr1,pCntr3), QLineF(pCntr1,QPointF(pCntr1.x()+10,pCntr1.y())));
@@ -823,28 +821,32 @@ void ShapeElFigure::editEnter( DevelWdgView *w )
 
     w->mainWin()->elFigTool->setVisible(true);
 
-    //> Self-shape tools
+    //Self-shape tools
     connect(w->mainWin()->elFigTool, SIGNAL(actionTriggered(QAction*)), this, SLOT(toolAct(QAction*)));
-    //>> Init actions' address
-    for(int i_a = 0; i_a < w->mainWin()->elFigTool->actions().size(); i_a++)
-    {
-	w->mainWin()->elFigTool->actions().at(i_a)->setEnabled(true);
-	w->mainWin()->elFigTool->actions().at(i_a)->setProperty("wdgAddr", TSYS::addr2str(w).c_str());
+    // Init actions' address
+    for(int iA = 0; iA < w->mainWin()->elFigTool->actions().size(); iA++) {
+	w->mainWin()->elFigTool->actions().at(iA)->setEnabled(true);
+	w->mainWin()->elFigTool->actions().at(iA)->setProperty("wdgAddr", TSYS::addr2str(w).c_str());
     }
-    //> Main tools (copy)
+    //Main tools (copy)
     connect(w->mainWin()->visItToolBar, SIGNAL(actionTriggered(QAction*)), this, SLOT(toolAct(QAction*)));
     w->mainWin()->actVisItCopy->setProperty("wdgAddr", TSYS::addr2str(w).c_str());
     w->mainWin()->actVisItPaste->setProperty("wdgAddr", TSYS::addr2str(w).c_str());
     w->mainWin()->actVisItCut->setVisible(false);
     w->mainWin()->actVisItCopy->setEnabled(false);
     w->mainWin()->actVisItPaste->setEnabled(false);
-    //> Figures level tools
+    //Figures level tools
     connect(w->mainWin()->wdgToolView, SIGNAL(actionTriggered(QAction*)), this, SLOT(toolAct(QAction*)));
     w->mainWin()->actLevRise->setProperty("wdgAddr", TSYS::addr2str(w).c_str());
     w->mainWin()->actLevLower->setProperty("wdgAddr", TSYS::addr2str(w).c_str());
     w->mainWin()->actLevRise->setEnabled(false);
     w->mainWin()->actLevLower->setEnabled(false);
     status_hold = true;
+
+    //Complete reloading and repainting
+    w->load("");
+    paintImage(w);
+    w->repaint();
 }
 
 void ShapeElFigure::editExit( DevelWdgView *w )
@@ -853,11 +855,10 @@ void ShapeElFigure::editExit( DevelWdgView *w )
 
     disconnect(w->mainWin()->elFigTool, SIGNAL(actionTriggered(QAction*)), this, SLOT(toolAct(QAction*)));
     w->mainWin()->elFigTool->setVisible(false);
-    //> Clear action's address
-    for(int i_a = 0; i_a < w->mainWin()->elFigTool->actions().size(); i_a++)
-    {
-	w->mainWin()->elFigTool->actions().at(i_a)->setProperty("wdgAddr", "");
-	w->mainWin()->elFigTool->actions().at(i_a)->setEnabled(false);
+    //Clear action's address
+    for(int iA = 0; iA < w->mainWin()->elFigTool->actions().size(); iA++) {
+	w->mainWin()->elFigTool->actions().at(iA)->setProperty("wdgAddr", "");
+	w->mainWin()->elFigTool->actions().at(iA)->setEnabled(false);
     }
     w->mainWin()->actElFigLine->setChecked(false);
     w->mainWin()->actElFigArc->setChecked(false);
@@ -884,11 +885,15 @@ void ShapeElFigure::editExit( DevelWdgView *w )
     elFD->itInMotion = 0;
     elFD->cntShp = 0;
     elFD->idxArr.clear();
-    if(elFD->rectItems.size())
-    {
+    if(elFD->rectItems.size()) {
 	elFD->rectItems.clear();
 	paintImage(w);
     }
+
+    //Complete reloading and repainting
+    w->load("");
+    paintImage(w);
+    w->repaint();
 }
 
 void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
@@ -910,8 +915,8 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
 
 	QVector<ShapeItem> &shapeItems = elFD->shapeItems;
 	QVector<inundationItem> &inundItems = elFD->inundItems;
-	for(int i_a = 0; i_a < devW->mainWin()->elFigTool->actions().size(); i_a++)
-	    menu.addAction(devW->mainWin()->elFigTool->actions().at(i_a));
+	for(int iA = 0; iA < devW->mainWin()->elFigTool->actions().size(); iA++)
+	    menu.addAction(devW->mainWin()->elFigTool->actions().at(iA));
 	menu.addSeparator();
 	menu.addAction(devW->mainWin()->actVisItUnDo);
 	menu.addAction(devW->mainWin()->actVisItReDo);
@@ -1177,9 +1182,9 @@ void ShapeElFigure::toolAct( QAction *act )
     ImageMap &imgs	= elFD->shapeImages;
 
     if(act->objectName() == "cursor" || act->objectName() == "line" || act->objectName() == "arc" || act->objectName() == "besier")
-	for(int i_a = 0; i_a < w->mainWin()->elFigTool->actions().size(); i_a++)
-	    if(w->mainWin()->elFigTool->actions().at(i_a)->objectName() != "hold")
-		w->mainWin()->elFigTool->actions().at(i_a)->setChecked(false);
+	for(int iA = 0; iA < w->mainWin()->elFigTool->actions().size(); iA++)
+	    if(w->mainWin()->elFigTool->actions().at(iA)->objectName() != "hold")
+		w->mainWin()->elFigTool->actions().at(iA)->setChecked(false);
     bool fl_figure = false;
     if(act->objectName() == "line")		{ shapeType = 1; fl_figure = true; }
     else if(act->objectName() == "arc")		{ shapeType = 2; fl_figure = true; }
@@ -1228,8 +1233,8 @@ void ShapeElFigure::toolAct( QAction *act )
 	    if(copy_index[i_p] != -1)
 	    {
 		bool f_pr = false;
-		for(int i_s = 0; !f_pr && i_s < shapeItems.size(); i_s++)
-		    if(copy_index[i_p] == i_s)	f_pr = true;
+		for(int iS = 0; !f_pr && iS < shapeItems.size(); iS++)
+		    if(copy_index[i_p] == iS)	f_pr = true;
 		if(!f_pr) f_present = false;
 	    }
 	if(f_present)
@@ -2813,7 +2818,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, WdgView *w )
 		    CtrlMotionPos_2 = scaleRotate(pnts[elFD->itInMotion->n4], w);
 		}
 	    }
-	    if(flag_hold_arc || flag_arc_rect_3_4) {
+	    if((flag_hold_arc || flag_arc_rect_3_4) && elFD->idxArr.size()) {
 		if(arc_rect == 0) {
 		    EndMotionPos = scaleRotate(pnts[shapeItems[elFD->idxArr[0]].n1], w);
 		    CtrlMotionPos_1 = scaleRotate(pnts[elFD->itInMotion->n3], w);
@@ -2951,11 +2956,13 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, WdgView *w )
 	CtrlMotionPos_1 = unScaleRotate(CtrlMotionPos_1, w);
 	CtrlMotionPos_2 = unScaleRotate(CtrlMotionPos_2, w);
 	CtrlMotionPos_3 = unScaleRotate(CtrlMotionPos_3, w);
-	pnts[MotionNum_1] = StartMotionPos;
-	pnts[MotionNum_2] = EndMotionPos;
-	pnts[MotionNum_3] = CtrlMotionPos_1;
-	pnts[MotionNum_4] = CtrlMotionPos_2;
-	pnts[MotionNum_5] = CtrlMotionPos_3;
+	if(devW && devW->edit()) {
+	    pnts[MotionNum_1] = StartMotionPos;
+	    pnts[MotionNum_2] = EndMotionPos;
+	    pnts[MotionNum_3] = CtrlMotionPos_1;
+	    pnts[MotionNum_4] = CtrlMotionPos_2;
+	    pnts[MotionNum_5] = CtrlMotionPos_3;
+	}
     }
     //Building the bezier curve
     if(shapeType == ShT_Bezier) {
@@ -3015,9 +3022,10 @@ bool ShapeElFigure::holds( WdgView *w )
 			ellipse_draw_startPath == newPath && ellipse_draw_endPath == newPath )
 	    {
 		flag_equal = false;
-		for(int j = 0; j <= elFD->cntHolds; j++)
+		for(int j = 0; j <= elFD->cntHolds; j++) {
 		    if(elFD->idxArr[j] == i) flag_equal = 1;
-		    if(flag_equal == 0) { elFD->cntHolds++; elFD->idxArr[elFD->cntHolds] = i; }
+		}
+		if(flag_equal == 0) { elFD->cntHolds++; elFD->idxArr[elFD->cntHolds] = i; }
 	    }
 	num++;
     }
@@ -3089,7 +3097,7 @@ void ShapeElFigure::moveUpDown( WdgView *w )
 
 	    //> Circle contour gap
 	    if(newIt.type == ShT_Arc && !vrng(newIt.n2,-9,0) && newIt.n2 == newIt.n1)
-                newIt.n2 = elFD->appendPoint(pnts[newIt.n2], (newIt.n2<=-10));
+		newIt.n2 = elFD->appendPoint(pnts[newIt.n2], (newIt.n2<=-10));
 
 	    for(int i = 0; /*!status_hold &&*/ !flag_first_move && i < shapeItems.size(); i++)
 	    {
@@ -3357,34 +3365,27 @@ void ShapeElFigure::moveAll( const QPointF &pos, WdgView *w )
 	    Prev_pos_2 = scaleRotate(pnts[shapeItems[elFD->idxArr[0]].n2], w);
 	}
     }
-    if( inundItems.size() )
-    {
-	for( int i = 0; i < inundItems.size(); i++ )
-	    for(int j = 0; j < inundItems[i].n.size(); j++ )
-	    {
-		flag_break = false;
-		for(int k = 0; k < elFD->idxArr.size(); k++ )
-		    if( inundItems[i].n[j] == elFD->idxArr[k] )
-		    {
-			bool fl_buildPath = true;
-			if( !images[inundItems[i].brushImg].empty() )
-			{
-			    QImage img;
-			    string backimg = w->resGet(images[inundItems[i].brushImg]);
-			    img.loadFromData((const uchar*)backimg.data(), backimg.size());
-			    if( !img.isNull() ) fl_buildPath = false;
-			}
-			if( fl_buildPath )
-			{
-			    inundationPath = createInundationPath(inundItems[i].n, pnts, w);
-			    inundItems[i].path = inundationPath;
-			}
-			flag_break = true;
-			break;
+    for(int i = 0; i < inundItems.size(); i++)
+	for(int j = 0; j < inundItems[i].n.size(); j++) {
+	    flag_break = false;
+	    for(int k = 0; k < elFD->idxArr.size(); k++)
+		if(inundItems[i].n[j] == elFD->idxArr[k]) {
+		    bool fl_buildPath = true;
+		    if(!images[inundItems[i].brushImg].empty()) {
+			QImage img;
+			string backimg = w->resGet(images[inundItems[i].brushImg]);
+			img.loadFromData((const uchar*)backimg.data(), backimg.size());
+			if(!img.isNull()) fl_buildPath = false;
 		    }
-		    if( flag_break ) break;
-	    }
-    }
+		    if(fl_buildPath) {
+			inundationPath = createInundationPath(inundItems[i].n, pnts, w);
+			inundItems[i].path = inundationPath;
+		    }
+		    flag_break = true;
+		    break;
+		}
+	    if(flag_break) break;
+	}
 }
 
 void ShapeElFigure::removeFill( QVector<int> ind_array, int count, WdgView *w )
@@ -4008,23 +4009,27 @@ bool ShapeElFigure::inundation1_2( const QPointF &point, int number, WdgView *w 
     return false;
 }
 
-QPointF ShapeElFigure::scaleRotate( const QPointF &point, WdgView *w, int8_t toScale, int8_t toTrans )
+QPointF ShapeElFigure::scaleRotate( const QPointF &point, WdgView *w, int8_t toScale, int8_t toTrans, bool toMirror )
 {
+    DevelWdgView *devW = qobject_cast<DevelWdgView*>(w);
     ElFigDt *elFD = (ElFigDt*)w->shpData;
     QPointF rpnt = point;
 
-    if(toTrans > 0 || (toTrans < 0 && fTransl)) {
+    //Transformation
+    if(!devW || !devW->edit()) {
 	QPointF center = (toScale > 0 || (toScale < 0 && fTransl)) ?
 	    QPointF((w->sizeF().width())/(2*w->xScale(true)), (w->sizeF().height())/(2*w->yScale(true))).toPoint() :
 	    QPointF(w->sizeF().width()/2, w->sizeF().height()/2).toPoint();
-
 	rpnt = rpnt - center;
-	if(elFD->mirror) rpnt.setX(-rpnt.x());	//Mirror
-	rpnt = rotate(rpnt, elFD->orient);	//Rotate
+	// Mirror
+	if(elFD->mirror && toMirror)			rpnt.setX(-rpnt.x());
+	// Rotate
+	if(toTrans > 0 || (toTrans < 0 && fTransl))	rpnt = rotate(rpnt, elFD->orient);
 	rpnt = rpnt + center;
     }
+
     //Scale
-    if(toScale > 0 || (toScale < 0 && fTransl)) rpnt = QPointF(rpnt.x()*w->xScale(true), rpnt.y()*w->yScale(true));
+    if(toScale > 0 || (toScale < 0 && fTransl))		rpnt = QPointF(rpnt.x()*w->xScale(true), rpnt.y()*w->yScale(true));
 
     //Append remnant
     //!!!!: Disabled now for mostly prevent flaws between inundations.
@@ -4033,8 +4038,9 @@ QPointF ShapeElFigure::scaleRotate( const QPointF &point, WdgView *w, int8_t toS
     return rpnt;// + add;
 }
 
-QPointF ShapeElFigure::unScaleRotate( const QPointF &point, WdgView *w, int8_t toScale, int8_t toTrans )
+QPointF ShapeElFigure::unScaleRotate( const QPointF &point, WdgView *w, int8_t toScale, int8_t toTrans, bool toMirror )
 {
+    DevelWdgView *devW = qobject_cast<DevelWdgView*>(w);
     ElFigDt *elFD = (ElFigDt*)w->shpData;
 
     //Append remnant
@@ -4044,14 +4050,17 @@ QPointF ShapeElFigure::unScaleRotate( const QPointF &point, WdgView *w, int8_t t
 
     //Scale
     if(toScale > 0 || (toScale < 0 && fTransl)) rpnt = QPointF(rpnt.x()/w->xScale(true), rpnt.y()/w->yScale(true));
-    if(toTrans > 0 || (toTrans < 0 && fTransl)) {
+
+    //Transformation
+    if(!devW || !devW->edit()) {
 	QPointF center = (toScale > 0 || (toScale < 0 && fTransl)) ?
 	    QPointF((w->sizeF().width())/(2*w->xScale(true)), (w->sizeF().height())/(2*w->yScale(true))).toPoint() :
 	    QPointF(w->sizeF().width()/2, w->sizeF().height()/2).toPoint();
-
 	rpnt = rpnt - center;
-	rpnt = rotate(rpnt, 360-elFD->orient);	//Rotate
-	if(elFD->mirror) rpnt.setX(-rpnt.x());	//Mirror
+	// Rotate
+	if(toTrans > 0 || (toTrans < 0 && fTransl))	rpnt = rotate(rpnt, 360-elFD->orient);
+	// Mirror
+	if(elFD->mirror && toMirror)			rpnt.setX(-rpnt.x());
 	rpnt = rpnt + center;
     }
 
@@ -4094,7 +4103,7 @@ void ShapeElFigure::paintImage( WdgView *w )
 	img.loadFromData((const uchar*)backimg.data(), backimg.size());
 	if(shapeItems.size() == 0 || ((inundItems[i].path == newPath) && img.isNull())) continue;
 
-	//printf("TEST 10: %d: '%s'\n", i, w->id().c_str());
+	//printf("TEST 10: %d\n", i);
 
 	// Sorting the figures in each fill(inundation)
 	QVector<int> n;
@@ -4275,7 +4284,7 @@ void ShapeElFigure::paintImage( WdgView *w )
 		    if(im_x >= 0 && im_x < clr_img.width() && im_y >= 0 && im_y < clr_img.height() &&
 			clr_img.pixel(QPoint(im_x,im_y)) == qRgb(255,255,255))
 		    {
-			drw_pnt = unScaleRotate(QPoint(im_x,im_y), w, false, true);
+			drw_pnt = unScaleRotate(QPoint(im_x,im_y), w, false, true, false);
 			drw_pnt1 = QPoint((int)rRnd(drw_pnt.x()-xMin,POS_PREC_DIG,true), (int)rRnd(drw_pnt.y()-yMin,POS_PREC_DIG,true));
 			if(img.valid(drw_pnt1)) {
 			    rgb = img.pixel(drw_pnt1);
@@ -4286,7 +4295,7 @@ void ShapeElFigure::paintImage( WdgView *w )
 			    alpha_rez = (1-alpha_col) * (1-alpha);
 			    im_pen.setColor(QColor(color_r,color_g,color_b,rRnd(255*(1-alpha_rez),POS_PREC_DIG,true)));
 			    draw_pnt.setPen(im_pen);
-			    drw_pnt = scaleRotate(drw_pnt, w, false, true);
+			    drw_pnt = scaleRotate(drw_pnt, w, false, true, false);
 			    drw_pnt1 = QPoint((int)rRnd(drw_pnt.x(),POS_PREC_DIG,true), (int)rRnd(drw_pnt.y(),POS_PREC_DIG,true));
 			    draw_pnt.drawPoint(drw_pnt1);
 			}
@@ -6168,7 +6177,7 @@ void ElFigDt::properties( )
 		    pnts[shapeItems[index].n4].setX(p4_x->value()); pnts[shapeItems[index].n4].setY(p4_y->value());
 		    pnts[shapeItems[index].n5].setX(p5_x->value()); pnts[shapeItems[index].n5].setY(p5_y->value());
 		    //>> Calcylating t_start and t_end for the arc, using the start and end points(n1,n2)
-		    shapeItems[index].ctrlPos4 = elF->getArcStartEnd(pnts[shapeItems[index].n1], pnts[shapeItems[index].n2],
+		    shapeItems[index].ctrlPos4 = elF->getArcStartEnd(w, pnts[shapeItems[index].n1], pnts[shapeItems[index].n2],
 				pnts[shapeItems[index].n3], pnts[shapeItems[index].n4], pnts[shapeItems[index].n5]);
 		}
 		if(p1_c->isEnabled() &&

@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"4.4.2"
+#define MOD_VER		"4.5.0"
 #define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on the the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -481,7 +481,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 			    "200 OK", "", "<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/" MOD_ID "'/>", "", ses.lang);
 			mess_info(nodePath().c_str(), _("The session '%s' is closed."), sesnm.c_str());
 		    }
-		    else page = pgCreator(iprt, string("<div class='error'>")+_("You '%s' have no access to close sessions!")+"</div>\n",
+		    else page = pgCreator(iprt, string("<div class='error'>")+TSYS::strMess(_("You '%s' have no access to close sessions!"),user.c_str())+"</div>\n",
 			    "401 Unauthorized", "", "", "", ses.lang);
 		}
 		// Checking for the internal session presence
@@ -620,7 +620,7 @@ void TWEB::cntrCmdProc( XMLNode *opt )
     if(a_path == "/prm/st/ses" && ctrChkNode(opt)) {
 	vector<string> vSesLs, vSesObjs;
 	vcaSesList(vSesLs);
-	for(int iS = 0; iS < vSesLs.size(); iS++) {
+	for(unsigned iS = 0; iS < vSesLs.size(); iS++) {
 	    AutoHD<VCASess> ses = vcaSesAt(vSesLs[iS]);
 	    ses.at().objList(vSesObjs);
 	    opt->childAdd("el")->setText(TSYS::strMess(_("%s %s(%s):%s(%s): the last %s; cached pages %d and resources %d, %s; session objects %d."),

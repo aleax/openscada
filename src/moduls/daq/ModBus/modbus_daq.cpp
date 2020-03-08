@@ -991,7 +991,7 @@ TMdContr::SDataRec::SDataRec( int ioff, int v_rez ) : off(ioff), err(mod->dataRe
 //******************************************************
 //* TMdPrm                                             *
 //******************************************************
-TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) : TParamContr(name, tp_prm), pEl("w_attr"), acqErr(dataRes()), lCtx(NULL)
+TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) : TParamContr(name, tp_prm), acqErr(dataRes()), pEl("w_attr"), lCtx(NULL)
 {
     acqErr.setVal("");
     if(isLogic()) lCtx = new TLogCtx(this, name+"_ModBusPrm");

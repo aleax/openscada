@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.5.0"
+#define MOD_VER		"2.5.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2 are supported.")
@@ -534,7 +534,7 @@ void *TSocketIn::ClTask( void *s_inf )
     //Select mode
     struct timeval tv;
     fd_set rd_fd;
-    int    cnt = 0;			//Requests counter
+    unsigned cnt = 0;			//Requests counter
     int    tm = s.s->connTm = time(NULL);	//Last connection time
     int    actPrts = 0;
 
@@ -546,7 +546,7 @@ void *TSocketIn::ClTask( void *s_inf )
 
 		unsigned poolPrt = 0;
 		if((actPrts=s.s->prtInit(prot_in,s.sock,s.sender)))
-		    for(int iP = 0; iP < prot_in.size(); iP++)
+		    for(unsigned iP = 0; iP < prot_in.size(); iP++)
 			if(!prot_in[iP].freeStat() && (poolPrt=prot_in[iP].at().waitReqTm()))
 			    break;
 		if(poolPrt) { tv.tv_sec = poolPrt/1000; tv.tv_usec = (poolPrt%1000)*1000; }
@@ -615,7 +615,7 @@ void *TSocketIn::ClTask( void *s_inf )
     BIO_free_all(s.bio);
 
     //Close protocol on broken connection
-    for(int iP = 0; iP < prot_in.size(); iP++) {
+    for(unsigned iP = 0; iP < prot_in.size(); iP++) {
 	if(prot_in[iP].freeStat())	continue;
 	try {
 	    string n_pr = prot_in[iP].at().name();
@@ -640,13 +640,13 @@ int TSocketIn::prtInit( vector< AutoHD<TProtocolIn> > &prot_in, int sock, const 
     string prts = protocols(), prt, subPrt;
     int iActP = 0;
     for(int off = 0, iP = 0; (prt=TSYS::strParse(prts,0,";",&off)).size(); iP++) {
-	if(iP < prot_in.size() && !prot_in[iP].freeStat()) { iActP++; continue; }
+	if(iP < (int)prot_in.size() && !prot_in[iP].freeStat()) { iActP++; continue; }
 	try {
 	    AutoHD<TProtocol> proto = SYS->protocol().at().modAt(TSYS::strParse(prt,0,"."));
 	    subPrt = TSYS::strParse(prt, 1, ".");
 	    string n_pr = id() + i2s(sock) + (subPrt.size()?"#"+subPrt:"");
 	    if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, this, sender+"\n"+i2s(sock));
-	    if(iP < prot_in.size()) prot_in[iP] = proto.at().at(n_pr);
+	    if(iP < (int)prot_in.size()) prot_in[iP] = proto.at().at(n_pr);
 	    else prot_in.push_back(proto.at().at(n_pr));
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("The new input protocol's object '%s' is created!"), n_pr.c_str());
 	} catch(TError &err) {
@@ -668,7 +668,7 @@ int TSocketIn::messPut( int sock, string &request, string &answer, string sender
     int iActP = 0;
     string n_pr, tAnsw;
 
-    for(int iP = 0; iP < prot_in.size(); iP++, answer += tAnsw, tAnsw = "") {
+    for(unsigned iP = 0; iP < prot_in.size(); iP++, answer += tAnsw, tAnsw = "") {
 	if(prot_in[iP].freeStat())	continue;
 	AutoHD<TProtocol> proto;
 	try {
@@ -964,7 +964,7 @@ void TSocketOut::start( int tmCon )
 	aRes.unlock();
 
 	// Try for all addresses
-	for(int iA = 0; iA < addrs.size(); iA++) {
+	for(unsigned iA = 0; iA < addrs.size(); iA++) {
 	    try {
 		if((sockFd=socket((((sockaddr*)&addrs[iA])->sa_family==AF_INET6)?PF_INET6:PF_INET,SOCK_STREAM,0)) == -1)
 		    throw TError(nodePath().c_str(), _("Error creating TCP socket: %s!"), strerror(errno));

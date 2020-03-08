@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.FLibSYS file: varchfnc.cpp
 /***************************************************************************
- *   Copyright (C) 2009-2017,2019 by Roman Savochenko, <rom_as@oscada.org> *
+ *   Copyright (C) 2009-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -161,6 +161,7 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 		case TVariant::Boolean:	tp = TFld::Boolean;	break;
 		case TVariant::Integer:	tp = TFld::Integer;	break;
 		case TVariant::Real:	tp = TFld::Real;	break;
+		default:	break;
 	    }
 	    TValBuf buf(tp, 10, arch().at().period(), true, true); buf.set(prms[0], (int64_t)prms[1].getI()*1000000+prms[2].getI());
 	    arch().at().setVals(buf, buf.begin(), buf.end(), (prms.size()>=4)?prms[3].getS():"");

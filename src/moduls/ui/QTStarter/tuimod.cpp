@@ -56,7 +56,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"MainThr"
-#define MOD_VER		"4.7.6"
+#define MOD_VER		"4.7.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -92,8 +92,8 @@ using namespace QTStarter;
 //*************************************************
 //* TUIMod                                        *
 //*************************************************
-TUIMod::TUIMod( string name ) : TUI(MOD_ID), mQtLookMdf(false), hideMode(false), mEndRun(false), mStartCom(false), mCloseToTray(false),
-    mStartMod(dataRes()), mFont(dataRes()), mStyle(dataRes()), mPalette(dataRes()), mStyleSheets(dataRes()), qtArgC(0), qtArgEnd(0), QtApp(NULL), splash(NULL)
+TUIMod::TUIMod( string name ) : TUI(MOD_ID), mQtLookMdf(false), QtApp(NULL), hideMode(false), mEndRun(false), mStartCom(false), mCloseToTray(false),
+    mStartMod(dataRes()), mStyle(dataRes()), mFont(dataRes()), mPalette(dataRes()), mStyleSheets(dataRes()), qtArgC(0), qtArgEnd(0), splash(NULL)
 {
     mod = this;
 
@@ -507,7 +507,7 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/prm/LF/stlLs" && ctrChkNode(opt)) {
 	QStringList sls = QStyleFactory::keys();
-	for(unsigned iL = 0; iL < sls.size(); iL++)
+	for(int iL = 0; iL < sls.size(); iL++)
 	    opt->childAdd("el")->setText(sls[iL].toStdString());
     }
     else if(a_path == "/prm/LF/plt") {
@@ -802,8 +802,8 @@ void StApp::updLookFeel( )
     if(mod->palette().size()) {
 	QPalette plt = palette();
 	string cGrp, cRl, tVl;
-	for(int off = 0, iGrp = 0; ((cGrp=TSYS::strLine(mod->palette(),0,&off)).size() || off < mod->palette().size()) && iGrp < 4; iGrp++)
-	    for(int off1 = 0, iRl = 0; ((cRl=TSYS::strParse(cGrp,0,",",&off1)).size() || off1 < cGrp.size()) && iRl < 20; iRl++) {
+	for(int off = 0, iGrp = 0; ((cGrp=TSYS::strLine(mod->palette(),0,&off)).size() || off < (int)mod->palette().size()) && iGrp < 4; iGrp++)
+	    for(int off1 = 0, iRl = 0; ((cRl=TSYS::strParse(cGrp,0,",",&off1)).size() || off1 < (int)cGrp.size()) && iRl < 20; iRl++) {
 		if(!(tVl=sTrm(cRl)).size())	continue;
 		plt.setColor((QPalette::ColorGroup)iGrp, (QPalette::ColorRole)iRl, tVl.c_str());
 	    }
@@ -1037,7 +1037,7 @@ StartDialog::StartDialog( ) : prjsLs(NULL), prjsBt(NULL)
     prjsLs = NULL;
     prjsBt = NULL;
     if(!SYS->prjCustMode()) {
-	bool oscd_datadir_wr = (access(oscd_datadir_full,X_OK|W_OK) == 0);
+	//bool oscd_datadir_wr = (access(oscd_datadir_full,X_OK|W_OK) == 0);
 
 	// Prepare the list widget for projects selection.
 	prjsLs = new QListWidget(this);

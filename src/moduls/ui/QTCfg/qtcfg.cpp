@@ -67,8 +67,8 @@ using namespace QTCFG;
 //*************************************************
 //* ConfApp                                       *
 //*************************************************
-ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
-    pgInfo("info"), genReqs("CntrReqs"), root(&pgInfo), copyBuf("0"), queSz(20), inHostReq(0), tblInit(false), pgDisplay(false), winClose(false)
+ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
+    pgInfo("info"), genReqs("CntrReqs"), root(&pgInfo), copyBuf("0"), queSz(20), inHostReq(0), tblInit(false), pgDisplay(false)
 {
     connect(this, SIGNAL(makeStarterMenu(QWidget*)), qApp, SLOT(makeStarterMenu(QWidget*)));
 

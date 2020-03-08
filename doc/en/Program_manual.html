@@ -523,10 +523,10 @@
 <p>While examining configuration pages of the modular subsystems there will be described general properties of all the modules. However, it should be noted that each module can provide both additional tabs and separate fields for the configuration of its own operation features for pages whose objects are inherited by the modules. Information on the features and additions of the modules can be found in <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules" title="Special:MyLanguage/Modules">separate documentation</a> for each of them.
 </p>
 <h3><span class="mw-headline" id="Subsystem_.22DB.22"><span class="mw-headline-number">4.1</span> <span id="CfgDB" title="#CfgDB">Subsystem "DB"</span></span></h3>
-<p>This subsystem is the modular one and contains a hierarchy of objects shown in Figure 1.4. To configure the subsystem the root page of the subsystem "DB" containing the tab "Subsystem" and the tab "Modules". The tab "Subsystem" (Fig.4.1a) contains currently only a configuration field for setting the tables lifetime, in seconds. The tab "Modules" (Fig.4.1b) is common for all subsystems and contains the list of modules in the subsystem "DB", available at the station.
+<p>This subsystem is the modular one and contains a hierarchy of objects shown in Figure 1.4. To configure the subsystem the root page of the subsystem "DB" containing the tab "Subsystem" and the tab "Modules". The tab "Subsystem" (Fig.4.1a) contains currently only a configuration field for setting the opened tables lifetime, in seconds. The tab "Modules" (Fig.4.1b) is common for all subsystems and contains the list of modules in the subsystem "DB", available at the station.
 </p><p>To modify the page's fields of this subsystem it may be required the super user's rights or the inclusion of your user to the "DB" group.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:679px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_db_subsys.png"><img class="thumbimage" height="407" src="files/QTCfg_subsys_db_subsys.png" width="677" /></a>  <div class="thumbcaption">Fig. 4.1a. The tab "Subsystem" of the root page of the subsystem "DB".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:682px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_db_subsys.png"><img class="thumbimage" height="408" src="files/QTCfg_subsys_db_subsys.png" width="680" /></a>  <div class="thumbcaption">Fig. 4.1a. The tab "Subsystem" of the root page of the subsystem "DB".</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:679px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_db_mod.png"><img class="thumbimage" height="407" src="files/QTCfg_subsys_db_mod.png" width="677" /></a>  <div class="thumbcaption">Fig. 4.1b. The tab "Modules" of the root page of the subsystem "DB".</div></div></div></div>
 <p>Each module of the subsystem "DB" provides a configuration page with tabs "DB" and "Module". The tab "DB" (Fig.4.1c) contains a list of database objects registered in the module and a sign of complete removal of database in execution of the deletion command. In the context menu of the database list, the user is given the opportunity to add, remove and switch to the desired database. The tab "Module" contains information about the module of the subsystem "DB" (Fig.4.1d):
 </p>
@@ -1502,7 +1502,7 @@ RdPrimCmdTr &lt;0|1&gt;       Enables the transmission of primary commands to th
 ========================= Subsystem "DB" options ========================
 ------ Parameters of the section '/sub_BD/' of the configuration file ------
 SYSStPref    &lt;0|1&gt;      Use the station ID in the common table (SYS).
-TblLifeTime  &lt;seconds&gt;  Tables lifetime (by default 600 seconds).
+TblLifeTime  &lt;seconds&gt;  Opened tables lifetime (by default 600 seconds).
 
 ======================= Subsystem "Security" options ====================
 
@@ -1738,5 +1738,5 @@ ChkPer     &lt;seconds&gt;    Period of the checking for new shared libraries(mo
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/en">Documents/Program_manual/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2666</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/en">Documents/Program_manual/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2667</td></tr></table></body>
 </html>

@@ -2063,11 +2063,14 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		if(!reg[ptr->a1].props().size())
 		    switch(reg[ptr->a1].vType(this)) {
 			case Reg::Bool: case Reg::Int: case Reg::Real:
-			    reg[ptr->rez] = getValR(val,reg[ptr->a1]) + getValR(val,reg[ptr->a2]);	break;
-			case Reg::String:
+			    reg[ptr->rez] = getValR(val,reg[ptr->a1]) + getValR(val,reg[ptr->a2]);
+			    break;
+			case Reg::String: {
 			    if(ptr->rez == ptr->a1 && reg[ptr->rez].type() == Reg::String)
 				reg[ptr->rez].val().s->append(getValS(val,reg[ptr->a2]));
-			    else reg[ptr->rez] = getValS(val,reg[ptr->a1]) + getValS(val,reg[ptr->a2]);	break;
+			    else reg[ptr->rez] = getValS(val,reg[ptr->a1]) + getValS(val,reg[ptr->a2]);
+			    break;
+			}
 			default:
 			    throw TError(nodePath().c_str(), _("Type %d, which is not supported by the 'Add' operation."), reg[ptr->a1].vType(this));
 		    }

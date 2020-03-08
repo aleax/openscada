@@ -1,0 +1,613 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Библиотеки/Элементы электрики - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../en/files/doc.css" rel="stylesheet" /></head>
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../en/files/Logo-big.png" /></a></div><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="ru">Библиотеки/Элементы электрики</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FElectrical+elements&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Electrical_elements" title="Libs/Electrical elements">Libs/Electrical elements</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_Electrical_elements.html" title="Libs/Electrical elements (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Libs_Electrical_elements.html" title="Бібліотеки/Елементи електрики (100% translated)">українська</a></div></div>
+<table class="wikitable">
+
+<tr>
+<th> Название </th>
+<th> Версия </th>
+<th> Лицензия </th>
+<th> Источник </th>
+<th> Языки </th>
+<th> Автор </th>
+<th> Описание
+</th></tr>
+
+<tr>
+<td> <a href="Libs_Electrical_elements.html" title="Special:MyLanguage/Libs/Electrical elements">Библиотека электрических элементов пользовательского интерфейса</a>
+</td>
+<td> 2.0 </td>
+<td> GPL </td>
+<td> vcaElectroEls.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaElectroEls.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:VcaElectroEls.db.gz" title="File:VcaElectroEls.db.gz">GZip</a>) &gt; VCA.wlb_ElectroEls </td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a><br />&nbsp;&nbsp;<font size="-2"><i>Максим Лысенко (2009)</i></font>
+</td>
+<td> Предоставляет библиотеку мнемонических элементов интерфейса пользователя электрических подстанций и станций генерации электрики.
+<ul><li> <b>Основано:</b> Июнь 2009</li>
+<li> <b>Изначально спонсировано:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Irkutsk_HES" title="Special:MyLanguage/Using/Irkutsk HES">Валерий Николаев</a></li>
+<li> <b>Спонсировано унификацию и усовершенствование:</b> ElProtect (Июнь 2017)</li>
+<li> <b>Изначально создано:</b> в <a class="external text" href="http://wiki.oscada.org/Using/GraphicElementsLibraries/ElectroElements" rel="nofollow noreferrer noopener" target="_blank">старой Wiki</a></li></ul>
+</td></tr></table>
+<p>Библиотека создаётся для предоставления мнемонических элементов пользовательского интерфейса и содержит элементы мнемосхем, которые часто востребованы при формировании пользовательского интерфейса электрических подстанций и станций генерации электрики. Строится библиотека на основе <a href="Modules/VCAEngine.html#ElFigure" title="Special:MyLanguage/Modules/VCAEngine">примитива "ElFigure"</a> и языка внутреннего программирования <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>.
+</p><p>Названия элементов и их параметров доступны на языках: Английский, Украинский и Российский. Их исходный код написан в языко(человеческий)-независимом режиме с вызовом функции перевода <i>tr()</i> и перевод этих сообщений также доступен Английским, Украинским и Российским.
+</p><p>Для подключения библиотеки к проекту станции OpenSCADA вы можете получить файл БД как:
+</p>
+<ul><li> такой что поставляется с готовым и соответствующим пакетом дистрибутива Linux вроде "openscada-libdb-vca", "openscada-LibDB.VCA";</li>
+<li> наиболее актуальный и непосредственно полученный из <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaElectroEls.sql" rel="nofollow noreferrer noopener" target="_blank">репозитория subversion</a>, преобразованный в файл БД SQLite путём:</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 15px">
+$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaElectroEls.sql
+$ sqlite3 -init vcaElectroEls.sql vcaElectroEls.db .exit
+</pre>
+<ul><li> загрузка <a class="external" href="http://oscada.org/wiki/File:VcaElectroEls.db.gz" title="File:VcaElectroEls.db.gz">прикреплённого тут</a>.</li></ul>
+<p>Этот загруженный файл Вы далее можете разместить в каталоге проекта станции и создать объект базы данных модуля БД "SQLite", зарегистрировав файл базы данных в конфигурации.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9F.D0.B0.D1.81.D1.81.D0.B8.D0.B2.D0.BD.D1.8B.D0.B5_.D1.8D.D0.BA.D1.80.D0.B0.D0.BD.D0.BD.D1.8B.D0.B5_.D1.8D.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.8B"><span class="tocnumber">1</span> <span class="toctext">Пассивные экранные элементы</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.90.D0.BA.D1.82.D0.B8.D0.B2.D0.BD.D1.8B.D0.B5_.D0.B8_.D0.B4.D0.B8.D0.BD.D0.B0.D0.BC.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.B8.D0.B5_.D1.8D.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.8B"><span class="tocnumber">2</span> <span class="toctext">Активные и динамические элементы</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#.D0.90.D0.BA.D1.82.D1.83.D0.B0.D0.BB.D1.8C.D0.BD.D1.8B.D0.B5_.D0.B0.D0.BA.D1.82.D0.B8.D0.B2.D0.BD.D1.8B.D0.B5_.D1.8D.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.8B"><span class="tocnumber">2.1</span> <span class="toctext">Актуальные активные элементы</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#.D0.A3.D1.81.D1.82.D0.B0.D1.80.D0.B5.D0.BB.D1.8B.D0.B5_.D0.B0.D0.BA.D1.82.D0.B8.D0.B2.D0.BD.D1.8B.D0.B5_.D1.8D.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.8B"><span class="tocnumber">2.2</span> <span class="toctext">Устарелые активные элементы</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#.D0.94.D0.BE.D0.BF.D0.BE.D0.BB.D0.BD.D0.B5.D0.BD.D0.B8.D0.B5_1:_.D0.9F.D0.BE.D0.B4.D1.81.D1.82.D1.80.D0.BE.D0.B9.D0.BA.D0.B0_.D0.B8_.D1.81.D0.BE.D0.B3.D0.BB.D0.B0.D1.81.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B5_.D1.8D.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D0.BE.D0.B2.2C_.D0.BF.D0.BE.D1.81.D1.82.D1.80.D0.BE.D0.B5.D0.BD.D0.B8.D0.B5_.D1.86.D0.B5.D0.BB.D0.BE.D1.81.D1.82.D0.BD.D1.8B.D1.85_.D1.8D.D0.BB.D0.B5.D0.BA.D1.82.D1.80.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.B8.D1.85_.D1.81.D1.85.D0.B5.D0.BC"><span class="tocnumber">3</span> <span class="toctext"><span>Дополнение 1: Подстройка и согласование элементов, построение целостных электрических схем</span></span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id=".D0.9F.D0.B0.D1.81.D1.81.D0.B8.D0.B2.D0.BD.D1.8B.D0.B5_.D1.8D.D0.BA.D1.80.D0.B0.D0.BD.D0.BD.D1.8B.D0.B5_.D1.8D.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.8B"><span class="mw-headline-number">1</span> Пассивные экранные элементы</span></h2>
+<p>Элементы на рисунке 1 служат для построения электрических сетей, сверху, и размещение пассивных статических элементов в или около проводов. По умолчанию, угол поворота установлен в 0° и выключено отражение.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:716px;"><a class="image" href="http://oscada.org/wiki/File:LibElectroEls_wires.png"><img class="thumbimage" height="408" src="../en/files/LibElectroEls_wires.png" width="714" /></a>  <div class="thumbcaption">Рис.1. Элементы электрических сетей.</div></div></div></div>
+<p>Элементы электрических сетей включают, слева направо и сверху вниз:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Название (идентификатор) </th>
+<th> Версия </th>
+<th> Лицензия </th>
+<th> Автор
+</th></tr>
+<tr>
+<td colspan="4"> <i>Первый ряд</i>
+</td></tr>
+<tr>
+<td> Электрическое горизонтальное соединение (El_lhor) <br /> Токопроводящая связь, линия или шина, горизонтальная, по ГОСТ 2.723-68 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Электрическое вертикальное соединение (El_lvert) <br /> Токопроводящая связь, линия или шина, вертикальная, по ГОСТ 2.723-68 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Распределительная шина (conBus) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Заземление (El_Zemlia) <br /> Заземление, по ГОСТ 2.721-74 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Три полосы (Sharp) <br /> Три полосы, обозначение трёхфазной линии электропередачи </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Двойная стрелка (arrowSharp) <br /> Двойная стрелка, обозначение выездного оборудования </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td colspan="4"> <i>Второй ряд</i>
+</td></tr>
+<tr>
+<td> Индуктивность (Induct) <br /> Индуктивность, по ГОСТ 2.723-68 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Реактор (reactor) <br /> Реактор, по ГОСТ 2.723-68 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Предохранитель (fuse1) <br />  </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Ограничитель напряжения (limU) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Нагрузка 1 (load1) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Нагрузка 2 (load2) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td colspan="4"> <i>Третий ряд</i>
+</td></tr>
+<tr>
+<td> Трансформатор (tr) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Трансформатор 1 (tr1) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Тр.: одна вторичная обмотка (trDuo) <br /> Трансформатор с одной вторичной обмоткой, по ГОСТ 2.723-68 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Тр.: звезда в треугольник (trStarTriangl) <br /> Трансформатор трёхфазный, звезда в треугольник </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Тр.: треугольник в звезда (trTrianglStar) <br /> Трансформатор трёхфазный, треугольник в звезду </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Тр.: треугольник в звезда, горизонтально (trTrianglStarH) <br /> Трансформатор трёхфазный, треугольник в звезду, горизонтальный </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Тр.: две вторичные обмотки (trTrio) <br /> Трансформатор с двумя вторичными обмотками, по ГОСТ 2.723-68 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td colspan="4"> <i>Четвёртый ряд</i>
+</td></tr>
+<tr>
+<td> Батарея (battery) <br /> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Преобр.: постоянный в постоянный (converterDC_DC) <br /> Преобразователь постоянного тока в постоянный ток другого уровня напряжения, по ГОСТ 2.723-68 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Преобр.: переменный в постоянный (converterAC_DC) <br /> Преобразователь переменного тока в постоянный, по ГОСТ 2.723-68 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Источник: переменный ток (srcAC) <br /> Источник переменного тока, по ГОСТ 2.723-68 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Окружность (El_Krug) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Треугольник (triangle) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p><b><u>Использование — разработка</u></b><br />
+Эти виджеты могут быть использованы разработчиком при создании мнемосхем электрических сетей. Путём поворота и отражения этих виджетов можно получить все необходимые комбинации. Путём масштабирования можно установить нужную соединения, где, для прямых участков, масштаб по оси "x" и "y" может быть отличным, определяя соответственно типовую ширину соединения на мнемосхеме и длину отдельного его участка. Для использования необходимо добавить выбранные виджеты на мнемосхему, системно подстроить геометрию и соответствующим образом визуально объединить элементы соединителями, больше смотрите в <a href="#Add1">Дополнении 1</a>. С целью систематизации и упрощения работы вы можете подготовить только первые элементы, а для других частей электрической сети использовать готовые копии этих уже подготовленных и размещённых элементов.
+</p><p><b><u>Использование — исполнение</u></b><br />
+В режиме исполнения эти элементы имеют такой-же вид как и в режиме разработки, поскольку они не являются динамическими.
+</p>
+<h2><span class="mw-headline" id=".D0.90.D0.BA.D1.82.D0.B8.D0.B2.D0.BD.D1.8B.D0.B5_.D0.B8_.D0.B4.D0.B8.D0.BD.D0.B0.D0.BC.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.B8.D0.B5_.D1.8D.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.8B"><span class="mw-headline-number">2</span> Активные и динамические элементы</span></h2>
+<p>Элементы секции используются для контроля и отображения состояний дискретных аппаратов, основанных на дискретных сигналах, которые предназначены для использования в электрических сетях.
+</p>
+<h3><span class="mw-headline" id=".D0.90.D0.BA.D1.82.D1.83.D0.B0.D0.BB.D1.8C.D0.BD.D1.8B.D0.B5_.D0.B0.D0.BA.D1.82.D0.B8.D0.B2.D0.BD.D1.8B.D0.B5_.D1.8D.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.8B"><span class="mw-headline-number">2.1</span> Актуальные активные элементы</span></h3>
+<p>Элементы на рисунке 2.2 на данное время актуальны для использования в качестве активных и динамических элементов электрических схем. Элементы в целом используют и репрезентуют структуру DAQ-шаблона <a href="../en/Libs_Main.html#digitBlockUnif" title="Special:MyLanguage/Libs/Main">дискретного блока</a> в различных визуальных вариантах.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:494px;"><a class="image" href="http://oscada.org/wiki/File:LibElectroEls_discrDevs.png"><img class="thumbimage" height="231" src="../en/files/LibElectroEls_discrDevs.png" width="492" /></a>  <div class="thumbcaption">Рис.2.2. Дискретные электрические устройства в режиме разработки и исполнения (сверху вниз).</div></div></div></div>
+<p>Элементы электрических сетей включают, слева направо:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Название (идентификатор) </th>
+<th> Версия </th>
+<th> Лицензия </th>
+<th> Автор
+</th></tr>
+<tr>
+<td> Ключ, унифицированный (keyUnif) <br /> Унифицированный простой ключ </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Переключатель, унифицированный (swUnif) <br /> Унифицированный простой переключатель </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Состояние общее, унифицированное (stGenUnif) <br /> Унифицированное общее состояние, обычно для контакторов </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Состояние области, унифицированное (stAreaUnif) <br /> Унифицированное общее состояние группы и области статических элементов, цветным штрих-боксом </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p><b><u>Использование — разработка</u></b><br />
+Эти виджеты могут быть использованы разработчиком при создании мнемосхем электрических сетей с отображением состояния и контролем дискретных устройств. Путём поворота и отражения этих виджетов можно получить все необходимые комбинации. Путём масштабирования можно установить необходимые геометрические размеры, относительно общих размеров электрической сети. Для использования необходимо добавить выбранные виджеты на мнемосхему, системно подстроить геометрию и соответствующим образом визуально объединить элементы соединителями, больше смотрите в <a href="#Add1">Дополнении 1</a>, и подключить к параметру источника. С целью систематизации и упрощения работы вы можете подготовить только первые элементы, а для других частей электрической сети использовать готовые копии этих уже подготовленных и размещённых элементов.
+</p><p><b><u>Использование — исполнение</u></b><br />
+В режиме исполнения, в основном поле элементов, отображается символический образ аппарата с динамическим сигналом дискретного статуса, который соответствует значениям дискретных сигналов параметра и конфигурации состояний в атрибуте <b>digStts</b>. При аппаратных ошибках и недостоверности данных он отображается не сплошным.
+</p><p>В активном режиме элемента, при нажатии левой клавишей мыши, в области панелей появится <a href="Libs_Main_graphical_elements.html#ElCadr" title="Special:MyLanguage/Libs/Main graphical elements">панель управления параметром</a>, а выбор данного виджета будет отображаться мигающим цветом структуры. Команды дублируются в контекстном меню, которое появляется при нажатии правой клавиши мыши в области виджета.
+</p><p><b><u>Свойства связывания и конфигурации</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Идентификатор </th>
+<th> Имя </th>
+<th> Тип </th>
+<th> Конфигурация </th>
+<th> Конфигурационный шаблон </th>
+<th> Описание
+</th></tr>
+<tr>
+<td> code </td>
+<td> Параметр: шифр </td>
+<td> Строка </td>
+<td> Входная связь </td>
+<td> Parameter|NAME </td>
+<td> Краткое наименование параметра, которое вставляется в действия оператора-пользователя.
+</td></tr>
+<tr>
+<td> DESCR </td>
+<td> Описание </td>
+<td> Строка </td>
+<td> Входная связь </td>
+<td> Parameter|DESCR </td>
+<td> Описание или развёрнутое название параметра, которое вставляется в действия оператора-пользователя.
+</td></tr>
+<tr>
+<td> st_open </td>
+<td> Параметр: состояние - "Открыто" </td>
+<td> Логический </td>
+<td> Входная связь </td>
+<td> Parameter|st_open </td>
+<td> Статус параметра "Открыто" или общий статус переключателя при отсутствии сигнала статуса "Закрыто".
+</td></tr>
+<tr>
+<td> st_close </td>
+<td> Параметр: состояние - "Закрыто" </td>
+<td> Логический </td>
+<td> Входная связь </td>
+<td> Parameter|st_close </td>
+<td> Статус параметра "Закрыто".
+</td></tr>
+<tr>
+<td> digStts </td>
+<td> Статусы </td>
+<td> Строка </td>
+<td> Входная связь </td>
+<td> Parameter|digStts </td>
+<td> Конфигурация статусов параметра со структурой <b>{openedLabel}-{color};{closedLabel}-{color}</b>, для дискретного блока.
+</td></tr>
+<tr>
+<td> com </td>
+<td> Параметр: команда - "Открыть" </td>
+<td> Логический </td>
+<td> Полная связь </td>
+<td> Parameter|com </td>
+<td> Команда параметра "Открыть" или общая команда переключателя при отсутствии сигнала команды "Закрыть".
+</td></tr>
+<tr>
+<td> close </td>
+<td> Параметр: команда - "Закрыть" </td>
+<td> Логический </td>
+<td> Полная связь </td>
+<td> Parameter|close </td>
+<td> Команда параметра "Закрыть".
+</td></tr>
+<tr>
+<td> digComs </td>
+<td> Команды </td>
+<td> Строка </td>
+<td> Входная связь </td>
+<td> Parameter|digComs </td>
+<td> Конфигурация команд параметра со структурой <b>{openLabel}-{color};{closeLabel}-{color};{stopLabel}-{color}</b>, для дискретного блока, и <b>{com1Label}-{color};{com2Label}-{color};...;{comNLabel}-{color}</b>, для статуса по коду.
+</td></tr>
+<tr>
+<td colspan="6"> <i>Только для "Состояние области, унифицированное"</i>
+</td></tr>
+<tr>
+<td> st_open </td>
+<td> Параметр: состояние - "Открыто" </td>
+<td> Логический </td>
+<td> Входная связь </td>
+<td> Parameter|st_open </td>
+<td> Статус параметра "Открыто" или общий статус переключателя при отсутствии сигнала статуса "Закрыто".
+</td></tr>
+<tr>
+<td> st_close </td>
+<td> Параметр: состояние - "Закрыто" </td>
+<td> Логический </td>
+<td> Входная связь </td>
+<td> Parameter|st_close </td>
+<td> Статус параметра "Закрыто".
+</td></tr>
+<tr>
+<td> digStts </td>
+<td> Статусы </td>
+<td> Строка </td>
+<td> Входная связь </td>
+<td> Parameter|digStts </td>
+<td> Конфигурация статусов параметра со структурой <b>{openedLabel}-{color};{closedLabel}-{color}</b>, для дискретного блока.
+</td></tr></table>
+<h3><span class="mw-headline" id=".D0.A3.D1.81.D1.82.D0.B0.D1.80.D0.B5.D0.BB.D1.8B.D0.B5_.D0.B0.D0.BA.D1.82.D0.B8.D0.B2.D0.BD.D1.8B.D0.B5_.D1.8D.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.8B"><span class="mw-headline-number">2.2</span> Устарелые активные элементы</span></h3>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Устарелые элементы на рисунке 2.1 изначально разработаны Максимом Лысенко и они сейчас в основном бесполезны из-за недостатков: сложность подстройки, ненужное дублирование и нестандартность — геометрия не 100x100 и имеют специфическое связывание. Некоторые более новые элементы <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Романа Савоченко</a> также считаются устарелыми из-за использования специфического связывания.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:925px;"><a class="image" href="http://oscada.org/wiki/File:LibElectroEls_discrDevs_old.png"><img class="thumbimage" height="744" src="../en/files/LibElectroEls_discrDevs_old.png" width="923" /></a>  <div class="thumbcaption">Рис.2.1. Устарелые дискретные электрические устройства, только в режиме разработки.</div></div></div></div>
+<p>Элементы электрических сетей включают, слева направо и сверху вниз:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Название (идентификатор) </th>
+<th> Версия </th>
+<th> Лицензия </th>
+<th> Автор
+</th></tr>
+<tr>
+<td> Ключ однополосный (El_KeySqr_1) <br /> Ключ однополосный, по ГОСТ 2.755-87 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Ключ однополосный, разомкнутый (El_KeySqr_1_tst) <br /> Ключ однополосный, нормально разомкнутый, согласно ГОСТ 2.755-87 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Ключ-предохранитель (El_KeySqr_2) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Ключ-предохранитель, разомкнутый (El_KeySqr_2_tst) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Ключ однополосный, авто (El_KeySqr_3) <br /> Ключ однополосный, автоматический, по ГОСТ 2.755-87 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Ключ однополосный, авто, разомкнутый (El_KeySqr_3_tst) <br /> Ключ однополосный, автоматический, разомкнутый, по ГОСТ 2.755-87 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Ключ однополосный, круг (El_Key_1) <br /> Ключ однополосный, круг, по ГОСТ 2.755-87 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Ключ однополосный, круг, разомкнутый (El_Key_1_tst) <br /> Ключ однополосный, круг, разомкнутый, по ГОСТ 2.755-87 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Ключ-предохранитель, круг (El_Key_2) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Ключ-предохранитель, круг, разомкнутый (El_Key_2_tst) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Ключ однополосный, авто, круг (El_Key_3) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Ключ однополосный, авто, круг, разомкнутый (El_Key_3_tst) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Ключ-предохранитель 2 (El_KeySqr_6) <br /> Ключ-предохранитель 2, по ГОСТ 2.755-87 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Ключ-предохранитель 2, разомкнутый (El_KeySqr_6_tst) <br /> Ключ-предохранитель, разомкнутый, по ГОСТ 2.755-87 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Переключ. с нейтральным положением, разомкнутый (El_KeySqr_5) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Переключ. с нейтральным положением (El_KeySqr_5_tst) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Выключатель (El_Key_h) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Ключ двухполосный, авто (El_KeySqr_4) <br /> Ключ двухполосный, автоматический, по ГОСТ 2.755-87 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Ключ двухполосный, авто (El_KeySqr_4_tst) <br /> Ключ двухполосный, автоматический, по ГОСТ 2.755-87 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Максим Лысенко
+</td></tr>
+<tr>
+<td> Ключ (key) <br /> Простой ключ </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Переключатель (sw) <br /> Простой переключатель </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Состояние общее (stGen) <br /> Общее состояние, обычно для контакторов </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr>
+<tr>
+<td> Состояние общее 1 (stGen1) <br /> Общее состояние группы, для включенных в бокс элементов </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p><b><u>Использование — разработка</u></b><br />
+Эти элементы считаются устарелыми, но они остаются в библиотеке для совместимости и вы можете использовать их как базу для собственных элементов с похожим видом.
+</p><p><b><u>Свойства связывания и конфигурации</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Идентификатор </th>
+<th> Имя </th>
+<th> Тип </th>
+<th> Конфигурация </th>
+<th> Конфигурационный шаблон </th>
+<th> Описание
+</th></tr>
+<tr>
+<td> c1 </td>
+<td> Цвет 1 </td>
+<td> Цвет </td>
+<td> Нет </td>
+<td> </td>
+<td> Цвет штрих-бордюра
+</td></tr>
+<tr>
+<td> val </td>
+<td> Значение </td>
+<td> Логический </td>
+<td> Входная связь </td>
+<td> Parameter|var </td>
+<td> Ссылка на дискретный сигнал состояния
+</td></tr>
+<tr>
+<td colspan="6"> <i>Только для "Состояние общее (stGen)" и "Состояние общее 1 (stGen1)"</i>
+</td></tr>
+<tr>
+<td> val </td>
+<td> Значение </td>
+<td> Логический </td>
+<td> Входная связь </td>
+<td> Parameter|var </td>
+<td> Ссылка на дискретный сигнал состояния
+</td></tr></table>
+<h2><span class="mw-headline" id=".D0.94.D0.BE.D0.BF.D0.BE.D0.BB.D0.BD.D0.B5.D0.BD.D0.B8.D0.B5_1:_.D0.9F.D0.BE.D0.B4.D1.81.D1.82.D1.80.D0.BE.D0.B9.D0.BA.D0.B0_.D0.B8_.D1.81.D0.BE.D0.B3.D0.BB.D0.B0.D1.81.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B5_.D1.8D.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D0.BE.D0.B2.2C_.D0.BF.D0.BE.D1.81.D1.82.D1.80.D0.BE.D0.B5.D0.BD.D0.B8.D0.B5_.D1.86.D0.B5.D0.BB.D0.BE.D1.81.D1.82.D0.BD.D1.8B.D1.85_.D1.8D.D0.BB.D0.B5.D0.BA.D1.82.D1.80.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.B8.D1.85_.D1.81.D1.85.D0.B5.D0.BC"><span class="mw-headline-number">3</span> <span id="Add1" title="#Add1">Дополнение 1: Подстройка и согласование элементов, построение целостных электрических схем</span></span></h2>
+<p>Эта библиотека содержит и предназначена для построения целостных электрических схем произвольной конфигурации из отдельных её элементов, которые необходимо соответствующим образом визуально присоединять один к другому таким образом, чтобы не было существенных смещений по общей оси и промежутков-разрывов между соединением визуальных элементов, особенно для соединительных линий и с возможностью иметь одинаково совершенных вид на широком диапазоне масштабов, в идеале на всех.
+</p><p>Необходимость в работе мнемосхем в широком диапазоне масштабов актуальна из-за унифицированного построение мнемосхем в разрешении 900x600 и возможности их исполнения на больших разрешениях современных дисплеев, когда коэффициент масштабирования может на данное время достигать 10.
+</p><p>Итак, все неидеальности ручной подстройки там сразу выплывут и испортят картинку, поскольку это сложно сделать без специальных методов и на исходном экране разработки их невозможно увидеть.
+</p><p>Согласно чему рекомендуются следующие правила подстройки элементов, которые позволяют получить желаемый результат:
+</p>
+<ol><li> <i><b>Выравнивание элементов по оси</b></i> необходимо осуществлять центрированием, или влево и право для элементов с несколькими подключениями на одной стороне, поскольку всех их унифицировано в размере 100x100 и при условии их системного размещения на мнемосхеме с одинаковым масштабом, типично 0.2.</li>
+<li> <i><b>Идеального прилегания</b></i> достичь сложно, поскольку сейчас отсутствует инструмент притягивания одного элемента к ближней границе другого, и это возможно только при отдельном вычислении координат. Соответственно, рекомендуется частичное наложение одного элемента на другой, в масштабе разработки 100%, после предварительного правила и согласно алгоритма:
+<ul><li> подвести второй элемент к первому, шагом в один пиксель (удерживая Shift) к моменту визуального исчезновения разрыва, т.е. максимально возможное расстояние, которое там осталось составит <b>1</b> пиксель;</li>
+<li> компенсируем этот остаток ещё одним шагом в <b>1 піксель</b>.</li></ul></li></ol>
+<dl><dd><dl><dd><dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> При разработке в масштабе, который отличается от 100%, скажем 150%, получим максимальный остаток в <b>1*(150/100)=1.5</b>, т.е шагов компенсации должно быть большее целое — <b>2</b>.</dd></dl></dd></dl></dd></dl>
+<p>Применяя эти правила можно довольно просто получить результат на рисунке:
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1263px;"><a class="image" href="http://oscada.org/wiki/File:LibElectroEls_example.png"><img class="thumbimage" height="807" src="../en/files/LibElectroEls_example.png" width="1261" /></a>  <div class="thumbcaption">Образец мнемосхеми с трубопроводами.</div></div></div></div>
+
+
+
+
+
+
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Electrical_elements/ru">Libs/Electrical_elements/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2667</td></tr></table></body>
+</html>

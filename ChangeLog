@@ -1,3 +1,19 @@
+2020-03-08 Roman (stable)
+- !!!!:DB.LibsDB.{vcaElectroEls,OscadaLibs}: The document of "the Electrical elements library of the user interface" is completed,
+    all items are revised and the four new items are appended:
+	"Key, unified (keyUnif)", "Switch, unified (swUnif)", "General state, unified (stGenUnif)", "Area state, unified (stAreaUnif)".
+- !!!!:SYS,Archive.FSArch,DB.{MySQL,PostgreSQL},DAQ.{JavaLikeCalc,LogicLev,ModBus,Siemens,SoundCard},Protocol.ModBus,
+	Transport.{SSL,Serial,Sockets},Special.FLibSYS,UI.{QTCfg,VCAEngine,Vision,WebVision}:
+    !!!!: The source codes significantly cleaned at the building warnings of GCC 9 (CentOs 8) and
+    !!: The CentOs 8 chroot appended for build OpenSCADA.
+- DB: The label "Tables lifetime" renamed to "Opened tables lifetime".
+- !!!!:UI.{Vision,WebVision}: The mirroring support of the primitive FormEl significantly advanced for the shape Arc draw and it generic fills.
+- !!:UI.Vision: Edition of the primitive FormEl switched to the normal mode, without any transformation (rotation and mirroring).
+    !: The Arc shapes of the primitive FormEl allowed in connection each other in the fillings buld, like to the sector diagram.
+- !!: UI.WebVision: The primitive ElFigure source code is significantly cleaned.
+    Scroll areas of the popupmenu select are set to hidden.
+
+
 2020-03-01 Roman (stable)
 - !!:DB.LibsDB.vcaBase: doc.docRepYear: Significantly improved for:
 	- appended for the option "showOrigCntr" to show the original counter values;

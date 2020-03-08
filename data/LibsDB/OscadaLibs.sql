@@ -485,6 +485,7 @@ Libs/Main:en,uk:Libs_Main.html
 Libs/Technological_apparatuses:en,uk,ru:Libs_Technological_apparatuses.html
 Libs/Main_graphical_elements:en,uk,ru:Libs_Main_graphical_elements.html
 Libs/Mnemo_elements:en,uk,ru:Libs_Mnemo_elements.html
+Libs/Electrical_elements:en,uk,ru:Libs_Electrical_elements.html
 Libs/Documents:en,uk,ru:Libs_Documents.html',0,4,'','','','');
 INSERT INTO lib_servProc_io VALUES('docOffLine','pagesCur','Current pages list of "{wiki}:{langs}:{dest}", for empty here used "pages"',0,5,'',0,5,'','','','');
 INSERT INTO lib_servProc_io VALUES('docOffLine','res','Result',0,1,'',0,0,'','','','');

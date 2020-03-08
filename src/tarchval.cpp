@@ -1354,7 +1354,7 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 
     string lab_tm, lab_dt;
     time_t tm_t;
-    struct tm ttm, ttm1 = ttm;
+    struct tm ttm, ttm1;
     int64_t c_tm;
     int hv_border,		//Image border size
 	h_w_start, h_w_size,	//Trend window horizontal start and size
@@ -1735,6 +1735,7 @@ TVariant TVArchive::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 	    case TVariant::Boolean:	tp = TFld::Boolean;	break;
 	    case TVariant::Integer:	tp = TFld::Integer;	break;
 	    case TVariant::Real:	tp = TFld::Real;	break;
+	    default:	break;
 	}
 	TValBuf buf(tp, 10, period(), true, true); buf.set(prms[1], tm);
 	setVals(buf, buf.begin(), buf.end(), arch);
@@ -1774,7 +1775,7 @@ TVariant TVArchive::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 	int64_t btm = prms[1].getI(),
 		per = vmax(TValBuf::period(), prms[2].getI());
 	TValBuf buf(TValBuf::valType(), 0, per, true, true);
-	for(int iIt = 0; iIt < aBuf.at().arSize(); iIt++, btm += per)
+	for(int iIt = 0; iIt < (int)aBuf.at().arSize(); iIt++, btm += per)
 	    buf.set(aBuf.at().arGet(iIt), btm);
 	setVals(buf, buf.begin(), buf.end(), (prms.size()>=4?prms[3].getS():""));
 	prms[2].setI(per); prms[2].setModify();

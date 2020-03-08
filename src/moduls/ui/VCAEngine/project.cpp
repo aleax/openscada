@@ -509,7 +509,7 @@ void Project::pageEnable( const string &pg, bool vl )
     //Process the path
     int pL = 0;
     string pPg, pPath;
-    for(int off = 0; (pPg=TSYS::pathLev(pg,0,false,&off)).size() && off < pg.size(); pL++)
+    for(int off = 0; (pPg=TSYS::pathLev(pg,0,false,&off)).size() && off < (int)pg.size(); pL++)
 	if(pL) pPath += "/"+pPg;
     if(pPg.compare(0,3,"pg_") == 0)	pPg = pPg.substr(3);
 
@@ -764,7 +764,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 
 		// Appending for the properties
 		for(iStPrp = mStProp.begin(); iStPrp != mStProp.end(); iStPrp++)
-		    if(iStPrp->first != "<Styles>" && stlSize() > iStPrp->second.size())
+		    if(iStPrp->first != "<Styles>" && stlSize() > (int)iStPrp->second.size())
 			iStPrp->second.push_back(iStPrp->second[(mStyleIdW>=0)?mStyleIdW:iStPrp->second.size()-1]);
 
 		mStyleIdW = mStProp["<Styles>"].size()-1;

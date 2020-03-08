@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_widgs.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -683,6 +683,7 @@ void LineEdit::setCfg( const QString &cfg )
 	    if(((QComboBox*)ed_fld)->completer()) ((QComboBox*)ed_fld)->completer()->setCaseSensitivity(Qt::CaseSensitive);
 	    break;
 	}
+	default: break;
     }
     if(bt_fld) viewApplyBt(false);
     if(ed_fld) ed_fld->blockSignals(false);
@@ -696,8 +697,9 @@ void LineEdit::setFont( const QFont &f )
 	case Combo: {
 	    QList<QLineEdit*> lnEdWs = workWdg()->findChildren<QLineEdit*>();
 	    if(lnEdWs.size()) lnEdWs[0]->setFont(f);
+	    break;
 	}
-	break;
+	default: break;
     }
 }
 

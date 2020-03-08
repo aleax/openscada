@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.SoundCard file: sound.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2008-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 #define MOD_NAME	_("Sound card")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.8.2"
+#define MOD_VER		"0.8.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides an access to the sound card.")
 #define LICENSE		"GPL2"
@@ -106,7 +106,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     mSmplRate(cfg("SMPL_RATE").getId()), mSmplType(cfg("SMPL_TYPE").getId()), mPrior(cfg("PRIOR").getId()),
     prcSt(false), endrunReq(false), firstCall(false), numChan(0), smplSize(0), stream(NULL), acqSize(0), cntCor(0)
 {
-    for(int iC = 0; iC < sizeof(curTm)/sizeof(time_t); iC++) curTm[iC] = 0;
+    for(int iC = 0; iC < (int)(sizeof(curTm)/sizeof(time_t)); iC++) curTm[iC] = 0;
 
     cfg("PRM_BD").setS("SoundCard_"+name_c);
 

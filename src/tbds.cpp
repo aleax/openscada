@@ -528,7 +528,7 @@ string TBDS::optDescr( )
 	"========================= Subsystem \"DB\" options ========================\n"
 	"------ Parameters of the section '%s' of the configuration file ------\n"
 	"SYSStPref    <0|1>      Use the station ID in the common table (SYS).\n"
-	"TblLifeTime  <seconds>  Tables lifetime (by default 600 seconds).\n\n"
+	"TblLifeTime  <seconds>  Opened tables lifetime (by default 600 seconds).\n\n"
 	),nodePath().c_str()) + TSubSYS::optDescr();
 }
 
@@ -586,7 +586,7 @@ void TBDS::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TSubSYS::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,0,"/sub",_("Subsystem"),R_R_R_))
-	    ctrMkNode("fld",opt,-1,"/sub/tblKeepAlive",_("Tables lifetime, seconds"),RWRWR_,"root",STR_ID,4,
+	    ctrMkNode("fld",opt,-1,"/sub/tblKeepAlive",_("Opened tables lifetime, seconds"),RWRWR_,"root",STR_ID,4,
 		"tp","dec", "min","10", "max","1000", "help",_("Time of inactivity in the tables for it closing."));
 	return;
     }
@@ -659,9 +659,9 @@ void TTypeBD::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* TBD                                          *
 //************************************************
-TBD::TBD( const string &iid, TElem *cf_el ) : TConfig(cf_el), mId(cfg("ID")), mToEn(cfg("EN").getBd()),
+TBD::TBD( const string &iid, TElem *cf_el ) : TConfig(cf_el), mEn(false), mId(cfg("ID")), mToEn(cfg("EN").getBd()),
     mTrTm_ClsOnOpen(cfg("TRTM_CLS_ON_OPEN").getRd()), mTrTm_ClsOnReq(cfg("TRTM_CLS_ON_REQ").getRd()), mTrPr_ClsTask(cfg("TRPR_CLS_TASK").getId()),
-    mEn(false), userSQLTrans(EVAL_BOOL), mDisByUser(true)
+    userSQLTrans(EVAL_BOOL), mDisByUser(true)
 {
     mId = iid;
     mTbl = grpAdd("tbl_");
@@ -1108,7 +1108,7 @@ void TTable::cntrCmdProc( XMLNode *opt )
 	    time_t upTo = time(NULL)+STD_INTERF_TM;
 	    bool firstRow = true;
 	    vector< vector<string> > full;
-	    for(unsigned iR = vmax(0,tblOff); (iR-tblOff) < tblSz && time(NULL) < upTo && fieldSeek(iR,req,&full); iR++, firstRow = false)
+	    for(unsigned iR = vmax(0,tblOff); (iR-tblOff) < (unsigned)tblSz && time(NULL) < upTo && fieldSeek(iR,req,&full); iR++, firstRow = false)
 		for(unsigned iF = 0; iF < req.elem().fldSize(); iF++) {
 		    eid = req.elem().fldAt(iF).name();
 		    if(firstRow) ctrMkNode("list",opt,-1,("/prm/tbl/"+eid).c_str(),"",RWRWR_);

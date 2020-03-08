@@ -1165,7 +1165,7 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt, const string &i
 	    //  Get parent widget id
 	    string baseNm = "item";
 	    if(!par_nm.empty())	baseNm = TSYS::pathLev(par_nm,1,true).substr(4);
-	    for(int iW = 0; iW < req.childSize(); iW++)
+	    for(int iW = 0; iW < (int)req.childSize(); iW++)
 		if(req.childGet(iW)->attr("id") == baseNm) { baseNm = TSYS::strLabEnum(baseNm); iW = -1; }
 	    dlg.setId(baseNm.c_str());
 	}

@@ -118,7 +118,7 @@ void ModMArch::start( )
 	    write(hd, "1", 1);
 	    vector<string> ls;
 	    mod->messList(ls);
-	    for(int iL = 0; iL < ls.size() && dbl.empty(); iL++) {
+	    for(unsigned iL = 0; iL < ls.size() && dbl.empty(); iL++) {
 		AutoHD<TMArchivator> mAt = mod->messAt(ls[iL]);
 		if(mAt.at().id() == id() || !mAt.at().startStat())	continue;
 		int hd1 = open((mAt.at().addr()+"/"+fLock).c_str(), O_RDONLY);
@@ -142,7 +142,7 @@ void ModMArch::start( )
 	    // Search for the info table
 	    vector<string> ls;
 	    SQLite.at().list(ls);
-	    for(int iL = 0; iL < ls.size() && infoTbl.empty(); iL++)
+	    for(unsigned iL = 0; iL < ls.size() && infoTbl.empty(); iL++)
 		if(SQLite.at().at(ls[iL]).at().addr() == addr()+"/info.db")
 		    infoTbl = "SQLite."+ls[iL]+"."+TSYS::strParse(mod->filesDB(),2,".");
 	    if(infoTbl.empty()) {
@@ -792,9 +792,10 @@ bool MFileArch::put( TMess::SRec mess )
 		if(iSet >= mNode->childSize())	iSet = iCh;
 		if(xTm > FTM(mess))	break;
 	    }
-	    if((owner().prevDbl() || owner().prevDblTmCatLev()) && xTm == FTM(mess) && s2i(xIt->attr("lv")) == mess.level && xIt->attr("cat") == mess.categ)
+	    if((owner().prevDbl() || owner().prevDblTmCatLev()) && xTm == FTM(mess) && s2i(xIt->attr("lv")) == mess.level && xIt->attr("cat") == mess.categ) {
 		if(xIt->text() == mess.mess) return true;
 		else if(owner().prevDblTmCatLev()) { xIt->setText(mess.mess); mWrite = true; return true; }
+	    }
 	    //  Adding too big positions to the cache
 	    if((passCnt++) > CACHE_POS && xTm != lastTm) { cacheSet(xTm, iCh); passCnt = 0; }
 	    lastTm = xTm;

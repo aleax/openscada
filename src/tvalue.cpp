@@ -481,7 +481,7 @@ string TVal::setArch( const string &nm )
 	AutoHD<TVal> dattr = SYS->archive().at().valAt(rez_nm).at().srcPAttr();
 	if(!dattr.freeStat() && dattr.at().DAQPath() == DAQPath()) break;
 	rez_nm = a_nm + i2s(p_cnt);
-	if(rez_nm.size() > s2i(ARCH_ID_SZ)) rez_nm = a_nm.substr(0,a_nm.size()-(rez_nm.size()-s2i(ARCH_ID_SZ)))+i2s(p_cnt);
+	if((int)rez_nm.size() > s2i(ARCH_ID_SZ)) rez_nm = a_nm.substr(0,a_nm.size()-(rez_nm.size()-s2i(ARCH_ID_SZ)))+i2s(p_cnt);
     }
     //Create new archive
     rez_nm = SYS->archive().at().valAdd(rez_nm);

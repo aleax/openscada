@@ -446,7 +446,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		// Light updating for true work on mobile devices like to Maemo, MeeGo
 		int itN = 0;
 		string itVl;
-		for(int off = 0; (itVl=TSYS::strLine(shD->items,0,&off)).size() || off < shD->items.size(); itN++) {
+		for(int off = 0; (itVl=TSYS::strLine(shD->items,0,&off)).size() || off < (int)shD->items.size(); itN++) {
 		    if(itN >= wdg->count()) wdg->addItem(itVl.c_str());
 		    else if(wdg->item(itN)->text() != itVl.c_str()) wdg->item(itN)->setText(itVl.c_str());
 		}
@@ -3385,7 +3385,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 			if(lab_tm.size()) {
 			    wdth = pnt.fontMetrics().width(lab_tm.c_str());
 			    tpos = vmax(h_pos-wdth/2,0);
-			    if(first_m || (tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3)) {
+			    if(first_m || ((tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3))) {
 				if(first_m) tpos = vmax(begMarkBrd, tpos);
 				pnt.drawText(tpos, markY, lab_tm.c_str());
 				endPosTm = tpos+wdth;
@@ -3396,7 +3396,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		    if(lab_dt.size()) {
 			wdth = pnt.fontMetrics().width(lab_dt.c_str());
 			tpos = vmax(h_pos-wdth/2, 0);
-			if(first_m || (tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3)) {
+			if(first_m || ((tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3))) {
 			    if(first_m) tpos = vmax(begMarkBrd, tpos);
 			    pnt.drawText(tpos, markY, lab_dt.c_str());
 			    endPosDt = tpos+wdth;

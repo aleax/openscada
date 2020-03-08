@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tvariant.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2010-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -734,12 +734,10 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
     //  start - start position for search from the end
     if(id == "lastIndexOf" && prms.size()) {
 	dataM.lock();
-	size_t sp = 0;
-	if(prms.size() > 1) sp = vmax(0, vmin(mEls.size()-1,(unsigned)prms[1].getI()));
 	string sVl = prms[0].getS();
 	int iE = mEls.size();
 	while(iE >= 0 && mEls[iE].getS() != sVl) iE--;
-	int rez = (iE < mEls.size()) ? iE : -1;
+	int rez = (iE < (int)mEls.size()) ? iE : -1;
 	dataM.unlock();
 	return rez;
     }

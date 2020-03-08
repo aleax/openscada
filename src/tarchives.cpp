@@ -41,8 +41,8 @@ using namespace OSCADA;
 //************************************************
 TArchiveS::TArchiveS( ) :
     TSubSYS(SARH_ID,_("Archives-History"),true), elMess(""), elVal(""), elAval(""), mMessPer(10), prcStMess(false), mRes(true),
-    headBuf(0), vRes(true), mValPer(1000), mValPrior(10), mValForceCurTm(false), mAutoIdMode(BothPrmAttrId),
-    prcStVal(false), endrunReqVal(false), toUpdate(false), mRdRestDtOverTm(0), mRdFirst(true)
+    headBuf(0), vRes(true), mValPer(1000), mValPrior(10), mAutoIdMode(BothPrmAttrId),
+    mValForceCurTm(false), prcStVal(false), endrunReqVal(false), toUpdate(false), mRdRestDtOverTm(0), mRdFirst(true)
 {
     mAval = grpAdd("va_");
 
@@ -271,7 +271,7 @@ void TArchiveS::unload( )
     mRes.unlock();
     setMessBufLen(BUF_SIZE_DEF);
 
-    mMessPer = 10, mValPer = 1000, mValPrior = 10, mValForceCurTm = mAutoIdMode = BothPrmAttrId;
+    mMessPer = 10, mValPer = 1000, mValPrior = 10, mValForceCurTm = false, mAutoIdMode = BothPrmAttrId;
 }
 
 void TArchiveS::subStart( )

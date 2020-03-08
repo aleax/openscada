@@ -137,7 +137,7 @@ void VCASess::getReq( SSess &ses )
 			setAttr("cachePgLife", r2s(mod->cachePgLife()));
 
 	// Getting opened pages from the cache
-	for(int iP = 0; iP < req.childGet(0)->childSize(); iP++)
+	for(unsigned iP = 0; iP < req.childGet(0)->childSize(); iP++)
 	    pgCacheGet(TSYS::path2sepstr(req.childGet(0)->childGet(iP)->text()));
 
 	ses.page = mod->pgCreator(ses.prt, req.childGet(0)->save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
@@ -149,7 +149,7 @@ void VCASess::getReq( SSess &ses )
 	    XMLNode reqCur("get"); reqCur.setAttr("path", ses.url+"/%2fobj%2fcfg%2fstyle");
 	    mod->cntrIfCmd(reqCur, ses);
 	    req.setAttr("curStlId", reqCur.text());
-	    for(int iCh = 0; iCh < req.childSize(); iCh++)
+	    for(unsigned iCh = 0; iCh < req.childSize(); iCh++)
 		if(req.childGet(iCh)->attr("id") == req.attr("curStlId")) {
 		    req.setAttr("curStlName", req.childGet(iCh)->text());
 		    break;
@@ -331,7 +331,7 @@ void VCASess::pgCacheProc( const string &addr, bool fClose )
     //Processing for the cache limits
     for(int iPg = mCachePg.size()-1; iPg >= 0; iPg = fmin(iPg,mCachePg.size())-1)
 	if((mod->cachePgLife() > 0.01 && (SYS->sysTm()-mCachePg[iPg].first) > (unsigned)(mod->cachePgLife()*1.1*60*60)) ||
-		mCachePg[iPg].first == 0 || (mod->cachePgSz() && mCachePg.size() > mod->cachePgSz()))
+		mCachePg[iPg].first == 0 || (mod->cachePgSz() && (int)mCachePg.size() > mod->cachePgSz()))
 	{
 	    // Removing the same page record
 	    string tAddr = mCachePg[iPg].second;
@@ -341,7 +341,7 @@ void VCASess::pgCacheProc( const string &addr, bool fClose )
 
 	    // Removing page's objects - same the cached data
 	    objList(oLs);
-	    for(int iO = 0; iO < oLs.size(); iO++)
+	    for(unsigned iO = 0; iO < oLs.size(); iO++)
 		if(oLs[iO].find(tAddr) == 0)
 		    objDel(oLs[iO]);
 
@@ -625,53 +625,73 @@ double VCAElFigure::length( const Point pt1, const Point pt2 )
 }
 
 //- Scaling and rotating the point -
-Point VCAElFigure::scaleRotate( const Point point, double xScale, double yScale,  bool flag_scale, bool flag_rotate )
+Point VCAElFigure::scaleRotate( const Point point, double xScale, double yScale, bool flag_scale, bool flag_rotate, bool flag_mirror )
 {
     Point rpnt = Point(point.x, point.y);
-    Point center;
-    if(flag_rotate) {
+    Point center = flag_scale ? Point(rRnd(width/2), rRnd(height/2)) : Point(rRnd(width*xScale/2), rRnd(height*yScale/2));
+    rpnt.x = rpnt.x - center.x;
+    rpnt.y = rpnt.y - center.y;
+    if(mirror && flag_mirror) rpnt.x = -rpnt.x;
+    if(flag_rotate) rpnt = rotate(rpnt, orient);
+    rpnt.x = rpnt.x + center.x;
+    rpnt.y = rpnt.y + center.y;
+
+    /*if(flag_rotate) {
 	if(!flag_scale) center = Point(rRnd(width*xScale/2), rRnd(height*yScale/2));
 	else center = Point(rRnd(width/2), rRnd(height/2));
 	rpnt.x = rpnt.x - center.x;
 	rpnt.y = rpnt.y - center.y;
-	if(mirror) rpnt.x = -rpnt.x;	//Mirror
+    }
+    if(mirror && flag_mirror) rpnt.x = -rpnt.x;
+    if(flag_rotate) {
 	rpnt = rotate(rpnt, orient);
 	rpnt.x = rpnt.x + center.x;
 	rpnt.y = rpnt.y + center.y;
-    }
-    if( flag_scale ) rpnt = Point( rpnt.x*xScale, rpnt.y*yScale );
-    Point add((geomX+0.5)-floor(geomX+0.5)-0.5,(geomY+0.5)-floor(geomY+0.5)-0.5);
+    }*/
+    if(flag_scale) rpnt = Point(rpnt.x*xScale, rpnt.y*yScale);
+    Point add((geomX+0.5)-floor(geomX+0.5)-0.5, (geomY+0.5)-floor(geomY+0.5)-0.5);
 
     return Point(rpnt.x+add.x, rpnt.y+add.y);
 }
 
 //- Unscaling and unrotating the point -
-Point VCAElFigure::unscaleUnrotate( const Point point, double xScale, double yScale, bool flag_scale, bool flag_rotate )
+Point VCAElFigure::unscaleUnrotate( const Point point, double xScale, double yScale, bool flag_scale, bool flag_rotate, bool flag_mirror )
 {
-    Point add((geomX+0.5)-floor(geomX+0.5)-0.5,(geomY+0.5)-floor(geomY+0.5)-0.5);
-    Point rpnt = Point( point.x - add.x, point.y - add.y );
-    Point center;
-    if( flag_scale ) rpnt = Point( rpnt.x/xScale, rpnt.y/yScale );
-    if( flag_rotate )
-    {
-	if( !flag_scale ) center = Point(rRnd(width*xScale/2), rRnd(height*yScale/2));
+    Point add((geomX+0.5)-floor(geomX+0.5)-0.5, (geomY+0.5)-floor(geomY+0.5)-0.5);
+    Point rpnt = Point(point.x-add.x, point.y-add.y);
+    Point center = Point(rRnd(width*xScale/2), rRnd(height*yScale/2));
+    if(flag_scale) {
+	rpnt = Point(rpnt.x/xScale, rpnt.y/yScale);
+	center = Point(rRnd(width/2), rRnd(height/2));
+    }
+    rpnt.x = rpnt.x - center.x;
+    rpnt.y = rpnt.y - center.y;
+    if(flag_rotate) rpnt = rotate(rpnt, 360 - orient);
+    if(mirror && flag_mirror) rpnt.x = -rpnt.x;
+    rpnt.x = rpnt.x + center.x;
+    rpnt.y = rpnt.y + center.y;
+
+    /*Point center;
+    if(flag_rotate) {
+	if(!flag_scale) center = Point(rRnd(width*xScale/2), rRnd(height*yScale/2));
 	else center = Point(rRnd(width/2), rRnd(height/2));
 	rpnt.x = rpnt.x - center.x;
 	rpnt.y = rpnt.y - center.y;
 	rpnt = rotate(rpnt, 360 - orient);
-	if(mirror) rpnt.x = -rpnt.x;	//Mirror
+    }
+    if(mirror && flag_mirror) rpnt.x = -rpnt.x;
+    if(flag_rotate) {
 	rpnt.x = rpnt.x + center.x;
 	rpnt.y = rpnt.y + center.y;
-    }
+    }*/
     return rpnt;
 }
 
 //- Painting existing inundationItems -
 void VCAElFigure::paintFill( gdImagePtr iim, Point pnt, InundationItem &in_item )
 {
-    int fill_clr = gdImageColorResolveAlpha( iim, (uint8_t)(in_item.P_color>>16), (uint8_t)(in_item.P_color>>8), (uint8_t)in_item.P_color, 127 - (uint8_t)(in_item.P_color>>24) );
-    in_item.index_color = fill_clr;
-    gdImageFill(iim, (int)rRnd(pnt.x), (int)rRnd(pnt.y), fill_clr);
+    in_item.index_color = gdImageColorResolveAlpha(iim, (uint8_t)(in_item.P_color>>16), (uint8_t)(in_item.P_color>>8), (uint8_t)in_item.P_color, 127 - (uint8_t)(in_item.P_color>>24));
+    gdImageFill(iim, (int)rRnd(pnt.x), (int)rRnd(pnt.y), in_item.index_color);
 }
 
 //- Detecting if any point of the figure is out of the borders of the image -
@@ -682,38 +702,38 @@ void VCAElFigure::paintFill( gdImagePtr iim, Point pnt, InundationItem &in_item 
     switch(item.type)
     {
 	case 1:
-	    if(  (scaleRotate((pnts)[item.n1],xScale,yScale,true, true).x >= 0 && scaleRotate((pnts)[item.n1],xScale,yScale,true,true).x <= (s_width)) &&
-		 (scaleRotate((pnts)[item.n1],xScale,yScale,true,true).y >= 0 && scaleRotate((pnts)[item.n1],xScale,yScale,true,true).y <= (s_height)) &&
-		 (scaleRotate((pnts)[item.n2],xScale,yScale,true,true).x >= 0 && scaleRotate((pnts)[item.n2],xScale,yScale,true,true).x <= (s_width)) &&
-		 (scaleRotate((pnts)[item.n2],xScale,yScale,true,true).y >= 0 && scaleRotate((pnts)[item.n2],xScale,yScale,true,true).y <= (s_height))
+	    if(  (scaleRotate((pnts)[item.n1],xScale,yScale).x >= 0 && scaleRotate((pnts)[item.n1],xScale,yScale).x <= (s_width)) &&
+		 (scaleRotate((pnts)[item.n1],xScale,yScale).y >= 0 && scaleRotate((pnts)[item.n1],xScale,yScale).y <= (s_height)) &&
+		 (scaleRotate((pnts)[item.n2],xScale,yScale).x >= 0 && scaleRotate((pnts)[item.n2],xScale,yScale).x <= (s_width)) &&
+		 (scaleRotate((pnts)[item.n2],xScale,yScale).y >= 0 && scaleRotate((pnts)[item.n2],xScale,yScale).y <= (s_height))
 	      )
 		return true;
 	    else return true;
 	case 2:
 	    if(
-		(scaleRotate((pnts)[item.n1],xScale,yScale,true,true).x >= 0 && scaleRotate((pnts)[item.n1],xScale,yScale,true,true).x <= (s_width)) &&
-		(scaleRotate((pnts)[item.n1],xScale,yScale,true,true).y >= 0 && scaleRotate((pnts)[item.n1],xScale,yScale,true,true).y <= (s_height)) &&
-		(scaleRotate((pnts)[item.n2],xScale,yScale,true,true).x >= 0 && scaleRotate((pnts)[item.n2],xScale,yScale,true,true).x <= (s_width)) &&
-		(scaleRotate((pnts)[item.n2],xScale,yScale,true,true).y >= 0 && scaleRotate((pnts)[item.n2],xScale,yScale,true,true).y <= (s_height)) &&
-		(scaleRotate((pnts)[item.n3],xScale,yScale,true,true).x >= 0 && scaleRotate((pnts)[item.n3],xScale,yScale,true,true).x <= (s_width)) &&
-		(scaleRotate((pnts)[item.n3],xScale,yScale,true,true).y >= 0 && scaleRotate((pnts)[item.n3],xScale,yScale,true,true).y <= (s_height)) &&
-		(scaleRotate((pnts)[item.n4],xScale,yScale,true,true).x >= 0 && scaleRotate((pnts)[item.n4],xScale,yScale,true,true).x <= (s_width)) &&
-		(scaleRotate((pnts)[item.n4],xScale,yScale,true,true).y >= 0 && scaleRotate((pnts)[item.n4],xScale,yScale,true,true).y <= (s_height)) &&
-		(scaleRotate((pnts)[item.n5],xScale,yScale,true,true).x >= 0 && scaleRotate((pnts)[item.n5],xScale,yScale,true,true).x <= (s_width)) &&
-		(scaleRotate((pnts)[item.n5],xScale,yScale,true,true).y >= 0 && scaleRotate((pnts)[item.n5],xScale,yScale,true,true).y <= (s_height))
+		(scaleRotate((pnts)[item.n1],xScale,yScale).x >= 0 && scaleRotate((pnts)[item.n1],xScale,yScale).x <= (s_width)) &&
+		(scaleRotate((pnts)[item.n1],xScale,yScale).y >= 0 && scaleRotate((pnts)[item.n1],xScale,yScale).y <= (s_height)) &&
+		(scaleRotate((pnts)[item.n2],xScale,yScale).x >= 0 && scaleRotate((pnts)[item.n2],xScale,yScale).x <= (s_width)) &&
+		(scaleRotate((pnts)[item.n2],xScale,yScale).y >= 0 && scaleRotate((pnts)[item.n2],xScale,yScale).y <= (s_height)) &&
+		(scaleRotate((pnts)[item.n3],xScale,yScale).x >= 0 && scaleRotate((pnts)[item.n3],xScale,yScale).x <= (s_width)) &&
+		(scaleRotate((pnts)[item.n3],xScale,yScale).y >= 0 && scaleRotate((pnts)[item.n3],xScale,yScale).y <= (s_height)) &&
+		(scaleRotate((pnts)[item.n4],xScale,yScale).x >= 0 && scaleRotate((pnts)[item.n4],xScale,yScale).x <= (s_width)) &&
+		(scaleRotate((pnts)[item.n4],xScale,yScale).y >= 0 && scaleRotate((pnts)[item.n4],xScale,yScale).y <= (s_height)) &&
+		(scaleRotate((pnts)[item.n5],xScale,yScale).x >= 0 && scaleRotate((pnts)[item.n5],xScale,yScale).x <= (s_width)) &&
+		(scaleRotate((pnts)[item.n5],xScale,yScale).y >= 0 && scaleRotate((pnts)[item.n5],xScale,yScale).y <= (s_height))
 	      )
 		return true;
 	    else return true;
 	case 3:
 	    if(
-		(scaleRotate((pnts)[item.n1],xScale,yScale,true,true).x >= 0 && scaleRotate((pnts)[item.n1],xScale,yScale,true,true).x <= (s_width)) &&
-		(scaleRotate((pnts)[item.n1],xScale,yScale,true,true).y >= 0 && scaleRotate((pnts)[item.n1],xScale,yScale,true,true).y <= (s_height)) &&
-		(scaleRotate((pnts)[item.n2],xScale,yScale,true,true).x >= 0 && scaleRotate((pnts)[item.n2],xScale,yScale,true,true).x <= (s_width)) &&
-		(scaleRotate((pnts)[item.n2],xScale,yScale,true,true).y >= 0 && scaleRotate((pnts)[item.n2],xScale,yScale,true,true).y <= (s_height)) &&
-		(scaleRotate((pnts)[item.n3],xScale,yScale,true,true).x >= 0 && scaleRotate((pnts)[item.n3],xScale,yScale,true,true).x <= (s_width)) &&
-		(scaleRotate((pnts)[item.n3],xScale,yScale,true,true).y >= 0 && scaleRotate((pnts)[item.n3],xScale,yScale,true,true).y <= (s_height)) &&
-		(scaleRotate((pnts)[item.n4],xScale,yScale,true,true).x >= 0 && scaleRotate((pnts)[item.n4],xScale,yScale,true,true).x <= (s_width)) &&
-		(scaleRotate((pnts)[item.n4],xScale,yScale,true,true).y >= 0 && scaleRotate((pnts)[item.n4],xScale,yScale,true,true).y <= (s_height))
+		(scaleRotate((pnts)[item.n1],xScale,yScale).x >= 0 && scaleRotate((pnts)[item.n1],xScale,yScale).x <= (s_width)) &&
+		(scaleRotate((pnts)[item.n1],xScale,yScale).y >= 0 && scaleRotate((pnts)[item.n1],xScale,yScale).y <= (s_height)) &&
+		(scaleRotate((pnts)[item.n2],xScale,yScale).x >= 0 && scaleRotate((pnts)[item.n2],xScale,yScale).x <= (s_width)) &&
+		(scaleRotate((pnts)[item.n2],xScale,yScale).y >= 0 && scaleRotate((pnts)[item.n2],xScale,yScale).y <= (s_height)) &&
+		(scaleRotate((pnts)[item.n3],xScale,yScale).x >= 0 && scaleRotate((pnts)[item.n3],xScale,yScale).x <= (s_width)) &&
+		(scaleRotate((pnts)[item.n3],xScale,yScale).y >= 0 && scaleRotate((pnts)[item.n3],xScale,yScale).y <= (s_height)) &&
+		(scaleRotate((pnts)[item.n4],xScale,yScale).x >= 0 && scaleRotate((pnts)[item.n4],xScale,yScale).x <= (s_width)) &&
+		(scaleRotate((pnts)[item.n4],xScale,yScale).y >= 0 && scaleRotate((pnts)[item.n4],xScale,yScale).y <= (s_height))
 	      )
 		return true;
 	    else return true;
@@ -1200,16 +1220,14 @@ void VCAElFigure::paintFigure( gdImagePtr iim, ShapeItem item, double xScale, do
     double t;
     double arc_a, arc_b, t_start, t_end, ang;
     double el_width, el_border_width;
-    //-- Arc --
-    if( item.type == 2 )
-    {
-	if( item.border_width == 0 )//--- Drawing the arc with borders' width == 0 ---
-	{
-	    Point el_p1 = scaleRotate( (pnts)[item.n1], xScale, yScale, true, true );
-	    Point el_p2 = scaleRotate( (pnts)[item.n2], xScale, yScale, true, true );
-	    Point el_p3 = scaleRotate( (pnts)[item.n3], xScale, yScale, true, true );
-	    Point el_p4 = scaleRotate( (pnts)[item.n4], xScale, yScale, true, true );
-	    Point el_p5 = scaleRotate( (pnts)[item.n5], xScale, yScale, true, true );
+    //Arc
+    if(item.type == ShapeItem::Arc) {
+	if( item.border_width == 0 ) {	//Drawing the arc with borders' width == 0
+	    Point el_p1 = scaleRotate( (pnts)[item.n1], xScale, yScale);
+	    Point el_p2 = scaleRotate( (pnts)[item.n2], xScale, yScale);
+	    Point el_p3 = scaleRotate( (pnts)[item.n3], xScale, yScale);
+	    Point el_p4 = scaleRotate( (pnts)[item.n4], xScale, yScale);
+	    Point el_p5 = scaleRotate( (pnts)[item.n5], xScale, yScale);
 	    Point el_p6 = item.ctrlPos4;
 	    if( el_p5.y <= el_p3.y )
 		ang = angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
@@ -1243,22 +1261,23 @@ void VCAElFigure::paintFigure( gdImagePtr iim, ShapeItem item, double xScale, do
 		while( t < t_end );
 		gdImageAlphaBlending(iim,1);
 	    }
-	    (pnts)[item.n1] = unscaleUnrotate( Point( el_p3.x + rotate( arc( t_start, arc_a, arc_b ), ang ).x,
-		el_p3.y - rotate( arc( t_start, arc_a, arc_b ), ang ).y ), xScale, yScale, true, true );
+	    //!!!! Spare and brake the coordinats for other figures with share points
+	    /*(pnts)[item.n1] = unscaleUnrotate( Point( el_p3.x + rotate( arc( t_start, arc_a, arc_b ), ang ).x,
+		el_p3.y - rotate( arc( t_start, arc_a, arc_b ), ang ).y ), xScale, yScale);
 	    (pnts)[item.n2] = unscaleUnrotate( Point( el_p3.x + rotate( arc( t_end, arc_a, arc_b ), ang ).x,
-		el_p3.y - rotate( arc( t_end, arc_a, arc_b ), ang ).y ), xScale, yScale, true, true );
+		el_p3.y - rotate( arc( t_end, arc_a, arc_b ), ang ).y ), xScale, yScale);
 	    (pnts)[item.n4] = unscaleUnrotate( Point( el_p3.x + rotate( arc( 0.25, arc_a, arc_b ), ang ).x,
-		el_p3.y - rotate( arc( 0.25, arc_a, arc_b ), ang ).y ), xScale, yScale, true, true );
+		el_p3.y - rotate( arc( 0.25, arc_a, arc_b ), ang ).y ), xScale, yScale);
 	    (pnts)[item.n5] = unscaleUnrotate( Point( el_p3.x + rotate( arc( 0, arc_a, arc_b ), ang ).x,
-		el_p3.y - rotate( arc( 0, arc_a, arc_b ), ang ).y ), xScale, yScale, true, true );
+		el_p3.y - rotate( arc( 0, arc_a, arc_b ), ang ).y ), xScale, yScale);*/
 	}
 	else//--- Drawing the arc with borders' width > 0 ---
 	{
-	    Point el_p1 = scaleRotate( (pnts)[item.n1], xScale, yScale, true, true );
-	    Point el_p2 = scaleRotate( (pnts)[item.n2], xScale, yScale, true, true );
-	    Point el_p3 = scaleRotate( (pnts)[item.n3], xScale, yScale, true, true );
-	    Point el_p4 = scaleRotate( (pnts)[item.n4], xScale, yScale, true, true );
-	    Point el_p5 = scaleRotate( (pnts)[item.n5], xScale, yScale, true, true );
+	    Point el_p1 = scaleRotate( (pnts)[item.n1], xScale, yScale);
+	    Point el_p2 = scaleRotate( (pnts)[item.n2], xScale, yScale);
+	    Point el_p3 = scaleRotate( (pnts)[item.n3], xScale, yScale);
+	    Point el_p4 = scaleRotate( (pnts)[item.n4], xScale, yScale);
+	    Point el_p5 = scaleRotate( (pnts)[item.n5], xScale, yScale);
 	    Point el_p6 = item.ctrlPos4;
 	    el_width = item.width;
 	    el_border_width = item.border_width;
@@ -1687,11 +1706,11 @@ void VCAElFigure::paintFigure( gdImagePtr iim, ShapeItem item, double xScale, do
 		if(iim2) { gdImageDestroy(iim2); iim2 = NULL; }
 	    }
 	    //---- Recalculating the points of the arc to make them really belonging to the arc ----
-	    el_p1 = scaleRotate( (pnts)[item.n1], xScale, yScale, true, true );
-	    el_p2 = scaleRotate( (pnts)[item.n2], xScale, yScale, true, true );
-	    el_p3 = scaleRotate( (pnts)[item.n3], xScale, yScale, true, true );
-	    el_p4 = scaleRotate( (pnts)[item.n4], xScale, yScale, true, true );
-	    el_p5 = scaleRotate( (pnts)[item.n5], xScale, yScale, true, true );
+	    el_p1 = scaleRotate( (pnts)[item.n1], xScale, yScale);
+	    el_p2 = scaleRotate( (pnts)[item.n2], xScale, yScale);
+	    el_p3 = scaleRotate( (pnts)[item.n3], xScale, yScale);
+	    el_p4 = scaleRotate( (pnts)[item.n4], xScale, yScale);
+	    el_p5 = scaleRotate( (pnts)[item.n5], xScale, yScale);
 	    el_p6 = item.ctrlPos4;
 	    if( el_p5.y <= el_p3.y )
 		ang = angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
@@ -1700,14 +1719,15 @@ void VCAElFigure::paintFigure( gdImagePtr iim, ShapeItem item, double xScale, do
 	    arc_b = length( el_p3, el_p4 );
 	    t_start = item.ctrlPos4.x;
 	    t_end = item.ctrlPos4.y;
-	    (pnts)[item.n1] = unscaleUnrotate( Point( el_p3.x + rotate( arc( t_start, arc_a, arc_b ), ang ).x,
-		el_p3.y - rotate( arc( t_start, arc_a, arc_b ), ang ).y ), xScale, yScale, true, true );
+	    //!!!! Spare and brake the coordinats for other figures with share points
+	    /*(pnts)[item.n1] = unscaleUnrotate( Point( el_p3.x + rotate( arc( t_start, arc_a, arc_b ), ang ).x,
+		el_p3.y - rotate( arc( t_start, arc_a, arc_b ), ang ).y ), xScale, yScale);
 	    (pnts)[item.n2] = unscaleUnrotate( Point( el_p3.x + rotate( arc( t_end, arc_a, arc_b ), ang ).x,
-		el_p3.y - rotate( arc( t_end, arc_a, arc_b ), ang ).y ), xScale, yScale, true, true );
+		el_p3.y - rotate( arc( t_end, arc_a, arc_b ), ang ).y ), xScale, yScale);
 	    (pnts)[item.n4] = unscaleUnrotate( Point( el_p3.x + rotate( arc( 0.25, arc_a, arc_b ), ang ).x,
-		el_p3.y - rotate( arc( 0.25, arc_a, arc_b ), ang ).y ), xScale, yScale, true, true );
+		el_p3.y - rotate( arc( 0.25, arc_a, arc_b ), ang ).y ), xScale, yScale);
 	    (pnts)[item.n5] = unscaleUnrotate( Point( el_p3.x + rotate( arc( 0, arc_a, arc_b ), ang ).x,
-		el_p3.y - rotate( arc( 0, arc_a, arc_b ), ang ).y ), xScale, yScale, true, true );
+		el_p3.y - rotate( arc( 0, arc_a, arc_b ), ang ).y ), xScale, yScale);*/
 	}
     }
     //-- bezier curve --
@@ -1723,10 +1743,10 @@ void VCAElFigure::paintFigure( gdImagePtr iim, ShapeItem item, double xScale, do
 	    //---- Drawing the dashed or dotted bezier curve with borders' width == 0 ----
 	    if( item.style != 0 && flag_style )
 	    {
-		Point el_p1 = scaleRotate( (pnts)[item.n1], xScale, yScale, true, true );
-		Point el_p2 = scaleRotate( (pnts)[item.n2], xScale, yScale, true, true );
-		Point el_p3 = scaleRotate( (pnts)[item.n3], xScale, yScale, true, true );
-		Point el_p4 = scaleRotate( (pnts)[item.n4], xScale, yScale, true, true );
+		Point el_p1 = scaleRotate( (pnts)[item.n1], xScale, yScale);
+		Point el_p2 = scaleRotate( (pnts)[item.n2], xScale, yScale);
+		Point el_p3 = scaleRotate( (pnts)[item.n3], xScale, yScale);
+		Point el_p4 = scaleRotate( (pnts)[item.n4], xScale, yScale);
 		gdImageAlphaBlending(iim,0);
 		dashDot( iim, el_p1, el_p2, el_p3, el_p4, Point(0,0), Point(0,0), clr_el, item.width, 3, item.style );
 		gdImageAlphaBlending(iim,1);
@@ -1735,28 +1755,28 @@ void VCAElFigure::paintFigure( gdImagePtr iim, ShapeItem item, double xScale, do
 	    {
 		gdImageAlphaBlending(iim,0);
 		gdImageSetThickness( iim, item.width );
-		double delta = bezierDeltaT( scaleRotate( (pnts)[item.n1], xScale, yScale, true, true ), scaleRotate( (pnts)[item.n3], xScale, yScale, true, true ),
-					    scaleRotate( (pnts)[item.n4], xScale, yScale, true, true ), scaleRotate( (pnts)[item.n2], xScale, yScale, true, true ) );
+		double delta = bezierDeltaT( scaleRotate( (pnts)[item.n1], xScale, yScale), scaleRotate( (pnts)[item.n3], xScale, yScale),
+					    scaleRotate( (pnts)[item.n4], xScale, yScale), scaleRotate( (pnts)[item.n2], xScale, yScale) );
 
 		t = t_start;
 		do
 		{
-		    gdImageLine( iim, (int)rRnd( bezier(t,scaleRotate((pnts)[item.n1],xScale,yScale,true, true),
-		    scaleRotate((pnts)[item.n3],xScale,yScale,true, true ),
-		    scaleRotate((pnts)[item.n4],xScale,yScale,true, true),
-		    scaleRotate((pnts)[item.n2],xScale,yScale,true, true)).x, POS_PREC_DIG, true ),
-		    (int)rRnd(bezier(t,scaleRotate((pnts)[item.n1],xScale,yScale,true, true ),
-		    scaleRotate((pnts)[item.n3],xScale,yScale,true, true ),
-		    scaleRotate((pnts)[item.n4],xScale,yScale,true, true ),
-		    scaleRotate((pnts)[item.n2],xScale,yScale,true, true )).y, POS_PREC_DIG, true ),
-		    (int)rRnd(bezier(t+delta,scaleRotate((pnts)[item.n1],xScale,yScale,true, true ),
-		    scaleRotate((pnts)[item.n3],xScale,yScale,true, true ),
-		    scaleRotate((pnts)[item.n4],xScale,yScale,true, true ),
-		    scaleRotate((pnts)[item.n2],xScale,yScale,true, true )).x, POS_PREC_DIG, true ),
-		    (int)rRnd(bezier(t+delta,scaleRotate((pnts)[item.n1],xScale,yScale,true, true ),
-		    scaleRotate((pnts)[item.n3],xScale,yScale,true, true ),
-		    scaleRotate((pnts)[item.n4],xScale,yScale,true, true ),
-		    scaleRotate((pnts)[item.n2],xScale,yScale,true, true )).y, POS_PREC_DIG, true ),clr_el );
+		    gdImageLine( iim, (int)rRnd( bezier(t,scaleRotate((pnts)[item.n1],xScale,yScale),
+		    scaleRotate((pnts)[item.n3],xScale,yScale ),
+		    scaleRotate((pnts)[item.n4],xScale,yScale),
+		    scaleRotate((pnts)[item.n2],xScale,yScale)).x, POS_PREC_DIG, true ),
+		    (int)rRnd(bezier(t,scaleRotate((pnts)[item.n1],xScale,yScale),
+		    scaleRotate((pnts)[item.n3],xScale,yScale),
+		    scaleRotate((pnts)[item.n4],xScale,yScale),
+		    scaleRotate((pnts)[item.n2],xScale,yScale)).y, POS_PREC_DIG, true ),
+		    (int)rRnd(bezier(t+delta,scaleRotate((pnts)[item.n1],xScale,yScale),
+		    scaleRotate((pnts)[item.n3],xScale,yScale),
+		    scaleRotate((pnts)[item.n4],xScale,yScale),
+		    scaleRotate((pnts)[item.n2],xScale,yScale)).x, POS_PREC_DIG, true ),
+		    (int)rRnd(bezier(t+delta,scaleRotate((pnts)[item.n1],xScale,yScale),
+		    scaleRotate((pnts)[item.n3],xScale,yScale),
+		    scaleRotate((pnts)[item.n4],xScale,yScale),
+		    scaleRotate((pnts)[item.n2],xScale,yScale)).y, POS_PREC_DIG, true ),clr_el );
 		    t += delta;
 		}
 		while( t < t_end );
@@ -1769,10 +1789,10 @@ void VCAElFigure::paintFigure( gdImagePtr iim, ShapeItem item, double xScale, do
 	    double el_border_width = item.border_width;
 	    double el_ang;
 	    Point un_p1, un_p2;
-	    Point el_p1 = scaleRotate( (pnts)[item.n1], xScale, yScale, true, true );
-	    Point el_p2 = scaleRotate( (pnts)[item.n2], xScale, yScale, true, true );
-	    Point el_p3 = scaleRotate( (pnts)[item.n3], xScale, yScale, true, true );
-	    Point el_p4 = scaleRotate( (pnts)[item.n4], xScale, yScale, true, true );
+	    Point el_p1 = scaleRotate( (pnts)[item.n1], xScale, yScale);
+	    Point el_p2 = scaleRotate( (pnts)[item.n2], xScale, yScale);
+	    Point el_p3 = scaleRotate( (pnts)[item.n3], xScale, yScale);
+	    Point el_p4 = scaleRotate( (pnts)[item.n4], xScale, yScale);
 	    if( el_p1.y <= el_p2.y )
 		el_ang = 360 - angle( el_p1, el_p2, el_p1, Point( el_p1.x+10, el_p1.y ) );
 	    else
@@ -2176,16 +2196,16 @@ void VCAElFigure::paintFigure( gdImagePtr iim, ShapeItem item, double xScale, do
 	    //---- Drawing the dashed line with borders' width == 0 ----
 	    if( item.style != 0 && flag_style )
 	    {
-		Point el_p1 = Point( scaleRotate( (pnts)[item.n1], xScale, yScale, true, true ) );
-		Point el_p2 = Point( scaleRotate( (pnts)[item.n2], xScale, yScale, true, true ) );
+		Point el_p1 = Point( scaleRotate( (pnts)[item.n1], xScale, yScale) );
+		Point el_p2 = Point( scaleRotate( (pnts)[item.n2], xScale, yScale) );
 		dashDot( iim, el_p1, el_p2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, item.width, 1, item.style );
 	    }
 	    else//---- Drawing the solid line with borders' width == 0 ----
 	    {
-		gdImageLine( iim, (int)rRnd( scaleRotate( (pnts)[item.n1], xScale, yScale, true, true ).x, POS_PREC_DIG, true ),
-				    (int)rRnd( scaleRotate( (pnts)[item.n1], xScale, yScale, true, true ).y, POS_PREC_DIG, true ),
-				    (int)rRnd( scaleRotate( (pnts)[item.n2], xScale, yScale, true, true ).x, POS_PREC_DIG, true ),
-				    (int)rRnd( scaleRotate( (pnts)[item.n2], xScale, yScale, true, true ).y, POS_PREC_DIG, true ),  clr_el );
+		gdImageLine( iim, (int)rRnd( scaleRotate( (pnts)[item.n1], xScale, yScale).x, POS_PREC_DIG, true ),
+				    (int)rRnd( scaleRotate( (pnts)[item.n1], xScale, yScale).y, POS_PREC_DIG, true ),
+				    (int)rRnd( scaleRotate( (pnts)[item.n2], xScale, yScale).x, POS_PREC_DIG, true ),
+				    (int)rRnd( scaleRotate( (pnts)[item.n2], xScale, yScale).y, POS_PREC_DIG, true ),  clr_el );
 	    }
 	}
 	else//--- Drawing the line with borders' width > 0 ---
@@ -2198,8 +2218,8 @@ void VCAElFigure::paintFigure( gdImagePtr iim, ShapeItem item, double xScale, do
 		clr_el = item.borderColor;
 		if( item.flag_brd ) clr_el_line = clr_el;
 	    }
-	    Point el_p1 = scaleRotate( (pnts)[item.n1], xScale, yScale, true, true );
-	    Point el_p2 = scaleRotate( (pnts)[item.n2], xScale, yScale, true, true );
+	    Point el_p1 = scaleRotate( (pnts)[item.n1], xScale, yScale);
+	    Point el_p2 = scaleRotate( (pnts)[item.n2], xScale, yScale);
 	    double el_border_width = (double)item.border_width/2;
 	    double el_width = item.width;
 	    //---- Drawing the dashed or dotted line with borders' width == 1(for lines with width > 3) ----
@@ -2217,8 +2237,8 @@ void VCAElFigure::paintFigure( gdImagePtr iim, ShapeItem item, double xScale, do
 	    {
 		double el_ang;
 		Point el_pb1,el_pb2;
-		Point el_p1 = scaleRotate( (pnts)[item.n1], xScale, yScale, true, true );
-		Point el_p2 = scaleRotate( (pnts)[item.n2], xScale, yScale, true, true );
+		Point el_p1 = scaleRotate( (pnts)[item.n1], xScale, yScale);
+		Point el_p2 = scaleRotate( (pnts)[item.n2], xScale, yScale);
 		if( el_p1.y <= el_p2.y )
 		    el_ang = 360 - angle( el_p1, el_p2, el_p1, Point( el_p1.x+10, el_p1.y ) );
 		else
@@ -2258,8 +2278,8 @@ void VCAElFigure::paintFigure( gdImagePtr iim, ShapeItem item, double xScale, do
 				    (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 		gdImageAlphaBlending(iim, 1);
 
-		double x_center = (scaleRotate( (pnts)[item.n1], xScale, yScale, true, true ).x + scaleRotate( (pnts)[item.n2], xScale, yScale, true, true ).x)/2;
-		double y_center = (scaleRotate( (pnts)[item.n1], xScale, yScale, true, true ).y + scaleRotate( (pnts)[item.n2], xScale, yScale, true, true ).y)/2;
+		double x_center = (scaleRotate( (pnts)[item.n1], xScale, yScale).x + scaleRotate( (pnts)[item.n2], xScale, yScale).x)/2;
+		double y_center = (scaleRotate( (pnts)[item.n1], xScale, yScale).y + scaleRotate( (pnts)[item.n2], xScale, yScale).y)/2;
 		gdImageFillToBorder( iim, (int)(x_center+0.5), (int)(y_center+0.5), clr_el_line, clr_el_line);
 
 		//----- Drawing the lines with their real width on the other image and merging it with the previous one -----
@@ -2349,8 +2369,8 @@ void VCAElFigure::paintFigure( gdImagePtr iim, ShapeItem item, double xScale, do
 				    (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 
 		gdImageAlphaBlending(iim, 1);
-		double x_center = (scaleRotate( (pnts)[item.n1], xScale, yScale, true, true ).x + scaleRotate( (pnts)[item.n2], xScale, yScale, true, true ).x)/2;
-		double y_center=(scaleRotate( (pnts)[item.n1], xScale, yScale, true, true ).y + scaleRotate( (pnts)[item.n2], xScale, yScale, true, true ).y)/2;
+		double x_center = (scaleRotate( (pnts)[item.n1], xScale, yScale).x + scaleRotate( (pnts)[item.n2], xScale, yScale).x)/2;
+		double y_center=(scaleRotate( (pnts)[item.n1], xScale, yScale).y + scaleRotate( (pnts)[item.n2], xScale, yScale).y)/2;
 		gdImageFillToBorder( iim, (int)(x_center+0.5), (int)(y_center+0.5), clr_el_line, clr_el_line);
 		el_width = el_width + 1;
 
@@ -2434,8 +2454,8 @@ void VCAElFigure::paintFigure( gdImagePtr iim, ShapeItem item, double xScale, do
 		gdImageLine( iim, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
 				    (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 		gdImageAlphaBlending(iim, 1);
-		double x_center = (scaleRotate( (pnts)[item.n1], xScale, yScale, true, true ).x + scaleRotate( (pnts)[item.n2], xScale, yScale, true, true ).x)/2;
-		double y_center = (scaleRotate( (pnts)[item.n1], xScale, yScale, true, true ).y + scaleRotate( (pnts)[item.n2], xScale, yScale, true, true ).y)/2;
+		double x_center = (scaleRotate( (pnts)[item.n1], xScale, yScale).x + scaleRotate( (pnts)[item.n2], xScale, yScale).x)/2;
+		double y_center = (scaleRotate( (pnts)[item.n1], xScale, yScale).y + scaleRotate( (pnts)[item.n2], xScale, yScale).y)/2;
 		gdImageFillToBorder( iim, (int)(x_center+0.5), (int)(y_center+0.5), clr_el_line, clr_el_line);\
 
 		//----- Drawing the lines with their real width on the other image and merging it with the previous one -----
@@ -2488,51 +2508,35 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
     vector<int> border_width_shape;
 
     double scale;
-    double el_width;
-    double border_width;
     bool flag_min;
     bool flag_push_back;
     scaleHeight = (int)rRnd(height*ySc, POS_PREC_DIG, true);
     scaleWidth = (int)rRnd(width*xSc, POS_PREC_DIG, true);
     if(scaleHeight < 0 || scaleHeight > 10000 || scaleWidth < 0 || scaleWidth > 10000)	return -1;
     scale = vmin(xSc, ySc);
-    if(scale != 1) {
-	for(unsigned i = 0; i < shapeItems.size(); i++) {
-	    if(!shapeItems[i].flag_brd && shapeItems[i].border_width > 0) {
-		border_width = shapeItems[i].border_width;
-		border_width = border_width*scale;
-		shapeItems[i].border_width = (int)rRnd(border_width);
-		if( shapeItems[i].border_width < 1 ) shapeItems[i].border_width = 1;
-	    }
+    for(unsigned i = 0; scale != 1 && i < shapeItems.size(); i++) {
+	if(!shapeItems[i].flag_brd && shapeItems[i].border_width > 0)
+	    shapeItems[i].border_width = vmax(1, (int)rRnd(shapeItems[i].border_width*scale));
 
-	    flag_min = false;
-	    if( shapeItems[i].flag_brd ) shapeItems[i].width += 2;
-	    el_width = shapeItems[i].width;
-	    el_width = el_width*scale;
-	    shapeItems[i].width = (int)rRnd(el_width);
-	    if( shapeItems[i].width > 3 && shapeItems[i].flag_brd )
-	    {
-		shapeItems[i].width -= 2;
-		flag_min = true;
-	    }
-	    if( shapeItems[i].width < 1 ) shapeItems[i].width = 1;
-	    if( shapeItems[i].width <= 3 && shapeItems[i].flag_brd )
-	    {
-		if( flag_min ) shapeItems[i].width += 2;
-		shapeItems[i].border_width = 0;
-		shapeItems[i].flag_brd = false;
-	    }
+	flag_min = false;
+	if(shapeItems[i].flag_brd) shapeItems[i].width += 2;
+	shapeItems[i].width = (int)rRnd(shapeItems[i].width*scale);
+	if(shapeItems[i].width > 3 && shapeItems[i].flag_brd) { shapeItems[i].width -= 2; flag_min = true; }
+	shapeItems[i].width = vmax(1, shapeItems[i].width);
+	if(shapeItems[i].width <= 3 && shapeItems[i].flag_brd) {
+	    if(flag_min) shapeItems[i].width += 2;
+	    shapeItems[i].border_width = 0;
+	    shapeItems[i].flag_brd = false;
 	}
     }
-    for(unsigned i = 0; i < inundationItems.size(); i++)
-    {
-	//- Detecting which figures correspond the points of each fill -
+    for(unsigned i = 0; i < inundationItems.size(); i++) {
+	//Detecting which figures correspond the points of each fill
 	int num_pnt = 0;
 	int min_x, min_y, max_x, max_y;
 	vector<int> fig;
 	vector<int> point_num;
 	double delta;
-	double W1,W2;
+	double W1, W2;
 	W1 = 0; W2 = 0;
 	Point delta_point_1, delta_point_2, delta_point_center;
 	int count_min_x,count_min_y,count_max_x,count_max_y;
@@ -2546,154 +2550,94 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 	gdImageFilledRectangle( im1, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(im1,0,0,0,127) );
 	gdImageAlphaBlending(im1, 1);
 
-	if( inundationItems[i].number_point.size() == 2 )
-	{
+	if(inundationItems[i].number_point.size() == 2) {
 	    for(unsigned k = 0; k < shapeItems.size(); k++)
-		if( ((inundationItems[i].number_point[1] == shapeItems[k].n1) && (inundationItems[i].number_point[0] == shapeItems[k].n2)) ||
+		if(((inundationItems[i].number_point[1] == shapeItems[k].n1) && (inundationItems[i].number_point[0] == shapeItems[k].n2)) ||
 		    ((inundationItems[i].number_point[1] == shapeItems[k].n2) && (inundationItems[i].number_point[0] == shapeItems[k].n1)))
 		{
 		    shape_temp.push_back(k);
 		    width_shape.push_back(shapeItems[k].width);
 		    border_width_shape.push_back(shapeItems[k].border_width);
 		    line_color_shape.push_back(shapeItems[k].lineColor);
-		    if(shapeItems[k].border_width != 0) border_color_shape.push_back(shapeItems[k].borderColor);
-		    else border_color_shape.push_back(shapeItems[k].lineColor);
+		    border_color_shape.push_back((shapeItems[k].border_width != 0) ? shapeItems[k].borderColor : shapeItems[k].lineColor);
 		    if(shape_temp.size() == 2) break;
 		}
 	}
-	else
-	{
+	else {
 	    for(unsigned j = 0; j < inundationItems[i].number_point.size()-1; j++)
 		for(unsigned k = 0; k < shapeItems.size(); k++)
-		    if( ((inundationItems[i].number_point[j] == shapeItems[k].n1) && (inundationItems[i].number_point[j+1] == shapeItems[k].n2)) ||
-			((inundationItems[i].number_point[j] == shapeItems[k].n2) && (inundationItems[i].number_point[j+1] == shapeItems[k].n1)) )
+		    if(((inundationItems[i].number_point[j] == shapeItems[k].n1) && (inundationItems[i].number_point[j+1] == shapeItems[k].n2)) ||
+			((inundationItems[i].number_point[j] == shapeItems[k].n2) && (inundationItems[i].number_point[j+1] == shapeItems[k].n1)))
 		    {
 			flag_push_back = true;
 			for(unsigned p = 0; p < shape_temp.size(); p++)
-			    if( (shapeItems[shape_temp[p]].n1 == shapeItems[k].n1 && shapeItems[shape_temp[p]].n2 == shapeItems[k].n2) ||
-				 (shapeItems[shape_temp[p]].n1 == shapeItems[k].n2 && shapeItems[shape_temp[p]].n2 == shapeItems[k].n1) )
+			    if((shapeItems[shape_temp[p]].n1 == shapeItems[k].n1 && shapeItems[shape_temp[p]].n2 == shapeItems[k].n2) ||
+				 (shapeItems[shape_temp[p]].n1 == shapeItems[k].n2 && shapeItems[shape_temp[p]].n2 == shapeItems[k].n1))
 			    {
 				flag_push_back = false;
-				if( (shapeItems[shape_temp[p]].type==2 && shapeItems[k].type==1) && (shape_temp[p]!=k) )
-				{
-				    shape_temp[p]=k;
-				    width_shape[p] = shapeItems[k].width;
-				    border_width_shape[p] = shapeItems[k].border_width;
-				    line_color_shape[p] = shapeItems[k].lineColor;
-				    if( shapeItems[k].border_width != 0 ) border_color_shape[p] = shapeItems[k].borderColor;
-				    else border_color_shape[p] = shapeItems[k].lineColor ;
-				}
-				if( (shapeItems[shape_temp[p]].type==3 && shapeItems[k].type==1) && (shape_temp[p]!=k) )
-				{
-				    shape_temp[p]=k;
-				    width_shape[p] = shapeItems[k].width;
-				    border_width_shape[p] = shapeItems[k].border_width;
-				    line_color_shape[p] = shapeItems[k].lineColor;
-				    if( shapeItems[k].border_width != 0 ) border_color_shape[p] = shapeItems[k].borderColor;
-				    else border_color_shape[p] = shapeItems[k].lineColor ;
-
-				}
-				if( (shapeItems[shape_temp[p]].type==2 && shapeItems[k].type==3) && (shape_temp[p]!=k) )
-				{
-				    shape_temp[p]=k;
-				    width_shape[p] = shapeItems[k].width;
-				    border_width_shape[p] = shapeItems[k].border_width;
-				    line_color_shape[p] = shapeItems[k].lineColor;
-				    if( shapeItems[k].border_width != 0 ) border_color_shape[p] = shapeItems[k].borderColor;
-				    else border_color_shape[p] = shapeItems[k].lineColor ;
-
-				}
+				if(shape_temp[p] == k || shapeItems[shape_temp[p]].type == shapeItems[k].type)	continue;
+				shape_temp[p] = k;
+				width_shape[p] = shapeItems[k].width;
+				border_width_shape[p] = shapeItems[k].border_width;
+				line_color_shape[p] = shapeItems[k].lineColor;
+				border_color_shape[p] = (shapeItems[k].border_width != 0) ? shapeItems[k].borderColor : shapeItems[k].lineColor;
 			    }
-			if( flag_push_back )// inundation_fig_num.push_back(j);
-			{
+			if(flag_push_back) {
 			    shape_temp.push_back(k);
-			    width_shape.push_back( shapeItems[k].width );
-			    border_width_shape.push_back( shapeItems[k].border_width );
-			    line_color_shape.push_back( shapeItems[k].lineColor );
-			    if( shapeItems[k].border_width != 0 ) border_color_shape.push_back( shapeItems[k].borderColor );
-			    else border_color_shape.push_back( shapeItems[k].lineColor );
+			    width_shape.push_back(shapeItems[k].width);
+			    border_width_shape.push_back(shapeItems[k].border_width);
+			    line_color_shape.push_back(shapeItems[k].lineColor);
+			    border_color_shape.push_back((shapeItems[k].border_width != 0) ? shapeItems[k].borderColor : shapeItems[k].lineColor);
 			}
 		    }
+
 	    for(unsigned k = 0; k < shapeItems.size(); k++)
 		if( ((inundationItems[i].number_point[inundationItems[i].number_point.size()-1] == shapeItems[k].n1) && (inundationItems[i].number_point[0] == shapeItems[k].n2)) ||
 		    ((inundationItems[i].number_point[inundationItems[i].number_point.size()-1] == shapeItems[k].n2) && (inundationItems[i].number_point[0] == shapeItems[k].n1)) )
 		{
 		    flag_push_back = true;
 		    for(unsigned p = 0; p < shape_temp.size(); p++)
-			if( (shapeItems[shape_temp[p]].n1 == shapeItems[k].n1 && shapeItems[shape_temp[p]].n2 == shapeItems[k].n2) ||
-			     (shapeItems[shape_temp[p]].n1 == shapeItems[k].n2 && shapeItems[shape_temp[p]].n2 == shapeItems[k].n1) )
+			if((shapeItems[shape_temp[p]].n1 == shapeItems[k].n1 && shapeItems[shape_temp[p]].n2 == shapeItems[k].n2) ||
+			     (shapeItems[shape_temp[p]].n1 == shapeItems[k].n2 && shapeItems[shape_temp[p]].n2 == shapeItems[k].n1))
 			{
 			    flag_push_back = false;
-			    if( (shapeItems[shape_temp[p]].type==2 && shapeItems[k].type==1) && (shape_temp[p]!=k) )
-			    {
-				shape_temp[p]=k;
-				width_shape[p] = shapeItems[k].width;
-				border_width_shape[p] = shapeItems[k].border_width;
-				line_color_shape[p] = shapeItems[k].lineColor;
-				if( shapeItems[k].border_width != 0 ) border_color_shape[p] = shapeItems[k].borderColor;
-				else border_color_shape[p] = shapeItems[k].lineColor ;
-			    }
-			    if( (shapeItems[shape_temp[p]].type==3 && shapeItems[k].type==1) && (shape_temp[p]!=k) )
-			    {
-				shape_temp[p]=k;
-				width_shape[p] = shapeItems[k].width;
-				border_width_shape[p] = shapeItems[k].border_width;
-				line_color_shape[p] = shapeItems[k].lineColor;
-				if( shapeItems[k].border_width != 0 ) border_color_shape[p] = shapeItems[k].borderColor;
-				else border_color_shape[p] = shapeItems[k].lineColor ;
-
-			    }
-			    if( (shapeItems[shape_temp[p]].type==2 && shapeItems[k].type==3) && (shape_temp[p]!=k) )
-			    {
-				shape_temp[p]=k;
-				width_shape[p] = shapeItems[k].width;
-				border_width_shape[p] = shapeItems[k].border_width;
-				line_color_shape[p] = shapeItems[k].lineColor;
-				if( shapeItems[k].border_width != 0 ) border_color_shape[p] = shapeItems[k].borderColor;
-				else border_color_shape[p] = shapeItems[k].lineColor ;
-
-			    }
+			    if(shape_temp[p] == k || shapeItems[shape_temp[p]].type == shapeItems[k].type) continue;
+			    shape_temp[p] = k;
+			    width_shape[p] = shapeItems[k].width;
+			    border_width_shape[p] = shapeItems[k].border_width;
+			    line_color_shape[p] = shapeItems[k].lineColor;
+			    border_color_shape[p] = (shapeItems[k].border_width != 0) ? shapeItems[k].borderColor : shapeItems[k].lineColor;
 			}
-		    if( flag_push_back )
-		    {
+		    if(flag_push_back) {
 			shape_temp.push_back(k);
-			width_shape.push_back( shapeItems[k].width );
-			border_width_shape.push_back( shapeItems[k].border_width );
-			line_color_shape.push_back( shapeItems[k].lineColor );
-			if( shapeItems[k].border_width != 0 ) border_color_shape.push_back( shapeItems[k].borderColor );
-			else border_color_shape.push_back( shapeItems[k].lineColor );
+			width_shape.push_back(shapeItems[k].width);
+			border_width_shape.push_back(shapeItems[k].border_width);
+			line_color_shape.push_back(shapeItems[k].lineColor);
+			border_color_shape.push_back((shapeItems[k].border_width != 0) ? shapeItems[k].borderColor : shapeItems[k].lineColor);
 		    }
 		}
 	}
-	//- Changing the color of the figure for the same for all figures from which the each fill is consist and painting them -
-	//-- Sorting the figures in each fill(inundation) and drawing the figures, which are to be under the each fill --
+	//Changing the color of the figure for the same for all figures from which the each fill is consist and painting them
+	// Sorting the figures in each fill(inundation) and drawing the figures, which are to be under the each fill
 	vector<unsigned> number_shape;
 	number_shape = shape_temp;
 	std::sort(number_shape.begin(), number_shape.end());
-	//>>> Making the array of the figures to be drawn before the each fill
+	//  Making the array of the figures to be drawn before the each fill
 	vector<unsigned> draw_before;
-	bool fl_numb;
-	for(unsigned k=0; k < shapeItems.size(); k++)
-	{
-	    fl_numb = false;
-	    for(unsigned j = 0; j < number_shape.size(); j++)
-		if( k >= number_shape[j] ){ fl_numb = true; break; }
-	    if( !fl_numb ){ draw_before.push_back( k ); }
+	for(unsigned k = 0; k < shapeItems.size(); k++) {
+	    bool fl_numb = false;
+	    for(unsigned j = 0; !fl_numb && j < number_shape.size(); j++)
+		fl_numb = (k >= number_shape[j]);
+	    if(!fl_numb) draw_before.push_back(k);
 	    else continue;
 	}
-	//>>>Drawing the figures and push_bask them into the array of the already drawn figures
+	//  Drawing the figures and push_bask them into the array of the already drawn figures
 	bool flag_dr;
-	for(unsigned k = 0; k < draw_before.size(); k++)
-	{
+	for(unsigned k = 0; k < draw_before.size(); k++) {
 	    flag_dr = true;
-	    for(unsigned j = 0; j < shape_temp_all.size(); j++)
-		if( draw_before[k] == shape_temp_all[j] )
-	    {
-		flag_dr = false;
-		break;
-	    }
-	    if( flag_dr )//-- If the figure is out of this array, then draw it(it is the figures which are lower than the current fill ) --
-	    {
+	    for(unsigned j = 0; flag_dr && j < shape_temp_all.size(); j++)
+		flag_dr = (draw_before[k] != shape_temp_all[j]);
+	    if(flag_dr) {	//If the figure is out of this array, then draw it(it is the figures which are lower than the current fill )
 		shape_temp_all.push_back(draw_before[k]);
 		gdImagePtr im2 = gdImageCreateTrueColor(scaleWidth, scaleHeight);
 		gdImageAlphaBlending(im2, 0);
@@ -2709,1426 +2653,1350 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 	    }
 	}
 	int tmp_clr;
-	tmp_clr = gdImageColorResolveAlpha( im1, (uint8_t)(inundationItems[i].P_color>>16), (uint8_t)(inundationItems[i].P_color>>8),
-						    (uint8_t)inundationItems[i].P_color, 127 - (uint8_t)(inundationItems[i].P_color>>24) );
+	tmp_clr = gdImageColorResolveAlpha(im1, (uint8_t)(inundationItems[i].P_color>>16), (uint8_t)(inundationItems[i].P_color>>8),
+						(uint8_t)inundationItems[i].P_color, 127 - (uint8_t)(inundationItems[i].P_color>>24));
 
-	for(unsigned j = 0; j < shape_temp.size(); j++)
-	    if( shapeItems[shape_temp[j]].type == 2 )
-	    {
+	//!!!! May by that is enough to draw all shapes in one cicle
+	for(unsigned j = 0; j < shape_temp.size(); j++) {
+	    shapeItems[shape_temp[j]].width = 1;
+	    shapeItems[shape_temp[j]].border_width = 0;
+	    shapeItems[shape_temp[j]].lineColor = tmp_clr;
+	    paintFigure(im1, shapeItems[shape_temp[j]], xSc, ySc, false, false);
+	}
+
+	/*for(unsigned j = 0; j < shape_temp.size(); j++)
+	    if(shapeItems[shape_temp[j]].type == 2) {
 		shapeItems[shape_temp[j]].width = 1;
 		shapeItems[shape_temp[j]].border_width = 0;
 		shapeItems[shape_temp[j]].lineColor = tmp_clr;
 		paintFigure( im1, shapeItems[shape_temp[j]], xSc, ySc, false, false );
 	    }
 	for(unsigned j = 0; j < shape_temp.size(); j++)
-	    if( shapeItems[shape_temp[j]].type != 2 )
-	    {
+	    if(shapeItems[shape_temp[j]].type != 2 ) {
 		shapeItems[shape_temp[j]].width = 1;
 		shapeItems[shape_temp[j]].border_width = 0;
 		shapeItems[shape_temp[j]].lineColor = tmp_clr;
 		paintFigure( im1, shapeItems[shape_temp[j]], xSc, ySc, false, false );
-	    }
-	    // - Detecting the base point(the end or start point of the figure) for each fill -
-	    count_min_x = 0;
-	    count_min_y = 0;
-	    count_max_x = 0;
-	    count_max_y = 0;
-	    min_x = inundationItems[i].number_point[0];
-	    min_y = inundationItems[i].number_point[0];
-	    max_x = inundationItems[i].number_point[0];
-	    max_y = inundationItems[i].number_point[0];
-	    for(unsigned j = 1; j < inundationItems[i].number_point.size(); j++)
-	    {
-		if( (pnts)[inundationItems[i].number_point[j]].x < (pnts)[min_x].x )
-		    min_x = inundationItems[i].number_point[j];
-		if( (pnts)[inundationItems[i].number_point[j]].y < (pnts)[min_y].y )
-		    min_y = inundationItems[i].number_point[j];
-		if( (pnts)[inundationItems[i].number_point[j]].x > (pnts)[max_x].x )
-		    max_x = inundationItems[i].number_point[j];
-		if( (pnts)[inundationItems[i].number_point[j]].y > (pnts)[max_y].y )
-		    max_y = inundationItems[i].number_point[j];
-	    }
-	    for(unsigned j = 0; j < inundationItems[i].number_point.size(); j++)
-	    {
-		if( (pnts)[inundationItems[i].number_point[j]].x == (pnts)[min_x].x )
-		    count_min_x++;
-		if( (pnts)[inundationItems[i].number_point[j]].x == (pnts)[max_x].x )
-		    count_max_x++;
-		if( (pnts)[inundationItems[i].number_point[j]].y == (pnts)[min_y].y )
-		    count_min_y++;
-		if( (pnts)[inundationItems[i].number_point[j]].y == (pnts)[max_y].y )
-		    count_max_y++;
-	    }
-	    if( count_min_x < 3 ) num_pnt = min_x;
-	    else if( count_max_x < 3 ) num_pnt = max_x;
-	    else if( count_min_y < 3 ) num_pnt = min_y;
-	    else if( count_max_y < 3 ) num_pnt = max_y;
-	    //- Detecting two figures and their "free" points for computing the real "filling" point
-	    for(unsigned j = 0; j < shape_temp.size(); j++)
-	    {
-		if( shapeItems[shape_temp[j]].n1 == num_pnt )
-		    for(unsigned k = 0; k < inundationItems[i].number_point.size(); k++)
-			if( shapeItems[shape_temp[j]].n2 == inundationItems[i].number_point[k] )
-			{
-			    fig.push_back(shape_temp[j]);
-			    point_num.push_back( shapeItems[shape_temp[j]].n2 );
-			    break;
-			}
-		if( shapeItems[shape_temp[j]].n2 == num_pnt )
-		    for(unsigned k = 0; k < inundationItems[i].number_point.size(); k++)
-			if( shapeItems[shape_temp[j]].n1 == inundationItems[i].number_point[k] )
-			{
-			    fig.push_back(shape_temp[j]);
-			    point_num.push_back( shapeItems[shape_temp[j]].n1 );
-			    break;
-			}
-	    }
-	    //- Detecting the real "filling" point for all possible combinations of types of two connected figures -
-	    if( (point_num.size() > 1 &&
-		length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[0]], xSc, ySc, true, true ) ) > 1 &&
-		length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ) > 1) ||
-		((point_num.size() == 2 && fig.size() == 2 && shapeItems[fig[0]].type == 2 && shapeItems[fig[1]].type == 2) ||
-		    (point_num.size() == 1 && fig.size() == 1 && shapeItems[fig[0]].type == 2 &&
+	    }*/
+	// Detecting the base point(the end or start point of the figure) for each fill
+	count_min_x = count_min_y = count_max_x = count_max_y = 0;
+	min_x = min_y = max_x = max_y = inundationItems[i].number_point[0];
+	for(unsigned j = 1; j < inundationItems[i].number_point.size(); j++) {
+	    if((pnts)[inundationItems[i].number_point[j]].x < (pnts)[min_x].x)	min_x = inundationItems[i].number_point[j];
+	    if((pnts)[inundationItems[i].number_point[j]].y < (pnts)[min_y].y)	min_y = inundationItems[i].number_point[j];
+	    if((pnts)[inundationItems[i].number_point[j]].x > (pnts)[max_x].x)	max_x = inundationItems[i].number_point[j];
+	    if((pnts)[inundationItems[i].number_point[j]].y > (pnts)[max_y].y)	max_y = inundationItems[i].number_point[j];
+	}
+	for(unsigned j = 0; j < inundationItems[i].number_point.size(); j++) {
+	    if((pnts)[inundationItems[i].number_point[j]].x == (pnts)[min_x].x)	count_min_x++;
+	    if((pnts)[inundationItems[i].number_point[j]].x == (pnts)[max_x].x)	count_max_x++;
+	    if((pnts)[inundationItems[i].number_point[j]].y == (pnts)[min_y].y)	count_min_y++;
+	    if((pnts)[inundationItems[i].number_point[j]].y == (pnts)[max_y].y)	count_max_y++;
+	}
+	if(count_min_x < 3)	num_pnt = min_x;
+	else if(count_max_x < 3)num_pnt = max_x;
+	else if(count_min_y < 3)num_pnt = min_y;
+	else if(count_max_y < 3)num_pnt = max_y;
+	// Detecting two figures and their "free" points for computing the real "filling" point
+	for(unsigned j = 0; j < shape_temp.size(); j++) {
+	    if(shapeItems[shape_temp[j]].n1 == num_pnt)
+		for(unsigned k = 0; k < inundationItems[i].number_point.size(); k++)
+		    if(shapeItems[shape_temp[j]].n2 == inundationItems[i].number_point[k]) {
+			fig.push_back(shape_temp[j]);
+			point_num.push_back(shapeItems[shape_temp[j]].n2);
+			break;
+		    }
+	    if(shapeItems[shape_temp[j]].n2 == num_pnt)
+		for(unsigned k = 0; k < inundationItems[i].number_point.size(); k++)
+		    if(shapeItems[shape_temp[j]].n1 == inundationItems[i].number_point[k]) {
+			fig.push_back(shape_temp[j]);
+			point_num.push_back( shapeItems[shape_temp[j]].n1 );
+			break;
+		    }
+	}
+	// Detecting the real "filling" point for all possible combinations of types of two connected figures
+	if((point_num.size() > 1 &&
+	    length(scaleRotate((pnts)[num_pnt],xSc,ySc), scaleRotate((pnts)[point_num[0]],xSc,ySc)) > 1 &&
+	    length(scaleRotate((pnts)[num_pnt],xSc,ySc), scaleRotate((pnts)[point_num[1]],xSc,ySc)) > 1) ||
+	    ((point_num.size() == 2 && fig.size() == 2 && shapeItems[fig[0]].type == 2 && shapeItems[fig[1]].type == 2) ||
+		(point_num.size() == 1 && fig.size() == 1 && shapeItems[fig[0]].type == 2 &&
+		fabs((pnts)[shapeItems[fig[0]].n1].x - (pnts)[shapeItems[fig[0]].n2].x) < 0.01 &&
+		fabs((pnts)[shapeItems[fig[0]].n1].y - (pnts)[shapeItems[fig[0]].n2].y) < 0.01)))
+	{
+	    //  Simple arc
+	    if((point_num.size() == 2 && fig.size() == 2 && shapeItems[fig[0]].type == ShapeItem::Arc && shapeItems[fig[1]].type == ShapeItem::Arc) ||
+		(point_num.size() == 1 && fig.size() == 1 && shapeItems[fig[0]].type == ShapeItem::Arc &&
 		    fabs((pnts)[shapeItems[fig[0]].n1].x - (pnts)[shapeItems[fig[0]].n2].x) < 0.01 &&
-		    fabs((pnts)[shapeItems[fig[0]].n1].y - (pnts)[shapeItems[fig[0]].n2].y) < 0.01)) )
-	    {
-		//-- Simple arc --
-		if( (point_num.size() == 2 && fig.size() == 2 && shapeItems[fig[0]].type == 2 && shapeItems[fig[1]].type == 2) ||
-		    (point_num.size() == 1 && fig.size() == 1 && shapeItems[fig[0]].type == 2 &&
-			fabs((pnts)[shapeItems[fig[0]].n1].x - (pnts)[shapeItems[fig[0]].n2].x) < 0.01 &&
-			fabs((pnts)[shapeItems[fig[0]].n1].y - (pnts)[shapeItems[fig[0]].n2].y) < 0.01) )
-		    delta_point_center = scaleRotate( (pnts)[shapeItems[fig[0]].n3], xSc, ySc, true, true );
-		else
+		    fabs((pnts)[shapeItems[fig[0]].n1].y - (pnts)[shapeItems[fig[0]].n2].y) < 0.01))
+		delta_point_center = scaleRotate((pnts)[shapeItems[fig[0]].n3], xSc, ySc);
+	    else {
+		//  Line and line
+		if(shapeItems[fig[0]].type == ShapeItem::Line && shapeItems[fig[1]].type == ShapeItem::Line) {
+		    Point P1, P2, P3, P4, P5, P6, P7, P8, dP1, dP2, num_pnt_new;
+		    double a = 0, b = 0, a1 = 0, b1 = 0;
+		    double scale;
+		    scale = 0.0;
+		    if(xSc < 1 && xSc <= ySc) scale = (1-xSc)/6;
+		    else if(ySc < 1 && ySc <= xSc) scale = (1-ySc)/6;
+		    if( (length( scaleRotate( (pnts)[num_pnt], xSc, ySc), scaleRotate( (pnts)[point_num[0]], xSc, ySc) ) ) < 15 ||
+			(length( scaleRotate( (pnts)[num_pnt], xSc, ySc), scaleRotate( (pnts)[point_num[1]], xSc, ySc) ) ) < 15 )
+			delta = 0.5;
+		    else delta = 0.2 + scale;
+		    double ang,ang1;
+		    if( scaleRotate( (pnts)[num_pnt], xSc, ySc).y <= scaleRotate( (pnts)[point_num[0]], xSc, ySc).y )
+			ang = 360 - angle( scaleRotate( (pnts)[num_pnt], xSc, ySc), scaleRotate( (pnts)[point_num[0]], xSc, ySc), scaleRotate( (pnts)[num_pnt], xSc, ySc),
+			    Point( scaleRotate( (pnts)[num_pnt], xSc, ySc).x+10, scaleRotate( (pnts)[num_pnt], xSc, ySc).y ) );
+		    else
+			ang = angle( scaleRotate( (pnts)[num_pnt], xSc, ySc), scaleRotate( (pnts)[point_num[0]], xSc, ySc), scaleRotate( (pnts)[num_pnt], xSc, ySc),
+			    Point( scaleRotate( (pnts)[num_pnt], xSc, ySc).x+10, scaleRotate( (pnts)[num_pnt], xSc, ySc).y ) );
+		    if( scaleRotate( (pnts)[num_pnt], xSc, ySc).y <= scaleRotate( (pnts)[point_num[1]], xSc, ySc).y )
+			ang1 = 360 - angle( scaleRotate( (pnts)[num_pnt], xSc, ySc), scaleRotate( (pnts)[point_num[1]], xSc, ySc), scaleRotate( (pnts)[num_pnt], xSc, ySc),
+			    Point( scaleRotate( (pnts)[num_pnt], xSc, ySc).x+10, scaleRotate( (pnts)[num_pnt], xSc, ySc).y ) );
+		    else
+			ang1 = angle( scaleRotate( (pnts)[num_pnt], xSc, ySc), scaleRotate( (pnts)[point_num[1]], xSc, ySc), scaleRotate( (pnts)[num_pnt], xSc, ySc),
+			    Point( scaleRotate( (pnts)[num_pnt], xSc, ySc).x+10, scaleRotate( (pnts)[num_pnt], xSc, ySc).y ) );
+		    //--- if there is any width(of figure itself or of its borders) ---
+		    if( (shapeItems[fig[0]].width > 1 || shapeItems[fig[0]].border_width > 0) || (shapeItems[fig[1]].width > 1 || shapeItems[fig[1]].border_width > 0) )
+		    {
+			if( shapeItems[fig[0]].width == 1 && shapeItems[fig[0]].border_width == 0 ) W1 = 0;
+			else W1 = (shapeItems[fig[0]].width)/2 + shapeItems[fig[0]].border_width;
+			if( shapeItems[fig[1]].width == 1 && shapeItems[fig[1]].border_width == 0 ) W2 = 0;
+			else W2 = (shapeItems[fig[1]].width)/2 + shapeItems[fig[1]].border_width;
+			//--- Line_1 ---
+			P1 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc).x + rotate( Point(0,W1), ang ).x,
+					scaleRotate( (pnts)[num_pnt], xSc, ySc).y - rotate( Point(0,W1), ang ).y );
+			P2 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc).x + rotate( Point(0,-W1), ang ).x,
+					scaleRotate( (pnts)[num_pnt], xSc, ySc).y - rotate( Point(0,-W1), ang ).y );
+			P3 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc).x +
+					rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc), scaleRotate( (pnts)[point_num[0]], xSc, ySc) ), W1 ), ang ).x,
+					scaleRotate( (pnts)[num_pnt], xSc, ySc).y -
+					rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc), scaleRotate( (pnts)[point_num[0]], xSc, ySc) ), W1 ), ang ).y );
+			P4 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc).x +
+					rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc), scaleRotate( (pnts)[point_num[0]], xSc, ySc) ), -W1 ), ang ).x,
+					scaleRotate( (pnts)[num_pnt], xSc, ySc).y -
+					rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc), scaleRotate( (pnts)[point_num[0]], xSc, ySc) ), -W1 ), ang ).y );
+			//--- Line_2 ---
+			P5 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc).x + rotate( Point(0,W2), ang1 ).x,
+					scaleRotate( (pnts)[num_pnt], xSc, ySc).y - rotate( Point(0,W2), ang1 ).y );
+			P6 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc).x + rotate( Point(0,-W2), ang1 ).x,
+					scaleRotate( (pnts)[num_pnt], xSc, ySc).y - rotate( Point(0,-W2), ang1 ).y );
+			P7 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc).x +
+					rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc), scaleRotate( (pnts)[point_num[1]], xSc, ySc) ), W2 ), ang1 ).x,
+					scaleRotate( (pnts)[num_pnt], xSc, ySc).y -
+					rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc), scaleRotate( (pnts)[point_num[1]], xSc, ySc) ), W2 ), ang1 ).y );
+			P8 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc).x +
+					rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc), scaleRotate( (pnts)[point_num[1]], xSc, ySc) ), -W2 ), ang1 ).x,
+					scaleRotate( (pnts)[num_pnt], xSc, ySc).y -
+					rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc), scaleRotate( (pnts)[point_num[1]], xSc, ySc) ), -W2 ), ang1 ).y );
+			P1 = Point( rRnd( P1.x, POS_PREC_DIG, true ), rRnd( P1.y, POS_PREC_DIG, true ) );
+			P2 = Point( rRnd( P2.x, POS_PREC_DIG, true ), rRnd( P2.y, POS_PREC_DIG, true ) );
+			P3 = Point( rRnd( P3.x, POS_PREC_DIG, true ), rRnd( P3.y, POS_PREC_DIG, true ) );
+			P4 = Point( rRnd( P4.x, POS_PREC_DIG, true ), rRnd( P4.y, POS_PREC_DIG, true ) );
+			P5 = Point( rRnd( P5.x, POS_PREC_DIG, true ), rRnd( P5.y, POS_PREC_DIG, true ) );
+			P6 = Point( rRnd( P6.x, POS_PREC_DIG, true ), rRnd( P6.y, POS_PREC_DIG, true ) );
+			P7 = Point( rRnd( P7.x, POS_PREC_DIG, true ), rRnd( P7.y, POS_PREC_DIG, true ) );
+			P8 = Point( rRnd( P8.x, POS_PREC_DIG, true ), rRnd( P8.y, POS_PREC_DIG, true ) );
+			bool flag_vert1 = true;
+			bool flag_vert2 = true;
+			if( lineIntersect( P1.x, P1.y, P3.x, P3.y,P5.x, P5.y, P7.x, P7.y ) )
+			{
+			    if( P3.x != P1.x )
+			    {
+				b = (P3.y-P1.y) / (P3.x-P1.x);
+				a = P1.y - b*P1.x;
+				flag_vert1 = false;
+			    }
+			    if( P7.x != P5.x )
+			    {
+				b1 = (P7.y-P5.y) / (P7.x-P5.x);
+				a1 = P5.y - b1*P5.x;
+				flag_vert2 = false;
+			    }
+			    dP1 = P3;
+			    dP2 = P7;
+			}
+			else if( lineIntersect( P1.x, P1.y, P3.x, P3.y,P6.x, P6.y, P8.x, P8.y ) )
+			{
+			    if( P3.x != P1.x )
+			    {
+				b = (P3.y-P1.y) / (P3.x-P1.x);
+				a = P1.y - b*P1.x;
+				flag_vert1 = false;
+			    }
+			    if( P8.x != P6.x )
+			    {
+				b1 = (P8.y-P6.y) / (P8.x-P6.x);
+				a1 = P6.y - b1*P6.x;
+				flag_vert2 = false;
+			    }
+			    dP1 = P3;
+			    dP2 = P8;
+			}
+			else if( lineIntersect( P2.x, P2.y, P4.x, P4.y,P5.x, P5.y, P7.x, P7.y ) )
+			{
+			    if( P4.x != P2.x )
+			    {
+				b = (P4.y-P2.y) / (P4.x-P2.x);
+				a = P2.y - b*P2.x;
+				flag_vert1 = false;
+			    }
+			    if( P7.x != P5.x )
+			    {
+				b1 = (P7.y-P5.y) / (P7.x-P5.x);
+				a1 = P5.y - b1*P5.x;
+				flag_vert2 = false;
+			    }
+			    dP1 = P4;
+			    dP2 = P7;
+			}
+			else if( lineIntersect( P2.x, P2.y, P4.x, P4.y,P6.x, P6.y, P8.x, P8.y ) )
+			{
+			    if( P4.x != P2.x )
+			    {
+				b = (P4.y-P2.y) / (P4.x-P2.x);
+				a = P2.y - b*P2.x;
+				flag_vert1 = false;
+			    }
+			    if( P8.x != P6.x )
+			    {
+				b1 = (P8.y-P6.y) / (P8.x-P6.x);
+				a1 = P6.y - b1*P6.x;
+				flag_vert2 = false;
+			    }
+			    dP1 = P4;
+			    dP2 = P8;
+			}
+			if( !flag_vert2 &&  !flag_vert1 ) num_pnt_new = Point( (a-a1) / (b1-b), a + b*(a-a1) / (b1-b) );
+			else if( flag_vert1 && !flag_vert2 ) num_pnt_new = Point( dP1.x, a1 + b1*dP1.x );
+			else if( !flag_vert1 && flag_vert2 ) num_pnt_new = Point( dP2.x, a + b*dP2.x );
+		    }
+		    else
+		    {
+			dP1 = scaleRotate( (pnts)[point_num[0]], xSc, ySc);
+			dP2 = scaleRotate( (pnts)[point_num[1]], xSc, ySc);
+			num_pnt_new = scaleRotate( (pnts)[num_pnt], xSc, ySc);
+		    }
+		    if( (length( scaleRotate( (pnts)[num_pnt], xSc, ySc), scaleRotate( (pnts)[point_num[0]], xSc, ySc) ) ) > 4 )
+		    {
+			delta_point_1 = unrotate( dP1, ang, num_pnt_new.x, num_pnt_new.y );
+			delta_point_1.x = delta_point_1.x * (delta);
+			delta_point_1 = Point( num_pnt_new.x + rotate( delta_point_1, ang ).x,
+				num_pnt_new.y - rotate( delta_point_1, ang ).y );
+		    }
+		    else delta_point_1 = dP1;
+		    if( (length( scaleRotate( (pnts)[num_pnt], xSc, ySc), scaleRotate( (pnts)[point_num[1]], xSc, ySc) ) ) > 4 )
+		    {
+			delta_point_2 = unrotate( dP2, ang1, num_pnt_new.x, num_pnt_new.y );
+			delta_point_2.x = delta_point_2.x * (delta);
+			delta_point_2 = Point( num_pnt_new.x + rotate( delta_point_2, ang1 ).x,
+					       num_pnt_new.y - rotate( delta_point_2, ang1 ).y );
+		    }
+		    else delta_point_2 = dP2;
+		}
+		//  Arc and line
+		else if((shapeItems[fig[0]].type == ShapeItem::Arc && shapeItems[fig[1]].type == ShapeItem::Line) ||
+			(shapeItems[fig[1]].type == ShapeItem::Arc && shapeItems[fig[0]].type == ShapeItem::Line))
 		{
-		    //-- Line and line --
-		    if( shapeItems[fig[0]].type == 1 && shapeItems[fig[1]].type == 1 )
-		    {
-			Point P1, P2, P3, P4, P5, P6, P7, P8, dP1, dP2, num_pnt_new;
-			double a = 0, b = 0, a1 = 0, b1 = 0;
-			double scale;
-			scale = 0.0;
-			if( xSc<1 && xSc <= ySc ) scale = (1-xSc)/6;
-			else if( ySc < 1 && ySc <= xSc ) scale = (1-ySc)/6;
-			if( (length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[0]], xSc, ySc, true, true ) ) ) < 15 ||
-			    (length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ) ) < 15 )
-			    delta = 0.5;
-			else delta = 0.2 + scale;
-			double ang,ang1;
-			if( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y <= scaleRotate( (pnts)[point_num[0]], xSc, ySc, true, true ).y )
-			    ang = 360 - angle( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true), scaleRotate( (pnts)[point_num[0]], xSc, ySc, true, true ), scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ),
-				Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x+10, scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y ) );
-			else
-			    ang = angle( scaleRotate( (pnts)[num_pnt], xSc, ySc, true , true), scaleRotate( (pnts)[point_num[0]], xSc, ySc, true, true), scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ),
-					Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x+10, scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y ) );
-			if( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y <= scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ).y )
-			    ang1 = 360 - angle( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ), scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ),
-				Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x+10, scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y ) );
-			else
-			    ang1 = angle( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ), scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ),
-					Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x+10, scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y ) );
-			//--- if there is any width(of figure itself or of its borders) ---
-			if( (shapeItems[fig[0]].width > 1 || shapeItems[fig[0]].border_width > 0) || (shapeItems[fig[1]].width > 1 || shapeItems[fig[1]].border_width > 0) )
-			{
-			    if( shapeItems[fig[0]].width == 1 && shapeItems[fig[0]].border_width == 0 ) W1 = 0;
-			    else W1 = (shapeItems[fig[0]].width)/2 + shapeItems[fig[0]].border_width;
-			    if( shapeItems[fig[1]].width == 1 && shapeItems[fig[1]].border_width == 0 ) W2 = 0;
-			    else W2 = (shapeItems[fig[1]].width)/2 + shapeItems[fig[1]].border_width;
-			    //--- Line_1 ---
-			    P1 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x + rotate( Point(0,W1), ang ).x,
-					scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y - rotate( Point(0,W1), ang ).y );
-			    P2 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x + rotate( Point(0,-W1), ang ).x,
-					scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y - rotate( Point(0,-W1), ang ).y );
-			    P3 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x +
-					rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[0]], xSc, ySc, true, true ) ), W1 ), ang ).x,
-					scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y -
-					rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[0]], xSc, ySc, true, true ) ), W1 ), ang ).y );
-			    P4 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x +
-					rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[0]], xSc, ySc, true, true ) ), -W1 ), ang ).x,
-					scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y -
-					rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[0]], xSc, ySc, true, true ) ), -W1 ), ang ).y );
-			    //--- Line_2 ---
-			    P5 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x + rotate( Point(0,W2), ang1 ).x,
-					scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y - rotate( Point(0,W2), ang1 ).y );
-			    P6 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x + rotate( Point(0,-W2), ang1 ).x,
-					scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y - rotate( Point(0,-W2), ang1 ).y );
-			    P7 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x +
-					rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ), W2 ), ang1 ).x,
-					scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y -
-					rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ), W2 ), ang1 ).y );
-			    P8 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x +
-					rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ), -W2 ), ang1 ).x,
-					scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y -
-					rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ), -W2 ), ang1 ).y );
-			    P1 = Point( rRnd( P1.x, POS_PREC_DIG, true ), rRnd( P1.y, POS_PREC_DIG, true ) );
-			    P2 = Point( rRnd( P2.x, POS_PREC_DIG, true ), rRnd( P2.y, POS_PREC_DIG, true ) );
-			    P3 = Point( rRnd( P3.x, POS_PREC_DIG, true ), rRnd( P3.y, POS_PREC_DIG, true ) );
-			    P4 = Point( rRnd( P4.x, POS_PREC_DIG, true ), rRnd( P4.y, POS_PREC_DIG, true ) );
-			    P5 = Point( rRnd( P5.x, POS_PREC_DIG, true ), rRnd( P5.y, POS_PREC_DIG, true ) );
-			    P6 = Point( rRnd( P6.x, POS_PREC_DIG, true ), rRnd( P6.y, POS_PREC_DIG, true ) );
-			    P7 = Point( rRnd( P7.x, POS_PREC_DIG, true ), rRnd( P7.y, POS_PREC_DIG, true ) );
-			    P8 = Point( rRnd( P8.x, POS_PREC_DIG, true ), rRnd( P8.y, POS_PREC_DIG, true ) );
-			    bool flag_vert1 = true;
-			    bool flag_vert2 = true;
-			    if( lineIntersect( P1.x, P1.y, P3.x, P3.y,P5.x, P5.y, P7.x, P7.y ) )
-			    {
-				if( P3.x != P1.x )
-				{
-				    b = (P3.y-P1.y) / (P3.x-P1.x);
-				    a = P1.y - b*P1.x;
-				    flag_vert1 = false;
-				}
-				if( P7.x != P5.x )
-				{
-				    b1 = (P7.y-P5.y) / (P7.x-P5.x);
-				    a1 = P5.y - b1*P5.x;
-				    flag_vert2 = false;
-				}
-				dP1 = P3;
-				dP2 = P7;
-			    }
-			    else if( lineIntersect( P1.x, P1.y, P3.x, P3.y,P6.x, P6.y, P8.x, P8.y ) )
-			    {
-				if( P3.x != P1.x )
-				{
-				    b = (P3.y-P1.y) / (P3.x-P1.x);
-				    a = P1.y - b*P1.x;
-				    flag_vert1 = false;
-				}
-				if( P8.x != P6.x )
-				{
-				    b1 = (P8.y-P6.y) / (P8.x-P6.x);
-				    a1 = P6.y - b1*P6.x;
-				    flag_vert2 = false;
-				}
-				dP1 = P3;
-				dP2 = P8;
-			    }
-			    else if( lineIntersect( P2.x, P2.y, P4.x, P4.y,P5.x, P5.y, P7.x, P7.y ) )
-			    {
-				if( P4.x != P2.x )
-				{
-				    b = (P4.y-P2.y) / (P4.x-P2.x);
-				    a = P2.y - b*P2.x;
-				    flag_vert1 = false;
-				}
-				if( P7.x != P5.x )
-				{
-				    b1 = (P7.y-P5.y) / (P7.x-P5.x);
-				    a1 = P5.y - b1*P5.x;
-				    flag_vert2 = false;
-				}
-				dP1 = P4;
-				dP2 = P7;
-			    }
-			    else if( lineIntersect( P2.x, P2.y, P4.x, P4.y,P6.x, P6.y, P8.x, P8.y ) )
-			    {
-				if( P4.x != P2.x )
-				{
-				    b = (P4.y-P2.y) / (P4.x-P2.x);
-				    a = P2.y - b*P2.x;
-				    flag_vert1 = false;
-				}
-				if( P8.x != P6.x )
-				{
-				    b1 = (P8.y-P6.y) / (P8.x-P6.x);
-				    a1 = P6.y - b1*P6.x;
-				    flag_vert2 = false;
-				}
-				dP1 = P4;
-				dP2 = P8;
-			    }
-			    if( !flag_vert2 &&  !flag_vert1 ) num_pnt_new = Point( (a-a1) / (b1-b), a + b*(a-a1) / (b1-b) );
-			    else if( flag_vert1 && !flag_vert2 ) num_pnt_new = Point( dP1.x, a1 + b1*dP1.x );
-			    else if( !flag_vert1 && flag_vert2 ) num_pnt_new = Point( dP2.x, a + b*dP2.x );
-			}
-			else
-			{
-			    dP1 = scaleRotate( (pnts)[point_num[0]], xSc, ySc, true, true );
-			    dP2 = scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true );
-			    num_pnt_new = scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true );
-			}
-			if( (length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[0]], xSc, ySc, true, true ) ) ) > 4 )
-			{
-			    delta_point_1 = unrotate( dP1, ang, num_pnt_new.x, num_pnt_new.y );
-			    delta_point_1.x = delta_point_1.x * (delta);
-			    delta_point_1 = Point( num_pnt_new.x + rotate( delta_point_1, ang ).x,
-				    num_pnt_new.y - rotate( delta_point_1, ang ).y );
-			}
-			else delta_point_1 = dP1;
-			if( (length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ) ) > 4 )
-			{
-			    delta_point_2 = unrotate( dP2, ang1, num_pnt_new.x, num_pnt_new.y );
-			    delta_point_2.x = delta_point_2.x * (delta);
-			    delta_point_2 = Point( num_pnt_new.x + rotate( delta_point_2, ang1 ).x,
-						    num_pnt_new.y - rotate( delta_point_2, ang1 ).y );
-			}
-			else delta_point_2 = dP2;
+		    if(shapeItems[fig[1]].type == ShapeItem::Arc) {
+			int tp = fig[1];
+			int tp1 = point_num[1];
+			fig[1] = fig[0];
+			fig[0] = tp;
+			point_num[1] = point_num[0];
+			point_num[0] = tp1;
 		    }
-		    //-- Arc and line --
-		    else if( (shapeItems[fig[0]].type == 2 && shapeItems[fig[1]].type == 1) || (shapeItems[fig[1]].type == 2 && shapeItems[fig[0]].type == 1) )
+		    Point new_pnt;
+		    double delta_real;
+		    double scale;
+		    double ang, ang1;
+		    double arc_a, arc_b, arc_a_small, arc_b_small, t_start, t_end, delta_t = 0;
+		    Point P1, P2, P3, P4;
+		    scale = 0.0;
+		    if(xSc < 1 && xSc <= ySc) scale = (1-xSc)/10;
+		    else if(ySc < 1 && ySc <= xSc) scale = (1-ySc)/10;
+		    //   Arc
+		    Point el_p3 = scaleRotate( (pnts)[shapeItems[fig[0]].n3], xSc, ySc);
+		    Point el_p4 = scaleRotate( (pnts)[shapeItems[fig[0]].n4], xSc, ySc);
+		    Point el_p5 = scaleRotate( (pnts)[shapeItems[fig[0]].n5], xSc, ySc);
+		    if( el_p5.y <= el_p3.y )
+			ang = angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
+		    else ang = 360 - angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
+		    //   Line
+		    if( scaleRotate( (pnts)[num_pnt], xSc, ySc).y <= scaleRotate( (pnts)[point_num[1]], xSc, ySc).y )
+			ang1 = 360 - angle( scaleRotate( (pnts)[num_pnt], xSc, ySc), scaleRotate( (pnts)[point_num[1]], xSc, ySc), scaleRotate( (pnts)[num_pnt], xSc, ySc),
+					    Point( scaleRotate( (pnts)[num_pnt], xSc, ySc).x+10, scaleRotate( (pnts)[num_pnt], xSc, ySc).y ) );
+		    else
+			ang1 = angle( scaleRotate( (pnts)[num_pnt], xSc, ySc), scaleRotate( (pnts)[point_num[1]], xSc, ySc), scaleRotate( (pnts)[num_pnt], xSc, ySc),
+					Point( scaleRotate( (pnts)[num_pnt], xSc, ySc).x+10, scaleRotate( (pnts)[num_pnt], xSc, ySc).y ) );
+		    arc_a = length( el_p5, el_p3 ) + shapeItems[fig[0]].width/2 + shapeItems[fig[0]].border_width;
+		    arc_b = length( el_p3, el_p4 ) + shapeItems[fig[0]].width/2 + shapeItems[fig[0]].border_width;
+		    //--- if there is any width(of figure itself or of its borders) ---
+		    if((shapeItems[fig[0]].width > 1 || shapeItems[fig[0]].border_width > 0) || (shapeItems[fig[1]].width > 1 || shapeItems[fig[1]].border_width > 0))
 		    {
-			if( shapeItems[fig[1]].type == 2 )
-			{
-			    int tp = fig[1];
-			    int tp1 = point_num[1];
-			    fig[1] = fig[0];
-			    fig[0] = tp;
-			    point_num[1] = point_num[0];
-			    point_num[0] = tp1;
-			}
-			Point new_pnt;
-			double delta_real;
-			double scale;
-			double ang, ang1;
-			double arc_a, arc_b, arc_a_small, arc_b_small, t_start, t_end, delta_t = 0;
-			Point P1, P2, P3, P4;
-			scale = 0.0;
-			if( xSc < 1 && xSc <= ySc ) scale = (1-xSc)/10;
-			else if( ySc < 1 && ySc <= xSc ) scale = (1-ySc)/10;
-			//-- Arc --
-			Point el_p3 = scaleRotate( (pnts)[shapeItems[fig[0]].n3], xSc, ySc, true, true );
-			Point el_p4 = scaleRotate( (pnts)[shapeItems[fig[0]].n4], xSc, ySc, true, true );
-			Point el_p5 = scaleRotate( (pnts)[shapeItems[fig[0]].n5], xSc, ySc, true, true );
-			if( el_p5.y <= el_p3.y )
-			    ang = angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
-			else ang = 360 - angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
+			arc_a_small = arc_a - shapeItems[fig[0]].width - 2*shapeItems[fig[0]].border_width;
+			arc_b_small = arc_b - shapeItems[fig[0]].width - 2*shapeItems[fig[0]].border_width;
+			//--- Arc ---
+			if( shapeItems[fig[0]].width == 1 && shapeItems[fig[0]].border_width == 0 ) W1 = 0;
+			else W1 = (shapeItems[fig[0]].width)/2 + shapeItems[fig[0]].border_width;
 			//--- Line ---
-			if( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y <= scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ).y )
-			    ang1 = 360 - angle( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ), scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ),
-					    Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x+10, scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y ) );
-			else
-			    ang1 = angle( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true), scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ),
-					Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x+10, scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y ) );
-			arc_a = length( el_p5, el_p3 ) + shapeItems[fig[0]].width/2 + shapeItems[fig[0]].border_width;
-			arc_b = length( el_p3, el_p4 ) + shapeItems[fig[0]].width/2 + shapeItems[fig[0]].border_width;
-			//--- if there is any width(of figure itself or of its borders) ---
-			if( (shapeItems[fig[0]].width > 1 || shapeItems[fig[0]].border_width > 0 ) || ( shapeItems[fig[1]].width > 1 || shapeItems[fig[1]].border_width > 0 ) )
-			{
-			    arc_a_small = arc_a - shapeItems[fig[0]].width - 2*shapeItems[fig[0]].border_width;
-			    arc_b_small = arc_b - shapeItems[fig[0]].width - 2*shapeItems[fig[0]].border_width;
-			    //--- Arc ---
-			    if( shapeItems[fig[0]].width == 1 && shapeItems[fig[0]].border_width == 0 ) W1 = 0;
-			    else W1 = (shapeItems[fig[0]].width)/2 + shapeItems[fig[0]].border_width;
-			    //--- Line ---
-			    if( shapeItems[fig[1]].width == 1 && shapeItems[fig[1]].border_width == 0 ) W2 = 0;
-			    else W2 = (shapeItems[fig[1]].width)/2 + shapeItems[fig[1]].border_width;
-			    //--- Line ---
-			    P1 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x + rotate( Point(0,W2), ang1 ).x,
-					scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y - rotate( Point(0,W2), ang1 ).y );
-			    P2 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x + rotate( Point(0,-W2), ang1 ).x,
-					scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y - rotate( Point(0,-W2), ang1 ).y );
-			    P3 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x +
-					rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ), W2 ), ang1 ).x,
-					scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y -
-					rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true) ), W2 ), ang1 ).y );
-			    P4 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x +
-					rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ), -W2 ), ang1 ).x,
-					scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y -
-					rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ), -W2 ), ang1 ).y );
-			    P1 = Point( rRnd( P1.x, POS_PREC_DIG, true ), rRnd( P1.y, POS_PREC_DIG, true ) );
-			    P2 = Point( rRnd( P2.x, POS_PREC_DIG, true ), rRnd( P2.y, POS_PREC_DIG, true ) );
-			    P3 = Point( rRnd( P3.x, POS_PREC_DIG, true ), rRnd( P3.y, POS_PREC_DIG, true ) );
-			    P4 = Point( rRnd( P4.x, POS_PREC_DIG, true ), rRnd( P4.y, POS_PREC_DIG, true ) );
-			    //--- Line ---
-			    t_start = shapeItems[fig[0]].ctrlPos4.x;
-			    t_end = shapeItems[fig[0]].ctrlPos4.y;
-			    double inc_delta;
-			    if( num_pnt == shapeItems[fig[0]].n1 )
-			    {
-				delta_t = t_start;
-				inc_delta = 0.001;
-			    }
-			    else
-			    {
-				delta_t = t_end;
-				inc_delta = -0.001;
-			    }
-			    Point arc_pnt, arc_pnt_pred;
-			    arc_pnt_pred = Point( (int)rRnd( el_p3.x + rotate( arc( delta_t, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
-						    (int)rRnd( el_p3.y - rotate( arc( delta_t, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ) );
-			    do
-			    {
-				delta_t += inc_delta;
-				arc_pnt = Point( (int)rRnd( el_p3.x + rotate( arc( delta_t, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
-						    (int)rRnd( el_p3.y - rotate( arc( delta_t, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ) );
-				if( lineIntersect( arc_pnt_pred.x, arc_pnt_pred.y, arc_pnt.x, arc_pnt.y,P1.x, P1.y, P3.x, P3.y ) )
-				{
-				    new_pnt = Point( arc_pnt.x, arc_pnt.y );
-				    break;
-				}
-				else if( lineIntersect( arc_pnt_pred.x, arc_pnt_pred.y, arc_pnt.x, arc_pnt.y,P2.x, P2.y, P4.x, P4.y ) )
-				{
-				    new_pnt = Point( arc_pnt.x, arc_pnt.y );
-				    break;
-				}
-				arc_pnt_pred = arc_pnt;
-			    }
-			    while ( ((delta_t<t_end) && (inc_delta>0)) || ((delta_t>t_start) && (inc_delta<0)) );
-			    if( inc_delta > 0 ) delta = (t_end - delta_t)/2 + scale;
-			    else delta = -( (delta_t - t_start)/2 + scale );
-			    delta_point_1 = Point( (int)rRnd( el_p3.x + rotate( arc( delta_t + delta, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
-						    (int)rRnd( el_p3.y - rotate( arc( delta_t + delta, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ) );
+			if( shapeItems[fig[1]].width == 1 && shapeItems[fig[1]].border_width == 0 ) W2 = 0;
+			else W2 = (shapeItems[fig[1]].width)/2 + shapeItems[fig[1]].border_width;
+			//--- Line ---
+			P1 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc).x + rotate( Point(0,W2), ang1 ).x,
+				    scaleRotate( (pnts)[num_pnt], xSc, ySc).y - rotate( Point(0,W2), ang1 ).y );
+			P2 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc).x + rotate( Point(0,-W2), ang1 ).x,
+				    scaleRotate( (pnts)[num_pnt], xSc, ySc).y - rotate( Point(0,-W2), ang1 ).y );
+			P3 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc).x +
+				    rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc), scaleRotate( (pnts)[point_num[1]], xSc, ySc) ), W2 ), ang1 ).x,
+				    scaleRotate( (pnts)[num_pnt], xSc, ySc).y -
+				    rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc), scaleRotate( (pnts)[point_num[1]], xSc, ySc) ), W2 ), ang1 ).y );
+			P4 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc).x +
+				    rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc), scaleRotate( (pnts)[point_num[1]], xSc, ySc) ), -W2 ), ang1 ).x,
+				    scaleRotate( (pnts)[num_pnt], xSc, ySc).y -
+				    rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc), scaleRotate( (pnts)[point_num[1]], xSc, ySc) ), -W2 ), ang1 ).y );
+			P1 = Point( rRnd( P1.x, POS_PREC_DIG, true ), rRnd( P1.y, POS_PREC_DIG, true ) );
+			P2 = Point( rRnd( P2.x, POS_PREC_DIG, true ), rRnd( P2.y, POS_PREC_DIG, true ) );
+			P3 = Point( rRnd( P3.x, POS_PREC_DIG, true ), rRnd( P3.y, POS_PREC_DIG, true ) );
+			P4 = Point( rRnd( P4.x, POS_PREC_DIG, true ), rRnd( P4.y, POS_PREC_DIG, true ) );
+
+			//--- Line ---
+			t_start = shapeItems[fig[0]].ctrlPos4.x;
+			t_end = shapeItems[fig[0]].ctrlPos4.y;
+			double inc_delta;
+			if(num_pnt == shapeItems[fig[0]].n1) {
+			    delta_t = t_start;
+			    inc_delta = 0.001;
 			}
-			else
+			else {
+			    delta_t = t_end;
+			    inc_delta = -0.001;
+			}
+			Point arc_pnt, arc_pnt_pred;
+			arc_pnt_pred = Point( (int)rRnd( el_p3.x + rotate( arc( delta_t, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
+					      (int)rRnd( el_p3.y - rotate( arc( delta_t, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ) );
+			do
 			{
-			    t_start = shapeItems[fig[0]].ctrlPos4.x;
-			    t_end = shapeItems[fig[0]].ctrlPos4.y;
-			    if( num_pnt == shapeItems[fig[0]].n1 ) delta_real = t_start + (t_end-t_start)/2 + scale;
-			    else delta_real = t_end - (t_end-t_start)/2 + scale;
-			    new_pnt = scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true );
-			    delta_point_1 = Point( (int)rRnd( el_p3.x + rotate( arc( delta_real, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+			    delta_t += inc_delta;
+			    arc_pnt = Point( (int)rRnd( el_p3.x + rotate( arc( delta_t, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
+					     (int)rRnd( el_p3.y - rotate( arc( delta_t, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ) );
+			    if( lineIntersect( arc_pnt_pred.x, arc_pnt_pred.y, arc_pnt.x, arc_pnt.y,P1.x, P1.y, P3.x, P3.y ) )
+			    {
+				new_pnt = Point( arc_pnt.x, arc_pnt.y );
+				break;
+			    }
+			    else if( lineIntersect( arc_pnt_pred.x, arc_pnt_pred.y, arc_pnt.x, arc_pnt.y,P2.x, P2.y, P4.x, P4.y ) )
+			    {
+				new_pnt = Point( arc_pnt.x, arc_pnt.y );
+				break;
+			    }
+			    arc_pnt_pred = arc_pnt;
+			}
+			while(((delta_t<t_end) && (inc_delta>0)) || ((delta_t>t_start) && (inc_delta<0)));
+			if( inc_delta > 0 ) delta = (t_end - delta_t)/2 + scale;
+			else delta = -( (delta_t - t_start)/2 + scale );
+			delta_point_1 = Point( (int)rRnd( el_p3.x + rotate( arc( delta_t + delta, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
+					       (int)rRnd( el_p3.y - rotate( arc( delta_t + delta, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ) );
+		    }
+		    else {
+			t_start = shapeItems[fig[0]].ctrlPos4.x;
+			t_end = shapeItems[fig[0]].ctrlPos4.y;
+			if(num_pnt == (mirror?shapeItems[fig[0]].n2:shapeItems[fig[0]].n1))
+			    delta_real = t_start + (t_end-t_start)/2 + scale;
+			else delta_real = t_end - (t_end-t_start)/2 + scale;
+			new_pnt = scaleRotate( (pnts)[num_pnt], xSc, ySc);
+			delta_point_1 = Point( (int)rRnd( el_p3.x + rotate( arc( delta_real, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
 						    (int)rRnd( el_p3.y - rotate( arc( delta_real, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ) );
-			}
-			delta_point_2 = unrotate( new_pnt, ang1, new_pnt.x, new_pnt.y );
-			delta_point_2.x = delta_point_2.x + length( new_pnt, scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ) * (0.15 + scale);
-			delta_point_2 = Point( new_pnt.x + rotate( delta_point_2, ang1 ).x, new_pnt.y - rotate( delta_point_2, ang1 ).y );
 		    }
-		    //-- bezier curve and line --
-		    else if( (shapeItems[fig[0]].type == 3 && shapeItems[fig[1]].type == 1) || (shapeItems[fig[1]].type == 3 && shapeItems[fig[0]].type == 1) )
+		    delta_point_2 = unrotate( new_pnt, ang1, new_pnt.x, new_pnt.y );
+		    delta_point_2.x = delta_point_2.x + length(new_pnt, scaleRotate((pnts)[point_num[1]], xSc, ySc)) * (0.15 + scale);
+		    delta_point_2 = Point(new_pnt.x + rotate(delta_point_2,ang1).x, new_pnt.y - rotate(delta_point_2,ang1).y);
+		}
+		//-- bezier curve and line --
+		else if( (shapeItems[fig[0]].type == 3 && shapeItems[fig[1]].type == 1) || (shapeItems[fig[1]].type == 3 && shapeItems[fig[0]].type == 1) )
+		{
+		    if( shapeItems[fig[1]].type == 3 ) {
+			int tp = fig[1];
+			int tp1 = point_num[1];
+			fig[1] = fig[0];
+			fig[0] = tp;
+			point_num[1] = point_num[0];
+			point_num[0] = tp1;
+		    }
+		    Point new_pnt, new_pnt_1, new_pnt_2;
+		    double delta_real, delta_t = 0, delta_temp_1 = 0, delta_temp_2 = 0;
+		    double scale;
+		    double ang, ang1;
+		    int num_bezier = 0;
+		    Point P1, P2, P3, P4, el_p1, el_p2, el_p3, el_p4;
+		    scale = 0.0;
+		    if( xSc < 1 && xSc <= ySc ) scale = (1-xSc)/10;
+		    else if( ySc < 1 && ySc <= xSc ) scale = (1-ySc)/10;
+		    //--- bezier ---
+		    el_p1 = scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc);
+		    el_p2 = scaleRotate( (pnts)[shapeItems[fig[0]].n2], xSc, ySc);
+		    el_p3 = scaleRotate( (pnts)[shapeItems[fig[0]].n3], xSc, ySc);
+		    el_p4 = scaleRotate( (pnts)[shapeItems[fig[0]].n4], xSc, ySc);
+		    if( el_p1.y <= el_p2.y )
+			ang = 360 - angle( el_p1, el_p2, el_p1, Point( el_p1.x+10, el_p1.y ) );
+		    else ang = angle( el_p1, el_p2, el_p1, Point( el_p1.x+10, el_p1.y ) );
+		    //--- Line ---
+		    if( scaleRotate( (pnts)[num_pnt], xSc, ySc).y <= scaleRotate( (pnts)[point_num[1]], xSc, ySc).y )
+			ang1 = 360 - angle( scaleRotate( (pnts)[num_pnt], xSc, ySc), scaleRotate( (pnts)[point_num[1]], xSc, ySc), scaleRotate( (pnts)[num_pnt], xSc, ySc),
+					    Point( scaleRotate( (pnts)[num_pnt], xSc, ySc).x+10, scaleRotate( (pnts)[num_pnt], xSc, ySc).y ) );
+		    else
+			ang1 = angle( scaleRotate( (pnts)[num_pnt], xSc, ySc), scaleRotate( (pnts)[point_num[1]], xSc, ySc), scaleRotate( (pnts)[num_pnt], xSc, ySc),
+					    Point( scaleRotate( (pnts)[num_pnt], xSc, ySc).x+10, scaleRotate( (pnts)[num_pnt], xSc, ySc).y ) );
+		    //--- if there is ane width(of figure itself or of its borders) ---
+		    if( (shapeItems[fig[0]].width > 1 || shapeItems[fig[0]].border_width > 0 ) || ( shapeItems[fig[1]].width > 1 || shapeItems[fig[1]].border_width > 0 ))
 		    {
-			if( shapeItems[fig[1]].type == 3 )
-			{
-			    int tp = fig[1];
-			    int tp1 = point_num[1];
-			    fig[1] = fig[0];
-			    fig[0] = tp;
-			    point_num[1] = point_num[0];
-			    point_num[0] = tp1;
-			}
-			Point new_pnt, new_pnt_1, new_pnt_2;
-			double delta_real, delta_t = 0, delta_temp_1 = 0, delta_temp_2 = 0;
-			double scale;
-			double ang, ang1;
-			int num_bezier = 0;
-			Point P1, P2, P3, P4, el_p1, el_p2, el_p3, el_p4;
-			scale = 0.0;
-			if( xSc < 1 && xSc <= ySc ) scale = (1-xSc)/10;
-			else if( ySc < 1 && ySc <= xSc ) scale = (1-ySc)/10;
 			//--- bezier ---
-			el_p1 = scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc, true, true );
-			el_p2 = scaleRotate( (pnts)[shapeItems[fig[0]].n2], xSc, ySc, true, true );
-			el_p3 = scaleRotate( (pnts)[shapeItems[fig[0]].n3], xSc, ySc, true, true );
-			el_p4 = scaleRotate( (pnts)[shapeItems[fig[0]].n4], xSc, ySc, true, true );
-			if( el_p1.y <= el_p2.y )
-			    ang = 360 - angle( el_p1, el_p2, el_p1, Point( el_p1.x+10, el_p1.y ) );
-			else ang = angle( el_p1, el_p2, el_p1, Point( el_p1.x+10, el_p1.y ) );
+			if( shapeItems[fig[0]].width == 1 && shapeItems[fig[0]].border_width == 0 ) W1 = 0;
+			else W1 = (shapeItems[fig[0]].width)/2 + shapeItems[fig[0]].border_width;
 			//--- Line ---
-			if( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y <= scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ).y )
-			    ang1 = 360 - angle( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ), scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ),
-						Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x+10, scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y ) );
-			else
-			    ang1 = angle( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ), scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ),
-					Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x+10, scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y ) );
-			//--- if there is ane width(of figure itself or of its borders) ---
-			if( (shapeItems[fig[0]].width > 1 || shapeItems[fig[0]].border_width > 0 ) || ( shapeItems[fig[1]].width > 1 || shapeItems[fig[1]].border_width > 0 ))
-			{
-			    //--- bezier ---
-			    if( shapeItems[fig[0]].width == 1 && shapeItems[fig[0]].border_width == 0 ) W1 = 0;
-			    else W1 = (shapeItems[fig[0]].width)/2 + shapeItems[fig[0]].border_width;
-			    //--- Line ---
-			    if( shapeItems[fig[1]].width == 1 && shapeItems[fig[1]].border_width == 0 ) W2 = 0;
-			    else W2 = (shapeItems[fig[1]].width)/2 + shapeItems[fig[1]].border_width;
-			    //--- Line ---
-			    P1 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x + rotate( Point(0,W2), ang1 ).x,
-					scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y - rotate( Point(0,W2), ang1 ).y );
-			    P2 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x + rotate( Point(0,-W2), ang1 ).x,
-					scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y - rotate( Point(0,-W2), ang1 ).y );
-			    P3 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x +
-					rotate( Point( length(scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ), W2 ), ang1 ).x,
-					scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y -
-					rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ), W2 ), ang1 ).y );
-			    P4 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x +
-					rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ), -W2 ), ang1 ).x,
-					scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y -
-					rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true , true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true) ), -W2 ), ang1 ).y );
-			    P1 = Point( rRnd( P1.x, POS_PREC_DIG, true ), rRnd( P1.y, POS_PREC_DIG, true ) );
-			    P2 = Point( rRnd( P2.x, POS_PREC_DIG, true ), rRnd( P2.y, POS_PREC_DIG, true ) );
-			    P3 = Point( rRnd( P3.x, POS_PREC_DIG, true ), rRnd( P3.y, POS_PREC_DIG, true ) );
-			    P4 = Point( rRnd( P4.x, POS_PREC_DIG, true ), rRnd( P4.y, POS_PREC_DIG, true ) );
-			    //--- Line ---
-			    double inc_delta;
-			    if( num_pnt == shapeItems[fig[0]].n1 )
-			    {
-				delta_t = 0;
-				inc_delta = 0.001;
-			    }
-			    else
-			    {
-				delta_t = 1;
-				inc_delta = -0.001;
-			    }
-			    Point bezier_pnt_1, bezier_pnt_2, bezier_pnt_pred_1, bezier_pnt_pred_2;
-			    ShapeItem item = shapeItems[fig[0]];
-			    el_p1 = unrotate( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ), ang,
-				    scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).x, scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y );
-			    el_p2 = unrotate( scaleRotate( (pnts)[item.n3], xSc, ySc, true, true ), ang,
-				    scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).x, scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y );
-			    el_p3 = unrotate( scaleRotate( (pnts)[item.n4], xSc, ySc, true, true ), ang,
-				    scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).x, scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y );
-			    el_p4 = unrotate( scaleRotate( (pnts)[item.n2], xSc, ySc, true, true ), ang,
-				    scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).x, scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y );
+			if( shapeItems[fig[1]].width == 1 && shapeItems[fig[1]].border_width == 0 ) W2 = 0;
+			else W2 = (shapeItems[fig[1]].width)/2 + shapeItems[fig[1]].border_width;
+			//--- Line ---
+			P1 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc).x + rotate( Point(0,W2), ang1 ).x,
+				scaleRotate( (pnts)[num_pnt], xSc, ySc).y - rotate( Point(0,W2), ang1 ).y );
+			P2 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc).x + rotate( Point(0,-W2), ang1 ).x,
+				scaleRotate( (pnts)[num_pnt], xSc, ySc).y - rotate( Point(0,-W2), ang1 ).y );
+			P3 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc).x +
+				rotate( Point( length(scaleRotate( (pnts)[num_pnt], xSc, ySc), scaleRotate( (pnts)[point_num[1]], xSc, ySc) ), W2 ), ang1 ).x,
+				scaleRotate( (pnts)[num_pnt], xSc, ySc).y -
+				rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc), scaleRotate( (pnts)[point_num[1]], xSc, ySc) ), W2 ), ang1 ).y );
+			P4 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc).x +
+				rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc), scaleRotate( (pnts)[point_num[1]], xSc, ySc) ), -W2 ), ang1 ).x,
+				scaleRotate( (pnts)[num_pnt], xSc, ySc).y -
+				rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc), scaleRotate( (pnts)[point_num[1]], xSc, ySc) ), -W2 ), ang1 ).y );
+			P1 = Point( rRnd( P1.x, POS_PREC_DIG, true ), rRnd( P1.y, POS_PREC_DIG, true ) );
+			P2 = Point( rRnd( P2.x, POS_PREC_DIG, true ), rRnd( P2.y, POS_PREC_DIG, true ) );
+			P3 = Point( rRnd( P3.x, POS_PREC_DIG, true ), rRnd( P3.y, POS_PREC_DIG, true ) );
+			P4 = Point( rRnd( P4.x, POS_PREC_DIG, true ), rRnd( P4.y, POS_PREC_DIG, true ) );
+			//--- Line ---
+			double inc_delta;
+			if(num_pnt == shapeItems[fig[0]].n1) {
+			    delta_t = 0;
+			    inc_delta = 0.001;
+			}
+			else {
+			    delta_t = 1;
+			    inc_delta = -0.001;
+			}
+			Point bezier_pnt_1, bezier_pnt_2, bezier_pnt_pred_1, bezier_pnt_pred_2;
+			ShapeItem item = shapeItems[fig[0]];
+			el_p1 = unrotate( scaleRotate( (pnts)[item.n1], xSc, ySc), ang,
+				scaleRotate( (pnts)[item.n1], xSc, ySc).x, scaleRotate( (pnts)[item.n1], xSc, ySc).y );
+			el_p2 = unrotate( scaleRotate( (pnts)[item.n3], xSc, ySc), ang,
+				scaleRotate( (pnts)[item.n1], xSc, ySc).x, scaleRotate( (pnts)[item.n1], xSc, ySc).y );
+			el_p3 = unrotate( scaleRotate( (pnts)[item.n4], xSc, ySc), ang,
+				scaleRotate( (pnts)[item.n1], xSc, ySc).x, scaleRotate( (pnts)[item.n1], xSc, ySc).y );
+			el_p4 = unrotate( scaleRotate( (pnts)[item.n2], xSc, ySc), ang,
+				scaleRotate( (pnts)[item.n1], xSc, ySc).x, scaleRotate( (pnts)[item.n1], xSc, ySc).y );
 
-			    bezier_pnt_pred_1 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t,
-						Point( el_p1.x, el_p1.y+W1 ),
-						Point( el_p2.x, el_p2.y+W1 ),
-						Point( el_p3.x, el_p3.y+W1 ),
-						Point( el_p4.x, el_p4.y+W1 ) ), ang ).x, POS_PREC_DIG, true ),
-						(int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t,
-						Point( el_p1.x, el_p1.y+W1 ),
-						Point( el_p2.x, el_p2.y+W1 ),
-						Point( el_p3.x, el_p3.y+W1 ),
-						Point( el_p4.x, el_p4.y+W1) ), ang ).y, POS_PREC_DIG, true ) );
+			bezier_pnt_pred_1 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc).x + rotate( bezier( delta_t,
+					    Point( el_p1.x, el_p1.y+W1 ),
+					    Point( el_p2.x, el_p2.y+W1 ),
+					    Point( el_p3.x, el_p3.y+W1 ),
+					    Point( el_p4.x, el_p4.y+W1 ) ), ang ).x, POS_PREC_DIG, true ),
+					    (int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc).y - rotate( bezier( delta_t,
+					    Point( el_p1.x, el_p1.y+W1 ),
+					    Point( el_p2.x, el_p2.y+W1 ),
+					    Point( el_p3.x, el_p3.y+W1 ),
+					    Point( el_p4.x, el_p4.y+W1) ), ang ).y, POS_PREC_DIG, true ) );
 
-			    bezier_pnt_pred_2 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t,
+			bezier_pnt_pred_2 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc).x + rotate( bezier( delta_t,
+					    Point( el_p1.x, el_p1.y-W1 ),
+					    Point( el_p2.x, el_p2.y-W1 ),
+					    Point( el_p3.x, el_p3.y-W1 ),
+					    Point( el_p4.x, el_p4.y-W1 ) ), ang).x, POS_PREC_DIG, true ),
+					    (int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc).y - rotate( bezier( delta_t,
+					    Point( el_p1.x, el_p1.y-W1 ),
+					    Point( el_p2.x, el_p2.y-W1 ),
+					    Point( el_p3.x, el_p3.y-W1 ),
+					    Point( el_p4.x, el_p4.y-W1 ) ), ang ).y, POS_PREC_DIG, true ) );
+			bool flag_brk_1, flag_brk_2;
+			flag_brk_1 = false;
+			flag_brk_2 = false;
+			do {
+			    delta_t += inc_delta;
+			    bezier_pnt_1 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc).x + rotate( bezier( delta_t,
+					    Point( el_p1.x, el_p1.y+W1 ),
+					    Point( el_p2.x, el_p2.y+W1 ),
+					    Point( el_p3.x, el_p3.y+W1 ),
+					    Point( el_p4.x, el_p4.y+W1 ) ), ang ).x, POS_PREC_DIG, true ),
+					    (int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc).y - rotate( bezier( delta_t,
+					    Point( el_p1.x, el_p1.y+W1 ),
+					    Point( el_p2.x, el_p2.y+W1 ),
+					    Point( el_p3.x, el_p3.y+W1 ),
+					    Point( el_p4.x, el_p4.y+W1 ) ), ang ).y, POS_PREC_DIG, true ) );
+			    if( W1 != 0 )
+				bezier_pnt_2 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc).x + rotate( bezier( delta_t,
+					    Point( el_p1.x, el_p1.y-W1 ),
+					    Point( el_p2.x, el_p2.y-W1 ),
+					    Point( el_p3.x, el_p3.y-W1 ),
+					    Point( el_p4.x, el_p4.y-W1 ) ), ang ).x, POS_PREC_DIG, true ),
+					    (int)rRnd( scaleRotate((pnts)[item.n1], xSc, ySc).y - rotate( bezier( delta_t,
+					    Point( el_p1.x, el_p1.y-W1 ),
+					    Point( el_p2.x, el_p2.y-W1 ),
+					    Point( el_p3.x, el_p3.y-W1 ),
+					    Point( el_p4.x, el_p4.y-W1 ) ), ang ).y, POS_PREC_DIG, true ) );
+			    if( lineIntersect( bezier_pnt_pred_1.x, bezier_pnt_pred_1.y, bezier_pnt_1.x, bezier_pnt_1.y, P1.x, P1.y, P3.x, P3.y ) ) {
+				new_pnt_1 = Point( bezier_pnt_1.x, bezier_pnt_1.y );
+				delta_temp_1 = delta_t;
+				flag_brk_1 = true;
+			    }
+			    else if( lineIntersect( bezier_pnt_pred_1.x,  bezier_pnt_pred_1.y, bezier_pnt_1.x, bezier_pnt_1.y, P2.x, P2.y, P4.x, P4.y ) ) {
+				new_pnt_1 = Point( bezier_pnt_1.x, bezier_pnt_1.y );
+				delta_temp_1 = delta_t;
+				flag_brk_1 = true;
+			    }
+			    else if( lineIntersect( bezier_pnt_pred_2.x,  bezier_pnt_pred_2.y, bezier_pnt_2.x, bezier_pnt_2.y, P1.x, P1.y, P3.x, P3.y ) ) {
+				new_pnt_2 = Point( bezier_pnt_2.x, bezier_pnt_2.y );
+				delta_temp_2 = delta_t;
+				flag_brk_2 = true;
+			    }
+			    else if( lineIntersect( bezier_pnt_pred_2.x,  bezier_pnt_pred_2.y, bezier_pnt_2.x, bezier_pnt_2.y, P2.x, P2.y, P4.x, P4.y ) ) {
+				new_pnt_2 = Point( bezier_pnt_2.x, bezier_pnt_2.y );
+				delta_temp_2 = delta_t;
+				flag_brk_2 = true;
+			    }
+			    bezier_pnt_pred_1 = bezier_pnt_1;
+			    bezier_pnt_pred_2 = bezier_pnt_2;
+			    if(flag_brk_1 && flag_brk_2) break;
+			}
+			while ( ((delta_t<1) && (inc_delta>0)) || ((delta_t>0) && (inc_delta<0)) );
+			if( !flag_brk_1 && !flag_brk_2 ) {
+			    el_p1 = scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc);
+			    el_p2 = scaleRotate( (pnts)[shapeItems[fig[0]].n2], xSc, ySc);
+			    el_p3 = scaleRotate( (pnts)[shapeItems[fig[0]].n3], xSc, ySc);
+			    el_p4 = scaleRotate( (pnts)[shapeItems[fig[0]].n4], xSc, ySc);
+			    new_pnt = scaleRotate( (pnts)[num_pnt], xSc, ySc);
+			    if( num_pnt == shapeItems[fig[0]].n1 ) delta_real = 0.25 + scale;
+			    else delta_real = 0.75 - scale;
+			    delta_point_1 = Point( (int)rRnd( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).x, POS_PREC_DIG, true ),
+						    (int)rRnd( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).y, POS_PREC_DIG, true ) );
+			}
+			else {
+			    if( length(new_pnt_1, (pnts)[point_num[1]]) < length(new_pnt_2, (pnts)[point_num[1]]) ) {
+				new_pnt = new_pnt_1;
+				delta_t = delta_temp_1;
+				num_bezier = 1;
+			    }
+			    else {
+				new_pnt = new_pnt_2;
+				delta_t = delta_temp_2;
+				num_bezier = 2;
+			    }
+			    if(inc_delta > 0) delta = (1-delta_t)/3 + scale;
+			    else delta = -((delta_t)/3 + scale);
+
+			    if(num_bezier == 2)
+				delta_point_1 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc).x + rotate( bezier( delta_t + delta,
 						Point( el_p1.x, el_p1.y-W1 ),
 						Point( el_p2.x, el_p2.y-W1 ),
 						Point( el_p3.x, el_p3.y-W1 ),
 						Point( el_p4.x, el_p4.y-W1 ) ), ang).x, POS_PREC_DIG, true ),
-						(int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t,
+						(int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc).y - rotate( bezier( delta_t + delta,
 						Point( el_p1.x, el_p1.y-W1 ),
 						Point( el_p2.x, el_p2.y-W1 ),
 						Point( el_p3.x, el_p3.y-W1 ),
 						Point( el_p4.x, el_p4.y-W1 ) ), ang ).y, POS_PREC_DIG, true ) );
-			    bool flag_brk_1, flag_brk_2;
-			    flag_brk_1 = false;
-			    flag_brk_2 = false;
-			    do
-			    {
-				delta_t += inc_delta;
-				bezier_pnt_1 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t,
+			    if( num_bezier == 1 )
+				delta_point_1 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc).x + rotate( bezier( delta_t + delta,
 						Point( el_p1.x, el_p1.y+W1 ),
 						Point( el_p2.x, el_p2.y+W1 ),
 						Point( el_p3.x, el_p3.y+W1 ),
 						Point( el_p4.x, el_p4.y+W1 ) ), ang ).x, POS_PREC_DIG, true ),
-						(int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t,
+						(int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc).y - rotate( bezier( delta_t + delta,
 						Point( el_p1.x, el_p1.y+W1 ),
 						Point( el_p2.x, el_p2.y+W1 ),
 						Point( el_p3.x, el_p3.y+W1 ),
 						Point( el_p4.x, el_p4.y+W1 ) ), ang ).y, POS_PREC_DIG, true ) );
-				if( W1 != 0 )
-				    bezier_pnt_2 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t,
-						Point( el_p1.x, el_p1.y-W1 ),
-						Point( el_p2.x, el_p2.y-W1 ),
-						Point( el_p3.x, el_p3.y-W1 ),
-						Point( el_p4.x, el_p4.y-W1 ) ), ang ).x, POS_PREC_DIG, true ),
-						(int)rRnd( scaleRotate((pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t,
-						Point( el_p1.x, el_p1.y-W1 ),
-						Point( el_p2.x, el_p2.y-W1 ),
-						Point( el_p3.x, el_p3.y-W1 ),
-						Point( el_p4.x, el_p4.y-W1 ) ), ang ).y, POS_PREC_DIG, true ) );
-				if( lineIntersect( bezier_pnt_pred_1.x, bezier_pnt_pred_1.y, bezier_pnt_1.x, bezier_pnt_1.y, P1.x, P1.y, P3.x, P3.y ) )
-				{
-				    new_pnt_1 = Point( bezier_pnt_1.x, bezier_pnt_1.y );
-				    delta_temp_1 = delta_t;
-				    flag_brk_1 = true;
-				}
-				else if( lineIntersect( bezier_pnt_pred_1.x,  bezier_pnt_pred_1.y, bezier_pnt_1.x, bezier_pnt_1.y, P2.x, P2.y, P4.x, P4.y ) )
-				{
-				    new_pnt_1 = Point( bezier_pnt_1.x, bezier_pnt_1.y );
-				    delta_temp_1 = delta_t;
-				    flag_brk_1 = true;
-				}
-				else if( lineIntersect( bezier_pnt_pred_2.x,  bezier_pnt_pred_2.y, bezier_pnt_2.x, bezier_pnt_2.y, P1.x, P1.y, P3.x, P3.y ) )
-				{
-				    new_pnt_2 = Point( bezier_pnt_2.x, bezier_pnt_2.y );
-				    delta_temp_2 = delta_t;
-				    flag_brk_2 = true;
-				}
-				else if( lineIntersect( bezier_pnt_pred_2.x,  bezier_pnt_pred_2.y, bezier_pnt_2.x, bezier_pnt_2.y, P2.x, P2.y, P4.x, P4.y ) )
-				{
-				    new_pnt_2 = Point( bezier_pnt_2.x, bezier_pnt_2.y );
-				    delta_temp_2 = delta_t;
-				    flag_brk_2 = true;
-				}
-				bezier_pnt_pred_1 = bezier_pnt_1;
-				bezier_pnt_pred_2 = bezier_pnt_2;
-				if( flag_brk_1 && flag_brk_2 ) break;
-			    }
-			    while ( ((delta_t<1) && (inc_delta>0)) || ((delta_t>0) && (inc_delta<0)) );
-			    if( !flag_brk_1 && !flag_brk_2 )
-			    {
-				el_p1 = scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc, true, true );
-				el_p2 = scaleRotate( (pnts)[shapeItems[fig[0]].n2], xSc, ySc, true, true );
-				el_p3 = scaleRotate( (pnts)[shapeItems[fig[0]].n3], xSc, ySc, true, true );
-				el_p4 = scaleRotate( (pnts)[shapeItems[fig[0]].n4], xSc, ySc, true, true );
-				new_pnt = scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true );
-				if( num_pnt == shapeItems[fig[0]].n1 ) delta_real = 0.25 + scale;
-				else delta_real = 0.75 - scale;
-				delta_point_1 = Point( (int)rRnd( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).x, POS_PREC_DIG, true ),
-							(int)rRnd( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).y, POS_PREC_DIG, true ) );
-			    }
-			    else
-			    {
-				if( length(new_pnt_1, (pnts)[point_num[1]]) < length(new_pnt_2, (pnts)[point_num[1]]) )
-				{
-				    new_pnt = new_pnt_1;
-				    delta_t = delta_temp_1;
-				    num_bezier = 1;
-				}
-				else
-				{
-				    new_pnt = new_pnt_2;
-				    delta_t = delta_temp_2;
-				    num_bezier = 2;
-				}
-				if( inc_delta > 0 ) delta = (1-delta_t)/3 + scale;
-				else delta = -((delta_t)/3 + scale);
-
-				if( num_bezier == 2 )
-				    delta_point_1 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t + delta,
-						    Point( el_p1.x, el_p1.y-W1 ),
-						    Point( el_p2.x, el_p2.y-W1 ),
-						    Point( el_p3.x, el_p3.y-W1 ),
-						    Point( el_p4.x, el_p4.y-W1 ) ), ang).x, POS_PREC_DIG, true ),
-						    (int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t + delta,
-						    Point( el_p1.x, el_p1.y-W1 ),
-						    Point( el_p2.x, el_p2.y-W1 ),
-						    Point( el_p3.x, el_p3.y-W1 ),
-						    Point( el_p4.x, el_p4.y-W1 ) ), ang ).y, POS_PREC_DIG, true ) );
-				if( num_bezier == 1 )
-				    delta_point_1 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t + delta,
-						    Point( el_p1.x, el_p1.y+W1 ),
-						    Point( el_p2.x, el_p2.y+W1 ),
-						    Point( el_p3.x, el_p3.y+W1 ),
-						    Point( el_p4.x, el_p4.y+W1 ) ), ang ).x, POS_PREC_DIG, true ),
-						    (int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t + delta,
-						    Point( el_p1.x, el_p1.y+W1 ),
-						    Point( el_p2.x, el_p2.y+W1 ),
-						    Point( el_p3.x, el_p3.y+W1 ),
-						    Point( el_p4.x, el_p4.y+W1 ) ), ang ).y, POS_PREC_DIG, true ) );
-			    }
 			}
-			else
-			{
-			    new_pnt = scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true );
-			    if( num_pnt == shapeItems[fig[0]].n1 ) delta_real = 0.2 + scale;
-			    else delta_real = 0.8 - scale;
-			    delta_point_1 = Point( (int)rRnd( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).x, POS_PREC_DIG, true ),
-						    (int)rRnd( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).y, POS_PREC_DIG, true ) );
-			}
-			delta_point_2 = unrotate( new_pnt, ang1, new_pnt.x, new_pnt.y );
-			delta_point_2.x = delta_point_2.x + length( new_pnt, scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ) * (0.2 + scale);
-			delta_point_2 = Point( new_pnt.x + rotate( delta_point_2, ang1 ).x, new_pnt.y - rotate( delta_point_2, ang1 ).y );
 		    }
-		    //-- bezier cureve and Arc --
-		    else if( (shapeItems[fig[0]].type == 3 && shapeItems[fig[1]].type == 2) || (shapeItems[fig[1]].type == 3 && shapeItems[fig[0]].type == 2 ) )
+		    else {
+			new_pnt = scaleRotate( (pnts)[num_pnt], xSc, ySc);
+			if( num_pnt == shapeItems[fig[0]].n1 ) delta_real = 0.2 + scale;
+			else delta_real = 0.8 - scale;
+			delta_point_1 = Point( (int)rRnd( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).x, POS_PREC_DIG, true ),
+						(int)rRnd( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).y, POS_PREC_DIG, true ) );
+		    }
+		    delta_point_2 = unrotate( new_pnt, ang1, new_pnt.x, new_pnt.y );
+		    delta_point_2.x = delta_point_2.x + length( new_pnt, scaleRotate( (pnts)[point_num[1]], xSc, ySc) ) * (0.2 + scale);
+		    delta_point_2 = Point( new_pnt.x + rotate( delta_point_2, ang1 ).x, new_pnt.y - rotate( delta_point_2, ang1 ).y );
+		}
+		//-- bezier cureve and Arc --
+		else if( (shapeItems[fig[0]].type == 3 && shapeItems[fig[1]].type == 2) || (shapeItems[fig[1]].type == 3 && shapeItems[fig[0]].type == 2 ) )
+		{
+		    if( shapeItems[fig[1]].type == 2 ) {
+			int tp = fig[1];
+			int tp1 = point_num[1];
+			fig[1] = fig[0];
+			fig[0] = tp;
+			point_num[1] = point_num[0];
+			point_num[0] = tp1;
+		    }
+		    Point new_pnt, new_pnt_1, new_pnt_2;
+		    double delta_real;
+		    double scale;
+		    double ang, ang1, delta_temp_1 = 0, delta_temp_2 = 0, delta_t = 0;
+		    double arc_a, arc_b, arc_a_small, arc_b_small, t_start, t_end, delta_t_arc, delta_t_bez;
+		    int num_bezier = 0;
+		    Point P1, P2, P3, P4;
+		    scale = 0.0;
+		    if( xSc < 1 && xSc <= ySc ) scale = (1-xSc)/10;
+		    else if( ySc < 1 && ySc <= xSc ) scale = (1-ySc)/10;
+		    //--- Arc ---
+		    Point el_p3 = scaleRotate( (pnts)[shapeItems[fig[0]].n3], xSc, ySc);
+		    Point el_p4 = scaleRotate( (pnts)[shapeItems[fig[0]].n4], xSc, ySc);
+		    Point el_p5 = scaleRotate( (pnts)[shapeItems[fig[0]].n5], xSc, ySc);
+		    if( el_p5.y <= el_p3.y ) ang = angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
+		    else ang = 360 - angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
+		    arc_a = length( el_p5, el_p3 ) + shapeItems[fig[0]].width/2 + shapeItems[fig[0]].border_width;
+		    arc_b = length( el_p3, el_p4 ) + shapeItems[fig[0]].width/2 + shapeItems[fig[0]].border_width;
+		    //--- bezier ---
+		    P1 = scaleRotate( (pnts)[shapeItems[fig[1]].n1], xSc, ySc);
+		    P2 = scaleRotate( (pnts)[shapeItems[fig[1]].n2], xSc, ySc);
+		    P3 = scaleRotate( (pnts)[shapeItems[fig[1]].n3], xSc, ySc);
+		    P4 = scaleRotate( (pnts)[shapeItems[fig[1]].n4], xSc, ySc);
+		    if( P1.y <= P2.y ) ang1 = 360 - angle( P1, P2, P1, Point( P1.x+10, P1.y ) );
+		    else ang1 = angle( P1, P2, P1, Point( P1.x+10, P1.y ) );
+		    //-- if there is ane width(of figure itself or of its borders) --
+		    if( (shapeItems[fig[0]].width > 1 || shapeItems[fig[0]].border_width > 0) || (shapeItems[fig[1]].width > 1 || shapeItems[fig[1]].border_width > 0) )
 		    {
-			if( shapeItems[fig[1]].type == 2 )
-			{
-			    int tp = fig[1];
-			    int tp1 = point_num[1];
-			    fig[1] = fig[0];
-			    fig[0] = tp;
-			    point_num[1] = point_num[0];
-			    point_num[0] = tp1;
-			}
-			Point new_pnt, new_pnt_1, new_pnt_2;
-			double delta_real;
-			double scale;
-			double ang, ang1, delta_temp_1 = 0, delta_temp_2 = 0, delta_t = 0;
-			double arc_a, arc_b, arc_a_small, arc_b_small, t_start, t_end, delta_t_arc, delta_t_bez;
-			int num_bezier = 0;
-			Point P1, P2, P3, P4;
-			scale = 0.0;
-			if( xSc < 1 && xSc <= ySc ) scale = (1-xSc)/10;
-			else if( ySc < 1 && ySc <= xSc ) scale = (1-ySc)/10;
 			//--- Arc ---
-			Point el_p3 = scaleRotate( (pnts)[shapeItems[fig[0]].n3], xSc, ySc, true, true );
-			Point el_p4 = scaleRotate( (pnts)[shapeItems[fig[0]].n4], xSc, ySc, true, true );
-			Point el_p5 = scaleRotate( (pnts)[shapeItems[fig[0]].n5], xSc, ySc, true, true );
-			if( el_p5.y <= el_p3.y ) ang = angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
-			else ang = 360 - angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
-			arc_a = length( el_p5, el_p3 ) + shapeItems[fig[0]].width/2 + shapeItems[fig[0]].border_width;
-			arc_b = length( el_p3, el_p4 ) + shapeItems[fig[0]].width/2 + shapeItems[fig[0]].border_width;
+			if( shapeItems[fig[0]].width == 1 && shapeItems[fig[0]].border_width == 0 ) W1 = 0;
+			else W1 = (shapeItems[fig[0]].width)/2 + shapeItems[fig[0]].border_width;
 			//--- bezier ---
-			P1 = scaleRotate( (pnts)[shapeItems[fig[1]].n1], xSc, ySc, true, true );
-			P2 = scaleRotate( (pnts)[shapeItems[fig[1]].n2], xSc, ySc, true, true );
-			P3 = scaleRotate( (pnts)[shapeItems[fig[1]].n3], xSc, ySc, true, true );
-			P4 = scaleRotate( (pnts)[shapeItems[fig[1]].n4], xSc, ySc, true, true );
-			if( P1.y <= P2.y ) ang1 = 360 - angle( P1, P2, P1, Point( P1.x+10, P1.y ) );
-			else ang1 = angle( P1, P2, P1, Point( P1.x+10, P1.y ) );
-			//-- if there is ane width(of figure itself or of its borders) --
-			if( (shapeItems[fig[0]].width > 1 || shapeItems[fig[0]].border_width > 0) || (shapeItems[fig[1]].width > 1 || shapeItems[fig[1]].border_width > 0) )
-			{
-			    //--- Arc ---
-			    if( shapeItems[fig[0]].width == 1 && shapeItems[fig[0]].border_width == 0 ) W1 = 0;
-			    else W1 = (shapeItems[fig[0]].width)/2 + shapeItems[fig[0]].border_width;
-			    //--- bezier ---
-			    if( shapeItems[fig[1]].width == 1 && shapeItems[fig[1]].border_width == 0 ) W2 = 0;
-			    else W2 = (shapeItems[fig[1]].width)/2 + shapeItems[fig[1]].border_width;
+			if( shapeItems[fig[1]].width == 1 && shapeItems[fig[1]].border_width == 0 ) W2 = 0;
+			else W2 = (shapeItems[fig[1]].width)/2 + shapeItems[fig[1]].border_width;
 
-			    arc_a_small = arc_a - shapeItems[fig[0]].width - 2*shapeItems[fig[0]].border_width;
-			    arc_b_small = arc_b - shapeItems[fig[0]].width - 2*shapeItems[fig[0]].border_width;
-			    //--- Arc ---
-			    t_start = shapeItems[fig[0]].ctrlPos4.x;
-			    t_end = shapeItems[fig[0]].ctrlPos4.y;
-			    double inc_delta_arc;
-			    double s = 0.825056176207;
-			    double Len_arc = (4*(arc_a_small + arc_b_small) -
-					    (2*(4 - M_PI)* arc_a_small* arc_b_small)/
-					    pow( pow(arc_a_small,s)/2 + pow(arc_b_small,s)/2 ,(1/s)))*(t_end-t_start);
-			    if( num_pnt == shapeItems[fig[0]].n1 )
-			    {
-				delta_t_arc = t_start;
-				inc_delta_arc = 1/Len_arc;
-			    }
-			    else
-			    {
-				delta_t_arc = t_end;
-				inc_delta_arc = -1/Len_arc;
-			    }
-			    Point arc_pnt, arc_pnt_pred;
-			    arc_pnt_pred = Point( (int)rRnd( el_p3.x + rotate( arc( delta_t_arc, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
-						    (int)rRnd( el_p3.y - rotate( arc( delta_t_arc, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ) );
-			    //--- bezier ---
-			    double Len = length( (pnts)[shapeItems[fig[1]].n1], (pnts)[shapeItems[fig[1]].n3] ) +
-					length( (pnts)[shapeItems[fig[1]].n3], (pnts)[shapeItems[fig[1]].n4] ) +
-					length( (pnts)[shapeItems[fig[1]].n4], (pnts)[shapeItems[fig[1]].n2] );
-			    double inc_delta_bez;
-			    if( num_pnt == shapeItems[fig[1]].n1 )
-			    {
-				delta_t_bez = 0;
-				inc_delta_bez = 1/Len;
-			    }
-			    else
-			    {
-				delta_t_bez = 1;
-				inc_delta_bez = -1/Len;
-			    }
-			    Point bezier_pnt_1, bezier_pnt_2, bezier_pnt_pred_1, bezier_pnt_pred_2;
-			    ShapeItem item = shapeItems[fig[1]];
-			    P1 = unrotate( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ), ang1,
-					scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).x, scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y );
-			    P2 = unrotate( scaleRotate( (pnts)[item.n3], xSc, ySc, true, true ), ang1,
-					scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).x, scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y );
-			    P3 = unrotate( scaleRotate( (pnts)[item.n4], xSc, ySc, true, true ), ang1,
-					scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).x, scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y );
-			    P4 = unrotate( scaleRotate( (pnts)[item.n2], xSc, ySc, true, true ), ang1,
-					scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).x, scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y );
+			arc_a_small = arc_a - shapeItems[fig[0]].width - 2*shapeItems[fig[0]].border_width;
+			arc_b_small = arc_b - shapeItems[fig[0]].width - 2*shapeItems[fig[0]].border_width;
+			//--- Arc ---
+			t_start = shapeItems[fig[0]].ctrlPos4.x;
+			t_end = shapeItems[fig[0]].ctrlPos4.y;
+			double inc_delta_arc;
+			double s = 0.825056176207;
+			double Len_arc = (4*(arc_a_small + arc_b_small) -
+					(2*(4 - M_PI)* arc_a_small* arc_b_small)/
+					pow( pow(arc_a_small,s)/2 + pow(arc_b_small,s)/2 ,(1/s)))*(t_end-t_start);
+			if(num_pnt == shapeItems[fig[0]].n1) {
+			    delta_t_arc = t_start;
+			    inc_delta_arc = 1/Len_arc;
+			}
+			else {
+			    delta_t_arc = t_end;
+			    inc_delta_arc = -1/Len_arc;
+			}
+			Point arc_pnt, arc_pnt_pred;
+			arc_pnt_pred = Point( (int)rRnd( el_p3.x + rotate( arc( delta_t_arc, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
+						(int)rRnd( el_p3.y - rotate( arc( delta_t_arc, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ) );
+			//--- bezier ---
+			double Len = length( (pnts)[shapeItems[fig[1]].n1], (pnts)[shapeItems[fig[1]].n3] ) +
+				     length( (pnts)[shapeItems[fig[1]].n3], (pnts)[shapeItems[fig[1]].n4] ) +
+				     length( (pnts)[shapeItems[fig[1]].n4], (pnts)[shapeItems[fig[1]].n2] );
+			double inc_delta_bez;
+			if( num_pnt == shapeItems[fig[1]].n1 ) {
+			    delta_t_bez = 0;
+			    inc_delta_bez = 1/Len;
+			}
+			else {
+			    delta_t_bez = 1;
+			    inc_delta_bez = -1/Len;
+			}
+			Point bezier_pnt_1, bezier_pnt_2, bezier_pnt_pred_1, bezier_pnt_pred_2;
+			ShapeItem item = shapeItems[fig[1]];
+			P1 = unrotate( scaleRotate( (pnts)[item.n1], xSc, ySc), ang1,
+				scaleRotate( (pnts)[item.n1], xSc, ySc).x, scaleRotate( (pnts)[item.n1], xSc, ySc).y );
+			P2 = unrotate( scaleRotate( (pnts)[item.n3], xSc, ySc), ang1,
+				scaleRotate( (pnts)[item.n1], xSc, ySc).x, scaleRotate( (pnts)[item.n1], xSc, ySc).y );
+			P3 = unrotate( scaleRotate( (pnts)[item.n4], xSc, ySc), ang1,
+				scaleRotate( (pnts)[item.n1], xSc, ySc).x, scaleRotate( (pnts)[item.n1], xSc, ySc).y );
+			P4 = unrotate( scaleRotate( (pnts)[item.n2], xSc, ySc), ang1,
+				scaleRotate( (pnts)[item.n1], xSc, ySc).x, scaleRotate( (pnts)[item.n1], xSc, ySc).y );
 
-			    bezier_pnt_pred_1 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[1]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_bez,
-						Point( P1.x, P1.y+W1 ),
-						Point( P2.x, P2.y+W1 ),
-						Point( P3.x, P3.y+W1 ),
-						Point( P4.x, P4.y+W1 ) ), ang1 ).x, POS_PREC_DIG, true ),
-						(int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_bez,
-						Point( P1.x, P1.y+W1 ),
-						Point( P2.x, P2.y+W1 ),
-						Point( P3.x, P3.y+W1 ),
-						Point( P4.x, P4.y+W1 ) ), ang1 ).y, POS_PREC_DIG, true ) );
-
-			    bezier_pnt_pred_2 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[1]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_bez,
-						Point( P1.x, P1.y-W1 ),
-						Point( P2.x, P2.y-W1 ),
-						Point( P3.x, P3.y-W1 ),
-						Point( P4.x, P4.y-W1 ) ), ang1 ).x, POS_PREC_DIG, true ),
-						(int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_bez,
-						Point( P1.x, P1.y-W1 ),
-						Point( P2.x, P2.y-W1 ),
-						Point( P3.x, P3.y-W1 ),
-						Point( P4.x, P4.y-W1 ) ), ang1 ).y, POS_PREC_DIG, true ) );
-
-			    bool f_brk_1, f_brk_2;
-			    f_brk_1 = false;
-			    f_brk_2 = false;
-			    do
-			    {
-				bezier_pnt_1 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[1]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_bez,
+			bezier_pnt_pred_1 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[1]].n1], xSc, ySc).x + rotate( bezier( delta_t_bez,
 					    Point( P1.x, P1.y+W1 ),
 					    Point( P2.x, P2.y+W1 ),
 					    Point( P3.x, P3.y+W1 ),
 					    Point( P4.x, P4.y+W1 ) ), ang1 ).x, POS_PREC_DIG, true ),
-					    (int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_bez,
+					    (int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc).y - rotate( bezier( delta_t_bez,
 					    Point( P1.x, P1.y+W1 ),
 					    Point( P2.x, P2.y+W1 ),
 					    Point( P3.x, P3.y+W1 ),
 					    Point( P4.x, P4.y+W1 ) ), ang1 ).y, POS_PREC_DIG, true ) );
-				if( W1 != 0 )
-				    bezier_pnt_2 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[1]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_bez,
-						Point( P1.x, P1.y-W1 ),
-						Point( P2.x, P2.y-W1 ),
-						Point( P3.x, P3.y-W1 ),
-						Point( P4.x, P4.y-W1 ) ), ang1 ).x, POS_PREC_DIG, true ),
-						(int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_bez,
-						Point( P1.x, P1.y-W1 ),
-						Point( P2.x, P2.y-W1 ),
-						Point( P3.x, P3.y-W1 ),
-						Point( P4.x, P4.y-W1 ) ), ang1 ).y, POS_PREC_DIG, true ) );
-				delta_t_bez += inc_delta_bez;
-				double t_arc = delta_t_arc;
-				do
-				{
-				    arc_pnt = Point( (int)rRnd( el_p3.x + rotate( arc( t_arc, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
-							(int)rRnd( el_p3.y - rotate( arc( t_arc, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ) );
-				    if( ( ABS(arc_pnt.x - bezier_pnt_1.x) ) < 1 && ( ABS(arc_pnt.y - bezier_pnt_1.y) < 1 ) && !f_brk_1 )
-				    {
-					new_pnt_1 = Point( arc_pnt.x, arc_pnt.y );
-					f_brk_1 = true;
-					delta_temp_1 = delta_t_bez;
-				    }
-				    if( ( ABS(arc_pnt.x - bezier_pnt_2.x) ) < 1 && ( ABS(arc_pnt.y - bezier_pnt_2.y) < 1 ) && !f_brk_2 )
-				    {
-					new_pnt_2 = Point( arc_pnt.x, arc_pnt.y );
-					f_brk_2 = true;
-					delta_temp_2 = delta_t_bez;
-				    }
-				    t_arc += inc_delta_arc;
-				}
-				while( ((t_arc < t_end) && (inc_delta_arc > 0)) || ((t_arc > t_start) && (inc_delta_arc < 0)) );
-				if( f_brk_1 && f_brk_2 ) break;
-			    }
-			    while ( ((delta_t_bez < 1) && (inc_delta_bez > 0)) || ((delta_t_bez > 0) && (inc_delta_bez < 0)) );
 
-			    if( !f_brk_1 && !f_brk_2 )
-			    {
-				//--- Arc ---
-				t_start = shapeItems[fig[0]].ctrlPos4.x;
-				t_end = shapeItems[fig[0]].ctrlPos4.y;
-				if( num_pnt == shapeItems[fig[0]].n1 ) delta_real = t_start + (t_end-t_start)/4 + scale;
-				else delta_real = t_end - (t_end-t_start)/4 + scale;
-				new_pnt = scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true );
-				delta_point_1 = Point( (int)rRnd( el_p3.x + rotate( arc( delta_real, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
-							(int)rRnd( el_p3.y - rotate( arc( delta_real, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ) );
-				//--- bezier ---
-				P1 = scaleRotate( (pnts)[shapeItems[fig[1]].n1], xSc, ySc, true, true );
-				P2 = scaleRotate( (pnts)[shapeItems[fig[1]].n2], xSc, ySc, true, true );
-				P3 = scaleRotate( (pnts)[shapeItems[fig[1]].n3], xSc, ySc, true, true );
-				P4 = scaleRotate( (pnts)[shapeItems[fig[1]].n4], xSc, ySc, true, true );
-				if( num_pnt == shapeItems[fig[1]].n1 ) delta_real = 0.2 + scale;
-				else delta_real = 0.8 - scale;
-				delta_point_2 = Point( (int)TSYS::realRound (bezier( delta_real, P1, P3, P4, P2 ).x, POS_PREC_DIG, true ),
-							(int)rRnd( bezier( delta_real, P1, P3, P4, P2 ).y, POS_PREC_DIG, true ) );
-			    }
-			    else
-			    {
-				if( f_brk_1 && f_brk_2 )
-				    if( length( new_pnt_1, scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ) ) >
-					length( new_pnt_2, scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ) ) )
-				    {
-					new_pnt = new_pnt_1;
-					delta_t = delta_temp_1;
-					num_bezier = 1;
-				    }
-				    else
-				    {
-					new_pnt = new_pnt_2;
-					delta_t = delta_temp_2;
-					num_bezier = 2;
-				    }
-				else if( f_brk_1 && !f_brk_2 )
-				{
-				    new_pnt = new_pnt_1;
-				    delta_t = delta_temp_1;
-				    num_bezier = 1;
-				}
-				else if( !f_brk_1 && f_brk_2 )
-				{
-				    new_pnt = new_pnt_2;
-				    delta_t = delta_temp_2;
-				    num_bezier = 2;
-				}
-				if( inc_delta_bez > 0 ) delta = (1-delta_t)/3 + scale;
-				else delta = -((delta_t)/3 + scale);
+			bezier_pnt_pred_2 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[1]].n1], xSc, ySc).x + rotate( bezier( delta_t_bez,
+					    Point( P1.x, P1.y-W1 ),
+					    Point( P2.x, P2.y-W1 ),
+					    Point( P3.x, P3.y-W1 ),
+					    Point( P4.x, P4.y-W1 ) ), ang1 ).x, POS_PREC_DIG, true ),
+					    (int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc).y - rotate( bezier( delta_t_bez,
+					    Point( P1.x, P1.y-W1 ),
+					    Point( P2.x, P2.y-W1 ),
+					    Point( P3.x, P3.y-W1 ),
+					    Point( P4.x, P4.y-W1 ) ), ang1 ).y, POS_PREC_DIG, true ) );
 
-				if(num_bezier == 1)
-				    delta_point_1 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[1]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t + delta,
-						    Point( P1.x, P1.y+W1 ),
-						    Point( P2.x, P2.y+W1 ),
-						    Point( P3.x, P3.y+W1 ),
-						    Point( P4.x, P4.y+W1 ) ), ang1 ).x, POS_PREC_DIG, true ),
-						    (int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t + delta,
-						    Point( P1.x, P1.y+W1 ),
-						    Point( P2.x, P2.y+W1 ),
-						    Point( P3.x, P3.y+W1 ),
-						    Point( P4.x, P4.y+W1 ) ), ang1 ).y, POS_PREC_DIG, true ) );
-				if( num_bezier == 2 )
-				    delta_point_1 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[1]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t + delta,
-						    Point( P1.x, P1.y-W1 ),
-						    Point( P2.x, P2.y-W1 ),
-						    Point( P3.x, P3.y-W1 ),
-						    Point( P4.x, P4.y-W1 ) ), ang1 ).x, POS_PREC_DIG, true ),
-						    (int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t + delta,
-						    Point( P1.x, P1.y-W1 ),
-						    Point( P2.x, P2.y-W1 ),
-						    Point( P3.x, P3.y-W1 ),
-						    Point( P4.x, P4.y-W1 ) ), ang1 ).y, POS_PREC_DIG, true ) );
-				if( num_pnt == shapeItems[fig[0]].n1 ) delta_real = t_start + (t_end-t_start)/4 + scale;
-				else delta_real = t_end - (t_end-t_start)/4 + scale;
-				delta_point_2 = Point( (int)rRnd( el_p3.x + rotate( arc( delta_real, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
-							(int)rRnd( el_p3.y - rotate( arc( delta_real, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ) );
+			bool f_brk_1, f_brk_2;
+			f_brk_1 = f_brk_2 = false;
+			do {
+			    bezier_pnt_1 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[1]].n1], xSc, ySc).x + rotate( bezier( delta_t_bez,
+					Point( P1.x, P1.y+W1 ),
+					Point( P2.x, P2.y+W1 ),
+					Point( P3.x, P3.y+W1 ),
+					Point( P4.x, P4.y+W1 ) ), ang1 ).x, POS_PREC_DIG, true ),
+					(int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc).y - rotate( bezier( delta_t_bez,
+					Point( P1.x, P1.y+W1 ),
+					Point( P2.x, P2.y+W1 ),
+					Point( P3.x, P3.y+W1 ),
+					Point( P4.x, P4.y+W1 ) ), ang1 ).y, POS_PREC_DIG, true ) );
+			    if( W1 != 0 )
+				bezier_pnt_2 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[1]].n1], xSc, ySc).x + rotate( bezier( delta_t_bez,
+					Point( P1.x, P1.y-W1 ),
+					Point( P2.x, P2.y-W1 ),
+					Point( P3.x, P3.y-W1 ),
+					Point( P4.x, P4.y-W1 ) ), ang1 ).x, POS_PREC_DIG, true ),
+					(int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc).y - rotate( bezier( delta_t_bez,
+					Point( P1.x, P1.y-W1 ),
+					Point( P2.x, P2.y-W1 ),
+					Point( P3.x, P3.y-W1 ),
+					Point( P4.x, P4.y-W1 ) ), ang1 ).y, POS_PREC_DIG, true ) );
+			    delta_t_bez += inc_delta_bez;
+			    double t_arc = delta_t_arc;
+			    do {
+				arc_pnt = Point( (int)rRnd( el_p3.x + rotate( arc( t_arc, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
+						 (int)rRnd( el_p3.y - rotate( arc( t_arc, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ) );
+				if( ( ABS(arc_pnt.x - bezier_pnt_1.x) ) < 1 && ( ABS(arc_pnt.y - bezier_pnt_1.y) < 1 ) && !f_brk_1 ) {
+				    new_pnt_1 = Point( arc_pnt.x, arc_pnt.y );
+				    f_brk_1 = true;
+				    delta_temp_1 = delta_t_bez;
+				}
+				if( ( ABS(arc_pnt.x - bezier_pnt_2.x) ) < 1 && ( ABS(arc_pnt.y - bezier_pnt_2.y) < 1 ) && !f_brk_2 ) {
+				    new_pnt_2 = Point( arc_pnt.x, arc_pnt.y );
+				    f_brk_2 = true;
+				    delta_temp_2 = delta_t_bez;
+				}
+				t_arc += inc_delta_arc;
 			    }
+			    while( ((t_arc < t_end) && (inc_delta_arc > 0)) || ((t_arc > t_start) && (inc_delta_arc < 0)) );
+			    if( f_brk_1 && f_brk_2 ) break;
 			}
-			else
-			{
+			while ( ((delta_t_bez < 1) && (inc_delta_bez > 0)) || ((delta_t_bez > 0) && (inc_delta_bez < 0)) );
+
+			if( !f_brk_1 && !f_brk_2 ) {
 			    //--- Arc ---
 			    t_start = shapeItems[fig[0]].ctrlPos4.x;
 			    t_end = shapeItems[fig[0]].ctrlPos4.y;
 			    if( num_pnt == shapeItems[fig[0]].n1 ) delta_real = t_start + (t_end-t_start)/4 + scale;
 			    else delta_real = t_end - (t_end-t_start)/4 + scale;
-			    new_pnt = scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true );
-			    delta_point_1 = Point( (int)rRnd( el_p3.x + rotate( arc( delta_real, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
-						    (int)rRnd( el_p3.y - rotate( arc( delta_real, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ) );
+			    new_pnt = scaleRotate( (pnts)[num_pnt], xSc, ySc);
+			    delta_point_1 = Point( (int)rRnd( el_p3.x + rotate( arc( delta_real, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
+						   (int)rRnd( el_p3.y - rotate( arc( delta_real, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ) );
 			    //--- bezier ---
+			    P1 = scaleRotate( (pnts)[shapeItems[fig[1]].n1], xSc, ySc);
+			    P2 = scaleRotate( (pnts)[shapeItems[fig[1]].n2], xSc, ySc);
+			    P3 = scaleRotate( (pnts)[shapeItems[fig[1]].n3], xSc, ySc);
+			    P4 = scaleRotate( (pnts)[shapeItems[fig[1]].n4], xSc, ySc);
 			    if( num_pnt == shapeItems[fig[1]].n1 ) delta_real = 0.2 + scale;
 			    else delta_real = 0.8 - scale;
-			    delta_point_2 = Point( (int)rRnd( bezier( delta_real, P1, P3, P4, P2 ).x, POS_PREC_DIG, true ),
-						    (int)rRnd( bezier( delta_real, P1, P3, P4, P2 ).y, POS_PREC_DIG, true ) );
+			    delta_point_2 = Point( (int)TSYS::realRound (bezier( delta_real, P1, P3, P4, P2 ).x, POS_PREC_DIG, true ),
+						   (int)rRnd( bezier( delta_real, P1, P3, P4, P2 ).y, POS_PREC_DIG, true ) );
+			}
+			else {
+			    if( f_brk_1 && f_brk_2 ) {
+				if( length( new_pnt_1, scaleRotate( (pnts)[num_pnt], xSc, ySc) ) >
+				    length( new_pnt_2, scaleRotate( (pnts)[num_pnt], xSc, ySc) ) )
+				{
+				    new_pnt = new_pnt_1;
+				    delta_t = delta_temp_1;
+				    num_bezier = 1;
+				}
+				else {
+				    new_pnt = new_pnt_2;
+				    delta_t = delta_temp_2;
+				    num_bezier = 2;
+				}
+			    }
+			    else if( f_brk_1 && !f_brk_2 ) {
+				new_pnt = new_pnt_1;
+				delta_t = delta_temp_1;
+				num_bezier = 1;
+			    }
+			    else if( !f_brk_1 && f_brk_2 ) {
+				new_pnt = new_pnt_2;
+				delta_t = delta_temp_2;
+				num_bezier = 2;
+			    }
+			    if( inc_delta_bez > 0 ) delta = (1-delta_t)/3 + scale;
+			    else delta = -((delta_t)/3 + scale);
+
+			    if(num_bezier == 1)
+				delta_point_1 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[1]].n1], xSc, ySc).x + rotate( bezier( delta_t + delta,
+						Point( P1.x, P1.y+W1 ),
+						Point( P2.x, P2.y+W1 ),
+						Point( P3.x, P3.y+W1 ),
+						Point( P4.x, P4.y+W1 ) ), ang1 ).x, POS_PREC_DIG, true ),
+						(int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc).y - rotate( bezier( delta_t + delta,
+						Point( P1.x, P1.y+W1 ),
+						Point( P2.x, P2.y+W1 ),
+						Point( P3.x, P3.y+W1 ),
+						Point( P4.x, P4.y+W1 ) ), ang1 ).y, POS_PREC_DIG, true ) );
+			    if(num_bezier == 2)
+				delta_point_1 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[1]].n1], xSc, ySc).x + rotate( bezier( delta_t + delta,
+						Point( P1.x, P1.y-W1 ),
+						Point( P2.x, P2.y-W1 ),
+						Point( P3.x, P3.y-W1 ),
+						Point( P4.x, P4.y-W1 ) ), ang1 ).x, POS_PREC_DIG, true ),
+						(int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc).y - rotate( bezier( delta_t + delta,
+						Point( P1.x, P1.y-W1 ),
+						Point( P2.x, P2.y-W1 ),
+						Point( P3.x, P3.y-W1 ),
+						Point( P4.x, P4.y-W1 ) ), ang1 ).y, POS_PREC_DIG, true ) );
+			    if(num_pnt == shapeItems[fig[0]].n1) delta_real = t_start + (t_end-t_start)/4 + scale;
+			    else delta_real = t_end - (t_end-t_start)/4 + scale;
+			    delta_point_2 = Point( (int)rRnd( el_p3.x + rotate( arc( delta_real, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
+						   (int)rRnd( el_p3.y - rotate( arc( delta_real, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ) );
 			}
 		    }
-		    //- bezier curve and bezier curve -
-		    else if( shapeItems[fig[0]].type == 3 && shapeItems[fig[1]].type == 3 )
+		    else {
+			//--- Arc ---
+			t_start = shapeItems[fig[0]].ctrlPos4.x;
+			t_end = shapeItems[fig[0]].ctrlPos4.y;
+			if( num_pnt == shapeItems[fig[0]].n1 ) delta_real = t_start + (t_end-t_start)/4 + scale;
+			else delta_real = t_end - (t_end-t_start)/4 + scale;
+			new_pnt = scaleRotate( (pnts)[num_pnt], xSc, ySc);
+			delta_point_1 = Point( (int)rRnd( el_p3.x + rotate( arc( delta_real, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+					       (int)rRnd( el_p3.y - rotate( arc( delta_real, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ) );
+			//--- bezier ---
+			if( num_pnt == shapeItems[fig[1]].n1 ) delta_real = 0.2 + scale;
+			else delta_real = 0.8 - scale;
+			delta_point_2 = Point( (int)rRnd( bezier( delta_real, P1, P3, P4, P2 ).x, POS_PREC_DIG, true ),
+					       (int)rRnd( bezier( delta_real, P1, P3, P4, P2 ).y, POS_PREC_DIG, true ) );
+		    }
+		}
+		//- bezier curve and bezier curve -
+		else if( shapeItems[fig[0]].type == 3 && shapeItems[fig[1]].type == 3 ) {
+		    Point new_pnt;
+		    vector <Point> new_pnt_vect;
+		    double delta_real, delta_t_1 = 0, delta_t_2 = 0, delta_t_bez_1,  delta_t_bez_2;
+		    double delta_1, delta_2;
+		    vector <double> delta_temp_1, delta_temp_2;
+		    vector <int> num_bezier_1, num_bezier_2;
+		    double scale;
+		    double ang, ang1;
+		    int num_bez_1 = 0, num_bez_2 = 0;
+		    Point P1, P2, P3, P4, el_p1, el_p2, el_p3, el_p4;
+		    scale = 0.0;
+		    if( xSc < 1 && xSc <= ySc ) scale = (1 - xSc)/10;
+		    else if( ySc<1 && ySc<=xSc ) scale = (1 - ySc)/10;
+		    //--- bezier_1 ---
+		    el_p1 = scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc);
+		    el_p2 = scaleRotate( (pnts)[shapeItems[fig[0]].n2], xSc, ySc);
+		    el_p3 = scaleRotate( (pnts)[shapeItems[fig[0]].n3], xSc, ySc);
+		    el_p4 = scaleRotate( (pnts)[shapeItems[fig[0]].n4], xSc, ySc);
+		    if( el_p1.y <= el_p2.y ) ang = 360 - angle( el_p1, el_p2, el_p1, Point( el_p1.x+10, el_p1.y ) );
+		    else ang = angle( el_p1, el_p2, el_p1, Point( el_p1.x+10, el_p1.y ) );
+		    //--- bezier_2 ---
+		    P1 = scaleRotate( (pnts)[shapeItems[fig[1]].n1], xSc, ySc);
+		    P2 = scaleRotate( (pnts)[shapeItems[fig[1]].n2], xSc, ySc);
+		    P3 = scaleRotate( (pnts)[shapeItems[fig[1]].n3], xSc, ySc);
+		    P4 = scaleRotate( (pnts)[shapeItems[fig[1]].n4], xSc, ySc);
+		    if( P1.y <= P2.y ) ang1 = 360 - angle( P1, P2, P1, Point( P1.x+10, P1.y ) );
+		    else ang1 = angle( P1, P2, P1, Point( P1.x+10, P1.y ) );
+		    //-- if there is ane width(of figure itself or of its borders) --
+		    if( ( shapeItems[fig[0]].width > 1 || shapeItems[fig[0]].border_width > 0 ) || ( shapeItems[fig[1]].width > 1 || shapeItems[fig[1]].border_width > 0 ) )
 		    {
-			Point new_pnt;
-			vector <Point> new_pnt_vect;
-			double delta_real, delta_t_1 = 0, delta_t_2 = 0, delta_t_bez_1,  delta_t_bez_2;
-			double delta_1, delta_2;
-			vector <double> delta_temp_1, delta_temp_2;
-			vector <int> num_bezier_1, num_bezier_2;
-			double scale;
-			double ang, ang1;
-			int num_bez_1 = 0, num_bez_2 = 0;
-			Point P1, P2, P3, P4, el_p1, el_p2, el_p3, el_p4;
-			scale = 0.0;
-			if( xSc < 1 && xSc <= ySc ) scale = (1 - xSc)/10;
-			else if( ySc<1 && ySc<=xSc ) scale = (1 - ySc)/10;
+			double inc_delta_bez_1, inc_delta_bez_2;
+			Point bezier_pnt_1_1, bezier_pnt_1_2, bezier_pnt_2_1, bezier_pnt_2_2;
 			//--- bezier_1 ---
-			el_p1 = scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc, true, true );
-			el_p2 = scaleRotate( (pnts)[shapeItems[fig[0]].n2], xSc, ySc, true, true );
-			el_p3 = scaleRotate( (pnts)[shapeItems[fig[0]].n3], xSc, ySc, true, true );
-			el_p4 = scaleRotate( (pnts)[shapeItems[fig[0]].n4], xSc, ySc, true, true );
-			if( el_p1.y <= el_p2.y ) ang = 360 - angle( el_p1, el_p2, el_p1, Point( el_p1.x+10, el_p1.y ) );
-			else ang = angle( el_p1, el_p2, el_p1, Point( el_p1.x+10, el_p1.y ) );
+			if( shapeItems[fig[0]].width == 1 && shapeItems[fig[0]].border_width == 0 ) W1 = 0;
+			else W1 = (shapeItems[fig[0]].width)/2 + shapeItems[fig[0]].border_width;
 			//--- bezier_2 ---
-			P1 = scaleRotate( (pnts)[shapeItems[fig[1]].n1], xSc, ySc, true, true );
-			P2 = scaleRotate( (pnts)[shapeItems[fig[1]].n2], xSc, ySc, true, true );
-			P3 = scaleRotate( (pnts)[shapeItems[fig[1]].n3], xSc, ySc, true, true );
-			P4 = scaleRotate( (pnts)[shapeItems[fig[1]].n4], xSc, ySc, true, true );
-			if( P1.y <= P2.y ) ang1 = 360 - angle( P1, P2, P1, Point( P1.x+10, P1.y ) );
-			else ang1 = angle( P1, P2, P1, Point( P1.x+10, P1.y ) );
-			//-- if there is ane width(of figure itself or of its borders) --
-			if( ( shapeItems[fig[0]].width > 1 || shapeItems[fig[0]].border_width > 0 ) || ( shapeItems[fig[1]].width > 1 || shapeItems[fig[1]].border_width > 0 ) )
-			{
-			    double inc_delta_bez_1, inc_delta_bez_2;
-			    Point bezier_pnt_1_1, bezier_pnt_1_2, bezier_pnt_2_1, bezier_pnt_2_2;
-			    //--- bezier_1 ---
-			    if( shapeItems[fig[0]].width == 1 && shapeItems[fig[0]].border_width == 0 ) W1 = 0;
-			    else W1 = (shapeItems[fig[0]].width)/2 + shapeItems[fig[0]].border_width;
-			    //--- bezier_2 ---
-			    if( shapeItems[fig[1]].width == 1 && shapeItems[fig[1]].border_width == 0 ) W2 = 0;
-			    else W2 = (shapeItems[fig[1]].width)/2 + shapeItems[fig[1]].border_width;
-			    double Len_1 = length( (pnts)[shapeItems[fig[0]].n1], (pnts)[shapeItems[fig[0]].n3] ) +
+			if( shapeItems[fig[1]].width == 1 && shapeItems[fig[1]].border_width == 0 ) W2 = 0;
+			else W2 = (shapeItems[fig[1]].width)/2 + shapeItems[fig[1]].border_width;
+			double Len_1 = length( (pnts)[shapeItems[fig[0]].n1], (pnts)[shapeItems[fig[0]].n3] ) +
 					length( (pnts)[shapeItems[fig[0]].n3], (pnts)[shapeItems[fig[0]].n4] ) +
 					length( (pnts)[shapeItems[fig[0]].n4], (pnts)[shapeItems[fig[0]].n2] );
-			    double Len_2 = length( (pnts)[shapeItems[fig[1]].n1], (pnts)[shapeItems[fig[1]].n3] ) +
+			double Len_2 = length( (pnts)[shapeItems[fig[1]].n1], (pnts)[shapeItems[fig[1]].n3] ) +
 					length( (pnts)[shapeItems[fig[1]].n3], (pnts)[shapeItems[fig[1]].n4] ) +
 					length( (pnts)[shapeItems[fig[1]].n4], (pnts)[shapeItems[fig[1]].n2] );
 
-			    //--- bezier_1 ---
-			    if( num_pnt == shapeItems[fig[0]].n1 )
-			    {
-				delta_t_bez_1 = 0;
-				inc_delta_bez_1 = 1/Len_1;
-			    }
-			    else
-			    {
-				delta_t_bez_1 = 1;
-				inc_delta_bez_1 = -1/Len_1;
-			    }
-			    ShapeItem item = shapeItems[fig[0]];
-			    el_p1 = unrotate( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ), ang,
-				    scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).x, scaleRotate( (pnts)[item.n1], xSc, ySc, true, true).y );
-			    el_p2 = unrotate( scaleRotate( (pnts)[item.n3], xSc, ySc, true, true ), ang,
-				    scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).x, scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y );
-			    el_p3 = unrotate( scaleRotate( (pnts)[item.n4], xSc, ySc, true, true ), ang,
-				    scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).x, scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y );
-			    el_p4 = unrotate( scaleRotate( (pnts)[item.n2], xSc, ySc, true, true ), ang,
-				    scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).x, scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y );
+			//--- bezier_1 ---
+			if( num_pnt == shapeItems[fig[0]].n1 ) {
+			    delta_t_bez_1 = 0;
+			    inc_delta_bez_1 = 1/Len_1;
+			}
+			else {
+			    delta_t_bez_1 = 1;
+			    inc_delta_bez_1 = -1/Len_1;
+			}
+			ShapeItem item = shapeItems[fig[0]];
+			el_p1 = unrotate( scaleRotate( (pnts)[item.n1], xSc, ySc), ang,
+				    scaleRotate( (pnts)[item.n1], xSc, ySc).x, scaleRotate( (pnts)[item.n1], xSc, ySc).y );
+			el_p2 = unrotate( scaleRotate( (pnts)[item.n3], xSc, ySc), ang,
+				    scaleRotate( (pnts)[item.n1], xSc, ySc).x, scaleRotate( (pnts)[item.n1], xSc, ySc).y );
+			el_p3 = unrotate( scaleRotate( (pnts)[item.n4], xSc, ySc), ang,
+				    scaleRotate( (pnts)[item.n1], xSc, ySc).x, scaleRotate( (pnts)[item.n1], xSc, ySc).y );
+			el_p4 = unrotate( scaleRotate( (pnts)[item.n2], xSc, ySc), ang,
+				    scaleRotate( (pnts)[item.n1], xSc, ySc).x, scaleRotate( (pnts)[item.n1], xSc, ySc).y );
 
-			    //--- bezier_2 ---
-			    if( num_pnt == shapeItems[fig[1]].n1 )
-			    {
-				delta_t_bez_2 = 0;
-				inc_delta_bez_2 = 1/Len_2;
-			    }
-			    else
-			    {
-				delta_t_bez_2 = 1;
-				inc_delta_bez_2 = -1/Len_2;
-			    }
-			    ShapeItem item_1 = shapeItems[fig[1]];
-			    P1 = unrotate( scaleRotate( (pnts)[item_1.n1], xSc, ySc, true, true ), ang1,
-					scaleRotate( (pnts)[item_1.n1], xSc, ySc, true, true ).x, scaleRotate( (pnts)[item_1.n1], xSc, ySc, true, true ).y );
-			    P2 = unrotate( scaleRotate( (pnts)[item_1.n3], xSc, ySc, true, true ), ang1,
-					scaleRotate( (pnts)[item_1.n1], xSc, ySc, true, true ).x, scaleRotate( (pnts)[item_1.n1], xSc, ySc, true, true ).y );
-			    P3 = unrotate( scaleRotate( (pnts)[item_1.n4], xSc, ySc, true, true ), ang1,
-					scaleRotate( (pnts)[item_1.n1], xSc, ySc, true, true ).x, scaleRotate( (pnts)[item_1.n1], xSc, ySc, true, true ).y );
-			    P4 = unrotate( scaleRotate( (pnts)[item_1.n2], xSc, ySc, true, true ), ang1,
-					scaleRotate( (pnts)[item_1.n1], xSc, ySc, true, true ).x, scaleRotate( (pnts)[item_1.n1], xSc, ySc, true, true ).y );
+			//--- bezier_2 ---
+			if( num_pnt == shapeItems[fig[1]].n1 ) {
+			    delta_t_bez_2 = 0;
+			    inc_delta_bez_2 = 1/Len_2;
+			}
+			else {
+			    delta_t_bez_2 = 1;
+			    inc_delta_bez_2 = -1/Len_2;
+			}
+			ShapeItem item_1 = shapeItems[fig[1]];
+			P1 = unrotate( scaleRotate( (pnts)[item_1.n1], xSc, ySc), ang1,
+					scaleRotate( (pnts)[item_1.n1], xSc, ySc).x, scaleRotate( (pnts)[item_1.n1], xSc, ySc).y );
+			P2 = unrotate( scaleRotate( (pnts)[item_1.n3], xSc, ySc), ang1,
+					scaleRotate( (pnts)[item_1.n1], xSc, ySc).x, scaleRotate( (pnts)[item_1.n1], xSc, ySc).y );
+			P3 = unrotate( scaleRotate( (pnts)[item_1.n4], xSc, ySc), ang1,
+					scaleRotate( (pnts)[item_1.n1], xSc, ySc).x, scaleRotate( (pnts)[item_1.n1], xSc, ySc).y );
+			P4 = unrotate( scaleRotate( (pnts)[item_1.n2], xSc, ySc), ang1,
+					scaleRotate( (pnts)[item_1.n1], xSc, ySc).x, scaleRotate( (pnts)[item_1.n1], xSc, ySc).y );
 
-			    bool f_brk_1, f_brk_2, f_brk_3, f_brk_4;
-			    f_brk_1 = false;
-			    f_brk_2 = false;
-			    f_brk_3 = false;
-			    f_brk_4 = false;
-			    do
-			    {
-				bezier_pnt_1_1 = Point( (int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_bez_1,
+			bool f_brk_1, f_brk_2, f_brk_3, f_brk_4;
+			f_brk_1 = false;
+			f_brk_2 = false;
+			f_brk_3 = false;
+			f_brk_4 = false;
+			do {
+			    bezier_pnt_1_1 = Point( (int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc).x + rotate( bezier( delta_t_bez_1,
+					    Point( el_p1.x, el_p1.y+W1 ),
+					    Point( el_p2.x, el_p2.y+W1 ),
+					    Point( el_p3.x, el_p3.y+W1 ),
+					    Point( el_p4.x, el_p4.y+W1 ) ), ang ).x, POS_PREC_DIG, true ),
+					    (int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc).y - rotate( bezier( delta_t_bez_1,
+					    Point( el_p1.x, el_p1.y+W1 ),
+					    Point( el_p2.x, el_p2.y+W1 ),
+					    Point( el_p3.x, el_p3.y+W1 ),
+					    Point( el_p4.x, el_p4.y+W1 ) ), ang ).y, POS_PREC_DIG, true ) );
+			    if( W1 != 0 ) {
+				bezier_pnt_1_2 = Point( (int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc).x + rotate( bezier( delta_t_bez_1,
+						Point( el_p1.x, el_p1.y-W1 ),
+						Point( el_p2.x, el_p2.y-W1 ),
+						Point( el_p3.x, el_p3.y-W1 ),
+						Point( el_p4.x, el_p4.y-W1 ) ), ang ).x, POS_PREC_DIG, true ),
+						(int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc).y - rotate( bezier( delta_t_bez_1,
+						Point( el_p1.x, el_p1.y-W1 ),
+						Point( el_p2.x, el_p2.y-W1 ),
+						Point( el_p3.x, el_p3.y-W1 ),
+						Point( el_p4.x, el_p4.y-W1 ) ), ang ).y, POS_PREC_DIG, true ) );
+			    }
+			    delta_t_bez_1 += inc_delta_bez_1;
+			    double delta_t_bez_2_do = delta_t_bez_2;
+			    do {
+				bezier_pnt_2_1 = Point( (int)rRnd( scaleRotate( (pnts)[item_1.n1], xSc, ySc).x + rotate( bezier( delta_t_bez_2_do,
+						Point( P1.x, P1.y+W2 ),
+						Point( P2.x, P2.y+W2 ),
+						Point( P3.x, P3.y+W2 ),
+						Point( P4.x, P4.y+W2 ) ), ang1 ).x, POS_PREC_DIG, true ),
+						(int)rRnd( scaleRotate( (pnts)[item_1.n1], xSc, ySc).y - rotate( bezier( delta_t_bez_2_do,
+						Point( P1.x, P1.y+W2 ),
+						Point( P2.x, P2.y+W2 ),
+						Point( P3.x, P3.y+W2 ),
+						Point( P4.x, P4.y+W2 ) ), ang1 ).y, POS_PREC_DIG, true ) );
+				if( W2 != 0 ) {
+				    bezier_pnt_2_2 = Point( (int)rRnd( scaleRotate( (pnts)[item_1.n1], xSc, ySc).x + rotate( bezier( delta_t_bez_2_do,
+						Point( P1.x, P1.y-W2 ),
+						Point( P2.x, P2.y-W2 ),
+						Point( P3.x, P3.y-W2 ),
+						Point( P4.x, P4.y-W2 ) ), ang1 ).x, POS_PREC_DIG, true ),
+						(int)rRnd( scaleRotate( (pnts)[item_1.n1], xSc, ySc).y - rotate( bezier( delta_t_bez_2_do,
+						Point( P1.x, P1.y-W2 ),
+						Point( P2.x, P2.y-W2 ),
+						Point( P3.x, P3.y-W2 ),
+						Point( P4.x, P4.y-W2 ) ), ang1 ).y, POS_PREC_DIG, true ) );
+				}
+				if( (ABS( bezier_pnt_2_1.x - bezier_pnt_1_1.x)) < 1 && (ABS( bezier_pnt_2_1.y - bezier_pnt_1_1.y) < 1) && !f_brk_1 )
+				{
+				    new_pnt_vect.push_back( Point( bezier_pnt_2_1.x, bezier_pnt_2_1.y ) );
+				    f_brk_1 = true;
+				    delta_temp_1.push_back(delta_t_bez_1);
+				    delta_temp_2.push_back(delta_t_bez_2_do);
+				    num_bezier_1.push_back(1);
+				    num_bezier_2.push_back(1);
+				}
+				if( (ABS( bezier_pnt_2_1.x - bezier_pnt_1_2.x)) < 1 && (ABS( bezier_pnt_2_1.y - bezier_pnt_1_2.y) < 1) && !f_brk_2 )
+				{
+				    new_pnt_vect.push_back(Point(bezier_pnt_2_1.x, bezier_pnt_2_1.y));
+				    f_brk_2 = true;
+				    delta_temp_1.push_back(delta_t_bez_1);
+				    delta_temp_2.push_back(delta_t_bez_2_do);
+				    num_bezier_1.push_back(0);
+				    num_bezier_2.push_back(1);
+				}
+				if( (ABS( bezier_pnt_2_2.x - bezier_pnt_1_1.x)) < 1 && (ABS( bezier_pnt_2_2.y - bezier_pnt_1_1.y) < 1) && !f_brk_3 )
+				{
+				    new_pnt_vect.push_back( Point( bezier_pnt_2_2.x, bezier_pnt_2_2.y ) );
+				    f_brk_3 = true;
+				    delta_temp_1.push_back(delta_t_bez_1);
+				    delta_temp_2.push_back(delta_t_bez_2_do);
+				    num_bezier_1.push_back(1);
+				    num_bezier_2.push_back(0);
+				}
+				if( (ABS( bezier_pnt_2_2.x - bezier_pnt_1_2.x)) < 1 && (ABS( bezier_pnt_2_2.y - bezier_pnt_1_2.y) < 1) && !f_brk_4 )
+				{
+				    new_pnt_vect.push_back( Point( bezier_pnt_2_2.x, bezier_pnt_2_2.y ) );
+				    f_brk_4 = true;
+				    delta_temp_1.push_back(delta_t_bez_1);
+				    delta_temp_2.push_back(delta_t_bez_2_do);
+				    num_bezier_1.push_back(0);
+				    num_bezier_2.push_back(0);
+				}
+				delta_t_bez_2_do+=inc_delta_bez_2;
+			    }
+			    while( ((delta_t_bez_2_do < 1) && (inc_delta_bez_2 > 0)) || ((delta_t_bez_2_do > 0) && (inc_delta_bez_2 < 0)) );
+			    if( f_brk_1 && f_brk_2 && f_brk_3 && f_brk_4 ) break;
+			}
+			while ( ((delta_t_bez_1 < 1) && (inc_delta_bez_1 > 0)) || ((delta_t_bez_1 > 0) && (inc_delta_bez_1 < 0)) );
+			if(!f_brk_1 && !f_brk_2 && !f_brk_3 && !f_brk_4) {
+			    el_p1 = scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc);
+			    el_p2 = scaleRotate( (pnts)[shapeItems[fig[0]].n2], xSc, ySc);
+			    el_p3 = scaleRotate( (pnts)[shapeItems[fig[0]].n3], xSc, ySc);
+			    el_p4 = scaleRotate( (pnts)[shapeItems[fig[0]].n4], xSc, ySc);
+
+			    P1 = scaleRotate( (pnts)[shapeItems[fig[1]].n1], xSc, ySc);
+			    P2 = scaleRotate( (pnts)[shapeItems[fig[1]].n2], xSc, ySc);
+			    P3 = scaleRotate( (pnts)[shapeItems[fig[1]].n3], xSc, ySc);
+			    P4 = scaleRotate( (pnts)[shapeItems[fig[1]].n4], xSc, ySc);
+
+			    new_pnt = scaleRotate( (pnts)[num_pnt], xSc, ySc);
+			    if( num_pnt == shapeItems[fig[0]].n1 ) delta_real = 0.2 + scale;
+			    else delta_real = 0.8 - scale;
+			    delta_point_1 = Point( (int)rRnd( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).x, POS_PREC_DIG, true ),
+						   (int)rRnd( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).y, POS_PREC_DIG, true ) );
+			    if( num_pnt == shapeItems[fig[1]].n1 ) delta_real = 0.2 + scale;
+			    else delta_real = 0.8 - scale;
+			    delta_point_2 = Point( (int)rRnd( bezier( delta_real, P1, P3, P4, P2 ).x, POS_PREC_DIG, true ),
+						   (int)rRnd( bezier( delta_real, P1, P3, P4, P2 ).y, POS_PREC_DIG, true ) );
+			}
+			else {
+			    if( new_pnt_vect.size() ) {
+				new_pnt = Point( new_pnt_vect[0].x, new_pnt_vect[0].y );
+				double max_len = length( (pnts)[num_pnt], new_pnt );
+				delta_t_1 = delta_temp_1[0];
+				delta_t_2 = delta_temp_2[0];
+				num_bez_1 = num_bezier_1[0];
+				num_bez_2 = num_bezier_2[0];
+				for(unsigned i = 1; i < new_pnt_vect.size(); i++)
+				    if( length( (pnts)[num_pnt], new_pnt_vect[i]) > max_len ) {
+					max_len = length( (pnts)[num_pnt], new_pnt_vect[i] );
+					new_pnt = Point( new_pnt_vect[i].x, new_pnt_vect[i].y );
+					delta_t_1 = delta_temp_1[i];
+					delta_t_2 = delta_temp_2[i];
+					num_bez_1 = num_bezier_1[i];
+					num_bez_2 = num_bezier_2[i];
+				    }
+			    }
+			    if(inc_delta_bez_1 > 0) delta_1 = (1-delta_t_1)/3 + scale;
+			    else delta_1 = -((delta_t_1)/3 + scale);
+			    if(inc_delta_bez_2 > 0) delta_2 = (1-delta_t_2)/3 + scale;
+			    else delta_2 = -((delta_t_2)/3 + scale);
+			    if(num_bez_1 == 1)
+				delta_point_1 = Point( (int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc).x + rotate( bezier( delta_t_1 + delta_1,
 						Point( el_p1.x, el_p1.y+W1 ),
 						Point( el_p2.x, el_p2.y+W1 ),
 						Point( el_p3.x, el_p3.y+W1 ),
 						Point( el_p4.x, el_p4.y+W1 ) ), ang ).x, POS_PREC_DIG, true ),
-						(int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_bez_1,
+						(int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc).y - rotate( bezier( delta_t_1 + delta_1,
 						Point( el_p1.x, el_p1.y+W1 ),
 						Point( el_p2.x, el_p2.y+W1 ),
 						Point( el_p3.x, el_p3.y+W1 ),
 						Point( el_p4.x, el_p4.y+W1 ) ), ang ).y, POS_PREC_DIG, true ) );
-				if( W1 != 0 )
-				{
-				    bezier_pnt_1_2 = Point( (int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_bez_1,
-						    Point( el_p1.x, el_p1.y-W1 ),
-						    Point( el_p2.x, el_p2.y-W1 ),
-						    Point( el_p3.x, el_p3.y-W1 ),
-						    Point( el_p4.x, el_p4.y-W1 ) ), ang ).x, POS_PREC_DIG, true ),
-						    (int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_bez_1,
-						    Point( el_p1.x, el_p1.y-W1 ),
-						    Point( el_p2.x, el_p2.y-W1 ),
-						    Point( el_p3.x, el_p3.y-W1 ),
-						    Point( el_p4.x, el_p4.y-W1 ) ), ang ).y, POS_PREC_DIG, true ) );
-				}
-				delta_t_bez_1 += inc_delta_bez_1;
-				double delta_t_bez_2_do = delta_t_bez_2;
-				do
-				{
-				    bezier_pnt_2_1 = Point( (int)rRnd( scaleRotate( (pnts)[item_1.n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_bez_2_do,
-						    Point( P1.x, P1.y+W2 ),
-						    Point( P2.x, P2.y+W2 ),
-						    Point( P3.x, P3.y+W2 ),
-						    Point( P4.x, P4.y+W2 ) ), ang1 ).x, POS_PREC_DIG, true ),
-						    (int)rRnd( scaleRotate( (pnts)[item_1.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_bez_2_do,
-						    Point( P1.x, P1.y+W2 ),
-						    Point( P2.x, P2.y+W2 ),
-						    Point( P3.x, P3.y+W2 ),
-						    Point( P4.x, P4.y+W2 ) ), ang1 ).y, POS_PREC_DIG, true ) );
-				    if( W2 != 0 )
-				    {
-					bezier_pnt_2_2 = Point( (int)rRnd( scaleRotate( (pnts)[item_1.n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_bez_2_do,
-							Point( P1.x, P1.y-W2 ),
-							Point( P2.x, P2.y-W2 ),
-							Point( P3.x, P3.y-W2 ),
-							Point( P4.x, P4.y-W2 ) ), ang1 ).x, POS_PREC_DIG, true ),
-							(int)rRnd( scaleRotate( (pnts)[item_1.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_bez_2_do,
-							Point( P1.x, P1.y-W2 ),
-							Point( P2.x, P2.y-W2 ),
-							Point( P3.x, P3.y-W2 ),
-							Point( P4.x, P4.y-W2 ) ), ang1 ).y, POS_PREC_DIG, true ) );
-				    }
-				    if( (ABS( bezier_pnt_2_1.x - bezier_pnt_1_1.x)) < 1 && (ABS( bezier_pnt_2_1.y - bezier_pnt_1_1.y) < 1) && !f_brk_1 )
-				    {
-					new_pnt_vect.push_back( Point( bezier_pnt_2_1.x, bezier_pnt_2_1.y ) );
-					f_brk_1 = true;
-					delta_temp_1.push_back(delta_t_bez_1);
-					delta_temp_2.push_back(delta_t_bez_2_do);
-					num_bezier_1.push_back(1);
-					num_bezier_2.push_back(1);
-				    }
-				    if( (ABS( bezier_pnt_2_1.x - bezier_pnt_1_2.x)) < 1 && (ABS( bezier_pnt_2_1.y - bezier_pnt_1_2.y) < 1) && !f_brk_2 )
-				    {
-					new_pnt_vect.push_back(Point(bezier_pnt_2_1.x, bezier_pnt_2_1.y));
-					f_brk_2 = true;
-					delta_temp_1.push_back(delta_t_bez_1);
-					delta_temp_2.push_back(delta_t_bez_2_do);
-					num_bezier_1.push_back(0);
-					num_bezier_2.push_back(1);
-				    }
-				    if( (ABS( bezier_pnt_2_2.x - bezier_pnt_1_1.x)) < 1 && (ABS( bezier_pnt_2_2.y - bezier_pnt_1_1.y) < 1) && !f_brk_3 )
-				    {
-					new_pnt_vect.push_back( Point( bezier_pnt_2_2.x, bezier_pnt_2_2.y ) );
-					f_brk_3 = true;
-					delta_temp_1.push_back(delta_t_bez_1);
-					delta_temp_2.push_back(delta_t_bez_2_do);
-					num_bezier_1.push_back(1);
-					num_bezier_2.push_back(0);
-				    }
-				    if( (ABS( bezier_pnt_2_2.x - bezier_pnt_1_2.x)) < 1 && (ABS( bezier_pnt_2_2.y - bezier_pnt_1_2.y) < 1) && !f_brk_4 )
-				    {
-					new_pnt_vect.push_back( Point( bezier_pnt_2_2.x, bezier_pnt_2_2.y ) );
-					f_brk_4 = true;
-					delta_temp_1.push_back(delta_t_bez_1);
-					delta_temp_2.push_back(delta_t_bez_2_do);
-					num_bezier_1.push_back(0);
-					num_bezier_2.push_back(0);
-				    }
-				    delta_t_bez_2_do+=inc_delta_bez_2;
-				}
-				while( ((delta_t_bez_2_do < 1) && (inc_delta_bez_2 > 0)) || ((delta_t_bez_2_do > 0) && (inc_delta_bez_2 < 0)) );
-				if( f_brk_1 && f_brk_2 && f_brk_3 && f_brk_4 ) break;
-			    }
-			    while ( ((delta_t_bez_1 < 1) && (inc_delta_bez_1 > 0)) || ((delta_t_bez_1 > 0) && (inc_delta_bez_1 < 0)) );
-			    if(!f_brk_1 && !f_brk_2 && !f_brk_3 && !f_brk_4)
-			    {
-				el_p1 = scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc, true, true );
-				el_p2 = scaleRotate( (pnts)[shapeItems[fig[0]].n2], xSc, ySc, true, true );
-				el_p3 = scaleRotate( (pnts)[shapeItems[fig[0]].n3], xSc, ySc, true, true );
-				el_p4 = scaleRotate( (pnts)[shapeItems[fig[0]].n4], xSc, ySc, true, true );
+			    if(num_bez_1 == 0)
+				delta_point_1 = Point( (int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc).x + rotate( bezier( delta_t_1 + delta_1,
+						Point( el_p1.x, el_p1.y-W1 ),
+						Point( el_p2.x, el_p2.y-W1 ),
+						Point( el_p3.x, el_p3.y-W1 ),
+						Point( el_p4.x, el_p4.y-W1 ) ), ang ).x, POS_PREC_DIG, true ),
+						(int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc).y - rotate( bezier( delta_t_1 + delta_1,
+						Point( el_p1.x, el_p1.y-W1 ),
+						Point( el_p2.x, el_p2.y-W1 ),
+						Point( el_p3.x, el_p3.y-W1 ),
+						Point( el_p4.x, el_p4.y-W1 ) ), ang ).y, POS_PREC_DIG, true ) );
 
-				P1 = scaleRotate( (pnts)[shapeItems[fig[1]].n1], xSc, ySc, true, true );
-				P2 = scaleRotate( (pnts)[shapeItems[fig[1]].n2], xSc, ySc, true, true );
-				P3 = scaleRotate( (pnts)[shapeItems[fig[1]].n3], xSc, ySc, true, true );
-				P4 = scaleRotate( (pnts)[shapeItems[fig[1]].n4], xSc, ySc, true, true );
-
-				new_pnt = scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true );
-				if( num_pnt == shapeItems[fig[0]].n1 ) delta_real = 0.2 + scale;
-				else delta_real = 0.8 - scale;
-				delta_point_1 = Point( (int)rRnd( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).x, POS_PREC_DIG, true ),
-							(int)rRnd( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).y, POS_PREC_DIG, true ) );
-				if( num_pnt == shapeItems[fig[1]].n1 ) delta_real = 0.2 + scale;
-				else delta_real = 0.8 - scale;
-				delta_point_2 = Point( (int)rRnd( bezier( delta_real, P1, P3, P4, P2 ).x, POS_PREC_DIG, true ),
-							(int)rRnd( bezier( delta_real, P1, P3, P4, P2 ).y, POS_PREC_DIG, true ) );
-			    }
-			    else
-			    {
-				if( new_pnt_vect.size() )
-				{
-				    new_pnt = Point( new_pnt_vect[0].x, new_pnt_vect[0].y );
-				    double max_len = length( (pnts)[num_pnt], new_pnt );
-				    delta_t_1 = delta_temp_1[0];
-				    delta_t_2 = delta_temp_2[0];
-				    num_bez_1 = num_bezier_1[0];
-				    num_bez_2 = num_bezier_2[0];
-				    for(unsigned i = 1; i < new_pnt_vect.size(); i++)
-					if( length( (pnts)[num_pnt], new_pnt_vect[i]) > max_len )
-					{
-					    max_len = length( (pnts)[num_pnt], new_pnt_vect[i] );
-					    new_pnt = Point( new_pnt_vect[i].x, new_pnt_vect[i].y );
-					    delta_t_1 = delta_temp_1[i];
-					    delta_t_2 = delta_temp_2[i];
-					    num_bez_1 = num_bezier_1[i];
-					    num_bez_2 = num_bezier_2[i];
-					}
-				}
-				if( inc_delta_bez_1 > 0 ) delta_1 = (1-delta_t_1)/3 + scale;
-				else delta_1 = -((delta_t_1)/3 + scale);
-				if( inc_delta_bez_2 > 0 ) delta_2 = (1-delta_t_2)/3 + scale;
-				else delta_2 = -((delta_t_2)/3 + scale);
-				if( num_bez_1 == 1 )
-				    delta_point_1 = Point( (int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_1 + delta_1,
-						    Point( el_p1.x, el_p1.y+W1 ),
-						    Point( el_p2.x, el_p2.y+W1 ),
-						    Point( el_p3.x, el_p3.y+W1 ),
-						    Point( el_p4.x, el_p4.y+W1 ) ), ang ).x, POS_PREC_DIG, true ),
-						    (int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_1 + delta_1,
-						    Point( el_p1.x, el_p1.y+W1 ),
-						    Point( el_p2.x, el_p2.y+W1 ),
-						    Point( el_p3.x, el_p3.y+W1 ),
-						    Point( el_p4.x, el_p4.y+W1 ) ), ang ).y, POS_PREC_DIG, true ) );
-				if( num_bez_1 == 0 )
-				    delta_point_1 = Point( (int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_1 + delta_1,
-						    Point( el_p1.x, el_p1.y-W1 ),
-						    Point( el_p2.x, el_p2.y-W1 ),
-						    Point( el_p3.x, el_p3.y-W1 ),
-						    Point( el_p4.x, el_p4.y-W1 ) ), ang ).x, POS_PREC_DIG, true ),
-						    (int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_1 + delta_1,
-						    Point( el_p1.x, el_p1.y-W1 ),
-						    Point( el_p2.x, el_p2.y-W1 ),
-						    Point( el_p3.x, el_p3.y-W1 ),
-						    Point( el_p4.x, el_p4.y-W1 ) ), ang ).y, POS_PREC_DIG, true ) );
-
-				if( num_bez_2 == 1 )
-				    delta_point_2 = Point( (int)rRnd( scaleRotate( (pnts)[item_1.n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_2 + delta_2,
-						    Point( P1.x, P1.y+W2 ),
-						    Point( P2.x, P2.y+W2 ),
-						    Point( P3.x, P3.y+W2 ),
-						    Point( P4.x, P4.y+W2 ) ), ang1 ).x, POS_PREC_DIG, true ),
-						    (int)rRnd( scaleRotate( (pnts)[item_1.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_2 + delta_2,
-						    Point( P1.x, P1.y+W2 ),
-						    Point( P2.x, P2.y+W2 ),
-						    Point( P3.x, P3.y+W2 ),
-						    Point( P4.x, P4.y+W2 ) ), ang1 ).y, POS_PREC_DIG, true ) );
-				if( num_bez_2 == 0 )
-				    delta_point_2 = Point( (int)rRnd( scaleRotate( (pnts)[item_1.n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_2 + delta_2,
-						    Point( P1.x, P1.y-W2 ),
-						    Point( P2.x, P2.y-W2 ),
-						    Point( P3.x, P3.y-W2 ),
-						    Point( P4.x, P4.y-W2 ) ), ang1 ).x, POS_PREC_DIG, true ),
-						    (int)rRnd( scaleRotate( (pnts)[item_1.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_2 + delta_2,
-						    Point( P1.x, P1.y-W2 ),
-						    Point( P2.x, P2.y-W2 ),
-						    Point( P3.x, P3.y-W2 ),
-						    Point( P4.x, P4.y-W2 ) ), ang1 ).y, POS_PREC_DIG, true ) );
-			    }
-			}
-			else
-			{
-			    new_pnt = scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true );
-			    if( num_pnt == shapeItems[fig[0]].n1 ) delta_real = 0.2 + scale;
-			    else delta_real = 0.8 - scale;
-			    delta_point_1 = Point( (int)rRnd( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).x, POS_PREC_DIG, true ),
-						    (int)rRnd( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).y, POS_PREC_DIG, true ) );
-			    if( num_pnt == shapeItems[fig[1]].n1 ) delta_real = 0.2 + scale;
-			    else delta_real = 0.8 - scale;
-			    delta_point_2 = Point( (int)rRnd( bezier( delta_real, P1, P3, P4, P2 ).x, POS_PREC_DIG, true ),
-						    (int)rRnd( bezier( delta_real, P1, P3, P4, P2 ).y, POS_PREC_DIG, true ) );
+			    if(num_bez_2 == 1)
+				delta_point_2 = Point( (int)rRnd( scaleRotate( (pnts)[item_1.n1], xSc, ySc).x + rotate( bezier( delta_t_2 + delta_2,
+						Point( P1.x, P1.y+W2 ),
+						Point( P2.x, P2.y+W2 ),
+						Point( P3.x, P3.y+W2 ),
+						Point( P4.x, P4.y+W2 ) ), ang1 ).x, POS_PREC_DIG, true ),
+						(int)rRnd( scaleRotate( (pnts)[item_1.n1], xSc, ySc).y - rotate( bezier( delta_t_2 + delta_2,
+						Point( P1.x, P1.y+W2 ),
+						Point( P2.x, P2.y+W2 ),
+						Point( P3.x, P3.y+W2 ),
+						Point( P4.x, P4.y+W2 ) ), ang1 ).y, POS_PREC_DIG, true ) );
+			    if(num_bez_2 == 0)
+				delta_point_2 = Point( (int)rRnd( scaleRotate( (pnts)[item_1.n1], xSc, ySc).x + rotate( bezier( delta_t_2 + delta_2,
+						Point( P1.x, P1.y-W2 ),
+						Point( P2.x, P2.y-W2 ),
+						Point( P3.x, P3.y-W2 ),
+						Point( P4.x, P4.y-W2 ) ), ang1 ).x, POS_PREC_DIG, true ),
+						(int)rRnd( scaleRotate( (pnts)[item_1.n1], xSc, ySc).y - rotate( bezier( delta_t_2 + delta_2,
+						Point( P1.x, P1.y-W2 ),
+						Point( P2.x, P2.y-W2 ),
+						Point( P3.x, P3.y-W2 ),
+						Point( P4.x, P4.y-W2 ) ), ang1 ).y, POS_PREC_DIG, true ) );
 			}
 		    }
-		    //-- Detecting the real "fill" point as the middle of the distance between two points on the figures --
-		    delta_point_center.x = (delta_point_1.x+delta_point_2.x)/2;
-		    delta_point_center.y = (delta_point_1.y+delta_point_2.y)/2;
+		    else {
+			new_pnt = scaleRotate( (pnts)[num_pnt], xSc, ySc);
+			if( num_pnt == shapeItems[fig[0]].n1 ) delta_real = 0.2 + scale;
+			else delta_real = 0.8 - scale;
+			delta_point_1 = Point( (int)rRnd( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).x, POS_PREC_DIG, true ),
+					       (int)rRnd( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).y, POS_PREC_DIG, true ) );
+			if( num_pnt == shapeItems[fig[1]].n1 ) delta_real = 0.2 + scale;
+			else delta_real = 0.8 - scale;
+			delta_point_2 = Point( (int)rRnd( bezier( delta_real, P1, P3, P4, P2 ).x, POS_PREC_DIG, true ),
+					       (int)rRnd( bezier( delta_real, P1, P3, P4, P2 ).y, POS_PREC_DIG, true ) );
+		    }
 		}
-		//-- Calling fill procedure for each fill with the real "fill" point --
-		if( (((int) rRnd(delta_point_center.x)) > 0) && (((int) rRnd(delta_point_center.x)) <= scaleWidth) &&
-		    (((int) rRnd(delta_point_center.y)) > 0) && (((int) rRnd(delta_point_center.y)) <= scaleHeight) )
-		{
-		    if( inundationItems[i].imgFill.size() )
-		    {
-			Point el1_temp = scaleRotate( (pnts)[shapeItems[shape_temp[0]].n1], xSc, ySc, true, true );
+		//-- Detecting the real "fill" point as the middle of the distance between two points on the figures --
+		delta_point_center.x = (delta_point_1.x+delta_point_2.x)/2;
+		delta_point_center.y = (delta_point_1.y+delta_point_2.y)/2;
+	    }
+	    //-- Calling fill procedure for each fill with the real "fill" point --
+	    if( (((int) rRnd(delta_point_center.x)) > 0) && (((int) rRnd(delta_point_center.x)) <= scaleWidth) &&
+		(((int) rRnd(delta_point_center.y)) > 0) && (((int) rRnd(delta_point_center.y)) <= scaleHeight) )
+	    {
+		if( inundationItems[i].imgFill.size() ) {
+		    Point el1_temp = scaleRotate( (pnts)[shapeItems[shape_temp[0]].n1], xSc, ySc);
 
-			double xMax = unscaleUnrotate( el1_temp, xSc, ySc, false, true ).x;
-			double xMin = unscaleUnrotate( el1_temp, xSc, ySc, false, true ).x;
-			double yMax = unscaleUnrotate( el1_temp, xSc, ySc, false, true ).y;
-			double yMin = unscaleUnrotate( el1_temp, xSc, ySc, false, true ).y;
+		    double xMax = unscaleUnrotate( el1_temp, xSc, ySc, false).x;
+		    double xMin = unscaleUnrotate( el1_temp, xSc, ySc, false).x;
+		    double yMax = unscaleUnrotate( el1_temp, xSc, ySc, false).y;
+		    double yMin = unscaleUnrotate( el1_temp, xSc, ySc, false).y;
 
-			double xMax_rot = scaleRotate( (pnts)[shapeItems[shape_temp[0]].n1], xSc, ySc, true, true ).x;
-			double xMin_rot = scaleRotate( (pnts)[shapeItems[shape_temp[0]].n1], xSc, ySc, true, true ).x;
-			double yMax_rot = scaleRotate( (pnts)[shapeItems[shape_temp[0]].n1], xSc, ySc, true, true ).y;
-			double yMin_rot = scaleRotate( (pnts)[shapeItems[shape_temp[0]].n1], xSc, ySc, true, true ).y;
+		    double xMax_rot = scaleRotate( (pnts)[shapeItems[shape_temp[0]].n1], xSc, ySc).x;
+		    double xMin_rot = scaleRotate( (pnts)[shapeItems[shape_temp[0]].n1], xSc, ySc).x;
+		    double yMax_rot = scaleRotate( (pnts)[shapeItems[shape_temp[0]].n1], xSc, ySc).y;
+		    double yMin_rot = scaleRotate( (pnts)[shapeItems[shape_temp[0]].n1], xSc, ySc).y;
 
-			double t, arc_a, arc_b, t_start, t_end, ang, arc_a_rot, arc_b_rot, ang_rot;
-			Point pnt_, pnt_rot, pnt_temp;
+		    double t, arc_a, arc_b, t_start, t_end, ang, arc_a_rot, arc_b_rot, ang_rot;
+		    Point pnt_, pnt_rot, pnt_temp;
 
-			for(unsigned j = 0; j < shape_temp.size(); j++)
-			{
-			    ShapeItem item = shapeItems[shape_temp[j]] ;
-			    if( item.type == 1 )
-			    {
-				pnt_temp.x = scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).x;
-				pnt_temp.y = scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y;
+		    for(unsigned j = 0; j < shape_temp.size(); j++) {
+			ShapeItem item = shapeItems[shape_temp[j]] ;
+			if(item.type == 1) {
+			    pnt_temp.x = scaleRotate( (pnts)[item.n1], xSc, ySc).x;
+			    pnt_temp.y = scaleRotate( (pnts)[item.n1], xSc, ySc).y;
 
-				pnt_.x = unscaleUnrotate( pnt_temp, xSc, ySc, false, true ).x;
-				pnt_.y = unscaleUnrotate( pnt_temp, xSc, ySc, false, true ).y;
+			    pnt_.x = unscaleUnrotate( pnt_temp, xSc, ySc, false).x;
+			    pnt_.y = unscaleUnrotate( pnt_temp, xSc, ySc, false).y;
+
+			    if( pnt_.x < xMin ) xMin = pnt_.x;
+			    if( pnt_.x > xMax ) xMax = pnt_.x;
+			    if( pnt_.y < yMin ) yMin = pnt_.y;
+			    if( pnt_.y > yMax ) yMax = pnt_.y;
+
+			    pnt_temp.x = scaleRotate( (pnts)[item.n2], xSc, ySc).x;
+			    pnt_temp.y = scaleRotate( (pnts)[item.n2], xSc, ySc).y;
+
+			    pnt_.x = unscaleUnrotate( pnt_temp, xSc, ySc, false).x;
+			    pnt_.y = unscaleUnrotate( pnt_temp, xSc, ySc, false).y;
+
+			    if( pnt_.x < xMin ) xMin = pnt_.x;
+			    if( pnt_.x > xMax ) xMax = pnt_.x;
+			    if( pnt_.y < yMin ) yMin = pnt_.y;
+			    if( pnt_.y > yMax ) yMax = pnt_.y;
+
+			    pnt_rot.x = scaleRotate( (pnts)[item.n1], xSc, ySc).x;
+			    pnt_rot.y = scaleRotate( (pnts)[item.n1], xSc, ySc).y;
+
+			    if( pnt_rot.x < xMin_rot ) xMin_rot = pnt_rot.x;
+			    if( pnt_rot.x > xMax_rot ) xMax_rot = pnt_rot.x;
+			    if( pnt_rot.y < yMin_rot ) yMin_rot = pnt_rot.y;
+			    if( pnt_rot.y > yMax_rot ) yMax_rot = pnt_rot.y;
+
+			    pnt_rot.x = scaleRotate( (pnts)[item.n2], xSc, ySc).x;
+			    pnt_rot.y = scaleRotate( (pnts)[item.n2], xSc, ySc).y;
+
+			    if( pnt_rot.x < xMin_rot ) xMin_rot = pnt_rot.x;
+			    if( pnt_rot.x > xMax_rot ) xMax_rot = pnt_rot.x;
+			    if( pnt_rot.y < yMin_rot ) yMin_rot = pnt_rot.y;
+			    if( pnt_rot.y > yMax_rot ) yMax_rot = pnt_rot.y;
+			}
+			if( item.type == 2 ) {
+			    Point el_p3_rot = scaleRotate( (pnts)[item.n3], xSc, ySc);
+			    Point el_p4_rot = scaleRotate( (pnts)[item.n4], xSc, ySc);
+			    Point el_p5_rot = scaleRotate( (pnts)[item.n5], xSc, ySc);
+
+			    Point el_p3 = unscaleUnrotate( el_p3_rot, xSc, ySc, false);
+			    Point el_p4 = unscaleUnrotate( el_p4_rot, xSc, ySc, false);
+			    Point el_p5 = unscaleUnrotate( el_p5_rot, xSc, ySc, false);
+
+			    if( el_p5.y <= el_p3.y ) ang = angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
+			    else ang = 360 - angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
+
+			    if( el_p5_rot.y <= el_p3_rot.y ) ang_rot = angle( el_p3_rot, el_p5_rot, el_p3_rot, Point( el_p3_rot.x+10, el_p3_rot.y ) );
+			    else ang_rot = 360 - angle( el_p3_rot, el_p5_rot, el_p3_rot, Point( el_p3_rot.x+10, el_p3_rot.y ) );
+
+			    arc_a = length( el_p5, el_p3 );
+			    arc_b = length( el_p3, el_p4 );
+
+			    arc_a_rot = length( el_p5_rot, el_p3_rot );
+			    arc_b_rot = length( el_p3_rot, el_p4_rot );
+			    t_start = item.ctrlPos4.x;
+			    t_end = item.ctrlPos4.y;
+			    t = t_start;
+			    do {
+				pnt_.x = el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x;
+				pnt_.y = el_p3.y - rotate( arc( t, arc_a, arc_b ), ang ).y;
+
+				pnt_rot.x = el_p3_rot.x + rotate( arc( t, arc_a_rot, arc_b_rot ), ang_rot ).x;
+				pnt_rot.y = el_p3_rot.y - rotate( arc( t, arc_a_rot, arc_b_rot ), ang_rot ).y;
 
 				if( pnt_.x < xMin ) xMin = pnt_.x;
 				if( pnt_.x > xMax ) xMax = pnt_.x;
 				if( pnt_.y < yMin ) yMin = pnt_.y;
 				if( pnt_.y > yMax ) yMax = pnt_.y;
 
-				pnt_temp.x = scaleRotate( (pnts)[item.n2], xSc, ySc, true, true ).x;
-				pnt_temp.y = scaleRotate( (pnts)[item.n2], xSc, ySc, true, true ).y;
+				if( pnt_rot.x < xMin_rot ) xMin_rot = pnt_rot.x;
+				if( pnt_rot.x > xMax_rot ) xMax_rot = pnt_rot.x;
+				if( pnt_rot.y < yMin_rot ) yMin_rot = pnt_rot.y;
+				if( pnt_rot.y > yMax_rot ) yMax_rot = pnt_rot.y;
+				t += 0.00277777777778;
+			    }
+			    while ( t < t_end );
+			}
+			if( item.type == 3 ) {
+			    t = 0;
+			    Point el_p1_rot = scaleRotate( (pnts)[item.n1], xSc, ySc);
+			    Point el_p2_rot = scaleRotate( (pnts)[item.n2], xSc, ySc);
+			    Point el_p3_rot = scaleRotate( (pnts)[item.n3], xSc, ySc);
+			    Point el_p4_rot = scaleRotate( (pnts)[item.n4], xSc, ySc);
 
-				pnt_.x = unscaleUnrotate( pnt_temp, xSc, ySc, false, true ).x;
-				pnt_.y = unscaleUnrotate( pnt_temp, xSc, ySc, false, true ).y;
+			    Point el_p1 = unscaleUnrotate( el_p1_rot, xSc, ySc, false);
+			    Point el_p2 = unscaleUnrotate( el_p2_rot, xSc, ySc, false);
+			    Point el_p3 = unscaleUnrotate( el_p3_rot, xSc, ySc, false);
+			    Point el_p4 = unscaleUnrotate( el_p4_rot, xSc, ySc, false);
+
+			    do {
+				pnt_.x = bezier( t, el_p1, el_p3, el_p4, el_p2 ).x;
+				pnt_.y = bezier( t, el_p1, el_p3, el_p4, el_p2 ).y;
+
+				pnt_rot.x = bezier( t, el_p1_rot, el_p3_rot, el_p4_rot, el_p2_rot ).x;
+				pnt_rot.y = bezier( t, el_p1_rot, el_p3_rot, el_p4_rot, el_p2_rot ).y;
 
 				if( pnt_.x < xMin ) xMin = pnt_.x;
 				if( pnt_.x > xMax ) xMax = pnt_.x;
 				if( pnt_.y < yMin ) yMin = pnt_.y;
 				if( pnt_.y > yMax ) yMax = pnt_.y;
 
-				pnt_rot.x = scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).x;
-				pnt_rot.y = scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y;
-
 				if( pnt_rot.x < xMin_rot ) xMin_rot = pnt_rot.x;
 				if( pnt_rot.x > xMax_rot ) xMax_rot = pnt_rot.x;
 				if( pnt_rot.y < yMin_rot ) yMin_rot = pnt_rot.y;
 				if( pnt_rot.y > yMax_rot ) yMax_rot = pnt_rot.y;
 
-				pnt_rot.x = scaleRotate( (pnts)[item.n2], xSc, ySc, true, true ).x;
-				pnt_rot.y = scaleRotate( (pnts)[item.n2], xSc, ySc, true, true ).y;
-
-				if( pnt_rot.x < xMin_rot ) xMin_rot = pnt_rot.x;
-				if( pnt_rot.x > xMax_rot ) xMax_rot = pnt_rot.x;
-				if( pnt_rot.y < yMin_rot ) yMin_rot = pnt_rot.y;
-				if( pnt_rot.y > yMax_rot ) yMax_rot = pnt_rot.y;
+				t += 0.00277777777778;
 			    }
-			    if( item.type == 2 )
-			    {
-				Point el_p3_rot = scaleRotate( (pnts)[item.n3], xSc, ySc, true, true );
-				Point el_p4_rot = scaleRotate( (pnts)[item.n4], xSc, ySc, true, true );
-				Point el_p5_rot = scaleRotate( (pnts)[item.n5], xSc, ySc, true, true );
-
-				Point el_p3 = unscaleUnrotate( el_p3_rot, xSc, ySc, false, true );
-				Point el_p4 = unscaleUnrotate( el_p4_rot, xSc, ySc, false, true );
-				Point el_p5 = unscaleUnrotate( el_p5_rot, xSc, ySc, false, true );
-
-				if( el_p5.y <= el_p3.y ) ang = angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
-				else ang = 360 - angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
-
-				if( el_p5_rot.y <= el_p3_rot.y ) ang_rot = angle( el_p3_rot, el_p5_rot, el_p3_rot, Point( el_p3_rot.x+10, el_p3_rot.y ) );
-				else ang_rot = 360 - angle( el_p3_rot, el_p5_rot, el_p3_rot, Point( el_p3_rot.x+10, el_p3_rot.y ) );
-
-				arc_a = length( el_p5, el_p3 );
-				arc_b = length( el_p3, el_p4 );
-
-				arc_a_rot = length( el_p5_rot, el_p3_rot );
-				arc_b_rot = length( el_p3_rot, el_p4_rot );
-				t_start = item.ctrlPos4.x;
-				t_end = item.ctrlPos4.y;
-				t = t_start;
-				do
-				{
-				    pnt_.x = el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x;
-				    pnt_.y = el_p3.y - rotate( arc( t, arc_a, arc_b ), ang ).y;
-
-				    pnt_rot.x = el_p3_rot.x + rotate( arc( t, arc_a_rot, arc_b_rot ), ang_rot ).x;
-				    pnt_rot.y = el_p3_rot.y - rotate( arc( t, arc_a_rot, arc_b_rot ), ang_rot ).y;
-
-				    if( pnt_.x < xMin ) xMin = pnt_.x;
-				    if( pnt_.x > xMax ) xMax = pnt_.x;
-				    if( pnt_.y < yMin ) yMin = pnt_.y;
-				    if( pnt_.y > yMax ) yMax = pnt_.y;
-
-				    if( pnt_rot.x < xMin_rot ) xMin_rot = pnt_rot.x;
-				    if( pnt_rot.x > xMax_rot ) xMax_rot = pnt_rot.x;
-				    if( pnt_rot.y < yMin_rot ) yMin_rot = pnt_rot.y;
-				    if( pnt_rot.y > yMax_rot ) yMax_rot = pnt_rot.y;
-				    t += 0.00277777777778;
-				}
-				while ( t < t_end );
-			    }
-			    if( item.type == 3 )
-			    {
-				t = 0;
-				Point el_p1_rot = scaleRotate( (pnts)[item.n1], xSc, ySc, true, true );
-				Point el_p2_rot = scaleRotate( (pnts)[item.n2], xSc, ySc, true, true );
-				Point el_p3_rot = scaleRotate( (pnts)[item.n3], xSc, ySc, true, true );
-				Point el_p4_rot = scaleRotate( (pnts)[item.n4], xSc, ySc, true, true );
-
-				Point el_p1 = unscaleUnrotate( el_p1_rot, xSc, ySc, false, true );
-				Point el_p2 = unscaleUnrotate( el_p2_rot, xSc, ySc, false, true );
-				Point el_p3 = unscaleUnrotate( el_p3_rot, xSc, ySc, false, true );
-				Point el_p4 = unscaleUnrotate( el_p4_rot, xSc, ySc, false, true );
-
-				do
-				{
-				    pnt_.x = bezier( t, el_p1, el_p3, el_p4, el_p2 ).x;
-				    pnt_.y = bezier( t, el_p1, el_p3, el_p4, el_p2 ).y;
-
-				    pnt_rot.x = bezier( t, el_p1_rot, el_p3_rot, el_p4_rot, el_p2_rot ).x;
-				    pnt_rot.y = bezier( t, el_p1_rot, el_p3_rot, el_p4_rot, el_p2_rot ).y;
-
-				    if( pnt_.x < xMin ) xMin = pnt_.x;
-				    if( pnt_.x > xMax ) xMax = pnt_.x;
-				    if( pnt_.y < yMin ) yMin = pnt_.y;
-				    if( pnt_.y > yMax ) yMax = pnt_.y;
-
-				    if( pnt_rot.x < xMin_rot ) xMin_rot = pnt_rot.x;
-				    if( pnt_rot.x > xMax_rot ) xMax_rot = pnt_rot.x;
-				    if( pnt_rot.y < yMin_rot ) yMin_rot = pnt_rot.y;
-				    if( pnt_rot.y > yMax_rot ) yMax_rot = pnt_rot.y;
-
-				    t += 0.00277777777778;
-				}
-				while ( t < 1 );
-			    }
+			    while ( t < 1 );
 			}
-			paintFill( im1, delta_point_center, inundationItems[i] );
-			if( clickPnt.x > -1 && clickPnt.y > -1 )
-			{
-			    if( gdImageGetPixel( im1, (int)rRnd(clickPnt.x,POS_PREC_DIG,true), (int)rRnd(clickPnt.y,POS_PREC_DIG,true) )
-				!= gdImageColorResolveAlpha(im1,0,0,0,127) )
-			    {
-				if(im1) gdImageDestroy(im1);
-				return i;
-			    }
+		    }
+		    paintFill(im1, delta_point_center, inundationItems[i]);
+		    if(clickPnt.x > -1 && clickPnt.y > -1) {
+			if(gdImageGetPixel(im1,(int)rRnd(clickPnt.x,POS_PREC_DIG,true),(int)rRnd(clickPnt.y,POS_PREC_DIG,true)) != gdImageColorResolveAlpha(im1,0,0,0,127)) {
+			    if(im1) gdImageDestroy(im1);
+			    return i;
 			}
-			else
-			{
-			    xMin = (int)rRnd( xMin, POS_PREC_DIG, true );
-			    yMin = (int)rRnd( yMin, POS_PREC_DIG, true );
-			    xMax = (int)rRnd( xMax, POS_PREC_DIG, true );
-			    yMax = (int)rRnd( yMax, POS_PREC_DIG, true );
+		    }
+		    else {
+			xMin = (int)rRnd( xMin, POS_PREC_DIG, true );
+			yMin = (int)rRnd( yMin, POS_PREC_DIG, true );
+			xMax = (int)rRnd( xMax, POS_PREC_DIG, true );
+			yMax = (int)rRnd( yMax, POS_PREC_DIG, true );
 
-			    gdImagePtr im_fill_in = NULL;
-			    string imgDef_temp = owner().resGet(inundationItems[i].imgFill, path(), ses);
-			    if( !(im_fill_in = gdImageCreateFromPngPtr(imgDef_temp.size(), (void*)imgDef_temp.data())) &&
+			gdImagePtr im_fill_in = NULL;
+			string imgDef_temp = owner().resGet(inundationItems[i].imgFill, path(), ses);
+			if(!(im_fill_in = gdImageCreateFromPngPtr(imgDef_temp.size(), (void*)imgDef_temp.data())) &&
 				!(im_fill_in = gdImageCreateFromGifPtr(imgDef_temp.size(), (void*)imgDef_temp.data())) &&
-				!(im_fill_in = gdImageCreateFromJpegPtr(imgDef_temp.size(), (void*)imgDef_temp.data())) )
-				mess_debug(nodePath().c_str(),_("Fill image type is not supported."));
-			    gdImagePtr im_fill_out = gdImageCreateTrueColor((int)rRnd( xMax - xMin ) + 1, (int)rRnd( yMax - yMin ) + 1 );
-			    gdImageAlphaBlending(im_fill_out, 0);
-			    int alpha;
-			    double alpha_pr, alpha_rez;
-			    if( im_fill_in )
-			    {
-				gdImageAlphaBlending(im_fill_in, 0);
-				gdImageCopyResampled(im_fill_out, im_fill_in, 0, 0, 0, 0, im_fill_out->sx, im_fill_out->sy, im_fill_in->sx, im_fill_in->sy);
-			    }
-			    int im_x, im_y;
-			    Point drw_pnt,drw_pnt1;
-			    xMin_rot = (int)rRnd( xMin_rot, POS_PREC_DIG, true );
-			    yMin_rot = (int)rRnd( yMin_rot, POS_PREC_DIG, true );
-			    xMax_rot = (int)rRnd( xMax_rot, POS_PREC_DIG, true );
-			    yMax_rot = (int)rRnd( yMax_rot, POS_PREC_DIG, true );
+				!(im_fill_in = gdImageCreateFromJpegPtr(imgDef_temp.size(), (void*)imgDef_temp.data())))
+			    mess_debug(nodePath().c_str(),_("Fill image type is not supported."));
+			gdImagePtr im_fill_out = gdImageCreateTrueColor((int)rRnd( xMax - xMin ) + 1, (int)rRnd( yMax - yMin ) + 1 );
+			gdImageAlphaBlending(im_fill_out, 0);
+			int alpha;
+			double alpha_pr, alpha_rez;
+			if(im_fill_in) {
+			    gdImageAlphaBlending(im_fill_in, 0);
+			    gdImageCopyResampled(im_fill_out, im_fill_in, 0, 0, 0, 0, im_fill_out->sx, im_fill_out->sy, im_fill_in->sx, im_fill_in->sy);
+			}
+			int im_x, im_y;
+			Point drw_pnt,drw_pnt1;
+			xMin_rot = (int)rRnd( xMin_rot, POS_PREC_DIG, true );
+			yMin_rot = (int)rRnd( yMin_rot, POS_PREC_DIG, true );
+			xMax_rot = (int)rRnd( xMax_rot, POS_PREC_DIG, true );
+			yMax_rot = (int)rRnd( yMax_rot, POS_PREC_DIG, true );
 
-			    double alpha_col = (double)(uint8_t)(inundationItems[i].P_color>>24)/127;
-			    double color_r, color_g, color_b;
-			    int rgb;
-			    gdImageAlphaBlending(im1,0);
+			double alpha_col = (double)(uint8_t)(inundationItems[i].P_color>>24)/127;
+			double color_r, color_g, color_b;
+			int rgb;
+			gdImageAlphaBlending(im1,0);
 
-			    im_y = (int)yMin_rot;
-			    do
-			    {
-				im_x = (int)xMin_rot;
-				do
-				{
-				    if(  gdImageGetPixel( im1, im_x, im_y ) == tmp_clr )
-				    {
-					Point drw_pnt = unscaleUnrotate( Point( im_x, im_y ), xSc, ySc, false, true );
-					rgb = gdImageGetPixel( im_fill_out, (int)rRnd( drw_pnt.x - xMin, POS_PREC_DIG, true ),
+			im_y = (int)yMin_rot;
+			do {
+			    im_x = (int)xMin_rot;
+			    do {
+				if(gdImageGetPixel( im1, im_x, im_y ) == tmp_clr ) {
+				    Point drw_pnt = unscaleUnrotate( Point( im_x, im_y ), xSc, ySc, false);
+				    rgb = gdImageGetPixel( im_fill_out, (int)rRnd( drw_pnt.x - xMin, POS_PREC_DIG, true ),
+									(int)rRnd( drw_pnt.y - yMin, POS_PREC_DIG, true ) );
+				    if( ((int)rRnd( drw_pnt.x - xMin, POS_PREC_DIG, true ) == (int)rRnd( xMax - xMin ) + 1) && rgb == 0 )
+					rgb = gdImageGetPixel( im_fill_out, (int)rRnd( drw_pnt.x - xMin - 1, POS_PREC_DIG, true ),
 									    (int)rRnd( drw_pnt.y - yMin, POS_PREC_DIG, true ) );
-					if( ((int)rRnd( drw_pnt.x - xMin, POS_PREC_DIG, true ) == (int)rRnd( xMax - xMin ) + 1) && rgb == 0 )
-					    rgb = gdImageGetPixel( im_fill_out, (int)rRnd( drw_pnt.x - xMin - 1, POS_PREC_DIG, true ),
-										(int)rRnd( drw_pnt.y - yMin, POS_PREC_DIG, true ) );
-					else if( ((int)rRnd( drw_pnt.y - yMin, POS_PREC_DIG, true ) == (int)rRnd( yMax - yMin ) + 1) && rgb == 0 )
-					    rgb = gdImageGetPixel( im_fill_out, (int)rRnd( drw_pnt.x - xMin, POS_PREC_DIG, true ),
-										(int)rRnd( drw_pnt.y - yMin - 1, POS_PREC_DIG, true ) );
+				    else if( ((int)rRnd( drw_pnt.y - yMin, POS_PREC_DIG, true ) == (int)rRnd( yMax - yMin ) + 1) && rgb == 0 )
+					rgb = gdImageGetPixel( im_fill_out, (int)rRnd( drw_pnt.x - xMin, POS_PREC_DIG, true ),
+									    (int)rRnd( drw_pnt.y - yMin - 1, POS_PREC_DIG, true ) );
 
-					alpha = gdImageAlpha( im_fill_out, rgb );
-					alpha_pr = 1 - (double)alpha / 127;
-					drw_pnt1.x = scaleRotate( drw_pnt, xSc, ySc, false, true ).x;
-					drw_pnt1.y = scaleRotate( drw_pnt, xSc, ySc, false, true ).y;
+				    alpha = gdImageAlpha( im_fill_out, rgb );
+				    alpha_pr = 1 - (double)alpha / 127;
+				    drw_pnt1.x = scaleRotate( drw_pnt, xSc, ySc, false).x;
+				    drw_pnt1.y = scaleRotate( drw_pnt, xSc, ySc, false).y;
 
-					//if( fabs(alpha_pr - 0) < 0.001 ) alpha_pr = 1;
-					color_r = alpha_pr*((rgb>>16)&0xff) + (1-alpha_pr)*alpha_col*( (uint8_t)( inundationItems[i].P_color>>16 ) );
-					color_g = alpha_pr*((rgb>>8)&0xff) + (1-alpha_pr)*alpha_col*( (uint8_t)( inundationItems[i].P_color>>8 ) );
-					color_b = alpha_pr*(rgb&0xff) + (1-alpha_pr)*alpha_col*( (uint8_t)inundationItems[i].P_color );
-					alpha_rez = (1 - alpha_col) * (1 - alpha_pr);
-					/*int color = gdImageColorResolve( im1, (int)rRnd( color_r, POS_PREC_DIG, true ),
+				    //if( fabs(alpha_pr - 0) < 0.001 ) alpha_pr = 1;
+				    color_r = alpha_pr*((rgb>>16)&0xff) + (1-alpha_pr)*alpha_col*( (uint8_t)( inundationItems[i].P_color>>16 ) );
+				    color_g = alpha_pr*((rgb>>8)&0xff) + (1-alpha_pr)*alpha_col*( (uint8_t)( inundationItems[i].P_color>>8 ) );
+				    color_b = alpha_pr*(rgb&0xff) + (1-alpha_pr)*alpha_col*( (uint8_t)inundationItems[i].P_color );
+				    alpha_rez = (1 - alpha_col) * (1 - alpha_pr);
+				    /*int color = gdImageColorResolve( im1, (int)rRnd( color_r, POS_PREC_DIG, true ),
 									    (int)rRnd( color_g, POS_PREC_DIG, true ),
 									    (int)rRnd( color_b, POS_PREC_DIG, true ) );*/
-					int color = gdImageColorResolveAlpha( im1, (int)rRnd( color_r, POS_PREC_DIG, true ),
-										   (int)rRnd( color_g, POS_PREC_DIG, true ),
-										   (int)rRnd( color_b, POS_PREC_DIG, true ),
-										   127 - (int)rRnd( 127*(1 - alpha_rez), POS_PREC_DIG, true ) );
-					gdImageSetPixel( im1, (int)rRnd( drw_pnt1.x, POS_PREC_DIG, true ) , (int)rRnd( drw_pnt1.y, POS_PREC_DIG, true ), color );
-				    }
-				    im_x += 1;
+				    int color = gdImageColorResolveAlpha( im1, (int)rRnd( color_r, POS_PREC_DIG, true ),
+										(int)rRnd( color_g, POS_PREC_DIG, true ),
+										(int)rRnd( color_b, POS_PREC_DIG, true ),
+										127 - (int)rRnd( 127*(1 - alpha_rez), POS_PREC_DIG, true ) );
+				    gdImageSetPixel( im1, (int)rRnd( drw_pnt1.x, POS_PREC_DIG, true ) , (int)rRnd( drw_pnt1.y, POS_PREC_DIG, true ), color );
 				}
-				while( im_x <= xMax_rot );
-				im_y += 1;
+				im_x += 1;
 			    }
-			    while( im_y <= yMax_rot );
-			    if( im_fill_out ) gdImageDestroy(im_fill_out);
-			    if( im_fill_in ) gdImageDestroy(im_fill_in);
-			    gdImageAlphaBlending(im1,1);
-			}
-		    }
-		    else
-		    {
-			paintFill( im1, delta_point_center, inundationItems[i] );
-			if( clickPnt.x > -1 && clickPnt.y > -1 )
-			{
-			    if( gdImageGetPixel(im1, (int)rRnd(clickPnt.x,POS_PREC_DIG,true),
-							(int)rRnd(clickPnt.y,POS_PREC_DIG,true) ) != gdImageColorResolveAlpha(im1,0,0,0,127) )
-			    {
-				if( im1 ) gdImageDestroy(im1);
-				return i;
-			    }
-			}
-
+			    while( im_x <= xMax_rot );
+			    im_y += 1;
+			} while(im_y <= yMax_rot);
+			if(im_fill_out) gdImageDestroy(im_fill_out);
+			if(im_fill_in) gdImageDestroy(im_fill_in);
+			gdImageAlphaBlending(im1,1);
 		    }
 		}
-		else mess_debug(nodePath().c_str(),_("At least one of the elementary figures, of which 'fill' is forming, is outside the boundary of the display area."));
+		else {
+		    paintFill(im1, delta_point_center, inundationItems[i]);
+		    //gdImageSetPixel(im1, delta_point_center.x, delta_point_center.y, gdImageColorResolveAlpha(im1,(uint8_t)(inundationItems[i].P_color>>16), (uint8_t)(inundationItems[i].P_color>>8), (uint8_t)inundationItems[i].P_color, 127 - (uint8_t)(inundationItems[i].P_color>>24)));
+		    if(clickPnt.x > -1 && clickPnt.y > -1) {
+			if(gdImageGetPixel(im1, (int)rRnd(clickPnt.x,POS_PREC_DIG,true),
+						(int)rRnd(clickPnt.y,POS_PREC_DIG,true)) != gdImageColorResolveAlpha(im1,0,0,0,127))
+			{
+			    if(im1) gdImageDestroy(im1);
+			    return i;
+			}
+		    }
+		}
 	    }
+	    else mess_debug(nodePath().c_str(),_("At least one of the elementary figures, of which 'fill' is forming, is outside the boundary of the display area."));
+	}
 	if( (int)rRnd( clickPnt.x, POS_PREC_DIG, true ) == -1 && (int)rRnd( clickPnt.y, POS_PREC_DIG, true ) == -1 )
 	{
 	    for(unsigned j = 0; j < shape_temp.size(); j++)
@@ -4143,8 +4011,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 	    }
 	    //- Painting all figures -
 	    std::sort(shape_temp.begin(), shape_temp.end());
-	    for(unsigned j = 0; j < shape_temp.size(); j++)
-	    {
+	    for(unsigned j = 0; j < shape_temp.size(); j++) {
 		gdImagePtr im2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
 		gdImageAlphaBlending(im2, 0);
 		gdImageFilledRectangle( im2, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(im2,0,0,0,127) );
@@ -4155,7 +4022,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 		gdImageAlphaBlending(im2,1);
 		gdImageSaveAlpha(im2, 1);
 		gdImageCopy(im1, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
-		if( im2 ) gdImageDestroy(im2);
+		if(im2) gdImageDestroy(im2);
 	    }
 	    gdImageAlphaBlending(im,1);
 	    gdImageSaveAlpha(im,1);
@@ -4163,32 +4030,25 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 	    gdImageSaveAlpha(im1, 1);
 	    gdImageCopy(im, im1, 0, 0, 0, 0, scaleWidth, scaleHeight);
 	}
-	if( im1 ) gdImageDestroy(im1);
+	if(im1) gdImageDestroy(im1);
     }
-    if( (int)rRnd( clickPnt.x, POS_PREC_DIG, true ) == -1 && (int)rRnd( clickPnt.y, POS_PREC_DIG, true ) == -1 )
-    {
-	for(unsigned j = 0; j < shapeItems.size(); j++)
-	{
+    if((int)rRnd(clickPnt.x,POS_PREC_DIG,true) == -1 && (int)rRnd(clickPnt.y,POS_PREC_DIG,true) == -1) {
+	for(unsigned j = 0; j < shapeItems.size(); j++) {
 	    bool fl_paint = false;
-	    for(unsigned i = 0; i < shape_temp_all.size(); i++)
-		if( j == shape_temp_all[i] )
-		{
-		    fl_paint = true;
-		    break;
-		}
-	    if( !fl_paint )
-	    {
-		gdImagePtr im2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
+	    for(unsigned i = 0; !fl_paint && i < shape_temp_all.size(); i++)
+		fl_paint = (j == shape_temp_all[i]);
+	    if(!fl_paint) {
+		gdImagePtr im2 = gdImageCreateTrueColor(scaleWidth, scaleHeight);
 		gdImageAlphaBlending(im2, 0);
-		gdImageFilledRectangle( im2, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(im2,0,0,0,127) );
+		gdImageFilledRectangle(im2, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(im2,0,0,0,127));
 		gdImageAlphaBlending(im2, 1);
-		paintFigure( im2, shapeItems[j], xSc, ySc, true, true );
-		gdImageAlphaBlending(im,1);
+		paintFigure(im2, shapeItems[j], xSc, ySc, true, true);
+		gdImageAlphaBlending(im, 1);
 		gdImageSaveAlpha(im, 1);
-		gdImageAlphaBlending(im2,1);
+		gdImageAlphaBlending(im2, 1);
 		gdImageSaveAlpha(im2, 1);
 		gdImageCopy(im, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
-		if( im2 ) gdImageDestroy(im2);
+		if(im2) gdImageDestroy(im2);
 	    }
 	}
     }
@@ -4269,8 +4129,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const SSess &ses )
 	if(reqEl->name() != "el") continue;
 
 	int uiPrmPos = s2i(reqEl->attr("p"));
-	switch(uiPrmPos)
-	{
+	switch(uiPrmPos) {
 	    case A_ACTIVE: active = (bool)s2i(reqEl->text());	break;
 	    case A_GEOM_W: width = s2r(reqEl->text());		break;
 	    case A_GEOM_H: height = s2r(reqEl->text());	break;
@@ -4303,13 +4162,11 @@ void VCAElFigure::setAttrs( XMLNode &node, const SSess &ses )
 	    case A_ElFigMirror: mirror = s2i(reqEl->text()); rel_list = true;	break;
 	    case A_ElFigElLst: elLst = reqEl->text(); rel_list = true;		break;
 	    default:
-		if(uiPrmPos >= A_ElFigIts)
-		{
+		if(uiPrmPos >= A_ElFigIts) {
 		    int pnt  = (uiPrmPos-A_ElFigIts)/A_ElFigItsSz;
 		    int patr = (uiPrmPos-A_ElFigIts)%A_ElFigItsSz;
 		    Point pnt_ = pnts[pnt];
-		    switch(patr)
-		    {
+		    switch(patr) {
 			case A_ElFigItPntX: pnt_.x = s2r(reqEl->text()); pnts[pnt] = pnt_; rel_list = true;	break;
 			case A_ElFigItPntY: pnt_.y = s2r(reqEl->text()); pnts[pnt] = pnt_; rel_list = true;	break;
 			case A_ElFigItW: widths[pnt] = (int)rRnd(s2r(reqEl->text())); rel_list = true;	break;
@@ -4325,8 +4182,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const SSess &ses )
 		}
 	}
     }
-    if(rel_list)
-    {
+    if(rel_list) {
 	for(PntMap::iterator pi = pnts.begin(); pi != pnts.end(); )
 	    if(pi->first <= ShapeItem::StatIts) pnts.erase(pi++); else ++pi;
 	string sel, el_s;
@@ -4338,8 +4194,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const SSess &ses )
 	Point ip[5];
 	shapeItems.clear();
 	inundationItems.clear();
-	for(int off = 0, el_off = 0; (sel=TSYS::strLine(elLst,0,&off)).size(); el_off = 0)
-	{
+	for(int off = 0, el_off = 0; (sel=TSYS::strLine(elLst,0,&off)).size(); el_off = 0) {
 	    string el = TSYS::strSepParse(sel, 0, ':', &el_off);
 	    ShapeItem::Type elTp;
 	    int nPnts = 0, servPnts;
@@ -4349,19 +4204,17 @@ void VCAElFigure::setAttrs( XMLNode &node, const SSess &ses )
 	    else if(el == "fill")       { elTp = ShapeItem::Fill; nPnts = -1; servPnts = -1; }
 	    else continue;
 
-	    //>> Reading anf setting attributes for the current line
-	    //>>> Points
+	    // Reading anf setting attributes for the current line
+	    //  Points
 	    float x_s, y_s;
 	    int w_s;
 	    bool pnts_ok = true;
 	    p.clear();
-	    for(int iP = 0, off_last = 0; pnts_ok && (nPnts < 0 || iP < nPnts); iP++)
-	    {
+	    for(int iP = 0, off_last = 0; pnts_ok && (nPnts < 0 || iP < nPnts); iP++) {
 		el_s = TSYS::strSepParse(sel, 0, ':', &el_off);
-		if(sscanf(el_s.c_str(),"(%f|%f)",&x_s,&y_s) == 2)
-		{
+		if(sscanf(el_s.c_str(),"(%f|%f)",&x_s,&y_s) == 2) {
 		    bool fl = false;
-		    //>>> Detecting if there is a point with same coordinates in the map
+		    //   Detecting if there is a point with same coordinates in the map
 		    for(PntMap::reverse_iterator pi = pnts.rbegin(); (servPnts < 0 || iP < servPnts) && !fl && pi != pnts.rend(); ++pi)
 			if(pi->first <= ShapeItem::StatIts && fabs(rRnd(x_s,POS_PREC_DIG) - rRnd(pi->second.x,POS_PREC_DIG)) < 0.01 &&
 			    fabs(rRnd(y_s,POS_PREC_DIG) - rRnd(pi->second.y,POS_PREC_DIG)) < 0.01)
@@ -4370,62 +4223,67 @@ void VCAElFigure::setAttrs( XMLNode &node, const SSess &ses )
 		}
 		else if(sscanf(el_s.c_str(),"%d",&w_s) == 1) p.push_back(w_s);
 		else { pnts_ok = false; el_off = off_last; }
-                off_last = el_off;
-            }
-            if(!pnts_ok && nPnts > 0) continue;
-	    //>>> Other properties
-            switch(elTp)
-            {
-                case ShapeItem::Line: case ShapeItem::Arc: case ShapeItem::Bezier:
-            	{
-            	    //>>> Line width
+		off_last = el_off;
+	    }
+	    if(!pnts_ok && nPnts > 0) continue;
+	    //  Other properties
+	    switch(elTp) {
+		case ShapeItem::Line: case ShapeItem::Arc: case ShapeItem::Bezier: {
+		    //   Line width
 		    el_s = TSYS::strSepParse(sel, 0, ':', &el_off);
 		    if(sscanf(el_s.c_str(),"w%d",&w_s) == 1) lnwidth  = widths[w_s];
 		    else if(sscanf(el_s.c_str(), "%d", &w_s) == 1 ) lnwidth = w_s;
 		    else lnwidth = lineWdth;
 
-		    //>>> Line color
+		    //   Line color
 		    el_s = TSYS::strSepParse(sel, 0, ':', &el_off);
 		    if(sscanf(el_s.c_str(),"c%d",&w_s) == 1) color = colors[w_s];
-		    else
-		    {
+		    else {
 			color = mod->colorParse(el_s);
 			if(color == -1) color = lineClr;
 			else if(color == 0) color = 0x00FA0000;
 		    }
 
-		    //>>> Border width
+		    //   Border width
 		    el_s = TSYS::strSepParse(sel, 0, ':', &el_off);
 		    if(sscanf(el_s.c_str(),"w%d",&w_s) == 1) bord_width = widths[w_s];
 		    else if(sscanf(el_s.c_str(),"%d",&w_s) == 1) bord_width = w_s;
 		    else bord_width = bordWdth;
 
-		    //>>> Border color
+		    //   Border color
 		    el_s = TSYS::strSepParse(sel, 0, ':', &el_off);
 		    if(sscanf(el_s.c_str(),"c%d",&w_s) == 1) bord_color = colors[w_s];
-		    else
-		    {
+		    else {
 			bord_color = mod->colorParse(el_s);
 			if(bord_color == -1) bord_color = bordClr;
 			else if(bord_color == 0) bord_color = 0x00FA0000;
 		    }
 
-		    //>>> Line style
+		    //   Line style
 		    el_s = TSYS::strSepParse(sel, 0, ':', &el_off);
 		    if(sscanf(el_s.c_str(),"s%d",&w_s) == 1) style = styles[w_s];
 		    else if(sscanf(el_s.c_str(),"%d",&w_s) == 1 && (w_s == EF_SOLID || w_s == EF_DASH || w_s == EF_DOT)) style = w_s;
 		    else style = lineStyle;
 
-		    //>> Reading coordinates for the points of the line
+		    //  Reading coordinates for the points of the line
 		    for(unsigned iP = 0; iP < p.size(); iP++) ip[iP] = pnts[p[iP]];
 
-		    if(elTp == ShapeItem::Arc)
-                    {
-			StartMotionPos = ip[0];
-			EndMotionPos = ip[1];
+		    if(elTp == ShapeItem::Arc) {
+			StartMotionPos	= ip[0];
+			EndMotionPos	= ip[1];
 			CtrlMotionPos_1 = ip[2];
 			CtrlMotionPos_2 = ip[3];
 			CtrlMotionPos_3 = ip[4];
+
+			//Mirroring
+			if(mirror) {
+			    StartMotionPos = scaleRotate(ip[1], 1, 1, false, false);
+			    EndMotionPos   = scaleRotate(ip[0], 1, 1, false, false);
+			    CtrlMotionPos_1 = scaleRotate(ip[2], 1, 1, false, false);
+			    CtrlMotionPos_2 = scaleRotate(ip[3], 1, 1, false, false);
+			    CtrlMotionPos_3 = scaleRotate(ip[4], 1, 1, false, false);
+			}
+
 			ang = angle(CtrlMotionPos_1, CtrlMotionPos_3, CtrlMotionPos_1, Point(CtrlMotionPos_1.x+10,CtrlMotionPos_1.y));
 			if(CtrlMotionPos_3.y > CtrlMotionPos_1.y) ang = 360 - ang;
 			a = length(CtrlMotionPos_3, CtrlMotionPos_1);
@@ -4433,26 +4291,22 @@ void VCAElFigure::setAttrs( XMLNode &node, const SSess &ses )
 
 			CtrlMotionPos_2 = Point(CtrlMotionPos_1.x+rotate(arc(0.25,a,b),ang).x, CtrlMotionPos_1.y-rotate(arc(0.25,a,b),ang).y);
 			StartMotionPos = unrotate(StartMotionPos, ang, CtrlMotionPos_1.x, CtrlMotionPos_1.y);
-			if(StartMotionPos.x >= a)
-			{
+			if(StartMotionPos.x >= a) {
 			    StartMotionPos.y = (StartMotionPos.y/StartMotionPos.x)*a;
 			    StartMotionPos.x = a;
 			}
-			if(StartMotionPos.x < -a)
-			{
+			if(StartMotionPos.x < -a) {
 			    StartMotionPos.y = (StartMotionPos.y/StartMotionPos.x)*(-a);
 			    StartMotionPos.x = -a;
 			}
 			t_start = acos(StartMotionPos.x/a)/(2*M_PI);
 			if(StartMotionPos.y > 0) t_start = 1 - t_start;
 			EndMotionPos = unrotate(EndMotionPos, ang, CtrlMotionPos_1.x, CtrlMotionPos_1.y);
-			if(EndMotionPos.x < -a)
-			{
+			if(EndMotionPos.x < -a) {
 			    EndMotionPos.y = (EndMotionPos.y/EndMotionPos.x)*(-a);
 			    EndMotionPos.x = -a;
 			}
-			if(EndMotionPos.x >= a)
-			{
+			if(EndMotionPos.x >= a) {
 			    EndMotionPos.y = (EndMotionPos.y/EndMotionPos.x)*a;
 			    EndMotionPos.x = a;
 			}
@@ -4465,8 +4319,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const SSess &ses )
 			if(t_end > t_start && t_start >= 1 && t_end > 1) { t_start -= 1; t_end -= 1; }
 			CtrlMotionPos_4 = Point(t_start, t_end);
                     }
-		    else
-		    {
+		    else {
 			ang = angle(ip[0], ip[1], ip[0], Point(ip[0].x+10,ip[0].y));
 			if(ip[0].y <= ip[1].y) ang = 360-ang;
 		    }
@@ -4482,6 +4335,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const SSess &ses )
 
 		    p.resize(5);
 		    shapeItems.push_back(ShapeItem(p[0],p[1],p[2],p[3],p[4],CtrlMotionPos_4,ang,color,bord_color,lnwidth,bord_width,elTp,style,flag_brd));
+
 		    break;
 		}
 		case ShapeItem::Fill:
@@ -5420,7 +5274,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 			if(lab_tm.size()) {
 			    wdth = brect[2]-brect[6];
 			    tpos = vmax(h_pos-wdth/2, 0);
-			    if(first_m || (tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3)) {
+			    if(first_m || ((tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3))) {
 				if(first_m) tpos = vmax(begMarkBrd, tpos);
 				gdImageStringFTEx(im, NULL, clrMrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0, tpos, markY, (char*)lab_tm.c_str(), &strex);
 				endPosTm = tpos+wdth;
@@ -5432,7 +5286,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 			markY += (brect[3] - brect[7]);
 			wdth = brect[2]-brect[6];
 			tpos = vmax(h_pos-wdth/2, 0);
-			if(first_m || (tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3)) {
+			if(first_m || ((tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3))) {
 			    if(first_m) tpos = vmax(begMarkBrd, tpos);
 			    gdImageStringFTEx(im, NULL, clrMrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0, tpos, markY, (char*)lab_dt.c_str(), &strex);
 			    endPosDt = tpos+wdth;

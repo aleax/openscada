@@ -1,0 +1,613 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Libs/Electrical elements - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="files/doc.css" rel="stylesheet" /></head>
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../en/files/Logo-big.png" /></a></div><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Libs/Electrical elements</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Libs_Electrical_elements.html" title="Библиотеки/Элементы электрики (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Libs_Electrical_elements.html" title="Бібліотеки/Елементи електрики (100% translated)">українська</a></div></div>
+<table class="wikitable">
+
+<tr>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="Libs_Electrical_elements.html" title="Special:MyLanguage/Libs/Electrical elements">Electrical elements library of the user interface</a>
+</td>
+<td> 2.0 </td>
+<td> GPL </td>
+<td> vcaElectroEls.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaElectroEls.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:VcaElectroEls.db.gz" title="File:VcaElectroEls.db.gz">GZip</a>) &gt; VCA.wlb_ElectroEls </td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2009)</i></font>
+</td>
+<td> Provides the mnemonic elements library of the user interface of the electrical substations and the electricity generation station.
+<ul><li> <b>Founded:</b> June 2009</li>
+<li> <b>Initially sponsored by:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Irkutsk_HES" title="Special:MyLanguage/Using/Irkutsk HES">Valeriy Nikolaev</a></li>
+<li> <b>Sponsored in the unification and improvement:</b> ElProtect (June 2017)</li>
+<li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/GraphicElementsLibraries/ElectroElements" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a></li></ul>
+</td></tr></table>
+<p>The library is created to provide mnemonic elements of the user interface and it contains graphic elements, often need when forming the user interface of the electrical substations and the electricity generation station. The library is built mostly on <a href="Modules/VCAEngine.html#ElFigure" title="Special:MyLanguage/Modules/VCAEngine">the primitive "ElFigure"</a> basis and the internal programming language <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>.
+</p><p>The element's names and their parameters are available in languages: English, Ukrainian and Russian. Their source code wrote in the human-language independent mode with calls for the translations by the function <i>tr()</i> and the message's translation also allowed for English, Ukrainian and Russian.
+</p><p>For connection the library to a project of the OpenSCADA station you can obtain the database file as:
+</p>
+<ul><li> supplied with a ready and proper package of the Linux distribution like to "openscada-libdb-vca", "openscada-LibDB.VCA";</li>
+<li> directly taken for most actual one from <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaElectroEls.sql" rel="nofollow noreferrer noopener" target="_blank">the subversion repository</a> and converted to the DB SQLite file in the way:</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 15px">
+$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaElectroEls.sql
+$ sqlite3 -init vcaElectroEls.sql vcaElectroEls.db .exit
+</pre>
+<ul><li> downloaded for <a class="external" href="http://oscada.org/wiki/File:VcaElectroEls.db.gz" title="File:VcaElectroEls.db.gz">the one attached here</a>.</li></ul>
+<p>This obtained file next you can place into the project directory of the station and create the database object for the DB module "SQLite", registering the database file in the configuration.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Passive_and_static_screen_elements"><span class="tocnumber">1</span> <span class="toctext">Passive and static screen elements</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Active_and_dynamic_elements"><span class="tocnumber">2</span> <span class="toctext">Active and dynamic elements</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Actual_active_elements"><span class="tocnumber">2.1</span> <span class="toctext">Actual active elements</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Deprecated_active_elements"><span class="tocnumber">2.2</span> <span class="toctext">Deprecated active elements</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#Addition_1:_Adjustment_and_fitting_of_elements.2C_construction_of_complete_electrical_schemes"><span class="tocnumber">3</span> <span class="toctext"><span>Addition 1: Adjustment and fitting of elements, construction of complete electrical schemes</span></span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Passive_and_static_screen_elements"><span class="mw-headline-number">1</span> Passive and static screen elements</span></h2>
+<p>The elements in Figure 1 serve to construct electrical networks, on the top, and to place into or about the wires as the passive static elements. By default, the angle of rotation is 0° and the mirroring disabled.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:716px;"><a class="image" href="http://oscada.org/wiki/File:LibElectroEls_wires.png"><img class="thumbimage" height="408" src="files/LibElectroEls_wires.png" width="714" /></a>  <div class="thumbcaption">Fig.1. Elements of the electrical networks.</div></div></div></div>
+<p>Elements of the electrical networks include, from the left to the right and from the top to the bottom:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Name (identifier) </th>
+<th> Version </th>
+<th> License </th>
+<th> Author
+</th></tr>
+<tr>
+<td colspan="4"> <i>The first row</i>
+</td></tr>
+<tr>
+<td> Electric horizontal connector (El_lhor) <br /> Conductive connection, line or tire, horizontal, according to GOST 2.723-68 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> Electric vertical connector (El_lvert) <br /> Conductive connection, line or tire, vertical, according to GOST 2.723-68 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> Distribution bus (conBus) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> Grounding (El_Zemlia) <br /> Grounding, according to GOST 2.721-74 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> Sharp (Sharp) <br /> Three lines, designation of a three-phase power transmission line </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> Double arrow (arrowSharp) <br /> Double arrow, designation of outboard equipment </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td colspan="4"> <i>The second row</i>
+</td></tr>
+<tr>
+<td> Inductance (Induct) <br /> Inductance, according to GOST 2.723-68 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> Reactor (reactor) <br /> Reactor according to GOST 2.723-68 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> Fuse (fuse1) <br />  </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> Voltage limiter (limU) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> Load 1 (load1) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> Load 2 (load2) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td colspan="4"> <i>The third row</i>
+</td></tr>
+<tr>
+<td> Transformer (tr) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> Transformer 1 (tr1) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> Tr: one secondary winding (trDuo) <br /> Transformer with one secondary winding, according to GOST 2.723-6 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> Tr: star in triangle (trStarTriangl) <br /> Transformer three-phase, star in triangle </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> Tr: triangle in star (trTrianglStar) <br /> Transformer three-phase, triangle in star </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> Tr: triangle in star, horizontal (trTrianglStarH) <br /> Transformer three-phase, triangle in star, horizontal </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> Tr: two secondary winding (trTrio) <br /> Transformer with two secondary winding, according to GOST 2.723-68 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td colspan="4"> <i>The fourth row</i>
+</td></tr>
+<tr>
+<td> Battery (battery) <br /> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> Converter: direct to direct (converterDC_DC) <br /> Direct current to direct converter, according to GOST 2.723-68 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> Converter: alternating to direct (converterAC_DC) <br /> Alternating current to direct converter, according to GOST 2.723-68 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> Source: alternating current (srcAC) <br /> AC power source, according to GOST 2.723-68 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> Circumference (El_Krug) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> Triangle (triangle) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p><b><u>Using — development</u></b><br />
+These widgets can be used by the developer to create mnemonic schemes of the electricity networks. By rotation and mirroring these widgets you can get all the needed combinations. By scaling, you can set the desired connector width where, for straight sections, the "x" and "y" axis scales may be different, determining the typical connector width on the mnemonic scheme and the length of its individual section, respectively. To use it you need to add selected ones to a mnemonic scheme, systematically adjust for the geometry and visually connect properly the needed elements by the the connector, see <a href="#Add1">Addition 1</a> for the details. For the purpose of systematic and simplified work, you may prepare only first elements and for other elements of the electric network use ready copies of these already prepared and placed items.
+</p><p><b><u>Using — runtime</u></b><br />
+In the runtime mode, these elements look the same as in the development mode because they are not dynamic.
+</p>
+<h2><span class="mw-headline" id="Active_and_dynamic_elements"><span class="mw-headline-number">2</span> Active and dynamic elements</span></h2>
+<p>The section elements is used to control and display the discrete apparatus' status on basis of the discrete signals, which designed for use in the electrical networks.
+</p>
+<h3><span class="mw-headline" id="Actual_active_elements"><span class="mw-headline-number">2.1</span> Actual active elements</span></h3>
+<p>The elements on Figure 2.2 is actual ones currently to use as the dynamic and active items of the electrical schemes. The elements commonly use and represent the representative structure of the DAQ-template of the <a href="Libs_Main.html#digitBlockUnif" title="Special:MyLanguage/Libs/Main">discrete block</a> in different visual variants.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:494px;"><a class="image" href="http://oscada.org/wiki/File:LibElectroEls_discrDevs.png"><img class="thumbimage" height="231" src="files/LibElectroEls_discrDevs.png" width="492" /></a>  <div class="thumbcaption">Fig.2.2. Discrete electrical devices in the development and runtime modes (top to bottom).</div></div></div></div>
+<p>Elements of the electrical networks include, from the left to the right:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Name (identifier) </th>
+<th> Version </th>
+<th> License </th>
+<th> Author
+</th></tr>
+<tr>
+<td> Key, unified (keyUnif) <br /> Unified simple key </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> Switch, unified (swUnif) <br /> Unified simple switch </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> General state, unified (stGenUnif) <br /> Unified general state, usually for the contactors </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> Area state, unified (stAreaUnif) <br /> Unified general status of groups and areas of static elements by the colored and dashed box </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p><b><u>Using — development</u></b><br />
+These widgets can be used by the developer to create mnemonic schemes of the electricity networks with the state displaying and control of the discrete devices. By rotation and mirroring these widgets you can get all the needed combinations. By scaling, you can set the desired geometric dimensions relative to the overall dimensions of the electric network. To use it you need to add selected ones to a mnemonic scheme, systematically adjust for the geometry and visually connect properly the needed elements by the the connector, see <a href="#Add1">Addition 1</a> for the details, and link to the data source parameter. For the purpose of systematic and simplified work, you may prepare only first elements and for other elements of the electric network use ready copies of these already prepared and placed items.
+</p><p><b><u>Using — runtime</u></b><br />
+In the runtime mode, in the main field of the elements, there are represented the apparatus symbolic shape with a dynamic sign of the discrete status, what related to values of the discrete signals of the parameter and the attribute <b>digStts</b> configuration. At the hardware errors and non validity the data, it draws not solid.
+</p><p>In the active mode of the element, pressing the left mouse button in the widget body will cause to appear in the panels area for <a href="Libs_Main_graphical_elements.html#ElCadr" title="Special:MyLanguage/Libs/Main graphical elements">control panel</a> of the parameter, and the selection of this widget will be displayed with the blinking structure color. The commands are duplicated in the context menu that appears when the right mouse button is pressed in the widget area.
+</p><p><b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Configuration </th>
+<th> Configuration template </th>
+<th> Description
+</th></tr>
+<tr>
+<td> code </td>
+<td> Parameter: code </td>
+<td> String </td>
+<td> Input link </td>
+<td> Parameter|NAME </td>
+<td> Short name of the parameter to be inserted in actions of the user-operator.
+</td></tr>
+<tr>
+<td> DESCR </td>
+<td> Description </td>
+<td> String </td>
+<td> Input link </td>
+<td> Parameter|DESCR </td>
+<td> Description or long name of the parameter to be inserted in actions of the user-operator.
+</td></tr>
+<tr>
+<td> st_open </td>
+<td> Parameter: state - "Opened" </td>
+<td> Boolean </td>
+<td> Input link </td>
+<td> Parameter|st_open </td>
+<td> The state "Opened" of the parameter or the common state of the switch at missing the state signal "Closed".
+</td></tr>
+<tr>
+<td> st_close </td>
+<td> Parameter: state - "Closed" </td>
+<td> Boolean </td>
+<td> Input link </td>
+<td> Parameter|st_close </td>
+<td> The state "Closed" of the parameter.
+</td></tr>
+<tr>
+<td> digStts </td>
+<td> Statuses </td>
+<td> String </td>
+<td> Input link </td>
+<td> Parameter|digStts </td>
+<td> Configuration of the parameter statuses with the structure <b>{openedLabel}-{color};{closedLabel}-{color}</b>, for the discrete block.
+</td></tr>
+<tr>
+<td> com </td>
+<td> Parameter: command - "Open" </td>
+<td> Boolean </td>
+<td> Full link </td>
+<td> Parameter|com </td>
+<td> The command "Open" of the parameter or the common command of the switch at missing the command signal "Close".
+</td></tr>
+<tr>
+<td> close </td>
+<td> Parameter: command - "Close" </td>
+<td> Boolean </td>
+<td> Full link </td>
+<td> Parameter|close </td>
+<td> The command "Close" of the parameter.
+</td></tr>
+<tr>
+<td> digComs </td>
+<td> Commands </td>
+<td> String </td>
+<td> Input link </td>
+<td> Parameter|digComs </td>
+<td> Configuration of the parameter commands with the structure <b>{openLabel}-{color};{closeLabel}-{color}</b>, for the discrete block, and <b>{com1Label}-{color};{com2Label}-{color};...;{comNLabel}-{color}</b>, for the code status.
+</td></tr>
+<tr>
+<td colspan="6"> <i>Only for the "Area state, unified (stAreaUnif)"</i>
+</td></tr>
+<tr>
+<td> st_open </td>
+<td> Parameter: state - "Opened" </td>
+<td> Boolean </td>
+<td> Input link </td>
+<td> Parameter|st_open </td>
+<td> The state "Opened" of the parameter or the common state of the switch at missing the state signal "Closed".
+</td></tr>
+<tr>
+<td> st_close </td>
+<td> Parameter: state - "Closed" </td>
+<td> Boolean </td>
+<td> Input link </td>
+<td> Parameter|st_close </td>
+<td> The state "Closed" of the parameter.
+</td></tr>
+<tr>
+<td> digStts </td>
+<td> Statuses </td>
+<td> String </td>
+<td> Input link </td>
+<td> Parameter|digStts </td>
+<td> Configuration of the parameter statuses with the structure <b>{openedLabel}-{color};{closedLabel}-{color}</b>, for the discrete block.
+</td></tr></table>
+<h3><span class="mw-headline" id="Deprecated_active_elements"><span class="mw-headline-number">2.2</span> Deprecated active elements</span></h3>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> The old elements on Figure 2.1 are originally developed by Maxim Lysenko and their are mostly useless currently due to they disadvantages: difficulty of fitting, unneeded dubling and non-standard — the geometry is not 100x100 and having the specific linking. Some newer elements of <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a> are also mean as deprecated due to yet using the specific linking.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:925px;"><a class="image" href="http://oscada.org/wiki/File:LibElectroEls_discrDevs_old.png"><img class="thumbimage" height="744" src="files/LibElectroEls_discrDevs_old.png" width="923" /></a>  <div class="thumbcaption">Fig.2.1. Deprecated discrete electrical devices, in the development mode only.</div></div></div></div>
+<p>Elements of the electrical networks include, from the left to the right and from the top to the bottom:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Name (identifier) </th>
+<th> Version </th>
+<th> License </th>
+<th> Author
+</th></tr>
+<tr>
+<td> One-way key (El_KeySqr_1) <br /> One-way key, according to GOST 2.755-87 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> One-way key, open (El_KeySqr_1_tst) <br /> One-way key, normally open, according to GOST 2.755-87 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> Key-protection (El_KeySqr_2) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> Key-protection, open (El_KeySqr_2_tst) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> One-way key, auto (El_KeySqr_3) <br /> One-way key, automatic, according to GOST 2.755-87 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> One-way key, auto, open (El_KeySqr_3_tst) <br /> One-way key, automatic, open, according to GOST 2.755-87 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> One-way key, circle (El_Key_1) <br /> One-way key, circle, according to GOST 2.755-87 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> One-way key, circle, open (El_Key_1_tst) <br /> One-way key, circle, open, according to GOST 2.755-87 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> Key-protection, circle (El_Key_2) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> Key-protection, circle, open (El_Key_2_tst) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> One-way key, auto, circle (El_Key_3) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> One-way key, auto, circle, open (El_Key_3_tst) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> Key-protection 2 (El_KeySqr_6) <br /> Key-protection 2, according to GOST 2.755-87 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> Key-protection 2, open (El_KeySqr_6_tst) <br /> Key-protection 2, open, according to GOST 2.755-87 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> Switch with neutral positions, open (El_KeySqr_5) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> Switch with neutral positions (El_KeySqr_5_tst) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> Switch (El_Key_h) </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> Two-way key, auto (El_KeySqr_4) <br /> Two-way key, automatic, according to GOST 2.755-87 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> Two-way key, auto, open (El_KeySqr_4_tst) <br /> Two-way key, automatic, open, according to GOST 2.755-87 </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> Maxim Lysenko
+</td></tr>
+<tr>
+<td> Key (key) <br /> Simple key </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> Switch (sw) <br /> Simple switch </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> General state (stGen) <br /> General state, usually for contactors </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr>
+<tr>
+<td> General state 1 (stGen1) <br /> General status of the group for boxing elements included </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p><b><u>Using — development</u></b><br />
+These elements are counted as the deprecated ones, but their are remained in the library for the compatibility and you yet may use them as a base for your own elements with the like shapes.
+</p><p><b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Configuration </th>
+<th> Configuration template </th>
+<th> Description
+</th></tr>
+<tr>
+<td> c1 </td>
+<td> Color 1 </td>
+<td> Color </td>
+<td> No </td>
+<td> </td>
+<td> Color of the dashed border
+</td></tr>
+<tr>
+<td> val </td>
+<td> Value </td>
+<td> Boolean </td>
+<td> Input link </td>
+<td> Parameter|var </td>
+<td> Link to the state discrete signal
+</td></tr>
+<tr>
+<td colspan="6"> <i>Only for the "General state (stGen)" and "General state 1 (stGen1)"</i>
+</td></tr>
+<tr>
+<td> val </td>
+<td> Value </td>
+<td> Boolean </td>
+<td> Input link </td>
+<td> Parameter|var </td>
+<td> Link to the state discrete signal
+</td></tr></table>
+<h2><span class="mw-headline" id="Addition_1:_Adjustment_and_fitting_of_elements.2C_construction_of_complete_electrical_schemes"><span class="mw-headline-number">3</span> <span id="Add1" title="#Add1">Addition 1: Adjustment and fitting of elements, construction of complete electrical schemes</span></span></h2>
+<p>This library contains and is intended for the construction of integral electrical schemes of arbitrary configuration of its individual elements, which need to be visually connected to each other so that there are no obvious displacements along the common axis and the intervals between the connection of visual elements, especially for the connection lines and with the ability to have an equally perfect appearance across a wide range of scales, ideally at all.
+</p><p>The need for wide-scale mnemonic schemes is relevant because of the unified construction of the mnemonic schemes in the resolution 900x600 and the ability to perform them on large resolutions of modern displays, when the zoom factor can now reach 10.
+</p><p>Therefore, all imperfections of the manual fitting there will immediately pop up and spoil the picture, since it is difficult to do without special means and on the initial screen of development it is impossible to see them.
+</p><p>Accordingly, the following rules are recommended for fitting the elements to obtain the desired result:
+</p>
+<ol><li> <i><b>Aligning elements by axis</b></i> should be performed by centering, or to the left and to the right for elements with several connections at one side, since they are all unified in size 100x100 and at the condition of providing their systematic arrangement on the mnemonic scheme on the same scale, typically 0.2.</li>
+<li> <i><b>Perfect fit</b></i> is more difficult because there is currently no tool to draw one element to the nearest border of another, and it is possible only at a separate calculation of the coordinates. Therefore, it is recommended to partially overlap one element to another, at 100% development scale, after the previous rule and according to the algorithm:
+<ul><li> to pull up the second element to the first, in one pixel step (holding down Shift) until the visual gap disappears, that is, the maximum possible distance remaining there will be <b>1</b> pixel;</li>
+<li> compensate this remain by another step of <b>1 pixel</b>.</li></ul></li></ol>
+<dl><dd><dl><dd><dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> When developing at a scale other than 100%, say 150%, we get a maximum compensation of <b>1*(150/100)=1.5</b>, ie the compensation steps must be the larger whole (ceil) — <b>2</b>.</dd></dl></dd></dl></dd></dl>
+<p>Applying these rules can be quite simple to get the result in the figure:
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1263px;"><a class="image" href="http://oscada.org/wiki/File:LibElectroEls_example.png"><img class="thumbimage" height="807" src="files/LibElectroEls_example.png" width="1261" /></a>  <div class="thumbcaption">The mnemonic scheme sample with pipelines.</div></div></div></div>
+
+
+
+
+
+
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Electrical_elements/en">Libs/Electrical_elements/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2667</td></tr></table></body>
+</html>

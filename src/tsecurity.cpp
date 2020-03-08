@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tsecurity.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -553,7 +553,7 @@ bool TGroup::user( const string &inm )
 {
     if(owner().usrPresent(inm)) {
 	string val;
-	for(int off = 0; (val=TSYS::strParse(users(),0,";",&off)).size() || off < users().size(); )
+	for(int off = 0; (val=TSYS::strParse(users(),0,";",&off)).size() || off < (int)users().size(); )
 	    if(val == inm) return true;
     }
     return false;
@@ -608,7 +608,7 @@ void TGroup::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/USERS") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SSEC_ID,SEC_RD)) {
 	    string val;
-	    for(int off = 0; (val=TSYS::strParse(users(),0,";",&off)).size() || off < users().size(); )
+	    for(int off = 0; (val=TSYS::strParse(users(),0,";",&off)).size() || off < (int)users().size(); )
 		opt->childAdd("el")->setText(val);
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SSEC_ID,SEC_WR))	userAdd(opt->text());

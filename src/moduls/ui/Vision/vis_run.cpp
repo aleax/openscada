@@ -59,13 +59,13 @@ using namespace VISION;
 
 VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string &user_pass, const string &VCAstat,
 		bool icrSessForce, unsigned iScr ) :
-    QMainWindow(QDesktopWidget().screen(iScr)), isResizeManual(false),
+    QMainWindow(QDesktopWidget().screen(iScr)), winClose(false), isResizeManual(false), updTmMax(0), planePer(0),
 #ifndef QT_NO_PRINTER
     prPg(NULL), prDiag(NULL), prDoc(NULL),
 #endif
     fileDlg(NULL),
-    winClose(false), conErr(NULL), crSessForce(icrSessForce), mKeepAspectRatio(true), mWinPosCntrSave(false), prjSes_it(iprjSes_it),
-    master_pg(NULL), mPeriod(1000), mConId(0), mScreen(iScr), wPrcCnt(0), updTmMax(0), planePer(0), reqtm(1), expDiagCnt(1), expDocCnt(1), x_scale(1), y_scale(1),
+    conErr(NULL), crSessForce(icrSessForce), mKeepAspectRatio(true), mWinPosCntrSave(false), prjSes_it(iprjSes_it),
+    master_pg(NULL), mPeriod(1000), mConId(0), mScreen(iScr), wPrcCnt(0), reqtm(1), expDiagCnt(1), expDocCnt(1), x_scale(1), y_scale(1),
     mAlrmSt(0xFFFFFF), alrLevSet(false), ntfSet(0), updPage(false), host(NULL)
 {
     QImage ico_t;
@@ -1191,7 +1191,7 @@ void VisRun::initSess( const string &iprjSes_it, bool icrSessForce )
     //Connect/create session
     int off = 0;
     if((src_prj=TSYS::pathLev(iprjSes_it,0,true,&off)).empty()) return;
-    if(off > 0 && off < iprjSes_it.size()) openPgs = iprjSes_it.substr(off);
+    if(off > 0 && off < (int)iprjSes_it.size()) openPgs = iprjSes_it.substr(off);
     // Check for ready session connection or project
     if(src_prj.compare(0,4,"ses_") == 0) { work_sess = src_prj.substr(4); src_prj = ""; isSess = true; }
     else if(src_prj.compare(0,4,"prj_") == 0) src_prj.erase(0,4);
@@ -1554,7 +1554,7 @@ void VisRun::pgCacheAdd( RunPageView *wdg )
 {
     if(!wdg) return;
     cachePg.push_front(wdg);
-    while(mod->cachePgSz() && cachePg.size() > mod->cachePgSz()) {
+    while(mod->cachePgSz() && (int)cachePg.size() > mod->cachePgSz()) {
 	cachePg.back()->deleteLater();	//delete cachePg.back();
 	cachePg.pop_back();
     }

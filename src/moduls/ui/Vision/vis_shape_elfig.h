@@ -1,9 +1,9 @@
 
 //OpenSCADA module UI.VISION file: vis_shape_elfig.h
 /***************************************************************************
- *   Copyright (C) 2007-2008 by Yashina Kseniya <ksu@oscada.org>
+ *   Copyright (C) 2012-2015,2020 by Roman Savochenko <roman@oscada.org>
  *		   2007-2012 by Lysenko Maxim <mlisenko@oscada.org>
- *		   2012-2015 by Roman Savochenko <rom_as@oscada.org>
+ *		   2007-2008 by Yashina Kseniya <ksu@oscada.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -222,8 +222,10 @@ class ShapeElFigure : public WdgShape
 			  -(pnt.x()-cntr.x())*sin((alpha*M_PI)/180)-(pnt.y()-cntr.y())*cos((alpha*M_PI)/180));
 	}
 	void moveAll( const QPointF &pos, WdgView *w );
-	QPointF scaleRotate( const QPointF &point, WdgView *w, int8_t toScale = -1, int8_t toTrans = -1 );	//Scale or/and rotate of the point
-	QPointF unScaleRotate( const QPointF &point, WdgView *w, int8_t toScale = -1, int8_t toTrans = -1 );	//Redo the scale or/and rotate of the point
+	//  Scale or/and rotate of the point
+	QPointF scaleRotate( const QPointF &point, WdgView *w, int8_t toScale = -1, int8_t toTrans = -1, bool toMirror = true );
+	//  Redo the scale or/and rotate of the point
+	QPointF unScaleRotate( const QPointF &point, WdgView *w, int8_t toScale = -1, int8_t toTrans = -1, bool toMirror = true );
 	QPainterPath painterPath( float width, float bWidth, int type, double ang, QPointF pBeg, QPointF pEnd,
 		QPointF pCntr1 = QPointF(), QPointF pCntr2 = QPointF(), QPointF pCntr3 = QPointF(), QPointF aT = QPointF() );
 	QPainterPath painterPathSimple( int type, double ang, QPointF pBeg, QPointF pEnd,
@@ -240,7 +242,7 @@ class ShapeElFigure : public WdgShape
 	void rectNum0_1( int rect_num_temp, WdgView *w );
 	void rectNum3_4( WdgView *w );
 	//  Calculate the t_start and t_end for the arc
-	QPointF getArcStartEnd( QPointF pBeg, QPointF pEnd, QPointF pCntr1, QPointF pCntr2, QPointF pCntr3 );
+	QPointF getArcStartEnd( WdgView *w, QPointF pBeg, QPointF pEnd, QPointF pCntr1, QPointF pCntr2, QPointF pCntr3 );
 
 	// Inundations
 	//  Checking if appending of the point and deleting of the fill(inundation) is needed

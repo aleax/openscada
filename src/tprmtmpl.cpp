@@ -582,7 +582,7 @@ bool TPrmTempl::Impl::initLnks( bool checkNoLink )
     bool chkLnkNeed = false;
 
     lnkList(ls);
-    for(int iL = 0; iL < ls.size(); ++iL)
+    for(int iL = 0; iL < (int)ls.size(); ++iL)
 	if(lnkInit(ls[iL],checkNoLink)) chkLnkNeed = true;
 
     return chkLnkNeed;
@@ -600,7 +600,7 @@ void TPrmTempl::Impl::inputLinks( )
 {
     vector<int> ls;
     lnkList(ls);
-    for(int iL = 0; iL < ls.size(); ++iL)
+    for(int iL = 0; iL < (int)ls.size(); ++iL)
 	set(ls[iL], lnkInput(ls[iL]));
 }
 
@@ -608,7 +608,7 @@ void TPrmTempl::Impl::outputLinks( )
 {
     vector<int> ls;
     lnkList(ls);
-    for(int iL = 0; iL < ls.size(); ++iL)
+    for(int iL = 0; iL < (int)ls.size(); ++iL)
 	if(ioMdf(ls[iL])) lnkOutput(ls[iL], get(ls[iL]));
 }
 
