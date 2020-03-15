@@ -81,7 +81,7 @@ INSERT INTO wlb_test_incl VALUES('mn_gen','diagTests','/wlb_test/wdg_DiagramTest
 INSERT INTO wlb_test_incl VALUES('mn_gen','TextEl','/wlb_test/wdg_TextEltests','geomX;geomY;geomZ;',2);
 INSERT INTO wlb_test_incl VALUES('mn_gen','media','/wlb_test/wdg_MediaTests','geomX;geomY;',2);
 INSERT INTO wlb_test_incl VALUES('mn_gen','Ti_нд','/wlb_Main/wdg_anShow','geomX;geomY;geomZ;',2);
-INSERT INTO wlb_test_incl VALUES('mn_gen','prescrRunSimple','/wlb_Main/wdg_prescrRunSimple','geomX;geomY;geomXsc;geomYsc;geomZ;',0);
+INSERT INTO wlb_test_incl VALUES('mn_gen','prescrRunSimple','/wlb_prescr/wdg_prescrRunSimple','geomX;geomY;geomXsc;geomYsc;geomZ;',0);
 INSERT INTO wlb_test_incl VALUES('ElFigureTests','ElFigure','/wlb_originals/wdg_ElFigure','geomX;geomY;geomW;geomH;lineWdth;elLst;','');
 INSERT INTO wlb_test_incl VALUES('mn_gen','ElFigureTests1','/wlb_test/wdg_ElFigureTests','geomX;geomY;geomW;','');
 INSERT INTO wlb_test_incl VALUES('mn_gen','prt','/wlb_originals/wdg_Protocol','name;geomX;geomY;geomW;geomH;geomZ;tSize;trcPer;viewOrd;col;itProp;it0lev;it0fnt;it0color;it1lev;it1fnt;it1color;','');
@@ -2265,7 +2265,7 @@ Y0yJjGCMwCCDDRjb4mlClNZbG2unFxfJ7FsfAME4zc1wEtP19fXBYOB5HgDU6/U8z5VSlmXFcWxZ
 G0BgDCDUmJsTQiKEwCBm2fUGN1ojjKZpOg4j+sorr1iW9WFh/ZyCENre2jjoW0obSikjREiJECKM
 2dxijAZBMJlMHNdVUihtMCEqzzEhGIExCBBYjCVpShnTStXr9el0Gk+nnNJCsZQaLJL4l/V9YCYY
 4xs/+ckvb/0syx58Lf4rJr/yDtDHoPb/PyKE+D+7lpz88BufGQAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
-//if(geomX++ > 10) geomX=0;','','',-1,'name;dscr;geomX;geomW;geomH;backColor;bordWidth;bordColor;',1551599366);
+//if(geomX++ > 10) geomX=0;','','',-1,'name;dscr;geomX;geomW;geomH;backColor;bordWidth;bordColor;',1584299118);
 INSERT INTO wlb_test VALUES('ElFigureTests','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA0SAAANOgHo3ZneAAAKYElEQVRoge1ZfUxT5x4+XQsto6cfQIt2SAXWLqZoFb0i092NxbAYp5Fk
 ubLgcDNuC9NN4nbjvGjYBZxW9kFQwzIMMWombAvDXRwIZMgM9mO0tEA/aItSPgpt8bT09POUnt4/

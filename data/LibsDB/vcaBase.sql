@@ -133,6 +133,7 @@ DOC: Libs_Documents|Libs/Documents','Документы','Содержит эл�
 Версия: 2.1.1
 Лицензия: GPLv2
 DOC: Libs_Documents|Libs/Documents');
+INSERT INTO VCALibs VALUES('prescr','Prescriptions','','wlb_prescr','','Рецепти','','Рецепты','');
 CREATE TABLE IF NOT EXISTS 'prj_archBrowser_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO prj_archBrowser_incl VALUES('/prj_archBrowser/pg_control/pg_graphSelPrm','color','/wlb_Main/wdg_graphSelPrm/wdg_color','value;');
 INSERT INTO prj_archBrowser_incl VALUES('/prj_archBrowser/pg_control/pg_graphSelPrm','dim','/wlb_Main/wdg_graphSelPrm/wdg_dim','value;');
@@ -361,57 +362,57 @@ INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','diagT
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','media','/wlb_test/wdg_mn_gen/wdg_media','owner;perm;','');
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','prescrRunSimple','/wlb_test/wdg_mn_gen/wdg_prescrRunSimple','owner;perm;prExtCurCom;prExtMode;prExtProg;prExtStartTm;prExtWork;','');
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','prt','/wlb_test/wdg_mn_gen/wdg_prt','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','btPass','/wlb_Main/wdg_prescrRun/wdg_btPass','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','btStart','/wlb_Main/wdg_prescrRun/wdg_btStart','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','btStop','/wlb_Main/wdg_prescrRun/wdg_btStop','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','labProg','/wlb_Main/wdg_prescrRun/wdg_labProg','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','lib','/wlb_Main/wdg_prescrRun/wdg_lib','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','prog','/wlb_Main/wdg_prescrRun/wdg_prog','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','progBox','/wlb_Main/wdg_prescrRun/wdg_progBox','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','title','/wlb_Main/wdg_prescrRun/wdg_title','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','wPanel','/wlb_Main/wdg_prescrRun/wdg_wPanel','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','arg1','/wlb_Main/wdg_prescrEdit/wdg_arg1','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','arg2','/wlb_Main/wdg_prescrEdit/wdg_arg2','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','arg3','/wlb_Main/wdg_prescrEdit/wdg_arg3','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','arg4','/wlb_Main/wdg_prescrEdit/wdg_arg4','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','arg5','/wlb_Main/wdg_prescrEdit/wdg_arg5','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','backgrnd','/wlb_Main/wdg_prescrEdit/wdg_backgrnd','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','comAdd','/wlb_Main/wdg_prescrEdit/wdg_comAdd','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','comArgsBox','/wlb_Main/wdg_prescrEdit/wdg_comArgsBox','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','comBox','/wlb_Main/wdg_prescrEdit/wdg_comBox','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','comDel','/wlb_Main/wdg_prescrEdit/wdg_comDel','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','comDwn','/wlb_Main/wdg_prescrEdit/wdg_comDwn','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','comInAdd','/wlb_Main/wdg_prescrEdit/wdg_comInAdd','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','comIns','/wlb_Main/wdg_prescrEdit/wdg_comIns','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','comUp','/wlb_Main/wdg_prescrEdit/wdg_comUp','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','descr','/wlb_Main/wdg_prescrEdit/wdg_descr','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labArg1','/wlb_Main/wdg_prescrEdit/wdg_labArg1','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labArg2','/wlb_Main/wdg_prescrEdit/wdg_labArg2','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labArg3','/wlb_Main/wdg_prescrEdit/wdg_labArg3','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labArg4','/wlb_Main/wdg_prescrEdit/wdg_labArg4','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labArg5','/wlb_Main/wdg_prescrEdit/wdg_labArg5','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labArgs','/wlb_Main/wdg_prescrEdit/wdg_labArgs','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labBackgrnd','/wlb_Main/wdg_prescrEdit/wdg_labBackgrnd','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labCom','/wlb_Main/wdg_prescrEdit/wdg_labCom','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labDescr','/wlb_Main/wdg_prescrEdit/wdg_labDescr','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labName','/wlb_Main/wdg_prescrEdit/wdg_labName','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labProg','/wlb_Main/wdg_prescrEdit/wdg_labProg','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labType','/wlb_Main/wdg_prescrEdit/wdg_labType','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','lib','/wlb_Main/wdg_prescrEdit/wdg_lib','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','name','/wlb_Main/wdg_prescrEdit/wdg_name','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','prog','/wlb_Main/wdg_prescrEdit/wdg_prog','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','progAdd','/wlb_Main/wdg_prescrEdit/wdg_progAdd','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','progBox','/wlb_Main/wdg_prescrEdit/wdg_progBox','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','progCopy','/wlb_Main/wdg_prescrEdit/wdg_progCopy','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','progDel','/wlb_Main/wdg_prescrEdit/wdg_progDel','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','progExport','/wlb_Main/wdg_prescrEdit/wdg_progExport','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','progImport','/wlb_Main/wdg_prescrEdit/wdg_progImport','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','progNm','/wlb_Main/wdg_prescrEdit/wdg_progNm','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','progRename','/wlb_Main/wdg_prescrEdit/wdg_progRename','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','save','/wlb_Main/wdg_prescrEdit/wdg_save','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','title','/wlb_Main/wdg_prescrEdit/wdg_title','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','type','/wlb_Main/wdg_prescrEdit/wdg_type','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','wPanel','/wlb_Main/wdg_prescrEdit/wdg_wPanel','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','btPass','/wlb_prescr/wdg_prescrRun/wdg_btPass','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','btStart','/wlb_prescr/wdg_prescrRun/wdg_btStart','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','btStop','/wlb_prescr/wdg_prescrRun/wdg_btStop','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','labProg','/wlb_prescr/wdg_prescrRun/wdg_labProg','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','lib','/wlb_prescr/wdg_prescrRun/wdg_lib','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','prog','/wlb_prescr/wdg_prescrRun/wdg_prog','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','progBox','/wlb_prescr/wdg_prescrRun/wdg_progBox','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','title','/wlb_prescr/wdg_prescrRun/wdg_title','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','wPanel','/wlb_prescr/wdg_prescrRun/wdg_wPanel','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','arg1','/wlb_prescr/wdg_prescrEdit/wdg_arg1','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','arg2','/wlb_prescr/wdg_prescrEdit/wdg_arg2','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','arg3','/wlb_prescr/wdg_prescrEdit/wdg_arg3','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','arg4','/wlb_prescr/wdg_prescrEdit/wdg_arg4','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','arg5','/wlb_prescr/wdg_prescrEdit/wdg_arg5','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','backgrnd','/wlb_prescr/wdg_prescrEdit/wdg_backgrnd','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','comAdd','/wlb_prescr/wdg_prescrEdit/wdg_comAdd','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','comArgsBox','/wlb_prescr/wdg_prescrEdit/wdg_comArgsBox','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','comBox','/wlb_prescr/wdg_prescrEdit/wdg_comBox','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','comDel','/wlb_prescr/wdg_prescrEdit/wdg_comDel','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','comDwn','/wlb_prescr/wdg_prescrEdit/wdg_comDwn','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','comInAdd','/wlb_prescr/wdg_prescrEdit/wdg_comInAdd','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','comIns','/wlb_prescr/wdg_prescrEdit/wdg_comIns','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','comUp','/wlb_prescr/wdg_prescrEdit/wdg_comUp','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','descr','/wlb_prescr/wdg_prescrEdit/wdg_descr','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labArg1','/wlb_prescr/wdg_prescrEdit/wdg_labArg1','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labArg2','/wlb_prescr/wdg_prescrEdit/wdg_labArg2','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labArg3','/wlb_prescr/wdg_prescrEdit/wdg_labArg3','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labArg4','/wlb_prescr/wdg_prescrEdit/wdg_labArg4','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labArg5','/wlb_prescr/wdg_prescrEdit/wdg_labArg5','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labArgs','/wlb_prescr/wdg_prescrEdit/wdg_labArgs','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labBackgrnd','/wlb_prescr/wdg_prescrEdit/wdg_labBackgrnd','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labCom','/wlb_prescr/wdg_prescrEdit/wdg_labCom','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labDescr','/wlb_prescr/wdg_prescrEdit/wdg_labDescr','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labName','/wlb_prescr/wdg_prescrEdit/wdg_labName','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labProg','/wlb_prescr/wdg_prescrEdit/wdg_labProg','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labType','/wlb_prescr/wdg_prescrEdit/wdg_labType','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','lib','/wlb_prescr/wdg_prescrEdit/wdg_lib','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','name','/wlb_prescr/wdg_prescrEdit/wdg_name','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','prog','/wlb_prescr/wdg_prescrEdit/wdg_prog','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','progAdd','/wlb_prescr/wdg_prescrEdit/wdg_progAdd','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','progBox','/wlb_prescr/wdg_prescrEdit/wdg_progBox','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','progCopy','/wlb_prescr/wdg_prescrEdit/wdg_progCopy','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','progDel','/wlb_prescr/wdg_prescrEdit/wdg_progDel','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','progExport','/wlb_prescr/wdg_prescrEdit/wdg_progExport','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','progImport','/wlb_prescr/wdg_prescrEdit/wdg_progImport','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','progNm','/wlb_prescr/wdg_prescrEdit/wdg_progNm','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','progRename','/wlb_prescr/wdg_prescrEdit/wdg_progRename','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','save','/wlb_prescr/wdg_prescrEdit/wdg_save','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','title','/wlb_prescr/wdg_prescrEdit/wdg_title','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','type','/wlb_prescr/wdg_prescrEdit/wdg_type','owner;perm;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','wPanel','/wlb_prescr/wdg_prescrEdit/wdg_wPanel','owner;perm;','');
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','ElFigure1','/wlb_Main/wdg_grpGraph/wdg_ElFigure1','owner;perm;','');
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','arh','/wlb_Main/wdg_grpGraph/wdg_arh','owner;','');
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','el1','/wlb_Main/wdg_grpGraph/wdg_el1','owner;','');
@@ -756,25 +757,21 @@ INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','owner',
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','perm','944',32,'','','media','','','','','','');
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','owner','root:op',32,'','','prescrRunSimple','','','','','','');
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','perm','944',32,'','','prescrRunSimple','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','prExtCurCom','0',34,'Controller|curCom','prm:/LogicLev/prescription/manager/curCom','prescrRunSimple','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','prExtMode','0',38,'Controller|mode','prm:/LogicLev/prescription/manager/mode','prescrRunSimple','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','prExtCurCom','',34,'Controller|curCom','prm:/LogicLev/prescription/manager/curCom','prescrRunSimple','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','prExtMode','',38,'Controller|mode','prm:/LogicLev/prescription/manager/mode','prescrRunSimple','','','','','','');
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','prExtProg','',38,'Controller|prog','prm:/LogicLev/prescription/manager/prog','prescrRunSimple','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','prExtStartTm','0',34,'Controller|startTm','prm:/LogicLev/prescription/manager/startTm','prescrRunSimple','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','prExtWork','<TVarObj>
-</TVarObj>
-',34,'Controller|work','prm:/LogicLev/prescription/manager/work','prescrRunSimple','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','prExtStartTm','',34,'Controller|startTm','prm:/LogicLev/prescription/manager/startTm','prescrRunSimple','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','prExtWork','',34,'Controller|work','prm:/LogicLev/prescription/manager/work','prescrRunSimple','','','','','','');
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','owner','root:op',32,'','','prt','','','','','','');
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','perm','944',32,'','','prt','','','','','','');
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','owner','root:op',32,'','','','','','','','','');
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','perm','944',32,'','','','','','','','','');
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','pgNoOpenProc','1',0,'','','','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','prExtCurCom','0',42,'Controller|curCom','prm:/LogicLev/prescription/manager/curCom','','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','prExtMode','0',46,'Controller|mode','prm:/LogicLev/prescription/manager/mode','','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','prExtCurCom','',42,'Controller|curCom','prm:/LogicLev/prescription/manager/curCom','','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','prExtMode','',46,'Controller|mode','prm:/LogicLev/prescription/manager/mode','','','','','','','');
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','prExtProg','',46,'Controller|prog','prm:/LogicLev/prescription/manager/prog','','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','prExtStartTm','0',42,'Controller|startTm','prm:/LogicLev/prescription/manager/startTm','','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','prExtWork','<TVarObj>
-</TVarObj>
-',42,'Controller|work','prm:/LogicLev/prescription/manager/work','','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','prExtStartTm','',42,'Controller|startTm','prm:/LogicLev/prescription/manager/startTm','','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','prExtWork','',42,'Controller|work','prm:/LogicLev/prescription/manager/work','','','','','','','');
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','owner','root:op',32,'','','btPass','','','','','','');
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','perm','944',32,'','','btPass','','','','','','');
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','owner','root:op',32,'','','btStart','','','','','','');
@@ -795,9 +792,7 @@ INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','owner'
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','perm','944',32,'','','wPanel','','','','','','');
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','','','','','','','');
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','prExtComLs','<TVarObj>
-</TVarObj>
-',42,'Controller|comLs','prm:/LogicLev/prescription/manager/comLs','','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','prExtComLs','',42,'Controller|comLs','prm:/LogicLev/prescription/manager/comLs','','','','','','','');
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','arg1','','','','','','');
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','arg1','','','','','','');
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','arg2','','','','','','');
@@ -3514,7 +3509,7 @@ line:6:7::c2:::
 line:8:9::c2:::
 line:2:3::c1:::
 line:4:5::c1:::',32,'','','lev_var','','','','','','');
-INSERT INTO wlb_Main_io VALUES('prescrRunSimple','name','Prescription: run (simple)',32,'','','','Рецепт: виконання (простий)','','Рецепт: исполнение (простой)','','','');
+INSERT INTO wlb_Main_io VALUES('prescrRunSimple','name','Prescription — run, simple (moved)',32,'','','','Рецепт — виконання, простий (перенесено)','','Рецепт — исполнение, простой (перенесен)','','','');
 INSERT INTO wlb_Main_io VALUES('prescrRunSimple','geomW','250',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrRunSimple','geomH','170',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrRunSimple','backColor','gray',96,'','','','','','','','','');
@@ -4569,7 +4564,7 @@ INSERT INTO wlb_Main_io VALUES('grph_panel','font','Arial 15',32,'','','size',''
 INSERT INTO wlb_Main_io VALUES('grph_panel','font','Arial 14',0,'','','tmTp','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','font','Arial 13',32,'','','cursor','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','1',32,'','','line3','','','','','','');
-INSERT INTO wlb_Main_io VALUES('prescrEdit','name','Prescription: edit',32,'','','','Рецепт: редагування','','Рецепт: редактирование','','','');
+INSERT INTO wlb_Main_io VALUES('prescrEdit','name','Prescription — edit (moved)',32,'','','','Рецепт — редагування (перенесено)','','Рецепт — редактирование (перенесен)','','','');
 INSERT INTO wlb_Main_io VALUES('prescrEdit','geomW','900',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrEdit','geomH','600',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrEdit','pgGrp','so',32,'','','','','','','','','');
@@ -4921,7 +4916,7 @@ INSERT INTO wlb_Main_io VALUES('prescrEdit','backColor','',32,'','','wPanel','',
 INSERT INTO wlb_Main_io VALUES('prescrEdit','bordWidth','2',32,'','','wPanel','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrEdit','bordColor','#5A5A5A',32,'','','wPanel','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrEdit','bordStyle','8',32,'','','wPanel','','','','','','');
-INSERT INTO wlb_Main_io VALUES('prescrRun','name','Prescription: run',32,'','','','Рецепт: виконання','','Рецепт: исполнение','','','');
+INSERT INTO wlb_Main_io VALUES('prescrRun','name','Prescription — run (moved)',32,'','','','Рецепт — виконання (перенесено)','','Рецепт — исполнение (перенесен)','','','');
 INSERT INTO wlb_Main_io VALUES('prescrRun','geomW','900',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrRun','geomH','600',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrRun','evProc','ws_FocusIn:/prog:open:/pg_control/pg_doc_panel',32,'','','','','','','','','');
@@ -5037,7 +5032,9 @@ INSERT INTO wlb_Main_io VALUES('prescrRun','bordColor','#5A5A5A',32,'','','wPane
 INSERT INTO wlb_Main_io VALUES('prescrRun','bordStyle','8',32,'','','wPanel','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrEdit','tipTool','Save the step changes',32,'','','save','Зберегти зміни кроку','','Сохранить изменения шага','','','');
 INSERT INTO wlb_Main_io VALUES('prescrRun','tipTool','Allowed prescriptions/programms list',32,'','','lib','Перелік наявних рецептів/програм','','Список доступных рецептов/программ','','','');
-INSERT INTO wlb_Main_io VALUES('prescrEdit','dscr','The element "Prescription: edit" is one of the two frames with rescriptions work,
+INSERT INTO wlb_Main_io VALUES('prescrEdit','dscr','!!!!: Moved to the library "Prescriptions". Will be removed soon
+
+The element "Prescription — edit" is one of the two frames with rescriptions work,
 with serve for edit programms-prescriptions by user.
 Programm-prescription is sequential functions blocks call - commands (macros),
 with get up to five arguments and return three results: "Work" (0), "Finish" (> 0) и "Error" (< 0).
@@ -5045,7 +5042,9 @@ The command step call cyclic while return result "Work" (0). Go to next step per
 case result "Finish" (> 0) return. In error case, result "Error" (< 0), the prescription run interrurpt.
 Prescription execution performed into visualization interface session.
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.0',32,'','','','Елемент "Рецепт: редагування" є одним з двох кадрів роботи з рецептами,
+Version: 1.2.0',32,'','','','!!!!: Перенесено до бібліотеки "Рецепти". Скоро буде видалено
+
+Елемент "Рецепт: редагування" є одним з двох кадрів роботи з рецептами,
 який слугує для редагування програм-рецептів користувачем.
 Програма-рецепт представляє собою послідовний виклик блоків функцій - команди
 (макроси), які приймають до п''яти аргументів та повертають три результати:
@@ -5055,7 +5054,9 @@ Version: 1.2.0',32,'','','','Елемент "Рецепт: редагуванн�
 У випадку помилки, результат "Помилка" (< 0), виконання рецепту припиняється.
 Виконання рецепту відбувається у сеансі інтерфейсу візуалізації.
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.2.0','','Элемент "Рецепт: редактирование" является одним из двух кадров работы с рецептами,
+Версія: 1.2.0','','!!!!: Перенесен в библиотеку "Рецепты". Скоро будет удалён
+
+Элемент "Рецепт: редактирование" является одним из двух кадров работы с рецептами,
 который служит для пользовательского редактирования программ-рецептов.
 Программа-рецепт представляет собой последовательный вызов блоков функций - команды
 (макросы), принимающие до пяти аргументов и возвращающие три результата:
@@ -5066,8 +5067,10 @@ Version: 1.2.0',32,'','','','Елемент "Рецепт: редагуванн�
 Исполнение рецепта осуществляется в сеансе интерфейса визуализации.
 Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.2.0','','','');
-INSERT INTO wlb_Main_io VALUES('prescrRun','dscr','The element "Prescription: run" is one from two frames for prescriptions work,
-which serve for programm-prescription execution, early prepared in frame кадре "Prescription: edit".
+INSERT INTO wlb_Main_io VALUES('prescrRun','dscr','!!!!: Moved to the library "Prescriptions". Will be removed soon
+
+The element "Prescription — run" is one from two frames for prescriptions work,
+which serve for programm-prescription execution, early prepared in frame кадре "Prescription — edit".
 
 Executed prescription-programm can been paused, by button "Pause" press in place for button "Start",
 or interrupt, by press button "Stop".
@@ -5079,7 +5082,9 @@ session time in graphics group. For history of reports of programms execution se
 document field and list into appear navigation panel on archived document.
 By default the document''s archive configured to 10 documents depth.
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.0',32,'','','','Елемент "Рецепт: виконання" є одним з двох кадрів роботи з рецептами,
+Version: 1.2.0',32,'','','','!!!!: Перенесено до бібліотеки "Рецепти". Скоро буде видалено
+
+Елемент "Рецепт: виконання" є одним з двох кадрів роботи з рецептами,
 які слугують для безпосереднього виконання програм-рецептів,
 раніше сформованих у кадрі "Рецепт: редагування".
 
@@ -5094,7 +5099,9 @@ Version: 1.2.0',32,'','','','Елемент "Рецепт: виконання" �
 документа та погортати по архівному документу на панелі навігації що з''явилася праворуч.
 По замовченню архів документів налаштовано на глибину 10 документів.
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.2.0','','Элемент "Рецепт: исполнение" является одним из двух кадров работы с рецептами,
+Версія: 1.2.0','','!!!!: Перенесен в библиотеку "Рецепты". Скоро будет удалён
+
+Элемент "Рецепт: исполнение" является одним из двух кадров работы с рецептами,
 который служит для непосредственного исполнения программ-рецептов,
 ранее сформированных в кадре "Рецепт: редактирование".
 
@@ -5910,7 +5917,7 @@ INSERT INTO wlb_Main_io VALUES('prescrEdit','elType','0',32,'','','name','','','
 INSERT INTO wlb_Main_io VALUES('prescrEdit','value','',8,'','','name','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrEdit','font','Arial 15',32,'','','name','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrEdit','confirm','0',32,'','','name','','','','','','');
-INSERT INTO wlb_Main_io VALUES('anShow1s','name','Analog show 1 (short)',32,'','','','Відображення аналогового 1 (короткий)','','Отображение аналогового 1 (короткий)','','','');
+INSERT INTO wlb_Main_io VALUES('anShow1s','name','Analog show 1, short',32,'','','','Відображення аналогового 1, короткий','','Отображение аналогового 1, короткий','','','');
 INSERT INTO wlb_Main_io VALUES('anShow1s','geomW','65',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('anShow1s','geomW','65',32,'','','val','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph10','en','0',40,'','','el1','','','','','','');
@@ -6977,21 +6984,27 @@ INSERT INTO wlb_Main_io VALUES('prescrEdit','font','Arial 17',32,'','','labBackg
 INSERT INTO wlb_Main_io VALUES('prescrEdit','alignment','8',32,'','','labBackgrnd','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrEdit','text','Background:',32,'','','labBackgrnd','Фоновий:','','Фоновый:','','','');
 INSERT INTO wlb_Main_io VALUES('prescrEdit','value','0',8,'','','backgrnd','','','','','','');
-INSERT INTO wlb_Main_io VALUES('prescrRunSimple','dscr','The element "Prescription: run simple" is simple variant of the element "Prescription: run" which designed
-for placing as a widget of mnemo and works only in cooperation with the primary element "Prescription: run".
+INSERT INTO wlb_Main_io VALUES('prescrRunSimple','dscr','!!!!: Moved to the library "Prescriptions". Will be removed soon
+
+The element "Prescription — run, simple" is simple variant of the element "Prescription — run" which designed
+for placing as a widget of mnemo and works only in cooperation with the primary element "Prescription — run".
 
 Executed prescription-programm can been paused, pressing the button "Pause" in the place of the button "Start",
 or interrupt, pressing the button "Stop".
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.0',32,'','','','Елемент "Рецепт: просте виконання" - простий варіант елементу "Рецепт: виконання" який розроблено
+Version: 1.2.0',32,'','','','!!!!: Перенесено до бібліотеки "Рецепти". Скоро буде видалено
+
+Елемент "Рецепт: просте виконання" - простий варіант елементу "Рецепт: виконання" який розроблено
 для розташування як віджет мнемосхеми та роботи тільки разом з первинним елементом "Рецепт: виконання".
 
 Запущений рецепт-програма може бути призупинено, натиском кнопки "Пауза" у місці кнопки "Запуск",
 або перервати, натиском "Зупинити".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.2.0','','Элемент "Рецепт: простое исполнение" - простой вариант элемента "Рецепт: выполнение" который разработан
+Версія: 1.2.0','','!!!!: Перенесен в библиотеку "Рецепты". Скоро будет удалён
+
+Элемент "Рецепт: простое исполнение" - простой вариант элемента "Рецепт: выполнение" который разработан
 для располажения как виджет мнемосхемы и работы только вместе с первичным элементом "Рецепт: исполнения".
 
 Запущенный рецепт-программа может быть приостановлен, нажатием кнопки "Пауза" в месте кнопки "Запуск",
@@ -8385,7 +8398,7 @@ License: GPLv2',32,'','','','Елемент є інформаційним діа
 Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.0.0
 Лицензия: GPLv2','','','');
-INSERT INTO wlb_Main_io VALUES('treeSelect','dscr','The element implements a simple dialog for selecting an item in a tree. The dialog contains the tree itself and the two buttons "Accept" and "Cancel". This dialog, for example, was used and originally designed for it in the frame "Prescription: run (simple)" for hierarchical selection of an element in a tree.
+INSERT INTO wlb_Main_io VALUES('treeSelect','dscr','The element implements a simple dialog for selecting an item in a tree. The dialog contains the tree itself and the two buttons "Accept" and "Cancel". This dialog, for example, was used and originally designed for it in the frame "Prescription — run, simple" for hierarchical selection of an element in a tree.
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: the Laboratory of Vacuum Technologies
@@ -21343,7 +21356,7 @@ if(f_start || progSelCom || progSelTp) {
 			for(i_a = 1; selNd && i_a <= 5; i_a++) this["arg"+i_a].attrSet("value",selNd.attr("arg"+i_a));
 	}
 }
-type_active = prog_value.length;','','',100,'name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;bordStyle;',1552226019);
+type_active = prog_value.length;','','',100,'name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;bordStyle;',1584085757);
 INSERT INTO wlb_Main VALUES('prescrRun','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA0SAAANOgHo3ZneAAAC60lEQVRYhe2ZTU8TQRyH//Oy2+22Ai0hGiqRSvTiAb0YI1y5eODolYQP
 0LvfhJPh6BW+gIkxUeNZ8QU1bYFYCsW+zs67h01ILRSLWueyz2Ezmfll5vdcZg+DSqVSOp2GIRzW
@@ -21503,7 +21516,7 @@ event = ev_rez;
 //Programm select process
 if(!prExtProg.length || lib_items.search("^"+prExtProg.replace(new RegExp("(\\[|\\]|\\(|\\)|\\.|\\+|\\*|\\?|\\^|\\$|\\<|\\>|\\{|\\}|\\\\)","g"),"\\$1")+"$","m") < 0)
 	prExtProg = lib_value;
-else lib_value = prExtProg;','','',200,'name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;',1552226019);
+else lib_value = prExtProg;','','',200,'name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;',1584085757);
 INSERT INTO wlb_Main VALUES('prescrRunSimple','iVBORw0KGgoAAAANSUhEUgAAAEAAAAArCAIAAABHOBkQAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAE0ElEQVRoge2Vy28TVxSHz525nvG8HNtjO2+TEBJqAoEoJBREqSLooqrK
 gj1do6Z/BH9EkYBVoMuyYAeqIkpbYlKkQNqkOAlJbEwcO37FnhnP2PPsghRBFsVQpCmSv9Xo3qtz
@@ -21683,7 +21696,7 @@ event = ev_rez;
 //Programm select process
 if(!prExtProg.length || lib_items.search("^"+prExtProg.replace(new RegExp("(\\[|\\]|\\(|\\)|\\.|\\+|\\*|\\?|\\^|\\$|\\<|\\>|\\{|\\}|\\\\)","g"),"\\$1")+"$","m") < 0)
 	prExtProg = lib_name;
-else lib_name = lib_selValue = prExtProg;','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;bordStyle;',1552226019);
+else lib_name = lib_selValue = prExtProg;','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;bordStyle;',1584085757);
 INSERT INTO wlb_Main VALUES('accept','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAeCAIAAAATj48OAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAADx0lEQVRYhe2X3W/bVBjGX9vHTh27+XCSJWlamvSLds0qsY1O2kDbQIML
 LiYViRX1DgkEUoS44KITEn8LAuUGcVcxCQbthgasWwordEALydZpLW3WNHbjJE7OsQ8XiQrctI0L
@@ -22279,7 +22292,7 @@ uz8eHdMKe6HqnXWNULj0RnBK4Qv9fV1NDa7WBqmUSSw9CM4HlzfT7PNa2MMUbCL4wW2MOzfoc7ua
 64FndkLB6U8+3Szs9zeHKyDxydm7yZqEyexuePb936+SIPFsgamkkgqboY/f2w4SILGFXLYyKPO5
 RDiYS67P0xSBI0US+VI+X2QF8RnttLg7/Y+JEEViIDApZr9NAqm0uzZ7L7U6oyFxBHKZK+ayOfYg
 /j8rIVlgc8nt3NODEldgEgXmOFcR+WKWL2arZ1WEbCr5LJ7E5dPciXOlgqot8f86CADAcfzq1atV
-qTiOJ5O11dhXCPT//lP/b42CIxloislxAAAAAElFTkSuQmCC','/wlb_Main/wdg_anShow1',0,'','','',-1,'name;geomW;',1542445373);
+qTiOJ5O11dhXCPT//lP/b42CIxloislxAAAAAElFTkSuQmCC','/wlb_Main/wdg_anShow1',0,'','','',-1,'name;geomW;',1584085788);
 INSERT INTO wlb_Main VALUES('calendar','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAyCAIAAABj4UpDAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAKd0lEQVRoge1ZWW/bVhq9XCRRK2Vt1uolVizYceMmLRqnBdoifWueOkD7
 0t8xGKCYGaC/oy8NmiJAkaCA03QcoAqKpHaCymjs2okdRJYsb9pMUqIokSLv5Z0Hpg4lKkaXzAQB
@@ -24885,11 +24898,11 @@ INSERT INTO prj_archBrowser VALUES('/archBrowser/so/1','doc','','root',0,'
 INSERT INTO prj_archBrowser VALUES('/archBrowser/so/1/doc','messRep','','/wlb_doc/wdg_docMessRep',0,'','','',-1,0,'owner;geomYsc;archLs;messCat;',1495719828);
 INSERT INTO prj_archBrowser VALUES('/archBrowser/control','graphCalc','','/wlb_Main/wdg_graphCalc',0,'','','',-1,0,'owner;',1563002360);
 CREATE TABLE IF NOT EXISTS 'prj_tmplSO' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
-INSERT INTO prj_tmplSO VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;',1570990224);
+INSERT INTO prj_tmplSO VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;',1584299250);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so','1','','root',1,'
 ','
 ','
-',-1,5,'name;dscr;geomX;',1570990146);
+',-1,5,'name;dscr;geomX;',1584299250);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so','2','','root',1,'
 ','
 ','',-1,5,'name;',1546704070);
@@ -24908,10 +24921,10 @@ INSERT INTO prj_tmplSO VALUES('/tmplSO/control','treeSelect','','/wlb_Main/wdg_t
 INSERT INTO prj_tmplSO VALUES('/tmplSO/control','cntrPasp','','/wlb_Main/wdg_cntrPaspExt',0,'','','',-1,0,'owner;perm;name;geomZ;pName;',1494598746);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/control','cntrPaspOld','','/wlb_Main/wdg_cntrPasp',0,'','','',-1,0,'owner;perm;geomZ;pName;',1494596514);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1','view1','','root',0,'
-','','',-1,5,'owner;perm;name;dscr;geomZ;',1570990146);
-INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1/view1','1','','/wlb_test/wdg_mn_gen',0,'','','',-1,0,'owner;perm;name;pgOpen;pgNoOpenProc;pgGrp;',1570990146);
-INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1/view1','10','','/wlb_Main/wdg_prescrRun',0,'','','',-1,0,'owner;perm;pgNoOpenProc;prExtCurCom;prExtMode;prExtProg;prExtStartTm;prExtWork;',1559660517);
-INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1/view1','11','','/wlb_Main/wdg_prescrEdit',0,'','','',-1,0,'owner;perm;prExtComLs;',1559660517);
+','','',-1,5,'owner;perm;name;dscr;geomZ;',1584299250);
+INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1/view1','1','','/wlb_test/wdg_mn_gen',0,'','','',-1,0,'owner;perm;name;pgOpen;pgNoOpenProc;pgGrp;',1584299250);
+INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1/view1','10','','/wlb_prescr/wdg_prescrRun',0,'','','',-1,0,'owner;perm;prExtCurCom;prExtMode;prExtProg;prExtStartTm;prExtWork;',1584299250);
+INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1/view1','11','','/wlb_prescr/wdg_prescrEdit',0,'','','',-1,0,'owner;perm;prExtComLs;',1584299250);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1','view2','','/wlb_Main/wdg_grpGraph',0,'','','',-1,2,'owner;perm;geomZ;pgGrp;',1546704070);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1/view2','1','','..',0,'','','',-1,0,'owner;',1546704070);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1','view3','','/wlb_Main/wdg_grpCadr',0,'','','',-1,2,'owner;perm;geomZ;pgGrp;',1546703892);
@@ -25877,4 +25890,1696 @@ INSERT INTO prj_archBrowser_ses VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el9','wMi
 INSERT INTO prj_archBrowser_ses VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el9','pModeA','');
 INSERT INTO prj_archBrowser_ses VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el9','pModeC','');
 INSERT INTO prj_archBrowser_ses VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el9','color','#69695C-200');
+CREATE TABLE IF NOT EXISTS 'wlb_prescr' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '0' ,"PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
+INSERT INTO wlb_prescr VALUES('prescrEdit','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
+RK5CYII=','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
+if(f_start) save_active = false;
+progLbUpdt = progSelPrg = progSelCom = progSelTp = false;
+var comOp = "";
+
+//Events for commands process
+for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
+	//SYS.messInfo(this.nodePath(),"Event: "+ev_cur);
+	if(ev_cur == "ws_BtPress:/progAdd") {
+		if(!progNm_value.length) progNm_value = tr("New program");
+		SYS.BD.nodeAt(dbDB,".").SQLReq("INSERT INTO "+dbProgs+" (name) VALUES (''"+progNm_value+"'');");
+		lib_value = progNm_value;
+		progLbUpdt = progSelPrg = progSelCom = true; prog_value = "";
+	}
+	else if(ev_cur == "ws_BtPress:/progCopy") {
+		if(!progNm_value.length) progNm_value = tr("New program");
+		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
+		if(rez.length > 1) {
+			SYS.BD.nodeAt(dbDB,".").SQLReq("INSERT INTO "+dbProgs+" (name, prgTxt) VALUES (''"+progNm_value+"'', ''"+rez[1][0].replace("''","''''")+"'');");
+			lib_value = progNm_value;
+			progLbUpdt = progSelPrg = progSelCom = true; prog_value = "";
+		}
+	}
+	else if(ev_cur == "ws_BtPress:/progRename") {
+		SYS.BD.nodeAt(dbDB,".").SQLReq("UPDATE "+dbProgs+" SET name=''"+progNm_value+"'' WHERE name=''"+lib_value+"'';");
+		lib_value = progNm_value;
+		progLbUpdt = progSelPrg = progSelCom = true; prog_value = "";
+	}
+	else if(ev_cur == "dlg_Apply:/progDel" && lib_value.length) {
+	//else if(ev_cur == "ws_BtPress:/progDel" && lib_value.length) {
+		SYS.BD.nodeAt(dbDB,".").SQLReq("DELETE FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
+		lib_value = "";
+		progLbUpdt = progSelPrg = true;
+	}
+	else if(ev_cur == "ws_TreeChange:/lib")	{ progSelPrg = progSelCom = true; prog_value = ""; }
+	else if(ev_cur == "ws_BtPress:/comAdd")	comOp = "add";
+	else if(ev_cur == "ws_BtPress:/comIns")	comOp = "ins";
+	else if(ev_cur == "ws_BtPress:/comInAdd")	comOp = "inAdd";
+	else if(ev_cur == "ws_BtPress:/comDel") comOp = "del";
+	else if(ev_cur == "ws_BtPress:/comUp")	comOp = "up";
+	else if(ev_cur == "ws_BtPress:/comDwn") comOp = "dwn";
+	else if(ev_cur == "ws_TreeChange:/prog"){ progSelCom = true; save_active = false; }
+	else if(ev_cur == "ws_CombChange:/type"){ progSelTp = true; save_active = true; }
+	else if(ev_cur == "ws_BtPress:/save" && prog_value.length) {
+		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
+		if(rez.length > 1) {
+			comTree = selNd = SYS.XMLNode("prg"); comTree.load(rez[1][0]);
+			parentPath = "";
+			for(offPV = 0; (vIt=prog_value.parsePath(0,offPV)).length; ) {
+				if(offPV < prog_value.length) parentPath += "/"+vIt;
+				selNd = selNd.childGet((i_c=vIt.toInt()));
+			}
+			if(selNd) {
+				selNd.setAttr("id", type_value);
+				selNd.setAttr("name", name_value);
+				selNd.setAttr("descr", descr_value);
+				selNd.setAttr("backgrnd", backgrnd_value);
+				for(i_a = 1; i_a <= 5; i_a++) {
+					argObj = this["arg"+i_a];
+					argVal = argObj.attr("value");
+					if(!argObj.attr("min").isEVal()) argVal = max(argVal,argObj.attr("min"));
+					if(!argObj.attr("max").isEVal()) argVal = min(argVal,argObj.attr("max"));
+					selNd.setAttr("arg"+i_a, argVal);
+				}
+				SYS.BD.nodeAt(dbDB,".").SQLReq("UPDATE "+dbProgs+" SET prgTxt=''"+comTree.save().replace("''","''''")+"'' WHERE name=''"+lib_value+"'';");
+				prog_value = parentPath+"/"+i_c+":"+(name_value.length?name_value:type_value);
+				//SYS.messInfo(this.nodePath(),"prog_value: "+prog_value);
+				progSelPrg = true;
+			}
+		}
+		save_active = false;
+	}
+	else if(ev_cur == "ws_BtPress:/progExport" && lib_value.length) {
+		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
+		if(rez.length > 1) {
+			expTree = SYS.XMLNode("OpenSCADA_Prescr");
+			expTree.childAdd("prg").load(rez[1][0]);
+			expTree.childGet(0).setAttr("id",lib_value);
+			progExport_value = tr("Prescription-Program")+" (*.prscr)|"+tr("Prescription file")+"|"+lib_value.replace("/","_")+".prscr\n"+expTree.save(0x05);
+		}
+	} 
+	//else if(ev_cur == "ws_BtPress:/progImport")
+	else if(ev_cur == "ws_BtLoad:/progImport" && progImport_value.length && (pCtx=progImport_value.indexOf("\n")) > 0)
+	{
+		expTree = SYS.XMLNode("OpenSCADA_Prescr");
+		expTree.load(progImport_value.slice(pCtx+1));
+		progImport_value = progImport_value.slice(0,pCtx);
+		// Save all recors to DB
+		for(i_p = 0; i_p < expTree.childSize(); i_p++) {
+			treeNd = expTree.childGet(i_p);
+			if(treeNd.name() != "prg") continue;
+			if(lib_items.search(treeNd.attr("id")+"(\n|\\z)") < 0)
+				SYS.BD.nodeAt(dbDB,".").SQLReq("INSERT INTO "+dbProgs+" (name,prgTxt) VALUES (''"+treeNd.attr("id")+"'',''"+treeNd.save().replace("''","''''")+"'');");
+			else
+				SYS.BD.nodeAt(dbDB,".").SQLReq("UPDATE "+dbProgs+" SET prgTxt=''"+treeNd.save().replace("''","''''")+"'' WHERE name=''"+treeNd.attr("id")+"'';");	
+		}
+		progLbUpdt = progSelPrg = progSelCom = true;
+	}
+	else if(ev_cur == "ws_LnAccept:/name" || ev_cur == "ws_TxtAccept:/descr" || ev_cur == "ws_ChkChange:/backgrnd" || (rez=ev_cur.match("ws_LnAccept:\\/arg(\\d)")).length)	save_active = true;
+	else if((rez=ev_cur.match("ws_FocusOut:\\/arg(\\d)")).length) {
+		argObj = this["arg"+rez[1]];
+		argVal = argObj.attr("value");
+		if(!argObj.attr("min").isEVal()) argVal = max(argVal,argObj.attr("min"));
+		if(!argObj.attr("max").isEVal()) argVal = min(argVal,argObj.attr("max"));
+		argObj.attrSet("value",argVal);
+	}
+	else ev_rez += (ev_cur+"\n");
+}
+event = ev_rez;
+
+//Get programms into library list
+if(f_start || progLbUpdt) {
+	rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT name FROM "+dbProgs+";");
+	lib_items = "";
+	for(i_p = 1; i_p < rez.length; i_p++)
+		lib_items += ((i_p==1)?"":"\n")+rez[i_p][0];
+	lib_items = lib_items.split("\n").sort().join("\n");
+	progNm_cfg = lib_items;
+}
+progCopy_active = progRename_active = progDel_active = progExport_active = comAdd_active = lib_value.length;
+
+//Command operations process
+if(comOp.length && lib_value.length) {
+	rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
+	if(rez.length > 1) {
+		comTree = selNd = SYS.XMLNode("prg");
+		comTree.load(rez[1][0]);
+		parentPath = "";
+		if(prog_value.length) {
+			for(offPV = 0; (vIt=prog_value.parsePath(0,offPV)).length; ) {
+				if(offPV < prog_value.length) parentPath += "/"+vIt;
+				selNd = selNd.childGet((i_c=vIt.toInt()));
+			}
+			selNd = selNd.parent();
+		}
+		if(comOp == "add") {
+			selNd.childAdd("com").setAttr("id",tr("New command"));
+			prog_value = parentPath+"/"+(selNd.childSize()-1)+":"+tr("New command");
+		}
+		else {
+			// Get selected command node and position
+			if(i_c < selNd.childSize()) {
+				if(comOp == "inAdd") {
+					selNd.childGet(i_c).childAdd("com").setAttr("id",tr("New command"));
+					prog_value = parentPath+"/"+i_c+":"+selNd.childGet(i_c).attr("id")+"/"+(selNd.childGet(i_c).childSize()-1)+":"+tr("New command");
+				}
+				else if(comOp == "ins") {
+					selNd.childIns(i_c,"com").setAttr("id",tr("New command"));
+					prog_value = parentPath+"/"+i_c+":"+tr("New command");
+				}
+				else if(comOp == "del") {
+					selNd.childDel(i_c);
+					if(!selNd.childSize())	prog_value = parentPath;
+					else {
+						if(i_c >= selNd.childSize()) i_c = selNd.childSize()-1;
+						prog_value = parentPath+"/"+i_c+":"+selNd.childGet(i_c).attr("id");
+					}
+				}
+				else if((comOp == "up" && i_c) || (comOp == "dwn" && i_c < (selNd.childSize()-1))) {
+					storeNd = selNd.childGet(i_c);
+					selNd.childDel(i_c);
+					if(comOp == "up") i_c--; else i_c++;
+					selNd.childIns(i_c,storeNd);
+					prog_value = parentPath+"/"+i_c+":"+storeNd.attr("id");
+				}
+			}
+		}
+
+		//Save changes
+		SYS.BD.nodeAt(dbDB,".").SQLReq("UPDATE "+dbProgs+" SET prgTxt=''"+comTree.save().replace("''","''''")+"'' WHERE name=''"+lib_value+"'';");
+		progSelPrg = progSelCom = true;
+	}
+}
+
+//Get commands of selected program into commands list
+if(f_start || progSelPrg) {
+	prog_items = "";
+	if(lib_value.length) {
+		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
+		if(rez.length > 1) {
+			comTree = SYS.XMLNode("prg");
+			comTree.load(rez[1][0]);
+			curNd = comTree; curPos = 0; curPath = ""; comLevs = new Array();
+			for( ; true; curPos++) {
+				if(curPos >= curNd.childSize()) {
+					if(!comLevs.length) break;
+					stObj = comLevs.pop();
+					curNd = curNd.parent();
+					curPos = stObj.curPos; curPath = stObj.curPath;
+					continue;
+				}
+				prog_items += (prog_items.length?"\n":"")+(wPath=curPath+"/"+curPos+":"+curNd.childGet(curPos).attr(curNd.childGet(curPos).attr("name").length?"name":"id"));
+				if(curNd.childGet(curPos).childSize()) {
+					curNd = curNd.childGet(curPos);
+					comLevs.push((stObj=new Object()));
+					stObj.curPos = curPos; stObj.curPath = curPath;
+					curPos = -1; curPath = wPath;
+					continue;
+				}
+			}
+		}
+	}
+	labProg_arg0val = progNm_value = lib_value;
+}
+comIns_active = comInAdd_active = comDel_active = comUp_active = comDwn_active = prog_value.length;
+
+//Get command properties
+if(f_start || progSelCom || progSelTp) {
+	if(!progSelTp) name_value = type_value = descr_value = "", backgrnd_value = false;
+	for(i_a = 1; i_a <= 5; i_a++) {
+		this["labArg"+i_a].attrSet("en",false).attrSet("text","");
+		this["arg"+i_a].attrSet("en",false).attrSet("value","");
+	}
+
+	// Types/commands list load
+	if(f_start && !prExtComLs.isEVal()) {
+		type_items = descr_value = ""; backgrnd_value = false;
+		for(var c_nm in prExtComLs)
+			if(c_nm != "Error" && c_nm != "Stop")
+				type_items += (type_items.length?"\n":"")+c_nm;
+	}
+
+	if(prog_value.length) {
+		selNd = false;
+		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
+		if(rez.length > 1) {
+			selNd = SYS.XMLNode("prg"); selNd.load(rez[1][0]);
+			for(off = 0; (vIt=prog_value.parsePath(0,off)).length; ) selNd = selNd.childGet(vIt.toInt());
+		}
+		if(!progSelTp && selNd) {
+			name_value = selNd.attr("name");
+			type_value = selNd.attr("id");
+			descr_value = selNd.attr("descr");
+			backgrnd_value = selNd.attr("backgrnd");
+		}
+		// Load command argument''s names
+		if(!prExtComLs.isEVal() && !prExtComLs[type_value].isEVal()) {
+			if((progSelTp || !descr_value.length) && (descr_value=prExtComLs[type_value]["descr"]).isEVal()) descr_value = "";
+			for(i_a = 1; i_a <= 5; i_a++) {
+				argLab = prExtComLs[type_value]["arg"+i_a];
+				if(argLab.isEVal() || !argLab.length)	continue;
+				off = 0;
+				this["labArg"+i_a].attrSet("en",true).attrSet("text",argLab.parse(0,"|",off));
+				argBord = argLab.parse(0,"|",off);
+				this["arg"+i_a].attrSet("min",argBord.length?argBord.toReal():EVAL_REAL);
+				argBord = argLab.parse(0,"|",off);
+				this["arg"+i_a].attrSet("max",argBord.length?argBord.toReal():EVAL_REAL);
+				this["arg"+i_a].attrSet("en",true);
+			}
+		}
+
+		// Load arguments'' values
+		if(!progSelTp && selNd)
+			for(i_a = 1; selNd && i_a <= 5; i_a++) this["arg"+i_a].attrSet("value",selNd.attr("arg"+i_a));
+	}
+}
+type_active = prog_value.length;',100,'owner;name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;',1584292826);
+INSERT INTO wlb_prescr VALUES('prescrRun','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
+AA0SAAANOgHo3ZneAAAC60lEQVRYhe2ZTU8TQRyH//Oy2+22Ai0hGiqRSvTiAb0YI1y5eODolYQP
+0LvfhJPh6BW+gIkxUeNZ8QU1bYFYCsW+zs67h01ILRSLWueyz2Ezmfll5vdcZg+DSqVSOp2GIRzW
+apO5vEcJQiiesdb2BxBC1gJCYK1FCMXf0xRCCOJlAM55KpU6DcfJGGvjfP8OvxwxrB5jjAZBcIFA
+GKSq5TJCYCzCBButpBBK62wY9iKRCQNMCFgrlWI9dnOhWK/VuywKAl8bAKOk0gTjdBj8aLQmchNK
+CKUtJaANygS+wSQdpK9endmvlJnQFGMDWknj+ZRz7nu+lNKAWVy8R/D5DtZaGoZhEATDBObmi3Pz
+xWGrZykUCsYAIVgpRSntXzqdObs0NXV39CP64ZxTa+1cYXZgx2arpbXO56b6J62FnY+fut3uycmJ
+53lSSq2U53lBmKEYtTudlO9rrVgkCCG+7+Xz077vDTgMDP6STqdDAeDWQpFSWt47yOXynXZzrjBb
+3T+QUhbnb1Sqe7npmeOj+vXZa5SQdzs7KysrhBCMsTEGY3x202Hz/xyl1Pb2NgUAIeW3cuX+g4eb
+m5vLy8ssipRSWusoijJXJjc2NtbX13e/fL1ZnLcWlpaWMpnMf+j3WxhjW1tbGACklOl0sPv58+rq
+ar1+qGK0VkpVK5W1tbVms5nNZoUQrjufAwaAiPMwDI+PDt++eT2RDSPOhZSMsVa7nZua+PjhPY+6
+GKNWu+267TlQhNCLl68opdZajPHB9xoAxNdzubIXh44bP+LBBVeyKygAtFstpZW1gBEihERCBik/
+n8+77jYSVCm98PjJKFEjeeP503EXuiwUIXh0Z2aUqODRs+fj7nNpKADcnvZHiTKmx1zmT/gff5yx
+kgi4JhFwTSLgmkTANYmAaxIB1yQCrkkEXJMIuCYRcE0i4JpEwDWJgGsoADQajVGinEcIQAgx8CLo
+Cs45AKBSqTTwdn0xxpixVbo0vV7vJ+y1bVFUL+7MAAAAAElFTkSuQmCC','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
+//Get programms into library list
+if(f_start) {
+	prEndRun = true;
+	lib_value = "";
+	btStop_active = false;
+	prCnt = 0;
+}
+if(prExtMode.isEVal() || prExtProg.isEVal() || prExtStartTm.isEVal() || prExtCurCom.isEVal() || prExtWork.isEVal())
+	return;
+
+//Check for program list update
+if(f_start || (prCnt%max(1,f_frq)) == 0) {
+	rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT name FROM "+dbProgs+";");
+	curPrLst = "";
+	for(i_p = 1; i_p < rez.length; i_p++)
+		curPrLst += (curPrLst.length?"\n":"")+rez[i_p][0];
+	curPrLst = curPrLst.split("\n").sort().join("\n");
+	if(curPrLst != lib_items) lib_items = curPrLst;
+}
+
+//Check for ready
+btStart_active = prExtProg.length;
+
+if(prExtMode <= 0)		{ btStart_img = "start"; btStart_value = false; btStop_active = btPass_active = false; }
+else if(prExtMode == 1){ btStart_img = "pause"; btStart_value = false; btStop_active = btPass_active = true; prEndRun = false; }
+else if(prExtMode == 2){ btStart_img = "start"; btStart_value = true; btStop_active = true; btPass_active = true; }
+
+//Prepare call status document
+pTxt = "";
+if((prExtMode == 1 || prExtMode == 2 || prExtMode == 3 || ((prCnt%max(1,f_frq)) == 0 && prExtMode <= 0))) {
+	pTxt = "<body>";
+	off = 0;
+	labProg_arg0val = prExtWork.attr("name");
+
+	if(prExtMode < 0 && !prEndRun) {
+		prEndRun = true;
+		prog_aCur = -1;	//Archiving
+	}
+
+	//Build result table
+	pTxt += "<i>"+tr("Program:")+" </i>"+Special.FLibSYS.strEnc2HTML(labProg_arg0val)+"<br/>\n";
+	if(prExtMode > 0 || (prExtMode < 0 && prog_aCur < 0)) {
+		pTxt += "<i>"+tr("Started:")+" </i>"+SYS.strftime(prExtStartTm)+"<br/>\n";
+		if(prog_aCur < 0) {
+			if(prExtMode == -1) pTxt += "<i>"+tr("Status:")+" </i>"+tr("Error")+"<br/>\n";
+			else if(prExtMode == -2) pTxt += "<i>"+tr("Status:")+" </i>"+tr("Successful finish")+"<br/>\n";
+			else if(prExtMode == -3) pTxt += "<i>"+tr("Status:")+" </i>"+tr("Terminated")+"<br/>\n";
+			else pTxt += "<i>"+tr("Status:")+" </i>"+tr("Unknown")+"<br/>\n";
+		}
+	}
+	if(prExtMode == 1) {
+		wtm = max(0,prExtWork.attr("wtm").toInt()-(SYS.time()-prExtStartTm));
+		pTxt += "<i>"+tr("Remain:")+" </i>"+(wtm/3600).toString(10)+":"+((wtm/60)%60).toString(10,2)+":"+(wtm%60).toString(10,2)+"<br/>";
+	}
+	pTxt += "<table border=''1'' cellpadding=''2'' cellspacing=''0'' width=''100%''>\n"
+					"<tr><th>"+tr("#")+"</th><th>"+tr("Command")+"</th><th>"+tr("Comments")+"</th><th>"+tr("Time")+"</th>";
+	pTxt += "</tr>\n";
+
+	for(comElN = prExtWork, comPos = 0, comLev = 0, comCur = true, comAftCur = false, comN = "", comPath = ""; true; comPos++) {
+		if(comPos >= comElN.childSize()) {
+			if((comElN=comElN.parent())) {
+				comLev--;
+				comPos = comElN.attr("seekPos").toInt();
+				comCur = comElN.attr("comCur").toInt();
+				comN = comElN.attr("comN");
+				comPath = comElN.attr("comPath");
+				continue;
+			}
+			break;
+		}
+		comEl = comElN.childGet(comPos);
+		comN_ = (comN.length?comN+":":"") + comPos;
+		comPath_ = (comPath.length?comPath+": ":"") + (comEl.attr("name").length?comEl.attr("name"):comEl.attr("id"));
+		isCurCmd = comCur && (tmpComLv=prExtCurCom.parse(comLev,":")).length && tmpComLv.toInt() == comPos && !prExtCurCom.parse(comLev+1,":").length;
+		if(isCurCmd) comAftCur = true;
+		rezVl = comEl.attr("rez");
+		toMark = true;
+		if((isCurCmd || (rezVl.length && rezVl.toInt() == 0)) && (prExtMode > 0 || (prExtMode < 0 && prog_aCur < 0)))				pTxt += "<tr class=''"+(prEndRun?"err":"run")+"''>";
+		else if(!comAftCur && (prExtMode > 0 || (prExtMode < 0 && prog_aCur < 0)))	pTxt += "<tr class=''"+((rezVl.toInt()==-10)?"skip":((rezVl.toInt()<0)?"err":"pass"))+"''>";
+		else { pTxt += "<tr>"; toMark = false; }
+		pTxt += "<td>"+comN_+"</td>";
+		pTxt += "<td>"+Special.FLibSYS.strEnc2HTML(comPath_)+(comEl.attr("backgrnd")?" "+tr("(background)"):"")+"</td><td>";
+		if(toMark && rezVl.parse(1,":").length) pTxt += Special.FLibSYS.strEnc2HTML(rezVl.parse(1,":"));
+		else {
+			//Arguments values
+			for(i_a = 1; i_a <= 5; i_a++)
+				if(comEl.attr("labArg"+i_a).length)
+					pTxt += Special.FLibSYS.strEnc2HTML(comEl.attr("labArg"+i_a).parse(0,"|")+" = "+comEl.attr("arg"+i_a)+"; ");
+		}
+		pTxt += "</td>";
+		comTm = comEl.attr("tm").toInt();
+		if(toMark && comTm) {
+			comTm -= prExtStartTm;
+			pTxt += "<td>"+(comTm/3600).toString(10)+":"+
+									((comTm/60)%60).toString(10,2)+":"+
+									(comTm%60).toString(10,2)+"</td>";
+		}
+		else pTxt += "<td>---</td>";
+		pTxt += "</tr>\n";
+
+		if(comEl.childSize()) {
+			comElN.setAttr("seekPos",comPos).setAttr("comCur",comCur).setAttr("comN",comN).setAttr("comPath",comPath);
+			comElN = comEl;
+			comCur = comCur && (tmpComLv=prExtCurCom.parse(comLev,":")).length && tmpComLv.toInt() == comPos;
+			comPos = -1; comLev++; comN = comN_; comPath = comPath_;
+		}
+	}
+	pTxt += "</table></body>";
+}
+
+if(!prExtProg.length && f_start) pTxt = "<body><H1>"+tr("Select a program please")+"</H1></body>";
+
+if(pTxt.length) {
+	this.prog.attrSet("aDoc",pTxt);
+	if(this.prog.attr("aCur") == this.prog.attr("vCur")) prog_doc = pTxt;
+}
+
+prCnt++;
+
+//Events for commands process
+for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
+	//SYS.messDebug("Prescription edit control","Event: "+ev_cur);
+	if(ev_cur == "ws_TreeChange:/lib") {
+		prog_vCur = prog_aCur;
+		prExtProg = lib_value;
+	}
+	else if(ev_cur == "ws_BtPress:/btStart") {
+		if(prExtMode <= 0)	prExtMode = 1;
+		else if(prExtMode == 1)	prExtMode = 2;
+		prog_vCur = prog_aCur;
+	}
+	else if(ev_cur == "ws_BtRelease:/btStart")	prExtMode = 1;
+	else if(ev_cur == "ws_BtPress:/btStop" && prExtMode >= 0) {
+		prExtMode = prExtCurCom = 0;
+		prog_vCur = prog_aCur;
+	}
+	else if(ev_cur == "ws_BtPress:/btPass" && (prExtMode == 1 || prExtMode == 2))	prExtMode = 3;
+	else ev_rez += (ev_cur+"\n");
+}
+event = ev_rez;
+
+//Programm select process
+if(!prExtProg.length || lib_items.search("^"+prExtProg.replace(new RegExp("(\\[|\\]|\\(|\\)|\\.|\\+|\\*|\\?|\\^|\\$|\\<|\\>|\\{|\\}|\\\\)","g"),"\\$1")+"$","m") < 0)
+	prExtProg = lib_value;
+else lib_value = prExtProg;',200,'owner;name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;',1584292826);
+INSERT INTO wlb_prescr VALUES('prescrRunSimple','iVBORw0KGgoAAAANSUhEUgAAAEAAAAArCAIAAABHOBkQAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
+AA7EAAAOxAGVKw4bAAAE0ElEQVRoge2Vy28TVxSHz525nvG8HNtjO2+TEBJqAoEoJBREqSLooqrK
+gj1do6Z/BH9EkYBVoMuyYAeqIkpbYlKkQNqkOAlJbEwcO37FnhnP2PPsghRBFsVQpCmSv9Xo3qtz
+ft89Mxp0+/btSqUCHyeJRAJXKpVUKuV2kvckl8vhZs49mb2fq5nIqLV1HBja10ExLMd4CoVyOCxm
+t7IeiiJJ0ssKNGkXSjtBMShJNYGl6oalNwy/j1XqJk06St2MhPwzP82Mjh2nGZZnqEKhFIqIsqRi
+5NAcVymV/KJYym8blk1RlK7rvM/v9/H/nq0pAdtGJ06fIZXc/OL6vdSGB5N97XxVt5KZQGY9fXAg
+spaVSIDB3sDjP/7q7BtcW0mNDnftqLD6dP3MZ8PpbZNH1ZVk9suvvnAI4t79WcpD7u8U1jOFrv4h
+uSgHaANz3tVkJtTZK+e2/ALFRqIby4nJc+femo1oRuANY4omCTAti2UZQzf9wXB7KOihvASC7ex2
+uD1i6rrI40ylTgJ0BZlnWZki7GJZCQrsxtpG3/5+7KFIhHTdAJKiMKEqUlVWajUVEEF7MCv4u9sj
+Yrg9GAiGRf/b8zQTeuDQMEtjRIYG+7XVVPHo6EiAp9Kb2e7eruqOAlpR4LiRI8exreXLksDzjm07
+iCAQwOFDFiACkbbRrzZshvFytJPmuGNjRwM8HXi+2RPt5TBZKWVJX+94dzTU2a3KCkdjoFnu2JFm
+sqHp6enmP2JT16SaEQz4Xl9sqLJmkX6Bba5CvaroYvDNCpqiGcjv45qM8YpkMokBwLZthvHu2Ws0
+GggQRVOvL9I0hUhtz0maFeimW2LKKwb39qIZnmaaLrGnIAD0RXvGRo89XV6VZAUA2nx87JOD6xtJ
+nuN8PmHp6bJlO+DY0d6e3p7ue/d/oSkae5p69z44uq5T1O6dbmVzuwIIEbNzjw4fGfn8wAGWZRcW
+Fh7+/igSCjX0xuzDxNfnz0ciEVVVZ2ZmdF33YHzy0wlwHFcEJEn2+YSXz4/mH6+trWMAkBUFY8/4
++Pj169ej0ejZs2cTiYSsKMVSeez4eD6fv3r1KsdxU1NTN2/c4DnGNE3Htl0RME1DURRJknied2wH
+Xk6gXq+LIk8QRDwev3v3biwWY1lWq8myLAmCsLS0dOfOnVgsxjCMaZq245im6bg0AcO0TEubvvnD
+Nxcv2o69K+AThOfpdKVSuXDhwuTkJEmSqVRyf/++DtQxPz8/MTFx+fLltra2ZDJJEMhxHNM0bbcm
+YJkCz3839S0A2C/+ESBJYnCg79q1a6dOnVpcXHwYjw/070OI6GiPrKw8i8fjIyMj+Xz+1q0fT588
+sfJsTdd1260JGIZuGLsyprUrUFPVrq5Omvb+ufAEEAwNDXAsu7mZsSxrePhQsVSMP/iN47nxsVHL
+tlVV+/nXBwR651/4B8F27FetTcvcFSgWy7SXBQCG4wGgVK6WylWCwFpdf5HJAoDQ5geArVwBAEKh
+MCLcSb8HRVGSG0kMAEFRvHTpktt53pnV1ZW5ubn/xV3+F1oCbtMScJuWgNu0BNymJeA2LQG3aQm4
+TUvAbVoCbtMScJuWgNt89AIYAHZ2yleufO92kndGUzWMMV5eXs5ms+n0C7fzvA+yLP8NrZUdC69n
+Pt0AAAAASUVORK5CYII=','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
+//Get programms into library list
+if(f_start) {
+	prEndRun = true;
+	lib_name = lib_selValue = "";
+	btStop_active = false;
+	prCnt = 0;
+}
+if(prExtMode.isEVal() || prExtProg.isEVal() || prExtStartTm.isEVal() || prExtCurCom.isEVal() || prExtWork.isEVal())
+	return;
+
+//Check for program list update
+if(f_start || (prCnt%max(1,f_frq)) == 0) {
+	rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT name FROM "+dbProgs+";");
+	curPrLst = "";
+	for(i_p = 1; i_p < rez.length; i_p++)
+		curPrLst += (curPrLst.length?"\n":"")+rez[i_p][0];
+	curPrLst = curPrLst.split("\n").sort().join("\n");
+	if(curPrLst != lib_items) lib_items = curPrLst;
+}
+
+//Check for ready
+btStart_active = prExtProg.length;
+
+if(prExtMode <= 0)		{ btStart_img = "start"; btStart_value = false; btStop_active = btPass_active = false; }
+else if(prExtMode == 1){ btStart_img = "pause"; btStart_value = false; btStop_active = btPass_active = true; prEndRun = false; }
+else if(prExtMode == 2){ btStart_img = "start"; btStart_value = true; btStop_active = true; btPass_active = true; }
+
+//Prepare call status document
+pTxt = "";
+if((prExtMode == 1 || prExtMode == 2 || prExtMode == 3 || ((prCnt%max(1,f_frq)) == 0 && prExtMode <= 0))) {
+	pTxt = "<body>";
+	//off = 0;
+	labProg_arg0val = prExtWork.attr("name");
+
+	if(prExtMode < 0 && !prEndRun)	prEndRun = true;
+
+	//Build result
+	pTxt += "<i>"+tr("Program:")+" </i>"+Special.FLibSYS.strEnc2HTML(lib_name);
+	if(prExtMode > 0) pTxt += "\n<br/><i>"+tr("Started:")+" </i>"+SYS.strftime(prExtStartTm);
+	if(prExtMode == 1) {
+		wtm = max(0,prExtWork.attr("wtm").toInt()-(SYS.time()-prExtStartTm));
+		pTxt += "\n<br/><i>"+tr("Remain:")+" </i>"+(wtm/3600).toString(10)+":"+((wtm/60)%60).toString(10,2)+":"+(wtm%60).toString(10,2);
+	}
+	if(prExtMode > 0 && prExtCurCom.parse(0,":").toInt() < prExtWork.childSize()) {
+		pTxt += "<table border=''1'' cellpadding=''2'' cellspacing=''0'' width=''100%''>\n"
+					"<tr><th>"+tr("#")+"</th><th>"+tr("Command")+"</th><th>"+tr("Comments")+"</th><th>"+tr("Time")+"</th></tr>\n";
+		for(comElN = prExtWork, comPos = 0, comLev = 0, comN = "", comPath = ""; true; comPos++) {
+			if(comPos >= comElN.childSize()) {
+				if((comElN=comElN.parent())) {
+					comLev--;
+					comPos = comElN.attr("seekPos2").toInt();
+					comN = comElN.attr("comN2");
+					comPath = comElN.attr("comPath2");
+					continue;
+				}
+				break;
+			}
+			comEl = comElN.childGet(comPos);
+			comN_ = (comN.length?comN+":":"") + comPos;
+			comPath_ = (comPath.length?comPath+": ":"") + (comEl.attr("name").length?comEl.attr("name"):comEl.attr("id"));
+			rezVl = comEl.attr("rez");
+			toMark = true;
+			if((rezVl.length && rezVl.toInt() == 0)) {
+				pTxt += "<tr class=''" + (prEndRun?"err":"run") + "''>" +
+					"<td>" + comN_ + "</td>"+
+					"<td>" + Special.FLibSYS.strEnc2HTML(comPath_) + "</td><td>";
+				if(toMark && rezVl.parse(1,":").length) pTxt += Special.FLibSYS.strEnc2HTML(rezVl.parse(1,":"));
+				else {
+					//Arguments values
+					for(i_a = 1; i_a <= 5; i_a++)
+						if(comEl.attr("labArg"+i_a).length)
+							pTxt += Special.FLibSYS.strEnc2HTML(comEl.attr("labArg"+i_a).parse(0,"|")+" = "+comEl.attr("arg"+i_a)+"; ");
+				}
+				pTxt += "</td>";
+				comTm = comEl.attr("tm").toInt();
+				if(toMark && comTm) {
+					comTm -= prExtStartTm;
+					pTxt += "<td>"+(comTm/3600).toString(10)+":"+
+										((comTm/60)%60).toString(10,2)+":"+
+										(comTm%60).toString(10,2)+"</td>";
+				}
+				else pTxt += "<td>---</td>";
+				pTxt += "</tr>\n";
+			}
+
+			if(comEl.childSize()) {
+				comElN.setAttr("seekPos2",comPos).setAttr("comN2",comN).setAttr("comPath2",comPath);
+				comElN = comEl;
+				comPos = -1; comLev++; comN = comN_; comPath = comPath_;
+			}
+		}
+		pTxt += "</table>";
+
+		/*comN = 0;
+		if(prExtMode == 0)	comEl = prExtWork.childGet(0);
+		else {
+			comEl = prExtWork;
+			for(off = 0; comEl && (tVl=prExtCurCom.parse(0,":",off)).length; )	comEl = comEl.childGet(tVl.toInt());
+			if(!comEl) comEl = prExtWork.childGet(0); else comN = prExtCurCom;
+		}
+		for(comPath = "", comElI = comEl; comElI; comElI = comElI.parent())
+			if(comElI.name() == "com")
+				comPath = comElI.attr(comElI.attr("name").length?"name":"id")+(comPath.length?": ":"")+comPath;
+		rezVl = comEl.attr("rez");
+		if(prExtMode != 0) pTxt += "<tr class=''"+((prExtMode==-1)?"err":"run")+"''>";
+		else pTxt += "<tr>";
+		pTxt += "<td>"+comN+"</td>";
+		pTxt += "<td>"+Special.FLibSYS.strEnc2HTML(comPath)+"</td><td>";
+		if(rezVl.parse(1,":").length) pTxt += Special.FLibSYS.strEnc2HTML(rezVl.parse(1,":"));
+		else {
+			//Arguments values
+			for(i_a = 1; i_a <= 5; i_a++)
+				if(comEl.attr("labArg"+i_a).length)
+					pTxt += Special.FLibSYS.strEnc2HTML(comEl.attr("labArg"+i_a).parse(0,"|")+" = "+comEl.attr("arg"+i_a)+"; ");
+		}
+		pTxt += "</td>";
+		comTm = comEl.attr("tm").toInt();
+		if(!comTm) pTxt += "<td>---</td>";
+		else {
+			comTm -= prExtStartTm;
+			pTxt += "<td>"+(comTm/3600).toString(10)+":"+
+									((comTm/60)%60).toString(10,2)+":"+
+									(comTm%60).toString(10,2)+"</td>";
+		}
+		pTxt += "</tr>\n</table>";*/
+	}
+	pTxt += "</body>";
+}
+
+if(!prExtProg.length && f_start) pTxt = "<body><H1>"+tr("Select a program")+"</H1></body>";
+
+if(pTxt.length)	prog_doc = pTxt;
+
+prCnt++;
+
+//Events for commands process
+for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
+	//SYS.messInfo("Prescription edit control","Event: "+ev_cur);
+	//if(ev_cur == "ws_CombChange:/lib") prExtProg = lib_name;
+	//if(ev_cur.slice(0,11) == "ws_BtMenu=/")	prExtProg = ev_cur.slice(11).parse(0,":");
+	if(ev_cur == "dlg_Apply:/lib")	prExtProg = lib_selValue;
+	else if(ev_cur == "ws_BtPress:/btStart") {
+		if(prExtMode <= 0)			prExtMode = 1;
+		else if(prExtMode == 1)	prExtMode = 2;
+	}
+	else if(ev_cur == "ws_BtRelease:/btStart")	prExtMode = 1;
+	else if(ev_cur == "ws_BtPress:/btStop" && prExtMode >= 0)	prExtMode = prExtCurCom = 0;
+	else if(ev_cur == "ws_BtPress:/btPass" && (prExtMode == 1 || prExtMode == 2))	prExtMode = 3;
+	else ev_rez += (ev_cur+"\n");
+}
+event = ev_rez;
+
+//Programm select process
+if(!prExtProg.length || lib_items.search("^"+prExtProg.replace(new RegExp("(\\[|\\]|\\(|\\)|\\.|\\+|\\*|\\?|\\^|\\$|\\<|\\>|\\{|\\}|\\\\)","g"),"\\$1")+"$","m") < 0)
+	prExtProg = lib_name;
+else lib_name = lib_selValue = prExtProg;',500,'owner;name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;bordStyle;',1584292826);
+CREATE TABLE IF NOT EXISTS 'wlb_prescr_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID"));
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','arg1','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;value;confirm;font;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','arg2','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;value;confirm;font;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','arg3','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;value;confirm;font;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','arg4','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;value;confirm;font;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','arg5','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;value;confirm;font;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','backgrnd','/wlb_originals/wdg_FormEl','owner;active;geomX;geomY;geomW;geomH;geomZ;elType;value;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','comAdd','/wlb_originals/wdg_FormEl','owner;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','comArgsBox','/wlb_originals/wdg_Box','owner;geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;bordColor;bordStyle;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','comBox','/wlb_originals/wdg_Box','owner;geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;bordColor;bordStyle;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','comDel','/wlb_originals/wdg_FormEl','owner;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','comDwn','/wlb_originals/wdg_FormEl','owner;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;img;font;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','comInAdd','/wlb_originals/wdg_FormEl','owner;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','comIns','/wlb_originals/wdg_FormEl','owner;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','comUp','/wlb_originals/wdg_FormEl','owner;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;img;font;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','descr','/wlb_originals/wdg_FormEl','owner;active;geomX;geomY;geomW;geomH;geomZ;elType;value;font;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','labArg1','/wlb_originals/wdg_Text','owner;en;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','labArg2','/wlb_originals/wdg_Text','owner;en;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','labArg3','/wlb_originals/wdg_Text','owner;en;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','labArg4','/wlb_originals/wdg_Text','owner;en;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','labArg5','/wlb_originals/wdg_Text','owner;en;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','labArgs','/wlb_originals/wdg_Text','owner;geomX;geomY;geomH;geomZ;geomMargin;backColor;font;alignment;text;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','labBackgrnd','/wlb_originals/wdg_Text','owner;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','labCom','/wlb_originals/wdg_Text','owner;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;font;alignment;text;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','labDescr','/wlb_originals/wdg_Text','owner;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','labName','/wlb_originals/wdg_Text','owner;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','labProg','/wlb_originals/wdg_Text','owner;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;font;alignment;text;numbArg;arg0tp;arg0val;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','labType','/wlb_originals/wdg_Text','owner;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','lib','/wlb_originals/wdg_FormEl','owner;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;items;font;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','name','/wlb_originals/wdg_FormEl','owner;active;geomX;geomY;geomW;geomH;geomZ;value;confirm;font;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','prog','/wlb_originals/wdg_FormEl','owner;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;items;font;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','progAdd','/wlb_originals/wdg_FormEl','owner;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','progBox','/wlb_originals/wdg_Box','owner;geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;bordColor;bordStyle;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','progCopy','/wlb_originals/wdg_FormEl','owner;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;img;font;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','progDel','/wlb_originals/wdg_FormEl','owner;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','progExport','/wlb_originals/wdg_FormEl','owner;name;active;geomX;geomY;geomH;geomZ;tipTool;elType;value;mode;font;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','progImport','/wlb_originals/wdg_FormEl','owner;name;active;geomX;geomY;geomH;geomZ;tipTool;elType;value;mode;font;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','progNm','/wlb_originals/wdg_FormEl','owner;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;confirm;font;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','progRename','/wlb_originals/wdg_FormEl','owner;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','save','/wlb_originals/wdg_FormEl','owner;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','title','/wlb_originals/wdg_Text','owner;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','type','/wlb_originals/wdg_FormEl','owner;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;');
+INSERT INTO wlb_prescr_incl VALUES('prescrEdit','wPanel','/wlb_originals/wdg_Box','owner;geomX;geomY;geomW;geomH;backColor;bordWidth;bordColor;bordStyle;');
+INSERT INTO wlb_prescr_incl VALUES('prescrRun','btPass','/wlb_originals/wdg_FormEl','owner;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;img;font;');
+INSERT INTO wlb_prescr_incl VALUES('prescrRun','btStart','/wlb_originals/wdg_FormEl','owner;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;img;mode;font;');
+INSERT INTO wlb_prescr_incl VALUES('prescrRun','btStop','/wlb_originals/wdg_FormEl','owner;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;img;font;');
+INSERT INTO wlb_prescr_incl VALUES('prescrRun','labProg','/wlb_originals/wdg_Text','owner;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;font;alignment;text;numbArg;arg0tp;arg0val;');
+INSERT INTO wlb_prescr_incl VALUES('prescrRun','lib','/wlb_originals/wdg_FormEl','owner;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;items;font;');
+INSERT INTO wlb_prescr_incl VALUES('prescrRun','prog','/wlb_originals/wdg_Document','owner;name;active;geomX;geomY;geomW;geomH;geomZ;style;tmpl;doc;font;time;n;vCur;aCur;');
+INSERT INTO wlb_prescr_incl VALUES('prescrRun','progBox','/wlb_originals/wdg_Box','owner;geomX;geomY;geomW;geomH;backColor;bordWidth;bordColor;bordStyle;');
+INSERT INTO wlb_prescr_incl VALUES('prescrRun','title','/wlb_originals/wdg_Text','owner;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_prescr_incl VALUES('prescrRun','wPanel','/wlb_originals/wdg_Box','owner;geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;bordColor;bordStyle;');
+INSERT INTO wlb_prescr_incl VALUES('prescrRunSimple','btPass','/wlb_originals/wdg_FormEl','owner;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;img;font;');
+INSERT INTO wlb_prescr_incl VALUES('prescrRunSimple','btStart','/wlb_originals/wdg_FormEl','owner;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;img;mode;font;');
+INSERT INTO wlb_prescr_incl VALUES('prescrRunSimple','btStop','/wlb_originals/wdg_FormEl','owner;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;img;font;');
+INSERT INTO wlb_prescr_incl VALUES('prescrRunSimple','lib','/wlb_originals/wdg_FormEl','owner;name;active;geomX;geomY;geomW;geomH;geomZ;elType;font;');
+INSERT INTO wlb_prescr_incl VALUES('prescrRunSimple','prog','/wlb_originals/wdg_Document','owner;name;active;geomX;geomY;geomW;geomH;geomZ;style;tmpl;doc;font;time;');
+INSERT INTO wlb_prescr_incl VALUES('prescrRunSimple','title','/wlb_originals/wdg_Text','owner;geomX;geomY;geomW;geomH;font;alignment;text;');
+CREATE TABLE IF NOT EXISTS 'wlb_prescr_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
+INSERT INTO wlb_prescr_mime VALUES('up','image/png;2.57227','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
+AAAASUVORK5CYII=');
+INSERT INTO wlb_prescr_mime VALUES('down','image/png;2.71094','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
+gg==');
+INSERT INTO wlb_prescr_mime VALUES('copy','image/png;0.667969','iVBORw0KGgoAAAANSUhEUgAAABsAAAAbCAYAAACN1PRVAAAABmJLR0QA/wD/AP+gvaeTAAAACXBI
+WXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4QoTDBs4kf4INwAAAYdJREFUSMftlU9qwkAUh3/vZcSD
+dCkWAq67dN8DeLocwIsIgRoXBY8gUrQxDfPndZEmVeuYMZEuSgdCSGYyX36Pb2aAv9ro+CHL1nJt
+cJouMZs9013IWbaW46a1laLQstm8yXa7kyxbS5LMpev8fK0zighRRGD+HjaZPKIrkFvrTIQoipoy
+LhYvANAJqIL+iBnWWkynT9jt3rHf51itXnFXWJWqujMz8rxAUZQnZb17MiKBcw6HwweYGcyMOB7/
+sLfN1qswYxyMccjzAmWpAQCj0cOF/vwr7RhJMhcf0FsPkSpNWZYQEQwGUW9bvTBrpUmjlGqM7GOr
+8qXSWoOImuuaFKG2XoQ5VwHD1mC4rRffam1PJmxTvbZVawulGEqpcBudMxAhiLhGlBBbh8MBRBSM
+cWGwunxEAiLyltNnq0j1XSssTZdI06W3XHE89tpapzfGhcHazqp6x/DZ6pxrzOy0699iawWFN1kn
+2K229kxW2yontratzZth57ael7H3ERNq63/7lfYJahwuHnYccJMAAAAASUVORK5CYII=');
+INSERT INTO wlb_prescr_mime VALUES('pause','image/png;3.95312','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');
+INSERT INTO wlb_prescr_mime VALUES('start','image/png;4.29395','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
+RK5CYII=');
+INSERT INTO wlb_prescr_mime VALUES('step_pass','image/png;2.82129','iVBORw0KGgoAAAANSUhEUgAAACUAAAAlCAYAAADFniADAAAABmJLR0QA/wD/AP+gvaeTAAAACXBI
+WXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4QoTDB0XbHWS6AAAB+ZJREFUWMPtmHtwVVcVxn/7PO65
+7zxvSHITmgKB8JQEkArYVkAeohUHRV5WrAp2BlqkdHQcpgPWttBqnfqPVtHWtgwqou2MzGh9FcbO
+WBwIQVJogSQkJoE8CA0JSW7OOds/9rnJIQ8sM7UzOj0ze+7aj7vPt9deZ3372/DB8+4eMWA9LMcL
+h42Ghq4BY7OgIErd0QfFjweHSxF8mG1hi9kA2tDJfA2WDgENTAOCBgR0ME3VFtTBMsE06BOCXQfv
+FfX+eYy0ERT8dWqS4ol5UBiHix1QEId5h+W1PSvEAQBtO/dvmM3TFUlAQwoAqVYmhCpIkN5yBSAF
+CBeEBNdzgQRcFzr7EJ29fBrIGRFURoiMyfmwvgISEXjhuFpdsLuuMD0mbpGYmIBlZWC7CMcFxwVH
+gu3ZtgTHubFuu9DvgO34bBc0DYKGGwOCQO8wUFFLubymXXmpOwX52UBHY6a3knbTVB6oavK90PEB
+czxQrrJTDvT0Q7+rQAwA9UAFTahQSy4DTg73lAXNnXC0Rnmo5grMKgI9wkD4FGeobahshD7bmxz1
+ItcD1GcrML39N4K2hxYHxsRgcemQ2PaDygnD+TbosRWo5k7YOh8C0cHBuSH6IxYcvTC4LTdsn89T
+A1vptTtyEJwj1XyJKORHkUO/vgFQkQCnV85gXtyC3IgqZQkpT5yuaUiPyYtx6FqPs/0zM/QcTYCu
+gamp2DA0VdeFZwvQda/fsw1/vwZBQ8rrLef2j5oSPvcrGer/x/61uUFbz45Bbhg6W2s7vrN7dw3Q
+ALSmsQFF73FqkkDl8DylnvFAxgh/Ogdc8+wAMBEw30NQl4Dm0UAJIDSkzQZS/9MU8cxTT63YdeCl
+wpXRwui+igXl/r5nPSd0Sam9GMof/76B+uTbldaxqzJ66FPLTx1dfY/8nWWsHjrm1cmljx777Iqe
+gxHrvpHmGPj62C4/ZmrsDJkYloksyoCsEOfGhtj6/JeEyrY7ZCTb4mfhANPTey08Q/N+z+/v1k6d
+3VyyICdmFU0qo9q2f7HWWvV0/bz7OgMaVBzemZPMqs4rnj4TpNj3g5rUjAcqX902IqiQycHSXHJW
+TIHxufDKP2FcDndZJn8HfgpgSLasK2f1F+YMRqCQvuAU0HnqHKkjlWRWTKe7pY/isqniy2d+mayT
+saRsaGBavJKcZBm9l3soLJ8i8i786QFgZFDxEOasJMwvgcwQnM5V+URrO50H6IATDRAcm624cSBx
+DuG+0LSZOOt3cva3e0nkXsW5ZlBQWEz9K08SDwTILphA6/km9IRO3VsttGx43OHksiygYzj3mYrR
+z7aoVbd3w+Q8cLkaArKBVt1QCeU/cl/ZPfTM6WH6a4+SzM7nnTcamDOjFCF13mloI1QS4s2363l9
+6Xcpv3OuBEpGBJURhNor0NIFIRPqrsBHSkDz0UxxhsrIJxo9ovWI1ZXqKGK7ivdSNqRKPs/JmTHW
+Hd9Gfk42bX8+hhYwCX1oDJU1bfxk5g+JZlewKOKOHujZIWjqgrOXIWBAaxeMiYKIioFclhsmFbfg
+zWZwUd5x5eCv64LjSlwpcCVYnQ2YmsA5cx6tvl39J9VM8PZxZF27SHFOOcWZuKOCCgZ4ecVk7s2P
+QV5UleK40/fy4aOn02Oycnm2qaPnE7OL9Emmx2um4Z0wPW4zdVXOP/9kZGzTb8K3X7iM3dSJO2ci
+ZneK6Nl6siKtfCXwOJGWtqsNVUVPjH4cBsbNWrYgLGwjGFRH2I7W5lR1dXXvrXLfI+Uzti4qzNg4
+6cRpjOYO5/L8Cv0JmbqSCIasB9u7IrGqM27ftAnaqbyE+8faS3u/V1t70M99hn+ymuO/r/Ne6n9c
+oMtXbwOiI9ARACtLJ8yeOHPKxvILdcSaO6ibP1ffZ2hXXjpy4v4o5CeWL/z+JjStoKoauWa61mhG
+NlJbu/fdiAl/uTW6l1L/9uKFBw4uulNeWrdK7pk/tzkA89P9JbDuuY/fbV9au0oeumNO4zd0fcn7
+RjffmjP9kcfKp9asgsVD+x6fNOlrBxYvrNsBS28usQB2yaC/ejfYr+0S9g1jdsgIDpm3CjIUhjAQ
+NpFhb+MzLZw3tonLo4LSH5I/youyORGBeAiyw6ALuuNB5v58nagG4Oty9kfHcaQog7BfUqXpRvNJ
+KE1XASuEatc0xY+6NlgXQEcvLzy3RnxxxJSQFWZteRF89Q4ozYHH/gK3ZRLpbGtYAlSjVrl0+WTC
+G2b5aMa5kWZuyOxD+lK2L8F6Sqe9210DbAL6RtJ9JDOgrx8utCt+C5nQ03UxKy2xwgGMgA5VjYMA
++n0047jQ7xMLtoTelBIjfbaSWkMlVlkC4UmsquHJU4frKUUhmoD6DijNBT06KLFMb3RVk0/H+VSK
+7Xmmtx96bejqUx65mcSadxvDbgAGQGWG4K0WJbMsAxquwqoZYPq4LxlX3Pd6HXT2DMos11XJzHY9
+vTcEQFox+wvAlDFKNY1KM7EgdlFQ0tIliASgPAmTEvCv1sHBwQA1Y+KwZKJ3d5AOZC+IBZ7tHfpE
+2ha+gBfqHIQGBTFIRu2ro4Lqd1lfEOza8+F8jGSGuuQwrl9r2P3NLX9Ij/nbFvFi4TPVIiMg51kG
+WJryqqWDoSsiD3g3LAFTcWBAV6ER0AfbDQ0sAXqXY2/a/NCvb56noBSIjZBmzgOd6Vue/4LEugw0
+fnAz93/x/BsZHlZwM6LfRAAAAABJRU5ErkJggg==');
+INSERT INTO wlb_prescr_mime VALUES('stop','image/png;4.05566','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');
+CREATE TABLE IF NOT EXISTS 'wlb_prescr_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '0' ,"IO_VAL" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '0' ,"CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
+INSERT INTO wlb_prescr_uio VALUES('prescrEdit','dbDB','','DB: Data base','БД: База даних','БД: База данных',131077,'SQLite.vcaBase','','',9,'DB','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrEdit','dbProgs','','DB: Programms','БД: Програми','БД: Программы',131077,'PrescrProgs','','',9,'DB','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrEdit','fileExpImp','','File export/import','Файл експорту/імпорту','Файл экспорта/импорта',131077,'PrescrExport.xml','','',9,'File','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrEdit','prExtComLs','','Available commands list','Перелік доступних команд рецепту','Список доступных команд рецепта',131078,'','','',10,'Controller|comLs','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrEdit','max','arg1','Maximum','Максимум','Максимум',131076,'0|','','',8,'','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrEdit','min','arg1','Minimum','Мінімум','Минимум',131076,'0|','','',8,'','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrEdit','max','arg2','Maximum','Максимум','Максимум',131076,'0|','','',8,'','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrEdit','min','arg2','Minimum','Мінімум','Минимум',131076,'0|','','',8,'','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrEdit','max','arg3','Maximum','Максимум','Максимум',131076,'0|','','',8,'','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrEdit','min','arg3','Minimum','Мінімум','Минимум',131076,'0|','','',8,'','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrEdit','max','arg4','Maximum','Максимум','Максимум',131076,'0|','','',8,'','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrEdit','min','arg4','Minimum','Мінімум','Минимум',131076,'0|','','',8,'','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrEdit','max','arg5','Maximum','Максимум','Максимум',131076,'0|','','',8,'','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrEdit','min','arg5','Minimum','Мінімум','Минимум',131076,'0|','','',8,'','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrEdit','mess','progDel','Dialog message','Повідомлення діалогу','Сообщение диалога',131077,'Are you really want to delete this program?','Ви дійсно бажаєте видалити обрану програму?','Вы действительно желаете удалить выбранную программу?',0,'','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrRun','dbDB','','DB: Data base','БД: База даних','БД: База данных',131077,'SQLite.vcaBase','','',9,'DB','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrRun','dbProgs','','DB: Programms','БД: Програми','БД: Программы',131077,'PrescrProgs','','',9,'DB','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrRun','prCnt','','Cycles counter','Лічильник циклів','Счётчик циклов',131073,'0|','','',8,'','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrRun','prEndRun','','Program: running end','Програма: кінець виконання','Программа: конец исполнения',131072,'0','','',8,'','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrRun','prExtCurCom','','Controller: current command','Контролер: поточна команда','Контроллер: текущая команда',131077,'0','0','0',10,'Controller|curCom','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrRun','prExtMode','','Controller: mode','Контролер: режим','Контроллер: режим',131073,'0|','','',14,'Controller|mode','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrRun','prExtProg','','Controller: program','Контролер: програма','Контроллер: программа',131077,'','','',14,'Controller|prog','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrRun','prExtStartTm','','Controller: start time','Контролер: час запуску','Контроллер: время запуска',131073,'0|','','',10,'Controller|startTm','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrRun','prExtWork','','Controller: work','Контролер: робочий','Контроллер: рабочая',131078,'','','',10,'Controller|work','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrRunSimple','dbDB','','DB: Data base','БД: База даних','БД: База данных',131077,'SQLite.vcaBase','','',9,'DB','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrRunSimple','dbProgs','','DB: Programms','БД: Програми','БД: Программы',131077,'PrescrProgs','','',9,'DB','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrRunSimple','prCnt','','Cycles counter','Лічильник циклів','Счётчик циклов',131073,'0|','','',8,'','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrRunSimple','prEndRun','','Program: running end','Програма: кінець виконання','Программа: конец исполнения',131077,'','','',8,'','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrRunSimple','prExtCurCom','','Controller: current command','Контролер: поточна команда','Контроллер: текущая команда',131077,'0','0','0',10,'Controller|curCom','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrRunSimple','prExtMode','','Controller: mode','Контролер: режим','Контроллер: режим',131073,'0|','','',14,'Controller|mode','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrRunSimple','prExtProg','','Controller: program','Контролер: програма','Контроллер: программа',131077,'','','',14,'Controller|prog','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrRunSimple','prExtStartTm','','Controller: start time','Контролер: час запуску','Контроллер: время запуска',131073,'0|','','',10,'Controller|startTm','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrRunSimple','prExtWork','','Controller: work','Контролер: робочий','Контроллер: рабочая',131078,'','','',10,'Controller|work','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrRunSimple','items','lib','Tree items','Елементи дерева','Элементы дерева',131205,'','','',8,'','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrRunSimple','selValue','lib','Selected value','Обране значення','Выбранное значение',131077,'','','',8,'','','','','','');
+CREATE TABLE IF NOT EXISTS 'wlb_prescr_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '0' ,"CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','name','','Prescription — edit','Рецепт — редагування','Рецепт — редактирование',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','dscr','','The element "Prescription — edit" is one of the two frames with rescriptions work,
+with serve for edit programms-prescriptions by user.
+Programm-prescription is sequential functions blocks call - commands (macros),
+with get up to five arguments and return three results: "Work" (0), "Finish" (> 0) и "Error" (< 0).
+The command step call cyclic while return result "Work" (0). Go to next step performed in
+case result "Finish" (> 0) return. In error case, result "Error" (< 0), the prescription run interrurpt.
+Prescription execution performed into visualization interface session.
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.2.0','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','','900','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','','600','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','evProc','','ws_BtPress:/progDel:open:/pg_control/pg_accept','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','pgGrp','','so','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','backColor','','#5A5A5A','','',96,'backColorFrame','backColorFrame','backColorFrame','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','bordWidth','','1','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','bordColor','','black','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','arg1','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','en','arg1','1','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','arg1','610','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','arg1','299','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','arg1','258','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','arg1','22','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','arg1','24','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','active','arg1','1','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','value','arg1','','','',8,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','confirm','arg1','0','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','arg1','Arial 15','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','arg2','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','en','arg2','1','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','arg2','610','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','arg2','324','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','arg2','258','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','arg2','22','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','arg2','25','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','active','arg2','1','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','value','arg2','','','',8,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','confirm','arg2','0','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','arg2','Arial 15','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','arg3','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','en','arg3','1','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','arg3','610','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','arg3','349','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','arg3','258','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','arg3','22','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','arg3','26','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','active','arg3','1','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','value','arg3','','','',8,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','confirm','arg3','0','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','arg3','Arial 15','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','arg4','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','en','arg4','1','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','arg4','610','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','arg4','374','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','arg4','258','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','arg4','22','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','arg4','27','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','active','arg4','1','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','value','arg4','','','',8,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','confirm','arg4','0','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','arg4','Arial 15','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','arg5','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','en','arg5','1','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','arg5','610','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','arg5','399','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','arg5','258','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','arg5','22','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','arg5','28','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','active','arg5','1','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','value','arg5','','','',8,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','confirm','arg5','0','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','arg5','Arial 15','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','backgrnd','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','backgrnd','610','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','backgrnd','249','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','backgrnd','23','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','backgrnd','22','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','backgrnd','41','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','active','backgrnd','1','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','elType','backgrnd','2','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','value','backgrnd','0','','',8,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','comAdd','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','name','comAdd','Add','Додати','Добавить',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','comAdd','227.437','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','comAdd','511','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','comAdd','71.548','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','comAdd','23','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','comAdd','17','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','tipTool','comAdd','Add command','Додати команду','Добавить команду',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','active','comAdd','1','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','elType','comAdd','3','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','comAdd','Arial 15','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','comArgsBox','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','comArgsBox','438','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','comArgsBox','284.5','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','comArgsBox','436','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','comArgsBox','142.846','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','comArgsBox','4','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','backColor','comArgsBox','','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','bordWidth','comArgsBox','2','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','bordColor','comArgsBox','#5A5A5A','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','bordStyle','comArgsBox','6','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','comBox','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','comBox','431','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','comBox','72','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','comBox','450','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','comBox','391','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','comBox','3','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','backColor','comBox','','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','bordWidth','comBox','2','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','bordColor','comBox','#5A5A5A','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','bordStyle','comBox','6','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','comDel','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','name','comDel','Delete','Видалити','Удалить',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','comDel','227.437','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','comDel','562','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','comDel','144','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','comDel','23','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','comDel','20','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','tipTool','comDel','Delete command into selected position','Видалити команду у обраній позиції','Удалить команду в выбранной позиции',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','active','comDel','1','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','elType','comDel','3','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','comDel','Arial 15','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','comDwn','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','comDwn','372','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','comDwn','550','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','comDwn','54','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','comDwn','35','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','comDwn','22','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','tipTool','comDwn','Down command to selected position','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','active','comDwn','1','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','elType','comDwn','3','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','img','comDwn','down','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','comDwn','Arial 15','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','comInAdd','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','name','comInAdd','Add >','Опустити команду у обраній позиції','Опустить выбранную команду ниже',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','comInAdd','299.889','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','comInAdd','511','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','comInAdd','71.548','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','comInAdd','23','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','comInAdd','39','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','tipTool','comInAdd','Add command','Додати команду','Добавить команду',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','active','comInAdd','1','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','elType','comInAdd','3','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','comInAdd','Arial 15','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','comIns','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','name','comIns','Insert','Вставити','Вставить',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','comIns','227.437','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','comIns','536','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','comIns','144','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','comIns','23','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','comIns','19','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','tipTool','comIns','Insert command to selected position','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','active','comIns','1','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','elType','comIns','3','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','comIns','Arial 15','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','comUp','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','comUp','372','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','comUp','511','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','comUp','54','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','comUp','35','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','comUp','21','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','tipTool','comUp','Up command into selected position','Вставити команду у обрану позицію','Вставить команду в выбранную позицию',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','active','comUp','1','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','elType','comUp','3','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','img','comUp','up','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','comUp','Arial 15','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','descr','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','descr','532','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','descr','140','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','descr','340','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','descr','105','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','descr','32','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','active','descr','1','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','elType','descr','1','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','value','descr','','','',8,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','descr','Arial 15','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','labArg1','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','en','labArg1','1','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','labArg1','444.077','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','labArg1','300.5','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','labArg1','161','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','labArg1','19','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','labArg1','31','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','labArg1','Arial 17','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','alignment','labArg1','8','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','text','labArg1','Argument 1:','Аргумент 1:','Аргумент 1:',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','labArg2','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','en','labArg2','1','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','labArg2','444.077','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','labArg2','325.5','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','labArg2','161','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','labArg2','19','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','labArg2','35','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','labArg2','Arial 17','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','alignment','labArg2','8','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','text','labArg2','Argument 2:','Аргумент 2:','Аргумент 2:',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','labArg3','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','en','labArg3','1','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','labArg3','444.077','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','labArg3','350.5','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','labArg3','161','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','labArg3','19','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','labArg3','36','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','labArg3','Arial 17','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','alignment','labArg3','8','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','text','labArg3','Argument 3:','Аргумент 3:','Аргумент 3:',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','labArg4','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','en','labArg4','1','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','labArg4','444.077','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','labArg4','375.5','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','labArg4','161','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','labArg4','19','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','labArg4','38','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','labArg4','Arial 17','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','alignment','labArg4','8','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','text','labArg4','Argument 4:','Аргумент 4:','Аргумент 4:',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','labArg5','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','en','labArg5','1','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','labArg5','444.077','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','labArg5','400.5','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','labArg5','161','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','labArg5','19','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','labArg5','37','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','labArg5','Arial 17','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','alignment','labArg5','8','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','text','labArg5','Argument 5:','Аргумент 5:','Аргумент 5:',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','labArgs','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','labArgs','445','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','labArgs','277','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','labArgs','19','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','labArgs','5','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomMargin','labArgs','2','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','backColor','labArgs','#5A5A5A','','',96,'backColorFrame','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','labArgs','Arial 17','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','alignment','labArgs','8','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','text','labArgs','Parameters:','Параметри:','Параметры:',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','labBackgrnd','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','labBackgrnd','439.077','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','labBackgrnd','250.5','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','labBackgrnd','92.25','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','labBackgrnd','19','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','labBackgrnd','40','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','labBackgrnd','Arial 17','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','alignment','labBackgrnd','8','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','text','labBackgrnd','Background:','Фоновий:','Фоновый:',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','labCom','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','labCom','439.077','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','labCom','63','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','labCom','85.25','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','labCom','19','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','labCom','6','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomMargin','labCom','2','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','backColor','labCom','#5A5A5A','','',96,'backColorFrame','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','labCom','Arial 17','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','alignment','labCom','8','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','text','labCom','Command','Команда','Команда',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','labDescr','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','labDescr','439.077','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','labDescr','140','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','labDescr','92.25','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','labDescr','19','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','labDescr','33','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','labDescr','Arial 17','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','alignment','labDescr','8','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','text','labDescr','Description:','Опис:','Описание:',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','labName','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','labName','439.077','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','labName','111.5','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','labName','66','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','labName','19','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','labName','38','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','labName','Arial 17','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','alignment','labName','8','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','text','labName','Name:','Ім''я:','Имя:',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','labProg','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','labProg','232','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','labProg','41','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','labProg','647','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','labProg','22','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','labProg','7','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomMargin','labProg','2','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','backColor','labProg','#5A5A5A','','',96,'backColorFrame','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','labProg','Arial 17','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','alignment','labProg','8','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','text','labProg','Program: %1','Програма: %1','Программа: %1',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','numbArg','labProg','1','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','arg0tp','labProg','2','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','arg0val','labProg','','','',8,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','labType','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','labType','439.077','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','labType','86.5','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','labType','66','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','labType','19','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','labType','34','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','labType','Arial 17','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','alignment','labType','8','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','text','labType','Type:','Тип:','Тип:',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','lib','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','name','lib','Programms','Програми','Программы',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','lib','12','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','lib','52','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','lib','200','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','lib','426','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','lib','7','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','tipTool','lib','Prescriptions/programms list in the library','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','active','lib','1','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','elType','lib','8','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','value','lib','','','',8,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','items','lib','','','',8,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','lib','Arial 15','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','name','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','name','507','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','name','110','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','name','365','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','name','22','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','name','39','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','active','name','1','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','value','name','','','',8,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','confirm','name','0','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','name','Arial 15','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','prog','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','name','prog','Commands','Команди','Команды',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','prog','227','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','prog','62','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','prog','200','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','prog','444','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','prog','18','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','tipTool','prog','List and sequence of commands','Перелік та послідовність команд','Список и последовательность команд',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','active','prog','1','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','elType','prog','8','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','value','prog','','','',8,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','items','prog','','','',8,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','prog','Arial 15','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','progAdd','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','name','progAdd','Add','Додати','Добавить',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','progAdd','12.437','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','progAdd','532.102','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','progAdd','65','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','progAdd','23','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','progAdd','12','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','tipTool','progAdd','Add new program','Додати нову програму','Добавить новую программу',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','active','progAdd','1','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','elType','progAdd','3','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','progAdd','Arial 15','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','progBox','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','progBox','221','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','progBox','52','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','progBox','668','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','progBox','539','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','progBox','2','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','backColor','progBox','','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','bordWidth','progBox','2','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','bordColor','progBox','#5A5A5A','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','bordStyle','progBox','6','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','progCopy','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','name','progCopy','Copy','Копіюв.','Копир.',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','progCopy','79.771','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','progCopy','532.102','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','progCopy','65','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','progCopy','23','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','progCopy','13','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','tipTool','progCopy','Copy selected program','Копіювати обрану програму','Копировать выбранную программу',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','active','progCopy','1','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','elType','progCopy','3','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','img','progCopy','copy','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','progCopy','Arial 15','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','progDel','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','name','progDel','Delete','Видалити','Удалить',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','progDel','12.437','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','progDel','484.532','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','progDel','201','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','progDel','23','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','progDel','14','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','tipTool','progDel','Delete programm in selected position','Видалити обрану програму','Удалить выбранную программу',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','active','progDel','1','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','elType','progDel','3','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','progDel','Arial 15','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','progExport','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','name','progExport','Export','Експорт','Экспорт',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','progExport','12.313','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','progExport','561.867','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','progExport','23','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','progExport','15','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','tipTool','progExport','Export the program to file','Експортувати обрану програму у файл','Экспортировать программу в файл',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','active','progExport','1','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','elType','progExport','3','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','value','progExport','','','',8,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','mode','progExport','4','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','progExport','Arial 15','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','progImport','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','name','progImport','Import','Імпорт','Импорт',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','progImport','113.437','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','progImport','561.867','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','progImport','23','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','progImport','16','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','tipTool','progImport','Import programms from file.','Імпортувати програми з файлу','Импортировать программы из файла',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','active','progImport','1','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','elType','progImport','3','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','value','progImport','Prescription-Program (*.prscr)|Prescription file','Рецепт-Програма (*.prscr)|Файл рецепту','Рецепт-Программа (*.prscr)|Файл рецепта',8,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','mode','progImport','3','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','progImport','Arial 15','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','progNm','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','progNm','12.437','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','progNm','510.102','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','progNm','200','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','progNm','23','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','progNm','10','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','active','progNm','1','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','value','progNm','New program','Нова програма','Новая программа',8,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','view','progNm','1','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','cfg','progNm','','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','confirm','progNm','0','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','progNm','Arial 14','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','progRename','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','name','progRename','Rename','Перейменув.','Переимен.',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','progRename','148.437','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','progRename','532.102','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','progRename','65','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','progRename','23','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','progRename','11','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','tipTool','progRename','Rename selected program','Перейменувати обрану програму','Переименовать выбранную программу',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','active','progRename','1','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','elType','progRename','3','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','progRename','Arial 15','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','save','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','name','save','Save','Зберегти','Сохранить',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','save','610','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','save','431','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','save','258','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','save','25','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','save','29','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','tipTool','save','Save the step changes','Зберегти зміни кроку','Сохранить изменения шага',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','active','save','1','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','elType','save','3','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','save','Arial 15','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','title','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','title','5','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','title','4.563','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','title','891','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','title','27.75','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','title','30','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','title','Arial 25','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','alignment','title','10','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','text','title','User program/prescription - edit','Програми/рецепти користувача - редагування','Пользовательские программы/рецепты - редактирование',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','type','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','type','507','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','type','85','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','type','365','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','type','22','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomZ','type','23','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','active','type','1','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','elType','type','4','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','value','type','','','',8,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','items','type','','','',8,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','type','Arial 15','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','wPanel','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','wPanel','4','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','wPanel','36','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','wPanel','892','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','wPanel','560','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','backColor','wPanel','','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','bordWidth','wPanel','2','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','bordColor','wPanel','#5A5A5A','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','bordStyle','wPanel','8','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','owner','','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','name','','Prescription — run','Рецепт — исполнение','Рецепт — виконання',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','dscr','','The element "Prescription — run" is one from two frames for prescriptions work,
+which serve for programm-prescription execution, early prepared in frame кадре "Prescription — edit".
+
+Executed prescription-programm can been paused, by button "Pause" press in place for button "Start",
+or interrupt, by press button "Stop".
+
+On correct prescription-programm finish occurred message generation with include the session properties,
+and also session''s document archiving. The message with session properties can be used simple for
+observe on messages archive seen, or for prepare sessions list, for example for direct go to history
+session time in graphics group. For history of reports of programms execution see you can press on
+document field and list into appear navigation panel on archived document.
+By default the document''s archive configured to 10 documents depth.
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.2.0','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomW','','900','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomH','','600','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','evProc','','ws_FocusIn:/prog:open:/pg_control/pg_doc_panel','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','pgGrp','','so','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','backColor','','#5A5A5A','','',96,'backColorFrame','backColorFrame','backColorFrame','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','bordWidth','','1','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','bordColor','','black','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','owner','btPass','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomX','btPass','160.508','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomY','btPass','61.376','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomW','btPass','55','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomH','btPass','49.813','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomZ','btPass','5','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','tipTool','btPass','Pass current step of the program','Пропустити поточний крок програми','Пропустить текущий шаг программы',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','active','btPass','1','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','elType','btPass','3','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','img','btPass','step_pass','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','font','btPass','Arial 20','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','owner','btStart','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomX','btStart','9.687','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomY','btStart','44.376','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomW','btStart','72','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomH','btStart','67.813','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomZ','btStart','2','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','tipTool','btStart','Start/Pause the program','Запуск/Пауза програми','Пуск/Пауза программы',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','active','btStart','1','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','elType','btStart','3','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','value','btStart','0','','',8,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','img','btStart','start','','',8,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','mode','btStart','1','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','font','btStart','Arial 20','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','owner','btStop','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomX','btStop','85.508','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomY','btStop','44.376','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomW','btStop','72','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomH','btStop','66.813','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomZ','btStop','3','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','tipTool','btStop','Stop the program','Зупинка програми','Останов программы',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','active','btStop','1','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','elType','btStop','3','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','img','btStop','stop','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','font','btStop','Arial 20','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','owner','labProg','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomX','labProg','232','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomY','labProg','40','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomW','labProg','644','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomH','labProg','23','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomZ','labProg','10','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomMargin','labProg','2','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','backColor','labProg','#5A5A5A','','',96,'backColorFrame','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','font','labProg','Arial 17','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','alignment','labProg','8','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','text','labProg','Program: "%1"','Програма: "%1"','Программа: "%1"',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','numbArg','labProg','1','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','arg0tp','labProg','2','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','arg0val','labProg','Not selected','Не обрано','Не выбрано',8,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','owner','lib','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','name','lib','Programms','Програми','Программы',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomX','lib','12.437','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomY','lib','121.715','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomW','lib','200','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomH','lib','464.444','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomZ','lib','6','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','tipTool','lib','Allowed prescriptions/programms list','Перелік наявних рецептів/програм','Список доступных рецептов/программ',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','active','lib','1','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','elType','lib','8','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','value','lib','','','',8,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','items','lib','','','',8,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','font','lib','Arial 15','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','owner','prog','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','name','prog','Library','Бібліотека','Библиотека',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomX','prog','224.311','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomY','prog','61.5','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomW','prog','662.938','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomH','prog','525.063','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomZ','prog','11','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','active','prog','1','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','style','prog','TABLE { border-collapse: collapse; }
+TABLE TH { background-color: #e6e6e6; border: 1px solid black; }
+TABLE TD { white-space: nowrap; border: 1px solid black;}
+TR.run { background-color: yellow; }
+TR.pass { background-color: lightgreen; }
+TR.skip { background-color: lightblue; }
+TR.err { background-color: orange; }','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','tmpl','prog','','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','doc','prog','','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','font','prog','Arial 10','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','time','prog','0','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','n','prog','10','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','vCur','prog','0','','',8,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','aCur','prog','0','','',8,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','owner','progBox','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomX','progBox','221','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomY','progBox','49.5','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomW','progBox','669.5','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomH','progBox','541.846','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','backColor','progBox','','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','bordWidth','progBox','2','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','bordColor','progBox','#5A5A5A','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','bordStyle','progBox','6','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','owner','title','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomX','title','5','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomY','title','4.563','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomW','title','890','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomH','title','27.75','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomZ','title','6','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','font','title','Arial 25','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','alignment','title','10','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','text','title','User programm/prescription - run','Програми/рецепти користувача - виконання','Пользовательские программы/рецепты - исполнение',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','owner','wPanel','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomX','wPanel','4','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomY','wPanel','36.313','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomW','wPanel','893','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomH','wPanel','560','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','geomZ','wPanel','1','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','backColor','wPanel','','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','bordWidth','wPanel','2','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','bordColor','wPanel','#5A5A5A','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','bordStyle','wPanel','8','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','owner','','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','name','','Prescription — run, simple','Рецепт — исполнение, простой','Рецепт — виконання, простий',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','dscr','','The element "Prescription — run simple" is simple variant of the element "Prescription — run" which designed
+for placing as a widget of mnemo and works only in cooperation with the primary element "Prescription — run".
+
+Executed prescription-programm can been paused, pressing the button "Pause" in the place of the button "Start",
+or interrupt, pressing the button "Stop".
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.2.0','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','geomW','','250','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','geomH','','170','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','evProc','','ws_BtPress:/lib:open:/pg_control/pg_treeSelect','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','backColor','','gray','','',96,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','bordWidth','','2','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','bordColor','','gray','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','bordStyle','','6','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','owner','btPass','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','geomX','btPass','71.508','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','geomY','btPass','13.376','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','geomW','btPass','25','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','geomH','btPass','24.813','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','geomZ','btPass','4','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','tipTool','btPass','Pass current step of the program','Пропустити поточний крок програми','Пропустить текущий шаг программы',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','active','btPass','1','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','elType','btPass','3','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','img','btPass','step_pass','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','font','btPass','Arial 20','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','owner','btStart','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','geomX','btStart','2','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','geomY','btStart','3','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','geomW','btStart','35','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','geomH','btStart','35','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','geomZ','btStart','1','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','tipTool','btStart','Program start','Запуск програми','Пуск программы',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','active','btStart','1','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','elType','btStart','3','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','value','btStart','0','','',8,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','img','btStart','start','','',8,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','mode','btStart','1','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','font','btStart','Arial 20','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','owner','btStop','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','geomX','btStop','37','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','geomY','btStop','3','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','geomW','btStop','35','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','geomH','btStop','35','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','geomZ','btStop','2','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','tipTool','btStop','Program stop','Зупинка програми','Останов программы',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','active','btStop','1','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','elType','btStop','3','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','img','btStop','stop','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','font','btStop','Arial 20','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','owner','lib','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','name','lib','Library','Бібліотека','Библиотека',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','geomX','lib','98','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','geomY','lib','18','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','geomW','lib','149','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','geomH','lib','20','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','geomZ','lib','5','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','active','lib','1','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','elType','lib','3','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','font','lib','Arial 15','','',0,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','owner','prog','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','name','prog','Program','Програма','Программа',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','geomX','prog','2','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','geomY','prog','38','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','geomW','prog','246','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','geomH','prog','131','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','geomZ','prog','3','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','active','prog','1','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','style','prog','TABLE { border-collapse: collapse; }
+TABLE TH { background-color: #e6e6e6; border: 1px solid black; }
+TABLE TD { white-space: nowrap; border: 1px solid black;}TR.run { background-color: yellow; }
+TR.pass { background-color: lightgreen; }
+TR.err { background-color: orange; }','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','tmpl','prog','','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','doc','prog','','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','font','prog','Arial 10','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','time','prog','0','','',40,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','owner','title','root:UI','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','geomX','title','102','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','geomY','title','2','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','geomW','title','148','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','geomH','title','16','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','font','title','Arial 15','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','alignment','title','8','','',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','text','title','Program/prescription:','Програма/рецепт:','Программа/рецепт:',32,'','','','');
 COMMIT;

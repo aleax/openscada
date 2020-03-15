@@ -1,3 +1,11 @@
+2020-03-15 Roman (stable)
+- !!:DB.LibsDB.{vcaBase,vcaTest}:
+    The prescription frames "prescrEdit", "prescrRun" and "prescrRunSimple" moved to the new library "Prescriptions (prescr)".
+- FIX:UI.{Vision,WebVision}: The mirroring property of the primitive "ElFigure" is completed in the implementing at the filling by image.
+    FIX: The filling by image in the primitive "ElFigure" prevented from lacks at accessing outside the image.
+- !!: UI.WebVision: The primitive ElFigure source code is significantly cleaned again.
+
+
 2020-03-08 Roman (stable)
 - !!!!:DB.LibsDB.{vcaElectroEls,OscadaLibs}: The document of "the Electrical elements library of the user interface" is completed,
     all items are revised and the four new items are appended:

@@ -356,7 +356,7 @@ INSERT INTO lib_Controllers_io VALUES('prescr','dbComs','DB:Table with commands'
 INSERT INTO lib_Controllers_io VALUES('prescr','dbProgs','DB:Table with programs',0,1,'',0,6,'БД:Таблица с программами','','БД:Таблиця з програмами','');
 INSERT INTO lib_Controllers_io VALUES('prescr','mode','Mode: Finish(-2); Error(-1); Stop(0); Run (1); Pause(2); Pass com (3)',1,1,'',0,8,'Режим: Оконч.(-2); Ошибка(-1); Стоп(0); Исполн.(1); Пауза (2); Пропуст. ком. (3)','','Режим: Окінч.(-2); Помилка(-1); Стоп(0); Викон.(1); Пауза (2); Пропуст. ком. (3)','');
 INSERT INTO lib_Controllers_io VALUES('prescr','curMode','Current mode',1,0,'',0,9,'Текущий режим','','Поточний режим','');
-INSERT INTO lib_Controllers_io VALUES('prescr','prog','Name of selected program',0,1,'',0,10,'Имя выбранной программы','','Ім''я обраної програми','');
+INSERT INTO lib_Controllers_io VALUES('prescr','prog','Name of the selected program',0,1,'',0,10,'Имя выбранной программы','','Ім''я обраної програми','');
 INSERT INTO lib_Controllers_io VALUES('prescr','startTm','Start time, seconds',1,0,'',0,11,'Время запуска, секунды','','Час запуску, секунди','');
 INSERT INTO lib_Controllers_io VALUES('prescr','curCom','Current command-step',0,0,'',0,12,'Текущая комманда-шаг','','Поточна команда-крок','');
 INSERT INTO lib_Controllers_io VALUES('prescr','work','Work program',4,0,'',0,13,'Рабочая программа','','Робоча програма','');
@@ -1994,8 +1994,8 @@ INSERT INTO Trs VALUES('Too big parameter''s motion speed','Дуже велик�
 INSERT INTO Trs VALUES('NORMA','НОРМА','НОРМА');
 INSERT INTO Trs VALUES('Step missed','Крок пропущено','Шаг пропущен');
 INSERT INTO Trs VALUES('Program terminated','Програму перервано','Программа прервана');
-INSERT INTO Trs VALUES('Terminated by user session of the program','Перерваний користувачем сеанс програми','Прерванный пользователем сеанс программы');
-INSERT INTO Trs VALUES('Terminated by error session of the program','Перерваний помилкою сеанс програми','Прерванный ошибкой сеанс программы');
+INSERT INTO Trs VALUES('Terminated program session by the user','Перерваний користувачем сеанс програми','Прерванный пользователем сеанс программы');
+INSERT INTO Trs VALUES('Terminated program session by the error','Перерваний помилкою сеанс програми','Прерванный ошибкой сеанс программы');
 INSERT INTO Trs VALUES('Successful session of the program','Вдалий сеанс програми','Успешный сеанс программы');
 INSERT INTO Trs VALUES('Command miss: ','Відсутня команда: ','Отсутствует команда: ');
 INSERT INTO Trs VALUES('Waiting %1s expired','Очікування %1с вичерпано','Ожидание %1c исчерпано');

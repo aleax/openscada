@@ -225,9 +225,6 @@ void VCASess::getReq( SSess &ses )
 
     //Checking for the cache
     pgCacheProc();
-
-    //if(1e-3*(TSYS::curTime()-curTm) > 20)
-    //	printf("TEST 00: %gms: '%s': '%s'\n",1e-3*(TSYS::curTime()-curTm),wp_com.c_str(),ses.url.c_str());
 }
 
 void VCASess::postReq( SSess &ses )
@@ -1759,27 +1756,26 @@ void VCAElFigure::paintFigure( gdImagePtr iim, ShapeItem item, double xScale, do
 					    scaleRotate( (pnts)[item.n4], xScale, yScale), scaleRotate( (pnts)[item.n2], xScale, yScale) );
 
 		t = t_start;
-		do
-		{
-		    gdImageLine( iim, (int)rRnd( bezier(t,scaleRotate((pnts)[item.n1],xScale,yScale),
-		    scaleRotate((pnts)[item.n3],xScale,yScale ),
-		    scaleRotate((pnts)[item.n4],xScale,yScale),
-		    scaleRotate((pnts)[item.n2],xScale,yScale)).x, POS_PREC_DIG, true ),
-		    (int)rRnd(bezier(t,scaleRotate((pnts)[item.n1],xScale,yScale),
-		    scaleRotate((pnts)[item.n3],xScale,yScale),
-		    scaleRotate((pnts)[item.n4],xScale,yScale),
-		    scaleRotate((pnts)[item.n2],xScale,yScale)).y, POS_PREC_DIG, true ),
-		    (int)rRnd(bezier(t+delta,scaleRotate((pnts)[item.n1],xScale,yScale),
-		    scaleRotate((pnts)[item.n3],xScale,yScale),
-		    scaleRotate((pnts)[item.n4],xScale,yScale),
-		    scaleRotate((pnts)[item.n2],xScale,yScale)).x, POS_PREC_DIG, true ),
-		    (int)rRnd(bezier(t+delta,scaleRotate((pnts)[item.n1],xScale,yScale),
-		    scaleRotate((pnts)[item.n3],xScale,yScale),
-		    scaleRotate((pnts)[item.n4],xScale,yScale),
-		    scaleRotate((pnts)[item.n2],xScale,yScale)).y, POS_PREC_DIG, true ),clr_el );
+		do {
+		    gdImageLine(iim, (int)rRnd(bezier(t,scaleRotate((pnts)[item.n1],xScale,yScale),
+						scaleRotate((pnts)[item.n3],xScale,yScale),
+						scaleRotate((pnts)[item.n4],xScale,yScale),
+						scaleRotate((pnts)[item.n2],xScale,yScale)).x, POS_PREC_DIG, true),
+				    (int)rRnd(bezier(t,scaleRotate((pnts)[item.n1],xScale,yScale),
+						scaleRotate((pnts)[item.n3],xScale,yScale),
+						scaleRotate((pnts)[item.n4],xScale,yScale),
+						scaleRotate((pnts)[item.n2],xScale,yScale)).y, POS_PREC_DIG, true),
+				    (int)rRnd(bezier(t+delta,scaleRotate((pnts)[item.n1],xScale,yScale),
+						scaleRotate((pnts)[item.n3],xScale,yScale),
+						scaleRotate((pnts)[item.n4],xScale,yScale),
+						scaleRotate((pnts)[item.n2],xScale,yScale)).x, POS_PREC_DIG, true),
+				    (int)rRnd(bezier(t+delta,scaleRotate((pnts)[item.n1],xScale,yScale),
+						scaleRotate((pnts)[item.n3],xScale,yScale),
+						scaleRotate((pnts)[item.n4],xScale,yScale),
+						scaleRotate((pnts)[item.n2],xScale,yScale)).y, POS_PREC_DIG, true),
+				    clr_el);
 		    t += delta;
-		}
-		while( t < t_end );
+		} while(t < t_end);
 		gdImageAlphaBlending(iim,1);
 	    }
 	}
@@ -2278,8 +2274,8 @@ void VCAElFigure::paintFigure( gdImagePtr iim, ShapeItem item, double xScale, do
 				    (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 		gdImageAlphaBlending(iim, 1);
 
-		double x_center = (scaleRotate( (pnts)[item.n1], xScale, yScale).x + scaleRotate( (pnts)[item.n2], xScale, yScale).x)/2;
-		double y_center = (scaleRotate( (pnts)[item.n1], xScale, yScale).y + scaleRotate( (pnts)[item.n2], xScale, yScale).y)/2;
+		double x_center = (scaleRotate((pnts)[item.n1],xScale,yScale).x + scaleRotate((pnts)[item.n2],xScale,yScale).x)/2;
+		double y_center = (scaleRotate((pnts)[item.n1],xScale,yScale).y + scaleRotate((pnts)[item.n2],xScale,yScale).y)/2;
 		gdImageFillToBorder( iim, (int)(x_center+0.5), (int)(y_center+0.5), clr_el_line, clr_el_line);
 
 		//----- Drawing the lines with their real width on the other image and merging it with the previous one -----
@@ -2545,9 +2541,9 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 	border_color_shape.clear();
 	width_shape.clear();
 	border_width_shape.clear();
-	gdImagePtr im1 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
+	gdImagePtr im1 = gdImageCreateTrueColor(scaleWidth, scaleHeight);
 	gdImageAlphaBlending(im1, 0);
-	gdImageFilledRectangle( im1, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(im1,0,0,0,127) );
+	gdImageFilledRectangle(im1, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(im1,0,0,0,127));
 	gdImageAlphaBlending(im1, 1);
 
 	if(inundationItems[i].number_point.size() == 2) {
@@ -3003,9 +2999,9 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 			if(num_pnt == (mirror?shapeItems[fig[0]].n2:shapeItems[fig[0]].n1))
 			    delta_real = t_start + (t_end-t_start)/2 + scale;
 			else delta_real = t_end - (t_end-t_start)/2 + scale;
-			new_pnt = scaleRotate( (pnts)[num_pnt], xSc, ySc);
-			delta_point_1 = Point( (int)rRnd( el_p3.x + rotate( arc( delta_real, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
-						    (int)rRnd( el_p3.y - rotate( arc( delta_real, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ) );
+			new_pnt = scaleRotate((pnts)[num_pnt], xSc, ySc);
+			delta_point_1 = Point((int)rRnd(el_p3.x + rotate(arc(delta_real,arc_a,arc_b),ang).x, POS_PREC_DIG, true),
+					      (int)rRnd(el_p3.y - rotate(arc(delta_real,arc_a,arc_b),ang).y, POS_PREC_DIG, true));
 		    }
 		    delta_point_2 = unrotate( new_pnt, ang1, new_pnt.x, new_pnt.y );
 		    delta_point_2.x = delta_point_2.x + length(new_pnt, scaleRotate((pnts)[point_num[1]], xSc, ySc)) * (0.15 + scale);
@@ -3761,144 +3757,102 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 		delta_point_center.x = (delta_point_1.x+delta_point_2.x)/2;
 		delta_point_center.y = (delta_point_1.y+delta_point_2.y)/2;
 	    }
-	    //-- Calling fill procedure for each fill with the real "fill" point --
-	    if( (((int) rRnd(delta_point_center.x)) > 0) && (((int) rRnd(delta_point_center.x)) <= scaleWidth) &&
-		(((int) rRnd(delta_point_center.y)) > 0) && (((int) rRnd(delta_point_center.y)) <= scaleHeight) )
+	    //  Calling fill procedure for each fill with the real "fill" point
+	    if((((int)rRnd(delta_point_center.x)) > 0) && (((int)rRnd(delta_point_center.x)) <= scaleWidth) &&
+		(((int)rRnd(delta_point_center.y)) > 0) && (((int)rRnd(delta_point_center.y)) <= scaleHeight))
 	    {
-		if( inundationItems[i].imgFill.size() ) {
-		    Point el1_temp = scaleRotate( (pnts)[shapeItems[shape_temp[0]].n1], xSc, ySc);
-
-		    double xMax = unscaleUnrotate( el1_temp, xSc, ySc, false).x;
-		    double xMin = unscaleUnrotate( el1_temp, xSc, ySc, false).x;
-		    double yMax = unscaleUnrotate( el1_temp, xSc, ySc, false).y;
-		    double yMin = unscaleUnrotate( el1_temp, xSc, ySc, false).y;
-
-		    double xMax_rot = scaleRotate( (pnts)[shapeItems[shape_temp[0]].n1], xSc, ySc).x;
-		    double xMin_rot = scaleRotate( (pnts)[shapeItems[shape_temp[0]].n1], xSc, ySc).x;
-		    double yMax_rot = scaleRotate( (pnts)[shapeItems[shape_temp[0]].n1], xSc, ySc).y;
-		    double yMin_rot = scaleRotate( (pnts)[shapeItems[shape_temp[0]].n1], xSc, ySc).y;
-
-		    double t, arc_a, arc_b, t_start, t_end, ang, arc_a_rot, arc_b_rot, ang_rot;
+		if(inundationItems[i].imgFill.size()) {
+		    double t, arc_a, arc_b, t_start, t_end, ang, arc_a_rot, arc_b_rot, ang_rot,
+			xMax, xMin, yMax, yMin,
+			xMax_rot, xMin_rot, yMax_rot, yMin_rot;
 		    Point pnt_, pnt_rot, pnt_temp;
+
+		    Point el1_temp = scaleRotate((pnts)[shapeItems[shape_temp[0]].n1], xSc, ySc);
+		    xMax_rot = xMin_rot = el1_temp.x; yMax_rot = yMin_rot = el1_temp.y;
+
+		    el1_temp = unscaleUnrotate(el1_temp, xSc, ySc, false, true, false);
+		    xMax = xMin = el1_temp.x; yMax = yMin = el1_temp.y;
 
 		    for(unsigned j = 0; j < shape_temp.size(); j++) {
 			ShapeItem item = shapeItems[shape_temp[j]] ;
-			if(item.type == 1) {
-			    pnt_temp.x = scaleRotate( (pnts)[item.n1], xSc, ySc).x;
-			    pnt_temp.y = scaleRotate( (pnts)[item.n1], xSc, ySc).y;
+			if(item.type == ShapeItem::Line) {
+			    pnt_ = unscaleUnrotate(scaleRotate((pnts)[item.n1],xSc,ySc), xSc, ySc, false, true, false);
+			    xMin = vmin(xMin, pnt_.x); yMin = vmin(yMin, pnt_.y);
+			    xMax = vmax(xMax, pnt_.x); yMax = vmax(yMax, pnt_.y);
 
-			    pnt_.x = unscaleUnrotate( pnt_temp, xSc, ySc, false).x;
-			    pnt_.y = unscaleUnrotate( pnt_temp, xSc, ySc, false).y;
+			    pnt_ = unscaleUnrotate(scaleRotate((pnts)[item.n2],xSc,ySc), xSc, ySc, false, true, false);
+			    xMin = vmin(xMin, pnt_.x); yMin = vmin(yMin, pnt_.y);
+			    xMax = vmax(xMax, pnt_.x); yMax = vmax(yMax, pnt_.y);
 
-			    if( pnt_.x < xMin ) xMin = pnt_.x;
-			    if( pnt_.x > xMax ) xMax = pnt_.x;
-			    if( pnt_.y < yMin ) yMin = pnt_.y;
-			    if( pnt_.y > yMax ) yMax = pnt_.y;
+			    pnt_rot = scaleRotate((pnts)[item.n1], xSc, ySc);
+			    xMin_rot = vmin(xMin_rot, pnt_rot.x); yMin_rot = vmin(yMin_rot, pnt_rot.y);
+			    xMax_rot = vmax(xMax_rot, pnt_rot.x); yMax_rot = vmax(yMax_rot, pnt_rot.y);
 
-			    pnt_temp.x = scaleRotate( (pnts)[item.n2], xSc, ySc).x;
-			    pnt_temp.y = scaleRotate( (pnts)[item.n2], xSc, ySc).y;
-
-			    pnt_.x = unscaleUnrotate( pnt_temp, xSc, ySc, false).x;
-			    pnt_.y = unscaleUnrotate( pnt_temp, xSc, ySc, false).y;
-
-			    if( pnt_.x < xMin ) xMin = pnt_.x;
-			    if( pnt_.x > xMax ) xMax = pnt_.x;
-			    if( pnt_.y < yMin ) yMin = pnt_.y;
-			    if( pnt_.y > yMax ) yMax = pnt_.y;
-
-			    pnt_rot.x = scaleRotate( (pnts)[item.n1], xSc, ySc).x;
-			    pnt_rot.y = scaleRotate( (pnts)[item.n1], xSc, ySc).y;
-
-			    if( pnt_rot.x < xMin_rot ) xMin_rot = pnt_rot.x;
-			    if( pnt_rot.x > xMax_rot ) xMax_rot = pnt_rot.x;
-			    if( pnt_rot.y < yMin_rot ) yMin_rot = pnt_rot.y;
-			    if( pnt_rot.y > yMax_rot ) yMax_rot = pnt_rot.y;
-
-			    pnt_rot.x = scaleRotate( (pnts)[item.n2], xSc, ySc).x;
-			    pnt_rot.y = scaleRotate( (pnts)[item.n2], xSc, ySc).y;
-
-			    if( pnt_rot.x < xMin_rot ) xMin_rot = pnt_rot.x;
-			    if( pnt_rot.x > xMax_rot ) xMax_rot = pnt_rot.x;
-			    if( pnt_rot.y < yMin_rot ) yMin_rot = pnt_rot.y;
-			    if( pnt_rot.y > yMax_rot ) yMax_rot = pnt_rot.y;
+			    pnt_rot = scaleRotate((pnts)[item.n2], xSc, ySc);
+			    xMin_rot = vmin(xMin_rot, pnt_rot.x); yMin_rot = vmin(yMin_rot, pnt_rot.y);
+			    xMax_rot = vmax(xMax_rot, pnt_rot.x); yMax_rot = vmax(yMax_rot, pnt_rot.y);
 			}
-			if( item.type == 2 ) {
-			    Point el_p3_rot = scaleRotate( (pnts)[item.n3], xSc, ySc);
-			    Point el_p4_rot = scaleRotate( (pnts)[item.n4], xSc, ySc);
-			    Point el_p5_rot = scaleRotate( (pnts)[item.n5], xSc, ySc);
+			else if(item.type == ShapeItem::Arc) {
+			    Point el_p3_rot = scaleRotate((pnts)[item.n3], xSc, ySc);
+			    Point el_p4_rot = scaleRotate((pnts)[item.n4], xSc, ySc);
+			    Point el_p5_rot = scaleRotate((pnts)[item.n5], xSc, ySc);
 
-			    Point el_p3 = unscaleUnrotate( el_p3_rot, xSc, ySc, false);
-			    Point el_p4 = unscaleUnrotate( el_p4_rot, xSc, ySc, false);
-			    Point el_p5 = unscaleUnrotate( el_p5_rot, xSc, ySc, false);
+			    Point el_p3 = unscaleUnrotate(el_p3_rot, xSc, ySc, false, true, false);
+			    Point el_p4 = unscaleUnrotate(el_p4_rot, xSc, ySc, false, true, false);
+			    Point el_p5 = unscaleUnrotate(el_p5_rot, xSc, ySc, false, true, false);
 
-			    if( el_p5.y <= el_p3.y ) ang = angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
-			    else ang = 360 - angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
+			    ang = angle(el_p3, el_p5, el_p3, Point(el_p3.x+10,el_p3.y));
+			    if(el_p5.y > el_p3.y) ang = 360 - ang;
 
-			    if( el_p5_rot.y <= el_p3_rot.y ) ang_rot = angle( el_p3_rot, el_p5_rot, el_p3_rot, Point( el_p3_rot.x+10, el_p3_rot.y ) );
-			    else ang_rot = 360 - angle( el_p3_rot, el_p5_rot, el_p3_rot, Point( el_p3_rot.x+10, el_p3_rot.y ) );
+			    ang_rot = angle(el_p3_rot, el_p5_rot, el_p3_rot, Point(el_p3_rot.x+10,el_p3_rot.y));
+			    if(el_p5_rot.y > el_p3_rot.y) ang_rot = 360 - ang_rot;
 
-			    arc_a = length( el_p5, el_p3 );
-			    arc_b = length( el_p3, el_p4 );
+			    arc_a = length(el_p5, el_p3);
+			    arc_b = length(el_p3, el_p4);
 
-			    arc_a_rot = length( el_p5_rot, el_p3_rot );
-			    arc_b_rot = length( el_p3_rot, el_p4_rot );
-			    t_start = item.ctrlPos4.x;
-			    t_end = item.ctrlPos4.y;
+			    arc_a_rot = length(el_p5_rot, el_p3_rot);
+			    arc_b_rot = length(el_p3_rot, el_p4_rot);
+			    t_start = item.ctrlPos4.x; t_end = item.ctrlPos4.y;
 			    t = t_start;
 			    do {
-				pnt_.x = el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x;
-				pnt_.y = el_p3.y - rotate( arc( t, arc_a, arc_b ), ang ).y;
+				pnt_.x = el_p3.x + rotate(arc(t,arc_a,arc_b),ang).x;
+				pnt_.y = el_p3.y - rotate(arc(t,arc_a,arc_b),ang).y;
+				xMin = vmin(xMin, pnt_.x); yMin = vmin(yMin, pnt_.y);
+				xMax = vmax(xMax, pnt_.x); yMax = vmax(yMax, pnt_.y);
 
-				pnt_rot.x = el_p3_rot.x + rotate( arc( t, arc_a_rot, arc_b_rot ), ang_rot ).x;
-				pnt_rot.y = el_p3_rot.y - rotate( arc( t, arc_a_rot, arc_b_rot ), ang_rot ).y;
-
-				if( pnt_.x < xMin ) xMin = pnt_.x;
-				if( pnt_.x > xMax ) xMax = pnt_.x;
-				if( pnt_.y < yMin ) yMin = pnt_.y;
-				if( pnt_.y > yMax ) yMax = pnt_.y;
-
-				if( pnt_rot.x < xMin_rot ) xMin_rot = pnt_rot.x;
-				if( pnt_rot.x > xMax_rot ) xMax_rot = pnt_rot.x;
-				if( pnt_rot.y < yMin_rot ) yMin_rot = pnt_rot.y;
-				if( pnt_rot.y > yMax_rot ) yMax_rot = pnt_rot.y;
+				pnt_rot.x = el_p3_rot.x + rotate(arc(t,arc_a_rot,arc_b_rot),ang_rot).x;
+				pnt_rot.y = el_p3_rot.y - rotate(arc(t,arc_a_rot,arc_b_rot),ang_rot).y;
+				xMin_rot = vmin(xMin_rot, pnt_rot.x); yMin_rot = vmin(yMin_rot, pnt_rot.y);
+				xMax_rot = vmax(xMax_rot, pnt_rot.x); yMax_rot = vmax(yMax_rot, pnt_rot.y);
 				t += 0.00277777777778;
-			    }
-			    while ( t < t_end );
+			    } while(t < t_end);
 			}
-			if( item.type == 3 ) {
+			else if(item.type == ShapeItem::Bezier) {
 			    t = 0;
-			    Point el_p1_rot = scaleRotate( (pnts)[item.n1], xSc, ySc);
-			    Point el_p2_rot = scaleRotate( (pnts)[item.n2], xSc, ySc);
-			    Point el_p3_rot = scaleRotate( (pnts)[item.n3], xSc, ySc);
-			    Point el_p4_rot = scaleRotate( (pnts)[item.n4], xSc, ySc);
+			    Point el_p1_rot = scaleRotate((pnts)[item.n1], xSc, ySc);
+			    Point el_p2_rot = scaleRotate((pnts)[item.n2], xSc, ySc);
+			    Point el_p3_rot = scaleRotate((pnts)[item.n3], xSc, ySc);
+			    Point el_p4_rot = scaleRotate((pnts)[item.n4], xSc, ySc);
 
-			    Point el_p1 = unscaleUnrotate( el_p1_rot, xSc, ySc, false);
-			    Point el_p2 = unscaleUnrotate( el_p2_rot, xSc, ySc, false);
-			    Point el_p3 = unscaleUnrotate( el_p3_rot, xSc, ySc, false);
-			    Point el_p4 = unscaleUnrotate( el_p4_rot, xSc, ySc, false);
+			    Point el_p1 = unscaleUnrotate(el_p1_rot, xSc, ySc, false, true, false);
+			    Point el_p2 = unscaleUnrotate(el_p2_rot, xSc, ySc, false, true, false);
+			    Point el_p3 = unscaleUnrotate(el_p3_rot, xSc, ySc, false, true, false);
+			    Point el_p4 = unscaleUnrotate(el_p4_rot, xSc, ySc, false, true, false);
 
 			    do {
-				pnt_.x = bezier( t, el_p1, el_p3, el_p4, el_p2 ).x;
-				pnt_.y = bezier( t, el_p1, el_p3, el_p4, el_p2 ).y;
+				pnt_ = bezier(t, el_p1, el_p3, el_p4, el_p2);
+				xMin = vmin(xMin, pnt_.x); yMin = vmin(yMin, pnt_.y);
+				xMax = vmax(xMax, pnt_.x); yMax = vmax(yMax, pnt_.y);
 
-				pnt_rot.x = bezier( t, el_p1_rot, el_p3_rot, el_p4_rot, el_p2_rot ).x;
-				pnt_rot.y = bezier( t, el_p1_rot, el_p3_rot, el_p4_rot, el_p2_rot ).y;
-
-				if( pnt_.x < xMin ) xMin = pnt_.x;
-				if( pnt_.x > xMax ) xMax = pnt_.x;
-				if( pnt_.y < yMin ) yMin = pnt_.y;
-				if( pnt_.y > yMax ) yMax = pnt_.y;
-
-				if( pnt_rot.x < xMin_rot ) xMin_rot = pnt_rot.x;
-				if( pnt_rot.x > xMax_rot ) xMax_rot = pnt_rot.x;
-				if( pnt_rot.y < yMin_rot ) yMin_rot = pnt_rot.y;
-				if( pnt_rot.y > yMax_rot ) yMax_rot = pnt_rot.y;
+				pnt_rot = bezier(t, el_p1_rot, el_p3_rot, el_p4_rot, el_p2_rot);
+				xMin_rot = vmin(xMin_rot, pnt_rot.x); yMin_rot = vmin(yMin_rot, pnt_rot.y);
+				xMax_rot = vmax(xMax_rot, pnt_rot.x); yMax_rot = vmax(yMax_rot, pnt_rot.y);
 
 				t += 0.00277777777778;
-			    }
-			    while ( t < 1 );
+			    } while(t < 1);
 			}
 		    }
+
 		    paintFill(im1, delta_point_center, inundationItems[i]);
 		    if(clickPnt.x > -1 && clickPnt.y > -1) {
 			if(gdImageGetPixel(im1,(int)rRnd(clickPnt.x,POS_PREC_DIG,true),(int)rRnd(clickPnt.y,POS_PREC_DIG,true)) != gdImageColorResolveAlpha(im1,0,0,0,127)) {
@@ -3907,10 +3861,8 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 			}
 		    }
 		    else {
-			xMin = (int)rRnd( xMin, POS_PREC_DIG, true );
-			yMin = (int)rRnd( yMin, POS_PREC_DIG, true );
-			xMax = (int)rRnd( xMax, POS_PREC_DIG, true );
-			yMax = (int)rRnd( yMax, POS_PREC_DIG, true );
+			xMin = (int)rRnd(xMin, POS_PREC_DIG, true); yMin = (int)rRnd(yMin, POS_PREC_DIG, true);
+			xMax = (int)rRnd(xMax, POS_PREC_DIG, true); yMax = (int)rRnd(yMax, POS_PREC_DIG, true);
 
 			gdImagePtr im_fill_in = NULL;
 			string imgDef_temp = owner().resGet(inundationItems[i].imgFill, path(), ses);
@@ -3920,113 +3872,100 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 			    mess_debug(nodePath().c_str(),_("Fill image type is not supported."));
 			gdImagePtr im_fill_out = gdImageCreateTrueColor((int)rRnd( xMax - xMin ) + 1, (int)rRnd( yMax - yMin ) + 1 );
 			gdImageAlphaBlending(im_fill_out, 0);
-			int alpha;
 			double alpha_pr, alpha_rez;
 			if(im_fill_in) {
 			    gdImageAlphaBlending(im_fill_in, 0);
 			    gdImageCopyResampled(im_fill_out, im_fill_in, 0, 0, 0, 0, im_fill_out->sx, im_fill_out->sy, im_fill_in->sx, im_fill_in->sy);
 			}
-			int im_x, im_y;
-			Point drw_pnt,drw_pnt1;
-			xMin_rot = (int)rRnd( xMin_rot, POS_PREC_DIG, true );
-			yMin_rot = (int)rRnd( yMin_rot, POS_PREC_DIG, true );
-			xMax_rot = (int)rRnd( xMax_rot, POS_PREC_DIG, true );
-			yMax_rot = (int)rRnd( yMax_rot, POS_PREC_DIG, true );
+			int im_x, im_y, im_x_t, im_y_t;
+			Point drw_pnt, drw_pnt1;
+			xMin_rot = (int)rRnd(xMin_rot, POS_PREC_DIG, true); yMin_rot = (int)rRnd(yMin_rot, POS_PREC_DIG, true);
+			xMax_rot = (int)rRnd(xMax_rot, POS_PREC_DIG, true); yMax_rot = (int)rRnd(yMax_rot, POS_PREC_DIG, true);
 
 			double alpha_col = (double)(uint8_t)(inundationItems[i].P_color>>24)/127;
 			double color_r, color_g, color_b;
 			int rgb;
-			gdImageAlphaBlending(im1,0);
+			gdImageAlphaBlending(im1, 0);
 
 			im_y = (int)yMin_rot;
 			do {
 			    im_x = (int)xMin_rot;
 			    do {
-				if(gdImageGetPixel( im1, im_x, im_y ) == tmp_clr ) {
-				    Point drw_pnt = unscaleUnrotate( Point( im_x, im_y ), xSc, ySc, false);
-				    rgb = gdImageGetPixel( im_fill_out, (int)rRnd( drw_pnt.x - xMin, POS_PREC_DIG, true ),
-									(int)rRnd( drw_pnt.y - yMin, POS_PREC_DIG, true ) );
-				    if( ((int)rRnd( drw_pnt.x - xMin, POS_PREC_DIG, true ) == (int)rRnd( xMax - xMin ) + 1) && rgb == 0 )
-					rgb = gdImageGetPixel( im_fill_out, (int)rRnd( drw_pnt.x - xMin - 1, POS_PREC_DIG, true ),
-									    (int)rRnd( drw_pnt.y - yMin, POS_PREC_DIG, true ) );
-				    else if( ((int)rRnd( drw_pnt.y - yMin, POS_PREC_DIG, true ) == (int)rRnd( yMax - yMin ) + 1) && rgb == 0 )
-					rgb = gdImageGetPixel( im_fill_out, (int)rRnd( drw_pnt.x - xMin, POS_PREC_DIG, true ),
-									    (int)rRnd( drw_pnt.y - yMin - 1, POS_PREC_DIG, true ) );
+				if(gdImageGetPixel(im1,im_x,im_y) == tmp_clr) {
+				    Point drw_pnt = unscaleUnrotate(Point(im_x,im_y), xSc, ySc, false, true, false);
+				    rgb = gdImageGetPixel(im_fill_out,
+					vmax(0, vmin(im_fill_out->sx-1, (int)rRnd((mirror?xMax-drw_pnt.x:drw_pnt.x-xMin), POS_PREC_DIG, true))),
+					vmax(0, vmin(im_fill_out->sy-1, (int)rRnd(drw_pnt.y-yMin, POS_PREC_DIG, true))));
 
-				    alpha = gdImageAlpha( im_fill_out, rgb );
-				    alpha_pr = 1 - (double)alpha / 127;
-				    drw_pnt1.x = scaleRotate( drw_pnt, xSc, ySc, false).x;
-				    drw_pnt1.y = scaleRotate( drw_pnt, xSc, ySc, false).y;
+				    alpha_pr = 1 - (double)gdImageAlpha(im_fill_out,rgb) / 127;
+				    drw_pnt1 = scaleRotate(drw_pnt, xSc, ySc, false, true, false);
 
 				    //if( fabs(alpha_pr - 0) < 0.001 ) alpha_pr = 1;
-				    color_r = alpha_pr*((rgb>>16)&0xff) + (1-alpha_pr)*alpha_col*( (uint8_t)( inundationItems[i].P_color>>16 ) );
-				    color_g = alpha_pr*((rgb>>8)&0xff) + (1-alpha_pr)*alpha_col*( (uint8_t)( inundationItems[i].P_color>>8 ) );
-				    color_b = alpha_pr*(rgb&0xff) + (1-alpha_pr)*alpha_col*( (uint8_t)inundationItems[i].P_color );
+				    color_r = alpha_pr*((rgb>>16)&0xff) + (1-alpha_pr)*alpha_col*((uint8_t)(inundationItems[i].P_color>>16));
+				    color_g = alpha_pr*((rgb>>8)&0xff) + (1-alpha_pr)*alpha_col*((uint8_t)(inundationItems[i].P_color>>8));
+				    color_b = alpha_pr*(rgb&0xff) + (1-alpha_pr)*alpha_col*((uint8_t)inundationItems[i].P_color);
 				    alpha_rez = (1 - alpha_col) * (1 - alpha_pr);
 				    /*int color = gdImageColorResolve( im1, (int)rRnd( color_r, POS_PREC_DIG, true ),
 									    (int)rRnd( color_g, POS_PREC_DIG, true ),
 									    (int)rRnd( color_b, POS_PREC_DIG, true ) );*/
-				    int color = gdImageColorResolveAlpha( im1, (int)rRnd( color_r, POS_PREC_DIG, true ),
-										(int)rRnd( color_g, POS_PREC_DIG, true ),
-										(int)rRnd( color_b, POS_PREC_DIG, true ),
-										127 - (int)rRnd( 127*(1 - alpha_rez), POS_PREC_DIG, true ) );
-				    gdImageSetPixel( im1, (int)rRnd( drw_pnt1.x, POS_PREC_DIG, true ) , (int)rRnd( drw_pnt1.y, POS_PREC_DIG, true ), color );
+
+				    int color = gdImageColorResolveAlpha(im1,
+							(int)rRnd(color_r, POS_PREC_DIG, true),
+							(int)rRnd(color_g, POS_PREC_DIG, true),
+							(int)rRnd(color_b, POS_PREC_DIG, true),
+							127 - (int)rRnd(127*(1-alpha_rez), POS_PREC_DIG, true));
+				    gdImageSetPixel(im1, (int)rRnd(drw_pnt1.x,POS_PREC_DIG,true), (int)rRnd(drw_pnt1.y,POS_PREC_DIG,true), color);
 				}
 				im_x += 1;
-			    }
-			    while( im_x <= xMax_rot );
+			    } while(im_x <= xMax_rot);
 			    im_y += 1;
 			} while(im_y <= yMax_rot);
 			if(im_fill_out) gdImageDestroy(im_fill_out);
 			if(im_fill_in) gdImageDestroy(im_fill_in);
-			gdImageAlphaBlending(im1,1);
+			gdImageAlphaBlending(im1, 1);
 		    }
 		}
 		else {
 		    paintFill(im1, delta_point_center, inundationItems[i]);
 		    //gdImageSetPixel(im1, delta_point_center.x, delta_point_center.y, gdImageColorResolveAlpha(im1,(uint8_t)(inundationItems[i].P_color>>16), (uint8_t)(inundationItems[i].P_color>>8), (uint8_t)inundationItems[i].P_color, 127 - (uint8_t)(inundationItems[i].P_color>>24)));
-		    if(clickPnt.x > -1 && clickPnt.y > -1) {
-			if(gdImageGetPixel(im1, (int)rRnd(clickPnt.x,POS_PREC_DIG,true),
-						(int)rRnd(clickPnt.y,POS_PREC_DIG,true)) != gdImageColorResolveAlpha(im1,0,0,0,127))
-			{
-			    if(im1) gdImageDestroy(im1);
-			    return i;
-			}
+		    if(clickPnt.x > -1 && clickPnt.y > -1 &&
+			gdImageGetPixel(im1, (int)rRnd(clickPnt.x,POS_PREC_DIG,true), (int)rRnd(clickPnt.y,POS_PREC_DIG,true)) != gdImageColorResolveAlpha(im1,0,0,0,127))
+		    {
+			if(im1) gdImageDestroy(im1);
+			return i;
 		    }
 		}
 	    }
 	    else mess_debug(nodePath().c_str(),_("At least one of the elementary figures, of which 'fill' is forming, is outside the boundary of the display area."));
 	}
-	if( (int)rRnd( clickPnt.x, POS_PREC_DIG, true ) == -1 && (int)rRnd( clickPnt.y, POS_PREC_DIG, true ) == -1 )
-	{
+	if((int)rRnd(clickPnt.x,POS_PREC_DIG,true) == -1 && (int)rRnd(clickPnt.y,POS_PREC_DIG,true) == -1) {
 	    for(unsigned j = 0; j < shape_temp.size(); j++)
 		shape_temp_all.push_back(shape_temp[j]);
-	    //- Changing the color to the real one for all figures used in each fill(inundation)
-	    for(unsigned j = 0; j < shape_temp.size(); j++)
-	    {
+	    // Changing the color to the real one for all figures used in each fill(inundation)
+	    for(unsigned j = 0; j < shape_temp.size(); j++) {
 		shapeItems[shape_temp[j]].width = width_shape[j];
 		shapeItems[shape_temp[j]].border_width = border_width_shape[j];
 		shapeItems[shape_temp[j]].lineColor = line_color_shape[j];
 		shapeItems[shape_temp[j]].borderColor = border_color_shape[j];
 	    }
-	    //- Painting all figures -
+	    // Painting all figures
 	    std::sort(shape_temp.begin(), shape_temp.end());
 	    for(unsigned j = 0; j < shape_temp.size(); j++) {
-		gdImagePtr im2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
+		gdImagePtr im2 = gdImageCreateTrueColor(scaleWidth, scaleHeight);
 		gdImageAlphaBlending(im2, 0);
-		gdImageFilledRectangle( im2, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(im2,0,0,0,127) );
+		gdImageFilledRectangle(im2, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(im2,0,0,0,127));
 		gdImageAlphaBlending(im2, 1);
-		paintFigure( im2, shapeItems[shape_temp[j]], xSc, ySc, true, true );
-		gdImageAlphaBlending(im1,1);
-		gdImageSaveAlpha(im1,1);
-		gdImageAlphaBlending(im2,1);
+		paintFigure(im2, shapeItems[shape_temp[j]], xSc, ySc, true, true);
+		gdImageAlphaBlending(im1, 1);
+		gdImageSaveAlpha(im1, 1);
+		gdImageAlphaBlending(im2, 1);
 		gdImageSaveAlpha(im2, 1);
 		gdImageCopy(im1, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
 		if(im2) gdImageDestroy(im2);
 	    }
-	    gdImageAlphaBlending(im,1);
-	    gdImageSaveAlpha(im,1);
-	    gdImageAlphaBlending(im1,1);
+	    gdImageAlphaBlending(im, 1);
+	    gdImageSaveAlpha(im, 1);
+	    gdImageAlphaBlending(im1, 1);
 	    gdImageSaveAlpha(im1, 1);
 	    gdImageCopy(im, im1, 0, 0, 0, 0, scaleWidth, scaleHeight);
 	}
@@ -5170,7 +5109,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	int hvLev = 0;
 	int64_t hLen = tEnd - tBeg;
 
-	if(hLen/2635200000000ll >= 5)	{ hvLev = 7; hDiv = 2635200000000ll; }	//Month a unstrict interval !!!! to implement !!!!
+	if(hLen/2635200000000ll >= 5)	{ hvLev = 7; hDiv = 2635200000000ll; }	//Month a unstrict interval
 	else if(hLen/86400000000ll >= 5){ hvLev = 6; hDiv =   86400000000ll; }	//More days and no time in the scale
 	else if(hLen/86400000000ll >= 2){ hvLev = 5; hDiv =   86400000000ll; }	//Days
 	else if(hLen/3600000000ll >= 2)	{ hvLev = 4; hDiv =    3600000000ll; }	//Hours
@@ -6316,7 +6255,7 @@ void VCADiagram::postReq( SSess &ses )
     MtxAlloc res(mRes, true);
 
     map<string, string>::iterator prmEl = ses.prm.find("sub");
-    if(prmEl != ses.prm.end() && prmEl->second == "point") {	//;????
+    if(prmEl != ses.prm.end() && prmEl->second == "point") {
 	prmEl = ses.prm.find("x");
 	int x_coord = (prmEl!=ses.prm.end()) ? s2i(prmEl->second) : 0;
 	if(x_coord >= tArX && x_coord <= (tArX+tArW))

@@ -3282,7 +3282,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	int hvLev = 0;
 	int64_t hLen = tEnd - tBeg;
 
-	if(hLen/2635200000000ll >= 5)	{ hvLev = 7; hDiv = 2635200000000ll; }	//Month a unstrict interval !!!! to implement !!!!
+	if(hLen/2635200000000ll >= 5)	{ hvLev = 7; hDiv = 2635200000000ll; }	//Month a unstrict interval
 	else if(hLen/86400000000ll >= 5){ hvLev = 6; hDiv =   86400000000ll; }	//More days and no time in the scale
 	else if(hLen/86400000000ll >= 2){ hvLev = 5; hDiv =   86400000000ll; }	//Days
 	else if(hLen/3600000000ll >= 2)	{ hvLev = 4; hDiv =    3600000000ll; }	//Hours

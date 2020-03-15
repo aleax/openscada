@@ -4285,20 +4285,17 @@ void ShapeElFigure::paintImage( WdgView *w )
 			clr_img.pixel(QPoint(im_x,im_y)) == qRgb(255,255,255))
 		    {
 			drw_pnt = unScaleRotate(QPoint(im_x,im_y), w, false, true, false);
-			drw_pnt1 = QPoint((int)rRnd(drw_pnt.x()-xMin,POS_PREC_DIG,true), (int)rRnd(drw_pnt.y()-yMin,POS_PREC_DIG,true));
-			if(img.valid(drw_pnt1)) {
-			    rgb = img.pixel(drw_pnt1);
-			    alpha = (double)((rgb>>24)&0xff)/255;
-			    color_r = alpha*((rgb>>16)&0xff) + (1-alpha)*alpha_col*colors[inundItems[i].brush].red();
-			    color_g = alpha*((rgb>>8)&0xff) + (1-alpha)*alpha_col*colors[inundItems[i].brush].green();
-			    color_b = alpha*(rgb&0xff) + (1-alpha)*alpha_col*colors[inundItems[i].brush].blue();
-			    alpha_rez = (1-alpha_col) * (1-alpha);
-			    im_pen.setColor(QColor(color_r,color_g,color_b,rRnd(255*(1-alpha_rez),POS_PREC_DIG,true)));
-			    draw_pnt.setPen(im_pen);
-			    drw_pnt = scaleRotate(drw_pnt, w, false, true, false);
-			    drw_pnt1 = QPoint((int)rRnd(drw_pnt.x(),POS_PREC_DIG,true), (int)rRnd(drw_pnt.y(),POS_PREC_DIG,true));
-			    draw_pnt.drawPoint(drw_pnt1);
-			}
+			rgb = img.pixel(vmax(0, vmin(img.width()-1,(int)rRnd(((elFD->mirror&&(!devW||!devW->edit()))?xMax-drw_pnt.x():drw_pnt.x()-xMin),POS_PREC_DIG,true))),
+					vmax(0, vmin(img.height()-1,(int)rRnd(drw_pnt.y()-yMin,POS_PREC_DIG,true))));
+			alpha = (double)((rgb>>24)&0xff)/255;
+			color_r = alpha*((rgb>>16)&0xff) + (1-alpha)*alpha_col*colors[inundItems[i].brush].red();
+			color_g = alpha*((rgb>>8)&0xff) + (1-alpha)*alpha_col*colors[inundItems[i].brush].green();
+			color_b = alpha*(rgb&0xff) + (1-alpha)*alpha_col*colors[inundItems[i].brush].blue();
+			alpha_rez = (1-alpha_col) * (1-alpha);
+			im_pen.setColor(QColor(color_r,color_g,color_b,rRnd(255*(1-alpha_rez),POS_PREC_DIG,true)));
+			draw_pnt.setPen(im_pen);
+			drw_pnt = scaleRotate(drw_pnt, w, false, true, false);
+			draw_pnt.drawPoint((int)rRnd(drw_pnt.x(),POS_PREC_DIG,true), (int)rRnd(drw_pnt.y(),POS_PREC_DIG,true));
 		    }
 		    im_x++;
 		} while(im_x > xMin_rot && im_x <= xMax_rot);
