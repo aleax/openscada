@@ -220,7 +220,19 @@
 <ul><li> "val*" — the typical template-sign of a value, that can be directly used in the category filter to determine only the values in messages;</li>
 <li> <i>SrcID</i> — source identifier.</li></ul></dd>
 <dd> TEXT: the parameter <i>Name</i> and <i>Value</i> in the form "<b>{Name}: {Value}</b>".</dd></dl>
-<ul><li> <b>Prescriptions execution</b> — <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> waiting of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Prescriptions" title="Special:MyLanguage/Libs/Prescriptions">the prescription document</a> forming ...</li></ul>
+<ul><li> <b><a href="Libs_Prescriptions.html#manager" title="Special:MyLanguage/Libs/Prescriptions">Prescriptions execution</a></b> — generate the action messages during the prescription execution for:</li></ul>
+<dl><dd> CATEGORY: defines the user prescription-program ID <i>ProgNM</i> in the form "<b>uprg{ProgNM}</b>", where:
+<ul><li> "uprg*" —  the typical template-sign of a user prescription-program, that can be directly used in the category filter to determine in the messages only the user prescriptions-programs;</li>
+<li> <i>ProgNM</i> — the prescription-program name.</li></ul></dd>
+<dd> TEXT: the action description in the form "<b>{ActDescr} "{ProgNM}"&nbsp;: {StartTm}&nbsp;: {ActTm}</b>", where:
+<ul><li> <i>ActDescr</i> — the action description:</li></ul>
+<dl><dd><ul><li> "No current node present";</li>
+<li> "Terminated program session by the user";</li>
+<li> "Terminated program session by the error";</li>
+<li> "Successful session of the program".</li></ul></dd></dl>
+<ul><li> <i>ProgNM</i> — the prescription-program name;</li>
+<li> <i>StartTm</i> — start time of the prescription-program, in the form "2020-03-14 16:05:01";</li>
+<li> <i>ActTm</i> — action time of the prescription-program, in the form "2020-03-14 16:05:52".</li></ul></dd></dl>
 <h4><span class="mw-headline" id="Values"><span class="mw-headline-number">1.5.2</span> <span id="ArchVals" title="#ArchVals">Values</span></span></h4>
 <p>OpenSCADA values archives act as independent components that include buffers processed by archivers. The main parameter of the values archives is data source, in the role of which may be attributes of the parameters of the subsystem "DAQ", as well as other external data sources (passive mode). Other data sources may be network archivers of remote OpenSCADA stations, OpenSCADA programming environment, and more.
 </p><p>A key component of archiving the values of continuous processes is the value buffer, which is intended for intermediate storing of an array of values obtained with a defined periodicity (time quantum). The values buffer is used to directly store large values of arrays in the value archives both before the direct "flushing" on the physical storage, and for manipulating the value frames, that is, in the functions of the frame-by-frame query of the values and their location in the archive buffer.
@@ -1654,6 +1666,7 @@ SessLimit    &lt;numb&gt;     Maximum number of the sessions (by default 5).
 CachePgLife  &lt;hours&gt;    Lifetime of the pages in the cache (by default 1).
 CachePgSz    &lt;numb&gt;     Maximum number of the pages in the cache (by default 10).
 PNGCompLev   &lt;lev&gt;      Compression level [-1..9] of the creating PNG-images.
+ImgResize    &lt;0|1&gt;      Resizing raster images on the server side.
 
 =================== Subsystem "Modules scheduler" options =================
     --modPath=&lt;path&gt;    Directories with the modules, separated by ';', they can include a files' template at the end.
@@ -1738,5 +1751,5 @@ ChkPer     &lt;seconds&gt;    Period of the checking for new shared libraries(mo
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/en">Documents/Program_manual/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2667</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/en">Documents/Program_manual/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2669</td></tr></table></body>
 </html>

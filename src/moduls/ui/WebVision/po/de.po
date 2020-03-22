@@ -3,15 +3,15 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2019.
+# Roman Savochenko <roman@oscada.org>, 2010-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-23 09:19+0300\n"
+"POT-Creation-Date: 2020-03-22 17:18+0200\n"
 "PO-Revision-Date: 2009-08-26 08:21+0200\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: de <>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -197,6 +197,7 @@ msgid ""
 "10).\n"
 "PNGCompLev   <lev>      Compression level [-1..9] of the creating PNG-"
 "images.\n"
+"ImgResize    <0|1>      Resizing raster images on the server side.\n"
 "\n"
 msgstr ""
 "======================== Optionen des Moduls <%s:%s> "
@@ -209,6 +210,8 @@ msgstr ""
 "CachePgSz    <Anzahl>   Maximale Anzahl der Seiten im Cache (Standard 10).\n"
 "PNGCompLev   <lev>      Komprimierungsgrad [-1..9] der erstellenden PNG-"
 "Bilder.\n"
+"ImgResize    <0|1>      Ändern der Größe von Rasterbildern auf der "
+"Serverseite.\n"
 "\n"
 
 msgid "close"
@@ -313,9 +316,19 @@ msgstr ""
 "  0   - abgeschaltet;\n"
 "  1-9 - direkte Stufe."
 
+msgid "Resizing raster images on the server side"
+msgstr "Ändern der Größe von Rasterbildern auf der Serverseite."
+
+msgid ""
+"Mostly to decrease too big images size then decrease the traffic, what "
+"causes to rise the server load."
+msgstr ""
+"Meistens, um zu große Bilder zu verkleinern und dann den Datenverkehr zu verringern, was zu einer Erhöhung der Serverlast führt."
+
+#, c-format
 msgid ""
 "%s %s(%s):%s(%s): the last %s; cached pages %d and resources %d, %s; session "
 "objects %d."
 msgstr ""
-"%s %s(%s):%s(%s): die letzten %s; zwischengespeicherte Seiten %d und Ressourcen %d, "
-"%s; Sitzungsobjekte %d."
+"%s %s(%s):%s(%s): die letzten %s; zwischengespeicherte Seiten %d und "
+"Ressourcen %d, %s; Sitzungsobjekte %d."

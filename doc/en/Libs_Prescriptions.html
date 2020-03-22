@@ -1,0 +1,966 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Libs/Prescriptions - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="files/doc.css" rel="stylesheet" /></head>
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../en/files/Logo-big.png" /></a></div><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Libs/Prescriptions</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Libs_Prescriptions.html" title="Библиотеки/Рецепты (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Libs_Prescriptions.html" title="Бібліотеки/Рецепти (100% translated)">українська</a></div></div>
+<table class="wikitable">
+
+<tr>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="Libs_Prescriptions.html" title="Special:MyLanguage/Libs/Prescriptions">Prescriptions</a>
+</td>
+<td> 1.1, 1.1 </td>
+<td> GPLv2 </td>
+<td>
+<p>OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.tmplb_PrescrTempl<br />
+vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">GZip</a>) &gt; VCA.wlb_prescr
+</p>
+</td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td>
+<td> Library of elements of scenarios of the technological operations — prescriptions.
+<ul><li> <b>Founded:</b> April 2012</li>
+<li> <b>Sponsored by:</b> <a class="external text" href="http://e-beam.ru" rel="nofollow noreferrer noopener" target="_blank">the Laboratory of Vacuum Technologies</a></li>
+<li> <b>Sponsored by, about the controller templateization:</b> Magomed</li>
+<li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/GraphicElementsLibraries/MainElements" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a></li>
+<li> <b>Used by:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Vacuum_processing_unit" title="Special:MyLanguage/Using/Vacuum processing unit">Automated control system for vacuum processing unit</a></li>
+<li> <b>To Do:</b></li></ul>
+<dl><dd>- move <a href="#GraphPart">the graphical part</a> items to all work through <a href="#manager">the prescription manager</a>, for the possibility to distribute the parts remotely.</dd></dl>
+</td></tr></table>
+<p>The library is created to provide an environment of execution of scenarios of the technological operations — prescriptions, and frames of the user interface about them, including <a href="#prescrEdit">the frame of creation/edition the prescriptions</a> and two frames of the execution control and reporting — "<a href="#prescrRun">Prescription — run</a>" and "<a href="#prescrRunSimple">Prescription — run, simple</a>". The library is built on the basis <a href="Modules/VCAEngine.html#WidgetPrimitives" title="Special:MyLanguage/Modules/VCAEngine">primitives of the widgets</a> and the internal programming language <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, including templates and commands.
+</p><p>The element's names and their parameters are available in languages: English, Ukrainian and Russian. Their source code wrote in human-language independent mode with calls for the translations by the function <i>tr()</i> and the message's translation also allowed for English, Ukrainian and Russian.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Conception"><span class="tocnumber">1</span> <span class="toctext"><span>Conception</span></span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Part_of_processing_and_executing"><span class="tocnumber">2</span> <span class="toctext">Part of processing and executing</span></a>
+<ul>
+<li class="toclevel-2"><a href="#Prescriptions_manager_.28manager.29"><span class="tocnumber">2.1</span> <span class="toctext">Prescriptions manager (manager)</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Templates_of_the_commands"><span class="tocnumber">2.2</span> <span class="toctext"><span>Templates of the commands</span></span></a>
+<ul>
+<li class="toclevel-3"><a href="#Command_.E2.80.94_Timer_.28timer.29"><span class="tocnumber">2.2.1</span> <span class="toctext">Command — Timer (timer)</span></a></li>
+<li class="toclevel-3"><a href="#Command_.E2.80.94_Background_timer_.28backTimer.29"><span class="tocnumber">2.2.2</span> <span class="toctext">Command — Background timer (backTimer)</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Graphical_part"><span class="tocnumber">3</span> <span class="toctext"><span>Graphical part</span></span></a>
+<ul>
+<li class="toclevel-2"><a href="#Prescription_.E2.80.94_edit_.28prescrEdit.29"><span class="tocnumber">3.1</span> <span class="toctext">Prescription — edit (prescrEdit)</span></a></li>
+<li class="toclevel-2"><a href="#Prescription_.E2.80.94_run_.28prescrRun.29"><span class="tocnumber">3.2</span> <span class="toctext">Prescription — run (prescrRun)</span></a></li>
+<li class="toclevel-2"><a href="#Prescription_.E2.80.94_run.2C_simple_.28prescrRunSimple.29"><span class="tocnumber">3.3</span> <span class="toctext">Prescription — run, simple (prescrRunSimple)</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Conception"><span class="mw-headline-number">1</span> <span id="Conception" title="#Conception">Conception</span></span></h2>
+<p>The scenario of technological operations — prescription, is a sequentially call of the function's blocks — commands, which taking up to five arguments and return string with the result code at the begin: "Working (0)", "Finished (&gt;0)" and "Error (&lt;0)". Calling the step command is made in a loop until the "Working (0)" result is returned. Jump to the next step is made in the case of the "Finished (&gt;0)" result and the command "Pass (2)". In the case of an error, the "Error (&lt;0)" result, the prescription execution is terminated.
+</p><p>The commands sequence, by the user of the final interface, are formed on <a href="#prescrEdit">the frame of creation/editing</a> and are controlled for their execution on the frame "<a href="#prescrRun">Prescription — run</a>" and "<a href="#prescrRunSimple">Prescription — run, simple</a>", when, the prescriptions data is stored in the programs-prescriptions DB table. The prescriptions-programs table is placed into the accessible OpenSCADA specific configuration database, as an example, currently such table is placed in the library database as "<b>PrescrProgs = (<u>name</u>, prgTxt)</b>", where:
+</p>
+<ul><li> <i>name</i> — the prescription-program name;</li>
+<li> <i>prgTxt</i> — the program text as an XML-tree.</li></ul>
+<p>The prescriptions-programs XML-tree starts with the "prg" tag that contains the command end tags "com" with attributes:
+</p>
+<ul><li> <i>id</i> — identifier-name-type of the command in the step base;</li>
+<li> <i>name</i> — personal name of the step, may be missing;</li>
+<li> <i>descr</i> — personal description of the step, taken from the appropriate field of the command and may be missing;</li>
+<li> <i>backgrnd</i> — sign of the step execution in the background, or a series of steps with that sign;</li>
+<li> <i>arg{N}</i> — user defined values of the arguments from 1 to 5.</li></ul>
+<p>For example, for a four-step prescription we will have:
+</p>
+<pre style="white-space: pre-wrap; margin-left: 20pt;">
+&lt;prg&gt;
+  &lt;com arg1="10" id="Timer" /&gt;
+  &lt;com arg1="10" id="Vacuum" /&gt;
+  &lt;com arg1="20" id="Timer" /&gt;
+  &lt;com arg1="34" id="Enable coils" /&gt;
+&lt;/prg&gt;</pre>
+<p>The prescription execution making through the <a href="#manager">prescription manager's</a> parameter, which support two modes of the prescription commands execution:
+</p>
+<ul><li> <b>command-parameter</b> — are placed as parameters of the <a href="DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">logical controller</a> and given their context, if the logical controller specified in the prescription manager;</li>
+<li> <b>command-macro</b> — directly into the prescription manager object, by commands stored into the table "PrescrComs".</li></ul>
+<p><b><u>The execution mode "command-parameter"</u></b><br />
+The commands-parameters of the logical level are formed by the programmer of SCADA-system under the specific application area as <a href="Program_manual.html#DAQTmpl" title="Special:MyLanguage/Documents/Program manual">templates of parameters of the subsystem "Data acquisition"</a>, which next used into the logical controller of the prescriptions, include series of mandatory, service and internal attributes:
+</p>
+<ul><li> <i>rez</i> — command: result the execution; the command should return a string of the view "<b>{rezCode}:{TextMess}</b>", where <i>rezCode</i> has states:
+<ul><li> <b>&lt;0</b> — error;</li>
+<li> <b>=0</b> — running;</li>
+<li> <b>&gt;0</b> — running finished;</li>
+<li> <b>=10</b> — running into the background with the indication to update the running state.</li></ul></li>
+<li> <i>run</i> — command: execution;</li>
+<li> <i>pause</i> — command: pause the execution;</li>
+<li> <i>start</i> — prescription: start;</li>
+<li> <i>stop</i> — prescription: correct finish;</li>
+<li> <i>error</i> — prescription: prescription finish by error;</li>
+<li> <i>abort</i> — prescription: execution abort by operator;</li>
+<li> <i>arg{1...5}</i> — arguments 1...5, into the argument name you can set the minimal and maximal borders of the numerical value as "<b>{name}|{min}|{max}</b>".</li></ul>
+<p>A specific of using commands-parameters is their independent execution and the ability to leave the execution of a number of commands in the background, such as regulators. These commands can also be directly connected to a data source through links, or even implemented in the same template-parameter.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> This mode is now the main one, and it has implemented many mechanisms of interaction with visualization and control frames, which may not work or work erroneously with the old "command-macro" mode!
+</p><p><b><u>The execution mode "command-macro" (old)</u></b><br />
+The commands-macros, which user can choose during the formation of a prescription-program, are formed by the programmer of SCADA-system under the specific application area by editing a commands table in OpenSCADA. The commands table is placed into the accessible OpenSCADA specific configuration database, as an example, currently such table is placed in the library database as "<b>PrescrComs = (<u>name</u>, proc, arg1, arg2, arg3, arg4, arg5)</b>", where:
+</p>
+<ul><li> <i>name</i> — the command name;</li>
+<li> <i>proc</i> — text of the command procedure, in the first line it contains the program language name, at the moment it is "JavaLikeCalc.JavaScript", and the program text directly after the language; in the command procedure the following context parameters are available:
+<ul><li> <i>rez</i> — result of the command execution, by default it returns "Work" ("0:Waiting now for ...");</li>
+<li> <i>f_start</i> — sign of the first procedure execution;</li>
+<li> <i>f_frq</i> — frequency of the procedure periodic executions;</li>
+<li> <i>arg{1...5}</i> — argument's 1..5 value;</li>
+<li> <i>tmp{1...10}</i> — temporary parameter's (the execution context) 1...10 value;</li></ul></li></ul>
+<dl><dd><dl><dd>An example of the program code for the "Timer" command, which does not depend on the application area:</dd></dl></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 40pt;">
+JavaLikeCalc.JavaScript
+if(f_start) tmp1 = arg1;
+var curTm = tmp1.toReal();
+if(curTm &lt;= 0) { rez = "1:Waiting is elapsed for "+arg1+"s"; return; }
+curTm -= 1/f_frq;
+tmp1 = max(0, curTm);
+rez = "0:Waiting now for "+curTm+"s";</pre>
+<ul><li> <i>arg{1...5}</i> — label of the 1..5 argument, only arguments with the label will be displayed when editing the prescription step; into the label you can set the minimum and maximum borders of the numeric values of the argument into the format "<b>{Label}|{min}|{max}</b>".</li></ul>
+<p>The several command names are reserved for the special purposes:
+</p>
+<ul><li> "Error" — is called after an error at execution the prescription step;</li>
+<li> "Stop" — is called on stopping the prescription, on successful prescription finish and on forced termination by the user.</li></ul>
+<h2><span class="mw-headline" id="Part_of_processing_and_executing"><span class="mw-headline-number">2</span> Part of processing and executing</span></h2>
+<p>The section contains <a href="Program_manual.html#DAQTmpl" title="Special:MyLanguage/Documents/Program manual">DAQ-templates</a> of the prescription manager and commands of the "command-template" mode, which are intended to be connected to the logic level controller, by creating related parameters of the prescription manager and commands, which available for the user to choose from, and which will carry out all the work with the prescriptions-programs for their processing and execution.
+</p><p>For connection the library part to a project of the OpenSCADA station you can obtain the database file as:
+</p>
+<ul><li> supplied with a ready and proper package of the Linux distribution like to "openscada-libdb-main", "openscada-LibDB.Main";</li>
+<li> directly taken for most actual one from <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">the subversion repository</a> and converted to the DB SQLite file in the way:</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 15px">
+$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql
+$ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
+</pre>
+<ul><li> downloaded for <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">the one attached here</a>.</li></ul>
+<p>This obtained file next you can place into the project directory of the station and create the database object for the DB module "SQLite", registering the database file in the configuration.
+</p><p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="manager" title="#manager"><h3><span class="mw-headline" id="Prescriptions_manager_.28manager.29"><span class="mw-headline-number">2.1</span> Prescriptions manager (<a href="Libs_Prescriptions.html#manager" title="Special:MyLanguage/Libs/Prescriptions">manager</a>)</span></h3></span>
+</td>
+<td> 2.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsPrescriptionsManagerOp.png" title="Result and the operative setup."><img alt="Result and the operative setup." height="650" src="files/LibsPrescriptionsManagerOp.png" width="445" /></a></div>
+<p>Basic, representative and unified template of a manager and a controller of the prescriptions, of their processing and direct execution in the "command-macro" mode. The template forms a structure of the prescription manager parameter which can be easily connected to all frames of this library.
+</p><p>The representative structure of the prescription manager is:
+</p>
+<ul><li> "DB: DB name with the tables (<b>dbDB</b>)" — DB, like to "SQLite.vcaBase", where stored or must be stored the prescription-program tables.</li>
+<li> "DB: Table with programs (<b>dbProgs</b>)" — name of the prescriptions-programs table, typically "PrescrProgs".</li>
+<li> "Commands list (<b>comLs</b>)" — the allowed to use commands list.</li>
+<li> "Name of the selected program (<b>prog</b>)" — state and setting of the selected program name in processing by the manager.</li>
+<li> "Mode (<b>mode</b>)", "Current mode (<b>curMode</b>)" — the setting and the current manager mode of the selected prescription-program execution: Finish(-2), Error(-1), Stop(0), Run(1), Pause(2), Pass command(3).</li>
+<li> "Start time (<b>startTm</b>)" — the start time in seconds.</li>
+<li> "Current command-step (<b>curCom</b>)" — the currently processing command.</li>
+<li> "Work program (<b>work</b>)" — the actual and processing now program in an object.</li></ul>
+<p><b><u>Functions</u></b><br />
+</p>
+<ul><li> Forms the "Commands list (<b>comLs</b>)", allowed to use in the user prescriptions-programs.</li>
+<li> Process the "Name of the selected program (<b>prog</b>)", modifying it will either load its command sequence to the "Work program (<b>work</b>)" or create a new program.</li>
+<li> Execute the program in the "Name of the selected program (<b>prog</b>)" after receiving the command "Run(1)" in the "Mode (<b>mode</b>)" and indicate this process in: the "Current mode (<b>curMode</b>)", the "Start time (<b>startTm</b>)", the "Current command-step (<b>curCom</b>)" and the "Work program (<b>work</b>)".</li>
+<li> Generate the action messages during the prescription execution for:</li></ul>
+<dl><dd> CATEGORY: defines the user prescription-program ID <i>ProgNM</i> in the form "<b>uprg{ProgNM}</b>", where:
+<ul><li> "uprg*" —  the typical template-sign of a user prescription-program, that can be directly used in the category filter to determine in the messages only the user prescriptions-programs;</li>
+<li> <i>ProgNM</i> — the prescription-program name.</li></ul></dd>
+<dd> TEXT: the action description in the form "<b>{ActDescr} "{ProgNM}"&nbsp;: {StartTm}&nbsp;: {ActTm}</b>", where:
+<ul><li> <i>ActDescr</i> — the action description:</li></ul>
+<dl><dd><ul><li> "No current node present";</li>
+<li> "Terminated program session by the user";</li>
+<li> "Terminated program session by the error";</li>
+<li> "Successful session of the program".</li></ul></dd></dl>
+<ul><li> <i>ProgNM</i> — the prescription-program name;</li>
+<li> <i>StartTm</i> — start time of the prescription-program, in the form "2020-03-14 16:05:01";</li>
+<li> <i>ActTm</i> — action time of the prescription-program, in the form "2020-03-14 16:05:52".</li></ul></dd></dl>
+<p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> dbDB </td>
+<td> DB: DB name with the tables </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Constant </td>
+<td>
+</td></tr>
+<tr>
+<td> dbComs </td>
+<td> DB: Table with commands </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> PrescrComs
+</td></tr>
+<tr>
+<td> dbProgs </td>
+<td> DB: Table with programs </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Constant </td>
+<td> PrescrProgs
+</td></tr>
+<tr>
+<td> comsCntr </td>
+<td> Commands controller,
+<p>&lt;empty&gt; - for commands into the table,<br />
+'*' - this parameter's controller
+</p>
+</td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> *
+</td></tr>
+<tr>
+<td> mode </td>
+<td> Mode </td>
+<td> Integer numbers selection </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> -2
+<p>-2;-1;0;1;2;3
+Finish;Error;Stop;Run;Pause;Pass com
+</p>
+</td></tr>
+<tr>
+<td> curMode </td>
+<td> Current mode </td>
+<td> Integer numbers selection </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td> -2
+<p>-2;-1;0;1;2;3
+Finish;Error;Stop;Run;Pause;Pass com
+</p>
+</td></tr>
+<tr>
+<td> prog </td>
+<td> Name of the selected program </td>
+<td> String </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> startTm </td>
+<td> Start time, seconds </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> curCom </td>
+<td> Current command-step </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> work </td>
+<td> Work program </td>
+<td> Object </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> comLs </td>
+<td> Commands list </td>
+<td> Object </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> clcCnt </td>
+<td> Cycles counter </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> this </td>
+<td> The object </td>
+<td> Object </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Frequency of calculation of the function, Hz </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsPrescriptionsManagerCfg.png" title="Configuration."><img alt="Configuration." height="292" src="files/LibsPrescriptionsManagerCfg.png" width="445" /></a></div>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller</a> object with the needed scheduling properties.
+<ul><li>[<b>JavaLikeCalc</b>] or <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">a JavaLikeCalc controller</a> object directly.</li></ul></dd>
+<dd>2. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter</a> object, for the case of using the logical controller, and select this template for it. Enable the parameter.
+<ul><li>[<b>JavaLikeCalc</b>] or select this template for <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">the JavaLikeCalc controller</a>; enable the controller; create a parameter "manager" of reflection the representative attributes:</li></ul></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 40pt;">
+dbDB
+dbProgs
+comLs
+prog
+mode
+curMode
+startTm
+curCom
+work
+</pre>
+<dl><dd>3. Into the tab "Template configuration" of the object of the logical parameter, or the controller for [JavaLikeCalc], you need to set:
+<dl><dd><ul><li> <i>DB: DB name with the tables</i> — to DB, like to "SQLite.vcaBase", where stored or must be stored the prescription-program tables. The empty value is not allowed and will cause an error!</li>
+<li> <i>DB: Table with programs</i> — to name of the prescriptions-programs table, by default it is "PrescrProgs".</li>
+<li> <i>Commands controller</i> — left it in the default value "*", to use this parameter's controller for the commands also. You must change this field if you run the manager controller object in a separate logical controller for the commands!</li></ul></dd></dl>
+<ul><li> [<b>JavaLikeCalc</b>] or and additionally:</li></ul>
+<dl><dd><ul><li> <i>Commands controller</i> — change this field in a separate logical controller for the commands!</li></ul></dd></dl>
+<ul><li> [<b>Command-macro</b>] or and additionally:</li></ul>
+<dl><dd><ul><li> <i>DB: Table with commands</i> — to name of the commands table, by default it is "PrescrComs";</li>
+<li> <i>Commands controller</i> — set to <b>&lt;empty&gt;</b>.</li></ul></dd></dl></dd>
+<dd>4. Place the required <a href="#LogicLevCommands">parameters of the commands</a> together to the manager parameter.
+<ul><li> [<b>Command-macro</b>] or prepare the required commands in "DB: Table with commands" according to <a href="#Conception">the conception</a>; the empty commands table must be created automatically after starting the object of the logical parameter, or the controller for [JavaLikeCalc]!</li></ul></dd>
+<dd>5. RESULT: Launching the controller object (where this parameter is created), we must get the operational data in the tab "Attributes" for the: allowed commands list, current mode, work program, current command-step and start time.
+<ul><li> [<b>JavaLikeCalc</b>] or the <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a> controller object directly.</li></ul></dd>
+<dd>6. In the process of the working, through the tab "Attributes" of operational data, in addition to obtaining the result, it is possible to perform operative setup and control on:
+<ul><li> <i>Name of the selected program</i> — to set of the selected program name in processing by the manager;</li>
+<li> <i>Mode</i> — to set the manager mode of the selected prescription-program execution: Finish(-2), Error(-1), Stop(0), Run(1), Pause(2), Pass command(3).</li></ul></dd></dl>
+<h3><span class="mw-headline" id="Templates_of_the_commands"><span class="mw-headline-number">2.2</span> <span id="LogicLevCommands" title="#LogicLevCommands">Templates of the commands</span></span></h3>
+<table class="wikitable">
+
+<tr>
+<td> <span id="timer" title="#timer"><h4><span class="mw-headline" id="Command_.E2.80.94_Timer_.28timer.29"><span class="mw-headline-number">2.2.1</span> Command — Timer (<a href="Libs_Prescriptions.html#timer" title="Special:MyLanguage/Libs/Prescriptions">timer</a>)</span></h4></span> </td>
+<td> 2.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsPrescriptionsTimer.png" title="Result and the operative setup."><img alt="Result and the operative setup." height="436" src="files/LibsPrescriptionsTimer.png" width="333" /></a></div>
+<p>Template of a command of the prescription typical timer. The timer is only designed to hold time between other action steps and for example, so it only has one attribute, "Time" in seconds.
+</p><p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> start </td>
+<td> Prescription: start </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> stop </td>
+<td> Prescription: stop </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> error </td>
+<td> Prescription: error </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> abort </td>
+<td> Prescription: abort </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> run </td>
+<td> Command: run </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> pause </td>
+<td> Command: pause </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> rez </td>
+<td> Command: result </td>
+<td> String </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 1
+</td></tr>
+<tr>
+<td> arg1 </td>
+<td> Time, seconds </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> tmp1 </td>
+<td> Temporary 1 </td>
+<td> Real </td>
+<td> Output </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Frequency of calculation of the function, Hz </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller</a> object with the needed scheduling properties, or use created one for <a href="#manager">the prescription engine</a>.</dd>
+<dd>2. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter</a> object and select this template for it. Enable the parameter.</dd>
+<dd>3. RESULT: Launching, we must get the operational data in the tab "Attributes" for the command result.</dd>
+<dd>4. In the process of the working, through the tab "Attributes" of operational data, in addition to obtaining the result, it is possible to perform operative setup and control on <a href="#Conception">the representative attributes of the prescription commands</a> and the additional ones:
+<ul><li> <i>Time</i> — to set time of the timer in seconds.</li></ul></dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="backTimer" title="#backTimer"><h4><span class="mw-headline" id="Command_.E2.80.94_Background_timer_.28backTimer.29"><span class="mw-headline-number">2.2.2</span> Command — Background timer (<a href="Libs_Prescriptions.html#backTimer" title="Special:MyLanguage/Libs/Prescriptions">backTimer</a>)</span></h4></span> </td>
+<td> 2.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsPrescriptionsBackTimer.png" title="Result and the operative setup."><img alt="Result and the operative setup." height="435" src="files/LibsPrescriptionsBackTimer.png" width="332" /></a></div>
+<p>Template of a command of the prescription background timer. The timer designed only for hold a time in the background to an example, then it contains only one attribute, it is "Time" in seconds.
+</p><p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> start </td>
+<td> Prescription: start </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> stop </td>
+<td> Prescription: stop </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> error </td>
+<td> Prescription: error </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> abort </td>
+<td> Prescription: abort </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> run </td>
+<td> Command: run </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> pause </td>
+<td> Command: pause </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> rez </td>
+<td> Command: result </td>
+<td> String </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 1
+</td></tr>
+<tr>
+<td> arg1 </td>
+<td> Time, seconds </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> tmp1 </td>
+<td> Temporary 1 </td>
+<td> Real </td>
+<td> Output </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Frequency of calculation of the function, Hz </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller</a> object with the needed scheduling properties, or use created one for <a href="#manager">the prescription engine</a>.</dd>
+<dd>2. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter</a> object and select this template for it. Enable the parameter.</dd>
+<dd>3. RESULT: Launching, we must get the operational data in the tab "Attributes" for the command result.</dd>
+<dd>4. In the process of the working, through the tab "Attributes" of operational data, in addition to obtaining the result, it is possible to perform operative setup and control on <a href="#Conception">the representative attributes of the prescription commands</a> and the additional ones:
+<ul><li> <i>Time</i> — to set time of the timer in seconds.</li></ul></dd></dl>
+<h2><span class="mw-headline" id="Graphical_part"><span class="mw-headline-number">3</span> <span id="GraphPart" title="#GraphPart">Graphical part</span></span></h2>
+<p>Contains elements-frames of the prescription of the end type and elements-widgets, what intended to be placed in the mnemonic schemes part (the type of view) of the project tree of the pages, built on <a href="Libs_Main_graphical_elements.html#RootPgSo" title="Special:MyLanguage/Libs/Main graphical elements">the concept of the signal objects of the root page "RootPgSo"</a> and to be placed on the other complex frames. However, elements-frames may be located as separate entities or as part of your own concept of the page management, but it should be take in account that frames often refer and call certain <a href="Libs_Main_graphical_elements.html#Panels" title="Special:MyLanguage/Libs/Main graphical elements">control panels</a> of the common usage and related elements!
+</p><p>For connection the library part to a project of the OpenSCADA station you can obtain the database file as:
+</p>
+<ul><li> supplied with a ready and proper package of the Linux distribution like to "openscada-libdb-vca", "openscada-LibDB.VCA";</li>
+<li> directly taken for most actual one from <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql" rel="nofollow noreferrer noopener" target="_blank">the subversion repository</a> and converted to the DB SQLite file in the way:</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 15px">
+$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql
+$ sqlite3 -init vcaBase.sql vcaBase.db .exit
+</pre>
+<ul><li> downloaded for <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">the one attached here</a>.</li></ul>
+<p>This obtained file next you can place into the project directory of the station and create the database object for the DB module "SQLite", registering the database file in the configuration.
+</p><p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="prescrEdit" title="#prescrEdit"><h3><span class="mw-headline" id="Prescription_.E2.80.94_edit_.28prescrEdit.29"><span class="mw-headline-number">3.1</span> Prescription — edit (<a href="Libs_Prescriptions.html#prescrEdit" title="Special:MyLanguage/Libs/Prescriptions">prescrEdit</a>)</span></h3></span>
+</td>
+<td> 1.3 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The frame, shown in Figure 3.1, is one of the group frames for working with the prescriptions, which serves for the user-editing of the prescriptions-programs. The frame commonly uses and represents the representative structure of the <a href="#manager">prescription manager</a>.
+</p><p>The frame contains from left to right:
+</p>
+<ul><li> "Library" — library with a list of programs and library's control tools.</li>
+<li> "Program" — the list of commands-steps of the selected in the library prescription-program with the control tools.</li>
+<li> "Command" — the edit field of the selected step in the prescription, which contains the selection of the command and set the name, description, background execution flag and values of the available attributes, as well as button to save the changes.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibsPrescriptions_prescrEditD.png"><img class="thumbimage" height="600" src="files/LibsPrescriptions_prescrEditD.png" width="900" /></a>  <div class="thumbcaption">Fig.3.1a. The "Prescription — edit" frame in the development mode.</div></div></div></div>
+<p><b><u>Using — development</u></b><br />
+The frame is designed to perform the role of page, and should therefore be placed directly in the project's tree. To the frame can be connected one parameter of <a href="#manager">the prescription manager</a>, by setting the links.
+</p><p><b><u>Using — runtime</u></b><br />
+In the runtime mode, the user can add new prescription-programs, delete, copy and export the existing ones as well as to import prescriptions from other OpenSCADA stations. In the selected prescription-program user can do: add or insert a new step, remove or move the selected step. For the selected steps of the prescription-program the user can set the command and enter the name, description, background execution flag and values for the available arguments of the selected command, and then to save changes of the step.
+</p><p>Removal operations are accompanied by <a href="Libs_Main_graphical_elements.html#accept" title="Special:MyLanguage/Libs/Main graphical elements">the confirmation dialog</a>.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibsPrescriptions_prescrEditR.png"><img class="thumbimage" height="639" src="files/LibsPrescriptions_prescrEditR.png" width="900" /></a>  <div class="thumbcaption">Fig.3.1b. The "Prescription — edit" frame in the runtime mode.</div></div></div></div>
+<p>{<b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Configuration </th>
+<th> Configuration template
+</th></tr>
+<tr>
+<td> dbDB </td>
+<td> DB: Data base </td>
+<td> String </td>
+<td> Input link </td>
+<td> Controller|dbDB
+</td></tr>
+<tr>
+<td> dbProgs </td>
+<td> DB: Programs table </td>
+<td> String </td>
+<td> Input link </td>
+<td> Controller|dbProgs
+</td></tr>
+<tr>
+<td> prExtComLs </td>
+<td> Available commands list </td>
+<td> Object </td>
+<td> Input link </td>
+<td> Controller|comLs
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="prescrRun" title="#prescrRun"><h3><span class="mw-headline" id="Prescription_.E2.80.94_run_.28prescrRun.29"><span class="mw-headline-number">3.2</span> Prescription — run (<a href="Libs_Prescriptions.html#prescrRun" title="Special:MyLanguage/Libs/Prescriptions">prescrRun</a>)</span></h3></span>
+</td>
+<td> 1.3 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The frame, shown in Figure 3.2, is one of the group frames for working with the prescriptions, which serves for control and observing of executing the programs-prescriptions, previously formed in the <a href="#prescrEdit">Prescription — edit</a> frame. The frame commonly uses and represents the representative structure of the <a href="#manager">prescription manager</a>. In addition to this full-format prescription frame, there is a simplified one — "<a href="#prescrRunSimple">Prescription — run, simple</a>, that allows you to manage and to track compactly the prescriptions execution in other frames of the technological process.
+</p><p>The frame contains from the left to the right:
+</p>
+<ul><li> "Start/stop/skip" — two buttons to start and stop the selected program and a button to skip the current step execution.</li>
+<li> "Library" — library with a list of the programs.</li>
+<li> "Program" — document of the commands-steps list of the selected prescription-program in the library. During the execution in this field it is monitored the program execution current state by the appropriate highlight of the steps.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibsPrescriptions_prescrRunD.png"><img class="thumbimage" height="600" src="files/LibsPrescriptions_prescrRunD.png" width="900" /></a>  <div class="thumbcaption">Fig.3.2a. The "Prescription — run" frame in the development mode.</div></div></div></div>
+<p><b><u>Using — development</u></b><br />
+The frame is designed to perform the role of page, and should therefore be placed directly in the project's tree. To the frame can be connected one parameter of <a href="#manager">the prescription manager</a>, by setting the links.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> To archive completed sessions while the operator is switching between frames, this full-format frame in the project tree must be set for the parameter "Page: process not opened".
+</p><p>At the end of the prescription-program, messages with session parameters are generated <a href="#manager">by the prescription manager</a>, as well as archiving of the session document. The messages with the session parameters can be used either simply to view the sessions history or to create a session list, for example, in <a href="Libs_Main_graphical_elements.html#grpGraph" title="Special:MyLanguage/Libs/Main graphical elements">the graphics group</a> to go to the history at the session time. <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Document" title="Special:MyLanguage/Sub-projects/VCA">The reports archive</a> is set to the depth of 10 documents by default, what you can change by setting the "Archive length (n)" attribute of the document widget.
+</p><p><b><u>Using — runtime</u></b><br />
+In the runtime mode, the user can select the desired prescription-program and run-on the execution, and then track the execution progress or switch to other frames. The running program user can pause by pressing the "Pause" button or terminate by pressing "Stop". In addition, the user can skip the current step by clicking the "Skip" button. Also the user can review or print reports of the previously executed prescriptions of this full-format frame, for what it is necessary to press the left mouse button on the document and browse on <a href="Libs_Main_graphical_elements.html#doc_panel" title="Special:MyLanguage/Libs/Main graphical elements">the navigation bar</a> through the archive of the executed prescriptions.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibsPrescriptions_prescrRunR.png"><img class="thumbimage" height="639" src="files/LibsPrescriptions_prescrRunR.png" width="900" /></a>  <div class="thumbcaption">Fig.3.2b. The "Prescription — run" frame in the runtime mode.</div></div></div></div>
+<p>{<b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Configuration </th>
+<th> Configuration template
+</th></tr>
+<tr>
+<td> dbDB </td>
+<td> DB: Data base </td>
+<td> String </td>
+<td> Input link </td>
+<td> Controller|dbDB
+</td></tr>
+<tr>
+<td> dbProgs </td>
+<td> DB: Programs table </td>
+<td> String </td>
+<td> Input link </td>
+<td> Controller|dbProgs
+</td></tr>
+<tr>
+<td> prExtCurCom </td>
+<td> Controller: current command </td>
+<td> String </td>
+<td> Input link </td>
+<td> Controller|curCom
+</td></tr>
+<tr>
+<td> prExtMode </td>
+<td> Controller: mode </td>
+<td> Integer </td>
+<td> Full link </td>
+<td> Controller|mode
+</td></tr>
+<tr>
+<td> prExtProg </td>
+<td> Controller: program </td>
+<td> String </td>
+<td> Full link </td>
+<td> Controller|prog
+</td></tr>
+<tr>
+<td> prExtStartTm </td>
+<td> Controller: start time </td>
+<td> Integer </td>
+<td> Input link </td>
+<td> Controller|startTm
+</td></tr>
+<tr>
+<td> prExtWork </td>
+<td> Controller: work </td>
+<td> Object </td>
+<td> Input link </td>
+<td> Controller|work
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="prescrRunSimple" title="#prescrRunSimple"><h3><span class="mw-headline" id="Prescription_.E2.80.94_run.2C_simple_.28prescrRunSimple.29"><span class="mw-headline-number">3.3</span> Prescription — run, simple (<a href="Libs_Prescriptions.html#prescrRunSimple" title="Special:MyLanguage/Libs/Prescriptions">prescrRunSimple</a>)</span></h3></span>
+</td>
+<td> 1.3 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The widget, shown in Figure 3.3, is a simple variant of the frame "<a href="#prescrRun">Prescription — run</a>", which designed for placing as a widget of the mnemonic schemes and it mostly works together the frame "<a href="#prescrRun">Prescription — run</a>". The frame commonly uses and represents the representative structure of the <a href="#manager">prescription manager</a>.
+</p><p>The widget contains from the left to the right and to the bottom:
+</p>
+<ul><li> "Start/stop/skip" — two buttons to start and stop the selected program and a button to skip the current step execution.</li>
+<li> "Library" — button to display the current prescription-program and call <a href="Libs_Main_graphical_elements.html#treeSelect" title="Special:MyLanguage/Libs/Main graphical elements">the dialog of selecting item into tree</a>.</li>
+<li> "Program" — document with lines of currently active commands.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:552px;"><a class="image" href="http://oscada.org/wiki/File:LibsPrescriptions_prescrRunSimple.png"><img class="thumbimage" height="194" src="files/LibsPrescriptions_prescrRunSimple.png" width="550" /></a>  <div class="thumbcaption">Fig.3.3. The "Prescription — run, simple" frame in the development and runtime modes.</div></div></div></div>
+<p><b><u>Using — development</u></b><br />
+This widget can be used by the developer to create mnemonic schemes with displaying the prescriptions execution activity and to fast control them. To use it you need to add this widget to a mnemonic scheme, adjust for the horizontal, vertical size, by scaling, and connect to <a href="#manager">the prescription manager</a>, by setting the links.
+</p><p><b><u>Using — runtime</u></b><br />
+In the runtime mode, the user can select the desired prescription-program, in <a href="Libs_Main_graphical_elements.html#treeSelect" title="Special:MyLanguage/Libs/Main graphical elements">the dialog of selecting item into tree</a> that appears at the prescription button click, and run-on the execution, and then track the execution progress or switch to other frames. The running program user can pause by pressing the "Pause" button or terminate by pressing "Stop". In addition, the user can skip the current step by clicking the "Skip" button.
+</p><p>{<b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Configuration </th>
+<th> Configuration template
+</th></tr>
+<tr>
+<td> dbDB </td>
+<td> DB: Data base </td>
+<td> String </td>
+<td> Input link </td>
+<td> Controller|dbDB
+</td></tr>
+<tr>
+<td> dbProgs </td>
+<td> DB: Programs table </td>
+<td> String </td>
+<td> Input link </td>
+<td> Controller|dbProgs
+</td></tr>
+<tr>
+<td> prExtCurCom </td>
+<td> Controller: current command </td>
+<td> String </td>
+<td> Input link </td>
+<td> Controller|curCom
+</td></tr>
+<tr>
+<td> prExtMode </td>
+<td> Controller: mode </td>
+<td> Integer </td>
+<td> Full link </td>
+<td> Controller|mode
+</td></tr>
+<tr>
+<td> prExtProg </td>
+<td> Controller: program </td>
+<td> String </td>
+<td> Full link </td>
+<td> Controller|prog
+</td></tr>
+<tr>
+<td> prExtStartTm </td>
+<td> Controller: start time </td>
+<td> Integer </td>
+<td> Input link </td>
+<td> Controller|startTm
+</td></tr>
+<tr>
+<td> prExtWork </td>
+<td> Controller: work </td>
+<td> Object </td>
+<td> Input link </td>
+<td> Controller|work
+</td></tr></table>
+
+
+
+
+
+
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Prescriptions/en">Libs/Prescriptions/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2669</td></tr></table></body>
+</html>

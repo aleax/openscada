@@ -41,6 +41,10 @@
 <td> Роман Савоченко </td>
 <td> Предоставляет библиотеку функций совместимых со SCADA Complex1 фирмы НИП "ДІЯ".
 </td></tr></table>
+<p>Модуль предоставляет в OpenSCADA статическую библиотеку функций совместимости со SCADA Complex1 фирмы НИП "DIYA". Эти функции использовались в Complex1 в виде алгоблоков для создания внутрисистемных вычислений на основе виртуального контроллера. Предоставление библиотеки этих функций позволяет выполнять перенос вычислительных алгоритмов из Complex1.
+</p><p>Для адресации к функциям этой библиотеки можно использовать статический адрес вызова <b>Special.FLibComplex1.{Func}()</b> или динамический <b>SYS.Special.FLibComplex1["{Func}"].call()</b>, <b>SYS.Special.FLibComplex1.{Func}()</b>. Где <i>{Func}</i> — идентификатор функции в библиотеке.
+</p><p>Ниже приведено описание каждой функции библиотеки.
+</p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#.D0.A1.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB_.28alarm.29"><span class="tocnumber">1</span> <span class="toctext">Сигнал (alarm)</span></a></li>
@@ -55,7 +59,7 @@
 <li class="toclevel-1 tocsection-10"><a href="#.D0.97.D0.B0.D0.B4.D0.B5.D1.80.D0.B6.D0.BA.D0.B0_.28lag.29"><span class="tocnumber">10</span> <span class="toctext">Задержка (lag)</span></a></li>
 <li class="toclevel-1 tocsection-11"><a href="#.D0.9F.D1.80.D0.BE.D1.81.D1.82.D0.BE.D0.B5_.D1.83.D0.BC.D0.BD.D0.BE.D0.B6.D0.B5.D0.BD.D0.B8.D0.B5_.28mult.29"><span class="tocnumber">11</span> <span class="toctext">Простое умножение (mult)</span></a></li>
 <li class="toclevel-1 tocsection-12"><a href="#.D0.A3.D0.BC.D0.BD.D0.BE.D0.B6.D0.B5.D0.BD.D0.B8.D0.B5_.D0.B8_.D0.B4.D0.B5.D0.BB.D0.B5.D0.BD.D0.B8.D0.B5_.28multDiv.29"><span class="tocnumber">12</span> <span class="toctext">Умножение и деление (multDiv)</span></a></li>
-<li class="toclevel-1 tocsection-13"><a href="#.D0.9F.D0.98.D0.94_.D1.80.D0.B5.D0.B3.D1.83.D0.BB.D1.8F.D1.82.D0.BE.D1.80_.28pid.29"><span class="tocnumber">13</span> <span class="toctext">ПИД регулятор (pid)</span></a></li>
+<li class="toclevel-1 tocsection-13"><a href="#.D0.9F.D0.98.D0.94_.D1.80.D0.B5.D0.B3.D1.83.D0.BB.D1.8F.D1.82.D0.BE.D1.80_.28pid.29"><span class="tocnumber">13</span> <span class="toctext"><span>ПИД регулятор (pid)</span></span></a></li>
 <li class="toclevel-1 tocsection-14"><a href="#.D0.A1.D1.82.D0.B5.D0.BF.D0.B5.D0.BD.D1.8C_.28pow.29"><span class="tocnumber">14</span> <span class="toctext">Степень (pow)</span></a></li>
 <li class="toclevel-1 tocsection-15"><a href="#.D0.92.D1.8B.D0.B1.D0.BE.D1.80_.28select.29"><span class="tocnumber">15</span> <span class="toctext">Выбор (select)</span></a></li>
 <li class="toclevel-1 tocsection-16"><a href="#.D0.9F.D1.80.D0.BE.D1.81.D1.82.D0.BE.D0.B9_.D1.81.D1.83.D0.BC.D0.BC.D0.B0.D1.82.D0.BE.D1.80_.28sum.29"><span class="tocnumber">16</span> <span class="toctext">Простой сумматор (sum)</span></a></li>
@@ -65,10 +69,6 @@
 </ul>
 </div>
 
-<p>Модуль предоставляет в OpenSCADA статическую библиотеку функций совместимости со SCADA Complex1 фирмы НИП "DIYA". Эти функции использовались в Complex1 в виде алгоблоков для создания внутрисистемных вычислений на основе виртуального контроллера. Предоставление библиотеки этих функций позволяет выполнять перенос вычислительных алгоритмов из Complex1.
-</p><p>Для адресации к функциям этой библиотеки можно использовать статический адрес вызова <b>Special.FLibComplex1.{Func}()</b> или динамический <b>SYS.Special.FLibComplex1["{Func}"].call()</b>, <b>SYS.Special.FLibComplex1.{Func}()</b>. Где <i>{Func}</i> — идентификатор функции в библиотеке.
-</p><p>Ниже приведено описание каждой функции библиотеки.
-</p>
 <h2><span class="mw-headline" id=".D0.A1.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB_.28alarm.29"><span class="mw-headline-number">1</span> Сигнал (alarm)</span></h2>
 <p><i>Описание:</i> Установка признака сигнализации в случае выхода значения переменной за указанную границу.<br />
 <i>Формула:</i> 
@@ -199,7 +199,7 @@ out = (in1_1*in1_2*in1_3*in1_4*in1_5*in1_6)/
 out = in1_1*in1_2*in1_3*in1_4*in1_5*
       (in2_1*in2_2*in2_3*in2_4*in2_5+(in3_1*in3_2*in3_3*in3_4*in3_5)/
       (in4_1*in4_2*in4_3*in4_4*in4_5));</pre>
-<h2><span class="mw-headline" id=".D0.9F.D0.98.D0.94_.D1.80.D0.B5.D0.B3.D1.83.D0.BB.D1.8F.D1.82.D0.BE.D1.80_.28pid.29"><span class="mw-headline-number">13</span> ПИД регулятор (pid)</span></h2>
+<h2><span class="mw-headline" id=".D0.9F.D0.98.D0.94_.D1.80.D0.B5.D0.B3.D1.83.D0.BB.D1.8F.D1.82.D0.BE.D1.80_.28pid.29"><span class="mw-headline-number">13</span> <span id="PID" title="#PID">ПИД регулятор (pid)</span></span></h2>
 <p><i>Описание:</i> Пропорционально-интегрально-дифференциальный регулятор.<br />
 <i>Параметры:</i>
 </p>
@@ -453,5 +453,5 @@ out = in1_1*in1_2*(in1_3*in1_4+in1_5) +
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/FLibComplex1/ru">Modules/FLibComplex1/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2667</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/FLibComplex1/ru">Modules/FLibComplex1/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2669</td></tr></table></body>
 </html>

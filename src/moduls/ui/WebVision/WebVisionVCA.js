@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebVision file: VCA.js
 /***************************************************************************
- *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -863,7 +863,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    if(toInit || this.attrsMdf["fit"] || !pgBr) {
 		if(this.attrs['fit'] == 1) {
 		    medObj.width = geomW; medObj.height = geomH;
-		    if(this.attrs['src'].length) medObj.src += "&size="+geomH;
+		    // Only for the type "Image(0)"
+		    if(this.attrs['src'].length && this.attrs['type'] == 0) medObj.src += "&size="+geomH;
 		    medObj.onload = null;
 		}
 		else medObj.onload = function() {

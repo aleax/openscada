@@ -3302,7 +3302,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 
 	if((hLen/hDiv) >= 5 && shD->trcPer) {
 	    tPict = hDiv*(tEnd/hDiv+1);
-	    if((tPict-tEnd) > UTChourDt) tPict -= UTChourDt;
+	    if((tPict-tEnd) > abs(UTChourDt)) tPict -= UTChourDt;
 	    tBeg = tPict-hLen;
 	}
 

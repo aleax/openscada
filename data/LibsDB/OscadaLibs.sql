@@ -42,13 +42,43 @@ DOC: Libs_Devices|Libs/Devices','Бібліотеку пристроїв кор�
 Версія: 2.3.0
 Ліцензія: GPLv2
 DOC: Libs_Devices|Libs/Devices','tmplib_DevLib','Промышленные устройства','');
-INSERT INTO ParamTemplLibs VALUES('PrescrTempl','Prescriptions','Шаблони рецепту','Library of the prescriptions.
+INSERT INTO ParamTemplLibs VALUES('PrescrTempl','Prescriptions','Рецепти','The library is created to provide an environment of execution of scenarios of the technological operations — prescriptions, and frames of the user interface about them, including the frame of creation/edition the prescriptions and two frames of the execution control and reporting — "Prescription — run" and "Prescription — run, simple". The library is built on the basis primitives of the widgets and the internal programming language JavaLikeCalc, including templates and commands.
+
+The section contains DAQ-templates of the prescription manager and commands of the "command-template" mode, which are intended to be connected to the logic level controller, by creating related parameters of the prescription manager and commands, which available for the user to choose from, and which will carry out all the work with the prescriptions-programs for their processing and execution.
+
+The element''s names and their parameters are available in languages: English, Ukrainian and Russian. Their source code wrote in human-language independent mode with calls for the translations by the function tr() and the message''s translation also allowed for English, Ukrainian and Russian.
 
 Author: Roman Savochenko <roman@oscada.org>
+Sponsored by: the Laboratory of Vacuum Technologies
+Sponsored by, about the controller templateization: Magomed
 Founded: April 2012
-Version: 1.0.0
+Version: 1.1.0
 License: GPLv2
-DOC: Libs_Prescriptions|Libs/Prescriptions','','tmplib_PrescrTempl','Шаблоны рецепта','');
+DOC: Libs_Prescriptions|Libs/Prescriptions','Бібліотека створюється для надання середовища виконання сценаріїв технологічних процесів — рецептів, та кадрів користувацького інтерфейсу довкола нього, включно з кадром створення/редагування рецептів та двома кадрами контролю виконання та звітності — "Рецепт — виконання" та "Рецепт — виконання, простий". Будується бібліотека на основі примітивів віджетів та мови внутрішнього програмування JavaLikeCalc, включно для шаблонів та команд.
+
+Розділ містить DAQ-шаблони менеджеру рецептів та команд режиму "команда-шаблон", які призначено до підключення у контролері логічного рівня, через створення відповідно параметрів менеджеру рецептів та команд, доступних до обрання користувачем, які і здійснюватимуть там всю роботу із рецептами-програмами щодо їх опрацювання та виконання.
+
+Назви елементів та їх параметрів доступні на мовах: Англійська, Українська та Російська. Їх вихідний код написано у мово(людська)-незалежному режимі з викликом функції перекладу tr() та переклад цих повідомлень також доступний Англійською, Українською та Російською.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Спонсоровано: Лабораторія Вакуумних Технологій
+Спонсоровано, щодо шаблонізації контролеру: Магомед
+Засновано: Квітень 2012
+Версія: 1.1.0
+Ліцензія: GPLv2
+DOC: Libs_Prescriptions|Libs/Prescriptions','tmplib_PrescrTempl','Рецепты','Библиотека создаётся для предоставления среды исполнения сценариев технологических процессов — рецептов, и кадров пользовательского интерфейса около него, включая кадр создания/редактирования рецептов и два кадра контроля исполнения и отчётности — "Рецепт — исполнение" и "Рецепт — исполнение, простой". Строится библиотека на основе примитивов виджетов и языка внутреннего программирования JavaLikeCalc, включая для шаблонов и команд.
+
+Раздел содержит DAQ-шаблоны менеджера рецептов и команд режима "команда-шаблон", которые предназначены к подключению в контроллере логического уровня, путём создания соответственно параметров менеджера рецептов и команд, доступных для выбора пользователем, которые и будут осуществлять там всю роботу с рецептами-програмами на предмет их обработки и исполнения.
+
+Названия элементов и их параметров доступны на языках: Английский, Украинский и Российский. Их исходный код написан в языко(человеческий)-независимом режиме с вызовом функции перевода tr() и перевод этих сообщений также доступен Английским, Украинским и Российским.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Спонсировано: Лаборатория Вакуумных Технологий
+Спонсировано, на предмет шаблонизации контроллера: Магомед
+Основано: Апрель 2012
+Версия: 1.1.0
+Лицензия: GPLv2
+DOC: Libs_Prescriptions|Libs/Prescriptions');
 INSERT INTO ParamTemplLibs VALUES('LowDevLib','Low-level devices','Низькорівневі пристрої','Library of functions to provide access to device''s data of low-level buses'' chips.
 
 Author: Roman Savochenko <roman@oscada.org>, Arcadiy Kisel (2017)
@@ -82,7 +112,9 @@ DOC: Libs_Technological_apparatuses|Libs/Technological_apparatuses','Техно�
 Версия: 2.0.1
 Лицензия: GPLv2
 DOC: Libs_Technological_apparatuses|Libs/Technological_apparatuses',0);
-INSERT INTO UserFuncLibs VALUES('servProc','Service procedures','Library of service procedures for different using.
+INSERT INTO UserFuncLibs VALUES('servProc','Service procedures','The library is wrote on the JavaLikeCalc language and aimed for different using.
+
+To addressing the library functions you can use the static call address DAQ.JavaLikeCalc.lib_servProc.{Func}() or dynamic SYS.DAQ.JavaLikeCalc["lib_servProc"]["{Func}"].call(), SYS.DAQ.JavaLikeCalc["lib_servProc"].{Func}()". Where {Func} — function identifier in the library.
 
 Founded: November 2017
 Author: Roman Savochenko <roman@oscada.org>
@@ -132,19 +164,34 @@ DOC: Libs_Documents|Libs/Documents','Библиотека отчётов и до
 Версия: 2.0.2
 Лицензия: GPLv2
 DOC: Libs_Documents|Libs/Documents',1);
-INSERT INTO UserFuncLibs VALUES('regEl','Regulation elements','Regulation elements library.
+INSERT INTO UserFuncLibs VALUES('regEl','Regulation elements','The library is created to provide functions of different control algorithms and it can be used in programmable logic controllers (PLC) based on OpenSCADA for construction control schemes in the module DAQ.BlockCalc. The library is not static, but based on the module JavaLikeCalc, allowing to create calculations on the Java-like language. The functions'' names and its parameters are available in languages: English, Ukrainian and Russian.
 
+To addressing the library functions you can use the static call address DAQ.JavaLikeCalc.lib_regEl.{Func}() or dynamic SYS.DAQ.JavaLikeCalc["lib_regEl"]["{Func}"].call(), SYS.DAQ.JavaLikeCalc["lib_regEl"].{Func}()". Where {Func} — function identifier in the library.
+
+Founded: January 2010
 Author: Roman Savochenko <roman@oscada.org>
+Sponsored by: DIYA Ltd
 Version: 1.0.0
-License: GPL','flb_regEl','Елементи регулювання','Бібліотека елементів регулювання.
+License: GPLv2
+DOC: Libs_Regulation|Libs/Regulation','flb_regEl','Елементи регулювання','Бібліотека створюється для надання функцій різних алгоритмів контролю та вона може бути використана у програмованих логічних контролерах (PLC) заснованих на OpenSCADA для побудови схем контролю у модулі DAQ.BlockCalc. Бібліотека не є статичною, а будується на основі модуля JavaLikeCalc, який дозволяє створювати обчислення на мові схожій на Java. Назви функцій та їх параметрів доступні на мовах: Англійська, Українська та Російська.
 
+Для адресації до функцій цієї бібліотеки можна використати статичну адресу виклику DAQ.JavaLikeCalc.lib_regEl.{Func}() або динамічну SYS.DAQ.JavaLikeCalc["lib_regEl"]["{Func}"].call(), SYS.DAQ.JavaLikeCalc["lib_regEl"].{Func}(). Де {Func} — ідентифікатор функції у бібліотеці.
+
+Засновано: Січень 2010
 Автор: Роман Савоченко <roman@oscada.org>
+Спонсоровано: ТОВ "ДІЯ"
 Версія: 1.0.0
-Ліцензія: GPL','Элементы регулирования','Библиотека элементов регулирования.
+Ліцензія: GPLv2
+DOC: Libs_Regulation|Libs/Regulation','Элементы регулирования','Библиотека создаётся для предоставления функций различных алгоритмов контроля и она может быть использована в программированных логических контроллерах (PLC) основанных на OpenSCADA для построения схем контроля в модуле DAQ.BlockCalc. Библиотека не является статической, а строится на основе модуля JavaLikeCalc, позволяющего создавать вычисления на Java-подобном языке. Названия функций и их параметров доступны на языках: Английский, Украинский и Российский.
 
+Для адресации к функции этой библиотеки можно использовать статический адрес вызова DAQ.JavaLikeCalc.lib_regEl.{Func}() или динамический SYS.DAQ.JavaLikeCalc["lib_regEl"]["{Func}"].call(), SYS.DAQ.JavaLikeCalc["lib_regEl"].{Func}(). Где {Func} — идентификатор функции в библиотеке.
+
+Основано: Январь 2010
 Автор: Роман Савоченко <roman@oscada.org>
+Спонсировано: ООО "ДІЯ"
 Версия: 1.0.0
-Лицензия: GPL',0);
+Лицензия: GPLv2
+DOC: Libs_Regulation|Libs/Regulation',0);
 INSERT INTO UserFuncLibs VALUES('Controller','Controllers','Library of programs of controllers based on JavaLikeCalc.
 
 Author: Roman Savochenko <roman@oscada.org>
@@ -281,7 +328,7 @@ INSERT INTO flb_regEl_io VALUES('pidUnifD','K3','Coefficient of input 3','Кое
 INSERT INTO flb_regEl_io VALUES('pidUnifD','in3','Input 3','Вхід 3',2,0,'0','',0,28,'Вход 3','');
 INSERT INTO flb_regEl_io VALUES('pidUnifD','K4','Coefficient of input 4','Коефіцієнт входу 4',2,0,'0','',0,29,'Коэффициент входа 4','');
 INSERT INTO flb_regEl_io VALUES('pidUnifD','in4','Input 4','Вхід 4',2,0,'0','',0,30,'Вход 4','');
-INSERT INTO flb_regEl_io VALUES('pidUnifD','impAnOut','Real analog position of impulse regulator, [0...100], -1 - disable','Аналогове положення імпульсного регулятора',2,0,'-1','',0,33,'Аналоговое положение импульсного регулятора или ск','');
+INSERT INTO flb_regEl_io VALUES('pidUnifD','impAnOut','Real analog position of impulse regulator, [0...100], -1 - disable','Аналогове положення імпульсного регулятора',2,0,'-1','',0,33,'Аналоговое положение импульсного регулятора','');
 INSERT INTO flb_regEl_io VALUES('pidUnif','Kd','Gain differential','Кп диференціалу',2,0,'1','',0,13,'Кп производной','');
 INSERT INTO flb_regEl_io VALUES('pidUnifD','impAnImit','Full stroke time for analog position imitation, s','Імітація аналогового положення',2,0,'-1','',0,34,'Имитация аналогового положения','');
 INSERT INTO flb_regEl_io VALUES('pidUnifD','impQupTm','Imp. output up lag for GUI','Імп. вихід вгору утримано для GUI',3,1,'0','',0,35,'Импульсный выход вверх удерж. для GUI','');
@@ -297,7 +344,7 @@ INSERT INTO flb_regEl_io VALUES('pidUnifD','dlag','Differential lag accumulation
 INSERT INTO flb_regEl_io VALUES('pidUnif','Tzd','T differential lag, milliseconds','T фільтру диференціалу, мілісекунд',1,0,'0','',0,15,'T задержки дифференциала, миллисекунд','');
 INSERT INTO flb_regEl_io VALUES('pidUnif','followSp','Follow to variable by setpoint into manual','Відслідковувати завданням за змінною у ручному',3,0,'1','',0,22,'Следить заданием за переменной в ручном','');
 INSERT INTO flb_regEl_io VALUES('pidUnif','impAnImit','Analog position imitation','Імітація аналогового положення',3,0,'0','',0,32,'Имитация аналогового положения','');
-INSERT INTO flb_regEl_io VALUES('pidUnif','impQupTm','Imp. output up lag for GUI',' Імп. вихід вгору утримано для GUI',1,1,'0','',0,33,'Импульсный выход вверх удерж. для GUI','');
+INSERT INTO flb_regEl_io VALUES('pidUnif','impQupTm','Imp. output up lag for GUI','Імп. вихід вгору утримано для GUI',1,1,'0','',0,33,'Импульсный выход вверх удерж. для GUI','');
 INSERT INTO flb_regEl_io VALUES('pidUnif','impQdwnTm','Imp. output down lag for GUI','Імп. вихід додолу утримано для GUI',1,1,'0','',0,34,'Имп. выход вниз удерж. для GUI','');
 INSERT INTO flb_regEl_io VALUES('pidUnif','f_frq','Calculation frequency, Hz','Частота обчислення, Гц',1,0,'1','',1,35,'Частота вычисления, Гц','');
 INSERT INTO flb_regEl_io VALUES('pidUnif','f_start','First start','Перший запуск',3,0,'0','',1,36,'Первый запуск','');
@@ -334,7 +381,7 @@ INSERT INTO flb_regEl_io VALUES('pidImp','K3','Coefficient of input 3','Коеф
 INSERT INTO flb_regEl_io VALUES('pidImp','in3','Input 3','Вхід 3',2,0,'0','',0,29,'Вход 3','');
 INSERT INTO flb_regEl_io VALUES('pidImp','K4','Coefficient of input 4','Коефіцієнт входу 4',2,0,'0','',0,30,'Коэффициент входа 4','');
 INSERT INTO flb_regEl_io VALUES('pidImp','in4','Input 4','Вхід 4',2,0,'0','',0,31,'Вход 4','');
-INSERT INTO flb_regEl_io VALUES('pidImp','impAnOut','Analog position of impulse regulator','Аналогове положення імпульсного регулятора',2,0,'0','',0,32,'Аналоговое положение импульсного регулятора или ск','');
+INSERT INTO flb_regEl_io VALUES('pidImp','impAnOut','Analog position of impulse regulator','Аналогове положення імпульсного регулятора',2,0,'0','',0,32,'Аналоговое положение импульсного регулятора','');
 INSERT INTO flb_regEl_io VALUES('pidImp','impAnImit','Analog position imitation','Імітація аналогового положення',3,0,'0','',0,33,'Имитация аналогового положения','');
 INSERT INTO flb_regEl_io VALUES('pidImp','impQupTm','Imp. output up lag for GUI','Імп. вихід вгору утримано для GUI',1,1,'0','',0,34,'Импульсный выход вверх удерж. для GUI','');
 INSERT INTO flb_regEl_io VALUES('pidImp','impQdwnTm','Imp. output down lag for GUI','Імп. вихід додолу утримано для GUI',1,1,'0','',0,35,'Имп. выход вниз удерж. для GUI','');
@@ -351,10 +398,10 @@ INSERT INTO flb_regEl_io VALUES('pidImp','err2','Error two step back','Поми�
 INSERT INTO flb_regEl_io VALUES('pidUnifD','QO','Opened state of the control mechanism','Відкритий стан виконавчого механізму',3,0,'0','',0,31,'Открытое состояние исполнительного механизма','');
 INSERT INTO flb_regEl_io VALUES('pidUnifD','QZ','Closed state of the control mechanism','Закритий стан виконавчого механізму',3,0,'0','',0,32,'Закрытое состояние исполнительного механизма','');
 CREATE TABLE IF NOT EXISTS 'lib_Controllers_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DEF" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DEF" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
-INSERT INTO lib_Controllers_io VALUES('prescr','dbDB','DB:DB with tables name',0,1,'',0,4,'БД:Имя БД с таблицами','','БД:Ім''я БД з таблицями','');
-INSERT INTO lib_Controllers_io VALUES('prescr','dbComs','DB:Table with commands',0,1,'',0,5,'БД:Таблица с коммандами','','БД:Таблиця з командами','');
-INSERT INTO lib_Controllers_io VALUES('prescr','dbProgs','DB:Table with programs',0,1,'',0,6,'БД:Таблица с программами','','БД:Таблиця з програмами','');
-INSERT INTO lib_Controllers_io VALUES('prescr','mode','Mode: Finish(-2); Error(-1); Stop(0); Run (1); Pause(2); Pass com (3)',1,1,'',0,8,'Режим: Оконч.(-2); Ошибка(-1); Стоп(0); Исполн.(1); Пауза (2); Пропуст. ком. (3)','','Режим: Окінч.(-2); Помилка(-1); Стоп(0); Викон.(1); Пауза (2); Пропуст. ком. (3)','');
+INSERT INTO lib_Controllers_io VALUES('prescr','dbDB','DB: DB with tables name',0,1,'',0,4,'БД: Имя БД с таблицами','','БД: Ім''я БД з таблицями','');
+INSERT INTO lib_Controllers_io VALUES('prescr','dbComs','DB: Table with commands',0,1,'',0,5,'БД: Таблица с командами','','БД: Таблиця з командами','');
+INSERT INTO lib_Controllers_io VALUES('prescr','dbProgs','DB: Table with programs',0,1,'',0,6,'БД: Таблица с программами','','БД: Таблиця з програмами','');
+INSERT INTO lib_Controllers_io VALUES('prescr','mode','Mode: Finish(-2); Error(-1); Stop(0); Run(1); Pause(2); Pass command(3)',1,1,'',0,8,'Режим: Завершение(-2); Ошибка(-1); Стоп(0); Исполнение(1); Пауза(2); Пропустить команду(3)','','Режим: Завершення(-2); Помилка(-1); Стоп(0); Виконання(1); Пауза(2); Пропустити команду(3)','');
 INSERT INTO lib_Controllers_io VALUES('prescr','curMode','Current mode',1,0,'',0,9,'Текущий режим','','Поточний режим','');
 INSERT INTO lib_Controllers_io VALUES('prescr','prog','Name of the selected program',0,1,'',0,10,'Имя выбранной программы','','Ім''я обраної програми','');
 INSERT INTO lib_Controllers_io VALUES('prescr','startTm','Start time, seconds',1,0,'',0,11,'Время запуска, секунды','','Час запуску, секунди','');
@@ -483,10 +530,12 @@ Modules/FLibMath:en,uk,ru:Modules/FLibMath.html
 Modules/FLibComplex1:en,uk,ru:Modules/FLibComplex1.html
 Libs/Main:en,uk:Libs_Main.html
 Libs/Technological_apparatuses:en,uk,ru:Libs_Technological_apparatuses.html
+Libs/Regulation:en,uk,ru:Libs_Regulation.html
 Libs/Main_graphical_elements:en,uk,ru:Libs_Main_graphical_elements.html
 Libs/Mnemo_elements:en,uk,ru:Libs_Mnemo_elements.html
 Libs/Electrical_elements:en,uk,ru:Libs_Electrical_elements.html
-Libs/Documents:en,uk,ru:Libs_Documents.html',0,4,'','','','');
+Libs/Documents:en,uk,ru:Libs_Documents.html
+Libs/Prescriptions:en,uk,ru:Libs_Prescriptions.html',0,4,'','','','');
 INSERT INTO lib_servProc_io VALUES('docOffLine','pagesCur','Current pages list of "{wiki}:{langs}:{dest}", for empty here used "pages"',0,5,'',0,5,'','','','');
 INSERT INTO lib_servProc_io VALUES('docOffLine','res','Result',0,1,'',0,0,'','','','');
 INSERT INTO lib_servProc_io VALUES('docOffLine','reqTr','Tries of the requests',1,1,'3',0,2,'','','','');
@@ -1392,32 +1441,46 @@ INSERT INTO tmplib_PrescrTempl_io VALUES('timer','pause','Command: pause',3,32,'
 INSERT INTO tmplib_PrescrTempl_io VALUES('timer','error','Prescription: error',3,32,'0',2,'Рецепт: ошибка','','Рецепт: помилка','');
 INSERT INTO tmplib_PrescrTempl_io VALUES('timer','abort','Prescription: abort',3,32,'0',3,'Рецепт: прерывание','','Рецепт: перервано','');
 INSERT INTO tmplib_PrescrTempl_io VALUES('timer','rez','Command: result',0,32,'1',6,'Команда: результат','','Команда: результат','');
-INSERT INTO tmplib_PrescrTempl_io VALUES('timer','arg1','Time (s)',2,32,'',7,'Время (сек.)','','Час (сек.)','');
+INSERT INTO tmplib_PrescrTempl_io VALUES('timer','arg1','Time, seconds',2,32,'',7,'Время, секунд','','Час, секунд','');
 INSERT INTO tmplib_PrescrTempl_io VALUES('timer','tmp1','Temporary 1',2,1,'0',8,'Временный 1','','Тимчасово 1','');
 INSERT INTO tmplib_PrescrTempl_io VALUES('backTimer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
 INSERT INTO tmplib_PrescrTempl_io VALUES('backTimer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
 INSERT INTO tmplib_PrescrTempl_io VALUES('backTimer','error','Prescription: error',3,32,'0',2,'Рецепт: ошибка','','Рецепт: помилка','');
 INSERT INTO tmplib_PrescrTempl_io VALUES('backTimer','abort','Prescription: abort',3,32,'0',3,'Рецепт: прерывание','','Рецепт: перервано','');
 INSERT INTO tmplib_PrescrTempl_io VALUES('backTimer','rez','Command: result',0,32,'1',6,'Команда: результат','','Команда: результат','');
-INSERT INTO tmplib_PrescrTempl_io VALUES('backTimer','arg1','Time (s)',2,32,'',7,'Время (сек.)','','Час (сек.)','');
+INSERT INTO tmplib_PrescrTempl_io VALUES('backTimer','arg1','Time, seconds',2,32,'',7,'Время, секунд','','Час, секунд','');
 INSERT INTO tmplib_PrescrTempl_io VALUES('backTimer','tmp1','Temporary 1',2,1,'0',8,'Временный 1','','Тимчасово 1','');
 INSERT INTO tmplib_PrescrTempl_io VALUES('backTimer','start','Prescription: start',3,32,'0',0,'Рецепт: старт','','Рецепт: старт','');
 INSERT INTO tmplib_PrescrTempl_io VALUES('backTimer','stop','Prescription: stop',3,32,'0',1,'Рецепт: стоп','','Рецепт: стоп','');
 INSERT INTO tmplib_PrescrTempl_io VALUES('timer','start','Prescription: start',3,32,'0',0,'Рецепт: старт','','Рецепт: старт','');
 INSERT INTO tmplib_PrescrTempl_io VALUES('timer','stop','Prescription: stop',3,32,'0',1,'Рецепт: стоп','','Рецепт: стоп','');
-INSERT INTO tmplib_PrescrTempl_io VALUES('manager','dbDB','DB: DB name with the tables',0,64,'',0,'БД:Имя БД с таблицами','','БД:Ім''я БД з таблицями','');
-INSERT INTO tmplib_PrescrTempl_io VALUES('manager','dbComs','DB: Table with commands',0,64,'PrescrComs',1,'БД:Таблица с коммандами','','БД:Таблиця з командами','');
-INSERT INTO tmplib_PrescrTempl_io VALUES('manager','dbProgs','DB: Table with programs',0,64,'PrescrProgs',2,'БД:Таблица с программами','','БД:Таблиця з програмами','');
-INSERT INTO tmplib_PrescrTempl_io VALUES('manager','comsCntr','Commands controller, <empty> - for commands into the table, ''*'' - this parameter''s controller',0,64,'*',3,'Контроллер команд, <пусто> - для команд в таблице, ''*'' - этот параметр контроллер','','Контролер команд, <порожньо> - для команд у таблиці, ''*'' - цей параметр контролеру','');
+INSERT INTO tmplib_PrescrTempl_io VALUES('manager','dbDB','DB: DB name with the tables',0,80,'',0,'БД: Имя БД с таблицами','','БД: Ім''я БД з таблицями','');
+INSERT INTO tmplib_PrescrTempl_io VALUES('manager','dbComs','DB: Table with commands',0,64,'PrescrComs',1,'БД: Таблица с командами','','БД: Таблиця з командами','');
+INSERT INTO tmplib_PrescrTempl_io VALUES('manager','dbProgs','DB: Table with programs',0,80,'PrescrProgs',2,'БД: Таблица с программами','','БД: Таблиця з програмами','');
+INSERT INTO tmplib_PrescrTempl_io VALUES('manager','comsCntr','Commands controller,
+<empty> - for commands into the table,
+''*'' - this parameter''s controller',0,64,'*',3,'Контроллер команд,
+<пусто> - для команд в таблице,
+''*'' - этот параметр контроллер','','Контролер команд,
+<порожньо> - для команд у таблиці,
+''*'' - цей параметр контролеру','');
 INSERT INTO tmplib_PrescrTempl_io VALUES('manager','mode','Mode',1,40,'-2
 -2;-1;0;1;2;3
-Finish;Error;Stop;Run;Pause;Pass com',4,'Режим','','Режим','');
+Finish;Error;Stop;Run;Pause;Pass command',4,'Режим','-2
+-2;-1;0;1;2;3
+Завершение;Ошибка;Стоп;Исполнение;Пауза;Пропустить команду','Режим','-2
+-2;-1;0;1;2;3
+Завершення;Помилка;Стоп;Виконання;Пауза;Пропустити команду');
 INSERT INTO tmplib_PrescrTempl_io VALUES('manager','curMode','Current mode',1,24,'-2
 -2;-1;0;1;2;3
-Finish;Error;Stop;Run;Pause;Pass com',5,'','','','');
-INSERT INTO tmplib_PrescrTempl_io VALUES('manager','prog','Name of selected program',0,32,'',6,'Имя выбранной программы','','Ім''я обраної програми','');
+Finish;Error;Stop;Run;Pause;Pass command',5,'Текущий режим','-2
+-2;-1;0;1;2;3
+Завершение;Ошибка;Стоп;Исполнение;Пауза;Пропустить команду','Поточний режим','-2
+-2;-1;0;1;2;3
+Завершення;Помилка;Стоп;Виконання;Пауза;Пропустити команду');
+INSERT INTO tmplib_PrescrTempl_io VALUES('manager','prog','Name of the selected program',0,32,'',6,'Имя выбранной программы','','Ім''я обраної програми','');
 INSERT INTO tmplib_PrescrTempl_io VALUES('manager','startTm','Start time, seconds',1,16,'',7,'Время запуска, секунды','','Час запуску, секунди','');
-INSERT INTO tmplib_PrescrTempl_io VALUES('manager','curCom','Current command-step',0,16,'',8,'Текущая комманда-шаг','','Поточна команда-крок','');
+INSERT INTO tmplib_PrescrTempl_io VALUES('manager','curCom','Current command-step',0,16,'',8,'Текущая команда-шаг','','Поточна команда-крок','');
 INSERT INTO tmplib_PrescrTempl_io VALUES('manager','work','Work program',4,16,'',9,'Рабочая программа','','Робоча програма','');
 INSERT INTO tmplib_PrescrTempl_io VALUES('manager','comLs','Commands list',4,16,'',10,'Список команд','','Перелік команд','');
 INSERT INTO tmplib_PrescrTempl_io VALUES('manager','clcCnt','Cycles counter',1,0,'',11,'Счётчик циклов','','Лічильник циклів','');
@@ -2330,6 +2393,7 @@ INSERT INTO Trs VALUES('Event Buffer Overflow','','');
 INSERT INTO Trs VALUES('Parameters Invalid or Out of Range','','');
 INSERT INTO Trs VALUES('Requested Objects Unknown','','');
 INSERT INTO Trs VALUES('Function Code not implemented','','');
+INSERT INTO Trs VALUES('Error the DB ''%1''.','Помилка БД ''%1''.','Ошибка БД ''%1''.');
 CREATE TABLE IF NOT EXISTS 'tmplib_DevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO tmplib_DevLib VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data acquisition by SCU750 Cotrol Unit protocol.
 
@@ -6073,7 +6137,19 @@ if(t_err.toInt()) {
 f_err = t_err;
 ','','',1574605544);
 CREATE TABLE IF NOT EXISTS 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO tmplib_PrescrTempl VALUES('timer','Timer','Таймер','Таймер','Typical timer. Hold run up to time elapse.','Типовий таймер. Утримує виконання до завершення часу.','Типовой таймер. Удерживает выполнение до завершения времени.',10,0,'JavaLikeCalc.JavaScript
+INSERT INTO tmplib_PrescrTempl VALUES('timer','Command — Timer','Команда — Таймер','Команда — Таймер','Template of a command of the prescription typical timer. The timer is only designed to hold time between other action steps and for example, so it only has one attribute, "Time" in seconds.
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 2.0.0
+License: GPLv2','Шаблон команди типового таймеру рецепту. Таймер розроблено лише для витримки часу між іншими дієвими кроками та для прикладу, відтак він містить лише один атрибут, це "Час" у секундах.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 2.0.0
+Ліцензія: GPLv2','Шаблон команды типового таймера рецепта. Таймер разработан только для удержания времени между другими действенными шагами и для примера, т.е. он содержит только один атрибут, это "Время" в секундах.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 2.0.0
+Лицензия: GPLv2',10,0,'JavaLikeCalc.JavaScript
 //Reset to default
 if(f_start || (!run && tmp1)) { run = pause = error = abort = false; tmp1 = 0; rez = 1; }
 //Run
@@ -6082,8 +6158,20 @@ if(run && !pause) {
 	tmp1 = max(0, tmp1 - 1/f_frq);
 	if(tmp1 <= 0) { rez = "1:"+tr("Waiting %1s expired").replace("%1",arg1.toPrecision(3)); run = false; }
 	else rez = "0:"+tr("Waiting %1s").replace("%1",tmp1.toPrecision(3));
-}','','',1559660663);
-INSERT INTO tmplib_PrescrTempl VALUES('backTimer','Background timer','Фоновий таймер','Фоновый таймер','Background timer. Updating parallel with current command.','Фоновий таймер. Оновлення паралельно із поточною командой.','Фоновый таймер. Обновление параллельно с текущей командой.',10,0,'JavaLikeCalc.JavaScript
+}','','',1584814597);
+INSERT INTO tmplib_PrescrTempl VALUES('backTimer','Command — Background timer','Команда — Фоновий таймер','Команда — Фоновый таймер','Template of a command of the prescription background timer. The timer designed only for hold a time in the background to an example, then it contains only one attribute, it is "Time" in seconds.
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 2.0.0
+License: GPLv2','Шаблон команди фонового таймеру рецепту. Таймер розроблено лише для витримки часу у фоні для прикладу, відтак він містить лише один атрибут, це "Час" у секундах.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 2.0.0
+Ліцензія: GPLv2','Шаблон команды фонового таймера рецепта. Таймер разработан только для удержания времени в фоне для примера, т.е. он содержит только один атрибут, это "Время" в секундах.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 2.0.0
+Лицензия: GPLv2',10,0,'JavaLikeCalc.JavaScript
 //Reset to default
 if(f_start || (!run && tmp1)) { run = pause = error = abort = false; tmp1 = 0; rez = 1; }
 //Run
@@ -6093,24 +6181,134 @@ if(run && !pause) {
 	if(tmp1 <= 0) { rez = "1:"+tr("Waiting %1s expired").replace("%1",arg1.toPrecision(3)); run = false; }
 	//if(tmp1 <= 10)	rez = "-1:Waiting "+arg1.toPrecision(3)+"s expired";
 	else rez = "10:"+tr("Background waiting %1s").replace("%1",tmp1.toPrecision(3));
-}','','',1559660663);
-INSERT INTO tmplib_PrescrTempl VALUES('manager','Prescriptions manager','','','Prescriptions manager and controller. Used in addition with user interface''s cadre "Prescription: editing" and "Prescription: runtime" for which into a parameter of the controller you must pass that parameters: "mode", "prog", "startTm", "curCom", "comLs", "work".
+}','','',1584814597);
+INSERT INTO tmplib_PrescrTempl VALUES('manager','Prescriptions manager','Менеджер рецептів','Менеджер рецептов','Basic, representative and unified template of a manager and a controller of the prescriptions, of their processing and direct execution in the "command-macro" mode. The template forms a structure of the prescription manager parameter which can be easily connected to all frames of this library.
+
+The representative structure of the prescription manager is:
+- "DB: DB name with the tables (dbDB)" — DB, like to "SQLite.vcaBase", where stored or must be stored the prescription-program tables.
+- "DB: Table with programs (dbProgs)" — name of the prescriptions-programs table, typically "PrescrProgs".
+- "Commands list (comLs)" — the allowed to use commands list.
+- "Name of the selected program (prog)" — state and setting of the selected program name in processing by the manager.
+- "Mode (mode)", "Current mode (curMode)" — the setting and the current manager mode of the selected prescription-program execution: Finish(-2), Error(-1), Stop(0), Run(1), Pause(2), Pass command(3).
+- "Start time (startTm)" — the start time in seconds.
+- "Current command-step (curCom)" — the currently processing command.
+- "Work program (work)" — the actual and processing now program in an object.
+
+Functions:
+- Forms the "Commands list (comLs)", allowed to use in the user prescriptions-programs.
+- Process the "Name of the selected program (prog)", modifying it will either load its command sequence to the "Work program (work)" or create a new program.
+- Execute the program in the "Name of the selected program (prog)" after receiving the command "Run(1)" in the "Mode (mode)" and indicate this process in: the "Current mode (curMode)", the "Start time (startTm)", the "Current command-step (curCom)" and the "Work program (work)".
+- Generate the action messages during the prescription execution for:
+  CATEGORY: defines the user prescription-program ID ProgNM in the form "uprg{ProgNM}", where:
+    - "uprg*" — the typical template-sign of a user prescription-program, that can be directly used in the category filter to determine in the messages only the user prescriptions-programs;
+    - ProgNM — the prescription-program name.
+  TEXT: the action description in the form "{ActDescr} "{ProgNM}" : {StartTm} : {ActTm}", where:
+    - ActDescr — the action description:
+      - "No current node present";
+      - "Terminated program session by the user";
+      - "Terminated program session by the error";
+      - "Successful session of the program".
+    - ProgNM — the prescription-program name;
+    - StartTm — start time of the prescription-program, in the form "2020-03-14 16:05:01";
+    - ActTm — action time of the prescription-program, in the form "2020-03-14 16:05:52".
 
 Author: Roman Savochenko <roman@oscada.org>
-Sponsor: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
-Version: 2.0.0','','',10,0,'JavaLikeCalc.JavaScript
+Version: 2.1.0
+License: GPLv2','Основний, представницький та уніфікований шаблон менеджеру та контролеру рецептів, їх опрацювання та прямого виконання у режимі "команда-макрос". Шаблон формує структуру параметру менеджеру рецептів, який може бути легко підключений до всіх кадрів цієї бібліотеки.
+
+Представницькою структурою менеджеру рецептів є:
+- "БД: Ім''я БД з таблицями (dbDB)" — БД, на кшталт "SQLite.vcaBase", де зберігаються або мають зберігатися таблиці рецептів-програм.
+- "БД: Таблиця з програмами (dbProgs)" — назва таблиці рецептів-програм, типово "PrescrProgs".
+- "Перелік команд (comLs)" — перелік команд доступних до використання.
+- "Ім''я обраної програми (prog)" — стан та встановлення назви обраної програми у обробці менеджером.
+- "Режим (mode)", "Поточний режим (curMode)" — встановлення та поточний режим менеджеру, виконання обраного рецепту-програми: Завершення(-2); Помилка(-1); Стоп(0); Виконання(1); Пауза(2); Пропустити команду(3).
+- "Час запуску (startTm)" — час запуску у секундах.
+- "Поточна команда-крок (curCom)" — поточна опрацьовувана команда.
+- "Робоча програма (work)" — актуальна та опрацьовувана наразі програма у об''єкті.
+
+Функції:
+- Формує "Перелік команд (comLs)", доступних до використання у користувацьких рецептах-програмах.
+- Опрацьовує "Ім''я обраної програми (prog)", зміна якої призводить до завантаження її послідовності команд до "Робоча програма (work)" або створення нової програми.
+- Виконує програму у "Ім''я обраної програми (prog)" після отримання команди "Виконання(1)" у "Режим (mode)" та відзначає цей процес у: "Поточний режим (curMode)", "Час запуску (startTm)", "Поточна команда-крок (curCom)" та "Робоча програма (work)".
+- Генерує повідомлення дій протягом виконання рецепту щодо:
+  КАТЕГОРІЯ: визначає ідентифікатор користувацького рецепту-програми ProgNM у форматі "uprg{ProgNM}", де:
+    - "uprg*" — типовий шаблон-ознака користувацького рецепту-програми, який може бути безпосередньо використано у фільтрі категорії для визначення у повідомленнях суто користувацьких рецептів-програм;
+    - ProgNM — ім''я рецепту-програми.
+  ТЕКСТ: опис дії у форматі "{ActDescr} "{ProgNM}" : {StartTm} : {ActTm}", де:
+    - ActDescr — опис дії:
+      - "Поточний вузол відсутній";
+      - "Перерваний користувачем сеанс програми";
+      - "Перерваний помилкою сеанс програми";
+      - "Вдалий сеанс програми".
+    - ProgNM — ім''я рецепту-програми;
+    - StartTm — час запуску рецепту-програми, у форматі "2020-03-14 16:05:01";
+    - ActTm — час дії рецепту-програми, у форматі "2020-03-14 16:05:52".
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 2.1.0
+Ліцензія: GPLv2','Основной, представительский и унифицированный шаблон менеджера и контроллера рецептов, их обработки и прямого исполнения в режиме "команда-макрос". Шаблон формирует структуру параметра менеджера рецептов, который может быть легко подключен ко всем кадрам этой библиотеки.
+
+Представительской структурой менеджера рецептов является:
+- "БД: Имя БД с таблицами" — БД, вроде "SQLite.vcaBase", где хранятся или должны храниться таблицы рецептов-программ.
+- "БД: Таблица с программами" — название таблицы рецептов-программ, типично "PrescrProgs".
+- "Список команд (comLs)" — перечень команд доступных для использования.
+- "Имя выбранной программы (prog)" — состояние и установка названия выбранной программы в обработке менеджером.
+- "Режим (mode)", "Текущий режим (curMode)" — установка и текущий режим менеджера, исполнения выбранного рецепта-программы: Завершение(-2); Ошибка(-1); Стоп(0); Исполнение(1); Пауза(2); Пропустить команду(3);
+- "Время запуска (startTm)" — время запуска в секундах.
+- "Текущая команда-шаг (curCom)" — текущая обрабатываемая команда.
+- "Рабочая программа (work)" — актуальная и обрабатываемая на данный момент программа в объекте.
+
+Функции:
+- Формирует "Список команд (comLs)", доступных для использования в пользовательских рецептах-программах.
+- Обрабатывает "Имя выбранной программы (prog)", смена которой приводит к загрузке её последовательности команд в Рабочая программа (work)" или созданию новой программы.
+- Исполняет программу в "Имя выбранной программы (prog)" после получения команды "Исполнение(1)" в "Режим (mode)" и отмечает этот процесс в: "Текущий режим (curMode)", "Время запуска (startTm)", "Текущая команда-шаг (curCom)" и "Рабочая программа (work)".
+- Генерирует сообщения действий в течении исполнения рецепта на предмет:
+  КАТЕГОРИЯ: определяет идентификатор пользовательского рецепта-программы ProgNM в формате "uprg{ProgNM}", где:
+    - "uprg*" — типовой шаблон-признак пользовательского рецепта-программы, который может быть непосредственно использован в фильтре категории для определения чисто пользовательских рецептов-программ;
+    - ProgNM — имя рецепта-программы.
+  ТЕКСТ: описание действия в формате "{ActDescr} "{ProgNM}" : {StartTm} : {ActTm}", где:
+    - ActDescr — описание действия:
+      - "Текущий узел отсутствует";
+      - "Прерванный пользователем сеанс программы";
+      - "Прерванный ошибкой сеанс программы";
+      - "Успешный сеанс программы".
+    - ProgNM — имя рецепта-программы;
+    - StartTm — время запуска рецепта-программы, в формате "2020-03-14 16:05:01";
+    - ActTm — время действия рецепта-программы, в формате "2020-03-14 16:05:52".
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 2.1.0
+Лицензия: GPLv2',10,0,'JavaLikeCalc.JavaScript
 clcCnt++;
 
-if(f_start)	work = SYS.XMLNode("prg");
+if(f_start) {
+	dbDB_ = ""; dbO = false;
+	work = SYS.XMLNode("prg");
+}
 
 //Checking for the commands controller presence
 comCntrO = false;
 if(comsCntr.length)	comCntrO = (comsCntr=="*") ? this.nodePrev() : SYS.DAQ.nodeAt(comsCntr,".");
 
+t_err = "0";
+
+//Check for the transport change and connect
+if(!dbO || dbDB != dbDB_) {
+	dbDB_ = dbDB;
+	dbO = SYS.BD.nodeAt(dbDB_, ".");
+	if(dbO) {
+		dbO.SQLReq("CREATE TABLE IF NOT EXISTS PrescrProgs (name TEXT, prgTxt TEXT, PRIMARY KEY (name));");
+		if(!comCntrO)
+			dbO.SQLReq("CREATE TABLE IF NOT EXISTS PrescrComs (name TEXT, descr TEXT, proc TEXT, arg1 TEXT, arg2 TEXT, arg3 TEXT, arg4 TEXT, arg5 TEXT, PRIMARY KEY (name));");
+	}
+}
+if(!dbO)	t_err = "1:"+tr("Error the DB ''%1''.").replace("%1", dbDB);
+else {
+
 //Commands list update
 if(f_start || !(clcCnt%(60*f_frq))) {
 	if(!comCntrO) {
-		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT * FROM "+dbComs+";");
+		rez = dbO.SQLReq("SELECT * FROM "+dbComs+";");
 		comLs = new Object();
 		for(i_t = 1; i_t < rez.length; i_t++) {
 			comNm = rez[i_t]["name"];
@@ -6141,7 +6339,7 @@ if(f_start || !(clcCnt%(60*f_frq))) {
 //Programm selection change
 if(curMode <= 0 && prog.length && (prog != work.attr("name") || mode == 1)) {
 	work = SYS.XMLNode("prg");
-	rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+prog+"'';");
+	rez = dbO.SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+prog+"'';");
 	if(rez.length > 1) {
 		//Parse program and insert procedure text and argument''s labels
 		work.load(rez[1][0]);
@@ -6222,7 +6420,7 @@ if(curMode == 1 || curMode == 2) {
 					prLang = comLs["Stop"].proc.parse(0,"\n",off);
 					SYS.DAQ.funcCall(prLang,new Object(),comLs["Stop"].proc.slice(off));
 				}
-				SYS.messInfo("uprg"+prog,tr("Terminated by user session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+				SYS.messInfo("uprg"+prog,tr("Terminated program session by the user")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
 				curMode = mode = -3;
 			}
 			//Pass empty command		
@@ -6247,7 +6445,7 @@ if(curMode == 1 || curMode == 2) {
 						prLang = comLs["Error"].proc.parse(0,"\n",off);
 						SYS.DAQ.funcCall(prLang,new Object(),comLs["Error"].proc.slice(off));
 					}
-					SYS.messInfo("uprg"+prog,tr("Terminated by error session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+					SYS.messInfo("uprg"+prog,tr("Terminated program session by the error")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
 					curMode = mode = -1;
 				}
 				comEl.setAttr("rez",args.rez);
@@ -6270,13 +6468,13 @@ if(curMode == 1 || curMode == 2) {
 			SYS.messInfo("uprg"+prog,tr("Successful session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
 
 			//Place to program last execution time
-			rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+prog+"'';");
+			rez = dbO.SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+prog+"'';");
 			if(rez.length > 1) {
 				//Parse programm and insert procedure text and argument''s labels to here
 				comTree = SYS.XMLNode("prg");
 				comTree.load(rez[1][0]);
 				comTree.setAttr("wtm",SYS.time()-startTm);
-				SYS.BD.nodeAt(dbDB,".").SQLReq("UPDATE "+dbProgs+" SET prgTxt=''"+comTree.save().replace("''","''''")+"'' WHERE name=''"+prog+"'';");
+				dbO.SQLReq("UPDATE "+dbProgs+" SET prgTxt=''"+comTree.save().replace("''","''''")+"'' WHERE name=''"+prog+"'';");
 			}
 		}
 	}
@@ -6316,7 +6514,7 @@ if(curMode == 1 || curMode == 2) {
 					cLi.start.set(false);
 					cLi.abort.set(true);
 				}
-				SYS.messInfo("uprg"+prog, tr("Terminated by user session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+				SYS.messInfo("uprg"+prog, tr("Terminated program session by the user")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
 				curMode = mode = -3;
 			}
 			//Commands process
@@ -6370,7 +6568,7 @@ if(curMode == 1 || curMode == 2) {
 						cLi.start.set(false);
 						cLi.error.set(true);
 					}
-					SYS.messInfo("uprg"+prog,tr("Terminated by error session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+					SYS.messInfo("uprg"+prog,tr("Terminated program session by the error")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
 					curMode = mode = -1;
 				}
 				if(!actBackGrnd && isBackgrnd && rez.toInt() == 0) actBackGrnd = true;
@@ -6417,19 +6615,23 @@ if(curMode == 1 || curMode == 2) {
 			SYS.messInfo("uprg"+prog,tr("Successful session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
 
 			//Place to program last execution time
-			rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+prog+"'';");
+			rez = dbO.SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+prog+"'';");
 			if(rez.length > 1) {
 				//Parse program and insert procedure text and argument''s labels to here
 				comTree = SYS.XMLNode("prg");
 				comTree.load(rez[1][0]);
 				comTree.setAttr("wtm",SYS.time()-startTm);
-				SYS.BD.nodeAt(dbDB,".").SQLReq("UPDATE "+dbProgs+" SET prgTxt=''"+comTree.save().replace("''","''''")+"'' WHERE name=''"+prog+"'';");
+				dbO.SQLReq("UPDATE "+dbProgs+" SET prgTxt=''"+comTree.save().replace("''","''''")+"'' WHERE name=''"+prog+"'';");
 			}
 		}
 	}
 }
 curMode = mode;
-//mode = curMode;','','',1559658615);
+//mode = curMode;
+
+}
+
+f_err = t_err;','','',1584814597);
 CREATE TABLE IF NOT EXISTS 'tmplib_base' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO tmplib_base VALUES('digAlarm','Alarm discrete','Сигналізація дискретна','Сигнализация дискретная','Common, representative and unified template of separate discrete parameter (complex tag) processing with formation of signaling by the defined criterion. The template forms a structure of discrete parameter (complex tag) which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object.
 
@@ -8104,7 +8306,7 @@ if(curMode == 1 || curMode == 2) {
 					prLang = comLs["Stop"].proc.parse(0,"\n",off);
 					SYS.DAQ.funcCall(prLang,new Object(),comLs["Stop"].proc.slice(off));
 				}
-				SYS.messInfo("uprg"+prog,tr("Terminated by user session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+				SYS.messInfo("uprg"+prog,tr("Terminated program session by the user")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
 				curMode = mode = -3;
 			}
 			//Pass empty command		
@@ -8129,7 +8331,7 @@ if(curMode == 1 || curMode == 2) {
 						prLang = comLs["Error"].proc.parse(0,"\n",off);
 						SYS.DAQ.funcCall(prLang,new Object(),comLs["Error"].proc.slice(off));
 					}
-					SYS.messInfo("uprg"+prog,tr("Terminated by error session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+					SYS.messInfo("uprg"+prog,tr("Terminated program session by the error")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
 					curMode = mode = -1;
 				}
 				comEl.setAttr("rez",args.rez);
@@ -8198,7 +8400,7 @@ if(curMode == 1 || curMode == 2) {
 					cLi.start.set(false);
 					cLi.abort.set(true);
 				}
-				SYS.messInfo("uprg"+prog, tr("Terminated by user session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+				SYS.messInfo("uprg"+prog, tr("Terminated program session by the user")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
 				curMode = mode = -3;
 			}
 			//Commands process
@@ -8252,7 +8454,7 @@ if(curMode == 1 || curMode == 2) {
 						cLi.start.set(false);
 						cLi.error.set(true);
 					}
-					SYS.messInfo("uprg"+prog,tr("Terminated by error session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+					SYS.messInfo("uprg"+prog,tr("Terminated program session by the error")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
 					curMode = mode = -1;
 				}
 				if(!actBackGrnd && isBackgrnd && rez.toInt() == 0) actBackGrnd = true;
@@ -9692,16 +9894,19 @@ for(var ip in pgsOprc) {
 
 if(!isError)	pagesCur = "", res = "0: Fetched and processed pages="+pCnt+"; images="+imgCnt+"; links="+lnkCnt+"; languages="+lngCnt;','','',1579619800);
 CREATE TABLE IF NOT EXISTS 'flb_regEl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO flb_regEl VALUES('pidUnif','PID (unified)','ПІД (уніфікований)','ПИД (унифицированный)','Composite-unified analog and pulse PID. At the heart of the regulator is core a standard analog PID controller from the library FLibComplex1 and the implementation of the PWM for the pulse part.
+INSERT INTO flb_regEl VALUES('pidUnif','PID, unified','ПІД, уніфікований','ПИД, унифицированный','Composite-unified analog and pulse PID. At the heart of the regulator is core a standard analog PID controller from the library FLibComplex1 and the implementation of the PWM for the pulse part.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.0','Суміщений-уніфікований аналоговий та імпульсний ПІД-регулятор. У основі регулятора лежить мова стандартного аналогового ПІД-регулятора з бібліотеки "FLibComplex1" та реалізація ШІМ для імпульсної частини.
+Version: 1.0.0
+License: GPLv2','Суміщений-уніфікований аналоговий та імпульсний ПІД-регулятор. У основі регулятора лежить ядро стандартного аналогового ПІД-регулятора з бібліотеки "FLibComplex1" та реалізація ШІМ для імпульсної частини.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.0.0','Совмещённый-унифицированный аналоговый и импульсный ПИД-регулятор. В основе регулятора лежит ядро стандартного аналогового ПИД-регулятора из библиотеки "FLibComplex1" и реализация ШИМ для импульсной части.
+Версія: 1.0.0
+Ліцензія: GPLv2','Совмещённый-унифицированный аналоговый и импульсный ПИД-регулятор. В основе регулятора лежит ядро стандартного аналогового ПИД-регулятора из библиотеки "FLibComplex1" и реализация ШИМ для импульсной части.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.0.0',1,10,0,'//Call standard analog PID
+Версия: 1.0.0
+Лицензия: GPLv2',1,10,0,'//Call standard analog PID
 outA = Special.FLibComplex1.pid(var,sp,max,min,manIn,auto,casc,Kp,Ti,Kd,Td,Tzd,Hup,Hdwn,Zi,followSp,K1,in1,K2,in2,K3,in3,K4,in4,f_frq,int,dif,lag);
 if(analog) return outA;
 
@@ -9736,11 +9941,20 @@ if(impAnImit) {
 	if(impQdwn)	out -= 100/(impAnOut*f_frq);
 	return max(0,min(100,out));
 }
-return impAnOut;','','',1560101809);
-INSERT INTO flb_regEl VALUES('pidUnifD','PID dynamic','ПІД динамічний','ПИД динамический','Completely identical to the unified PID regulator is implemented dynamically on JavaLikeCalc. The dynamic implementation allows you to easily adapt the regulator to the desired requirements, simply editing it.
+return impAnOut;','','',1584883408);
+INSERT INTO flb_regEl VALUES('pidUnifD','PID dynamic','ПІД динамічний','ПИД динамический','Completely identical to the unified PID-regulator, but it is implemented dynamically on JavaLikeCalc. The dynamic implementation allows you to easily adapt the regulator to the desired requirements, simply editing it.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.0','Повністю ідентичний уніфікованому ПІД регулятор, реалізований динамічно на JavaLikeCalc. Динамічна реалізація дозволяє легко адаптувати регулятор під потрібні вимоги, просто відредагувати його.','Полностью идентичный унифицированному ПИД регулятор, реализованный динамически на JavaLikeCalc. Динамическая реализация позволяет легко адаптировать регулятор под нужные требования, просто отредактировав его.',1,10,0,'if(f_start) {
+Version: 1.0.0
+License: GPLv2','Цілковито ідентичний уніфікованому ПІД-регулятору, але реалізований динамічно на JavaLikeCalc. Динамічна реалізація дозволяє легко адаптувати регулятор під потрібні вимоги, просто відредагувавши його.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.0.0
+Ліцензія: GPLv2','Полностью идентичный унифицированному ПИД-регулятору, но реализованный динамически на JavaLikeCalc. Динамическая реализация позволяет легко адаптировать регулятор под нужные требования, просто отредактировав его.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.0.0
+Лицензия: GPLv2',1,10,0,'if(f_start) {
 	auto_ = auto;
 	outA = out;
 	impQupTm_ = impQdwnTm_ = 0;
@@ -9829,17 +10043,20 @@ if(impAnImit > 0) {
 	if(impQdwn)	out -= 100/(impAnImit*f_frq);
 	return max(0, min(100,out));
 }
-return max(0, min(100,impAnOut));','','',1560104664);
+return max(0, min(100,impAnOut));','','',1584883408);
 INSERT INTO flb_regEl VALUES('pidImp','PID pulse','ПІД імпульсний','ПИД импульсный','Specialized pulse PID regulator is implemented on a special algorithm with compensation of double integration.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.0','Спеціалізований імпульсний ПІД регулятор реалізований за особливим алгоритмом з компенсацією подвійного інтегрування.
+Version: 1.0.0
+License: GPLv2','Спеціалізований імпульсний ПІД-регулятор реалізований за особливим алгоритмом із компенсацією подвійного інтегрування.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.0.0','Специализированный импульсный ПИД регулятор реализованный по особому алгоритму с компенсацией двойного интегрирования.
+Версія: 1.0.0
+Ліцензія: GPLv2','Специализированный импульсный ПИД регулятор реализованный по особому алгоритму с компенсацией двойного интегрирования.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.0.0',1,10,0,'//Call standard analog PID
+Версия: 1.0.0
+Лицензия: GPLv2',1,10,0,'//Call standard analog PID
 Kzd = min(1e3/(f_frq*Tzd), 1);
 Kint = min(1e3/(f_frq*Ti), 1);
 Kdif = min(1e3/(f_frq*Td), 1);
@@ -9914,7 +10131,7 @@ if(impAnImit) {
 	if(impQdwn) out -= 100/(impAnOut*f_frq);
 	return max(0, min(100,out));
 }
-return impAnOut;','','',1560104660);
+return impAnOut;','','',1584883408);
 CREATE TABLE IF NOT EXISTS 'flb_doc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 INSERT INTO flb_doc VALUES('getVal','Getting value from the value archive','Отримання значення з архіву значень','Получение значения из архива значений','Query the value for the specified time (time:uTime) from the assigned archiver archtor (FSArch.1m) and issuing results with the specified number of digits prec after the dot.
 

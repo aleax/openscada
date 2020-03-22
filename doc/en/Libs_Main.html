@@ -112,7 +112,7 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 </p>
 <ul><li> <a href="Libs_Main_graphical_elements.html" title="Special:MyLanguage/Libs/Main graphical elements">Main elements library of the user interface</a>:
 <ul><li> <a href="Libs_Main_graphical_elements.html#anShow" title="Special:MyLanguage/Libs/Main graphical elements">Analog show</a></li>
-<li> <a href="Libs_Main_graphical_elements.html#anShow1" title="Special:MyLanguage/Libs/Main graphical elements">Analog show 1</a>, <a href="Libs_Main_graphical_elements.html#anShow1s" title="Special:MyLanguage/Libs/Main graphical elements">Analog show 1 (short)</a></li>
+<li> <a href="Libs_Main_graphical_elements.html#anShow1" title="Special:MyLanguage/Libs/Main graphical elements">Analog show 1</a>; <a href="Libs_Main_graphical_elements.html#anShow1s" title="Special:MyLanguage/Libs/Main graphical elements">Analog show 1, short</a></li>
 <li> <a href="Libs_Main_graphical_elements.html#ElViewGraph" title="Special:MyLanguage/Libs/Main graphical elements">Graphics group element</a></li>
 <li> <a href="Libs_Main_graphical_elements.html#ElViewCadr" title="Special:MyLanguage/Libs/Main graphical elements">Frame of the group of overview</a></li>
 <li> <a href="Libs_Main_graphical_elements.html#ResultGraphEl" title="Special:MyLanguage/Libs/Main graphical elements">Frame of the result graphics</a></li>
@@ -531,7 +531,7 @@ else if(!(tVl=gO.prm_alarms.PRG_Alarm_T_min.get()).isEVal() &amp;&amp; tVl)
 <ul><li> <i>Allowed scale exceeding</i> — set if necessary to exceed the value of the main border, and when this scale starts to perform the recommendation function, say for the initial display of the trend on this scale.</li>
 <li> <i>PLC imitation and the imitation input</i> — define at the need to simulate the input as required in the functions.</li></ul></dd>
 <dd>4. RESULT: Launching the controller object (where this parameter is created) and if it has not been started, we must get the operational data in the tab "Attributes" for: variable, error status; and the generation of violations if the state of the error is nonzero.</dd>
-<dd>5. In process of the working, through the tab "Attributes" of operational data, in addition to obtaining the result, it is possible to perform operative setup and control on:
+<dd>5. In the process of the working, through the tab "Attributes" of operational data, in addition to obtaining the result, it is possible to perform operative setup and control on:
 <ul><li> <i>Scale: minimum and maximum</i> — strictly <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> set to the range of data changes by availability and according to the hardware border, otherwise the value will be distorted! In the absence of the hardware border, this, the main border, is arbitrary and advisory, although exceeding of the border by the value will be also accompanied by a violation.</li>
 <li> <i>Scale: square</i> — set if the hardware border is square one.</li>
 <li> <i>Filter time</i> — set the filtering time for noisy signals.</li>
@@ -978,7 +978,7 @@ Completely identical to "<a href="#anUnif">Analog signal (unified)</a>]" with th
 <li> <i>Input addition and multiplication</i> — use for easy and linear correction of the input, for example see the template "<a href="#anUnif">Analog signal (unified)</a>".</li>
 <li> <i>Allowed scale exceeding</i> — set if necessary to exceed the value of the main border, and when this scale starts to perform the recommendation function, say for the initial display of the trend on this scale.</li></ul></dd>
 <dd>4. RESULT: Launching the controller object (where this parameter is created) and if it has not been started, we must get the operational data in the tab "Attributes" for: variable, error status; and the generation of violations if the state of the error is nonzero; and it will be allowed to set new values.</dd>
-<dd>5. In process of the working, through the tab "Attributes" of operational data, in addition to obtaining the result, it is possible to perform operative setup and control on:
+<dd>5. In the process of the working, through the tab "Attributes" of operational data, in addition to obtaining the result, it is possible to perform operative setup and control on:
 <ul><li> <i>Scale: minimum and maximum</i> — strictly <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> set to the range of data changes by availability and according to the hardware border, otherwise the value will be distorted! In the absence of the hardware border, this, the main border, is arbitrary and advisory, although exceeding of the border by the value will be also accompanied by a violation.</li>
 <li> <i>Scale: square</i> — set if the hardware border is square one.</li>
 <li> <i>Filter time</i> — set the filtering time for noisy signals.</li>
@@ -1020,7 +1020,12 @@ Completely identical to "<a href="#anUnif">Analog signal (unified)</a>]" with th
 <li> <a href="Libs_Main_graphical_elements.html#cntrPaspExt" title="Special:MyLanguage/Libs/Main graphical elements">Passport, extended</a></li></ul></li>
 <li> <a href="Libs_Mnemo_elements.html" title="Special:MyLanguage/Libs/Mnemo elements">Mnemonic elements library of the user interface</a>:
 <ul><li> <a href="Libs_Mnemo_elements.html#El_Alarm" title="Special:MyLanguage/Libs/Mnemo elements">Alarming</a></li>
-<li> <a href="Libs_Mnemo_elements.html#discrApps" title="Special:MyLanguage/Libs/Mnemo elements">Discrete apparatus</a></li></ul></li></ul>
+<li> <a href="Libs_Mnemo_elements.html#discrApps" title="Special:MyLanguage/Libs/Mnemo elements">Discrete apparatus</a></li></ul></li>
+<li> <a href="Libs_Electrical_elements.html" title="Special:MyLanguage/Libs/Electrical elements">Electrical elements library of the user interface</a>:
+<ul><li> <a href="Libs_Electrical_elements.html#ActualActive" title="Special:MyLanguage/Libs/Electrical elements">Key, unified</a></li>
+<li> <a href="Libs_Electrical_elements.html#ActualActive" title="Special:MyLanguage/Libs/Electrical elements">Switch, unified</a></li>
+<li> <a href="Libs_Electrical_elements.html#ActualActive" title="Special:MyLanguage/Libs/Electrical elements">General state, unified</a></li>
+<li> <a href="Libs_Electrical_elements.html#ActualActive" title="Special:MyLanguage/Libs/Electrical elements">Area state, unified</a></li></ul></li></ul>
 <p><b><u>Functions</u></b><br />
 </p>
 <ul><li> Direct obtaining, by link, of the two states (read only) and three commands (reading and writing).</li>
@@ -1156,7 +1161,7 @@ Completely identical to "<a href="#anUnif">Analog signal (unified)</a>]" with th
 <ul><li> All the states and commands — <a href="DAQ.html#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">link to a source of the "raw" signal</a>.</li>
 <li> <i>Time to hold the command, seconds</i> — set the desired hold value or 0 to disable this feature.</li></ul></dd>
 <dd>4. RESULT: Launching the controller object (where this parameter is created) and if it has not been started, we must get the operational data in the tab "Attributes" for: states and commands.</dd>
-<dd>5. In process of the working, through the tab "Attributes" of operational data, in addition to obtaining the result, it is possible to perform operative control, performing the commands:</dd></dl>
+<dd>5. In the process of the working, through the tab "Attributes" of operational data, in addition to obtaining the result, it is possible to perform operative control, performing the commands:</dd></dl>
 <p><br />
 </p>
 <table class="wikitable">
@@ -1617,7 +1622,7 @@ if(com_text.length &amp;&amp;&nbsp;!com_text.isEVal() &amp;&amp; (tVl=coms.match
   gO.prm_other.KEY_RTC_set_time.set(true);
 } </pre>
 <dl><dd>4. RESULT: Launching the controller object (where this parameter is created) and if it has not been started, we must get the operational data in the tab "Attributes" for: input, output, code-input state, error status; and the generation of violations if the state of the error is nonzero.</dd>
-<dd>5. In process of the working, through the tab "Attributes" of operational data, in addition to obtaining the result, it is possible to perform operative control, performing the commands:
+<dd>5. In the process of the working, through the tab "Attributes" of operational data, in addition to obtaining the result, it is possible to perform operative control, performing the commands:
 <ul><li> <i>States</i> — set to list of accordance with its status code to text.</li>
 <li> <i>Commands-states</i> — set to list of accordance with its status-command code to text.</li>
 <li> <i>Command "Text"</i> — set in the command text, which is described in the command list, for the code conversion and issuance.</li>
@@ -2194,7 +2199,7 @@ if(com_text.length &amp;&amp;&nbsp;!com_text.isEVal() &amp;&amp; (tVl=coms.match
 <li> <i>Allowed scale exceeding</i> — set if necessary to exceed the value of the main border, and when this scale starts to perform the recommendation function, say for the initial display of the trend on this scale.</li>
 <li> <i>PLC imitation and the imitation input</i> — define at the need to simulate the input as required in the functions.</li></ul></dd>
 <dd>4. RESULT: Launching the controller object (where this parameter is created) and if it has not been started, we must get the operational data in the tab "Attributes" for: variable, error status; and the generation of violations if the state of the error is nonzero. Also we will get all the PID-specific attributes.</dd>
-<dd>5. In process of the working, through the tab "Attributes" of operational data, in addition to obtaining the result, it is possible to perform operative setup and control on:
+<dd>5. In the process of the working, through the tab "Attributes" of operational data, in addition to obtaining the result, it is possible to perform operative setup and control on:
 <ul><li> <i>Scale: minimum and maximum</i> — strictly <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> set to the range of data changes by availability and according to the hardware border, otherwise the value will be distorted!</li>
 <li> <i>Scale: square</i> — set if the hardware border is square one.</li>
 <li> <i>Filter time</i> — set the filtering time for noisy signals.</li>
@@ -3167,5 +3172,5 @@ rez = req.attr("err").toInt()&nbsp;? req.attr("err")&nbsp;: "OK";
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main/en">Libs/Main/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2667</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main/en">Libs/Main/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2669</td></tr></table></body>
 </html>

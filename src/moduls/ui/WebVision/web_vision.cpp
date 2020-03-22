@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"4.5.1"
+#define MOD_VER		"4.6.0"
 #define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on the the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -72,7 +72,7 @@ using namespace WebVision;
 //************************************************
 //* TWEB                                         *
 //************************************************
-TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5), mCachePgLife(1), mCachePgSz(10), mPNGCompLev(1)
+TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5), mCachePgLife(1), mCachePgSz(10), mPNGCompLev(1), mImgResize(false)
 {
     mod = this;
 
@@ -266,7 +266,8 @@ string TWEB::optDescr( )
 	"SessLimit    <numb>     Maximum number of the sessions (by default 5).\n"
 	"CachePgLife  <hours>    Lifetime of the pages in the cache (by default 1).\n"
 	"CachePgSz    <numb>     Maximum number of the pages in the cache (by default 10).\n"
-	"PNGCompLev   <lev>      Compression level [-1..9] of the creating PNG-images.\n\n"),
+	"PNGCompLev   <lev>      Compression level [-1..9] of the creating PNG-images.\n"
+	"ImgResize    <0|1>      Resizing raster images on the server side.\n\n"),
 	MOD_TYPE, MOD_ID, nodePath().c_str());
 }
 
@@ -280,6 +281,7 @@ void TWEB::load_( )
     setCachePgLife(s2r(TBDS::genDBGet(nodePath()+"CachePgLife",r2s(cachePgLife()))));
     setCachePgSz(s2i(TBDS::genDBGet(nodePath()+"CachePgSz",i2s(cachePgSz()))));
     setPNGCompLev(s2i(TBDS::genDBGet(nodePath()+"PNGCompLev",i2s(PNGCompLev()))));
+    setImgResize(s2i(TBDS::genDBGet(nodePath()+"ImgResize",i2s(imgResize()))));
 }
 
 void TWEB::save_( )
@@ -289,6 +291,7 @@ void TWEB::save_( )
     TBDS::genDBSet(nodePath()+"CachePgLife", r2s(cachePgLife()));
     TBDS::genDBSet(nodePath()+"CachePgSz", i2s(cachePgSz()));
     TBDS::genDBSet(nodePath()+"PNGCompLev",i2s(PNGCompLev()));
+    TBDS::genDBSet(nodePath()+"ImgResize",i2s(imgResize()));
 }
 
 void TWEB::modStart( )	{ runSt = true; }
@@ -611,6 +614,8 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 			    "  -1  - optimal speed-size;\n"
 			    "  0   - disable;\n"
 			    "  1-9 - direct level."));
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/imgResize",_("Resizing raster images on the server side"),RWRWR_,"root",SUI_ID,2,
+		"tp","bool","help",_("Mostly to decrease too big images size then decrease the traffic, what causes to rise the server load."));
 	}
 	return;
     }
@@ -651,6 +656,10 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(PNGCompLev()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setPNGCompLev(s2i(opt->text()));
     }
+    else if(a_path == "/prm/cfg/imgResize") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(imgResize()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setImgResize(s2i(opt->text()));
+    }
     else TUI::cntrCmdProc(opt);
 }
 
@@ -674,7 +683,7 @@ void TWEB::imgConvert( SSess &ses, const string &mime )
 	} catch(TError&) { }
 
     //Raster images processing
-    if(ses.page.empty() || (ses.prm.find("size") == ses.prm.end() && ses.prm.find("filtr") == ses.prm.end()))	return;
+    if(!imgResize() || ses.page.empty() || (ses.prm.find("size") == ses.prm.end() && ses.prm.find("filtr") == ses.prm.end()))	return;
 
     if((sim=gdImageCreateFromPngPtr(ses.page.size(),(char*)ses.page.data())))		itp = "png";
     else if((sim=gdImageCreateFromJpegPtr(ses.page.size(),(char*)ses.page.data())))	itp = "jpg";

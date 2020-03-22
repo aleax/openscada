@@ -133,7 +133,43 @@ DOC: Libs_Documents|Libs/Documents','Документы','Содержит эл�
 Версия: 2.1.1
 Лицензия: GPLv2
 DOC: Libs_Documents|Libs/Documents');
-INSERT INTO VCALibs VALUES('prescr','Prescriptions','','wlb_prescr','','Рецепти','','Рецепты','');
+INSERT INTO VCALibs VALUES('prescr','Prescriptions','The library is created to provide an environment of execution of scenarios of the technological operations — prescriptions, and frames of the user interface about them, including the frame of creation/edition the prescriptions and two frames of the execution control and reporting — "Prescription — run" and "Prescription — run, simple". The library is built on the basis primitives of the widgets and the internal programming language JavaLikeCalc, including templates and commands.
+
+Contains elements-frames of the prescription of the end type and elements-widgets, what intended to be placed in the mnemonic schemes part (the type of view) of the project tree of the pages, built on the concept of the signal objects of the root page "RootPgSo" and to be placed on the other complex frames. However, elements-frames may be located as separate entities or as part of your own concept of the page management, but it should be take in account that frames often refer and call certain control panels of the common usage and related elements!
+
+The element''s names and their parameters are available in languages: English, Ukrainian and Russian. Their source code wrote in human-language independent mode with calls for the translations by the function tr() and the message''s translation also allowed for English, Ukrainian and Russian.
+
+Author: Roman Savochenko <roman@oscada.org>
+Sponsored by: the Laboratory of Vacuum Technologies
+Sponsored by, about the controller templateization: Magomed
+Founded: April 2012
+Version: 1.1.0
+License: GPLv2
+DOC: Libs_Prescriptions|Libs/Prescriptions','wlb_prescr','','Рецепти','Бібліотека створюється для надання середовища виконання сценаріїв технологічних процесів — рецептів, та кадрів користувацького інтерфейсу довкола нього, включно з кадром створення/редагування рецептів та двома кадрами контролю виконання та звітності — "Рецепт — виконання" та "Рецепт — виконання, простий". Будується бібліотека на основі примітивів віджетів та мови внутрішнього програмування JavaLikeCalc, включно для шаблонів та команд.
+
+Містить елементи-кадри рецептів кінцевого типу та елементи-віджети, що призначені для розташування у розділі мнемосхем (вид відображення) дерева сторінок проекту, побудованого за концепцією об''єктів сигналізації кореневої сторінки "RootPgSo" та для розташування на інших комплексних кадрах. Однак, елементи-кадри можуть бути розташовані як окремі сутності або у складі власної концепції керування сторінками, але тут треба враховувати, що кадри часто посилаються та викликають панель документів!
+
+Назви елементів та їх параметрів доступні на мовах: Англійська, Українська та Російська. Їх вихідний код написано у мово(людська)-незалежному режимі з викликом функції перекладу tr() та переклад цих повідомлень також доступний Англійською, Українською та Російською.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Спонсоровано: Лабораторія Вакуумних Технологій
+Спонсоровано, щодо шаблонізації контролеру: Магомед
+Засновано: Квітень 2012
+Версія: 1.1.0
+Ліцензія: GPLv2
+DOC: Libs_Prescriptions|Libs/Prescriptions','Рецепты','Библиотека создаётся для предоставления среды исполнения сценариев технологических процессов — рецептов, и кадров пользовательского интерфейса около него, включая кадр создания/редактирования рецептов и два кадра контроля исполнения и отчётности — "Рецепт — исполнение" и "Рецепт — исполнение, простой". Строится библиотека на основе примитивов виджетов и языка внутреннего программирования JavaLikeCalc, включая для шаблонов и команд.
+
+Содержит элементы-кадры рецептов конечного типа и элементы-виджеты, которые предназначены для размещения в разделе мнемосхем (вид отображения) дерева страниц проекта, построенного по концепции объектов сигнализации корневой страницы "RootPgSo" и для размещения на других комплексных кадрах. Однако, элементы-кадры могут быть размещены как отдельные сущности или в составе собственной концепции управления страницами, но тут нужно учитывать, что кадры часто ссылаются и вызывают панель документов!
+
+Названия элементов и их параметров доступны на языках: Английский, Украинский и Российский. Их исходный код написан в языко(человеческий)-независимом режиме с вызовом функции перевода tr() и перевод этих сообщений также доступен Английским, Украинским и Российским.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Спонсировано: Лаборатория Вакуумных Технологий
+Спонсировано, на предмет шаблонизации контроллера: Магомед
+Основано: Апрель 2012
+Версия: 1.1.0
+Лицензия: GPLv2
+DOC: Libs_Prescriptions|Libs/Prescriptions');
 CREATE TABLE IF NOT EXISTS 'prj_archBrowser_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO prj_archBrowser_incl VALUES('/prj_archBrowser/pg_control/pg_graphSelPrm','color','/wlb_Main/wdg_graphSelPrm/wdg_color','value;');
 INSERT INTO prj_archBrowser_incl VALUES('/prj_archBrowser/pg_control/pg_graphSelPrm','dim','/wlb_Main/wdg_graphSelPrm/wdg_dim','value;');
@@ -360,7 +396,7 @@ INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','TextE
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','Ti_нд','/wlb_test/wdg_mn_gen/wdg_Ti_нд','owner;pErr;pModeA;pModeC;pName;pPrec;pVal;','');
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','diagTests','/wlb_test/wdg_mn_gen/wdg_diagTests','owner;perm;','');
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','media','/wlb_test/wdg_mn_gen/wdg_media','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','prescrRunSimple','/wlb_test/wdg_mn_gen/wdg_prescrRunSimple','owner;perm;prExtCurCom;prExtMode;prExtProg;prExtStartTm;prExtWork;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','prescrRunSimple','/wlb_test/wdg_mn_gen/wdg_prescrRunSimple','owner;perm;dbDB;dbProgs;prExtCurCom;prExtMode;prExtProg;prExtStartTm;prExtWork;','');
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','prt','/wlb_test/wdg_mn_gen/wdg_prt','owner;perm;','');
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','btPass','/wlb_prescr/wdg_prescrRun/wdg_btPass','owner;perm;','');
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','btStart','/wlb_prescr/wdg_prescrRun/wdg_btStart','owner;perm;','');
@@ -1478,6 +1514,12 @@ INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','own
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','sclWin','0',160,'','','trnd1','','','','','','');
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','sclWin','0',160,'','','trnd1','','','','','','');
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_control/pg_graphCalc','owner','root:op',32,'','','','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','dbDB','',34,'Controller|dbDB','prm:/LogicLev/prescription/manager/dbDB','prescrRunSimple','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','dbProgs','',34,'Controller|dbProgs','prm:/LogicLev/prescription/manager/dbProgs','prescrRunSimple','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','dbDB','',42,'Controller|dbDB','prm:/LogicLev/prescription/manager/dbDB','','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','dbProgs','',42,'Controller|dbProgs','prm:/LogicLev/prescription/manager/dbProgs','','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','dbDB','',42,'Controller|dbDB','prm:/LogicLev/prescription/manager/dbDB','','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','dbProgs','',42,'Controller|dbProgs','prm:/LogicLev/prescription/manager/dbProgs','','','','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_Main_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO wlb_Main_incl VALUES('ElCadr','lev_sp','/wlb_originals/wdg_ElFigure','name;en;geomX;geomY;geomW;geomH;geomZ;fillColor;elLst;p1x;p1y;',2);
 INSERT INTO wlb_Main_incl VALUES('ElCadr','com_open','/wlb_originals/wdg_FormEl','name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;value;color;font;',2);
@@ -4794,7 +4836,7 @@ INSERT INTO wlb_Main_io VALUES('prescrEdit','backColor','',32,'','','labType',''
 INSERT INTO wlb_Main_io VALUES('prescrEdit','font','Arial 17',32,'','','labType','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrEdit','alignment','8',32,'','','labType','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrEdit','text','Type:',32,'','','labType','Тип:','','Тип:','','','');
-INSERT INTO wlb_Main_io VALUES('prescrEdit','name','Programms',32,'','','lib','Програми','','Программы','','','');
+INSERT INTO wlb_Main_io VALUES('prescrEdit','name','Programs',32,'','','lib','Програми','','Программы','','','');
 INSERT INTO wlb_Main_io VALUES('prescrEdit','geomX','12',32,'','','lib','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrEdit','geomY','52',32,'','','lib','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrEdit','geomW','200',32,'','','lib','','','','','','');
@@ -4960,7 +5002,7 @@ INSERT INTO wlb_Main_io VALUES('prescrRun','text','Program: "%1"',32,'','','labP
 INSERT INTO wlb_Main_io VALUES('prescrRun','numbArg','1',32,'','','labProg','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrRun','arg0tp','2',0,'','','labProg','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrRun','arg0val','Not selected',8,'','','labProg','Не обрано','','Не выбрано','','','');
-INSERT INTO wlb_Main_io VALUES('prescrRun','name','Programms',32,'','','lib','Програми','','Программы','','','');
+INSERT INTO wlb_Main_io VALUES('prescrRun','name','Programs',32,'','','lib','Програми','','Программы','','','');
 INSERT INTO wlb_Main_io VALUES('prescrRun','geomX','12.437',32,'','','lib','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrRun','geomY','121.715',32,'','','lib','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrRun','geomW','200',32,'','','lib','','','','','','');
@@ -11013,12 +11055,11 @@ INSERT INTO wlb_Main_uio VALUES('ElCadr','prmVarIn','Parameter: variable input',
 INSERT INTO wlb_Main_uio VALUES('ElCadr','clearCnt','Clear counter',131073,'<EVAL>||',8,'','','info_var','Лічильник очищень','','','Счётчик очистки','','','','');
 INSERT INTO wlb_Main_uio VALUES('prescrRun','prCnt','Cycles counter',131073,'0|',8,'','','','Лічильник циклів','','','Счётчик циклов','','','','');
 INSERT INTO wlb_Main_uio VALUES('prescrRun','prEndRun','Program:ending',131072,'0',8,'','','','Програма:закінчення','','','Программа:завершение','','','','');
-INSERT INTO wlb_Main_uio VALUES('prescrRunSimple','dbProgs','DB: Programms',131077,'PrescrProgs',9,'DB','','','БД: Програми','','БД','БД: Программы','','БД','','');
+INSERT INTO wlb_Main_uio VALUES('prescrRunSimple','dbProgs','DB: Programs table',131077,'PrescrProgs',9,'DB','','','БД: Таблиця програм','','БД','БД: Таблица программ','','БД','','');
 INSERT INTO wlb_Main_uio VALUES('prescrEdit','dbDB','DB: Data base',131077,'SQLite.vcaBase',9,'DB','','','БД: База даних','SQLite.vcaBase','БД','БД: База данных','SQLite.vcaBase','БД','','');
-INSERT INTO wlb_Main_uio VALUES('prescrEdit','dbProgs','DB: Programms',131077,'PrescrProgs',9,'DB','','','БД: Програми','PrescrProgs','БД','БД: Программы','PrescrProgs','БД','','');
+INSERT INTO wlb_Main_uio VALUES('prescrEdit','dbProgs','DB: Programs table',131077,'PrescrProgs',9,'DB','','','БД: Таблиця програм','PrescrProgs','БД','БД: Таблица программ','PrescrProgs','БД','','');
 INSERT INTO wlb_Main_uio VALUES('prescrRun','dbDB','DB: Data base',131077,'SQLite.vcaBase',9,'DB','','','БД: База даних','SQLite.vcaBase','БД','БД: База данных','SQLite.vcaBase','БД','','');
-INSERT INTO wlb_Main_uio VALUES('prescrRun','dbProgs','DB: Programms',131077,'PrescrProgs',9,'DB','','','БД: Програми','PrescrProgs','БД','БД: Программы','PrescrProgs','БД','','');
-INSERT INTO wlb_Main_uio VALUES('prescrEdit','fileExpImp','File export/import',131077,'PrescrExport.xml',9,'File','','','Файл експорту/імпорту','PrescrExport.xml','Файл','Файл экспорта/импорта','PrescrExport.xml','Файл','','');
+INSERT INTO wlb_Main_uio VALUES('prescrRun','dbProgs','DB: Programs table',131077,'PrescrProgs',9,'DB','','','БД: Таблиця програм','PrescrProgs','БД','БД: Таблица программ','PrescrProgs','БД','','');
 INSERT INTO wlb_Main_uio VALUES('RootPgSo','stepCur','Step: current',131073,'0|',8,'','','','Крок: поточний','','','Шаг: текущий','','','','');
 INSERT INTO wlb_Main_uio VALUES('RootPgSo','stepTm','Step: time',131076,'0|',8,'','','','Крок: час','','','Шаг: час','','','','');
 INSERT INTO wlb_Main_uio VALUES('RootPgSo','demoPlayProc','Procedure of the Demo play',131205,'',8,'','','','Проц. програвання демо','','','Проц. проигрывания демо','','','','');
@@ -24898,11 +24939,11 @@ INSERT INTO prj_archBrowser VALUES('/archBrowser/so/1','doc','','root',0,'
 INSERT INTO prj_archBrowser VALUES('/archBrowser/so/1/doc','messRep','','/wlb_doc/wdg_docMessRep',0,'','','',-1,0,'owner;geomYsc;archLs;messCat;',1495719828);
 INSERT INTO prj_archBrowser VALUES('/archBrowser/control','graphCalc','','/wlb_Main/wdg_graphCalc',0,'','','',-1,0,'owner;',1563002360);
 CREATE TABLE IF NOT EXISTS 'prj_tmplSO' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
-INSERT INTO prj_tmplSO VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;',1584299250);
+INSERT INTO prj_tmplSO VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;',1584730664);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so','1','','root',1,'
 ','
 ','
-',-1,5,'name;dscr;geomX;',1584299250);
+',-1,5,'name;dscr;geomX;',1584730664);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so','2','','root',1,'
 ','
 ','',-1,5,'name;',1546704070);
@@ -24921,10 +24962,10 @@ INSERT INTO prj_tmplSO VALUES('/tmplSO/control','treeSelect','','/wlb_Main/wdg_t
 INSERT INTO prj_tmplSO VALUES('/tmplSO/control','cntrPasp','','/wlb_Main/wdg_cntrPaspExt',0,'','','',-1,0,'owner;perm;name;geomZ;pName;',1494598746);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/control','cntrPaspOld','','/wlb_Main/wdg_cntrPasp',0,'','','',-1,0,'owner;perm;geomZ;pName;',1494596514);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1','view1','','root',0,'
-','','',-1,5,'owner;perm;name;dscr;geomZ;',1584299250);
-INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1/view1','1','','/wlb_test/wdg_mn_gen',0,'','','',-1,0,'owner;perm;name;pgOpen;pgNoOpenProc;pgGrp;',1584299250);
-INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1/view1','10','','/wlb_prescr/wdg_prescrRun',0,'','','',-1,0,'owner;perm;prExtCurCom;prExtMode;prExtProg;prExtStartTm;prExtWork;',1584299250);
-INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1/view1','11','','/wlb_prescr/wdg_prescrEdit',0,'','','',-1,0,'owner;perm;prExtComLs;',1584299250);
+','','',-1,5,'owner;perm;name;dscr;geomZ;',1584730664);
+INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1/view1','1','','/wlb_test/wdg_mn_gen',0,'','','',-1,0,'owner;perm;name;pgOpen;pgNoOpenProc;pgGrp;',1584730664);
+INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1/view1','10','','/wlb_prescr/wdg_prescrRun',0,'','','',-1,0,'owner;perm;dbDB;dbProgs;prExtCurCom;prExtMode;prExtProg;prExtStartTm;prExtWork;',1584730664);
+INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1/view1','11','','/wlb_prescr/wdg_prescrEdit',0,'','','',-1,0,'owner;perm;dbDB;dbProgs;prExtComLs;',1584730664);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1','view2','','/wlb_Main/wdg_grpGraph',0,'','','',-1,2,'owner;perm;geomZ;pgGrp;',1546704070);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1/view2','1','','..',0,'','','',-1,0,'owner;',1546704070);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1','view3','','/wlb_Main/wdg_grpCadr',0,'','','',-1,2,'owner;perm;geomZ;pgGrp;',1546703892);
@@ -26173,7 +26214,7 @@ if(f_start || progSelCom || progSelTp) {
 			for(i_a = 1; selNd && i_a <= 5; i_a++) this["arg"+i_a].attrSet("value",selNd.attr("arg"+i_a));
 	}
 }
-type_active = prog_value.length;',100,'owner;name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;',1584292826);
+type_active = prog_value.length;',100,'owner;name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;',1584814859);
 INSERT INTO wlb_prescr VALUES('prescrRun','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA0SAAANOgHo3ZneAAAC60lEQVRYhe2ZTU8TQRyH//Oy2+22Ai0hGiqRSvTiAb0YI1y5eODolYQP
 0LvfhJPh6BW+gIkxUeNZ8QU1bYFYCsW+zs67h01ILRSLWueyz2Ezmfll5vdcZg+DSqVSOp2GIRzW
@@ -26333,7 +26374,7 @@ event = ev_rez;
 //Programm select process
 if(!prExtProg.length || lib_items.search("^"+prExtProg.replace(new RegExp("(\\[|\\]|\\(|\\)|\\.|\\+|\\*|\\?|\\^|\\$|\\<|\\>|\\{|\\}|\\\\)","g"),"\\$1")+"$","m") < 0)
 	prExtProg = lib_value;
-else lib_value = prExtProg;',200,'owner;name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;',1584292826);
+else lib_value = prExtProg;',200,'owner;name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;',1584814859);
 INSERT INTO wlb_prescr VALUES('prescrRunSimple','iVBORw0KGgoAAAANSUhEUgAAAEAAAAArCAIAAABHOBkQAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAE0ElEQVRoge2Vy28TVxSHz525nvG8HNtjO2+TEBJqAoEoJBREqSLooqrK
 gj1do6Z/BH9EkYBVoMuyYAeqIkpbYlKkQNqkOAlJbEwcO37FnhnP2PPsghRBFsVQpCmSv9Xo3qtz
@@ -26513,7 +26554,7 @@ event = ev_rez;
 //Programm select process
 if(!prExtProg.length || lib_items.search("^"+prExtProg.replace(new RegExp("(\\[|\\]|\\(|\\)|\\.|\\+|\\*|\\?|\\^|\\$|\\<|\\>|\\{|\\}|\\\\)","g"),"\\$1")+"$","m") < 0)
 	prExtProg = lib_name;
-else lib_name = lib_selValue = prExtProg;',500,'owner;name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;bordStyle;',1584292826);
+else lib_name = lib_selValue = prExtProg;',500,'owner;name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;bordStyle;',1584814859);
 CREATE TABLE IF NOT EXISTS 'wlb_prescr_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO wlb_prescr_incl VALUES('prescrEdit','arg1','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;value;confirm;font;');
 INSERT INTO wlb_prescr_incl VALUES('prescrEdit','arg2','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;value;confirm;font;');
@@ -26858,10 +26899,11 @@ TUQ7GGP7iKi1njAkOeGkel7SZh1j7Bsi2scYOzw8PHx7Xw6Rj6eeesoiop2MsZ1EZC9VvFEd8xIb
 cSUiOsQYOzQyMvL9vcaTAK6ZiLYxxrYSUR+A3FJFmoTY0GWMnSGitxljJ0dGRn64F67qAKx5NY4x
 VgCwiogKVTBXAMxWawrxq3EjIyPL+mrcj8ePxw94/BObOu+GBeg0IQAAAABJRU5ErkJggg==');
 CREATE TABLE IF NOT EXISTS 'wlb_prescr_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '0' ,"IO_VAL" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '0' ,"CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
-INSERT INTO wlb_prescr_uio VALUES('prescrEdit','dbDB','','DB: Data base','БД: База даних','БД: База данных',131077,'SQLite.vcaBase','','',9,'DB','','','','','');
-INSERT INTO wlb_prescr_uio VALUES('prescrEdit','dbProgs','','DB: Programms','БД: Програми','БД: Программы',131077,'PrescrProgs','','',9,'DB','','','','','');
-INSERT INTO wlb_prescr_uio VALUES('prescrEdit','fileExpImp','','File export/import','Файл експорту/імпорту','Файл экспорта/импорта',131077,'PrescrExport.xml','','',9,'File','','','','','');
-INSERT INTO wlb_prescr_uio VALUES('prescrEdit','prExtComLs','','Available commands list','Перелік доступних команд рецепту','Список доступных команд рецепта',131078,'','','',10,'Controller|comLs','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrEdit','dbDB','','DB: Data base','БД: База даних','БД: База данных',131077,'SQLite.vcaBase','','',10,'Controller|dbDB','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrEdit','dbProgs','','DB: Programs table','БД: Таблиця програм','БД: Таблица программ',131077,'PrescrProgs','','',10,'Controller|dbProgs','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrEdit','prExtComLs','','Available commands list','Перелік доступних команд рецепту','Список доступных команд рецепта',131078,'<TVarObj>
+</TVarObj>
+','','',10,'Controller|comLs','','','','','');
 INSERT INTO wlb_prescr_uio VALUES('prescrEdit','max','arg1','Maximum','Максимум','Максимум',131076,'0|','','',8,'','','','','','');
 INSERT INTO wlb_prescr_uio VALUES('prescrEdit','min','arg1','Minimum','Мінімум','Минимум',131076,'0|','','',8,'','','','','','');
 INSERT INTO wlb_prescr_uio VALUES('prescrEdit','max','arg2','Maximum','Максимум','Максимум',131076,'0|','','',8,'','','','','','');
@@ -26873,38 +26915,61 @@ INSERT INTO wlb_prescr_uio VALUES('prescrEdit','min','arg4','Minimum','Міні�
 INSERT INTO wlb_prescr_uio VALUES('prescrEdit','max','arg5','Maximum','Максимум','Максимум',131076,'0|','','',8,'','','','','','');
 INSERT INTO wlb_prescr_uio VALUES('prescrEdit','min','arg5','Minimum','Мінімум','Минимум',131076,'0|','','',8,'','','','','','');
 INSERT INTO wlb_prescr_uio VALUES('prescrEdit','mess','progDel','Dialog message','Повідомлення діалогу','Сообщение диалога',131077,'Are you really want to delete this program?','Ви дійсно бажаєте видалити обрану програму?','Вы действительно желаете удалить выбранную программу?',0,'','','','','','');
-INSERT INTO wlb_prescr_uio VALUES('prescrRun','dbDB','','DB: Data base','БД: База даних','БД: База данных',131077,'SQLite.vcaBase','','',9,'DB','','','','','');
-INSERT INTO wlb_prescr_uio VALUES('prescrRun','dbProgs','','DB: Programms','БД: Програми','БД: Программы',131077,'PrescrProgs','','',9,'DB','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrRun','dbDB','','DB: Data base','БД: База даних','БД: База данных',131077,'SQLite.vcaBase','','',10,'Controller|dbDB','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrRun','dbProgs','','DB: Programs table','БД: Таблиця програм','БД: Таблица программ',131077,'PrescrProgs','','',10,'Controller|dbProgs','','','','','');
 INSERT INTO wlb_prescr_uio VALUES('prescrRun','prCnt','','Cycles counter','Лічильник циклів','Счётчик циклов',131073,'0|','','',8,'','','','','','');
 INSERT INTO wlb_prescr_uio VALUES('prescrRun','prEndRun','','Program: running end','Програма: кінець виконання','Программа: конец исполнения',131072,'0','','',8,'','','','','','');
 INSERT INTO wlb_prescr_uio VALUES('prescrRun','prExtCurCom','','Controller: current command','Контролер: поточна команда','Контроллер: текущая команда',131077,'0','0','0',10,'Controller|curCom','','','','','');
 INSERT INTO wlb_prescr_uio VALUES('prescrRun','prExtMode','','Controller: mode','Контролер: режим','Контроллер: режим',131073,'0|','','',14,'Controller|mode','','','','','');
 INSERT INTO wlb_prescr_uio VALUES('prescrRun','prExtProg','','Controller: program','Контролер: програма','Контроллер: программа',131077,'','','',14,'Controller|prog','','','','','');
 INSERT INTO wlb_prescr_uio VALUES('prescrRun','prExtStartTm','','Controller: start time','Контролер: час запуску','Контроллер: время запуска',131073,'0|','','',10,'Controller|startTm','','','','','');
-INSERT INTO wlb_prescr_uio VALUES('prescrRun','prExtWork','','Controller: work','Контролер: робочий','Контроллер: рабочая',131078,'','','',10,'Controller|work','','','','','');
-INSERT INTO wlb_prescr_uio VALUES('prescrRunSimple','dbDB','','DB: Data base','БД: База даних','БД: База данных',131077,'SQLite.vcaBase','','',9,'DB','','','','','');
-INSERT INTO wlb_prescr_uio VALUES('prescrRunSimple','dbProgs','','DB: Programms','БД: Програми','БД: Программы',131077,'PrescrProgs','','',9,'DB','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrRun','prExtWork','','Controller: work','Контролер: робочий','Контроллер: рабочая',131078,'<TVarObj>
+</TVarObj>
+','','',10,'Controller|work','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrRunSimple','dbDB','','DB: Data base','БД: База даних','БД: База данных',131077,'SQLite.vcaBase','','',10,'Controller|dbDB','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrRunSimple','dbProgs','','DB: Programs table','БД: Таблиця програм','БД: Таблица программ',131077,'PrescrProgs','','',10,'Controller|dbProgs','','','','','');
 INSERT INTO wlb_prescr_uio VALUES('prescrRunSimple','prCnt','','Cycles counter','Лічильник циклів','Счётчик циклов',131073,'0|','','',8,'','','','','','');
 INSERT INTO wlb_prescr_uio VALUES('prescrRunSimple','prEndRun','','Program: running end','Програма: кінець виконання','Программа: конец исполнения',131077,'','','',8,'','','','','','');
 INSERT INTO wlb_prescr_uio VALUES('prescrRunSimple','prExtCurCom','','Controller: current command','Контролер: поточна команда','Контроллер: текущая команда',131077,'0','0','0',10,'Controller|curCom','','','','','');
 INSERT INTO wlb_prescr_uio VALUES('prescrRunSimple','prExtMode','','Controller: mode','Контролер: режим','Контроллер: режим',131073,'0|','','',14,'Controller|mode','','','','','');
 INSERT INTO wlb_prescr_uio VALUES('prescrRunSimple','prExtProg','','Controller: program','Контролер: програма','Контроллер: программа',131077,'','','',14,'Controller|prog','','','','','');
 INSERT INTO wlb_prescr_uio VALUES('prescrRunSimple','prExtStartTm','','Controller: start time','Контролер: час запуску','Контроллер: время запуска',131073,'0|','','',10,'Controller|startTm','','','','','');
-INSERT INTO wlb_prescr_uio VALUES('prescrRunSimple','prExtWork','','Controller: work','Контролер: робочий','Контроллер: рабочая',131078,'','','',10,'Controller|work','','','','','');
+INSERT INTO wlb_prescr_uio VALUES('prescrRunSimple','prExtWork','','Controller: work','Контролер: робочий','Контроллер: рабочая',131078,'<TVarObj>
+</TVarObj>
+','','',10,'Controller|work','','','','','');
 INSERT INTO wlb_prescr_uio VALUES('prescrRunSimple','items','lib','Tree items','Елементи дерева','Элементы дерева',131205,'','','',8,'','','','','','');
 INSERT INTO wlb_prescr_uio VALUES('prescrRunSimple','selValue','lib','Selected value','Обране значення','Выбранное значение',131077,'','','',8,'','','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_prescr_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '0' ,"CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','','root:UI','','',32,'','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrEdit','name','','Prescription — edit','Рецепт — редагування','Рецепт — редактирование',32,'','','','');
-INSERT INTO wlb_prescr_io VALUES('prescrEdit','dscr','','The element "Prescription — edit" is one of the two frames with rescriptions work,
-with serve for edit programms-prescriptions by user.
-Programm-prescription is sequential functions blocks call - commands (macros),
-with get up to five arguments and return three results: "Work" (0), "Finish" (> 0) и "Error" (< 0).
-The command step call cyclic while return result "Work" (0). Go to next step performed in
-case result "Finish" (> 0) return. In error case, result "Error" (< 0), the prescription run interrurpt.
-Prescription execution performed into visualization interface session.
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','dscr','','The frame is one of the group frames for working with the prescriptions, which serves for the user-editing of the prescriptions-programs. The frame commonly uses and represents the representative structure of the prescription manager.
+
+The frame contains from left to right:
+- "Library" — library with a list of programs and library''s control tools.
+- "Program" — the list of commands-steps of the selected in the library prescription-program with the control tools.
+- "Command" — the edit field of the selected step in the prescription, which contains the selection of the command and set the name, description, background execution flag and values of the available attributes, as well as button to save the changes.
+
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.0','','',32,'','','','');
+Version: 1.3.0
+License: GPLv2','Кадр є одним із групи кадрів роботи із рецептами, який слугує для користувацького редагування рецептів-програм. Кадр загалом використовує та представляє представницьку структуру менеджеру рецептів.
+
+Кадр містить, зліва праворуч:
+- "Бібліотека" — бібліотека із переліком програм та елементами управління бібліотекою.
+- "Програма" — перелік кроків-команд обраного у бібліотеці рецепту-програми з елементами управління.
+- "Команда" — поле редагування обраного кроку рецепту у складі вибору команди та встановлення ім''я, опису, прапорця фонового виконання та значень доступних атрибутів, а також кнопки збереження змін.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.3.0
+Ліцензія: GPLv2','Кадр является одним из группы кадров работы с рецептами, который служит для пользовательского редактирования рецептов-программ. Кадр, в целом, использует и представляет представительскую структуру менеджера рецептов.
+
+Кадр содержит, слева на право:
+- "Библиотека" — библиотека со списком программ и элементами управления библиотекой.
+- "Программа" — список шагов-команд выбранного в библиотеке рецепта-программы с элементами управления.
+- "Команда" — поле редактирования выбранного шага рецепта в составе выбора команды и установки имени, описания, флага фонового исполнения и значений доступных атрибутов, а также кнопки сохранения изменений.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.3.0
+Лицензия: GPLv2',32,'','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','','900','','',32,'','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomH','','600','','',32,'','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrEdit','evProc','','ws_BtPress:/progDel:open:/pg_control/pg_accept','','',32,'','','','');
@@ -27030,7 +27095,7 @@ INSERT INTO wlb_prescr_io VALUES('prescrEdit','elType','comDwn','3','','',32,'',
 INSERT INTO wlb_prescr_io VALUES('prescrEdit','img','comDwn','down','','',0,'','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','comDwn','Arial 15','','',0,'','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','comInAdd','root:UI','','',32,'','','','');
-INSERT INTO wlb_prescr_io VALUES('prescrEdit','name','comInAdd','Add >','Опустити команду у обраній позиції','Опустить выбранную команду ниже',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','name','comInAdd','Add >','Додати >','Добавить >',32,'','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','comInAdd','299.889','','',32,'','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','comInAdd','511','','',32,'','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','comInAdd','71.548','','',32,'','','','');
@@ -27194,7 +27259,7 @@ INSERT INTO wlb_prescr_io VALUES('prescrEdit','font','labType','Arial 17','','',
 INSERT INTO wlb_prescr_io VALUES('prescrEdit','alignment','labType','8','','',32,'','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrEdit','text','labType','Type:','Тип:','Тип:',32,'','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','lib','root:UI','','',32,'','','','');
-INSERT INTO wlb_prescr_io VALUES('prescrEdit','name','lib','Programms','Програми','Программы',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','name','lib','Programs','Програми','Программы',32,'','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','lib','12','','',32,'','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','lib','52','','',32,'','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','lib','200','','',32,'','','','');
@@ -27361,21 +27426,35 @@ INSERT INTO wlb_prescr_io VALUES('prescrEdit','bordWidth','wPanel','2','','',32,
 INSERT INTO wlb_prescr_io VALUES('prescrEdit','bordColor','wPanel','#5A5A5A','','',32,'','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrEdit','bordStyle','wPanel','8','','',32,'','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrRun','owner','','root:UI','','',32,'','','','');
-INSERT INTO wlb_prescr_io VALUES('prescrRun','name','','Prescription — run','Рецепт — исполнение','Рецепт — виконання',32,'','','','');
-INSERT INTO wlb_prescr_io VALUES('prescrRun','dscr','','The element "Prescription — run" is one from two frames for prescriptions work,
-which serve for programm-prescription execution, early prepared in frame кадре "Prescription — edit".
+INSERT INTO wlb_prescr_io VALUES('prescrRun','name','','Prescription — run','Рецепт — виконання','Рецепт — исполнение',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','dscr','','The frame is one of the group frames for working with the prescriptions, which serves for control and observing of executing the programs-prescriptions, previously formed in the Prescription — edit frame. The frame commonly uses and represents the representative structure of the prescription manager. In addition to this full-format prescription frame, there is a simplified one — "Prescription — run, simple, that allows you to manage and to track compactly the prescriptions execution in other frames of the technological process.
 
-Executed prescription-programm can been paused, by button "Pause" press in place for button "Start",
-or interrupt, by press button "Stop".
+The frame contains from the left to the right:
+- "Start/stop/skip" — two buttons to start and stop the selected program and a button to skip the current step execution.
+- "Library" — library with a list of the programs.
+- "Program" — document of the commands-steps list of the selected prescription-program in the library. During the execution in this field it is monitored the program execution current state by the appropriate highlight of the steps.
 
-On correct prescription-programm finish occurred message generation with include the session properties,
-and also session''s document archiving. The message with session properties can be used simple for
-observe on messages archive seen, or for prepare sessions list, for example for direct go to history
-session time in graphics group. For history of reports of programms execution see you can press on
-document field and list into appear navigation panel on archived document.
-By default the document''s archive configured to 10 documents depth.
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.0','','',32,'','','','');
+Version: 1.3.0
+License: GPLv2','Кадр є одним із групи кадрів роботи із рецептами, який слугує для контролю та спостереження за виконанням програм-рецептів, раніш сформованих у кадрі "Рецепт — редагування". Кадр загалом використовує та представляє представницьку структуру менеджеру рецептів. Додатково до цього повноформатного кадру виконання рецептів, передбачено спрощений — "Рецепт — виконання, простий", який дозволяє компактно керувати та відстежувати виконання рецептів у складі інших кадрів технологічного процесу.
+
+Кадр містить, зліва праворуч:
+- "Запуск/зупинка/пропуск" — дві кнопки запуску та зупинки обраної програми, а також кнопка пропуску виконання поточного кроку.
+- "Бібліотека" — бібліотека із переліком програм.
+- "Програма" — документ переліку кроків-команд, обраного у бібліотеці рецепту-програми. При виконання у цьому полі відстежується поточний стан виконання шляхом відповідного підсвітлення кроків.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.3.0
+Ліцензія: GPLv2','Кадр является одним из группы кадров работы с рецептами, который служит для контроля и наблюдения за исполнением программ-рецептов, ранее сформированных в кадре "Рецепт — редактирование". Кадр, в целом, использует и представляет представительскую структуру менеджера рецептов. Дополнительно к этому полноформатному кадру исполнения рецептов, предусмотрен упрощённый — "Рецепт — исполнение, простой", который позволяет компактно управлять и отслеживать исполнение рецептов в составе других кадров технологического процесса.
+
+Кадр содержит, слева на право:
+- "Запуск/останов/пропуск" — две кнопки запуска и останова выбранной программы, а также кнопка пропуска выполнения текущего шага.
+- "Библиотека" — библиотека со списком программ.
+- "Программа" — документ списка шагов-команд, выбранного в библиотеке рецепта-программы. При исполнении в этом поле отслеживается текущее состояние исполнения путём соответствующей подсветки шагов.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.3.0
+Лицензия: GPLv2',32,'','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrRun','geomW','','900','','',32,'','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrRun','geomH','','600','','',32,'','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrRun','evProc','','ws_FocusIn:/prog:open:/pg_control/pg_doc_panel','','',32,'','','','');
@@ -27433,7 +27512,7 @@ INSERT INTO wlb_prescr_io VALUES('prescrRun','numbArg','labProg','1','','',32,''
 INSERT INTO wlb_prescr_io VALUES('prescrRun','arg0tp','labProg','2','','',0,'','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrRun','arg0val','labProg','Not selected','Не обрано','Не выбрано',8,'','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrRun','owner','lib','root:UI','','',32,'','','','');
-INSERT INTO wlb_prescr_io VALUES('prescrRun','name','lib','Programms','Програми','Программы',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRun','name','lib','Programs','Програми','Программы',32,'','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrRun','geomX','lib','12.437','','',32,'','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrRun','geomY','lib','121.715','','',32,'','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrRun','geomW','lib','200','','',32,'','','','');
@@ -27496,15 +27575,35 @@ INSERT INTO wlb_prescr_io VALUES('prescrRun','bordWidth','wPanel','2','','',32,'
 INSERT INTO wlb_prescr_io VALUES('prescrRun','bordColor','wPanel','#5A5A5A','','',32,'','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrRun','bordStyle','wPanel','8','','',32,'','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','owner','','root:UI','','',32,'','','','');
-INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','name','','Prescription — run, simple','Рецепт — исполнение, простой','Рецепт — виконання, простий',32,'','','','');
-INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','dscr','','The element "Prescription — run simple" is simple variant of the element "Prescription — run" which designed
-for placing as a widget of mnemo and works only in cooperation with the primary element "Prescription — run".
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','name','','Prescription — run, simple','Рецепт — виконання, простий','Рецепт — исполнение, простой',32,'','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','dscr','','The widget is a simple variant of the frame "Prescription — run", which designed for placing as a widget of the mnemonic schemes and it mostly works together the frame "Prescription — run". The frame commonly uses and represents the representative structure of the prescription manager.
 
-Executed prescription-programm can been paused, pressing the button "Pause" in the place of the button "Start",
-or interrupt, pressing the button "Stop".
+The widget contains from the left to the right and to the bottom:
+- "Start/stop/skip" — two buttons to start and stop the selected program and a button to skip the current step execution.
+- "Library" — button to display the current prescription-program and call the dialog of selecting item into tree.
+- "Program" — document with lines of currently active commands.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.0','','',32,'','','','');
+Version: 1.3.0
+License: GPLv2','Віджет це спрощений варіант кадру "Рецепт — виконання", який розроблено для розташування як віджет мнемосхем та він переважно і працює доповненням кадру "Рецепт — виконання". Кадр загалом використовує та представляє представницьку структуру менеджеру рецептів.
+
+Віджет містить, зліва праворуч та додолу:
+- "Запуск/зупинка/пропуск" — дві кнопки запуску та зупинки обраної програми, а також кнопка пропуску виконання поточного кроку.
+- "Бібліотека" — кнопка відображення поточного рецепту-програми та виклику діалогу обрання програми у дереві.
+- "Програма" — документ із рядками активних наразі команд.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.3.0
+Ліцензія: GPLv2','Виджет это упрощённый вариант кадра "Рецепт — исполнение", который разработан для размещения как виджет мнемосхем и он в основном и работает дополнением кадра "Рецепт — исполнение". Кадр, в целом, использует и представляет представительскую структуру менеджера рецептов.
+
+Виджет содержит, слева направа и вниз:
+- "Запуск/останов/пропуск" — две кнопки запуска и останова выбранной программы, а также кнопка пропуска исполнения текущего шага.
+- "Библиотека" — кнопка отображения текущего рецепта-программы и вызова диалога выбора программы в дереве.
+- "Программа" — документ со строками активных на текущий момент команд.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версия: 1.3.0
+Лицензия: GPLv2',32,'','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','geomW','','250','','',32,'','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','geomH','','170','','',32,'','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrRunSimple','evProc','','ws_BtPress:/lib:open:/pg_control/pg_treeSelect','','',32,'','','','');

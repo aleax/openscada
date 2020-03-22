@@ -5127,7 +5127,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 
 	if(hLen/hDiv >= 5 && trcPer) {
 	    tPict = hDiv*(tEnd/hDiv+1);
-	    if((tPict-tEnd) > UTChourDt) tPict -= UTChourDt;
+	    if((tPict-tEnd) > abs(UTChourDt)) tPict -= UTChourDt;
 	    tBeg = tPict-hLen;
 	}
 

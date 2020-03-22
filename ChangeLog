@@ -1,3 +1,13 @@
+2020-03-22 Roman (stable)
+- !!!!:DB.LibsDB.OscadaLibs,Model.AGLKS.vca: The document of "the Prescriptions library" and "the Regulation elements library" is completed.
+    !!: Items of "the Prescriptions library" expanded for DB linking and the command and program tables automatic creation.
+- UI.VCAEngine: Widget procedures calculation period -1 means currently the value (not -1) from the parent widget-page.
+- !!!!:FIX:UI.{Vision,WebVision}: The primitive "Diagram" is fixed for the negative time zone processing.
+- !!:FIX:UI.WebVision: The variant "Animation" of the primitive "Media" processing is improved by disable the animated images scaling
+    on the server side, then lost the animation.
+    !!: Appended for the new parameter "Resizing raster images on the server side." to control the images transformation on the server side.
+
+
 2020-03-15 Roman (stable)
 - !!:DB.LibsDB.{vcaBase,vcaTest}:
     The prescription frames "prescrEdit", "prescrRun" and "prescrRunSimple" moved to the new library "Prescriptions (prescr)".

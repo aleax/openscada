@@ -39,8 +39,12 @@
 </td>
 <td> Special </td>
 <td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2009) — the page translation</i></font> </td>
-<td> Provides a library of the functions of compatibility with SCADA Complex 1 of the firm SIC "DIYA".
+<td> Provides a library of the functions of compatibility with SCADA Complex 1 of the firm DIYA Ltd.
 </td></tr></table>
+<p>The module provides OpenSCADA for a static library of compatibility functions with SCADA Complex1 of the firm SIC "DIYA". These functions were used in Complex1 in the form of algoblocks to create in-system computations based on the virtual controller. Providing the library of these functions allows the transfer of computational algorithms from Complex1.
+</p><p>To address the functions of the library you can use the static call address <b>Special.FLibComplex1.{Func}()</b> or dynamic <b>SYS.Special.FLibComplex1["{Func}"].call()</b>, <b>SYS.Special.FLibComplex1.{Func}()</b>. Where <i>{Func}</i> — function identifier in the library.
+</p><p>Below is a description of each library function.
+</p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#Alarm_.28alarm.29"><span class="tocnumber">1</span> <span class="toctext">Alarm (alarm)</span></a></li>
@@ -55,7 +59,7 @@
 <li class="toclevel-1 tocsection-10"><a href="#Lag_.28lag.29"><span class="tocnumber">10</span> <span class="toctext">Lag (lag)</span></a></li>
 <li class="toclevel-1 tocsection-11"><a href="#Simple_multiplication_.28mult.29"><span class="tocnumber">11</span> <span class="toctext">Simple multiplication (mult)</span></a></li>
 <li class="toclevel-1 tocsection-12"><a href="#Multiplication_and_division_.28multDiv.29"><span class="tocnumber">12</span> <span class="toctext">Multiplication and division (multDiv)</span></a></li>
-<li class="toclevel-1 tocsection-13"><a href="#PID_regulator_.28pid.29"><span class="tocnumber">13</span> <span class="toctext">PID regulator (pid)</span></a></li>
+<li class="toclevel-1 tocsection-13"><a href="#PID_regulator_.28pid.29"><span class="tocnumber">13</span> <span class="toctext"><span>PID regulator (pid)</span></span></a></li>
 <li class="toclevel-1 tocsection-14"><a href="#Power_.28pow.29"><span class="tocnumber">14</span> <span class="toctext">Power (pow)</span></a></li>
 <li class="toclevel-1 tocsection-15"><a href="#Selection_.28select.29"><span class="tocnumber">15</span> <span class="toctext">Selection (select)</span></a></li>
 <li class="toclevel-1 tocsection-16"><a href="#Simple_sumator_.28sum.29"><span class="tocnumber">16</span> <span class="toctext">Simple sumator (sum)</span></a></li>
@@ -65,10 +69,6 @@
 </ul>
 </div>
 
-<p>The module provides OpenSCADA for a static library of compatibility functions with SCADA Complex1 of the firm SIC "DIYA". These functions were used in Complex1 in the form of algoblocks to create in-system computations based on the virtual controller. Providing the library of these functions allows the transfer of computational algorithms from Complex1.
-</p><p>To address the functions of the library you can use the static call address <b>Special.FLibComplex1.{Func}()</b> or dynamic <b>SYS.Special.FLibComplex1["{Func}"].call()</b>, <b>SYS.Special.FLibComplex1.{Func}()</b>. Where <i>{Func}</i> — function identifier in the library.
-</p><p>Below is a description of each library function.
-</p>
 <h2><span class="mw-headline" id="Alarm_.28alarm.29"><span class="mw-headline-number">1</span> Alarm (alarm)</span></h2>
 <p><i>Description:</i> Setting an alarm sign in case of exceeding of the variable for the specified boundary.<br />
 <i>Formula:</i> 
@@ -199,7 +199,7 @@ out = (in1_1*in1_2*in1_3*in1_4*in1_5*in1_6)/
 out = in1_1*in1_2*in1_3*in1_4*in1_5*
       (in2_1*in2_2*in2_3*in2_4*in2_5+(in3_1*in3_2*in3_3*in3_4*in3_5)/
       (in4_1*in4_2*in4_3*in4_4*in4_5));</pre>
-<h2><span class="mw-headline" id="PID_regulator_.28pid.29"><span class="mw-headline-number">13</span> PID regulator (pid)</span></h2>
+<h2><span class="mw-headline" id="PID_regulator_.28pid.29"><span class="mw-headline-number">13</span> <span id="PID" title="#PID">PID regulator (pid)</span></span></h2>
 <p><i>Description:</i> Proportional-integral-differential regulator.<br />
 <i>Parameters:</i>
 </p>
@@ -453,5 +453,5 @@ out = in1_1*in1_2*(in1_3*in1_4+in1_5) +
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/FLibComplex1/en">Modules/FLibComplex1/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2667</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/FLibComplex1/en">Modules/FLibComplex1/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2669</td></tr></table></body>
 </html>

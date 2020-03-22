@@ -31,7 +31,7 @@
 <td> <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a> </td>
 <td> Operation user interface (WEB)
 </td>
-<td> 4.5 </td>
+<td> 4.6 </td>
 <td> GPL2 </td>
 <td> ui_WebVision.so </td>
 <td> en,uk,ru,de </td>
@@ -390,8 +390,9 @@
 <li> Configuring:
 <ul><li> Lifetime, in minutes, and maximum number of the sessions.</li>
 <li> Lifetime, in hours, and maximum number of the cached pages.</li>
-<li> Level of the PNG-images compression. The optimum is the minimum level 1, since large files get uncompressed, and higher compression levels create a higher load on the processor.</li></ul></li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1228px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_cfg.png"><img class="thumbimage" height="481" src="../files/WebVision_wvis_cfg.png" width="1226" /></a>  <div class="thumbcaption">Fig.4. Configuration page of the module.</div></div></div></div>
+<li> Level of the PNG-images compression. The optimum is the minimum level 1, since large files get uncompressed, and higher compression levels create a higher load on the processor.</li>
+<li> Resizing raster images on the server side. Mostly to decrease too big images size then decrease the traffic, what causes to rise the server load.</li></ul></li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:949px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_cfg.png"><img class="thumbimage" height="504" src="../files/WebVision_wvis_cfg.png" width="947" /></a>  <div class="thumbcaption">Fig.4. Configuration page of the module.</div></div></div></div>
 <h2><span class="mw-headline" id="Efficiency_and_scalability"><span class="mw-headline-number">5</span> <span id="Efficiency" title="#Efficiency">Efficiency and scalability</span></span></h2>
 <p><b><u>31.07.2019</u></b><br />
 GROUNDS: The Web-sessions may create many objects servicing the VCA-session for generating images, processing documents and performing other background functions of the end user Web-interface. Moreover, in difference to <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a>, the VCA-sessions may be created, closed and recreated again multiple times for different users and remote hosts. In the time the memory heap is affected by the memory fragmentation, so the program consumes more memory than at the start. The table below represents the phenomenon for different environments and the first page of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">the DemoDB (AGLKS) project</a> reopening:
@@ -679,5 +680,5 @@ GROUNDS: At working with the board <a class="external" href="http://oscada.org/w
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebVision/en">Modules/WebVision/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2667</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebVision/en">Modules/WebVision/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2669</td></tr></table></body>
 </html>

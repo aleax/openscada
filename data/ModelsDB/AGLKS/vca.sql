@@ -392,7 +392,7 @@ INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','comprEn201
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','comprEn202','/wlb_AGLKS/wdg_KCH_MN1/wdg_comprEn202','pVar;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','comprEn301','/wlb_AGLKS/wdg_KCH_MN1/wdg_comprEn301','pVar;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','comprEn302','/wlb_AGLKS/wdg_KCH_MN1/wdg_comprEn302','pVar;',2);
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_10','prescrRunSimple','/wlb_test/wdg_mn_gen/wdg_prescrRunSimple','prExtCurCom;prExtMode;prExtProg;prExtStartTm;prExtWork;',0);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_10','prescrRunSimple','/wlb_test/wdg_mn_gen/wdg_prescrRunSimple','dbDB;dbProgs;prExtCurCom;prExtMode;prExtProg;prExtStartTm;prExtWork;',0);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_control/pg_treeSelect','apply','/wlb_Main/wdg_treeSelect/wdg_apply','value;','');
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_control/pg_treeSelect','cancel','/wlb_Main/wdg_treeSelect/wdg_cancel','value;','');
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so','alarms','/wlb_originals/wdg_Protocol','geomX;geomY;geomW;geomH;geomZ;headVis;tSize;trcPer;lev;viewOrd;col;itProp;it0lev;it0fnt;it0color;it1lev;it1color;it2lev;it2color;','');
@@ -2743,13 +2743,11 @@ INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','dscr',''
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_rg/pg_rg','grpName','Common',41,'','Generic','','Загальні','','Загальні','Общие','','Общие');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_control/pg_treeSelect','value','',0,'','','apply','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_control/pg_treeSelect','value','',0,'','','cancel','','','','','','');
-INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_10','prExtCurCom','0',34,'Controller|curCom','prm:/LogicLev/prescription/manager/curCom','prescrRunSimple','','','','','','');
-INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_10','prExtMode','0',38,'Controller|mode','prm:/LogicLev/prescription/manager/mode','prescrRunSimple','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_10','prExtCurCom','',34,'Controller|curCom','prm:/LogicLev/prescription/manager/curCom','prescrRunSimple','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_10','prExtMode','',38,'Controller|mode','prm:/LogicLev/prescription/manager/mode','prescrRunSimple','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_10','prExtProg','',38,'Controller|prog','prm:/LogicLev/prescription/manager/prog','prescrRunSimple','','','','','','');
-INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_10','prExtStartTm','0',34,'Controller|startTm','prm:/LogicLev/prescription/manager/startTm','prescrRunSimple','','','','','','');
-INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_10','prExtWork','<TVarObj>
-</TVarObj>
-',34,'Controller|work','prm:/LogicLev/prescription/manager/work','prescrRunSimple','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_10','prExtStartTm','',34,'Controller|startTm','prm:/LogicLev/prescription/manager/startTm','prescrRunSimple','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_10','prExtWork','',34,'Controller|work','prm:/LogicLev/prescription/manager/work','prescrRunSimple','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','pErr','',34,'Parameter|err','prm:/LogicLev/gen/F_PP1/err','F_PP1','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','pNAME','',34,'Parameter|NAME','prm:/LogicLev/gen/F_PP1/NAME','F_PP1','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','pErr','',34,'Parameter|err','prm:/LogicLev/gen/F_PP3/err','F_PP3','','','','','','');
@@ -3623,6 +3621,8 @@ INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_7/pg_mn/pg_CM101','pDscr','
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_7/pg_mn/pg_CM101','pDscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM302/TT0204/DESCR','T_CM101_2','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_7/pg_mn/pg_CM101','pDscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM302/TE1313_1/DESCR','T_PP101','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_7/pg_mn/pg_CM101','pDscr','',34,'Parameter|DESCR','prm:/BlockCalc/CM302/TE1314_1/DESCR','T_PP102','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_10','dbDB','',34,'Controller|dbDB','prm:/LogicLev/prescription/manager/dbDB','prescrRunSimple','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_10','dbProgs','',34,'Controller|dbProgs','prm:/LogicLev/prescription/manager/dbProgs','prescrRunSimple','','','','','','');
 CREATE TABLE IF NOT EXISTS 'prj_AGLKS_stl' ("ID" TEXT DEFAULT '' ,"V_0" TEXT DEFAULT '' ,"V_1" TEXT DEFAULT '' ,"V_2" TEXT DEFAULT '' ,"V_3" TEXT DEFAULT '' ,"V_4" TEXT DEFAULT '' ,"V_5" TEXT DEFAULT '' ,"V_6" TEXT DEFAULT '' ,"V_7" TEXT DEFAULT '' ,"V_8" TEXT DEFAULT '' ,"V_9" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO prj_AGLKS_stl VALUES('<Styles>','Default','Light','','','','','','','','');
 INSERT INTO prj_AGLKS_stl VALUES('backColor','gray','ivory','','','','','','','','');
@@ -6113,8 +6113,8 @@ CREATE TABLE IF NOT EXISTS 'wlb_AGLKS_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT D
 CREATE TABLE IF NOT EXISTS 'wlb_AGLKS_uio' ("IDW" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","IDC","ID"));
 INSERT INTO wlb_AGLKS_uio VALUES('comprEn','','pVar','Variable',131073,'<EVAL>|0;0|',10,'Parameter|var','','Переменная','','','','Змінна','','','');
 CREATE TABLE IF NOT EXISTS 'prj_AGLKS' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
-INSERT INTO prj_AGLKS VALUES('/AGLKS','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;demoPlayProc;',1582873333);
-INSERT INTO prj_AGLKS VALUES('/AGLKS/so','1','','root',1,'','','',-1,5,'name;dscr;geomX;',1582873333);
+INSERT INTO prj_AGLKS VALUES('/AGLKS','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;demoPlayProc;',1584730673);
+INSERT INTO prj_AGLKS VALUES('/AGLKS/so','1','','root',1,'','','',-1,5,'name;dscr;geomX;',1584730673);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1582550254);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/ggraph','1','','..',1,'','','',-1,0,'name;dscr;',1582550254);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/ggraph','2','','..',1,'','','',-1,0,'name;dscr;',1582550254);
@@ -6127,9 +6127,9 @@ INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/doc','2','','/wlb_doc/wdg_docUsersSet'
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/doc','3','','/wlb_doc/wdg_docRepDay',1,'','','',-1,0,'name;geomYsc;pgNoOpenProc;n;',1582543524);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/doc','4','','/wlb_doc/wdg_docRepMonth',1,'','','',-1,0,'name;geomYsc;pgNoOpenProc;n;',1582543531);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/doc','5','','/wlb_test/wdg_docTestGasNodeDayRep',1,'','','',-1,0,'name;geomYsc;',1580649241);
-INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1','mn','','root',1,'','','',-1,5,'name;dscr;',1582873333);
+INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1','mn','','root',1,'','','',-1,5,'name;dscr;',1584730673);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/mn','1','','/wlb_AGLKS/wdg_KCH_MN1',1,'','','',-1,0,'name;pgOpen;pgNoOpenProc;pgGrp;',1582873333);
-INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/mn','10','','/wlb_test/wdg_mn_gen',1,'','','',-1,0,'pgNoOpenProc;pgGrp;',1560142498);
+INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/mn','10','','/wlb_test/wdg_mn_gen',1,'','','',-1,0,'pgNoOpenProc;pgGrp;',1584730410);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1','gcadr','','/wlb_Main/wdg_grpCadr',1,'','','',-1,2,'geomYsc;evProc;pgGrp;',1400851728);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/gcadr','1','','..',1,'','','',-1,0,'name;grpName;','');
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so','rg','','root',1,'','','',-1,5,'name;',1554066600);
@@ -6410,7 +6410,7 @@ else c1 = (pVar<1) ? "red" : "green";',1000,'name;geomW;geomH;fillColor;elLst;c1
 CREATE TABLE IF NOT EXISTS 'prj_AGLKS_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','statLine','','Status line items',131205,'',128,'','');
 INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','runWin','','Run window',131089,'0|0;1;2|Original size;Maximize;Full screen',128,'','');
-INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','keepAspectRatio','','Keep aspect ratio on scale',131072,'1',128,'','');
+INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','keepAspectRatio','','Keep aspect ratio on scale',131072,'1',0,'','');
 INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','stBarNoShow','','Not show status bar',131072,'0',128,'','');
-INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','winPosCntrSave','','Windows position control and save',131072,'1',128,'','');
+INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','winPosCntrSave','','Windows position control and save',131072,'1',0,'','');
 COMMIT;

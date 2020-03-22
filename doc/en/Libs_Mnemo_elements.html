@@ -38,7 +38,8 @@
 </td>
 <td> Provides the mnemonic elements library of the user interface of the industrial automation.
 <ul><li> <b>Founded:</b> September 2007</li>
-<li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/GraphicElementsLibraries/MnemoElements" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a></li></ul>
+<li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/GraphicElementsLibraries/MnemoElements" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a></li>
+<li> <b>Used by:</b> the simulator <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">AGLKS</a>, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_Boiler" title="Special:MyLanguage/Using/Model Boiler">Boiler</a> and <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using" title="Special:MyLanguage/Using">more projects</a></li></ul>
 </td></tr></table>
 <p>The library is created to provide mnemonic elements of the user interface and it contains graphic elements, often need when forming the user interface of the automation of technological processes. The library is built on the basis <a href="Modules/VCAEngine.html#WidgetPrimitives" title="Special:MyLanguage/Modules/VCAEngine">primitives of the widgets</a> and the internal programming language <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>.
 </p><p>The element's names and their parameters are available in languages: English, Ukrainian and Russian. Their source code wrote in the human-language independent mode with calls for the translations by the function <i>tr()</i> and the message's translation also allowed for English, Ukrainian and Russian.
@@ -76,7 +77,7 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 
 <h2><span class="mw-headline" id="Passive_screen_elements"><span class="mw-headline-number">1</span> Passive screen elements</span></h2>
 <h3><span class="mw-headline" id="Elements_of_pipelines_without_the_gradient_fill"><span class="mw-headline-number">1.1</span> Elements of pipelines without the gradient fill</span></h3>
-<p>The elements in Figure 1.1 serve to construct pipelines of any complexity, required width and color. By default, they are filled in yellow and the angle of rotation is 0°.
+<p>The elements in Figure 1.1 serve to construct pipelines of any complexity, required width and color. By default, they are filled in yellow, the rotation angle  is 0° and the mirroring disabled.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:727px;"><a class="image" href="http://oscada.org/wiki/File:LibMnemoEls_pipes.png"><img class="thumbimage" height="110" src="files/LibMnemoEls_pipes.png" width="725" /></a>  <div class="thumbcaption">Fig.1.1. Elements of the pipeline without the gradient fill.</div></div></div></div>
 <p>The pipeline elements include, from the left to the right:
@@ -132,7 +133,7 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <td> Maxim Lysenko
 </td></tr></table>
 <p><b><u>Using — development</u></b><br />
-These widgets can be used by the developer to create mnemonic schemes of the plain pipelines. By the attribute "Color 1" you can change the element filling color. By rotation these widgets you can get all the needed combinations. By scaling, you can set the desired pipe width where, for straight sections, the "x" and "y" axis scales may be different, determining the typical pipe width on the mnemonic scheme and the length of its individual section, respectively. To use it you need to add selected ones to a mnemonic scheme, systematically adjust for the geometry and visually connect the needed parts of the pipelines properly, see <a href="#Add1">Addition 1</a> for the details. For the purpose of systematic and simplified work, you may prepare only first elements and for other pipeline parts use ready copies of these already prepared and placed elements.
+These widgets can be used by the developer to create mnemonic schemes of the plain pipelines. By the attribute "Color 1" you can change the element filling color. By rotation and mirroring these widgets you can get all the needed combinations. By scaling, you can set the desired pipe width where, for straight sections, the "x" and "y" axis scales may be different, determining the typical pipe width on the mnemonic scheme and the length of its individual section, respectively. To use it you need to add selected ones to a mnemonic scheme, systematically adjust for the geometry and visually connect the needed parts of the pipelines properly, see <a href="#Add1">Addition 1</a> for the details. For the purpose of systematic and simplified work, you may prepare only first elements and for other pipeline parts use ready copies of these already prepared and placed elements.
 </p><p><b><u>Using — runtime</u></b><br />
 In the runtime mode, these elements look the same as in the development mode because they are not dynamic.
 </p>
@@ -378,7 +379,7 @@ In the runtime mode, these elements look the same as in the development mode bec
 <td> Maxim Lysenko
 </td></tr></table>
 <p><b><u>Using — development</u></b><br />
-These widgets can be used by the developer to create mnemonic schemes with the pipelines. By rotating these widgets, you can get all the combinations you want, based solely on the primitive "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#ElFigure" title="Special:MyLanguage/Sub-projects/VCA">Elementary Figures</a>". By scaling, you can set the desired geometric dimensions relative to the overall dimensions of the pipe network. To use it you need to add selected ones to a mnemonic scheme, systematically adjust for the geometry and properly visually connect into or between the pipeline elements, see <a href="#Add1">Addition 1</a> for the details. For the purpose of systematic and simplified work, you may prepare only first elements and for other pipeline parts use ready copies of these already prepared and placed elements.
+These widgets can be used by the developer to create mnemonic schemes with the pipelines. By rotating and mirroring these widgets, you can get all the combinations you want, based solely on the primitive "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#ElFigure" title="Special:MyLanguage/Sub-projects/VCA">Elementary Figures</a>". By scaling, you can set the desired geometric dimensions relative to the overall dimensions of the pipe network. To use it you need to add selected ones to a mnemonic scheme, systematically adjust for the geometry and properly visually connect into or between the pipeline elements, see <a href="#Add1">Addition 1</a> for the details. For the purpose of systematic and simplified work, you may prepare only first elements and for other pipeline parts use ready copies of these already prepared and placed elements.
 </p><p><b><u>Using — runtime</u></b><br />
 In the runtime mode, these elements look mostly the same as in the development mode because they are not dynamic. Some elements, as "Cooler 2", are dynamic but are not linked.
 </p><p><br />
@@ -723,5 +724,5 @@ In the runtime mode, in the main field of the elements, there are represented th
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Mnemo_elements/en">Libs/Mnemo_elements/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2667</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Mnemo_elements/en">Libs/Mnemo_elements/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2669</td></tr></table></body>
 </html>

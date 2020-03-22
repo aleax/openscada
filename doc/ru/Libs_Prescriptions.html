@@ -1,0 +1,965 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Библиотеки/Рецепты - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../en/files/doc.css" rel="stylesheet" /></head>
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../en/files/Logo-big.png" /></a></div><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="ru">Библиотеки/Рецепты</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FPrescriptions&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Prescriptions" title="Libs/Prescriptions">Libs/Prescriptions</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_Prescriptions.html" title="Libs/Prescriptions (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Libs_Prescriptions.html" title="Бібліотеки/Рецепти (100% translated)">українська</a></div></div>
+<table class="wikitable">
+
+<tr>
+<th> Название </th>
+<th> Версия </th>
+<th> Лицензия </th>
+<th> Источник </th>
+<th> Языки </th>
+<th> Автор </th>
+<th> Описание
+</th></tr>
+
+<tr>
+<td> <a href="Libs_Prescriptions.html" title="Special:MyLanguage/Libs/Prescriptions">Рецепты</a>
+</td>
+<td> 1.1, 1.1 </td>
+<td> GPLv2 </td>
+<td>
+<p>OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.tmplb_PrescrTempl<br />
+vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">GZip</a>) &gt; VCA.wlb_prescr
+</p>
+</td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td>
+<td> Библиотека элементов сценариев технологических процессов — рецептов.
+<ul><li> <b>Основано:</b> Апрель 2012</li>
+<li> <b>Спонсировано:</b> <a class="external text" href="http://e-beam.ru" rel="nofollow noreferrer noopener" target="_blank">Лаборатория Вакуумных Технологий</a></li>
+<li> <b>Спонсировано, на предмет шаблонизации контроллера:</b> Магомед</li>
+<li> <b>Изначально создано, для кадров:</b> в <a class="external text" href="http://wiki.oscada.org/Using/GraphicElementsLibraries/MainElements" rel="nofollow noreferrer noopener" target="_blank">старой Wiki</a></li>
+<li> <b>Использовано:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Vacuum_processing_unit" title="Special:MyLanguage/Using/Vacuum processing unit">Автоматизированная система управления вакуумной технологической установкой</a></li>
+<li> <b>Сделать (To Do):</b></li></ul>
+<dl><dd>- перевести элементы <a href="#GraphPart">графической части</a> на полную работу через <a href="#manager">менеджер рецептов</a>, для возможности удалённого разнесения частей.</dd></dl>
+</td></tr></table>
+<p>Библиотека создаётся для предоставления среды исполнения сценариев технологических процессов — рецептов, и кадров пользовательского интерфейса около него, включая <a href="#prescrEdit">кадр создания/редактирования рецептов</a> и два кадра контроля исполнения и отчётности — "<a href="#prescrRun">Рецепт — исполнение</a>" и "<a href="#prescrRunSimple">Рецепт — исполнение, простой</a>". Строится библиотека на основе <a href="Modules/VCAEngine.html#WidgetPrimitives" title="Special:MyLanguage/Modules/VCAEngine">примитивов виджетов</a> и языка внутреннего программирования <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, включая для шаблонов и команд.
+</p><p>Названия элементов и их параметров доступны на языках: Английский, Украинский и Российский. Их исходный код написан в языко(человеческий)-независимом режиме с вызовом функции перевода <i>tr()</i> и перевод этих сообщений также доступен Английским, Украинским и Российским.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9A.D0.BE.D0.BD.D1.86.D0.B5.D0.BF.D1.86.D0.B8.D1.8F"><span class="tocnumber">1</span> <span class="toctext"><span>Концепция</span></span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.A7.D0.B0.D1.81.D1.82.D1.8C_.D0.BE.D0.B1.D1.80.D0.B0.D0.B1.D0.BE.D1.82.D0.BA.D0.B8_.D0.B8_.D0.B8.D1.81.D0.BF.D0.BE.D0.BB.D0.BD.D0.B5.D0.BD.D0.B8.D1.8F"><span class="tocnumber">2</span> <span class="toctext">Часть обработки и исполнения</span></a>
+<ul>
+<li class="toclevel-2"><a href="#.D0.9C.D0.B5.D0.BD.D0.B5.D0.B4.D0.B6.D0.B5.D1.80_.D1.80.D0.B5.D1.86.D0.B5.D0.BF.D1.82.D0.BE.D0.B2_.28manager.29"><span class="tocnumber">2.1</span> <span class="toctext">Менеджер рецептов (manager)</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#.D0.A8.D0.B0.D0.B1.D0.BB.D0.BE.D0.BD.D1.8B_.D0.BA.D0.BE.D0.BC.D0.B0.D0.BD.D0.B4"><span class="tocnumber">2.2</span> <span class="toctext"><span>Шаблоны команд</span></span></a>
+<ul>
+<li class="toclevel-3"><a href="#.D0.9A.D0.BE.D0.BC.D0.B0.D0.BD.D0.B4.D0.B0_.E2.80.94_.D0.A2.D0.B0.D0.B9.D0.BC.D0.B5.D1.80_.28timer.29"><span class="tocnumber">2.2.1</span> <span class="toctext">Команда — Таймер (timer)</span></a></li>
+<li class="toclevel-3"><a href="#.D0.9A.D0.BE.D0.BC.D0.B0.D0.BD.D0.B4.D0.B0_.E2.80.94_.D0.A4.D0.BE.D0.BD.D0.BE.D0.B2.D1.8B.D0.B9_.D1.82.D0.B0.D0.B9.D0.BC.D0.B5.D1.80_.28timer.29"><span class="tocnumber">2.2.2</span> <span class="toctext">Команда — Фоновый таймер (timer)</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#.D0.93.D1.80.D0.B0.D1.84.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.B0.D1.8F_.D1.87.D0.B0.D1.81.D1.82.D1.8C"><span class="tocnumber">3</span> <span class="toctext"><span>Графическая часть</span></span></a>
+<ul>
+<li class="toclevel-2"><a href="#.D0.A0.D0.B5.D1.86.D0.B5.D0.BF.D1.82_.E2.80.94_.D1.80.D0.B5.D0.B4.D0.B0.D0.BA.D1.82.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B5_.28prescrEdit.29"><span class="tocnumber">3.1</span> <span class="toctext">Рецепт — редактирование (prescrEdit)</span></a></li>
+<li class="toclevel-2"><a href="#.D0.A0.D0.B5.D1.86.D0.B5.D0.BF.D1.82_.E2.80.94_.D0.B8.D1.81.D0.BF.D0.BE.D0.BB.D0.BD.D0.B5.D0.BD.D0.B8.D0.B5_.28prescrRun.29"><span class="tocnumber">3.2</span> <span class="toctext">Рецепт — исполнение (prescrRun)</span></a></li>
+<li class="toclevel-2"><a href="#.D0.A0.D0.B5.D1.86.D0.B5.D0.BF.D1.82_.E2.80.94_.D0.B8.D1.81.D0.BF.D0.BE.D0.BB.D0.BD.D0.B5.D0.BD.D0.B8.D0.B5.2C_.D0.BF.D1.80.D0.BE.D1.81.D1.82.D0.BE.D0.B9_.28prescrRunSimple.29"><span class="tocnumber">3.3</span> <span class="toctext">Рецепт — исполнение, простой (prescrRunSimple)</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id=".D0.9A.D0.BE.D0.BD.D1.86.D0.B5.D0.BF.D1.86.D0.B8.D1.8F"><span class="mw-headline-number">1</span> <span id="Conception" title="#Conception">Концепция</span></span></h2>
+<p>Сценарий технологических операций — рецепт, представляет собой последовательный вызов блока функций — команды, принимающие до пяти аргументов и возвращающие строку результата с кодом завершения в начале: "Работа (0)", "Завершен (&gt;0)" и "Ошибка (&lt;0)". Вызов команды шага осуществляется циклически, пока возвращается результат "Работа (0)". Переход к следующему шагу осуществляется в случае результата "Завершен (&gt;0)" и команды "Пропуск (2)". В случае ошибки, результат "Ошибка (&lt;0)", выполнение рецепта прерывается.
+</p><p>Последовательность команд, пользователем конечного интерфейса, формируются на <a href="#prescrEdit">кадре создания/редактирования</a> и осуществляется контроль их исполнения на кадре "<a href="#prescrRun">Рецепт — исполнение</a>" и "<a href="#prescrRunSimple">Рецепт — исполнение, простой</a>", при этом, данные рецептов сохраняются в таблице БД програм-рецептов. Таблица рецептов-программ помещается в одну из БД, доступных в конкретной конфигурации OpenSCADA, например, на данный момент такая таблица помещается в БД этой библиотеки как "<b>PrescrProgs = (<u>name</u>, prgTxt)</b>", где:
+</p>
+<ul><li> <i>name</i> — имя рецепта-программы;</li>
+<li> <i>prgTxt</i> — текст программы в виде XML-дерева.</li></ul>
+<p>XML-дерево рецепта-программы начинается с тега-контейнера "prg", который содержит конечные теги команд "com" с атрибутами:
+</p>
+<ul><li> <i>id</i> — идентификатор-имя-тип команды в основе шага;</li>
+<li> <i>name</i> — персональное название шага, может отсутствовать;</li>
+<li> <i>descr</i> — персональное описание шага, берётся из соответствующего поля команды и может отсутствовать;</li>
+<li> <i>backgrnd</i> — признак исполнения шага в фоне, или последовательной группой шагов с этим признаком;</li>
+<li> <i>arg{N}</i> — определённые пользователем значения аргументов от 1 до 5.</li></ul>
+<p>Например, для рецепта с четырьмя шагами получим:
+</p>
+<pre style="white-space: pre-wrap; margin-left: 20pt;">
+&lt;prg&gt;
+  &lt;com arg1="10" id="Таймер" /&gt;
+  &lt;com arg1="10" id="Вакуум" /&gt;
+  &lt;com arg1="20" id="Таймер" /&gt;
+  &lt;com arg1="34" id="Включить катушки" /&gt;
+&lt;/prg&gt;</pre>
+<p>Вычисление рецепта осуществляется через параметр <a href="#manager">менеджера рецептов</a>, который поддерживает два способа исполнения команд рецепта:
+</p>
+<ul><li> <b>команда-параметр</b> — размещённые в виде параметров контроллера <a href="DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">логического уровня</a> и с учётом их контекста, если в менеджере рецептов указан логический контроллер;</li>
+<li> <b>команда-макрос</b> — непосредственно в объекте менеджера рецептов по командам, хранимым в таблице "PrescrComs".</li></ul>
+<p><b><u>Режим исполнения "команда-параметр"</u></b><br />
+Команды-параметры логического уровня формируются программистом SCADA-системы под реализуемую прикладную область в виде <a href="Program_manual.html#DAQTmpl" title="Special:MyLanguage/Documents/Program manual">шаблонов параметров подсистемы "Сбор данных"</a>, которые затем используются в логическом контроллере рецептов, с рядом обязательных, служебных и внутренних атрибутов:
+</p>
+<ul><li> <i>rez</i> — команда: результат исполнения; команда должна возвращать строку вида "<b>{rezCode}:{TextMess}</b>", где <i>rezCode</i> имеет состояния:
+<ul><li> <b>&lt;0</b> — ошибка;</li>
+<li> <b>=0</b> — исполнение;</li>
+<li> <b>&gt;0</b> — исполнение завершено;</li>
+<li> <b>=10</b> — исполнение в фоне с указанием обновлять статус исполнения.</li></ul></li>
+<li> <i>run</i> — команда: исполнение;</li>
+<li> <i>pause</i> — команда: пауза;</li>
+<li> <i>start</i> — рецепт: запуск;</li>
+<li> <i>stop</i> — рецепт: корректное завершение;</li>
+<li> <i>error</i> — рецепт: завершение по ошибке;</li>
+<li> <i>abort</i> — рецепт: прерывание исполнения оператором;</li>
+<li> <i>arg{1...5}</i> — аргументы 1...5, в имени аргумента возможно указание минимальной и максимальной границы числового значения аргумента в виде "<b>{имя}|{мин}|{макс}</b>".</li></ul>
+<p>Особенностью использования команд-параметров является независимое их исполнение и возможность оставить исполнение ряда команд в фоне, например, регуляторы. Эти команды, также, можно прямо подключать к источнику данных с помощью связей, или даже реализовывать их обоих в одном шаблоне-параметре.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Этот режим, на данное время, является основным и на основе него было реализовано много механизмов взаимодействия с кадрами визуализации и контроля, которые могут не работать, или работать ошибочно со старым "команда-макрос" режимом!
+</p><p><b><u>Режим выполнения "команда-макрос" (старый)</u></b><br />
+Команды-макросы, которые пользователь может выбирать при формировании рецепта-программы, формируются программистом SCADA-системы под реализуемую прикладную область, путём редактирования таблицы команд в OpenSCADA. Таблица команд помещается в одну из БД, доступных в конкретной конфигурации OpenSCADA, например, на данный момент такая таблица помещается в БД этой библиотеки как "<b>PrescrComs = (<u>name</u>, proc, arg1, arg2, arg3, arg4, arg5)</b>", где:
+</p>
+<ul><li> <i>name</i> — имя команды;</li>
+<li> <i>proc</i> — текст процедуры команды, в первой строке содержит имя языка программы, на данный момент это "JavaLikeCalc.JavaScript", и текст программы непосредственно за языком; в процедуре команды доступны следующие контекстные параметры:
+<ul><li> <i>rez</i> — результат выполнения команды, по умолчанию возвращает "Работа" ("0:Ожидание сейчас ...");</li>
+<li> <i>f_start</i> — признак первого запуска процедуры;</li>
+<li> <i>f_frq</i> — частота периодических вызовов процедуры;</li>
+<li> <i>arg{1...5}</i> — значение аргумента 1...5;</li>
+<li> <i>tmp{1...10}</i> — значение временного параметра (контекст вычисления) 1...10;</li></ul></li></ul>
+<dl><dd><dl><dd>Пример текста программы для команды "Таймер", не зависящей от прикладной области:</dd></dl></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 40pt;">
+JavaLikeCalc.JavaScript
+if(f_start) tmp1 = arg1;
+var curTm = tmp1.toReal();
+if(curTm &lt;= 0) { rez = "1:Время истекло для "+arg1+"с"; return; }
+curTm -= 1/f_frq;
+tmp1 = max(0, curTm);
+rez = "0:Ожидание сейчас "+curTm+"с";</pre>
+<ul><li> <i>arg{1...5}</i> — метка аргумента 1...5, только аргументы с меткой будут отображаться при редактировании шага рецепта; в метке возможно указание минимальной и максимальной границы числового значения аргумента в виде "<b>{имя}|{мин}|{макс}</b>".</li></ul>
+<p>Для специальных целей зарезервировано несколько имён команд:
+</p>
+<ul><li> "Error" — вызывается после возникновения ошибки при выполнении шага рецепта;</li>
+<li> "Stop" — вызывается при останове рецепта, при нормальном завершении рецепта и принудительном останове пользователем.</li></ul>
+<h2><span class="mw-headline" id=".D0.A7.D0.B0.D1.81.D1.82.D1.8C_.D0.BE.D0.B1.D1.80.D0.B0.D0.B1.D0.BE.D1.82.D0.BA.D0.B8_.D0.B8_.D0.B8.D1.81.D0.BF.D0.BE.D0.BB.D0.BD.D0.B5.D0.BD.D0.B8.D1.8F"><span class="mw-headline-number">2</span> Часть обработки и исполнения</span></h2>
+<p>Раздел содержит <a href="Program_manual.html#DAQTmpl" title="Special:MyLanguage/Documents/Program manual">DAQ-шаблоны менеджера рецептов</a> и команд режима "команда-шаблон", которые предназначены к подключению в контроллере логического уровня, путём создания соответственно параметров менеджера рецептов и команд, доступных для выбора пользователем, которые и будут осуществлять там всю роботу с рецептами-програмами на предмет их обработки и исполнения.
+</p><p>Для подключения части библиотеки к проекту станции OpenSCADA Вы можете получить файл БД как:
+</p>
+<ul><li> такой что поставляется с готовым и соответствующим пакетом дистрибутива Linux вроде "openscada-libdb-main", "openscada-LibDB.Main";</li>
+<li> наиболее актуальный и непосредственно полученный из <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">репозитория subversion</a>, преобразованный в файл БД SQLite путём:</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 15px">
+$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql
+$ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
+</pre>
+<ul><li> загрузка <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">прикреплённого тут</a>.</li></ul>
+<p>Этот загруженный файл Вы далее можете разместить в каталоге проекта станции и создать объект базы данных модуля БД "SQLite", зарегистрировав файл базы данных в конфигурации.
+</p><p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="manager" title="#manager"><h3><span class="mw-headline" id=".D0.9C.D0.B5.D0.BD.D0.B5.D0.B4.D0.B6.D0.B5.D1.80_.D1.80.D0.B5.D1.86.D0.B5.D0.BF.D1.82.D0.BE.D0.B2_.28manager.29"><span class="mw-headline-number">2.1</span> Менеджер рецептов (<a href="Libs_Prescriptions.html#manager" title="Special:MyLanguage/Libs/Prescriptions">manager</a>)</span></h3></span>
+</td>
+<td> 2.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsPrescriptionsManagerOp_ru.png" title="Результат и оперативные настройки."><img alt="Результат и оперативные настройки." height="650" src="files/LibsPrescriptionsManagerOp_ru.png" width="446" /></a></div>
+<p>Основной, представительский и унифицированный шаблон менеджера и контроллера рецептов, их обработки и прямого исполнения в режиме "команда-макрос". Шаблон формирует структуру параметра менеджера рецептов, который может быть легко подключен ко всем кадрам этой библиотеки.
+</p><p>Представительской структурой менеджера рецептов является:
+</p>
+<ul><li> "БД: Имя БД с таблицами" — БД, вроде "SQLite.vcaBase", где хранятся или должны храниться таблицы рецептов-программ.</li>
+<li> "БД: Таблица с программами" — название таблицы рецептов-программ, типично "PrescrProgs".</li>
+<li> "Список команд (<b>comLs</b>)" — перечень команд доступных для использования.</li>
+<li> "Имя выбранной программы (<b>prog</b>)" — состояние и установка названия выбранной программы в обработке менеджером.</li>
+<li> "Режим (<b>mode</b>)", "Текущий режим (<b>curMode</b>)" — установка и текущий режим менеджера, исполнения выбранного рецепта-программы: Завершение(-2); Ошибка(-1); Стоп(0); Исполнение(1); Пауза(2); Пропустить команду(3);</li>
+<li> "Время запуска (<b>startTm</b>)" — время запуска в секундах.</li>
+<li> "Текущая команда-шаг (<b>curCom</b>)" — текущая обрабатываемая команда.</li>
+<li> "Рабочая программа (<b>work</b>)" — актуальная и обрабатываемая на данный момент программа в объекте.</li></ul>
+<p><b><u>Функции</u></b><br />
+</p>
+<ul><li> Формирует "Список команд (<b>comLs</b>)", доступных для использования в пользовательских рецептах-программах.</li>
+<li> Обрабатывает "Имя выбранной программы (<b>prog</b>)", смена которой приводит к загрузке её последовательности команд в Рабочая программа (<b>work</b>)" или созданию новой программы.</li>
+<li> Исполняет программу в "Имя выбранной программы (<b>prog</b>)" после получения команды "Исполнение(1)" в "Режим (<b>mode</b>)" и отмечает этот процесс в: "Текущий режим (<b>curMode</b>)", "Время запуска (<b>startTm</b>)", "Текущая команда-шаг (<b>curCom</b>)" и "Рабочая программа (<b>work</b>)".</li>
+<li> Генерирует сообщения действий в течении исполнения рецепта на предмет:</li></ul>
+<dl><dd> КАТЕГОРИЯ: определяет идентификатор пользовательского рецепта-программы <i>ProgNM</i> в формате "<b>uprg{ProgNM}</b>", где:
+<ul><li> "uprg*" —  типовой шаблон-признак пользовательского рецепта-программы, который может быть непосредственно использован в фильтре категории для определения чисто пользовательских рецептов-программ;</li>
+<li> <i>ProgNM</i> — имя рецепта-программы.</li></ul></dd>
+<dd> ТЕКСТ: описание действия в формате "<b>{ActDescr} "{ProgNM}"&nbsp;: {StartTm}&nbsp;: {ActTm}</b>", где:
+<ul><li> <i>ActDescr</i> — описание действия:</li></ul>
+<dl><dd><ul><li> "Текущий узел отсутствует";</li>
+<li> "Прерванный пользователем сеанс программы";</li>
+<li> "Прерванный ошибкой сеанс программы";</li>
+<li> "Успешный сеанс программы".</li></ul></dd></dl>
+<ul><li> <i>ProgNM</i> — имя рецепта-программы;</li>
+<li> <i>StartTm</i> — время запуска рецепта-программы, в формате "2020-03-14 16:05:01";</li>
+<li> <i>ActTm</i> — время действия рецепта-программы, в формате "2020-03-14 16:05:52".</li></ul></dd></dl>
+<p><b><u>ВВ шаблона</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Идентификатор </th>
+<th> Имя </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Атрибут </th>
+<th> Конфигурация </th>
+<th> Значение
+</th></tr>
+<tr>
+<td> dbDB </td>
+<td> БД: Имя БД с таблицами </td>
+<td> Строка </td>
+<td> Вход </td>
+<td> Только чтение </td>
+<td> Константа </td>
+<td>
+</td></tr>
+<tr>
+<td> dbComs </td>
+<td> БД: Таблица с командами </td>
+<td> Строка </td>
+<td> Вход </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> PrescrComs
+</td></tr>
+<tr>
+<td> dbProgs </td>
+<td> БД: Таблица с программами </td>
+<td> Строка </td>
+<td> Вход </td>
+<td> Только чтение </td>
+<td> Константа </td>
+<td> PrescrProgs
+</td></tr>
+<tr>
+<td> comsCntr </td>
+<td> Контроллер команд,
+<p>&lt;пусто&gt; - для команд в таблице,<br />
+'*' - этот параметр контроллер
+</p>
+</td>
+<td> Строка </td>
+<td> Вход </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> *
+</td></tr>
+<tr>
+<td> mode </td>
+<td> Режим </td>
+<td> Выбор целых чисел </td>
+<td> Вход </td>
+<td> Полный доступ </td>
+<td> Переменная </td>
+<td> -2
+<p>-2;-1;0;1;2;3
+Завершение;Ошибка;Стоп;Исполнение;Пауза;Пропустить команду
+</p>
+</td></tr>
+<tr>
+<td> curMode </td>
+<td> Текущий режим </td>
+<td> Выбор целых чисел </td>
+<td> Вход </td>
+<td> Только чтение </td>
+<td> Переменная </td>
+<td> -2
+<p>-2;-1;0;1;2;3
+Завершение;Ошибка;Стоп;Исполнение;Пауза;Пропустить команду
+</p>
+</td></tr>
+<tr>
+<td> prog </td>
+<td> Имя выбранной программы </td>
+<td> Строка </td>
+<td> Вход </td>
+<td> Полный доступ </td>
+<td> Переменная </td>
+<td>
+</td></tr>
+<tr>
+<td> startTm </td>
+<td> Время запуска, секунды </td>
+<td> Целый </td>
+<td> Вход </td>
+<td> Только чтение </td>
+<td> Переменная </td>
+<td>
+</td></tr>
+<tr>
+<td> curCom </td>
+<td> Текущая команда-шаг </td>
+<td> Строка </td>
+<td> Вход </td>
+<td> Только чтение </td>
+<td> Переменная </td>
+<td>
+</td></tr>
+<tr>
+<td> work </td>
+<td> Рабочая программа </td>
+<td> Объект </td>
+<td> Вход </td>
+<td> Только чтение </td>
+<td> Переменная </td>
+<td>
+</td></tr>
+<tr>
+<td> comLs </td>
+<td> Список команд </td>
+<td> Объект </td>
+<td> Вход </td>
+<td> Только чтение </td>
+<td> Переменная </td>
+<td>
+</td></tr>
+<tr>
+<td> clcCnt </td>
+<td> Счётчик циклов </td>
+<td> Целый </td>
+<td> Вход </td>
+<td> Не атрибут </td>
+<td> Переменная </td>
+<td>
+</td></tr>
+<tr>
+<td> this </td>
+<td> Объект </td>
+<td> Объект </td>
+<td> Вход </td>
+<td> Не атрибут </td>
+<td> Переменная </td>
+<td>
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Ошибка функции </td>
+<td> Строка </td>
+<td> Вход </td>
+<td> Не атрибут </td>
+<td> Переменная </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обсчёта функции, Гц </td>
+<td> Вещественный </td>
+<td> Вход </td>
+<td> Не атрибут </td>
+<td> Переменная </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Флаг запуска функции </td>
+<td> Логический </td>
+<td> Вход </td>
+<td> Не атрибут </td>
+<td> Переменная </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Флаг останова функции </td>
+<td> Логический </td>
+<td> Вход </td>
+<td> Не атрибут </td>
+<td> Переменная </td>
+<td>0
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsPrescriptionsManagerCfg_ru.png" title="Конфигурация."><img alt="Конфигурация." height="271" src="files/LibsPrescriptionsManagerCfg_ru.png" width="442" /></a></div>
+<p><b><u>Конфигурация и использование</u></b><br />
+</p>
+<dl><dd>1. Создать и запустить объект <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">логического контроллера</a> с необходимыми свойствами планирования.
+<ul><li>[<b>JavaLikeCalc</b>] или непосредственно объект <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc контроллера</a>.</li></ul></dd>
+<dd>2. Создать объект <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">логического параметра</a> и выбрать этот шаблон для него. Включить параметр.
+<ul><li>[<b>JavaLikeCalc</b>] или выбрать этот шаблон для <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc контроллера</a>; включить контроллер; создать параметр "manager" отражения репрезентативных атрибутов:</li></ul></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 40pt;">
+dbDB
+dbProgs
+comLs
+prog
+mode
+curMode
+startTm
+curCom
+work
+</pre>
+<dl><dd>3. Во вкладке "Конфигурация шаблона" объекта логического параметра, или контроллера для [JavaLikeCalc], вы должны установить:
+<dl><dd><ul><li> <i>БД: Имя БД с таблицами</i> — в БД, вроде "SQLite.vcaBase", где хранятся или должны храниться таблицы рецептов-программ. Пустое значение не разрешено и вызовет ошибку!</li>
+<li> <i>БД: Таблица с программами</i> — в название таблицы рецептов-программ, по умолчанию это "PrescrProgs".</li>
+<li> <i>Контроллер команд</i> — оставить в значении по умолчанию "*" для использования контроллера параметров также для команд. Вы должны изменить это поле в случае исполнения объекта контроллера менеджера в отдельном от команд логическом контроллере!</li></ul></dd></dl>
+<ul><li> [<b>JavaLikeCalc</b>] или и дополнительно:</li></ul>
+<dl><dd><ul><li> <i>Контроллер команд</i> — изменить это поле в отдельный логический контроллер для команд!</li></ul></dd></dl>
+<ul><li> [<b>Команда-макрос</b>] или и дополнительно:</li></ul>
+<dl><dd><ul><li> <i>БД: Таблица с командами</i> — в название таблицы команд, по умолчанию это "PrescrComs".</li>
+<li> <i>Контроллер команд</i> — установить <b>&lt;пусто&gt;</b>.</li></ul></dd></dl></dd>
+<dd>4. Разместить необходимые <a href="#LogicLevCommands">параметры команд</a> вместе с параметром менеджера. 
+<ul><li> [<b>Команда-макрос</b>] или подготовить необходимые команды в "БД: Таблица с командами" согласно <a href="#Conception">концепции</a>; пустая таблица команд должна быть создана автоматически после запуска объекта параметра, или контроллера для [JavaLikeCalc]!</li></ul></dd>
+<dd>5. РЕЗУЛЬТАТ: Запустив объект контроллера (где создан этот параметр) должны получить оперативные данные во вкладке "Атрибуты", для: перечень доступных команд, текущий режим, рабочая программа, текущая команда-шаг и время запуска.
+<ul><li> [<b>JavaLikeCalc</b>] или непосредственно объект контроллера <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>.</li></ul></dd>
+<dd>6. В процессе работы, через вкладку оперативных данных "Атрибуты", кроме получения результата, можно осуществлять оперативную настройку и контроль на предмет:
+<ul><li> <i>Имя выбранной программы</i> — установка названия выбранной программы в обработке менеджером;</li>
+<li> <i>Режим</i> — установка режима менеджера, исполнения выбранного рецепта-программы: Завершение(-2); Ошибка(-1); Стоп(0); Исполнение(1); Пауза(2); Пропустить команду(3).</li></ul></dd></dl>
+<h3><span class="mw-headline" id=".D0.A8.D0.B0.D0.B1.D0.BB.D0.BE.D0.BD.D1.8B_.D0.BA.D0.BE.D0.BC.D0.B0.D0.BD.D0.B4"><span class="mw-headline-number">2.2</span> <span id="LogicLevCommands" title="#LogicLevCommands">Шаблоны команд</span></span></h3>
+<table class="wikitable">
+
+<tr>
+<td> <span id="timer" title="#timer"><h4><span class="mw-headline" id=".D0.9A.D0.BE.D0.BC.D0.B0.D0.BD.D0.B4.D0.B0_.E2.80.94_.D0.A2.D0.B0.D0.B9.D0.BC.D0.B5.D1.80_.28timer.29"><span class="mw-headline-number">2.2.1</span> Команда — Таймер (<a href="Libs_Prescriptions.html#timer" title="Special:MyLanguage/Libs/Prescriptions">timer</a>)</span></h4></span> </td>
+<td> 2.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsPrescriptionsTimer_ru.png" title="Результат и оперативные настройки."><img alt="Результат и оперативные настройки." height="435" src="files/LibsPrescriptionsTimer_ru.png" width="332" /></a></div>
+<p>Шаблон команды типового таймера рецепта. Таймер разработан только для удержания времени между другими действенными шагами и для примера, т.е. он содержит только один атрибут, это "Время" в секундах.
+</p><p><b><u>ВВ шаблона</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Идентификатор </th>
+<th> Имя </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Атрибут </th>
+<th> Конфигурация </th>
+<th> Значение
+</th></tr>
+<tr>
+<td> start </td>
+<td> Рецепт: старт </td>
+<td> Логический </td>
+<td> Вход </td>
+<td> Полный доступ </td>
+<td> Переменная </td>
+<td> 0
+</td></tr>
+<tr>
+<td> stop </td>
+<td> Рецепт: стоп </td>
+<td> Логический </td>
+<td> Вход </td>
+<td> Полный доступ </td>
+<td> Переменная </td>
+<td> 0
+</td></tr>
+<tr>
+<td> error </td>
+<td> Рецепт: ошибка </td>
+<td> Логический </td>
+<td> Вход </td>
+<td> Полный доступ </td>
+<td> Переменная </td>
+<td> 0
+</td></tr>
+<tr>
+<td> abort </td>
+<td> Рецепт: прерывание </td>
+<td> Логический </td>
+<td> Вход </td>
+<td> Полный доступ </td>
+<td> Переменная </td>
+<td> 0
+</td></tr>
+<tr>
+<td> run </td>
+<td> Команда: исполнение </td>
+<td> Логический </td>
+<td> Вход </td>
+<td> Полный доступ </td>
+<td> Переменная </td>
+<td> 0
+</td></tr>
+<tr>
+<td> pause </td>
+<td> Команда: пауза </td>
+<td> Логический </td>
+<td> Вход </td>
+<td> Полный доступ </td>
+<td> Переменная </td>
+<td> 0
+</td></tr>
+<tr>
+<td> rez </td>
+<td> Команда: результат </td>
+<td> Строка </td>
+<td> Вход </td>
+<td> Полный доступ </td>
+<td> Переменная </td>
+<td> 1
+</td></tr>
+<tr>
+<td> arg1 </td>
+<td> Время, секунд </td>
+<td> Вещественный </td>
+<td> Вход </td>
+<td> Полный доступ </td>
+<td> Переменная </td>
+<td>
+</td></tr>
+<tr>
+<td> tmp1 </td>
+<td> Временный 1 </td>
+<td> Вещественный </td>
+<td> Выход </td>
+<td> Не атрибут </td>
+<td> Переменная </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Флаг останова функции </td>
+<td> Логический </td>
+<td> Вход </td>
+<td> Не атрибут </td>
+<td> Переменная </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обсчёта функции, Гц </td>
+<td> Вещественный </td>
+<td> Вход </td>
+<td> Не атрибут </td>
+<td> Переменная </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Ошибка функции </td>
+<td> Строка </td>
+<td> Вход </td>
+<td> Не атрибут </td>
+<td> Переменная </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Флаг запуска функции </td>
+<td> Логический </td>
+<td> Вход </td>
+<td> Не атрибут </td>
+<td> Переменная </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Конфигурация и использование</u></b><br />
+</p>
+<dl><dd>1. Создать и запустить объект <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">логического контроллера</a> с необходимыми свойствами планирования, или использовать созданный для <a href="#manager">менеджера рецепта</a>.</dd>
+<dd>2. Создать объект <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">логического параметра</a> и выбрать этот шаблон для него. Включить параметр.</dd>
+<dd>5. РЕЗУЛЬТАТ: Запустив должны получить оперативные данные во вкладке "Атрибуты" для результата команды.</dd>
+<dd>6. В процессе работы, через вкладку оперативных данных "Атрибуты", кроме получения результата, можно осуществлять оперативную настройку и контроль на предмет <a href="#Conception">репрезентативных атрибутов команд рецепта</a> и дополнительных:
+<ul><li> <i>Время</i> — установка времени таймера, в секундах.</li></ul></dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="timer" title="#timer"><h4><span class="mw-headline" id=".D0.9A.D0.BE.D0.BC.D0.B0.D0.BD.D0.B4.D0.B0_.E2.80.94_.D0.A4.D0.BE.D0.BD.D0.BE.D0.B2.D1.8B.D0.B9_.D1.82.D0.B0.D0.B9.D0.BC.D0.B5.D1.80_.28timer.29"><span class="mw-headline-number">2.2.2</span> Команда — Фоновый таймер (<a href="Libs_Prescriptions.html#timer" title="Special:MyLanguage/Libs/Prescriptions">timer</a>)</span></h4></span> </td>
+<td> 2.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsPrescriptionsBackTimer_ru.png" title="Результат и оперативные настройки."><img alt="Результат и оперативные настройки." height="436" src="files/LibsPrescriptionsBackTimer_ru.png" width="334" /></a></div>
+<p>Шаблон команды фонового таймера рецепта. Таймер разработан только для удержания времени в фоне для примера, т.е. он содержит только один атрибут, это "Время" в секундах.
+</p><p><b><u>ВВ шаблона</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Идентификатор </th>
+<th> Имя </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Атрибут </th>
+<th> Конфигурация </th>
+<th> Значение
+</th></tr>
+<tr>
+<td> start </td>
+<td> Рецепт: старт </td>
+<td> Логический </td>
+<td> Вход </td>
+<td> Полный доступ </td>
+<td> Переменная </td>
+<td> 0
+</td></tr>
+<tr>
+<td> stop </td>
+<td> Рецепт: стоп </td>
+<td> Логический </td>
+<td> Вход </td>
+<td> Полный доступ </td>
+<td> Переменная </td>
+<td> 0
+</td></tr>
+<tr>
+<td> error </td>
+<td> Рецепт: ошибка </td>
+<td> Логический </td>
+<td> Вход </td>
+<td> Полный доступ </td>
+<td> Переменная </td>
+<td> 0
+</td></tr>
+<tr>
+<td> abort </td>
+<td> Рецепт: прерывание </td>
+<td> Логический </td>
+<td> Вход </td>
+<td> Полный доступ </td>
+<td> Переменная </td>
+<td> 0
+</td></tr>
+<tr>
+<td> run </td>
+<td> Команда: исполнение </td>
+<td> Логический </td>
+<td> Вход </td>
+<td> Полный доступ </td>
+<td> Переменная </td>
+<td> 0
+</td></tr>
+<tr>
+<td> pause </td>
+<td> Команда: пауза </td>
+<td> Логический </td>
+<td> Вход </td>
+<td> Полный доступ </td>
+<td> Переменная </td>
+<td> 0
+</td></tr>
+<tr>
+<td> rez </td>
+<td> Команда: результат </td>
+<td> Строка </td>
+<td> Вход </td>
+<td> Полный доступ </td>
+<td> Переменная </td>
+<td> 1
+</td></tr>
+<tr>
+<td> arg1 </td>
+<td> Время, секунд </td>
+<td> Вещественный </td>
+<td> Вход </td>
+<td> Полный доступ </td>
+<td> Переменная </td>
+<td>
+</td></tr>
+<tr>
+<td> tmp1 </td>
+<td> Временный 1 </td>
+<td> Вещественный </td>
+<td> Выход </td>
+<td> Не атрибут </td>
+<td> Переменная </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Флаг останова функции </td>
+<td> Логический </td>
+<td> Вход </td>
+<td> Не атрибут </td>
+<td> Переменная </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обсчёта функции, Гц </td>
+<td> Вещественный </td>
+<td> Вход </td>
+<td> Не атрибут </td>
+<td> Переменная </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Ошибка функции </td>
+<td> Строка </td>
+<td> Вход </td>
+<td> Не атрибут </td>
+<td> Переменная </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Флаг запуска функции </td>
+<td> Логический </td>
+<td> Вход </td>
+<td> Не атрибут </td>
+<td> Переменная </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Конфигурация и использование</u></b><br />
+</p>
+<dl><dd>1. Создать и запустить объект <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">логического контроллера</a> с необходимыми свойствами планирования, или использовать созданный для <a href="#manager">менеджера рецепта</a>.</dd>
+<dd>2. Создать объект <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">логического параметра</a> и выбрать этот шаблон для него. Включить параметр.</dd>
+<dd>5. РЕЗУЛЬТАТ: Запустив должны получить оперативные данные во вкладке "Атрибуты" для результата команды.</dd>
+<dd>6. В процессе работы, через вкладку оперативных данных "Атрибуты", кроме получения результата, можно осуществлять оперативную настройку и контроль на предмет <a href="#Conception">репрезентативных атрибутов команд рецепта</a> и дополнительных:
+<ul><li> <i>Время</i> — установка времени таймера, в секундах.</li></ul></dd></dl>
+<h2><span class="mw-headline" id=".D0.93.D1.80.D0.B0.D1.84.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.B0.D1.8F_.D1.87.D0.B0.D1.81.D1.82.D1.8C"><span class="mw-headline-number">3</span> <span id="GraphPart" title="#GraphPart">Графическая часть</span></span></h2>
+<p>Содержит элементы-кадры рецептов конечного типа и элементы-виджеты, которые предназначены для размещения в разделе мнемосхем (вид отображения) дерева страниц проекта, построенного по <a href="Libs_Main_graphical_elements.html#RootPgSo" title="Special:MyLanguage/Libs/Main graphical elements">концепции объектов сигнализации корневой страницы "RootPgSo"</a> и для размещения на других комплексных кадрах. Однако, элементы-кадры могут быть размещены как отдельные сущности или в составе собственной концепции управления страницами, но тут нужно учитывать, что кадры часто ссылаются и вызывают <a href="Libs_Main_graphical_elements.html#doc_panel" title="Special:MyLanguage/Libs/Main graphical elements">панель документов</a>!
+</p><p>Для подключения части библиотеки к проекту станции OpenSCADA Вы можете получить файл БД как:
+</p>
+<ul><li> такой что поставляется с готовым и соответствующим пакетом дистрибутива Linux вроде "openscada-libdb-vca", "openscada-LibDB.VCA";</li>
+<li> наиболее актуальный и непосредственно полученный из <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql" rel="nofollow noreferrer noopener" target="_blank">репозиторию subversion</a>, преобразованный в файл БД SQLite путём:</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 15px">
+$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql
+$ sqlite3 -init vcaBase.sql vcaBase.db .exit
+</pre>
+<ul><li> загрузка <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">прикреплённого тут</a>.</li></ul>
+<p>Этот полученный файл Вы далее можете разместить в каталоге проекта станции и создать объект базы данных модуля БД "SQLite", зарегистрировав файл базы данных в конфигурации.
+</p><p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="prescrEdit" title="#prescrEdit"><h3><span class="mw-headline" id=".D0.A0.D0.B5.D1.86.D0.B5.D0.BF.D1.82_.E2.80.94_.D1.80.D0.B5.D0.B4.D0.B0.D0.BA.D1.82.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B5_.28prescrEdit.29"><span class="mw-headline-number">3.1</span> Рецепт — редактирование (<a href="Libs_Prescriptions.html#prescrEdit" title="Special:MyLanguage/Libs/Prescriptions">prescrEdit</a>)</span></h3></span>
+</td>
+<td> 1.3 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Кадр, представленный на рисунке 3.1, является одним из группы кадров работы с рецептами, который служит для пользовательского редактирования рецептов-программ. Кадр, в целом, использует и представляет представительскую структуру <a href="#manager">менеджера рецептов</a>.
+</p><p>Кадр содержит, слева на право:
+</p>
+<ul><li> "Библиотека" — библиотека со списком программ и элементами управления библиотекой.</li>
+<li> "Программа" — список шагов-команд выбранного в библиотеке рецепта-программы с элементами управления.</li>
+<li> "Команда" — поле редактирования выбранного шага рецепта в составе выбора команды и установки имени, описания, флага фонового исполнения и значений доступных атрибутов, а также кнопки сохранения изменений.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibsPrescriptions_prescrEditD_ru.png"><img class="thumbimage" height="600" src="files/LibsPrescriptions_prescrEditD_ru.png" width="900" /></a>  <div class="thumbcaption">Рис.3.1a. Кадр "Рецепт — редактирование" в режиме разработки.</div></div></div></div>
+<p><b><u>Использование — разработка</u></b><br />
+Кадр предназначен для выполнения роли страницы, а, следовательно, он должен непосредственно помещаться в дерево проекта. К кадру может быть подключен один параметр <a href="#manager">менеджера рецептов</a>, путём установки связей.
+</p><p><b><u>Использование — исполнение</u></b><br />
+В режиме исполнения пользователь может добавлять новые рецепты-программы, удалять, копировать и экспортировать существующие, а также импортировать рецепты других станций OpenSCADA. В выбранном рецепте-программе пользователь может выполнить: добавление или вставку нового шага, удаление или изменение положения выбранного шага. Для выбранного шага рецепта-программы пользователь может установить команду и ввести имя, описание, флаг фонового исполнения и значения доступных аргументов выбранной команды, после чего сохранить изменения шага.
+</p><p>Операции удаление сопровождаются появлением <a href="Libs_Main_graphical_elements.html#accept" title="Special:MyLanguage/Libs/Main graphical elements">диалога-окна подтверждения</a>.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibsPrescriptions_prescrEditR_ru.png"><img class="thumbimage" height="639" src="files/LibsPrescriptions_prescrEditR_ru.png" width="900" /></a>  <div class="thumbcaption">Рис.3.1b. Кадр "Рецепт — редактирование" в режиме исполнения.</div></div></div></div>
+<p><b><u>Свойства связывания и конфигурации</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Идентификатор </th>
+<th> Имя </th>
+<th> Тип </th>
+<th> Конфигурация </th>
+<th> Конфигурационный шаблон
+</th></tr>
+<tr>
+<td> dbDB </td>
+<td> БД: База данных </td>
+<td> Строка </td>
+<td> Входная связь </td>
+<td> Controller|dbDB
+</td></tr>
+<tr>
+<td> dbProgs </td>
+<td> БД: Таблица программ </td>
+<td> Строка </td>
+<td> Входная связь </td>
+<td> Controller|dbProgs
+</td></tr>
+<tr>
+<td> prExtComLs </td>
+<td> Список доступных команд рецепта </td>
+<td> Объект </td>
+<td> Входная связь </td>
+<td> Controller|comLs
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="prescrRun" title="#prescrRun"><h3><span class="mw-headline" id=".D0.A0.D0.B5.D1.86.D0.B5.D0.BF.D1.82_.E2.80.94_.D0.B8.D1.81.D0.BF.D0.BE.D0.BB.D0.BD.D0.B5.D0.BD.D0.B8.D0.B5_.28prescrRun.29"><span class="mw-headline-number">3.2</span> Рецепт — исполнение (<a href="Libs_Prescriptions.html#prescrRun" title="Special:MyLanguage/Libs/Prescriptions">prescrRun</a>)</span></h3></span>
+</td>
+<td> 1.3 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Кадр, представленный на рисунке 3.2, является одним из группы кадров работы с рецептами, который служит для контроля и наблюдения за исполнением программ-рецептов, ранее сформированных в кадре "<a href="#prescrEdit">Рецепт — редактирование</a>". Кадр, в целом, использует и представляет представительскую структуру <a href="#manager">менеджера рецептов</a>. Дополнительно к этому полноформатному кадру исполнения рецептов, предусмотрен упрощённый — "<a href="#prescrRunSimple">Рецепт — исполнение, простой</a>", который позволяет компактно управлять и отслеживать исполнение рецептов в составе других кадров технологического процесса.
+</p><p>Кадр содержит, слева на право:
+</p>
+<ul><li> "Запуск/останов/пропуск" — две кнопки запуска и останова выбранной программы, а также кнопка пропуска выполнения текущего шага.</li>
+<li> "Библиотека" — библиотека со списком программ.</li>
+<li> "Программа" — документ списка шагов-команд, выбранного в библиотеке рецепта-программы. При исполнении в этом поле отслеживается текущее состояние исполнения путём соответствующей подсветки шагов.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibsPrescriptions_prescrRunD_ru.png"><img class="thumbimage" height="600" src="files/LibsPrescriptions_prescrRunD_ru.png" width="900" /></a>  <div class="thumbcaption">Рис.3.2a. Кадр "Рецепт — исполнение" в режиме разработки.</div></div></div></div>
+<p><b><u>Использование — разработка</u></b><br />
+Кадр предназначен для выполнения роли страницы, а, следовательно, он должен непосредственно помещаться в дерево проекта. К кадру может быть подключен один параметр <a href="#manager">менеджера рецептов</a>, путём установки связей.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Для возможности архивирования завершённых сеансов, пока оператор переключается по другим кадрам, необходимо, для этого полноформатного кадра в дереве проекта, установить параметр "Стр.: обрабатывать не открытой".
+</p><p>По завершению рецепта-программы происходит генерация <a href="#manager">менеджером рецептов</a> сообщений с параметрами сеанса, а также архивирование документа сеанса. Сообщения с параметрами сеанса могут быть использованы или просто для просмотра истории сеансов, или-же для формирования списка сеансов, например, в <a href="Libs_Main_graphical_elements.html#grpGraph" title="Special:MyLanguage/Libs/Main graphical elements">группе графиков</a> для перехода к истории на время сеанса. По умолчанию <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Document" title="Special:MyLanguage/Sub-projects/VCA">архив отчётов</a> настроен на глубину 10 документов, что вы можете изменить установкой атрибута "Размер архиву (n)" виджета документа.
+</p><p><b><u>Использование — исполнение</u></b><br />
+В режиме исполнения пользователь может выбрать нужный рецепт-программу и запустить его на исполнение, после чего отслеживать процесс исполнения или перейти к другим кадрам. Исполняемую программу пользователь может приостановить путём нажатия кнопки "Пауза" в месте кнопки "Запуск" или прервать путём нажатия кнопки "Останов". Кроме этого, пользователь может пропустит исполнение текущего шага, нажав кнопку "Пропустить". Также пользователь может пересмотреть или распечатать отчёты ранее исполняемых рецептов этого полноформатного кадра, для чего нужно нажать левой клавишей мыши на поле документа и полистать по архиву исполняемых рецептов, на появившейся справа <a href="Libs_Main_graphical_elements.html#doc_panel" title="Special:MyLanguage/Libs/Main graphical elements">панели навигации</a>.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibsPrescriptions_prescrRunR_ru.png"><img class="thumbimage" height="639" src="files/LibsPrescriptions_prescrRunR_ru.png" width="900" /></a>  <div class="thumbcaption">Рис.3.2b. Кадр "Рецепт — исполнение" в режиме исполнения.</div></div></div></div>
+<p><b><u>Свойства связывания и конфигурации</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Идентификатор </th>
+<th> Имя </th>
+<th> Тип </th>
+<th> Конфигурация </th>
+<th> Конфигурационный шаблон
+</th></tr>
+<tr>
+<td> dbDB </td>
+<td> БД: База данных </td>
+<td> Строка </td>
+<td> Входная связь </td>
+<td> Controller|dbDB
+</td></tr>
+<tr>
+<td> dbProgs </td>
+<td> БД: Таблица программ </td>
+<td> Строка </td>
+<td> Входная связь </td>
+<td> Controller|dbProgs
+</td></tr>
+<tr>
+<td> prExtCurCom </td>
+<td> Контроллер: текущая команда </td>
+<td> Входная связь </td>
+<td> Controller|curCom
+</td></tr>
+<tr>
+<td> prExtMode </td>
+<td> Контроллер: режим </td>
+<td> Целый </td>
+<td> Полная связь </td>
+<td> Controller|mode
+</td></tr>
+<tr>
+<td> prExtProg </td>
+<td> Контроллер: программа </td>
+<td> Строка </td>
+<td> Полная связь </td>
+<td> Controller|prog
+</td></tr>
+<tr>
+<td> prExtStartTm </td>
+<td> Контроллер: время запуска </td>
+<td> Целый </td>
+<td> Входная связь </td>
+<td> Controller|startTm
+</td></tr>
+<tr>
+<td> prExtWork </td>
+<td> Контроллер: рабочая </td>
+<td> Объект </td>
+<td> Входная связь </td>
+<td> Controller|work
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="prescrRunSimple" title="#prescrRunSimple"><h3><span class="mw-headline" id=".D0.A0.D0.B5.D1.86.D0.B5.D0.BF.D1.82_.E2.80.94_.D0.B8.D1.81.D0.BF.D0.BE.D0.BB.D0.BD.D0.B5.D0.BD.D0.B8.D0.B5.2C_.D0.BF.D1.80.D0.BE.D1.81.D1.82.D0.BE.D0.B9_.28prescrRunSimple.29"><span class="mw-headline-number">3.3</span> Рецепт — исполнение, простой (<a href="Libs_Prescriptions.html#prescrRunSimple" title="Special:MyLanguage/Libs/Prescriptions">prescrRunSimple</a>)</span></h3></span>
+</td>
+<td> 1.3 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Виджет, представленный на рисунке 3.3, это упрощённый вариант кадра "<a href="#prescrRun">Рецепт — исполнение</a>", который разработан для размещения как виджет мнемосхем и он в основном и работает дополнением кадра "<a href="#prescrRun">Рецепт — исполнение</a>". Кадр, в целом, использует и представляет представительскую структуру <a href="#manager">менеджера рецептов</a>.
+</p><p>Виджет содержит, слева направа и вниз:
+</p>
+<ul><li> "Запуск/останов/пропуск" — две кнопки запуска и останова выбранной программы, а также кнопка пропуска исполнения текущего шага.</li>
+<li> "Библиотека" — кнопка отображения текущего рецепта-программы и вызова <a href="Libs_Main_graphical_elements.html#treeSelect" title="Special:MyLanguage/Libs/Main graphical elements">диалога выбора программы в дереве</a>.</li>
+<li> "Программа" — документ со строками активных на текущий момент команд.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:552px;"><a class="image" href="http://oscada.org/wiki/File:LibsPrescriptions_prescrRunSimple_ru.png"><img class="thumbimage" height="195" src="files/LibsPrescriptions_prescrRunSimple_ru.png" width="550" /></a>  <div class="thumbcaption">Рис.3.3. Кадр "Рецепт — исполнение, простой" в режиме разработки и исполнения.</div></div></div></div>
+<p><b><u>Использование — разработка</u></b><br />
+Этот виджет может быть использован разработчиком при создании мнемосхем с отображением активности исполнения рецептов и быстрого контроля ними. Для использования нужно добавить данный виджет на мнемосхему, подстроить горизонтальный, вертикальный размер масштабом и подключит один параметр <a href="#manager">менеджера рецептов</a>, путём установки связей.
+</p><p><b><u>Использование — исполнение</u></b><br />
+В режиме исполнения пользователь может выбрать нужный рецепт-программу, в <a href="Libs_Main_graphical_elements.html#treeSelect" title="Special:MyLanguage/Libs/Main graphical elements">диалоге выбора программы в дереве</a> который появляется при нажатии кнопки рецепта, и запустить его на исполнение, после чего отслеживать процесс исполнения или перейти к другим кадрам. Исполняемую программу пользователь может приостановить путём нажатия кнопки "Пауза" в месте кнопки "Запуск" или прервать путём нажатия кнопки "Останов". Кроме этого, пользователь может пропустит исполнение текущего шага, нажав кнопку "Пропустить".
+</p><p><b><u>Свойства связывания и конфигурации</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Идентификатор </th>
+<th> Имя </th>
+<th> Тип </th>
+<th> Конфигурация </th>
+<th> Конфигурационный шаблон
+</th></tr>
+<tr>
+<td> dbDB </td>
+<td> БД: База данных </td>
+<td> Строка </td>
+<td> Входная связь </td>
+<td> Controller|dbDB
+</td></tr>
+<tr>
+<td> dbProgs </td>
+<td> БД: Таблица программ </td>
+<td> Строка </td>
+<td> Входная связь </td>
+<td> Controller|dbProgs
+</td></tr>
+<tr>
+<td> prExtCurCom </td>
+<td> Контроллер: текущая команда </td>
+<td> Строка </td>
+<td> Входная связь </td>
+<td> Controller|curCom
+</td></tr>
+<tr>
+<td> prExtMode </td>
+<td> Контроллер: режим </td>
+<td> Целый </td>
+<td> Полная связь </td>
+<td> Controller|mode
+</td></tr>
+<tr>
+<td> prExtProg </td>
+<td> Контроллер: программа </td>
+<td> Строка </td>
+<td> Полная связь </td>
+<td> Controller|prog
+</td></tr>
+<tr>
+<td> prExtStartTm </td>
+<td> Контроллер: время запуска </td>
+<td> Целый </td>
+<td> Входная связь </td>
+<td> Controller|startTm
+</td></tr>
+<tr>
+<td> prExtWork </td>
+<td> Контроллер: рабочая </td>
+<td> Объект </td>
+<td> Входная связь </td>
+<td> Controller|work
+</td></tr></table>
+
+
+
+
+
+
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Prescriptions/ru">Libs/Prescriptions/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2669</td></tr></table></body>
+</html>

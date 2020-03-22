@@ -1741,7 +1741,13 @@ string SessWdg::calcProg( ) const	{ return parent().freeStat() ? "" : parent().a
 
 string SessWdg::calcProgStors( const string &attr ){ return parent().freeStat() ? "" : parent().at().calcProgStors(attr); }
 
-int SessWdg::calcPer( ) const		{ return parent().freeStat() ? 0 : parent().at().calcPer(); }
+int SessWdg::calcPer( ) const
+{
+    int vRez = parent().freeStat() ? 0 : parent().at().calcPer();
+    if(vRez < 0 && ownerSessWdg()) vRez = ownerSessWdg()->calcPer();
+
+    return vRez;
+}
 
 string SessWdg::resourceGet( const string &iid, string *mime )
 {
