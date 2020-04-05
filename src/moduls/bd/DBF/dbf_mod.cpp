@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.DBF file: dbf_mod.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -176,6 +176,8 @@ void MBD::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TBD::cntrCmdProc(opt);
 	ctrRemoveNode(opt, "/sql");
+	ctrRemoveNode(opt, "/prm/cfg/TRTM_CLS_ON_OPEN");
+	ctrRemoveNode(opt, "/prm/cfg/TRTM_CLS_ON_REQ");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,enableStat()?R_R___:RWRW__,"root",SDB_ID,3,
 	    "dest","sel_ed","select","/prm/cfg/dbFsList","help",
 	    _("For DBF, a DB address is the directory which contains files of the tables (*.dbf).\n"

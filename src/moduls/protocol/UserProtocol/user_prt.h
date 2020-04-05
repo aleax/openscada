@@ -61,7 +61,6 @@ class TProtIn: public TProtocolIn
 
     private:
 	//Attributes
-	//TValFunc funcV;
 	AutoHD<UserPrt> up;
 };
 

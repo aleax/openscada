@@ -55,7 +55,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.4.2"
+#define MOD_VER		"2.4.3"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov (2016)")
 #define DESCRIPTION	_("Provides transport based on the serial interfaces.\
  It is used for data exchanging via the serial interfaces of the type RS232, RS485, GSM and similar.")
@@ -586,7 +586,7 @@ void *TTrIn::Task( void *tr_in )
 		continue;
 	    }
 	}
-	//Send message to the protocols, ????
+	//Send message to the protocols
 	string prts = tr->protocols(), prt, subPrt, tAnsw;
 	for(int off = 0, iP = 0; (prt=TSYS::strParse(prts,0,";",&off)).size(); iP++, answ += tAnsw, tAnsw = "") {
 	    try {

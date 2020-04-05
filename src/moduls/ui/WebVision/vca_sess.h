@@ -85,9 +85,6 @@ class VCAObj : public TCntrNode
 
 	VCASess &owner( ) const;
 
-    protected:
-	string imgDef;
-
     private:
 	//Attributes
 	const string	mId;
@@ -208,7 +205,7 @@ class VCAElFigure : public VCAObj
 		lineStyle,	//The style of the line
 		scaleHeight,	//The vertical scale
 		scaleWidth;	//The horizontal scale
-	string	elLst;
+	string	elLst, imgDef;
 	double	orient;		//The orientation angle
 	bool	active,		//Active diagram
 		mirror,

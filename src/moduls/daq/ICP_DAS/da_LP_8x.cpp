@@ -607,7 +607,7 @@ void *da_LP_8x::fastTask( void *ip )
 	    for(unsigned i_c = 0; p.owner().startStat() && i_c < cnls.size(); i_c++)
 		cnls[i_c].at().setR(vbuf[i_c], wTm, true);
 
-	    // Check for more cycles lost
+	    // Check for more cycles loss
 	    if(abs(SYS->sysTm()-wTm/1000000) >= 3) wTm = 1000000ll*SYS->sysTm();
 
 	    //Calc next work time and sleep

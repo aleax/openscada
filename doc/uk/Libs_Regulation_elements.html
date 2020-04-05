@@ -1,0 +1,1229 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Бібліотека/Елементи регулювання - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../en/files/doc.css" rel="stylesheet" /></head>
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../en/files/Logo-big.png" /></a></div><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="uk">Бібліотека/Елементи регулювання</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FRegulation+elements&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Regulation_elements" title="Libs/Regulation elements">Libs/Regulation elements</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_Regulation_elements.html" title="Libs/Regulation elements (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Libs_Regulation_elements.html" title="Библиотека/Элементы регулирования (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+<table class="wikitable">
+
+<tr>
+<th> Назва </th>
+<th> Версія </th>
+<th> Ліцензія </th>
+<th> Джерело </th>
+<th> Мови </th>
+<th> Автор </th>
+<th> Опис
+</th></tr>
+
+<tr>
+<td> <a href="Libs_Regulation_elements.html" title="Special:MyLanguage/Libs/Regulation elements">Бібліотека елементів регулювання</a>
+</td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.JavaLikeCalc.regEl </td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td>
+<td> Бібліотека елементів регулювання блокових схем модуля <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">DAQ.BlockCalc</a>.
+<ul><li> <b>Засновано:</b> Січень 2010</li>
+<li> <b>Спонсоровано:</b> <a class="external text" href="http://diyaorg.dp.ua" rel="nofollow noreferrer noopener" target="_blank">ТОВ "ДІЯ"</a></li>
+<li> <b>Початково створено:</b> у <a class="external text" href="http://wiki.oscada.org/HomePageUk/Using/APIFunctionLibs/LibRegEl" rel="nofollow noreferrer noopener" target="_blank">старій Wiki</a></li>
+<li> <b>Використано:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Kramatorsk_Ball_Mills" title="Special:MyLanguage/Using/Kramatorsk Ball Mills">САУ кульових барабанних млинів</a>, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Kramatorsk_Water" title="Special:MyLanguage/Using/Kramatorsk Water">САУ Фосфатування, Амінування та Гідразину</a></li>
+<li> <b>Зробити (To Do):</b></li></ul>
+<dl><dd>- перевести у <a href="Program_manual.html#DAQTmpl" title="Special:MyLanguage/Documents/Program manual">DAQ-шаблони</a> після розширення їх концепції щодо внутрішніх посилань та розширення <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">DAQ.BlockCalc</a> до використання DAQ-шаблонів.</dd></dl>
+</td></tr></table>
+<p>Бібліотека створюється для надання функцій різних алгоритмів контролю та вона може бути використана у програмованих логічних контролерах (PLC) заснованих на OpenSCADA для побудови схем контролю у модулі <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">DAQ.BlockCalc</a>. Бібліотека не є статичною, а будується на основі модуля <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, який дозволяє створювати обчислення на мові схожій на Java. Назви функцій та їх параметрів доступні на мовах: Англійська, Українська та Російська.
+</p><p>Для адресації до функцій цієї бібліотеки можна використати статичну адресу виклику <b>DAQ.JavaLikeCalc.lib_regEl.{Func}()</b> або динамічну <b>SYS.DAQ.JavaLikeCalc["lib_regEl"]["{Func}"].call()</b>, <b>SYS.DAQ.JavaLikeCalc["lib_regEl"].{Func}()</b>.
+Де <i>{Func}</i> — ідентифікатор функції у бібліотеці.
+</p><p>Для підключення бібліотеки до проекту станції OpenSCADA Ви можете отримати файл БД як:
+</p>
+<ul><li> такий що постачається з готовим та відповідним пакетом дистрибутиву Linux на кшталт "openscada-libdb-main", "openscada-LibDB.Main";</li>
+<li> найбільш актуальний та безпосередньо отриманий з <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">репозиторію subversion</a>, перетворений у файл БД SQLite шляхом:</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 15px">
+$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql
+$ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
+</pre>
+<ul><li> завантаження <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">прикріпленого тут</a>.</li></ul>
+<p>Цей завантажений файл Ви надалі можете розмістити у теці проекту станції та створити об'єкт бази даних модуля БД "SQLite", зареєструвавши файл бази даних у конфігурації.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1"><a href="#.D0.9F.D0.86.D0.94.2C_.D1.83.D0.BD.D1.96.D1.84.D1.96.D0.BA.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B9_.28pidUnif.29"><span class="tocnumber">1</span> <span class="toctext">ПІД, уніфікований (pidUnif)</span></a></li>
+<li class="toclevel-1"><a href="#.D0.9F.D0.86.D0.94_.D0.B4.D0.B8.D0.BD.D0.B0.D0.BC.D1.96.D1.87.D0.BD.D0.B8.D0.B9_.28pidUnifD.29"><span class="tocnumber">2</span> <span class="toctext">ПІД динамічний (pidUnifD)</span></a></li>
+<li class="toclevel-1"><a href="#.D0.9F.D0.86.D0.94_.D1.96.D0.BC.D0.BF.D1.83.D0.BB.D1.8C.D1.81.D0.BD.D0.B8.D0.B9_.28pidImp.29"><span class="tocnumber">3</span> <span class="toctext">ПІД імпульсний (pidImp)</span></a></li>
+</ul>
+</div>
+
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="pidUnif" title="#pidUnif"><h3><span class="mw-headline" id=".D0.9F.D0.86.D0.94.2C_.D1.83.D0.BD.D1.96.D1.84.D1.96.D0.BA.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B9_.28pidUnif.29"><span class="mw-headline-number">1</span> ПІД, уніфікований (<a href="Libs_Regulation_elements.html#pidUnif" title="Special:MyLanguage/Libs/Regulation elements">pidUnif</a>)</span></h3></span>
+</td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Суміщений-уніфікований аналоговий та імпульсний ПІД-регулятор. У основі регулятора лежить ядро стандартного аналогового ПІД-регулятора з бібліотеки "<a href="Modules/FLibComplex1.html#PID" title="Special:MyLanguage/Modules/FLibComplex1">FLibComplex1</a>" та реалізація ШІМ для імпульсної частини.
+</p><p><b><u>Параметри</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Прихований </th>
+<th> По замовченню
+</th></tr>
+<tr>
+<td> var </td>
+<td> Змінна </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> sp </td>
+<td> Завдання </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> max </td>
+<td> Шкала: максимум </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 100
+</td></tr>
+<tr>
+<td> min </td>
+<td> Шкала: мінімум </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> manIn </td>
+<td> Ручний ввід </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> out </td>
+<td> Вихід,&nbsp;% </td>
+<td> Реальний </td>
+<td> Повернення </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impQup </td>
+<td> Імпульсний вихід у гору </td>
+<td> Логічний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impQdwn </td>
+<td> Імпульсний вихід до низу </td>
+<td> Логічний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> analog </td>
+<td> Аналоговий </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> auto </td>
+<td> Автомат </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> casc </td>
+<td> Каскад </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Kp </td>
+<td> Kп </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Ti </td>
+<td> Tі, мілісекунд </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> Kd </td>
+<td> Кп диференціалу </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Td </td>
+<td> Tд, мілісекунд </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Tzd </td>
+<td> T фільтру диференціалу, мілісекунд </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> TImpPer </td>
+<td> T період імпульсів, мілісекунд </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 5000
+</td></tr>
+<tr>
+<td> TImpMin </td>
+<td> Мінімальна довжина імпульсу, мілісекунд </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 500
+</td></tr>
+<tr>
+<td> KImpRfact </td>
+<td> Рейтинг фактор імпульсів </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Hup </td>
+<td> Верхня границя виходу,&nbsp;% </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 100
+</td></tr>
+<tr>
+<td> Hdwn </td>
+<td> Нижня границя виходу,&nbsp;% </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Zi </td>
+<td> Нечутливість,&nbsp;% </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> followSp </td>
+<td> Відслідковувати завданням за змінною у ручному </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> K1 </td>
+<td> Коефіцієнт входу 1 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> in1 </td>
+<td> Вхід 1 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> K2 </td>
+<td> Коефіцієнт входу 2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> in2 </td>
+<td> Вхід 2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> K3 </td>
+<td> Коефіцієнт входу 3 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> in3 </td>
+<td> Вхід 3 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> K4 </td>
+<td> Коефіцієнт входу 4 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> in4 </td>
+<td> Вхід 4 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impAnOut </td>
+<td> Аналогове положення імпульсного регулятора </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impAnImit </td>
+<td> Імітація аналогового положення </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impQupTm </td>
+<td> Імп. вихід вгору утримано для GUI </td>
+<td> Цілий </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impQdwnTm </td>
+<td> Імп. вихід додолу утримано для GUI </td>
+<td> Цілий </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення, Гц </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> true </td>
+<td> 1
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Перший запуск </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Останній запуск </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> int </td>
+<td> Накопичення інтегралу </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> dif </td>
+<td> Знач. диференціалу </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> lag </td>
+<td> Накопичення затримки </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impLag </td>
+<td> Час утримання імпульсу </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> perLag </td>
+<td> Час генерації нового імпульсу </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Структура</u></b><br />
+<a class="image" href="http://oscada.org/wiki/File:RegEls_pid_unif.png"><img alt="RegEls pid unif.png" height="446" src="../en/files/RegEls_pid_unif.png" width="744" /></a>
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="pidUnifD" title="#pidUnifD"><h3><span class="mw-headline" id=".D0.9F.D0.86.D0.94_.D0.B4.D0.B8.D0.BD.D0.B0.D0.BC.D1.96.D1.87.D0.BD.D0.B8.D0.B9_.28pidUnifD.29"><span class="mw-headline-number">2</span> ПІД динамічний (<a href="Libs_Regulation_elements.html#pidUnifD" title="Special:MyLanguage/Libs/Regulation elements">pidUnifD</a>)</span></h3></span>
+</td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Цілковито ідентичний <a href="#pidUnif">уніфікованому ПІД-регулятору</a>, але реалізований динамічно на <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>. Динамічна реалізація дозволяє легко адаптувати регулятор під потрібні вимоги, просто відредагувавши його.
+</p><p><b><u>Параметри</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Прихований </th>
+<th> По замовченню
+</th></tr>
+<tr>
+<td> var </td>
+<td> Змінна </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> sp </td>
+<td> Завдання </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> max </td>
+<td> Шкала: максимум </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 100
+</td></tr>
+<tr>
+<td> min </td>
+<td> Шкала: мінімум </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> manIn </td>
+<td> Ручний ввід </td>
+<td> Реальний </td>
+<td> Вхід	false	0
+</td></tr>
+<tr>
+<td> out </td>
+<td> Вихід,&nbsp;% </td>
+<td> Реальний </td>
+<td> Повернення </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impQup </td>
+<td> Імпульсний вихід у гору </td>
+<td> Логічний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impQdwn </td>
+<td> Імпульсний вихід до низу </td>
+<td> Логічний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> analog </td>
+<td> Аналоговий </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> auto </td>
+<td> Автомат </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> casc </td>
+<td> Каскад </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Kp </td>
+<td> Kп </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Ti </td>
+<td> Tі, мілісекунд </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> Kd </td>
+<td> Кп диференціалу </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Td </td>
+<td> Tд, мілісекунд </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Tzd </td>
+<td> T фільтру диференціалу, мілісекунд </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> TImpPer </td>
+<td> T період імпульсів, мілісекунд </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 5000
+</td></tr>
+<tr>
+<td> TImpMin </td>
+<td> Мінімальна довжина імпульсу, мілісекунд </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 500
+</td></tr>
+<tr>
+<td> KImpRfact </td>
+<td> Рейтинг фактор імпульсів </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Hup </td>
+<td> Верхня границя виходу,&nbsp;% </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 100
+</td></tr>
+<tr>
+<td> Hdwn </td>
+<td> Нижня границя виходу,&nbsp;% </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Zi </td>
+<td> Нечутливість,&nbsp;% </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> followSp </td>
+<td> Відслідковувати завданням за змінною у ручному </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> K1 </td>
+<td> Коефіцієнт входу 1 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> in1 </td>
+<td> Вхід 1 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> K2 </td>
+<td> Коефіцієнт входу 2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> in2 </td>
+<td> Вхід 2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> K3 </td>
+<td> Коефіцієнт входу 3 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> in3 </td>
+<td> Вхід 3 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> K4 </td>
+<td> Коефіцієнт входу 4 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> in4 </td>
+<td> Вхід 4 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> QO </td>
+<td> Відкритий стан виконавчого механізму </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> QZ </td>
+<td> Закритий стан виконавчого механізму </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impAnOut </td>
+<td> Аналогове положення імпульсного регулятора </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> -1
+</td></tr>
+<tr>
+<td> impAnImit </td>
+<td> Імітація аналогового положення </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> -1
+</td></tr>
+<tr>
+<td> impQupTm </td>
+<td> Імп. вихід вгору утримано для GUI </td>
+<td> Логічний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impQdwnTm </td>
+<td> Імп. вихід додолу утримано для GUI </td>
+<td> Логічний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> true </td>
+<td> 1
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Перший запуск </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Останній запуск </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impLag </td>
+<td> Час утримання імпульсу </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> perLag </td>
+<td> Час генерації нового імпульсу </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> integ </td>
+<td> Накопичення інтегралу </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> difer </td>
+<td> Накопичення диференціалу </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> dlag </td>
+<td> Фільтр диференціалу </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Структура</u></b><br />
+<a class="image" href="http://oscada.org/wiki/File:RegEls_pid_unif.png"><img alt="RegEls pid unif.png" height="446" src="../en/files/RegEls_pid_unif.png" width="744" /></a>
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="pidImp" title="#pidImp"><h3><span class="mw-headline" id=".D0.9F.D0.86.D0.94_.D1.96.D0.BC.D0.BF.D1.83.D0.BB.D1.8C.D1.81.D0.BD.D0.B8.D0.B9_.28pidImp.29"><span class="mw-headline-number">3</span> ПІД імпульсний (<a href="Libs_Regulation_elements.html#pidImp" title="Special:MyLanguage/Libs/Regulation elements">pidImp</a>)</span></h3></span>
+</td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Спеціалізований імпульсний ПІД-регулятор реалізований за особливим алгоритмом із компенсацією подвійного інтегрування.
+</p><p><b><u>Параметри</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Прихований </th>
+<th> По замовченню
+</th></tr>
+<tr>
+<td> var </td>
+<td> Змінна </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> sp </td>
+<td> Завдання </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> max </td>
+<td> Шкала: максимум </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 100
+</td></tr>
+<tr>
+<td> min </td>
+<td> Шкала: мінімум </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> manIn </td>
+<td> Ручний ввід </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> out </td>
+<td> Вихід,&nbsp;% </td>
+<td> Реальний </td>
+<td> Повернення </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> outPID </td>
+<td> Вихід ПІД </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impQup </td>
+<td> Імпульсний вихід у гору </td>
+<td> Логічний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impQdwn </td>
+<td> Імпульсний вихід до низу </td>
+<td> Логічний </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> auto </td>
+<td> Автомат </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> casc </td>
+<td> Каскад </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Kp </td>
+<td> Kп </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Ki </td>
+<td> Кп інтегралу </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Ti </td>
+<td> Tі, мілісекунд </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> Kd </td>
+<td> Кп диференціалу </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Td </td>
+<td> Tд, мілісекунд </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Tzd </td>
+<td> T фільтру диференціалу, мілісекунд </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> TImpPer </td>
+<td> T період імпульсів, мілісекунд </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 5000
+</td></tr>
+<tr>
+<td> TImpMin </td>
+<td> Мінімальна довжина імпульсу, мілісекунд </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 500
+</td></tr>
+<tr>
+<td> KImpRfact </td>
+<td> Рейтинг фактор імпульсів </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Hup </td>
+<td> Верхня границя виходу,&nbsp;% </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 100
+</td></tr>
+<tr>
+<td> Hdwn </td>
+<td> Нижня границя виходу,&nbsp;% </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Zi </td>
+<td> Нечутливість,&nbsp;% </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> followSp </td>
+<td> Відслідковувати завданням за змінною у ручному </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> K1 </td>
+<td> Коефіцієнт входу 1 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> in1 </td>
+<td> Вхід 1 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> K2 </td>
+<td> Коефіцієнт входу 2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> in2 </td>
+<td> Вхід 2 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> K3 </td>
+<td> Коефіцієнт входу 3 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> in3 </td>
+<td> Вхід 3 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> K4 </td>
+<td> Коефіцієнт входу 4 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> in4 </td>
+<td> Вхід 4 </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impAnOut </td>
+<td> Аналогове положення імпульсного регулятора </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impAnImit </td>
+<td> Імітація аналогового положення </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impQupTm </td>
+<td> Імп. вихід вгору утримано для GUI </td>
+<td> Цілий </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impQdwnTm </td>
+<td> Імп. вихід додолу утримано для GUI </td>
+<td> Цілий </td>
+<td> Вихід </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> true </td>
+<td> 1
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Перший запуск </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Останній запуск </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impLag </td>
+<td> Час утримання імпульсу </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> perLag </td>
+<td> Час генерації нового імпульсу </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> integ </td>
+<td> Накопичення інтегралу </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> difer </td>
+<td> Накопичення диференціалу </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> dlag </td>
+<td> Фільтр диференціалу </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> err1 </td>
+<td> Помилка крок назад </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> err2 </td>
+<td> Помилка два кроки назад </td>
+<td> Реальний </td>
+<td> Вихід </td>
+<td> true </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Структура</u></b><br />
+<a class="image" href="http://oscada.org/wiki/File:RegEls_pid_imp.png"><img alt="RegEls pid imp.png" height="462" src="../en/files/RegEls_pid_imp.png" width="821" /></a>
+</p>
+
+
+
+
+
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Regulation_elements/uk">Libs/Regulation_elements/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2670</td></tr></table></body>
+</html>

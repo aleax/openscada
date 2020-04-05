@@ -413,6 +413,8 @@ VCAObj::VCAObj( const string &iid ) : mId(iid)
 
 VCAObj::~VCAObj( )
 {
+    nodeDelAll();
+
     if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), -1);
 }
 

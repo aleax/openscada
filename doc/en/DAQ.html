@@ -218,8 +218,8 @@
 <p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Working directly with the output transport of the <a href="User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">string messIO(string mess, real timeOut = 0);</a> function does not imply blocking the output transport outside this function call and, therefore, for complex protocols with response packets more than in one packet, which requires the "waiting" process, can not be used a shared transport, at which can be sent packets of different protocols or even one, but for different tasks (controller objects). Therefore, if you need to use shared transport, place the poll parameters in one controller object (task), or use <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">the user protocol module</a> to which this remark is irrelevant, since it performs such blocking at the time of the call of the processing procedure, as well as other modular protocols of OpenSCADA. 
 </p><p>Using the conception of user accessing to services and device's data next libraries created:
 </p>
-<ul><li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Devices" title="Special:MyLanguage/Libs/Devices">Industrial devices library</a></li>
-<li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/LowLevelDevices" title="Special:MyLanguage/Libs/LowLevelDevices">Low level sensors and chips library</a></li></ul>
+<ul><li> <a href="Libs_Devices.html" title="Special:MyLanguage/Libs/Devices">Industrial devices library</a></li>
+<li> <a href="Libs_LowLevelDevices.html" title="Special:MyLanguage/Libs/LowLevelDevices">Low level sensors and chips library</a></li></ul>
 <h2><span class="mw-headline" id="Redundancy_of_the_data_sources"><span class="mw-headline-number">4</span> <span id="Redundancy" title="#Redundancy">Redundancy of the data sources</span></span></h2>
 <p>Redundancy in general and of the data sources in particular serves to increase the overall level of fault-tolerance of the solution by integrating the redundant nodes in collaboration with the main node. In case of failure of the main node, the grab of the main node functions by the redundant one takes place. The redundant scheme can work in the mode of the load distribution between the co-operating nodes.
 </p>
@@ -272,5 +272,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/DAQ/en">Documents/DAQ/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2669</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/DAQ/en">Documents/DAQ/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2670</td></tr></table></body>
 </html>

@@ -588,7 +588,7 @@ void ModVArchEl::getValsProc( TValBuf &ibuf, int64_t ibegIn, int64_t iendIn )
     // Fill by EVAL following range part without a real data
     //for(int64_t cTm = iend+period(); cTm <= iendIn; cTm += period()) buf.setR(EVAL_REAL, cTm);
 
-    //Check for target DB enabled (disabled by the connection lost)
+    //Check for target DB enabled (disabled by the connection loss)
     string wDB = TBDS::realDBName(archivator().addr());
     if(TSYS::strParse(wDB,0,".") == DB_CFG ||
 	    SYS->db().at().at(TSYS::strParse(wDB,0,".")).at().at(TSYS::strParse(wDB,1,".")).at().enableStat())
@@ -704,7 +704,7 @@ int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t ibeg, int64_t iend, bool 
     ModVArch::SGrp *gO = NULL;
     TValBuf &pDt = archivator().accmGetReg(vlFld, &gO, archive().valType(true));
     if(toAccum) {
-	if(!gO->dbOK && pDt.realSize()) return 0;	//Prevent the accumulated data lost at DB errors
+	if(!gO->dbOK && pDt.realSize()) return 0;	//Prevent the accumulated data loss at DB errors
 	pDt = buf;
 	if(!gO->accmBeg || !gO->accmEnd) { gO->accmBeg = ibeg; gO->accmEnd = iend; }
 	return vmin(gO->accmEnd, iend);
@@ -787,7 +787,7 @@ bool ModVArchEl::readMeta( )
 
     if(!mPer) mPer = (int64_t)(archivator().valPeriod()*1e6);
 
-    //Check for target DB enabled (disabled by the connection lost)
+    //Check for the target DB enabled (disabled by the connection loss)
     if(!rez) {
 	string wDB = TBDS::realDBName(archivator().addr());
 	rez = (TSYS::strParse(wDB,0,".") == DB_CFG ||

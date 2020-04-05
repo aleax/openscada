@@ -1,0 +1,1230 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Libs/Regulation elements - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="files/doc.css" rel="stylesheet" /></head>
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../en/files/Logo-big.png" /></a></div><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Libs/Regulation elements</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Libs_Regulation_elements.html" title="Библиотека/Элементы регулирования (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Libs_Regulation_elements.html" title="Бібліотека/Елементи регулювання (100% translated)">українська</a></div></div>
+<table class="wikitable">
+
+<tr>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="Libs_Regulation_elements.html" title="Special:MyLanguage/Libs/Regulation elements">Regulation elements library</a>
+</td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.JavaLikeCalc.regEl </td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td>
+<td> Regulation elements library of block-schemes of the module <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">DAQ.BlockCalc</a>.
+<ul><li> <b>Founded:</b> January 2010</li>
+<li> <b>Sponsored by:</b> <a class="external text" href="http://diyaorg.dp.ua" rel="nofollow noreferrer noopener" target="_blank">DIYA Ltd</a></li>
+<li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/APIFunctionLibs/LibRegEl" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a></li>
+<li> <b>Used by:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Kramatorsk_Ball_Mills" title="Special:MyLanguage/Using/Kramatorsk Ball Mills">ACS of the ball drum mills</a>, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Kramatorsk_Water" title="Special:MyLanguage/Using/Kramatorsk Water">ACS of Phosphating, Amination and Hydrazine</a></li>
+<li> <b>To Do:</b></li></ul>
+<dl><dd>- move to <a href="Program_manual.html#DAQTmpl" title="Special:MyLanguage/Documents/Program manual">the DAQ-templates</a> after their conception expanding for the internal links and the <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">DAQ.BlockCalc</a> expanding for using the DAQ-templates.</dd></dl>
+</td></tr></table>
+<p>The library is created to provide functions of different control algorithms and it can be used in programmable logic controllers (PLC) based on OpenSCADA for construction control schemes in the module <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">DAQ.BlockCalc</a>. The library is not static, but based on the module <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, allowing to create calculations on the Java-like language. The functions' names and its parameters are available in languages: English, Ukrainian and Russian.
+</p><p>To addressing the library functions you can use the static call address <b>DAQ.JavaLikeCalc.lib_regEl.{Func}()</b> or dynamic <b>SYS.DAQ.JavaLikeCalc["lib_regEl"]["{Func}"].call()</b>, <b>SYS.DAQ.JavaLikeCalc["lib_regEl"].{Func}()</b>". Where {Func} — function identifier in the library.
+</p><p>For connection the library to a project of the OpenSCADA station you can obtain the database file as:
+</p>
+<ul><li> supplied with a ready and proper package of the Linux distribution like to "openscada-libdb-main", "openscada-LibDB.Main";</li>
+<li> directly taken for most actual one from <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">the subversion repository</a> and converted to the DB SQLite file in way:</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 15px">
+$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql
+$ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
+</pre>
+<ul><li> downloaded for <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">the one attached here</a>.</li></ul>
+<p>This obtained file next you can place into the project's database directory of the station and create the database object for the DB module "SQLite", registering the database file in the configuration.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1"><a href="#PID.2C_unified_.28pidUnif.29"><span class="tocnumber">1</span> <span class="toctext">PID, unified (pidUnif)</span></a></li>
+<li class="toclevel-1"><a href="#PID_dynamic_.28pidUnifD.29"><span class="tocnumber">2</span> <span class="toctext">PID dynamic (pidUnifD)</span></a></li>
+<li class="toclevel-1"><a href="#PID_pulse_.28pidImp.29"><span class="tocnumber">3</span> <span class="toctext">PID pulse (pidImp)</span></a></li>
+</ul>
+</div>
+
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="pidUnif" title="#pidUnif"><h3><span class="mw-headline" id="PID.2C_unified_.28pidUnif.29"><span class="mw-headline-number">1</span> PID, unified (<a href="Libs_Regulation_elements.html#pidUnif" title="Special:MyLanguage/Libs/Regulation elements">pidUnif</a>)</span></h3></span>
+</td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>Composite-unified analog and pulse PID. At the heart of the regulator is core a standard analog PID controller from the library <a href="Modules/FLibComplex1.html#PID" title="Special:MyLanguage/Modules/FLibComplex1">FLibComplex1</a> and the implementation of the PWM for the pulse part.
+</p><p><b><u>Parameters</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Hide </th>
+<th> Default
+</th></tr>
+<tr>
+<td> var </td>
+<td> Variable </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> sp </td>
+<td> Setpoint </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> max </td>
+<td> Scale: maximum </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 100
+</td></tr>
+<tr>
+<td> min </td>
+<td> Scale: minimum </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> manIn </td>
+<td> Manual input </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> out </td>
+<td> Output (%) </td>
+<td> Real </td>
+<td> Return </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impQup </td>
+<td> Impulse output up </td>
+<td> Boolean </td>
+<td> Output </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impQdwn </td>
+<td> Impulse output down </td>
+<td> Boolean </td>
+<td> Output </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> analog </td>
+<td> Analog </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> auto </td>
+<td> Automate </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> casc </td>
+<td> Cascade </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Kp </td>
+<td> Gain </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Ti </td>
+<td> Ti (ms) </td>
+<td> Integer </td>
+<td> Input </td>
+<td> false </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> Kd </td>
+<td> Gain differential </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Td </td>
+<td> Td (ms) </td>
+<td> Integer </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Tzd </td>
+<td> T differential lag (ms) </td>
+<td> Integer </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> TImpPer </td>
+<td> T impulses period (ms) </td>
+<td> Integer </td>
+<td> Input </td>
+<td> false </td>
+<td> 5000
+</td></tr>
+<tr>
+<td> TImpMin </td>
+<td> T minimal impulse (ms) </td>
+<td> Integer </td>
+<td> Input </td>
+<td> false </td>
+<td> 500
+</td></tr>
+<tr>
+<td> KImpRfact </td>
+<td> Impulse rate factor </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Hup </td>
+<td> Upper output border (%) </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 100
+</td></tr>
+<tr>
+<td> Hdwn </td>
+<td> Neither output border (%) </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Zi </td>
+<td> Insensitivity (%) </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> followSp </td>
+<td> Follow to variable by setpoint into manual </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> K1 </td>
+<td> Coefficient of input 1 </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> in1 </td>
+<td> Input 1 </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> K2 </td>
+<td> Coefficient of input 2 </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> in2 </td>
+<td> Input 2 </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> K3 </td>
+<td> Coefficient of input 3 </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> in3 </td>
+<td> Input 3 </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> K4 </td>
+<td> Coefficient of input 4 </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> in4 </td>
+<td> Input 4 </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impAnOut </td>
+<td> Analog position of impulse regulator </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impAnImit </td>
+<td> Analog position imitation </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impQupTm </td>
+<td> Imp. output up lag for GUI </td>
+<td> Integer </td>
+<td> Output </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impQdwnTm </td>
+<td> Imp. output down lag for GUI </td>
+<td> Integer </td>
+<td> Output </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Calc frequency (Hz) </td>
+<td> Integer </td>
+<td> Input </td>
+<td> true </td>
+<td> 1
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> First start </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Last start </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> int </td>
+<td> Integral accumulation </td>
+<td> Real </td>
+<td> Output </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> dif </td>
+<td> Differential accumulation </td>
+<td> Real </td>
+<td> Output </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> lag </td>
+<td> Lag accumulation </td>
+<td> Real </td>
+<td> Output </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impLag </td>
+<td> Impulse lag time </td>
+<td> Real </td>
+<td> Output </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> perLag </td>
+<td> New impulse generation time </td>
+<td> Real </td>
+<td> Output </td>
+<td> true </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Structure</u></b><br />
+<a class="image" href="http://oscada.org/wiki/File:RegEls_pid_unif.png"><img alt="RegEls pid unif.png" height="446" src="files/RegEls_pid_unif.png" width="744" /></a>
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="pidUnifD" title="#pidUnifD"><h3><span class="mw-headline" id="PID_dynamic_.28pidUnifD.29"><span class="mw-headline-number">2</span> PID dynamic (<a href="Libs_Regulation_elements.html#pidUnifD" title="Special:MyLanguage/Libs/Regulation elements">pidUnifD</a>)</span></h3></span>
+</td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>Completely identical to <a href="#pidUnif">the unified PID-regulator</a>, but it is implemented dynamically on <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>. The dynamic implementation allows you to easily adapt the regulator to the desired requirements, simply editing it.
+</p><p><b><u>Parameters</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Hide </th>
+<th> Default
+</th></tr>
+<tr>
+<td> var </td>
+<td> Variable </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> sp </td>
+<td> Setpoint </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> max </td>
+<td> Scale: maximum </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 100
+</td></tr>
+<tr>
+<td> min </td>
+<td> Scale: minimum </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> manIn </td>
+<td> Manual input </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> out </td>
+<td> Output (%) </td>
+<td> Real </td>
+<td> Return </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impQup </td>
+<td> Impulse output up </td>
+<td> Boolean </td>
+<td> Output </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impQdwn </td>
+<td> Impulse output down </td>
+<td> Boolean </td>
+<td> Output </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> analog </td>
+<td> Analog </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> auto </td>
+<td> Automate </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> casc </td>
+<td> Cascade </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Kp </td>
+<td> Gain </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Ti </td>
+<td> Ti (ms) </td>
+<td> Integer </td>
+<td> Input </td>
+<td> false </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> Kd </td>
+<td> Gain differential </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Td </td>
+<td> Td (ms) </td>
+<td> Integer </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Tzd </td>
+<td> T differential lag (ms) </td>
+<td> Integer </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> TImpPer </td>
+<td> T impulses period (ms) </td>
+<td> Integer </td>
+<td> Input </td>
+<td> false </td>
+<td> 5000
+</td></tr>
+<tr>
+<td> TImpMin </td>
+<td> T minimal impulse (ms) </td>
+<td> Integer </td>
+<td> Input </td>
+<td> false </td>
+<td> 500
+</td></tr>
+<tr>
+<td> KImpRfact </td>
+<td> Impulse rate factor </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Hup </td>
+<td> Upper output border (%) </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 100
+</td></tr>
+<tr>
+<td> Hdwn </td>
+<td> Neither output border (%) </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Zi </td>
+<td> Insensitivity (%) </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> followSp </td>
+<td> Follow to variable by setpoint into manual </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> K1 </td>
+<td> Coefficient of input 1 </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> in1 </td>
+<td> Input 1 </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> K2 </td>
+<td> Coefficient of input 2 </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> in2 </td>
+<td> Input 2 </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> K3 </td>
+<td> Coefficient of input 3 </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> in3 </td>
+<td> Input 3 </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> K4 </td>
+<td> Coefficient of input 4 </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> in4 </td>
+<td> Input 4 </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> QO </td>
+<td> Opened state of the control mechanism </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> QZ </td>
+<td> Closed state of the control mechanism </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impAnOut </td>
+<td> Real analog position of impulse regulator, [0...100], -1 - disable </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impAnImit </td>
+<td> Full stroke time for analog position imitation, s </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impQupTm </td>
+<td> Imp. output up lag for GUI </td>
+<td> Integer </td>
+<td> Output </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impQdwnTm </td>
+<td> Imp. output down lag for GUI </td>
+<td> Integer </td>
+<td> Output </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Calc frequency (Hz) </td>
+<td> Integer </td>
+<td> Input </td>
+<td> true </td>
+<td> 1
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> First start </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Last start </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impLag </td>
+<td> Impulse lag time </td>
+<td> Real </td>
+<td> Output </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> perLag </td>
+<td> New impulse generation time </td>
+<td> Real </td>
+<td> Output </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> integ </td>
+<td> Integral accumulation </td>
+<td> Real </td>
+<td> Output </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> difer </td>
+<td> Differential accumulation </td>
+<td> Real </td>
+<td> Output </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> dlag </td>
+<td> Differential lag accumulation </td>
+<td> Real </td>
+<td> Output </td>
+<td> true </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Structure</u></b><br />
+<a class="image" href="http://oscada.org/wiki/File:RegEls_pid_unif.png"><img alt="RegEls pid unif.png" height="446" src="files/RegEls_pid_unif.png" width="744" /></a>
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="pidImp" title="#pidImp"><h3><span class="mw-headline" id="PID_pulse_.28pidImp.29"><span class="mw-headline-number">3</span> PID pulse (<a href="Libs_Regulation_elements.html#pidImp" title="Special:MyLanguage/Libs/Regulation elements">pidImp</a>)</span></h3></span>
+</td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>Specialized pulse PID regulator is implemented on a special algorithm with compensation of double integration.
+</p><p><b><u>Parameters</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Hide </th>
+<th> Default
+</th></tr>
+<tr>
+<td> var </td>
+<td> Variable </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> sp </td>
+<td> Setpoint </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> max </td>
+<td> Scale: maximum </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 100
+</td></tr>
+<tr>
+<td> min </td>
+<td> Scale: minimum </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> manIn </td>
+<td> Manual input </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> out </td>
+<td> Output (%) </td>
+<td> Real </td>
+<td> Return </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> outPID </td>
+<td> PID output </td>
+<td> Real </td>
+<td> Output </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impQup </td>
+<td> Impulse output up </td>
+<td> Boolean </td>
+<td> Output </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impQdwn </td>
+<td> Impulse output down </td>
+<td> Boolean </td>
+<td> Output </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> auto </td>
+<td> Automate </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> casc </td>
+<td> Cascade </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Kp </td>
+<td> Gain </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Ki </td>
+<td> Gain integer </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Ti </td>
+<td> Ti (ms) </td>
+<td> Integer </td>
+<td> Input </td>
+<td> false </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> Kd </td>
+<td> Gain differential </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Td </td>
+<td> Td (ms) </td>
+<td> Integer </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Tzd </td>
+<td> T differential lag (ms) </td>
+<td> Integer </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> TImpPer </td>
+<td> T impulses period (ms) </td>
+<td> Integer </td>
+<td> Input </td>
+<td> false </td>
+<td> 5000
+</td></tr>
+<tr>
+<td> TImpMin </td>
+<td> T minimal impulse (ms) </td>
+<td> Integer </td>
+<td> Input </td>
+<td> false </td>
+<td> 500
+</td></tr>
+<tr>
+<td> KImpRfact </td>
+<td> Impulse rate factor </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Hup </td>
+<td> Upper output border (%) </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 100
+</td></tr>
+<tr>
+<td> Hdwn </td>
+<td> Neither output border (%) </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Zi </td>
+<td> Insensitivity (%) </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> followSp </td>
+<td> Follow to variable by setpoint into manual </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> false </td>
+<td> 1
+</td></tr>
+<tr>
+<td> K1 </td>
+<td> Coefficient of input 1 </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> in1 </td>
+<td> Input 1 </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> K2 </td>
+<td> Coefficient of input 2 </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> in2 </td>
+<td> Input 2 </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> K3 </td>
+<td> Coefficient of input 3 </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> in3 </td>
+<td> Input 3 </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> K4 </td>
+<td> Coefficient of input 4 </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> in4 </td>
+<td> Input 4 </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impAnOut </td>
+<td> Analog position of impulse regulator </td>
+<td> Real </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impAnImit </td>
+<td> Analog position imitation </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impQupTm </td>
+<td> Imp. output up lag for GUI </td>
+<td> Integer </td>
+<td> Output </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impQdwnTm </td>
+<td> Imp. output down lag for GUI </td>
+<td> Integer </td>
+<td> Output </td>
+<td> false </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Calc frequency (Hz) </td>
+<td> Integer </td>
+<td> Input </td>
+<td> true </td>
+<td> 1
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> First start </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Last start </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> impLag </td>
+<td> Impulse lag time </td>
+<td> Real </td>
+<td> Output </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> perLag </td>
+<td> New impulse generation time </td>
+<td> Real </td>
+<td> Output </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> integ </td>
+<td> Integral accumulation </td>
+<td> Real </td>
+<td> Output </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> difer </td>
+<td> Differential accumulation </td>
+<td> Real </td>
+<td> Output </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> dlag </td>
+<td> Differential lag accumulation </td>
+<td> Real </td>
+<td> Output </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> err1 </td>
+<td> Error step back </td>
+<td> Real </td>
+<td> Output </td>
+<td> true </td>
+<td> 0
+</td></tr>
+<tr>
+<td> err2 </td>
+<td> Error two step back </td>
+<td> Real </td>
+<td> Output </td>
+<td> true </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Structure</u></b><br />
+<a class="image" href="http://oscada.org/wiki/File:RegEls_pid_imp.png"><img alt="RegEls pid imp.png" height="462" src="files/RegEls_pid_imp.png" width="821" /></a>
+</p>
+
+
+
+
+
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Regulation_elements/en">Libs/Regulation_elements/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2670</td></tr></table></body>
+</html>

@@ -1,7 +1,7 @@
 
 //OpenSCADA OPC_UA implementation library file: libOPC_UA.cpp
 /******************************************************************************
- *   Copyright (C) 2009-2017 by Roman Savochenko, <rom_as@oscada.org>	      *
+ *   Copyright (C) 2009-2020 by Roman Savochenko, <roman@oscada.org>	      *
  *									      *
  *   This library is free software; you can redistribute it and/or modify     *
  *   it under the terms of the GNU Lesser General Public License as	      *
@@ -2327,7 +2327,7 @@ nextReq:
 		// Abort
 		if(rb[3] == 'A') { scHd_.chCnt = 0; scHd_.chB = ""; passMessPrc = true; }
 		else if(scHd.chCnt || rb[3] == 'C') {
-		    //Check for lost sequence
+		    //Check for lose sequence
 		    // * Lost single 'C' before 'F': pass to processing but there is possible single 'F', it will be checked by correct request type.
 		    // * Lost intermediate 'F' ('C' both after and before): clean the chunks buffer and start it's filling from begin.
 		    // * Lost first 'C': clean the chunks buffer and start it's filling from next 'C' but there is possible this is first 'C' after

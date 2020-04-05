@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.SMH2Gi file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2012-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2012-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Segnetics SMH2Gi and SMH4")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.1.2"
+#define MOD_VER		"1.1.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Data acquisition and control by Segnetics SMH2Gi and SMH4 hardware interfaces and modules.")
 #define LICENSE		"GPL2"
@@ -150,7 +150,7 @@ void TTpContr::perSYSCall( unsigned int cnt )
 	cntr.at().list(pls);
 	for(unsigned i_p = 0; i_p < pls.size(); i_p++) {
 	    int errCode = cntr.at().at(pls[i_p]).at().vlAt("err").at().getI();
-	    if(errCode == 21) {	//By MR/MC bus lost
+	    if(errCode == 21) {	//By MR/MC bus lose
 		mess_warning(cntr.at().nodePath().c_str(), _("Re-enable by Reinit flag for MC/MR module."));
 		cntr.at().disable();
 		cntr.at().start();

@@ -1887,10 +1887,10 @@ fi
 %endif
 
 %changelog
-* Sun Jun 17 2018 Roman Savochenko <rom_as@oscada.org>
+* Sun Jun 17 2018 Roman Savochenko <roman@oscada.org>
 - The work branch switched to the version 1+r0000.
 
-* Sat Mar 24 2018 Roman Savochenko <rom_as@oscada.org>
+* Sat Mar 24 2018 Roman Savochenko <roman@oscada.org>
 - The daemon mode init script "openscadad" renamed to "openscada-server", separated to "openscada-plc" and moved to the coresponding package.
 
 * Wed May 14 2014 Aleksey Popkov <aleksey@oscada.org> - 0.8.0.10
@@ -1947,7 +1947,7 @@ fi
 
 * Wed Sep 14 2011 Aleksey Popkov <aleksey@oscada.org> - 0.7.1-5
 - Adding of directive Obsoletes for demo package.
-- Removed to some directives dir by Roman Savochenko (rom_as@oscada.org).
+- Removed to some directives dir by Roman Savochenko (roman@oscada.org).
 
 * Tue May 17 2011 Aleksey Popkov <aleksey@oscada.org> - 0.7.1-4
 - Adding of autoreconf command.

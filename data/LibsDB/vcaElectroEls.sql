@@ -1670,7 +1670,7 @@ The element''s names and their parameters are available in languages: English, U
 
 Author: Roman Savochenko <roman@oscada.org>, Maxim Lysenko (2009)
 Initially sponsored by: Valeriy Nikolaev
-Sponsored in the unification and improvement: ElProtect (June 2017)
+Sponsored in the unification and improvement: Nikolay Mitrofanov, ElProtect (June 2017)
 Founded: June 2009
 Version: 2.0.0
 License: GPLv2
@@ -1680,7 +1680,7 @@ DOC: Libs_Electrical_elements|Libs/Electrical_elements','Библиотека с
 
 Автор: Роман Савоченко <roman@oscada.org>, Максим Лысенко (2009)
 Изначально спонсировано: Валерий Николаев
-Спонсировано унификацию и усовершенствование: ElProtect (Июнь 2017)
+Спонсировано унификацию и усовершенствование: Николай Митрофанов, ElProtect (Июнь 2017)
 Основано: Июнь 2009
 Версия: 2.0.0
 Лицензия: GPLv2
@@ -1690,7 +1690,7 @@ DOC: Libs_Electrical_elements|Libs/Electrical_elements','Бібліотека с
 
 Автор: Роман Савоченко <roman@oscada.org>, Максим Лисенко (2009)
 Початково спонсоровано: Валерій Ніколаєв
-Спонсоровано уніфікацію та вдосконалення: ElProtect (Червень 2017)
+Спонсоровано уніфікацію та вдосконалення: Микола Мітрофанов, ElProtect (Червень 2017)
 Засновано: Червень 2009
 Версія: 2.0.0
 Ліцензія: GPLv2

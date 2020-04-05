@@ -1,9 +1,9 @@
 
 //OpenSCADA OPC_UA implementation library file: libOPC_UA.h
 /********************************************************************************
- *   Copyright (C) 2009-2017 by Roman Savochenko, <rom_as@oscada.org>		*
+ *   Copyright (C) 2009-2020 by Roman Savochenko, <roman@oscada.org>		*
  *										*
- *   Version: 1.2.5								*
+ *   Version: 1.2.6								*
  *	* Hello/Acknowledge properties set configurable and client's ones	*
  *	  also storing.								*
  *	* New OPCAlloc object is added for mutex handle and its automatic free	*

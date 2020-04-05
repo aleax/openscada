@@ -428,20 +428,6 @@ string TSYS::strMess( const char *fmt, ... )
     return str;
 }
 
-/*string TSYS::strMess( unsigned len, const char *fmt, ... )
-{
-    if(len <= 0) return "";
-
-    char str[len];
-    va_list argptr;
-
-    va_start(argptr, fmt);
-    int lenRez = vsnprintf(str, sizeof(str), fmt, argptr);
-    va_end(argptr);
-
-    return (lenRez < (int)len) ? string(str) : string(str)+"...";
-}*/
-
 string TSYS::strLabEnum( const string &base )
 {
     //Get number from end

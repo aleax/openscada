@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.DiamondBoards file: diamond.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,7 +36,7 @@
 #define MOD_NAME	_("Diamond DAQ boards")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.1.13"
+#define MOD_VER		"2.1.14"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides an access to \"Diamond Systems\" DAQ boards. Includes main support for all generic boards.")
 #define LICENSE		"GPL2"
@@ -687,7 +687,7 @@ void TMdPrm::getVals( const string &atr, bool start, bool stop )
 		    (dscs.overflows-st_overflows), 1000000ll*(dscs.overflows-st_overflows)*dscaioint.fifo_depth/(aiSz*dscaioint.conversion_rate), st_drift);
 		st_overflows = dscs.overflows;
 	    }
-	    //Controller cycles lost or big differ
+	    //Controller cycles loss or big differ
 	    else if(owner().lag()/owner().period() || fabs(st_drift) > (10*(float)wPer/1000000)) {
 		cTm = diffTm = curTime-dtSz;
 		st_drift = 1e-6*(curTime-(cTm+dtSz));

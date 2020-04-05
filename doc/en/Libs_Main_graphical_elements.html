@@ -38,7 +38,8 @@
 </td>
 <td> Provides the library of the main elements of the user interface of common and the industrial automation.
 <ul><li> <b>Founded:</b> September 2007</li>
-<li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/GraphicElementsLibraries/MainElements" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a></li></ul>
+<li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/GraphicElementsLibraries/MainElements" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a></li>
+<li> <b>Used by:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using" title="Special:MyLanguage/Using">most projects on OpenSCADA</a></li></ul>
 </td></tr></table>
 <p>The library is created to provide main elements of the user interface and it contains graphic elements, often need when forming the user interface of the automation of technological and common processes. The library is built on the basis <a href="Modules/VCAEngine.html#WidgetPrimitives" title="Special:MyLanguage/Modules/VCAEngine">primitives of the widgets</a> and the internal programming language <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>.
 </p><p>The element's names and their parameters are available in languages: English, Ukrainian and Russian. Their source code wrote in the human-language independent mode with calls for the translations by the function <i>tr()</i> and the message's translation also allowed for English, Ukrainian and Russian.
@@ -323,7 +324,7 @@ In the runtime mode, in the main field of the element, there are displayed the s
 </td></tr></table>
 <p>The element on Figure 1.3 is used to display the dynamic text labels, which form on basis of the discrete signals. Also this element generates notifications of violations on the locally defined condition, the attribute <b>ntf</b>. The element commonly uses and represents the representative structure of DAQ-templates of <a href="Libs_Main.html#digitBlockUnif" title="Special:MyLanguage/Libs/Main">the discrete block</a> and <a href="Libs_Main.html#codeState" title="Special:MyLanguage/Libs/Main">the code state</a>.
 </p>
-<ul><li> <b>Sponsored by:</b> <a class="external text" href="http://e-beam.ru" rel="nofollow noreferrer noopener" target="_blank">the Laboratory of Vacuum Technologies</a></li></ul>
+<ul><li> <b>Sponsored by:</b> Vassily Grigoriev, <a class="external text" href="http://e-beam.ru" rel="nofollow noreferrer noopener" target="_blank">the Laboratory of Vacuum Technologies</a></li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_TextLab.png"><img class="thumbimage" height="25" src="files/LibMainEls_TextLab.png" width="400" /></a>  <div class="thumbcaption">Fig.1.3. The element "Text label" in the development and runtime modes (left to right).</div></div></div></div>
 <p><b><u>Using — development</u></b><br />
 This widget can be used by the developer to create mnemonic schemes with displaying of text labels and/or as an element of the static screen table. To use it you need to add this widget to a mnemonic scheme, adjust for the horizontal, vertical size and link to the data source parameter.
@@ -1584,7 +1585,7 @@ In the runtime mode, the main element field displays the group header, headers a
 </td></tr></table>
 <p>Element-frame, shown in Figure 3.5, is used for adjustment of PID-regulator, includes information about the parameter-regulator, fields of the regulator's settings and <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">the "Diagram" primitive</a>, to monitor the trends of the regulator and browsing history. The frame commonly uses and represents the representative structure of the DAQ-template for the <a href="Libs_Main.html#pidUnif" title="Special:MyLanguage/Libs/Main">analog</a> and <a href="Libs_Main.html#pidUnifImp" title="Special:MyLanguage/Libs/Main">pulse</a> PID-regulators.
 </p>
-<ul><li> <b>Sponsored by:</b> <a class="external text" href="http://diyaorg.dp.ua" rel="nofollow noreferrer noopener" target="_blank">DIYA LTD</a></li></ul>
+<ul><li> <b>Sponsored by:</b> <a class="external text" href="http://diyaorg.dp.ua" rel="nofollow noreferrer noopener" target="_blank">DIYA Ltd</a></li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_cntrRegulD.png"><img class="thumbimage" height="600" src="files/LibMainEls_cntrRegulD.png" width="900" /></a>  <div class="thumbcaption">Fig.3.5a. The "Regulator's control panel" frame in the development mode.</div></div></div></div>
 <p><b><u>Using — Development</u></b><br />
 This frame can be used as a panel, called from <a href="#ElCadr">the control of panel of the parameters</a>, as well as a template-page. The frame should be placed directly in the project's tree, namely to <a href="#RootPgSo">the panels container</a>, where the dynamic linking will be performed to the regulator parameter. To create a static list of contours of the regulators' configuration, with the possibility of listing in it, you must place them in the container "greg" of the regulators' contours of each <a href="#RootPgSo">signal object</a> and statically link them with the corresponding parameter, and to ensure equality of the panel's ID and the linked parameter.
@@ -2814,7 +2815,7 @@ The panel provides tools that are somewhat different for the dynamic and archiva
 </td></tr></table>
 <p>The element on Figure 4.7 implements a simple operations' acception dialog. The dialog contains a message with a question and two buttons "Apply" and "Cancel". The dialogue, for example, is used in the frame <a href="#userManager">Users manager</a> to accept the deleting operation.
 </p>
-<ul><li> <b>Sponsored by:</b> <a class="external text" href="http://e-beam.ru" rel="nofollow noreferrer noopener" target="_blank">the Laboratory of Vacuum Technologies</a></li></ul>
+<ul><li> <b>Sponsored by:</b> Vassily Grigoriev, <a class="external text" href="http://e-beam.ru" rel="nofollow noreferrer noopener" target="_blank">the Laboratory of Vacuum Technologies</a></li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:652px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_accept.png"><img class="thumbimage" height="169" src="files/LibMainEls_accept.png" width="650" /></a>  <div class="thumbcaption">Fig.4.7. The "Accept" dialog in the development and runtime mode.</div></div></div></div>
 <p><b><u>Using — development</u></b><br />
 The dialogue does not require any special configuration by the user, it should only be located in the panels folder of the project tree of <a href="#RootPgSo">the concept of the signal objects of the root page "RootPgSo"</a>, which will allow it to be dynamically invoked and opened as an external dialogue window.
@@ -2864,7 +2865,7 @@ Calling the dialogue is made from the frame-initiator, and closing is made by pr
 </td></tr></table>
 <p>The element in Figure 4.8 implements a simple dialog for selecting an item in a tree. The dialog contains the tree itself and the two buttons "Accept" and "Cancel". This dialog, for example, was used and originally designed for it in the frame "<a href="Libs_Prescriptions.html#prescrRunSimple" title="Special:MyLanguage/Libs/Prescriptions">Prescription: run (simple)</a>" for hierarchical selection of an element in a tree.
 </p>
-<ul><li> <b>Sponsored by:</b> <a class="external text" href="http://e-beam.ru" rel="nofollow noreferrer noopener" target="_blank">the Laboratory of Vacuum Technologies</a></li></ul>
+<ul><li> <b>Sponsored by:</b> Vassily Grigoriev, <a class="external text" href="http://e-beam.ru" rel="nofollow noreferrer noopener" target="_blank">the Laboratory of Vacuum Technologies</a></li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:782px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_treeSelect.png"><img class="thumbimage" height="389" src="files/LibMainEls_treeSelect.png" width="780" /></a>  <div class="thumbcaption">Fig.4.8. The "Select item into tree" dialog in the development and runtime mode.</div></div></div></div>
 <p><b><u>Using — development</u></b><br />
 The dialogue does not require any special configuration by the user, it should only be located in the panels folder of the project tree of <a href="#RootPgSo">the concept of the signal objects of the root page "RootPgSo"</a>, which will allow it to be dynamically invoked and opened as an external dialogue window.
@@ -2913,5 +2914,5 @@ Calling the dialogue is made from the frame-initiator, and closing is made by pr
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/en">Libs/Main_graphical_elements/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2669</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/en">Libs/Main_graphical_elements/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2670</td></tr></table></body>
 </html>

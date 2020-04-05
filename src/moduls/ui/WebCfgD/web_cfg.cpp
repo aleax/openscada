@@ -402,11 +402,6 @@ string TWEB::trMessReplace( const string &tsrc )
 
 int TWEB::cntrIfCmd( XMLNode &node, const string &user )
 {
-    //Mark commands in "primaryCmd", for redundant hosts mostly transfer
-    // !!! Move further to the command's source
-    //if(node.name() == "set" || node.name() == "add" || node.name() == "ins" || node.name() == "del" || node.name() == "move" ||
-    //	    node.name() == "load" || node.name() == "save" || node.name() == "copy")
-    //	node.setAttr("primaryCmd", "1");
     try { return SYS->transport().at().cntrIfCmd(node,"UIWebCfg",user); }
     catch(TError &err) { node.setAttr("mcat",err.cat)->setAttr("rez",i2s(TError::Tr_Connect))->setText(err.mess); }
 

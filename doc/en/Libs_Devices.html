@@ -1,0 +1,4527 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Libs/Devices - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="files/doc.css" rel="stylesheet" /></head>
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../en/files/Logo-big.png" /></a></div><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Libs/Devices</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--low" href="../uk/Libs_Devices.html" title="Бібліотеки/Пристрої (22% translated)">українська</a></div></div>
+<table class="wikitable">
+
+<tr>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="Libs_Devices.html" title="Special:MyLanguage/Libs/Devices">Industrial devices library</a>
+</td>
+<td> 2.3 </td>
+<td> GPLv2 </td>
+<td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.tmplb_DevLib
+</td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Constantine (IrmIngeneer) (2018), Arsen Zakojan (2017), Ruslan Yarmoliuk (2017)</i></font>
+</td>
+<td> Library of functions to provide access to industrial device's data through network with simply enough protocols, like to common industrial automation devices and wide resources counters.
+<ul><li> <b>Founded</b>: January 2010</li>
+<li> <b>Sponsored by:</b> depending on the item ...</li>
+<li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/APIFunctionLibs/LibUserPrtDevs" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a></li>
+<li> <b>Used by:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using" title="Special:MyLanguage/Using">many projects on OpenSCADA</a></li></ul>
+</td></tr></table>
+<p>The user protocol devices library created to provide access to industrial device's data through network, like to common industrial automation devices and wide resources counters, with protocols simple enough to implement into <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">the User Protocol module</a>, using the presented complex protocols (<a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a>, <a href="Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC_UA</a>, <a href="Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">HTTP</a>) or directly on <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">the internal like to Java language</a>.
+</p><p>The template's names and their parameters are available in languages: English, Ukrainian and Russian. Their source code wrote in the human-language independent mode with calls for the translations by the function <i>tr()</i> and the message's translation also allowed for English, Ukrainian and Russian.
+</p><p>For connection the library to a project of the OpenSCADA station you can obtain the database file as:
+</p>
+<ul><li> supplied with a ready and proper package of the Linux distribution like to "openscada-libdb-main", "openscada-LibDB.Main";</li>
+<li> directly taken for most actual one from <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">the subversion repository</a> and converted to the DB SQLite file in the way:</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 15px">
+$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql
+$ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
+</pre>
+<ul><li> downloaded for <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">the one attached here</a>.</li></ul>
+<p>This obtained file next you can place into the project directory of the station and create the database object for the DB module "SQLite", registering the database file in the configuration.
+</p><p>For the DAQ-templates in generic you need to create a representing object of the device into <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">the Logical controller module</a> and to select the proper template from the templates library. Next, to correct configuration, follow to specific of the template into its individual description.
+The conception of accessing the data by a user protocol we can imagine like to Figure 1.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:324px;"><a class="image" href="http://oscada.org/wiki/File:UserPrtDevs_concept.png"><img class="thumbimage" height="275" src="files/UserPrtDevs_concept.png" width="322" /></a>  <div class="thumbcaption">Fig.1. Conception of user accessing to services and device's data.</div></div></div></div>
+<p>As you can see from Figure 1, interaction with devices carried out through some transport on which their physically based. Requests to the transport you can send:
+</p>
+<ol><li> Directly by OpenSCADA system API function of the transport object <i><a href="User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">string messIO( string mess, real timeOut = 0 );</a></i>, if the protocol specific part is very simple and you need only the data extract.</li>
+<li> Wrapped data request <i>req</i> by function <i><a href="User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">int messIO( XMLNodeObj req, string prt );</a></i> and for protocol <i>prt</i>, if the protocol part is complex enough and already presented into OpenSCADA.</li>
+<li> Wrapped data request specific for user by function <i><a href="User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">int messIO( XMLNodeObj req, "UserProtocol" );</a></i> and <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">the user protocol</a> implementation, if the protocol part is complex enough and not yet present into OpenSCADA. The user implements here itself of the protocol specific part into <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">the module UserProtocol</a>  and the data specific part into the template for <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">the Logical Level module</a> or directly into controller's procedure on the internal language of <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">the module JavaLikeCalc</a>.</li></ol>
+<dl><dd><dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> This latter method is currently developed to the possibility of forming a protocol code part directly in the same code of the template as a separate built-in function with call the requesting function of the first method, if there is no need for reuse, or even if such a need exists and it makes sense to create a complex template that can combine the role of the output protocol, through its connection to the user protocol module. And it will be completely stored in a single template library. </dd></dl></dd></dl>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Working directly with the output transport of the <a href="User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">string messIO(string mess, real timeOut = 0);</a> function does not imply blocking the output transport outside this function call and, therefore, for complex protocols with response packets more than in one packet, which requires the "waiting" process, can not be used a shared transport, at which can be sent packets of different protocols or even one, but for different tasks (controller objects). Therefore, if you need to use shared transport, place the poll parameters in one controller object (task), or use <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">the user protocol module</a> to which this remark is irrelevant, since it performs such blocking at the time of the call of the processing procedure, as well as other modular protocols of OpenSCADA. 
+To place a protocol implementation here you need to do and to follow for the shown demands:
+</p>
+<ul><li> be the copyright holder or the author of the code and distribute it under any free license, GPL preferred;</li>
+<li> prepare and store into a separated DB file of SQLite, or as a text file, for: the parameters (IO) description, the procedure's code wrote and formed in some system way;</li>
+<li> write a short description and instruction for connect a device by the protocol in way like to the other ones here;</li>
+<li> write a direct request to the forum topic "<a class="external text" href="http://oscada.org/en/forum/topics/openscada_development/" rel="nofollow noreferrer noopener" target="_blank">OpenSCADA development</a>" for placing the protocol here, include a proving of its ability to work from any OpenSCADA developer or a short demonstration video.</li></ul>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Common_protocols"><span class="tocnumber">1</span> <span class="toctext">Common protocols</span></a>
+<ul>
+<li class="toclevel-2"><a href="#ModBus_scanner_.28ModBusScan.29"><span class="tocnumber">1.1</span> <span class="toctext">ModBus scanner (ModBusScan)</span></a></li>
+<li class="toclevel-2"><a href="#DCON_Protocol_.2B_Input_AI_.28DCON_Prt.29"><span class="tocnumber">1.2</span> <span class="toctext">DCON Protocol + Input AI (DCON_Prt)</span></a></li>
+<li class="toclevel-2"><a href="#DCON_Protocol_.2B_Input_AO_.28DCON_Prt_AO.29"><span class="tocnumber">1.3</span> <span class="toctext">DCON Protocol + Input AO (DCON_Prt_AO)</span></a></li>
+<li class="toclevel-2"><a href="#DCON_Protocol_.2B_Input_DI_.28DCON_Prt_DI.29"><span class="tocnumber">1.4</span> <span class="toctext">DCON Protocol + Input DI (DCON_Prt_DI)</span></a></li>
+<li class="toclevel-2"><a href="#DCON_Protocol_.2B_Input_DO_.28DCON_Prt_DO.29"><span class="tocnumber">1.5</span> <span class="toctext">DCON Protocol + Input DO (DCON_Prt_DO)</span></a></li>
+<li class="toclevel-2"><a href="#Distributed_Network_Protocol_3_.28DNP3.29"><span class="tocnumber">1.6</span> <span class="toctext">Distributed Network Protocol 3 (DNP3)</span></a></li>
+<li class="toclevel-2"><a href="#IEC-60870_.28IEC60870.29"><span class="tocnumber">1.7</span> <span class="toctext">IEC-60870 (IEC60870)</span></a></li>
+<li class="toclevel-2"><a href="#OWEN_.28OWEN.29"><span class="tocnumber">1.8</span> <span class="toctext">OWEN (OWEN)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-2"><a href="#Industrial_automation_devices"><span class="tocnumber">2</span> <span class="toctext">Industrial automation devices</span></a>
+<ul>
+<li class="toclevel-2"><a href="#Elemer_TM510x_.28TM510x.29"><span class="tocnumber">2.1</span> <span class="toctext">Elemer TM510x (TM510x)</span></a></li>
+<li class="toclevel-2"><a href="#EDWARDS_TURBOMOLECULAR_PUMPS_.28SCU750.29"><span class="tocnumber">2.2</span> <span class="toctext">EDWARDS TURBOMOLECULAR PUMPS (SCU750)</span></a></li>
+<li class="toclevel-2"><a href="#Sycon_Multi_Drop_Protocol_.28SMDP.29"><span class="tocnumber">2.3</span> <span class="toctext">Sycon Multi Drop Protocol (SMDP)</span></a></li>
+<li class="toclevel-2"><a href="#Power_supply_for_turbomolecular_pumps_.28TMH.29"><span class="tocnumber">2.4</span> <span class="toctext">Power supply for turbomolecular pumps (TMH)</span></a></li>
+<li class="toclevel-2"><a href="#Temperature_measurement_IT-3_.28IT3.29"><span class="tocnumber">2.5</span> <span class="toctext">Temperature measurement IT-3 (IT3)</span></a></li>
+<li class="toclevel-2"><a href="#Power_supply_of_beam-electrons_evaporator_.28IVE-452HS-02.29"><span class="tocnumber">2.6</span> <span class="toctext">Power supply of beam-electrons evaporator (IVE-452HS-02)</span></a></li>
+<li class="toclevel-2"><a href="#OPTRIS_CT.2FCTL_.28OPTRIS.29"><span class="tocnumber">2.7</span> <span class="toctext">OPTRIS CT/CTL (OPTRIS)</span></a></li>
+<li class="toclevel-2"><a href="#CTR_100.2C_101_.28CTR.29"><span class="tocnumber">2.8</span> <span class="toctext">CTR 100, 101 (CTR)</span></a></li>
+<li class="toclevel-2"><a href="#Shark_Slave_Communication_Protocol_.28SSCP.29"><span class="tocnumber">2.9</span> <span class="toctext">Shark Slave Communication Protocol (SSCP)</span></a></li>
+<li class="toclevel-2"><a href="#Pulsar-M_.28pulsarM.29"><span class="tocnumber">2.10</span> <span class="toctext">Pulsar-M (pulsarM)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-3"><a href="#Counters_of_the_resources"><span class="tocnumber">3</span> <span class="toctext">Counters of the resources</span></a>
+<ul>
+<li class="toclevel-2"><a href="#Heat_counter_computer_VKT7_.28VKT7.29"><span class="tocnumber">3.1</span> <span class="toctext">Heat counter computer VKT7 (VKT7)</span></a></li>
+<li class="toclevel-2"><a href="#Mercury_200_.28m200.29"><span class="tocnumber">3.2</span> <span class="toctext">Mercury 200 (m200)</span></a></li>
+<li class="toclevel-2"><a href="#Mercury_230_.28m230.29"><span class="tocnumber">3.3</span> <span class="toctext">Mercury 230 (m230)</span></a></li>
+<li class="toclevel-2"><a href="#Nik2303I_.28Nik2303I.29"><span class="tocnumber">3.4</span> <span class="toctext">Nik2303I (Nik2303I)</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Common_protocols"><span class="mw-headline-number">1</span> Common protocols</span></h2>
+<table class="wikitable">
+
+<tr>
+<td> <span id="ModBusScan" title="#ModBusScan"><h3><span class="mw-headline" id="ModBus_scanner_.28ModBusScan.29"><span class="mw-headline-number">1.1</span> ModBus scanner (<a href="Libs_Devices.html#ModBusScan" title="Special:MyLanguage/Libs/Devices">ModBusScan</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsDevsModBusScanOp.png" title="Result and the operative setup."><img alt="Result and the operative setup." height="524" src="files/LibsDevsModBusScanOp.png" width="343" /></a></div>
+<p>ModBus scanner for Coils (1), Input Coils (2), Registers (3), Input Registers (4); in the range [0...65535]. The template useful to examine unknown ModBus devices, scanning their Coils' and Registers' map for detecting the available data addresses. The scanning performs per one item, whether it is a coil or a register, to prevent the data unavailability for strict data accessing devices. The protocol ModBus itself implemented by the OpenSCADA module <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">DAQ.ModBus</a>, together which the template designed to use.
+</p>
+<ul><li> <b>Sponsored by:</b> SVItoVYR Ltd</li></ul>
+<p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> lim </td>
+<td> Limit time, seconds </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 10
+</td></tr>
+<tr>
+<td> type </td>
+<td> Type </td>
+<td> Integer numbers selection </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable
+</td>
+<td> 2<br />
+<p>0;1;2;3<br />
+Coils (1);Input Coils (2);Registers (3);Input Registers (4)
+</p>
+</td></tr>
+<tr>
+<td> begin </td>
+<td> Begin (0...65535) </td>
+<td> Integer </td>
+<td> Output </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> end </td>
+<td> End (0...65536) </td>
+<td> Integer </td>
+<td> Output </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> res </td>
+<td> Result </td>
+<td> Text </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> this </td>
+<td> The object </td>
+<td> Object </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr></table>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create a source controller object, or use a suitable one, into the module "<a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a>".</dd>
+<dd>2. Create a source parameter object into the previous source controller object, set its Identifier like to "ModBusScan", select its type to "Logical" and select this template for it. Enable the parameter.</dd>
+<dd>3. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>Limit time, seconds</i> — time of limiting for one cycle execution, the default value is a normal one.</li></ul></dd>
+<dd>4. RESULT: Selecting type of the data and setting the "Begin" and "End" attributes of the scanning range you will get the scanning result into the attribute "Result", which will be appended in the scanning process.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="DCON_Prt" title="#DCON_Prt"><h3><span class="mw-headline" id="DCON_Protocol_.2B_Input_AI_.28DCON_Prt.29"><span class="mw-headline-number">1.2</span> DCON Protocol + Input AI (<a href="Libs_Devices.html#DCON_Prt" title="Special:MyLanguage/Libs/Devices">DCON_Prt</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * =&gt; <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">UserProtocol</a> </td>
+<td> en
+</td></tr>
+<tr>
+<td> <span id="DCON_Prt_AO" title="#DCON_Prt_AO"><h3><span class="mw-headline" id="DCON_Protocol_.2B_Input_AO_.28DCON_Prt_AO.29"><span class="mw-headline-number">1.3</span> DCON Protocol + Input AO (<a href="Libs_Devices.html#DCON_Prt_AO" title="Special:MyLanguage/Libs/Devices">DCON_Prt_AO</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * =&gt; <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">UserProtocol</a> </td>
+<td> en
+</td></tr>
+<tr>
+<td> <span id="DCON_Prt_DI" title="#DCON_Prt_DI"><h3><span class="mw-headline" id="DCON_Protocol_.2B_Input_DI_.28DCON_Prt_DI.29"><span class="mw-headline-number">1.4</span> DCON Protocol + Input DI (<a href="Libs_Devices.html#DCON_Prt_DI" title="Special:MyLanguage/Libs/Devices">DCON_Prt_DI</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * =&gt; <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">UserProtocol</a> </td>
+<td> en
+</td></tr>
+<tr>
+<td> <span id="DCON_Prt_DO" title="#DCON_Prt_DO"><h3><span class="mw-headline" id="DCON_Protocol_.2B_Input_DO_.28DCON_Prt_DO.29"><span class="mw-headline-number">1.5</span> DCON Protocol + Input DO (<a href="Libs_Devices.html#DCON_Prt_DO" title="Special:MyLanguage/Libs/Devices">DCON_Prt_DO</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * =&gt; <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">UserProtocol</a> </td>
+<td> en 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>Input and output parts of <span id="DCON" title="#DCON">the protocol DCON implementation</span> with the input part designed for typical AI, DI, AO, DO modules at up to 20, 32, 8, 32 channels. The protocol DCON client part also implemented by the OpenSCADA module <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">DAQ.DCON</a>.
+</p><p><b>INPUT USER PROTOCOL'S PART</b> — full-featured implementation of typical DAQ modules suitable to multiple using on one bus and multiple using of the templates.
+</p><p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create of needed <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">user protocol objects</a> based on the templates, with ID like to DCON_[AI,AO,DI,DO].</dd>
+<dd>2. Configure the input part of the protocol objects for their addresses, CRC and establish them links to real data. </dd>
+<dd>3. Create one or several input transports of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" mostly and set its to any ID.</dd>
+<dd>4. Set proper address and the timeouts to the <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> devices.</dd>
+<dd>5. Select for one or several user protocols created in the step 1.</dd>
+<dd>6. RESULT: all requests to the input transport(s) will be processed by the input part of the user protocol objects.</dd></dl>
+<p><b>OUTPUT USER PROTOCOL'S XML REQUEST STRUCTURE</b> — <b>&lt;ReqSymb addr="{toAddr}" err="{err}" CRC="{CRC}"&gt;{req}&lt;/ReqSymb&gt;</b>
+</p>
+<dl><dd><i>ReqSymb</i> — symbol of the request type into the tag name, like to: '#', '@', etc;</dd>
+<dd><i>toAddr</i> — remote host address [0...240];</dd>
+<dd><i>CRC</i> — sign [0,1] of using CRC;</dd>
+<dd><i>req</i> — data of the request and response;</dd>
+<dd><i>err</i> — sets for the request result.</dd></dl>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create or use allowed <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">user protocol objects</a> based on the templates, with ID like to "DCON".</dd>
+<dd>2. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" and set its ID like to "DCON", one transport suitable for more receivers. </dd>
+<dd>3. Set proper address and timeouts for the <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> device.</dd>
+<dd>4. Place some requesting commands directly into allowed or a new internal OpenSCADA procedure like to:</dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px">
+req = SYS.XMLNode("#"); req.setAttr("ProtIt","DCON").setAttr("addr","5");
+SYS.Transport.Serial.out_DCON.messIO(req, "UserProtocol");
+data = req.attr("err").toInt()&nbsp;? ""&nbsp;: req.text();
+</pre>
+<dl><dd>5. RESULT: Into the variable <i>data</i> you will get the request's data part if no errors occur. The data is values of the analog inputs.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="DNP3" title="#DNP3"><h3><span class="mw-headline" id="Distributed_Network_Protocol_3_.28DNP3.29"><span class="mw-headline-number">1.6</span> Distributed Network Protocol 3 (<a href="Libs_Devices.html#DNP3" title="Special:MyLanguage/Libs/Devices">DNP3</a>)</span></h3></span>
+</td>
+<td> 0.8 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsDevsDNP3Op.png" title="Result and the operative setup."><img alt="Result and the operative setup." height="906" src="files/LibsDevsDNP3Op.png" width="474" /></a></div>
+<p><a class="external text" href="https://en.wikipedia.org/wiki/DNP3" rel="nofollow noreferrer noopener" target="_blank">Distributed Network Protocol 3 (DNP3)</a> is a set of communications protocols used between components in process automation systems. Its main use is in utilities such as electric and water companies. Usage in other industries is not common. It was developed for communications between various types of data acquisition and control equipment. Competing standards include the older Modbus protocol and the newer IEC 61850 protocol and IEC 61870.
+</p><p>The template implements currently for the client, which uses the followed functions: Confirm (0x00), Read (0x01), Write (0x02), Enable (0x14) and Disable (0x15) Spontaneous Messages.
+</p><p>And which implements and tested for the followed point-oriented objects (data types):
+</p>
+<ul><li> <b>1.[2]</b> — Binary Input [with status]</li>
+<li> <b>2.[1]</b> — Binary Input Changed [w/o time]</li>
+<li> <b>3.[2]</b> — Double-bit Input [with status]</li>
+<li> <b>4.[1]</b> — Double-bit Input Changed [w/o time]</li>
+<li> <b>10.[2]</b> — Binary Output (reading back and used to write also) [with status]</li>
+<li> <b>20,21.[1]</b> — Binary Counter (Typical,Frozen) [32-Bit]</li>
+<li> <b>22,23.[1]</b> — Binary Counter Changed (Typical,Frozen) [32-Bit w/o time]</li>
+<li> <b>30.[1,5]</b> — Analog Input [32-bit integer value with flag, 32-bit floating point value with flag]</li>
+<li> <b>32.[7]</b> — Analog Input Changed [32-bit floating point value with flag and event time]</li>
+<li> <b>40.[1]</b> — Analog Output (reading back and used to write also) [32-bit integer value with flag]</li>
+<li> <b>50</b> — Time and Date (just passed and not read) [indexed absolute time and long interval]</li>
+<li> <b>60.[1,2,3,4]</b> — Classes [0,1,2,3]</li>
+<li> <b>80.[1]</b> — Device [Restart 7=Off(0x01)]</li>
+<li> <b>110.[1]</b> — Octet String (just passed and not read) [Sized by variation] </li></ul>
+<p>Considering the purpose and the application area, the protocol does not provide the direct determination of the requested data and the device, that implements it, provides all available ones upon request for the Class 0 data, after which only changes are requested for the Classes 1, 2, 3.
+</p><p>All received and controlled data is accumulated in an object of the attribute "items" for further control as an object in a table of the widget "<a href="Libs_Main_graphical_elements.html#objProps" title="Special:MyLanguage/Libs/Main graphical elements">Main.objProps</a>", according to the <a href="Libs_Main.html#ComplexObject" title="Special:MyLanguage/Libs/Main">complex object</a> definition.
+</p><p>For standard control over parameter attributes, including archiving, it is possible to define the necessary data to create a separate representative attribute for them, which is described in the attribute "itemsSet", where they can be defined individually, with a semantic identifier and name, or in a range named by a template. The data in the attribute "itemsSet" is defined by records in the format <b>ai|ao|cnt|di|do:{pnt}[-{endPnt}][:a[:{NameBase}]]</b>, where:
+</p>
+<ul><li> <i>ai|ao|cnt|di|do</i> — data type, where:
+<ul><li> "ai" — analog inputs, transmitted by the functions 30 and 32;</li>
+<li> "ao" — analog outputs, transmitted by the function 40;</li>
+<li> "cnt" — counters, transmitted by the functions 20, 21, 22, 23; so Typical and Frozen counters is in one space;</li>
+<li> "di" — discrete inputs, transmitted by the functions 1, 2, 3, 4; so Binary Input and Double-bit Input is in one space;</li>
+<li> "do" — discrete outputs, transmitted by the function 10.</li></ul></li>
+<li> <i>{pnt}</i> — point number of the range begin;</li>
+<li> <i>{endPnt}</i> — the range end (the last point number);</li>
+<li> <i>a</i> — sign of creating the representative attribute for the parameter or the parameters group;</li>
+<li> <i>{NameBase}</i> — naming base of the attributes.</li></ul>
+<p>Examples of the parameters definition, rows of the attribute "itemsSet":
+</p>
+<ul><li> <b>ai:0-9:a</b> — analog inputs in the points range [0...9] with forming the attributes;</li>
+<li> <b>ao:0-9:a</b> — analog outputs in the points range [0...9] with forming the attributes;</li>
+<li> <b>di:0-9:a</b> — discrete inputs in the points range [0...9] with forming the attributes;</li>
+<li> <b>do:0-9:a</b> — discrete outputs in the points range [0...9] with forming the attributes;</li>
+<li> <b>cnt:0-9:a</b> — counters in the points range [0...9] with forming the attributes.</li></ul>
+<ul><li> <b>Sponsored by:</b> Hadi Ramezani and Hossein Malakooti</li></ul>
+<p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> transport </td>
+<td> Transport </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> Sockets.out_DNP3
+</td></tr>
+<tr>
+<td> dest </td>
+<td> Destination [0...65520] </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 10
+</td></tr>
+<tr>
+<td> src </td>
+<td> Source [0...65520] </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 1
+</td></tr>
+<tr>
+<td> tmRetr </td>
+<td> Retry connection time, seconds </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 10
+</td></tr>
+<tr>
+<td> tmPoolEv </td>
+<td> Poll events time, seconds </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 1
+</td></tr>
+<tr>
+<td> tmPoolAll </td>
+<td> Poll all time, seconds </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 60
+</td></tr>
+<tr>
+<td> itemsSet </td>
+<td>ao|cnt|di|do:{pnt}[-{endPnt}][:a[:{NameBase}]]" </td>
+<td> Text </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> items </td>
+<td> All items </td>
+<td> Object </td>
+<td> Output </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> tr </td>
+<td> Output transport </td>
+<td> Object </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> ctx </td>
+<td> IO context </td>
+<td> Object </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> oAVals </td>
+<td> Output values </td>
+<td> Object </td>
+<td> Output </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> this </td>
+<td> Object </td>
+<td> Object </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Frequency of calculation of the function, Hz </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsDevsDNP3Cfg.png" title="Configuration."><img alt="Configuration." height="310" src="files/LibsDevsDNP3Cfg.png" width="393" /></a></div>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an output transport of the type "<a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>", set its Identifier like to "DNP3", one for each the device-PLC.</dd>
+<dd>2. Set proper address with port <b>20000</b> and timeouts of the <a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a> device-PLC.</dd>
+<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties. The interaction period preferred to be about 0.1 second.</dd>
+<dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select this template for that, one for each the device-PLC. Enable the parameter.</dd>
+<dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>Transport</i> — to address of the transport into step 1. Tracing for the address changing is supported.</li>
+<li> <i>Destination</i> — remote station address in the integer range [0...65520].</li>
+<li> <i>Source</i> — the same station address (source) in the integer range [0...65520].</li>
+<li> <i>Retry connection time</i> — retry connection time in seconds, at the connection missing and no response detection.</li>
+<li> <i>Poll events time</i> — time in seconds of the events periodical polling (Class 1).</li>
+<li> <i>Poll all time</i> — time in seconds of the complete data requesting (Class 0,1,2,3).</li></ul></dd>
+<dd>6. RESULT: The logical parameter object will perform interaction and placing of the gathered data to the object "items", creation/placing and checking for commands of the proper attributes, created by the "itemsSet" instruction.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="IEC60870" title="#IEC60870"><h3><span class="mw-headline" id="IEC-60870_.28IEC60870.29"><span class="mw-headline-number">1.7</span> IEC-60870 (<a href="Libs_Devices.html#IEC60870" title="Special:MyLanguage/Libs/Devices">IEC60870</a>)</span></h3></span>
+</td>
+<td> 1.4 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsDevsIEC60870Op.png" title="Result and the operative setup."><img alt="Result and the operative setup." height="723" src="files/LibsDevsIEC60870Op.png" width="426" /></a></div>
+<p><a class="external text" href="https://en.wikipedia.org/wiki/IEC_60870" rel="nofollow noreferrer noopener" target="_blank">IEC 60870</a> part 5 is one from the IEC 60870 set of standards which defines systems used for telecontrol (supervisory control and data acquisition) in electrical engineering and power system automation applications. Part 5 provides a communication profile for sending basic telecontrol messages between two systems, which uses permanent directly connected data circuits between the systems.
+</p><p>The template currently implements the part 104 (Ethernet transport) for the client and followed services: STARTDT, STOPDT, TESTFR, Ack, C_IC_NA_1 (100), C_CI_NA_1 (101), C_SC_NA_1 (45), M_SP_NA_1 (1), M_SP_TA_1 (2), M_DP_NA_1 (3), M_DP_TA_1 (4), M_ME_NB_1 (11), M_ME_NC_1 (13), M_ME_TF_1 (36), C_CS_NA_1 (103). For information ones, the sequential (SQ) mode enabling and disabling are supported.
+</p><p>Considering the purpose and the application area, the protocol does not provide the direct determination of the requested data and the device, that implements it, provides all available ones upon request by the C_IC_NA_1 command, after which only changes are sent.
+</p><p>All received and controlled data is accumulated in an object of the attribute "items" for further control as an object in a table of the widget "<a href="Libs_Main_graphical_elements.html#objProps" title="Special:MyLanguage/Libs/Main graphical elements">Main.objProps</a>", according to the <a href="Libs_Main.html#ComplexObject" title="Special:MyLanguage/Libs/Main">complex object</a> definition.
+</p><p>For standard control over parameter attributes, including archiving, it is possible to define the necessary data to create a separate representative attribute for them, which is described in the attribute "itemsSet", where they can be defined individually, with a semantic identifier and name, or in a range named by a template. The data in the attribute "itemsSet" is defined by records in the format <b>ai|di|do:{IOA}[-{EndIOA}][:a[:{NameBase}]]</b>, where:
+</p>
+<ul><li> <i>ai|di|do</i> — data type, where:
+<ul><li> "ai" — analog inputs, transmitted by the message M_ME_NB_1, M_ME_NC_1, M_ME_TF_1 and requested by C_IC_NA_1;</li>
+<li> "di" — discrete inputs, transmitted by the message M_SP_NA_1, M_SP_TA_1, M_DP_NA_1, M_DP_TA_1 and requested by C_IC_NA_1;</li>
+<li> "do" — discrete outputs, is transmitted by C_SC_NA_1.</li></ul></li>
+<li> <i>{IOA}</i> — parameter address of the range begin;</li>
+<li> <i>{EndIOA}</i> — the range end (the last item address);</li>
+<li> <i>a</i> — sign of creating the representative attribute for the parameter or the parameters group;</li>
+<li> <i>{NameBase}</i> — naming base of the attributes.</li></ul>
+<p>Examples of the parameters definition, rows of the attribute "itemsSet":
+</p>
+<ul><li> <b>di:100-108:a</b> — discrete inputs in the address range [100...108] with forming the attributes;</li>
+<li> <b>ai:873-880:a</b> — analog inputs in the address range [873...880] with forming the attributes;</li>
+<li> <b>do:1-10:a</b> — discrete outputs in the address range [1...10] with forming the attributes.</li></ul>
+<p>The module provides integrated support for time synchronisation of PLC by sending the C_CS_NA_1 service command.
+</p><p>In the template for the first time used the not requesting mode of an output transport and the attributes creation in free while performing.
+</p>
+<ul><li> <b>Sponsored by:</b> Ustijancev Michael</li>
+<li> <a class="external text" href="http://oscada.org/en/development/tasks/posts/subsystem_daq/iec_60870_5_acquisition_protocol_implementation" rel="nofollow noreferrer noopener" target="_blank">Implementing task</a></li></ul>
+<p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> transport </td>
+<td> Transport </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> Sockets.out_IEC60870
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Address, {addr}.{OA} </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0.5
+</td></tr>
+<tr>
+<td> tmRetr </td>
+<td> Retry connection time, seconds </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 10
+</td></tr>
+<tr>
+<td> tmPoolAll </td>
+<td> Poll all time, seconds </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 60
+</td></tr>
+<tr>
+<td> t1 </td>
+<td> Acknowledge lack activity timeout, seconds </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 1.5
+</td></tr>
+<tr>
+<td> t2 </td>
+<td> Acknowledge timeout, seconds </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 1
+</td></tr>
+<tr>
+<td> t3 </td>
+<td> Test timeout, seconds </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 2
+</td></tr>
+<tr>
+<td> k </td>
+<td> Maximum unconfirmed </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 12
+</td></tr>
+<tr>
+<td> w </td>
+<td> Maximum no ack </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 8
+</td></tr>
+<tr>
+<td> itemsSet </td>
+<td> Items set by: "ai|di|do:{IOA}[-{EndIOA}][:a[:{NameBase}]]" </td>
+<td> Text </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> items </td>
+<td> All items </td>
+<td> Object </td>
+<td> Output </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> syncTimePLC </td>
+<td> Sync PLC time </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> oAVals </td>
+<td> Output values </td>
+<td> Object </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> this </td>
+<td> Object </td>
+<td> Object </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Frequency of calculation of the function (Hz) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsDevsIEC60870Cfg.png" title="Configuration."><img alt="Configuration." height="366" src="files/LibsDevsIEC60870Cfg.png" width="468" /></a></div>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an output transport of the type "<a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>", set its Identifier like to "IEC60870", one for each the device-PLC.</dd>
+<dd>2. Set proper address with port <b>2404</b> and timeouts of the <a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a> device-PLC.</dd>
+<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties. For interaction by IEC-60870-104 you need the execution period not greater than <b>0.1 second</b>!</dd>
+<dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select this template for that, one for each the device-PLC. Enable the parameter.</dd>
+<dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>Transport</i> — to address of the transport into step 1. Tracing for the address changing is supported.</li>
+<li> <i>Address</i> — remote station and object address in the format "{addr}.{OA}", for physical systems without a gateway is not particularly important.</li>
+<li> <i>Retry connection time</i> — retry connection time in seconds, at the connection missing.</li>
+<li> <i>Poll all time</i> — time in seconds of the complete data requesting, sending C_IC_NA_1.</li>
+<li> <i>Acknowledge lack activity timeout</i>, in seconds.</li>
+<li> <i>Acknowledge timeout</i>, in seconds.</li>
+<li> <i>Test timeout</i>, in seconds.</li>
+<li> <i>Maximum unconfirmed</i> — not used into the client since it is not generate such flows.</li>
+<li> <i>Maximum no ack</i> — maximum input packages after what the client will send "Ack".</li></ul></dd>
+<dd>6. RESULT: The logical parameter object will perform interaction and placing of the gathered data to the object "items", creation/placing and checking for commands of the proper attributes, created by the "itemsSet" instruction.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="OWEN" title="#OWEN"><h3><span class="mw-headline" id="OWEN_.28OWEN.29"><span class="mw-headline-number">1.8</span> OWEN (<a href="Libs_Devices.html#OWEN" title="Special:MyLanguage/Libs/Devices">OWEN</a>)</span></h3></span> </td>
+<td> 0.8 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>, Constantine (IrmIngeneer)
+</td></tr></table>
+<p>OWEN data sources implementation in the OWEN protocol. Implemented wholly in the template for the protocol requesting and for dynamic data model of the OWEN data sources' data with support of the writing and original names of the parameters.<br />
+The field "addr" of the items can be wrote positive, for  the 8 bit address [0...255], and negative, for the 11 bit address[-2047...0].<br />
+The protocol implementing is not finished due to missing for feedback from the developer to resolve this undocumented behavior:
+</p>
+<ul><li> МВ110-8А responds error 0x31 for reading "in-t": &gt;1003023331932DCB43 &lt;1010932D4791;</li>
+<li> and error 0x34 for it writing: &gt;1003023334932D2A42 &lt;1001932D0BEDBC<br /></li></ul>
+<p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> transport </td>
+<td> Transport </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> Serial.out_owen
+</td></tr>
+<tr>
+<td> items </td>
+<td> Items set "{addr}:{func}:{f|i|u|s}:{r|w}[:{id}[:{nm}]]" </td>
+<td> Text </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> this </td>
+<td> Object </td>
+<td> Object </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr></table>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" directly or by the "<a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>" gate, and set its Identifier like to "Serial.out_owen", one for each the devices' used serial bus.</dd>
+<dd>2. Set proper address and timeouts of the <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> device.</dd>
+<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for that, one for the devices on one bus. Enable the parameter.</dd>
+<dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>Transport</i> — to address of the transport into step 1. Tracing for the address changing is supported.</li></ul></dd>
+<dd>6. RESULT: The logical parameter object will: dynamically create needed attributes accordingly to the attribute "Items set" value and perform interaction and placing of gathered data to the parameter attributes. Also you are able to change for writable attributes. Into the "Error" attribute, additionally to the same errors, you will get for statuses of the read and wrote values.</dd></dl>
+<h2><span class="mw-headline" id="Industrial_automation_devices"><span class="mw-headline-number">2</span> Industrial automation devices</span></h2>
+<table class="wikitable">
+
+<tr>
+<td> <span id="TM510x" title="#TM510x"><h3><span class="mw-headline" id="Elemer_TM510x_.28TM510x.29"><span class="mw-headline-number">2.1</span> Elemer TM510x (<a href="Libs_Devices.html#TM510x" title="Special:MyLanguage/Libs/Devices">TM510x</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * =&gt; <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">UserProtocol</a> </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>Multi-channels thermometer Elemer TM5102 and TM5103 of the firm <a class="external text" href="http://www.elemer.ru" rel="nofollow noreferrer noopener" target="_blank">Elemer</a>.
+</p>
+<ul><li> <b>Sponsored by:</b> <a class="external text" href="http://diyaorg.dp.ua" rel="nofollow noreferrer noopener" target="_blank">DIYA Ltd</a></li></ul>
+<p><b><u>Output user protocol's XML request structure</u></b><br />
+<b>&lt;mess addr="1" err="1:Error"&gt;{req}&lt;/mess&gt;</b>
+</p>
+<dl><dd><i>req</i> — request/respond data;</dd>
+<dd><i>addr</i> — remote station address (1...254);</dd>
+<dd><i>err</i> — sets to result of the request.<br /></dd></dl>
+<p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> transport </td>
+<td> Transport </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> tm510x
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Device address (1...254) </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 1
+</td></tr>
+<tr>
+<td> devTp </td>
+<td> Device type </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> errors </td>
+<td> Errors </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> in1 </td>
+<td> Input 1 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> in2 </td>
+<td> Input 2 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> in3 </td>
+<td> Input 3 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> in4 </td>
+<td> Input 4 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> in5 </td>
+<td> Input 5 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> in6 </td>
+<td> Input 6 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> in7 </td>
+<td> Input 7 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> in8 </td>
+<td> Input 8 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr></table>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" and set its Identifier like to "tm510", one for each the devices' used serial bus.</dd>
+<dd>2. Set proper address and timeouts of the <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> device.</dd>
+<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for that, one for each the devices. Enable the parameter.</dd>
+<dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>Transport</i> — to Identifier of the transport into step 1.</li>
+<li> <i>Device address</i> — to logical address of the device on the bus under the transport in step 1.</li></ul></dd>
+<dd>6. RESULT: The logical parameter object will perform interaction and placing of gathered data to the parameter attributes.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="SCU750" title="#SCU750"><h3><span class="mw-headline" id="EDWARDS_TURBOMOLECULAR_PUMPS_.28SCU750.29"><span class="mw-headline-number">2.2</span> EDWARDS TURBOMOLECULAR PUMPS (<a href="Libs_Devices.html#SCU750" title="Special:MyLanguage/Libs/Devices">SCU750</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * =&gt; <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">UserProtocol</a> </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>Typical EDWARDS TURBOMOLECULAR PUMPS (<a class="external free" href="http://edwardsvacuum.com" rel="nofollow noreferrer noopener" target="_blank">http://edwardsvacuum.com</a>) data acquisition by SCU750 Cotrol Unit protocol.<br />
+</p>
+<ul><li> <b>Sponsored by:</b> Vassily Grigoriev, <a class="external text" href="http://e-beam.ru" rel="nofollow noreferrer noopener" target="_blank">the Laboratory of Vacuum Technologies</a></li></ul>
+<p><b><u>Output user protocol's XML request structure</u></b><br />
+<b>&lt;mess addr="1" err="1:Error"&gt;{req}&lt;/mess&gt;</b>
+</p>
+<dl><dd><i>req</i> — request/respond data;</dd>
+<dd><i>addr</i> — remote station address (&lt;0 — single; &gt;=0 — multi port);</dd>
+<dd><i>err</i> — sets to result of the request.</dd></dl>
+<p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> transport </td>
+<td> Transport </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> SCU750
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Device address (-1...255) </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 1
+</td></tr>
+<tr>
+<td> perGet </td>
+<td> Period data getting (s) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 10
+</td></tr>
+<tr>
+<td> version </td>
+<td> Version </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> snCntrUnit </td>
+<td> Serial number: Control Unit </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> snPump </td>
+<td> Serial number: Pump </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> cntPumpHour </td>
+<td> Pump hour counter (minutes) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> cntCntrUnitHour </td>
+<td>Control unit hour counter (minutes) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> cntStart </td>
+<td> Start counter </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> operMode </td>
+<td> Pump Operation Mode </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> errors </td>
+<td> Errors </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> events </td>
+<td> Events </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> tTMS </td>
+<td> TMS temperature (°С) </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> tMotor </td>
+<td> Motor temperature (°С) </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> rotSpeed </td>
+<td> Rotational speed (HZ) </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> comStart </td>
+<td> Command: START </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> comStop </td>
+<td> Command: STOP </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> comReset </td>
+<td> Command: RESET </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> spSpeed </td>
+<td> Set point: Speed </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> spTMSt </td>
+<td> Set point: TMS temperature </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> spSpeedPrev </td>
+<td> Set point: Speed (previous) </td>
+<td> Integer </td>
+<td> Output </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> cnt </td>
+<td> Counter </td>
+<td> Integer </td>
+<td> Output </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> operModes </td>
+<td> Operation modes </td>
+<td> Object </td>
+<td> Output </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr></table>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" and set its Identifier like to "SCU750", one for each the devices' used serial bus.</dd>
+<dd>2. Set proper address and timeouts of the <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> device.</dd>
+<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for that, one for each the devices. Enable the parameter.</dd>
+<dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>Transport</i> — to Identifier of the transport into step 1.</li>
+<li> <i>Device address</i> — to logical address of the device on the bus under the transport in step 1.</li>
+<li> <i>Period data getting</i> — to needed acquisition period which more to the real processing by the logical level controller. Commands and some other functions will process immediately.</li></ul></dd>
+<dd>6. RESULT: The logical parameter object will perform interaction and placing of gathered data to the parameter attributes. Also you are able to send some commands to the device through the writable attributes.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="SMDP" title="#SMDP"><h3><span class="mw-headline" id="Sycon_Multi_Drop_Protocol_.28SMDP.29"><span class="mw-headline-number">2.3</span> Sycon Multi Drop Protocol (<a href="Libs_Devices.html#SMDP" title="Special:MyLanguage/Libs/Devices">SMDP</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * =&gt; <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">UserProtocol</a> </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>STM devices for resonant frequency measurement for mass of deposited films attached to their surface by Sycon Instruments, Inc. (<a class="external free" href="http://www.sycon.com" rel="nofollow noreferrer noopener" target="_blank">http://www.sycon.com</a>).<br />
+</p>
+<ul><li> <b>Sponsored by:</b> Vassily Grigoriev, <a class="external text" href="http://e-beam.ru" rel="nofollow noreferrer noopener" target="_blank">the Laboratory of Vacuum Technologies</a></li></ul>
+<p><b><u>Output user protocol's XML request structure</u></b><br />
+<b>&lt;mess addr="16" try="1" err="1:Error"&gt;{req}&lt;/mess&gt;</b>
+</p>
+<dl><dd><i>req</i> — request/respond data;</dd>
+<dd><i>addr</i> — remote device address [16...254];</dd>
+<dd><i>try</i> — tries of the request;</dd>
+<dd><i>err</i> — sets to result of the request.</dd></dl>
+<p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> transport </td>
+<td> Transport </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> SMDP
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Device address (16...254) </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 16
+</td></tr>
+<tr>
+<td> perGet </td>
+<td> Period data getting (s) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 10
+</td></tr>
+<tr>
+<td> version </td>
+<td> Firmware Version </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> CfgPrmSSID </td>
+<td> Configuration parameter session ID </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Srlno </td>
+<td> Measurement serial number </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> RawFreq </td>
+<td> Channel freq. </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> GoodFreq </td>
+<td> Last used, good channel freq. (Hz) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> RawThick </td>
+<td> Computed raw thickness, from frequency. (A) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> XtalThick </td>
+<td> Computed material related thickness, can be zeroed. (A) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> XtalThick_F </td>
+<td> Filtered computed material related thickness, can be zeroed. (A) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> XtalRate </td>
+<td> Rate, angstroms per second. </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> XtalRate_F </td>
+<td> Rate, angstroms per second, filtered. </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> XtalLife </td>
+<td> XtalLife (%) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> XtalQual </td>
+<td> Quality level (0-9). </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> XtalQualPeak </td>
+<td> Highest quality level seen (0-9). </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> XtalStab </td>
+<td> Stability level (0-9). </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> XtalStabPeak </td>
+<td> Highest stability level seen (0-9). </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> XtalStat </td>
+<td> Channel status. </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> XtalLife_C </td>
+<td> XtalLife (%). </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> SessId </td>
+<td> Session ID </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Fq </td>
+<td> Xtal start freq. (Hz) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Fm </td>
+<td> Xtal min freq. (Hz) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Density </td>
+<td> Material density (gm/cc). </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Zratio </td>
+<td> Material Z ratio. Not scaled or unitized. </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Tooling </td>
+<td> 1.000 is 100&nbsp;% tooling (unity). </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> RateReq </td>
+<td> Requested rate (A/S). </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> QlvlTrip </td>
+<td> Quality threshold, if non 0 and exceeded, xtal fail occurs. </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> SlvlTrip </td>
+<td> Stability threshold, if non 0 and exceeded, xtal fail occurs. </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr></table>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" and set its Identifier like to "SMDP", one for each the devices' used serial bus.</dd>
+<dd>2. Set proper address and timeouts of the <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> device.</dd>
+<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for that, one for each the devices. Enable the parameter.</dd>
+<dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>Transport</i> — to Identifier of the transport into step 1.</li>
+<li> <i>Device address</i> — to logical address of the device on the bus under the transport in step 1.</li>
+<li> <i>Period data getting</i> — to needed acquisition period which more to the real processing by the logical level controller. Commands and some other functions will process immediately.</li></ul></dd>
+<dd>6. RESULT: The logical parameter object will perform interaction and placing of gathered data to the parameter attributes. Also you are able to send some commands to the device through the writable attributes.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="TMH" title="#TMH"><h3><span class="mw-headline" id="Power_supply_for_turbomolecular_pumps_.28TMH.29"><span class="mw-headline-number">2.4</span> Power supply for turbomolecular pumps (<a href="Libs_Devices.html#TMH" title="Special:MyLanguage/Libs/Devices">TMH</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * =&gt; <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">UserProtocol</a> </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>Power supply for turbomolecular pumps of the firm <a class="external text" href="http://www.shimadzu.com" rel="nofollow noreferrer noopener" target="_blank">SHIMADZU</a>, model EI-R04M.<br />
+</p>
+<ul><li> <b>Sponsored by:</b> Vassily Grigoriev, <a class="external text" href="http://e-beam.ru" rel="nofollow noreferrer noopener" target="_blank">the Laboratory of Vacuum Technologies</a></li></ul>
+<p><b><u>Output user protocol's XML request structure</u></b><br />
+<b>&lt;mess addr="1" err="1:Error"&gt;{req}&lt;/mess&gt;</b>
+</p>
+<dl><dd><i>req</i> — request/respond data;</dd>
+<dd><i>addr</i> — remote station address (1...32);</dd>
+<dd><i>err</i> — sets to result of the request.</dd></dl>
+<p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> transport </td>
+<td> Transport </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> TMP
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Device address (-1...255) </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 1
+</td></tr>
+<tr>
+<td> perGet </td>
+<td> Period data getting (s) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 10
+</td></tr>
+<tr>
+<td> modelID </td>
+<td> Model ID </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> errors </td>
+<td> Errors </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> rotSpeed </td>
+<td> Rotational speed (HZ) </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> I </td>
+<td> Current (A) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> axle1disb </td>
+<td> Axle 1 disbalance </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> axle2disb </td>
+<td> Axle 2 disbalance </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> MP_X1 </td>
+<td> MP X1 </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> MP_Y1 </td>
+<td> MP Y1 </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> MP_X2 </td>
+<td> MP X2 </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> MP_Y2 </td>
+<td> MP Y2 </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> MP_Z </td>
+<td> MP Z </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> operMode </td>
+<td> Operation Mode </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> comStart </td>
+<td> Command: START </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> comStop </td>
+<td> Command: STOP </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> comReset </td>
+<td> Command: RESET </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> operCntr </td>
+<td> Operation Control Mode </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> comInteract </td>
+<td> Interactive mode </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> comAutonom </td>
+<td> Autonomous mode </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> cnt </td>
+<td> Counter </td>
+<td> Integer </td>
+<td> Output </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> operModes </td>
+<td> Operation modes </td>
+<td> Object </td>
+<td> Output </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr></table>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" and set its Identifier like to "TMP", one for each the devices' used serial bus.</dd>
+<dd>2. Set proper address and timeouts of the <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> device.</dd>
+<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for that, one for each the devices. Enable the parameter.</dd>
+<dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>Transport</i> — to Identifier of the transport into step 1.</li>
+<li> <i>Device address</i> — to logical address of the device on the bus under the transport in step 1.</li>
+<li> <i>Period data getting</i> — to needed acquisition period which more to the real processing by the logical level controller. Commands and some other functions will process immediately.</li></ul></dd>
+<dd>6. RESULT: The logical parameter object will perform interaction and placing of gathered data to the parameter attributes. Also you are able to send some commands to the device through the writable attributes.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="IT3" title="#IT3"><h3><span class="mw-headline" id="Temperature_measurement_IT-3_.28IT3.29"><span class="mw-headline-number">2.5</span> Temperature measurement IT-3 (<a href="Libs_Devices.html#IT3" title="Special:MyLanguage/Libs/Devices">IT3</a>)</span></h3></span> </td>
+<td> 1.2 </td>
+<td> GPLv2 </td>
+<td> * =&gt; <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">UserProtocol</a> </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>Temperature measurement IT-3 from <a class="external text" href="http://www.omsketalon.ru" rel="nofollow noreferrer noopener" target="_blank">OmskEtalon</a>.<br />
+</p>
+<ul><li> <b>Sponsored by:</b> Vassily Grigoriev, <a class="external text" href="http://e-beam.ru" rel="nofollow noreferrer noopener" target="_blank">the Laboratory of Vacuum Technologies</a></li></ul>
+<p><b><u>Output user protocol's XML request structure</u></b><br />
+<b>&lt;mess addr="1" err="1:Error"&gt;{req}&lt;/mess&gt;</b>
+</p>
+<dl><dd><i>req</i> — request/respond data;</dd>
+<dd><i>addr</i> — remote station address (1...32);</dd>
+<dd><i>err</i> — sets to result of the request.</dd></dl>
+<p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> transport </td>
+<td> Transport </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> IT3
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Device address </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 1
+</td></tr>
+<tr>
+<td> T </td>
+<td> Temperature </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> H </td>
+<td> Upper border </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> L </td>
+<td> Lower border </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> relSt </td>
+<td> Relay state </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr></table>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" and set its Identifier like to "IT3", one for each the devices' used serial bus.</dd>
+<dd>2. Set proper address and timeouts of the <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> device, typical it is "{serDevPath}:4800:8N2".</dd>
+<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for that, one for each the devices. Enable the parameter.</dd>
+<dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>Transport</i> — to Identifier of the transport into step 1.</li>
+<li> <i>Device address</i> — to logical address of the device on the bus under the transport in step 1.</li></ul></dd>
+<dd>6. RESULT: The logical parameter object will perform interaction and placing of gathered data to the parameter attributes.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="IVE_452HS_02" title="#IVE_452HS_02"><h3><span class="mw-headline" id="Power_supply_of_beam-electrons_evaporator_.28IVE-452HS-02.29"><span class="mw-headline-number">2.6</span> Power supply of beam-electrons evaporator (<a href="Libs_Devices.html#IVE_452HS_02" title="Special:MyLanguage/Libs/Devices">IVE-452HS-02</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * =&gt; <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">UserProtocol</a> </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>Power supply of beam-electrons evaporator of "Plasma Tech" Ltd, from Moskov.<br />
+</p>
+<ul><li> <b>Sponsored by:</b> Vassily Grigoriev, <a class="external text" href="http://e-beam.ru" rel="nofollow noreferrer noopener" target="_blank">the Laboratory of Vacuum Technologies</a></li></ul>
+<p><b><u>Output user protocol's XML request structure:</u></b><br />
+<b>&lt;mess addr="255" err="1:Error"&gt;{req}&lt;/mess&gt;</b>
+</p>
+<dl><dd><i>req</i> — request/respond data;</dd>
+<dd><i>addr</i> — remote station address (0...255);</dd>
+<dd><i>err</i> — sets to result of the request.</dd></dl>
+<p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> transport </td>
+<td> Transport </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> Sockets.out_IVE
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Device address </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 255
+</td></tr>
+<tr>
+<td> COIA </td>
+<td> Output current level set-point </td>
+<td> Integer </td>
+<td> Output </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> COUA </td>
+<td> Output voltage level set-point </td>
+<td> Integer </td>
+<td> Output </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> COPA </td>
+<td> Output power level set-point </td>
+<td> Integer </td>
+<td> Output </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> DIA </td>
+<td> Output current </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> DUA </td>
+<td> Output voltage </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> DPA </td>
+<td> Output power </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> DFA </td>
+<td> Electric arcs frequency </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> DAC </td>
+<td> Electric arcs counter </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> COM_DEW </td>
+<td> Command: Blocking by SC and XX </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> COM_OUT </td>
+<td> Command: Display on UI out block's params </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> COM_DEP </td>
+<td> Command: Enable MK </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> COM_DEL </td>
+<td> Command: Blocks #1,2 to net </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> COM_UF </td>
+<td> Command: Display on UI frequency and current </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> DKW </td>
+<td> MUBR of the block overheated </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> DKZ </td>
+<td> Short circuits on the block out </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> DK </td>
+<td> MK of the block overheated </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> DE </td>
+<td> Power and voltage on out present </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr></table>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" directly or by the "<a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>" gate, and set its Identifier like to "Sockets.out_IVE", one for each the devices' used serial bus.</dd>
+<dd>2. Set proper address and timeouts of the <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> device.</dd>
+<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for that, one for each the devices. Enable the parameter.</dd>
+<dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>Transport</i> — to address of the transport into step 1. Tracing for the address changing is supported.</li>
+<li> <i>Device address</i> — to logical address of the device on the bus under the transport in step 1. Tracing for the address changing is supported.</li></ul></dd>
+<dd>6. RESULT: The logical parameter object will perform interaction and placing of gathered data to the parameter attributes. Also you are able to send some commands to the device through the writable attributes.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="OPTRIS" title="#OPTRIS"><h3><span class="mw-headline" id="OPTRIS_CT.2FCTL_.28OPTRIS.29"><span class="mw-headline-number">2.7</span> OPTRIS CT/CTL (<a href="Libs_Devices.html#OPTRIS" title="Special:MyLanguage/Libs/Devices">OPTRIS</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * =&gt; <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">UserProtocol</a> </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>OPTRIS CT/CTL communication interface of "Optris" GmbH, from Berlin.<br />
+</p>
+<ul><li> <b>Sponsored by:</b> Vassily Grigoriev, <a class="external text" href="http://e-beam.ru" rel="nofollow noreferrer noopener" target="_blank">the Laboratory of Vacuum Technologies</a></li></ul>
+<p><b><u>Output user protocol's XML request structure</u></b><br />
+<b>&lt;mess addr="1" cs="1" err="1:Error"&gt;{req}&lt;/mess&gt;</b>
+</p>
+<dl><dd><i>req</i> — request/respond data;</dd>
+<dd><i>addr</i> — remote station address (0...15);</dd>
+<dd><i>сs</i> — use control sum for SET commands [0,1];</dd>
+<dd><i>err</i> — sets to result of the request.</dd></dl>
+<p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> transport </td>
+<td> Transport </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> Serial.out_OPTRIS
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Device address </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Tproc </td>
+<td> T process </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Thead </td>
+<td> T head </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Tbox </td>
+<td> T box </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Tact </td>
+<td> T act. </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> eps </td>
+<td> IR epsilon </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> trans </td>
+<td> IR transmission </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> spIll </td>
+<td> Spot illumination </td>
+<td> Logical </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr></table>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" directly or by the "<a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>" gate, and set its Identifier like to "Serial.out_OPTRIS", one for each the devices' used serial bus.</dd>
+<dd>2. Set proper address and timeouts of the <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> device.</dd>
+<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for that, one for each the devices. Enable the parameter.</dd>
+<dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>Transport</i> — to address of the transport into step 1. Tracing for the address changing is supported.</li>
+<li> <i>Device address</i> — to logical address of the device on the bus under the transport in step 1.</li></ul></dd>
+<dd>6. RESULT: The logical parameter object will perform interaction and placing of gathered data to the parameter attributes. Also you are able to send some commands to the device through the writable attributes.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="CTR" title="#CTR"><h3><span class="mw-headline" id="CTR_100.2C_101_.28CTR.29"><span class="mw-headline-number">2.8</span> CTR 100, 101 (<a href="Libs_Devices.html#CTR" title="Special:MyLanguage/Libs/Devices">CTR</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * =&gt; <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">UserProtocol</a> </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The RS232C Serial Interface permits the communication between the digital Oerlikon Leybold Vacuum CERAVAC, from Köln.<br />
+</p>
+<ul><li> <b>Sponsored by:</b> Vassily Grigoriev, <a class="external text" href="http://e-beam.ru" rel="nofollow noreferrer noopener" target="_blank">the Laboratory of Vacuum Technologies</a></li></ul>
+<p><b><u>Output user protocol's XML request structure</u></b><br />
+<b>&lt;mess err="1:Error"&gt;{req}&lt;/mess&gt;</b>
+</p>
+<dl><dd><i>req</i> — request/respond data;</dd>
+<dd><i>err</i> — sets to result of the request.</dd></dl>
+<p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> transport </td>
+<td> Transport </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> Serial.out_CTR
+</td></tr>
+<tr>
+<td> press </td>
+<td> Pressure, Tor </td>
+<td> Real </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> zeroSet </td>
+<td> Zero set </td>
+<td> Logical </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr></table>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" directly or by the "<a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>" gate, and set its Identifier like to "Serial.out_CTR", one for each the devices' used serial bus.</dd>
+<dd>2. Set proper address and timeouts of the <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> device.</dd>
+<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for that, one for each the devices. Enable the parameter.</dd>
+<dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>Transport</i> — to address of the transport into step 1. Tracing for the address changing is supported.</li></ul></dd>
+<dd>6. RESULT: The logical parameter object will perform interaction and placing of gathered data to the parameter attributes. Also you are able to send some commands to the device through the writable attributes.</dd></dl>
+<p><br />
+</p><p><br />
+</p><p><br />
+</p><p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="SSCP" title="#SSCP"><h3><span class="mw-headline" id="Shark_Slave_Communication_Protocol_.28SSCP.29"><span class="mw-headline-number">2.9</span> Shark Slave Communication Protocol (<a href="Libs_Devices.html#SSCP" title="Special:MyLanguage/Libs/Devices">SSCP</a>)</span></h3></span> </td>
+<td> 0.6 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>Shark Slave Communication Protocol from EnergoCentrum PLUS, s.r.o.
+</p>
+<ul><li> <b>Sponsored by:</b> <a class="external text" href="http://faster.cz" rel="nofollow noreferrer noopener" target="_blank">Costumer Faster CZ</a></li></ul>
+<p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> transport </td>
+<td> Transport of the Ethernet network, Sockets </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> SSCP
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Address [0...255] </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 1
+</td></tr>
+<tr>
+<td> user </td>
+<td> User </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> admin
+</td></tr>
+<tr>
+<td> pass </td>
+<td> Password </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> rw
+</td></tr>
+<tr>
+<td> maxDtFrm </td>
+<td> Maximum data frame size </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 2048
+</td></tr>
+<tr>
+<td> listsDir </td>
+<td> Folder of the list files </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> SSCP
+</td></tr>
+<tr>
+<td> verPrt </td>
+<td> Protocol version </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> maxDtFrmServ </td>
+<td> Server's maximum data frame size </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> list </td>
+<td> Variables selected for processing </td>
+<td> Text </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> this </td>
+<td> Object </td>
+<td> Object </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr></table>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an output transport of the type "<a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>", set its Identifier like to "SSCP", one for each the device.</dd>
+<dd>2. Set proper address of the <a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a> device to IP-address or host address of the remote device in the Ethernet network.</dd>
+<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for that, one for each the devices. Enable the parameter.</dd>
+<dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>Transport</i> — to address of the transport into step 1. Tracing for the address changing is supported.</li>
+<li> <i>Address</i> — to logical address of the device on the bus under the transport in step 1.</li></ul></dd>
+<dd>6. RESULT: The logical parameter object will perform:
+<ul><li> reading files of lists <i>listsDir</i> for creation and content forming of the attribute "selList" of list of all allowed device's attributes;</li>
+<li> reading of content of the attribute <i>list</i> of selected device's attributes to dynamic form their representing attributes into the parameter object;</li>
+<li> reading of the dynamic formed representing attributes;</li>
+<li> checking for changes and writing of the dynamic formed representing attributes.</li></ul></dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="pulsarM" title="#pulsarM"><h3><span class="mw-headline" id="Pulsar-M_.28pulsarM.29"><span class="mw-headline-number">2.10</span> Pulsar-M (<a href="Libs_Devices.html#pulsarM" title="Special:MyLanguage/Libs/Devices">pulsarM</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>Pulsar-M counters protocol.
+</p>
+<ul><li> <b>Sponsored by:</b> Zubarev Dmitry, <a class="external text" href="http://kip-i-a.pro" rel="nofollow noreferrer noopener" target="_blank">IP INTEGRAL</a></li></ul>
+<p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> transport </td>
+<td> Transport </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> Serial.out_pulsar
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Address [0...99999999] </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 12345678
+</td></tr>
+<tr>
+<td> nChnl </td>
+<td> Channels number </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> this </td>
+<td> Object </td>
+<td> Object </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr></table>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" directly or by the "<a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>" gate, and set its Identifier like to "Serial.out_pulsar", one for each the devices' used serial bus.</dd>
+<dd>2. Set proper address and timeouts of the <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> device.</dd>
+<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for that, one for each the devices. Enable the parameter.</dd>
+<dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>Transport</i> — to address of the transport into step 1. Tracing for the address changing is supported.</li>
+<li> <i>Address</i> — to logical address of the device on the bus under the transport in step 1. Tracing for the address changing is supported.</li></ul></dd>
+<dd>6. RESULT: The logical parameter object will: dynamically create needed attributes accordingly to the attribute "Channels number" value and perform interaction and placing of gathered data to the parameter attributes. Also you are able to change some writable attributes.</dd></dl>
+<p><br />
+</p>
+<h2><span class="mw-headline" id="Counters_of_the_resources"><span class="mw-headline-number">3</span> Counters of the resources</span></h2>
+<table class="wikitable">
+
+<tr>
+<td> <span id="VKT7" title="#VKT7"><h3><span class="mw-headline" id="Heat_counter_computer_VKT7_.28VKT7.29"><span class="mw-headline-number">3.1</span> Heat counter computer VKT7 (<a href="Libs_Devices.html#VKT7" title="Special:MyLanguage/Libs/Devices">VKT7</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * =&gt; <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">UserProtocol</a> </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>Firm "Teplocom" (<a class="external free" href="http://www.teplocom.spb.ru" rel="nofollow noreferrer noopener" target="_blank">http://www.teplocom.spb.ru</a>) computer "VKT-7" for complex heat measurement and counting. The device complex enough to provide more parameters, more history and accessed by a nonlinear Serial-based protocol at low speed. The template implements acquisition for all significant parameters, gets for their history by hours, days and result months. Also you can to append easily enough for processing of the remained parameters.<br />
+</p>
+<ul><li> <b>Sponsored by:</b> Vladislav Chubuk</li></ul>
+<p><b><u>Output user protocol's XML request structure</u></b><br />
+<b>&lt;mess addr="1" err="1:Error"&gt;{req}&lt;/mess&gt;</b>
+</p>
+<dl><dd><i>req</i> — request/respond data;</dd>
+<dd><i>addr</i> — remote station address (0...254);</dd>
+<dd><i>err</i> — sets for the request result.<br /></dd></dl>
+<p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> imit </td>
+<td> Imitation drift&nbsp;% (0-disable) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> trAddr </td>
+<td> Transport </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> Transport.Serial.out_VKT7
+</td></tr>
+<tr>
+<td> arhH </td>
+<td> Archiver: hours </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td>
+</td></tr>
+<tr>
+<td> arhD </td>
+<td> Archiver: days </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td>
+</td></tr>
+<tr>
+<td> arhRes </td>
+<td> Archiver: results-month </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td>
+</td></tr>
+<tr>
+<td> maxDayDepth </td>
+<td> Archiver: maximum depth of reading for not hours archivers, days </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 366
+</td></tr>
+<tr>
+<td> lastResTm </td>
+<td> Last result months read time (s) </td>
+<td> Integer </td>
+<td> Output </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> leftResTm </td>
+<td> Left result months for read from archive </td>
+<td> Integer </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> lastDTm </td>
+<td> Last days read time (s) </td>
+<td> Integer </td>
+<td> Output </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> leftDTm </td>
+<td> Left days for read from archive </td>
+<td> Integer </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> lastHTm </td>
+<td> Last hours read time (s) </td>
+<td> Integer </td>
+<td> Output </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> leftHTm </td>
+<td> Left hours for read from archive </td>
+<td> Integer </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> diffTm </td>
+<td> Difference time (server-counter), hours </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> firmVer </td>
+<td> Firmware version </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> abonId </td>
+<td> Subscriber ID </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> repDay </td>
+<td> Report day </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> netNum </td>
+<td> Network number </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> modelImpl </td>
+<td> Model implementation </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> tTypeM </td>
+<td> t: dimension </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> GTypeM </td>
+<td> G: dimension </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> VTypeM </td>
+<td> V: dimension </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable	 </td>
+<td>
+</td></tr>
+<tr>
+<td> MTypeM </td>
+<td> M: dimension </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> PTypeM </td>
+<td> P: dimension </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> QoTypeM </td>
+<td> Qo: dimension </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> QntTypeHIM </td>
+<td> ВНР: dimension </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> QntTypeM </td>
+<td> ВОК: dimension </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> t1_1 </td>
+<td> t1 (Tв1) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> t2_1 </td>
+<td> t2 (Tв1) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> t3_1 </td>
+<td> t3 (Tв1) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> V1_1 </td>
+<td> V1 (Tв1) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> V2_1 </td>
+<td> V2 (Tв1) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> V3_1 </td>
+<td> V3 (Tв1) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> M1_1 </td>
+<td> M1 (Tв1) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> M2_1 </td>
+<td> M2 (Tв1) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> M3_1 </td>
+<td> M3 (Tв1) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> P1_1 </td>
+<td> P1 (Tв1) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> P2_1 </td>
+<td> P2 (Tв1) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Mg_1 </td>
+<td> Mg (Tв1) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Qo_1 </td>
+<td> Qo (Tв1) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Qg_1 </td>
+<td> Qg (Tв1) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> dt_1 </td>
+<td> dt (Tв1) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> BNR_1 </td>
+<td> ВНР (Tв1) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> BOC_1 </td>
+<td> ВОС (Tв1) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> G1_1 </td>
+<td> G1 (Tв1) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> G2_1 </td>
+<td> G2 (Tв1) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> t1_2 </td>
+<td> t1 (Tв2) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> t2_2 </td>
+<td> t2 (Tв2) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> t3_2 </td>
+<td> t3 (Tв2) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> V1_2 </td>
+<td> V1 (Tв2) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> V2_2 </td>
+<td> V2 (Tв2) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> V3_2 </td>
+<td> V3 (Tв2) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> M1_2 </td>
+<td> M1 (Tв2) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> M2_2 </td>
+<td> M2 (Tв2) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> M3_2 </td>
+<td> M3 (Tв2) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> P1_2 </td>
+<td> P1 (Tв2) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> P2_2 </td>
+<td> P2 (Tв2) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Mg_2 </td>
+<td> Mg (Tв2) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Qo_2 </td>
+<td> Qo (Tв2) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Qg_2 </td>
+<td> Qg (Tв2) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> dt_2 </td>
+<td> dt (Tв2) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> BNR_2 </td>
+<td> ВНР (Tв2) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> BOC_2 </td>
+<td> ВОС (Tв2) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> G1_2 </td>
+<td> G1 (Tв2) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> G2_2 </td>
+<td> G2 (Tв2) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr></table>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" and set its Identifier like to "VKT7", one for each the devices.</dd>
+<dd>2. Set proper address and timeouts of the <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> device.</dd>
+<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for that, one for each the devices. Enable the parameter.</dd>
+<dd>5. Create or use a minutes (current ones) value archivator object (1m, period=60sek.).</dd>
+<dd>6. Create a hours value archivator object (arhH, period=3600sek.), a days value archivator object (arhD, 86400sek.) and a result month value archivator object (arhM, 86400sek.). Set the "Period archiving (sec)" property of the archivators to '0' for disable the data flow from the archive buffer.</dd>
+<dd>7. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>Imitation drift&nbsp;%</i> — to '0' for the imitation disable.</li>
+<li> <i>Transport</i> — to path of the transport into step 1, like to "Transport.Serial.out_VKT7".</li>
+<li> <i>Archiver: hours</i> — to the hours archiver into step 6, like to "FSArch.arhH".</li>
+<li> <i>Archiver: days</i> — to the days archiver into step 6, like to "FSArch.arhD".</li>
+<li> <i>Archiver: results-month</i> — to the result month archiver into step 6, like to "FSArch.arhM".</li>
+<li> <i>Archiver: maximum depth of reading for not hours archivers, days</i> — to needed depth of not hours archives reading, in days.</li></ul></dd>
+<dd>8. Into the tab "Archiving" to set archiving for needed attributes by the archivators.</dd>
+<dd>9. RESULT: The logical parameter object will perform interaction and placing of current gathered data to the parameter attributes and the current archive. Other archives' data will read in parallel from the previously set depth per one value for the period i.e. one day (for the days archive) per the minute period and up to the current and last value.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="m200" title="#m200"><h3><span class="mw-headline" id="Mercury_200_.28m200.29"><span class="mw-headline-number">3.2</span> Mercury 200 (<a href="Libs_Devices.html#m200" title="Special:MyLanguage/Libs/Devices">m200</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * =&gt; <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">UserProtocol</a> </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external text" href="mailto:godzilla919@gmail.com" rel="nofollow noreferrer noopener" target="_blank">Arsen Zakojan</a>
+</td></tr></table>
+<p>One phase counter of electricity Mercury 200, 203.2Т, 206 from the firm "Incotex" (<a class="external free" href="http://www.incotexcom.ru" rel="nofollow noreferrer noopener" target="_blank">http://www.incotexcom.ru</a>)
+</p><p><b><u>Output user protocol's XML request structure</u></b><br />
+<b>&lt;req first="255" second="16777215" data="{req}"&gt;{resp}&lt;/req&gt;</b>
+</p>
+<dl><dd><i>req</i> — request data;</dd>
+<dd><i>resp</i> — respond data;</dd>
+<dd><i>first</i>, <i>second</i> — first and three of second's bytes of the common address (0...4294967295).</dd></dl>
+<p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> s </td>
+<td> Energy from reset, tariffs sum </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> t1 </td>
+<td> Energy from reset, tariff 1 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> t2 </td>
+<td> Energy from reset, tariff 2 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> t3 </td>
+<td> Energy from reset, tariff 3 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> t4 </td>
+<td> Energy from reset, tariff 4 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> U </td>
+<td> Voltage U(V) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> I </td>
+<td> Current I(A) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> P </td>
+<td> Power P(W) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> transport </td>
+<td> Transport </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> merc200
+</td></tr>
+<tr>
+<td> netaddr </td>
+<td> Network address </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 1
+</td></tr>
+<tr>
+<td> naladchik </td>
+<td> Coded address by the program Fixer+ </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> tarif </td>
+<td> Read energy from reset </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 1
+</td></tr>
+<tr>
+<td> UIP </td>
+<td> Read current values </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 1
+</td></tr>
+<tr>
+<td> first </td>
+<td> First byte of the address </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> second </td>
+<td> Last 3 bytes of the address </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Function calculate frequency (Hz) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr></table>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" and set its Identifier like to "merc200", one for each the devices' used serial bus.</dd>
+<dd>2. Set proper address and timeouts of the <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> device.</dd>
+<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for that, one for each the devices. Enable the parameter.</dd>
+<dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>Transport</i> — to Identifier of the transport into step 1.</li>
+<li> <i>Network address</i> — to logical address of the device on the bus under the transport in step 1.</li>
+<li> <i>Coded address by the program Fixer+</i> — set the flag for counters coded by the program. Most likely the address will equal to apartment number. </li>
+<li> <i>Read energy from reset</i> — set the flag if you need the data.</li>
+<li> <i>Read current values</i> — set the flag to read current values.</li></ul></dd>
+<dd>6. RESULT: The logical parameter object will perform interaction and placing of gathered data to the parameter attributes.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="m230" title="#m230"><h3><span class="mw-headline" id="Mercury_230_.28m230.29"><span class="mw-headline-number">3.3</span> Mercury 230 (<a href="Libs_Devices.html#m230" title="Special:MyLanguage/Libs/Devices">m230</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * =&gt; <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">UserProtocol</a> </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external text" href="mailto:godzilla919@gmail.com" rel="nofollow noreferrer noopener" target="_blank">Arsen Zakojan</a>
+</td></tr></table>
+<p>Three phase counter of electricity Mercury 230, 231, 232, 233, 234, 236 from the firm "Incotex" (<a class="external free" href="http://www.incotexcom.ru" rel="nofollow noreferrer noopener" target="_blank">http://www.incotexcom.ru</a>)
+</p><p><b><u>Output user protocol's XML request structure</u></b><br />
+<b>&lt;req netaddr="255" data="{req}"&gt;{resp}&lt;/req&gt;</b>
+</p>
+<dl><dd><i>req</i> — request data;</dd>
+<dd><i>resp</i> — respond data;</dd>
+<dd><i>netaddr</i> — network address; for counters Mercury 230, 231 and 233 the tree last digits are serial number or they are last two digits for the number more to 240; if the last numbers are zero, the network address is "1"; universal, broadcast address is "0".<br /></dd></dl>
+<p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> answer </td>
+<td> Answer to the password request </td>
+<td> String</td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> TS </td>
+<td> Read energy of tariffs sum </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> T1 </td>
+<td> Read energy of tariff 1 </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> T2 </td>
+<td> Read energy of tariff 2 </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> T3 </td>
+<td> Read energy of tariff 3 </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> T4 </td>
+<td> Read energy of tariff 4 </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> P </td>
+<td> Read power P </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Q </td>
+<td> Read power Q </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> S </td>
+<td> Read power S </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> U </td>
+<td> Read voltage U </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> I </td>
+<td> Read current I </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> K </td>
+<td> Read power coefficient </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> F </td>
+<td> Read frequency F </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> N </td>
+<td> Read serial number </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> TSAp </td>
+<td> Energy from resetting, tariffs sum A+ </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> TSAm </td>
+<td> Energy from resetting, tariffs sum A- </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> TSRp </td>
+<td> Energy from resetting, tariffs sum R+ </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> TSRm </td>
+<td> Energy from resetting, tariffs sum R- </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> T1Ap </td>
+<td> Energy from resetting, tariff 1 A+ </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> T1Am </td>
+<td> Energy from resetting, tariff 1 A- </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> T1Rp </td>
+<td> Energy from resetting, tariff 1 R+ </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> T1Rm </td>
+<td> Energy from resetting, tariff 1 R- </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> T2Ap </td>
+<td> Energy from resetting, tariff 2 A+ </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> T2Am </td>
+<td> Energy from resetting, tariff 2 A- </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> T2Rp </td>
+<td> Energy from resetting, tariff 2 R+ </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> T2Rm </td>
+<td> Energy from resetting, tariff 2 R- </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> T3Ap </td>
+<td> Energy from resetting, tariff 3 A+ </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> T3Am </td>
+<td> Energy from resetting, tariff 3 A- </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> T3Rp </td>
+<td> Energy from resetting, tariff 3 R+ </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> T3Rm </td>
+<td> Energy from resetting, tariff 3 R- </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> T4Ap </td>
+<td> Energy from resetting, tariff 4 A+ </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> T4Am </td>
+<td> Energy from resetting, tariff 4 A- </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> T4Rp </td>
+<td> Energy from resetting, tariff 4 R+ </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> T4Rm </td>
+<td> Energy from resetting, tariff 4 R- </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> PS </td>
+<td> Power P(W) by the phases sum </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> P1 </td>
+<td> Power P(W) by the phase 1 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> P2 </td>
+<td> Power P(W) by the phase 2 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> P3 </td>
+<td> Power P(W) by the phase 3 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> QS </td>
+<td> Power Q(var) by the phases sum </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Q1 </td>
+<td> Power Q(var) by the phase 1 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Q2 </td>
+<td> Power Q(var) by the phase 2 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Q3 </td>
+<td> Power Q(var) by the phase 3 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> SS </td>
+<td> Power S(VA) by the phases sum </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> S1 </td>
+<td> Power S(VA) by the phase 1 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> S2 </td>
+<td> Power S(VA) by the phase 2 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> S3 </td>
+<td> Power S(VA) by the phase 3 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> U1 </td>
+<td> Voltage U(V) by the phase 1 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> U2 </td>
+<td> Voltage U(V) by the phase 2 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> U3 </td>
+<td> Voltage U(V) by the phase 3 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> I1 </td>
+<td> Current I(A) by the phase 1 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> I2 </td>
+<td> Current I(A) by the phase 2 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> I3 </td>
+<td> Current I(A) by the phase 3 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> KS </td>
+<td> Power coefficient by the phases sum </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> K1 </td>
+<td> Power coefficient by the phase 1 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> K2 </td>
+<td> Power coefficient by the phase 2 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> K3 </td>
+<td> Power coefficient by the phase 3 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> F1 </td>
+<td> Frequency F(Hz) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> N1 </td>
+<td> Serial number </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> netaddr </td>
+<td> Network address (0...240) </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 1
+</td></tr>
+<tr>
+<td> password </td>
+<td> Password </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 111111
+</td></tr>
+<tr>
+<td> transport </td>
+<td> Transport </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> merc230
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Function calculate frequency (Hz) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr></table>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" and set its Identifier like to "merc230", one for each the devices' used serial bus.</dd>
+<dd>2. Set proper address and timeouts of the <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> device.</dd>
+<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for that, one for each the devices. Enable the parameter.</dd>
+<dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>Transport</i> — to Identifier of the transport into step 1.</li>
+<li> <i>Network address (0...240)</i> — to logical address of the device on the bus under the transport in step 1.</li>
+<li> <i>Password</i> — first level password, by default 111111.</li>
+<li> Set flags for all parameters you need to read.</li></ul></dd>
+<dd>6. RESULT: The logical parameter object will perform interaction and placing of gathered data to the parameter attributes.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="Nik2303I" title="#Nik2303I"><h3><span class="mw-headline" id="Nik2303I_.28Nik2303I.29"><span class="mw-headline-number">3.4</span> Nik2303I (<a href="Libs_Devices.html#Nik2303I" title="Special:MyLanguage/Libs/Devices">Nik2303I</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * =&gt; <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">UserProtocol</a> </td>
+<td> en, uk, ru 
+</td>
+<td> <a class="external text" href="mailto:rylio74@gmail.com" rel="nofollow noreferrer noopener" target="_blank">Ruslan Yarmoliuk</a>
+</td></tr></table>
+<p>Three phase counter of electricity NIK 2303 from firm NIK LLC (<a class="external free" href="http://www.nik.net.ua" rel="nofollow noreferrer noopener" target="_blank">http://www.nik.net.ua</a>).
+</p><p><b><u>Output user protocol's XML request structure</u></b><br />
+<b>&lt;req SN="1234567" cntr="0x10"&gt;{resp}&lt;/req&gt;</b>
+</p>
+<dl><dd><i>SN</i> — serial number of the counter;</dd>
+<dd><i>cntr</i> — control word;</dd>
+<dd><i>resp</i> — respond data.</dd></dl>
+<p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> transport </td>
+<td> Transport </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> Sockets.out_
+</td></tr>
+<tr>
+<td> serial </td>
+<td> Factory number of the counter </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td>
+</td></tr>
+<tr>
+<td> passw </td>
+<td> Password </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 1111111111111111
+</td></tr>
+<tr>
+<td> kT </td>
+<td> Coefficient of transformation </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 1
+</td></tr>
+<tr>
+<td> T0 </td>
+<td> Current values </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> T1 </td>
+<td> Current values tariff T1 </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> T2 </td>
+<td> Current values tariff T2 </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> T3 </td>
+<td> Current values tariff T3 </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> U </td>
+<td> Instantaneous value "Voltage" </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> I </td>
+<td> Instantaneous value "Current" </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> P </td>
+<td> Instantaneous value "Power" </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> kP </td>
+<td> Instantaneous value "Power coefficient" </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Q </td>
+<td> Instantaneous value "Power reactive" </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> K </td>
+<td> Instantaneous value "Vectors angle" </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Ae </td>
+<td> А+(kW*h) </td>
+<td> Real </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Ae_ </td>
+<td> А-(kW*h) </td>
+<td> Real </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Re </td>
+<td> R+(1+2quadrant)(kVar*h) </td>
+<td> Real </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Re_ </td>
+<td> R-(3+4quadrant)(kVar*h) </td>
+<td> Real </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Ae1 </td>
+<td> А1+(kW*h) </td>
+<td> Real </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Ae_1 </td>
+<td> А1-(kW*h) </td>
+<td> Real </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Re1 </td>
+<td> R1+(1+2quadrant)(kVar*h) </td>
+<td> Real </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Re_1 </td>
+<td> R1-(3+4quadrant)(kVar*h) </td>
+<td> Real </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Ae2 </td>
+<td> А2+(kW*h) </td>
+<td> Real </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Ae_2 </td>
+<td> А2-(kW*h) </td>
+<td> Real </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Re2 </td>
+<td> R2+(1+2quadrant)(kVar*h) </td>
+<td> Real </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Re_2 </td>
+<td> R2-(3+4quadrant)(kVar*h) </td>
+<td> Real </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Ae3 </td>
+<td> А3+(kW*h) </td>
+<td> Real </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Ae_3 </td>
+<td> А3-(kW*h) </td>
+<td> Real </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Re3 </td>
+<td> R3+(1+2quadrant)(kVar*h) </td>
+<td> Real </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Re_3 </td>
+<td> R3-(3+4quadrant)(kVar*h) </td>
+<td> Real </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> U1 </td>
+<td> Phase voltage 1(V) </td>
+<td> Real </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> U2 </td>
+<td> Phase voltage 2(V) </td>
+<td> Real </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> U3 </td>
+<td> Phase voltage 3(V) </td>
+<td> Real </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> I1 </td>
+<td> Phase current 1(A) </td>
+<td> Real </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> I2 </td>
+<td> Phase current 2(A) </td>
+<td> Real </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> I3 </td>
+<td> Phase current 3(A) </td>
+<td> Real </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> kP1 </td>
+<td> Power coeff. cos φ phase 1 </td>
+<td> Real </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> kP2 </td>
+<td> Power coeff. cos φ phase 2 </td>
+<td> Real </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> kP3 </td>
+<td> Power coeff. cos φ phase 3 </td>
+<td> Real </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Psum </td>
+<td> Summary active power (kW) </td>
+<td> Real </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> P1 </td>
+<td> Active power phase 1 (kW) </td>
+<td> Real </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> P2 </td>
+<td> Active power phase 2 (kW) </td>
+<td> Real </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> P3 </td>
+<td> Active power phase 3 (kW) </td>
+<td> Real </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Qsum </td>
+<td> Summary reactive power (kVar) </td>
+<td> Real </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Q1 </td>
+<td> Reactive power phase 1 (kVar) </td>
+<td> Real </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Q2 </td>
+<td> Reactive power phase 2 (kVar) </td>
+<td> Real </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Q3 </td>
+<td> Reactive power phase 3 (kVar) </td>
+<td> Real </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> V12 </td>
+<td> Vector angle U1_U2 (degr.) </td>
+<td> Integer </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> V13 </td>
+<td> Vector angle U1_U3 (degr.) </td>
+<td> Integer </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> this </td>
+<td> Object </td>
+<td> Object </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> NAME </td>
+<td> Name </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> SHIFR </td>
+<td> Shifr </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> DESCR </td>
+<td> Description </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Function calculate frequency (Hz) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr></table>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an output transport of the type "<a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>" or "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" and set its Identifier like to "nik2303", one for each the device.</dd>
+<dd>2. Set proper address and timeouts of the <a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a> or <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> device.</dd>
+<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for that, one for each the devices. Enable the parameter.</dd>
+<dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>Transport</i> — to Identifier of the transport into step 1.</li>
+<li> <i>Factory number of the counter</i> — to proper factory number of the counter.</li>
+<li> <i>Password</i> — first level password, by default 1111111111111111.</li>
+<li> <i>Coefficient of transformation</i> — at accounting through the current transformers set the coefficient, by default it us — 1.</li>
+<li> Set flags for all parameters you need to read.</li></ul></dd>
+<dd>6. RESULT: The logical parameter object will perform interaction and placing of gathered data to the parameter attributes.</dd></dl>
+
+
+
+
+
+
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Devices/en">Libs/Devices/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2670</td></tr></table></body>
+</html>

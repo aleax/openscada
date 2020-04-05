@@ -832,6 +832,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR)) {
 	    ((Func *)func())->setProg(opt->text().c_str());
 	    ((Func *)func())->progCompile();
+	    ((Func *)func())->setStart(true);
 	    modif();
 	}
 	if(ctrChkNode(opt,"SnthHgl",RWRW__,"root",SDAQ_ID,SEC_RD))	mod->compileFuncSynthHighl("JavaScript",*opt);

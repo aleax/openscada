@@ -1,7 +1,7 @@
 
 //OpenSCADA module DB.ODBC file: mod_ldap.cpp
 /***************************************************************************
- *   Copyright (C) 2017-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2017-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,7 +33,7 @@
 #define MOD_NAME	_("Directory by LDAP")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"0.5.1"
+#define MOD_VER		"0.5.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of directories by LDAP.")
 #define MOD_LICENSE	"GPL2"
@@ -184,6 +184,8 @@ void MBD::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TBD::cntrCmdProc(opt);
 	ctrRemoveNode(opt, "/sql");
+	ctrRemoveNode(opt, "/prm/cfg/TRTM_CLS_ON_OPEN");
+	ctrRemoveNode(opt, "/prm/cfg/TRTM_CLS_ON_REQ");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,enableStat()?R_R___:RWRW__,"root",SDB_ID,1,
 	    "help",_("Directory server address as \"ldap[s]://{host}[:{port}];bdn[;{adn};{pass}[;{tm}]]\".\n"
 	    "Where:\n"

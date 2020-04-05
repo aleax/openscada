@@ -10,7 +10,7 @@ Source: openscada-%version.tar.xz
 Source1: openscada-res-%version.tar.xz
 License: GPLv2
 Group: Applications/Engineering
-Packager: Roman Savochenko <rom_as@oscada.org>
+Packager: Roman Savochenko <roman@oscada.org>
 URL: http://oscada.org
 
 %define srcname openscada-%version
@@ -1610,94 +1610,94 @@ ln -s `relative %_defaultdocdir/%name-docUK-%version %_datadir/openscada/docs/uk
 
 
 %changelog
-* Sun Jun 17 2018 Roman Savochenko <rom_as@oscada.org>
+* Sun Jun 17 2018 Roman Savochenko <roman@oscada.org>
 - The work branch switched to the version 1+r0000.
 
-* Sat Mar 24 2018 Roman Savochenko <rom_as@oscada.org>
+* Sat Mar 24 2018 Roman Savochenko <roman@oscada.org>
 - The daemon mode init script "oscadad" renamed to "openscada-server", separated to "openscada-plc" and moved to the coresponding package.
 
-* Fri May 22 2015 Roman Savochenko <rom_as@oscada.org>
+* Fri May 22 2015 Roman Savochenko <roman@oscada.org>
 - Move to new Work version scheme naming 0.9+rNNNN, sets by the AutoBuilder or manual.
 - Next LTS version will 0.8.N.
 
-* Sat Feb 22 2014 Roman Savochenko <rom_as@oscada.org>
+* Sat Feb 22 2014 Roman Savochenko <roman@oscada.org>
 - Move to new Work version scheme naming 0.9-rNNNN.
 - Next LTS version will 0.8.N.
 
-* Fri Apr 06 2012 Roman Savochenko <rom_as@oscada.org>
+* Fri Apr 06 2012 Roman Savochenko <roman@oscada.org>
 - Build 0.8.0 release.
 
-* Mon Dec 05 2011 Roman Savochenko <rom_as@oscada.org>
+* Mon Dec 05 2011 Roman Savochenko <roman@oscada.org>
 - Build 0.7.2 release.
 
-* Mon Apr 18 2011 Roman Savochenko <rom_as@oscada.org>
+* Mon Apr 18 2011 Roman Savochenko <roman@oscada.org>
 - Model's RPM-packages dependency to main package is fixed for modules spec-file.
 
-* Mon Mar 14 2011 Roman Savochenko <rom_as@oscada.org>
+* Mon Mar 14 2011 Roman Savochenko <roman@oscada.org>
 - New source packages implementation is released.
 - Documentation separated by languages.
 - Libraries DB packages is added for *-LibDB.Main and *-LibDB.VCA.
 - Instead DemoDB package added Model's packages for "AGLKS" and "Boiler".
 
-* Wed Jan 26 2011 Roman Savochenko <rom_as@oscada.org>
+* Wed Jan 26 2011 Roman Savochenko <roman@oscada.org>
 - "openscada-core" package is created for core library and core content. Main package "openscada" is used for typical installation.
 - German messages is supplemented.
 
-* Sun Oct 24 2010 Roman Savochenko <rom_as@oscada.org>
+* Sun Oct 24 2010 Roman Savochenko <roman@oscada.org>
 - Build 0.7.0 production release.
 
-* Fri May 28 2010 Roman Savochenko <rom_as@oscada.org>
+* Fri May 28 2010 Roman Savochenko <roman@oscada.org>
 - Build 0.6.4.2 release.
 
-* Mon Jan 25 2010 Roman Savochenko <rom_as@oscada.org>
+* Mon Jan 25 2010 Roman Savochenko <roman@oscada.org>
 - Build 0.6.4.1 release.
 
-* Sun Oct 04 2009 Roman Savochenko <rom_as@oscada.org>
+* Sun Oct 04 2009 Roman Savochenko <roman@oscada.org>
 - Move modules to separated packages
 
-* Mon Jun 08 2009 Roman Savochenko <rom_as@oscada.org>
+* Mon Jun 08 2009 Roman Savochenko <roman@oscada.org>
 - Build 0.6.3.3 release.
 
-* Mon May 25 2009 Roman Savochenko <rom_as@oscada.org>
+* Mon May 25 2009 Roman Savochenko <roman@oscada.org>
 - Merge demo DB from different languages to one multilanguage (Russian,English and Ukrainian) DB.
 
-* Wed Mar 18 2009 Roman Savochenko <rom_as@oscada.org>
+* Wed Mar 18 2009 Roman Savochenko <roman@oscada.org>
 - OpenSCADA update 0.6.3.2 release build.
 
-* Mon Feb 2 2009 Roman Savochenko <rom_as@oscada.org>
+* Mon Feb 2 2009 Roman Savochenko <roman@oscada.org>
 - OpenSCADA update 0.6.3.1 release build.
 
-* Mon Dec 22 2008 Roman Savochenko <rom_as@oscada.org>
+* Mon Dec 22 2008 Roman Savochenko <roman@oscada.org>
 - Documentation pack is unified and separated to project info files and documentation.
 - Dynamic librarie's links packing into main package and development is fixed.
 
-* Thu Oct 02 2008 Roman Savochenko <rom_as@oscada.org>
+* Thu Oct 02 2008 Roman Savochenko <roman@oscada.org>
 - Package name simple changing allow is added.
 
-* Thu Sep 18 2008 Roman Savochenko <rom_as@oscada.org>
+* Thu Sep 18 2008 Roman Savochenko <roman@oscada.org>
 - Update spec to build for ALTLinux Sisyphus.
 
-* Wed Mar 26 2008 Roman Savochenko <rom_as@oscada.org>
+* Wed Mar 26 2008 Roman Savochenko <roman@oscada.org>
 - Rebuilded for support x86_64 several distributives and some build system bugs is fixed.
 
-* Sun Mar 23 2008 Roman Savochenko <rom_as@oscada.org>
+* Sun Mar 23 2008 Roman Savochenko <roman@oscada.org>
 - menu files included
 
-* Fri Sep 02 2005 Roman Savochenko <rom_as@oscada.org>
+* Fri Sep 02 2005 Roman Savochenko <roman@oscada.org>
 - replace testdate whith demo package
 - rename xinetd script from openscada to oscadad
 - add xinetd script to generic package
 
-* Wed Mar 16 2005 Roman Savochenko <rom_as@oscada.org>
+* Wed Mar 16 2005 Roman Savochenko <roman@oscada.org>
 - add Athena board specific build
 
-* Wed Nov 03 2004 Roman Savochenko <rom_as@oscada.org>
+* Wed Nov 03 2004 Roman Savochenko <roman@oscada.org>
 - move the message arhives data to /var/spool/openscada/ARHIVE/MESS
 
-* Tue Apr 06 2004 Roman Savochenko <rom_as@oscada.org>
+* Tue Apr 06 2004 Roman Savochenko <roman@oscada.org>
 - make 3 packages: OpenScada, OpenScada-devel, OpenScada-testdata
 - add languages: ru, uk
 - make packages from 'make -dist' package;
 
-* Wed Oct 15 2003 Roman Savochenko <rom_as@oscada.org>
+* Wed Oct 15 2003 Roman Savochenko <roman@oscada.org>
 - Starting

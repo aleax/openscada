@@ -38,7 +38,8 @@
 </td>
 <td> Предоставляет библиотеку основных элементов пользовательского интерфейса общей и промышленной автоматизации.
 <ul><li> <b>Основано:</b> Сентябрь 2007</li>
-<li> <b>Изначально создано:</b> в <a class="external text" href="http://wiki.oscada.org/Using/GraphicElementsLibraries/MainElements" rel="nofollow noreferrer noopener" target="_blank">старой Wiki</a></li></ul>
+<li> <b>Изначально создано:</b> в <a class="external text" href="http://wiki.oscada.org/Using/GraphicElementsLibraries/MainElements" rel="nofollow noreferrer noopener" target="_blank">старой Wiki</a></li>
+<li> <b>Использовано:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using" title="Special:MyLanguage/Using">большинство проектов на OpenSCADA</a></li></ul>
 </td></tr></table>
 <p>Библиотека создаётся для предоставления основных элементов пользовательского интерфейса и содержит графические элементы, которые часто востребованы при формировании пользовательского интерфейса автоматизации технологических и общих процессом. Строится библиотека на основе <a href="Modules/VCAEngine.html#WidgetPrimitives" title="Special:MyLanguage/Modules/VCAEngine">примитивов виджетов</a> и языка внутреннего программирования <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>.
 </p><p>Названия элементов и их параметров доступны на языках: Английский, Украинский и Российский. Их исходный код написан в языко(человеческий)-независимом режиме с вызовом функции перевода <i>tr()</i> и перевод этих сообщений также доступен Английским, Украинским и Российским.
@@ -323,7 +324,7 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </td></tr></table>
 <p>Элемент на рисунке 1.3 служит для отображения динамических текстовых меток, которые формируется на основе дискретных сигналов. Также этот элемент генерирует уведомление про нарушения по локально определённому условию, атрибут <b>ntf</b>. Элемент в целом использует и представляет представительскую структуру DAQ-шаблонов <a href="../en/Libs_Main.html#digitBlockUnif" title="Special:MyLanguage/Libs/Main">дискретного блока</a> и <a href="../en/Libs_Main.html#codeState" title="Special:MyLanguage/Libs/Main">состояния по коду</a>.
 </p>
-<ul><li> <b>Спонсирование:</b> <a class="external text" href="http://e-beam.ru" rel="nofollow noreferrer noopener" target="_blank">Лаборатория Вакуумных Технологий</a></li></ul>
+<ul><li> <b>Спонсирование:</b> Василий Григорьев, <a class="external text" href="http://e-beam.ru" rel="nofollow noreferrer noopener" target="_blank">Лаборатория Вакуумных Технологий</a></li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_TextLab.png"><img class="thumbimage" height="25" src="../en/files/LibMainEls_TextLab.png" width="400" /></a>  <div class="thumbcaption">Рис.1.3. Элемент "Текстовая метка" в режиме разработки и выполнения (слева направо)</div></div></div></div>.
 <p><b><u>Использование — разработка</u></b><br />
 Этот виджет может быть использован разработчиком при создании мнемосхем с отображением текстовых меток и/или как элемент статической экранной таблицы. Для использования нужно добавить данный виджет на мнемосхему, подстроить горизонтальный, вертикальный размер и связать с параметром источника данных.
@@ -2813,7 +2814,7 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </td></tr></table>
 <p>Элемент на рисунке 4.7 реализует простейший диалог подтверждения операций. Диалог содержит сообщение с вопросом и две кнопки "Принять" и "Отмена". Данный диалог, например, использован в кадре <a href="#userManager">Менеджер пользователей</a> для подтверждения операции удаления.
 </p>
-<ul><li> <b>Спонсирование:</b> <a class="external text" href="http://e-beam.ru" rel="nofollow noreferrer noopener" target="_blank">Лаборатория Вакуумных Технологий</a></li></ul>
+<ul><li> <b>Спонсирование:</b> Василий Григорьев, <a class="external text" href="http://e-beam.ru" rel="nofollow noreferrer noopener" target="_blank">Лаборатория Вакуумных Технологий</a></li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:652px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_accept_ru.png"><img class="thumbimage" height="169" src="files/LibMainEls_accept_ru.png" width="650" /></a>  <div class="thumbcaption">Рис.4.7. Диалог "Подтверждение" в режиме разработки и исполнения.</div></div></div></div>
 <p><b><u>Использование — разработка</u></b><br />
 Диалог не предусматривает специальной конфигурации пользователем, он должен лишь быть размещён в каталоге панелей дерева проекта <a href="#RootPgSo">концепции объектов сигнализации корневой страницы "RootPgSo"</a>, что будет предусматривать его динамический вызов и открытие, как внешнее диалоговое окно.
@@ -2863,7 +2864,7 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </td></tr></table>
 <p>Элемент на рисунке 4.8 реализует простой диалог операции выбора пункта в дереве. Диалог содержит само дерево и две кнопки "Принять" и "Отменить". Этот диалог, например, использован, и первично для него разрабатывался, в кадре "<a href="Libs_Prescriptions.html#prescrRunSimple" title="Special:MyLanguage/Libs/Prescriptions">Рецепт: исполнение (простой)</a>" для иерархического выбора элемента в дереве.
 </p>
-<ul><li> <b>Спонсирование:</b> <a class="external text" href="http://e-beam.ru" rel="nofollow noreferrer noopener" target="_blank">Лаборатория Вакуумных Технологий</a></li></ul>
+<ul><li> <b>Спонсирование:</b> Василий Григорьев, <a class="external text" href="http://e-beam.ru" rel="nofollow noreferrer noopener" target="_blank">Лаборатория Вакуумных Технологий</a></li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:782px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_treeSelect_ru.png"><img class="thumbimage" height="389" src="files/LibMainEls_treeSelect_ru.png" width="780" /></a>  <div class="thumbcaption">Рис.4.8. Диалог "Выбор элемента в дереве" в режиме разработки и исполнения.</div></div></div></div>
 <p><b><u>Использование — разработка</u></b><br />
 Диалог не предусматривает специальной конфигурации пользователем, он должен лишь быть размещён в каталоге панелей дерева проекта <a href="#RootPgSo">концепции объектов сигнализации корневой страницы "RootPgSo"</a>, что будет предусматривать его динамический вызов и открытие, как внешнее диалоговое окно.
@@ -2912,5 +2913,5 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/ru">Libs/Main_graphical_elements/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2669</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/ru">Libs/Main_graphical_elements/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2670</td></tr></table></body>
 </html>

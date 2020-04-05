@@ -412,7 +412,7 @@ var OK = re.test("12/30/1969"); </pre></li>
 <li><i>int message( string cat, int level, string mess );</i> — формирует системное сообщение <i>mess</i> с категорией <i>cat</i>, уровнем <i>level</i> (-7...7). Отрицательное значение уровня формирует нарушения — "Alarm.</li>
 <li><i>int messDebug( string cat, string mess ); int messInfo( string cat, string mess ); int messNote( string cat, string mess ); int messWarning( string cat, string mess ); int messErr( string cat, string mess ); int messCrit( string cat, string mess ); int messAlert( string cat, string mess ); int messEmerg( string cat, string mess );</i> — формирует системное сообщения <i>mess</i> с категорией <i>cat</i> и соответствующим к имени уровнем.</li>
 <li><i>XMLNodeObj XMLNode( string name = "" );</i> — создаёт объект узла XML c именем <i>name</i>.</li>
-<li><i>string cntrReq( XMLNodeObj req, string stat = "" );</i> — отправляет запрос <a href="../en/API.html#CntrNode" title="Special:MyLanguage/Documents/API">интерфейса управления</a> к программе-системе посредством XML. Обычный запрос записывается в виде <b>&lt;get path="/OPath/%2felem"/&gt;</b>. При указании станции в <i>stat</i> осуществляется запрос к указанной внешней станции. Адрес, атрибут "path", можно узнать в конфигураторе OpenSCADA, а именно в строке статуса, где этот адрес появляется при наведении курсора мыши на конфигурационное или информационное поле. Некоторые примеры распространённых запросов, больше примеров в <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Service_procedures#releaseTests" title="Special:MyLanguage/Libs/Service procedures">releaseTests()</a>:<ul>
+<li><i>string cntrReq( XMLNodeObj req, string stat = "" );</i> — отправляет запрос <a href="../en/API.html#CntrNode" title="Special:MyLanguage/Documents/API">интерфейса управления</a> к программе-системе посредством XML. Обычный запрос записывается в виде <b>&lt;get path="/OPath/%2felem"/&gt;</b>. При указании станции в <i>stat</i> осуществляется запрос к указанной внешней станции. Адрес, атрибут "path", можно узнать в конфигураторе OpenSCADA, а именно в строке статуса, где этот адрес появляется при наведении курсора мыши на конфигурационное или информационное поле. Некоторые примеры распространённых запросов, больше примеров в <a href="../en/Libs_Service_procedures.html#releaseTests" title="Special:MyLanguage/Libs/Service procedures">releaseTests()</a>:<ul>
  <li>Чтение значения элемента (имя пользователя "test"):
 <pre style="white-space: pre-wrap;">
 req = SYS.XMLNode("get").setAttr("path","/sub_Security/usr_test/%2fprm%2fDESCR");
@@ -822,7 +822,7 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 </td></tr>
 
 <tr>
-<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Devices" title="Special:MyLanguage/Libs/Devices">Industrial devices library</a>
+<td> <a href="../en/Libs_Devices.html" title="Special:MyLanguage/Libs/Devices">Industrial devices library</a>
 </td>
 <td> 2.3 </td>
 <td> GPLv2 </td>
@@ -832,15 +832,15 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 </td></tr>
 
 <tr>
-<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/LowLevelDevices" title="Special:MyLanguage/Libs/LowLevelDevices">Low level sensors and chips library</a> </td>
-<td> 1.2 </td>
+<td> <a href="../en/Libs_LowLevelDevices.html" title="Special:MyLanguage/Libs/LowLevelDevices">Low level sensors and chips library</a> </td>
+<td> 1.4 </td>
 <td> GPLv2 </td>
 <td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.tmplb_LowDevLib </td>
 <td> en, uk, ru
 </td></tr>
 
 <tr>
-<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Service_procedures" title="Special:MyLanguage/Libs/Service procedures">Service procedures library</a> </td>
+<td> <a href="../en/Libs_Service_procedures.html" title="Special:MyLanguage/Libs/Service procedures">Service procedures library</a> </td>
 <td> 1.2 </td>
 <td> GPLv2 </td>
 <td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.JavaLikeCalc.servProc </td>
@@ -848,7 +848,7 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 </td></tr>
 
 <tr>
-<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Regulation_elements" title="Special:MyLanguage/Libs/Regulation elements">Библиотека элементов регулирования</a>
+<td> <a href="Libs_Regulation_elements.html" title="Special:MyLanguage/Libs/Regulation elements">Библиотека элементов регулирования</a>
 </td>
 <td> 1.0 </td>
 <td> GPLv2 </td>
@@ -939,5 +939,5 @@ vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/ru">Documents/User_API/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2669</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/ru">Documents/User_API/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2670</td></tr></table></body>
 </html>

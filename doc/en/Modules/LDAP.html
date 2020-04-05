@@ -39,8 +39,15 @@
 </td>
 <td> DB </td>
 <td> Roman Savochenko </td>
-<td> BD module. Provides support of directories by LDAP.<br />Sponsored by: Alexander Kolesov, 2017
+<td> BD module. Provides support of directories by LDAP.
+<ul><li> <b>Sponsored by</b>: Alexander Kolesov, 2017</li></ul>
 </td></tr></table>
+<p>The module gives to OpenSCADA support of directories by Lightweight Directory Access Protocol (<a class="extiw" href="https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol" title="wikipedia:Lightweight Directory Access Protocol">LDAP</a>). The module is based on the <a class="external text" href="https://www.openldap.org/" rel="nofollow noreferrer noopener" target="_blank">OpenLDAP</a> library on the programming language "C". Due conceptual difference the directory service from data bases (DB) the module allows you to perform mostly reading and modification entries represented as tables' records in the DB conception.
+</p><p>Directory service or name service maps the names of network resources to their respective network addresses. It is a shared information infrastructure for locating, managing, administering and organizing everyday items and network resources, which can include volumes, folders, files, printers, users, groups, devices, telephone numbers and other objects. A common use of LDAP is to provide a central place to store usernames and passwords. This allows many different applications and services to connect to the LDAP server to validate users. The protocol provides an interface with directories that follow the 1993 edition of the X.500 model:
+</p>
+<ul><li> An entry consists of a set of attributes.</li>
+<li> An attribute has a name (an attribute type or attribute description) and one or more values. The attributes are defined in a schema.</li>
+<li> Each entry has a unique identifier: its Distinguished Name (DN). This consists of its Relative Distinguished Name (RDN), constructed from some attribute(s), in pairs <i>{name}={value}</i> separated with the sign '+', in the entry, followed by the parent entry's DN, separated with the sign ','. Think of the DN as the full file path and the RDN as its relative filename in its parent folder.</li></ul>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#Operations_over_the_database"><span class="tocnumber">1</span> <span class="toctext">Operations over the database</span></a></li>
@@ -50,12 +57,6 @@
 </ul>
 </div>
 
-<p>The module gives to OpenSCADA support of directories by Lightweight Directory Access Protocol (<a class="extiw" href="https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol" title="wikipedia:Lightweight Directory Access Protocol">LDAP</a>). The module is based on the <a class="external text" href="https://www.openldap.org/" rel="nofollow noreferrer noopener" target="_blank">OpenLDAP</a> library on the programming language "C". Due conceptual difference the directory service from data bases (DB) the module allows you to perform mostly reading and modification entries represented as tables' records in the DB conception.
-</p><p>Directory service or name service maps the names of network resources to their respective network addresses. It is a shared information infrastructure for locating, managing, administering and organizing everyday items and network resources, which can include volumes, folders, files, printers, users, groups, devices, telephone numbers and other objects. A common use of LDAP is to provide a central place to store usernames and passwords. This allows many different applications and services to connect to the LDAP server to validate users. The protocol provides an interface with directories that follow the 1993 edition of the X.500 model:
-</p>
-<ul><li> An entry consists of a set of attributes.</li>
-<li> An attribute has a name (an attribute type or attribute description) and one or more values. The attributes are defined in a schema.</li>
-<li> Each entry has a unique identifier: its Distinguished Name (DN). This consists of its Relative Distinguished Name (RDN), constructed from some attribute(s), in pairs <i>{name}={value}</i> separated with the sign '+', in the entry, followed by the parent entry's DN, separated with the sign ','. Think of the DN as the full file path and the RDN as its relative filename in its parent folder.</li></ul>
 <h2><span class="mw-headline" id="Operations_over_the_database"><span class="mw-headline-number">1</span> Operations over the database</span></h2>
 <p>The module provides only opening database (representing in that way of a base entry) operation. In terms of the subsystem "DB" of OpenSCADA, opening of a DB is its registration for further using of the program. It also supports the operation of requesting the list of tables in the database.
 </p><p>LDAP database (connection) is addressed in the following format "<b>ldap[s]://{host}[:{port}];bdn[;{adn};{pass}[;{tm}]]</b>", where:
@@ -115,5 +116,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/LDAP/en">Modules/LDAP/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2669</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/LDAP/en">Modules/LDAP/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2670</td></tr></table></body>
 </html>

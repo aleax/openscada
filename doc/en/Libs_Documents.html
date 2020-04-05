@@ -40,7 +40,8 @@ vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA
 </td>
 <td> Provides the combined library of the reports, documents and related functions of common and the industrial automation.
 <ul><li> <b>Founded:</b> January 2008</li>
-<li> <b>Initially created, for the functions:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/APIFunctionLibs/LibDoc" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a></li></ul>
+<li> <b>Initially created, for the functions:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/APIFunctionLibs/LibDoc" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a></li>
+<li> <b>Used by:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using" title="Special:MyLanguage/Using">most projects on OpenSCADA</a></li></ul>
 </td></tr></table>
 <p>The library is created to provide report and document elements-frames of the user interface and it contains graphic elements, often need when forming the user interface of the automation of technological and common processes. The library is mostly built on the basis <a href="Modules/VCAEngine.html#Document" title="Special:MyLanguage/Modules/VCAEngine">the primitive "Document"</a> and the internal programming language <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, for the related functions also.
 </p><p>The element's names and their parameters are available in languages: English, Ukrainian and Russian. Their source code wrote in human-language independent mode with calls for the translations by the function <i>tr()</i> and the message's translation also allowed for English, Ukrainian and Russian.
@@ -643,7 +644,7 @@ In the runtime mode, the specified messages are displayed. Additionally you can 
 </td></tr></table>
 <p>The document, shown in Figure 1.2.5, is provided for generating a report of the hour values of up to 10 parameters for two working shift of day with the result sum for flows and related parameters. The document is the dynamic type, so you can specify the data time and depth (fixed). The document commonly uses and represents the representative structure of the DAQ-template "<a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">Analog signal</a>". As a data source of this document is <a href="Program_manual.html#ArchVals" title="Special:MyLanguage/Documents/Program manual">the value archives</a> of the DAQ-parameters.
 </p>
-<ul><li> <b>Sponsored by:</b> <a class="external text" href="http://diyaorg.dp.ua" rel="nofollow noreferrer noopener" target="_blank">DIYA LTD</a></li></ul>
+<ul><li> <b>Sponsored by:</b> <a class="external text" href="http://diyaorg.dp.ua" rel="nofollow noreferrer noopener" target="_blank">DIYA Ltd</a></li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibDocuments_docRep2WorkSh.png"><img class="thumbimage" height="580" src="files/LibDocuments_docRep2WorkSh.png" width="900" /></a>  <div class="thumbcaption">Fig.1.2.5. The "Report of two working shifts" document in the runtime mode.</div></div></div></div>
 <p><b><u>Using — development</u></b><br />
 The document is designed to perform the role of page-template, and should therefore be placed directly in the project's tree. To each document can be connected up to ten parameters, setting the links. Items, for which there are not set the links, will be hidden at runtime.
@@ -1191,7 +1192,7 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <li> <b>color</b> — colour of the trend curve;</li>
 <li> <b>scale</b> — separate definition of the trend scale, by default "Global (0)" and generally provided: "Global (0)", "Markers (2)", "Grid and markers (3)", "Markers (log) (6)", "Grid and markers (log) (7)".</li>
 <li> <b>width</b> — width of the trend curve, by default 2.</li></ul>
-<ul><li> <b>Sponsored by:</b> Magomed</li></ul>
+<ul><li> <b>Sponsored by:</b> Magomed, <a class="external text" href="https://www.savtech.ru" rel="nofollow noreferrer noopener" target="_blank">SAVTECH</a></li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibDocuments_docRepInstVals.png"><img class="thumbimage" height="580" src="files/LibDocuments_docRepInstVals.png" width="900" /></a>  <div class="thumbcaption">Fig.2.4. The function "Diagram" default result in a XHTML-document.</div></div></div></div>
 <p><b><u>Parameters</u></b><br />
 </p>
@@ -1295,5 +1296,5 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Documents/en">Libs/Documents/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2669</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Documents/en">Libs/Documents/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2670</td></tr></table></body>
 </html>

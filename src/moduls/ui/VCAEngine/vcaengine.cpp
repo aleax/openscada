@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"6.1.0"
+#define MOD_VER		"6.1.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -622,7 +622,7 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
 
 void Engine::perSYSCall( unsigned int cnt )
 {
-    //Check for stop and remove lost and not used already project's sessions
+    //Check for stop and remove lose and not used already project's sessions
     vector<string> sls;
     sesList(sls);
     for(unsigned iS = 0; iS < sls.size(); iS++)

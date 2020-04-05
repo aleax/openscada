@@ -251,7 +251,7 @@ bool ModMArch::readMeta( )
 	}
     } else rez = false;
 
-    //Check for target DB enabled (disabled by the connection lost)
+    //Check for target DB enabled (disabled by the connection loss)
     if(!rez) {
 	string wDB = TBDS::realDBName(addr());
 	rez = (TSYS::strParse(wDB,0,".") == DB_CFG ||

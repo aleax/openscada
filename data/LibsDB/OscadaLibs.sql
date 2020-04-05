@@ -8,22 +8,31 @@ Author: Roman Savochenko <roman@oscada.org>','Бібліотека шаблон�
 Автор: Роман Савоченко <roman@oscada.org>','tmplib_tests','','Библиотека шаблонов параметров для контроллеров фирмы Siemens серии S7.
 
 Автор: Роман Савоченко <roman@oscada.org>');
-INSERT INTO ParamTemplLibs VALUES('base','Main library','Основна бібліотека','The library was created to provide main templates of the DAQ-sources processing and related services.
+INSERT INTO ParamTemplLibs VALUES('base','Main library','Основна бібліотека','Library of the main templates of the DAQ-sources processing and related services.
+
+The library was created to provide main templates of the DAQ-sources processing and related services.
 
 Author: Roman Savochenko <roman@oscada.org>
-Founded: 2006
+Used by: Most projects on OpenSCADA
+Founded: January 2006
 Version: 2.0.0
 License: GPLv2
-DOC: Libs_Main|Libs/Main','Бібліотеку створено для надання основних шаблонів опрацювання DAQ-джерел та похідних сервісів.
+DOC: Libs_Main|Libs/Main','Бібліотека основних шаблонів опрацювання DAQ-джерел та похідних сервісів.
+
+Бібліотеку створено для надання основних шаблонів опрацювання DAQ-джерел та похідних сервісів.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Засновано: 2006
+Використано: Більшість проектів OpenSCADA
+Засновано: Січень 2006
 Версія: 2.0.0
 Ліцензія: GPLv2
-DOC: Libs_Main|Libs/Main','tmplib_base','Основная библиотека','Библиотека создана для предоставления основных шаблонов обработки DAQ-источников и производных сервисов.
+DOC: Libs_Main|Libs/Main','tmplib_base','Основная библиотека','Библиотека основных шаблонов обработки DAQ-источников и производных сервисов.
+
+Библиотека создана для предоставления основных шаблонов обработки DAQ-источников и производных сервисов.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Основано: 2006
+Использовано: Большинство проектов OpenSCADA
+Основано: Январь 2006
 Версия: 2.0.0
 Лицензия: GPLv2
 DOC: Libs_Main|Libs/Main');
@@ -49,8 +58,8 @@ The section contains DAQ-templates of the prescription manager and commands of t
 The element''s names and their parameters are available in languages: English, Ukrainian and Russian. Their source code wrote in human-language independent mode with calls for the translations by the function tr() and the message''s translation also allowed for English, Ukrainian and Russian.
 
 Author: Roman Savochenko <roman@oscada.org>
-Sponsored by: the Laboratory of Vacuum Technologies
-Sponsored by, about the controller templateization: Magomed
+Sponsored by: Vassily Grigoriev, the Laboratory of Vacuum Technologies
+Sponsored by, about the controller templateization: Magomed, SAVTECH
 Founded: April 2012
 Version: 1.1.0
 License: GPLv2
@@ -61,8 +70,8 @@ DOC: Libs_Prescriptions|Libs/Prescriptions','Бібліотека створює
 Назви елементів та їх параметрів доступні на мовах: Англійська, Українська та Російська. Їх вихідний код написано у мово(людська)-незалежному режимі з викликом функції перекладу tr() та переклад цих повідомлень також доступний Англійською, Українською та Російською.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Спонсоровано: Лабораторія Вакуумних Технологій
-Спонсоровано, щодо шаблонізації контролеру: Магомед
+Спонсоровано: Василь Григор''єв, Лабораторія Вакуумних Технологій
+Спонсоровано, щодо шаблонізації контролеру: Магомед, SAVTECH
 Засновано: Квітень 2012
 Версія: 1.1.0
 Ліцензія: GPLv2
@@ -73,13 +82,17 @@ DOC: Libs_Prescriptions|Libs/Prescriptions','tmplib_PrescrTempl','Рецепты
 Названия элементов и их параметров доступны на языках: Английский, Украинский и Российский. Их исходный код написан в языко(человеческий)-независимом режиме с вызовом функции перевода tr() и перевод этих сообщений также доступен Английским, Украинским и Российским.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Спонсировано: Лаборатория Вакуумных Технологий
-Спонсировано, на предмет шаблонизации контроллера: Магомед
+Спонсировано: Василий Григорьев, Лаборатория Вакуумных Технологий
+Спонсировано, на предмет шаблонизации контроллера: Магомед, SAVTECH
 Основано: Апрель 2012
 Версия: 1.1.0
 Лицензия: GPLv2
 DOC: Libs_Prescriptions|Libs/Prescriptions');
 INSERT INTO ParamTemplLibs VALUES('LowDevLib','Low-level devices','Низькорівневі пристрої','Library of functions to provide access to device''s data of low-level buses'' chips.
+
+The user protocol devices library created to provide access to device''s data of low-level buses'' chips, with simple enough to implement protocols into: the User Protocol module or directly on the internal like to Java language.
+
+The template''s names and their parameters are available in languages: English, Ukrainian and Russian. Their source code wrote in the human-language independent mode with calls for the translations by the function tr() and the message''s translation also allowed for English, Ukrainian and Russian.
 
 Author: Roman Savochenko <roman@oscada.org>, Arcadiy Kisel (2017)
 Founded: Jul 2016
@@ -87,32 +100,43 @@ Version: 1.4.0
 License: GPLv2 mostly
 DOC: Libs_LowLevelDevices|Libs/LowLevelDevices','','tmplib_LowDevLib','Низкоуровневые устройства','');
 CREATE TABLE IF NOT EXISTS 'UserFuncLibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"PROG_TR" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO UserFuncLibs VALUES('techApp','Technological apparatuses','The library is created to provide models of devices of the technological processes. The library is not static, but based on the module JavaLikeCalc, allowing to create calculations on the Java-like language.
+INSERT INTO UserFuncLibs VALUES('techApp','Technological apparatuses','Library of models of the technological apparatuses for creating complex simulators of the technological processes of block-schemes of the module DAQ.BlockCalc.
+
+The library is created to provide models of devices of the technological processes. The library is not static, but based on the module JavaLikeCalc, allowing to create calculations on the Java-like language.
 
 To address the library functions you can use the static call address DAQ.JavaLikeCalc.lib_techApp.{Func}() or dynamic SYS.DAQ.JavaLikeCalc["lib_techApp"]["{Func}"].call(), SYS.DAQ.JavaLikeCalc["lib_techApp"].{Func}()". Where {Func} — function identifier in the library.
 
 Founded: October 2005
 Author: Roman Savochenko <roman@oscada.org>, Maxim Lysenko (2007,2010), Ksenia Yashina (2007)
+Sponsored by: DIYA Ltd
 Version: 2.0.1
 License: GPLv2
-DOC: Libs_Technological_apparatuses|Libs/Technological_apparatuses','techApp','Технологічні апарати','Бібліотека створюється для надання моделей апаратів технологічних процесів. Бібліотека не є статичною, а будується на основі модуля JavaLikeCalc, який дозволяє створювати обчислення на мові схожій на Java.
+DOC: Libs_Technological_apparatuses|Libs/Technological_apparatuses','techApp','Технологічні апарати','Бібліотека моделей технологічних апаратів для створення комплексних моделей технологічних процесів, блокових схем модуля DAQ.BlockCalc.
+
+Бібліотека створюється для надання моделей апаратів технологічних процесів. Бібліотека не є статичною, а будується на основі модуля JavaLikeCalc, який дозволяє створювати обчислення на мові схожій на Java.
 
 Для адресації до функцій цієї бібліотеки можна використати статичну адресу виклику DAQ.JavaLikeCalc.lib_techApp.{Func}() або динамічну SYS.DAQ.JavaLikeCalc["lib_techApp"]["{Func}"].call(), SYS.DAQ.JavaLikeCalc["lib_techApp"].{Func}(). Де {Func} — ідентифікатор функції у бібліотеці.
 
 Засновано: Жовтень 2005
 Автор: Роман Савоченко <roman@oscada.org>, Максим Лисенко (2007,2010), Ксенія Яшина (2007)
+Спонсоровано: ТОВ "ДІЯ"
 Версія: 2.0.1
 Ліцензія: GPLv2
-DOC: Libs_Technological_apparatuses|Libs/Technological_apparatuses','Технологические аппараты','Библиотека создаётся для предоставления моделей аппаратов технологических процессов. Библиотека не является статической, а строится на основе модуля JavaLikeCalc, позволяющего создавать вычисления на Java-подобном языке.
+DOC: Libs_Technological_apparatuses|Libs/Technological_apparatuses','Технологические аппараты','Библиотека моделей технологических аппаратов для создания комплексных моделей технологических процессов, блочных схем модуля DAQ.BlockCalc.
+
+Библиотека создаётся для предоставления моделей аппаратов технологических процессов. Библиотека не является статической, а строится на основе модуля JavaLikeCalc, позволяющего создавать вычисления на Java-подобном языке.
 
 Для адресации к функции этой библиотеки можно использовать статический адрес вызова DAQ.JavaLikeCalc.lib_techApp.{Func}() или динамический SYS.DAQ.JavaLikeCalc["lib_techApp"]["{Func}"].call(), SYS.DAQ.JavaLikeCalc["lib_techApp"].{Func}(). Где {Func} — идентификатор функции в библиотеке.
 
 Основан: Октябрь 2005
 Автор: Роман Савоченко <roman@oscada.org>, Максим Лысенко (2007,2010), Ксения Яшина (2007)
+Спонсировано: ООО "ДІЯ"
 Версия: 2.0.1
 Лицензия: GPLv2
 DOC: Libs_Technological_apparatuses|Libs/Technological_apparatuses',0);
-INSERT INTO UserFuncLibs VALUES('servProc','Service procedures','The library is wrote on the JavaLikeCalc language and aimed for different using.
+INSERT INTO UserFuncLibs VALUES('servProc','Service procedures','Library of the service procedures of different using.
+
+The library is wrote on the JavaLikeCalc language and aimed for different using.
 
 To addressing the library functions you can use the static call address DAQ.JavaLikeCalc.lib_servProc.{Func}() or dynamic SYS.DAQ.JavaLikeCalc["lib_servProc"]["{Func}"].call(), SYS.DAQ.JavaLikeCalc["lib_servProc"].{Func}()". Where {Func} — function identifier in the library.
 
@@ -120,20 +144,10 @@ Founded: November 2017
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.2.1
 License: GPLv2
-DOC: Libs_Service_procedures|Libs/Service_procedures','lib_servProc','Сервісні процедури','Бібліотека різноманітних сервісних процедур.
+DOC: Libs_Service_procedures|Libs/Service_procedures','lib_servProc','Сервісні процедури','','Сервисные процедуры','',1);
+INSERT INTO UserFuncLibs VALUES('doc','Reports'' and documents'' library','Provides the combined library of the reports, documents and related functions of common and the industrial automation.
 
-Засновано: Жовтень 2017
-Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.2.1
-Ліцензія: GPLv2
-DOC: Libs_Service_procedures|Libs/Service_procedures','Сервисные процедуры','Библиотека различных сервисных процедур.
-
-Основан: Октябрь 2017
-Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.2.1
-Лицензия: GPLv2
-DOC: Libs_Service_procedures|Libs/Service_procedures',1);
-INSERT INTO UserFuncLibs VALUES('doc','Reports'' and documents'' library','The service functions of the frames of reports and documents are intended to perform the characteristic tasks of obtaining reporting data, for which you need to perform some verification or counting, for example, to check the validity and to summarize. Forming complex data, such as charts embedded in a document, can also be a service function.
+The service functions of the frames of reports and documents are intended to perform the characteristic tasks of obtaining reporting data, for which you need to perform some verification or counting, for example, to check the validity and to summarize. Forming complex data, such as charts embedded in a document, can also be a service function.
 
 To address the library functions you can use the static call address DAQ.JavaLikeCalc.lib_doc.{Func}() or dynamic SYS.DAQ.JavaLikeCalc["lib_doc"]["{Func}"].call(), SYS.DAQ.JavaLikeCalc["lib_doc"].{Func}()". Where {Func} — function identifier in the library.
 
@@ -143,7 +157,9 @@ Founded: January 2008
 Author: Roman Savochenko <roman@oscada.org>
 Version: 2.0.2
 License: GPLv2
-DOC: Libs_Documents|Libs/Documents','flb_doc','Бібліотека звітів та документів','Сервісні функції кадрів звітів та документів призначено для виконання характерних задач отримання звітних даних, для чого треба здійснювати якусь перевірку або підрахунок, наприклад, перевіряти достовірність та підсумовувати. Сервісною функцією може бути й формування складних даних, як то вбудованих у документ діаграм.
+DOC: Libs_Documents|Libs/Documents','flb_doc','Бібліотека звітів та документів','Надає комбіновану бібліотеку звітів, документів та пов''язаних функцій загальної та промислової автоматизації.
+
+Сервісні функції кадрів звітів та документів призначено для виконання характерних задач отримання звітних даних, для чого треба здійснювати якусь перевірку або підрахунок, наприклад, перевіряти достовірність та підсумовувати. Сервісною функцією може бути й формування складних даних, як то вбудованих у документ діаграм.
 
 Для адресації до функцій цієї бібліотеки можна використати статичну адресу виклику DAQ.JavaLikeCalc.lib_doc.{Func}() або динамічну SYS.DAQ.JavaLikeCalc["lib_doc"]["{Func}"].call(), SYS.DAQ.JavaLikeCalc["lib_doc"].{Func}(). Де {Func} — ідентифікатор функції у бібліотеці.
 
@@ -153,7 +169,9 @@ DOC: Libs_Documents|Libs/Documents','flb_doc','Бібліотека звітів
 Автор: Роман Савоченко <roman@oscada.org>
 Версія: 2.0.2
 Ліцензія: GPLv2
-DOC: Libs_Documents|Libs/Documents','Библиотека отчётов и документов','Сервисные функции кадров отчётов и документов предназначены для выполнения характерных задач получения отчётных данных, для чего нужно осуществлять какую-то проверку или подсчёт, например, проверять достоверность и суммировать. Сервисной функцией может быть и формирование сложных данных, вроде встраиваемых в документ диаграмм.
+DOC: Libs_Documents|Libs/Documents','Библиотека отчётов и документов','Предоставляет комбинированную библиотеку отчётов, документов и связанных функций общей и промышленной автоматизации.
+
+Сервисные функции кадров отчётов и документов предназначены для выполнения характерных задач получения отчётных данных, для чего нужно осуществлять какую-то проверку или подсчёт, например, проверять достоверность и суммировать. Сервисной функцией может быть и формирование сложных данных, вроде встраиваемых в документ диаграмм.
 
 Для адресации к функции этой библиотеки можно использовать статический адрес вызова DAQ.JavaLikeCalc.lib_doc.{Func}() или динамический SYS.DAQ.JavaLikeCalc["lib_doc"]["{Func}"].call(), SYS.DAQ.JavaLikeCalc["lib_doc"].{Func}(). Где {Func} — идентификатор функции в библиотеке.
 
@@ -164,7 +182,9 @@ DOC: Libs_Documents|Libs/Documents','Библиотека отчётов и до
 Версия: 2.0.2
 Лицензия: GPLv2
 DOC: Libs_Documents|Libs/Documents',1);
-INSERT INTO UserFuncLibs VALUES('regEl','Regulation elements','The library is created to provide functions of different control algorithms and it can be used in programmable logic controllers (PLC) based on OpenSCADA for construction control schemes in the module DAQ.BlockCalc. The library is not static, but based on the module JavaLikeCalc, allowing to create calculations on the Java-like language. The functions'' names and its parameters are available in languages: English, Ukrainian and Russian.
+INSERT INTO UserFuncLibs VALUES('regEl','Regulation elements','Regulation elements library of block-schemes of the module DAQ.BlockCalc.
+
+The library is created to provide functions of different control algorithms and it can be used in programmable logic controllers (PLC) based on OpenSCADA for construction control schemes in the module DAQ.BlockCalc. The library is not static, but based on the module JavaLikeCalc, allowing to create calculations on the Java-like language. The functions'' names and its parameters are available in languages: English, Ukrainian and Russian.
 
 To addressing the library functions you can use the static call address DAQ.JavaLikeCalc.lib_regEl.{Func}() or dynamic SYS.DAQ.JavaLikeCalc["lib_regEl"]["{Func}"].call(), SYS.DAQ.JavaLikeCalc["lib_regEl"].{Func}()". Where {Func} — function identifier in the library.
 
@@ -173,7 +193,9 @@ Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: DIYA Ltd
 Version: 1.0.0
 License: GPLv2
-DOC: Libs_Regulation|Libs/Regulation','flb_regEl','Елементи регулювання','Бібліотека створюється для надання функцій різних алгоритмів контролю та вона може бути використана у програмованих логічних контролерах (PLC) заснованих на OpenSCADA для побудови схем контролю у модулі DAQ.BlockCalc. Бібліотека не є статичною, а будується на основі модуля JavaLikeCalc, який дозволяє створювати обчислення на мові схожій на Java. Назви функцій та їх параметрів доступні на мовах: Англійська, Українська та Російська.
+DOC: Libs_Regulation_elements|Libs/Regulation_elements','flb_regEl','Елементи регулювання','Бібліотека елементів регулювання блокових схем модуля DAQ.BlockCalc.
+
+Бібліотека створюється для надання функцій різних алгоритмів контролю та вона може бути використана у програмованих логічних контролерах (PLC) заснованих на OpenSCADA для побудови схем контролю у модулі DAQ.BlockCalc. Бібліотека не є статичною, а будується на основі модуля JavaLikeCalc, який дозволяє створювати обчислення на мові схожій на Java. Назви функцій та їх параметрів доступні на мовах: Англійська, Українська та Російська.
 
 Для адресації до функцій цієї бібліотеки можна використати статичну адресу виклику DAQ.JavaLikeCalc.lib_regEl.{Func}() або динамічну SYS.DAQ.JavaLikeCalc["lib_regEl"]["{Func}"].call(), SYS.DAQ.JavaLikeCalc["lib_regEl"].{Func}(). Де {Func} — ідентифікатор функції у бібліотеці.
 
@@ -182,7 +204,9 @@ DOC: Libs_Regulation|Libs/Regulation','flb_regEl','Елементи регулю
 Спонсоровано: ТОВ "ДІЯ"
 Версія: 1.0.0
 Ліцензія: GPLv2
-DOC: Libs_Regulation|Libs/Regulation','Элементы регулирования','Библиотека создаётся для предоставления функций различных алгоритмов контроля и она может быть использована в программированных логических контроллерах (PLC) основанных на OpenSCADA для построения схем контроля в модуле DAQ.BlockCalc. Библиотека не является статической, а строится на основе модуля JavaLikeCalc, позволяющего создавать вычисления на Java-подобном языке. Названия функций и их параметров доступны на языках: Английский, Украинский и Российский.
+DOC: Libs_Regulation_elements|Libs/Regulation_elements','Элементы регулирования','Библиотека элементов регулирования блочных схем модуля DAQ.BlockCalc.
+
+Библиотека создаётся для предоставления функций различных алгоритмов контроля и она может быть использована в программированных логических контроллерах (PLC) основанных на OpenSCADA для построения схем контроля в модуле DAQ.BlockCalc. Библиотека не является статической, а строится на основе модуля JavaLikeCalc, позволяющего создавать вычисления на Java-подобном языке. Названия функций и их параметров доступны на языках: Английский, Украинский и Российский.
 
 Для адресации к функции этой библиотеки можно использовать статический адрес вызова DAQ.JavaLikeCalc.lib_regEl.{Func}() или динамический SYS.DAQ.JavaLikeCalc["lib_regEl"]["{Func}"].call(), SYS.DAQ.JavaLikeCalc["lib_regEl"].{Func}(). Где {Func} — идентификатор функции в библиотеке.
 
@@ -191,7 +215,7 @@ DOC: Libs_Regulation|Libs/Regulation','Элементы регулировани
 Спонсировано: ООО "ДІЯ"
 Версия: 1.0.0
 Лицензия: GPLv2
-DOC: Libs_Regulation|Libs/Regulation',0);
+DOC: Libs_Regulation_elements|Libs/Regulation_elements',0);
 INSERT INTO UserFuncLibs VALUES('Controller','Controllers','Library of programs of controllers based on JavaLikeCalc.
 
 Author: Roman Savochenko <roman@oscada.org>
@@ -529,8 +553,11 @@ Modules/SystemTests:en,uk,ru:Modules/SystemTests.html
 Modules/FLibMath:en,uk,ru:Modules/FLibMath.html
 Modules/FLibComplex1:en,uk,ru:Modules/FLibComplex1.html
 Libs/Main:en,uk:Libs_Main.html
+Libs/Devices:en:Libs_Devices.html
+Libs/LowLevelDevices:en:Libs_LowLevelDevices.html
+Libs/Service_procedures:en:Libs_Service_procedures.html
+Libs/Regulation_elements:en,uk,ru:Libs_Regulation_elements.html
 Libs/Technological_apparatuses:en,uk,ru:Libs_Technological_apparatuses.html
-Libs/Regulation:en,uk,ru:Libs_Regulation.html
 Libs/Main_graphical_elements:en,uk,ru:Libs_Main_graphical_elements.html
 Libs/Mnemo_elements:en,uk,ru:Libs_Mnemo_elements.html
 Libs/Electrical_elements:en,uk,ru:Libs_Electrical_elements.html
@@ -6675,10 +6702,7 @@ License: GPLv2','Загальний, представницький шаблон
 
 Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.1.0
-Ліцензія: GPLv2','Сигнализация по дискретному параметру.
-
-Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.1.0',10,0,'JavaLikeCalc.JavaScript
+Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	f_err = "0";
 	alDelay_ = 0;
@@ -6790,23 +6814,79 @@ else {
 		if(last_cmd&0x4) { cmdStop = false; last_cmd = last_cmd&(~0x4); }
 	}
 }','','',1416656400);
-INSERT INTO tmplib_base VALUES('manInUnif','Manual input (unified)','Ручний ввід (уніфікований)','Ручной ввод (унифицированный)','Common, representative and unified template of a manual input — an analog output signal.
-The template forms a structure of parameter (complex tag) of the analog output which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object, mostly through the Element cadre control panel.
+INSERT INTO tmplib_base VALUES('manInUnif','Manual input, unified','Ручний ввід, уніфікований','Ручной ввод, унифицированный','Common, representative and unified template of a manual input and an analog output signal. The template forms a structure of parameter (complex tag) of the manual input what can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object, the control mostly can be performed through the Element cadre control panel.
+
+The representative structure of the parameter (complex tag) of the manual input is:
+- "Variable (var)" — end variable of the parameter — engineeric real value, allowed and suitable for archiving.
+- "Variable input (varIn)" — attribute for entering a new engineering value, which in the next falls into the variable.
+- "Error (err)" — obligatory attribute of any parameter, consist of the combination of the error code and short text description, like to "2:No data or connection with source". The template reserves next error codes:
+  - 1, 2 — hardware errors, when the data mostly wrong;
+  - 3, 4 — alarm border errors;
+  - 5, 6 — warning border errors;
+  - 7 — the speed error of the variable changing.
+- "Violations suppress (alSup) and delay (alDelay)" — violations generic control for suppressing and delaying.
+- "Scale: minimum (min)" and "Scale: maximum (max)" — main scale of the end variable, the output of which causes a hardware border error. The scale is also used as a scale of the variable trend display on the graphs.
+- "Logarithmic scale (log)" — the scale sign of the variable trend display on the graphs in the logarithmic scale.
+- "Dimension (ed)" — dimension (unit of measurement) of the variable.
+- "Precision (prec)" — number signs after the dot, for positive values, and precision (signs in whole), for negative ones, to display the real end variable on the screen.
 
 Functions:
-Mostly the same as the basic template "Analog signal (unified)" and the value entering attribute is additionally provided.
+- Generic processing of the raw analog input for:
+  - simple correction-calibration at the formula "in = iMult*(in+iAdd)";
+  - scaling from the hardware border [plcMin...plcMax] to the main border [min...max], applying the square scale scSqr;
+￼ !!!! The hardware borders can be inverted ones and disabled in whole for equal values of the maximum and minimum, when the main border only used.
+  - permission to exceed the border for the input value on the value of plcExcess percent;
+  - filtering the input value changing in the time Tf.
+- Processing the result variable var for violation some borders and criteria, generating the alarms and proper setting the attribute err. The alarm borders can have some hysteresis HystBnd, can be delayed on the time alDelay and can be suppressed setting alSup. Next borders and criteria are provided:
+  - missing for data or connection with source at the EVAL input value — error code 1 and alarm level 5;
+  - exceeding the input value of the hardware border — error code 1,2 and alarm level 5;
+  - exceeding the end variable of the alarm border [aMin...aMax] — error code 3,4 and alarm level 4;
+￼ !!!! Disabled at setting for equal or inverted values of the border
+  - exceeding the end variable of the warning border [wMin...wMax] — error code 5,6 and alarm level 2;
+￼ !!!! Disabled at setting for equal or inverted values of the border
+  - big motion speed of the end variable — error code 7 and alarm level 2.
+- Reverse conversion of the engineered variable value and writing to the output.
+￼ !!!! In the absence of the "Input/Output" connection, the writing is not performed and there is the stand-alone operation.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.0
-License: GPLv2','Загальний, представницький та уніфікований шаблон ручного вводу — сигналу аналогового виходу.
-Шаблон формує структуру параметру (складного тегу) аналогового виходу який може бути легко підключений до більшості віджетів та кадрів бібліотеки основних елементів інтерфейсу користувача просто вказавши об''єкт параметру, переважно через панель контролю Елемент кадр.
+Version: 1.2.0
+License: GPLv2','Загальний, представницький та уніфікований шаблон ручного вводу та сигналу аналогового виходу. Шаблон формує структуру параметру (складного тегу) ручного вводу, який може бути легко підключений до більшості віджетів та кадрів бібліотеки основних елементів інтерфейсу користувача просто вказавши об''єкт параметру, контроль переважно можна здійснювати через панель контролю Елемент кадр.
+
+Представницькою структурою параметру (складного тегу) ручного вводу є:
+- "Змінна (var)" — кінцева змінна параметру — інженерне реальне значення, доступне та придатне до архівації.
+- "Введення змінної (varIn)" — атрибут введення нового інженерного значення, який надалі потрапляє до змінної.
+- "Помилка (err)" — обов''язковий атрибут будь якого параметру, що містить комбінацію коду помилки та короткого опису, на кшталт "2:Немає даних або підключення до джерела". Шаблон резервує наступні коди помилок:
+  - 1, 2 — помилки обладнання, коли дані переважно помилкові;
+  - 3, 4 — помилки аварійної границі;
+  - 5, 6 — помилки попереджувальної границі;
+  - 7 — помилка швидкості зміни змінної.
+- "Придушення (alSup) та затримка (alDelay) порушень" — загальний контроль порушень щодо придушення та затримки.
+- "Шкала: мінімум (min)" та "Шкала: максимум (max)" — головна шкала кінцевої змінної, вихід за яку призводить до помилки апаратної границі. Шкала також використовується як шкала відображення тренду змінної на графіках.
+- "Логарифмічна шкала (log)" — ознака відображення тренду змінної на графіках у логарифмічній шкалі.
+- "Одиниця виміру (ed)" — одиниця виміру змінної.
+- "Точність (prec)" — кількість знаків після крапки, для позитивних значень, та точність (знаків загалом), для негативних, для відображення реальної кінцевої змінної на екрані.
+
+Функції:
+- Загальне опрацювання аналогового входу щодо:
+  - проста корекція-калібрування за формулою "in = iMult*(in+iAdd)";
+  - масштабування від апаратної границі [plcMin...plcMax] у головну границю [min...max], враховуючи квадратичну шкалу scSqr;
+￼ !!!! Апаратні границі може бути інвертовано та взагалі вимкнено однаковими значеннями максимуму та мінімуму, коли використовується тільки головна шкала.
+  - дозвіл на перевищення границі вхідним значенням на величину plcExcess відсотків;
+  - фільтрування зміни вхідного значення на час Tf.
+- Опрацювання кінцевої змінної var на предмет порушення деяких границь та критеріїв, генеруючи аварії та відповідно встановлюючи атрибут err. Границі аварії можуть мати деякий гістерезис HystBnd, можуть бути затримані на час alDelay та можуть бути придушені встановленням alSup. Надаються наступні границі та критерії:
+  - відсутність даних або підключення до джерела за вхідним значенням EVAL — код помилки 1 та рівень аварії 5;
+  - перевищення апаратної границі вхідним значенням — код помилки 1,2 та рівень аварії 5;
+  - перевищення аварійної границі кінцевою змінною [aMin...aMax] — код помилки 3,4 та рівень аварії 4;
+￼ !!!! Вимикається встановленням однакових або інверсних значень границі
+  - перевищення попереджувальної границі кінцевою змінною [wMin...wMax] — код помилки 5,6 та рівень аварії 2;
+￼ !!!! Вимикається встановленням однакових або інверсних значень границі
+  - велика швидкість зміни speed кінцевої змінної — код помилки 7 та рівень аварії 2.
+- Зворотне перетворення введеного інженерного значення змінної та запис у вихід.
+￼ !!!! За відсутності підключення "Входу/Виходу" запису не здійснюється та відбувається автономна робота.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.1.0
-Ліцензія: GPLv2','Унифицированный шаблон ручного ввода сигнала.
-
-Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.1.0',10,0,'JavaLikeCalc.JavaScript
+Версія: 1.2.0
+Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	{ f_err = "0"; alDelay_ = 0; }
 
 pMax = plcMax; pMin = plcMin;	//Copy for local modifies using
@@ -6873,7 +6953,8 @@ else {
 	f_err = tErr;
 	alDelay_ = 0;
 }','','',1572284562);
-INSERT INTO tmplib_base VALUES('anUnif','Analog signal (unified)','Аналоговий сигнал (уніфікований)','Аналоговый сигнал (унифицированный)','Common, representative and unified template of analog input signals processing. The template forms a structure of complex analog parameter (tag) which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object.
+INSERT INTO tmplib_base VALUES('anUnif','Analog signal, unified','Аналоговий сигнал, уніфікований','Аналоговый сигнал, унифицированный','Common, representative and unified template of analog input signals processing. The template forms a structure of complex analog parameter (tag) which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object.
+
 Functions:
 - Generic processing of the raw analog input for:
   - simple correction-calibration at the formula "in = iMult*(in+iAdd)";
@@ -6904,6 +6985,7 @@ Functions:
 Author: Roman Savochenko <roman@oscada.org>
 Version: 2.1.0
 License: GPLv2','Загальний, представницький та уніфікований шаблон обробки аналогових вхідних сигналів. Шаблон формує структуру складного аналогового параметру (тегу) який може бути легко підключений до більшості віджетів та кадрів бібліотеки основних елементів інтерфейсу користувача просто вказавши об''єкт параметру.
+
 Функції:
 - Загальне опрацювання аналогового входу щодо:
   - проста корекція-калібрування за формулою "in = iMult*(in+iAdd)";
@@ -6933,11 +7015,7 @@ License: GPLv2','Загальний, представницький та уні�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Версія: 2.1.0
-Ліцензія: GPLv2','Общий, представительский и унифицированный шаблон обработки аналоговых входных сигналов. Шаблон формирует структуру сложного аналогового параметра (тега) который может быть легко подключенный к большинству виджетов и кадров библиотеки основных элементов интерфейса пользователя просто указав объект параметра.
-
-Автор: Роман Савоченко <roman@oscada.org>
-Версия: 2.1.0
-Лицензия: GPLv2',10,0,'JavaLikeCalc.JavaScript
+Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	prevVar = EVAL_REAL;
 	alDelay_ = 0;
@@ -7040,17 +7118,31 @@ else {
 	f_err = tErr;
 	alDelay_ = 0;
 }','','',1572284562);
-INSERT INTO tmplib_base VALUES('digitBlockUnif','Discrete block (unified)','Блок дискретних (уніфікований)','Блок дискретных (унифицированный)','Common, representative and unified template of the block for union of Discrete parameters for the common control device.
-The template forms a structure of discrete parameter-block (complex tag) which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object.
+INSERT INTO tmplib_base VALUES('digitBlockUnif','Discrete block, unified','Блок дискретних, уніфікований','Блок дискретных, унифицированный','Common, representative and unified template of the block for union of Discrete parameters for the common control device. The template forms a structure of discrete parameter-block (complex tag) which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object.
+
+The representative structure of discrete parameters (complex tags) is a latch object with two characteristic states and three commands, which in the final representation may have a different meaning and name:
+- "State "Opened" (st_open)" — the state "Opened" of the latch. Is the primary status signal that can be used without the next one, when 1 (true) is "Opened", and 0 (false) is 'Closed'.
+- "State "Closed" (st_close)" — the state "Closed".
+- "Command "Open" (com)" — the command "Open" of the latch. Is the primary command signal that can be used without the next one, when 1 (true) is "Open", and 0 (false) is 'Close'.
+- "Command "Close" (close)" — the command "Close" of the latch.
+- "Command "Stop" (stop)" — the command "Stop" of the latch.
+
 Functions:
-- Direct obtaining, by link, two states (read only) and three commands (reading and writing).
+- Direct obtaining, by link, of the two states (read only) and three commands (reading and writing).
 - Possibility of holding the commands for a certain time and removing them.
 - Ability to redefine the states and commands by the appropriate settings of the interface elements, such as digStts, for statuses, and digComs, for commands.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0
-License: GPLv2','Загальний, представницький та уніфікований шаблон блоку поєднання дискретних параметрів у пристрій загального контролю.
-Шаблон формує структуру дискретного параметру-блоку (складного тегу) який може бути легко підключений до більшості віджетів та кадрів бібліотеки основних елементів інтерфейсу користувача просто вказавши об''єкт параметру.
+License: GPLv2','Загальний, представницький та уніфікований шаблон блоку поєднання дискретних параметрів у пристрій загального контролю. Шаблон формує структуру дискретного параметру-блоку (складного тегу) який може бути легко підключений до більшості віджетів та кадрів бібліотеки основних елементів інтерфейсу користувача просто вказавши об''єкт параметру.
+
+Представницькою структурою дискретного параметру (складного тегу) є об''єкт засувки із характерними двома станами та трьома командами, які у кінцевому представленні можуть мати інше значення та назву:
+- "Стан "Відкрито" (st_open)" — стан засувки "Відкрито". Є первинним сигналом стану, який може використовуватися без наступного, коли 1 (true) — "Відкрито", а 0 (false) — "Закрито".
+- "Стан "Закрито" (st_close)" — стан засувки "Відкрито".
+- "Команда "Відкрити" (com)" — команда засувки "Відкрити". Є первинним сигналом команди, який може використовуватися без наступного, коли 1 (true) — "Відкрити", а 0 (false) — "Закрити".
+- "Команда "Закрити" (close)" — команда засувки "Закрити".
+- "Команда "Зупинити" (stop)" — команда засувки "Зупинити".
+
 Функції:
 - Пряме отримання, за посиланням, двох станів (тільки читання) та трьох команд (читання та запис).
 - Можливість утримання команди протягом визначеного часу та зняття їх.
@@ -7058,10 +7150,7 @@ License: GPLv2','Загальний, представницький та уні�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.0.0
-Ліцензія: GPLv2','Блок для дискретных параметров управляющих одним аппаратом.
-
-Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.0.0',10,0,'JavaLikeCalc.JavaScript
+Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 set = false;
 if(!com.isEVal() && com && last_cmd != 1)		last_cmd = 1, set = true;
 if(!close.isEVal() && close && last_cmd != 2)last_cmd = 2, set = true;
@@ -7077,26 +7166,26 @@ else {
 		last_cmd = 0;
 	}
 }','','',1441903511);
-INSERT INTO tmplib_base VALUES('pidUnifImp','Impulse PID signal (unified, violation statuses)','Імпульсний ПІД сигнал (уніфікований, стани порушень)','ПИД импульсный сигнал (унифицированный, состояния нарушений)','Common, representative and unified template of an interface to the Proportional Integral Differential (PID) regulator based on the common analog input signal but with the PWM-output, extended by binary states of indication the violations and mostly like to the template PID signal (unified, violation statuses). The template forms a structure of the impulse PID-regulator which can be easily connected to some cadres of the main elements library of the user interface just pointing the parameter object.
+INSERT INTO tmplib_base VALUES('pidUnifImp','Impulse PID signal, unified, violation statuses','Імпульсний ПІД сигнал, уніфікований, стани порушень','ПИД импульсный сигнал, унифицированный, состояния нарушений','Common, representative and unified template of an interface to the Proportional Integral Differential (PID) regulator based on the common analog input signal but with the PWM-output, extended by binary states of indication the violations and mostly like to the template "PID signal, unified, violation statuses". The template forms a structure of the impulse PID-regulator which can be easily connected to some cadres of the main elements library of the user interface just pointing the parameter object.
 
-The representative structure of the impulse PID-regulators is mostly equal to the template "PID signal (unified, violation statuses)" and contains a number of attributes specific to the pulse output and the attribute of determining the operation of this regulator in the analog mode, that is, this template is even more generalizable:
+The representative structure of the impulse PID-regulators is mostly equal to the template "PID signal, unified, violation statuses" and contains a number of attributes specific to the pulse output and the attribute of determining the operation of this regulator in the analog mode, that is, this template is even more generalizable:
 - "Impulse output up (impQup)" and "Impulse output down (impQdwn)" — signals of the PWM-output.
 - "Mode: analog (analog)" — a sign of working the regulator in the analog output mode.
 
 Functions:
-Mostly the same as the basic template "PID signal (unified, violation statuses)" and the impulse-specific attributes are additionally provided: "Impulse output up", "Impulse output down", "Mode: analog", "T impulses period", "T minimal impulse", "Impulse rate factor".
+Mostly the same as the basic template "PID signal, unified, violation statuses" and the impulse-specific attributes are additionally provided: "Impulse output up", "Impulse output down", "Mode: analog", "T impulses period", "T minimal impulse", "Impulse rate factor".
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: DIYA LTD
 Version: 1.1.0
-License: GPLv2','Загальний, представницький та уніфікований шаблон інтерфейсу до Пропорційного Інтегрального Диференційного (ПІД) регулятору заснованому на аналоговому вхідному сигналі але із ШІМ-виходом, розширеному бінарними станами індикації порушень та переважно схоже на шаблон ПІД сигнал (уніфікований, стани порушень). Шаблон формує структуру імпульсного ПІД-регулятору, який може бути легко підключений до деяких кадрів та віджетів бібліотеки основних елементів інтерфейсу користувача, просто вказавши об''єкт параметру.
+License: GPLv2','Загальний, представницький та уніфікований шаблон інтерфейсу до Пропорційного Інтегрального Диференційного (ПІД) регулятору заснованому на аналоговому вхідному сигналі але із ШІМ-виходом, розширеному бінарними станами індикації порушень та переважно схоже на шаблон "ПІД сигнал, уніфікований, стани порушень". Шаблон формує структуру імпульсного ПІД-регулятору, який може бути легко підключений до деяких кадрів та віджетів бібліотеки основних елементів інтерфейсу користувача, просто вказавши об''єкт параметру.
 
-Представницька структура імпульсних ПІД-регуляторів переважно еквівалентна шаблону "ПІД сигнал (уніфікований, стани порушень)" та містить низку атрибутів, специфічних до імпульсного виходу та атрибут визначення роботи цього регулятору у аналоговому режимі, тобто цей шаблон є навіть більш узагальнювальним:
+Представницька структура імпульсних ПІД-регуляторів переважно еквівалентна шаблону "ПІД сигнал, уніфікований, стани порушень" та містить низку атрибутів, специфічних до імпульсного виходу та атрибут визначення роботи цього регулятору у аналоговому режимі, тобто цей шаблон є навіть більш узагальнювальним:
 - "Імпульсний вихід у гору (impQup)" та "Імпульсний вихід до низу (impQdwn)" — сигнали ШІМ-виходу.
 - "Режим: аналоговий (analog)" — ознака роботи регулятору у режимі аналогового виходу.
 
 Функції:
-Переважно те саме що у базового шаблону "ПІД сигнал (уніфікований, стани порушень)" та додатково надаються імпульсно-специфічні атрибути: "Імпульсний вихід у гору", "Імпульсний вихід до низу", "Режим: аналоговий", "T період імпульсів", "Мінімальна довжина імпульсу", "Рейтинг фактор імпульсів".
+Переважно те саме що у базового шаблону "ПІД сигнал, уніфікований, стани порушень" та додатково надаються імпульсно-специфічні атрибути: "Імпульсний вихід у гору", "Імпульсний вихід до низу", "Режим: аналоговий", "T період імпульсів", "Мінімальна довжина імпульсу", "Рейтинг фактор імпульсів".
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсоровано: ТОВ "ДІЯ"
@@ -7157,26 +7246,25 @@ else {
 	f_err = tErr;
 	alDelay_ = 0;
 }','','',1572862020);
-INSERT INTO tmplib_base VALUES('anUnifSt','Analog signal (unified, violation statuses)','Аналог. сигнал (уніфікований, стани порушень)','Аналог. сигн. (унифицированный, состояния нарушений)','Common, representative and unified template of analog input signals processing, extended by binary states of indication the violations. The template grounded on the base template "Analog signal (unified)" with its representative structure and some differences characteristic to independent development and expansion.
+INSERT INTO tmplib_base VALUES('anUnifSt','Analog signal, unified, violation statuses','Аналоговий сигнал, уніфікований, стани порушень','Аналоговый сигнал, унифицированный, состояния нарушений','Common, representative and unified template of analog input signals processing, extended by binary states of indication the violations. The template grounded on the base template "Analog signal, unified" with its representative structure and some differences characteristic to independent development and expansion.
+
 Binary states were provided for the convenient use of algorithms of operation at the borders of violations of the parameter object, preferably in the block diagrams of general control algorithms.
 
 Functions:
-Mostly the same as the basic "Analog signal (unified)" and the borderline signs are additionally provided: "H", "L", "HH", "LL", "EVAL".
+Mostly the same as the basic "Analog signal, unified" and the borderline signs are additionally provided: "H", "L", "HH", "LL", "EVAL".
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.2.0
-License: GPLv2','Загальний, представницький та уніфікований шаблон обробки аналогових вхідних сигналів, розширений бінарними станами індикації порушень. Шаблон засновано на базовому шаблоні "Аналоговий сигнал (уніфікований)" з відповідною до нього представницькою структурою та деякими відмінностями, характерними до незалежного розвитку та розширення.
+License: GPLv2','Загальний, представницький та уніфікований шаблон обробки аналогових вхідних сигналів, розширений бінарними станами індикації порушень. Шаблон засновано на базовому шаблоні "Аналоговий сигнал, уніфікований" з відповідною до нього представницькою структурою та деякими відмінностями, характерними до незалежного розвитку та розширення.
+
 Бінарні стани передбачалося для зручного використання у алгоритмах роботи за границями порушення об''єкту параметру, переважно у блокових схемах загальних алгоритмів керування.
 
 Функції:
-Переважно відповідають базовому шаблону "Аналоговий сигнал (уніфікований)" та додатково надаються ознаки порушень границь: "H", "L", "HH", "LL", "EVAL".
+Переважно відповідають базовому шаблону "Аналоговий сигнал, уніфікований" та додатково надаються ознаки порушень границь: "H", "L", "HH", "LL", "EVAL".
 
 Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.2.0
-Ліцензія: GPLv2','Унифицированный шаблон обработки аналогового входного сигнала.
-
-Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.2.0',10,0,'JavaLikeCalc.JavaScript
+Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	prevVar = EVAL_REAL;
 	alDelay_ = 0;
@@ -7277,7 +7365,7 @@ else {
 	f_err = tErr;
 	alDelay_ = 0;
 }','','',1572284562);
-INSERT INTO tmplib_base VALUES('pidUnif','PID signal (unified, violation statuses)','ПІД сигнал (уніфікований, стани порушень)','ПИД сигнал (унифицированный, состояния нарушений)','Common, representative and unified template of an interface to the Proportional Integral Differential (PID) regulator based on the common analog input signal, extended by binary states of indication the violations. The template forms a structure of the analog PID-regulator which can be easily connected to some cadres and widgets of the main elements library of the user interface just pointing the parameter object.
+INSERT INTO tmplib_base VALUES('pidUnif','PID signal, unified, violation statuses','ПІД сигнал, уніфікований, стани порушень','ПИД сигнал, унифицированный, состояния нарушений','Common, representative and unified template of an interface to the Proportional Integral Differential (PID) regulator based on the common analog input signal, extended by binary states of indication the violations. The template forms a structure of the analog PID-regulator which can be easily connected to some cadres and widgets of the main elements library of the user interface just pointing the parameter object.
 
 The representative structure of the analog PID-regulators is:
 - "Variable (var)" — end variable of the parameter — engineeric real value, allowed and suitable for archiving.
@@ -7516,8 +7604,15 @@ else {
 	f_err = tErr;
 	alDelay_ = 0;
 }','','',1572284562);
-INSERT INTO tmplib_base VALUES('codeState','Code state','Стан за кодом','Состояние по коду','A variant of the common, representative and unified template of the block for union of Discrete parameters, expanded by more than two states and three commands that can be encoded by an integer value.
-The template forms a structure of parameter (complex tag) which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object.
+INSERT INTO tmplib_base VALUES('codeState','Code state','Стан за кодом','Состояние по коду','A variant of the common, representative and unified template of the block for union of Discrete parameters, expanded by more than two states and three commands that can be encoded by an integer value. The template forms a structure of parameter (complex tag) which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object.
+
+The representative structure of the parameter (complex tag) of the code state is:
+- "State "Text" (st_text)" — text description of the state.
+- "Command "Text" (com_text)" — text of the command.
+- "Commands (digComs)" — common list of the allowed commands, to form the selecting.
+- "Error (err)" — obligatory attribute of any parameter, consist of the combination of the error code and short text description, like to "2:No data or connection with source". The template reserves next error codes:
+  - 1 — hardware errors, when the data mostly wrong.
+- "Violations suppress (alSup) and delay (alDelay)" — violations generic control for suppressing and delaying.
 
 Functions:
 - Direct receiving, by link, the status code and the command (read only), as well as setting the status text according to the list of states stats.
@@ -7532,12 +7627,19 @@ Functions:
   - f_frq [IN] — frequency of the calculation, the template IO;
   - this [IN] — reference to the parameter object, what executing the template;
   - ctx [IN] — object of the user context, what saved between the execution cycles.
-- Formation of the violation and the corresponding setting of the attribute err, provided at setting in the processing procedure or lack of the communication (in = EVAL).
+- Formation of the violation and the corresponding setting of the attribute err, provided at setting in the processing procedure or lack of the communication (in = EVAL). What can be delayed on the time alDelay and can be suppressed setting alSup.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.2.0
-License: GPLv2','Варіант загального, представницького та уніфікованого шаблону блоку поєднання дискретних параметрів, розширений більш ніж двома станами та трьома командами які можна закодувати цілим значенням.
-Шаблон формує структуру параметру (складного тегу) стану за кодом який може бути легко підключений до більшості віджетів та кадрів бібліотеки основних елементів інтерфейсу користувача просто вказавши об''єкт параметру.
+License: GPLv2','Варіант загального, представницького та уніфікованого шаблону блоку поєднання дискретних параметрів, розширений більш ніж двома станами та трьома командами які можна закодувати цілим значенням. Шаблон формує структуру параметру (складного тегу) стану за кодом який може бути легко підключений до більшості віджетів та кадрів бібліотеки основних елементів інтерфейсу користувача просто вказавши об''єкт параметру.
+
+Представницькою структурою параметру (складного тегу) стану за кодом є:
+- "Стан "Текст" (st_text)" — текстовий опис стану.
+- "Команда "Текст" (com_text)" — текст команди.
+- "Команди (digComs)" — загальний перелік можливих команд, для формування обрання.
+- "Помилка (err)" — обов''язковий атрибут будь якого параметру, що містить комбінацію коду помилки та короткого опису, на кшталт "1:Немає даних або підключення до джерела". Шаблон резервує наступні коди помилок:
+  - 1 — помилки обладнання, коли дані переважно помилкові.
+- "Придушення (alSup) та затримка (alDelay) порушень" — загальний контроль порушень щодо придушення та затримки.
 
 Функції:
 - Пряме отримання, за посиланням, коду стану та команди (тільки читання), а також встановлення тексту стану згідно до переліку станів stats.
@@ -7552,14 +7654,11 @@ License: GPLv2','Варіант загального, представницьк
   - f_frq [IN] — частота обчислення, шаблонний ВВ;
   - this [IN] — посилання на об''єкт параметру, що виконує шаблон;
   - ctx [IN] — об''єкт користувацького контексту, що зберігається між циклами виклику.
-- Формування порушення та відповідне встановлення атрибуту err, за умови встановлення у процедурі обробки або відсутності зв''язку (in = EVAL).
+- Формування порушення та відповідне встановлення атрибуту err, за умови встановлення у процедурі обробки або відсутності зв''язку (in = EVAL). Що може бути затримано на час alDelay та придушено встановленням alSup.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.2.0
-Ліцензія: GPLv2','Формирование состояния по коду
-
-Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.2.0',10,0,'JavaLikeCalc.JavaScript
+Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	f_err = "0";
 	alDelay_ = 0;
@@ -7633,7 +7732,7 @@ else {
 	f_err = tErr;
 	alDelay_ = 0;
 }','','',1572284562);
-INSERT INTO tmplib_base VALUES('ntf','Notificator by SMS, EMail(SMTP)','Повідомлювач за SMS, EMail(SMTP)','Уведомитель посредством SMS, EMail(SMTP)','The complex template of the notification contains of parts of the dispatcher and the output user protocol of notification by EMail(SMTP) and SMS.
+INSERT INTO tmplib_base VALUES('ntf','Notificator by SMS, EMail-SMTP','Повідомлювач за SMS, EMail-SMTP','Уведомитель посредством SMS, EMail-SMTP','The complex template of the notification contains of parts of the dispatcher and the output user protocol of notification by EMail(SMTP) and SMS.
 
 THE DISPATCHER can be performed for pointed messages of the message buffer of OpenSCADA and applied on the Logical level or the controller object of the module JavaLikeCalc.
 
@@ -8096,7 +8195,7 @@ The template can control the containers of data source objects, constructed both
   - TrCntrFldAddr — address of the transport control field in the source object, for example — "%2fcntr%2fcfg%2fADDR" for "ModBus"; what can be obtained in a configurator at the history of pointing on the control field in the status line.
 
 Author: Roman Savochenko <roman@oscada.org>
-Sponsored by: BLUE STAR GROUP Ltd
+Sponsored by: Elyor Turaboev, BLUE STAR GROUP Ltd
 Version: 1.1.0
 License: GPLv2','Шаблон служби опрацювання вхідних ініціативних підключень створено для надання останньої ланки реалізації та підтримки концепції збору даних у пасивному режимі та ініціативного підключення, а саме — контролю асоціативних транспортів, створюваних вхідним транспортом за кожним підключенням.
 
@@ -8114,7 +8213,7 @@ License: GPLv2','Шаблон служби опрацювання вхідних
   - TrCntrFldAddr — адреса поля контролю транспорту у об''єкті джерела, наприклад — "%2fcntr%2fcfg%2fADDR" для "ModBus"; що може бути отримано у конфігураторі за історією наведення на поля контролю у рядку статусу.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Спонсорування: ТОВ BLUE STAR GROUP
+Спонсорування: Еліор Турабоєв, ТОВ BLUE STAR GROUP
 Версія: 1.1.0
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
@@ -10303,7 +10402,7 @@ Currently, only value archives can be used as a data source, either directly to 
 - width — width of the trend curve, by default 2.
 
 Author: Roman Savochenko <roman@oscada.org>
-Sponsored by: Magomed
+Sponsored by: Magomed, SAVTECH
 Version: 1.3.1
 License: GPLv2','Побудова діаграми трендів у SVG, яка може надалі вбудовуватися у XHTML-документу, для даних за вказаний період часу [(end-size)...end] та із джерел srcs.
 
@@ -10324,7 +10423,7 @@ License: GPLv2','Побудова діаграми трендів у SVG, яка
 - width — ширина кривої тренду, по замовченню 2.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Спонсоровано: Магомед
+Спонсоровано: Магомед, SAVTECH
 Версія: 1.3.1
 Ліцензія: GPLv2','Построение диаграммы трендов в SVG, которая может далее встраиваться в XHTML-документ, для данных за указанный период времени [(end-size)...end] и из источников srcs.
 
@@ -10345,7 +10444,7 @@ License: GPLv2','Побудова діаграми трендів у SVG, яка
 - width — ширина кривой тренда, по умолчанию 2.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Спонсировано: Магомед
+Спонсировано: Магомед, SAVTECH
 Версия: 1.3.1
 Лицензия: GPLv2',1,10,0,'function strChars(inS) {
 	for(inSz = 0, off = 0; off < inS.length; inSz++)

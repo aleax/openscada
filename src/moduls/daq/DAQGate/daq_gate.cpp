@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.DAQGate file: daq_gate.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.2.1"
+#define MOD_VER		"2.2.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -441,7 +441,7 @@ void *TMdContr::Task( void *icntr )
 		    // The bottom time border processing
 		    for(map<string, time_t>::iterator iLM = cntr.mStatWork[iSt].second.lstMess.begin();
 								iLM != cntr.mStatWork[iSt].second.lstMess.end(); ++iLM)
-			//  The new algorithm, not tested yet !!!!
+			//  The new algorithm
 			if(!iLM->second) iLM->second = SYS->sysTm()-3600*cntr.restDtTm();
 			else {
 			    time_t mRdTm = iLM->second, mRdTm_ = s2i(prmNd->attr("tm"));
@@ -806,7 +806,7 @@ TMdPrm::~TMdPrm( )
 void TMdPrm::postEnable( int flag )
 {
     TParamContr::postEnable(flag);
-    //if(vlCfg())	setVlCfg(NULL);		//!!!! For prevent SHIFR and other lost at the parameter restore, by lock, after it deletion try
+    //if(vlCfg())	setVlCfg(NULL);		//!!!! For prevent SHIFR and other losses at the parameter restore, by lock, after it deletion try
     if(!vlElemPresent(&pEl))	vlElemAtt(&pEl);
 }
 
