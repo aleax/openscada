@@ -146,7 +146,7 @@ class TCntrNode
 	ResMtx &dataRes( ) { return mDataM; }	//Generic node's data mutex
 						//Allowed for using by heirs into the data resources allocation
 						//  not for long-term functions-tasks resources allocation!
-	virtual const char *nodeName( ) const = 0;
+	virtual const char *nodeName( ) const		{ return ""; }
 	virtual const char *nodeNameSYSM( ) const	{ return ""; }
 	string nodePath( char sep = 0, bool from_root = true ) const;
 

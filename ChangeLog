@@ -1,6 +1,13 @@
+2020-04-06 Roman (stable)
+- !!: The fuction TCntrNode::nodeName() is set to not abstract one and return "", for the possibility it partially lost
+    and crash in the TCntrNode destructor.
+- !!:FIX:UI.{Vision,WebVison}: Fixed in use abs() for the long long integer, replaced to llabs().
+
+
 2020-04-05 Roman (stable)
 - data/*.spec,{debian,debian_mod}/changelog: rom_as@oscada.org and OpenSCADA <oscada@oscada.org> replaced by roman@oscada.org.
-- DOC: The document "Industrial devices library", "Low level sensors and chips library" and "Service procedures library" appended for downloading to offline.
+- DOC: The document "Industrial devices library", "Low level sensors and chips library" and "Service procedures library" appended
+    for downloading to offline.
     The document address "Regulation elements library" fixed to Libs/Regulation_elements.
 - LibsDB.OscadaLibs: base,LowDevLib,techApp,servProc,doc,regEl: The description is some appended for common description and sponsors.
 - LibsDB.vcaBase: mnEls,doc: The description is some appended for common description and sponsors.
