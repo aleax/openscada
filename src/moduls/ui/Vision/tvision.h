@@ -25,9 +25,7 @@
 
 #include <QMainWindow>
 
-#include <telem.h>
-#include <tuis.h>
-#include "tsys.h"
+#include <tsys.h>
 #include "../VCAEngine/types.h"
 
 #undef _
@@ -63,18 +61,22 @@ class TVision : public TUI
 	string userPass( )			{ return mUserPass; }
 	string runPrjs( )			{ return mRunPrjs; }
 	bool exitLstRunPrjCls( )		{ return mExitLstRunPrjCls; }
+	bool dropCommonWdgStls( )		{ return mDropCommonWdgStls; }
 	string VCAStation( )			{ return mVCAStation; }
 	int restoreTime( )			{ return mRestTime; }
-	float cachePgLife( )			{ return mCachePgLife; }
+	double cachePgLife( )			{ return mCachePgLife; }
+	int cachePgSz( )			{ return mCachePgSz; }
 	string uiPropGet( const string &prop, const string &user = "root" );
 
 	void setUserStart( const string &user )	{ mUserStart = user; modif(); }
 	void setUserPass( const string &pass )	{ mUserPass = pass; modif(); }
 	void setRunPrjs( const string &prj )	{ mRunPrjs = prj; modif(); }
 	void setExitLstRunPrjCls( bool en )	{ mExitLstRunPrjCls = en; modif(); }
+	void setDropCommonWdgStls( bool en )	{ mDropCommonWdgStls = en; modif(); }
 	void setVCAStation( const string &stat ){ mVCAStation = stat; modif(); }
 	void setRestoreTime( int vl )		{ mRestTime = vl; modif(); }
-	void setCachePgLife( float vl )		{ mCachePgLife = vmax(0,vmin(1000,vl)); modif(); }
+	void setCachePgLife( double vl )	{ mCachePgLife = vmax(0, vmin(1000,vl)); modif(); }
+	void setCachePgSz( int vl )		{ mCachePgSz = vmax(0, vmin(100,vl)); modif(); }
 	void uiPropSet( const string &prop, const string &vl, const string &user = "root" );
 
 	void modStart( );
@@ -119,11 +121,15 @@ class TVision : public TUI
 	string		mRunPrjs;		//Run projects list on the module start
 	vector<WdgShape*> shapesWdg;
 	bool		mExitLstRunPrjCls,	//Exit program on last run project close
+			mDropCommonWdgStls,	//Drops widget styles to the common one for some specific widgets in the runtime
 			mEndRun;		//End run command. Close all windows
 	int		mRestTime;		//Restore connection time, seconds
-	float		mCachePgLife;		//Cached pages lifetime
+	double		mCachePgLife;		//Cached pages lifetime
+	int		mCachePgSz;		//Cached pages number
 
 	int		mScrnCnt;
+
+	ResMtx		mnWindsRes;
 };
 
 extern TVision *mod;

@@ -144,6 +144,13 @@ void TConfig::cfgKeyUseAll( bool val )
 	    p->second->setKeyUse(val);
 }
 
+void TConfig::cfgToDefault( )
+{
+    for(TCfgMap::iterator p = value.begin(); p != value.end(); ++p)
+	if(!(p->second->fld().flg()&TCfg::Key) && !p->second->reqKey() && p->second->view())
+	    p->second->toDefault(true);
+}
+
 void TConfig::setElem( TElem *Elements, bool first )
 {
     if(mElem == Elements && !first) return;
@@ -204,11 +211,13 @@ void TConfig::cntrCmdProc( XMLNode *opt, const string &elem, const string &user,
     }
 }
 
-TVariant TConfig::objFunc( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TConfig::objFunc( const string &iid, vector<TVariant> &prms,
+    const string &user, int perm, const string &owner )
 {
     // ElTp cfg(string nm) - config variable 'nm' get.
     //  nm - config variable name.
-    if(iid == "cfg" && prms.size() >= 1) {
+    if(iid == "cfg" && prms.size() >= 1 &&
+	    SYS->security().at().access(user,SEC_RD,TSYS::strParse(owner,0,":"),TSYS::strParse(owner,1,":"),perm)) {
 	TCfg *cf = at(prms[0].getS(), true);
 	if(!cf) return EVAL_REAL;
 	return *cf;
@@ -216,7 +225,8 @@ TVariant TConfig::objFunc( const string &iid, vector<TVariant> &prms, const stri
     // ElTp cfgSet(string nm, ElTp val) - set config variable 'nm' to 'val'.
     //  nm - config variable name;
     //  val - variable value.
-    if(iid == "cfgSet" && prms.size() >= 2) {
+    if(iid == "cfgSet" && prms.size() >= 2 &&
+	    SYS->security().at().access(user,SEC_WR,TSYS::strParse(owner,0,":"),TSYS::strParse(owner,1,":"),perm)) {
 	TCfg *cf = at(prms[0].getS(), true);
 	if(!cf || (cf->fld().flg()&TFld::NoWrite)) return false;
 	*(TVariant*)cf = prms[1];
@@ -238,13 +248,8 @@ TCfg::TCfg( TFld &fld, TConfig &owner ) : mView(true), mKeyUse(false), mNoTransl
     }
     else mFld = &fld;
 
-    switch(mFld->type()) {
-	case TFld::String:	setType(TVariant::String, true, (fld.flg()&TCfg::Key)); TVariant::setS(mFld->def());	break;
-	case TFld::Integer:	setType(TVariant::Integer, true); TVariant::setI(s2ll(mFld->def()));	break;
-	case TFld::Real:	setType(TVariant::Real, true);	  TVariant::setR(s2r(mFld->def()));	break;
-	case TFld::Boolean:	setType(TVariant::Boolean, true); TVariant::setB((bool)s2i(mFld->def()));break;
-	default: break;
-    }
+    toDefault();
+
     if(fld.flg()&TCfg::Hide)	mView = false;
 }
 
@@ -257,13 +262,8 @@ TCfg::TCfg( const TCfg &src ) : mView(true), mKeyUse(false), mNoTransl(false), m
     }
     else mFld = src.mFld;
 
-    switch(mFld->type()) {
-	case TFld::String:	setType(TVariant::String, true, (src.mFld->flg()&TCfg::Key)); TVariant::setS(mFld->def());	break;
-	case TFld::Integer:	setType(TVariant::Integer, true); TVariant::setI(s2ll(mFld->def()));	break;
-	case TFld::Real:	setType(TVariant::Real, true);	  TVariant::setR(s2r(mFld->def()));	break;
-	case TFld::Boolean:	setType(TVariant::Boolean, true); TVariant::setB((bool)s2i(mFld->def()));break;
-	default: break;
-    }
+    toDefault();
+
     if(src.mFld->flg()&TCfg::Hide)	mView = false;
 
     operator=(src);
@@ -297,9 +297,34 @@ void TCfg::setReqKey( bool vl )
     mOwner.reqKeysUpdate();
 }
 
+void TCfg::toDefault( bool notSetType )
+{
+    if(!mFld)	return;
+
+    switch(mFld->type()) {
+	case TFld::String:
+	    if(!notSetType) setType(TVariant::String, true, (mFld->flg()&TCfg::Key));
+	    TVariant::setS(mFld->def());
+	    break;
+	case TFld::Integer:
+	    if(!notSetType) setType(TVariant::Integer, true);
+	    TVariant::setI(s2ll(mFld->def()));
+	    break;
+	case TFld::Real:
+	    if(!notSetType) setType(TVariant::Real, true);
+	    TVariant::setR(s2r(mFld->def()));
+	    break;
+	case TFld::Boolean:
+	    if(!notSetType) setType(TVariant::Boolean, true);
+	    TVariant::setB((bool)s2i(mFld->def()));
+	    break;
+	default: break;
+    }
+}
+
 string TCfg::getSEL( )
 {
-    if(!(mFld->flg()&TFld::Selected))	throw TError("Cfg", _("Element type is not selective!"));
+    if(!(mFld->flg()&TFld::Selectable))	throw TError("Cfg", _("Element type is not selective!"));
     switch(type()) {
 	case TVariant::String:	return mFld->selVl2Nm(getS());
 	case TVariant::Integer:	return mFld->selVl2Nm(getI());
@@ -375,9 +400,10 @@ void TCfg::setS( const string &ival )
 	    mOwner.mRes.lock();
 	    string tVal = TVariant::getS();
 	    if(extVal() && (fld().flg()&TFld::TransltText) && !noTransl() && ival.find(char(0)) == string::npos) {
-		if(Mess->lang2Code()==Mess->lang2CodeBase()) TVariant::setS(ival+string(2,0)+getS(ExtValThree));
+		if(Mess->lang2Code() == Mess->lang2CodeBase()) TVariant::setS(ival+string(2,0)+getS(ExtValThree));
 		else TVariant::setS(getS(ExtValOne)+string(1,0)+ival+string(1,0)+getS(ExtValThree));
 	    }
+	    else if(fld().flg()&TCfg::Key) TVariant::setS(TSYS::strEncode(ival,TSYS::Limit,i2s(fld().len())));
 	    else TVariant::setS(ival);
 	    mOwner.mRes.unlock();
 	    bool mInCfgCh_ = mInCfgCh;
@@ -408,7 +434,7 @@ void TCfg::setR( double ival )
 	case TVariant::Integer:	setI((ival==EVAL_REAL) ? EVAL_INT : (int64_t)ival);	break;
 	case TVariant::Boolean:	setB((ival==EVAL_REAL) ? EVAL_BOOL : (bool)ival);	break;
 	case TVariant::Real: {
-	    if(!(mFld->flg()&TFld::Selected) && mFld->selValR()[0] < mFld->selValR()[1])
+	    if(!(mFld->flg()&TFld::Selectable) && mFld->selValR()[0] < mFld->selValR()[1])
 		ival = vmin(mFld->selValR()[1], vmax(mFld->selValR()[0],ival));
 	    double tVal = TVariant::getR();
 	    TVariant::setR(ival);
@@ -435,7 +461,7 @@ void TCfg::setI( int64_t ival )
 	case TVariant::Real:	setR((ival==EVAL_INT) ? EVAL_REAL : ival);	break;
 	case TVariant::Boolean:	setB((ival==EVAL_INT) ? EVAL_BOOL : (bool)ival);break;
 	case TVariant::Integer: {
-	    if(!(mFld->flg()&TFld::Selected) && mFld->selValI()[0] < mFld->selValI()[1])
+	    if(!(mFld->flg()&TFld::Selectable) && mFld->selValI()[0] < mFld->selValI()[1])
 		ival = vmin(mFld->selValI()[1], vmax(mFld->selValI()[0],ival));
 	    int tVal = TVariant::getI();
 	    TVariant::setI(ival);
@@ -482,7 +508,7 @@ void TCfg::setB( char ival )
 
 void TCfg::setSEL( const string &ival, uint8_t RqFlg )
 {
-    if(!(mFld->flg()&TFld::Selected)) throw TError("Cfg", _("Element type is not selective!"));
+    if(!(mFld->flg()&TFld::Selectable)) throw TError("Cfg", _("Element type is not selective!"));
     switch(type()) {
 	case TVariant::String:	setS(mFld->selNm2VlS(ival), RqFlg);	break;
 	case TVariant::Integer:	setI(mFld->selNm2VlI(ival), RqFlg);	break;

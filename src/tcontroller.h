@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tcontroller.h
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -95,11 +95,11 @@ class TController : public TCntrNode, public TConfig
 	void disable( );
 
 	// Parameters
-	void list( vector<string> &list ) const		{ chldList(mPrm,list); }
-	bool present( const string &name ) const	{ return chldPresent(mPrm,name); }
-	void add( const string &name, unsigned type );
-	void del( const string &name, int full = TParamContr::RM_Exit )	{ chldDel(mPrm,name,-1,full); }
-	AutoHD<TParamContr> at( const string &name, const string &who = "th_contr" ) const	{ return chldAt(mPrm,name); }
+	void list( vector<string> &list ) const	{ chldList(mPrm, list); }
+	bool present( const string &id ) const	{ return chldPresent(mPrm, id); }
+	string add( const string &id, unsigned type );
+	void del( const string &id, int full = TParamContr::RM_Exit )	{ chldDel(mPrm, id, -1, full); }
+	AutoHD<TParamContr> at( const string &id, const string &who = "th_contr" ) const	{ return chldAt(mPrm, id); }
 
 	// Redundancy
 	//  In redundancy now
@@ -114,7 +114,7 @@ class TController : public TCntrNode, public TConfig
 	virtual void redntDataUpdate( );
 
 	virtual string catsPat( );	//Individual categories pattern for messages of the controller
-	void alarmSet( const string &mess, int lev = -TMess::Crit, const string &prm = "" );
+	void alarmSet( const string &mess, int lev = -TMess::Crit, const string &prm = "", bool force = false );
 
 	TTypeDAQ &owner( ) const;
 
@@ -133,9 +133,9 @@ class TController : public TCntrNode, public TConfig
 
 	virtual TParamContr *ParamAttach( const string &name, int type );
 
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
-	bool cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
 	void preDisable( int flag );		//Disable if delete
 	void postDisable( int flag );		//Delete all DB if flag 1

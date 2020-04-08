@@ -3,15 +3,15 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2018.
+# Roman Savochenko <roman@oscada.org>, 2010-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-15 23:30+0300\n"
+"POT-Creation-Date: 2020-03-22 17:18+0200\n"
 "PO-Revision-Date: 2009-08-26 08:21+0200\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: de <>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -110,6 +110,12 @@ msgstr "mcsek"
 msgid "Ready"
 msgstr "Fertig"
 
+msgid "Page"
+msgstr "Seite"
+
+msgid "View access is not permitted."
+msgstr "Der Zugriff auf Ansichten ist nicht zulässig."
+
 msgid "Today"
 msgstr "Heute"
 
@@ -170,12 +176,28 @@ msgstr "November"
 msgid "December"
 msgstr "Dezember"
 
+msgid "Field for displaying and changing the current user."
+msgstr "Feld zum Anzeigen und Ändern des aktuellen Benutzers."
+
+msgid "Field for displaying and changing the used interface style."
+msgstr "Feld zum Anzeigen und Ändern des verwendeten Schnittstellenstils."
+
+msgid "Alarm level: %1"
+msgstr "Stufe der Störung: %1"
+
 #, c-format
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
 "---- Parameters of the module section '%s' of the configuration file ----\n"
 "SessTimeLife <min>      Lifetime of the sessions in minutes (by default, "
 "10).\n"
+"SessLimit    <numb>     Maximum number of the sessions (by default 5).\n"
+"CachePgLife  <hours>    Lifetime of the pages in the cache (by default 1).\n"
+"CachePgSz    <numb>     Maximum number of the pages in the cache (by default "
+"10).\n"
+"PNGCompLev   <lev>      Compression level [-1..9] of the creating PNG-"
+"images.\n"
+"ImgResize    <0|1>      Resizing raster images on the server side.\n"
 "\n"
 msgstr ""
 "======================== Optionen des Moduls <%s:%s> "
@@ -183,13 +205,23 @@ msgstr ""
 "------ Parameter des Modulabschnitts '%s' der Konfigurationsdatei ------\n"
 "SessTimeLife <Min>      Lebensdauer der Sitzungen in Minuten (standardmäßig "
 "10).\n"
+"SessLimit    <Anzahl>   Maximale Anzahl der Sitzungen (standardmäßig 5).\n"
+"CachePgLife  <uhr>      Die Lebensdauer von Seiten im Cache (Standard = 1).\n"
+"CachePgSz    <Anzahl>   Maximale Anzahl der Seiten im Cache (Standard 10).\n"
+"PNGCompLev   <lev>      Komprimierungsgrad [-1..9] der erstellenden PNG-"
+"Bilder.\n"
+"ImgResize    <0|1>      Ändern der Größe von Rasterbildern auf der "
+"Serverseite.\n"
 "\n"
 
-msgid "Connecting to the opened session"
-msgstr "Verbindung zur geöffneten Sitzung herstellen"
+msgid "close"
+msgstr "schließen"
 
-msgid "Creating a new session for the existing project"
-msgstr "Erstellen einer neuen Sitzung für das vorhandene Projekt"
+msgid "Opened sessions of the projects"
+msgstr "Eröffnete Sitzungen der Projekte"
+
+msgid "Available projects"
+msgstr "Verfügbare Projekte"
 
 msgid "There is no session and project of the VCA engine for the user!"
 msgstr ""
@@ -203,6 +235,20 @@ msgstr ""
 msgid "Going to the session '%s' for the project '%s' ..."
 msgstr "Gehen Sie zu Session '%s' für Projekt '%s' ..."
 
+msgid "Going to the main page ..."
+msgstr "Zur Hauptseite gehen ..."
+
+#, c-format
+msgid "The session '%s' is closed."
+msgstr "Die Sitzung '%s' ist geschlossen."
+
+#, c-format
+msgid "You '%s' have no access to close sessions!"
+msgstr "Sie '%s' haben keinen Zugriff auf geschlossene Sitzungen!"
+
+msgid "Going to the different session ..."
+msgstr "Zur anderen Sitzung gehen ..."
+
 #, c-format
 msgid "The specified project/session '%s' is false!"
 msgstr "Spitzes Projekt/Sitzung '%s' ist falsch!"
@@ -215,14 +261,46 @@ msgstr "Fehler auf der Seite '%s': %s"
 msgid "Wrong session '%s'."
 msgstr "Falsche Sitzung '%s'."
 
+msgid "State"
+msgstr "Zustand"
+
+msgid "Sessions"
+msgstr "Sitzungen"
+
 msgid "Module options"
 msgstr "Optionen des Moduls"
 
-msgid "Lifetime of the sessions, minutes"
-msgstr "Lebensdauer der Sitzungen, Minuten"
+msgid "Lifetime and maximum number of the sessions"
+msgstr "Lebensdauer und maximale Anzahl der Sitzungen"
 
-msgid "Sessions limit"
-msgstr "Session Limit"
+msgid ""
+"The time is specified in minutes, which defines the inactivity interval for "
+"closing the WEB-sessions."
+msgstr ""
+"Die Zeit wird in Minuten angegeben, die das Inaktivitätsintervall zum "
+"Schließen der WEB-Sitzungen definiert."
+
+msgid "The number defines a limit of opened WEB-sessions."
+msgstr "Die Anzahl definiert ein Limit für geöffnete WEB-Sitzungen."
+
+msgid "Lifetime and maximum number of the cached pages"
+msgstr "Lebensdauer und maximale Anzahl der zwischengespeicherten Seiten"
+
+msgid ""
+"The time is specified in hours, which defines the inactivity interval for "
+"closing pages in the cache.\n"
+"Zero value of the time excludes the closing of pages in the cache."
+msgstr ""
+"Die Zeit wird in Stunden angegeben, die das Inaktivitätsintervall für das "
+"Schließen von Seiten im Cache definiert.\n"
+"Ein Nullwert der Zeit schließt das Schließen von Seiten im Cache aus."
+
+msgid ""
+"The number defines a limit of pages in the cache.\n"
+"Zero value of the number excludes the cache limit."
+msgstr ""
+"Die Anzahl definiert eine Begrenzung der Seiten im Cache.\n"
+"Ein Nullwert der Zahl schließt das Cache-Limit aus."
 
 msgid "Level of the PNG compression"
 msgstr "PNG Komprimierungsstufe"
@@ -237,3 +315,20 @@ msgstr ""
 "  -1  - optimale Geschwindigkeit-Grösse;\n"
 "  0   - abgeschaltet;\n"
 "  1-9 - direkte Stufe."
+
+msgid "Resizing raster images on the server side"
+msgstr "Ändern der Größe von Rasterbildern auf der Serverseite."
+
+msgid ""
+"Mostly to decrease too big images size then decrease the traffic, what "
+"causes to rise the server load."
+msgstr ""
+"Meistens, um zu große Bilder zu verkleinern und dann den Datenverkehr zu verringern, was zu einer Erhöhung der Serverlast führt."
+
+#, c-format
+msgid ""
+"%s %s(%s):%s(%s): the last %s; cached pages %d and resources %d, %s; session "
+"objects %d."
+msgstr ""
+"%s %s(%s):%s(%s): die letzten %s; zwischengespeicherte Seiten %d und "
+"Ressourcen %d, %s; Sitzungsobjekte %d."

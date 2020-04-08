@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tarchval.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -383,12 +383,12 @@ void TValBuf::getVals( TValBuf &buf, int64_t ibeg, int64_t iend )
 	}
 	case TFld::Real: {
 	    double vl;
-	    for( ; ibeg <= iend; ibeg += t_step) { vl = getR(&ibeg,true); buf.setR(vl,ibeg); }
+	    for( ; ibeg <= iend; ibeg += t_step) { vl = getR(&ibeg, true); buf.setR(vl, ibeg); }
 	    break;
 	}
 	case TFld::String: {
 	    string vl;
-	    for( ; ibeg <= iend; ibeg += t_step) { vl = getS(&ibeg,true); buf.setS(vl,ibeg); }
+	    for( ; ibeg <= iend; ibeg += t_step) { vl = getS(&ibeg, true); buf.setS(vl, ibeg); }
 	    break;
 	}
 	default: break;
@@ -476,7 +476,7 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( int64_t *itm, bool up_or
 {
     int64_t tm = (itm)?(*itm):TSYS::curTime();
 
-    if((up_ord && tm > end) || (!up_ord && tm < beg))	throw TError("ValBuf", _("No value."));
+    if((up_ord && tm > end) || (!up_ord && tm < beg))	return eval;	//throw TError("ValBuf", _("No value."));
 
     tm = up_ord ? vmax(tm, beg) : vmin(tm, end);
     //Process hard grid buffer
@@ -613,7 +613,8 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, int64_t tm )
 	    (*buf.grid)[wcur] = value;
 	    return;
 	}
-	else if(npos < 0) throw TError("ValBuf", _("Grid mode doesn't support inserting too old values %lld (%lld-%lld)."), tm, beg, end);
+	else if(npos < 0)
+	    throw TError(TError::Arch_Val_OldBufVl, "ValBuf", _("The grid mode doesn't support inserting too old values %lld (%lld-%lld)."), tm, beg, end);
 	else {
 	    TpVal fillVl = eval;
 	    if(fillLast && buf.grid->size()) fillVl = cur ? (*buf.grid)[cur-1] : (*buf.grid)[buf.grid->size()-1];
@@ -647,7 +648,8 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, int64_t tm )
     else if(per) {
 	int npos = (tm-end)/per;
 	// Set value
-	if(npos < 0) throw TError("ValBuf", _("Grid mode doesn't support inserting old values."));
+	if(npos < 0)
+	    throw TError(TError::Arch_Val_OldBufVl, "ValBuf", _("The grid mode doesn't support inserting too old values."));
 	else {
 	    if(hgResTm) {
 		SHg b_el;
@@ -718,14 +720,14 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, int64_t tm )
 			    }
 			}
 		    }
-		    //  Update end time
+		    //  Updating the end time
 		    end += per;
 		}
 	    }
 	    else {
 		SLw b_el;
 
-		// Update current end value
+		// Update the current end value
 		if(npos == 0) {
 		    b_el.tm = end/1000000; b_el.val = value;
 		    int h_el = cur ? cur-1 : buf.tmLow->size()-1;
@@ -802,7 +804,8 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, int64_t tm )
     else {
 	if(hgResTm) {
 	    SHg b_el = { tm, value };
-	    if(tm < beg && size && (int)buf.tmHigh->size() >= size) throw TError("ValBuf", _("Insert a very old value to the buffer."));
+	    if(tm < beg && size && (int)buf.tmHigh->size() >= size)
+		throw TError(TError::Arch_Val_OldBufVl, "ValBuf", _("Inserting too old values to the buffer."));
 	    int c_pos = 0;
 
 	    // Half divider
@@ -835,7 +838,8 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, int64_t tm )
 	}
 	else {
 	    SLw b_el = { (time_t)(tm/1000000ll), value };
-	    if(tm < beg && size && (int)buf.tmLow->size() >= size) throw TError("ValBuf", _("Insert a very old value to the buffer."));
+	    if(tm < beg && size && (int)buf.tmLow->size() >= size)
+		throw TError(TError::Arch_Val_OldBufVl, "ValBuf", _("Inserting too old values to the buffer."));
 	    int c_pos = 0;
 	    // Half divider
 	    int d_win = buf.tmLow->size()/2;
@@ -888,6 +892,8 @@ TVArchive::~TVArchive( )
 
 }
 
+string TVArchive::objName( )	{ return TCntrNode::objName()+":TVArchive"; }
+
 TCntrNode &TVArchive::operator=( const TCntrNode &node )
 {
     const TVArchive *src_n = dynamic_cast<const TVArchive*>(&node);
@@ -928,6 +934,7 @@ bool TVArchive::cfgChange( TCfg &co, const TVariant &pc )
     else if(co.name() == "BPER") {
 	if(co.getR() < 1e-6) co.setR(1e-6);
 	else mBSize = 100/co.getR();
+	setUpBuf();
     }
 
     modif();
@@ -1151,15 +1158,30 @@ TVariant TVArchive::getVal( int64_t *tm, bool up_ord, const string &arch, bool o
 
 void TVArchive::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string &arch, int limit, bool onlyLocal )
 {
-    //Get from buffer
+    //Free buffers fill directly but not free ones must be filled from the begin to the end,
+    //  then for their there a buffer array is used which is back replayed at the end.
+    //The function of the data requesting through the buffer and different archivers for a fixed period is significant one then implemented here.
+    bool isFreeBuf = !buf.period();
+    vector<TValBuf*> tBuf;
+    TValBuf	*wBuf = &buf;
+    int64_t ibeg_ = 0;
+
+    try {
+
+    //Getting from the buffer
     if((arch.empty() || arch == BUF_ARCH_NM) && vOK(ibeg,iend)) {
-	ibeg = vmax(ibeg,iend-TValBuf::period()*limit);
-	TValBuf::getVals(buf,ibeg,iend);
-	iend = buf.begin()-1;
+	if(!isFreeBuf && arch != BUF_ARCH_NM) {
+	    wBuf = new TValBuf(buf.valType(), 0, buf.period(), true, true);
+	    tBuf.push_back(wBuf);
+	}
+
+	ibeg_ = vmax(ibeg, iend-TValBuf::period()*limit);
+	TValBuf::getVals(*wBuf, ibeg_, iend);
+	iend = wBuf->begin()-1;
 	if(arch == BUF_ARCH_NM) return;
     }
 
-    //Get priority archivers list for requested range
+    //Getting the priority archivers list for requested range
     ResAlloc res(aRes, false);
     vector<pair<float,TVArchEl*> >	propArchs;
     for(unsigned iA = 0; iA < archEl.size(); iA++) {
@@ -1170,20 +1192,37 @@ void TVArchive::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string 
     }
     std::sort(propArchs.begin(), propArchs.end());
 
-    //Process the range by priority
+    //Processing the range at the priority
     for(vector<pair<float,TVArchEl*> >::reverse_iterator iA = propArchs.rbegin(); iA != propArchs.rend(); ++iA) {
-	if(iA->second->begin() > iend)	continue;	//Try the block from next archiver, !!!!
+	if(iA->second->begin() > iend)	continue;	//Try the block from the next archiver, !!!!
+
+	if(!isFreeBuf && arch.empty()) {
+	    wBuf = new TValBuf(buf.valType(), 0, buf.period(), true, true);
+	    tBuf.push_back(wBuf);
+	} else wBuf = &buf;
 
 	// Decrease the range begin to the limit
-	int prevSz = buf.realSize();
-	if(!prevSz) ibeg = vmax(ibeg, iend-(int64_t)(1e6*iA->second->archivator().valPeriod())*(limit-buf.realSize()));
-	iA->second->getVals(buf, ibeg, iend, onlyLocal);
+	int prevSz = wBuf->realSize();
+	ibeg_ = prevSz ? ibeg : vmax(ibeg, iend-(int64_t)(1e6*iA->second->archivator().valPeriod())*(limit/*-wBuf->realSize()*/));
+	iA->second->getVals(*wBuf, ibeg_, iend, onlyLocal);
 
-	if(buf.realSize() != prevSz) {			// Request good
-	    iend = buf.begin()-1;
-	    if(iend <= ibeg)	break;	//All data requested
-	    iA = propArchs.rbegin();	//Next block check
+	if(wBuf->realSize() != prevSz) {// The request is good
+	    iend = wBuf->begin()-1;
+	    if(iend <= ibeg)	break;	// All data requested
+	    iA = propArchs.rbegin();	// Checking the next block
 	}
+    }
+
+    for(int iBf = tBuf.size()-1; iBf >= 0; iBf--) {
+	tBuf[iBf]->getVals(buf, tBuf[iBf]->begin(), tBuf[iBf]->end());
+	delete tBuf[iBf]; tBuf[iBf] = NULL;
+    }
+
+    } catch(TError &err) {
+	for(int iBf = tBuf.size()-1; iBf >= 0; iBf--)
+	    if(tBuf[iBf]) delete tBuf[iBf];
+	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+	throw;
     }
 }
 
@@ -1191,7 +1230,8 @@ void TVArchive::setVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string 
 {
     //Check for put to buffer
     if(((arch.empty() && TValBuf::end()) || arch == BUF_ARCH_NM) && iend > TValBuf::begin()) {
-	bool onlyBuf = (ibeg >= TValBuf::end());
+	bool onlyBuf = (ibeg >= TValBuf::end()) &&
+	    (iend-ibeg)/TValBuf::period() <= TValBuf::size();	//!!!! Allow for writing new data blocks in the redundancy and DAQGate
 	TValBuf::setVals(buf, vmax(ibeg,iend-TValBuf::size()*TValBuf::period()), iend);
 	if(arch == BUF_ARCH_NM || onlyBuf) return;	//To prevent spare writings direct to the archivers
     }
@@ -1201,7 +1241,8 @@ void TVArchive::setVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string 
     for(unsigned iA = 0; iA < archEl.size(); iA++)
 	if((arch.empty() || arch == archEl[iA]->archivator().workId()))
 		//&& (!archEl[iA]->lastGet() || ibeg < archEl[iA]->lastGet()))	//!!!! Impossible write direct else
-	    archEl[iA]->setVals(buf, ibeg, iend/*vmin(iend,archEl[iA]->lastGet())*/);
+	    try { archEl[iA]->setVals(buf, ibeg, iend/*vmin(iend,archEl[iA]->lastGet())*/); }
+	    catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 }
 
 void TVArchive::getActiveData( const int64_t &tm )
@@ -1248,7 +1289,7 @@ void TVArchive::archivatorAttach( const string &arch )
 
     if(!archivat.at().startStat()) return;
 
-    if(startStat()) {	//Attach allow only to started archive
+    if(startStat()) {	//Attaching allowed only for started archive
 	int iL, i_ins = -1;
 	for(iL = 0; iL < (int)archEl.size(); iL++) {
 	    if(&archEl[iL]->archivator() == &archivat.at()) break;
@@ -1313,13 +1354,13 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 
     string lab_tm, lab_dt;
     time_t tm_t;
-    struct tm ttm, ttm1 = ttm;
+    struct tm ttm, ttm1;
     int64_t c_tm;
     int hv_border,		//Image border size
 	h_w_start, h_w_size,	//Trend window horizontal start and size
 	v_w_start, v_w_size;	//Trend window vertical start and size
     string sclMarkFont = "Times";
-    int mrkFontSize = 8, begMarkBrd = -1, endMarkBrd = 0;
+    int mrkFontSize = 10, begMarkBrd = -1, endMarkBrd = 0;
 
     //Check and get data
     if(ibeg >= iend || valType() == TFld::String) return rez;
@@ -1651,27 +1692,26 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 
 TVariant TVArchive::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
-    // bool status() - get the archive start status.
+    // bool status( ) - get the archive start status.
     if(iid == "status")	return startStat();
-    // int end(string arch = "") - get the archive data end time for the archiver <arch>, in microseconds.
+    // int end( string arch = "" ) - get the archive data end time for the archiver <arch>, in microseconds.
     if(iid == "end")	return (int64_t)end(prms.size()?prms[0].getS():string(""));
-    // int begin(string arch = "") - get the archive data begin time for the archiver <arch>, in microseconds.
+    // int begin( string arch = "" ) - get the archive data begin time for the archiver <arch>, in microseconds.
     if(iid == "begin")	return (int64_t)begin(prms.size()?prms[0].getS():string(""));
-    // int period(string arch = "") - get the archive data period for the archiver <arch>, in microseconds.
+    // int period( string arch = "" ) - get the archive data period for the archiver <arch>, in microseconds.
     if(iid == "period")	return (int64_t)period(prms.size()?prms[0].getS():string(""));
-    // TArrayObj archivatorList() - get the archivers list which using the archive as source.
+    // TArrayObj archivatorList( ) - get the archivers list which using the archive as source.
     if(iid == "archivatorList") {
 	TArrayObj *rez = new TArrayObj();
 	vector<string> ls; archivatorList(ls);
 	for(unsigned iA = 0; iA < ls.size(); iA++) rez->arSet(iA, ls[iA]);
 	return rez;
     }
-    // VarType getVal(int tm, bool up_ord = false, string arch = "") -
+    // VarType getVal( int tm, bool up_ord = false, string arch = "" ) -
     //         get one value from the archive for the time <tm>, up order <up_ord> and the archiver <arch>.
-    //  tm - the time for requested value, in microseconds. Set to 0 for end().
-    //  up_ord - fit the requested value time to up for the grid.
-    //  arch - the archiver for the request. Set to empty for buffer and all archivers try.
-    //         Set to "<buffer>" for the buffer only process.
+    //  tm     - the time for requested value, in microseconds. Set to 0 for end();
+    //  up_ord - fit the requested value time to up for the grid;
+    //  arch   - requesting archiver, set to empty to try for the buffer and all archivers, set to "<buffer>" to process only for the buffer.
     if(iid == "getVal" && prms.size()) {
 	int64_t tm = prms[0].getI();
 	string arch = (prms.size() >= 3) ? prms[2].getS() : string("");
@@ -1680,12 +1720,13 @@ TVariant TVArchive::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 	prms[0].setI(tm); prms[0].setModify();
 	return rez;
     }
-    // bool setVal(int tm, VarType vl, string arch = "") - set one value to the archive for the time <tm> and the archiver <arch>.
-    //  tm - the time for requested value, in microseconds. Set to 0 for end().
-    //  vl - the value.
-    //  arch - the archiver for the request. Set to empty for buffer and all archivers try.
-    //         Set to "<buffer>" for the buffer only process.
+    // bool setVal( int tm, VarType vl, string arch = "" ) - set one value to the archive for the time <tm> and the archiver <arch>.
+    //  tm - the time for requested value, in microseconds. Set to 0 for end();
+    //  vl - the value;
+    //  arch - the archiver for the request, set to empty for buffer and all archivers try, set to "<buffer>" for the buffer only process.
     if(iid == "setVal" && prms.size() >= 2) {
+	if(!SYS->security().at().access(user,SEC_WR,"root",SARH_ID,RWRWR_))	return false;
+
 	int64_t tm = prms[0].getI();
 	string arch = (prms.size() >= 3) ? prms[2].getS() : string("");
 	if(!tm) tm = end(arch);
@@ -1694,16 +1735,56 @@ TVariant TVArchive::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 	    case TVariant::Boolean:	tp = TFld::Boolean;	break;
 	    case TVariant::Integer:	tp = TFld::Integer;	break;
 	    case TVariant::Real:	tp = TFld::Real;	break;
+	    default:	break;
 	}
 	TValBuf buf(tp, 10, period(), true, true); buf.set(prms[1], tm);
 	setVals(buf, buf.begin(), buf.end(), arch);
 	return true;
     }
-    //!!!! getVals() - append after an internal represent object to TValBuf appending.
-    //!!!! setVals() - append after an internal represent object to TValBuf appending.
+    // Array getVals( int begTm, int endTm, int period, string arch = "" ) -
+    //         gets for the archive/history values from <begTm> and up to <endTm> for the archiver <arch>
+    //  begTm  - begin time of the requesting data range, in microseconds, will be changed to the real data begin;
+    //  endTm  - end time of the requesting data range, in microseconds;
+    //  period - period of the data, in microseconds, must be necessarily specified and
+    //           will be used the maximum one from the archive, will be changed to the real data period;
+    //  arch   - requesting archiver, set to empty to try for the buffer and all archivers, set to "<buffer>" to process only the buffer.
+    if(iid == "getVals" && prms.size() >= 3) {
+	TValBuf buf(TValBuf::valType(), 0, vmax(TValBuf::period(),prms[2].getI()), true, true);
+	getVals(buf, prms[0].getI(), prms[1].getI(), (prms.size()>=4?prms[3].getS():""));
+	TArrayObj *rez = new TArrayObj();
+	int64_t btm = (buf.begin()/buf.period())*buf.period();
+	for(int64_t tm = btm; tm <= buf.end(); tm += buf.period()) {
+	    int64_t ttm = tm;
+	    rez->arSet(-1, buf.get(&ttm));
+	}
+	prms[0].setI(btm); prms[0].setModify();
+	prms[2].setI(buf.period()); prms[2].setModify();
+	return rez;
+    }
+    // bool setVals( Array buf, int tm, int period, string arch = "" ) -
+    //         sets for the archive/history values <buf> to the archive from the begin time <tm>, the values period <period> and the archiver <arch>.
+    //  buf    - array of the values to set;
+    //  tm     - begin time of the setting data range, in microseconds;
+    //  period - period of the setting data, in microseconds, must be necessarily specified and
+    //           will be used the maximum one from the archive, will be changed to the real data period;
+    //  arch   - setting archiver, set to empty to set for the buffer and all archivers, set to "<buffer>" to process only the buffer.
+    if(iid == "setVals" && prms.size() >= 3) {
+	AutoHD<TArrayObj> aBuf;
+	if(prms[0].type() != TVariant::Object || (aBuf=prms[0].getO()).freeStat() ||
+	    !SYS->security().at().access(user,SEC_WR,"root",SARH_ID,RWRWR_))	return false;
+	int64_t btm = prms[1].getI(),
+		per = vmax(TValBuf::period(), prms[2].getI());
+	TValBuf buf(TValBuf::valType(), 0, per, true, true);
+	for(int iIt = 0; iIt < (int)aBuf.at().arSize(); iIt++, btm += per)
+	    buf.set(aBuf.at().arGet(iIt), btm);
+	setVals(buf, buf.begin(), buf.end(), (prms.size()>=4?prms[3].getS():""));
+	prms[2].setI(per); prms[2].setModify();
+
+	return true;
+    }
 
     //Configuration functions call
-    TVariant cfRez = objFunc(iid, prms, user);
+    TVariant cfRez = objFunc(iid, prms, user, RWRWR_, "root:" SARH_ID);
     if(!cfRez.isNull()) return cfRez;
 
     return TCntrNode::objFuncCall(iid, prms, user);
@@ -1733,7 +1814,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    string	arch	= opt->attr("arch");
 	    bool	local	= s2i(opt->attr("local"));
 
-	    // Process one value request
+	    // Processing for requesting one value
 	    if(!tm) 	tm = TSYS::curTime();
 	    if(!tm_grnd) {
 		opt->setText(getVal(&tm,false,arch,local).getS());
@@ -1764,7 +1845,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		}
 		std::sort(propArchs.begin(), propArchs.end());
 
-		//Process the range by priority
+		//Processing the range at the priority
 		for(vector<pair<float,TVArchEl*> >::reverse_iterator iA = propArchs.rbegin(); iA != propArchs.rend(); ++iA) {
 		    buf.setPeriod(vmax((int64_t)(1e6*iA->second->archivator().valPeriod()),period));
 		    iA->second->getVals(buf, vmax(tm_grnd,iA->second->begin()), tm, local);		//vmax for allow access to next level archive
@@ -1846,7 +1927,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		case TFld::Real: {
 		    float round_perc = s2r(opt->attr("round_perc"));
 		    int   real_prec  = s2i(opt->attr("real_prec"));
-		    if(!real_prec) real_prec = 10;
+		    if(!real_prec) real_prec = 15;
 		    double tval_pr = EVAL_REAL, tval_pr1 = EVAL_REAL;
 		    while(ibeg <= iend) {
 			double tval = buf.getR(&ibeg, true);
@@ -2054,10 +2135,10 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/val/tm") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD)) {
 	    opt->setText(TBDS::genDBGet(owner().nodePath()+"vaTm","0",opt->attr("user")));
-	    if(!s2i(opt->text())) opt->setText(i2s(time(NULL)));
+	    if(!s2i(opt->text())) opt->setText(i2s(TSYS::curTime()/1000000));
 	}
 	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))
-	    TBDS::genDBSet(owner().nodePath()+"vaTm",(s2i(opt->text())>=time(NULL))?"0":opt->text(),opt->attr("user"));
+	    TBDS::genDBSet(owner().nodePath()+"vaTm",(s2i(opt->text())>=TSYS::curTime()/1000000)?"0":opt->text(),opt->attr("user"));
     }
     else if(a_path == "/val/utm") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genDBGet(owner().nodePath()+"vaTm_u","0",opt->attr("user")));
@@ -2104,7 +2185,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/val/val" && ctrChkNode(opt,"get",R_R___,"root",SARH_ID,SEC_RD)) {
 	int64_t end = (int64_t)s2i(TBDS::genDBGet(owner().nodePath()+"vaTm","0",opt->attr("user")))*1000000;
-	if(!(end/1000000)) end = (int64_t)time(NULL) * 1000000;
+	if(!(end/1000000)) end = (TSYS::curTime()/1000000) * 1000000;
 	end += s2i(TBDS::genDBGet(owner().nodePath()+"vaTm_u","0",opt->attr("user")));
 	int64_t beg = end - (int64_t)(s2r(TBDS::genDBGet(owner().nodePath()+"vaSize","1",opt->attr("user")))*1e6);
 
@@ -2130,9 +2211,9 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	int vPctH = vmin(800, vmax(50,s2i(TBDS::genDBGet(owner().nodePath()+"vPctH","230",opt->attr("user")))));
 	double vMax = s2r(TBDS::genDBGet(owner().nodePath()+"vMax","0",opt->attr("user")));
 	double vMin = s2r(TBDS::genDBGet(owner().nodePath()+"vMin","0",opt->attr("user")));
-	int64_t end = (int64_t) s2i(TBDS::genDBGet(owner().nodePath()+"vaTm",i2s(time(NULL)),opt->attr("user")))*1000000+
+	int64_t end = (int64_t) s2i(TBDS::genDBGet(owner().nodePath()+"vaTm",i2s(TSYS::curTime()/1000000),opt->attr("user")))*1000000+
 				s2i(TBDS::genDBGet(owner().nodePath()+"vaTm_u","0",opt->attr("user")));
-	if(!(end/1000000))	end = (int64_t)time(NULL) * 1000000;
+	if(!(end/1000000))	end = (TSYS::curTime()/1000000) * 1000000;
 	int64_t beg = end - (int64_t)(s2r(TBDS::genDBGet(owner().nodePath()+"vaSize","1",opt->attr("user")))*1e6);
 
 	string tp = "png";
@@ -2331,7 +2412,7 @@ TVariant TVArchivator::objFuncCall( const string &iid, vector<TVariant> &prms, c
     if(iid == "status")	return startStat();
 
     //Configuration functions call
-    TVariant cfRez = objFunc(iid, prms, user);
+    TVariant cfRez = objFunc(iid, prms, user, RWRWR_, "root:" SARH_ID);
     if(!cfRez.isNull()) return cfRez;
 
     return TCntrNode::objFuncCall(iid, prms, user);
@@ -2414,7 +2495,7 @@ TVArchivator &TVArchEl::archivator( )	{ return mArchivator; }
 
 TVariant TVArchEl::getVal( int64_t *tm, bool up_ord, bool onlyLocal )
 {
-    TVariant vl = getValProc(tm,up_ord);
+    TVariant vl = getValProc(tm, up_ord);
 
     if(!onlyLocal && tm && archive().startStat() && vl.isEVal() && SYS->rdActive() &&
 	(archive().srcMode() == TVArchive::ActiveAttr || archive().srcMode() == TVArchive::PassiveAttr))

@@ -104,28 +104,28 @@ msgid "HD temperature: "
 msgstr "Температура НЖМД: "
 
 msgid "Free (KiB)"
-msgstr "Вільно (ГиБ)"
+msgstr "Вільно (КіБ)"
 
 msgid "Total (KiB)"
-msgstr "Разом (ГиБ)"
+msgstr "Разом (КіБ)"
 
 msgid "Used (KiB)"
-msgstr "Використано (ГиБ)"
+msgstr "Використано (КіБ)"
 
 msgid "Buffers (KiB)"
-msgstr "Буфера (КиБ)"
+msgstr "Буфера (КіБ)"
 
 msgid "Cached (KiB)"
-msgstr "Кеші (КиБ)"
+msgstr "Кеші (КіБ)"
 
 msgid "Swap free (KiB)"
-msgstr "Своп вільно (КиБ)"
+msgstr "Своп вільно (КіБ)"
 
 msgid "Swap total (KiB)"
-msgstr "Своп усього (КиБ)"
+msgstr "Своп усього (КіБ)"
 
 msgid "Swap used (KiB)"
-msgstr "Своп використано (КиБ)"
+msgstr "Своп використано (КіБ)"
 
 msgid "Memory info"
 msgstr "Інформація про пам'ять"

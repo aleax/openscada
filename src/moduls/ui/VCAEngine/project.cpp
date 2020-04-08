@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: project.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -65,16 +65,23 @@ TCntrNode &Project::operator=( const TCntrNode &node )
     vector<string> pls;
     src_n->mimeDataList(pls);
     string mimeType, mimeData;
-    for(unsigned i_m = 0; i_m < pls.size(); i_m++) {
-	src_n->mimeDataGet(pls[i_m], mimeType, &mimeData);
-	mimeDataSet(pls[i_m], mimeType, mimeData);
+    for(unsigned iM = 0; iM < pls.size(); iM++) {
+	src_n->mimeDataGet(pls[iM], mimeType, &mimeData);
+	mimeDataSet(pls[iM], mimeType, mimeData);
     }
+
+    //Styles copy
+    const_cast<Project*>(this)->mStRes.lock(true);
+    const_cast<Project*>(src_n)->mStRes.lock(false);
+    mStProp = src_n->mStProp;
+    const_cast<Project*>(this)->mStRes.unlock();
+    const_cast<Project*>(src_n)->mStRes.unlock();
 
     //Copy included pages
     src_n->list(pls);
-    for(unsigned i_p = 0; i_p < pls.size(); i_p++) {
-	if(!present(pls[i_p])) add(pls[i_p],"");
-	(TCntrNode&)at(pls[i_p]).at() = (TCntrNode&)src_n->at(pls[i_p]).at();
+    for(unsigned iP = 0; iP < pls.size(); iP++) {
+	if(!present(pls[iP])) add(pls[iP],"");
+	(TCntrNode&)at(pls[iP]).at() = (TCntrNode&)src_n->at(pls[iP]).at();
     }
 
     return *this;
@@ -132,6 +139,21 @@ string Project::owner( ) const	{ return SYS->security().at().usrPresent(cfg("USE
 
 string Project::grp( ) const	{ return SYS->security().at().grpPresent(cfg("GRP").getS()) ? cfg("GRP").getS() : string("UI"); }
 
+string Project::getStatus( )
+{
+    string rez = enable() ? _("Enabled. ") : _("Disabled. ");
+
+    vector<string> tls;
+    list(tls);
+    time_t maxTm = 0;
+    for(unsigned iT = 0; iT < tls.size(); iT++)
+	maxTm = vmax(maxTm, at(tls[iT]).at().timeStamp());
+    rez += TSYS::strMess(_("Used: %d. "), mHerit.size());
+    rez += TSYS::strMess(_("Date of modification: %s. "), atm2s(maxTm).c_str());
+
+    return rez;
+}
+
 void Project::setOwner( const string &it )
 {
     cfg("USER").setS(it);
@@ -179,12 +201,12 @@ void Project::load_( TConfig *icfg )
     }
 
     //Check for remove items removed from the DB
-    if(!SYS->selDB().empty()) {
-	vector<string> it_ls;
-	list(it_ls);
-	for(unsigned i_it = 0; i_it < it_ls.size(); i_it++)
-	    if(itReg.find(it_ls[i_it]) == itReg.end())
-		del(it_ls[i_it]);
+    if(SYS->chkSelDB(SYS->selDB(),true)) {
+	vector<string> itLs;
+	list(itLs);
+	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
+	    if(itReg.find(itLs[iIt]) == itReg.end())
+		del(itLs[iIt]);
     }
 
     mOldDB = TBDS::realDBName(DB());
@@ -217,9 +239,9 @@ void Project::save_( )
 	vector<string> pls;
 	mimeDataList(pls,mOldDB);
 	string mimeType, mimeData;
-	for(unsigned i_m = 0; i_m < pls.size(); i_m++) {
-	    mimeDataGet(pls[i_m], mimeType, &mimeData, mOldDB);
-	    mimeDataSet(pls[i_m], mimeType, mimeData, DB());
+	for(unsigned iM = 0; iM < pls.size(); iM++) {
+	    mimeDataGet(pls[iM], mimeType, &mimeData, mOldDB);
+	    mimeDataSet(pls[iM], mimeType, mimeData, DB());
 	}
 	// Session's data copy
 	vector<vector<string> > full;
@@ -231,7 +253,7 @@ void Project::save_( )
 
     mOldDB = TBDS::realDBName(DB());
 
-    //Save styles
+    //Saving the styles
     ResAlloc res(mStRes, false);
     TConfig cStl(&mod->elPrjStl());
     for(map<string, vector<string> >::iterator iStPrp = mStProp.begin(); iStPrp != mStProp.end(); iStPrp++) {
@@ -241,15 +263,16 @@ void Project::save_( )
 	SYS->db().at().dataSet(fullDB()+"_stl",nodePath()+tbl()+"_stl",cStl);
     }
 
-    // Check for removed properties
+    // Checking for the removed properties
     vector<vector<string> > full;
     res.request(true);
     cStl.cfgViewAll(false);
-    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB()+"_stl",nodePath()+tbl()+"_stl",fldCnt++,cStl,false,&full); )
+    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB()+"_stl",nodePath()+tbl()+"_stl",fldCnt++,cStl,false,&full); ) {
 	if(mStProp.find(cStl.cfg("ID").getS()) == mStProp.end()) {
-	    if(!SYS->db().at().dataDel(fullDB()+"_stl",nodePath()+tbl()+"_stl",cStl,false,false,true))	break;
+	    if(!SYS->db().at().dataDel(fullDB()+"_stl",nodePath()+tbl()+"_stl",cStl,true,false,true))	break;
 	    if(full.empty()) fldCnt--;
 	}
+    }
 }
 
 void Project::setEnable( bool val )
@@ -269,12 +292,17 @@ void Project::setEnable( bool val )
     mEnable = val;
 }
 
-void Project::add( const string &id, const string &name, const string &orig )
+string Project::add( const string &iid, const string &name, const string &orig )
 {
-    if(present(id)) return;
-    //chldAdd(mPage, new Page(id,orig));
-    add(new Page(id,orig));
-    at(id).at().setName(name);
+    if(present(iid))	throw err_sys(_("The page '%s' is already present!"), iid.c_str());
+	//return "";
+
+    Page *obj = new Page(TSYS::strEncode(sTrm(iid),TSYS::oscdID), orig);
+    MtxAlloc res(chM(), true);
+    add(obj);
+    obj->setName(name);
+
+    return obj->id();
 }
 
 void Project::add( Page *iwdg )
@@ -415,17 +443,20 @@ void Project::stlPropList( vector<string> &ls )
 
 string Project::stlPropGet( const string &pid, const string &def, int sid )
 {
+    if(pid.empty() || pid == "<Styles>")	return def;
+
     ResAlloc res(mStRes, false);
     if(sid < 0) sid = stlCurent();
-    if(pid.empty() || sid < 0 || sid >= stlSize() || pid == "<Styles>") return def;
-
-    map<string, vector<string> >::iterator iStPrp = mStProp.find(pid);
-    if(iStPrp != mStProp.end()) return iStPrp->second[sid];
-    vector<string> vl;
-    for(int i_v = 0; i_v < stlSize(); i_v++) vl.push_back(def);
-    res.request(true);
-    mStProp[pid] = vl;
-    modif();
+    map<string, vector<string> >::iterator iStPrp = mStProp.end();
+    if((iStPrp=mStProp.find(pid)) == mStProp.end()) {
+	vector<string> vl;
+	for(int iV = 0; iV < vmax(1,stlSize()); iV++) vl.push_back(def);
+	res.request(true);
+	mStProp[pid] = vl;
+	modif();
+	return def;
+    }
+    if(iStPrp != mStProp.end() && sid >= 0 && sid < stlSize()) return iStPrp->second[sid];
 
     return def;
 }
@@ -446,7 +477,7 @@ bool Project::stlPropSet( const string &pid, const string &vl, int sid )
 string Project::catsPat( )
 {
     string cat = "/ses_"+id()+"\\d*";
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(mHeritRes, true);
     for(unsigned iH = 0; iH < mHerit.size(); iH++)
 	cat += "|/ses_"+mHerit[iH].at().id();
 
@@ -456,7 +487,7 @@ string Project::catsPat( )
 void Project::heritReg( Session *s )
 {
     //Search for already registered session-heritator
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(mHeritRes, true);
     for(unsigned iH = 0; iH < mHerit.size(); iH++)
 	if(&mHerit[iH].at() == s)	return;
     mHerit.push_back(AutoHD<Session>(s));
@@ -465,7 +496,7 @@ void Project::heritReg( Session *s )
 void Project::heritUnreg( Session *s )
 {
     //Search the session-heritator
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(mHeritRes, true);
     for(unsigned iH = 0; iH < mHerit.size(); iH++)
 	if(&mHerit[iH].at() == s) {
 	    mHerit.erase(mHerit.begin()+iH);
@@ -478,12 +509,12 @@ void Project::pageEnable( const string &pg, bool vl )
     //Process the path
     int pL = 0;
     string pPg, pPath;
-    for(int off = 0; (pPg=TSYS::pathLev(pg,0,false,&off)).size() && off < pg.size(); pL++)
+    for(int off = 0; (pPg=TSYS::pathLev(pg,0,false,&off)).size() && off < (int)pg.size(); pL++)
 	if(pL) pPath += "/"+pPg;
     if(pPg.compare(0,3,"pg_") == 0)	pPg = pPg.substr(3);
 
     //Call the connected sessions for add-remove a page
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(mHeritRes, true);
 
     for(unsigned iH = 0; iH < mHerit.size(); iH++)
 	if(pL > 1) {
@@ -510,6 +541,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("grp",opt,-1,"/br/pg_",_("Page"),RWRWR_,"root",SUI_ID,2,"idm","1","idSz","30");
 	if(ctrMkNode("area",opt,-1,"/obj",_("Project"))) {
 	    if(ctrMkNode("area",opt,-1,"/obj/st",_("State"))) {
+		ctrMkNode("fld",opt,-1,"/obj/st/status",_("Status"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/obj/st/en",_("Enabled"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/obj/st/db",_("Project DB"),RWRWR_,"root",SUI_ID,4,
 		    "tp","str","dest","sel_ed","select",("/db/tblList:prj_"+id()).c_str(),
@@ -572,7 +604,8 @@ void Project::cntrCmdProc( XMLNode *opt )
 
     //Process command to page
     string a_path = opt->attr("path"), u = opt->attr("user"), l = opt->attr("lang");
-    if(a_path == "/obj/st/en") {
+    if(a_path == "/obj/st/status" && ctrChkNode(opt))		opt->setText(getStatus());
+    else if(a_path == "/obj/st/en") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(enable()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setEnable(s2i(opt->text()));
     }
@@ -584,7 +617,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 	vector<string> tls;
 	list(tls);
 	time_t maxTm = 0;
-	for(unsigned i_t = 0; i_t < tls.size(); i_t++) maxTm = vmax(maxTm, at(tls[i_t]).at().timeStamp());
+	for(unsigned iT = 0; iT < tls.size(); iT++) maxTm = vmax(maxTm, at(tls[iT]).at().timeStamp());
 	opt->setText(i2s(maxTm));
     }
     else if(a_path == "/obj/st/use" && ctrChkNode(opt))	opt->setText(i2s(mHerit.size()));
@@ -631,18 +664,18 @@ void Project::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/br/pg_" || a_path == "/page/page") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD)) {
-	    vector<string> lst;
+	    bool getChPgN = s2i(opt->attr("getChPgN"));
+	    vector<string> lst, lst1;
 	    list(lst);
-	    for(unsigned i_f = 0; i_f < lst.size(); i_f++)
-		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(trLU(at(lst[i_f]).at().name(),l,u));
+	    for(unsigned iF = 0; iF < lst.size(); iF++) {
+		XMLNode *no = opt->childAdd("el")->setAttr("id",lst[iF])->setText(trLU(at(lst[iF]).at().name(),l,u));
+		if(getChPgN) { at(lst[iF]).at().pageList(lst1); no->setAttr("chPgN", i2s(lst1.size())); }
+	    }
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
-	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
-	    if(present(vid)) throw TError(nodePath().c_str(), _("Page '%s' is already present!"), vid.c_str());
-	    add(vid, opt->text());
-	    at(vid).at().setOwner(opt->attr("user"));
-	    at(vid).at().manCrt = true;
-	    opt->setAttr("id", vid);
+	    opt->setAttr("id", add(opt->attr("id"),opt->text()));
+	    at(opt->attr("id")).at().setOwner(opt->attr("user"));
+	    at(opt->attr("id")).at().manCrt = true;
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	del(opt->attr("id"),true);
     }
@@ -650,8 +683,8 @@ void Project::cntrCmdProc( XMLNode *opt )
 	vector<string> c_list;
 	list(c_list);
 	unsigned e_c = 0;
-	for(unsigned i_p = 0; i_p < c_list.size(); i_p++)
-	    if(at(c_list[i_p]).at().enable()) e_c++;
+	for(unsigned iP = 0; iP < c_list.size(); iP++)
+	    if(at(c_list[iP]).at().enable()) e_c++;
 	opt->setText(TSYS::strMess(_("All: %d; Enabled: %d"),c_list.size(),e_c));
     }
     else if(a_path == "/obj/u_lst" && ctrChkNode(opt)) {
@@ -723,41 +756,42 @@ void Project::cntrCmdProc( XMLNode *opt )
 	    if(s2i(opt->text()) >= -1) stlCurentSet(s2i(opt->text()));
 	    else {
 		ResAlloc res(mStRes, true);
-		map< string, vector<string> >::iterator iStPrp;
-		for(iStPrp = mStProp.begin(); iStPrp != mStProp.end(); iStPrp++)
-		    if(iStPrp->first == "<Styles>") continue;
-		    else if(iStPrp->second.size()) iStPrp->second.push_back(iStPrp->second[iStPrp->second.size()-1]);
-		    else mStProp.erase(iStPrp--);
-		iStPrp = mStProp.find("<Styles>");
+
+		// Appending for the style name
+		map< string, vector<string> >::iterator iStPrp = mStProp.find("<Styles>");
 		if(iStPrp == mStProp.end()) mStProp["<Styles>"] = vector<string>(1,_("New style"));
 		else iStPrp->second.push_back(_("New style"));
+
+		// Appending for the properties
+		for(iStPrp = mStProp.begin(); iStPrp != mStProp.end(); iStPrp++)
+		    if(iStPrp->first != "<Styles>" && stlSize() > (int)iStPrp->second.size())
+			iStPrp->second.push_back(iStPrp->second[(mStyleIdW>=0)?mStyleIdW:iStPrp->second.size()-1]);
+
 		mStyleIdW = mStProp["<Styles>"].size()-1;
 		modif();
 	    }
 	}
     }
     else if(a_path == "/style/stLst" && ctrChkNode(opt)) {
-	opt->childAdd("el")->setAttr("id","-1")->setText(_("No style"));
+	opt->childAdd("el")->setAttr("id","-1")->setText(_("<Disabled>"));
+	if(stlSize() < 10) opt->childAdd("el")->setAttr("id","-2")->setText(_("<Create a new style>"));
 	for(int iSt = 0; iSt < stlSize(); iSt++)
 	    opt->childAdd("el")->setAttr("id", i2s(iSt))->setText(TSYS::strSepParse(stlGet(iSt),0,';'));
-	if(stlSize() < 10) opt->childAdd("el")->setAttr("id","-2")->setText(_("Create a new style"));
     }
     else if(a_path == "/style/name") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::strSepParse(stlGet(stlCurent()),0,';'));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    string sprv = stlGet(stlCurent());
-	    stlSet(stlCurent(),opt->text());
+	    stlSet(stlCurent(), opt->text());
 	}
     }
     else if(a_path == "/style/props") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD) && stlCurent() >=0 && stlCurent() < stlSize())
-	{
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD) && stlCurent() >= 0 && stlCurent() < stlSize()) {
 	    XMLNode *n_id = ctrMkNode("list",opt,-1,"/style/props/id","");
 	    XMLNode *n_vl = ctrMkNode("list",opt,-1,"/style/props/vl","");
 
 	    ResAlloc res(mStRes, false);
-	    for(map< string, vector<string> >::iterator iStPrp = mStProp.begin(); iStPrp != mStProp.end(); iStPrp++)
-	    {
+	    for(map<string, vector<string> >::iterator iStPrp = mStProp.begin(); iStPrp != mStProp.end(); iStPrp++) {
 		if(iStPrp->first == "<Styles>") continue;
 		if(n_id)	n_id->childAdd("el")->setText(iStPrp->first);
 		if(n_vl)	n_vl->childAdd("el")->setText(iStPrp->second[stlCurent()]);
@@ -776,10 +810,11 @@ void Project::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/style/erase" && ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR) && stlCurent() >=0 && stlCurent() < stlSize())
     {
-	ResAlloc res( mStRes, true );
+	ResAlloc res(mStRes, true);
 	map< string, vector<string> >::iterator iStPrp;
 	for(iStPrp = mStProp.begin(); iStPrp != mStProp.end(); iStPrp++)
-	    iStPrp->second.erase(iStPrp->second.begin()+stlCurent());
+	    if(iStPrp->second.size() > 1 || iStPrp->first == "<Styles>")
+		iStPrp->second.erase(iStPrp->second.begin()+stlCurent());
 	stlCurentSet(-1);
     }
     else if(a_path == "/mess/tm") {
@@ -851,17 +886,24 @@ TCntrNode &Page::operator=( const TCntrNode &node )
     setPrjFlags(src_n->prjFlags());
 
     //Widget copy
-    Widget::operator=(node);
+    try {
+	Widget::operator=(node);
 
-    //Include widgets copy
-    vector<string> els;
-    src_n->pageList(els);
-    // Call recursive only for separated branches copy and for prevent to included copy
-    if(path().find(src_n->path()+"/") != 0)
-	for(unsigned i_p = 0; i_p < els.size(); i_p++) {
-	    if(!pagePresent(els[i_p])) pageAdd(els[i_p], "");
-	    (TCntrNode&)pageAt(els[i_p]).at() = (TCntrNode&)src_n->pageAt(els[i_p]).at();
-	}
+	//Include widgets copy
+	vector<string> els;
+	src_n->pageList(els);
+	// Call recursive only for separated branches copy and for prevent to included copy
+	if(path().find(src_n->path()+"/") != 0)
+	    for(unsigned iP = 0; iP < els.size(); iP++) {
+		if(!pagePresent(els[iP])) pageAdd(els[iP], "");
+		(TCntrNode&)pageAt(els[iP]).at() = (TCntrNode&)src_n->pageAt(els[iP]).at();
+	    }
+    }
+    catch(TError &err) {
+	if(prjFlags()&Page::Link)
+	    mess_err(err.cat.c_str(),"%s The copying operation is ommited then you must repeat that or just enable the page.",err.mess.c_str());
+	else throw;
+    }
 
     return *this;
 }
@@ -966,6 +1008,23 @@ void Page::setParentNm( const string &isw )
     modif();
 }
 
+string Page::getStatus( )
+{
+    string rez = Widget::getStatus();
+    rez += TSYS::strMess(_("Date of modification: %s. "), atm2s(timeStamp()).c_str());
+    if(calcProg().size()) {
+	rez += _("Calculating procedure: ");
+	if(!parent().freeStat() && parent().at().calcProg().size() && calcProg() != parent().at().calcProg())
+	    rez += _("!!redefined!!");
+	else if(!parent().freeStat() && parent().at().calcProg().size())
+	    rez += _("inherited");
+	else rez += _("presented");
+	rez += ". ";
+    }
+
+    return rez;
+}
+
 string Page::calcId( )
 {
     if(proc().empty()) {
@@ -1006,6 +1065,7 @@ string Page::calcProgStors( const string &attr )
     string rez = parent().freeStat() ? "" : parent().at().calcProgStors(attr);
     if(((attr.size() && attrAt(attr).at().modif()) || (!attr.size() && proc().size())) && rez.find(ownerProj()->DB()) == string::npos)
 	rez = ownerProj()->DB() + ";" + rez;
+
     return rez;
 }
 
@@ -1050,23 +1110,23 @@ void Page::load_( TConfig *icfg )
     else SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,*this);
     setParentNm(cfg("PARENT").getS());
 
-    //Inherit modify attributes
+    //Inheriting the modified attributes
     vector<string> als;
     attrList(als);
     string tAttrs = cfg("ATTRS").getS();
-    for(unsigned i_a = 0; i_a < als.size(); i_a++) {
-	if(!attrPresent(als[i_a])) continue;
-	AutoHD<Attr> attr = attrAt(als[i_a]);
-	if(attr.at().modif() && tAttrs.find(als[i_a]+";") == string::npos) {
+    for(unsigned iA = 0; iA < als.size(); iA++) {
+	if(!attrPresent(als[iA])) continue;
+	AutoHD<Attr> attr = attrAt(als[iA]);
+	if(attr.at().modif() && tAttrs.find(als[iA]+";") == string::npos) {
 	    attr.at().setModif(0);
-	    inheritAttr(als[i_a]);
+	    inheritAttr(als[iA]);
 	}
     }
 
-    //Load generic attributes
+    //Loading for the generic attributes
     mod->attrsLoad(*this, db+"."+tbl, path(), "", tAttrs, true);
 
-    //Create new pages
+    //Creating for new pages
     map<string, bool>	itReg;
     vector<vector<string> > full;
     TConfig cEl(&mod->elPage());
@@ -1082,12 +1142,12 @@ void Page::load_( TConfig *icfg )
     }
 
     //Check for remove items removed from DB
-    if(!SYS->selDB().empty()) {
-	vector<string> it_ls;
-	pageList(it_ls);
-	for(unsigned i_it = 0; i_it < it_ls.size(); i_it++)
-	    if(itReg.find(it_ls[i_it]) == itReg.end())
-		pageDel(it_ls[i_it]);
+    if(SYS->chkSelDB(SYS->selDB(),true)) {
+	vector<string> itLs;
+	pageList(itLs);
+	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
+	    if(itReg.find(itLs[iIt]) == itReg.end())
+		pageDel(itLs[iIt]);
     }
 
     //Load present pages
@@ -1119,9 +1179,24 @@ void Page::loadIO( )
     cEl.cfg("IDW").setS(path(), true);
     for(int fldCnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fldCnt++,cEl,false,&full); ) {
 	string sid  = cEl.cfg("ID").getS();
-	if(cEl.cfg("PARENT").getS() == "<deleted>") {
-	    if(wdgPresent(sid))	wdgDel(sid);
+	string spar = cEl.cfg("PARENT").getS();
+
+	// Directly marked as deleted one
+	if(spar == "<deleted>") {
+	    if(wdgPresent(sid)) wdgDel(sid);
 	    continue;
+	}
+	// Lost inherited widget due to it removing into the parent
+	else if(mod->nodeAt(spar,0,0,0,true).freeStat() && sid.size() < spar.size() && spar.compare(spar.size()-sid.size(),sid.size(),sid) == 0) {
+	    if(wdgPresent(sid)) wdgDel(sid);
+	    SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, cEl, true);
+	    if(full.empty()) fldCnt--;
+	    continue;
+	}
+	// Record without any changes
+	else if(!cEl.cfg("ATTRS").getS().size()) {
+	    SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, cEl, true);
+	    if(full.empty()) fldCnt--;
 	}
 	if(!wdgPresent(sid))
 	    try{ wdgAdd(sid, "", ""); }
@@ -1132,12 +1207,12 @@ void Page::loadIO( )
     }
 
     // Check for remove items removed from the DB
-    if(!SYS->selDB().empty()) {
-	vector<string> it_ls;
-	wdgList(it_ls);
-	for(unsigned i_it = 0; i_it < it_ls.size(); i_it++)
-	    if(itReg.find(it_ls[i_it]) == itReg.end())
-		wdgDel(it_ls[i_it]);
+    if(SYS->chkSelDB(SYS->selDB(),true)) {
+	vector<string> itLs;
+	wdgList(itLs);
+	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
+	    if(itReg.find(itLs[iIt]) == itReg.end())
+		wdgDel(itLs[iIt]);
     }
 }
 
@@ -1177,9 +1252,16 @@ void Page::setEnable( bool val, bool force )
     if(enable() == val) return;
 
     if(prjFlags()&Page::Empty) cfg("PARENT").setS("root");
+    else if(prjFlags()&Page::Link) {
+	//Checking for the recursion
+	if(parentNm().empty() || path().find(parentNm()) != string::npos)
+	    throw err_sys(_("The target page '%s' of the link is empty or recursive!"), parentNm().c_str());
 
+	mParent = ownerProj()->nodeAt(parentNm());
+    }
+ 
     Widget::setEnable(val);
-    if(val && !parent().freeStat() && parent().at().rootId() != "Box") {
+    if(val && !parent().freeStat() && parent().at().rootId() != "Box" && !(prjFlags()&Page::Link)) {
 	Widget::setEnable(false);
 	throw TError(nodePath().c_str(),_("As a page, only a box based widget can be used!"));
     }
@@ -1219,7 +1301,7 @@ void Page::setEnable( bool val, bool force )
 void Page::wdgAdd( const string &wid, const string &name, const string &ipath, bool force )
 {
     if(!isContainer())  throw TError(nodePath().c_str(),_("The widget is not a container!"));
-    if(wdgPresent(wid)) return;
+    if(wdgPresent(wid)) throw err_sys(_("The widget '%s' is already present!"), wid.c_str());
 
     bool toRestoreInher = false;
 
@@ -1251,7 +1333,8 @@ void Page::wdgAdd( const string &wid, const string &name, const string &ipath, b
 	if(mHerit[i_h].at().enable())
 	    mHerit[i_h].at().inheritIncl(wid);
 
-    if(toRestoreInher)	throw TError("warning", _("Restoring '%s' from the base container!"), wid.c_str());
+    if(toRestoreInher)
+	throw TError(TError::Core_CntrWarning, nodePath().c_str(), _("Restoring '%s' from the base container!"), wid.c_str());
 }
 
 AutoHD<Widget> Page::wdgAt( const string &wdg, int lev, int off ) const
@@ -1271,13 +1354,23 @@ AutoHD<Widget> Page::wdgAt( const string &wdg, int lev, int off ) const
     return Widget::wdgAt(wdg, lev, off);
 }
 
-void Page::pageAdd( const string &id, const string &name, const string &orig )
+void Page::pageList( vector<string> &ls ) const
 {
-    if(pagePresent(id)) return;
+    ls.clear();
+    if(prjFlags()&(Page::Template|Page::Container))
+	chldList(mPage, ls);
+}
+
+string Page::pageAdd( const string &iid, const string &name, const string &orig )
+{
+    if(pagePresent(iid)) throw err_sys(_("The page '%s' is already present!"), iid.c_str());
     if(!(prjFlags()&(Page::Container|Page::Template)))
-	throw TError(nodePath().c_str(),_("Page is not a container or template!"));
-    chldAdd(mPage, new Page(id,orig));
+	throw TError(nodePath().c_str(),_("Page is not a container or a template!"));
+
+    string id = chldAdd(mPage, new Page(TSYS::strEncode(sTrm(iid),TSYS::oscdID),orig));
     pageAt(id).at().setName(name);
+
+    return id;
 }
 
 void Page::pageAdd( Page *iwdg )
@@ -1285,9 +1378,8 @@ void Page::pageAdd( Page *iwdg )
     if(pagePresent(iwdg->id()))	delete iwdg;
     if(!(prjFlags()&(Page::Container|Page::Template))) {
 	delete iwdg;
-	throw TError(nodePath().c_str(),_("Page is not a container or template!"));
-    }
-    else chldAdd(mPage,iwdg);
+	throw TError(nodePath().c_str(),_("Page is not a container or a template!"));
+    } else chldAdd(mPage, iwdg);
 }
 
 AutoHD<Page> Page::pageAt( const string &id ) const	{ return chldAt(mPage,id); }
@@ -1320,7 +1412,7 @@ void Page::procChange( bool src )
 {
     if(!src && proc().size()) return;
 
-    //Update heritors procedures
+    //Update heritors' procedures
     for(unsigned iH = 0; iH < mHerit.size(); iH++)
 	if(mHerit[iH].at().enable())
 	    mHerit[iH].at().procChange(false);
@@ -1369,9 +1461,9 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 	Widget::cntrCmdGeneric(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Project page: ")+path(),RWRWR_,"root",SUI_ID);
 	if(ctrMkNode("area",opt,-1,"/wdg",_("Widget")) && ctrMkNode("area",opt,-1,"/wdg/cfg",_("Configuration"))) {
+	    ctrMkNode("fld",opt,2,"/wdg/st/pgTp",_("Page type"),RWRWR_,"root",SUI_ID,4,"tp","str","idm","1","dest","select","select","/wdg/st/pgTpLst");
 	    if((prjFlags()&Page::Empty) || (ownerPage() && (ownerPage()->prjFlags()&Page::Template) && !(ownerPage()->prjFlags()&Page::Container)))
 		ctrMkNode("fld",opt,-1,"/wdg/st/parent",_("Parent"),R_R_R_,"root",SUI_ID,1,"tp","str");
-	    ctrMkNode("fld",opt,10,"/wdg/st/pgTp",_("Page type"),RWRWR_,"root",SUI_ID,4,"tp","str","idm","1","dest","select","select","/wdg/st/pgTpLst");
 	    ctrMkNode("fld",opt,-1,"/wdg/st/timestamp",_("Date of modification"),R_R_R_,"root",SUI_ID,1,"tp","time");
 	}
 	if(prjFlags()&(Page::Template|Page::Container)) {
@@ -1387,44 +1479,67 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 
     //Process command to page
     string a_path = opt->attr("path"), u = opt->attr("user"), l = opt->attr("lang");
-    if(a_path == "/wdg/w_lst" && ctrChkNode(opt) && ownerPage() && (ownerPage()->prjFlags()&Page::Template))
-	opt->childIns(0,"el")->setText("..");
+    if(a_path == "/wdg/w_lst" && ctrChkNode(opt)) {
+	if(ownerPage() && (ownerPage()->prjFlags()&Page::Template)) opt->childIns(0,"el")->setText("..");
+	else if(prjFlags()&Page::Link) {
+	    int c_lv = 0;
+	    string c_path = "", c_el;
+	    string lnk = parentNm();
+
+	    opt->childAdd("el")->setText(c_path);
+	    for(int c_off = 0; (c_el=TSYS::pathLev(lnk,0,true,&c_off)).size(); c_lv++) {
+		c_path += "/"+c_el;
+		opt->childAdd("el")->setText(c_path);
+	    }
+	    try {
+		vector<string>	ls;
+		ownerProj()->nodeAt(lnk).at().nodeList(ls, "pg_");
+
+		for(unsigned iL = 0; iL < ls.size(); iL++)
+		    opt->childAdd("el")->setText(c_path+"/"+ls[iL]);
+	    } catch(TError&) { }
+	} else Widget::cntrCmdGeneric(opt);
+    }
     else if(a_path == "/wdg/st/pgTp") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(prjFlags()&(Page::Container|Page::Template|Page::Empty)));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))
+	    opt->setText(i2s(prjFlags()&(Page::Container|Page::Template|Page::Empty|Page::Link)));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))
-	    setPrjFlags(prjFlags()^((prjFlags()^s2i(opt->text()))&(Page::Container|Page::Template|Page::Empty)));
+	    setPrjFlags(prjFlags()^((prjFlags()^s2i(opt->text()))&(Page::Container|Page::Template|Page::Empty|Page::Link)));
     }
     else if(a_path == "/wdg/st/pgTpLst" && ctrChkNode(opt)) {
 	opt->childAdd("el")->setAttr("id","0")->setText(_("Standard"));
-	opt->childAdd("el")->setAttr("id", i2s(Page::Container))->setText(_("Container"));
-	opt->childAdd("el")->setAttr("id", i2s(Page::Container|Page::Empty))->setText(_("Logical container"));
-	opt->childAdd("el")->setAttr("id", i2s(Page::Template))->setText(_("Template"));
-	opt->childAdd("el")->setAttr("id", i2s(Page::Container|Page::Template))->setText(_("Container and template"));
+	if(!ownerPage() || !(ownerPage()->prjFlags()&Page::Template)) {
+	    opt->childAdd("el")->setAttr("id", i2s(Page::Container))->setText(_("Container"));
+	    opt->childAdd("el")->setAttr("id", i2s(Page::Container|Page::Empty))->setText(_("Logical container"));
+	    opt->childAdd("el")->setAttr("id", i2s(Page::Template))->setText(_("Template"));
+	    opt->childAdd("el")->setAttr("id", i2s(Page::Container|Page::Template))->setText(_("Container and template"));
+	    opt->childAdd("el")->setAttr("id", i2s(Page::Link))->setText(_("Link"));
+	}
     }
     else if(a_path == "/wdg/st/timestamp" && ctrChkNode(opt)) opt->setText(i2s(timeStamp()));
     else if(a_path == "/br/pg_" || a_path == "/page/page") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD)) {
-	    vector<string> lst;
+	    bool getChPgN = s2i(opt->attr("getChPgN"));
+	    vector<string> lst, lst1;
 	    pageList(lst);
-	    for(unsigned iF = 0; iF < lst.size(); iF++)
-		opt->childAdd("el")->setAttr("id",lst[iF])->setText(trLU(pageAt(lst[iF]).at().name(),l,u));
+	    for(unsigned iF = 0; iF < lst.size(); iF++) {
+		XMLNode *no = opt->childAdd("el")->setAttr("id",lst[iF])->setText(trLU(pageAt(lst[iF]).at().name(),l,u));
+		if(getChPgN) { pageAt(lst[iF]).at().pageList(lst1); no->setAttr("chPgN", i2s(lst1.size())); }
+	    }
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
-	    string vid = TSYS::strEncode(opt->attr("id"), TSYS::oscdID);
-	    if(pagePresent(vid)) throw TError(nodePath().c_str(), _("Page '%s' is already present!"), vid.c_str());
-	    pageAdd(vid, opt->text());
-	    pageAt(vid).at().setOwner(opt->attr("user"));
-	    pageAt(vid).at().manCrt = true;
-	    opt->setAttr("id", vid);
+	    opt->setAttr("id", pageAdd(opt->attr("id"),opt->text()));
+	    pageAt(opt->attr("id")).at().setOwner(opt->attr("user"));
+	    pageAt(opt->attr("id")).at().manCrt = true;
 	}
-	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	pageDel(opt->attr("id"),true);
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	pageDel(opt->attr("id"), true);
     }
     else if(a_path == "/page/nmb" && ctrChkNode(opt)) {
 	vector<string> c_list;
 	pageList(c_list);
 	unsigned e_c = 0;
-	for(unsigned i_p = 0; i_p < c_list.size(); i_p++)
-	    if(pageAt(c_list[i_p]).at().enable()) e_c++;
+	for(unsigned iP = 0; iP < c_list.size(); iP++)
+	    if(pageAt(c_list[iP]).at().enable()) e_c++;
 	opt->setText(TSYS::strMess(_("All: %d; Enabled: %d"),c_list.size(),e_c));
     }
     else return Widget::cntrCmdGeneric(opt);
@@ -1472,12 +1587,12 @@ bool Page::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	    vector<string> a_ls;
 	    string p_nm = TSYS::strSepParse(srcwdg.at().attrAt(nattr).at().cfgTempl(),0,'|');
 	    srcwdg.at().attrList(a_ls);
-	    unsigned i_a;
-	    for(i_a = 0; i_a < a_ls.size(); i_a++)
-		if(p_nm == TSYS::strSepParse(srcwdg.at().attrAt(a_ls[i_a]).at().cfgTempl(),0,'|') &&
-		    !(srcwdg.at().attrAt(a_ls[i_a]).at().flgSelf()&Attr::CfgConst))
-		{ nattr = a_ls[i_a]; break; }
-	    if(i_a >= a_ls.size()) throw TError(nodePath().c_str(),_("The variable is not a link"));
+	    unsigned iA;
+	    for(iA = 0; iA < a_ls.size(); iA++)
+		if(p_nm == TSYS::strSepParse(srcwdg.at().attrAt(a_ls[iA]).at().cfgTempl(),0,'|') &&
+		    !(srcwdg.at().attrAt(a_ls[iA]).at().flgSelf()&Attr::CfgConst))
+		{ nattr = a_ls[iA]; break; }
+	    if(iA >= a_ls.size()) throw TError(nodePath().c_str(),_("The variable is not a link"));
 	}
 
 	string m_prm = srcwdg.at().attrAt(nattr).at().cfgVal();
@@ -1664,7 +1779,14 @@ string PageWdg::calcLang( ) const	{ return parent().freeStat() ? "" : parent().a
 
 string PageWdg::calcProg( ) const	{ return parent().freeStat() ? "" : parent().at().calcProg(); }
 
-string PageWdg::calcProgStors( const string &attr ) { return parent().freeStat() ? "" : parent().at().calcProgStors(attr); }
+string PageWdg::calcProgStors( const string &attr )
+{
+    string rez = parent().freeStat() ? "" : parent().at().calcProgStors(attr);
+    if(attr.size() && attrAt(attr).at().modif() && rez.find(ownerPage().ownerProj()->DB()) == string::npos)
+	rez = ownerPage().ownerProj()->DB() + ";" + rez;
+
+    return rez;
+}
 
 int PageWdg::calcPer( ) const	{ return parent().freeStat() ? 0 : parent().at().calcPer(); }
 
@@ -1684,12 +1806,12 @@ void PageWdg::load_( TConfig *icfg )
     vector<string> als;
     attrList(als);
     string tAttrs = cfg("ATTRS").getS();
-    for(unsigned i_a = 0; i_a < als.size(); i_a++) {
-	if(!attrPresent(als[i_a])) continue;
-	AutoHD<Attr> attr = attrAt(als[i_a]);
-	if(attr.at().modif() && tAttrs.find(als[i_a]+";") == string::npos) {
+    for(unsigned iA = 0; iA < als.size(); iA++) {
+	if(!attrPresent(als[iA])) continue;
+	AutoHD<Attr> attr = attrAt(als[iA]);
+	if(attr.at().modif() && tAttrs.find(als[iA]+";") == string::npos) {
 	    attr.at().setModif(0);
-	    inheritAttr(als[i_a]);
+	    inheritAttr(als[iA]);
 	}
     }
 
@@ -1761,6 +1883,14 @@ string PageWdg::resourceGet( const string &id, string *mime )
     if(mime) *mime = mimeType;
 
     return mimeData;
+}
+
+void PageWdg::procChange( bool src )
+{
+    //Update heritors' procedures
+    for(unsigned iH = 0; iH < mHerit.size(); iH++)
+	if(mHerit[iH].at().enable())
+	    mHerit[iH].at().procChange(false);
 }
 
 void PageWdg::cntrCmdProc( XMLNode *opt )

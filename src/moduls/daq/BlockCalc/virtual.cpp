@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.BlockCalc file: virtual.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -42,7 +42,7 @@
 #define MOD_NAME	_("Block based calculator")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.8.4"
+#define MOD_VER		"1.9.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a block based calculator.")
 #define LICENSE		"GPL2"
@@ -247,12 +247,12 @@ void Contr::load_( )
     }
 
     // Check for remove items removed from DB
-    if(!SYS->selDB().empty()) {
-	vector<string> it_ls;
-	blkList(it_ls);
-	for(unsigned i_it = 0; i_it < it_ls.size(); i_it++)
-	    if(itReg.find(it_ls[i_it]) == itReg.end())
-		blkDel(it_ls[i_it]);
+    if(SYS->chkSelDB(SYS->selDB(),true)) {
+	vector<string> itLs;
+	blkList(itLs);
+	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
+	    if(itReg.find(itLs[iIt]) == itReg.end())
+		blkDel(itLs[iIt]);
     }
 }
 
@@ -364,14 +364,14 @@ void *Contr::Task( void *icontr )
 
 	cntr.hdRes.resRequestR();
 	MtxAlloc sres(cntr.calcRes, true);
-	for(unsigned i_it = 0; (int)i_it < cntr.mIter && !cntr.redntUse(); i_it++)
-	    for(unsigned i_blk = 0; i_blk < cntr.calcBlks.size(); i_blk++)
-		try { cntr.calcBlks[i_blk].at().calc(is_start, is_stop, cntr.period()?((1e9*(double)cntr.iterate())/cntr.period()):(-1e-6*(t_cnt-t_prev))); }
+	for(unsigned iIt = 0; (int)iIt < cntr.mIter && !cntr.redntUse(); iIt++)
+	    for(unsigned iBlk = 0; iBlk < cntr.calcBlks.size(); iBlk++)
+		try { cntr.calcBlks[iBlk].at().calc(is_start, is_stop, cntr.period()?((1e9*(double)cntr.iterate())/cntr.period()):(-1e-6*(t_cnt-t_prev))); }
 		catch(TError &err) {
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    string blck = cntr.calcBlks[i_blk].at().id();
+		    string blck = cntr.calcBlks[iBlk].at().id();
 		    mess_err(cntr.nodePath().c_str(),_("Block '%s' calc error."),blck.c_str());
-		    if(cntr.calcBlks[i_blk].at().errCnt() < 10) continue;
+		    if(cntr.calcBlks[iBlk].at().errCnt() < 10) continue;
 		    cntr.hdRes.resRelease( );
 		    mess_err(cntr.nodePath().c_str(),_("Block '%s' is stopped."),blck.c_str());
 		    cntr.blkAt(blck).at().setProcess(false);
@@ -425,21 +425,21 @@ void Contr::redntDataUpdate( )
 
 TParamContr *Contr::ParamAttach( const string &name, int type )	{ return new Prm(name,&owner().tpPrmAt(type)); }
 
-void Contr::blkAdd( const string &iid )
+string Contr::blkAdd( const string &iid )
 {
-    chldAdd(mBl, new Block(iid, this));
+    return chldAdd(mBl, new Block(TSYS::strEncode(sTrm(iid),TSYS::oscdID),this));
 }
 
 void Contr::blkProc( const string &id, bool val )
 {
-    unsigned i_blk;
+    unsigned iBlk;
 
     ResAlloc res(hdRes, true);
-    for(i_blk = 0; i_blk < calcBlks.size(); i_blk++)
-	if(calcBlks[i_blk].at().id() == id) break;
+    for(iBlk = 0; iBlk < calcBlks.size(); iBlk++)
+	if(calcBlks[iBlk].at().id() == id) break;
 
-    if(val && i_blk >= calcBlks.size()) calcBlks.push_back(blkAt(id));
-    if(!val && i_blk < calcBlks.size()) calcBlks.erase(calcBlks.begin()+i_blk);
+    if(val && iBlk >= calcBlks.size()) calcBlks.push_back(blkAt(id));
+    if(!val && iBlk < calcBlks.size()) calcBlks.erase(calcBlks.begin()+iBlk);
 }
 
 void Contr::cntrCmdProc( XMLNode *opt )
@@ -468,10 +468,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(blkAt(lst[i_f]).at().name());
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
-	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
-	    blkAdd(vid); blkAt(vid).at().setName(opt->text());
-	}
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	{ opt->setAttr("id", blkAdd(opt->attr("id"))); blkAt(opt->attr("id")).at().setName(opt->text()); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(mBl,opt->attr("id"),-1,1);
     }
     else if(a_path == "/scheme/sch") {
@@ -488,10 +485,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 		    opt->childAdd("el")->setAttr("id",calcBlks[i_b].at().id())->setText(calcBlks[i_b].at().name());
 	    }
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
-	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
-	    blkAdd(vid); blkAt(vid).at().setName(opt->text());
-	}
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	{ opt->setAttr("id", blkAdd(opt->attr("id"))); blkAt(opt->attr("id")).at().setName(opt->text()); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(mBl,opt->attr("id"),-1,1);
     }
     else if(a_path == "/scheme/nmb" && ctrChkNode(opt)) {
@@ -634,13 +628,7 @@ void Prm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     if(!enableStat() || !owner().startStat())	return;
 
     //Send to active reserve station
-    if(owner().redntUse()) {
-	if(vl == pvl) return;
-	XMLNode req("set");
-	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
-	SYS->daq().at().rdStRequest(owner().workId(),req);
-	return;
-    }
+    if(vlSetRednt(vo,vl,pvl))	return;
 
     //Direct write
     try {

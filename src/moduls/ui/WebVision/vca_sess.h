@@ -1,9 +1,9 @@
 
 //OpenSCADA module UI.WebVision file: vca_sess.h
 /***************************************************************************
- *   Copyright (C) 2007-2008 by Yashina Kseniya (ksu@oscada.org)	   *
- *		   2007-2012 by Lysenko Maxim (mlisenko@oscada.org)	   *
- *		   2007-2018 by Roman Savochenko (rom_as@oscada.org)	   *
+ *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>	   *
+ *		   2007-2012 by Lysenko Maxim, <mlisenko@oscada.org>	   *
+ *		   2007-2008 by Yashina Kseniya, <ksu@oscada.org>	   *
  *									   *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -72,6 +72,9 @@ class VCAObj : public TCntrNode
     public:
 	//Methods
 	VCAObj( const string &iid );
+	~VCAObj( );
+
+	string objName( );
 
 	const char *nodeName( ) const	{ return mId.c_str(); }
 	string path( )	{ return TSYS::sepstr2path(mId); }
@@ -81,9 +84,6 @@ class VCAObj : public TCntrNode
 	virtual void setAttrs( XMLNode &node, const SSess &ses ) = 0;
 
 	VCASess &owner( ) const;
-
-    protected:
-	string imgDef;
 
     private:
 	//Attributes
@@ -98,7 +98,9 @@ class VCAFormEl : public VCAObj
     public:
 	//Methods
 	VCAFormEl( const string &iid );
-	~VCAFormEl( )			{ }
+	~VCAFormEl( );
+
+	string objName( );
 
 	void getReq( SSess &ses );
 	void postReq( SSess &ses );
@@ -163,6 +165,8 @@ class VCAElFigure : public VCAObj
 	VCAElFigure( const string &iid );
 	~VCAElFigure( );
 
+	string objName( );
+
 	void getReq( SSess &ses );
 	void postReq( SSess &ses );
 	void setAttrs( XMLNode &node, const SSess &ses );
@@ -184,8 +188,8 @@ class VCAElFigure : public VCAObj
 	void dashDot( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3, Point el_p4, Point el_p5, Point el_p6, int  clr_el, double el_width, int type, int style  );
 	void dashDotFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3, Point el_p4, Point el_p5, Point el_p6, int  clr_el, int clr_el_line, double el_width, double el_border_width, int type, double wdt, double wdt_1, double xScale, double yScale  );
 	void paintFill( gdImagePtr im, Point pnt, InundationItem &in_item );
-	Point unscaleUnrotate( Point point, double xScale, double yScale, bool flag_scale, bool flag_rotate );
-	Point scaleRotate( Point point, double xScale, double yScale, bool flag_scale, bool flag_rotate );
+	Point unscaleUnrotate( Point point, double xScale, double yScale, bool flag_scale = true, bool flag_rotate = true, bool flag_mirror = true );
+	Point scaleRotate( Point point, double xScale, double yScale, bool flag_scale = true, bool flag_rotate = true, bool flag_mirror = true );
 	int drawElF( SSess &ses, double xSc, double ySc, Point clickPnt );
 	//Attributes
 	double	width,		//Widget geometry
@@ -201,9 +205,10 @@ class VCAElFigure : public VCAObj
 		lineStyle,	//The style of the line
 		scaleHeight,	//The vertical scale
 		scaleWidth;	//The horizontal scale
-	string	elLst;
+	string	elLst, imgDef;
 	double	orient;		//The orientation angle
 	bool	active,		//Active diagram
+		mirror,
 		rel_list;
 	gdImagePtr im;
 
@@ -253,6 +258,8 @@ class VCAText : public VCAObj
 	VCAText( const string &iid );
 	~VCAText( );
 
+	string objName( );
+
 	void getReq( SSess &ses );
 	void postReq( SSess &ses )  { }
 	void setAttrs( XMLNode &node, const SSess &ses );
@@ -292,6 +299,8 @@ class VCADiagram : public VCAObj
 	//Methods
 	VCADiagram( const string &iid );
 	~VCADiagram( );
+
+	string objName( );
 
 	void getReq( SSess &ses );
 	void postReq( SSess &ses );
@@ -418,7 +427,9 @@ class VCADocument : public VCAObj
     public:
 	//Methods
 	VCADocument( const string &iid );
-	~VCADocument( )			{ }
+	~VCADocument( );
+
+	string objName( );
 
 	void getReq( SSess &ses )	{ }
 	void postReq( SSess &ses )	{ }
@@ -432,29 +443,43 @@ class VCASess : public TCntrNode
 {
     public:
 	//Methods
-	VCASess( const string &iid, bool isCreate );
+	VCASess( const string &iid );
+	~VCASess( );
+
+	string objName( );
 
 	string id( )			{ return mId; }
+	string proj( )			{ return mProj; }
+	string user( )			{ return mUser; }
 	const string &sender( )		{ return mSender; }
+	time_t openTm( )		{ return open_ses; }
 	time_t lstReq( )		{ return lst_ses_req; }
 
-	void senderSet(const string &val)	{ mSender = val; }
+	void projSet( const string &val )	{ mProj = val; }
+	void userSet( const string &val )	{ mUser = val; }
+	void senderSet( const string &val )	{ mSender = val; }
 
 	void getReq( SSess &ses );
 	void postReq( SSess &ses );
 
 	// Objects
-	void objCheck( const string &rootId, const string &wPath );
+	bool objProc( const string &wPath, const SSess &ses, XMLNode *attrsN = NULL );
 	void objList( vector<string> &list ) const		{ chldList(id_objs,list); }
 	bool objPresent( const string &name ) const		{ return chldPresent(id_objs,name); }
 	void objAdd( VCAObj *obj );
 	void objDel( const string &name )			{ chldDel(id_objs, name); }
 	AutoHD<VCAObj> objAt( const string &name ) const	{ return chldAt(id_objs,name); }
 
+	int pgCacheSize( )		{ return mCachePg.size(); }
+	void pgCacheGet( const string &addr );
+	void pgCacheProc( const string &addr = "", bool fClose = false );	//Empty <addr> to check for the time limit
+
 	string resGet( const string &res, const string &path, const SSess &ses, string *mime = NULL );
 
 	string cacheResGet( const string &res, string *mime = NULL );
 	void cacheResSet( const string &res, const string &val, const string &mime );
+	int cacheResSize( );
+	float cacheResLen( );
 
 	ResRW &nodeRes( )		{ return nRes; }
 
@@ -478,9 +503,10 @@ class VCASess : public TCntrNode
 	//Attributes
 	const string		mId;
 	int			id_objs;	//Primitive object's container identifier
-	time_t			lst_ses_req;
-	string			mSender;
-	bool			mIsCreate;
+	time_t			open_ses, lst_ses_req;
+	string			mUser, mProj, mSender;
+
+	deque<pair<time_t,string> > mCachePg;	//Pages cache
 	map<string,CacheEl>	mCacheRes;	//Resources cache
 
 	ResRW	nRes;

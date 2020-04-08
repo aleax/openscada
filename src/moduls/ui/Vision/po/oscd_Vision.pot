@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-04 23:34+0300\n"
+"POT-Creation-Date: 2020-01-21 20:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,9 +33,11 @@ msgid ""
 "StartUser  <user>       Start-up, no-password, user.\n"
 "UserPass   <pass>       User password for non-local start.\n"
 "RunPrjs    <list>       List of projects to be launched at the start of the module.\n"
-"ExitLstRunPrjCls <0|1>  Exit closing the last completed project (default = 1).\n"
-"CachePgLife <hours>     The lifetime of pages in the cache.\n"
-"VCAstation <id>         The station with the VCA engine ('.' Is local).\n"
+"ExitLstRunPrjCls <0|1>  Exit closing the last completed project (by default 1).\n"
+"DropCommonWdgStls <0|1> Reset widget styles to common for some specific widgets in runtime, like to buttons (default 1).\n"
+"CachePgLife <hours>     Lifetime of the pages in the cache (by default 1).\n"
+"CachePgSz  <numb>       Maximum number of the pages in the cache (by default 10).\n"
+"VCAstation <id>         The station with the VCA engine ('.' is local).\n"
 "RestoreTime <seconds>   Connection recovery time.\n"
 "\n"
 msgstr ""
@@ -82,12 +84,17 @@ msgstr ""
 msgid "Connection recovery time, seconds"
 msgstr ""
 
-msgid "Lifetime of the cached pages"
+msgid "Lifetime and maximum number of the cached pages"
 msgstr ""
 
 msgid ""
 "The time is specified in hours, which defines the inactivity interval for closing pages in the cache.\n"
-"A zero value of time excludes the closing of pages in the cache."
+"Zero value of the time excludes the closing of pages in the cache."
+msgstr ""
+
+msgid ""
+"The number defines a limit of pages in the cache.\n"
+"Zero value of the number excludes the cache limit."
 msgstr ""
 
 msgid "List of the projects for launch"
@@ -102,12 +109,18 @@ msgstr ""
 msgid "Exit when closing the last running project"
 msgstr ""
 
-#, c-format
-msgid "%d: Development by \"%s\""
+msgid "Reset widget styles to common"
+msgstr ""
+
+msgid "Required for some widget styles like \"gtk\" in some specific widgets in run mode, like buttons for the background color and images."
 msgstr ""
 
 #, c-format
-msgid "%d: Running \"%s:%s\" from \"%s\" - %s"
+msgid "%d: Development by \"%s\"."
+msgstr ""
+
+#, c-format
+msgid "%d: Running \"%s:%s\" from \"%s\" - %s, updating period %s(%s), cached pages %d and resources %d."
 msgstr ""
 
 msgid "Connected"
@@ -180,6 +193,15 @@ msgstr ""
 msgid "Press for getting the using Qt information."
 msgstr ""
 
+msgid "Manual on ..."
+msgstr ""
+
+msgid "The button for getting the library manual"
+msgstr ""
+
+msgid "Press for getting the library manual."
+msgstr ""
+
 msgid "Manual on '%1'"
 msgstr ""
 
@@ -213,6 +235,18 @@ msgstr ""
 msgid "Press for loading the item data from the DB."
 msgstr ""
 
+msgid "Load from DB forcibly"
+msgstr ""
+
+msgid "Load the item data from DB forcibly"
+msgstr ""
+
+msgid "The button for loading the item data from the DB forcibly, not only when it changed"
+msgstr ""
+
+msgid "Press for loading the item data from the DB forcibly, not only when it changed."
+msgstr ""
+
 msgid "Save to DB"
 msgstr ""
 
@@ -223,6 +257,18 @@ msgid "The button for saving the item data to the DB"
 msgstr ""
 
 msgid "Press for saving the item data to the DB."
+msgstr ""
+
+msgid "Save to DB forcibly"
+msgstr ""
+
+msgid "Save the item data to DB forcibly"
+msgstr ""
+
+msgid "The button for saving the item data to the DB forcibly, not only when it changed"
+msgstr ""
+
+msgid "Press for saving the item data to the DB forcibly, not only when it changed."
 msgstr ""
 
 msgid "Run project"
@@ -813,7 +859,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Are you sure for lowering down to the parent for all changes of the visual items: '%1'?\n"
+"Are you sure for lowering down to the parent for all changes of the visual items '%1'?\n"
 "All other visual elements, descendant from this ancestor, will use these changes!"
 msgstr ""
 
@@ -873,16 +919,13 @@ msgstr ""
 msgid "Item icon. Click to download another."
 msgstr ""
 
+msgid "Status:"
+msgstr ""
+
 msgid "Enabled:"
 msgstr ""
 
 msgid "Container DB:"
-msgstr ""
-
-msgid "Used:"
-msgstr ""
-
-msgid "Date of modification:"
 msgstr ""
 
 msgid "Configuration"
@@ -975,9 +1018,6 @@ msgstr ""
 msgid "Error getting the node '%1' information."
 msgstr ""
 
-msgid "Not set"
-msgstr ""
-
 msgid "Downloading the image icon"
 msgstr ""
 
@@ -1025,10 +1065,10 @@ msgstr ""
 msgid "Widget"
 msgstr ""
 
-msgid "Parent widget:"
+msgid "Page type:"
 msgstr ""
 
-msgid "Page type:"
+msgid "Parent widget:"
 msgstr ""
 
 msgid "Root:"
@@ -1073,6 +1113,12 @@ msgstr ""
 msgid "Links"
 msgstr ""
 
+msgid "Are you sure of editing the inherited procedure, since that can cause for unexpectedly loss of the access to the original one?!"
+msgstr ""
+
+msgid "Editing an inherited procedure"
+msgstr ""
+
 msgid "Correct widget is not selected"
 msgstr ""
 
@@ -1112,14 +1158,18 @@ msgstr ""
 msgid "Short help to describe the syntax of the text."
 msgstr ""
 
+msgid ""
+"Are you sure for lowering down to the parent for the selected attribute '%1' change of the visual item '%2'?\n"
+"At missing the visual item will be created in the parent and all other visual elements, descendant from this ancestor, will use this!"
+msgstr ""
+
+msgid "Lowering down the selected attribute change of the visual item to the parent"
+msgstr ""
+
 msgid "Widgets"
 msgstr ""
 
 msgid "Type"
-msgstr ""
-
-#, c-format
-msgid "Time of requesting the widgets development tree '%s': %f ms."
 msgstr ""
 
 msgid "Library"
@@ -1154,10 +1204,6 @@ msgid "Projects"
 msgstr ""
 
 msgid "Project"
-msgstr ""
-
-#, c-format
-msgid "Time of loading the projects development tree '%s': %f ms."
 msgstr ""
 
 msgid "Page"
@@ -1379,6 +1425,9 @@ msgstr ""
 msgid "\"Date and time\";\"us\""
 msgstr ""
 
+msgid "Empty"
+msgstr ""
+
 msgid "\"Frequency (Hz)\""
 msgstr ""
 
@@ -1579,7 +1628,7 @@ msgid "Restore the session creation for '%s'."
 msgstr ""
 
 #, c-format
-msgid "Time of updating the session '%s': %f ms."
+msgid "Time of the session updating '%s': %s[%s]ms. Planer period %s(%s)ms"
 msgstr ""
 
 #, c-format
@@ -1625,7 +1674,7 @@ msgid ""
 "No access to view."
 msgstr ""
 
-msgid "No style"
+msgid "<Disabled>"
 msgstr ""
 
 msgid "Select your style from the list."

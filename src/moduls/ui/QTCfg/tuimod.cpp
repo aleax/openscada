@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTCfg file: tuimod.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2004-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,11 +24,11 @@
 #include <QErrorMessage>
 #include <QIcon>
 
-#include <tsys.h>
-#include <tmess.h>
 #include "qtcfg.h"
 #include "selfwidg.h"
 #include "tuimod.h"
+
+#include <tmess.h>
 
 //*************************************************
 //* Modul info!                                   *
@@ -37,7 +37,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"4.2.4"
+#define MOD_VER		"4.8.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt-based configurator of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -283,16 +283,24 @@ void TUIMod::postMess( const string &cat, const string &mess, TUIMod::MessLev ty
     msgBox.exec();
 }
 
-void TUIMod::setHelp( const string &help, const string &addr, QWidget *w )
+string TUIMod::setHelp( const string &help, const string &addr, QWidget *w )
 {
+    string helpL = TSYS::strEncode(help, TSYS::Limit, i2s(toolTipLim()));
+
+    if(!w)
+	return (helpL != help) ?
+	    "<body style='white-space: pre-wrap;'>"+TSYS::strEncode(helpL+"...",TSYS::Html)+"<i><b>Shift+F1</b></i></body>" :
+	    help;
+
     w->setStatusTip(addr.c_str());
     size_t itPos = addr.rfind("/");
     w->setWhatsThis(("<body style='white-space: pre-wrap;'>"+TSYS::strEncode(help,TSYS::Html)+(help.size()?"\n":"")+
 	"<i><b>"+_("Page")+"</b></i>:&nbsp;"+addr.substr(0,itPos)+"\n"+
 	"<i><b>"+_("Item")+"</b></i>:&nbsp;"+TSYS::strDecode((itPos==string::npos)?"":addr.substr(itPos+1),TSYS::PathEl)+"</body>").c_str());
     if(help.size()) {
-	if(toolTipLim() && help.size() > toolTipLim())
-	    w->setToolTip(("<body style='white-space: pre-wrap;'>"+TSYS::strEncode(TSYS::strMess(toolTipLim(),"%s",help.c_str()),TSYS::Html)+"<i><b>Shift+F1</b></i></body>").c_str());
+	if(helpL != help)
+	    w->setToolTip(("<body style='white-space: pre-wrap;'>"+TSYS::strEncode(helpL+"...",TSYS::Html)+"<i><b>Shift+F1</b></i></body>").c_str());
 	else w->setToolTip(help.c_str());
     }
+    return "";
 }

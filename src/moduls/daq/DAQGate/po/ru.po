@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.DAQGate translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.DAQGate package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2007-2018.
+# Roman Savochenko <rom_as@oscada.org>, 2007-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-01 16:13+0300\n"
+"POT-Creation-Date: 2019-06-23 09:33+0300\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -64,6 +64,9 @@ msgstr "Список удалённых объектов контроллеро�
 msgid "Allow the automatic removal of parameters and attributes"
 msgstr "Разрешать автоматическое удаление параметров и атрибутов"
 
+msgid "Placing different controllers to the separate virtual parameters"
+msgstr "Помещение различных контроллеров в отдельные виртуальные параметры"
+
 msgid "Standard"
 msgstr "Стандарт"
 
@@ -73,7 +76,7 @@ msgstr "Адрес удалённого параметра"
 msgid "Attributes configuration cache"
 msgstr "Кеш конфигурации атрибутов"
 
-msgid "Presence at stations"
+msgid "Presence at the stations"
 msgstr "Присутствие по станциям"
 
 msgid "Acquisition. "
@@ -111,9 +114,8 @@ msgstr ""
 "Ошибка удаления параметра '%s' поскольку он отсутствует в конфигурации или "
 "на удалённой станции."
 
-#, c-format
-msgid "DAQ.%s.%s: connecting to the data source: %s."
-msgstr "DAQ.%s.%s: подключение к источнику данных: %s."
+msgid "Connection to the data source: %s."
+msgstr "Подключение к источнику данных: %s."
 
 msgid "STOP"
 msgstr "ОСТАНОВЛЕН"
@@ -124,9 +126,8 @@ msgstr "10:Данные не доступны."
 msgid "OK"
 msgstr "НОРМА"
 
-#, c-format
-msgid "DAQ.%s.%s: connecting to the data source '%s': %s."
-msgstr "DAQ.%s.%s: подключение к источнику данных '%s': %s."
+msgid "Connection to the data source '%s': %s."
+msgstr "Подключение к источнику данных '%s': %s."
 
 #, c-format
 msgid "11:Station missed '%s'."
@@ -155,8 +156,8 @@ msgid ""
 "  System.AutoDA - for a controller object;\n"
 "  System.AutoDA.UpTimeStation - for a controller parameter."
 msgstr ""
-"Список удалённых OpenSCADA полных объектов контроллеров или отдельных параметров "
-"контроллеров. Пример адреса:\n"
+"Список удалённых OpenSCADA полных объектов контроллеров или отдельных "
+"параметров контроллеров. Пример адреса:\n"
 "  System.AutoDA - для объекта контроллера;\n"
 "  System.AutoDA.UpTimeStation - для параметра контроллера."
 

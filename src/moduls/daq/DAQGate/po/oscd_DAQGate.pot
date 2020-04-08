@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-05 19:03+0300\n"
+"POT-Creation-Date: 2019-06-23 09:33+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -59,6 +59,9 @@ msgstr ""
 msgid "Allow the automatic removal of parameters and attributes"
 msgstr ""
 
+msgid "Placing different controllers to the separate virtual parameters"
+msgstr ""
+
 msgid "Standard"
 msgstr ""
 
@@ -68,7 +71,7 @@ msgstr ""
 msgid "Attributes configuration cache"
 msgstr ""
 
-msgid "Presence at stations"
+msgid "Presence at the stations"
 msgstr ""
 
 msgid "Acquisition. "
@@ -103,7 +106,7 @@ msgid "Error deleting parameter '%s' but it is not present on the configuration 
 msgstr ""
 
 #, c-format
-msgid "DAQ.%s.%s: connecting to the data source: %s."
+msgid "Connection to the data source: %s."
 msgstr ""
 
 msgid "STOP"
@@ -116,7 +119,7 @@ msgid "OK"
 msgstr ""
 
 #, c-format
-msgid "DAQ.%s.%s: connecting to the data source '%s': %s."
+msgid "Connection to the data source '%s': %s."
 msgstr ""
 
 #, c-format

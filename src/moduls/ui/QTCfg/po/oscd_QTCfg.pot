@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-15 23:06+0300\n"
+"POT-Creation-Date: 2019-11-21 17:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -95,28 +95,52 @@ msgstr ""
 msgid "Press for going to the forward page."
 msgstr ""
 
-msgid "Load from the DB"
+msgid "Load from DB"
 msgstr ""
 
 msgid "Load the item data from DB"
 msgstr ""
 
-msgid "The button for loading the item data from the DB"
+msgid "The button for loading the item data from DB"
 msgstr ""
 
-msgid "Press for loading the item data from the DB."
+msgid "Press for loading the item data from DB."
 msgstr ""
 
-msgid "Save to the DB"
+msgid "Load from DB forcibly"
+msgstr ""
+
+msgid "Load the item data from DB forcibly"
+msgstr ""
+
+msgid "The button for loading the item data from DB forcibly, not only when it changed"
+msgstr ""
+
+msgid "Press for loading the item data from DB forcibly, not only when it changed."
+msgstr ""
+
+msgid "Save to DB"
 msgstr ""
 
 msgid "Save the item data to DB"
 msgstr ""
 
-msgid "The button for saving the item data to the DB"
+msgid "The button for saving the item data to DB"
 msgstr ""
 
-msgid "Press for saving the item data to the DB."
+msgid "Press for saving the item data to DB."
+msgstr ""
+
+msgid "Save to DB forcibly"
+msgstr ""
+
+msgid "Save the item data to DB forcibly"
+msgstr ""
+
+msgid "The button for saving the item data to DB forcibly, not only when it changed"
+msgstr ""
+
+msgid "Press for saving the item data to DB forcibly, not only when it changed."
 msgstr ""
 
 msgid "&Add"
@@ -312,7 +336,7 @@ msgid "Ready"
 msgstr ""
 
 #, c-format
-msgid "Configurator using the remote host %d times."
+msgid "The configurator is using the remote host %d times."
 msgstr ""
 
 msgid "Saving the changes"
@@ -333,6 +357,10 @@ msgid "Adding a node"
 msgstr ""
 
 msgid "The node '%1' is already present."
+msgstr ""
+
+#, c-format
+msgid "... and yet %d nodes"
 msgstr ""
 
 msgid "Are you sure of deleting the nodes '%1'?"
@@ -450,7 +478,7 @@ msgstr ""
 msgid "%s| Pressed down '%s'!"
 msgstr ""
 
-msgid "Value is wrong: "
+msgid "Value is missing: "
 msgstr ""
 
 #, c-format
@@ -519,10 +547,10 @@ msgstr ""
 msgid "Delete record"
 msgstr ""
 
-msgid "Move Up"
+msgid "Move Up (Ctrl+Up)"
 msgstr ""
 
-msgid "Move Down"
+msgid "Move Down (Ctrl+Down)"
 msgstr ""
 
 msgid "Copy"

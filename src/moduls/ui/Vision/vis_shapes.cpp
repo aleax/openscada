@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_shapes.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -50,16 +50,14 @@
 #include <QScrollBar>
 #include <QHeaderView>
 #if QT_VERSION < 0x050000
-// #include <QPlastiqueStyle>
+# include <QPlastiqueStyle>
 #else
-// #include <QCommonStyle>
-#include <qdrawutil.h>
+# include <QCommonStyle>
+# include <qdrawutil.h>
 #endif
 
-#include <tsys.h>
-#include "tvision.h"
-#include "vis_devel.h"
 #include "vis_run.h"
+#include "vis_devel.h"
 #include "vis_run_widgs.h"
 #include "vis_devel_widgs.h"
 #include "vis_shapes.h"
@@ -236,6 +234,12 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
     shD->evLock = true;
     switch(uiPrmPos) {
 	case A_COM_LOAD:	rel_cfg = true;	break;
+	case A_NO_ID:
+	    rel_cfg = true;
+	    if(attr == "vs_background")	w->setProperty("vs_background", val.c_str());
+	    else if(attr == "vs_border")w->setProperty("vs_border", val.c_str());
+	    else rel_cfg = false;
+	    break;
 	case A_EN:
 	    if(!runW)	break;
 	    shD->en = (bool)s2i(val);
@@ -296,14 +300,17 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 	    }
 	    break;
 	case A_FormElMixP3: shD->mode = s2i(val); rel_cfg = true;	break;
-	case A_FormElFont: shD->font = getFont(val); rel_cfg = true;	break;
+	case A_FormElFont:
+	    shD->font = getFont(val,vmin(w->xScale(true),w->yScale(true)));
+	    rel_cfg = true;
+	    break;
 	case A_FormElMixP4: shD->colorText = val; rel_cfg = true;	break;
     }
     if(rel_cfg && !w->allAttrLoad()) {
 	bool mk_new = false;
 	Qt::Alignment wAlign = 0;
 	QFont elFnt = shD->font;
-	if(elFnt.pixelSize() > 0) elFnt.setPixelSize((int)((float)elFnt.pixelSize()*vmin(w->xScale(true),w->yScale(true))));
+	//if(elFnt.pixelSize() > 0) elFnt.setPixelSize((int)((float)elFnt.pixelSize()*vmin(w->xScale(true),w->yScale(true))));
 
 	switch(shD->elType) {
 	    case F_LINE_ED: {
@@ -318,6 +325,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		LineEdit::LType tp = LineEdit::Text;
 		switch(shD->view) {
 		    case FL_TEXT:	tp = LineEdit::Text;	break;
+		    case FL_PASS:	tp = LineEdit::Password;break;
 		    case FL_COMBO:	tp = LineEdit::Combo;	break;
 		    case FL_INTEGER:	tp = LineEdit::Integer;	break;
 		    case FL_REAL:	tp = LineEdit::Real;	break;
@@ -339,7 +347,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		    if(runW) connect(wdg, SIGNAL(apply()), this, SLOT(textAccept()));
 		    mk_new = true;
 		}
-		wdg->setFont(elFnt);		//Font
+		wdg->workWdg()->setFont(elFnt);	//Font
 		setValue(w, shD->value, true);	//Value
 		wdg->workWdg()->setLineWrapMode(shD->opt1 ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);	//WordWrap
 		break;
@@ -362,11 +370,6 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		if(!wdg || !qobject_cast<QPushButton*>(wdg)) {
 		    if(wdg) wdg->deleteLater();
 		    shD->addrWdg = wdg = new QPushButton("test", w);
-/*#if QT_VERSION < 0x050000
-		    wdg->setStyle(new QPlastiqueStyle());
-#else
-		    wdg->setStyle(new QCommonStyle());
-#endif*/
 		    wdg->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
 		    if(runW) {
 			connect(wdg, SIGNAL(pressed()), this, SLOT(buttonPressed()));
@@ -379,7 +382,14 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		//Img
 		QImage img;
 		string backimg = w->resGet(shD->img);
+		wdg->setStyle(NULL);
 		if(!backimg.empty() && img.loadFromData((const uchar*)backimg.data(),backimg.size())) {
+		    if(mod->dropCommonWdgStls())
+#if QT_VERSION < 0x050000
+			wdg->setStyle(new QPlastiqueStyle());
+#else
+			wdg->setStyle(new QCommonStyle());
+#endif
 		    int icSzW = w->width() - w->layout()->margin();
 		    int icSzH = w->height() - w->layout()->margin();
 		    img = img.scaled(w->width()-w->layout()->margin(), w->height()-w->layout()->margin(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -391,10 +401,15 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		QPalette plt;
 		QColor clr = getColor(shD->color);
 		if(clr.isValid()) {
+		    if(mod->dropCommonWdgStls())
+#if QT_VERSION < 0x050000
+			wdg->setStyle(new QPlastiqueStyle());
+#else
+			wdg->setStyle(new QCommonStyle());
+#endif
 		    plt.setColor(QPalette::Button, clr);
 		    wdg->setStyleSheet(QString("background: %1").arg(shD->color.c_str()));
-		}
-		else wdg->setStyleSheet(QString("background: %1").arg(plt.color(QPalette::Button).name()));
+		} else wdg->setStyleSheet(QString("background: %1").arg(plt.color(QPalette::Button).name()));
 		clr = getColor(shD->colorText);
 		if(clr.isValid())	plt.setColor(QPalette::ButtonText, clr);
 		wdg->setPalette(plt);
@@ -431,7 +446,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		// Light updating for true work on mobile devices like to Maemo, MeeGo
 		int itN = 0;
 		string itVl;
-		for(int off = 0; (itVl=TSYS::strLine(shD->items,0,&off)).size() || off < shD->items.size(); itN++) {
+		for(int off = 0; (itVl=TSYS::strLine(shD->items,0,&off)).size() || off < (int)shD->items.size(); itN++) {
 		    if(itN >= wdg->count()) wdg->addItem(itVl.c_str());
 		    else if(wdg->item(itN)->text() != itVl.c_str()) wdg->item(itN)->setText(itVl.c_str());
 		}
@@ -557,12 +572,16 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 			    if(!(hit=wdg->horizontalHeaderItem(iC))) wdg->setHorizontalHeaderItem(iC, (hit=new QTableWidgetItem()));
 			    if(isH) {	//Header process
 				hit->setText(tC?tC->text().c_str():"");
+				hit->setData(Qt::FontRole, elFnt);
 				if(tC) {
 				    if((wVl=tC->attr("width")).size()) {
-					int wdthCel = fmax(1, s2i(wVl));
-					hit->setData(Qt::UserRole,
-					    (wVl.find("%") == wVl.size()-1) ? w->size().width()*wdthCel/100 : wdthCel*w->xScale(true));
-				    } else hit->setData(Qt::UserRole, QVariant());
+					int wdthCel = fmax(0, s2i(wVl));
+					if(wdthCel) {
+					    wdg->showColumn(iC);
+					    hit->setData(Qt::UserRole,
+						(wVl.find("%") == wVl.size()-1) ? -wdthCel : wdthCel*w->xScale(true));
+					} else wdg->hideColumn(iC);
+				    } //else hit->setData(Qt::UserRole, QVariant());
 				    hit->setData(Qt::UserRole+1, (bool)s2i(tC->attr("edit")));
 				    hit->setData(Qt::UserRole+2, ((wVl=tC->attr("color")).size()) ? QString::fromStdString(wVl) : QVariant());
 				    hit->setData(Qt::UserRole+3, ((wVl=tC->attr("colorText")).size()) ? QString::fromStdString(wVl) : QVariant());
@@ -603,8 +622,10 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 				    tit->setData(Qt::DecorationRole, QPixmap::fromImage(img));
 				else tit->setData(Qt::DecorationRole, QVariant());
 				// Modify set
-				if(hit->data(Qt::UserRole+1).toBool() || (tC && s2i(tC->attr("edit"))))
+				if(hit->data(Qt::UserRole+1).toBool() || (tC && s2i(tC->attr("edit")))) {
 				    tit->setFlags(tit->flags()|Qt::ItemIsEditable);
+				    tit->setData(Qt::UserRole+5, v);
+				}
 				tit->setData(Qt::UserRole+1, iC);
 				tit->setData(Qt::UserRole+2, iR);
 			    }
@@ -643,33 +664,11 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		}
 		wdg->setColumnCount(maxCols);
 		wdg->setRowCount(maxRows);
-		if(maxCols > 1) wdg->resizeColumnsToContents();
-		if(colsWdthFit && maxRows) {
-		    int averWdth = w->size().width()/maxCols;
-		    int fullColsWdth = 0, niceForceColsWdth = 0, busyCols = 0, tVl;
-		    //Count width params
-		    for(int iC = 0; iC < wdg->columnCount(); iC++) {
-			fullColsWdth += wdg->columnWidth(iC);
-			if(wdg->horizontalHeaderItem(iC) && (tVl=wdg->horizontalHeaderItem(iC)->data(Qt::UserRole).toInt())) {
-			    niceForceColsWdth += tVl;
-			    wdg->setColumnWidth(iC, tVl);
-			}
-			else if(wdg->columnWidth(iC) <= averWdth)	niceForceColsWdth += wdg->columnWidth(iC);
-			else busyCols++;
-		    }
-		    //Set busyCols
-		    if(fullColsWdth > w->size().width() && busyCols) {
-			int busyColsWdth = (w->size().width()-niceForceColsWdth)/busyCols;
-			for(int iC = 0; iC < wdg->columnCount(); iC++)
-			    if(wdg->columnWidth(iC) > averWdth && wdg->columnWidth(iC) > busyColsWdth)
-				wdg->setColumnWidth(iC, busyColsWdth);
-		    }
-		    wdg->resizeRowsToContents();
-		}
-		wdg->horizontalHeader()->setStretchLastSection(colsWdthFit);
+		wdg->setProperty("colsWdthFit", colsWdthFit);
 		shD->addrWdg->blockSignals(false);
 
 		setValue(w, shD->value, true);	//Value
+
 		break;
 	    }
 	    case F_SLIDER: case F_SCROLL_BAR: {
@@ -704,6 +703,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 	    }
 	}
 	shD->setType = true;
+
 	if(mk_new) {
 	    // Install event's filter and disable focus
 	    eventFilterSet(w, shD->addrWdg, true);
@@ -715,7 +715,42 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 	    ((QVBoxLayout*)w->layout())->addWidget(shD->addrWdg);
 	}
 	if(wAlign) ((QVBoxLayout*)w->layout())->setAlignment(shD->addrWdg, wAlign);
+
+	//Postprocessing after taking real data and size
+	switch(shD->elType) {
+	    case F_TABLE:
+		((QVBoxLayout*)w->layout())->activate();
+		tableFit(w);
+		break;
+	}
     }
+
+    if(rel_cfg && !w->allAttrLoad() && shD->addrWdg)
+	switch(shD->elType) {
+	    case F_LINE_ED: case F_TEXT_ED: case F_COMBO: case F_LIST: case F_TREE: case F_TABLE: {
+		string tVl, tVl1;
+		if((tVl=w->property("vs_background").toString().toStdString()).size()) {
+		    tVl1 = TSYS::strParse(tVl, 0, " ");
+
+		    QPalette plt(shD->addrWdg->palette());
+		    QBrush brsh = plt.brush(QPalette::Base);
+		    brsh.setColor(getColor(tVl1));
+		    if(!brsh.color().isValid()) brsh.setColor(QPalette().brush(QPalette::Base).color());
+
+		    QImage img;
+		    tVl1 = w->resGet(TSYS::strParse(tVl,1," "));
+		    if(tVl1.size()) img.loadFromData((const uchar*)tVl1.data(), tVl1.size());
+		    brsh.setTextureImage(img);
+
+		    brsh.setStyle(brsh.textureImage().isNull() ? Qt::SolidPattern : Qt::TexturePattern);
+		    plt.setBrush(QPalette::Base, brsh);
+		    shD->addrWdg->setPalette(plt);
+		}
+
+		tVl = w->property("vs_border").toString().toStdString();
+		shD->addrWdg->setStyleSheet(tVl.size()?QString("border: %1").arg(tVl.c_str()):"");
+	    }
+	}
 
     shD->evLock = false;
 
@@ -729,6 +764,11 @@ void ShapeFormEl::setActive( WdgView *w, bool val )
     switch(shD->elType) {
 	case F_LINE_ED:	((LineEdit*)shD->addrWdg)->setReadOnly(!val);			break;
 	case F_TEXT_ED:	((TextEdit*)shD->addrWdg)->workWdg()->setReadOnly(!val);	break;
+	case F_BUTTON:
+	    shD->addrWdg->setEnabled(val);
+	    if(val) shD->addrWdg->setCursor(Qt::PointingHandCursor);
+	    else shD->addrWdg->unsetCursor();
+	    break;
 	case F_TABLE:	break;
 	default: shD->addrWdg->setEnabled(val);
     }
@@ -793,8 +833,8 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 			    }
 
 			    cur_act = NULL;
-			    for(int i_a = 0; i_a < menu->actions().size(); i_a++)
-				if(menu->actions()[i_a]->text() == item.c_str()) cur_act = menu->actions()[i_a];
+			    for(int iA = 0; iA < menu->actions().size(); iA++)
+				if(menu->actions()[iA]->text() == item.c_str()) cur_act = menu->actions()[iA];
 			    if(!cur_act) {
 				cur_act = new QAction(item.c_str(), wdg);
 				connect(cur_act, SIGNAL(triggered()), this, SLOT(buttonMenuTrig()));
@@ -910,6 +950,45 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
     }
 }
 
+void ShapeFormEl::tableFit( WdgView *w )
+{
+    ShpDt *shD = (ShpDt*)w->shpData;
+    QTableWidget *wdg = (QTableWidget*)shD->addrWdg;
+    if(shD->elType != F_TABLE || !wdg || !qobject_cast<QTableWidget*>(wdg)) return;
+
+    wdg->horizontalHeader()->setStretchLastSection(false);
+
+    if(wdg->columnCount() > 1) wdg->resizeColumnsToContents();
+    if(wdg->property("colsWdthFit").toBool() && wdg->rowCount()) {
+	int tblWdth = wdg->maximumViewportSize().width();
+		    //vmax(w->sizeF().width(),wdg->maximumViewportSize().width()); - (wdg->verticalScrollBar()?wdg->verticalScrollBar()->size().width():0);
+	int averWdth = tblWdth/wdg->columnCount();
+	int fullColsWdth = 0, niceForceColsWdth = 0, busyCols = 0, tVl;
+	//Count width params
+	for(int iC = 0; iC < wdg->columnCount(); iC++) {
+	    fullColsWdth += wdg->columnWidth(iC);
+	    if(wdg->horizontalHeaderItem(iC) && (tVl=wdg->horizontalHeaderItem(iC)->data(Qt::UserRole).toInt())) {
+		if(tVl < 0)	tVl = tblWdth*abs(tVl)/100;
+		niceForceColsWdth += tVl;
+		wdg->setColumnWidth(iC, tVl);
+	    }
+	    else if(wdg->columnWidth(iC) <= averWdth)	niceForceColsWdth += wdg->columnWidth(iC);
+	    else busyCols++;
+	}
+
+	//Set busyCols
+	if(fullColsWdth > tblWdth && busyCols) {
+	    int busyColsWdth = (tblWdth-niceForceColsWdth)/busyCols;
+	    for(int iC = 0; iC < wdg->columnCount(); iC++)
+		if((!wdg->horizontalHeaderItem(iC) || !(tVl=wdg->horizontalHeaderItem(iC)->data(Qt::UserRole).toInt())) &&
+			wdg->columnWidth(iC) > averWdth && wdg->columnWidth(iC) > busyColsWdth)
+		    wdg->setColumnWidth(iC, busyColsWdth);
+	}
+	wdg->resizeRowsToContents();
+    }
+    wdg->horizontalHeader()->setStretchLastSection(wdg->property("colsWdthFit").toBool());
+}
+
 bool ShapeFormEl::event( WdgView *w, QEvent *event )
 {
     if(qobject_cast<RunWdgView*>(w))
@@ -950,8 +1029,9 @@ bool ShapeFormEl::eventFilter( WdgView *w, QObject *object, QEvent *event )
     else {
 	AttrValS attrs;
 	switch(event->type()) {
-	    case QEvent::FocusIn:
-		if(!w->hasFocus()) break;
+	    case QEvent::Resize: case QEvent::Show: tableFit(w);	break;
+	    case QEvent::FocusIn: qobject_cast<RunWdgView*>(w)->mainWin()->setFocus(w->id());	break;
+		/*if(!w->hasFocus()) break;
 		attrs.push_back(std::make_pair("focus","1"));
 		attrs.push_back(std::make_pair("event","ws_FocusIn"));
 		w->attrsSet(attrs);
@@ -961,7 +1041,7 @@ bool ShapeFormEl::eventFilter( WdgView *w, QObject *object, QEvent *event )
 		attrs.push_back(std::make_pair("focus","0"));
 		attrs.push_back(std::make_pair("event","ws_FocusOut"));
 		w->attrsSet(attrs);
-		break;
+		break;*/
 	    case QEvent::MouseButtonDblClick:
 	    case QEvent::MouseButtonPress:
 	    case QEvent::MouseButtonRelease: QApplication::sendEvent(w, event);	break;
@@ -1148,7 +1228,14 @@ void ShapeFormEl::tableSelectChange( )
     QTableWidget *el = (QTableWidget*)sender();
     RunWdgView   *w  = (RunWdgView*)el->parentWidget();
 
-    if(((ShpDt*)w->shpData)->evLock || !el->selectedItems().size() || !(((ShpDt*)w->shpData)->active && w->permCntr())) return;
+    if(((ShpDt*)w->shpData)->evLock || !el->selectedItems().size()) return;
+
+    //Unselect the table due its inactivity
+    if(!(((ShpDt*)w->shpData)->active && w->permCntr())) {
+	for(int iS = 0; iS < el->selectedItems().size(); iS++)
+	    el->selectedItems()[iS]->setSelected(false);
+	return;
+    }
 
     AttrValS attrs;
     QTableWidgetItem *wIt = el->selectedItems()[0];
@@ -1177,9 +1264,16 @@ void ShapeFormEl::tableChange( int row, int col )
     QTableWidget *el = (QTableWidget*)sender();
     RunWdgView   *w  = (RunWdgView*)el->parentWidget();
 
-    if(((ShpDt*)w->shpData)->evLock || !el->selectedItems().size() || !(((ShpDt*)w->shpData)->active && w->permCntr())) return;
+    if(((ShpDt*)w->shpData)->evLock /*|| !el->selectedItems().size()*/) return;
 
-    QTableWidgetItem *wIt = el->item(row,col);
+    QTableWidgetItem *wIt = el->item(row, col);
+
+    //Restore the previous value
+    if(!(((ShpDt*)w->shpData)->active && w->permCntr())) {
+	wIt->setData(Qt::DisplayRole, wIt->data(Qt::UserRole+5));
+	return;
+    }
+
     QVariant val = wIt->data(Qt::DisplayRole);
     if(val.type() == QVariant::Bool) val = val.toInt();
 
@@ -1257,11 +1351,13 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val, const stri
 	    shD->en = (bool)s2i(val);
 	    w->setVisible(s2i(val) && ((RunWdgView*)w)->permView());
 	    break;
-	case A_ACTIVE:
+	case A_ACTIVE: {
 	    if(!qobject_cast<RunWdgView*>(w))	break;
 	    shD->active = (bool)s2i(val);
-	    w->setFocusPolicy((s2i(val)&&((RunWdgView*)w)->permCntr()) ? Qt::StrongFocus : Qt::NoFocus);
+	    shD->realAct = (shD->active && ((RunWdgView*)w)->permCntr());
+	    w->setFocusPolicy(shD->realAct ? Qt::StrongFocus : Qt::NoFocus);
 	    break;
+	}
 	case A_GEOM_MARGIN: shD->geomMargin = s2i(val); up = true;	break;
 	case A_BackColor: {
 	    shD->backGrnd.setColor(getColor(val));
@@ -1271,7 +1367,7 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val, const stri
 	    brsh.setColor(shD->backGrnd.color());
 	    if(!brsh.color().isValid()) brsh.setColor(QPalette().brush(QPalette::Background).color());
 	    brsh.setStyle(brsh.textureImage().isNull() ? Qt::SolidPattern : Qt::TexturePattern);
-	    plt.setBrush(QPalette::Background,brsh);
+	    plt.setBrush(QPalette::Background, brsh);
 	    w->setPalette(plt);
 
 	    up = true;
@@ -1359,25 +1455,31 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val, const stri
     //Text reformation
     if(reform && !w->allAttrLoad()) {
 	QString text = shD->text_tmpl.c_str();
-	for(unsigned i_a = 0; i_a < shD->args.size(); i_a++) {
-	    switch(shD->args[i_a].val().type()) {
+	for(unsigned iA = 0; iA < shD->args.size(); iA++) {
+	    switch(shD->args[iA].val().type()) {
 		case QVariant::String:
-		    text = text.arg(shD->args[i_a].val().toString(), vmax(-1000,vmin(1000,s2i(shD->args[i_a].cfg()))));
+		    text = text.arg(shD->args[iA].val().toString(), vmax(-1000,vmin(1000,s2i(shD->args[iA].cfg()))));
 		    break;
 		case QVariant::Double: {
 		    int off = 0;
-		    int wdth = s2i(TSYS::strSepParse(shD->args[i_a].cfg(),0,';',&off));
-		    string form = TSYS::strSepParse(shD->args[i_a].cfg(),0,';',&off);
-		    int prec = s2i(TSYS::strSepParse(shD->args[i_a].cfg(),0,';',&off));
-		    text = text.arg(shD->args[i_a].val().toDouble(),vmax(-1000,vmin(1000,wdth)),form.empty()?0:form[0],vmax(0,prec),' ');
+		    int wdth = s2i(TSYS::strSepParse(shD->args[iA].cfg(),0,';',&off));
+		    string form = TSYS::strSepParse(shD->args[iA].cfg(),0,';',&off);
+		    int prec = s2i(TSYS::strSepParse(shD->args[iA].cfg(),0,';',&off));
+		    text = text.arg(shD->args[iA].val().toDouble(),vmax(-1000,vmin(1000,wdth)),form.empty()?0:form[0],vmax(0,prec),' ');
 		    break;
 		}
 		default:
-		    text = text.arg(shD->args[i_a].val().toInt(), vmax(-1000,vmin(1000,s2i(shD->args[i_a].cfg()))));
+		    text = text.arg(shD->args[iA].val().toInt(), vmax(-1000,vmin(1000,s2i(shD->args[iA].cfg()))));
 		    break;
 	    }
 	}
 	if(text != shD->text.c_str())	{ shD->text = text.toStdString(); up = true; }
+    }
+
+    if(up) {
+	if(shD->realAct && shD->text.size() && shD->backGrnd.color().isValid() && shD->backGrnd.color().alpha())
+	    w->setCursor(Qt::PointingHandCursor);
+	else w->unsetCursor();
     }
 
     if(up && !w->allAttrLoad() && uiPrmPos != -1) w->update();
@@ -1536,8 +1638,9 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 	case A_ACTIVE:
 	    if(!qobject_cast<RunWdgView*>(w))	break;
 	    shD->active = s2i(val);
-	    if(shD->addrWdg) shD->addrWdg->setMouseTracking(shD->active && ((RunWdgView*)w)->permCntr());
-	    w->setMouseTracking(shD->active && ((RunWdgView*)w)->permCntr());
+	    shD->realActive = shD->active && ((RunWdgView*)w)->permCntr();
+	    if(shD->addrWdg) shD->addrWdg->setMouseTracking(shD->realActive);
+	    w->setMouseTracking(shD->realActive);
 	    break;
 	case A_GEOM_MARGIN:
 	    shD->geomMargin = s2i(val);
@@ -1786,7 +1889,7 @@ bool ShapeMedia::event( WdgView *w, QEvent *event )
 	    QPainter pnt(w);
 
 	    //Prepare draw area
-	    QRect dA = w->rect().adjusted(0,0,-2*shD->geomMargin,-2*shD->geomMargin);
+	    QRect dA = w->rect().adjusted(0, 0, -2*shD->geomMargin, -2*shD->geomMargin);
 	    pnt.setWindow(dA);
 	    pnt.setViewport(w->rect().adjusted(shD->geomMargin,shD->geomMargin,-shD->geomMargin,-shD->geomMargin));
 
@@ -1801,22 +1904,27 @@ bool ShapeMedia::event( WdgView *w, QEvent *event )
 	}
 	case QEvent::MouseMove: {
 	    Qt::CursorShape new_shp = Qt::ArrowCursor;
-	    for(unsigned i_a = 0; i_a < shD->maps.size(); i_a++)
-		if(shD->maps[i_a].containsPoint(w->mapFromGlobal(w->cursor().pos()))) {
+	    if(shD->realActive && !shD->maps.size() && shD->backGrnd.color().isValid() && shD->backGrnd.color().alpha() && shD->mediaSrc.size())
+		new_shp = Qt::PointingHandCursor;
+	    for(unsigned iA = 0; iA < shD->maps.size(); iA++)
+		if(shD->maps[iA].containsPoint(w->mapFromGlobal(w->cursor().pos()))) {
 		    new_shp = Qt::PointingHandCursor;
-		    if(!shD->maps[i_a].title.empty()) QToolTip::showText(w->cursor().pos(),shD->maps[i_a].title.c_str());
+		    if(!shD->maps[iA].title.empty()) QToolTip::showText(w->cursor().pos(),shD->maps[iA].title.c_str());
 		    break;
 		}
 
-	    if(new_shp != w->cursor().shape()) w->setCursor(new_shp);
+	    if(new_shp != w->cursor().shape()) {
+		if(new_shp != Qt::ArrowCursor)	w->setCursor(new_shp);
+		else w->unsetCursor();
+	    }
 
 	    return true;
 	}
 	case QEvent::MouseButtonPress: {
 	    string sev;
-	    for(unsigned i_a = 0; i_a < shD->maps.size(); i_a++)
-	        if(shD->maps[i_a].containsPoint(w->mapFromGlobal(w->cursor().pos())))
-	        { sev = "ws_MapAct"+i2s(i_a); break; }
+	    for(unsigned iA = 0; iA < shD->maps.size(); iA++)
+	        if(shD->maps[iA].containsPoint(w->mapFromGlobal(w->cursor().pos())))
+	        { sev = "ws_MapAct"+i2s(iA); break; }
 	    if(!sev.empty()) {
 		switch(((QMouseEvent*)event)->button()) {
 		    case Qt::LeftButton:	sev += "Left";	break;
@@ -1995,7 +2103,7 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val, const s
 	case A_DiagramSclHor: shD->sclHor = s2i(val); make_pct = true;		break;
 	case A_DiagramSclVer: shD->sclVer = s2i(val); make_pct = true;		break;
 	case A_DiagramSclMarkColor: shD->sclMarkColor = getColor(val); make_pct = true;	break;
-	case A_DiagramSclMarkFont: shD->sclMarkFont = getFont(val); make_pct = true;	break;
+	case A_DiagramSclMarkFont: shD->sclMarkFont = getFont(val,vmin(w->xScale(true),w->yScale(true))); make_pct = true;	break;
 	case A_DiagramValArch: if(shD->valArch != val) { shD->valArch = val; reld_tr_dt = 2; }	break;
 	case A_DiagramParNum: {
 	    int parNum = s2i(val);
@@ -2062,7 +2170,7 @@ void ShapeDiagram::loadData( WdgView *w, bool full )
     ShpDt *shD = (ShpDt*)w->shpData;
 
     XMLNode req("set");
-    req.setAttr("path", w->id()+"/%2fserv%2fattr")->setAttr("noUser", "1");
+    req.setAttr("path", w->id()+"/%2fserv%2fattr")->setAttr("noUser", "1")->setAttr("reforwardRedundOff", "1");
     for(unsigned iP = 0; iP < shD->prms.size(); iP++) {
 	shD->prms[iP].loadData(full);
 	if(shD->prms[iP].arh_beg && shD->prms[iP].arh_end)
@@ -2123,7 +2231,7 @@ void ShapeDiagram::makeXYPicture( WdgView *w )
 	if(sclHor&FD_MARKS || sclVer&FD_MARKS) {
 	    mrkPen.setColor(shD->sclMarkColor);
 	    QFont mrkFnt = shD->sclMarkFont;
-	    mrkFnt.setPixelSize((double)mrkFnt.pixelSize()*vmin(w->xScale(true),w->yScale(true)));
+	    //mrkFnt.setPixelSize((double)mrkFnt.pixelSize()*vmin(w->xScale(true),w->yScale(true)));
 	    pnt.setFont(mrkFnt);
 	    mrkHeight = pnt.fontMetrics().height() - pnt.fontMetrics().descent();
 	    mrkWidth = pnt.fontMetrics().width("000000");
@@ -2190,7 +2298,7 @@ void ShapeDiagram::makeXYPicture( WdgView *w )
 	prmInGrp++; prmGrpLast = iP;
     }
 
-    // Check for individual parameters and for possibility to merge it to group or create new for no group
+    // Checking for individual parameters and for the possibility to merge their to groups or create a new one for no group
     int prmIndiv = 0, prmIndivSc = -1;
     vector<int>	prmsInd;
     for(unsigned iP = 0; iP < shD->prms.size(); iP += 2) {
@@ -2199,7 +2307,7 @@ void ShapeDiagram::makeXYPicture( WdgView *w )
 	if(!cP.val().size() || !cP.color().isValid() || !(cP.wScale&FD_GRD_MARKS) || (iP+1) >= shD->prms.size() ||
 	    !shD->prms[iP+1].val().size() || !shD->prms[iP+1].color().isValid()) continue;
 
-	//  Check for include to present or create new group and exclude from individual
+	//  Checking for include to the present one or create a new group and exclude from individual ones
 	if((!prmInGrp || (vsMin < vsMax && vmax(fabs((vsMax-cP.adjL)/(vsMax-vsMin)-1),fabs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2)) &&
 	    (cP.mScale&FD_LOG) == (sclVer&FD_LOG))
 	{
@@ -2286,7 +2394,7 @@ void ShapeDiagram::makeXYPicture( WdgView *w )
 	    while(!isLogT && ((cP.adjU-cP.adjL)/vDiv) < vmax_ln/2) vDiv /= 2;
 	    vsMinT = cP.adjL; vsMaxT = cP.adjU;
 	}
-	if(iP < (prmsInd.size()-1))	sclVerT &= ~(FD_GRD);	//Hide grid for no last scale
+	if(iP < (prmsInd.size()-1))	sclVerT &= ~(FD_GRD);	//Hide grid for not last scale
 
 	//Draw vertical grid and markers
 	int markWdth = 0;
@@ -2294,7 +2402,7 @@ void ShapeDiagram::makeXYPicture( WdgView *w )
 	    string labVal;
 	    pnt.setPen(grdPenT);
 	    pnt.drawLine(tAr.x()-1, tAr.y(), tAr.x()-1, tAr.height());
-	    for(double iV = ceil(vsMinT/vDiv)*vDiv; (vsMaxT-iV)/vDiv > -0.1; iV += vDiv) {
+	    for(double iV = floor((vsMinT/vDiv)+0.5)*vDiv; (vsMaxT-iV)/vDiv > -0.1; iV += vDiv) {
 		int v_pos = tAr.y() + tAr.height() - (int)((double)tAr.height()*(iV-vsMinT)/(vsMaxT-vsMinT));
 		if(sclVerT&FD_GRD) { pnt.setPen(grdPen); pnt.drawLine(tAr.x(), v_pos, tAr.x()+tAr.width(), v_pos); }
 		else { pnt.setPen(grdPenT); pnt.drawLine(tAr.x()-3, v_pos, tAr.x()+3, v_pos); }
@@ -2502,11 +2610,11 @@ void ShapeDiagram::makeXYPicture( WdgView *w )
 	QPen trpen(cP.color());
 	trpen.setStyle(Qt::SolidLine);
 	trpen.setWidth(vmax(1,vmin(10,(int)rRnd(cP.width()*vmin(w->xScale(true),w->yScale(true))))));
-#if QT_VERSION < 0x050000
-	if(cP.valTp() != TFld::Boolean && trpen.width() > 1) trpen.setCapStyle(Qt::RoundCap);
-#else
+//#if QT_VERSION < 0x050000
+//	if(cP.valTp() != TFld::Boolean && trpen.width() > 1) trpen.setCapStyle(Qt::RoundCap);
+//#else
 	trpen.setCapStyle(Qt::FlatCap);
-#endif
+//#endif
 	pnt.setRenderHint(QPainter::Antialiasing, (trpen.width()>=2));
 	pnt.setPen(trpen);
 
@@ -2544,6 +2652,7 @@ void ShapeDiagram::makeXYPicture( WdgView *w )
 		}
 	    }
 	    float vMarg = (bordU-bordL)/10;
+	    if(vMarg == 0) vMarg = 0.5;
 	    bordL -= vMarg;
 	    bordU += vMarg;
 	}
@@ -2551,6 +2660,7 @@ void ShapeDiagram::makeXYPicture( WdgView *w )
 	// X: Prepare XY data buffer and prepare border for percent trend, ONLY!
 	float xBordL = cPX.bordL();
 	float xBordU = cPX.bordU();
+	int maxVlX = -1;
 	vector< pair<double,double> > dBuf;
 	{
 	    bool xNeedRngChk = (hsPercT && xBordL >= xBordU);
@@ -2560,8 +2670,10 @@ void ShapeDiagram::makeXYPicture( WdgView *w )
 		if(ipos >= (int)cPX.val().size() || end_vl)	break;
 		if(cPX.val()[ipos].tm >= aVend) end_vl = true;
 		if(cPX.val()[ipos].val != EVAL_REAL) {
-		    if((iVpos=cP.val(cPX.val()[ipos].tm)) < (int)cP.val().size() && cP.val()[iVpos].val != EVAL_REAL)
+		    if((iVpos=cP.val(cPX.val()[ipos].tm)) < (int)cP.val().size() && cP.val()[iVpos].val != EVAL_REAL) {
 			dBuf.push_back(pair<double,double>(cPX.val()[ipos].val,cP.val()[iVpos].val));
+			if(maxVlX < 0 || cPX.val()[ipos].val >= cPX.val()[maxVlX].val) maxVlX = ipos;
+		    }
 		    if(xNeedRngChk) {
 			xBordL = vmin(xBordL, cPX.val()[ipos].val);
 			xBordU = vmax(xBordU, cPX.val()[ipos].val);
@@ -2591,18 +2703,18 @@ void ShapeDiagram::makeXYPicture( WdgView *w )
 	// Draw curent point
 	int iVpos = cP.val(aVend);
 	int iVposX = cPX.val(aVend);
-	if(iVpos < (int)cP.val().size() && iVposX < (int)cPX.val().size() && cP.val()[iVpos].val != EVAL_REAL && cPX.val()[iVposX].val != EVAL_REAL)
+	if(iVpos < (int)cP.val().size() && iVposX < (int)cPX.val().size() && iVposX != maxVlX && cP.val()[iVpos].val != EVAL_REAL && cPX.val()[iVposX].val != EVAL_REAL)
 	{
 	    curVl = vsPercT ? 100*(cP.val()[iVpos].val-bordL)/(bordU-bordL) : cP.val()[iVpos].val;
 	    curVlX = hsPercT ? 100*(cPX.val()[iVposX].val-xBordL)/(xBordU-xBordL) : cPX.val()[iVposX].val;
 	    c_vpos = tAr.y() + tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,((isLogT?log10(vmax(1e-100,curVl)):curVl)-vsMinT)/(vsMaxT-vsMinT))));
 	    c_hpos = tAr.x() + (int)((double)tAr.width()*vmax(0,vmin(1,((isHLogT?log10(vmax(1e-100,curVlX)):curVlX)-hsMinT)/(hsMaxT-hsMinT))));
-	    pnt.drawLine(c_hpos-trpen.width()*5, c_vpos-trpen.width()*5, c_hpos+trpen.width()*5, c_vpos+trpen.width()*5);
-	    pnt.drawLine(c_hpos-trpen.width()*5, c_vpos+trpen.width()*5, c_hpos+trpen.width()*5, c_vpos-trpen.width()*5);
+	    pnt.drawLine(c_hpos-trpen.width()*3, c_vpos-trpen.width()*3, c_hpos+trpen.width()*3, c_vpos+trpen.width()*3);
+	    pnt.drawLine(c_hpos-trpen.width()*3, c_vpos+trpen.width()*3, c_hpos+trpen.width()*3, c_vpos-trpen.width()*3);
 
 	    AttrValS attrs;
-	    attrs.push_back(std::make_pair(TSYS::strMess("prm%dval",iT),r2s(cP.val()[iVpos].val,6)));
-	    attrs.push_back(std::make_pair(TSYS::strMess("prm%dval",iT+1),r2s(cPX.val()[iVposX].val,6)));
+	    attrs.push_back(std::make_pair(TSYS::strMess("prm%dval",iT),r2s(cP.val()[iVpos].val)));
+	    attrs.push_back(std::make_pair(TSYS::strMess("prm%dval",iT+1),r2s(cPX.val()[iVposX].val)));
 	    attrs.push_back(std::make_pair("curSek",i2s(aVend/1000000)));
 	    attrs.push_back(std::make_pair("curUSek",i2s(aVend%1000000)));
 	    w->attrsSet(attrs);
@@ -2647,7 +2759,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	if(sclHor&FD_MARKS || sclVer&FD_MARKS) {
 	    mrkPen.setColor(shD->sclMarkColor);
 	    QFont mrkFnt = shD->sclMarkFont;
-	    mrkFnt.setPixelSize((double)mrkFnt.pixelSize()*vmin(w->xScale(true),w->yScale(true)));
+	    //mrkFnt.setPixelSize((double)mrkFnt.pixelSize()*vmin(w->xScale(true),w->yScale(true)));
 	    pnt.setFont(mrkFnt);
 	    mrkHeight = pnt.fontMetrics().height() - pnt.fontMetrics().descent();
 	    mrkWidth = pnt.fontMetrics().width("000000");
@@ -2838,16 +2950,16 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 		pnt.drawText(markBrd,tAr.y()+tAr.height()+mrkHeight,labH.c_str());
 	    }
 	    //  Draw grid and/or markers
-	    for(double i_h = fftBeg; (fftEnd-i_h)/hDiv > -0.1; i_h += hDiv) {
+	    for(double iH = fftBeg; (fftEnd-iH)/hDiv > -0.1; iH += hDiv) {
 		//   Draw grid
 		pnt.setPen(grdPen);
-		int h_pos = tAr.x()+(int)((double)tAr.width()*(i_h-fftBeg)/(fftEnd-fftBeg));
+		int h_pos = tAr.x()+(int)((double)tAr.width()*(iH-fftBeg)/(fftEnd-fftBeg));
 		if(sclHor&FD_GRD) pnt.drawLine(h_pos, tAr.y(), h_pos, tAr.y()+tAr.height());
 		else pnt.drawLine(h_pos, tAr.y()+tAr.height()-3, h_pos, tAr.y()+tAr.height()+3);
 
 		if(sclHor&FD_MARKS) {
 		    pnt.setPen(mrkPen);
-		    labH = TSYS::strMess("%0.5g", i_h/labDiv);
+		    labH = TSYS::strMess("%0.5g", iH/labDiv);
 		    int wdth = pnt.fontMetrics().width(labH.c_str());
 		    int tpos = vmax(h_pos-wdth/2, 0);
 		    if((tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3))
@@ -2868,11 +2980,11 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	QPen trpen(cP.color());
 	trpen.setStyle(Qt::SolidLine);
 	trpen.setWidth(vmax(1,vmin(10,(int)rRnd(cP.width()*vmin(w->xScale(true),w->yScale(true))))));
-#if QT_VERSION < 0x050000
-	if(trpen.width() > 1) trpen.setCapStyle(Qt::RoundCap);
-#else
+//#if QT_VERSION < 0x050000
+//	if(trpen.width() > 1) trpen.setCapStyle(Qt::RoundCap);
+//#else
 	trpen.setCapStyle(Qt::FlatCap);
-#endif
+//#endif
 	pnt.setRenderHint(QPainter::Antialiasing, (trpen.width()>=2));
 	pnt.setPen(trpen);
 
@@ -2974,7 +3086,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	if(sclHor&FD_MARKS || sclVer&FD_MARKS) {
 	    mrkPen.setColor(shD->sclMarkColor);
 	    QFont mrkFnt = shD->sclMarkFont;
-	    mrkFnt.setPixelSize((double)mrkFnt.pixelSize()*vmin(w->xScale(true),w->yScale(true)));
+	    //mrkFnt.setPixelSize((double)mrkFnt.pixelSize()*vmin(w->xScale(true),w->yScale(true)));
 	    pnt.setFont(mrkFnt);
 	    mrkHeight = pnt.fontMetrics().height()-pnt.fontMetrics().descent();
 	    mrkWidth = pnt.fontMetrics().width("000000");
@@ -3163,24 +3275,34 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
     }
     mrkPen.setColor(shD->sclMarkColor);	//Restore mark color
 
-    //Calc horizontal scale
+    //Calc and draw the horizontal scale
     int64_t hDiv = 1;	//Horisontal scale divisor
     int hmax_ln = tAr.width() / (int)((sclHor&FD_MARKS)?mrkWidth:15*vmin(w->xScale(true),w->yScale(true)));
     if(hmax_ln >= 2) {
 	int hvLev = 0;
 	int64_t hLen = tEnd - tBeg;
-	if(hLen/86400000000ll >= 2)	{ hvLev = 5; hDiv = 86400000000ll; }	//Days
-	else if(hLen/3600000000ll >= 2)	{ hvLev = 4; hDiv =  3600000000ll; }	//Hours
-	else if(hLen/60000000 >= 2)	{ hvLev = 3; hDiv =    60000000ll; }	//Minutes
-	else if(hLen/1000000 >= 2)	{ hvLev = 2; hDiv =     1000000ll; }	//Seconds
-	else if(hLen/1000 >= 2)		{ hvLev = 1; hDiv =        1000ll; }	//Milliseconds
-	while(hLen/hDiv > hmax_ln)	hDiv *= 10;
-	while(hLen/hDiv < hmax_ln/2)	hDiv /= 2;
+
+	if(hLen/2635200000000ll >= 5)	{ hvLev = 7; hDiv = 2635200000000ll; }	//Month a unstrict interval
+	else if(hLen/86400000000ll >= 5){ hvLev = 6; hDiv =   86400000000ll; }	//More days and no time in the scale
+	else if(hLen/86400000000ll >= 2){ hvLev = 5; hDiv =   86400000000ll; }	//Days
+	else if(hLen/3600000000ll >= 2)	{ hvLev = 4; hDiv =    3600000000ll; }	//Hours
+	else if(hLen/60000000 >= 2)	{ hvLev = 3; hDiv =      60000000ll; }	//Minutes
+	else if(hLen/1000000 >= 2)	{ hvLev = 2; hDiv =       1000000ll; }	//Seconds
+	else if(hLen/1000 >= 2)		{ hvLev = 1; hDiv =          1000ll; }	//Milliseconds
+
+	int64_t hDiv_ = hDiv;
+	while(hLen/hDiv_ > hmax_ln)	hDiv_ *= 10;
+	while(hLen/hDiv_ < hmax_ln/5 && (hDiv_/5)%hDiv == 0) hDiv_ /= 5;
+	while(hLen/hDiv_ < hmax_ln/2 && (hvLev < 6 || (hDiv_/2)%hDiv == 0)) hDiv_ /= 2;
+	hDiv = hDiv_;
 
 	if(shD->sclHorPer > 0 && (hLen/shD->sclHorPer) > 2 && (tAr.width()/(hLen/shD->sclHorPer)) > 15)	hDiv = shD->sclHorPer;
 
+	int64_t UTChourDt = 1000000ll*TSYS::str2atime(TSYS::atime2str(tEnd/1000000),"",true) - tEnd;
+
 	if((hLen/hDiv) >= 5 && shD->trcPer) {
 	    tPict = hDiv*(tEnd/hDiv+1);
+	    if((tPict-tEnd) > llabs(UTChourDt)) tPict -= UTChourDt;
 	    tBeg = tPict-hLen;
 	}
 
@@ -3189,9 +3311,6 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    time_t tm_t = 0;
 	    struct tm ttm, ttm1 = ttm;
 	    string lab_tm, lab_dt;
-
-	    localtime_r(&tm_t, &ttm);
-	    int64_t UTChourDt = (int64_t)ttm.tm_hour*3600000000ll;
 
 	    //  Draw generic grid line
 	    pnt.setPen(grdPen);
@@ -3202,71 +3321,84 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    if(sclHor&FD_MARKS) {
 		pnt.setPen(mrkPen);
 		tm_t = tPict/1000000;
-		localtime_r(&tm_t,&ttm);
-		lab_dt = TSYS::strMess("%d-%02d-%d",ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900);
-		if(ttm.tm_sec == 0 && tPict%1000000 == 0) lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
-		else if(tPict%1000000 == 0) lab_tm = TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec);
-		else lab_tm = TSYS::strMess("%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(tPict%1000000)/1e6);
-		int markBrd = tAr.x()+tAr.width()-pnt.fontMetrics().width(lab_tm.c_str());
-		endMarkBrd = vmin(endMarkBrd,markBrd);
-		pnt.drawText(markBrd,tAr.y()+tAr.height()+mrkHeight,lab_tm.c_str());
-		markBrd = tAr.x()+tAr.width()-pnt.fontMetrics().width(lab_dt.c_str());
-		endMarkBrd = vmin(endMarkBrd,markBrd);
-		pnt.drawText(markBrd,tAr.y()+tAr.height()+2*mrkHeight,lab_dt.c_str());
+		localtime_r(&tm_t, &ttm);
+		lab_dt = TSYS::strMess("%d-%02d-%d", ttm.tm_mday, ttm.tm_mon+1, ttm.tm_year+1900);
+		if(ttm.tm_sec == 0 && tPict%1000000 == 0) lab_tm = TSYS::strMess("%d:%02d", ttm.tm_hour, ttm.tm_min);
+		else if(tPict%1000000 == 0) lab_tm = TSYS::strMess("%d:%02d:%02d", ttm.tm_hour, ttm.tm_min, ttm.tm_sec);
+		else lab_tm = TSYS::strMess("%d:%02d:%g", ttm.tm_hour, ttm.tm_min, (float)ttm.tm_sec+(float)(tPict%1000000)/1e6);
+
+		int markBrd = 0, markY = tAr.y()+tAr.height()+mrkHeight;
+		if(hvLev < 6) {
+		    markBrd = tAr.x() + tAr.width() - pnt.fontMetrics().width(lab_tm.c_str());
+		    endMarkBrd = vmin(endMarkBrd, markBrd);
+		    pnt.drawText(markBrd, markY, lab_tm.c_str());
+		    markY += mrkHeight;
+		}
+		markBrd = tAr.x() + tAr.width() - pnt.fontMetrics().width(lab_dt.c_str());
+		endMarkBrd = vmin(endMarkBrd, markBrd);
+		pnt.drawText(markBrd, markY, lab_dt.c_str());
 	    }
-	    //  Draw grid and/or markers
+	    //  Drawing the grid and/or markers
 	    bool first_m = true;
-	    for(int64_t i_h = tBeg; true; ) {
-		//   Draw grid
+	    for(int64_t iH = tBeg; true; ) {
+		//   Drawing the grid
 		pnt.setPen(grdPen);
-		int h_pos = tAr.x()+tAr.width()*(i_h-tBeg)/(tPict-tBeg);
+		int h_pos = tAr.x()+tAr.width()*(iH-tBeg)/(tPict-tBeg);
 		if(sclHor&FD_GRD) pnt.drawLine(h_pos, tAr.y(), h_pos, tAr.y()+tAr.height());
 		else pnt.drawLine(h_pos, tAr.y()+tAr.height()-3, h_pos, tAr.y()+tAr.height()+3);
 
-		if(sclHor&FD_MARKS && !((i_h+UTChourDt)%hDiv) && i_h != tPict) {
-		    tm_t = i_h/1000000;
-		    localtime_r(&tm_t,&ttm);
-		    int chLev = -1;
-		    if(!first_m) {
-			if(ttm.tm_mon > ttm1.tm_mon || ttm.tm_year > ttm1.tm_year) chLev = 5;
-			else if(ttm.tm_mday > ttm1.tm_mday)	chLev = 4;
-			else if(ttm.tm_hour > ttm1.tm_hour)	chLev = 3;
-			else if(ttm.tm_min > ttm1.tm_min)	chLev = 2;
-			else if(ttm.tm_sec > ttm1.tm_sec)	chLev = 1;
-			else chLev = 0;
-		    }
+		if(sclHor&FD_MARKS && (!((iH+UTChourDt)%hDiv) || hvLev >= 7) && iH != tPict) {
+		    if(first_m) tm_t = (tBeg-(tEnd-tBeg))/1000000, localtime_r(&tm_t, &ttm1);
+		    tm_t = iH/1000000; localtime_r(&tm_t, &ttm);
+
+		    int chLev = 0;
+		    if(ttm.tm_year-ttm1.tm_year)	chLev = 6;
+		    else if(ttm.tm_mon-ttm1.tm_mon)	chLev = 5;
+		    else if(ttm.tm_mday-ttm1.tm_mday)	chLev = 4;
+		    else if(ttm.tm_hour-ttm1.tm_hour)	chLev = 3;
+		    else if(ttm.tm_min-ttm1.tm_min)	chLev = 2;
+		    else if(ttm.tm_sec-ttm1.tm_sec)	chLev = 1;
 
 		    //Check for data present
 		    lab_dt.clear(), lab_tm.clear();
 		    //Date
-		    if(hvLev == 5 || chLev >= 4)
-			lab_dt = TSYS::strMess(((chLev>=5 || chLev==-1)?"%d-%02d-%d":"%d"), ttm.tm_mday, ttm.tm_mon+1, ttm.tm_year+1900);
+		    if(hvLev == 7)
+			lab_dt = TSYS::atime2str(iH/1000000, (chLev>=6)?"%B %Y":"%B");
+		    else if(/*hvLev == 5 ||*/ chLev >= 4)
+			lab_dt = TSYS::strMess((chLev>=5?"%d-%02d-%d":"%d"), ttm.tm_mday, ttm.tm_mon+1, ttm.tm_year+1900);
 		    //Hours and minuts
 		    if((hvLev == 4 || hvLev == 3 || ttm.tm_hour || ttm.tm_min) && !ttm.tm_sec)
 			lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
 		    //Seconds
-		    else if((hvLev == 2 || ttm.tm_sec) && !(i_h%1000000))
-			lab_tm = (chLev>=2 || chLev==-1) ? TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec) : TSYS::strMess(_("%ds"),ttm.tm_sec);
+		    else if((hvLev == 2 || ttm.tm_sec) && !(iH%1000000))
+			lab_tm = chLev >= 2 ? TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec) :
+					      TSYS::strMess(_("%ds"),ttm.tm_sec);
 		    //Milliseconds
-		    else if(hvLev <= 1 || i_h%1000000)
-			lab_tm = (chLev>=2 || chLev==-1) ? TSYS::strMess("%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(i_h%1000000)/1e6) :
-				 (chLev>=1) ? TSYS::strMess(_("%gs"),(float)ttm.tm_sec+(float)(i_h%1000000)/1e6) :
-					      TSYS::strMess(_("%gms"),(double)(i_h%1000000)/1000.);
-		    int wdth, tpos, endPosTm = 0, endPosDt = 0;
+		    else if(hvLev <= 1 || iH%1000000)
+			lab_tm = chLev >= 2 ? TSYS::strMess("%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(iH%1000000)/1e6) :
+				 chLev >= 1 ? TSYS::strMess(_("%gs"),(float)ttm.tm_sec+(float)(iH%1000000)/1e6) :
+					      TSYS::strMess(_("%gms"),(double)(iH%1000000)/1000.);
+
+		    int wdth, tpos, endPosTm = 0, endPosDt = 0, markY = tAr.y()+tAr.height()+mrkHeight;
 		    pnt.setPen(mrkPen);
-		    if(lab_tm.size()) {
-			wdth = pnt.fontMetrics().width(lab_tm.c_str());
-			tpos = vmax(h_pos-wdth/2,0);
-			if((tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3)) {
-			    pnt.drawText(tpos, tAr.y()+tAr.height()+mrkHeight, lab_tm.c_str());
-			    endPosTm = tpos+wdth;
+		    if(hvLev < 6) {
+			if(lab_tm.size()) {
+			    wdth = pnt.fontMetrics().width(lab_tm.c_str());
+			    tpos = vmax(h_pos-wdth/2,0);
+			    if(first_m || ((tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3))) {
+				if(first_m) tpos = vmax(begMarkBrd, tpos);
+				pnt.drawText(tpos, markY, lab_tm.c_str());
+				endPosTm = tpos+wdth;
+			    }
 			}
+			markY += mrkHeight;
 		    }
 		    if(lab_dt.size()) {
 			wdth = pnt.fontMetrics().width(lab_dt.c_str());
-			tpos = vmax(h_pos-wdth/2,0);
-			if((tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3)) {
-			    pnt.drawText(tpos, tAr.y()+tAr.height()+2*mrkHeight, lab_dt.c_str());
+			tpos = vmax(h_pos-wdth/2, 0);
+			if(first_m || ((tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3))) {
+			    if(first_m) tpos = vmax(begMarkBrd, tpos);
+			    pnt.drawText(tpos, markY, lab_dt.c_str());
 			    endPosDt = tpos+wdth;
 			}
 		    }
@@ -3275,9 +3407,16 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		    first_m = false;
 		}
 		//   Next
-		if(i_h >= tPict) break;
-		i_h = ((i_h+UTChourDt)/hDiv)*hDiv + hDiv - UTChourDt;
-		if(i_h > tPict)	i_h = tPict;
+		if(iH >= tPict) break;
+		if(hvLev >= 7) {	//Per month
+		    tm_t = iH/1000000;
+		    localtime_r(&tm_t, &ttm);
+		    ttm.tm_sec = ttm.tm_min = ttm.tm_hour = 0;
+		    ttm.tm_mday = 1; ttm.tm_mon++;
+		    ttm.tm_wday = ttm.tm_yday = ttm.tm_isdst = -1;
+		    iH = 1000000ll * mktime(&ttm);
+		} else iH = ((iH+UTChourDt)/hDiv)*hDiv + hDiv - UTChourDt;
+		iH = vmin(tPict, iH);
 	    }
 	}
     }
@@ -3290,11 +3429,11 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	QPen trpen(cP.color());
 	trpen.setStyle(Qt::SolidLine);
 	trpen.setWidth(vmax(1,vmin(10,(int)rRnd(cP.width()*vmin(w->xScale(true),w->yScale(true))))));
-#if QT_VERSION < 0x050000
-	if(cP.valTp() != 0 && trpen.width() > 1) trpen.setCapStyle(Qt::RoundCap);
-#else
-	trpen.setCapStyle(Qt::FlatCap);
-#endif
+//#if QT_VERSION < 0x050000
+//	if(cP.valTp() != 0 && trpen.width() > 1) trpen.setCapStyle(Qt::RoundCap);
+//#else
+	trpen.setCapStyle((cP.valTp() != 0 && trpen.width() > 1)?Qt::RoundCap:Qt::FlatCap);
+//#endif
 	pnt.setRenderHint(QPainter::Antialiasing, (trpen.width()>=2));
 	pnt.setPen(trpen);
 
@@ -3356,21 +3495,22 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		continue;
 	    }
 
-	    //Write point and line
+	    //Writing a point and a line
 	    if(averVl != EVAL_REAL) {
 		if(cP.valTp() == 0)
 		    z_vpos = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,((vsPercT?(100.*(0-bordL)/(bordU-bordL)):0)-vsMinT)/(vsMaxT-vsMinT))));
 		c_vpos = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,((isLogT?log10(vmax(1e-100,averVl)):averVl)-vsMinT)/(vsMaxT-vsMinT))));
 		if(prevVl == EVAL_REAL) {
-		    if(cP.valTp() != 0) pnt.drawPoint(averPos,c_vpos);
-		    else pnt.drawLine(averPos,z_vpos,averPos,vmin(z_vpos-trpen.width(),c_vpos));
+		    if(cP.valTp() != 0) pnt.drawPoint(averPos, c_vpos);
+		    else pnt.drawLine(averPos, z_vpos, averPos, vmin(z_vpos-trpen.width(),c_vpos));
 		}
 		else {
-		    int c_vpos_prv = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,((isLogT?log10(vmax(1e-100,prevVl)):prevVl)-vsMinT)/(vsMaxT-vsMinT))));
-		    if(cP.valTp() != 0) pnt.drawLine(prevPos,c_vpos_prv,averPos,c_vpos);
-		    else
+		    if(cP.valTp() != 0) {
+			int c_vpos_prv = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,((isLogT?log10(vmax(1e-100,prevVl)):prevVl)-vsMinT)/(vsMaxT-vsMinT))));
+			pnt.drawLine(prevPos, c_vpos_prv, averPos, c_vpos);
+		    } else
 			for(int sps = prevPos+1; sps <= averPos; sps++)
-			    pnt.drawLine(sps,z_vpos,sps,vmin(z_vpos-trpen.width(),c_vpos));
+			    pnt.drawLine(sps, z_vpos, sps, vmin(z_vpos-trpen.width(),c_vpos));
 		}
 	    }
 	    prevVl  = averVl;
@@ -3404,9 +3544,10 @@ void ShapeDiagram::tracing( )
     makePicture(w);
 
     //Trace cursors value
-    if(shD->tTimeCurent) shD->tTime = shD->arhEnd(shD->tTime);	//Force for cursor limit to real data
+    if(shD->tTimeCurent) shD->tTime = shD->arhEnd(shD->tTime);	//Force for cursor limit to the real data
     if(shD->type == 0 && shD->active && (shD->holdCur || shD->curTime <= (shD->tPict-(int64_t)(1e6*shD->tSize))))
 	setCursor(w, shD->tTime);
+
     w->update();
 }
 
@@ -3592,7 +3733,7 @@ void ShapeDiagram::setCursor( WdgView *w, int64_t itm )
 	shD->holdCur = (curTime==shD->tTime);
 
 	XMLNode req("set");
-	req.setAttr("path",w->id()+"/%2fserv%2fattr")->setAttr("noUser", "1");
+	req.setAttr("path",w->id()+"/%2fserv%2fattr")->setAttr("noUser", "1")->setAttr("reforwardRedundOff", "1");
 	req.childAdd("el")->setAttr("id","curSek")->setText(i2s(curTime/1000000));
 	req.childAdd("el")->setAttr("id","curUSek")->setText(i2s(curTime%1000000));
 
@@ -3608,7 +3749,7 @@ void ShapeDiagram::setCursor( WdgView *w, int64_t itm )
 		val = shD->prms[iP].val()[vpos].val;
 	    }
 	    if(val != shD->prms[iP].curVal()) {
-		req.childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",iP))->setText(r2s(val,6));
+		req.childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",iP))->setText(r2s(val));
 		shD->prms[iP].setCurVal(val);
 	    }
 	}
@@ -3619,7 +3760,7 @@ void ShapeDiagram::setCursor( WdgView *w, int64_t itm )
 	shD->curTime = 1e6/curFrq;
 
 	XMLNode req("set");
-	req.setAttr("path",w->id()+"/%2fserv%2fattr")->setAttr("noUser", "1");
+	req.setAttr("path",w->id()+"/%2fserv%2fattr")->setAttr("noUser", "1")->setAttr("reforwardRedundOff", "1");
 	req.childAdd("el")->setAttr("id","curSek")->setText(i2s(shD->curTime/1000000));
 	req.childAdd("el")->setAttr("id","curUSek")->setText(i2s(shD->curTime%1000000));
 
@@ -3633,7 +3774,7 @@ void ShapeDiagram::setCursor( WdgView *w, int64_t itm )
 	    if(vpos >= 1 && vpos < (shD->prms[iP].fftN/2+1))
 		val = shD->prms[iP].fftOut[0][0]/shD->prms[iP].fftN +
 		    pow(pow(shD->prms[iP].fftOut[vpos][0],2)+pow(shD->prms[iP].fftOut[vpos][1],2),0.5)/(shD->prms[iP].fftN/2+1);
-	    req.childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",iP))->setText(r2s(val,6));
+	    req.childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",iP))->setText(r2s(val));
 	    shD->prms[iP].setCurVal(val);
 	}
 #endif
@@ -3725,7 +3866,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 		arh_end = s2ll(req.attr("end"));
 		arh_per = s2ll(req.attr("per"));
 
-		//  Correct to real data
+		//  Correct to the real data
 		if(shD->tTimeCurent) tTimeGrnd = (tTime=shD->arhEnd(tTime)) - tSize;
 	    }
 	}
@@ -3733,7 +3874,8 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 	// One request check and prepare
 	int trcPer = shD->trcPer*1e6;
 	if(shD->tTimeCurent && trcPer && shD->valArch.empty() &&
-	    (!arh_per || (vmax(arh_per,wantPer) >= trcPer && (tTime-valEnd())/vmax(arh_per,vmax(wantPer,trcPer)) < 2)))
+	    (!arh_per || (vmax(arh_per,wantPer) >= trcPer && (tTime-valEnd()) < 2*arh_per
+		/*(tTime-valEnd())/vmax(arh_per,vmax(wantPer,trcPer)) < 2*/)))	//!!!! Cause to uneven call for current and archive
 	{
 	    XMLNode req("get");
 	    req.setAttr("path", addr()+"/%2fserv%2fval")->
@@ -3747,8 +3889,9 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 		double curVal = (req.text() == EVAL_STR) ? EVAL_REAL : s2r(req.text());
 		if((val_tp == TFld::Boolean && curVal == EVAL_BOOL) || (val_tp == TFld::Integer && curVal == EVAL_INT) || isinf(curVal))
 		    curVal = EVAL_REAL;
-		if(valEnd_ && (lstTm-valEnd_)/vmax(wantPer,trcPer) > 2) vals.push_back(SHg(lstTm-trcPer,EVAL_REAL));
-		else if((lstTm-valEnd_) >= wantPer) vals.push_back(SHg(lstTm,curVal));
+
+		/*if(valEnd_ && (lstTm-valEnd_)/vmax(wantPer,trcPer) > 2) vals.push_back(SHg(lstTm-trcPer,EVAL_REAL));	//!!!! Can cause to flaws on slow remote channels
+		else*/ if((lstTm-valEnd_) >= wantPer) vals.push_back(SHg(lstTm,curVal));
 		else if((lstTm == valEnd_ && curVal != EVAL_REAL) || vals[vals.size()-1].val == EVAL_REAL) vals[vals.size()-1].val = curVal;
 		else if(curVal != EVAL_REAL) {
 		    int s_k = lstTm-wantPer*(lstTm/wantPer), n_k = trcPer;
@@ -3800,7 +3943,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
     //Check for request to present in buffer data
     if(tTime/wantPer <= valEnd()/wantPer && tTimeGrnd/wantPer >= valBeg()/wantPer) return;
 
-    //Correcting request to present data
+    //Correcting request to the presented data
     if(valEnd() && tTime > valEnd())		tTimeGrnd = valEnd()+wantPer;//1;
     else if(valBeg() && tTimeGrnd < valBeg())	tTime = valBeg()-wantPer;//1;
 
@@ -3822,7 +3965,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 	    setAttr("tm_grnd", ll2s(tTimeGrnd))->
 	    setAttr("per", ll2s(wantPer))->
 	    setAttr("mode", "1")->
-	    setAttr("real_prec", "6")->
+	    //setAttr("real_prec", "6")->
 	    setAttr("round_perc", "0");//r2s(100/(float)view->size().height()));
 
 	if(view->cntrIfCmd(req,true)) return;
@@ -3848,7 +3991,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 		curVal = EVAL_REAL;
 	}
 	else curPos = maxPos+1;
-	if(curPos < 0 || curPos > (maxPos+1)) break;	//Out of range exit
+	if(curPos < 0 || curPos > (maxPos+1)) break;	//Exit for out of the range
 	for(int stPos = prevPos; prevPos < curPos; prevPos++)
 	    if(toAprox && prevVal != EVAL_REAL && curVal != EVAL_REAL)
 		buf.push_back(SHg(bbeg+prevPos*bper,prevVal+(curVal-prevVal)*(prevPos-stPos)/(curPos-stPos)));
@@ -3930,7 +4073,7 @@ int64_t ShapeDiagram::ShpDt::arhEnd( int64_t def )
     int64_t rez = 0, rez1 = 0;
     for(vector<TrendObj>::iterator iP = prms.begin(); iP != prms.end(); ++iP) {
 	rez = vmax(rez, iP->arhEnd());
-	rez1 = vmax(rez1, iP->arhEnd()+iP->arhPer());	//!!!! For allow curent values update on periodicity by minutes and hours.
+	rez1 = vmax(rez1, iP->arhEnd()+2*iP->arhPer());	//!!!! To allow for curent values update on the periodicity in minutes and hours.
     }
 
     return (rez && rez1 < def) ? rez : def;
@@ -3980,7 +4123,12 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val, const 
     ShpDt *shD = (ShpDt*)w->shpData;
 
     switch(uiPrmPos) {
-	case A_COM_LOAD: reld_dt = 2;	break;
+	case A_COM_LOAD:
+	    reld_dt = 2;
+	    shD->addrWdg->clear();
+	    shD->addrWdg->setColumnCount(0);
+	    shD->addrWdg->setRowCount(0);
+	    break;
 	case A_EN:
 	    if(!qobject_cast<RunWdgView*>(w))	break;
 	    w->setVisible((bool)s2i(val) && ((RunWdgView*)w)->permView());
@@ -4067,7 +4215,7 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val, const 
 		    case A_ProtPropLev: shD->itProps[itNum].lev = s2i(val);	break;
 		    case A_ProtPropTmpl: shD->itProps[itNum].tmpl = val;	break;
 		    case A_ProtPropFnt:
-			shD->itProps[itNum].font = val.empty() ? shD->addrWdg->font() : getFont(val,vmin(w->xScale(true),w->yScale(true)));
+			shD->itProps[itNum].font = val.empty() ? shD->addrWdg->font() : getFont(val, vmin(w->xScale(true),w->yScale(true)));
 			break;
 		    case A_ProtPropClr: shD->itProps[itNum].clr = getColor(val);	break;
 		}
@@ -4124,6 +4272,7 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	shD->addrWdg->setHorizontalHeaderItem(ncl, new QTableWidgetItem());
 	shD->addrWdg->horizontalHeaderItem(ncl)->setText(clmNm.c_str());
 	shD->addrWdg->horizontalHeaderItem(ncl)->setData(Qt::UserRole, clm.c_str());
+	shD->addrWdg->horizontalHeaderItem(ncl)->setData(Qt::FontRole, shD->addrWdg->font());
 	newFill = true;
     }
 
@@ -4336,8 +4485,8 @@ bool ShapeProtocol::eventFilter( WdgView *w, QObject *object, QEvent *event )
     else {
 	AttrValS attrs;
 	switch(event->type()) {
-	    case QEvent::FocusIn:
-		attrs.push_back(std::make_pair("focus","1"));
+	    case QEvent::FocusIn: qobject_cast<RunWdgView*>(w)->mainWin()->setFocus(w->id());	break;
+		/*attrs.push_back(std::make_pair("focus","1"));
 		attrs.push_back(std::make_pair("event","ws_FocusIn"));
 		w->attrsSet(attrs);
 		break;
@@ -4345,7 +4494,7 @@ bool ShapeProtocol::eventFilter( WdgView *w, QObject *object, QEvent *event )
 		attrs.push_back(std::make_pair("focus","0"));
 		attrs.push_back(std::make_pair("event","ws_FocusOut"));
 		w->attrsSet(attrs);
-		break;
+		break;*/
 	    default: break;
 	}
     }
@@ -4505,8 +4654,8 @@ bool ShapeDocument::eventFilter( WdgView *w, QObject *object, QEvent *event )
     else {
 	AttrValS attrs;
 	switch(event->type()) {
-	    case QEvent::FocusIn:
-		attrs.push_back(std::make_pair("focus","1"));
+	    case QEvent::FocusIn: qobject_cast<RunWdgView*>(w)->mainWin()->setFocus(w->id());	break;
+		/*attrs.push_back(std::make_pair("focus","1"));
 		attrs.push_back(std::make_pair("event","ws_FocusIn"));
 		w->attrsSet(attrs);
 		break;
@@ -4514,7 +4663,7 @@ bool ShapeDocument::eventFilter( WdgView *w, QObject *object, QEvent *event )
 		attrs.push_back(std::make_pair("focus","0"));
 		attrs.push_back(std::make_pair("event","ws_FocusOut"));
 		w->attrsSet(attrs);
-		break;
+		break;*/
 	    default: break;
 	}
     }
@@ -4590,8 +4739,7 @@ string ShapeDocument::ShpDt::toHtml( )
     nodeProcess(&xproc);
 
     return "<?xml version='1.0' ?>\n"
-	"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
-	"'DTD/xhtml1-transitional.dtd'>\n"
+	"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>\n"
 	"<html xmlns='http://www.w3.org/1999/xhtml'>\n"
 	"<head>\n"
 	"  <meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n"
@@ -4682,7 +4830,10 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val, const strin
     switch(uiPrmPos) {
 	case A_COM_LOAD:
 	    up = true;
-	    if(runW && shD->inclPg)	shD->inclPg->setMinimumSize(w->size());
+	    //if(runW && shD->inclPg) shD->inclPg->setMinimumSize(w->size());
+	    break;
+	case A_NO_ID:
+	    if(runP && attr == "vs_winTitle")	w->window()->setWindowTitle(val.c_str());
 	    break;
 	case A_COM_FOCUS: break;
 	case A_EN:
@@ -4692,8 +4843,9 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val, const strin
 	    break;
 	case A_ACTIVE:
 	    if(!runW)	{ up = false; break; }
-	    if(s2i(val) && runW->permCntr()) w->setFocusPolicy(Qt::TabFocus /*Qt::StrongFocus*/);
-	    else w->setFocusPolicy(Qt::NoFocus);
+	    shD->active = (bool)s2i(val);
+	    shD->realAct = (shD->active && ((RunWdgView*)w)->permCntr());
+	    w->setFocusPolicy(shD->realAct ? Qt::TabFocus : Qt::NoFocus);
 	    break;
 	case A_GEOM_MARGIN:
 	    shD->geomMargin = s2i(val);
@@ -4791,7 +4943,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val, const strin
 			shD->inclScrl->setWidget(shD->inclPg);
 			shD->inclPg->setEnabled(true);
 			shD->inclPg->setVisible(true);
-			shD->inclPg->setMinimumSize(w->size());
+			//shD->inclPg->setMinimumSize(w->size());
 			if(shD->inclPg->wx_scale != shD->inclPg->mainWin()->xScale() ||
 				shD->inclPg->wy_scale != shD->inclPg->mainWin()->yScale())
 			    shD->inclPg->load("");
@@ -4816,6 +4968,12 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val, const strin
 	    } else up = false;
 	    break;
 	default: up = false;
+    }
+
+    if(up) {
+	if(shD->realAct && shD->backGrnd.color().isValid() && shD->backGrnd.color().alpha())
+	    w->setCursor(Qt::PointingHandCursor);
+	else w->setCursor(Qt::ArrowCursor);	// w->unsetCursor();
     }
 
     if(up && !w->allAttrLoad()) {

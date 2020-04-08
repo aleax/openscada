@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-15 22:48+0300\n"
+"POT-Creation-Date: 2019-03-23 15:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,6 +32,10 @@ msgid ""
 "---- Parameters of the module section '%s' of the configuration file ----\n"
 "AuthTime   <min>        Life time of the authentication session, in minutes (default 10).\n"
 "\n"
+msgstr ""
+
+#, c-format
+msgid "Error loading the META header '%s': %s"
 msgstr ""
 
 #, c-format
@@ -80,6 +84,12 @@ msgstr ""
 msgid "HTML template of the main page"
 msgstr ""
 
+msgid "DB of the active authentication sessions"
+msgstr ""
+
+msgid "Set to empty to disable using the external table of the active authentication sessions."
+msgstr ""
+
 msgid "Life time of the authentication, minutes"
 msgstr ""
 
@@ -117,13 +127,17 @@ msgid "Going to the page: <b>%s</b>"
 msgstr ""
 
 #, c-format
-msgid "Wrong authentication from the user '%s'. Host: %s. User agent: %s."
+msgid "Wrong authentication of the user '%s'. Host: %s. User agent: %s."
 msgstr ""
 
 msgid "<p style='color: #CF8122;'>Wrong authentication! Retry please.</p>"
 msgstr ""
 
 msgid "No WWW subtype module found!"
+msgstr ""
+
+#, c-format
+msgid "Successful automatic authentication for the user '%s'. Host: %s. User agent: %s."
 msgstr ""
 
 #, c-format

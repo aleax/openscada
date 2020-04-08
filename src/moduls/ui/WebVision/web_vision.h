@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebVision file: web_vision.h
 /***************************************************************************
- *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -49,9 +49,11 @@ namespace WebVision
 //*************************************************
 struct SSess
 {
-    SSess( const string &iuser ) : user(iuser)	{ }
+    SSess( const string &iuser ) : user(iuser), mRoot(-1)	{ }
     SSess( const string &iurl, const string &isender, const string &iuser, vector<string> &ivars,
 	    const string &icontent, TProtocolIn *iprt );
+
+    bool isRoot( );
 
     //Attributes
     TProtocolIn	*prt;		//input protocol
@@ -62,6 +64,7 @@ struct SSess
 		content,	//Contains
 		gPrms,		//Global parameters
 		lang;		//Language
+    int		mRoot;		//Root access user
 
     vector<string>	vars;	//request vars
     vector<XMLNode>	cnt;	//Parsed contain
@@ -84,15 +87,21 @@ class TWEB: public TUI
 	time_t	sessTime( )				{ return mTSess; }
 	int	sessLimit( )				{ return mSessLimit; }
 	int	PNGCompLev( )				{ return mPNGCompLev; }
+	double	cachePgLife( )				{ return mCachePgLife; }
+	int	cachePgSz( )				{ return mCachePgSz; }
+	bool	imgResize( )				{ return mImgResize; }
 
 	void setSessTime( time_t vl )			{ mTSess = vmax(1,vmin(24*60,vl)); modif(); }
 	void setSessLimit( int vl )			{ mSessLimit = vmax(1,vmin(100,vl)); modif(); }
+	void setCachePgLife( double vl )		{ mCachePgLife = vmax(0, vmin(1000,vl)); modif(); }
+	void setCachePgSz( int vl )			{ mCachePgSz = vmax(0, vmin(100,vl)); modif(); }
 	void setPNGCompLev( int vl )			{ mPNGCompLev = vmax(-1,vmin(9,vl)); modif(); }
+	void setImgResize( bool vl )			{ mImgResize = vl; modif(); }
 
 	// VCA sessions
 	void vcaSesList( vector<string> &list ) const	{ chldList(id_vcases,list); }
 	bool vcaSesPresent( const string &name ) const	{ return chldPresent(id_vcases,name); }
-	void vcaSesAdd( const string &name, bool isCreate );
+	void vcaSesAdd( const string &name );
 	void vcaSesDel( const string &name )		{ chldDel(id_vcases, name); }
 	AutoHD<VCASess> vcaSesAt( const string &name ) const	{ return chldAt(id_vcases, name); }
 
@@ -110,12 +119,14 @@ class TWEB: public TUI
 
 	int cntrIfCmd( XMLNode &node, const SSess &ses, bool VCA = true );
 
-	void imgConvert(SSess &ses);
+	void imgConvert( SSess &ses, const string &mime = "" );
 	int colorParse( const string &clr );
 	static int colorResolve( gdImagePtr im, int clr );
 	string trMessReplace( const string &tsrc );
 
 	void perSYSCall( unsigned int cnt );
+
+	ResMtx &cacheRes( )	{ return mCacheRes; }
 
     protected:
 	//Methods
@@ -135,11 +146,15 @@ class TWEB: public TUI
 	//Attributes
 	int		mTSess;				//Time of sesion life (minutes)
 	int		mSessLimit;			//Sessions limit
+	double		mCachePgLife;			//Cached pages lifetime
+	int		mCachePgSz;			//Cached pages number
 	int		mPNGCompLev;			//PNG images compression level
+	bool		mImgResize;			//Resizing raster images on the server side
 	int		id_vcases;			//VCA session's container identifier
 	map<string,int> colors;				//Named colors
 
 	ResRW		mSesRes;			//Sessions resource
+	ResMtx		mCacheRes;
 };
 
 extern TWEB *mod;

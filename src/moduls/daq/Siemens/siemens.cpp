@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.Siemens file: siemens.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,13 +38,14 @@
 //************************************************
 //* Modul info!                                  *
 #define MOD_ID		"Siemens"
-#define MOD_NAME	_("Siemens DAQ")
+#define MOD_NAME	_("Siemens DAQ and Beckhoff")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.1.5"
+#define MOD_VER		"3.2.2"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides a data source PLC Siemens by means of Hilscher CIF cards, by using the MPI protocol,\
- and Libnodave library, or self, for the rest.")
+#define DESCRIPTION	_("Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol)\
+ and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the\
+ protocol TwinCAT ADS/AMS due it working with data blocks also.")
 #define LICENSE		"GPL2"
 //************************************************
 
@@ -77,8 +78,8 @@ TTpContr::TTpContr( string name ) : TTypeDAQ(MOD_ID), drvCIF_OK(false)
 
 TTpContr::~TTpContr( )
 {
-    for(int i_b = 0; i_b < MAX_DEV_BOARDS; i_b++)
-	if(cif_devs[i_b].present) DevExitBoard(i_b);
+    for(int iB = 0; iB < MAX_DEV_BOARDS; iB++)
+	if(cif_devs[iB].present) DevExitBoard(iB);
     if(drvCIFOK())	DevCloseDriver();
 }
 
@@ -92,19 +93,19 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("PRIOR",_("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
     fldAdd(new TFld("TM_REST",_("Restore timeout, seconds"),TFld::Integer,TFld::NoFlag,"4","30","1;3600"));
     fldAdd(new TFld("ASINC_WR",_("Asynchronous write mode"),TFld::Boolean,TFld::NoFlag,"1","0"));
-    fldAdd(new TFld("TYPE",_("Connection type"),TFld::Integer,TFld::Selected,"1","0",
+    fldAdd(new TFld("TYPE",_("Connection type"),TFld::Integer,TFld::Selectable,"1","0",
 	TSYS::strMess("%d;%d;%d;%d;%d",TMdContr::CIF_PB,TMdContr::ISO_TCP,TMdContr::ISO_TCP243,TMdContr::ADS,TMdContr::SELF_ISO_TCP).c_str(),
 	"CIF_PB;ISO_TCP (LibnoDave);ISO_TCP243 (LibnoDave);ADS;ISO_TCP"));
     fldAdd(new TFld("ADDR",_("Remote controller address"),TFld::String,TFld::NoFlag,"100","10"));
     fldAdd(new TFld("ADDR_TR",_("Output transport"),TFld::String,TFld::NoFlag,"40"));
-    fldAdd(new TFld("SLOT",_("Slot CPU"),TFld::Integer,TFld::NoFlag,"2","2","0;30"));
+    fldAdd(new TFld("SLOT",_("CPU slot of the PLC"),TFld::Integer,TFld::NoFlag,"2","2","0;30"));
     fldAdd(new TFld("CIF_DEV",_("CIF board"),TFld::Integer,TFld::NoFlag,"1","0","0;3"));
     // Parameter type DB structure
     int t_prm = tpParmAdd("logic","PRM_BD",_("Logical"));
     tpPrmAt(t_prm).fldAdd( new TFld("TMPL",_("Parameter template"),TFld::String,TCfg::NoVal,"50","") );
     // Parameter template IO DB structure
     elPrmIO.fldAdd(new TFld("PRM_ID",_("Parameter ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
-    elPrmIO.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    elPrmIO.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(s2i(OBJ_ID_SZ)*1.5).c_str()));
     elPrmIO.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TFld::NoFlag,"200"));
 
     //CIF devices DB structure
@@ -113,14 +114,14 @@ void TTpContr::postEnable( int flag )
     elCifDev.fldAdd(new TFld("SPEED",_("Speed"),TFld::Integer,TFld::NoFlag,"1","7"));
 
     //Clear CIF devices info
-    for(int i_b = 0; i_b < MAX_DEV_BOARDS; i_b++) {
-	cif_devs[i_b].present = false;
-	cif_devs[i_b].board = -1;
-	cif_devs[i_b].phAddr = 0;
-	cif_devs[i_b].irq = 0;
-	cif_devs[i_b].fwname  = _("No device");
-	cif_devs[i_b].fwver = "";
-	cif_devs[i_b].pbspeed = cif_devs[i_b].pbaddr = 0;
+    for(int iB = 0; iB < MAX_DEV_BOARDS; iB++) {
+	cif_devs[iB].present = false;
+	cif_devs[iB].board = -1;
+	cif_devs[iB].phAddr = 0;
+	cif_devs[iB].irq = 0;
+	cif_devs[iB].fwname  = _("No device");
+	cif_devs[iB].fwver = "";
+	cif_devs[iB].pbspeed = cif_devs[iB].pbaddr = 0;
     }
 }
 
@@ -131,13 +132,13 @@ void TTpContr::load_( )
     //Load CIF devices configuration
     TConfig cfg(&CIFDevE());
     string bd_tbl = modId()+"_CIFdevs";
-    for(int i_b = 0; i_b < MAX_DEV_BOARDS; i_b++) {
-	cfg.cfg("ID").setI(i_b);
+    for(int iB = 0; iB < MAX_DEV_BOARDS; iB++) {
+	cfg.cfg("ID").setI(iB);
 	if(SYS->db().at().dataGet(SYS->workDB()+"."+bd_tbl,mod->nodePath()+bd_tbl,cfg,false,true)) {
-	    cif_devs[i_b].pbaddr = cfg.cfg("ADDR").getI();
-	    cif_devs[i_b].pbspeed = cfg.cfg("SPEED").getI();
+	    cif_devs[iB].pbaddr = cfg.cfg("ADDR").getI();
+	    cif_devs[iB].pbspeed = cfg.cfg("SPEED").getI();
 	}
-	if(drvCIFOK())	initCIF(i_b);
+	if(drvCIFOK())	initCIF(iB);
     }
 }
 
@@ -146,10 +147,10 @@ void TTpContr::save_( )
     //Save CIF devices configuration
     TConfig cfg(&CIFDevE());
     string bd_tbl = modId()+"_CIFdevs";
-    for(int i_b = 0; i_b < MAX_DEV_BOARDS; i_b++) {
-	cfg.cfg("ID").setI(i_b);
-	cfg.cfg("ADDR").setI(cif_devs[i_b].pbaddr);
-	cfg.cfg("SPEED").setI(cif_devs[i_b].pbspeed);
+    for(int iB = 0; iB < MAX_DEV_BOARDS; iB++) {
+	cfg.cfg("ID").setI(iB);
+	cfg.cfg("ADDR").setI(cif_devs[iB].pbaddr);
+	cfg.cfg("SPEED").setI(cif_devs[iB].pbspeed);
 	SYS->db().at().dataSet(SYS->workDB()+"."+bd_tbl, mod->nodePath()+bd_tbl, cfg);
     }
 }
@@ -166,18 +167,18 @@ bool TTpContr::drvCIFOK( )
 	BOARD_INFO brd_info;
 	memset(&brd_info,0,sizeof(BOARD_INFO));
 	if(DevGetBoardInfo(&brd_info) == DRV_NO_ERROR)
-	    for(int i_b = 0; i_b < MAX_DEV_BOARDS; i_b++) {
-		cif_devs[i_b].present = (brd_info.tBoard[i_b].usAvailable==1);
-		if(!cif_devs[i_b].present) continue;
-		cif_devs[i_b].board = brd_info.tBoard[i_b].usBoard;
-		cif_devs[i_b].phAddr = brd_info.tBoard[i_b].ulPhysicalAddress;
-		cif_devs[i_b].irq = brd_info.tBoard[i_b].usIrq;
+	    for(int iB = 0; iB < MAX_DEV_BOARDS; iB++) {
+		cif_devs[iB].present = (brd_info.tBoard[iB].usAvailable==1);
+		if(!cif_devs[iB].present) continue;
+		cif_devs[iB].board = brd_info.tBoard[iB].usBoard;
+		cif_devs[iB].phAddr = brd_info.tBoard[iB].ulPhysicalAddress;
+		cif_devs[iB].irq = brd_info.tBoard[iB].usIrq;
 		unsigned char fwInfo[300];
-		if(DevGetInfo(i_b,GET_FIRMWARE_INFO,sizeof(FIRMWAREINFO),&fwInfo[0]) == DRV_NO_ERROR) {
-		    cif_devs[i_b].fwname.assign((char *)&fwInfo[0],16);
-		    cif_devs[i_b].fwver.assign((char *)&fwInfo[16],16);
+		if(DevGetInfo(iB,GET_FIRMWARE_INFO,sizeof(FIRMWAREINFO),&fwInfo[0]) == DRV_NO_ERROR) {
+		    cif_devs[iB].fwname.assign((char *)&fwInfo[0],16);
+		    cif_devs[iB].fwver.assign((char *)&fwInfo[16],16);
 		}
-		DevInitBoard(i_b);
+		DevInitBoard(iB);
 	    }
     }
     return drvCIF_OK;
@@ -219,7 +220,7 @@ void TTpContr::initCIF( int dev )
 
 
     if(dev < 0 || dev > MAX_DEV_BOARDS || !drvCIFOK())
-	throw TError(nodePath().c_str(), _("CIF device %d or device driver error!"), dev);
+	throw TError(nodePath().c_str(), _("Error the CIF device %d or the device driver."), dev);
     if(!cif_devs[dev].present)	return;
 
     ResAlloc resource(cif_devs[dev].res, true);
@@ -227,14 +228,14 @@ void TTpContr::initCIF( int dev )
     // Load parameters to board
     //  Running board aplications
     if((sRet = DevSetHostState(dev,HOST_READY,0L)) != DRV_NO_ERROR)
-	throw TError(nodePath().c_str(), _("CIF device %d running (DevSetHostState(HOST_READY)) error!"), dev);
+	throw TError(nodePath().c_str(), _("Error starting up the CIF device %d (DevSetHostState(HOST_READY))."), dev);
     //  Load the protocol task parameters
     memset(&DPParameter, 0, sizeof(DPM_PLC_PARAMETER));
     DPParameter.bMode = DPM_SET_MODE_UNCONTROLLED;
     DPParameter.bFormat = 1;
     DPParameter.usWatchDogTime = 1000;
     if((sRet=DevPutTaskParameter(dev,1,sizeof(DPM_PLC_PARAMETER),&DPParameter)) != DRV_NO_ERROR)
-	throw TError(nodePath().c_str(), _("CIF device %d. DevPutTaskParameter() error!"), dev);
+	throw TError(nodePath().c_str(), _("DevPutTaskParameter: error the CIF device %d."), dev);
     //   Reset CP for apply parameters
     DevReset(dev, WARMSTART, 5000L);
     //  Download the bus parameter
@@ -252,9 +253,9 @@ void TTpContr::initCIF( int dev )
 	tMsg.d[0] = 4;			// mode clear data base
 	tMsg.d[1] = 8;			// startsegment = 8
 	if((sRet=DevPutMessage(dev,(MSG_STRUC*)&tMsg,200L)) != DRV_NO_ERROR)
-	    throw TError(nodePath().c_str(), _("CIF device %d. DevPutMessage() error!"), dev);
+	    throw TError(nodePath().c_str(), _("DevPutMessage: error the CIF device %d."), dev);
 	if((sRet=DevGetMessage(dev,sizeof(tMsg),(MSG_STRUC *)&tMsg,200L)) != DRV_NO_ERROR)
-	    throw TError(nodePath().c_str(), _("CIF device %d. DevGetMessage() error!"), dev);
+	    throw TError(nodePath().c_str(), _("DevGetMessage: error the CIF device %d."), dev);
     }
     //   Load new bus parameters
     tMsg.rx = 3;			// task = DPM-Task
@@ -295,9 +296,9 @@ void TTpContr::initCIF( int dev )
     ptBusDpm->abOctet[3] = 0;
     tMsg.ln = sizeof(DPM_BUS_DP)+sizeof(DDLM_DOWNLOAD_REQUEST)- DPM_MAX_LEN_DATA_UNIT;
     if((sRet=DevPutMessage(dev,(MSG_STRUC *)&tMsg, 200L))!=DRV_NO_ERROR)
-	throw TError(nodePath().c_str(), _("Sending request error: %d."),sRet);
+	throw TError(nodePath().c_str(), _("Error sending message: %d."),sRet);
     if((sRet = DevGetMessage(dev,sizeof(RCS_MESSAGE),(MSG_STRUC *)&tMsg, 200L))!=DRV_NO_ERROR)
-	throw TError(nodePath().c_str(), _("Getting request error: %d."),sRet);
+	throw TError(nodePath().c_str(), _("Error getting message: %d."),sRet);
     //   Wait for operation start with new parameters of PLC task
     do {
 	DevGetTaskState(dev, 2, sizeof(tTaskState), &tTaskState);
@@ -311,7 +312,7 @@ void TTpContr::getLifeListPB( unsigned board, string &buffer )
     RCS_TELEGRAMHEADER_10 *ptRcsTelegramheader10;
     int res;
 
-    if(!cif_devs[board].present) throw TError(nodePath().c_str(), _("%d:Board %d is not present."), 15, board);
+    if(!cif_devs[board].present) throw TError(nodePath().c_str(), _("%d:The board %d is not present."), 15, board);
 
     ResAlloc resource(cif_devs[board].res, true);
 
@@ -336,9 +337,9 @@ void TTpContr::getLifeListPB( unsigned board, string &buffer )
 
     //Put message
     if((res=DevPutMessage(board,(MSG_STRUC*)&tMsg,500L)) != DRV_NO_ERROR)
-	throw TError(nodePath().c_str(), _("%d:Sending request error %d."), 12, res);
+	throw TError(nodePath().c_str(), _("%d:Error sending request: %d."), 12, res);
     if((res=DevGetMessage(board,sizeof(RCS_MESSAGE),(MSG_STRUC *)&tMsg, 200L)) != DRV_NO_ERROR)
-	throw TError(nodePath().c_str(), _("%d:Getting request error %d."), 13, res);
+	throw TError(nodePath().c_str(), _("%d:Error getting request: %d."), 13, res);
 
     buffer.assign((char*)&tMsg.d[sizeof(RCS_TELEGRAMHEADER_10)], DPM_MAX_NUM_DEVICES+1);
 }
@@ -361,9 +362,9 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/mod/dev/speed",_("PB speed"),RWRWR_,"root",SDAQ_ID,4,"tp","dec","idm","1","dest","select","select","/mod/dev/lsspd");
 	    }
 	}
-	if(ctrMkNode("area",opt,1,"/PB",_("Profibus"))) {
+	if(ctrMkNode("area",opt,1,"/PB","ProfiBus")) {
 	    ctrMkNode("fld",opt,-1,"/PB/dev",_("CIF device"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
-	    ctrMkNode("list",opt,-1,"/PB/lifels",_("Life stations list"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
+	    ctrMkNode("list",opt,-1,"/PB/lifels",_("Live stations list"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 	}
 	return;
     }
@@ -382,20 +383,20 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 	    XMLNode *n_pba  = ctrMkNode("list",opt,-1,"/mod/dev/addr","");
 	    XMLNode *n_pbspd= ctrMkNode("list",opt,-1,"/mod/dev/speed","");
 
-	    for(int i_b = 0; i_b < MAX_DEV_BOARDS; i_b++) {
-		if(n_brd)	n_brd->childAdd("el")->setText(i2s(cif_devs[i_b].board));
-		if(n_fwnm)	n_fwnm->childAdd("el")->setText(cif_devs[i_b].fwname);
-		if(n_fwver)	n_fwver->childAdd("el")->setText(cif_devs[i_b].fwver);
-		if(n_phAddr)	n_phAddr->childAdd("el")->setText(i2s(cif_devs[i_b].phAddr,TSYS::Hex));
-		if(n_irq)	n_irq->childAdd("el")->setText(i2s(cif_devs[i_b].irq));
-		if(n_pba)	n_pba->childAdd("el")->setText(i2s(cif_devs[i_b].pbaddr));
-		if(n_pbspd)	n_pbspd->childAdd("el")->setText(i2s(cif_devs[i_b].pbspeed));
+	    for(int iB = 0; iB < MAX_DEV_BOARDS; iB++) {
+		if(n_brd)	n_brd->childAdd("el")->setText(i2s(cif_devs[iB].board));
+		if(n_fwnm)	n_fwnm->childAdd("el")->setText(cif_devs[iB].fwname);
+		if(n_fwver)	n_fwver->childAdd("el")->setText(cif_devs[iB].fwver);
+		if(n_phAddr)	n_phAddr->childAdd("el")->setText(i2s(cif_devs[iB].phAddr,TSYS::Hex));
+		if(n_irq)	n_irq->childAdd("el")->setText(i2s(cif_devs[iB].irq));
+		if(n_pba)	n_pba->childAdd("el")->setText(i2s(cif_devs[iB].pbaddr));
+		if(n_pbspd)	n_pbspd->childAdd("el")->setText(i2s(cif_devs[iB].pbspeed));
 	    }
 	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
 	    int brd = s2i(opt->attr("row"));
 	    string col  = opt->attr("col");
-	    if(brd < 0 || brd > 3)	throw TError(nodePath().c_str(), _("Board number %d error!"), brd);
+	    if(brd < 0 || brd > 3)	throw TError(nodePath().c_str(), _("Error the board %d."), brd);
 	    if(col == "addr") {
 		int addr = s2i(opt->text());
 		cif_devs[brd].pbaddr = (addr<0) ? 0 : (addr>126)?126:addr;
@@ -473,11 +474,11 @@ string TMdContr::getStatus( )
 {
     string rez = TController::getStatus( );
     if(startStat() && !redntUse()) {
-	if(!prcSt) rez += TSYS::strMess(_("Task terminated! "));
+	if(!prcSt) rez += TSYS::strMess(_("Task is terminated! "));
 	if(tmDelay > -1) {
-	    rez += (conErr.getVal().size() ? conErr.getVal(): string(_("Connect error."))) + " ";
+	    rez += (conErr.getVal().size() ? conErr.getVal(): string(_("Error connecting."))) + " ";
 	    if(tmDelay) rez += TSYS::strMess(_("Restoring in %.6g s. "), tmDelay);
-	    rez.replace(0, 1, i2s(ConnErrCode));
+	    rez.replace(0, 1, i2s(TError::Tr_Connect));
 	}
 	else {
 	    if(callSt)	rez += TSYS::strMess(_("Acquisition. "));
@@ -555,7 +556,7 @@ void TMdContr::stop_( )
     //Stop the request and calc data task
     SYS->taskDestroy(nodePath('.',true), &endrunReq);
 
-    alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),owner().modId().c_str(),id().c_str(),_("STOP")), TMess::Info);
+    alarmSet(TSYS::strMess(_("Connection to the data source: %s."),_("STOP")), TMess::Info);
     alSt = -1;
 
     //Clear proccess parameters list
@@ -585,64 +586,66 @@ void TMdContr::prmEn( const string &id, bool val )
     if(!val && i_prm < pHd.size()) pHd.erase(pHd.begin()+i_prm);
 }
 
-void TMdContr::regVal( SValData ival, IO::Type itp, bool wr )
+void TMdContr::regVal( const string &iaddr, bool wr )
 {
-    if(ival.db < 0 || ival.off < 0)	return;
+    int db = -1, off = -1;
+    char tp[11];
+    if(sscanf(iaddr.c_str(),"DB%d.%i.%10s",&db,&off,tp) != 3 || db < 0 || off < 0)	return;
 
-    int iv_sz = valSize(itp, ival.sz);	//Get real value's size
+    int ivSz = valSize(tp);	//Get real value's size
 
     ResAlloc res(reqDataRes, true);
 
     //Register to acquisition block
-    unsigned i_b;
+    unsigned iB;
     bool plcOK = false;
-    for(i_b = 0; i_b < acqBlks.size(); i_b++)
-	if(ival.db < acqBlks[i_b].db) break;
-	else if(acqBlks[i_b].db == ival.db) {
-	    if(ival.off < acqBlks[i_b].off) {
-		if((acqBlks[i_b].val.size()+acqBlks[i_b].off-ival.off) < MaxLenReq) {
-		    acqBlks[i_b].val.insert(0, acqBlks[i_b].off-ival.off, 0);
-		    acqBlks[i_b].off = ival.off;
+    for(iB = 0; iB < acqBlks.size(); iB++)
+	if(db < acqBlks[iB].db) break;
+	else if(acqBlks[iB].db == db) {
+	    if(off < acqBlks[iB].off) {
+		if((acqBlks[iB].val.size()+acqBlks[iB].off-off) < MaxLenReq) {
+		    acqBlks[iB].val.insert(0, acqBlks[iB].off-off, 0);
+		    acqBlks[iB].off = off;
 		}
-		else acqBlks.insert(acqBlks.begin()+i_b,SDataRec(ival.db,ival.off,iv_sz));
+		else acqBlks.insert(acqBlks.begin()+iB,SDataRec(db,off,ivSz));
 	    }
-	    else if((ival.off+iv_sz) > (acqBlks[i_b].off+(int)acqBlks[i_b].val.size())) {
-		if((ival.off+iv_sz-acqBlks[i_b].off) < MaxLenReq)
-		    acqBlks[i_b].val.append((ival.off+iv_sz)-(acqBlks[i_b].off+acqBlks[i_b].val.size()), 0);
+	    else if((off+ivSz) > (acqBlks[iB].off+(int)acqBlks[iB].val.size())) {
+		if((off+ivSz-acqBlks[iB].off) < MaxLenReq)
+		    acqBlks[iB].val.append((off+ivSz)-(acqBlks[iB].off+acqBlks[iB].val.size()), 0);
 		else continue;
 	    }
 	    plcOK = true;
 	    break;
 	}
-    if(!plcOK)	acqBlks.insert(acqBlks.begin()+i_b, SDataRec(ival.db,ival.off,iv_sz));
+    if(!plcOK)	acqBlks.insert(acqBlks.begin()+iB, SDataRec(db,off,ivSz));
     res.release();
 
     //Register to asynchronous write block
     if(wr && assincWrite()) {
 	ResAlloc res(reqDataAsWrRes, true);
 	plcOK = false;
-	for(i_b = 0; i_b < writeBlks.size(); i_b++)
-	    if(ival.db < writeBlks[i_b].db) break;
-	    else if(writeBlks[i_b].db == ival.db) {
-		if(ival.off < writeBlks[i_b].off) {
-		    if((ival.off+iv_sz) >= writeBlks[i_b].off &&
-			    (writeBlks[i_b].val.size()+writeBlks[i_b].off-ival.off) < MaxLenReq)
+	for(iB = 0; iB < writeBlks.size(); iB++)
+	    if(db < writeBlks[iB].db) break;
+	    else if(writeBlks[iB].db == db) {
+		if(off < writeBlks[iB].off) {
+		    if((off+ivSz) >= writeBlks[iB].off &&
+			    (writeBlks[iB].val.size()+writeBlks[iB].off-off) < MaxLenReq)
 		    {
-			writeBlks[i_b].val.insert(0,writeBlks[i_b].off-ival.off,0);
-			writeBlks[i_b].off = ival.off;
+			writeBlks[iB].val.insert(0,writeBlks[iB].off-off,0);
+			writeBlks[iB].off = off;
 		    }
-		    else writeBlks.insert(writeBlks.begin()+i_b,SDataRec(ival.db,ival.off,iv_sz));
+		    else writeBlks.insert(writeBlks.begin()+iB,SDataRec(db,off,ivSz));
 		}
-		else if((ival.off+iv_sz) > (writeBlks[i_b].off+(int)writeBlks[i_b].val.size())) {
-		    if(ival.off <= (writeBlks[i_b].off+(int)writeBlks[i_b].val.size()) &&
-			    (ival.off+iv_sz-writeBlks[i_b].off) < MaxLenReq) {
-			writeBlks[i_b].val.append((ival.off+iv_sz)-(writeBlks[i_b].off+writeBlks[i_b].val.size()),0);
+		else if((off+ivSz) > (writeBlks[iB].off+(int)writeBlks[iB].val.size())) {
+		    if(off <= (writeBlks[iB].off+(int)writeBlks[iB].val.size()) &&
+			    (off+ivSz-writeBlks[iB].off) < MaxLenReq) {
+			writeBlks[iB].val.append((off+ivSz)-(writeBlks[iB].off+writeBlks[iB].val.size()),0);
 			//Check for allow mergin to next block
-			if(i_b+1 < writeBlks.size() && writeBlks[i_b+1].db == ival.db &&
-				(writeBlks[i_b].off+(int)writeBlks[i_b].val.size()) >= writeBlks[i_b+1].off)
+			if(iB+1 < writeBlks.size() && writeBlks[iB+1].db == db &&
+				(writeBlks[iB].off+(int)writeBlks[iB].val.size()) >= writeBlks[iB+1].off)
 			{
-			    writeBlks[i_b].val.append(writeBlks[i_b+1].val,writeBlks[i_b].off+writeBlks[i_b].val.size()-writeBlks[i_b+1].off,string::npos);
-			    writeBlks.erase(writeBlks.begin()+i_b+1);
+			    writeBlks[iB].val.append(writeBlks[iB+1].val,writeBlks[iB].off+writeBlks[iB].val.size()-writeBlks[iB+1].off,string::npos);
+			    writeBlks.erase(writeBlks.begin()+iB+1);
 			}
 		    }
 		    else continue;
@@ -650,8 +653,8 @@ void TMdContr::regVal( SValData ival, IO::Type itp, bool wr )
 		plcOK = true;
 		break;
 	    }
-	if(!plcOK) writeBlks.insert(writeBlks.begin()+i_b,SDataRec(ival.db,ival.off,iv_sz));
-	writeBlks[i_b].err = _("-1:No data");
+	if(!plcOK) writeBlks.insert(writeBlks.begin()+iB,SDataRec(db,off,ivSz));
+	writeBlks[iB].err = _("-1:No data");
     }
 }
 
@@ -672,7 +675,7 @@ void TMdContr::connectRemotePLC( bool initOnly )
 	    MtxAlloc res1(reqAPIRes, true);
 	    _daveOSserialType fds;
 	    fds.wfd = fds.rfd = openSocket(102, addr().c_str());
-	    if(fds.rfd <= 0) throw TError(nodePath().c_str(), _("Open socket of remote PLC error."));
+	    if(fds.rfd <= 0) throw TError(nodePath().c_str(), _("Error opening the remote PLC socket."));
 
 	    ResAlloc res2(mod->resAPI, true);
 	    di = daveNewInterface(fds, (char*)(string("IF")+id()).c_str(), 0,
@@ -683,7 +686,7 @@ void TMdContr::connectRemotePLC( bool initOnly )
 		close(fds.wfd);
 		free(dc); dc = NULL;
 		free(di); di = NULL;
-		throw TError(nodePath().c_str(), _("Connection to PLC error."));
+		throw TError(nodePath().c_str(), _("Error connecting to the PLC."));
 	    }
 	    break;
 	}
@@ -691,10 +694,10 @@ void TMdContr::connectRemotePLC( bool initOnly )
 	case SELF_ISO_TCP:
 	    tr = SYS->transport().at().at(TSYS::strParse(addrTr(),0,".")).at().outAt(TSYS::strParse(addrTr(),1,"."));
 	    //try { tr.at().start(); }
-	    //catch(TError &err) { throw TError(nodePath().c_str(), _("Connection error.")); }
+	    //catch(TError &err) { throw TError(nodePath().c_str(), _("Error connecting.")); }
 	    reset();
 	    break;
-	default: throw TError(nodePath().c_str(), _("Connection type '%d' is not supported."), mType);
+	default: throw TError(nodePath().c_str(), _("The connection type '%d' is not supported."), mType);
     }
 }
 
@@ -731,8 +734,8 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 		RCS_MESSAGE tMsg;
 		int res, e_try = 4;
 
-		if(buffer.size() > 240)			throw TError(_("ReadDB"), _("Requested block is too big."));
-		if(!owner().cif_devs[mDev].present)	throw TError(_("ReadDB"), _("Board %d is not present."), mDev);
+		if(buffer.size() > 240)			throw TError("ReadDB", _("Requested block is too big."));
+		if(!owner().cif_devs[mDev].present)	throw TError("ReadDB", _("The board %d is not present."), mDev);
 
 		ResAlloc resource(owner().cif_devs[mDev].res, true);
 
@@ -762,17 +765,17 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 
 		    //Put message to remote host
 		    res = DevPutMessage(mDev, (MSG_STRUC *)&tMsg, 200L);
-		    if(res == DRV_DEV_PUT_TIMEOUT) throw TError(_("ReadDB"), _("Sending request is timeouted."));
+		    if(res == DRV_DEV_PUT_TIMEOUT) throw TError("ReadDB", _("Timeout sending request."));
 		    //Get remote host's response
 		    if(res == DRV_NO_ERROR) res = DevGetMessage(mDev, sizeof(RCS_MESSAGE), (MSG_STRUC *)&tMsg, 200L);
 		} while((res == DRV_NO_ERROR) && (tMsg.f == 0x02 || tMsg.f == 0x39) && e_try > 0);
 
 		//Process errors
-		if(res != DRV_NO_ERROR)		throw TError(_("ReadDB"), _("Request to DB error, %d."), res);
-		if(res == DRV_DEV_GET_TIMEOUT)	throw TError(_("ReadDB"), _("Get request is timeouted."));
+		if(res != DRV_NO_ERROR)		throw TError("ReadDB", _("Error requesting to DB: %d."), res);
+		if(res == DRV_DEV_GET_TIMEOUT)	throw TError(_("ReadDB"), _("Timeout the get request."));
 		if(tMsg.f == 17)	throw TError(_("ReadDB"), _("There is no response from the remote station."));
 		if(tMsg.f == 18)	throw TError(_("ReadDB"), _("Master is out of the logical token ring."));
-		if(tMsg.f == 0x85)	throw TError(11, _("ReadDB"), _("Specified offset address or DB error."));
+		if(tMsg.f == 0x85)	throw TError(TError::EXT+1, _("ReadDB"), _("Error the specified offset address or DB."));
 
 		//printf("Get DB %d:%d DB%d.%d(%d) -- %d\n",mDev,vmax(0,vmin(126,s2i(addr()))),n_db,offset,buffer.size(),tMsg.f);
 
@@ -786,9 +789,9 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 		tMsg.b  = MPI_Disconnect;
 		tMsg.e  = 0;
 		if((res=DevPutMessage(mDev,(MSG_STRUC *)&tMsg, 200L)) != DRV_NO_ERROR)
-		    throw TError(nodePath().c_str(),_("12:Put request is error %d."),res);
+		    throw TError(nodePath().c_str(),_("12:Error putting request: %d."),res);
 		if((res=DevGetMessage(mDev,sizeof(RCS_MESSAGE),(MSG_STRUC *)&tMsg,200L)) != DRV_NO_ERROR)
-		    throw TError(nodePath().c_str(),_("12:Get request is error %d."),res);*/
+		    throw TError(nodePath().c_str(),_("12:Error getting request: %d."),res);*/
 
 		//Put result
 		buffer.replace(0, buffer.size(), (char *)tMsg.d+8, buffer.size());
@@ -802,9 +805,9 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 		MtxAlloc res1(reqAPIRes, true);
 		ResAlloc res2(mod->resAPI, false);
 		if((rez=daveReadBytes(dc,daveDB,n_db,offset,buffer.size(),NULL))) {
-		    if(rez == daveResTimeout) throw TError(_("ReadDB"), _("Connection error."));
-		    if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), _("Read block '%d' error, %s."), n_db, daveStrerror(rez));
-		    throw TError(11, _("ReadDB"), _("DB '%d' error, %s."), n_db, daveStrerror(rez));
+		    if(rez == daveResTimeout) throw TError("ReadDB", _("Error connecting."));
+		    if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), _("Error reading the block %d: %s."), n_db, daveStrerror(rez));
+		    throw TError(TError::EXT+1, "ReadDB", _("Error the DB %d: %s."), n_db, daveStrerror(rez));
 		}
 		buffer.replace(0, buffer.size(), (char*)dc->resultPointer, buffer.size());	//!!!! But assign() temporary the block size changes
 		break;
@@ -840,14 +843,14 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 		//Request
 		int resp_len = tr.at().messIO(buf, AmsTcpHD->len+sizeof(AMS_TCP_HEAD), res, sizeof(res));
 		int full_len = resp_len;
-		if(full_len < (int)sizeof(AMS_TCP_HEAD))	throw TError(_("ReadDB"), _("Error server respond."));
+		if(full_len < (int)sizeof(AMS_TCP_HEAD))	throw TError("ReadDB", _("Error the server response."));
 		AmsTcpHD = (AMS_TCP_HEAD *)res;
 		unsigned resp_sz = AmsHD->len;
 
 		//Wait tail
 		while(full_len < (int)(resp_sz+sizeof(AMS_TCP_HEAD))) {
 		    resp_len = tr.at().messIO(NULL, 0, res+full_len, sizeof(res)-full_len);
-		    if(!resp_len) throw TError(_("ReadDB"), _("Not full respond."));
+		    if(!resp_len) throw TError("ReadDB", _("Not full response."));
 		    full_len += resp_len;
 		}
 
@@ -855,12 +858,12 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 		AmsHD = (AMS_HEAD *)(AmsTcpHD+1);
 		ADS_ReadResp *ADSreadResp = (ADS_ReadResp *)(AmsHD+1);
 		resp_len = sizeof(AMS_TCP_HEAD)+sizeof(AMS_HEAD);
-		if(full_len < resp_len || AmsHD->com != 2 || AmsHD->stFlgs != 0x05)	throw TError(_("ReadDB"), _("Error server respond."));
-		if(AmsHD->errCod) throw TError(11, _("ReadDB"), _("Error server respond, %d."), AmsHD->errCod);
-		if(full_len < (resp_len+=sizeof(ADS_ReadResp)))	throw TError(12, _("ReadDB"), _("Error server respond."));
-		if(ADSreadResp->res) throw TError(13, _("ReadDB"), _("Error server respond, %d."), ADSreadResp->res);
+		if(full_len < resp_len || AmsHD->com != 2 || AmsHD->stFlgs != 0x05)	throw TError("ReadDB", _("Error the server response."));
+		if(AmsHD->errCod) throw TError(TError::EXT+1, "ReadDB", _("Error the server response: %d."), AmsHD->errCod);
+		if(full_len < (resp_len+=sizeof(ADS_ReadResp)))	throw TError(TError::EXT+2, "ReadDB", _("Error the server response."));
+		if(ADSreadResp->res) throw TError(TError::EXT+3, "ReadDB", _("Error the server response: %d."), ADSreadResp->res);
 		if(ADSreadResp->len != buffer.size() || full_len < (int)(resp_len+ADSreadResp->len))
-		    throw TError(14, _("ReadDB"), _("Error server respond."));
+		    throw TError(TError::EXT+4, "ReadDB", _("Error the server response."));
 		buffer.replace(0, buffer.size(), res+resp_len, buffer.size());	//!!!! But assign() temporary the block size changes
 
 		break;
@@ -870,7 +873,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 		req.setAttr("id", "read")->setAttr("db", i2s(n_db))->setAttr("off", i2s(offset))->setAttr("size", i2s(buffer.size()));
 		reqService(req);
 		if(req.attr("err").size()) throw TError(s2i(req.attr("errCod")), "", "%s", req.attr("err").c_str());
-		if(req.text().size() != buffer.size()) throw TError("read", _("Reply data block size, %d != %d."), req.text().size(), buffer.size());
+		if(req.text().size() != buffer.size()) throw TError("read", _("Size of the response data block %d != %d."), req.text().size(), buffer.size());
 		buffer.replace(0, buffer.size(), req.text());	//!!!! But assign() temporary the block size changes
 		break;
 	    }
@@ -878,8 +881,8 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 	numR += buffer.size();
     } catch(TError &er) {
 	if(er.cat.size()) er.mess = er.cat + ":" + er.mess;
-	if(!er.cod) er.cod = ConnErrCode;
-	if(er.cod == ConnErrCode) setCntrDelay(er.mess);
+	if(!er.cod) er.cod = TError::Tr_Connect;
+	if(er.cod == TError::Tr_Connect) setCntrDelay(er.mess);
 	er.mess = i2s(er.cod) + ":" + er.mess;
 	if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), "%s", er.mess.c_str());
 	throw er;
@@ -894,8 +897,8 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 		RCS_MESSAGE tMsg;
 		int res, e_try = 4;
 
-		if(buffer.size() > 240)		throw TError(_("WriteDB"), _("Transmitted block is too big."));
-		if(!owner().cif_devs[mDev].present)	throw TError(_("WriteDB"), _("Board %d is not present."), mDev);
+		if(buffer.size() > 240)		throw TError("WriteDB", _("Transmitted block is too big."));
+		if(!owner().cif_devs[mDev].present)	throw TError("WriteDB", _("The board %d is not present."), mDev);
 
 		ResAlloc resource(owner().cif_devs[mDev].res, true);
 
@@ -926,7 +929,7 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 
 		    //Put message to remote host
 		    res = DevPutMessage(mDev, (MSG_STRUC *)&tMsg, 200L);
-		    if(res == DRV_DEV_PUT_TIMEOUT) throw TError(_("WriteDB"), _("Sending request is timeouted."));
+		    if(res == DRV_DEV_PUT_TIMEOUT) throw TError("WriteDB", _("Timeout sending request."));
 		    //Get remote host's response
 		    if(res == DRV_NO_ERROR) res = DevGetMessage(mDev, sizeof(RCS_MESSAGE), (MSG_STRUC *)&tMsg, 200L);
 		}
@@ -935,11 +938,11 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 		//printf("Put DB %d:%d DB%d.%d(%d) -- %d \n",mDev,vmax(0,vmin(126,s2i(addr()))),n_db,offset,buffer.size(),tMsg.f);
 
 		//Process errors
-		if(res != DRV_NO_ERROR)		throw TError(_("WriteDB"), _("Request to DB error, %d."), res);
-		if(res == DRV_DEV_GET_TIMEOUT)	throw TError(_("WriteDB"), _("Getting request is timeouted."));
+		if(res != DRV_NO_ERROR)		throw TError("WriteDB", _("Error requesting to DB: %d."), res);
+		if(res == DRV_DEV_GET_TIMEOUT)	throw TError("WriteDB", _("Timeout getting request."));
 		if(tMsg.f == 17)	throw TError(_("WriteDB"), _("There is no response from the remote station."));
 		if(tMsg.f == 18)	throw TError(_("WriteDB"), _("Master is out of the logical token ring."));
-		if(tMsg.f == 0x85)	throw TError(11, _("WriteDB"), _("Specified offset address or DB error."));
+		if(tMsg.f == 0x85)	throw TError(TError::EXT+1, _("WriteDB"), _("Error the specified offset address or DB."));
 		break;
 	    }
 	    case ISO_TCP:
@@ -950,9 +953,9 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 		MtxAlloc res1(reqAPIRes, true);
 		ResAlloc res2(mod->resAPI, false);
 		if((rez=daveWriteBytes(dc,daveDB,n_db,offset,buffer.size(),(char*)buffer.c_str()))) {
-		    if(rez == daveResTimeout) throw TError(_("WriteDB"), _("Connection error."));
-		    if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), _("Write block '%d' error, %s."), n_db, daveStrerror(rez));
-		    throw TError(11, _("WriteDB"), _("DB '%d' error, %s."), n_db, daveStrerror(rez));
+		    if(rez == daveResTimeout) throw TError("WriteDB", _("Error connecting."));
+		    if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), _("Error writing the block %d: %s."), n_db, daveStrerror(rez));
+		    throw TError(TError::EXT+1, "WriteDB", _("Error the DB %d: %s."), n_db, daveStrerror(rez));
 		}
 		break;
 	    }
@@ -989,23 +992,23 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 		//Request
 		int resp_len = tr.at().messIO(buf, AmsTcpHD->len+sizeof(AMS_TCP_HEAD), res, sizeof(res));
 		int full_len = resp_len;
-		if(full_len < (int)sizeof(AMS_TCP_HEAD)) throw TError(_("WriteDB"), _("Error server respond."));
+		if(full_len < (int)sizeof(AMS_TCP_HEAD)) throw TError("WriteDB", _("Error the server response."));
 		AmsTcpHD = (AMS_TCP_HEAD *)res;
 		unsigned resp_sz = AmsHD->len;
 		//Wait tail
 		while(full_len < (int)(resp_sz+sizeof(AMS_TCP_HEAD))) {
 		    resp_len = tr.at().messIO(NULL, 0, res+full_len, sizeof(res)-full_len);
-		    if(!resp_len) throw TError(_("WriteDB"), _("Not full respond."));
+		    if(!resp_len) throw TError("WriteDB", _("Not full response."));
 		    full_len += resp_len;
 		}
 		//Check for correct result
 		AmsHD = (AMS_HEAD*)(AmsTcpHD+1);
 		ADS_WriteResp *ADSwriteResp = (ADS_WriteResp *)(AmsHD+1);
 		resp_len = sizeof(AMS_TCP_HEAD)+sizeof(AMS_HEAD);
-		if(full_len < resp_len || AmsHD->com != 3 || AmsHD->stFlgs != 0x05) throw TError(_("WriteDB"), _("Error server respond."));
-		if(AmsHD->errCod) throw TError(11, _("WriteDB"), _("Error server respond, %d."), AmsHD->errCod);
-		if(full_len < (resp_len+=sizeof(ADS_WriteResp)))	throw TError(12, _("WriteDB"), _("Error server respond."));
-		if(ADSwriteResp->res) throw TError(13, _("WriteDB"), _("Error server respond, %d."), ADSwriteResp->res);
+		if(full_len < resp_len || AmsHD->com != 3 || AmsHD->stFlgs != 0x05) throw TError("WriteDB", _("Error the server response."));
+		if(AmsHD->errCod) throw TError(TError::EXT+1, "WriteDB", _("Error the server response: %d."), AmsHD->errCod);
+		if(full_len < (resp_len+=sizeof(ADS_WriteResp)))	throw TError(TError::EXT+2, "WriteDB", _("Error the server response."));
+		if(ADSwriteResp->res) throw TError(TError::EXT+3, "WriteDB", _("Error the server response: %d."), ADSwriteResp->res);
 
 		break;
 	    }
@@ -1020,8 +1023,8 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 	numW += buffer.size();
     } catch(TError &er) {
 	if(er.cat.size()) er.mess = er.cat + ":" + er.mess;
-	if(!er.cod) er.cod = ConnErrCode;
-	if(er.cod == ConnErrCode) setCntrDelay(er.mess);
+	if(!er.cod) er.cod = TError::Tr_Connect;
+	if(er.cod == TError::Tr_Connect) setCntrDelay(er.mess);
 	er.mess = i2s(er.cod) + ":" + er.mess;
 	if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), "%s", er.mess.c_str());
 	throw er;
@@ -1159,13 +1162,13 @@ void TMdContr::protIO( XMLNode &io )
 	tpkt.assign(buf, resp_len);
 	int off = 2;
 	for( ; tpkt.size() < 4 || tpkt.size() < iN(tpkt,off,2); off = 2) {
-	    if(!(resp_len=messIO(NULL,0,buf,sizeof(buf)))) throw TError("", _("Not full respond."));
+	    if(!(resp_len=messIO(NULL,0,buf,sizeof(buf)))) throw TError("", _("Not full response."));
 	    tpkt.append(buf, resp_len);
 	}
 
 	off = 2;
 	if(tpkt.size() < 4 || iN(tpkt,off,2) != tpkt.size())	//<TPKT length
-	    throw TError("", _("Respond size is not coincidence."));
+	    throw TError("", _("Inconsistency in response size."));
 
 								//<COTP result
 	uint8_t lenCOTP = iN(tpkt, off, 1);			// Length
@@ -1175,7 +1178,7 @@ void TMdContr::protIO( XMLNode &io )
 
 	//Service's response process
 	if(io.attr("id") == "connect") {
-	    if(tpPDU != COTP_CC)	throw TError("COTP", _("PDU Type error, %d != %d."), tpPDU, COTP_CC);
+	    if(tpPDU != COTP_CC)	throw TError("COTP", _("Error the PDU type, %d != %d."), tpPDU, COTP_CC);
 	    iN(tpkt, off, 2);					// Dest reference
 	    iN(tpkt, off, 2);					// Source reference
 	    iN(tpkt, off, 1);					// Class
@@ -1184,29 +1187,49 @@ void TMdContr::protIO( XMLNode &io )
 		uint8_t oLen = iN(tpkt, off, 1);		//  Length
 		iVal(tpkt, off, oLen);
 	    }
-	    if((off-begCOTP) != lenCOTP)throw TError("COTP", _("Inconsistent length."));
+	    if((off-begCOTP) != lenCOTP)throw TError("COTP", _("Inappropriate size."));
 	}
 	else if(sCd) {
-	    if(tpPDU != COTP_DT)	throw TError("COTP", _("PDU Type error, %d != %d."), tpPDU, COTP_DT);
+	    if(tpPDU != COTP_DT)	throw TError("COTP", _("Error the PDU type, %d != %d."), tpPDU, COTP_DT);
 	    iN(tpkt, off, 1);					// Class
 	    uint32_t tmpV;
 								//<ISO-TCP
 	    if(iN(tpkt,off,1) != 0x32)				//P: allways 0x32
-		throw TError(_("PDU header"), _("No start from 0x32."));
+		throw TError(_("PDU header"), _("Not started from 0x32."));
 	    char iHTp = iN(tpkt, off, 1);			//Header type, one of 1,2,3 or 7. type 2 and 3 headers are two bytes longer.
 	    iN(tpkt, off, 2);					//Currently unknown. Maybe it can be used for long numbers?
 	    if((tmpV=iN(tpkt,off,2)) != (uint16_t)(mInvokeID-1))	//number: sequence or invoke number
-		throw TError(_("PDU header"), _("Inconsistent respond's invoke ID to the request, %d != %d."), (uint16_t)(mInvokeID-1), tmpV);
+		throw TError(_("PDU header"), _("Inconsistency of the response ID to his request one, %d != %d."), (uint16_t)(mInvokeID-1), tmpV);
 	    uint16_t szPrm  = iN(tpkt, off, 2);			//plen: length of parameters which follow this header
 	    uint16_t szData = iN(tpkt, off, 2);			//dlen: length of data which follow the parameters
 	    uint16_t iErr = 0;
 	    if(iHTp == 2 || iHTp == 3) iErr = iN(tpkt, off, 2);	//result[2]: only present in type 2 and 3 headers. This contains an error information.
-	    if((off+szPrm+szData) > (int)tpkt.size()) throw TError(_("PDU header"), _("Parameters + data parts size more to the respond size."));
+	    if(iErr) {
+		const char *errNm = "unknown error.";
+		switch(iErr) {
+		    case 0x8000: errNm = "function already occupied.";	break;
+		    case 0x8001: errNm = "not allowed in current operating status.";	break;
+		    case 0x8101: errNm = "hardware fault.";		break;
+		    case 0x8103: errNm = "object access not allowed.";	break;
+		    case 0x8104: errNm = "context is not supported. Step7 says:Function not implemented or error in telgram.";	break;
+		    case 0x8105: errNm = "invalid address.";		break;
+		    case 0x8106: errNm = "data type not supported.";	break;
+		    case 0x8107: errNm = "data type not consistent.";	break;
+		    case 0x810A: errNm = "object does not exist.";	break;
+		    case 0x8301: errNm = "insufficient CPU memory ?";	break;
+		    case 0x8402: errNm = "CPU already in RUN or already in STOP ?";	break;
+		    case 0x8404: errNm = "severe error ?";		break;
+		    case 0x8500: errNm = "incorrect PDU size.";		break;
+		    case 0x8702: errNm = "address invalid.";		break;
+		}
+		throw TError(_("PDU header"), _("PLC error: [%d] %s"), (int)iErr, errNm);
+	    }
+	    if((off+szPrm+szData) > (int)tpkt.size()) throw TError(_("PDU header"), _("Size of the parameters + data more to the response size."));
 
 	    switch(sCd) {
 		case ISOTCP_OpenS7Connection: {
-		    if(szPrm != 8) throw TError(io.attr("id").c_str(), _("Parameters part size is not equal to expected, %d."), 8);
-		    if((int)iN(tpkt,off,1) != sCd) throw TError(io.attr("id").c_str(), _("Respond function mismatch."));
+		    if(szPrm != 8) throw TError(io.attr("id").c_str(), _("Parameters part size does not match for expected value, %d."), 8);
+		    if((int)iN(tpkt,off,1) != sCd) throw TError(io.attr("id").c_str(), _("Inconsistency of the response function."));
 		    iN(tpkt, off, 1);
 		    iN(tpkt, off, 2);
 		    iN(tpkt, off, 2);
@@ -1214,40 +1237,42 @@ void TMdContr::protIO( XMLNode &io )
 		    break;
 		}
 		case ISOTCP_Read: {
-		    if(szPrm != 2) throw TError(io.attr("id").c_str(), _("Parameters part size is not equal to expected, %d."), 2);
-		    if((int)iN(tpkt,off,1) != sCd) throw TError(io.attr("id").c_str(), _("Respond function mismatch."));
+		    if(szPrm != 2) throw TError(io.attr("id").c_str(), _("Parameters part size does not match for expected value, %d."), 2);
+		    if((int)iN(tpkt,off,1) != sCd) throw TError(io.attr("id").c_str(), _("Inconsistency of the response function."));
 		    iN(tpkt, off, 1);
 		    // Data part
 		    uint8_t iDErr = iN(tpkt, off, 1);
 		    if(iDErr != 0xFF) {
-			if(iDErr == 5) throw TError(12, io.attr("id").c_str(), _("Try access beyond the DB '%s' range %s(%s)."),
+			if(iDErr == 3)		throw TError(TError::EXT+2, io.attr("id").c_str(), _("An attempt to access outside the DB '%s' (200 family), %s(%s)."),
 					io.attr("db").c_str(), io.attr("off").c_str(), io.attr("size").c_str());
-			else if(iDErr == 10) throw TError(11, io.attr("id").c_str(), _("DB '%s' is not exist."), io.attr("db").c_str());
-			else throw TError(13, io.attr("id").c_str(), _("Data access unknown error, %xh."), iDErr);
+			else if(iDErr == 5)	throw TError(TError::EXT+2, io.attr("id").c_str(), _("An attempt to access outside the DB '%s', %s(%s)."),
+					io.attr("db").c_str(), io.attr("off").c_str(), io.attr("size").c_str());
+			else if(iDErr == 10)	throw TError(TError::EXT+1, io.attr("id").c_str(), _("The DB '%s' doesn't exist."), io.attr("db").c_str());
+			else throw TError(TError::EXT+3, io.attr("id").c_str(), _("Unknown error accessing to DB, %xh."), iDErr);
 		    }
 		    char iDLenTp = iN(tpkt, off, 1);
 		    uint16_t iDLen = iN(tpkt, off, 2);
 		    if(iDLenTp == 4) iDLen = iDLen/8;	//len is in bits, adjust
 		    else if(iDLenTp == 9) ;		//len is already in bytes, ok
 		    else if(iDLenTp == 3) ;		//len is in bits, but there is a byte per result bit, ok
-		    else throw TError(14, io.attr("id").c_str(), _("Unknown data encoding type, %d."), iDLenTp);
+		    else throw TError(TError::EXT+4, io.attr("id").c_str(), _("Unknown data encoding type, %d."), iDLenTp);
 		    if((off+iDLen) != (int)tpkt.size())
-			throw TError(15, io.attr("id").c_str(), _("Inconsistent data block size to the respond size, %d(%d)."),
+			throw TError(TError::EXT+5, io.attr("id").c_str(), _("Inconsistency in the size of the data block to the response size, %d(%d)."),
 								    (off+iDLen), tpkt.size());
 		    io.setText(tpkt.substr(off));
 		    break;
 		}
 		case ISOTCP_Write: {
-		    if(szPrm != 2) throw TError(io.attr("id").c_str(), _("Parameters part size is not equal to expected, %d."), 2);
-		    if((int)iN(tpkt,off,1) != sCd) throw TError(io.attr("id").c_str(), _("Respond function mismatch."));
+		    if(szPrm != 2) throw TError(io.attr("id").c_str(), _("Parameters part size does not match for expected value, %d."), 2);
+		    if((int)iN(tpkt,off,1) != sCd) throw TError(io.attr("id").c_str(), _("Inconsistency of the response function."));
 		    iN(tpkt, off, 1);
 		    // Data part
 		    uint8_t iDErr = iN(tpkt, off, 1);
 		    if(iDErr != 0xFF) {
-			if(iDErr == 5) throw TError(12, io.attr("id").c_str(), _("Try access beyond the DB '%s' range %s(%s)."),
+			if(iDErr == 5) throw TError(TError::EXT+2, io.attr("id").c_str(), _("An attempt to access outside the DB '%s', %s(%s)."),
 					io.attr("db").c_str(), io.attr("off").c_str(), io.attr("size").c_str());
-			else if(iDErr == 10) throw TError(11, io.attr("id").c_str(), _("DB '%s' is not exist."), io.attr("db").c_str());
-			else throw TError(13, io.attr("id").c_str(), _("Data access unknown error, %xh."), iDErr);
+			else if(iDErr == 10) throw TError(TError::EXT+1, io.attr("id").c_str(), _("The DB '%s' doesn't exist."), io.attr("db").c_str());
+			else throw TError(TError::EXT+3, io.attr("id").c_str(), _("Unknown error accessing to DB, %xh."), iDErr);
 		    }
 		    break;
 		}
@@ -1267,254 +1292,152 @@ void TMdContr::reset( )
     mInvokeID = -1;
 }
 
-char TMdContr::getValB( SValData ival, ResString &err )
+TVariant TMdContr::getVal( const string &iaddr, ResString &err)
 {
     if(tmDelay > 0) {
-	if(err.getVal().empty())err = TSYS::strMess("%d:%s", ConnErrCode, conErr.getVal().c_str());
-	return EVAL_BOOL;
-    }
-
-    ResAlloc res(reqDataRes, false);
-    for(unsigned i_b = 0; i_b < acqBlks.size(); i_b++)
-	if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off &&
-	    (ival.off+1) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()))
-	{
-	    if(!acqBlks[i_b].err.size())
-		return (bool)(acqBlks[i_b].val[ival.off-acqBlks[i_b].off]&(0x01<<ival.sz));
-	    else err.setVal(acqBlks[i_b].err);
-	    break;
-	}
-    if(err.getVal().empty())	err = TSYS::strMess(_("%d:Value is not gathered."), 11);
-
-    return EVAL_BOOL;
-}
-
-int64_t TMdContr::getValI( SValData ival, ResString &err )
-{
-    if(tmDelay > 0) {
-	if(err.getVal().empty()) err = TSYS::strMess("%d:%s", ConnErrCode, conErr.getVal().c_str());
-	return EVAL_INT;
-    }
-
-    int iv_sz = valSize(IO::Integer, ival.sz);
-    ResAlloc res(reqDataRes, false);
-    for(unsigned i_b = 0; i_b < acqBlks.size(); i_b++)
-	if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off &&
-	    (ival.off+iv_sz) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()))
-	{
-	    if(!acqBlks[i_b].err.size())
-		switch(iv_sz) {
-		    case 1:	return acqBlks[i_b].val[ival.off-acqBlks[i_b].off];
-		    case 2:	return *(int16_t*)revers(acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz)).c_str();
-		    case 4:	return *(int32_t*)revers(acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz)).c_str();
-		}
-	    else err.setVal(acqBlks[i_b].err);
-	    break;
-	}
-    if(err.getVal().empty()) err = TSYS::strMess(_("%d:Value is not gathered."), 11);
-
-    return EVAL_INT;
-}
-
-double TMdContr::getValR( SValData ival, ResString &err )
-{
-    if(tmDelay > 0) {
-	if(err.getVal().empty()) err = TSYS::strMess("%d:%s", ConnErrCode, conErr.getVal().c_str());
+	if(err.getVal().empty())
+	    err = TSYS::strMess("%d:%s", TError::Tr_Connect, conErr.getVal().c_str());
 	return EVAL_REAL;
     }
 
-    int iv_sz = valSize(IO::Real, ival.sz);
+    int db = -1, off = -1;
+    char tp[11];
+    if(sscanf(iaddr.c_str(),"DB%d.%i.%10s",&db,&off,tp) != 3 || db < 0 || off < 0)	return EVAL_REAL;
+
+    int ivSz = valSize(tp);	//Get real value's size
+
     ResAlloc res(reqDataRes, false);
-    for(unsigned i_b = 0; i_b < acqBlks.size(); i_b++)
-	if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off &&
-	    (ival.off+iv_sz) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()))
+    for(unsigned iB = 0; iB < acqBlks.size(); iB++)
+	if(acqBlks[iB].db == db && off >= acqBlks[iB].off &&
+	    (off+ivSz) <= (acqBlks[iB].off+(int)acqBlks[iB].val.size()))
 	{
-	    if(!acqBlks[i_b].err.size())
-		switch(iv_sz) {
-		    case 4:	return TSYS::floatLErev(*(float*)revers(acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz)).c_str());
-		    case 8:	return TSYS::doubleLErev(*(double*)revers(acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz)).c_str());
+	    if(!acqBlks[iB].err.size()) {
+		switch(tp[0]) {
+		    case 'b':		return (bool)(acqBlks[iB].val[off-acqBlks[iB].off]&(0x01<<atoi(tp+1)));
+		    case 'i':
+			switch(ivSz) {
+			    case 1:	return *(int8_t*)(acqBlks[iB].val.data()+(off-acqBlks[iB].off));
+						//acqBlks[iB].val[off-acqBlks[iB].off];
+			    case 2:	return (int16_t)TSYS::i16_BE(TSYS::getUnalign16(acqBlks[iB].val.data()+(off-acqBlks[iB].off)));
+						//*(int16_t*)revers(acqBlks[iB].val.substr(off-acqBlks[iB].off,ivSz)).c_str();
+			    case 4:	return (int32_t)TSYS::i32_BE(TSYS::getUnalign32(acqBlks[iB].val.data()+(off-acqBlks[iB].off)));
+						//*(int32_t*)revers(acqBlks[iB].val.substr(off-acqBlks[iB].off,ivSz)).c_str();
+			    case 8:	return (int64_t)TSYS::i64_BE(TSYS::getUnalign64(acqBlks[iB].val.data()+(off-acqBlks[iB].off)));
+						//*(int64_t*)revers(acqBlks[iB].val.substr(off-acqBlks[iB].off,ivSz)).c_str();
+			}
+			break;
+		    case 'u':
+			switch(ivSz) {
+			    case 1:	return *(uint8_t*)(acqBlks[iB].val.data()+(off-acqBlks[iB].off));
+						//(uint8_t)acqBlks[iB].val[off-acqBlks[iB].off];
+			    case 2:	return TSYS::i16_BE(TSYS::getUnalign16(acqBlks[iB].val.data()+(off-acqBlks[iB].off)));
+						//(int64_t)*(uint16_t*)revers(acqBlks[iB].val.substr(off-acqBlks[iB].off,ivSz)).c_str();
+			    case 4:	return (int64_t)TSYS::i32_BE(TSYS::getUnalign32(acqBlks[iB].val.data()+(off-acqBlks[iB].off)));
+						//(int64_t)*(uint32_t*)revers(acqBlks[iB].val.substr(off-acqBlks[iB].off,ivSz)).c_str();
+			}
+			break;
+		    case 'r':
+			switch(ivSz) {
+			    case 4:	return TSYS::floatLErev(*(float*)revers(acqBlks[iB].val.substr(off-acqBlks[iB].off,ivSz)).c_str());
+			    case 8:	return TSYS::doubleLErev(*(double*)revers(acqBlks[iB].val.substr(off-acqBlks[iB].off,ivSz)).c_str());
+			}
+		    case 's':		return acqBlks[iB].val.substr(off-acqBlks[iB].off, ivSz);
 		}
-	    else err.setVal(acqBlks[i_b].err);
+	    }
+	    else err.setVal(acqBlks[iB].err);
 	    break;
 	}
-    if(err.getVal().empty()) err = TSYS::strMess(_("%d:Value is not gathered."), 11);
+    if(err.getVal().empty())	err = TSYS::strMess(_("%d:The value is not gathered."), 11);
 
     return EVAL_REAL;
 }
 
-string TMdContr::getValS( SValData ival, ResString &err )
+void TMdContr::setVal( const TVariant &ivl, const string &iaddr, ResString &err )
 {
     if(tmDelay > 0) {
-	if(err.getVal().empty()) err = TSYS::strMess("%d:%s", ConnErrCode, conErr.getVal().c_str());
-	return EVAL_STR;
+	if(err.getVal().empty()) err = TSYS::strMess("%d:%s", TError::Tr_Connect, conErr.getVal().c_str());
+	return;
     }
+    if(ivl.isEVal())	return;
 
-    int iv_sz = valSize(IO::String, ival.sz);
-    ResAlloc res(reqDataRes, false);
-    for(unsigned i_b = 0; i_b < acqBlks.size(); i_b++)
-	if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off &&
-	    (ival.off+iv_sz) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()) )
-	{
-	    if(!acqBlks[i_b].err.size()) return acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz);
-	    else err.setVal(acqBlks[i_b].err);
+    int db = -1, off = -1;
+    char tp[11];
+    if(sscanf(iaddr.c_str(),"DB%d.%i.%10s",&db,&off,tp) != 3 || db < 0 || off < 0)	return;
+
+    int ivSz = valSize(tp);	//Get real value's size
+
+    string val;
+    switch(tp[0]) {
+	case 'b': {
+	    char tval = getVal(TSYS::strMess("DB%d.%i.u1",db,off),err).getI();
+	    if((bool)(tval&(0x01<<atoi(tp+1))) != (bool)ivl.getB()) {
+		tval ^= (0x01<<atoi(tp+1));
+		val = tval;
+	    }
 	    break;
 	}
-    if(err.getVal().empty()) err = TSYS::strMess(_("%d:Value is not gathered."), 11);
-
-    return EVAL_STR;
-}
-
-void TMdContr::setValB( bool ivl, SValData ival, ResString &err )
-{
-    if(tmDelay > 0) {
-	if(err.getVal().empty()) err = TSYS::strMess("%d:%s", ConnErrCode, conErr.getVal().c_str());
-	return;
-    }
-
-    int64_t val = getValI(SValData(ival.db,ival.off,1), err);
-    if(val == EVAL_INT || (bool)(val&(0x01<<ival.sz)) == ivl) return;
-    //Write data to controller or write data block
-    val ^= (0x01<<ival.sz);
-    try {
-	if(!assincWrite()) putDB(ival.db,ival.off,string((char*)&val,1));
-	else {
-	    ResAlloc res(reqDataAsWrRes, false);
-	    for(unsigned i_b = 0; i_b < writeBlks.size(); i_b++)
-		if(writeBlks[i_b].db == ival.db && ival.off >= writeBlks[i_b].off &&
-		    (ival.off+1) <= (writeBlks[i_b].off+(int)writeBlks[i_b].val.size()))
-		{
-		    writeBlks[i_b].val[ival.off-writeBlks[i_b].off] = val;
-		    if(s2i(writeBlks[i_b].err.getVal()) == -1) writeBlks[i_b].err = "";
-		    break;
-		}
+	case 'i':
+	case 'u': {
+	    int64_t tval = ivl.getI();
+	    if(tval != getVal(iaddr,err).getI())
+		val = revers(string((char*)&tval,ivSz));
+	    break;
 	}
-	//Set to DB buffer
-	ResAlloc res(reqDataRes, false);
-	for(unsigned i_b = 0; i_b < acqBlks.size(); i_b++)
-	    if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off &&
-		    (ival.off+1) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()))
-	    { acqBlks[i_b].val[ival.off-acqBlks[i_b].off] = val; break; }
-    } catch(TError &cerr) { if(err.getVal().empty()) err.setVal(cerr.mess); }
-}
-
-void TMdContr::setValI( int64_t ivl, SValData ival, ResString &err )
-{
-    if(tmDelay > 0) {
-	if(err.getVal().empty()) err = TSYS::strMess("%d:%s", ConnErrCode, conErr.getVal().c_str());
-	return;
-    }
-
-    int64_t val = getValI(ival, err);
-    if(val == EVAL_INT || val == ivl) return;
-    //Write data to controller or write data block
-    val = ivl;
-    int iv_sz = valSize(IO::Integer, ival.sz);
-    try {
-	if(!assincWrite()) putDB(ival.db,ival.off,revers(string((char *)&val,iv_sz)));
-	else {
-	    ResAlloc res(reqDataAsWrRes, false);
-	    for(unsigned i_b = 0; i_b < writeBlks.size(); i_b++)
-		if(writeBlks[i_b].db == ival.db && ival.off >= writeBlks[i_b].off &&
-			(ival.off+iv_sz) <= (writeBlks[i_b].off+(int)writeBlks[i_b].val.size()))
-		{
-		    writeBlks[i_b].val.replace(ival.off-writeBlks[i_b].off,iv_sz,revers(string((char *)&val,iv_sz)));
-		    if(s2i(writeBlks[i_b].err.getVal()) == -1) writeBlks[i_b].err = "";
-		    break;
-		}
-	}
-	//Set to DB buffer
-	ResAlloc res(reqDataRes, false);
-	for(unsigned i_b = 0; i_b < acqBlks.size(); i_b++)
-	    if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off &&
-		    (ival.off+iv_sz) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()))
-	    { acqBlks[i_b].val.replace(ival.off-acqBlks[i_b].off,iv_sz,revers(string((char*)&val,iv_sz))); break; }
-    } catch(TError &cerr) { if(err.getVal().empty()) err.setVal(cerr.mess); }
-}
-
-void TMdContr::setValR( double ivl, SValData ival, ResString &err )
-{
-    if(tmDelay > 0) {
-	if(err.getVal().empty()) err = TSYS::strMess("%d:%s", ConnErrCode, conErr.getVal().c_str());
-	return;
-    }
-
-    double val = getValR(ival, err);
-    if(val == EVAL_REAL || val == ivl) return;
-    //Write data to controller or write data block
-    val = TSYS::doubleLE(ivl);
-    float val_4 = TSYS::floatLE(ivl);
-    int iv_sz = valSize(IO::Real, ival.sz);
-    try {
-	if(!assincWrite()) putDB(ival.db,ival.off,revers(string((iv_sz==4)?(char*)&val_4:(char *)&val,iv_sz)));
-	else {
-	    ResAlloc res(reqDataAsWrRes, false);
-	    for(unsigned i_b = 0; i_b < writeBlks.size(); i_b++)
-		if(writeBlks[i_b].db == ival.db && ival.off >= writeBlks[i_b].off &&
-			(ival.off+iv_sz) <= (writeBlks[i_b].off+(int)writeBlks[i_b].val.size()))
-		{
-		    writeBlks[i_b].val.replace(ival.off-writeBlks[i_b].off,iv_sz,revers(string(((iv_sz==4)?(char *)&val_4:(char *)&val),iv_sz)));
-		    if(s2i(writeBlks[i_b].err.getVal()) == -1) writeBlks[i_b].err = "";
-		    break;
-		}
-	}
-	//Set to DB buffer
-	ResAlloc res(reqDataRes, false);
-	for(unsigned i_b = 0; i_b < acqBlks.size(); i_b++)
-	    if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off &&
-		    (ival.off+iv_sz) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()))
-	    {
-		acqBlks[i_b].val.replace(ival.off-acqBlks[i_b].off,iv_sz,revers(string(((iv_sz==4)?(char *)&val_4:(char *)&val),iv_sz)));
-		break;
+	case 'r':
+	    if(ivSz == 4) {
+		float tval = ivl.getR();
+		if(tval != getVal(iaddr,err).getR())
+		    val = revers(string((char*)&tval,ivSz));
 	    }
-    } catch(TError &cerr) { if(err.getVal().empty()) err.setVal(cerr.mess); }
-}
-
-void TMdContr::setValS( const string &ivl, SValData ival, ResString &err )
-{
-    if(tmDelay > 0) {
-	if(err.getVal().empty()) err = TSYS::strMess("%d:%s", ConnErrCode, conErr.getVal().c_str());
-	return;
+	    else {
+		double tval = ivl.getR();
+		if(tval != getVal(iaddr,err).getR())
+		    val = revers(string((char*)&tval,ivSz));
+	    }
+	    break;
+	case 's':
+	    val = ivl.getS(); val.resize(ivSz);
+	    if(val == getVal(iaddr,err).getS()) val = "";
     }
+    if(!val.size())	return;
 
-    string val = getValS(ival,err);
-    int iv_sz = valSize(IO::String, ival.sz);
-    string vali = ivl;
-    vali.resize(iv_sz);
-    if(val == EVAL_STR || val == vali) return;
     //Write data to controller or write data block
     try {
-	if(!assincWrite())	putDB(ival.db, ival.off, vali);
+	if(!assincWrite())	putDB(db, off, val);
 	else {
 	    ResAlloc res(reqDataAsWrRes, false);
-	    for(unsigned i_b = 0; i_b < writeBlks.size(); i_b++)
-		if(writeBlks[i_b].db == ival.db && ival.off >= writeBlks[i_b].off &&
-			(ival.off+iv_sz) <= (writeBlks[i_b].off+(int)writeBlks[i_b].val.size()))
+	    for(unsigned iB = 0; iB < writeBlks.size(); iB++)
+		if(writeBlks[iB].db == db && off >= writeBlks[iB].off &&
+			(off+ivSz) <= (writeBlks[iB].off+(int)writeBlks[iB].val.size()))
 		{
-		    writeBlks[i_b].val.replace(ival.off-writeBlks[i_b].off,iv_sz,vali);
-		    if(s2i(writeBlks[i_b].err.getVal()) == -1) writeBlks[i_b].err = "";
+		    writeBlks[iB].val.replace(off-writeBlks[iB].off,ivSz,val);
+		    if(s2i(writeBlks[iB].err.getVal()) == -1) writeBlks[iB].err = "";
 		    break;
 		}
 	}
 	//Set to DB buffer
 	ResAlloc res(reqDataRes, false);
-	for(unsigned i_b = 0; i_b < acqBlks.size(); i_b++)
-	    if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off &&
-		    (ival.off+iv_sz) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()))
-	    { acqBlks[i_b].val.replace(ival.off-acqBlks[i_b].off,iv_sz,vali); break; }
+	for(unsigned iB = 0; iB < acqBlks.size(); iB++)
+	    if(acqBlks[iB].db == db && off >= acqBlks[iB].off &&
+		    (off+ivSz) <= (acqBlks[iB].off+(int)acqBlks[iB].val.size()))
+	    { acqBlks[iB].val.replace(off-acqBlks[iB].off,ivSz,val); break; }
     } catch(TError &cerr) { if(err.getVal().empty()) err.setVal(cerr.mess); }
 }
 
-int TMdContr::valSize( IO::Type itp, int iv_sz )
+int TMdContr::valSize( const string &itp )
 {
-    switch(itp) {
-	case IO::String:	return (iv_sz <= 0) ? 10 : iv_sz;
-	case IO::Integer:	return (iv_sz == 1 || iv_sz == 2 || iv_sz == 4) ? iv_sz : 2;
-	case IO::Real:		return (iv_sz == 4 || iv_sz == 8) ? iv_sz : 4;
-	case IO::Boolean:	return 1;
-	default: break;
+    if(itp.size()) {
+	int ivSz = (itp.size() >= 2) ? s2i(itp.substr(1)) : 0;
+	switch(itp[0]) {
+	    case 's': return (ivSz <= 0) ? 10 : vmin(100,ivSz);
+	    case 'i': case 'u': return (ivSz == 1 || ivSz == 2 || ivSz == 4 || ivSz == 8) ? ivSz : 2;
+	    case 'r': return (ivSz == 4 || ivSz == 8) ? ivSz : 4;
+	    case 'b': return 1;
+	    default: break;
+	}
     }
 
-    throw TError(nodePath().c_str(), _("Value type error."));
+    throw TError(nodePath().c_str(), _("Error value type '%s'."), itp.c_str());
 }
 
 void *TMdContr::Task( void *icntr )
@@ -1557,23 +1480,23 @@ void *TMdContr::Task( void *icntr )
 	    //Process write data blocks
 	    if(cntr.assincWrite()) {
 		ResAlloc res(cntr.reqDataAsWrRes, false);
-		for(unsigned i_b = 0; !isStart && !isStop && !cntr.endrunReq && i_b < cntr.writeBlks.size(); i_b++)
+		for(unsigned iB = 0; !isStart && !isStop && !cntr.endrunReq && iB < cntr.writeBlks.size(); iB++)
 		    try {
-			if(cntr.redntUse()) { cntr.writeBlks[i_b].err = _("-1:No data"); continue; }
-			if(s2i(cntr.writeBlks[i_b].err.getVal()) == -1) continue;
-			cntr.putDB(cntr.writeBlks[i_b].db,cntr.writeBlks[i_b].off,cntr.writeBlks[i_b].val);
-			cntr.writeBlks[i_b].err = _("-1:No data");
-		    } catch(TError &err) { cntr.writeBlks[i_b].err = err.mess; }
+			if(cntr.redntUse()) { cntr.writeBlks[iB].err = _("-1:No data"); continue; }
+			if(s2i(cntr.writeBlks[iB].err.getVal()) == -1) continue;
+			cntr.putDB(cntr.writeBlks[iB].db,cntr.writeBlks[iB].off,cntr.writeBlks[iB].val);
+			cntr.writeBlks[iB].err = _("-1:No data");
+		    } catch(TError &err) { cntr.writeBlks[iB].err = err.mess; }
 		if(cntr.tmDelay > 0) continue;
 	    }
 	    ResAlloc res(cntr.reqDataRes, false);
 	    //Process acquisition data blocks
-	    for(unsigned i_b = 0; !isStart && !isStop && !cntr.endrunReq && i_b < cntr.acqBlks.size(); i_b++)
+	    for(unsigned iB = 0; !isStart && !isStop && !cntr.endrunReq && iB < cntr.acqBlks.size(); iB++)
 		try {
-		    if(cntr.redntUse()) { cntr.acqBlks[i_b].err = _("-1:No data"); continue; }
-		    cntr.getDB(cntr.acqBlks[i_b].db, cntr.acqBlks[i_b].off, cntr.acqBlks[i_b].val);
-		    cntr.acqBlks[i_b].err = "";
-		} catch(TError &err) { cntr.acqBlks[i_b].err = err.mess; }
+		    if(cntr.redntUse()) { cntr.acqBlks[iB].err = _("-1:No data"); continue; }
+		    cntr.getDB(cntr.acqBlks[iB].db, cntr.acqBlks[iB].off, cntr.acqBlks[iB].val);
+		    cntr.acqBlks[iB].err = "";
+		} catch(TError &err) { cntr.acqBlks[iB].err = err.mess; }
 	    if(cntr.tmDelay > 0) continue;
 	    res.unlock();
 
@@ -1588,8 +1511,7 @@ void *TMdContr::Task( void *icntr )
 	    if(cntr.tmDelay <= 0) {
 		if(cntr.alSt != 0) {
 		    cntr.alSt = 0;
-		    cntr.alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),cntr.owner().modId().c_str(),cntr.id().c_str(),_("OK")),
-				    TMess::Info);
+		    cntr.alarmSet(TSYS::strMess(_("Connection to the data source: %s."),_("OK")), TMess::Info);
 		}
 		cntr.tmDelay--;
 	    }
@@ -1615,8 +1537,7 @@ void TMdContr::setCntrDelay( const string &err )
 {
     if(alSt <= 0) {
 	alSt = 1;
-	alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),owner().modId().c_str(),id().c_str(),
-								TRegExp(":","g").replace(err,"=").c_str()));
+	alarmSet(TSYS::strMess(_("Connection to the data source: %s."),TRegExp(":","g").replace(err,"=").c_str()));
 	reset();
 	numErr++;
     }
@@ -1644,14 +1565,14 @@ void TMdContr::redntDataUpdate( )
     req.setAttr("path","/");
     for(unsigned i_prm = 0; i_prm < req.childSize(); )
 	if(s2i(req.childGet(i_prm)->attr("err"))) req.childDel(i_prm);
-	else { req.childGet(i_prm)->setName("set"); i_prm++; }
+	else { req.childGet(i_prm)->setName("set")->setAttr("reforwardRedundOff", "1"); i_prm++; }
     cntrCmd(&req);
 }
 
 TMdContr::SDataRec::SDataRec( int idb, int ioff, int v_rez ) : db(idb), off(ioff)
 {
     val.assign(v_rez, 0);
-    err = TSYS::strMess(_("%d:Value is not gathered."), 11);
+    err = TSYS::strMess(_("%d:The value is not gathered."), 11);
 }
 
 void TMdContr::cntrCmdProc( XMLNode *opt )
@@ -1666,23 +1587,24 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	    "tp","str", "dest","sel_ed", "sel_list",TMess::labSecCRONsel(), "help",TMess::labSecCRON());
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1, "help",TMess::labTaskPrior());
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/TYPE",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,
-	    "help",_("Connection type:\n"
-		     "  CIF_PB - connection to controllers series S7, by firm Siemens, by communication unit CIF-50PB or like;\n"
-		     "  ISO_TCP, ISO_TCP243 - connection to controllers series S7, by firm Siemens, by Ethernet network (TCP243 by CP243);\n"
-		     "  ADS - TwinCAT ADS/AMS protocol for connection to controllers firm Beckhoff."));
+	    "help",_("Connection type, supported ones:\n"
+		     "  CIF_PB - connection to S7 controllers of the firm Siemens via CIF-50PB communication processor or similar;\n"
+		     "  ISO_TCP, ISO_TCP243 - connection to S7 controllers of the firm Siemens via the Ethernet network (TCP243 by CP243);\n"
+		     "  ADS - TwinCAT ADS/AMS protocol for connecting to controllers of the firm Beckhoff."));
 	if(type() != SELF_ISO_TCP)
 	    ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,
-		"help",_("Remote controller address. For connections:\n"
-		     "  CIF_PB - controller address in \"Profibus\" network, digit 0-255;\n"
-		     "  ISO_TCP, ISO_TCP243 - IP-address into Ethernet network;\n"
-		     "  ADS - Network identifier and port for target and source stations, in view\n"
+		"help",_("Remote controller address, for the connections:\n"
+		     "  CIF_PB - controller address in the ProfiBus network, one digit 0-255;\n"
+		     "  ISO_TCP, ISO_TCP243 - IP-address into the Ethernet network;\n"
+		     "  ADS - network identifier and port for the target and source stations, in view\n"
 		     "      \"{Target_AMSNetId}:{Target_AMSPort}|{Source_AMSNetId}:{Source_AMSPort}\"\n"
 		     "      (for example: \"192.168.0.1.1.1:801|82.207.88.73.1.1:801\"), where:\n"
-		     "    AMSNetId - network identifier, write into view of six digits 0-255, for example: \"192.168.0.1.1.1\";\n"
-		     "    AMSPort - port, write into view digit 0-65535."));
+		     "    AMSNetId - network identifier, writes in view of six digits 0-255, for example: \"192.168.0.1.1.1\";\n"
+		     "    AMSPort - port, writes in view of one digit 0-65535."));
 	else ctrRemoveNode(opt, "/cntr/cfg/ADDR");
 	if(type() == ADS || type() == SELF_ISO_TCP)
-	    ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR_TR",EVAL_STR,RWRWR_,"root",SDAQ_ID,2, "dest","select", "select","/cntr/cfg/trLst");
+	    ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR_TR",EVAL_STR,RWRWR_,"root",SDAQ_ID,3, "dest","select", "select","/cntr/cfg/trLst",
+		"help",_("OpenSCADA output transport for the protocol ADS (port 48898, 801 for AMS) and ISO_TCP (port 102) for sending requests."));
 	else ctrRemoveNode(opt, "/cntr/cfg/ADDR_TR");
 	return;
     }
@@ -1730,8 +1652,8 @@ void TMdContr::oN( string &buf, uint32_t val, uint8_t sz, int off )
 //* TMdPrm                                       *
 //************************************************
 TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) :
-    TParamContr(name,tp_prm), TValFunc(name+"SiemensPrm"), pEl("cif_attr"),
-    idFreq(-1), idStart(-1), idStop(-1), idErr(-1), idSh(-1), idNm(-1), idDscr(-1), acqErrTm(0)
+    TParamContr(name,tp_prm), TPrmTempl::Impl(this, name+"SiemensPrm"), pEl("cif_attr"),
+    chkLnkNeed(false), idFreq(-1), idStart(-1), idStop(-1), idErr(-1), idSh(-1), idNm(-1), idDscr(-1), acqErrTm(0)
 {
 
 }
@@ -1739,6 +1661,24 @@ TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) :
 TMdPrm::~TMdPrm( )
 {
     nodeDelAll();
+}
+
+TCntrNode &TMdPrm::operator=( const TCntrNode &node )
+{
+    TParamContr::operator=(node);
+
+    TMdPrm *src_n = const_cast<TMdPrm*>(dynamic_cast<const TMdPrm*>(&node));
+    if(!src_n || !src_n->enableStat() || !enableStat() || !func()) return *this;
+
+    //IO values copy
+    for(int iIO = 0; iIO < src_n->ioSize(); iIO++)
+	if(src_n->ioFlg(iIO)&TPrmTempl::CfgLink)
+	    lnkAddrSet(iIO, src_n->lnkAddr(iIO));
+	else setS(iIO, src_n->getS(iIO));
+
+    chkLnkNeed = initLnks();
+
+    return *this;
 }
 
 void TMdPrm::postEnable( int flag )
@@ -1768,41 +1708,18 @@ void TMdPrm::enable( )
     TParamContr::enable();
     //Template's function connect
     try {
-	vector<string> als;
+	//vector<string> als;
 	bool to_make = false;
-	unsigned fId = 0;
 	if(!func()) {
 	    setFunc(&SYS->daq().at().tmplLibAt(TSYS::strSepParse(cfg("TMPL").getS(),0,'.')).at().
 				     at(TSYS::strSepParse(cfg("TMPL").getS(),1,'.')).at().func().at());
 	    to_make = true;
 	}
 	// Init attrubutes
-	for(int i_io = 0; i_io < func()->ioSize(); i_io++) {
-	    if((func()->io(i_io)->flg()&TPrmTempl::CfgLink) && lnkId(i_io) < 0)	plnk.push_back(SLnk(i_io));
-	    if((func()->io(i_io)->flg()&(TPrmTempl::AttrRead|TPrmTempl::AttrFull))) {
-		unsigned flg = TVal::DirWrite|TVal::DirRead;
-		if(func()->io(i_io)->flg()&IO::FullText)	flg |= TFld::FullText;
-		if(func()->io(i_io)->flg()&TPrmTempl::AttrRead)	flg |= TFld::NoWrite;
-		TFld::Type tp = TFld::type(ioType(i_io));
-		if((fId=pEl.fldId(func()->io(i_io)->id(),true)) < pEl.fldSize()) {
-		    if(pEl.fldAt(fId).type() != tp)
-			try{ pEl.fldDel(fId); } catch(TError &err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
-		    else {
-			pEl.fldAt(fId).setFlg(flg);
-			pEl.fldAt(fId).setDescr(func()->io(i_io)->name().c_str());
-		    }
-		}
-
-		if(!vlPresent(func()->io(i_io)->id()))
-		    pEl.fldAdd(new TFld(func()->io(i_io)->id().c_str(),func()->io(i_io)->name().c_str(),tp,flg));
-
-		als.push_back(func()->io(i_io)->id());
-	    }
-	    if(to_make && (func()->io(i_io)->flg()&TPrmTempl::CfgLink)) setS(i_io,"0");
-	}
+	addLinksAttrs(&pEl);
 
 	// Init links
-	initLnks();
+	chkLnkNeed = initLnks();
 
 	// Init system attributes identifiers
 	idFreq  = ioId("f_frq");
@@ -1817,17 +1734,6 @@ void TMdPrm::enable( )
 
 	// Load IO at enabling
 	if(to_make)	loadIO(true);
-
-	//Check for delete DAQ parameter's attributes
-	for(int i_p = 0; i_p < (int)pEl.fldSize(); i_p++) {
-	    unsigned i_l;
-	    for(i_l = 0; i_l < als.size(); i_l++)
-		if(pEl.fldAt(i_p).name() == als[i_l])
-		    break;
-	    if(i_l >= als.size())
-		try{ pEl.fldDel(i_p); i_p--; }
-		catch(TError &err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
-	}
 
 	// Set to process
 	if(owner().startStat())	calc(true, false, 0);
@@ -1846,9 +1752,8 @@ void TMdPrm::disable( )
     if(owner().startStat()) calc(false, true, 0);
 
     //Template's function disconnect
-    setFunc(NULL);
+    cleanLnks(true);
     idFreq = idStart = idStop = idErr = idSh = idNm = idDscr = -1;
-    plnk.clear();
 
     TParamContr::disable();
 }
@@ -1869,14 +1774,14 @@ void TMdPrm::loadIO( bool force )
     cfg.cfg("PRM_ID").setS(id());
     string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
 
-    for(int i_io = 0; i_io < ioSize(); i_io++) {
-	cfg.cfg("ID").setS(func()->io(i_io)->id());
+    for(int iIO = 0; iIO < ioSize(); iIO++) {
+	cfg.cfg("ID").setS(func()->io(iIO)->id());
 	if(!SYS->db().at().dataGet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg,false,true)) continue;
-	if(func()->io(i_io)->flg()&TPrmTempl::CfgLink)
-	    lnk(lnkId(i_io)).dbAddr = cfg.cfg("VALUE").getS();
-	else setS(i_io,cfg.cfg("VALUE").getS());
+	if(func()->io(iIO)->flg()&TPrmTempl::CfgLink)
+	    lnkAddrSet(iIO, cfg.cfg("VALUE").getS());
+	else setS(iIO, cfg.cfg("VALUE").getS());
     }
-    initLnks();
+    chkLnkNeed = initLnks();
 }
 
 void TMdPrm::save_( )
@@ -1894,12 +1799,11 @@ void TMdPrm::saveIO( )
     cfg.cfg("PRM_ID").setS(id());
     string io_bd = owner().DB() + "." + type().DB(&owner()) + "_io";
 
-    for(int i_io = 0; i_io < func()->ioSize(); i_io++) {
-	cfg.cfg("ID").setS(func()->io(i_io)->id());
-	if(func()->io(i_io)->flg()&TPrmTempl::CfgLink)
-	    cfg.cfg("VALUE").setS(lnk(lnkId(i_io)).dbAddr);
-	else cfg.cfg("VALUE").setS(getS(i_io));
-	SYS->db().at().dataSet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg);
+    for(int iIO = 0; iIO < func()->ioSize(); iIO++) {
+	cfg.cfg("ID").setS(func()->io(iIO)->id());
+	if(func()->io(iIO)->flg()&TPrmTempl::CfgLink)	cfg.cfg("VALUE").setS(lnkAddr(iIO));
+	else cfg.cfg("VALUE").setS(getS(iIO));
+	SYS->db().at().dataSet(io_bd, owner().owner().nodePath()+type().DB(&owner())+"_io", cfg);
     }
 }
 
@@ -1916,15 +1820,9 @@ void TMdPrm::vlGet( TVal &val )
     if(val.name() != "err")
 	try {
 	    int id_lnk = lnkId(val.name());
-	    if(id_lnk >= 0 && lnk(id_lnk).val.db < 0) id_lnk = -1;
-	    if(id_lnk < 0) val.set(get(ioId(val.name())),0,true);
-	    else switch(val.fld().type()) {
-		case TFld::String:	val.setS(owner().getValS(lnk(id_lnk).val,acqErr),0,true);	break;
-		case TFld::Integer:	val.setI(owner().getValI(lnk(id_lnk).val,acqErr),0,true);	break;
-		case TFld::Real:	val.setR(owner().getValR(lnk(id_lnk).val,acqErr),0,true);	break;
-		case TFld::Boolean:	val.setB(owner().getValB(lnk(id_lnk).val,acqErr),0,true);	break;
-		default: break;
-	    }
+	    if(id_lnk >= 0 && !lnkActive(id_lnk)) id_lnk = -1;
+	    if(id_lnk < 0) val.set(get(ioId(val.name())), 0, true);
+	    else val.set(lnkInput(id_lnk), 0, true);
 	} catch(TError &err) { }
     else {
 	if(acqErr.getVal().size()) val.setS(acqErr.getVal(), 0, true);
@@ -1938,27 +1836,15 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     if(!enableStat() || !owner().startStat())	{ vo.setS(EVAL_STR, 0, true); return; }
 
     //Send to active reserve station
-    if(owner().redntUse()) {
-	if(vl == pvl) return;
-	XMLNode req("set");
-	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
-	SYS->daq().at().rdStRequest(owner().workId(),req);
-	return;
-    }
+    if(vlSetRednt(vo,vl,pvl))	return;
 
     //Direct write
     try {
 	int id_lnk = lnkId(vo.name());
-	if(id_lnk >= 0 && lnk(id_lnk).val.db < 0) id_lnk = -1;
+	if(id_lnk >= 0 && !lnkActive(id_lnk)) id_lnk = -1;
 	if(!(vl.isEVal() || vl == pvl)) {
 	    if(id_lnk < 0) set(ioId(vo.name()), vl);
-	    else switch(vo.fld().type()) {
-		case TFld::String:	owner().setValS(vl.getS(), lnk(id_lnk).val, acqErr);	break;
-		case TFld::Integer:	owner().setValI(vl.getI(), lnk(id_lnk).val, acqErr);	break;
-		case TFld::Real:	owner().setValR(vl.getR(), lnk(id_lnk).val, acqErr);	break;
-		case TFld::Boolean:	owner().setValB(vl.getB(), lnk(id_lnk).val, acqErr);	break;
-		default: break;
-	    }
+	    else lnkOutput(id_lnk, vl);
 	}
     } catch(TError &err) {  }
 }
@@ -1974,58 +1860,6 @@ void TMdPrm::vlArchMake( TVal &val )
     val.arch().at().setHighResTm(true);
 }
 
-int TMdPrm::lnkSize( )
-{
-    if(!enableStat()) throw TError(nodePath().c_str(), _("Parameter disabled."));
-    return plnk.size();
-}
-
-int TMdPrm::lnkId( int id )
-{
-    if(!enableStat()) throw TError(nodePath().c_str(), _("Parameter disabled."));
-    for(unsigned i_l = 0; i_l < plnk.size(); i_l++)
-	if(lnk(i_l).ioId == id)
-	    return i_l;
-    return -1;
-}
-
-int TMdPrm::lnkId( const string &id )
-{
-    if(!enableStat()) throw TError(nodePath().c_str(), _("Parameter disabled."));
-    for(unsigned i_l = 0; i_l < plnk.size(); i_l++)
-	if(func()->io(lnk(i_l).ioId)->id() == id)
-	    return i_l;
-    return -1;
-}
-
-TMdPrm::SLnk &TMdPrm::lnk( int num )
-{
-    if(!enableStat() || num < 0 || num >= (int)plnk.size())
-	throw TError(nodePath().c_str(), _("Parameter is disabled or id error."));
-    return plnk[num];
-}
-
-void TMdPrm::initLnks()
-{
-    if(!enableStat())	return;
-    //Init links
-    for(int i_l = 0; i_l < lnkSize(); i_l++) {
-	if(ioType(lnk(i_l).ioId) == IO::Boolean) {
-	    if(sscanf(lnk(i_l).dbAddr.c_str(),"DB%i.%i.%d",&lnk(i_l).val.db,&lnk(i_l).val.off,&lnk(i_l).val.sz) == 3)
-		lnk(i_l).val.sz = vmax(0,vmin(7,lnk(i_l).val.sz));
-	    else lnk(i_l).val.db = -1;
-	}
-	else {
-	    if(sscanf(lnk(i_l).dbAddr.c_str(),"DB%i.%i",&lnk(i_l).val.db,&lnk(i_l).val.off) == 2)
-		lnk(i_l).val.sz = s2i(TSYS::strParse(func()->io(lnk(i_l).ioId)->def(),2,"|"));
-	    else lnk(i_l).val.db = -1;
-	}
-	// Process data
-	if(lnk(i_l).val.db < 0 || lnk(i_l).val.off < 0) lnk(i_l).val.db = lnk(i_l).val.off = -1;
-	else owner().regVal(lnk(i_l).val,ioType(lnk(i_l).ioId),ioFlg(lnk(i_l).ioId)&(IO::Output|IO::Return));
-    }
-}
-
 void TMdPrm::calc( bool first, bool last, double frq )
 {
     try {
@@ -2036,47 +1870,34 @@ void TMdPrm::calc( bool first, bool last, double frq )
 	    if(tm > acqErrTm)	{ acqErr.setVal(""); acqErrTm = 0; }
 	}
 
+	if(chkLnkNeed && !first && !last) chkLnkNeed = initLnks(true);
+
 	//Set fixed system attributes
 	if(idFreq >= 0)	setR(idFreq, frq);
-	if(idStart >= 0)setB(idStart, first);
+	if(idStart >= 0)setB(idStart, isChangedProg(true) || first);
 	if(idStop >= 0)	setB(idStop, last);
 	if(idSh >= 0)	setS(idSh, id());
 	if(idNm >= 0)	setS(idNm, name());
 	if(idDscr >= 0)	setS(idDscr, descr());
 
 	//Get input links
-	for(int i_l = 0; i_l < lnkSize(); i_l++)
-	    if(lnk(i_l).val.db >= 0)
-		switch(ioType(lnk(i_l).ioId)) {
-		    case IO::String:	setS(lnk(i_l).ioId,owner().getValS(lnk(i_l).val,acqErr));	break;
-		    case IO::Integer:	setI(lnk(i_l).ioId,owner().getValI(lnk(i_l).val,acqErr));	break;
-		    case IO::Real:	setR(lnk(i_l).ioId,owner().getValR(lnk(i_l).val,acqErr));	break;
-		    case IO::Boolean:	setB(lnk(i_l).ioId,owner().getValB(lnk(i_l).val,acqErr));	break;
-		    case IO::Object: break;
-		}
+	inputLinks();
 
 	//Calc template
+	setMdfChk(true);
 	TValFunc::calc();
-	modif();
+	if(SYS->modifCalc()) modif();
 
 	//Put output links
-	for(int i_l = 0; i_l < lnkSize(); i_l++)
-	    if(lnk(i_l).val.db >= 0 && ioFlg(lnk(i_l).ioId)&(IO::Output|IO::Return))
-		switch(ioType(lnk(i_l).ioId)) {
-		    case IO::String:	owner().setValS(getS(lnk(i_l).ioId),lnk(i_l).val,acqErr);	break;
-		    case IO::Integer:	owner().setValI(getI(lnk(i_l).ioId),lnk(i_l).val,acqErr);	break;
-		    case IO::Real:	owner().setValR(getR(lnk(i_l).ioId),lnk(i_l).val,acqErr);	break;
-		    case IO::Boolean:	owner().setValB(getB(lnk(i_l).ioId),lnk(i_l).val,acqErr);	break;
-		    case IO::Object: break;
-		}
+	outputLinks();
 
 	//Put fixed system attributes
-	if(idNm >= 0)	setName(getS(idNm));
-	if(idDscr >= 0)setDescr(getS(idDscr));
+	if(idNm >= 0 && ioMdf(idNm))	setName(getS(idNm));
+	if(idDscr >= 0 && ioMdf(idDscr))setDescr(getS(idDscr));
 
     } catch(TError &err) {
 	mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
-	mess_warning(nodePath().c_str(),_("Error calculate template."));
+	mess_warning(nodePath().c_str(),_("Error calculating template."));
     }
 }
 
@@ -2105,46 +1926,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TParamContr::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/TMPL",cfg("TMPL").fld().descr(),RWRW__,"root",SDAQ_ID,3,"tp","str","dest","select","select","/prm/tmplList");
-	if(enableStat() && ctrMkNode("area",opt,-1,"/cfg",_("Template configuration"))) {
-	    ctrMkNode("fld",opt,-1,"/cfg/only_off",_("Only DB offsets are to be shown"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
-	    if(ctrMkNode("area",opt,-1,"/cfg/prm",_("Parameters")))
-		for(int i_io = 0; i_io < ioSize(); i_io++) {
-		    if(!(func()->io(i_io)->flg()&(TPrmTempl::CfgLink|TPrmTempl::CfgConst)))
-			continue;
-		    // Check select param
-		    bool is_lnk = func()->io(i_io)->flg()&TPrmTempl::CfgLink;
-		    if(is_lnk && func()->io(i_io)->def().size() &&
-			!s2i(TBDS::genDBGet(mod->nodePath()+"onlOff","0",opt->attr("user"))))
-		    {
-			string nprm = TSYS::strSepParse(func()->io(i_io)->def(),0,'|');
-			// Check already to present parameters
-			bool f_ok = false;
-			for(unsigned i_l = 0; i_l < list.size() && !f_ok; i_l++)
-			    if(list[i_l] == nprm) f_ok = true;
-			if(!f_ok) {
-			    ctrMkNode("fld",opt,-1,(string("/cfg/prm/pr_")+i2s(i_io)).c_str(),nprm,RWRWR_,"root",SDAQ_ID,1,"tp","str");
-			    list.push_back(nprm);
-			}
-		    }
-		    else {
-			const char *tip = "str";
-			bool fullTxt = false;
-			if(!is_lnk)
-			    switch(ioType(i_io)) {
-				case IO::Integer:	tip = "dec";	break;
-				case IO::Real:		tip = "real";	break;
-				case IO::Boolean:	tip = "bool";	break;
-				case IO::String:
-				    if(func()->io(i_io)->flg()&IO::FullText) fullTxt = true;
-				    break;
-				case IO::Object:	fullTxt = true; break;
-			    }
-			XMLNode *wn = ctrMkNode("fld",opt,-1,(string("/cfg/prm/el_")+i2s(i_io)).c_str(),func()->io(i_io)->name(),RWRWR_,
-			    "root",SDAQ_ID,1,"tp",tip);
-			if(wn && fullTxt) wn->setAttr("cols","100")->setAttr("rows","4");
-		    }
-		}
-	}
+	if(enableStat()) TPrmTempl::Impl::cntrCmdProc(opt);
 	return;
     }
     //Process command to page
@@ -2156,50 +1938,136 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) opt->setText(TBDS::genDBGet(mod->nodePath()+"onlOff","0",opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) TBDS::genDBSet(mod->nodePath()+"onlOff",opt->text(),opt->attr("user"));
     }
-    else if(a_path.compare(0,12,"/cfg/prm/pr_") == 0 && enableStat()) {
+    else if(enableStat() && a_path.substr(0,12) == "/cfg/prm/pr_") {
+	int lnk_id = s2i(a_path.substr(12));
+	int db = 0, off = 0;
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
-	    int lnk_id = lnkId(s2i(a_path.substr(12)));
-	    string sdb = TSYS::strSepParse(lnk(lnk_id).dbAddr, 0, '.');
-	    int off = s2i(TSYS::strSepParse(lnk(lnk_id).dbAddr, 1, '.'));
-	    int t_off = s2i(TSYS::strSepParse(func()->io(lnk(lnk_id).ioId)->def(),1,'|'));
-	    if((off-t_off) > 0)	sdb = sdb + "." + i2s(off-t_off);
-	    opt->setText(sdb);
+	    string addr = lnkAddr(lnk_id);
+	    if(sscanf(addr.c_str(),"DB%d.%i",&db,&off) == 2) {
+		int t_off = s2i(TSYS::strParse(TSYS::strLine(func()->io(lnk_id)->def(),0), 1, "|"));
+		opt->setText("DB"+i2s(db)+(((off-t_off) > 0)?"."+i2s(off-t_off):""));
+	    } else TPrmTempl::Impl::cntrCmdProc(opt);
 	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
-	    string p_nm, cp_nm;
-	    int off, coff, cbit;
-	    int lnk_id = lnkId(s2i(a_path.substr(12)));
-	    string sdb = TSYS::strSepParse(opt->text(), 0, '.');
-	    off = strtol(TSYS::strSepParse(opt->text(),1,'.').c_str(), NULL, 0);
-	    p_nm = TSYS::strSepParse(func()->io(lnk(lnk_id).ioId)->def(),0,'|');
-
-	    for(int i_l = 0; i_l < lnkSize(); i_l++) {
-		cp_nm = TSYS::strSepParse(func()->io(lnk(i_l).ioId)->def(), 0, '|');
-		sscanf(TSYS::strSepParse(func()->io(lnk(i_l).ioId)->def(),1,'|').c_str(), "%i.%d", &coff, &cbit);
-		if(p_nm == cp_nm) {
-		    lnk(i_l).dbAddr = sdb + "." + i2s(off+coff);
-		    if(ioType(lnk(i_l).ioId) == IO::Boolean) lnk(i_l).dbAddr = lnk(i_l).dbAddr + "." + i2s(cbit);
-		    modif();
+	    if(sscanf(opt->text().c_str(),"DB%d.%i",&db,&off) >= 1) {
+		string p_nm = TSYS::strParse(TSYS::strLine(func()->io(lnk_id)->def(),0), 0, "|"), tVl;
+		bool set = false;
+		for(int iIO = 0; iIO < ioSize(); iIO++) {
+		    if(!(ioFlg(iIO)&TPrmTempl::CfgLink)) continue;
+		    tVl = TSYS::strParse(TSYS::strLine(func()->io(iIO)->def(),0), 0, "|");
+		    if(p_nm == tVl) {
+			int coff = -1, cbit = 0;
+			if(sscanf(TSYS::strParse(TSYS::strLine(func()->io(iIO)->def(),0),1,"|").c_str(),"%i.%d",&coff,&cbit)) {
+			    string lAddr = "DB"+i2s(db) + "." + i2s(off+coff);
+			    if(ioType(iIO) == IO::Boolean) lAddr += "." + i2s(cbit);
+			    else if((tVl=TSYS::strParse(TSYS::strLine(func()->io(iIO)->def(),0),2,"|")).size())
+				lAddr += "." + tVl;
+			    lnkAddrSet(iIO, lAddr);
+			    modif();
+			    set = true;
+			}
+		    }
 		}
-	    }
-	    initLnks();
+		if(set) initLnks();
+	    } else TPrmTempl::Impl::cntrCmdProc(opt);
 	}
     }
-    else if(a_path.compare(0,12,"/cfg/prm/el_") == 0 && enableStat()) {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
-	    int i_io = s2i(a_path.substr(12));
-	    if(func()->io(i_io)->flg()&TPrmTempl::CfgLink)		opt->setText(lnk(lnkId(i_io)).dbAddr);
-	    else if(func()->io(i_io)->flg()&TPrmTempl::CfgConst)	opt->setText(getS(i_io));
-	}
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
-	    int i_io = s2i(a_path.substr(12));
-	    if(func()->io(i_io)->flg()&TPrmTempl::CfgLink) {
-		lnk(lnkId(i_io)).dbAddr = opt->text();
-		initLnks();
-	    }
-	    else if(func()->io(i_io)->flg()&TPrmTempl::CfgConst) setS(i_io, opt->text());
-	    modif();
-	}
-    }
+    else if(enableStat() && TPrmTempl::Impl::cntrCmdProc(opt))	;
     else TParamContr::cntrCmdProc(opt);
+}
+
+bool TMdPrm::lnkInit( int num, bool checkNoLink )
+{
+    //Common link forms
+    if(!TPrmTempl::Impl::lnkInit(num,checkNoLink)) return false;
+
+    MtxAlloc res(lnkRes, true);
+    map<int,SLnk>::iterator it = lnks.find(num);
+    if(it == lnks.end() || (checkNoLink && it->second.addrSpec.size())) return false;
+
+    it->second.addrSpec = "";
+    int rez = 0, db = -1, off = -1;
+    char tp[11];
+    if(((rez=sscanf(it->second.addr.c_str(),"DB%d.%i.%10s",&db,&off,tp)) == 2 || rez == 3) && db >= 0 && off >= 0) {
+	string stp = (rez == 2) ? TSYS::strParse(TSYS::strLine(func()->io(num)->def(),0),2,"|") : tp;
+	if(stp.empty() || isdigit(stp[0]))
+	    switch(ioType(num)) {
+		case IO::Boolean: stp.insert(0, "b");	break;
+		case IO::Integer: stp.insert(0, "i");	break;
+		case IO::Real:	  stp.insert(0, "r");	break;
+		case IO::String:  stp.insert(0, "s");	break;
+		default:	break;
+	    }
+	if(stp[0] == 'b' || stp[0] == 'i' || stp[0] == 'u' || stp[0] == 'r' || stp[0] == 's') {
+	    it->second.addrSpec = TSYS::strMess("DB%d.%i.%s", db, off, stp.c_str());
+	    owner().regVal(it->second.addrSpec, ioFlg(num)&(IO::Output|IO::Return));
+
+	    return true;
+	}
+    }
+
+    return false;
+}
+
+bool TMdPrm::lnkActive( int num )
+{
+    MtxAlloc res(lnkRes, true);
+    map<int,SLnk>::iterator it = lnks.find(num);
+    if(it != lnks.end() && it->second.addrSpec.size())	return true;
+    return TPrmTempl::Impl::lnkActive(num);
+}
+
+TVariant TMdPrm::lnkInput( int num )
+{
+    MtxAlloc res(lnkRes, true);
+    map<int,SLnk>::iterator it = lnks.find(num);
+    if(it == lnks.end()) return EVAL_REAL;
+    string addrSpec = it->second.addrSpec;
+    res.unlock();
+
+    return addrSpec.size() ? owner().getVal(addrSpec, acqErr) : TPrmTempl::Impl::lnkInput(num);
+}
+
+bool TMdPrm::lnkOutput( int num, const TVariant &vl )
+{
+    MtxAlloc res(lnkRes, true);
+    map<int,SLnk>::iterator it = lnks.find(num);
+    if(it == lnks.end()) return false;
+    string addrSpec = it->second.addrSpec;
+    res.unlock();
+
+    if(addrSpec.size()) owner().setVal(vl, addrSpec, acqErr);
+    else return TPrmTempl::Impl::lnkOutput(num, vl);
+
+    return true;
+}
+
+string TMdPrm::lnkHelp( )
+{
+    return _("Special address format:\n"
+	"Siemens-DB address writes in the form \"DB{N}.{off}[.{BOff}|{TpSz}]\", where:\n"
+	"    N   - Data Block number;\n"
+	"    off - offset in the Data Block;\n"
+	"    BOff- bit of the byte for Boolean;\n"
+	"    TpSz- type and size for other to Boolean types in the form \"[{tp}]{sz}\", where:\n"
+	"      tp - type in one symbol from the list: b-Boolean, i-Signed integer, u-Unsigned integer, r-Real, s-String;\n"
+	"      sz - the type size: b=[0...7], iu=[1,2(def),4,8], r=[4(def).8], s=[0(def10)...100].\n"
+	"Examples:\n"
+	"    \"DB1.12.2\", \"DB1.0xC.2\", \"DB1.12.b2\" - Boolean in DB 1, offset 12 and bit 2;\n"
+	"    \"DB2.24\", \"DB2.0x18.8\" - Integer or Real, taken from the template's IO type, in DB 2, offset 24, size default and 8;\n"
+	"    \"DB3.36.i4\", \"DB3.0x24.r8\" - directly specified Integer and Real in DB 3, offset 36, size 4 and 8;\n"
+	"    \"DB4.48.20\", \"DB4.0x30.s20\" - implicitly, from the template IO type, and directly specified String in DB 4, offset 48 and size 20.\n"
+	"  Link's template, of the column \"Value\" on the template forming side, writes in the form \"{LnkName}|{OffDB[.{bit}]}[|{TpSz}]\", where:\n"
+	"    LnkName - name of the group link; all references with the same name are grouped and\n"
+	"              indicated as one reference to the data block or data block with the specified offset;\n"
+	"    OffDB   - offset number in the data block; if you specify only the data block, when configuring the template, this offset will be specified for the parameter;\n"
+	"              if the configuration of the template also specifies an offset, both offsets will be summed together;\n"
+	"              the data block number and the offset can be specified both in the decimal (3245) and hexadecimal format (0xCAD);\n"
+	"    bit     - bit number for Boolean;\n"
+	"    TpSz    - equal to the same field above.\n"
+	"  Examples:\n"
+	"    \"Grp 1|0.0\" - Boolean in \"Grp 1\", offset 0 and bit 0;\n"
+	"    \"Grp 2|10|1\", \"Grp 2|0xA|i1\" - Integer, from the template IO type and directly, in \"Grp 2\", offset 10 and size 1;\n"
+	"    \"Grp 3|20|20\", \"Grp 3|0x13|s20\" - String, from the template IO type and directly, in \"Grp 3\", offset 20 and size 20.\n\n"
+	"Common address format:\n") + TPrmTempl::Impl::lnkHelp();
 }

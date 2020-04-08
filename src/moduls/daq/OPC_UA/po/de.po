@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-27 20:13+0300\n"
+"POT-Creation-Date: 2019-06-23 09:40+0300\n"
 "PO-Revision-Date: 2010-10-21 00:33+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -86,6 +86,7 @@ msgstr "Erwerb mit dem Zeitraum: %s. "
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Erwerb nächsten durch cron '%s'. "
 
+#, c-format
 msgid "Spent time: %s[%s]. Requests %.6g."
 msgstr "Verbrauchte Zeit: %s[%s]. Anfragen %.6g."
 
@@ -93,9 +94,8 @@ msgstr "Verbrauchte Zeit: %s[%s]. Anfragen %.6g."
 msgid "OPC UA automatic created transport for '%s' controller."
 msgstr "OPC UA automatische erstellt Transportmittel für '%s' Controller."
 
-#, c-format
-msgid "DAQ.%s.%s: connect to data source: %s."
-msgstr "DAQ.%s.%s: Verbindung zu Datenquelle: %s."
+msgid "Connection to the data source: %s."
+msgstr "Verbindung zur Datenquelle: %s."
 
 msgid "STOP"
 msgstr "STOP"

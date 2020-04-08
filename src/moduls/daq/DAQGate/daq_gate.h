@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.DAQGate file: daq_gate.h
 /***************************************************************************
- *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -89,8 +89,9 @@ class TMdPrm : public TParamContr
 
     protected:
 	//Methods
-	void load_( );				//Load parameter
-	void save_( );				//Save parameter
+	void load_( );				//Load the parameter
+	void loadIO( );
+	void save_( );				//Save the parameter
 	void sync( );				//Synchronize parameter
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 	bool cfgChange( TCfg &co, const TVariant &pc );
@@ -132,7 +133,7 @@ class TMdContr: public TController
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
-	//> Request to OpenSCADA control interface
+	// Request to OpenSCADA control interface
 	int cntrIfCmd( XMLNode &node );
 
     protected:
@@ -154,7 +155,8 @@ class TMdContr: public TController
 	    StHd( ) : cntr(0) { lstMess.clear(); }
 
 	    float cntr;
-	    map<string, time_t> lstMess;
+	    map<string, time_t>	lstMess;
+	    map<string, int>	lstMessCnt;
 	};
 	class SPrmsStack
 	{
@@ -180,7 +182,8 @@ class TMdContr: public TController
 						//configuration update, attributes list update, local and remote archives sync.
 		&mRestTm,			//Restore timeout in s
 		&mPrior;			//Process task priority
-	char	&mAllowToDelPrmAttr;		//Allow automatic remove parameters and attributes
+	char	&mAllowToDelPrmAttr,		//Allow automatic remove parameters and attributes
+		&mPlaceCntrToVirtPrm;		//Placing different controllers to the different virtual parameters
 
 	bool	prcSt,				//Process task active
 		callSt,				//Calc now stat

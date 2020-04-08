@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: project.h
 /***************************************************************************
- *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -60,6 +60,7 @@ class Project : public TCntrNode, public TConfig
 	short	permit( ) const	{ return mPermit; }		//Permission for access to library
 	int	period( )	{ return mPer; }		//Project's session calculate period
 	bool	toEnByNeed( )	{ return cfg("EN_BY_NEED").getB(); } //To enable the project by need
+	string	getStatus( );
 
 	string DB( ) const	{ return workPrjDB; }		//Current library DB
 	string tbl( ) const	{ return cfg("DB_TBL").getS(); }//Table of storing library data
@@ -86,7 +87,7 @@ class Project : public TCntrNode, public TConfig
 	void list( vector<string> &ls ) const		{ chldList(mPage,ls); }
 	bool present( const string &id ) const		{ return chldPresent(mPage,id); }
 	AutoHD<Page> at( const string &id ) const;
-	void add( const string &id, const string &name, const string &orig = "" );
+	string add( const string &id, const string &name, const string &orig = "" );
 	void add( Page *iwdg );
 	void del( const string &id, bool full = false )	{ chldDel( mPage, id, -1, full ); }
 
@@ -149,7 +150,7 @@ class Project : public TCntrNode, public TConfig
 	ResRW	mStRes;
 	map< string, vector<string> >	mStProp;	//Styles' properties
 
-	ResMtx	mFuncM;
+	ResMtx	mFuncM, mHeritRes;
 
 	vector< AutoHD<Session> > mHerit;	//Heritators
 };
@@ -166,7 +167,8 @@ class Page : public Widget, public TConfig
 	enum Flag {
 	    Container	= 0x01,	//Page is container included pages
 	    Template	= 0x02,	//Page is template for included pages
-	    Empty	= 0x04	//No page, use for logical containers
+	    Empty	= 0x04,	//No page, use for logical containers
+	    Link	= 0x08	//Links of the projects executing side
 	};
 
 	//Methods
@@ -178,6 +180,7 @@ class Page : public Widget, public TConfig
 	string	path( ) const;
 	string	ico( ) const;
 	string	type( )			{ return "ProjPage"; }
+	string	getStatus( );
 	string	calcId( );
 	string	calcLang( ) const;
 	bool	calcProgTr( );
@@ -209,12 +212,12 @@ class Page : public Widget, public TConfig
 	AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 ) const;
 
 	// Pages
-	void pageList( vector<string> &ls ) const		{ chldList(mPage,ls); }
+	void pageList( vector<string> &ls ) const;
 	bool pagePresent( const string &id ) const		{ return chldPresent(mPage,id); }
 	AutoHD<Page> pageAt( const string &id ) const;
-	void pageAdd( const string &id, const string &name, const string &orig = "" );
+	string pageAdd( const string &id, const string &name, const string &orig = "" );
 	void pageAdd( Page *iwdg );
-	void pageDel( const string &id, bool full = false )	{ chldDel( mPage, id, -1, full ); }
+	void pageDel( const string &id, bool full = false )	{ chldDel(mPage, id, -1, full); }
 
 	// Data access
 	void resourceList( vector<string> &ls );
@@ -226,6 +229,8 @@ class Page : public Widget, public TConfig
 
 	Page	*ownerPage( ) const;
 	Project	*ownerProj( ) const;
+
+	TVariant stlReq( Attr &a, const TVariant &vl, bool wr );
 
     public:
 	//Attributes
@@ -244,7 +249,6 @@ class Page : public Widget, public TConfig
 
 	unsigned int modifVal( Attr &cfg )	{ modif(); return 0; }
 	TVariant vlGet( Attr &a );
-	TVariant stlReq( Attr &a, const TVariant &vl, bool wr );
 
 	bool cntrCmdGeneric( XMLNode *opt );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
@@ -292,6 +296,8 @@ class PageWdg : public Widget, public TConfig
 	// Data access
 	void resourceList( vector<string> &ls );
 	string resourceGet( const string &id, string *mime = NULL );
+
+	void procChange( bool src = true );
 
 	AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 ) const;
 

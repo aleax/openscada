@@ -39,8 +39,8 @@ class TestSysContrLang : public TFunction
 	    ioAdd( new IO("path",_("Path to the language element"),IO::String,IO::Default,"/Archive/BaseArh/mess_StatErrors/%2fprm%2fst") );
 	}
 
-	string name( )	{ return _("The control language of the program"); }
-	string descr( )	{ return _("The test of the control language of the program.\n"
+	string name( )	{ return _("Control language of the program"); }
+	string descr( )	{ return _("Test of the control language of the program.\n"
 				   "Performs query of language elements through a complete path.\n"
 				   "The full path to the language element looks like </Archive/%2fbd%2fm_per>.\n"
 				   "The complete path consists of two nested paths.\n"
@@ -54,7 +54,7 @@ class TestSysContrLang : public TFunction
 		mod->mess(id(),_("Test: Start"));
 
 		string path = val->getS(1);
-		mod->mess(id(),_("SysContr test for path '%s'."),path.c_str());
+		mod->mess(id(),_("SysContr test for the path '%s'."),path.c_str());
 
 		XMLNode node("info");
 		node.setAttr("path",path)->setAttr("user","root");

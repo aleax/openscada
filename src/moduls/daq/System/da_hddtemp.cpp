@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_hddtemp.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2017,2020 by Roman Savochenko, <roman@oscada.org>  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -111,6 +111,7 @@ string Hddtemp::getHDDTemp( )
     tr.at().setName(_("Parameter Hddtemp"));
     tr.at().setAddr("TCP:127.0.0.1:7634");
     tr.at().setTimings("5:0.01");
+    tr.at().modifClr();
 
     if(tr.at().startStat()) tr.at().stop();
     tr.at().start();

@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel.h
 /***************************************************************************
- *   Copyright (C) 2006-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2020 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,17 +22,13 @@
 #ifndef VIS_DEVEL_H
 #define VIS_DEVEL_H
 
-#include <string>
-#include <vector>
-
 #include <QMainWindow>
 #include <QLabel>
 #include <QFileDialog>
 
-#include "tvision.h"
+#include <xml.h>
 
-using std::string;
-using std::vector;
+using namespace OSCADA;
 
 class QMdiArea;
 class QSignalMapper;
@@ -66,7 +62,7 @@ class VisDevelop : public QMainWindow
 	string VCAStation( );
 	bool   wdgScale( );
 	double wdgVisScale( );
-	const string &workWdg()	{ return work_wdg; }
+	const string &workWdg( ){ return work_wdg; }
 
 	void setVCAStation( const string& st );
 	void setWdgScale( bool val );
@@ -85,8 +81,8 @@ class VisDevelop : public QMainWindow
 	//Public slots
 	void selectItem( const string &item, bool force = false );	//Update enabled actions state
 	void editToolUpdate( );						//Edit tools visible update
-	void modifyToolUpdate( const string& );
-	void modifyGlbStUpdate( bool check = false );			//<check> in false will set else will check
+	void modifyToolUpdate( const string &it );
+	void modifyGlbStUpdate( const string &it, bool check = false );	//<check> in false will set else will check
 	bool exitModifChk( );
 	void waitCursorSet( int val = -1 );	//Set global wait cursor (-1 - real clear from timer, 0 - clear after timer shot, 1 - set)
 
@@ -119,8 +115,8 @@ class VisDevelop : public QMainWindow
 	//Public attributes
 	// Actions
 	//  VCA actions of items
-	QAction *actDBLoad,		//Load item from DB
-		*actDBSave,		//Save item to DB
+	QAction *actDBLoad, *actDBLoadF,//Load item from DB
+		*actDBSave, *actDBSaveF,//Save item to DB
 		*actPrjRun,		//Run project execution from selected project item
 		*actPrjNew,		//New project create
 		*actLibNew,		//New widgets library create
@@ -159,7 +155,9 @@ class VisDevelop : public QMainWindow
 		*actWinTile,		//Tile windows
 		*actWinCascade,		//Cascade windows
 		*actWinNext,		//Select next window
-		*actWinPrevious;	//Select previous window
+		*actWinPrevious,	//Select previous window
+	//  Manuals
+		*actManualLib;		//Selected library manual
 	QActionGroup	*actGrpWdgAdd;	//Add widgets action group
 
 	// Toolbars

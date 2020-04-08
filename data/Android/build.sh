@@ -72,7 +72,8 @@ export CXXFLAGS="$CFLAGS -std=c++11 -I$NDK_PATH/sources/cxx-stl/gnu-libstdc++/$T
  -L$NDK_PATH/sources/cxx-stl/gnu-libstdc++/$TARGET_V/libs/$PLATFORM_LIB_VAR -lgnustl_shared"
 
 # export PKG_CONFIG="pkg-config --static"
-export PKG_CONFIG_PATH=$NDK_PATH/sources/pkgconfig
+export PKG_CONFIG_DIR=
+export PKG_CONFIG_LIBDIR=$NDK_PATH/sources/pkgconfig
 export PATH=$PREFIX/bin:$PATH
 
 #Extended for not autotool
@@ -101,7 +102,7 @@ for iPatch in $(ls $AndroidPrjDir/patches/openscada_*.patch 2> /dev/null); do pa
     --enable-SelfSystem=incl --enable-UserProtocol=incl --enable-HTTP=incl \
     --enable-JavaLikeCalc=incl --enable-LogicLev=incl --enable-BlockCalc=incl --enable-System --enable-OPC_UA --enable-DAQGate=incl --enable-ModBus=incl --enable-DCON=incl \
     --enable-FSArch=incl --enable-DBArch=incl \
-    --with-qt5=yes --enable-QtMainThrd --enable-QTStarter --enable-QTCfg --enable-Vision \
+    --with-qt5=yes --enable-QTStarter --enable-QTCfg --enable-Vision \
     --enable-VCAEngine --enable-WebCfg --enable-WebCfgD --enable-WebVision --enable-WebUser \
     --enable-FLibSYS=incl --enable-SystemTests --enable-FLibMath --enable-FLibComplex1
 rm -R $BuildDir

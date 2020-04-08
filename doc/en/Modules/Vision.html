@@ -7,11 +7,11 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../files/doc.css" rel="stylesheet" /></head>
-<body><div id="mw_header">
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../../en/files/Logo-big.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/Vision</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Vision/ru" title="Модули/Vision (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Vision/uk" title="Модулі/Vision (100% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/Vision.html" title="Модули/Vision (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/Vision.html" title="Модулі/Vision (100% translated)">українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -31,14 +31,14 @@
 <td> <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> </td>
 <td> Operation user interface (Qt)
 </td>
-<td> 5.4 </td>
+<td> 7.0 </td>
 <td> GPL2 </td>
 <td> ui_Vision.so </td>
 <td> en,uk,ru,de </td>
 <td> x86,x86_64,ARM
 </td>
 <td> UI </td>
-<td> Roman Savochenko<br /><font size="-2"><i>Maxim Lysenko (2007-2012), Ksenia Yashina (2007-2008)</i></font> </td>
+<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2007-2012), Ksenia Yashina (2007-2008)</i></font> </td>
 <td> Visual operation user interface, based on the Qt library — front-end to the VCA engine.
 </td></tr></table>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
@@ -50,7 +50,7 @@
 <li class="toclevel-2 tocsection-4"><a href="#Linkage_with_the_dynamics"><span class="tocnumber">2.2</span> <span class="toctext">Linkage with the dynamics</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-5"><a href="#Execution_of_the_VCA_interfaces"><span class="tocnumber">3</span> <span class="toctext">Execution of the VCA interfaces</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Execution_of_the_VCA_interfaces"><span class="tocnumber">3</span> <span class="toctext"><span>Execution of the VCA interfaces</span></span></a></li>
 <li class="toclevel-1 tocsection-6"><a href="#Presentation_of_the_basic_elements_.28primitives.29"><span class="tocnumber">4</span> <span class="toctext"><span>Presentation of the basic elements (primitives)</span></span></a>
 <ul>
 <li class="toclevel-2 tocsection-7"><a href="#Elementary_figure_primitive_.28ElFigure.29"><span class="tocnumber">4.1</span> <span class="toctext">Elementary figure primitive (ElFigure)</span></a></li>
@@ -130,6 +130,7 @@
 <li> "Paste visual item" — paste of the visual element.</li>
 <li> "Load from DB" — uploading data of the visual element from the database.</li>
 <li> "Save to DB" — saving data of the visual element to the database.</li>
+<li> "Manual on ..." — call manual on the selected library.</li>
 <li> "Refresh libraries" — rereading of the configuration and composition of the libraries from the data model.</li></ul></li>
 <li> Tree of the projects pages. Provides the mechanism for "Drag and drop" for creation of the user frames based on the libraries elements. For flexible control, the context menu is supported with the following items:
 <ul><li> "Run project" — starting up of the chosen project execution.</li>
@@ -153,7 +154,9 @@
 </p>
 <ul><li> "File" — General operations.
 <ul><li> "Load from DB" — uploading the data of the visual element from the database.</li>
+<li> "Load from DB forcibly" — uploading data of the visual element from the database forcibly, not only when it changed.</li>
 <li> "Save to DB" — saving data of visual element to the database.</li>
+<li> "Save to DB forcibly" — saving data of the visual element to the database forcibly, not only when it changed.</li>
 <li> "Close" — closing the editor's window</li>
 <li> "Quit" — quiting the program.</li></ul></li>
 <li> "Edit" — Editing operations of the visual elements.
@@ -212,9 +215,10 @@
 <li> "Help" — Help for OpenSCADA and this module.
 <ul><li> "About" — information about this module.</li>
 <li> "About Qt" — Information about the Qt library, used by this module.</li>
-<li> "Manual on 'Vision'" — call the manual on this module.</li>
-<li> "Manual on 'VCAEngine'" — call the manual on the engine of the visualization and control area.</li>
-<li> "Manual on 'OpenSCADA 0.9.0'" — call the manual on OpenSCADA in whole.</li>
+<li> "Manual on 'Vision'" — call manual on this module.</li>
+<li> "Manual on 'VCAEngine'" — call manual on the engine of the visualization and control area.</li>
+<li> "Manual on 'OpenSCADA 0.9.0'" — call manual on OpenSCADA in whole.</li>
+<li> "Manual on ..." — call manual on the selected library.</li>
 <li> "What's this" — query of the description of the elements of the window's interface.</li></ul></li>
 <li> "QTStarter" — Menu item, created by the module for running the Qt library modules. Contains start buttons for UI modules OpenSCADA, based on the Qt library. This option allows you to open several instances of the windows of this module or other modules.</li></ul>
 <p>Above, under menu, or on the sides, there are the toolbars. Toolbars can be hidden or located, which is controlled in the menu item "View". The following toolbars are provided:
@@ -297,7 +301,7 @@
 <li> attributes of the parameter can provide information of five types: Boolean, Integer, Real, String and Object;</li>
 <li> attributes of the parameter can have their archive (history);</li>
 <li> attributes of the parameter can be set to read, write and with full access.</li></ol>
-<p>Given the first point, it is necessary to provide the possibility of group-based reference. To do this, we use <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLev" title="Special:MyLanguage/Documents/DAQ">the logical level concept</a>.
+<p>Given the first point, it is necessary to provide the possibility of group-based reference. To do this, we use <a href="../DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">the logical level concept</a>.
 </p><p>The links provide a transparent type conversion and do not require a special configuration.
 </p><p>To satisfy the opportunities for accessing to archives links make check of the attribute type, and in the case of connection to the "Address", the address of the link is put into the value.
 </p><p>In the VCA terms, the dynamic links and configuration of the dynamics are the one process, to describe a configuration of which the tab "Processing" of the widgets is provided (Fig.2.f). The tab contains a table of configuration of the attributes properties and the calculation procedure text of the widget.
@@ -400,7 +404,7 @@
 <td> - </td>
 <td> EVAL
 </td></tr></table>
-<h2><span class="mw-headline" id="Execution_of_the_VCA_interfaces"><span class="mw-headline-number">3</span> Execution of the VCA interfaces</span></h2>
+<h2><span class="mw-headline" id="Execution_of_the_VCA_interfaces"><span class="mw-headline-number">3</span> <span id="RunTime" title="#RunTime">Execution of the VCA interfaces</span></span></h2>
 <p>Execution of the IU interface consists in launching a new project session or connecting to the current one, at the level of the VCA engine. Then the module of direct visualization represents and controls the session data. The main window of the execution mode of this module has the view presented at Figure 3.
 </p><p>Update of the contents of the open pages of the visual interface with periodicity of the project session is implemented. During the upgrade process:
 </p>
@@ -419,9 +423,9 @@
 <li> "Diagram" — diagram on the user interface;</li>
 <li> "Document" — document on the user interface.</li></ul></li>
 <li> "Export" — export:
-<ul><li> "Page" — page of the user interface;</li>
-<li> "Diagram" — diagram on the user interface;</li>
-<li> "Document" — document on the user interface.</li></ul></li>
+<ul><li> "Page" — page of the user interface, to image;</li>
+<li> "Diagram" — diagram on the user interface, to image and CSV;</li>
+<li> "Document" — document on the user interface, to HTML and CSV for exporting tables.</li></ul></li>
 <li> "Close" — close the editor window.</li>
 <li> "Quit" — quit the program.</li></ul></li>
 <li> "Alarm" — Alarm quietance:
@@ -444,13 +448,17 @@
 <ul><li> the clock, in the full-screen mode;</li>
 <li> the current VCA engine station;</li>
 <li> the current user, on whose behalf the VCA interface is executed — by a double-clicking this user can be changed, typing of the new username and password;</li>
+<li> the current interface style, which can be changed by a double-clicking.</li>
 <li> the panel with buttons:
 <ul><li> alarms quietance — by a click the violations can be quieted completely or just the desired type of the notification;</li>
-<li> export and print — calls by a click for the dialog of exporting and printing the default element or selected from the menu;</li>
+<li> export and print — calls by a click for the dialog of exporting and printing the default element or selected from the menu, where the export for:
+<ul><li> "Page" — page of the user interface, to image;</li>
+<li> "Diagram" — diagram on the user interface, to image and CSV;</li>
+<li> "Document" — document on the user interface, to HTML and CSV for exporting tables.</li></ul></li>
 <li> manual on the VCA project — calls by a click the manual on the visualization project — a file with the name of the identifier of the VCA project.</li></ul></li>
 <li> the panel of user actions, if specified in <a href="#SpecAttrs">the attribute "statLine"</a> — by clicking the left, right and double click forms the even to the main interface page.</li></ul></li>
 <li> In the main field of the status line various messages and assistance messages are displayed.</li></ul>
-<p>The Runtime mode mostly supports multi-language, which depends on the language of the selected user or the execution window, that is if you change the user you will get the Runtime interface at other language of the user. This function enabled for <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#ConfigTr" title="Special:MyLanguage/Documents/Program manual">dynamic messages translation of OpenSCADA</a>.
+<p>The Runtime mode mostly supports multi-language, which depends on the language of the selected user or the execution window, that is if you change the user you will get the Runtime interface at other language of the user. This function enabled for <a href="../Program_manual.html#ConfigTr" title="Special:MyLanguage/Documents/Program manual">dynamic messages translation of OpenSCADA</a>.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1039px;"><a class="image" href="http://oscada.org/wiki/File:Vision_run.png"><img class="thumbimage" height="768" src="../files/Vision_run.png" width="1037" /></a>  <div class="thumbcaption">Fig.3. Main window in the execution mode.</div></div></div></div>
 <h2><span class="mw-headline" id="Presentation_of_the_basic_elements_.28primitives.29"><span class="mw-headline-number">4</span> <span id="Primitives" title="#Primitives">Presentation of the basic elements (primitives)</span></span></h2>
@@ -584,6 +592,21 @@
 <ul><li> "*" — call for a selecting dialog of the user; </li>
 <li> "$" — change the user to the default one;</li>
 <li> "{user}" — direct change to <i>user</i>, if available.</li></ul>
+</td></tr>
+<tr>
+<td> vs_background (the views "Line edit", "Text edit", "Combo box", "List", "Tree", "Table" of the primitive "FormEl") </td>
+<td> Custom background </td>
+<td> Specifies for the custom background in the form <b>{color}-{transp} {image}</b>
+</td></tr>
+<tr>
+<td> vs_border (the views "Line edit", "Text edit", "Combo box", "List", "Tree", "Table" of the primitive "FormEl") </td>
+<td> Custom border </td>
+<td> Specifies for the custom border in the standard CSS-form <b>{wdth}px {style} {color}</b>
+</td></tr>
+<tr>
+<td> vs_winTitle (the view "Box") </td>
+<td> Window title </td>
+<td> Dynamic window title value
 </td></tr></table>
 <p>Consider the implementation of each primitive in more detail.
 </p>
@@ -598,8 +621,7 @@
 <li> fill of the closed circuit with the color and image;</li>
 <li> generation of mouse key events at the time of the click on the filled spaces;</li>
 <li> scaling;</li>
-<li> rotation;</li>
-<li> mirroring, <span style="color: red">partial</span>.</li></ul>
+<li> transformation: rotation and mirroring.</li></ul>
 <p>Figure shows a part of the screen with a frame containing the elementary figures.
 </p>
 <div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:Vision_elfig_new.png"><img alt="Vision elfig new.png" height="298" src="../files/Vision_elfig_new.png" width="299" /></a></div></div>
@@ -666,9 +688,13 @@
 <li> <i>Tree</i> — Provides the tree element with possibility of an item selection.</li>
 <li> <i>Table</i> — Provides the table element with the possibility of selecting for cells, rows or columns and editing the cell content.</li>
 <li> <i>Slider</i> — Slider element.</li>
-<li> <i>Scroll bar</i> — Scroll bar.</li></ul>
-<p>The "Enabled" and "Active" modes are implemented, as well as the transfer of changes and events to the data model of the VCA — engine.
-</p><p>Figure represents a part of the screen with the frame containing the above-listed elements of the form.
+<li> <i>Scroll bar</i> — Scroll bar.</li>
+<li> <i>Password</i> — Hidden password typing.</li></ul>
+<p>The "Enabled" and "Active" modes are implemented, as well as the transfer of changes and events to the data model of the VCA — engine. The mode "Active" cause to the activity cursor set for not empty background and the addition conditions of the different views "Text", "Media" and "Box":
+</p>
+<ul><li> <i>Text</i> — not empty text;</li>
+<li> <i>Media</i> — not empty source image.</li></ul>
+<p>Figure represents a part of the screen with the frame containing the above-listed elements of the form.
 </p>
 <div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:Vision_run_formel.png"><img alt="Vision run formel.png" height="255" src="../files/Vision_run_formel.png" width="452" /></a></div></div>
 <p><br />
@@ -892,15 +918,16 @@ An example of editing a frame based on this primitive is shown in Figure 2.a, an
 <li> Starting user — points on behalf of what user to open the module window without requiring the password, for local station. For remote station it is points to an user different from the typical one, pointed into the host configuration.</li>
 <li> User password (remote station) — password of the user different from the typical one, pointed into the host configuration.</li>
 <li> Connection recovery time, in seconds — indicates the time that the lost remote connection is restored.</li>
-<li> Lifetime of the cached pages. The visualizer provides acceleration of the user interface by placing a previously opened pages in the cache, to control the storage time of pages in which this property is intended. Indication of the zero value in general excludes cleaning the cache.</li>
+<li> Lifetime and maximum number of the cached pages. The visualizer provides acceleration of the user interface placing previously opened pages into the cache, to control the storage time and maximum number of the pages in which this properties are intended. Indication of the zero value in general excludes cleaning the cache.</li>
 <li> List of the projects for launch, separated by symbol ';', for their automatic execution with the launch of the module. To provide the possibility to indicate the opening of the window of the project execution on the desired display of many display systems, the recording format of the project "PrjName-1" is provided, where 1 — the number of the target display. To connect to the background or another open session use "<b>ses_ {SesID}</b>".</li>
-<li> Exit when closing the last running project — useful for solutions that are immediately launched on the project interface.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:760px;"><a class="image" href="http://oscada.org/wiki/File:Vision_cfg.png"><img class="thumbimage" height="591" src="../files/Vision_cfg.png" width="758" /></a>  <div class="thumbcaption">Fig.6. Configuration page of the module.</div></div></div></div>
+<li> Exit when closing the last running project — useful for solutions that are immediately launched on the project interface.</li>
+<li> Reset widget styles to common — required for some widget styles like "gtk" in some specific widgets in run mode, like buttons for the background color and images.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1057px;"><a class="image" href="http://oscada.org/wiki/File:Vision_cfg.png"><img class="thumbimage" height="567" src="../files/Vision_cfg.png" width="1055" /></a>  <div class="thumbcaption">Fig.6. Configuration page of the module.</div></div></div></div>
 
 
 
 
 
 
-</div></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Vision/en">Modules/Vision/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.1</td></tr></table></body>
 </html>

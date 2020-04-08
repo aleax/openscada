@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tmess.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -61,6 +61,10 @@ TMess::TMess( ) : IOCharSet("UTF-8"), mMessLevel(Info), mLogDir(DIR_STDOUT|DIR_A
     mRes(true), mLang2CodeBase(mRes), mLang2Code(mRes), getMessRes(true)
 {
     openlog(PACKAGE, 0, LOG_USER);
+
+    //Cleaning the LC_ALL since it overides the proper LC_NUMERIC
+    char *lc = getenv("LC_ALL");
+    if(lc) { setenv("LANG", lc, 0); unsetenv("LC_ALL"); }
 
     setenv("LC_NUMERIC", "C", 1);
     setlocale(LC_ALL, "");
@@ -189,7 +193,7 @@ void TMess::putArg( const char *categ, int8_t level, const char *fmt, va_list ap
 #endif
 
     if((mLogDir&DIR_ARCHIVE) && SYS->present("Archive"))
-	SYS->archive().at().messPut(ctm/1000000, ctm%1000000, categ, level, mess);
+	SYS->archive().at().messPut(ctm/1000000, ctm%1000000, categ, level, mess, BUF_ARCH_NM);
 }
 
 void TMess::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &recs, const string &category, int8_t level )
@@ -274,8 +278,8 @@ string TMess::translGet( const string &base, const string &lang, const string &s
 		    break;
 		}
 		// Create new record into the translation table of the data source
-		else if((iA+1) == addrs.rend() && lang2CodeBase().size()) {
-		    if(lang2CodeBase() == trLang) req.elem().fldDel(req.elem().fldId(tStrVl.c_str()));
+		else if((iA+1) == addrs.rend() /*&& lang2CodeBase().size()*/) {
+		    if(lang2CodeBase().size() && lang2CodeBase() == trLang)	req.elem().fldDel(req.elem().fldId(tStrVl.c_str()));
 		    SYS->db().at().dataSet(*iA+"." mess_TrUApiTbl, "/" mess_TrUApiTbl, req, false, true);
 		}
 	    }
@@ -686,4 +690,17 @@ int TMess::getUTF8( const string &str, int off, int32_t *symb )
 	else rez = (rez<<6) | (str[off+iSmb]&0x3F);
     if(symb) *symb = rez;
     return len;
+}
+
+string TMess::setUTF8( int32_t symb )
+{
+    string rez;
+    if(symb < 0x80) rez += (char)symb;
+    else for(int iCh = 5, iSt = -1; iCh >= 0; iCh--) {
+	if(iSt < iCh && (symb>>(iCh*6))) iSt = iCh;
+	if(iCh == iSt) rez += (char)((0xFF<<(7-iCh))|(symb>>(iCh*6)));
+	else if(iCh < iSt) rez += (char)(0x80|(0x3F&(symb>>(iCh*6))));
+    }
+
+    return rez;
 }

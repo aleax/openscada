@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_widgs.h
 /***************************************************************************
- *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,10 +22,6 @@
 #ifndef VIS_WIDGS_H
 #define VIS_WIDGS_H
 
-#include <string>
-#include <vector>
-#include <map>
-
 #include <QLabel>
 #include <QDialog>
 #include <QMap>
@@ -38,9 +34,6 @@
 
 #include "tvision.h"
 
-using std::string;
-using std::vector;
-using std::map;
 using namespace OSCADA;
 
 class QMainWindow;
@@ -192,7 +185,7 @@ namespace VISION
 
 	public:
 	    //Data
-	    enum LType { Text, Integer, Real, Time, Date, DateTime, Combo };
+	    enum LType { Text, Integer, Real, Time, Date, DateTime, Combo, Password };
 
 	    //Methods
 	    LineEdit( QWidget *parent, LType tp = Text, bool prev_dis = false, bool resApply = true );
@@ -205,6 +198,7 @@ namespace VISION
 	    void setType( LType tp );
 	    void setValue( const QString& );
 	    void setCfg( const QString& );
+	    void setFont( const QFont& );
 
 	    QWidget *workWdg( )	{ return ed_fld; }
 	    void viewApplyBt( bool view );
@@ -275,13 +269,17 @@ namespace VISION
 	    void cancel( );
 	    void textChanged( const QString& );
 
+	public slots:
+	    void applySlot( );
+	    void cancelSlot( );
+
 	protected:
 	    bool event( QEvent * e );
 
 	private slots:
 	    void changed( );
-	    void applySlot( );
-	    void cancelSlot( );
+	    //void applySlot( );
+	    //void cancelSlot( );
 	    void curPosChange( );
 	    void custContextMenu( );
 	    void find( );

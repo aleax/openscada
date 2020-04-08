@@ -7,11 +7,11 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../files/doc.css" rel="stylesheet" /></head>
-<body><div id="mw_header">
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../../en/files/Logo-big.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/VCAEngine</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/VCAEngine/ru" title="Модули/Движок Среды Визуализации и Управлений (СВУ) (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/VCAEngine/uk" title="Модулі/Рушій Середовища Візуалізації та Управління (СВУ) (100% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/VCAEngine.html" title="Модули/Движок Среды Визуализации и Управлений (СВУ) (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/VCAEngine.html" title="Модулі/Рушій Середовища Візуалізації та Управління (СВУ) (100% translated)">українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -23,24 +23,45 @@
 <th> Languages </th>
 <th> Platforms </th>
 <th> Type </th>
-<th> Author </th>
-<th> Description
+<th> Author
 </th></tr>
 
 <tr>
 <td> <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
 <td> Visual control area engine
 </td>
-<td> 5.1 </td>
+<td> 6.1 </td>
 <td> GPL2 </td>
 <td> ui_VCAEngine.so </td>
 <td> en,uk,ru,de </td>
 <td> x86,x86_64,ARM
 </td>
 <td> UI </td>
-<td> Roman Savochenko<br /><font size="-2"><i>Maxim Lysenko (2011-2012) — the page translation</i></font> </td>
-<td> The main engine of the visual control area.
+<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2011-2012) — the page initial translation</i></font>
+</td></tr>
+<tr>
+<th colspan="9"> Description
+</th></tr>
+<tr>
+<td colspan="9"> The main engine of the visual control area.
+<ul><li> <b>To Do:</b></li></ul>
+<dl><dd> - append the image files edition user API for raster (PNG, JPEG, GIF), by LibGD2, and vector (SVG):
+<dl><dd>+ append the images loading and saving their changes into the session table from the user procedures, allows to edit SVG (XML);</dd>
+<dd>- implement the main functions of the GD object (into <a href="../Modules/FLibSYS.html" title="Special:MyLanguage/Modules/FLibSYS">Special.FLibSYS</a>).</dd></dl></dd>
+<dd> ... <i>for <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> also</i> ...</dd>
+<dd> - move the runtime requests to VCAEngine in the asynchronous mode;
+<dl><dd>&nbsp;!&gt; has a problem with processing recursive events into event(), in the case of the mouse release events loss in processing the pressing mouse event.</dd></dl></dd>
+<dd> - implement the background execution of the edited pages in the development mode, for the visual diagram forming jointly <a href="../Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">BlockCalc</a> and DAQ-sources at all.</dd>
+<dd> ... <i>for <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> and <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a> also</i> ...</dd>
+<dd> - append for the user-space global menu by the project-specific properties;</dd>
+<dd> - develop the block diagrams forming (dynamic frames) from the GUI.</dd></dl>
 </td></tr></table>
+<p>The module provides OpenSCADA for visual control area engine (VCA). The module itself does not implement visualization of VCA, but contains data in accordance with the concept "Model/Data — Interface". The visualization of this module's data is performed by the visualization modules of VCA, such as <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> and <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a>.
+</p><p>Visual control area (VCA) is an integral part of the SCADA system. It applies to the client stations with a view to providing accessible information about the control object and to for the the issuance of the control actions to the object. In various practical situations and conditions the VCA, based on different principles of visualization, may by applied. For example, this may be the library of widgets Qt, GTK+, WxWidgets or hypertext mechanisms based on the technologies HTML, XHTML, XML, CSS and JavaScript, or third-party applications of visualization, realized in various programming languages Java, Python, etc. Any of these principles has its advantages and disadvantages, the combination of which could become an insurmountable obstacle to the use of VCA in a practical case. For example, technologies like the Qt library can create highly-productive VCA, which will undoubtedly important for the operator station for control the technological processes (TP). However, the need for installation of that client software in some cases may make using of it impossible. On the other hand, Web-technology does not require installation on client systems and is extremely multi-platform (it is enough to create a link to the Web-server at any Web-browser) that is most important for various engineering and administrative stations, but the productivity and reliability of such interfaces is lower, that actually eliminates the using of them at the operator stations of TP.
+</p><p>OpenSCADA has extremely flexible architecture that allows you to create external interfaces, including user, in any manner and taste. For example, the OpenSCADA configuration environment available now as by means of the Qt-library, and also the Web-based.
+</p><p>At the same time, independent creation of the VCA implementations in different basis may cause the inability to use the configuration of one VCA into another one. That is inconvenient and limited from the user side, as well as costly in terms of implementation and follow-up support.
+</p><p>In order to avoid these problems, as well as to create as soon as possible the full spectrum of different types of VCA, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA" title="Special:MyLanguage/Sub-projects/VCA">the project for the construction of the concept of VCA </a> is founded. The result of this project was this engine module (data model) of VCA, as well as direct visualization modules <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> and <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a>.
+</p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#Purpose"><span class="tocnumber">1</span> <span class="toctext">Purpose</span></a></li>
@@ -55,7 +76,7 @@
 <li class="toclevel-2 tocsection-9"><a href="#Signaling_.28Alarms.29"><span class="tocnumber">3.6</span> <span class="toctext"><span>Signaling (Alarms)</span></span></a></li>
 <li class="toclevel-2 tocsection-10"><a href="#Rights_management"><span class="tocnumber">3.7</span> <span class="toctext">Rights management</span></a></li>
 <li class="toclevel-2 tocsection-11"><a href="#Linkage_with_the_dynamics"><span class="tocnumber">3.8</span> <span class="toctext">Linkage with the dynamics</span></a></li>
-<li class="toclevel-2 tocsection-12"><a href="#Primitives_of_the_widgets"><span class="tocnumber">3.9</span> <span class="toctext">Primitives of the widgets</span></a>
+<li class="toclevel-2 tocsection-12"><a href="#Primitives_of_the_widgets"><span class="tocnumber">3.9</span> <span class="toctext"><span>Primitives of the widgets</span></span></a>
 <ul>
 <li class="toclevel-3"><a href="#Elementary_graphical_figure_.28ElFigure.29"><span class="tocnumber">3.9.1</span> <span class="toctext"><span>Elementary graphical figure (ElFigure)</span></span></a></li>
 <li class="toclevel-3"><a href="#Element_of_the_form_.28FormEl.29"><span class="tocnumber">3.9.2</span> <span class="toctext"><span>Element of the form (FormEl)</span></span></a></li>
@@ -70,7 +91,7 @@
 <li class="toclevel-2 tocsection-13"><a href="#Database_using_to_store_libraries_of_widgets_and_projects"><span class="tocnumber">3.10</span> <span class="toctext">Database using to store libraries of widgets and projects</span></a></li>
 <li class="toclevel-2 tocsection-14"><a href="#API_of_the_user_programming_and_service_interfaces_of_OpenSCADA"><span class="tocnumber">3.11</span> <span class="toctext"><span>API of the user programming and service interfaces of OpenSCADA</span></span></a>
 <ul>
-<li class="toclevel-3"><a href="#API_of_the_user_programming"><span class="tocnumber">3.11.1</span> <span class="toctext">API of the user programming</span></a></li>
+<li class="toclevel-3"><a href="#API_of_the_user_programming"><span class="tocnumber">3.11.1</span> <span class="toctext"><span>API of the user programming</span></span></a></li>
 <li class="toclevel-3"><a href="#Service_interfaces_of_OpenSCADA"><span class="tocnumber">3.11.2</span> <span class="toctext">Service interfaces of OpenSCADA</span></a>
 <ul>
 <li class="toclevel-4"><a href="#Access_to_the_attributes_values_of_the_visualization_elements_.28widgets.29"><span class="tocnumber">3.11.2.1</span> <span class="toctext">Access to the attributes values of the visualization elements (widgets)</span></a></li>
@@ -89,12 +110,6 @@
 </ul>
 </div>
 
-<p>The module provides OpenSCADA for visual control area engine (VCA). The module itself does not implement visualization of VCA, but contains data in accordance with the concept "Model/Data — Interface". The visualization of this module's data is performed by the visualization modules of VCA, such as <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> and <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a>.
-</p><p>Visual control area (VCA) is an integral part of the SCADA system. It applies to the client stations with a view to providing accessible information about the control object and to for the the issuance of the control actions to the object. In various practical situations and conditions the VCA, based on different principles of visualization, may by applied. For example, this may be the library of widgets Qt, GTK+, WxWidgets or hypertext mechanisms based on the technologies HTML, XHTML, XML, CSS and JavaScript, or third-party applications of visualization, realized in various programming languages Java, Python, etc. Any of these principles has its advantages and disadvantages, the combination of which could become an insurmountable obstacle to the use of VCA in a practical case. For example, technologies like the Qt library can create highly-productive VCA, which will undoubtedly important for the operator station for control the technological processes (TP). However, the need for installation of that client software in some cases may make using of it impossible. On the other hand, Web-technology does not require installation on client systems and is extremely multi-platform (it is enough to create a link to the Web-server at any Web-browser) that is most important for various engineering and administrative stations, but the productivity and reliability of such interfaces is lower, that actually eliminates the using of them at the operator stations of TP.
-</p><p>OpenSCADA has extremely flexible architecture that allows you to create external interfaces, including user, in any manner and taste. For example, the OpenSCADA configuration environment available now as by means of the Qt-library, and also the Web-based.
-</p><p>At the same time, independent creation of the VCA implementations in different basis may cause the inability to use the configuration of one VCA into another one. That is inconvenient and limited from the user side, as well as costly in terms of implementation and follow-up support.
-</p><p>In order to avoid these problems, as well as to create as soon as possible the full spectrum of different types of VCA, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA" title="Special:MyLanguage/Sub-projects/VCA">the project for the construction of the concept of VCA </a> is founded. The result of this project was this engine module (data model) of VCA, as well as direct visualization modules <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> and <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a>.
-</p>
 <h2><span class="mw-headline" id="Purpose"><span class="mw-headline-number">1</span> Purpose</span></h2>
 <p>This engine module (data model) of the VCA is aimed to create the logical structure of the VCA and the execution of sessions of individual instances of the VCA projects. Also, the module provides all the necessary data to the final visualizers of the VCA, both through local mechanisms of interaction of OpenSCADA, and through the control interface of OpenSCADA for remote access.
 </p><p>Final version of the VCA module will provide:
@@ -170,19 +185,21 @@
 </p>
 <ul><li> <i>Container</i> — page is the container for the underlying pages.</li>
 <li> <i>Template</i> — page is the template for the underlying pages.</li>
-<li> <i>Empty</i> — empty and inactive page. This property is used in conjunction with the property <i>Container</i> for organization the logical containers.</li></ul>
+<li> <i>Empty</i> — empty and inactive page. This property is used in conjunction with the property <i>Container</i> for organization the logical containers.</li>
+<li> <i>Link</i> — link to other page as a container of sub-pages which will be used on the project execution side (sessions) without their different creation. </li></ul>
 <p>Based on combinations of these properties the following types of pages are realized:
 </p>
 <ul><li> <i>Standard</i> — the standard page (no property), it is the full-featured final page.</li>
 <li> <i>Container</i> — the full-featured page with the property of the container (<i>Container</i>).</li>
 <li> <i>Logical container</i> — the logical container is actually not a page (<i>Container</i>|<i>Empty</i>), acts as an intermediate and group element in the page tree.</li>
 <li> <i>Template</i> — the template page (<i>Template</i>). Pure template page that is used to describe common properties and to identify them in nested pages, privately.</li>
-<li> <i>Container and template</i> — the template and container page (<i>Template</i>|<i>Container</i>), combines the functions of the template and the container.</li></ul>
+<li> <i>Container and template</i> — the template and container page (<i>Template</i>|<i>Container</i>), combines the functions of the template and the container.</li>
+<li> <i>Link</i> — link to other page. The links can be used for fully dynamic and high replicated pages, to optimize the memory consumption. To different the linked pages opening you must use the attribute "path". <a href="#UserAPI">The user API</a> function uiCmd() must be used to that pages type managing before the direct writing to the page attributes "pgOpen" and "pgOpenSrc".</li></ul>
 <p>On the visualization side (RunTime) a logic is constructed that governs how to open pages based on the following attributes of the basic element "Box":
 </p>
 <ul><li> <i>pgOpen</i> — sign "The page is opened";</li>
 <li> <i>pgNoOpenProc</i> — sign "Execute the page, even if it is not opened";</li>
-<li> <i>pgOpenSrc</i> — contains the widget address or the page that opened the current page; in the case of an included container widget, here is the address of the included page; to open a page from a script it is enough to specify the address of the widget-source of opening;</li>
+<li> <i>pgOpenSrc</i> — contains the widget address or the page that opened the current page; in the case of an included container widget, here is the address of the included page; to open a page from an internal procedure it is enough to specify the address of the widget-source of opening, but for the pages type "Link" you must prefer of <a href="#UserAPI">the user API</a> function uiCmd() using to the pages managing;</li>
 <li> <i>pgGrp</i> — group of pages used to link container pages to pages, according to a common group.</li></ul>
 <p>The logic of determining how to open pages works like this:
 </p>
@@ -216,7 +233,7 @@
 <ul><li> "Page of the top level" -&gt; "Page of the lower level" </li>
 <li> "Widget of the lower level" -&gt; "Widget of the top level"</li></ul>
 <p>This policy allows to bypass the pages according to their hierarchy, and events in the widgets "climb up" during one iteration.
-</p><p>The sessions support multi-language at the level of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/API#CntrNode" title="Special:MyLanguage/Documents/API">the control interface of OpenSCADA</a>, which depended from values of the generic attributes "lang" and "user" and which visualizer can set in proper way of own language. This function is enabled by <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Config" title="Special:MyLanguage/Documents/Program manual">dynamic messages translation of OpenSCADA</a>.
+</p><p>The sessions support multi-language at the level of <a href="../API.html#CntrNode" title="Special:MyLanguage/Documents/API">the control interface of OpenSCADA</a>, which depended from values of the generic attributes "lang" and "user" and which visualizer can set in proper way of own language. This function is enabled by <a href="../Program_manual.html#Config" title="Special:MyLanguage/Documents/Program manual">dynamic messages translation of OpenSCADA</a>.
 </p><p><br />
 </p>
 <h3><span class="mw-headline" id="Styles"><span class="mw-headline-number">3.4</span> Styles</span></h3>
@@ -821,7 +838,7 @@ if test $en = 1 -a -s $res; then play -q $res; fi
 <li> attributes of the parameter can provide information of five types: Boolean, Integer, Real, String and Object;</li>
 <li> attributes of the parameter can have their archive (history);</li>
 <li> attributes of the parameter can be set to read, write and with full access.</li></ol>
-<p>Given the first point, it is necessary to provide the possibility of group-based reference. To do this, we use <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLev" title="Special:MyLanguage/Documents/DAQ">the logical level concept</a>.
+<p>Given the first point, it is necessary to provide the possibility of group-based reference. To do this, we use <a href="../DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">the logical level concept</a>.
 </p><p>According to point 2, the links provide a transparent type conversion and do not require a special configuration.
 </p><p>To satisfy the opportunities for accessing to archives, in accordance with the item 3, links make check of the attribute type, and in the case of connection to the "Address", the address of the link is put into the value.
 </p><p>In the VCA terms, the dynamic links and configuration of the dynamics are the one process, to describe a configuration of which the tab "Processing" of the widgets is provided. The tab contains a table of configuration of the attributes properties and the calculation procedure text of the widget.
@@ -854,7 +871,8 @@ if test $en = 1 -a -s $res; then play -q $res; fi
 <ul><li> receiving the data from the input links;</li>
 <li> performing the calculation of the widget procedure;</li>
 <li> transmission the values by the output links.</li></ul>
-<p>The figure shows a tab of links for group attributes, by specifying only the parameter. The following figure shows the individual attribute assignment.
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> The widget calculation period in the default value "-1" means the chain using the period value from the widget owner for the first positive value, or the project calculation period.
+</p><p>The figure shows a tab of links for group attributes, by specifying only the parameter. The following figure shows the individual attribute assignment.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:656px;"><a class="image" href="http://oscada.org/wiki/File:VCA_wdg_lnk_grp.png"><img class="thumbimage" height="458" src="../files/VCA_wdg_lnk_grp.png" width="654" /></a>  <div class="thumbcaption">Figure. Tab "Links" of the configuration page of the widget with the group assignment of the attributes by the specifying only the parameter.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:656px;"><a class="image" href="http://oscada.org/wiki/File:VCA_wdg_lnk_attr.png"><img class="thumbimage" height="506" src="../files/VCA_wdg_lnk_attr.png" width="654" /></a>  <div class="thumbcaption">Figure. Tab "Links" of the configuration page of the widget with the individual assignment of the attributes.</div></div></div></div>
@@ -934,7 +952,7 @@ if test $en = 1 -a -s $res; then play -q $res; fi
 </td></tr></table>
 <p><br />
 </p>
-<h3><span class="mw-headline" id="Primitives_of_the_widgets"><span class="mw-headline-number">3.9</span> Primitives of the widgets</span></h3>
+<h3><span class="mw-headline" id="Primitives_of_the_widgets"><span class="mw-headline-number">3.9</span> <span id="WidgetPrimitives" title="#WidgetPrimitives">Primitives of the widgets</span></span></h3>
 <p>Any newly created widget is based on one of several primitives — end element of the visualization, by installing of the kinship as directly to the primitive, as well as through the several intermediate user widgets. Each of the primitives contains a mechanism of the data model. An instance of the widget stores the properties values of the primitive own configuration.
 </p><p>The tasks of the visualization interface include support and work with the data model of the widgets primitives. The widgets primitives should be thoroughly worked out and unified, in order to capture as many opportunities as possible in a smaller number of poorly linked, with the purpose, primitives.
 </p><p><b>Table.</b> Library of the primitives of the widgets — basic elements of the visualization.
@@ -1195,7 +1213,7 @@ Where:
 <td>
 <p>Sign "The page is opened".
 </p>
-<dl><dd> * Modification from the session provides an immediate opening/closing the page.</dd></dl>
+<dl><dd> * Modification from the session provides an immediate opening/closing the page, but for the pages type "Link" you must prefer of <a href="#UserAPI">the user API</a> function uiCmd() using to the pages managing.</dd></dl>
 </td></tr>
 <tr>
 <td> pgNoOpenProc </td>
@@ -1210,7 +1228,7 @@ Where:
 <td>
 <p>Full address of the page which has opened this one.
 </p>
-<dl><dd> * Write/clear address of the widget (opening initiator) performs an immediate opening/closing the page. In the case of writing the address and on <a href="#DynLink">certain conditions</a>, performs the dynamic linking of the current widget to the initiator. </dd></dl>
+<dl><dd> * Writing/clearing the widget address, of the opening initiation, performs an immediate opening/closing the page. In the case of writing the address and on <a href="#DynLink">certain conditions</a>, the dynamic linking of the current widget to the initiator performs. But for the pages type "Link" you must prefer of <a href="#UserAPI">the user API</a> function uiCmd() using to the pages managing.</dd></dl>
 </td></tr>
 <tr>
 <td> pgGrp </td>
@@ -1246,7 +1264,7 @@ Where:
 <td> Virtual attribute of the rights of the active user to view and control the widget.
 </td></tr></table>
 <dl><dd> * — Special function of the widget attribute which executing in the project session at any user's modification.</dd></dl>
-<p>The engine of the visualization environment provides activation of the visualizer specific attributes. The activation process performs at opening a session of the project and means for the project: creation of the specific attribute with the specified properties, at case it lack, and activation for tracing its modification by the engine of the visualization environment, like to the attributes of forming primitive's shapes. For the specific attributes list of the visualizer you can see the documentation of the proper visualizer.
+<p>The engine of the visualization environment provides activation of the visualizer specific attributes. The activation process performs at opening a session of the project and means for the project: creation of the specific attribute with the specified properties, at case it lack, and activation for tracing its modification by the engine of the visualization environment, like to the attributes of forming primitive's shapes. To direct specifying such attribute you can also use the prefix "vs_" to the attribute identifiers, what is mach faster and excludes of the activation stage. For the specific attributes list of the visualizer you can see the documentation of the proper visualizer.
 </p>
 <h4><span class="mw-headline" id="Elementary_graphical_figure_.28ElFigure.29"><span class="mw-headline-number">3.9.1</span> <span id="ElFigure" title="#ElFigure">Elementary graphical figure (ElFigure)</span></span></h4>
 <p>The primitive is the basis for drawing basic graphical shapes with their possible combinations in a single object. Taking into account the wide range of various shapes, which must be maintained by the primitive, and at the same time the primitive must be simple enough for using and, if possible, for implementation, it was decided to limit the list of the basic figures used for the construction of the resulting graphics to these figures: line, arc, Bézier curve and fill of the enclosed spaces. Based at these basic figures, it is possible to construct derived figures by combining the basic. In the context of the primitive, there is a possibility to set the transparency of the color in the range [0...255], where '0' — complete transparency.
@@ -1440,7 +1458,7 @@ Where:
 <li> Tree</li>
 <li> Table</li>
 <li> Slider</li>
-<li> Scroll bar"</li></ul>
+<li> Scroll bar</li></ul>
 </td></tr>
 <tr>
 <td colspan="4"> <i>Line edit:</i>
@@ -1462,7 +1480,8 @@ Where:
 <li> Real</li>
 <li> Time</li>
 <li> Date</li>
-<li> Date and Time".</li></ul>
+<li> Date and Time</li>
+<li> Password</li></ul>
 </td></tr>
 <tr>
 <td> cfg </td>
@@ -2026,7 +2045,7 @@ Where:
 <td> Sign "Coordinate the contents with the widget size".
 </td></tr>
 <tr>
-<td colspan="4"> <i>Attributes of the video (Movie)</i>
+<td colspan="4"> <i>Attributes of the animation-video (Animation)</i>
 </td></tr>
 <tr>
 <td> fit </td>
@@ -2038,7 +2057,7 @@ Where:
 <td> speed </td>
 <td> Play speed </td>
 <td> 29 </td>
-<td> Speed of playback, as a percentage from the original speed. If the value is less than 1%, the playback stops.
+<td> Speed of playback, as a percentage from the original speed. If the value is less or even than 1%, the playback stops.
 </td></tr>
 <tr>
 <td colspan="4"> <i>Attributes of the full video (Full video)</i>
@@ -2703,7 +2722,7 @@ Where:
 </td></tr>
 <tr>
 <td> *.docAMess="1:PLC*" </td>
-<td> Indicates the need for multiplication a tag with the attribute, by messages from the message archive for the specified time interval, according to the level "1" and the query template "PLC*", by the message category. In the query template, regular expressions can be specified "<b>/{re}/</b>". For this tag, in the process of multiplication, the following attributes are defined: mTime, mTimeU, mLev, mCat and mVal.
+<td> Indicates the need for multiplication a tag with the attribute, by messages from the message archive for the specified time interval, according to the level "1" and the query template "PLC*", by the message category. In the query template, <a class="extiw" href="https://en.wikipedia.org/wiki/Regular_expression" title="wikipedia:Regular expression">regular expressions</a> can be specified "<b>/{re}/</b>". For this tag, in the process of multiplication, the following attributes are defined: mTime, mTimeU, mLev, mCat and mVal.
 </td></tr>
 <tr>
 <td> *.docAMessArchs="ArchMod0.Archivator0[;ArchModN.ArchivatorN]" </td>
@@ -2886,7 +2905,7 @@ Where:
 <p><br />
 </p>
 <h3><span class="mw-headline" id="API_of_the_user_programming_and_service_interfaces_of_OpenSCADA"><span class="mw-headline-number">3.11</span> <span id="UserAPI" title="#UserAPI">API of the user programming and service interfaces of OpenSCADA</span></span></h3>
-<h4><span class="mw-headline" id="API_of_the_user_programming"><span class="mw-headline-number">3.11.1</span> API of the user programming</span></h4>
+<h4><span class="mw-headline" id="API_of_the_user_programming"><span class="mw-headline-number">3.11.1</span> <span id="UserAPI" title="#UserAPI">API of the user programming</span></span></h4>
 <p>API of the user programming of the visualization engine are represented directly by the OpenSCADA objects, which form the user interface, that is by the "Session" and "Widgets-pages". For the user, these objects provide a set of control functions:
 </p>
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_VCAEngine.png" title="User object model of the module VCAEngine."><img alt="User object model of the module VCAEngine." height="238" src="../files/Oscada_UserOM_VCAEngine.png" width="352" /></a></div>
@@ -2897,7 +2916,8 @@ Where:
 <li> <i>int reqTm( )</i> — last request time.</li>
 <li> <i>string reqUser( )</i> — last request user.</li>
 <li> <i>string reqLang( )</i> — last request language.</li>
-<li> <i>int userActTm( )</i> — last user action time.</li></ul>
+<li> <i>int userActTm( )</i> — last user action time.</li>
+<li> <i>bool uiCmd( string cmd, string prm, string src )</i> — sends a UI command of the pages managing, that is: "open", "next", "prev"; for more details see in <a href="#Events">the events section</a>. This function must be in the priority of using to the pages managing before the direct writing to the page attributes "pgOpen" and "pgOpenSrc" due it is single method of the correct work with <a href="#Project">the linked pages</a>.</li></ul>
 <p><b>Object "Widget" (this)</b>
 </p>
 <ul><li> <i>TCntrNodeObj ownerSess( )</i> — session object for the current widget.</li>
@@ -2911,6 +2931,7 @@ nw.attrSet("geomX", 50).attrSet("geomY", 50);
 </pre>
 <ul><li> <i>bool wdgDel( string wid )</i> — deletes the widget <i>wid</i>.</li>
 <li> <i>TCntrNodeObj wdgAt( string wid, bool byPath = false )</i> — attaches to child or global widget, by the path <i>byPath</i>. In the case of global connection, you can use absolute or relative path to the widget. For starting point of the absolute address acts the root object of the module "VCAEngine", which means the first element of the absolute address is session identifier, which is ignored. The relative address takes the countdown from the current widget. Special element of the relative address is an element of parent node "..".</li>
+<li> <i>Array attrList()</i> — list of the widget attributes.</li>
 <li> <i>bool attrPresent( string attr )</i> — checks to presence fact of the attribute <i>attr</i> of the widget.</li>
 <li> <i>ElTp attr( string attr, bool fromSess = false )</i> — value of the attribute <i>attr</i> of the widget or from the session <i>fromSess</i>. For missing attributes will be return empty string.</li>
 <li> <i>TCntrNodeObj attrSet( string attr, ElTp vl, bool toSess = false )</i> — sets the value <i>vl</i> to the attribute <i>attr</i> of the widget or to the session, by <i>toSess</i>. The object is returned for the function concatenation.</li>
@@ -3119,7 +3140,7 @@ Deprecated, but supported, the API is represented by a group of functions direct
 <td>
 </td></tr></table>
 <h4><span class="mw-headline" id="Service_interfaces_of_OpenSCADA"><span class="mw-headline-number">3.11.2</span> Service interfaces of OpenSCADA</span></h4>
-<p>Service interfaces are the interfaces for access to OpenSCADA through <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/API#CntrNode" title="Special:MyLanguage/Documents/API">the OpenSCADA control interface</a>. This mechanism is the basis of all mechanisms of exchange within OpenSCADA, implemented through weak links and the standard exchange protocol of OpenSCADA .
+<p>Service interfaces are the interfaces for access to OpenSCADA through <a href="../API.html#CntrNode" title="Special:MyLanguage/Documents/API">the OpenSCADA control interface</a>. This mechanism is the basis of all mechanisms of exchange within OpenSCADA, implemented through weak links and the standard exchange protocol of OpenSCADA .
 </p>
 <h5><span class="mw-headline" id="Access_to_the_attributes_values_of_the_visualization_elements_.28widgets.29"><span class="mw-headline-number">3.11.2.1</span> Access to the attributes values of the visualization elements (widgets)</span></h5>
 <p>In order to provide unitized, grouping and relatively fast access to the attributes values of the visual elements, the service function of the visual element "/serv/attr" and get-set commands of values of the attributes are provided:
@@ -3296,7 +3317,7 @@ Deprecated, but supported, the API is represented by a group of functions direct
 <p>From this page you can set:
 </p>
 <ul><li> States of the element, the same: "Enabled", counter of the use, parent element and jump to it, date and time of the last modification.</li>
-<li> States of the runtime session's mode: "Opened", "Process" and spent time on execution of the subtree and item, into the <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Config" title="Special:MyLanguage/Documents/Program manual">debug mode</a>.</li>
+<li> States of the runtime session's mode: "Opened", "Process" and spent time on execution of the subtree and item, into the <a href="../Program_manual.html#Config" title="Special:MyLanguage/Documents/Program manual">debug mode</a>.</li>
 <li> Identifier, type, root, path, name, description and icon of the element.</li>
 <li> Command — clear the widget changes.</li>
 <li> Command — lower down the widget changes to its parent.</li></ul>
@@ -3309,5 +3330,5 @@ Deprecated, but supported, the API is represented by a group of functions direct
 
 
 
-</div></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/en">Modules/VCAEngine/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.1</td></tr></table></body>
 </html>

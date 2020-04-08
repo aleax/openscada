@@ -2,11 +2,11 @@ AC_PREREQ(2.50)
 
 # After any LTS release append there the third stabilisation level/number to the version
 #  Don't change the version string but it uses in whole to replace by a real one into the automatic builder.
-AC_INIT(OpenSCADA, [0.9.0], rom_as@oscada.org)
+AC_INIT(OpenSCADA, [0.9.1], roman@oscada.org)
 
 # Increase the major for next Work version.
 # Increase the minor after any significant changes into API of the Work/LTS version
-oscd_LIBREVISION="3:6:0"
+oscd_LIBREVISION="3:7:0"
 
 AC_PREFIX_DEFAULT(/usr)
 oscd_modulpref="oscd_"
@@ -210,7 +210,7 @@ AX_MOD_DB_EN(ODBC, [disable or enable[=incl] compilation module DB.ODBC], enable
 ])
 AX_MOD_DB_EN(LDAP, [disable or enable[=incl] compilation module DB.LDAP], enable, incl, [
     AC_CHECK_HEADERS([ldap.h], [],
-	AC_MSG_ERROR([DB.LDAP: OpenLDAP developing resources aren't found. Install or check the iODBC development package!]))
+	AC_MSG_ERROR([DB.LDAP: OpenLDAP developing resources aren't found. Install or check the libldap development package!]))
 ])
 
 # DAQ modules

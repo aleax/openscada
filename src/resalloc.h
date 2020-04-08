@@ -97,7 +97,7 @@ class ResAlloc
 class ResMtx
 {
     public:
-	ResMtx( bool isRecurs = false ) {
+	ResMtx( bool isRecurs = true ) {
 	    pthread_mutexattr_t attrM;
 	    pthread_mutexattr_init(&attrM);
 	    if(isRecurs) pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);

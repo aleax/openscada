@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2013-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2013-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebCfg 1.5.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-23 16:44+0200\n"
+"POT-Creation-Date: 2018-12-31 16:25+0200\n"
 "PO-Revision-Date: 2009-08-26 08:08+0200\n"
 "Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -26,8 +26,8 @@ msgstr "Programmkonfigurator (WEB)"
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
-msgid "Provides the WEB-based configurator of the OpenSCADA system."
-msgstr "Ermöglicht die WEB-basierten Systemeinstellungen OpenSCADA."
+msgid "Provides the WEB-based configurator of the OpenSCADA."
+msgstr "Stellt den WEB-basierten Konfigurator von OpenSCADA bereit."
 
 msgid "Name: "
 msgstr "Name: "
@@ -116,64 +116,61 @@ msgstr "Zeile nach oben verschieben"
 msgid "Move down row"
 msgstr "Zeile nach unten verschieben"
 
-msgid "Post request broken!"
-msgstr "Post-Anfrage ist beschädigt!"
+msgid "The post request is broken!"
+msgstr "Die Postanforderung ist defekt!"
 
 #, c-format
-msgid "%s| Change <%s:%s> to %s"
-msgstr "%s| Änderung <%s:%s> in %s"
+msgid "%s| Changed for <%s:%s> to %s"
+msgstr "%s| Changed für <%s:%s> in %s"
 
 #, c-format
-msgid "%s| Go to link '%s'"
-msgstr "%s| Gehen zum Link '%s'"
+msgid "%s| Went to the link '%s'"
+msgstr "%s| Ging zum Link '%s'"
 
 #, c-format
-msgid "Go to '%s'."
-msgstr "Gehe zu '%s'."
+msgid "Went to '%s'."
+msgstr "Ging zum '%s'."
 
 #, c-format
-msgid "%s| Put command <%s:%s>"
-msgstr "%s| Kommando einsetzen <%s:%s>"
+msgid "%s| Put the command <%s:%s>"
+msgstr "%s| Setzen Sie den Befehl <%s:%s>"
 
 #, c-format
-msgid "%s| Delete '%s' element <%s:%s>."
-msgstr "%s| Löschen '%s' des Elements <%s:%s>."
+msgid "%s| Deleted '%s' for the element <%s:%s>."
+msgstr "%s| Gelöschte '%s' für das Element <%s:%s>."
 
 #, c-format
-msgid "%s| Insert '%s' element <%s:%s> to %s."
-msgstr "%s| Einfügen '%s' des Elements <%s:%s> in %s."
+msgid "%s| Inserted '%s' for the element <%s:%s> to %s."
+msgstr "%s| Eingefügt '%s' für das Element <%s:%s> zu %s."
 
 #, c-format
-msgid "%s| Add '%s' element <%s:%s>."
-msgstr "%s| Hinzufügen '%s' des Elements <%s:%s>."
+msgid "%s| Added '%s' for the element <%s:%s>."
+msgstr "%s| Hinzugefügt '%s' für das Element <%s:%s>."
 
 #, c-format
-msgid "%s| Set '%s' element %s to <%s:%s>."
-msgstr "%s| Speichern '%s' des Elements %s in <%s:%s>."
+msgid "%s| Set '%s' for the element %s to <%s:%s>."
+msgstr "%s| Setzen Sie '%s' für das Element %s auf <%s:%s>."
 
 #, c-format
-msgid "%s| Move '%s' from %s to %s."
-msgstr "%s| Verschieben '%s' von %s nach %s."
+msgid "%s| Moved '%s' from %s to %s."
+msgstr "%s| Verschoben '%s' von %s zu %s."
 
 #, c-format
-msgid "%s| Set '%s' cell ('%s':%s) to: %s."
-msgstr "%s| Speichern '%s' der Zelle ('%s':%s) in: %s."
+msgid "%s| Set '%s' for the cell <%s:%s> to %s."
+msgstr "%s| Setzen Sie '%s' für die Zelle <%s:%s> auf %s."
 
 #, c-format
-msgid "%s| Add '%s' record."
-msgstr "%s| Hinzufügen '%s' des Datensatzes."
+msgid "%s| Added '%s' for a record."
+msgstr "%s| Hinzugefügt '%s' für einen Datensatz."
 
 #, c-format
-msgid "%s| Insert '%s' record %d."
-msgstr "%s| Einfügen '%s' des Datensatzes %d."
+msgid "%s| Inserted '%s' for the record %d."
+msgstr "%s| Eingefügt '%s' für den Datensatz %d."
 
 #, c-format
-msgid "%s| Delete '%s' record %d."
-msgstr "%s| Löschen '%s' des Datensatzes %d."
+msgid "%s| Deleted '%s' for the record %d."
+msgstr "%s| Gelöschte '%s' für den Datensatz %d."
 
 #, c-format
-msgid "%s| Move '%s' record from %d to %d."
-msgstr "%s| Verschieben '%s' des Datensatzes von %d nach %d."
-
-msgid "System configurator (WEB)"
-msgstr "Systemkonfigurator (WEB)"
+msgid "%s| Moved '%s' for a record from %d to %d."
+msgstr "%s| Verschoben '%s' für einen Datensatz von %d bis %d."

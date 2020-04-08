@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tuis.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -105,7 +105,22 @@ string TUIS::docGet( const string &inm, string *tp, unsigned opt )
 	close(hd);
     }
 
-    //Find the online document into network
+    // Detect the LTS and connect to the network copy of the offline documentation
+    if(rez.empty() && (nm=TSYS::strParse(inm,0,"|")).size() && TSYS::strParse(inm,1,"|").size()) {
+	TArrayObj *tArr;
+	if((tArr=TRegExp("(0.\\d+|\\d+)\\.\\d+").match(VERSION))) {
+	    if(tArr->size() >= 2) {
+		const char  *docHost = "ftp.oscada.org/OpenSCADA";
+
+		if(opt&GetPathURL) rez = string("http://") + docHost + "/" + tArr->arGet(1).getS() + "/doc/en/" + nm + ".html";
+		else if(opt&GetContent) ;//rez = req.text();
+		else rez = string("xdg-open ") + "http://" + docHost + "/" + tArr->arGet(1).getS() + "/doc/en/" + nm + ".html &";
+	    }
+	    delete tArr;
+	}
+    }
+
+    //Use the online document into the network
     if(rez.empty() && (nm=TSYS::strParse(inm,1,"|")).size()) {
 	const char  *docHost = "oscada.org/wiki/Special:MyLanguage";
 
@@ -115,6 +130,16 @@ string TUIS::docGet( const string &inm, string *tp, unsigned opt )
     }
 
     return rez;
+}
+
+string TUIS::docKeyGet( const string &itxt )
+{
+    TArrayObj *rez;
+    if((rez=TRegExp("DOC:\\s*(.+)$").match(itxt))) {
+	if(rez->size() >= 2) return rez->arGet(1).getS();
+	delete rez;
+    }
+    return "";
 }
 
 string TUIS::mimeGet( const string &inm, const string &fDt, const string &orig )
@@ -152,8 +177,8 @@ string TUIS::mimeGet( const string &inm, const string &fDt, const string &orig )
     else if(strcasecmp(tvl,"ico") == 0)					prc = "image/ico";
     else if(strcasecmp(tvl,"pcx") == 0)					prc = "image/pcx";
     else if(strcasecmp(tvl,"bmp") == 0)					prc = "image/bmp";
-    else if(strcasecmp(tvl,"svg") == 0 || strcasecmp(tvl,"svg+xml") == 0)
-	prc = string("image/") + ((fDt.find("<?xml ") == string::npos) ? "svg" : "svg+xml");
+    else if(strcasecmp(tvl,"svg") == 0 || strcasecmp(tvl,"svg+xml") == 0) prc = "image/svg+xml";
+		//string("image/") + ((fDt.find("<?xml ") == string::npos) ? "svg" : "svg+xml");
     // Audio
     else if(strcasecmp(tvl,"wav"))	prc = "audio/wav";
     else if(strcasecmp(tvl,"ogg"))	prc = "audio/ogg";

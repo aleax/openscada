@@ -165,6 +165,7 @@ class TMess
 	static const char *labMessCat( );
 
 	int getUTF8( const string &str, int off = 0, int32_t *symb = NULL );
+	static string setUTF8( int32_t symb );
 
     private:
 	//Data

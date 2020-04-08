@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.FLibSYS file: varchfnc.h
 /***************************************************************************
- *   Copyright (C) 2009-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2009-2014,2019 by Roman Savochenko, <rom_as@oscada.org> *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@ class VArchObj : public TVarObj
 {
     public:
 	//Methods
-	VArchObj( );
+	VArchObj( const string &user = "" );
 	~VArchObj( );
 
 	string objName( )	{ return "arch"; }
@@ -59,6 +59,7 @@ class VArchObj : public TVarObj
 	    AutoHD<TVArchive> *mArch;
 	    TValBuf *mBuf;
 	};
+	string	mUser;
 };
 
 //*************************************************
@@ -73,10 +74,10 @@ class vArh : public TFunction
 	}
 
 	string name( )	{ return _("Val: Archive"); }
-	string descr( )	{ return _("Get value archive object."); }
+	string descr( )	{ return _("Getting the value archive object (VArchObj) through connecting to the archive at its address."); }
 
 	void calc( TValFunc *val ) {
-	    VArchObj *obj = new VArchObj();
+	    VArchObj *obj = new VArchObj(val->user());
 	    obj->open(val->getS(1));
 	    val->setO(0, obj);
 	}
@@ -90,20 +91,20 @@ class vArhBuf : public TFunction
     public:
 	vArhBuf( ) : TFunction("vArhBuf", SSPC_ID) {
 	    ioAdd(new IO("res",_("Result"),IO::Object,IO::Return));
-	    ioAdd(new IO("tp",_("Type"),IO::Integer,IO::Default,"1"));
-	    ioAdd(new IO("sz",_("Size"),IO::Integer,IO::Default,"100"));
-	    ioAdd(new IO("per",_("Period (us)"),IO::Integer,IO::Default,"1000000"));
+	    ioAdd(new IO("tp",_("Values type (0-Boolean, 1-Integer, 4-Real, 5-String)"),IO::Integer,IO::Default,"1"));
+	    ioAdd(new IO("sz",_("Maximum buffer size"),IO::Integer,IO::Default,"100"));
+	    ioAdd(new IO("per",_("Values period, microseconds"),IO::Integer,IO::Default,"1000000"));
 	    ioAdd(new IO("hgrd",_("Hard grid"),IO::Boolean,IO::Default,"0"));
-	    ioAdd(new IO("hres",_("High resolution"),IO::Boolean,IO::Default,"0"));
+	    ioAdd(new IO("hres",_("High time resolution (microseconds)"),IO::Boolean,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Val: Archive buffer"); }
-	string descr( )	{ return _("Get value buffer object for temporary values storing."); }
+	string descr( )	{ return _("Getting a value buffer object (VArchObj) for temporary values storing and performing the intermediate operations on frames of data."); }
 
 	void calc( TValFunc *val ) {
-	    VArchObj *obj = new VArchObj();
-	    obj->open((TFld::Type)val->getI(1),val->getI(2),val->getI(3),val->getB(4),val->getB(5));
-	    val->setO(0,obj);
+	    VArchObj *obj = new VArchObj(val->user());
+	    obj->open((TFld::Type)val->getI(1), val->getI(2), val->getI(3), val->getB(4), val->getB(5));
+	    val->setO(0, obj);
 	}
 };
 

@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.FireBird file: firebird.h
 /***************************************************************************
- *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -62,7 +62,6 @@ class MTable : public TTable
 	void postDisable( int flag );
 	void fieldFix( TConfig &cfg, bool trPresent = false );
 
-
 	string getVal( TCfg &cfg, uint8_t RqFlg = 0 );
 	void   setVal( TCfg &cfg, const string &vl, bool tr = false );
 
@@ -110,7 +109,7 @@ class MBD : public TBD
 	isc_db_handle	hdb;
 	isc_tr_handle	htrans;
 	int		reqCnt;
-	time_t		reqCntTm, trOpenTm;
+	int64_t		reqCntTm, trOpenTm;
 	ResMtx		connRes;
 };
 

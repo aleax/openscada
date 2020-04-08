@@ -77,7 +77,7 @@ class MBD : public TBD
     public:
 	//Public methods
 	MBD( const string &iid, TElem *cf_el );
-	~MBD(  );
+	~MBD( );
 
 	void enable( );
 	void disable( );
@@ -102,7 +102,7 @@ class MBD : public TBD
 	string	cd_pg;
 	sqlite3	*m_db;
 	int	reqCnt;
-	time_t	reqCntTm, trOpenTm;
+	int64_t	reqCntTm, trOpenTm;
 	ResMtx	connRes;
 	int	trans_reqs;
 };

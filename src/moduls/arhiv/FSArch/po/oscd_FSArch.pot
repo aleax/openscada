@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-05 15:58+0300\n"
+"POT-Creation-Date: 2020-02-26 09:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,6 +42,10 @@ msgid "Error checking the value archiver '%s'."
 msgstr ""
 
 #, c-format
+msgid "Cannot create the archive directory '%s'."
+msgstr ""
+
+#, c-format
 msgid "The value archiver '%s' uses the same folder '%s' as an other archiver."
 msgstr ""
 
@@ -61,7 +65,7 @@ msgid "Error creating a new archive file '%s'!"
 msgstr ""
 
 #, c-format
-msgid "Can not create the directory '%s'."
+msgid "The archive directory '%s' is not present."
 msgstr ""
 
 msgid "Overall size of the archiver files"

@@ -7,11 +7,11 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="files/doc.css" rel="stylesheet" /></head>
-<body><div id="mw_header">
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../en/files/Logo-big.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/Release 0.9</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/Release_0.9/ru" title="Документы/Релиз 0.9 (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/Release_0.9/uk" title="Документи/Реліз 0.9 (100% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Release_0.9.html" title="Документы/Релиз 0.9 (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Release_0.9.html" title="Документи/Реліз 0.9 (100% translated)">українська</a></div></div>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a>
@@ -33,7 +33,25 @@
 </li>
 <li class="toclevel-1 tocsection-12"><a href="#New_and_significantly_updated_modules"><span class="tocnumber">5</span> <span class="toctext">New and significantly updated modules</span></a></li>
 <li class="toclevel-1 tocsection-13"><a href="#Conclusion"><span class="tocnumber">6</span> <span class="toctext">Conclusion</span></a></li>
-<li class="toclevel-1 tocsection-14"><a href="#Links"><span class="tocnumber">7</span> <span class="toctext">Links</span></a></li>
+<li class="toclevel-1 tocsection-14"><a href="#Updates"><span class="tocnumber">7</span> <span class="toctext">Updates</span></a>
+<ul>
+<li class="toclevel-2"><a href="#.5B8.04.2020.5D_The_FIRST_update_of_the_production_release_0.9_LTS"><span class="tocnumber">7.1</span> <span class="toctext">[8.04.2020] The FIRST update of the production release 0.9 LTS</span></a>
+<ul>
+<li class="toclevel-3"><a href="#OpenSCADA_libraries_and_projects"><span class="tocnumber">7.1.1</span> <span class="toctext"><span>OpenSCADA libraries and projects</span></span></a></li>
+<li class="toclevel-3"><a href="#API"><span class="tocnumber">7.1.2</span> <span class="toctext">API</span></a></li>
+<li class="toclevel-3"><a href="#SYS"><span class="tocnumber">7.1.3</span> <span class="toctext">SYS</span></a></li>
+<li class="toclevel-3"><a href="#DB"><span class="tocnumber">7.1.4</span> <span class="toctext">DB</span></a></li>
+<li class="toclevel-3"><a href="#DAQ"><span class="tocnumber">7.1.5</span> <span class="toctext">DAQ</span></a></li>
+<li class="toclevel-3"><a href="#Archives-History"><span class="tocnumber">7.1.6</span> <span class="toctext">Archives-History</span></a></li>
+<li class="toclevel-3"><a href="#Transports"><span class="tocnumber">7.1.7</span> <span class="toctext">Transports</span></a></li>
+<li class="toclevel-3"><a href="#Transport_Protocols"><span class="tocnumber">7.1.8</span> <span class="toctext">Transport Protocols</span></a></li>
+<li class="toclevel-3"><a href="#User_Interface"><span class="tocnumber">7.1.9</span> <span class="toctext">User Interface</span></a></li>
+<li class="toclevel-3"><a href="#Special"><span class="tocnumber">7.1.10</span> <span class="toctext">Special</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-15"><a href="#Links"><span class="tocnumber">8</span> <span class="toctext">Links</span></a></li>
 </ul>
 </div>
 
@@ -54,13 +72,14 @@
 <ul><li> <b>openness</b> — mostly GPLv2;</li>
 <li> <b>scalability, flexibility, extensibility</b> — modularity, multithreading and internal dynamism;</li>
 <li> <b>executive redundancy</b> — reservation;</li>
-<li> <b>accessibility</b> — opened source texts; multilingual; dynamic multilingual; automatic build for archives, packages, live disks, ...; builds and executes on wide age Linux environments, from 2002 to modern ones;</li>
+<li> <b>accessibility</b> — opened source texts; multilingual; dynamic multilingual; automatic build for archives, packages, live disks, ...; builds and executes on wide age Linux environments, from 2002 (2009-<a class="external text" href="http://ftp.oscada.org/ALTLinux/6" rel="nofollow noreferrer noopener" target="_blank">ALTLinux 6</a>, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/ICPDAS_LP8x81" title="Special:MyLanguage/Using/ICPDAS LP8x81">LP8x81</a>, <a class="external text" href="http://ftp.oscada.org/OpenSCADA/LTS/Fedora/12" rel="nofollow noreferrer noopener" target="_blank">Fedora 12</a>; 2012-<a class="external text" href="http://ftp.oscada.org/Debian/7" rel="nofollow noreferrer noopener" target="_blank">Debian 7</a>) to modern ones;</li>
 <li> <b>reliability</b> — practical application, quick problems solving;</li>
 <li> <b>security</b> — permissions distribution, SSL;</li>
-<li> <b>multiplatform</b> — x86_32, x86_64, ARM, Web, Android, QNX (<a class="external text" href="http://oscada.org/en/forum/posts/raznoe/popytka_adaptacii_openscada_k_qnx_65/" rel="nofollow noreferrer noopener" target="_blank">preadapted</a>), MS Windows (<a class="external text" href="http://oscada.org/en/development/tasks/posts/tasks_forming_formirovanie_zadach/adapting_openscada_to_work_on_os_ms_windows/" rel="nofollow noreferrer noopener" target="_blank">scheduled</a>);</li>
+<li> <b>multiplatform</b> — x86_32, x86_64, ARM, Web, Android, QNX (<a class="external text" href="http://oscada.org/en/forum/posts/razrabotka_openscada/popytka_adaptacii_openscada_k_qnx_65/" rel="nofollow noreferrer noopener" target="_blank">preadapted</a>), MS Windows (<a class="external text" href="http://oscada.org/en/development/tasks/posts/tasks_forming_formirovanie_zadach/adapting_openscada_to_work_on_os_ms_windows/" rel="nofollow noreferrer noopener" target="_blank">scheduled</a>);</li>
 <li> <b>united, unified, user-friendly, dynamic and advanced user interface</b> — Qt, Web, transparent and multi-level remote dynamic control;</li>
 <li> <b>wide range of the data sources</b> — unified ones, DAQ boards and low-level buses, created into the environment of OpenSCADA.</li></ul>
 <h3><span class="mw-headline" id="Application"><span class="mw-headline-number">1.2</span> Application</span></h3>
+<div class="thumb tright"><div class="thumbinner" style="width:302px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_use.png"><img class="thumbimage" height="367" src="files/300px-Oscada_use.png" srcset="/wiki/images/thumb/9/92/Oscada_use.png/450px-Oscada_use.png 1.5x, /wiki/images/9/92/Oscada_use.png 2x" width="300" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_use.png" title="Enlarge" /></div>Roles of OpenSCADA.</div></div></div>
 <p>For actual implementations, where at least one implementation is known and with a short list of which from the project participants you can read through <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using" title="Special:MyLanguage/Using">this link</a>, belong:
 </p>
 <ul><li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using" title="Special:MyLanguage/Using">ACS TP (SCADA/HMI)</a> or telemechanics systems — the main direction and there are many implementations;</li>
@@ -72,11 +91,12 @@
 <li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/HouseSpirit" title="Special:MyLanguage/Using/HouseSpirit">smart houses and home automation</a>.</li></ul>
 <p>With some restrictions and improvements, largely in the user's internal environment, OpenSCADA can be used in the following areas:
 </p>
-<ul><li> medical diagnostic systems;</li>
+<ul><li> enterprise resources management (ERP);</li>
+<li> Geo-location and location tracking; </li>
 <li> trading systems;</li>
-<li> enterprise resources management (ERP);</li>
-<li> billing systems;</li>
-<li> accounting and bookkeeping.</li></ul>
+<li> medical diagnostic systems;</li>
+<li> accounting and bookkeeping;</li>
+<li> billing systems.</li></ul>
 <h2><span class="mw-headline" id="Results_of_the_previous_release_0.8.0_LTS"><span class="mw-headline-number">2</span> Results of the previous release 0.8.0 LTS</span></h2>
 <p>The release 0.8.0 LTS was released in April 2012 and during these six years it received 20 updates, which, in total, corrected over 500 errors and added many improvements that do not violate the compatibility of library databases and configurations.
 </p><p>The configuration and library databases of 0.8.0 LTS were generally frozen due to large incompatible changes at 0.9 Work, for OpenSCADA launch methods, and the imperfection of distributing the library databases at the release date of 0.8.0 LTS. Therefore, the upgrade and transition to 0.9 LTS will be non-trivial, although 0.9 LTS provides everything possible for simplification <a href="Updating_0.8.0.html" title="Special:MyLanguage/Documents/Release 0.9/Updating 0.8.0 LTS">this procedure</a>. Updating 0.9 LTS to the planned future 1 LTS will no longer be so complex and in fact can only turn into a formal change in the version of the working branch, since now it is planned to upgrade all, including the library databases.
@@ -97,7 +117,7 @@
 </p>
 <h2><span class="mw-headline" id="System-wide_properties"><span class="mw-headline-number">4</span> System-wide properties</span></h2>
 <p>The new stable version of OpenSCADA has gained significant system-wide extensions, increased stability in work and productivity, and also received significant improvements to the graphical user interface and its environment, such as: advanced configuration, documentation, accessible directly from the program (offline and online), and which significantly revised and updated.
-</p><p>The common part of documentation of the project has been moved to a new Wiki, based on MediaWiki, and a significant amount of this part has been revised and translated into three languages — English, Ukrainian, Russian. For the pages transferring <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Service_procedures#wacko2media" title="Special:MyLanguage/Libs/Service procedures">a converting procedure from the WackoWiki engine dialect to MediaWiki</a>  was created which was completely written in the internal programming language of OpenSCADA, and is used to transfer large volume of the old Wiki. Format the offline documentation has been changed from static PDF-files, that were not updated after the previous LTS version, to HTML-files which dynamically generated from the actual knowledge base (Wiki) of the project, and have actual cross-links between pages and links on the online-documentation, for exclusively external materials. The offline-documentation is also generated by <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Service_procedures#docOffLine" title="Special:MyLanguage/Libs/Service procedures">a specially-written procedure</a> in the internal language of OpenSCADA, which, along with the procedure of the Wiki-dialects converting and <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Service_procedures#releaseTests" title="Special:MyLanguage/Libs/Service procedures">complex testing the release OpenSCADA</a>, is a bright sign of power and the current level of development of the internal language of OpenSCADA.
+</p><p>The common part of documentation of the project has been moved to a new Wiki, based on MediaWiki, and a significant amount of this part has been revised and translated into three languages — English, Ukrainian, Russian. For the pages transferring <a href="Libs_Service_procedures.html#wacko2media" title="Special:MyLanguage/Libs/Service procedures">a converting procedure from the WackoWiki engine dialect to MediaWiki</a>  was created which was completely written in the internal programming language of OpenSCADA, and is used to transfer large volume of the old Wiki. Format the offline documentation has been changed from static PDF-files, that were not updated after the previous LTS version, to HTML-files which dynamically generated from the actual knowledge base (Wiki) of the project, and have actual cross-links between pages and links on the online-documentation, for exclusively external materials. The offline-documentation is also generated by <a href="Libs_Service_procedures.html#docOffLine" title="Special:MyLanguage/Libs/Service procedures">a specially-written procedure</a> in the internal language of OpenSCADA, which, along with the procedure of the Wiki-dialects converting and <a href="Libs_Service_procedures.html#releaseTests" title="Special:MyLanguage/Libs/Service procedures">complex testing the release OpenSCADA</a>, is a bright sign of power and the current level of development of the internal language of OpenSCADA.
 </p><p>Within the old Wiki, after the release 0.8.0 LTS, some documents were added and updated, and with the transferring to the new Wiki, in addition to revision and translation of the main part of the documentation, the overall unification of its structure was made for reasons of: multilingualism (English as a primary language), the logic of the organization, the convenience of translation and the ability to remove duplicate articles from the official site, which at the moment are simply used with the Wiki. We will separately note the significantly expanded main documents:
 </p>
 <ul><li> <a href="Quick_start.html" title="Special:MyLanguage/Documents/Quick start">Quick start</a>;</li>
@@ -108,12 +128,16 @@
 <p>The original language (English) was completely revised in original messages of the program and mainly for the main articles of the documentation-Wiki OpenSCADA, which is currently making OpenSCADA an adequately favorable for an audience that does not understand the original language — Ukrainian or Russian. And, along with the full realization of the dynamic translation mechanism, it is possible to build on the basis of OpenSCADA the dynamically multilingual user interfaces that you can see, in particular, on the publicly available Web-interface of the dynamic simulators of TP: <a class="external text" href="http://oscada.org:10002" rel="nofollow noreferrer noopener" target="_blank">AGLKS</a>, <a class="external text" href="http://oscada.org:10003" rel="nofollow noreferrer noopener" target="_blank">Boiler</a>.
 </p><p>The Work version, based on this stable, for the first time defined the OpenSCADA projects conception and implemented a command line script for launching and creating OpenSCADA projects. Immediately before the release of this version, the concept of the OpenSCADA project was finally assigned to the folder with the data of the separate project and the configuration file of OpenSCADA, and the implementation of the project manager was integrated directly into OpenSCADA. Consequently, this LTS version has a developed concept for the project manager that allows to flexibly work with them and eliminate the dangerous possibility of multiple launches with the general data of one project.
 </p><p>The Work version also introduced modification of the modules versions at modification in the code of the module and just before they are uploaded to the source repository, and therefore, the versions of the OpenSCADA modules of this release clearly reflect the overall level of development and stability.
-</p><p>In the process of implementing works on the Work branch, based on this stable, there were introduced the repositories of Linux distribution packages with the OpenSCADA builds, which until now were only provided as separate packages. That significantly simplified the deployment of OpenSCADA and keeping it up to date. Then <a class="external text" href="http://oscada.org/en/development/tasks/posts/core/the_automatic_openscada_builder/" rel="nofollow noreferrer noopener" target="_blank">automatic builder of these packages</a> was created, which currently has up to 100 targets, and which greatly simplified the release of updates for both branches, that is the Work and this stable. Therefore, this LTS version provides packages collections for the main Linux environments and the entire history of public updates will be saved.
-</p><p>To the OpenSCADA packages collections there also provide builds of the <a href="How_to_Live_disk.html" title="Special:MyLanguage/Documents/How to/Live disk">live disks</a> of the quick acquaintance and deployment of OpenSCADA together with the system environment. Currently, they have received a formal background in the form of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">the Linux Automation Distribution of OpenSCADA</a>.
-</p><p>OpenSCADA builds and packages are accompanied by a number of open and free materials of the internal environment of the program, that is, the development of the data acquisition and processing layer, graphic representation elements and whole-complex projects of the TP simulators. These materials are provided as SQLite database files and include:
 </p>
-<ul><li> <i>Functions libraries</i> (<b>OscadaLibs</b>), "LibsDB/OscadaLibs.db" — contains all the development of the OpenSCADA project in the data acquisition and processing layer, including <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/User_protocol_devices" title="Special:MyLanguage/Libs/User protocol devices">data source elements of the user protocol</a>.</li>
-<li> <i>VCA: Main libraries</i> (<b>vcaBase</b>), "LibsDB/vcaBase.db" — contains <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_elements" title="Special:MyLanguage/Libs/Main elements">main elements of the graphic representation</a> and <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Mnemo_elements" title="Special:MyLanguage/Libs/Mnemo elements">elements of the mnemonic schemes</a> of the OpenSCADA project.</li>
+<div class="thumb tright"><div class="thumbinner" style="width:502px;"><a class="image" href="http://oscada.org/wiki/File:HowTo_livebootlang.png"><img class="thumbimage" height="192" src="files/500px-HowTo_livebootlang.png" srcset="/wiki/images/thumb/0/02/HowTo_livebootlang.png/750px-HowTo_livebootlang.png 1.5x, /wiki/images/thumb/0/02/HowTo_livebootlang.png/1000px-HowTo_livebootlang.png 2x" width="500" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:HowTo_livebootlang.png" title="Enlarge" /></div>Live disks of the Automation Linux distributive of the project OpenSCADA.</div></div></div>
+<p>In the process of implementing works on the Work branch, based on this stable, there were introduced the repositories of Linux distribution packages with the OpenSCADA builds, which until now were only provided as separate packages. That significantly simplified the deployment of OpenSCADA and keeping it up to date. Then <a class="external text" href="http://oscada.org/en/development/tasks/posts/core/the_automatic_openscada_builder/" rel="nofollow noreferrer noopener" target="_blank">automatic builder of these packages</a> was created, which currently has up to 100 targets, and which greatly simplified the release of updates for both branches, that is the Work and this stable. Therefore, this LTS version provides packages collections for the main Linux environments and the entire history of public updates will be saved.
+</p><p>To the OpenSCADA packages collections there also provide builds of the <a href="How_to_Live_disk.html" title="Special:MyLanguage/Documents/How to/Live disk">live disks</a> of the quick acquaintance and deployment of OpenSCADA together with the system environment. Currently, they have received a formal background in the form of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">the Linux Automation Distribution of OpenSCADA</a>.
+</p>
+<div class="thumb tright"><div class="thumbinner" style="width:302px;"><a class="image" href="http://oscada.org/wiki/File:Server_net.png"><img class="thumbimage" height="244" src="files/300px-Server_net.png" srcset="/wiki/images/thumb/6/68/Server_net.png/450px-Server_net.png 1.5x, /wiki/images/thumb/6/68/Server_net.png/600px-Server_net.png 2x" width="300" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Server_net.png" title="Enlarge" /></div>Main OpenSCADA server.</div></div></div>
+<p>OpenSCADA builds and packages are accompanied by a number of open and free materials of the internal environment of the program, that is, the development of the data acquisition and processing layer, graphic representation elements and whole-complex projects of the TP simulators. These materials are provided as SQLite database files and include:
+</p>
+<ul><li> <i>Functions libraries</i> (<b>OscadaLibs</b>), "LibsDB/OscadaLibs.db" — contains all the development of the OpenSCADA project in the data acquisition and processing layer, including <a href="DAQ.html#UserPrt" title="Special:MyLanguage/Documents/DAQ">data source elements of the user protocol</a>.</li>
+<li> <i>VCA: Main libraries</i> (<b>vcaBase</b>), "LibsDB/vcaBase.db" — contains <a href="Libs_Main_graphical_elements.html" title="Special:MyLanguage/Libs/Main graphical elements">main elements of the graphic representation</a> and <a href="Libs_Mnemo_elements.html" title="Special:MyLanguage/Libs/Mnemo elements">elements of the mnemonic schemes</a> of the OpenSCADA project.</li>
 <li> <i>VCA: Tests</i> (<b>vcaTest</b>), "LibsDB/vcaTest.db" — contains test elements of the graphic representation primitives.</li>
 <li> <i>VCA: Library of electrical-elements of the mnemonic schemes of the user interface</i> (<b>vcaElectroEls</b>), "LibsDB/vcaElectroEls.db" — contains elements of the graphical representation of the electrical schemes.</li></ul>
 <p>Hosting of the project in general and materials of 0.9 LTS in particular were transferred to <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Server" title="Special:MyLanguage/Sub-projects/Server">own project server</a>, where additionally were deployed: the demonstration Web-interfaces of OpenSCADA simulators, the project of server monitoring and smart home based on OpenSCADA and builder of the packages of the OpenSCADA repositories.
@@ -123,7 +147,15 @@
 </p><p>To the OpenSCADA core, <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">its own protocol</a> and all nodes that work with remote stations OpenSCADA; added the ability to "raise" the nodes of OpenSCADA that are located behind other nodes and, as a rule, in another network. What generally allows you to centrally manage the OpenSCADA network at any level of the hierarchy.
 </p>
 <h3><span class="mw-headline" id="Improvements_and_adaptions_to_the_different_platforms"><span class="mw-headline-number">4.2</span> Improvements and adaptions to the different platforms</span></h3>
+<div class="thumb tright"><div class="thumbinner" style="width:302px;"><a class="image" href="http://oscada.org/wiki/File:AsusNexus7.png"><img class="thumbimage" height="172" src="files/300px-AsusNexus7.png" srcset="/wiki/images/thumb/6/69/AsusNexus7.png/450px-AsusNexus7.png 1.5x, /wiki/images/thumb/6/69/AsusNexus7.png/600px-AsusNexus7.png 2x" width="300" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:AsusNexus7.png" title="Enlarge" /></div>OpenSCADA on Android.</div></div></div>
 <p>This version of OpenSCADA has gained in-depth support and ability to adapt to different platforms. This was mainly due to the adaptation to work on the Android software platform and the restoration of the building and work with ucLibC, and that it is planned to be used for further adaptation to work on QNX and MS Windows software platforms.
+</p>
+<div class="thumb tright"><div class="thumbinner" style="width:302px;"><a class="image" href="http://oscada.org/wiki/File:RaspberryPi.png"><img class="thumbimage" height="110" src="files/300px-RaspberryPi.png" srcset="/wiki/images/thumb/e/ed/RaspberryPi.png/450px-RaspberryPi.png 1.5x, /wiki/images/thumb/e/ed/RaspberryPi.png/600px-RaspberryPi.png 2x" width="300" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:RaspberryPi.png" title="Enlarge" /></div>Raspberry Pi.</div></div></div>
+<div class="thumb tright"><div class="thumbinner" style="width:152px;"><a class="image" href="http://oscada.org/wiki/File:OrangePi.png"><img class="thumbimage" height="106" src="files/150px-OrangePi.png" srcset="/wiki/images/thumb/b/b2/OrangePi.png/225px-OrangePi.png 1.5x, /wiki/images/b/b2/OrangePi.png 2x" width="150" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:OrangePi.png" title="Enlarge" /></div>Orange Pi.</div></div></div>
+<p>Working on the Single-board PCs was expanded by the <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Raspberry_Pi" title="Special:MyLanguage/Using/Raspberry Pi">Raspberry Pi</a> and <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Orange_Pi" title="Special:MyLanguage/Using/Orange Pi">Orange Pi</a> boards.
+</p>
+<div class="thumb tright"><div class="thumbinner" style="width:202px;"><a class="image" href="http://oscada.org/wiki/File:Nokia_N9.png"><img class="thumbimage" height="105" src="files/200px-Nokia_N9.png" srcset="/wiki/images/thumb/7/75/Nokia_N9.png/300px-Nokia_N9.png 1.5x, /wiki/images/thumb/7/75/Nokia_N9.png/400px-Nokia_N9.png 2x" width="200" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Nokia_N9.png" title="Enlarge" /></div>Nokia N9.</div></div></div>
+<p>Support of the Linux smartphones of Nokia was appended by the last one based on MeeGo 1.2, that is Nokia N9. Or it was the renewing of support for the Nokia N950.
 </p><p>In addition to direct work (natively) on different platforms, the Web-interface has been significantly expanded, which currently implements all the general features of the concept of the Visualization Control Area (VCA).
 </p>
 <h3><span class="mw-headline" id="Optimization.2C_stabilization_and_performance"><span class="mw-headline-number">4.3</span> Optimization, stabilization and performance</span></h3>
@@ -133,7 +165,7 @@
 <li> special debugging of the controller objects of the data sources;</li>
 <li> special debugging of execution of the VCA projects;</li>
 <li> in-depth statistics formation for execution of the dynamic objects OpenSCADA, such as: controller objects of the data sources and their parameters, incoming and outgoing traffic, VCA sessions with detail up to widgets;</li>
-<li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Transports" title="Special:MyLanguage/Documents/Program manual">logging of ingoing and outgoing traffic of the transports</a>.</li></ul>
+<li> <a href="Program_manual.html#Transports" title="Special:MyLanguage/Documents/Program manual">logging of ingoing and outgoing traffic of the transports</a>.</li></ul>
 <p>Almost all of the OpenSCADA modules have been subjected to deep and comprehensive stabilization and many have been optimized, of which especially should be noted:
 </p>
 <ul><li> <i><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules#DB" title="Special:MyLanguage/Modules">All DB modules</a></i> — added processing and verification of database or DBMS errors, and issuance of messages about these errors in the case of user uploading and recording; increased productivity (up to ten times) DBs that support SQL, through the implementation of the pre-loading mode of the scan query;</li>
@@ -141,12 +173,15 @@
 <li> <i>Archiver to DB</i> (<a href="Modules/DBArch.html" title="Special:MyLanguage/Modules/DBArch">Archive.DBArch</a>) — significantly optimized for recording and reading of the database, that is: group recording of multiple archives to one table and block reading (multiples of ten) in one query.</li>
 <li> <i><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules#Transports" title="Special:MyLanguage/Modules">All transports</a></i> — increased for the overall productivity.</li>
 <li> <i>Operation user interface (WEB)</i> (<a href="Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">UI.WebVision</a>) — sensitivity of the interface increased by using asynchronous queries in the overall updating cycle.</li></ul>
+<div class="thumb tright"><div class="thumbinner" style="width:302px;"><a class="image" href="http://oscada.org/wiki/File:DAQ_red.png"><img class="thumbimage" height="205" src="files/300px-DAQ_red.png" srcset="/wiki/images/thumb/e/ed/DAQ_red.png/450px-DAQ_red.png 1.5x, /wiki/images/e/ed/DAQ_red.png 2x" width="300" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:DAQ_red.png" title="Enlarge" /></div>Redundancy of the OpenSCADA stations.</div></div></div>
 <p>Reliability of the redundant station on an integrated solution scale, more precisely the preservation of the history data, was enhanced by the extension of the redundancy mechanism, which potentially involves reserving any subsystem and currently implements the subsystems "Data acquisition" and "Archives-History".
-</p><p>And, for the program as a whole, <a class="external" href="http://oscada.org/wiki/Documents/Release_0.9/Tests" title="Documents/Release 0.9/Tests">a series of formal comprehensive tests</a> was executed, that was pre-expanded in <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Service_procedures#releaseTests" title="Special:MyLanguage/Libs/Service procedures">the internal integrated testing procedure of the OpenSCADA release</a>. On the basis of these tests, several bugs were detected which were fixed.
+</p><p>And, for the program as a whole, <a class="external" href="http://oscada.org/wiki/Documents/Release_0.9/Tests" title="Documents/Release 0.9/Tests">a series of formal comprehensive tests</a> was executed, that was pre-expanded in <a href="Libs_Service_procedures.html#releaseTests" title="Special:MyLanguage/Libs/Service procedures">the internal integrated testing procedure of the OpenSCADA release</a>. On the basis of these tests, several bugs were detected which were fixed.
 </p>
 <h3><span class="mw-headline" id="Data_acquisition"><span class="mw-headline-number">4.4</span> Data acquisition</span></h3>
+<div class="thumb tright"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="180" src="files/400px-Oscada_UserOM.png" srcset="/wiki/images/thumb/6/67/Oscada_UserOM.png/600px-Oscada_UserOM.png 1.5x, /wiki/images/thumb/6/67/Oscada_UserOM.png/800px-Oscada_UserOM.png 2x" width="400" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM.png" title="Enlarge" /></div>User object model of the core OpenSCADA.</div></div></div>
 <p>Given the key role of the data acquisition in this type of software, this feature, in the person of the subsystem "Data acquisition" and its modules, has received significant improvements, of which particular attention should be paid: shifting emphasis on the extending supported data sources from implementation of individual modules of the subsystem "Data acquisition" in the system language "C/C++", to their implementation in the OpenSCADA environment and in its internal language — <a href="DAQ.html" title="Special:MyLanguage/Documents/DAQ">logical level of OpenSCADA</a>. That is, at the logical level of OpenSCADA, can be and implements everything that: uses the network to access the data, does not require to use specific libraries and functions, and is not very complicated. Currently there implemented in this way:
 </p>
+<div class="thumb tright"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:RaspberryPi_experiments.jpg"><img class="thumbimage" height="390" src="files/400px-RaspberryPi_experiments.jpg" srcset="/wiki/images/thumb/1/1f/RaspberryPi_experiments.jpg/600px-RaspberryPi_experiments.jpg 1.5x, /wiki/images/thumb/1/1f/RaspberryPi_experiments.jpg/800px-RaspberryPi_experiments.jpg 2x" width="400" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:RaspberryPi_experiments.jpg" title="Enlarge" /></div>Low-level devices connected to Raspberry Pi.</div></div></div> <div class="thumb tright"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:RaspberryPi_LCD.png"><img class="thumbimage" height="267" src="files/400px-RaspberryPi_LCD.png" srcset="/wiki/images/4/47/RaspberryPi_LCD.png 1.5x, /wiki/images/4/47/RaspberryPi_LCD.png 2x" width="400" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:RaspberryPi_LCD.png" title="Enlarge" /></div>OpenSCADA on Raspberry Pi LCD screen.</div></div></div>
 <ul><li> Sending SMS (SMS) and Email (SMTP).</li>
 <li> Uninterruptible Power Supply (UPS), as a data object with attributes of values.</li>
 <li> Simple sensors:
@@ -172,11 +207,14 @@
 <p>The OpenSCADA internal programming language has made significant improvements and, at the moment, satisfies all the requirements of the areas of application OpenSCADA. Many of these enhancements came in the previous version of 0.8.0 LTS, and some could not get there because of the backward compatibility or lack of stability at that time. Of these significant improvements, it should be noted again: increasing the resolution of the data of the OpenSCADA internal environment of the integer type up to 64 bits and preserving the context of execution of the internal procedures.
 </p>
 <h3><span class="mw-headline" id="Graphical_environment"><span class="mw-headline-number">4.5</span> Graphical environment</span></h3>
+<div class="thumb tright"><div class="thumbinner" style="width:202px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_dialog.png"><img class="thumbimage" height="425" src="files/200px-QTStarter_dialog.png" srcset="/wiki/images/2/2b/QTStarter_dialog.png 1.5x, /wiki/images/2/2b/QTStarter_dialog.png 2x" width="200" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:QTStarter_dialog.png" title="Enlarge" /></div>OpenSCADA projects selection dialog.</div></div></div>
+<div class="thumb tright"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_cfg.png"><img class="thumbimage" height="402" src="files/400px-QTStarter_cfg.png" srcset="/wiki/images/thumb/3/3e/QTStarter_cfg.png/600px-QTStarter_cfg.png 1.5x, /wiki/images/3/3e/QTStarter_cfg.png 2x" width="400" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:QTStarter_cfg.png" title="Enlarge" /></div>Custom control of the Qt interface appearance.</div></div></div>
 <p>In general, the graphical environment has been significantly developed, and the main one has been the extension of <a href="Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">the module of starting the Qt-interface</a>, as the basis for the rest local interface modules. First of all, this module and the core of OpenSCADA are adapted to allow the Qt-library to run in the main thread of the program, eliminating many of the problems associated with execution in the non-main thread, and also provides work with version 5 of this library. Secondly, this module took on the role of the selecting interface of the OpenSCADA projects when it launches and switches, as well as creating new ones. And thirdly, because of its primacy to launching Qt, it received the function of controlling the appearance of the program regardless of the graphical environment and the possibility of its launch-closing in the system tray. In general, it has made of the possibility to customize OpenSCADA to personal user requirements and to adapt it to very specific environments such as <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Android</a>.
 </p><p>Notable improvements have been made to the Qt and Web configuration modules, which are particularly noteworthy:
 </p>
 <ul><li> <i>Configurator-Qt</i> (<a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">UI.QTCfg</a>): querying remote stations in a separate thread from the Qt-thread made it more convenient and more predictable and even, along with one update, got into the previous stable versions of 0.8.0 LTS.</li>
 <li> <i>Configurator-WEB</i> (<a href="Modules/WebCfgD.html" title="Special:MyLanguage/Modules/WebCfgD">UI.WebCfgD</a>): in general, has been completely updated to the interface, which is now more dynamic, user-friendly and can be extended by themes.</li></ul>
+<div class="thumb tright"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run.png"><img class="thumbimage" height="301" src="files/400px-WebVision_wvis_run.png" srcset="/wiki/images/thumb/a/ae/WebVision_wvis_run.png/600px-WebVision_wvis_run.png 1.5x, /wiki/images/thumb/a/ae/WebVision_wvis_run.png/800px-WebVision_wvis_run.png 2x" width="400" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:WebVision_wvis_run.png" title="Enlarge" /></div>OpenSCADA on Web.</div></div></div>
 <p>Notable improvements were also made to the Visual Control Area (VCA), consisting of all its modules:
 </p>
 <ul><li> <i>VCA Engine and the visualizer modules at all</i> (<a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">UI.VCAEngine</a>):
@@ -210,7 +248,7 @@
 <li> <i>Data acquisition of OS</i> (<a href="Modules/System.html" title="Special:MyLanguage/Modules/System">DAQ.System</a>) expanded for the data sources: "File System", UPS, QSensor and the ability to separate slow sources from fast ones.</li>
 <li> <i>ModBus</i> (<a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">{DAQ,Protocol}.ModBus</a>) expanded for support string, as a sequence of values of the registers.</li>
 <li> <i>Client DCON</i> (<a href="Modules/DCON.html" title="Special:MyLanguage/Modules/DCON">DAQ.DCON</a>) significantly expanded for specific modules support.</li>
-<li> <i>OPC-UA</i> (<a href="Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">DAQ.OPC_UA</a>) significantly expanded for Publishes and to support for "Chunks" into client part of the service, the specific protocol code is separated from the library.</li>
+<li> <div class="thumb tright"><div class="thumbinner" style="width:302px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_use_opcua.png"><img class="thumbimage" height="284" src="files/300px-Oscada_use_opcua.png" srcset="/wiki/images/thumb/a/af/Oscada_use_opcua.png/450px-Oscada_use_opcua.png 1.5x, /wiki/images/a/af/Oscada_use_opcua.png 2x" width="300" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_use_opcua.png" title="Enlarge" /></div>Roles of OpenSCADA as the OPC-UA server.</div></div></div> <i>OPC-UA</i> (<a href="Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">DAQ.OPC_UA</a>) significantly expanded for Publishes and to support for "Chunks" into client part of the service, the specific protocol code is separated from the library.</li>
 <li> <i>Equipment of ICP_DAS</i> (<a href="Modules/ICP_DAS.html" title="Special:MyLanguage/Modules/ICP DAS">DAQ.ICP_DAS</a>) significantly expanded, and in fact completely rewritten, for support all available ICP_DAS data acquisition boards for the series I8k, I-87k, on the ISA bus and unified types for standard modules of the I7k series.</li>
 <li> <i>Siemens S7 PLC</i> (<a href="Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">DAQ.Siemens</a>) significantly expanded its own implementation of ISO-TSAP.</li>
 <li> <i>Diamond data acquisition boards</i> (<a href="Modules/DiamondBoards.html" title="Special:MyLanguage/Modules/DiamondBoards">DAQ.DiamondBoards</a>) significantly expanded, but in fact completely rewritten, to support all existing data acquisition boards from Diamond Systems.</li>
@@ -233,17 +271,26 @@
 <h2><span class="mw-headline" id="Conclusion"><span class="mw-headline-number">6</span> Conclusion</span></h2>
 <p>On the way to the new release 0.9 LTS of industrial use, much work has been done to stabilize, expand functionality, and expand adaptability to work on alternative platforms. All this in general has further expanded the scope of full use of OpenSCADA at all levels of industrial automation systems and related areas of automation and automatic.
 </p><p>LTS versions of OpenSCADA are not blank, they are really supported all the time until the next LTS version, and support for this version will be further expanded with the service updates. Also, the emphasis and implementation policy of the LTS version, which was previously recommended to upgrade configurations with frozen library databases, will be shifted to the using priority on a wide range of new solutions.
-</p><p>In the emergence of the new industrial version of OpenSCADA 0.9 LTS took part:
 </p>
-<ul><li> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>: the main volume of work on the development, testing, building, documenting and translation of the program and documentation in three languages.</li>
+<div class="thumb tright"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:Release0.9_QNX4.5-preadaption.png"><img class="thumbimage" height="320" src="files/400px-Release0.9_QNX4.5-preadaption.png" srcset="/wiki/images/thumb/3/31/Release0.9_QNX4.5-preadaption.png/600px-Release0.9_QNX4.5-preadaption.png 1.5x, /wiki/images/thumb/3/31/Release0.9_QNX4.5-preadaption.png/800px-Release0.9_QNX4.5-preadaption.png 2x" width="400" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Release0.9_QNX4.5-preadaption.png" title="Enlarge" /></div>Previous adaptation of OpenSCADA to work on QNX.</div></div></div>
+<p>In the emergence of the new industrial version of OpenSCADA 0.9 LTS took part:
+</p>
+<ul><li> <i><a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a></i>: the main volume of work on the development, testing, building, documenting and translation of the program and documentation in three languages.</li>
 <li> <i>Maxim Kochetkov</i>: implementing the modules DAQ.Fastwel, DAQ.FT3; expanding the module <a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Transport.Sockets</a> by support RAWCAN and the module <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Transport.Serial</a> by extended control RTS for RS-485.</li>
 <li> <i>Arsen Zakojan</i>: implementing for support the electricity counters "Mercury 200" and "Mercury 230".</li>
 <li> <i>Ruslan Yarmoliuk</i>: implementing for support the electricity counter NIK 2303.</li>
 <li> <i>Almaz Karimov</i>: expanding for the module of the protocol DCON implementation.</li>
 <li> <i>Arcadiy Kisel</i>: implementing for support the I2C temperature, barometric pressure and humidity sensor BME280.</li>
 <li> <i>Constantine (IrmIngeneer)</i>: support of the OpenSCADA build on the Linux distribution Gentoo.</li>
-<li> <i>Sergij Doroshka</i>: <a class="external text" href="http://oscada.org/en/forum/posts/raznoe/popytka_adaptacii_openscada_k_qnx_65/" rel="nofollow noreferrer noopener" target="_blank">previous adaptation of OpenSCADA to work on QNX</a>.</li>
-<li> Many other users of OpenSCADA through implementation and exploiting.</li></ul>
+<li> <i>Sergij Doroshka</i>: <a class="external text" href="http://oscada.org/en/forum/posts/razrabotka_openscada/popytka_adaptacii_openscada_k_qnx_65/" rel="nofollow noreferrer noopener" target="_blank">previous adaptation of OpenSCADA to work on QNX</a>.</li>
+<li> The organizations which caused to the most significant OpenSCADA improvement through it integration to own control systems:
+<ul><li> <i>Proviron Holding NV</i>: purchasing the technical support packages for the general support, fixing and improvement the Siemens ISO-TSAP(ProfiNet) protocol implementation, some workouts with Raspberry Pi, 2014, 2016-2018.</li>
+<li> <i>Laboratory of the vacuum technologies</i>: "Vacuum technological facility", 2011-2018, and financing equipment for the OpenSCADA server, 2014</li>
+<li> <i>Optima</i>: "Automation System of the Metropolitan", 2015-2016.</li>
+<li> <i>Vector</i>: purchasing the technical support packages for fixing and improvement the OPC-UA implementation to work with different OPC-UA clients and servers, 2015-2016.</li>
+<li> <i>Kramatorskteploenergo+<a class="external text" href="http://diyaorg.dp.ua" rel="nofollow noreferrer noopener" target="_blank">DIYA</a></i>: "ACS of the ball drum mills BDM 287/410 of the boiler #8 of BKZ 160–100 PT", 2015, and "ACS of Phosphating, Amination and Hydrazine of boiler BKZ 160–100 PT", 2014. For PLC there used ICP-DAS LP-8781 with OpenSCADA in a role of environment of execution of PLC.</li>
+<li> <i>Hartron</i>: "Reactivity Monitoring System (RMS) of the Subcritical Nuclear Facility (SNF)", 2013-2015.</li></ul></li>
+<li> Many other organizations and individual users who wished to remain anonymous, through the purchase of technical support and services, constructive feedback on implementation and exploiting.</li></ul>
 <p>Further development efforts will focus on:
 </p>
 <ul><li> Completion of revisions of the basic documentation, mainly for modules and libraries.</li>
@@ -256,14 +303,358 @@
 <li> creating a common interface for tasks control and their funding, with the organization of developers to engage in the implementation of these tasks and technical support.</li></ul></li>
 <li> Expand the application functions in the areas: "Smart House", "Home Automation" and "Custom Robots".</li>
 <li> Adaptation to work in the environment of the operating systems QNX and MS Windows.</li></ul>
-<h2><span class="mw-headline" id="Links"><span class="mw-headline-number">7</span> Links</span></h2>
+<h2><span class="mw-headline" id="Updates"><span class="mw-headline-number">7</span> Updates</span></h2>
+<h3><span class="mw-headline" id=".5B8.04.2020.5D_The_FIRST_update_of_the_production_release_0.9_LTS"><span class="mw-headline-number">7.1</span> [8.04.2020] The FIRST update of <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">the production release 0.9 LTS</a></span></h3>
+<p>This update is done after 1.5 years of releasing the 0.9 LTS, then it worth as 10 updates by there have fixed about 250 bugs and append many improvements, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2672" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
+</p><p>The key features of the update are:
+</p>
+<ul><li> significant expanding and stabilisation of the Web-interface during practical exploiting in a large distributed solution based on the module <a href="#WebVision">UI.WebVision</a>;</li>
+<li> testing, fixing, and extending the redundancy in the messages part, also through the practical exploiting in a large distributed and also redundant solution, in <a href="#Redundancy">the common-system code</a> and the module <a href="#ModBus">DAQ.ModBus</a>;</li>
+<li> complete restructuring, improvement and addition of <a href="#ProjLibs">the OpenSCADA libraries</a> in the SQLite files;</li>
+<li> general documentation enhancements, appending for the <a href="#ProjLibs">all libraries</a> documentation and revision for most module documentation.</li></ul>
+<p>Most significant improvements and appends are!
+</p>
+<h4><span class="mw-headline" id="OpenSCADA_libraries_and_projects"><span class="mw-headline-number">7.1.1</span> <span id="ProjLibs" title="#ProjLibs">OpenSCADA libraries and projects</span></span></h4>
+<ul><li> FIX:DB.LibsDB.{OscadaLibs,vcaBase}: Translation updating.
+<ul><li> FIX:JavaLikeCalc.doc,doc: The user interface library "Documents" and the JavaLikeCalc "Reports' and documents' library" revised, improved, appended, documented and the documentation appended to offline.
+<ul><li> FIX:doc: {docUsersSet,docAlarmsRep,docMessRep}: The field "Parameter" renamed to "Source" in the way of global unification of the alarm messages structure of the function alarmSet().
+<ul><li> Appended for implementing "Year report of the month values (docRepYear)" with a function of entering values in the manual mode, support for the manual values storing into the message archive, their display in the table and diagram.</li>
+<li> {doc,docDin,docRep2WorkSh(renamed docRepSm2),docAlarmsRep,docRepInstVals(renamed docGasNodeMgn),docMessRep,docUsersSet, docRepDay(renamed docGasNodeDayA),docRepMonth(renamed docGasNodeMonthA),docRepYear(renamed docResourcesYear)}: made the JavaLikeCalc translation by tr().</li>
+<li> {docRepInstVals,docRep2WorkSh,docRepDay,docRepMonth}: Significantly rewrote, improved and made secondly usable, by allowing the DAQ-parameters connecting.</li>
+<li> docMessRep: Appended for processing the remote stations as additional sources and anytime.</li></ul></li>
+<li> JavaLikeCalc.doc: Appended for implementing the "Diagram (diagram)" building in SVG.</li></ul></li>
+<li> PrescrTempl,prescr: The user interface library and the template library "Prescriptions" revised, improved, appended, documented and the documentation appended to offline.
+<ul><li> PrescrTempl: Appended for the "Manager" template, moved from the controllers library.</li>
+<li> prescr: Items of the library expanded for DB linking and the command and program tables automatic creation.</li></ul></li></ul></li>
+<li> DB.LibsDB.vcaElectroEls: The user interface library "Elements of the electric" revised, improved, appended, documented and the documentation appended to offline.
+<ul><li> Appended for the four unified items: "Key, unified (keyUnif)", "Switch, unified (swUnif)", "General state, unified (stGenUnif)", "Area state, unified (stAreaUnif)".</li></ul></li>
+<li> FIX:DB.LibsDB.OscadaLibs:
+<ul><li> Updated for some messages.</li>
+<li> FIX:base: The template library "Main library" revised, improved, appended, documented and the documentation appended to offline.
+<ul><li> {anUnif,anUnifSt,manInUnif,digAlarm,codeState,pidUnif,pidUnifImp,SNMP,UPS}: Moved under the unified alarms forming and controlling mechanism.</li>
+<li> Appended for the "initConsAssignTrs" template of the assigned output transports processing of the initial Sockets' connections for any type of the source objects, that is DAQ-modules and logical level controllers and parameters.</li>
+<li> Appended for the "codeState" template of the state forming by a code.</li>
+<li> Appended for the complex notifier implementation in the template "ntf", the separate JavaLikeCalc function and the user protocol objects "SMS" and "SMTP" are marked for obsolete.</li>
+<li> Appended for the "UPS" template, moved from the "Industrial devices" library.</li></ul></li>
+<li> FIX:DevLib: The template library is a splitted part of the original library "Devices" under the name "Industrial devices", which revised, improved, appended, documented and the documentation appended to offline.
+<ul><li> FIX:IEC60870: Appended for the separate time "tmPoolAll" of the period of the complete polling.
+<ul><li> Appended for the package M_ME_TF_1, M_ME_NC_1 support, expanded for the SQ-mode support, tested for M_ME_TF_1 and M_ME_NC_1, M_ME_NB_1 in the SQ-mode, set AI to "real".</li>
+<li> Appended for the option "syncTimePLC" to controll the PLC synchronisation.</li></ul></li>
+<li> Appended for the true DCON implementation in the templates DCON_Prt, DCON_Prt_DI, DCON_Prt_AO, DCON_Prt_DO, the user protocol object "DCON" is removed.</li>
+<li> Appended for a full featured implementation of the protocol OWEN in the data acquisition part.</li>
+<li> Appended for the DNP3 implementation and it tested with outstation-demo from opendnp3.</li>
+<li> Appended for the counter modules Pulsar-M (pulsarM) implementation.</li>
+<li> Appended for the ModBus scanner implementation as the template "ModBusScan".</li></ul></li>
+<li> LowDevLib: The template library is a splitted part of the original library "Devices" under the name "Low-level devices", which revised, some improved, documented and the documentation appended to offline.
+<ul><li> FIX:{1W_DS9097,W_DS9097U}: Fixed for the device family detection as the template 0x7F, detected on the last DS2413 with the first byte 0xBA.</li>
+<li> Appended for the template "MAX6675" implementation of the low-level SPI Cold-Junction-Compensated K-Thermocouple-to-Digital Converter.</li>
+<li> Appended for the template "SHT3x" implementation of the low-level humidity sensors.</li>
+<li> Appended for the templates ADS111x(ADS101x) and MCP4725 implementation of the low-level I2C chips.</li></ul></li>
+<li> FIX:JavaLikeCalc.techApp: The JavaLikeCalc library "Technological apparatuses" documented and the documentation appended to offline. All Cyrillic symbols removed from identifiers of the models and all texts corrected.</li>
+<li> tests: The template library "Tests" renamed from the library "S7".</li>
+<li> JavaLikeCalc.servProc: The JavaLikeCalc library "Service procedures" revised, some improved, documented and the documentation appended to offline.
+<ul><li> docOffLine: Significantly expanded for detailing the error messages and placing the unfinished pages to the argument "pagesCur" for continue the termination.</li></ul></li>
+<li> JavaLikeCalc.regEl: The JavaLikeCalc library "Regulation elements" documented and the documentation appended to offline.</li></ul></li>
+<li> FIX:DB.LibsDB.vcaBase:
+<ul><li> FIX: Complete and significant cleaning from the Cyrillic symbols and improving in the original identifiers and messages, renaming their to English.</li>
+<li> Most standard cadres and widgets adapted to styles and the style "Light" created for all projects.</li>
+<li> FIX:Main: The user interface library "Main elements" revised, improved, appended, documented and the documentation appended to offline.
+<ul><li> FIX:{alarmsAct,alarmsSt}:
+<ul><li> Expanded for support quittance-confirmation, comments and custom fields.</li>
+<li> FIX: Fixed in using the view "Table" of the primitive "FormEl" for the attribute "fontColor" instead the correct "colorText".</li>
+<li> The field "Parameter (prm)" renamed to "Source" where placed all remoted and local sources.</li></ul></li>
+<li> RootPgSo: Improved for dynamically create signal objects, the number of which is limited only by the total length of the signal objects names and their two rows. The signal object buttons generating in the right of the logo is supported also. The views also unified for ID "view[1..6]", when user can their assign in self way. The compatibility with the original names of the views was saved, for present projects!</li>
+<li> Appended for:
+<ul><li> the new control panel-window "Graph parameter calculation (graphCalc)";</li>
+<li> the objects widget "Object properties (objProps)";</li>
+<li> the alarms frame "Alarms — report (alarmsStReport)";</li>
+<li> the widget "Image label (ImgLab)";</li>
+<li> an implementing of the cadre "Users manager (userManager)".</li></ul></li>
+<li> grph_panel: Appended for an independent button of switching to the cursor time instead the indirect switching at the depth of decreasing.</li>
+<li> ElViewGraph: Font size of the name decreased from 15 to 11 and trend color of the disabled items set by default to "gray".</li>
+<li> The prescription frames "prescrEdit", "prescrRun" and "prescrRunSimple" moved to the new library "Prescriptions (prescr)".</li>
+<li> cntrRegul: The trends width increased to 2 pixels.</li></ul></li>
+<li> FIX:mnEls: The user interface elements library "Mnemo elements" documented and the documentation appended to offline.</li></ul></li>
+<li> FIX:Model.{AGLKS,Boiler}: Significantly updated regarding the common libraries' changes.
+<ul><li> FIX: Significantly cleaned and all original identifiers renamed to English, during the documentation revision.</li>
+<li> FIX: AGLKS.vca,Boiler.St: Adapted to the new changes of the main page.
+<ul><li> The style "Light" created for all projects. The styles moved under a scheme of direct styles disabling at their presence instead "No style" and the style "Default" is appended.</li></ul></li>
+<li> FIX:Model.AGLKS:
+<ul><li> FIX:St:
+<ul><li> FSArch.1m: The strange and temporary message archivers removed: FSArch.{NetRequsts,test,StatErrors}, DBArch.test and added the actual ones: FSArch.{alarms,actions,SYS}, DBArch.SYS.</li></ul></li>
+<li> FIX:vca: The analog parameters and graphics is relinked.</li></ul></li></ul></li></ul>
+<h4><span class="mw-headline" id="API"><span class="mw-headline-number">7.1.2</span> API</span></h4>
+<p><i>!!!!:Changes</i>:
+</p>
+<ul><li> SYS: The ResMtx default constructor set to true for "isRecurs" but it is the typical situation.
+<ul><li> The most functions of appending to the nodes container expanded for returning the result created node ID/name for: chldAdd(), TSecurity::{usrAdd(),grpAdd()}, TTypeBD::open(), TTypeTransport::{inAdd(),outAdd()}, TValue.chldAdd(), DAQ.{TController::add(),TParameter::add(),BlockCalc.blkAdd()}, TTypeArchivator::{messAdd(),valAdd()}, TArchiveS::valAdd(), UI.VCAEngine::{wlbAdd(),prjAdd(),WLib.add(),Project.add(),Project.Page.pageAdd()}, UI.WebUser.uPgAdd().</li>
+<li> TFld::Selected everywhere renamed to TFld::Selectable.</li>
+<li> The special function strMess() variant with limiting in the result message size is removed and replaced by the function strEncode() in the type TSYS::Limit.</li>
+<li> chldList() and chldPresent() set to virtual.</li></ul></li>
+<li> DAQ,Special: The attribute "run_st" in TPrmTmplLib and TSpecial renamed to runSt.</li>
+<li> Archives: TArchiveS::messPut() cleaned from the argument "force".</li>
+<li> Protocols.HTTP: User API functions pgAccess(), pgCreator() moved from TProtocol to TProtocolIn.</li>
+<li> Transports.In: The function protocol() renamed to protocols() and protocolFull() removed.</li></ul>
+<p><i>Appends</i>:
+</p>
+<ul><li> SYS: Common locks mechanism is added by a locks container, the function commonLock().
+<ul><li> TConfig,*: The user API functions TConfig::cfg() and TConfig::cfgSet() of the configuration expanded by the permition control.</li>
+<li> Appended for the configuration context resetting functions to defaults TCfg::toDefault() and TConfig::cfgToDefault().</li>
+<li> TFunction object appended by a mark of the function procedure changing isChangedProg() and the flag TFld::Selectable and the function ioAdd() appended by the result for the appended IO position.</li>
+<li> The Control Interface request "load" expanded for specifying the selected DB in the attribute "force" to perform such operations for concrete nodes.</li>
+<li> XMLNode: The attributes getting function attr() expanded for the optional argument of the presence detection.</li>
+<li> The user space "Array" expanded by the functions indexOf() and lastIndexOf().</li>
+<li> The user API function SYS.fileRead() expanded by the arguments of the reading block offset and size.</li>
+<li> The user API function strEncode() appended for support the variants "ToLower" and "Limit".</li>
+<li> The user API appended for the function strFromCharUTF() of forming string from UTF-8, UTF-16, UTF-16LE, UTF-16BE, UTF-32, UTF-32LE, UTF-32BE.</li>
+<li> Appended for the definition SERV_TASK_PER=10 of the service task periodicity.</li>
+<li> The user API appended for the function SYS.fileSize().</li>
+<li> The function str2atime() is appended to convert from string time to the Unix epoch time supporting GMT.</li>
+<li> TError appended for naming the error codes in the enum "Codes", which used everywhere.</li>
+<li> The special archive names appended for the name ALRM_ARCH_CH_NM ("&lt;alarmsChange&gt;") of just changing the presented alarms.</li>
+<li> The limits appended by USER_ITS_LIMIT (1000000) for limit the items number like to user arrays from DAQ.JavaLikeCalc.</li></ul></li>
+<li> DB: The transactions closing control into the OpenSCADA core by the functions trTm_ClsOnOpen(), trTm_ClsOnReq() and trPr_ClsTask().
+<ul><li> The DB-objects reenabling control at the function disabledByUser().</li>
+<li> Appended for configuration of the "Opened tables lifetime" of the inactive tables closing by the function tblLifeTime().</li>
+<li> The attribute TBD::mEn moved to the protected space.</li></ul></li>
+<li> Transports:
+<ul><li> In: Appended by the virtual functions keepAliveReqs(), keepAliveTm() for the true KeepAlive on Web.</li>
+<li> Out: Appended for a service of closing output transports at the lifetime (inactivity) by the service function outLifeTime().
+<ul><li> Expanded by the attempts field ot the generic control in the function attempts().</li>
+<li> Unified for the last request time control in the function lstReqTm().</li>
+<li> The function outAddrHelp() of taken common address help for the output transport modules was added.</li></ul></li></ul></li>
+<li> DAQ: TController::alarmSet() expanded for the argumnet "force" to force the alarms on the controller objects in the redundance.
+<ul><li> The DAQ-parameter appended for the User-API function alarmSet() and the function vlSetRednt() of the unified values writing in the redundancy.</li>
+<li> TDAQS::rdRestDtTm() expanded from the float to double type return.</li>
+<li> Appended for the user API function daqAt().</li>
+<li> The user API function funcCall() expanded by the "err" argument.</li>
+<li> JavaLikeCalc: The User API functions charAt() and charCodeAt() expanded to support UTF. The User API functions expanded by isNaN() for bool, integer, real, string (especially for checking numbers in the string).</li></ul></li>
+<li> Archives:
+<ul><li> The objects TMArchivator and TArchiveS appended of the function redntTm() and rdTm() to obtain last time of the message archives redundancy.</li>
+<li> TArchiveS::rdRestDtOverTm() expanded from the float to double type return.</li>
+<li> Val: The value archives appended by the common option autoIdMode() of the mode of forming ID of the automatic created archives with the enum variants AutoIdMode::{BothPrmAttrId,OnlyPrmId,OnlyAttrId}.</li>
+<li> Val: The user API functions getVals() and setVals() added to implement generic archives/history accessing mechanism in an array and the fixed periodicity.</li></ul></li>
+<li> UI: The inline documentation declaration from description some nodes is unified in the function TUIS::docKeyGet().
+<ul><li> VCAEngine: The user API function this.ownerSess().uiCmd() added on the session level. The runtime widget appended of the user API function this.attrList() of obtaining list of the widget attributes.</li></ul></li></ul>
+<h4><span class="mw-headline" id="SYS"><span class="mw-headline-number">7.1.3</span> SYS</span></h4>
+<ul><li> FIX: The source code messages and program documentation:
+<ul><li> TMess: Appended for the environment variable LC_ALL cleaning and setting "LANG" if empty, to prevent from overriding LC_NUMERIC=C at the last.</li>
+<li> FIX:.,*: Fixed for many original messages of the source code also during the most modules documenting.</li>
+<li> FIX:DAQ.JavaLikeCalc: The JavaLikeCalc code translation by the function tr() fixed in creating the translations table "Trs" and entries here in the simple mode (single language).</li>
+<li> The inline documentation:
+<ul><li> The offline documentation appended by some OpenSCADA modules and most libraries of the internal procedures and graphical elements. The common CSS-styles file of the offline documentation "doc/en/files/doc.css" improved in disable the transparent background color and some properties of the language selector.</li>
+<li> Declaration from description some nodes is unified in the function TUIS::docKeyGet() and the nodes appended for that:
+<ul><li> the DAQ-template and JavaLikeCalc libraries;</li>
+<li> the VCA-libraries in UI.VCAEngine and UI.Vision.</li></ul></li>
+<li> UI: TUIS::docGet() appended by a code of the LTS build checking and using the LTS frozen documentation on the OpenSCADA file-server.</li>
+<li> FIX:DAQ.JavaLikeCalc,UI.VCAEngine: Fixed in the offline documentation declaration for "User_API".</li></ul></li></ul></li>
+<li> FIX: Building:
+<ul><li> FIX:configure.ac: Core library version rose to 3:7:0 and the program version rose to 0.9.1.</li>
+<li> The Debian 10, CentOs 8 and Ubuntu 20.04 chroots are appended for build OpenSCADA.
+<ul><li> The source codes significantly cleaned at the building warnings of GCC 9 (CentOs 8).</li>
+<li> UI.{QTCfg,Vision}: Adapted to build in the environment of Debian 10 for Qt5.11.3, GCC8 and an error about a conflict in the macro message() into StdLibC++ through Qt5.</li></ul></li></ul></li>
+<li> Android: The behaviour of using the environment variable QT_SCALE_FACTOR on Android is observed, what set to 1.5 and the default font "Helvetica,12,-1" with QScrollBar CSS rule are removed.</li>
+<li> Module versions of the subsystem "Special" rose to 12; of the subsystem "DB", "DAQ", "Archives" and "UI" rose to 13; of the subsystem "Transports" rose to 15.</li>
+<li> FIX: Threading, tasks, realtime and locks:
+<ul><li> Some common data resources of dataRes() replaced by own resources, mostly due to the observed locking problems in Protocol.HTTP and <b>DAQ.ModBus</b>.</li>
+<li> FIX: Common locks mechanism is added by a locks container, the function commonLock().
+<ul><li> FIX: Transport.{Sockets,SSL}: Used for system functions like to getaddrinfo(), which is not multithreaded one.</li></ul></li>
+<li> The tasks planning appended for phasing their invoking, what make the CPU loading even.</li>
+<li> FIX: The function TCntrNode::nodeDis() waiting fixed for zero time and the function chldDel() set to no waiting by default.</li>
+<li> FIX: Fix for the negative priority of the policy "BATCH".</li>
+<li> Archive,DAQ.Controller: For the current time of messages and values mostly used TSYS::curTime()/1000000 instead time(NULL) due to the message and value time is in microseconds and mark by TSYS::curTime().</li></ul></li>
+<li> FIX: <span id="Redundancy" title="#Redundancy"><b>Redundancy</b></span>:
+<ul><li> .,UI.{QTCfg,Vision,WebCfg,WebCfgD}: The function "Local primary commands transfer" of the redundant systems is unified and expanded for complete moving to TCntrNode::cntrCmd(), so the function works now for any calls also from the user programming environment.</li>
+<li> Archives,DAQ.DAQGate: The messages bottom time border processing for redundancy and the DAQGate changed to use time of the last message to repeat it requesting for two time, to prevent the messages losses on the border.
+<ul><li> FIX: The redundancy and DAQ.DAQGate restored for writing the big value archive's blocks, mostly in restoring the value archive parts.</li>
+<li> The first alarms obtaining in the messages redundancy enabled only at presence the message archivers in the redundancy.</li>
+<li> Placing messages to the archivers of the redundancy procedure TMArchivator::redntDataUpdate() changed to use the function put(), to do this operation atomically for all obtained messages under a lock.</li></ul></li>
+<li> DAQ,DAQ.*: Writing values in the redundancy is unified under the new function vlSetRednt(). The service "TValue::get:/serv/attr" expanded to some spare request of the last requested value to prevent EVAL here at the connection loss.</li></ul></li>
+<li> The function strEncode() appended by the variant "Limit" to limit the string size counting for the UTF-8 variability, and such items moved to it instead removed limiting variant of the function strMess(): TConfig keys, DAQ-Template IOs, DB.SQLite, UI.QTCfg.</li>
+<li> FIX: Configuration:
+<ul><li> TConfig,TCfg: The key fields appended for their size limiting before cutting on the DB side.
+<ul><li> *: Adapted in the adding functions to treat the ID or name forming and to limit its size, returning the result name to the creator, using the node function chldAdd() expanding in direct return the ID and to just remove the new node for equal ones.</li>
+<li> DAQ: Identifiers of the logical level IO of the DAQ-templates expanded to the size limit up to 1.5*OBJ_ID_SZ=30 symbols and have added for these shrinking on creating.</li>
+<li> Transports: Size of the output transports ID set to OBJ_ID_SZ*2, since it can be cobined from the ordinal node ID and some prefix, in the automatic mode.</li>
+<li> Appended by a function of setting the TCfg fields to the default value, to prevent loading values of previous records for miss fields.</li></ul></li>
+<li> TConfig,*: The user API functions cfg() and cfgSet() of the configuration expanded by the permition control.</li>
+<li> The loading from selected DB improved in checking the DB enabling before, in the function TSYS::chkSelDB().</li>
+<li> TCntrNode,DAQ,DAQ.JavaLikeCalc: Appended for the function load__() to treat some doings in the loading end.</li></ul></li>
+<li> Control Interface:
+<ul><li> *: Unified in the modification control of the node objects and cleaned the spare modifications, moving the calculation context modification to the option "modifCalc".</li>
+<li> .,UI.{QTCfg,WebCfgD}: Tables expanded for difference help per columns and cells.
+<ul><li> Transports: Table of the external OpenSCADA hosts expanded for the context help to the transport address cell, using the function outAddrHelp().</li></ul></li></ul></li>
+<li> The DAQ-templates and all their implementations appended by a function of selectable attributes creation from the template field "Value" of the two and three lines, TFunction::IO appended by the flag TFld::Selectable.</li>
+<li> The unified DAQ-templates implementation TPrmTempl::Impl is finished and such items migrated and adapted to it: DAQ.{JavaLikeCalc,<b>ModBus</b>,LogicLev,Siemens}, Protocol.{ModBus,UserProtocol}, UI.WebUser.</li>
+<li> FIX:DAQ,Archive.DBArch: The TElem copy constructor was implemented to fix problems into Archive.DBArch at multiple groups-tables in the group table mode.</li>
+<li> Function,DAQ.{JavaLikeCalc,LogicLev,<b>ModBus</b>,Siemens}: Expanded for tracing the function program changing and hot restarting the executing procedures, by setting the flag "f_start".</li>
+<li> TMess,XMLNode: Appended for the function setUTF8() of forming UTF-8 from their code, taken from XMLNode to use in other places.</li></ul>
+<h4><span class="mw-headline" id="DB"><span class="mw-headline-number">7.1.4</span> DB</span></h4>
+<ul><li> FIX:*: The configuration context resetting function cfgToDefault() used in the function dataSeek() and fieldSeek() begin, due to it is an obligatory operation for the configuration file at least and must be done for the DB configuration also, for new fields.</li>
+<li> Appended for the transactions closing control into the OpenSCADA core whether in the service task, for the timeout &gt; 10 seconds, or in a different per DB task of fast transactions closing of the shared DBMS. For what appended the functions trTm_ClsOnOpen(), trTm_ClsOnReq() and trPr_ClsTask().</li>
+<li> DB-objects appended for restoring their enabling after the connection loss (or other reason) for meaned to enable and not disabled by the user, by disabledByUser().</li>
+<li> Appended for configuration of the "Opened tables lifetime" of the inactive tables closing.</li>
+<li> FIX:{SQLite,MySQL,PostgreSQL,FireBird}:
+<ul><li> FIX:{MySQL,PostgreSQL,FireBird}: Improved and tested for hot restoring of the losses connections and without the data loss.
+<ul><li> FIX:FireBird: Restored for the main work in the primary keys requesting and adapted to FireBird version 3.</li>
+<li> FIX:MySQL: Resolved for crashing in the built-in reconnection (by MYSQL_OPT_RECONNECT), which replaced for the own and hot reconnection. Fixed for the error "BLOB/TEXT can't have a default value (1)" on modern MariaDB server versions, wholly removing the DEFAULT for TEXT.</li></ul></li>
+<li> SQLite: Appended for correct treating the locking of the SQLite DB files, at accessing to common libraries from different processes.</li></ul></li></ul>
+<h4><span class="mw-headline" id="DAQ"><span class="mw-headline-number">7.1.5</span> DAQ</span></h4>
+<ul><li> TController::alarmSet(): Expanded by implementing the alarms triggering conception, which means also of passing messages to the buffer for clearance the alarms only at the alarms presence.
+<ul><li> Globally unified and completely described in the documentation for messages from the controller objects and DAQ-parameters, when the parameter-source in the message appended for the controller object name.</li>
+<li> FIX: Changed to use complete parameter ID-path, to prevent collisions in alarms from parameters with even IDs but different sources.</li></ul></li>
+<li> FIX:*: The property period() is set actual in early, at the configuration "SCHEDULE" changing, for true data period of the archives.</li>
+<li> Expanded for early enabling the template libraries in the loading stage, initially for transport protocols based on the DAQ-templates.</li>
+<li> FIX:<span id="ModBus" title="#ModBus"><b>ModBus</b></span>:
+<ul><li> FIX: The mode "Asynchronous write" restored and tested in writing after restoring the connection, to use it for the losses preventing. The asynchronous writing moved to the after requesting stage with oppresing-delay the writen values changing in the attributes, before the writing buffer clearance.</li>
+<li> FIX: Fixed for work in the redundancy mode.</li>
+<li> FIX: The common function upVal() is separated to two functions upValStd() and upValLog() of the parameter types separate updating for the "Standard" firstly and the "Logical" type in the last, for cases of using data of the "Standard" type parameters in the "Logical" ones.</li>
+<li> Expanded in work with wrong or empty connection transport, to allow it set-change from external procedures.</li>
+<li> Expanded for the flag "s" of the strict requesting at the complex data.</li></ul></li>
+<li> FIX:JavaLikeCalc: Expanded for try of the restoring the previous procedure executing at the new one error, mostly from DAQ-templates.
+<ul><li> FIX: Fixed for crashing in the hot compiling, mostly at returning to the correct procedure after the wrong one compiling, in case of the procedure uses internal functions and possible external ones also due to missing for clearing "fPrmst". All these clearings are unified in the functions buildClear(), workClear().</li>
+<li> Set to stop the functions at the program source changing for apply the changes.</li>
+<li> FIX: Prevented for the recursive call, observed on the recursive widgets creating in UI.VCAEngine.</li></ul></li>
+<li> Siemens: Extended for direct specifying the data type of the link address. LibnoDave updated to 0.8.5.1.</li>
+<li> DAQGate: Expanded by an option and a function of placing different controllers to the different virtual parameters.</li></ul>
+<h4><span class="mw-headline" id="Archives-History"><span class="mw-headline-number">7.1.6</span> Archives-History</span></h4>
+<ul><li> FIX:Mess:
+<ul><li> /serv/mess: In put it is improved for independent writing to the archive and just to update the presented alarms.</li>
+<li> Messages of the function's Mess-&gt;put() macrosses "message", "mess_info", ... redirected to the buffer writing, to prevent of direct writing to the archivers.</li>
+<li> TArchiveS::messPut() cleaned from the argument "force".</li></ul></li>
+<li> FIX:Val:
+<ul><li> TVArchive::getVals(): Improved for processing not free buffers (for a fixed period) of the data requesting from the buffer and different archivers, using an intermediate buffer array which is back replayed at the end.</li>
+<li> FIX: Improved for the limit processing independently for the buffer and the archivers and their periodicity, to work the long ranged and high periodicity data requests.</li>
+<li> FIX: TValBuf.get() switched from the exceptions emitting to return EVAL at the requested data missing.</li>
+<li> The value archives appended by the common option "Mode of forming ID of the automatic created archives" with selection from the modes: "Both parameter and attribute ID", "Only parameter ID", "Only attribute ID". For the possibility to control the automatic archives naming.</li>
+<li> TVArchive::{setVals(),setVal()}: Access to the archive writing functions restricted only for users in the group "Archive".</li></ul></li>
+<li> FIX:FSArch: The XML mode of the messages appended by the positions cache.
+<ul><li> FIX: The messages archivation is significantly improved and fixed in placing several different messages in even time.</li>
+<li> FIX: Fixed for the info.db removing and processing by using the DB address as a unique essence instead limited DB-identifier, what currently is named through indexing the equal ones.</li>
+<li> FIX: The archive folder creation moved in the begin, before the locking and the info.db creating.</li>
+<li> FIX: Fixed for archiving double messages in the mode of preventing the doubles - rewriting.</li></ul></li>
+<li> FIX:DBArch:
+<ul><li> FIX: Fixed for the value archives including to an archiver for the not grouped archiving mode.</li>
+<li> FIX: Finally fixed for the single-value requests of the value archive, after the not full fix from 2018-02-23 only for the archiver data period 1 second.</li>
+<li> Adapted to work in the only direct archive writing mode on the archives group mode for updating the meta at writing.</li></ul></li></ul>
+<h4><span class="mw-headline" id="Transports"><span class="mw-headline-number">7.1.7</span> Transports</span></h4>
+<ul><li> .,*: Expanded for support the multiple protocols selecting and the function protocol() renamed to protocols().
+<ul><li> Appended for a service of closing output transports at the lifetime (inactivity) by the service function outLifeTime(), unified for the last request time control in the function lstReqTm().</li></ul></li>
+<li> FIX:Serial: Fixed for the "Modem" mode of the output transports in the correct processing the function ResMtx::tryLock() result. The flow control field moved to the options field due to a need with direct disabling some options like to -RS485.</li>
+<li> FIX:Sockets,SSL: Expanded for support IPv6 both for input and output transports using getaddrinfo().
+<ul><li> Appended for processing (connecting) all IP addresses resolved from the symbolic one, especially for the output transports.</li>
+<li> The output transports appended for direct definition several host addresses.</li>
+<li> The output transports improved in using the tries after the error "Reading timeouted." of responding to request.</li>
+<li> FIX:Sockets: Fixed in processing the output transports with the address "SOCK:{N}" of the initiative connections to clean up the address by setting it to "SOCK:-1", then preventing of the restarting possibility with using already closed socket's handler but possible allocated already by another part of the program.
+<ul><li> Address of the input transports in the TCP-mode can be expanded for addition parameters and currently the next one after the mode field is identification message of the initiative connection into the mode 2, so this mode expanded for sending identification messages after establish the initiative connections.</li>
+<li> "TCP:" prefix of the addresses set to nonobligatory-optional.</li>
+<li> The address mode of the input transports set to 1 (do not close, only by the KeepAlive parameters) by default.</li>
+<li> The default port set to 10005.</li></ul></li>
+<li> SSL: Appended for treating NO_*_METHOD for TLS1, TLS1_1, TLS1_2, DTLS1 and for direct support DTLSv1_2. The default port set to 10045.</li></ul></li></ul>
+<h4><span class="mw-headline" id="Transport_Protocols"><span class="mw-headline-number">7.1.8</span> Transport Protocols</span></h4>
+<ul><li> FIX:HTTP: Appended for the true KeepAlive support by the input transport functions keepAliveTm() and keepAliveReqs(). Expanded for the DB table "HTTP_AuthSessions" of the external authentication sessions.</li>
+<li> FIX:ModBus: The input part expanded for the DAQ-templates using.
+<ul><li> The data types list of the IO table appended by the type "Object".</li>
+<li> The protocol variant recognising for input requests some improved for detecting difference RTU and TCP variants, appending to that the transport type.</li></ul></li>
+<li> UserProtocol: Expanded by the DAQ-templates support.</li>
+<li> SelfSystem: Expanded for the output transport attempts support.</li></ul>
+<h4><span class="mw-headline" id="User_Interface"><span class="mw-headline-number">7.1.9</span> User Interface</span></h4>
+<ul><li> FIX: TUIS::mimeGet() changed in the behaviour of determining the file extension "svg" as "image/svg+xml" for correct and multiple SVG files display on WEB.</li>
+<li> FIX:VCAEngine,Vision,<b>WebVision</b>: The variant "LineEdit" of the primitive "FormEl" appended for the view "Password".</li>
+<li> FIX: The VCA-styles moved under a scheme of disabling styles at their presence instead "No style" and fixed in the the new items creating and at all.</li>
+<li> VCAEngine,Vision: All information moved to the status field for widgets, libraries and projects; what appended for the calculating procedure state - inherited, redefined.</li>
+<li> FIX:VCAEngine:
+<ul><li> Pages of the projects appended for the type "Link", to optimise the memory consumption on fully dynamic and highly replicated pages, on the project's session side. The pages opening in the project's execution (sessions) improved to prevent spare and double opening and closing, which is critical one to manage the linked pages.</li>
+<li> Many measures of the visual items edition in time of the project execution:
+<ul><li> Fixed in deletion the project pages in time of the project execution, to prevent the objects lock and to provide their early linking for removing the session pages together the project pages.</li>
+<li> Session objects moved under own data lock to prevent the dead locking in the complex situations due to the style calls uses indirect parent().</li></ul></li>
+<li> Optimisation the remote development:
+<ul><li> the info control services "/prm/cfg/prj", "/page/page" appended by getting of number of the child pages in the attribute "chPgN" at setting "getChPgN";</li>
+<li> appended to omit the widgets' icons transmitting in the control service "/serv/wlbBr" of the complete widgets' tree loading, setting the attributes "disIconsW", "disIconsCW".</li></ul></li>
+<li> The project sessions of the VCA moved at the last from the modification control for the development mode.</li>
+<li> Expanded for the direct definition of the visualiser specific attributes, marking their by the prefix "vs_".</li>
+<li> FIX: The project session command "close" of the service "/serv/pg" forced to processing, what actual to the linked pages.</li>
+<li> FIX: The VCA pages loading procedure appended for cleaning the spare records and records of inherited but missed widgets of the "*_incl" table.</li>
+<li> FIX: Fixed in the User API function tr() work from documents.</li></ul></li>
+<li> FIX:QTCfg,Vision: Fixed in processing the syntax highlighting of the text fields to load firstly the syntax rules and next the text, to prevent the text corruption in some cases, detected into the transport exchanging log and Qt 5.11.
+<ul><li> Appended for buttons of the force loading and saving, into the menu.</li>
+<li> Table forming improved for the allowed width getting from maximumViewportSize().</li></ul></li>
+<li> FIX:Vision,<b>WebVision</b>: Improved for the scrollbar control of the included pages, to ensure they work separately, not two together.
+<ul><li> FIX:ElFigure: The mirroring support is completed in the implementing for the common, shape Arc draw and it generic and image fills. The filling by image prevented from lacks at accessing outside the image.</li>
+<li> FIX:Diagram:
+<ul><li> FIX:Trends: Expanded in the time scale building for many days with the time complete hiding and show the first value in the left, using the timezone offset. Appended for support the big time range intervals per month.</li>
+<li> Disabled in limiting the requested archive values precision, for long counters.</li>
+<li> Improved in the remote work on slow channels and with the value buffers period in 10 seconds.</li></ul></li>
+<li> Text,Media,Box: Expanded to display the activity cursor.</li>
+<li> FormEl: Some views (Line edit, Text edit, Combo box, List, Tree, Table) expanded for custom background and border by the visualiser specific attributes "vs_background", "vs_border".</li>
+<li> Appended for the visualiser specific attribute "vs_winTitle" of the dynamic window title value.</li></ul></li>
+<li> FIX:Vision:
+<ul><li> Optimisation the remote development:
+<ul><li> The projects tree switched to download the branches partially at expanding, to improve it work on slow connections.</li>
+<li> The widgets tree improved in the work on slow connections, disabling the widgets' icons downloading at the threshold of the complete tree downloading time more for 5 seconds and enabling that at the time less for 0.1 second.</li></ul></li>
+<li> Expanded for the planning of the updating period depending to the real connection quality of the runtime mode, like to <b>UI.WebVision</b>.</li>
+<li> FIX: Common fixes and improvements of the runtime window modes:
+<ul><li> FIX: Manual scaling of the runtime window (for full-screen or maximise) improved and fixed in the processing the sign isResizeManual.</li>
+<li> FIX: Fixed in starting to the full-screen mode and not full scaling at restoring to not zero window position, preventing the restoring.</li></ul></li>
+<li> FIX:FormEl:
+<ul><li> FIX:Table: Tables fitting improved to use maximum width from the widget size and the maximum view port, but the maximum view port only can be uninitiated here yet. Final fix for the tables fitting, moving the procedure in events: create, resize and show. Prevented from casual crashing.</li>
+<li> FIX:Date: Fixed for crashing at setting configuration.</li></ul></li>
+<li> FIX: Fixed for the master page regular replacing (crashing) and scaling into the run-time mode.</li>
+<li> FIX: The runtime executing was fixed from crashing in closing external windows at closing the main window.</li>
+<li> FIX: Fixed in the properties edition dialogues of Pages/Libraries and Widgets for:
+<ul><li> preventing for closing at Esc;</li>
+<li> disabling for timeouted cancelling of the LineEdit;</li>
+<li> unbinding the edited state from the visibility for TextEdit;</li>
+<li> preventing from the changes loss into the tab "Process";</li>
+<li> appending for warnings about the inherited calculation procedure changing.</li></ul></li>
+<li> The focus control rewrote to the VCA-widgets specific one and not Qt-widgets, like to UI.WebVision, what prevents some problems.</li>
+<li> ElFigure: The figure edition switched to the normal mode, without any transformation (rotation and mirroring).</li></ul></li>
+<li> FIX:<span id="WebVision" title="#WebVision"><b>WebVision</b></span>:
+<ul><li> FIX:Main operation:
+<ul><li> FIX: The JS function servSet() of writing to the server switched to the synchronous mode to prevent loses.</li>
+<li> The main checking of the background objects is made unified and expanded for support the optional background objects, to decrease the overall number of the background objects, where the obligatory currently are: "ElFigure", "Diagram", "Document", "FormEl"; and the optional is only "Text".</li>
+<li> The main window vertical expanding threshold set to 10% of the window decreasing size and to 50% for shrinking, to prevent flicking on FireFox for notes about block the external windows. The built-in scaling mode set to use-enable in relation from window.devicePixelRatio equal to 1, on the WebBrowser level.</li>
+<li> FIX: Restored in the full widgets tree reloading to restore the function of removing missed widgets in the visualiser at their removing into the VCA-engine.</li>
+<li> FIX: Prevented from spare and separate requesting of the included pages' content, in the starting.</li>
+<li> FIX: Improved for the focus control behaviour and fixed to prevent mouse events to behind pages.</li></ul></li>
+<li> Appended for the pages cache be controlled in the lifetime and the pages maximum number, both on the server and WebBrowser side, then the module is more suitable now to work in the operative mode!</li>
+<li> Sessions control:
+<ul><li> Expanded for the possibility of the opened sessions manual closing from the administrator user.</li>
+<li> FIX: The ordinal users prevented from connection to foreign sessions.</li>
+<li> FIX: The main requesting code of GET significantly simplified to prevent of reconnections to the VCA-sessions without the local ones.</li>
+<li> Appended for the state of the opened sessions on the control page, including the connected project and the user.</li></ul></li>
+<li> FIX:Status bar:
+<ul><li> Appended for the alarm level with a function of the global quietation, sending "ws_alarmLev".</li>
+<li> Expanded for the VCA-styles support in their display and changing.</li>
+<li> FIX: Fixed in form the statusbar size, updating and preventing from its flicking at the master page updating.</li></ul></li>
+<li> FIX:FormEl:
+<ul><li> FIX:{Tree,Table}: Are fixed for true counting the border width and padding in the result geometry.
+<ul><li> FIX:Tree: Fixed for processing the empty string in the end. Appended for scaling the control tree images.</li></ul></li></ul></li>
+<li> Expanded for setting the VCA visual elements at the "class" attribute to "Primitive {WPrimitive}" and the "id" attribute to the widget identifier like to "wdg_{id}", for simplifying the customisation.</li></ul></li>
+<li> FIX:QTStarter: The function updLookFeel() fixed for the void return type. Right mouse key and context menu emulation is added at holding the left mouse key during the time set by the command line option --simulRightMKeyTm. This time set to 2 seconds for Android.</li>
+<li> FIX:QTCfg:
+<ul><li> FIX: Fixed for applying forgotten changes of the editable widgets at switching to a different node. The TextEdit items fixed for the editing sate detection, what is unbidden from the visibility.</li>
+<li> The Node groups hint is added for a command of the node adding.</li>
+<li> The moving operations, in the configuration table, expanded by the hot keys "Ctrl+Up" and "Ctrl+Down".</li>
+<li> Optimisation the remote work:
+<ul><li> Prevented from the navigation tree updating at selecting any item.</li>
+<li> Makes slower the cycle of the periodic updating after the busy dialog appearing.</li></ul></li>
+<li> Set fast for the closing time of the configurator window with many OpenSCADA inactive external hosts, by early notifying the host tasks.</li></ul></li>
+<li> WebUser: Expanded by the DAQ-templates support.</li></ul>
+<h4><span class="mw-headline" id="Special"><span class="mw-headline-number">7.1.10</span> Special</span></h4>
+<ul><li> FIX:FLibSYS:
+<ul><li> FIX:IO: write() fixed for the default data type obtain, wrong data type obtaining set safe.</li>
+<li> CRC: Completed by using normal polynomials, the input and output references and the XOR for output.</li>
+<li> VArchObj: Access to the archive writing functions restricted only for users in the group "Archive".</li></ul></li></ul>
+<h2><span class="mw-headline" id="Links"><span class="mw-headline-number">8</span> Links</span></h2>
 <ul><li> <a class="external" href="http://oscada.org/wiki/Documents/Release_0.9/Tests" title="Documents/Release 0.9/Tests">Tests report</a> of the industrial release 0.9 LTS.</li>
-<li> <a href="Updating_0.8.0.html" title="Special:MyLanguage/Documents/Release 0.9/Updating 0.8.0 LTS">Manual of updating 0.8.0 LTS</a>.</li></ul>
+<li> <a href="Updating_0.8.0.html" title="Special:MyLanguage/Documents/Release 0.9/Updating 0.8.0 LTS">Manual of updating 0.8.0 LTS</a>.</li>
+<li> <a class="external text" href="http://oscada.org/en/development/tasks/posts/core/release_of_the_openscada_09_lts/" rel="nofollow noreferrer noopener" target="_blank">The releasing process task and a list of the post-release works before the first 0.9 LTS update</a>.</li></ul>
 
 
 
 
 
 
-</div></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Release_0.9/en">Documents/Release_0.9/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.1</td></tr></table></body>
 </html>

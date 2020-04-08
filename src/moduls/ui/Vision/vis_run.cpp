@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_run.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -48,12 +48,9 @@
 #include <QDateTime>
 #include <QTextStream>
 
-// #include <config.h>
-#include <tsys.h>
-#include "tvision.h"
+#include "vis_run.h"
 #include "vis_run_widgs.h"
 #include "vis_shapes.h"
-#include "vis_run.h"
 
 #undef _
 #define _(mess) mod->I18N(mess, lang().c_str())
@@ -62,12 +59,12 @@ using namespace VISION;
 
 VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string &user_pass, const string &VCAstat,
 		bool icrSessForce, unsigned iScr ) :
-    QMainWindow(QDesktopWidget().screen(iScr)), isResizeManual(false),
+    QMainWindow(QDesktopWidget().screen(iScr)), winClose(false), isResizeManual(false), updTmMax(0), planePer(0),
 #ifndef QT_NO_PRINTER
     prPg(NULL), prDiag(NULL), prDoc(NULL),
 #endif
     fileDlg(NULL),
-    winClose(false), conErr(NULL), crSessForce(icrSessForce), mKeepAspectRatio(true), mWinPosCntrSave(false), prjSes_it(iprjSes_it),
+    conErr(NULL), crSessForce(icrSessForce), mKeepAspectRatio(true), mWinPosCntrSave(false), prjSes_it(iprjSes_it),
     master_pg(NULL), mPeriod(1000), mConId(0), mScreen(iScr), wPrcCnt(0), reqtm(1), expDiagCnt(1), expDocCnt(1), x_scale(1), y_scale(1),
     mAlrmSt(0xFFFFFF), alrLevSet(false), ntfSet(0), updPage(false), host(NULL)
 {
@@ -194,7 +191,7 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     statusBar()->insertPermanentWidget(0, mWUser);
     mWStat = new QLabel(VCAStation().c_str(), this);
     mWStat->setVisible(VCAStation() != ".");
-    statusBar()->insertPermanentWidget(0,mWStat);
+    statusBar()->insertPermanentWidget(0, mWStat);
     mStlBar = new StylesStBar(-1, this);
     connect(mStlBar, SIGNAL(styleChanged()), this, SLOT(styleChanged()));
     statusBar()->insertPermanentWidget(0, mStlBar);
@@ -233,8 +230,8 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     //mWStat->setText(host.st_nm.c_str());
     statusBar()->showMessage(_("Ready"), 2000);
 
-    //Restore the main window position
-    if(!s2i(SYS->cmdOpt("showWin")) && winPosCntrSave() && masterPg()) {
+    //Restoring the main window position
+    if(!s2i(SYS->cmdOpt("showWin")) && winPosCntrSave() && masterPg() && !(windowState()&(Qt::WindowMaximized|Qt::WindowFullScreen))) {
 	string xPos, yPos;
 	if((xPos=wAttrGet(masterPg()->id(),i2s(screen())+"geomX",true)).size() &&
 		(yPos=wAttrGet(masterPg()->id(),i2s(screen())+"geomY",true)).size())
@@ -286,6 +283,30 @@ VisRun::~VisRun( )
 	// Push down all Qt events of the window to free the module
 	for(int iTr = 0; iTr < 5; iTr++) qApp->processEvents();
     }
+
+    //Child widgets remove before
+    QObjectList chLst = children();
+    for(int iC = 0; iC < chLst.size(); iC++) {
+	WdgView *cw = qobject_cast<WdgView*>(chLst[iC]);
+	if(cw)	delete cw;//cw->deleteLater();	//!!!! direct deleting due to this step is last one
+    }
+}
+
+void VisRun::setFocus( const string &addr )
+{
+    if(focusWdf.size() && focusWdf == addr) return;
+    XMLNode req("set");
+    if(focusWdf.size()) {
+	req.setAttr("path", focusWdf+"/%2fserv%2fattr");
+	req.childAdd("el")->setAttr("id","focus")->setText("0");
+	req.childAdd("el")->setAttr("id","event")->setText("ws_FocusOut");
+	cntrIfCmd(req);
+    }
+    focusWdf = addr;
+    req.clear()->setAttr("path", focusWdf+"/%2fserv%2fattr");
+    req.childAdd("el")->setAttr("id","focus")->setText("1");
+    req.childAdd("el")->setAttr("id","event")->setText("ws_FocusIn");
+    cntrIfCmd(req);
 }
 
 bool VisRun::winMenu( )	{ return menuBar()->actions().length(); }
@@ -326,6 +347,8 @@ void VisRun::initHost( )
 
 int VisRun::cntrIfCmd( XMLNode &node, bool glob, bool main )
 {
+    node.setAttr("reforwardRedundOff", "1");	//To prevent for redundancy
+
     if(masterPg() && conErr && (!main || (time(NULL)-conErr->property("tm").toLongLong()) < conErr->property("tmRest").toInt())) {
 	if(main && conErr->property("labTmpl").toString().size())
 	    conErr->setText(conErr->property("labTmpl").toString().arg(conErr->property("tmRest").toInt()-(time(NULL)-conErr->property("tm").toLongLong())));
@@ -354,7 +377,7 @@ int VisRun::cntrIfCmd( XMLNode &node, bool glob, bool main )
     else rez = mod->cntrIfCmd(node, user(), password(), VCAStation(), glob);
 
     //Display error message about connection error
-    if(rez == 10 && main && masterPg()) {
+    if(rez == TError::Tr_Connect && main && masterPg()) {
 	if(!conErr) {
 	    //Create error message
 	    conErr = new QLabel(masterPg());
@@ -388,6 +411,7 @@ int VisRun::cntrIfCmd( XMLNode &node, bool glob, bool main )
     else if(rez != 10 && main && conErr) {
 	if(masterPg()) conErr->deleteLater();
 	conErr = NULL;
+	updTmMax = planePer = 0;
     }
 
     return rez;
@@ -452,11 +476,7 @@ void VisRun::resizeEvent( QResizeEvent *ev )
 	    if(y_scale > 1 && y_scale < 1.02) y_scale = 1;
 	    if(keepAspectRatio()) x_scale = y_scale = vmin(x_scale, y_scale);
 	} else x_scale = y_scale = 1;
-	if(x_scale_old != x_scale || y_scale_old != y_scale) {
-	    isResizeManual = true;
-	    fullUpdatePgs();
-	    isResizeManual = false;
-	}
+	if(x_scale_old != x_scale || y_scale_old != y_scale)	fullUpdatePgs();
 
 	// Fit to the master page size
 	if((x_scale_old != x_scale || y_scale_old != y_scale || !ev || !ev->oldSize().isValid()) && !(windowState()&(Qt::WindowMaximized|Qt::WindowFullScreen))) {
@@ -834,7 +854,7 @@ void VisRun::exportDiag( const string &idg )
 			ShapeDiagram::TrendObj &cPrm = dgDt->prms[iP];
 			if(cPrm.val().size() && cPrm.color().isValid()) {
 			    vPos = cPrm.val(baseVls[i_v].tm);
-			    CSVr = CSVr + ";"+((vPos < (int)cPrm.val().size())?QLocale().toString(cPrm.val()[vPos].val).toStdString():"");
+			    CSVr = CSVr + ";"+((vPos < (int)cPrm.val().size())?((cPrm.val()[vPos].val!=EVAL_REAL)?QLocale().toString(cPrm.val()[vPos].val).toStdString():"\""+string(_("Empty"))+"\""):"");
 			}
 		    }
 		    CSVr += "\x0D\x0A";
@@ -1028,9 +1048,7 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
 	    if(keepAspectRatio()) x_scale = y_scale = vmin(x_scale, y_scale);
 	    mess_debug(mod->nodePath().c_str(), _("Scale of the root page [%f:%f]."), x_scale, y_scale);
 	}
-	isResizeManual = true;
 	fullUpdatePgs();
-	isResizeManual = false;
 	messUpd();
 
 	//Resize
@@ -1048,6 +1066,7 @@ void VisRun::styleChanged( )
 	return;
     }
     fullUpdatePgs();
+    pgCacheClear();
 }
 
 void VisRun::aboutQt( )		{ QMessageBox::aboutQt(this, mod->modInfo("Name").c_str()); }
@@ -1163,7 +1182,6 @@ void VisRun::usrStatus( const string &val, RunPageView *pg )
 	}
 }
 
-
 void VisRun::initSess( const string &iprjSes_it, bool icrSessForce )
 {
     bool isSess = false;
@@ -1173,7 +1191,7 @@ void VisRun::initSess( const string &iprjSes_it, bool icrSessForce )
     //Connect/create session
     int off = 0;
     if((src_prj=TSYS::pathLev(iprjSes_it,0,true,&off)).empty()) return;
-    if(off > 0 && off < iprjSes_it.size()) openPgs = iprjSes_it.substr(off);
+    if(off > 0 && off < (int)iprjSes_it.size()) openPgs = iprjSes_it.substr(off);
     // Check for ready session connection or project
     if(src_prj.compare(0,4,"ses_") == 0) { work_sess = src_prj.substr(4); src_prj = ""; isSess = true; }
     else if(src_prj.compare(0,4,"prj_") == 0) src_prj.erase(0,4);
@@ -1209,7 +1227,7 @@ void VisRun::initSess( const string &iprjSes_it, bool icrSessForce )
     if(work_sess.empty()) req.setAttr("prj", src_prj);
     else req.setAttr("sess", work_sess);
     if(cntrIfCmd(req)) {
-	if(!(conErr && s2i(req.attr("rez")) == 10)) {	//Need check for prevent the warning dialog and the run closing by the session creation wait
+	if(!(conErr && s2i(req.attr("rez")) == TError::Tr_Connect)) {	//Need check for prevent the warning dialog and the run closing by the session creation wait
 	    mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	    close();
 	}
@@ -1257,7 +1275,8 @@ void VisRun::initSess( const string &iprjSes_it, bool icrSessForce )
 	pN = req.childGet(3);
 	setStyle(s2i(pN->text()));
 	pN = req.childGet(4);
-	if(style() < 0 && pN->childSize() <= 1) mStlBar->setVisible(false);
+	mStlBar->setVisible(style() >= 0 && pN->childSize() > 1);
+	//if(style() < 0 && pN->childSize() <= 1) mStlBar->setVisible(false);
 
 	// Clean up the previous pages for clean reconnection
 	if(toRestore) {
@@ -1267,8 +1286,10 @@ void VisRun::initSess( const string &iprjSes_it, bool icrSessForce )
 		RunPageView *pg = master_pg->findOpenPage(pgList[iP]);
 		if(pg) { pg->deleteLater(); openPgs += pgList[iP] + ";"; }
 	    }
+	    ((QScrollArea *)centralWidget())->takeWidget();
 	    master_pg->deleteLater();
 	    master_pg = NULL;
+	    focusWdf = "";
 	    setXScale(1); setYScale(1);
 	}
 
@@ -1289,21 +1310,22 @@ void VisRun::initSess( const string &iprjSes_it, bool icrSessForce )
 	for(off = 0; (pIt=TSYS::strParse(openPgs,0,";",&off)).size(); )
 	    req.childAdd("open")->setAttr("path","/%2fserv%2fpg")->setAttr("pg",pIt);
 	cntrIfCmd(req);
-	// Force call for blinks prevent
+	// Force call to prevent blinking
 	for(off = 0; (pIt=TSYS::strParse(openPgs,0,";",&off)).size(); )
 	    callPage(pIt);
     }
 
-    if(toRestore) isResizeManual = false;
-
     QCoreApplication::processEvents();
 
     //Start timer
+    updTmMax = planePer = 0;
     updateTimer->start(period());
 }
 
 void VisRun::fullUpdatePgs( )
 {
+    isResizeManual = true;
+
     for(unsigned iP = 0; iP < pgList.size(); iP++) {
 	RunPageView *pg = master_pg->findOpenPage(pgList[iP]);
 	if(pg) pg->update(true);
@@ -1468,6 +1490,9 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
 	if(master_pg) {
 	    XMLNode req("close"); req.setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg")->setAttr("pg",master_pg->id());
 	    cntrIfCmd(req);
+	    //!!!! Without next rows the master page removing performs just into setWidget() of the scroll area
+	    ((QScrollArea *)centralWidget())->takeWidget();
+	    master_pg->deleteLater();
 	}
 
 	// Get and activate for specific attributes to the master-page
@@ -1477,7 +1502,7 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
 				     setAttr("aTp", i2s(TFld::String))->setAttr("aFlg", i2s(TFld::FullText));
 	reqSpc.childAdd("activate")->setAttr("path", "/%2fserv%2fattr%2frunWin")->
 				     setAttr("aNm", _("Running window"))->
-				     setAttr("aTp", i2s(TFld::Integer))->setAttr("aFlg", i2s(TFld::Selected))->
+				     setAttr("aTp", i2s(TFld::Integer))->setAttr("aFlg", i2s(TFld::Selectable))->
 				     setAttr("aVls", "0;1;2")->setAttr("aNms", _("Original size;Maximize;Full screen"));
 	reqSpc.childAdd("activate")->setAttr("path", "/%2fserv%2fattr%2fkeepAspectRatio")->
 				     setAttr("aNm", _("Keep aspect ratio on the scaling"))->
@@ -1494,6 +1519,7 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
 	// Create widget view
 	master_pg = new RunPageView(pg_it, this, centralWidget());
 	conErr = NULL;			//possible a connection error status clean up
+	focusWdf = "";
 	//master_pg->load("");
 	master_pg->setFocusPolicy(Qt::StrongFocus);
 	((QScrollArea *)centralWidget())->setWidget(master_pg);
@@ -1501,7 +1527,10 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
 	    QRect ws = QApplication::desktop()->availableGeometry(this);
 	    resize(vmin(master_pg->size().width()+10,ws.width()-10), vmin(master_pg->size().height()+55,ws.height()-10));
 	}
-	else x_scale = y_scale = 1.0;
+	else {
+	    x_scale = y_scale = 1.0;
+	    resizeEvent(NULL);
+	}
     }
     //Put to check for include
     else master_pg->callPage(pg_it, pgGrp, pgSrc);
@@ -1525,7 +1554,7 @@ void VisRun::pgCacheAdd( RunPageView *wdg )
 {
     if(!wdg) return;
     cachePg.push_front(wdg);
-    while(cachePg.size() > 100) {
+    while(mod->cachePgSz() && (int)cachePg.size() > mod->cachePgSz()) {
 	cachePg.back()->deleteLater();	//delete cachePg.back();
 	cachePg.pop_back();
     }
@@ -1619,7 +1648,7 @@ void VisRun::alarmSet( unsigned alarm )
 	actAlrmLev->setToolTip(QString(_("Alarm level: %1")).arg(alarmLev));
 
 	QImage lens(":/images/alarmLev.png");
-	QImage levImage(lens.size(),lens.format());
+	QImage levImage(lens.size(), lens.format());
 
 	QPainter painter(&levImage);
 	//QColor lclr( alarmLev ? 224 : 0, alarmLev ? 224-(int)(0.87*alarmLev) : 224, 0 );
@@ -1705,14 +1734,12 @@ void VisRun::cacheResSet( const string &res, const string &val )
 
 void VisRun::updatePage( )
 {
-    int64_t d_cnt = 0;
     if(winClose || updPage) return;
 
     int rez;
+    int64_t d_cnt = TSYS::curTime();
 
     updPage = true;
-
-    if(mess_lev() == TMess::Debug) d_cnt = TSYS::curTime();
 
     //Pages update
     XMLNode req("openlist");
@@ -1730,11 +1757,15 @@ void VisRun::updatePage( )
 	    if(!pg->property("cntPg").toString().isEmpty())
 		((RunWdgView*)TSYS::str2addr(pg->property("cntPg").toString().toStdString()))->setPgOpenSrc("");
 	    else {
-		if(pg != master_pg)	pg->deleteLater();
+		if(pg != master_pg) {
+		    if(pg->isWindow()) pg->close();
+		    pg->deleteLater();
+		}
 		else {
 		    ((QScrollArea*)centralWidget())->setWidget(new QWidget());
 		    master_pg = NULL;
 		    conErr = NULL;		//possible a connection error status clean up
+		    focusWdf = "";
 		}
 	    }
 	}
@@ -1771,21 +1802,22 @@ void VisRun::updatePage( )
 	alarmSet(wAlrmSt);
     }
 
-    //Old pages from cache for close checking
+    //Calc the planed executing period to correct the main one
+    float updTm = 1e-3*(TSYS::curTime()-d_cnt);
+    updTmMax = vmax(updTmMax, updTm);
+    if(!planePer) planePer = period();
+    planePer += (vmax(period(),updTm*3)-planePer)/100;
+    if(mess_lev() == TMess::Debug)
+	mess_debug(mod->nodePath().c_str(), _("Time of the session updating '%s': %s[%s]ms. Planer period %s(%s)ms"),
+	    workSess().c_str(), tm2s(1e-3*updTm).c_str(), tm2s(1e-3*updTmMax).c_str(), tm2s(1e-3*planePer).c_str(), tm2s(1e-3*period()).c_str());
+    updateTimer->start(vmax(0,planePer-updTm));
+
+    //Removing from the cache for old pages
     for(unsigned iPg = 0; iPg < cachePg.size(); )
 	if(mod->cachePgLife() > 0.01 && (period()*(reqTm()-cachePg[iPg]->reqTm())/1000) > (unsigned)(mod->cachePgLife()*60*60)) {
 	    cachePg[iPg]->deleteLater();	//delete cachePg[iPg];
 	    cachePg.erase(cachePg.begin()+iPg);
-	}
-	else iPg++;
-
-    if(mess_lev() == TMess::Debug) {
-	upd_tm += 1e-3*(TSYS::curTime()-d_cnt);
-	if(!(1000/vmin(1000,period()) && wPrcCnt%(1000/vmin(1000,period())))) {
-	    mess_debug(mod->nodePath().c_str(), _("Time of updating the session '%s': %f ms."), workSess().c_str(), upd_tm);
-	    upd_tm = 0;
-	}
-    }
+	} else iPg++;
 
     //Time update
     if(mWTime->isVisible() && !(wPrcCnt%vmax(1000/vmin(1000,period()),1))) {
@@ -1811,7 +1843,7 @@ void VisRun::updatePage( )
     }
 
     wPrcCnt++;
-    updPage = false;
+    updPage = isResizeManual = false;
 }
 
 #undef _

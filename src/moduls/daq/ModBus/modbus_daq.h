@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.ModBus file: modbus_daq.h
 /***************************************************************************
- *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -43,7 +43,7 @@ using namespace OSCADA;
 #define DAQ_NAME	"ModBus"
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"1.9.2"
+#define DAQ_MVER	"2.7.3"
 #define DAQ_AUTHORS	_("Roman Savochenko")
 #define DAQ_DESCR	_("Provides implementation of the client ModBus service. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported.")
 #define DAQ_LICENSE	"GPL2"
@@ -72,7 +72,8 @@ class TMdPrm : public TParamContr
 	void enable( );
 	void disable( );
 
-	void upVal( bool first, bool last, double frq );
+	void upValStd( );
+	void upValLog( bool first, bool last, double frq );
 
 	TElem *dynElCntr( )	{ return &pEl; }
 	TElem &elem( )		{ return pEl; }
@@ -80,6 +81,9 @@ class TMdPrm : public TParamContr
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
 	TMdContr &owner( ) const;
+
+	//Attributes
+	MtxString	acqErr;
 
     protected:
 	//Methods
@@ -98,45 +102,37 @@ class TMdPrm : public TParamContr
 
 	//Attributes
 	TElem		pEl;		//Work atribute elements
-	MtxString	acqErr;
 
 	// Logical type by template
 	//Data
 	//***************************************************
 	//* Logical type parameter's context                *
-	class TLogCtx : public TValFunc
+	class TLogCtx : public TPrmTempl::Impl
 	{
 	    public:
-	    //Data
-	    // Link structure
-	    class SLnk
-	    {
-		public:
-		SLnk( );
-		SLnk( int iid, const string &iaddr = "" );
-
-		int	ioId;		//Template function io index
-		MtxString addr, real;	//Full item address: R:23
-	    };
-
 	    //Methods
-	    TLogCtx( const string &name );
+	    TLogCtx( TCntrNode *iobj, const string &name );
 
-	    // Link operations
-	    int lnkSize( )		{ return plnk.size(); }
-	    int lnkId( int id );
-	    int lnkId( const string &id );
-	    SLnk &lnk( int num );
+	    //void lnkAdd( int num, const SLnk &l );
+	    bool lnkInit( int num, bool checkNoLink = false );
+	    bool lnkActive( int num );
+	    TVariant lnkInput( int num );
+	    bool lnkOutput( int num, const TVariant &vl );
+
+	    void cleanLnks( bool andFunc = false );
 
 	    //Attributes
+	    bool chkLnkNeed;	// Check lnks need flag
 	    int	idFreq, idStart, idStop, idErr, idSh, idNm, idDscr;	//Fixed system attributes identifiers
-	    vector<SLnk>	plnk;		//Parameter's links
+
+	    protected:
+	    //Methods
+	    string lnkHelp( );
 	};
 
 	//Methods
 	void loadIO( bool force = false );
 	void saveIO( );
-	void initLnks( );
 
 	//Attributes
 	TLogCtx	*lCtx;
@@ -162,7 +158,7 @@ class TMdContr: public TController
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
-	void regVal( int reg, const string &dt = "R" );			//Register value for acquisition
+	void regVal( int reg, const string &dt = "R", bool separate = false );	//Register value for acquisition
 	TVariant getVal( const string &addr, MtxString &err );		//Unified value request from string address
 	int64_t getValR( int addr, MtxString &err, bool in = false );	//Get register value
 	char getValC( int addr, MtxString &err, bool in = false );	//Get coins value
@@ -171,6 +167,8 @@ class TMdContr: public TController
 	bool setValRs( const map<int,int> &regs, MtxString &err );	//Set multiply registers
 	bool setValC( char val, int addr, MtxString &err );		//Set coins value
 	string modBusReq( string &pdu );
+
+	void redntDataUpdate( );
 
     protected:
 	//Methods
@@ -183,6 +181,8 @@ class TMdContr: public TController
 	void prmEn( TMdPrm *prm, bool val );
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+
+	bool inWr( const string &addr );
 
     private:
 	//Data
@@ -203,7 +203,7 @@ class TMdContr: public TController
 	void setCntrDelay( const string &err );
 
 	//Attributes
-	ResMtx	enRes;
+	ResMtx	enRes, aWrRes;
 	ResRW	reqRes;
 	int64_t	&mPrior,			//Process task priority
 		&mNode,				//Node

@@ -7,11 +7,11 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="files/doc.css" rel="stylesheet" /></head>
-<body><div id="mw_header">
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../en/files/Logo-big.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/How to/Crash report</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Crash_report/ru" title="Документы/Как сделать/Отчёт о падении (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Crash_report/uk" title="Документи/Як зробити/Звіт про падіння (100% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/How_to_Crash_report.html" title="Документы/Как сделать/Отчёт о падении (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/How_to_Crash_report.html" title="Документи/Як зробити/Звіт про падіння (100% translated)">українська</a></div></div>
 <p><i>Author:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
@@ -62,7 +62,7 @@ $ cat /proc/sys/kernel/core_pattern
 $ echo "core" &gt; /proc/sys/kernel/core_pattern
 </pre>
 <p>After that, you need to remove the limit on the size of the generated dump file. This limit is currently, by default, removed into OpenSCADA and is enabled with the command line argument <b>--noCoreDump</b>. To remove this limitation, at the operating system level, you can execute, before calling OpenSCADA, a special command — <b>$ ulimit -c unlimited</b>.
-</p><p>Then, you must make sure that the user launching OpenSCADA has the rights to write to the OpenSCADA working directory, which is required in the latest versions of OpenSCADA and provided by <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Projects" title="Special:MyLanguage/Documents/Program manual">the OpenSCADA Project Manager</a>.
+</p><p>Then, you must make sure that the user launching OpenSCADA has the rights to write to the OpenSCADA working directory, which is required in the latest versions of OpenSCADA and provided by <a href="Program_manual.html#Projects" title="Special:MyLanguage/Documents/Program manual">the OpenSCADA Project Manager</a>.
 </p><p>Then start OpenSCADA and reproduce the crash, which resulted in the working directory OpenSCADA, creates a file "core".
 </p><p>The latest versions of OpenSCADA provide the automatic generation of the crash report, in the presence of the "core" dump file and the <b>gdb</b> debugger, and this is done at the start of OpenSCADA. Crash report files are named "AGLKS_core_2018-02-16_22.06.crash" and accumulate in the work folder of the OpenSCADA project.
 </p><p>If the "core" memory dump file is generated and the crash report is not automatically generated, then the <b>gdb</b> debugger is probably not installed. In this case, you must install it and call:
@@ -92,5 +92,5 @@ $ echo "core" &gt; /proc/sys/kernel/core_pattern
 
 
 
-</div></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Crash_report/en">Documents/How_to/Crash_report/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.1</td></tr></table></body>
 </html>

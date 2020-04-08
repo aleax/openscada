@@ -1,7 +1,7 @@
 
 //OpenSCADA module Archive.DBArch file: mess.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -110,7 +110,7 @@ void ModMArch::start( )
     string wdb = TBDS::realDBName(addr());
     AutoHD<TBD> db = SYS->db().at().nodeAt(wdb, 0, '.');
     try { if(!db.at().enableStat()) db.at().enable(); }
-    catch(TError &err) { mess_warning(nodePath().c_str(), _("Enable target DB error: %s"), err.mess.c_str()); }
+    catch(TError &err) { mess_warning(nodePath().c_str(), _("Error enabling the target DB: %s"), err.mess.c_str()); }
 
     TMArchivator::start();
 }
@@ -122,13 +122,23 @@ void ModMArch::stop( )
     reqEl.fldClear();
 }
 
+time_t ModMArch::begin( )
+{
+    return mBeg;
+}
+
+time_t ModMArch::end( )
+{
+    return mEnd;
+}
+
 bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
 {
     if(needMeta && (needMeta=!readMeta()))	return false;
 
     TMArchivator::put(mess, force);	//Allow redundancy
 
-    if(!runSt) throw TError(nodePath().c_str(), _("Archive is not started!"));
+    if(!runSt) throw TError(nodePath().c_str(), _("The archive is not started!"));
 
     AutoHD<TTable> tbl = SYS->db().at().open(addr()+"."+archTbl(), true);
     if(tbl.freeStat()) return false;
@@ -179,7 +189,7 @@ bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
 
 time_t ModMArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const string &category, char level, time_t upTo )
 {
-    if(!runSt) throw TError(nodePath().c_str(), _("Archive is not started!"));
+    if(!runSt) throw TError(nodePath().c_str(), _("The archive is not started!"));
     if(needMeta && (needMeta=!readMeta())) return eTm;
     if(!upTo) upTo = SYS->sysTm() + STD_INTERF_TM;
 
@@ -241,7 +251,7 @@ bool ModMArch::readMeta( )
 	}
     } else rez = false;
 
-    //Check for target DB enabled (disabled by the connection lost)
+    //Check for target DB enabled (disabled by the connection loss)
     if(!rez) {
 	string wDB = TBDS::realDBName(addr());
 	rez = (TSYS::strParse(wDB,0,".") == DB_CFG ||
@@ -257,14 +267,14 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TMArchivator::cntrCmdProc(opt);
 	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
-	ctrMkNode("fld",opt,-1,"/prm/st/tarch",_("Archiving time (msek)"),R_R_R_,"root",SARH_ID,1,"tp","real");
+	ctrMkNode("fld",opt,-1,"/prm/st/tarch",_("Archiving time, milliseconds"),R_R_R_,"root",SARH_ID,1,"tp","real");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SARH_ID,3,
 	    "dest","select","select","/db/list","help",TMess::labDB());
 	if(ctrMkNode("area",opt,-1,"/prm/add",_("Additional options"),R_R_R_,"root",SARH_ID)) {
-	    ctrMkNode("fld",opt,-1,"/prm/add/sz",_("Archive size (days)"),RWRWR_,"root",SARH_ID,2,
-		"tp","real", "help",_("Set to 0 for the limit disable and some performance rise."));
-	    ctrMkNode("fld",opt,-1,"/prm/add/tmAsStr",_("Force time as string"),startStat()?R_R_R_:RWRWR_,"root",SARH_ID,2,
-		"tp","bool", "help",_("Only for DBs it supports by a specific data type like to \"datetime\" into MySQL."));
+	    ctrMkNode("fld",opt,-1,"/prm/add/sz",_("Archive size, days"),RWRWR_,"root",SARH_ID,2,
+		"tp","real", "help",_("Set to 0 to disable this limit and to rise some the performance."));
+	    ctrMkNode("fld",opt,-1,"/prm/add/tmAsStr",_("To form time as a string"),startStat()?R_R_R_:RWRWR_,"root",SARH_ID,2,
+		"tp","bool", "help",_("Only for databases that support such by means of specific data types like \"datetime\" in MySQL."));
 	}
 	return;
     }

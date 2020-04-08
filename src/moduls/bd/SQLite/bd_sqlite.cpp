@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.SQLite file: bd_sqlite.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,12 +33,14 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.5.2"
+#define MOD_VER		"2.8.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
 //******************************************************************************
 
+#define TRANS_CLOSE_TM_AFT_REQ	10
+#define TRANS_CLOSE_TM_AFT_OPEN	60
 #define SEEK_PRELOAD_LIM	100
 
 BDSQLite::BDMod *BDSQLite::mod;
@@ -117,7 +119,13 @@ void MBD::postDisable( int flag )
 void MBD::enable( )
 {
     MtxAlloc res(connRes, true);
-    if(enableStat()) return;
+
+    //Reconnecting
+    if(enableStat()) {
+	sqlite3_close(m_db);
+	mEn = false;
+	//return;
+    }
 
     string fnm = TSYS::strSepParse(addr(), 0, ';');
     remove((fnm+"-journal").c_str());
@@ -153,9 +161,9 @@ void MBD::allowList( vector<string> &list ) const
     if(!enableStat()) return;
     list.clear();
     vector< vector<string> > tbl;
-    const_cast<MBD*>(this)->sqlReq("SELECT name FROM sqlite_master WHERE type IN ('table','view') AND name NOT LIKE 'sqlite_%';", &tbl, false);
-    for(unsigned i_t = 1; i_t < tbl.size(); i_t++)
-	list.push_back(tbl[i_t][0]);
+    const_cast<MBD*>(this)->sqlReq("SELECT name FROM sqlite_master WHERE type IN ('table','view') AND name NOT LIKE 'sqlite_%';", &tbl/*, false*/);
+    for(unsigned iT = 1; iT < tbl.size(); iT++)
+	list.push_back(tbl[iT][0]);
 }
 
 TTable *MBD::openTable( const string &inm, bool create )
@@ -174,8 +182,8 @@ void MBD::sqlReq( const string &req, vector< vector<string> > *tbl, char intoTra
     int rc, nrow = 0, ncol = 0;
     char **result = NULL;
 
-    if(tbl) tbl->clear();
     if(!enableStat())	return;
+    if(tbl) tbl->clear();	//!! Clean only for enabled DB due to the possibility of wrong cleaning the table structure
 
     MtxAlloc res(connRes, true);//!! Moved before the transaction checking for prevent the "BEGIN;" and "COMMIT;"
 				//   request's sequence breakage on high concurrency access activity
@@ -184,14 +192,26 @@ void MBD::sqlReq( const string &req, vector< vector<string> > *tbl, char intoTra
     if(intoTrans && intoTrans != EVAL_BOOL) transOpen();
     else if(!intoTrans && reqCnt) transCommit();
 
+    int repCnt = 0;
+rep:
     //Put the request
     if(mess_lev() == TMess::Debug) mess_debug((nodePath()+"tracing/").c_str(), _("Request: \"%s\""), req.c_str());
     rc = sqlite3_get_table(m_db, Mess->codeConvOut(cd_pg.c_str(),req).c_str(), &result, &nrow, &ncol, &zErrMsg);
     if(rc != SQLITE_OK) {
 	string err = _("Unknown error");
 	if(zErrMsg) { err = zErrMsg; sqlite3_free(zErrMsg); }
+
+	if(rc == SQLITE_BUSY) {	//Treat locked DBs
+	    //Try to reconnect
+	    if((repCnt++) < 3)
+		try { enable(); goto rep; } catch(TError&) { }
+	    else mess_warning(nodePath().c_str(), _("Repeated errors of requesting the DB: %s(%d)."), err.c_str(), rc);
+
+	    disable();
+	}
+
 	if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("Error of the request \"%s\": %s(%d)"), req.c_str(), err.c_str(), rc);
-	throw err_sys(100+rc, _("Error of the request \"%s\": %s(%d)"), TSYS::strMess(50,"%s",req.c_str()).c_str(), err.c_str(), rc);
+	throw err_sys(TError::EXT+rc, _("Error of the request \"%s\": %s(%d)"), TSYS::strEncode(req,TSYS::Limit,"50").c_str(), err.c_str(), rc);
     }
     if(tbl && ncol > 0) {
 	vector<string> row;
@@ -216,9 +236,9 @@ void MBD::transOpen( )
 
     MtxAlloc res(connRes, true);
     bool begin = !reqCnt;
-    if(begin) trOpenTm = SYS->sysTm();
+    if(begin) trOpenTm = TSYS::curTime();
     reqCnt++;
-    reqCntTm = SYS->sysTm();
+    reqCntTm = TSYS::curTime();
 
     if(begin) sqlReq("BEGIN;");
 }
@@ -234,7 +254,8 @@ void MBD::transCommit( )
 
 void MBD::transCloseCheck( )
 {
-    if(enableStat() && reqCnt && ((SYS->sysTm()-reqCntTm) > 60 || (SYS->sysTm()-trOpenTm) > 10*60)) transCommit();
+    if(enableStat() && reqCnt && ((TSYS::curTime()-reqCntTm) > 1e6*trTm_ClsOnReq() || (TSYS::curTime()-trOpenTm) > 1e6*trTm_ClsOnOpen()))
+	transCommit();
 }
 
 void MBD::cntrCmdProc( XMLNode *opt )
@@ -315,6 +336,8 @@ bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
 
     if(tblStrct.empty()) throw err_sys(_("Table is empty."));
     mLstUse = SYS->sysTm();
+
+    cfg.cfgToDefault();	//reset the not key and viewed fields
 
     //Check for not present and not empty keys allow
     if(row == 0) {
@@ -532,7 +555,7 @@ void MTable::fieldSet( TConfig &cfg )
     //Query
     try { owner().sqlReq(req, NULL, true); }
     catch(TError &err) {
-	if((err.cod-100) == SQLITE_READONLY) {
+	if((err.cod-TError::EXT) == SQLITE_READONLY) {
 	    err.mess = err.mess + " " + _("The DB is into the Read only mode!");
 	    throw;
 	}
@@ -608,8 +631,8 @@ void MTable::fieldFix( TConfig &cfg, bool trPresent )
 		switch(cf.fld().type()) {
 		    case TFld::String:	if(tblStrct[iFld][2] != "TEXT")	toUpdate = true;	break;
 		    case TFld::Integer: case TFld::Boolean:
-					if(tblStrct[iFld][2] != "INTEGER")	toUpdate = true;	break;
-		    case TFld::Real:	if(tblStrct[iFld][2] != "DOUBLE")	toUpdate = true;	break;
+					if(tblStrct[iFld][2] != "INTEGER")toUpdate = true;	break;
+		    case TFld::Real:	if(tblStrct[iFld][2] != "DOUBLE")toUpdate = true;	break;
 		    default: toUpdate = true;
 		}
 		all_flds += (all_flds.size()?",\"":"\"") + TSYS::strEncode(tblStrct[iFld][1],TSYS::SQL,"\"") + "\"";
@@ -712,7 +735,7 @@ string MTable::getVal( TCfg &cfg, uint8_t RqFlg )
 	return isBin ? "X'"+TSYS::strDecode(rez, TSYS::Bin)+"'" : "'"+prntRes+"'";
     }
 
-    return "'" + rez + "'";
+    return rez;
 }
 
 void MTable::setVal( TCfg &cf, const string &ival, bool tr )

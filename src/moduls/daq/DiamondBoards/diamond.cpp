@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.DiamondBoards file: diamond.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,7 +36,7 @@
 #define MOD_NAME	_("Diamond DAQ boards")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.1.9"
+#define MOD_VER		"2.1.14"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides an access to \"Diamond Systems\" DAQ boards. Includes main support for all generic boards.")
 #define LICENSE		"GPL2"
@@ -177,7 +177,7 @@ void TTpContr::postEnable( int flag )
     tPrm.fldAdd(new TFld("INT",_("Board: interrupt"),TFld::Integer,TCfg::NoVal,"2","5"));
     tPrm.fldAdd(new TFld("S_RATE",_("Sample rate (single channel)"),TFld::Integer,TCfg::NoVal,"7","0"));
     tPrm.fldAdd(new TFld("ASYNCH_RD",_("Asynchronous read"),TFld::Boolean,TCfg::NoVal,"1","0"));
-    tPrm.fldAdd(new TFld("AI_VAL",_("AI value mode"),TFld::Integer,TCfg::NoVal|TFld::Selected,"1","0",
+    tPrm.fldAdd(new TFld("AI_VAL",_("AI value mode"),TFld::Integer,TCfg::NoVal|TFld::Selectable,"1","0",
 	TSYS::strMess("%d;%d;%d",TMdPrm::AIM_CODE,TMdPrm::AIM_PERC,TMdPrm::AIM_VOLT).c_str(),_("Code;%;Voltage")));
     tPrm.fldAdd(new TFld("PRMS",_("Addition parameters"),TFld::String,TFld::FullText|TCfg::NoVal,"1000"));
 }
@@ -189,7 +189,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )	{
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) :
     TController(name_c,daq_db,cfgelem), mPrior(cfg("PRIOR").getId()), mSched(cfg("SCHEDULE")),
-    mPer(1000000000), prcSt(false), callSt(false)
+    mPer(1e9), prcSt(false), callSt(false)
 {
     cfg("PRM_BD").setS("DiamPrm_"+name_c);
 }
@@ -219,9 +219,6 @@ TParamContr *TMdContr::ParamAttach( const string &name, int type ) { return new 
 void TMdContr::start_( )
 {
     if(prcSt)	return;
-
-    //Schedule process
-    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
 
     //Start the gathering data task
     SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this, 10);
@@ -289,6 +286,16 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     TController::cntrCmdProc(opt);
 }
 
+bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
+{
+    TController::cfgChange(co, pc);
+
+    if(co.fld().name() == "SCHEDULE")
+	mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
+
+    return true;
+}
+
 //*************************************************
 //* TMdPrm                                        *
 //*************************************************
@@ -341,12 +348,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     if(vl.isEVal() || vl == pvl) return;
 
     //Send to active reserve station
-    if(owner().redntUse()) {
-	XMLNode req("set");
-	req.setAttr("path", nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id", vo.name())->setText(vl.getS());
-	SYS->daq().at().rdStRequest(owner().workId(), req);
-	return;
-    }
+    if(vlSetRednt(vo,vl,pvl))	return;
 
     //Direct write
     ResAlloc res(devRes, true);
@@ -685,7 +687,7 @@ void TMdPrm::getVals( const string &atr, bool start, bool stop )
 		    (dscs.overflows-st_overflows), 1000000ll*(dscs.overflows-st_overflows)*dscaioint.fifo_depth/(aiSz*dscaioint.conversion_rate), st_drift);
 		st_overflows = dscs.overflows;
 	    }
-	    //Controller cycles lost or big differ
+	    //Controller cycles loss or big differ
 	    else if(owner().lag()/owner().period() || fabs(st_drift) > (10*(float)wPer/1000000)) {
 		cTm = diffTm = curTime-dtSz;
 		st_drift = 1e-6*(curTime-(cTm+dtSz));

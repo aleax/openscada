@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebCfgD file: web_cfg.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2008-2017,2020 by Roman Savochenko, <roman@oscada.org>  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -40,7 +40,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.2.9"
+#define MOD_VER		"1.4.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the WEB-based configurator of OpenSCADA. The technologies are used: XHTML, CSS and JavaScript.")
 #define LICENSE		"GPL2"
@@ -132,7 +132,7 @@ string TWEB::pgCreator( TProtocolIn *iprt, const string &cnt, const string &rcod
     vector<TVariant> prms;
     prms.push_back(cnt); prms.push_back(rcode); prms.push_back(httpattrs); prms.push_back(htmlHeadEls); prms.push_back(forceTmplFile);
 
-    return iprt->owner().objFuncCall("pgCreator", prms, "root").getS();
+    return iprt->objFuncCall("pgCreator", prms, "root").getS();
 }
 
 void TWEB::imgConvert( SSess &ses, string &vl )
@@ -402,13 +402,8 @@ string TWEB::trMessReplace( const string &tsrc )
 
 int TWEB::cntrIfCmd( XMLNode &node, const string &user )
 {
-    //Mark commands in "primaryCmd", for redundant hosts mostly transfer
-    // !!! Move further to the command's source
-    if(node.name() == "set" || node.name() == "add" || node.name() == "ins" || node.name() == "del" || node.name() == "move" ||
-	    node.name() == "load" || node.name() == "save" || node.name() == "copy")
-	node.setAttr("primaryCmd", "1");
     try { return SYS->transport().at().cntrIfCmd(node,"UIWebCfg",user); }
-    catch(TError &err) { node.setAttr("mcat",err.cat)->setAttr("rez","10")->setText(err.mess); }
+    catch(TError &err) { node.setAttr("mcat",err.cat)->setAttr("rez",i2s(TError::Tr_Connect))->setText(err.mess); }
 
     return s2i(node.attr("rez"));
 }

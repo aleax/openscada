@@ -135,6 +135,7 @@ namespace ModFastwel {
 	int WriteConfig(int);
 	int ReadConfig(int);
 	int SaveConfig(int);
+
       protected:
 	//Methods
 	void prmEn(const string & id, bool val);
@@ -142,10 +143,12 @@ namespace ModFastwel {
 	void start_();
 	void stop_();
 
+	void cntrCmdProc(XMLNode * opt);
+	bool cfgChange( TCfg &co, const TVariant &pc );
+
       private:
 	//Methods
 	TParamContr * ParamAttach(const string & name, int type);
-	void cntrCmdProc(XMLNode * opt);
 	static void *Task(void *icntr);
 
 	//Attributes

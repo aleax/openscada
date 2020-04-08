@@ -3,15 +3,15 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2018.
+# Roman Savochenko <roman@oscada.org>, 2010-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.FSArch 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-04 16:45+0300\n"
+"POT-Creation-Date: 2020-02-26 09:41+0200\n"
 "PO-Revision-Date: 2009-08-17 10:44+0200\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: de <>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -51,9 +51,14 @@ msgstr "Fehler beim Überprüfen des Nachrichtenarchivers '%s'."
 msgid "Error checking the value archiver '%s'."
 msgstr "Fehler beim Überprüfen des Wertarchivers '%s'."
 
+msgid "Cannot create the archive directory '%s'."
+msgstr "Das Archivverzeichnis '%s' kann nicht erstellt werden."
+
 #, c-format
 msgid "The value archiver '%s' uses the same folder '%s' as an other archiver."
-msgstr "Der Wertarchivierer '%s' verwendet denselben Ordner '%s' wie ein anderer Archivierer."
+msgstr ""
+"Der Wertarchivierer '%s' verwendet denselben Ordner '%s' wie ein anderer "
+"Archivierer."
 
 #, c-format
 msgid "%s: Mess: %s: information"
@@ -74,9 +79,8 @@ msgstr "Archiv ist nicht gestartet!"
 msgid "Error creating a new archive file '%s'!"
 msgstr "Fehler beim Erstellen einer neuen Archivdatei '%s'!"
 
-#, c-format
-msgid "Can not create the directory '%s'."
-msgstr "Das Verzeichnis '%s' kann nicht erstellt werden."
+msgid "The archive directory '%s' is not present."
+msgstr "Das Archivverzeichnis '%s' ist nicht vorhanden."
 
 msgid "Overall size of the archiver files"
 msgstr "Gesamtgröße der Archiver-Dateien"

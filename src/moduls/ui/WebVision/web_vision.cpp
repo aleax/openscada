@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebVision file: web_vision.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"2.6.1"
+#define MOD_VER		"4.6.1"
 #define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on the the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -72,7 +72,7 @@ using namespace WebVision;
 //************************************************
 //* TWEB                                         *
 //************************************************
-TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5), mPNGCompLev(1)
+TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5), mCachePgLife(1), mCachePgSz(10), mPNGCompLev(1), mImgResize(false)
 {
     mod = this;
 
@@ -238,10 +238,11 @@ TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5), mPNGCompLev(
     colors["yellowgreen"]	= rgb(154, 205, 50);
 
 #if 0
-    char mess[][100] = { _("Date and time"), _("Level"), _("Category"), _("Message"), _("mcsec"), _("Ready"),
+    char mess[][100] = { _("Date and time"), _("Level"), _("Category"), _("Message"), _("mcsec"), _("Ready"), _("Page"), _("View access is not permitted."),
 	_("Today"), _("Mon"), _("Tue"), _("Wed"), _("Thr"), _("Fri"), _("Sat"), _("Sun"),
 	_("January"), _("February"), _("March"), _("April"), _("May"), _("June"), _("July"),
-	_("August"), _("September"), _("October"), _("November"), _("December") };
+	_("August"), _("September"), _("October"), _("November"), _("December")
+	_("Field for displaying and changing the current user."), _("Field for displaying and changing the used interface style."), _("Alarm level: %1") };
 #endif
 }
 
@@ -250,10 +251,10 @@ TWEB::~TWEB( )
 
 }
 
-void TWEB::vcaSesAdd( const string &name, bool isCreate )
+void TWEB::vcaSesAdd( const string &name )
 {
     if(vcaSesPresent(name))	return;
-    chldAdd(id_vcases, new VCASess(name,isCreate));
+    chldAdd(id_vcases, new VCASess(name));
 }
 
 string TWEB::optDescr( )
@@ -261,8 +262,13 @@ string TWEB::optDescr( )
     return TSYS::strMess(_(
 	"======================= Module <%s:%s> options =======================\n"
 	"---- Parameters of the module section '%s' of the configuration file ----\n"
-	"SessTimeLife <min>      Lifetime of the sessions in minutes (by default, 10).\n\n"),
-	MOD_TYPE,MOD_ID,nodePath().c_str());
+	"SessTimeLife <min>      Lifetime of the sessions in minutes (by default, 10).\n"
+	"SessLimit    <numb>     Maximum number of the sessions (by default 5).\n"
+	"CachePgLife  <hours>    Lifetime of the pages in the cache (by default 1).\n"
+	"CachePgSz    <numb>     Maximum number of the pages in the cache (by default 10).\n"
+	"PNGCompLev   <lev>      Compression level [-1..9] of the creating PNG-images.\n"
+	"ImgResize    <0|1>      Resizing raster images on the server side.\n\n"),
+	MOD_TYPE, MOD_ID, nodePath().c_str());
 }
 
 void TWEB::load_( )
@@ -272,14 +278,20 @@ void TWEB::load_( )
     //Load parameters from config-file
     setSessTime(s2i(TBDS::genDBGet(nodePath()+"SessTimeLife",i2s(sessTime()))));
     setSessLimit(s2i(TBDS::genDBGet(nodePath()+"SessLimit",i2s(sessLimit()))));
+    setCachePgLife(s2r(TBDS::genDBGet(nodePath()+"CachePgLife",r2s(cachePgLife()))));
+    setCachePgSz(s2i(TBDS::genDBGet(nodePath()+"CachePgSz",i2s(cachePgSz()))));
     setPNGCompLev(s2i(TBDS::genDBGet(nodePath()+"PNGCompLev",i2s(PNGCompLev()))));
+    setImgResize(s2i(TBDS::genDBGet(nodePath()+"ImgResize",i2s(imgResize()))));
 }
 
 void TWEB::save_( )
 {
     TBDS::genDBSet(nodePath()+"SessTimeLife",i2s(sessTime()));
     TBDS::genDBSet(nodePath()+"SessLimit",i2s(sessLimit()));
+    TBDS::genDBSet(nodePath()+"CachePgLife", r2s(cachePgLife()));
+    TBDS::genDBSet(nodePath()+"CachePgSz", i2s(cachePgSz()));
     TBDS::genDBSet(nodePath()+"PNGCompLev",i2s(PNGCompLev()));
+    TBDS::genDBSet(nodePath()+"ImgResize",i2s(imgResize()));
 }
 
 void TWEB::modStart( )	{ runSt = true; }
@@ -294,33 +306,33 @@ void TWEB::perSYSCall( unsigned int cnt )
 
 	vector<string> list;
 	vcaSesList(list);
-	for(unsigned i_s = 0; i_s < list.size(); i_s++)
-	    if(cur_tm > vcaSesAt(list[i_s]).at().lstReq()+sessTime()*60)
-		vcaSesDel(list[i_s]);
+	for(unsigned iS = 0; iS < list.size(); iS++)
+	    if(cur_tm > vcaSesAt(list[iS]).at().lstReq()+sessTime()*60)
+		vcaSesDel(list[iS]);
     } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 string TWEB::pgCreator( TProtocolIn *iprt, const string &cnt, const string &rcode, const string &httpattrs,
     const string &htmlHeadEls, const string &forceTmplFile, const string &lang )
 {
-    if(httpattrs.size() && httpattrs.find("Content-Type: text/html") == string::npos)
+    /*if(httpattrs.size() && httpattrs.find("Content-Type: text/html") == string::npos)
 	return "HTTP/1.0 " + rcode + "\x0D\x0A"
 	    "Server: " + PACKAGE_STRING + "\x0D\x0A"
 	    "Accept-Ranges: bytes\x0D\x0A"
 	    "Content-Length: " + i2s(cnt.size()) + "\x0D\x0A" +
 //	    "Connection: close\x0D\x0A" +
-	    httpattrs + "\x0D\x0A\x0D\x0A" + cnt;
+	    httpattrs + "\x0D\x0A\x0D\x0A" + cnt;*/
 
     vector<TVariant> prms;
     prms.push_back(cnt); prms.push_back(rcode); prms.push_back(httpattrs); prms.push_back(htmlHeadEls); prms.push_back(forceTmplFile); prms.push_back(lang);
 
-    return iprt->owner().objFuncCall("pgCreator", prms, "root").getS();
+    return iprt->objFuncCall("pgCreator", prms, "root").getS();
 }
 
 bool TWEB::pgAccess( TProtocolIn *iprt, const string &URL )
 {
     vector<TVariant> prms; prms.push_back(URL);
-    return iprt->owner().objFuncCall("pgAccess", prms, "root").getB();
+    return iprt->objFuncCall("pgAccess", prms, "root").getB();
 }
 
 #undef _
@@ -345,7 +357,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		page = TSYS::strDecode(req.text(), TSYS::base64);
 	    }
 	    else page = TUIS::icoGet(zero_lev=="ico"?"UI." MOD_ID:zero_lev.substr(4), &itp);
-	    page = pgCreator(iprt, page, "200 OK", "Content-Type: image/"+itp+";");
+	    page = pgCreator(iprt, page, "200 OK", "Content-Type: image/"+itp);
 	}
 	//Check for main JavaScript code
 	else if(zero_lev == "script.js") {
@@ -357,7 +369,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 	    }
 	    else page = WebVisionVCA_js;
 	    page = trMessReplace(page);
-	    page = mod->pgCreator(iprt, page, "200 OK", "Content-Type: text/javascript;");
+	    page = mod->pgCreator(iprt, page, "200 OK", "Content-Type: text/javascript");	//Maybe application/javascript
 	}
 	else {
 	    //Session selection or a new session for the project creation
@@ -372,12 +384,13 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		ResAlloc sesRes(mSesRes, false);
 		for(unsigned iCh = 0; iCh < req.childSize(); iCh++) {
 		    if(!pgAccess(iprt,sender+"/" MOD_ID "/ses_"+req.childGet(iCh)->text()+"/"))	continue;
-		    if(!SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_) &&
+		    if(!ses.isRoot() &&
 			    (req.childGet(iCh)->attr("user") != user ||
 			    (vcaSesPresent(req.childGet(iCh)->text()) && vcaSesAt(req.childGet(iCh)->text()).at().sender() != sender)))
 			continue;
 		    prjSesEls += "<tr><td><img src='/" MOD_ID "/ico?it=/ses_" + req.childGet(iCh)->text() + "' height='32' width='32'/> "
 			"<a href='/" MOD_ID "/ses_" + req.childGet(iCh)->text() + "/"+ses.gPrms+"'>" + req.childGet(iCh)->text()+"</a>";
+		    if(ses.isRoot() && vcaSesPresent(req.childGet(iCh)->text())) prjSesEls += " (<a href='/" MOD_ID "/ses_" + req.childGet(iCh)->text() + "?com=close'>"+_("close")+"</a>)";
 		    if(req.childGet(iCh)->attr("user") != user) prjSesEls += " - "+req.childGet(iCh)->attr("user");
 		    if(vcaSesPresent(req.childGet(iCh)->text()) && vcaSesAt(req.childGet(iCh)->text()).at().sender() != sender)
 			prjSesEls += " - "+vcaSesAt(req.childGet(iCh)->text()).at().sender();
@@ -386,7 +399,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		}
 		if(!prjSesEls.empty()) {
 		    page = page +
-			"<tr><th>" + _("Connecting to the opened session") + "</th></tr>\n"
+			"<tr><th>" + _("Opened sessions of the projects") + "</th></tr>\n"
 			"<tr><td class='content'>\n"
 			"<table border='0' cellspacing='3px' width='100%'>\n" +
 			prjSesEls +
@@ -399,14 +412,13 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		cntrIfCmd(req, ses);
 		for(unsigned iCh = 0; iCh < req.childSize(); iCh++) {
 		    if(!pgAccess(iprt,sender+"/" MOD_ID "/prj_"+req.childGet(iCh)->attr("id")+"/"))	continue;
-		    if(!SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_) && self_prjSess.find(req.childGet(iCh)->attr("id")+";") != string::npos)
-			continue;
+		    if(!ses.isRoot() && self_prjSess.find(req.childGet(iCh)->attr("id")+";") != string::npos)	continue;
 		    prjSesEls += "<tr><td><img src='/" MOD_ID "/ico?it=/prj_" + req.childGet(iCh)->attr("id") + "' height='32' width='32'/> "
 			"<a href='/" MOD_ID "/prj_" + req.childGet(iCh)->attr("id") + "/"+ses.gPrms+"'>" + req.childGet(iCh)->text() + "</a></td></tr>";
 		}
 		if(!prjSesEls.empty()) {
 		    page = page +
-			"<tr><th>"+_("Creating a new session for the existing project")+"</th></tr>\n"
+			"<tr><th>"+_("Available projects")+"</th></tr>\n"
 			"<tr><td class='content'>\n"
 			"<table border='0' cellspacing='3px' width='100%'>\n"+
 			prjSesEls+
@@ -426,11 +438,11 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		req.setAttr("path","/%2fses%2fses")->setAttr("chkUserPerm","1");
 		cntrIfCmd(req, ses);
 		ResAlloc sesRes(mSesRes, false);
-		if(!SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_))
-		    for(unsigned iCh = 0; iCh < req.childSize(); iCh++)
-			if(req.childGet(iCh)->attr("user") == user && req.childGet(iCh)->attr("proj") == zero_lev.substr(4) &&
-			    vcaSesPresent(req.childGet(iCh)->text()) && vcaSesAt(req.childGet(iCh)->text()).at().sender() == sender)
-			{ sName = req.childGet(iCh)->text(); break; }
+		//if(!ses.isRoot())
+		for(unsigned iCh = 0; iCh < req.childSize(); iCh++)
+		    if(req.childGet(iCh)->attr("user") == user && req.childGet(iCh)->attr("proj") == zero_lev.substr(4) &&
+			vcaSesPresent(req.childGet(iCh)->text()) && vcaSesAt(req.childGet(iCh)->text()).at().sender() == sender)
+		    { sName = req.childGet(iCh)->text(); break; }
 		if(sName.empty()) {
 		    vector<string> vcaLs;
 		    vcaSesList(vcaLs);
@@ -438,13 +450,16 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 			page = messPost(nodePath(), _("Sorry, the number of open sessions has reached a limit!"), TWEB::Warning);
 		    else {
 			sesRes.request(true);
-			req.setName("connect")->setAttr("path","/%2fserv%2fsess")->setAttr("prj",zero_lev.substr(4));
+			req.setName("connect")->setAttr("path", "/%2fserv%2fsess")->setAttr("prj", zero_lev.substr(4))->setAttr("remoteSrcAddr", sender);
 			if(cntrIfCmd(req,ses))
 			    page = messPost(req.attr("mcat").c_str(), req.text().c_str(), TWEB::Error);
 			else {
 			    sName = req.attr("sess");
-			    vcaSesAdd(sName, true);
-			    vcaSesAt(sName).at().senderSet(sender);
+			    vcaSesAdd(sName);
+			    AutoHD<VCASess> vs = vcaSesAt(sName);
+			    vs.at().projSet(req.attr("prj"));
+			    vs.at().userSet(user);
+			    vs.at().senderSet(sender);
 			}
 		    }
 		}
@@ -457,23 +472,52 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 	    else if(zero_lev.compare(0,4,"ses_") == 0) {
 		ses.url = Mess->codeConvIn("UTF-8", ses.url);	//Internal data into UTF-8
 		string sesnm = zero_lev.substr(4);
-		// Check for the session presence
-		if(!ses.prm.size()) {
-		    XMLNode req("get"); req.setAttr("path",ses.url+"/%2fobj%2fst%2fen");
-		    if(cntrIfCmd(req,ses) || !s2i(req.text()))	{ HTTP_GET("", page, vars, user, iprt); return; }
+
+		AutoHD<VCASess> vs;
+		try { vs = vcaSesAt(sesnm); } catch(TError&) { }
+
+		map<string,string>::iterator cntEl;
+		if((cntEl=ses.prm.find("com"))!=ses.prm.end() && cntEl->second == "close") {
+		    if(ses.isRoot()) {
+			if(!vs.freeStat()) { vs.free(); vcaSesDel(sesnm); }
+			page = pgCreator(iprt, _("Going to the main page ..."),
+			    "200 OK", "", "<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/" MOD_ID "'/>", "", ses.lang);
+			mess_info(nodePath().c_str(), _("The session '%s' is closed."), sesnm.c_str());
+		    }
+		    else page = pgCreator(iprt, string("<div class='error'>")+TSYS::strMess(_("You '%s' have no access to close sessions!"),user.c_str())+"</div>\n",
+			    "401 Unauthorized", "", "", "", ses.lang);
 		}
-		// Call to the session
-		ResAlloc sesRes(mSesRes, false);
-		try { vcaSesAt(sesnm).at().getReq(ses); }
-		catch(...) {
-		    if(!vcaSesPresent(sesnm)) {
-			sesRes.request(true);
-			vcaSesAdd(sesnm, false);
-			vcaSesAt(sesnm).at().senderSet(sender);
-			vcaSesAt(sesnm).at().getReq(ses);
-		    } else throw;
+		// Checking for the internal session presence
+		else if(!vs.freeStat() && (user != vs.at().user() || sender != vs.at().sender()) && !SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_))
+		    page = pgCreator(iprt, _("Going to the different session ..."),
+			"200 OK", "", "<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/" MOD_ID "/prj_"+vs.at().proj()+"'/>", "", ses.lang);
+		// The main requesting code
+		else {
+		    // Try to connect the VCA-session at missing the Web-session
+		    if(vs.freeStat() && !ses.prm.size() && ses.isRoot()) {
+			XMLNode req("get"); req.setAttr("path", ses.url+"/%2fobj%2fst%2fen");
+			//  Connecting and creation a new Web-session for the VCA-session
+			if(!cntrIfCmd(req,ses) && s2i(req.text())) {
+			    req.setName("connect")->setAttr("path", "/%2fserv%2fsess")->setAttr("sess", sesnm)->setAttr("remoteSrcAddr", sender);
+			    if(cntrIfCmd(req,ses)) {
+				page = messPost(req.attr("mcat").c_str(), req.text().c_str(), TWEB::Error);
+				return;
+			    }
+			    ResAlloc sesRes(mSesRes, true);
+			    vcaSesAdd(sesnm); vs = vcaSesAt(sesnm);
+			    vs.at().projSet(req.attr("prj"));
+			    vs.at().userSet(user);
+			    vs.at().senderSet(sender);
+			}
+		    }
+
+		    // Same request
+		    if(!vs.freeStat()) {
+			ResAlloc sesRes(mSesRes, false);
+			vs.at().getReq(ses);
+			page = ses.page;
+		    } else HTTP_GET("", page, vars, user, iprt);
 		}
-		page = ses.page;
 	    }
 	    else {
 		page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("The specified project/session '%s' is false!"),zero_lev.c_str())+"</div>\n",
@@ -539,8 +583,9 @@ string TWEB::messPost( const string &cat, const string &mess, MessLev type )
 
 int TWEB::cntrIfCmd( XMLNode &node, const SSess &ses, bool VCA )
 {
-    node.setAttr("lang", ses.lang);
-    node.setAttr("user", ses.user);
+    node.setAttr("lang", ses.lang)->
+	setAttr("user", ses.user)->
+	setAttr("reforwardRedundOff", "1");
     if(VCA)	node.setAttr("path","/UI/VCAEngine"+node.attr("path"));
     SYS->cntrCmd(&node);
     return s2i(node.attr("rez"));
@@ -551,21 +596,47 @@ void TWEB::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TUI::cntrCmdProc(opt);
+	if(ctrMkNode("area",opt,1,"/prm/st",_("State")))
+	    ctrMkNode("list",opt,-1,"/prm/st/ses",_("Sessions"),R_R_R_,"root",SUI_ID);
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options"),R_R_R_)) {
-	    ctrMkNode("fld", opt, -1, "/prm/cfg/lf_tm", _("Lifetime of the sessions, minutes"), RWRWR_, "root", SUI_ID, 1, "tp","dec");
-	    ctrMkNode("fld", opt, -1, "/prm/cfg/sesLimit", _("Sessions limit"), RWRWR_, "root", SUI_ID, 1, "tp","dec");
-	    ctrMkNode("fld", opt, -1, "/prm/cfg/PNGCompLev", _("Level of the PNG compression"), RWRWR_, "root", SUI_ID, 4,
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Lifetime and maximum number of the sessions"),RWRWR_,"root",SUI_ID,2,"tp","dec",
+		"help",_("The time is specified in minutes, which defines the inactivity interval for closing the WEB-sessions."));
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/sesLimit","",RWRWR_,"root",SUI_ID,2,"tp","dec",
+		"help",_("The number defines a limit of opened WEB-sessions."));
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/cachePgLife",_("Lifetime and maximum number of the cached pages"),RWRWR_,"root",SUI_ID,2,"tp","real",
+		"help",_("The time is specified in hours, which defines the inactivity interval for closing pages in the cache.\n"
+			"Zero value of the time excludes the closing of pages in the cache."));
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/cachePgSz","",RWRWR_,"root",SUI_ID,2,"tp","dec",
+		"help",_("The number defines a limit of pages in the cache.\n"
+			"Zero value of the number excludes the cache limit."));
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/PNGCompLev",_("Level of the PNG compression"),RWRWR_,"root",SUI_ID,4,
 		"tp","dec", "min","-1", "max","9", "help",_("Level of the PNG (ZLib) compression:\n"
 			    "  -1  - optimal speed-size;\n"
 			    "  0   - disable;\n"
 			    "  1-9 - direct level."));
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/imgResize",_("Resizing raster images on the server side"),RWRWR_,"root",SUI_ID,2,
+		"tp","bool","help",_("Mostly to decrease too big images size then decrease the traffic, what causes to rise the server load."));
 	}
 	return;
     }
 
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/cfg/lf_tm") {
+    if(a_path == "/prm/st/ses" && ctrChkNode(opt)) {
+	vector<string> vSesLs, vSesObjs;
+	vcaSesList(vSesLs);
+	for(unsigned iS = 0; iS < vSesLs.size(); iS++) {
+	    AutoHD<VCASess> ses = vcaSesAt(vSesLs[iS]);
+	    ses.at().objList(vSesObjs);
+	    opt->childAdd("el")->setText(TSYS::strMess(_("%s %s(%s):%s(%s): the last %s; cached pages %d and resources %d, %s; session objects %d."),
+		atm2s(ses.at().openTm(),"%Y-%m-%dT%H:%M:%S").c_str(),
+		ses.at().id().c_str(), ses.at().proj().c_str(),
+		ses.at().user().c_str(),  ses.at().sender().c_str(),
+		atm2s(ses.at().lstReq(),"%Y-%m-%dT%H:%M:%S").c_str(),
+		ses.at().pgCacheSize(), ses.at().cacheResSize(), TSYS::cpct2str(ses.at().cacheResLen()).c_str(), vSesObjs.size()));
+	}
+    }
+    else if(a_path == "/prm/cfg/lf_tm") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(sessTime()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setSessTime(s2i(opt->text()));
     }
@@ -573,21 +644,46 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(sessLimit()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setSessLimit(s2i(opt->text()));
     }
+    else if(a_path == "/prm/cfg/cachePgLife") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(r2s(cachePgLife()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setCachePgLife(s2r(opt->text()));
+    }
+    else if(a_path == "/prm/cfg/cachePgSz") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(cachePgSz()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setCachePgSz(s2i(opt->text()));
+    }
     else if(a_path == "/prm/cfg/PNGCompLev") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(PNGCompLev()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setPNGCompLev(s2i(opt->text()));
     }
+    else if(a_path == "/prm/cfg/imgResize") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(imgResize()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setImgResize(s2i(opt->text()));
+    }
     else TUI::cntrCmdProc(opt);
 }
 
-void TWEB::imgConvert( SSess &ses )
+void TWEB::imgConvert( SSess &ses, const string &mime )
 {
     map<string,string>::iterator prmEl;
     gdImagePtr sim = NULL;
     string itp;
     int newImgH = 0, newImgW = 0;
 
-    if(ses.page.empty() || (ses.prm.find("size") == ses.prm.end() && ses.prm.find("filtr") == ses.prm.end()))   return;
+    //Checking for SVG and appending/removing "preserveAspectRatio" at the argument "size" presence, for true fitting.
+    if(mime.find("image/svg+xml") != string::npos && ses.page.size() && ses.prm.find("size") != ses.prm.end())
+	try {
+	    XMLNode nd;
+	    nd.load(ses.page, XMLNode::LD_Full);
+	    if(nd.name() == "svg") {
+		nd.setAttr("preserveAspectRatio","none");
+		ses.page = nd.save(XMLNode::XMLHeader);
+	    }
+	    return;
+	} catch(TError&) { }
+
+    //Raster images processing
+    if(!imgResize() || ses.page.empty() || (ses.prm.find("size") == ses.prm.end() && ses.prm.find("filtr") == ses.prm.end()))	return;
 
     if((sim=gdImageCreateFromPngPtr(ses.page.size(),(char*)ses.page.data())))		itp = "png";
     else if((sim=gdImageCreateFromJpegPtr(ses.page.size(),(char*)ses.page.data())))	itp = "jpg";
@@ -696,7 +792,7 @@ string TWEB::trMessReplace( const string &tsrc )
 //*************************************************
 SSess::SSess( const string &iurl, const string &isender, const string &iuser, vector<string> &ivars,
 	const string &icontent, TProtocolIn *iprt ) :
-    prt(iprt), url(iurl), sender(isender), user(iuser), content(icontent), vars(ivars)
+    prt(iprt), url(iurl), sender(isender), user(iuser), content(icontent), mRoot(-1), vars(ivars)
 {
     //URL parameters parse
     size_t prmSep = iurl.find("?");
@@ -753,6 +849,13 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
 	if(pos >= content.size()) return;
 	cnt.back().setText(content.substr(pos, content.find(string(c_term)+c_end+boundary,pos)-pos));
     }
+}
+
+bool SSess::isRoot( )
+{
+    if(mRoot < 0) mRoot = SYS->security().at().access(user, SEC_WR, "root", "root", RWRWR_);
+
+    return mRoot;
 }
 
 #undef _

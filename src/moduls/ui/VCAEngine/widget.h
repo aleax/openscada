@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: widget.h
 /***************************************************************************
- *   Copyright (C) 2006-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -174,6 +174,7 @@ class Widget : public TCntrNode
 	string owner( ) const;					//Widget owner
 	string grp( ) const;					//Widget group
 	short  permit( ) const;					//Permission for access to widget
+	virtual string getStatus( );
 	virtual string calcId( );				//Compile function identifier
 	virtual string calcLang( ) const { return ""; }		//Calc procedure language
 	virtual bool   calcProgTr( )	{ return true; }	//Calc procedure translation
@@ -205,6 +206,7 @@ class Widget : public TCntrNode
 	// Enable stat
 	bool enable( ) const;
 	virtual void setEnable( bool val, bool force = false );
+	void linkToParent( );
 
 	// Inheritance methods
 	virtual string parentNm( ) const { return mParentNm; }	//Parent widget name
@@ -218,7 +220,7 @@ class Widget : public TCntrNode
 	virtual void inheritAttr( const string &attr = "" );	//Inherit parent attributes
 	void inheritIncl( const string &wdg = "" );		//Inherit parent include widgets
 
-	virtual void procChange( bool src = true )	{ }			//Process the procedure change
+	virtual void procChange( bool src = true )	{ }	//Process the procedure change
 
 	// Widget's attributes
 	void attrList( vector<string> &list ) const;
@@ -244,6 +246,8 @@ class Widget : public TCntrNode
 	static string helpColor( );
 	static string helpFont( );
 
+	virtual TVariant stlReq( Attr &a, const TVariant &vl, bool wr );
+
     protected:
 	//Methods
 	const char *nodeName( ) const	{ return mId.c_str(); }
@@ -260,7 +264,6 @@ class Widget : public TCntrNode
 	virtual bool attrChange( Attr &cfg, TVariant prev );	//Process an attribute change local and into the terminator
 	virtual unsigned int modifVal( Attr &cfg )	{ return 0; }
 	virtual TVariant vlGet( Attr &a );
-	virtual TVariant stlReq( Attr &a, const TVariant &vl, bool wr );
 	virtual bool eventProc( const string &ev, Widget *src = NULL );	//Return "true" for terminate next processing
 
 	virtual void disable( Widget *base );

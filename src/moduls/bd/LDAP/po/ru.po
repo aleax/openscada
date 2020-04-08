@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 
 msgid "Directory by LDAP"
-msgstr "Директория LDAP"
+msgstr "Директория по LDAP"
 
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"

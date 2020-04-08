@@ -1,13 +1,13 @@
 # OpenSCADA.Protocol.SelfSystem translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.Protocol.SelfSystem package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2007-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2007-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-19 18:52+0300\n"
+"POT-Creation-Date: 2018-07-02 12:18+0300\n"
 "PO-Revision-Date: 2007-10-23 18:19+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -15,20 +15,22 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-msgid "Self protocol of OpenSCADA"
+msgid "Own protocol of OpenSCADA"
 msgstr "Власний протокол OpenSCADA"
 
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 msgid ""
-"Provides self OpenSCADA protocol based at XML and one's control interface."
+"Provides own OpenSCADA protocol based at XML and the control interface of "
+"OpenSCADA."
 msgstr ""
-"Надає власний протокол заснований на XML та інтерфейсі керування OpenSCADA."
+"Надає власний протокол OpenSCADA заснований на XML та інтерфейсі керування "
+"OpenSCADA."
 
 #, c-format
 msgid ""
-"Connections from the user '%s' and the source '%s' reached to limit %d. "
+"Connections from the user '%s' and the source '%s' reached to the limit %d. "
 "Erasing spare!"
 msgstr ""
 "Підключення від користувача '%s' та джерела '%s' досягли ліміту %d. "
@@ -38,7 +40,7 @@ msgstr ""
 msgid "SES_OPEN request: %d"
 msgstr "SES_OPEN запит: %d"
 
-msgid "Not full respond."
+msgid "Not full response."
 msgstr "Неповна відповідь."
 
 #, c-format
@@ -46,31 +48,34 @@ msgid "SES_OPEN response: %d"
 msgstr "SES_OPEN відповідь: %d"
 
 #, c-format
-msgid "Station '%s' error: %s!"
-msgstr "Помилка станції '%s': %s!"
+msgid "Error the station '%s': %s."
+msgstr "Помилка станції '%s': %s."
 
 #, c-format
-msgid "Station '%s' error: Respond format error!"
-msgstr "Помилка станції '%s': Відповідь помилкова!"
+msgid "Error the station '%s': error the response format."
+msgstr "Помилка станції '%s': помилка формату відповіді."
 
 #, c-format
 msgid "REQ send: %d"
 msgstr "REQ надсилання: %d"
 
 #, c-format
-msgid "REQ response first %d"
+msgid "REQ first response %d"
 msgstr "REQ перша відповідь %d"
 
 #, c-format
-msgid "Station respond '%s' error!"
-msgstr "Помилка відповіді станції '%s'!"
+msgid "Error the station '%s' response."
+msgstr "Помилка відповіді станції '%s'."
+
+msgid "Not full respond."
+msgstr "Неповна відповідь."
 
 #, c-format
-msgid "REQ response full %d"
+msgid "REQ full response %d"
 msgstr "REQ повна відповідь %d"
 
 #, c-format
-msgid "Request error: %s"
+msgid "Error the request: %s"
 msgstr "Помилка запиту: %s"
 
 msgid "Parameters"
@@ -85,10 +90,10 @@ msgstr "Активні сеанси аутентифікації"
 msgid "Module options"
 msgstr "Опції модуля"
 
-msgid "Life time of auth session(min)"
-msgstr "Час життя сесії аутентифікації (хвил.)"
+msgid "Life time of the authentication session, minutes"
+msgstr "Час життя сеансу аутентифікації, хвилин"
 
-msgid "Single user and host connections limit"
+msgid "Limit of the connections for one user and host"
 msgstr "Ліміт підключень одного користувача та хоста"
 
 msgid "Compression level"
@@ -105,32 +110,28 @@ msgstr ""
 "  0   - вимкнено;\n"
 "  1-9 - прямий рівень."
 
-msgid "Lower compression border"
+msgid "Lower limit of compression"
 msgstr "Нижня межа компресії"
 
 msgid "Value in bytes."
 msgstr "Значення у байтах."
 
 #, c-format
-msgid "%s %s(%s)"
-msgstr ""
+msgid "Request received: '%s': %d, time: %g ms."
+msgstr "Отримано запит: '%s': %d, час: %g мс."
 
 #, c-format
-msgid "Get request: '%s': %d, time: %f ms."
-msgstr "Отримання запиту: '%s': %d, час: %f мс."
+msgid "Request checked and redirected: '%s': %d, time: %g ms."
+msgstr "Перевірено та переспрямовано запит: '%s': %d, час: %g мс."
 
 #, c-format
-msgid "Check and reforward request: '%s': %d, time: %f ms."
-msgstr "Перевірка та переспрямування запиту: '%s': %d, час: %f мс."
+msgid "Request unpacked and loaded: '%s': %d, time: %g ms."
+msgstr "Розпаковано та завантажено запит: '%s': %d, час: %g мс."
 
 #, c-format
-msgid "Unpack and load request: '%s': %d, time: %f ms."
-msgstr "Розпакування та завантаження запиту: '%s': %d, час: %f мс."
+msgid "Request processed: '%s', time: %g ms."
+msgstr "Оброблено запит: '%s', час: %g мс."
 
 #, c-format
-msgid "Process request: '%s', time: %f ms."
-msgstr "Обробка запиту: '%s', час: %f мс."
-
-#, c-format
-msgid "Save respond to stream and pack: '%s': %d, time: %f ms."
-msgstr "Збереження відповіді до потоку та пакування: '%s': %d, час: %f мс."
+msgid "Response saved to a stream and packed: '%s': %d, time: %g ms."
+msgstr "Збережено відповідь до потоку та запаковано: '%s': %d, час: %g мс."

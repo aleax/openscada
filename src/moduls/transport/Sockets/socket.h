@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.Sockets file: socket.h
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -55,14 +55,14 @@ class SSockIn
     public:
 	SSockIn( TSocketIn *is, int isock, const string &isender ) :
 	    pid(0), sock(isock), sender(isender), tmCreate(time(NULL)), tmReq(time(NULL)),
-	    trIn(0), trOut(0), prcTm(0), prcTmMax(0), clntDetchCnt(0), s(is)	{ }
+	    trIn(0), trOut(0), prcTm(0), prcTmMax(0), s(is)	{ }
 
 	pthread_t pid;		//Client's thread id
 	int	sock;
 	string	sender;
 	time_t	tmCreate, tmReq;
 	uint64_t trIn, trOut;	//Traffic in and out counters
-	float	prcTm, prcTmMax, clntDetchCnt;
+	float	prcTm, prcTmMax;
 
 	TSocketIn	*s;
 };
@@ -124,8 +124,8 @@ class TSocketIn: public TTransportIn
 	static void *Task( void* );
 	static void *ClTask( void* );
 
-	bool prtInit( AutoHD<TProtocolIn> &prot_in, int sock, const string &sender, bool noex = false );
-	void messPut( int sock, string &request, string &answer, const string &sender, AutoHD<TProtocolIn> &prot_in );
+	int prtInit( vector< AutoHD<TProtocolIn> > &prot_in, int sock, const string &sender );
+	int messPut( int sock, string &request, string &answer, const string &sender, vector< AutoHD<TProtocolIn> > &prot_in );
 
 	void clientReg( SSockIn *so );
 	void clientUnreg( SSockIn *so );
@@ -143,6 +143,7 @@ class TSocketIn: public TTransportIn
 	string		path;			//Path to file socket for UNIX socket
 	string		host;			//Host for TCP/UDP sockets
 	string		port;			//Port for TCP/UDP sockets
+	string		addon;
 
 	unsigned short	mMode,			//Mode for TCP/UNIX sockets (0 - no hand; 1 - hand connect; 2 - initiative connection)
 			mMSS,			//MSS
@@ -169,6 +170,8 @@ class TSocketIn: public TTransportIn
 //************************************************
 class TSocketOut: public TTransportOut
 {
+    friend class TSocketIn;
+
     public:
 	/* Open output socket <name> for locale <address>
 	 * address : <type:<specific>>
@@ -185,10 +188,12 @@ class TSocketOut: public TTransportOut
 	string getStatus( );
 
 	string timings( )		{ return mTimings; }
+	unsigned short attempts( )	{ return mAttemts; }
 	unsigned MSS( )			{ return mMSS; }
 	int tmCon( )			{ return mTmCon; }
 
 	void setTimings( const string &vl );
+	void setAttempts( unsigned short vl );
 	void setMSS( unsigned vl )	{ mMSS = vl ? vmax(100,vmin(1000000,vl)) : 0; modif(); }
 	void setTmCon( int vl )		{ mTmCon = vmax(1,vmin(60000,vl)); }
 
@@ -199,6 +204,8 @@ class TSocketOut: public TTransportOut
 
     protected:
 	//Methods
+	bool cfgChange( TCfg &co, const TVariant &pc );
+
 	void load_( );
 	void save_( );
 
@@ -208,7 +215,8 @@ class TSocketOut: public TTransportOut
 
 	//Attributes
 	string		mTimings;
-	unsigned short	mMSS,			//MSS
+	unsigned short	mAttemts,
+			mMSS,			//MSS
 			mTmCon,
 			mTmNext,
 			mTmRep;
@@ -220,9 +228,9 @@ class TSocketOut: public TTransportOut
 	struct sockaddr_un	nameUn;
 
 	// Status atributes
+	string		connAddr;
 	uint64_t	trIn, trOut;		//Traffic in and out counter
 	float		respTm, respTmMax;
-	int64_t		mLstReqTm;
 };
 
 //************************************************
@@ -236,6 +244,10 @@ class TTransSock: public TTypeTransport
 
 	TTransportIn  *In( const string &name, const string &idb );
 	TTransportOut *Out( const string &name, const string &idb );
+
+	string outAddrHelp( );
+	string outTimingsHelp( );
+	string outAttemptsHelp( );
 
 	void perSYSCall( unsigned int cnt );
 

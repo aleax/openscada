@@ -94,7 +94,7 @@ void BCM2835::enable( TParamContr *ip )
     if(!bcm2835_init())
 	throw TError(p->nodePath().c_str(), _("Init bcm2835 library error whether that is not bcm2835 or there is not access."));
 
-    MtxAlloc res(p->owner().dataRes(), true);
+    MtxAlloc res(p->owner().enRes(), true);
     if(use)	throw TError(p->nodePath().c_str(), _("BCM2835 GPIO is already used."));
     use = true;
 

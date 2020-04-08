@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTCfg file: qtcfg.h
 /***************************************************************************
- *   Copyright (C) 2004-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2004-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,9 +21,6 @@
 #ifndef QTCFG_H
 #define QTCFG_H
 
-#include <string>
-#include <vector>
-
 #include <QWidget>
 #include <QMainWindow>
 #include <QThread>
@@ -31,6 +28,12 @@
 #include <QWaitCondition>
 #include <QProgressDialog>
 
+#include <string>
+#include <vector>
+
+#include <tmess.h>
+#include <tsys.h>
+#include <tsecurity.h>
 #include <resalloc.h>
 #include <tcntrnode.h>
 #include <xml.h>
@@ -109,12 +112,17 @@ class TUIMod;
 
 class ConfApp: public QMainWindow
 {
+    friend class CfgTable;
+
     Q_OBJECT
 
 public:
     //Methods
     ConfApp( string open_user );
     ~ConfApp( );
+
+    //Atributes
+    bool	winClose;			//Closing window flag
 
 signals:
     void makeStarterMenu( QWidget *mn );
@@ -181,7 +189,7 @@ private slots:
     void tablePopup( const QPoint &pos );	//QTable popup menu
     void tableSet( int row, int col );		//QTable set
     void editChange( const QString& );		//Change Edit (LineEdit and TextEdit)
-    void applyButton( QWidget *src = NULL );	//Apply button
+    void applyButton( );			//Apply button
     void cancelButton( );			//Cancel button
     void imgPopup( const QPoint &pos );		//Image popup
 
@@ -189,7 +197,7 @@ private:
     //Methods
     // Page display
     void selectPage( const string &path, int tm = 0 );
-    void pageDisplay( const string &path );
+    void pageDisplay( const string path );
 
     // View ListItem with recursive processing of the ControllArea
     void viewChildRecArea( QTreeWidgetItem *i, bool upTree = false );
@@ -221,8 +229,8 @@ private:
     QProgressDialog *reqPrgrs;
 
     QAction	*actUp, *actPrev, *actNext,
-		*actStartUpd, *actStopUpd,
-		*actDBLoad, *actDBSave,
+		*actUpdate, *actStartUpd, *actStopUpd,
+		*actDBLoad, *actDBLoadF, *actDBSave, *actDBSaveF,
 		*actItAdd, *actItDel,
 		*actItCut, *actItCopy, *actItPaste,
 		*actManualPage;
@@ -242,7 +250,6 @@ private:
     map<string, SCADAHost*> hosts;
 
     bool	tblInit, pgDisplay;
-    bool	winClose;	//Closing window flag
 };
 
 }

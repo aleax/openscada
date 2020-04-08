@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.SNMP file: snmp.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -47,7 +47,7 @@
 #define MOD_NAME	_("SNMP client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.9.0"
+#define MOD_VER		"0.9.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides an implementation of the client of SNMP-service.")
 #define LICENSE		"GPL2"
@@ -104,7 +104,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("ADDR",_("Remote host address"),TFld::String,TFld::NoFlag,"30","localhost"));
     fldAdd(new TFld("RETR",_("Number of retries"),TFld::Integer,TFld::NoFlag,"1","1","0;10"));
     fldAdd(new TFld("TM",_("Responds timeout, seconds"),TFld::Integer,TFld::NoFlag,"1","3","1;10"));
-    fldAdd(new TFld("VER",_("SNMP version"),TFld::String,TFld::Selected,"2","1","1;2c;2u;3","SNMPv1;SNMPv2c;SNMPv2u;SNMPv3"));
+    fldAdd(new TFld("VER",_("SNMP version"),TFld::String,TFld::Selectable,"2","1","1;2c;2u;3","SNMPv1;SNMPv2c;SNMPv2u;SNMPv3"));
     fldAdd(new TFld("COMM",_("Server community/user"),TFld::String,TFld::NoFlag,"20","public"));
     fldAdd(new TFld("V3",_("V3 parameters"),TFld::String,TFld::NoFlag,"50","authNoPriv:MD5::DES:"));
     fldAdd(new TFld("PATTR_LIM",_("Limit of the attributes number"),TFld::Integer,TFld::NoFlag,"3","100","10;10000"));
@@ -122,7 +122,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )	{
 TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
     TController(name_c,daq_db,cfgelem), enRes(true),
     mPrior(cfg("PRIOR").getId()), mPattrLim(cfg("PATTR_LIM").getId()), mRetr(cfg("RETR").getId()), mTm(cfg("TM").getId()),
-    prcSt(false), callSt(false), endrunReq(false), prmEnErr(false), tmGath(0), acqErr(dataRes())
+    mPer(1e9), prcSt(false), callSt(false), endrunReq(false), prmEnErr(false), tmGath(0), acqErr(dataRes())
 {
     cfg("PRM_BD").setS("SNMPPrm_"+name_c);
 }
@@ -257,9 +257,6 @@ void TMdContr::enable_( )	{ prmEnErr = false; }
 
 void TMdContr::start_( )
 {
-    //Schedule process
-    mPer = TSYS::strSepParse(cron(), 1, ' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
-
     getSess();
 
     //Start the gathering data task
@@ -402,6 +399,15 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     else TController::cntrCmdProc(opt);
 }
 
+bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
+{
+    TController::cfgChange(co, pc);
+
+    if(co.fld().name() == "SCHEDULE")
+	mPer = TSYS::strSepParse(cron(), 1, ' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
+
+    return true;
+}
 
 //*************************************************
 //* TMdPrm                                        *
@@ -437,7 +443,7 @@ void TMdPrm::enable( )
     if(owner().enableStat() || !owner().prmEnErr) {
 	void *ss =  snmp_sess_open(owner().getSess());
 	if(ss) {
-	    try { upVal(ss,true); }
+	    try { upVal(ss, true); }
 	    catch(TError &err) {
 		owner().prmEnErr = true;
 		mess_err(nodePath().c_str(),"%s",err.mess.c_str());
@@ -477,8 +483,8 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
     try {
     for(unsigned ioid = 0; ioid < lsOID().size(); ioid++) {
 	oid_root_len = oid_next_len = lsOID()[ioid].size()/sizeof(oid);
-	memmove(oid_root,lsOID()[ioid].data(),oid_root_len*sizeof(oid));
-	memmove(oid_next,oid_root,oid_root_len*sizeof(oid));
+	memmove(oid_root, lsOID()[ioid].data(), oid_root_len*sizeof(oid));
+	memmove(oid_next, oid_root, oid_root_len*sizeof(oid));
 
 	bool isScalar = oid_root_len && (oid_root[oid_root_len-1] == 0);
 	bool running = true;
@@ -508,7 +514,7 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
 			    if(!(subtree->access == MIB_ACCESS_READWRITE || subtree->access == MIB_ACCESS_WRITEONLY))
 				flg |= TFld::NoWrite;
 			    if(subtree->enums) {
-				flg |= TFld::Selected;
+				flg |= TFld::Selectable;
 				for(struct enum_list *enums = subtree->enums; enums; enums = enums->next) {
 				    selIds += i2s(enums->value)+";";
 				    selLabs += string(enums->label)+";";
@@ -545,7 +551,7 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
 		    // Set value
 		    if(!onlyInit) {
 			AutoHD<TVal> attr = vlAt(soid);
-			
+
 			switch(var->type)
 			{
 			    case ASN_BOOLEAN: attr.at().setB((bool)*var->val.integer, 0, true);	break;
@@ -645,8 +651,7 @@ void TMdPrm::parseOIDList( const string &ioid )
     ls_oid.clear();
 
     string sel;
-    for(int ioff = 0; (sel=TSYS::strSepParse(OIDList(),0,'\n',&ioff)).size(); )
-    {
+    for(int ioff = 0; (sel=TSYS::strSepParse(OIDList(),0,'\n',&ioff)).size(); ) {
 	if(sel[0] == '#') continue;
 	tmpoid_len = MAX_OID_LEN;
 	if(snmp_parse_oid(sel.c_str(),tmpoid,&tmpoid_len))
@@ -729,13 +734,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     if(!enableStat() || !owner().startStat()) { vo.setS(EVAL_STR, 0, true); return; }
 
     //Send to active reserve station
-    if(owner().redntUse()) {
-	if(vl == pvl) return;
-	XMLNode req("set");
-	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
-	SYS->daq().at().rdStRequest(owner().workId(),req);
-	return;
-    }
+    if(vlSetRednt(vo,vl,pvl))	return;
 
     //Direct write
     void *ss;

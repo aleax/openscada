@@ -7,11 +7,11 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="files/doc.css" rel="stylesheet" /></head>
-<body><div id="mw_header">
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../en/files/Logo-big.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Functions and demands</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Functions_and_demands/ru" title="Функции и требования (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Functions_and_demands/uk" title="Функції та вимоги (100% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Functions_and_demands.html" title="Функции и требования (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Functions_and_demands.html" title="Функції та вимоги (100% translated)">українська</a></div></div>
 <p>The page contains information that allows you to get a general view of the features that OpenSCADA can perform at this time. The functions are grouped according to application areas. To get a general picture there also includes scheduled functions or functions that are currently being implemented. The page also contains the requirements of OpenSCADA for its execution and building.
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
@@ -30,7 +30,12 @@
 <li class="toclevel-2 tocsection-8"><a href="#Building"><span class="tocnumber">2.2</span> <span class="toctext"><span>Building</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-9"><a href="#Links"><span class="tocnumber">3</span> <span class="toctext">Links</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#Scalability"><span class="tocnumber">3</span> <span class="toctext"><span>Scalability</span></span></a>
+<ul>
+<li class="toclevel-2 tocsection-10"><a href="#Tests"><span class="tocnumber">3.1</span> <span class="toctext">Tests</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-11"><a href="#Links"><span class="tocnumber">4</span> <span class="toctext">Links</span></a></li>
 </ul>
 </div>
 
@@ -171,7 +176,7 @@
 </td></tr>
 <tr>
 <td> Directories through LDAP </td>
-<td> Module БД <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/LDAP" title="Special:MyLanguage/Modules/LDAP">LDAP</a>
+<td> Module БД <a href="Modules/LDAP.html" title="Special:MyLanguage/Modules/LDAP">LDAP</a>
 </td></tr>
 <tr>
 <td> Available on another OpenSCADA-based server </td>
@@ -181,11 +186,11 @@
 <th colspan="2"> Acquisition and control of internal and external data (DAQ)
 </th></tr>
 <tr>
-<td> Different types of logical and physical sources that have data access utilities or accessible through simple and specialized network protocols. This is accomplished by writing a data acquisition procedure of the user protocol in the user programming language. Most known protocols implementing on <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/User_protocol_devices" title="Special:MyLanguage/Libs/User protocol devices">the user protocols</a>:
-<ul><li> <i>Common services</i>: SMS, SMTP, UPS.</li>
-<li> <i>Industrial automation</i>: Elemer TM510x, EDWARDS TURBOMOLECULAR PUMPS (SCU750), Sycon Multi Drop Protocol, Power supply for turbomolecular pumps (TMP-xx03), Temperature measurement IT-3, IVE-452HS-02, OPTRIS CT/CTL, CTR 100-101, IEC-60870-104, Shark Slave Communication Protocol, DCON (example), OWEN (example).</li>
-<li> <i>Counters of the resources</i>: Heat counter computer VKT7, Mercury 200, Mercury 230, Nik2303I.</li>
-<li> <i>Low level sensors and chips</i>:
+<td> Different types of logical and physical sources that have data access utilities or accessible through simple and specialized network protocols. This is accomplished by writing a data acquisition procedure of the user protocol in the user programming language. Most known protocols implementing on <a href="DAQ.html#UserPrt" title="Special:MyLanguage/Documents/DAQ">the user protocols</a>:
+<ul><li> <i><a href="Libs_Devices.html" title="Special:MyLanguage/Libs/Devices">Industrial devices library</a></i>
+<ul><li> <i>Industrial automation</i>: Elemer TM510x, EDWARDS TURBOMOLECULAR PUMPS (SCU750), Sycon Multi Drop Protocol, Power supply for turbomolecular pumps (TMP-xx03), Temperature measurement IT-3, IVE-452HS-02, OPTRIS CT/CTL, CTR 100-101, IEC-60870-104, Shark Slave Communication Protocol, DCON (example), OWEN (example).</li>
+<li> <i>Counters of the resources</i>: Heat counter computer VKT7, Mercury 200, Mercury 230, Nik2303I.</li></ul></li>
+<li> <i><a href="Libs_LowLevelDevices.html" title="Special:MyLanguage/Libs/LowLevelDevices">Low level sensors and chips library</a></i>
 <ul><li> <i>I2C</i>: PCF8591, PCF8574, BMP180, BME280, DS3231, AT24CXX;</li>
 <li> <i>1Wire Chips by the adapters DS9097 and DS9097U</i>: DS1820, DS1820/DS18S20/DS1920, DS1822, DS2413, DS2408, DS2450, DS2438;</li>
 <li> <i>Low level devices by GPIO</i>: DHT11,22 (DHT), 1602A(HD44780).</li></ul></li></ul>
@@ -287,6 +292,8 @@
 </td></tr></table>
 <hr />
 <h3><span class="mw-headline" id="Station_of_the_operator_of_technological_process.2C_the_dispatcher_board.2C_the_monitoring_panel.2C_etc."><span class="mw-headline-number">1.2</span> Station of the operator of technological process, the dispatcher board, the monitoring panel, etc.</span></h3>
+<div class="thumb tright"><div class="thumbinner" style="width:202px;"><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Avalue_FPC-1701" title="Special:MyLanguage/Using/Avalue FPC-1701"><img class="thumbimage" height="150" src="files/200px-FPC-1701_img.png.jpeg" srcset="/wiki/images/thumb/1/12/FPC-1701_img.png/300px-FPC-1701_img.png.jpeg 1.5x, /wiki/images/thumb/1/12/FPC-1701_img.png/400px-FPC-1701_img.png.jpeg 2x" width="200" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:FPC-1701_img.png" title="Enlarge" /></div>FPC-1701</div></div></div>
+<div class="thumb tright"><div class="thumbinner" style="width:202px;"><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Advantech" title="Special:MyLanguage/Using/Advantech"><img class="thumbimage" height="153" src="files/200px-Advantech_PPC-L126.jpg" srcset="/wiki/images/thumb/a/ae/Advantech_PPC-L126.jpg/300px-Advantech_PPC-L126.jpg 1.5x, /wiki/images/a/ae/Advantech_PPC-L126.jpg 2x" width="200" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Advantech_PPC-L126.jpg" title="Enlarge" /></div>PPC-L126</div></div></div>
 <table class="wikitable">
 
 <tr>
@@ -366,7 +373,7 @@
 </td></tr>
 <tr>
 <td> Directories through LDAP </td>
-<td> Module БД <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/LDAP" title="Special:MyLanguage/Modules/LDAP">LDAP</a>
+<td> Module БД <a href="Modules/LDAP.html" title="Special:MyLanguage/Modules/LDAP">LDAP</a>
 </td></tr>
 <tr>
 <td> Available on another OpenSCADA-based server </td>
@@ -426,6 +433,9 @@
 </td></tr></table>
 <hr />
 <h3><span class="mw-headline" id="Environment_of_execution_of_the_controllers_.28PLC.29"><span class="mw-headline-number">1.3</span> Environment of execution of the controllers (PLC)</span></h3>
+<div class="thumb tright"><div class="thumbinner" style="width:202px;"><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/ICPDAS_LP8x81" title="Special:MyLanguage/Using/ICPDAS LP8x81"><img class="thumbimage" height="95" src="files/200px-LP781_img.png" srcset="/wiki/images/6/64/LP781_img.png 1.5x, /wiki/images/6/64/LP781_img.png 2x" width="200" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:LP781_img.png" title="Enlarge" /></div>LP-8781</div></div></div> <div class="thumb tright"><div class="thumbinner" style="width:72px;"><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/ICPDAS_LP5xxx" title="Special:MyLanguage/Using/ICPDAS LP5xxx"><img class="thumbimage" height="91" src="files/70px-LP5xxx_img.png" srcset="/wiki/images/thumb/9/95/LP5xxx_img.png/105px-LP5xxx_img.png 1.5x, /wiki/images/thumb/9/95/LP5xxx_img.png/140px-LP5xxx_img.png 2x" width="70" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:LP5xxx_img.png" title="Enlarge" /></div>LP-5141</div></div></div>
+<div class="thumb tright"><div class="thumbinner" style="width:122px;"><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Segnetics_SMH2Gi" title="Special:MyLanguage/Using/Segnetics SMH2Gi"><img class="thumbimage" height="135" src="files/120px-Segnetics_SMH2Gi.png" srcset="/wiki/images/thumb/6/6c/Segnetics_SMH2Gi.png/180px-Segnetics_SMH2Gi.png 1.5x, /wiki/images/thumb/6/6c/Segnetics_SMH2Gi.png/240px-Segnetics_SMH2Gi.png 2x" width="120" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Segnetics_SMH2Gi.png" title="Enlarge" /></div>SMH2Gi</div></div></div>
+<div class="thumb tright"><div class="thumbinner" style="width:202px;"><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Advantech" title="Special:MyLanguage/Using/Advantech"><img class="thumbimage" height="129" src="files/200px-Advantech_PCA-6753.png" srcset="/wiki/images/7/74/Advantech_PCA-6753.png 1.5x, /wiki/images/7/74/Advantech_PCA-6753.png 2x" width="200" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Advantech_PCA-6753.png" title="Enlarge" /></div>PCA-6753</div></div></div>
 <table class="wikitable">
 
 <tr>
@@ -542,7 +552,7 @@
 </td></tr>
 <tr>
 <td> Directories through LDAP </td>
-<td> Module БД <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/LDAP" title="Special:MyLanguage/Modules/LDAP">LDAP</a>
+<td> Module БД <a href="Modules/LDAP.html" title="Special:MyLanguage/Modules/LDAP">LDAP</a>
 </td></tr>
 <tr>
 <td> Available on another OpenSCADA-based server </td>
@@ -552,11 +562,11 @@
 <th colspan="2"> Acquisition and control of internal and external data (DAQ)
 </th></tr>
 <tr>
-<td> Different types of logical and physical sources that have data access utilities or accessible through simple and specialized network protocols. This is accomplished by writing a data acquisition procedure of the user protocol in the user programming language. Most known protocols implementing on <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/User_protocol_devices" title="Special:MyLanguage/Libs/User protocol devices">the user protocols</a>:
-<ul><li> <i>Common services</i>: SMS, SMTP, UPS.</li>
-<li> <i>Industrial automation</i>: Elemer TM510x, EDWARDS TURBOMOLECULAR PUMPS (SCU750), Sycon Multi Drop Protocol, Power supply for turbomolecular pumps (TMP-xx03), Temperature measurement IT-3, IVE-452HS-02, OPTRIS CT/CTL, CTR 100-101, IEC-60870-104, Shark Slave Communication Protocol, DCON (example), OWEN (example).</li>
-<li> <i>Counters of the resources</i>: Heat counter computer VKT7, Mercury 200, Mercury 230, Nik2303I.</li>
-<li> <i>Low level sensors and chips</i>:
+<td> Different types of logical and physical sources that have data access utilities or accessible through simple and specialized network protocols. This is accomplished by writing a data acquisition procedure of the user protocol in the user programming language. Most known protocols implementing on <a href="DAQ.html#UserPrt" title="Special:MyLanguage/Documents/DAQ">the user protocols</a>:
+<ul><li> <i><a href="Libs_Devices.html" title="Special:MyLanguage/Libs/Devices">Industrial devices library</a></i>
+<ul><li> <i>Industrial automation</i>: Elemer TM510x, EDWARDS TURBOMOLECULAR PUMPS (SCU750), Sycon Multi Drop Protocol, Power supply for turbomolecular pumps (TMP-xx03), Temperature measurement IT-3, IVE-452HS-02, OPTRIS CT/CTL, CTR 100-101, IEC-60870-104, Shark Slave Communication Protocol, DCON (example), OWEN (example).</li>
+<li> <i>Counters of the resources</i>: Heat counter computer VKT7, Mercury 200, Mercury 230, Nik2303I.</li></ul></li>
+<li> <i><a href="Libs_LowLevelDevices.html" title="Special:MyLanguage/Libs/LowLevelDevices">Low level sensors and chips library</a></i>
 <ul><li> <i>I2C</i>: PCF8591, PCF8574, BMP180, BME280, DS3231, AT24CXX;</li>
 <li> <i>1Wire Chips by the adapters DS9097 and DS9097U</i>: DS1820, DS1820/DS18S20/DS1920, DS1822, DS2413, DS2408, DS2450, DS2438;</li>
 <li> <i>Low level devices by GPIO</i>: DHT11,22 (DHT), 1602A(HD44780).</li></ul></li></ul>
@@ -675,7 +685,7 @@
 <th colspan="2"> Acquisition and control of internal and external data (DAQ)
 </th></tr>
 <tr>
-<td> Different types of logical and physical sources that have data access utilities or accessible through simple and specialized network protocols. This is accomplished by writing a data acquisition procedure of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/User_protocol_devices" title="Special:MyLanguage/Libs/User protocol devices">the user protocol</a> in the user programming language
+<td> Different types of logical and physical sources that have data access utilities or accessible through simple and specialized network protocols. This is accomplished by writing a data acquisition procedure of <a href="DAQ.html#UserPrt" title="Special:MyLanguage/Documents/DAQ">the user protocol</a> in the user programming language
 </td>
 <td> Module of the user programming language <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a><br />Module <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">LogicLev</a><br />Module of the user protocol <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">UserProtocol</a>
 </td></tr>
@@ -1152,7 +1162,79 @@
 </td></tr></table>
 <p>* "opt: auto" — provides for disable of using the library at build time on it absence.
 </p>
-<h2><span class="mw-headline" id="Links"><span class="mw-headline-number">3</span> Links</span></h2>
+<h2><span class="mw-headline" id="Scalability"><span class="mw-headline-number">3</span> <span id="Scalability" title="#Scalability">Scalability</span></span></h2>
+<p><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Embedding_and_PLC#PerfSystems" title="Special:MyLanguage/Sub-projects/Embedding and PLC">Common productivity</a> of the direct calculations, calculations in <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">the Java-like language</a> and complex calculations of the simulators on different hardware and software platforms.
+</p><p>Memory consumption, generic parameters on <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">the project "AGLKS"</a>:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Levels of the measuring </th>
+<th> Debian 9 X86_64, MB </th>
+<th> Debian 9 686, MB </th>
+<th> Debian 8 ARMHF (ARMv7), MB
+</th></tr>
+<tr>
+<td colspan="4"> <i>2019.02.01: OpenSCADA 1+r2600</i>
+</td></tr>
+<tr>
+<td> 1. Executing of the simulator and archiving </td>
+<td> 96 </td>
+<td> 71 </td>
+<td> 64
+</td></tr>
+<tr>
+<td> 2. Loading for the VCA projects </td>
+<td> 147 </td>
+<td> 104 </td>
+<td> 95
+</td></tr>
+<tr>
+<td> 3. Starting a session of the project "AGLKS" (as a server of visualization) </td>
+<td> 152 </td>
+<td> 108 </td>
+<td> 97
+</td></tr>
+<tr>
+<td> 3.1. Starting a session of the project "AGLKS" from UI.Vision, and for the first mnemonic &gt; graph cadre </td>
+<td> 168 &gt; 175 </td>
+<td> 121 &gt; 126 </td>
+<td> 106 &gt; 109
+</td></tr>
+<tr>
+<td> 3.2. Starting a session of the project "AGLKS" from UI.WebVision, and for the first mnemonic &gt; graph cadre </td>
+<td> 159 &gt; 167 </td>
+<td> 113 &gt; 125 </td>
+<td> 100 &gt; 106
+</td></tr></table>
+<p>Big and complex projects:
+</p>
+<ul><li> <i>2019.01.12:</i> Debian 9 686, OpenSCADA 1+r2595, An aviaries project for: ModBus DAQ of 38 Controller objects, with 75 complex parameters and ~900 signals in each, summary it have 2850 complex parameters and 34200 signals; a VCA project of 39 signal objects, with 19 pages in each, summary it have 741 pages:</li></ul>
+<dl><dd><dl><dd> =&gt; Optimized in UI.VCAEngine for implementing links to pages, what allowed to remove 703 pages, moving the typical pages in the completely dynamic mode.</dd>
+<dd> =&gt; Expanded in UI.WebVision for support of working in the operative mode, limiting the pages cache.</dd></dl>
+<ul><li> Executing for DAQ, processing and archiving: <b>102 MB</b></li>
+<li> Loading for the VCA projects: <b>271 MB</b>, after the optimization: <b>148 MB</b></li>
+<li> Starting a session of the project (as a server of visualization): <b>437 MB</b>, after the optimization: <b>174 MB</b></li>
+<li> Starting a session of the project from UI.WebVision: <b>460 MB</b> (one session), after the optimization: <b>198 MB</b></li></ul></dd></dl>
+<h3><span class="mw-headline" id="Tests"><span class="mw-headline-number">3.1</span> Tests</span></h3>
+<p>Of OpenSCADA components:
+</p>
+<ul><li> Core:
+<ul><li> <a class="external text" href="http://wiki.oscada.org/Works/Tests/ARM" rel="nofollow noreferrer noopener" target="_blank">OpenSCADA core and its modules testing on the hardware platform ARM</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Adaption_to_Android#Tests" title="Special:MyLanguage/Sub-projects/Adaption to Android">Extended performance tests for Android on Asus Nexus7 II with different options of the compilation, especially for Hard and Soft float.</a></li></ul></li>
+<li> DB: <a href="Modules/SQLite.html#Tests" title="Special:MyLanguage/Modules/SQLite">SQLite</a>, <a href="Modules/MySQL.html#Tests" title="Special:MyLanguage/Modules/MySQL">MySQL</a>, <a href="Modules/PostgreSQL.html#Tests" title="Special:MyLanguage/Modules/PostgreSQL">PostgreSQL</a>, <a href="Modules/FireBird.html#Tests" title="Special:MyLanguage/Modules/FireBird">FireBird</a></li>
+<li> DAQ: <a href="Modules/JavaLikeCalc.html#Productivity" title="Special:MyLanguage/Modules/JavaLikeCalc">Calculator on the Java-like language (JavaLikeCalc)</a></li>
+<li> Archives-History: <a href="Modules/FSArch.html#Efficiency" title="Special:MyLanguage/Modules/FSArch">FSArch</a></li>
+<li> UI: <a class="external text" href="http://wiki.oscada.org/Works/Tests/VCA" rel="nofollow noreferrer noopener" target="_blank">Vision</a>, <a href="Modules/WebVision.html#Efficiency" title="Special:MyLanguage/Modules/WebVision">WebVision</a></li></ul>
+<p>Acceptation tests of the OpenSCADA releases (LTS):
+</p>
+<ul><li> <a class="external" href="http://oscada.org/wiki/Documents/Release_0.9/Tests" title="Documents/Release 0.9/Tests">0.9</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/Documents/Release_0.8.0/Tests" title="Documents/Release 0.8.0/Tests">0.8.0</a></li>
+<li> <a class="external text" href="http://wiki.oscada.org/Works/Tests/release070" rel="nofollow noreferrer noopener" target="_blank">0.7.0</a></li>
+<li> <a class="external text" href="http://wiki.oscada.org/Works/Tests/release060" rel="nofollow noreferrer noopener" target="_blank">0.6.0</a></li>
+<li> <a class="external text" href="http://wiki.oscada.org/Works/Tests/release050" rel="nofollow noreferrer noopener" target="_blank">0.5.0</a></li>
+<li> <a class="external text" href="http://wiki.oscada.org/Works/Tests/release040" rel="nofollow noreferrer noopener" target="_blank">0.4.0</a></li></ul>
+<h2><span class="mw-headline" id="Links"><span class="mw-headline-number">4</span> Links</span></h2>
 <ul><li> <a class="external" href="http://oscada.org/wiki/File:Oscada_use.odg" title="File:Oscada use.odg">Diagram: Roles of OpenSCADA.</a></li>
 <li> <a class="external" href="http://oscada.org/wiki/File:Oscada_use_opcua.odg" title="File:Oscada use opcua.odg">Diagram: OpenSCADA roles as a "OPC-UA Server".</a></li></ul>
 
@@ -1161,5 +1243,5 @@
 
 
 
-</div></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Functions_and_demands/en">Functions_and_demands/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.1</td></tr></table></body>
 </html>

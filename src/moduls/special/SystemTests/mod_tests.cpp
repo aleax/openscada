@@ -49,7 +49,7 @@
 #define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"TEST"
-#define MOD_VER		"1.6.4"
+#define MOD_VER		"1.7.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the group of tests to OpenSCADA and its modules.")
 #define LICENSE		"GPL2"
@@ -88,7 +88,7 @@ TTest::TTest( string name ) : TSpecial(MOD_ID)
 
 TTest::~TTest()
 {
-    if(run_st) modStop();
+    if(runSt) modStop();
 }
 
 void TTest::postEnable( int flag )
@@ -183,12 +183,12 @@ void TTest::load_( )
 
 void TTest::modStart(  )
 {
-    if(!run_st) SYS->taskCreate(nodePath('.',true), 0, Task, this);
+    if(!runSt) SYS->taskCreate(nodePath('.',true), 0, Task, this);
 }
 
 void TTest::modStop(  )
 {
-    if(run_st) SYS->taskDestroy(nodePath('.',true), &endrun);
+    if(runSt) SYS->taskDestroy(nodePath('.',true), &endrun);
 }
 
 void *TTest::Task( void *CfgM )
@@ -196,7 +196,7 @@ void *TTest::Task( void *CfgM )
     int count = 0, i_cnt = 0;
 
     TTest *tst = (TTest*)CfgM;
-    tst->run_st = true;
+    tst->runSt = true;
     tst->endrun = false;
 
     //Task counter
@@ -228,7 +228,7 @@ void *TTest::Task( void *CfgM )
 	}
 	TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
     }
-    tst->run_st = false;
+    tst->runSt = false;
 
     return NULL;
 }
@@ -286,7 +286,7 @@ void TTest::cntrCmdProc( XMLNode *opt )
 	int enCnt = 0;
 	for(unsigned iT = 0; iT < lst.size(); iT++)
 	    if(testAt(lst[iT]).at().startStat()) enCnt++;
-	opt->setText(TSYS::strMess(_("All: %d; Accessing: %d"),lst.size(),enCnt));
+	opt->setText(TSYS::strMess(_("All: %d; Accessed: %d"),lst.size(),enCnt));
     }
     else TSpecial::cntrCmdProc(opt);
 }

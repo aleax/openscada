@@ -30,7 +30,7 @@ void xmlCntrReq::calc( TValFunc *val )
     try {
 	XMLNode req;
 	AutoHD<XMLNodeObj> xnd = val->getO(1);
-	if(xnd.freeStat()) { val->setS(0,_("1:Request is not object!")); return; }
+	if(xnd.freeStat()) { val->setS(0,_("1:The request is not the object!")); return; }
 	xnd.at().toXMLNode(req);
 	string path = req.attr("path");
 	if(val->getS(2).empty()) {
@@ -44,5 +44,5 @@ void xmlCntrReq::calc( TValFunc *val )
 	}
 	xnd.at().fromXMLNode(req);
 	val->setS(0, "0");
-    } catch(TError &err) { val->setS(0, TSYS::strMess(_("1:Request error: %s"),err.mess.c_str())); }
+    } catch(TError &err) { val->setS(0, TSYS::strMess(_("1:Error the request: %s"),err.mess.c_str())); }
 }

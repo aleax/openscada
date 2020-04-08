@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: libwidg.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -63,9 +63,9 @@ TCntrNode &WidgetLib::operator=( const TCntrNode &node )
     //Mime data copy
     src_n->mimeDataList(pls);
     string mimeType, mimeData;
-    for(unsigned i_m = 0; i_m < pls.size(); i_m++) {
-	src_n->mimeDataGet(pls[i_m], mimeType, &mimeData);
-	mimeDataSet(pls[i_m], mimeType, mimeData);
+    for(unsigned iM = 0; iM < pls.size(); iM++) {
+	src_n->mimeDataGet(pls[iM], mimeType, &mimeData);
+	mimeDataSet(pls[iM], mimeType, mimeData);
     }
 
     // Copy include pages
@@ -138,6 +138,24 @@ string WidgetLib::name( ) const
     return tNm.size() ? tNm : mId;
 }
 
+string WidgetLib::getStatus( )
+{
+    string rez = enable() ? _("Enabled. ") : _("Disabled. ");
+
+    vector<string> tls;
+    list(tls);
+    int cnt = 0;
+    time_t maxTm = 0;
+    for(unsigned iT = 0; iT < tls.size(); iT++) {
+	cnt += at(tls[iT]).at().herit().size();
+	maxTm = vmax(maxTm, at(tls[iT]).at().timeStamp());
+    }
+    rez += TSYS::strMess(_("Used: %d. "), cnt);
+    rez += TSYS::strMess(_("Date of modification: %s. "), atm2s(maxTm).c_str());
+
+    return rez;
+}
+
 void WidgetLib::setFullDB( const string &it )
 {
     size_t dpos = it.rfind(".");
@@ -170,12 +188,12 @@ void WidgetLib::load_( TConfig *icfg )
     }
 
     // Check for remove items removed from DB
-    if(!SYS->selDB().empty()) {
-	vector<string> it_ls;
-	list(it_ls);
-	for(unsigned i_it = 0; i_it < it_ls.size(); i_it++)
-	    if(itReg.find(it_ls[i_it]) == itReg.end())
-		del(it_ls[i_it]);
+    if(SYS->chkSelDB(SYS->selDB(),true)) {
+	vector<string> itLs;
+	list(itLs);
+	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
+	    if(itReg.find(itLs[iIt]) == itReg.end())
+		del(itLs[iIt]);
     }
 
     passAutoEn = false;
@@ -192,11 +210,11 @@ void WidgetLib::save_( )
     //Check for need copy mime data to other DB and same copy
     if(!mOldDB.empty() && mOldDB != TBDS::realDBName(DB())) {
 	vector<string> pls;
-	mimeDataList(pls,mOldDB);
+	mimeDataList(pls, mOldDB);
 	string mimeType, mimeData;
-	for(unsigned i_m = 0; i_m < pls.size(); i_m++) {
-	    mimeDataGet(pls[i_m], mimeType, &mimeData, mOldDB);
-	    mimeDataSet(pls[i_m], mimeType, mimeData, DB());
+	for(unsigned iM = 0; iM < pls.size(); iM++) {
+	    mimeDataGet(pls[iM], mimeType, &mimeData, mOldDB);
+	    mimeDataSet(pls[iM], mimeType, mimeData, DB());
 	}
     }
 
@@ -300,11 +318,15 @@ void WidgetLib::mimeDataDel( const string &iid, const string &idb )
     SYS->db().at().dataDel(wdb+"."+wtbl, mod->nodePath()+wtbl, cEl, false, false, true);
 }
 
-void WidgetLib::add( const string &id, const string &name, const string &orig )
+string WidgetLib::add( const string &iid, const string &name, const string &orig )
 {
-    if(present(id))	return;
-    chldAdd(mWdg, new LWidget(id,orig));
+    if(present(iid))	throw err_sys(_("The widget '%s' is already present!"), iid.c_str());
+	//return "";
+
+    string id = chldAdd(mWdg, new LWidget(TSYS::strEncode(sTrm(iid),TSYS::oscdID),orig));
     at(id).at().setName(name);
+
+    return id;
 }
 
 void WidgetLib::add( LWidget *iwdg )
@@ -320,12 +342,14 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TCntrNode::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Widgets library: ")+id(),RWRWR_,"root",SUI_ID);
+	XMLNode *nd = ctrMkNode("oscada_cntr",opt,-1,"/",_("Widgets library: ")+id(),RWRWR_,"root",SUI_ID);
+	if(nd)	nd->setAttr("doc", TUIS::docKeyGet(descr()));
 	if(ico().size()) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);
 	if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
 	    ctrMkNode("grp",opt,-1,"/br/wdg_",_("Widget"),RWRWR_,"root",SUI_ID,2,"idm","1","idSz","30");
 	if(ctrMkNode("area",opt,-1,"/obj",_("Library"))) {
 	    if(ctrMkNode("area",opt,-1,"/obj/st",_("State"))) {
+		ctrMkNode("fld",opt,-1,"/obj/st/status",_("Status"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/obj/st/en",_("Enabled"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/obj/st/db",_("Library DB"),RWRWR_,"root",SUI_ID,4,
 		    "tp","str","dest","sel_ed","select",("/db/tblList:wlb_"+id()).c_str(),
@@ -353,7 +377,8 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 
     //Process command to page
     string a_path = opt->attr("path"), u = opt->attr("user"), l = opt->attr("lang");
-    if(a_path == "/obj/st/en") {
+    if(a_path == "/obj/st/status" && ctrChkNode(opt))		opt->setText(getStatus());
+    else if(a_path == "/obj/st/en") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(enable()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setEnable(s2i(opt->text()));
     }
@@ -397,12 +422,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	    for(unsigned i_f=0; i_f < lst.size(); i_f++)
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(trLU(at(lst[i_f]).at().name(),l,u));
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
-	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
-	    if(present(vid)) throw TError(nodePath().c_str(), _("Widget '%s' is already present!"), vid.c_str());
-	    add(vid, opt->text()); at(vid).at().setOwner(opt->attr("user"));
-	    opt->setAttr("id", vid);
-	}
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) { opt->setAttr("id", add(opt->attr("id"),opt->text())); at(opt->attr("id")).at().setOwner(opt->attr("user")); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR)) del(opt->attr("id"),true);
     }
     else if(a_path == "/mime/mime") {
@@ -423,9 +443,9 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 		vector<string> lst;
 		string mimeType;
 		mimeDataList(lst);
-		for(unsigned i_el = 0; i_el < lst.size(); i_el++)
-		    if(mimeDataGet("res:"+lst[i_el],mimeType)) {
-			if(n_id) n_id->childAdd("el")->setText(lst[i_el]);
+		for(unsigned iEl = 0; iEl < lst.size(); iEl++)
+		    if(mimeDataGet("res:"+lst[iEl],mimeType)) {
+			if(n_id) n_id->childAdd("el")->setText(lst[iEl]);
 			if(n_tp) n_tp->childAdd("el")->setText(TSYS::strSepParse(mimeType,0,';'));
 			if(n_dt) n_dt->childAdd("el")->setText(TSYS::strSepParse(mimeType,1,';'));
 		    }
@@ -515,6 +535,23 @@ string LWidget::ico( ) const
     return "";
 }
 
+string LWidget::getStatus( )
+{
+    string rez = Widget::getStatus();
+    rez += TSYS::strMess(_("Date of modification: %s. "), atm2s(timeStamp()).c_str());
+    if(calcProg().size()) {
+	rez += _("Calculating procedure: ");
+	if(!parent().freeStat() && parent().at().calcProg().size() && calcProg() != parent().at().calcProg())
+	    rez += _("!!redefined!!");
+	else if(!parent().freeStat() && parent().at().calcProg().size())
+	    rez += _("inherited");
+	else rez += _("presented");
+	rez += ". ";
+    }
+
+    return rez;
+}
+
 string LWidget::calcId( )
 {
     if(proc().empty()) {
@@ -554,6 +591,7 @@ string LWidget::calcProgStors( const string &attr )
     string rez = parent().freeStat() ? "" : parent().at().calcProgStors(attr);
     if(((attr.size() && attrAt(attr).at().modif()) || (!attr.size() && proc().size())) && rez.find(ownerLib().DB()) == string::npos)
 	rez = ownerLib().DB() + ";" + rez;
+
     return rez;
 }
 
@@ -671,7 +709,7 @@ void LWidget::loadIO( )
 	    continue;
 	}
 	if(!wdgPresent(sid))
-	    try{ wdgAdd(sid,"",""); }
+	    try{ wdgAdd(sid, "", ""); }
 	    catch(TError &err) { mess_err(err.cat.c_str(),err.mess.c_str()); }
 
 	wdgAt(sid).at().load(&cEl);
@@ -679,12 +717,12 @@ void LWidget::loadIO( )
     }
 
     //Check for remove items removed from DB
-    if(!SYS->selDB().empty()) {
-	vector<string> it_ls;
-	wdgList(it_ls);
-	for(unsigned i_it = 0; i_it < it_ls.size(); i_it++)
-	    if(itReg.find(it_ls[i_it]) == itReg.end())
-		wdgDel(it_ls[i_it]);
+    if(SYS->chkSelDB(SYS->selDB(),true)) {
+	vector<string> itLs;
+	wdgList(itLs);
+	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
+	    if(itReg.find(itLs[iIt]) == itReg.end())
+		wdgDel(itLs[iIt]);
     }
 }
 
@@ -725,7 +763,8 @@ void LWidget::wClear( )
 void LWidget::wdgAdd( const string &wid, const string &name, const string &path, bool force )
 {
     if(!isContainer())	throw TError(nodePath().c_str(),_("Widget is not container!"));
-    if(wdgPresent(wid))	return;
+    if(wdgPresent(wid))	throw err_sys(_("The widget '%s' is already present!"), wid.c_str());
+	//return;
 
     bool toRestoreInher = false;
 
@@ -757,7 +796,8 @@ void LWidget::wdgAdd( const string &wid, const string &name, const string &path,
 	if(mHerit[iH].at().enable())
 	    mHerit[iH].at().inheritIncl(wid);
 
-    if(toRestoreInher)	throw TError("warning", _("Restoring '%s' from the base container!"), wid.c_str());
+    if(toRestoreInher)
+	throw TError(TError::Core_CntrWarning, nodePath().c_str(), _("Restoring '%s' from the base container!"), wid.c_str());
 }
 
 AutoHD<CWidget> LWidget::wdgAt( const string &wdg ) const	{ return Widget::wdgAt(wdg); }
@@ -790,7 +830,7 @@ void LWidget::procChange( bool src )
 {
     if(!src && proc().size()) return;
 
-    //Update heritors procedures
+    //Update heritors' procedures
     for(unsigned iH = 0; iH < mHerit.size(); iH++)
 	if(mHerit[iH].at().enable())
 	    mHerit[iH].at().procChange(false);
@@ -822,12 +862,22 @@ void LWidget::cntrCmdProc( XMLNode *opt )
 	cntrCmdAttributes(opt);
 	cntrCmdLinks(opt);
 	cntrCmdProcess(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Library widget: ")+id(),RWRWR_,"root",SUI_ID,1,"doc", "Documents/User_API|Documents/User_API");
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Library widget: ")+id(),RWRWR_,"root",SUI_ID,1,"doc", "User_API|Documents/User_API");
 	return;
     }
     if(cntrCmdGeneric(opt) || cntrCmdAttributes(opt) || cntrCmdLinks(opt) || cntrCmdProcess(opt)) ;
     else if(opt->attr("path") == "/wdg/st/timestamp" && ctrChkNode(opt)) opt->setText(i2s(timeStamp()));
     else TCntrNode::cntrCmdProc(opt);
+}
+
+TVariant LWidget::stlReq( Attr &a, const TVariant &vl, bool wr )
+{
+    //To register the property on the project side
+    for(unsigned iH = 0; !wr && iH < mHerit.size(); iH++)
+	if(mHerit[iH].at().enable())
+	    mHerit[iH].at().stlReq(a, vl, wr);
+
+    return vl;
 }
 
 //************************************************
@@ -918,7 +968,14 @@ string CWidget::calcLang( ) const	{ return parent().freeStat() ? "" : parent().a
 
 string CWidget::calcProg( ) const	{ return parent().freeStat() ? "" : parent().at().calcProg(); }
 
-string CWidget::calcProgStors( const string &attr ){ return parent().freeStat() ? "" : parent().at().calcProgStors(attr); }
+string CWidget::calcProgStors( const string &attr )
+{
+    string rez = parent().freeStat() ? "" : parent().at().calcProgStors(attr);
+    if(attr.size() && attrAt(attr).at().modif() && rez.find(ownerLWdg().ownerLib().DB()) == string::npos)
+	rez = ownerLWdg().ownerLib().DB() + ";" + rez;
+
+    return rez;
+}
 
 int CWidget::calcPer( ) const	{ return parent().freeStat() ? 0 : parent().at().calcPer(); }
 
@@ -1004,6 +1061,14 @@ string CWidget::resourceGet( const string &id, string *mime )
     if(mime) *mime = mimeType;
 
     return mimeData;
+}
+
+void CWidget::procChange( bool src )
+{
+    //Update heritors' procedures
+    for(unsigned iH = 0; iH < mHerit.size(); iH++)
+	if(mHerit[iH].at().enable())
+	    mHerit[iH].at().procChange(false);
 }
 
 void CWidget::inheritAttr( const string &attr )

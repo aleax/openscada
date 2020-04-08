@@ -56,24 +56,24 @@ class Engine : public TUI
 	string prjTable( )	{ return "VCAPrjs"; }
 
 	// Widgets libraries
-	void wlbList( vector<string> &ls ) const		{ chldList( idWlb, ls ); }
-	bool wlbPresent( const string &id ) const		{ return chldPresent( idWlb, id ); }
-	void wlbAdd( const string &iid, const string &inm = "", const string &idb = "*.*" );
-	void wlbDel( const string &iid, bool full = false )	{ chldDel( idWlb, iid, -1, full ); }
+	void wlbList( vector<string> &ls ) const		{ chldList(idWlb, ls); }
+	bool wlbPresent( const string &id ) const		{ return chldPresent(idWlb, id); }
+	string wlbAdd( const string &id, const string &inm = "", const string &idb = "*.*" );
+	void wlbDel( const string &id, bool full = false )	{ chldDel(idWlb, id, -1, full); }
 	AutoHD<WidgetLib> wlbAt( const string &id ) const;
 
 	// Projects
-	void prjList( vector<string> &ls ) const		{ chldList( idPrj, ls ); }
-	bool prjPresent( const string &id ) const		{ return chldPresent( idPrj, id ); }
-	void prjAdd( const string &iid, const string &inm = "", const string &idb = "*.*" );
-	void prjDel( const string &iid, bool full = false )	{ chldDel( idPrj, iid, -1, full ); }
+	void prjList( vector<string> &ls ) const		{ chldList(idPrj, ls); }
+	bool prjPresent( const string &id ) const		{ return chldPresent(idPrj, id); }
+	string prjAdd( const string &id, const string &inm = "", const string &idb = "*.*" );
+	void prjDel( const string &id, bool full = false )	{ chldDel(idPrj, id, -1, full); }
 	AutoHD<Project> prjAt( const string &id ) const;
 
 	// Sessions
-	void sesList( vector<string> &ls ) const		{ chldList( idSes, ls ); }
-	bool sesPresent( const string &id ) const		{ return chldPresent( idSes, id ); }
+	void sesList( vector<string> &ls ) const		{ chldList(idSes, ls); }
+	bool sesPresent( const string &id ) const		{ return chldPresent(idSes, id); }
 	void sesAdd( const string &id, const string &proj = "" );
-	void sesDel( const string &iid, bool full = false )	{ chldDel( idSes, iid, -1, full ); }
+	void sesDel( const string &id, bool full = false )	{ chldDel(idSes, id, -1, full); }
 	AutoHD<Session> sesAt( const string &id ) const;
 
 	// User functions

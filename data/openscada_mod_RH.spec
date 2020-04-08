@@ -79,7 +79,7 @@
 
 Summary: Open SCADA system
 Name: openscada
-Version: 0.9
+Version: 0.9.1
 Release: 1%{?dist}
 Source0: ftp://oscada.org/OpenSCADA/Work/openscada-%version.tar.xz
 Source1: ftp://oscada.org/OpenSCADA/Work/openscada-res-%version.tar.xz
@@ -1944,7 +1944,7 @@ fi
 
 * Wed Sep 14 2011 Aleksey Popkov <aleksey@oscada.org> - 0.7.1-5
 - Adding of directive Obsoletes for demo package.
-- Removed to some directives dir by Roman Savochenko (rom_as@oscada.org).
+- Removed to some directives dir by Roman Savochenko (roman@oscada.org).
 
 * Tue May 17 2011 Aleksey Popkov <aleksey@oscada.org> - 0.7.1-4
 - Adding of autoreconf command.

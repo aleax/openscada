@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: libwidg.h
 /***************************************************************************
- *   Copyright (C) 2006-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -47,6 +47,7 @@ class WidgetLib : public TCntrNode, public TConfig
 	string name( ) const;					//Name
 	string descr( ) const	{ return cfg("DESCR").getS(); }	//Description
 	string ico( ) const	{ return cfg("ICO").getS(); }	//Icon
+	string getStatus( );
 
 	string DB( ) const	{ return workLibDB; }		//Current library DB
 	string tbl( ) const	{ return cfg("DB_TBL").getS(); }//Table of storing library data
@@ -70,10 +71,10 @@ class WidgetLib : public TCntrNode, public TConfig
 	void mimeDataDel( const string &id, const string &idb = "" );
 
 	// Widgets
-	void list( vector<string> &ls ) const		{ chldList(mWdg,ls); }
-	bool present( const string &id ) const		{ return chldPresent(mWdg,id); }
+	void list( vector<string> &ls ) const		{ chldList(mWdg, ls); }
+	bool present( const string &id ) const		{ return chldPresent(mWdg, id); }
 	AutoHD<LWidget> at( const string &id ) const;
-	void add( const string &id, const string &name, const string &orig = "" );
+	string add( const string &id, const string &name, const string &orig = "" );
 	void add( LWidget *iwdg );
 	void del( const string &id, bool full = false )	{ chldDel(mWdg, id, -1, full); }
 
@@ -118,6 +119,7 @@ class LWidget : public Widget, public TConfig
 	string	path( ) const;
 	string	ico( ) const;
 	string	type( )		{ return "LibWidget"; }
+	string	getStatus( );
 	string	calcId( );
 	string	calcLang( ) const;
 	bool	calcProgTr( );
@@ -157,6 +159,8 @@ class LWidget : public Widget, public TConfig
 
 	bool	enableByNeed;	//Load and enable by need
 	ResMtx &funcM( )	{ return mFuncM; }
+
+	TVariant stlReq( Attr &a, const TVariant &vl, bool wr );
 
     protected:
 	//Methods
@@ -210,6 +214,8 @@ class CWidget : public Widget, public TConfig
 	// Data access
 	void resourceList( vector<string> &ls );
 	string resourceGet( const string &id, string *mime = NULL );
+
+	void procChange( bool src = true );
 
 	void inheritAttr( const string &attr = "" );
 

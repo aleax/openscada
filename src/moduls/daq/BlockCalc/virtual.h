@@ -100,7 +100,7 @@ class Contr: public TController
 	// Scheme's functions
 	void blkList( vector<string> &ls ) const	{ chldList(mBl, ls); }
 	bool blkPresent( const string &id ) const	{ return chldPresent(mBl, id); }
-	void blkAdd( const string &id );
+	string blkAdd( const string &id );
 	void blkDel( const string &id )			{ chldDel(mBl, id); }
 	AutoHD<Block> blkAt( const string &id ) const	{ return chldAt(mBl, id); }
 

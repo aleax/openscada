@@ -1,13 +1,13 @@
 # OpenSCADA.UI.Vision translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.UI.Vision package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2018.
+# Roman Savochenko <rom_as@oscada.org>, 2005-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-31 20:00+0300\n"
+"POT-Creation-Date: 2020-01-21 20:34+0200\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -40,10 +40,14 @@ msgid ""
 "UserPass   <pass>       User password for non-local start.\n"
 "RunPrjs    <list>       List of projects to be launched at the start of the "
 "module.\n"
-"ExitLstRunPrjCls <0|1>  Exit closing the last completed project (default = "
+"ExitLstRunPrjCls <0|1>  Exit closing the last completed project (by default "
 "1).\n"
-"CachePgLife <hours>     The lifetime of pages in the cache.\n"
-"VCAstation <id>         The station with the VCA engine ('.' Is local).\n"
+"DropCommonWdgStls <0|1> Reset widget styles to common for some specific "
+"widgets in runtime, like to buttons (default 1).\n"
+"CachePgLife <hours>     Lifetime of the pages in the cache (by default 1).\n"
+"CachePgSz  <numb>       Maximum number of the pages in the cache (by default "
+"10).\n"
+"VCAstation <id>         The station with the VCA engine ('.' is local).\n"
 "RestoreTime <seconds>   Connection recovery time.\n"
 "\n"
 msgstr ""
@@ -54,7 +58,11 @@ msgstr ""
 "RunPrjs    <список>     Перечень запускаемых при старте проектов.\n"
 "ExitLstRunPrjCls <0|1>  Выход при закрытии последнего исполняющегося проекта "
 "(по умолчанию = 1).\n"
-"CachePgLife <часы>      Время жизни страниц в кеше.\n"
+"DropCommonWdgStls <0|1> Сбрасывать стили виджетов к общему для некоторых "
+"специфических виджетов в режиме исполнения, вроде кнопок (по умолчанию 1).\n"
+"CachePgLife <часы>      Время жизни страниц в кеше (по умолчанию = 1).\n"
+"CachePgSz  <кол.>       Максимальное количество страниц в кеше (по умолчанию "
+"10).\n"
 "VCAstation <id>         Станция с движком СВУ ('.' - локальная).\n"
 "RestoreTime <секунды>   Время восстановления подключения.\n"
 "\n"
@@ -101,17 +109,24 @@ msgstr "Пароль пользователя"
 msgid "Connection recovery time, seconds"
 msgstr "Время восстановления подключения, секунд"
 
-msgid "Lifetime of the cached pages"
-msgstr "Время жизни страниц в кеше"
+msgid "Lifetime and maximum number of the cached pages"
+msgstr "Время жизни и максимальное количество страниц в кеше"
 
 msgid ""
 "The time is specified in hours, which defines the inactivity interval for "
 "closing pages in the cache.\n"
-"A zero value of time excludes the closing of pages in the cache."
+"Zero value of the time excludes the closing of pages in the cache."
 msgstr ""
-"Время указано в часах, которое определяет интервал не активности для "
-"закрытия страниц в кеше.\n"
-"Нулевое значение времени исключает закрытие страниц в кеше."
+"Время указывается в часах, которое определяет интервал неактивности для "
+"закрытия страниц в кеш.\n"
+"Нулевое значение времени исключает закрытие страниц в кеш."
+
+msgid ""
+"The number defines a limit of pages in the cache.\n"
+"Zero value of the number excludes the cache limit."
+msgstr ""
+"Количество определяет ограничение страниц в кеше.\n"
+"Нулевое значение количества исключает закрытие страниц в кеш."
 
 msgid "List of the projects for launch"
 msgstr "Перечень запускаемых проектов"
@@ -131,13 +146,28 @@ msgstr ""
 msgid "Exit when closing the last running project"
 msgstr "Выход при закрытии последнего исполняющегося проекта"
 
-#, c-format
-msgid "%d: Development by \"%s\""
-msgstr "%d: Разработка от \"%s\""
+msgid "Reset widget styles to common"
+msgstr "Сбрасывать стили виджетов к общему"
+
+msgid ""
+"Required for some widget styles like \"gtk\" in some specific widgets in run "
+"mode, like buttons for the background color and images."
+msgstr ""
+"Необходимо для некоторых стилей виджетов вроде \"gtk\" в работе некоторых "
+"специфических виджетов в режиме исполнения, вроде кнопок для цвета фона и "
+"изображений."
 
 #, c-format
-msgid "%d: Running \"%s:%s\" from \"%s\" - %s"
-msgstr "%d: Исполнение \"%s:%s\" от \"%s\" - %s"
+msgid "%d: Development by \"%s\"."
+msgstr "%d: Разработка от \"%s\"."
+
+#, c-format
+msgid ""
+"%d: Running \"%s:%s\" from \"%s\" - %s, updating period %s(%s), cached pages "
+"%d and resources %d."
+msgstr ""
+"%d: Исполнение \"%s:%s\" от \"%s\" - %s, период обновления %s(%s), "
+"кешированных страниц %d и ресурсов %d."
 
 msgid "Connected"
 msgstr "Подключен"
@@ -209,6 +239,15 @@ msgstr "Кнопка получения информации о Qt"
 msgid "Press for getting the using Qt information."
 msgstr "Нажать для получения информации о Qt"
 
+msgid "Manual on ..."
+msgstr "Руководство на ..."
+
+msgid "The button for getting the library manual"
+msgstr "Кнопка для получения руководства библиотеки"
+
+msgid "Press for getting the library manual."
+msgstr "Нажать для получения руководства библиотеки."
+
 msgid "Manual on '%1'"
 msgstr "Руководство на '%1'"
 
@@ -242,6 +281,26 @@ msgstr "Кнопка загрузки данных элемента из БД"
 msgid "Press for loading the item data from the DB."
 msgstr "Нажать для загрузки данных элемента из БД."
 
+msgid "Load from DB forcibly"
+msgstr "Принудительно загрузить из БД"
+
+msgid "Load the item data from DB forcibly"
+msgstr "Принудительно загрузить данные элемента из БД"
+
+msgid ""
+"The button for loading the item data from the DB forcibly, not only when it "
+"changed"
+msgstr ""
+"Кнопка принудительной загрузки данных элемента из БД, не только когда "
+"изменено"
+
+msgid ""
+"Press for loading the item data from the DB forcibly, not only when it "
+"changed."
+msgstr ""
+"Нажать для принудительной загрузки данных элемента из БД, не только когда "
+"изменено."
+
 msgid "Save to DB"
 msgstr "Сохранить в БД"
 
@@ -253,6 +312,25 @@ msgstr "Кнопка сохранения данных элемента в БД"
 
 msgid "Press for saving the item data to the DB."
 msgstr "Нажать для сохранения данных элемента в БД"
+
+msgid "Save to DB forcibly"
+msgstr "Принудительно сохранить в БД"
+
+msgid "Save the item data to DB forcibly"
+msgstr "Принудительно сохранить данные элемента в БД"
+
+msgid ""
+"The button for saving the item data to the DB forcibly, not only when it "
+"changed"
+msgstr ""
+"Кнопка принудительного сохранения данных элемента в БД, не только когда "
+"изменено"
+
+msgid ""
+"Press for saving the item data to the DB forcibly, not only when it changed."
+msgstr ""
+"Нажать для принудительного сохранения данных элемента в БД, не только когда "
+"изменено."
 
 msgid "Run project"
 msgstr "Запуск проекта"
@@ -880,11 +958,11 @@ msgstr ""
 
 msgid ""
 "Are you sure for lowering down to the parent for all changes of the visual "
-"items: '%1'?\n"
+"items '%1'?\n"
 "All other visual elements, descendant from this ancestor, will use these "
 "changes!"
 msgstr ""
-"Вы действительно желаете опустить предку все изменения визуальных элементов: "
+"Вы действительно желаете опустить предку все изменения визуальных элементов "
 "'%1'?\n"
 "Все другие визуальные элементы, наследники от данного предка, будут "
 "использовать эти изменения!"
@@ -947,17 +1025,14 @@ msgstr "Состояние"
 msgid "Item icon. Click to download another."
 msgstr "Иконка элемента. Нажмите для загрузки другой."
 
+msgid "Status:"
+msgstr "Статус:"
+
 msgid "Enabled:"
 msgstr "Включен:"
 
 msgid "Container DB:"
 msgstr "БД контейнера:"
-
-msgid "Used:"
-msgstr "Использовано:"
-
-msgid "Date of modification:"
-msgstr "Дата модификации:"
 
 msgid "Configuration"
 msgstr "Конфигурация"
@@ -1049,9 +1124,6 @@ msgstr "Закрыть"
 msgid "Error getting the node '%1' information."
 msgstr "Ошибка запроса информации узла '%1'."
 
-msgid "Not set"
-msgstr "Не установлен"
-
 msgid "Downloading the image icon"
 msgstr "Загрузка изображения иконки"
 
@@ -1101,11 +1173,11 @@ msgstr "Свойства виджета"
 msgid "Widget"
 msgstr "Виджет"
 
-msgid "Parent widget:"
-msgstr "Родительский виджет:"
-
 msgid "Page type:"
 msgstr "Тип страницы:"
+
+msgid "Parent widget:"
+msgstr "Родительский виджет:"
 
 msgid "Root:"
 msgstr "Корень:"
@@ -1149,6 +1221,16 @@ msgstr "Переводить:"
 msgid "Links"
 msgstr "Связи"
 
+msgid ""
+"Are you sure of editing the inherited procedure, since that can cause for "
+"unexpectedly loss of the access to the original one?!"
+msgstr ""
+"Вы действительно желаете редактировать наследованную процедуру, поскольку "
+"это может привести к неожиданной потере доступа к оригинальной процедуре?!"
+
+msgid "Editing an inherited procedure"
+msgstr "Редактирование наследованной процедуры"
+
 msgid "Correct widget is not selected"
 msgstr "Не выбрано корректного виджета"
 
@@ -1188,15 +1270,27 @@ msgstr "Редактирование атрибута '%1' для виджета
 msgid "Short help to describe the syntax of the text."
 msgstr "Короткая помощь для описания синтаксиса текста."
 
+msgid ""
+"Are you sure for lowering down to the parent for the selected attribute '%1' "
+"change of the visual item '%2'?\n"
+"At missing the visual item will be created in the parent and all other "
+"visual elements, descendant from this ancestor, will use this!"
+msgstr ""
+"Вы действительно желаете опустить предку изменения выбранного атрибута '%1' "
+"визуального элемента '%1'?\n"
+"В случае отсутствия визуальный элемент будет создан у предка а все другие "
+"визуальные элементы, наследники от данного предка, будут использовать его!"
+
+msgid ""
+"Lowering down the selected attribute change of the visual item to the parent"
+msgstr ""
+"Опускание изменения выбранного атрибута визуального элемента к родителю"
+
 msgid "Widgets"
 msgstr "Виджет"
 
 msgid "Type"
 msgstr "Тип"
-
-#, c-format
-msgid "Time of requesting the widgets development tree '%s': %f ms."
-msgstr "Время запроса дерева разработки виджетов '%s': %f мс."
 
 msgid "Library"
 msgstr "Библиотека"
@@ -1231,10 +1325,6 @@ msgstr "Проекты"
 
 msgid "Project"
 msgstr "Проект"
-
-#, c-format
-msgid "Time of loading the projects development tree '%s': %f ms."
-msgstr "Время загрузки дерева разработки проектов '%s': %f мс."
 
 msgid "Page"
 msgstr "Страница"
@@ -1463,6 +1553,9 @@ msgstr "Изображения (*.png *.xpm *.jpg);;CSV файл (*.csv)"
 msgid "\"Date and time\";\"us\""
 msgstr "\"Дата и время\";\"мкс\""
 
+msgid "Empty"
+msgstr "Пусто"
+
 msgid "\"Frequency (Hz)\""
 msgstr "\"Частота (Гц)\""
 
@@ -1636,7 +1729,7 @@ msgid "This label displays the used interface style."
 msgstr "Эта метка показывает используемый стиль интерфейса."
 
 msgid "Field for displaying the used interface style."
-msgstr "Поле для отображения используемого стиля интерфейса."
+msgstr "Поле отображения используемого стиля интерфейса."
 
 msgid "Double click to change the style."
 msgstr "Дважды кликнуть для смены пользователя."
@@ -1667,8 +1760,8 @@ msgid "Restore the session creation for '%s'."
 msgstr "Восстановление создания сеанса для '%s'."
 
 #, c-format
-msgid "Time of updating the session '%s': %f ms."
-msgstr "Время обновления сеанса '%s': %f мс."
+msgid "Time of the session updating '%s': %s[%s]ms. Planer period %s(%s)ms"
+msgstr "Время обновления сеанса '%s':  %s[%s]мс. Плановый период %s(%s)мс"
 
 #, c-format
 msgid "Error function of the notificator '%s': %s"
@@ -1715,8 +1808,8 @@ msgstr ""
 "Страница: '%1'.\n"
 "Отсутствует доступ для просмотра."
 
-msgid "No style"
-msgstr "Нет стиля"
+msgid "<Disabled>"
+msgstr "<Выключено>"
 
 msgid "Select your style from the list."
 msgstr "Выберите Ваш стиль из списка."

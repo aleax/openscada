@@ -76,7 +76,7 @@ class TUIMod: public TUI
 
 	// Common
 	void postMess( const string &cat, const string &mess, MessLev type = Info, QWidget *parent = 0 );
-	void setHelp( const string &help, const string &addr, QWidget *w );
+	string setHelp( const string &help, const string &addr = "", QWidget *w = NULL );
 
     protected:
 	//Methods

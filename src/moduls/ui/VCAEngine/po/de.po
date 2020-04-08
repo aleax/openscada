@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009-2013.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2018.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-28 20:27+0300\n"
+"POT-Creation-Date: 2020-02-20 17:23+0200\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: irina\n"
 "Language-Team: German <kde-russian@lists.kde.ru>\n"
@@ -19,6 +19,20 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Lokalize 1.5\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Enabled. "
+msgstr "Aktiviert. "
+
+msgid "Disabled. "
+msgstr "Deaktiviert. "
+
+#, c-format
+msgid "Used: %d. "
+msgstr "Verwendet: %d. "
+
+#, c-format
+msgid "Date of modification: %s. "
+msgstr "Änderungsdatum: %s. "
 
 msgid "Loading widgets library."
 msgstr "Widgetsbibliothek laden."
@@ -36,6 +50,10 @@ msgstr "Widgetsbibliothek abschalten."
 msgid "Error enabling/disabling widget '%s': %s."
 msgstr "Fehler beim Ein-/Abschaltens des Widgets '%s': %s."
 
+#, c-format
+msgid "The widget '%s' is already present!"
+msgstr "Das Widget '%s' ist bereits vorhanden!"
+
 msgid "Widgets library: "
 msgstr "Widgetsbibliothek: "
 
@@ -47,6 +65,9 @@ msgstr "Bibliothek"
 
 msgid "State"
 msgstr "Zustand"
+
+msgid "Status"
+msgstr "Status"
 
 msgid "Enabled"
 msgstr "Aktiviert"
@@ -94,9 +115,17 @@ msgstr "Mime Typ"
 msgid "Data"
 msgstr "Daten"
 
-#, c-format
-msgid "Widget '%s' is already present!"
-msgstr "Widget '%s' ist bereits vorhanden!"
+msgid "Calculating procedure: "
+msgstr "Berechnungsverfahren: "
+
+msgid "!!redefined!!"
+msgstr "!!neu definiert!!"
+
+msgid "inherited"
+msgstr "vererbt"
+
+msgid "presented"
+msgstr "vorgeführt"
 
 msgid "Widget is not container!"
 msgstr "Widget ist kein Container!"
@@ -277,8 +306,9 @@ msgstr "Wert"
 msgid "View"
 msgstr "Ansicht"
 
-msgid "Text;Combo;Integer;Real;Time;Date;Date and time"
-msgstr "Text;Combo;Ganzzahl;Reelle Zahl;Uhrzeit;Datum;Datum und Uhrzeit"
+msgid "Text;Combo;Integer;Real;Time;Date;Date and time;Password"
+msgstr ""
+"Text;Combo;Ganzzahl;Reelle Zahl;Uhrzeit;Datum;Datum und Uhrzeit;Passwort"
 
 msgid "Confirm"
 msgstr "Bestätigen"
@@ -1248,6 +1278,10 @@ msgstr "Projekt einschalten."
 msgid "Disabling the project."
 msgstr "Projekt abschalten."
 
+#, c-format
+msgid "The page '%s' is already present!"
+msgstr "Die Seite '%s' ist bereits vorhanden!"
+
 msgid "Project: "
 msgstr "Projekt: "
 
@@ -1315,21 +1349,17 @@ msgid "Message"
 msgstr "Nachricht"
 
 #, c-format
-msgid "Page '%s' is already present!"
-msgstr "Seite '%s' ist vorhanden!"
-
-#, c-format
 msgid "All: %d; Enabled: %d"
 msgstr "Alle: %d; Aktiviert: %d"
 
 msgid "New style"
 msgstr "Neuer Stil"
 
-msgid "No style"
-msgstr "Kein Stil"
+msgid "<Disabled>"
+msgstr "<Deaktiviert>"
 
-msgid "Create a new style"
-msgstr "Neuen Stil schaffen"
+msgid "<Create a new style>"
+msgstr "<Neuen Stil schaffen>"
 
 msgid "Page: opened"
 msgstr "Seite: geöffnet"
@@ -1337,14 +1367,18 @@ msgstr "Seite: geöffnet"
 msgid "Page: process not opened"
 msgstr "Seite: Prozess nicht geöffnet"
 
+#, c-format
+msgid "The target page '%s' of the link is empty or recursive!"
+msgstr "Die Zielseite '%s' des Links ist leer oder rekursiv!"
+
 msgid "As a page, only a box based widget can be used!"
 msgstr "Für Seiten kann nur das Box-basierte Widget benutzt werden!"
 
 msgid "The widget is not a container!"
 msgstr "Widget ist kein Container!"
 
-msgid "Page is not a container or template!"
-msgstr "Seite ist kein Container oder Vorlage!"
+msgid "Page is not a container or a template!"
+msgstr "Seite ist kein Container oder eine Vorlage!"
 
 msgid "Project page: "
 msgstr "Seite des Projekts: "
@@ -1363,6 +1397,9 @@ msgstr "Logischer Container"
 
 msgid "Container and template"
 msgstr "Container und Vorlage"
+
+msgid "Link"
+msgstr "Link"
 
 msgid "The variable is not a link"
 msgstr "Die Variable ist kein Lnk"
@@ -1417,6 +1454,14 @@ msgstr "Uhrzeit des Beginns der Verarbeitungstask: %f ms."
 
 msgid "Stopping the session."
 msgstr "Stoppen der Sitzung."
+
+#, c-format
+msgid "Registering/opening the page '%s'."
+msgstr "Registrieren/Öffnen der Seite '%s'."
+
+#, c-format
+msgid "Unregistering/closing the page '%s'."
+msgstr "Aufheben der Registrierung/Schließen der Seite '%s'."
 
 #, c-format
 msgid "Error calculating the session '%s'."
@@ -1490,6 +1535,9 @@ msgstr "Benachrichtigung"
 msgid "Language of the notification message"
 msgstr "Sprache der Benachrichtigung"
 
+msgid "Opened. "
+msgstr "Geöffnet. "
+
 msgid "Enabling the page."
 msgstr "Aktivieren Seite."
 
@@ -1508,20 +1556,24 @@ msgid ""
 msgstr ""
 "Fehler in der Funktionskompilation '%s' in der Sprache '%s' für Widget: %s"
 
+msgid "Processing. "
+msgstr "Wird bearbeitet. "
+
+msgid "Spent time on the branch: "
+msgstr "Verbrachte Zeit in der Branche: "
+
+msgid "the item: "
+msgstr "der Gegenstand: "
+
+msgid "It is a try of creating a widget in depth bigger to 10!"
+msgstr ""
+"Es ist ein Versuch, ein Widget mit einer Tiefe von bis zu 10 zu erstellen!"
+
 msgid "Error calculating the widget. Process is disabled."
 msgstr "Fehler der Berechnung des Widgets. Bearbeitung ist abgeschaltet."
 
-msgid "Process"
+msgid "Processing"
 msgstr "Bearbeitung"
-
-msgid "Spent time"
-msgstr "Verbrachte Zeit"
-
-msgid "Subtree="
-msgstr "Subtree="
-
-msgid "Item="
-msgstr "Punkt="
 
 msgid "Engine of the visual control area"
 msgstr "Motor der visuellen Kontrollzone"
@@ -1538,8 +1590,8 @@ msgstr "DB-Tabelle"
 msgid "Parent widget"
 msgstr "Elternwidget"
 
-msgid "Translate procedure"
-msgstr "Übersetzungsverfahren"
+msgid "Completely translate the procedure"
+msgstr "Übersetzen Sie das Verfahren vollständig"
 
 msgid "Procedure text and language"
 msgstr "Text und Sprache des Programms"
@@ -1642,6 +1694,14 @@ msgid "Time of the project '%s' enabling: %f ms."
 msgstr "Zeitpunkt der Aktivierung des Projekts '%s': %f ms."
 
 #, c-format
+msgid "The widget library '%s' is already present!"
+msgstr "Die Widget-Bibliothek '%s' ist bereits vorhanden!"
+
+#, c-format
+msgid "The project '%s' is already present!"
+msgstr "Das Projekt '%s' ist bereits vorhanden!"
+
+#, c-format
 msgid "Connecting to the session is not permitted for '%s'."
 msgstr "Die Verbindung zur Sitzung ist für '%s' nicht erlaubt."
 
@@ -1674,14 +1734,6 @@ msgstr "Sitzungen"
 
 msgid "Auto created and started"
 msgstr "Automatisch erstellt und gestartet"
-
-#, c-format
-msgid "Project '%s' is already present!"
-msgstr "Projekt '%s' ist vorhanden!"
-
-#, c-format
-msgid "Widgets library '%s' is already present!"
-msgstr "Widgets Bibliothek '%s' ist vorhanden!"
 
 #, c-format
 msgid "Session '%s' is already present!"
@@ -1781,12 +1833,11 @@ msgid "Adding a new attribute '%s' exceeds the number %d!"
 msgstr "Hinzufügen eines neuen Attributs '%s' überschreitet die Anzahl %d!"
 
 #, c-format
-msgid "Attribute '%s' is not present!"
-msgstr "Attribut '%s' fehlt!"
+msgid "Attribute '%s' is not present."
+msgstr "Attribut '%s' ist nicht vorhanden."
 
-#, c-format
-msgid "Deleting attribute '%s' has not been released!"
-msgstr "Entfernt Attribut '%s' wird nicht veröffentlicht!"
+msgid "Deleting attribute '%s' has not been released."
+msgstr "Entfernt Attribut '%s' wird nicht veröffentlicht."
 
 msgid ""
 "Image name in the form \"[{src}:]{name}\", where:\n"
@@ -1870,6 +1921,10 @@ msgstr "Verringern Sie das Widget nach unten zu seinem übergeordneten Element"
 
 msgid "Included widgets"
 msgstr "Enthaltene Widgets"
+
+#, c-format
+msgid "Widget '%s' is already present!"
+msgstr "Widget '%s' ist bereits vorhanden!"
 
 msgid "Path to the widget."
 msgstr "Pfad zum Widget."
@@ -1963,6 +2018,13 @@ msgstr "Berechnung"
 msgid "Procedure language"
 msgstr "Verfahrenssprache"
 
+msgid ""
+"Select the blank language to reset the widget procedure and language to the "
+"parent widget."
+msgstr ""
+"Wählen Sie die leere Sprache das Widget Verfahren und Sprache auf das "
+"übergeordnete Widget zurückgesetzt werden."
+
 msgid "Period of the calculating, milliseconds"
 msgstr "Zeitraum der Berechnung, Millisekunden"
 
@@ -1971,10 +2033,6 @@ msgstr "Verfahren"
 
 msgid "New attribute"
 msgstr "Neues Attribut"
-
-#, c-format
-msgid "Attribute '%s' is not present."
-msgstr "Attribut '%s' ist nicht vorhanden."
 
 #, c-format
 msgid "Unable to delete non-user attribute '%s'."

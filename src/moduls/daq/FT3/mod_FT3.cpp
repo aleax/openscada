@@ -435,8 +435,8 @@ void TTpContr::postEnable(int flag)
     TTypeDAQ::postEnable(flag);
 
     //> Controler's bd structure
-    fldAdd(new TFld("CTRTYPE", _("Type"), TFld::String, TFld::Selected, "5", "Logic", "Logic;DAQ", _("Logic;DAQ")));
-    fldAdd(new TFld("PRTTYPE", _("Protocol"), TFld::String, TFld::Selected, "5", "GRS", "GRS;KA", _("GRS;KA")));
+    fldAdd(new TFld("CTRTYPE", _("Type"), TFld::String, TFld::Selectable, "5", "Logic", "Logic;DAQ", _("Logic;DAQ")));
+    fldAdd(new TFld("PRTTYPE", _("Protocol"), TFld::String, TFld::Selectable, "5", "GRS", "GRS;KA", _("GRS;KA")));
     fldAdd(new TFld("PRM_BD_BUC", _("BUC Parameters table"), TFld::String, TFld::NoFlag, "30", ""));
     fldAdd(new TFld("PRM_BD_BVTS", _("BVTS Parameters table"), TFld::String, TFld::NoFlag, "30", ""));
     fldAdd(new TFld("PRM_BD_BVT", _("BVT Parameters table"), TFld::String, TFld::NoFlag, "30", ""));
@@ -454,7 +454,7 @@ void TTpContr::postEnable(int flag)
     fldAdd(new TFld("PRM_BD_TANK", _("TANK Parameters table"), TFld::String, TFld::NoFlag, "30", ""));
     fldAdd(new TFld("SCHEDULE", _("Acquisition schedule"), TFld::String, TFld::NoFlag, "100", "1"));
     fldAdd(new TFld("PRIOR", _("Priority of the acquisition task"), TFld::Integer, TFld::NoFlag, "2", "0", "-1;199"));
-    //fldAdd(new TFld("TO_PRTR",_("Blocs"),TFld::String,TFld::Selected,"5","BUC","BUC;BTR;BVT;BVTS;BPI",_("BUC;BTR;BVT;BVTS;BPI")));
+    //fldAdd(new TFld("TO_PRTR",_("Blocs"),TFld::String,TFld::Selectable,"5","BUC","BUC;BTR;BVT;BVTS;BPI",_("BUC;BTR;BVT;BVTS;BPI")));
     fldAdd(new TFld("NODE", _("Addres"), TFld::Integer, TFld::NoFlag, "2", "1", "1;63"));
     fldAdd(new TFld("ADDR", _("Transport address"), TFld::String, TFld::NoFlag, "30", ""));
     fldAdd(new TFld("NCHANNEL", _("Channels count/Stantion address"), TFld::Integer, TFld::NoFlag, "2", "1", "1;63"));
@@ -523,7 +523,7 @@ void TTpContr::postEnable(int flag)
     t_prm = tpParmAdd("tp_GZD", "PRM_BD_GZD", _("GZD"));
     tpPrmAt(t_prm).fldAdd(new TFld("DEV_ID", _("Device address"), TFld::Integer, TCfg::NoVal, "2", "6", "0;15"));
     tpPrmAt(t_prm).fldAdd(new TFld("CHAN_COUNT", _("Channels count"), TFld::Integer, TCfg::NoVal, "3", "1", "0;48"));
-    tpPrmAt(t_prm).fldAdd(new TFld("VALVE_TYPE", _("Valve type"), TFld::Integer, TFld::Selected | TCfg::NoVal, "1", "0", "0;1", _("5 TU;6 TU")));
+    tpPrmAt(t_prm).fldAdd(new TFld("VALVE_TYPE", _("Valve type"), TFld::Integer, TFld::Selectable | TCfg::NoVal, "1", "0", "0;1", _("5 TU;6 TU")));
     tpPrmAt(t_prm).fldAdd(new TFld("WITH_PARAMS", _("With parameters"), TFld::Boolean, TCfg::NoVal, "1", "0"));
 
     t_prm = tpParmAdd("tp_GNS", "PRM_BD_GNS", _("GNS"));
@@ -542,7 +542,7 @@ void TTpContr::postEnable(int flag)
     tpPrmAt(t_prm).fldAdd(new TFld("WITH_PARAMS", _("With parameters"), TFld::Boolean, TCfg::NoVal, "1", "0"));
 
     elPrmIO.fldAdd(new TFld("PRM_ID", _("Parameter ID"), TFld::String, TCfg::Key, i2s(atoi(OBJ_ID_SZ) * 6).c_str()));
-    elPrmIO.fldAdd(new TFld("ID", _("Identifier"), TFld::String, TCfg::Key, OBJ_ID_SZ));
+    elPrmIO.fldAdd(new TFld("ID", _("Identifier"), TFld::String, TCfg::Key, i2s(s2i(OBJ_ID_SZ)*1.5).c_str()));
     elPrmIO.fldAdd(new TFld("VALUE", _("Value"), TFld::String, TFld::NoFlag, "200"));
     elPrmIO.fldAdd(new TFld("ATTR_VALUE", _("Attribute value"), TFld::String, TFld::NoFlag, "200"));
 }
@@ -557,7 +557,7 @@ TController *TTpContr::ContrAttach(const string &name, const string &daq_db)
 //*************************************************
 TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
 	TController(name_c, daq_db, cfgelem), prc_st(false), endrun_req(false), tm_gath(0), CntrState(StateNoConnection), NeedInit(true), enRes(true),
-	eventRes(true), mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR").getId())
+	eventRes(true), mSched(cfg("SCHEDULE")), mPer(1e9), mPrior(cfg("PRIOR").getId())
 {
     cfg("PRM_BD_BUC").setS("FT3Prm_BUC_" + name_c);
     cfg("PRM_BD_BVTS").setS("FT3Prm_BVTS_" + name_c);
@@ -1048,7 +1048,6 @@ TParamContr *TMdContr::ParamAttach(const string &name, int type)
 
 void TMdContr::start_()
 {
-    mPer = TSYS::strSepParse(cron(), 1, ' ').empty() ? vmax(0, (int64_t )(1e9 * s2r(cron()))) : 0;
     nChannel = cfg("NCHANNEL").getI();
     Channels.clear();
     devAddr = vmin(63, vmax(1,cfg("NODE").getI()));
@@ -1455,7 +1454,6 @@ void *TMdContr::LogicTask(void *icntr)
 
 void TMdContr::cntrCmdProc(XMLNode *opt)
 {
-
     //> Get page info
     if(opt->name() == "info") {
 	TController::cntrCmdProc(opt);
@@ -1473,6 +1471,17 @@ void TMdContr::cntrCmdProc(XMLNode *opt)
     } else
 	TController::cntrCmdProc(opt);
 }
+
+bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
+{
+    TController::cfgChange(co, pc);
+
+    if(co.fld().name() == "SCHEDULE")
+	mPer = TSYS::strSepParse(cron(), 1, ' ').empty() ? vmax(0, (int64_t )(1e9 * s2r(cron()))) : 0;
+
+    return true;
+}
+
 //*************************************************
 //* TMdPrm                                        *
 //*************************************************
@@ -1740,13 +1749,9 @@ void TMdPrm::vlSet(TVal &vo, const TVariant &vl, const TVariant &pvl)
 
     if(vl.isEVal() || vl == pvl) return;
 
-//Send to active reserve station
-    if(owner().redntUse()) {
-	XMLNode req("set");
-	req.setAttr("path", nodePath(0, true) + "/%2fserv%2fattr")->childAdd("el")->setAttr("id", vo.name())->setText(vl.getS());
-	SYS->daq().at().rdStRequest(owner().workId(), req);
-	return;
-    }
+    //Send to active reserve station
+    if(vlSetRednt(vo,vl,pvl))	return;
+
     if(mDA) {
 	if(mDA->setVal(vo)) {
 	    modif();

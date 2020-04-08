@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tparamcontr.h
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -73,10 +73,10 @@ class TParamContr : public TConfig, public TValue
 
 	// Included parameters
 	void list( vector<string> &list ) const;
-	bool present( const string &name ) const;
-	void add( const string &name, unsigned type = 0 );
-	void del( const string &name, int full = RM_Exit );
-	AutoHD<TParamContr> at( const string &name, const string &who = "th_prm" ) const;
+	bool present( const string &id ) const;
+	string add( const string &id, unsigned type = 0 );
+	void del( const string &id, int full = RM_Exit );
+	AutoHD<TParamContr> at( const string &id, const string &who = "th_prm" ) const;
 
 	TTypeParam &type( ) const	{ return *tpParm; }
 
@@ -104,6 +104,7 @@ class TParamContr : public TConfig, public TValue
 
 	void vlGet( TVal &vo );
 	void vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl );
+	bool vlSetRednt( TVal &vo, const TVariant &vl, const TVariant &pvl );
 	void vlArchMake( TVal &val );
 
 	virtual void setType( const string &tpId );

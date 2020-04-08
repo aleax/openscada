@@ -1,15 +1,15 @@
 # OpenSCADA.UI.WebVision translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.UI.WebVision package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2007-2018.
+# Roman Savochenko <roman@oscada.org>, 2007-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-15 23:30+0300\n"
+"POT-Creation-Date: 2020-03-22 17:18+0200\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -104,6 +104,12 @@ msgstr "мкс"
 msgid "Ready"
 msgstr "Готовий"
 
+msgid "Page"
+msgstr "Сторінка"
+
+msgid "View access is not permitted."
+msgstr "Відсутній доступ до перегляду."
+
 msgid "Today"
 msgstr "Сьогодні"
 
@@ -164,24 +170,49 @@ msgstr "Листопад"
 msgid "December"
 msgstr "Грудень"
 
+msgid "Field for displaying and changing the current user."
+msgstr "Поле відображення та зміни поточного користувача."
+
+msgid "Field for displaying and changing the used interface style."
+msgstr "Поле відображення та зміни використаного стилю інтерфейсу."
+
+msgid "Alarm level: %1"
+msgstr "Рівень порушення: %1"
+
 #, c-format
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
 "---- Parameters of the module section '%s' of the configuration file ----\n"
 "SessTimeLife <min>      Lifetime of the sessions in minutes (by default, "
 "10).\n"
+"SessLimit    <numb>     Maximum number of the sessions (by default 5).\n"
+"CachePgLife  <hours>    Lifetime of the pages in the cache (by default 1).\n"
+"CachePgSz    <numb>     Maximum number of the pages in the cache (by default "
+"10).\n"
+"PNGCompLev   <lev>      Compression level [-1..9] of the creating PNG-"
+"images.\n"
+"ImgResize    <0|1>      Resizing raster images on the server side.\n"
 "\n"
 msgstr ""
 "======================== Опції модуля <%s:%s> ============================\n"
 "------ Параметри модульної секції '%s' конфігураційного файлу ------\n"
 "SessTimeLife <хвил>     Час життя сеансів у хвилинах (по замовченню 10).\n"
+"SessLimit    <кільк.>   Максимальна кількість сеансів (по замовченю 5).\n"
+"CachePgLife  <години>   Час життя сторінок у кешу (по замовченю 1).\n"
+"CachePgSz    <кільк.>   Максимальна кількість сторінок у кешу (по замовченю "
+"10).\n"
+"PNGCompLev   <рів.>     Рівень стиснення [-1..9] створюваних PNG-файлів.\n"
+"ImgResize    <0|1>      Зміна розміру растрових зображень на боці серверу.\n"
 "\n"
 
-msgid "Connecting to the opened session"
-msgstr "Підключення до відкритої сесії"
+msgid "close"
+msgstr "закрити"
 
-msgid "Creating a new session for the existing project"
-msgstr "Створення нової сесії для існуючого проекту"
+msgid "Opened sessions of the projects"
+msgstr "Відкриті сеанси проектів"
+
+msgid "Available projects"
+msgstr "Доступні проекти"
 
 msgid "There is no session and project of the VCA engine for the user!"
 msgstr "Немає жодного сеансу та проекту рушія СВУ для користувача!"
@@ -192,6 +223,20 @@ msgstr "Пробачте, кількість відкритих сеансів �
 #, c-format
 msgid "Going to the session '%s' for the project '%s' ..."
 msgstr "Перехід до сеансу '%s' для проекту '%s' ..."
+
+msgid "Going to the main page ..."
+msgstr "Перехід до головної сторінки ..."
+
+#, c-format
+msgid "The session '%s' is closed."
+msgstr "Закрито сеанс '%s'."
+
+#, c-format
+msgid "You '%s' have no access to close sessions!"
+msgstr "Ви '%s' не маєте доступу до закриття сеансів!"
+
+msgid "Going to the different session ..."
+msgstr "Перехід до іншого сеансу ..."
 
 #, c-format
 msgid "The specified project/session '%s' is false!"
@@ -205,14 +250,46 @@ msgstr "Помилка сторінки '%s': %s"
 msgid "Wrong session '%s'."
 msgstr "Помилковий сеанс '%s'."
 
+msgid "State"
+msgstr "Стан"
+
+msgid "Sessions"
+msgstr "Сеанси"
+
 msgid "Module options"
 msgstr "Опції модуля"
 
-msgid "Lifetime of the sessions, minutes"
-msgstr "Час життя сеансів, хвилин"
+msgid "Lifetime and maximum number of the sessions"
+msgstr "Час життя та максимальна кількість сеансів"
 
-msgid "Sessions limit"
-msgstr "Обмеження кількості сеансів"
+msgid ""
+"The time is specified in minutes, which defines the inactivity interval for "
+"closing the WEB-sessions."
+msgstr ""
+"Час вказується у хвилинах, який визначає інтервал бездіяльності для закриття "
+"WEB-сеансів."
+
+msgid "The number defines a limit of opened WEB-sessions."
+msgstr "Кількість визначає обмеження відкриваних WEB-сеансів."
+
+msgid "Lifetime and maximum number of the cached pages"
+msgstr "Час життя та максимальна кількість сторінок у кеші"
+
+msgid ""
+"The time is specified in hours, which defines the inactivity interval for "
+"closing pages in the cache.\n"
+"Zero value of the time excludes the closing of pages in the cache."
+msgstr ""
+"Час вказується у годинах, який визначає інтервал бездіяльності для закриття "
+"сторінок у кеш.\n"
+"Нульове значення часу виключає закриття сторінок у кеш."
+
+msgid ""
+"The number defines a limit of pages in the cache.\n"
+"Zero value of the number excludes the cache limit."
+msgstr ""
+"Кількість визначає обмеження сторінок у кеші.\n"
+"Нульове значення кількості виключає закриття сторінок у кеш."
 
 msgid "Level of the PNG compression"
 msgstr "Рівень компресії PNG"
@@ -227,3 +304,21 @@ msgstr ""
 "  -1  - оптимальна швидкість-розмір;\n"
 "  0   - вимкнено;\n"
 "  1-9 - прямий рівень."
+
+msgid "Resizing raster images on the server side"
+msgstr "Зміна розміру растрових зображень на боці серверу"
+
+msgid ""
+"Mostly to decrease too big images size then decrease the traffic, what "
+"causes to rise the server load."
+msgstr ""
+"Переважно щоб зменшити розмір занадто великий зображень відтак і трафіку, що призводить до "
+"збільшення навантаження на сервер."
+
+#, c-format
+msgid ""
+"%s %s(%s):%s(%s): the last %s; cached pages %d and resources %d, %s; session "
+"objects %d."
+msgstr ""
+"%s %s(%s):%s(%s): останне %s; кешованих сторінок %d та ресурсів %d, %s; "
+"об'єктів сеансу %d."

@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.HTTP file: http.h
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -53,6 +53,10 @@ class TProtIn: public TProtocolIn
 
 	string lang( );
 
+    protected:
+	//Methods
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+
     private:
 	//Methods
 	string getIndex( const string &user, const string &sender );
@@ -64,7 +68,7 @@ class TProtIn: public TProtocolIn
 	bool pgAccess( const string &URL );
 
 	//Attributes
-	bool	mNotFull;
+	bool	mNotFull, KeepAlive;
 	string	mBuf,
 		prms, user, prmLang, brLang;
 };
@@ -83,13 +87,16 @@ class TProt: public TProtocol
 	string allow( )			{ return mAllow; }
 	string tmpl( )			{ return mTmpl; }
 	string tmplMainPage( )		{ return mTmplMainPage; }
+	string authSessDB( )		{ return mAuthSessDB; }
 	string allowUsersAuth( )	{ return mAllowUsersAuth; }
 	int authTime( )			{ return mTAuth; }
+	string authSessTbl( )		{ return authSessDB().size() ? authSessDB()+".HTTP_AuthSessions" : ""; }
 
 	void setDeny( const string &vl )	{ mDeny = vl; modif(); }
 	void setAllow( const string &vl )	{ mAllow = vl; modif(); }
 	void setTmpl( const string &vl )	{ mTmpl = vl; modif(); }
 	void setTmplMainPage( const string &vl ){ mTmplMainPage = vl; modif(); }
+	void setAuthSessDB( const string &vl)	{ mAuthSessDB = vl; modif(); }
 	void setAllowUsersAuth( const string &vl ) { mAllowUsersAuth = vl; modif(); }
 	void setAuthTime( int vl )		{ mTAuth = vmax(1,vl); modif(); }
 
@@ -107,8 +114,6 @@ class TProt: public TProtocol
 	//Methods
 	void load_( );
 	void save_( );
-
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
     private:
 	//Data
@@ -151,12 +156,14 @@ class TProt: public TProtocol
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
-	MtxString	mDeny, mAllow, mTmpl, mTmplMainPage, mAllowUsersAuth;
+	MtxString	mDeny, mAllow, mTmpl, mTmplMainPage, mAllowUsersAuth, mAuthSessDB;
+	TElem		elAuth;		//Elements of the external authentication sessions
 	map<int, SAuth>	mAuth;
 	int		mTAuth;
 	time_t		lstSesChk;
 
-	vector<SAutoLogin>	mALog;
+	vector<SAutoLogin> mALog;
+	ResMtx		authM;
 };
 
 extern TProt *mod;

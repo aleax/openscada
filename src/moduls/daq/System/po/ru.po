@@ -104,13 +104,13 @@ msgid "HD temperature: "
 msgstr "Температура НЖМД: "
 
 msgid "Free (KiB)"
-msgstr "Свободно (ГиБ)"
+msgstr "Свободно (КиБ)"
 
 msgid "Total (KiB)"
-msgstr "Всего (ГиБ)"
+msgstr "Всего (КиБ)"
 
 msgid "Used (KiB)"
-msgstr "Использовано (ГиБ)"
+msgstr "Использовано (КиБ)"
 
 msgid "Buffers (KiB)"
 msgstr "Буфера (КиБ)"

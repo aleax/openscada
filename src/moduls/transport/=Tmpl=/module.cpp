@@ -108,6 +108,8 @@ string TTr::optDescr( )
 //!!! Inherited (virtual) load object's node method. Append your module need data loadings
 void TTr::load_( )
 {
+    TTypeTransport::load_();
+
     //!!! Load self module command line parameters' values. Append your addition parameters process.
     // Load parameters from command line
 

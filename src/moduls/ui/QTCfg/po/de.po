@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2018.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-01 16:36+0300\n"
+"POT-Creation-Date: 2019-11-21 16:57+0200\n"
 "PO-Revision-Date: 2009-08-20 11:41+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -98,29 +98,66 @@ msgstr "Schaltfläche um zur nächsten Seite zu gelangen"
 msgid "Press for going to the forward page."
 msgstr "Betätigen um zur nächsten Seite zu gelangen."
 
-msgid "Load from the DB"
+msgid "Load from DB"
 msgstr "Laden von der DB"
 
 msgid "Load the item data from DB"
 msgstr "Laden Sie die Artikeldaten aus der DB"
 
-msgid "The button for loading the item data from the DB"
+msgid "The button for loading the item data from DB"
 msgstr "Schaltfläche zum Laden der Artikeldaten aus der DB"
 
-msgid "Press for loading the item data from the DB."
+msgid "Press for loading the item data from DB."
 msgstr "Betätigen zum Laden der Artikeldaten aus der DB."
 
-msgid "Save to the DB"
+msgid "Load from DB forcibly"
+msgstr "Laden von der DB gewaltsam"
+
+msgid "Load the item data from DB forcibly"
+msgstr "Laden Sie die Artikeldaten aus der DB gewaltsam"
+
+msgid ""
+"The button for loading the item data from DB forcibly, not only when it "
+"changed"
+msgstr ""
+"Schaltfläche zum zwangsweisen Laden der Artikeldaten aus der DB, nicht nur "
+"beim Ändern"
+
+msgid ""
+"Press for loading the item data from DB forcibly, not only when it changed."
+msgstr ""
+"Drücken Sie, um die Artikeldaten zwangsweise zu laden, nicht nur, wenn sie "
+"geändert wurden."
+
+msgid "Save to DB"
 msgstr "Speichern Sie an die DB"
 
 msgid "Save the item data to DB"
 msgstr "Sichern Sie die Artikeldaten in der DB"
 
-msgid "The button for saving the item data to the DB"
+msgid "The button for saving the item data to DB"
 msgstr "Schaltfläche zum Speichern der Artikeldaten in der Datenbank"
 
-msgid "Press for saving the item data to the DB."
+msgid "Press for saving the item data to DB."
 msgstr "Betätigen zum Speichern der Artikeldaten in der Datenbank."
+
+msgid "Save to DB forcibly"
+msgstr "Speichern Sie an die DB gewaltsam"
+
+msgid "Save the item data to DB forcibly"
+msgstr "Sichern Sie die Artikeldaten in der DB gewaltsam"
+
+msgid ""
+"The button for saving the item data to DB forcibly, not only when it changed"
+msgstr ""
+"Schaltfläche zum zwangsweisen Speichern der Artikeldaten in den DB, nicht "
+"nur bei Änderung"
+
+msgid ""
+"Press for saving the item data to DB forcibly, not only when it changed."
+msgstr ""
+"Drücken Sie, um die Artikeldaten zwangsweise in der Datenbank zu speichern, "
+"nicht nur, wenn sie geändert wurden."
 
 msgid "&Add"
 msgstr "&Hinzufügen"
@@ -322,8 +359,8 @@ msgid "Ready"
 msgstr "Fertig"
 
 #, c-format
-msgid "Configurator using the remote host %d times."
-msgstr "Konfigurator verwendet den Remote-Host %d mal."
+msgid "The configurator is using the remote host %d times."
+msgstr "Der Konfigurator verwendet %d-Zeiten eines Remote-Hosts."
 
 msgid "Saving the changes"
 msgstr "Speichern der Änderungen"
@@ -346,6 +383,10 @@ msgstr "Hinzufügen eines Knotens"
 
 msgid "The node '%1' is already present."
 msgstr "Der Knoten '%1' ist bereits vorhanden."
+
+#, c-format
+msgid "... and yet %d nodes"
+msgstr "... und noch %d Knoten"
 
 msgid "Are you sure of deleting the nodes '%1'?"
 msgstr "Sind Sie sicher, die Knoten '%1' zu löschen?"
@@ -474,8 +515,8 @@ msgstr "%s| Geh zum Link '%s'!"
 msgid "%s| Pressed down '%s'!"
 msgstr "%s| Betätigen '%s'!"
 
-msgid "Value is wrong: "
-msgstr "Wert ist falsch: "
+msgid "Value is missing: "
+msgstr "Wert fehlt: "
 
 #, c-format
 msgid "%s| Changed '%s' from '%s' to '%s'!"
@@ -543,11 +584,11 @@ msgstr "Datensatz einfügen"
 msgid "Delete record"
 msgstr "Datensatz löschen"
 
-msgid "Move Up"
-msgstr "Nach oben verschieben"
+msgid "Move Up (Ctrl+Up)"
+msgstr "Nach oben stellen (Ctrl+Up)"
 
-msgid "Move Down"
-msgstr "Nach unten verschieben"
+msgid "Move Down (Ctrl+Down)"
+msgstr "Nach unten bewegen (Ctrl+Down)"
 
 msgid "Copy"
 msgstr "Kopieren"

@@ -1,12 +1,18 @@
+openscada (0.9.1-1) experimental; urgency=low
+
+  * Update 1 of OpenSCADA 0.9 LTS.
+
+ -- Roman Savochenko <roman@oscada.org>  Wed, 08 Apr 2020 20:00:00 +0200
+
 openscada (0.9.0-1) experimental; urgency=low
 
   * Release of OpenSCADA 0.9 LTS.
 
- -- OpenSCADA <oscada@oscada.org>  Sun, 17 Jun 2018 20:00:00 +0200
+ -- Roman Savochenko <roman@oscada.org>  Sun, 17 Jun 2018 20:00:00 +0200
 
 openscada (0.9-1) experimental; urgency=low
 
   * Work version scheme naming 0.9+rNNNN, sets by the AutoBuilder or manual.
   * LTS version naming 0.8.N.
 
- -- OpenSCADA <oscada@oscada.org>  Fri, 22 May 2015 22:00:00 +0200
+ -- Roman Savochenko <roman@oscada.org>  Fri, 22 May 2015 22:00:00 +0200

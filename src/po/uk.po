@@ -1,13 +1,13 @@
 # OpenSCADA core translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA package.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2003-2018.
+# Roman Savochenko <roman@oscada.org>, 2003-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-15 22:36+0300\n"
+"POT-Creation-Date: 2020-03-08 18:28+0200\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -125,25 +125,25 @@ msgid ""
 "======================== Subsystem \"Archives-History\" options "
 "===================\n"
 "------ Parameters of the section '%s' of the configuration file ------\n"
-"MessBufSize <items>     Size of the messages buffer.\n"
-"MessPeriod <sec>        Period of the messages archiving.\n"
-"ValPeriod  <msec>       Period of active archiving of values.\n"
-"ValPriority <level>     Level of priority of the task of active archiving of "
+"MessBufSize  <items>    Size of the messages buffer.\n"
+"MessPeriod   <seconds>  Period of the messages archiving.\n"
+"ValPeriod    <mseconds> Period of active archiving of values.\n"
+"ValPriority  <level>    Level of priority of the task of active archiving of "
 "values.\n"
-"RdRestDtOverTm <hours>  Depth of the forced overloading of the reserve "
-"history at startup, in hours.\n"
+"RdRestDtOverTm <days>   Depth of the forced overloading of the reserve "
+"history at startup, in days.\n"
 "\n"
 msgstr ""
 "====================== Опції підсистеми \"Архіви-Історія\" "
 "========================\n"
 "---------- Параметри секції '%s' конфігураційного файлу ----------\n"
-"MessBufSize <од.>       Розмір буферу повідомлень.\n"
-"MessPeriod <сек>        Період архівування повідомлень.\n"
-"ValPeriod  <мсек>       Період активного архівування значень.\n"
-"ValPriority <рівень>    Рівень пріоритету задачі активного архівування "
+"MessBufSize   <од.>     Розмір буферу повідомлень.\n"
+"MessPeriod    <секунд>  Період архівування повідомлень.\n"
+"ValPeriod     <мсекунд> Період активного архівування значень.\n"
+"ValPriority   <рівень>  Рівень пріоритету задачі активного архівування "
 "значень.\n"
-"RdRestDtOverTm <годин>  Глибина примусового перевантаження історії резерву "
-"при запуску, у годинах.\n"
+"RdRestDtOverTm <днів>   Глибина примусового перевантаження історії резерву "
+"при запуску, у днях.\n"
 "\n"
 
 msgid "Start/update subsystem."
@@ -268,8 +268,8 @@ msgstr "Рівень"
 msgid "Message"
 msgstr "Повідомлення"
 
-msgid "Clear the current alarms table"
-msgstr "Очистити таблицю поточних порушень."
+msgid "Clean up the the current violations table"
+msgstr "Очистити таблицю поточних порушень"
 
 msgid "Values"
 msgstr "Значення"
@@ -283,6 +283,12 @@ msgstr "Рівень пріоритету задачі отримання дан
 msgid "Forced to set timestampes in the current time"
 msgstr "Примусово встановлювати мітку часу у поточний час"
 
+msgid "Mode of forming ID of the automatic created archives"
+msgstr "Режим формування ID атрибуту автоматично створюваних архівів"
+
+msgid "Both parameter and attribute ID;Only parameter ID;Only attribute ID"
+msgstr "Обидва ID параметру та атрибуту;Тільки ID параметру;Тільки ID атрибуту"
+
 msgid "Number"
 msgstr "Кількість"
 
@@ -291,7 +297,7 @@ msgstr "Архіви значень"
 
 #, c-format
 msgid "All: %d; Enabled: %d"
-msgstr "Всього: %d; Ввімкнено: %d"
+msgstr "Разом: %d; Ввімкнено: %d"
 
 msgid "<High level>"
 msgstr "<Високий рівень>"
@@ -336,20 +342,17 @@ msgstr "Конфігурація"
 msgid "Requested %d records for time %s."
 msgstr "Запитано %d записів протягом %s."
 
-msgid "No value."
-msgstr "Значення відсутнє."
-
 #, c-format
-msgid "Grid mode doesn't support inserting too old values %lld (%lld-%lld)."
+msgid ""
+"The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
 msgstr ""
 "Не підтримується вставка дуже старих повідомлень у режимі прив'язки до сітки "
 "%lld (%lld-%lld)."
 
-msgid "Grid mode doesn't support inserting old values."
-msgstr ""
-"Не підтримується вставка старих повідомлень у режимі прив'язки до сітки."
+msgid "The grid mode doesn't support inserting too old values."
+msgstr "Режим прив'язки до сітки не підтримує вставки дуже старих значень."
 
-msgid "Insert a very old value to the buffer."
+msgid "Inserting too old values to the buffer."
 msgstr "Вставка дуже старого значення до буфера."
 
 #, c-format
@@ -521,6 +524,15 @@ msgstr "Кодова сторінка"
 msgid "To enable"
 msgstr "Вмикати"
 
+msgid "Transaction closing: after opening, seconds"
+msgstr "Закриття транзакції: після відкриття, секунд"
+
+msgid "Transaction closing: after request, seconds"
+msgstr "Закриття транзакції: після запиту, секунд"
+
+msgid "Transaction closing: separate task priority"
+msgstr "Закриття транзакції: пріоритет окремої задачі"
+
 #, c-format
 msgid "Error closing database '%s'!"
 msgstr "Помилка закриття БД '%s'!"
@@ -535,17 +547,29 @@ msgstr "Помилка запису до БД або конфігураційн�
 msgid ""
 "========================= Subsystem \"DB\" options ========================\n"
 "------ Parameters of the section '%s' of the configuration file ------\n"
-"SYSStPref  <0|1>        Use the station ID in the common table (SYS).\n"
+"SYSStPref    <0|1>      Use the station ID in the common table (SYS).\n"
+"TblLifeTime  <seconds>  Opened tables lifetime (by default 600 seconds).\n"
 "\n"
 msgstr ""
 "========================= Опції підсистеми \"БД\" =========================\n"
 "---------- Параметри секції '%s' конфігураційного файлу ----------\n"
-"SYSStPref  <0|1>        Використовувати ідентифікатор станції у загальній "
+"SYSStPref    <0|1>      Використовувати ідентифікатор станції у загальній "
 "таблиці (SYS).\n"
+"TblLifeTime  <секунд>   Час життя відкритих таблиць (по замовченню 600 "
+"секунд).\n"
 "\n"
 
 msgid "Error finding and opening a new database."
 msgstr "Помилка пошуку та відкриття нової БД."
+
+msgid "Subsystem"
+msgstr "Підсистема"
+
+msgid "Opened tables lifetime, seconds"
+msgstr "Час життя відкритих таблиць, секунд"
+
+msgid "Time of inactivity in the tables for it closing."
+msgstr "Час неактивності у таблицях для їх закриття."
 
 msgid "DB"
 msgstr "БД"
@@ -648,7 +672,7 @@ msgstr ""
 msgid ""
 "Error blocking node.\n"
 "The node forced to disable which can cause to crash.\n"
-"This problem mostly in user procedure, if the program exits!"
+"This problem mostly in a user procedure, if the program exits!"
 msgstr ""
 "Помилка блокування вузлу.\n"
 "Вузол примусово вимкнено, що може призвести до аваріного завершення "
@@ -690,12 +714,8 @@ msgstr "Помилка групи нащадків %d!"
 msgid "Node is not enabled!"
 msgstr "Вузол не увімкнено!"
 
-msgid "Id the child that is added is empty!"
-msgstr "Id нащадку, який додається, порожнє!"
-
-#, c-format
-msgid "The node '%s' is already present."
-msgstr "Вузол '%s' вже присутній."
+msgid "Id of the child that is adding is empty!"
+msgstr "Id нащадку, що додається є порожнім!"
 
 msgid "Node is being processed now for enable!"
 msgstr "Вузол обробляється зараз для ввімкнення!"
@@ -715,7 +735,7 @@ msgid "Very many users at the node!!!"
 msgstr "Дуже багато користувачів у вузла!!!"
 
 #, c-format
-msgid "Error function '%s' or missing parameters for it."
+msgid "Error the function '%s' or missing its parameters."
 msgstr "Помилка функції '%s' або недостатньо параметрів для неї."
 
 #, c-format
@@ -865,11 +885,11 @@ msgstr "Збір Даних"
 msgid "Maximum calculate time, seconds"
 msgstr "Максимальний час обрахунку, секунд"
 
-msgid "Translate program"
-msgstr "Перекладати програму"
+msgid "Completely translate the procedure"
+msgstr "Повністю перекладати процедуру"
 
-msgid "Program"
-msgstr "Програма"
+msgid "Procedure"
+msgstr "Процедура"
 
 msgid "Date of modification"
 msgstr "Дата модифікації"
@@ -1185,8 +1205,8 @@ msgid ""
 "                        Uses '*' value to allow all the modules.\n"
 "ModDeny    <list>       List of the shared libraries denied for the "
 "automatic loading, attaching and starting (bd_DBF.so;daq_JavaLikeCalc.so).\n"
-"ChkPer     <sec>        Period of the checking for new shared "
-"libraries(modules), in seconds. Set zero to disable.\n"
+"ChkPer     <seconds>    Period of the checking for new shared "
+"libraries(modules), 0 to disable.\n"
 "\n"
 msgstr ""
 "================ Опції підсистеми \"Планувальник модулів\" "
@@ -1205,8 +1225,8 @@ msgstr ""
 "ModDeny    <перелік>    Перелік поділюваних бібліотек заборонених для "
 "автоматичного завантаження, підключення та виконання (bd_DBF.so;"
 "daq_JavaLikeCalc.so).\n"
-"ChkPer     <сек>        Період пошуку нових поділюваних бібліотек(модулів), "
-"в секундах. Встановити у нуля для вимкнення.\n"
+"ChkPer     <секунд>     Період пошуку нових поділюваних бібліотек(модулів), "
+"0 - для вимкнення.\n"
 "\n"
 
 #, c-format
@@ -1236,9 +1256,6 @@ msgstr "Помилка під'єднання модуля '%s'!"
 #, c-format
 msgid "Can not detach the library '%s'."
 msgstr "Неможливо від'єднати бібліотеку '%s'."
-
-msgid "Subsystem"
-msgstr "Підсистема"
 
 msgid "Path to the shared libraries(modules)"
 msgstr "Шлях до поділюваних бібліотек(модулів)"
@@ -1336,8 +1353,8 @@ msgstr "Включення"
 msgid "Controller is not running!"
 msgstr "Контролер не запущено!"
 
-msgid "Frequency of calculation of the function (Hz)"
-msgstr "Частота обчислення функції (Гц)"
+msgid "Frequency of calculation of the function, Hz"
+msgstr "Частота обчислення функції, Гц"
 
 msgid "Function start flag"
 msgstr "Прапорець запуску функції"
@@ -1357,8 +1374,12 @@ msgstr "Шаблон параметра: "
 msgid "Template"
 msgstr "Шаблон"
 
-msgid "Real;Integer;Boolean;String;Text;Object"
-msgstr "Реальний;Цілий;Логічний;Рядок;Текст;Об'єкт"
+msgid ""
+"Real;Integer;Boolean;String;Text;Object;Integer numbers selection;Real "
+"numbers selection;Strings selection"
+msgstr ""
+"Реальний;Цілий;Логічний;Рядок;Текст;Об'єкт;Вибір цілих чисел;Вибір реальних "
+"чисел;Вибір рядків"
 
 msgid "Input;Output"
 msgstr "Вхід;Вихід"
@@ -1393,11 +1414,39 @@ msgstr "Помилковий ID параметру."
 msgid "Template configuration"
 msgstr "Конфігурація шаблону"
 
-msgid "Only attributes are to be shown"
-msgstr "Показувати тільки атрибути"
+msgid "Show attributes"
+msgstr "Показати атрибути"
 
 msgid "Error, recursive linking."
 msgstr "Помилка, рекурсивне підключення."
+
+msgid ""
+"Address to the DAQ attribute writes in the form \"{Type}.{Cntr}.{Prm}[."
+"{PrmN}].{Attr}\", where:\n"
+"    Type,Cntr,Prm,Attr - DAQ: type, controller object, parameter and "
+"attribute.\n"
+"  Link's template, of the column \"Value\" on the template forming side, "
+"writes in the form \"{Parameter}|{attribute}\", where:\n"
+"    Parameter - specifies the parameter's name as the attribute's "
+"container;\n"
+"    attribute - attributes with the equal value <Parameter> will be grouped "
+"and will be appointed only by the indication of the attributes' container,\n"
+"                and the individual attributes will be associated with the "
+"attributes of the container in accordance with this field.\n"
+"Constant link value writes in the form \"val:{Constant}\".\n"
+msgstr ""
+"Адреса до DAQ атрибутів записується у формі \"{Type}.{Cntr}.{Prm}[.{PrmN}]."
+"{Attr}\", де:\n"
+"    Type,Cntr,Prm,Attr - DAQ: тип, об'єкт контролеру, параметр та атрибут.\n"
+"  Шаблон зв'язку, стовпчику \"Значення\" на боці формування шаблону, "
+"записується у формі \"{Parameter}|{attribute}\", де:\n"
+"    Parameter - вказує ім'я параметру як контейнеру атрибутів;\n"
+"    attribute - атрибути з однаковим значенням <Parameter> будуть "
+"групуватися та дозволять призначатися визначенням тільки контейнеру "
+"атрибутів,\n"
+"                а окремі атрибути будуть пов'язані з атрибутами контейнеру "
+"відповідно до поля <attribute>.\n"
+"Зв'язок на постійне значення записується у формі \"val:{Constant}\".\n"
 
 #, c-format
 msgid "Error starting the template '%s'."
@@ -1432,10 +1481,10 @@ msgid "Transport Protocols"
 msgstr "Транспортні Протоколи"
 
 msgid ""
-"=============== Subsystem \"Transport protocols\" options =================\n"
+"=============== Subsystem \"Transport Protocols\" options =================\n"
 "\n"
 msgstr ""
-"=============== Опції підсистеми \"Транспортні протоколи\" ================\n"
+"=============== Опції підсистеми \"Транспортні Протоколи\" ================\n"
 "\n"
 
 msgid "Security"
@@ -1690,15 +1739,17 @@ msgid ""
 "Lang2CodeBase <lang>\tBase language for variable texts translation, in the "
 "two symbols code.\n"
 "MainCPUs   <list>\tMain list of the using CPUs, separated by ':'.\n"
+"TaskInvPhs <n>\t\tNumber of phases of the task invoking, 1 to disable the "
+"phasing.\n"
 "ClockRT    <0|1>\tSets the clock source to use to REALTIME (otherwise "
 "MONOTONIC), which is problematic one at the system clock modification.\n"
 "SaveAtExit <0|1>\tSave the program at exit.\n"
-"SavePeriod <sec>\tPeriod of the program saving, in seconds. Set zero to "
-"disable.\n"
+"SavePeriod <seconds>\tPeriod of the program saving, 0 to disable.\n"
+"ModifCalc  <0|1>\tSet modification for the calculated objects.\n"
 "RdStLevel  <lev>\tLevel of the redundancy of the current station.\n"
-"RdTaskPer  <sec>\tCall period of the redundancy task, in seconds.\n"
-"RdRestConnTm <sec>\tTime to restore connection to \"dead\" reserve station, "
-"in seconds.\n"
+"RdTaskPer  <seconds>\tCall period of the redundancy task.\n"
+"RdRestConnTm <seconds>\tTime to restore connection to \"dead\" reserve "
+"station.\n"
 "RdStList   <list>\tRedundant stations list, separated symbol ';' (st1;st2).\n"
 "RdPrimCmdTr <0|1>\tEnables the transmission of primary commands to the "
 "reserve stations.\n"
@@ -1762,18 +1813,18 @@ msgstr ""
 "символи.\n"
 "MainCPUs   <перелік>\tОсновний перелік використаних процесорів, поділено "
 "':'.\n"
+"TaskInvPhs <n>\t\tКількість фаз виклику задач, 1 для вимкнення фазування.\n"
 "ClockRT    <0|1>\tВстановити використання джерела годиннику у REALTIME "
 "(інакше MONOTONIC), дещо проблематичне при модифікації системного "
 "годинника.\n"
 "SaveAtExit <0|1>\tЗберігати програму при виході.\n"
-"SavePeriod <сек>\tПеріод збереження програми, у секундах. Встановити у нуль "
-"для вимкнення.\n"
+"SavePeriod <секунд>\tПеріод збереження програми, 0 для вимкнення.\n"
+"ModifCalc  <0|1>\tВстановлювати модифікацію для обчислювальних об'єктів.\n"
 "RdStLevel  <рів>\tРівень резервування поточної станції.\n"
-"RdTaskPer  <сек>\tПеріод виклику задачі обслуговування резервування, у "
-"секундах.\n"
-"RdRestConnTm <сек>\tЧас відновлення з'єднання з \"мертвою\" резервною "
-"станцією, у секундах.\n"
-"RdStList   <перел>\tПерелік резервних станції, поділено символом ';' (st1;"
+"RdTaskPer  <секунд>\tПеріод виклику задачі обслуговування резервування.\n"
+"RdRestConnTm <секунд>\tЧас відновлення з'єднання з \"мертвою\" резервною "
+"станцією.\n"
+"RdStList   <перелік>\tПерелік резервних станції, поділено символом ';' (st1;"
 "st2).\n"
 "RdPrimCmdTr <0|1>\tВключення трансляції первинних команд до резервних "
 "станцій.\n"
@@ -1828,7 +1879,7 @@ msgstr "Запуск."
 msgid "Error starting the subsystem '%s'."
 msgstr "Помилка старту підсистеми '%s'."
 
-msgid "Running is complete!"
+msgid "Running is completed!"
 msgstr "Запуск завершено!"
 
 msgid "Stopping."
@@ -1904,11 +1955,11 @@ msgid "Task %u unexpected terminated by an exception."
 msgstr "Завдання %u несподівано перервано виключенням."
 
 #, c-format
-msgid "Redundant station '%s' up."
+msgid "Redundant station '%s' is up."
 msgstr "Резервна станція '%s' доступна."
 
 #, c-format
-msgid "Redundant station '%s' down."
+msgid "Redundant station '%s' is down."
 msgstr "Резервна станція '%s' недоступна."
 
 #, c-format
@@ -1919,6 +1970,10 @@ msgid "1:Request is not an object!"
 msgstr "1:Запит не є об'єкт!"
 
 #, c-format
+msgid "10:Error remote request: %s"
+msgstr "10:Помилка віддаленого запиту: %s"
+
+#, c-format
 msgid "%s station: \"%s\""
 msgstr "%s станція: \"%s\""
 
@@ -1927,6 +1982,9 @@ msgstr "Станція"
 
 msgid "Station name"
 msgstr "Ім'я станції"
+
+msgid "Program"
+msgstr "Програма"
 
 msgid "Version"
 msgstr "Версія"
@@ -1957,6 +2015,16 @@ msgstr ""
 
 msgid "Tasks planning clock"
 msgstr "Годинник планування задач"
+
+msgid "Number of phases of the task invoking"
+msgstr "Кількість фаз виклику задач"
+
+msgid ""
+"To set up phasing of the task invoking in the determined phases number, <= 0 "
+"to set optimal, 1 to disable the tasks phasing."
+msgstr ""
+"Для встановлення фазування виклику задач у визначену кількість фаз, <= 0 для "
+"встановлення оптимально, 1 для вимкнення фазування задач."
 
 msgid "Internal charset"
 msgstr "Внутрішнє кодування"
@@ -2009,6 +2077,20 @@ msgid ""
 msgstr ""
 "Використати не нульовий період (секунди) для періодичного збереження змін "
 "частин програми у БД."
+
+msgid "Set modification for the calculated objects"
+msgstr "Встановлювати модифікацію для обчислювальних об'єктів"
+
+msgid ""
+"Most suitable for the production systems together with the previous "
+"configuration properties, for the calculation context saving.\n"
+"But it is inconvinient in the development mode, all time reminding for the "
+"saving need."
+msgstr ""
+"Особливо підхоже для робочих систем разом із попередніми конфігураційними "
+"властивостями, для збереження контексту обчислення.\n"
+"Але незручно у режимі розробки, постійно нагадуючи про необхідність "
+"збереження."
 
 msgid "Least level"
 msgstr "Найменший рівень"
@@ -2072,6 +2154,19 @@ msgstr "Пріор."
 
 msgid "CPU set"
 msgstr "Вст. CPU"
+
+msgid ""
+"To set up the processors you use, write a row of numbers separated by a ':' "
+"character."
+msgstr ""
+"Для встановлення використовуваних процесорів записуйте рядок номерів "
+"поділених символом ':'."
+
+msgid "Phase"
+msgstr "Фаза"
+
+msgid "To set up the task invoking phase."
+msgstr "Для встановлення фазування виклику задач."
 
 msgid "Translations"
 msgstr "Переклади"
@@ -2266,11 +2361,38 @@ msgstr "Новий зовнішній хост"
 msgid "Lifted hosts are not available for control here!"
 msgstr "Підняті хости недоступні для контролю тут!"
 
+#, c-format
+msgid ""
+"======================= Module <%s:%s> options =======================\n"
+"---- Parameters of the module section '%s' of the configuration file ----\n"
+"OutLifeTime  <seconds>  Output transports lifetime (by default 0 seconds), 0 "
+"to disable the function.\n"
+"\n"
+msgstr ""
+"========================== Опції модуля <%s:%s> ==========================\n"
+"------ Параметри модульної секції '%s' конфігураційного файлу ------\n"
+"OutLifeTime  <секунд>   Час життя вихідного транспорту (по замовченню 0 "
+"секунд), 0 - для вимкнення функції.\n"
+"\n"
+
 msgid "Input transport"
 msgstr "Вхідний транспорт"
 
 msgid "Output transport"
 msgstr "Вихідний транспорт"
+
+msgid "List"
+msgstr "Перелік"
+
+msgid "Lifetime, seconds"
+msgstr "Час життя, секунд"
+
+msgid ""
+"Time of inactivity in the output transport for it closing/disconnection. Set "
+"to 0 to disable the transports closing!"
+msgstr ""
+"Час бездіяльності у вихідному транспорті для його закриття/відключення. "
+"Встановіть 0, щоб відключити закриття транспорту!"
 
 msgid "Started. "
 msgstr "Запущено. "
@@ -2301,8 +2423,8 @@ msgid "Log"
 msgstr "Лог"
 
 #, c-format
-msgid "Established: %s. "
-msgstr "Встановлено: %s. "
+msgid "Established: %s. Last: %s. "
+msgstr "Встановлено: %s. Останнє: %s. "
 
 #, c-format
 msgid "Transport protocol '%s' is missing"
@@ -2516,10 +2638,6 @@ msgid "Unfinished attribute. Pos: %d"
 msgstr "Незавершений атрибут. Поз: %d"
 
 #, c-format
-msgid "Error entity. Pos: %d"
-msgstr "Помилка сутності. Поз: %d"
-
-#, c-format
 msgid "Unknown entity '%s'. Pos: %d"
 msgstr "Невідома сутність '%s'. Поз: %d"
 
@@ -2579,9 +2697,3 @@ msgstr "Встановлено назву проекту у:"
 
 msgid "already started."
 msgstr "вже запущено."
-
-#~ msgid "Error opening 'iconv': %s"
-#~ msgstr "Помилка відкриття 'iconv': %s"
-
-#~ msgid "Error converting input sequence: %s"
-#~ msgstr "Помилка перетворення вхідної послідовності: %s"

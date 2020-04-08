@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.JavaLikeCalc file: freelib.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2020 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -121,12 +121,12 @@ void Lib::load_( TConfig *icfg )
     }
 
     // Check for remove items removed from DB
-    if(!SYS->selDB().empty()) {
-	vector<string> it_ls;
-	list(it_ls);
-	for(unsigned i_it = 0; i_it < it_ls.size(); i_it++)
-	    if(itReg.find(it_ls[i_it]) == itReg.end())
-		del(it_ls[i_it]);
+    if(SYS->chkSelDB(SYS->selDB(),true)) {
+	vector<string> itLs;
+	list(itLs);
+	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
+	    if(itReg.find(itLs[iIt]) == itReg.end())
+		del(itLs[iIt]);
     }
 }
 
@@ -141,16 +141,16 @@ void Lib::setStart( bool val )
 {
     vector<string> lst;
     list(lst);
-    for(unsigned i_f = 0; i_f < lst.size(); i_f++)
-	try { if(!val || at(lst[i_f]).at().toStart()) at(lst[i_f]).at().setStart(val); }
+    for(unsigned iF = 0; iF < lst.size(); iF++)
+	try { if(!val || at(lst[iF]).at().toStart()) at(lst[iF]).at().setStart(val); }
 	catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
     runSt = val;
 }
 
-void Lib::add( const string &id, const string &name )	{ chldAdd(mFnc,new Func(id,name)); }
+void Lib::add( const string &id, const string &name )	{ chldAdd(mFnc, new Func(id,name)); }
 
-void Lib::del( const string &id )			{ chldDel(mFnc,id); }
+void Lib::del( const string &id )			{ chldDel(mFnc, id); }
 
 TVariant Lib::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
@@ -164,7 +164,8 @@ void Lib::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TCntrNode::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Library of the functions: ")+id(),RWRWR_,"root",SDAQ_ID);
+	XMLNode *nd = ctrMkNode("oscada_cntr",opt,-1,"/",_("Library of the functions: ")+id(),RWRWR_,"root",SDAQ_ID);
+	if(nd)	nd->setAttr("doc", TUIS::docKeyGet(descr()));
 	if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
 	    ctrMkNode("grp",opt,-1,"/br/fnc_",_("Function"),RWRWR_,"root",SDAQ_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
 	if(ctrMkNode("area",opt,-1,"/lib",_("Library"))) {
@@ -219,8 +220,8 @@ void Lib::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    vector<string> lst;
 	    list(lst);
-	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
-		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(at(lst[i_f]).at().name());
+	    for(unsigned iF = 0; iF < lst.size(); iF++)
+		opt->childAdd("el")->setAttr("id",lst[iF])->setText(at(lst[iF]).at().name());
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	add(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text().c_str());
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(mFnc,opt->attr("id"),-1,1);

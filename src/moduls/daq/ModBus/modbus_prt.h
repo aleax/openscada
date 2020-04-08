@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.ModBus file: modbus_prt.h
 /***************************************************************************
- *   Copyright (C) 2008-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2008-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,11 +41,13 @@ using namespace OSCADA;
 #define PRT_NAME	"ModBus"
 #define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
-#define PRT_MVER	"1.1.3"
+#define PRT_MVER	"2.1.8"
 #define PRT_AUTHORS	_("Roman Savochenko")
 #define PRT_DESCR	_("Provides implementation of ModBus protocols. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported.")
 #define PRT_LICENSE	"GPL2"
 //*************************************************
+
+#define MODBUS_FRM_LIM	1000
 
 namespace ModBus
 {
@@ -77,10 +79,9 @@ class TProtIn: public TProtocolIn
 class Node : public TFunction, public TConfig
 {
     public:
-	//> Addition flags for IO
+	// Addition flags for IO
 	enum IONodeFlgs {
-	    IsLink	= 0x10,	//Link to subsystem's "DAQ" data
-	    LockAttr	= 0x20	//Lock attribute
+	    IsLink	= 0x10,	//Link to subsystem's "DAQ" data, for compatibility the old configurations
 	};
 	// Node modes
 	enum NodeModes {
@@ -95,16 +96,17 @@ class Node : public TFunction, public TConfig
 
 	TCntrNode &operator=( const TCntrNode &node );
 
-	string id( )			{ return mId; }
+	string id( )		{ return mId; }
 	string name( );
-	string descr( )			{ return mDscr; }
-	string stor( ) const		{ return DB(); }
-	bool toEnable( )		{ return mAEn; }
-	bool enableStat( ) const	{ return mEn; }
+	string descr( )		{ return mDscr; }
+	string stor( ) const	{ return DB(); }
+	bool toEnable( )	{ return mAEn; }
+	bool enableStat( ) const{ return mEn; }
 	int addr( ) const;
 	string inTransport( );
 	string prt( );
 	NodeModes mode( );
+	int64_t timeStamp( )	{ return mTimeStamp; }
 
 	double period( )	{ return mPer; }
 	string progLang( );
@@ -146,18 +148,21 @@ class Node : public TFunction, public TConfig
 		int id, pos;
 		char sTp;
 	};
-	class SData {
+	class SData : public TPrmTempl::Impl {
 	    public:
-		SData( ) : rReg(0), wReg(0), rCoil(0), wCoil(0), rCoilI(0), rRegI(0)	{ }
+		SData( TCntrNode *iobj, string name_c ) : TPrmTempl::Impl(iobj, name_c.c_str()),
+		    rReg(0), wReg(0), rCoil(0), wCoil(0), rCoilI(0), rRegI(0), chkLnkNeed(false) { }
 
-		TValFunc	val;
-		map<int,AutoHD<TVal> > lnk;
 		map<int,SIO> regR, regW, coilR, coilW, coilI, regI;
-		float rReg, wReg, rCoil, wCoil, rCoilI, rRegI;
+		float	rReg, wReg, rCoil, wCoil, rCoilI, rRegI;
+		bool	chkLnkNeed;	//Check lnk need flag
 	};
 
 	//Methods
 	const char *nodeName( ) const	{ return mId.getSd(); }
+
+	void loadIO( );
+	void saveIO( );
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
@@ -171,14 +176,16 @@ class Node : public TFunction, public TConfig
 	//Attributes
 	ResRW	nRes;
 	SData	*data;
+	bool	isDAQTmpl;	// DAQ template used
 	TCfg	&mId, &mName, &mDscr;
 	double	&mPer;
 	char	&mAEn, mEn;
+	int64_t	&mTimeStamp;
 	string	mDB;
 
-	bool	prcSt, endRun, prgChOnEn;
+	bool	prcSt, endRun;
 
-	float	tmProc, cntReq;
+	float	cntReq;
 };
 
 //*************************************************
@@ -209,7 +216,7 @@ class TProt: public TProtocol
 	// Node's functions
 	void nList( vector<string> &ls ) const		{ chldList(mNode, ls); }
 	bool nPresent( const string &id ) const		{ return chldPresent(mNode, id); }
-	void nAdd( const string &id, const string &db = "*.*" );
+	string nAdd( const string &id, const string &db = "*.*" );
 	void nDel( const string &id )			{ chldDel(mNode, id); }
 	AutoHD<Node> nAt( const string &id ) const	{ return chldAt(mNode, id); }
 

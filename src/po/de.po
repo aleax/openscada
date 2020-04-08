@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2011.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2018.
+# Roman Savochenko <roman@oscada.org>, 2010-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-15 22:36+0300\n"
+"POT-Creation-Date: 2020-03-08 18:28+0200\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -130,25 +130,25 @@ msgid ""
 "======================== Subsystem \"Archives-History\" options "
 "===================\n"
 "------ Parameters of the section '%s' of the configuration file ------\n"
-"MessBufSize <items>     Size of the messages buffer.\n"
-"MessPeriod <sec>        Period of the messages archiving.\n"
-"ValPeriod  <msec>       Period of active archiving of values.\n"
-"ValPriority <level>     Level of priority of the task of active archiving of "
+"MessBufSize  <items>    Size of the messages buffer.\n"
+"MessPeriod   <seconds>  Period of the messages archiving.\n"
+"ValPeriod    <mseconds> Period of active archiving of values.\n"
+"ValPriority  <level>    Level of priority of the task of active archiving of "
 "values.\n"
-"RdRestDtOverTm <hours>  Depth of the forced overloading of the reserve "
-"history at startup, in hours.\n"
+"RdRestDtOverTm <days>   Depth of the forced overloading of the reserve "
+"history at startup, in days.\n"
 "\n"
 msgstr ""
 "==================== Optionen des Subsystems \"Archiv-Geschichte\" "
 "======================\n"
 "---------- Parameter des Abschnitts '%s' der Konfigurationsdatei ----------\n"
 "MessBufSize <items>     Größe des Nachrichtenpuffers.\n"
-"MessPeriod <sec>        Zeitraum der Nachrichtenarchivierung.\n"
-"ValPeriod  <msec>       Zeitraum der aktiven Archivierung von Werten.\n"
+"MessPeriod  <Sekunden>  Zeitraum der Nachrichtenarchivierung.\n"
+"ValPeriod   <mSekunden> Zeitraum der aktiven Archivierung von Werten.\n"
 "ValPriority <level>     Prioritätsstufe der Aufgabe der aktiven Archivierung "
 "von Werten.\n"
-"RdRestDtOverTm <Std.>   Tiefe der erzwungenen Überlastung der "
-"Reservehistorie beim Start in Stunden.\n"
+"RdRestDtOverTm <Tage>   Tiefe der erzwungenen Überlastung der "
+"Reservehistorie beim Start in Tagen.\n"
 "\n"
 
 msgid "Start/update subsystem."
@@ -274,7 +274,7 @@ msgstr "Stufe"
 msgid "Message"
 msgstr "Nachricht"
 
-msgid "Clear the current alarms table"
+msgid "Clean up the the current violations table"
 msgstr "Löschen Sie die aktuelle Alarmtabelle"
 
 msgid "Values"
@@ -288,6 +288,12 @@ msgstr "Prioritätsstufe der Datenempfangsaufgabe"
 
 msgid "Forced to set timestampes in the current time"
 msgstr "Gezwungen, Zeitstempel in der aktuellen Zeit festzulegen"
+
+msgid "Mode of forming ID of the automatic created archives"
+msgstr "Art der Bildung der ID der automatisch erstellten Archive"
+
+msgid "Both parameter and attribute ID;Only parameter ID;Only attribute ID"
+msgstr "Beide Parameter und ID-Attribut;Nur ID-Parameter;Nur ID-Attribut"
 
 msgid "Number"
 msgstr "Anzahl"
@@ -342,18 +348,16 @@ msgstr "Konfiguration"
 msgid "Requested %d records for time %s."
 msgstr "Fordert %d Datensätze für Zeit %s."
 
-msgid "No value."
-msgstr "Kein Wert."
-
 #, c-format
-msgid "Grid mode doesn't support inserting too old values %lld (%lld-%lld)."
+msgid ""
+"The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
 msgstr ""
 "Gittermodus unterstützt nicht das Einfügen sehr alter Werte %lld (%lld-%lld)."
 
-msgid "Grid mode doesn't support inserting old values."
+msgid "The grid mode doesn't support inserting too old values."
 msgstr "Gittermodus unterstützt nicht das Einfügen alter Werte."
 
-msgid "Insert a very old value to the buffer."
+msgid "Inserting too old values to the buffer."
 msgstr "Fügen Sie einen sehr alten Wert in den Puffer ein."
 
 #, c-format
@@ -526,6 +530,15 @@ msgstr "Unicode Zeichensatz"
 msgid "To enable"
 msgstr "Aktivieren"
 
+msgid "Transaction closing: after opening, seconds"
+msgstr "Transaktionsabschluss: nach dem Öffnen, Sekunden"
+
+msgid "Transaction closing: after request, seconds"
+msgstr "Transaktionsabschluss: nach Aufforderung, Sekunden"
+
+msgid "Transaction closing: separate task priority"
+msgstr "Transaktionsabschluss: separate Aufgabenpriorität"
+
 #, c-format
 msgid "Error closing database '%s'!"
 msgstr "Fehler beim Schliessen der Datenbank '%s'!"
@@ -540,18 +553,30 @@ msgstr "Schreiben Reihe zum DB-oder Konfigurationsfehler."
 msgid ""
 "========================= Subsystem \"DB\" options ========================\n"
 "------ Parameters of the section '%s' of the configuration file ------\n"
-"SYSStPref  <0|1>        Use the station ID in the common table (SYS).\n"
+"SYSStPref    <0|1>      Use the station ID in the common table (SYS).\n"
+"TblLifeTime  <seconds>  Opened tables lifetime (by default 600 seconds).\n"
 "\n"
 msgstr ""
 "========================= Optionen des Subsystems\"DB\" "
 "=========================\n"
 "---------- Parameter des Abschnitts '%s' der Konfigurationsdatei ----------\n"
-"SYSStPref  <0|1>        Verwenden Sie die Stationskennung in der gemeinsamen "
+"SYSStPref    <0|1>      Verwenden Sie die Stationskennung in der gemeinsamen "
 "Tabelle (SYS).\n"
+"TblLifeTime  <Sekunden> Lebensdauer geöffneter Tabellen (standardmäßig 600 "
+"Sekunden).\n"
 "\n"
 
 msgid "Error finding and opening a new database."
 msgstr "Fehler beim Suchen und Öffnen einer neuen Datenbank."
+
+msgid "Subsystem"
+msgstr "Subsystem"
+
+msgid "Opened tables lifetime, seconds"
+msgstr "Lebensdauer geöffneter Tabellen, Sekunden"
+
+msgid "Time of inactivity in the tables for it closing."
+msgstr "Zeitpunkt der Inaktivität in den Tabellen zum Schließen."
 
 msgid "DB"
 msgstr "Datenbank"
@@ -656,7 +681,7 @@ msgstr ""
 msgid ""
 "Error blocking node.\n"
 "The node forced to disable which can cause to crash.\n"
-"This problem mostly in user procedure, if the program exits!"
+"This problem mostly in a user procedure, if the program exits!"
 msgstr ""
 "Fehler beim Blockieren des Knotens.\n"
 "Der Knoten wird zum Deaktivieren gezwungen, was zum Absturz führen kann.\n"
@@ -698,12 +723,8 @@ msgstr "Gruppe der Kinder %d Fehler!"
 msgid "Node is not enabled!"
 msgstr "Knoten ist nicht eingeschaltet!"
 
-msgid "Id the child that is added is empty!"
-msgstr "Der hinzugefügte Kindbezeichner ist leer!"
-
-#, c-format
-msgid "The node '%s' is already present."
-msgstr "Der Knoten '%s' ist schon vorhanden."
+msgid "Id of the child that is adding is empty!"
+msgstr "Die ID des hinzuzufügenden Kindes ist leer!"
 
 msgid "Node is being processed now for enable!"
 msgstr "Knoten wird jetzt zur Aktivierung verarbeitet!"
@@ -713,7 +734,7 @@ msgstr "Knotenstamm oder nicht verbunden!"
 
 #, c-format
 msgid "Element '%s' is missing!"
-msgstr "Element '% s' fehlt!"
+msgstr "Das Element '%s' fehlt!"
 
 #, c-format
 msgid "Element '%s' is disabled!"
@@ -723,7 +744,7 @@ msgid "Very many users at the node!!!"
 msgstr "Zu viele Benutzer für Knoten!!!"
 
 #, c-format
-msgid "Error function '%s' or missing parameters for it."
+msgid "Error the function '%s' or missing its parameters."
 msgstr "Fehler in der Funktion '%s' oder nicht genug Parameter."
 
 #, c-format
@@ -873,11 +894,11 @@ msgstr "Datenerfassung"
 msgid "Maximum calculate time, seconds"
 msgstr "Maximale Zeit der Berechnung, Sekunden"
 
-msgid "Translate program"
-msgstr "Programm übersetzen"
+msgid "Completely translate the procedure"
+msgstr "Übersetzen Sie das Verfahren vollständig"
 
-msgid "Program"
-msgstr "Programm"
+msgid "Procedure"
+msgstr "Verfahren"
 
 msgid "Date of modification"
 msgstr "Änderungsdatum"
@@ -1193,8 +1214,8 @@ msgid ""
 "                        Uses '*' value to allow all the modules.\n"
 "ModDeny    <list>       List of the shared libraries denied for the "
 "automatic loading, attaching and starting (bd_DBF.so;daq_JavaLikeCalc.so).\n"
-"ChkPer     <sec>        Period of the checking for new shared "
-"libraries(modules), in seconds. Set zero to disable.\n"
+"ChkPer     <seconds>    Period of the checking for new shared "
+"libraries(modules), 0 to disable.\n"
 "\n"
 msgstr ""
 "=================== Optionen des Subsystems \"Modul-Scheduler\" "
@@ -1211,8 +1232,8 @@ msgstr ""
 "                        Verwendet den Wert '*', um alle Module zuzulassen.\n"
 "ModDeny    <list>       Liste der freigegebenen Bibliotheken zum "
 "automatischen Laden, Anhängen und Starten (bd_DBF.so;daq_JavaLikeCalc.so).\n"
-"ChkPer     <sec>        Zeitraum der Überprüfung auf neue gemeinsame "
-"Bibliotheken (Module) in Sekunden. Stellen Sie Null zum Deaktivieren ein.\n"
+"ChkPer     <Sekunden>   Zeitraum der Überprüfung auf neue gemeinsame "
+"Bibliotheken (Module), 0 zu deaktivieren.\n"
 "\n"
 
 #, c-format
@@ -1242,9 +1263,6 @@ msgstr "Fehler beim Verbinden des Moduls '%s'!"
 #, c-format
 msgid "Can not detach the library '%s'."
 msgstr "Die Bibliothek '%s' kann nicht getrennt werden."
-
-msgid "Subsystem"
-msgstr "Subsystem"
 
 msgid "Path to the shared libraries(modules)"
 msgstr "Pfad zu den gemeinsam genutzten Bibliotheken (Module)"
@@ -1344,8 +1362,8 @@ msgstr "Einbeziehung"
 msgid "Controller is not running!"
 msgstr "Controller ist nicht gestartet!"
 
-msgid "Frequency of calculation of the function (Hz)"
-msgstr "Frequenz der Berechnung der Funktion (Hz)"
+msgid "Frequency of calculation of the function, Hz"
+msgstr "Frequenz der Berechnung der Funktion, Hz"
 
 msgid "Function start flag"
 msgstr "Schalter fürs Startens der Funktion"
@@ -1365,8 +1383,12 @@ msgstr "Parametervorlage: "
 msgid "Template"
 msgstr "Vorlage"
 
-msgid "Real;Integer;Boolean;String;Text;Object"
-msgstr "Reelle Zahl;Ganzzahl;Logisch;Linie;Text;Objekt"
+msgid ""
+"Real;Integer;Boolean;String;Text;Object;Integer numbers selection;Real "
+"numbers selection;Strings selection"
+msgstr ""
+"Reelle Zahl;Ganzzahl;Logisch;Linie;Text;Objekt;Integer-Zahlen Auswahl;Reelle "
+"Zahlen Auswahl;Strings Auswahl"
 
 msgid "Input;Output"
 msgstr "Eingang;Ausgang"
@@ -1401,11 +1423,40 @@ msgstr "Fehler der Parameter-ID."
 msgid "Template configuration"
 msgstr "Konfiguration der Vorlage"
 
-msgid "Only attributes are to be shown"
-msgstr "Nur Attribute zeigen"
+msgid "Show attributes"
+msgstr "Attribute anzeigen"
 
 msgid "Error, recursive linking."
 msgstr "Fehler, rekursives Verknüpfen."
+
+msgid ""
+"Address to the DAQ attribute writes in the form \"{Type}.{Cntr}.{Prm}[."
+"{PrmN}].{Attr}\", where:\n"
+"    Type,Cntr,Prm,Attr - DAQ: type, controller object, parameter and "
+"attribute.\n"
+"  Link's template, of the column \"Value\" on the template forming side, "
+"writes in the form \"{Parameter}|{attribute}\", where:\n"
+"    Parameter - specifies the parameter's name as the attribute's "
+"container;\n"
+"    attribute - attributes with the equal value <Parameter> will be grouped "
+"and will be appointed only by the indication of the attributes' container,\n"
+"                and the individual attributes will be associated with the "
+"attributes of the container in accordance with this field.\n"
+"Constant link value writes in the form \"val:{Constant}\".\n"
+msgstr ""
+"Adresse an den DAQ schreibt in der Form \"{Type}.{Cntr}.{Prm}[.{PrmN}]."
+"{Attr}\", wobei:\n"
+"    Type,Cntr,Prm,Attr - DAQ: Typ, Controller-Objekt, Parameter und "
+"Attribut.\n"
+"  Link-Vorlage, der Spalte \"Value\" ist die Vorlage bildende Seite, "
+"schreibt in das Formular \"{Parameter}|{attribute}\", wobei:\n"
+"    Parameter - Gibt den Namen des Parameters als Container des Attributs "
+"an;\n"
+"    attribute - Attribute mit dem gleichen Wert <Parameter> werden gruppiert "
+"und nur durch die Angabe des Attributcontainers festgelegt,\n"
+"                und die einzelnen Attribute werden entsprechend diesem Feld "
+"den Attributen des Containers zugeordnet.\n"
+"Konstanter Linkwert schreibt in der Form \"val:{Constant}\".\n"
 
 #, c-format
 msgid "Error starting the template '%s'."
@@ -1437,13 +1488,13 @@ msgid "Templates"
 msgstr "Vorlagen"
 
 msgid "Transport Protocols"
-msgstr "Übertragungsprotokolle"
+msgstr "TransportProtokolle"
 
 msgid ""
-"=============== Subsystem \"Transport protocols\" options =================\n"
+"=============== Subsystem \"Transport Protocols\" options =================\n"
 "\n"
 msgstr ""
-"============== Optionen des Subsystems \"Übertragungsprotokolle\" "
+"============== Optionen des Subsystems \"TransportProtokolle\" "
 "================\n"
 "\n"
 
@@ -1700,15 +1751,17 @@ msgid ""
 "Lang2CodeBase <lang>\tBase language for variable texts translation, in the "
 "two symbols code.\n"
 "MainCPUs   <list>\tMain list of the using CPUs, separated by ':'.\n"
+"TaskInvPhs <n>\t\tNumber of phases of the task invoking, 1 to disable the "
+"phasing.\n"
 "ClockRT    <0|1>\tSets the clock source to use to REALTIME (otherwise "
 "MONOTONIC), which is problematic one at the system clock modification.\n"
 "SaveAtExit <0|1>\tSave the program at exit.\n"
-"SavePeriod <sec>\tPeriod of the program saving, in seconds. Set zero to "
-"disable.\n"
+"SavePeriod <seconds>\tPeriod of the program saving, 0 to disable.\n"
+"ModifCalc  <0|1>\tSet modification for the calculated objects.\n"
 "RdStLevel  <lev>\tLevel of the redundancy of the current station.\n"
-"RdTaskPer  <sec>\tCall period of the redundancy task, in seconds.\n"
-"RdRestConnTm <sec>\tTime to restore connection to \"dead\" reserve station, "
-"in seconds.\n"
+"RdTaskPer  <seconds>\tCall period of the redundancy task.\n"
+"RdRestConnTm <seconds>\tTime to restore connection to \"dead\" reserve "
+"station.\n"
 "RdStList   <list>\tRedundant stations list, separated symbol ';' (st1;st2).\n"
 "RdPrimCmdTr <0|1>\tEnables the transmission of primary commands to the "
 "reserve stations.\n"
@@ -1775,15 +1828,18 @@ msgstr ""
 "Lang2CodeBase <Sprache> Basissprache für die Übersetzung von variablen "
 "Texten, in den beiden Symbolen.\n"
 "MainCPUs   <Liste>\tHauptliste der verwendeten CPUs, getrennt durch ':'.\n"
+"TaskInvPhs <n>\t\tAnzahl der Phasen des Taskaufrufs, 1 um die "
+"Phaseneinstellung zu deaktivieren.\n"
 "ClockRT    <0|1>\tLegt die zu verwendende Taktquelle auf REALTIME (sonst "
 "MONOTONIC) fest, was bei der Systemtaktmodifikation problematisch ist.\n"
 "SaveAtExit <0|1>\tSpeichere das Programm beim Beenden.\n"
-"SavePeriod <sec>\tZeitraum der Programmspeicherung in Sekunden. Stellen Sie "
-"Null zum Deaktivieren ein.\n"
+"SavePeriod <Sekunden>\tZeitraum der Programmspeicherung in Sekunden, 0 zu "
+"deaktivieren.\n"
+"ModifCalc  <0|1>\tLegen Sie die Änderung für die berechneten Objekte fest.\n"
 "RdStLevel  <lev>\tLevel der Redundanz der aktuellen Station.\n"
-"RdTaskPer  <s>\t\tAufrufdauer der Redundanzaufgabe, in Sekunden.\n"
-"RdRestConnTm <s>\tZeit, um die Verbindung zur \"toten\" Reservestation, in "
-"Sekunden wiederherzustellen.\n"
+"RdTaskPer  <Sekunden>\t\tAufrufdauer der Redundanzaufgabe.\n"
+"RdRestConnTm <Sekunden>\tZeit, um die Verbindung zur Reservestation \"tot\" "
+"wiederherzustellen.\n"
 "RdStList   <Liste>\tListe der redundanten Stationen, getrenntes Symbol "
 "';' (st1;st2).\n"
 "RdPrimCmdTr <0|1>\tErmöglicht die Übertragung von Primärbefehlen zu den "
@@ -1841,7 +1897,7 @@ msgstr "Starten."
 msgid "Error starting the subsystem '%s'."
 msgstr "Fehler beim Starten des Subsystems '%s'."
 
-msgid "Running is complete!"
+msgid "Running is completed!"
 msgstr "Laufen ist komplett!"
 
 msgid "Stopping."
@@ -1917,11 +1973,11 @@ msgid "Task %u unexpected terminated by an exception."
 msgstr "Task %u unerwartet beendet durch Ausnahme."
 
 #, c-format
-msgid "Redundant station '%s' up."
+msgid "Redundant station '%s' is up."
 msgstr "Redundancy station '%s' auf."
 
 #, c-format
-msgid "Redundant station '%s' down."
+msgid "Redundant station '%s' is down."
 msgstr "Redundancy station '%s' abwärts."
 
 #, c-format
@@ -1932,6 +1988,10 @@ msgid "1:Request is not an object!"
 msgstr "1:Die Anfrage ist kein Objekt!"
 
 #, c-format
+msgid "10:Error remote request: %s"
+msgstr "10:Fehler Remote-Anforderung: %s"
+
+#, c-format
 msgid "%s station: \"%s\""
 msgstr "%s Station: \"%s\""
 
@@ -1940,6 +2000,9 @@ msgstr "Station"
 
 msgid "Station name"
 msgstr "Stationsnamen"
+
+msgid "Program"
+msgstr "Programm"
 
 msgid "Version"
 msgstr "Version"
@@ -1970,6 +2033,17 @@ msgstr ""
 
 msgid "Tasks planning clock"
 msgstr "Aufgaben Uhr Planung"
+
+msgid "Number of phases of the task invoking"
+msgstr "Anzahl der Phasen des Taskaufrufs"
+
+msgid ""
+"To set up phasing of the task invoking in the determined phases number, <= 0 "
+"to set optimal, 1 to disable the tasks phasing."
+msgstr ""
+"Zum Einstellen der Phaseneinstellung der Task, die in der festgelegten "
+"Phasennummer aufgerufen wird, <= 0 zum Einstellen des Optimums, 1 zum "
+"Deaktivieren der Task-Phaseneinstellung."
 
 msgid "Internal charset"
 msgstr "Interne Kodierung"
@@ -2022,6 +2096,20 @@ msgid ""
 msgstr ""
 "Keine Nullperiode (Sekunden) für periodische Speicherung der geänderten "
 "Programm in die Datenbank verwenden."
+
+msgid "Set modification for the calculated objects"
+msgstr "Legen Sie die Änderung für die berechneten Objekte fest."
+
+msgid ""
+"Most suitable for the production systems together with the previous "
+"configuration properties, for the calculation context saving.\n"
+"But it is inconvinient in the development mode, all time reminding for the "
+"saving need."
+msgstr ""
+"Am besten geeignet für die Produktionssysteme zusammen mit den vorherigen "
+"Konfigurationseigenschaften, um den Berechnungskontext zu speichern.\n"
+"Aber im Entwicklungsmodus unpraktisch, immer daran zu erinnern, dass gespart "
+"werden muss."
 
 msgid "Least level"
 msgstr "Niedrigste Nachrichtenstufe"
@@ -2085,6 +2173,19 @@ msgstr "Priorität"
 
 msgid "CPU set"
 msgstr "CPU Installation"
+
+msgid ""
+"To set up the processors you use, write a row of numbers separated by a ':' "
+"character."
+msgstr ""
+"Für eine Verwendung von CPU gesetzt Schreib Prozessoren Zahlen String mit "
+"dem Symbol ':' getrennt."
+
+msgid "Phase"
+msgstr "Phase"
+
+msgid "To set up the task invoking phase."
+msgstr "Zum Einstellen der Phaseneinstellung der Task"
 
 msgid "Translations"
 msgstr "Übersetzungen"
@@ -2279,11 +2380,39 @@ msgstr "Neuer externe Host"
 msgid "Lifted hosts are not available for control here!"
 msgstr "Lifted Hosts sind hier nicht zur Kontrolle verfügbar!"
 
+#, c-format
+msgid ""
+"======================= Module <%s:%s> options =======================\n"
+"---- Parameters of the module section '%s' of the configuration file ----\n"
+"OutLifeTime  <seconds>  Output transports lifetime (by default 0 seconds), 0 "
+"to disable the function.\n"
+"\n"
+msgstr ""
+"========================== Optionen des Moduls <%s:%s> "
+"==========================\n"
+"------ Parameter des Modulabschnitts '%s' der Konfigurationsdatei ------\n"
+"OutLifeTime  <Sekunden> Die Ausgabe transportiert die Lebensdauer "
+"(standardmäßig 0 Sekunden), 0 um die Funktion zu deaktivieren.\n"
+"\n"
+
 msgid "Input transport"
 msgstr "Eingangsübertragung"
 
 msgid "Output transport"
 msgstr "Ausgangsübertragung"
+
+msgid "List"
+msgstr "Aufführen"
+
+msgid "Lifetime, seconds"
+msgstr "Lebensdauer, Sekunden"
+
+msgid ""
+"Time of inactivity in the output transport for it closing/disconnection. Set "
+"to 0 to disable the transports closing!"
+msgstr ""
+"Zeitpunkt der Inaktivität im Ausgangstransport zum Schließen/Trennen. Auf 0 "
+"setzen, um das Schließen der Transporte zu deaktivieren!"
 
 msgid "Started. "
 msgstr "Gestartet. "
@@ -2314,8 +2443,8 @@ msgid "Log"
 msgstr "Log"
 
 #, c-format
-msgid "Established: %s. "
-msgstr "Etabliert: %s. "
+msgid "Established: %s. Last: %s. "
+msgstr "Etabliert: %s. Zuletzt: %s. "
 
 #, c-format
 msgid "Transport protocol '%s' is missing"
@@ -2461,7 +2590,7 @@ msgstr "Sehr große Zeichenfolge für Nicht-STL-Zeichenfolge (> 30 MB)!"
 
 #, c-format
 msgid "Error allocating memory for large string (%d)!"
-msgstr "Fehler beim Zuweisen von Speicher für große Zeichenfolge (% d)!"
+msgstr "Fehler beim Zuweisen von Speicher für große Zeichenfolge (%d)!"
 
 msgid "Attempt to double disconnect!"
 msgstr "Versuch, die Verbindung zu trennen!"
@@ -2531,10 +2660,6 @@ msgid "Unfinished attribute. Pos: %d"
 msgstr "Unfertig Attribut. Pos: %d"
 
 #, c-format
-msgid "Error entity. Pos: %d"
-msgstr "Entity Fehler. Pos: %d"
-
-#, c-format
 msgid "Unknown entity '%s'. Pos: %d"
 msgstr "Unbekannte Entität '%s'. Pos: %d"
 
@@ -2594,9 +2719,3 @@ msgstr "Stellen Sie den Namen des Projekts an:"
 
 msgid "already started."
 msgstr "begonnen."
-
-#~ msgid "Error opening 'iconv': %s"
-#~ msgstr "Fehler beim Öffnen 'iconv': %s"
-
-#~ msgid "Error converting input sequence: %s"
-#~ msgstr "Fehler beim Konvertieren der Eingangssequenz: %s"

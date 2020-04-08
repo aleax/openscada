@@ -1,15 +1,15 @@
 # OpenSCADA.UI.WebVision translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.UI.WebVision package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2007-2018.
+# Roman Savochenko <roman@oscada.org>, 2007-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-15 23:30+0300\n"
+"POT-Creation-Date: 2020-03-22 17:18+0200\n"
 "PO-Revision-Date: 2007-12-03 11:05+0200\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -104,6 +104,12 @@ msgstr "мкс"
 msgid "Ready"
 msgstr "Готов"
 
+msgid "Page"
+msgstr "Страница"
+
+msgid "View access is not permitted."
+msgstr "Отсутствует доступ для просмотра."
+
 msgid "Today"
 msgstr "Сегодня"
 
@@ -164,24 +170,50 @@ msgstr "Ноябрь"
 msgid "December"
 msgstr "Декабрь"
 
+msgid "Field for displaying and changing the current user."
+msgstr "Поле отображения и изменения текущего пользователя."
+
+msgid "Field for displaying and changing the used interface style."
+msgstr "Поле отображения и изменения используемого стиля интерфейса."
+
+msgid "Alarm level: %1"
+msgstr "Уровень нарушения: %1"
+
 #, c-format
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
 "---- Parameters of the module section '%s' of the configuration file ----\n"
 "SessTimeLife <min>      Lifetime of the sessions in minutes (by default, "
 "10).\n"
+"SessLimit    <numb>     Maximum number of the sessions (by default 5).\n"
+"CachePgLife  <hours>    Lifetime of the pages in the cache (by default 1).\n"
+"CachePgSz    <numb>     Maximum number of the pages in the cache (by default "
+"10).\n"
+"PNGCompLev   <lev>      Compression level [-1..9] of the creating PNG-"
+"images.\n"
+"ImgResize    <0|1>      Resizing raster images on the server side.\n"
 "\n"
 msgstr ""
 "======================== Опции модуля <%s:%s> ============================\n"
 "------ Параметры модульной секции '%s' конфигурационного файла ------\n"
 "SessTimeLife <мин>      Время жизни сеансов в минутах (по умолчанию 10).\n"
+"SessLimit    <кол.>     Максимальное количество сеансов (по умолчанию 5).\n"
+"CachePgLife  <часы>     Время жизни страниц в кеше (по умолчанию = 1).\n"
+"CachePgSz    <кол.>     Максимальное количество страниц в кеше (по умолчанию "
+"10).\n"
+"PNGCompLev   <уров.>    Уровень сжатия [-1..9] создаваемых PNG-фафлов.\n"
+"ImgResize    <0|1>      Изменение размера растровых изображений на стороне "
+"сервера.\n"
 "\n"
 
-msgid "Connecting to the opened session"
-msgstr "Подключение к открытой сессии"
+msgid "close"
+msgstr "закрыть"
 
-msgid "Creating a new session for the existing project"
-msgstr "Создание новой сессии для доступного проекта"
+msgid "Opened sessions of the projects"
+msgstr "Открытые сеансы проектов"
+
+msgid "Available projects"
+msgstr "Доступные проекты"
 
 msgid "There is no session and project of the VCA engine for the user!"
 msgstr "Нет ни одного сеанса и проекта движка СВУ для пользователя!"
@@ -192,6 +224,20 @@ msgstr "Извините, количество открытых сеансов �
 #, c-format
 msgid "Going to the session '%s' for the project '%s' ..."
 msgstr "Переход к сеансу '%s' для проекта '%s' ..."
+
+msgid "Going to the main page ..."
+msgstr "Переход к основной странице ..."
+
+#, c-format
+msgid "The session '%s' is closed."
+msgstr "Закрыт сеанс '%s'."
+
+#, c-format
+msgid "You '%s' have no access to close sessions!"
+msgstr "Вы '%s' не имеете доступа к закрытию сеансов!"
+
+msgid "Going to the different session ..."
+msgstr "Переход к другому сеансу ..."
 
 #, c-format
 msgid "The specified project/session '%s' is false!"
@@ -205,14 +251,46 @@ msgstr "Ошибка страницы '%s': %s"
 msgid "Wrong session '%s'."
 msgstr "Ошибочный сеанс '%s'."
 
+msgid "State"
+msgstr "Статус"
+
+msgid "Sessions"
+msgstr "Сеансы"
+
 msgid "Module options"
 msgstr "Опции модуля"
 
-msgid "Lifetime of the sessions, minutes"
-msgstr "Время жизни сеансов, минут"
+msgid "Lifetime and maximum number of the sessions"
+msgstr "Время жизни и максимальное количество сеансов"
 
-msgid "Sessions limit"
-msgstr "Ограничение количества сеансов"
+msgid ""
+"The time is specified in minutes, which defines the inactivity interval for "
+"closing the WEB-sessions."
+msgstr ""
+"Время указывается в минутах, которое определяет интервал неактивности для "
+"закрытия WEB-сеансов."
+
+msgid "The number defines a limit of opened WEB-sessions."
+msgstr "Количество определяет ограничение открываемых WEB-сеансов."
+
+msgid "Lifetime and maximum number of the cached pages"
+msgstr "Время жизни и максимальное количество страниц в кеше"
+
+msgid ""
+"The time is specified in hours, which defines the inactivity interval for "
+"closing pages in the cache.\n"
+"Zero value of the time excludes the closing of pages in the cache."
+msgstr ""
+"Время указывается в часах, которое определяет интервал неактивности для "
+"закрытия страниц в кеш.\n"
+"Нулевое значение времени исключает закрытие страниц в кеш."
+
+msgid ""
+"The number defines a limit of pages in the cache.\n"
+"Zero value of the number excludes the cache limit."
+msgstr ""
+"Количество определяет ограничение страниц в кеше.\n"
+"Нулевое значение количества исключает закрытие страниц в кеш."
 
 msgid "Level of the PNG compression"
 msgstr "Уровень сжатия PNG"
@@ -227,3 +305,21 @@ msgstr ""
 "  -1  - оптимальный, скорость-размер;\n"
 "  0   - отключен;\n"
 "  1-9 - прямой уровень."
+
+msgid "Resizing raster images on the server side"
+msgstr "Изменение размера растровых изображений на стороне сервера."
+
+msgid ""
+"Mostly to decrease too big images size then decrease the traffic, what "
+"causes to rise the server load."
+msgstr ""
+"В основном чтобы уменьшить размер очень больших изображений, а соответственно и трафика, что приводит к "
+"увеличению нагрузки на сервер."
+
+#, c-format
+msgid ""
+"%s %s(%s):%s(%s): the last %s; cached pages %d and resources %d, %s; session "
+"objects %d."
+msgstr ""
+"%s %s(%s):%s(%s): последний %s; кешированных страниц %d и ресурсов %d, %s; "
+"объектов сеанса %d."

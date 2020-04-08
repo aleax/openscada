@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.LogicLev translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.LogicLev package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2006-2018.
+# Roman Savochenko <rom_as@oscada.org>, 2006-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.LogicLev 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-30 10:55+0300\n"
+"POT-Creation-Date: 2020-01-26 14:37+0200\n"
 "PO-Revision-Date: 2007-10-29 09:45+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -82,26 +82,8 @@ msgstr "2:Вычисление остановлено."
 msgid "Spent time %s[%s]"
 msgstr "Затрачено времени: %s[%s]. "
 
-msgid "Parameter is disabled or is not based on the template."
-msgstr "Параметр отключен или не основан на шаблоне."
-
-msgid "Error of parameter ID."
-msgstr "Ошибка ID параметра."
-
 msgid "Error calculating template."
 msgstr "Ошибка вычисления шаблона."
 
 msgid "Error or non-template parameter."
 msgstr "Ошибка или нешаблонный параметр."
-
-msgid "Template configuration"
-msgstr "Конфигурация шаблона"
-
-msgid "Only attributes are to be shown"
-msgstr "Показывать только атрибуты"
-
-msgid "Parameters"
-msgstr "Параметры"
-
-msgid "Error, recursive linking."
-msgstr "Ошибка, рекурсивное подключение."

@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tcntrnode.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -189,7 +189,7 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 		    chNd = chldAt(iG, s_br.substr((*chGrp)[iG].id.size()));
 		    break;
 		}
-	    //Go to default thread
+	    //Go to the default thread
 	    if(chNd.freeStat() && chGrp) chNd = chldAt(0, s_br);
 	    res.unlock();
 	    if(!chNd.freeStat()) chNd.at().cntrCmd(opt, 0, path, off);
@@ -210,21 +210,25 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 		throw TError("ContrItfc", _("%s:%s:> Error in the control item '%s'!"), opt->name().c_str(), (nodePath()+path).c_str(), s_br.c_str());
 
 	    // Check and put the command to the redundant stations
-	    if(SYS->rdPrimCmdTr() && SYS->rdEnable() && SYS->rdActive() && s2i(opt->attr("primaryCmd"))) {
-		string aNm = opt->name(), lstStat;
-		opt->setAttr("path", nodePath()+"/"+TSYS::strEncode(s_br,TSYS::PathEl))->setAttr("primaryCmd", "");
+	    string aNm = opt->name();
+	    if(SYS->rdPrimCmdTr() && SYS->rdEnable() && SYS->rdActive() && !s2i(opt->attr("reforwardRedundReq")) && !s2i(opt->attr("reforwardRedundOff")) &&
+		    (s2i(opt->attr("primaryCmd")) ||
+			aNm == "set" || aNm == "add" || aNm == "ins" || aNm == "del" || aNm == "move" || aNm == "load" || aNm == "save" || aNm == "copy")) {
+		string lstStat;
+		opt->setAttr("path", nodePath()+"/"+TSYS::strEncode(s_br,TSYS::PathEl))->setAttr("primaryCmd", "")->setAttr("reforwardRedundReq", "1");
 		try{ while((lstStat=SYS->rdStRequest(*opt,lstStat,true)).size()) ; }
 		catch(TError &) { }
 	    }
+	    opt->attrDel("reforwardRedundReq");
 	}
     } catch(TError &err) {
-	if(err.cat == "warning") opt->setAttr("rez", "1");
-	else opt->setAttr("rez", "2");
+	if(err.cod == TError::Core_CntrWarning) opt->setAttr("rez", i2s(err.cod));
+	else opt->setAttr("rez", i2s(TError::Core_CntrError));
 	opt->childClear();
 	opt->setAttr("mcat", err.cat);
 	opt->setText(err.mess);
     }
-    opt->setAttr("path",path);
+    opt->setAttr("path", path);
 }
 
 //*************************************************
@@ -291,12 +295,12 @@ void TCntrNode::nodeDis( long tm, int flag )
 	MtxAlloc res1(dataRes(), true);		//!! Added to prevent a possible attach and it next disable and free the node, by mUse control
 	while(mUse > 1) {
 	    // Check timeout
-	    if(tm && time(NULL) > (t_cur+tm)) {
+	    if(/*tm &&*/ time(NULL) >= (t_cur+tm)) {
 		if(!TSYS::finalKill)
 		    throw err_sys(_("Waiting time exceeded. The object is used by %d users. Release the object first!"), mUse-1);
 		mess_sys(TMess::Error, _("Error blocking node.\n"
 		    "The node forced to disable which can cause to crash.\n"
-		    "This problem mostly in user procedure, if the program exits!"));
+		    "This problem mostly in a user procedure, if the program exits!"));
 		break;
 	    }
 	    res1.unlock();
@@ -510,10 +514,10 @@ bool TCntrNode::chldPresent( int8_t igr, const string &name ) const
     return false;
 }
 
-void TCntrNode::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
+string TCntrNode::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
 {
     if(nodeMode() != Enabled)		{ delete node; throw err_sys(_("Node is not enabled!")); }
-    if(sTrm(node->nodeName()).empty())	{ delete node; throw err_sys(_("Id the child that is added is empty!")); }
+    if(sTrm(node->nodeName()).empty())	{ delete node; throw err_sys(_("Id of the child that is adding is empty!")); }
 
     MtxAlloc res(mChM, true);
     if(!chGrp || igr >= (int)chGrp->size())	{ delete node; throw err_sys(_("Error group of childs %d!"), igr); }
@@ -524,8 +528,8 @@ void TCntrNode::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
 	res.unlock();
 	delete node;
 	if(chN.at().nodeMode() == Disabled) chN.at().nodeEn(TCntrNode::NodeRestore);
-	if(!noExp) throw err_sys(_("The node '%s' is already present."), p->first);
-	return;
+	//if(!noExp) throw err_sys(_("The node '%s' is already present."), p->first);
+	return p->first;
     }
 
     node->prev.node = this;
@@ -540,6 +544,8 @@ void TCntrNode::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
     res.unlock();
 
     if(node->nodeMode() == Disabled) node->nodeEn(TCntrNode::NodeConnect);
+
+    return node->nodeName();
 }
 
 void TCntrNode::chldDel( int8_t igr, const string &name, long tm, int flag )
@@ -548,7 +554,7 @@ void TCntrNode::chldDel( int8_t igr, const string &name, long tm, int flag )
     if(nodeMode() == DoEnable) throw err_sys(_("Node is being processed now for enable!"));
 
     if(SYS->stopSignal())	tm = STD_WAIT_TM*5;
-    else if(tm < 0)		tm = STD_WAIT_TM;
+    else if(tm < 0)		tm = 0;	//STD_WAIT_TM;	//Do not wait anything by default
 
     AutoHD<TCntrNode> chN = chldAt(igr, name);
     if(chN.at().nodeMode() == Enabled) chN.at().nodeDis(tm, (flag<<8));
@@ -625,6 +631,7 @@ AutoHD<TCntrNode> TCntrNode::chldAt( int8_t igr, const string &name, const strin
     if(p == (*chGrp)[igr].elem.end()) throw err_sys(_("Element '%s' is missing!"), name.c_str());
     AutoHD<TCntrNode> chN(p->second, user);
     if(chN.at().nodeMode() == Disabled) throw err_sys(_("Element '%s' is disabled!"), name.c_str());
+    res.unlock();
 
     return chN;
 }
@@ -694,6 +701,7 @@ void TCntrNode::modifGClr( )
 
 void TCntrNode::load( TConfig *cfg, string *errs )
 {
+    bool loadOwn = false;
     //Self load
     if((isModify(Self)&Self))
 	try {
@@ -702,7 +710,9 @@ void TCntrNode::load( TConfig *cfg, string *errs )
 	    load_(cfg);
 	    load_();
 	    modifClr(nodeFlg()&SelfModifyS);	//Save modify or clear
+	    loadOwn = true;
 	} catch(TError &err) {
+	    if(err.cat.empty())	modifClr();	//Clearing the modification at the loading for not selected DB
 	    if(errs && err.cat.size()) (*errs) += nodePath('.')+": "+err.mess+"\n";
 	    /*mess_err(err.cat.c_str(), "%s", err.mess.c_str());
 	    mess_sys(TMess::Error, _("Error node loading: %s"), err.mess.c_str());*/
@@ -725,6 +735,8 @@ void TCntrNode::load( TConfig *cfg, string *errs )
 	    }
 	}
     }
+
+    if(loadOwn) load__();
 }
 
 void TCntrNode::save( unsigned lev, string *errs )
@@ -831,7 +843,7 @@ TVariant TCntrNode::objFuncCall( const string &iid, vector<TVariant> &prms, cons
     //  mess - message text.
     if(iid == "messSys" && prms.size() >= 2) { mess_sys(prms[0].getI(), "%s", prms[1].getS().c_str()); return 0; }
 
-    throw err_sys(_("Error function '%s' or missing parameters for it."), iid.c_str());
+    throw err_sys(_("Error the function '%s' or missing its parameters."), iid.c_str());
 }
 
 XMLNode *TCntrNode::_ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const char *path, const string &dscr,
@@ -862,7 +874,7 @@ XMLNode *TCntrNode::_ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const ch
     if(obj->name() == "info")	obj = nd->childGet(0, true);
     if(!obj) {
 	obj = nd->childAdd();
-	nd->setAttr("rez", "0");
+	nd->setAttr("rez", i2s(TError::NoError));
     }
 
     //Go to element
@@ -952,8 +964,8 @@ bool TCntrNode::ctrChkNode( XMLNode *nd, const char *cmd, int perm, const char *
     if(((char)perm&mode) != mode && SYS->security().at().access(nd->attr("user"),mode,user,grp,perm) != mode)
 	throw TError("ContrItfc", _("Error accessing item '%s'!"), nd->attr("path").c_str());
     if(warn && !s2i(nd->attr("force")))
-	throw TError("warning", _("Warning element '%s'! %s"), nd->attr("path").c_str(),warn);
-    nd->setAttr("rez","0");
+	throw TError(TError::Core_CntrWarning, "ContrItfc", _("Warning element '%s'! %s"), nd->attr("path").c_str(),warn);
+    nd->setAttr("rez", i2s(TError::NoError));
 
     return true;
 }
@@ -970,11 +982,17 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"modify",R_R_R_))	opt->setText(isModify(TCntrNode::All)?"1":"0");
 	// Do load node
 	else if(ctrChkNode(opt,"load",RWRWRW,"root","root",SEC_WR)) {
-	    if(s2i(opt->attr("force"))) modifG();
+	    string selDB;
+	    if((selDB=opt->attr("force")).size()) {
+		if(!isdigit(selDB[0]) || s2i(selDB)) modifG();
+		if(!isdigit(selDB[0]))	SYS->setSelDB(selDB);
+	    }
 
 	    string errs;
 	    load(NULL, &errs);
 	    if(errs.size()) throw err_sys(_("Error loading:\n%s"), errs.c_str());
+
+	    if(selDB.size() && !isdigit(selDB[0]))	SYS->setSelDB("");
 	}
 	// Do save node
 	else if(ctrChkNode(opt,"save",RWRWRW,"root","root",SEC_WR)) {
@@ -1031,6 +1049,7 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 	    opt->childAdd("el")->setText(tblList.size() ? c_list[i_db]+"."+tblList : c_list[i_db]);
     }
     else if(a_path == "/plang/list" && ctrChkNode(opt)) {
+	opt->childAdd("el")->setText("");
 	vector<string>  ls, lls;
 	SYS->daq().at().modList(ls);
 	for(unsigned iM = 0; iM < ls.size(); iM++) {

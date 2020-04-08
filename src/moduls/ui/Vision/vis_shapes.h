@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_shapes.h
 /***************************************************************************
- *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,10 +21,6 @@
 
 #ifndef VIS_SHAPES_H
 #define VIS_SHAPES_H
-
-#include <string>
-#include <deque>
-#include <vector>
 
 #include <config.h>
 
@@ -49,12 +45,12 @@
 #include <QWebFrame>
 #endif
 
+#include <deque>
+
 #include <tmess.h>
 #include <xml.h>
 
-using std::string;
 using std::deque;
-using std::vector;
 using namespace OSCADA;
 
 class QEvent;
@@ -130,6 +126,8 @@ class ShapeFormEl : public WdgShape
 	bool eventFilter( WdgView *view, QObject *object, QEvent *event );
 	void setActive( WdgView *view, bool val );
 	void setValue( WdgView *view, const string &val, bool force = false );
+
+	void tableFit( WdgView *w );
 
     public slots:
 	//Public slots
@@ -228,10 +226,11 @@ class ShapeText : public WdgShape
 	{
 	    public:
 		//Methods
-		ShpDt( ) : en(true), active(true), inHtml(false), geomMargin(0)	{ }
+		ShpDt( ) : en(true), active(true), realAct(false), inHtml(false), geomMargin(0)	{ }
 		//Attributes
 		short	en		:1;
 		short	active		:1;
+		short	realAct		:1;
 		short	inHtml		:1;
 		short	geomMargin	:8;
 		short	bordStyle	:5;
@@ -292,10 +291,11 @@ class ShapeMedia : public WdgShape
 	{
 	    public:
 		//Methods
-		ShpDt( ) : en(true), active(false), geomMargin(0), mediaType(-1), addrWdg(NULL)	{ }
+		ShpDt( ) : en(true), active(false), realActive(false), geomMargin(0), mediaType(-1), addrWdg(NULL)	{ }
 		//Attributes
 		short	en		:1;
 		short	active		:1;
+		short	realActive	:1;
 		short	geomMargin	:8;
 		short	bordStyle	:5;
 		short	mediaType	:3;
@@ -600,9 +600,11 @@ class ShapeBox : public WdgShape
 	{
 	    public:
 		//Methods
-		ShpDt( ) : en(true), geomMargin(0), bordStyle(0), inclPg(NULL), inclScrl(NULL)	{ }
+		ShpDt( ) : en(true), active(false), realAct(false), geomMargin(0), bordStyle(0), inclPg(NULL), inclScrl(NULL)	{ }
 		//Attributes
 		short	en		:1;
+		short	active		:1;
+		short	realAct		:1;
 		short	geomMargin	:8;
 		short	bordStyle	:5;
 		QPen		border;

@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTStarter file: tuimod.h
 /***************************************************************************
- *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,7 +28,6 @@
 #include <QSessionManager>
 #include <QSystemTrayIcon>
 
-#include "tbds.h"
 #include <tsys.h>
 #include <tuis.h>
 
@@ -122,9 +121,9 @@ public:
     void createTray( );
     bool callQtModule( const string &nm );
 
-    bool updLookFeel( );
+    void updLookFeel( );
 
-    //bool notify( QObject *receiver, QEvent *event )	???? Try for mouse right click emulation on mobile only touch-screened devices
+    bool notify( QObject *receiver, QEvent *event );
     void saveState( QSessionManager &manager );
 
     int stExec( );
@@ -157,6 +156,11 @@ private:
     QSystemTrayIcon *tray;
     StartDialog	*stDlg;
     bool	initExec;
+
+    int		simulRightMKeyTm;
+    int64_t	mouseBtPress;
+    QObject	*mouseBtRecv;
+    QMouseEvent	mouseBtHold;
 };
 
 //*************************************************
@@ -194,7 +198,7 @@ public:
     void modStart( );
     void modStop( );
 
-    void	splashSet( SplashFlag flg = SPLSH_NULL );
+    void splashSet( SplashFlag flg = SPLSH_NULL );
 
 public:
     //Attributes
@@ -216,8 +220,8 @@ private:
     static void *Task( void * );
 
     //Methods
-    string	optDescr( );
-    void	toQtArg( const char *nm, const char *arg = NULL );
+    string optDescr( );
+    void toQtArg( const char *nm, const char *arg = NULL );
 
     //Attributes
     bool	hideMode, mEndRun, mStartCom, mCloseToTray;

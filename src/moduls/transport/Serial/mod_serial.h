@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.Serial file: mod_serial.h
 /***************************************************************************
- *   Copyright (C) 2009-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2009-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,8 +20,6 @@
 
 #ifndef MOD_SERIAL_H
 #define MOD_SERIAL_H
-
-#include <pthread.h>
 
 #include <ttransports.h>
 
@@ -121,10 +119,10 @@ class TTrOut: public TTransportOut
 	string getStatus( );
 
 	string timings( )			{ return mTimings; }
-	bool noStopOnProceed( )			{ return mNoStopOnProceed; }
+	bool notStopOnProceed( )		{ return mNotStopOnProceed; }
 
 	void setTimings( const string &vl );
-	void setNoStopOnProceed( bool vl )	{ mNoStopOnProceed = vl; modif(); }
+	void setNotStopOnProceed( bool vl )	{ mNotStopOnProceed = vl; modif(); }
 
 	// Modem functions
 	int	mdmTm( )			{ return mMdmTm; }
@@ -179,10 +177,10 @@ class TTrOut: public TTransportOut
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
-	bool	mNoStopOnProceed;
+	bool	mNotStopOnProceed;
 	string	mDevPort, mTimings;
 	int	fd;
-	int64_t	mLstReqTm, mKeepAliveLstTm;
+	int64_t	mKeepAliveLstTm;
 
 	uint64_t trIn, trOut;			//Traffic in and out counter and maximum respond timeout
 	float	respTm, respTmMax, respSymbTmMax;
@@ -216,6 +214,8 @@ class TTr: public TTypeTransport
 
 	TTransportIn  *In( const string &name, const string &idb );
 	TTransportOut *Out( const string &name, const string &idb );
+
+	string outAddrHelp( );
 
 	static void writeLine( int fd, const string &ln, bool noNewLn = false );
 	static string expect( int fd, const string& expLst, int tm );

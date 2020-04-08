@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_run_widgs.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -26,13 +26,11 @@
 #include <QComboBox>
 #include <QStatusBar>
 #include <QDesktopWidget>
+#include <QScrollBar>
 
-#include <tsys.h>
-
-#include "tvision.h"
-#include "vis_shapes.h"
 #include "vis_run.h"
 #include "vis_run_widgs.h"
+#include "vis_shapes.h"
 
 #undef _
 #define _(mess) mod->I18N(mess, mainWin()->lang().c_str())
@@ -77,17 +75,24 @@ void RunWdgView::resizeF( const QSizeF &size )
     else if(!holdPg && root() == "Box" && (holdPg=((ShapeBox::ShpDt*)shpData)->inclPg)) cntW = this;
 
     //Hard resize for main and external windows
-    if(holdPg && !cntW) { resize((mWSize=size).toSize()); }
+    if(holdPg && !cntW)	resize((mWSize=size).toSize());
     else WdgView::resizeF(size);
 
     if(holdPg && cntW) {
+	QAbstractScrollArea *sa = (cntW->root() == "Box") ? ((ShapeBox::ShpDt*)cntW->shpData)->inclScrl : NULL;
 	bool wHold = (holdPg->sizeOrigF().width()*holdPg->xScale() <= cntW->sizeOrigF().width()*cntW->xScale());
 	bool hHold = (holdPg->sizeOrigF().height()*holdPg->yScale() <= cntW->sizeOrigF().height()*cntW->yScale());
-	holdPg->setMinimumSize(wHold ? cntW->size().width() : holdPg->size().width(), hHold ? cntW->size().height() : holdPg->size().height());
-	holdPg->setMaximumSize(wHold ? cntW->size().width() : 1000000, hHold ? cntW->size().height() : 1000000);
+
+	holdPg->setMaximumSize(wHold ? cntW->size().width() : 1000000, hHold ? cntW->size().height() : 1000000);	//Needed to hide the spare scroll bar on big scale rates
+
+	if(cntW != this) {
+	    QSize holdB = QSize(cntW->size().width()  - ((sa&&sa->verticalScrollBar()&&holdPg->size().height()>cntW->size().height())?sa->verticalScrollBar()->size().width():0),
+				cntW->size().height() - ((sa&&sa->horizontalScrollBar()&&holdPg->size().width()>cntW->size().width())?sa->horizontalScrollBar()->size().height():0));
+	    holdPg->setMinimumSize(wHold ? holdB.width() : holdPg->size().width(), hHold ? holdB.height() : holdPg->size().height());
+	}
+	else holdPg->resize(QSize(holdPg->sizeOrigF().width()*holdPg->xScale(),holdPg->sizeOrigF().height()*holdPg->yScale()));
     }
 }
-
 
 string RunWdgView::pgGrp( )	{ return property("pgGrp").toString().toStdString(); }
 
@@ -281,7 +286,7 @@ bool RunWdgView::isVisible( QPoint pos )
     //Clear background and draw transparent
     QPalette pltSave, plt;
     pltSave = plt = palette();
-    plt.setBrush(QPalette::Window,QColor(0,0,0,0));
+    plt.setBrush(QPalette::Window, QColor(0,0,0,0));
     setPalette(plt);
 
     //Grab widget and check it for no zero
@@ -513,8 +518,8 @@ bool RunWdgView::event( QEvent *event )
 		return true;
 	    }
 	    break;
-	case QEvent::FocusIn:
-	    attrs.push_back(std::make_pair("focus","1"));
+	case QEvent::FocusIn:	mainWin()->setFocus(id());	return true;
+	    /*attrs.push_back(std::make_pair("focus","1"));
 	    attrs.push_back(std::make_pair("event","ws_FocusIn"));
 	    attrsSet(attrs);
 	    return true;
@@ -522,7 +527,7 @@ bool RunWdgView::event( QEvent *event )
 	    attrs.push_back(std::make_pair("focus","0"));
 	    attrs.push_back(std::make_pair("event","ws_FocusOut"));
 	    attrsSet(attrs);
-	    return true;
+	    return true;*/
 	default: break;
     }
 
@@ -716,15 +721,15 @@ VisRun *StylesStBar::mainWin( )	{ return (VisRun *)window(); }
 void StylesStBar::setStyle( int istl, const string &nm )
 {
     mStyle = istl;
-    if(mStyle < 0) setText(_("No style"));
+    if(mStyle < 0) setText(_("<Disabled>"));
     else if(!nm.empty()) setText(nm.c_str());
     else {
 	XMLNode req("get");
 	req.setAttr("path","/ses_"+mainWin()->workSess()+"/%2fobj%2fcfg%2fstLst");
 	mainWin()->cntrIfCmd(req);
-	for(unsigned i_s = 0; i_s < req.childSize(); i_s++)
-	    if(s2i(req.childGet(i_s)->attr("id")) == istl)
-		setText(req.childGet(i_s)->text().c_str());
+	for(unsigned iS = 0; iS < req.childSize(); iS++)
+	    if(s2i(req.childGet(iS)->attr("id")) == istl)
+		setText(req.childGet(iS)->text().c_str());
     }
 }
 
@@ -743,10 +748,11 @@ bool StylesStBar::styleSel( )
     dlg.edLay()->addWidget(lab, 0, 0);
     QComboBox *stls = new QComboBox(&dlg);
     dlg.edLay()->addWidget(stls, 0, 1);
-    for(unsigned iS = 0; iS < req.childSize(); iS++) {
-	stls->addItem(req.childGet(iS)->text().c_str(),s2i(req.childGet(iS)->attr("id")));
-	if(s2i(req.childGet(iS)->attr("id")) == style())
-	    stls->setCurrentIndex(iS);
+    for(unsigned iS = 0, iSls = 0; iS < req.childSize(); iS++) {
+	if(s2i(req.childGet(iS)->attr("id")) < 0) continue;
+	stls->addItem(req.childGet(iS)->text().c_str(), s2i(req.childGet(iS)->attr("id")));
+	if(s2i(req.childGet(iS)->attr("id")) == style()) stls->setCurrentIndex(iSls);
+	iSls++;
     }
     dlg.resize(300, 120);
     if(dlg.exec() == QDialog::Accepted && stls->currentIndex() >= 0) {

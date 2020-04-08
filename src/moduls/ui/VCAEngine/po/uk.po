@@ -1,19 +1,33 @@
 # OpenSCADA.UI.VCAEngine translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.UI.VCAEngine package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2006-2018.
+# Roman Savochenko <rom_as@oscada.org>, 2006-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-28 20:27+0300\n"
+"POT-Creation-Date: 2020-02-20 17:23+0200\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Enabled. "
+msgstr "Ввімкнено. "
+
+msgid "Disabled. "
+msgstr "Вимкнено. "
+
+#, c-format
+msgid "Used: %d. "
+msgstr "Використано: %d. "
+
+#, c-format
+msgid "Date of modification: %s. "
+msgstr "Дата модифікації: %s. "
 
 msgid "Loading widgets library."
 msgstr "Завантаження бібліотеки віджетів."
@@ -31,6 +45,10 @@ msgstr "Вимкнення бібліотеки віджетів."
 msgid "Error enabling/disabling widget '%s': %s."
 msgstr "Помилка ввімкнення/вимкнення віджету '%s': %s."
 
+#, c-format
+msgid "The widget '%s' is already present!"
+msgstr "Віджет '%s' вже присутній!"
+
 msgid "Widgets library: "
 msgstr "Бібліотека віджетів: "
 
@@ -42,6 +60,9 @@ msgstr "Бібліотека"
 
 msgid "State"
 msgstr "Стан"
+
+msgid "Status"
+msgstr "Статус"
 
 msgid "Enabled"
 msgstr "Включений"
@@ -89,9 +110,17 @@ msgstr "Mime тип"
 msgid "Data"
 msgstr "Дані"
 
-#, c-format
-msgid "Widget '%s' is already present!"
-msgstr "Віджет '%s' вже присутній!"
+msgid "Calculating procedure: "
+msgstr "Обчислювальна процедура: "
+
+msgid "!!redefined!!"
+msgstr "!!перевизначено!!"
+
+msgid "inherited"
+msgstr "успадковано"
+
+msgid "presented"
+msgstr "представлено"
 
 msgid "Widget is not container!"
 msgstr "Віджет не контейнер!"
@@ -273,8 +302,8 @@ msgstr "Значення"
 msgid "View"
 msgstr "Вид"
 
-msgid "Text;Combo;Integer;Real;Time;Date;Date and time"
-msgstr "Текст;Combo;Ціле;Реальне;Час;Дата;Дата та час"
+msgid "Text;Combo;Integer;Real;Time;Date;Date and time;Password"
+msgstr "Текст;Combo;Ціле;Реальне;Час;Дата;Дата та час;Пароль"
 
 msgid "Confirm"
 msgstr "Підтверджувати"
@@ -568,8 +597,8 @@ msgstr ""
 "XML тег \"tbl\" для заповнення таблиці:\n"
 "  <tbl>\n"
 "    <h><s>{Заголовок1}</s><s>{Заголовок2}</s></h>\n"
-"    <r><s>{Ряд1Колонка1Строка}</s><i>{Ряд1Колонка2Ціле}</i></r>\n"
-"    <r><b>{Ряд2Колонка1Логічне}</b><r>{Ряд2Колонка2Реальне}</r></r>\n"
+"    <r><s>{Рядок1Стовпчик1Рядок}</s><i>{Рядок1Стовпчик2Ціле}</i></r>\n"
+"    <r><b>{Рядок2Стовпчик1Логічне}</b><r>{Рядок2Стовпчик2Реальне}</r></r>\n"
 "  </tbl>\n"
 "Теги:\n"
 "  tbl - Таблиця, загальні властивості:\n"
@@ -685,7 +714,7 @@ msgid ""
 "Real value configuration in the form: \"{width};{form};{prec}\".\n"
 "Where \"form\" is 'g', 'e' or 'f'."
 msgstr ""
-"Конфігурація реального значення у формі: \"{ширина]};{форма};{точність}\".\n"
+"Конфігурація реального значення у формі: \"{ширина};{форма};{точність}\".\n"
 "Де \"форма\" це 'g', 'e' або 'f'."
 
 msgid "String value configuration in the form \"{len}\"."
@@ -1240,6 +1269,10 @@ msgstr "Увімкнення проекту."
 msgid "Disabling the project."
 msgstr "Вимкнення проекту."
 
+#, c-format
+msgid "The page '%s' is already present!"
+msgstr "Сторінка '%s' вже присутня!"
+
 msgid "Project: "
 msgstr "Проект: "
 
@@ -1307,27 +1340,27 @@ msgid "Message"
 msgstr "Повідомлення"
 
 #, c-format
-msgid "Page '%s' is already present!"
-msgstr "Сторінка '%s' вже присутня!"
-
-#, c-format
 msgid "All: %d; Enabled: %d"
 msgstr "Загалом: %d; Ввімкнено: %d"
 
 msgid "New style"
 msgstr "Новий стиль"
 
-msgid "No style"
-msgstr "Немає стилю"
+msgid "<Disabled>"
+msgstr "<Вимкнено>"
 
-msgid "Create a new style"
-msgstr "Створити новий стиль"
+msgid "<Create a new style>"
+msgstr "<Створити новий стиль>"
 
 msgid "Page: opened"
 msgstr "Стор.: відкрита"
 
 msgid "Page: process not opened"
 msgstr "Стор.: обробляти не відкритою"
+
+#, c-format
+msgid "The target page '%s' of the link is empty or recursive!"
+msgstr "Цільова сторінка '%s' зв'язку порожня або рекурсивна!"
 
 msgid "As a page, only a box based widget can be used!"
 msgstr ""
@@ -1336,7 +1369,7 @@ msgstr ""
 msgid "The widget is not a container!"
 msgstr "Віджет не контейнер!"
 
-msgid "Page is not a container or template!"
+msgid "Page is not a container or a template!"
 msgstr "Сторінка не є контейнером або шаблоном!"
 
 msgid "Project page: "
@@ -1356,6 +1389,9 @@ msgstr "Логічний контейнер"
 
 msgid "Container and template"
 msgstr "Контейнер та шаблон"
+
+msgid "Link"
+msgstr "Зв'язок"
 
 msgid "The variable is not a link"
 msgstr "Змінна не є зв'язком"
@@ -1410,6 +1446,14 @@ msgstr "Час запуску задачі обробки: %f мс."
 
 msgid "Stopping the session."
 msgstr "Зупинка сеансу."
+
+#, c-format
+msgid "Registering/opening the page '%s'."
+msgstr "Реєстрація/відкриття сторінки '%s'."
+
+#, c-format
+msgid "Unregistering/closing the page '%s'."
+msgstr "Дереєстрація/закриття сторінки '%s'."
 
 #, c-format
 msgid "Error calculating the session '%s'."
@@ -1483,6 +1527,9 @@ msgstr "Повідомлення сповіщення"
 msgid "Language of the notification message"
 msgstr "Мова повідомлення сповіщення"
 
+msgid "Opened. "
+msgstr "Відкрито. "
+
 msgid "Enabling the page."
 msgstr "Увімкнення сторінки."
 
@@ -1500,20 +1547,23 @@ msgid ""
 "Error compiling the function '%s' by the language '%s' for the widget: %s"
 msgstr "Помилка компіляції функції '%s' на мові '%s' для віджета: %s"
 
+msgid "Processing. "
+msgstr "Обробка. "
+
+msgid "Spent time on the branch: "
+msgstr "Витрачено часу на гілку: "
+
+msgid "the item: "
+msgstr "елемент: "
+
+msgid "It is a try of creating a widget in depth bigger to 10!"
+msgstr "Спроба створення віджету на глибину більш за 10!"
+
 msgid "Error calculating the widget. Process is disabled."
 msgstr "Помилка обчислення віджета. Обробку вимкнено."
 
-msgid "Process"
+msgid "Processing"
 msgstr "Обробка"
-
-msgid "Spent time"
-msgstr "Використано часу"
-
-msgid "Subtree="
-msgstr "Піддерево="
-
-msgid "Item="
-msgstr "Елемент="
 
 msgid "Engine of the visual control area"
 msgstr "Рушій середовища візуалізації та керування"
@@ -1530,8 +1580,8 @@ msgstr "Таблиця БД"
 msgid "Parent widget"
 msgstr "Батьківський віджет"
 
-msgid "Translate procedure"
-msgstr "Перекладати процедуру"
+msgid "Completely translate the procedure"
+msgstr "Повністю перекладати процедуру"
 
 msgid "Procedure text and language"
 msgstr "Текст та мова програмування процедури"
@@ -1634,6 +1684,14 @@ msgid "Time of the project '%s' enabling: %f ms."
 msgstr "Час включення проекту '%s': %f мс."
 
 #, c-format
+msgid "The widget library '%s' is already present!"
+msgstr "Бібліотека віджетів '%s' вже присутня!"
+
+#, c-format
+msgid "The project '%s' is already present!"
+msgstr "Проект '%s' вже присутній!"
+
+#, c-format
 msgid "Connecting to the session is not permitted for '%s'."
 msgstr "Недозволено підключення до сеансу для користувача '%s'."
 
@@ -1666,14 +1724,6 @@ msgstr "Сеанси"
 
 msgid "Auto created and started"
 msgstr "Автоматично створений та запущений"
-
-#, c-format
-msgid "Project '%s' is already present!"
-msgstr "Проект '%s' вже присутній!"
-
-#, c-format
-msgid "Widgets library '%s' is already present!"
-msgstr "Бібліотека віджетів '%s' вже присутня!"
 
 #, c-format
 msgid "Session '%s' is already present!"
@@ -1772,12 +1822,11 @@ msgid "Adding a new attribute '%s' exceeds the number %d!"
 msgstr "Додання нового атрибуту '%s' превищує кількість %d!"
 
 #, c-format
-msgid "Attribute '%s' is not present!"
+msgid "Attribute '%s' is not present."
 msgstr "Атрибут '%s' відсутній!"
 
-#, c-format
-msgid "Deleting attribute '%s' has not been released!"
-msgstr "Видаляємий атрибут '%s' не було звільнено!"
+msgid "Deleting attribute '%s' has not been released."
+msgstr "Видаляємий атрибут '%s' не було звільнено."
 
 msgid ""
 "Image name in the form \"[{src}:]{name}\", where:\n"
@@ -1862,6 +1911,10 @@ msgstr "Опустити зміни віджету до його предка"
 
 msgid "Included widgets"
 msgstr "Вкладенні віджети"
+
+#, c-format
+msgid "Widget '%s' is already present!"
+msgstr "Віджет '%s' вже присутній!"
 
 msgid "Path to the widget."
 msgstr "Шлях до цього віджету."
@@ -1953,6 +2006,13 @@ msgstr "Обчислення"
 msgid "Procedure language"
 msgstr "Мова процедури"
 
+msgid ""
+"Select the blank language to reset the widget procedure and language to the "
+"parent widget."
+msgstr ""
+"Оберіть порожню мову для скидання процедури та мови віджету до батьківського "
+"віджету."
+
 msgid "Period of the calculating, milliseconds"
 msgstr "Період обчислення, мілісекунд."
 
@@ -1961,10 +2021,6 @@ msgstr "Процедура"
 
 msgid "New attribute"
 msgstr "Новий атрибут"
-
-#, c-format
-msgid "Attribute '%s' is not present."
-msgstr "Атрибут '%s' відсутній!"
 
 #, c-format
 msgid "Unable to delete non-user attribute '%s'."
@@ -1991,7 +2047,7 @@ msgid "Real"
 msgstr "Реальний"
 
 msgid "String"
-msgstr "Строка"
+msgstr "Рядок"
 
 msgid "Object"
 msgstr "Об'єкт"

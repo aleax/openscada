@@ -7,14 +7,27 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="files/doc.css" rel="stylesheet" /></head>
-<body><div id="mw_header">
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../en/files/Logo-big.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/User API</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/User_API/ru" title="Документация/API пользователя (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/User_API/uk" title="Документація/API користувача (100% translated)">українська</a></div></div>
-<p><i>Author:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/User_API.html" title="Документация/API пользователя (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/User_API.html" title="Документація/API користувача (100% translated)">українська</a></div></div>
+<div style="float:right; border:1px solid gray; width:300px; padding:2px;">
+<ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2012) — the page initial translation</i></font></li>
+<li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/ProgrammManual" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a></li></ul>
+</div>
+<p>Before programming in OpenSCADA, you must examine the object structure of the program (Object Model) in <a href="Program_manual.html" title="Special:MyLanguage/Documents/Program manual">OpenSCADA Program Manual</a> and in Figure 1.
 </p>
-<dl><dd><dl><dd>Maxim Lysenko (2012) — the page translation</dd></dl></dd></dl>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1202px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="540" src="files/Oscada_UserOM.png" width="1200" /></a>  <div class="thumbcaption">Fig. 1. User object model of the core OpenSCADA.</div></div></div></div>
+<p>From this document you will see that you can program next parts of OpenSCADA as the user:
+</p>
+<ul><li> <a href="DAQ.html#Virtual" title="Special:MyLanguage/Documents/DAQ">Logical level sources of the subsystem "DAQ"</a>.</li>
+<li> Transport protocols allowed for user programming that is: <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">User protocol</a>, <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus nodes of the type "Data"</a>, <a href="Modules/WebUser.html" title="Special:MyLanguage/Modules/WebUser">Web-interfaces from the user</a>, ...</li>
+<li> <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">Visual Control Area (VCA)</a> in procedures of the widgets.</li></ul>
+<p>User programming API is the tree of the OpenSCADA objects (Fig.1), every object of which can provide own list of properties and functions. Properties and functions of the objects can be used by the user in procedures on the languages of the user programming of OpenSCADA.
+</p><p>Currently OpenSCADA provides only one language of the text programming — <a href="#JavaLikeCalc">JavaLikeCalc</a> then you must learn it also before the starting! The entry point for access to the objects of OpenSCADA (Fig.1) from the user programming language JavaLikeCalc is the reserved word "SYS" of the root OpenSCADA object. For example, to access the function of output transport you should write: <b>SYS.Transport.Serial.out_ModBus.messIO(mess);</b>.
+</p><p>API of the objects provided by the modules is described in the own documentation of the modules and here links to their are provided.
+</p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#The_user_programming_language_JavaLikeCalc"><span class="tocnumber">1</span> <span class="toctext"><span>The user programming language JavaLikeCalc</span></span></a>
@@ -51,14 +64,14 @@
 <li class="toclevel-2 tocsection-14"><a href="#Module_DAQ.ModBus"><span class="tocnumber">7.4</span> <span class="toctext">Module DAQ.ModBus</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-15"><a href="#Subsystem_.22Archives-History.22_.28SYS.Archive.29"><span class="tocnumber">8</span> <span class="toctext">Subsystem "Archives-History" (SYS.Archive)</span></a></li>
+<li class="toclevel-1 tocsection-15"><a href="#Subsystem_.22Archives-History.22_.28SYS.Archive.29"><span class="tocnumber">8</span> <span class="toctext"><span>Subsystem "Archives-History" (SYS.Archive)</span></span></a></li>
 <li class="toclevel-1 tocsection-16"><a href="#Subsystem_.22Transports.22_.28SYS.Transport.29"><span class="tocnumber">9</span> <span class="toctext"><span>Subsystem "Transports" (SYS.Transport)</span></span></a></li>
 <li class="toclevel-1 tocsection-17"><a href="#Subsystem_.22Protocols.22_.28SYS.Protocols.29"><span class="tocnumber">10</span> <span class="toctext">Subsystem "Protocols" (SYS.Protocols)</span></a>
 <ul>
 <li class="toclevel-2 tocsection-18"><a href="#Module_Protocol.HTTP"><span class="tocnumber">10.1</span> <span class="toctext">Module Protocol.HTTP</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-19"><a href="#Subsystem_.22User_interfaces.22_.28SYS.UI.29"><span class="tocnumber">11</span> <span class="toctext">Subsystem "User interfaces" (SYS.UI)</span></a>
+<li class="toclevel-1 tocsection-19"><a href="#Subsystem_.22User_interfaces.22_.28SYS.UI.29"><span class="tocnumber">11</span> <span class="toctext"><span>Subsystem "User interfaces" (SYS.UI)</span></span></a>
 <ul>
 <li class="toclevel-2 tocsection-20"><a href="#Module_QTStarter"><span class="tocnumber">11.1</span> <span class="toctext">Module QTStarter</span></a></li>
 <li class="toclevel-2 tocsection-21"><a href="#Module_UI.VCAEngine"><span class="tocnumber">11.2</span> <span class="toctext">Module UI.VCAEngine</span></a></li>
@@ -76,18 +89,6 @@
 </ul>
 </div>
 
-<p>Before programming in OpenSCADA, you must examine the object structure of the program (Object Model) in <a href="Program_manual.html" title="Special:MyLanguage/Documents/Program manual">OpenSCADA Program Manual</a> and in Figure 1.
-</p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1202px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="540" src="files/Oscada_UserOM.png" width="1200" /></a>  <div class="thumbcaption">Fig. 1. User object model of the core OpenSCADA.</div></div></div></div>
-<p>From the document you will see that you can program next parts of OpenSCADA as the user:
-</p>
-<ul><li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#Virtual" title="Special:MyLanguage/Documents/DAQ">Logical level sources of the subsystem "DAQ"</a>.</li>
-<li> Transport protocols allowed for user programming that is: <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">User protocol</a>, <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus nodes of the type "Data"</a>, <a href="Modules/WebUser.html" title="Special:MyLanguage/Modules/WebUser">Web-interfaces from the user</a>, ...</li>
-<li> <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">Visual Control Area (VCA)</a> in procedures of the widgets.</li></ul>
-<p>User programming API is the tree of the OpenSCADA objects (Fig.1), every object of which can provide own list of properties and functions. Properties and functions of the objects can be used by the user in procedures on the languages of the user programming of OpenSCADA.
-</p><p>Currently OpenSCADA provides only one language of the text programming — <a href="#JavaLikeCalc">JavaLikeCalc</a> then you must learn it also before the starting! The entry point for access to the objects of OpenSCADA (Fig.1) from the user programming language JavaLikeCalc is the reserved word "SYS" of the root OpenSCADA object. For example, to access the function of output transport you should write: <b>SYS.Transport.Serial.out_ModBus.messIO(mess);</b>.
-</p><p>API of the objects provided by the modules is described in the own documentation of the modules and here links to their are provided.
-</p>
 <h2><span class="mw-headline" id="The_user_programming_language_JavaLikeCalc"><span class="mw-headline-number">1</span> <span id="JavaLikeCalc" title="#JavaLikeCalc"><a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">The user programming language JavaLikeCalc</a></span></span></h2>
 <h3><span class="mw-headline" id="Elements_of_the_language"><span class="mw-headline-number">1.1</span> Elements of the language</span></h3>
 <p><i>Keywords:</i> if, else, while, for, break, continue, return, function, using, true, false.<br />
@@ -192,12 +193,13 @@
 <li> <i>delete</i> — delete/free of an object or its properties, while: internal variables are set in EVAL, external ones are replaced by an empty object, and the properties of the object are cleared.</li></ul>
 <h4><span class="mw-headline" id="Conditional_operators"><span class="mw-headline-number">1.4.1</span> Conditional operators</span></h4>
 <p>The language supports two types of conditions. First — this is the operation of condition for use within the expression, second — a global, based on the conditional operators.
-</p><p>The condition inside an expression is based on the operations '?' and ':'. As an example we'll write the following practical expression <b>st_open = (pos&gt;=100)&nbsp;?</b>
+</p><p>The condition inside an expression is based on the operations '?' and ':'. As an example we'll write the following practical expression:
 </p>
-<pre>true&nbsp;: false;<b>, which reads as: "If the variable <i>pos</i> greater than or equal to </b>100<b>, the variable <i>st_open</i> is set to </b>true<b>, otherwise — to </b>false<b>".</b>
-</pre>
-<p>The global condition is based on the conditional operators "if" and "else". As an example, we can show the same expression, but recorded in another way <b>if(pos&gt;100) st_open = true; else st_open = false;</b>.
+<pre style="white-space: pre-wrap;">st_open = (pos &gt;= 100)&nbsp;? true&nbsp;: false;</pre>
+<p>Which reads as — if the variable <i>pos</i> greater than or equal to <b>100</b>, the variable <i>st_open</i> is set to <b>true</b>, otherwise — to <b>false</b>.
+</p><p>The global condition is based on the conditional operators "if" and "else". As an example, we can show the same expression, but recorded in another way:
 </p>
+<pre style="white-space: pre-wrap;">if(pos &gt; 100) st_open = true; else st_open = false;</pre>
 <h4><span class="mw-headline" id="Loops"><span class="mw-headline-number">1.4.2</span> Loops</span></h4>
 <p>Two types of the loops are supported: <b>while</b>, <b>for</b> and <b>for-in</b>. The syntax of the loops corresponds to the programming languages: C++, Java and JavaScript.
 </p><p>Loop <b>while</b> is written generally as follows: <b>while({condition}) {body of the loop};</b><br />
@@ -237,9 +239,9 @@ rez = sum(1, 2);
 </p>
 <h2><span class="mw-headline" id="System-wide_user_objects"><span class="mw-headline-number">2</span> System-wide user objects</span></h2>
 <p>JavaLikeCalc provides support of the data type "Object". The data type "Object" is an associated container of properties and functions. The properties can support data of fourth basic types and other objects. Access to object properties can be done through the record of property names to the object <i>obj.prop</i>, through a dot, and also through the inclusion of the property name in square brackets <i>obj["prop"]</i>. It is obvious that the first mechanism is static, while the second lets you to specify the name of the property through a variable. The name of the property through the dot must not start with a digit and contain operations symbols; otherwise, for the first digit, the <a href="User_API.html" title="Special:MyLanguage/Documents/User API">object prefix</a> should be used — <b>SYS.BD.SQLite.db_1s</b>, or write in square brackets — <b>SYS.BD.SQLite["1+s"]</b>, for operations symbols in the name. Object's properties removing you can perform by the operator "delete". Reading of an undefined property will return <b>EVAL</b>. Creating an object is carried by the keyword <i>new</i>: <b>varO = new Object()</b>. The basic definition of the object does not contain functions. Copying of an object is actually makes the reference to the original object. When you delete an object is carried out the reducing of the reference count, and when the count is set to zero then the object is removed physically.
-</p><p>Different components of OpenSCADA can define the basic object with special properties and functions. The standard extension of the object is an array "Array", which is created by the command <b>varO = new Array(prm1,prm2,prm3,...,prmN)</b>. Comma-separated parameters are placed in the array in the original order. If the parameter is the only one the array is initiated by the specified number of empty elements. Peculiarity of the array is that it works with the properties as the indexes and the main mechanism of addressing is placing the index into square brackets <i>arr[1]</i> is accessible. Array stores the properties in its own container of the one-dimensional array. Digital properties of the array are used to access directly to the array, and the characters work as the object properties. For more details about the properties and functions of the array can be read <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/User_API#Array" title="Special:MyLanguage/Documents/User API">here</a>.
-</p><p>The object of regular expression "RegExp" is created by command <b>varO = new RegExp(pat, flg)</b>, where <i>pat</i> — pattern of the regular expression, and <i>flg</i> — match flags. The object for work with regular expressions, based on the library "PCRE". In the global search set object attribute "lastIndex", which allows you to continue searching for the next function call. In the case of an unsuccessful search for the attribute "lastIndex" reset to zero. For more details about the properties and functions of the regular expression object can be read <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/User_API#RegExp" title="Special:MyLanguage/Documents/User API">here</a>.
-</p><p>For random access to the arguments of functions provided the arguments object, which you can refer to by the symbol "arguments". This object contains the property "length" with a number of arguments in the function and allows you to access to a value of the argument by its number or ID. Consider the enumeration of the arguments on the cycle:
+</p><p>Different components of OpenSCADA can define the basic object with special properties and functions. The standard extension of the object is an array "Array", which is created by the command <b>varO = new Array(prm1,prm2,prm3,...,prmN)</b>. Comma-separated parameters are placed in the array in the original order. If the parameter is the only one the array is initiated by the specified number of empty elements. Peculiarity of the array is that it works with the properties as the indexes and the main mechanism of addressing is placing the index into square brackets <i>arr[1]</i> is accessible. Array stores the properties in its own container of the one-dimensional array. Digital properties of the array are used to access directly to the array, and the characters work as the object properties. For more details about the properties and functions of the array can be read <a href="User_API.html#Array" title="Special:MyLanguage/Documents/User API">here</a>.
+</p><p>The object of regular expression "RegExp" is created by command <b>varO = new RegExp(pat, flg)</b>, where <i>pat</i> — pattern of the regular expression, and <i>flg</i> — match flags. The object for work with regular expressions, based on the library "PCRE". In the global search set object attribute "lastIndex", which allows you to continue searching for the next function call. In the case of an unsuccessful search for the attribute "lastIndex" reset to zero. For more details about the properties and functions of the regular expression object can be read <a href="User_API.html#RegExp" title="Special:MyLanguage/Documents/User API">here</a>.
+</p><p>For random access to the function arguments provided the arguments object, which you can refer to by the symbol "arguments". This object contains the property "length" with a number of arguments in the function and allows you to access to a value of the argument by its <b>number</b> or <b>ID</b>. Consider the enumeration of the arguments on the cycle:
 </p>
 <pre style="white-space: pre-wrap;">
 args = new Array();
@@ -251,7 +253,7 @@ for(var i = 0; i &lt; arguments.length; i++)
 <ul><li> NULL type, functions:
 <ul><li> <i>bool isEVal();</i> — returns "true".</li></ul></li></ul>
 <ul><li> Logical type, functions:
-<ul><li> <i>bool isEVal();</i> — checks value to "EVAL".</li>
+<ul><li> <i>bool isEVal(); bool isNaN( );</i> — checks the value to "EVAL".</li>
 <li> <i>string toString();</i> — performs the value as the string "true" or "false".</li></ul></li></ul>
 <dl><dd><ul><li> <i>real toReal();</i> — reads this Boolean as a real number.</li>
 <li> <i>int toInt();</i> — reads this Boolean as an integer number.</li></ul></dd></dl>
@@ -261,7 +263,7 @@ for(var i = 0; i &lt; arguments.length; i++)
 <li> <i>MIN_VALUE</i> — minimum value;</li>
 <li> <i>NaN</i> —  error value.</li></ul>
 <dl><dt> <i>Functions:</i></dt></dl>
-<ul><li> <i>bool isEVal();</i> — checks value to "EVAL".</li>
+<ul><li> <i>bool isEVal(); bool isNaN( );</i> — checks the value to "EVAL", and NaN for Real.</li>
 <li> <i>string toExponential( int numbs = -1 );</i> — returns the string of the number, formatted in the exponential notation, and with the number of significant digits <i>numbs</i>. If <i>numbs</i> is missing the number of digits will have as much as needed.</li>
 <li> <i>string toFixed( int numbs = 0, int len = 0, bool sign = false );</i> — returns the string of the number, formatted in the notation of fixed-point, and with the number of significant digits after the decimal point <i>numbs</i>, for minimum length <i>len</i> and compulsion to the presence of a <i>sign</i>. If <i>numbs</i> is missing, the number of digits after the decimal point is equal to zero.</li>
 <li> <i>string toPrecision( int prec = -1 );</i> — returns the string of the number, formatted with the number of significant digits <i>prec</i>.</li>
@@ -273,11 +275,12 @@ for(var i = 0; i &lt; arguments.length; i++)
 <ul><li> <i>int length</i> — string length. </li></ul>
 <dl><dt> <i>Functions:</i></dt></dl>
 <ul><li> <i>bool isEVal();</i> — checks value to "EVAL".</li>
-<li> <i>string charAt( int symb );</i> — extracts from the string the symbol <i>symb</i>, numbering from zero.</li>
-<li> <i>int charCodeAt( int symb );</i> — extracts from the string the symbol code <i>symb</i>.</li>
+<li> <i>bool isNaN( bool whole = true );</i> — checks the string to Not A Number and in whole for <i>whole</i>. </li>
+<li> <i>string charAt( int symb, string type = "" );</i> — extracts from the string the symbol <i>symb</i> for the <i>type</i>. These types of the symbol are supported: ""-ASCII and raw one byte code, UTF-8, UTF-16, UTF-32. In the case of UTF-8, the symbol position <i>symb</i> is changed to the next symbol position due to length of this symbols type is variable one.</li>
+<li> <i>int charCodeAt( int symb, string type = "" );</i> — extracts from the string the symbol code <i>symb</i> for the <i>type</i>. These types of the symbol are supported: ""-ASCII and raw one byte code, UTF-8, UTF-16, UTF-16LE, UTF-16BE, UTF-32, UTF-32LE, UTF-32BE. In the case of UTF-8, the symbol position <i>symb</i> is changed to the next symbol position due to length of this symbols type is variable one.</li>
 <li> <i>string concat( string val1, string val2, ... );</i> — returns a new string formed by joining the values <i>val1</i> etc. to the original one.</li>
-<li> <i>int indexOf( string substr, int start );</i> — returns the position of the required string <i>substr</i> in the original row from the position <i>start</i>. If the initial position is not specified then the search starts from the beginning. If the search string is not found then "-1" is returned.</li>
-<li> <i>int lastIndexOf( string substr, int start );</i> — returns the position of the search string <i>substr</i> in the original one beginning from the position of <i>start</i> when searching from the end. If the initial position is not specified then the search begins from the end. If the search string is not found then "-1" is returned.</li>
+<li> <i>int indexOf( string substr, int start = 0 );</i> — returns the position of the required string <i>substr</i> in the original row from the position <i>start</i>. If the initial position is not specified then the search starts from the beginning. If the search string is not found then "-1" is returned.</li>
+<li> <i>int lastIndexOf( string substr, int start = {end} );</i> — returns the position of the search string <i>substr</i> in the original one beginning from the position of <i>start</i> when searching from the end. If the initial position is not specified then the search begins from the end. If the search string is not found then "-1" is returned.</li>
 <li> <i>int search( string pat, string flg = "" );</i> — searches into the string by the pattern <i>pat</i> and pattern's flags <i>flg</i>. Returns found substring position or "-1" for else.</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 var rez = "Java123Script".search("script","i");  // rez = 7</pre>
@@ -327,6 +330,9 @@ rez = "value = \"123\"".replace(new RegExp("\"([^\"]*)\"","g"),"``$1''"));  // r
 <li> <i>int unshift( ElTp var, ... );</i> — shifts element(s) <i>var</i> to the array. The first element to the 0, second to the 1 and so on.</li>
 <li> <i>Array slice( int beg, int end );</i> — returns an array fragment from <i>beg</i> to <i>end</i> (exclude). If the value of beginning or end is negative, then the count is made from the end of the array. If the end is not specified, then the end is the end of the array.</li>
 <li> <i>Array splice( int beg, int remN, ElTp val1, ElTp val2, ... );</i> — inserts, deletes or replaces the elements of the array. Returns the removed elements array. Firstly it is made the removing of elements from the position <i>beg</i> and in the quantity of <i>remN</i>, and then the values <i>val1</i> are inserted and so on, beginning from the position <i>beg</i>.</li>
+<li> <i>int indexOf( ElTp var, int start = 0 );</i> — returns the array index of the required variable <i>var</i> in the original row from the position <i>start</i>. If the initial position is not specified then the search starts from the beginning. If the search variable is not found then "-1" is returned.</li>
+<li> <i>int lastIndexOf( ElTp var, int start = {end} );</i> — returns the array index of the required variable <i>var</i> in the original row from the position <i>start</i> when searching from the end. If the initial position is not specified then the search begins from the end. If the search variable is not found then "-1" is returned.</li>
+<li> <i>double sum(int beg, int end);</i> — sum of the array values part from the position <i>beg</i> to <i>end</i>, excluding.</li>
 <li> <i>Array sort( );</i> — sorts array elements in the lexicographical order.</li></ul>
 <h3><span class="mw-headline" id="RegExp_object"><span class="mw-headline-number">2.2</span> <span id="RegExp" title="#RegExp">RegExp object</span></span></h3>
 <p>Object of work with the regular expressions, based on the library PCRE. In the global search sets object attribute "lastIndex", which allows you to continue the searching at the next function call. In the case of an unsuccessful search the attribute "lastIndex" resets to zero.
@@ -399,13 +405,14 @@ var OK = re.test("12/30/1969"); </pre></li>
 </p>
 <ul>
 <li><i>{string|int} system( string cmd, bool noPipe = false );</i> — calls the console commands <i>cmd</i> of the OS returning the result by the channel. If <i>noPipe</i> is set then the callback code is returned and program can be started in the background ("sleep 5 &amp;"). The function provides OpenSCADA with a wide range of capabilities by calling any system programs, utilities, and scripts, as well as by providing them with access to a huge amount of system data. For example the command "ls-l" returns the detailed content of the working directory.</li>
-<li><i>string fileRead( string file );</i> — returns a string of the <i>file</i> content.</li>
+<li><i>int fileSize( string file );</i> — returns the <i>file</i> size.</li>
+<li><i>string fileRead( string file, int off = 0, int sz = -1 );</i> — returns a string of part of the <i>file</i> for the offset <i>off</i> and the block size <i>sz</i>.</li>
 <li><i>int fileWrite( string file, string str, bool append = false );</i> — writes the string <i>str</i> to the <i>file</i>, removes presented one, at <i>append</i>. Returns the wrote bytes count.</li>
 <li><i>int fileRemove( string file );</i> — removes the <i>file</i>. Returns the removing result.</li>
 <li><i>int message( string cat, int level, string mess );</i> — forms of the system message <i>mess</i> with the category <i>cat</i>, level <i>level</i> (-7...7). The negative value of the level forms the alarms.</li>
 <li><i>int messDebug( string cat, string mess ); int messInfo( string cat, string mess ); int messNote( string cat, string mess ); int messWarning( string cat, string mess ); int messErr( string cat, string mess ); int messCrit( string cat, string mess ); int messAlert( string cat, string mess ); int messEmerg( string cat, string mess );</i> — forms of the system message <i>mess</i> with the category <i>cat</i> and the appropriate level by the name.</li>
 <li><i>XMLNodeObj XMLNode( string name = "" );</i> — creates of the XML node object with the <i>name</i>.</li>
-<li><i>string cntrReq( XMLNodeObj req, string stat = "" );</i> — sends of <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API#h919-1" rel="nofollow noreferrer noopener" target="_blank">the control interface</a> request to the program-system via XML. The usual request is written as <b>&lt;get path="/OPath/%2felem"/&gt;</b>. If the station <i>stat</i> is indicated into the request then the request will be send to this external station. The address into the attribute "path" you can obtain into an OpenSCADA configurator, that is into the status line where the address appear at the mouse cursor point to a field of configuration or information. Examples of common queries:<ul>
+<li><i>string cntrReq( XMLNodeObj req, string stat = "" );</i> — sends of <a href="API.html#CntrNode" title="Special:MyLanguage/Documents/API">the control interface</a> request to the program-system via XML. The usual request is written as <b>&lt;get path="/OPath/%2felem"/&gt;</b>. If the station <i>stat</i> is indicated into the request then the request will be send to this external station. The address into the attribute "path" you can obtain into an OpenSCADA configurator, that is into the status line where the address appear at the mouse cursor point to a field of configuration or information. Some examples of common queries, more examples in <a href="Libs_Service_procedures.html#releaseTests" title="Special:MyLanguage/Libs/Service procedures">releaseTests()</a>:<ul>
  <li>Reading a value of the element (the user name "test"):
 <pre style="white-space: pre-wrap;">
 req = SYS.XMLNode("get").setAttr("path","/sub_Security/usr_test/%2fprm%2fDESCR");
@@ -441,6 +448,7 @@ SYS.cntrReq(req); </pre></li>
 <li><i>int {strptime|strptimegm}( string str, string form = "%Y-%m-%d&nbsp;%H:%M:%S" );</i> — returns the time in seconds from the epoch of 1/1/1970, based on the string record of time <i>str</i>, in accordance with the specified template <i>form</i>. For example the template "%Y-%m-%d&nbsp;%H:%M:%S" corresponds with the time "2006-08-08 11:21:55". Description of the template format can be obtained from the documentation on POSIX-function <i>strptime</i>. <i>strptimegm</i> works into GMT(UTC) time.</li>
 <li><i>int cron( string cronreq, int base = 0 );</i> — returns the time, planned in the format of the standard Cron, <i>cronreq</i>, beginning from the basic time <i>base</i> or current, if the basic is not specified.</li>
 <li><i>string strFromCharCode( int char1, int char2, int char3, ... );</i> — creates a string from symbol codes <i>char1</i>, <i>char2</i> ... <i>charN</i>.</li>
+<li><i>string strFromCharUTF([string type = "UTF-8",] int char1, int char2, int char3, ...);</i> — creates a string from UTF symbols <i>char1</i>, <i>char2</i> ... <i>charN</i>. These types of the symbol are supported: UTF-8, UTF-16, UTF-16LE, UTF-16BE, UTF-32, UTF-32LE, UTF-32BE.</li>
 <li><i>string strCodeConv( string src, string fromCP, string toCP );</i> — transcodes the text <i>src</i> from the encoding <i>fromCP</i> to <i>toCP</i>. If the encoding is omitted (empty string), it is used the internal one.</li>
 <li><i>string strEncode( string src, string tp = "Bin", string opt1 = "" );</i> — encodes the string <i>src</i> by the rule <i>tp</i> and option <i>opt1</i>. Allowed rules:
 <dl><dd>"PathEl" — symbols <b>[/%]</b> to "%2f" and "%25", respectively;</dd>
@@ -454,7 +462,9 @@ SYS.cntrReq(req); </pre></li>
 <dd>"OscdID" — almost all symbols like <b>[ /\&amp;(]</b> to '_';</dd>
 <dd>"Bin" — ASCII bytes list ("XX XX XX XX ...") to the binary represent;</dd>
 <dd>"Reverse" — reversion the sequence;</dd>
-<dd>"ShieldSimb" — shielded symbols like '\a', '\b', ..., '\0NNN', '\xNN' to the binary represent.</dd></dl>
+<dd>"ShieldSimb" — shielded symbols like '\a', '\b', ..., '\0NNN', '\xNN' to the binary represent;</dd>
+<dd>"ToLower" — symbols to the lower register;</dd>
+<dd>"Limit" — limiting the string to the length into <i>opt1</i>, counting UTF-8 variable length.</dd></dl>
 </li>
 <li><i>string strDecode( string src, string tp = "Bin", string opt1 = "" );</i> — decodes the string <i>src</i> by the rule <i>tp</i> and the option <i>opt1</i>. Allowed rules:
 <dl><dd>"PathEl", "HttpURL", "Custom" — symbols like "%NN" to the binary represent;</dd>
@@ -481,19 +491,19 @@ SYS.cntrReq(req); </pre></li>
 <p>Functions of the object "User" (SYS.Security["usr_{User}"]):
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">access to the appropriate subsystem</span>] — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
 <li> <i>Array groups( )</i> — returns the groups list of the user</li></ul>
 <p>Functions of the object "Users group" (SYS.Security["grp_{Group}"]):
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">access to the appropriate subsystem</span>] — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
 <li> <i>bool user( string nm )</i> — checks for the user <i>nm</i> presence into the group.</li></ul>
 <h2><span class="mw-headline" id="Subsystem_.22DB.22_.28SYS.BD.29"><span class="mw-headline-number">6</span> <span id="SYS.BD" title="#SYS.BD">Subsystem "DB" (SYS.BD)</span></span></h2>
 <p>Functions of the database object (SYS.BD["TypeDB"]["DB"]):
 </p>
 <ul>
 <li><i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
-<li><i>bool cfgSet( string nm, ElTp val )</i> — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
+<li><i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">access to the appropriate subsystem</span>] — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
 <li><i>Array SQLReq( string req, bool tr = EVAL );</i> — performs the SQL-request <i>req</i> to the DB, inside (<i>tr</i>=true), outside (<i>tr</i>=false) or no matter (<i>tr</i>=EVAL) to the transaction. Returns an array of rows of the result table with the fields both per indexes and column names. At an error the result property "err" sets to the error value.
 <pre style="white-space: pre-wrap;">
 DBTbl = SYS.BD.MySQL.GenDB.SQLReq("SELECT * from DB;");
@@ -533,7 +543,8 @@ SYS.messDebug("TEST DB","Value: "+req.childGet(2).text());</pre></li>
 <p>Functions of the subsystem object (SYS.DAQ):
 </p>
 <ul>
-<li><i>bool funcCall( string progLang, TVarObj args, string prog, string fixId = "" );</i> — executes the function text <i>prog</i> with the arguments <i>args</i> on the program language <i>progLang</i> and with the function fixing identifier <i>fixId</i> (automatic if it is empty). Returns "true" when it is executed correctly. The fixed function differ from the automatic one by it does not remove after execution and uses repeatedly by an address into <i>fixId</i>, which replaces that original identifier in first call. To recreate the function, you must change the program or clear the <i>fixId</i> in its original id.
+<li><i>TCntrNodeObj daqAt(string path, string sep = "", waitForAttr = true)</i> — attaches to a DAQ node (controller object, parameter, attribute) in the <i>path</i> or the separated string by the separator <i>sep</i>, from the DAQ-subsystem. Check for an attribute in the path last element, at <i>waitForAttr</i>.</li>
+<li><i>bool funcCall( string progLang, TVarObj args, string prog, string fixId = "", string err = "" );</i> — executes the function text <i>prog</i> with the arguments <i>args</i> on the program language <i>progLang</i> and with the function fixing identifier <i>fixId</i> (automatic if it is empty). Returns "true" when it is executed correctly or "false" and set <i>err</i>. The fixed function differ from the automatic one by it does not remove after execution and uses repeatedly by an address into <i>fixId</i>, which replaces that original identifier in first call. To recreate the function, you must change the program or clear the <i>fixId</i> in its original id.
 <pre style="white-space: pre-wrap;">
 var args = new Object();
 args.y = 0;
@@ -544,21 +555,25 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <p>Functions of the controller object (SYS.DAQ["Modul"]["Controller"]):
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">access to the appropriate subsystem</span>] — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
 <li> <i>string name( )</i> — name of the controller object.</li>
 <li> <i>string descr( )</i> — description of the controller object and controller.</li>
 <li> <i>string status( )</i> — status of the controller.</li>
-<li> <i>bool alarmSet( string mess, int lev = -5, string prm = "" )</i> — sets/removes of the violations <i>mess</i> with the level <i>lev</i> (negative to remove otherwise to set), for the parameter <i>prm</i>. The function forms an alarm with the category: <b>al{ModId}:{CntrId}[.{PrmId}]</b>, where:
+<li> <i>bool alarmSet( string mess, int lev = -5, string prm = "", bool force = false )</i> — sets/removes of the violation <i>mess</i> with the level <i>lev</i> (negative to set otherwise to remove), for the parameter <i>prm</i> (<b>{PrmId}\n{PrmNm}</b>). The alarms clearance, as the setting also, works in the toggling mode, so means of passing the clearance messages to the message buffer, and the same clearance, only at the according violations presence, what may be disabled setting <i>force</i>. The function forms an alarm with the category <b>al{ModId}:{CntrId}[.{PrmId}]</b> and the text <b>{CntrNm} &gt; {PrmNm}: {MessText}</b>, where:
 <ul><li> <i>ModId</i> — identifier of the module;</li>
 <li> <i>CntrId</i> — identifier of the controller object;</li>
-<li> <i>PrmId</i> — parameter identifier, from the argument <i>prm</i>.</li></ul></li>
+<li> <i>PrmId</i> — parameter identifier, from the argument <i>prm</i>;</li>
+<li> <i>CntrNm</i> — name of the controller object;</li>
+<li> <i>PrmNm</i> — parameter name, from the argument <i>prm</i>;</li>
+<li> <i>MessText</i> — message text.</li></ul></li>
 <li> <i>bool enable( bool newSt = EVAL )</i> — gets the status "Enabled" or changes it by the argument <i>newSt</i> assign.</li>
 <li> <i>bool start( bool newSt = EVAL )</i> — gets the status "Running" or changes it by the argument <i>newSt</i> assign.</li></ul>
 <p>Functions of the parameter object of the controller (SYS.DAQ["Modul"]["Controller"]["Parameter"]):
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
-<li> <i>TCntrNodeObj cntr( )</i> — returns the controller object regardless of the nesting parameters.</li></ul>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">access to the appropriate subsystem</span>] — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
+<li> <i>TCntrNodeObj cntr( )</i> — returns the controller object regardless of the nesting parameters.</li>
+<li> <i>bool alarmSet( string mess, int lev = -5, bool force = false )</i> — sets/removes of the violation <i>mess</i> with the level <i>lev</i> (negative to set otherwise to remove) for the parameter. The alarms clearance, as the setting also, works in the toggling mode, so means of passing the clearance messages to the message buffer, and the same clearance, only at the according violations presence, what may be disabled setting <i>force</i>.</li></ul>
 <p>Functions of the attribute object of the parameter of the controller (SYS.DAQ["Modul"]["Controller"]["Parameter"]["Attribute"]):
 </p>
 <ul><li> <i>ElTp get( int tm = 0, int utm = 0, bool sys = false );</i> — gets the attribute value at the time <i>tm.utm</i> and system access flag <i>sys</i>. The time attributes <i>tm.utm</i> is outputs also then real time of the gotten value also places here if their are variables.</li>
@@ -576,7 +591,7 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <p>Functions of object of templates library (SYS.DAQ[tmplb_Lib"]) and template (SYS.DAQ[tmplb_Lib"]["Tmpl"]) of controller's parameter:
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li></ul>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">access to the appropriate subsystem</span>] — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li></ul>
 <h3><span class="mw-headline" id="Module_DAQ.JavaLikeCalc"><span class="mw-headline-number">7.1</span> Module <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">DAQ.JavaLikeCalc</a></span></h3>
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_JavaLikeCalc.png" title="User object model of the module JavaLikeCalc."><img alt="User object model of the module JavaLikeCalc." height="214" src="files/Oscada_UserOM_JavaLikeCalc.png" width="223" /></a></div>
 <p><b>The object "Functions library" (SYS.DAQ.JavaLikeCalc["lib_Lfunc"])</b>
@@ -598,7 +613,7 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <p><b>The object "Block" (SYS.DAQ.BlockCalc["cntr"]["blk_block"])</b>
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — get value of configuration field <i>nm</i> of the object.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — set configuration field <i>nm</i> of the object to value <i>val</i>.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">access to the appropriate subsystem</span>] — set configuration field <i>nm</i> of the object to value <i>val</i>.</li>
 <li> <i>TCntrNodeObj cntr( )</i> — return the object of controller for the parameter nesting independent.</li></ul>
 <h3><span class="mw-headline" id="Module_DAQ.ModBus"><span class="mw-headline-number">7.4</span> Module <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">DAQ.ModBus</a></span></h3>
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_ModBus.png" title="User object model of the module ModBus."><img alt="User object model of the module ModBus." height="215" src="files/Oscada_UserOM_ModBus.png" width="323" /></a></div>
@@ -614,7 +629,7 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <li> <i>bool attrDel( string id )</i> [<span style="color: red">for enabled parameter of the logical type</span>] — removes the attribute <i>id</i>.</li></ul>
 <p><br />
 </p>
-<h2><span class="mw-headline" id="Subsystem_.22Archives-History.22_.28SYS.Archive.29"><span class="mw-headline-number">8</span> Subsystem "Archives-History" (SYS.Archive)</span></h2>
+<h2><span class="mw-headline" id="Subsystem_.22Archives-History.22_.28SYS.Archive.29"><span class="mw-headline-number">8</span> <span id="SYS.Archive" title="#SYS.Archive">Subsystem "Archives-History" (SYS.Archive)</span></span></h2>
 <p>Functions of the subsystem object:
 </p>
 <ul><li> <i>Array messGet( int btm, int etm, string cat = "", int lev = 0, string arch = "", int upTm = 0 );</i> — requests of the program messages or alarms for the time from <i>btm</i> to <i>etm</i> for the category <i>cat</i>, level <i>lev</i> (-7...7) and archivers <i>arch</i> (separated by the symbol ';'; "" — buffer and archivers; "&lt;buffer&gt;" — buffer; "{ArhMod}.{Arh}" — concrete archiver of the module). <i>upTm</i> sets the operation continuance limit to time; a negative value used as relative time; less to STD_INTERF_TM (5). Returns time of stopping of the reading (attribute "tm" of the array) and an array of the message objects with the preset attributes:
@@ -627,19 +642,19 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <p>Functions of object's archiver of messages (SYS.Archive["mod_Modul"]["mess_Archivator"]):
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">access to the appropriate subsystem</span>] — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
 <li> <i>bool status( )</i> — status "Running" of the archiver.</li>
 <li> <i>int end( )</i> — end time of data of the archiver.</li>
 <li> <i>int begin( )</i> — begin time of data of the archiver.</li></ul>
 <p>Functions of object's archiver of values (SYS.Archive["val_Modul"]["val_Archivator"]):
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">access to the appropriate subsystem</span>] — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
 <li> <i>bool status( )</i> — status "Running" of the archiver.</li></ul>
 <p><span id="SYS.Archive" title="#SYS.Archive">Functions of object's archive (SYS.Archive["va_Archive"]):</span>
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">access to the appropriate subsystem</span>] — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
 <li> <i>bool status( )</i> — status "Running" of the archive.</li>
 <li> <i>int end( string arch = "" )</i> — end time of data of the archive for the archiver <i>arch</i>, in microseconds.</li>
 <li> <i>int begin( string arch = "" )</i> — begin time of data of the archive for the archiver <i>arch</i>, in microseconds.</li>
@@ -649,15 +664,25 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <ul><li> <i>tm</i> — time of the requested value, in microseconds, set to 0 for "end()"; this attribute is also an output, so the real time of the received value is placed here if it is a variable;</li>
 <li> <i>up_ord</i> — tighten the time of the requested value to the top of the grid;</li>
 <li> <i>arch</i> — request archiver, set in an empty line to check all archivers, set to "&lt;buffer&gt;" to handle only the buffer.</li></ul></li>
-<li> <i>bool setVal( int tm, VarType vl, string arch = "" )</i> — sets the value <i>vl</i> to the archive for the time <i>tm</i> and the archiver <i>arch</i>:
+<li> <i>bool setVal( int tm, VarType vl, string arch = "" )</i> [<span style="color:red">access to the Archive-History subsystem</span>] — sets the value <i>vl</i> to the archive for the time <i>tm</i> and the archiver <i>arch</i>:
 <ul><li> <i>tm</i> — time of the set value, in microseconds;</li>
 <li> <i>vl</i> — value;</li>
-<li> <i>arch</i> — archiver of the set request, set in an empty line for all archivers, set to "&lt;buffer&gt;" to handle only the buffer.</li></ul></li></ul>
+<li> <i>arch</i> — archiver of the set request, set in an empty line for all archivers, set to "&lt;buffer&gt;" to handle only the buffer.</li></ul></li>
+<li> <i>Array getVals( int begTm, int endTm, int period, string arch = "" )</i> — gets for the archive/history values from <i>begTm</i> and up to <i>endTm</i> for the archiver <i>arch</i>:
+<ul><li> <i>begTm</i> — begin time of the requesting data range, in microseconds, will be changed to the real data begin;</li>
+<li> <i>endTm</i> — end time of the requesting data range, in microseconds;</li>
+<li> <i>period</i> — period of the data, in microseconds, must be necessarily specified and will be used the maximum one from the archive, will be changed to the real data period;</li>
+<li> <i>arch</i> — requesting archiver, set to empty to try for the buffer and all archivers, set to "&lt;buffer&gt;" to process only the buffer.</li></ul></li>
+<li> <i>bool setVals( Array buf, int tm, int period, string arch = "" )</i> [<span style="color:red">access to the Archive-History subsystem</span>] — sets for the archive/history values <i>buf</i> to the archive from the begin time <i>tm</i>, the values period <i>period</i> and the archiver <i>arch</i>.
+<ul><li> <i>buf</i> — array of the values to set;</li>
+<li> <i>tm</i> — begin time of the setting data range, in microseconds;</li>
+<li> <i>period</i> — period of the setting data, in microseconds, must be necessarily specified and will be used the maximum one from the archive, will be changed to the real data period;</li>
+<li> <i>arch</i> — setting archiver, set to empty to set for the buffer and all archivers, set to "&lt;buffer&gt;" to set only the buffer.</li></ul></li></ul>
 <h2><span class="mw-headline" id="Subsystem_.22Transports.22_.28SYS.Transport.29"><span class="mw-headline-number">9</span> <span id="SYSTransport" title="#SYSTransport">Subsystem "Transports" (SYS.Transport)</span></span></h2>
 <p>Functions of the input transport object (SYS.Transport["Modul"]["in_Transp"]):
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">access to the appropriate subsystem</span>] — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
 <li> <i>string status()</i> — string status of the transport.</li>
 <li> <i>string addr( string vl = "" )</i> — address of the transport, sets the non-empty value <i>vl</i>.</li>
 <li> <i>string writeTo(string sender, string mess)</i> — sends the message <i>mess</i> to the sender <i>sender</i>, as a reply.</li>
@@ -666,11 +691,12 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 </p>
 <ul>
 <li><i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
-<li><i>bool cfgSet( string nm, ElTp val )</i> — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
+<li><i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">access to the appropriate subsystem</span>] — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
 <li><i>string status()</i> — string status of the transport.</li>
-<li><i>bool start( bool vl = &lt;EVAL&gt;, int tm = 0 )</i> — returns the transport status "Running", starts/stops it by <i>vl</i> (if it is not &lt;EVAL&gt;). For starting you can set the specific timeout <i>tm</i>.</li>
+<li><i>bool start( bool vl = EVAL, int tm = 0 )</i> — returns the transport status "Running", starts/stops it by <i>vl</i> (if it is not EVAL). For starting you can set the specific timeout <i>tm</i>.</li>
 <li><i>string addr( string vl = "" )</i> — address of the transport, sets the non-empty value <i>vl</i>.</li>
 <li><i>string timings( string vl = "" )</i> — timings of the transport, sets the non-empty value <i>vl</i>.</li>
+<li><i>int attempts( int vl = EVAL )</i> — attempts of the transport connection, sets the non-EVAL value <i>vl</i>.</li>
 <li><i>string messIO( string mess, real timeOut = 0, int inBufLen = -1 );</i> — sends the message <i>mess</i> via the transport with the waiting time of the response <i>timeOut</i> (in seconds) and reads an response (Buffer) in <i>inBufLen</i> byte. In the case of a zero timeout, this time is taken from the settings of the output transport. The <i>timeOut</i> in negative (&lt; -1e-3) disables the transport request/respond mode and allows for independent reading/writing to a buffer IO, with the reading timeout <i>timeOut</i> in absolute. For negative <i>inBufLen</i> the buffer size sets to STR_BUF_LEN(10000) and "0" disables the reading at all.<br />
 <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> If your transport means getting data in parts for a request then for several devices on single bus-transport, use the function into single thread but there is not a way to lock the transport into the user API. Single thread that is any object of controller of DAQ and <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">the module "User protocol"</a> locks the transport internally before self user procedures execution.
 <pre style="white-space: pre-wrap;">
@@ -686,7 +712,7 @@ test = Special.FLibSYS.strDec4Bin(req.text()); </pre></li>
 </ul>
 <h2><span class="mw-headline" id="Subsystem_.22Protocols.22_.28SYS.Protocols.29"><span class="mw-headline-number">10</span> Subsystem "Protocols" (SYS.Protocols)</span></h2>
 <h3><span class="mw-headline" id="Module_Protocol.HTTP"><span class="mw-headline-number">10.1</span> Module <a href="Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a></span></h3>
-<p><b>The module object (SYS.Protocol.HTTP)</b>
+<p><b>Input part of the module object (SYS.Protocol.HTTP.{In})</b>
 </p>
 <ul><li> <i>bool pgAccess(string URL)</i> — checks for accessing the page, pointed by the <i>URL</i>.
 <ul><li> <i>URL</i> — URL of the checking page.</li></ul></li>
@@ -699,7 +725,7 @@ test = Special.FLibSYS.strDec4Bin(req.text()); </pre></li>
 <li> <i>lang</i> — language of the forming interface.</li></ul></li></ul>
 <p><br />
 </p>
-<h2><span class="mw-headline" id="Subsystem_.22User_interfaces.22_.28SYS.UI.29"><span class="mw-headline-number">11</span> Subsystem "User interfaces" (SYS.UI)</span></h2>
+<h2><span class="mw-headline" id="Subsystem_.22User_interfaces.22_.28SYS.UI.29"><span class="mw-headline-number">11</span> <span id="SYSUI" title="#SYSUI">Subsystem "User interfaces" (SYS.UI)</span></span></h2>
 <h3><span class="mw-headline" id="Module_QTStarter"><span class="mw-headline-number">11.1</span> Module <a href="Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">QTStarter</a></span></h3>
 <p><b>The module object (SYS.UI.QTStarter)</b>
 </p>
@@ -713,7 +739,8 @@ test = Special.FLibSYS.strDec4Bin(req.text()); </pre></li>
 <li> <i>int reqTm( )</i> — last request time.</li>
 <li> <i>string reqUser( )</i> — last request user.</li>
 <li> <i>string reqLang( )</i> — last request language.</li>
-<li> <i>int userActTm( )</i> — last user action time.</li></ul>
+<li> <i>int userActTm( )</i> — last user action time.</li>
+<li> <i>bool uiCmd( string cmd, string prm, string src )</i> — sends a UI command of the pages managing, that is: "open", "next", "prev"; for more details see in <a href="#Events">the events section</a>. This function must be in the priority of using to the pages managing before the direct writing to the page attributes "pgOpen" and "pgOpenSrc" due it is single method of the correct work with <a href="#Project">the linked pages</a>.</li></ul>
 <p><b>Object "Widget" (this)</b>
 </p>
 <ul><li> <i>TCntrNodeObj ownerSess( )</i> — session object for the current widget.</li>
@@ -727,6 +754,7 @@ nw.attrSet("geomX", 50).attrSet("geomY", 50);
 </pre>
 <ul><li> <i>bool wdgDel( string wid )</i> — deletes the widget <i>wid</i>.</li>
 <li> <i>TCntrNodeObj wdgAt( string wid, bool byPath = false )</i> — attaches to child or global widget, by the path <i>byPath</i>. In the case of global connection, you can use absolute or relative path to the widget. For starting point of the absolute address acts the root object of the module "VCAEngine", which means the first element of the absolute address is session identifier, which is ignored. The relative address takes the countdown from the current widget. Special element of the relative address is an element of parent node "..".</li>
+<li> <i>Array attrList()</i> — list of the widget attributes.</li>
 <li> <i>bool attrPresent( string attr )</i> — checks to presence fact of the attribute <i>attr</i> of the widget.</li>
 <li> <i>ElTp attr( string attr, bool fromSess = false )</i> — value of the attribute <i>attr</i> of the widget or from the session <i>fromSess</i>. For missing attributes will be return empty string.</li>
 <li> <i>TCntrNodeObj attrSet( string attr, ElTp vl, bool toSess = false )</i> — sets the value <i>vl</i> to the attribute <i>attr</i> of the widget or to the session, by <i>toSess</i>. The object is returned for the function concatenation.</li>
@@ -746,10 +774,10 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 </p>
 <h2><span class="mw-headline" id=".22Special.22_subsystem_.28SYS.Special.29"><span class="mw-headline-number">12</span> "Special" subsystem (SYS.Special)</span></h2>
 <h3><span class="mw-headline" id="Module_Library_of_the_system_API_of_the_user_programming_area_.28Special.FLibSYS.29"><span class="mw-headline-number">12.1</span> Module <a href="Modules/FLibSYS.html" title="Special:MyLanguage/Modules/FLibSYS">Library of the system API of the user programming area (Special.FLibSYS)</a></span></h3>
-<p><b>The object "Functions library" (SYS.Special.FLibMath)</b>
+<p><b>The object "Functions library" (SYS.Special.FLibSYS)</b>
 </p>
 <ul><li> <i>ElTp {funcID}(ElTp prm1, ...)</i> — call the library function <i>{funcID}</i>. Return result of the called function.</li></ul>
-<p><b>The object "User function" (SYS.Special.FLibMath["funcID"])</b>
+<p><b>The object "User function" (SYS.Special.FLibSYS["funcID"])</b>
 </p>
 <ul><li> <i>ElTp call(ElTp prm1, ...)</i> — call the function with parameters <i>prm{N}</i>. Return result of the called function.</li></ul>
 <h3><span class="mw-headline" id="Module_Library_of_standard_mathematical_functions_.28Special.FLibMath.29"><span class="mw-headline-number">12.2</span> Module <a href="Modules/FLibMath.html" title="Special:MyLanguage/Modules/FLibMath">Library of standard mathematical functions (Special.FLibMath)</a></span></h3>
@@ -758,14 +786,14 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 <ul><li> <i>ElTp {funcID}(ElTp prm1, ...)</i> — call the library function <i>{funcID}</i>. Return result of the called function.</li></ul>
 <p><b>The object "User function" (SYS.Special.FLibMath["funcID"])</b>
 </p>
-<ul><li> <i>ElTp call(ElTp prm1, ...)</i> — call the function with parameters <i>&lt;prm{N}&gt;</i>. Return result of the called function.</li></ul>
+<ul><li> <i>ElTp call(ElTp prm1, ...)</i> — call the function with parameters <i>prm{N}</i>. Return result of the called function.</li></ul>
 <h3><span class="mw-headline" id="Module_Library_of_functions_of_compatibility_with_SCADA_Complex1_of_the_firm_DIYA_Ltd_.28Special.FLibComplex1.29"><span class="mw-headline-number">12.3</span> Module <a href="Modules/FLibComplex1.html" title="Special:MyLanguage/Modules/FLibComplex1">Library of functions of compatibility with SCADA Complex1 of the firm DIYA Ltd (Special.FLibComplex1)</a></span></h3>
 <p><b>The object "Functions library" (SYS.Special.FLibComplex1)</b>
 </p>
 <ul><li> <i>ElTp {funcID}(ElTp prm1, ...)</i> — call the library function <i>{funcID}</i>. Return result of the called function.</li></ul>
 <p><b>The object "User function" (SYS.Special.FLibComplex1["funcID"])</b>
 </p>
-<ul><li> <i>ElTp call(ElTp prm1, ...)</i> — call the function with parameters <i>&lt;prm{N}&gt;</i>. Return result of the called function.</li></ul>
+<ul><li> <i>ElTp call(ElTp prm1, ...)</i> — call the function with parameters <i>prm{N}</i>. Return result of the called function.</li></ul>
 <p><br />
 </p>
 <h2><span class="mw-headline" id="Libraries_of_the_user_functions"><span class="mw-headline-number">13</span> Libraries of the user functions</span></h2>
@@ -780,79 +808,127 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 <th> Source </th>
 <th> Languages
 </th></tr>
+<tr>
+<td colspan="5"> <i>Libraries of the data sources, services and processing</i>
+</td></tr>
 
 <tr>
-<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/User_protocol_devices" title="Special:MyLanguage/Libs/User protocol devices">Main user protocol based library</a> </td>
-<td> 1.8 </td>
-<td> Free (GPL2 by default) </td>
-<td> DB SQLite: <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">File:OscadaLibs.db.gz</a>, <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">Most actual SQL</a> </td>
+<td> <a href="Libs_Main.html" title="Special:MyLanguage/Libs/Main">Main library</a>
+</td>
+<td> 2.0 </td>
+<td> GPLv2 </td>
+<td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.tmplb_base </td>
 <td> en, uk, ru
 </td></tr>
 
 <tr>
-<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Controllers" title="Special:MyLanguage/Libs/Controllers">Controllers library</a> </td>
-<td> 1.1 </td>
-<td> Free (GPL) </td>
-<td> DB SQLite: <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">File:OscadaLibs.db.gz</a>, <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">Most actual SQL</a> </td>
-<td> en
+<td> <a href="Libs_Devices.html" title="Special:MyLanguage/Libs/Devices">Industrial devices library</a>
+</td>
+<td> 2.3 </td>
+<td> GPLv2 </td>
+<td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.tmplb_DevLib
+</td>
+<td> en, uk, ru
 </td></tr>
 
 <tr>
-<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Service_procedures" title="Special:MyLanguage/Libs/Service procedures">Service procedures library</a> </td>
-<td> 1.0 </td>
-<td> Free (GPL) </td>
-<td> DB SQLite: <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">File:OscadaLibs.db.gz</a>, <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">Most actual SQL</a> </td>
-<td> en
+<td> <a href="Libs_LowLevelDevices.html" title="Special:MyLanguage/Libs/LowLevelDevices">Low level sensors and chips library</a>
+</td>
+<td> 1.4 </td>
+<td> GPLv2 </td>
+<td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.tmplb_LowDevLib </td>
+<td> en, uk, ru
 </td></tr>
 
 <tr>
-<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Regulation_elements" title="Special:MyLanguage/Libs/Regulation elements">Regulation elements library</a> </td>
-<td> 1.0 </td>
-<td> Free (GPL) </td>
-<td> DB SQLite: <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">File:OscadaLibs.db.gz</a>, <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">Most actual SQL</a> </td>
-<td> en
+<td> <a href="Libs_Service_procedures.html" title="Special:MyLanguage/Libs/Service procedures">Service procedures library</a>
+</td>
+<td> 1.2 </td>
+<td> GPLv2 </td>
+<td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.JavaLikeCalc.servProc </td>
+<td> en, uk, ru
 </td></tr>
 
 <tr>
-<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Documents" title="Special:MyLanguage/Libs/Documents">Library of preparation and data acquisition for reporting</a> </td>
+<td> <a href="Libs_Regulation_elements.html" title="Special:MyLanguage/Libs/Regulation elements">Regulation elements library</a>
+</td>
 <td> 1.0 </td>
-<td> Free (GPL) </td>
-<td> DB SQLite: <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">File:OscadaLibs.db.gz</a>, <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">Most actual SQL</a> </td>
-<td> en
+<td> GPLv2 </td>
+<td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.JavaLikeCalc.regEl </td>
+<td> en, uk, ru
 </td></tr>
 
 <tr>
-<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Technological_apparatuses" title="Special:MyLanguage/Libs/Technological apparatuses">Library of models of technological apparatuses</a> </td>
-<td> 1.0 </td>
-<td> Free (GPL) </td>
-<td> DB SQLite: <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">File:OscadaLibs.db.gz</a>, <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">Most actual SQL</a> </td>
-<td> en
+<td> <a href="Libs_Technological_apparatuses.html" title="Special:MyLanguage/Libs/Technological apparatuses">Library of models of the technological apparatuses</a>
+</td>
+<td> 2.0 </td>
+<td> GPLv2
+</td>
+<td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.JavaLikeCalc.techApp
+</td>
+<td> en, uk, ru
 </td></tr>
 <tr>
 <td colspan="5"> <i>Graphic elements' libraries of OpenSCADA module <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">UI.VCAEngine</a></i>
 </td></tr>
 
 <tr>
-<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Electrical_elements" title="Special:MyLanguage/Libs/Electrical elements">Library of the electrical elements of the user's interface mnemonic schemes</a> </td>
-<td> 0.2 </td>
-<td> Free (GPL) </td>
-<td> DB SQLite: <a class="external" href="http://oscada.org/wiki/File:VcaElectroEls.db.gz" title="File:VcaElectroEls.db.gz">File:VcaElectroEls.db.gz</a>, <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaElectroEls.sql" rel="nofollow noreferrer noopener" target="_blank">Most actual SQL</a> </td>
+<td> <a href="Libs_Main_graphical_elements.html" title="Special:MyLanguage/Libs/Main graphical elements">Main elements library of the user interface</a>
+</td>
+<td> 2.0 </td>
+<td> GPLv2
+</td>
+<td> vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">GZip</a>) &gt; VCA.wlb_Main
+</td>
 <td> en, uk, ru
 </td></tr>
 
 <tr>
-<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_elements" title="Special:MyLanguage/Libs/Main elements">Main elements library of the user interface</a> </td>
-<td> 1.1 </td>
-<td> Free (GPL) </td>
-<td> DB SQLite: <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">File:VcaBase.db.gz</a>, <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql" rel="nofollow noreferrer noopener" target="_blank">Most actual SQL</a> </td>
+<td> <a href="Libs_Mnemo_elements.html" title="Special:MyLanguage/Libs/Mnemo elements">Mnemonic elements library of the user interface</a>
+</td>
+<td> 1.0 </td>
+<td> GPLv2
+</td>
+<td> vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">GZip</a>) &gt; VCA.wlb_mnEls
+</td>
 <td> en, uk, ru
 </td></tr>
 
 <tr>
-<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Mnemo_elements" title="Special:MyLanguage/Libs/Mnemo elements">Mnemonic elements library of the user interface</a> </td>
-<td> 0.5 </td>
-<td> Free (GPL) </td>
-<td> DB SQLite: <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">File:VcaBase.db.gz</a>, <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql" rel="nofollow noreferrer noopener" target="_blank">Most actual SQL</a> </td>
+<td> <a href="Libs_Electrical_elements.html" title="Special:MyLanguage/Libs/Electrical elements">Electrical elements library of the user interface</a>
+</td>
+<td> 2.0 </td>
+<td> GPLv2 </td>
+<td> vcaElectroEls.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaElectroEls.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:VcaElectroEls.db.gz" title="File:VcaElectroEls.db.gz">GZip</a>) &gt; VCA.wlb_ElectroEls </td>
+<td> en, uk, ru
+</td></tr>
+<tr>
+<td colspan="5"> <i>Combined libraries</i>
+</td></tr>
+
+<tr>
+<td> <a href="Libs_Documents.html" title="Special:MyLanguage/Libs/Documents">Reports' and documents' library</a>
+</td>
+<td> 2.0, 2.1 </td>
+<td> GPLv2 </td>
+<td>
+<p>OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.JavaLikeCalc.doc<br />
+vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">GZip</a>) &gt; VCA.wlb_doc
+</p>
+</td>
+<td> en, uk, ru
+</td></tr>
+
+<tr>
+<td> <a href="Libs_Prescriptions.html" title="Special:MyLanguage/Libs/Prescriptions">Prescriptions</a>
+</td>
+<td> 1.1, 1.1 </td>
+<td> GPLv2 </td>
+<td>
+<p>OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.tmplb_PrescrTempl<br />
+vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">GZip</a>) &gt; VCA.wlb_prescr
+</p>
+</td>
 <td> en, uk, ru
 </td></tr></table>
 <p><br />
@@ -865,5 +941,5 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 
 
 
-</div></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/en">Documents/User_API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.1</td></tr></table></body>
 </html>

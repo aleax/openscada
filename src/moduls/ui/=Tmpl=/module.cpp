@@ -300,12 +300,11 @@ string TWEB::w_head( )
 
     string shead =
 	"<?xml version='1.0' ?>\n"
-	"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
-	"'DTD/xhtml1-transitional.dtd'>\n"
+	"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>\n"
 	"<html xmlns='http://www.w3.org/1999/xhtml'>\n"
 	"<head>\n"
 	"  <meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n";
-    if( per_refr )
+    if(per_refr)
 	shead=shead+"<meta http-equiv='Refresh' content='1'/>\n<meta http-equiv='Cache-Control' content='no-cache'/>\n";
     shead=shead+"  <title>OpenSCADA debug web modul!</title>\n"
 	"</head>\n"

@@ -1,13 +1,13 @@
 # OpenSCADA.UI.QTCfg translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.UI.QTCfg package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2004-2018.
+# Roman Savochenko <rom_as@oscada.org>, 2004-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-01 16:36+0300\n"
+"POT-Creation-Date: 2019-11-21 16:57+0200\n"
 "PO-Revision-Date: 2007-10-29 19:12+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -93,29 +93,64 @@ msgstr "Кнопка переходу на наступну сторінку"
 msgid "Press for going to the forward page."
 msgstr "Натиснути для переходу на наступну сторінку."
 
-msgid "Load from the DB"
+msgid "Load from DB"
 msgstr "Завантажити з БД"
 
 msgid "Load the item data from DB"
 msgstr "Завантажити дані елементу з БД"
 
-msgid "The button for loading the item data from the DB"
+msgid "The button for loading the item data from DB"
 msgstr "Кнопка завантаження даних елементу з БД"
 
-msgid "Press for loading the item data from the DB."
+msgid "Press for loading the item data from DB."
 msgstr "Натиснути для завантаження даних елементу з БД."
 
-msgid "Save to the DB"
+msgid "Load from DB forcibly"
+msgstr "Примусово завантажити з БД"
+
+msgid "Load the item data from DB forcibly"
+msgstr "Примусово завантажити дані елементу з БД"
+
+msgid ""
+"The button for loading the item data from DB forcibly, not only when it "
+"changed"
+msgstr ""
+"Кнопка примусового завантаження даних елементу з БД, не тільки коли змінено"
+
+msgid ""
+"Press for loading the item data from DB forcibly, not only when it changed."
+msgstr ""
+"Натиснути для примусового завантаження даних елементу з БД, не тільки коли "
+"змінено."
+
+msgid "Save to DB"
 msgstr "Зберегти у БД"
 
 msgid "Save the item data to DB"
 msgstr "Зберегти дані елементу у БД"
 
-msgid "The button for saving the item data to the DB"
+msgid "The button for saving the item data to DB"
 msgstr "Кнопка збереження даних елементу у БД"
 
-msgid "Press for saving the item data to the DB."
+msgid "Press for saving the item data to DB."
 msgstr "Натиснути для збереження даних елементу у БД."
+
+msgid "Save to DB forcibly"
+msgstr "Примусово зберегти у БД"
+
+msgid "Save the item data to DB forcibly"
+msgstr "Примусово зберегти дані елементу у БД"
+
+msgid ""
+"The button for saving the item data to DB forcibly, not only when it changed"
+msgstr ""
+"Кнопка примусового збереження даних елементу у БД, не тільки коли змінено"
+
+msgid ""
+"Press for saving the item data to DB forcibly, not only when it changed."
+msgstr ""
+"Натиснути для примусового збереження даних елементу у БД, не тільки коли "
+"змінено."
 
 msgid "&Add"
 msgstr "&Додати"
@@ -310,7 +345,7 @@ msgid "Ready"
 msgstr "Готовий"
 
 #, c-format
-msgid "Configurator using the remote host %d times."
+msgid "The configurator is using the remote host %d times."
 msgstr "Конфігуратор використовує віддалені хости %d разів."
 
 msgid "Saving the changes"
@@ -335,11 +370,15 @@ msgstr "Додання вузлу"
 msgid "The node '%1' is already present."
 msgstr "Вузол '%1' вже присутній."
 
+#, c-format
+msgid "... and yet %d nodes"
+msgstr "... та ще %d вузли"
+
 msgid "Are you sure of deleting the nodes '%1'?"
 msgstr "Ви дійсно бажаєте видалити вузли '%1'?"
 
 msgid "Deleting the nodes"
-msgstr "Видалення елементів"
+msgstr "Видалення вузлів"
 
 msgid "Copying is not possible."
 msgstr "Копіювання неможливе."
@@ -462,8 +501,8 @@ msgstr "%s| Перехід за посиланням '%s'!"
 msgid "%s| Pressed down '%s'!"
 msgstr "%s| Натиснуто '%s'!"
 
-msgid "Value is wrong: "
-msgstr "Значення помилкове: "
+msgid "Value is missing: "
+msgstr "Значення відсутнє: "
 
 #, c-format
 msgid "%s| Changed '%s' from '%s' to '%s'!"
@@ -531,11 +570,11 @@ msgstr "Вставити запис"
 msgid "Delete record"
 msgstr "Видалити запис"
 
-msgid "Move Up"
-msgstr "Пересунути вгору"
+msgid "Move Up (Ctrl+Up)"
+msgstr "Пересунути вгору (Ctrl+Up)"
 
-msgid "Move Down"
-msgstr "Пересунути донизу"
+msgid "Move Down (Ctrl+Down)"
+msgstr "Пересунути донизу (Ctrl+Down)"
 
 msgid "Copy"
 msgstr "Копіювати"

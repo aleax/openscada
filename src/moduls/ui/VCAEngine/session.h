@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: session.h
 /***************************************************************************
- *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -90,10 +90,11 @@ class Session : public TCntrNode
 	void del( const string &id, bool full = false )	{ chldDel(mPage,id,-1,full); }
 
 	vector<string> openList( );
+	bool openCheck( const string &id );
 	void openReg( const string &id );
-	void openUnreg( const string &id );
+	bool openUnreg( const string &id );
 
-	void uiComm( const string &com, const string &prm, SessWdg *src = NULL );
+	void uiCmd( const string &com, const string &prm, SessWdg *src = NULL );
 
 	string sessAttr( const string &idw, const string &id, bool onlyAllow = false );
 	void sessAttrSet( const string &idw, const string &id, const string &val );
@@ -108,6 +109,8 @@ class Session : public TCntrNode
 	// Style
 	string stlPropGet( const string &pid, const string &def = "" );
 	bool stlPropSet( const string &pid, const string &vl );
+
+	ResMtx &dataResSes( ) { return mDataRes; }
 
 	//Attributes
 	AutoHD<TSecurity> sec;
@@ -207,7 +210,8 @@ class Session : public TCntrNode
 
 	//Attributes
 	ResMtx	mAlrmRes,			//Alarms resource
-		mCalcRes;			//Calc resource
+		mCalcRes,			//Calc resource
+		mDataRes;			//Own DATA resource, independent from the TCntrNode
 	int	mPage;
 	const string mId;
 	string	mPrjnm, mOwner, mGrp;
@@ -249,6 +253,7 @@ class SessWdg : public Widget, public TValFunc
 	string	ownerFullId( bool contr = false ) const;
 	string	type( )		{ return "SessWidget"; }
 	string	ico( ) const;
+	string	getStatus( );
 	string	calcLang( ) const;
 	string	calcProg( ) const;
 	string	calcProgStors( const string &attr = "" );
@@ -319,11 +324,12 @@ class SessWdg : public Widget, public TValFunc
 	unsigned	inLnkGet: 1;
 	unsigned	mToEn	: 1;
 
+	unsigned int	&mCalcClk;
+
     private:
 	//Attributes
 	string		mWorkProg;
 	unsigned int	mMdfClc;
-	unsigned int	&mCalcClk;
 	ResMtx		mCalcRes;
 
 	vector<string>	mWdgChldAct,	//Active childs widget's list
@@ -343,8 +349,11 @@ class SessPage : public SessWdg
 	~SessPage( );
 
 	string	path( ) const;
+	string	path( bool orig ) const;
 	string	type( )		{ return "SessPage"; }
+	string	getStatus( );
 
+	void setPathAsOpen( const string &ip );
 	void setEnable( bool val, bool force = false );
 	void setProcess( bool val, bool lastFirstCalc = true );
 
@@ -353,11 +362,16 @@ class SessPage : public SessWdg
 	AutoHD<Page> parent( ) const;
 
 	// Pages
-	void pageList( vector<string> &ls ) const		{ chldList(mPage,ls); }
-	bool pagePresent( const string &id ) const		{ return chldPresent(mPage,id); }
+	void pageList( vector<string> &ls ) const		{ chldList(mPage, ls); }
+	bool pagePresent( const string &id ) const		{ return chldPresent(mPage, id); }
 	AutoHD<SessPage> pageAt( const string &id ) const;
 	void pageAdd( const string &id, const string &parent = "" );
 	void pageDel( const string &id, bool full = false )	{ chldDel(mPage,id,-1,full); }
+
+	//  The access redirection for the links
+	void chldList( int8_t igr, vector<string> &list, bool noex = false, bool onlyEn = true ) const;
+	bool chldPresent( int8_t igr, const string &name ) const;
+	AutoHD<TCntrNode> chldAt( int8_t igr, const string &name, const string &user = "" ) const;
 
 	AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 ) const;
 
@@ -373,20 +387,25 @@ class SessPage : public SessWdg
 
 	ResMtx &funcM( )	{ return mFuncM; }
 
+	TVariant stlReq( Attr &a, const TVariant &vl, bool wr );
+
     protected:
 	//Methods
+	void postEnable( int flag );
+
 	bool cntrCmdGeneric( XMLNode *opt );
 
 	bool attrChange( Attr &cfg, TVariant prev );
 	TVariant vlGet( Attr &a );
-	TVariant stlReq( Attr &a, const TVariant &vl, bool wr );
 
     private:
 	//Attributes
 	unsigned mPage		: 4;		//Pages container identifier
 	unsigned mClosePgCom	: 1;
 	unsigned mDisMan	: 1;		//Disable the page enabling at request by it's disabling in manual
+	unsigned int	mCalcClk_;
 	ResMtx	mFuncM;
+	MtxString pathAsOpen, pathToClose;
 };
 
 }

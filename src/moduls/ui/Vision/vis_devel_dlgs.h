@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel_dlgs.h
 /***************************************************************************
- *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,17 +22,12 @@
 #ifndef VIS_DEVEL_DLGS_H
 #define VIS_DEVEL_DLGS_H
 
-#include <string>
-#include <vector>
-
 #include <QDialog>
 #include <QItemDelegate>
 #include <QCloseEvent>
 
+#include "vis_widgs.h"
 #include "vis_devel_widgs.h"
-
-using std::string;
-using std::vector;
 
 class QLabel;
 class QComboBox;
@@ -67,6 +62,7 @@ class LibProjProp: public QDialog
 
     protected:
 	//Protected methods
+	void keyPressEvent(QKeyEvent *e);
 	void closeEvent( QCloseEvent* );
 	void showEvent( QShowEvent * event );
 
@@ -103,8 +99,9 @@ class LibProjProp: public QDialog
 			*obj_accother;	//Other access
 			//*prj_runw;	//Project's run window mode
 	QLabel		*obj_id,	//Id
-			*obj_used,	//Used
-			*obj_tmstmp;	//TimeStamp
+			*obj_st;	//Status
+//			*obj_used,	//Used
+//			*obj_tmstmp;	//TimeStamp
 	LineEdit	*obj_name,	//Name
 			*prj_ctm;	//Calc time of project
 	TextEdit	*obj_descr;	//Description
@@ -153,6 +150,7 @@ class VisItProp : public QDialog
 
     protected:
 	//Protected methods
+	void keyPressEvent(QKeyEvent *e);
 	void closeEvent( QCloseEvent* );
 	void showEvent( QShowEvent * event );
 
@@ -167,6 +165,8 @@ class VisItProp : public QDialog
 	void changeAttr(QTreeWidgetItem *it, int col);
 
 	void tabChanged( int itb );
+
+	void progChanged( );
 
     private:
 	//Private data
@@ -187,8 +187,9 @@ class VisItProp : public QDialog
 	QLabel		*obj_id,	//Id
 			*obj_root,	//Root
 			*obj_path,	//Path
-			*obj_used,	//Used
-			*obj_tmstmp;	//TimeStamp
+			*obj_st;	//Status
+//			*obj_used,	//Used
+//			*obj_tmstmp;	//TimeStamp
 	QPushButton	*obj_ico;	//Icon
 	QCheckBox	*obj_enable;	//Enabled stat
 	QComboBox	*obj_parent,	//Parent widget

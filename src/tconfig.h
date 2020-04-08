@@ -78,6 +78,7 @@ class TCfg : public TVariant
 	void	setNoTransl( bool vl )	{ mNoTransl = vl; }
 	void	setReqKey( bool vl );
 	void	setExtVal( bool vw )	{ mExtVal = vw; }
+	void	toDefault( bool notSetType = false );
 
 	TFld	&fld( ) const		{ return *mFld; }
 
@@ -152,6 +153,7 @@ class TConfig: public TValElem
 	TCfg *at( const string &n_val, bool noExpt = false ) const;
 	void cfgViewAll( bool val = true );	// Show/Hide all no key elements
 	void cfgKeyUseAll( bool val );
+	void cfgToDefault( );
 
 	TElem &elem( )			{ return *mElem; }
 	void setElem( TElem *Elements, bool first = false );
@@ -165,7 +167,7 @@ class TConfig: public TValElem
 	void setIncmplTblStrct( bool vl ) { mIncmplTblStrct = vl; }
 	bool reqKeys( )			{ return mReqKeys; }
 
-	TVariant objFunc( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFunc( const string &id, vector<TVariant> &prms, const string &user, int perm, const string &owner );
 
     protected:
 	//Methods

@@ -1,15 +1,15 @@
 # OpenSCADA.Archive.FSArch translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.Archive.FSArch package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2003-2018.
+# Roman Savochenko <roman@oscada.org>, 2003-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.FSArch 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-04 16:45+0300\n"
+"POT-Creation-Date: 2020-02-26 09:41+0200\n"
 "PO-Revision-Date: 2007-10-21 22:21+0300\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -44,6 +44,9 @@ msgstr "Ошибка проверки архиватора сообщений '%
 msgid "Error checking the value archiver '%s'."
 msgstr "Ошибка проверки архиватора значений '%s'."
 
+msgid "Cannot create the archive directory '%s'."
+msgstr "Невозможно создать директорию архива '%s'."
+
 #, c-format
 msgid "The value archiver '%s' uses the same folder '%s' as an other archiver."
 msgstr "Архиватор значений '%s' использует туже директорию '%s' что и другой."
@@ -67,9 +70,8 @@ msgstr "Архив не запущен!"
 msgid "Error creating a new archive file '%s'!"
 msgstr "Ошибка создания файла архива '%s'!"
 
-#, c-format
-msgid "Can not create the directory '%s'."
-msgstr "Не могу создать директорию '%s'."
+msgid "The archive directory '%s' is not present."
+msgstr "Директория архива '%s' отсутствует."
 
 msgid "Overall size of the archiver files"
 msgstr "Общий размер файлов архиватора"

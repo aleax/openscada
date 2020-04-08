@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tbds.h
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,7 +21,7 @@
 #ifndef TBDS_H
 #define TBDS_H
 
-#define SDB_VER		12		//BDS type modules version
+#define SDB_VER		13		//BDS type modules version
 #define SDB_ID		"BD"
 
 #include <stdio.h>
@@ -105,15 +105,19 @@ class TBD : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( const TCntrNode &node );
 
-	string	id( )		{ return mId; }
+	string	id( )			{ return mId; }
 	string	fullDBName( );
 	string	name( );
-	string	dscr( )		{ return cfg("DESCR").getS(); }
-	string	addr( ) const	{ return cfg("ADDR").getS(); }
-	string	codePage( )	{ return cfg("CODEPAGE").getS(); }
+	string	dscr( )			{ return cfg("DESCR").getS(); }
+	string	addr( ) const		{ return cfg("ADDR").getS(); }
+	string	codePage( )		{ return cfg("CODEPAGE").getS(); }
+	double	trTm_ClsOnOpen( )	{ return mTrTm_ClsOnOpen; }
+	double	trTm_ClsOnReq( )	{ return mTrTm_ClsOnReq; }
+	int	trPr_ClsTask( )		{ return mTrPr_ClsTask; }
 
 	bool enableStat( ) const	{ return mEn; }
 	bool toEnable( )		{ return mToEn; }
+	bool disabledByUser( )		{ return mDisByUser; }
 
 	void setName( const string &inm )	{ cfg("NAME").setS(inm); }
 	void setDscr( const string &idscr )	{ cfg("DESCR").setS(idscr); }
@@ -149,9 +153,10 @@ class TBD : public TCntrNode, public TConfig
 	virtual TTable *openTable( const string &table, bool create )
 	{ throw TError(nodePath().c_str(),_("Function '%s' is not supported!"),"openTable"); }
 
+	void postEnable( int flag );
 	void preDisable( int flag );
 	void postDisable( int flag );
-	bool cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
 	void load_( TConfig *cfg );
 	void save_( );
@@ -161,17 +166,21 @@ class TBD : public TCntrNode, public TConfig
 
 	AutoHD<TCntrNode> chldAt( int8_t igr, const string &name, const string &user = "" ) const;
 
+	//Protected attributes
+	bool	mEn;
+
     private:
 	//Private methods
-	void postEnable( int flag );
 	const char *nodeName( ) const	{ return mId.getSd(); }
+
+	static void *Task( void * );
 
 	//Private attributes
 	// Base options
 	TCfg	&mId;	//ID
 	char	&mToEn;
-
-	bool	mEn;
+	double	&mTrTm_ClsOnOpen, &mTrTm_ClsOnReq;
+	int64_t	&mTrPr_ClsTask;
 
 	// Special options
 	int	mTbl;
@@ -179,6 +188,8 @@ class TBD : public TCntrNode, public TConfig
 	string	userSQLReq;
 	vector< vector<string> > userSQLResTbl;
 	char	userSQLTrans;
+
+	bool	mDisByUser;	//Disabled by user to prevent of restoring the enabling
 };
 
 //************************************************
@@ -196,11 +207,11 @@ class TTypeBD : public TModule
 	bool fullDeleteDB( )	{ return fullDBDel; }
 
 	// Opened DB
-	void list( vector<string> &list ) const		{ chldList(mDB,list); }
-	bool openStat( const string &idb ) const	{ return chldPresent(mDB,idb); }
-	void open( const string &iid );
-	void close( const string &iid, bool erase = false ) { chldDel(mDB,iid,-1,erase); }
-	AutoHD<TBD> at( const string &name ) const	{ return chldAt(mDB,name); }
+	void list( vector<string> &list ) const		{ chldList(mDB, list); }
+	bool openStat( const string &idb ) const	{ return chldPresent(mDB, idb); }
+	string open( const string &id );
+	void close( const string &id, bool erase = false ) { chldDel(mDB, id, -1, erase); }
+	AutoHD<TBD> at( const string &id ) const	{ return chldAt(mDB, id); }
 
 	TBDS &owner( ) const;
 
@@ -237,6 +248,8 @@ class TBDS : public TSubSYS, public TElem
 
 	static string realDBName( const string &bdn );
 	void dbList( vector<string> &ls, bool checkSel = false );
+	int tblLifeTime( )	{ return mTblLifeTime; }
+	void setTblLifeTime( int vl )	{ mTblLifeTime = vmax(10, vmin(1000,vl)); modif(); }
 
 	void perSYSCall( unsigned int cnt );
 
@@ -265,14 +278,16 @@ class TBDS : public TSubSYS, public TElem
 
     protected:
 	void load_( );
+	void save_( );
 
     private:
 	//Private methods
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Private attributes
 	TElem	elDB;
 	bool	mSYSStPref;
+	int	mTblLifeTime;			//Tables lifetime
 };
 
 }

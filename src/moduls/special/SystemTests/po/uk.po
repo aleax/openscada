@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.SystemTests 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-27 20:04+0200\n"
+"POT-Creation-Date: 2018-10-20 16:39+0300\n"
 "PO-Revision-Date: 2007-10-24 19:01+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -60,8 +60,8 @@ msgid "Number"
 msgstr "Кількість"
 
 #, c-format
-msgid "All: %d; Accessing: %d"
-msgstr "Взагалі: %d; Доступні: %d"
+msgid "All: %d; Accessed: %d"
+msgstr "Загалом: %d; Доступно: %d"
 
 msgid "Result"
 msgstr "Результат"
@@ -76,7 +76,7 @@ msgid "Archiver"
 msgstr "Архіватор"
 
 msgid ""
-"The tests of location in the value archives.\n"
+"Test of location in the value archives.\n"
 "Contains 7(8) tests of the value archiver to verify the correct functioning "
 "of the sequential packing mechanism."
 msgstr ""
@@ -95,7 +95,7 @@ msgstr "Тест1: Помилка."
 msgid "Test1: Passed."
 msgstr "Тест1: Виконано."
 
-msgid "Test2: Internal insert double value (down)."
+msgid "Test2: Internal insert for double value (to down)."
 msgstr "Тест2: Внутрішня вставка реального значення (до долу)."
 
 msgid "Test2: Failed."
@@ -104,8 +104,8 @@ msgstr "Тест2: Помилка."
 msgid "Test2: Passed."
 msgstr "Тест2: Виконано."
 
-msgid "Test3: Internal insert double value (up)."
-msgstr "Тест3: Внутрішня вставка реального значення (з верху)."
+msgid "Test3: Internal insert for double value (to up)."
+msgstr "Тест3: Внутрішня вставка реального значення (до гори)."
 
 msgid "Test3: Failed."
 msgstr "Тест3: Помилка."
@@ -113,7 +113,7 @@ msgstr "Тест3: Помилка."
 msgid "Test3: Passed."
 msgstr "Тест3: Виконано."
 
-msgid "Test4: Internal insert double value (down)."
+msgid "Test4: Internal insert for double value (to down)."
 msgstr "Тест4: Внутрішня вставка реального значення (до долу)."
 
 msgid "Test4: Failed."
@@ -122,7 +122,7 @@ msgstr "Тест4: Помилка."
 msgid "Test4: Passed."
 msgstr "Тест4: Виконано."
 
-msgid "Test5: Internal insert no double value."
+msgid "Test5: Internal insert for not double value."
 msgstr "Тест5: Внутрішня вставка не реального значення."
 
 msgid "Test5: Failed."
@@ -131,8 +131,8 @@ msgstr "Тест5: Помилка."
 msgid "Test5: Passed."
 msgstr "Тест5: Виконано."
 
-msgid "Test6: Internal insert double value (up)."
-msgstr "Тест6: Внутрішня вставка реального значення (з верху)."
+msgid "Test6: Internal insert for double value (to up)."
+msgstr "Тест6: Внутрішня вставка реального значення (до гори)."
 
 msgid "Test6: Failed."
 msgstr "Тест6: Помилка."
@@ -140,7 +140,7 @@ msgstr "Тест6: Помилка."
 msgid "Test6: Passed."
 msgstr "Тест6: Виконано."
 
-msgid "Test7: Internal insert value instead double value."
+msgid "Test7: Internal insert for a value instead double value."
 msgstr "Тест7: Внутрішня вставка значення замість реального значення."
 
 msgid "Test7: Failed"
@@ -173,8 +173,8 @@ msgid "Test1: Encoding."
 msgstr "Тест1: Кодування."
 
 #, c-format
-msgid "Encoded text by length %d for time %f ms."
-msgstr "Текст довжиною %d закодовано за час %f мс."
+msgid "Encoded text at length %d for time %f ms."
+msgstr "Закодовано текст довжиною %d за час %f мс."
 
 #, c-format
 msgid "Encoded text: %s"
@@ -184,10 +184,10 @@ msgid "Test2: Decoding."
 msgstr "Тест2: Декодування."
 
 #, c-format
-msgid "Decoded text by length %d for time %f ms."
-msgstr "Текст довжиною %d декодовано за час %f мс."
+msgid "Decoded text at length %d for time %f ms."
+msgstr "Декодовано текст довжиною %d за час %f мс."
 
-msgid "Test2: Failed. Decoding error."
+msgid "Test2: Failed. Error decoding."
 msgstr "Тест2: Помилка. Помилка декодування."
 
 msgid "DB type"
@@ -206,57 +206,63 @@ msgid "DB test"
 msgstr "Тест БД"
 
 msgid ""
-"Full database test. Make:\n"
-"  - make/open DB;\n"
-"  - make/open table;\n"
-"  - make multiply records for the determined structure;\n"
-"  - modify multiply records;\n"
-"  - get and check values for multiply records;\n"
+"Complete database test. Performs:\n"
+"  - create/open DB;\n"
+"  - create/open table;\n"
+"  - create multiple records for the determined structure;\n"
+"  - update multiple records;\n"
+"  - update multiple records by a request key;\n"
+"  - get and check values for multiple records;\n"
+"  - seek records;\n"
+"  - seek records in preload;\n"
 "  - modify a record and the table structure;\n"
-"  - remove multiply records;\n"
+"  - remove multiple records;\n"
 "  - close/remove table;\n"
 "  - close/remove DB."
 msgstr ""
-"Повний тест БД. Виконує:\n"
+"Повний тест БД. Здійснює:\n"
 "  - створення/відкриття БД;\n"
 "  - створення/відкриття таблиці;\n"
-"  - створення множини записів (рядків) визначеною структурою;\n"
-"  - модифікація множини записів;\n"
+"  - створення множини записів визначеної структури;\n"
+"  - оновлення множини записів;\n"
+"  - оновлення множини записів за ключем запиту;\n"
 "  - отримання та перевірка значень множини записів;\n"
+"  - сканування записів;\n"
+"  - сканування записів предзавантаженням;\n"
 "  - модифікація структури запису та таблиці;\n"
 "  - видалення записів;\n"
 "  - закриття/видалення таблиці;\n"
 "  - закриття/видалення БД."
 
 #, c-format
-msgid "Open DB '%s'."
+msgid "Open the DB '%s'."
 msgstr "Відкриття БД '%s'."
 
 #, c-format
-msgid "Open table '%s'."
+msgid "Open the table '%s'."
 msgstr "Відкриття таблиці '%s'."
 
 #, c-format
-msgid "Connect to table '%s'."
+msgid "Connect to the table '%s'."
 msgstr "Підключення до таблиці '%s'."
 
-msgid "Create DB configuration."
+msgid "Create a DB configuration."
 msgstr "Створення конфігурації БД."
 
-msgid "Name field"
-msgstr "Поле ім'я"
+msgid "Name"
+msgstr "Ім'я"
 
-msgid "Description field"
-msgstr "Поле опису"
+msgid "Description"
+msgstr "Опис"
 
-msgid "Field value"
-msgstr "Поле значення"
+msgid "Value"
+msgstr "Значення"
 
-msgid "Field id"
-msgstr "Поле ідентифікатору"
+msgid "Identifier"
+msgstr "Ідентифікатор"
 
-msgid "Field stat"
-msgstr "Поле стану"
+msgid "State"
+msgstr "Стан"
 
 msgid "Request's key"
 msgstr "Ключ запиту"
@@ -279,12 +285,12 @@ msgid "Updated %d records for time %f sec."
 msgstr "Оновлено %d записів за час %f сек."
 
 #, c-format
-msgid "Update records, by request key, for %d records."
-msgstr "Оновлення записів, за ключем запиту, для %d записів."
+msgid "Update records by a request key for %d records."
+msgstr "Оновлення записів за ключем запиту для %d записів."
 
 #, c-format
-msgid "Updated %d records, by request key, for time %f sec."
-msgstr "Оновлено %d записів, за ключем запиту, за час %f сек."
+msgid "Updated %d records by a request key for time %f sec."
+msgstr "Оновлено %d записів за ключем запиту за час %f сек."
 
 msgid "Check records."
 msgstr "Перевірка записів."
@@ -328,6 +334,9 @@ msgstr "Сканування записів."
 msgid "Sought %d records for time %f sec."
 msgstr "Проскановано %d записів за час %f сек."
 
+msgid "Seek records in preload."
+msgstr "Сканування записів предзавантаженням."
+
 #, c-format
 msgid "Sought %d records in preload for time %f sec."
 msgstr "Проскановано %d передзавантажених записів за час %f сек."
@@ -342,31 +351,31 @@ msgstr "Тест виправлення БД"
 msgid "Record #2='%s'; Descr='%s'; Value=%f; Id=%d; Stat=%d."
 msgstr "Запис #2='%s'; Опис='%s'; Значення=%f; Id=%d; Стан=%d."
 
-msgid "Add column error."
+msgid "Error adding a column."
 msgstr "Помилка додання стовпчика."
 
-msgid "Add column ok."
+msgid "OK adding a column."
 msgstr "Вдале додання стовпчика."
 
-msgid "Del column error."
+msgid "Error deleting a column."
 msgstr "Помилка видалення стовпчика."
 
-msgid "Del column ok."
+msgid "OK deleting a column."
 msgstr "Вдале видалення стовпчика."
 
 #, c-format
-msgid "Del %d records for time %f sec."
+msgid "Deleted %d records for time %f sec."
 msgstr "Видалено %d записів за час %f сек."
 
 #, c-format
-msgid "Close and delete table '%s'."
+msgid "Close and delete the table '%s'."
 msgstr "Закриття та видалення таблиці '%s'."
 
 #, c-format
-msgid "Close and delete DB '%s'."
+msgid "Close and delete the DB '%s'."
 msgstr "Закриття та видалення БД '%s'."
 
-msgid "Message category template"
+msgid "Template of the messages category"
 msgstr "Шаблон категорії повідомлення"
 
 msgid "Messages depth, seconds"
@@ -383,24 +392,24 @@ msgstr ""
 "вказаного архіватору."
 
 #, c-format
-msgid "New messages present %d."
+msgid "%d new messages present."
 msgstr "Наявно %d нових повідомлень."
 
-msgid "DAQ parameter address"
+msgid "Address of the DAQ parameter"
 msgstr "Адреса DAQ параметру"
 
 msgid "Parameter"
 msgstr "Параметр"
 
 msgid ""
-"DAQ test parameters. Reads the attributes and configuration fields of the "
-"parameter."
+"Test of the DAQ parameters. Reads the attributes and configuration fields of "
+"the parameter."
 msgstr ""
 "Тест DAQ параметрів. Вичитує атрибути та конфігураційні поля параметру."
 
 #, c-format
-msgid "Value attributes present: %d"
-msgstr "Наявно значень атрибутів: %d"
+msgid "Value attributes: %d"
+msgstr "Атрибутів значень: %d"
 
 #, c-format
 msgid "%s(SELECT): %s"
@@ -432,24 +441,24 @@ msgstr "Шлях до модуля"
 msgid "Mode (1-attach;-1-detach;0-change)"
 msgstr "Режим (1-підключити;-1-виключити;0-змінити)"
 
-msgid "Complete attach(startup)"
+msgid "Complete attach (when start)"
 msgstr "Повне підключення (на старті)"
 
-msgid "Attach SO"
+msgid "Attaching SO"
 msgstr "Підключення SO"
 
-msgid "Test attach/detach module."
-msgstr "Тест підключення/виключення модулів."
+msgid "Test the module to attach/detach."
+msgstr "Тест підключення/виключення модуля."
 
 msgid "Path to the language element"
 msgstr "Шлях до елементу мови"
 
-msgid "The control language of the program"
+msgid "Control language of the program"
 msgstr "Мова контролю програми"
 
 #, c-format
 msgid ""
-"The test of the control language of the program.\n"
+"Test of the control language of the program.\n"
 "Performs query of language elements through a complete path.\n"
 "The full path to the language element looks like </Archive/%2fbd%2fm_per>.\n"
 "The complete path consists of two nested paths.\n"
@@ -461,10 +470,10 @@ msgstr ""
 "Повний шлях до елемента мови має вигляд </Archive/%2fbd%2fm_per>.\n"
 "Повний шлях складається з двох вкладених шляхів.\n"
 "Перший </Archive/> це шлях до вузла дерева контролю.\n"
-"Другий </bd/m_per> це шлях до конкретного елемента вузла."
+"Другий </bd/m_per> це шлях до конкретного елементу вузла."
 
 #, c-format
-msgid "SysContr test for path '%s'."
+msgid "SysContr test for the path '%s'."
 msgstr "Тест SysContr за шляхом '%s'."
 
 msgid "Address"
@@ -480,11 +489,11 @@ msgid "Transport"
 msgstr "Транспорт"
 
 msgid ""
-"Test of outgoing and/or ingoing transport.\n"
-"Performs testing of the original transport by sending a request to the "
-"specified ingoing transport."
+"Test of the output and/or input transports.\n"
+"Performs testing of the original transport sending a request to the "
+"specified input transport."
 msgstr ""
-"Тест вихідних та/або вхідних транспортів.\n"
+"Тест вихідного та/або вхідного транспорту.\n"
 "Виконує тестування вихідного транспорту шляхом надсилання запиту до "
 "вказаного вхідного транспорту."
 
@@ -500,12 +509,13 @@ msgid "Value buffer"
 msgstr "Буфер значень"
 
 msgid ""
-"The tests of the values buffer.\n"
+"Tests of the value buffer.\n"
 "Contains 13 tests of all aspects of the value buffer (the subsystem "
-"\"Archives\")."
+"\"Archives-History\")."
 msgstr ""
 "Тести буферу значень.\n"
-"Містить 13 тестів всіх аспектів буферу значень (підсистема \"Архіви\")."
+"Містить 13 тестів всіх аспектів буферу значень (підсистема \"Архіви-Історія"
+"\")."
 
 #, c-format
 msgid "Test%d"
@@ -523,35 +533,35 @@ msgstr ""
 msgid "%s: Passed."
 msgstr "%s: Виконано."
 
-msgid "Create buffer error."
-msgstr "Збій створення буферу."
+msgid "Error creating a buffer."
+msgstr "Помилка створення буферу."
 
 #, c-format
-msgid "%s: Change buffer mode."
+msgid "%s: Change the buffer mode."
 msgstr "%s: Зміна режиму буфера."
 
-msgid "Disable hard grid ok."
-msgstr "Вдала зміна жорсткої ґратки."
+msgid "OK disabling the hard grid."
+msgstr "Вдале відключення жорсткої ґратки."
 
-msgid "Disable hard grid failed."
-msgstr "Збій зміни жорсткої ґратки."
+msgid "Fail disabling the hard grid."
+msgstr "Збій відключення жорсткої ґратки."
 
-msgid "Set high resolution time ok."
+msgid "OK setting the high resolution time."
 msgstr "Вдале встановлення високої роздільної здатності часу."
 
-msgid "Set high resolution time failed."
+msgid "Fail setting the high resolution time."
 msgstr "Збій встановлення високої роздільної здатності часу."
 
-msgid "Change buffer size ok."
+msgid "OK changing the buffer size."
 msgstr "Вдала зміна розміру буфера."
 
-msgid "Change buffer size failed."
+msgid "Fail changing the buffer size."
 msgstr "Збій зміни розміру буфера."
 
-msgid "Change period ok."
+msgid "OK changing the period."
 msgstr "Вдала зміна періоду."
 
-msgid "Change period failed."
+msgid "Fail changing the period."
 msgstr "Збій зміни періоду."
 
 #, c-format
@@ -559,31 +569,31 @@ msgid "%s: Destroy buffer."
 msgstr "%s: Видалення буферу."
 
 #, c-format
-msgid "%s: Fill and check hard time grid string buffer."
+msgid "%s: Fill and check the hard time grid string buffer."
 msgstr "%s: Заповнення та перевірка строкового буферу з жорсткою граткою часу."
 
-msgid "Buffer begin or/and end error, at filling half buffer."
-msgstr "Збій початку або/та кінця буферу, під час заповнення половини буферу."
+msgid "Error the buffer begin or/and end at filling a half buffer."
+msgstr "Збій початку або/та кінця буферу під час заповнення половини буферу."
 
-msgid "Write a half buffer values error."
+msgid "Error writing to half of the value buffer."
 msgstr "Збій запису половини буферу значень."
 
-msgid "Write a half buffer ok."
+msgid "OK writing a half buffer."
 msgstr "Вдалий запис половини буферу."
 
-msgid "Buffer begin or/and end error, at roll filling buffer."
-msgstr "Збій початку або/та кінця буферу, під час заповнення по колу."
+msgid "Error the buffer begin and/or end when filling in a circle."
+msgstr "Збій початку або/та кінця буферу під час заповнення по колу."
 
-msgid "Write a roll buffer values error."
+msgid "Error writing the value buffer in a circle."
 msgstr "Збій запису буферу по колу."
 
-msgid "Write a roll buffer ok."
+msgid "OK writing the value buffer in a circle."
 msgstr "Вдалий запис буферу по колу."
 
-msgid "Update buffer end error."
+msgid "Error updating the buffer end."
 msgstr "Збій оновлення кінця буферу."
 
-msgid "Update buffer end ok."
+msgid "OK updating the buffer end."
 msgstr "Вдале оновлення кінця буферу."
 
 #, c-format
@@ -595,54 +605,54 @@ msgid "Read 1000 values for time %f ms."
 msgstr "Прочитано 1000 значень за час %f мс."
 
 #, c-format
-msgid "%s: Fill and check hard time grid integer buffer."
+msgid "%s: Fill and check the hard time grid integer buffer."
 msgstr ""
 "%s: Заповнення та перевірка цілочислового буферу з жорсткою ґраткою часу."
 
 #, c-format
-msgid "%s: Fill and check soft time grid string buffer (high time)."
+msgid "%s: Fill and check the soft time grid string buffer (high time)."
 msgstr ""
 "%s: Заповнення та перевірка строкового буферу з м'якою ґраткою часу (висока "
 "розд. здатн. часу)."
 
 #, c-format
-msgid "%s: Fill and check soft time grid integer buffer (high time)."
+msgid "%s: Fill and check the soft time grid integer buffer (high time)."
 msgstr ""
-"%s: Заповнення та перевірка цілочислового буферу з м'якою ґраткою часу "
+"%s: Заповнення та перевірка цілочисельного буферу з м'якою ґраткою часу "
 "(висока розд. здатн. часу)."
 
 #, c-format
-msgid "%s: Fill and check soft time grid string buffer (low time)."
+msgid "%s: Fill and check the soft time grid string buffer (low time)."
 msgstr ""
 "%s: Заповнення та перевірка строкового буферу з м'якою ґраткою часу (низька "
 "розд. здатн. часу)."
 
 #, c-format
-msgid "%s: Fill and check soft time grid integer buffer (low time)."
+msgid "%s: Fill and check the soft time grid integer buffer (low time)."
 msgstr ""
 "%s: Заповнення та перевірка цілочислового буферу з м'якою ґраткою часу "
 "(низька розд. здатн. часу)."
 
 #, c-format
-msgid "%s: Fill and check free time string buffer (high time)."
+msgid "%s: Fill and check the free time string buffer (high time)."
 msgstr ""
 "%s: Заповнення та перевірка строкового буферу з вільним часом (висока розд. "
 "здатн. часу)."
 
 #, c-format
-msgid "%s: Fill and check free time integer buffer (high time)."
+msgid "%s: Fill and check the free time integer buffer (high time)."
 msgstr ""
 "%s: Заповнення та перевірка цілочислового буферу з вільним часом (висока "
 "розд. здатн. часу)."
 
 #, c-format
-msgid "%s: Fill and check free time string buffer (low time)."
+msgid "%s: Fill and check the free time string buffer (low time)."
 msgstr ""
 "%s: Заповнення та перевірка строкового буферу з вільним часом (низька розд. "
 "здатн. часу)."
 
 #, c-format
-msgid "%s: Fill and check free time integer buffer (low time)."
+msgid "%s: Fill and check the free time integer buffer (low time)."
 msgstr ""
 "%s: Заповнення та перевірка цілочислового з вільним часом (низька розд. "
 "здатн. часу)."
@@ -661,15 +671,15 @@ msgstr "Шлях до атрибуту параметру"
 msgid "Depth of getting of archive values, seconds"
 msgstr "Глибина отримання архівних значень, секунд"
 
-msgid "Depth of getting of archive values, microseconds"
-msgstr "Глибина отримання архівних значень, мікросекунди"
+msgid "Period of getting of archive values, microseconds"
+msgstr "Період отримання архівних значень, мікросекунди"
 
 msgid "Parameter attribute"
 msgstr "Атрибут параметру"
 
 msgid ""
-"Test the attribute value of the parameter.\n"
-"Performs a periodic acquisition of the last value of the specified "
+"Test for values of the parameter attribute.\n"
+"Performs the periodic acquisition of the last value of the specified "
 "attribute, as well as the archive questioning to the required depth."
 msgstr ""
 "Тест значень атрибуту параметра.\n"
@@ -695,21 +705,21 @@ msgid "XML parsing"
 msgstr "Розбір XML"
 
 msgid ""
-"XML parsing file test. Disassembles and displays the structure of the "
+"Test for XML file parsing. Disassembles and displays the structure of the "
 "specified file."
 msgstr ""
 "Тест розбору XML файлу. Розбирає та відображає структуру вказаного файлу."
 
 #, c-format
-msgid "Open file '%s' error."
+msgid "Error opening the file '%s'."
 msgstr "Помилка відкриття файлу '%s'."
 
 #, c-format
-msgid "Read file '%s' error: %s."
+msgid "Error reading the file '%s': %s."
 msgstr "Помилка читання файлу '%s': %s."
 
 #, c-format
-msgid "Read file '%s' only %d from %d."
+msgid "Read the file '%s' only %d from %d."
 msgstr "Читання файлу '%s' тільки для %d із %d."
 
 #, c-format

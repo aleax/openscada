@@ -54,6 +54,28 @@ TCntrNode &ModVArch::operator=( const TCntrNode &node )
     return *this;
 }
 
+void ModVArch::postDisable( int flag )
+{
+    TVArchivator::postDisable(flag);
+
+    if(flag) {
+	//Removing the grouping mode tables and records
+	vector<vector<string> > full;
+	TConfig cfg(&mod->archEl());
+	for(int aCnt = 0; SYS->db().at().dataSeek(addr()+"."+mod->mainTbl(),"",aCnt++,cfg,false,&full); ) {
+	    string vTbl = cfg.cfg("TBL").getS(), aNm;
+	    if(vTbl.find(archTbl()+"_") == string::npos) continue;
+
+	    //Removing for groups table of the grouping mode
+	    SYS->db().at().open(addr()+"."+vTbl);
+	    SYS->db().at().close(addr()+"."+vTbl, true);
+
+	    if(!SYS->db().at().dataDel(addr()+"."+mod->mainTbl(),"",cfg,true,false,true)) break;
+	    if(full.empty()) aCnt--;
+	}
+    }
+}
+
 void ModVArch::load_( )
 {
     //TVArchivator::load_();
@@ -87,7 +109,7 @@ void ModVArch::start( )
     string wdb = TBDS::realDBName(addr());
     AutoHD<TBD> db = SYS->db().at().nodeAt(wdb,0,'.');
     try { if(!db.at().enableStat()) db.at().enable(); }
-    catch(TError &err) { mess_sys(TMess::Warning, _("Enable target DB error: %s"), err.mess.c_str()); }
+    catch(TError &err) { mess_sys(TMess::Warning, _("Error enabling the target DB: %s"), err.mess.c_str()); }
 
     //Start getting data cycle
     TVArchivator::start();
@@ -101,6 +123,7 @@ void ModVArch::stop( bool full_del )
     //Stop getting data cicle an detach archives
     TVArchivator::stop(full_del);
 
+    MtxAlloc res(reqRes, true);
     if(groupPrms()) accm.clear();
     needMeta = true;
 }
@@ -113,12 +136,14 @@ void ModVArch::checkArchivator( unsigned int cnt )
 {
     if(needRePushGrps) pushAccumVals();
 
-    if(!needMeta || (cnt%60)) return;
+    if((groupPrms() && !needMeta) || (!groupPrms() && (cnt%60))) return;	//One time update at <needMeta> for groupPrms()
+
+    MtxAlloc res(reqRes, true);	//Moved to the up to prevent for unlocked cleaning the accumulator on the groupPrms() mode
 
     //Clear the accummulator's groups
     if(groupPrms()) accm.clear();
 
-    //Load and process the main table with the meta-information.
+    //Loading and processing the main table with the meta-information.
     vector<vector<string> > full;
     TConfig cfg(&mod->archEl());
     for(int aCnt = 0; SYS->db().at().dataSeek(addr()+"."+mod->mainTbl(),"",aCnt++,cfg,false,&full); ) {
@@ -152,7 +177,7 @@ void ModVArch::checkArchivator( unsigned int cnt )
 	    int gId = s2i(vTbl.substr(archTbl(0).size()));
 	    SGrp *gO = NULL;
 
-	    MtxAlloc res(reqRes, true);
+	    //MtxAlloc res(reqRes, true);
 
 	    // The parameters
 	    for(int off = 0, aTp; (aNm=TSYS::strLine(cfg.cfg("PRM2").getS(),0,&off)).size(); ) {
@@ -219,6 +244,8 @@ void ModVArch::checkArchivator( unsigned int cnt )
 
 TValBuf &ModVArch::accmGetReg( const string &aNm, SGrp **grp, TFld::Type tp, int prefGrpPos )
 {
+    MtxAlloc res(reqRes, true);
+
     //Find the parameter into a group
     for(unsigned iG = 0; iG < accm.size(); iG++) {
 	map<string,TValBuf>::iterator iP = accm[iG].els.find(aNm);
@@ -236,11 +263,12 @@ TValBuf &ModVArch::accmGetReg( const string &aNm, SGrp **grp, TFld::Type tp, int
 	accm.push_back(SGrp(accm.size()));
 	accm.back().tblEl.fldAdd(new TFld("MARK",_("Mark, time/(10*per)"),TFld::Integer,TCfg::Key,"20"));
 	accm.back().tblEl.fldAdd(new TFld("TM",_("Time, seconds"),TFld::Integer,TCfg::Key|(tmAsStr()?TFld::DateTimeDec:0),"20"));
-	//accm.back().tblEl.fldAdd(new TFld("TMU",_("Time (us)"),TFld::Integer,TCfg::Key,"10"));
+	//accm.back().tblEl.fldAdd(new TFld("TMU",_("Time, microseconds"),TFld::Integer,TCfg::Key,"10"));
     }
 
     //Place the parameter to the selected group
     SGrp &gO = accm[prefGrpPos];
+
     switch(tp&TFld::GenMask) {
 	case TFld::Boolean: gO.tblEl.fldAdd(new TFld(aNm.c_str(),aNm.c_str(),TFld::Integer,TFld::NoFlag,"1",i2s(EVAL_BOOL).c_str()));	break;
 	case TFld::Integer: gO.tblEl.fldAdd(new TFld(aNm.c_str(),aNm.c_str(),TFld::Integer,TFld::NoFlag,"20",ll2s(EVAL_INT).c_str()));	break;
@@ -408,13 +436,13 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SARH_ID,3,
 	    "dest","select","select","/db/list","help",TMess::labDB());
 	if(ctrMkNode("area",opt,-1,"/prm/add",_("Additional options"),R_R_R_,"root",SARH_ID)) {
-	    ctrMkNode("fld",opt,-1,"/prm/add/sz",_("Archive size (days)"),RWRWR_,"root",SARH_ID,2,
-		"tp","real", "help",_("Set to 0 for the limit disable and some performance rise"));
-	    ctrMkNode("fld",opt,-1,"/prm/add/tmAsStr",_("Force time as string"),startStat()?R_R_R_:RWRWR_,"root",SARH_ID,2,
-		"tp","bool", "help",_("Only for DBs it supports by a specific data type like to \"datetime\" into MySQL."));
-	    ctrMkNode("fld",opt,-1,"/prm/add/groupPrms",_("Grouping parameters limit"),startStat()?R_R_R_:RWRWR_,"root",SARH_ID,4,
+	    ctrMkNode("fld",opt,-1,"/prm/add/sz",_("Archive size, days"),RWRWR_,"root",SARH_ID,2,
+		"tp","real", "help",_("Set to 0 to disable this limit and to rise some the performance."));
+	    ctrMkNode("fld",opt,-1,"/prm/add/tmAsStr",_("To form time as a string"),startStat()?R_R_R_:RWRWR_,"root",SARH_ID,2,
+		"tp","bool", "help",_("Only for databases that support such by means of specific data types like \"datetime\" in MySQL."));
+	    ctrMkNode("fld",opt,-1,"/prm/add/groupPrms",_("Grouping limit of the parameters"),startStat()?R_R_R_:RWRWR_,"root",SARH_ID,4,
 		"tp","dec", "min","0", "max","10000",
-		"help",_("Enable grouping arhivator's parameters into a single table. Set to '0' for one table per parameter."));
+		"help",_("Enables for grouping arhivator's parameters into single table. Set to '0' for one table per parameter."));
 	}
 	return;
     }
@@ -448,12 +476,10 @@ bool ModVArch::cfgChange( TCfg &co, const TVariant &pc )
 ModVArchEl::ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator ) :
     TVArchEl(iachive, iarchivator), mBeg(0), mEnd(0), mPer(0), needMeta(false)
 {
-    needMeta = !readMeta();
-
     if(!archivator().groupPrms()) {
 	reqEl.fldAdd(new TFld("MARK",_("Mark, time/(10*per)"),TFld::Integer,TCfg::Key,"20"));
 	reqEl.fldAdd(new TFld("TM",_("Time, seconds"),TFld::Integer,TCfg::Key|(archivator().tmAsStr()?TFld::DateTimeDec:0),"20"));
-	//reqEl.fldAdd(new TFld("TMU",_("Time (us)"),TFld::Integer,TCfg::Key,"10"));
+	//reqEl.fldAdd(new TFld("TMU",_("Time, microseconds"),TFld::Integer,TCfg::Key,"10"));
 	switch(archive().valType()) {
 	    case TFld::Boolean: reqEl.fldAdd(new TFld("VAL",_("Value"),TFld::Integer,TFld::NoFlag,"1",i2s(EVAL_BOOL).c_str()));	break;
 	    case TFld::Integer: reqEl.fldAdd(new TFld("VAL",_("Value"),TFld::Integer,TFld::NoFlag,"20",ll2s(EVAL_INT).c_str()));break;
@@ -462,6 +488,8 @@ ModVArchEl::ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator ) :
 	    default: break;
 	}
     }
+
+    needMeta = !readMeta();
 }
 
 ModVArchEl::~ModVArchEl( )	{ }
@@ -560,7 +588,7 @@ void ModVArchEl::getValsProc( TValBuf &ibuf, int64_t ibegIn, int64_t iendIn )
     // Fill by EVAL following range part without a real data
     //for(int64_t cTm = iend+period(); cTm <= iendIn; cTm += period()) buf.setR(EVAL_REAL, cTm);
 
-    //Check for target DB enabled (disabled by the connection lost)
+    //Check for target DB enabled (disabled by the connection loss)
     string wDB = TBDS::realDBName(archivator().addr());
     if(TSYS::strParse(wDB,0,".") == DB_CFG ||
 	    SYS->db().at().at(TSYS::strParse(wDB,0,".")).at().at(TSYS::strParse(wDB,1,".")).at().enableStat())
@@ -590,7 +618,7 @@ TVariant ModVArchEl::getValProc( int64_t *tm, bool up_ord )
 	cf.cfgViewAll(false);
 	cf.cfg(vlFld).setView(true);
     }
-    cf.cfg("MARK").setI(itm/10000000);
+    cf.cfg("MARK").setI(itm/(10*period()));
     cf.cfg("TM").setI(itm/1000000);
     //cf.cfg("TMU").setI(itm%1000000);
     if(SYS->db().at().dataGet(tblAddr,"",cf,false,true)) {
@@ -658,7 +686,7 @@ int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t ibeg, int64_t iend, bool 
 	tbl.free();
 	//SYS->db().at().close(archivator().addr()+"."+archTbl());		//!!! No close the table manually
 
-	//Update archive info
+	//Updating the archive info
 	cfg.setElem(&mod->archEl());
 	cfg.cfgViewAll(false);
 	cfg.cfg("TBL").setS(archTbl(), true);
@@ -676,7 +704,7 @@ int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t ibeg, int64_t iend, bool 
     ModVArch::SGrp *gO = NULL;
     TValBuf &pDt = archivator().accmGetReg(vlFld, &gO, archive().valType(true));
     if(toAccum) {
-	if(!gO->dbOK && pDt.realSize()) return 0;	//Prevent the accumulated data lost at DB errors
+	if(!gO->dbOK && pDt.realSize()) return 0;	//Prevent the accumulated data loss at DB errors
 	pDt = buf;
 	if(!gO->accmBeg || !gO->accmEnd) { gO->accmBeg = ibeg; gO->accmEnd = iend; }
 	return vmin(gO->accmEnd, iend);
@@ -692,6 +720,7 @@ int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t ibeg, int64_t iend, bool 
     cfg.cfg(vlFld).setView(true);
 
     //Write data to the table
+    bool updMeta = false;
     int64_t lstWrTm = 0;
     for(int64_t ctm; ibeg <= iend; ibeg++) {
 	switch(archive().valType()) {
@@ -711,10 +740,23 @@ int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t ibeg, int64_t iend, bool 
 	//Archive's range update
 	mBeg = mBeg ? vmin(mBeg,ctm) : ctm;
 	mEnd = mEnd ? vmax(mEnd,ctm) : ctm;
+
+	if(!gO->per || !gO->beg || mBeg < gO->beg || mEnd > gO->end) {
+	    gO->per = (archivator().valPeriod()*1e6);
+	    gO->beg = gO->beg ? vmin(gO->beg, mBeg) : mBeg;
+	    gO->end = vmax(gO->end, mEnd);
+	    updMeta = true;
+	}
     }
 
     //Archive size limit process
-    if(archivator().grpLimits(*gO,&mBeg,&mEnd)) archivator().grpMetaUpd(*gO);
+    if(archivator().grpLimits(*gO,&mBeg,&mEnd) || updMeta) {
+	string	pLs;
+	for(map<string,TValBuf>::iterator iP = gO->els.begin(); updMeta && iP != gO->els.end(); ++iP)
+	    pLs += i2s(iP->second.valType(true)) + ":" + iP->first + "\n";
+
+	archivator().grpMetaUpd(*gO, pLs.size()?&pLs:NULL);
+    }
 
     return lstWrTm;
 }
@@ -745,7 +787,7 @@ bool ModVArchEl::readMeta( )
 
     if(!mPer) mPer = (int64_t)(archivator().valPeriod()*1e6);
 
-    //Check for target DB enabled (disabled by the connection lost)
+    //Check for the target DB enabled (disabled by the connection loss)
     if(!rez) {
 	string wDB = TBDS::realDBName(archivator().addr());
 	rez = (TSYS::strParse(wDB,0,".") == DB_CFG ||

@@ -2,7 +2,7 @@
 //OpenSCADA module DAQ.DCON file: DCON_client.cpp
 /***************************************************************************
  *   Copyright (C) 2008-2011 by Almaz Karimov                              *
- *		   2008-2018 by Roman Savochenko, rom_as@oscada.org        *
+ *		   2008-2019 by Roman Savochenko, rom_as@oscada.org        *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,7 +39,7 @@
 #define MOD_NAME	_("DCON client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.3.2"
+#define MOD_VER		"1.3.7"
 #define AUTHORS		_("Roman Savochenko, Almaz Karimov")
 #define DESCRIPTION	_("Provides an implementation of DCON-client protocol. Supports I-7000 DCON protocol.")
 #define LICENSE		"GPL2"
@@ -102,29 +102,29 @@ void TTpContr::postEnable( int flag )
     int t_prm = tpParmAdd("std", "PRM_BD", _("Standard"), true);
     tpPrmAt(t_prm).fldAdd(new TFld("MOD_ADDR",_("Module address"),TFld::Integer,TFld::NoFlag|TCfg::NoVal,"20","1","0;255"));
     tpPrmAt(t_prm).fldAdd(new TFld("CRC_CTRL",_("CRC control"),TFld::Boolean,TFld::NoFlag|TCfg::NoVal,"1","1"));
-    tpPrmAt(t_prm).fldAdd(new TFld("HOST_SIGNAL",_("Host signal"),TFld::Integer,TFld::Selected|TCfg::NoVal,"1","0",
+    tpPrmAt(t_prm).fldAdd(new TFld("HOST_SIGNAL",_("Host signal"),TFld::Integer,TFld::Selectable|TCfg::NoVal,"1","0",
 		"0;1",_("No signal;HostOK")));
-    tpPrmAt(t_prm).fldAdd(new TFld("AI_METHOD",_("AI method"),TFld::Integer,TFld::Selected|TCfg::NoVal,"1","0",
+    tpPrmAt(t_prm).fldAdd(new TFld("AI_METHOD",_("AI method"),TFld::Integer,TFld::Selectable|TCfg::NoVal,"1","0",
 		"0;1;2;3;4;6;8;10;20;116;201;202;203;204;206;208;210;220;316",
 		_("No AI;1AI (#AA);2AI (#AA);3AI (#AA);4AI (#AA);6AI (#AA);8AI (#AA);10AI (#AA);20AI (#AA);16AI (#AA^AA);1AI (#AAN);2AI (#AAN);3AI (#AAN);4AI (#AAN);6AI (#AAN);8AI (#AAN);10AI (#AANN);20AI (#AANN);16AI (#AAN^AAN)")));
-    tpPrmAt(t_prm).fldAdd(new TFld("AI_RANGE",""/*_("AI range")*/,TFld::Integer,TFld::Selected|TCfg::NoVal,"1","0",
+    tpPrmAt(t_prm).fldAdd(new TFld("AI_RANGE",""/*_("AI range")*/,TFld::Integer,TFld::Selectable|TCfg::NoVal,"1","0",
 		"0;1;2",_("Engineer or percent;Hexadecimal (0000 FFFF);Hexadecimal (8000 7FFF)")));
-    tpPrmAt(t_prm).fldAdd(new TFld("AO_METHOD",_("AO method"),TFld::Integer,TFld::Selected|TCfg::NoVal,"1","0",
+    tpPrmAt(t_prm).fldAdd(new TFld("AO_METHOD",_("AO method"),TFld::Integer,TFld::Selectable|TCfg::NoVal,"1","0",
 		"0;1;2;4;14",_("No AO;1AO (#AA);2AO (#AAN);4AO (#AAN);4AO (#AACN)")));
-    tpPrmAt(t_prm).fldAdd(new TFld("AO_RANGE",""/*_("AO range")*/,TFld::Integer,TFld::Selected|TCfg::NoVal,"1","0",
+    tpPrmAt(t_prm).fldAdd(new TFld("AO_RANGE",""/*_("AO range")*/,TFld::Integer,TFld::Selectable|TCfg::NoVal,"1","0",
 		"0;1;2;3;4;5;6;7;8;9;10",
 		_("Engineer (00.000 20.000);Engineer (04.000 20.000);Engineer (00.000 10.000);Engineer (+00.000 +20.000);"
 		  "Engineer (+04.000 +20.000);Engineer (+00.000 +10.000);Engineer (-10.000 +10.000);Engineer (+00.000 +05.000);"
 		  "Engineer (-05.000 +05.000);Percent (+000.00 +100.00);Hexadecimal (000 FFF)")));
-    tpPrmAt(t_prm).fldAdd(new TFld("DI_METHOD",_("DI method"),TFld::Integer,TFld::Selected|TCfg::NoVal,"1","0",
+    tpPrmAt(t_prm).fldAdd(new TFld("DI_METHOD",_("DI method"),TFld::Integer,TFld::Selectable|TCfg::NoVal,"1","0",
 		"0;3;4;7;8;14;16;101;201",
 		_("No DI;3DI ($AA6);4DI ($AA6);7DI ($AA6);8DI ($AA6);14DI ($AA6);16DI ($AA6);1DI (@AADI);8DI ($AA6,FF00)")) );
-    tpPrmAt(t_prm).fldAdd(new TFld("DO_METHOD",_("DO method"),TFld::Integer,TFld::Selected|TCfg::NoVal,"1","0",
+    tpPrmAt(t_prm).fldAdd(new TFld("DO_METHOD",_("DO method"),TFld::Integer,TFld::Selectable|TCfg::NoVal,"1","0",
 		"0;2;3;4;5;7;8;12;13;16;102;103;202;204;306;402;504;604;608;704;708;712)",
 		_("No DO;2DO (@AA,0300);3DO (@AA,7);4DO (@AA,F);5DO (@AA,1F);7DO (@AA,7F);8DO (@AA,FF);12DO (@AA,0FFF);"
 		  "13DO (@AA,1FFF);16DO (@AA,FFFF);2DO (^AADOVVV);3DO (^AADOVVV);2DO (@AADO);4DO (@AADO);6DO (@AADODD);"
 		  "2DO (@AADO0D);4DO (@(^)AADO0D);4DO (@AA,0F00);8DO (@AA,FF00);4DO (#AA000F);8DO (#AA00FF);12DO (#AA000FFF)")));
-    tpPrmAt(t_prm).fldAdd(new TFld("CI_METHOD",_("CI method"),TFld::Integer,TFld::Selected|TCfg::NoVal,"1","0",
+    tpPrmAt(t_prm).fldAdd(new TFld("CI_METHOD",_("CI method"),TFld::Integer,TFld::Selectable|TCfg::NoVal,"1","0",
 		"0;2;3",_("No CI;2CI (#AA);3CI (#AA)")));
 }
 
@@ -190,9 +190,6 @@ void TMdContr::start_( )
 {
     if(prcSt)	return;
 
-    //Schedule process
-    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,1e9*s2r(cron())) : 0;
-
     //Fix old address format
     if(addr().size() && TSYS::strParse(addr(),1,".").empty())	mAddr = "Serial."+addr();
 
@@ -209,13 +206,9 @@ void TMdContr::stop_( )
 {
     //Stop the request and calc data task
     if(prcSt) SYS->taskDestroy(nodePath('.',true), &endrunReq);
-
-    //Clear process parameters list
-    MtxAlloc res(enRes, true);
-    pHd.clear();
 }
 
-bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )	{ TController::cfgChange(co, pc); return true; }
+
 
 void TMdContr::prmEn( TMdPrm *prm, bool val )
 {
@@ -687,6 +680,16 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     else TController::cntrCmdProc(opt);
 }
 
+bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
+{
+    TController::cfgChange(co, pc);
+
+    if(co.fld().name() == "SCHEDULE")
+	mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,1e9*s2r(cron())) : 0;
+
+    return true;
+}
+
 //******************************************************
 //* TMdPrm                                             *
 //******************************************************
@@ -910,13 +913,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     if(!enableStat() || !owner().startStat())	{ vo.setI(EVAL_INT, 0, true); return; }
 
     //Send to active reserve station
-    if(owner().redntUse()) {
-	if(vl == pvl) return;
-	XMLNode req("set");
-	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
-	SYS->daq().at().rdStRequest(owner().workId(),req);
-	return;
-    }
+    if(vlSetRednt(vo,vl,pvl))	return;
 
     //Direct write
     if(vo.name().compare(0,2,"AO") == 0) AO[s2i(vo.name().substr(2,vo.name().size()-2))] = vl.getR();

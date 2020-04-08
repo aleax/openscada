@@ -41,14 +41,17 @@ class TestDB : public TFunction
 	}
 
 	string name( )	{ return _("DB test"); }
-	string descr( )	{ return _("Full database test. Make:\n"
-				   "  - make/open DB;\n"
-				   "  - make/open table;\n"
-				   "  - make multiply records for the determined structure;\n"
-				   "  - modify multiply records;\n"
-				   "  - get and check values for multiply records;\n"
+	string descr( )	{ return _("Complete database test. Performs:\n"
+				   "  - create/open DB;\n"
+				   "  - create/open table;\n"
+				   "  - create multiple records for the determined structure;\n"
+				   "  - update multiple records;\n"
+				   "  - update multiple records by a request key;\n"
+				   "  - get and check values for multiple records;\n"
+				   "  - seek records;\n"
+				   "  - seek records in preload;\n"
 				   "  - modify a record and the table structure;\n"
-				   "  - remove multiply records;\n"
+				   "  - remove multiple records;\n"
 				   "  - close/remove table;\n"
 				   "  - close/remove DB."); }
 
@@ -65,23 +68,23 @@ class TestDB : public TFunction
 
 		AutoHD<TTypeBD> bd = SYS->db().at().modAt(t_bd);
 
-		mod->mess(id(),_("Open DB '%s'."),n_bd.c_str());
+		mod->mess(id(),_("Open the DB '%s'."),n_bd.c_str());
 		bd.at().open(n_bd);
 		bd.at().at(n_bd).at().setAddr(bd_addr);
 		bd.at().at(n_bd).at().enable();
 
-		mod->mess(id(),_("Open table '%s'."),n_tbl.c_str());
+		mod->mess(id(),_("Open the table '%s'."),n_tbl.c_str());
 		bd.at().at(n_bd).at().open(n_tbl,true);
-		mod->mess(id(),_("Connect to table '%s'."),n_tbl.c_str());
+		mod->mess(id(),_("Connect to the table '%s'."),n_tbl.c_str());
 		AutoHD<TTable> tbl = bd.at().at(n_bd).at().at(n_tbl);
 
-		mod->mess(id(),_("Create DB configuration."));
+		mod->mess(id(),_("Create a DB configuration."));
 		TConfig bd_cfg;
-		bd_cfg.elem().fldAdd(new TFld("name",_("Name field"),TFld::String,TCfg::Key,OBJ_ID_SZ));
-		bd_cfg.elem().fldAdd(new TFld("descr",_("Description field"),TFld::String,0,OBJ_NM_SZ));
-		bd_cfg.elem().fldAdd(new TFld("val",_("Field value"),TFld::Real,0,"10.2","5"));
-		bd_cfg.elem().fldAdd(new TFld("id",_("Field id"),TFld::Integer,0,"7","34"));
-		bd_cfg.elem().fldAdd(new TFld("stat",_("Field stat"),TFld::Boolean,0,"1","1"));
+		bd_cfg.elem().fldAdd(new TFld("name",_("Name"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+		bd_cfg.elem().fldAdd(new TFld("descr",_("Description"),TFld::String,0,OBJ_NM_SZ));
+		bd_cfg.elem().fldAdd(new TFld("val",_("Value"),TFld::Real,0,"10.2","5"));
+		bd_cfg.elem().fldAdd(new TFld("id",_("Identifier"),TFld::Integer,0,"7","34"));
+		bd_cfg.elem().fldAdd(new TFld("stat",_("State"),TFld::Boolean,0,"1","1"));
 		bd_cfg.elem().fldAdd(new TFld("reqKey",_("Request's key"),TFld::String,0,"100"));
 		bd_cfg.elem().fldAdd(new TFld("reqVal",_("Request's value"),TFld::String,0,"100"));
 
@@ -116,7 +119,7 @@ class TestDB : public TFunction
 		mod->mess(id(),_("Updated %d records for time %f sec."),experem,1e-6*(TSYS::curTime()-ctime));
 
 		//Check for update fields, by request key
-		mod->mess(id(),_("Update records, by request key, for %d records."), experem/2);
+		mod->mess(id(),_("Update records by a request key for %d records."), experem/2);
 		ctime = TSYS::curTime();
 		bd_cfg.cfgViewAll(false);
 		bd_cfg.cfg("reqKey").setReqKey(true);
@@ -124,7 +127,7 @@ class TestDB : public TFunction
 		bd_cfg.cfg("reqKey").setS("reqNew0",TCfg::ForceUse);
 		bd_cfg.cfg("reqVal").setS("Request new 0 value",TCfg::ForceUse);
 		tbl.at().fieldSet(bd_cfg);
-		mod->mess(id(),_("Updated %d records, by request key, for time %f sec."),experem/2,1e-6*(TSYS::curTime()-ctime));
+		mod->mess(id(),_("Updated %d records by a request key for time %f sec."),experem/2,1e-6*(TSYS::curTime()-ctime));
 		bd_cfg.cfg("reqKey").setReqKey(false);
 		bd_cfg.cfg("reqKey").setExtVal(false);
 		bd_cfg.cfgViewAll(true);
@@ -171,7 +174,7 @@ class TestDB : public TFunction
 		mod->mess(id(), _("Sought %d records for time %f sec."), pos, 1e-6*(TSYS::curTime()-ctime));
 
 		//Seek in preload all records
-		mod->mess(id(), _("Seek records."));
+		mod->mess(id(), _("Seek records in preload."));
 		ctime = TSYS::curTime();
 		vector< vector<string> > full;
 		pos = 0;
@@ -193,9 +196,9 @@ class TestDB : public TFunction
 		    mod->mess(id(),_("Record #2='%s'; Descr='%s'; Value=%f; Id=%d; Stat=%d."),
 			bd_cfg.cfg("name").getS().c_str(), bd_cfg.cfg("descr").getS().c_str(),
 			bd_cfg.cfg("val").getR(), bd_cfg.cfg("id").getI(), bd_cfg.cfg("stat").getB());
-		    throw TError(nodePath().c_str(),_("Add column error."));
+		    throw TError(nodePath().c_str(),_("Error adding a column."));
 		}
-		else mod->mess(id(),_("Add column ok."));
+		else mod->mess(id(),_("OK adding a column."));
 
 		//Del column
 		bd_cfg.elem().fldDel(bd_cfg.elem().fldId("fix"));
@@ -209,14 +212,14 @@ class TestDB : public TFunction
 		    mod->mess(id(),"Record #2='%s'; Descr='%s'; Value=%f; Id=%d; Stat=%d.",
 			bd_cfg.cfg("name").getS().c_str(), bd_cfg.cfg("descr").getS().c_str(),
 			bd_cfg.cfg("val").getR(), bd_cfg.cfg("id").getI(), bd_cfg.cfg("stat").getB() );
-		    throw TError(nodePath().c_str(),_("Del column error."));
+		    throw TError(nodePath().c_str(),_("Error deleting a column."));
 		}
-		else mod->mess(id(),_("Del column ok."));
+		else mod->mess(id(),_("OK deleting a column."));
 
 		//Check List
 		//vector<string> ls_elem;
 		//tbl.at().fieldList("name",ls_elem);
-		//if(ls_elem.size() != experem) mod->mess(id(),_("List size error!"));
+		//if(ls_elem.size() != experem) mod->mess(id(),_("Error list size!"));
 
 		//Delete fields
 		ctime = TSYS::curTime();
@@ -224,14 +227,14 @@ class TestDB : public TFunction
 		    bd_cfg.cfg("name").setS("Sh"+i2s(i_fld),true);
 		    tbl.at().fieldDel(bd_cfg);
 		}
-		mod->mess(id(),_("Del %d records for time %f sec."),experem,1e-6*(TSYS::curTime()-ctime));
+		mod->mess(id(),_("Deleted %d records for time %f sec."),experem,1e-6*(TSYS::curTime()-ctime));
 
 		tbl.free();
 
-		mod->mess(id(),_("Close and delete table '%s'."),n_tbl.c_str());
+		mod->mess(id(),_("Close and delete the table '%s'."),n_tbl.c_str());
 		bd.at().at(n_bd).at().close(n_tbl,true);
 
-		mod->mess(id(),_("Close and delete DB '%s'."),n_bd.c_str());
+		mod->mess(id(),_("Close and delete the DB '%s'."),n_bd.c_str());
 		bd.at().close(n_bd,true);
 
 		bd.free();

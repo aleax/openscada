@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tfunction.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -117,13 +117,15 @@ void TFunction::ioList( vector<string> &list )
 	list.push_back(mIO[iIO]->id());
 }
 
-void TFunction::ioAdd( IO *io )
+int TFunction::ioAdd( IO *io )
 {
     preIOCfgChange();
     mIO.push_back(io);
     io->owner = this;
     postIOCfgChange();
     modif();
+
+    return mIO.size()-1;
 }
 
 int TFunction::ioIns( IO *io, int pos )
@@ -459,7 +461,7 @@ void IO::setRez( const string &val )
 //* TValFunc                                      *
 //*************************************************
 TValFunc::TValFunc( const string &iname, TFunction *ifunc, bool iblk, const string &iuser ) :
-    exCtx(NULL), mName(iname), mUser(iuser), mBlk(iblk), mMdfChk(false), mFunc(NULL)
+    exCtx(NULL), mName(iname), mUser(iuser), mBlk(iblk), mMdfChk(false), mPrgCh(false), mFunc(NULL)
 {
     setFunc(ifunc);
 }
@@ -482,11 +484,13 @@ void TValFunc::setFunc( TFunction *ifunc, bool att_det )
 	    SVl val;
 	    val.tp = mFunc->io(iVl)->type();
 	    val.mdf = false;
+	    string def = mFunc->io(iVl)->def();
+	    if(mFunc->io(iVl)->flg()&IO::Selectable)	def = TSYS::strLine(def, 0);
 	    switch(val.tp) {
-		case IO::String:	val.val.s = new string(mFunc->io(iVl)->def());	break;
-		case IO::Integer:	val.val.i = s2ll(mFunc->io(iVl)->def());	break;
-		case IO::Real:		val.val.r = s2r(mFunc->io(iVl)->def());	break;
-		case IO::Boolean:	val.val.b = s2i(mFunc->io(iVl)->def());	break;
+		case IO::String:	val.val.s = new string(def);	break;
+		case IO::Integer:	val.val.i = s2ll(def);		break;
+		case IO::Real:		val.val.r = s2r(def);		break;
+		case IO::Boolean:	val.val.b = s2i(def);		break;
 		case IO::Object:	val.val.o = new AutoHD<TVarObj>(new TVarObj);	break;
 	    }
 	    mVal.push_back(val);
@@ -528,7 +532,7 @@ void TValFunc::ioList( vector<string> &list )
     return mFunc->ioList(list);
 }
 
-int TValFunc::ioSize( )
+int TValFunc::ioSize( ) const
 {
     if(!mFunc)	throw TError("ValFnc", _("Function is not attached!"));
 
@@ -777,7 +781,7 @@ void TFuncArgsObj::propSet( const string &id, TVariant val )
     if(!vf.func()) return;
     if(id.size() && isdigit(id[0])) apos = s2i(id);
     if(apos < 0 || apos >= vf.ioSize()) apos = vf.ioId(id);
-    if(apos != -1) vf.set(apos,val);
+    if(apos != -1) vf.set(apos, val);
 }
 
 string TFuncArgsObj::getStrXML( const string &oid )

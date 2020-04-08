@@ -27,13 +27,13 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"FLibComplex1"
-#define MOD_NAME	_("Complex1 function's lib")
+#define MOD_NAME	_("Complex1 functions")
 #define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"1.1.4"
+#define MOD_VER		"1.2.0"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides the library of functions compatible with SCADA Complex1 of the firm SIC \"DIYA\".")
+#define DESCRIPTION	_("Provides a library of the functions of compatibility with SCADA Complex 1 of the firm SIC \"DIYA\".")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -121,7 +121,7 @@ void Lib::modStart( )
     list(lst);
     for(unsigned i_l = 0; i_l < lst.size(); i_l++)
 	at(lst[i_l]).at().setStart(true);
-    run_st = true;
+    runSt = true;
 }
 
 void Lib::modStop( )
@@ -130,7 +130,7 @@ void Lib::modStop( )
     list(lst);
     for(unsigned i_l = 0; i_l < lst.size(); i_l++)
 	at(lst[i_l]).at().setStart(false);
-    run_st = false;
+    runSt = false;
 }
 
 TVariant Lib::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )

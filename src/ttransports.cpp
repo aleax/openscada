@@ -1,7 +1,7 @@
 
 //OpenSCADA file: ttransports.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,11 +39,11 @@ TTransportS::TTransportS( ) : TSubSYS(STR_ID, _("Transports"), true), extHostLoa
     elIn.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
     elIn.fldAdd(new TFld("DESCRIPT",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"500"));
     elIn.fldAdd(new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"100"));
-    elIn.fldAdd(new TFld("PROT",_("Transport protocol"),TFld::String,TFld::NoFlag,i2s(s2i(OBJ_ID_SZ)*3).c_str()));
+    elIn.fldAdd(new TFld("PROT",_("Transport protocol"),TFld::String,TFld::NoFlag,i2s(s2i(OBJ_ID_SZ)*10).c_str()));
     elIn.fldAdd(new TFld("START",_("To start"),TFld::Boolean,TFld::NoFlag,"1"));
 
     //Output transport BD structure
-    elOut.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
+    elOut.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(s2i(OBJ_ID_SZ)*2).c_str()));
     elOut.fldAdd(new TFld("MODULE",_("Transport type"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
     elOut.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
     elOut.fldAdd(new TFld("DESCRIPT",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"500"));
@@ -70,12 +70,12 @@ void TTransportS::inTrList( vector<string> &ls )
 {
     ls.clear();
 
-    vector<string> t_ls, m_ls;
-    modList(t_ls);
-    for(unsigned i_tp = 0; i_tp < t_ls.size(); i_tp++) {
-	at(t_ls[i_tp]).at().inList(m_ls);
-	for(unsigned i_t = 0; i_t < m_ls.size(); i_t++)
-	    ls.push_back(t_ls[i_tp]+"."+m_ls[i_t]);
+    vector<string> tLs, mLs;
+    modList(tLs);
+    for(unsigned iTp = 0; iTp < tLs.size(); iTp++) {
+	at(tLs[iTp]).at().inList(mLs);
+	for(unsigned iT = 0; iT < mLs.size(); iT++)
+	    ls.push_back(tLs[iTp]+"."+mLs[iT]);
     }
 }
 
@@ -83,12 +83,12 @@ void TTransportS::outTrList( vector<string> &ls )
 {
     ls.clear();
 
-    vector<string> t_ls, m_ls;
-    modList(t_ls);
-    for(unsigned i_tp = 0; i_tp < t_ls.size(); i_tp++) {
-	at(t_ls[i_tp]).at().outList(m_ls);
-	for(unsigned i_t = 0; i_t < m_ls.size(); i_t++)
-	    ls.push_back(t_ls[i_tp]+"."+m_ls[i_t]);
+    vector<string> tLs, mLs;
+    modList(tLs);
+    for(unsigned iTp = 0; iTp < tLs.size(); iTp++) {
+	at(tLs[iTp]).at().outList(mLs);
+	for(unsigned iT = 0; iT < mLs.size(); iT++)
+	    ls.push_back(tLs[iTp]+"."+mLs[iT]);
     }
 }
 
@@ -108,30 +108,31 @@ void TTransportS::load_( )
     try {
 	TConfig c_el(&elIn);
 	//c_el.cfgViewAll(false);
-	vector<string> db_ls;
+	vector<string> itLs;
 
 	//  Search new into DB and Config-file
-	SYS->db().at().dbList(db_ls, true);
-	db_ls.push_back(DB_CFG);
-	for(unsigned iDB = 0; iDB < db_ls.size(); iDB++)
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(db_ls[iDB]+"."+subId()+"_in",nodePath()+subId()+"_in",fld_cnt++,c_el,false,&full); ) {
+	SYS->db().at().dbList(itLs, true);
+	itLs.push_back(DB_CFG);
+	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek(itLs[iIt]+"."+subId()+"_in",nodePath()+subId()+"_in",fld_cnt++,c_el,false,&full); ) {
 		id   = c_el.cfg("ID").getS();
 		type = c_el.cfg("MODULE").getS();
-		if(modPresent(type) && !at(type).at().inPresent(id))
-		    at(type).at().inAdd(id,(db_ls[iDB]==SYS->workDB())?"*.*":db_ls[iDB]);
+		if(!modPresent(type))	continue;
+		if(!at(type).at().inPresent(id))
+		    at(type).at().inAdd(id,(itLs[iIt]==SYS->workDB())?"*.*":itLs[iIt]);
 		at(type).at().inAt(id).at().load(&c_el);
 		itReg[type+"."+id] = true;
 	    }
 
 	//  Check for remove items removed from DB
-	if(!SYS->selDB().empty()) {
-	    vector<string> m_ls;
-	    modList(m_ls);
-	    for(unsigned i_m = 0; i_m < m_ls.size(); i_m++) {
-		at(m_ls[i_m]).at().inList(db_ls);
-		for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
-		    if(itReg.find(m_ls[i_m]+"."+db_ls[i_it]) == itReg.end() && SYS->chkSelDB(at(m_ls[i_m]).at().inAt(db_ls[i_it]).at().DB()))
-			at(m_ls[i_m]).at().inDel(db_ls[i_it]);
+	if(SYS->chkSelDB(SYS->selDB(),true)) {
+	    vector<string> mLs;
+	    modList(mLs);
+	    for(unsigned iM = 0; iM < mLs.size(); iM++) {
+		at(mLs[iM]).at().inList(itLs);
+		for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
+		    if(itReg.find(mLs[iM]+"."+itLs[iIt]) == itReg.end() && SYS->chkSelDB(at(mLs[iM]).at().inAt(itLs[iIt]).at().DB()))
+			at(mLs[iM]).at().inDel(itLs[iIt]);
 	    }
 	}
     } catch(TError &err) {
@@ -143,31 +144,32 @@ void TTransportS::load_( )
     try {
 	TConfig c_el(&elOut);
 	//c_el.cfgViewAll(false);
-	vector<string> tdb_ls, db_ls;
+	vector<string> itLs;
 	itReg.clear();
 
 	//  Search new into DB and Config-file
-	SYS->db().at().dbList(db_ls, true);
-	db_ls.push_back(DB_CFG);
-	for(unsigned iDB = 0; iDB < db_ls.size(); iDB++)
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(db_ls[iDB]+"."+subId()+"_out",nodePath()+subId()+"_out",fld_cnt++,c_el,false,&full); ) {
+	SYS->db().at().dbList(itLs, true);
+	itLs.push_back(DB_CFG);
+	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek(itLs[iIt]+"."+subId()+"_out",nodePath()+subId()+"_out",fld_cnt++,c_el,false,&full); ) {
 		id = c_el.cfg("ID").getS();
 		type = c_el.cfg("MODULE").getS();
-		if(modPresent(type) && !at(type).at().outPresent(id))
-		    at(type).at().outAdd(id,(db_ls[iDB]==SYS->workDB())?"*.*":db_ls[iDB]);
+		if(!modPresent(type))	continue;
+		if(!at(type).at().outPresent(id))
+		    at(type).at().outAdd(id,(itLs[iIt]==SYS->workDB())?"*.*":itLs[iIt]);
 		at(type).at().outAt(id).at().load(&c_el);
 		itReg[type+"."+id] = true;
 	    }
 
 	//  Check for remove items removed from DB
-	if(!SYS->selDB().empty()) {
-	    vector<string> m_ls;
-	    modList(m_ls);
-	    for(unsigned i_m = 0; i_m < m_ls.size(); i_m++) {
-		at(m_ls[i_m]).at().outList(db_ls);
-		for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
-		    if(itReg.find(m_ls[i_m]+"."+db_ls[i_it]) == itReg.end() && SYS->chkSelDB(at(m_ls[i_m]).at().outAt(db_ls[i_it]).at().DB()))
-			at(m_ls[i_m]).at().outDel(db_ls[i_it]);
+	if(SYS->chkSelDB(SYS->selDB(),true)) {
+	    vector<string> mLs;
+	    modList(mLs);
+	    for(unsigned iM = 0; iM < mLs.size(); iM++) {
+		at(mLs[iM]).at().outList(itLs);
+		for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
+		    if(itReg.find(mLs[iM]+"."+itLs[iIt]) == itReg.end() && SYS->chkSelDB(at(mLs[iM]).at().outAt(itLs[iIt]).at().DB()))
+			at(mLs[iM]).at().outDel(itLs[iIt]);
 	    }
 	}
     } catch(TError &err) {
@@ -233,30 +235,30 @@ void TTransportS::unload( )
 
 void TTransportS::subStart( )
 {
-    vector<string> t_lst, o_lst;
-    modList(t_lst);
-    for(unsigned i_t = 0; i_t < t_lst.size(); i_t++) {
-	AutoHD<TTypeTransport> mod = modAt(t_lst[i_t]);
-	o_lst.clear();
-	mod.at().inList(o_lst);
-	for(unsigned i_o = 0; i_o < o_lst.size(); i_o++)
+    vector<string> tLst, oLst;
+    modList(tLst);
+    for(unsigned iT = 0; iT < tLst.size(); iT++) {
+	AutoHD<TTypeTransport> mod = modAt(tLst[iT]);
+	oLst.clear();
+	mod.at().inList(oLst);
+	for(unsigned iO = 0; iO < oLst.size(); iO++)
 	    try {
-		AutoHD<TTransportIn> in = mod.at().inAt(o_lst[i_o]);
+		AutoHD<TTransportIn> in = mod.at().inAt(oLst[iO]);
 		if(!in.at().startStat() && in.at().toStart()) in.at().start();
 	    } catch(TError &err) {
 		mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		mess_sys(TMess::Error, _("Error starting the input transport '%s'."), o_lst[i_o].c_str());
+		mess_sys(TMess::Error, _("Error starting the input transport '%s'."), oLst[iO].c_str());
 	    }
 
-	o_lst.clear();
-	mod.at().outList(o_lst);
-	for(unsigned i_o = 0; i_o < o_lst.size(); i_o++)
+	oLst.clear();
+	mod.at().outList(oLst);
+	for(unsigned iO = 0; iO < oLst.size(); iO++)
 	    try {
-		AutoHD<TTransportOut> out = mod.at().outAt(o_lst[i_o]);
+		AutoHD<TTransportOut> out = mod.at().outAt(oLst[iO]);
 		if(!out.at().startStat() && out.at().toStart()) out.at().start();
 	    } catch(TError &err) {
 	        mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		mess_sys(TMess::Error, _("Error starting the output transport '%s'."), o_lst[i_o].c_str());
+		mess_sys(TMess::Error, _("Error starting the output transport '%s'."), oLst[iO].c_str());
 	    }
     }
 
@@ -266,29 +268,29 @@ void TTransportS::subStart( )
 
 void TTransportS::subStop( )
 {
-    vector<string> t_lst, o_lst;
-    modList(t_lst);
-    for(unsigned i_t = 0; i_t < t_lst.size(); i_t++) {
-	AutoHD<TTypeTransport> mod = modAt(t_lst[i_t]);
-	o_lst.clear();
-	mod.at().inList(o_lst);
-	for(unsigned i_o = 0; i_o < o_lst.size(); i_o++)
+    vector<string> tLst, oLst;
+    modList(tLst);
+    for(unsigned iT = 0; iT < tLst.size(); iT++) {
+	AutoHD<TTypeTransport> mod = modAt(tLst[iT]);
+	oLst.clear();
+	mod.at().inList(oLst);
+	for(unsigned iO = 0; iO < oLst.size(); iO++)
 	    try {
-		AutoHD<TTransportIn> in = mod.at().inAt(o_lst[i_o]);
+		AutoHD<TTransportIn> in = mod.at().inAt(oLst[iO]);
 		if(in.at().startStat()) in.at().stop();
 	    } catch(TError &err) {
 		mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		mess_sys(TMess::Error, _("Error stopping the input transport '%s'."), o_lst[i_o].c_str());
+		mess_sys(TMess::Error, _("Error stopping the input transport '%s'."), oLst[iO].c_str());
 	    }
-	o_lst.clear();
-	mod.at().outList(o_lst);
-	for(unsigned i_o = 0; i_o < o_lst.size(); i_o++)
+	oLst.clear();
+	mod.at().outList(oLst);
+	for(unsigned iO = 0; iO < oLst.size(); iO++)
 	    try {
-		AutoHD<TTransportOut> out = mod.at().outAt(o_lst[i_o]);
+		AutoHD<TTransportOut> out = mod.at().outAt(oLst[iO]);
 		if(out.at().startStat()) out.at().stop();
 	    } catch(TError &err) {
 		mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		mess_sys(TMess::Error, _("Error stopping the output transport '%s'."), o_lst[i_o].c_str());
+		mess_sys(TMess::Error, _("Error stopping the output transport '%s'."), oLst[iO].c_str());
 	    }
     }
 
@@ -435,16 +437,16 @@ int TTransportS::cntrIfCmd( XMLNode &node, const string &senderPref, const strin
 	return s2i(node.attr("rez"));
     }
 
-    //Check for reforward
+    //Checking to reforward
     off = 0; TSYS::strParse(station, 0, ".", &off);
     if(off && off < (int)station.size()) { node.setAttr("reforwardHost", station.substr(off)); station.erase(off-1); }
 
-    //Connect to the transport
+    //Connection to the transport
     off = 0;
     string user = TSYS::strLine(iuser, 0, &off), rqUser = TSYS::strLine(iuser, 0, &off), rqPass = TSYS::strLine(iuser, 0, &off);
-    TTransportS::ExtHost host = extHostGet(user.empty()?"*":user, station);
+    TTransportS::ExtHost host = extHostGet((user.empty()?"*":user), station);
     bool rqDir = (rqUser.size() && rqUser != host.user) || (rqUser == host.user && rqPass.size());
-    node.setAttr("rqDir", i2s(rqDir))->setAttr("rqUser", rqDir?rqUser:host.user)->setAttr("rqPass", rqDir?rqPass:host.pass);
+    node.setAttr("rqDir", i2s(rqDir))->setAttr("rqUser", (rqDir?rqUser:host.user))->setAttr("rqPass", rqDir?rqPass:host.pass);
     AutoHD<TTransportOut> tr = extHost(host, senderPref);
     if(tr.at().startStat() && host.mdf > tr.at().startTm()) { tr.at().stop(); node.setAttr("rqAuthForce","1"); }
     if(!tr.at().startStat()) tr.at().start(s2i(node.attr("conTm")));
@@ -516,7 +518,9 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 		if(nId)		nId->childAdd("el")->setText(host.id);
 		if(nNm)		nNm->childAdd("el")->setText(trLU(host.name,l,u));
 		if(nTr)		nTr->childAdd("el")->setText(host.transp);
-		if(nAddr)	nAddr->childAdd("el")->setText(host.addr);
+		if(nAddr)
+		    nAddr->childAdd("el")->setAttr("help",modPresent(host.transp)?at(host.transp).at().outAddrHelp():"")->
+					   setText(host.addr);
 		if(nUser)	nUser->childAdd("el")->setText(host.user);
 		if(nPass)	nPass->childAdd("el")->setText(host.pass.size() ? "*******" : "");
 		if(nMode)	nMode->childAdd("el")->setText(i2s(host.mode));
@@ -559,7 +563,7 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* TTypeTransport                               *
 //************************************************
-TTypeTransport::TTypeTransport( const string &id ) : TModule(id)
+TTypeTransport::TTypeTransport( const string &id ) : TModule(id), mOutLifeTime(0)
 {
     mIn = grpAdd("in_");
     mOut = grpAdd("out_");
@@ -572,9 +576,24 @@ TTypeTransport::~TTypeTransport()
 
 TTransportS &TTypeTransport::owner( ) const	{ return (TTransportS&)TModule::owner(); }
 
-void TTypeTransport::inAdd( const string &name, const string &idb )	{ chldAdd(mIn, In(name,idb)); }
+string TTypeTransport::inAdd( const string &iid, const string &idb )
+{
+    return chldAdd(mIn, In(TSYS::strEncode(sTrm(iid),TSYS::oscdID),idb));
+}
 
-void TTypeTransport::outAdd( const string &name, const string &idb )	{ chldAdd(mOut, Out(name,idb)); }
+string TTypeTransport::outAdd( const string &iid, const string &idb )
+{
+    return chldAdd(mOut, Out(TSYS::strEncode(sTrm(iid),TSYS::oscdID),idb));
+}
+
+string TTypeTransport::optDescr( )
+{
+    return TSYS::strMess(_(
+	"======================= Module <%s:%s> options =======================\n"
+	"---- Parameters of the module section '%s' of the configuration file ----\n"
+	"OutLifeTime  <seconds>  Output transports lifetime (by default 0 seconds), 0 to disable the function.\n\n"
+	), mModType.c_str(), modId().c_str(), nodePath().c_str());
+}
 
 void TTypeTransport::cntrCmdProc( XMLNode *opt )
 {
@@ -587,8 +606,12 @@ void TTypeTransport::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,0,"/tr",_("Transports"))) {
 	    ctrMkNode("list",opt,-1,"/tr/in",_("Input"),RWRWR_,"root",STR_ID,5,
 		"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","in_","idSz",OBJ_ID_SZ);
-	    ctrMkNode("list",opt,-1,"/tr/out",_("Output"),RWRWR_,"root",STR_ID,5,
-		"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","out_","idSz",OBJ_ID_SZ);
+	    if(ctrMkNode("area",opt,-1,"/tr/out",_("Output"))) {
+		ctrMkNode("list",opt,-1,"/tr/out/list",_("List"),RWRWR_,"root",STR_ID,5,
+		    "tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","out_","idSz",OBJ_ID_SZ);
+		ctrMkNode("fld",opt,-1,"/tr/out/keepAlive",_("Lifetime, seconds"),RWRWR_,"root",STR_ID,4,"tp","dec","min","0","max","3600",
+		    "help",_("Time of inactivity in the output transport for it closing/disconnection. Set to 0 to disable the transports closing!"));
+	    }
 	}
 	return;
     }
@@ -600,25 +623,50 @@ void TTypeTransport::cntrCmdProc( XMLNode *opt )
 	    for(unsigned iA = 0; iA < list.size(); iA++)
 		opt->childAdd("el")->setAttr("id",list[iA])->setText(inAt(list[iA]).at().name());
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",STR_ID,SEC_WR)) {
-	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
-	    inAdd(vid); inAt(vid).at().setName(opt->text());
-	}
+	if(ctrChkNode(opt,"add",RWRWR_,"root",STR_ID,SEC_WR))	{ opt->setAttr("id", inAdd(opt->attr("id"))); inAt(opt->attr("id")).at().setName(opt->text()); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",STR_ID,SEC_WR))	inDel(opt->attr("id"),true);
     }
-    else if(a_path == "/br/out_" || a_path == "/tr/out") {
+    else if(a_path == "/br/out_" || a_path == "/tr/out" || a_path == "/tr/out/list") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD)) {
 	    outList(list);
 	    for(unsigned iA = 0; iA < list.size(); iA++)
 		opt->childAdd("el")->setAttr("id",list[iA])->setText(outAt(list[iA]).at().name());
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",STR_ID,SEC_WR)) {
-	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
-	    outAdd(vid); outAt(vid).at().setName(opt->text());
-	}
+	if(ctrChkNode(opt,"add",RWRWR_,"root",STR_ID,SEC_WR))	{ opt->setAttr("id", outAdd(opt->attr("id"))); outAt(opt->attr("id")).at().setName(opt->text()); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",STR_ID,SEC_WR))	outDel(opt->attr("id"),true);
     }
+    if(a_path == "/tr/out/keepAlive") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(i2s(outLifeTime()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setOutLifeTime(s2i(opt->text()));
+    }
     else TModule::cntrCmdProc(opt);
+}
+
+void TTypeTransport::load_( )
+{
+    //Load parameters
+    setOutLifeTime(s2i(TBDS::genDBGet(nodePath()+"OutLifeTime",i2s(outLifeTime()))));
+}
+
+void TTypeTransport::save_( )
+{
+    //Save parameters
+    TBDS::genDBSet(nodePath()+"OutLifeTime",i2s(outLifeTime()));
+}
+
+void TTypeTransport::perSYSCall( unsigned int cnt )
+{
+    //Check all output transports
+    vector<string> ls;
+    outList(ls);
+    for(unsigned iL = 0; outLifeTime() && iL < ls.size(); iL++) {
+	AutoHD<TTransportOut> outTr = outAt(ls[iL]);
+
+	int reRs = 1;
+	bool toStop = (outTr.at().startStat() && (reRs=outTr.at().reqRes().tryLock()) == 0 && (TSYS::curTime()-outTr.at().lstReqTm())/1000000 > outLifeTime());
+	if(reRs == 0) outTr.at().reqRes().unlock();
+	if(toStop) try { outTr.at().stop(); } catch(TError &err) { }
+    }
 }
 
 //************************************************
@@ -663,6 +711,7 @@ TCntrNode &TTransportIn::operator=( const TCntrNode &node )
     exclCopy(*src_n, "ID;");
     cfg("MODULE").setS(owner().modId());
     setDB(src_n->mDB);
+    load_();
 
     return *this;
 }
@@ -678,8 +727,6 @@ string TTransportIn::name( )
 string TTransportIn::workId( )		{ return owner().modId()+"."+id(); }
 
 string TTransportIn::tbl( )		{ return owner().owner().subId()+"_in"; }
-
-string TTransportIn::protocol( )	{ return TSYS::strParse(protocolFull(),0,"."); }
 
 string TTransportIn::getStatus( )	{ return startStat() ? _("Started. ") : _("Stoped. "); }
 
@@ -717,21 +764,21 @@ vector<AutoHD<TTransportOut> > TTransportIn::assTrs( bool checkForCleanDisabled 
 
     //Find proper for clean up stopped transports
     if(checkForCleanDisabled)
-	for(int i_ass = 0; i_ass < (int)mAssTrO.size(); i_ass++) {
-	    bool isFree = mAssTrO[i_ass].freeStat();
-	    if(!isFree && mAssTrO[i_ass].at().startStat()) continue;
+	for(int iAss = 0; iAss < (int)mAssTrO.size(); iAss++) {
+	    bool isFree = mAssTrO[iAss].freeStat();
+	    if(!isFree && mAssTrO[iAss].at().startStat()) continue;
 	    if(!isFree) {
-		string oTrId = mAssTrO[i_ass].at().id();
-		mAssTrO[i_ass].free();
+		string oTrId = mAssTrO[iAss].at().id();
+		mAssTrO[iAss].free();
 		try { owner().outDel(oTrId); }
 		catch(TError &er) {
-		    mAssTrO[i_ass] = owner().outAt(oTrId);
+		    mAssTrO[iAss] = owner().outAt(oTrId);
 		    mess_sys(TMess::Error, _("Error deletion the node: %s"), er.mess.c_str());
 		    continue;
 		}
 	    }
-	    mAssTrO.erase(mAssTrO.begin()+i_ass);
-	    i_ass--;
+	    mAssTrO.erase(mAssTrO.begin()+iAss);
+	    iAss--;
 	}
 
     rez = mAssTrO;
@@ -742,7 +789,7 @@ vector<AutoHD<TTransportOut> > TTransportIn::assTrs( bool checkForCleanDisabled 
 
 void TTransportIn::setLogLen( int vl )
 {
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(mLogRes, true);
 
     vl = vmax(0, vmin(10000,vl));
     while((int)mLog.size() > vl) mLog.pop_back();
@@ -752,7 +799,7 @@ void TTransportIn::setLogLen( int vl )
 
 void TTransportIn::pushLogMess( const string &vl )
 {
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(mLogRes, true);
 
     if(!logLen()) return;
 
@@ -766,22 +813,22 @@ string TTransportIn::assTrO( const string &addr )
     MtxAlloc resN(assTrRes, true);
     int trFor = -1;
     //Find proper for replace and clean up stopped transports
-    for(int i_ass = 0; i_ass < (int)mAssTrO.size(); i_ass++) {
-	bool isFree = mAssTrO[i_ass].freeStat();
-	if(!isFree && mAssTrO[i_ass].at().startStat()) continue;
-	if(!isFree && trFor < 0) { trFor = i_ass; continue; }
+    for(int iAss = 0; iAss < (int)mAssTrO.size(); iAss++) {
+	bool isFree = mAssTrO[iAss].freeStat();
+	if(!isFree && mAssTrO[iAss].at().startStat()) continue;
+	if(!isFree && trFor < 0) { trFor = iAss; continue; }
 	if(!isFree) {
-	    string oTrId = mAssTrO[i_ass].at().id();
-	    mAssTrO[i_ass].free();
+	    string oTrId = mAssTrO[iAss].at().id();
+	    mAssTrO[iAss].free();
 	    try { owner().outDel(oTrId); }
 	    catch(TError &er) {
-		mAssTrO[i_ass] = owner().outAt(oTrId);
+		mAssTrO[iAss] = owner().outAt(oTrId);
 		mess_sys(TMess::Error, _("Error deletion the node: %s"), er.mess.c_str());
 		continue;
 	    }
 	}
-	mAssTrO.erase(mAssTrO.begin()+i_ass);
-	i_ass--;
+	mAssTrO.erase(mAssTrO.begin()+iAss);
+	iAss--;
     }
 
     //Create new assigned transport
@@ -830,7 +877,7 @@ TVariant TTransportIn::objFuncCall( const string &iid, vector<TVariant> &prms, c
     }
 
     //Configuration functions call
-    TVariant cfRez = objFunc(iid, prms, user);
+    TVariant cfRez = objFunc(iid, prms, user, RWRWR_, "root:" STR_ID);
     if(!cfRez.isNull()) return cfRez;
 
     return TCntrNode::objFuncCall(iid, prms, user);
@@ -874,21 +921,27 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setDB(opt->text());
     }
     else if(a_path == "/prm/cfg/p_mod" && ctrChkNode(opt)) {
-	vector<string> list;
-	int c_lv = 0;
-	string c_path = "", c_el;
-	for(int c_off = 0; (c_el=TSYS::strSepParse(protocolFull(),0,'.',&c_off)).size(); c_lv++) {
-	    opt->childAdd("el")->setText(c_path);
-	    c_path += c_lv ? "."+c_el : c_el;
+	string curPrt = protocols();
+	vector<string> mLst, itLst;
+	SYS->protocol().at().modList(mLst);
+	// Single protocol directly
+	for(unsigned iM = 0; curPrt.size() && iM < mLst.size(); iM++) {
+	    SYS->protocol().at().at(mLst[iM]).at().itemListIn(itLst);
+	    opt->childAdd("el")->setText(mLst[iM]);
+	    for(unsigned iIt = 0; iIt < itLst.size(); iIt++)
+		opt->childAdd("el")->setText(mLst[iM]+"."+itLst[iIt]);
 	}
-	opt->childAdd("el")->setText(c_path);
-	if(c_lv == 0) SYS->protocol().at().modList(list);
-	else {
-	    c_path += ".";
-	    SYS->protocol().at().at(protocol()).at().itemListIn(list,protocolFull());
+	opt->childAdd("el")->setText("");
+	// Combinated protocol
+	for(unsigned iM = 0; iM < mLst.size(); iM++) {
+	    SYS->protocol().at().at(mLst[iM]).at().itemListIn(itLst);
+	    if(!TRegExp("(^|;)"+mLst[iM]+"(;|$)","m").test(curPrt))
+		opt->childAdd("el")->setText((curPrt.size()?curPrt+";":"")+mLst[iM]);
+	    for(unsigned iIt = 0; iIt < itLst.size(); iIt++)
+		if(!TRegExp("(^|;)"+mLst[iM]+"\\."+itLst[iIt]+"(;|$)","m").test(curPrt))
+		    opt->childAdd("el")->setText((curPrt.size()?curPrt+";":"")+mLst[iM]+"."+itLst[iIt]);
 	}
-	for(unsigned i_a=0; i_a < list.size(); i_a++)
-	    opt->childAdd("el")->setText(c_path+list[i_a]);
+	opt->childAdd("el")->setText("");
     }
     else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",STR_ID,RWRWR_);
     else if(a_path == "/log/logLen") {
@@ -897,7 +950,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/log/log") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD)) {
-	    MtxAlloc res(dataRes(), true);
+	    MtxAlloc res(mLogRes, true);
 	    for(unsigned iL = 0; iL < mLog.size(); iL++) {
 		int off = 0;
 		int64_t itTm   = s2ll(TSYS::strLine(mLog[iL],0,&off));
@@ -910,7 +963,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 	    opt->setAttr("font","Courier");
 	    opt->childAdd("rule")->setAttr("expr","^\\[[^\\]]+.+$")->setAttr("color","blue")->setAttr("font_italic","1")->
 		childAdd("rule")->setAttr("expr","^\\[[^\\]]+\\]")->setAttr("color","darkblue")->setAttr("font_weight","1");
-	    opt->childAdd("rule")->setAttr("expr","^[0-9a-fA-F]{2,} .+$")->setAttr("color","black");
+	    //opt->childAdd("rule")->setAttr("expr","^[0-9a-fA-F]{2,} .+$")->setAttr("color","black");
 	}
     }
     else TCntrNode::cntrCmdProc(opt);
@@ -920,7 +973,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 //* TTransportOut                                *
 //************************************************
 TTransportOut::TTransportOut( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), runSt(false), mId(cfg("ID")), mStart(cfg("START").getBd()),
+    TConfig(el), runSt(false), mLstReqTm(0), mId(cfg("ID")), mStart(cfg("START").getBd()),
     mDB(idb), mStartTm(0), mPrm1(0), mPrm2(0), mReqRes(true), mLogLen(0)
 {
     mId = iid;
@@ -939,6 +992,7 @@ TCntrNode &TTransportOut::operator=( const TCntrNode &node )
     exclCopy(*src_n, "ID;");
     cfg("MODULE").setS(owner().modId());
     setDB(src_n->mDB);
+    load_();
 
     return *this;
 }
@@ -972,7 +1026,8 @@ bool TTransportOut::cfgChange( TCfg &co, const TVariant &pc )
 
 string TTransportOut::getStatus( )
 {
-    return (startStat()?_("Started. "):_("Stoped. ")) + TSYS::strMess(_("Established: %s. "), atm2s(startTm(),"%d-%m-%Y %H:%M:%S").c_str());
+    return (startStat()?_("Started. "):_("Stoped. ")) +
+	TSYS::strMess(_("Established: %s. Last: %s. "), atm2s(startTm(),"%d-%m-%Y %H:%M:%S").c_str(), atm2s(1e-6*lstReqTm(),"%d-%m-%Y %H:%M:%S").c_str());
 }
 
 void TTransportOut::load_( TConfig *icfg )
@@ -1002,7 +1057,7 @@ void TTransportOut::messProtIO( XMLNode &io, const string &prot )
 
 void TTransportOut::setLogLen( int vl )
 {
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(mLogRes, true);
 
     vl = vmax(0, vmin(10000,vl));
     while((int)mLog.size() > vl) mLog.pop_back();
@@ -1012,7 +1067,7 @@ void TTransportOut::setLogLen( int vl )
 
 void TTransportOut::pushLogMess( const string &vl )
 {
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(mLogRes, true);
 
     if(!logLen()) return;
 
@@ -1068,21 +1123,27 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, 
 
 	return startStat();
     }
-    // string addr( string vl = "" ) - the transport address return, set it to no empty <vl>
+    // string addr( string vl = "" ) - the transport address return, set it to not empty <vl>
     if(iid == "addr") {
 	if(prms.size() && prms[0].getS().size())
 	    try{ setAddr(prms[0].getS()); } catch(TError&) { }
 	return addr();
     }
-    // string timings( string vl = "" ) - the transport timings return, set the to no empty <vl>
+    // string timings( string vl = "" ) - the transport timings return, set it to not empty <vl>
     if(iid == "timings") {
 	if(prms.size() && prms[0].getS().size())
 	    try{ setTimings(prms[0].getS()); } catch(TError&) { }
 	return timings();
     }
+    // int attempts( int vl = EVAL ) - the transport requesting attempts return, set it to not EVAL <vl>
+    if(iid == "attempts") {
+	if(prms.size() && prms[0].getI() != EVAL_INT)
+	    try{ setAttempts(prms[0].getI()); } catch(TError&) { }
+	return attempts();
+    }
 
     //Configuration functions call
-    TVariant cfRez = objFunc(iid, prms, user);
+    TVariant cfRez = objFunc(iid, prms, user, RWRWR_, "root:" STR_ID);
     if(!cfRez.isNull()) return cfRez;
 
     return TCntrNode::objFuncCall(iid, prms, user);
@@ -1235,7 +1296,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/log/log") {
 	if(ctrChkNode(opt,"get",R_R___,"root",STR_ID,SEC_RD)) {
-	    MtxAlloc res(dataRes(), true);
+	    MtxAlloc res(mLogRes, true);
 	    for(unsigned iL = 0; iL < mLog.size(); iL++) {
 		int off = 0;
 		int64_t itTm   = s2ll(TSYS::strLine(mLog[iL],0,&off));
@@ -1248,7 +1309,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	    opt->setAttr("font","Courier");
 	    opt->childAdd("rule")->setAttr("expr","^\\[[^\\]]+.+$")->setAttr("color","blue")->setAttr("font_italic","1")->
 		childAdd("rule")->setAttr("expr","^\\[[^\\]]+\\]")->setAttr("color","darkblue")->setAttr("font_weight","1");
-	    opt->childAdd("rule")->setAttr("expr","^[0-9a-fA-F]{2,} .+$")->setAttr("color","black");
+	    //opt->childAdd("rule")->setAttr("expr","^[0-9a-fA-F]{2,} .+$")->setAttr("color","black");
 	}
     }
     else TCntrNode::cntrCmdProc(opt);

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-05 19:05+0300\n"
+"POT-Creation-Date: 2020-01-26 14:37+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -84,26 +84,8 @@ msgstr ""
 msgid "Spent time %s[%s]"
 msgstr ""
 
-msgid "Parameter is disabled or is not based on the template."
-msgstr ""
-
-msgid "Error of parameter ID."
-msgstr ""
-
 msgid "Error calculating template."
 msgstr ""
 
 msgid "Error or non-template parameter."
-msgstr ""
-
-msgid "Template configuration"
-msgstr ""
-
-msgid "Only attributes are to be shown"
-msgstr ""
-
-msgid "Parameters"
-msgstr ""
-
-msgid "Error, recursive linking."
 msgstr ""

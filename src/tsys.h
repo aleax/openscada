@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tsys.h
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,18 +27,24 @@
 #define PACKAGE_AUTHOR	_("Roman Savochenko")
 #define PACKAGE_SITE	"http://oscada.org"
 
-//Other system's constants
+//Other global constants
 #define OBJ_ID_SZ	"20"	// Typical object's ID size. Warning, the size can cause key limit on MySQL like DB.
 #define OBJ_NM_SZ	"100"	// Typical object's NAME size.
-#define USER_FILE_LIMIT	1048576	// Loading and processing files limit into userspace
+#define ARCH_ID_SZ	"20"	// Size of the archive identifier,
+				// !!!! Must be related to Archive.FSArch identifier size of the archive to store in the files
+#define USER_FILE_LIMIT	1048576	// Loading and processing files limit into the userspace
+#define USER_ITS_LIMIT	1000000	// Creating user items limit, like to array items
 #define STR_BUF_LEN	10000	// Length of string buffers (no string class)
 #define NSTR_BUF_LEN	100	// Length of string buffers for number
 #define STD_WAIT_DELAY	100	// Standard wait dalay (ms)
 #define STD_CACHE_LIM	100	// Standard caches limit
-#define STD_WAIT_TM	10	// Standard timeouts length (s), and interface wait for long
-#define STD_INTERF_TM	5	// Interface wait for long (s)
+#define STD_WAIT_TM	5	// Standard timeouts length (s), and interface wait for long
+#define STD_INTERF_TM	7	// Interface wait for long (s)
+#define SERV_TASK_PER	10	// Service task period
+
 #define BUF_ARCH_NM	"<buffer>"
 #define ALRM_ARCH_NM	"<alarms>"
+#define ALRM_ARCH_CH_NM	"<alarmsChange>"
 #define DB_CFG		"<cfg>"
 #define DB_NULL		"<NULL>"
 
@@ -83,7 +89,7 @@ class TSYS : public TCntrNode
 
     public:
 	//Data
-	enum Code	{ PathEl, HttpURL, Html, JavaSc, SQL, Custom, base64, FormatPrint, oscdID, Bin, Reverse, ShieldSimb, ToLower };
+	enum Code	{ PathEl, HttpURL, Html, JavaSc, SQL, Custom, base64, FormatPrint, oscdID, Bin, Reverse, ShieldSimb, ToLower, Limit };
 	enum IntView	{ Dec, Oct, Hex };
 
 	// Task structure
@@ -94,10 +100,10 @@ class TSYS : public TCntrNode
 		enum Flgs	{ Detached = 0x01, FinishTask = 0x02 };
 
 		//Methods
-		STask( ) : thr(0), policy(0), prior(0), tid(0), flgs(0), tm_beg(0), tm_end(0), tm_per(0), tm_pnt(0),
+		STask( ) : thr(0), policy(0), phase(0), prior(0), tid(0), flgs(0), tm_beg(0), tm_end(0), tm_per(0), tm_pnt(0),
 		    cycleLost(0), lagMax(0), consMax(0)	{ }
 		STask( pthread_t ithr, char ipolicy, char iprior ) :
-		    thr(ithr), policy(ipolicy), prior(iprior), tid(0), flgs(0), tm_beg(0), tm_end(0), tm_per(0), tm_pnt(0),
+		    thr(ithr), policy(ipolicy), phase(0), prior(iprior), tid(0), flgs(0), tm_beg(0), tm_end(0), tm_per(0), tm_pnt(0),
 		    cycleLost(0), lagMax(0), consMax(0)	{ }
 
 		float consumpt( ) const	{ return tm_beg ? 1e-9*(tm_end-tm_beg) : 0; }
@@ -106,7 +112,8 @@ class TSYS : public TCntrNode
 		//Attributes
 		string		path;
 		pthread_t	thr;
-		uint8_t		policy, prior;
+		uint8_t		policy, phase;
+		int16_t		prior;
 		pid_t		tid;
 		ResString	cpuSet;
 		void *(*task) (void *);
@@ -182,19 +189,21 @@ class TSYS : public TCntrNode
 	string	selDB( )	{ return mSelDB; }
 	string	mainCPUs( )	{ return mMainCPUs; }
 	bool	clockRT( )	{ return mClockRT; }
+	int	taskInvPhs( )	{ return mTaskInvPhs; }
 	bool	saveAtExit( )	{ return mSaveAtExit; }
 	int	savePeriod( )	{ return mSavePeriod; }
+	bool	modifCalc( )	{ return mModifCalc; }
 
 	void	setWorkDB( const string &wdb )	{ mWorkDB = wdb; modifG(); }
 	void	setSelDB( const string &vl )	{ mSelDB = vl; }
 	void	setMainCPUs( const string &vl );
 	void	setClockRT( bool vl )		{ mClockRT = vl; modif(); }
+	void	setTaskInvPhs( int vl );
 	void	setSaveAtExit( bool vl )	{ mSaveAtExit = vl; modif(); }
 	void	setSavePeriod( int vl )		{ mSavePeriod = vmax(0,vl); modif(); }
+	void	setModifCalc( bool vl )		{ mModifCalc = vl; modif(); }
 
 	bool	chkSelDB( const string& wDB, bool isStrong = false );
-
-
 
 	static void sighandler( int signal, siginfo_t *siginfo, void *context );
 
@@ -274,12 +283,13 @@ class TSYS : public TCntrNode
 	    double rez = floor(val*pow(10,dig)+0.5)/pow(10,dig);
 	    return toint ? floor(rez+0.5) : rez;
 	}
-	static string atime2str( time_t tm, const string &format = "" );
+	static string atime2str( time_t tm, const string &format = "", bool gmt = false );
 	static string time2str( double tm );
 	static string cpct2str( double cnt );
 
-	// Convert value to string
+	// Convert string to value
 	static double str2real( const string &val );
+	static time_t str2atime( const string &val, const string &format = "", bool gmt = false );
 
 	// Adress convertors
 	static string addr2str( void *addr );
@@ -296,7 +306,6 @@ class TSYS : public TCntrNode
 	static string strEncode( const string &in, Code tp, const string &opt1 = "" );
 	static string strDecode( const string &in, Code tp = Custom, const string &opt1 = "" );
 	static string strMess( const char *fmt, ... );
-	static string strMess( unsigned len, const char *fmt, ... );
 	static string strLabEnum( const string &base );
 
 	static string strCompr( const string &in, int lev = -1 );
@@ -361,6 +370,8 @@ class TSYS : public TCntrNode
 
 	int permCrtFiles( bool exec = false );
 
+	ResMtx *commonLock( const string &nm );
+
 	// Control interface functions
 	static void ctrListFS( XMLNode *nd, const string &fsBase, const string &fileExt = "" );	//Inline file system browsing
 
@@ -415,8 +426,10 @@ class TSYS : public TCntrNode
 
 	string	mWorkDB, mSelDB,// Work and selected DB
 		mMainCPUs;	// Main used processors set
+	int	mTaskInvPhs;	// Number of phases of the task invoking
 	bool	mSaveAtExit;	// Save at exit
 	int	mSavePeriod;	// Save period (s) for periodic system saving to DB
+	bool	mModifCalc;	// Set modification for the calculated objects
 
 	bool	isLoaded;
 
@@ -452,6 +465,8 @@ class TSYS : public TCntrNode
 	float		mRdTaskPer;	//Redundant task period in seconds
 	bool		mRdPrimCmdTr;	//Allow transfer local primary commands to redundant ones
 
+	map<string, ResMtx*>	mCommonLocks;
+
 	struct sigaction	sigActOrig;
 };
 
@@ -465,7 +480,7 @@ inline string u2s( unsigned val, TSYS::IntView view = TSYS::Dec ){ return TSYS::
 inline string ll2s( long long val, TSYS::IntView view = TSYS::Dec ){ return TSYS::ll2str(val, view); }
 inline string r2s( double val, int prec = 15, char tp = 'g' )	{ return TSYS::real2str(val, prec, tp); }
 inline double rRnd( double val, int dig = 0, bool toint = false ){ return TSYS::realRound(val, dig, toint); }
-inline string atm2s( time_t tm, const string &format = "" )	{ return TSYS::atime2str(tm, format); }
+inline string atm2s( time_t tm, const string &format = "", bool gmt = false )	{ return TSYS::atime2str(tm, format, gmt); }
 inline string tm2s( double tm )					{ return TSYS::time2str(tm); }
 
 inline int s2i( const string &val )		{ return atoi(val.c_str()); }

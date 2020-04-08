@@ -1,7 +1,8 @@
 
 //OpenSCADA module DAQ.MMS file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2013-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2013-2017,2019-2020                                     *
+ *                      by Roman Savochenko, <roman@oscada.org>            *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,7 +38,7 @@
 #define MOD_NAME	_("MMS(IEC-9506)")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.3.17"
+#define MOD_VER		"1.4.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("MMS(IEC-9506) client implementation.")
 #define LICENSE		"GPL2"
@@ -116,7 +117,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 //* TMdContr                                      *
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem ) : TController(name_c,daq_db,cfgelem), enRes(true), cntrRes(true),
-    mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mRestTm(cfg("TM_REST")), mSync(cfg("SYNCPER")), mAddr(cfg("ADDR")), mVarsRdReq(cfg("VARS_RD_REQ")),
+    mPer(1e9), mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mRestTm(cfg("TM_REST")), mSync(cfg("SYNCPER")), mAddr(cfg("ADDR")), mVarsRdReq(cfg("VARS_RD_REQ")),
     prcSt(false), callSt(false), isReload(false), alSt(-1), acq_err(dataRes()), tmDelay(0)
 {
     cfg("PRM_BD").setS("MMSPrm_"+name_c);
@@ -274,8 +275,6 @@ void TMdContr::start_( )
 {
     reset();	//MMS coneection state reset
 
-    //Schedule process
-    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
     tmDelay = 0;
 
     //Clear data blocks
@@ -301,7 +300,7 @@ void TMdContr::stop_( )
     //Stop the request and calc data task
     SYS->taskDestroy(nodePath('.',true));
 
-    alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),owner().modId().c_str(),id().c_str(),_("STOP")),TMess::Info);
+    alarmSet(TSYS::strMess(_("Connection to the data source: %s."),_("STOP")), TMess::Info);
     alSt = -1;
 
     //Set EVal
@@ -354,8 +353,8 @@ void *TMdContr::Task( void *icntr )
 			mess_err(cntr.nodePath().c_str(), "%s", cntr.acq_err.getVal().c_str());
 			if(cntr.alSt <= 0) {
 			    cntr.alSt = 1;
-			    cntr.alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),cntr.owner().modId().c_str(),cntr.id().c_str(),
-								TRegExp(":","g").replace(cntr.acq_err.getVal(),"=").c_str()));
+			    cntr.alarmSet(TSYS::strMess(_("Connection to the data source: %s."),
+				TRegExp(":","g").replace(cntr.acq_err.getVal(),"=").c_str()));
 			}
 			cntr.tmDelay = cntr.restTm();
 		    }
@@ -363,8 +362,7 @@ void *TMdContr::Task( void *icntr )
 			cntr.acq_err.setVal("");
 			if(cntr.alSt != 0) {
 			    cntr.alSt = 0;
-			    cntr.alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),
-							    cntr.owner().modId().c_str(),cntr.id().c_str(),_("OK")),TMess::Info);
+			    cntr.alarmSet(TSYS::strMess(_("Connection to the data source: %s."),_("OK")), TMess::Info);
 			}
 		    }
 		}
@@ -453,7 +451,7 @@ void *TMdContr::Task( void *icntr )
 			cntr.acq_err.setVal(aPrcErr);
 			if(cntr.alSt <= 0) {
 			    cntr.alSt = 1;
-			    cntr.alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),cntr.owner().modId().c_str(),cntr.id().c_str(),
+			    cntr.alarmSet(TSYS::strMess(_("Connection to the data source: %s."),
 						(aPrcErr.size()?TRegExp(":","g").replace(cntr.acq_err.getVal(),"=").c_str():_("No data"))));
 			}
 			cntr.tmDelay = cntr.restTm();
@@ -486,7 +484,9 @@ bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
     TController::cfgChange(co, pc);
 
     try {
-	if(co.name() == "ADDR" && enableStat()) tr.at().setAddr("TCP:"+co.getS());
+	if(co.fld().name() == "SCHEDULE")
+	    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
+	else if(co.name() == "ADDR" && enableStat()) tr.at().setAddr("TCP:"+co.getS());
     } catch(...) { }
 
     return true;
@@ -601,7 +601,7 @@ string TMdPrm::attrPrc( )
 
 	// Request value for the type obtain
 	if(vtp < 0) {
-	    if(s2i(conErr) == 10)	continue;
+	    if(s2i(conErr) == TError::Tr_Connect)	continue;
 	    value->setAttr("itemId", TSYS::pathLev(var,1));
 	    if(TSYS::pathLev(var,0) != "*") value->setAttr("domainId", TSYS::pathLev(var,0));
 	    owner().reqService(valCntr);
@@ -760,15 +760,9 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     if(!enableStat() || !owner().startStat())	{ vo.setS(EVAL_STR, 0, true); return; }
 
     //Send to active reserve station
-    if(owner().redntUse()) {
-	if(vl == pvl) return;
-	XMLNode req("set");
-	req.setAttr("path", nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
-	SYS->daq().at().rdStRequest(owner().workId(), req);
-	return;
-    }
+    if(vlSetRednt(vo,vl,pvl))	return;
 
-    if(vl.isEVal() || vl == pvl) return;
+    if(vl.isEVal() || vl == pvl)return;
 
     int off = 0;
     string nId = TSYS::strLine(vo.fld().reserve(), 0, &off);

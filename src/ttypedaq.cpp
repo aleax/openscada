@@ -1,7 +1,7 @@
 
 //OpenSCADA file: ttypedaq.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -71,7 +71,7 @@ void TTypeDAQ::postEnable( int flag )
     TModule::postEnable(flag);
 
     if(redntAllow()) {
-	fldAdd(new TFld("REDNT",_("Redundant"),TFld::Integer,TFld::Selected,"1","0",
+	fldAdd(new TFld("REDNT",_("Redundant"),TFld::Integer,TFld::Selectable,"1","0",
 	    (i2s(TController::Off)+";"+i2s(TController::Asymmetric)/*+";"+i2s(TController::Symmetric)*/).c_str(),
 	    _("Off;Asymmetric"/*;Symmetric"*/)));
 	fldAdd(new TFld("REDNT_RUN",_("Preference for running"),TFld::String,0,"20","<high>"));
@@ -101,7 +101,10 @@ void TTypeDAQ::modStop( )
 	at(lst[i_l]).at().stop();
 }
 
-void TTypeDAQ::add( const string &name, const string &daq_db )	{ chldAdd(mCntr, ContrAttach(name,daq_db)); }
+string TTypeDAQ::add( const string &iid, const string &daq_db )
+{
+    return chldAdd(mCntr, ContrAttach(TSYS::strEncode(sTrm(iid),TSYS::oscdID),daq_db));
+}
 
 TTypeParam &TTypeDAQ::tpPrmAt( unsigned id )
 {
@@ -166,11 +169,7 @@ void TTypeDAQ::cntrCmdProc( XMLNode *opt )
 	    for(unsigned i_a=0; i_a < c_list.size(); i_a++)
 		opt->childAdd("el")->setAttr("id",c_list[i_a])->setText(at(c_list[i_a]).at().name());
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
-	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
-	    add(vid); at(vid).at().setName(opt->text());
-	    opt->setAttr("id", vid);
-	}
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	{ opt->setAttr("id", add(opt->attr("id"))); at(opt->attr("id")).at().setName(opt->text()); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(mCntr, opt->attr("id"), -1, 1);
     }
     else TModule::cntrCmdProc(opt);

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-28 10:03+0200\n"
+"POT-Creation-Date: 2018-12-31 16:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "Roman Savochenko"
 msgstr ""
 
-msgid "Provides the WEB-based configurator of the OpenSCADA system."
+msgid "Provides the WEB-based configurator of the OpenSCADA."
 msgstr ""
 
 msgid "Name: "
@@ -113,64 +113,61 @@ msgstr ""
 msgid "Move down row"
 msgstr ""
 
-msgid "Post request broken!"
+msgid "The post request is broken!"
 msgstr ""
 
 #, c-format
-msgid "%s| Change <%s:%s> to %s"
+msgid "%s| Changed for <%s:%s> to %s"
 msgstr ""
 
 #, c-format
-msgid "%s| Go to link '%s'"
+msgid "%s| Went to the link '%s'"
 msgstr ""
 
 #, c-format
-msgid "Go to '%s'."
+msgid "Went to '%s'."
 msgstr ""
 
 #, c-format
-msgid "%s| Put command <%s:%s>"
+msgid "%s| Put the command <%s:%s>"
 msgstr ""
 
 #, c-format
-msgid "%s| Delete '%s' element <%s:%s>."
+msgid "%s| Deleted '%s' for the element <%s:%s>."
 msgstr ""
 
 #, c-format
-msgid "%s| Insert '%s' element <%s:%s> to %s."
+msgid "%s| Inserted '%s' for the element <%s:%s> to %s."
 msgstr ""
 
 #, c-format
-msgid "%s| Add '%s' element <%s:%s>."
+msgid "%s| Added '%s' for the element <%s:%s>."
 msgstr ""
 
 #, c-format
-msgid "%s| Set '%s' element %s to <%s:%s>."
+msgid "%s| Set '%s' for the element %s to <%s:%s>."
 msgstr ""
 
 #, c-format
-msgid "%s| Move '%s' from %s to %s."
+msgid "%s| Moved '%s' from %s to %s."
 msgstr ""
 
 #, c-format
-msgid "%s| Set '%s' cell ('%s':%s) to: %s."
+msgid "%s| Set '%s' for the cell <%s:%s> to %s."
 msgstr ""
 
 #, c-format
-msgid "%s| Add '%s' record."
+msgid "%s| Added '%s' for a record."
 msgstr ""
 
 #, c-format
-msgid "%s| Insert '%s' record %d."
+msgid "%s| Inserted '%s' for the record %d."
 msgstr ""
 
 #, c-format
-msgid "%s| Delete '%s' record %d."
+msgid "%s| Deleted '%s' for the record %d."
 msgstr ""
 
 #, c-format
-msgid "%s| Move '%s' record from %d to %d."
-msgstr ""
-
-msgid "System configurator (WEB)"
+msgid "%s| Moved '%s' for a record from %d to %d."
 msgstr ""

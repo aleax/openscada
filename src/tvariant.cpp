@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tvariant.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2010-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -496,7 +496,7 @@ TVariant TVarObj::funcCall( const string &id, vector<TVariant> &prms )
     // bool isEVal() - return "false" for EVAL detect
     if(id == "isEVal")	return false;
 
-    throw TError(TSYS::strMess("Obj%s",objName().c_str()).c_str(), _("Error function '%s' or missing parameters for it."), id.c_str());
+    throw TError(TSYS::strMess("Obj%s",objName().c_str()).c_str(), _("Error the function '%s' or missing its parameters."), id.c_str());
 }
 
 //*****************************************************************
@@ -614,26 +614,27 @@ AutoHD<TVarObj> TArrayObj::parseStrXML( XMLNode *nd )
 
 TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 {
-    // string join(string sep = ",") - join items to string
+    // string join( string sep = "," ) - join items to string
     //  sep - items separator
     if(id == "join" || id == "toString" || id == "valueOf") {
 	string rez, sep = prms.size() ? prms[0].getS() : ",";
 	dataM.lock();
-	for(unsigned i_e = 0; i_e < mEls.size(); i_e++)
-	    rez += (i_e?sep:"")+mEls[i_e].getS();
+	for(unsigned iE = 0; iE < mEls.size(); iE++)
+	    rez += (iE?sep:"")+mEls[iE].getS();
 	dataM.unlock();
 	return rez;
     }
-    // TArrayObj concat(TArrayObj arr) - concatenate array
+    // TArrayObj concat( TArrayObj arr ) - concatenate array
     //  arr - source array
-    if(id == "concat" && prms.size() && prms[0].type() == TVariant::Object && !AutoHD<TArrayObj>(prms[0].getO()).freeStat()) {
+    if(id == "concat" && prms.size()) {
+	AutoHD<TArrayObj> sArr;
+	if(prms[0].type() != TVariant::Object || (sArr=prms[0].getO()).freeStat())	return this;
 	dataM.lock();
-	TArrayObj *sArr = (TArrayObj*)&prms[0].getO().at();
-	for(unsigned iP = 0; iP < sArr->mEls.size(); iP++) mEls.push_back(sArr->mEls[iP]);
+	for(unsigned iP = 0; iP < sArr.at().arSize(); iP++) mEls.push_back(sArr.at().arGet(iP));
 	dataM.unlock();
 	return this;
     }
-    // int push(ElTp var, ...) - push variables to array
+    // int push( ElTp var, ... ) - push variables to array
     //  var - variable
     if(id == "push" && prms.size()) {
 	dataM.lock();
@@ -666,7 +667,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	dataM.unlock();
 	return val;
     }
-    // int unshift(ElTp var, ...) - shift items to array upward
+    // int unshift( ElTp var, ... ) - shift items to array upward
     //  var - variable
     if(id == "unshift" && prms.size()) {
 	dataM.lock();
@@ -674,7 +675,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	dataM.unlock();
 	return (int)mEls.size();
     }
-    // Array slice(int beg, int end) - get array part from positon <beg> to <end> (exclude)
+    // Array slice( int beg, int end ) - get array part from positon <beg> to <end> (exclude)
     //  beg - begin position
     //  end - end position
     if(id == "slice" && prms.size()) {
@@ -692,7 +693,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	dataM.unlock();
 	return rez;
     }
-    // Array splice(int beg, int remN, ElTp val1, ElTp val2, ...) - insert, remove or replace array's items
+    // Array splice( int beg, int remN, ElTp val1, ElTp val2, ... ) - insert, remove or replace array's items
     //  beg - start position
     //  remN - removed items number
     //  val1, val2, ... - values for insert
@@ -702,17 +703,45 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	int cnt = (prms.size()>1) ? prms[1].getI() : mEls.size();
 	//  Delete elements
 	TArrayObj *rez = new TArrayObj();
-	for(int i_c = 0; i_c < cnt && beg < (int)mEls.size(); i_c++) {
-	    rez->arSet(i_c, mEls[beg]);
+	for(int iC = 0; iC < cnt && beg < (int)mEls.size(); iC++) {
+	    rez->arSet(iC, mEls[beg]);
 	    mEls.erase(mEls.begin()+beg);
 	}
 	//  Insert elements
-	for(unsigned i_c = 2; i_c < prms.size() && beg <= (int)mEls.size(); i_c++)
-	    mEls.insert(mEls.begin()+beg+i_c-2,prms[i_c]);
+	for(unsigned iC = 2; iC < prms.size() && beg <= (int)mEls.size(); iC++)
+	    mEls.insert(mEls.begin()+beg+iC-2,prms[iC]);
 	dataM.unlock();
 	return rez;
     }
-    // double sum(int beg, int end) - sum of the array part from positon <beg> to <end> (exclude)
+    // int indexOf( ElTp var, int start = 0 ) - returns the array index of the required variable <var> in the original
+    //       row from the position <start>
+    //  var - requested variable
+    //  start - start position for search
+    if(id == "indexOf" && prms.size()) {
+	dataM.lock();
+	size_t sp = 0;
+	if(prms.size() > 1) sp = vmax(0, vmin(mEls.size()-1,(unsigned)prms[1].getI()));
+	string sVl = prms[0].getS();
+	unsigned iE = sp;
+	while(iE < mEls.size() && mEls[iE].getS() != sVl) iE++;
+	int rez = (iE < mEls.size()) ? iE : -1;
+	dataM.unlock();
+	return rez;
+    }
+    // int lastIndexOf( ElTp var, int start ) - returns the array index of the required variable <var> in the original
+    //       row from the position <start> when searching from the end
+    //  var - requested variable
+    //  start - start position for search from the end
+    if(id == "lastIndexOf" && prms.size()) {
+	dataM.lock();
+	string sVl = prms[0].getS();
+	int iE = mEls.size();
+	while(iE >= 0 && mEls[iE].getS() != sVl) iE--;
+	int rez = (iE < (int)mEls.size()) ? iE : -1;
+	dataM.unlock();
+	return rez;
+    }
+    // double sum( int beg, int end ) - sum of the array values part from the position <beg> to <end>, excluding
     //  beg - begin position
     //  end - end position
     if(id == "sum" && prms.size()) {

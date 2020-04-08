@@ -1,8 +1,8 @@
 
 //OpenSCADA module UI.VISION file: tvision.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Evgen Zaichuk
- *                 2006-2018 by Roman Savochenko (rom_as@oscada.org)
+ *   Copyright (C) 2006-2020 by Roman Savochenko (roman@oscada.org)
+ *                 2005-2006 by Evgen Zaichuk
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -28,15 +28,13 @@
 #include <QMessageBox>
 #include <QErrorMessage>
 
-#include <tsys.h>
-#include <tmess.h>
-
-#include "vis_devel.h"
 #include "vis_run.h"
-#include "vis_widgs.h"
 #include "vis_shapes.h"
 #include "vis_shape_elfig.h"
-#include "tvision.h"
+#include "vis_widgs.h"
+#include "vis_devel.h"
+
+#include <tmess.h>
 
 //*************************************************
 //* Modul info!                                   *
@@ -45,7 +43,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"5.4.4"
+#define MOD_VER		"7.0.2"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
 #define DESCRIPTION	_("Visual operation user interface, based on the Qt library - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -83,7 +81,7 @@ using namespace VISION;
 //* QTCFG::TVision                                *
 //*************************************************
 TVision::TVision( string name ) : TUI(MOD_ID), mVCAStation(dataRes()), mUserStart(dataRes()), mUserPass(dataRes()),
-    mExitLstRunPrjCls(true), mEndRun(false), mRestTime(30), mCachePgLife(1), mScrnCnt(0)
+    mExitLstRunPrjCls(true), mDropCommonWdgStls(true), mEndRun(false), mRestTime(30), mCachePgLife(1), mCachePgSz(10), mScrnCnt(0)
 {
     mVCAStation = ".";
     mod = this;
@@ -114,9 +112,11 @@ string TVision::optDescr( )
 	"StartUser  <user>       Start-up, no-password, user.\n"
 	"UserPass   <pass>       User password for non-local start.\n"
 	"RunPrjs    <list>       List of projects to be launched at the start of the module.\n"
-	"ExitLstRunPrjCls <0|1>  Exit closing the last completed project (default = 1).\n"
-	"CachePgLife <hours>     The lifetime of pages in the cache.\n"
-	"VCAstation <id>         The station with the VCA engine ('.' Is local).\n"
+	"ExitLstRunPrjCls <0|1>  Exit closing the last completed project (by default 1).\n"
+	"DropCommonWdgStls <0|1> Reset widget styles to common for some specific widgets in runtime, like to buttons (default 1).\n"
+	"CachePgLife <hours>     Lifetime of the pages in the cache (by default 1).\n"
+	"CachePgSz  <numb>       Maximum number of the pages in the cache (by default 10).\n"
+	"VCAstation <id>         The station with the VCA engine ('.' is local).\n"
 	"RestoreTime <seconds>   Connection recovery time.\n\n"),
 	MOD_TYPE, MOD_ID, nodePath().c_str());
 }
@@ -132,7 +132,9 @@ void TVision::load_( )
     setUserPass(TBDS::genDBGet(nodePath()+"UserPass",""));
     setRunPrjs(TBDS::genDBGet(nodePath()+"RunPrjs",""));
     setExitLstRunPrjCls(s2i(TBDS::genDBGet(nodePath()+"ExitLstRunPrjCls",i2s(exitLstRunPrjCls()))));
+    setDropCommonWdgStls(s2i(TBDS::genDBGet(nodePath()+"DropCommonWdgStls",i2s(dropCommonWdgStls()))));
     setCachePgLife(s2r(TBDS::genDBGet(nodePath()+"CachePgLife",r2s(cachePgLife()))));
+    setCachePgSz(s2i(TBDS::genDBGet(nodePath()+"CachePgSz",i2s(cachePgSz()))));
     setVCAStation(TBDS::genDBGet(nodePath()+"VCAstation","."));
     setRestoreTime(s2i(TBDS::genDBGet(nodePath()+"RestoreTime",i2s(restoreTime()))));
 }
@@ -146,7 +148,9 @@ void TVision::save_( )
     TBDS::genDBSet(nodePath()+"UserPass", userPass());
     TBDS::genDBSet(nodePath()+"RunPrjs", runPrjs());
     TBDS::genDBSet(nodePath()+"ExitLstRunPrjCls", i2s(exitLstRunPrjCls()));
+    TBDS::genDBSet(nodePath()+"DropCommonWdgStls", i2s(dropCommonWdgStls()));
     TBDS::genDBSet(nodePath()+"CachePgLife", r2s(cachePgLife()));
+    TBDS::genDBSet(nodePath()+"CachePgSz", i2s(cachePgSz()));
     TBDS::genDBSet(nodePath()+"VCAstation", VCAStation());
     TBDS::genDBSet(nodePath()+"RestoreTime",i2s(restoreTime()));
 }
@@ -158,7 +162,7 @@ void TVision::postEnable( int flag )
 
 string TVision::uiPropGet( const string &prop, const string &user )
 {
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(mnWindsRes, true);
 
     XMLNode prmNd;
     try {
@@ -171,7 +175,7 @@ string TVision::uiPropGet( const string &prop, const string &user )
 
 void TVision::uiPropSet( const string &prop, const string &vl, const string &user )
 {
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(mnWindsRes, true);
 
     XMLNode prmNd("UI");
     try { prmNd.load(TBDS::genDBGet(nodePath()+"uiProps","",user)); }
@@ -217,7 +221,7 @@ QMainWindow *TVision::openWindow( )
 	    (VCAStation() != "." && !(err=mod->cntrIfCmd(req,userStart(),userPass(),VCAStation(),true)))))
 										//!!! But for remote same the request has the athentification
 	while(true) {
-	    if(err == 10)	{ postMess(nodePath().c_str(),_("Error connecting to remote station!")); return NULL; }
+	    if(err == TError::Tr_Connect) { postMess(nodePath().c_str(),_("Error connecting to remote station!")); return NULL; }
 	    DlgUser d_usr(userStart().c_str(), userPass().c_str(), VCAStation().c_str());
 	    int rez = d_usr.exec();
 	    if(rez == DlgUser::SelCancel) return NULL;
@@ -249,7 +253,7 @@ QMainWindow *TVision::openWindow( )
 
 	//QDesktopWidget().screen(1)
 	// Find for already opened run window
-	MtxAlloc res(dataRes(), true);
+	MtxAlloc res(mnWindsRes, true);
 	bool openRunOK = false;
 	for(unsigned iW = 0; !openRunOK && iW < mnWinds.size(); iW++)
 	    openRunOK = (qobject_cast<VisRun*>(mnWinds[iW]) &&
@@ -282,7 +286,7 @@ void TVision::modStop( )
 
     mEndRun = true;
 
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(mnWindsRes, true);
     for(unsigned iW = 0; iW < mnWinds.size(); iW++)
 	while(mnWinds[iW]) {
 	    res.unlock();
@@ -305,7 +309,7 @@ WdgShape *TVision::getWdgShape( const string &iid )
 
 void TVision::regWin( QMainWindow *mwd )
 {
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(mnWindsRes, true);
     unsigned iW;
     for(iW = 0; iW < mnWinds.size(); iW++)
 	if(mnWinds[iW] == NULL) break;
@@ -315,7 +319,7 @@ void TVision::regWin( QMainWindow *mwd )
 
 void TVision::unregWin( QMainWindow *mwd )
 {
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(mnWindsRes, true);
     for(unsigned iW = 0; iW < mnWinds.size(); iW++)
 	if(mnWinds[iW] == mwd) mnWinds[iW] = NULL;
 }
@@ -335,13 +339,19 @@ void TVision::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/cfg/u_pass",_("Password of the user"),RWRWR_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/restTm",_("Connection recovery time, seconds"),RWRWR_,"root",SUI_ID,3,"tp","dec","min","1","max","1000");
 	    }
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/cachePgLife",_("Lifetime of the cached pages"),RWRWR_,"root",SUI_ID,2,"tp","real",
-		"help",_("The time is specified in hours, which defines the inactivity interval for closing pages in the cache.\nA zero value of time excludes the closing of pages in the cache."));
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/cachePgLife",_("Lifetime and maximum number of the cached pages"),RWRWR_,"root",SUI_ID,2,"tp","real",
+		"help",_("The time is specified in hours, which defines the inactivity interval for closing pages in the cache.\n"
+			"Zero value of the time excludes the closing of pages in the cache."));
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/cachePgSz","",RWRWR_,"root",SUI_ID,2,"tp","dec",
+		"help",_("The number defines a limit of pages in the cache.\n"
+			"Zero value of the number excludes the cache limit."));
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/run_prj",_("List of the projects for launch"),RWRWR_,"root",SUI_ID,4,"tp","str","dest","sel_ed","select","/prm/cfg/r_lst",
 		"help",_("Automatically executed projects, divided by the symbol ';'.\n"
 			 "To open the project window on the desired display (1), use the project name format: 'PrjName-1'.\n"
 			 "To connect to the background or another open session use \"ses_{SesID}\"."));
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/exit_on_lst_run_prj_cls",_("Exit when closing the last running project"),RWRWR_,"root",SUI_ID,1,"tp","bool");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/drop_common_wdg_stls",_("Reset widget styles to common"),RWRWR_,"root",SUI_ID,2,"tp","bool",
+		"help",_("Required for some widget styles like \"gtk\" in some specific widgets in run mode, like buttons for the background color and images."));
 	}
 	return;
     }
@@ -351,15 +361,17 @@ void TVision::cntrCmdProc( XMLNode *opt )
     if(a_path == "/prm/st/disp_n" && ctrChkNode(opt))		opt->setText(i2s(mScrnCnt));
     else if(a_path == "/prm/st/mnWinds" && ctrChkNode(opt)) {
 	string rez;
-	MtxAlloc res(dataRes(), true);
+	MtxAlloc res(mnWindsRes, true);
 	for(unsigned iW = 0; iW < mnWinds.size(); iW++)
-	    if(dynamic_cast<VisDevelop*>(mnWinds[iW]))	opt->childAdd("el")->setText(TSYS::strMess(_("%d: Development by \"%s\""),iW,((VisDevelop*)mnWinds[iW])->user().c_str()));
+	    if(dynamic_cast<VisDevelop*>(mnWinds[iW]))	opt->childAdd("el")->setText(TSYS::strMess(_("%d: Development by \"%s\"."),iW,((VisDevelop*)mnWinds[iW])->user().c_str()));
 	    else if(dynamic_cast<VisRun*>(mnWinds[iW]))	{
-		opt->childAdd("el")->setText(TSYS::strMess(_("%d: Running \"%s:%s\" from \"%s\" - %s"),iW,
+		opt->childAdd("el")->setText(TSYS::strMess(_("%d: Running \"%s:%s\" from \"%s\" - %s, updating period %s(%s), cached pages %d and resources %d."),iW,
 		    ((VisRun*)mnWinds[iW])->workSess().c_str(),
 		    ((VisRun*)mnWinds[iW])->srcProject().c_str(),
 		    ((VisRun*)mnWinds[iW])->user().c_str(),
-		    ((VisRun*)mnWinds[iW])->connOK()?_("Connected"):_("Disconnected")));
+		    ((VisRun*)mnWinds[iW])->connOK()?_("Connected"):_("Disconnected"),
+		    tm2s(((VisRun*)mnWinds[iW])->planePer*1e-3).c_str(),tm2s(((VisRun*)mnWinds[iW])->period()*1e-3).c_str(),
+		    ((VisRun*)mnWinds[iW])->cachePgSz(),((VisRun*)mnWinds[iW])->cacheResSz()));
 	    }
     }
     else if(a_path == "/prm/cfg/start_user") {
@@ -381,6 +393,10 @@ void TVision::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/cfg/cachePgLife") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(r2s(cachePgLife()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setCachePgLife(s2r(opt->text()));
+    }
+    else if(a_path == "/prm/cfg/cachePgSz") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(cachePgSz()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setCachePgSz(s2i(opt->text()));
     }
     else if(a_path == "/prm/cfg/run_prj") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(runPrjs());
@@ -408,6 +424,10 @@ void TVision::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/cfg/exit_on_lst_run_prj_cls") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(exitLstRunPrjCls()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setExitLstRunPrjCls(s2i(opt->text()));
+    }
+    else if(a_path == "/prm/cfg/drop_common_wdg_stls") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(dropCommonWdgStls()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setDropCommonWdgStls(s2i(opt->text()));
     }
     else if(a_path == "/prm/cfg/stationVCA") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(VCAStation());
@@ -465,7 +485,7 @@ int TVision::cntrIfCmd( XMLNode &node, const string &user, const string &passwor
 	return rez;
     } catch(TError &err) {
 	node.childClear();
-	node.setAttr("mcat", err.cat)->setAttr("rez", "10")->setText(err.mess);
+	node.setAttr("mcat", err.cat)->setAttr("rez", i2s(TError::Tr_Connect))->setText(err.mess);
     }
 
     return s2i(node.attr("rez"));

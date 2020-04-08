@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.SSL file: modssl.h
 /***************************************************************************
- *   Copyright (C) 2008-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2008-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -74,10 +74,11 @@ class TSocketIn: public TTransportIn
 
 	string getStatus( );
 
-	unsigned bufLen( )		{ return mBufLen; }
-	unsigned maxFork( )		{ return mMaxFork; }
-	unsigned maxForkPerHost( )	{ return mMaxForkPerHost; }
-	unsigned keepAliveReqs( )	{ return mKeepAliveReqs; }
+	int lastConn( )		{ return connTm; }
+	unsigned bufLen( )	{ return mBufLen; }
+	unsigned maxFork( )	{ return mMaxFork; }
+	unsigned maxForkPerHost( ) { return mMaxForkPerHost; }
+	unsigned keepAliveReqs( )  { return mKeepAliveReqs; }
 	unsigned keepAliveTm( )	{ return mKeepAliveTm; }
 	int taskPrior( )	{ return mTaskPrior; }
 	string certKey( )	{ return mCertKey; }
@@ -110,8 +111,8 @@ class TSocketIn: public TTransportIn
 	void clientReg( SSockIn *so );
 	void clientUnreg( SSockIn *so );
 
-	bool prtInit( AutoHD<TProtocolIn> &prot_in, int sock, const string &sender, bool noex = false );
-	void messPut( int sock, string &request, string &answer, string sender, AutoHD<TProtocolIn> &prot_in );
+	int prtInit( vector< AutoHD<TProtocolIn> > &prot_in, int sock, const string &sender );
+	int messPut( int sock, string &request, string &answer, string sender, vector< AutoHD<TProtocolIn> > &prot_in );
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
@@ -140,7 +141,7 @@ class TSocketIn: public TTransportIn
 	string		stErr;			//Last error messages
 	uint64_t	trIn, trOut;		//Traffic in and out counter
 	float		prcTm, prcTmMax;
-	int		connNumb, clsConnByLim;	//Close connections by limit
+	int		connNumb, connTm, clsConnByLim;	//Close connections by limit
 };
 
 //************************************************
@@ -157,10 +158,12 @@ class TSocketOut: public TTransportOut
 	string certKey( )	{ return mCertKey; }
 	string pKeyPass( )	{ return mKeyPass; }
 	string timings( )	{ return mTimings; }
+	unsigned short attempts( )	{ return mAttemts; }
 
 	void setCertKey( const string &val )	{ mCertKey = val; modif(); }
 	void setPKeyPass( const string &val )	{ mKeyPass = val; modif(); }
 	void setTimings( const string &vl );
+	void setAttempts( unsigned short vl );
 
 	void start( int time = 0 );
 	void stop( );
@@ -180,14 +183,16 @@ class TSocketOut: public TTransportOut
 	string		mCertKey,		// SSL certificate
 			mKeyPass;		// SSL private key password
 	string		mTimings;
-	unsigned short	mTmCon;
-	unsigned short	mTmNext;
+	unsigned short	mAttemts,
+			mTmCon,
+			mTmNext;
 
 	SSL_CTX		*ctx;
 	BIO		*conn;
 	SSL		*ssl;
 
 	// Status atributes
+	string		connAddr;
 	uint64_t	trIn, trOut;		// Traffic in and out counter
 	float		respTm, respTmMax;
 };
@@ -204,12 +209,17 @@ class TTransSock: public TTypeTransport
 	TTransportIn  *In( const string &name, const string &idb );
 	TTransportOut *Out( const string &name, const string &idb );
 
+	string outAddrHelp( );
+	string outTimingsHelp( );
+	string outAttemptsHelp( );
+
     protected:
 	void load_( );
 
     private:
 	//Methods
 	void postEnable( int flag );
+	void preDisable( int flag );
 
 	static unsigned long id_function( );
 	static void locking_function( int mode, int n, const char * file, int line );

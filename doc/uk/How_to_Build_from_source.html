@@ -7,11 +7,11 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../en/files/doc.css" rel="stylesheet" /></head>
-<body><div id="mw_header">
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../en/files/Logo-big.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Документи/Як зробити/Скласти з вихідних текстів</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FHow+to%2FBuild+from+source&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/How_to/Build_from_source" title="Documents/How to/Build from source">Documents/How to/Build from source</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Build_from_source" title="Documents/How to/Build from source (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Build_from_source/ru" title="Документы/Как сделать/Собрать из исходных текстов (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FHow+to%2FBuild+from+source&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/How_to/Build_from_source" title="Documents/How to/Build from source">Documents/How to/Build from source</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/How_to_Build_from_source.html" title="Documents/How to/Build from source (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/How_to_Build_from_source.html" title="Документы/Как сделать/Собрать из исходных текстов (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
 <p><i>Автор:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>, <a class="external text" href="http://oscada.org/en/forum/user/IrmIngeneer/" rel="nofollow noreferrer noopener" target="_blank">Константин</a>
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
@@ -59,7 +59,7 @@
 <ul><li> отримання дерева вихідних текстів із SVN-репозиторія проекту:</li></ul>
 <dl><dd>$ svn co <a class="external free" href="http://oscada.org/svn/trunk/OpenSCADA/" rel="nofollow noreferrer noopener" target="_blank">http://oscada.org/svn/trunk/OpenSCADA/</a></dd>
 <dd>$ cd OpenSCADA</dd></dl></dd>
-<dd>3. Задоволення залежностей проекту OpenSCADA для складання, відповідно до <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Functions_and_demands#Building" title="Special:MyLanguage/Functions and demands">вимог</a>.</dd>
+<dd>3. Задоволення залежностей проекту OpenSCADA для складання, відповідно до <a href="Functions_and_demands.html#Building" title="Special:MyLanguage/Functions and demands">вимог</a>.</dd>
 <dd>4. Генерація складальної системи, при завантажені із SVN-репозиторія:
 <dl><dd>$ autoreconf -ivf</dd></dl></dd></dl>
 <p>Етапи глобальної збірки:
@@ -84,14 +84,12 @@
 <dl><dd>$ cd ~/OScadaW/bin; ./openscada</dd></dl></dd></dl>
 <h2><span class="mw-headline" id=".D0.97.D0.B1.D1.96.D1.80.D0.BA.D0.B0_.D0.BF.D0.B0.D0.BA.D0.B5.D1.82.D1.96.D0.B2_OpenSCADA_.D0.B4.D0.BB.D1.8F_.D0.B4.D0.B8.D1.81.D1.82.D1.80.D0.B8.D0.B1.D1.83.D1.82.D0.B8.D0.B2.D1.83_Linux"><span class="mw-headline-number">3</span> Збірка пакетів OpenSCADA для дистрибутиву Linux</span></h2>
 <h3><span class="mw-headline" id=".D0.94.D0.B8.D1.81.D1.82.D1.80.D0.B8.D0.B1.D1.83.D1.82.D0.B8.D0.B2.D0.B8_.D0.B7.D0.B0.D1.81.D0.BD.D0.BE.D0.B2.D0.B0.D0.BD.D1.96_.D0.BD.D0.B0_RedHat_.E2.80.94_.D0.BF.D0.B0.D0.BA.D0.B5.D1.82.D0.B8_RPM"><span class="mw-headline-number">3.1</span> Дистрибутиви засновані на RedHat — пакети RPM</span></h3>
-<p>Для збірки RPM-пакетів OpenSCADA Вам знадобляться архіви вихідних текстів, ресурсів та файл специфікації RPM пакету (openscada.spec, openscada_mod_ALT.spec, openscada_mod_RH.spec) або ж SRPM-пакет всіх цих вихідних матеріалів.
+<p>Для збірки RPM-пакетів OpenSCADA Вам знадобляться архіви вихідних текстів, ресурсів та файл специфікації RPM пакету (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/" rel="nofollow noreferrer noopener" target="_blank">openscada.spec, openscada_mod_ALT.spec, openscada_mod_RH.spec</a>) або ж SRPM-пакет всіх цих вихідних матеріалів.
 </p><p>Файл специфікації RPM-пакетів та SRPM-пакет можуть відрізнятися для різних дистрибутивів Linux, враховуючи їх особливості, тому потрібно намагатися завантажувати їх відповідно до дистрибутиву. Якщо спеціальний SRPM пакет відсутній тоді можна спробувати зібрати з уніфікованого файлу специфікації (openscada.spec) у основному SRPM пакеті або пакеті ресурсів.
 </p><p>Збірка RPM-пакетів відбувається у директорії зі спеціальною структурою, яка за звичай створюється під час встановлення відповідного пакету дистрибутива (наприклад: rpm-build). Ця директорія, залежно від дистрибутиву, розташовується у домашній теці користувача або у теці <b>/usr/src</b>. Відомі факти розташування директорії збірки RPM-пакетів різних дистрибутивів:
 </p>
-<ul><li> <b>~/rpmbuild</b>: <a class="external text" href="https://www.redhat.com" rel="nofollow noreferrer noopener" target="_blank">RedHat</a>, <a class="external text" href="https://www.centos.org/" rel="nofollow noreferrer noopener" target="_blank">CentOS</a>, Mandriva,</li></ul>
-<pre><a class="external text" href="http://fedoraproject.org" rel="nofollow noreferrer noopener" target="_blank">Fedora</a>
-</pre>
-<ul><li> <b>/usr/src/packages</b>: <a class="external text" href="https://www.opensuse.org/" rel="nofollow noreferrer noopener" target="_blank">Open-SUSE</a></li>
+<ul><li> <b>~/rpmbuild</b>: <a class="external text" href="https://www.redhat.com" rel="nofollow noreferrer noopener" target="_blank">RedHat</a>, <a class="external text" href="https://www.centos.org/" rel="nofollow noreferrer noopener" target="_blank">CentOS</a>, Mandriva, <a class="external text" href="http://fedoraproject.org" rel="nofollow noreferrer noopener" target="_blank">Fedora</a></li>
+<li> <b>/usr/src/packages</b>: <a class="external text" href="https://www.opensuse.org/" rel="nofollow noreferrer noopener" target="_blank">Open-SUSE</a></li>
 <li> <b>~/RPM</b>: <a class="external text" href="http://altlinux.com" rel="nofollow noreferrer noopener" target="_blank">ALTLinux</a></li></ul>
 <p>Якщо після встановлення спеціалізованого пакету теки створення RPM пакетів немає тоді її потрібно створити командою:
 </p>
@@ -101,7 +99,7 @@
 <dl><dd>1. Розташування архівів OpenSCADA та файлу специфікації у теці збірки RPM (вихідні файли попередньо розташовано у поточній теці):
 <dl><dd>$ cp openscada-0.9+r2537.tar.xz openscada-res-0.9+r2537.tar.xz <u>Тека дистрибутиву</u>/SOURCES</dd>
 <dd>$ cp openscada.spec <u>Тека дистрибутиву</u>/SPECS</dd></dl></dd>
-<dd>2. Задоволення залежностей проекту OpenSCADA для збірки у відповідності із <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Functions_and_demands#Building" title="Special:MyLanguage/Functions and demands">вимогами</a>. Аргументи команди "configure" можна вказати у файлі "openscada.spec".</dd>
+<dd>2. Задоволення залежностей проекту OpenSCADA для збірки у відповідності із <a href="Functions_and_demands.html#Building" title="Special:MyLanguage/Functions and demands">вимогами</a>. Аргументи команди "configure" можна вказати у файлі "openscada.spec".</dd>
 <dd>3. Збірка пакетів
 <ul><li> збірка з початку:</li></ul>
 <dl><dd>$ rpmbuild -bb <u>Тека дистрибутиву</u>/SPECS/openscada.spec</dd></dl>
@@ -110,7 +108,7 @@
 <dd>4. Пакети готові та доступні у теці <b><u>Тека дистрибутиву</u>/RPMS</b>, для відповідної архітектури</dd></dl>
 <p>Етапи збірки із SRPMS пакету:
 </p>
-<dl><dd>1. Задоволення залежностей проекту OpenSCADA для збірки у відповідності із <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Functions_and_demands#Building" title="Special:MyLanguage/Functions and demands">вимогами</a>.</dd>
+<dl><dd>1. Задоволення залежностей проекту OpenSCADA для збірки у відповідності із <a href="Functions_and_demands.html#Building" title="Special:MyLanguage/Functions and demands">вимогами</a>.</dd>
 <dd>2. Збірка пакетів (вихідні файли попередньо розташовано у поточній теці):
 <dl><dd>$ rpmbuild --rebuild openscada-0.9+r2537.src.rpm</dd></dl></dd>
 <dd>3. Пакети готові та доступні у теці <b><u>Тека дистрибутиву</u>/RPMS</b>, для відповідної архітектури</dd></dl>
@@ -136,7 +134,7 @@
 <dl><dd>$ ln -s data/debian debian</dd></dl>
 <ul><li> бінарні файли модулів в окремих пакетах:</li></ul>
 <dl><dd>$ ln -s data/debian_mod debian</dd></dl></dd>
-<dd>4. Задоволення залежностей проекту OpenSCADA для складання, відповідно до <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Functions_and_demands#Building" title="Special:MyLanguage/Functions and demands">вимог</a>. Аргументи команди "configure" можна вказати у файлі "debian/rules".</dd>
+<dd>4. Задоволення залежностей проекту OpenSCADA для складання, відповідно до <a href="Functions_and_demands.html#Building" title="Special:MyLanguage/Functions and demands">вимог</a>. Аргументи команди "configure" можна вказати у файлі "debian/rules".</dd>
 <dd>5. Збірка:
 <ul><li> збірка з початку:</li></ul>
 <dl><dd>$ dpkg-buildpackage -rfakeroot</dd></dl>
@@ -183,5 +181,5 @@ Portage tree and overlays:
 
 
 
-</div></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Build_from_source/uk">Documents/How_to/Build_from_source/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.1</td></tr></table></body>
 </html>

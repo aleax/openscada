@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.FLibSYS file: statfunc.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,13 +32,13 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"FLibSYS"
-#define MOD_NAME	_("System API functions")
+#define MOD_NAME	_("System functions")
 #define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"1.5.3"
+#define MOD_VER		"1.7.1"
 #define MOD_AUTOR	_("Roman Savochenko")
-#define MOD_DESCR	_("Provides the library of system API functions of user programming area.")
+#define MOD_DESCR	_("Provides a library of the system functions of the user programming area of OpenSCADA.")
 #define MOD_LICENSE	"GPL2"
 //*************************************************
 
@@ -160,7 +160,7 @@ void Lib::modStart( )
     for(unsigned i_l = 0; i_l < lst.size(); i_l++)
 	at(lst[i_l]).at().setStart(true);
 
-    run_st = true;
+    runSt = true;
 }
 
 void Lib::modStop( )
@@ -170,7 +170,7 @@ void Lib::modStop( )
     for(unsigned i_l = 0; i_l < lst.size(); i_l++)
 	at(lst[i_l]).at().setStart(false);
 
-    run_st = false;
+    runSt = false;
 }
 
 TVariant Lib::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )

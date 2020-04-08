@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tcntrnode.h
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -144,9 +144,9 @@ class TCntrNode
 
 	//Methods
 	ResMtx &dataRes( ) { return mDataM; }	//Generic node's data mutex
-						//Allowed for using by heirs into data resources allocation
+						//Allowed for using by heirs into the data resources allocation
 						//  not for long-term functions-tasks resources allocation!
-	virtual const char *nodeName( ) const = 0;
+	virtual const char *nodeName( ) const		{ return ""; }
 	virtual const char *nodeNameSYSM( ) const	{ return ""; }
 	string nodePath( char sep = 0, bool from_root = true ) const;
 
@@ -188,8 +188,8 @@ class TCntrNode
 	int8_t	grpSize( );
 	int8_t	grpId( const string &sid );
 	virtual AutoHD<TCntrNode> chldAt( int8_t igr, const string &name, const string &user = "" ) const;
-	void chldList( int8_t igr, vector<string> &list, bool noex = false, bool onlyEn = true ) const;
-	bool chldPresent( int8_t igr, const string &name ) const;
+	virtual void chldList( int8_t igr, vector<string> &list, bool noex = false, bool onlyEn = true ) const;
+	virtual bool chldPresent( int8_t igr, const string &name ) const;
 
     protected:
 	//Data
@@ -209,11 +209,13 @@ class TCntrNode
 	void setNodePrev( TCntrNode *node )	{ prev.node = node; }
 	void setNodeMode( char mode );
 
+	ResMtx &chM( )				{ return mChM; }	//Child nodes mutex
+
 	// Childs and containers
 	GrpEl	&grpAt( int8_t id );
 	unsigned grpAdd( const string &id, bool ordered = false );
 	void	grpDel( int8_t id );
-	virtual void chldAdd( int8_t igr, TCntrNode *node, int pos = -1, bool noExp = false );
+	virtual string chldAdd( int8_t igr, TCntrNode *node, int pos = -1, bool noExp = false );
 	void chldDel( int8_t igr, const string &name, long tm = -1, int flag = 0 );
 
 	virtual void preEnable( int flag )	{ }
@@ -223,7 +225,8 @@ class TCntrNode
 	virtual void postDisable( int flag )	{ }
 
 	virtual void load_( TConfig *cfg )	{ }
-	virtual void load_( )			{ }
+	virtual void load_( )			{ }	//In the begin
+	virtual void load__( )			{ }	//In the end
 	virtual void save_( )			{ }
 
     private:

@@ -7,11 +7,11 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../files/doc.css" rel="stylesheet" /></head>
-<body><div id="mw_header">
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../../en/files/Logo-big.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/DAQGate</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/DAQGate/ru" title="Модули/Шлюз сбора данных (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/DAQGate/uk" title="Модулі/Шлюз збору даних (100% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/DAQGate.html" title="Модули/Шлюз сбора данных (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/DAQGate.html" title="Модулі/Шлюз збору даних (100% translated)">українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -31,14 +31,14 @@
 <td> <a href="../Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQGate</a> </td>
 <td> Gateway of the data sources
 </td>
-<td> 2.0 </td>
+<td> 2.2 </td>
 <td> GPL2 </td>
 <td> daq_DAQGate.so </td>
 <td> en,uk,ru,de </td>
 <td> x86,x86_64,ARM
 </td>
 <td> DAQ </td>
-<td> Roman Savochenko<br />Maxim Lysenko (2009) — the page translation </td>
+<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2009) — the page initial translation</i></font> </td>
 <td> Allows to locate data sources of the remote OpenSCADA stations to local ones.
 </td></tr></table>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
@@ -46,10 +46,11 @@
 <li class="toclevel-1 tocsection-1"><a href="#Controller_object"><span class="tocnumber">1</span> <span class="toctext">Controller object</span></a></li>
 <li class="toclevel-1 tocsection-2"><a href="#Parameters"><span class="tocnumber">2</span> <span class="toctext">Parameters</span></a></li>
 <li class="toclevel-1 tocsection-3"><a href="#Notes"><span class="tocnumber">3</span> <span class="toctext">Notes</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Links"><span class="tocnumber">4</span> <span class="toctext">Links</span></a></li>
 </ul>
 </div>
 
-<p>Main function of this module is the data reflection of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#DAQ" title="Special:MyLanguage/Documents/Program manual">the subsystem "Data acquisition"</a> of the remote OpenSCADA stations on the local ones. In its work, the module uses the OpenSCADA self protocol (SelfSystem) and service functions of the subsystem "Data acquisition".
+<p>Main function of this module is the data reflection of <a href="../Program_manual.html#DAQ" title="Special:MyLanguage/Documents/Program manual">the subsystem "Data acquisition"</a> of the remote OpenSCADA stations on the local ones. In its work, the module uses the OpenSCADA self protocol (SelfSystem) and service functions of the subsystem "Data acquisition".
 </p><p>The module realizes following functions:
 </p>
 <ul><li> Reflection of the parameters structure of the subsystem "Data acquisition" of the remote station. This structure can be periodically synchronized while working.</li>
@@ -80,7 +81,8 @@
 <li> List of the reflected remote stations. Several stations in the list enable the vertical redundancy mechanism.</li>
 <li> List of the reflected controller objects and parameters. The list can be used as for controller objects for the reflection of all their parameters, and for individual parameters too.</li>
 <li> Command to go to configuration of the remote stations list.</li>
-<li> Allow the automatic removal of parameters and attributes to update to the actual state.</li></ul>
+<li> Allow the automatic removal of parameters and attributes to update to the actual state.</li>
+<li> Placing different controllers to the different virtual parameters.</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> In the production mode, it's better to turn this off!</dd></dl>
 <h2><span class="mw-headline" id="Parameters"><span class="mw-headline-number">2</span> Parameters</span></h2>
 <p>The module, though, provides the ability to create parameters manually, but it is meaningless, since such a parameter, in the absence of it at the remote station, will be empty. All parameters are created automatically, taking into account the list of reflection controller objects and parameters. Parameters can be stored in the cache for subsequent creation even in the absence of communication with the remote station. An example of a mirrored parameter is shown in Figure 3.
@@ -97,11 +99,13 @@
 <li> these 10 seconds are expected to be synchronized and checked for execution, by the changes presence;</li>
 <li> synchronization is disabled, its period of 0 seconds is set;</li>
 <li> the mirrored parameters structure is saved, while the controller object of the gateway is stored.</li></ul></li></ul>
+<h2><span class="mw-headline" id="Links"><span class="mw-headline-number">4</span> Links</span></h2>
+<ul><li> <a class="external" href="http://oscada.org/wiki/File:Daq_red.odg" title="File:Daq red.odg">Diagram: Horizontal and vertical redundancy.</a></li></ul>
 
 
 
 
 
 
-</div></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/DAQGate/en">Modules/DAQGate/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.1</td></tr></table></body>
 </html>

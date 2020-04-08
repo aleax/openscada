@@ -1,7 +1,7 @@
 
 //OpenSCADA module Archive.FSArch file: mess.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -56,8 +56,6 @@ TCntrNode &ModMArch::operator=( const TCntrNode &node )
     return *this;
 }
 
-string ModMArch::infoDBnm( )	{ return MOD_ID "_Mess_"+id()+"_info"; }
-
 void ModMArch::load_( )
 {
     //TMArchivator::load_();
@@ -105,15 +103,22 @@ bool ModMArch::cfgChange( TCfg &co, const TVariant &pc )
 void ModMArch::start( )
 {
     if(!startStat()) {
+	//Open/create the archive directory
+	DIR *IdDir = opendir(addr().c_str());
+	if(IdDir == NULL && mkdir(addr().c_str(),SYS->permCrtFiles(true)))
+	    throw err_sys(_("Cannot create the archive directory '%s'."), addr().c_str());
+	closedir(IdDir);
+
+	//Checking the archiver folders for duplicates
 	string dbl = "";
-	MtxAlloc res(mod->dataRes(), true);
+	MtxAlloc res(mod->enRes(), true);
 	const char *fLock = "fsArchLock";
 	int hd = open((addr()+"/"+fLock).c_str(), O_CREAT|O_TRUNC|O_WRONLY, SYS->permCrtFiles());
 	if(hd >= 0) {
 	    write(hd, "1", 1);
 	    vector<string> ls;
 	    mod->messList(ls);
-	    for(int iL = 0; iL < ls.size() && dbl.empty(); iL++) {
+	    for(unsigned iL = 0; iL < ls.size() && dbl.empty(); iL++) {
 		AutoHD<TMArchivator> mAt = mod->messAt(ls[iL]);
 		if(mAt.at().id() == id() || !mAt.at().startStat())	continue;
 		int hd1 = open((mAt.at().addr()+"/"+fLock).c_str(), O_RDONLY);
@@ -131,17 +136,31 @@ void ModMArch::start( )
 
     //Create and/or update the SQLite info file, special for the archivator and placed with main files of the archivator
     if(!startStat() && packInfoFiles()) {
+	infoTbl = "";
 	try {
-	    if(!SYS->db().at().at("SQLite").at().openStat(infoDBnm())) SYS->db().at().at("SQLite").at().open(infoDBnm());
-	    AutoHD<TBD> infoDB = SYS->db().at().at("SQLite").at().at(infoDBnm());
-	    infoDB.at().setName(TSYS::strMess(_("%s: Mess: %s: information"),MOD_ID,id().c_str()));
-	    infoDB.at().setDscr(TSYS::strMess(_("Local information DB for the message archiver '%s'. "
-		"Created automatically then don't modify, save and remove it!"),id().c_str()));
-	    infoDB.at().setAddr(addr()+"/info.db");
-	    infoDB.at().enable();
-	    infoDB.at().modifClr();
-	    infoTbl = "SQLite."+infoDBnm()+"."+TSYS::strParse(mod->filesDB(),2,".");
-	} catch(TError&) { infoTbl = ""; }
+	    AutoHD<TTypeBD> SQLite = SYS->db().at().at("SQLite");
+	    // Search for the info table
+	    vector<string> ls;
+	    SQLite.at().list(ls);
+	    for(unsigned iL = 0; iL < ls.size() && infoTbl.empty(); iL++)
+		if(SQLite.at().at(ls[iL]).at().addr() == addr()+"/info.db")
+		    infoTbl = "SQLite."+ls[iL]+"."+TSYS::strParse(mod->filesDB(),2,".");
+	    if(infoTbl.empty()) {
+		string iDBnm = MOD_ID "_Mess_"+id()+"_info";
+		while(true) {
+		    AutoHD<TBD> infoDB = SQLite.at().at((iDBnm=SQLite.at().open(iDBnm)));
+		    if(infoDB.at().addr().size()) { iDBnm = TSYS::strLabEnum(iDBnm); continue; }
+		    infoDB.at().setName(TSYS::strMess(_("%s: Mess: %s: information"),MOD_ID,id().c_str()));
+		    infoDB.at().setDscr(TSYS::strMess(_("Local information DB for the message archiver '%s'. "
+			"Created automatically then don't modify, save and remove it!"),id().c_str()));
+		    infoDB.at().setAddr(addr()+"/info.db");
+		    infoDB.at().enable();
+		    infoDB.at().modifClr();
+		    infoTbl = "SQLite."+iDBnm+"."+TSYS::strParse(mod->filesDB(),2,".");
+		    break;
+		}
+	    }
+	} catch(TError&) { }
     }
 
     //First scan dir
@@ -153,13 +172,15 @@ void ModMArch::stop( )
 {
     bool curSt = startStat();
 
+    ResAlloc res(mRes, true);
+
     TMArchivator::stop();
 
     //Clear archive files list
-    ResAlloc res(mRes, true);
     while(files.size()) { delete files[0]; files.pop_front(); }
 
     if(curSt)	infoTbl = "";
+    mLstCheck = 0;
 }
 
 time_t ModMArch::begin( )
@@ -189,18 +210,19 @@ bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
     ResAlloc res(mRes, false);
 
     if(!runSt) throw err_sys(_("Archive is not started!"));
+    if(!mLstCheck)	return false;
 
     bool wrOK = true;
-    for(unsigned i_m = 0; i_m < mess.size(); i_m++) {
-	if(!chkMessOK(mess[i_m].categ,mess[i_m].level)) continue;
+    for(unsigned iM = 0; iM < mess.size(); iM++) {
+	if(!chkMessOK(mess[iM].categ,mess[iM].level)) continue;
 	int iF;
 	for(iF = 0; iF < (int)files.size(); iF++)
-	    if(!files[iF]->err() && mess[i_m].time >= files[iF]->begin()) {
-		if(mess[i_m].time > files[iF]->end() &&
+	    if(!files[iF]->err() && mess[iM].time >= files[iF]->begin()) {
+		if(mess[iM].time > files[iF]->end() &&
 		    ((mMaxSize && iF == 0 && files[iF]->size() > mMaxSize*1024) ||
-		    (mess[i_m].time >= files[iF]->begin()+mTimeSize*24*60*60))) break;
+		    (mess[iM].time >= files[iF]->begin()+mTimeSize*24*60*60))) break;
 		try {
-		    wrOK = files[iF]->put(mess[i_m]) && wrOK;
+		    wrOK = files[iF]->put(mess[iM]) && wrOK;
 		} catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); continue; }
 		iF = -1;
 		break;
@@ -208,7 +230,7 @@ bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
 	//If going a new data then create new file
 	if(iF >= 0) {
 	    res.request(true);
-	    time_t f_beg = mess[i_m].time;
+	    time_t f_beg = mess[iM].time;
 	    if(iF < (int)files.size() && f_beg > files[iF]->end() && (f_beg-files[iF]->end()) < (mTimeSize*24*60*60/3))
 		f_beg = files[iF]->end()+1;
 	    if(iF && files[iF-1]->begin() > f_beg && (files[iF-1]->begin()-f_beg) < (mTimeSize*24*60*60*2/3))
@@ -233,7 +255,7 @@ bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
 	    }
 	    // Allow parallel read access
 	    res.request(false);
-	    wrOK = files[iF]->put(mess[i_m]) && wrOK;
+	    wrOK = files[iF]->put(mess[iM]) && wrOK;
 	}
     }
 
@@ -244,13 +266,14 @@ bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
 
 time_t ModMArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const string &category, char level, time_t upTo )
 {
+    ResAlloc res(mRes, false);
+
     bTm = vmax(bTm, begin());
     eTm = vmin(eTm, end());
     if(eTm < bTm) return eTm;
     if(!runSt) throw err_sys(_("Archive is not started!"));
     if(!upTo) upTo = SYS->sysTm() + STD_INTERF_TM;
 
-    ResAlloc res(mRes, false);
     time_t result = bTm;
     for(int iF = files.size()-1; iF >= 0 && SYS->sysTm() < upTo; iF--) {
 	if(!files[iF]->err() &&
@@ -265,11 +288,8 @@ void ModMArch::checkArchivator( bool now )
 {
     if(now || time(NULL) > mLstCheck + checkTm()*60) {
 	DIR *IdDir = opendir(addr().c_str());
-	if(IdDir == NULL) {
-	    if(mkdir(addr().c_str(),SYS->permCrtFiles(true)))
-		throw err_sys(_("Can not create the directory '%s'."), addr().c_str());
-	    IdDir = opendir(addr().c_str());
-	}
+	if(IdDir == NULL) throw err_sys(_("The archive directory '%s' is not present."), addr().c_str());
+
 	//Clean scan flag
 	ResAlloc res(mRes, false);
 	for(unsigned iF = 0; iF < files.size(); iF++) files[iF]->scan = false;
@@ -280,7 +300,7 @@ void ModMArch::checkArchivator( bool now )
 		*scan_dirent = (dirent*)malloc(offsetof(dirent,d_name) + NAME_MAX + 1);
 
 	while(readdir_r(IdDir,scan_dirent,&scan_rez) == 0 && scan_rez) {
-	    if(strcmp(scan_rez->d_name,"..") == 0 || strcmp(scan_rez->d_name,".") == 0) continue;
+	    if(strcmp(scan_rez->d_name,"..") == 0 || strcmp(scan_rez->d_name,".") == 0 || strcmp(scan_rez->d_name,"info.db") == 0) continue;
 	    string NameArhFile = addr() + "/" + scan_rez->d_name;
 
 	    stat(NameArhFile.c_str(), &file_stat);
@@ -310,7 +330,7 @@ void ModMArch::checkArchivator( bool now )
 		f_arh->scan = true;
 
 		res.request(true);
-		//  Oldest and broken archives to down
+		//  Oldest and broken archives to the down
 		if(f_arh->err()) files.push_back(f_arh);
 		else {
 		    for(iF = 0; iF < files.size(); iF++)
@@ -650,7 +670,7 @@ void MFileArch::attach( const string &iname, bool full )
 	    mChars = s_char;
 	    mXML = false;
 	    mLoad = true;
-	    fseek(f,0,SEEK_END);
+	    fseek(f, 0, SEEK_END);
 	    mSize = ftell(f);
 
 	    // Delete Node tree
@@ -763,22 +783,25 @@ bool MFileArch::put( TMess::SRec mess )
     }
 
     if(xmlM()) {
-	unsigned iCh;
-	for(iCh = 0; iCh < mNode->childSize(); iCh++) {
+	unsigned iSet = mNode->childSize();
+	int64_t lastTm = 0;
+	for(unsigned iCh = cacheGet(FTM(mess)), passCnt = 0; iCh < mNode->childSize(); iCh++) {
 	    XMLNode *xIt = mNode->childGet(iCh);
-	    long xTm = strtol(xIt->attr("tm").c_str(),(char **)NULL,16);
-	    if(xTm > mess.time)	break;
-	    else if((owner().prevDbl() || owner().prevDblTmCatLev()) && xTm == mess.time && s2i(xIt->attr("tmu")) == mess.utime &&
-		    xIt->attr("cat") == mess.categ && xIt->text() == mess.mess)
-		return true;
-	    else if(owner().prevDblTmCatLev() && xTm == mess.time && s2i(xIt->attr("tmu")) == mess.utime && xIt->attr("cat") == mess.categ) {
-		xIt->setText(mess.mess);
-		mWrite = true;
-		return true;
+	    int64_t xTm = FTM2(strtol(xIt->attr("tm").c_str(),(char **)NULL,16), s2i(xIt->attr("tmu")));
+	    if(xTm >= FTM(mess)) {
+		if(iSet >= mNode->childSize())	iSet = iCh;
+		if(xTm > FTM(mess))	break;
 	    }
+	    if((owner().prevDbl() || owner().prevDblTmCatLev()) && xTm == FTM(mess) && s2i(xIt->attr("lv")) == mess.level && xIt->attr("cat") == mess.categ) {
+		if(xIt->text() == mess.mess) return true;
+		else if(owner().prevDblTmCatLev()) { xIt->setText(mess.mess); mWrite = true; return true; }
+	    }
+	    //  Adding too big positions to the cache
+	    if((passCnt++) > CACHE_POS && xTm != lastTm) { cacheSet(xTm, iCh); passCnt = 0; }
+	    lastTm = xTm;
 	}
 
-	XMLNode *cl_node = mNode->childIns(iCh, "m");
+	XMLNode *cl_node = mNode->childIns(iSet, "m");
 	cl_node->setAttr("tm", i2s(mess.time,TSYS::Hex))->
 		 setAttr("tmu", i2s(mess.utime))->
 		 setAttr("lv", i2s(mess.level))->
@@ -820,16 +843,18 @@ bool MFileArch::put( TMess::SRec mess )
 		int tLev = 0;
 		char tCat[1001];
 		if((sscanf(buf,"%x:%d %d %1000s",&tTm,&tTmU,&tLev,tCat)) < 4) continue;
+		int64_t xTm = FTM2(tTm, tTmU);
 
-		if(tTm > mess.time || (tTm == mess.time && (int)tTmU > mess.utime)) {
-		    mv_beg = ftell(f) - strlen(buf);
-		    break;
+		if(xTm >= FTM(mess)) {
+		    if(!mv_beg)	mv_beg = ftell(f) - strlen(buf);
+		    if(xTm > FTM(mess)) break;
 		}
 		if(tTm == mess.time && s_buf == buf) { fclose(f); return true; }
-		if(owner().prevDblTmCatLev() && tTm == mess.time && (int)tTmU == mess.utime && tLev == mess.level &&
+		if(owner().prevDblTmCatLev() && xTm == FTM(mess) && tLev == mess.level &&
 		    TSYS::strDecode(Mess->codeConvIn(mChars,tCat),TSYS::HttpURL) == mess.categ)
 		{
-		    if(s_buf.size() < strlen(buf)) s_buf.resize(strlen(buf), ' ');
+		    if(s_buf.size() < strlen(buf))
+			s_buf = s_buf.substr(0,s_buf.size()-strlen("\n")) + string(strlen(buf)-s_buf.size(),' ') + "\n";
 		    mv_beg = ftell(f) - strlen(buf); mv_off = s_buf.size() - strlen(buf);
 		    break;
 		}
@@ -837,7 +862,7 @@ bool MFileArch::put( TMess::SRec mess )
 	    fseek(f, 0, SEEK_SET);
 	}
 
-	//Put message to end
+	//Put message to the end
 	if(fOK && (mess.time >= mEnd)) {
 	    //Update header
 	    if(mess.time != mEnd) {
@@ -852,23 +877,24 @@ bool MFileArch::put( TMess::SRec mess )
 	//Put message to inwards
 	else {
 	    if(fOK && !mv_beg) {
-		// Get want position
+		// Get need position
 		long c_off = cacheGet(FTM(mess));
 		if(c_off) fseek(f,c_off,SEEK_SET);
 		else fOK = (fgets(buf,bufSz,f) != NULL);
 
 		// Check mess records
-		int pass_cnt = 0;
-		time_t last_tm = 0;
+		int passCnt = 0;
+		int64_t lastTm = 0;
 		while(!mv_beg && fgets(buf,bufSz,f) != NULL) {
 		    sscanf(buf, "%x:%d %*d", &tTm, &tTmU);
-		    if(tTm > mess.time || (tTm == mess.time && (int)tTmU > mess.utime)) mv_beg = ftell(f) - strlen(buf);
-		    //  Add too big position to cache
-		    else if((pass_cnt++) > CACHE_POS && tTm != last_tm) {
-			cacheSet(((int64_t)tTm*1000000)+tTmU, ftell(f)-strlen(buf));
-			pass_cnt = 0;
+		    int64_t xTm = FTM2(tTm, tTmU);
+		    if(xTm >= FTM(mess)) mv_beg = ftell(f) - strlen(buf);
+		    //  Adding too big positions to the cache
+		    else if((passCnt++) > CACHE_POS && xTm != lastTm) {
+			cacheSet(xTm, ftell(f)-strlen(buf));
+			passCnt = 0;
 		    }
-		    last_tm = tTm;
+		    lastTm = xTm;
 		}
 	    }
 	    if(fOK && mv_beg) {
@@ -879,7 +905,7 @@ bool MFileArch::put( TMess::SRec mess )
 		    do {
 			beg_cur = ((mv_end-mv_beg) >= bufSz) ? mv_end-bufSz : mv_beg;
 			fseek(f, beg_cur, SEEK_SET);
-			fOK = fOK && (fread(buf, mv_end-beg_cur,1,f) == 1);
+			fOK = fOK && (fread(buf,mv_end-beg_cur,1,f) == 1);
 			fseek(f, beg_cur+mv_off, SEEK_SET);
 			fOK = fOK && (fwrite(buf,mv_end-beg_cur,1,f) == 1);
 			mv_end -= bufSz;
@@ -889,8 +915,8 @@ bool MFileArch::put( TMess::SRec mess )
 		fseek(f, mv_beg, SEEK_SET);
 		fOK = fOK && (fwrite(s_buf.c_str(),s_buf.size(),1,f) == 1);
 		cacheUpdate(FTM(mess), mv_off);
-		//  Put last value to cache
-		cacheSet(FTM(mess), mv_beg, true);
+		//  Put the last value to the cache
+		//cacheSet(FTM(mess), mv_beg, true);	//!!!! This may be wrong for several records with the equal time
 	    }
 	}
 	fseek(f, 0, SEEK_END);
@@ -933,31 +959,37 @@ time_t MFileArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const 
     eTm = vmin(eTm, end());
     time_t result = bTm;
     if(xmlM()) {
-	for(unsigned iCh = 0; iCh < mNode->childSize() && time(NULL) < upTo; iCh++) {
+	int64_t lastTm = 0;
+	for(unsigned iCh = cacheGet((int64_t)bTm*1000000), passCnt = 0; iCh < mNode->childSize() && time(NULL) < upTo; iCh++) {
 	    //Find messages
 	    bRec.time = strtol(mNode->childGet(iCh)->attr("tm").c_str(), (char**)NULL, 16);
+	    bRec.utime = s2i(mNode->childGet(iCh)->attr("tmu"));
 	    if(bRec.time > eTm) break;
 	    if(bRec.time >= bTm) {
 		result = bRec.time;
 		bRec.level = (TMess::Type)s2i(mNode->childGet(iCh)->attr("lv"));
 		bRec.categ = mNode->childGet(iCh)->attr("cat");
 		if(abs(bRec.level) < level || !re.test(bRec.categ)) continue;
-		bRec.utime = s2i(mNode->childGet(iCh)->attr("tmu"));
 		bRec.mess  = mNode->childGet(iCh)->text();
 		bool equal = false;
-		int i_p = mess.size();
-		for(int i_m = mess.size()-1; i_m >= 0; i_m--) {
-		    if(FTM(mess[i_m]) > FTM(bRec)) i_p = i_m;
-		    else if(FTM(mess[i_m]) == FTM(bRec) && bRec.level == mess[i_m].level &&
-			    (owner().prevDblTmCatLev() || bRec.mess == mess[i_m].mess)) {
-			if(owner().prevDblTmCatLev()) mess[i_m] = bRec;	//Replace previous as the archieved is priority
+		int iP = mess.size();
+		for(int iM = mess.size()-1; iM >= 0; iM--) {
+		    if(FTM(mess[iM]) > FTM(bRec)) iP = iM;
+		    else if(FTM(mess[iM]) == FTM(bRec) && bRec.level == mess[iM].level && bRec.categ == mess[iM].categ &&
+			    (owner().prevDblTmCatLev() || bRec.mess == mess[iM].mess)) {
+			if(owner().prevDblTmCatLev()) mess[iM] = bRec;	//Replace previous as the archieved is priority
 			equal = true;
 			break;
 		    }
-		    else if(FTM(mess[i_m]) < FTM(bRec)) break;
+		    else if(FTM(mess[iM]) < FTM(bRec)) break;
 		}
-		if(!equal) mess.insert(mess.begin()+i_p, bRec);
+		if(!equal) mess.insert(mess.begin()+iP, bRec);
 	    }
+	    if((passCnt++) > CACHE_POS && FTM(bRec) != lastTm) {
+		cacheSet(FTM(bRec), iCh);
+		passCnt = 0;
+	    }
+	    lastTm = FTM(bRec);
 	}
     }
     else {
@@ -973,8 +1005,8 @@ time_t MFileArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const 
 	if(c_off) fseek(f, c_off, SEEK_SET);
 	else rdOK = (fgets(buf,bufSz,f) != NULL);
 	//Check mess records
-	int pass_cnt = 0;
-	time_t last_tm = 0;
+	int passCnt = 0;
+	int64_t lastTm = 0;
 	while((rdOK=(fgets(buf,bufSz,f)!=NULL)) && time(NULL) < upTo) {
 	    char stm[51]; int off = 0, bLev;
 	    if(sscanf(buf,"%50s %d",stm,&bLev) != 2) continue;
@@ -992,23 +1024,23 @@ time_t MFileArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const 
 		if(!re.test(bRec.categ)) continue;
 		// Check to equal messages and inserting
 		bool equal = false;
-		int i_p = mess.size();
-		for(int i_m = mess.size()-1; i_m >= 0; i_m--)
-		    if(FTM(mess[i_m]) > FTM(bRec)) i_p = i_m;
-		    else if(FTM(mess[i_m]) == FTM(bRec) && bRec.level == mess[i_m].level &&
-			    (owner().prevDblTmCatLev() || bRec.mess == mess[i_m].mess)) {
-			if(owner().prevDblTmCatLev()) mess[i_m] = bRec;	//Replace previous as the archieved is priority
+		int iP = mess.size();
+		for(int iM = mess.size()-1; iM >= 0; iM--)
+		    if(FTM(mess[iM]) > FTM(bRec)) iP = iM;
+		    else if(FTM(mess[iM]) == FTM(bRec) && bRec.level == mess[iM].level && bRec.categ == mess[iM].categ &&
+			    (owner().prevDblTmCatLev() || bRec.mess == mess[iM].mess)) {
+			if(owner().prevDblTmCatLev()) mess[iM] = bRec;	//Replace previous as the archieved is priority
 			equal = true;
 			break;
 		    }
-		    else if(FTM(mess[i_m]) < FTM(bRec)) break;
-		if(!equal) mess.insert(mess.begin()+i_p, bRec);
+		    else if(FTM(mess[iM]) < FTM(bRec)) break;
+		if(!equal) mess.insert(mess.begin()+iP, bRec);
 	    }
-	    else if((pass_cnt++) > CACHE_POS && bRec.time != last_tm) {
+	    else if((passCnt++) > CACHE_POS && FTM(bRec) != lastTm) {
 		cacheSet(FTM(bRec), ftell(f)-strlen(buf));
-		pass_cnt = 0;
+		passCnt = 0;
 	    }
-	    last_tm = bRec.time;
+	    lastTm = FTM(bRec);
 	}
 	fclose(f);
     }

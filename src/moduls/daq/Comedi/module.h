@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.Comedi file: module.h
 /***************************************************************************
- *   Copyright (C) 2012-2014 by Roman Savochenko                           *
+ *   Copyright (C) 2012-2014,2019 by Roman Savochenko                      *
  *   rom_as@oscada.org                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -108,6 +108,7 @@ class TMdContr: public TController
 	void start_( );
 	void stop_( );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
     private:
 	//Methods

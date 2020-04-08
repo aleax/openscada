@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.ModBus translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.ModBus module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2007-2018.
+# Roman Savochenko <rom_as@oscada.org>, 2007-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-26 17:02+0300\n"
+"POT-Creation-Date: 2019-11-04 11:03+0200\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -105,8 +105,8 @@ msgstr ""
 "%g регістрів, %g бітів. Помилок з'єднання %g, відповіді %g."
 
 #, c-format
-msgid "DAQ.%s.%s: connection to data source: %s."
-msgstr "DAQ.%s.%s: підключення до джерела даних: %s."
+msgid "Connection to the data source: %s."
+msgstr "Підключення до джерела даних: %s."
 
 msgid "STOP"
 msgstr "ЗУПИНЕНО"
@@ -114,14 +114,21 @@ msgstr "ЗУПИНЕНО"
 msgid "10:Error of connection or no response."
 msgstr "10:Помилка з'єднання або немає відповіді."
 
-msgid "4:Server failure."
-msgstr "4:Збій серверу"
+msgid "IN REDUNDANCY"
+msgstr "РЕЗЕРВУВАННЯ"
 
 msgid "15:Error in size of response PDU."
 msgstr "13:Помилка розміру PDU відповіді."
 
 msgid "OK"
 msgstr "НОРМА"
+
+#, c-format
+msgid "10:Generic error: %s."
+msgstr "10:Загальна помилка: %s."
+
+msgid "Default port of the ModuBus/TCP is 502."
+msgstr "Типовий порт ModuBus/TCP це 502."
 
 msgid ""
 "Merge non-adjacent fragments of registers for request in a single block.\n"
@@ -155,7 +162,7 @@ msgstr "2:Збір зупинено."
 
 msgid ""
 "Attributes configuration list. List must be written by lines in the format: "
-"\"{dt}:{numb}[:{rw}[:{id}[:{name}]]]\".\n"
+"\"{dt}:{numb}[:{flg}[:{id}[:{name}]]]\".\n"
 "Where:\n"
 "  dt - ModBus data type (R-register[3,6(16)], C-coil[1,5(15)], RI-input "
 "register[4], CI-input coil[2]);\n"
@@ -164,7 +171,8 @@ msgid ""
 "Double, b5-Bit5, s-String;\n"
 "       Start from the symbol '#' for the commented line;\n"
 "  numb - ModBus data address of the device (dec, hex or octal) [0...65535];\n"
-"  rw - read/write mode (r-read; w-write; rw-read and write);\n"
+"  flg - flags: read/write mode (r-read; w-write; rw-read and write), strict "
+"requesting mode (not combining) 's';\n"
 "  id - identifier of the created attribute;\n"
 "  name - name of the created attribute.\n"
 "Examples:\n"
@@ -178,7 +186,7 @@ msgid ""
 "register 15 and the size 20."
 msgstr ""
 "Перелік конфігурації атрибутів. Перелік формується строками у форматі: "
-"\"{dt}:{numb}[:{rw}[:{id}[:{name}]]]\".\n"
+"\"{dt}:{numb}[:{flg}[:{id}[:{name}]]]\".\n"
 "Де:\n"
 "  dt - ModBus тип даних (R-регістер[3,6(16)], C-біт[1,5(15)], RI-регістер "
 "входу[4], CI-біт входу[2]);\n"
@@ -188,7 +196,8 @@ msgstr ""
 "       Почніть з символу '#' для коментування рядка;\n"
 "  numb - адреса ModBus даних пристрою (десят., шіст., або вісімк.) "
 "[0...65535];\n"
-"  rw - режим запису/читання (r-читати, w-писати, rw-читати та писати);\n"
+"  flg - прапорці: режим запису/читання (r-читати, w-писати, rw-читати та "
+"писати), суворий режим запиту (без комбінування) 's';\n"
 "  id - ідентифікатор створюваного атрибуту;\n"
 "  name - ім'я створюваного атрибуту.\n"
 "Приклади:\n"
@@ -200,15 +209,9 @@ msgstr ""
 "  \"R_s:15,20:r:str:Reg blk\" - отримати рядок (блок регістрів) із регистру "
 "15 та розміром 20."
 
-msgid "Template configuration"
-msgstr "Конфігурація шаблону"
-
-msgid "Parameters"
-msgstr "Параметри"
-
 msgid ""
-"ModBus address in the format: \"{dt}:{numb}[:{rw}]\".\n"
-"Where:\n"
+"Special address format:\n"
+"ModBus address writes in the form \"{dt}:{numb}[:{rw}]\", where:\n"
 "  dt - ModBus data type (R-register[3,6(16)], C-coil[1,5(15)], RI-input "
 "register[4], CI-input coil[2]);\n"
 "       R and RI can be expanded by the suffixes:\n"
@@ -223,9 +226,12 @@ msgid ""
 "  \"R_i4:400,300:r\" - get int32 from the registers 400 and 300;\n"
 "  \"R_b10:25:r\" - get the bit 10 from the register 25;\n"
 "  \"R_s:15,20:r\" - get string (registers block) from the register 15 and "
-"the size 20."
+"the size 20.\n"
+"\n"
+"Common address format:\n"
 msgstr ""
-"ModBus адреса у форматі: \"{dt}:{numb}[:{rw}]\".\n"
+"Формат спеціальної адреси:\n"
+"ModBus адреса у форматі \"{dt}:{numb}[:{rw}]\".\n"
 "Де:\n"
 "  dt - ModBus тип даних (R-регістер[3,6(16)], C-біт[1,5(15)], RI-регістер "
 "входу[4], CI-біт входу[2]);\n"
@@ -242,10 +248,9 @@ msgstr ""
 "  \"R_i4:400,300:r\" - отримати int32 з регістрів 400 та 300;\n"
 "  \"R_b10:25:r\" - отримати біт 10 з регітру 25;\n"
 "  \"R_s:15,20:r\" - отримати рядок (блок регістрів) із регистру 15 та "
-"розміром 20."
-
-msgid "Error of parameter ID."
-msgstr "Помилка ID параметру."
+"розміром 20.\n"
+"\n"
+"Формат загальної адреси:\n"
 
 msgid "Name"
 msgstr "Ім'я"
@@ -274,14 +279,17 @@ msgstr "Режим"
 msgid "Data;Gateway node;Gateway net"
 msgstr "Дані;Шлюз вузла;Шлюз мережі"
 
+msgid "Date of modification"
+msgstr "Дата модифікації"
+
 msgid "Period of the data calculation, seconds"
 msgstr "Період обчислення даних, секунд"
 
-msgid "Translate program"
-msgstr "Перекладати програму"
+msgid "Completely translate the procedure"
+msgstr "Повністю перекладати процедуру"
 
-msgid "Program"
-msgstr "Програма"
+msgid "Procedure"
+msgstr "Процедура"
 
 msgid "To output transport"
 msgstr "До виходного транспорту"
@@ -312,6 +320,9 @@ msgstr "13:Помилка відповіді сервера"
 
 msgid "Not full response"
 msgstr "Неповна відповідь"
+
+msgid "13:Error of the response: Too large."
+msgstr "13:Помилка відповіді: Дуже довга."
 
 msgid "14:Device error: "
 msgstr "14:Помилка пристрою: "
@@ -344,6 +355,9 @@ msgstr "2:Адреса запиту недозволена або межа за�
 
 msgid "3:Illegal value of the data in the request."
 msgstr "3:Нелегальне значення даних у запиті."
+
+msgid "4:Server failure."
+msgstr "4:Збій серверу"
 
 msgid "5:Request requires too long time for execute."
 msgstr "5:Запит вимагає дуже багато часу для виконання."
@@ -385,8 +399,8 @@ msgstr "Довжина звіту"
 msgid "Use zero for the report disabling"
 msgstr "Використовувати нуль для вимкнення звіту"
 
-msgid "Frequency of calculation of the function (Hz)"
-msgstr "Частота обчислення функції (Гц)"
+msgid "Frequency of calculation of the function, Hz"
+msgstr "Частота обчислення функції, Гц"
 
 msgid "Function start flag"
 msgstr "Прапорець початку функції"
@@ -424,17 +438,14 @@ msgstr "Вимкнено. "
 msgid "Enabled. "
 msgstr "Ввімкнено. "
 
-msgid "Modified, re-enable to apply! "
-msgstr "Модифіковано, переувімкнути для застосування! "
-
 #, c-format
 msgid ""
-"Spent time: %s. Requests %.4g. Read registers %.4g, coils %.4g, register "
+"Spent time %s[%s]. Requests %.4g. Read registers %.4g, coils %.4g, register "
 "inputs %.4g, coil inputs %.4g.\n"
 "Wrote registers %.4g, coils %.4g."
 msgstr ""
-"Витрачено часу: %s. Запитів %.4g. Прочитано %.4g регістрів, %.4g бітів, %.4g "
-"регістрів входів, %.4g бітів входів.\n"
+"Витрачено часу %s[%s]. Запитів %.4g. Прочитано %.4g регістрів, %.4g бітів, "
+"%.4g регістрів входів, %.4g бітів входів.\n"
 "Записано %.4g регістрів, %.4g бітів."
 
 #, c-format
@@ -461,6 +472,9 @@ msgstr "БД"
 
 msgid "Configuration"
 msgstr "Конфігурація"
+
+msgid "DAQ template or direct procedure language"
+msgstr "DAQ шаблон або мова прямої процедури"
 
 msgid "Data"
 msgstr "Дані"
@@ -520,17 +534,11 @@ msgstr ""
 msgid "Type"
 msgstr "Тип"
 
-msgid "Real;Integer;Boolean;String"
-msgstr "Реальний;Цілий;Логічний;Рядок"
+msgid "Real;Integer;Boolean;String;Object"
+msgstr "Реальний;Цілий;Логічний;Рядок;Об'єкт"
 
 msgid "Link"
 msgstr "Зв'язок"
-
-msgid "Program language"
-msgstr "Мова програми"
-
-msgid "Links"
-msgstr "Зв'язки"
 
 msgid "Turn off the node for this operation"
 msgstr "Вимкніть вузол для цієї операції"

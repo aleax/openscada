@@ -7,11 +7,11 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../en/files/doc.css" rel="stylesheet" /></head>
-<body><div id="mw_header">
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../en/files/Logo-big.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Документы/Релиз 0.9/Обновление 0.8.0 LTS</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FRelease+0.9%2FUpdating+0.8.0+LTS&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/Release_0.9/Updating_0.8.0_LTS" title="Documents/Release 0.9/Updating 0.8.0 LTS">Documents/Release 0.9/Updating 0.8.0 LTS</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/Release_0.9/Updating_0.8.0_LTS" title="Documents/Release 0.9/Updating 0.8.0 LTS (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/Release_0.9/Updating_0.8.0_LTS/uk" title="Документи/Реліз 0.9/Оновлення 0.8.0 LTS (100% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FRelease+0.9%2FUpdating+0.8.0+LTS&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/Release_0.9/Updating_0.8.0_LTS" title="Documents/Release 0.9/Updating 0.8.0 LTS">Documents/Release 0.9/Updating 0.8.0 LTS</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Updating_0.8.0.html" title="Documents/Release 0.9/Updating 0.8.0 LTS (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Updating_0.8.0.html" title="Документи/Реліз 0.9/Оновлення 0.8.0 LTS (100% translated)">українська</a></div></div>
 <p>Основными отличиями версии 0.9 LTS от 0.8.0 LTS являются:
 </p>
 <ol><li> Размещение данных проекта пользователя и отсутствие поддержки и понятия "Проект OpenSCADA" в 0.8.0 LTS.</li>
@@ -95,15 +95,15 @@ $ cp -R /usr/share/openscada/LibsDB/*.db ~/.openscada/LibsDB
 </p>
 <dl><dt> 5. Отличия и желаемые изменения полученного обновления</dt>
 <dd /></dl>
-<ul><li> [ПРОЕКТ] Сократить адрес к локальным <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#CfgDB" title="Special:MyLanguage/Documents/Program manual">файлам БД проекта</a>, который будет иметь вид "./AGLKS/Model.db" и его можно сократить до "Model.db".</li>
+<ul><li> [ПРОЕКТ] Сократить адрес к локальным <a href="Program_manual.html#CfgDB" title="Special:MyLanguage/Documents/Program manual">файлам БД проекта</a>, который будет иметь вид "./AGLKS/Model.db" и его можно сократить до "Model.db".</li>
 <li> Проект визуализации:</li></ul>
-<dl><dd><ul><li> уведомитель был полностью переписан, поэтому, на главной странице Вашего проекта, нужно предусмотреть <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/VCAEngine#Alarms" title="Special:MyLanguage/Modules/VCAEngine">атрибуты описания желаемых уведомителей</a>, и типовые значения которых можно получить из проекта шаблона, конечно если библиотеки обновлены;</li>
-<li> свойства проекта визуализации, на предмет контроля параметров окна исполнения, в основном вынесены в <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/Vision#SpecAttrs" title="Special:MyLanguage/Modules/Vision">отдельные атрибуты главной страницы</a> и которые, соответственно, и нужно определять.</li></ul></dd></dl>
+<dl><dd><ul><li> уведомитель был полностью переписан, поэтому, на главной странице Вашего проекта, нужно предусмотреть <a href="Modules/VCAEngine.html#Alarms" title="Special:MyLanguage/Modules/VCAEngine">атрибуты описания желаемых уведомителей</a>, и типовые значения которых можно получить из проекта шаблона, конечно если библиотеки обновлены;</li>
+<li> свойства проекта визуализации, на предмет контроля параметров окна исполнения, в основном вынесены в <a href="Modules/Vision.html#SpecAttrs" title="Special:MyLanguage/Modules/Vision">отдельные атрибуты главной страницы</a> и которые, соответственно, и нужно определять.</li></ul></dd></dl>
 
 
 
 
 
 
-</div></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Release_0.9/Updating_0.8.0_LTS/ru">Documents/Release_0.9/Updating_0.8.0_LTS/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.1</td></tr></table></body>
 </html>

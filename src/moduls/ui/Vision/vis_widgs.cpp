@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_widgs.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -44,12 +44,10 @@
 #include <QCompleter>
 #include <QDesktopWidget>
 
-#include <tsys.h>
-
+#include "vis_run.h"
 #include "vis_shapes.h"
 #include "vis_widgs.h"
 #include "vis_run_widgs.h"
-#include "vis_run.h"
 
 using namespace VISION;
 
@@ -65,6 +63,7 @@ InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess, con
 		    const string &lang, const string &istCtxId ) :
 	QDialog(parent), mId(NULL), mName(NULL), stCtxId(istCtxId)
 {
+    setWindowModality(Qt::WindowModal);
     //setMaximumSize(800, 600);
     setWindowTitle(ndlg);
     setWindowIcon(icon);
@@ -479,8 +478,10 @@ LineEdit::LineEdit( QWidget *parent, LType tp, bool prev_dis, bool resApply ) :
     box->setMargin(0);
     box->setSpacing(0);
 
-    bt_tm = new QTimer(this);
-    connect(bt_tm, SIGNAL(timeout()), this, SLOT(cancelSlot()));
+    if(resApply) {
+	bt_tm = new QTimer(this);
+	connect(bt_tm, SIGNAL(timeout()), this, SLOT(cancelSlot()));
+    }
 
     setType(tp);
 }
@@ -499,7 +500,7 @@ void LineEdit::viewApplyBt( bool view )
 	layout()->addWidget(bt_fld);
     }
     if(!view && bt_fld) {
-	bt_tm->stop(); //bt_tm->deleteLater(); bt_tm = NULL;
+	if(bt_tm) bt_tm->stop(); //bt_tm->deleteLater(); bt_tm = NULL;
 	bt_fld->deleteLater(); bt_fld = NULL;
 	mIsEdited = false;
     }
@@ -511,7 +512,8 @@ void LineEdit::setReadOnly( bool val )
 {
     if(!ed_fld)	return;
     switch(type()) {
-	case Text:	((QLineEdit*)ed_fld)->setReadOnly(val);		break;
+	case Text: case Password:
+	    ((QLineEdit*)ed_fld)->setReadOnly(val);			break;
 	case Integer: case Real: case Time: case Date: case DateTime:
 	    ((QAbstractSpinBox*)ed_fld)->setReadOnly(val);		break;
 	case Combo:	((QComboBox*)ed_fld)->setEnabled(!val);		break;
@@ -528,8 +530,9 @@ void LineEdit::setType( LType tp )
 
     //Create new widget
     switch(tp) {
-	case Text:
+	case Text: case Password:
 	    ed_fld = new QLineEdit(this);
+	    ((QLineEdit*)ed_fld)->setEchoMode((tp==Password)?QLineEdit::Password:QLineEdit::Normal);
 	    connect((QLineEdit*)ed_fld, SIGNAL(textEdited(const QString&)), SLOT(changed()));
 	    break;
 	case Integer:
@@ -570,7 +573,7 @@ void LineEdit::setType( LType tp )
     }
     ((QBoxLayout*)layout())->insertWidget(0, ed_fld);
     if(applyReserve && needReserver) {
-	ed_fld->setMaximumWidth(width()-12); ed_fld->setMinimumWidth(width()-12);
+	ed_fld->setMaximumWidth(width()-icoSize(1.2)); ed_fld->setMinimumWidth(width()-icoSize(1.2));
 	((QBoxLayout*)layout())->setAlignment(ed_fld, Qt::AlignLeft);
     }
     setFocusProxy(ed_fld);
@@ -582,7 +585,7 @@ void LineEdit::changed( )
 {
     //Enable apply
     if(mPrev && !bt_fld) viewApplyBt(true);
-    bt_tm->start(mPrev ? 5000 : 500);
+    if(bt_tm) bt_tm->start(mPrev ? 10000 : 500);
     mIsEdited = true;
 
     emit valChanged(value());
@@ -592,7 +595,7 @@ void LineEdit::setValue( const QString &txt )
 {
     if(ed_fld) ed_fld->blockSignals(true);
     switch(type()) {
-	case Text:
+	case Text: case Password:
 	    if(txt == value())	break;
 	    ((QLineEdit*)ed_fld)->setText(txt);
 	    ((QLineEdit*)ed_fld)->setCursorPosition(0);
@@ -603,11 +606,13 @@ void LineEdit::setValue( const QString &txt )
 	case Real:
 	    ((QDoubleSpinBox*)ed_fld)->setValue(txt.toDouble());
 	    break;
-	case Time:
-	    ((QTimeEdit*)ed_fld)->setTime(QTime().addSecs(txt.toInt()));
+	case Time: {
+	    int secs = txt.toInt();
+	    ((QTimeEdit*)ed_fld)->setTime(QTime(secs/3600,(secs/60)%60,secs%60)/*.addSecs(txt.toInt())*/);
 	    break;
+	}
 	case Date: case DateTime:
-	    if(((QDateTimeEdit*)ed_fld)->calendarWidget()->isVisible()) break;
+	    if(((QDateTimeEdit*)ed_fld)->calendarWidget() && ((QDateTimeEdit*)ed_fld)->calendarWidget()->isVisible()) break;
 	    ((QDateTimeEdit*)ed_fld)->setDateTime(QDateTime::fromTime_t(txt.toInt()));
 	    break;
 	case Combo:
@@ -678,18 +683,37 @@ void LineEdit::setCfg( const QString &cfg )
 	    if(((QComboBox*)ed_fld)->completer()) ((QComboBox*)ed_fld)->completer()->setCaseSensitivity(Qt::CaseSensitive);
 	    break;
 	}
+	default: break;
     }
     if(bt_fld) viewApplyBt(false);
     if(ed_fld) ed_fld->blockSignals(false);
 }
 
+void LineEdit::setFont( const QFont &f )
+{
+    if(!workWdg()) return;
+    workWdg()->setFont(f);
+    switch(type()) {
+	case Combo: {
+	    QList<QLineEdit*> lnEdWs = workWdg()->findChildren<QLineEdit*>();
+	    if(lnEdWs.size()) lnEdWs[0]->setFont(f);
+	    break;
+	}
+	default: break;
+    }
+}
+
 QString LineEdit::value( )
 {
     switch(type()) {
-	case Text:	return ((QLineEdit*)ed_fld)->text();
+	case Text: case Password:
+			return ((QLineEdit*)ed_fld)->text();
 	case Integer:	return QString::number(((QSpinBox*)ed_fld)->value());
 	case Real:	return QString::number(((QDoubleSpinBox*)ed_fld)->value());
-	case Time:	return QString::number(QTime().secsTo(((QTimeEdit*)ed_fld)->time()));
+	case Time: {
+	    QTime tm = ((QTimeEdit*)ed_fld)->time();
+	    return QString::number(tm.hour()*3600 + tm.minute()*60 + tm.second() /*QTime().secsTo(((QTimeEdit*)ed_fld)->time())*/);
+	}
 	case Date: case DateTime:
 			return QString::number(((QDateTimeEdit*)ed_fld)->dateTime().toTime_t());
 	case Combo:	return ((QComboBox*)ed_fld)->currentText();
@@ -728,7 +752,7 @@ bool LineEdit::event( QEvent * e )
 	else if(keyEvent->key() == Qt::Key_Escape )	{ cancelSlot(); return true; }
     }
     else if(e->type() == QEvent::Resize && applyReserve && needReserver) {
-	int btW = bt_fld ? bt_fld->width() : 12;
+	int btW = bt_fld ? bt_fld->width() : icoSize(1.2);
 	ed_fld->setMaximumWidth(width()-btW);
 	ed_fld->setMinimumWidth(width()-btW);
     }
@@ -835,10 +859,10 @@ void SyntxHighl::rule( XMLNode *irl, const QString &text, int off, char lev )
     }
 }
 
-void SyntxHighl::highlightBlock(const QString &text)
+void SyntxHighl::highlightBlock( const QString &text )
 {
     setCurrentBlockState((previousBlockState()<0)?0:previousBlockState());
-    rule(&rules,text);
+    rule(&rules, text);
 }
 
 #undef _
@@ -862,7 +886,7 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
     ed_fld->setAcceptRichText(false);
     ed_fld->setLineWrapMode(QTextEdit::NoWrap);
     setFocusProxy(ed_fld);
-    connect(ed_fld, SIGNAL(textChanged()), this, SLOT(changed()) );
+    connect(ed_fld, SIGNAL(textChanged()), this, SLOT(changed()));
     connect(ed_fld, SIGNAL(cursorPositionChanged()), this, SLOT(curPosChange()) );
     connect(ed_fld, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(custContextMenu()));
     box->addWidget(ed_fld);
@@ -908,7 +932,7 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
 }
 
 
-bool TextEdit::isEdited( )	{ return (but_box && but_box->isVisible()); }
+bool TextEdit::isEdited( )	{ return (but_box && but_box->isEnabled()); }	//isVisible() sometime wrong but it can be hidden commonly
 
 QString TextEdit::text( )	{ return ed_fld->toPlainText(); }
 
@@ -946,7 +970,7 @@ void TextEdit::changed( )
 
     if(!but_box) bt_tm->start(500);
 
-    emit textChanged(text());
+    if(text() != m_text) emit textChanged(text());
 }
 
 void TextEdit::applySlot( )
@@ -988,7 +1012,7 @@ bool TextEdit::event( QEvent * e )
 	    return true;
 	}
     }
-    if(e->type() == QEvent::ToolTip && hasFocus() && toolTip().isEmpty()) {
+    if(!dynamic_cast<VisRun*>(window()) && e->type() == QEvent::ToolTip && hasFocus() && toolTip().isEmpty()) {
 	QToolTip::showText(((QHelpEvent *)e)->globalPos(),QString(_("Cursor = (%1:%2)")).
 	    arg(ed_fld->textCursor().blockNumber()+1).arg(ed_fld->textCursor().columnNumber()+1));
 	return true;
@@ -1090,7 +1114,7 @@ void WdgView::childsClear( )
     QObjectList chLst = children();
     for(int iC = 0; iC < chLst.size(); iC++) {
 	WdgView *cw = qobject_cast<WdgView*>(chLst[iC]);
-	if(cw)	cw->deleteLater(); //delete cw;
+	if(cw)	delete cw;//cw->deleteLater(); //!!!! direct deleting due to this step is last one mostly
     }
 }
 
@@ -1191,12 +1215,12 @@ void WdgView::attrsSet( AttrValS &attrs )
     XMLNode req("set");
     req.setAttr("path", id()+"/%2fserv%2fattr");
     string attrId, attrPos;
-    for(AttrValS::iterator i_a = attrs.begin(); i_a != attrs.end(); i_a++) {
+    for(AttrValS::iterator iA = attrs.begin(); iA != attrs.end(); iA++) {
 	int off = 0;
-	attrId = TSYS::strParse(i_a->first, 0, ":", &off);
-	attrPos = TSYS::strParse(i_a->first, 0, ":", &off);
-	if(!attrId.empty())	req.childAdd("el")->setAttr("id",attrId)->setText(i_a->second);
-	if(!attrPos.empty())	attrSet("", i_a->second, s2i(attrPos));
+	attrId = TSYS::strParse(iA->first, 0, ":", &off);
+	attrPos = TSYS::strParse(iA->first, 0, ":", &off);
+	if(!attrId.empty())	req.childAdd("el")->setAttr("id",attrId)->setText(iA->second);
+	if(!attrPos.empty())	attrSet("", iA->second, s2i(attrPos));
     }
     if(req.childSize())	cntrIfCmd(req);
 }
@@ -1242,29 +1266,29 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 	// Delete child widgets
 	string b_nm = aBr->attr("lnkPath");
 	if(b_nm.empty()) b_nm = id();
-	for(int iC = 0, i_l = 0; iC < children().size(); iC++) {
+	for(int iC = 0, iL = 0; iC < children().size(); iC++) {
 	    if(!qobject_cast<WdgView*>(children().at(iC))) continue;
-	    for(i_l = 0; i_l < (int)aBr->childSize(); i_l++)
-		if(aBr->childGet(i_l)->name() == "w" &&
-			qobject_cast<WdgView*>(children().at(iC))->id() == (b_nm+"/wdg_"+aBr->childGet(i_l)->attr("id")))
+	    for(iL = 0; iL < (int)aBr->childSize(); iL++)
+		if(aBr->childGet(iL)->name() == "w" &&
+			qobject_cast<WdgView*>(children().at(iC))->id() == (b_nm+"/wdg_"+aBr->childGet(iL)->attr("id")))
 		    break;
-	    if(i_l >= (int)aBr->childSize()) children().at(iC)->deleteLater();
+	    if(iL >= (int)aBr->childSize()) children().at(iC)->deleteLater();
 	}
 
 	// Create new child widget
-	for(int i_l = 0, iC = 0; i_l < (int)aBr->childSize(); i_l++) {
-	    if(aBr->childGet(i_l)->name() != "w") continue;
+	for(int iL = 0, iC = 0; iL < (int)aBr->childSize(); iL++) {
+	    if(aBr->childGet(iL)->name() != "w") continue;
 	    for(iC = 0; iC < children().size(); iC++)
 		if(qobject_cast<WdgView*>(children().at(iC)) &&
-			qobject_cast<WdgView*>(children().at(iC))->id() == (b_nm+"/wdg_"+aBr->childGet(i_l)->attr("id")))
+			qobject_cast<WdgView*>(children().at(iC))->id() == (b_nm+"/wdg_"+aBr->childGet(iL)->attr("id")))
 		{
-		    ((WdgView*)children().at(iC))->load((item==id())?"":item,true,(wLevel()>0)?isInit:false,aBr->childGet(i_l));
+		    ((WdgView*)children().at(iC))->load((item==id())?"":item,true,(wLevel()>0)?isInit:false,aBr->childGet(iL));
 		    break;
 		}
 	    if(iC < children().size()) continue;
-	    WdgView *nwdg = newWdgItem(b_nm+"/wdg_"+aBr->childGet(i_l)->attr("id"));
+	    WdgView *nwdg = newWdgItem(b_nm+"/wdg_"+aBr->childGet(iL)->attr("id"));
 	    nwdg->show();
-	    nwdg->load((item==id())?"":item,true,(wLevel()>0)?isInit:false,aBr->childGet(i_l));
+	    nwdg->load((item==id())?"":item,true,(wLevel()>0)?isInit:false,aBr->childGet(iL));
 	}
 
 	// Children widgets order update

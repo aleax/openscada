@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.FLibSYS file: varchfnc.cpp
 /***************************************************************************
- *   Copyright (C) 2009-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2009-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -29,7 +29,7 @@ using namespace FLibSYS;
 //*************************************************
 //* VArchObj - Value archive object               *
 //*************************************************
-VArchObj::VArchObj( ) : mIsArch(false), mBuf(NULL)
+VArchObj::VArchObj( const string &user ) : mIsArch(false), mBuf(NULL), mUser(user)
 {
     if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
 }
@@ -87,9 +87,9 @@ TValBuf *VArchObj::buf( )
     return mBuf;
 }
 
-TVariant VArchObj::propGet( const string &id )	{ throw TError("VArchObj", _("Properties no supported by the object.")); }
+TVariant VArchObj::propGet( const string &id )	{ throw TError("VArchObj", _("Properties are not supported by the object.")); }
 
-void VArchObj::propSet( const string &id, TVariant val ) { throw TError("VArchObj", _("Properties no supported by the object.")); }
+void VArchObj::propSet( const string &id, TVariant val ) { throw TError("VArchObj", _("Properties are not supported by the object.")); }
 
 TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 {
@@ -111,7 +111,7 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
     //    and microseconds <usec> for the archivator <archivator>.
     if(id == "end") {
 	int64_t vtm;
-	if(isArch())	vtm = arch().at().end( (prms.size()>=2) ? prms[1].getS() : "" );
+	if(isArch())	vtm = arch().at().end((prms.size()>=2) ? prms[1].getS() : "");
 	else {
 	    if(!buf()) return (int64_t)EVAL_INT;
 	    vtm = buf()->end();
@@ -155,11 +155,13 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
     //bool set( ValObj val, int sec, int usec, string archivator = "" ) - writing of the value <val> to the archive for the time <sec>:<usec> for the archivator <archivator>.
     if(id == "set" && prms.size() >= 3) {
 	if(isArch()) {
+	    if(!SYS->security().at().access(mUser,SEC_WR,"root",SARH_ID,RWRWR_)) return false;
 	    TFld::Type tp = TFld::String;
 	    switch(prms[0].type()) {
 		case TVariant::Boolean:	tp = TFld::Boolean;	break;
 		case TVariant::Integer:	tp = TFld::Integer;	break;
 		case TVariant::Real:	tp = TFld::Real;	break;
+		default:	break;
 	    }
 	    TValBuf buf(tp, 10, arch().at().period(), true, true); buf.set(prms[0], (int64_t)prms[1].getI()*1000000+prms[2].getI());
 	    arch().at().setVals(buf, buf.begin(), buf.end(), (prms.size()>=4)?prms[3].getS():"");
@@ -187,21 +189,21 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	if(src.at().isArch()) {
 	    TValBuf* vb = NULL;
 	    if(isArch()) {
+		if(!SYS->security().at().access(mUser,SEC_WR,"root",SARH_ID,RWRWR_)) return false;
 		tarch = arch();
 		vb = &tarch.at();
-	    }
-	    else vb = buf();
-	    if(!vb)     return false;
+	    } else vb = buf();
+	    if(!vb)	return false;
 	    src.at().arch().at().getVals(*vb, prms[1].getI()*1000000+prms[2].getI(),
 					      prms[3].getI()*1000000+prms[4].getI(), (prms.size()>=6)?prms[5].getS():"");
 	}
 	else if(isArch()) {
+	    if(!SYS->security().at().access(mUser,SEC_WR,"root",SARH_ID,RWRWR_)) return false;
 	    TValBuf* vb = NULL;
 	    if(src.at().isArch()) {
 		tarch = src.at().arch();
 		vb = &tarch.at();
-	    }
-	    else vb = src.at().buf();
+	    } else vb = src.at().buf();
 	    if(!vb)	return false;
 	    arch().at().setVals(*vb, prms[1].getI()*1000000+prms[2].getI(),
 				     prms[3].getI()*1000000+prms[4].getI(), (prms.size()>=6)?prms[5].getS():"");
@@ -224,7 +226,7 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
     // archivator  - concrete archiver select for FFT processing;
     // vlOnEVAL    - replacing EVAL value; for same <vlOnEVAL> is EVAL used previous actual value for the EVAL replace.
     if(id == "FFT" && prms.size() >= 2) {
-	int64_t etm = 1000000ll * (!prms[0].getI() ? time(NULL) : prms[0].getI()) + ((prms.size()>=4) ? prms[3].getI() : 0);
+	int64_t etm = 1000000ll * (!prms[0].getI() ? TSYS::curTime()/1000000 : prms[0].getI()) + ((prms.size()>=4) ? prms[3].getI() : 0);
 	int64_t btm = etm - (int64_t)(1e6*prms[1].getR());
 	int fftN = 0, iN = 0, bufEVAL = 0;
 	double *fftIn = NULL, tVl,
@@ -275,5 +277,5 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	return ao;
     }
 #endif
-    throw TError("VArchObj",_("Error function '%s' or missing parameters for it."),id.c_str());
+    throw TError("VArchObj",_("Error the function '%s' or missing its parameters."),id.c_str());
 }

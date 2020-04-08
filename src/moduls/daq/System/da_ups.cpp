@@ -134,7 +134,7 @@ void UPS::getVal( TMdPrm *prm )
 				else if(enSel == "END LIST ENUM "+UPS+" "+var)	break;
 				else if(lstSecEn && sscanf(enSel.c_str(),"ENUM %*s %*s \"%255[^\"]s\"",vVal) == 1) selLs = selLs + vVal + ";";
 
-			    flg |= TFld::Selected;
+			    flg |= TFld::Selectable;
 			}
 			// Create
 			((tval*)prm->daData)->els.fldAdd(new TFld(aid.c_str(),descr.c_str(),TFld::String,flg,vLen.c_str(),"",selLs.c_str(),selLs.c_str(),vid.c_str()));

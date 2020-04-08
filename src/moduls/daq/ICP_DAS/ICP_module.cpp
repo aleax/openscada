@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.ICP_DAS file: ICP_module.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2010-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,7 +39,7 @@ extern "C"
 #define MOD_NAME	_("ICP DAS hardware")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.8.8"
+#define MOD_VER		"1.8.13"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides implementation for 'ICP DAS' hardware support.\
  Includes main I-87xxx DCON modules, I-8xxx fast modules and boards on ISA bus.")
@@ -95,10 +95,10 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",_("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
-    fldAdd(new TFld("BUS",_("Bus"),TFld::Integer,TFld::Selected,"2","1","-1;0;1;2;3;4;5;6;7;8;9;10",
+    fldAdd(new TFld("BUS",_("Bus"),TFld::Integer,TFld::Selectable,"2","1","-1;0;1;2;3;4;5;6;7;8;9;10",
 	    _("ISA;COM 1 (Master LP-8xxx);COM 1;COM 2;COM 3;COM 4;COM 5;COM 6;COM 7;COM 8;COM 9;COM 10")));
     fldAdd(new TFld("TR_OSCD",_("Transport"),TFld::String,TFld::NoFlag,i2s(2*atoi(OBJ_ID_SZ)+5).c_str(),TrIcpDasNm));
-    fldAdd(new TFld("BAUD",_("Baudrate"),TFld::Integer,TFld::Selected,"6","115200",
+    fldAdd(new TFld("BAUD",_("Baudrate"),TFld::Integer,TFld::Selectable,"6","115200",
 	"300;600;1200;2400;4800;9600;19200;38400;57600;115200;230400;460800;500000;576000;921600",
 	"300;600;1200;2400;4800;9600;19200;38400;57600;115200;230400;460800;500000;576000;921600"));
     fldAdd(new TFld("LP_PRMS",_("LinPAC parameters"),TFld::String,TFld::FullText,"1000"));
@@ -158,7 +158,7 @@ TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
 	TController(name_c, daq_db, cfgelem), reqRes(true), pBusRes(true),
 	mPrior(cfg("PRIOR").getId()), mBus(cfg("BUS").getId()),
 	mBaud(cfg("BAUD").getId()), connTry(cfg("REQ_TRY").getId()), mSched(cfg("SCHEDULE")), mTrOscd(cfg("TR_OSCD")),
-	mPer(100000000), prcSt(false), callSt(false), endRunReq(false), tmGath(0), mCurSlot(-1), numReq(0), numErr(0), numErrResp(0)
+	mPer(1e9), prcSt(false), callSt(false), endRunReq(false), tmGath(0), mCurSlot(-1), numReq(0), numErr(0), numErrResp(0)
 {
     cfg("PRM_BD").setS("ICPDASPrm_"+name_c);
     cfg("BUS").setI(1);
@@ -208,9 +208,6 @@ void TMdContr::start_( )
 
 	numReq = numErr = numErrResp = 0;
 
-	//Schedule process
-	mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
-
 	//Start the gathering data task
 	SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this, 10);
     } catch(TError &err) {
@@ -232,14 +229,7 @@ void TMdContr::stop_( )
     if(mBus == 0) { pBusRes.lock(); Close_Slot(9); Close_SlotAll(); pBusRes.unlock(); }
 }
 
-bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
-{
-    TController::cfgChange(co, pc);
 
-    if((co.name() == "BUS" || co.name() == "BAUD") && startStat()) stop();
-
-    return true;
-}
 
 string TMdContr::DCONCRC( string str )
 {
@@ -453,6 +443,17 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     else TController::cntrCmdProc(opt);
 }
 
+bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
+{
+    TController::cfgChange(co, pc);
+
+    if(co.fld().name() == "SCHEDULE")
+	mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
+    else if((co.name() == "BUS" || co.name() == "BAUD") && startStat()) stop();
+
+    return true;
+}
+
 //******************************************************
 //* TMdPrm                                             *
 //******************************************************
@@ -604,13 +605,8 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     if(!enableStat() || !owner().startStat())	{ vo.setI(EVAL_INT, 0, true); return; }
 
     //Send to active reserve station
-    if(owner().redntUse()) {
-	if(vl == pvl) return;
-	XMLNode req("set");
-	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
-	SYS->daq().at().rdStRequest(owner().workId(),req);
-	return;
-    }
+    if(vlSetRednt(vo,vl,pvl))	return;
+
     //Direct write
     try { if(da) da->vlSet(this, vo, vl, pvl); }
     catch(TError &err) {

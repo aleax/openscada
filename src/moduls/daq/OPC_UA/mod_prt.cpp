@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.OPC_UA file: mod_prt.cpp
 /***************************************************************************
- *   Copyright (C) 2009-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2009-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -50,7 +50,7 @@ TProt::TProt( string name ) : TProtocol(PRT_ID)
     mEndPntEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
     mEndPntEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
     mEndPntEl.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0"));
-    mEndPntEl.fldAdd(new TFld("SerialzType",_("Serializer type"),TFld::Integer,TFld::Selected,"1","0","0",_("Binary")));
+    mEndPntEl.fldAdd(new TFld("SerialzType",_("Serializer type"),TFld::Integer,TFld::Selectable,"1","0","0",_("Binary")));
     mEndPntEl.fldAdd(new TFld("URL",_("URL"),TFld::String,0,"50","opc.tcp://localhost:4841"));
     mEndPntEl.fldAdd(new TFld("SecPolicies",_("Security policies"),TFld::String,TFld::FullText,"100","None:0\nBasic128Rsa15:1"));
     mEndPntEl.fldAdd(new TFld("ServCert",_("Server certificate (PEM)"),TFld::String,TFld::FullText,"10000"));
@@ -82,9 +82,9 @@ void TProt::clientMsgMaxSzSet( const string &inPrtId, uint32_t vl )	{ at(inPrtId
 
 void TProt::clientChunkMaxCntSet( const string &inPrtId, uint32_t vl )	{ at(inPrtId).at().mChunkMaxCnt = vl; }
 
-void TProt::epAdd( const string &iid, const string &db )
+string TProt::epAdd( const string &iid, const string &db )
 {
-    chldAdd(mEndPnt, new OPCEndPoint(iid,db,&endPntEl()));
+    return chldAdd(mEndPnt, new OPCEndPoint(TSYS::strEncode(sTrm(iid),TSYS::oscdID),db,&endPntEl()));
 }
 
 bool TProt::debug( )			{ return (mess_lev()==TMess::Debug); }
@@ -173,27 +173,27 @@ void TProt::load_( )
     try {
 	TConfig gCfg(&endPntEl());
 	//gCfg.cfgViewAll(false);
-	vector<string> dbLs;
+	vector<string> itLs;
 	map<string, bool> itReg;
 	vector<vector<string> > full;
 
 	// Search into DB
-	SYS->db().at().dbList(dbLs, true);
-	dbLs.push_back(DB_CFG);
-	for(unsigned iDb = 0; iDb < dbLs.size(); iDb++)
-	    for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iDb]+"."+modId()+"_ep",nodePath()+modId()+"_ep",fldCnt++,gCfg,false,&full); ) {
+	SYS->db().at().dbList(itLs, true);
+	itLs.push_back(DB_CFG);
+	for(unsigned iDb = 0; iDb < itLs.size(); iDb++)
+	    for(int fldCnt = 0; SYS->db().at().dataSeek(itLs[iDb]+"."+modId()+"_ep",nodePath()+modId()+"_ep",fldCnt++,gCfg,false,&full); ) {
 		string id = gCfg.cfg("ID").getS();
-		if(!epPresent(id)) epAdd(id,(dbLs[iDb]==SYS->workDB())?"*.*":dbLs[iDb]);
+		if(!epPresent(id)) epAdd(id,(itLs[iDb]==SYS->workDB())?"*.*":itLs[iDb]);
 		epAt(id).at().load(&gCfg);
 		itReg[id] = true;
 	    }
 
 	// Check for remove items removed from DB
-	if(!SYS->selDB().empty()) {
-	    epList(dbLs);
-	    for(unsigned i_it = 0; i_it < dbLs.size(); i_it++)
-		if(itReg.find(dbLs[i_it]) == itReg.end() && SYS->chkSelDB(epAt(dbLs[i_it]).at().DB()))
-		    epDel(dbLs[i_it]);
+	if(SYS->chkSelDB(SYS->selDB(),true)) {
+	    epList(itLs);
+	    for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
+		if(itReg.find(itLs[iIt]) == itReg.end() && SYS->chkSelDB(epAt(itLs[iIt]).at().DB()))
+		    epDel(itLs[iIt]);
 	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -243,10 +243,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	    for(unsigned i_f = 0; i_f < lst.size(); i_f++)
 		opt->childAdd("el")->setAttr("id", lst[i_f])->setText(epAt(lst[i_f]).at().name());
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR)) {
-	    string vid = TSYS::strEncode(opt->attr("id"), TSYS::oscdID);
-	    epAdd(vid); epAt(vid).at().setName(opt->text());
-	}
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR))	{ opt->setAttr("id", epAdd(opt->attr("id"))); epAt(opt->attr("id")).at().setName(opt->text()); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR))	chldDel(mEndPnt,opt->attr("id"),-1,1);
     }
     else TProtocol::cntrCmdProc(opt);
@@ -355,7 +352,7 @@ void OPCEndPoint::load_( TConfig *icfg )
     //Security policies parse
     string sp = cfg("SecPolicies").getS();
     string spi;
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(secRes, true);
     mSec.clear();
     for(int off = 0; (spi=TSYS::strParse(sp,0,"\n",&off)).size(); )
 	mSec.push_back(UA::SecuritySetting(TSYS::strParse(spi,0,":"),s2i(TSYS::strParse(spi,1,":"))));
@@ -375,7 +372,7 @@ void OPCEndPoint::save_( )
 {
     //Security policies store
     string sp;
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc res(secRes, true);
     for(unsigned i_p = 0; i_p < mSec.size(); i_p++)
 	sp += mSec[i_p].policy + ":" + i2s(mSec[i_p].messageMode)+"\n";
     cfg("SecPolicies").setS(sp);
@@ -834,14 +831,14 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD)) {
 	    XMLNode *n_pol	= ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/0","",RWRWR_);
 	    XMLNode *n_mm	= ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/1","",RWRWR_);
-	    MtxAlloc res(dataRes(), true);
+	    MtxAlloc res(secRes, true);
 	    for(unsigned i_p = 0; i_p < mSec.size(); i_p++) {
 		if(n_pol) n_pol->childAdd("el")->setText(mSec[i_p].policy);
 		if(n_mm)  n_mm->childAdd("el")->setText(i2s(mSec[i_p].messageMode));
 	    }
 	    return;
 	}
-	MtxAlloc res(dataRes(), true);
+	MtxAlloc res(secRes, true);
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR)) { mSec.push_back(UA::SecuritySetting("None",MS_None)); modif(); return; }
 	int row = s2i(opt->attr("row"));
 	if(row < 0 || row >= (int)mSec.size()) throw TError(nodePath().c_str(),_("No present selected row."));

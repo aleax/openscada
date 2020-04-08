@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009-2010.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2018.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-26 17:02+0300\n"
+"POT-Creation-Date: 2019-11-04 11:03+0200\n"
 "PO-Revision-Date: 2010-10-10 23:11+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -110,8 +110,8 @@ msgstr ""
 "%g Register, %g Bits. Fehler in der Verbindung %g, in der Antwort %g."
 
 #, c-format
-msgid "DAQ.%s.%s: connection to data source: %s."
-msgstr "DAQ.%s.%s: Verbindung zu Datenquelle: %s."
+msgid "Connection to the data source: %s."
+msgstr "Verbindung zur Datenquelle: %s."
 
 msgid "STOP"
 msgstr "STOP"
@@ -119,14 +119,21 @@ msgstr "STOP"
 msgid "10:Error of connection or no response."
 msgstr "10:Verbindungsfehler oder keine Antwort."
 
-msgid "4:Server failure."
-msgstr "4:Serverfehler."
+msgid "IN REDUNDANCY"
+msgstr "IN REDUNDANZ"
 
 msgid "15:Error in size of response PDU."
 msgstr "15:Fehler in der Größe der Antwort-PDU."
 
 msgid "OK"
 msgstr "OK"
+
+#, c-format
+msgid "10:Generic error: %s."
+msgstr "10:Allgemeiner Fehler: %s."
+
+msgid "Default port of the ModuBus/TCP is 502."
+msgstr "Der Standardport des ModBus/TCP ist 502."
 
 msgid ""
 "Merge non-adjacent fragments of registers for request in a single block.\n"
@@ -162,7 +169,7 @@ msgstr "2:Erwerb ist angehalten."
 
 msgid ""
 "Attributes configuration list. List must be written by lines in the format: "
-"\"{dt}:{numb}[:{rw}[:{id}[:{name}]]]\".\n"
+"\"{dt}:{numb}[:{flg}[:{id}[:{name}]]]\".\n"
 "Where:\n"
 "  dt - ModBus data type (R-register[3,6(16)], C-coil[1,5(15)], RI-input "
 "register[4], CI-input coil[2]);\n"
@@ -171,7 +178,8 @@ msgid ""
 "Double, b5-Bit5, s-String;\n"
 "       Start from the symbol '#' for the commented line;\n"
 "  numb - ModBus data address of the device (dec, hex or octal) [0...65535];\n"
-"  rw - read/write mode (r-read; w-write; rw-read and write);\n"
+"  flg - flags: read/write mode (r-read; w-write; rw-read and write), strict "
+"requesting mode (not combining) 's';\n"
 "  id - identifier of the created attribute;\n"
 "  name - name of the created attribute.\n"
 "Examples:\n"
@@ -185,7 +193,7 @@ msgid ""
 "register 15 and the size 20."
 msgstr ""
 "Liste der Konfiguration der Attribute. Die Liste wird gemacht zeilenweise im "
-"Format: \"{dt}:{numb}[:{rw}[:{id}[:{name}]]]\".\n"
+"Format: \"{dt}:{numb}[:{flg}[:{id}[:{name}]]]\".\n"
 "Wo:\n"
 "  dt - ModBus Datentyp (R-Register[3,6(16)], C-Bit[1,5(15)], RI-"
 "Eingansregister[4], CI-Bit des Eingangs[2]);\n"
@@ -195,8 +203,9 @@ msgstr ""
 "       Star von Symbol '#' für einen Kommentar Linie;\n"
 "  numb - ModBus-Datenadresse des Geräts (dec., hex., oder octal) "
 "[0...65535];\n"
-"  rw - Regime Lesen/Einschreiben (r-lesen; w-einschreiben, rw-lesen und "
-"einschreiben);\n"
+"  flg - Flaggen: Regime Lesen/Einschreiben (r-lesen; w-einschreiben, rw-"
+"lesen und einschreiben), strikter Anforderungsmodus (nicht kombinierend) "
+"'s';\n"
 "  id - Bezeichner des gebildeten Attributs;\n"
 "  name - Name des gebildeten Attributs .\n"
 "Beispiele:\n"
@@ -210,15 +219,9 @@ msgstr ""
 "  \"R_s:15,20:r:str:Reg blk\" - Den Stringdie (Register Block) aus dem "
 "Register 15 und Größe 20."
 
-msgid "Template configuration"
-msgstr "Konfiguration Vorlage"
-
-msgid "Parameters"
-msgstr "Optionen"
-
 msgid ""
-"ModBus address in the format: \"{dt}:{numb}[:{rw}]\".\n"
-"Where:\n"
+"Special address format:\n"
+"ModBus address writes in the form \"{dt}:{numb}[:{rw}]\", where:\n"
 "  dt - ModBus data type (R-register[3,6(16)], C-coil[1,5(15)], RI-input "
 "register[4], CI-input coil[2]);\n"
 "       R and RI can be expanded by the suffixes:\n"
@@ -233,10 +236,12 @@ msgid ""
 "  \"R_i4:400,300:r\" - get int32 from the registers 400 and 300;\n"
 "  \"R_b10:25:r\" - get the bit 10 from the register 25;\n"
 "  \"R_s:15,20:r\" - get string (registers block) from the register 15 and "
-"the size 20."
+"the size 20.\n"
+"\n"
+"Common address format:\n"
 msgstr ""
-"Modbus-Adresse im Format: \"{dt}:{numb}[:{rw}]\".\n"
-"Wo:\n"
+"Spezielles Adressformat:\n"
+"Modbus-Adresse im Format \"{dt}:{numb}[:{rw}]\", wo:\n"
 "  dt - ModBus Datentyp (R-Register[3,6(16)], C-Bit[1,5(15)], RI-"
 "Eingansregister[4], CI-Bit des Eingangs[2]);\n"
 "       R und RI können mit den Suffixen erweitert werden:\n"
@@ -253,10 +258,9 @@ msgstr ""
 "  \"R_i4:400,300:r\" - bekommen 'int32' aus den Registern 400 und 300;\n"
 "  \"R_b10:25:r\" - Bit 10 aus dem Register 25 bekommen;\n"
 "  \"R_s:15,20:r\" - Den Stringdie (Register Block) aus dem Register 15 und "
-"Größe 20."
-
-msgid "Error of parameter ID."
-msgstr "Fehler der Parameter-ID."
+"Größe 20.\n"
+"\n"
+"Gemeinsames Adressformat:\n"
 
 msgid "Name"
 msgstr "Name"
@@ -285,14 +289,17 @@ msgstr "Modus"
 msgid "Data;Gateway node;Gateway net"
 msgstr "Daten;Knotenschnittstelle;Netzschnittstelle"
 
+msgid "Date of modification"
+msgstr "Datum der Änderung"
+
 msgid "Period of the data calculation, seconds"
 msgstr "Zeitraum der Datenberechnung, Sekunden"
 
-msgid "Translate program"
-msgstr "Programm übersetzen"
+msgid "Completely translate the procedure"
+msgstr "Übersetzen Sie das Verfahren vollständig"
 
-msgid "Program"
-msgstr "Programm"
+msgid "Procedure"
+msgstr "Verfahren"
 
 msgid "To output transport"
 msgstr "Um Transport auszugeben"
@@ -323,6 +330,9 @@ msgstr "13:Fehler der Serverantwort"
 
 msgid "Not full response"
 msgstr "Nicht voll antworten"
+
+msgid "13:Error of the response: Too large."
+msgstr "13:Fehler in der Antwort: Zu groß."
 
 msgid "14:Device error: "
 msgstr "14:Fehler im Baustein: "
@@ -356,6 +366,9 @@ msgstr ""
 
 msgid "3:Illegal value of the data in the request."
 msgstr "3:Illegale Datenwert in der Anfrage."
+
+msgid "4:Server failure."
+msgstr "4:Serverfehler."
 
 msgid "5:Request requires too long time for execute."
 msgstr "5:Anfrage benötigt zu viel Zeit für die Ausführung."
@@ -397,8 +410,8 @@ msgstr "Berichtsgrösse"
 msgid "Use zero for the report disabling"
 msgstr "Verwenden Sie Null für die Deaktivierung des Berichts"
 
-msgid "Frequency of calculation of the function (Hz)"
-msgstr "Funktionberechnungsfrequenz (Hz)"
+msgid "Frequency of calculation of the function, Hz"
+msgstr "Funktionberechnungsfrequenz, Hz"
 
 msgid "Function start flag"
 msgstr "Schalter für das Anhalten der Funktion"
@@ -436,17 +449,14 @@ msgstr "Abgeschaltet. "
 msgid "Enabled. "
 msgstr "Eingeschaltet. "
 
-msgid "Modified, re-enable to apply! "
-msgstr "Geändert, wieder freigeben zu bewerben! "
-
 #, c-format
 msgid ""
-"Spent time: %s. Requests %.4g. Read registers %.4g, coils %.4g, register "
+"Spent time %s[%s]. Requests %.4g. Read registers %.4g, coils %.4g, register "
 "inputs %.4g, coil inputs %.4g.\n"
 "Wrote registers %.4g, coils %.4g."
 msgstr ""
-"Verbrauchte Zeit: %s. Anfragen %.4g. Gelesen %.4g Register, %.4g Bits, %.4g "
-"Register Eingänge, %.4g Bits Eingänge.\n"
+"Verbrauchte Zeit %s[%s]. Anfragen %.4g. Gelesen %.4g Register, %.4g Bits, "
+"%.4g Register Eingänge, %.4g Bits Eingänge.\n"
 "Geschrieben %.4g Register, %.4g Bits."
 
 #, c-format
@@ -473,6 +483,9 @@ msgstr "DB"
 
 msgid "Configuration"
 msgstr "Konfiguration"
+
+msgid "DAQ template or direct procedure language"
+msgstr "DAQ-Vorlage oder direkte Verfahrenssprache"
 
 msgid "Data"
 msgstr "Daten"
@@ -533,17 +546,11 @@ msgstr ""
 msgid "Type"
 msgstr "Typ"
 
-msgid "Real;Integer;Boolean;String"
-msgstr "Reelle Zahl;Ganz Zahl;Logisch;Text"
+msgid "Real;Integer;Boolean;String;Object"
+msgstr "Reelle Zahl;Ganz Zahl;Logisch;Text;Objekt"
 
 msgid "Link"
 msgstr "Verbindung"
-
-msgid "Program language"
-msgstr "Programmsprache."
-
-msgid "Links"
-msgstr "Verbindungen"
 
 msgid "Turn off the node for this operation"
 msgstr "Deaktivieren Sie den Knoten für diesen Vorgang"

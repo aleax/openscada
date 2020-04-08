@@ -7,20 +7,16 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="files/doc.css" rel="stylesheet" /></head>
-<body><div id="mw_header">
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../en/files/Logo-big.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/API</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
-<table cellspacing="0">
-<tr>
-<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="files/Constr.png" width="32" /></a>
-</td>
-<td style="padding-left:5px;"> Revision and Actualizing
-</td></tr></table>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span></div></div>
+<div style="float:right; border:1px solid gray; width:300px; padding:2px;">
+<ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2012) — the page initial translation</i></font></li>
+<li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a></li></ul>
 </div>
-<p><i>Author:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>, Maxim Lysenko (2012)
-</p><p>This page describes an application programming interface (API) of OpenSCADA.
+<p>This page describes an application programming interface (API) of OpenSCADA.
 </p><p>OpenSCADA is the project of an open SCADA-system based on the modular principle. The document contains an exhaustive description of the internal system architecture of OpenSCADA. In addition to information on the architecture the background information on methods and attributes of the system is provided.<br />
 The document is intended for programmers wishing to understand the architecture of OpenSCADA and develop extensions for it. The document is not intended for users and integrators of OpenSCADA!
 </p><p>For understanding of this document it is necessary for you to know the concept of Object Oriented Programming (OOP) and Universal Modeling Language (UML), and for the possibility of studying the source code of the project it is required the knowledge of programming language C++. In addition, the document contains the mentioning of the following technologies: relational databases, XML.
@@ -28,7 +24,7 @@ The document is intended for programmers wishing to understand the architecture 
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#The_internal_structure.2C_OpenSCADA_API"><span class="tocnumber">1</span> <span class="toctext">The internal structure, OpenSCADA API</span></a></li>
-<li class="toclevel-1 tocsection-2"><a href="#The_overall_structure_of_the_system._Modularity_.28TSubSYS.2C_TModule.29"><span class="tocnumber">2</span> <span class="toctext">The overall structure of the system. Modularity (TSubSYS, TModule)</span></a>
+<li class="toclevel-1 tocsection-2"><a href="#The_overall_structure_of_the_system._Modularity_.28TSYS.2C_TSubSYS.2C_TModule.29"><span class="tocnumber">2</span> <span class="toctext">The overall structure of the system. Modularity (TSYS, TSubSYS, TModule)</span></a>
 <ul>
 <li class="toclevel-2 tocsection-3"><a href="#The_root_object_system_.28TSYS.29"><span class="tocnumber">2.1</span> <span class="toctext"><span>The root object system (TSYS)</span></span></a></li>
 <li class="toclevel-2 tocsection-4"><a href="#Object_of_the_messages_system_.28TMess.29"><span class="tocnumber">2.2</span> <span class="toctext"><span>Object of the messages system (TMess)</span></span></a></li>
@@ -54,139 +50,144 @@ The document is intended for programmers wishing to understand the architecture 
 <li class="toclevel-2 tocsection-18"><a href="#Object_of_the_value_.28TValue.29"><span class="tocnumber">4.6</span> <span class="toctext"><span>Object of the value (TValue)</span></span></a></li>
 <li class="toclevel-2 tocsection-19"><a href="#Attribute.27s_object_.28TVal.29"><span class="tocnumber">4.7</span> <span class="toctext"><span>Attribute's object (TVal)</span></span></a></li>
 <li class="toclevel-2 tocsection-20"><a href="#Object_of_the_templates_library_of_parameters_of_the_.22DAQ.22_subsystem_.28TPrmTmplLib.29"><span class="tocnumber">4.8</span> <span class="toctext"><span>Object of the templates library of parameters of the "DAQ" subsystem (TPrmTmplLib)</span></span></a></li>
-<li class="toclevel-2 tocsection-21"><a href="#The_object_of_the_parameter.27s_template_of_the_.22DAQ.22_subsystem_.28TPrmTempl.29"><span class="tocnumber">4.9</span> <span class="toctext"><span>The object of the parameter's template of the "DAQ" subsystem (TPrmTempl)</span></span></a></li>
-</ul>
-</li>
-<li class="toclevel-1 tocsection-22"><a href="#Subsystem_.22Archives.22_.28TArchiveS.29"><span class="tocnumber">5</span> <span class="toctext"><span>Subsystem "Archives" (TArchiveS)</span></span></a>
+<li class="toclevel-2 tocsection-21"><a href="#The_object_of_the_parameter.27s_template_of_the_.22DAQ.22_subsystem_.28TPrmTempl.29"><span class="tocnumber">4.9</span> <span class="toctext"><span>The object of the parameter's template of the "DAQ" subsystem (TPrmTempl)</span></span></a>
 <ul>
-<li class="toclevel-2 tocsection-23"><a href="#The_object_of_the_subsystem_.22Archives.22_.28TArchiveS.29"><span class="tocnumber">5.1</span> <span class="toctext"><span>The object of the subsystem "Archives" (TArchiveS)</span></span></a></li>
-<li class="toclevel-2 tocsection-24"><a href="#The_object_of_the_values.27_archive_.28TVArchive.29"><span class="tocnumber">5.2</span> <span class="toctext"><span>The object of the values' archive (TVArchive)</span></span></a></li>
-<li class="toclevel-2 tocsection-25"><a href="#Object_of_the_values.27_buffer_.28TValBuf.29"><span class="tocnumber">5.3</span> <span class="toctext"><span>Object of the values' buffer (TValBuf)</span></span></a></li>
-<li class="toclevel-2 tocsection-26"><a href="#The_modular_object_of_the_archiver.27s_type_.28TTypeArchivator.29"><span class="tocnumber">5.4</span> <span class="toctext"><span>The modular object of the archiver's type (TTypeArchivator)</span></span></a></li>
-<li class="toclevel-2 tocsection-27"><a href="#The_object_of_the_messages.27_archiver_.28TMArchivator.29"><span class="tocnumber">5.5</span> <span class="toctext"><span>The object of the messages' archiver (TMArchivator)</span></span></a></li>
-<li class="toclevel-2 tocsection-28"><a href="#The_object_of_the_values.27_archiver_.28TVArchivator.29"><span class="tocnumber">5.6</span> <span class="toctext"><span>The object of the values' archiver (TVArchivator)</span></span></a></li>
-<li class="toclevel-2 tocsection-29"><a href="#The_object_of_the_archive.27s_element_in_the_archiver_.28TVArchEl.29"><span class="tocnumber">5.7</span> <span class="toctext"><span>The object of the archive's element in the archiver (TVArchEl)</span></span></a></li>
+<li class="toclevel-3 tocsection-22"><a href="#The_object_of_the_implementation_of_the_template.27s_parameters_of_the_.22DAQ.22_subsystem_.28TPrmTempl::Impl.29"><span class="tocnumber">4.9.1</span> <span class="toctext"><span>The object of the implementation of the template's parameters of the "DAQ" subsystem (TPrmTempl::Impl)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-30"><a href="#Subsystem_.22Transports.22_.28TTransportS.29"><span class="tocnumber">6</span> <span class="toctext"><span>Subsystem "Transports" (TTransportS)</span></span></a>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-23"><a href="#Subsystem_.22Archives.22_.28TArchiveS.29"><span class="tocnumber">5</span> <span class="toctext"><span>Subsystem "Archives" (TArchiveS)</span></span></a>
 <ul>
-<li class="toclevel-2 tocsection-31"><a href="#The_object_of_the_.22Transports.22_subsystem_.28TTransportS.29"><span class="tocnumber">6.1</span> <span class="toctext"><span>The object of the "Transports" subsystem (TTransportS)</span></span></a></li>
-<li class="toclevel-2 tocsection-32"><a href="#The_modular_object_of_the_transports.27_type_.28TTypeTransport.29"><span class="tocnumber">6.2</span> <span class="toctext"><span>The modular object of the transports' type (TTypeTransport)</span></span></a></li>
-<li class="toclevel-2 tocsection-33"><a href="#The_object_of_the_input_transports_.28TTransportIn.29"><span class="tocnumber">6.3</span> <span class="toctext"><span>The object of the input transports (TTransportIn)</span></span></a></li>
-<li class="toclevel-2 tocsection-34"><a href="#The_object_of_the_output_transports_.28TTransportOut.29"><span class="tocnumber">6.4</span> <span class="toctext"><span>The object of the output transports (TTransportOut)</span></span></a></li>
+<li class="toclevel-2 tocsection-24"><a href="#The_object_of_the_subsystem_.22Archives.22_.28TArchiveS.29"><span class="tocnumber">5.1</span> <span class="toctext"><span>The object of the subsystem "Archives" (TArchiveS)</span></span></a></li>
+<li class="toclevel-2 tocsection-25"><a href="#The_object_of_the_values.27_archive_.28TVArchive.29"><span class="tocnumber">5.2</span> <span class="toctext"><span>The object of the values' archive (TVArchive)</span></span></a></li>
+<li class="toclevel-2 tocsection-26"><a href="#Object_of_the_values.27_buffer_.28TValBuf.29"><span class="tocnumber">5.3</span> <span class="toctext"><span>Object of the values' buffer (TValBuf)</span></span></a></li>
+<li class="toclevel-2 tocsection-27"><a href="#The_modular_object_of_the_archiver.27s_type_.28TTypeArchivator.29"><span class="tocnumber">5.4</span> <span class="toctext"><span>The modular object of the archiver's type (TTypeArchivator)</span></span></a></li>
+<li class="toclevel-2 tocsection-28"><a href="#The_object_of_the_messages.27_archiver_.28TMArchivator.29"><span class="tocnumber">5.5</span> <span class="toctext"><span>The object of the messages' archiver (TMArchivator)</span></span></a></li>
+<li class="toclevel-2 tocsection-29"><a href="#The_object_of_the_values.27_archiver_.28TVArchivator.29"><span class="tocnumber">5.6</span> <span class="toctext"><span>The object of the values' archiver (TVArchivator)</span></span></a></li>
+<li class="toclevel-2 tocsection-30"><a href="#The_object_of_the_archive.27s_element_in_the_archiver_.28TVArchEl.29"><span class="tocnumber">5.7</span> <span class="toctext"><span>The object of the archive's element in the archiver (TVArchEl)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-35"><a href="#Subsystem_.22Communication_interfaces.27_protocols.22_.28TProtocolS.29"><span class="tocnumber">7</span> <span class="toctext"><span>Subsystem "Communication interfaces' protocols" (TProtocolS)</span></span></a>
+<li class="toclevel-1 tocsection-31"><a href="#Subsystem_.22Transports.22_.28TTransportS.29"><span class="tocnumber">6</span> <span class="toctext"><span>Subsystem "Transports" (TTransportS)</span></span></a>
 <ul>
-<li class="toclevel-2 tocsection-36"><a href="#The_object_of_the_.22Communication_interfaces.27_protocols.22_subsystem_.28TProtocolS.29"><span class="tocnumber">7.1</span> <span class="toctext"><span>The object of the "Communication interfaces' protocols" subsystem (TProtocolS)</span></span></a></li>
-<li class="toclevel-2 tocsection-37"><a href="#The_modular_object_of_the_protocol_.28TProtocol.29"><span class="tocnumber">7.2</span> <span class="toctext"><span>The modular object of the protocol (TProtocol)</span></span></a></li>
-<li class="toclevel-2 tocsection-38"><a href="#The_object_of_the_input_protocol.27s_session_.28TProtocolIn.29"><span class="tocnumber">7.3</span> <span class="toctext"><span>The object of the input protocol's session (TProtocolIn)</span></span></a></li>
+<li class="toclevel-2 tocsection-32"><a href="#The_object_of_the_.22Transports.22_subsystem_.28TTransportS.29"><span class="tocnumber">6.1</span> <span class="toctext"><span>The object of the "Transports" subsystem (TTransportS)</span></span></a></li>
+<li class="toclevel-2 tocsection-33"><a href="#The_modular_object_of_the_transports.27_type_.28TTypeTransport.29"><span class="tocnumber">6.2</span> <span class="toctext"><span>The modular object of the transports' type (TTypeTransport)</span></span></a></li>
+<li class="toclevel-2 tocsection-34"><a href="#The_object_of_the_input_transports_.28TTransportIn.29"><span class="tocnumber">6.3</span> <span class="toctext"><span>The object of the input transports (TTransportIn)</span></span></a></li>
+<li class="toclevel-2 tocsection-35"><a href="#The_object_of_the_output_transports_.28TTransportOut.29"><span class="tocnumber">6.4</span> <span class="toctext"><span>The object of the output transports (TTransportOut)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-39"><a href="#Subsystem_.22User_interfaces.22_.28TUIS.29"><span class="tocnumber">8</span> <span class="toctext">Subsystem "User interfaces" (TUIS)</span></a>
+<li class="toclevel-1 tocsection-36"><a href="#Subsystem_.22Communication_interfaces.27_protocols.22_.28TProtocolS.29"><span class="tocnumber">7</span> <span class="toctext"><span>Subsystem "Communication interfaces' protocols" (TProtocolS)</span></span></a>
 <ul>
-<li class="toclevel-2 tocsection-40"><a href="#The_object_of_the_.22User_interfaces.22_subsystem_.28TUIS.29"><span class="tocnumber">8.1</span> <span class="toctext"><span>The object of the "User interfaces" subsystem (TUIS)</span></span></a></li>
-<li class="toclevel-2 tocsection-41"><a href="#The_modular_object_of_the_user_interface_.28TUI.29"><span class="tocnumber">8.2</span> <span class="toctext"><span>The modular object of the user interface (TUI)</span></span></a></li>
+<li class="toclevel-2 tocsection-37"><a href="#The_object_of_the_.22Communication_interfaces.27_protocols.22_subsystem_.28TProtocolS.29"><span class="tocnumber">7.1</span> <span class="toctext"><span>The object of the "Communication interfaces' protocols" subsystem (TProtocolS)</span></span></a></li>
+<li class="toclevel-2 tocsection-38"><a href="#The_modular_object_of_the_protocol_.28TProtocol.29"><span class="tocnumber">7.2</span> <span class="toctext"><span>The modular object of the protocol (TProtocol)</span></span></a></li>
+<li class="toclevel-2 tocsection-39"><a href="#The_object_of_the_input_protocol.27s_session_.28TProtocolIn.29"><span class="tocnumber">7.3</span> <span class="toctext"><span>The object of the input protocol's session (TProtocolIn)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-42"><a href="#Subsystem_.22Specials.22_.28TSpecialS.29"><span class="tocnumber">9</span> <span class="toctext">Subsystem "Specials" (TSpecialS)</span></a>
+<li class="toclevel-1 tocsection-40"><a href="#Subsystem_.22User_interfaces.22_.28TUIS.29"><span class="tocnumber">8</span> <span class="toctext">Subsystem "User interfaces" (TUIS)</span></a>
 <ul>
-<li class="toclevel-2 tocsection-43"><a href="#The_object_of_the_.22Specials.22_subsystem_.28TSpecialS.29"><span class="tocnumber">9.1</span> <span class="toctext"><span>The object of the "Specials" subsystem (TSpecialS)</span></span></a></li>
-<li class="toclevel-2 tocsection-44"><a href="#The_modular_object_of_the_specials_.28TSpecial.29"><span class="tocnumber">9.2</span> <span class="toctext"><span>The modular object of the specials (TSpecial)</span></span></a></li>
+<li class="toclevel-2 tocsection-41"><a href="#The_object_of_the_.22User_interfaces.22_subsystem_.28TUIS.29"><span class="tocnumber">8.1</span> <span class="toctext"><span>The object of the "User interfaces" subsystem (TUIS)</span></span></a></li>
+<li class="toclevel-2 tocsection-42"><a href="#The_modular_object_of_the_user_interface_.28TUI.29"><span class="tocnumber">8.2</span> <span class="toctext"><span>The modular object of the user interface (TUI)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-45"><a href="#Subsystem_.22Security.22_.28TSe.D1.81urity.29"><span class="tocnumber">10</span> <span class="toctext">Subsystem "Security" (TSeсurity)</span></a>
+<li class="toclevel-1 tocsection-43"><a href="#Subsystem_.22Specials.22_.28TSpecialS.29"><span class="tocnumber">9</span> <span class="toctext">Subsystem "Specials" (TSpecialS)</span></a>
 <ul>
-<li class="toclevel-2 tocsection-46"><a href="#The_object_of_the_.22Security.22_subsystem_.28TSe.D1.81urity.29"><span class="tocnumber">10.1</span> <span class="toctext"><span>The object of the "Security" subsystem (TSeсurity)</span></span></a></li>
-<li class="toclevel-2 tocsection-47"><a href="#The_user.27s_object_.28TUser.29"><span class="tocnumber">10.2</span> <span class="toctext"><span>The user's object (TUser)</span></span></a></li>
-<li class="toclevel-2 tocsection-48"><a href="#The_users.27_group_object_.28TGroup.29"><span class="tocnumber">10.3</span> <span class="toctext"><span>The users' group object (TGroup)</span></span></a></li>
+<li class="toclevel-2 tocsection-44"><a href="#The_object_of_the_.22Specials.22_subsystem_.28TSpecialS.29"><span class="tocnumber">9.1</span> <span class="toctext"><span>The object of the "Specials" subsystem (TSpecialS)</span></span></a></li>
+<li class="toclevel-2 tocsection-45"><a href="#The_modular_object_of_the_specials_.28TSpecial.29"><span class="tocnumber">9.2</span> <span class="toctext"><span>The modular object of the specials (TSpecial)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-49"><a href="#Subsystem_.E2.80.9CModules.27_sheduling.E2.80.9D_.28TModSchedul.29"><span class="tocnumber">11</span> <span class="toctext">Subsystem “Modules' sheduling” (TModSchedul)</span></a>
+<li class="toclevel-1 tocsection-46"><a href="#Subsystem_.22Security.22_.28TSe.D1.81urity.29"><span class="tocnumber">10</span> <span class="toctext">Subsystem "Security" (TSeсurity)</span></a>
 <ul>
-<li class="toclevel-2 tocsection-50"><a href="#The_object_of_the_subsystem_.22Modules.27_sheduling.22_.28TModSchedul.29"><span class="tocnumber">11.1</span> <span class="toctext"><span>The object of the subsystem "Modules' sheduling" (TModSchedul)</span></span></a></li>
+<li class="toclevel-2 tocsection-47"><a href="#The_object_of_the_.22Security.22_subsystem_.28TSe.D1.81urity.29"><span class="tocnumber">10.1</span> <span class="toctext"><span>The object of the "Security" subsystem (TSeсurity)</span></span></a></li>
+<li class="toclevel-2 tocsection-48"><a href="#The_user.27s_object_.28TUser.29"><span class="tocnumber">10.2</span> <span class="toctext"><span>The user's object (TUser)</span></span></a></li>
+<li class="toclevel-2 tocsection-49"><a href="#The_users.27_group_object_.28TGroup.29"><span class="tocnumber">10.3</span> <span class="toctext"><span>The users' group object (TGroup)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-51"><a href="#Components_of_the_object_model_of_OpenSCADA"><span class="tocnumber">12</span> <span class="toctext">Components of the object model of OpenSCADA</span></a>
+<li class="toclevel-1 tocsection-50"><a href="#Subsystem_.E2.80.9CModules.27_sheduling.E2.80.9D_.28TModSchedul.29"><span class="tocnumber">11</span> <span class="toctext">Subsystem “Modules' sheduling” (TModSchedul)</span></a>
 <ul>
-<li class="toclevel-2 tocsection-52"><a href="#The_function_object_.28TFunction.29"><span class="tocnumber">12.1</span> <span class="toctext"><span>The function object (TFunction)</span></span></a></li>
-<li class="toclevel-2 tocsection-53"><a href="#The_object_of_the_function.27s_parameter_.28IO.29"><span class="tocnumber">12.2</span> <span class="toctext"><span>The object of the function's parameter (IO)</span></span></a></li>
-<li class="toclevel-2 tocsection-54"><a href="#The_object_of_the_function.27s_value_.28TValFunc.29"><span class="tocnumber">12.3</span> <span class="toctext"><span>The object of the function's value (TValFunc)</span></span></a></li>
+<li class="toclevel-2 tocsection-51"><a href="#The_object_of_the_subsystem_.22Modules.27_sheduling.22_.28TModSchedul.29"><span class="tocnumber">11.1</span> <span class="toctext"><span>The object of the subsystem "Modules' sheduling" (TModSchedul)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-55"><a href="#Data_in_OpenSCADA_and_their_storage_in_the_DB_.28TConfig.29"><span class="tocnumber">13</span> <span class="toctext">Data in OpenSCADA and their storage in the DB (TConfig)</span></a>
+<li class="toclevel-1 tocsection-52"><a href="#Components_of_the_object_model_of_OpenSCADA"><span class="tocnumber">12</span> <span class="toctext">Components of the object model of OpenSCADA</span></a>
 <ul>
-<li class="toclevel-2 tocsection-56"><a href="#Data_object_.28TConfig.29"><span class="tocnumber">13.1</span> <span class="toctext"><span>Data object (TConfig)</span></span></a></li>
-<li class="toclevel-2 tocsection-57"><a href="#Data_cell_.28TCfg.29"><span class="tocnumber">13.2</span> <span class="toctext"><span>Data cell (TCfg)</span></span></a></li>
-<li class="toclevel-2 tocsection-58"><a href="#Data_structure_object_.28TElem.29"><span class="tocnumber">13.3</span> <span class="toctext"><span>Data structure object (TElem)</span></span></a></li>
-<li class="toclevel-2 tocsection-59"><a href="#Data_structure_cell_.28TFld.29"><span class="tocnumber">13.4</span> <span class="toctext"><span>Data structure cell (TFld)</span></span></a></li>
-<li class="toclevel-2 tocsection-60"><a href="#The_object_which_preacts_about_changing_of_the_structure_.28TValElem.29"><span class="tocnumber">13.5</span> <span class="toctext"><span>The object which preacts about changing of the structure (TValElem)</span></span></a></li>
-<li class="toclevel-2 tocsection-61"><a href="#Data_cell_.28TVariant.29"><span class="tocnumber">13.6</span> <span class="toctext"><span>Data cell (TVariant)</span></span></a></li>
-<li class="toclevel-2 tocsection-62"><a href="#User_object_.28TVarObj.29"><span class="tocnumber">13.7</span> <span class="toctext"><span>User object (TVarObj)</span></span></a></li>
+<li class="toclevel-2 tocsection-53"><a href="#The_function_object_.28TFunction.29"><span class="tocnumber">12.1</span> <span class="toctext"><span>The function object (TFunction)</span></span></a></li>
+<li class="toclevel-2 tocsection-54"><a href="#The_object_of_the_function.27s_parameter_.28IO.29"><span class="tocnumber">12.2</span> <span class="toctext"><span>The object of the function's parameter (IO)</span></span></a></li>
+<li class="toclevel-2 tocsection-55"><a href="#The_object_of_the_function.27s_value_.28TValFunc.29"><span class="tocnumber">12.3</span> <span class="toctext"><span>The object of the function's value (TValFunc)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-63"><a href="#The_control_interface_of_the_system_and_the_dynamic_tree_of_the_system_objects_.28TCntrNode.29"><span class="tocnumber">14</span> <span class="toctext"><span>The control interface of the system and the dynamic tree of the system objects (TCntrNode)</span></span></a>
+<li class="toclevel-1 tocsection-56"><a href="#Data_in_OpenSCADA_and_their_storage_in_the_DB_.28TConfig.29"><span class="tocnumber">13</span> <span class="toctext">Data in OpenSCADA and their storage in the DB (TConfig)</span></a>
 <ul>
-<li class="toclevel-2 tocsection-64"><a href="#The_syntax_of_the_request_and_response_of_the_control_interface"><span class="tocnumber">14.1</span> <span class="toctext">The syntax of the request and response of the control interface</span></a></li>
-<li class="toclevel-2 tocsection-65"><a href="#Tag_of_the_information_structure_for_describing_the_groups_of_child_branches_of_the_page"><span class="tocnumber">14.2</span> <span class="toctext">Tag of the information structure for describing the groups of child branches of the page</span></a></li>
-<li class="toclevel-2 tocsection-66"><a href="#Tags_of_the_description_of_the_information_structure_of_the_control_interface"><span class="tocnumber">14.3</span> <span class="toctext">Tags of the description of the information structure of the control interface</span></a>
+<li class="toclevel-2 tocsection-57"><a href="#Data_object_.28TConfig.29"><span class="tocnumber">13.1</span> <span class="toctext"><span>Data object (TConfig)</span></span></a></li>
+<li class="toclevel-2 tocsection-58"><a href="#Data_cell_.28TCfg.29"><span class="tocnumber">13.2</span> <span class="toctext"><span>Data cell (TCfg)</span></span></a></li>
+<li class="toclevel-2 tocsection-59"><a href="#Data_structure_object_.28TElem.29"><span class="tocnumber">13.3</span> <span class="toctext"><span>Data structure object (TElem)</span></span></a></li>
+<li class="toclevel-2 tocsection-60"><a href="#Data_structure_cell_.28TFld.29"><span class="tocnumber">13.4</span> <span class="toctext"><span>Data structure cell (TFld)</span></span></a></li>
+<li class="toclevel-2 tocsection-61"><a href="#The_object_which_preacts_about_changing_of_the_structure_.28TValElem.29"><span class="tocnumber">13.5</span> <span class="toctext"><span>The object which preacts about changing of the structure (TValElem)</span></span></a></li>
+<li class="toclevel-2 tocsection-62"><a href="#Data_cell_.28TVariant.29"><span class="tocnumber">13.6</span> <span class="toctext"><span>Data cell (TVariant)</span></span></a></li>
+<li class="toclevel-2 tocsection-63"><a href="#User_object_.28TVarObj.29"><span class="tocnumber">13.7</span> <span class="toctext"><span>User object (TVarObj)</span></span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-64"><a href="#The_control_interface_of_the_system_and_the_dynamic_tree_of_the_system_objects_.28TCntrNode.29"><span class="tocnumber">14</span> <span class="toctext"><span>The control interface of the system and the dynamic tree of the system objects (TCntrNode)</span></span></a>
 <ul>
-<li class="toclevel-3 tocsection-67"><a href="#Area_tag_.22area.22"><span class="tocnumber">14.3.1</span> <span class="toctext">Area tag "area"</span></a></li>
-<li class="toclevel-3 tocsection-68"><a href="#Data_tags"><span class="tocnumber">14.3.2</span> <span class="toctext">Data tags</span></a>
+<li class="toclevel-2 tocsection-65"><a href="#The_syntax_of_the_request_and_response_of_the_control_interface"><span class="tocnumber">14.1</span> <span class="toctext">The syntax of the request and response of the control interface</span></a></li>
+<li class="toclevel-2 tocsection-66"><a href="#Tag_of_the_information_structure_for_describing_the_groups_of_child_branches_of_the_page"><span class="tocnumber">14.2</span> <span class="toctext">Tag of the information structure for describing the groups of child branches of the page</span></a></li>
+<li class="toclevel-2 tocsection-67"><a href="#Tags_of_the_description_of_the_information_structure_of_the_control_interface"><span class="tocnumber">14.3</span> <span class="toctext">Tags of the description of the information structure of the control interface</span></a>
 <ul>
-<li class="toclevel-4 tocsection-69"><a href="#Tag_.22fld.22"><span class="tocnumber">14.3.2.1</span> <span class="toctext">Tag "fld"</span></a></li>
-<li class="toclevel-4 tocsection-70"><a href="#Tag_.22list.22"><span class="tocnumber">14.3.2.2</span> <span class="toctext">Tag "list"</span></a></li>
-<li class="toclevel-4 tocsection-71"><a href="#Tag_.22table.22"><span class="tocnumber">14.3.2.3</span> <span class="toctext">Tag "table"</span></a></li>
-<li class="toclevel-4 tocsection-72"><a href="#Tag_.22img.22"><span class="tocnumber">14.3.2.4</span> <span class="toctext">Tag "img"</span></a></li>
-<li class="toclevel-4 tocsection-73"><a href="#Commands_with_the_parameters._Tag_.22comm.22"><span class="tocnumber">14.3.2.5</span> <span class="toctext">Commands with the parameters. Tag "comm"</span></a></li>
-<li class="toclevel-4 tocsection-74"><a href="#Branches_.28child_nodes.29"><span class="tocnumber">14.3.2.6</span> <span class="toctext">Branches (child nodes)</span></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toclevel-2 tocsection-75"><a href="#Hierarchical_dependences_of_the_information_elements_of_the_control_language"><span class="tocnumber">14.4</span> <span class="toctext">Hierarchical dependences of the information elements of the control language</span></a></li>
-<li class="toclevel-2 tocsection-76"><a href="#Object_of_the_dynamic_tree_node_.28TCntrNode.29"><span class="tocnumber">14.5</span> <span class="toctext"><span>Object of the dynamic tree node (TCntrNode)</span></span></a></li>
-</ul>
-</li>
-<li class="toclevel-1 tocsection-77"><a href="#XML_in_OpenSCADA_.28XMLNode.29"><span class="tocnumber">15</span> <span class="toctext">XML in OpenSCADA (XMLNode)</span></a>
+<li class="toclevel-3 tocsection-68"><a href="#Area_tag_.22area.22"><span class="tocnumber">14.3.1</span> <span class="toctext">Area tag "area"</span></a></li>
+<li class="toclevel-3 tocsection-69"><a href="#Data_tags"><span class="tocnumber">14.3.2</span> <span class="toctext">Data tags</span></a>
 <ul>
-<li class="toclevel-2 tocsection-78"><a href="#XML-tag_.28XMLNode.29"><span class="tocnumber">15.1</span> <span class="toctext"><span>XML-tag (XMLNode)</span></span></a></li>
+<li class="toclevel-4 tocsection-70"><a href="#Tag_.22fld.22"><span class="tocnumber">14.3.2.1</span> <span class="toctext">Tag "fld"</span></a></li>
+<li class="toclevel-4 tocsection-71"><a href="#Tag_.22list.22"><span class="tocnumber">14.3.2.2</span> <span class="toctext">Tag "list"</span></a></li>
+<li class="toclevel-4 tocsection-72"><a href="#Tag_.22table.22"><span class="tocnumber">14.3.2.3</span> <span class="toctext">Tag "table"</span></a></li>
+<li class="toclevel-4 tocsection-73"><a href="#Tag_.22img.22"><span class="tocnumber">14.3.2.4</span> <span class="toctext">Tag "img"</span></a></li>
+<li class="toclevel-4 tocsection-74"><a href="#Commands_with_the_parameters._Tag_.22comm.22"><span class="tocnumber">14.3.2.5</span> <span class="toctext">Commands with the parameters. Tag "comm"</span></a></li>
+<li class="toclevel-4 tocsection-75"><a href="#Branches_.28child_nodes.29"><span class="tocnumber">14.3.2.6</span> <span class="toctext">Branches (child nodes)</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-79"><a href="#Resources_in_OpenSCADA_.28Res.2C_ResAlloc.2C_ResMtx.2C_MtxAlloc.2C_AutoHD.29"><span class="tocnumber">16</span> <span class="toctext">Resources in OpenSCADA (Res, ResAlloc, ResMtx, MtxAlloc, AutoHD)</span></a>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-76"><a href="#Hierarchical_dependences_of_the_information_elements_of_the_control_language"><span class="tocnumber">14.4</span> <span class="toctext">Hierarchical dependences of the information elements of the control language</span></a></li>
+<li class="toclevel-2 tocsection-77"><a href="#Object_of_the_dynamic_tree_node_.28TCntrNode.29"><span class="tocnumber">14.5</span> <span class="toctext"><span>Object of the dynamic tree node (TCntrNode)</span></span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-78"><a href="#Resources_locking_in_OpenSCADA_.28Res.2C_ResAlloc.2C_ResMtx.2C_MtxAlloc.2C_AutoHD.29"><span class="tocnumber">15</span> <span class="toctext">Resources locking in OpenSCADA (Res, ResAlloc, ResMtx, MtxAlloc, AutoHD)</span></a>
 <ul>
-<li class="toclevel-2 tocsection-80"><a href="#Resource_R.2FW_lock_object_.28ResRW.29"><span class="tocnumber">16.1</span> <span class="toctext"><span>Resource R/W lock object (ResRW)</span></span></a></li>
-<li class="toclevel-2 tocsection-81"><a href="#Automatic_resource_RW_unlock_object_.28ResAlloc.29"><span class="tocnumber">16.2</span> <span class="toctext"><span>Automatic resource RW unlock object (ResAlloc)</span></span></a></li>
-<li class="toclevel-2 tocsection-82"><a href="#Template_.28AutoHD.29"><span class="tocnumber">16.3</span> <span class="toctext"><span>Template (AutoHD)</span></span></a></li>
-<li class="toclevel-2 tocsection-83"><a href="#Resources_allocation_object.2C_by_mutex_.28ResMtx.29"><span class="tocnumber">16.4</span> <span class="toctext"><span>Resources allocation object, by mutex (ResMtx)</span></span></a></li>
-<li class="toclevel-2 tocsection-84"><a href="#Object_of_the_string_with_the_access_shared_by_the_resource_.28ResString.29"><span class="tocnumber">16.5</span> <span class="toctext"><span>Object of the string with the access shared by the resource (ResString)</span></span></a></li>
-<li class="toclevel-2 tocsection-85"><a href="#Conditional_variable_object.2C_by_mutex_.28CondVar.29"><span class="tocnumber">16.6</span> <span class="toctext"><span>Conditional variable object, by mutex (CondVar)</span></span></a></li>
-<li class="toclevel-2 tocsection-86"><a href="#Object_of_automatic_unlock_POSIX_mutex_.28MtxAlloc.29"><span class="tocnumber">16.7</span> <span class="toctext"><span>Object of automatic unlock POSIX mutex (MtxAlloc)</span></span></a></li>
-<li class="toclevel-2 tocsection-87"><a href="#Object_of_the_string_with_the_access_shared_by_the_global_the_data_resource_.28mutex.29_.28MtxString.29"><span class="tocnumber">16.8</span> <span class="toctext"><span>Object of the string with the access shared by the global the data resource (mutex) (MtxString)</span></span></a></li>
+<li class="toclevel-2 tocsection-79"><a href="#Resource_R.2FW_lock_object_.28ResRW.29"><span class="tocnumber">15.1</span> <span class="toctext"><span>Resource R/W lock object (ResRW)</span></span></a></li>
+<li class="toclevel-2 tocsection-80"><a href="#Automatic_resource_RW_unlock_object_.28ResAlloc.29"><span class="tocnumber">15.2</span> <span class="toctext"><span>Automatic resource RW unlock object (ResAlloc)</span></span></a></li>
+<li class="toclevel-2 tocsection-81"><a href="#Template_.28AutoHD.29"><span class="tocnumber">15.3</span> <span class="toctext"><span>Template (AutoHD)</span></span></a></li>
+<li class="toclevel-2 tocsection-82"><a href="#Resources_allocation_object.2C_by_mutex_.28ResMtx.29"><span class="tocnumber">15.4</span> <span class="toctext"><span>Resources allocation object, by mutex (ResMtx)</span></span></a></li>
+<li class="toclevel-2 tocsection-83"><a href="#Object_of_the_string_with_the_access_shared_by_the_resource_.28ResString.29"><span class="tocnumber">15.5</span> <span class="toctext"><span>Object of the string with the access shared by the resource (ResString)</span></span></a></li>
+<li class="toclevel-2 tocsection-84"><a href="#Conditional_variable_object.2C_by_mutex_.28CondVar.29"><span class="tocnumber">15.6</span> <span class="toctext"><span>Conditional variable object, by mutex (CondVar)</span></span></a></li>
+<li class="toclevel-2 tocsection-85"><a href="#Object_of_automatic_unlock_POSIX_mutex_.28MtxAlloc.29"><span class="tocnumber">15.7</span> <span class="toctext"><span>Object of automatic unlock POSIX mutex (MtxAlloc)</span></span></a></li>
+<li class="toclevel-2 tocsection-86"><a href="#Object_of_the_string_with_the_access_shared_by_the_global_the_data_resource_.28mutex.29_.28MtxString.29"><span class="tocnumber">15.8</span> <span class="toctext"><span>Object of the string with the access shared by the global the data resource (mutex) (MtxString)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-88"><a href="#Organization_and_structure_of_the_database_of_the_system_components"><span class="tocnumber">17</span> <span class="toctext">Organization and structure of the database of the system components</span></a>
+<li class="toclevel-1 tocsection-87"><a href="#Other_generic_objects_.28XMLNode.2C_TError.29"><span class="tocnumber">16</span> <span class="toctext">Other generic objects (XMLNode, TError)</span></a>
 <ul>
-<li class="toclevel-2 tocsection-89"><a href="#System_tables"><span class="tocnumber">17.1</span> <span class="toctext">System tables</span></a></li>
-<li class="toclevel-2 tocsection-90"><a href="#Tables_of_the_.22Data_acquisition.22_subsystem"><span class="tocnumber">17.2</span> <span class="toctext">Tables of the "Data acquisition" subsystem</span></a></li>
-<li class="toclevel-2 tocsection-91"><a href="#Tables_of_the_.22Transports.22_subsystem"><span class="tocnumber">17.3</span> <span class="toctext">Tables of the "Transports" subsystem</span></a></li>
-<li class="toclevel-2 tocsection-92"><a href="#Tables_of_the_.22Archives.22_subsystem"><span class="tocnumber">17.4</span> <span class="toctext">Tables of the "Archives" subsystem</span></a></li>
-<li class="toclevel-2 tocsection-93"><a href="#Tables_of_the_.22Security.22_subsystem"><span class="tocnumber">17.5</span> <span class="toctext">Tables of the "Security" subsystem</span></a></li>
-<li class="toclevel-2 tocsection-94"><a href="#The_structure_of_the_databases_of_the_modules"><span class="tocnumber">17.6</span> <span class="toctext">The structure of the databases of the modules</span></a></li>
+<li class="toclevel-2 tocsection-88"><a href="#XML-tag_.28XMLNode.29"><span class="tocnumber">16.1</span> <span class="toctext"><span>XML-tag (XMLNode)</span></span></a></li>
+<li class="toclevel-2 tocsection-89"><a href="#Error_exception_.28TError.29"><span class="tocnumber">16.2</span> <span class="toctext"><span>Error exception (TError)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-95"><a href="#Service_functions_of_the_OpenSCADA_control_interface"><span class="tocnumber">18</span> <span class="toctext">Service functions of the OpenSCADA control interface</span></a>
+<li class="toclevel-1 tocsection-90"><a href="#Organization_and_structure_of_the_database_of_the_system_components"><span class="tocnumber">17</span> <span class="toctext">Organization and structure of the database of the system components</span></a>
 <ul>
-<li class="toclevel-2 tocsection-96"><a href="#Group_access_to_the_values_of_the_parameter.27s_attributes_of_the_subsystem_.22Data_acquisition.22.2C_as_well_as_to_the_detailed_information"><span class="tocnumber">18.1</span> <span class="toctext">Group access to the values of the parameter's attributes of the subsystem "Data acquisition", as well as to the detailed information</span></a></li>
-<li class="toclevel-2 tocsection-97"><a href="#Access_to_archived_data_of_the_archives_of_messages"><span class="tocnumber">18.2</span> <span class="toctext">Access to archived data of the archives of messages</span></a></li>
-<li class="toclevel-2 tocsection-98"><a href="#Access_to_archived_data_of_the_values.27_archive"><span class="tocnumber">18.3</span> <span class="toctext">Access to archived data of the values' archive</span></a></li>
+<li class="toclevel-2 tocsection-91"><a href="#System_tables"><span class="tocnumber">17.1</span> <span class="toctext">System tables</span></a></li>
+<li class="toclevel-2 tocsection-92"><a href="#Tables_of_the_.22Data_acquisition.22_subsystem"><span class="tocnumber">17.2</span> <span class="toctext">Tables of the "Data acquisition" subsystem</span></a></li>
+<li class="toclevel-2 tocsection-93"><a href="#Tables_of_the_.22Transports.22_subsystem"><span class="tocnumber">17.3</span> <span class="toctext">Tables of the "Transports" subsystem</span></a></li>
+<li class="toclevel-2 tocsection-94"><a href="#Tables_of_the_.22Archives.22_subsystem"><span class="tocnumber">17.4</span> <span class="toctext">Tables of the "Archives" subsystem</span></a></li>
+<li class="toclevel-2 tocsection-95"><a href="#Tables_of_the_.22Security.22_subsystem"><span class="tocnumber">17.5</span> <span class="toctext">Tables of the "Security" subsystem</span></a></li>
+<li class="toclevel-2 tocsection-96"><a href="#The_structure_of_the_databases_of_the_modules"><span class="tocnumber">17.6</span> <span class="toctext">The structure of the databases of the modules</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-99"><a href="#API_of_modules_of_modular_subsystems"><span class="tocnumber">19</span> <span class="toctext"><span>API of modules of modular subsystems</span></span></a></li>
-<li class="toclevel-1 tocsection-100"><a href="#Debugging_and_Testing_OpenSCADA"><span class="tocnumber">20</span> <span class="toctext">Debugging and Testing OpenSCADA</span></a></li>
-<li class="toclevel-1 tocsection-101"><a href="#Rules_for_design_and_commenting_of_the_sources_of_OpenSCADA_and_its_modules"><span class="tocnumber">21</span> <span class="toctext">Rules for design and commenting of the sources of OpenSCADA and its modules</span></a></li>
-<li class="toclevel-1 tocsection-102"><a href="#.D0.A1onventional_signs_in_the_text_and_source_code"><span class="tocnumber">22</span> <span class="toctext">Сonventional signs in the text and source code</span></a></li>
-<li class="toclevel-1 tocsection-103"><a href="#Links"><span class="tocnumber">23</span> <span class="toctext">Links</span></a></li>
+<li class="toclevel-1 tocsection-97"><a href="#Service_functions_of_the_OpenSCADA_control_interface"><span class="tocnumber">18</span> <span class="toctext"><span>Service functions of the OpenSCADA control interface</span></span></a>
+<ul>
+<li class="toclevel-2 tocsection-98"><a href="#Group_access_to_the_values_of_the_parameter.27s_attributes_of_the_subsystem_.22Data_acquisition.22.2C_as_well_as_to_the_detailed_information"><span class="tocnumber">18.1</span> <span class="toctext">Group access to the values of the parameter's attributes of the subsystem "Data acquisition", as well as to the detailed information</span></a></li>
+<li class="toclevel-2 tocsection-99"><a href="#Access_to_archived_data_of_the_archives_of_messages"><span class="tocnumber">18.2</span> <span class="toctext">Access to archived data of the archives of messages</span></a></li>
+<li class="toclevel-2 tocsection-100"><a href="#Access_to_archived_data_of_the_values.27_archive"><span class="tocnumber">18.3</span> <span class="toctext">Access to archived data of the values' archive</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-101"><a href="#API_of_modules_of_the_modular_subsystems"><span class="tocnumber">19</span> <span class="toctext"><span>API of modules of the modular subsystems</span></span></a></li>
+<li class="toclevel-1 tocsection-102"><a href="#Debugging_and_Testing_OpenSCADA"><span class="tocnumber">20</span> <span class="toctext">Debugging and Testing OpenSCADA</span></a></li>
+<li class="toclevel-1 tocsection-103"><a href="#Rules_for_design_and_commenting_of_the_sources_of_OpenSCADA_and_its_modules"><span class="tocnumber">21</span> <span class="toctext">Rules for design and commenting of the sources of OpenSCADA and its modules</span></a></li>
+<li class="toclevel-1 tocsection-104"><a href="#.D0.A1onventional_signs_in_the_text_and_source_code"><span class="tocnumber">22</span> <span class="toctext">Сonventional signs in the text and source code</span></a></li>
+<li class="toclevel-1 tocsection-105"><a href="#Links"><span class="tocnumber">23</span> <span class="toctext">Links</span></a></li>
 </ul>
 </div>
 
@@ -194,7 +195,7 @@ The document is intended for programmers wishing to understand the architecture 
 <p>For the purpose of visual and affordable perception of OpenSCADA architecture in general the Figure 1 shows the static class diagram of OpenSCADA on the universal modeling language (UML). Based on the chart it is clear that OpenSCADA contains modular subsystems: "Archives", "Databases", "Transports", "Transport protocols", "User interfaces", "Data acquisition" and "Special", as well as subsystems: "Safety" and "Module's management". The chart graphically presents the relationship between modular subsystems and modules.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:718px;"><a class="image" href="http://oscada.org/wiki/File:API_uml_classdep.png"><img class="thumbimage" height="836" src="files/API_uml_classdep.png" width="716" /></a>  <div class="thumbcaption">Fig. 1. Static class diagram.</div></div></div></div>
-<h2><span class="mw-headline" id="The_overall_structure_of_the_system._Modularity_.28TSubSYS.2C_TModule.29"><span class="mw-headline-number">2</span> The overall structure of the system. Modularity (TSubSYS, TModule)</span></h2>
+<h2><span class="mw-headline" id="The_overall_structure_of_the_system._Modularity_.28TSYS.2C_TSubSYS.2C_TModule.29"><span class="mw-headline-number">2</span> The overall structure of the system. Modularity (TSYS, TSubSYS, TModule)</span></h2>
 <p>The root, from which we construct the whole system is the object of TSYS. The root contains a subsystem (TSubSYS). Subsystems can be: the ordinary and modular. The difference between the modular subsystems is clearly shown in Fig. 1. Thus, the modular subsystems necessarily contain a list of modular structures (TModule), such as subsystem TArchiveS contain modular objects TTypeArchivator. At the same time, the normal subsystem does not contain such objects. For example TSecurity  subsystem (Figure 2).
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:703px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_struct.png"><img class="thumbimage" height="360" src="files/Oscada_struct.png" width="701" /></a>  <div class="thumbcaption">Fig. 2. Hierarchical structure of OpenSCADA.</div></div></div></div>
@@ -252,7 +253,8 @@ Information variables of the program:
 <li> <i>float period( );</i> — the task's call instant periodicity, in seconds.</li>
 <li> <i>string path;</i> — path.</li>
 <li> <i>pthread_t thr;</i> — thread handler.</li>
-<li> <i>uint8_t policy, prior;</i> — scheduling policy and priority. </li>
+<li> <i>uint8_t policy, phase;</i> — scheduling policy and phase. </li>
+<li> <i>int16_t prior;</i> — scheduling priority. </li>
 <li> <i>pid_t tid;</i> — thread's identifier as a Linux process's ID.</li>
 <li> <i>ResString cpuSet;</i> — used processors/cores list.</li>
 <li> <i>void *(*task) (void *);</i> — pointer to the task.</li>
@@ -262,14 +264,17 @@ Information variables of the program:
 <p><b>Templates/definitions:</b>
 </p>
 <ul><li> <i>USER_FILE_LIMIT</i> — The limit to files size for user's loading (1 MB).</li>
+<li> <i>USER_ITS_LIMIT</i> — Creating user items limit, like to array items (1000000).</li>
 <li> <i>STR_BUF_LEN</i> — Standard length of string buffers (10000).</li>
 <li> <i>NSTR_BUF_LEN</i> — Standard length of string buffers, for numbers (100). </li>
-<li> <i>STD_WAIT_DELAY</i> — Standard quantum of the waiting time cycles (100 ms).</li>
+<li> <i>STD_WAIT_DELAY</i> — Standard quantum of the waiting time cycles (100 milliseconds).</li>
 <li> <i>STD_CACHE_LIM</i> — Standard cache limit (100).</li>
-<li> <i>STD_WAIT_TM</i> — Standard interval of the event waiting (10 ms).</li>
-<li> <i>STD_INTERF_TM</i> — Timeout, maximum time, waiting for the interface reaction (5 s).</li>
+<li> <i>STD_WAIT_TM</i> — Standard interval of the event waiting (10 milliseconds).</li>
+<li> <i>STD_INTERF_TM</i> — Timeout, maximum time, waiting for the interface reaction (5 seconds).</li>
+<li> <i>SERV_TASK_PER</i> — Service task period (10 seconds)</li>
 <li> <i>BUF_ARCH_NM</i> — The archive buffer name ("&lt;buffer&gt;").</li>
 <li> <i>ALRM_ARCH_NM</i> — The alarms table name ("&lt;alarms&gt;").</li>
+<li> <i>ALRM_ARCH_CH_NM</i> — The alarms table name ("&lt;alarmsChange&gt;") just for changing.</li>
 <li> <i>__func__</i> — The full name of the calling function.</li>
 <li> <i>vmin (a,b)</i> — Determination of the minimum value.</li>
 <li> <i>vmax (a,b)</i> — Definition of the maximum value.</li></ul>
@@ -314,14 +319,18 @@ Information variables of the program:
 <li> <i>string selDB( );</i> — Chosen DB. Used for selective loading from the specified database in the subsystem "DB". </li>
 <li> <i>string mainCPUs( );</i> — Used processors list.</li>
 <li> <i>bool clockRT( );</i> — The Real-time clock selection for the tasks planning, else used the monotonic one (by defaults).</li>
+<li> <i>int taskInvPhs( );</i> — Number of the tasks invoking phases.</li>
 <li> <i>bool saveAtExit( );</i> — Sign - "Save configuration on exit".</li>
 <li> <i>int savePeriod( );</i> — Frequency of the automatically saving the station in the database (seconds).</li>
+<li> <i>bool modifCalc( );</i> — Set modification for the calculated objects.</li>
 <li> <i>void setWorkDB( const string &amp;wdb );</i> — Setting of  the full name of the working database.</li>
 <li> <i>void setSelDB( const string &amp;vl );</i> — Installation of the selected database for the specified  boot.</li>
 <li> <i>void setMainCPUs( const string &amp;vl );</i> — Setting of used processors list.</li>
 <li> <i>void setClockRT( bool vl );</i> — Setting of the Real-time clock selection for the tasks planning.</li>
+<li> <i>void setTaskInvPhs( int vl );</i> — Setting number of the tasks invoking phases.</li>
 <li> <i>void setSaveAtExit( bool vl );</i> — Setting of the sign - "Save configuration on exit".</li>
 <li> <i>void setSavePeriod( int vl );</i> — Set the frequency of the automatically saving of the station to the database (seconds).</li>
+<li> <i>void setModifCalc( bool vl );</i> — Set of setting the modification for the calculated objects.</li>
 <li> <i>bool chkSelDB( const string &amp;wDB );</i> — The function of checking for compliance of the specified database <i>wDB</i>  with the selected "selDB()".</li>
 <li> <i>static void sighandler( int signal );</i> — Function of the  default handler of the signals of the system as a whole.</li>
 <li> <i>unsigned long long sysClk( );</i> — The estimated frequency of the processor on which the system works (Hz). </li>
@@ -368,10 +377,11 @@ Information variables of the program:
 <li> <i>static string ll2str( long long val, IntView view=Dec );</i> — Transformation of a long integer (64bit) to the string type of view <i>view</i>.</li>
 <li> <i>static string real2str( double val, int prec=15, char tp='g');</i> — Real transformation with an accuracy <i>prec</i> signs and type <i>tp</i> to the string.</li>
 <li> <i>static double realRound( double val, int dig=0, bool toint=false );</i> — Rounding the real number to the specified digit <i>dig</i> after the decimal point with the possibility of transformation to integer after rounding <i>toint</i>.</li>
-<li> <i>static string atime2str( time_t tm, const string &amp;format = "" );</i> — Astronomic UNIX time <i>tm</i> conversion to string, by format <i>format</i> of POSIX-function "strftime()".</li>
+<li> <i>static string atime2str( time_t tm, const string &amp;format = "", bool gmt = false );</i> — Astronomic UNIX time <i>tm</i> conversion to a string, in the <i>format</i> of the POSIX-function "strftime()" or "gmtime()", for <i>gmt</i>.</li>
 <li> <i>static string time2str( double tm );</i> — Convert time interval, in seconds, to string like "1hour 23min 10sec".</li>
 <li> <i>static string cpct2str( double cnt );</i> — Traffic counter <i>cnt</i> (bytes) convert to string like "12.5KiB".</li>
 <li> <i>static double str2real( const string &amp;val );</i> — String transformation to the real.</li>
+<li> <i>static time_t str2atime( const string &amp;val, const string &amp;format = "", bool gmt = false )</i> — String time <i>val</i> conversion to an astronomic UNIX time, in the <i>format</i> of the POSIX-function "strptime()", and by the function "mktime()" or "timegm()", for <i>gmt</i>.</li>
 <li> <i>static string addr2str( void *addr );</i> — Convert addresses into string.</li>
 <li> <i>static void *str2addr( const string &amp;str );</i> — Convert string into the address.</li>
 <li> <i>static string strTrim( const string &amp;val, const string &amp;cfg = " \n\t\r" );</i> — Deletes from the original string <i>val</i> pointed into <i>cfg</i> (mostly empty) characters at the beginning and end of it.</li>
@@ -383,7 +393,7 @@ Information variables of the program:
 <li> <i>static string sepstr2path( const string &amp;str, char sep = '.' );</i> — Transformation of the string with the separator <i>sep</i> of the elements into the path.</li>
 <li> <i>static string strEncode( const string &amp;in, Code tp, const string &amp;opt1 = "" );</i> — Encoding of the string by the specified rule <i>tp</i> and option <i>opt1</i> (symbols by "Custom"). </li>
 <li> <i>static string strDecode( const string &amp;in, Code tp = Custom, const string &amp;opt1 = "" );</i> — Decoding of the string <i>in</i> by the specified rule <i>tp</i> and option <i>opt1</i> (separator or "&lt;text&gt;" for "Bin"). </li>
-<li> <i>static string strMess( const char *fmt, ... ); static string strMess( unsigned len, const char *fmt, ... );</i> — Formation of the string by the template <i>fmt</i> and arguments. It is implemented on the basis of "printf". For the length limit variant exceeding mark by append "...".</li>
+<li> <i>static string strMess( const char *fmt, ... );</i> — Formation of the string by the template <i>fmt</i> and arguments. It is implemented on the basis of "printf".</li>
 <li> <i>static string strLabEnum( const string &amp;base );</i> — Individual string labels from <i>base</i> forming by increment at end. Supported numbering into decimal, hexadecimal (prefix "0x") or octal (prefix "0") notation.</li>
 <li> <i>string strCompr( const string &amp;in, int lev=-1);</i> — Compression of the string <i>in</i> with the compression level <i>lev</i>.</li>
 <li> <i>string strUncompr( const string &amp;in );</i> — Decompression of the string <i>in</i>.</li>
@@ -401,12 +411,13 @@ Information variables of the program:
 <li> <i>string getCmdOpt( int &amp;curPos, string *argVal = NULL ); static string getCmdOpt_( int &amp;curPos, string *argVal, int argc, char **argv );</i> — Command line parameters parsing by cursor scanning <i>curPos</i>. Return argument name and it's possible value into <i>argVal</i>. Implement formats for short keys: "-v", "-v val", "-abcv", "-abcv val"; and long keys: "--var", "--var=val", "--var val".</li>
 <li> <i>bool cmdOptPresent( const string &amp;opt );</i> — Check the command-line option <i>opt</i> for presence.</li>
 <li> <i>string cmdOpt( const string &amp;opt, const string &amp;setVl = "" );</i> — Get command-line option <i>opt</i>. Set it at <i>setVl</i> if pointing.</li>
-<li> <i>int permCrtFiles( bool exec = false );</i> — get permission for files created OpenSCADA in form 0777 (RWXRWXRWX), where <i>exec</i> is not mask the bit 01. </li>
+<li> <i>int permCrtFiles( bool exec = false );</i> — get permission for files created OpenSCADA in form 0777 (RWXRWXRWX), where <i>exec</i> is not mask the bit 01.</li>
+<li> <i>ResMtx *commonLock( const string &amp;nm );</i> — creates and gets a lock for the name <i>nm</i> — for non multithread system functions, typically.</li>
 <li> <i>static void ctrListFS( XMLNode *nd, const string &amp;fsBase, const string &amp;fileExt = "" );</i> — Browsing list for file system's items from base <i>fsBase</i>, for the files with extensions <i>fileExt</i> in list "png;jpeg;gif;".</li>
 <li> <i>ResRW &amp;cfgRes( );</i> — Access to config file tree resource locking.</li></ul>
 <p><b>Public attributes:</b>
 </p>
-<ul><li> <i>static bool finalKill</i> — Sign "The final killing of". It is used for forced disconnection of blocked objects on the the final stage of shutdown.</li></ul>
+<ul><li> <i>static bool finalKill;</i> — Sign "The final killing of". It is used for forced disconnection of blocked objects on the the final stage of shutdown.</li></ul>
 <p><b>Short calls for global functions into "OSCADA" namespace:</b>
 </p>
 <ul><li> <i>template &lt;class fVal&gt; fVal fmin( fVal a, fVal b ); template &lt;class fVal&gt; fVal fmax( fVal a, fVal b );</i> — functional templates for obtain of two values minimum and maximum.</li>
@@ -415,7 +426,7 @@ Information variables of the program:
 <li> <i>inline string ll2s( long long val, TSYS::IntView view = TSYS::Dec )</i> —&gt; TSYS::ll2str(val, view);</li>
 <li> <i>inline string r2s( double val, int prec = 15, char tp = 'g' )</i> —&gt; TSYS::real2str(val, prec, tp);</li>
 <li> <i>inline double rRnd( double val, int dig = 0, bool toint = false )</i> —&gt; TSYS::realRound(val, dig, toint);</li>
-<li> <i>inline string atm2s( time_t tm, const string &amp;format = "" )</i> —&gt; TSYS::atime2str(tm, format);</li>
+<li> <i>inline string atm2s( time_t tm, const string &amp;format = "", bool gmt = false )</i> —&gt; TSYS::atime2str(tm, format, gmt);</li>
 <li> <i>inline string tm2s( double tm )</i> —&gt; TSYS::time2str(tm);</li>
 <li> <i>inline int s2i( const string &amp;val )</i> —&gt; atoi(val.c_str());</li>
 <li> <i>inline long long s2ll( const string &amp;val )</i> —&gt; atoll(val.c_str());</li>
@@ -511,7 +522,8 @@ Types (levels) of messages (enum — TMess::Type):
 <li> <i>string translSet( const string &amp;base, const string &amp;lang, const string &amp;mess, bool *needReload = NULL ); string translSetU( const string &amp;base, const string &amp;user, const string &amp;mess, bool *needReload = NULL ); string translSetLU( const string &amp;base, const string &amp;lang, const string &amp;user, const string &amp;mess, bool *needReload = NULL );</i> — Setting translation for <i>base</i> text variable for language <i>lang</i> or <i>user</i> and optional source <i>src</i> to value <i>mess</i>.</li>
 <li> <i>void translReg( const string &amp;mess, const string &amp;src, const string &amp;prms = "" );</i> — Registering the translated message <i>mess</i> with source <i>src</i> and appended parameters <i>prms</i> into the translations index.</li>
 <li> <i>static const char *labDB( ); static const char *labSecCRON( ); static const char *labSecCRONsel( ); static const char *labTaskPrior( );</i> — Common help labels.</li>
-<li> <i>int getUTF8( const string &amp;str, int off = 0, int32_t *symb = NULL );</i> — Get and parse a UTF-8 symbol.</li></ul>
+<li> <i>int getUTF8( const string &amp;str, int off = 0, int32_t *symb = NULL );</i> — Get and parse a UTF-8 symbol.</li>
+<li> <i>static string setUTF8( int32_t symb );</i> — Set, form and return a UTF-8 symbol from their code <i>symb</i>.</li></ul>
 <h3><span class="mw-headline" id="Object_subsystem_.28TSubSYS.29"><span class="mw-headline-number">2.3</span> <span id="TSubSYS" title="#TSubSYS">Object subsystem (TSubSYS)</span></span></h3>
 <table class="wikitable">
 
@@ -621,6 +633,8 @@ Flags of the queries to the system table (enum – TDBS::ReqGen):
 <ul><li> <i>int subVer( );</i> — Subsystem version.</li>
 <li> <i>static string realDBName( const string &amp;bdn );</i> — Conversion of the full template name of the database or table (of view *.*.myTbl) in the real name. Actually the replacement of the special elements '*' by the elements of the working DB.</li>
 <li> <i>void dbList( vector&lt;string&gt; &amp;ls, bool checkSel = false );</i> — A list of available databases.. <i>checkSel</i> points to the necessity to verify the fact of boot from the selected database and to insert to the db list the only selected one.</li>
+<li> <i>int tblLifeTime( );</i> — Lifetime of the inactive tables closing, in seconds.</li>
+<li> <i>void setTblLifeTime( int vl );</i> — Sets lifetime of the inactive tables closing in <i>vl</i> seconds.</li>
 <li> <i>AutoHD&lt;TTable&gt; open( const string &amp;bdn, bool create = false );</i> — Opening the table <i>bdn</i> of the DB by its full path with the creation <i>create</i> in the case of its absence.</li>
 <li> <i>void close( const string &amp;bdn, bool del = false );</i> — Closing the table <i>bdn</i> of the DB by its full path with the possibility of deleting of it after closing <i>del</i>.</li>
 <li> <i>bool dataSeek( const string &amp;bdn, const string &amp;path, int lev, TConfig &amp;cfg, bool forceCfg = false, vector&lt; vector&lt;string&gt; &gt; *full = NULL );</i> — Total scanning of the records of the data source. The configuration file of the DB is the source if data. In the case of DB absence the configuration file is used. If the DB name <i>bdn</i> or path <i>path</i> to the configuration file are not indicated, their processing is skipped. <i>full</i> defines before a record for it's result preloading in whole and significant acceleration.</li>
@@ -649,9 +663,9 @@ Flags of the queries to the system table (enum – TDBS::ReqGen):
 <ul><li> <i>bool fullDeleteDB( );</i> — Sign of the complete removal of the database.</li>
 <li> <i>void list( vector&lt;string&gt; &amp;list ) const;</i> — The list of registered (opened) databases.</li>
 <li> <i>bool openStat( const string &amp;idb ) const;</i> — Check the availability of the specified opened database.</li>
-<li> <i>void open( const string &amp;iid );</i> — Opening of the database.</li>
-<li> <i>void close( const string &amp;iid, bool erase = false );</i> — Closing the database. If the sign <i>erase</i> is set, the database will be completely removed.</li>
-<li> <i>AutoHD&lt;TBD&gt; at( const string &amp;name ) const;</i> — Connection to the opened database.</li>
+<li> <i>string open( const string &amp;id );</i> — Opening of the database. Returns the end created identifier.</li>
+<li> <i>void close( const string &amp;id, bool erase = false );</i> — Closing the database. If the sign <i>erase</i> is set, the database will be completely removed.</li>
+<li> <i>AutoHD&lt;TBD&gt; at( const string &amp;id ) const;</i> — Connection to the opened database.</li>
 <li> <i>TBDS &amp;owner( ) const;</i> — Subsystem - the owner of the module.</li></ul>
 <h3><span class="mw-headline" id="The_object_of_the_database_.28TBD.29"><span class="mw-headline-number">3.3</span> <span id="TBD" title="#TBD">The object of the database (TBD)</span></span></h3>
 <table class="wikitable">
@@ -673,8 +687,12 @@ Flags of the queries to the system table (enum – TDBS::ReqGen):
 <li> <i>string dscr( );</i> — DB description.</li>
 <li> <i>string addr( ) const;</i> — Address of the database. The form of recording is different for each type of database.</li>
 <li> <i>string codePage( );</i> — Codepage in which the data of the database are stored.</li>
+<li> <i>double trTm_ClsOnOpen( );</i> — Transaction closing: after opening, seconds.</li>
+<li> <i>double trTm_ClsOnReq( );</i> — Transaction closing: after request, seconds.</li>
+<li> <i>int trPr_ClsTask( );</i> — Transaction closing: separate task priority.</li>
 <li> <i>bool enableStat( ) const;</i> — The state of the database: "Enabled".</li>
 <li> <i>bool toEnable( );</i> — Sign of the DB: "To Enable".</li>
+<li> <i>bool disabledByUser( );</i> — Sign of the node disabling by user, to prevent its enabling restore.</li>
 <li> <i>void setName( const string &amp;inm );</i> — Setting the DB name.</li>
 <li> <i>void setDscr( const string &amp;idscr );</i> — Setting the DB description.</li>
 <li> <i>void setAddr( const string &amp;iaddr );</i> — Setting the DB address.</li>
@@ -748,8 +766,8 @@ Flags of the queries to the system table (enum – TDBS::ReqGen):
 <li> <i>void tmplLibReg( TPrmTmplLib *lib );</i> — Registration of the parameter's template <i>lib</i>.</li>
 <li> <i>void tmplLibUnreg( const string &amp;id, int flg = 0 );</i> — Deleting/removing of the registration of the parameter's template <i>id</i>.</li>
 <li> <i>AutoHD&lt;TPrmTmplLib&gt; tmplLibAt( const string &amp;id ) const;</i> — Connection to the parameter's template <i>id</i>.</li>
-<li> <i>float rdRestDtTm( );</i> — Maximum depth of the archive data recovery when starting in hours.</li>
-<li> <i>void setRdRestDtTm( float vl );</i> — Set of the maximum depth of the archive data recovery when starting in hours.</li>
+<li> <i>double rdRestDtTm( );</i> — Maximum depth of the archive data recovery when starting in hours.</li>
+<li> <i>void setRdRestDtTm( double vl );</i> — Set of the maximum depth of the archive data recovery when starting in hours.</li>
 <li> <i>void rdActCntrList( vector&lt;string&gt; &amp;ls, bool isRun = false );</i> — The list of active controllers working in the redundancy scheme. When we indicate <i>isRun</i> there will be in the list only running controllers in this station.</li>
 <li> <i>string rdStRequest( const string &amp;cntr, XMLNode &amp;req, const string &amp;prevSt = "", bool toRun = true );</i> — Request <i>req</i> to the redundant station on behalf of the controller <i>cntr</i>. The station for the request is selected after specified in <i>prevSt</i> for the running remote controller when indicating <i>toRun</i>.</li>
 <li> <i>TElem &amp;elLib( );</i> — The structure of the table of the libraries if parameters' templates.</li>
@@ -773,10 +791,10 @@ Flags of the queries to the system table (enum – TDBS::ReqGen):
 <li> <i>void modStart( );</i> — Start of the module.</li>
 <li> <i>void modStop( );</i> — Stop of the module.</li>
 <li> <i>void list( vector&lt;string&gt; &amp;list ) const;</i> — The list of the controllers.</li>
-<li> <i>bool present( const string &amp;name ) const;</i> — Check for the availability of the specified controller.</li>
-<li> <i>void add( const string &amp;name, const string &amp;daq_db = "*.*" );</i> — Add the controller.</li>
-<li> <i>void del( const string &amp;name );</i> — Delete the controller.</li>
-<li> <i>AutoHD&lt;TController&gt; at( const string &amp;name, const string &amp;who = "" ) const;</i> — Connect to the controller.</li>
+<li> <i>bool present( const string &amp;id ) const;</i> — Check for the availability of the specified controller object.</li>
+<li> <i>string add( const string &amp;id, const string &amp;daq_db = "*.*" );</i> — Add the controller object. Returns the end created identifier.</li>
+<li> <i>void del( const string &amp;id );</i> — Delete the controller object.</li>
+<li> <i>AutoHD&lt;TController&gt; at( const string &amp;id, const string &amp;who = "" ) const;</i> — Connect to the controller object.</li>
 <li> <i>bool tpPrmPresent( const string &amp;name_t );</i> — Check for the availability of the specified controller type.</li>
 <li> <i>unsigned tpPrmToId( const string &amp;name_t );</i> — Getting of the index of the parameters' types by their names.</li>
 <li> <i>int tpParmAdd( const char *id, const char *n_db, const char *name );</i> — Addition/registration of the parameters' types.</li>
@@ -833,10 +851,10 @@ Redundancy modes (enum TController::Redundant):
 <li> <i>void enable( );</i> — Controller's enabling.</li>
 <li> <i>void disable( );</i> — Controller's stopping.</li>
 <li> <i>void list( vector&lt;string&gt; &amp;list ) const;</i> — Parameter's list in the controller.</li>
-<li> <i>bool present( const string &amp;name ) const;</i> — Check for the availability of the parameter <i>name</i>.</li>
-<li> <i>void add( const string &amp;name, unsigned type );</i> — Addition of the parameter <i>name</i> of the type <i>type</i>.</li>
-<li> <i>void del( const string &amp;name, bool full = false );</i> — Deleting of the parameter <i>name</i>. If the field <i>full</i> is specified the controller will be completely removed.</li>
-<li> <i>AutoHD&lt;TParamContr&gt; at( const string &amp;name, const string &amp;who = "th_contr" ) const;</i> — Connection to the controller's parameter <i>name</i>.</li>
+<li> <i>bool present( const string &amp;id ) const;</i> — Check for the availability of the parameter <i>id</i>.</li>
+<li> <i>string add( const string &amp;id, unsigned type );</i> — Addition of the parameter <i>id</i> of the type <i>type</i>. Returns the end created identifier.</li>
+<li> <i>void del( const string &amp;id, bool full = false );</i> — Deleting of the parameter <i>id</i>. If the field <i>full</i> is specified the controller will be completely removed.</li>
+<li> <i>AutoHD&lt;TParamContr&gt; at( const string &amp;id, const string &amp;who = "th_contr" ) const;</i> — Connection to the controller's parameter <i>id</i>.</li>
 <li> <i>bool redntUse( Redundant md = Asymmetric );</i> — Redundancy state for mode <i>md</i>.</li>
 <li> <i>void setRedntUse( bool vl );</i> — Changing of the getting the data from the backup station mode.</li>
 <li> <i>Redundant redntMode( );</i> — Redundancy mode ("&lt;high&gt;", "&lt;low&gt;", "&lt;optimal&gt;", {ForceStation}), enabling.</li>
@@ -845,12 +863,12 @@ Redundancy modes (enum TController::Redundant):
 <li> <i>void setRedntRun( const string &amp;vl );</i> — Setting the configuration of the preferred execution.</li>
 <li> <i>virtual void redntDataUpdate( );</i> — An operation of the data receiving from the backup station execution. It is called automatically by the service procedure of the redundancy scheme of the subsystem.</li>
 <li> <i>virtual string catsPat( );</i> — regular expression rules separated '|' list for the object's generated messages math by category.</li>
-<li> <i>void alarmSet( const string &amp;mess, int lev = -TMess::Crit, const string &amp;prm = "" );</i> — Formation of the alarm (violation) for the object controller <i>prm</i>, or the controller as a whole if the object is not specified, the message <i>mess</i> and level <i>lev</i>. The negative value of the level <i>lev</i> is used to set and positive for removal of the violation. This function generates the violation and message with a category: <b>al{ModId}:{CntrId}[.{PrmId}]</b>.</li>
+<li> <i>void alarmSet( const string &amp;mess, int lev = -TMess::Crit, const string &amp;prm = "", bool force = false );</i> — Formation of an alarms (a violation) for the parameter object <i>prm</i> (<b>{PrmId}\n{PrmNm}</b>), or the controller object in whole if the object is not specified, the message <i>mess</i> and level <i>lev</i>. The negative value of the level <i>lev</i> is used to set and positive for removal of the violation. This function generates the violation and message with a category <b>al{ModId}:{CntrId}[.{prm}]</b> and the text <b>{CntrNm} &gt; {PrmNm}: {MessText}</b>. The alarms clearance, as the setting also, works in the toggling mode, so means of passing the clearance messages to the message buffer, and the same clearance, only at the according violations presence, what may be disabled setting <i>force</i>.</li>
 <li> <i>TTypeDAQ &amp;owner( ) const;</i> — The type of the data source (module) - the owner of the controller.</li></ul>
 <p><b>Protected attributes:</b>
 </p>
-<ul><li> <i>bool en_st;</i> — Sign "Enable".</li>
-<li> <i>bool run_st;</i> — Sign "Running".</li></ul>
+<ul><li> <i>bool enSt;</i> — The sign "Enable".</li>
+<li> <i>bool runSt;</i> — The sign "Running".</li></ul>
 <p><b>Protected methods:</b>
 </p>
 <ul><li> <i>virtual void enable_(  );</i> — Enabling of the controller. Intercepted by the child.</li>
@@ -877,6 +895,7 @@ Redundancy modes (enum TController::Redundant):
 <li> <i>virtual bool cfgChange( TParamContr *prm, TCfg &amp;cfg );</i> — The configuration filed <i>cfg</i> of the parameter <i>prm</i> change.</li>
 <li> <i>virtual void vlGet( TParamContr *prm, TVal &amp;vo );</i> — Predicting function of the value getting, through the parameter <i>prm</i>. It is used for direct (synchronous) reading.</li>
 <li> <i>virtual void vlSet( TParamContr *prm, TVal &amp;vo, const TVariant &amp;vl, const TVariant &amp;pvl );</i> — Predicting function of the value setting, through the parameter <i>prm</i>. It is used for direct (synchronous) writing <i>vl</i> with the previous value into <i>pvl</i>.</li>
+<li> <i>bool vlSetRednt( TVal &amp;vo, const TVariant &amp;vl, const TVariant &amp;pvl );</i> — Processing of the values setting, mostly in the predicting function, under the redundancy. Returns true at processing the setting in the redundancy.</li>
 <li> <i>virtual void vlArchMake( TParamContr *prm, TVal &amp;val );</i> — Notifying function of the creation of the archive for the <i>val</i> attribute, through parameter <i>prm</i>. It is used to configure the created archive in accordance with the peculiarities of the data source.</li>
 <li> <i>virtual void getVals( TParamContr *prm );</i> — Asynchronous mode internal realization, called into the controller object cycle for parameter <i>prm</i>.</li>
 <li> <i>virtual bool cntrCmdProc( TParamContr *prm, XMLNode *opt );</i> — Function of requests' processing of the control interface, from parameter <i>prm</i>.</li></ul>
@@ -911,10 +930,10 @@ Redundancy modes (enum TController::Redundant):
 <li> <i>void setDescr( const string &amp;idsc );</i> — Setting of the parameter's description.</li>
 <li> <i>void setToEnable( bool vl );</i> — Setting of the sign "To enable the parameter".</li>
 <li> <i>void list( vector&lt;string&gt; &amp;list ) const;</i> — Parameter's list in the parameter.</li>
-<li> <i>bool present( const string &amp;name ) const;</i> — Check for the availability of the parameter <i>name</i>.</li>
-<li> <i>void add( const string &amp;name, unsigned type = 0 );</i> — Addition of the parameter name of the type <i>type</i>.</li>
-<li> <i>void del( const string &amp;name, bool full = false );</i> — Deleting of the parameter <i>name</i>. If the field <i>full</i> is specified the controller will be completely removed.</li>
-<li> <i>AutoHD&lt;TParamContr&gt; at( const string &amp;name, const string &amp;who = "th_prm" ) const;</i> — Connection to the controller's parameter <i>name</i>.</li>
+<li> <i>bool present( const string &amp;id ) const;</i> — Check for the availability of the parameter <i>id</i>.</li>
+<li> <i>string add( const string &amp;id, unsigned type = 0 );</i> — Addition of the parameter <i>id</i> of the type <i>type</i>. Returns the end created identifier.</li>
+<li> <i>void del( const string &amp;id, bool full = false );</i> — Deleting of the parameter <i>id</i>. If the field <i>full</i> is specified the controller will be completely removed.</li>
+<li> <i>AutoHD&lt;TParamContr&gt; at( const string &amp;id, const string &amp;who = "th_prm" ) const;</i> — Connection to the controller's parameter <i>id</i>.</li>
 <li> <i>TTypeParam &amp;type( ) const;</i> — Parameter's type.</li>
 <li> <i>virtual TElem *dynElCntr( );</i> — Container of the dynamic elements of the DAQ attributes.</li>
 <li> <i>virtual void enable( );</i> — To enable parameter.</li>
@@ -1060,6 +1079,46 @@ Additional flags to the attribute's object of the function IO (enum TPrmTempl::I
 <li> <i>void setStart( bool val );</i> — Start/stop of the parameter's template.</li>
 <li> <i>AutoHD&lt;TFunction&gt; func( );</i> — Connection to the function formed by the template.</li>
 <li> <i>TPrmTmplLib &amp;owner( ) const;</i> — Object of the templates' library - the owner of the template.</li></ul>
+<h4><span class="mw-headline" id="The_object_of_the_implementation_of_the_template.27s_parameters_of_the_.22DAQ.22_subsystem_.28TPrmTempl::Impl.29"><span class="mw-headline-number">4.9.1</span> <span id="TPrmTempl_Impl" title="#TPrmTempl_Impl">The object of the implementation of the template's parameters of the "DAQ" subsystem (TPrmTempl::Impl)</span></span></h4>
+<table class="wikitable">
+
+<tr>
+<td><b>Inherits:</b></td>
+<td><i><a href="#TValFunc">TValFunc</a></i>
+</td></tr></table>
+<p><b>Data:</b><br />
+Structure of template links (class — TPrmTempl::Impl::SLnk):
+</p>
+<ul><li> <i>int objOff;</i> — offset of an Object part to direct accessing by it;</li>
+<li> <i>string addr, addrSpec;</i> — original and special (like to ModBus final address) link address;</li>
+<li> <i>AutoHD&lt;TVal&gt; con;</i> — connection to the destination, DAQ attribute;</li>
+<li> <i>SLnk( const string &amp;iaddr = "" )</i> — structure constructor.</li></ul>
+<p><b>Public methods:</b><br />
+</p>
+<ul><li> <i>Impl( TCntrNode *iobj, const string &amp;iname = "", bool blked = true );</i> — constructs for the template implementation with the control node <i>iobj</i> and the name <i>iname</i>.</li>
+<li> <i>int  lnkId( const string &amp;nm );</i> — returns the link <i>nm</i> (function's IO) identifier/number.</li>
+<li> <i>bool lnkPresent( int num );</i> — checks the link number <i>num</i> to presence, returns "true" for accessibility the link.</li>
+<li> <i>void lnkList( vector&lt;int&gt; &amp;ls ) const</i> — gets for list of the linked attributes ID.</li>
+<li> <i>virtual void lnkAdd( int num, const SLnk &amp;l );</i> — adds a link with the number <i>num</i> and the "SLnk" structure <i>l</i>.</li>
+<li> <i>string lnkAddr( int num, bool spec = false ) const;</i> — returns the link address for the number <i>num</i> and the special link address for <i>spec</i>.</li>
+<li> <i>void lnkAddrSet( int num, const string &amp;vl, bool spec = false );</i> — sets the link address to <i>vl</i> for number <i>num</i> and the special link address for <i>spec</i>.</li>
+<li> <i>virtual bool lnkInit( int num, bool checkNoLink = false );</i> — inits/connects the link for the number <i>num</i>, which means reading "addr" and forming "con" or "addrSpec". Set <i>checkNoLink</i> to prevent re-linking. Returns "true" at the link need for the initialization/activation repeating — does not initiated.</li>
+<li> <i>virtual bool lnkActive( int num );</i> — checks the link number <i>num</i> initialization/activation state.</li>
+<li> <i>virtual TVariant lnkInput( int num );</i> — returns a value by the link number <i>num</i>.</li>
+<li> <i>virtual bool lnkOutput( int num, const TVariant &amp;vl );</i> — sets the value <i>vl</i> by the link number <i>num</i>. Returns "true" at correct setting.</li>
+<li> <i>void addLinksAttrs( TElem *attrsCntr = NULL );</i> — adds links and DAQ parameter's attributes, at <i>attrsCntr</i> presence.</li>
+<li> <i>bool initLnks( bool checkNoLink = false );</i> — inits/connects all the links. Set <i>checkNoLink</i> to prevent re-linking. Returns "true" at presence at last one not initiated link — needs for the initialization/activation repeating.</li>
+<li> <i>virtual void cleanLnks( bool andFunc = false );</i> — cleans all the links and the function, for <i>andFunc</i>.</li>
+<li> <i>void inputLinks( );</i> — gets for values of all the links.</li>
+<li> <i>void outputLinks( );</i> — sets for values of all the links.</li>
+<li> <i>bool cntrCmdProc( XMLNode *opt, const string &amp;pref = "/cfg" );</i> — calls for control interface of the links with the prefix "pref".</li></ul>
+<p><b>Protected attributes:</b><br />
+</p>
+<ul><li> <i>map&lt;int,SLnk&gt; lnks;</i> — links contatiner;</li>
+<li> <i>TCntrNode *obj;</i> — associated control node;</li></ul>
+<p><b>Protected methods:</b><br />
+</p>
+<ul><li> <i>virtual string lnkHelp( );</i> — returns help for the links address' syntax.</li></ul>
 <h2><span class="mw-headline" id="Subsystem_.22Archives.22_.28TArchiveS.29"><span class="mw-headline-number">5</span> <span id="TArchiveS" title="#TArchiveS">Subsystem "Archives" (TArchiveS)</span></span></h2>
 <p>Subsystem "Archives" is represented by an object TArchiveS, which contains at the subsystem level the modular objects of the archivers types TTypeArchivator. Each object of the archiver type contains objects of the messages' archivers  TMArchivator and values' archivers TVArchivator. In addition, the subsystem object contains the methods of the messages archive and objects of the values' archives TVArchive. The object of the values' archive TVArchive contains the buffer of values through the inheritance of the buffer object TValBuf. To connect the archive of values with the archivers the object of the value element TVArchEl is provided. This object is contained in the archiver and it is referenced by the archive. Structure of the subsystem "Archives" is presented in Fig. 5.
 </p>
@@ -1079,6 +1138,11 @@ Additional flags to the attribute's object of the function IO (enum TPrmTempl::I
 <td><b>Inherits:</b></td>
 <td><i><a href="#TSubSYS">TSubSYS</a></i>
 </td></tr></table>
+<p>Modes of forming ID of the automatic created archives:
+</p>
+<ul><li> <i>BothPrmAttrId</i> — combining the parameter and the attribute ID.</li>
+<li> <i>OnlyPrmId</i> — only the parameter ID.</li>
+<li> <i>OnlyAttrId</i> — only the attribute ID.</li></ul>
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>int subVer( );</i> — Subsystem's version.</li>
@@ -1086,28 +1150,31 @@ Additional flags to the attribute's object of the function IO (enum TPrmTempl::I
 <li> <i>int valPeriod( );</i> — Acquisition of values period for the active archivers (milliseconds).</li>
 <li> <i>int valPrior( );</i> — Priority of the tasks of the values acquisition for the active archivers.</li>
 <li> <i>bool valForceCurTm( );</i> — Points to force of current time as the time-stamp of the getting values.</li>
+<li> <i>AutoIdMode autoIdMode( );</i> — Gets the mode of forming ID of the automatic created archives.</li>
 <li> <i>void setMessPeriod( int ivl );</i> — Setting the period of the archiving of messages from the buffer (seconds).</li>
 <li> <i>void setValPeriod( int ivl );</i> — Setting the values' acquisition period for active archivers (milliseconds).</li>
 <li> <i>void setValPrior( int ivl );</i> — Setting the priority of the values' acquisition task for the active archivers.</li>
 <li> <i>void setValForceCurTm( bool vl );</i> — Force of current time as the time-stamp of the getting values.</li>
+<li> <i>void setAutoIdMode( AutoIdMode vl );</i> — Sets the mode <i>vl</i> of forming ID of the automatic created archives.</li>
 <li> <i>void setToUpdate( );</i> — Planing update flag set.</li>
 <li> <i>void subStart( );</i> — Start of the subsystem.</li>
 <li> <i>void subStop( );</i> — Stop of the system.</li>
 <li> <i>void valList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the values'archives in the subsystem.</li>
-<li> <i>bool valPresent( const string &amp;iid ) const;</i> — Check for the availability of the values' archive <i>iid</i>.</li>
-<li> <i>void valAdd( const string &amp;iid, const string &amp;idb = "*.*" );</i> — Addition of the new values' archive <i>iid</i>.</li>
-<li> <i>void valDel( const string &amp;iid, bool db = false );</i> — Deleting of the values' archive <i>iid</i>.</li>
-<li> <i>AutoHD&lt;TVArchive&gt; valAt( const string &amp;iid ) const;</i> — Connection/addressing to the values' archive <i>iid</i>.</li>
+<li> <i>bool valPresent( const string &amp;id ) const;</i> — Check for the availability of the values' archive <i>id</i>.</li>
+<li> <i>string valAdd( const string &amp;id, const string &amp;idb = "*.*" );</i> — Addition of the new values' archive <i>id</i>. Returns the end created identifier.</li>
+<li> <i>void valDel( const string &amp;id, bool db = false );</i> — Deleting of the values' archive <i>id</i>.</li>
+<li> <i>AutoHD&lt;TVArchive&gt; valAt( const string &amp;id ) const;</i> — Connection/addressing to the values' archive <i>id</i>.</li>
 <li> <i>void setActMess( TMArchivator *a, bool val );</i> — Setting of the messages archivator <i>a</i> into the active status <i>val</i>. Active archivator will be provided by the subsystem with the flow of messages.</li>
 <li> <i>void setActVal( TVArchive *a, bool val );</i> — Setting of the value archive <i>a</i> into the active status <i>val</i>. Active archive will be provided by the subsystem with the periodic flow of values (is determined by the periodicity of the archive).</li>
 <li> <i>AutoHD&lt;TTypeArchivator&gt; at( const string &amp;name );</i> — Connection/addressing to the archiver's type (module) <i>name</i>.</li>
-<li> <i>void messPut( time_t tm, int utm, const string &amp;categ, int8_t level, const string &amp;mess, const string &amp;arch = "", bool force = false );</i> — Location of the value <i>mess</i> with the level <i>level</i> of the category <i>categ</i> and time <i>tm+utm</i> into the buffer, and then into the messages' archive or direct to the pointed archivators <i>arch</i> (separated by symbol ';'). <i>force</i> for direct writing to the archivator omit the redundancy.</li>
-<li> <i>void messPut( const vector&lt;TMess::SRec&gt; &amp;recs, const string &amp;arch = "", bool force = false );</i> — Location of the group of values <i>recs</i> into the buffer, and then into the messages' archive or direct to the pointed archivators <i>arch</i> (separated by symbol ';'). <i>force</i> for direct writing to the archivator omit the redundancy.</li>
+<li> <i>void messPut( time_t tm, int utm, const string &amp;categ, int8_t level, const string &amp;mess, const string &amp;arch = "" );</i> — Location of the value <i>mess</i> with the level <i>level</i> of the category <i>categ</i> and time <i>tm+utm</i> into the buffer, and then into the messages' archive or direct to the pointed archivators <i>arch</i> (separated by symbol ';').</li>
+<li> <i>void messPut( const vector&lt;TMess::SRec&gt; &amp;recs, const string &amp;arch = "" );</i> — Location of the group of values <i>recs</i> into the buffer, and then into the messages' archive or direct to the pointed archivators <i>arch</i> (separated by symbol ';').</li>
 <li> <i>time_t messGet( time_t bTm, time_t eTm, vector&lt;TMess::SRec&gt; &amp;recs, const string &amp;category = "", int8_t level = TMess::Debug, const string &amp;arch = "", time_t upTo = 0 );</i> — Values' request <i>reqs</i> for the specified period of time <i>bTm, eTm</i> for the specified category (by the template) <i>category</i> and level <i>level</i> from the archivators <i>arch</i> (separated by symbol ';'). Return time of the request stop, useful for continue from the point.</li>
 <li> <i>time_t messBeg( const string &amp;arch = "" );</i> — Beginning of the messages' archive as a whole or for the specified archiver <i>arch</i>.</li>
 <li> <i>time_t messEnd( const string &amp;arch = "" );</i> — End of the messages' archive as a whole or for the specified archiver <i>arch</i>.</li>
-<li> <i>float rdRestDtOverTm( );</i> — Overtime of the reserve history reload at start in days.</li>
-<li> <i>void setRdRestDtOverTm( float vl );</i> — Setting of overtime of the reserve history reload at start in days.</li>
+<li> <i>time_t rdTm( );</i> — Time of the last redundancy operation, maximum for message archivers in the active redundancy.</li>
+<li> <i>double rdRestDtOverTm( );</i> — Overtime of the reserve history reload at start in days.</li>
+<li> <i>void setRdRestDtOverTm( double vl );</i> — Setting of overtime of the reserve history reload at start in days.</li>
 <li> <i>void rdActArchMList( vector&lt;string&gt; &amp;ls, bool isRun = false );</i> — The list of active message archivators working in the redundancy scheme. When we indicate <i>isRun</i> there will be in the list only running message archvators in this station.</li>
 <li> <i>string rdStRequest( const string &amp;arch, XMLNode &amp;req, const string &amp;prevSt = "", bool toRun = true );</i> — Request <i>req</i> to the redundant station on behalf of the message archivator <i>arch</i>. The station for the request is selected after specified in <i>prevSt</i> for the running remotely message archivators when indicating <i>toRun</i>.</li>
 <li> <i>TElem &amp;messE( );</i> — DB structure of the messages' archivers.</li>
@@ -1234,15 +1301,15 @@ The data acquisition mode/source (struct — TVArchive::SrcMode):
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>void messList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the messages' archivers.</li>
-<li> <i>bool messPresent( const string &amp;iid ) const;</i> — Check for the presence of the specified messages' archiver.</li>
-<li> <i>void messAdd( const string &amp;iid, const string &amp;idb = "*.*" );</i> — Adding of the messages' archiver.</li>
-<li> <i>void messDel( const string &amp;iid, bool full = false );</i> — Deleting of the messages' archiver.</li>
-<li> <i>AutoHD&lt;TMArchivator&gt; messAt( const string &amp;iid ) const;</i> — Connection to the messages' archiver.</li>
+<li> <i>bool messPresent( const string &amp;id ) const;</i> — Check for the presence of the specified messages' archiver.</li>
+<li> <i>string messAdd( const string &amp;id, const string &amp;idb = "*.*" );</i> — Adding of the messages' archiver. Returns the end created identifier.</li>
+<li> <i>void messDel( const string &amp;id, bool full = false );</i> — Deleting of the messages' archiver.</li>
+<li> <i>AutoHD&lt;TMArchivator&gt; messAt( const string &amp;id ) const;</i> — Connection to the messages' archiver.</li>
 <li> <i>void valList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the values' archivers.</li>
-<li> <i>bool valPresent( const string &amp;iid ) const;</i> — Check for the presence of the specified values' archiver.</li>
-<li> <i>void valAdd( const string &amp;iid, const string &amp;idb = "*.*" );</i> — Adding of the values' archiver.</li>
-<li> <i>void valDel( const string &amp;iid, bool full = false );</i> — Deleting of the values' archiver.</li>
-<li> <i>AutoHD&lt;TVArchivator&gt; valAt( const string &amp;iid ) const;</i> — Connection to the values' archiver.</li>
+<li> <i>bool valPresent( const string &amp;id ) const;</i> — Check for the presence of the specified values' archiver.</li>
+<li> <i>string valAdd( const string &amp;id, const string &amp;idb = "*.*" );</i> — Adding of the values' archiver. Returns the end created identifier.</li>
+<li> <i>void valDel( const string &amp;id, bool full = false );</i> — Deleting of the values' archiver.</li>
+<li> <i>AutoHD&lt;TVArchivator&gt; valAt( const string &amp;id ) const;</i> — Connection to the values' archiver.</li>
 <li> <i>TArchiveS &amp;owner( ) const;</i> — Subsystem "Archives" - the owner of the archiver's type.</li></ul>
 <p><b>Protected methods:</b>
 </p>
@@ -1280,6 +1347,7 @@ The data acquisition mode/source (struct — TVArchive::SrcMode):
 <li> <i>void setAddr( const string &amp;vl );</i> — Setting the address of the archiver's storage.</li>
 <li> <i>void setLevel( int lev );</i> — Setting the level of messages, serviced by the archiver.</li>
 <li> <i>void setDB( const string &amp;idb );</i> — Setting the DB adress of the archiver.</li>
+<li> <i>time_t redntTm( );</i> — Time of the last redundancy operation.</li>
 <li> <i>bool redntUse( );</i> — Getting the data from the backup station mode.</li>
 <li> <i>void setRedntUse( bool vl );</i> — Changing of the getting the data from the backup station mode.</li>
 <li> <i>Redundant redntMode( );</i> — Redundancy mode ("&lt;high&gt;", "&lt;low&gt;", "&lt;optimal&gt;", {ForceStation}), enabling.</li>
@@ -1296,7 +1364,7 @@ The data acquisition mode/source (struct — TVArchive::SrcMode):
 <li> <i>TTypeArchivator&amp;owner( ) const;</i> — Archiver's type – the owner of the messages' archiver.</li></ul>
 <p><b>Protected attributes:</b>
 </p>
-<ul><li> <i>bool run_st;</i> — Sign "Run".</li>
+<ul><li> <i>bool runSt;</i> — The sign "Running".</li>
 <li> <i>int messHead;</i> — The pointer to last read message of the messages buffer.</li></ul>
 <p><b>Protected methods:</b>
 </p>
@@ -1349,9 +1417,10 @@ The data acquisition mode/source (struct — TVArchive::SrcMode):
 <li> <i>virtual void pushAccumVals( );</i> — Push the accumulated by the archivation task values, for the accumulated archivators.</li></ul>
 <p><b>Protected attributes:</b>
 </p>
-<ul><li> <i>Res a_res</i> — Resource of the archiving process.</li>
-<li> <i>bool run_st</i> — Sign "Archive is run".</li>
-<li> <i>vector&lt;TVArchEl *&gt; arch_el;</i> — Array of elements of archives.</li></ul>
+<ul><li> <i>ResRW archRes;</i> — Resource locker of the archiving process.</li>
+<li> <i>bool runSt;</i> — The sign "Archiver is run".</li>
+<li> <i>bool endrunReq;</i> — The sign "End run request to the archiver task".</li>
+<li> <i>vector&lt;TVArchEl *&gt; archEl;</i> — Array of elements of archives in the archiver.</li></ul>
 <h3><span class="mw-headline" id="The_object_of_the_archive.27s_element_in_the_archiver_.28TVArchEl.29"><span class="mw-headline-number">5.7</span> <span id="TVArchEl" title="#TVArchEl">The object of the archive's element in the archiver (TVArchEl)</span></span></h3>
 <table class="wikitable">
 
@@ -1445,15 +1514,18 @@ External hosts mode (enum — ExtHost::Mode):
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>void inList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the input transports.</li>
-<li> <i>bool inPresent( const string &amp;name ) const;</i> — Check for an input transport presence.</li>
-<li> <i>void inAdd( const string &amp;name, const string &amp;db = "*.*" );</i> — Addition of the input transport.</li>
-<li> <i>void inDel( const string &amp;name, bool complete = false );</i> — Deleting of the input transport. It is possible to completely delete with the database included, by setting the <i>complete</i> sign.</li>
-<li> <i>AutoHD&lt;TTransportIn&gt; inAt( const string &amp;name ) const;</i> — Connection to the input transport.</li>
+<li> <i>bool inPresent( const string &amp;id ) const;</i> — Check for an input transport presence.</li>
+<li> <i>string inAdd( const string &amp;id, const string &amp;db = "*.*" );</i> — Addition of the input transport. Returns the end created identifier.</li>
+<li> <i>void inDel( const string &amp;id, bool complete = false );</i> — Deleting of the input transport. It is possible to completely delete with the database included, by setting the <i>complete</i> sign.</li>
+<li> <i>AutoHD&lt;TTransportIn&gt; inAt( const string &amp;id ) const;</i> — Connection to the input transport.</li>
 <li> <i>void outList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the output transports.</li>
-<li> <i>bool outPresent( const string &amp;name ) const;</i> — Check for an output transport presence.</li>
-<li> <i>void outAdd( const string &amp;name, const string &amp;db = "*.*" );</i> — Addition of the output transport.</li>
-<li> <i>void outDel( const string &amp;name, bool complete = false );</i> — Deleting of the output transport. It is possible to completely delete with the database included, by setting the <i>complete</i> sign.</li>
-<li> <i>AutoHD&lt;TTransportOut&gt; outAt( const string &amp;name ) const;</i> — Connection to the output transport.</li>
+<li> <i>bool outPresent( const string &amp;id ) const;</i> — Check for an output transport presence.</li>
+<li> <i>string outAdd( const string &amp;id, const string &amp;db = "*.*" );</i> — Addition of the output transport. Returns the end created identifier.</li>
+<li> <i>void outDel( const string &amp;id, bool complete = false );</i> — Deleting of the output transport. It is possible to completely delete with the database included, by setting the <i>complete</i> sign.</li>
+<li> <i>AutoHD&lt;TTransportOut&gt; outAt( const string &amp;id ) const;</i> — Connection to the output transport.</li>
+<li> <i>virtual string outAddrHelp( );</i> — Address format help of the output transport.</li>
+<li> <i>int outLifeTime( );</i> — Output transport lifetime, 0 for disable.</li>
+<li> <i>void setOutKeepAliveTm( int vl );</i> — Set the output transport lifetime, 0 for disable.</li>
 <li> <i>TTransportS &amp;owner( ) const;</i> — "Transports" subsystem - the owner of the transport's type.</li></ul>
 <p><b>Protected methods:</b>
 </p>
@@ -1478,7 +1550,9 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>string name( );</i> — Transport's name.</li>
 <li> <i>string dscr( );</i> — Transport's description.</li>
 <li> <i>string addr( ) const;</i> — Address.</li>
-<li> <i>string protocol( );</i> — Linked transport protocol.</li>
+<li> <i>string protocols( );</i> — Linked transport protocols.</li>
+<li> <i>virtual unsigned keepAliveReqs( );</i> — Maximum Keep Alive requests.</li>
+<li> <i>virtual unsigned keepAliveTm( );</i> — Keep Alive time.</li>
 <li> <i>virtual string getStatus( );</i> — Getting the status of the input transport.</li>
 <li> <i>bool toStart( );</i> — The sign "To start".</li>
 <li> <i>bool startStat( );</i> — The status "Running".</li>
@@ -1488,7 +1562,7 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>void setName( const string &amp;inm );</i> — Setting the name of transport in <i>inm</i>.</li>
 <li> <i>void setDscr( const string &amp;idscr );</i> — Setting the description of transport in <i>idscr</i>.</li>
 <li> <i>void setAddr( const string &amp;addr );</i> — Setting the address of transport in <i>addr</i>.</li>
-<li> <i>void setProtocol( const string &amp;prt );</i> — Setting of the linked transport protocol.</li>
+<li> <i>void setProtocols( const string &amp;prt );</i> — Setting of the linked transport protocols.</li>
 <li> <i>void setToStart( bool val );</i> — Setting of the sign "To start".</li>
 <li> <i>void setDB( const string &amp;vl );</i> — Setting of the transport's DB address.</li>
 <li> <i>virtual void start( );</i> — Start of the transport.</li>
@@ -1504,7 +1578,7 @@ External hosts mode (enum — ExtHost::Mode):
 <ul><li> <i>string assTrO( const string &amp;addr );</i> — The assigned output transport creation with address <i>addr</i>.</li></ul>
 <p><b>Protected attributes:</b>
 </p>
-<ul><li> <i>bool run_st;</i> — The sign "Run".</li></ul>
+<ul><li> <i>bool runSt;</i> — The sign "Running".</li></ul>
 <h3><span class="mw-headline" id="The_object_of_the_output_transports_.28TTransportOut.29"><span class="mw-headline-number">6.4</span> <span id="TTransportOut" title="#TTransportOut">The object of the output transports (TTransportOut)</span></span></h3>
 <table class="wikitable">
 
@@ -1525,11 +1599,13 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>string dscr( );</i> — Transport description.</li>
 <li> <i>string addr( ) const;</i> — Transport address.</li>
 <li> <i>virtual string timings( );</i> — Transport timeouts.</li>
+<li> <i>virtual unsigned short attempts( );</i> Connection attempts.</li>
 <li> <i>int prm1( );</i> — First backup parameter.</li>
 <li> <i>int prm2( );</i> — Second backup parameter.</li>
 <li> <i>bool toStart( );</i> — Sign "To start".</li>
 <li> <i>bool startStat( );</i> — Status "Running".</li>
 <li> <i>time_t startTm( );</i> — Status "Time of starting/connection".</li>
+<li> <i>int64_t lstReqTm( );</i> — Status "Last request time".</li>
 <li> <i>virtual string getStatus( );</i> — Getting the status of the transport.</li>
 <li> <i>string DB( );</i> — Transport's DB address.</li>
 <li> <i>string tbl( );</i> — Transport's DB table.</li>
@@ -1538,6 +1614,7 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>void setDscr( const string &amp;idscr );</i> — Setting the description of transport.</li>
 <li> <i>void setAddr( const string &amp;addr );</i> — Setting the address of transport.</li>
 <li> <i>virtual void setTimings( const string &amp;vl );</i> — Setting the transport timeouts.</li>
+<li> <i>virtual void setAttempts( unsigned short vl );</i> — Setting the connection attempts.</li>
 <li> <i>void setPrm1( int vl );</i> — Setting of the first backup parameter.</li>
 <li> <i>void setPrm2( int vl );</i> — Setting of the second backup parameter.</li>
 <li> <i>void setToStart( bool val );</i> — Setting of the sign "To start".</li>
@@ -1553,7 +1630,8 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>ResMtx &amp;reqRes( );</i> — The requesting resource, needs to global lock into protocols with fragments receiving.</li></ul>
 <p><b>Protected attributes:</b>
 </p>
-<ul><li> <i>bool run_st;</i> — The sign "Running".</li></ul>
+<ul><li> <i>bool runSt;</i> — The sign "Running".</li>
+<li> <i>int64_t mLstReqTm;</i> — The last request time.</li></ul>
 <h2><span class="mw-headline" id="Subsystem_.22Communication_interfaces.27_protocols.22_.28TProtocolS.29"><span class="mw-headline-number">7</span> <span id="TProtocolS" title="#TProtocolS">Subsystem "Communication interfaces' protocols" (TProtocolS)</span></span></h2>
 <p>Subsystem "Communication interfaces' protocols" is presented by the TProtocolS object, which contains modular objects of the separate protocols TProtocol on the a subsystem's level. Each protocol contains objects of the opened sessions of the input protocols TProtocolIn.
 </p><p>TProtocolS object provides an access to the both: the input and the output protocols of the individual types of transport protocols. The inner side of output protocol based on the steaming principle with the individual structure of the stream for each implementation of the protocol.
@@ -1632,10 +1710,11 @@ Requests parameters (enum — GetOpts):
 <ul><li> <i>int subVer( );</i> — Subsystem's version.</li>
 <li> <i>void subStart( );</i> — Start of the subsystem.</li>
 <li> <i>void subStop( );</i> — Stop of the subsystem.</li>
-<li> <i>AutoHD&lt;TUI&gt; at( const string &amp;name ) const;</i> — Connecting to the user's interface module.</li>
-<li> <i>static string icoGet( const string &amp;inm, string *tp = NULL, bool retPath = false );</i> — Download image of the icon <i>inm</i> from standard directories or return path, on <i>retPath</i>, to allowed icon. Detecting icons for file extensions "png", "gif", "jpg", "jpeg", which return into <i>tp</i>.</li>
-<li> <i>static string docGet( const string &amp;inm, string *tp = NULL, unsigned opt = 0 );</i> — Download document <i>inm</i> from standard directories or return path, on <i>retPath</i>, to allowed document. Detecting documents for file extensions "pdf", "html", "odt", which return into <i>tp</i>.</li>
-<li> <i>static string mimeGet( const string &amp;inm, const string &amp;fDt, const string &amp;orig = "" );</i> — Get file's mime type in view <b>{group}/{type}</b> for the file name <i>inm</i>, its content <i>fDt</i> and the original hint <i>orig</i>.</li></ul>
+<li> <i>AutoHD&lt;TUI&gt; at( const string &amp;name ) const;</i> — Connects to the user's interface module.</li>
+<li> <i>static string icoGet( const string &amp;inm, string *tp = NULL, bool retPath = false );</i> — Downloads image of the icon <i>inm</i> from standard directories or return path, on <i>retPath</i>, to allowed icon. Detecting icons for file extensions "png", "gif", "jpg", "jpeg", which return into <i>tp</i>.</li>
+<li> <i>static string docGet( const string &amp;inm, string *tp = NULL, unsigned opt = 0 );</i> — Downloads document <i>inm</i> from standard directories or return path, on <i>retPath</i>, to allowed document. Detecting documents for file extensions "pdf", "html", "odt", which return into <i>tp</i>.</li>
+<li> <i>static string docKeyGet( const string &amp;itxt );</i> — Gets the inline documentation key from the text <i>itxt</i> of a configuration field, often it is the node description and the key "DOC" in it.</li>
+<li> <i>static string mimeGet( const string &amp;inm, const string &amp;fDt, const string &amp;orig = "" );</i> — Gets file's mime type in view <b>{group}/{type}</b> for the file name <i>inm</i>, its content <i>fDt</i> and the original hint <i>orig</i>.</li></ul>
 <h3><span class="mw-headline" id="The_modular_object_of_the_user_interface_.28TUI.29"><span class="mw-headline-number">8.2</span> <span id="TUI" title="#TUI">The modular object of the user interface (TUI)</span></span></h3>
 <table class="wikitable">
 
@@ -1649,7 +1728,7 @@ Requests parameters (enum — GetOpts):
 </td></tr></table>
 <p><b>Protected attributes:</b>
 </p>
-<ul><li> <i>bool run_st;</i> — The sign "Running".</li></ul>
+<ul><li> <i>bool runSt;</i> — The sign "Running".</li></ul>
 <h2><span class="mw-headline" id="Subsystem_.22Specials.22_.28TSpecialS.29"><span class="mw-headline-number">9</span> Subsystem "Specials" (TSpecialS)</span></h2>
 <p>The subsystem "Specials" is presented by TSpecialS object, which contains modular objects of TSpecial special on the subsystem's level.
 </p>
@@ -1676,7 +1755,7 @@ Requests parameters (enum — GetOpts):
 </td></tr></table>
 <p><b>Protected attributes:</b>
 </p>
-<ul><li> <i>bool run_st;</i> — The sign "Running".</li></ul>
+<ul><li> <i>bool runSt;</i> — The sign "Running".</li></ul>
 <h2><span class="mw-headline" id="Subsystem_.22Security.22_.28TSe.D1.81urity.29"><span class="mw-headline-number">10</span> Subsystem "Security" (TSeсurity)</span></h2>
 <p>Security subsystem is presented by an object TSesurity, which contains group objects of TGroup and users TUser.
 </p><p>User object TUser contains user information and checks the authenticity of the user in accordance with the specified password.
@@ -1698,12 +1777,12 @@ Requests parameters (enum — GetOpts):
 <li> <i>void usrList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the users <i>list</i>.</li>
 <li> <i>void usrGrpList( const string &amp;name, vector&lt;string&gt; &amp;list );</i> — The list of the users' groups <i>list</i>, in which the user <i>name</i> is included.</li>
 <li> <i>bool usrPresent( const string &amp;name ) const;</i> — Check fro the presence of the specified user <i>name</i>.</li>
-<li> <i>int usrAdd( const string &amp;name, const string &amp;db = "*.*" );</i> — Addition of the user <i>name</i> with the saving to the DB <i>db</i>.</li>
+<li> <i>string usrAdd( const string &amp;name, const string &amp;db = "*.*" );</i> — Addition of the user <i>name</i> with the saving to the DB <i>db</i>. Returns the end created name of the user.</li>
 <li> <i>void usrDel( const string &amp;name, bool complete = false );</i> — Deleting of the user <i>name</i> with the possibility of the completely deleting <i>complete</i>.</li>
 <li> <i>AutoHD&lt;TUser&gt; usrAt( const string &amp;name ) const;</i> — Attaching of the user <i>name</i>.</li>
 <li> <i>void grpList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the users' groups <i>list</i>.</li>
 <li> <i>bool grpPresent( const string &amp;name ) const;</i> — Check fro the presence of the specified users' group <i>name</i>.</li>
-<li> <i>int grpAdd( const string &amp;name, const string &amp;db = "*.*" );</i> — Addition of the users' group <i>name</i> with the saving to the DB <i>db</i>.</li>
+<li> <i>string grpAdd( const string &amp;name, const string &amp;db = "*.*" );</i> — Addition of the users' group <i>name</i> with the saving to the DB <i>db</i>. Returns the end created name of the user group.</li>
 <li> <i>void grpDel( const string &amp;name, bool complete = false );</i> — Deleting of the users' group <i>name</i> with the possibility of the completely deleting <i>complete</i>.</li>
 <li> <i>AutoHD&lt;TGroup&gt; grpAt( const string &amp;name ) const;</i> — Connection to the users' group <i>name</i>.</li></ul>
 <h3><span class="mw-headline" id="The_user.27s_object_.28TUser.29"><span class="mw-headline-number">10.2</span> <span id="TUser" title="#TUser">The user's object (TUser)</span></span></h3>
@@ -1833,8 +1912,8 @@ The structure of information about the shared library (struct – TModSchedul::S
 <li> <i>int ioId( const string &amp;id ) const;</i> — Getting the index of the function's parameter <i>id</i>.</li>
 <li> <i>int ioSize( ) const;</i> — The quantity of the function's parameters.</li>
 <li> <i>IO *io( int id ) const;</i> — Getting the function's parameter by the index <i>id</i>.</li>
-<li> <i>void ioAdd( IO *io );</i> — Addition of the function's parameter <i>io</i>.</li>
-<li> <i>int ioIns( IO *io, int pos );</i> — Insert of the function's parameter <i>io</i> into the position <i>pos</i>. Returns the actual position of the new parameter.</li>
+<li> <i>int ioAdd( IO *io );</i> — Addition of the function's parameter <i>io</i>. Returns the actual position of the new IO.</li>
+<li> <i>int ioIns( IO *io, int pos );</i> — Insert of the function's parameter <i>io</i> into the position <i>pos</i>. Returns the actual position of the new IO.</li>
 <li> <i>void ioDel( int pos );</i> — Deleting the function's parameter in the position <i>pos</i>.</li>
 <li> <i>void ioMove( int pos, int to );</i> — Moving the function's parameter from the position <i>pos</i> to the position <i>to</i>.</li>
 <li> <i>virtual void calc( TValFunc *val );</i> — The calculation of the function's algorithm of the specified values <i>val</i>.</li>
@@ -1885,22 +1964,21 @@ Parameter's type (enum — IO::Type):
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>TValFunc( const string &amp;iname = "", TFunction *ifunc = NULL, bool iblk = true );</i> — Initializing constructor.</li>
+<li> <i>bool blk( );</i> — The sign — "Blocking of the parameters' changes of the function".</li>
+<li> <i>bool mdfChk( );</i> — The sign — "To check attributes to modify".</li>
+<li> <i>bool isChangedProg( bool clear = false );</i> — The sign — "The program changing" with it clearing by <i>clear</i>.</li>
 <li> <i>string user( );</i> — User on whose behalf the function is executed.</li>
 <li> <i>string lang( );</i> — Language on whose the function is executed.</li>
 <li> <i>const string &amp;vfName( );</i> — Name of the values' object.</li>
-<li> <i>bool blk( );</i> — The sign - "Blocking of the parameters' changes of the function".</li>
-<li> <i>bool dimens( );</i> — The sign - "To measure the computation time".</li>
-<li> <i>bool mdfChk( );</i> — The sign - "To check attributes to modify".</li>
 <li> <i>void setUser( const string &amp;vl );</i> — Set the user on whose behalf the function will be executed.</li>
 <li> <i>void setLang( const string &amp;vl );</i> — Set the language on whose the function will be executed.</li>
 <li> <i>void setVfName( const string &amp;nm );</i> — Set the name of the values' object to <i>nm</i>.</li>
-<li> <i>void setDimens( bool set )</i> — Set/unset <i>set</i> of the sign - "To measure the computation time".</li>
 <li> <i>void setMdfChk( bool set );</i> — Set/unset <i>set</i> of the sign - "To check attributes to modify".</li>
 <li> <i>void ioList( vector&lt;string&gt; &amp;list );</i> — The list of the function's parameters <i>list</i>.</li>
 <li> <i>int ioId( const string &amp;id );</i> — Getting the parameter's index <i>id</i>.</li>
-<li> <i>int ioSize( );</i> — The whole quantity of the parameters.</li>
+<li> <i>int ioSize( ) const;</i> — The whole quantity of the parameters.</li>
 <li> <i>IO::Type ioType( unsigned id );</i> — Parameter's type <i>id</i>.</li>
-<li> <i>unsigned ioFlg( unsigned id );</i> — Parameter's flags <i>id</i>.</li>
+<li> <i>unsigned ioFlg( unsigned id ) const;</i> — Parameter's flags <i>id</i>.</li>
 <li> <i>bool ioHide( unsigned id );</i> — Parameter's sign <i>id</i> - "Hide".</li>
 <li> <i>bool ioMdf( unsigned id );</i> — Parameter's sign <i>id</i> - "Modified".</li>
 <li> <i>TVariant get( unsigned id );</i> — Get the value of the parameter <i>id</i>.</li>
@@ -1922,6 +2000,7 @@ Parameter's type (enum — IO::Type):
 <li> <i>void setFunc( TFunction *func, bool att_det = true );</i> — To attach with the specified function <i>func</i>.</li>
 <li> <i>virtual void preIOCfgChange( );</i> — Is called before the configuration changes.</li>
 <li> <i>virtual void postIOCfgChange( );</i> — Is called after the configuration changes.</li>
+<li> <i>virtual void progChange( );</i> —  Is called at the program changing.</li>
 <li> <i>TValFunc *ctxGet( int key );</i> — Get context for key <i>key</i>.</li>
 <li> <i>void ctxSet( int key, TValFunc *val );</i> — Set context for key <i>key</i>.</li>
 <li> <i>void ctxClear( );</i> — External functions call context clear.</li></ul>
@@ -1956,6 +2035,7 @@ Parameter's type (enum — IO::Type):
 <li> <i>TCfg *at( const string &amp;n_val, bool noExpt = false ) const;</i> — Getting of the element's pointer <i>n_val</i>. If the element is absent an exception is generated or the null pointer is returned when setting <i>noExpt</i>.</li>
 <li> <i>void cfgViewAll( bool val = true );</i> — Set/unset the sign of the visibility for all the elements.</li>
 <li> <i>void cfgKeyUseAll( bool val );</i> — Set/unset the sign of the using the key for all the elements.</li>
+<li> <i>void cfgToDefault( );</i> — Setting all not key and view fields to the default value.</li>
 <li> <i>TElem &amp;elem( );</i> — The using structure.</li>
 <li> <i>void setElem( TElem *Elements, bool first = false );</i> — Setting the structure in <i>Elements</i>.</li>
 <li> <i>void cntrCmdMake( XMLNode *fld, const string &amp;path, int pos, const string &amp;user = "root", const string &amp;grp = "root", int perm = 0664 );</i> — Formation of the information description of elements of the configuration for the management interface of OpenSCADA.</li>
@@ -1963,7 +2043,7 @@ Parameter's type (enum — IO::Type):
 <li> <i>bool incomplTblStruct( );</i> — The DB struct incomplete flag.</li>
 <li> <i>void setIncmplTblStrct( bool vl );</i> — Setting the DB struct incomplete flag to <i>vl</i>.</li>
 <li> <i>bool reqKeys( );</i> — The sign "Requests key", mark for using the request keys by the group items.</li>
-<li> <i>TVariant objFunc( const string &amp;id, vector&lt;TVariant&gt; &amp;prms, const string &amp;user );</i> — The object's functions for access to configuration.</li></ul>
+<li> <i>TVariant objFunc( const string &amp;id, vector&lt;TVariant&gt; &amp;prms, const string &amp;user, int perm, const string &amp;owner );</i> — User API object functions of accessing to the configuration with the permition control.</li></ul>
 <p><b>Protected methods:</b>
 </p>
 <ul><li> <i>virtual bool cfgChange( TCfg &amp;co, const TVariant &amp;pc );</i> — Is called in the case of changing the contents of the configuration element.</li></ul>
@@ -2004,14 +2084,15 @@ Additional flags to <i>TFld</i> (enum — TCfg::AttrFlg):
 <li> <i>void setNoTransl( bool vl );</i> — Setting of the sign "No translation".</li>
 <li> <i>void setReqKey( bool vl );</i> — Setting of the sign "Requests key".</li>
 <li> <i>void setExtVal( bool vw );</i> — Setting of the sign "Extended value".</li>
+<li> <i>void toDefault( bool notSetType = false );</i> — Setting the field value to the default one, and without setting the field type at <i>notSetType</i>.</li>
 <li> <i>TFld &amp;fld( ) const;</i> —  Configuration of the cell.</li>
-<li> <i>string getSEL( );</i> — Get the value of the selective type.</li>
+<li> <i>string getSEL( );</i> — Get the value of the selectable type.</li>
 <li> <i>string getS( ) const; string getS( uint8_t RqFlg );</i> — Get the value of the string type with the request flags <i>RqFlg</i>.</li>
 <li> <i>const char *getSd( );</i> — Get the direct access to the string type value.</li>
 <li> <i>double &amp;getRd( );</i> — Get the direct access to the real type value.</li>
 <li> <i>int64_t &amp;getId( );</i> — Get the direct access to the integer type value.</li>
 <li> <i>char &amp;getBd( );</i> — Get the direct access to the boolean type value.</li>
-<li> <i>void setSEL( const string &amp;val, uint8_t RqFlg = 0 );</i> — Set the value of the selective type to the <i>val</i> with the request flags <i>RqFlg</i>.</li>
+<li> <i>void setSEL( const string &amp;val, uint8_t RqFlg = 0 );</i> — Set the value of the selectable type to the <i>val</i> with the request flags <i>RqFlg</i>.</li>
 <li> <i>void setS( const string &amp;val ); TCfg &amp;operator=( const string &amp;vl ); TCfg &amp;operator=( const char *vl ); void setS( const string &amp;val, uint8_t RqFlg );</i> — Set the value of the string type to the <i>val</i> with the request flags <i>RqFlg</i>.</li>
 <li> <i>void setR( double val ); TCfg &amp;operator=( double vl ); void setR( double val, uint8_t RqFlg );</i> — Set the value of the real type to the <i>val</i> with the request flags <i>RqFlg</i>.</li>
 <li> <i>void setI( int64_t val ); TCfg &amp;operator=( int64_t vl ); void setI( int64_t val, uint8_t RqFlg );</i> — Set the value of the integer type to the <i>val</i> with the request flags <i>RqFlg</i>.</li>
@@ -2031,12 +2112,12 @@ Additional flags to <i>TFld</i> (enum — TCfg::AttrFlg):
 <li> <i>TElem &amp;operator=( const TElem &amp;src );</i> — Copying from <i>src</i>.</li>
 <li> <i>string &amp;elName( );</i> — The name if the structure.</li>
 <li> <i>void fldList( vector&lt;string&gt; &amp;list );</i> — The cell's list in the structure <i>list</i>.</li>
-<li> <i>unsigned fldSize( );</i> — The number of cells in the structure.</li>
+<li> <i>unsigned fldSize( ) const;</i> — The number of cells in the structure.</li>
 <li> <i>unsigned fldId( const string &amp;name, bool noex = false );</i> — Getting the index of the cell from its identifier <i>name</i>. Set <i>noex</i> on no the cell present caused return overall cells number, without exception generation.</li>
 <li> <i>bool fldPresent( const string &amp;name );</i> — Check for the presence of the specified cell <i>name</i>.</li>
 <li> <i>int fldAdd( TFld *fld, int id = -1 );</i> — Addition/insert of the cell <i>fld</i> to the position <i>id</i> (-1 — insert to the end).</li>
 <li> <i>void fldDel( unsigned int id );</i> — Deleting of the cell  <i>id</i>.</li>
-<li> <i>TFld &amp;fldAt( unsigned int id );</i> — Getting of the cell <i>id</i>.</li>
+<li> <i>TFld &amp;fldAt( unsigned int id ) const;</i> — Getting of the cell <i>id</i>.</li>
 <li> <i>void fldClear( );</i> — Removing all cells.</li>
 <li> <i>void valAtt( TValElem *cnt );</i> — Is called automatically when the structure is attached to the data storage <i>cnt</i>.</li>
 <li> <i>void valDet( TValElem *cnt );</i> — Is called automatically when the structure is detached from the data storage <i>cnt</i>.</li>
@@ -2059,7 +2140,7 @@ Cell's type (enum – TFld::Type):
 <p>Cell's flags (enum — TFld::AttrFlg):
 </p>
 <ul><li> <i>TFld::NoFlag</i>(0x00) — No flags;</li>
-<li> <i>TFld::Selected</i>(0x01) — selection mode from the available values, the selective type;</li>
+<li> <i>TFld::Selectable</i>(0x01) — selection mode from the available values, the selectable type;</li>
 <li> <i>TFld::SelfFld</i>(0x02) — To create the own copy of this cell;</li>
 <li> <i>TFld::NoWrite</i>(0x04) — unwritable;</li>
 <li> <i>TFld::HexDec</i>(0x08) — integer type: hexadecimal notation;</li>
@@ -2082,30 +2163,30 @@ Cell's type (enum – TFld::Type):
 <li> <i>IO::Type typeIO( ) const;</i> — Cell's type in IO::Type.</li>
 <li> <i>unsigned flg( ) const;</i> — Cell's flag.</li>
 <li> <i>const string &amp;def( ) const;</i> — Default value.</li>
-<li> <i>string values( ) const;</i> — Working range of the value or a list of possible values for the selective type (as — "vl1;vl2;vl3").</li>
-<li> <i>string selNames( ) const;</i> — List of names of values for the selective type (as — "Value 1;Value 2;Value 3").</li>
+<li> <i>string values( ) const;</i> — Working range of the value or a list of possible values for the selectable type (as — "vl1;vl2;vl3").</li>
+<li> <i>string selNames( ) const;</i> — List of names of values for the selectable type (as — "Value 1;Value 2;Value 3").</li>
 <li> <i>const string &amp;reserve( ) const;</i> — Reserve parameter.</li>
 <li> <i>void setDescr( const string &amp;dscr );</i> — Set the descrition to the <i>dscr</i>.</li>
 <li> <i>void setLen( int vl );</i> — Set the cell's size to the <i>vl</i>.</li>
 <li> <i>void setDec( int vl );</i> — Set the fraction part of the real to the <i>vl</i>.</li>
 <li> <i>void setDef( const string &amp;def );</i> — Set the default value to the <i>def</i>.</li>
 <li> <i>void setFlg( unsigned flg );</i> — Set the flags to <i>flg</i>.</li>
-<li> <i>void setValues( const string &amp;vls );</i> — Set the working range of value or the list of possible values for the selective type (as — "vl1;vl2;vl3") to the <i>vls</i>.</li>
-<li> <i>void setSelNames( const string &amp;slnms );</i> — Set the list of values' names for the selective type (as — "Value 1;Value 2;Value 3") to the <i>slnms</i>.</li>
+<li> <i>void setValues( const string &amp;vls );</i> — Set the working range of value or the list of possible values for the selectable type (as — "vl1;vl2;vl3") to the <i>vls</i>.</li>
+<li> <i>void setSelNames( const string &amp;slnms );</i> — Set the list of values' names for the selectable type (as — "Value 1;Value 2;Value 3") to the <i>slnms</i>.</li>
 <li> <i>void setReserve( const string &amp;ires );</i> — Set of the reserve parameter to <i>res</i>.</li>
 <li> <i>const vector&lt;string&gt; &amp;selValS() const;</i> — List of values' variants for the string type.</li>
 <li> <i>const vector&lt;int&gt;    &amp;selValI() const;</i> — List of values' variants for the integer type.</li>
 <li> <i>const vector&lt;double&gt; &amp;selValR() const;</i> — List of values' variants for the real type</li>
 <li> <i>const vector&lt;bool&gt;   &amp;selValB() const;</i> — List of values' variants for the boolean type</li>
 <li> <i>const vector&lt;string&gt; &amp;selNm() const;</i> — List of the names of values' variants.</li>
-<li> <i>string selVl2Nm( const string &amp;val );</i> — Get the selected name from the value <i>val</i> of the string type.</li>
-<li> <i>string selVl2Nm( int64_t val );</i> — Get the selected name from the value <i>val</i> of the integer type.</li>
-<li> <i>string selVl2Nm( double val );</i> — Get the selected name from the value <i>val</i> of the real type.</li>
-<li> <i>string selVl2Nm( bool val ); string selVl2Nm( char val );</i> — Get the selected name from the value <i>val</i>of the boolean type.</li>
-<li> <i>string selNm2VlS( const string &amp;name );</i> — Get the value of string type from the selected name <i>name</i>.</li>
-<li> <i>int64_t selNm2VlI( const string &amp;name );</i> — Get the value of integer type from the selected name <i>name</i>.</li>
-<li> <i>double selNm2VlR( const string &amp;name );</i> — Get the value of real type from the selected name <i>name</i>.</li>
-<li> <i>bool selNm2VlB( const string &amp;name );</i> — Get the value of boolean type from the selected name <i>name</i>.</li>
+<li> <i>string selVl2Nm( const string &amp;val );</i> — Get the selectable name from the value <i>val</i> of the string type.</li>
+<li> <i>string selVl2Nm( int64_t val );</i> — Get the selectable name from the value <i>val</i> of the integer type.</li>
+<li> <i>string selVl2Nm( double val );</i> — Get the selectable name from the value <i>val</i> of the real type.</li>
+<li> <i>string selVl2Nm( bool val ); string selVl2Nm( char val );</i> — Get the selectable name from the value <i>val</i>of the Boolean type.</li>
+<li> <i>string selNm2VlS( const string &amp;name );</i> — Get the value of string type from the selectable name <i>name</i>.</li>
+<li> <i>int64_t selNm2VlI( const string &amp;name );</i> — Get the value of integer type from the selectable name <i>name</i>.</li>
+<li> <i>double selNm2VlR( const string &amp;name );</i> — Get the value of real type from the selectable name <i>name</i>.</li>
+<li> <i>bool selNm2VlB( const string &amp;name );</i> — Get the value of boolean type from the selectable name <i>name</i>.</li>
 <li> <i>XMLNode *cntrCmdMake( XMLNode *opt, const string &amp;path, int pos, const string &amp;user = "root", const string &amp;grp = "root", int perm = 0664 );</i> — Create a form element in accordance with the parameters of the cell.</li></ul>
 <h3><span class="mw-headline" id="The_object_which_preacts_about_changing_of_the_structure_.28TValElem.29"><span class="mw-headline-number">13.5</span> <span id="TValElem" title="#TValElem">The object which preacts about changing of the structure (TValElem)</span></span></h3>
 <table class="wikitable">
@@ -2426,7 +2507,7 @@ Where:
 <tr>
 <td>String's addition</td>
 <td>
-<p><i>Request:</i> command "add": <i>&lt;add path="/fld_teg" user="user" id="tst"&gt;Test&lt;/add&gt;</i> 
+<p><i>Request:</i> command "add": <i>&lt;add path="/fld_teg" user="user" id="tst"&gt;Test&lt;/add&gt;</i>
 </p>
 <dl><dd>To add the string with ID "tst" and value "Test". If the list is not indexed, then the id attribute is absent.<br /></dd></dl>
 <p><i>Result:</i> confirmation or an error message.
@@ -2435,7 +2516,7 @@ Where:
 <tr>
 <td>Insert the string</td>
 <td>
-<p><i>Request:</i> command "ins": <i><ins id="tst">Test</ins></i>
+<p><i>Request:</i> command "ins": <i>&lt;ins path="/fld_teg" user="user" pos="3" p_id="tst1" id="tst"&gt;Test&lt;/ins&gt;</i>
 </p>
 <dl><dd>To insert the string with the ID "tst" and value "Test" in position 3 with the string "tst1". In the case of the index list p_id attribute contains the identifier, else — the text of the string. If the list is not indexed, then the ID attribute is absent.<br /></dd></dl>
 <p><i>Result:</i> confirmation or an error message.
@@ -2444,7 +2525,7 @@ Where:
 <tr>
 <td>Deleting of the string</td>
 <td>
-<p><i>Request:</i> command "del": <i><del id="tst">Test</del></i>
+<p><i>Request:</i> command "del": <i>&lt;del path="/fld_teg" user="user" pos="3" id="tst"&gt;Test&lt;/del&gt;</i>
 </p>
 <dl><dd>To delete the string with ID "tst" and value "Test" from the position 3. If the list is not indexed, then the ID attribute is absent.<br /></dd></dl>
 <p><i>Result:</i> confirmation or an error message.
@@ -2513,14 +2594,14 @@ Where:
 <dd>&lt;/get&gt;</dd></dl>
 </td></tr>
 <tr>
-<td>Adding of the string</td>
+<td> Adding of the row </td>
 <td>
 <p><i>Request:</i> command "add": <i>&lt;add path="/fld_teg" user="user"/&gt;</i><br />
 <i>Result:</i> confirmation or an error message.
 </p>
 </td></tr>
 <tr>
-<td>Insert of the string</td>
+<td> Inserting of the row </td>
 <td>
 <p><i>Request:</i> command "ins": <i>&lt;ins path="/fld_teg" user="user" row="3"/&gt;</i>
 </p>
@@ -2529,7 +2610,7 @@ Where:
 </p>
 </td></tr>
 <tr>
-<td>Deleting of the string</td>
+<td> Deleting of the row </td>
 <td>
 <p><i>Request:</i> command "del": <i>&lt;del path="/fld_teg" user="user" row="3"/&gt;</i> or <i>&lt;del path="/fld_teg" user="user" key_id="Test"/&gt;</i> for the key mode
 </p>
@@ -2538,7 +2619,7 @@ Where:
 </p>
 </td></tr>
 <tr>
-<td>Moving of the string</td>
+<td> Moving of the row </td>
 <td>
 <p><i>Request:</i> command "move": <i>&lt;move path="/fld_teg" user="user" row="3" to="5"/&gt;</i>
 </p>
@@ -2547,7 +2628,7 @@ Where:
 </p>
 </td></tr>
 <tr>
-<td>Change the cell</td>
+<td> Changing of the row </td>
 <td>
 <p><i>Request:</i> command "set": <i>&lt;set path="/fld_teg" user="user" row="3" col="id"&gt;Test&lt;/set&gt;</i> or <i>&lt;set path="/fld_teg" user="user" key_id="Test" col="id"&gt;Test1&lt;/set&gt;</i> for the key mode
 </p>
@@ -2856,8 +2937,8 @@ Named rights of access to control elements (define):
 <li> <i>int8_t	grpSize( );</i> — Number of the containers with the child nodes.</li>
 <li> <i>int8_t	grpId( const string &amp;sid );</i> — Getting the index of the group by its ID.</li>
 <li> <i>virtual AutoHD&lt;TCntrNode&gt; chldAt( int8_t igr, const string &amp;name, const string &amp;user = "" ) const;</i> — Attachment to the child node <i>name</i> of the container <i>gr</i> of the user <i>user</i>.</li>
-<li> <i>void chldList( int8_t igr, vector&lt;string&gt; &amp;list, bool noex = false ) const;</i> — The list of the child nodes <i>list</i> in the specified container <i>gr</i>.</li>
-<li> <i>bool chldPresent( int8_t igr, const string &amp;name ) const;</i> — Check for the presence of the specified child node <i>name</i> in the container <i>gr</i>.</li></ul>
+<li> <i>virtual void chldList( int8_t igr, vector&lt;string&gt; &amp;list, bool noex = false ) const;</i> — The list of the child nodes <i>list</i> in the specified container <i>gr</i>.</li>
+<li> <i>virtual bool chldPresent( int8_t igr, const string &amp;name ) const;</i> — Check for the presence of the specified child node <i>name</i> in the container <i>gr</i>.</li></ul>
 <p><b>Protected methods:</b>
 </p>
 <ul><li> <i>virtual void cntrCmdProc( XMLNode *req );</i> — Function of requests' processing of the control interface. It must be redefined by the child.</li>
@@ -2869,18 +2950,96 @@ Named rights of access to control elements (define):
 <li> <i>GrpEl	&amp;grpAt( int8_t id );</i> — Access to the structure of the group.</li>
 <li> <i>unsigned grpAdd( const string &amp;id, bool ordered = false );</i> — Adding the container of the child nodes with the prefix <i>id</i> and the possibility of an orderly storage <i>ordered</i>. Returns the ID of the new container.</li>
 <li> <i>void grpDel( int8_t id );</i> — Deleting the container of the child nodes <i>id</i>.</li>
-<li> <i>virtual void chldAdd( int8_t igr, TCntrNode *node, int pos = -1 );</i> — Adding the child node <i>node</i> to the container <i>gr</i> and position <i>pos</i>.</li>
+<li> <i>virtual string chldAdd( int8_t igr, TCntrNode *node, int pos = -1 );</i> — Adds the child node <i>node</i> to the container <i>gr</i> and position <i>pos</i>. Returns the actual node identifier or name, after it cleaning and shrinking.</li>
 <li> <i>void chldDel( int8_t igr, const string &amp;name, long tm = -1, int flag = 0 );</i> — Deleting the child node <i>name</i> from the container <i>gr</i> with the flag <i>flag</i>.</li>
 <li> <i>virtual void preEnable( int flag );</i> — The connection preact. It is called before the actual connection.</li>
 <li> <i>virtual void postEnable( int flag );</i> — The connection preact. It is called after the actual connection.</li>
 <li> <i>virtual void preDisable( int flag );</i> — The disconnection preact. It is called before the actual disconnection.</li>
 <li> <i>virtual void postDisable( int flag );</i> — The disconnection preact. It is called before the actual disconnection (before deleting).</li>
-<li> <i>virtual void load_( ); virtual void load_( TConfig *cfg );</i> — The function of the loading child node calling for ready configuration <i>cfg</i>.</li>
+<li> <i>virtual void load_( ); virtual void load_( TConfig *cfg );</i> — The function of the node specific loading, for ready configuration <i>cfg</i> also.</li>
+<li> <i>virtual void load__( );</i> — The function of the node specific loading in the loading end.</li>
 <li> <i>virtual void save_( );</i> — The function of the saving child node calling.</li></ul>
-<h2><span class="mw-headline" id="XML_in_OpenSCADA_.28XMLNode.29"><span class="mw-headline-number">15</span> XML in OpenSCADA (XMLNode)</span></h2>
-<p>XML in the OpenSACDA system is represented by the object of the XML-tag — XMLNode.
+<h2><span class="mw-headline" id="Resources_locking_in_OpenSCADA_.28Res.2C_ResAlloc.2C_ResMtx.2C_MtxAlloc.2C_AutoHD.29"><span class="mw-headline-number">15</span> Resources locking in OpenSCADA (Res, ResAlloc, ResMtx, MtxAlloc, AutoHD)</span></h2>
+<p>Most of the units and subsystems of OpenSCADA are dynamic, ie they allow the creation/deletion/configuration while the system is working. Taking into account the multi-threading of the system, this functionality imposes stringent requirements for synchronization of threads. For synchronization in the system the resources are used, functions of which are localized in the objects "Res" and "ResAlloc". Object "Res" provides storage of the resource, providing the functions of capture/release for the read and write. In object "ResAlloc" the automatic release of the resource functions are implemented. Automatic resource involves the creation of a local resource object with its automatic release at fracture (in the destructor). Using of automatic resource makes the work with resources when using the exceptions much easier.
+</p><p>Any dynamic system object is inherited from "TCntrNode" object, which contains a mechanism to connect via the "AutoHD" template. The main function of the template is to store the link to the object and the capture of the resource, excluding the deleting of the object at the time of use. Template supports copying the resource and its release in case of destruction of the template object. For clarity of the access to the objects generated by "TCntrNode" the "AutoHD" template supports casting, based on the dynamic cast.
 </p>
-<h3><span class="mw-headline" id="XML-tag_.28XMLNode.29"><span class="mw-headline-number">15.1</span> <span id="XMLNode" title="#XMLNode">XML-tag (XMLNode)</span></span></h3>
+<h3><span class="mw-headline" id="Resource_R.2FW_lock_object_.28ResRW.29"><span class="mw-headline-number">15.1</span> <span id="ResRW" title="#ResRW">Resource R/W lock object (ResRW)</span></span></h3>
+<p><b>Public methods:</b>
+</p>
+<ul><li> <i>ResRW( );</i> — Initialization of the resource.</li>
+<li> <i>static void resRequestW( long tm = 0 );</i> — Request the resource for writing/modification with wait timeout <i>tm</i> (in milliseconds).</li>
+<li> <i>bool resTryW( );</i> — Request try the resource for writing/modification. On success return "true" else "false".</li>
+<li> <i>static void resRequestR( long tm = 0 );</i> — Request the resource for reading with wait timeout <i>tm</i> (in milliseconds).</li>
+<li> <i>bool resTryR( );</i> — Request try the resource for reading. On success return "true" else "false".</li>
+<li> <i>static void resRelease( );</i> — Release of the resource.</li></ul>
+<h3><span class="mw-headline" id="Automatic_resource_RW_unlock_object_.28ResAlloc.29"><span class="mw-headline-number">15.2</span> <span id="ResAlloc" title="#ResAlloc">Automatic resource RW unlock object (ResAlloc)</span></span></h3>
+<p><b>Public methods:</b>
+</p>
+<ul><li> <i>ResAlloc( ResRW &amp;rid );</i> — Initialization of the automatically released resource for the previously selected identifier  <i>rid</i>.</li>
+<li> <i>ResAlloc( ResRW &amp;rid, bool write, long tm = 0 );</i> — Initialization of the automatically released resource for the previously selected identifier <i>rid</i>. With the specification of the resource type <i>write</i> (read/write).</li>
+<li> <i>void request( bool write = false, long tm = 0 ); void lock( bool write = false, unsigned short tm = 0 );</i> — Request of the resource in the specified mode <i>write</i> (read/write).</li>
+<li> <i>void release( ); void unlock( );</i> — Release of the resource.</li></ul>
+<h3><span class="mw-headline" id="Template_.28AutoHD.29"><span class="mw-headline-number">15.3</span> <span id="AutoHD" title="#AutoHD">Template (AutoHD)</span></span></h3>
+<p><b>Public methods:</b>
+</p>
+<ul><li> <i>AutoHD( );</i> — Initializing without linkage to the object.</li>
+<li> <i>AutoHD( ORes *node, const string &amp;who = "" );</i> — Initialization with the linkage to the object <i>node</i>. The object must contain the function AHDConnect() and AHDDisConnect().</li>
+<li> <i>AutoHD( const AutoHD &amp;hd );</i> — Copyng constructor.</li>
+<li> <i>template &lt;class ORes1&gt; AutoHD( const AutoHD&lt;ORes1&gt; &amp;hd_s, bool nosafe = false );</i> — Сast constructor in safe mode casting (by help dynamic_cast). Return free resource on impossible cast.</li>
+<li> <i>ORes &amp;at( ) const;</i> — Getting the object by the resource. </li>
+<li> <i>AutoHD &amp;operator=(const AutoHD &amp;hd);</i> — Copying of the resources.</li>
+<li> <i>bool operator==(const AutoHD &amp;hd);</i> — Compare objects into resource by pointer.</li>
+<li> <i>void free( );</i> — Release of the resource.</li>
+<li> <i>bool freeStat( ) const;</i> — The sign "The resource is free".</li></ul>
+<h3><span class="mw-headline" id="Resources_allocation_object.2C_by_mutex_.28ResMtx.29"><span class="mw-headline-number">15.4</span> <span id="ResMtx" title="#ResMtx">Resources allocation object, by mutex (ResMtx)</span></span></h3>
+<p><b>Public methods:</b>
+</p>
+<ul><li> <i>ResMtx( bool isRecurs = true );</i> — Initialization of a mutex object with recursion <i>isRecurs</i>.</li>
+<li> <i>void lock( );</i> — Mutex lock. Return zero at the success.</li>
+<li> <i>void unlock( );</i> — Mutex unlock. Return zero at the success.</li>
+<li> <i>int tryLock( );</i> — Mutex try lock, without wait for free. Return zero at success.</li>
+<li> <i>pthread_mutex_t &amp;mtx( );</i> — Direct link to the mutex structure.</li></ul>
+<h3><span class="mw-headline" id="Object_of_the_string_with_the_access_shared_by_the_resource_.28ResString.29"><span class="mw-headline-number">15.5</span> <span id="ResString" title="#ResString">Object of the string with the access shared by the resource (ResString)</span></span></h3>
+<p><b>Public methods:</b>
+</p>
+<ul><li> <i>explicit ResString( const string &amp;vl = "" );</i> — Initialization of the string with the specified value <i>vl</i>.</li>
+<li> <i>ResString &amp;operator=( const string &amp;val );</i> — Function for implicit conversion from <i>std::string</i>.</li>
+<li> <i>operator string( );</i> — Function for implicit conversion to <i>std::string</i>.</li>
+<li> <i>size_t size( );</i> — The string size.</li>
+<li> <i>bool empty( );</i> — The string empty.</li>
+<li> <i>void setVal( const string &amp;vl );</i> — Setting the string's value to <i>vl</i>.</li>
+<li> <i>const string &amp;getVal( );</i> — Getting the string's value.</li>
+<li> <i>const string &amp;getValRef( );</i> — Getting a direct reference to the string <i>std::string</i>. The resource is ignored when you use this function!</li></ul>
+<h3><span class="mw-headline" id="Conditional_variable_object.2C_by_mutex_.28CondVar.29"><span class="mw-headline-number">15.6</span> <span id="CondVar" title="#CondVar">Conditional variable object, by mutex (CondVar)</span></span></h3>
+<p><b>Public methods:</b>
+</p>
+<ul><li> <i>CondVar( );</i> — Initialization of the conditional variable.</li>
+<li> <i>int wait( ResMtx &amp;mtx, unsigned short tm = 0 );</i> — wait for the conditional variable wake up for the timeout <i>tm</i> with the mutex <i>mtx</i>.</li>
+<li> <i>int wakeOne( );</i> — wake up one thread.</li>
+<li> <i>int wakeAll( );</i> — wake up all threads.</li></ul>
+<h3><span class="mw-headline" id="Object_of_automatic_unlock_POSIX_mutex_.28MtxAlloc.29"><span class="mw-headline-number">15.7</span> <span id="MtxAlloc" title="#MtxAlloc">Object of automatic unlock POSIX mutex (MtxAlloc)</span></span></h3>
+<p><b>Public methods:</b>
+</p>
+<ul><li> <i>MtxAlloc( ResMtx &amp;iM, bool lock = false );</i> — Initialization of automatic unlock mutex for early allocated identifier <i>iM</i>. With the <i>lock</i> set at a creation.</li>
+<li> <i>int lock( );</i> — The resource lock. Return zero at the success.</li>
+<li> <i>int unlock( );</i> — The resource unlock. Return zero at the success.</li>
+<li> <i>int tryLock( );</i> — The resource try lock, without wait for free. Return zero at the success.</li></ul>
+<h3><span class="mw-headline" id="Object_of_the_string_with_the_access_shared_by_the_global_the_data_resource_.28mutex.29_.28MtxString.29"><span class="mw-headline-number">15.8</span> <span id="MtxString" title="#MtxString">Object of the string with the access shared by the global the data resource (mutex) (MtxString)</span></span></h3>
+<p><b>Public methods:</b>
+</p>
+<ul><li> <i>MtxString( ResMtx &amp;iM );</i> — The string initialization with the access sharing by resource <i>iM</i>.</li>
+<li> <i>MtxString &amp;operator=( const string &amp;val );</i> — Function for implicit conversion from <i>std::string</i>.</li>
+<li> <i>operator string( );</i> — Function for implicit conversion to <i>std::string</i>.</li>
+<li> <i>size_t size( );</i> — The string size.</li>
+<li> <i>bool empty( );</i> — The string empty.</li>
+<li> <i>void setVal( const string &amp;vl );</i> — Setting the string's value to <i>vl</i>.</li>
+<li> <i>const string &amp;getVal( );</i> — Getting the string's value.</li>
+<li> <i>const string &amp;getValRef( );</i> — Getting a direct reference to the string <i>std::string</i>. The resource is ignored when you use this function!</li></ul>
+<h2><span class="mw-headline" id="Other_generic_objects_.28XMLNode.2C_TError.29"><span class="mw-headline-number">16</span> Other generic objects (XMLNode, TError)</span></h2>
+<p>XML in OpenSACDA is represented by the object of the XML-tag — XMLNode.
+</p><p>Errors of the exceptions are handled by the error object "TError".
+</p>
+<h3><span class="mw-headline" id="XML-tag_.28XMLNode.29"><span class="mw-headline-number">16.1</span> <span id="XMLNode" title="#XMLNode">XML-tag (XMLNode)</span></span></h3>
 <p><b>Data:</b><br />
 Options for XML-file loading (enum — XMLNode::LoadFlgs):
 </p>
@@ -2911,7 +3070,7 @@ Options for XML-file loading (enum — XMLNode::LoadFlgs):
 <li> <i>void attrList( vector&lt;string&gt; &amp; list ) const;</i> — <i>List</i> of attributes in the tag.</li>
 <li> <i>XMLNode* attrDel( const string &amp;name );</i> — Deleting of the attribute <i>name</i>.</li>
 <li> <i>void attrClear( );</i> — Clean up the tag's attributes.</li>
-<li> <i>string attr( const string &amp;name, bool caseSens = true ) const;</i> — Getting the attribute <i>name</i>.</li>
+<li> <i>string attr( const string &amp;name, bool caseSens = true, bool *presence = NULL ) const;</i> — Getting the attribute <i>name</i> for the case-sensitivity <i>caseSens</i> and with the <i>presence</i> sign.</li>
 <li> <i>XMLNode* setAttr( const string &amp;name, const string &amp;val );</i> — Setting/creation of the attribute <i>name</i> with the value <i>val</i>.</li>
 <li> <i>void load( const string &amp;vl, unsigned flg = 0, const string &amp;cp = "UTF-8" );</i> — Load/parsing of the XML-file, with source encoding <i>cp</i> and flags <i>flg</i>.</li>
 <li> <i>string save( unsigned flg = 0, const string &amp;cp = "UTF-8" ) const;</i> — Saving/creation of the XML-file with the formatting parameter <i>flg</i> and encoding to <i>cp</i>.</li>
@@ -2931,82 +3090,31 @@ Options for XML-file loading (enum — XMLNode::LoadFlgs):
 <li> <i>void getElementsBy( const string &amp;tag, const string &amp;attr, const string &amp;val, TArrayObj *rez );</i> — get elements array <i>rez</i> from the tree by <i>tag</i> (empty for all) and attribute <i>attr</i> value <i>val</i> (empty for pass).</li>
 <li> <i>XMLNode* parent( );</i> — Parent tag of the tag.</li>
 <li> <i>XMLNode* root( );</i> — Root tag of the tag.</li></ul>
-<h2><span class="mw-headline" id="Resources_in_OpenSCADA_.28Res.2C_ResAlloc.2C_ResMtx.2C_MtxAlloc.2C_AutoHD.29"><span class="mw-headline-number">16</span> Resources in OpenSCADA (Res, ResAlloc, ResMtx, MtxAlloc, AutoHD)</span></h2>
-<p>Most of the units and subsystems of OpenSCADA are dynamic, ie they allow the creation/deletion/configuration while the system is working. Taking into account the multi-threading of the system, this functionality imposes stringent requirements for synchronization of threads. For synchronization in the system the resources are used, functions of which are localized in the objects "Res" and "ResAlloc". Object "Res" provides storage of the resource, providing the functions of capture/release for the read and write. In object "ResAlloc" the automatic release of the resource functions are implemented. Automatic resource involves the creation of a local resource object with its automatic release at fracture (in the destructor). Using of automatic resource makes the work with resources when using the exceptions much easier.
-</p><p>Any dynamic system object is inherited from "TCntrNode" object, which contains a mechanism to connect via the "AutoHD" template. The main function of the template is to store the link to the object and the capture of the resource, excluding the deleting of the object at the time of use. Template supports copying the resource and its release in case of destruction of the template object. For clarity of the access to the objects generated by "TCntrNode" the "AutoHD" template supports casting, based on the dynamic cast.
+<h3><span class="mw-headline" id="Error_exception_.28TError.29"><span class="mw-headline-number">16.2</span> <span id="TError" title="#TError">Error exception (TError)</span></span></h3>
+<p><b>Data:</b><br />
+Error codes (enum — TError::Codes):
 </p>
-<h3><span class="mw-headline" id="Resource_R.2FW_lock_object_.28ResRW.29"><span class="mw-headline-number">16.1</span> <span id="ResRW" title="#ResRW">Resource R/W lock object (ResRW)</span></span></h3>
+<ul><li> <i>TError::NoCode (0)</i>, <i>TError::NoError (0)</i> — no error;</li>
+<li> <i>TError::Core_CntrWarning (1)</i> — Core level, warning of the control interface;</li>
+<li> <i>TError::Core_CntrError (2)</i> — Core level, error of the control interface;</li>
+<li> <i>TError::Core_RWLock_EDEADLK (3)</i> — Core level, deadlock of the RWLock;</li>
+<li> <i>TError::Core_TaskCrt (4)</i> — Core level, error the task-thread creation;</li>
+<li> <i>TError::Tr_Connect (10)</i> — Transport level, error connection;</li>
+<li> <i>TError::Tr_UnknownHost (11)</i> — Transport level, unknown host;</li>
+<li> <i>TError::DB_SQL_Connect (20)</i> — DB level, error the SQL-connection;</li>
+<li> <i>TError::DB_SQL_Query (21)</i> — DB level, error the SQL-query;</li>
+<li> <i>TError::Arch_Val_OldBufVl (30)</i> — Archives level, old value placing to the value buffer;</li>
+<li> <i>TError::EXT (100)</i> — Extended errors of OpenSCADA modules to use as TError::EXT+{N}.</li></ul>
 <p><b>Public methods:</b>
 </p>
-<ul><li> <i>ResRW( );</i> — Initialization of the resource.</li>
-<li> <i>static void resRequestW( long tm = 0 );</i> — Request the resource for writing/modification with wait timeout <i>tm</i> (in milliseconds).</li>
-<li> <i>bool resTryW( );</i> — Request try the resource for writing/modification. On success return "true" else "false".</li>
-<li> <i>static void resRequestR( long tm = 0 );</i> — Request the resource for reading with wait timeout <i>tm</i> (in milliseconds).</li>
-<li> <i>bool resTryR( );</i> — Request try the resource for reading. On success return "true" else "false".</li>
-<li> <i>static void resRelease( );</i> — Release of the resource.</li></ul>
-<h3><span class="mw-headline" id="Automatic_resource_RW_unlock_object_.28ResAlloc.29"><span class="mw-headline-number">16.2</span> <span id="ResAlloc" title="#ResAlloc">Automatic resource RW unlock object (ResAlloc)</span></span></h3>
-<p><b>Public methods:</b>
+<ul><li> <i>TError( );</i> — Default-empty constructor.</li>
+<li> <i>TError( const char *cat, const char *mess, ... );</i> — Initialization of the error with the category <i>cat</i> and the message <i>mess</i> + arguments.</li>
+<li> <i>TError( int cod, const char *cat, const char *mess, ... );</i> — Initialization of the error with the <i>code</i>, the category <i>cat</i> and the message <i>mess</i> + arguments.</li></ul>
+<p><b>Public attributes:</b>
 </p>
-<ul><li> <i>ResAlloc( ResRW &amp;rid );</i> — Initialization of the automatically released resource for the previously selected identifier  <i>rid</i>.</li>
-<li> <i>ResAlloc( ResRW &amp;rid, bool write, long tm = 0 );</i> — Initialization of the automatically released resource for the previously selected identifier <i>rid</i>. With the specification of the resource type <i>write</i> (read/write).</li>
-<li> <i>void request( bool write = false, long tm = 0 ); void lock( bool write = false, unsigned short tm = 0 );</i> — Request of the resource in the specified mode <i>write</i> (read/write).</li>
-<li> <i>void release( ); void unlock( );</i> — Release of the resource.</li></ul>
-<h3><span class="mw-headline" id="Template_.28AutoHD.29"><span class="mw-headline-number">16.3</span> <span id="AutoHD" title="#AutoHD">Template (AutoHD)</span></span></h3>
-<p><b>Public methods:</b>
-</p>
-<ul><li> <i>AutoHD( );</i> — Initializing without linkage to the object.</li>
-<li> <i>AutoHD( ORes *node, const string &amp;who = "" );</i> — Initialization with the linkage to the object <i>node</i>. The object must contain the function AHDConnect() and AHDDisConnect().</li>
-<li> <i>AutoHD( const AutoHD &amp;hd );</i> — Copyng constructor.</li>
-<li> <i>template &lt;class ORes1&gt; AutoHD( const AutoHD&lt;ORes1&gt; &amp;hd_s, bool nosafe = false );</i> — Сast constructor in safe mode casting (by help dynamic_cast). Return free resource on impossible cast.</li>
-<li> <i>ORes &amp;at( ) const;</i> — Getting the object by the resource. </li>
-<li> <i>AutoHD &amp;operator=(const AutoHD &amp;hd);</i> — Copying of the resources.</li>
-<li> <i>bool operator==(const AutoHD &amp;hd);</i> — Compare objects into resource by pointer.</li>
-<li> <i>void free( );</i> — Release of the resource.</li>
-<li> <i>bool freeStat( ) const;</i> — The sign "The resource is free".</li></ul>
-<h3><span class="mw-headline" id="Resources_allocation_object.2C_by_mutex_.28ResMtx.29"><span class="mw-headline-number">16.4</span> <span id="ResMtx" title="#ResMtx">Resources allocation object, by mutex (ResMtx)</span></span></h3>
-<p><b>Public methods:</b>
-</p>
-<ul><li> <i>ResMtx( bool isRecurs = false );</i> — Initialization of a mutex object with recursion <i>isRecurs</i>.</li>
-<li> <i>void lock( );</i> — Mutex lock. Return zero at the success.</li>
-<li> <i>void unlock( );</i> — Mutex unlock. Return zero at the success.</li>
-<li> <i>int tryLock( );</i> — Mutex try lock, without wait for free. Return zero at success.</li>
-<li> <i>pthread_mutex_t &amp;mtx( );</i> — Direct link to the mutex structure.</li></ul>
-<h3><span class="mw-headline" id="Object_of_the_string_with_the_access_shared_by_the_resource_.28ResString.29"><span class="mw-headline-number">16.5</span> <span id="ResString" title="#ResString">Object of the string with the access shared by the resource (ResString)</span></span></h3>
-<p><b>Public methods:</b>
-</p>
-<ul><li> <i>explicit ResString( const string &amp;vl = "" );</i> — Initialization of the string with the specified value <i>vl</i>.</li>
-<li> <i>ResString &amp;operator=( const string &amp;val );</i> — Function for implicit conversion from <i>std::string</i>.</li>
-<li> <i>operator string( );</i> — Function for implicit conversion to <i>std::string</i>.</li>
-<li> <i>size_t size( );</i> — The string size.</li>
-<li> <i>bool empty( );</i> — The string empty.</li>
-<li> <i>void setVal( const string &amp;vl );</i> — Setting the string's value to <i>vl</i>.</li>
-<li> <i>const string &amp;getVal( );</i> — Getting the string's value.</li>
-<li> <i>const string &amp;getValRef( );</i> — Getting a direct reference to the string <i>std::string</i>. The resource is ignored when you use this function!</li></ul>
-<h3><span class="mw-headline" id="Conditional_variable_object.2C_by_mutex_.28CondVar.29"><span class="mw-headline-number">16.6</span> <span id="CondVar" title="#CondVar">Conditional variable object, by mutex (CondVar)</span></span></h3>
-<p><b>Public methods:</b>
-</p>
-<ul><li> <i>CondVar( );</i> — Initialization of the conditional variable.</li>
-<li> <i>int wait( ResMtx &amp;mtx, unsigned short tm = 0 );</i> — wait for the conditional variable wake up for the timeout <i>tm</i> with the mutex <i>mtx</i>.</li>
-<li> <i>int wakeOne( );</i> — wake up one thread.</li>
-<li> <i>int wakeAll( );</i> — wake up all threads.</li></ul>
-<h3><span class="mw-headline" id="Object_of_automatic_unlock_POSIX_mutex_.28MtxAlloc.29"><span class="mw-headline-number">16.7</span> <span id="MtxAlloc" title="#MtxAlloc">Object of automatic unlock POSIX mutex (MtxAlloc)</span></span></h3>
-<p><b>Public methods:</b>
-</p>
-<ul><li> <i>MtxAlloc( ResMtx &amp;iM, bool lock = false );</i> — Initialization of automatic unlock mutex for early allocated identifier <i>iM</i>. With the <i>lock</i> set at a creation.</li>
-<li> <i>int lock( );</i> — The resource lock. Return zero at the success.</li>
-<li> <i>int unlock( );</i> — The resource unlock. Return zero at the success.</li>
-<li> <i>int tryLock( );</i> — The resource try lock, without wait for free. Return zero at the success.</li></ul>
-<h3><span class="mw-headline" id="Object_of_the_string_with_the_access_shared_by_the_global_the_data_resource_.28mutex.29_.28MtxString.29"><span class="mw-headline-number">16.8</span> <span id="MtxString" title="#MtxString">Object of the string with the access shared by the global the data resource (mutex) (MtxString)</span></span></h3>
-<p><b>Public methods:</b>
-</p>
-<ul><li> <i>MtxString( ResMtx &amp;iM );</i> — The string initialization with the access sharing by resource <i>iM</i>.</li>
-<li> <i>MtxString &amp;operator=( const string &amp;val );</i> — Function for implicit conversion from <i>std::string</i>.</li>
-<li> <i>operator string( );</i> — Function for implicit conversion to <i>std::string</i>.</li>
-<li> <i>size_t size( );</i> — The string size.</li>
-<li> <i>bool empty( );</i> — The string empty.</li>
-<li> <i>void setVal( const string &amp;vl );</i> — Setting the string's value to <i>vl</i>.</li>
-<li> <i>const string &amp;getVal( );</i> — Getting the string's value.</li>
-<li> <i>const string &amp;getValRef( );</i> — Getting a direct reference to the string <i>std::string</i>. The resource is ignored when you use this function!</li></ul>
+<ul><li> <i>int cod;</i> — The error code.</li>
+<li> <i>string cat;</i> — The error category.</li>
+<li> <i>string mess;</i> — The error message.</li></ul>
 <h2><span class="mw-headline" id="Organization_and_structure_of_the_database_of_the_system_components"><span class="mw-headline-number">17</span> Organization and structure of the database of the system components</span></h2>
 <p>Nodes and subsystems of OpenSCADA may have their own tables in the database to store their own data. The structure of tables is individual and determined by the &lt;TConfig&gt; object. Nodes and subsystems must create and configure the &lt;TConfig&gt; object under their demands.
 </p>
@@ -3447,8 +3555,9 @@ Options for XML-file loading (enum — XMLNode::LoadFlgs):
 <h3><span class="mw-headline" id="The_structure_of_the_databases_of_the_modules"><span class="mw-headline-number">17.6</span> The structure of the databases of the modules</span></h3>
 <p>Each module can have its own database tables to store individual data. Structure of database tables of the modules can be formed freely, based on internal needs.
 </p>
-<h2><span class="mw-headline" id="Service_functions_of_the_OpenSCADA_control_interface"><span class="mw-headline-number">18</span> Service functions of the OpenSCADA control interface</span></h2>
-<p>Service functions — is an interface to access OpenSCADA through the OpenSCADA control interface from external systems. This mechanism is the basis for all exchange mechanisms within OpenSCADA, implemented through weak links and standard exchange protocol of OpenSCADA. Its main advantage is the priority processing and the possibility of using non-standard packaging data. For access to normal data you can use the standard commands of the control interface.
+<h2><span class="mw-headline" id="Service_functions_of_the_OpenSCADA_control_interface"><span class="mw-headline-number">18</span> <span id="ServFunc" title="#ServFunc">Service functions of the OpenSCADA control interface</span></span></h2>
+<p>Service functions is an interface to access OpenSCADA through <a href="#CntrNode">the OpenSCADA control interface</a> from external systems. This mechanism is the basis for all exchange mechanisms within OpenSCADA, implemented through weak links and <a href="Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">the standard-self exchange protocol of OpenSCADA</a>. Its main advantage is the priority processing and the possibility of using non-standard packaging data. For access to normal data you can use <a href="#CntrNode">the standard commands</a> of the control interface.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Not all service functions-requests are described here so to familiarise all presented you must see to the function <i>cntrCmdProc()</i> of proper parts of OpenSCADA in <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/" rel="nofollow noreferrer noopener" target="_blank">the project sources</a>.
 </p>
 <h3><span class="mw-headline" id="Group_access_to_the_values_of_the_parameter.27s_attributes_of_the_subsystem_.22Data_acquisition.22.2C_as_well_as_to_the_detailed_information"><span class="mw-headline-number">18.1</span> Group access to the values of the parameter's attributes of the subsystem "Data acquisition", as well as to the detailed information</span></h3>
 <p>These requests let you to obtain detailed information about the parameters of the subsystem "Data acquisition", to acquire the values of all attributes of the parameters, and also to make the group setting. Detailed information about requests is given in Table 23.
@@ -3496,8 +3605,8 @@ Options for XML-file loading (enum — XMLNode::LoadFlgs):
 </td></tr>
 <tr>
 <td>  names </td>
-<td> The names of the attribute's values for the selective type. </td>
-<td> The names of the single attribute's values for the selective type.
+<td> The names of the attribute's values for the selectable type. </td>
+<td> The names of the single attribute's values for the selectable type.
 </td></tr>
 <tr>
 <td> <i>Team request command of the all values of attributes of the parameter:</i> <b>&lt;get path="/sub_DAQ/mod_{SRC}/cntr_{CNTR}/prm_{PRM}/%2fserv%2fattr"/&gt;</b>
@@ -3747,7 +3856,7 @@ Options for XML-file loading (enum — XMLNode::LoadFlgs):
 <td> </td>
 <td>
 </td></tr></table>
-<h2><span class="mw-headline" id="API_of_modules_of_modular_subsystems"><span class="mw-headline-number">19</span> <span id="ModAPI" title="#ModAPI">API of modules of modular subsystems</span></span></h2>
+<h2><span class="mw-headline" id="API_of_modules_of_the_modular_subsystems"><span class="mw-headline-number">19</span> <span id="ModAPI" title="#ModAPI">API of modules of the modular subsystems</span></span></h2>
 <p>Modules in OpenSCADA are implemented as shared libraries. As it was previously mentioned, one such library can contain many modules of OpenSCADA subsystems, actually acting as a container.
 </p><p>The first step in connecting the shared (SO — shared object) libraries is the connection of the initialization functions. These functions should be defined as usual "C" functions to avoid distortion of function names. Usually this is done as follows:
 </p>
@@ -4011,5 +4120,5 @@ extern "C"
 
 
 
-</div></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.1</td></tr></table></body>
 </html>

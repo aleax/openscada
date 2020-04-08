@@ -46,10 +46,11 @@ class IO
 	//Data
 	enum Type { String, Integer, Real, Boolean, Object };
 	enum IOFlgs {
-	    Default = 0x00,	//Default mode (Input IO)
-	    Output  = 0x01,
-	    Return  = 0x02,
-	    FullText= 0x04
+	    Default	= 0x00,	//Default mode (Input IO)
+	    Output	= 0x01,
+	    Return	= 0x02,
+	    FullText	= 0x04,
+	    Selectable	= 0x08
 	};
 
 	//Methods
@@ -122,7 +123,7 @@ class TFunction : public TCntrNode
 	int ioId( const string &id ) const;
 	int ioSize( ) const;
 	IO *io( int id ) const;
-	void ioAdd( IO *io );
+	int ioAdd( IO *io );
 	int ioIns( IO *io, int pos );
 	void ioDel( int pos );
 	void ioMove( int pos, int to );
@@ -168,12 +169,14 @@ class TValFunc
 	TValFunc( const string &iname = "", TFunction *ifunc = NULL, bool iblk = true, const string &iuser = "root" );
 	virtual ~TValFunc( );
 
+	bool blk( )				{ return mBlk; }
+	bool mdfChk( )				{ return mMdfChk; }
+	bool isChangedProg( bool clear = false ) { bool mPrgCh_ = mPrgCh; if(clear) mPrgCh = false; return mPrgCh_; }
+
 	string user( )				{ return mUser; }
 	string lang( )				{ return mLang; }
 	const string &vfName( )			{ return mName; }
 
-	bool blk( )				{ return mBlk; }
-	bool mdfChk( )				{ return mMdfChk; }
 	void setUser( const string &vl )	{ mUser = vl; }
 	void setLang( const string &vl )	{ mLang = vl; }
 	void setVfName( const string &inm )	{ mName = inm; }
@@ -182,12 +185,12 @@ class TValFunc
 
 	void ioList( vector<string> &list );
 	int  ioId( const string &id );
-	int  ioSize( );
+	int  ioSize( ) const;
 	IO::Type ioType( unsigned id ) {
 	    if(id >= mVal.size()) throw TError("ValFunc", _("%s: Error with ID or IO %d!"), "ioType()", id);
 	    return mFunc->io(id)->type();
 	}
-	unsigned ioFlg( unsigned id ) {
+	unsigned ioFlg( unsigned id ) const {
 	    if(!mFunc) throw TError("ValFunc", _("%s: No function set!"),"ioFlg()", id);
 	    if(id >= mVal.size()) throw TError("ValFunc", _("%s: Error with ID or IO %d for the function '%s'!"), "ioFlg()", id, mFunc->nodePath().c_str());
 	    return mFunc->io(id)->flg();
@@ -226,6 +229,7 @@ class TValFunc
 
 	virtual void preIOCfgChange( );
 	virtual void postIOCfgChange( );
+	virtual void progChange( )	{ mPrgCh = true; }
 
 	// Context operations
 	TValFunc *ctxGet( int key );
@@ -261,7 +265,8 @@ class TValFunc
 		mUser,			//Link to user
 		mLang;			//Force language
 	unsigned short	mBlk	:1;	//Blocked values screen
-	unsigned short	mMdfChk	:1;	//Modify attributes check
+	unsigned short	mMdfChk	:1;	//Checking for the IO modification
+	unsigned short	mPrgCh	:1;	//Changing the program text
 
 	TFunction	*mFunc;
 	map<int, TValFunc* >	vctx;

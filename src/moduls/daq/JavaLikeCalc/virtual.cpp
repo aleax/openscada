@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.JavaLikeCalc file: virtual.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2020 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"3.9.3"
+#define MOD_VER		"4.2.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")
@@ -108,7 +108,7 @@ void TpContr::postEnable( int flag )
 
     //Controller db structure
     fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"60","system"));
-    fldAdd(new TFld("FUNC",_("Controller function"),TFld::String,TFld::NoFlag,"40"));
+    fldAdd(new TFld("FUNC",_("Controller function or DAQ-template"),TFld::String,TFld::NoFlag,"40"));
     fldAdd(new TFld("SCHEDULE",_("Calculation schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",_("Priority of the calculation task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
     fldAdd(new TFld("ITER",_("Number of iterations in single calculation"),TFld::Integer,TFld::NoFlag,"2","1","1;99"));
@@ -133,7 +133,7 @@ void TpContr::postEnable( int flag )
     fnc_el.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::TransltText,"300"));
     fnc_el.fldAdd(new TFld("START",_("To start"),TFld::Boolean,TFld::NoFlag,"1","1"));
     fnc_el.fldAdd(new TFld("MAXCALCTM",_("Maximum calculate time, seconds"),TFld::Integer,TFld::NoFlag,"4","10","0;3600"));
-    fnc_el.fldAdd(new TFld("PR_TR",_("Translate program"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    fnc_el.fldAdd(new TFld("PR_TR",_("Completely translate the program"),TFld::Boolean,TFld::NoFlag,"1","0"));
     fnc_el.fldAdd(new TFld("FORMULA",_("Program"),TFld::String,TFld::TransltText,"1000000"));
     fnc_el.fldAdd(new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec));
 
@@ -227,8 +227,7 @@ string TpContr::compileFunc( const string &lang, TFunction &fnc_cfg, const strin
     if(funcId == "<auto>") {
 	funcId = "Auto";
 	for(int iP = 1; lbAt("sys_compile").at().present(funcId); ++iP) funcId = TSYS::strMess("Auto%d",iP);
-    }
-    else funcId = fnc_cfg.nodePath('_', true);
+    } else funcId = fnc_cfg.nodePath('_', true);
 
     // Connect or use allowed compiled function object
     if(!lbAt("sys_compile").at().present(funcId)) lbAt("sys_compile").at().add(funcId, "");
@@ -237,18 +236,21 @@ string TpContr::compileFunc( const string &lang, TFunction &fnc_cfg, const strin
     AutoHD<Func> func = lbAt("sys_compile").at().at(funcId);
     if(maxCalcTm > 0) func.at().setMaxCalcTm(maxCalcTm);
 
-    //Try hot config fields change for work function
+    //Try for hot config fields changing of the work function
     if(func.at().use() && func.at().startStat())
 	try {
 	    ((TFunction&)func.at()).operator=(fnc_cfg);
-	    if(prog_text == func.at().prog()) return func.at().nodePath(0,true);
+	    if(prog_text == func.at().prog()) return func.at().nodePath(0, true);
 	} catch(TError &err) {
 	    func.at().setStart(true);
 	    throw;
 	}
     //Standard compile
+    bool started = func.at().startStat();
+    string  prevProc = func.at().prog(),
+	    prevUsings = func.at().usings();
     try {
-	if(func.at().startStat()) func.at().setStart(false);
+	if(started) func.at().setStart(false);
 	func.at().setProg(prog_text.c_str());
 	func.at().setUsings(usings);
 	((TFunction&)func.at()).operator=(fnc_cfg);
@@ -259,10 +261,18 @@ string TpContr::compileFunc( const string &lang, TFunction &fnc_cfg, const strin
 	    func.free();
 	    lbAt("sys_compile").at().del(funcId.c_str());
 	}
+	// Try of the restoring the previous procedure executing
+	else if(started)
+	    try {
+		func.at().setProg(prevProc);
+		func.at().setUsings(prevUsings);
+		func.at().setStart(true);
+	    } catch(TError&) { }
+
 	throw TError((nodePath()+"sys_compile/"+funcId).c_str(), _("Error compiling: %s"), err.mess.c_str());
     }
 
-    return func.at().nodePath(0,true);
+    return func.at().nodePath(0, true);
 }
 
 void TpContr::load_( )
@@ -277,18 +287,18 @@ void TpContr::load_( )
 	// Search and create new libraries
 	TConfig cEl(&elLib());
 	//cEl.cfgViewAll(false);
-	vector<string> dbLs;
+	vector<string> itLs;
 	map<string, bool> itReg;
 	vector<vector<string> > full;
 
 	// Search into DB
-	SYS->db().at().dbList(dbLs, true);
-	dbLs.push_back(DB_CFG);
-	for(unsigned iDB = 0; iDB < dbLs.size(); iDB++)
-	    for(int libCnt = 0; SYS->db().at().dataSeek(dbLs[iDB]+"."+libTable(),nodePath()+"lib",libCnt++,cEl,false,&full); ) {
+	SYS->db().at().dbList(itLs, true);
+	itLs.push_back(DB_CFG);
+	for(unsigned iDB = 0; iDB < itLs.size(); iDB++)
+	    for(int libCnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+libTable(),nodePath()+"lib",libCnt++,cEl,false,&full); ) {
 		string l_id = cEl.cfg("ID").getS();
 		if(!lbPresent(l_id)) {
-		    lbReg(new Lib(l_id.c_str(),"",(dbLs[iDB]==SYS->workDB())?"*.*":dbLs[iDB]));
+		    lbReg(new Lib(l_id.c_str(),"",(itLs[iDB]==SYS->workDB())?"*.*":itLs[iDB]));
 		    try {
 			lbAt(l_id).at().load(&cEl);
 			//lbAt(l_id).at().setStart(true);		//Do not try start into the loading but possible broblems like into openscada --help
@@ -298,11 +308,11 @@ void TpContr::load_( )
 	    }
 
 	//  Check for remove items removed from DB
-	if(!SYS->selDB().empty()) {
-	    lbList(dbLs);
-	    for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
-		if(itReg.find(dbLs[iIt]) == itReg.end() && SYS->chkSelDB(lbAt(dbLs[iIt]).at().DB()))
-		    lbUnreg(dbLs[iIt]);
+	if(SYS->chkSelDB(SYS->selDB(),true)) {
+	    lbList(itLs);
+	    for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
+		if(itReg.find(itLs[iIt]) == itReg.end() && SYS->chkSelDB(lbAt(itLs[iIt]).at().DB()))
+		    lbUnreg(itLs[iIt]);
 	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -322,8 +332,8 @@ void TpContr::modStart( )
 
     //Start functions
     lbList(lst);
-    for(unsigned i_lb = 0; i_lb < lst.size(); i_lb++)
-	lbAt(lst[i_lb]).at().setStart(true);
+    for(unsigned iLb = 0; iLb < lst.size(); iLb++)
+	lbAt(lst[iLb]).at().setStart(true);
 
     TTypeDAQ::modStart();
 }
@@ -392,10 +402,10 @@ BFunc *TpContr::bFuncGet( const char *nm )
 //*************************************************
 //* Contr: Controller object                      *
 //*************************************************
-Contr::Contr(string name_c, const string &daq_db, ::TElem *cfgelem) :
-    ::TController(name_c, daq_db, cfgelem), TPrmTempl::Impl(this, name_c.c_str()),
-    prcSt(false), callSt(false), endrunReq(false), isDAQTmpl(false), chkLnkNeed(false),
-    mPrior(cfg("PRIOR").getId()), mIter(cfg("ITER").getId()), idFreq(-1), idStart(-1), idStop(-1), mPer(0)
+Contr::Contr( string name_c, const string &daq_db, ::TElem *cfgelem ) :
+    ::TController(name_c, daq_db, cfgelem), TPrmTempl::Impl(this, ("JavaLikeCalc_"+name_c).c_str(), false),
+    isDAQTmpl(false), prcSt(false), callSt(false), endrunReq(false), chkLnkNeed(false),
+    mPrior(cfg("PRIOR").getId()), mIter(cfg("ITER").getId()), idFreq(-1), idStart(-1), idStop(-1), mPer(1e9)
 {
     cfg("PRM_BD").setS("JavaLikePrm_"+name_c);
 }
@@ -405,7 +415,25 @@ Contr::~Contr( )
 
 }
 
-void Contr::postDisable(int flag)
+TCntrNode &Contr::operator=( const TCntrNode &node )
+{
+    TController::operator=(node);
+
+    Contr *src_n = const_cast<Contr*>(dynamic_cast<const Contr*>(&node));
+    if(!src_n || !src_n->enableStat() || !enableStat()) return *this;
+
+    //IO values copy
+    for(int iIO = 0; iIO < src_n->ioSize(); iIO++)
+	if(isDAQTmpl && src_n->ioFlg(iIO)&TPrmTempl::CfgLink)
+	    lnkAddrSet(iIO, src_n->lnkAddr(iIO));
+	else setS(iIO, src_n->getS(iIO));
+
+    if(isDAQTmpl) chkLnkNeed = initLnks();
+
+    return *this;
+}
+
+void Contr::postDisable( int flag )
 {
     try {
 	if(flag) {
@@ -472,7 +500,7 @@ void Contr::enable_( )
 
 void Contr::disable_( )
 {
-    lnkClear(true);
+    cleanLnks(true);
 }
 
 void Contr::load_( )
@@ -488,17 +516,11 @@ void Contr::loadFunc( bool onlyVl )
 	if(!onlyVl && !isDAQTmpl) ((Func*)func())->load();
 
 	// Init attrubutes
-	if(isDAQTmpl)
-	    for(int iIO = 0; iIO < func()->ioSize(); iIO++) {
-		if((func()->io(iIO)->flg()&TPrmTempl::CfgLink) && !lnkPresent(iIO)) {
-		    lnkAdd(iIO, TPrmTempl::Impl::SLnk());
-		    setS(iIO, EVAL_STR);
-		}
-	    }
+	if(isDAQTmpl)	addLinksAttrs();
 
 	//Creating special IO
 	if(!isDAQTmpl) {
-	    if(func()->ioId("f_frq") < 0)	func()->ioIns(new IO("f_frq",_("Frequency of calculation of the function (Hz)"),IO::Real,0,"1000",false),0);
+	    if(func()->ioId("f_frq") < 0)	func()->ioIns(new IO("f_frq",_("Frequency of calculation of the function, Hz"),IO::Real,0,"1000",false),0);
 	    if(func()->ioId("f_start") < 0)	func()->ioIns(new IO("f_start",_("Function start flag"),IO::Boolean,0,"0",false),1);
 	    if(func()->ioId("f_stop") < 0)	func()->ioIns(new IO("f_stop",_("Function stop flag"),IO::Boolean,0,"0",false),2);
 	    if(func()->ioId("this") < 0)	func()->ioIns(new IO("this",_("Link to the object of this controller"),IO::Object,0,"0",false),3);
@@ -516,12 +538,12 @@ void Contr::loadFunc( bool onlyVl )
 	    if(!isDAQTmpl) setS(ioId, cfg.cfg("VAL").getS());
 	    else {
 		if(func()->io(ioId)->flg()&TPrmTempl::CfgLink)
-		    lnkAttrSet(ioId, cfg.cfg("VAL").getS(TCfg::ExtValOne));	//Force no translated
+		    lnkAddrSet(ioId, cfg.cfg("VAL").getS(TCfg::ExtValOne));	//Force no translated
 		else if(func()->io(ioId)->type() != IO::String) setS(ioId, cfg.cfg("VAL").getS(TCfg::ExtValOne));		//Force no translated
 		else setS(ioId, cfg.cfg("VAL").getS());
 	    }
 	}
-	if(isDAQTmpl) chkLnkNeed = initTmplLnks();
+	if(isDAQTmpl) chkLnkNeed = initLnks();
     }
 }
 
@@ -549,7 +571,7 @@ void Contr::save_( )
 	    if(!isDAQTmpl) cfg.cfg("VAL").setS(getS(iio));
 	    else {
 		cfg.cfg("VAL").setNoTransl(!(func()->io(iio)->type()==IO::String && !(func()->io(iio)->flg()&TPrmTempl::CfgLink)));
-		if(func()->io(iio)->flg()&TPrmTempl::CfgLink)	cfg.cfg("VAL").setS(lnkAttr(iio));
+		if(func()->io(iio)->flg()&TPrmTempl::CfgLink)	cfg.cfg("VAL").setS(lnkAddr(iio));
 		else cfg.cfg("VAL").setS(getS(iio));
 	    }
 	    SYS->db().at().dataSet(val_bd, mod->nodePath()+bd_tbl, cfg);
@@ -578,9 +600,6 @@ void Contr::start_( )
     int id_this = ioId("this");
     if(id_this >= 0) setO(id_this, new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
 
-    //Schedule process
-    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
-
     //Start the request data task
     SYS->taskCreate(nodePath('.',true), mPrior, Contr::Task, this);
 }
@@ -604,13 +623,13 @@ void *Contr::Task( void *icntr )
 
     while(true) {
 	if(!cntr.redntUse()) {
-	    if(cntr.chkLnkNeed)	cntr.chkLnkNeed = cntr.initTmplLnks();
+	    if(cntr.chkLnkNeed)	cntr.chkLnkNeed = cntr.initLnks(true);
 
 	    cntr.callSt = true;
 	    t_cnt = TSYS::curTime();
 	    //Setting special IO
 	    if(cntr.idFreq >= 0)  cntr.setR(cntr.idFreq, cntr.period()?((float)cntr.iterate()*1e9/(float)cntr.period()):(-1e-6*(t_cnt-t_prev)));
-	    if(cntr.idStart >= 0) cntr.setB(cntr.idStart, is_start);
+	    if(cntr.idStart >= 0) cntr.setB(cntr.idStart, cntr.isChangedProg(true) || is_start);
 	    if(cntr.idStop >= 0)  cntr.setB(cntr.idStop, is_stop);
 
 	    //Get input links
@@ -686,7 +705,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TController::cntrCmdProc(opt);
-	opt->childGet(0)->setAttr("doc", "Documents/User_API|Documents/User_API");
+	opt->childGet(0)->setAttr("doc", "User_API|Documents/User_API");
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/FUNC",cfg("FUNC").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","sel_ed","select","/cntr/flst");
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,
 	    "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
@@ -727,6 +746,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	    for(unsigned iT = 0; iT < ls.size(); iT++)
 		opt->childAdd("el")->setText(lls[iL]+"."+ls[iT]);
 	}
+	opt->childAdd("el")->setText("");
 	//Templates
 	SYS->daq().at().tmplLibList(lls);
 	for(unsigned iL = 0; iL < lls.size(); iL++) {
@@ -800,7 +820,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 		    break;
 		case 4:
 		    setS(row, opt->text());
-		    if(isDAQTmpl) outputLink(row, opt->text());
+		    if(isDAQTmpl) lnkOutput(row, opt->text());
 		    break;
 	    }
 	    modif();
@@ -812,12 +832,24 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR)) {
 	    ((Func *)func())->setProg(opt->text().c_str());
 	    ((Func *)func())->progCompile();
+	    ((Func *)func())->setStart(true);
 	    modif();
 	}
 	if(ctrChkNode(opt,"SnthHgl",RWRW__,"root",SDAQ_ID,SEC_RD))	mod->compileFuncSynthHighl("JavaScript",*opt);
     }
     else if(isDAQTmpl && func() && TPrmTempl::Impl::cntrCmdProc(opt))	;
     else TController::cntrCmdProc(opt);
+}
+
+bool Contr::cfgChange( TCfg &co, const TVariant &pc )
+{
+    TController::cfgChange(co, pc);
+
+    if(co.fld().name() == "FUNC" && enableStat()) disable();
+    if(co.fld().name() == "SCHEDULE")
+	mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
+
+    return true;
 }
 
 //*************************************************
@@ -920,19 +952,13 @@ void Prm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     if(!enableStat())	return;
 
     //Send to active reserve station
-    if(owner().redntUse()) {
-	if(vl == pvl) return;
-	XMLNode req("set");
-	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
-	SYS->daq().at().rdStRequest(owner().workId(),req);
-	return;
-    }
+    if(vlSetRednt(vo,vl,pvl))	return;
 
     //Direct write
     try {
 	int io_id = ((Contr &)owner()).ioId(vo.fld().reserve());
 	if(io_id < 0) disable();
-	else if(!((Contr&)owner()).outputLink(io_id,vl)) ((Contr&)owner()).set(io_id, vl);
+	else if(!((Contr&)owner()).lnkOutput(io_id,vl)) ((Contr&)owner()).set(io_id, vl);
     } catch(TError &err) { disable(); }
 }
 

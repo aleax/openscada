@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTCfg file: selfwidg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2004-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -45,8 +45,7 @@
 #include <QCompleter>
 #include <QDesktopWidget>
 
-#include <tsys.h>
-
+#include "qtcfg.h"
 #include "tuimod.h"
 #include "selfwidg.h"
 
@@ -135,7 +134,7 @@ void LineEdit::viewApplyBt( bool view )
 	btFld->setIconSize(QSize(icoSize(),icoSize()));
 	btFld->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
 	//btFld->setMaximumWidth(15);
-	connect(btFld, SIGNAL(clicked()), this, SLOT(applySlot()));
+	connect(btFld, SIGNAL(clicked()), this, SLOT(btApply()));
 	layout()->addWidget(btFld);
     }
     if(!view && btFld) { btFld->deleteLater(); btFld = NULL; }
@@ -186,7 +185,7 @@ void LineEdit::setType( LType tp )
 	    edFld = new QComboBox(this);
 	    ((QComboBox*)edFld)->setEditable(true);
 	    connect((QComboBox*)edFld, SIGNAL(editTextChanged(const QString&)), SLOT(changed()));
-	    connect((QComboBox*)edFld, SIGNAL(activated(int)), this, SLOT(applySlot()));
+	    connect((QComboBox*)edFld, SIGNAL(activated(int)), this, SLOT(btApply()));
 	    break;
     }
     ((QBoxLayout*)layout())->insertWidget(0, edFld);
@@ -312,7 +311,7 @@ QString LineEdit::value( )
     return "";
 }
 
-void LineEdit::applySlot( )
+void LineEdit::btApply( )
 {
     viewApplyBt(false);
 
@@ -321,6 +320,12 @@ void LineEdit::applySlot( )
 
     emit valChanged(value());
     emit apply();
+}
+
+void LineEdit::btCancel( )
+{
+    emit cancel();
+    setValue(mVal);
 }
 
 bool LineEdit::event( QEvent * e )
@@ -332,8 +337,7 @@ bool LineEdit::event( QEvent * e )
 	    return true;
 	}
 	else if(keyEvent->key() == Qt::Key_Escape) {
-	    emit cancel();
-	    setValue(mVal);
+	    btCancel();
 	    return true;
 	}
     }
@@ -460,7 +464,7 @@ void SyntxHighl::highlightBlock( const QString &text )
 //* TextEdit: Text edit widget.                   *
 //*************************************************
 TextEdit::TextEdit( QWidget *parent, const char *name, bool prev_dis ) :
-    QWidget(parent), isInit(false), sntHgl(NULL), butBox(NULL)
+    QWidget(parent), isInit(false), isCh(false), sntHgl(NULL), butBox(NULL)
 {
     setObjectName(name);
 
@@ -518,7 +522,7 @@ QSize TextEdit::minimumSizeHint( ) const
 						//2*edFld->currentFont().pointSize()*(mRowCol.height()+1));
 }
 
-bool TextEdit::isChanged( )		{ return (butBox && butBox->isVisible()); }
+bool TextEdit::isChanged( )		{ return isCh; /*(butBox && butBox->isVisible());*/ }
 
 QString TextEdit::text( )		{ return edFld->toPlainText(); }
 
@@ -540,7 +544,7 @@ void TextEdit::setText( const QString &text )
 void TextEdit::setSnthHgl( XMLNode nd )
 {
     int scrollPos = edFld->verticalScrollBar()->value();
-    if(!sntHgl) sntHgl = new SyntxHighl(edFld->document());
+    if(!sntHgl)	sntHgl = new SyntxHighl(edFld->document());
     sntHgl->setSnthHgl(nd);
     edFld->verticalScrollBar()->setValue(scrollPos);
 }
@@ -561,7 +565,7 @@ void TextEdit::changed( )
 {
     if(isInit) return;
     if(butBox) {
-	butBox->setVisible(edFld->document()->isModified());
+	butBox->setVisible((isCh=edFld->document()->isModified()));
 	if(butBox->isVisible()) {
 	    butBox->move(width()-butBox->width(), height()-butBox->height());
 	    edFld->resize(edFld->width(), height()-butBox->height());
@@ -573,14 +577,14 @@ void TextEdit::changed( )
 void TextEdit::btApply( )
 {
     emit textChanged(text());
-    butBox->setVisible(false);
+    butBox->setVisible((isCh=false));
     edFld->resize(size());
     emit apply();
 }
 
 void TextEdit::btCancel( )
 {
-    butBox->setVisible(false);
+    butBox->setVisible((isCh=false));
     edFld->resize(size());
     emit cancel();
 }
@@ -691,13 +695,44 @@ QSize CfgTable::sizeHint( ) const
 void CfgTable::resizeRowsToContentsLim( )
 {
     QTableView::resizeRowsToContents();
-    for(int i_rw = 0; i_rw < rowCount(); i_rw++)
-	setRowHeight(i_rw, vmin(rowHeight(i_rw), size().height()/1.3));
+    for(int iRW = 0; iRW < rowCount(); iRW++)
+	setRowHeight(iRW, vmin(rowHeight(iRW), size().height()/1.3));
 }
 
 bool CfgTable::event( QEvent *e )
 {
-    if(e->type() == QEvent::MouseButtonPress)
+    if(e->type() == QEvent::KeyPress) {
+	QKeyEvent *key = static_cast<QKeyEvent*>(e);
+	bool toUp = false;
+	ConfApp *mainW = dynamic_cast<ConfApp *>(window());
+	if(mainW && (QApplication::keyboardModifiers()&Qt::ControlModifier) &&
+		((toUp=(key->key()==Qt::Key_Up)) || key->key() == Qt::Key_Down)) {
+	    try {
+		int row = currentRow();
+		int r_new = toUp ? row-1 : row+1;
+
+		XMLNode *n_el = SYS->ctrId(mainW->root, TSYS::strDecode(objectName().toStdString(),TSYS::PathEl));
+		if(n_el->attr("s_com").find("move") != string::npos && r_new >= 0 && r_new < rowCount()) {
+		    string el_path = mainW->selPath + "/" + objectName().toStdString();
+		    XMLNode n_el1;
+		    n_el1.setAttr("path", el_path);
+		    n_el1.setName("move");
+		    n_el1.setAttr("row", i2s(row))->setAttr("to", i2s(r_new));
+		    mess_info(mod->nodePath().c_str(), _("%s| '%s' moved for the record %d to %d."),
+			mainW->wUser->user().toStdString().c_str(), el_path.c_str(), row, r_new);
+		    if(mainW->cntrIfCmd(n_el1)) throw TError(n_el1.attr("mcat").c_str(), n_el1.text().c_str());
+		    mainW->tblInit = true;
+		    item(row,currentColumn())->setSelected(false);
+		    for(int iCol = 0; iCol < columnCount(); iCol++) {
+			QTableWidgetItem *tIt = takeItem(row, iCol), *tIt2 = takeItem(r_new, iCol);
+			setItem(r_new, iCol, tIt); setItem(row, iCol, tIt2);
+		    }
+		    mainW->tblInit = false;
+		}
+	    } catch(TError &err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
+	}
+    }
+    else if(e->type() == QEvent::MouseButtonPress)
 	holdPnt = mapFromGlobal(cursor().pos());
     else if(e->type() == QEvent::MouseMove) {
 	QPoint curp = mapFromGlobal(cursor().pos());

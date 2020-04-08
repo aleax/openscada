@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 20:08+0300\n"
+"POT-Creation-Date: 2018-10-28 10:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,13 +17,13 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "Math function's lib"
+msgid "Math functions"
 msgstr ""
 
 msgid "Roman Savochenko"
 msgstr ""
 
-msgid "Provides the library of standard mathematical functions."
+msgid "Provides a library of the standard mathematical functions."
 msgstr ""
 
 msgid "Function"
@@ -38,22 +38,22 @@ msgstr ""
 msgid "X"
 msgstr ""
 
-msgid "ArcCos"
+msgid "Arccosine"
 msgstr ""
 
-msgid "Arc cosine math function."
+msgid "Arccosine math function."
 msgstr ""
 
-msgid "ArcSin"
+msgid "Arcsine"
 msgstr ""
 
-msgid "Arc sine math function."
+msgid "Arcsine math function."
 msgstr ""
 
-msgid "ArcTan"
+msgid "Arctangent"
 msgstr ""
 
-msgid "Arc tangent math function."
+msgid "Arctangent math function."
 msgstr ""
 
 msgid "Y"
@@ -131,7 +131,7 @@ msgstr ""
 msgid "Ceil"
 msgstr ""
 
-msgid "Ceil math function."
+msgid "Math function of rounding up to the largest integer."
 msgstr ""
 
 msgid "Absolute"
@@ -143,13 +143,13 @@ msgstr ""
 msgid "Floor"
 msgstr ""
 
-msgid "Floor math function."
+msgid "Math function of rounding down to the lowest integer."
 msgstr ""
 
-msgid "Rand"
+msgid "Random number"
 msgstr ""
 
-msgid "Rand math function."
+msgid "Math function of the random numbers generation."
 msgstr ""
 
 msgid "Condition"
@@ -164,5 +164,5 @@ msgstr ""
 msgid "IF condition"
 msgstr ""
 
-msgid "Function's type 'if'-condition."
+msgid "Function of the type 'if'-condition."
 msgstr ""

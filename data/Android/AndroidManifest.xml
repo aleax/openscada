@@ -12,7 +12,7 @@
             </intent-filter>
 
             <!-- Application arguments -->
-            <meta-data android:name="android.app.arguments" android:value="--modDir=/data/data/org.oscada/lib/liboscada_*.so --projUserDir=/storage/sdcard0/.openscada --style=fusion"/>
+            <meta-data android:name="android.app.arguments" android:value="--modDir=/data/data/org.oscada/lib/liboscada_*.so --projUserDir=/storage/sdcard0/.openscada --style=fusion --simulRightMKeyTm=2"/>
             <!-- Application arguments -->
 
             <meta-data android:name="android.app.lib_name" android:value="oscada"/>
@@ -67,7 +67,7 @@
 
     </application>
 
-    <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="16"/>
+    <uses-sdk android:minSdkVersion="19" android:targetSdkVersion="21"/>
     <supports-screens android:largeScreens="true" android:normalScreens="true" android:anyDensity="true" android:smallScreens="true"/>
 
     <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.

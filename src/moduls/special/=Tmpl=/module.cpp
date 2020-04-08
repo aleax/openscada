@@ -128,7 +128,7 @@ void Lib::modStart( )
     list(lst);
     for( int i_l = 0; i_l < lst.size(); i_l++ )
 	at(lst[i_l]).at().setStart(true);
-    run_st = true;
+    runSt = true;
 }
 
 //!!! Module's stop call. Place code for internal objects stop.
@@ -138,7 +138,7 @@ void Lib::modStop( )
     list(lst);
     for( int i_l = 0; i_l < lst.size(); i_l++ )
 	at(lst[i_l]).at().setStart(false);
-    run_st = false;
+    runSt = false;
 }
 
 //!!! OpenSCADA control interface comands process virtual function.

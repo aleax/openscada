@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tprmtmpl.h
 /***************************************************************************
- *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -59,31 +59,42 @@ class TPrmTempl: public TFunction, public TConfig
 	    //Data
 	    class SLnk {
 		public:
-		SLnk( const string &iprmAttr = "" ) : detOff(0), prmAttr(iprmAttr) { }
-		int	detOff;
-		string	prmAttr;
-		AutoHD<TVal> aprm;
+		SLnk( const string &iaddr = "" ) : objOff(0), addr(iaddr) { }
+		int	objOff;
+		string	addr, addrSpec;
+		AutoHD<TVal> con;
 	    };
 
-	    //Functions
-	    Impl( TCntrNode *iobj, const string &iname = "" );
+	    //Methods
+	    Impl( TCntrNode *iobj, const string &iname = "", bool blked = true );
 
+	    int  lnkId( const string &nm );
 	    bool lnkPresent( int num );
-	    void lnkAdd( int num, const SLnk &l );
-	    string lnkAttr( int num );
-	    void lnkAttrSet( int num, const string &vl );
-	    void lnkClear( bool andFunc = false );
+	    void lnkList( vector<int> &ls ) const;
+	    virtual void lnkAdd( int num, const SLnk &l );
+	    string lnkAddr( int num, bool spec = false ) const;
+	    void lnkAddrSet( int num, const string &vl, bool spec = false );
+	    virtual bool lnkInit( int num, bool checkNoLink = false );
+	    virtual bool lnkActive( int num );
+	    virtual TVariant lnkInput( int num );
+	    virtual bool lnkOutput( int num, const TVariant &vl );
 
-	    bool initTmplLnks( bool checkNoLink = false );
+	    void addLinksAttrs( TElem *attrsCntr = NULL );
+	    bool initLnks( bool checkNoLink = false );
+	    virtual void cleanLnks( bool andFunc = false );
 	    void inputLinks( );
 	    void outputLinks( );
-	    bool outputLink( int num, const TVariant &vl );
 
-	    bool cntrCmdProc( XMLNode *opt );
+	    bool cntrCmdProc( XMLNode *opt, const string &pref = "/cfg" );
 
-	    private:
+	    protected:
+	    //Methods
+	    virtual string lnkHelp( );
+
+	    //Attributes
 	    map<int,SLnk> lnks;
 
+	    ResMtx	lnkRes;
 	    TCntrNode	*obj;
 	};
 
@@ -158,7 +169,7 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 	string	tbl( )		{ return cfg("DB").getS(); }
 	string	fullDB( )	{ return DB()+'.'+tbl(); }
 
-	bool startStat( ) const	{ return run_st; }
+	bool startStat( ) const	{ return runSt; }
 	void start( bool val );
 
 	void setName( const string &vl );
@@ -191,7 +202,7 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 	const char *nodeName( ) const	{ return mId.getSd(); }
 
 	//Attributes
-	bool	run_st;
+	bool	runSt;
 	int	m_ptmpl;
 	TCfg	&mId;
 	string	work_lib_db;

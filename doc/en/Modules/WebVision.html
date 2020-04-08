@@ -7,11 +7,11 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../files/doc.css" rel="stylesheet" /></head>
-<body><div id="mw_header">
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../../en/files/Logo-big.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/WebVision</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/WebVision/ru" title="Модули/WebVision (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/WebVision/uk" title="Модулі/WebVision (100% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/WebVision.html" title="Модули/WebVision (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/WebVision.html" title="Модулі/WebVision (100% translated)">українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -23,29 +23,46 @@
 <th> Languages </th>
 <th> Platforms </th>
 <th> Type </th>
-<th> Author </th>
-<th> Description
+<th> Author
 </th></tr>
 
 <tr>
 <td> <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a> </td>
 <td> Operation user interface (WEB)
 </td>
-<td> 2.6 </td>
+<td> 4.6 </td>
 <td> GPL2 </td>
 <td> ui_WebVision.so </td>
 <td> en,uk,ru,de </td>
 <td> x86,x86_64,ARM
 </td>
 <td> UI </td>
-<td> Roman Savochenko<br /><font size="-2"><i>Maxim Lysenko (2007-2012), Ksenia Yashina (2007-2008)</i></font> </td>
-<td> Visual operation user interface, based on the the WEB — front-end to the VCA engine.
+<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2007-2012), Ksenia Yashina (2007-2008)</i></font>
+</td></tr>
+<tr>
+<th colspan="9"> Description
+</th></tr>
+<tr>
+<td colspan="9"> Visual operation user interface, based on the the WEB — front-end to the VCA engine.
+<ul><li> <b>To Do:</b></li></ul>
+<dl><dd> - expand the view "Table" of the primitive "FormEl" for user sorting by the selected column;</dd>
+<dd> * expand the status-bar, with the functions:
+<dl><dd> - export and print;</dd>
+<dd> - call of the project documents.</dd></dl></dd>
+<dd> - ElFigure,Diagram: enable or make the anti aliasing, for the library GD;</dd>
+<dd> - implement the primitives "Diagram", "ElFigure" in the tag "SVG".</dd></dl>
 </td></tr></table>
+<p>The module provides in OpenSCADA a mechanism of the final visualization of the visual control area (VCA). The module is based on WEB technologies (XHTML, JavaScript, CSS, AJAX). In its work, the module uses the data from the VCA engine — module <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>.
+</p><p>Visual control area (VCA) is an integral part of the SCADA system. It applies to the client stations with a view to providing accessible information about the control object and to for the the issuance of the control actions to the object. In various practical situations and conditions the VCA, based on different principles of visualization, may by applied. For example, this may be the library of widgets Qt, GTK+, WxWidgets or hypertext mechanisms based on the technologies HTML, XHTML, XML, CSS and JavaScript, or third-party applications of visualization, realized in various programming languages Java, Python, etc. Any of these principles has its advantages and disadvantages, the combination of which could become an insurmountable obstacle to the use of VCA in a practical case. For example, technologies like the Qt library can create highly-productive VCA, which will undoubtedly important for the operator station for control the technological processes (TP). However, the need for installation of that client software in some cases may make using of it impossible. On the other hand, Web-technology does not require installation on client systems and is extremely multi-platform (it is enough to create a link to the Web-server at any Web-browser) that is most important for various engineering and administrative stations, but the productivity and reliability of such interfaces is lower, that actually eliminates the using of them at the operator stations of TP.
+</p><p>OpenSCADA has extremely flexible architecture that allows you to create external interfaces, including user, in any manner and taste. For example, the OpenSCADA configuration environment available now as by means of the Qt-library, and also the Web-based.
+</p><p>At the same time, independent creation of the VCA implementations in different basis may cause the inability to use the configuration of one VCA into another one. That is inconvenient and limited from the user side, as well as costly in terms of implementation and follow-up support.
+</p><p>In order to avoid these problems, as well as to create as soon as possible the full spectrum of different types of VCA, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA" title="Special:MyLanguage/Sub-projects/VCA">the generic concept of VCA</a> is established. The result of this project — this direct visualization module (based on the Web-technologies), direct visualization module <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> and the VCA engine <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>.
+</p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#Purpose"><span class="tocnumber">1</span> <span class="toctext">Purpose</span></a></li>
 <li class="toclevel-1 tocsection-2"><a href="#Execution_of_the_VCA_interfaces"><span class="tocnumber">2</span> <span class="toctext">Execution of the VCA interfaces</span></a></li>
-<li class="toclevel-1 tocsection-3"><a href="#Presentation_of_the_basic_elements_.28primitives.29"><span class="tocnumber">3</span> <span class="toctext">Presentation of the basic elements (primitives)</span></a>
+<li class="toclevel-1 tocsection-3"><a href="#Presentation_of_the_basic_elements_.28primitives.29"><span class="tocnumber">3</span> <span class="toctext"><span>Presentation of the basic elements (primitives)</span></span></a>
 <ul>
 <li class="toclevel-2 tocsection-4"><a href="#Elementary_figure_primitive_.28ElFigure.29"><span class="tocnumber">3.1</span> <span class="toctext">Elementary figure primitive (ElFigure)</span></a></li>
 <li class="toclevel-2 tocsection-5"><a href="#Text_primitive_.28Text.29"><span class="tocnumber">3.2</span> <span class="toctext">Text primitive (Text)</span></a></li>
@@ -58,16 +75,12 @@
 </ul>
 </li>
 <li class="toclevel-1 tocsection-12"><a href="#Overall_configuration_of_the_module"><span class="tocnumber">4</span> <span class="toctext">Overall configuration of the module</span></a></li>
-<li class="toclevel-1 tocsection-13"><a href="#Notes"><span class="tocnumber">5</span> <span class="toctext">Notes</span></a></li>
+<li class="toclevel-1 tocsection-13"><a href="#Efficiency_and_scalability"><span class="tocnumber">5</span> <span class="toctext"><span>Efficiency and scalability</span></span></a></li>
+<li class="toclevel-1 tocsection-14"><a href="#Notes"><span class="tocnumber">6</span> <span class="toctext">Notes</span></a></li>
+<li class="toclevel-1 tocsection-15"><a href="#Links"><span class="tocnumber">7</span> <span class="toctext">Links</span></a></li>
 </ul>
 </div>
 
-<p>The module provides in OpenSCADA a mechanism of the final visualization of the visual control area (VCA). The module is based on WEB technologies (XHTML, JavaScript, CSS, AJAX). In its work, the module uses the data from the VCA engine — module <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>.
-</p><p>Visual control area (VCA) is an integral part of the SCADA system. It applies to the client stations with a view to providing accessible information about the control object and to for the the issuance of the control actions to the object. In various practical situations and conditions the VCA, based on different principles of visualization, may by applied. For example, this may be the library of widgets Qt, GTK+, WxWidgets or hypertext mechanisms based on the technologies HTML, XHTML, XML, CSS and JavaScript, or third-party applications of visualization, realized in various programming languages Java, Python, etc. Any of these principles has its advantages and disadvantages, the combination of which could become an insurmountable obstacle to the use of VCA in a practical case. For example, technologies like the Qt library can create highly-productive VCA, which will undoubtedly important for the operator station for control the technological processes (TP). However, the need for installation of that client software in some cases may make using of it impossible. On the other hand, Web-technology does not require installation on client systems and is extremely multi-platform (it is enough to create a link to the Web-server at any Web-browser) that is most important for various engineering and administrative stations, but the productivity and reliability of such interfaces is lower, that actually eliminates the using of them at the operator stations of TP.
-</p><p>OpenSCADA has extremely flexible architecture that allows you to create external interfaces, including user, in any manner and taste. For example, the OpenSCADA configuration environment available now as by means of the Qt-library, and also the Web-based.
-</p><p>At the same time, independent creation of the VCA implementations in different basis may cause the inability to use the configuration of one VCA into another one. That is inconvenient and limited from the user side, as well as costly in terms of implementation and follow-up support.
-</p><p>In order to avoid these problems, as well as to create as soon as possible the full spectrum of different types of VCA, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA" title="Special:MyLanguage/Sub-projects/VCA">the generic concept of VCA</a> is established. The result of this project — this direct visualization module (based on the Web-technologies), direct visualization module <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> and the VCA engine <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>.
-</p>
 <h2><span class="mw-headline" id="Purpose"><span class="mw-headline-number">1</span> Purpose</span></h2>
 <p>This module of the direct visualization of the VCA serves only for the execution of the VCA interfaces in the area of WEB-technologies!
 </p><p>The user interface forms in WEB-browser, by reference to the WEB-server and receiving from it XHTML-document over HTTP. In this case, the WEB-server — OpenSCADA, which supports standard communication mechanisms of the TCP-networks (module <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Transport.Sockets</a>), hypertext transfer protocol (module <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a>), as well as encryption of the traffic between the browser and the server (<a href="../Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">Transport.SSL</a>). Therefore, in order to access the user interface provided by this module, OpenSCADA must configure transport (Transport.Sockets or Transport.SSL) in conjunction with the HTTP protocol (Protocol.HTTP). OpenSCADA comes with configuration files that contain the Transport.Sockets configuration for ports 10002 and 10004. Consequently, the module interface, in the default, will be available at URL: "http://localhost:10002" and "http://localhost:10004".
@@ -99,7 +112,7 @@
 <p><br />
 </p>
 <h2><span class="mw-headline" id="Execution_of_the_VCA_interfaces"><span class="mw-headline-number">2</span> Execution of the VCA interfaces</span></h2>
-<p>Execution of the VCA interface is to run a new project session, or connect to the existing one, on the level of the VCA engine (Fig.2). Before the connection request to the session the user authentication request (Fig.1) is done. Then the module of direct visualization displays and controls the data of the session. The main window of the execution mode of this module has the form presented at Figure 3.
+<p>Execution of the VCA interface is to run a new project session, or connect to the existing one, on the level of the VCA engine (Fig.2). Before the connection request to the session the user authentication request (Fig.1) is done. Then the module of direct visualization displays and controls the data of the session. The main window of the execution mode of this module has the form presented at Figure 3. The administrator users ("root" or in the group "root") can close the opened sessions.
 </p><p>The interface of the execution window is built fully dynamically by the JavaScript script on the basis of the contents of the project session through direct XML requests to the server.
 </p><p>Update of the contents of the open pages of the visual interface with periodicity of the project session is implemented. During the upgrade process:
 </p>
@@ -108,16 +121,23 @@
 <dd>- updating content of the pages and their widgets in accordance with the received modified data.</dd></dl>
 <p>The mechanism of the request for only modified data is based on the absolute counter of the session execution. When you make real changes in the attributes of widgets the remembering of the value of this counter is made, which allows us to identify the modified attributes. This approach allows to increase productivity and reduce the load on the traffic in case of access to the model through the network.
 </p><p>Hierarchically, the module assumes the possibility of placing pages of the project as in the main window of execution (Fig. 3), and by placing inside the container widgets, as well as by opening additional windows over the main one.
-</p><p>The module supports multi-language which one enabled by the <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#ConfigTr" title="Special:MyLanguage/Documents/Program manual">dynamic messages translation of OpenSCADA</a>. The gotten language passes by the module <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a> and detects in way and by the order:
+</p><p>On the status line locates:
+</p>
+<ul><li> On the right side:
+<ul><li> the current user, on whose behalf the VCA interface is executed — by a clicking this user can be changed, typing of the new username and password;</li>
+<li> the current interface style, which can be changed selecting need one in the combobox;</li>
+<li> the current alarm status by a lamp with color related to the alarm level; blinks at the alarm appearing or changing; pressing on the lamp you may quiet the alarm.</li></ul></li>
+<li> In the main field of the status line various messages and assistance messages are displayed.</li></ul>
+<p>The module supports multi-language which one enabled by the <a href="../Program_manual.html#ConfigTr" title="Special:MyLanguage/Documents/Program manual">dynamic messages translation of OpenSCADA</a>. The gotten language passes by the module <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a> and detects in way and by the order:
 </p>
 <ul><li> URL's parameter "lang".</li>
 <li> Authenticated user's language.</li>
 <li> Language of the Web-browser from the HTTP property "Accept-Language".</li>
 <li> Generic language of the OpenSCADA process.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:619px;"><a class="image" href="http://oscada.org/wiki/File:HTTP_auth.png"><img class="thumbimage" height="302" src="../files/HTTP_auth.png" width="617" /></a>  <div class="thumbcaption">Fig.1. Authentication page.</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:618px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_connect.png"><img class="thumbimage" height="423" src="../files/WebVision_wvis_connect.png" width="616" /></a>  <div class="thumbcaption">Fig.2. Connection or creation of a new session of the execution project of the VCA.</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1048px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run.png"><img class="thumbimage" height="784" src="../files/WebVision_wvis_run.png" width="1046" /></a>  <div class="thumbcaption">Fig.3. Main execution window.</div></div></div></div>
-<h2><span class="mw-headline" id="Presentation_of_the_basic_elements_.28primitives.29"><span class="mw-headline-number">3</span> Presentation of the basic elements (primitives)</span></h2>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:621px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_connect.png"><img class="thumbimage" height="411" src="../files/WebVision_wvis_connect.png" width="619" /></a>  <div class="thumbcaption">Fig.2. Connection or creation of a new session of the execution project of the VCA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1041px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run.png"><img class="thumbimage" height="782" src="../files/WebVision_wvis_run.png" width="1039" /></a>  <div class="thumbcaption">Fig.3. Main execution window.</div></div></div></div>
+<h2><span class="mw-headline" id="Presentation_of_the_basic_elements_.28primitives.29"><span class="mw-headline-number">3</span> <span id="Primitives" title="#Primitives">Presentation of the basic elements (primitives)</span></span></h2>
 <p>This version of the module does not implement all the shapes of the primitives laid by the project. In general, the project provides the following primitives:
 </p>
 <table class="wikitable">
@@ -210,17 +230,38 @@
 <td> stBarNoShow (main page) </td>
 <td> Do not show the status bar </td>
 <td> Hide the status bar of the main window.
+</td></tr>
+<tr>
+<td> vs_goHttpUrl (view "Button" of the primitive "FormEl") </td>
+<td> Go to the HTTP URL </td>
+<td> Go to the specified URL at the button press
+</td></tr>
+<tr>
+<td> vs_background (views "Line edit", "Text edit", "Combo box", "List", "Tree", "Table" of the primitive "FormEl") </td>
+<td> Custom background </td>
+<td> Specifies for the custom background in the form <b>{color}-{transp} {image}</b>
+</td></tr>
+<tr>
+<td> vs_border (views "Line edit", "Text edit", "Combo box", "List", "Tree", "Table" of the primitive "FormEl") </td>
+<td> Custom border </td>
+<td> Specifies for the custom border in the standard CSS-form <b>{wdth}px {style} {color}</b>
+</td></tr>
+<tr>
+<td> vs_winTitle (the view "Box") </td>
+<td> Window title </td>
+<td> Dynamic window title value
 </td></tr></table>
 <p>Consider the implementation of each primitive in more detail.
 </p>
 <h3><span class="mw-headline" id="Elementary_figure_primitive_.28ElFigure.29"><span class="mw-headline-number">3.1</span> Elementary figure primitive (ElFigure)</span></h3>
 <p>Support of the elementary figures is implemented: lines, elliptical arcs, Bézier curves and fill of the enclosed space with the color and image with the properties:
 </p>
-<ul><li> Formation of arbitrary images from three elemental shapes and fillings of closed spaces with color or image.</li>
-<li> There is the possibility of determination of the figures' properties both in general and individual to each one: line width, color and style, line border's width and color, filling's color and image.</li>
-<li> Arbitrary rotation of the generic figure about its center.</li>
-<li> User's attributes support for dynamic: points, widths, colors, styles and images.</li>
-<li> Formation of events by action of the mouse manipulator in a closed space and in general.</li></ul>
+<ul><li> formation of arbitrary images from three elemental shapes and fillings of closed spaces with color or image;</li>
+<li> there is the possibility of determination of the figures' properties both in general and individual to each one: line width, color and style, line border's width and color, filling's color and image;</li>
+<li> scaling;</li>
+<li> transformation: rotation and mirroring;</li>
+<li> user's attributes support for dynamic: points, widths, colors, styles and images;</li>
+<li> formation of events by action of the mouse manipulator in a closed space and in general.</li></ul>
 <p>Figure shows a part of the screen with a frame containing the elementary figures.
 </p>
 <div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run_elfig.png"><img alt="WebVision wvis run elfig.png" height="311" src="../files/WebVision_wvis_run_elfig.png" width="222" /></a></div></div>
@@ -260,9 +301,13 @@
 <li> <i>Tree</i> — Provides the tree element with possibility of an item selection.</li>
 <li> <i>Table</i> — Provides the table element with the possibility of selecting for cells, rows or columns and editing the cell content.</li>
 <li> <i>Slider</i> — Slider element.</li>
-<li> <i>Scroll bar</i> — Scroll bar (Equal to Slider).</li></ul>
-<p>The "Enabled" and "Active" modes are implemented, as well as the transfer of changes and events to the data model of the VCA — engine.
-</p><p>Figure represents a part of the screen with the frame containing the above-listed elements of the form.
+<li> <i>Scroll bar</i> — Scroll bar (Equal to Slider).</li>
+<li> <i>Password</i> — Hidden password typing.</li></ul>
+<p>The "Enabled" and "Active" modes are implemented, as well as the transfer of changes and events to the data model of the VCA — engine. The mode "Active" cause to the activity cursor set for not empty background and the addition conditions of the different views "Text", "Media" and "Box":
+</p>
+<ul><li> <i>Text</i> — not empty text;</li>
+<li> <i>Media</i> — not empty source image.</li></ul>
+<p>Figure represents a part of the screen with the frame containing the above-listed elements of the form.
 </p>
 <div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run_formel.png"><img alt="WebVision wvis run formel.png" height="259" src="../files/WebVision_wvis_run_formel.png" width="597" /></a></div></div>
 <p><br />
@@ -350,19 +395,301 @@
 <p><br />
 </p>
 <h2><span class="mw-headline" id="Overall_configuration_of_the_module"><span class="mw-headline-number">4</span> Overall configuration of the module</span></h2>
-<p>To configure the general behavior, the module provides the ability to configure a number of parameters through the control interface of OpenSCADA (Fig.4):
+<p>To configure and control this module, you have the configuration page of the OpenSCADA control interface (Fig.4):
 </p>
-<ul><li> Lifetime of the sessions, in minutes.</li>
-<li> Overall sessions limit.</li>
-<li> Level of the PNG-images compression. The optimum is the minimum level 1, since large files get uncompressed, and higher compression levels create a higher load on the processor.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:750px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_cfg.png"><img class="thumbimage" height="503" src="../files/WebVision_wvis_cfg.png" width="748" /></a>  <div class="thumbcaption">Fig.4. Configuration page of the module.</div></div></div></div>
-<h2><span class="mw-headline" id="Notes"><span class="mw-headline-number">5</span> Notes</span></h2>
+<ul><li> Control for the active WEB-sessions.</li>
+<li> Configuring:
+<ul><li> Lifetime, in minutes, and maximum number of the sessions.</li>
+<li> Lifetime, in hours, and maximum number of the cached pages.</li>
+<li> Level of the PNG-images compression. The optimum is the minimum level 1, since large files get uncompressed, and higher compression levels create a higher load on the processor.</li>
+<li> Resizing raster images on the server side. Mostly to decrease too big images size then decrease the traffic, what causes to rise the server load.</li></ul></li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:949px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_cfg.png"><img class="thumbimage" height="504" src="../files/WebVision_wvis_cfg.png" width="947" /></a>  <div class="thumbcaption">Fig.4. Configuration page of the module.</div></div></div></div>
+<h2><span class="mw-headline" id="Efficiency_and_scalability"><span class="mw-headline-number">5</span> <span id="Efficiency" title="#Efficiency">Efficiency and scalability</span></span></h2>
+<p><b><u>31.07.2019</u></b><br />
+GROUNDS: The Web-sessions may create many objects servicing the VCA-session for generating images, processing documents and performing other background functions of the end user Web-interface. Moreover, in difference to <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a>, the VCA-sessions may be created, closed and recreated again multiple times for different users and remote hosts. In the time the memory heap is affected by the memory fragmentation, so the program consumes more memory than at the start. The table below represents the phenomenon for different environments and the first page of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">the DemoDB (AGLKS) project</a> reopening:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Environment </th>
+<th> Initially, MB </th>
+<th> Iter. 1, MB </th>
+<th> Iter. 2, MB </th>
+<th> Iter. 3, MB </th>
+<th> Iter. 4, MB </th>
+<th> Iter. 5, MB </th>
+<th> Resume
+</th></tr>
+<tr>
+<td colspan="9"> <i>Complete creation the Web- and VCA-sessions</i>
+</td></tr>
+<tr>
+<td> Debian 10 amd64, GLibC 2.28, GCC 8.3.0 + MALLOC_ARENA_MAX=2 </td>
+<td> 181 </td>
+<td> 189 </td>
+<td> 190 </td>
+<td> 195 </td>
+<td> 195 </td>
+<td> 194 </td>
+<td> Satiated on the iteration <b>3</b>, base consumption 8 MB, extra consumption 5 MB (<b>62.5</b>&nbsp;%), liboscada.so 3.5 MB, ui_WebVision.so 0.75 MB
+</td></tr>
+<tr>
+<td> Debian 10 amd64, GLibC 2.28, GCC 8.3.0 + MALLOC_ARENA_MAX=1 </td>
+<td> 177 </td>
+<td> 185 </td>
+<td> 186 </td>
+<td> 186 </td>
+<td> 185 </td>
+<td> 186 </td>
+<td> Satiated on the iteration <b>2</b>, base consumption 8 MB, extra consumption 1 MB (<b>13</b>&nbsp;%), liboscada.so 3.5 MB, ui_WebVision.so 0.75 MB
+</td></tr>
+<tr>
+<td> Debian 9 amd64, GLibC 2.28, GCC 8.3.0 + MALLOC_ARENA_MAX=1 </td>
+<td> 160 </td>
+<td> 168 </td>
+<td> 168 </td>
+<td> 168.5 </td>
+<td> 168.5 </td>
+<td> 168.5 </td>
+<td> Satiated on the iteration <b>1</b>, base consumption 8 MB, extra consumption 0.5 MB (<b>6</b>&nbsp;%), liboscada.so 3.5 MB, ui_WebVision.so 0.75 MB
+</td></tr>
+<tr>
+<td> Debian 10 amd64, GLibC 2.28, GCC 8.3.0 + optional background objects in WebVision </td>
+<td> 184 </td>
+<td> 194.5 </td>
+<td> 200 </td>
+<td> 207 </td>
+<td> 207 </td>
+<td> 212.5 </td>
+<td> Satiated on the iteration <b>5</b>, base consumption 10.5 MB, extra consumption 18 MB (<b>171</b>&nbsp;%), liboscada.so 3.5 MB, ui_WebVision.so 0.75 MB
+</td></tr>
+<tr>
+<td> Debian 10 amd64, GLibC 2.28, GCC 8.3.0 </td>
+<td> 182 </td>
+<td> 191.5 </td>
+<td> 199 </td>
+<td> 206 </td>
+<td> 212 </td>
+<td> 212 </td>
+<td> Satiated on the iteration <b>4</b>, base consumption 9.5 MB, extra consumption 20 MB (<b>200</b>&nbsp;%), liboscada.so 3.5 MB, ui_WebVision.so 0.74 MB
+</td></tr>
+<tr>
+<td> Debian 9 amd64, GLibC 2.24, GCC 6.3.0 </td>
+<td> 160 </td>
+<td> 170 </td>
+<td> 178 </td>
+<td> 179 </td>
+<td> 183 </td>
+<td> 185 </td>
+<td> Satiated on the iteration <b>5</b>, base consumption 10 MB, extra consumption 15 MB (<b>150</b>&nbsp;%), liboscada.so 3.5 MB, ui_WebVision.so 0.72 MB
+</td></tr>
+<tr>
+<td> Debian 8 amd64, GLibC 2.19, GCC 4.9.2 </td>
+<td> 125.5 </td>
+<td> 133 </td>
+<td> 139 </td>
+<td> 139 </td>
+<td> 139 </td>
+<td> 139 </td>
+<td> Satiated on the iteration <b>2</b>, base consumption 7.5 MB, extra consumption 6 MB (<b>80</b>&nbsp;%), liboscada.so 3.8 MB, ui_WebVision.so 0.79 MB
+</td></tr>
+<tr>
+<td> Debian 7 amd64, GLibC 2.13, GCC 4.7.2 </td>
+<td> 101 </td>
+<td> 108 </td>
+<td> 111 </td>
+<td> 112 </td>
+<td> 112 </td>
+<td> 112 </td>
+<td> Satiated on the iteration <b>2</b>, base consumption 7 MB, extra consumption 4 MB (<b>57</b>&nbsp;%), liboscada.so 3.4 MB, ui_WebVision.so 0.85 MB
+</td></tr>
+<tr>
+<td> Debian 10 i386, GLibC 2.28, GCC 8.3.0 + MALLOC_ARENA_MAX=1 </td>
+<td> 144 </td>
+<td> 152 </td>
+<td> 152 </td>
+<td> 152 </td>
+<td> 152 </td>
+<td> 152 </td>
+<td> Satiated on the iteration <b>1</b>, base consumption 8 MB, extra consumption 0 MB (<b>0</b>&nbsp;%), liboscada.so 3.7 MB, ui_WebVision.so 0.9 MB
+</td></tr>
+<tr>
+<td> Debian 9 i386, GLibC 2.24, GCC 6.3.0 + MALLOC_ARENA_MAX=1 </td>
+<td> 126.5 </td>
+<td> 132.5 </td>
+<td> 133 </td>
+<td> 133 </td>
+<td> 133 </td>
+<td> 133 </td>
+<td> Satiated on the iteration <b>1</b>, base consumption 6 MB, extra consumption 0.5 MB (<b>8</b>&nbsp;%), liboscada.so 3.7 MB, ui_WebVision.so 0.9 MB
+</td></tr>
+<tr>
+<td> Debian 10 i386, GLibC 2.28, GCC 8.3.0 </td>
+<td> 151 </td>
+<td> 158 </td>
+<td> 162.5 </td>
+<td> 166 </td>
+<td> 166 </td>
+<td> 166 </td>
+<td> Satiated on the iteration <b>3</b>, base consumption 7 MB, extra consumption 8 MB (<b>114</b>&nbsp;%), liboscada.so 3.7 MB, ui_WebVision.so 0.9 MB
+</td></tr>
+<tr>
+<td> Debian 9 i386, GLibC 2.24, GCC 6.3.0 </td>
+<td> 125 </td>
+<td> 131 </td>
+<td> 132 </td>
+<td> 136 </td>
+<td> 136 </td>
+<td> 139 </td>
+<td> Satiated on the iteration <b>5</b>, base consumption 6 MB, extra consumption 8 MB (<b>133</b>&nbsp;%), liboscada.so 3.7 MB, ui_WebVision.so 0.9 MB
+</td></tr>
+<tr>
+<td> Debian 8 i386, GLibC 2.19, GCC 4.9.2 </td>
+<td> 92.5 </td>
+<td> 99 </td>
+<td> 101.5 </td>
+<td> 103 </td>
+<td> 103.5 </td>
+<td> 103.5 </td>
+<td> Satiated on the iteration <b>2</b>, base consumption 6.5 MB, extra consumption 4.5 (<b>69</b>&nbsp;%), liboscada.so 3.6 MB, ui_WebVision.so 0.94 MB
+</td></tr>
+<tr>
+<td> Debian 7 i386, GLibC 2.13, GCC 4.7.2 </td>
+<td> 70 </td>
+<td> 76 </td>
+<td> 76 </td>
+<td> 76 </td>
+<td> 77 </td>
+<td> 77 </td>
+<td> Satiated on the iteration <b>2</b>, base consumption 6 MB, extra consumption 1 MB (<b>16</b>&nbsp;%), liboscada.so 3.6 MB, ui_WebVision.so 0.9 MB
+</td></tr>
+<tr>
+<td> ALTLinux 6 i386, GLibC 2.11.3, GCC 4.5.4 </td>
+<td> 69 </td>
+<td> 74 </td>
+<td> 75 </td>
+<td> 75 </td>
+<td> 75 </td>
+<td> 75 </td>
+<td> Satiated on the iteration <b>2</b>, base consumption 5 MB, extra consumption 1 MB (<b>20</b>&nbsp;%), liboscada.so 2.3 MB, ui_WebVision.so 0.9 MB
+</td></tr>
+<tr>
+<td colspan="9"> <i>Creation only VCA-session, from remote connection to the visualizer server</i>
+</td></tr>
+<tr>
+<td> Debian 10 amd64, GLibC 2.28, GCC 8.3.0 </td>
+<td> 180 </td>
+<td> 186 </td>
+<td> 186 </td>
+<td> 186 </td>
+<td> 186 </td>
+<td> 186 </td>
+<td> Satiated on the iteration <b>1</b>, extra consumption 0.2 MB (3&nbsp;%)
+</td></tr>
+<tr>
+<td> Debian 7 amd64, GLibC 2.13, GCC 4.7.2 </td>
+<td> 100 </td>
+<td> 104 </td>
+<td> 105 </td>
+<td> 105 </td>
+<td> 105 </td>
+<td> 105 </td>
+<td> Satiated on the iteration <b>1</b>, extra consumption 1 MB (25&nbsp;%)
+</td></tr>
+<tr>
+<td> Debian 10 i386, GLibC 2.28, GCC 8.3.0 </td>
+<td> 148 </td>
+<td> 154 </td>
+<td> 155 </td>
+<td> 155 </td>
+<td> 155 </td>
+<td> 155 </td>
+<td> Satiated on the iteration <b>1</b>, extra consumption 1 MB (16&nbsp;%)
+</td></tr>
+<tr>
+<td> Debian 7 i386, GLibC 2.13, GCC 4.7.2 </td>
+<td> 69 </td>
+<td> 72 </td>
+<td> 72 </td>
+<td> 72 </td>
+<td> 72 </td>
+<td> 72 </td>
+<td> Satiated on the iteration <b>1</b>, extra consumption 0 MB (0&nbsp;%)
+</td></tr></table>
+<p>CONCLUSION: We see obvious degradation in the memory effectivity on the last Debian releases starting at Debian 8 (GLibC 2.19) on I386 and Debian 9 (GLibC 2.24) on AMD64, when the memory consumption increased up to 200% after 3,4 free-allocate iterations of the same data. To more presenting of the problem there have built follow images on the data basis:
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:667px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_MemEffectAMD64.png"><img class="thumbimage" height="405" src="../files/WebVision_MemEffectAMD64.png" width="665" /></a>  <div class="thumbcaption">Fig.5. Memory effectivity on AMD64 platform.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:643px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_MemEffectI386.png"><img class="thumbimage" height="401" src="../files/WebVision_MemEffectI386.png" width="641" /></a>  <div class="thumbcaption">Fig.6. Memory effectivity on I386 platform.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:607px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_AbsInitSizeAMD64.png"><img class="thumbimage" height="427" src="../files/WebVision_AbsInitSizeAMD64.png" width="605" /></a>  <div class="thumbcaption">Fig.7. Absolute initial size of OpenSCADA "AGLKS" on the platform AMD64.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:606px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_AbsInitSizeAI386.png"><img class="thumbimage" height="428" src="../files/WebVision_AbsInitSizeAI386.png" width="604" /></a>  <div class="thumbcaption">Fig.8. Absolute initial size of OpenSCADA "AGLKS" on the platform I386.</div></div></div></div>
+<p>MEASURES:
+</p>
+<ol><li> The optional background objects were implemented for the primitives "FormEl" and "Text", what will have most effect on mnemonic-schemes with these elements and wont have many effect for other, see the measuring data above.</li>
+<li> There were some tries to tune the memory allocator of GLibC using "<a class="external text" href="https://www.gnu.org/software/libc/manual/html_node/Memory-Allocation-Tunables.html" rel="nofollow noreferrer noopener" target="_blank">Memory Allocation Tunables</a>" without any significant effect, so we will <a class="external text" href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=934080" rel="nofollow noreferrer noopener" target="_blank">notify the Debian community</a>, firstly.</li>
+<li> The problem was detected in arenas of the memory allocator, setting whose number to 1 (MALLOC_ARENA_MAX=1) completely resolves the problem and the effect you may see on Figures 9, 10, for a real big application.</li></ol>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1038px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_MemoryDef.png"><img class="thumbimage" height="544" src="../files/WebVision_MemoryDef.png" width="1036" /></a>  <div class="thumbcaption">Fig.9. Tendency of the memory consumption on a real big application at the default conditions.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1058px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_MemoryArenas1.png"><img class="thumbimage" height="552" src="../files/WebVision_MemoryArenas1.png" width="1056" /></a>  <div class="thumbcaption">Fig.10. Tendency of the memory consumption on a real big application at the environment variable MALLOC_ARENA_MAX=1.</div></div></div></div>
+<p><b><u>20.06.2013</u></b><br />
+GROUNDS: At working with the board <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Kontron_MOPSlcdLX" title="Special:MyLanguage/Using/Kontron MOPSlcdLX">MOPSlcdLX</a>, attention was drawn to the heavy load of the task of forming full-size trends. As it turned out later, a large load is created by the formation of a PNG image in the GD2 library, or rather, the packing procedure of ZLib. The subject analysis of the performance of the formation of images of various formats on this board is summarized in the table below:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Format </th>
+<th> Trend building, milliseconds </th>
+<th> Converting to the image format, milliseconds </th>
+<th> Size of the image, bytes
+</th></tr>
+<tr>
+<td> PNG (0) </td>
+<td> 200 </td>
+<td> 800 </td>
+<td> 1700365
+</td></tr>
+<tr>
+<td> PNG (1) </td>
+<td> 200 </td>
+<td> 690 </td>
+<td> 24000
+</td></tr>
+<tr>
+<td> PNG (-1) </td>
+<td> 200 </td>
+<td> 1000 </td>
+<td> 14800
+</td></tr>
+<tr>
+<td> PNG (9) </td>
+<td> 200 </td>
+<td> 1900 </td>
+<td> 13354
+</td></tr>
+<tr>
+<td> JPEG (-1) </td>
+<td> 200 </td>
+<td> 180 </td>
+<td> 53157
+</td></tr>
+<tr>
+<td> GIF </td>
+<td> 200 </td>
+<td> 380 </td>
+<td> 14300
+</td></tr></table>
+<p>CONCLUSION: As can be seen from the table above, the operation of forming PNG as a whole is resource-intensive and the most optimal level of compression is "1". At the same time, the formation of JPEG and GIF is much faster, but these image formats have a number of critical flaws, namely: JPEG does not have an alpha channel (transparency), and GIF is limited by the number of colors, which in both cases leads to loss of transparency and distortion of text smoothing and images in general.
+</p><p>MEASURES: The ability to select the compression level for the generated PNG images is added, and the default value is set to the optimal level "1". The implementation of the formation of the "Diagram" primitive on the browser side in the "svg" or "canvas" tags is planned.
+</p><p><br />
+</p>
+<h2><span class="mw-headline" id="Notes"><span class="mw-headline-number">6</span> Notes</span></h2>
 <p>At this stage, the module can be used to construct real user interfaces with support for the main functions. However, some problems may arise due to the differences between browsers. At this time, provided enough quality performance on browsers: Chromium (Google Chrome), FireFox, Opera, Konqueror.
 </p>
+<h2><span class="mw-headline" id="Links"><span class="mw-headline-number">7</span> Links</span></h2>
+<ul><li> <a class="external" href="http://oscada.org/wiki/File:WebVision_MemAllocFree.ods" title="File:WebVision MemAllocFree.ods">Spreadsheet: Analysis of effectivity of the memory allocation.</a></li></ul>
 
 
 
 
 
-</div></body>
+
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebVision/en">Modules/WebVision/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.1</td></tr></table></body>
 </html>

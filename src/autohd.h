@@ -1,7 +1,7 @@
 
 //OpenSCADA file: autohd.h
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -54,7 +54,8 @@ template <class ORes> class AutoHD
 
 	ORes &at( ) const {
 	    if(m_node) return *m_node;
-	    throw TError("AutoHD","No init!");
+	    //int *cr = NULL; *cr = 123;	//!!!! Use to emit a crash to observe the problematic place
+	    throw TError("AutoHD", "No init!");
 	}
 
 	AutoHD &operator=( const AutoHD &hd ) {

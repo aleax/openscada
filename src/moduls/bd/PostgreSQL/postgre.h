@@ -1,8 +1,8 @@
 
 //OpenSCADA module BD.PostgreSQL file: postgre.h
 /***************************************************************************
- *   Copyright (C) 2013-2017 by Roman Savochenko, rom_as@oscada.org        *
- *                 2010 by Maxim Lysenko, mlisenko@oscada.org              *
+ *   Copyright (C) 2013-2020 by Roman Savochenko, roman@oscada.org         *
+ *                 2010-2011 by Maxim Lysenko, mlisenko@oscada.org         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -63,7 +63,6 @@ class MTable : public TTable
 	void fieldFix( TConfig &cfg, bool trPresent = false, bool recurse = false );
 	void fieldPrmSet( TCfg &cfg, const string &last, string &req );
 
-
 	string getVal( TCfg &cfg, uint8_t RqFlg = 0 );
 	void   setVal( TCfg &cfg, const string &vl, bool tr = false );
 
@@ -83,9 +82,6 @@ class MBD : public TBD
     friend class MTable;
 
     public:
-	//Data
-	enum SQLerrs { SQL_CONN = 1, SQL_QUERY = 2 };
-
 	//Public methods
 	MBD( string iid, TElem *cf_el );
 	~MBD( );
@@ -116,7 +112,7 @@ class MBD : public TBD
 	string host, hostaddr, user, pass, db, port, connect_timeout, cd_pg, conninfo;
 	PGconn	*connection;
 	int	reqCnt;
-	time_t	reqCntTm, trOpenTm;
+	int64_t	reqCntTm, trOpenTm;
 	ResMtx	connRes;
 
 	// Statistic

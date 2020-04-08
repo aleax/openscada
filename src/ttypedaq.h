@@ -53,10 +53,10 @@ class TTypeDAQ : public TModule, public TElem
 
 	// Controllers
 	void list( vector<string> &list ) const		{ chldList(mCntr,list); }
-	bool present( const string &name ) const	{ return chldPresent(mCntr,name); }
-	void add( const string &name, const string &daq_db = "*.*" );
-	void del( const string &name )			{ chldDel(mCntr,name); }
-	AutoHD<TController> at( const string &name, const string &who = "" ) const	{ return chldAt(mCntr,name); }
+	bool present( const string &id ) const	{ return chldPresent(mCntr,id); }
+	string add( const string &id, const string &daq_db = "*.*" );
+	void del( const string &id )			{ chldDel(mCntr,id); }
+	AutoHD<TController> at( const string &id, const string &who = "" ) const	{ return chldAt(mCntr,id); }
 
 	// Parameter types (DB structure)
 	bool tpPrmPresent( const string &name_t );

@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.JavaLikeCalc file: freefunc.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2020 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -72,6 +72,8 @@ void Func::postDisable( int flag )
 bool Func::cfgChange( TCfg &co, const TVariant &pc )
 {
     if(co.name() == "PR_TR") cfg("FORMULA").setNoTransl(!progTr());
+    else if(co.name() == "FORMULA" && startStat() && co.getS() != pc.getS())
+	setStart(false);
     modif();
     return true;
 }
@@ -134,6 +136,7 @@ void Func::setMaxCalcTm( int vl )
 void Func::setProg( const string &iprg )
 {
     cfg("FORMULA").setS(iprg);
+
     if(owner().DB().empty()) modifClr();
 }
 
@@ -251,14 +254,14 @@ void Func::delIO( )
 void Func::valAtt( TValFunc *vfnc )
 {
     TFunction::valAtt(vfnc);
-    ResAlloc res1(fRes(), true);
+    ResAlloc res1(fRes(), false);
     workRegControl(vfnc);
 }
 
 void Func::valDet( TValFunc *vfnc )
 {
     TFunction::valDet(vfnc);
-    ResAlloc res1(fRes(), true);
+    ResAlloc res1(fRes(), false);
     workRegControl(vfnc, true);
 }
 
@@ -293,17 +296,23 @@ void Func::workRegControl( TValFunc *vfnc, bool toFree )
 void Func::setStart( bool val )
 {
     if(val == runSt) return;
-    //Start calc
-    if(val) progCompile();
-    //Stop calc
+    //Start calcing
+    if(val) {
+	progCompile();
+
+	TFunction::setStart(val);
+
+	//Mark the users for the program changing
+	ResAlloc res1(fRes(), false);
+	for(unsigned i = 0; i < used.size(); i++) used[i]->progChange();
+    }
+    //Stop calcing
     else {
 	ResAlloc res(fRes(), true);
-	prg = mUsings = "";
-	regClear();
-	regTmpClean();
-	mFncs.clear();
+	workClear();
+
+	TFunction::setStart(val);
     }
-    TFunction::setStart(val);
 }
 
 void Func::ioAdd( IO *io )
@@ -338,32 +347,22 @@ void Func::progCompile( )
     //Context clear for usings
     for(unsigned i = 0; i < used.size(); i++) used[i]->ctxClear();
 
+    buildClear();
+    workClear();
+
     pF     = this;	//Parse func
-    pErr   = "";	//Clear error messages
-    laPos  = 0;		//LA position
     sprg   = cfg("FORMULA").getS();
-    prg.clear();	//Clear program
-    regClear();		//Clear registers list
-    regTmpClean();	//Clear temporary registers list
-    mFncs.clear();	//Clear static linked external functions list
-    mInFnc = "";
-    mInFncs.clear();
 
     if(yyparse()) {
-	prg.clear();
-	sprg.clear();
-	regClear();
-	regTmpClean();
-	mFncs.clear();
-	mInFncs.clear();
+	string tErr = pErr;
+	buildClear();
+	workClear();
 	runSt = false;
-	throw TError(nodePath().c_str(), "%s", pErr.c_str());
+	throw TError(nodePath().c_str(), "%s", tErr.c_str());
     }
-    sprg.clear();
-    mInFncs.clear();
-    regTmpClean();
+    buildClear();
 
-    //Work registers update for calc contexts
+    //Work registers update for the calculating contexts
     for(unsigned i = 0; i < used.size(); i++) workRegControl(used[i]);
 }
 
@@ -444,6 +443,23 @@ int Func::ioGet( const string &nm )
     return rez;
 }
 
+void Func::buildClear( )
+{
+    laPos  = 0;		//LA position
+    pErr   = "";
+    sprg.clear();
+    regTmpClear();	//Clear temporary registers list
+    mInFnc = ""; mInFncs.clear();
+    fPrmst.clear();
+}
+
+void Func::workClear( )
+{
+    prg.clear();	//Clear program
+    mFncs.clear();	//Clear static linked external functions list
+    regClear();		//Clear registers list
+}
+
 void Func::regClear( )
 {
     for(unsigned iRg = 0; iRg < mRegs.size(); iRg++)
@@ -461,7 +477,7 @@ Reg *Func::regTmpNew( )
     return mTmpRegs[iRg];
 }
 
-void Func::regTmpClean( )
+void Func::regTmpClear( )
 {
     for(unsigned iRg = 0; iRg < mTmpRegs.size(); iRg++)
 	delete mTmpRegs[iRg];
@@ -1272,8 +1288,8 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		return false;
 	    case TVariant::Object:	return vl.getO().at().funcCall(prop, prms);
 	    case TVariant::Boolean:
-		// bool isEVal( ) - check value to "EVAL"
-		if(prop == "isEVal")	return (vl.getB() == EVAL_BOOL);
+		// bool isEVal( ); bool isNaN( ); - check value to "EVAL"
+		if(prop == "isEVal" || prop == "isNaN")	return (vl.getB() == EVAL_BOOL);
 		// string toString( ) - performs the value as the string “true” or “false”
 		if(prop == "toString")	return string(vl.getB() ? "true" : "false");
 		// real toReal() - read this Boolean as a real number
@@ -1284,10 +1300,12 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		//throw TError(nodePath().c_str(),_("Boolean type has not the property '%s' or there are not enough parameters for it."),prop.c_str());
 	    case TVariant::Integer:
 		// bool isEVal( ) - check value to "EVAL"
-		if(prop == "isEVal")	return (vl.getI() == EVAL_INT);
+		if(prop == "isEVal" || prop == "isNaN")	return (vl.getI() == EVAL_INT);
 	    case TVariant::Real:
 		// bool isEVal( ) - check value to "EVAL"
 		if(prop == "isEVal")	return (vl.getR() == EVAL_REAL);
+		// bool isNaN( ) - check the real for Not A Number
+		if(prop == "isNaN")	return (vl.getR() == EVAL_REAL || isnan(vl.getR()));
 		// string toExponential(int numbs = -1) - return the string of the number, formatted in exponential notation, 
 		//      and with the number of significant digits <numbs>
 		//  numbs - number of significant digits, if is missing the number of digits will have as much as needed
@@ -1347,21 +1365,58 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 	    case TVariant::String:
 		// bool isEVal( ) - check value to "EVAL"
 		if(prop == "isEVal")	return (vl.getS() == EVAL_STR);
-		// string charAt(int symb) - extracts from the string the symbol <symb>
-		//  symb - symbol position
+		// bool isNaN( bool whole = true ) - check the string for Not A Number
+		if(prop == "isNaN")
+		    return !TRegExp((prms.size()&&!prms[0].getB())?"^ *[+-]?\\d*\\.?\\d*(|[eE][+-]*\\d+)":"^ *[+-]?\\d*\\.?\\d*(|[eE][+-]*\\d+)$").test(vl.getS());
+		// string charAt( int symb, string type = "") - extracts from the string the symbol <symb> of the type <type>
+		//  symb - symbol position, changed to the next symbol position for UTF-8
+		//  type  - symbol type, (""-ASCII and raw one byte code, UTF-8, UTF-16, UTF-32)
 		if(prop == "charAt" && prms.size()) {
-		    int n = prms[0].getI();
-		    if(n < 0 || n >= (int)vl.getS().size()) return string("");
-		    return vl.getS().substr(n,1);
+		    int n, n_;
+		    n = n_ = prms[0].getI();
+		    string tp = (prms.size() >= 2) ? TSYS::strEncode(prms[1].getS(),TSYS::ToLower) : "";
+		    string s = vl.getS();
+		    if(n < 0 || n >= (int)s.size()) return string("");
+		    if(tp == "utf-8") {
+			int l = Mess->getUTF8(s, n);
+			if((l=Mess->getUTF8(s,n))) n += l; else n += 1;
+			prms[0].setI(n); prms[0].setModify();
+			return l ? s.substr(n_, l) : string("");
+		    }
+		    if(tp == "utf-16") return s.substr(n, 2);
+		    if(tp == "utf-32") return s.substr(n, 4);
+		    return s.substr(n, 1);
 		}
-		// int charCodeAt(int symb) - extracts from the string the symbol code <symb>
-		//  symb - symbol position
+		// int charCodeAt( int symb, string type = "" ) - extracts the symbol code <symb> from the string of the type <type>
+		//  symb - symbol position, changed to the next symbol position for UTF-8
+		//  type  - symbol type, (""-ASCII and raw one byte code, UTF-8, UTF-16, UTF-16LE, UTF-16BE, UTF-32, UTF-32LE, UTF-32BE)
 		if(prop == "charCodeAt" && prms.size()) {
 		    int n = prms[0].getI();
-		    if(n < 0 || n >= (int)vl.getS().size())	return (int64_t)EVAL_INT;
+		    string tp = (prms.size() >= 2) ? TSYS::strEncode(prms[1].getS(),TSYS::ToLower) : "";
+		    string s = vl.getS();
+		    if(n < 0 || n >= (int)s.size())	return (int64_t)EVAL_INT;
+		    if(tp == "utf-8") {
+			int l;
+			int32_t symb;
+			if((l=Mess->getUTF8(s,n,&symb))) n += l; else n += 1;
+			prms[0].setI(n); prms[0].setModify();
+			return l ? (int64_t)symb : (int64_t)EVAL_INT;
+		    }
+		    if(tp.find("utf-16") == 0) {
+			if((s.size()-n) < 2) s.resize(s.size()+1, 0);
+			if(tp.find("be") != string::npos)
+			    return (int64_t)TSYS::i16_BE(TSYS::getUnalign16(s.data()+n));
+			return (int64_t)TSYS::i16_LE(TSYS::getUnalign16(s.data()+n));
+		    }
+		    if(tp.find("utf-32") == 0) {
+			if((s.size()-n) < 4) s.resize(s.size()+3, 0);
+			if(tp.find("be") != string::npos)
+			    return (int64_t)TSYS::i32_BE(TSYS::getUnalign32(s.data()+n));
+			return (int64_t)TSYS::i32_LE(TSYS::getUnalign32(s.data()+n));
+		    }
 		    return (int64_t)(unsigned char)vl.getS()[n];
 		}
-		// string concat(string val1, string val2, ...) - returns a new string formed by joining the values <val1> etc
+		// string concat( string val1, string val2, ... ) - returns a new string formed by joining the values <val1> etc
 		//  val1, val2 - appended values
 		if(prop == "concat" && prms.size()) {
 		    string rez = vl.getS();
@@ -1369,7 +1424,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 			rez += prms[iP].getS();
 		    return rez;
 		}
-		// int indexOf(string substr, int start) - returns the position of the required string <substr> in the original
+		// int indexOf( string substr, int start ) - returns the position of the required string <substr> in the original
 		//       row from the position <start>
 		//  substr - requested substring value
 		//  start - start position for search
@@ -1379,10 +1434,10 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    sp = vl.getS().find(prms[0].getS(),sp);
 		    return (sp==string::npos) ? -1 : (int)sp;
 		}
-		// int lastIndexOf(string substr, int start) - returns the position of the search string <substr> in the original
+		// int lastIndexOf( string substr, int start ) - returns the position of the search string <substr> in the original
 		//       one beginning from the position of <start> when searching from the end
 		//  substr - requested substring value
-		//  start - start position for search from end
+		//  start - start position for search from the end
 		if(prop == "lastIndexOf" && prms.size()) {
 		    size_t sp = string::npos;
 		    if(prms.size() > 1) sp = vmax(0,vmin(vl.getS().size()-1,(unsigned)prms[1].getI()));
@@ -1415,7 +1470,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    else if(prms[0].type() != TVariant::Object || (re=prms[0].getO()).freeStat()) return -1;
 		    return re.at().match(vl.getS(), true);
 		}
-		// string slice(int beg, int end) - return the string extracted from the original one starting from the <beg> position
+		// string slice( int beg, int end ) - return the string extracted from the original one starting from the <beg> position
 		//       and ending be the <end>
 		//  beg - begin position
 		//  end - end position
@@ -1430,10 +1485,10 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    if(beg >= end) return string("");
 		    return vl.getS().substr(beg,end-beg);
 		}
-		// Array split(string sep, int limit) - return the array of strings separated by <sep> with the limit of the number of elements <limit>.
+		// Array split( string sep, int limit ) - return the array of strings separated by <sep> with the limit of the number of elements <limit>.
 		//  sep - items separator
 		//  limit - items limit
-		// Array split(RegExp pat, int limit) - return the array of strings separated by RegExp pattern <pat> with the limit of the number of elements <limit>.
+		// Array split( RegExp pat, int limit ) - return the array of strings separated by RegExp pattern <pat> with the limit of the number of elements <limit>.
 		//  pat - regular expression pattern.
 		if(prop == "split" && prms.size()) {
 		    //  Use RegExp for split
@@ -1451,18 +1506,18 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    }
 		    return rez;
 		}
-		// string insert(int pos, string substr) - insert substring <substr> into this string's position <pos>
+		// string insert( int pos, string substr ) - insert substring <substr> into this string's position <pos>
 		//  pos - position for insert
 		//  substr - substring for insert
 		if(prop == "insert" && prms.size() >= 2)
 		    return vl.getS().insert(vmax(0,vmin(vl.getS().size(),(unsigned)prms[0].getI())), prms[1].getS() );
-		// string replace(int pos, int n, string str) - replace substring into position <pos> and length <n> to string <str>.
+		// string replace( int pos, int n, string str ) - replace substring into position <pos> and length <n> to string <str>.
 		//  pos - position for start replace
 		//  n - number symbols for replace
 		//  str - string for replace
-		// string replace(string substr, string str) - replace all substrings <substr> to string <str>.
+		// string replace( string substr, string str ) - replace all substrings <substr> to string <str>.
 		//  substr - substring into all string
-		// string replace(RegExp pat, string str) - replace substrings by pattern <pat> to string <str>.
+		// string replace( RegExp pat, string str ) - replace substrings by pattern <pat> to string <str>.
 		//  pat - regular expression pattern
 		if(prop == "replace" && prms.size() >= 2) {
 		    string cstr = vl.getS();
@@ -1486,12 +1541,12 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    //vl.setModify();
 		    return cstr;
 		}
-		// real toReal() - convert this string to real number
+		// real toReal( ) - convert this string to real number
 		if(prop == "toReal") return s2r(vl.getS());
-		// int toInt(int base = 0) - convert this string to integer number
+		// int toInt( int base = 0 ) - convert this string to integer number
 		//  base - radix of subject sequence
 		if(prop == "toInt") return (int64_t)strtoll(vl.getS().c_str(), NULL, (prms.size()>=1?prms[0].getI():10));
-		// string parse(int pos, string sep = ".", int off = 0) - get token with number <pos> from the string when separated by <sep>
+		// string parse( int pos, string sep = ".", int off = 0 ) - get token with number <pos> from the string when separated by <sep>
 		//       and from offset <off>
 		//  pos - item position
 		//  sep - items separator
@@ -1504,7 +1559,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    if(prms.size() >= 3) { prms[2].setI(off); prms[2].setModify(); }
 		    return rez;
 		}
-		// string parseLine(int pos, int off = 0) - get line with number <pos> from the string and from offset <off>
+		// string parseLine( int pos, int off = 0 ) - get line with number <pos> from the string and from offset <off>
 		//  pos - item position
 		//  off - start position
 		if(prop == "parseLine" && prms.size()) {
@@ -1513,7 +1568,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    if(prms.size() >= 2) { prms[1].setI(off); prms[1].setModify(); }
 		    return rez;
 		}
-		// string parsePath(int pos, int off = 0) - get path token with number <pos> from the string and from offset <off>
+		// string parsePath( int pos, int off = 0 ) - get path token with number <pos> from the string and from offset <off>
 		//  pos - item position
 		//  off - start position
 		if(prop == "parsePath" && prms.size()) {
@@ -1522,11 +1577,11 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    if(prms.size() >= 2) { prms[1].setI(off); prms[1].setModify(); }
 		    return rez;
 		}
-		// string path2sep(string sep = ".") - convert path into this string to separated by <sep> string.
+		// string path2sep( string sep = "." ) - convert path into this string to separated by <sep> string.
 		//  sep - item separator
 		if(prop == "path2sep")
 		    return TSYS::path2sepstr(vl.getS(), (prms.size() && prms[0].getS().size()) ? prms[0].getS()[0] : '.');
-		// string trim(string cfg = " \n\t\r") - string trimming at begin and end for symbols <cfg>.
+		// string trim( string cfg = " \n\t\r" ) - string trimming at begin and end for symbols <cfg>.
 		//  cfg - trimming symbols
 		if(prop == "trim") return sTrm(vl.getS(), prms.size() ? prms[0].getS() : " \n\t\r");
 
@@ -1857,9 +1912,14 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 #endif
 		TArrayObj *ar = new TArrayObj();
 		//  Fill array by empty elements number
-		if(ptr->numb == 1)
-		    for(int iP = 0; iP < getValI(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode))]); iP++)
-			ar->arSet(iP, EVAL_REAL);
+		if(ptr->numb == 1) {
+		    int itN = fmin(USER_ITS_LIMIT,getValI(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode))]));
+		    try { for(int iP = 0; iP < itN; iP++) ar->arSet(iP, EVAL_REAL); }
+		    catch(...) {	//Remove the problematic array and create an empty one, for very big arrays mostly
+			delete ar; ar = new TArrayObj();
+			mess_err(nodePath().c_str(), _("Exception of creating %d items of the array."), itN);
+		    }
+		}
 		//  Fill array by parameters
 		else
 		    for(int iP = 0; iP < ptr->numb; iP++)
@@ -2003,11 +2063,14 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		if(!reg[ptr->a1].props().size())
 		    switch(reg[ptr->a1].vType(this)) {
 			case Reg::Bool: case Reg::Int: case Reg::Real:
-			    reg[ptr->rez] = getValR(val,reg[ptr->a1]) + getValR(val,reg[ptr->a2]);	break;
-			case Reg::String:
+			    reg[ptr->rez] = getValR(val,reg[ptr->a1]) + getValR(val,reg[ptr->a2]);
+			    break;
+			case Reg::String: {
 			    if(ptr->rez == ptr->a1 && reg[ptr->rez].type() == Reg::String)
 				reg[ptr->rez].val().s->append(getValS(val,reg[ptr->a2]));
-			    else reg[ptr->rez] = getValS(val,reg[ptr->a1]) + getValS(val,reg[ptr->a2]);	break;
+			    else reg[ptr->rez] = getValS(val,reg[ptr->a1]) + getValS(val,reg[ptr->a2]);
+			    break;
+			}
 			default:
 			    throw TError(nodePath().c_str(), _("Type %d, which is not supported by the 'Add' operation."), reg[ptr->a1].vType(this));
 		    }
@@ -2721,7 +2784,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 			(iF >= ptr->n) ? TVariant() : getVal(val, reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iF*sizeof(uint16_t))]);
 		// Make calc
 		exec(val, (const uint8_t*)ptrF+sizeof(SFCode)+ptrF->n*sizeof(uint16_t), dt);
-		dt.flg = 0;	//Clean all flags
+		dt.flg = 0;	//Clean up all flags
 		// Process outputs
 		for(int iF = 0; iF < vmin(ptrF->n,ptr->n); iF++)
 		    setVal(val, reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iF*sizeof(uint16_t))],
@@ -2743,7 +2806,7 @@ void Func::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TFunction::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Function: ")+name(),/*owner().DB().empty()?R_R_R_:*/RWRWR_,"root",SDAQ_ID,1,
-	    "doc","Documents/User_API|Documents/User_API");
+	    "doc","User_API|Documents/User_API");
 	if(owner().DB().size())
 	    ctrMkNode("fld",opt,-1,"/func/st/timestamp",_("Date of modification"),R_R_R_,"root",SDAQ_ID,1,"tp","time");
 	ctrMkNode("fld",opt,-1,"/func/cfg/NAME",_("Name"),owner().DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"tp","str","len",OBJ_NM_SZ);
@@ -2926,6 +2989,18 @@ void Reg::free( )
 //*************************************************
 //* RegW : Work register                          *
 //*************************************************
+RegW::RegW( ) : mTp(Reg::Free), mConst(false)
+{
+    if(mess_lev() == TMess::Debug) SYS->cntrIter("DAQ:JavaLikeCalc:RegW", 1);
+}
+
+RegW::~RegW( )
+{
+    setType(Reg::Free);
+
+    if(mess_lev() == TMess::Debug) SYS->cntrIter("DAQ:JavaLikeCalc:RegW", -1);
+}
+
 void RegW::operator=( const TVariant &ivar )
 {
     switch(ivar.type()) {

@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.MySQL file: my_sql.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,12 +34,13 @@
 #define MOD_NAME	_("DB MySQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.8.0"
+#define MOD_VER		"3.3.2"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("BD module. Provides support of the BD MySQL.")
+#define DESCRIPTION	_("DB module. Provides support of the DBMS MySQL.")
 #define MOD_LICENSE	"GPL2"
 //************************************************
 
+#define MYSQL_RECONNECT		0		//!!!! MySQL/MariaDB reconnect some time crashable due to a need of releasing some locks
 #define SEEK_PRELOAD_LIM	100
 
 BDMySQL::BDMod *BDMySQL::mod;
@@ -105,13 +106,14 @@ void MBD::postDisable( int flag )
 	    MYSQL tcon;
 
 	    MtxAlloc resource(connRes, true);
-	    if(!mysql_init(&tcon)) throw err_sys(_("Error initializing client."));
-	    tcon.reconnect = 1;
+	    if(!mysql_init(&tcon)) throw err_sys(_("Error initializing."));
+	    my_bool reconnect = MYSQL_RECONNECT;
+	    mysql_options(&tcon, MYSQL_OPT_RECONNECT, &reconnect);
 	    if(!mysql_real_connect(&tcon,host.c_str(),user.c_str(),pass.c_str(),"",port,(u_sock.size()?u_sock.c_str():NULL),CLIENT_MULTI_STATEMENTS))
-		throw err_sys(_("Connect to DB error: %s"), mysql_error(&tcon));
+		throw err_sys(_("Error connecting to the DB: %s"), mysql_error(&tcon));
 
 	    string req = "DROP DATABASE `" + bd + "`";
-	    if(mysql_real_query(&tcon,req.c_str(),req.size())) throw err_sys(_("Query to DB error: %s"), mysql_error(&tcon));
+	    if(mysql_real_query(&tcon,req.c_str(),req.size())) throw err_sys(_("Error querying to the DB: %s"), mysql_error(&tcon));
 
 	    mysql_close(&tcon);
 	} catch(TError&) { }
@@ -120,7 +122,12 @@ void MBD::postDisable( int flag )
 void MBD::enable( )
 {
     MtxAlloc resource(connRes, true);
-    if(enableStat())	return;
+    //Reconnecting
+    if(enableStat()) {
+	mysql_close(&connect);
+	mEn = false;
+	//return;
+    }
 
     //Address parse
     int off = 0;
@@ -138,21 +145,22 @@ void MBD::enable( )
     cd_pg  = codePage().size() ? codePage() : Mess->charset();
 
     //API init
-    if(!mysql_init(&connect)) throw err_sys(_("Error initializing client."));
+    if(!mysql_init(&connect)) throw err_sys(_("Error initializing."));
 
     //Timeouts parse
     off = 0;
     unsigned int tTm;
-    if(!(tTm=s2i(TSYS::strParse(tms,0,",",&off))))	tTm = 1;
-    mysql_options(&connect, MYSQL_OPT_CONNECT_TIMEOUT, (const char*)&tTm);
-    if(!(tTm=s2i(TSYS::strParse(tms,0,",",&off))))	tTm = 1;
-    mysql_options(&connect, MYSQL_OPT_READ_TIMEOUT, (const char*)&tTm);
-    if(!(tTm=s2i(TSYS::strParse(tms,0,",",&off))))	tTm = 1;
-    mysql_options(&connect, MYSQL_OPT_WRITE_TIMEOUT, (const char*)&tTm);
+    if(!(tTm=s2i(TSYS::strParse(tms,0,",",&off))))	tTm = 10;
+    mysql_options(&connect, MYSQL_OPT_CONNECT_TIMEOUT, &tTm);
+    if(!(tTm=s2i(TSYS::strParse(tms,0,",",&off))))	tTm = 5;
+    mysql_options(&connect, MYSQL_OPT_READ_TIMEOUT, &tTm);
+    if(!(tTm=s2i(TSYS::strParse(tms,0,",",&off))))	tTm = 5;
+    mysql_options(&connect, MYSQL_OPT_WRITE_TIMEOUT, &tTm);
 
-    connect.reconnect = 1;
+    my_bool reconnect = MYSQL_RECONNECT;
+    mysql_options(&connect, MYSQL_OPT_RECONNECT, &reconnect);
     if(!mysql_real_connect(&connect,host.c_str(),user.c_str(),pass.c_str(),"",port,(u_sock.size()?u_sock.c_str():NULL),CLIENT_MULTI_STATEMENTS))
-	throw err_sys(_("Connect to DB error: %s"), mysql_error(&connect));
+	throw err_sys(_("Error connecting to the DB: %s"), mysql_error(&connect));
 
     TBD::enable();
 
@@ -192,14 +200,14 @@ void MBD::allowList( vector<string> &list ) const
     if(!enableStat())	return;
     list.clear();
     vector< vector<string> > tbl;
-    const_cast<MBD*>(this)->sqlReq("SHOW TABLES FROM `"+TSYS::strEncode(bd,TSYS::SQL)+"`", &tbl, false);
-    for(unsigned i_t = 1; i_t < tbl.size(); i_t++)
-	list.push_back(tbl[i_t][0]);
+    const_cast<MBD*>(this)->sqlReq("SHOW TABLES FROM `"+TSYS::strEncode(bd,TSYS::SQL)+"`", &tbl/*, false*/);
+    for(unsigned iT = 1; iT < tbl.size(); iT++)
+	list.push_back(tbl[iT][0]);
 }
 
 TTable *MBD::openTable( const string &inm, bool create )
 {
-    if(!enableStat()) throw err_sys(_("Error open table '%s'. DB is disabled."), inm.c_str());
+    if(!enableStat()) throw err_sys(_("Error opening the table '%s': the DB is disabled."), inm.c_str());
 
     if(create) sqlReq("CREATE TABLE IF NOT EXISTS `"+TSYS::strEncode(bd,TSYS::SQL)+"`.`"+
 			TSYS::strEncode(inm, TSYS::SQL)+"` (`<<empty>>` char(20) NOT NULL DEFAULT '' PRIMARY KEY)");
@@ -214,8 +222,8 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 {
     MYSQL_RES *res = NULL;
 
-    if(tbl) tbl->clear();
     if(!enableStat()) return;
+    if(tbl) tbl->clear();
 
     string req = Mess->codeConvOut(cd_pg.c_str(), ireq);
 
@@ -225,32 +233,38 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
     if(intoTrans && intoTrans != EVAL_BOOL) transOpen();
     else if(!intoTrans && reqCnt) transCommit();
 
-    int irez, eNRez;
+    int irez, eNRez, repCnt = 0;
     rep:
     if((irez=mysql_real_query(&connect,req.c_str(),req.size()))) {
 	eNRez = mysql_errno(&connect);
 	if(irez == CR_SERVER_GONE_ERROR || irez == CR_SERVER_LOST ||
 	    eNRez == CR_SERVER_GONE_ERROR || eNRez == CR_CONN_HOST_ERROR || eNRez == CR_SERVER_LOST || eNRez == CR_CONNECTION_ERROR)
 	{
-	    resource.unlock();
+#if !MYSQL_RECONNECT
+	    //Try to reconnect
+	    if((repCnt++) < 3)
+		try { enable(); goto rep; } catch(TError&) { }
+	    else mess_warning(nodePath().c_str(), _("Repeated errors of requesting the DB: '%s (%d)'."), mysql_error(&connect), irez);
+#endif
+	    //resource.unlock();
 	    disable();
-	    throw err_sys(_("Connect to DB error %d: %s"), irez, mysql_error(&connect));
+	    throw err_sys(_("Error connecting to the DB: '%s (%d)'!"), mysql_error(&connect), irez);
 	}
 	if(irez) {
 	    if(mysql_errno(&connect) == ER_NO_DB_ERROR) {
-		resource.unlock();
+		//resource.unlock();
 		sqlReq("USE `"+TSYS::strEncode(bd,TSYS::SQL)+"`");
-		resource.lock();
+		//resource.lock();
 		goto rep;
 	    }
-	    if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("Query '%s' is error."), ireq.c_str());
-	    throw err_sys(_("Query to DB error %d: %s"), irez, mysql_error(&connect));
+	    if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("Error the query '%s': '%s (%d)'."), ireq.c_str(), mysql_error(&connect), irez);
+	    throw err_sys(_("Error querying the DB: '%s (%d)'!"), mysql_error(&connect), irez);
 	}
     }
 
     do {
 	if(!(res=mysql_store_result(&connect)) && mysql_field_count(&connect))
-	    throw err_sys(_("Store result error: %s"), mysql_error(&connect));
+	    throw err_sys(_("Error storing the result: %s"), mysql_error(&connect));
 
 	if(res && tbl && tbl->empty()) {	//Process only first statement's result
 	    int num_fields = mysql_num_fields(res);
@@ -273,7 +287,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 	if(res) mysql_free_result(res);
 
 	if((irez=mysql_next_result(&connect)) > 0) throw err_sys(_("Could not execute statement: %s"), mysql_error(&connect));
-    }while(irez == 0);
+    } while(irez == 0);
 }
 
 void MBD::transOpen( )
@@ -283,9 +297,9 @@ void MBD::transOpen( )
 
     connRes.lock();
     bool begin = !reqCnt;
-    if(begin) trOpenTm = SYS->sysTm();
+    if(begin) trOpenTm = TSYS::curTime();
     reqCnt++;
-    reqCntTm = SYS->sysTm();
+    reqCntTm = TSYS::curTime();
     connRes.unlock();
 
     if(begin) sqlReq("BEGIN;");
@@ -303,7 +317,8 @@ void MBD::transCommit( )
 
 void MBD::transCloseCheck( )
 {
-    if(enableStat() && reqCnt && ((SYS->sysTm()-reqCntTm) > 60 || (SYS->sysTm()-trOpenTm) > 10*60)) transCommit();
+    if(enableStat() && reqCnt && ((TSYS::curTime()-reqCntTm) > 1e6*trTm_ClsOnReq() || (TSYS::curTime()-trOpenTm) > 1e6*trTm_ClsOnOpen()))
+	transCommit();
     if(!enableStat() && toEnable()) enable();
 }
 
@@ -313,18 +328,18 @@ void MBD::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TBD::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,enableStat()?R_R___:RWRW__,"root",SDB_ID,1,"help",
-	    _("MySQL DB address must be written as: \"{host};{user};{pass};{db};{port}[;{u_sock}[;{charset-collation-engine}[;{tms}]]]\".\n"
+	    _("MySQL DBMS address must be written as: \"{host};{user};{pass};{db};{port}[;{u_sock}[;{charset-collation-engine}[;{tms}]]]\".\n"
 	      "Where:\n"
-	      "  host - MySQL server hostname;\n"
-	      "  user - DB user name;\n"
-	      "  pass - user's password for DB access;\n"
-	      "  db - DB name;\n"
-	      "  port - DB server port (default 3306);\n"
-	      "  u_sock - UNIX-socket name, for local access to DB (/var/lib/mysql/mysql.sock);\n"
+	      "  host - hostname on which the DBMS server MySQL works;\n"
+	      "  user - user name of the DB;\n"
+	      "  pass - password of the user for accessing the DB;\n"
+	      "  db   - name of the DB;\n"
+	      "  port - port, which listening by the DBMS server (default 3306);\n"
+	      "  u_sock - UNIX-socket name, for local accessing to the DBMS (/var/lib/mysql/mysql.sock);\n"
 	      "  charset-collation-engine - DB charset, collation and storage engine for CREATE DATABASE and SET;\n"
-	      "  tms - MySQL timeouts in form \"{connect},{read},{write}\" and in seconds.\n"
-	      "For local DB: \";roman;123456;OpenSCADA;;/var/lib/mysql/mysql.sock;utf8-utf8_general_ci-MyISAM;5,2,2\".\n"
-	      "For remote DB: \"server.nm.org;roman;123456;OpenSCADA;3306\"."));
+	      "  tms - MySQL timeouts in the form \"{connect},{read},{write}\" and in seconds.\n"
+	      "For local DBMS: \";user;password;OpenSCADA;;/var/lib/mysql/mysql.sock;utf8-utf8_general_ci-MyISAM;5,2,2\".\n"
+	      "For remote DBMS: \"server.nm.org;user;password;OpenSCADA;3306\"."));
 	if(reqCnt)
 	    ctrMkNode("comm",opt,-1,"/prm/st/end_tr",_("Close opened transaction"),RWRW__,"root",SDB_ID);
 	return;
@@ -409,6 +424,8 @@ bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
     if(tblStrct.empty()) throw err_sys(_("Table is empty!"));
     mLstUse = SYS->sysTm();
 
+    cfg.cfgToDefault();	//reset the not key and viewed fields
+
     //Check for no present and no empty keys allow
     if(row == 0) {
 	vector<string> cf_el;
@@ -462,7 +479,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
     }
 
     row = full ? (row%SEEK_PRELOAD_LIM)+1 : 1;
-    if(tbl.size() < 2 || (full && row >= tbl.size())) return false;
+    if(tbl.size() < 2 || (full && row >= (int)tbl.size())) return false;
 
     //Processing of the query
     for(unsigned iFld = 0; iFld < tbl[0].size(); iFld++) {
@@ -514,7 +531,7 @@ void MTable::fieldGet( TConfig &cfg )
 
     //Query
     owner().sqlReq(req, &tbl, false);
-    if(tbl.size() < 2) throw err_sys(_("Row \"%s\" is not present. Are you saved the object?"), req_where.c_str());
+    if(tbl.size() < 2) throw err_sys(_("The row \"%s\" is not present. Are you saved the object?"), req_where.c_str());
 
     //Processing of query
     for(unsigned iFld = 0; iFld < tbl[0].size(); iFld++) {
@@ -759,10 +776,14 @@ void MTable::fieldFix( TConfig &cfg, bool trPresent )
     if(pr_keys.size()) req += ",ADD PRIMARY KEY (" + pr_keys + ") ";
 
     if(next) {
-	owner().sqlReq(req, NULL, false);
-	//Update structure information
-	req = "DESCRIBE `" + TSYS::strEncode(owner().bd,TSYS::SQL) + "`.`" + TSYS::strEncode(name(),TSYS::SQL) + "`";
-	owner().sqlReq(req, &tblStrct, false);
+	try { owner().sqlReq(req, NULL, false); }
+	catch(TError&) {
+	    //An error possible at creating already presented columns, so try to update the table structure information before
+	    owner().sqlReq("DESCRIBE `" + TSYS::strEncode(owner().bd,TSYS::SQL) + "`.`" + TSYS::strEncode(name(),TSYS::SQL) + "`", &tblStrct, false);
+	    owner().sqlReq(req, NULL, false);
+	}
+	//Updating structure information of the table
+	owner().sqlReq("DESCRIBE `" + TSYS::strEncode(owner().bd,TSYS::SQL) + "`.`" + TSYS::strEncode(name(),TSYS::SQL) + "`", &tblStrct, false);
     }
 }
 
@@ -772,11 +793,12 @@ void MTable::fieldPrmSet( TCfg &cfg, const string &last, string &req, int keyCnt
     switch(cfg.fld().type()) {
 	case TFld::String:
 	    if((cfg.fld().len() && cfg.fld().len() < 256) || cfg.fld().flg()&TCfg::Key)
-		req += "varchar(" + i2s(vmax(1,vmin((cfg.fld().flg()&TCfg::Key)?(333/(2*keyCnt)):255,cfg.fld().len()))) + ") " +
-			((cfg.fld().flg()&TCfg::Key)?"BINARY ":" ");
-	    else if(cfg.fld().len() < 65536) req += "text ";
-	    else req += "mediumtext ";
-	    req += ((cfg.fld().def() == EVAL_STR) ? "DEFAULT NULL " : "NOT NULL DEFAULT '"+TSYS::strEncode(cfg.fld().def(),TSYS::SQL)+"' ");
+		req += "varchar(" + i2s(vmax(1,vmin((cfg.fld().flg()&TCfg::Key)?(333/(2*keyCnt)):255,cfg.fld().len()))) + ") " + ((cfg.fld().flg()&TCfg::Key)?"BINARY ":" ") +
+			((cfg.fld().def() == EVAL_STR) ? "DEFAULT NULL " : "NOT NULL DEFAULT '"+TSYS::strEncode(cfg.fld().def(),TSYS::SQL)+"' ");
+	    // Due to "BLOB/TEXT can't have a default value (1)"
+	    else if(cfg.fld().len() < 65536)
+		req += string("text "); //+ ((cfg.fld().def() == EVAL_STR) ? "DEFAULT NULL " : "NOT NULL DEFAULT '' ");
+	    else req += string("mediumtext ");// + ((cfg.fld().def() == EVAL_STR) ? "DEFAULT NULL " : "NOT NULL DEFAULT '' ");
 	    break;
 	case TFld::Integer:
 	    if(cfg.fld().flg()&TFld::DateTimeDec)
@@ -806,11 +828,11 @@ string MTable::getVal( TCfg &cfg, uint8_t RqFlg )
     if(rez == EVAL_STR)	return "NULL";
     if(cfg.fld().type() == TFld::String) {
 	if(Mess->translDyn() && (cfg.fld().flg()&TFld::TransltText)) rez = trL(rez, Mess->lang2Code());
-	rez = TSYS::strEncode(((cfg.fld().len()>0)?rez.substr(0,cfg.fld().len()):rez), TSYS::SQL);
+	rez = "'" + TSYS::strEncode(((cfg.fld().len()>0)?rez.substr(0,cfg.fld().len()):rez), TSYS::SQL) + "'";
     }
-    else if(cfg.fld().flg()&TFld::DateTimeDec)	rez = UTCtoSQL(s2i(rez));
+    else if(cfg.fld().flg()&TFld::DateTimeDec)	rez = "'" + UTCtoSQL(s2i(rez)) + "'";
 
-    return "'" + rez + "'";
+    return rez;
 }
 
 void MTable::setVal( TCfg &cf, const string &ival, bool tr )

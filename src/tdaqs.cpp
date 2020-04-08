@@ -47,13 +47,13 @@ TDAQS::TDAQS( ) : TSubSYS(SDAQ_ID,_("Data Acquisition"),true), mElErr("Error"), 
     mElTmpl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
     mElTmpl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"1000"));
     mElTmpl.fldAdd(new TFld("MAXCALCTM",_("Maximum calculate time, seconds"),TFld::Integer,TFld::NoFlag,"4","10","0;3600"));
-    mElTmpl.fldAdd(new TFld("PR_TR",_("Translate program"),TFld::Boolean,TFld::NoFlag,"1","0"));
-    mElTmpl.fldAdd(new TFld("PROGRAM",_("Program"),TFld::String,TFld::TransltText,"1000000"));
+    mElTmpl.fldAdd(new TFld("PR_TR",_("Completely translate the procedure"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    mElTmpl.fldAdd(new TFld("PROGRAM",_("Procedure"),TFld::String,TFld::TransltText,"1000000"));
     mElTmpl.fldAdd(new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec));
 
     //Parameter template IO DB structure
     mElTmplIO.fldAdd(new TFld("TMPL_ID",_("Template identifier"),TFld::String,TCfg::Key,OBJ_ID_SZ));
-    mElTmplIO.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    mElTmplIO.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(s2i(OBJ_ID_SZ)*1.5).c_str()));
     mElTmplIO.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
     mElTmplIO.fldAdd(new TFld("TYPE",_("Value type"),TFld::Integer,TFld::NoFlag,"1"));
     mElTmplIO.fldAdd(new TFld("FLAGS",_("Flags"),TFld::Integer,TFld::NoFlag,"4"));
@@ -130,7 +130,6 @@ void TDAQS::load_( )
 {
     //Load parameters from command line
 
-
     map<string, bool>	itReg;
     vector<vector<string> > full;
 
@@ -144,20 +143,20 @@ void TDAQS::load_( )
 	// Search into DB
 	SYS->db().at().dbList(dbLs, true);
 	dbLs.push_back(DB_CFG);
-	for(unsigned iDB = 0; iDB < dbLs.size(); iDB++)
-	    for(int libCnt = 0; SYS->db().at().dataSeek(dbLs[iDB]+"."+tmplLibTable(),nodePath()+"tmplib",libCnt++,cEl,false,&full); ) {
+	for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
+	    for(int libCnt = 0; SYS->db().at().dataSeek(dbLs[iIt]+"."+tmplLibTable(),nodePath()+"tmplib",libCnt++,cEl,false,&full); ) {
 		string l_id = cEl.cfg("ID").getS();
-		if(!tmplLibPresent(l_id)) tmplLibReg(new TPrmTmplLib(l_id.c_str(),"",(dbLs[iDB]==SYS->workDB())?"*.*":dbLs[iDB]));
+		if(!tmplLibPresent(l_id)) tmplLibReg(new TPrmTmplLib(l_id.c_str(),"",(dbLs[iIt]==SYS->workDB())?"*.*":dbLs[iIt]));
 		tmplLibAt(l_id).at().load(&cEl);
 		itReg[l_id] = true;
 	    }
 
 	//  Check for remove items removed from DB
-	if(!SYS->selDB().empty()) {
+	if(SYS->chkSelDB(SYS->selDB(),true)) {
 	    tmplLibList(dbLs);
-	    for(unsigned i_it = 0; i_it < dbLs.size(); i_it++)
-		if(itReg.find(dbLs[i_it]) == itReg.end() && SYS->chkSelDB(tmplLibAt(dbLs[i_it]).at().DB()))
-		    tmplLibUnreg(dbLs[i_it]);
+	    for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
+		if(itReg.find(dbLs[iIt]) == itReg.end() && SYS->chkSelDB(tmplLibAt(dbLs[iIt]).at().DB()))
+		    tmplLibUnreg(dbLs[iIt]);
         }
     } catch(TError &err) {
 	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
@@ -179,11 +178,11 @@ void TDAQS::load_( )
 	    // Search into DB and create new controllers
 	    SYS->db().at().dbList(dbLs, true);
 	    dbLs.push_back(DB_CFG);
-	    for(unsigned iDB = 0; iDB < dbLs.size(); iDB++)
-		for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iDB]+"."+subId()+"_"+wmod.at().modId(),wmod.at().nodePath()+"DAQ",fldCnt++,gCfg,false,&full); ) {
+	    for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
+		for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iIt]+"."+subId()+"_"+wmod.at().modId(),wmod.at().nodePath()+"DAQ",fldCnt++,gCfg,false,&full); ) {
 		    string mId = gCfg.cfg("ID").getS();
 		    try {
-			if(!wmod.at().present(mId)) wmod.at().add(mId,(dbLs[iDB]==SYS->workDB())?"*.*":dbLs[iDB]);
+			if(!wmod.at().present(mId)) wmod.at().add(mId,(dbLs[iIt]==SYS->workDB())?"*.*":dbLs[iIt]);
 			wmod.at().at(mId).at().load(&gCfg);
 			itReg[mId] = true;
 		    } catch(TError &err) {
@@ -194,14 +193,24 @@ void TDAQS::load_( )
 
 	    //  Check for remove items removed from DB
 	    wmod.at().list(dbLs);
-	    for(unsigned i_it = 0; i_it < dbLs.size(); i_it++)
-		if(itReg.find(dbLs[i_it]) == itReg.end() && SYS->chkSelDB(wmod.at().at(dbLs[i_it]).at().DB()))
-		    wmod.at().del(dbLs[i_it]);
+	    for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
+		if(itReg.find(dbLs[iIt]) == itReg.end() && SYS->chkSelDB(wmod.at().at(dbLs[iIt]).at().DB()))
+		    wmod.at().del(dbLs[iIt]);
 	}
     } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
-    //Load parameters from config-file and SYS DB
+    //Load parameters from the config-file and SYS DB
     setRdRestDtTm(s2r(TBDS::genDBGet(nodePath()+"RdRestDtTm",r2s(rdRestDtTm()))));
+}
+
+void TDAQS::load__( )
+{
+    //Early starting for template libraries, after the whole loading
+    vector<string> tmpl_lst;
+    tmplLibList(tmpl_lst);
+    for(unsigned iLb = 0; iLb < tmpl_lst.size(); iLb++)
+	try { tmplLibAt(tmpl_lst[iLb]).at().start(true); }
+	catch(TError &err) { }
 }
 
 void TDAQS::save_( )
@@ -212,7 +221,16 @@ void TDAQS::save_( )
 
 TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
-    // bool funcCall(string progLang, TVarObj args, string prog, string fixId = "") -
+    // TCntrNodeObj daqAt(string path, string sep = "", waitForAttr = true) - attaches to a DAQ node (controller object, parameter, attribute) in the ''path''
+    //		or the separated string by the separator ''sep'', from the DAQ-subsystem. Check for an attribute in the path last element, at ''waitForAttr''.
+    //  path - path to the DAQ-node
+    //  sep - the symbol separator for separated string path
+    //  waitForAttr - wait for an attribute or other
+    if(iid == "daqAt" && prms.size() >= 1) {
+	AutoHD<TCntrNode> nd = daqAt(prms[0].getS(), (prms.size()>=2 && prms[1].getS().size())?prms[1].getS()[0]:0, true, (prms.size()>=3)?prms[2].getB():true);
+	return nd.freeStat() ? TVariant(false) : TVariant(new TCntrNodeObj(nd,user));
+    }
+    // bool funcCall(string progLang, TVarObj args, string prog, string fixId = "", string err = "") -
     //    Call function text <prog> whith arguments <args> for program language <progLang>
     //    and with the fixed identifier <fixId> (automatic for this empty). Return "true" on a well call.
     //    For the fixed function recreate you need change the program or clean up <fixId> by the function original id.
@@ -222,6 +240,7 @@ TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const st
     //  fixId - two direction field of fixed identifier of the function;
     //          for the field empty the function id will be automatic and destroy at end,
     //          else the id will used on the function creation and replaced by an address to it.
+    //  err   - to place here all errors
     if(iid == "funcCall" && prms.size() >= 3 && prms[1].type() == TVariant::Object) {
 	string fixId = (prms.size() >= 4) ? prms[3].getS() : "";
 	string faddr;
@@ -297,7 +316,11 @@ TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const st
 		}
 
 	    return true;
-	} catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+	}
+	catch(TError &err) {
+	    if(prms.size() >= 5) { prms[4].setS(err.mess); prms[4].setModify(); }
+	    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+	}
 
 	return false;
     }
@@ -325,29 +348,29 @@ void TDAQS::subStart( )
     do {
 	//Start template's libraries
 	tmplLibList(tmpl_lst);
-	for(unsigned i_lb = 0; i_lb < tmpl_lst.size(); i_lb++)
-	    try { tmplLibAt(tmpl_lst[i_lb]).at().start(true); }
+	for(unsigned iLb = 0; iLb < tmpl_lst.size(); iLb++)
+	    try { tmplLibAt(tmpl_lst[iLb]).at().start(true); }
 	    catch(TError &err) {
 		if(try_cnt) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		    mess_sys(TMess::Error, _("Error starting the templates library '%s'."), tmpl_lst[i_lb].c_str());
+		    mess_sys(TMess::Error, _("Error starting the templates library '%s'."), tmpl_lst[iLb].c_str());
 		}
 		reply = true;
 	    }
 
 	//Enable controllers
 	modList(m_l);
-	for(unsigned i_m = 0; i_m < m_l.size(); i_m++) {
+	for(unsigned iM = 0; iM < m_l.size(); iM++) {
 	    vector<string> c_l;
-	    at(m_l[i_m]).at().list(c_l);
-	    for(unsigned i_c = 0; i_c < c_l.size(); i_c++) {
-		AutoHD<TController> cntr = at(m_l[i_m]).at().at(c_l[i_c]);
+	    at(m_l[iM]).at().list(c_l);
+	    for(unsigned iC = 0; iC < c_l.size(); iC++) {
+		AutoHD<TController> cntr = at(m_l[iM]).at().at(c_l[iC]);
 		if(/*!cntr.at().enableStat() &&*/ cntr.at().toEnable())
 		    try{ cntr.at().enable(); }
 		    catch(TError &err) {
 			if(try_cnt) {
 			    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-			    mess_sys(TMess::Error, _("Error enabling the templates library '%s'."), (m_l[i_m]+"."+c_l[i_c]).c_str());
+			    mess_sys(TMess::Error, _("Error enabling the templates library '%s'."), (m_l[iM]+"."+c_l[iC]).c_str());
 			}
 			reply = true;
 		    }
@@ -369,38 +392,38 @@ void TDAQS::subStop( )
 
     //Stop
     modList(m_l);
-    for(unsigned i_m = 0; i_m < m_l.size(); i_m++) {
+    for(unsigned iM = 0; iM < m_l.size(); iM++) {
 	vector<string> c_l;
-	at(m_l[i_m]).at().list(c_l);
-	for(unsigned i_c = 0; i_c < c_l.size(); i_c++) {
-	    AutoHD<TController> cntr = at(m_l[i_m]).at().at(c_l[i_c]);
+	at(m_l[iM]).at().list(c_l);
+	for(unsigned iC = 0; iC < c_l.size(); iC++) {
+	    AutoHD<TController> cntr = at(m_l[iM]).at().at(c_l[iC]);
 	    if(cntr.at().startStat())
 		try{ cntr.at().stop(); }
 		catch(TError &err) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		    mess_sys(TMess::Error, _("Error stopping the templates library '%s'."), (m_l[i_m]+"."+c_l[i_c]).c_str());
+		    mess_sys(TMess::Error, _("Error stopping the templates library '%s'."), (m_l[iM]+"."+c_l[iC]).c_str());
 		}
 	}
     }
     //Disable
-    for(unsigned i_m = 0; i_m < m_l.size(); i_m++) {
+    for(unsigned iM = 0; iM < m_l.size(); iM++) {
 	vector<string> c_l;
-	at(m_l[i_m]).at().list(c_l);
-	for(unsigned i_c = 0; i_c < c_l.size(); i_c++) {
-	    AutoHD<TController> cntr = at(m_l[i_m]).at().at(c_l[i_c]);
+	at(m_l[iM]).at().list(c_l);
+	for(unsigned iC = 0; iC < c_l.size(); iC++) {
+	    AutoHD<TController> cntr = at(m_l[iM]).at().at(c_l[iC]);
 	    if(cntr.at().enableStat())
 		try{ cntr.at().disable(); }
 		catch(TError &err) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		    mess_sys(TMess::Error, _("Error disabling the templates library '%s'."), (m_l[i_m]+"."+c_l[i_c]).c_str());
+		    mess_sys(TMess::Error, _("Error disabling the templates library '%s'."), (m_l[iM]+"."+c_l[iC]).c_str());
 		}
 	}
     }
 
     //Stop template's libraries
     tmplLibList(m_l);
-    for(unsigned i_lb = 0; i_lb < m_l.size(); i_lb++)
-	tmplLibAt(m_l[i_lb]).at().start(false);
+    for(unsigned iLb = 0; iLb < m_l.size(); iLb++)
+	tmplLibAt(m_l[iLb]).at().start(false);
 
     TSubSYS::subStop();
 }

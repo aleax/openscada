@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.ICP_DAS file: da_LP_8x.cpp
 /***************************************************************************
- *   Copyright (C) 2012-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2012-2016,2020 by Roman Savochenko, <roman@oscada.org>  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,17 +22,17 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+#include <tsys.h>
+
+#include "da_LP_8x.h"
+#include "ICP_module.h"
+
 extern "C"
 {
 #define CALLBACK
 #include "lincon.h"
 #include "i8014W.h"
 }
-
-#include <tsys.h>
-
-#include "da_LP_8x.h"
-#include "ICP_module.h"
 
 using namespace ICP_DAS_DAQ;
 

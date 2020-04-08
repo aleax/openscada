@@ -93,7 +93,7 @@ void ModMArch::save_( )
 {
     //!!! Addon parameters of the object saving.
     XMLNode prmNd("prms");
-    prmNd.setAttr("Size",TSYS::real2str(maxSize()));
+    prmNd.setAttr("Size", r2s(maxSize()));
     mAPrms = prmNd.save(XMLNode::BrAllPast);
 
     TMArchivator::save_();
@@ -107,19 +107,19 @@ void ModMArch::start( )
     AutoHD<TBD> db = SYS->db().at().nodeAt(wdb,0,'.');
     if( !db.at().enableStat( ) ) db.at().enable();
 
-    run_st = true;
+    runSt = true;
 }
 
 //!!! Inherited (virtual) stop archivator functions.
 void ModMArch::stop( )
 {
-    run_st = false;
+    runSt = false;
 }
 
 //!!! Put data virtual functions for place data to archive.
 void ModMArch::put( vector<TMess::SRec> &mess )
 {
-    if(!run_st) throw TError(nodePath().c_str(),_("Archive is not started!"));
+    if(!runSt) throw TError(nodePath().c_str(),_("Archive is not started!"));
 
     //!!! Code for place data to archive.
 }
@@ -127,7 +127,7 @@ void ModMArch::put( vector<TMess::SRec> &mess )
 //!!! Get data virtual functions for request data from archive.
 void ModMArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category, char level )
 {
-    if( !run_st ) throw TError(nodePath().c_str(),_("Archive is not started!"));
+    if(!runSt) throw TError(nodePath().c_str(),_("Archive is not started!"));
 
     //!!! Code for request data from archive.
 }
@@ -150,10 +150,10 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/st/tarch" && ctrChkNode(opt))	opt->setText(TSYS::real2str(tm_calc,6));
+    if(a_path == "/prm/st/tarch" && ctrChkNode(opt))	opt->setText(r2s(tm_calc));
     else if(a_path == "/prm/cfg/sz")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(TSYS::real2str(maxSize()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(r2s(maxSize()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setMaxSize(s2r(opt->text()));
     }
     else TMArchivator::cntrCmdProc(opt);

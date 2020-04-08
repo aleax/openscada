@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTStarter file: tuimod.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -56,7 +56,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"MainThr"
-#define MOD_VER		"4.6.5"
+#define MOD_VER		"4.7.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -92,8 +92,8 @@ using namespace QTStarter;
 //*************************************************
 //* TUIMod                                        *
 //*************************************************
-TUIMod::TUIMod( string name ) : TUI(MOD_ID), mQtLookMdf(false), hideMode(false), mEndRun(false), mStartCom(false), mCloseToTray(false),
-    mStartMod(dataRes()), mFont(dataRes()), mStyle(dataRes()), mPalette(dataRes()), mStyleSheets(dataRes()), qtArgC(0), qtArgEnd(0), QtApp(NULL), splash(NULL)
+TUIMod::TUIMod( string name ) : TUI(MOD_ID), mQtLookMdf(false), QtApp(NULL), hideMode(false), mEndRun(false), mStartCom(false), mCloseToTray(false),
+    mStartMod(dataRes()), mStyle(dataRes()), mFont(dataRes()), mPalette(dataRes()), mStyleSheets(dataRes()), qtArgC(0), qtArgEnd(0), splash(NULL)
 {
     mod = this;
 
@@ -304,6 +304,7 @@ string TUIMod::optDescr( )
 	"======================= Module <%s:%s> options =======================\n"
 	"    --QtInNotMainThread Starts Qt into a different from the main thread.\n"
 	"    --showWin=<0,1,2>   Window display mode, initial and which is allowed to change from: 0-typical window, 1-maximized window, 2-full screen.\n"
+	"    --simulRightMKeyTm=<tm> Timeout, in seconds, to simulate the right mouse key and context menu at holding the left mouse key in this time - more to zero.\n"
 	"----------- Qt debug commandline options ----------\n"
 	"    --noX11             Prevent the launch of Qt, preferably for a clean console.\n"
 	"    --sync              Switch to Sync X11 for debugging.\n"
@@ -409,7 +410,7 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 	TUI::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Module options"))) {
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/st_mod",_("Qt modules for startup, separated by ';'"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/prm/cfg/lsQtMod");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/closeToTray",_("Collapse or startup to the system tray"),RWRWR_,"root",SUI_ID,1,"tp","bool");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/closeToTray",_("Collapse and startup to the system tray"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 	    if(ctrMkNode("area",opt,-1,"/prm/LF",_("Look and feel"))) {
 		ctrMkNode("fld",opt,-1,"/prm/LF/prfl",_("Known profiles"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","select","select","/prm/LF/prflLs");
 		ctrMkNode("fld",opt,-1,"/prm/LF/stl",_("Widgets style"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/prm/LF/stlLs");
@@ -506,7 +507,7 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/prm/LF/stlLs" && ctrChkNode(opt)) {
 	QStringList sls = QStyleFactory::keys();
-	for(unsigned iL = 0; iL < sls.size(); iL++)
+	for(int iL = 0; iL < sls.size(); iL++)
 	    opt->childAdd("el")->setText(sls[iL].toStdString());
     }
     else if(a_path == "/prm/LF/plt") {
@@ -550,7 +551,8 @@ TVariant TUIMod::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 //* StApp                                         *
 //*************************************************
 StApp::StApp( int &argv, char **args ) : QApplication(argv, args), origStl(mod->dataRes()),
-    inExec(false), transl(NULL), trayMenu(NULL), tray(NULL), stDlg(NULL), initExec(false)
+    inExec(false), transl(NULL), trayMenu(NULL), tray(NULL), stDlg(NULL), initExec(false),
+    simulRightMKeyTm(0), mouseBtPress(0), mouseBtRecv(NULL), mouseBtHold(QEvent::None,QPoint(),Qt::NoButton,0,0)
 {
     setApplicationName(PACKAGE_STRING);
     setQuitOnLastWindowClosed(false);
@@ -571,6 +573,23 @@ int StApp::topLevelWindows( )
 	    winCnt++;
 
     return winCnt;
+}
+
+bool StApp::notify( QObject *receiver, QEvent *event )
+{
+    if(event && simulRightMKeyTm > 0) {
+	if(event->type() == QEvent::MouseButtonPress && ((QMouseEvent*)event)->button() == Qt::LeftButton) {
+	    mouseBtRecv = receiver;
+	    mouseBtHold = *((QMouseEvent*)event);
+	    mouseBtPress = TSYS::curTime();
+	}
+	if(mouseBtPress && ((event->type() == QEvent::MouseButtonRelease && ((QMouseEvent*)event)->button() == Qt::LeftButton) ||
+		(event->type() == QEvent::MouseMove && (((QMouseEvent*)event)->globalPos()-mouseBtHold.globalPos()).manhattanLength() > QFontMetrics(font()).height()) ||
+		(event->type() == QEvent::FocusOut && mouseBtRecv == receiver)))
+	    mouseBtPress = 0;
+    }
+
+    return QApplication::notify(receiver, event);
 }
 
 void StApp::saveState( QSessionManager &manager )
@@ -612,6 +631,8 @@ void StApp::timerEvent( QTimerEvent *event )
     if(!inExec)	return;
     if(!initExec) {
 	initExec = true;	//!!: Set to the begin but here can be a multiple entry from processEvents() manual call, observed on QTCfg.
+
+	simulRightMKeyTm = s2i(SYS->cmdOpt("simulRightMKeyTm"));
 
 	//Create I18N translator
 	transl = new I18NTranslator();
@@ -670,6 +691,20 @@ void StApp::timerEvent( QTimerEvent *event )
     }
 
     if(mod->mQtLookMdf)	updLookFeel();
+
+    if(mouseBtPress && 1e-6*(TSYS::curTime()-mouseBtPress) >= simulRightMKeyTm) {
+	QMouseEvent evPress(QEvent::MouseButtonPress, mouseBtHold.pos(), Qt::RightButton, 0, 0);
+	sendEvent(mouseBtRecv, &evPress);
+
+	QMouseEvent evRels(QEvent::MouseButtonRelease, mouseBtHold.pos(), Qt::RightButton, 0, 0);
+	sendEvent(mouseBtRecv, &evRels);
+
+	if(dynamic_cast<QWidget*>(mouseBtRecv)) {
+	    QContextMenuEvent evCtxMenu(QContextMenuEvent::Mouse, mouseBtHold.pos());
+	    sendEvent(mouseBtRecv, &evCtxMenu);
+	}
+	mouseBtPress = 0;
+    }
 
 #ifdef HAVE_QTSENSORS
     if(sensCnt.type() != TVariant::Object) sensCnt = new TArrayObj();
@@ -755,7 +790,7 @@ void StApp::callQtModule( )
     }
 }
 
-bool StApp::updLookFeel( )
+void StApp::updLookFeel( )
 {
     QStyle *appStl = QStyleFactory::create(mod->style().c_str());
     if(appStl)	QApplication::setStyle(appStl);
@@ -767,8 +802,8 @@ bool StApp::updLookFeel( )
     if(mod->palette().size()) {
 	QPalette plt = palette();
 	string cGrp, cRl, tVl;
-	for(int off = 0, iGrp = 0; ((cGrp=TSYS::strLine(mod->palette(),0,&off)).size() || off < mod->palette().size()) && iGrp < 4; iGrp++)
-	    for(int off1 = 0, iRl = 0; ((cRl=TSYS::strParse(cGrp,0,",",&off1)).size() || off1 < cGrp.size()) && iRl < 20; iRl++) {
+	for(int off = 0, iGrp = 0; ((cGrp=TSYS::strLine(mod->palette(),0,&off)).size() || off < (int)mod->palette().size()) && iGrp < 4; iGrp++)
+	    for(int off1 = 0, iRl = 0; ((cRl=TSYS::strParse(cGrp,0,",",&off1)).size() || off1 < (int)cGrp.size()) && iRl < 20; iRl++) {
 		if(!(tVl=sTrm(cRl)).size())	continue;
 		plt.setColor((QPalette::ColorGroup)iGrp, (QPalette::ColorRole)iRl, tVl.c_str());
 	    }
@@ -1002,7 +1037,7 @@ StartDialog::StartDialog( ) : prjsLs(NULL), prjsBt(NULL)
     prjsLs = NULL;
     prjsBt = NULL;
     if(!SYS->prjCustMode()) {
-	bool oscd_datadir_wr = (access(oscd_datadir_full,X_OK|W_OK) == 0);
+	//bool oscd_datadir_wr = (access(oscd_datadir_full,X_OK|W_OK) == 0);
 
 	// Prepare the list widget for projects selection.
 	prjsLs = new QListWidget(this);

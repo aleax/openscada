@@ -41,7 +41,7 @@ class TestXML : public TFunction
 	}
 
 	string name( )	{ return _("XML parsing"); }
-	string descr( )	{ return _("XML parsing file test. Disassembles and displays the structure of the specified file."); }
+	string descr( )	{ return _("Test for XML file parsing. Disassembles and displays the structure of the specified file."); }
 
 	void calc( TValFunc *val )
 	{
@@ -50,13 +50,13 @@ class TestXML : public TFunction
 	    {
 		mod->mess(id(),_("Test: Start"));
 		if((hd=open(val->getS(1).c_str(),O_RDONLY)) < 0)
-		    throw TError(nodePath().c_str(),_("Open file '%s' error."),val->getS(1).c_str());
+		    throw TError(nodePath().c_str(),_("Error opening the file '%s'."),val->getS(1).c_str());
 		int cf_sz = lseek(hd, 0, SEEK_END);
 		lseek(hd, 0, SEEK_SET);
 		char *buf = (char*)malloc(cf_sz);
 		ssize_t rRez = read(hd, buf, cf_sz);
-		if(rRez < 0) throw TError(nodePath().c_str(), _("Read file '%s' error: %s."),val->getS(1).c_str(),strerror(errno));
-		else if(rRez != cf_sz) throw TError(nodePath().c_str(), _("Read file '%s' only %d from %d."), val->getS(1).c_str(), rRez, cf_sz);
+		if(rRez < 0) throw TError(nodePath().c_str(), _("Error reading the file '%s': %s."),val->getS(1).c_str(),strerror(errno));
+		else if(rRez != cf_sz) throw TError(nodePath().c_str(), _("Read the file '%s' only %d from %d."), val->getS(1).c_str(), rRez, cf_sz);
 		string s_buf(buf, cf_sz);
 		free(buf);
 		XMLNode node;

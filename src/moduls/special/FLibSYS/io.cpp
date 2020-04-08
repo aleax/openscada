@@ -68,7 +68,7 @@ TVariant IOObj::propGet( const string &id )
     if(id == "mFormat")		return mFormat;
     if(id == "stringEncode")	return strEnc;
 
-    throw TError("IOObj", _("Properties no supported by the object."));
+    throw TError("IOObj", _("Properties are not supported by the object."));
 }
 
 void IOObj::propSet( const string &id, TVariant val )
@@ -80,7 +80,7 @@ void IOObj::propSet( const string &id, TVariant val )
     else if(id == "string" && !fhd)	{ str = val.getS(); pos = 0; }
     else if(id == "mFormat")		mFormat = val.getS();
     else if(id == "stringEncode")	strEnc = val.getS();
-    else throw TError("IOObj", _("Properties no supported by the object."));
+    else throw TError("IOObj", _("Properties are not supported by the object."));
 }
 
 TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
@@ -303,8 +303,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
     //	cnt - integer and real types write multiple count
     if((id == "write" || (sec1=(id=="wr"))) && prms.size() >= 1) {
 	TVariant &vals = prms[0];
-	TpDescr tpD;
-	if(prms.size() >= 2) tpD = getTp(prms[1].getS());
+	TpDescr &tpD = getTp((prms.size()>=2) ? prms[1].getS() : "char");
 	int64_t rez = 0;
 	//!!!! Check for real data type
 
@@ -516,13 +515,15 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	return rez;
     }
 
-    throw TError("IOObj",_("Error function '%s' or missing parameters for it."),id.c_str());
+    throw TError("IOObj",_("Error the function '%s' or missing its parameters."),id.c_str());
 }
 
 IOObj::TpDescr &IOObj::getTp( const string &dtT )
 {
     //Init data types
     if(dTPs.empty()) {
+	dTPs[""] = TpDescr(1, false, true, true);
+
 	dTPs["uchar"] = dTPs["unsigned char"] = TpDescr(1, false, false, true);
 	dTPs["uint8"] = TpDescr(1);
 	dTPs["uint16"] = dTPs["ushort"] = TpDescr(2);
@@ -538,5 +539,5 @@ IOObj::TpDescr &IOObj::getTp( const string &dtT )
 	dTPs["double"] = dTPs["float64"] = dTPs["real*8"] = dTPs["real"] = TpDescr(8, true);
     }
 
-    return dTPs[dtT];
+    return (dTPs.find(dtT) != dTPs.end()) ? dTPs[dtT] : dTPs[""];
 }

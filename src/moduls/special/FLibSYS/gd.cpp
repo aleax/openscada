@@ -49,16 +49,16 @@ string GDObj::save( const string &inm, bool file )
 
 TVariant GDObj::propGet( const string &id )
 {
-    throw TError("GDObj", _("Properties no supported by the object."));
+    throw TError("GDObj", _("Properties are not supported by the object."));
 }
 
 void GDObj::propSet( const string &id, TVariant val )
 {
-    throw TError("GDObj", _("Properties no supported by the object."));
+    throw TError("GDObj", _("Properties are not supported by the object."));
 }
 
 TVariant GDObj::funcCall( const string &id, vector<TVariant> &prms )
 {
     //????
-    throw TError("GDObj",_("Error function '%s' or missing parameters for it."),id.c_str());
+    throw TError("GDObj",_("Error the function '%s' or missing its parameters."),id.c_str());
 }

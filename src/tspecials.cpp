@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tspecials.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -61,7 +61,7 @@ void TSpecialS::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TSpecial                                      *
 //*************************************************
-TSpecial::TSpecial( const string &id ) : TModule(id), run_st(false)
+TSpecial::TSpecial( const string &id ) : TModule(id), runSt(false)
 {
 
 }
@@ -79,7 +79,7 @@ void TSpecial::cntrCmdProc( XMLNode *opt )
     //Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/prm/st/st") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SSPC_ID,SEC_RD))	opt->setText(run_st?"1":"0");
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SSPC_ID,SEC_RD))	opt->setText(runSt?"1":"0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SSPC_ID,SEC_WR))	s2i(opt->text()) ? modStart() : modStop();
     }
     else TModule::cntrCmdProc(opt);

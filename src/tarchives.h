@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tarchives.h
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,7 +21,7 @@
 #ifndef TARCHIVES_H
 #define TARCHIVES_H
 
-#define SARH_VER	12		//ArchiveS type modules version
+#define SARH_VER	13		//ArchiveS type modules version
 #define SARH_ID		"Archive"
 
 #include <string>
@@ -37,7 +37,7 @@ namespace OSCADA
 {
 
 //************************************************
-//* Message archivator                           *
+//* Message archiver                             *
 //************************************************
 
 //************************************************
@@ -78,6 +78,7 @@ class TMArchivator : public TCntrNode, public TConfig
 	void setDB( const string &idb )		{ mDB = idb; modifG(); }
 
 	// Redundancy
+	time_t redntTm( )	{ return mRdTm; }	//Time of the last redundancy operation
 	//  In redundancy now
 	bool redntUse( )	{ return mRdUse; }
 	void setRedntUse( bool vl )		{ mRdUse = vl; }
@@ -133,6 +134,7 @@ class TMArchivator : public TCntrNode, public TConfig
 	unsigned mRdUse  : 1;
 	unsigned mRdFirst: 1;
 	time_t	mRdTm;
+	unsigned mRdEqTm;
 };
 
 //************************************************
@@ -153,18 +155,18 @@ class TTypeArchivator: public TModule
 	virtual ~TTypeArchivator( );
 
 	// Messages
-	void messList( vector<string> &list ) const		{ chldList(mMess,list); }
-	bool messPresent( const string &iid ) const		{ return chldPresent(mMess,iid); }
-	void messAdd( const string &iid, const string &idb = "*.*" );
-	void messDel( const string &iid, bool full = false )	{ chldDel(mMess,iid,-1,full); }
-	AutoHD<TMArchivator> messAt( const string &iid ) const	{ return chldAt(mMess,iid); }
+	void messList( vector<string> &list ) const		{ chldList(mMess, list); }
+	bool messPresent( const string &id ) const		{ return chldPresent(mMess, id); }
+	string messAdd( const string &id, const string &idb = "*.*" );
+	void messDel( const string &id, bool full = false )	{ chldDel(mMess, id, -1, full); }
+	AutoHD<TMArchivator> messAt( const string &id ) const	{ return chldAt(mMess, id); }
 
 	// Values
-	void valList( vector<string> &list ) const		{ chldList(mVal,list); }
-	bool valPresent( const string &iid ) const		{ return chldPresent(mVal,iid); }
-	void valAdd( const string &iid, const string &idb = "*.*" );
-	void valDel( const string &iid, bool full = false )	{ chldDel(mVal,iid,-1,full); }
-	AutoHD<TVArchivator> valAt( const string &iid ) const	{ return chldAt(mVal,iid); }
+	void valList( vector<string> &list ) const		{ chldList(mVal, list); }
+	bool valPresent( const string &id ) const		{ return chldPresent(mVal, id); }
+	string valAdd( const string &id, const string &idb = "*.*" );
+	void valDel( const string &id, bool full = false )	{ chldDel(mVal, id, -1, full); }
+	AutoHD<TVArchivator> valAt( const string &id ) const	{ return chldAt(mVal, id); }
 
 	TArchiveS &owner( ) const;
 
@@ -190,6 +192,9 @@ class TVArchive;
 class TArchiveS : public TSubSYS
 {
     public:
+	//Public data
+	enum AutoIdMode { BothPrmAttrId = 0, OnlyPrmId, OnlyAttrId };
+
 	//Public methods
 	TArchiveS( );
 	~TArchiveS( );
@@ -200,11 +205,13 @@ class TArchiveS : public TSubSYS
 	int valPeriod( )	{ return vmax(1, mValPer); }
 	int valPrior( )		{ return mValPrior; }
 	bool valForceCurTm( )	{ return mValForceCurTm; }
+	AutoIdMode autoIdMode( ){ return (AutoIdMode)mAutoIdMode; }
 
 	void setMessPeriod( int ivl )	{ mMessPer = ivl; modif(); }
 	void setValPeriod( int ivl )	{ mValPer = ivl; modif(); }
 	void setValPrior( int ivl )	{ mValPrior = vmax(-1, vmin(199,ivl)); modif(); }
 	void setValForceCurTm( bool vl ){ mValForceCurTm = vl; modif(); }
+	void setAutoIdMode( AutoIdMode vl ) { mAutoIdMode = vl; modif(); }
 	void setToUpdate( )		{ toUpdate = true; }
 
 	void unload( );
@@ -215,30 +222,31 @@ class TArchiveS : public TSubSYS
 	void perSYSCall( unsigned int cnt );
 
 	// Value archives functions
-	void valList( vector<string> &list ) const		{ chldList(mAval,list); }
-	bool valPresent( const string &iid ) const		{ return chldPresent(mAval,iid); }
-	void valAdd( const string &iid, const string &idb = "*.*" );
-	void valDel( const string &iid, bool db = false )	{ chldDel(mAval,iid,-1,db); }
-	AutoHD<TVArchive> valAt( const string &iid ) const	{ return chldAt(mAval,iid); }
+	void valList( vector<string> &list ) const		{ chldList(mAval, list); }
+	bool valPresent( const string &id ) const		{ return chldPresent(mAval, id); }
+	string valAdd( const string &id, const string &idb = "*.*" );
+	void valDel( const string &id, bool db = false )	{ chldDel(mAval, id, -1, db); }
+	AutoHD<TVArchive> valAt( const string &id ) const	{ return chldAt(mAval, id); }
 
 	void setActMess( TMArchivator *a, bool val );
 	void setActVal( TVArchive *a, bool val );
 
-	// Archivators
+	// Archivers
 	AutoHD<TTypeArchivator> at( const string &name ) const		{ return modAt(name); }
 
 	// Message archive function
-	void messPut( time_t tm, int utm, const string &categ, int8_t level, const string &mess, const string &arch = "", bool force = false );
-	void messPut( const vector<TMess::SRec> &recs, const string &arch = "", bool force = false );
+	void messPut( time_t tm, int utm, const string &categ, int8_t level, const string &mess, const string &arch = "" );
+	void messPut( const vector<TMess::SRec> &recs, const string &arch = "" );
 	time_t messGet( time_t bTm, time_t eTm, vector<TMess::SRec> &recs, const string &category = "",
 	    int8_t level = TMess::Debug, const string &arch = "", time_t upTo = 0 );
 	time_t messBeg( const string &arch = "" );
 	time_t messEnd( const string &arch = "" );
 
 	// Redundancy
+	time_t rdTm( );			//Time of the last redundancy operation
 	bool rdProcess( XMLNode *reqSt = NULL );
-	float rdRestDtOverTm( )			{ return mRdRestDtOverTm; }	//In days
-	void setRdRestDtOverTm( float vl )	{ mRdRestDtOverTm = vmin(356,vmax(0,vl)); modif(); }
+	double rdRestDtOverTm( )		{ return mRdRestDtOverTm; }	//In days
+	void setRdRestDtOverTm( double vl )	{ mRdRestDtOverTm = vmin(356, vmax(0,vl)); modif(); }
 	void rdActArchMList( vector<string> &ls, bool isRun = false );
 	string rdStRequest( const string &arch, XMLNode &req, const string &prevSt = "", bool toRun = true );
 
@@ -268,7 +276,7 @@ class TArchiveS : public TSubSYS
 	void setMessBufLen( unsigned len );
 
 	//Private attributes
-	TElem	elMess,			//Message archivator's DB elements
+	TElem	elMess,			//Message archiver's DB elements
 		elVal,			//Value archivator's DB elements
 		elAval;			//Value archives DB elements
 
@@ -285,7 +293,8 @@ class TArchiveS : public TSubSYS
 	ResMtx	vRes;			//Value access resource
 	int	mValPer,		//Value archiving period
 		mValPrior,		//Value archive task priority
-		mAval;
+		mAval,
+		mAutoIdMode;
 
 	bool	mValForceCurTm,		//Time of taken values force to current and overide it's source from
 		prcStVal,		//Process value flag
@@ -297,7 +306,7 @@ class TArchiveS : public TSubSYS
 
 	// Redundancy
 	ResRW	mRdRes;
-	float	mRdRestDtOverTm;	//Overtime of the redundant history reload at start in hours
+	double	mRdRestDtOverTm;	//Overtime of the redundant history reload at start in hours
 	map<string, map<string,bool> > mRdArchM;
 	unsigned mRdFirst	: 1;
 };

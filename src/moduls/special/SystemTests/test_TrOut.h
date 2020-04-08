@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.SystemTests file: test_TrOut.h
 /***************************************************************************
- *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,8 +41,8 @@ class TestTrOut : public TFunction
 	}
 
 	string name( )	{ return _("Transport"); }
-	string descr( )	{ return _("Test of output and/or input transport.\n"
-				   "Performs testing of the original transport by sending a request to the specified ingoing transport."); }
+	string descr( )	{ return _("Test of the output and/or input transports.\n"
+				   "Performs testing of the original transport sending a request to the specified input transport."); }
 
 	void calc( TValFunc *val )
 	{
@@ -60,13 +60,11 @@ class TestTrOut : public TFunction
 		int64_t stTm = TSYS::curTime();
 
 		AutoHD<TTypeTransport> tr = SYS->transport().at().modAt(type);
-		if(!tr.at().outPresent(addr)) {
-		    tr.at().outAdd(addr);
-		    tr.at().outAt(addr).at().setAddr(addr);
-		}
-		if(!tr.at().outAt(addr).at().startStat()) tr.at().outAt(addr).at().start();
-		int len = tr.at().outAt(addr).at().messIO(req.c_str(), req.size(), buf, sizeof(buf)-1, 1000);
-		tr.at().outAt(addr).at().stop();
+		string oTrId = tr.at().outAdd(addr);
+		tr.at().outAt(oTrId).at().setAddr(addr);
+		if(!tr.at().outAt(oTrId).at().startStat()) tr.at().outAt(oTrId).at().start();
+		int len = tr.at().outAt(oTrId).at().messIO(req.c_str(), req.size(), buf, sizeof(buf)-1, 1000);
+		tr.at().outAt(oTrId).at().stop();
 		buf[len] = 0;
 		mod->mess(id(),_("%s: Put '%s'. Get: '%s'. Time = %g ms."),addr.c_str(),req.c_str(),buf,(1e-3*(TSYS::curTime()-stTm)));
 

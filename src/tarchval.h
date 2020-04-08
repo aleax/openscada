@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tarchval.h
 /***************************************************************************
- *   Copyright (C) 2006-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,7 +37,7 @@ namespace OSCADA
 {
 
 //*************************************************
-//* Value archivator                              *
+//* Value archiver                                *
 //*************************************************
 
 //*************************************************
@@ -161,7 +161,6 @@ class TValBuf
 	unsigned int mEvalCnt;
 };
 
-
 //*************************************************
 //* TVArchive                                     *
 //*************************************************
@@ -179,6 +178,8 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	//Public methods
 	TVArchive( const string &id, const string &db, TElem *cf_el );
 	~TVArchive( );
+
+	string objName( );
 
 	TCntrNode &operator=( const TCntrNode &node );
 
@@ -234,7 +235,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	// Active get data from atribute
 	void getActiveData( const int64_t &tm = 0 );
 
-	// Phisical archivator's functions
+	// Phisical archiver's functions
 	void archivatorList( vector<string> &ls );
 	bool archivatorPresent( const string &arch );
 	void archivatorAttach( const string &arch );
@@ -294,7 +295,7 @@ class TTypeArchivator;
 class TVArchivator : public TCntrNode, public TConfig
 {
     friend void TVArchive::archivatorAttach( const string &arch );
-    friend void TVArchive::archivatorDetach( const string &arch, bool full = false, bool toModify = true );
+    friend void TVArchive::archivatorDetach( const string &arch, bool full, bool toModify );
 
     public:
 	//Public methods

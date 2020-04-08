@@ -7,11 +7,11 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../../en/files/doc.css" rel="stylesheet" /></head>
-<body><div id="mw_header">
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../../en/files/Logo-big.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Модулі/Пускач Qt GUI</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FQTStarter&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/QTStarter" title="Modules/QTStarter">Modules/QTStarter</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/QTStarter" title="Modules/QTStarter (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/QTStarter/ru" title="Модули/Пускатель Qt GUI (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FQTStarter&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/QTStarter" title="Modules/QTStarter">Modules/QTStarter</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/QTStarter.html" title="Modules/QTStarter (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/QTStarter.html" title="Модули/Пускатель Qt GUI (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -39,6 +39,9 @@
 <td> Користувацькі інтерфейси </td>
 <td> Роман Савоченко </td>
 <td> Надає Qt GUI пускач. Qt-пускач є єдиним та обов'язковим компонентом для всіх GUI модулів, основаних на бібліотеці Qt.
+<ul><li> <b>Зробити (To Do):</b></li></ul>
+<dl><dd> - реалізувати менеджер підпроектів для їх запуску у окремих процесах, але із їх зберіганням та керуванням у одному конфігураційному файлі проекту, для високо-надійних конфігурацій;</dd>
+<dd> - реалізувати менеджер фонового виконання процесів.</dd></dl>
 </td></tr></table>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
@@ -50,8 +53,8 @@
 </ul>
 </div>
 
-<p>Модуль надає до OpenSCADA пускач GUI модулів, заснованих на багатоплатформеній бібліотеці <a class="external text" href="http://qt.io" rel="nofollow noreferrer noopener" target="_blank">Qt</a> графічного користувацького інтерфейсу (GUI), початково створеного фірмою <a class="external text" href="http://www.trolltech.com" rel="nofollow noreferrer noopener" target="_blank">TrollTech</a>. Також, модуль реалізує елементи менеджеру проектів OpenSCADA. Окремий модуль для запуску Qt GUI модулів потрібно через потребу організації однопотокового виконання всіх компонентів візуалізації Qt та централізованої ініціалізації головного об'єкту Qt-бібліотеки — QApplication.
-</p><p>Від початку цей модуль створює окремий поток для основного потоку Qt, де є можливість формування екрану динамічної заставки, оскільки основні процеси OpenSCADA продовжують виконання у основному потоці. Та версія Qt5 стала чутливою до виконання у неголовному потоці, тому для неї у OpenSCADA додано таку можливість, але виключно зі статичним екраном заставки. Для контролю цієї можливості передбачено параметр конфігурації збірки OpenSCADA <i>--enable-QtMainThrd</i>, який по замовченню виключено для Qt4 та включено для Qt5.
+<p>Модуль надає до OpenSCADA пускач GUI модулів, заснованих на багатоплатформеній бібліотеці <a class="external text" href="http://qt.io" rel="nofollow noreferrer noopener" target="_blank">Qt</a> графічного користувацького інтерфейсу (GUI), початково створеного фірмою <a class="external text" href="http://www.trolltech.com" rel="nofollow noreferrer noopener" target="_blank">TrollTech</a>. Також, модуль реалізує елементи менеджеру проектів OpenSCADA. Окремий модуль для запуску Qt GUI модулів потрібно через необхідність організації однопотокового виконання всіх компонентів візуалізації Qt та централізованої ініціалізації головного об'єкту Qt-бібліотеки — QApplication.
+</p><p>Від початку, цей модуль створює окремий поток для основного потоку Qt, де є можливість формування екрану динамічної заставки, оскільки основні процеси OpenSCADA продовжують виконання у основному потоці. Та версія Qt5 стала чутливою до виконання у неголовному потоці, тому для неї у OpenSCADA додано таку можливість, але виключно зі статичним екраном заставки. Для контролю цієї можливості передбачено параметр запуску <i>--QtInNotMainThread</i>, який вмикає виконання у неголовному потоці, для Qt4, відтак, по замовченню, здійснюється виконання у головному, що типово для Qt5.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:606px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_splash_uk.png"><img class="thumbimage" height="304" src="../files/QTStarter_splash_uk.png" width="604" /></a>  <div class="thumbcaption">Рис.1. Динамічний екран заставки модуля.</div></div></div></div>
 <p>Діалогове вікно пускачу (Рис.2) загалом надає:
@@ -65,6 +68,7 @@
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:340px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_systray_uk.png"><img class="thumbimage" height="174" src="../files/QTStarter_systray_uk.png" width="338" /></a>  <div class="thumbcaption">Рис.3. Проект "АГЛКС", запущений або згорнутий до системного лотка.</div></div></div></div> 
 <p>Модулем здійснюється відключення функції збереження сеансу програми при примусовому закритті системою, для того щоб запобігти спробам відновлення цього сеансу при старті системи, оскільки OpenSCADA цього не потребує.
+</p><p>Модулем передбачено підтримку емуляції правої клавіші миші для оточень із сенсорним екраном, на кшталт Android, оскільки інтерфейс часто передбачає контроль виключно за допомогою контекстного меню. Емуляція вмикається встановленням параметру командного рядку <i>--simulRightMKeyTm=&lt;tm&gt;</i>, при старті програми, де вказується час утримання (типово дві секунди) натиску лівої клавіші миші (або на екрані) для генерації повідомлення правої клавіші миші та контекстної допомоги. Емуляція правої клавіші не вимикає-відкладає первинних повідомлень лівої клавіші, відтак її загальні дії мають працювати коректно, але можливі невідповідності у місцях де первинне повідомлення щось перемикає та емульоване повідомлення вже піде не за адресою!
 </p>
 <h2><span class="mw-headline" id="Qt_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.96_OpenSCADA"><span class="mw-headline-number">1</span> Qt модулі OpenSCADA</span></h2>
 <p>Для запуску Qt GUI модулів використовується розширений інтерфейс виклику функцій модулів. Цей інтерфейс передбачає експортування функцій зовнішніми модулями. У нашому випадку Qt GUI модулі повинні експортувати наступні функції:
@@ -114,5 +118,5 @@
 
 
 
-</div></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/QTStarter/uk">Modules/QTStarter/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.1</td></tr></table></body>
 </html>

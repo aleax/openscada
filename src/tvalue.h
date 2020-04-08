@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tvalue.h
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -158,7 +158,7 @@ class TValue: public TCntrNode, public TValElem
 
     protected:
 	//Methods
-	void chldAdd( int8_t igr, TCntrNode *node, int pos = -1, bool noExp = false );
+	string chldAdd( int8_t igr, TCntrNode *node, int pos = -1, bool noExp = false );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	// Manipulation for configuration element

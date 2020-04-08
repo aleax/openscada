@@ -22,11 +22,6 @@
 #ifndef VIS_RUN_H
 #define VIS_RUN_H
 
-#include <string>
-#include <vector>
-#include <deque>
-#include <map>
-
 #include <QMainWindow>
 #include <QThread>
 #include <QLabel>
@@ -35,11 +30,6 @@
 #include <QMenu>
 
 #include "tvision.h"
-
-using std::string;
-using std::vector;
-using std::deque;
-using std::map;
 
 namespace VISION
 {
@@ -180,6 +170,8 @@ class VisRun : public QMainWindow
 	bool	connOK( )	{ return !conErr; }
 	QAction *aFullScr( )	{ return actFullScr; }
 
+	void	setFocus( const string &addr );
+
 	bool	winMenu( );
 	void	setWinMenu( bool act );
 
@@ -217,7 +209,10 @@ class VisRun : public QMainWindow
 
 	void usrStatus( const string &val, RunPageView *pg = NULL );
 
+	int cachePgSz( )	{ return cachePg.size(); }
+
 	// Resource cache commands
+	int cacheResSz( )	{ return mCacheRes.size(); }
 	string cacheResGet( const string &res );
 	void cacheResSet( const string &res, const string &val );
 
@@ -232,6 +227,8 @@ class VisRun : public QMainWindow
 	//Public attributes
 	bool winClose;					//Closing window flag
 	bool isResizeManual;				//Manual resizing flag
+
+	float	updTmMax, planePer;
 
     signals:
 	void makeStarterMenu( );
@@ -326,12 +323,12 @@ class VisRun : public QMainWindow
 	bool		mKeepAspectRatio;	//Keep aspect ratio on scale
 	bool		mWinPosCntrSave;	//Windows position control and save
 	string 		prjSes_it, work_sess, src_prj;//Work session and source project
+	string		focusWdf;
 	RunPageView	*master_pg;		//Master page of runtime session
 	int		mPeriod;		//Clock's period
 	int		mConId;			//The connection to VCA ID
 	unsigned	mScreen,		//Work screen, possible virtual
 			wPrcCnt;		//Process counter
-	float		upd_tm;
 	unsigned	reqtm;			//Requested time
 	unsigned	expDiagCnt, expDocCnt;
 

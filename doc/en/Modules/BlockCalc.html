@@ -7,11 +7,11 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../files/doc.css" rel="stylesheet" /></head>
-<body><div id="mw_header">
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../../en/files/Logo-big.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/BlockCalc</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/BlockCalc/ru" title="Модули/Блоковый вычислитель (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/BlockCalc/uk" title="Модулі/Блоковий обчислювач (100% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/BlockCalc.html" title="Модули/Блоковый вычислитель (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/BlockCalc.html" title="Модулі/Блоковий обчислювач (100% translated)">українська</a></div></div>
 <div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
 <table cellspacing="0">
 <tr>
@@ -37,28 +37,18 @@
 
 <tr>
 <td> <a href="../Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">BlockCalc</a> </td>
-<td> Block calculator </td>
-<td> 1.7 </td>
+<td> Block calculator
+</td>
+<td> 1.9 </td>
 <td> GPL2 </td>
 <td> daq_BlockCalc.so </td>
 <td> en,uk,ru,de </td>
 <td> x86,x86_64,ARM
 </td>
 <td> DAQ </td>
-<td> Roman Savochenko<br />Maxim Lysenko (2009,2012) — the page translation </td>
+<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2009,2012) — the page initial translation</i></font> </td>
 <td> Provides a block calculator.
 </td></tr></table>
-<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
-<ul>
-<li class="toclevel-1 tocsection-1"><a href="#The_controller_of_the_module"><span class="tocnumber">1</span> <span class="toctext">The controller of the module</span></a></li>
-<li class="toclevel-1 tocsection-2"><a href="#The_block_scheme_of_the_controller"><span class="tocnumber">2</span> <span class="toctext">The block scheme of the controller</span></a></li>
-<li class="toclevel-1 tocsection-3"><a href="#Parameters_of_the_controller"><span class="tocnumber">3</span> <span class="toctext">Parameters of the controller</span></a></li>
-<li class="toclevel-1 tocsection-4"><a href="#Copying_of_the_block_schemes"><span class="tocnumber">4</span> <span class="toctext">Copying of the block schemes</span></a></li>
-<li class="toclevel-1 tocsection-5"><a href="#User_programming_API"><span class="tocnumber">5</span> <span class="toctext">User programming API</span></a></li>
-<li class="toclevel-1 tocsection-6"><a href="#Links"><span class="tocnumber">6</span> <span class="toctext">Links</span></a></li>
-</ul>
-</div>
-
 <p>The module of subsystems "DAQ" BlockCalc provides the system OpenSCADA with the mechanism for creating custom calculations. The mechanism of calculations based on the formal language of block circuits(functional blocks).
 </p><p>Also, the module implements the functions of the horizontal reservation, namely, working in conjunction with the remote station of the same level. In addition to the synchronization of the archives of values and archives of attributes of parameters the module implements synchronization of computational templates, in order to shockless catch of the algorithms.
 </p><p>Languages of block programming based on the notion of  circuits(functional blocks). Moreover, depending on the substance of the block, block circuits may include: logic, relay logic circuits, a model of technological process, and more. The essence of the block circuit is that it contains a list of blocks and relations between them.
@@ -73,6 +63,17 @@
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:598px;"><a class="image" href="http://oscada.org/wiki/File:BlockCalc_model.png"><img class="thumbimage" height="210" src="../files/BlockCalc_model.png" width="596" /></a>  <div class="thumbcaption">Fig. 1. General connections between blocks of a block scheme.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:601px;"><a class="image" href="http://oscada.org/wiki/File:BlockCalc_links.png"><img class="thumbimage" height="162" src="../files/BlockCalc_links.png" width="599" /></a>  <div class="thumbcaption">Fig. 2. Detailed links between blocks.</div></div></div></div>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#The_controller_of_the_module"><span class="tocnumber">1</span> <span class="toctext">The controller of the module</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#The_block_scheme_of_the_controller"><span class="tocnumber">2</span> <span class="toctext">The block scheme of the controller</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Parameters_of_the_controller"><span class="tocnumber">3</span> <span class="toctext">Parameters of the controller</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Copying_of_the_block_schemes"><span class="tocnumber">4</span> <span class="toctext">Copying of the block schemes</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#User_programming_API"><span class="tocnumber">5</span> <span class="toctext">User programming API</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Links"><span class="tocnumber">6</span> <span class="toctext">Links</span></a></li>
+</ul>
+</div>
+
 <h2><span class="mw-headline" id="The_controller_of_the_module"><span class="mw-headline-number">1</span> The controller of the module</span></h2>
 <p>Each controller of this module contains the block circuit, which he computes with the specified period. In order to provide calculated data in the system OpenSCADA the parameters can be created in the controller. Example of the configuration tab of the controller of the given type depicted in Fig. 3.
 </p>
@@ -146,7 +147,7 @@
 <p><b>The object "Block" (SYS.DAQ.BlockCalc["cntr"]["blk_block"])</b>
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — get value of configuration field <i>nm</i> of the object.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — set configuration field <i>nm</i> of the object to value <i>val</i>.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">access to the appropriate subsystem</span>] — set configuration field <i>nm</i> of the object to value <i>val</i>.</li>
 <li> <i>TCntrNodeObj cntr( )</i> — return the object of controller for the parameter nesting independent.</li></ul>
 <p><br />
 </p>
@@ -158,5 +159,5 @@
 
 
 
-</div></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/BlockCalc/en">Modules/BlockCalc/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.1</td></tr></table></body>
 </html>

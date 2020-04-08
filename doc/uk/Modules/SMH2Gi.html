@@ -7,11 +7,11 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../../en/files/doc.css" rel="stylesheet" /></head>
-<body><div id="mw_header">
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../../en/files/Logo-big.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Модулі/SMH2Gi</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSMH2Gi&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/SMH2Gi" title="Modules/SMH2Gi">Modules/SMH2Gi</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/SMH2Gi" title="Modules/SMH2Gi (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/SMH2Gi/ru" title="Модули/SMH2Gi (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSMH2Gi&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/SMH2Gi" title="Modules/SMH2Gi">Modules/SMH2Gi</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/SMH2Gi.html" title="Modules/SMH2Gi (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/SMH2Gi.html" title="Модули/SMH2Gi (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
 <div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
 <table cellspacing="0">
 <tr>
@@ -47,6 +47,10 @@
 <td> DAQ </td>
 <td> Роман Савоченко </td>
 <td> Збір даних і управління апаратними інтерфейсами та модулями Segnetics SMH2Gi (<a class="external free" href="http://segnetics.com/smh_2gi" rel="nofollow noreferrer noopener" target="_blank">http://segnetics.com/smh_2gi</a>).
+<ul><li> <b>Спонсорування:</b> Василь Григор'єв, <a class="external text" href="http://e-beam.ru" rel="nofollow noreferrer noopener" target="_blank">Лабораторія Вакуумних Технологій</a></li>
+<li> <b>Спонсорування, у адаптації SMH4:</b> Магомед, <a class="external text" href="https://www.savtech.ru" rel="nofollow noreferrer noopener" target="_blank">SAVTECH</a></li>
+<li> <a class="external text" href="http://oscada.org/en/development/tasks/posts/subsystem_daq/new_module_daqsmh2gi_creation_for_deep_integration_to_segnetics_smh2gi" rel="nofollow noreferrer noopener" target="_blank">Завдання реалізації</a></li>
+<li> <b>Початково створено:</b> у <a class="external text" href="http://wiki.oscada.org/HomePageUk/Doc/SMH2Gi" rel="nofollow noreferrer noopener" target="_blank">старій Wiki</a></li></ul>
 </td></tr></table>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
@@ -62,7 +66,7 @@
 </ul>
 </div>
 
-<p>Модуль надає функцію інтеграції системи OpenSCADA в оточення програмованого панельного контролеру з ОС Linux <a class="external text" href="http://segnetics.com/smh_2gi" rel="nofollow noreferrer noopener" target="_blank">SMH2Gi</a> (рис.1) від фірми <a class="external text" href="http://segnetics.com" rel="nofollow noreferrer noopener" target="_blank">Segnetics</a>. Модуль розроблено для проекту "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Vacuum_processing_unit" title="Special:MyLanguage/Using/Vacuum processing unit">Автоматизованої системи управління вакуумної технологічної установки</a>" та фінансовано "<a class="external text" href="http://e-beam.ru" rel="nofollow noreferrer noopener" target="_blank">Лабораторією вакуумних технологій</a>". Задачу реалізації даного модуля доступно за  <a class="external text" href="http://oscada.org/en/development/tasks/posts/subsystem_daq/new_module_daqsmh2gi_creation_for_deep_integration_to_segnetics_smh2gi" rel="nofollow noreferrer noopener" target="_blank">посиланням</a>.
+<p>Модуль надає функцію інтеграції системи OpenSCADA в оточення програмованого панельного контролеру з ОС Linux <a class="external text" href="http://segnetics.com/smh_2gi" rel="nofollow noreferrer noopener" target="_blank">SMH2Gi</a> (рис.1) від фірми <a class="external text" href="http://segnetics.com" rel="nofollow noreferrer noopener" target="_blank">Segnetics</a>. Модуль розроблено для проекту "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Vacuum_processing_unit" title="Special:MyLanguage/Using/Vacuum processing unit">Автоматизованої системи управління вакуумної технологічної установки</a>".
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:421px;"><a class="image" href="http://oscada.org/wiki/File:Segnetics_SMH2Gi.png"><img class="thumbimage" height="470" src="../../en/files/Segnetics_SMH2Gi.png" width="419" /></a>  <div class="thumbcaption">Рис.1. Контролер SMH2Gi.</div></div></div></div>
 <p>"SMH 2Gi" — програмований логічний контролер, призначено для автоматизації інженерних систем будівель та технологічних процесів у промисловості.
@@ -179,7 +183,7 @@
 </td></tr>
 <tr>
 <td> Рівні напруги спрацьовування </td>
-<td> Замкнений "сухий" контакт �1.1В. Розімкнений "сухий" контакт �4.2В постійного струму (не більш 50В)
+<td> Замкнений "сухий" контакт ≤1.1В. Розімкнений "сухий" контакт ≥4.2В постійного струму (не більш 50В)
 </td></tr>
 <tr>
 <td colspan="2"> <i>Дискретні виходи</i>
@@ -278,5 +282,5 @@
 
 
 
-</div></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/SMH2Gi/uk">Modules/SMH2Gi/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.1</td></tr></table></body>
 </html>
