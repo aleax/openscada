@@ -691,14 +691,12 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 		    iL->second.addr = p_vl;
 		    string p_attr = TSYS::strSepParse(TSYS::strLine(func()->io(iL->first)->def(),0),1,'|');
 		    if(!prm.freeStat()) {
-			if(prm.at().vlPresent(p_attr)) {
-			    iL->second.addr = p_vl+"."+p_attr;
-			    obj->modif();
-			}
+			if(prm.at().vlPresent(p_attr))	iL->second.addr = p_vl+"."+p_attr;
 			else no_set += p_attr+",";
 		    }
 		}
 	    initLnks();
+	    obj->modif();
 	}
     }
     else if((a_path.compare(0,8,"/prm/pl_") == 0 || a_path.compare(0,8,"/prm/ls_") == 0) && ctrChkNode(opt))

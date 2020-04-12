@@ -58,7 +58,7 @@ The element''s names and their parameters are available in languages: English, U
 
 Author: Roman Savochenko <roman@oscada.org>
 Founded: September 2007
-Version: 2.0.2
+Version: 2.0.3
 License: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','wlb_Main','','Основні елементи','Бібліотека створюється для надання основних елементів користувацького інтерфейсу та містить графічні елементи, які часто затребувано при формуванні користувацького інтерфейсу автоматизації технологічних та загальних процесів. Будується бібліотека на основі примітивів віджетів та мови внутрішнього програмування JavaLikeCalc.
 
@@ -66,7 +66,7 @@ DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','wlb_Main','','�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Засновано: Вересень 2007
-Версія: 2.0.2
+Версія: 2.0.3
 Ліцензія: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','Основные элементы','Библиотека создаётся для предоставления основных элементов пользовательского интерфейса и содержит графические элементы, которые часто востребованы при формировании пользовательского интерфейса автоматизации технологических и общих процессом. Строится библиотека на основе примитивов виджетов и языка внутреннего программирования JavaLikeCalc.
 
@@ -74,7 +74,7 @@ DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','Основны�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Основано: Сентябрь 2007
-Версия: 2.0.2
+Версия: 2.0.3
 Лицензия: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements');
 INSERT INTO VCALibs VALUES('mnEls','Mnemo elements','Provides the mnemonic elements library of the user interface of the industrial automation.
@@ -7437,8 +7437,8 @@ INSERT INTO wlb_Main_io VALUES('ImgLab','bordColor','black',40,'','','','','',''
 INSERT INTO wlb_Main_io VALUES('ImgLab','src','alarm',40,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ImgLab','fit','1',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','owner','root:ITW',32,'','','arch','','','','','','');
-INSERT INTO wlb_Main_io VALUES('userManager','owner','root:Security',32,'','','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('userManager','perm','432',32,'','','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('userManager','owner','root:UI',32,'','','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('userManager','perm','948',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','name','Users manager',32,'','','','Менеджер користувачів','','Менеджер пользователей','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','geomH','550',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','evProc','ws_BtPress:/userDel:open:/pg_control/pg_accept',32,'','','','','','','','','');
@@ -7464,7 +7464,7 @@ INSERT INTO wlb_Main_io VALUES('userManager','active','1',40,'','','fullName',''
 INSERT INTO wlb_Main_io VALUES('userManager','value','',8,'','','fullName','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','font','Arial 15',32,'','','fullName','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','owner','root:Security',32,'','','grp','','','','','','');
-INSERT INTO wlb_Main_io VALUES('userManager','perm','944',32,'','','grp','','','','','','');
+INSERT INTO wlb_Main_io VALUES('userManager','perm','436',32,'','','grp','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','geomX','427',32,'','','grp','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','geomY','300',32,'','','grp','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','geomW','280',32,'','','grp','','','','','','');
@@ -7538,7 +7538,7 @@ INSERT INTO wlb_Main_io VALUES('userManager','font','Arial 17',32,'','','labUser
 INSERT INTO wlb_Main_io VALUES('userManager','alignment','8',32,'','','labUser','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','text','User',32,'','','labUser','Користувач','','Пользователь','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','owner','root:Security',32,'','','lib','','','','','','');
-INSERT INTO wlb_Main_io VALUES('userManager','perm','944',32,'','','lib','','','','','','');
+INSERT INTO wlb_Main_io VALUES('userManager','perm','436',32,'','','lib','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','name','Users',32,'','','lib','Користувачі','','Пользователи','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','geomX','10',32,'','','lib','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','geomY','50',32,'','','lib','','','','','','');
@@ -7584,7 +7584,7 @@ INSERT INTO wlb_Main_io VALUES('userManager','font','Arial 25 0 0 1 0',32,'','',
 INSERT INTO wlb_Main_io VALUES('userManager','alignment','10',32,'','','title','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','text','Users manager',32,'','','title','Менеджер користувачів','','Менеджер пользователей','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','owner','root:Security',32,'','','userAdd','','','','','','');
-INSERT INTO wlb_Main_io VALUES('userManager','perm','944',32,'','','userAdd','','','','','','');
+INSERT INTO wlb_Main_io VALUES('userManager','perm','436',32,'','','userAdd','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','name','Add',32,'','','userAdd','Додати','','Добавить','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','geomX','241',32,'','','userAdd','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','geomY','515.102',32,'','','userAdd','','','','','','');
@@ -7607,7 +7607,7 @@ INSERT INTO wlb_Main_io VALUES('userManager','bordWidth','2',32,'','','userBox',
 INSERT INTO wlb_Main_io VALUES('userManager','bordColor','gray',32,'','','userBox','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','bordStyle','6',32,'','','userBox','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','owner','root:Security',32,'','','userDel','','','','','','');
-INSERT INTO wlb_Main_io VALUES('userManager','perm','944',32,'','','userDel','','','','','','');
+INSERT INTO wlb_Main_io VALUES('userManager','perm','436',32,'','','userDel','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','name','Delete',32,'','','userDel','Видалити','','Удалить','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','geomX','10',32,'','','userDel','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','geomY','489.532',32,'','','userDel','','','','','','');
@@ -7619,14 +7619,14 @@ INSERT INTO wlb_Main_io VALUES('userManager','active','1',40,'','','userDel','',
 INSERT INTO wlb_Main_io VALUES('userManager','elType','3',32,'','','userDel','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','font','Arial 15',0,'','','userDel','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','owner','root:Security',32,'','','userNm','','','','','','');
-INSERT INTO wlb_Main_io VALUES('userManager','perm','944',32,'','','userNm','','','','','','');
+INSERT INTO wlb_Main_io VALUES('userManager','perm','436',32,'','','userNm','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','geomX','10',32,'','','userNm','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','geomY','515.102',32,'','','userNm','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','geomW','229',32,'','','userNm','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','geomH','23',32,'','','userNm','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','geomZ','10',32,'','','userNm','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','active','1',32,'','','userNm','','','','','','');
-INSERT INTO wlb_Main_io VALUES('userManager','value','NewUser',8,'','','userNm','','','','','','');
+INSERT INTO wlb_Main_io VALUES('userManager','value','NewUser',8,'','','userNm','НовийКористувач','','НовыйПользователь','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','view','1',32,'','','userNm','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','cfg','',40,'','','userNm','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','confirm','0',32,'','','userNm','','','','','','');
@@ -7731,7 +7731,7 @@ but sometimes there is a need to provide this capability from the user interface
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Vinnica Poultry Farm
-Version: 1.4.3
+Version: 1.5.0
 License: GPLv2',32,'','','','Елемент-кадр слугує для надання можливості контролю користувачів з інтерфейсу самого користувача.
 Тобто, типово ця функція надається програмісту SCADA на рівні конфігурації підсистеми "Безпека",
 але інколи виникає потреба надання такої можливості з інтерфейсу користувача та із низкою обмежень на контрольованих користувачів та їх групи, що цей кадр здійснює та загалом надає функції:
@@ -7741,7 +7741,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для над�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Вінницька Птахофабрика
-Версія: 1.4.3
+Версія: 1.5.0
 Ліцензія: GPLv2','','Элемент-кадр служит для предоставления возможности контроля пользователей из интерфейса самого пользователя.
 Т.е., типично эта функция предоставляется программисту SCADA на уровне конфигурации подсистемы "Безопасность",
 но иногда возникает необходимость предоставления такой возможности из интерфейса пользователя и с рядом ограничений на контролируемых пользователей и их группы, что этот кадр осуществляет и в целом предоставляет функции:
@@ -7751,7 +7751,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для над�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсирование: Винницкая Птицефабрика
-Версия: 1.4.3
+Версия: 1.5.0
 Лицензия: GPLv2','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsAct','dscr','The element serves to dynamically display the active violations in a tabular form and to highlight them in color and text. The violations are obtained from the buffer of current-active violations of OpenSCADA. In fact, the element implements the primitive "Protocol" functions for violations and extension opportunities.
 
@@ -19412,6 +19412,7 @@ INSERT INTO Trs VALUES('Average over hour values of "%1"','Середні за �
 INSERT INTO Trs VALUES('Average over day values of "%1"','Середні за добу значення за "%1"','Среднесуточные значения на "%1"');
 INSERT INTO Trs VALUES('Month values of "%1"','Місячні значення за "%1"','Месячные значения на "%1"');
 INSERT INTO Trs VALUES('Instantaneous values of "%1"','Миттєві значення "%1"','Мгновенные значения "%1"');
+INSERT INTO Trs VALUES('NewUser','НовийКористувач','НовыйПользователь');
 CREATE TABLE IF NOT EXISTS 'wlb_Main' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_Main VALUES('ElCadr','iVBORw0KGgoAAAANSUhEUgAAABcAAABACAIAAAB+w3u4AAAACXBIWXMAAA06AAANOgEDIh6FAAAE
 z0lEQVRYhdWX32/TVhTHv7Zv7NhO08RpcBLaauqPTcC0PYAQQkKTGJrGwx54QPsD2Z/AH8CkFiak
@@ -23251,8 +23252,13 @@ nInfBz4MjJuJNzCqKNFoNPb394cbe3d3N3jnURnodDqXl5cjEn/OxF9CHwbGzcQbYEKIk5OTocc/
 QgzD0FqLIOCca9CGQcc49RjGudsOAkqpbdta6/n5+Te+UvVk92ejYWaztm1fXV0VPhW+fP78ntN9
 DTs9Pf2nl1cAUGFIzd/nCkggxEimNgBCiF83DDWOMRA+MgAAAABJRU5ErkJggg==','/wlb_Main/wdg_RootPgSo/wdg_pgCont',0,'JavaLikeCalc.JavaScript
 if(f_start) {
-	grpLs = new Array(); userSelVl = lib_value_ = "";
+	grpLs = new Array(); userSelVl = lib_value_ = sesUer = "";
 	userLbUpdt = userSel = 0;
+}
+
+if(sesUer != this.ownerSess().reqUser()) {
+	userSel = userLbUpdt = SYS.mtime();
+	userSelVl = sesUer = this.ownerSess().reqUser();
 }
 
 //Events for commands process
@@ -23263,7 +23269,7 @@ for(ev_rez = "", offEv = 0; (ev_cur=event.parse(0,"\n",offEv)).length; ) {
 		userSelVl = ((userSelVl=lib_value.match("\\((.+)\\)$")).length > 1) ? userSelVl[1] : "";
 	}
 	if(ev_cur == "ws_BtPress:/userAdd") {
-		if(!userNm_value.length) userNm_value = tr("New user");
+		if(!userNm_value.length) userNm_value = tr("NewUser");
 		req = SYS.XMLNode("add").setAttr("path","/sub_Security/%2fbr%2fusr_").setText(userNm_value);
 		if(!SYS.cntrReq(req).toInt()) {
 			userNm_value = req.text();
@@ -23324,8 +23330,10 @@ if(f_start || (userLbUpdt && SYS.mtime() >= userLbUpdt)) {
 	lib_items = userNm_cfg = "";
 	for(iIt = 0; iIt < rez.length; iIt++) {
 		if(denyUsers.indexOf(rez[iIt].slice(4)) >= 0 || !(oIt=SYS.Security.nodeAt(rez[iIt])))	continue;
-		lib_items += (lib_items.length?"\n":"")+((tVl=oIt.cfg("DESCR")).length?tVl:rez[iIt].slice(4))+" ("+rez[iIt].slice(4)+")";
-		userNm_cfg += (userNm_cfg.length?"\n":"")+rez[iIt].slice(4);
+		tVl1 = ((tVl=oIt.cfg("DESCR")).length?tVl:rez[iIt].slice(4)) + " ("+rez[iIt].slice(4)+")";
+		lib_items += (lib_items.length?"\n":"") + tVl1;
+		userNm_cfg += (userNm_cfg.length?"\n":"") + rez[iIt].slice(4);
+		if(userSelVl == rez[iIt].slice(4))	lib_value_ = tVl1;
 	}
 	lib_value = lib_value_;
 
@@ -23360,7 +23368,7 @@ if(userSel && SYS.mtime() >= userSel) {
 		grp_items += "</tbl>";
 		grp_value = "";
 	}
-}','','',500,'owner;perm;name;dscr;geomH;evProc;backColor;',1567951477);
+}','','',500,'owner;perm;name;dscr;geomH;evProc;backColor;',1586529494);
 INSERT INTO wlb_Main VALUES('graphCalc','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAgCAIAAAAt/+nTAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAD
 X0lEQVRYhe2YzU7jRgCAZ8YziWPPjBNTwoJQoBKicEBqJLgguPMkPEDeaXvgxEOgPAGI21aiIK2d
 LPHP+Hc8nh6yaqtNWJVSyaXKd7DkGXv8fRrJkg0vLy8ppZ7nIYSUUlmWua4rhKjruigK27aVUhjj

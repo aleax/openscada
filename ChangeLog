@@ -1,3 +1,19 @@
+2020-04-12 Roman (stable)
+- FIX: LibsDB.OscadaLibs: The template library "LowDevLib" and the JavaLikeCalc library "servProc" appended for the translated description.
+    FIX: The template "digitBlockUnif" of the library "base" fixed in own description, caused to the template loss.
+    The function "diagram" removed from the JavaLikeCalc library "web".
+- LibsDB.vcaBase: Main.userManager expanded for the possibility to edit the unprivileged user own information and password.
+- !!:FIX:DAQ,DAQ.{LogicLev,ModBus,Siemens}:
+    !!:FIX: The templates implementation fixed in editing the links configuration to force the template modification flag.
+    !!:FIX: The value changing through the Control Interface forced to setting the parameter modification flag.
+    LogicLev,ModBus,Siemens: Allowed for the parameter loading in the run, to reload the values context.
+- !!!:FIX:UI.WebVision: Fixed in work with some pages missing, at the runtime objects locking and
+    the early linking mechanism improved in general.
+- !!!:UI.WebVision: Significantly improved in the connection losses detection for the main page reload,
+	for the cases of return back to already closed sessions in WebBrowser.
+    The page of list the available projects and sessions appended for the actual user information.
+
+
 2020-04-06 Roman (stable)
 - !!: The fuction TCntrNode::nodeName() is set to not abstract one and return "", for the possibility it partially lost
     and crash in the TCntrNode destructor.
@@ -24,7 +40,7 @@
 - UI.VCAEngine: Widget procedures calculation period -1 means currently the value (not -1) from the parent widget-page.
 - !!!!:FIX:UI.{Vision,WebVision}: The primitive "Diagram" is fixed for the negative time zone processing.
 - !!:FIX:UI.WebVision: The variant "Animation" of the primitive "Media" processing is improved by disabling the animated images scaling
-    on the server side, then lose the animation.
+    on the server side, then the animation loss.
     !!: Appended for the new parameter "Resizing raster images on the server side." to control the images transformation on the server side.
 
 
@@ -994,7 +1010,7 @@
 - !:DAQ.JavaLikeCalc: The User API functions expanded by isNaN() for bool, integer, real, string (especially for checking numbers in the string).
 - !!:UI.{VCAEngine,Vision}: All information moved to the status field for widgets, libraries and projects.
     The information appended by the calculating procedure state - inherited, redefined.
-    UI.Vision: Appended for warnings about the inherited calcualting procedure changing.
+    UI.Vision: Appended for warnings about the inherited calculation procedure changing.
 - FIX:UI.VCAEngine: The user API function wdgAdd() fixed for the name setting after the new widget enabling.
 - !!:FIX:UI.Vision: Final of the improving for the scrollbars control of the included pages.
     Final fix for the tables fitting, moving the procedure in events: create, resize and show.
@@ -1123,7 +1139,7 @@
 - !!!:FIX:UI.Vision: Expanded for the planning of the updating period depending to the real connection quality of the runtime mode, like to UI.WebVision.
     FIX: Fixed in the properties edition dialogues of Pages/Libraries and Widgets for:
 	- preventing for closing at Esc;
-	- disabling for timeouted canceling of the LineEdit;
+	- disabling for timeouted cancelling of the LineEdit;
 	- unbinding the edited state from the visibility for TextEdit;
 	- preventing from changes loss into the tab "Process".
     FIX: Fixed for LineEdit marging from the hidden icon size, for the spinned Real and Integer.
@@ -1181,7 +1197,7 @@
 - !!:Special.{FLibComplex1,FLibMath}: Revised for all messages and the documentation.
 - Transport.SSL: Prevented from twice SSL_library_init() call at OpenSCADA projects switch due it cause some time to crashes, seen on Ubuntu 16.04.
 - UI.VCAEngine: Widgets prevented from names setting to their ID, at the copying mostly.
-- !!:UI.Vision: The focus control rewrote to the VCA-widgets specific one and not Qt-widgets, what pevents some problems, like to UI.WebVision.
+- !!:UI.Vision: The focus control rewrote to the VCA-widgets specific one and not Qt-widgets, like to UI.WebVision, what prevents some problems.
 - !!:FIX:UI.WebVision: Improved for the focus control behaviour and fixed to prevent mouse events to behind pages.
 
 
@@ -3547,7 +3563,7 @@
     All operator doings log expanded by the parameter name into the category and allow for sort that next.
 - TArchives: Request "get" of the service "/serv/mess" some expanded for zero "tm" processing to the current time.
 - Transport: Debug messages added to the generic OpenSCADA control interface's function cntrIfCmd().
-- !!:DAQ.DAQGate: Messages gate expanded into the redundance mode, from parallel-redundance station.
+- !!:DAQ.DAQGate: Messages gate expanded into the redundancy mode, from parallel-redundancy station.
 - DAQ.JavaLikeCalc: Word "CODE" replaced to the absolute program position, for the debug messages.
     About "JavaLike problem detected" early: the problem wrong, but reveal some other before.
 - FIX:UI.VCAEngine: A misspell into the code of new notification manager, same into a queue processing, fix.
@@ -7212,7 +7228,7 @@
 
 
 2011-10-28 Roman
-- FIX:DAQ: Status of controller objects grow is prevented on incorrect redundance configuration, from self to self.
+- FIX:DAQ: Status of controller objects grow is prevented on incorrect redundancy configuration, from self to self.
 - Archive.FSArch: Checking for value archive file write error is some expanded.
 - !:UI.QTCfg: Rows of tables limit is set to half height of the table.
 - FIX:UI.VCAEngine: Force widgets create is set on child inherit for prevent to removed widgets check on that stage.
@@ -9012,7 +9028,7 @@
 - FIX:DAQ.LogicLev: Full parameter's links recheck for a broken link present is passed.
     Link is set to broken for broken address is passed.
 - !!:UI.Vision: UI properties support is added. Icons size for toolbars management and save it is added.
-- FIX:UI.Vision: Development window restor after close canceling is fixed.
+- FIX:UI.Vision: Development window restor after close cancelling is fixed.
 
 
 2010-05-20 Roman
@@ -9183,7 +9199,7 @@
 
 
 2010-02-12 Roman
-- !!:FIX:DAQ, DAQ.BlockCalc, DAQ.JavaLikeCalc, DAQ.LogicLev, DAQ.Siemens: Geting broken data into redundance code for no redundance tasks and for no one reserve station present.
+- !!:FIX:DAQ, DAQ.BlockCalc, DAQ.JavaLikeCalc, DAQ.LogicLev, DAQ.Siemens: Geting broken data into redundancy code for no redundancy tasks and for no one reserve station present.
 - DAQ:Function: A function using counter information is added.
 - FIX:DAQ.ICP_DAS: The loss tasks stoping is fixed.
 - DAQ.ICP_DAS: CPU module's data access is moved to self module object "LP-8781". Discrete IO reverse configuration support is added.
@@ -9875,7 +9891,7 @@
 
 
 2009-07-08 Roman
-- FIX:/DAQ: Redundance data restoring is made preemptive.
+- FIX:/DAQ: redundancy data restoring is made preemptive.
 - FIX:/UI/VCAEngine: Attributes init and free is rewrote and some fixed.
 
 
@@ -9898,7 +9914,7 @@
 - !!:/DAQ, /Value, /DAQ/DAQGate: Restore from archives mechanism is some updated for losses values fixing.
 - /TVariant: Object type is added.
 - !!:/DAQ/DAQGate: Stations list order is made significant. Some code clear. Error's attribute "err" get value is fixed.
-- !!!!:/Archive: Archive sync conception is changed for DAQ.DAQGate and DAQ-redundance.
+- !!!!:/Archive: Archive sync conception is changed for DAQ.DAQGate and DAQ-redundancy.
 
 
 2009-07-01 Roman
@@ -9974,7 +9990,7 @@
 
 
 2009-06-10 Roman
-- FIX:/DAQ/DAQGate: Vertical redundance is fixed.
+- FIX:/DAQ/DAQGate: Vertical redundancy is fixed.
 
 
 2009-06-09 Roman 0.6.3.3

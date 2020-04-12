@@ -1202,7 +1202,7 @@ void TMdPrm::load_( )
 void TMdPrm::loadIO( bool force )
 {
     if(!enableStat() || !isLogic() || !lCtx) return;
-    if(owner().startStat() && !force) { modif(true); return; }	//Load/reload IO context only allow for stoped controlers for prevent throws
+    //if(owner().startStat() && !force) { modif(true); return; }	//Load/reload IO context only allow for stoped controlers for prevent throws
 
     //Load IO and init links
     TConfig cfg(&mod->prmIOE());

@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"4.6.2"
+#define MOD_VER		"4.7.0"
 #define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on the the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -376,6 +376,11 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 	    if(zero_lev.empty()) {
 		bool sesPrjOk = false;
 		page = "<table class='work'>\n";
+		if(SYS->security().at().usrPresent(user))
+		    page += "<tr><th style='border-bottom: 1px dotted black; padding-bottom: 10px;'>"+
+			TSYS::strMess(_("Welcome \"%s (%s)\"!"),SYS->security().at().usrAt(user).at().descr().c_str(),("<a href='/login/" MOD_ID "'>"+user+"</a>").c_str())+
+			"</th></tr>\n";
+
 		// Get present sessions list
 		string self_prjSess, prjSesEls = "";
 		XMLNode req("get");

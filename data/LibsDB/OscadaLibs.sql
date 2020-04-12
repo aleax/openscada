@@ -88,17 +88,37 @@ DOC: Libs_Prescriptions|Libs/Prescriptions','tmplib_PrescrTempl','Рецепты
 Версия: 1.1.0
 Лицензия: GPLv2
 DOC: Libs_Prescriptions|Libs/Prescriptions');
-INSERT INTO ParamTemplLibs VALUES('LowDevLib','Low-level devices','Низькорівневі пристрої','Library of functions to provide access to device''s data of low-level buses'' chips.
+INSERT INTO ParamTemplLibs VALUES('LowDevLib','Low-level devices','Низькорівневі пристрої','Library of templates to provide access to device''s data of the low-level buses.
 
-The user protocol devices library created to provide access to device''s data of low-level buses'' chips, with simple enough to implement protocols into: the User Protocol module or directly on the internal like to Java language.
+The user protocol devices library created to provide access to device''s data of low-level buses, with protocols simple enough to implement into the User Protocol module or directly on the internal like to Java language.
 
 The template''s names and their parameters are available in languages: English, Ukrainian and Russian. Their source code wrote in the human-language independent mode with calls for the translations by the function tr() and the message''s translation also allowed for English, Ukrainian and Russian.
 
 Author: Roman Savochenko <roman@oscada.org>, Arcadiy Kisel (2017)
 Founded: Jul 2016
 Version: 1.4.0
-License: GPLv2 mostly
-DOC: Libs_LowLevelDevices|Libs/LowLevelDevices','','tmplib_LowDevLib','Низкоуровневые устройства','');
+License: GPLv2
+DOC: Libs_LowLevelDevices|Libs/LowLevelDevices','Бібліотека шаблонів надання доступу до даних пристроїв низькорівневих шин.
+
+Бібліотеку пристроїв користувацьких протоколів створено для надання доступу до даних пристроїв низькорівневих шин, із протоколом достатньо простим до реалізації у модулі користувацького протоколу або безпосередньо на внутрішній мові подібній до Java.
+
+Назви елементів та їх параметрів доступні на мовах: Англійська, Українська та Російська. Їх вихідний код написано у мово(людська)-незалежному режимі з викликом функції перекладу tr() та переклад цих повідомлень також доступний Англійською, Українською та Російською.
+
+Автор: Роман Савоченко <roman@oscada.org>, Аркадій Кисіль (2017)
+Засновано: Липень 2016
+Версія: 1.4.0
+Ліцензія: GPLv2
+DOC: Libs_LowLevelDevices|Libs/LowLevelDevices','tmplib_LowDevLib','Низкоуровневые устройства','Библиотека шаблонов предоставления доступа к данным устройств низкоуровневых шин.
+
+Библиотека устройств пользовательских протоколов создана для предоставления доступа к данным устройств низкоуровневых шин, с протоколом достаточно простым для реализации в модуле пользовательского протокола или непосредственно на внутреннем языке подобном на Java.
+
+Названия элементов и их параметров доступны на языках: Английский, Украинский и Российский. Их исходный код написан в языко(человеческий)-независимом режиме с вызовом функции перевода tr() и перевод этих сообщений также доступен Английским, Украинским и Российским.
+
+Автор: Роман Савоченко <roman@oscada.org>, Аркадий Кысиль (2017)
+Основано: Июль 2016
+Версия: 1.4.0
+Лицензия: GPLv2
+DOC: Libs_LowLevelDevices|Libs/LowLevelDevices');
 CREATE TABLE IF NOT EXISTS 'UserFuncLibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"PROG_TR" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO UserFuncLibs VALUES('techApp','Technological apparatuses','Library of models of the technological apparatuses for creating complex simulators of the technological processes of block-schemes of the module DAQ.BlockCalc.
 
@@ -106,8 +126,8 @@ The library is created to provide models of devices of the technological process
 
 To address the library functions you can use the static call address DAQ.JavaLikeCalc.lib_techApp.{Func}() or dynamic SYS.DAQ.JavaLikeCalc["lib_techApp"]["{Func}"].call(), SYS.DAQ.JavaLikeCalc["lib_techApp"].{Func}()". Where {Func} — function identifier in the library.
 
-Founded: October 2005
 Author: Roman Savochenko <roman@oscada.org>, Maxim Lysenko (2007,2010), Ksenia Yashina (2007)
+Founded: October 2005
 Sponsored by: DIYA Ltd
 Version: 2.0.1
 License: GPLv2
@@ -117,8 +137,8 @@ DOC: Libs_Technological_apparatuses|Libs/Technological_apparatuses','techApp','�
 
 Для адресації до функцій цієї бібліотеки можна використати статичну адресу виклику DAQ.JavaLikeCalc.lib_techApp.{Func}() або динамічну SYS.DAQ.JavaLikeCalc["lib_techApp"]["{Func}"].call(), SYS.DAQ.JavaLikeCalc["lib_techApp"].{Func}(). Де {Func} — ідентифікатор функції у бібліотеці.
 
-Засновано: Жовтень 2005
 Автор: Роман Савоченко <roman@oscada.org>, Максим Лисенко (2007,2010), Ксенія Яшина (2007)
+Засновано: Жовтень 2005
 Спонсоровано: ТОВ "ДІЯ"
 Версія: 2.0.1
 Ліцензія: GPLv2
@@ -128,23 +148,43 @@ DOC: Libs_Technological_apparatuses|Libs/Technological_apparatuses','Техно�
 
 Для адресации к функции этой библиотеки можно использовать статический адрес вызова DAQ.JavaLikeCalc.lib_techApp.{Func}() или динамический SYS.DAQ.JavaLikeCalc["lib_techApp"]["{Func}"].call(), SYS.DAQ.JavaLikeCalc["lib_techApp"].{Func}(). Где {Func} — идентификатор функции в библиотеке.
 
-Основан: Октябрь 2005
 Автор: Роман Савоченко <roman@oscada.org>, Максим Лысенко (2007,2010), Ксения Яшина (2007)
+Основано: Октябрь 2005
 Спонсировано: ООО "ДІЯ"
 Версия: 2.0.1
 Лицензия: GPLv2
 DOC: Libs_Technological_apparatuses|Libs/Technological_apparatuses',0);
-INSERT INTO UserFuncLibs VALUES('servProc','Service procedures','Library of the service procedures of different using.
+INSERT INTO UserFuncLibs VALUES('servProc','Service procedures','Library of the service procedures of different application.
 
-The library is wrote on the JavaLikeCalc language and aimed for different using.
+The library is created to provide service functions of performing service tasks about the OpenSCADA environment. The library is not static, but based on the module JavaLikeCalc, allowing to create calculations on the Java-like language. The functions'' names and their parameters are available in languages: English, Ukrainian and Russian.
 
 To addressing the library functions you can use the static call address DAQ.JavaLikeCalc.lib_servProc.{Func}() or dynamic SYS.DAQ.JavaLikeCalc["lib_servProc"]["{Func}"].call(), SYS.DAQ.JavaLikeCalc["lib_servProc"].{Func}()". Where {Func} — function identifier in the library.
 
-Founded: November 2017
 Author: Roman Savochenko <roman@oscada.org>
+Founded: November 2017
 Version: 1.2.1
 License: GPLv2
-DOC: Libs_Service_procedures|Libs/Service_procedures','lib_servProc','Сервісні процедури','','Сервисные процедуры','',1);
+DOC: Libs_Service_procedures|Libs/Service_procedures','lib_servProc','Сервісні процедури','Бібліотека сервісних процедур різноманітного застосування.
+
+Бібліотека створюється для надання сервісних функцій виконання службових завдань довкола оточення OpenSCADA. Бібліотека не є статичною, а будується на основі модуля JavaLikeCalc, який дозволяє створювати обчислення на мові схожій на Java. Назви функцій та їх параметрів доступні на мовах: Англійська, Українська та Російська.
+
+Для адресації до функцій цієї бібліотеки можна використати статичну адресу виклику DAQ.JavaLikeCalc.lib_servProc.{Func}() або динамічну SYS.DAQ.JavaLikeCalc["lib_servProc"]["{Func}"].call(), SYS.DAQ.JavaLikeCalc["lib_servProc"].{Func}(). Де {Func} — ідентифікатор функції у бібліотеці.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Засновано: Листопад 2017
+Версія: 1.2.1
+Ліцензія: GPLv2
+DOC: Libs_Service_procedures|Libs/Service_procedures','Сервисные процедуры','Библиотека сервисных процедур различного применения.
+
+Библиотека создаётся для предоставления сервисных функций исполнения служебных задач около окружения OpenSCADA. Библиотека не является статической, а строится на основе модуля JavaLikeCalc, позволяющего создавать вычисления на Java-подобном языке. Названия функций и их параметров доступны на языках: Английский, Украинский и Российский.
+
+Для адресации к функции этой библиотеки можно использовать статический адрес вызова DAQ.JavaLikeCalc.lib_servProc.{Func}() или динамический SYS.DAQ.JavaLikeCalc["lib_servProc"]["{Func}"].call(), SYS.DAQ.JavaLikeCalc["lib_servProc"].{Func}(). Где {Func} — идентификатор функции в библиотеке.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Основано: Ноябрь 2017
+Версия: 1.2.1
+Лицензия: GPLv2
+DOC: Libs_Service_procedures|Libs/Service_procedures',1);
 INSERT INTO UserFuncLibs VALUES('doc','Reports'' and documents'' library','Provides the combined library of the reports, documents and related functions of common and the industrial automation.
 
 The service functions of the frames of reports and documents are intended to perform the characteristic tasks of obtaining reporting data, for which you need to perform some verification or counting, for example, to check the validity and to summarize. Forming complex data, such as charts embedded in a document, can also be a service function.
@@ -496,16 +536,16 @@ Works/To_do:en:To_do.html
 Documents/FAQ:en,uk,ru:FAQ.html
 Documents/Quick_start:en,uk,ru:Quick_start.html
 Documents/Program_manual:en,uk,ru:Program_manual.html
-Documents/How_to:en,ru,uk:How_to.html
-Documents/How_to/Install:en,ru,uk:How_to_Install.html
-Documents/How_to/Live_disk:en,ru,uk:How_to_Live_disk.html
-Documents/How_to/Violations,_alarms_and_notifications:en,ru,uk:How_to_Violations.html
-Documents/How_to/Cyclic_programming:en,ru,uk:How_to_Cyclic_programming.html
-Documents/How_to/Debug:en,ru,uk:How_to_Debug.html
-Documents/How_to/Transferring_project_configuration:en,ru,uk:How_to_Transferring_project_configuration.html
-Documents/How_to/Build_from_source:en,ru,uk:How_to_Build_from_source.html
-Documents/How_to/Crash_report:en,ru,uk:How_to_Crash_report.html
-Documents/How_to/Create_module:en,ru,uk:How_to_Create_module.html
+Documents/How_to:en,uk,ru:How_to.html
+Documents/How_to/Install:en,uk,ru:How_to_Install.html
+Documents/How_to/Live_disk:en,uk,ru:How_to_Live_disk.html
+Documents/How_to/Violations,_alarms_and_notifications:en,uk,ru:How_to_Violations.html
+Documents/How_to/Cyclic_programming:en,uk,ru:How_to_Cyclic_programming.html
+Documents/How_to/Debug:en,uk,ru:How_to_Debug.html
+Documents/How_to/Transferring_project_configuration:en,uk,ru:How_to_Transferring_project_configuration.html
+Documents/How_to/Build_from_source:en,uk,ru:How_to_Build_from_source.html
+Documents/How_to/Crash_report:en,uk,ru:How_to_Crash_report.html
+Documents/How_to/Create_module:en,uk,ru:How_to_Create_module.html
 Documents/DAQ:en,uk,ru:DAQ.html
 Documents/User_API:en,uk,ru:User_API.html
 Documents/API:en:API.html
@@ -552,10 +592,10 @@ Modules/FLibSYS:en,uk,ru:Modules/FLibSYS.html
 Modules/SystemTests:en,uk,ru:Modules/SystemTests.html
 Modules/FLibMath:en,uk,ru:Modules/FLibMath.html
 Modules/FLibComplex1:en,uk,ru:Modules/FLibComplex1.html
-Libs/Main:en,uk:Libs_Main.html
-Libs/Devices:en:Libs_Devices.html
-Libs/LowLevelDevices:en:Libs_LowLevelDevices.html
-Libs/Service_procedures:en:Libs_Service_procedures.html
+Libs/Main:en,uk,ru:Libs_Main.html
+Libs/Devices:en,uk,ru:Libs_Devices.html
+Libs/LowLevelDevices:en,uk,ru:Libs_LowLevelDevices.html
+Libs/Service_procedures:en,uk,ru:Libs_Service_procedures.html
 Libs/Regulation_elements:en,uk,ru:Libs_Regulation_elements.html
 Libs/Technological_apparatuses:en,uk,ru:Libs_Technological_apparatuses.html
 Libs/Main_graphical_elements:en,uk,ru:Libs_Main_graphical_elements.html
@@ -1938,27 +1978,6 @@ INSERT INTO flb_web_io VALUES('user','urlPrms','Address parameters',4,0,'',0,1,'
 INSERT INTO flb_web_io VALUES('user','tmpl','Template',0,0,'',0,2,'Шаблон','Шаблон');
 INSERT INTO flb_web_io VALUES('user','cnts','POST request''s context',4,0,'',0,3,'Контекст POST-запроса','Контекст POST-запиту');
 INSERT INTO flb_web_io VALUES('user','user','User',0,0,'',0,4,'Пользователь','Користувач');
-INSERT INTO flb_web_io VALUES('diagram','res','Result',0,6,'',0,0,'','');
-INSERT INTO flb_web_io VALUES('diagram','srcs','Sources',0,4,'/DAQ/LogicLev/gen/F3/var:0:100:#ae77c3:2
-/Archive/va_CPULoad_load:0:0:darkcyan:2',0,3,'','');
-INSERT INTO flb_web_io VALUES('diagram','tmpl','SVG-template',0,4,'<svg xmlns="http://www.w3.org/2000/svg" version="1.1" sclMarkFont="Arial 10" sclHor="2" sclVer="3" sclColor="gray" sclMarkColor="gray">
-    <style type="text/css">
-	    #scVer rect { stroke: none; }
-	    #scVer text { stroke: none; }
-	    #scHor rect { stroke: none; }
-	    #scHor text { stroke: none; }
-	    #drawArea path { fill: none; }
-    </style>
-    <!--Draw grid and markers-->
-    <g id="scVer" />
-    <g id="scHor" />
-    <!--Curves area -->
-    <g id="drawArea" />
-</svg>',0,6,'','');
-INSERT INTO flb_web_io VALUES('diagram','hsz','Horizontal size, pixels',1,0,'600',0,4,'','');
-INSERT INTO flb_web_io VALUES('diagram','vsz','Vertical size, pixels',1,0,'400',0,5,'','');
-INSERT INTO flb_web_io VALUES('diagram','end','End time, seconds',2,0,'0',0,1,'','');
-INSERT INTO flb_web_io VALUES('diagram','size','Size, seconds',2,0,'3600',0,2,'','');
 CREATE TABLE IF NOT EXISTS 'WebUser_uPg' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PROG" TEXT DEFAULT '' ,"uk#PROG" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO WebUser_uPg VALUES('tmpl','XHTML-template','XHTML-шаблон','Site from XHTML template.','Сайт із XHTML шаблону',1,'JavaLikeCalc.JavaScript
 var pgDir = "Web/";
@@ -7121,9 +7140,9 @@ else {
 INSERT INTO tmplib_base VALUES('digitBlockUnif','Discrete block, unified','Блок дискретних, уніфікований','Блок дискретных, унифицированный','Common, representative and unified template of the block for union of Discrete parameters for the common control device. The template forms a structure of discrete parameter-block (complex tag) which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object.
 
 The representative structure of discrete parameters (complex tags) is a latch object with two characteristic states and three commands, which in the final representation may have a different meaning and name:
-- "State "Opened" (st_open)" — the state "Opened" of the latch. Is the primary status signal that can be used without the next one, when 1 (true) is "Opened", and 0 (false) is 'Closed'.
+- "State "Opened" (st_open)" — the state "Opened" of the latch. Is the primary status signal that can be used without the next one, when 1 (true) is "Opened", and 0 (false) is ''Closed''.
 - "State "Closed" (st_close)" — the state "Closed".
-- "Command "Open" (com)" — the command "Open" of the latch. Is the primary command signal that can be used without the next one, when 1 (true) is "Open", and 0 (false) is 'Close'.
+- "Command "Open" (com)" — the command "Open" of the latch. Is the primary command signal that can be used without the next one, when 1 (true) is "Open", and 0 (false) is ''Close''.
 - "Command "Close" (close)" — the command "Close" of the latch.
 - "Command "Stop" (stop)" — the command "Stop" of the latch.
 
@@ -9993,7 +10012,7 @@ for(var ip in pgsOprc) {
 
 if(!isError)	pagesCur = "", res = "0: Fetched and processed pages="+pCnt+"; images="+imgCnt+"; links="+lnkCnt+"; languages="+lngCnt;','','',1579619800);
 CREATE TABLE IF NOT EXISTS 'flb_regEl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO flb_regEl VALUES('pidUnif','PID, unified','ПІД, уніфікований','ПИД, унифицированный','Composite-unified analog and pulse PID. At the heart of the regulator is core a standard analog PID controller from the library FLibComplex1 and the implementation of the PWM for the pulse part.
+INSERT INTO flb_regEl VALUES('pidUnif','PID unified','ПІД уніфікований','ПИД унифицированный','Composite-unified analog and pulse PID. At the heart of the regulator is core a standard analog PID controller from the library FLibComplex1 and the implementation of the PWM for the pulse part.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0
@@ -14584,352 +14603,4 @@ if(!isAdmin || cnts.length || urlPrms["selUser"].isEVal() || !urlPrms["selUser"]
 //Save template
 rez = pgTree.save();
 //SYS.messDebug("TEST Dev","TEST 00: "+typeof(devLs[formEl["cat"]+"."+itId]));',1377261537);
-INSERT INTO flb_web VALUES('diagram','Diagram (moved)','','','!!!!: Moved to the functions library "Report''s documents". Will be removed soon!',1,10,0,'im = SYS.XMLNode();
-im.load(tmpl, false, 3);
-if(!(drawArea=im.getElementBy("drawArea")) || !(scVer=im.getElementBy("scVer")) || !(scHor=im.getElementBy("scHor")) ||
-		(styles=im.getElementsBy("style")[0]).isEVal())
-	return "";
-
-//Constant
-FD_GRD = 0x1;
-FD_MARKS = 0x2;
-FD_LOG = 0x4;
-
-if(!end)	end = SYS.time();
-begin = end - size;
-reqPer = size/vsz;
-
-//Getting the trends data
-trends = new Array();
-for(off = 0; (tEl=srcs.parseLine(0,off)).length; ) {
-	elO = new Object();
-	elO.addr = tEl.parse(0, ":");
-	if(!(elO.srcO=SYS.nodeAt(elO.addr)))	continue;
-	if(typeof(elO.srcO) == "TCntrNode:TVal")	elO.srcO = elO.srcO.arch();
-	if(typeof(elO.srcO) != "TCntrNode:TVArchive")	continue;
-	elO.min = tEl.parse(1, ":"); elO.max = tEl.parse(2, ":");
-	elO.color = tEl.parse(3, ":");
-	elO.scale = tEl.parse(4, ":").toInt();
-	elO.width = max(1, tEl.parse(5,":").toInt());
-	elO.beg = begin*1e6; elO.per = reqPer*1e6;
-	elO.val = elO.srcO.getVals(elO.beg, end*1e6, elO.per);
-	trends.push(elO);
-}
-
-im.setAttr("width", hsz).setAttr("height", vsz).setAttr("viewBox", "0 0 "+hsz+" "+vsz);
-
-//Getting the labels font
-if(!(tVl=im.attr("sclMarkFont")).length)	tVl = "Arial "+max(5,floor(hsz/50));
-off = 0;
-styles.setText("\ntext { font-family: "+tVl.parse(0," ",off)+"; font-size: "+(mrkFontSize=tVl.parse(0," ",off).toInt())+"px; "
-		"font-weight: "+(tVl.parse(0," ",off).toInt()?"bold":"normal")+"; font-style: "+(tVl.parse(0," ",off).toInt()?"italic":"normal")+"; }" + styles.text());
-sclHor = (tVl=im.attr("sclHor")).length ? tVl.toInt() : FD_MARKS;
-sclVer = (tVl=im.attr("sclVer")).length ? tVl.toInt() : FD_MARKS|FD_GRD;
-if(!(sclColor=im.attr("sclColor")).length)			sclColor = "gray";
-if(!(sclMarkColor=im.attr("sclMarkColor")).length)	sclMarkColor = "gray";
-
-mrkFontWRange = 0.7;
-mrkWidth = 5*mrkFontSize*mrkFontWRange;
-mrkHeight = mrkFontSize;
-
-tArMrg = 2;
-tArX	= tArMrg;
-tArW	= hsz - tArX - tArMrg;
-tArY	= tArMrg;
-tArH	= vsz - tArY - tArMrg;
-if(sclHor&FD_MARKS) {
-	if(tArH < 100) sclHor = sclHor & ~(FD_MARKS);
-	else tArH -= mrkHeight*2;
-}
-
-//Calculating the vertical scale
-vsPerc = true;			//Vertical scale percent mode
-isLog = sclVer&FD_LOG;		//Logarithmic scale
-vsMax = -3e300, vsMin = 3e300;	//Trend''s vertical scale border
-
-// Get main scale for non individual parameters
-prmInGrp = 0, prmGrpLast = -1;
-for(iP = 0, mainPerc = false; iP < trends.length; iP++) {
-	cP = trends[iP];
-	if(!cP.val.length || !cP.color.length) continue;
-	cP.adjU = -3e300, cP.adjL = 3e300;
-	if(cP.max > cP.min)	{ cP.adjL = cP.min; cP.adjU = cP.max; }
-	else for(iDt = 0; iDt < cP.val.length; iDt++)
-		if(!cP.val[iDt].isEVal()) { cP.adjL = min(cP.adjL, cP.val[iDt]); cP.adjU = max(cP.adjU, cP.val[iDt]); }
-
-	cP.wScale = cP.scale&(sclVer|FD_LOG);
-	if(cP.wScale&(FD_MARKS|FD_GRD))	continue;
-
-	//  Check for value border allow
-	if(!mainPerc && (vsMin > vsMax || max(abs((vsMax-cP.adjL)/(vsMax-vsMin)-1),abs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2))
-	{ vsMin = min(vsMin, cP.adjL); vsMax = max(vsMax, cP.adjU); }
-	else { vsMax = -3e300; vsMin = 3e300; mainPerc = true; }
-
-	prmInGrp++; prmGrpLast = iP;
-}
-
-// Checking for individual parameters and for the possibility to merge their to groups or create a new one for no group
-prmIndiv = 0, prmIndivSc = -1, prmsInd = new Array();
-for(iP = 0; iP < trends.length; iP++) {
-	cP = trends[iP];
-	cP.isIndiv = false;
-	if(!cP.val.length || !cP.color.length || !(cP.wScale&(FD_MARKS|FD_GRD))) continue;
-	// Checking for include to the present one or create a new group and exclude from individual ones
-	if((!prmInGrp || (vsMin < vsMax && max(abs((vsMax-cP.adjL)/(vsMax-vsMin)-1),abs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2)) &&
-			(cP.scale&FD_LOG) == (sclVer&FD_LOG))
-	{
-		vsMin = min(vsMin, cP.adjL); vsMax = max(vsMax, cP.adjU);
-		prmInGrp++; prmGrpLast = iP;
-		continue;
-	}
-	cP.isIndiv = true;
-	prmIndiv++;
-	if(prmIndivSc < 0 && (cP.scale&FD_GRD)) prmIndivSc = iP;
-	else prmsInd.push(iP);
-	if(cP.scale&FD_LOG) {
-		cP.adjU = lg(max(1e-100,cP.adjU)); cP.adjL = lg(max(1e-100,cP.adjL));
-		if((cP.adjU-cP.adjL) / abs(cP.adjL+(cP.adjU-cP.adjL)/2) < 0.0001) {
-			wnt_dp = 0.0001*abs(cP.adjL+(cP.adjU-cP.adjL)/2)-(cP.adjU-cP.adjL);
-			cP.adjL -= wnt_dp/2; cP.adjU += wnt_dp/2;
-		}
-	}
-}
-if(prmInGrp) prmsInd.push(-1);
-if(prmIndivSc >= 0) prmsInd.push(prmIndivSc);
-
-// Final main scale adapting
-if(vsMin > vsMax) { vsPerc = true; vsMax = 100; vsMin = isLog ? pow(10,min(0,2-(tArH/150))) : 0; }
-else vsPerc = false;
-if(isLog) {
-	vsMax = lg(max(1e-100,vsMax)); vsMin = lg(max(1e-100,vsMin));
-	if((vsMax-vsMin) / abs(vsMin+(vsMax-vsMin)/2) < 0.0001) {
-		wnt_dp = 0.0001*abs(vsMin+(vsMax-vsMin)/2)-(vsMax-vsMin);
-		vsMin -= wnt_dp/2; vsMax += wnt_dp/2;
-	}
-}
-
-//Draw main and individual vertical scales
-vmax_ln = tArH / ((sclVer&FD_MARKS)?(2*mrkHeight):15);
-for(iP = 0; vmax_ln >= 2 && iP < prmsInd.length; iP++) {	//prmsInd[i]=-1 - for main scale
-	vDiv = 1;
-	if(prmsInd[iP] < 0) {	//Main scale process
-		// Draw the environment
-		vsPercT = vsPerc;
-		isLogT = isLog;
-		sclVerT = sclVer;
-		clrGridT = sclColor;
-		clrMrk = sclMarkColor;
-		if(prmInGrp == 1 && prmGrpLast >= 0)	//Set color for single parameter in main group
-			clrGridT = clrMrk = trends[prmGrpLast].color;
-		// Rounding
-		v_len = vsMax - vsMin;
-		while(v_len > vmax_ln)						{ vDiv *= 10; v_len /= 10; }
-		while(v_len && v_len < vmax_ln/10)	{ vDiv /= 10; v_len *= 10; }
-		vsMin = floor(vsMin/vDiv)*vDiv; vsMax = ceil(vsMax/vDiv)*vDiv;
-		while(!isLogT && ((vsMax-vsMin)/vDiv) < vmax_ln/2) vDiv /= 2;
-		vsMinT = vsMin; vsMaxT = vsMax;
-	}
-	else {	//Individual scale process
-		cP = trends[prmsInd[iP]];
-		// Draw environment
-		vsPercT = false;
-		isLogT = cP.scale&FD_LOG;
-		sclVerT = cP.wScale;
-		clrGridT = clrMrk = cP.color;
-		// Rounding
-		v_len = cP.adjU - cP.adjL;
-		while(v_len > vmax_ln)						{ vDiv *= 10; v_len /= 10; }
-		while(v_len && v_len < vmax_ln/10)	{ vDiv /= 10; v_len *= 10; }
-		cP.adjL = floor(cP.adjL/vDiv)*vDiv; cP.adjU = ceil(cP.adjU/vDiv)*vDiv;
-		while(!isLogT && ((cP.adjU-cP.adjL)/vDiv) < vmax_ln/2) vDiv /= 2;
-		vsMinT = cP.adjL; vsMaxT = cP.adjU;
-	}
-	if(iP < (prmsInd.length-1))	sclVerT = sclVerT&(~FD_GRD);	//Hide grid for not last scale
-
-	// Draw vertical grid and markers
-	markWdth = 0;
-	if(sclVerT&(FD_MARKS|FD_GRD)) {
-		scVer.childAdd("rect").setAttr("fill",clrGridT).setAttr("x",tArX-1).setAttr("y",tArY).setAttr("width",1).setAttr("height",tArH);
-		for(iV = floor((vsMinT/vDiv)+0.5)*vDiv; (vsMaxT-iV)/vDiv > -0.1; iV += vDiv) {
-			//  Draw grid
-			v_pos = tArY + tArH - tArH*(iV-vsMinT)/(vsMaxT-vsMinT);
-			if(sclVerT&FD_GRD)	scVer.childAdd("rect").setAttr("fill",sclColor).setAttr("x",tArX).setAttr("y",floor(v_pos+0.5)).setAttr("width",tArW).setAttr("height",1);
-			else	scVer.childAdd("rect").setAttr("fill",clrGridT).setAttr("x",tArX-3).setAttr("y",floor(v_pos+0.5)).setAttr("width",6).setAttr("height",1);
-			//  Draw markers
-			if(sclVerT&FD_MARKS) {
-				isPerc = vsPercT && ((vsMaxT-iV-vDiv)/vDiv <= -0.1);
-				isMax = (v_pos-1-mrkHeight) < tArY;
-				labVal = (isLogT?pow(10,iV):iV).toPrecision(5) + (isPerc?" %":"");
-				scVer.childAdd("text").setAttr("text-anchor","start").setAttr("stroke","none")
-						.setAttr("fill", clrMrk)
-						.setAttr("x",tArX+2).setAttr("y",floor(v_pos-1+(isMax?mrkHeight:0)+0.5)).setText(labVal);
-				markWdth = max(markWdth, labVal.length*mrkFontSize*mrkFontWRange);
-			}
-		}
-	}
-	if(iP < (prmsInd.length-1)) { tArX += markWdth?(markWdth+5):0; tArW -= markWdth?(markWdth+5):0; }
-}
-
-//Calc and draw the horizontal scale
-hDiv = 1;			//Horisontal scale divisor
-hmax_ln = tArW / ((sclHor&FD_MARKS)?mrkWidth:15);
-if(hmax_ln >= 2) {
-	hvLev = 0;
-	hLen = end - begin;
-
-	if(hLen/2635200 >= 5)		{ hvLev = 7; hDiv = 2635200; }	//Month a unstrict interval !!!! to implement !!!!
-	else if(hLen/86400 >= 5)	{ hvLev = 6; hDiv =   86400; }	//More days and no time in the scale
-	else if(hLen/86400 >= 2)	{ hvLev = 5; hDiv =   86400; }	//Days
-	else if(hLen/3600 >= 2)	{ hvLev = 4; hDiv =    3600; }	//Hours
-	else if(hLen/60 >= 2)		{ hvLev = 3; hDiv =      60; }	//Minutes
-	else if(hLen/1 >= 2)		{ hvLev = 2; hDiv =       1; }	//Seconds
-	else if(hLen/0.001 >= 2)	{ hvLev = 1; hDiv =   0.001; }	//Milliseconds
-
-	hDiv_ = hDiv;
-	while(hLen/hDiv_ > hmax_ln)	hDiv_ *= 10;
-	while(hLen/hDiv_ < hmax_ln/5 && (1e6*hDiv_/5)%(1e6*hDiv) == 0) hDiv_ /= 5;
-	while(hLen/hDiv_ < hmax_ln/2 && (hvLev < 6 || (1e6*hDiv_/2)%(1e6*hDiv) == 0)) hDiv_ /= 2;
-	hDiv = hDiv_;
-
-	UTChourDt = SYS.strptimegm(SYS.strftime(end)) - end;
-
-	// Draw the horisontal grid and markers
-	if(sclHor&(FD_MARKS|FD_GRD)) {
-		tm_t = 0;
-		lab_tm = lab_dt = "";
-
-		//  Draw generic grid line
-		scHor.childAdd("rect").setAttr("fill",sclColor).setAttr("x",floor(tArX+0.5)).setAttr("y",floor(tArY+tArH+0.5)).setAttr("width",floor(tArW+0.5)).setAttr("height",1);
-
-		//  Draw full trend''s data and time to the trend end position
-		begMarkBrd = -5;
-		endMarkBrd = tArX + tArW;
-		if((sclHor&FD_MARKS) && mrkHeight) {
-			lab_dt = SYS.strftime(end, "%d-%m-%Y");
-			if((end%60) == 0 && (end-floor(end)) == 0)
-				lab_tm = SYS.strftime(end, "%H:%M");
-			else if((end-floor(end)) == 0)
-				lab_tm = SYS.strftime(end, "%H:%M:%S");
-			else lab_tm = SYS.strftime(end, "%H:%M:%S")+"."+(end-floor(end));
-
-			if(hvLev < 6) {
-				scHor.childAdd("text").setAttr("text-anchor","end").setAttr("stroke","none")
-					.setAttr("fill",sclMarkColor)
-					.setAttr("x",tArX+tArW).setAttr("y",tArY+tArH+mrkHeight).setText(lab_tm);
-				endMarkBrd = min(endMarkBrd, tArX + tArW - mrkFontSize*lab_tm.length*mrkFontWRange);
-			}
-			scHor.childAdd("text").setAttr("text-anchor","end").setAttr("stroke","none")
-				.setAttr("fill",sclMarkColor)
-				.setAttr("x",tArX+tArW).setAttr("y",tArY+tArH+2*mrkHeight).setText(lab_dt);
-			endMarkBrd = min(endMarkBrd, tArX + tArW - mrkFontSize*lab_dt.length*mrkFontWRange);
-		}
-
-		//  Draw grid and/or markers
-		first_m = true;
-		ttm1 = new Object();
-		for(i_h = begin; true; ) {
-			//   Draw grid
-			h_pos = tArX + tArW*(i_h-begin)/(end-begin);
-			if(sclHor&FD_GRD)
-				scHor.childAdd("rect").setAttr("fill",sclColor).setAttr("x",floor(h_pos+0.5)).setAttr("y",floor(tArY+0.5)).setAttr("width",1).setAttr("height",tArH);
-			else scHor.childAdd("rect").setAttr("fill",sclColor).setAttr("x",floor(h_pos+0.5)).setAttr("y",floor(tArY+tArH-3+0.5)).setAttr("width",1).setAttr("height",6);
-
-			//   Draw markers
-			if((sclHor&FD_MARKS) && !(1e6*(i_h+UTChourDt)%(1e6*hDiv)) && i_h != end) {
-				if(first_m)	SYS.localtime(begin-(end-begin), ttm1.sec, ttm1.min, ttm1.hour, ttm1.mday, ttm1.mon);
-				ttm = new Object();
-				SYS.localtime(i_h, ttm.sec, ttm.min, ttm.hour, ttm.mday, ttm.mon);
-
-				chLev = 0;
-				if((ttm.mon-ttm1.mon) || (ttm.year-ttm1.year)) chLev = 5;
-				else if(ttm.mday-ttm1.mday)	chLev = 4;
-				else if(ttm.hour-ttm1.hour)	chLev = 3;
-				else if(ttm.min-ttm1.min)		chLev = 2;
-				else if(ttm.sec-ttm1.sec)		chLev = 1;
-
-				//Checking for the data presence
-				lab_dt = lab_tm = "";
-				//Date
-				if(/*hvLev == 5 ||*/ chLev >= 4)
-					lab_dt = SYS.strftime(i_h, (chLev>=5)?"%d-%m-%Y":"%d");
-				//Hours and minuts
-				if((hvLev == 4 || hvLev == 3 || ttm.hour || ttm.min) && !ttm.sec)
-					lab_tm = SYS.strftime(i_h, "%H:%M");
-				//Seconds
-				else if((hvLev == 2 || ttm.sec) && !((i_h-floor(i_h))*1e6))
-					lab_tm = (chLev >= 2) ? SYS.strftime(i_h, "%H:%M:%S") : (i_h%60).toPrecision(6)+tr("s");
-				//Milliseconds
-				else if(hvLev <= 1 || (i_h-floor(i_h))*1e6)
-					lab_tm = (chLev >= 2) ? SYS.strftime(i_h, "%H:%M:%S")+(i_h-floor(i_h)).toPrecision(6).slice(1) :
-								(chLev >= 1) ? ((i_h%60)+(i_h-floor(i_h))).toPrecision(6)+tr("s") :
-													(1e3*i_h).toPrecision(6)+tr("ms");
-
-				//SYS.messInfo("DG", "lab_tm="+lab_tm+"; hvLev="+hvLev+"; chLev="+chLev+"; i_h="+i_h);
-
-				endPosTm = endPosDt = 0, markY = tArY + tArH + mrkHeight;
-				if(hvLev < 6) {
-					if(lab_tm.length) {
-						wdth = mrkFontSize*lab_tm.length*mrkFontWRange;
-						tpos = max(h_pos-wdth/2, 0);
-						if((tpos+wdth) < endMarkBrd && tpos > begMarkBrd) {
-							scHor.childAdd("text").setAttr("text-anchor","middle").setAttr("stroke","none")
-								.setAttr("fill",sclMarkColor)
-								.setAttr("x",floor(h_pos+0.5)).setAttr("y",floor(markY+0.5)).setText(lab_tm);
-							endPosTm = tpos+wdth;
-						}
-					}
-					markY += mrkHeight;
-				}
-				if(lab_dt.length) {
-					wdth = mrkFontSize*lab_dt.length*mrkFontWRange;
-					tpos = max(h_pos-wdth/2, 0);
-					if((tpos+wdth) < endMarkBrd && tpos > begMarkBrd) {
-						scHor.childAdd("text").setAttr("text-anchor","middle").setAttr("stroke","none")
-							.setAttr("fill",sclMarkColor)
-							.setAttr("x",floor(h_pos+0.5)).setAttr("y",floor(markY+0.5)).setText(lab_dt);
-						endPosDt = tpos+wdth;
-					}
-				}
-				begMarkBrd = max(begMarkBrd, max(endPosTm,endPosDt));
-				ttm1 = ttm;
-				first_m = false;
-			}
-
-			//   Next
-			if(i_h >= end) break;
-			i_h = floor((i_h+UTChourDt)/hDiv)*hDiv + hDiv - UTChourDt;
-			if(i_h > end)	i_h = end;
-		}
-	}
-}
-
-//Drawing the trends
-for(iTr = 0; iTr < trends.length; iTr++) {
-	cP = trends[iTr];
-
-	isLogT = cP.isIndiv ? (cP.wScale&FD_LOG) : isLog;
-	vsMaxT = cP.isIndiv ? cP.adjU : vsMax;
-	vsMinT = cP.isIndiv ? cP.adjL : vsMin;
-
-	trPath = 0; prev_vl = EVAL; prev_pos = 0;
-	for(iDt = 0; iDt < cP.val.length; iDt++) {
-		c_val = cP.val[iDt];
-		c_tm = 1e-6*(cP.beg + iDt*cP.per);
-		if(c_tm < begin)	continue;
-		c_pos = floor(tArX + tArW*(c_tm-begin)/(end-begin));
-		if(!c_val.isEVal()) {
-			c_vpos = floor(tArY + tArH - tArH*((isLogT?lg(max(1e-100,c_val)):c_val)-vsMinT)/(vsMaxT-vsMinT));
-			if(!trPath) trPath = drawArea.childAdd("path").setAttr("stroke", cP.color).setAttr("stroke-width",cP.width);
-			if(prev_vl.isEVal()) trPath.setAttr("d", trPath.attr("d")+"M"+c_pos+","+c_vpos);
-			else trPath.setAttr("d",trPath.attr("d")+"L"+c_pos+","+c_vpos);
-		}
-		else if(!prev_vl.isEVal()) {
-			c_vpos = floor(tArY + tArH - tArH*((isLogT?lg(max(1e-100,prev_vl)):prev_vl)-vsMinT)/(vsMaxT-vsMinT));
-			trPath.setAttr("d", trPath.attr("d")+"L"+prev_pos+".1,"+c_vpos+".1");
-		}
-		prev_vl = c_val; prev_pos = c_pos;
-	}
-}
-
-return im.save();',1579332448);
 COMMIT;
