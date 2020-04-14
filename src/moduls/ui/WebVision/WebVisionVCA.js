@@ -213,9 +213,11 @@ function servGet( adr, prm, callBack, callBackPrm )
     if(callBack) {
 	req.callBack = callBack;
 	req.callBackPrm = callBackPrm;
+	req.responseXML = null;
 	req.onreadystatechange = function( ) {
 	    if(this.readyState != 4) return;
-	    if(this.status == 200 && this.responseXML && this.responseXML.childNodes.length) {
+	    if(this.status != 200) window.location.reload();
+	    else if(this.responseXML && this.responseXML.childNodes.length) {
 		this.responseXML.childNodes[0].callBackPrm = this.callBackPrm;
 		this.callBack(this.responseXML.childNodes[0]);
 	    }
@@ -226,8 +228,8 @@ function servGet( adr, prm, callBack, callBackPrm )
     }
     //else console.log("TEST 00: Sync GET="+adr+'?'+prm);
     req.send(null);
-    if(req.status == 200 && req.responseXML.childNodes.length)
-	return req.responseXML.childNodes[0];
+    if(req.status != 200) window.location.reload();
+    else if(req.responseXML.childNodes.length)	return req.responseXML.childNodes[0];
 
     return null;
 }
@@ -242,7 +244,8 @@ function servSet( adr, prm, body, noWaitRez )
     req.open('POST', encodeURI('/'+MOD_ID+adr+(gPrms.length?gPrms+'&':'?')+prm), noWaitRez);
     try {
 	req.send(body);
-	if(!noWaitRez && req.status == 200 && req.responseXML.childNodes.length)
+	if(req.status != 200) window.location.reload();
+	else if(!noWaitRez && req.responseXML.childNodes.length)
 	    return req.responseXML.childNodes[0];
 	//if(mainTmId) clearTimeout(mainTmId);
 	//mainTmId = setTimeout(makeUI, 1000);
@@ -2564,7 +2567,7 @@ function pwDescr( pgAddr, pg, parent )
 function makeUI( callBackRez )
 {
     if(!callBackRez) {
-	prcCnt++;
+	prcCnt = (callBackRez == -1) ? Math.min(0,prcCnt) - 1 :  Math.max(0,prcCnt) + 1;
 	stTmMain = new Date();
     }
 
@@ -2622,6 +2625,8 @@ function makeUI( callBackRez )
 	    }
 	tmCnt = parseInt(pgNode.getAttribute('tm'));
     }
+    else if(prcCnt < 10) window.location.reload();
+
     //Update some widgets
     for(var i in perUpdtWdgs) perUpdtWdgs[i].perUpdt();
 

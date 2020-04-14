@@ -1194,10 +1194,10 @@ void SessPage::setProcess( bool val, bool lastFirstCalc )
 
 AutoHD<Page> SessPage::parent( ) const
 {
-    if(!enable()) {
+    /*if(!enable()) {
 	if(parentNm() == "..") return AutoHD<TCntrNode>(nodePrev());
 	else return mod->nodeAt(parentNm(), 0, 0, 0, true);
-    }
+    }*/
     return Widget::parent();
 }
 

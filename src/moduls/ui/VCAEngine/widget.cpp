@@ -158,9 +158,10 @@ void Widget::preDisable( int flag )
     if(enable()) setEnable(false);
 
     //Force unlinking
-    if(!parent().freeStat()) {
+    if(!mParent.freeStat()) {
 	//Unregister heritater
-	parent().at().heritUnreg(this);
+	mParent.at().heritUnreg(this);
+
 	//Disconnect parent widget
 	mParent.free();
     }
@@ -275,7 +276,6 @@ void Widget::setEnable( bool val, bool force )
 		inheritIncl();
 	    } catch(TError &err) {
 		mess_err(nodePath().c_str(),_("Error enabling the widget: %s"),err.mess.c_str());
-		mParent.free();
 		if(BACrtHoldOvr) { BACrtHoldOvr = false; postEnable(TCntrNode::NodeConnect); }
 		mEnable = false;
 		throw;
@@ -345,7 +345,7 @@ void Widget::linkToParent( )
     }
 
     //Register of heritater
-    parent().at().heritReg(this);
+    mParent.at().heritReg(this);
 }
 
 void Widget::setParentNm( const string &isw )

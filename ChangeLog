@@ -1,3 +1,18 @@
+2020-04-14 Roman 0.9.1
+- FIX: The template "digitBlockUnif" of the library "base" fixed in own description, caused to the template loss.
+    The function "diagram" removed from the JavaLikeCalc library "web".
+- LibsDB.vcaBase: Main.userManager expanded for the possibility to edit the unprivileged user own information and password.
+- !!:FIX:DAQ,DAQ.{LogicLev,ModBus,Siemens}:
+    !!:FIX: The templates implementation fixed in editing the links configuration to force the template modification flag.
+    !!:FIX: The value changing through the Control Interface forced to setting the parameter modification flag.
+    LogicLev,ModBus,Siemens: Allowed for the parameter loading in the run, to reload the values context.
+- !!!:FIX:UI.WebVision: Fixed in work with some pages missing, at the runtime objects locking and
+    the early linking mechanism improved in general.
+- !!!:UI.WebVision: Significantly improved in the connection losses detection for the main page reload,
+	for the cases of return back to already closed sessions in WebBrowser.
+    The page of list the available projects and sessions appended for the actual user information.
+
+
 2020-04-08 Roman 0.9.1
 - OpenSCADA libraries and projects:
     LibsDB/*,{AGLKS,Boiler}: The Roman Savochenko EMail rom_as@oscada.org replaced by roman@oscada.org.
@@ -69,7 +84,7 @@
 	    !!: Appended for the ModBus scanner implementation as the template "ModBusScan".
 	!!!:LowDevLib: The template library is a splitted part of the original library "Devices" under the name "Low-level devices", which revised,
 		some improved, documented and the documentation appended to offline.
-	    !!!:FIX:{1W_DS9097,W_DS9097U}: Fixed for the device family detection as the template 0x7F,
+	    !!!:FIX:{1W_DS9097,1W_DS9097U}: Fixed for the device family detection as the template 0x7F,
 		detected on the last DS2413 with the first byte 0xBA.
 	    !!!: Appended for the template "MAX6675" implementation of the low-level SPI Cold-Junction-Compensated K-Thermocouple-to-Digital Converter.
 	    !!!: Appended for the template "SHT3x" implementation of the low-level humidity sensors.
@@ -90,32 +105,32 @@
 	!!!!:FIX: Complete and significant cleaning from the Cyrillic symbols and improving in the original identifiers and messages, renaming their to English.
 	    FIX: Fixed for the message "reversed" translation.
 	!!!!: Most standard cadres and widgets adapted to styles and the style "Light" created for all projects.
-	    The styles moved under a scheme of disabling styles at their presence instead "No style" and the style "Default" is appended.
+	    The styles moved under a scheme of enabling styles at their presence instead disabling by "No style" and the style "Default" is appended.
 	Call of the OS utility <beep> fixed by decreasing the length argument to 100000.
 	Main.alarmsSt,doc.docAlarmsRep: Expanded by the attribute "messCat".
 	The service call "/Transport/%2fsub%2fehost" appended for the attribute "upRiseSYS"=1, for accessing the ordinal users.
 	!!!!:FIX:Main: The user interface library "Main elements" revised, improved, appended, documented and the documentation appended to offline.
 	    !!!!:FIX:{alarmsAct,alarmsSt}:
 		!!!!: Expanded for support quittance-confirmation, comments and custom fields.
-		!!:FIX: Fixed in using the view "Table" of the primitive "FormEl" for the attribute "fontColor" instead the correct "colorText".
 		!!: The field "Parameter (prm)" renamed to "Source" where placed all remoted and local sources.
+		!:FIX: Fixed in using the view "Table" of the primitive "FormEl" for the attribute "fontColor" instead the correct "colorText".
 		FIX:alarmsAct: Fixed for processing the custom fields.
 		    FIX: Prevented from very more expanding at appearing several events.
 		FIX:alarmsSt: Fixed for pointing "messCat" in the alarms requesting.
 	    !!!!:RootPgSo: Improved for dynamically create signal objects, the number of which is limited only by the total length of the
 		    signal objects names and their two rows. The signal object buttons generating in the right of the logo is supported also.
-		!!!!: The views also unified for ID "view[1..6]", when user can their assign in self way.
+		!!!!: The types of the views also unified for ID "view[1..6]", when user can their assign in self way.
 		    The compatibility with the original names of the views was saved, for present projects!
 		Moved to use the new function uiCmd() of the project sessions to open pages, from the combo,
 		    what is the singe true method now of the linked pages openning from the user space.
 		Improved for cleaning the control panel at changing content of the main container.
 		Set to not active to disable the activity cursor.
 	    !!!!: Appended for:
-		- the new control panel-window "Graph parameter calculation (graphCalc)";
+		- the control panel-window "Graph parameter calculation (graphCalc)";
 		- the objects widget "Object properties (objProps)";
 		- the alarms frame "Alarms — report (alarmsStReport)";
 		- the widget "Image label (ImgLab)";
-		- an implementing of the cadre "Users manager (userManager)".
+		- the frame "Users manager (userManager)".
 	    !!:grph_panel: Appended for an independent button of switching to the cursor time instead the indirect switching at the depth of decreasing.
 		The microsecond part of the cursor time improved for conditional display and set hidden at the big intervals.
 	    !!:ElViewGraph: Font size of the name decreased from 15 to 11 and trend color of the disabled items set to "gray".
@@ -200,12 +215,12 @@
 	    The user API appended for the function strFromCharUTF() of forming string from UTF-8, UTF-16, UTF-16LE, UTF-16BE, UTF-32, UTF-32LE, UTF-32BE.
 	    Appended for the definition SERV_TASK_PER=10 of the service task periodicity.
 	    The user API appended for the function SYS.fileSize().
-	    The function str2atime() is appended to convert from string time to the Unix epoch time supporting GMT.
+	    The function str2atime() is appended to convert from string time to the UNIX epoch time supporting GMT.
 	    TError appended for naming the error codes in the enum "Codes", which used everywhere.
 	    The special archive names appended for the name ALRM_ARCH_CH_NM ("<alarmsChange>") of just changing the presented alarms.
 	    The limits appended by USER_ITS_LIMIT (1000000) for limit the items number like to user arrays from DAQ.JavaLikeCalc.
-	DB: The transactions closing control into the OpenSCADA core by the functions trTm_ClsOnOpen(), trTm_ClsOnReq() and trPr_ClsTask().
-	    The DB-objects reenabling control at the function disabledByUser().
+	DB: Appended for the transactions closing control into the OpenSCADA core by the functions trTm_ClsOnOpen(), trTm_ClsOnReq() and trPr_ClsTask().
+	    Appended for the DB-objects reenabling control at the function disabledByUser().
 	    Appended for configuration of the "Opened tables lifetime" of the inactive tables closing by the function tblLifeTime().
 	    The attribute TBD::mEn moved to the protected space.
 	Transports:
@@ -214,7 +229,7 @@
 		Expanded by the attempts field ot the generic control in the function attempts().
 		Unified for the last request time control in the function lstReqTm().
 		The function outAddrHelp() of taken common address help for the output transport modules was added.
-	DAQ: TController::alarmSet() expanded for the argumnet "force" to force the alarms on the controller objects in the redundance.
+	DAQ: TController::alarmSet() expanded for the argument "force" to force the alarms on the controller objects in the redundancy.
 	    The DAQ-parameter appended for the User-API function alarmSet() and
 		the function vlSetRednt() of the unified values writing in the redundancy.
 	    TDAQS::rdRestDtTm() expanded from the float to double type return.
@@ -253,7 +268,7 @@
     !!!!:FIX: Building:
 	!!!!:FIX:configure.ac: Core library version rose to 3:7:0 and the program version rose to 0.9.1.
 	    FIX: Fixed for name of the required libldap library.
-	!!!!: The Debian 10, CentOs 8 and Ubuntu 20.04 chroots are appended for build OpenSCADA.
+	!!!!: The Debian 10, CentOs 8 and Ubuntu 20.04 root file systems (chroots) are appended for build OpenSCADA.
 	    !!!!: The source codes significantly cleaned at the building warnings of GCC 9 (CentOs 8).
 	    !!:UI.{QTCfg,Vision}: Adapted to build in the environment of Debian 10 for Qt5.11.3, GCC8 and an error about a conflict in the macro message()
 		into StdLibC++ through Qt5.
@@ -270,7 +285,7 @@
 	    the default font "Helvetica,12,-1" with QScrollBar CSS rule are removed.
 	The building SDK parameters set to "<uses-sdk android:minSdkVersion="19" android:targetSdkVersion="21"/>".
 	Android/build.sh: Improved in building under environments with the system Qt5 development files.
-    !!!!: Module versions of the subsystem "Special" rose to 12; of the subsystem "DB", "DAQ", "Archives" and "UI" rose to 13;
+    !!!!: The module version of the subsystem "Special" rose to 12; of the subsystem "DB", "DAQ", "Archives" and "UI" rose to 13;
 	of the subsystem "Transports" rose to 15.
     !!!!:FIX: Threading, tasks, realtime and locks:
 	!!!!: Some common data resources of dataRes() replaced by own resources, mostly due to the observed locking problems in Protocol.HTTP and DAQ.ModBus.
@@ -316,7 +331,7 @@
 		using the node function chldAdd() expanding in direct return the ID and to just remove the new node for equal ones.
 	    !!:DAQ: Identifiers of the logical level IO of the DAQ-templates expanded to the size limit up to 1.5*OBJ_ID_SZ=30 symbols
 		and have added for these shrinking on creating.
-	    !!:Transports: Size of the output transports ID set to OBJ_ID_SZ*2, since it can be cobined from the ordinal node ID and some prefix, in the automatic mode.
+	    !!:Transports: Size of the output transports ID set to OBJ_ID_SZ*2, since it can be combined from the ordinal node ID and some prefix, in the automatic mode.
 	    !!: Appended by a function of setting the TCfg fields to the default value, to prevent loading values of previous records for miss fields.
 	!!:TConfig,*: The user API functions cfg() and cfgSet() of the configuration expanded by the permition control.
 	!!: The loading from selected DB improved in checking the DB enabling before, in the function TSYS::chkSelDB().
@@ -431,7 +446,7 @@
 	!!: LibnoDave updated to 0.8.5.1.
 	The errors appended by the read code 0x3 - "An attempt to access outside the DB 'N' (200 family)".
 	The own implementation of ISO-TSAP appended for errors processing of the functions requesting.
-    !!!!:FIX:DAQGate: Expanded by an option and a function of placing different controllers to the different virtual parameters.
+    !!!!:FIX:DAQGate: Expanded by an option and a function of placing different remote controllers to the virtual parameters.
 	FIX: Fixed in storing duple parameters from different controller objects, preventing the RO attribute "SHIFR" reading.
 	The parameters' attribute "err" set to "10:Data not available." after loading.
     FIX:System: Fixed for some translations.
@@ -565,7 +580,7 @@
 	!!!: Optimisation the remote development:
 	    - the info control services "/prm/cfg/prj", "/page/page" appended by getting of number of the child pages in the attribute "chPgN"
 		at setting "getChPgN";
-	    - appended to omit the widgets' icons transmitting in the control service "/serv/wlbBr" of the complete widgets' tree loading,
+	    - appended to prevent the widgets' icons transmitting in the control service "/serv/wlbBr" of the complete widgets' tree loading,
 		setting the attributes "disIconsW", "disIconsCW".
 	!!!: The project sessions of the VCA moved at the last from the modification control for the development mode.
 	!!!: Expanded for the direct definition of the visualiser specific attributes, marking their by the prefix "vs_".
@@ -635,7 +650,7 @@
 	!!!: Expanded for the planning of the updating period depending to the real connection quality of the runtime mode, like to UI.WebVision.
 	!!:FIX: Common fixes and improvements of the runtime window modes:
 	    !!:FIX: Manual scaling of the runtime window (for full-screen or maximise) improved and fixed in the processing the sign isResizeManual.
-	    !!:FIX: Fixed in starting to the full-screen mode and not full scaling at restoring to not zero window position, preventing the restoring.
+	    !!:FIX: Fixed in starting to the full-screen mode and not full scaling at restoring to not zero window position.
 	    !:FIX: The widgets including fixed for resizing after his container resizing, has observed in a problem of direct opening included pages on the full screen.
 	!!:FIX:FormEl:
 	    !!!:FIX:Table: Tables fitting improved to use maximum width from the widget size and the maximum view port,
@@ -3023,7 +3038,7 @@
     All operator doings log expanded by the parameter name into the category and allow for sort that next.
 - TArchives: Request "get" of the service "/serv/mess" some expanded for zero "tm" processing to the current time.
 - Transport: Debug messages added to the generic OpenSCADA control interface's function cntrIfCmd().
-- !!:DAQ.DAQGate: Messages gate expanded into the redundance mode, from parallel-redundance station.
+- !!:DAQ.DAQGate: Messages gate expanded into the redundancy mode, from parallel-redundancy station.
 - DAQ.JavaLikeCalc: Word "CODE" replaced to the absolute program position, for the debug messages.
     About "JavaLike problem detected" early: the problem wrong, but reveal some other before.
 - FIX:UI.VCAEngine: A misspell into the code of new notification manager, same into a queue processing, fix.
@@ -6688,7 +6703,7 @@
 
 
 2011-10-28 Roman
-- FIX:DAQ: Status of controller objects grow is prevented on incorrect redundance configuration, from self to self.
+- FIX:DAQ: Status of controller objects grow is prevented on incorrect redundancy configuration, from self to self.
 - Archive.FSArch: Checking for value archive file write error is some expanded.
 - !:UI.QTCfg: Rows of tables limit is set to half height of the table.
 - FIX:UI.VCAEngine: Force widgets create is set on child inherit for prevent to removed widgets check on that stage.
@@ -8659,7 +8674,7 @@
 
 
 2010-02-12 Roman
-- !!:FIX:DAQ, DAQ.BlockCalc, DAQ.JavaLikeCalc, DAQ.LogicLev, DAQ.Siemens: Geting broken data into redundance code for no redundance tasks and for no one reserve station present.
+- !!:FIX:DAQ, DAQ.BlockCalc, DAQ.JavaLikeCalc, DAQ.LogicLev, DAQ.Siemens: Geting broken data into redundancy code for no redundancy tasks and for no one reserve station present.
 - DAQ:Function: A function using counter information is added.
 - FIX:DAQ.ICP_DAS: The loss tasks stoping is fixed.
 - DAQ.ICP_DAS: CPU module's data access is moved to self module object "LP-8781". Discrete IO reverse configuration support is added.
@@ -9351,7 +9366,7 @@
 
 
 2009-07-08 Roman
-- FIX:/DAQ: Redundance data restoring is made preemptive.
+- FIX:/DAQ: redundancy data restoring is made preemptive.
 - FIX:/UI/VCAEngine: Attributes init and free is rewrote and some fixed.
 
 
@@ -9374,7 +9389,7 @@
 - !!:/DAQ, /Value, /DAQ/DAQGate: Restore from archives mechanism is some updated for losses values fixing.
 - /TVariant: Object type is added.
 - !!:/DAQ/DAQGate: Stations list order is made significant. Some code clear. Error's attribute "err" get value is fixed.
-- !!!!:/Archive: Archive sync conception is changed for DAQ.DAQGate and DAQ-redundance.
+- !!!!:/Archive: Archive sync conception is changed for DAQ.DAQGate and DAQ-redundancy.
 
 
 2009-07-01 Roman
@@ -9450,7 +9465,7 @@
 
 
 2009-06-10 Roman
-- FIX:/DAQ/DAQGate: Vertical redundance is fixed.
+- FIX:/DAQ/DAQGate: Vertical redundancy is fixed.
 
 
 2009-06-09 Roman 0.6.3.3

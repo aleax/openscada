@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-22 17:18+0200\n"
+"POT-Creation-Date: 2020-04-12 07:33+0300\n"
 "PO-Revision-Date: 2009-08-26 08:21+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -214,6 +214,10 @@ msgstr ""
 "Serverseite.\n"
 "\n"
 
+#, c-format
+msgid "Welcome \"%s (%s)\"!"
+msgstr "Willkommen \"%s (%s)\"!"
+
 msgid "close"
 msgstr "schließen"
 
@@ -323,7 +327,8 @@ msgid ""
 "Mostly to decrease too big images size then decrease the traffic, what "
 "causes to rise the server load."
 msgstr ""
-"Meistens, um zu große Bilder zu verkleinern und dann den Datenverkehr zu verringern, was zu einer Erhöhung der Serverlast führt."
+"Meistens, um zu große Bilder zu verkleinern und dann den Datenverkehr zu "
+"verringern, was zu einer Erhöhung der Serverlast führt."
 
 #, c-format
 msgid ""

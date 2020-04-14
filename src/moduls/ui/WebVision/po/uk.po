@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-22 17:18+0200\n"
+"POT-Creation-Date: 2020-04-12 07:33+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -205,6 +205,10 @@ msgstr ""
 "ImgResize    <0|1>      Зміна розміру растрових зображень на боці серверу.\n"
 "\n"
 
+#, c-format
+msgid "Welcome \"%s (%s)\"!"
+msgstr "Ласкаво просимо \"%s (%s)\"!"
+
 msgid "close"
 msgstr "закрити"
 
@@ -312,8 +316,8 @@ msgid ""
 "Mostly to decrease too big images size then decrease the traffic, what "
 "causes to rise the server load."
 msgstr ""
-"Переважно щоб зменшити розмір занадто великий зображень відтак і трафіку, що призводить до "
-"збільшення навантаження на сервер."
+"Переважно щоб зменшити розмір занадто великий зображень відтак і трафіку, що "
+"призводить до збільшення навантаження на сервер."
 
 #, c-format
 msgid ""
