@@ -31,7 +31,7 @@
 <td> <a href="../Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">LogicLev</a> </td>
 <td> Логічний рівень
 </td>
-<td> 2.0 </td>
+<td> 2.2 </td>
 <td> GPL2 </td>
 <td> daq_LogicLev.so </td>
 <td> en,uk,ru,de </td>
@@ -41,6 +41,10 @@
 <td> Роман Савоченко </td>
 <td> Надає чистий логічний рівень параметрів сбору даних.
 </td></tr></table>
+<p>Модуль є чистою реалізацією механізму логічного рівня, заснованого на шаблонах параметрів <a href="../Program_manual.html#DAQ" title="Special:MyLanguage/Documents/Program manual">підсистеми "Збір даних (DAQ)"</a>. Реалізація модуля заснована на проекті "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Values_archivation" title="Special:MyLanguage/Sub-projects/Values archivation">Логічний рівень параметрів OpenSCADA</a>". Практично, цей модуль є реалізацією підсистеми "Параметри" вказаного проекту, без шаблонів та винесений до модуля.
+</p><p>Модуль надає механізм формування параметрів підсистеми "DAQ" рівня користувача на основі інших джерел цієї підсистеми. Фактично, модулем використовуються шаблони підсистеми "DAQ" та специфічний формат опису посилань на атрибути параметрів підсистеми "DAQ".
+</p><p>Також, модулем реалізуються функції горизонтального резервування, а саме — спільної роботи з віддаленою станцією цього-ж рівня. Крім синхронізації значень та архівів атрибутів параметрів, модулем здійснюється синхронізація значень обчислювальних шаблонів з метою безударного підхоплення алгоритмів.
+</p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#.D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D1.83"><span class="tocnumber">1</span> <span class="toctext">Об'єкт контролеру</span></a></li>
@@ -54,10 +58,6 @@
 </ul>
 </div>
 
-<p>Модуль є чистою реалізацією механізму логічного рівня, заснованого на шаблонах параметрів <a href="../Program_manual.html#DAQ" title="Special:MyLanguage/Documents/Program manual">підсистеми "Збір даних (DAQ)"</a>. Реалізація модуля заснована на проекті "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Values_archivation" title="Special:MyLanguage/Sub-projects/Values archivation">Логічний рівень параметрів OpenSCADA</a>". Практично, цей модуль є реалізацією підсистеми "Параметри" вказаного проекту, без шаблонів та винесений до модуля.
-</p><p>Модуль надає механізм формування параметрів підсистеми "DAQ" рівня користувача на основі інших джерел цієї підсистеми. Фактично, модулем використовуються шаблони підсистеми "DAQ" та специфічний формат опису посилань на атрибути параметрів підсистеми "DAQ".
-</p><p>Також, модулем реалізуються функції горизонтального резервування, а саме — спільної роботи з віддаленою станцією цього-ж рівня. Крім синхронізації значень та архівів атрибутів параметрів, модулем здійснюється синхронізація значень обчислювальних шаблонів з метою безударного підхоплення алгоритмів.
-</p>
 <h2><span class="mw-headline" id=".D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D1.83"><span class="mw-headline-number">1</span> Об'єкт контролеру</span></h2>
 <p>Для додання джерела даних параметрів логічного рівня створюється та конфігурується об'єкт контролеру OpenSCADA. Приклад вкладки конфігурації об'єкту контролера даного типу зображено на рисунку 1.
 </p>
@@ -118,5 +118,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/LogicLev/uk">Modules/LogicLev/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2670</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/LogicLev/uk">Modules/LogicLev/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2675</td></tr></table></body>
 </html>

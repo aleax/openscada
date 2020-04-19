@@ -439,44 +439,53 @@ void TPrmTempl::Impl::lnkAddrSet( int num, const string &vl, bool spec )
     map<int,SLnk>::iterator it = lnks.find(num);
     if(it == lnks.end()) throw TError(obj->nodePath().c_str(), _("Error of parameter ID."));
     if(spec)	it->second.addrSpec = vl;
-    else it->second.addr = vl;
+    else if(it->second.addr != vl) {
+	it->second.addr = vl;
+	it->second.con.free(); it->second.addrSpec = "";	//for reconnect
+    }
 }
 
-bool TPrmTempl::Impl::lnkInit( int num, bool checkNoLink )
+bool TPrmTempl::Impl::lnkInit( int num, bool toRecnt )
 {
     MtxAlloc res(lnkRes, true);
     map<int,SLnk>::iterator it = lnks.find(num);
+    if(it == lnks.end()) return false;
+    if(toRecnt) { it->second.con.free(); it->second.addrSpec = ""; }
 
-    if(it == lnks.end() || it->second.addr.empty() || it->second.addr.compare(0,4,"val:") == 0 || (checkNoLink && !it->second.con.freeStat())) {
-	//Cleaning the generic and specific links at clearing the address or it setting to "val:"
-	if(it != lnks.end())	{ it->second.con.free(); it->second.addrSpec = ""; }
-	return false;
+    bool toCheckRes = true;
+
+retry:
+    if(it->second.addr.empty() || it->second.addr.compare(0,4,"val:") == 0)	toCheckRes = false;
+    // Try to relink
+    else if(it->second.con.freeStat()) {
+	string addr = it->second.addr, aAddr;
+	res.unlock();
+
+	AutoHD<TVal> con;
+	int objOff = 0;
+
+	try {
+	    con = SYS->daq().at().attrAt((aAddr=TSYS::strParse(addr,0,"#",&objOff)), '.', true);
+	    if(!con.freeStat()) {
+		if(con.at().fld().type() == TFld::Object && objOff < (int)addr.size())
+		    setS(num, con.at().getO().at().propGet(addr.substr(objOff),'.'));
+		else setS(num, con.at().getS());
+		toCheckRes = false;
+	    }
+	    else if(!SYS->daq().at().prmAt(aAddr,'.',true).freeStat()) toCheckRes = false;	//just a parameter
+	} catch(TError &err) { }
+
+	//Set the connection result
+	res.lock();
+	// Relink after going behind the lock
+	if((it=lnks.find(num)) == lnks.end())	return false;
+	if(it->second.addr != addr) goto retry;			//the item address changed
+
+	it->second.con = con;
+	it->second.objOff = objOff;
     }
-    it->second.con.free();
-    it->second.objOff = 0;
-    string addr = it->second.addr, aAddr;
-    res.unlock();
 
-    AutoHD<TVal> con;
-    int objOff = 0;
-    try {
-	con = SYS->daq().at().attrAt((aAddr=TSYS::strParse(addr,0,"#",&objOff)), '.', true);
-	if(!con.freeStat()) {
-	    if(con.at().fld().type() == TFld::Object && objOff < (int)addr.size())
-		setS(num, con.at().getO().at().propGet(addr.substr(objOff),'.'));
-	    else setS(num, con.at().getS());
-	}
-	else if(!SYS->daq().at().prmAt(aAddr,'.',true).freeStat()) return false;	//just a parameter
-	else return true;
-    } catch(TError &err) { return true; }
-
-    //Set the connection result
-    res.lock();
-    if((it=lnks.find(num)) == lnks.end() || it->second.addr.compare(0,4,"val:") == 0)	return false;
-    it->second.con = con;
-    it->second.objOff = objOff;
-
-    return false;
+    return toCheckRes;
 }
 
 bool TPrmTempl::Impl::lnkActive( int num )
@@ -576,14 +585,14 @@ void TPrmTempl::Impl::addLinksAttrs( TElem *attrsCntr )
 	    catch(TError &err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
 }
 
-bool TPrmTempl::Impl::initLnks( bool checkNoLink )
+bool TPrmTempl::Impl::initLnks( bool toRecnt )
 {
     vector<int> ls;
     bool chkLnkNeed = false;
 
     lnkList(ls);
     for(int iL = 0; iL < (int)ls.size(); ++iL)
-	if(lnkInit(ls[iL],checkNoLink)) chkLnkNeed = true;
+	if(lnkInit(ls[iL],toRecnt)) chkLnkNeed = true;
 
     return chkLnkNeed;
 }
@@ -688,10 +697,10 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 
 	    for(map<int,SLnk>::iterator iL = lnks.begin(); iL != lnks.end(); ++iL)
 		if(p_nm == TSYS::strSepParse(TSYS::strLine(func()->io(iL->first)->def(),0),0,'|')) {
-		    iL->second.addr = p_vl;
+		    lnkAddrSet(iL->first, p_vl);
 		    string p_attr = TSYS::strSepParse(TSYS::strLine(func()->io(iL->first)->def(),0),1,'|');
 		    if(!prm.freeStat()) {
-			if(prm.at().vlPresent(p_attr))	iL->second.addr = p_vl+"."+p_attr;
+			if(prm.at().vlPresent(p_attr))	lnkAddrSet(iL->first, p_vl+"."+p_attr);
 			else no_set += p_attr+",";
 		    }
 		}
@@ -724,7 +733,7 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 		//	TSYS::strSepParse(a_vl,1,'.') == owner().id() &&
 		//	TSYS::strSepParse(a_vl,2,'.') == id())
 		//    throw TError(nodePath().c_str(),_("Error, recursive linking."));
-		lnks[iIO].addr = a_vl;
+		lnkAddrSet(iIO, a_vl);
 		initLnks();
 	    }
 	    else if(func()->io(iIO)->flg()&TPrmTempl::CfgConst) setS(iIO, opt->text());

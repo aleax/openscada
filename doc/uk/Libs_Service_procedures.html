@@ -1,0 +1,497 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Бібліотеки/Сервісні процедури - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../en/files/doc.css" rel="stylesheet" /></head>
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../en/files/Logo-big.png" /></a></div><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="uk">Бібліотеки/Сервісні процедури</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FService+procedures&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Service_procedures" title="Libs/Service procedures">Libs/Service procedures</a> and the translation is 37% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_Service_procedures.html" title="Libs/Service procedures (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--low" href="../ru/Libs_Service_procedures.html" title="Библиотеки/Сервисные процедуры (37% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--low">українська</span></div></div>
+<table class="wikitable">
+
+<tr>
+<th> Назва </th>
+<th> Версія </th>
+<th> Ліцензія </th>
+<th> Джерело </th>
+<th> Мови </th>
+<th> Автор </th>
+<th> Опис
+</th></tr>
+
+<tr>
+<td> <a href="Libs_Service_procedures.html" title="Special:MyLanguage/Libs/Service procedures">Бібліотека сервісних процедур</a>
+</td>
+<td> 1.2 </td>
+<td> GPLv2 </td>
+<td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.JavaLikeCalc.servProc </td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td>
+<td> Бібліотека сервісних процедур різноманітного застосування.
+<ul><li> <b>Засновано</b>: Листопад 2017</li>
+<li> <b>Початково створено:</b> у <a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/APIFunctionLibs/LibServProc" rel="nofollow noreferrer noopener" target="_blank">старій Wiki</a></li>
+<li> <b>Використано:</b> різними процесами OpenSCADA</li></ul>
+</td></tr></table>
+<p>Бібліотека створюється для надання сервісних функцій виконання службових завдань довкола оточення OpenSCADA. Бібліотека не є статичною, а будується на основі модуля <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, який дозволяє створювати обчислення на мові схожій на Java. Назви функцій та їх параметрів доступні на мовах: Англійська, Українська та Російська.
+</p><p>Для адресації до функцій цієї бібліотеки можна використати статичну адресу виклику <b>DAQ.JavaLikeCalc.lib_servProc.{Func}()</b> або динамічну <b>SYS.DAQ.JavaLikeCalc["lib_servProc"]["{Func}"].call()</b>, <b>SYS.DAQ.JavaLikeCalc["lib_servProc"].{Func}()</b>.
+Де <i>{Func}</i> — ідентифікатор функції у бібліотеці.
+</p><p>Для підключення бібліотеки до проекту станції OpenSCADA ви можете отримати файл БД як:
+</p>
+<ul><li> такий що постачається з готовим та відповідним пакетом дистрибутиву Linux на кшталт "openscada-libdb-main", "openscada-LibDB.Main";</li>
+<li> найбільш актуальний та безпосередньо отриманий з <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">репозиторію subversion</a>, перетворений у файл БД SQLite шляхом:</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 15px">
+$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql
+$ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
+</pre>
+<ul><li> завантаження <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">прикріпленого тут</a>.</li></ul>
+<p>Цей завантажений файл ви надалі можете розмістити у теці проекту станції та створити об'єкт бази даних модуля БД "SQLite", зареєструвавши файл бази даних у конфігурації.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1"><a href="#TEST:_Packing_of_the_archiver_on_FS_.28archPackFStests.29"><span class="tocnumber">1</span> <span class="toctext">TEST: Packing of the archiver on FS (archPackFStests)</span></a></li>
+<li class="toclevel-1"><a href="#TEST:_Release_.28releaseTests.29"><span class="tocnumber">2</span> <span class="toctext">TEST: Release (releaseTests)</span></a></li>
+<li class="toclevel-1"><a href="#CRC_16_.28crc16.29"><span class="tocnumber">3</span> <span class="toctext">CRC 16 (crc16)</span></a></li>
+<li class="toclevel-1"><a href="#Archives_recalculation_.28procArh.29"><span class="tocnumber">4</span> <span class="toctext">Archives recalculation (procArh)</span></a></li>
+<li class="toclevel-1"><a href="#EXT:_WackoWiki_to_MediaWiki_.28wacko2media.29"><span class="tocnumber">5</span> <span class="toctext">EXT: WackoWiki to MediaWiki (wacko2media)</span></a></li>
+<li class="toclevel-1"><a href="#EXT:_Off-line_documentation_.28docOffLine.29"><span class="tocnumber">6</span> <span class="toctext">EXT: Off-line documentation (docOffLine)</span></a></li>
+</ul>
+</div>
+
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="archPackFStests" title="#archPackFStests"><h3><span class="mw-headline" id="TEST:_Packing_of_the_archiver_on_FS_.28archPackFStests.29"><span class="mw-headline-number">1</span> TEST: Packing of the archiver on FS (<a href="Libs_Service_procedures.html#archPackFStests" title="Special:MyLanguage/Libs/Service procedures">archPackFStests</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>Tests set for packing of the value archives to File System, to check the optimization algorithm. The stages are provided:
+</p>
+<ul><li> Stage 0: Filling the main values: "1,1,10,10,100,100,1000,1000,10000,10000,EVAL"</li>
+<li> Stage 1: Changing to different value 20: "1,1,20,10,100,100,1000,1000,10000,10000,EVAL"</li>
+<li> Stage 2: Setting a value for merging (equal) to the up (10): "1,1,20,10,10,100,1000,1000,10000,10000,EVAL"</li>
+<li> Stage 3: Setting a value for merging (equal) to the down (1000): "1,1,20,10,10,1000,1000,1000,10000,10000,EVAL"</li>
+<li> Stage 4: Setting a different value to the end 20000: "1,1,20,10,10,1000,1000,1000,10000,10000,20000,EVAL"</li>
+<li> Stage 5: Changing the end value for merging to the up (10000): "1,1,20,10,10,1000,1000,1000,10000,10000,10000,EVAL"</li>
+<li> Stage 6: Setting a value to the end for merging to the up (10000): "1,1,20,10,10,1000,1000,1000,10000,10000,10000,10000,EVAL"</li>
+<li> Stage 7: Setting the end value to EVAL: "1,1,20,10,10,1000,1000,1000,10000,10000,10000,EVAL"</li>
+<li> Stage 8: Setting an equal value for inserting 10000: "1,1,20,10,10,1000,1000,1000,10000,10000,10000,EVAL"</li></ul>
+<p><b><u>Function parameters</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Default
+</th></tr>
+<tr>
+<td> tm </td>
+<td> Start time (14.03.2015 21:37) </td>
+<td> Integer </td>
+<td> Input </td>
+<td> 1426361839
+</td></tr>
+<tr>
+<td> per </td>
+<td> Period, seconds </td>
+<td> Integer </td>
+<td> Input </td>
+<td> 60
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Archive address </td>
+<td> String </td>
+<td> Input </td>
+<td> test123
+</td></tr>
+<tr>
+<td> archiver </td>
+<td> Archiver address </td>
+<td> String </td>
+<td> Input </td>
+<td> FSArch.1m
+</td></tr>
+<tr>
+<td> step </td>
+<td> Step (0-8), -1 for all </td>
+<td> Integer </td>
+<td> Input </td>
+<td> -1
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="releaseTests" title="#releaseTests"><h3><span class="mw-headline" id="TEST:_Release_.28releaseTests.29"><span class="mw-headline-number">2</span> TEST: Release (<a href="Libs_Service_procedures.html#releaseTests" title="Special:MyLanguage/Libs/Service procedures">releaseTests</a>)</span></h3></span> </td>
+<td> 2.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>Set of formal tests of the OpenSCADA releases:<br />
+0: System<br />
+1: Security User/Group tests<br />
+2: Transport subsystem tests<br />
+</p>
+<ul><li> Data transferring through output and input transports by the test "TrOut":</li></ul>
+<dl><dd> means presence of the input transports with the name "testRelease[{N}]" and the connected output transport adress into description or address field (if equal one).</dd></dl>
+<p>3: Protocol subsystem tests<br />
+</p>
+<ul><li> Execution of the test controller object DAQ.ModBUS.testTCP:</li></ul>
+<dl><dd> means presence of the controller object DAQ.ModBUS.testTCP.</dd></dl>
+<ul><li> Execution of the test controller object DAQ.OPC_UA.test:</li></ul>
+<dl><dd> means presence of the  controller object DAQ.OPC_UA.test.</dd></dl>
+<ul><li> Send requests to a test-echo protocol from a transport:</li></ul>
+<dl><dd> means presence of the user protocol object Protocol.UserProtocol.up_test.</dd></dl>
+<p>4: Archive subsystem tests<br />
+</p>
+<ul><li> Using the test "Mess" of the module "SystemTests" for archiving messages:</li></ul>
+<dl><dd> means presence the message archivers "test";</dd></dl>
+<ul><li> Assign/Clear archiving from the parameter attribute:</li></ul>
+<dl><dd> means presence "/DAQ/LogicLev/experiment/F3" with the attribute "ed", and the value archivers "1s"</dd></dl>
+<ul><li> The tests "Archive" of the value archiver to verify the correctness of the functioning of the sequential mechanism for packaging by "SystemTests":</li></ul>
+<dl><dd> means presence the archive "testArch_cntr" with the data period 1s and processed by the archiver FSArch.1s.</dd></dl>
+<p>5: DB subsystem tests<br />
+</p>
+<ul><li> The tests "BD" of the module "SystemTests":</li></ul>
+<dl><dd> means presence of the test DB with the name "testRelease".</dd></dl>
+<p>6: DAQ subsystem tests<br />
+</p>
+<ul><li> Test "Param" from the module "SystemTests":</li></ul>
+<dl><dd> presence of the DAQ parameter LogicLev.experiment.F3.</dd></dl>
+<ul><li> Test "Val" of the module "SystemTests" for the parameter attribute:</li></ul>
+<dl><dd> presence of the DAQ parameter LogicLev.experiment.F3.var.</dd></dl>
+<ul><li> Blocks create/remove, change, load, save and load from config and copy, set link:</li></ul>
+<dl><dd> presence the DAQ controller object "KM102cntr" for copy the block scheme.</dd>
+<dd> presence the DAQ parameter LogicLev.experiment.F3.var.</dd></dl>
+<p>7: UI subsystem tests<br />
+8: Special subsystem tests<br />
+</p><p><b><u>Function parameters</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Default
+</th></tr>
+<tr>
+<td> sub </td>
+<td> Subsystem (-1:All;0:SYS;1:Security;2:Transport;... </td>
+<td> Integer </td>
+<td> Input </td>
+<td> -1
+</td></tr>
+<tr>
+<td> rez </td>
+<td> Result </td>
+<td> Text </td>
+<td> Output </td>
+<td>
+</td></tr>
+<tr>
+<td> rezF </td>
+<td> Result for HTML file </td>
+<td> Text </td>
+<td> Output </td>
+<td>
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="crc16" title="#crc16"><h3><span class="mw-headline" id="CRC_16_.28crc16.29"><span class="mw-headline-number">3</span> CRC 16 (<a href="Libs_Service_procedures.html#crc16" title="Special:MyLanguage/Libs/Service procedures">crc16</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>Standard Cyclic Redundancy Check (CRC) with free setting the polynomial, by default 0x8005. It isn't actual more by the common <a href="Modules/FLibSYS.html#CRC" title="Special:MyLanguage/Modules/FLibSYS">common CRC</a> implementing.
+</p><p><b><u>Function parameters</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Default
+</th></tr>
+<tr>
+<td> in </td>
+<td> Input </td>
+<td> String </td>
+<td> Input </td>
+<td>
+</td></tr>
+<tr>
+<td> out </td>
+<td> Result </td>
+<td> Integer </td>
+<td> Output </td>
+<td>
+</td></tr>
+<tr>
+<td> poly </td>
+<td> Polynomial (reversion) </td>
+<td> Integer </td>
+<td> Input </td>
+<td> 40961
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="procArh" title="#procArh"><h3><span class="mw-headline" id="Archives_recalculation_.28procArh.29"><span class="mw-headline-number">4</span> Archives recalculation (<a href="Libs_Service_procedures.html#procArh" title="Special:MyLanguage/Libs/Service procedures">procArh</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>Value archives recalculation.
+</p><p><b><u>Function parameters</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Default
+</th></tr>
+<tr>
+<td> fromarch </td>
+<td> From archive </td>
+<td> String </td>
+<td> Input </td>
+<td> Archive.va_ai3_code
+</td></tr>
+<tr>
+<td> toarch </td>
+<td> To archive </td>
+<td> String </td>
+<td> Input </td>
+<td> Archive.va_ai3_dP
+</td></tr>
+<tr>
+<td> begs </td>
+<td> Begin time </td>
+<td> String </td>
+<td> Input </td>
+<td> 2006-08-08 9:21:56
+</td></tr>
+<tr>
+<td> ends </td>
+<td> End time </td>
+<td> String </td>
+<td> Input </td>
+<td> 2006-08-08 11:21:55
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="wacko2media" title="#wacko2media"><h3><span class="mw-headline" id="EXT:_WackoWiki_to_MediaWiki_.28wacko2media.29"><span class="mw-headline-number">5</span> EXT: WackoWiki to MediaWiki (<a href="Libs_Service_procedures.html#wacko2media" title="Special:MyLanguage/Libs/Service procedures">wacko2media</a>)</span></h3></span> </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>Procedure of conversion Wiki-dialect from WackoWiki to MediaWiki. Used and using to move OpenSCADA Wiki to MediaWiki.
+</p><p><b><u>Function parameters</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Default
+</th></tr>
+<tr>
+<td> ndb </td>
+<td> MySQL DB id </td>
+<td> String </td>
+<td> Input </td>
+<td> wiki
+</td></tr>
+<tr>
+<td> wpg </td>
+<td> Wiki page </td>
+<td> String </td>
+<td> Input </td>
+<td> HomePageUk/Doc/SQLite
+</td></tr>
+<tr>
+<td> rez </td>
+<td> Result </td>
+<td> Text </td>
+<td> Return </td>
+<td>
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="docOffLine" title="#docOffLine"><h3><span class="mw-headline" id="EXT:_Off-line_documentation_.28docOffLine.29"><span class="mw-headline-number">6</span> EXT: Off-line documentation (<a href="Libs_Service_procedures.html#docOffLine" title="Special:MyLanguage/Libs/Service procedures">docOffLine</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>Procedure of forming the offline documentation of OpenSCADA from Wiki by reading and processing the specified Wiki pages on different languages, currently it is: English, Ukrainian, Russian.
+</p><p><b><u>Function parameters</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Default
+</th></tr>
+<tr>
+<td> res </td>
+<td> Result </td>
+<td> String </td>
+<td> Output </td>
+<td>
+</td></tr>
+<tr>
+<td> reqTr </td>
+<td> Tries of requests </td>
+<td> Integer </td>
+<td> Output </td>
+<td> 3
+</td></tr>
+<tr>
+<td> resDir </td>
+<td> Results directory </td>
+<td> String </td>
+<td> Input </td>
+<td> /home/roman/roman/work/Проекти/OpenSCADA/doc/
+</td></tr>
+<tr>
+<td> pages </td>
+<td> Pages list of "{wiki}:{langs}:{dest}" </td>
+<td> Text </td>
+<td> Input </td>
+<td>
+<pre style="white-space: pre-wrap">
+Documents:en,uk,ru:index.html
+Documents/Release_0.9:en,uk,ru:Release_0.9.html
+About:en,uk,ru:About.html
+Documents/Terms:en,uk,ru:Terms.html
+Functions_and_demands:en,uk,ru:Functions_and_demands.html
+Works/To_do:en:To_do.html
+Documents/FAQ:en,uk,ru:FAQ.html
+Documents/Quick_start:en,uk,ru:Quick_start.html
+Documents/Program_manual:en,uk,ru:Program_manual.html
+Documents/How_to:en,ru,uk:How_to.html
+Documents/How_to/Install:en,ru,uk:How_to_Install.html
+Documents/How_to/Live_disk:en,ru,uk:How_to_Live_disk.html
+Documents/How_to/Violations,_alarms_and_notifications:en,ru,uk:How_to_Violations.html
+Documents/How_to/Cyclic_programming:en,ru,uk:How_to_Cyclic_programming.html
+Documents/How_to/Debug:en,ru,uk:How_to_Debug.html
+Documents/How_to/Transferring_project_configuration:en,ru,uk:How_to_Transferring_project_configuration.html
+Documents/How_to/Build_from_source:en,ru,uk:How_to_Build_from_source.html
+Documents/How_to/Crash_report:en,ru,uk:How_to_Crash_report.html
+Documents/How_to/Create_module:en,ru,uk:How_to_Create_module.html
+Documents/DAQ:en,uk,ru:DAQ.html
+Documents/User_API:en,uk,ru:User_API.html
+Documents/API:en:API.html
+Modules/SQLite:en,uk,ru:Modules/SQLite.html
+Modules/MySQL:en,uk,ru:Modules/MySQL.html
+Modules/FireBird:en,uk,ru:Modules/FireBird.html
+Modules/DBF:en,uk,ru:Modules/DBF.html
+Modules/PostgreSQL:en,uk,ru:Modules/PostgreSQL.html
+Modules/Sockets:en,uk,ru:Modules/Sockets.html
+Modules/Serial:en,uk,ru:Modules/Serial.html
+Modules/SSL:en,uk,ru:Modules/SSL.html
+Modules/SelfSystem:en,uk,ru:Modules/SelfSystem.html
+Modules/UserProtocol:en,uk,ru:Modules/UserProtocol.html
+Modules/HTTP:en,uk,ru:Modules/HTTP.html
+Modules/JavaLikeCalc:en,uk,ru:Modules/JavaLikeCalc.html
+Modules/LogicLev:en,uk,ru:Modules/LogicLev.html
+Modules/BlockCalc:en,uk,ru:Modules/BlockCalc.html
+Modules/DAQGate:en,uk,ru:Modules/DAQGate.html
+Modules/System:en,uk,ru:Modules/System.html
+Modules/ModBus:en,uk,ru:Modules/ModBus.html
+Modules/DCON:en,uk,ru:Modules/DCON.html
+Modules/OPC_UA:en,uk,ru:Modules/OPC_UA.html
+Modules/SNMP:en,uk,ru:Modules/SNMP.html
+Modules/ICP_DAS:en,uk,ru:Modules/ICP_DAS.html
+Modules/Siemens:en,uk,ru:Modules/Siemens.html
+Modules/DiamondBoards:en,uk,ru:Modules/DiamondBoards.html
+Modules/Comedi:en,uk,ru:Modules/Comedi.html
+Modules/SoundCard:en,uk,ru:Modules/SoundCard.html
+Modules/BFN:en,uk,ru:Modules/BFN.html
+Modules/SMH2Gi:en,uk,ru:Modules/SMH2Gi.html
+Modules/GPIO:en,uk,ru:Modules/GPIO.html
+Modules/FSArch:en,uk,ru:Modules/FSArch.html
+Modules/DBArch:en,uk,ru:Modules/DBArch.html
+Modules/VCAEngine:en,uk,ru:Modules/VCAEngine.html
+Modules/QTStarter:en,uk,ru:Modules/QTStarter.html
+Modules/QTCfg:en,uk,ru:Modules/QTCfg.html
+Modules/Vision:en,uk,ru:Modules/Vision.html
+Modules/WebCfgD:en,uk,ru:Modules/WebCfgD.html
+Modules/WebCfg:en,uk,ru:Modules/WebCfg.html
+Modules/WebVision:en,uk,ru:Modules/WebVision.html
+Modules/WebUser:en,uk,ru:Modules/WebUser.html
+Modules/FLibSYS:en,uk,ru:Modules/FLibSYS.html
+Modules/SystemTests:en,uk,ru:Modules/SystemTests.html
+Modules/FLibMath:en,uk,ru:Modules/FLibMath.html
+Modules/FLibComplex1:en,uk,ru:Modules/FLibComplex1.html</pre>
+</td></tr>
+<tr>
+<td> pagesCur </td>
+<td> Current pages list of "{wiki}:{langs}:{dest}", for empty here used "pages" </td>
+<td> Text </td>
+<td> Input </td>
+<td>
+</td></tr></table>
+
+
+
+
+
+
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Service_procedures/uk">Libs/Service_procedures/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2675</td></tr></table></body>
+</html>

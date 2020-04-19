@@ -12,8 +12,10 @@
 </div>
 			<h1 id="firstHeading" lang="en">Documents/How to/Cyclic programming</h1>
 		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/How_to_Cyclic_programming.html" title="Документы/Как сделать/Циклическое программирование (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/How_to_Cyclic_programming.html" title="Документи/Як зробити/Циклічне програмування (100% translated)">українська</a></div></div>
-<p><i>Author:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
-</p><p>Novice users often have a question about providing time intervals while programming calculation procedures in the OpenSCADA environment. This question is usually associated with the presence of previous programming experience in linear calculations and lack of the experience in programming of the cyclic real-time systems.
+<div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
+<ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a></li></ul>
+</div>
+<p>Novice users often have a question about providing time intervals while programming calculation procedures in the OpenSCADA environment. This question is usually associated with the presence of previous programming experience in linear calculations and lack of the experience in programming of the cyclic real-time systems.
 </p><p>In real-time systems, the so-called tact or cycle of periodic calculations is used — the rhythm of "life". At each tact, some procedure is performed, which should not take more time of the tact — cycle period. As a result, if the tact procedure stops at the waiting, then the life of the real-time system stops. Accordingly, it is inappropriate to use traditional functions of sleeping the task in these procedures in large intervals!
 </p><p>Solving the problem of holding a large time interval, more than the periodicity of the cycle, in the systems of real time is carried out in two ways.
 </p><p>The first method consists in decrement of the counter, set in the time interval value, in each cycle, and at the periodicity of the cycle to the value of &lt;= 0, for example, in OpenSCADA this is implemented as follows:
@@ -39,5 +41,5 @@ if(SYS.time() &gt; tm_to)
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Cyclic_programming/en">Documents/How_to/Cyclic_programming/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2670</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Cyclic_programming/en">Documents/How_to/Cyclic_programming/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2675</td></tr></table></body>
 </html>

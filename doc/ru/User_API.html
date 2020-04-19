@@ -12,9 +12,9 @@
 </div>
 			<h1 id="firstHeading" lang="ru">Документация/API пользователя</h1>
 		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FUser+API&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/User_API" title="Documents/User API">Documents/User API</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/User_API.html" title="Documents/User API (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/User_API.html" title="Документація/API користувача (100% translated)">українська</a></div></div>
-<div style="float:right; border:1px solid gray; width:300px; padding:2px;">
+<div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Автор:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a></li>
-<li> <b>Изначально создано:</b> в <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/ProgrammManual" rel="nofollow noreferrer noopener" target="_blank">старой Wiki</a></li></ul>
+<li> <b>Изначально создано:</b> в <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/ProgrammManual" rel="nofollow noreferrer noopener" target="_blank">старой Wiki</a> </li></ul>
 </div>
 <p>До начала программирования в OpenSCADA Вы должны изучить структуру объектов программы (Объектная модель) из <a href="Program_manual.html" title="Special:MyLanguage/Documents/Program manual">руководства по программе OpenSCADA</a> и на рисунке 1.
 </p>
@@ -412,7 +412,7 @@ var OK = re.test("12/30/1969"); </pre></li>
 <li><i>int message( string cat, int level, string mess );</i> — формирует системное сообщение <i>mess</i> с категорией <i>cat</i>, уровнем <i>level</i> (-7...7). Отрицательное значение уровня формирует нарушения — "Alarm.</li>
 <li><i>int messDebug( string cat, string mess ); int messInfo( string cat, string mess ); int messNote( string cat, string mess ); int messWarning( string cat, string mess ); int messErr( string cat, string mess ); int messCrit( string cat, string mess ); int messAlert( string cat, string mess ); int messEmerg( string cat, string mess );</i> — формирует системное сообщения <i>mess</i> с категорией <i>cat</i> и соответствующим к имени уровнем.</li>
 <li><i>XMLNodeObj XMLNode( string name = "" );</i> — создаёт объект узла XML c именем <i>name</i>.</li>
-<li><i>string cntrReq( XMLNodeObj req, string stat = "" );</i> — отправляет запрос <a href="../en/API.html#CntrNode" title="Special:MyLanguage/Documents/API">интерфейса управления</a> к программе-системе посредством XML. Обычный запрос записывается в виде <b>&lt;get path="/OPath/%2felem"/&gt;</b>. При указании станции в <i>stat</i> осуществляется запрос к указанной внешней станции. Адрес, атрибут "path", можно узнать в конфигураторе OpenSCADA, а именно в строке статуса, где этот адрес появляется при наведении курсора мыши на конфигурационное или информационное поле. Некоторые примеры распространённых запросов, больше примеров в <a href="../en/Libs_Service_procedures.html#releaseTests" title="Special:MyLanguage/Libs/Service procedures">releaseTests()</a>:<ul>
+<li><i>string cntrReq( XMLNodeObj req, string stat = "" );</i> — отправляет запрос <a href="../en/API.html#CntrNode" title="Special:MyLanguage/Documents/API">интерфейса управления</a> к программе-системе посредством XML. Обычный запрос записывается в виде <b>&lt;get path="/OPath/%2felem"/&gt;</b>. При указании станции в <i>stat</i> осуществляется запрос к указанной внешней станции. Адрес, атрибут "path", можно узнать в конфигураторе OpenSCADA, а именно в строке статуса, где этот адрес появляется при наведении курсора мыши на конфигурационное или информационное поле. Некоторые примеры распространённых запросов, больше примеров в <a href="Libs_Service_procedures.html#releaseTests" title="Special:MyLanguage/Libs/Service procedures">releaseTests()</a>:<ul>
  <li>Чтение значения элемента (имя пользователя "test"):
 <pre style="white-space: pre-wrap;">
 req = SYS.XMLNode("get").setAttr("path","/sub_Security/usr_test/%2fprm%2fDESCR");
@@ -714,7 +714,9 @@ test = Special.FLibSYS.strDec4Bin(req.text()); </pre></li>
 <h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_Protocol.HTTP"><span class="mw-headline-number">10.1</span> Модуль <a href="Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a></span></h3>
 <p><b>Входная часть объекта модуля (SYS.Protocol.HTTP.{In})</b>
 </p>
-<ul><li> <i>bool pgAccess(string URL)</i> — проверяет доступность страницы, определённой в <i>URL</i>.
+<ul><li> <i>bool setUser( string user )</i> — меняет пользователя связанного с идентификатором сеанса аутентификации.
+<ul><li> <i>user</i> — пользователя для смены.</li></ul></li>
+<li> <i>bool pgAccess(string URL)</i> — проверяет доступность страницы, определённой в <i>URL</i>.
 <ul><li> <i>URL</i> — URL страницы, которая проверяется.</li></ul></li>
 <li> <i>string pgCreator(string cnt, string rcode = "200 OK", string httpattrs = "Content-Type: text/html;charset={SYS}", string htmlHeadEls = "", string forceTmplFile = "", string lang = "" )</i> — формирует страницу или ресурс из содержимого <i>cnt</i>, обёрнутого в HTTP с результатом <i>rcode</i>, с дополнительными атрибутами HTTP <i>httpattrs</i>, дополнительным элементом заголовка HTML <i>htmlHeadEls</i> и использованием файла шаблона <i>forceTmplFile</i>.
 <ul><li> <i>cnt</i> — содержимое страницы или ресурса (изображения, XML, CSS, JavaScript, ...);</li>
@@ -736,10 +738,10 @@ test = Special.FLibSYS.strDec4Bin(req.text()); </pre></li>
 </p>
 <ul><li> <i>string user( )</i> — текущий пользователь сеанса.</li>
 <li> <i>int alrmQuietance( int quit_tmpl, string wpath = "", bool ret = false )</i> — квитирует нарушение <i>wpath</i> с шаблоном <i>quit_tmpl</i>. Если <i>wpath</i> это пустая строка то производится глобальное квитирование. В строке <i>wpath</i>, через символ ';', могут быть перечислены адреса нескольких виджетов. При установке <i>ret</i> осуществляется возврат квитирования.</li>
-<li> <i>int reqTm( )</i> — время последнего запроса.</li>
+<li> <i>int reqTm( )</i> — время последнего запроса в секундах от эпохи 1.1.1970.</li>
 <li> <i>string reqUser( )</i> — пользователь последнего запроса.</li>
 <li> <i>string reqLang( )</i> — язык последнего запроса.</li>
-<li> <i>int userActTm( )</i> — время последнего действия пользователя.</li>
+<li> <i>int userActTm( )</i> — время последнего действия пользователя в секундах от эпохи 1.1.1970.</li>
 <li> <i>bool uiCmd( string cmd, string prm, string src )</i> — отправляет UI команду управления страницами, как: "open", "next", "prev"; детальнее смотрите в <a href="#Events">секции сообщений</a>. Эта функция должна быть приоритетной для использования при контроле страницами перед прямой записью в атрибут страниц "pgOpen" и "pgOpenSrc" поскольку это единственный метод корректной работы с <a href="#Project">линкованными страницами</a>.</li></ul>
 <p><b>Объект "Виджет" (this)</b>
 </p>
@@ -813,7 +815,7 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 </td></tr>
 
 <tr>
-<td> <a href="../en/Libs_Main.html" title="Special:MyLanguage/Libs/Main">Main library</a>
+<td> <a href="Libs_Main.html" title="Special:MyLanguage/Libs/Main">Основная библиотека</a>
 </td>
 <td> 2.0 </td>
 <td> GPLv2 </td>
@@ -822,7 +824,7 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 </td></tr>
 
 <tr>
-<td> <a href="../en/Libs_Devices.html" title="Special:MyLanguage/Libs/Devices">Industrial devices library</a>
+<td> <a href="Libs_Devices.html" title="Special:MyLanguage/Libs/Devices">Библиотека промышленных устройств</a>
 </td>
 <td> 2.3 </td>
 <td> GPLv2 </td>
@@ -832,7 +834,8 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 </td></tr>
 
 <tr>
-<td> <a href="../en/Libs_LowLevelDevices.html" title="Special:MyLanguage/Libs/LowLevelDevices">Low level sensors and chips library</a> </td>
+<td> <a href="Libs_LowLevelDevices.html" title="Special:MyLanguage/Libs/LowLevelDevices">Библиотека низкоуровневых сенсоров и чипов</a>
+</td>
 <td> 1.4 </td>
 <td> GPLv2 </td>
 <td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.tmplb_LowDevLib </td>
@@ -840,11 +843,12 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 </td></tr>
 
 <tr>
-<td> <a href="../en/Libs_Service_procedures.html" title="Special:MyLanguage/Libs/Service procedures">Service procedures library</a> </td>
+<td> <a href="Libs_Service_procedures.html" title="Special:MyLanguage/Libs/Service procedures">Библиотека сервисных процедур</a>
+</td>
 <td> 1.2 </td>
 <td> GPLv2 </td>
 <td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.JavaLikeCalc.servProc </td>
-<td> en
+<td> en, uk, ru
 </td></tr>
 
 <tr>
@@ -939,5 +943,5 @@ vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/ru">Documents/User_API/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2670</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/ru">Documents/User_API/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2675</td></tr></table></body>
 </html>

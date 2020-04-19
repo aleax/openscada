@@ -43,7 +43,7 @@ using namespace OSCADA;
 #define DAQ_NAME	"ModBus"
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"2.7.4"
+#define DAQ_MVER	"2.8.0"
 #define DAQ_AUTHORS	_("Roman Savochenko")
 #define DAQ_DESCR	_("Provides implementation of the client ModBus service. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported.")
 #define DAQ_LICENSE	"GPL2"
@@ -114,7 +114,7 @@ class TMdPrm : public TParamContr
 	    TLogCtx( TCntrNode *iobj, const string &name );
 
 	    //void lnkAdd( int num, const SLnk &l );
-	    bool lnkInit( int num, bool checkNoLink = false );
+	    bool lnkInit( int num, bool toRecnt = false );
 	    bool lnkActive( int num );
 	    TVariant lnkInput( int num );
 	    bool lnkOutput( int num, const TVariant &vl );

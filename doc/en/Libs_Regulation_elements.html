@@ -42,7 +42,7 @@
 <li> <b>To Do:</b></li></ul>
 <dl><dd>- move to <a href="Program_manual.html#DAQTmpl" title="Special:MyLanguage/Documents/Program manual">the DAQ-templates</a> after their conception expanding for the internal links and the <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">DAQ.BlockCalc</a> expanding for using the DAQ-templates.</dd></dl>
 </td></tr></table>
-<p>The library is created to provide functions of different control algorithms and it can be used in programmable logic controllers (PLC) based on OpenSCADA for construction control schemes in the module <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">DAQ.BlockCalc</a>. The library is not static, but based on the module <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, allowing to create calculations on the Java-like language. The functions' names and its parameters are available in languages: English, Ukrainian and Russian.
+<p>The library is created to provide functions of different control algorithms and it can be used in programmable logic controllers (PLC) based on OpenSCADA for construction control schemes in the module <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">DAQ.BlockCalc</a>. The library is not static, but based on the module <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, allowing to create calculations on the Java-like language. The functions' names and their parameters are available in languages: English, Ukrainian and Russian.
 </p><p>To addressing the library functions you can use the static call address <b>DAQ.JavaLikeCalc.lib_regEl.{Func}()</b> or dynamic <b>SYS.DAQ.JavaLikeCalc["lib_regEl"]["{Func}"].call()</b>, <b>SYS.DAQ.JavaLikeCalc["lib_regEl"].{Func}()</b>". Where {Func} — function identifier in the library.
 </p><p>For connection the library to a project of the OpenSCADA station you can obtain the database file as:
 </p>
@@ -57,7 +57,7 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
-<li class="toclevel-1"><a href="#PID.2C_unified_.28pidUnif.29"><span class="tocnumber">1</span> <span class="toctext">PID, unified (pidUnif)</span></a></li>
+<li class="toclevel-1"><a href="#PID_unified_.28pidUnif.29"><span class="tocnumber">1</span> <span class="toctext">PID unified (pidUnif)</span></a></li>
 <li class="toclevel-1"><a href="#PID_dynamic_.28pidUnifD.29"><span class="tocnumber">2</span> <span class="toctext">PID dynamic (pidUnifD)</span></a></li>
 <li class="toclevel-1"><a href="#PID_pulse_.28pidImp.29"><span class="tocnumber">3</span> <span class="toctext">PID pulse (pidImp)</span></a></li>
 </ul>
@@ -68,7 +68,7 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <table class="wikitable">
 
 <tr>
-<td> <span id="pidUnif" title="#pidUnif"><h3><span class="mw-headline" id="PID.2C_unified_.28pidUnif.29"><span class="mw-headline-number">1</span> PID, unified (<a href="Libs_Regulation_elements.html#pidUnif" title="Special:MyLanguage/Libs/Regulation elements">pidUnif</a>)</span></h3></span>
+<td> <span id="pidUnif" title="#pidUnif"><h3><span class="mw-headline" id="PID_unified_.28pidUnif.29"><span class="mw-headline-number">1</span> PID unified (<a href="Libs_Regulation_elements.html#pidUnif" title="Special:MyLanguage/Libs/Regulation elements">pidUnif</a>)</span></h3></span>
 </td>
 <td> 1.0 </td>
 <td> GPLv2 </td>
@@ -1226,5 +1226,5 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Regulation_elements/en">Libs/Regulation_elements/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2670</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Regulation_elements/en">Libs/Regulation_elements/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2675</td></tr></table></body>
 </html>

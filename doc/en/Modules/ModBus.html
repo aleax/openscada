@@ -31,14 +31,14 @@
 <td> <a href="../Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> </td>
 <td> ModBus
 </td>
-<td> 2.7 </td>
+<td> 2.8 </td>
 <td> GPL2 </td>
 <td> daq_ModBus.so </td>
 <td> en,uk,ru,de </td>
 <td> x86,x86_64,ARM
 </td>
 <td> DAQ </td>
-<td> Roman Savochenko<br />Maxim Lysenko (2009) — the page translation </td>
+<td> Roman Savochenko<br />Maxim Lysenko (2009) — the page initial translation </td>
 <td> Provides implementation of the client ModBus service. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported.
 </td></tr>
 
@@ -46,16 +46,20 @@
 <td> <a href="../Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> </td>
 <td> ModBus
 </td>
-<td> 2.1 </td>
+<td> 2.2 </td>
 <td> GPL2 </td>
 <td> daq_ModBus.so </td>
 <td> en,uk,ru,de </td>
 <td> x86,x86_64,ARM
 </td>
 <td> Protocol </td>
-<td> Roman Savochenko<br />Maxim Lysenko (2009) — the page translation </td>
+<td> Roman Savochenko<br />Maxim Lysenko (2009) — the page initial translation </td>
 <td> Provides implementation of ModBus protocols. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported.
 </td></tr></table>
+<p>ModBus — communication protocol based on the client-server architecture. It was developed by Modicon for using in the programmable logic controllers (PLC). It became the de facto standard in the industry and is widely used for the connection of industrial electronic equipment. Used to transfer data via serial line RS-485, RS-422, RS-232, and network TCP/IP. Currently supported non-profit organization ModBus-IDA.
+</p><p>There are three modes of the protocol: ModBus/RTU, ModBus/ASCII and ModBus/TCP. The first two use the serial communication lines (mostly RS-485, less RS-422/RS-232), the last uses TCP/IP network to transfer data.
+</p><p>The module of the data acquisition provides an opportunity to gather the information from various devices by means of the protocol ModBus in all modes. Also, the module implements the functions of the horizontal redundancy, that is working in conjunction with the remote station of the same level. At the same time, the module of the protocol allows you to create and issue data by means of the protocol ModBus in various modes, and through interfaces that are supported by modules of <a href="../Program_manual.html#Communication" title="Special:MyLanguage/Documents/Program manual">the subsystem "Transports"</a>.
+</p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#General_description_of_the_ModBus_protocol"><span class="tocnumber">1</span> <span class="toctext">General description of the ModBus protocol</span></a>
@@ -93,10 +97,6 @@
 </ul>
 </div>
 
-<p>ModBus — communication protocol based on the client-server architecture. It was developed by Modicon for using in the programmable logic controllers (PLC). It became the de facto standard in the industry and is widely used for the connection of industrial electronic equipment. Used to transfer data via serial line RS-485, RS-422, RS-232, and network TCP/IP. Currently supported non-profit organization ModBus-IDA.
-</p><p>There are three modes of the protocol: ModBus/RTU, ModBus/ASCII and ModBus/TCP. The first two use the serial communication lines (mostly RS-485, less RS-422/RS-232), the last uses TCP/IP network to transfer data.
-</p><p>The module of the data acquisition provides an opportunity to gather the information from various devices by means of the protocol ModBus in all modes. Also, the module implements the functions of the horizontal redundancy, that is working in conjunction with the remote station of the same level. At the same time, the module of the protocol allows you to create and issue data by means of the protocol ModBus in various modes, and through interfaces that are supported by modules of <a href="../Program_manual.html#Communication" title="Special:MyLanguage/Documents/Program manual">the subsystem "Transports"</a>.
-</p>
 <h2><span class="mw-headline" id="General_description_of_the_ModBus_protocol"><span class="mw-headline-number">1</span> General description of the ModBus protocol</span></h2>
 <p>Protocol ModBus/{RTU,ASCII} means one lead (requesting) device in the line (master), which can send commands to one or more driven devices (slave), referring to them by a unique address in the line. Syntax of the commands of the protocol allows to address 247 devices on the one connection line of standard RS-485 (less RS-422 or RS-232). In the case of TCP, the addressing excluded from the protocol, as it is implemented in the TCP/IP stack.
 </p><p>Initiative of the exchanging always comes from the leading device. The slave devices listen the line. The master requests (package, the sequence of bytes) in the line and switches into  listening the line. The slave device responds to the request, which came to his address. 
@@ -368,5 +368,5 @@ Where:
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/ModBus/en">Modules/ModBus/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2670</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/ModBus/en">Modules/ModBus/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2675</td></tr></table></body>
 </html>

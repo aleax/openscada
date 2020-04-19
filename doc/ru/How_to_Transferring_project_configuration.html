@@ -12,7 +12,12 @@
 </div>
 			<h1 id="firstHeading" lang="ru">Документация/Как сделать/Перенос документации проекта</h1>
 		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FHow+to%2FTransferring+project+configuration&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/How_to/Transferring_project_configuration" title="Documents/How to/Transferring project configuration">Documents/How to/Transferring project configuration</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/How_to_Transferring_project_configuration.html" title="Documents/How to/Transferring project configuration (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/How_to_Transferring_project_configuration.html" title="Документація/Як зробити/Перенос документації проекту (100% translated)">українська</a></div></div>
-<p><i>Автор:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+<div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
+<p><b>Автор:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</p>
+</div>
+<p>Часто востребованной бывает задача переноса конфигурации из одного проекта OpenSCADA в другой. Причём, чаще всего, нужно осуществить частичный перенос, например, перенос отдельных наработок, которые могут пригодиться в новом проекте.
+</p><p>Нужно отметить, что любые наработки с малейшим намёком и перспективой вторичного использования нужно стараться унифицировать и сохранять в отдельные-собственные библиотеки и БД. Крайне не рекомендуется непосредственно менять стандартные конфигурации и элементы стандартных библиотек, а также сохранять собственные-новые библиотеки и элементы в базах данных стандартных библиотек. Это позволит Вам впоследствии безболезненно обновлять стандартные библиотеки, а также просто использовать наработки ваших предыдущих проектов.
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
@@ -22,9 +27,6 @@
 </ul>
 </div>
 
-<p>Часто востребованной бывает задача переноса конфигурации из одного проекта OpenSCADA в другой. Причём, чаще всего, нужно осуществить частичный перенос, например, перенос отдельных наработок, которые могут пригодиться в новом проекте.
-</p><p>Нужно отметить, что любые наработки с малейшим намёком и перспективой вторичного использования нужно стараться унифицировать и сохранять в отдельные-собственные библиотеки и БД. Крайне не рекомендуется непосредственно менять стандартные конфигурации и элементы стандартных библиотек, а также сохранять собственные-новые библиотеки и элементы в базах данных стандартных библиотек. Это позволит Вам впоследствии безболезненно обновлять стандартные библиотеки, а также просто использовать наработки ваших предыдущих проектов.
-</p>
 <h3><span class="mw-headline" id=".D0.9F.D1.80.D0.BE.D1.81.D1.82.D0.BE.D0.B9_.D0.BF.D0.B5.D1.80.D0.B5.D0.BD.D0.BE.D1.81_.D0.91.D0.94_.D1.81_.D0.B1.D0.B8.D0.B1.D0.BB.D0.B8.D0.BE.D1.82.D0.B5.D0.BA.D0.B0.D0.BC.D0.B8_.D0.B8_.D0.BA.D0.BE.D0.BD.D1.84.D0.B8.D0.B3.D1.83.D1.80.D0.B0.D1.86.D0.B8.D0.B5.D0.B9"><span class="mw-headline-number">1</span> Простой перенос БД с библиотеками и конфигурацией</span></h3>
 <p>Если Вы учли вышеуказанные рекомендации и все Ваши унифицированные наработки содержаться в отдельной БД, то весь процесс переноса будет заключаться в копировании и подключении БД в новом проекте или в простом подключении этой БД, для сетевых СУБД.
 </p><p>Процедура копирования БД отличается для различных типов БД и с ней нужно будет ознакомиться из документации на эту БД. Для сопутствующего распространения, с дистрибутивами OpenSCADA, обычно используется БД SQLite, в виде отдельных файлов *.db. Копирование БД SQLite соответственно заключается в простом копировании нужного файла БД из директории баз данных старого проекта в директорию баз данных нового.
@@ -46,5 +48,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Transferring_project_configuration/ru">Documents/How_to/Transferring_project_configuration/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2670</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Transferring_project_configuration/ru">Documents/How_to/Transferring_project_configuration/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2675</td></tr></table></body>
 </html>

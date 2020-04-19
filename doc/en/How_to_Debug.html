@@ -12,15 +12,9 @@
 </div>
 			<h1 id="firstHeading" lang="en">Documents/How to/Debug</h1>
 		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/How_to_Debug.html" title="Документы/Как сделать/Отладка (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/How_to_Debug.html" title="Документи/Як зробити/Налагодження (100% translated)">українська</a></div></div>
-<p><i>Author:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
-</p>
-<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
-<ul>
-<li class="toclevel-1 tocsection-1"><a href="#Debugging_the_current_execution_context"><span class="tocnumber">1</span> <span class="toctext">Debugging the current execution context</span></a></li>
-<li class="toclevel-1 tocsection-2"><a href="#Debugging_the_execution_sequence"><span class="tocnumber">2</span> <span class="toctext">Debugging the execution sequence</span></a></li>
-</ul>
+<div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
+<ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a></li></ul>
 </div>
-
 <p>If you strictly follow the <a href="Quick_start.html" title="Special:MyLanguage/Documents/Quick start">Quick Start manual</a> then you will not encounter any problems, but if you do something yourself then you may need some debugging. OpenSCADA provides extensive opportunities for debugging and identifying programming problems in the overall OpenSCADA user space and the problems of OpenSCADA itself and its parts.
 </p><p>Basic approaches to custom debugging include:
 </p>
@@ -30,6 +24,13 @@
 </p>
 <ul><li> Custom control over debugging, through the debugging message category for OpenSCADA parts and user space messages.</li>
 <li> Specific debugging and diagnostic environments for some parts of OpenSCADA, such as: data sources (controller objects) and interfaces of VCA (VCA projects).</li></ul>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Debugging_the_current_execution_context"><span class="tocnumber">1</span> <span class="toctext">Debugging the current execution context</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Debugging_the_execution_sequence"><span class="tocnumber">2</span> <span class="toctext">Debugging the execution sequence</span></a></li>
+</ul>
+</div>
+
 <h3><span class="mw-headline" id="Debugging_the_current_execution_context"><span class="mw-headline-number">1</span> Debugging the current execution context</span></h3>
 <p>This method of debugging involves monitoring values of the variables of the execution context, including the addition of intermediate values, for detail.
 </p><p>Current execution context of DAQ procedures you can observe into a proper page of the object of the execution context, like: the tab "Attributes" of the Logic Level parameter (Fig. 1), the tab "Calculation" of the Java-like based calculator (Fig. 2) and so on. To append some interim values you can temporary <a href="Quick_start.html#DataProc" title="Special:MyLanguage/Documents/Quick start">append (or set as an read-only attribute) and link some attributes to the template</a> or <a href="Modules/JavaLikeCalc.html#Controller" title="Special:MyLanguage/Modules/JavaLikeCalc">append and link some IO to the function</a>.
@@ -64,5 +65,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Debug/en">Documents/How_to/Debug/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2670</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Debug/en">Documents/How_to/Debug/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2675</td></tr></table></body>
 </html>

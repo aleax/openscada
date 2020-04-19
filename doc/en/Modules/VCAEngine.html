@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/VCAEngine</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/VCAEngine.html" title="Модули/Движок Среды Визуализации и Управлений (СВУ) (98% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/VCAEngine.html" title="Модулі/Рушій Середовища Візуалізації та Управління (СВУ) (100% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/VCAEngine.html" title="Модули/Движок Среды Визуализации и Управлений (СВУ) (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/VCAEngine.html" title="Модулі/Рушій Середовища Візуалізації та Управління (СВУ) (100% translated)">українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -23,8 +23,7 @@
 <th> Languages </th>
 <th> Platforms </th>
 <th> Type </th>
-<th> Author </th>
-<th> Description
+<th> Author
 </th></tr>
 
 <tr>
@@ -38,8 +37,24 @@
 <td> x86,x86_64,ARM
 </td>
 <td> UI </td>
-<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2011-2012) — the page initial translation</i></font> </td>
-<td> The main engine of the visual control area.
+<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2011-2012) — the page initial translation</i></font>
+</td></tr>
+<tr>
+<th colspan="9"> Description
+</th></tr>
+<tr>
+<td colspan="9"> The main engine of the visual control area.
+<ul><li> <b>To Do:</b></li></ul>
+<dl><dd> - append the image files edition user API for raster (PNG, JPEG, GIF), by LibGD2, and vector (SVG):
+<dl><dd>+ append the images loading and saving their changes into the session table from the user procedures, allows to edit SVG (XML);</dd>
+<dd>- implement the main functions of the GD object (into <a href="../Modules/FLibSYS.html" title="Special:MyLanguage/Modules/FLibSYS">Special.FLibSYS</a>).</dd></dl></dd>
+<dd> ... <i>for <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> also</i> ...</dd>
+<dd> - move the runtime requests to VCAEngine in the asynchronous mode;
+<dl><dd>&nbsp;!&gt; has a problem with processing recursive events into event(), in the case of the mouse release events loss in processing the pressing mouse event.</dd></dl></dd>
+<dd> - implement the background execution of the edited pages in the development mode, for the visual diagram forming jointly <a href="../Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">BlockCalc</a> and DAQ-sources at all.</dd>
+<dd> ... <i>for <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> and <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a> also</i> ...</dd>
+<dd> - append for the user-space global menu by the project-specific properties;</dd>
+<dd> - develop the block diagrams forming (dynamic frames) from the GUI.</dd></dl>
 </td></tr></table>
 <p>The module provides OpenSCADA for visual control area engine (VCA). The module itself does not implement visualization of VCA, but contains data in accordance with the concept "Model/Data — Interface". The visualization of this module's data is performed by the visualization modules of VCA, such as <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> and <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a>.
 </p><p>Visual control area (VCA) is an integral part of the SCADA system. It applies to the client stations with a view to providing accessible information about the control object and to for the the issuance of the control actions to the object. In various practical situations and conditions the VCA, based on different principles of visualization, may by applied. For example, this may be the library of widgets Qt, GTK+, WxWidgets or hypertext mechanisms based on the technologies HTML, XHTML, XML, CSS and JavaScript, or third-party applications of visualization, realized in various programming languages Java, Python, etc. Any of these principles has its advantages and disadvantages, the combination of which could become an insurmountable obstacle to the use of VCA in a practical case. For example, technologies like the Qt library can create highly-productive VCA, which will undoubtedly important for the operator station for control the technological processes (TP). However, the need for installation of that client software in some cases may make using of it impossible. On the other hand, Web-technology does not require installation on client systems and is extremely multi-platform (it is enough to create a link to the Web-server at any Web-browser) that is most important for various engineering and administrative stations, but the productivity and reliability of such interfaces is lower, that actually eliminates the using of them at the operator stations of TP.
@@ -2898,10 +2913,10 @@ Where:
 </p>
 <ul><li> <i>string user( )</i> — current session user.</li>
 <li> <i>int alrmQuietance( int quit_tmpl, string wpath = "", bool ret = false )</i> — quiets of the violations <i>wpath</i> with the template <i>quit_tmpl</i>. If <i>wpath</i> is empty string then the global quietance makes. Into the string <i>wpath</i>, by symbol ';', can be enumerated addresses of several widgets. When set the <i>ret</i>, the quietance return is performed.</li>
-<li> <i>int reqTm( )</i> — last request time.</li>
+<li> <i>int reqTm( )</i> — last request time in seconds from the epoch of 1/1/1970.</li>
 <li> <i>string reqUser( )</i> — last request user.</li>
 <li> <i>string reqLang( )</i> — last request language.</li>
-<li> <i>int userActTm( )</i> — last user action time.</li>
+<li> <i>int userActTm( )</i> — last user action time in seconds from the epoch of 1/1/1970.</li>
 <li> <i>bool uiCmd( string cmd, string prm, string src )</i> — sends a UI command of the pages managing, that is: "open", "next", "prev"; for more details see in <a href="#Events">the events section</a>. This function must be in the priority of using to the pages managing before the direct writing to the page attributes "pgOpen" and "pgOpenSrc" due it is single method of the correct work with <a href="#Project">the linked pages</a>.</li></ul>
 <p><b>Object "Widget" (this)</b>
 </p>
@@ -3315,5 +3330,5 @@ Deprecated, but supported, the API is represented by a group of functions direct
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/en">Modules/VCAEngine/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2670</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/en">Modules/VCAEngine/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2675</td></tr></table></body>
 </html>

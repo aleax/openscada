@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"4.7.0"
+#define MOD_VER		"4.8.0"
 #define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on the the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -553,7 +553,7 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
 	//Post command to the session
 	string sesnm = TSYS::pathLev(ses.url, 0);
 	if(sesnm.size() <= 4 || sesnm.compare(0,4,"ses_") != 0)
-	    throw TError(nodePath().c_str(), "%s", TSYS::strMess(_("Wrong session '%s'."), sesnm.c_str()).c_str());
+	    throw TError(nodePath().c_str(), "%s", TSYS::strMess(_("Wrong session '%s'."),sesnm.c_str()).c_str());
 	else {
 	    ResAlloc sesRes(mSesRes, false);
 	    vcaSesAt(sesnm.substr(4)).at().postReq(ses);

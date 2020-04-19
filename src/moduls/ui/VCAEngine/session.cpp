@@ -42,6 +42,7 @@ Session::Session( const string &iid, const string &iproj ) : mAlrmRes(true), mCa
     mPage = grpAdd("pg_");
     sec = SYS->security();
     mReqTm = time(NULL);
+    setUserActTm();
 }
 
 Session::~Session( )
@@ -225,6 +226,8 @@ int Session::connect( )
     while(mCons.find(rez) != mCons.end());
     mCons[rez] = true;
     dataResSes().unlock();
+
+    setUserActTm();
 
     return rez;
 }

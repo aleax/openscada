@@ -12,17 +12,9 @@
 </div>
 			<h1 id="firstHeading" lang="en">Documents/How to/Live disk</h1>
 		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/How_to_Live_disk.html" title="Документы/Как сделать/Живой диск (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/How_to_Live_disk.html" title="Документи/Як зробити/Живий диск (100% translated)">українська</a></div></div>
-<p><i>Author:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
-</p>
-<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
-<ul>
-<li class="toclevel-1 tocsection-1"><a href="#Combined-hybrid_ISO-images_of_the_live_disk"><span class="tocnumber">1</span> <span class="toctext">Combined-hybrid ISO-images of the live disk</span></a></li>
-<li class="toclevel-1 tocsection-2"><a href="#Live_USB-Flash_disk_with_the_file-system_FAT_or_EXT"><span class="tocnumber">2</span> <span class="toctext">Live USB-Flash disk with the file-system FAT or EXT</span></a></li>
-<li class="toclevel-1 tocsection-3"><a href="#Saving_the_working_data_of_the_live_disk_to_the_USB-Flash_partition"><span class="tocnumber">3</span> <span class="toctext"><span>Saving the working data of the live disk to the USB-Flash partition</span></span></a></li>
-<li class="toclevel-1 tocsection-4"><a href="#Booting"><span class="tocnumber">4</span> <span class="toctext">Booting</span></a></li>
-</ul>
+<div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
+<ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a></li></ul>
 </div>
-
 <p>To maximize ease of deployment of OpenSCADA you can use live builds of CD, DVD and USB boot disks from <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Automation Linux distributive of the project OpenSCADA</a>. A live disk provides the ability to download directly from it, and quickly get the desired working environment. When downloaded and running, the live disk does not use regular media, that is, you can not worry about the integrity and consistency of data on them. In general, a live disk is a convenient tool with a wide range of necessary software tools at hand and independent from the stationary software environment capable of implementing:
 </p>
 <ul><li> demonstration and familiarization with the possibilities of OpenSCADA;</li>
@@ -35,6 +27,15 @@
 <ul><li> The ability to transparently save work changes when written to USB Flash. The function is provided by creating a disk partition, with the ability to record, on a free space of the USB-Flash. This partition is reflected on the root of the file system, or its parts, and all changes are written to it. In addition to storing work data in this section, you can install missing software packages from the Debian package repository, OpenSCADA or ALTLinux.</li>
 <li> Ability to combine an ordinary Flash data disk with a live Flash disk. Means recording live disk data directly to the USB-Flash file system — FAT16 or FAT32, which stores the functions of the usual data storage and adds the function of the live disk.</li>
 <li> Ability to install the environment of the live disk on a stationary storage. Allows you not to engage to the Linux operating system in-depth study and immersion  when its installing, its configuring and OpenSCADA deployment. Enough boot from the live disk, make sure that the main hardware is determined normally, the required programs work and next, through a simple procedure from the desktop icon or a separate boot menu, install it on a stationary storage. The resulting installation will be identical to the environment of the live disk.</li></ul>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Combined-hybrid_ISO-images_of_the_live_disk"><span class="tocnumber">1</span> <span class="toctext">Combined-hybrid ISO-images of the live disk</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Live_USB-Flash_disk_with_the_file-system_FAT_or_EXT"><span class="tocnumber">2</span> <span class="toctext">Live USB-Flash disk with the file-system FAT or EXT</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Saving_the_working_data_of_the_live_disk_to_the_USB-Flash_partition"><span class="tocnumber">3</span> <span class="toctext"><span>Saving the working data of the live disk to the USB-Flash partition</span></span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Booting"><span class="tocnumber">4</span> <span class="toctext">Booting</span></a></li>
+</ul>
+</div>
+
 <h3><span class="mw-headline" id="Combined-hybrid_ISO-images_of_the_live_disk"><span class="mw-headline-number">1</span> Combined-hybrid ISO-images of the live disk</span></h3>
 <p>Currently, hybrid ISO images of "the live disks" (*LiveCD_USB.iso) are built mostly, which can be written directly to CD/DVD, USB-Flash, and also extract the contents for recording on USB-Flash with the FAT or EXT file systems.
 </p><p>The main option for creating a "live disk" is the recording on a CD/DVD, which allows you to use the standard tools of the original operating system. Additional, though in fact, already the main one, is the write to USB-Flash, which can be carried out from the environment of the Linux operating system, for example, from the environment of the same "live disk", recorded and downloaded earlier from a CD/DVD; or from the MS Windows operating system via Win32DiskImager.
@@ -98,5 +99,5 @@ $ dd if=/dev/sr0 of=/dev/sd{x} bs=4096
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Live_disk/en">Documents/How_to/Live_disk/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2670</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Live_disk/en">Documents/How_to/Live_disk/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2675</td></tr></table></body>
 </html>

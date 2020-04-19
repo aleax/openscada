@@ -33,7 +33,7 @@
 #define MOD_NAME	_("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.1.6"
+#define MOD_VER		"1.2.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user protocols on an internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -368,7 +368,7 @@ bool UserPrt::inMess( const string &reqst, string &answer, TProtIn *prt )
 	//Malfunction input protocol checking
 	if(!enableStat() || !func()) return false;
 
-	if(chkLnkNeed) chkLnkNeed = initLnks(true);
+	if(chkLnkNeed) chkLnkNeed = initLnks();
 
 	//The input function's execution context creation
 	if(ioTrIn >= 0) setO(ioTrIn, new TCntrNodeObj(AutoHD<TCntrNode>(&prt->srcTr().at()),"root"));
@@ -644,7 +644,7 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 		    "tp","dec", "help",_("Use this for the poolling mode enabling through setting this timeout to a nonzero value.\n"
 					"Into the poolling mode an input transport will call this protocol with the empty message at no request during this timeout."));
 		ResAlloc res(inCfgRes, false);
-		if(func() && chkLnkNeed) chkLnkNeed = initLnks(true);
+		if(func() && chkLnkNeed) chkLnkNeed = initLnks();
 		if(func() && ctrMkNode("table",opt,-1,"/in/io",_("IO"),RWRW__,"root",SPRT_ID,1,"rows","10")) {
 		    ctrMkNode("list",opt,-1,"/in/io/id",_("Identifier"),R_R___,"root",SPRT_ID,1, "tp","str");
 		    ctrMkNode("list",opt,-1,"/in/io/nm",_("Name"),R_R___,"root",SPRT_ID,1,"tp","str");

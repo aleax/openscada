@@ -1,0 +1,1813 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Библиотеки/НизкоУровневыеУстройства - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../en/files/doc.css" rel="stylesheet" /></head>
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../en/files/Logo-big.png" /></a></div><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="ru">Библиотеки/НизкоУровневыеУстройства</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FLowLevelDevices&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/LowLevelDevices" title="Libs/LowLevelDevices">Libs/LowLevelDevices</a> and the translation is 17% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_LowLevelDevices.html" title="Libs/LowLevelDevices (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--stub">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../uk/Libs_LowLevelDevices.html" title="Бібліотеки/НизькоРівневіПристрої (17% translated)">українська</a></div></div>
+<table class="wikitable">
+
+<tr>
+<th> Название </th>
+<th> Версия </th>
+<th> Лицензия </th>
+<th> Источник </th>
+<th> Языки </th>
+<th> Автор </th>
+<th> Описание
+</th></tr>
+
+<tr>
+<td> <a href="Libs_LowLevelDevices.html" title="Special:MyLanguage/Libs/LowLevelDevices">Библиотека низкоуровневых сенсоров и чипов</a>
+</td>
+<td> 1.4 </td>
+<td> GPLv2 </td>
+<td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.tmplb_LowDevLib </td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a><br />&nbsp;&nbsp;<font size="-2"><i>Аркадий Кысиль (2017)</i></font>
+</td>
+<td> Библиотека шаблонов предоставления доступа к данным устройств низкоуровневых шин.
+<ul><li> <b>Основано</b>: Июль 2016</li>
+<li> <b>Изначально создано:</b> в <a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/APIFunctionLibs/LibUserPrtDevs" rel="nofollow noreferrer noopener" target="_blank">старой Wiki</a></li>
+<li> <b>Использовано:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Server" title="Special:MyLanguage/Sub-projects/Server">проектами умных домов</a></li>
+<li> <b>Сделать (To Do):</b></li></ul>
+<dl><dd>- комбинировать <a href="#1W_DS9097">1W шаблоны</a> в одном сложном и дополнить 1W работой непосредственно через GPIO.</dd></dl>
+</td></tr></table>
+<p>Библиотека устройств пользовательских протоколов создана для предоставления доступа к данным устройств низкоуровневых шин, с протоколом достаточно простым для реализации в <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">модуле пользовательского протокола</a> или непосредственно на <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">внутреннем языке подобном на Java</a>.
+</p><p>Названия элементов и их параметров доступны на языках: Английский, Украинский и Российский. Их исходный код написан в языко(человеческий)-независимом режиме с вызовом функции перевода <i>tr()</i> и перевод этих сообщений также доступен Английским, Украинским и Российским.
+</p><p>Для подключения библиотеки к проекту станции OpenSCADA Вы можете получить файл БД как:
+</p>
+<ul><li> такой что поставляется с готовым и соответствующим пакетом дистрибутива Linux вроде "openscada-libdb-main", "openscada-LibDB.Main";</li>
+<li> наиболее актуальный и непосредственно полученный из <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">репозитория subversion</a>, преобразованный в файл БД SQLite путём:</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 15px">
+$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql
+$ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
+</pre>
+<ul><li> загрузка <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">прикреплённого тут</a>.</li></ul>
+<p>Этот загруженный файл вы далее можете разместить в каталоге проекта станции и создать объект базы данных модуля БД "SQLite", зарегистрировав файл базы данных в конфигурации.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1"><a href="#One_Wire_by_DS9097_.281W_DS9097.29"><span class="tocnumber">1</span> <span class="toctext">One Wire by DS9097 (1W_DS9097)</span></a></li>
+<li class="toclevel-1"><a href="#One_Wire_by_DS9097U_.281W_DS9097U.29"><span class="tocnumber">2</span> <span class="toctext">One Wire by DS9097U (1W_DS9097U)</span></a></li>
+<li class="toclevel-1"><a href="#I2C:_PCF8591_.28PCF8591.29"><span class="tocnumber">3</span> <span class="toctext">I2C: PCF8591 (PCF8591)</span></a></li>
+<li class="toclevel-1"><a href="#I2C:_PCF8574_.28PCF8574.29"><span class="tocnumber">4</span> <span class="toctext">I2C: PCF8574 (PCF8574)</span></a></li>
+<li class="toclevel-1"><a href="#I2C:_ADS101x.2C_ADS111x_.28ADS111x.29"><span class="tocnumber">5</span> <span class="toctext">I2C: ADS101x, ADS111x (ADS111x)</span></a></li>
+<li class="toclevel-1"><a href="#I2C:_MCP4725_.28MCP4725.29"><span class="tocnumber">6</span> <span class="toctext">I2C: MCP4725 (MCP4725)</span></a></li>
+<li class="toclevel-1"><a href="#I2C:_BMP180_.28BMP180.29"><span class="tocnumber">7</span> <span class="toctext">I2C: BMP180 (BMP180)</span></a></li>
+<li class="toclevel-1"><a href="#I2C:_BME280_.28BME280.29"><span class="tocnumber">8</span> <span class="toctext">I2C: BME280 (BME280)</span></a></li>
+<li class="toclevel-1"><a href="#I2C:_SHT3x_.28SHT3x.29"><span class="tocnumber">9</span> <span class="toctext">I2C: SHT3x (SHT3x)</span></a></li>
+<li class="toclevel-1"><a href="#I2C:_DS1307.2CDS3231_.28DS3231.29"><span class="tocnumber">10</span> <span class="toctext">I2C: DS1307,DS3231 (DS3231)</span></a></li>
+<li class="toclevel-1"><a href="#I2C:_AT24C.7B32.7C64.7D_.28AT24CXX.29"><span class="tocnumber">11</span> <span class="toctext">I2C: AT24C{32|64} (AT24CXX)</span></a></li>
+<li class="toclevel-1"><a href="#GPIO:_DHT11.2C22_.28DHT.29"><span class="tocnumber">12</span> <span class="toctext">GPIO: DHT11,22 (DHT)</span></a></li>
+<li class="toclevel-1"><a href="#GPIO:_MAX6675_.28MAX6675.29"><span class="tocnumber">13</span> <span class="toctext">GPIO: MAX6675 (MAX6675)</span></a></li>
+<li class="toclevel-1"><a href="#GPIO.7CI2C:_1602A.28HD44780.29_.281602A.29"><span class="tocnumber">14</span> <span class="toctext">GPIO|I2C: 1602A(HD44780) (1602A)</span></a></li>
+</ul>
+</div>
+
+<p>Для DAQ-шаблонов, в целом, вам нужно создать представительский объект устройства в <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">модуле Логического Уровня</a> и выбрать соответствующий шаблон из библиотеки шаблонов. Далее, для корректной конфигурации, придерживайтесь специфики шаблона в персональном описании.
+Концепцию доступа к данным через пользовательский протокол можно изобразить как на рисунке 1.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:324px;"><a class="image" href="http://oscada.org/wiki/File:UserPrtDevs_concept_ru.png"><img class="thumbimage" height="275" src="files/UserPrtDevs_concept_ru.png" width="322" /></a>  <div class="thumbcaption">Рис.1. Концепция доступа к данным через пользовательский протокол.</div></div></div></div>
+<p>Как можно видеть с рисунка 1, взаимодействие с устройством происходит через некоторый транспорт на котором они физически базируются. Запрос к транспорту Вы можете отправить:
+</p>
+<ol><li> Непосредственно с помощью функции системного API OpenSCADA объекта транспорта <i><a href="User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">string messIO( string mess, real timeOut = 0 );</a></i>, если протоколоспецифическая часть очень проста и данные Вам нужно лишь извлечь.</li>
+<li> Завёрнутый запрос данных <i>req</i>, функцией <i><a href="User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">int messIO( XMLNodeObj req, string prt );</a></i> и для протокола <i>prt</i>, если протокольная часть достаточно сложная и уже представлена в OpenSCADA.</li>
+<li> Завёрнутый запрос данных специфический к пользователю с помощью функции <i><a href="User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">int messIO( XMLNodeObj req, "UserProtocol" );</a></i> и реализации <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">пользовательского протокола</a>, если протокольная часть достаточно сложная и ещё отсутствует в OpenSCADA. Пользователь реализует тут саму протоколоспецифическую часть в <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">модуле UserProtocol</a> и часть специфическую к данным в шаблоне для <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">модуля Логического Уровня</a> или непосредственно в процедуре контролера на внутреннем языке программирования <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">модуля JavaLikeCalc</a>.</li></ol>
+<dl><dd><dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Этот последний метод развит к возможности формирования протокольной части кода непосредственно в том-же коде шаблона, как отдельная встроенная функция через вызовом функции запроса первого метода, если нет необходимости повторного использования, или даже если такая необходимость есть и тут имеет смысл создание комплексного шаблона, который сможет объединять роль и выходного протокола, через его подключение также к модулю пользовательского протокола. И оно будет полностью храниться в одной библиотеке шаблонов. </dd></dl></dd></dl>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Прямая работа с выходным транспортом функции <a href="User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">string messIO( string mess, real timeOut = 0 );</a> не предусматривает блокирования транспорта поза вызовом этой функции, а соответственно, для сложных протоколов с посылками ответа более чем в одном пакете, что предусматривает процесс "дожидания", не можно использовать общий транспорт, по которому возможна отправка пакетов различных протоколов или даже один, но в различных задачах (объектах контроллеров). Соответственно, если есть необходимость использования совместного транспорта, то размещайте параметры опроса по протоколу в одном объекте контроллера (задаче) или используйте <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">модуль пользовательского протокола</a>, к которому это замечание не имеет отношения, поскольку он осуществляет такое блокирование на время вызова процедуры обработки, как и остальные модульные протоколы OpenSCADA. 
+Для размещения реализации протокола тут вы должны выполнить и придерживаться приведенных требований:
+</p>
+<ul><li> быть владельцем прав или автором кода и распространять его под любой свободной лицензией, предпочтение предоставляется GPL;</li>
+<li> приготовить и сохранить в отдельном файле БД SQLite, или как текстовый файл, на предмет: описания параметров (ВВ), кода процедуры написанного и отформатированного согласно какой нидудь системы;</li>
+<li> написать краткое описание и инструкцию подключения устройства по протоколу в способ похожий на другие тут;</li>
+<li> написать прямой запрос в тему форума "<a class="external text" href="http://oscada.org/ru/forum/topics/razrabotka_openscada/" rel="nofollow noreferrer noopener" target="_blank">Разработка OpenSCADA</a>" на предмет размещения протокола тут, включая доказательства его работоспособности от любого разработчика OpenSCADA или краткое демонстрационное видео.</li></ul>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="1W_DS9097" title="#1W_DS9097"><h3><span class="mw-headline" id="One_Wire_by_DS9097_.281W_DS9097.29"><span class="mw-headline-number">1</span> One Wire by DS9097 (<a href="Libs_LowLevelDevices.html#1W_DS9097" title="Special:MyLanguage/Libs/LowLevelDevices">1W_DS9097</a>)</span></h3></span> </td>
+<td> 1.2 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en
+</td></tr>
+<tr>
+<td> <span id="1W_DS9097U" title="#1W_DS9097U"><h3><span class="mw-headline" id="One_Wire_by_DS9097U_.281W_DS9097U.29"><span class="mw-headline-number">2</span> One Wire by DS9097U (<a href="Libs_LowLevelDevices.html#1W_DS9097U" title="Special:MyLanguage/Libs/LowLevelDevices">1W_DS9097U</a>)</span></h3></span> </td>
+<td> 1.2 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsLowLevDevs1WOp.png" title="Result and the operative setup."><img alt="Result and the operative setup." height="655" src="../en/files/LibsLowLevDevs1WOp.png" width="386" /></a></div>
+<p><span id="1W" title="#1W">One Wire</span> sensors bus implementing by 1Wire-adapter {DS9097,DS9097U}. Supported direct and parasite powering for the temperature sensors.<br />
+Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not tested), DS2413, DS2408, DS2450, DS2438.<br />
+<a class="image" href="http://oscada.org/wiki/File:Ds9097.png"><img alt="Ds9097.png" height="265" src="../en/files/Ds9097.png" width="800" /></a>
+</p><p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> transport </td>
+<td> Transport of the One Wire bus, Serial </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> oneWire
+</td></tr>
+<tr>
+<td> tmResc </td>
+<td> Rescan period, s </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 60
+</td></tr>
+<tr>
+<td> power </td>
+<td> Power, for temperature </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> this </td>
+<td> Object </td>
+<td> Object </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Function calculate frequency (Hz) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsLowLevDevs1WCfg.png" title="Configuration."><img alt="Configuration." height="240" src="../en/files/LibsLowLevDevs1WCfg.png" width="384" /></a></div>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" and set its Identifier like to "oneWire", one for each the One Wire bus.</dd>
+<dd>2. Set proper address of the <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> device, only for the adapter's serial device like "/dev/ttyS{N}". The serial port speed, asynchronous data format and timeouts will adjust by the template.</dd>
+<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for that, one for each the devices. Enable the parameter.</dd>
+<dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>Transport of the One Wire bus, Serial</i> — to the address of the transport into step 1. Tracing for the address changing is supported.</li>
+<li> <i>Rescan period, s</i> — periodicity of rescaning for new and removed devices search.</li></ul></dd>
+<dd>6. <i>Result</i>: The logical parameter object will perform at first searching to 1Wire devices on the bus and create included parameters to the each found one. Next the logical parameter object will perform gather data of the found devices and trace to modify of the writable device's properties.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="PCF8591" title="#PCF8591"><h3><span class="mw-headline" id="I2C:_PCF8591_.28PCF8591.29"><span class="mw-headline-number">3</span> I2C: PCF8591 (<a href="Libs_LowLevelDevices.html#PCF8591" title="Special:MyLanguage/Libs/LowLevelDevices">PCF8591</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>I2C 8-bit 4xA/D and D/A converter. Connects through a Serial output transport into the I2C mode.
+</p><p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> transport </td>
+<td> Transport of the I2C, Serial </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> i2c
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Device address [0...119] </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 72
+</td></tr>
+<tr>
+<td> vRef </td>
+<td> Reference voltage, V </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 3.2
+</td></tr>
+<tr>
+<td> ai0 </td>
+<td> AI0 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> ai1 </td>
+<td> AI1 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> ai2 </td>
+<td> AI2 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> ai3 </td>
+<td> AI3 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> ao </td>
+<td> AO </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Function calculate frequency (Hz) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" and set its Identifier like to "i2c", one for each the I2C bus.</dd>
+<dd>2. Set proper address of the <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> device, only the I2C bus address like "/dev/i2c-{N}". Set the symbol's time into the timeouts field to the minimum value.</dd>
+<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for that, one for each I2C slave devices. Enable the parameter.</dd>
+<dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>transport</i> — to the address of the transport into step 1. Tracing for the address changing is supported.</li>
+<li> <i>addr</i> — the I2C slave device's address [0...119].</li>
+<li> <i>vRef</i> — reference voltage of the AIs and AO.</li></ul></dd>
+<dd>6. <i>Result</i>: The logical parameter object will perform interaction and placing of gathered data to the AI attributes and also will take the AO and write to the chip.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="PCF8574" title="#PCF8574"><h3><span class="mw-headline" id="I2C:_PCF8574_.28PCF8574.29"><span class="mw-headline-number">4</span> I2C: PCF8574 (<a href="Libs_LowLevelDevices.html#PCF8574" title="Special:MyLanguage/Libs/LowLevelDevices">PCF8574</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>I2C 8-bit 8DIO. Connects through a Serial output transport into the I2C mode.
+</p><p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> transport </td>
+<td> Transport I2C </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> i2c
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Device address (0, 119) </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 39
+</td></tr>
+<tr>
+<td> di0 </td>
+<td> DI0 </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> di1 </td>
+<td> DI1 </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> di2 </td>
+<td> DI2 </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> di3 </td>
+<td> DI3 </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> di4 </td>
+<td> DI4 </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> di5 </td>
+<td> DI5 </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> di6 </td>
+<td> DI6 </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> di7 </td>
+<td> DI7 </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> do0 </td>
+<td> DO0 </td>
+<td> Boolean </td>
+<td> Output </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> do1 </td>
+<td> DO1 </td>
+<td> Boolean </td>
+<td> Output </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> do2 </td>
+<td> DO2 </td>
+<td> Boolean </td>
+<td> Output </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> do3 </td>
+<td> DO3 </td>
+<td> Boolean </td>
+<td> Output </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> do4 </td>
+<td> DO4 </td>
+<td> Boolean </td>
+<td> Output </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> do5 </td>
+<td> DO5 </td>
+<td> Boolean </td>
+<td> Output </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> do6 </td>
+<td> DO6 </td>
+<td> Boolean </td>
+<td> Output </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> do7 </td>
+<td> DO7 </td>
+<td> Boolean </td>
+<td> Output </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Function calculate frequency (Hz) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" and set its Identifier like to "i2c", one for each the I2C bus.</dd>
+<dd>2. Set proper address of the <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> device, only the I2C bus address like "/dev/i2c-{N}". Set the symbol's time into the timeouts field to the minimum value.</dd>
+<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for that, one for each I2C slave devices. Enable the parameter.</dd>
+<dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>transport</i> — to the address of the transport into step 1. Tracing for the address changing is supported.</li>
+<li> <i>addr</i> — the I2C slave device's address [0...119].</li></ul></dd>
+<dd>6. <i>Result</i>: The logical parameter object will perform interaction and placing of gathered data to the DI attributes and also will take the DO and write to the chip.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="ADS111x" title="#ADS111x"><h3><span class="mw-headline" id="I2C:_ADS101x.2C_ADS111x_.28ADS111x.29"><span class="mw-headline-number">5</span> I2C: ADS101x, ADS111x (<a href="Libs_LowLevelDevices.html#ADS111x" title="Special:MyLanguage/Libs/LowLevelDevices">ADS111x</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>I2C 12/16-bit 4xA/D converter. Connect through a Serial output transport into the I2C mode.
+</p><p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> transport </td>
+<td> Transport of the I2C, Serial </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> i2c
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Device address [0...119] </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 72
+</td></tr>
+<tr>
+<td> range </td>
+<td> Range, ±V </td>
+<td> Integer numbers selection </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 2<br />
+<p>0;1;2;3;4;5<br />
+6.144;4.096;2.048;1.024;0.512;0.256
+</p>
+</td></tr>
+<tr>
+<td> ai0 </td>
+<td> AI0 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> ai1 </td>
+<td> AI1 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> ai2 </td>
+<td> AI2 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> ai3 </td>
+<td> AI3 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Function calculate frequency (Hz) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" and set its Identifier like to "i2c", one for each the I2C bus.</dd>
+<dd>2. Set proper address of the <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> device, only the I2C bus address like "/dev/i2c-{N}". Set the symbol's time into the timeouts field to the minimum value.</dd>
+<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for that, one for each I2C slave devices. Enable the parameter.</dd>
+<dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>transport</i> — to the address of the transport into step 1. Tracing for the address changing is supported.</li>
+<li> <i>addr</i> — the I2C slave device's address [0...119].</li>
+<li> <i>range</i> — range of voltage of the AIs.</li></ul></dd>
+<dd>6. <i>Result</i>: The logical parameter object will perform interaction and placing of gathered data to the AI attributes.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="MCP4725" title="#MCP4725"><h3><span class="mw-headline" id="I2C:_MCP4725_.28MCP4725.29"><span class="mw-headline-number">6</span> I2C: MCP4725 (<a href="Libs_LowLevelDevices.html#MCP4725" title="Special:MyLanguage/Libs/LowLevelDevices">MCP4725</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>I2C 12-bit D/A converter. Connect through a Serial output transport into the I2C mode.
+</p><p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> transport </td>
+<td> Transport of the I2C, Serial </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> i2c
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Device address [0...119] </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 96
+</td></tr>
+<tr>
+<td> vRef </td>
+<td> Reference voltage, V </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 3.2
+</td></tr>
+<tr>
+<td> ao </td>
+<td> AO </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Function calculate frequency (Hz) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" and set its Identifier like to "i2c", one for each the I2C bus.</dd>
+<dd>2. Set proper address of the <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> device, only the I2C bus address like "/dev/i2c-{N}". Set the symbol's time into the timeouts field to the minimum value.</dd>
+<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for that, one for each I2C slave devices. Enable the parameter.</dd>
+<dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>transport</i> — to the address of the transport into step 1. Tracing for the address changing is supported.</li>
+<li> <i>addr</i> — the I2C slave device's address [0...119].</li>
+<li> <i>vRef</i> — reference voltage of the AO.</li></ul></dd>
+<dd>6. <i>Result</i>: The logical parameter object will perform interaction and take the AO and write to the chip.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="BMP180" title="#BMP180"><h3><span class="mw-headline" id="I2C:_BMP180_.28BMP180.29"><span class="mw-headline-number">7</span> I2C: BMP180 (<a href="Libs_LowLevelDevices.html#BMP180" title="Special:MyLanguage/Libs/LowLevelDevices">BMP180</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>I2C Pressure and Temperature sensor. Connecting through a Serial output transport into the I2C mode.
+</p><p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> transport </td>
+<td> Transport of the I2C, Serial </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> i2c
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Device address [0...119] </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 119
+</td></tr>
+<tr>
+<td> oss </td>
+<td> Oversampling setting (0...3) </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> t </td>
+<td> T, °С </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable	 </td>
+<td>
+</td></tr>
+<tr>
+<td> p </td>
+<td> P, Pa </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Function calculate frequency (Hz) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" and set its Identifier like to "i2c", one for each the I2C bus.</dd>
+<dd>2. Set proper address of the <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> device, only the I2C bus address like "/dev/i2c-{N}". Set the symbol's time into the timeouts field to the minimum value.</dd>
+<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for that, one for each I2C slave devices. Enable the parameter.</dd>
+<dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>transport</i> — to the address of the transport into step 1. Tracing for the address changing is supported.</li>
+<li> <i>addr</i> — the I2C slave device's address [0...119].</li>
+<li> <i>oss</i> — oversampling setting of pressure measurement [0...3].</li></ul></dd>
+<dd>6. <i>Result</i>: The logical parameter object will perform interaction and placing of gathered data to the Pressure and Temperature attributes.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="BME280" title="#BME280"><h3><span class="mw-headline" id="I2C:_BME280_.28BME280.29"><span class="mw-headline-number">8</span> I2C: BME280 (<a href="Libs_LowLevelDevices.html#BME280" title="Special:MyLanguage/Libs/LowLevelDevices">BME280</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en 
+</td>
+<td> Arcadiy Kisel, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>I2C Barometric Pressure, Temperature and Humidity sensor. Connect through a Serial output transport into the I2C mode.
+</p><p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> transport </td>
+<td> Transport of the I2C, Serial </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> i2c
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Device address [0...119] </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 118
+</td></tr>
+<tr>
+<td> oss </td>
+<td> Oversampling setting (0...7) </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> t </td>
+<td> T, °С </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable	 </td>
+<td>
+</td></tr>
+<tr>
+<td> p </td>
+<td> P, Pa </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> h </td>
+<td> H,&nbsp;% </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Function calculate frequency (Hz) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" and set its Identifier like to "i2c", one for each the I2C bus.</dd>
+<dd>2. Set proper address of the <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> device, only the I2C bus address like "/dev/i2c-{N}". Set the symbol's time into the timeouts field to the minimum value.</dd>
+<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for that, one for each I2C slave devices. Enable the parameter.</dd>
+<dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>transport</i> — to the address of the transport into step 1. Tracing for the address changing is supported.</li>
+<li> <i>addr</i> — the I2C slave device's address [0...119].</li>
+<li> <i>oss</i> — oversampling setting of pressure measurement [0...7].</li></ul></dd>
+<dd>6. <i>Result</i>: The logical parameter object will perform interaction and placing of gathered data to the Pressure, Temperature and Humidity attributes.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="SHT3x" title="#SHT3x"><h3><span class="mw-headline" id="I2C:_SHT3x_.28SHT3x.29"><span class="mw-headline-number">9</span> I2C: SHT3x (<a href="Libs_LowLevelDevices.html#SHT3x" title="Special:MyLanguage/Libs/LowLevelDevices">SHT3x</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>Digital Temperature and Humidity Sensor for the models: SHT30
+</p><p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> transport </td>
+<td> Transport of the I2C, Serial </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> i2c
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Device address [0...119] </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 68
+</td></tr>
+<tr>
+<td> H </td>
+<td> Humidity </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> T </td>
+<td> Temperature </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Function calculate frequency (Hz) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" and set its Identifier like to "i2c", one for each the I2C bus.</dd>
+<dd>2. Set proper address of the <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> device, only the I2C bus address like "/dev/i2c-{N}". Set the symbol's time into the timeouts field to the minimum value.</dd>
+<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for that, one for each I2C slave devices. Enable the parameter.</dd>
+<dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>transport</i> — to the address of the transport into step 1. Tracing for the address changing is supported;</li>
+<li> <i>addr</i> — the I2C slave device's address [0...119].</li></ul></dd>
+<dd>6. <i>Result</i>: The logical parameter object will perform interaction and placing of gathered data to the Temperature and Humidity attributes.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="DS3231" title="#DS3231"><h3><span class="mw-headline" id="I2C:_DS1307.2CDS3231_.28DS3231.29"><span class="mw-headline-number">10</span> I2C: DS1307,DS3231 (<a href="Libs_LowLevelDevices.html#DS3231" title="Special:MyLanguage/Libs/LowLevelDevices">DS3231</a>)</span></h3></span> </td>
+<td> 1.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>I2C RTC chips DS1307,DS3231 with Temperature sensor and calibration for DS3231. Connects through a Serial output transport into the I2C mode.
+</p><p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> transport </td>
+<td> Transport of the I2C, Serial </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> i2c
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Device address [0...119] </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 119
+</td></tr>
+<tr>
+<td> mode </td>
+<td> Mode </td>
+<td> Integer numbers selection </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 0
+<p>0;1<br />
+DS3231;DS1307
+</p>
+</td></tr>
+<tr>
+<td> tm </td>
+<td> Date and time, YYYY-MM-DDTHH:mm:SS </td>
+<td> String </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> pSQW </td>
+<td> Enable SQUARE-WAVE OUTPUT </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> pSQWf<br />(dynamically updated) </td>
+<td> SQUARE-WAVE OUTPUT frequency </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> agOff<br />(dynamically created for DS3231) </td>
+<td> Aging offset, [-128...127] </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> t<br />(dynamically created for DS3231) </td>
+<td> T, °С </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> p32k<br />(dynamically created for DS3231) </td>
+<td> Enable 32768Hz </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Function calculate frequency (Hz) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" and set its Identifier like to "i2c", one for each the I2C bus.</dd>
+<dd>2. Set proper address of the <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> device, only the I2C bus address like "/dev/i2c-{N}". Set the symbol's time into the timeouts field to the minimum value.</dd>
+<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for that, one for each I2C slave devices. Enable the parameter.</dd>
+<dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>transport</i> — to the address of the transport into step 1. Tracing for the address changing is supported.</li>
+<li> <i>addr</i> — the I2C slave device's address [0...119].</li></ul></dd>
+<dd>6. <i>Result</i>: The logical parameter object will perform interaction and placing of gathered data to the DateTime, Temperature and some one state attributes and also will take the DateTime, some one state attributes and write it to the chip.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="AT24CXX" title="#AT24CXX"><h3><span class="mw-headline" id="I2C:_AT24C.7B32.7C64.7D_.28AT24CXX.29"><span class="mw-headline-number">11</span> I2C: AT24C{32|64} (<a href="Libs_LowLevelDevices.html#AT24CXX" title="Special:MyLanguage/Libs/LowLevelDevices">AT24CXX</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>Provides operations with EEPROM memory based on I2C chips AT24C32 (4KB) and AT24C64 (8KB). Supported random reading and writing.
+</p><p><b><u>Output user protocol's XML request structure</u></b><br />
+<b>&lt;{cmd} addr="{ChipAddr}" off="{MemOffset}" size="{ReadSize}" err="1:Error"&gt;{ReadWriteSeq}&lt;/{cmd}&gt;</b>
+</p>
+<dl><dd><i>cmd</i> — command, for now there allowed: "read", "write";</dd>
+<dd><i>addr</i> — I2C device address [0...119];</dd>
+<dd><i>off</i> — memory part offset;</dd>
+<dd><i>size</i> — read memory block size.</dd>
+<dd><i>ReadWriteSeq</i> — Read/Write bytes sequence.</dd>
+<dd><i>err</i> — sets to result of the request.</dd></dl>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" and set its Identifier like to "i2c", one for each the I2C bus.</dd>
+<dd>2. Set proper address of the <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> device, only the I2C bus address like "/dev/i2c-{N}". Set the symbol's time into the timeouts field to the minimum value.</dd>
+<dd>3. Place some requesting commands directly into presented or a new internal OpenSCADA procedure like to:</dd></dl>
+<pre style="white-space: pre-wrap; align-left: 30px">
+req = SYS.XMLNode("read"); req.setAttr("ProtIt","AT24CXX").setAttr("addr",87).setAttr("off",1000).setAttr("size",20).setText("My message");
+req = SYS.XMLNode("write"); req.setAttr("ProtIt","AT24CXX").setAttr("addr",87).setAttr("off",1000).setText("Stored data");
+</pre>
+<dl><dd>4. <i>Result</i>: Into <i>text()</i> for "read" you will get the read data if no errors occur.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="DHT" title="#DHT"><h3><span class="mw-headline" id="GPIO:_DHT11.2C22_.28DHT.29"><span class="mw-headline-number">12</span> GPIO: DHT11,22 (<a href="Libs_LowLevelDevices.html#DHT" title="Special:MyLanguage/Libs/LowLevelDevices">DHT</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>Digital Temperature and Humidity Sensor for models: DHT11, DHT12, AM2302, AM2320, ... . The module designed for the sensors connect through GPIO, mostly it's <a href="Modules/GPIO.html" title="Special:MyLanguage/Modules/GPIO">Raspberry PI BCM2835 GPIO</a>.<br />
+<i>Conditions:</i> Exclusively realtime planing in the priority 199 (FIFO-99).
+</p><p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> addr </td>
+<td> GPIO address with functions mode(), get() and put(), mostly it's BCM2835 </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> DAQ.GPIO.io.pi
+</td></tr>
+<tr>
+<td> pin </td>
+<td> IO pin number of the GPIO </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 17
+</td></tr>
+<tr>
+<td> tries </td>
+<td> Tries [1...5] </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 2
+</td></tr>
+<tr>
+<td> dev </td>
+<td> Device (0-DHT11, 1-DHT22) </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 1
+</td></tr>
+<tr>
+<td> t </td>
+<td> T, °С </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable	 </td>
+<td>
+</td></tr>
+<tr>
+<td> h </td>
+<td> H,&nbsp;% </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Function calculate frequency (Hz) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an output controller object and a parameter into the DAQ module "BCM 2835", by default it's "pi.pi".</dd>
+<dd>2. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties (FIFO-199).</dd>
+<dd>3. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter</a> and select the template for that, one for each sensor. Enable the parameter.</dd>
+<dd>4. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>addr</i> — to the address of the "BCM 2835" parameter like "DAQ.GPIO.io.pi"; tracing for the address changing is supported;</li>
+<li> <i>pin</i> — GPIO pin number where connected the data pin of the sensor;</li>
+<li> <i>tries</i> — tries of the sensor reading;</li>
+<li> <i>dev</i> — generic device specific selection.</li></ul></dd>
+<dd>5. <i>Result</i>: The logical parameter will perform interaction and placing of the gathered data to the Temperature and Humidity attributes.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="MAX6675" title="#MAX6675"><h3><span class="mw-headline" id="GPIO:_MAX6675_.28MAX6675.29"><span class="mw-headline-number">13</span> GPIO: MAX6675 (<a href="Libs_LowLevelDevices.html#MAX6675" title="Special:MyLanguage/Libs/LowLevelDevices">MAX6675</a>)</span></h3></span> </td>
+<td> 0.1 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en 
+</td>
+<td> Arcadiy Kisel
+</td></tr></table>
+<p>Cold-Junction-Compensated K-Thermocouple-to-Digital Converter (0°C to +1024°C). The module designed for the sensors connect through softSPI by GPIO, mostly it's <a href="Modules/GPIO.html" title="Special:MyLanguage/Modules/GPIO">Raspberry PI BCM2835 GPIO</a>.<br />
+<i>Conditions:</i> Exclusively realtime planing in the priority 199 (FIFO-99).
+</p><p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> addr </td>
+<td> GPIO address with functions mode(), get() and put(), mostly it's BCM2835 </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> DAQ.GPIO.io.pi
+</td></tr>
+<tr>
+<td> pin_cs </td>
+<td> CS pin number of the GPIO </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 8
+</td></tr>
+<tr>
+<td> pin_sclk </td>
+<td> SCLK pin number of the GPIO </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 11
+</td></tr>
+<tr>
+<td> pin_miso </td>
+<td> MISO pin number of the GPIO </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 9
+</td></tr>
+<tr>
+<td> t </td>
+<td> T, °С </td>
+<td> Real </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Function calculate frequency (Hz) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an output controller object and a parameter into the DAQ module "BCM 2835", by default it's "pi.pi".</dd>
+<dd>2. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties (FIFO-199).</dd>
+<dd>3. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter</a> and select the template for that, one for each sensor. Enable the parameter.</dd>
+<dd>4. Into the tab "Template configuration" of the logical parameter object you need to set: 
+<ul><li> <i>addr</i> — to the address of the "BCM 2835" parameter like "DAQ.GPIO.io.pi"; tracing for the address changing is supported; </li>
+<li> <i>pin_cs</i> — CS pin number where connected the chip selection pin of the sensor; </li>
+<li> <i>pin_sclk</i> — SCLK pin number where connected the serial clock pin of the sensor;</li>
+<li> <i>pin_miso</i> — MISO pin number where connected the master in slave out (data) pin of the sensor.</li></ul></dd>
+<dd>5. <i>Result</i>: The logical parameter will perform interaction and placing of the gathered data to the Temperature attributes.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="1602A" title="#1602A"><h3><span class="mw-headline" id="GPIO.7CI2C:_1602A.28HD44780.29_.281602A.29"><span class="mw-headline-number">14</span> GPIO|I2C: 1602A(HD44780) (<a href="Libs_LowLevelDevices.html#1602A" title="Special:MyLanguage/Libs/LowLevelDevices">1602A</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>LCD Module 1602A, STN, BLUB, 16 Character x 2 Line,  5 x 8 Dots, by the direct (<a href="Modules/GPIO.html" title="Special:MyLanguage/Modules/GPIO">Raspberry PI BCM2835 GPIO</a>) or I2C (PCF8574) wiring.<br />
+<i>Conditions:</i> Default planing policy but realtime one preferred.
+</p><p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> transport </td>
+<td> Transport of the I2C, Serial (i2c) or<br />
+<p>GPIO address with function put(), mostly it's BCM2835 (DAQ.GPIO.io.pi)
+</p>
+</td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> i2c
+</td></tr>
+<tr>
+<td> addr </td>
+<td> I2C device address [0...119] </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 39
+</td></tr>
+<tr>
+<td> RS </td>
+<td> GPIO Pin: Reset </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 7
+</td></tr>
+<tr>
+<td> E </td>
+<td> GPIO Pin: Enable </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 8
+</td></tr>
+<tr>
+<td> D4 </td>
+<td> GPIO Pin: Data4 </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 25
+</td></tr>
+<tr>
+<td> D5 </td>
+<td> GPIO Pin: Data5 </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 24
+</td></tr>
+<tr>
+<td> D6 </td>
+<td> GPIO Pin: Data6 </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 23
+</td></tr>
+<tr>
+<td> D7 </td>
+<td> GPIO Pin: Data7 </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 18
+</td></tr>
+<tr>
+<td> ln1 </td>
+<td> Line 1 </td>
+<td> String </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> ln2 </td>
+<td> Line 2 </td>
+<td> String </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Function calculate frequency (Hz) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an output controller and an object of parameter in DAQ module "BCM 2835", by default it's "pi.pi" or create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>", set address like to "i2c", one for each the I2C bus.</dd>
+<dd>2. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>3. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for that, one for each sensor. Enable the parameter.</dd>
+<dd>4. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>transport</i> — to address of the "BCM 2835" parameter like to "DAQ.GPIO.io.pi" or to address of the transport into step 1; tracing for the address changing is supported;</li>
+<li> <i>addr</i> — the I2C slave device's address [0...119];</li>
+<li> <i>RS, E, D4, D5, D6, D7</i> — numbers of the GPIO pins where connected the proper data ones of the sensor.</li></ul></dd>
+<dd>5. <i>Result</i>: The logical parameter object will perform interaction and setting lines' values to the display.</dd></dl>
+
+
+
+
+
+
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/LowLevelDevices/ru">Libs/LowLevelDevices/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2675</td></tr></table></body>
+</html>

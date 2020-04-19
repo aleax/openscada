@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Модули/Движок Среды Визуализации и Управлений (СВУ)</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FVCAEngine&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/VCAEngine" title="Modules/VCAEngine">Modules/VCAEngine</a> and the translation is 98% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/VCAEngine.html" title="Modules/VCAEngine (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/VCAEngine.html" title="Модулі/Рушій Середовища Візуалізації та Управління (СВУ) (100% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FVCAEngine&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/VCAEngine" title="Modules/VCAEngine">Modules/VCAEngine</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/VCAEngine.html" title="Modules/VCAEngine (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/VCAEngine.html" title="Модулі/Рушій Середовища Візуалізації та Управління (СВУ) (100% translated)">українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -23,8 +23,7 @@
 <th> Языки </th>
 <th> Платформы </th>
 <th> Тип </th>
-<th> Автор </th>
-<th> Описание
+<th> Автор
 </th></tr>
 
 <tr>
@@ -38,8 +37,24 @@
 <td> x86,x86_64,ARM
 </td>
 <td> UI </td>
-<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2011-2012) — the page initial translation</i></font> </td>
-<td> The main engine of the visual control area.
+<td> Роман Савоченко
+</td></tr>
+<tr>
+<th colspan="9"> Описание
+</th></tr>
+<tr>
+<td colspan="9"> Общий движок среды визуализации и управления.
+<ul><li> <b>Сделать (To Do):</b></li></ul>
+<dl><dd> - дополнить пользовательское API редактирования файлов растром (PNG, JPEG, GIF), посредством LibGD2, и векторно (SVG):
+<dl><dd>+ дополнить загрузкой и сохранением изменений изображений в таблице сеанса и из процедур пользователя, позволяет редактировать SVG (XML);</dd>
+<dd>- реализовать основные функции объекта GD (в <a href="../Modules/FLibSYS.html" title="Special:MyLanguage/Modules/FLibSYS">Special.FLibSYS</a>).</dd></dl></dd>
+<dd> ... <i>также для <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a></i> ...</dd>
+<dd> - перенести запросы времени исполнения к VCAEngine в асинхроный режим;
+<dl><dd>&nbsp;!&gt; имеет проблему с обработкой рекурсивных сообщений в event(), для случая потери сообщений отпускания мыши при обработке сообщений нажатия мыши.</dd></dl></dd>
+<dd> - реализовать фоновое исполнение редактируемых страниц в режиме разработки, для визуального формирования диаграмм совместно с <a href="../Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">BlockCalc</a> и DAQ-источниками в целом.</dd>
+<dd> ... <i>также для <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> и <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a></i> ...</dd>
+<dd> - добавить глобальное меню пространства пользователя с помощью специфических к проекту свойств;</dd>
+<dd> - разработать формирование блочных диаграмм (динамическими кадрами) из графического интерфейса.</dd></dl>
 </td></tr></table>
 <p>Модуль предоставляет в OpenSCADA движок среды визуализации и управления (СВУ). Сам модуль не реализует визуализации СВУ, а содержит данные в соответствии с концепцией "Модель/данные – Интерфейс". Визуализация данных этого модуля выполняется модулями визуализации СВУ, например, модулем <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> и <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a>.
 </p><p>Среда визуализации и управления (СВУ) является неотъемлемой составляющей SCADA системы. Она применяется на клиентских станциях с целью доступного предоставления информации об объекте управления и выдачи управляющих воздействий на объект. В различных практических ситуациях и условиях могут применяться СВУ, построенные на различных принципах визуализации. Например, это могут быть библиотеки виджетов Qt, GTK+, wxWidgets или гипертекстовые механизмы на основе технологий HTML, XHTML, XML, CSS и JavaScript или сторонние приложения визуализации, реализованные на различных языках программирования Java, Python и т.д. Любой из этих принципов имеет свои преимущества и недостатки, комбинация которых может стать непреодолимым препятствием в возможности использования СВУ в том или ином практическом случае. Например, технологии вроде библиотеки Qt позволяют создавать высокопроизводительные СВУ, что несомненно важно для станций оператора управления технологическим процессом (ТП). Однако, необходимость инсталляции данного клиентского ПО может сделать его использование невозможным в отдельных ситуациях. С другой стороны, Web-технологии не требуют инсталляции на клиентские системы и являются предельно многоплатформенными (достаточно указать ссылку на Web-сервер в любом Web-браузере), что наиболее важно для различных инженерных и административных станций. С другой стороны, производительность и надёжность таких интерфейсов ниже, что практически исключает их использование на станциях оператора ТП.
@@ -2956,10 +2971,10 @@ if test $en = 1 -a -s $res; then play -q $res; fi
 </p>
 <ul><li> <i>string user( )</i> — текущий пользователь сеанса.</li>
 <li> <i>int alrmQuietance( int quit_tmpl, string wpath = "", bool ret = false )</i> — квитирует нарушение <i>wpath</i> с шаблоном <i>quit_tmpl</i>. Если <i>wpath</i> это пустая строка то производится глобальное квитирование. В строке <i>wpath</i>, через символ ';', могут быть перечислены адреса нескольких виджетов. При установке <i>ret</i> осуществляется возврат квитирования.</li>
-<li> <i>int reqTm( )</i> — время последнего запроса.</li>
+<li> <i>int reqTm( )</i> — время последнего запроса в секундах от эпохи 1.1.1970.</li>
 <li> <i>string reqUser( )</i> — пользователь последнего запроса.</li>
 <li> <i>string reqLang( )</i> — язык последнего запроса.</li>
-<li> <i>int userActTm( )</i> — время последнего действия пользователя.</li>
+<li> <i>int userActTm( )</i> — время последнего действия пользователя в секундах от эпохи 1.1.1970.</li>
 <li> <i>bool uiCmd( string cmd, string prm, string src )</i> — отправляет UI команду управления страницами, как: "open", "next", "prev"; детальнее смотрите в <a href="#Events">секции сообщений</a>. Эта функция должна быть приоритетной для использования при контроле страницами перед прямой записью в атрибут страниц "pgOpen" и "pgOpenSrc" поскольку это единственный метод корректной работы с <a href="#Project">линкованными страницами</a>.</li></ul>
 <p><b>Объект "Виджет" (this)</b>
 </p>
@@ -3374,5 +3389,5 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/ru">Modules/VCAEngine/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2670</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/ru">Modules/VCAEngine/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2675</td></tr></table></body>
 </html>

@@ -1,3 +1,14 @@
+2020-04-19 Roman (stable)
+- LibsDB.vcaBase: Main.anShow1: The border width dislinked from the activity status.
+- !!!:FIX:DAQ,DAQ.{JavaLikeCalc,ModBus,Siemens},Protocol.UserProtocol,UI.WebUser:
+    The templates implementation fixed in processing the links reconnections and
+	the functions lnkInit() and initLnks() appended the forced relinking flag instead "checkNoLink".
+- !!:Protocol.HTTP: Appended for the user API function setUser() to change the authenticated user.
+- !!!!:FIX: Fixed for the POST requests correct result code 204.
+    !!!!: Appended for implementation the visualizer specific attribute "userSetVis".
+- UI.VCAEngine: The user last action time is initiated at the project session creation and connection.
+
+
 2020-04-12 Roman (stable)
 - FIX: LibsDB.OscadaLibs: The template library "LowDevLib" and the JavaLikeCalc library "servProc" appended for the translated description.
     FIX: The template "digitBlockUnif" of the library "base" fixed in own description, caused to the template loss.
@@ -824,7 +835,7 @@
 
 2019-03-10 Roman (stable)
 - !!:FIX:DB.{LibsDB.vcaBase,Model.AGLKS.St,Model.Boiler.St}:
-    The styles moved under a scheme of disabling styles at their presence instead "No style" and the style "Default" is appended.
+    The styles moved under a scheme of enabling styles at their presence instead disabling by "No style" and the style "Default" is appended.
     !!:Extra standard cadres of the graphics adapted to the styles.
     Main.userManager: finished for the translation.
     FIX:Main.graphSelPrm: Fixed for the item "<Clear>" appending and the "event" generating.
@@ -851,7 +862,7 @@
 - !!:DB.LibsDB.OscadaLibs: The temlate library LowDevLib appended for the template "MAX6675" of the low-level
     SPI Cold-Junction-Compensated K-Thermocouple-to-Digital Converter, from Arcadiy Kisel.
 - FIX:SYS.TCntrNode: OpenSCADA nodes TCntrNode prevented from left the modification mark after loading from a selected DB.
-- SYS.Transports: Size of the output transports ID set to OBJ_ID_SZ*2, since it can be cobined from the ordinal node ID and some prefix, in the automatic mode.
+- SYS.Transports: Size of the output transports ID set to OBJ_ID_SZ*2, since it can be combined from the ordinal node ID and some prefix, in the automatic mode.
 - !!:SYS.Archives: The value archives are appended by the common option "Add the attribute identifier to names of the automatic created archives" for
 	the possibility of naming the archives just in the DAQ parameter ID.
     Size limit of the archive names defined as the constant ARCH_ID_SZ int tsys.h.

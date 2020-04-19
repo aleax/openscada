@@ -12,9 +12,24 @@
 </div>
 			<h1 id="firstHeading" lang="en">Documents/DAQ</h1>
 		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/DAQ.html" title="Документы/Сбор данных (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/DAQ.html" title="Документи/Збір даних (100% translated)">українська</a></div></div>
-<p><i>Author:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2010) — the page initial translation</i></font>
-</p><p><br />
+<div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
+<ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2010) — the page initial translation</i></font> </li></ul>
+</div>
+<p>Data acquisition of the SCADA (Supervisory Control and Data Acquisition)-system is its integral part, which get data from sources of different type. The nature of data, which operates SCADA, is characterized by signals of basic value's types (Integer, Real, Boolean and String). The signals vary over time and has their history — life. In the theory of technological processes (TP), under the signal means the value of TP sensor in the ADC code — "raw" signal or in the real value — engineer one. Signals can be combined into groups, which are often called parameters or complex tags. For example, the advanced data sources can provide the structures of parameters with the predefined set of related signals. In addition to the direct data acquisition, to the function of this mechanism also includes the transfer of actions on the executive control devices of TP, usually it is: latches, pumps and control valves. Taken together, this equipment is known as Matching to Object Device (MOD).
+</p><p>Data sources are characterized by a large variety, which can be divided into three groups:
 </p>
+<ul><li> Sources of "raw" data, providing the ADC code or levels of discrete signals, and also the sources which include simple processing. Typically, these are modules of distributed MODs or simpler industrial programmable logic controllers (PLCs).</li>
+<li> Powerful industrial PLCs, which have significant computing power and the possibility of formation of complex parameters with different structure.</li>
+<li> Local or related data sources. For example, the MOD as expansion cards, and also the data of the environment of hardware and software in which the system operates.</li></ul>
+<p>The variety of data sources has created a wide range of mechanisms to access them. Local data sources are different in application programming interface (API), and network sources, in their turn, in transport and protocol interaction level. In general, this has led to the fact that the addition of support for a new data source requires the creation of interface module or driver. Taking into account the great variety of sources, it is extremely expensive and actually impossible to cover the entire spectrum of the market of these devices. The situation is somewhat simplified with the network source due to the presence of the number of standard and free interaction protocols, but many sources still use their own protocols: private, commercial or protocols, tied to private mechanisms of the commercial operating systems (OS).
+</p><p>In terms of OpenSCADA, the following objects of the data model to serve the data acquisition mechanism are provided:
+</p>
+<ul><li> "Attribute" — reflection object of the signal data, includes the current value of the specified type of signal and access to the history of the change of these values;</li>
+<li> "Parameter" — object of the attributes' group with the structure corresponding to the characteristics of the separate data source;</li>
+<li> "Controller object" — object of the separate data device. Typically, this is a separate MOD module or a device of industrial PLC.</li></ul>
+<p>To account the features of different data acquisition devices, as well as the different mechanisms of interaction, in OpenSCADA <a href="Program_manual.html#DAQ" title="Special:MyLanguage/Documents/Program manual">the modular subsystem "Data acquisition"</a> is provided. The module of the subsystem is the driver for interfacing with a data source of specific type. Each module can contain the configuration of several devices of this type as controller objects. The general scheme of objects of "Data acquisition" subsystem is shown in Figure 1.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:309px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_subsys_daq_str.png"><img class="thumbimage" height="335" src="files/Oscada_subsys_daq_str.png" width="307" /></a>  <div class="thumbcaption">Fig. 1. Scheme of the subsystem "Data acquisition".</div></div></div></div>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#Data_acquisition_methods"><span class="tocnumber">1</span> <span class="toctext">Data acquisition methods</span></a>
@@ -37,21 +52,6 @@
 </ul>
 </div>
 
-<p>Data acquisition of the SCADA (Supervisory Control and Data Acquisition)-system is its integral part, which get data from sources of different type. The nature of data, which operates SCADA, is characterized by signals of basic value's types (Integer, Real, Boolean and String). The signals vary over time and has their history — life. In the theory of technological processes (TP), under the signal means the value of TP sensor in the ADC code — "raw" signal or in the real value — engineer one. Signals can be combined into groups, which are often called parameters or complex tags. For example, the advanced data sources can provide the structures of parameters with the predefined set of related signals. In addition to the direct data acquisition, to the function of this mechanism also includes the transfer of actions on the executive control devices of TP, usually it is: latches, pumps and control valves. Taken together, this equipment is known as Matching to Object Device (MOD).
-</p><p>Data sources are characterized by a large variety, which can be divided into three groups:
-</p>
-<ul><li> Sources of "raw" data, providing the ADC code or levels of discrete signals, and also the sources which include simple processing. Typically, these are modules of distributed MODs or simpler industrial programmable logic controllers (PLCs).</li>
-<li> Powerful industrial PLCs, which have significant computing power and the possibility of formation of complex parameters with different structure.</li>
-<li> Local or related data sources. For example, the MOD as expansion cards, and also the data of the environment of hardware and software in which the system operates.</li></ul>
-<p>The variety of data sources has created a wide range of mechanisms to access them. Local data sources are different in application programming interface (API), and network sources, in their turn, in transport and protocol interaction level. In general, this has led to the fact that the addition of support for a new data source requires the creation of interface module or driver. Taking into account the great variety of sources, it is extremely expensive and actually impossible to cover the entire spectrum of the market of these devices. The situation is somewhat simplified with the network source due to the presence of the number of standard and free interaction protocols, but many sources still use their own protocols: private, commercial or protocols, tied to private mechanisms of the commercial operating systems (OS).
-</p><p>In terms of OpenSCADA, the following objects of the data model to serve the data acquisition mechanism are provided:
-</p>
-<ul><li> "Attribute" — reflection object of the signal data, includes the current value of the specified type of signal and access to the history of the change of these values;</li>
-<li> "Parameter" — object of the attributes' group with the structure corresponding to the characteristics of the separate data source;</li>
-<li> "Controller object" — object of the separate data device. Typically, this is a separate MOD module or a device of industrial PLC.</li></ul>
-<p>To account the features of different data acquisition devices, as well as the different mechanisms of interaction, in OpenSCADA <a href="Program_manual.html#DAQ" title="Special:MyLanguage/Documents/Program manual">the modular subsystem "Data acquisition"</a> is provided. The module of the subsystem is the driver for interfacing with a data source of specific type. Each module can contain the configuration of several devices of this type as controller objects. The general scheme of objects of "Data acquisition" subsystem is shown in Figure 1.
-</p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:309px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_subsys_daq_str.png"><img class="thumbimage" height="335" src="files/Oscada_subsys_daq_str.png" width="307" /></a>  <div class="thumbcaption">Fig. 1. Scheme of the subsystem "Data acquisition".</div></div></div></div>
 <h2><span class="mw-headline" id="Data_acquisition_methods"><span class="mw-headline-number">1</span> Data acquisition methods</span></h2>
 <p>Taking into account variety of the data sources, and also the ways of their possible interaction, the data acquisition methods can be divided to: simple synchronous, simple asynchronous, package and passive ones.
 </p><p>In the review of the mechanisms below, the following objects will be involved:
@@ -272,5 +272,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/DAQ/en">Documents/DAQ/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2670</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/DAQ/en">Documents/DAQ/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2675</td></tr></table></body>
 </html>

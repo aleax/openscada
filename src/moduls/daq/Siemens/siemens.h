@@ -111,7 +111,7 @@ class TMdPrm : public TParamContr, public TPrmTempl::Impl
 	void saveIO( );
 
 	//Links specific
-	bool lnkInit( int num, bool checkNoLink = false );
+	bool lnkInit( int num, bool toRecnt = false );
 	bool lnkActive( int num );
 	TVariant lnkInput( int num );
 	bool lnkOutput( int num, const TVariant &vl );

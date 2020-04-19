@@ -1147,7 +1147,7 @@ void TMdPrm::enable( )
 	    if(to_make) loadIO(true);
 
 	    // Init links
-	    lCtx->chkLnkNeed = lCtx->initLnks();
+	    lCtx->chkLnkNeed = lCtx->initLnks(true);
 
 	    // Init system attributes identifiers
 	    lCtx->idFreq  = lCtx->ioId("f_frq");
@@ -1267,7 +1267,7 @@ void TMdPrm::upValLog( bool first, bool last, double frq )
     vector<string> ls;
 
     try {
-	if(lCtx->chkLnkNeed && !first && !last)	lCtx->chkLnkNeed = lCtx->initLnks(true);
+	if(lCtx->chkLnkNeed && !first && !last)	lCtx->chkLnkNeed = lCtx->initLnks();
 
 	//Set fixed system attributes
 	if(lCtx->idFreq >= 0)	lCtx->setR(lCtx->idFreq, frq);
@@ -1487,14 +1487,14 @@ TMdPrm::TLogCtx::TLogCtx( TCntrNode *iobj, const string &name ) : TPrmTempl::Imp
     if(it != lnks.end()) lnkAddrSet(num, func()->io(num)->def());
 }*/
 
-bool TMdPrm::TLogCtx::lnkInit( int num, bool checkNoLink )
+bool TMdPrm::TLogCtx::lnkInit( int num, bool toRecnt )
 {
     //Common link forms
-    if(!TPrmTempl::Impl::lnkInit(num,checkNoLink)) return false;
+    if(!TPrmTempl::Impl::lnkInit(num,toRecnt))	return false;
 
     MtxAlloc res(lnkRes, true);
     map<int,SLnk>::iterator it = lnks.find(num);
-    if(it == lnks.end() || (checkNoLink && it->second.addrSpec.size())) return false;
+    if(it == lnks.end() || it->second.addrSpec.size())	return false;
 
     string atp, atp_m, atp_sub, ai, mode;
     int reg, off;

@@ -58,7 +58,7 @@ The element''s names and their parameters are available in languages: English, U
 
 Author: Roman Savochenko <roman@oscada.org>
 Founded: September 2007
-Version: 2.0.3
+Version: 2.0.4
 License: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','wlb_Main','','Основні елементи','Бібліотека створюється для надання основних елементів користувацького інтерфейсу та містить графічні елементи, які часто затребувано при формуванні користувацького інтерфейсу автоматизації технологічних та загальних процесів. Будується бібліотека на основі примітивів віджетів та мови внутрішнього програмування JavaLikeCalc.
 
@@ -66,7 +66,7 @@ DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','wlb_Main','','�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Засновано: Вересень 2007
-Версія: 2.0.3
+Версія: 2.0.4
 Ліцензія: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','Основные элементы','Библиотека создаётся для предоставления основных элементов пользовательского интерфейса и содержит графические элементы, которые часто востребованы при формировании пользовательского интерфейса автоматизации технологических и общих процессом. Строится библиотека на основе примитивов виджетов и языка внутреннего программирования JavaLikeCalc.
 
@@ -74,7 +74,7 @@ DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','Основны�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Основано: Сентябрь 2007
-Версия: 2.0.3
+Версия: 2.0.4
 Лицензия: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements');
 INSERT INTO VCALibs VALUES('mnEls','Mnemo elements','Provides the mnemonic elements library of the user interface of the industrial automation.
@@ -8069,19 +8069,19 @@ Also this element generates alarms on the corresponding parameter settings.
 The element commonly uses and represents the representative structure of the "Analog signal" DAQ-template.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.0
+Version: 1.3.0
 License: GPLv2',32,'','','','Елемент слугує для відображення поточного значения аналогового параметру та короткого префіксу виміряного значення.
 Також цей елемент генерує сигналізації (alarms) за відповідними уставкам параметру.
 Елемент загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал".
 
 Автор: Роман Савоченко <roman@oscada,org>
-Версія: 1.2.0
+Версія: 1.3.0
 Ліцензія: GPLv2','','Элемент служит для отображения текущего значения аналогового параметра и краткого префиксу измеренного значения.
 Также этот элемент генерирует сигнализации (alarms) по соответствующим уставкам параметра.
 Элемент в целом использует и представляет представительскую структуру DAQ-шаблона "Аналоговый сигнал".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.2.0
+Версия: 1.3.0
 Лицензия: GPLv2','','','');
 INSERT INTO wlb_Main_io VALUES('cntrRegul','dscr','Element-frame is used for adjustment of PID-regulator, includes information about the parameter-regulator, fields of the regulator''s settings and the "Diagram" primitive, to monitor the trends of the regulator and browsing history.
 
@@ -20534,6 +20534,8 @@ AMNLTXX1taXx8OLi7+vCjg4gha6+2U5K6Vu/3iL0tc2NptRKiFWVGos1f43E/REMQnljpYpZ/GWO
 6q6DVghEUeBYjhe2BwtXkSQJWRyA39qcmvhKcfAZ58CwkFq7Ojl29fYm+7BFBEEzLKtgkvcSW4wQ
 vHZ5qqi/va1XysRmJn0LqxkLAHg8HpvNtmtWp9NpNpufVE2F4P6fmKIomqZz5eLi4mg0+p+7+ncg
 ABgcHNxLLisre9JrJB9MJtOfuAmh/+/YRy0AAAAASUVORK5CYII=','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
+if(f_start)	bordWidth_ = bordWidth;
+if(f_stop)	bordWidth = bordWidth_;
 if(!pDscr.isEVal())
 	tipTool = pDscr + ((!pErr.isEVal()&&pErr.toInt())?"\n"+tr("Error")+": "+pErr:"");
 name_en = pName.length;
@@ -20547,7 +20549,7 @@ if(pVal.isEVal()) {
 	val_font = "Arial 20 0 1 0 1";
 	alarm = "";
 	pErrCode = 0;
-	bordColor = "gray", bordWidth = active ? 1 : 0;
+	bordColor = "gray", bordWidth = bordWidth_;
 	return;
 }
 
@@ -20589,7 +20591,7 @@ if(this.attr("focus") ||
   bordColor = (bordColor == "silver") ? "grey" : "silver";
   bordWidth = 2;
 }
-else { bordColor = "grey"; bordWidth = active ? 1 : 0; }','','',500,'perm;name;dscr;active;geomH;tipTool;evProc;backColor;bordWidth;bordColor;',1582872454);
+else { bordColor = "grey"; bordWidth = bordWidth_; }','','',500,'perm;name;dscr;active;geomH;tipTool;evProc;backColor;bordWidth;bordColor;',1586958619);
 INSERT INTO wlb_Main VALUES('cntrRegul','iVBORw0KGgoAAAANSUhEUgAAAEAAAAArCAIAAABHOBkQAAAACXBIWXMAAA06AAANOgEDIh6FAAAE
 DklEQVRoge2ZTU8bRxjHn9mZ2fF4d/2CDREJcUFVLRRLHHyAK+LGAT4INz5Cc04lLqmUxgfU9oCE
 OPEFoK2VVEhcoKQcqFog3lC7NsZv+zrTgwtBKAmDkmhVyb/TzjP7n/3/V8/MWjJ69uy7VqsF0eE6

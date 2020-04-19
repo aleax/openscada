@@ -31,7 +31,7 @@
 <td> <a href="../Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> </td>
 <td> ModBus
 </td>
-<td> 2.7 </td>
+<td> 2.8 </td>
 <td> GPL2 </td>
 <td> daq_ModBus.so </td>
 <td> en,uk,ru,de </td>
@@ -46,7 +46,7 @@
 <td> <a href="../Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> </td>
 <td> ModBus
 </td>
-<td> 2.1 </td>
+<td> 2.2 </td>
 <td> GPL2 </td>
 <td> daq_ModBus.so </td>
 <td> en,uk,ru,de </td>
@@ -56,6 +56,10 @@
 <td> Роман Савоченко </td>
 <td> Предоставляет реализацию протоколов ModBus. Поддерживаются ModBus/TCP, ModBus/RTU и ModBus/ASCII протоколы.
 </td></tr></table>
+<p>ModBus — коммуникационный протокол, основанный на клиент-серверной архитектуре. Разработан фирмой Modicon для использования в контроллерах с программируемой логикой (PLC). Стал стандартом де-факто в промышленности и широко применяется для организации связи промышленного электронного оборудования. Используется для передачи данных через последовательные линии связи RS-485, RS-422, RS-232, а также сети TCP/IP. В настоящее время поддерживается некоммерческой организацией ModBus-IDA.
+</p><p>Существуют три режима протокола: ModBus/RTU, ModBus/ASCII и ModBus/TCP. Первые два используют последовательные линии связи (в основном RS-485, реже RS-422/RS-232), последний использует сети TCP/IP для передачи данных.
+</p><p>Модуль сбора данных предоставляет возможность собирать информацию у различных устройств по протоколу ModBus во всех режимах. Также, модулем реализуются функции горизонтального резервирования, а именно — совместной работы с удалённой станцией этого-же уровня. В то же время, модуль протокола позволяет сформировать и выдать данные по протоколу ModBus в различных режимах и через интерфейсы, поддерживаемые модулями <a href="../Program_manual.html#Communication" title="Special:MyLanguage/Documents/Program manual">подсистемы "Транспорты"</a>.
+</p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#.D0.9E.D0.B1.D1.89.D0.B5.D0.B5_.D0.BE.D0.BF.D0.B8.D1.81.D0.B0.D0.BD.D0.B8.D0.B5_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D0.B0_ModBus"><span class="tocnumber">1</span> <span class="toctext">Общее описание протокола ModBus</span></a>
@@ -93,10 +97,6 @@
 </ul>
 </div>
 
-<p>ModBus — коммуникационный протокол, основанный на клиент-серверной архитектуре. Разработан фирмой Modicon для использования в контроллерах с программируемой логикой (PLC). Стал стандартом де-факто в промышленности и широко применяется для организации связи промышленного электронного оборудования. Используется для передачи данных через последовательные линии связи RS-485, RS-422, RS-232, а также сети TCP/IP. В настоящее время поддерживается некоммерческой организацией ModBus-IDA.
-</p><p>Существуют три режима протокола: ModBus/RTU, ModBus/ASCII и ModBus/TCP. Первые два используют последовательные линии связи (в основном RS-485, реже RS-422/RS-232), последний использует сети TCP/IP для передачи данных.
-</p><p>Модуль сбора данных предоставляет возможность собирать информацию у различных устройств по протоколу ModBus во всех режимах. Также, модулем реализуются функции горизонтального резервирования, а именно — совместной работы с удалённой станцией этого-же уровня. В то же время, модуль протокола позволяет сформировать и выдать данные по протоколу ModBus в различных режимах и через интерфейсы, поддерживаемые модулями <a href="../Program_manual.html#Communication" title="Special:MyLanguage/Documents/Program manual">подсистемы "Транспорты"</a>.
-</p>
 <h2><span class="mw-headline" id=".D0.9E.D0.B1.D1.89.D0.B5.D0.B5_.D0.BE.D0.BF.D0.B8.D1.81.D0.B0.D0.BD.D0.B8.D0.B5_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D0.B0_ModBus"><span class="mw-headline-number">1</span> Общее описание протокола ModBus</span></h2>
 <p>Протокол ModBus/{RTU,ASCII} предполагает одно ведущее (запрашивающее) устройство в линии (master), которое может передавать команды одному или нескольким ведомым устройствам (slave), обращаясь к ним по уникальному адресу в линии. Синтаксис команд протокола позволяет адресовать 247 устройств на одной линии связи стандарта RS-485 (реже RS-422 или RS-232). В случае с режимом TCP, адресация исключена из протокола, поскольку выполняется на уровне TCP/IP стека.
 </p><p>Инициатива осуществления обмена всегда исходит от ведущего устройства. Ведомые устройства прослушивают линию связи. Мастер подаёт запрос (посылка, последовательность байт) в линию и переходит в режим прослушивания линии связи. Ведомое устройство отвечает на запрос, пришедший на его адрес. 
@@ -369,5 +369,5 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/ModBus/ru">Modules/ModBus/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2670</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/ModBus/ru">Modules/ModBus/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2675</td></tr></table></body>
 </html>

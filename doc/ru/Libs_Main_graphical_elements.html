@@ -128,7 +128,7 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
 </td></tr></table>
-<p>Элемент на рисунке 1.1 служит для отображения текущего значения аналогового параметра и режима регулятора, если параметр является таковым. Также этот элемент генерирует уведомления про нарушения по соответствующим уставкам параметра. Элемент в целом использует и представляет представительскую структуру <a href="../en/Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">DAQ-шаблона "Аналоговый сигнал"</a>.
+<p>Элемент на рисунке 1.1 служит для отображения текущего значения аналогового параметра и режима регулятора, если параметр является таковым. Также этот элемент генерирует уведомления про нарушения по соответствующим уставкам параметра. Элемент в целом использует и представляет представительскую структуру <a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">DAQ-шаблона "Аналоговый сигнал"</a>.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_AnShow_ru.png"><img class="thumbimage" height="42" src="files/LibMainEls_AnShow_ru.png" width="400" /></a>  <div class="thumbcaption">Рис.1.1. Элемент "Отображение аналогового" в режиме разработки и исполнения (слева направо).</div></div></div></div>
 <p><b><u>Использование — разработка</u></b><br />
@@ -221,14 +221,14 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <tr>
 <td> <span id="anShow1" title="#anShow1"><h3><span class="mw-headline" id=".D0.9E.D1.82.D0.BE.D0.B1.D1.80.D0.B0.D0.B6.D0.B5.D0.BD.D0.B8.D0.B5_.D0.B0.D0.BD.D0.B0.D0.BB.D0.BE.D0.B3.D0.BE.D0.B2.D0.BE.D0.B3.D0.BE_1_.28anShow1.29.3B_.D0.9E.D1.82.D0.BE.D0.B1.D1.80.D0.B0.D0.B6.D0.B5.D0.BD.D0.B8.D0.B5_.D0.B0.D0.BD.D0.B0.D0.BB.D0.BE.D0.B3.D0.BE.D0.B2.D0.BE.D0.B3.D0.BE_1.2C_.D0.BA.D0.BE.D1.80.D0.BE.D1.82.D0.BA.D0.B8.D0.B9_.28anShow1s.29"><span class="mw-headline-number">1.2</span> Отображение аналогового 1 (<a href="Libs_Main_graphical_elements.html#anShow1" title="Special:MyLanguage/Libs/Main graphical elements">anShow1</a>); Отображение аналогового 1, короткий (<a href="Libs_Main_graphical_elements.html#anShow1" title="Special:MyLanguage/Libs/Main graphical elements">anShow1s</a>)</span></h3></span>
 </td>
-<td> 1.2 </td>
+<td> 1.3 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk, ru
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
 </td></tr></table>
-<p>Элемент на рисунке 1.2 служит для отображения текущего значения аналогового параметра и краткого префиксу измеренного значения. Также этот элемент генерирует уведомления про нарушения по соответствующим уставкам параметра. Элемент в целом использует и представляет представительскую структуру <a href="../en/Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">DAQ-шаблона "Аналоговый сигнал"</a>.
+<p>Элемент на рисунке 1.2 служит для отображения текущего значения аналогового параметра и краткого префиксу измеренного значения. Также этот элемент генерирует уведомления про нарушения по соответствующим уставкам параметра. Элемент в целом использует и представляет представительскую структуру <a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">DAQ-шаблона "Аналоговый сигнал"</a>.
 </p><p>Эти два элемента отличаются один от одного только начальным горизонтальным размером, т.е. второй "Отображение аналогового 1, короткий" является коротким вариантом для очень коротких случаев и он прямо наследуется от первого.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_anShow1.png"><img class="thumbimage" height="23" src="../en/files/LibMainEls_anShow1.png" width="400" /></a>  <div class="thumbcaption">Рис.1.2. Элемент "Отображение аналогового 1" в режиме разработки и исполнения (слева направо).</div></div></div></div>
@@ -322,7 +322,7 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
 </td></tr></table>
-<p>Элемент на рисунке 1.3 служит для отображения динамических текстовых меток, которые формируется на основе дискретных сигналов. Также этот элемент генерирует уведомление про нарушения по локально определённому условию, атрибут <b>ntf</b>. Элемент в целом использует и представляет представительскую структуру DAQ-шаблонов <a href="../en/Libs_Main.html#digitBlockUnif" title="Special:MyLanguage/Libs/Main">дискретного блока</a> и <a href="../en/Libs_Main.html#codeState" title="Special:MyLanguage/Libs/Main">состояния по коду</a>.
+<p>Элемент на рисунке 1.3 служит для отображения динамических текстовых меток, которые формируется на основе дискретных сигналов. Также этот элемент генерирует уведомление про нарушения по локально определённому условию, атрибут <b>ntf</b>. Элемент в целом использует и представляет представительскую структуру DAQ-шаблонов <a href="Libs_Main.html#digitBlockUnif" title="Special:MyLanguage/Libs/Main">дискретного блока</a> и <a href="Libs_Main.html#codeState" title="Special:MyLanguage/Libs/Main">состояния по коду</a>.
 </p>
 <ul><li> <b>Спонсирование:</b> Василий Григорьев, <a class="external text" href="http://e-beam.ru" rel="nofollow noreferrer noopener" target="_blank">Лаборатория Вакуумных Технологий</a></li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_TextLab.png"><img class="thumbimage" height="25" src="../en/files/LibMainEls_TextLab.png" width="400" /></a>  <div class="thumbcaption">Рис.1.3. Элемент "Текстовая метка" в режиме разработки и выполнения (слева направо)</div></div></div></div>.
@@ -452,7 +452,7 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
 </td></tr></table>
-<p>Элемент на рисунке 1.4 служит для отображения динамических меток изображений, которые формируются на основе дискретных сигналов. Также этот элемент генерирует уведомления про нарушения по локально определённому условию, атрибут <b>ntf</b>. Элемент в целом использует и представляет представительскую структуру DAQ-шаблонов <a href="../en/Libs_Main.html#digitBlockUnif" title="Special:MyLanguage/Libs/Main">дискретного блока</a> и <a href="../en/Libs_Main.html#codeState" title="Special:MyLanguage/Libs/Main">состояния по коду</a>.
+<p>Элемент на рисунке 1.4 служит для отображения динамических меток изображений, которые формируются на основе дискретных сигналов. Также этот элемент генерирует уведомления про нарушения по локально определённому условию, атрибут <b>ntf</b>. Элемент в целом использует и представляет представительскую структуру DAQ-шаблонов <a href="Libs_Main.html#digitBlockUnif" title="Special:MyLanguage/Libs/Main">дискретного блока</a> и <a href="Libs_Main.html#codeState" title="Special:MyLanguage/Libs/Main">состояния по коду</a>.
 </p>
 <ul><li> <b>Спонсирование:</b> Винницкая Птицефабрика</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_ImgLab.png"><img class="thumbimage" height="53" src="../en/files/LibMainEls_ImgLab.png" width="400" /></a>  <div class="thumbcaption">Рис.1.4. Элемент "Метка изображением" в режиме разработки и выполнения (слева направо)</div></div></div></div>.
@@ -710,12 +710,12 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
 </td></tr></table>
-<p>Элемент на рисунке 1.6 служит для отображения свойств источника данных в табличном виде и с выделением их цветом, как объект, и предоставления возможности изменения значения свойств с правом записи. Также этот элемент генерирует сообщения про нарушения согласно особенностям объекта. Элемент в целом использует и предоставляет представительскую структуру DAQ-шаблонов "<a href="../en/Libs_Main.html#ComplexObject" title="Special:MyLanguage/Libs/Main">Комплексный объект</a>".
+<p>Элемент на рисунке 1.6 служит для отображения свойств источника данных в табличном виде и с выделением их цветом, как объект, и предоставления возможности изменения значения свойств с правом записи. Также этот элемент генерирует сообщения про нарушения согласно особенностям объекта. Элемент в целом использует и предоставляет представительскую структуру DAQ-шаблонов "<a href="Libs_Main.html#ComplexObject" title="Special:MyLanguage/Libs/Main">Комплексный объект</a>".
 </p>
 <ul><li> <b>Спонсировано:</b> ПАТ ХАРТРОН</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:687px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_objProps_ru.png"><img class="thumbimage" height="387" src="files/LibMainEls_objProps_ru.png" width="685" /></a>  <div class="thumbcaption">Рис.1.6. Элемент "Свойства объекта" в режиме разработки и выполнения (слева направо).</div></div></div></div>
 <p><b><u>Использование — разработка</u></b><br />
-Этот виджет может быть использован разработчиком при создании мнемосхем с консолидированным отображением объекта как целое и сущности со свойствами. Для использования необходимо добавить этот виджет на мнемосхему, подстроить горизонтальный, вертикальный размер масштабом и связать с параметром источника данных от DAQ-шаблона "<a href="../en/Libs_Main.html#ComplexObject" title="Special:MyLanguage/Libs/Main">Комплексный объект</a>".
+Этот виджет может быть использован разработчиком при создании мнемосхем с консолидированным отображением объекта как целое и сущности со свойствами. Для использования необходимо добавить этот виджет на мнемосхему, подстроить горизонтальный, вертикальный размер масштабом и связать с параметром источника данных от DAQ-шаблона "<a href="Libs_Main.html#ComplexObject" title="Special:MyLanguage/Libs/Main">Комплексный объект</a>".
 </p><p><b><u>Использование — исполнение</u></b><br />
 В режиме исполнения отображается таблица со свойствами в строках, где первая колонка это название свойства, а вторая её значение. Строка может подсвечиваться фоном аварийного цвета, в случае нарушения по этому свойству. Особенное значение имеет и заголовок виджета где отображается название объекта, фон цвета которого может приобретать аварийные цвета, при наличии нарушений у объекта.
 </p><p>Таблица свойств является активной и при выборе строки свойства, которое предусматривает запись, снизу появится поле установки значения свойства.
@@ -1029,7 +1029,7 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
 </td></tr></table>
-<p>Элемент-виджет, представленный на рисунке 3.1.1, служит для создания <a href="#grpGraph">групп графиков</a>. Виджет содержит информацию о параметре, режиме регулятора, если параметр является таковым, единице измерения аналогового параметра, а также цвет, соответствующий параметру тренда. Виджет в целом использует и представляет представительскую структуру DAQ-шаблонов "<a href="../en/Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">Аналоговый сигнал</a>" и "<a href="../en/Libs_Main.html#digitBlockUnif" title="Special:MyLanguage/Libs/Main">Дискретный блок</a>".
+<p>Элемент-виджет, представленный на рисунке 3.1.1, служит для создания <a href="#grpGraph">групп графиков</a>. Виджет содержит информацию о параметре, режиме регулятора, если параметр является таковым, единице измерения аналогового параметра, а также цвет, соответствующий параметру тренда. Виджет в целом использует и представляет представительскую структуру DAQ-шаблонов "<a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">Аналоговый сигнал</a>" и "<a href="Libs_Main.html#digitBlockUnif" title="Special:MyLanguage/Libs/Main">Дискретный блок</a>".
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_ElViewGraphD_ru.png"><img class="thumbimage" height="60" src="files/LibMainEls_ElViewGraphD_ru.png" width="400" /></a>  <div class="thumbcaption">Рис.3.1.1a. Виджет "Элемент группы графиков" в режиме разработки.</div></div></div></div>
 <p><b><u>Использование — разработка</u></b><br />
@@ -1392,7 +1392,7 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
 </td></tr></table>
-<p>Элемент-виджет, представленный на рисунке 3.3.1, служит основой <a href="#ViewCadr">группы обзорных кадров</a> и обычно не используется самостоятельно. Виджет отображает текстовую информацию о параметре в виде наименования и значения, а также тренд параметра за небольшой промежуток времени (2 минуты) для наблюдения за текущей тенденцией поведения параметра с авто-масштабированием по шкале значения. Виджет в целом использует и представляет представительскую структуру DAQ-шаблона "<a href="../en/Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">Аналоговый сигнал</a>".
+<p>Элемент-виджет, представленный на рисунке 3.3.1, служит основой <a href="#ViewCadr">группы обзорных кадров</a> и обычно не используется самостоятельно. Виджет отображает текстовую информацию о параметре в виде наименования и значения, а также тренд параметра за небольшой промежуток времени (2 минуты) для наблюдения за текущей тенденцией поведения параметра с авто-масштабированием по шкале значения. Виджет в целом использует и представляет представительскую структуру DAQ-шаблона "<a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">Аналоговый сигнал</a>".
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_ElViewCadr_ru.png"><img class="thumbimage" height="203" src="files/LibMainEls_ElViewCadr_ru.png" width="400" /></a>  <div class="thumbcaption">Рис.3.3.1. Виджет "Кадр группы обзора" в режиме разработки и исполнения (слева направо).</div></div></div></div>
 <p><b><u>Использование — разработка</u></b><br />
@@ -1500,7 +1500,7 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
 </td></tr></table>
-<p>Элемент-виджет, представленный на рисунке 3.4.1, служит основой <a href="#ResultGraph">сводных графиков</a> и обычно не используется самостоятельно. Виджет отображает название группы и до пяти трендов, с их текстовыми метками, за фиксированный промежуток времени (10 минут) для наблюдения за текущей тенденцией поведения параметров. Виджет в целом использует и представляет представительскую структуру DAQ-шаблона "<a href="../en/Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">Аналоговый сигнал</a>".
+<p>Элемент-виджет, представленный на рисунке 3.4.1, служит основой <a href="#ResultGraph">сводных графиков</a> и обычно не используется самостоятельно. Виджет отображает название группы и до пяти трендов, с их текстовыми метками, за фиксированный промежуток времени (10 минут) для наблюдения за текущей тенденцией поведения параметров. Виджет в целом использует и представляет представительскую структуру DAQ-шаблона "<a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">Аналоговый сигнал</a>".
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:462px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_ResultGraphEl_ru.png"><img class="thumbimage" height="142" src="files/LibMainEls_ResultGraphEl_ru.png" width="460" /></a>  <div class="thumbcaption">Рис.3.4.1. Виджет "Кадр сводных графиков" в режиме разработки и исполнения (слева направо).</div></div></div></div>
 <p><b><u>Использование — разработка</u></b><br />
@@ -1583,7 +1583,7 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
 </td></tr></table>
-<p>Элемент-кадр, представленный на рисунке 3.5, служит для настройки ПИД-регулятора, включает в себя информацию о параметре-регуляторе, поля настроек регулятора и <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">примитив "Диаграмма"</a>, для наблюдения за трендами регулятора и просмотра истории. Кадр в целом использует и представляет представительскую структуру DAQ-шаблона <a href="../en/Libs_Main.html#pidUnif" title="Special:MyLanguage/Libs/Main">аналогового</a> и <a href="../en/Libs_Main.html#pidUnifImp" title="Special:MyLanguage/Libs/Main">импульсного</a> ПИД-регуляторов.
+<p>Элемент-кадр, представленный на рисунке 3.5, служит для настройки ПИД-регулятора, включает в себя информацию о параметре-регуляторе, поля настроек регулятора и <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">примитив "Диаграмма"</a>, для наблюдения за трендами регулятора и просмотра истории. Кадр в целом использует и представляет представительскую структуру DAQ-шаблона <a href="Libs_Main.html#pidUnif" title="Special:MyLanguage/Libs/Main">аналогового</a> и <a href="Libs_Main.html#pidUnifImp" title="Special:MyLanguage/Libs/Main">импульсного</a> ПИД-регуляторов.
 </p>
 <ul><li> <b>Спонсировано:</b> <a class="external text" href="http://diyaorg.dp.ua" rel="nofollow noreferrer noopener" target="_blank">ООО "ДІЯ"</a></li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_cntrRegulD_ru.png"><img class="thumbimage" height="600" src="files/LibMainEls_cntrRegulD_ru.png" width="900" /></a>  <div class="thumbcaption">Рис.3.5a. Кадр "Панель настройки регулятора" в режиме разработки.</div></div></div></div>
@@ -2050,7 +2050,7 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <tr>
 <td> <span id="userManager" title="#userManager"><h3><span class="mw-headline" id=".D0.9C.D0.B5.D0.BD.D0.B5.D0.B4.D0.B6.D0.B5.D1.80_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D0.B5.D0.B9_.28userManager.29"><span class="mw-headline-number">3.7</span> Менеджер пользователей (<a href="Libs_Main_graphical_elements.html#userManager" title="Special:MyLanguage/Libs/Main graphical elements">userManager</a>)</span></h3></span>
 </td>
-<td> 1.4 </td>
+<td> 1.5 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk, ru
@@ -2061,7 +2061,8 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </p>
 <ul><li> формирования перечня подконтрольных пользователей;</li>
 <li> возможность ознакомления и смены информации пользователей, на предмет: имя, полное имя, описание, пароль и группы;</li>
-<li> добавления новых и удаления существующих пользователей.</li></ul>
+<li> добавления новых и удаления существующих пользователей;</li>
+<li> возможность редактирования собственной информации и пароля непривелигированного пользователя.</li></ul>
 <ul><li> <b>Спонсирование:</b> Винницкая Птицефабрика</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_userManagerD_ru.png"><img class="thumbimage" height="550" src="files/LibMainEls_userManagerD_ru.png" width="900" /></a>  <div class="thumbcaption">Рис.3.7a. Кадр "Менеджер пользователей" в режиме разработки.</div></div></div></div>
 <p><b><u>Использование — разработка</u></b><br />
@@ -2153,9 +2154,9 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </td></tr></table>
 <p>Элемент, представленный на рисунках 4.2, фактически является универсальной панелью управления и расширенного контроля различными устройствами по всем известным и определённым представительским структурам базовых данных систем управления по DAQ-шаблонам:
 </p>
-<ul><li> аналоговые: <a href="../en/Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">аналоговый сигнал</a>, <a href="../en/Libs_Main.html#manInUnif" title="Special:MyLanguage/Libs/Main">ручной ввод аналогового сигнала</a>, ПИД-регулятор (<a href="../en/Libs_Main.html#pidUnif" title="Special:MyLanguage/Libs/Main">аналоговый</a> и <a href="../en/Libs_Main.html#pidUnifImp" title="Special:MyLanguage/Libs/Main">импульсный</a>);</li>
-<li> <a href="../en/Libs_Main.html#digitBlockUnif" title="Special:MyLanguage/Libs/Main">дискретные сборки</a>: клапаны, отсекатели, задвижки, двигатели, вентиляторы и различные переключатели;</li>
-<li> <a href="../en/Libs_Main.html#codeState" title="Special:MyLanguage/Libs/Main">произвольные дискретные состояния</a>.</li></ul>
+<ul><li> аналоговые: <a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">аналоговый сигнал</a>, <a href="Libs_Main.html#manInUnif" title="Special:MyLanguage/Libs/Main">ручной ввод аналогового сигнала</a>, ПИД-регулятор (<a href="Libs_Main.html#pidUnif" title="Special:MyLanguage/Libs/Main">аналоговый</a> и <a href="Libs_Main.html#pidUnifImp" title="Special:MyLanguage/Libs/Main">импульсный</a>);</li>
+<li> <a href="Libs_Main.html#digitBlockUnif" title="Special:MyLanguage/Libs/Main">дискретные сборки</a>: клапаны, отсекатели, задвижки, двигатели, вентиляторы и различные переключатели;</li>
+<li> <a href="Libs_Main.html#codeState" title="Special:MyLanguage/Libs/Main">произвольные дискретные состояния</a>.</li></ul>
 <p>В первичной функции панели — расширенное и общее управление, этот элемент вызывается из:
 </p>
 <ul><li> <a href="#Widgets">виджетов первичного представления данных</a> этой библиотеки: "<a href="#anShow">Отображение аналогового</a>", "<a href="#anShow">Отображение аналогового 1</a>", "<a href="#TextLab">Текстовая метка</a>", "<a href="#ImgLab">Метка изображением</a>";</li>
@@ -2462,15 +2463,15 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </td></tr></table>
 <p>Элемент, представленный на рисунке 4.3, является информационно-контрольным диалогом около параметра источника данных — расширенный паспорт параметра. В отличии от <a href="#cntrPasp">простого паспорта</a>, расширенный, кроме информации, предоставляет возможность контроля атрибутов параметра и отображения истории стандартных атрибутов как в виде тренда, так и таблицы данных.
 </p><p><i>Информация и контроль</i> атрибутов параметра остаётся основной функцией, которая предоставляется во вкладке "Обзор", где формируется таблица атрибутов как они есть, со столбцами "Имя" и "Значение". Таблица активная и при выборе доступных для записи атрибутов, и соответствующих прав (root:op), внизу предоставляется поле ввода новых значений.
-</p><p><i>История</i> предоставляется в следующих двух вкладках "Тренды" и "Данные", которые могут и отсутствовать при отсутствии истории-архивов по стандартным атрибутам. Вкладка "Тренды" содержит область графиков, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">примитив "Диаграмма"</a>, на большей части окна, и таблицу внизу с названиями, цветом и шкалами графиков. Графики периодически обновляются и строятся с периодом 1 секунда, и на фиксированную глубину в 1 час. Вкладка "Данные" содержит только поле <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Document" title="Special:MyLanguage/Sub-projects/VCA">примитива "Документ"</a> с таблицей со значениями атрибута в столбцах, которая обновляется с периодом 1 секунда для периода данных истории и на глубину в 100 записей. Стандартными атрибутами с историей считаются следующие элементы <a href="../en/Libs_Main.html" title="Special:MyLanguage/Libs/Main">представительских структур параметра</a>:
+</p><p><i>История</i> предоставляется в следующих двух вкладках "Тренды" и "Данные", которые могут и отсутствовать при отсутствии истории-архивов по стандартным атрибутам. Вкладка "Тренды" содержит область графиков, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">примитив "Диаграмма"</a>, на большей части окна, и таблицу внизу с названиями, цветом и шкалами графиков. Графики периодически обновляются и строятся с периодом 1 секунда, и на фиксированную глубину в 1 час. Вкладка "Данные" содержит только поле <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Document" title="Special:MyLanguage/Sub-projects/VCA">примитива "Документ"</a> с таблицей со значениями атрибута в столбцах, которая обновляется с периодом 1 секунда для периода данных истории и на глубину в 100 записей. Стандартными атрибутами с историей считаются следующие элементы <a href="Libs_Main.html" title="Special:MyLanguage/Libs/Main">представительских структур параметра</a>:
 </p>
-<ul><li> <a href="../en/Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">Аналоговый сигнал</a>:
+<ul><li> <a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">Аналоговый сигнал</a>:
 <ul><li> <b>var</b> — переменная.</li></ul></li>
-<li> <a href="../en/Libs_Main.html#pidUnif" title="Special:MyLanguage/Libs/Main">ПИД-регулятор</a>:
+<li> <a href="Libs_Main.html#pidUnif" title="Special:MyLanguage/Libs/Main">ПИД-регулятор</a>:
 <ul><li> <b>sp</b> — задание;</li>
 <li> <b>out</b> — выход;</li>
 <li> <b>auto</b> — режим: автомат.</li></ul></li>
-<li> <a href="../en/Libs_Main.html#codeState" title="Special:MyLanguage/Libs/Main">Дискретные сборки</a>:
+<li> <a href="Libs_Main.html#codeState" title="Special:MyLanguage/Libs/Main">Дискретные сборки</a>:
 <ul><li> <b>com</b> — команда "Открыть";</li>
 <li> <b>close</b> — команда "Закрыть";</li>
 <li> <b>stop</b> — команда "Остановить";</li>
@@ -2520,7 +2521,7 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
 </td></tr></table>
-<p>Элемент, представленный на рисунке 4.4, является информационным диалогом около параметра источника данных — паспорт параметра, соответственно он позволяет получить такого рода информацию как: шифр, имя, описание, единица измерения, аварийные границы и другое, согласно <a href="../en/Libs_Main.html" title="Special:MyLanguage/Libs/Main">представительской структуре параметра</a> — атрибуты параметра. Диалог построен на основе <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Document" title="Special:MyLanguage/Sub-projects/VCA">примитива "Документ"</a>, содержимое которого формируется динамически и периодически обновляется.
+<p>Элемент, представленный на рисунке 4.4, является информационным диалогом около параметра источника данных — паспорт параметра, соответственно он позволяет получить такого рода информацию как: шифр, имя, описание, единица измерения, аварийные границы и другое, согласно <a href="Libs_Main.html" title="Special:MyLanguage/Libs/Main">представительской структуре параметра</a> — атрибуты параметра. Диалог построен на основе <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Document" title="Special:MyLanguage/Sub-projects/VCA">примитива "Документ"</a>, содержимое которого формируется динамически и периодически обновляется.
 </p><p>При построении паспорта отдельно обрабатываются атрибуты аварийных [<b>aMin</b>...<b>aMax</b>] и предупредительных шкал [<b>wMin</b>...<b>wMax</b>], которые объединяются в одной записи и в целом могут скрываться при условии их отключения.
 </p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> На данный момент этот диалог фактически заменён <a href="#cntrPaspExt">более функциональным и расширенным диалогом паспорта</a> и он в основном отключен во всех шаблонных и демонстрационных проектах, хотя никто не препятствует его использованию, если необходима только информацию.
 </p>
@@ -2913,5 +2914,5 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/ru">Libs/Main_graphical_elements/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2670</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/ru">Libs/Main_graphical_elements/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2675</td></tr></table></body>
 </html>

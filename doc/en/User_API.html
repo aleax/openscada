@@ -12,9 +12,9 @@
 </div>
 			<h1 id="firstHeading" lang="en">Documents/User API</h1>
 		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/User_API.html" title="Документация/API пользователя (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/User_API.html" title="Документація/API користувача (100% translated)">українська</a></div></div>
-<div style="float:right; border:1px solid gray; width:300px; padding:2px;">
+<div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2012) — the page initial translation</i></font></li>
-<li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/ProgrammManual" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a></li></ul>
+<li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/ProgrammManual" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a> </li></ul>
 </div>
 <p>Before programming in OpenSCADA, you must examine the object structure of the program (Object Model) in <a href="Program_manual.html" title="Special:MyLanguage/Documents/Program manual">OpenSCADA Program Manual</a> and in Figure 1.
 </p>
@@ -714,7 +714,9 @@ test = Special.FLibSYS.strDec4Bin(req.text()); </pre></li>
 <h3><span class="mw-headline" id="Module_Protocol.HTTP"><span class="mw-headline-number">10.1</span> Module <a href="Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a></span></h3>
 <p><b>Input part of the module object (SYS.Protocol.HTTP.{In})</b>
 </p>
-<ul><li> <i>bool pgAccess(string URL)</i> — checks for accessing the page, pointed by the <i>URL</i>.
+<ul><li> <i>bool setUser( string user )</i> — changes the user linked to the authentication session ID.
+<ul><li> <i>user</i> — user to change.</li></ul></li>
+<li> <i>bool pgAccess(string URL)</i> — checks for accessing the page, pointed by the <i>URL</i>.
 <ul><li> <i>URL</i> — URL of the checking page.</li></ul></li>
 <li> <i>string pgCreator(string cnt, string rcode = "200 OK", string httpattrs = "Content-Type: text/html;charset={SYS}", string htmlHeadEls = "", string forceTmplFile = "", string lang = "" )</i> — forms for a page or a resource from the content <i>cnt</i>, wrapped to HTTP with the result <i>rcode</i>, with HTTP additional attributes <i>httpattrs</i>, HTML additional head's element <i>htmlHeadEls</i>, forced to template file <i>forceTmplFile</i> and language <i>lang</i>.
 <ul><li> <i>cnt</i> — content of the page or the resource (images, XML, CSS, JavaScript, ...)&nbsp;;</li>
@@ -736,10 +738,10 @@ test = Special.FLibSYS.strDec4Bin(req.text()); </pre></li>
 </p>
 <ul><li> <i>string user( )</i> — current session user.</li>
 <li> <i>int alrmQuietance( int quit_tmpl, string wpath = "", bool ret = false )</i> — quiets of the violations <i>wpath</i> with the template <i>quit_tmpl</i>. If <i>wpath</i> is empty string then the global quietance makes. Into the string <i>wpath</i>, by symbol ';', can be enumerated addresses of several widgets. When set the <i>ret</i>, the quietance return is performed.</li>
-<li> <i>int reqTm( )</i> — last request time.</li>
+<li> <i>int reqTm( )</i> — last request time in seconds from the epoch of 1/1/1970.</li>
 <li> <i>string reqUser( )</i> — last request user.</li>
 <li> <i>string reqLang( )</i> — last request language.</li>
-<li> <i>int userActTm( )</i> — last user action time.</li>
+<li> <i>int userActTm( )</i> — last user action time in seconds from the epoch of 1/1/1970.</li>
 <li> <i>bool uiCmd( string cmd, string prm, string src )</i> — sends a UI command of the pages managing, that is: "open", "next", "prev"; for more details see in <a href="#Events">the events section</a>. This function must be in the priority of using to the pages managing before the direct writing to the page attributes "pgOpen" and "pgOpenSrc" due it is single method of the correct work with <a href="#Project">the linked pages</a>.</li></ul>
 <p><b>Object "Widget" (this)</b>
 </p>
@@ -832,7 +834,8 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 </td></tr>
 
 <tr>
-<td> <a href="Libs_LowLevelDevices.html" title="Special:MyLanguage/Libs/LowLevelDevices">Low level sensors and chips library</a> </td>
+<td> <a href="Libs_LowLevelDevices.html" title="Special:MyLanguage/Libs/LowLevelDevices">Low level sensors and chips library</a>
+</td>
 <td> 1.4 </td>
 <td> GPLv2 </td>
 <td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.tmplb_LowDevLib </td>
@@ -840,11 +843,12 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 </td></tr>
 
 <tr>
-<td> <a href="Libs_Service_procedures.html" title="Special:MyLanguage/Libs/Service procedures">Service procedures library</a> </td>
+<td> <a href="Libs_Service_procedures.html" title="Special:MyLanguage/Libs/Service procedures">Service procedures library</a>
+</td>
 <td> 1.2 </td>
 <td> GPLv2 </td>
 <td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.JavaLikeCalc.servProc </td>
-<td> en
+<td> en, uk, ru
 </td></tr>
 
 <tr>
@@ -939,5 +943,5 @@ vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/en">Documents/User_API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2670</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/en">Documents/User_API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2675</td></tr></table></body>
 </html>

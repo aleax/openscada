@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Libs/LowLevelDevices</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/Libs_LowLevelDevices.html" title="Библиотеки/НизкоУровневыеУстройства (17% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../uk/Libs_LowLevelDevices.html" title="Бібліотеки/НизькоРівневіПристрої (17% translated)">українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -25,19 +25,23 @@
 </th></tr>
 
 <tr>
-<td> <a href="Libs_LowLevelDevices.html" title="Special:MyLanguage/Libs/LowLevelDevices">Low level sensors and chips library</a> </td>
+<td> <a href="Libs_LowLevelDevices.html" title="Special:MyLanguage/Libs/LowLevelDevices">Low level sensors and chips library</a>
+</td>
 <td> 1.4 </td>
 <td> GPLv2 </td>
 <td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.tmplb_LowDevLib </td>
-<td> en, uk, ru 
+<td> en, uk, ru
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Arcadiy Kisel (2017)</i></font>
 </td>
-<td> Library of functions to provide access to device's data of low-level buses' chips.
+<td> Library of templates to provide access to device's data of the low-level buses.
 <ul><li> <b>Founded</b>: Jul 2016</li>
-<li> <b>Initially created:</b> <a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/APIFunctionLibs/LibUserPrtDevs" rel="nofollow noreferrer noopener" target="_blank">in the old Wiki</a></li></ul>
+<li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/APIFunctionLibs/LibUserPrtDevs" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a></li>
+<li> <b>Used by:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Server" title="Special:MyLanguage/Sub-projects/Server">the smart house projects</a></li>
+<li> <b>To Do:</b></li></ul>
+<dl><dd>- to combine the <a href="#1W_DS9097">1W templates</a> in one complex and append 1W to work through GPIO directly.</dd></dl>
 </td></tr></table>
-<p>The user protocol devices library created to provide access to device's data of low-level buses' chips, with simple enough to implement protocols into: <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">the User Protocol module</a> or directly on <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">the internal like to Java language</a>.
+<p>The user protocol devices library created to provide access to device's data of low-level buses, with protocols simple enough to implement into <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">the User Protocol module</a> or directly on <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">the internal like to Java language</a>.
 </p><p>The template's names and their parameters are available in languages: English, Ukrainian and Russian. Their source code wrote in the human-language independent mode with calls for the translations by the function <i>tr()</i> and the message's translation also allowed for English, Ukrainian and Russian.
 </p><p>For connection the library to a project of the OpenSCADA station you can obtain the database file as:
 </p>
@@ -69,7 +73,7 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 </ul>
 </div>
 
-<p>For the DAQ templates at generic you need create the device representing object into module of <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">Logical controller</a> and select proper template from the templates library. Next, to correct configuration, follow to specific of the template into the individual description.
+<p>For the DAQ-templates in generic you need to create a representing object of the device into <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">the Logical controller module</a> and to select the proper template from the templates library. Next, to correct configuration, follow to specific of the template into its individual description.
 The conception of accessing the data by a user protocol we can imagine like to Figure 1.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:324px;"><a class="image" href="http://oscada.org/wiki/File:UserPrtDevs_concept.png"><img class="thumbimage" height="275" src="files/UserPrtDevs_concept.png" width="322" /></a>  <div class="thumbcaption">Fig.1. Conception of user accessing to services and device's data.</div></div></div></div>
@@ -80,10 +84,10 @@ The conception of accessing the data by a user protocol we can imagine like to F
 <li> Wrapped data request specific for user by function <i><a href="User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">int messIO( XMLNodeObj req, "UserProtocol" );</a></i> and <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">the user protocol</a> implementation, if the protocol part is complex enough and not yet present into OpenSCADA. The user implements here itself of the protocol specific part into <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">the module UserProtocol</a>  and the data specific part into the template for <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">the Logical Level module</a> or directly into controller's procedure on the internal language of <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">the module JavaLikeCalc</a>.</li></ol>
 <dl><dd><dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> This latter method is currently developed to the possibility of forming a protocol code part directly in the same code of the template as a separate built-in function with call the requesting function of the first method, if there is no need for reuse, or even if such a need exists and it makes sense to create a complex template that can combine the role of the output protocol, through its connection to the user protocol module. And it will be completely stored in a single template library. </dd></dl></dd></dl>
 <p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Working directly with the output transport of the <a href="User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">string messIO(string mess, real timeOut = 0);</a> function does not imply blocking the output transport outside this function call and, therefore, for complex protocols with response packets more than in one packet, which requires the "waiting" process, can not be used a shared transport, at which can be sent packets of different protocols or even one, but for different tasks (controller objects). Therefore, if you need to use shared transport, place the poll parameters in one controller object (task), or use <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">the user protocol module</a> to which this remark is irrelevant, since it performs such blocking at the time of the call of the processing procedure, as well as other modular protocols of OpenSCADA. 
-For a protocol placing here you need to do and to follow for the shown demands:
+To place a protocol implementation here you need to do and to follow for the shown demands:
 </p>
-<ul><li> be the copyright holder or the author of the code and distribute its under any free license, GPL preferred;</li>
-<li> prepare and store into a separated DB file of SQLite or as a text file for: the parameters (IO) description, the procedure's code wrote and formed in some system way;</li>
+<ul><li> be the copyright holder or the author of the code and distribute it under any free license, GPL preferred;</li>
+<li> prepare and store into a separated DB file of SQLite, or as a text file, for: the parameters (IO) description, the procedure's code wrote and formed in some system way;</li>
 <li> write a short description and instruction for connect a device by the protocol in way like to the other ones here;</li>
 <li> write a direct request to the forum topic "<a class="external text" href="http://oscada.org/en/forum/topics/openscada_development/" rel="nofollow noreferrer noopener" target="_blank">OpenSCADA development</a>" for placing the protocol here, include a proving of its ability to work from any OpenSCADA developer or a short demonstration video.</li></ul>
 <p><br />
@@ -106,6 +110,7 @@ For a protocol placing here you need to do and to follow for the shown demands:
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
 </td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsLowLevDevs1WOp.png" title="Result and the operative setup."><img alt="Result and the operative setup." height="655" src="files/LibsLowLevDevs1WOp.png" width="386" /></a></div>
 <p><span id="1W" title="#1W">One Wire</span> sensors bus implementing by 1Wire-adapter {DS9097,DS9097U}. Supported direct and parasite powering for the temperature sensors.<br />
 Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not tested), DS2413, DS2408, DS2450, DS2438.<br />
 <a class="image" href="http://oscada.org/wiki/File:Ds9097.png"><img alt="Ds9097.png" height="265" src="files/Ds9097.png" width="800" /></a>
@@ -194,6 +199,7 @@ Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not
 <td> Variable </td>
 <td> 0
 </td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsLowLevDevs1WCfg.png" title="Configuration."><img alt="Configuration." height="240" src="files/LibsLowLevDevs1WCfg.png" width="384" /></a></div>
 <p><b><u>Configuring and using</u></b><br />
 </p>
 <dl><dd>1. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" and set its Identifier like to "oneWire", one for each the One Wire bus.</dd>
@@ -1803,5 +1809,5 @@ req = SYS.XMLNode("write"); req.setAttr("ProtIt","AT24CXX").setAttr("addr",87).s
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/LowLevelDevices/en">Libs/LowLevelDevices/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2670</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/LowLevelDevices/en">Libs/LowLevelDevices/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2675</td></tr></table></body>
 </html>

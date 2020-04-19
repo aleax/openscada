@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebUser file: web_user.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2010-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.0.3"
+#define MOD_VER		"1.1.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -653,7 +653,7 @@ void UserPg::cntrCmdProc( XMLNode *opt )
 	    }
 	    ResAlloc res(cfgRes, false);
 	    if(ctrMkNode("area",opt,-1,"/prgm",_("Procedure"))) {
-		if(func() && chkLnkNeed) chkLnkNeed = initLnks(true);
+		if(func() && chkLnkNeed) chkLnkNeed = initLnks();
 		if(func() && ctrMkNode("table",opt,-1,"/prgm/io",_("IO"),RWRW__,"root",SPRT_ID,1,"rows","5")) {
 		    ctrMkNode("list",opt,-1,"/prgm/io/id",_("Identifier"),R_R___,"root",SPRT_ID,1, "tp","str");
 		    ctrMkNode("list",opt,-1,"/prgm/io/nm",_("Name"),R_R___,"root",SPRT_ID,1,"tp","str");

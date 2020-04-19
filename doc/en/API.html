@@ -11,7 +11,11 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/API</h1>
-		</div><div class="mw-pt-languages" dir="ltr" id="mw-content-text" lang="en">
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span></div></div>
+<div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
+<ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2012) — the page initial translation</i></font></li>
+<li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a> </li></ul>
+</div>
 <p>This page describes an application programming interface (API) of OpenSCADA.
 </p><p>OpenSCADA is the project of an open SCADA-system based on the modular principle. The document contains an exhaustive description of the internal system architecture of OpenSCADA. In addition to information on the architecture the background information on methods and attributes of the system is provided.<br />
 The document is intended for programmers wishing to understand the architecture of OpenSCADA and develop extensions for it. The document is not intended for users and integrators of OpenSCADA!
@@ -19,182 +23,182 @@ The document is intended for programmers wishing to understand the architecture 
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
-<li class="toclevel-1 tocsection-1"><a href="../en/API.html"><span class="tocnumber">1</span> <span class="toctext">The internal structure, OpenSCADA API</span></a></li>
-<li class="toclevel-1 tocsection-2"><a href="../en/API.html"><span class="tocnumber">2</span> <span class="toctext">The overall structure of the system. Modularity (TSYS, TSubSYS, TModule)</span></a>
+<li class="toclevel-1 tocsection-1"><a href="#The_internal_structure.2C_OpenSCADA_API"><span class="tocnumber">1</span> <span class="toctext">The internal structure, OpenSCADA API</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#The_overall_structure_of_the_system._Modularity_.28TSYS.2C_TSubSYS.2C_TModule.29"><span class="tocnumber">2</span> <span class="toctext">The overall structure of the system. Modularity (TSYS, TSubSYS, TModule)</span></a>
 <ul>
-<li class="toclevel-2 tocsection-3"><a href="../en/API.html"><span class="tocnumber">2.1</span> <span class="toctext"><span>The root object system (TSYS)</span></span></a></li>
-<li class="toclevel-2 tocsection-4"><a href="../en/API.html"><span class="tocnumber">2.2</span> <span class="toctext"><span>Object of the messages system (TMess)</span></span></a></li>
-<li class="toclevel-2 tocsection-5"><a href="../en/API.html"><span class="tocnumber">2.3</span> <span class="toctext"><span>Object subsystem (TSubSYS)</span></span></a></li>
-<li class="toclevel-2 tocsection-6"><a href="../en/API.html"><span class="tocnumber">2.4</span> <span class="toctext"><span>Object Module (TModule)</span></span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#The_root_object_system_.28TSYS.29"><span class="tocnumber">2.1</span> <span class="toctext"><span>The root object system (TSYS)</span></span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Object_of_the_messages_system_.28TMess.29"><span class="tocnumber">2.2</span> <span class="toctext"><span>Object of the messages system (TMess)</span></span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Object_subsystem_.28TSubSYS.29"><span class="tocnumber">2.3</span> <span class="toctext"><span>Object subsystem (TSubSYS)</span></span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Object_Module_.28TModule.29"><span class="tocnumber">2.4</span> <span class="toctext"><span>Object Module (TModule)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-7"><a href="../en/API.html"><span class="tocnumber">3</span> <span class="toctext"><span>Subsystem "Database" (TBDS)</span></span></a>
+<li class="toclevel-1 tocsection-7"><a href="#Subsystem_.22Database.22_.28TBDS.29"><span class="tocnumber">3</span> <span class="toctext"><span>Subsystem "Database" (TBDS)</span></span></a>
 <ul>
-<li class="toclevel-2 tocsection-8"><a href="../en/API.html"><span class="tocnumber">3.1</span> <span class="toctext"><span>Object of subsystem "Database" (TBDS)</span></span></a></li>
-<li class="toclevel-2 tocsection-9"><a href="../en/API.html"><span class="tocnumber">3.2</span> <span class="toctext"><span>Modular object of types of databases (TTypeBD)</span></span></a></li>
-<li class="toclevel-2 tocsection-10"><a href="../en/API.html"><span class="tocnumber">3.3</span> <span class="toctext"><span>The object of the database (TBD)</span></span></a></li>
-<li class="toclevel-2 tocsection-11"><a href="../en/API.html"><span class="tocnumber">3.4</span> <span class="toctext"><span>The object of the table (TTable)</span></span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Object_of_subsystem_.22Database.22_.28TBDS.29"><span class="tocnumber">3.1</span> <span class="toctext"><span>Object of subsystem "Database" (TBDS)</span></span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Modular_object_of_types_of_databases_.28TTypeBD.29"><span class="tocnumber">3.2</span> <span class="toctext"><span>Modular object of types of databases (TTypeBD)</span></span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#The_object_of_the_database_.28TBD.29"><span class="tocnumber">3.3</span> <span class="toctext"><span>The object of the database (TBD)</span></span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#The_object_of_the_table_.28TTable.29"><span class="tocnumber">3.4</span> <span class="toctext"><span>The object of the table (TTable)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-12"><a href="../en/API.html"><span class="tocnumber">4</span> <span class="toctext">The subsystem "Data acquisition" (TDAQS)</span></a>
+<li class="toclevel-1 tocsection-12"><a href="#The_subsystem_.22Data_acquisition.22_.28TDAQS.29"><span class="tocnumber">4</span> <span class="toctext">The subsystem "Data acquisition" (TDAQS)</span></a>
 <ul>
-<li class="toclevel-2 tocsection-13"><a href="../en/API.html"><span class="tocnumber">4.1</span> <span class="toctext"><span>Object of subsystem "Data acquisition" (TDAQS)</span></span></a></li>
-<li class="toclevel-2 tocsection-14"><a href="../en/API.html"><span class="tocnumber">4.2</span> <span class="toctext"><span>Modular object of the controller's type (TTypeDAQ)</span></span></a></li>
-<li class="toclevel-2 tocsection-15"><a href="../en/API.html"><span class="tocnumber">4.3</span> <span class="toctext"><span>Controller's object (TController)</span></span></a></li>
-<li class="toclevel-2 tocsection-16"><a href="../en/API.html"><span class="tocnumber">4.4</span> <span class="toctext"><span>Parameters' type object (TTypeParam)</span></span></a></li>
-<li class="toclevel-2 tocsection-17"><a href="../en/API.html"><span class="tocnumber">4.5</span> <span class="toctext"><span>Object of the physical level parameter (TParamContr)</span></span></a></li>
-<li class="toclevel-2 tocsection-18"><a href="../en/API.html"><span class="tocnumber">4.6</span> <span class="toctext"><span>Object of the value (TValue)</span></span></a></li>
-<li class="toclevel-2 tocsection-19"><a href="../en/API.html"><span class="tocnumber">4.7</span> <span class="toctext"><span>Attribute's object (TVal)</span></span></a></li>
-<li class="toclevel-2 tocsection-20"><a href="../en/API.html"><span class="tocnumber">4.8</span> <span class="toctext"><span>Object of the templates library of parameters of the "DAQ" subsystem (TPrmTmplLib)</span></span></a></li>
-<li class="toclevel-2 tocsection-21"><a href="../en/API.html"><span class="tocnumber">4.9</span> <span class="toctext"><span>The object of the parameter's template of the "DAQ" subsystem (TPrmTempl)</span></span></a>
+<li class="toclevel-2 tocsection-13"><a href="#Object_of_subsystem_.22Data_acquisition.22_.28TDAQS.29"><span class="tocnumber">4.1</span> <span class="toctext"><span>Object of subsystem "Data acquisition" (TDAQS)</span></span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#Modular_object_of_the_controller.27s_type_.28TTypeDAQ.29"><span class="tocnumber">4.2</span> <span class="toctext"><span>Modular object of the controller's type (TTypeDAQ)</span></span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#Controller.27s_object_.28TController.29"><span class="tocnumber">4.3</span> <span class="toctext"><span>Controller's object (TController)</span></span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#Parameters.27_type_object_.28TTypeParam.29"><span class="tocnumber">4.4</span> <span class="toctext"><span>Parameters' type object (TTypeParam)</span></span></a></li>
+<li class="toclevel-2 tocsection-17"><a href="#Object_of_the_physical_level_parameter_.28TParamContr.29"><span class="tocnumber">4.5</span> <span class="toctext"><span>Object of the physical level parameter (TParamContr)</span></span></a></li>
+<li class="toclevel-2 tocsection-18"><a href="#Object_of_the_value_.28TValue.29"><span class="tocnumber">4.6</span> <span class="toctext"><span>Object of the value (TValue)</span></span></a></li>
+<li class="toclevel-2 tocsection-19"><a href="#Attribute.27s_object_.28TVal.29"><span class="tocnumber">4.7</span> <span class="toctext"><span>Attribute's object (TVal)</span></span></a></li>
+<li class="toclevel-2 tocsection-20"><a href="#Object_of_the_templates_library_of_parameters_of_the_.22DAQ.22_subsystem_.28TPrmTmplLib.29"><span class="tocnumber">4.8</span> <span class="toctext"><span>Object of the templates library of parameters of the "DAQ" subsystem (TPrmTmplLib)</span></span></a></li>
+<li class="toclevel-2 tocsection-21"><a href="#The_object_of_the_parameter.27s_template_of_the_.22DAQ.22_subsystem_.28TPrmTempl.29"><span class="tocnumber">4.9</span> <span class="toctext"><span>The object of the parameter's template of the "DAQ" subsystem (TPrmTempl)</span></span></a>
 <ul>
-<li class="toclevel-3 tocsection-22"><a href="../en/API.html"><span class="tocnumber">4.9.1</span> <span class="toctext"><span>The object of the implementation of the template's parameters of the "DAQ" subsystem (TPrmTempl::Impl)</span></span></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toclevel-1 tocsection-23"><a href="../en/API.html"><span class="tocnumber">5</span> <span class="toctext"><span>Subsystem "Archives" (TArchiveS)</span></span></a>
-<ul>
-<li class="toclevel-2 tocsection-24"><a href="../en/API.html"><span class="tocnumber">5.1</span> <span class="toctext"><span>The object of the subsystem "Archives" (TArchiveS)</span></span></a></li>
-<li class="toclevel-2 tocsection-25"><a href="../en/API.html"><span class="tocnumber">5.2</span> <span class="toctext"><span>The object of the values' archive (TVArchive)</span></span></a></li>
-<li class="toclevel-2 tocsection-26"><a href="../en/API.html"><span class="tocnumber">5.3</span> <span class="toctext"><span>Object of the values' buffer (TValBuf)</span></span></a></li>
-<li class="toclevel-2 tocsection-27"><a href="../en/API.html"><span class="tocnumber">5.4</span> <span class="toctext"><span>The modular object of the archiver's type (TTypeArchivator)</span></span></a></li>
-<li class="toclevel-2 tocsection-28"><a href="../en/API.html"><span class="tocnumber">5.5</span> <span class="toctext"><span>The object of the messages' archiver (TMArchivator)</span></span></a></li>
-<li class="toclevel-2 tocsection-29"><a href="../en/API.html"><span class="tocnumber">5.6</span> <span class="toctext"><span>The object of the values' archiver (TVArchivator)</span></span></a></li>
-<li class="toclevel-2 tocsection-30"><a href="../en/API.html"><span class="tocnumber">5.7</span> <span class="toctext"><span>The object of the archive's element in the archiver (TVArchEl)</span></span></a></li>
-</ul>
-</li>
-<li class="toclevel-1 tocsection-31"><a href="../en/API.html"><span class="tocnumber">6</span> <span class="toctext"><span>Subsystem "Transports" (TTransportS)</span></span></a>
-<ul>
-<li class="toclevel-2 tocsection-32"><a href="../en/API.html"><span class="tocnumber">6.1</span> <span class="toctext"><span>The object of the "Transports" subsystem (TTransportS)</span></span></a></li>
-<li class="toclevel-2 tocsection-33"><a href="../en/API.html"><span class="tocnumber">6.2</span> <span class="toctext"><span>The modular object of the transports' type (TTypeTransport)</span></span></a></li>
-<li class="toclevel-2 tocsection-34"><a href="../en/API.html"><span class="tocnumber">6.3</span> <span class="toctext"><span>The object of the input transports (TTransportIn)</span></span></a></li>
-<li class="toclevel-2 tocsection-35"><a href="../en/API.html"><span class="tocnumber">6.4</span> <span class="toctext"><span>The object of the output transports (TTransportOut)</span></span></a></li>
-</ul>
-</li>
-<li class="toclevel-1 tocsection-36"><a href="../en/API.html"><span class="tocnumber">7</span> <span class="toctext"><span>Subsystem "Communication interfaces' protocols" (TProtocolS)</span></span></a>
-<ul>
-<li class="toclevel-2 tocsection-37"><a href="../en/API.html"><span class="tocnumber">7.1</span> <span class="toctext"><span>The object of the "Communication interfaces' protocols" subsystem (TProtocolS)</span></span></a></li>
-<li class="toclevel-2 tocsection-38"><a href="../en/API.html"><span class="tocnumber">7.2</span> <span class="toctext"><span>The modular object of the protocol (TProtocol)</span></span></a></li>
-<li class="toclevel-2 tocsection-39"><a href="../en/API.html"><span class="tocnumber">7.3</span> <span class="toctext"><span>The object of the input protocol's session (TProtocolIn)</span></span></a></li>
-</ul>
-</li>
-<li class="toclevel-1 tocsection-40"><a href="../en/API.html"><span class="tocnumber">8</span> <span class="toctext">Subsystem "User interfaces" (TUIS)</span></a>
-<ul>
-<li class="toclevel-2 tocsection-41"><a href="../en/API.html"><span class="tocnumber">8.1</span> <span class="toctext"><span>The object of the "User interfaces" subsystem (TUIS)</span></span></a></li>
-<li class="toclevel-2 tocsection-42"><a href="../en/API.html"><span class="tocnumber">8.2</span> <span class="toctext"><span>The modular object of the user interface (TUI)</span></span></a></li>
-</ul>
-</li>
-<li class="toclevel-1 tocsection-43"><a href="../en/API.html"><span class="tocnumber">9</span> <span class="toctext">Subsystem "Specials" (TSpecialS)</span></a>
-<ul>
-<li class="toclevel-2 tocsection-44"><a href="../en/API.html"><span class="tocnumber">9.1</span> <span class="toctext"><span>The object of the "Specials" subsystem (TSpecialS)</span></span></a></li>
-<li class="toclevel-2 tocsection-45"><a href="../en/API.html"><span class="tocnumber">9.2</span> <span class="toctext"><span>The modular object of the specials (TSpecial)</span></span></a></li>
-</ul>
-</li>
-<li class="toclevel-1 tocsection-46"><a href="../en/API.html"><span class="tocnumber">10</span> <span class="toctext">Subsystem "Security" (TSeсurity)</span></a>
-<ul>
-<li class="toclevel-2 tocsection-47"><a href="../en/API.html"><span class="tocnumber">10.1</span> <span class="toctext"><span>The object of the "Security" subsystem (TSeсurity)</span></span></a></li>
-<li class="toclevel-2 tocsection-48"><a href="../en/API.html"><span class="tocnumber">10.2</span> <span class="toctext"><span>The user's object (TUser)</span></span></a></li>
-<li class="toclevel-2 tocsection-49"><a href="../en/API.html"><span class="tocnumber">10.3</span> <span class="toctext"><span>The users' group object (TGroup)</span></span></a></li>
-</ul>
-</li>
-<li class="toclevel-1 tocsection-50"><a href="../en/API.html"><span class="tocnumber">11</span> <span class="toctext">Subsystem “Modules' sheduling” (TModSchedul)</span></a>
-<ul>
-<li class="toclevel-2 tocsection-51"><a href="../en/API.html"><span class="tocnumber">11.1</span> <span class="toctext"><span>The object of the subsystem "Modules' sheduling" (TModSchedul)</span></span></a></li>
-</ul>
-</li>
-<li class="toclevel-1 tocsection-52"><a href="../en/API.html"><span class="tocnumber">12</span> <span class="toctext">Components of the object model of OpenSCADA</span></a>
-<ul>
-<li class="toclevel-2 tocsection-53"><a href="../en/API.html"><span class="tocnumber">12.1</span> <span class="toctext"><span>The function object (TFunction)</span></span></a></li>
-<li class="toclevel-2 tocsection-54"><a href="../en/API.html"><span class="tocnumber">12.2</span> <span class="toctext"><span>The object of the function's parameter (IO)</span></span></a></li>
-<li class="toclevel-2 tocsection-55"><a href="../en/API.html"><span class="tocnumber">12.3</span> <span class="toctext"><span>The object of the function's value (TValFunc)</span></span></a></li>
-</ul>
-</li>
-<li class="toclevel-1 tocsection-56"><a href="../en/API.html"><span class="tocnumber">13</span> <span class="toctext">Data in OpenSCADA and their storage in the DB (TConfig)</span></a>
-<ul>
-<li class="toclevel-2 tocsection-57"><a href="../en/API.html"><span class="tocnumber">13.1</span> <span class="toctext"><span>Data object (TConfig)</span></span></a></li>
-<li class="toclevel-2 tocsection-58"><a href="../en/API.html"><span class="tocnumber">13.2</span> <span class="toctext"><span>Data cell (TCfg)</span></span></a></li>
-<li class="toclevel-2 tocsection-59"><a href="../en/API.html"><span class="tocnumber">13.3</span> <span class="toctext"><span>Data structure object (TElem)</span></span></a></li>
-<li class="toclevel-2 tocsection-60"><a href="../en/API.html"><span class="tocnumber">13.4</span> <span class="toctext"><span>Data structure cell (TFld)</span></span></a></li>
-<li class="toclevel-2 tocsection-61"><a href="../en/API.html"><span class="tocnumber">13.5</span> <span class="toctext"><span>The object which preacts about changing of the structure (TValElem)</span></span></a></li>
-<li class="toclevel-2 tocsection-62"><a href="../en/API.html"><span class="tocnumber">13.6</span> <span class="toctext"><span>Data cell (TVariant)</span></span></a></li>
-<li class="toclevel-2 tocsection-63"><a href="../en/API.html"><span class="tocnumber">13.7</span> <span class="toctext"><span>User object (TVarObj)</span></span></a></li>
-</ul>
-</li>
-<li class="toclevel-1 tocsection-64"><a href="../en/API.html"><span class="tocnumber">14</span> <span class="toctext"><span>The control interface of the system and the dynamic tree of the system objects (TCntrNode)</span></span></a>
-<ul>
-<li class="toclevel-2 tocsection-65"><a href="../en/API.html"><span class="tocnumber">14.1</span> <span class="toctext">The syntax of the request and response of the control interface</span></a></li>
-<li class="toclevel-2 tocsection-66"><a href="../en/API.html"><span class="tocnumber">14.2</span> <span class="toctext">Tag of the information structure for describing the groups of child branches of the page</span></a></li>
-<li class="toclevel-2 tocsection-67"><a href="../en/API.html"><span class="tocnumber">14.3</span> <span class="toctext">Tags of the description of the information structure of the control interface</span></a>
-<ul>
-<li class="toclevel-3 tocsection-68"><a href="../en/API.html"><span class="tocnumber">14.3.1</span> <span class="toctext">Area tag "area"</span></a></li>
-<li class="toclevel-3 tocsection-69"><a href="../en/API.html"><span class="tocnumber">14.3.2</span> <span class="toctext">Data tags</span></a>
-<ul>
-<li class="toclevel-4 tocsection-70"><a href="../en/API.html"><span class="tocnumber">14.3.2.1</span> <span class="toctext">Tag "fld"</span></a></li>
-<li class="toclevel-4 tocsection-71"><a href="../en/API.html"><span class="tocnumber">14.3.2.2</span> <span class="toctext">Tag "list"</span></a></li>
-<li class="toclevel-4 tocsection-72"><a href="../en/API.html"><span class="tocnumber">14.3.2.3</span> <span class="toctext">Tag "table"</span></a></li>
-<li class="toclevel-4 tocsection-73"><a href="../en/API.html"><span class="tocnumber">14.3.2.4</span> <span class="toctext">Tag "img"</span></a></li>
-<li class="toclevel-4 tocsection-74"><a href="../en/API.html"><span class="tocnumber">14.3.2.5</span> <span class="toctext">Commands with the parameters. Tag "comm"</span></a></li>
-<li class="toclevel-4 tocsection-75"><a href="../en/API.html"><span class="tocnumber">14.3.2.6</span> <span class="toctext">Branches (child nodes)</span></a></li>
+<li class="toclevel-3 tocsection-22"><a href="#The_object_of_the_implementation_of_the_template.27s_parameters_of_the_.22DAQ.22_subsystem_.28TPrmTempl::Impl.29"><span class="tocnumber">4.9.1</span> <span class="toctext"><span>The object of the implementation of the template's parameters of the "DAQ" subsystem (TPrmTempl::Impl)</span></span></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toclevel-2 tocsection-76"><a href="../en/API.html"><span class="tocnumber">14.4</span> <span class="toctext">Hierarchical dependences of the information elements of the control language</span></a></li>
-<li class="toclevel-2 tocsection-77"><a href="../en/API.html"><span class="tocnumber">14.5</span> <span class="toctext"><span>Object of the dynamic tree node (TCntrNode)</span></span></a></li>
-</ul>
-</li>
-<li class="toclevel-1 tocsection-78"><a href="../en/API.html"><span class="tocnumber">15</span> <span class="toctext">Resources locking in OpenSCADA (Res, ResAlloc, ResMtx, MtxAlloc, AutoHD)</span></a>
+<li class="toclevel-1 tocsection-23"><a href="#Subsystem_.22Archives.22_.28TArchiveS.29"><span class="tocnumber">5</span> <span class="toctext"><span>Subsystem "Archives" (TArchiveS)</span></span></a>
 <ul>
-<li class="toclevel-2 tocsection-79"><a href="../en/API.html"><span class="tocnumber">15.1</span> <span class="toctext"><span>Resource R/W lock object (ResRW)</span></span></a></li>
-<li class="toclevel-2 tocsection-80"><a href="../en/API.html"><span class="tocnumber">15.2</span> <span class="toctext"><span>Automatic resource RW unlock object (ResAlloc)</span></span></a></li>
-<li class="toclevel-2 tocsection-81"><a href="../en/API.html"><span class="tocnumber">15.3</span> <span class="toctext"><span>Template (AutoHD)</span></span></a></li>
-<li class="toclevel-2 tocsection-82"><a href="../en/API.html"><span class="tocnumber">15.4</span> <span class="toctext"><span>Resources allocation object, by mutex (ResMtx)</span></span></a></li>
-<li class="toclevel-2 tocsection-83"><a href="../en/API.html"><span class="tocnumber">15.5</span> <span class="toctext"><span>Object of the string with the access shared by the resource (ResString)</span></span></a></li>
-<li class="toclevel-2 tocsection-84"><a href="../en/API.html"><span class="tocnumber">15.6</span> <span class="toctext"><span>Conditional variable object, by mutex (CondVar)</span></span></a></li>
-<li class="toclevel-2 tocsection-85"><a href="../en/API.html"><span class="tocnumber">15.7</span> <span class="toctext"><span>Object of automatic unlock POSIX mutex (MtxAlloc)</span></span></a></li>
-<li class="toclevel-2 tocsection-86"><a href="../en/API.html"><span class="tocnumber">15.8</span> <span class="toctext"><span>Object of the string with the access shared by the global the data resource (mutex) (MtxString)</span></span></a></li>
+<li class="toclevel-2 tocsection-24"><a href="#The_object_of_the_subsystem_.22Archives.22_.28TArchiveS.29"><span class="tocnumber">5.1</span> <span class="toctext"><span>The object of the subsystem "Archives" (TArchiveS)</span></span></a></li>
+<li class="toclevel-2 tocsection-25"><a href="#The_object_of_the_values.27_archive_.28TVArchive.29"><span class="tocnumber">5.2</span> <span class="toctext"><span>The object of the values' archive (TVArchive)</span></span></a></li>
+<li class="toclevel-2 tocsection-26"><a href="#Object_of_the_values.27_buffer_.28TValBuf.29"><span class="tocnumber">5.3</span> <span class="toctext"><span>Object of the values' buffer (TValBuf)</span></span></a></li>
+<li class="toclevel-2 tocsection-27"><a href="#The_modular_object_of_the_archiver.27s_type_.28TTypeArchivator.29"><span class="tocnumber">5.4</span> <span class="toctext"><span>The modular object of the archiver's type (TTypeArchivator)</span></span></a></li>
+<li class="toclevel-2 tocsection-28"><a href="#The_object_of_the_messages.27_archiver_.28TMArchivator.29"><span class="tocnumber">5.5</span> <span class="toctext"><span>The object of the messages' archiver (TMArchivator)</span></span></a></li>
+<li class="toclevel-2 tocsection-29"><a href="#The_object_of_the_values.27_archiver_.28TVArchivator.29"><span class="tocnumber">5.6</span> <span class="toctext"><span>The object of the values' archiver (TVArchivator)</span></span></a></li>
+<li class="toclevel-2 tocsection-30"><a href="#The_object_of_the_archive.27s_element_in_the_archiver_.28TVArchEl.29"><span class="tocnumber">5.7</span> <span class="toctext"><span>The object of the archive's element in the archiver (TVArchEl)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-87"><a href="../en/API.html"><span class="tocnumber">16</span> <span class="toctext">Other generic objects (XMLNode, TError)</span></a>
+<li class="toclevel-1 tocsection-31"><a href="#Subsystem_.22Transports.22_.28TTransportS.29"><span class="tocnumber">6</span> <span class="toctext"><span>Subsystem "Transports" (TTransportS)</span></span></a>
 <ul>
-<li class="toclevel-2 tocsection-88"><a href="../en/API.html"><span class="tocnumber">16.1</span> <span class="toctext"><span>XML-tag (XMLNode)</span></span></a></li>
-<li class="toclevel-2 tocsection-89"><a href="../en/API.html"><span class="tocnumber">16.2</span> <span class="toctext"><span>Error exception (TError)</span></span></a></li>
+<li class="toclevel-2 tocsection-32"><a href="#The_object_of_the_.22Transports.22_subsystem_.28TTransportS.29"><span class="tocnumber">6.1</span> <span class="toctext"><span>The object of the "Transports" subsystem (TTransportS)</span></span></a></li>
+<li class="toclevel-2 tocsection-33"><a href="#The_modular_object_of_the_transports.27_type_.28TTypeTransport.29"><span class="tocnumber">6.2</span> <span class="toctext"><span>The modular object of the transports' type (TTypeTransport)</span></span></a></li>
+<li class="toclevel-2 tocsection-34"><a href="#The_object_of_the_input_transports_.28TTransportIn.29"><span class="tocnumber">6.3</span> <span class="toctext"><span>The object of the input transports (TTransportIn)</span></span></a></li>
+<li class="toclevel-2 tocsection-35"><a href="#The_object_of_the_output_transports_.28TTransportOut.29"><span class="tocnumber">6.4</span> <span class="toctext"><span>The object of the output transports (TTransportOut)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-90"><a href="../en/API.html"><span class="tocnumber">17</span> <span class="toctext">Organization and structure of the database of the system components</span></a>
+<li class="toclevel-1 tocsection-36"><a href="#Subsystem_.22Communication_interfaces.27_protocols.22_.28TProtocolS.29"><span class="tocnumber">7</span> <span class="toctext"><span>Subsystem "Communication interfaces' protocols" (TProtocolS)</span></span></a>
 <ul>
-<li class="toclevel-2 tocsection-91"><a href="../en/API.html"><span class="tocnumber">17.1</span> <span class="toctext">System tables</span></a></li>
-<li class="toclevel-2 tocsection-92"><a href="../en/API.html"><span class="tocnumber">17.2</span> <span class="toctext">Tables of the "Data acquisition" subsystem</span></a></li>
-<li class="toclevel-2 tocsection-93"><a href="../en/API.html"><span class="tocnumber">17.3</span> <span class="toctext">Tables of the "Transports" subsystem</span></a></li>
-<li class="toclevel-2 tocsection-94"><a href="../en/API.html"><span class="tocnumber">17.4</span> <span class="toctext">Tables of the "Archives" subsystem</span></a></li>
-<li class="toclevel-2 tocsection-95"><a href="../en/API.html"><span class="tocnumber">17.5</span> <span class="toctext">Tables of the "Security" subsystem</span></a></li>
-<li class="toclevel-2 tocsection-96"><a href="../en/API.html"><span class="tocnumber">17.6</span> <span class="toctext">The structure of the databases of the modules</span></a></li>
+<li class="toclevel-2 tocsection-37"><a href="#The_object_of_the_.22Communication_interfaces.27_protocols.22_subsystem_.28TProtocolS.29"><span class="tocnumber">7.1</span> <span class="toctext"><span>The object of the "Communication interfaces' protocols" subsystem (TProtocolS)</span></span></a></li>
+<li class="toclevel-2 tocsection-38"><a href="#The_modular_object_of_the_protocol_.28TProtocol.29"><span class="tocnumber">7.2</span> <span class="toctext"><span>The modular object of the protocol (TProtocol)</span></span></a></li>
+<li class="toclevel-2 tocsection-39"><a href="#The_object_of_the_input_protocol.27s_session_.28TProtocolIn.29"><span class="tocnumber">7.3</span> <span class="toctext"><span>The object of the input protocol's session (TProtocolIn)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-97"><a href="../en/API.html"><span class="tocnumber">18</span> <span class="toctext"><span>Service functions of the OpenSCADA control interface</span></span></a>
+<li class="toclevel-1 tocsection-40"><a href="#Subsystem_.22User_interfaces.22_.28TUIS.29"><span class="tocnumber">8</span> <span class="toctext">Subsystem "User interfaces" (TUIS)</span></a>
 <ul>
-<li class="toclevel-2 tocsection-98"><a href="../en/API.html"><span class="tocnumber">18.1</span> <span class="toctext">Group access to the values of the parameter's attributes of the subsystem "Data acquisition", as well as to the detailed information</span></a></li>
-<li class="toclevel-2 tocsection-99"><a href="../en/API.html"><span class="tocnumber">18.2</span> <span class="toctext">Access to archived data of the archives of messages</span></a></li>
-<li class="toclevel-2 tocsection-100"><a href="../en/API.html"><span class="tocnumber">18.3</span> <span class="toctext">Access to archived data of the values' archive</span></a></li>
+<li class="toclevel-2 tocsection-41"><a href="#The_object_of_the_.22User_interfaces.22_subsystem_.28TUIS.29"><span class="tocnumber">8.1</span> <span class="toctext"><span>The object of the "User interfaces" subsystem (TUIS)</span></span></a></li>
+<li class="toclevel-2 tocsection-42"><a href="#The_modular_object_of_the_user_interface_.28TUI.29"><span class="tocnumber">8.2</span> <span class="toctext"><span>The modular object of the user interface (TUI)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-101"><a href="../en/API.html"><span class="tocnumber">19</span> <span class="toctext"><span>API of modules of the modular subsystems</span></span></a></li>
-<li class="toclevel-1 tocsection-102"><a href="../en/API.html"><span class="tocnumber">20</span> <span class="toctext">Debugging and Testing OpenSCADA</span></a></li>
-<li class="toclevel-1 tocsection-103"><a href="../en/API.html"><span class="tocnumber">21</span> <span class="toctext">Rules for design and commenting of the sources of OpenSCADA and its modules</span></a></li>
-<li class="toclevel-1 tocsection-104"><a href="../en/API.html"><span class="tocnumber">22</span> <span class="toctext">Сonventional signs in the text and source code</span></a></li>
-<li class="toclevel-1 tocsection-105"><a href="../en/API.html"><span class="tocnumber">23</span> <span class="toctext">Links</span></a></li>
+<li class="toclevel-1 tocsection-43"><a href="#Subsystem_.22Specials.22_.28TSpecialS.29"><span class="tocnumber">9</span> <span class="toctext">Subsystem "Specials" (TSpecialS)</span></a>
+<ul>
+<li class="toclevel-2 tocsection-44"><a href="#The_object_of_the_.22Specials.22_subsystem_.28TSpecialS.29"><span class="tocnumber">9.1</span> <span class="toctext"><span>The object of the "Specials" subsystem (TSpecialS)</span></span></a></li>
+<li class="toclevel-2 tocsection-45"><a href="#The_modular_object_of_the_specials_.28TSpecial.29"><span class="tocnumber">9.2</span> <span class="toctext"><span>The modular object of the specials (TSpecial)</span></span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-46"><a href="#Subsystem_.22Security.22_.28TSe.D1.81urity.29"><span class="tocnumber">10</span> <span class="toctext">Subsystem "Security" (TSeсurity)</span></a>
+<ul>
+<li class="toclevel-2 tocsection-47"><a href="#The_object_of_the_.22Security.22_subsystem_.28TSe.D1.81urity.29"><span class="tocnumber">10.1</span> <span class="toctext"><span>The object of the "Security" subsystem (TSeсurity)</span></span></a></li>
+<li class="toclevel-2 tocsection-48"><a href="#The_user.27s_object_.28TUser.29"><span class="tocnumber">10.2</span> <span class="toctext"><span>The user's object (TUser)</span></span></a></li>
+<li class="toclevel-2 tocsection-49"><a href="#The_users.27_group_object_.28TGroup.29"><span class="tocnumber">10.3</span> <span class="toctext"><span>The users' group object (TGroup)</span></span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-50"><a href="#Subsystem_.E2.80.9CModules.27_sheduling.E2.80.9D_.28TModSchedul.29"><span class="tocnumber">11</span> <span class="toctext">Subsystem “Modules' sheduling” (TModSchedul)</span></a>
+<ul>
+<li class="toclevel-2 tocsection-51"><a href="#The_object_of_the_subsystem_.22Modules.27_sheduling.22_.28TModSchedul.29"><span class="tocnumber">11.1</span> <span class="toctext"><span>The object of the subsystem "Modules' sheduling" (TModSchedul)</span></span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-52"><a href="#Components_of_the_object_model_of_OpenSCADA"><span class="tocnumber">12</span> <span class="toctext">Components of the object model of OpenSCADA</span></a>
+<ul>
+<li class="toclevel-2 tocsection-53"><a href="#The_function_object_.28TFunction.29"><span class="tocnumber">12.1</span> <span class="toctext"><span>The function object (TFunction)</span></span></a></li>
+<li class="toclevel-2 tocsection-54"><a href="#The_object_of_the_function.27s_parameter_.28IO.29"><span class="tocnumber">12.2</span> <span class="toctext"><span>The object of the function's parameter (IO)</span></span></a></li>
+<li class="toclevel-2 tocsection-55"><a href="#The_object_of_the_function.27s_value_.28TValFunc.29"><span class="tocnumber">12.3</span> <span class="toctext"><span>The object of the function's value (TValFunc)</span></span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-56"><a href="#Data_in_OpenSCADA_and_their_storage_in_the_DB_.28TConfig.29"><span class="tocnumber">13</span> <span class="toctext">Data in OpenSCADA and their storage in the DB (TConfig)</span></a>
+<ul>
+<li class="toclevel-2 tocsection-57"><a href="#Data_object_.28TConfig.29"><span class="tocnumber">13.1</span> <span class="toctext"><span>Data object (TConfig)</span></span></a></li>
+<li class="toclevel-2 tocsection-58"><a href="#Data_cell_.28TCfg.29"><span class="tocnumber">13.2</span> <span class="toctext"><span>Data cell (TCfg)</span></span></a></li>
+<li class="toclevel-2 tocsection-59"><a href="#Data_structure_object_.28TElem.29"><span class="tocnumber">13.3</span> <span class="toctext"><span>Data structure object (TElem)</span></span></a></li>
+<li class="toclevel-2 tocsection-60"><a href="#Data_structure_cell_.28TFld.29"><span class="tocnumber">13.4</span> <span class="toctext"><span>Data structure cell (TFld)</span></span></a></li>
+<li class="toclevel-2 tocsection-61"><a href="#The_object_which_preacts_about_changing_of_the_structure_.28TValElem.29"><span class="tocnumber">13.5</span> <span class="toctext"><span>The object which preacts about changing of the structure (TValElem)</span></span></a></li>
+<li class="toclevel-2 tocsection-62"><a href="#Data_cell_.28TVariant.29"><span class="tocnumber">13.6</span> <span class="toctext"><span>Data cell (TVariant)</span></span></a></li>
+<li class="toclevel-2 tocsection-63"><a href="#User_object_.28TVarObj.29"><span class="tocnumber">13.7</span> <span class="toctext"><span>User object (TVarObj)</span></span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-64"><a href="#The_control_interface_of_the_system_and_the_dynamic_tree_of_the_system_objects_.28TCntrNode.29"><span class="tocnumber">14</span> <span class="toctext"><span>The control interface of the system and the dynamic tree of the system objects (TCntrNode)</span></span></a>
+<ul>
+<li class="toclevel-2 tocsection-65"><a href="#The_syntax_of_the_request_and_response_of_the_control_interface"><span class="tocnumber">14.1</span> <span class="toctext">The syntax of the request and response of the control interface</span></a></li>
+<li class="toclevel-2 tocsection-66"><a href="#Tag_of_the_information_structure_for_describing_the_groups_of_child_branches_of_the_page"><span class="tocnumber">14.2</span> <span class="toctext">Tag of the information structure for describing the groups of child branches of the page</span></a></li>
+<li class="toclevel-2 tocsection-67"><a href="#Tags_of_the_description_of_the_information_structure_of_the_control_interface"><span class="tocnumber">14.3</span> <span class="toctext">Tags of the description of the information structure of the control interface</span></a>
+<ul>
+<li class="toclevel-3 tocsection-68"><a href="#Area_tag_.22area.22"><span class="tocnumber">14.3.1</span> <span class="toctext">Area tag "area"</span></a></li>
+<li class="toclevel-3 tocsection-69"><a href="#Data_tags"><span class="tocnumber">14.3.2</span> <span class="toctext">Data tags</span></a>
+<ul>
+<li class="toclevel-4 tocsection-70"><a href="#Tag_.22fld.22"><span class="tocnumber">14.3.2.1</span> <span class="toctext">Tag "fld"</span></a></li>
+<li class="toclevel-4 tocsection-71"><a href="#Tag_.22list.22"><span class="tocnumber">14.3.2.2</span> <span class="toctext">Tag "list"</span></a></li>
+<li class="toclevel-4 tocsection-72"><a href="#Tag_.22table.22"><span class="tocnumber">14.3.2.3</span> <span class="toctext">Tag "table"</span></a></li>
+<li class="toclevel-4 tocsection-73"><a href="#Tag_.22img.22"><span class="tocnumber">14.3.2.4</span> <span class="toctext">Tag "img"</span></a></li>
+<li class="toclevel-4 tocsection-74"><a href="#Commands_with_the_parameters._Tag_.22comm.22"><span class="tocnumber">14.3.2.5</span> <span class="toctext">Commands with the parameters. Tag "comm"</span></a></li>
+<li class="toclevel-4 tocsection-75"><a href="#Branches_.28child_nodes.29"><span class="tocnumber">14.3.2.6</span> <span class="toctext">Branches (child nodes)</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-76"><a href="#Hierarchical_dependences_of_the_information_elements_of_the_control_language"><span class="tocnumber">14.4</span> <span class="toctext">Hierarchical dependences of the information elements of the control language</span></a></li>
+<li class="toclevel-2 tocsection-77"><a href="#Object_of_the_dynamic_tree_node_.28TCntrNode.29"><span class="tocnumber">14.5</span> <span class="toctext"><span>Object of the dynamic tree node (TCntrNode)</span></span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-78"><a href="#Resources_locking_in_OpenSCADA_.28Res.2C_ResAlloc.2C_ResMtx.2C_MtxAlloc.2C_AutoHD.29"><span class="tocnumber">15</span> <span class="toctext">Resources locking in OpenSCADA (Res, ResAlloc, ResMtx, MtxAlloc, AutoHD)</span></a>
+<ul>
+<li class="toclevel-2 tocsection-79"><a href="#Resource_R.2FW_lock_object_.28ResRW.29"><span class="tocnumber">15.1</span> <span class="toctext"><span>Resource R/W lock object (ResRW)</span></span></a></li>
+<li class="toclevel-2 tocsection-80"><a href="#Automatic_resource_RW_unlock_object_.28ResAlloc.29"><span class="tocnumber">15.2</span> <span class="toctext"><span>Automatic resource RW unlock object (ResAlloc)</span></span></a></li>
+<li class="toclevel-2 tocsection-81"><a href="#Template_.28AutoHD.29"><span class="tocnumber">15.3</span> <span class="toctext"><span>Template (AutoHD)</span></span></a></li>
+<li class="toclevel-2 tocsection-82"><a href="#Resources_allocation_object.2C_by_mutex_.28ResMtx.29"><span class="tocnumber">15.4</span> <span class="toctext"><span>Resources allocation object, by mutex (ResMtx)</span></span></a></li>
+<li class="toclevel-2 tocsection-83"><a href="#Object_of_the_string_with_the_access_shared_by_the_resource_.28ResString.29"><span class="tocnumber">15.5</span> <span class="toctext"><span>Object of the string with the access shared by the resource (ResString)</span></span></a></li>
+<li class="toclevel-2 tocsection-84"><a href="#Conditional_variable_object.2C_by_mutex_.28CondVar.29"><span class="tocnumber">15.6</span> <span class="toctext"><span>Conditional variable object, by mutex (CondVar)</span></span></a></li>
+<li class="toclevel-2 tocsection-85"><a href="#Object_of_automatic_unlock_POSIX_mutex_.28MtxAlloc.29"><span class="tocnumber">15.7</span> <span class="toctext"><span>Object of automatic unlock POSIX mutex (MtxAlloc)</span></span></a></li>
+<li class="toclevel-2 tocsection-86"><a href="#Object_of_the_string_with_the_access_shared_by_the_global_the_data_resource_.28mutex.29_.28MtxString.29"><span class="tocnumber">15.8</span> <span class="toctext"><span>Object of the string with the access shared by the global the data resource (mutex) (MtxString)</span></span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-87"><a href="#Other_generic_objects_.28XMLNode.2C_TError.29"><span class="tocnumber">16</span> <span class="toctext">Other generic objects (XMLNode, TError)</span></a>
+<ul>
+<li class="toclevel-2 tocsection-88"><a href="#XML-tag_.28XMLNode.29"><span class="tocnumber">16.1</span> <span class="toctext"><span>XML-tag (XMLNode)</span></span></a></li>
+<li class="toclevel-2 tocsection-89"><a href="#Error_exception_.28TError.29"><span class="tocnumber">16.2</span> <span class="toctext"><span>Error exception (TError)</span></span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-90"><a href="#Organization_and_structure_of_the_database_of_the_system_components"><span class="tocnumber">17</span> <span class="toctext">Organization and structure of the database of the system components</span></a>
+<ul>
+<li class="toclevel-2 tocsection-91"><a href="#System_tables"><span class="tocnumber">17.1</span> <span class="toctext">System tables</span></a></li>
+<li class="toclevel-2 tocsection-92"><a href="#Tables_of_the_.22Data_acquisition.22_subsystem"><span class="tocnumber">17.2</span> <span class="toctext">Tables of the "Data acquisition" subsystem</span></a></li>
+<li class="toclevel-2 tocsection-93"><a href="#Tables_of_the_.22Transports.22_subsystem"><span class="tocnumber">17.3</span> <span class="toctext">Tables of the "Transports" subsystem</span></a></li>
+<li class="toclevel-2 tocsection-94"><a href="#Tables_of_the_.22Archives.22_subsystem"><span class="tocnumber">17.4</span> <span class="toctext">Tables of the "Archives" subsystem</span></a></li>
+<li class="toclevel-2 tocsection-95"><a href="#Tables_of_the_.22Security.22_subsystem"><span class="tocnumber">17.5</span> <span class="toctext">Tables of the "Security" subsystem</span></a></li>
+<li class="toclevel-2 tocsection-96"><a href="#The_structure_of_the_databases_of_the_modules"><span class="tocnumber">17.6</span> <span class="toctext">The structure of the databases of the modules</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-97"><a href="#Service_functions_of_the_OpenSCADA_control_interface"><span class="tocnumber">18</span> <span class="toctext"><span>Service functions of the OpenSCADA control interface</span></span></a>
+<ul>
+<li class="toclevel-2 tocsection-98"><a href="#Group_access_to_the_values_of_the_parameter.27s_attributes_of_the_subsystem_.22Data_acquisition.22.2C_as_well_as_to_the_detailed_information"><span class="tocnumber">18.1</span> <span class="toctext">Group access to the values of the parameter's attributes of the subsystem "Data acquisition", as well as to the detailed information</span></a></li>
+<li class="toclevel-2 tocsection-99"><a href="#Access_to_archived_data_of_the_archives_of_messages"><span class="tocnumber">18.2</span> <span class="toctext">Access to archived data of the archives of messages</span></a></li>
+<li class="toclevel-2 tocsection-100"><a href="#Access_to_archived_data_of_the_values.27_archive"><span class="tocnumber">18.3</span> <span class="toctext">Access to archived data of the values' archive</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-101"><a href="#API_of_modules_of_the_modular_subsystems"><span class="tocnumber">19</span> <span class="toctext"><span>API of modules of the modular subsystems</span></span></a></li>
+<li class="toclevel-1 tocsection-102"><a href="#Debugging_and_Testing_OpenSCADA"><span class="tocnumber">20</span> <span class="toctext">Debugging and Testing OpenSCADA</span></a></li>
+<li class="toclevel-1 tocsection-103"><a href="#Rules_for_design_and_commenting_of_the_sources_of_OpenSCADA_and_its_modules"><span class="tocnumber">21</span> <span class="toctext">Rules for design and commenting of the sources of OpenSCADA and its modules</span></a></li>
+<li class="toclevel-1 tocsection-104"><a href="#.D0.A1onventional_signs_in_the_text_and_source_code"><span class="tocnumber">22</span> <span class="toctext">Сonventional signs in the text and source code</span></a></li>
+<li class="toclevel-1 tocsection-105"><a href="#Links"><span class="tocnumber">23</span> <span class="toctext">Links</span></a></li>
 </ul>
 </div>
 
 <h2><span class="mw-headline" id="The_internal_structure.2C_OpenSCADA_API"><span class="mw-headline-number">1</span> The internal structure, OpenSCADA API</span></h2>
 <p>For the purpose of visual and affordable perception of OpenSCADA architecture in general the Figure 1 shows the static class diagram of OpenSCADA on the universal modeling language (UML). Based on the chart it is clear that OpenSCADA contains modular subsystems: "Archives", "Databases", "Transports", "Transport protocols", "User interfaces", "Data acquisition" and "Special", as well as subsystems: "Safety" and "Module's management". The chart graphically presents the relationship between modular subsystems and modules.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:718px;"><a class="image" href="../en/API.html"><img class="thumbimage" height="836" src="files/API_uml_classdep.png" width="716" /></a>  <div class="thumbcaption">Fig. 1. Static class diagram.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:718px;"><a class="image" href="http://oscada.org/wiki/File:API_uml_classdep.png"><img class="thumbimage" height="836" src="files/API_uml_classdep.png" width="716" /></a>  <div class="thumbcaption">Fig. 1. Static class diagram.</div></div></div></div>
 <h2><span class="mw-headline" id="The_overall_structure_of_the_system._Modularity_.28TSYS.2C_TSubSYS.2C_TModule.29"><span class="mw-headline-number">2</span> The overall structure of the system. Modularity (TSYS, TSubSYS, TModule)</span></h2>
 <p>The root, from which we construct the whole system is the object of TSYS. The root contains a subsystem (TSubSYS). Subsystems can be: the ordinary and modular. The difference between the modular subsystems is clearly shown in Fig. 1. Thus, the modular subsystems necessarily contain a list of modular structures (TModule), such as subsystem TArchiveS contain modular objects TTypeArchivator. At the same time, the normal subsystem does not contain such objects. For example TSecurity  subsystem (Figure 2).
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:703px;"><a class="image" href="../en/API.html"><img class="thumbimage" height="360" src="files/Oscada_struct.png" width="701" /></a>  <div class="thumbcaption">Fig. 2. Hierarchical structure of OpenSCADA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:703px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_struct.png"><img class="thumbimage" height="360" src="files/Oscada_struct.png" width="701" /></a>  <div class="thumbcaption">Fig. 2. Hierarchical structure of OpenSCADA.</div></div></div></div>
 <p>In the process of initializing the root (TSYS) the global variable SYS is defined. The variable SYS can be used for direct access to the root of the system from any of its node. Initialization of the root is performed only one time from the main calling function. After starting the management is captured by the  system object till stop. The root object concentrate all system functions of OpenSCADA.
 </p><p>Extension of the root object (TSYS) is the object TMess, which performs the functions of service of the flow of system messages. The object is accessible through the global variable Mess, which is initialized by the root of the system. The object contains the functions of encoding, decoding, and localization of messages.
 </p><p>In the subsystems (TSubSYS) the functions typical for each subsystem individually with the general access for all subsystems are carried out through the object TSubSYS. Modular subsystem is able to extend its functionality by means of modules. For this purpose, modular subsystem provides access to the modules of its type in the form of modular objects.
@@ -205,7 +209,7 @@ The document is intended for programmers wishing to understand the architecture 
 
 <tr>
 <td> <b>Inherits:</b> </td>
-<td> <a href="../en/API.html">TCntrNode</a>.
+<td> <a href="#TCntrNode">TCntrNode</a>.
 </td></tr></table>
 <p><b>Data:</b><br />
 Information variables of the program:
@@ -525,11 +529,11 @@ Types (levels) of messages (enum — TMess::Type):
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="../en/API.html">TCntrNode</a></i>
+<td><i><a href="#TCntrNode">TCntrNode</a></i>
 </td></tr>
 <tr>
 <td><b>Inherited:</b></td>
-<td><i><a href="../en/API.html">TArchiveS</a>, <a href="../en/API.html">TProtocolS</a>, <a href="../en/API.html">TBDS</a>, <a href="../en/API.html">TFunctionS</a>, <a href="../en/API.html">TSesurity</a>, <a href="../en/API.html">TModShedul</a>, <a href="../en/API.html">TTransportS</a>, <a href="../en/API.html">TUIS</a>, <a href="../en/API.html">TSpecialS</a>, <a href="../en/API.html">TControllerS</a>.</i>
+<td><i><a href="#TArchiveS">TArchiveS</a>, <a href="#TProtocolS">TProtocolS</a>, <a href="#TBDS">TBDS</a>, <a href="#TFunctionS">TFunctionS</a>, <a href="#TSesurity">TSesurity</a>, <a href="#TModShedul">TModShedul</a>, <a href="#TTransportS">TTransportS</a>, <a href="#TUIS">TUIS</a>, <a href="#TSpecialS">TSpecialS</a>, <a href="#TControllerS">TControllerS</a>.</i>
 </td></tr></table>
 <p><b>Public methods:</b>
 </p>
@@ -555,11 +559,11 @@ Types (levels) of messages (enum — TMess::Type):
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="../en/API.html">TCntrNode</a></i>
+<td><i><a href="#TCntrNode">TCntrNode</a></i>
 </td></tr>
 <tr>
 <td><b>Inherited:</b></td>
-<td><i><a href="../en/API.html">TProtocol</a>, <a href="../en/API.html">TTypeBD</a>, <a href="../en/API.html">TTypeArchive</a>, <a href="../en/API.html">TTypeTransport</a>, <a href="../en/API.html">TUI</a>, <a href="../en/API.html">TSpecial</a>, <a href="../en/API.html">TTypeDAQ</a></i>
+<td><i><a href="#TProtocol">TProtocol</a>, <a href="#TTypeBD">TTypeBD</a>, <a href="#TTypeArchive">TTypeArchive</a>, <a href="#TTypeTransport">TTypeTransport</a>, <a href="#TUI">TUI</a>, <a href="#TSpecial">TSpecial</a>, <a href="#TTypeDAQ">TTypeDAQ</a></i>
 </td></tr></table>
 <p><b>Data:</b><br />
 The data structure which identifies the module (class — TModule::SAt):
@@ -607,7 +611,7 @@ The data structure which identifies the module (class — TModule::SAt):
 <h2><span class="mw-headline" id="Subsystem_.22Database.22_.28TBDS.29"><span class="mw-headline-number">3</span> <span id="TBDS" title="#TBDS">Subsystem "Database" (TBDS)</span></span></h2>
 <p>Subsystem "Databases" is represented by the object <i>TBDS</i>, which contains a modular objects of the following types of DB <i>TTypeBD</i>. Each type of database contains objects of individual databases of that type <i>TBD</i>. Each database in its turn, contains the objects of their tables TTable (Fig. 3).
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:370px;"><a class="image" href="../en/API.html"><img class="thumbimage" height="297" src="files/Oscada_subsys_db_str.png" width="368" /></a>  <div class="thumbcaption">Fig. 3. Hierarchical structure of the subsystem "DB".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:370px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_subsys_db_str.png"><img class="thumbimage" height="297" src="files/Oscada_subsys_db_str.png" width="368" /></a>  <div class="thumbcaption">Fig. 3. Hierarchical structure of the subsystem "DB".</div></div></div></div>
 <p>The subsystem provides the basic functions to access the type of database, as well as generalized functions for the manipulation of the databases and tables. For example, to hide the source of data, which may be a configuration file, the functions of an abstract access to the data source are provided. For the storage system-wide data the system table and the function of the abstract to access it are provided. Consequently, system-wide data can be stored in the configuration file and in the database table. Priority source, in this case, is the database table.
 </p><p>Being a modular object, the type of database (TTypeBD) provides access to the implementation of the mechanism of one or another database. Access is made through a public databases of the module of a given type of database. Open/registered database is described in the table of databases to be opened or in the configuration file. There is, the so-called, the working database, which is always opens and is shown in the configuration file. DB which support the SQL-queries can grant access based on direct SQL-queries.
 </p><p>While working, the components of OpenSCADA open tables (TTable) available in the database and work with them.
@@ -617,7 +621,7 @@ The data structure which identifies the module (class — TModule::SAt):
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="../en/API.html">TSubSYS</a>, <a href="../en/API.html">TElem</a></i>
+<td><i><a href="#TSubSYS">TSubSYS</a>, <a href="#TElem">TElem</a></i>
 </td></tr></table>
 <p><b>Data:</b><br />
 Flags of the queries to the system table (enum – TDBS::ReqGen):
@@ -648,7 +652,7 @@ Flags of the queries to the system table (enum – TDBS::ReqGen):
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="../en/API.html">TModule</a></i>
+<td><i><a href="#TModule">TModule</a></i>
 </td></tr>
 <tr>
 <td><b>Inherited:</b></td>
@@ -668,7 +672,7 @@ Flags of the queries to the system table (enum – TDBS::ReqGen):
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="../en/API.html">TCntrNode</a>, <a href="../en/API.html">TConfig</a></i>
+<td><i><a href="#TCntrNode">TCntrNode</a>, <a href="#TConfig">TConfig</a></i>
 </td></tr>
 <tr>
 <td><b>Inherited:</b></td>
@@ -713,7 +717,7 @@ Flags of the queries to the system table (enum – TDBS::ReqGen):
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="../en/API.html">TCntrNode</a></i>
+<td><i><a href="#TCntrNode">TCntrNode</a></i>
 </td></tr>
 <tr>
 <td><b>Inherited:</b></td>
@@ -733,7 +737,7 @@ Flags of the queries to the system table (enum – TDBS::ReqGen):
 <h2><span class="mw-headline" id="The_subsystem_.22Data_acquisition.22_.28TDAQS.29"><span class="mw-headline-number">4</span> The subsystem "Data acquisition" (TDAQS)</span></h2>
 <p>The subsystem "Data acquisition" is represented by the <i>TDAQS</i> object which contains modular objects of the data sources' types <i>TTypeDAQ</i> and the objects of the libraries of parameters' templates of subsystem "Data acquisition" <i>TPrmTmplLib</i>. Object of the data sources types contains objects of the controllers TController and objects of the  parameters' types <i>TTypeParam</i>. Parameters' types objects are provided by the controller module and contain the DB structure of the separate parameters' types (analog, digital ...). Controllers' objects contain parameters' objects <i>TParamContr</i>. Each parameter is associated with only one type of the parameter. For the attribute storage parameter is inherited from the values object <i>TValue</i>, which contains the attributes' values <i>TVal</i>. The library of the parameters' templates of this subsystem contains templates' objects <i>TPrmTmpl</i>. An example of the described hierarchical structure is shown in Fig. 4.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:309px;"><a class="image" href="../en/API.html"><img class="thumbimage" height="335" src="files/Oscada_subsys_daq_str.png" width="307" /></a>  <div class="thumbcaption">Fig. 4. Hierarchical structure of the subsystem "Data acquisition".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:309px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_subsys_daq_str.png"><img class="thumbimage" height="335" src="files/Oscada_subsys_daq_str.png" width="307" /></a>  <div class="thumbcaption">Fig. 4. Hierarchical structure of the subsystem "Data acquisition".</div></div></div></div>
 <p>Subsystem contains the types of data sources. The source may be virtually any substance providing any data. Type of source can be divided into individual sources (controllers) within the limits of the particular type. For example, if we take the data from the operating system (OS), then the single source can be the separate operating system of the separate PC.
 </p><p>Data source (controller) is further divided (contains) into the parameters. The parameter is the part of the data source. In the case of the OS it will be, for example,: used RAM, the processor's frequency and many other parts.
 </p><p>Parameter, in its turn, contains the attributes, which provide the data. In addition to the basic data attributes can provide the related or detailing data. In the case of the same operating system and the memory usage, the attributes may not only provide the used memory, and also how much it all, how much in the swap, etc.
@@ -745,7 +749,7 @@ Flags of the queries to the system table (enum – TDBS::ReqGen):
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="../en/API.html">TSubSYS</a></i>
+<td><i><a href="#TSubSYS">TSubSYS</a></i>
 </td></tr></table>
 <p><b>Public methods:</b>
 </p>
@@ -775,7 +779,7 @@ Flags of the queries to the system table (enum – TDBS::ReqGen):
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="../en/API.html">TModule</a>, <a href="../en/API.html">TElem</a></i>
+<td><i><a href="#TModule">TModule</a>, <a href="#TElem">TElem</a></i>
 </td></tr>
 <tr>
 <td><b>Inherited:</b></td>
@@ -808,7 +812,7 @@ Flags of the queries to the system table (enum – TDBS::ReqGen):
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="../en/API.html">TCntrNode</a>, <a href="../en/API.html">TConfig</a></i>
+<td><i><a href="#TCntrNode">TCntrNode</a>, <a href="#TConfig">TConfig</a></i>
 </td></tr>
 <tr>
 <td><b>Inherited:</b></td>
@@ -877,7 +881,7 @@ Redundancy modes (enum TController::Redundant):
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="../en/API.html">TElem</a></i>
+<td><i><a href="#TElem">TElem</a></i>
 </td></tr></table>
 <p><b>Public methods:</b>
 </p>
@@ -905,7 +909,7 @@ Redundancy modes (enum TController::Redundant):
 
 <tr>
 <td> <b>Inherits:</b> </td>
-<td> <i><a href="../en/API.html">TConfig</a>, <a href="../en/API.html">TValue</a></i>
+<td> <i><a href="#TConfig">TConfig</a>, <a href="#TValue">TValue</a></i>
 </td></tr>
 <tr>
 <td> <b>Inherited:</b> </td>
@@ -943,11 +947,11 @@ Redundancy modes (enum TController::Redundant):
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="../en/API.html">TCntrNode</a>, <a href="../en/API.html">TValElem</a></i>
+<td><i><a href="#TCntrNode">TCntrNode</a>, <a href="#TValElem">TValElem</a></i>
 </td></tr>
 <tr>
 <td><b>Inherited:</b></td>
-<td><i><a href="../en/API.html">TParamContr</a></i>
+<td><i><a href="#TParamContr">TParamContr</a></i>
 </td></tr></table>
 <p><b>Public methods:</b>
 </p>
@@ -973,7 +977,7 @@ Redundancy modes (enum TController::Redundant):
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="../en/API.html">TCntrNode</a></i>
+<td><i><a href="#TCntrNode">TCntrNode</a></i>
 </td></tr></table>
 <p><b>Data:</b><br />
 Additional flags to the object TFld (enum TVal::AttrFlag):
@@ -1018,7 +1022,7 @@ Additional flags to the object TFld (enum TVal::AttrFlag):
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="../en/API.html">TCntrNode</a>, <a href="../en/API.html">TConfig</a></i>
+<td><i><a href="#TCntrNode">TCntrNode</a>, <a href="#TConfig">TConfig</a></i>
 </td></tr></table>
 <p><b>Public methods:</b>
 </p>
@@ -1045,7 +1049,7 @@ Additional flags to the object TFld (enum TVal::AttrFlag):
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="../en/API.html">TFunction</a>, <a href="../en/API.html">TConfig</a></i>
+<td><i><a href="#TFunction">TFunction</a>, <a href="#TConfig">TConfig</a></i>
 </td></tr></table>
 <p><b>Data:</b><br />
 Additional flags to the attribute's object of the function IO (enum TPrmTempl::IOTmplFlgs):
@@ -1080,7 +1084,7 @@ Additional flags to the attribute's object of the function IO (enum TPrmTempl::I
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="../en/API.html">TValFunc</a></i>
+<td><i><a href="#TValFunc">TValFunc</a></i>
 </td></tr></table>
 <p><b>Data:</b><br />
 Structure of template links (class — TPrmTempl::Impl::SLnk):
@@ -1098,12 +1102,12 @@ Structure of template links (class — TPrmTempl::Impl::SLnk):
 <li> <i>virtual void lnkAdd( int num, const SLnk &amp;l );</i> — adds a link with the number <i>num</i> and the "SLnk" structure <i>l</i>.</li>
 <li> <i>string lnkAddr( int num, bool spec = false ) const;</i> — returns the link address for the number <i>num</i> and the special link address for <i>spec</i>.</li>
 <li> <i>void lnkAddrSet( int num, const string &amp;vl, bool spec = false );</i> — sets the link address to <i>vl</i> for number <i>num</i> and the special link address for <i>spec</i>.</li>
-<li> <i>virtual bool lnkInit( int num, bool checkNoLink = false );</i> — inits/connects the link for the number <i>num</i>, which means reading "addr" and forming "con" or "addrSpec". Set <i>checkNoLink</i> to prevent re-linking. Returns "true" at the link need for the initialization/activation repeating — does not initiated.</li>
+<li> <i>virtual bool lnkInit( int num, bool toRecnt = false );</i> — inits/connects the link for the number <i>num</i>, which means reading "addr" and forming "con" or "addrSpec". Set <i>toRecnt</i> to force the re-linking. Returns "true" at the need for the initialization/activation repeating.</li>
 <li> <i>virtual bool lnkActive( int num );</i> — checks the link number <i>num</i> initialization/activation state.</li>
 <li> <i>virtual TVariant lnkInput( int num );</i> — returns a value by the link number <i>num</i>.</li>
 <li> <i>virtual bool lnkOutput( int num, const TVariant &amp;vl );</i> — sets the value <i>vl</i> by the link number <i>num</i>. Returns "true" at correct setting.</li>
 <li> <i>void addLinksAttrs( TElem *attrsCntr = NULL );</i> — adds links and DAQ parameter's attributes, at <i>attrsCntr</i> presence.</li>
-<li> <i>bool initLnks( bool checkNoLink = false );</i> — inits/connects all the links. Set <i>checkNoLink</i> to prevent re-linking. Returns "true" at presence at last one not initiated link — needs for the initialization/activation repeating.</li>
+<li> <i>bool initLnks( bool toRecnt = false );</i> — inits/connects all the links. Set <i>toRecnt</i> to force the re-linking. Returns "true" at presence at last one not initiated link — needs for the initialization/activation repeating.</li>
 <li> <i>virtual void cleanLnks( bool andFunc = false );</i> — cleans all the links and the function, for <i>andFunc</i>.</li>
 <li> <i>void inputLinks( );</i> — gets for values of all the links.</li>
 <li> <i>void outputLinks( );</i> — sets for values of all the links.</li>
@@ -1118,7 +1122,7 @@ Structure of template links (class — TPrmTempl::Impl::SLnk):
 <h2><span class="mw-headline" id="Subsystem_.22Archives.22_.28TArchiveS.29"><span class="mw-headline-number">5</span> <span id="TArchiveS" title="#TArchiveS">Subsystem "Archives" (TArchiveS)</span></span></h2>
 <p>Subsystem "Archives" is represented by an object TArchiveS, which contains at the subsystem level the modular objects of the archivers types TTypeArchivator. Each object of the archiver type contains objects of the messages' archivers  TMArchivator and values' archivers TVArchivator. In addition, the subsystem object contains the methods of the messages archive and objects of the values' archives TVArchive. The object of the values' archive TVArchive contains the buffer of values through the inheritance of the buffer object TValBuf. To connect the archive of values with the archivers the object of the value element TVArchEl is provided. This object is contained in the archiver and it is referenced by the archive. Structure of the subsystem "Archives" is presented in Fig. 5.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:221px;"><a class="image" href="../en/API.html"><img class="thumbimage" height="251" src="files/Oscada_subsys_arch_str.png" width="219" /></a>  <div class="thumbcaption">Fig. 5. Hierarchical structure of the subsystem "Archives".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:221px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_subsys_arch_str.png"><img class="thumbimage" height="251" src="files/Oscada_subsys_arch_str.png" width="219" /></a>  <div class="thumbcaption">Fig. 5. Hierarchical structure of the subsystem "Archives".</div></div></div></div>
 <p>Subsystem "Archives" contains the mechanisms for archiving of messages and values. It directly contains the messages' archive together with its buffer. Contains methods for accessing the archives of the values and for the archivers of values and messages. Besides it performs the actively data acquisition from sources of values for the archives of values, as well as archiving the archive of messages by the archivers.
 </p><p>Archive of values (TVArchive) contains the buffer (TValBuf) for intermediate values' accumulation before archiving. It is connected with the source of values in the person of OpenSCADA parameters in active or passive mode, as well as with other sources in the passive mode. To archive to the physical storage it is connected with the values' archivers of various types.
 </p><p>Object of the buffer TValBuf contains an array of values of the main types of OpenSCADA: string, integer, real and boolean. It is supported the storage of values in the modes of hard, soft grid and in the free access mode. It is also provided the mode of high-resolution time (microseconds). It is used for direct storage of large arrays of values, and for the exchange of large arrays by the frame-accurate method of access. 
@@ -1132,7 +1136,7 @@ Structure of template links (class — TPrmTempl::Impl::SLnk):
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="../en/API.html">TSubSYS</a></i>
+<td><i><a href="#TSubSYS">TSubSYS</a></i>
 </td></tr></table>
 <p>Modes of forming ID of the automatic created archives:
 </p>
@@ -1184,7 +1188,7 @@ Structure of template links (class — TPrmTempl::Impl::SLnk):
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="../en/API.html">TCntrNode</a>, <a href="../en/API.html">TValBuf</a>, <a href="../en/API.html">TConfig</a></i>
+<td><i><a href="#TCntrNode">TCntrNode</a>, <a href="#TValBuf">TValBuf</a>, <a href="#TConfig">TConfig</a></i>
 </td></tr></table>
 <p><b>Data:</b><br />
 The data acquisition mode/source (struct — TVArchive::SrcMode):
@@ -1243,7 +1247,7 @@ The data acquisition mode/source (struct — TVArchive::SrcMode):
 
 <tr>
 <td><b>Inherited:</b></td>
-<td><i><a href="../en/API.html">TVArchive</a></i>
+<td><i><a href="#TVArchive">TVArchive</a></i>
 </td></tr></table>
 <p><b>Public methods:</b>
 </p>
@@ -1288,7 +1292,7 @@ The data acquisition mode/source (struct — TVArchive::SrcMode):
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="../en/API.html">TModule</a></i>
+<td><i><a href="#TModule">TModule</a></i>
 </td></tr>
 <tr>
 <td><b>Inherited:</b></td>
@@ -1316,7 +1320,7 @@ The data acquisition mode/source (struct — TVArchive::SrcMode):
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="../en/API.html">TCntrNode</a>, <a href="../en/API.html">TConfig</a></i>
+<td><i><a href="#TCntrNode">TCntrNode</a>, <a href="#TConfig">TConfig</a></i>
 </td></tr>
 <tr>
 <td><b>Inherited:</b></td>
@@ -1370,7 +1374,7 @@ The data acquisition mode/source (struct — TVArchive::SrcMode):
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="../en/API.html">TCntrNode</a>, <a href="../en/API.html">TConfig</a></i>
+<td><i><a href="#TCntrNode">TCntrNode</a>, <a href="#TConfig">TConfig</a></i>
 </td></tr>
 <tr>
 <td><b>Inherited:</b></td>
@@ -1448,7 +1452,7 @@ The data acquisition mode/source (struct — TVArchive::SrcMode):
 <h2><span class="mw-headline" id="Subsystem_.22Transports.22_.28TTransportS.29"><span class="mw-headline-number">6</span> <span id="TTransportS" title="#TTransportS">Subsystem "Transports" (TTransportS)</span></span></h2>
 <p>"Transports" subsystem is represented by the TTransportS object, which contains modular objects of the transports' types TTypeTransport on the subsystem-level. Each type of transport contains objects TTransportIn of the input and TTransportOut of the output transports. The overall structure of the subsystem is shown in Fig. 6.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:293px;"><a class="image" href="../en/API.html"><img class="thumbimage" height="296" src="files/Oscada_subsys_tr_str.png" width="291" /></a>  <div class="thumbcaption">Fig. 6. Hierarchical structure of the subsystem "Transports".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:293px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_subsys_tr_str.png"><img class="thumbimage" height="296" src="files/Oscada_subsys_tr_str.png" width="291" /></a>  <div class="thumbcaption">Fig. 6. Hierarchical structure of the subsystem "Transports".</div></div></div></div>
 <p>The root object of the "Transports" subsystem's module provides information about the specific type of module and about the external OpenSCADA hosts/stations. As part of the single module it can be implemented the own general-module functionality. In general, for all modules, the access methods for both: inbound and outbound transports of the specific module are contained.
 </p><p>The object of the input transport TTransportIn provides an interface to the implementation of the modular method of input transport.
 </p><p>The object of the output transport TTransportOut provides an interface to the implementation of the modular method of output transport.
@@ -1458,7 +1462,7 @@ The data acquisition mode/source (struct — TVArchive::SrcMode):
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="../en/API.html">TSubSYS</a></i>
+<td><i><a href="#TSubSYS">TSubSYS</a></i>
 </td></tr></table>
 <p><b>Data:</b><br />
 External hosts mode (enum — ExtHost::Mode):
@@ -1501,7 +1505,7 @@ External hosts mode (enum — ExtHost::Mode):
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="../en/API.html">TModule</a></i>
+<td><i><a href="#TModule">TModule</a></i>
 </td></tr>
 <tr>
 <td><b>Inherited:</b></td>
@@ -1532,7 +1536,7 @@ External hosts mode (enum — ExtHost::Mode):
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="../en/API.html">TCntrNode</a>, <a href="../en/API.html">TConfig</a></i>
+<td><i><a href="#TCntrNode">TCntrNode</a>, <a href="#TConfig">TConfig</a></i>
 </td></tr>
 <tr>
 <td><b>Inherited:</b></td>
@@ -1580,7 +1584,7 @@ External hosts mode (enum — ExtHost::Mode):
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="../en/API.html">TCntrNode</a>, <a href="../en/API.html">TConfig</a></i>
+<td><i><a href="#TCntrNode">TCntrNode</a>, <a href="#TConfig">TConfig</a></i>
 </td></tr>
 <tr>
 <td><b>Inherited:</b></td>
@@ -1637,7 +1641,7 @@ External hosts mode (enum — ExtHost::Mode):
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="../en/API.html">TSubSYS</a></i>
+<td><i><a href="#TSubSYS">TSubSYS</a></i>
 </td></tr></table>
 <p><b>Public methods:</b>
 </p>
@@ -1648,7 +1652,7 @@ External hosts mode (enum — ExtHost::Mode):
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="../en/API.html">TModule</a></i>
+<td><i><a href="#TModule">TModule</a></i>
 </td></tr>
 <tr>
 <td><b>Inherited:</b></td>
@@ -1668,7 +1672,7 @@ External hosts mode (enum — ExtHost::Mode):
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="../en/API.html">TCntrNode</a></i>
+<td><i><a href="#TCntrNode">TCntrNode</a></i>
 </td></tr>
 <tr>
 <td><b>Inherited:</b></td>
@@ -1694,7 +1698,7 @@ External hosts mode (enum — ExtHost::Mode):
 
 <tr>
 <td> <b>Inherits:</b> </td>
-<td> <i><a href="../en/API.html">TSubSYS</a></i>
+<td> <i><a href="#TSubSYS">TSubSYS</a></i>
 </td></tr></table>
 <p><b>Data:</b><br />
 Requests parameters (enum — GetOpts):
@@ -1716,7 +1720,7 @@ Requests parameters (enum — GetOpts):
 
 <tr>
 <td> <b>Inherits:</b> </td>
-<td> <i><a href="../en/API.html">TModule</a></i>
+<td> <i><a href="#TModule">TModule</a></i>
 </td></tr>
 <tr>
 <td> <b>Inherited:</b> </td>
@@ -1733,7 +1737,7 @@ Requests parameters (enum — GetOpts):
 
 <tr>
 <td>Inherits:</td>
-<td><i><a href="../en/API.html">TSubSYS</a></i>
+<td><i><a href="#TSubSYS">TSubSYS</a></i>
 </td></tr></table>
 <p><b>Public methods:</b>
 </p>
@@ -1743,7 +1747,7 @@ Requests parameters (enum — GetOpts):
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="../en/API.html">TModule</a></i>
+<td><i><a href="#TModule">TModule</a></i>
 </td></tr>
 <tr>
 <td><b>Inherited:</b></td>
@@ -1762,7 +1766,7 @@ Requests parameters (enum — GetOpts):
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="../en/API.html">TSubSYS</a></i>
+<td><i><a href="#TSubSYS">TSubSYS</a></i>
 </td></tr></table>
 <p><b>Public data:</b>
 </p>
@@ -1786,7 +1790,7 @@ Requests parameters (enum — GetOpts):
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="../en/API.html">TCntrNode</a>, <a href="../en/API.html">TConfig</a></i>
+<td><i><a href="#TCntrNode">TCntrNode</a>, <a href="#TConfig">TConfig</a></i>
 </td></tr></table>
 <p><b>Public methods:</b>
 </p>
@@ -1814,7 +1818,7 @@ Requests parameters (enum — GetOpts):
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="../en/API.html">TCntrNode</a>, <a href="../en/API.html">TConfig</a></i>
+<td><i><a href="#TCntrNode">TCntrNode</a>, <a href="#TConfig">TConfig</a></i>
 </td></tr></table>
 <p><b>Public methods:</b>
 </p>
@@ -1842,7 +1846,7 @@ Requests parameters (enum — GetOpts):
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="../en/API.html">TSubSYS</a></i>
+<td><i><a href="#TSubSYS">TSubSYS</a></i>
 </td></tr></table>
 <p><b>Data:</b><br />
 The structure of information about the shared library (struct – TModSchedul::SHD):
@@ -1871,7 +1875,7 @@ The structure of information about the shared library (struct – TModSchedul::S
 <p>Object model of OpenSCADA is based on the function object <i>TFunction</i>, on the parameters of the function <i>IO</i> and on the values' frame of the function <i>TValFunc</i>. Later the function's objects are included in the object tree, forming an object model of the system. Using the functions of the object model is made by linking the frame of values <i>TValFunc</i> with function.
 </p><p>The idea in general is shown in Fig. 7.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:602px;"><a class="image" href="../en/API.html"><img class="thumbimage" height="469" src="files/LogicLev_func_base.png" width="600" /></a>  <div class="thumbcaption">Fig. 7. Basis of the programming area of OpenSCADA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:602px;"><a class="image" href="http://oscada.org/wiki/File:LogicLev_func_base.png"><img class="thumbimage" height="469" src="files/LogicLev_func_base.png" width="600" /></a>  <div class="thumbcaption">Fig. 7. Basis of the programming area of OpenSCADA.</div></div></div></div>
 <p>Object of the function (TFunction) provides an interface for the formation of function parameters and algorithm of the computing in the object which inherits it.
 </p><p>Object of the function's parameter (IO) contains the configuration of the single parameter.
 </p><p>Object of the values' frame (TValFunc) contains values in accordance with the structure of the linked function. While the execution of the algorithm by the associated function the values of this object are used.
@@ -1881,7 +1885,7 @@ The structure of information about the shared library (struct – TModSchedul::S
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="../en/API.html">TCntrNode</a></i>
+<td><i><a href="#TCntrNode">TCntrNode</a></i>
 </td></tr>
 <tr>
 <td><b>Inherited:</b></td>
@@ -2014,11 +2018,11 @@ Parameter's type (enum — IO::Type):
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="../en/API.html">TValElem</a></i>
+<td><i><a href="#TValElem">TValElem</a></i>
 </td></tr>
 <tr>
 <td><b>Inherited:</b></td>
-<td><i><a href="../en/API.html">TParamContr</a>, <a href="../en/API.html">TController</a>, <a href="../en/API.html">TMArchivator</a>, <a href="../en/API.html">TPrmTempl</a>, <a href="../en/API.html">TPrmTmplLib</a>, <a href="../en/API.html">TUser</a>, <a href="../en/API.html">TGroup</a>, <a href="../en/API.html">TTransportIn</a>, <a href="../en/API.html">TTransportOut</a>, <a href="../en/API.html">TBD</a>, <a href="../en/API.html">TVArchive</a>, <a href="../en/API.html">TVArchivator</a>, as well as modular objects that store their data in the DB.</i>
+<td><i><a href="#TParamContr">TParamContr</a>, <a href="#TController">TController</a>, <a href="#TMArchivator">TMArchivator</a>, <a href="#TPrmTempl">TPrmTempl</a>, <a href="#TPrmTmplLib">TPrmTmplLib</a>, <a href="#TUser">TUser</a>, <a href="#TGroup">TGroup</a>, <a href="#TTransportIn">TTransportIn</a>, <a href="#TTransportOut">TTransportOut</a>, <a href="#TBD">TBD</a>, <a href="#TVArchive">TVArchive</a>, <a href="#TVArchivator">TVArchivator</a>, as well as modular objects that store their data in the DB.</i>
 </td></tr></table>
 <p><b>Public methods:</b>
 </p>
@@ -2048,7 +2052,7 @@ Parameter's type (enum — IO::Type):
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="../en/API.html">TVariant</a></i>
+<td><i><a href="#TVariant">TVariant</a></i>
 </td></tr></table>
 <p><b>Data:</b><br />
 Additional flags to <i>TFld</i> (enum — TCfg::AttrFlg):
@@ -2099,7 +2103,7 @@ Additional flags to <i>TFld</i> (enum — TCfg::AttrFlg):
 
 <tr>
 <td><b>Inherited:</b></td>
-<td> By the <i><a href="../en/API.html">TTypeParam</a>, <a href="../en/API.html">TControllerS</a>, <a href="../en/API.html">TTypeDAQ</a></i>, as well as by the modular objects, combining the functions of the structure storage .
+<td> By the <i><a href="#TTypeParam">TTypeParam</a>, <a href="#TControllerS">TControllerS</a>, <a href="#TTypeDAQ">TTypeDAQ</a></i>, as well as by the modular objects, combining the functions of the structure storage .
 </td></tr></table>
 <p><b>Public methods:</b>
 </p>
@@ -2189,7 +2193,7 @@ Cell's type (enum – TFld::Type):
 
 <tr>
 <td><b>Inherited:</b></td>
-<td><i><a href="../en/API.html">TValue</a>, <a href="../en/API.html">TConfig</a></i>
+<td><i><a href="#TValue">TValue</a>, <a href="#TConfig">TConfig</a></i>
 </td></tr></table>
 <p><b>Protected methods:</b>
 </p>
@@ -2251,7 +2255,7 @@ Error values for the different data types (define):
 
 <tr>
 <td><b>Inherited:</b></td>
-<td><i><a href="../en/API.html">TArrayObj</a></i>
+<td><i><a href="#TArrayObj">TArrayObj</a></i>
 </td></tr></table>
 <p><b>Public methods:</b>
 </p>
@@ -2290,7 +2294,7 @@ Error values for the different data types (define):
 </p><p>The container can also gather into the single request several information structures and dynamic parts, thereby optimizing the time of the request especially on the high latency network interfaces.
 </p><p>Overall control interface is built from individual components of the dynamic tree. Hierarchical inheritance from the TCntrNode object allows to realize multi-level addition of the configuration of the control interface. General view of the dynamic node tree is shown in Fig. 8.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="../en/API.html"><img class="thumbimage" height="360" src="files/800px-Oscada_UserOM.png" srcset="/wiki/images/6/67/Oscada_UserOM.png 1.5x, /wiki/images/6/67/Oscada_UserOM.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="../en/API.html" title="Enlarge" /></div>Fig. 8. Example of a dynamic tree of the nodes in OpenSCADA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="360" src="files/800px-Oscada_UserOM.png" srcset="/wiki/images/6/67/Oscada_UserOM.png 1.5x, /wiki/images/6/67/Oscada_UserOM.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM.png" title="Enlarge" /></div>Fig. 8. Example of a dynamic tree of the nodes in OpenSCADA.</div></div></div></div>
 <p>System's nodes, containing data for the control interface of the system must also be connected to the dynamic tree of objects. 
 </p><p>Connection of the node to the dynamic tree is done as follows:
 </p>
@@ -3552,8 +3556,8 @@ Error codes (enum — TError::Codes):
 <p>Each module can have its own database tables to store individual data. Structure of database tables of the modules can be formed freely, based on internal needs.
 </p>
 <h2><span class="mw-headline" id="Service_functions_of_the_OpenSCADA_control_interface"><span class="mw-headline-number">18</span> <span id="ServFunc" title="#ServFunc">Service functions of the OpenSCADA control interface</span></span></h2>
-<p>Service functions is an interface to access OpenSCADA through <a href="../en/API.html">the OpenSCADA control interface</a> from external systems. This mechanism is the basis for all exchange mechanisms within OpenSCADA, implemented through weak links and <a href="../en/API.html" title="Special:MyLanguage/Modules/SelfSystem">the standard-self exchange protocol of OpenSCADA</a>. Its main advantage is the priority processing and the possibility of using non-standard packaging data. For access to normal data you can use <a href="../en/API.html">the standard commands</a> of the control interface.
-</p><p><a class="image" href="../en/API.html"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Not all service functions-requests are described here so to familiarise all presented you must see to the function <i>cntrCmdProc()</i> of proper parts of OpenSCADA in <a class="external text" href="../en/API.html" rel="nofollow noreferrer noopener" target="_blank">the project sources</a>.
+<p>Service functions is an interface to access OpenSCADA through <a href="#CntrNode">the OpenSCADA control interface</a> from external systems. This mechanism is the basis for all exchange mechanisms within OpenSCADA, implemented through weak links and <a href="Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">the standard-self exchange protocol of OpenSCADA</a>. Its main advantage is the priority processing and the possibility of using non-standard packaging data. For access to normal data you can use <a href="#CntrNode">the standard commands</a> of the control interface.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Not all service functions-requests are described here so to familiarise all presented you must see to the function <i>cntrCmdProc()</i> of proper parts of OpenSCADA in <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/" rel="nofollow noreferrer noopener" target="_blank">the project sources</a>.
 </p>
 <h3><span class="mw-headline" id="Group_access_to_the_values_of_the_parameter.27s_attributes_of_the_subsystem_.22Data_acquisition.22.2C_as_well_as_to_the_detailed_information"><span class="mw-headline-number">18.1</span> Group access to the values of the parameter's attributes of the subsystem "Data acquisition", as well as to the detailed information</span></h3>
 <p>These requests let you to obtain detailed information about the parameters of the subsystem "Data acquisition", to acquire the values of all attributes of the parameters, and also to make the group setting. Detailed information about requests is given in Table 23.
@@ -4103,18 +4107,18 @@ extern "C"
 !!!! — the section requires a rethinking.
 </p>
 <h2><span class="mw-headline" id="Links"><span class="mw-headline-number">23</span> Links</span></h2>
-<ul><li> <a href="../en/API.html" title="File:API uml classdep.odg">Diagram: Static class diagram.</a></li>
-<li> <a href="../en/API.html" title="File:Oscada struct.odg">Diagram: Block scheme of OpenSCADA.</a></li>
-<li> <a href="../en/API.html" title="File:Oscada subsys daq str.odg">Diagram: Hierarchical structure of the subsystem "DAQ".</a></li>
-<li> <a href="../en/API.html" title="File:Oscada subsys db str.odg">Diagram: Hierarchical structure of the subsystem "DB".</a></li>
-<li> <a href="../en/API.html" title="File:Oscada subsys arch str.odg">Diagram: Hierarchical structure of the subsystem "Archives".</a></li>
-<li> <a href="../en/API.html" title="File:Oscada subsys tr str.odg">Diagram: Hierarchical structure of the subsystem "Transports" and "Protocols".</a></li>
-<li> <a href="../en/API.html" title="File:Oscada UserOM.odg">Diagram: User object model of the core OpenSCADA.</a></li></ul>
+<ul><li> <a class="external" href="http://oscada.org/wiki/File:API_uml_classdep.odg" title="File:API uml classdep.odg">Diagram: Static class diagram.</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/File:Oscada_struct.odg" title="File:Oscada struct.odg">Diagram: Block scheme of OpenSCADA.</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/File:Oscada_subsys_daq_str.odg" title="File:Oscada subsys daq str.odg">Diagram: Hierarchical structure of the subsystem "DAQ".</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/File:Oscada_subsys_db_str.odg" title="File:Oscada subsys db str.odg">Diagram: Hierarchical structure of the subsystem "DB".</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/File:Oscada_subsys_arch_str.odg" title="File:Oscada subsys arch str.odg">Diagram: Hierarchical structure of the subsystem "Archives".</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/File:Oscada_subsys_tr_str.odg" title="File:Oscada subsys tr str.odg">Diagram: Hierarchical structure of the subsystem "Transports" and "Protocols".</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/File:Oscada_UserOM.odg" title="File:Oscada UserOM.odg">Diagram: User object model of the core OpenSCADA.</a></li></ul>
 
 
 
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2670</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2675</td></tr></table></body>
 </html>

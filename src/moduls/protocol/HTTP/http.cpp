@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.HTTP file: http.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.3.2"
+#define MOD_VER		"3.4.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -148,7 +148,10 @@ void TProt::save_( )
 
 TVariant TProtIn::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
-    //bool pgAccess(string URL) - Checking for page access pointed by the <URL>.
+    //bool setUser( string user ) - Changing the user linked to the authentication session ID.
+    //  user      - user to change.
+    if(iid == "setUser" && prms.size())	{ mod->sesCheck(sesId, prms[0]); return true; }
+    //bool pgAccess( string URL ) - Checking for page access pointed by the <URL>.
     //  URL       - URL of the checking page.
     if(iid == "pgAccess" && prms.size()) {
 	// ???? Check for the allowed pages cache
@@ -347,13 +350,13 @@ void TProt::sesClose( int sid )
 	} catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 }
 
-string TProt::sesCheck( int sid )
+string TProt::sesCheck( int sid, const string &chUser )
 {
     time_t cur_tm = time(NULL);
-    map<int,SAuth>::iterator authEl = mAuth.find(sid);
 
     //Checking to close of old sessions
     MtxAlloc res(authM, true);
+    map<int,SAuth>::iterator authEl = mAuth.find(sid);
     if(cur_tm > lstSesChk+10 || (authEl == mAuth.end() && cur_tm > lstSesChk)) {
 	// Loading all sessions into the table of the external authentication sessions
 	if(authSessTbl().size())
@@ -395,6 +398,7 @@ string TProt::sesCheck( int sid )
     //Checking for the session
     authEl = mAuth.find(sid);
     if(authEl != mAuth.end()) {
+	if(chUser.size())	authEl->second.name = chUser;
 	if(authSessTbl().size() && (cur_tm=(cur_tm/10)*10) > authEl->second.tAuth)
 	    try {
 		TConfig cEl(&elAuth);
@@ -662,7 +666,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
 #undef _
 #define _(mess) mod->I18N(mess, lang().c_str())
 
-TProtIn::TProtIn( string name ) : TProtocolIn(name), mNotFull(false), KeepAlive(false)
+TProtIn::TProtIn( string name ) : TProtocolIn(name), mNotFull(false), KeepAlive(false), sesId(0)
 {
 
 }
@@ -690,7 +694,6 @@ bool TProtIn::mess( const string &reqst, string &answer )
 {
     KeepAlive = false;
     string req, sel, userAgent;
-    int sesId = 0;
     vector<string> vars;
     string sender = TSYS::strLine(srcAddr(), 0);
 

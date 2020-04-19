@@ -12,7 +12,11 @@
 </div>
 			<h1 id="firstHeading" lang="en">Documents/How to/Transferring project configuration</h1>
 		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/How_to_Transferring_project_configuration.html" title="Документация/Как сделать/Перенос документации проекта (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/How_to_Transferring_project_configuration.html" title="Документація/Як зробити/Перенос документації проекту (100% translated)">українська</a></div></div>
-<p><i>Author:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+<div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
+<ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a></li></ul>
+</div>
+<p>It is often needed to transfer configuration from one OpenSCADA project to another. And, more often, it is necessary to make a partial transfer, for example, the transfer of certain developments that could be useful in new project.
+</p><p>It should be noted that any developments with the slightest hint, and the prospect of re-use should be unified and stored in the separate-own libraries and databases. It is not recommended to change the default configurations and elements of the standard libraries, and save your own-new libraries and elements in the databases of standard libraries. This will subsequently allow you to unhindered update the standard libraries, as well as simply use the workings of your previous projects.
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
@@ -22,9 +26,6 @@
 </ul>
 </div>
 
-<p>It is often needed to transfer configuration from one OpenSCADA project to another. And, more often, it is necessary to make a partial transfer, for example, the transfer of certain developments that could be useful in new project.
-</p><p>It should be noted that any developments with the slightest hint, and the prospect of re-use should be unified and stored in the separate-own libraries and databases. It is not recommended to change the default configurations and elements of the standard libraries, and save your own-new libraries and elements in the databases of standard libraries. This will subsequently allow you to unhindered update the standard libraries, as well as simply use the workings of your previous projects.
-</p>
 <h3><span class="mw-headline" id="Simple_transferring_of_database_with_libraries_and_configurations"><span class="mw-headline-number">1</span> Simple transferring of database with libraries and configurations</span></h3>
 <p>If you took into account the above recommendations and all of your uniform workings are contained in a separate database, then the entire transferring process will consist in copying and connecting a database in a new project or in a simple connecting the database, for network DBMS.
 </p><p>The procedure of DB copying is different for types of databases and you should read about it in the DB documentation. For accompanying distribution, with OpenSCADA distributions, the SQLite database is usually used as separate files *.db. Copying of the SQLite database, respectively, is the simple copying of the the required database file from the database directory of the old project to the database directory of the new one.
@@ -45,5 +46,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Transferring_project_configuration/en">Documents/How_to/Transferring_project_configuration/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2670</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Transferring_project_configuration/en">Documents/How_to/Transferring_project_configuration/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2675</td></tr></table></body>
 </html>

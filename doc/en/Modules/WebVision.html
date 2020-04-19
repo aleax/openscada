@@ -23,23 +23,34 @@
 <th> Languages </th>
 <th> Platforms </th>
 <th> Type </th>
-<th> Author </th>
-<th> Description
+<th> Author
 </th></tr>
 
 <tr>
 <td> <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a> </td>
 <td> Operation user interface (WEB)
 </td>
-<td> 4.6 </td>
+<td> 4.8 </td>
 <td> GPL2 </td>
 <td> ui_WebVision.so </td>
 <td> en,uk,ru,de </td>
 <td> x86,x86_64,ARM
 </td>
 <td> UI </td>
-<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2007-2012), Ksenia Yashina (2007-2008)</i></font> </td>
-<td> Visual operation user interface, based on the the WEB — front-end to the VCA engine.
+<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2007-2012), Ksenia Yashina (2007-2008)</i></font>
+</td></tr>
+<tr>
+<th colspan="9"> Description
+</th></tr>
+<tr>
+<td colspan="9"> Visual operation user interface, based on the the WEB — front-end to the VCA engine.
+<ul><li> <b>To Do:</b></li></ul>
+<dl><dd> - expand the view "Table" of the primitive "FormEl" for user sorting by the selected column;</dd>
+<dd> * expand the status-bar, with the functions:
+<dl><dd> - export and print;</dd>
+<dd> - call of the project documents.</dd></dl></dd>
+<dd> - ElFigure,Diagram: enable or make the anti aliasing, for the library GD;</dd>
+<dd> - implement the primitives "Diagram", "ElFigure" in the tag "SVG".</dd></dl>
 </td></tr></table>
 <p>The module provides in OpenSCADA a mechanism of the final visualization of the visual control area (VCA). The module is based on WEB technologies (XHTML, JavaScript, CSS, AJAX). In its work, the module uses the data from the VCA engine — module <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>.
 </p><p>Visual control area (VCA) is an integral part of the SCADA system. It applies to the client stations with a view to providing accessible information about the control object and to for the the issuance of the control actions to the object. In various practical situations and conditions the VCA, based on different principles of visualization, may by applied. For example, this may be the library of widgets Qt, GTK+, WxWidgets or hypertext mechanisms based on the technologies HTML, XHTML, XML, CSS and JavaScript, or third-party applications of visualization, realized in various programming languages Java, Python, etc. Any of these principles has its advantages and disadvantages, the combination of which could become an insurmountable obstacle to the use of VCA in a practical case. For example, technologies like the Qt library can create highly-productive VCA, which will undoubtedly important for the operator station for control the technological processes (TP). However, the need for installation of that client software in some cases may make using of it impossible. On the other hand, Web-technology does not require installation on client systems and is extremely multi-platform (it is enough to create a link to the Web-server at any Web-browser) that is most important for various engineering and administrative stations, but the productivity and reliability of such interfaces is lower, that actually eliminates the using of them at the operator stations of TP.
@@ -124,7 +135,7 @@
 <li> Language of the Web-browser from the HTTP property "Accept-Language".</li>
 <li> Generic language of the OpenSCADA process.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:619px;"><a class="image" href="http://oscada.org/wiki/File:HTTP_auth.png"><img class="thumbimage" height="302" src="../files/HTTP_auth.png" width="617" /></a>  <div class="thumbcaption">Fig.1. Authentication page.</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:621px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_connect.png"><img class="thumbimage" height="411" src="../files/WebVision_wvis_connect.png" width="619" /></a>  <div class="thumbcaption">Fig.2. Connection or creation of a new session of the execution project of the VCA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:620px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_connect.png"><img class="thumbimage" height="458" src="../files/WebVision_wvis_connect.png" width="618" /></a>  <div class="thumbcaption">Fig.2. Connection or creation of a new session of the execution project of the VCA.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1041px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run.png"><img class="thumbimage" height="782" src="../files/WebVision_wvis_run.png" width="1039" /></a>  <div class="thumbcaption">Fig.3. Main execution window.</div></div></div></div>
 <h2><span class="mw-headline" id="Presentation_of_the_basic_elements_.28primitives.29"><span class="mw-headline-number">3</span> <span id="Primitives" title="#Primitives">Presentation of the basic elements (primitives)</span></span></h2>
 <p>This version of the module does not implement all the shapes of the primitives laid by the project. In general, the project provides the following primitives:
@@ -219,6 +230,16 @@
 <td> stBarNoShow (main page) </td>
 <td> Do not show the status bar </td>
 <td> Hide the status bar of the main window.
+</td></tr>
+<tr>
+<td> userSetVis (main page, created manually, the type "String") </td>
+<td> Setting the user </td>
+<td>
+<p>Change the user or call a dialog to select it. Variants of the value:
+</p>
+<ul><li> "*" — call for a selecting dialog of the user; </li>
+<li> "$" — change the user to the default one;</li>
+<li> "{user}" — direct change to <i>user</i>, if available.</li></ul>
 </td></tr>
 <tr>
 <td> vs_goHttpUrl (view "Button" of the primitive "FormEl") </td>
@@ -680,5 +701,5 @@ GROUNDS: At working with the board <a class="external" href="http://oscada.org/w
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebVision/en">Modules/WebVision/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2670</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebVision/en">Modules/WebVision/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2675</td></tr></table></body>
 </html>

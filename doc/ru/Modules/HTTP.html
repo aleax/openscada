@@ -31,7 +31,7 @@
 <td> <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">HTTP</a> </td>
 <td> HTTP-реализация
 </td>
-<td> 3.3 </td>
+<td> 3.4 </td>
 <td> GPL2 </td>
 <td> prot_HTTP.so </td>
 <td> en,uk,ru,de </td>
@@ -41,15 +41,6 @@
 <td> Роман Савоченко </td>
 <td> Предоставляет поддержку протокола HTTP для WWW-основанных пользовательских интерфейсов.
 </td></tr></table>
-<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
-<ul>
-<li class="toclevel-1 tocsection-1"><a href="#.D0.90.D1.83.D1.82.D0.B5.D0.BD.D1.82.D0.B8.D1.84.D0.B8.D0.BA.D0.B0.D1.86.D0.B8.D1.8F"><span class="tocnumber">1</span> <span class="toctext">Аутентификация</span></a></li>
-<li class="toclevel-1 tocsection-2"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D0.B8_WEB-.D0.B8.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D0.B0"><span class="tocnumber">2</span> <span class="toctext"><span>Модули WEB-интерфейса</span></span></a></li>
-<li class="toclevel-1 tocsection-3"><a href="#.D0.A4.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D1.8F_.D0.B2.D1.8B.D1.85.D0.BE.D0.B4.D0.BD.D1.8B.D1.85_.D0.B7.D0.B0.D0.BF.D1.80.D0.BE.D1.81.D0.BE.D0.B2_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.BE.D0.B3.D0.BE_API"><span class="tocnumber">3</span> <span class="toctext">Функция выходных запросов пользовательского API</span></a></li>
-<li class="toclevel-1 tocsection-4"><a href="#API_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F"><span class="tocnumber">4</span> <span class="toctext">API пользовательского программирования</span></a></li>
-</ul>
-</div>
-
 <p>Модуль транспортного протокола HTTP предназначен для реализации поддержки сетевого протокола HTTP(Hypertext Transfer Protocol) в OpenSCADA.
 </p><p>Протокол HTTP используется для передачи содержимого WWW. Так, через HTTP передаются следующие типы документов: html, xhtml, png, javascript и многие другие. Поддержка HTTP в OpenSCADA, в комплексе с транспортом <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>, позволяет реализовывать различные пользовательские функции на основе WWW интерфейса. Модуль реализует два основных метода протокола HTTP: GET и POST. Модуль обеспечивает контроль целостности HTTP-запросов и, совместно с транспортом Sockets, позволяет "собирать" целостные запросы из их фрагментов, а также обеспечивать удержание соединения "живым" (Keep-Alive).
 </p><p>Для гибкого подключения пользовательских интерфейсов к данному модулю, используется модульный механизм в рамках самого этого модуля. В роли модулей используются модули подсистемы "Пользовательские интерфейсы" с дополнительным информационным полем "SubType", имеющим значение "WWW".
@@ -76,6 +67,15 @@
 <li> БД активных сеансов аутентификации предусматривает внешнюю таблицу активных сеансов аутентификации — "HTTP_AuthSessions", которая включается для непустого значения и предоставляет возможность совместного использования аутентификации между разными станциями OpenSCADA и её короткого сохранения на время выключения станции.</li>
 <li> Время жизни, перечень пользователей разрешённых к аутентификации и установка автоматического входа. </li></ul></li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:933px;"><a class="image" href="http://oscada.org/wiki/File:HTTP_mod_ru.png"><img class="thumbimage" height="723" src="../files/HTTP_mod_ru.png" width="931" /></a>  <div class="thumbcaption">Рис.3. Страница настройки модуля.</div></div></div></div>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.90.D1.83.D1.82.D0.B5.D0.BD.D1.82.D0.B8.D1.84.D0.B8.D0.BA.D0.B0.D1.86.D0.B8.D1.8F"><span class="tocnumber">1</span> <span class="toctext">Аутентификация</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D0.B8_WEB-.D0.B8.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D0.B0"><span class="tocnumber">2</span> <span class="toctext"><span>Модули WEB-интерфейса</span></span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#.D0.A4.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D1.8F_.D0.B2.D1.8B.D1.85.D0.BE.D0.B4.D0.BD.D1.8B.D1.85_.D0.B7.D0.B0.D0.BF.D1.80.D0.BE.D1.81.D0.BE.D0.B2_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.BE.D0.B3.D0.BE_API"><span class="tocnumber">3</span> <span class="toctext">Функция выходных запросов пользовательского API</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#API_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F"><span class="tocnumber">4</span> <span class="toctext">API пользовательского программирования</span></a></li>
+</ul>
+</div>
+
 <h2><span class="mw-headline" id=".D0.90.D1.83.D1.82.D0.B5.D0.BD.D1.82.D0.B8.D1.84.D0.B8.D0.BA.D0.B0.D1.86.D0.B8.D1.8F"><span class="mw-headline-number">1</span> Аутентификация</span></h2>
 <p>Модулем поддерживается аутентификация в OpenSCADA при предоставлении доступа к модулям WEB-интерфейсов (рис.2).
 </p>
@@ -176,7 +176,9 @@ SYS.Transport.Sockets.out_testHTTP.messIO(req,"HTTP");
 <h2><span class="mw-headline" id="API_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F"><span class="mw-headline-number">4</span> API пользовательского программирования</span></h2>
 <p><b>Входная часть объекта модуля (SYS.Protocol.HTTP.{In})</b>
 </p>
-<ul><li> <i>bool pgAccess(string URL)</i> — проверяет доступность страницы, определённой в <i>URL</i>.
+<ul><li> <i>bool setUser( string user )</i> — меняет пользователя связанного с идентификатором сеанса аутентификации.
+<ul><li> <i>user</i> — пользователя для смены.</li></ul></li>
+<li> <i>bool pgAccess(string URL)</i> — проверяет доступность страницы, определённой в <i>URL</i>.
 <ul><li> <i>URL</i> — URL страницы, которая проверяется.</li></ul></li>
 <li> <i>string pgCreator(string cnt, string rcode = "200 OK", string httpattrs = "Content-Type: text/html;charset={SYS}", string htmlHeadEls = "", string forceTmplFile = "", string lang = "" )</i> — формирует страницу или ресурс из содержимого <i>cnt</i>, обёрнутого в HTTP с результатом <i>rcode</i>, с дополнительными атрибутами HTTP <i>httpattrs</i>, дополнительным элементом заголовка HTML <i>htmlHeadEls</i> и использованием файла шаблона <i>forceTmplFile</i>.
 <ul><li> <i>cnt</i> — содержимое страницы или ресурса (изображения, XML, CSS, JavaScript, ...);</li>
@@ -191,5 +193,5 @@ SYS.Transport.Sockets.out_testHTTP.messIO(req,"HTTP");
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/HTTP/ru">Modules/HTTP/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2670</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/HTTP/ru">Modules/HTTP/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2675</td></tr></table></body>
 </html>

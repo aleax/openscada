@@ -1291,7 +1291,7 @@ void *Node::Task( void *ind )
 
     for(unsigned int clc = 0; true; clc++) {
 	if(SYS->daq().at().subStartStat()) {
-	    if(nd.data->chkLnkNeed) nd.data->chkLnkNeed = nd.data->initLnks(true);
+	    if(nd.data->chkLnkNeed) nd.data->chkLnkNeed = nd.data->initLnks();
 
 	    //Setting special IO
 	    if(ioFrq >= 0)	nd.data->setR(ioFrq, (float)1/nd.period());

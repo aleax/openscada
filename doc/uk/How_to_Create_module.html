@@ -20,8 +20,27 @@
 <td style="padding-left:5px;"> Generic revision and updating
 </td></tr></table>
 </div>
-<p><i>Автор:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+<div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
+<ul><li> <b>Автор:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a> </li></ul>
+</div>
+<p>Цей керівний документ покликано допомогти у створені модулів для системи OpenSCADA. Створення модуля може знадобитися у випадку бажання додати підтримку нового джерела даних або іншого розширення до системи OpenSCADA. Оскільки OpenSCADA є гранично модульною то всі інтерфейси взаємодії з зовнішнім середовищем здійснюється за посередництвом розширення спеціалізованими модулями типів:
 </p>
+<ul><li> "Бази даних"</li>
+<li> "Комунікаційні інтерфейси, транспорти"</li>
+<li> "Протоколи комунікаційних інтерфейсів"</li>
+<li> "Джерела даних та збір даних"</li>
+<li> "Архіви (повідомлень та значень)"</li>
+<li> "Інтерфейси користувача (GUI, TUI, WebGUI, speach, signal ...)"</li>
+<li> "Додаткові модулі, спеціальні"</li></ul>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Для створення модулів OpenSCADA потрібні знання у програмуванні на мові C/C++, складальної системи <a class="external text" href="http://en.wikipedia.org/wiki/GNU_build_system" rel="nofollow noreferrer noopener" target="_blank">AutoTools</a>, а також базові знання у ОС Linux та використовуваного дистрибутиву Linux.
+</p><p>Для розміщення розробленого модуля у основному репозиторії дерева вихідних текстів OpenSCADA Ви маєте виконати наступне та слідувати наведеним вимогам:
+</p>
+<ul><li> бути правовласником або автором коду цього модуля та розповсюджувати його за вільною ліцензією, віддаючи перевагу GPL;</li>
+<li> приготувати та зберігати код модуля як архів окремої теки модуля будь-якої з підсистем OpenSCADA, слідувати вимогам до вмісту:
+<ul><li> вихідні тексти модуля мають включати коректну інформацію прав копіювання, на початку кожного файлу, бути написаними та відформатованими згідно до якоїсь системи де перевагу треба віддавати стилю форматуванню основних модулів OpenSCADA;</li>
+<li> файли локалізації модулів також мають бути коректними, актуальними та відповідно відформатованими.</li></ul></li>
+<li> написати коротку інформаційну сторінку модуля для розташування її на <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules" title="Special:MyLanguage/Modules">OpenSCADA Wiki</a>, таким-же чином як і для інших модулів поряд;</li>
+<li> для розташування цього модуля написати прямий запит у темі форуму "<a class="external text" href="http://oscada.org/ua/forum/topics/razrabotka_openscada/" rel="nofollow noreferrer noopener" target="_blank">Розробка OpenSCADA</a>", включаючи доказ працездатності від розробника OpenSCADA або коротке демонстраційним відео.</li></ul>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#.D0.A1.D1.82.D0.B2.D0.BE.D1.80.D0.B5.D0.BD.D0.BD.D1.8F_.D0.BD.D0.BE.D0.B2.D0.BE.D0.B3.D0.BE_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.8F"><span class="tocnumber">1</span> <span class="toctext">Створення нового модуля</span></a>
@@ -44,24 +63,6 @@
 </ul>
 </div>
 
-<p>Цей керівний документ покликано допомогти у створені модулів для системи OpenSCADA. Створення модуля може знадобитися у випадку бажання додати підтримку нового джерела даних або іншого розширення до системи OpenSCADA. Оскільки OpenSCADA є гранично модульною то всі інтерфейси взаємодії з зовнішнім середовищем здійснюється за посередництвом розширення спеціалізованими модулями типів:
-</p>
-<ul><li> "Бази даних"</li>
-<li> "Комунікаційні інтерфейси, транспорти"</li>
-<li> "Протоколи комунікаційних інтерфейсів"</li>
-<li> "Джерела даних та збір даних"</li>
-<li> "Архіви (повідомлень та значень)"</li>
-<li> "Інтерфейси користувача (GUI, TUI, WebGUI, speach, signal ...)"</li>
-<li> "Додаткові модулі, спеціальні"</li></ul>
-<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Для створення модулів OpenSCADA потрібні знання у програмуванні на мові C/C++, складальної системи <a class="external text" href="http://en.wikipedia.org/wiki/GNU_build_system" rel="nofollow noreferrer noopener" target="_blank">AutoTools</a>, а також базові знання у ОС Linux та використовуваного дистрибутиву Linux.
-</p><p>Для розміщення розробленого модуля у основному репозиторії дерева вихідних текстів OpenSCADA Ви маєте виконати наступне та слідувати наведеним вимогам:
-</p>
-<ul><li> бути правовласником або автором коду цього модуля та розповсюджувати його за вільною ліцензією, віддаючи перевагу GPL;</li>
-<li> приготувати та зберігати код модуля як архів окремої теки модуля будь-якої з підсистем OpenSCADA, слідувати вимогам до вмісту:
-<ul><li> вихідні тексти модуля мають включати коректну інформацію прав копіювання, на початку кожного файлу, бути написаними та відформатованими згідно до якоїсь системи де перевагу треба віддавати стилю форматуванню основних модулів OpenSCADA;</li>
-<li> файли локалізації модулів також мають бути коректними, актуальними та відповідно відформатованими.</li></ul></li>
-<li> написати коротку інформаційну сторінку модуля для розташування її на <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules" title="Special:MyLanguage/Modules">OpenSCADA Wiki</a>, таким-же чином як і для інших модулів поряд;</li>
-<li> для розташування цього модуля написати прямий запит у темі форуму "<a class="external text" href="http://oscada.org/ua/forum/topics/razrabotka_openscada/" rel="nofollow noreferrer noopener" target="_blank">Розробка OpenSCADA</a>", включаючи доказ працездатності від розробника OpenSCADA або коротке демонстраційним відео.</li></ul>
 <h2><span class="mw-headline" id=".D0.A1.D1.82.D0.B2.D0.BE.D1.80.D0.B5.D0.BD.D0.BD.D1.8F_.D0.BD.D0.BE.D0.B2.D0.BE.D0.B3.D0.BE_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.8F"><span class="mw-headline-number">1</span> Створення нового модуля</span></h2>
 <p>Модулі в OpenSCADA представляють із себе поділювані бібліотеки, які підключаються до ядра OpenSCADA динамічно, під час роботи програми. Багато модулів у процесі роботи можуть бути відключені, підключені та оновлені із <a href="Program_manual.html#CfgModSched" title="Special:MyLanguage/Documents/Program manual">менеджера модулів</a>. Модулі також можуть бути включені у ядро OpenSCADA під час збірки, за посередництвом аргументу <b>--enable-{ModName}=incl</b> до скрипту конфігурації "configure", про що можна дізнатися із <a href="How_to_Build_from_source.html" title="Special:MyLanguage/Documents/How to/Build from source">посібника по збірці</a>. Модулі OpenSCADA можуть бути семи типів, згідно присутнім <a href="Program_manual.html#Modularity" title="Special:MyLanguage/Documents/Program manual">модульним підсистемам</a>. Наразі модулі до системи OpenSCADA пишуться на мові програмування "<b>C++</b>", хоча у подальшому можлива поява біндінгів на інші мови.
 </p><p>Для полегшення створення нових модулів у дереві вихідних текстів, у гілці кожної підсистеми, передбачено теку "<b>=Tmpl=</b>" з шаблоном модуля відповідної підсистеми. Розробник нового модуля може взяти цю теку та скопіювати її з ім'ям свого нового модуля. Передбачено можливість створення модулів у дереві вихідних текстів проекту OpenSCADA або як незалежного проекту зовнішнього модуля до OpenSCADA.
@@ -347,5 +348,5 @@ SYS-&gt;db().at().dataSet(fullDB(),owner().nodePath()+"DAQ",*this);</pre>
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Create_module/uk">Documents/How_to/Create_module/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2670</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Create_module/uk">Documents/How_to/Create_module/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2675</td></tr></table></body>
 </html>

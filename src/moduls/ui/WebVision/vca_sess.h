@@ -504,7 +504,7 @@ class VCASess : public TCntrNode
 	const string		mId;
 	int			id_objs;	//Primitive object's container identifier
 	time_t			open_ses, lst_ses_req;
-	string			mUser, mProj, mSender;
+	string			mUser, mUserOrig, mProj, mSender;
 
 	deque<pair<time_t,string> > mCachePg;	//Pages cache
 	map<string,CacheEl>	mCacheRes;	//Resources cache

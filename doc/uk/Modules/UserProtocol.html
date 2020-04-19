@@ -31,7 +31,7 @@
 <td> <a href="../Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">UserProtocol</a> </td>
 <td> Користувацький протокол
 </td>
-<td> 1.1 </td>
+<td> 1.2 </td>
 <td> GPL2 </td>
 <td> prot_UserProtocol.so </td>
 <td> en,uk,ru,de </td>
@@ -41,13 +41,6 @@
 <td> Роман Савоченко </td>
 <td> Забезпечує створення власних протоколів користувача на внутрішній мові OpenSCADA.
 </td></tr></table>
-<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
-<ul>
-<li class="toclevel-1 tocsection-1"><a href="#.D0.92.D1.85.D1.96.D0.B4.D0.BD.D0.B0_.D1.87.D0.B0.D1.81.D1.82.D0.B8.D0.BD.D0.B0_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.83"><span class="tocnumber">1</span> <span class="toctext">Вхідна частина протоколу</span></a></li>
-<li class="toclevel-1 tocsection-2"><a href="#.D0.92.D0.B8.D1.85.D1.96.D0.B4.D0.BD.D0.B0_.D1.87.D0.B0.D1.81.D1.82.D0.B8.D0.BD.D0.B0_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.83"><span class="tocnumber">2</span> <span class="toctext">Вихідна частина протоколу</span></a></li>
-</ul>
-</div>
-
 <p>Модуль призначено для надання користувачу можливості створення реалізацій різних протоколів власними силами на внутрішній мові OpenSCADA, зазвичай це <a href="../Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, не залучаючи при цьому низькорівневого програмування.
 </p><p>Основна мета модуля — спростити завдання підключення до OpenSCADA пристроїв джерел даних, які мають незначне розповсюдження та/або надають доступ до власних даних за специфічним протоколом, зазвичай достатньо простому для реалізації на внутрішній мові OpenSCADA. Для реалізації цього надається механізм формування протоколу вихідного запиту.
 </p><p>Крім механізму протоколу вихідного запиту надається механізм протоколу вхідного запиту, який дозволяє OpenSCADA обслуговувати запити на отримання даних за специфічними протоколами, які достатньо просто можуть бути реалізовані на внутрішній мові OpenSCADA.
@@ -61,6 +54,13 @@
 <li> Стан "Ввімкнено", у який переводити протокол при завантажені.</li>
 <li> <a href="../Program_manual.html#DAQTmpl" title="Special:MyLanguage/Documents/Program manual">DAQ шаблон</a>, пов'язаний з протоколом. Обрання шаблону тут вимикає режим роботи за прямими процедурами та доступ до наступних опцій. Режим DAQ-шаблону може працювати у вхідному, вихідному або обох режимах запиту, залежно від наявності необхідних атрибутів.</li>
 <li> Ознака повного перекладу тексту процедур та мови вхідної та вихідної процедур. Обрання мови для вхідної та/або вихідної процедури вмикає відповідну частину протоколу та відкриває доступ до відповідних вкладок конфігурації.</li></ul>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.92.D1.85.D1.96.D0.B4.D0.BD.D0.B0_.D1.87.D0.B0.D1.81.D1.82.D0.B8.D0.BD.D0.B0_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.83"><span class="tocnumber">1</span> <span class="toctext">Вхідна частина протоколу</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.92.D0.B8.D1.85.D1.96.D0.B4.D0.BD.D0.B0_.D1.87.D0.B0.D1.81.D1.82.D0.B8.D0.BD.D0.B0_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.83"><span class="tocnumber">2</span> <span class="toctext">Вихідна частина протоколу</span></a></li>
+</ul>
+</div>
+
 <h2><span class="mw-headline" id=".D0.92.D1.85.D1.96.D0.B4.D0.BD.D0.B0_.D1.87.D0.B0.D1.81.D1.82.D0.B8.D0.BD.D0.B0_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.83"><span class="mw-headline-number">1</span> Вхідна частина протоколу</span></h2>
 <p>Протокол вхідних запитів працює у кооперації з вхідним транспортом та окремий об'єкт "Користувацького протоколу" визначається у полі конфігурації протоколу транспорту, разом з іменем модуля UserProtocol. Надалі всі запити до транспорту будуть спрямовуватися до прямої процедури, або процедури шаблону, з обробки запиту протоколу (рис.2).
 </p>
@@ -187,5 +187,5 @@ if(!req.attr("err").length) SYS.messDebug("TEST REQ","RES: "+req.text());
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/UserProtocol/uk">Modules/UserProtocol/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2670</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/UserProtocol/uk">Modules/UserProtocol/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2675</td></tr></table></body>
 </html>

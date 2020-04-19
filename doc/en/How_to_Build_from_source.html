@@ -11,8 +11,13 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/How to/Build from source</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/How_to_Build_from_source.html" title="Документы/Как сделать/Собрать из исходных текстов (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/How_to_Build_from_source.html" title="Документи/Як зробити/Скласти з вихідних текстів (100% translated)">українська</a></div></div>
-<p><i>Author:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>, <a class="external text" href="http://oscada.org/en/forum/user/IrmIngeneer/" rel="nofollow noreferrer noopener" target="_blank">Constantine</a>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/How_to_Build_from_source.html" title="Документы/Как сделать/Собрать из исходных текстов (97% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/How_to_Build_from_source.html" title="Документи/Як зробити/Скласти з вихідних текстів (97% translated)">українська</a></div></div>
+<div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
+<ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>, <a class="external text" href="http://oscada.org/en/forum/user/IrmIngeneer/" rel="nofollow noreferrer noopener" target="_blank">Constantine</a> </li></ul>
+</div>
+<p>This manual made for help on OpenSCADA building from the source texts. In process of accumulation of experience of building OpenSCADA for different OS Linux distributions and others platforms generally, the document will be complemented by the features and details of the building in a variety of environments.
+</p><p>In the latest versions of OpenSCADA, you do not need to pre-configure the building of the program when you use the "openscada-res" package or the source texts tree from the SVN repository when you build it, even after the direct building. Therefore, immediately after the building and installation, the program is ready for use!
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> To build OpenSCADA from the source code, you need the experience of a opensource program building, as well as basic knowledge of the Linux operating system and the used Linux distribution, which will allow you to adequately satisfy the dependencies and solve the possible building problems.
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
@@ -30,10 +35,6 @@
 </ul>
 </div>
 
-<p>This manual made for help on OpenSCADA building from the source texts. In process of accumulation of experience of building OpenSCADA for different OS Linux distributions and others platforms generally, the document will be complemented by the features and details of the building in a variety of environments.
-</p><p>In the latest versions of OpenSCADA, you do not need to pre-configure the building of the program when you use the "openscada-res" package or the source texts tree from the SVN repository when you build it, even after the direct building. Therefore, immediately after the building and installation, the program is ready for use!
-</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> To build OpenSCADA from the source code, you need the experience of a opensource program building, as well as basic knowledge of the Linux operating system and the used Linux distribution, which will allow you to adequately satisfy the dependencies and solve the possible building problems.
-</p>
 <h2><span class="mw-headline" id="OpenSCADA_configuration_for_building"><span class="mw-headline-number">1</span> OpenSCADA configuration for building</span></h2>
 <p>The OpenSCADA project, as a build system, uses a set of utilities <a class="external text" href="http://en.wikipedia.org/wiki/GNU_build_system" rel="nofollow noreferrer noopener" target="_blank">AutoTools</a>. Any building of a project under the control of "AutoTools" precedes the configuration stage, and sometimes the formation of the build system, under the environment of the OS.
 </p><p>To create the build system, the AutoTools utility must be installed: "autoconf", "automake" and "libtool". The general formation can be done by the command <b>$ autoreconf -if</b>. A previously formed build system may sometimes require reformatting, for example, in the case of a significant difference in the OS environment on which the build system was formed and current! Reformation of the build system is also carried out by the previously defined formation command.
@@ -181,5 +182,5 @@ Portage tree and overlays:
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Build_from_source/en">Documents/How_to/Build_from_source/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2670</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Build_from_source/en">Documents/How_to/Build_from_source/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2675</td></tr></table></body>
 </html>

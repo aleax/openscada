@@ -243,9 +243,9 @@ function servSet( adr, prm, body, noWaitRez )
     var req = getXmlHttp();
     req.open('POST', encodeURI('/'+MOD_ID+adr+(gPrms.length?gPrms+'&':'?')+prm), noWaitRez);
     try {
+	req.responseXML = null;
 	req.send(body);
-	if(req.status != 200) window.location.reload();
-	else if(!noWaitRez && req.responseXML.childNodes.length)
+	if(!noWaitRez && req.status == 200 && req.responseXML.childNodes.length)
 	    return req.responseXML.childNodes[0];
 	//if(mainTmId) clearTimeout(mainTmId);
 	//mainTmId = setTimeout(makeUI, 1000);
@@ -441,6 +441,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	servSet("/UI/VCAEngine"+this.addr, 'com=com', "<CntrReqs>"+
 	    "<activate path='/%2fserv%2fattr%2fkeepAspectRatio' aNm='Keep aspect ratio on scale' aTp='0'/>"+
 	    "<activate path='/%2fserv%2fattr%2fstBarNoShow' aNm='Do not show the status bar' aTp='0'/>"+
+	    "<activate path='/%2fserv%2fattr%2fuserSetVis'/>"+
 	    "</CntrReqs>");
 
 	this.makeEl(servGet(pgId,'com=attrsBr'), false, true);
@@ -604,6 +605,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 	// Calculation of the main window/page scale
 	if(this == masterPage) {
+	    sesUser = pgBr.getAttribute('user');
+
 	    //  Own status bar reserve
 	    var toCrtStBar = false;
 	    if(!parseInt(this.attrs["stBarNoShow"]) && !masterPage.status) {
@@ -645,7 +648,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			}
 			stBar += "</select></td>";
 		    }
-		    stBar += "<td id='st_user' title='###Field for displaying and changing the current user.###'><a href='/login/"+MOD_ID+"/'>"+pgBr.getAttribute('user')+"</a></td>";
+		    stBar += "<td id='st_user' title='###Field for displaying and changing the current user.###'><a href='/login/"+MOD_ID+"/'>"+sesUser+"</a></td>";
 		    stBar += "</TR></table>";
 		    masterPage.status.innerHTML = stBar;
 		}
@@ -747,6 +750,10 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    window.document.title = this.attrs['vs_winTitle'];
 		else if(this.pg && this.window && !this.windowExt)
 		    this.place.parentElement.offsetParent.rows[0].cells[0].innerText = this.attrs['vs_winTitle'];
+	    }
+	    if((tVl=this.attrs['userSetVis']) && !full && tVl.length && this.attrsMdf['userSetVis']) {
+		if(tVl == '*') window.location = '/login'+window.location.pathname;
+		else { servSet(this.addr, 'com=setUser&user='+tVl, ''); window.location.reload(); }
 	    }
 
 	    if(!this.pg && ((this.inclOpen && this.attrs['pgOpenSrc'] != this.inclOpen) ||
@@ -2849,5 +2856,6 @@ var stTmReload = null;			//Main reload timeout at the main window resize
 var wx_scale = 1;			//Main window scale for fit, X axis
 var wy_scale = 1;			//Main window scale for fit, Y axis
 var clearTm = 10;			//Clear time of line edit fields, seconds
+var sesUser = '';			//Session user
 
 mainTmId = setTimeout(makeUI, 100);	//First call init

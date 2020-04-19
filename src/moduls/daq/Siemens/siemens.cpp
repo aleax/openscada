@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Siemens DAQ and Beckhoff")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"3.2.3"
+#define MOD_VER		"3.3.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol)\
  and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the\
@@ -1719,7 +1719,7 @@ void TMdPrm::enable( )
 	addLinksAttrs(&pEl);
 
 	// Init links
-	chkLnkNeed = initLnks();
+	chkLnkNeed = initLnks(true);
 
 	// Init system attributes identifiers
 	idFreq  = ioId("f_frq");
@@ -1870,7 +1870,7 @@ void TMdPrm::calc( bool first, bool last, double frq )
 	    if(tm > acqErrTm)	{ acqErr.setVal(""); acqErrTm = 0; }
 	}
 
-	if(chkLnkNeed && !first && !last) chkLnkNeed = initLnks(true);
+	if(chkLnkNeed && !first && !last) chkLnkNeed = initLnks();
 
 	//Set fixed system attributes
 	if(idFreq >= 0)	setR(idFreq, frq);
@@ -1976,14 +1976,14 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     else TParamContr::cntrCmdProc(opt);
 }
 
-bool TMdPrm::lnkInit( int num, bool checkNoLink )
+bool TMdPrm::lnkInit( int num, bool toRecnt )
 {
     //Common link forms
-    if(!TPrmTempl::Impl::lnkInit(num,checkNoLink)) return false;
+    if(!TPrmTempl::Impl::lnkInit(num,toRecnt))	return false;
 
     MtxAlloc res(lnkRes, true);
     map<int,SLnk>::iterator it = lnks.find(num);
-    if(it == lnks.end() || (checkNoLink && it->second.addrSpec.size())) return false;
+    if(it == lnks.end() || it->second.addrSpec.size())	return false;
 
     it->second.addrSpec = "";
     int rez = 0, db = -1, off = -1;
@@ -2001,7 +2001,6 @@ bool TMdPrm::lnkInit( int num, bool checkNoLink )
 	if(stp[0] == 'b' || stp[0] == 'i' || stp[0] == 'u' || stp[0] == 'r' || stp[0] == 's') {
 	    it->second.addrSpec = TSYS::strMess("DB%d.%i.%s", db, off, stp.c_str());
 	    owner().regVal(it->second.addrSpec, ioFlg(num)&(IO::Output|IO::Return));
-
 	    return true;
 	}
     }

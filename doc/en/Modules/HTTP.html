@@ -31,25 +31,16 @@
 <td> <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">HTTP</a> </td>
 <td> HTTP-realization
 </td>
-<td> 3.3 </td>
+<td> 3.4 </td>
 <td> GPL2 </td>
 <td> prot_HTTP.so </td>
 <td> en,uk,ru,de </td>
 <td> x86,x86_64,ARM
 </td>
 <td> Protocol </td>
-<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2009) — the page translation</i></font> </td>
+<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2009) — the page initial translation</i></font> </td>
 <td> Provides support for the HTTP protocol for WWW-based user interfaces.
 </td></tr></table>
-<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
-<ul>
-<li class="toclevel-1 tocsection-1"><a href="#Authentication"><span class="tocnumber">1</span> <span class="toctext">Authentication</span></a></li>
-<li class="toclevel-1 tocsection-2"><a href="#Modules_of_the_WEB-interface"><span class="tocnumber">2</span> <span class="toctext"><span>Modules of the WEB-interface</span></span></a></li>
-<li class="toclevel-1 tocsection-3"><a href="#Function_of_the_output_requests_of_the_user_API"><span class="tocnumber">3</span> <span class="toctext">Function of the output requests of the user API</span></a></li>
-<li class="toclevel-1 tocsection-4"><a href="#User_programming_API"><span class="tocnumber">4</span> <span class="toctext">User programming API</span></a></li>
-</ul>
-</div>
-
 <p>Module of the transport protocol HTTP is designed to support the implementation of the network protocol HTTP (Hypertext Transfer Protocol) in OpenSCADA.
 </p><p>HTTP protocol is used to transfer the WWW content. For example, via HTTP the following types of documents are transmitted: html, xhtml, png, javascript, and many others. Support HTTP in OpenSCADA together with the transport <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a> allows to implement various user functions based on the WWW interface. The module implements two main methods of the HTTP protocol: "GET" and "POST". The module provides control of the integrity of HTTP-queries and, jointly with "Sockets" transport, allows to "collect" whole requests from their fragments, as well as hold of the connection "alive" (Keep-Alive).
 </p><p>For flexible connection of the user interfaces to this module, the modular mechanism within the module itself is used. In the role of modules the modules of the subsystem "User interfaces" are used with the additional information field "SubType", with the value of "WWW".
@@ -76,6 +67,15 @@
 <li> DB of the active authentication sessions provides an external table of the active authentication sessions — "HTTP_AuthSessions", which is enabled for not empty value and provides a possibility of sharing the authentication between different OpenSCADA stations and its short storing at the station shut down time.</li>
 <li> Lifetime of the authentication, list of the users allowed for authentication and set up of the automatic login. </li></ul></li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:846px;"><a class="image" href="http://oscada.org/wiki/File:HTTP_mod.png"><img class="thumbimage" height="723" src="../files/HTTP_mod.png" width="844" /></a>  <div class="thumbcaption">Fig.3. The module configuring page.</div></div></div></div>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Authentication"><span class="tocnumber">1</span> <span class="toctext">Authentication</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Modules_of_the_WEB-interface"><span class="tocnumber">2</span> <span class="toctext"><span>Modules of the WEB-interface</span></span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Function_of_the_output_requests_of_the_user_API"><span class="tocnumber">3</span> <span class="toctext">Function of the output requests of the user API</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#User_programming_API"><span class="tocnumber">4</span> <span class="toctext">User programming API</span></a></li>
+</ul>
+</div>
+
 <h2><span class="mw-headline" id="Authentication"><span class="mw-headline-number">1</span> Authentication</span></h2>
 <p>The module supports authentication in OpenSCADA while providing access to the WEB-interface modules (Fig.2).
 </p>
@@ -176,7 +176,9 @@ SYS.Transport.Sockets.out_testHTTP.messIO(req,"HTTP");
 <h2><span class="mw-headline" id="User_programming_API"><span class="mw-headline-number">4</span> User programming API</span></h2>
 <p><b>Input part of the module object (SYS.Protocol.HTTP.{In})</b>
 </p>
-<ul><li> <i>bool pgAccess(string URL)</i> — checks for accessing the page, pointed by the <i>URL</i>.
+<ul><li> <i>bool setUser( string user )</i> — changes the user linked to the authentication session ID.
+<ul><li> <i>user</i> — user to change.</li></ul></li>
+<li> <i>bool pgAccess(string URL)</i> — checks for accessing the page, pointed by the <i>URL</i>.
 <ul><li> <i>URL</i> — URL of the checking page.</li></ul></li>
 <li> <i>string pgCreator(string cnt, string rcode = "200 OK", string httpattrs = "Content-Type: text/html;charset={SYS}", string htmlHeadEls = "", string forceTmplFile = "", string lang = "" )</i> — forms for a page or a resource from the content <i>cnt</i>, wrapped to HTTP with the result <i>rcode</i>, with HTTP additional attributes <i>httpattrs</i>, HTML additional head's element <i>htmlHeadEls</i>, forced to template file <i>forceTmplFile</i> and language <i>lang</i>.
 <ul><li> <i>cnt</i> — content of the page or the resource (images, XML, CSS, JavaScript, ...)&nbsp;;</li>
@@ -191,5 +193,5 @@ SYS.Transport.Sockets.out_testHTTP.messIO(req,"HTTP");
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/HTTP/en">Modules/HTTP/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2670</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/HTTP/en">Modules/HTTP/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2675</td></tr></table></body>
 </html>

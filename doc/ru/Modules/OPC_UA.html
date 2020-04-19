@@ -31,8 +31,7 @@
 <th> Языки </th>
 <th> Платформы </th>
 <th> Тип </th>
-<th> Автор </th>
-<th> Описание
+<th> Автор
 </th></tr>
 
 <tr>
@@ -46,8 +45,13 @@
 <td> x86,x86_64,ARM
 </td>
 <td> Сбор Данных </td>
-<td> Роман Савоченко </td>
-<td> Предоставляет реализацию OPC-UA клиентского сервиса.<br />
+<td> Роман Савоченко
+</td></tr>
+<tr>
+<th colspan="9"> Описание
+</th></tr>
+<tr>
+<td colspan="9"> Предоставляет реализацию OPC-UA клиентского сервиса.
 <ul><li> <a class="external text" href="http://oscada.org/en/development/tasks/posts/subsystem_daq/module_opc_ua_functions_extending/" rel="nofollow noreferrer noopener" target="_blank">Задача расширения модуля</a></li></ul>
 </td></tr>
 
@@ -62,8 +66,13 @@
 <td> x86,x86_64,ARM
 </td>
 <td> Протокол </td>
-<td> Роман Савоченко </td>
-<td> Предоставляет реализацию OPC-UA сервиса сервера.
+<td> Роман Савоченко
+</td></tr>
+<tr>
+<th colspan="9"> Описание
+</th></tr>
+<tr>
+<td colspan="9"> Предоставляет реализацию OPC-UA сервиса сервера.
 </td></tr>
 
 <tr>
@@ -77,8 +86,21 @@
 <td> x86,x86_64,ARM
 </td>
 <td> Библиотека </td>
-<td> Роман Савоченко </td>
-<td> Предоставляет реализацию протокола OPC-UA в части клиента и сервера, в виде отдельной библиотеки.
+<td> Роман Савоченко
+</td></tr>
+<tr>
+<th colspan="9"> Описание
+</th></tr>
+<tr>
+<td colspan="9"> Предоставляет реализацию протокола OPC-UA в части клиента и сервера, в виде отдельной библиотеки.
+<ul><li> <b>Сделать (To Do):</b></li></ul>
+<dl><dd> - адаптировать к UAExpert 1.5;</dd>
+<dd> - добавить поддержку аутентификации к входной части протокола;</dd>
+<dd> - добавить автоматическое создание входных транспортов и их пре-конфигурацию из свойств объекта КонечногоУзла;</dd>
+<dd> - реализовать запрос-сервис "Publish" и "куски" в клиентской части;</dd>
+<dd> - добавить поддержку сервиса истории серверной части, смотря и тестируя совместно с обменом UAExpert;</dd>
+<dd> - добавить поддержку сервиса истории клиентской части;</dd>
+<dd> - реализовать транспорт HTTP/SOAP.</dd></dl>
 </td></tr></table>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
@@ -812,5 +834,5 @@ $ openssl req -x509 -new -key key_c.pem -out cert_c.pem -config ./openssl_opcua.
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/OPC_UA/ru">Modules/OPC_UA/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2670</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/OPC_UA/ru">Modules/OPC_UA/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2675</td></tr></table></body>
 </html>

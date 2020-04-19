@@ -255,6 +255,25 @@ void VCASess::postReq( SSess &ses )
 	else if(ses.prm.find("cacheCntr") != ses.prm.end())
 	    pgCacheProc(oAddr, ses.prm.find("cachePg") == ses.prm.end());
     }
+    else if(wp_com == "setUser") {
+	if((cntEl=ses.prm.find("user")) != ses.prm.end() && cntEl->second != mUser) {
+	    if(cntEl->second == "$" && mUserOrig.size()) cntEl->second = mUserOrig;
+
+	    // Checking the user permition to the session project
+	    XMLNode req("connect");
+	    req.setAttr("path","/%2fserv%2fsess")->setAttr("sess", mId)->setAttr("userChange", "1")->setAttr("remoteSrcAddr", ses.sender);
+	    if(SYS->security().at().usrPresent(cntEl->second) && !mod->cntrIfCmd(req,SSess(cntEl->second))) {
+		// Changing the session user
+		if(mUserOrig.empty()) mUserOrig = mUser;
+		mUser = cntEl->second;
+		vector<TVariant> prms; prms.push_back(mUser);
+		ses.prt->objFuncCall("setUser", prms, "root");
+
+		req.clear()->setName("disconnect")->setAttr("path", "/%2fserv%2fsess")->setAttr("sess", mId)->setAttr("remoteSrcAddr", ses.sender);
+		mod->cntrIfCmd(req, SSess(mUser));
+	    }
+	}
+    }
     else if(wp_com == "obj" && objProc(oAddr=TSYS::path2sepstr(ses.url),ses)) objAt(oAddr).at().postReq(ses);
 
     if(ses.page.empty())
@@ -3879,7 +3898,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 			    gdImageAlphaBlending(im_fill_in, 0);
 			    gdImageCopyResampled(im_fill_out, im_fill_in, 0, 0, 0, 0, im_fill_out->sx, im_fill_out->sy, im_fill_in->sx, im_fill_in->sy);
 			}
-			int im_x, im_y, im_x_t, im_y_t;
+			int im_x, im_y;
 			Point drw_pnt, drw_pnt1;
 			xMin_rot = (int)rRnd(xMin_rot, POS_PREC_DIG, true); yMin_rot = (int)rRnd(yMin_rot, POS_PREC_DIG, true);
 			xMax_rot = (int)rRnd(xMax_rot, POS_PREC_DIG, true); yMax_rot = (int)rRnd(yMax_rot, POS_PREC_DIG, true);

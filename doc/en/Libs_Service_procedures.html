@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Libs/Service procedures</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--low" href="../ru/Libs_Service_procedures.html" title="Библиотеки/Сервисные процедуры (37% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--low" href="../uk/Libs_Service_procedures.html" title="Бібліотеки/Сервісні процедури (37% translated)">українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -25,19 +25,21 @@
 </th></tr>
 
 <tr>
-<td> <a href="Libs_Service_procedures.html" title="Special:MyLanguage/Libs/Service procedures">Service procedures library</a> </td>
+<td> <a href="Libs_Service_procedures.html" title="Special:MyLanguage/Libs/Service procedures">Service procedures library</a>
+</td>
 <td> 1.2 </td>
 <td> GPLv2 </td>
 <td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.JavaLikeCalc.servProc </td>
-<td> en 
+<td> en, uk, ru
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
 </td>
-<td> Library of the service procedures of different using.
+<td> Library of the service procedures of different application.
 <ul><li> <b>Founded</b>: November 2017</li>
-<li> <b>Initially created:</b> <a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/APIFunctionLibs/LibServProc" rel="nofollow noreferrer noopener" target="_blank">in the old Wiki</a></li></ul>
+<li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/APIFunctionLibs/LibServProc" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a></li>
+<li> <b>Used by:</b> different OpenSCADA processes</li></ul>
 </td></tr></table>
-<p>The library is wrote on <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">the JavaLikeCalc language</a> and aimed for different using.
+<p>The library is created to provide service functions of performing service tasks about the OpenSCADA environment. The library is not static, but based on the module <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, allowing to create calculations on the Java-like language. The functions' names and their parameters are available in languages: English, Ukrainian and Russian.
 </p><p>To addressing the library functions you can use the static call address <b>DAQ.JavaLikeCalc.lib_servProc.{Func}()</b> or dynamic <b>SYS.DAQ.JavaLikeCalc["lib_servProc"]["{Func}"].call()</b>, <b>SYS.DAQ.JavaLikeCalc["lib_servProc"].{Func}()</b>". Where {Func} — function identifier in the library.
 </p><p>For connection the library to a project of the OpenSCADA station you can obtain the database file as:
 </p>
@@ -49,7 +51,6 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 </pre>
 <ul><li> downloaded for <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">the one attached here</a>.</li></ul>
 <p>This obtained file next you can place into the project's database directory of the station and create the database object for the DB module "SQLite", registering the database file in the configuration.
-</p><p>To connect the library to a project of the OpenSCADA station it is possible by downloading the attached file of the database, placing it in in the database directory of the station's project and creating the database object for the DB module "SQLite", indicating the database file in the configuration.
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
@@ -62,6 +63,8 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 </ul>
 </div>
 
+<p><br />
+</p>
 <table class="wikitable">
 
 <tr>
@@ -130,6 +133,8 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <td> Input </td>
 <td> -1
 </td></tr></table>
+<p><br />
+</p>
 <table class="wikitable">
 
 <tr>
@@ -211,6 +216,8 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <td> Output </td>
 <td>
 </td></tr></table>
+<p><br />
+</p>
 <table class="wikitable">
 
 <tr>
@@ -255,6 +262,8 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <td> Input </td>
 <td> 40961
 </td></tr></table>
+<p><br />
+</p>
 <table class="wikitable">
 
 <tr>
@@ -306,6 +315,8 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <td> Input </td>
 <td> 2006-08-08 11:21:55
 </td></tr></table>
+<p><br />
+</p>
 <table class="wikitable">
 
 <tr>
@@ -350,6 +361,8 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <td> Return </td>
 <td>
 </td></tr></table>
+<p><br />
+</p>
 <table class="wikitable">
 
 <tr>
@@ -479,5 +492,5 @@ Modules/FLibComplex1:en,uk,ru:Modules/FLibComplex1.html</pre>
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Service_procedures/en">Libs/Service_procedures/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2670</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Service_procedures/en">Libs/Service_procedures/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2675</td></tr></table></body>
 </html>

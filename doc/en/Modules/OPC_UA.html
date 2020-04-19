@@ -31,8 +31,7 @@
 <th> Languages </th>
 <th> Platforms </th>
 <th> Type </th>
-<th> Author </th>
-<th> Description
+<th> Author
 </th></tr>
 
 <tr>
@@ -46,8 +45,13 @@
 <td> x86,x86_64,ARM
 </td>
 <td> DAQ </td>
-<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2010) — the page translation</i></font> </td>
-<td> Provides OPC-UA client service implementation.<br />
+<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2010) — the page initial translation</i></font>
+</td></tr>
+<tr>
+<th colspan="9"> Description
+</th></tr>
+<tr>
+<td colspan="9"> Provides OPC-UA client service implementation.
 <ul><li> <a class="external text" href="http://oscada.org/en/development/tasks/posts/subsystem_daq/module_opc_ua_functions_extending/" rel="nofollow noreferrer noopener" target="_blank">A task of the module extending</a></li></ul>
 </td></tr>
 
@@ -62,8 +66,13 @@
 <td> x86,x86_64,ARM
 </td>
 <td> Protocol </td>
-<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2010) — the page translation</i></font> </td>
-<td> Provides OPC-UA server service implementation.
+<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2010) — the page initial translation</i></font>
+</td></tr>
+<tr>
+<th colspan="9"> Description
+</th></tr>
+<tr>
+<td colspan="9"> Provides OPC-UA server service implementation.
 </td></tr>
 
 <tr>
@@ -77,8 +86,21 @@
 <td> x86,x86_64,ARM
 </td>
 <td> Library </td>
-<td> Roman Savochenko </td>
-<td> Provides the protocol OPC-UA implementing into parts of client and server, as a separated library.
+<td> Roman Savochenko
+</td></tr>
+<tr>
+<th colspan="9"> Description
+</th></tr>
+<tr>
+<td colspan="9"> Provides the protocol OPC-UA implementing into parts of client and server, as a separated library.
+<ul><li> <b>To Do:</b></li></ul>
+<dl><dd> - adapt to UAExpert 1.5;</dd>
+<dd> - append the authentication support for the input protocol part;</dd>
+<dd> - append the automatic creation for input transports and their pre-configuration from the EndPoint object properties;</dd>
+<dd> - implement the request-service "Publish" and chunks into the client part;</dd>
+<dd> - append for support of the history services of the server part, seeing and testing against UAExpert negotiation;</dd>
+<dd> - append for support of the history services of the client part;</dd>
+<dd> - implement the transport HTTP/SOAP.</dd></dl>
 </td></tr></table>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
@@ -812,5 +834,5 @@ $ openssl req -x509 -new -key key_c.pem -out cert_c.pem -config ./openssl_opcua.
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/OPC_UA/en">Modules/OPC_UA/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2670</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/OPC_UA/en">Modules/OPC_UA/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2675</td></tr></table></body>
 </html>
