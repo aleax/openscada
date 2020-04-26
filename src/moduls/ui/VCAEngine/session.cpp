@@ -1699,12 +1699,13 @@ void SessWdg::setProcess( bool val, bool lastFirstCalc )
 	}
     }
     if(!val) {
+	MtxAlloc res(mCalcRes, true);
+
 	// Last calc, before any free
 	if(diff && lastFirstCalc) calc(false, true);
+	mProc = false;
 
 	// Free function link
-	mProc = false;
-	MtxAlloc res(mCalcRes, true);
 	TValFunc::setFunc(NULL);
     }
 
@@ -1714,8 +1715,6 @@ void SessWdg::setProcess( bool val, bool lastFirstCalc )
     for(unsigned iL = 0; iL < ls.size(); iL++)
 	((AutoHD<SessWdg>)wdgAt(ls[iL])).at().setProcess(val, false);
 
-    mProc = val;
-
     // Make process element's lists
     if(val) {
 	tmCalc = tmCalcMax = 0;
@@ -1723,6 +1722,8 @@ void SessWdg::setProcess( bool val, bool lastFirstCalc )
     }
 
     // First calc, after all set
+    MtxAlloc res(mCalcRes, true);
+    mProc = val;
     if(val && diff && lastFirstCalc) calc(true, false);
 }
 
@@ -1992,9 +1993,8 @@ bool SessWdg::modifChk( unsigned int tm, unsigned int iMdfClc )
 
 void SessWdg::calc( bool first, bool last, int pos )
 {
-    if(!process()) return;
-
     MtxAlloc res(mCalcRes, true);
+    if(!process()) return;
 
     string sw_attr, s_attr, obj_tp;
 

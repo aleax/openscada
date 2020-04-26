@@ -329,7 +329,9 @@ bool UserStBar::userSel( const string &hint )
 
     DlgUser d_usr(user().c_str(), pass().c_str(), VCAStation().c_str(), parentWidget(), hint, lang);
     int rez = (d_usr.autoRes() == DlgUser::NoAuto) ? d_usr.exec() : d_usr.autoRes();
-    if(rez == DlgUser::SelOK && d_usr.user().toStdString() != user()) {
+    if(rez == DlgUser::SelOK && d_usr.user().toStdString() != user() &&
+	    (hint == "$" || hint == "*" || SYS->security().at().usrAt(user()).at().permitCmpr(d_usr.user().toStdString()) <= 0))
+    {
 	QString old_user = user().c_str(), old_pass = pass().c_str();
 	setUser(d_usr.user().toStdString());
 	setPass(d_usr.password().toStdString());

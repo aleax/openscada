@@ -372,6 +372,31 @@ bool TUser::auth( const string &ipass, string *hash )
 #endif
 }
 
+int TUser::permitCmpr( const string &user )
+{
+    if(owner().access(user,SEC_WR,"root","root",RWRWR_))
+	return owner().access(name(),SEC_WR,"root","root",RWRWR_) ? 0 : 1;
+
+    int rez = -1;
+    try {
+	AutoHD<TUser> secUser = owner().usrAt(user);
+	vector<string> gList;
+	owner().usrGrpList(name(), gList);
+	rez = 0;
+	// Checking the lesser or equal the pointed user
+	for(unsigned iG = 0; !rez && iG < gList.size(); iG++)
+	    if(!owner().grpAt(gList[iG]).at().user(user)) rez = -1;
+	if(!rez) {
+	    // Checking the greater or equal the pointed user
+	    owner().usrGrpList(user, gList);
+	    for(unsigned iG = 0; !rez && iG < gList.size(); iG++)
+		if(!owner().grpAt(gList[iG]).at().user(name())) rez = 1;
+	}
+    } catch(TError&) { }
+
+    return rez;
+}
+
 void TUser::postDisable( int flag )
 {
     if(flag) SYS->db().at().dataDel(fullDB(), owner().nodePath()+tbl(), *this, true);

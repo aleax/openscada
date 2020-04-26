@@ -1,3 +1,14 @@
+2020-04-26 Roman (stable)
+- !:FIX:LibsDB.vcaBase: Main.userManager: Expanded by generation the operator action messages.
+    FIX:Main.anShow1: Fixed for f_start processing, replacing for EVAL checking.
+    Everywhere messInfo() of the operator actions "OP:" replaced to messNote().
+- Security: The user object expanded by the permition comparing function permitCmpr().
+- FIX:UI.VCAEngine: The widget processing state moved under the lock mCalcRes to ensure
+    the start execution before any ordinal and the stop execution after any ordinal.
+- UI.{Vision,WebVision}: The visualizer specific attribute "userSetVis" processing expanded by checking
+    the directly set user for the lesser or even permition.
+
+
 2020-04-19 Roman (stable)
 - LibsDB.vcaBase: Main.anShow1: The border width dislinked from the activity status.
 - !!!:FIX:DAQ,DAQ.{JavaLikeCalc,ModBus,Siemens},Protocol.UserProtocol,UI.WebUser:

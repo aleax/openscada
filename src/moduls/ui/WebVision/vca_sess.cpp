@@ -262,7 +262,8 @@ void VCASess::postReq( SSess &ses )
 	    // Checking the user permition to the session project
 	    XMLNode req("connect");
 	    req.setAttr("path","/%2fserv%2fsess")->setAttr("sess", mId)->setAttr("userChange", "1")->setAttr("remoteSrcAddr", ses.sender);
-	    if(SYS->security().at().usrPresent(cntEl->second) && !mod->cntrIfCmd(req,SSess(cntEl->second))) {
+	    if(SYS->security().at().usrAt(mUserOrig.size()?mUserOrig:mUser).at().permitCmpr(cntEl->second) <= 0 &&
+		    !mod->cntrIfCmd(req,SSess(cntEl->second))) {
 		// Changing the session user
 		if(mUserOrig.empty()) mUserOrig = mUser;
 		mUser = cntEl->second;

@@ -58,7 +58,7 @@ The element''s names and their parameters are available in languages: English, U
 
 Author: Roman Savochenko <roman@oscada.org>
 Founded: September 2007
-Version: 2.0.4
+Version: 2.0.5
 License: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','wlb_Main','','Основні елементи','Бібліотека створюється для надання основних елементів користувацького інтерфейсу та містить графічні елементи, які часто затребувано при формуванні користувацького інтерфейсу автоматизації технологічних та загальних процесів. Будується бібліотека на основі примітивів віджетів та мови внутрішнього програмування JavaLikeCalc.
 
@@ -66,7 +66,7 @@ DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','wlb_Main','','�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Засновано: Вересень 2007
-Версія: 2.0.4
+Версія: 2.0.5
 Ліцензія: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','Основные элементы','Библиотека создаётся для предоставления основных элементов пользовательского интерфейса и содержит графические элементы, которые часто востребованы при формировании пользовательского интерфейса автоматизации технологических и общих процессом. Строится библиотека на основе примитивов виджетов и языка внутреннего программирования JavaLikeCalc.
 
@@ -74,7 +74,7 @@ DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','Основны�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Основано: Сентябрь 2007
-Версия: 2.0.4
+Версия: 2.0.5
 Лицензия: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements');
 INSERT INTO VCALibs VALUES('mnEls','Mnemo elements','Provides the mnemonic elements library of the user interface of the industrial automation.
@@ -7573,8 +7573,8 @@ INSERT INTO wlb_Main_io VALUES('userManager','geomZ','16',32,'','','pass','','',
 INSERT INTO wlb_Main_io VALUES('userManager','active','1',40,'','','pass','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','value','',8,'','','pass','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','font','Arial 15',32,'','','pass','','','','','','');
-INSERT INTO wlb_Main_io VALUES('userManager','owner','root:Security',32,'','','title','','','','','','');
-INSERT INTO wlb_Main_io VALUES('userManager','perm','944',32,'','','title','','','','','','');
+INSERT INTO wlb_Main_io VALUES('userManager','owner','root:UI',32,'','','title','','','','','','');
+INSERT INTO wlb_Main_io VALUES('userManager','perm','948',32,'','','title','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','geomX','5',32,'','','title','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','geomY','4.563',32,'','','title','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','geomW','891',32,'','','title','','','','','','');
@@ -7582,7 +7582,7 @@ INSERT INTO wlb_Main_io VALUES('userManager','geomH','27.75',32,'','','title',''
 INSERT INTO wlb_Main_io VALUES('userManager','geomZ','1',32,'','','title','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','font','Arial 25 0 0 1 0',32,'','','title','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','alignment','10',32,'','','title','','','','','','');
-INSERT INTO wlb_Main_io VALUES('userManager','text','Users manager',32,'','','title','Менеджер користувачів','','Менеджер пользователей','','','');
+INSERT INTO wlb_Main_io VALUES('userManager','text','Users manager',40,'','','title','Менеджер користувачів','','Менеджер пользователей','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','owner','root:Security',32,'','','userAdd','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','perm','436',32,'','','userAdd','','','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','name','Add',32,'','','userAdd','Додати','','Добавить','','','');
@@ -7731,7 +7731,7 @@ but sometimes there is a need to provide this capability from the user interface
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Vinnica Poultry Farm
-Version: 1.5.0
+Version: 1.6.0
 License: GPLv2',32,'','','','Елемент-кадр слугує для надання можливості контролю користувачів з інтерфейсу самого користувача.
 Тобто, типово ця функція надається програмісту SCADA на рівні конфігурації підсистеми "Безпека",
 але інколи виникає потреба надання такої можливості з інтерфейсу користувача та із низкою обмежень на контрольованих користувачів та їх групи, що цей кадр здійснює та загалом надає функції:
@@ -7741,7 +7741,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для над�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Вінницька Птахофабрика
-Версія: 1.5.0
+Версія: 1.6.0
 Ліцензія: GPLv2','','Элемент-кадр служит для предоставления возможности контроля пользователей из интерфейса самого пользователя.
 Т.е., типично эта функция предоставляется программисту SCADA на уровне конфигурации подсистемы "Безопасность",
 но иногда возникает необходимость предоставления такой возможности из интерфейса пользователя и с рядом ограничений на контролируемых пользователей и их группы, что этот кадр осуществляет и в целом предоставляет функции:
@@ -7751,7 +7751,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для над�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсирование: Винницкая Птицефабрика
-Версия: 1.5.0
+Версия: 1.6.0
 Лицензия: GPLv2','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsAct','dscr','The element serves to dynamically display the active violations in a tabular form and to highlight them in color and text. The violations are obtained from the buffer of current-active violations of OpenSCADA. In fact, the element implements the primitive "Protocol" functions for violations and extension opportunities.
 
@@ -19413,6 +19413,14 @@ INSERT INTO Trs VALUES('Average over day values of "%1"','Середні за д
 INSERT INTO Trs VALUES('Month values of "%1"','Місячні значення за "%1"','Месячные значения на "%1"');
 INSERT INTO Trs VALUES('Instantaneous values of "%1"','Миттєві значення "%1"','Мгновенные значения "%1"');
 INSERT INTO Trs VALUES('NewUser','НовийКористувач','НовыйПользователь');
+INSERT INTO Trs VALUES('Full name','Повне ім''я','Полное имя');
+INSERT INTO Trs VALUES('Password','Пароль','Пароль');
+INSERT INTO Trs VALUES('CHANGED','ЗМІНЕНО','ИЗМЕНЁН');
+INSERT INTO Trs VALUES('Group uncheck','Скасування вибору групи','Отмена выбора группы');
+INSERT INTO Trs VALUES('Group check','Вибір групи','Выбор группы');
+INSERT INTO Trs VALUES('Set the user "%1" for','Встановлено користувача "%1" для','Установлен пользователь "%1" для');
+INSERT INTO Trs VALUES('Added user "%1"','Додано користувача "%1"','Добавлен пользователь "%1"');
+INSERT INTO Trs VALUES('Deleted user "%1"','Видалено користувача "%1"','Удалён пользователь "%1"');
 CREATE TABLE IF NOT EXISTS 'wlb_Main' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_Main VALUES('ElCadr','iVBORw0KGgoAAAANSUhEUgAAABcAAABACAIAAAB+w3u4AAAACXBIWXMAAA06AAANOgEDIh6FAAAE
 z0lEQVRYhdWX32/TVhTHv7Zv7NhO08RpcBLaauqPTcC0PYAQQkKTGJrGwx54QPsD2Z/AH8CkFiak
@@ -19522,8 +19530,8 @@ if(!prmVar.isEVal() || !prmVarIn.isEVal()) {
 				SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''. "+tr("Mode")+" : "+(prmDescr.isEVal()?"":prmDescr)+" : "+prevMode+" : "+tr("Automate"));
 			}
 			else if(ev_wrk == "ws_BtPress:/modCasc" && !prmCasc) {  
-        	prmAuto = prmCasc = true;
-        	SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''. "+tr("Mode")+" : "+(prmDescr.isEVal()?"":prmDescr)+" : "+prevMode+" : "+tr("Cascade"));
+		prmAuto = prmCasc = true;
+		SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''. "+tr("Mode")+" : "+(prmDescr.isEVal()?"":prmDescr)+" : "+prevMode+" : "+tr("Cascade"));
 			}
 			else if(ev_wrk == "key_mousePresLeft:/info_sp") {
 				SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''. "+tr("Setpoint")+" : "+(prmDescr.isEVal()?"":prmDescr)+" : "+prmSp.toFixed(abs(prmPrec))+" : "+info_sp_arg0val.toFixed(abs(prmPrec)));
@@ -19575,7 +19583,7 @@ if(!prmVar.isEVal() || !prmVarIn.isEVal()) {
 				prmManIn = 50+2.5*appToVl;
 				if(appToVl == -1)			SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''."+tr("Output")+": "+(prmDescr.isEVal()?"":prmDescr)+" :: "+tr("Close")+" ( < )");
 				else if(appToVl == 1)	SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''."+tr("Output")+": "+(prmDescr.isEVal()?"":prmDescr)+" :: "+tr("Open")+" ( > )");
-				else if(appToVl == -10)SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''."+tr("Output")+": "+(prmDescr.isEVal()?"":prmDescr)+" :: "+tr("Close")+" ( << )");
+				else if(appToVl == -10)	SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''."+tr("Output")+": "+(prmDescr.isEVal()?"":prmDescr)+" :: "+tr("Close")+" ( << )");
 				else if(appToVl == 10)	SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''."+tr("Output")+": "+(prmDescr.isEVal()?"":prmDescr)+" :: "+tr("Open")+" ( >> )");
 			}
 			else {
@@ -20534,7 +20542,8 @@ AMNLTXX1taXx8OLi7+vCjg4gha6+2U5K6Vu/3iL0tc2NptRKiFWVGos1f43E/REMQnljpYpZ/GWO
 6q6DVghEUeBYjhe2BwtXkSQJWRyA39qcmvhKcfAZ58CwkFq7Ojl29fYm+7BFBEEzLKtgkvcSW4wQ
 vHZ5qqi/va1XysRmJn0LqxkLAHg8HpvNtmtWp9NpNpufVE2F4P6fmKIomqZz5eLi4mg0+p+7+ncg
 ABgcHNxLLisre9JrJB9MJtOfuAmh/+/YRy0AAAAASUVORK5CYII=','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
-if(f_start)	bordWidth_ = bordWidth;
+var bordWidth_;
+if(bordWidth_.isEVal())	bordWidth_ = bordWidth;
 if(f_stop)	bordWidth = bordWidth_;
 if(!pDscr.isEVal())
 	tipTool = pDscr + ((!pErr.isEVal()&&pErr.toInt())?"\n"+tr("Error")+": "+pErr:"");
@@ -22612,7 +22621,7 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 			&& !iM.mess.parse(3,messItSep).length)
 	{
 		//this.messInfo("TEST 02: value="+value+"; set="+set);
-		if(!com) SYS.messInfo("OP:"+this.ownerSess().user()+":"+NAME, "''"+NAME+"''. "+tr("Command")+" : "+DESCR+" : : "+digComs.parse(0,";").parse(0,"-"));
+		if(!com) SYS.messNote("OP:"+this.ownerSess().user()+":"+NAME, "''"+NAME+"''. "+tr("Command")+" : "+DESCR+" : : "+digComs.parse(0,";").parse(0,"-"));
 		var tmU;
 		tMess = iM.mess.parse(0,messItSep)+messItSep+iM.mess.parse(1,messItSep)+messItSep+iM.mess.parse(2,messItSep)+messItSep+
 					SYS.strftime(SYS.time(tmU),formDtTm.replace("%MS",(tmU/1000).toString(10,3)).replace("%US",tmU.toString(10,6)));
@@ -22629,7 +22638,7 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 		for(i = 0; i < curAlMess.length; i++) {
 			iM = curAlMess[i];
 			if(!iM.mess.parse(3,messItSep).length) {
-				SYS.messInfo("OP:"+this.ownerSess().user()+":"+iM.mess.parse(0,messItSep),
+				SYS.messNote("OP:"+this.ownerSess().user()+":"+iM.mess.parse(0,messItSep),
 						"''"+iM.mess.parse(0,messItSep)+"''. "+tr("Command")+" : "+iM.mess.parse(1, messItSep) + " -> " + iM.mess.parse(2, messItSep)+" : : "+digComs.parse(0,";").parse(0,"-"));
 				tMess = iM.mess.parse(0,messItSep)+messItSep+iM.mess.parse(1,messItSep)+messItSep+iM.mess.parse(2,messItSep)+messItSep+
 						SYS.strftime(SYS.time(tmU),formDtTm.replace("%MS",(tmU/1000).toString(10,3)).replace("%US",tmU.toString(10,6)));
@@ -22949,7 +22958,7 @@ if((((cnt++)%(f_frq*1) == 0 && !wTm) || f_start || toUpdate) && !f_stop) {
 				alarms_items += aRow + "</r>\n";
 				if(makeReport) rep += repRow + "</tr>\n";
 				if(toMassQuitt && !iM.mess.parse(3,messItSep).length) {
-					SYS.messInfo("OP:"+this.ownerSess().user()+":"+iM.mess.parse(0,messItSep),
+					SYS.messNote("OP:"+this.ownerSess().user()+":"+iM.mess.parse(0,messItSep),
 						"''"+iM.mess.parse(0,messItSep)+"''. "+tr("Command")+" : "+iM.mess.parse(1, messItSep) + " -> " + iM.mess.parse(2, messItSep)+" : : "+alarms_digComs.parse(0,";").parse(0,"-"));
 					tmU = 0;
 					tMess = iM.mess.parse(0,messItSep)+messItSep+iM.mess.parse(1,messItSep)+messItSep+iM.mess.parse(2,messItSep)+messItSep+
@@ -23002,7 +23011,7 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 			&& !iM.mess.parse(3,messItSep).length)
 	{
 		//this.messInfo("TEST 02: value="+alarms_value+"; set="+alarms_set);
-		if(!alarms_com) SYS.messInfo("OP:"+this.ownerSess().user()+":"+alarms_NAME, "''"+alarms_NAME+"''. "+tr("Command")+" : "+alarms_DESCR+" : : "+alarms_digComs.parse(0,";").parse(0,"-"));
+		if(!alarms_com) SYS.messNote("OP:"+this.ownerSess().user()+":"+alarms_NAME, "''"+alarms_NAME+"''. "+tr("Command")+" : "+alarms_DESCR+" : : "+alarms_digComs.parse(0,";").parse(0,"-"));
 		tmU = 0;
 		tMess = iM.mess.parse(0,messItSep)+messItSep+iM.mess.parse(1,messItSep)+messItSep+iM.mess.parse(2,messItSep)+messItSep+
 					SYS.strftime(SYS.time(tmU),formDtTm.replace("%MS",(tmU/1000).toString(10,3)).replace("%US",tmU.toString(10,6)));
@@ -23282,6 +23291,8 @@ for(ev_rez = "", offEv = 0; (ev_cur=event.parse(0,"\n",offEv)).length; ) {
 					oIt.cfgSet("USERS", oIt.cfg("USERS")+userNm_value+";");
 			lib_value_ = userNm_value+" ("+userNm_value+")"; userSelVl = userNm_value;
 			userLbUpdt = userSel = SYS.mtime()+500;
+
+			SYS.messNote("OP:"+this.ownerSess().user()+":{Page}."+this.attr("id"), title_text+" : "+tr("Added user \"%1\"").replace("%1",userNm_value));
 		}
 
 		SYS.cntrReq(SYS.XMLNode("save").setAttr("path","/sub_Security/%2fobj"));	//To save all users and groups
@@ -23289,6 +23300,7 @@ for(ev_rez = "", offEv = 0; (ev_cur=event.parse(0,"\n",offEv)).length; ) {
 	else if(ev_cur == "dlg_Apply:/userDel" && userSelVl.length) {
 		req = SYS.XMLNode("del").setAttr("path","/sub_Security/%2fbr%2fusr_").setText(userSelVl);
 		rez = SYS.cntrReq(req);
+		SYS.messNote("OP:"+this.ownerSess().user()+":{Page}."+this.attr("id"), title_text+" : "+tr("Deleted user \"%1\"").replace("%1",userNm_value));
 		//this.messInfo("Result: "+rez+": "+req.save());
 		lib_value_ = userSelVl = "";
 		userLbUpdt = userSel = SYS.mtime()+500;
@@ -23298,22 +23310,26 @@ for(ev_rez = "", offEv = 0; (ev_cur=event.parse(0,"\n",offEv)).length; ) {
 	else if(ev_cur == "ws_LnAccept:/fullName" && (oIt=SYS.Security.nodeAt("usr_"+userSelVl))) {
 		oIt.cfgSet("DESCR", fullName_value);
 		SYS.cntrReq(SYS.XMLNode("save").setAttr("path","/sub_Security/usr_"+userSelVl+"/%2fobj"));
+		SYS.messNote("OP:"+this.ownerSess().user()+":{Page}."+this.attr("id"), title_text+" : "+tr("Set the user \"%1\" for").replace("%1",userSelVl)+" "+tr("Full name")+" : : "+fullName_value);
 		lib_value_ = fullName_value + " ("+userSelVl+")";
 		userLbUpdt = userSel = SYS.mtime()+500;
 	}
 	else if(ev_cur == "ws_TxtAccept:/descr" && (oIt=SYS.Security.nodeAt("usr_"+userSelVl))) {
 		oIt.cfgSet("LONGDESCR", descr_value);
 		SYS.cntrReq(SYS.XMLNode("save").setAttr("path","/sub_Security/usr_"+userSelVl+"/%2fobj"));
+		SYS.messNote("OP:"+this.ownerSess().user()+":{Page}."+this.attr("id"), title_text+" : "+tr("Set the user \"%1\" for").replace("%1",userSelVl)+" "+tr("Description")+" : : "+descr_value);
 		userSel = SYS.mtime()+500;
 	}
 	else if(ev_cur == "ws_LnAccept:/pass" && (oIt=SYS.Security.nodeAt("usr_"+userSelVl))) {
 		oIt.cfgSet("PASS", pass_value);
 		SYS.cntrReq(SYS.XMLNode("save").setAttr("path","/sub_Security/usr_"+userSelVl+"/%2fobj")); 
+		SYS.messNote("OP:"+this.ownerSess().user()+":{Page}."+this.attr("id"), title_text+" : "+tr("Set the user \"%1\" for").replace("%1",userSelVl)+" "+tr("Password")+" : : "+tr("CHANGED"));
 		userSel = SYS.mtime()+500;
 	}
 	else if(ev_cur == "ws_TableChangeSel:/grp" && (oIt=SYS.Security.nodeAt("usr_"+userSelVl)) &&
 			grp_value.length && (oIt1=SYS.Security.nodeAt(grp_value))) {
 		grp_value = grp_value.slice(4);
+		SYS.messNote("OP:"+this.ownerSess().user()+":{Page}."+this.attr("id"), title_text+" : "+tr("Set the user \"%1\" for").replace("%1",userSelVl)+" "+(oIt1.user(userSelVl)?tr("Group uncheck"):tr("Group check"))+" : : "+grp_value);
 		users = oIt1.cfg("USERS");
 		//this.messInfo("grp_value="+grp_value+"; users="+users);
 		oIt1.cfgSet("USERS", oIt1.user(userSelVl) ? users.replace(userSelVl+";","") : users+userSelVl+";");
@@ -23370,7 +23386,7 @@ if(userSel && SYS.mtime() >= userSel) {
 		grp_items += "</tbl>";
 		grp_value = "";
 	}
-}','','',500,'owner;perm;name;dscr;geomH;evProc;backColor;',1586529494);
+}','','',500,'id;owner;perm;name;dscr;geomH;evProc;backColor;',1587891375);
 INSERT INTO wlb_Main VALUES('graphCalc','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAgCAIAAAAt/+nTAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAD
 X0lEQVRYhe2YzU7jRgCAZ8YziWPPjBNTwoJQoBKicEBqJLgguPMkPEDeaXvgxEOgPAGI21aiIK2d
 LPHP+Hc8nh6yaqtNWJVSyaXKd7DkGXv8fRrJkg0vLy8ppZ7nIYSUUlmWua4rhKjruigK27aVUhjj
