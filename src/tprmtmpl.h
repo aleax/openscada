@@ -74,13 +74,13 @@ class TPrmTempl: public TFunction, public TConfig
 	    virtual void lnkAdd( int num, const SLnk &l );
 	    string lnkAddr( int num, bool spec = false ) const;
 	    void lnkAddrSet( int num, const string &vl, bool spec = false );
-	    virtual bool lnkInit( int num, bool checkNoLink = false );
+	    virtual bool lnkInit( int num, bool toRecnt = false );
 	    virtual bool lnkActive( int num );
 	    virtual TVariant lnkInput( int num );
 	    virtual bool lnkOutput( int num, const TVariant &vl );
 
 	    void addLinksAttrs( TElem *attrsCntr = NULL );
-	    bool initLnks( bool checkNoLink = false );
+	    bool initLnks( bool toRecnt = false );
 	    virtual void cleanLnks( bool andFunc = false );
 	    void inputLinks( );
 	    void outputLinks( );

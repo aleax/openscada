@@ -1,3 +1,21 @@
+2020-04-27 Roman 0.9.1
+- !:FIX:LibsDB.vcaBase: Main.userManager: Expanded by generation the operator action messages.
+    Everywhere messInfo() of the operator actions "OP:" replaced to messNote().
+    Main.anShow1: The border width dislinked from the activity status.
+- Security: The user object expanded by the permition comparing function permitCmpr().
+- !!!:FIX:DAQ,DAQ.{JavaLikeCalc,ModBus,Siemens},Protocol.UserProtocol,UI.WebUser:
+    The templates implementation fixed in processing the links reconnections and
+	the functions lnkInit() and initLnks() appended the forced relinking flag instead "checkNoLink".
+- !!:Protocol.HTTP: Appended for the user API function setUser() to change the authenticated user.
+- FIX:UI.VCAEngine: The widget processing state moved under the lock mCalcRes to ensure
+	the start execution before any ordinal and the stop execution after any ordinal.
+    The user last action time is initiated at the project session creation and connection.
+- UI.{Vision,WebVision}: The visualizer specific attribute "userSetVis" processing expanded by checking
+    the directly set user for the lesser or even permition.
+- !!!:FIX:WebVision: Fixed for the POST requests correct result code 204.
+    !!!: Appended for implementation the visualiser specific attribute "userSetVis".
+
+
 2020-04-14 Roman 0.9.1
 - FIX: The template "digitBlockUnif" of the library "base" fixed in own description, caused to the template loss.
     The function "diagram" removed from the JavaLikeCalc library "web".
@@ -8,7 +26,7 @@
     LogicLev,ModBus,Siemens: Allowed for the parameter loading in the run, to reload the values context.
 - !!!:FIX:UI.WebVision: Fixed in work with some pages missing, at the runtime objects locking and
     the early linking mechanism improved in general.
-- !!!:UI.WebVision: Significantly improved in the connection losses detection for the main page reload,
+    !!!: Significantly improved in the connection losses detection for the main page reload,
 	for the cases of return back to already closed sessions in WebBrowser.
     The page of list the available projects and sessions appended for the actual user information.
 

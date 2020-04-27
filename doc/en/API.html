@@ -1102,12 +1102,12 @@ Structure of template links (class — TPrmTempl::Impl::SLnk):
 <li> <i>virtual void lnkAdd( int num, const SLnk &amp;l );</i> — adds a link with the number <i>num</i> and the "SLnk" structure <i>l</i>.</li>
 <li> <i>string lnkAddr( int num, bool spec = false ) const;</i> — returns the link address for the number <i>num</i> and the special link address for <i>spec</i>.</li>
 <li> <i>void lnkAddrSet( int num, const string &amp;vl, bool spec = false );</i> — sets the link address to <i>vl</i> for number <i>num</i> and the special link address for <i>spec</i>.</li>
-<li> <i>virtual bool lnkInit( int num, bool checkNoLink = false );</i> — inits/connects the link for the number <i>num</i>, which means reading "addr" and forming "con" or "addrSpec". Set <i>checkNoLink</i> to prevent re-linking. Returns "true" at the link need for the initialization/activation repeating — does not initiated.</li>
+<li> <i>virtual bool lnkInit( int num, bool toRecnt = false );</i> — inits/connects the link for the number <i>num</i>, which means reading "addr" and forming "con" or "addrSpec". Set <i>toRecnt</i> to force the re-linking. Returns "true" at the need for the initialization/activation repeating.</li>
 <li> <i>virtual bool lnkActive( int num );</i> — checks the link number <i>num</i> initialization/activation state.</li>
 <li> <i>virtual TVariant lnkInput( int num );</i> — returns a value by the link number <i>num</i>.</li>
 <li> <i>virtual bool lnkOutput( int num, const TVariant &amp;vl );</i> — sets the value <i>vl</i> by the link number <i>num</i>. Returns "true" at correct setting.</li>
 <li> <i>void addLinksAttrs( TElem *attrsCntr = NULL );</i> — adds links and DAQ parameter's attributes, at <i>attrsCntr</i> presence.</li>
-<li> <i>bool initLnks( bool checkNoLink = false );</i> — inits/connects all the links. Set <i>checkNoLink</i> to prevent re-linking. Returns "true" at presence at last one not initiated link — needs for the initialization/activation repeating.</li>
+<li> <i>bool initLnks( bool toRecnt = false );</i> — inits/connects all the links. Set <i>toRecnt</i> to force the re-linking. Returns "true" at presence at last one not initiated link — needs for the initialization/activation repeating.</li>
 <li> <i>virtual void cleanLnks( bool andFunc = false );</i> — cleans all the links and the function, for <i>andFunc</i>.</li>
 <li> <i>void inputLinks( );</i> — gets for values of all the links.</li>
 <li> <i>void outputLinks( );</i> — sets for values of all the links.</li>
@@ -1794,7 +1794,7 @@ Requests parameters (enum — GetOpts):
 </td></tr></table>
 <p><b>Public methods:</b>
 </p>
-<ul><li> <i>TUser( const string &amp;name, const string &amp;db, TElem *el );</i> — Initializing constructor.</li>
+<ul><li> <i>TUser( const string &amp;name, const string &amp;db, TElem *el );</i> — Initialising constructor.</li>
 <li> <i>string name( );</i> — User name.</li>
 <li> <i>string descr( );</i> — User description.</li>
 <li> <i>string longDescr( );</i> — User long description.</li>
@@ -1802,6 +1802,7 @@ Requests parameters (enum — GetOpts):
 <li> <i>string	lang( );</i> — User language, only into the dynamic translation text variables mode.</li>
 <li> <i>bool sysItem( );</i> — Sign of the system user.</li>
 <li> <i>bool auth( const string &amp;pass, string *hash = NULL );</i> — Check the authenticity of the user by the password <i>pass</i>. The password hash, if it is supports, placing into the <i>hash</i>.</li>
+<li> <i>int permitCmpr( const string &amp;user );</i> — Comparing the <i>user</i> permition with the user object. Returns -1 for lesser, 1 for greater and 0 for even permition.</li>
 <li> <i>string DB( );</i> — User DB address.</li>
 <li> <i>string tbl( );</i> — Address of the table of user's DB.</li>
 <li> <i>string fullDB( );</i> — The full name of the table of user's DB.</li>

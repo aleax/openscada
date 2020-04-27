@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Logical level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.1.5"
+#define MOD_VER		"2.2.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the pure logical level of the DAQ parameters.")
 #define LICENSE		"GPL2"
@@ -649,7 +649,7 @@ void TMdPrm::calc( bool first, bool last, double frq )
     if(!isStd() || !tmpl->func()) return;
     try {
 	ResAlloc cres(calcRes, true);
-	if(chkLnkNeed) chkLnkNeed = tmpl->initLnks(true);
+	if(chkLnkNeed) chkLnkNeed = tmpl->initLnks();
 
 	//Set fixed system attributes
 	if(idFreq >= 0)	tmpl->setR(idFreq, frq);

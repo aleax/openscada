@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.HTTP file: http.h
 /***************************************************************************
- *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -69,6 +69,7 @@ class TProtIn: public TProtocolIn
 
 	//Attributes
 	bool	mNotFull, KeepAlive;
+	int	sesId;
 	string	mBuf,
 		prms, user, prmLang, brLang;
 };
@@ -105,7 +106,7 @@ class TProt: public TProtocol
 	// Auth session manipulation functions
 	int sesOpen( const string &name, const string &srcAddr = "", const string &userAgent = "" );
 	void sesClose( int sid );
-	string sesCheck( int sid );
+	string sesCheck( int sid, const string &chUser = "" );
 
 	// Auto-login
 	string autoLogGet( const string &sender );

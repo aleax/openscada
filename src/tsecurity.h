@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tsecurity.h
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -51,13 +51,14 @@ class TUser : public TCntrNode, public TConfig
 	string	longDescr( )	{ return cfg("LONGDESCR").getS(); }
 	string	picture( )	{ return cfg("PICTURE").getS(); }
 	string	lang( )		{ return mLang; }
-	bool sysItem( )		{ return mSysIt; }
+	bool	sysItem( )	{ return mSysIt; }
 
-	bool auth( const string &pass, string *hash = NULL );
+	bool	auth( const string &pass, string *hash = NULL );
+	int	permitCmpr( const string &user );
 
-	string DB( )		{ return mDB; }
-	string tbl( );
-	string fullDB( )	{ return DB()+'.'+tbl(); }
+	string	DB( )		{ return mDB; }
+	string	tbl( );
+	string	fullDB( )	{ return DB()+'.'+tbl(); }
 
 	void setDescr( const string &vl )	{ cfg("DESCR").setS(vl); }
 	void setLongDescr( const string &vl )	{ cfg("LONGDESCR").setS(vl); }
