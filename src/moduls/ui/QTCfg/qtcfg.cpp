@@ -2352,11 +2352,11 @@ QTreeWidgetItem *ConfApp::getExpandTreeWIt( const string &path )
 	if(curIt && !curIt->isExpanded()) curIt->setExpanded(true);
 	for(int iIt = 0; iIt < (curIt?curIt->childCount():CtrTree->topLevelItemCount()); iIt++) {
 	    QTreeWidgetItem *tit = curIt ? curIt->child(iIt): CtrTree->topLevelItem(iIt);
-	    if(tit->text(2)[0] == "*" && sit.find(tit->text(2).toStdString().substr(1)) == 0) {
+	    if(tit->text(2)[0] == '*' && sit.find(tit->text(2).toStdString().substr(1)) == 0) {
 		curIt = tit; iIt = -1;
 		if(!curIt->isExpanded()) curIt->setExpanded(true);
 	    }
-	    else if(tit->text(2)[0] != "*" && pathAdd == tit->text(2).toStdString())
+	    else if(tit->text(2)[0] != '*' && pathAdd == tit->text(2).toStdString())
 	    { curIt = tit; isOK = true; break; }
 	}
 	if(!isOK) return NULL;

@@ -1,4 +1,8 @@
 2020-05-10 Roman (stable)
+- FIX:UI.QTCfg: Fix the building.
+
+
+2020-05-10 Roman (stable)
 - LibsDB.vcaBase: doc.docUsersSet: The styles appended for a specific rule of the "Description" collumn -
     "TABLE.data TD:nth-child(5) { white-space: normal;}"
 - FIX: data/openscada-proj.in: The command "list" some improved to show the preinstalled and user projects.
