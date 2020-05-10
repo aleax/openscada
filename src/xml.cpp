@@ -1,7 +1,7 @@
 
 //OpenSCADA file: xml.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -139,8 +139,8 @@ XMLNode* XMLNode::childGet( const string &name, const int numb, bool noex ) cons
 
 XMLNode* XMLNode::childGet( const string &attr, const string &val, bool noex ) const
 {
-    for(unsigned i_f = 0; i_f < childSize(); i_f++)
-	if(childGet(i_f)->attr(attr) == val) return childGet(i_f);
+    for(unsigned iF = 0; iF < childSize(); iF++)
+	if(childGet(iF)->attr(attr) == val) return childGet(iF);
 
     if(noex) return NULL;
     throw TError("XMLNode", _("Child with the attribute %s=%s is not present."), attr.c_str(), val.c_str());
@@ -169,11 +169,11 @@ string	XMLNode::text( bool childs, bool recursive ) const
     if(!childs || mName == "<*>") return mText;
 
     string rez;
-    for(unsigned i_f = 0; i_f < childSize(); i_f++)
-	if(childGet(i_f)->name() == "<*>") rez += childGet(i_f)->text();
-	else if(recursive) rez += childGet(i_f)->text(childs, recursive);
+    for(unsigned iF = 0; iF < childSize(); iF++)
+	if(childGet(iF)->name() == "<*>") rez += childGet(iF)->text();
+	else if(recursive) rez += childGet(iF)->text(childs, recursive);
 
-    return rez;
+    return rez.size() ? rez : mText;
 }
 
 XMLNode* XMLNode::setText( const string &s, bool childs )
@@ -181,11 +181,11 @@ XMLNode* XMLNode::setText( const string &s, bool childs )
     if(!childs || mName == "<*>") { mText = s; return this; }
 
     int iCh = -1;
-    for(int i_f = 0; i_f < (int)childSize(); i_f++)
-	if(childGet(i_f)->name() == "<*>") {
-	    if(iCh < 0) childGet(i_f)->mText = s;
-	    else childDel(i_f--);
-	    iCh = i_f;
+    for(int iF = 0; iF < (int)childSize(); iF++)
+	if(childGet(iF)->name() == "<*>") {
+	    if(iCh < 0) childGet(iF)->mText = s;
+	    else childDel(iF--);
+	    iCh = iF;
 	}
     if(iCh < 0) childAdd("<*>")->mText = s;
 

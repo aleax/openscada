@@ -9894,6 +9894,7 @@ for(var ip in pgsOprc) {
 	stTm = SYS.mtime();
 	for(iTr = 0; iTr < reqTr; iTr++)
 		if(!(rez=tr.messIO(req,"HTTP")).length && req.text().length) break;
+		else tr.start(false);
 	//if(req.text().length < 10)
 	//	SYS.messInfo("OffLine", "TEST 00: rez="+rez+"; length="+req.text().length);
 	if(iTr == reqTr)	{
@@ -9960,6 +9961,7 @@ for(var ip in pgsOprc) {
 				stTm = SYS.mtime();
 				for(iTr = 0; iTr < reqTr; iTr++)
 					if(!(rez=tr.messIO(req,"HTTP")).length && req.text().length) break;
+					else tr.start(false);
 				//if(req.text().length < 10)
 				//	SYS.messInfo("OffLine", "TEST 01: rez="+rez+"; length="+req.text().length);
 				if(iTr == reqTr)	{

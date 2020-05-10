@@ -31,7 +31,7 @@
 <td> <a href="../Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a> </td>
 <td> Конфігуратор програми (Qt)
 </td>
-<td> 4.8 </td>
+<td> 5.0 </td>
 <td> GPL2 </td>
 <td> ui_QTCfg.so </td>
 <td> en,uk,ru,de </td>
@@ -43,17 +43,6 @@
 <ul><li> <b>Зробити (To Do):</b></li></ul>
 <dl><dd>- доповнити вкладками та вкладкою "Обране" із: процедурами, улюбленим імпортом або інші користувацькі функції швидкого доступу.</dd></dl>
 </td></tr></table>
-<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
-<ul>
-<li class="toclevel-1 tocsection-1"><a href="#.D0.9A.D0.BE.D0.BD.D1.84.D1.96.D0.B3.D1.83.D1.80.D0.B0.D1.86.D1.96.D1.8F"><span class="tocnumber">1</span> <span class="toctext">Конфігурація</span></a></li>
-<li class="toclevel-1 tocsection-2"><a href="#.D0.91.D0.B0.D0.B7.D0.BE.D0.B2.D1.96_.D0.B5.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D0.B8"><span class="tocnumber">2</span> <span class="toctext">Базові елементи</span></a></li>
-<li class="toclevel-1 tocsection-3"><a href="#.D0.9A.D0.BE.D0.BC.D0.B0.D0.BD.D0.B4.D0.B8"><span class="tocnumber">3</span> <span class="toctext">Команди</span></a></li>
-<li class="toclevel-1 tocsection-4"><a href="#.D0.9F.D0.B5.D1.80.D0.B5.D0.BB.D1.96.D0.BA.D0.B8"><span class="tocnumber">4</span> <span class="toctext">Переліки</span></a></li>
-<li class="toclevel-1 tocsection-5"><a href="#.D0.A2.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D1.96"><span class="tocnumber">5</span> <span class="toctext">Таблиці</span></a></li>
-<li class="toclevel-1 tocsection-6"><a href="#.D0.97.D0.BE.D0.B1.D1.80.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F"><span class="tocnumber">6</span> <span class="toctext">Зображення</span></a></li>
-</ul>
-</div>
-
 <p>Модуль надає конфігуратор OpenSCADA, який засновано на багатоплатформеній бібліотеці <a class="external text" href="http://qt.io" rel="nofollow noreferrer noopener" target="_blank">Qt</a> графічного користувацького інтерфейсу (GUI), початково створеного фірмою <a class="external text" href="http://www.trolltech.com" rel="nofollow noreferrer noopener" target="_blank">TrollTech</a>.
 </p><p>У основі модуля лежить мова інтерфейсу управління OpenSCADA, що означає надання єдиного інтерфейсу конфігурації. Оновлення модуля може знадобитися тільки у випадку оновлення специфікації мови інтерфейсу управління. Для запиту контексту сторінки використовується груповий запит інтерфейсу управління, що дозволяє оптимізувати час віддаленого доступу за високо-латентними та повільними каналами зв'язку.
 </p><p>Розглянемо робоче вікно конфігуратору на рисунку 1.
@@ -128,6 +117,17 @@
 <li> <i>Оновити елементи дерева</i> — оновлення вмісту дерева навігації.</li></ul>
 <p>Елементи управління поділяються на: базові, команди, переліки, таблиці та зображення. Всі елементи відображаються у послідовності, яка суворо відповідає їх розташуванню у описі мови інтерфейсу управління.
 </p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9A.D0.BE.D0.BD.D1.84.D1.96.D0.B3.D1.83.D1.80.D0.B0.D1.86.D1.96.D1.8F"><span class="tocnumber">1</span> <span class="toctext">Конфігурація</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.91.D0.B0.D0.B7.D0.BE.D0.B2.D1.96_.D0.B5.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D0.B8"><span class="tocnumber">2</span> <span class="toctext">Базові елементи</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#.D0.9A.D0.BE.D0.BC.D0.B0.D0.BD.D0.B4.D0.B8"><span class="tocnumber">3</span> <span class="toctext">Команди</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#.D0.9F.D0.B5.D1.80.D0.B5.D0.BB.D1.96.D0.BA.D0.B8"><span class="tocnumber">4</span> <span class="toctext">Переліки</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#.D0.A2.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D1.96"><span class="tocnumber">5</span> <span class="toctext">Таблиці</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#.D0.97.D0.BE.D0.B1.D1.80.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F"><span class="tocnumber">6</span> <span class="toctext">Зображення</span></a></li>
+</ul>
+</div>
+
 <h2><span class="mw-headline" id=".D0.9A.D0.BE.D0.BD.D1.84.D1.96.D0.B3.D1.83.D1.80.D0.B0.D1.86.D1.96.D1.8F"><span class="mw-headline-number">1</span> Конфігурація</span></h2>
 <p>Для налаштування власної поведінки у окремих випадках, модулем надається можливість налаштування параметрів за посередництвом інтерфейсу управління OpenSCADA (рис.2). Такими параметрами є:
 </p>
@@ -167,5 +167,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/QTCfg/uk">Modules/QTCfg/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2675</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/QTCfg/uk">Modules/QTCfg/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2678</td></tr></table></body>
 </html>

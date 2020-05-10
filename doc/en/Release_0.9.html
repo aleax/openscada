@@ -306,7 +306,7 @@
 <h2><span class="mw-headline" id="Updates"><span class="mw-headline-number">7</span> Updates</span></h2>
 <h3><span class="mw-headline" id=".5B8.04.2020.5D_The_FIRST_update"><span class="mw-headline-number">7.1</span> [8.04.2020] The FIRST update</span></h3>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
-<ul><li> <b>State:</b> Stage 3 — finish and the post release tasks</li></ul>
+<ul><li> <b>State:</b> Stage 3 — finish and the post release tasks: Implement the service updates at the first bug fix.</li></ul>
 <p>The common releasing process, for the users to estimate your expectations and for the developers to remind the tasks:<br />
 <b><u>1. The preparing and building week:</u></b><br />
 </p>
@@ -337,7 +337,7 @@
 <li> Waiting the <a class="external text" href="http://www.trinitydesktop.org/" rel="nofollow noreferrer noopener" target="_blank">TDE 14.0.8 release</a>, then build own patched packages and rebuild the <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Linux Automation</a> ISOs of the update.</li>
 <li> Implement the service updates at the first bug fix.</li></ul>
 </div>
-<p>This update is done after 1.5 years of <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">releasing the 0.9 LTS</a>, then it worth as 10 updates by there have fixed about 250 bugs and append many improvements, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2674" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
+<p>This update is done after 1.5 years of <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">releasing the 0.9 LTS</a>, then it worth as 10 updates by there have fixed about 250 bugs and append many improvements, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2677" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
 </p><p>The key features of the update are:
 </p>
 <ul><li> significant expanding and stabilisation of the Web-interface during practical exploiting in a large distributed solution based on the module <a href="#WebVision">UI.WebVision</a>; also expanding and stabilisation the hot development during the multiple execution of the developing project;</li>
@@ -452,6 +452,7 @@
 <ul><li> Expanded by the attempts field ot the generic control in the function attempts().</li>
 <li> Unified for the last request time control in the function lstReqTm().</li>
 <li> The function outAddrHelp() of taken common address help for the output transport modules was added.</li></ul></li></ul></li>
+<li> Protocol.HTTP: Appended for the user API function setUser() to change the authenticated user.</li>
 <li> DAQ: TController::alarmSet() expanded for the argument "force" to force the alarms on the controller objects in the redundancy.
 <ul><li> The DAQ-parameter appended for the User-API function alarmSet() and the function vlSetRednt() of the unified values writing in the redundancy.</li>
 <li> TDAQS::rdRestDtTm() expanded from the float to double type return.</li>
@@ -643,6 +644,8 @@
 <ul><li> FIX: The JS function servSet() of writing to the server switched to the synchronous mode to prevent loses.</li>
 <li> The main checking of the background objects is made unified and expanded for support the optional background objects, to decrease the overall number of the background objects, where the obligatory currently are: "ElFigure", "Diagram", "Document", "FormEl"; and the optional is only "Text".</li>
 <li> The main window vertical expanding threshold set to 10% of the window decreasing size and to 50% for shrinking, to prevent flicking on FireFox for notes about block the external windows. The built-in scaling mode set to use-enable in relation from window.devicePixelRatio equal to 1, on the WebBrowser level.</li>
+<li> Significantly improved in the connection losses detection for the main page reload, for the cases of return back to already closed sessions in WebBrowser.</li>
+<li> Appended for implementation the visualiser specific attribute "userSetVis".</li>
 <li> FIX: Restored in the full widgets tree reloading to restore the function of removing missed widgets in the visualiser at their removing into the VCA-engine.</li>
 <li> FIX: Prevented from spare and separate requesting of the included pages' content, in the starting.</li>
 <li> FIX: Improved for the focus control behaviour and fixed to prevent mouse events to behind pages.</li></ul></li>
@@ -685,5 +688,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Release_0.9/en">Documents/Release_0.9/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2675</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Release_0.9/en">Documents/Release_0.9/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2678</td></tr></table></body>
 </html>

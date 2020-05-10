@@ -40,7 +40,13 @@
 <td> Transport </td>
 <td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Kochetkov (2016), Maxim Lysenko (2009-2010) — the page initial translation</i></font> </td>
 <td> Provides transport based on the serial interfaces. It is used for data exchanging via the serial interfaces of the type RS232, RS485, GSM and similar.
+<ul><li> <b>To Do:</b></li></ul>
+<dl><dd> - test the modem mode and append to it for the PIN entering field.</dd></dl>
 </td></tr></table>
+<p>The module provides support for transports based on serial interfaces such as RS232, RS485, GSM and similar. Input and output transports is supported. You can add new input and output interfaces through the configuration of the transport subsystem in any OpenSCADA configurator.
+</p><p>The module, in the modem mode, supports a mixed mode of operation, which involves the presence of an input transport, which expects external connections, as well as an output transport on the same device. That is, the input transport will ignore all requests in the presence of the output transport connection, while the output transport will not attempt to establish a connection in the presence of the connection to the input transport or the connection of another output transport, for example, another telephone number.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> In the normal mode of the serial interface, multiple use of one and the same port in input and output transports is not allowed. A global blocking of the serial device is not performed due to the ambiguity of this process at the system level, and multiple use can lead to unpredictable and difficult-to-understand issues. If you need to organize a local serial channel with a couple of linked ports, it is recommended to use the command "<b>$ socat -d -d pty,raw,echo=0,perm=0666 pty,raw,echo=0,perm=0666</b>".
+</p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#Input_transports"><span class="tocnumber">1</span> <span class="toctext">Input transports</span></a></li>
@@ -55,10 +61,6 @@
 </ul>
 </div>
 
-<p>The module provides support for transports based on serial interfaces such as RS232, RS485, GSM and similar. Input and output transports is supported. You can add new input and output interfaces through the configuration of the transport subsystem in any OpenSCADA configurator.
-</p><p>The module, in the modem mode, supports a mixed mode of operation, which involves the presence of an input transport, which expects external connections, as well as an output transport on the same device. That is, the input transport will ignore all requests in the presence of the output transport connection, while the output transport will not attempt to establish a connection in the presence of the connection to the input transport or the connection of another output transport, for example, another telephone number.
-</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> In the normal mode of the serial interface, multiple use of one and the same port in input and output transports is not allowed. A global blocking of the serial device is not performed due to the ambiguity of this process at the system level, and multiple use can lead to unpredictable and difficult-to-understand issues. If you need to organize a local serial channel with a couple of linked ports, it is recommended to use the command "<b>$ socat -d -d pty,raw,echo=0,perm=0666 pty,raw,echo=0,perm=0666</b>".
-</p>
 <h2><span class="mw-headline" id="Input_transports"><span class="mw-headline-number">1</span> Input transports</span></h2>
 <p>The configured and running input transport opens a serial port to wait for user requests. Each input interface is necessarily associated with one of the available transport protocols to which incoming messages are transmitted.
 </p><p>Configuration dialog of the input serial interface is shown in Figure 1.
@@ -219,5 +221,5 @@ $ socat -d -d pty,raw,echo=0,perm=0666 tcp:192.168.2.4:5555,mss=1400
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Serial/en">Modules/Serial/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2675</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Serial/en">Modules/Serial/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2678</td></tr></table></body>
 </html>

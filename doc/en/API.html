@@ -315,15 +315,14 @@ Information variables of the program:
 <li> <i>XMLNode &amp;cfgRoot( );</i> — Parsed structure of the configuration file.</li>
 <li> <i>XMLNode *cfgNode( const string &amp;path, bool create = false );</i> — Node of configuration getting by it path <i>path</i>. Elements of the path creation by it miss <i>create</i>.</li>
 <li> <i>void modifCfg( bool chkPossibleWR = false );</i> — Configuration mark to modification or write possibility <i>chkPossibleWR</i>, for next saving to file.</li>
+<li> <i>ResRW &amp;cfgRes( );</i> — Lock of the access to the config file tree.</li>
 <li> <i>string workDB( );</i> — The full name of the working database.</li>
-<li> <i>string selDB( );</i> — Chosen DB. Used for selective loading from the specified database in the subsystem "DB". </li>
 <li> <i>string mainCPUs( );</i> — Used processors list.</li>
 <li> <i>bool clockRT( );</i> — The Real-time clock selection for the tasks planning, else used the monotonic one (by defaults).</li>
 <li> <i>int taskInvPhs( );</i> — Number of the tasks invoking phases.</li>
 <li> <i>bool saveAtExit( );</i> — Sign - "Save configuration on exit".</li>
 <li> <i>int savePeriod( );</i> — Frequency of the automatically saving the station in the database (seconds).</li>
 <li> <i>bool modifCalc( );</i> — Set modification for the calculated objects.</li>
-<li> <i>void setWorkDB( const string &amp;wdb );</i> — Setting of  the full name of the working database.</li>
 <li> <i>void setSelDB( const string &amp;vl );</i> — Installation of the selected database for the specified  boot.</li>
 <li> <i>void setMainCPUs( const string &amp;vl );</i> — Setting of used processors list.</li>
 <li> <i>void setClockRT( bool vl );</i> — Setting of the Real-time clock selection for the tasks planning.</li>
@@ -331,7 +330,12 @@ Information variables of the program:
 <li> <i>void setSaveAtExit( bool vl );</i> — Setting of the sign - "Save configuration on exit".</li>
 <li> <i>void setSavePeriod( int vl );</i> — Set the frequency of the automatically saving of the station to the database (seconds).</li>
 <li> <i>void setModifCalc( bool vl );</i> — Set of setting the modification for the calculated objects.</li>
+<li> <i>string selDB( );</i> — Chosen DB. Used for selective loading from the specified database in the subsystem "DB".</li>
+<li> <i>void setWorkDB( const string &amp;wdb );</i> — Setting of  the full name of the working database.</li>
 <li> <i>bool chkSelDB( const string &amp;wDB );</i> — The function of checking for compliance of the specified database <i>wDB</i>  with the selected "selDB()".</li>
+<li> <i>XMLNode *cfgCtx( );</i> — The global configuration context of the interstation copy, for the access lock use <i>cfgLoadSaveM()</i>.</li>
+<li> <i>void setCfgCtx( XMLNode *vl );</i> — Set the global configuration context of the interstation copy, for the access lock use <i>cfgLoadSaveM()</i>.</li>
+<li> <i>ResMtx &amp;cfgLoadSaveM( );</i> — Lock of the loading and saving configuration.</li>
 <li> <i>static void sighandler( int signal );</i> — Function of the  default handler of the signals of the system as a whole.</li>
 <li> <i>unsigned long long sysClk( );</i> — The estimated frequency of the processor on which the system works (Hz). </li>
 <li> <i>void clkCalc( );</i> — Calculation of frequency of the processor on which the system works. It is called periodically for the systems with variable CPU  frequency.</li>
@@ -388,7 +392,8 @@ Information variables of the program:
 <li> <i>static string strSepParse( const string &amp;path, int level, char sep, int *off=NULL );</i> — Parsing of the string <i>path</i> into the components separated by the dividing symbol <i>sep</i>, beginning with the offset <i>off</i> and controlling the offset of the element end in itself.</li>
 <li> <i>static string strParse( const string &amp;str, int level, const string &amp;sep, int *off = NULL, bool mergeSepSymb = false );</i> — Parse function's "strSepParse()" expanded version which allow using multi-symbols separators and one symbols merging.</li>
 <li> <i>static string strLine( const string &amp;str, int level, int *off = NULL );</i> — Parsing text lines for different ways to the end of a line (CR, LF and CR/LF).</li>
-<li> <i>static string pathLev( const string &amp;path, int level, bool decode = true, int *off = NULL );</i> — The allocation of the elements of the path <i>path</i> with the ability of their decode, starting with the offset <i>off</i> and controlling the offset of the element end in itself.</li>
+<li> <i>static string pathLev( const string &amp;path, int level, bool decode = true, int *off = NULL );</i> — Obtaining of the elements of the <i>path</i> with the ability of their decode, starting with the offset <i>off</i> and controlling the offset of the element end.</li>
+<li> <i>static string pathLevEnd( const string &amp;path, int level, bool decode = true, int *off = NULL );</i> — Obtaining of the elements of the <i>path</i> with the ability of their decode, starting with the offset <i>off</i> and controlling the offset of the element begin, in processing from the end.</li>
 <li> <i>static string path2sepstr( const string &amp;path, char sep = '.' );</i> — Transformation the path into string with the separator <i>sep</i> of the elements.</li>
 <li> <i>static string sepstr2path( const string &amp;str, char sep = '.' );</i> — Transformation of the string with the separator <i>sep</i> of the elements into the path.</li>
 <li> <i>static string strEncode( const string &amp;in, Code tp, const string &amp;opt1 = "" );</i> — Encoding of the string by the specified rule <i>tp</i> and option <i>opt1</i> (symbols by "Custom"). </li>
@@ -413,8 +418,7 @@ Information variables of the program:
 <li> <i>string cmdOpt( const string &amp;opt, const string &amp;setVl = "" );</i> — Get command-line option <i>opt</i>. Set it at <i>setVl</i> if pointing.</li>
 <li> <i>int permCrtFiles( bool exec = false );</i> — get permission for files created OpenSCADA in form 0777 (RWXRWXRWX), where <i>exec</i> is not mask the bit 01.</li>
 <li> <i>ResMtx *commonLock( const string &amp;nm );</i> — creates and gets a lock for the name <i>nm</i> — for non multithread system functions, typically.</li>
-<li> <i>static void ctrListFS( XMLNode *nd, const string &amp;fsBase, const string &amp;fileExt = "" );</i> — Browsing list for file system's items from base <i>fsBase</i>, for the files with extensions <i>fileExt</i> in list "png;jpeg;gif;".</li>
-<li> <i>ResRW &amp;cfgRes( );</i> — Access to config file tree resource locking.</li></ul>
+<li> <i>static void ctrListFS( XMLNode *nd, const string &amp;fsBase, const string &amp;fileExt = "" );</i> — Browsing list for file system's items from base <i>fsBase</i>, for the files with extensions <i>fileExt</i> in list "png;jpeg;gif;".</li></ul>
 <p><b>Public attributes:</b>
 </p>
 <ul><li> <i>static bool finalKill;</i> — Sign "The final killing of". It is used for forced disconnection of blocked objects on the the final stage of shutdown.</li></ul>
@@ -637,9 +641,9 @@ Flags of the queries to the system table (enum – TDBS::ReqGen):
 <li> <i>void setTblLifeTime( int vl );</i> — Sets lifetime of the inactive tables closing in <i>vl</i> seconds.</li>
 <li> <i>AutoHD&lt;TTable&gt; open( const string &amp;bdn, bool create = false );</i> — Opening the table <i>bdn</i> of the DB by its full path with the creation <i>create</i> in the case of its absence.</li>
 <li> <i>void close( const string &amp;bdn, bool del = false );</i> — Closing the table <i>bdn</i> of the DB by its full path with the possibility of deleting of it after closing <i>del</i>.</li>
-<li> <i>bool dataSeek( const string &amp;bdn, const string &amp;path, int lev, TConfig &amp;cfg, bool forceCfg = false, vector&lt; vector&lt;string&gt; &gt; *full = NULL );</i> — Total scanning of the records of the data source. The configuration file of the DB is the source if data. In the case of DB absence the configuration file is used. If the DB name <i>bdn</i> or path <i>path</i> to the configuration file are not indicated, their processing is skipped. <i>full</i> defines before a record for it's result preloading in whole and significant acceleration.</li>
-<li> <i>bool dataGet( const string &amp;bdn, const string &amp;path, TConfig &amp;cfg, bool forceCfg = false, bool noEx = false );</i> — Getting the record from the data source (database or configuration file). If the DB name <i>bdn</i> or path <i>path</i> to the configuration file are not indicated, their processing is skipped.</li>
-<li> <i>void dataSet( const string &amp;bdn, const string &amp;path, TConfig &amp;cfg, bool forceCfg = false, bool noEx = false );</i> — Set/Save the record in the data source (database or configuration file). If the DB name <i>bdn</i> or path <i>path</i> to the configuration file are not indicated, their processing is skipped.</li>
+<li> <i>bool dataSeek( const string &amp;bdn, const string &amp;path, int lev, TConfig &amp;cfg, bool forceCfg = false, vector&lt; vector&lt;string&gt; &gt; *full = NULL, XMLNode *localCfgCtx = NULL );</i> — Total scanning of the records of the data source. The configuration file or the DB is the source of the data. In the case of DB absence the configuration file is used. If the DB name <i>bdn</i> or path <i>path</i> to the configuration file are not indicated, their processing is skipped. <i>full</i> defines before a request for its result preloading in whole and significant acceleration. <i>localCfgCtx</i> uses for loading from the local configuration context, prepared in <i>dataSet()</i>, and it missing causes for checking and using, at presence, the global configuration context SYS-&gt;cfgCtx().</li>
+<li> <i>bool dataGet( const string &amp;bdn, const string &amp;path, TConfig &amp;cfg, bool forceCfg = false, bool noEx = false, XMLNode *localCfgCtx = NULL );</i> — Getting the record from the data source (database or configuration file). If the DB name <i>bdn</i> or path <i>path</i> to the configuration file are not indicated, their processing is skipped. <i>localCfgCtx</i> uses for loading from the local configuration context, prepared in <i>dataSet()</i>, and it missing causes for checking and using, at presence, the global configuration context SYS-&gt;cfgCtx().</li>
+<li> <i>void dataSet( const string &amp;bdn, const string &amp;path, TConfig &amp;cfg, bool forceCfg = false, bool noEx = false, XMLNode *localCfgCtx = NULL );</i> — Set/Save the record in the data source (database or configuration file). If the DB name <i>bdn</i> or path <i>path</i> to the configuration file are not indicated, their processing is skipped. <i>localCfgCtx</i> uses for saving to the local configuration context, prepares for <i>dataSeek() and dataGet()</i>, and it missing causes for checking and using, at presence, the global configuration context SYS-&gt;cfgCtx().</li>
 <li> <i>bool dataDel( const string &amp;bdn, const string &amp;path, TConfig &amp;cfg, bool useKeyAll = false, bool forceCfg = false, bool noEx = false );</i> — Deleting the record in the data source (database or configuration file). If the DB name <i>bdn</i> or path <i>path</i> to the configuration file are not indicated, their processing is skipped. <i>useKeyAll</i> is used to indicate the necessity of the all keys set fro their using while deleting with the restoration of the original state of the keys selection when the function is finished. If this flag is not set, the early selected keys are used to perform the operation.</li>
 <li> <i>static string genDBGet( const string &amp;path, const string &amp;oval = "", const string &amp;user = "root", char rFlg = 0 );</i> — Get system-wide data from the configuration file or system tables on behalf of user name <i>user</i>. If data are not available the value <i>oval</i> is returned.</li>
 <li> <i>static void genDBSet( const string &amp;path, const string &amp;val, const string &amp;user = "root", char rFlg = 0 );</i> — Set/Save the system-wide data in the configuration file or system tables on behalf of user name <i>user</i>.</li>
@@ -1794,7 +1798,7 @@ Requests parameters (enum — GetOpts):
 </td></tr></table>
 <p><b>Public methods:</b>
 </p>
-<ul><li> <i>TUser( const string &amp;name, const string &amp;db, TElem *el );</i> — Initializing constructor.</li>
+<ul><li> <i>TUser( const string &amp;name, const string &amp;db, TElem *el );</i> — Initialising constructor.</li>
 <li> <i>string name( );</i> — User name.</li>
 <li> <i>string descr( );</i> — User description.</li>
 <li> <i>string longDescr( );</i> — User long description.</li>
@@ -1802,6 +1806,7 @@ Requests parameters (enum — GetOpts):
 <li> <i>string	lang( );</i> — User language, only into the dynamic translation text variables mode.</li>
 <li> <i>bool sysItem( );</i> — Sign of the system user.</li>
 <li> <i>bool auth( const string &amp;pass, string *hash = NULL );</i> — Check the authenticity of the user by the password <i>pass</i>. The password hash, if it is supports, placing into the <i>hash</i>.</li>
+<li> <i>int permitCmpr( const string &amp;user );</i> — Comparing the <i>user</i> permition with the user object. Returns -1 for lesser, 1 for greater and 0 for even permition.</li>
 <li> <i>string DB( );</i> — User DB address.</li>
 <li> <i>string tbl( );</i> — Address of the table of user's DB.</li>
 <li> <i>string fullDB( );</i> — The full name of the table of user's DB.</li>
@@ -2323,14 +2328,16 @@ Where:
 <h3><span class="mw-headline" id="Tag_of_the_information_structure_for_describing_the_groups_of_child_branches_of_the_page"><span class="mw-headline-number">14.2</span> Tag of the information structure for describing the groups of child branches of the page</span></h3>
 <p>Each page can contain groups of child branches. For descriptions of groups of branches there is the tag "branches". Tag contains the description of groups of branches through embedded tags <i>grp</i>. The group tag can be accessed as for the "read" (visibility) and for modification (the execution of commands for adding and removing the elements of the group), hence the element of the triad of access may be:
 </p>
-<dl><dd><i>00</i> — there is no any access;</dd>
-<dd><i>04</i> — there is an access only for reading;</dd>
-<dd><i>02</i> — there is only access fro the writing, usually this value has no meaning because the write access means access for reading;</dd>
-<dd><i>06</i> — there is an access to read, and to write.</dd></dl>
+<dl><dd><i>0</i> — there is no any access;</dd>
+<dd><i>4</i> — there is an access only for reading;</dd>
+<dd><i>2</i> — there is only access fro the writing, usually this value has no meaning because the write access means access for reading;</dd>
+<dd><i>6</i> — there is an access to read, and to write.</dd></dl>
+<p>In the high octet it contains the maximum permition.
+</p>
 <pre style="white-space: pre-wrap;">
 &lt;branches id='br'&gt;
-  &lt;grp id='/br/in_' descr='Input transport' acs='04'/&gt;
-  &lt;grp id='/br/out_' descr='Output transport' acs='04'/&gt;
+  &lt;grp id='/br/in_' descr='Input transport' acs='52'/&gt;
+  &lt;grp id='/br/out_' descr='Output transport' acs='52'/&gt;
 &lt;/branches&gt;
 </pre>
 <p>Actions over the group of elements coincide with the actions over the list of visual elements "list", which is described below.
@@ -2552,10 +2559,10 @@ Where:
 <h5><span class="mw-headline" id="Tag_.22table.22"><span class="mw-headline-number">14.3.2.3</span> Tag "table"</span></h5>
 <pre style="white-space: pre-wrap;">
 &lt;table id="a_mess" key="0" col_lst="0;1;2"&gt;
-  &lt;list id="0" dscr="Id" acs="4" tp="str"/&gt;
-  &lt;list id="1" dscr="Name" acs="4" tp="str"/&gt;
-  &lt;list id="2" dscr="Type" acs="4" tp="str"/&gt;
-  &lt;list id="3" dscr="Hide" acs="4" tp="bool"/&gt;
+  &lt;list id="0" dscr="Id" acs="36" tp="str"/&gt;
+  &lt;list id="1" dscr="Name" acs="52" tp="str"/&gt;
+  &lt;list id="2" dscr="Type" acs="52" tp="str"/&gt;
+  &lt;list id="3" dscr="Hide" acs="52" tp="bool"/&gt;
 &lt;/table&gt;
 </pre>
 <p>The tag of the table or single column can be accessed as to "read" and also to "write"(modification), therefore an element of the triad of access may be: 
@@ -4120,5 +4127,5 @@ extern "C"
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2675</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2678</td></tr></table></body>
 </html>

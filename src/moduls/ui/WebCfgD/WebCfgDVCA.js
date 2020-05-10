@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebCfgD file: VCA.js
 /***************************************************************************
- *   Copyright (C) 2008-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2008-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -178,7 +178,7 @@ function getXmlHttp( )
  * crDoc - Create new XML document object for      *
  *  various browsers.                              *
  ***************************************************/
-function crDoc()
+function crDoc( )
 {
     var doc;
     if(document.implementation && document.implementation.createDocument)
@@ -527,12 +527,13 @@ function pageDisplay( path )
  ***************************************************/
 function editToolUpdate( )
 {
-    actEnable('actCut', (selPath.length && parseInt(root.getAttribute('acs'))&SEC_WR));
-    actEnable('actCopy', selPath.length);
+    rootAccess = root.getAttribute('acs') ? parseInt(root.getAttribute('acs')) : 0;
+    actEnable('actCut', (selPath.length && (rootAccess&SEC_WR)));
+    actEnable('actCopy', (rootAccess>>3)?((rootAccess>>3)&SEC_WR):selPath.length);
     actEnable('actPaste', false);
 
     //Src and destination elements calc
-    if(copyBuf.length <= 1 || /*copyBuf.substr(1) == selPath ||*/ pathLev(copyBuf.substr(1),0) != pathLev(selPath,0)) return;
+    if(copyBuf.length <= 1 /*|| copyBuf.substr(1) == selPath || pathLev(copyBuf.substr(1),0) != pathLev(selPath,0)*/) return;
     var s_elp; var s_el; var t_el;
     pathLev.off = 0;
     while((t_el=pathLev(copyBuf.substr(1),0,true)).length) { s_elp += ('/'+s_el); s_el = t_el; }
@@ -544,7 +545,7 @@ function editToolUpdate( )
 		{ actEnable('actPaste',true); break; }
 	    break;
 	}
-    if(parseInt(root.getAttribute('acs'))&SEC_WR) actEnable('actPaste',true);
+    if(rootAccess&SEC_WR) actEnable('actPaste',true);
 }
 
 /***************************************************
@@ -2107,7 +2108,7 @@ function itPaste( )
     for(pathLev.off = 0; (tEl=pathLev(copyBuf.substr(1),0,true)).length; nSel++)
     { if(nSel) sElp += ('/'+sEl); sEl = tEl; }
 
-    if(pathLev(copyBuf.substr(1),0) != pathLev(selPath,0)) { alert('###Copy is impossible.###'); return; }
+    //if(pathLev(copyBuf.substr(1),0) != pathLev(selPath,0)) { alert('###Copy is impossible.###'); return; }
 
     rootW = root;
     toPath = selPath;
@@ -2124,43 +2125,49 @@ function itPaste( )
 	if(rootW.childNodes[iCh].nodeName.toLowerCase() == 'branches' && rootW.childNodes[iCh].getAttribute('id') == 'br')
 	    branchS = rootW.childNodes[iCh];
     if(branchS)
-	for(var iB = 0; iB < branchS.childNodes.length; iB++, itCnt++)
+	for(var iB = 0; iB < branchS.childNodes.length; iB++)
 	    if(parseInt(branchS.childNodes[iB].getAttribute('acs'))&SEC_WR) {
 		var gbrId = branchS.childNodes[iB].getAttribute('id');
 		typeCfg += "<option idSz='" + branchS.childNodes[iB].getAttribute('idSz') + "' gid='" + gbrId + "'>" +
 				branchS.childNodes[iB].getAttribute('dscr') + "</option>";
 		if(sEl.substr(0,gbrId.length) == gbrId) { defIt = itCnt; bGrp = gbrId; }
+		itCnt++;
 	    }
+
+    pathLev.off = 1; statNmSrc = pathLev(copyBuf, 0, true);
+    pathLev.off = 0; statNm = pathLev(toPath, 0, true);
 
     //Make a request dialog
     dlgWin = ReqIdNameDlg('/'+MOD_ID+'/img_it_add');
     setNodeText(dlgWin.document.getElementById('wDlgHeader'), '###Moving or copying the node###');
+    wDlgTitle = dlgWin.document.getElementById('wDlgTitle').childNodes[1];
     if(copyBuf.charAt(0) == '1')
-	setNodeText(dlgWin.document.getElementById('wDlgTitle').childNodes[1],
-	    ("###Move node '%1' to '%2'.###").replace('%1',copyBuf.substr(1)).replace('%2',toPath));
-    else setNodeText(dlgWin.document.getElementById('wDlgTitle').childNodes[1],
-	    ("###Copy node '%1' to '%2'.###").replace('%1',copyBuf.substr(1)).replace('%2',toPath));
+	setNodeText(wDlgTitle, ("###Move node '%1' to '%2'.###").replace('%1',copyBuf.substr(1)).replace('%2',toPath));
+    else setNodeText(wDlgTitle, ("###Copy node '%1' to '%2'.###").replace('%1',copyBuf.substr(1)).replace('%2',toPath));
     if(bGrp.length) dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].value = sEl.substr(bGrp.length);
+    dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].disabled = (statNm != statNmSrc);
     dlgWin.document.getElementById('wDlgName').style.display = 'none';
-    dlgWin.document.getElementById('wDlgType').style.display = '';
-    dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0].innerHTML = typeCfg;
-    dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0].onchange = function( ) {
+    wDlgType = dlgWin.document.getElementById('wDlgType');
+    wDlgType.style.display = '';
+    wDlgType.childNodes[1].childNodes[0].innerHTML = typeCfg;
+    wDlgType.childNodes[1].childNodes[0].onchange = function( ) {
 	if(this.selectedIndex < 0) return;
 	var idSz = parseInt(this.options[this.selectedIndex].getAttribute('idSz'));
 	dlgWin.document.getElementById('wDlgId').style.display = (idSz >= 0) ? '' : 'none';
 	dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].maxLength = (idSz > 0) ? idSz : 1000;
     }
-    dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0].selectedIndex = defIt;
-    dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0].onchange();
+    wDlgType.childNodes[1].childNodes[0].selectedIndex = defIt;
+    wDlgType.childNodes[1].childNodes[0].onchange();
+    wDlgType.childNodes[1].childNodes[0].disabled = (statNm != statNmSrc);
     dlgWin.document.getElementById('wDlgActOk').onclick = function( ) {
-    var tpSel = dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0];
+	var tpSel = dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0];
 	if(!tpSel || tpSel.selectedIndex < 0) { document.body.dlgWin.close(); return false; }
 	var idSz = parseInt(tpSel.options[tpSel.selectedIndex].getAttribute('idSz'));
 	var gbrId = tpSel.options[tpSel.selectedIndex].getAttribute('gid');
 	var inpId = dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].value;
 
-	var statNm, srcNm;
-	pathLev.off = 1; statNm = pathLev(copyBuf, 0, true); srcNm = copyBuf.substr(pathLev.off);
+	var statNm, statNmSr, srcNm, dstNm;
+	pathLev.off = 1; statNmSrc = pathLev(copyBuf, 0, true); srcNm = copyBuf.substr(pathLev.off);
 	pathLev.off = 0; statNm = pathLev(toPath, 0, true); dstNm = toPath.substr(pathLev.off);
 
 	if(idSz >= 0) {
@@ -2175,11 +2182,11 @@ function itPaste( )
 		    document.body.dlgWin.close(); return;
 		}
 	}
-	// Copy visual item
-	var rez = servSet('/'+statNm+'/%2fobj','com=com',"<copy src='"+srcNm+"' dst='"+dstNm+"'/>", true);
-	if(!rez || parseInt(rez.getAttribute('rez')) != 0 ) { if(rez) alert(nodeText(rez)); document.dlgWin.close(); return false; }
+	//Copy visual item
+	var rez = servSet('/'+statNm+'/%2fobj','com=copy',"<copy src='"+srcNm+"' dst='"+dstNm+"' statNmSrc='"+statNmSrc+"' statNm='"+statNm+"'/>", true);
+	if(!rez || parseInt(rez.getAttribute('rez')) != 0) { if(rez) alert(nodeText(rez)); document.body.dlgWin.close(); return false; }
 
-	// Remove source widget
+	//Remove source widget
 	if(copyBuf.charAt(0) == '1') {
 	    itDel(copyBuf.substr(1));
 	    if(selPath == copyBuf.substr(1)) selectPage("/"+statNm+dstNm);

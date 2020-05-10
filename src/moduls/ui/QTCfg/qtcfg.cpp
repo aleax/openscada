@@ -355,7 +355,7 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     QMenu *mn_edit = menuBar()->addMenu(_("&Edit"));
     mn_edit->addAction(actItAdd);
     mn_edit->addAction(actItDel);
-    mn_edit->addSeparator( );
+    mn_edit->addSeparator();
     mn_edit->addAction(actItCopy);
     mn_edit->addAction(actItCut);
     mn_edit->addAction(actItPaste);
@@ -364,7 +364,7 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     mn_view->addAction(actUp);
     mn_view->addAction(actPrev);
     mn_view->addAction(actNext);
-    mn_view->addSeparator( );
+    mn_view->addSeparator();
     mn_view->addAction(actUpdate);
     mn_view->addAction(actStartUpd);
     mn_view->addAction(actStopUpd);
@@ -658,7 +658,7 @@ void ConfApp::itAdd( )
 
     //Check for already present node
     XMLNode req("get");
-    req.setAttr("path",selPath+"/%2fbr%2f"+TSYS::strSepParse(dlg.target( ),2,'\n'));
+    req.setAttr("path",selPath+"/%2fbr%2f"+TSYS::strSepParse(dlg.target(),2,'\n'));
     if(!cntrIfCmd(req))
 	for(unsigned i_lel = 0; i_lel < req.childSize(); i_lel++)
 	    if((req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->attr("id") == dlg.id().toStdString()) ||
@@ -671,7 +671,7 @@ void ConfApp::itAdd( )
     //Send create request
     req.clear()->
 	setName("add")->
-	setAttr("path",selPath+"/%2fbr%2f"+TSYS::strSepParse(dlg.target( ),2,'\n'));
+	setAttr("path",selPath+"/%2fbr%2f"+TSYS::strSepParse(dlg.target(),2,'\n'));
     if(s2i(TSYS::strSepParse(dlg.target(),1,'\n')))
 	req.setAttr("id",dlg.id().toStdString())->setText(dlg.name().toStdString());
     else req.setText(dlg.id().toStdString());
@@ -700,7 +700,7 @@ void ConfApp::itDel( const string &iit )
 	if(dlg.exec() != QDialog::Accepted)	return;
     }
 
-    bool toTreeUpdate = false;
+    string firstOwn;
     for(int roff = 0; (rmit=TSYS::strSepParse(rmits,0,'\n',&roff)).size(); ) {
 	string t_el, sel_own, sel_el;
 	int n_obj = 0;
@@ -708,7 +708,7 @@ void ConfApp::itDel( const string &iit )
 	{ if(n_obj) sel_own += ("/"+sel_el); sel_el = t_el; }
 	if(n_obj > 2) {
 	    XMLNode req("info");
-	    req.setAttr("path",sel_own+"/%2fbr");
+	    req.setAttr("path", sel_own+"/%2fbr");
 	    if(cntrIfCmd(req) || !req.childGet(0,true)) return;
 
 	    XMLNode *branch = req.childGet(0);
@@ -716,18 +716,26 @@ void ConfApp::itDel( const string &iit )
 		string b_id = branch->childGet(iB)->attr("id");
 		if(b_id == sel_el.substr(0,b_id.size()) && s2i(branch->childGet(iB)->attr("acs"))&SEC_WR) {
 		    bool idm = s2i(branch->childGet(iB)->attr("idm"));
-		    req.clear()->setName("del")->setAttr("path",sel_own+"/%2fbr%2f"+b_id);
-		    if(idm) req.setAttr("id",sel_el.substr(b_id.size()));
+		    req.clear()->setName("del")->setAttr("path", sel_own+"/%2fbr%2f"+b_id);
+		    if(idm) req.setAttr("id", sel_el.substr(b_id.size()));
 		    else req.setText(sel_el.substr(b_id.size()));
-		    if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Info,this);
-		    else toTreeUpdate = true;
+		    if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TUIMod::Info, this);
+		    else {
+			if(firstOwn.empty())	firstOwn = sel_own;
+			QTreeWidgetItem *tIt = getExpandTreeWIt(rmit);
+			if(tIt) {
+			    CtrTree->blockSignals(true);
+			    tIt->parent()->takeChild(tIt->parent()->indexOfChild(tIt));
+			    CtrTree->blockSignals(false);
+			}
+		    }
 		    break;
 		}
 	    }
 	}
     }
 
-    if(toTreeUpdate) treeUpdate();
+    if(firstOwn.size())	pageDisplay(firstOwn);
 }
 
 void ConfApp::itCut( )
@@ -770,8 +778,8 @@ void ConfApp::itPaste( )
 	for(off = 0; !(tEl=TSYS::pathLev(copyEl,0,true,&off)).empty(); nSel++)
 	{ if(nSel) sElp += ("/"+sEl); sEl = tEl; }
 
-	if(TSYS::pathLev(copyEl,0) != TSYS::pathLev(toPath,0))
-	{ mod->postMess(mod->nodePath().c_str(), _("Copying is not possible."), TUIMod::Error, this); return; }
+	//if(TSYS::pathLev(copyEl,0) != TSYS::pathLev(toPath,0))
+	//{ mod->postMess(mod->nodePath().c_str(), _("Copying is not possible."), TUIMod::Error, this); return; }
 
 	vector<string> brs;
 	if(copyEl == toPath) {	//For copy into the branch and no select direct the parent node
@@ -781,6 +789,10 @@ void ConfApp::itPaste( )
 	    rootW = parNode.childGet(0);
 	}
 	if(s2i(rootW->attr("acs"))&SEC_WR) brs.push_back(string("-1\n0\n\n")+_("Selected"));
+
+	string statNm, statNmSrc, srcNm, dstNm;
+	off = 0; statNmSrc = TSYS::pathLev(copyEl, 0, true, &off);	srcNm = copyEl.substr(off);
+	off = 0; statNm = TSYS::pathLev(toPath, 0, true, &off);	dstNm = toPath.substr(off);
 
 	XMLNode *branch = rootW->childGet("id", "br", true);
 	for(unsigned iB = 0; branch && iB < branch->childSize(); iB++)
@@ -795,19 +807,15 @@ void ConfApp::itPaste( )
 	dlg.setTargets(brs);
 	dlg.setMess(QString(isCut?_("Moving the node '%1' to '%2'.\n"):_("Copying the node '%1' to '%2'.\n")).arg(copyEl.c_str()).arg(toPath.c_str()));
 	dlg.setId(sEl.substr(bGrp.size()).c_str());
+	if(statNm != statNmSrc) dlg.setPassive();
 	if(isMult) {
 	    prcReq = new QCheckBox(_("Do not ask for more."), &dlg);
 	    dlg.edLay->addWidget(prcReq, 5, 0, 1, 2);
 	}
 	if(!prcReqMiss && dlg.exec() != QDialog::Accepted) return;
 	if(!prcReqMiss && prcReq && prcReq->checkState() == Qt::Checked) prcReqMiss = true;
-
-	string stat_nm, src_nm, dst_nm;
-	off = 0; stat_nm = TSYS::pathLev(copyEl, 0, true, &off);	src_nm = copyEl.substr(off);
-	off = 0; stat_nm = TSYS::pathLev(toPath, 0, true, &off);	dst_nm = toPath.substr(off);
-
 	if(s2i(TSYS::strSepParse(dlg.target(),0,'\n')) >= 0) {
-	    dst_nm += "/" +TSYS::strSepParse(dlg.target(),2,'\n') + dlg.id().toStdString();
+	    dstNm += "/" +TSYS::strSepParse(dlg.target(),2,'\n') + dlg.id().toStdString();
 	    // Check for already present node
 	    XMLNode req("get");
 	    req.setAttr("path", toPath+"/%2fbr%2f"+TSYS::strSepParse(dlg.target(),2,'\n'));
@@ -816,11 +824,11 @@ void ConfApp::itPaste( )
 		if((req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->attr("id") == dlg.id().toStdString()) ||
 		   (!req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->text() == dlg.id().toStdString()))
 		{
-		    InputDlg dlg1(this, actItPaste->icon(), QString(_("The node '%1' is already present. Continue?")).arg(dst_nm.c_str()),
+		    InputDlg dlg1(this, actItPaste->icon(), QString(_("The node '%1' is already present. Continue?")).arg(dstNm.c_str()),
 					_("Moving or copying the node"), 0, 0);
 		    if(isMult) {
-			prcAlrPres = new QCheckBox(_("Do not ask for more."),&dlg1);
-			dlg1.edLay->addWidget(prcAlrPres,5,0,5,1);
+			prcAlrPres = new QCheckBox(_("Do not ask for more."), &dlg1);
+			dlg1.edLay->addWidget(prcAlrPres, 5, 0, 5, 1);
 		    }
 		    if(!prcAlrPresMiss && dlg1.exec() != QDialog::Accepted) return;
 		    if(!prcAlrPresMiss && prcAlrPres && prcAlrPres->checkState() == Qt::Checked) prcAlrPresMiss = true;
@@ -828,15 +836,36 @@ void ConfApp::itPaste( )
 		}
 	}
 
-	//Copy visual item
-	XMLNode req("copy");
-	req.setAttr("path", "/"+stat_nm+"/%2fobj")->setAttr("src", src_nm)->setAttr("dst", dst_nm);
-	if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Error,this); pageRefresh(); return; }
+	//Local copy visual item
+	if(statNm == statNmSrc) {
+	    XMLNode req("copy");
+	    req.setAttr("path", "/"+statNm+"/%2fobj")->setAttr("src", srcNm)->setAttr("dst", dstNm);
+	    if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Error,this); pageRefresh(); return; }
+	}
+	//Interstation copy
+	else {
+	    XMLNode req("add");
+	    //Create the destination node
+	    req.setAttr("path", selPath+"/%2fbr%2f"+TSYS::strSepParse(dlg.target(),2,'\n'))->
+		setAttr("id", dlg.id().toStdString())->setText(dlg.id().toStdString());
+	    /*if(s2i(TSYS::strSepParse(dlg.target(),1,'\n')))
+		req.setAttr("id", dlg.id().toStdString())->setText(dlg.name().toStdString());
+	    else req.setText(dlg.id().toStdString());*/
+	    if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TUIMod::Info, this); return; }
+
+	    //Get context of the source node
+	    req.clear()->setName("save")->setAttr("path", "/"+statNmSrc+srcNm+"/%2fobj")->setAttr("ctx", "1");
+	    if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Error,this); return; }
+
+	    //Load context of the source node to the destination one
+	    req.setName("load")->setAttr("path", "/"+statNm+dstNm+"/%2fobj");
+	    if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Error,this); pageRefresh(); return; }
+	}
 
 	//Remove source widget
 	if(isCut) {
 	    itDel(copyEl);
-	    if(selPath == copyEl) chSel = "/"+stat_nm+"/"+dst_nm;
+	    if(selPath == copyEl) chSel = "/"+statNm+"/"+dstNm;
 	}
     }
 
@@ -849,22 +878,23 @@ void ConfApp::itPaste( )
 
 void ConfApp::editToolUpdate( )
 {
-    actItCut->setEnabled(selPath.size() && root && s2i(root->attr("acs"))&SEC_WR);
-    actItCopy->setEnabled(selPath.size());
+    int rootAccess = root ? s2i(root->attr("acs")) : 0;
+    actItCut->setEnabled(selPath.size() && (rootAccess&SEC_WR));
+    actItCopy->setEnabled((rootAccess>>3)?((rootAccess>>3)&SEC_WR):selPath.size());
     actItPaste->setEnabled(false);
 
     if(TSYS::strParse(copyBuf,1,"\n").empty()) {
 	//Src and destination elements calc
-	if(copyBuf.size() <= 1 || /*copyBuf.substr(1) == selPath ||*/ TSYS::pathLev(copyBuf.substr(1),0) != TSYS::pathLev(selPath,0))
+	if(copyBuf.size() <= 1 /*|| copyBuf.substr(1) == selPath || TSYS::pathLev(copyBuf.substr(1),0) != TSYS::pathLev(selPath,0)*/)
 	    return;
 	string sElp, sEl, tEl;
 	for(int off = 0; !(tEl=TSYS::pathLev(copyBuf.substr(1),0,true,&off)).empty(); )
 	{ sElp += ("/"+sEl); sEl = tEl; }
 
-	if(s2i(root->attr("acs"))&SEC_WR) actItPaste->setEnabled(true);
+	if(rootAccess&SEC_WR) actItPaste->setEnabled(true);
     }
 
-    XMLNode *branch = root->childGet("id","br",true);
+    XMLNode *branch = root ? root->childGet("id", "br", true) : NULL;
     if(branch)
 	for(unsigned iB = 0; iB < branch->childSize(); iB++)
 	    if(s2i(branch->childGet(iB)->attr("acs"))&SEC_WR)
@@ -875,7 +905,7 @@ void ConfApp::treeUpdate( )
 {
     for(int i_t = 0; i_t < CtrTree->topLevelItemCount(); i_t++)
 	if(CtrTree->topLevelItem(i_t)->isExpanded())
-	    viewChildRecArea(CtrTree->topLevelItem(i_t),true);
+	    viewChildRecArea(CtrTree->topLevelItem(i_t), true);
 }
 
 void ConfApp::userSel( )
@@ -1713,17 +1743,20 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 
 	    // Fill Edit
 	    if(lab)	lab->setText((t_s.attr("dscr")+":").c_str());
-	    if(edit && !edit->isChanged() && rezReq >= 0) {
+	    string tVl;
+	    if(edit && !edit->isChanged() && rezReq >= 0 && ((tVl=getPrintVal(data_req.text())) != edit->text().toStdString() || !edit->text().size())) {
+		int scrollPos = edit->edit()->verticalScrollBar()->value();
 		//Requesting the syntax higlihgt
 		if(s2i(t_s.attr("SnthHgl"))) {
 		    XMLNode hgl_req("SnthHgl");
-		    hgl_req.setAttr("path",br_path);
+		    hgl_req.setAttr("path", br_path);
 		    if(!cntrIfCmd(hgl_req)) edit->setSnthHgl(hgl_req);
 		}
 
 		mod->setHelp(t_s.attr("help"), selPath+"/"+br_path, edit);
 
-		edit->setText(getPrintVal(data_req.text()).c_str());
+		edit->setText(tVl.c_str());
+		edit->edit()->verticalScrollBar()->setValue(scrollPos);
 	    }
 	}
 	//View Data-Time fields
@@ -1963,6 +1996,14 @@ void ConfApp::pageDisplay( const string path )
 
     if(path != pgInfo.attr("path")) {
 	if(path == selPath) selPath = pgInfo.attr("path");	//!!!! To ensure for proper working of the checking for not applied editable widgets
+
+	// Trace the control tree
+	QTreeWidgetItem *tIt;
+	if((!CtrTree->currentItem() || CtrTree->currentItem()->text(2).toStdString() != path) && (tIt=getExpandTreeWIt(path))) {
+	    CtrTree->blockSignals(true);
+	    CtrTree->setCurrentItem(tIt);
+	    CtrTree->blockSignals(false);
+	}
 
 	// Stop the refreshing
 	pageCyclRefrStop();
@@ -2221,7 +2262,7 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 	    // Next node for update
 	    if(upTree && it->isExpanded()) viewChildRecArea(it,upTree);
 	}
-	//Delete no present
+	//Deleting not presented
 	for(int iIt = 0, iG = 0; upTree && iIt < i->childCount(); iIt++) {
 	    for(iG = 0; iG < grps.size(); iG++)
 		if(i->child(iIt)->text(2) == ("*"+TSYS::strSepParse(grps[iG].toStdString(),1,'\n')).c_str())
@@ -2301,9 +2342,32 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 	mess_debug(mod->nodePath().c_str(), _("Time of expanding/updating '%s': %f ms."), i->text(2).toStdString().c_str(), 1e-3*(TSYS::curTime()-d_cnt));
 }
 
+QTreeWidgetItem *ConfApp::getExpandTreeWIt( const string &path )
+{
+    string sit, pathAdd;
+    QTreeWidgetItem *curIt = NULL;
+    for(int off = 0; (sit=TSYS::pathLev(path,0,true,&off)).size(); ) {
+	pathAdd += "/" + sit;
+	bool isOK = false;
+	if(curIt && !curIt->isExpanded()) curIt->setExpanded(true);
+	for(int iIt = 0; iIt < (curIt?curIt->childCount():CtrTree->topLevelItemCount()); iIt++) {
+	    QTreeWidgetItem *tit = curIt ? curIt->child(iIt): CtrTree->topLevelItem(iIt);
+	    if(tit->text(2)[0] == "*" && sit.find(tit->text(2).toStdString().substr(1)) == 0) {
+		curIt = tit; iIt = -1;
+		if(!curIt->isExpanded()) curIt->setExpanded(true);
+	    }
+	    else if(tit->text(2)[0] != "*" && pathAdd == tit->text(2).toStdString())
+	    { curIt = tit; isOK = true; break; }
+	}
+	if(!isOK) return NULL;
+    }
+
+    return curIt;
+}
+
 int ConfApp::cntrIfCmd( XMLNode &node )
 {
-    //Force for direct requests
+    //Force for direct and multiple requests
     if(node.name() == "set" || node.name() == "load" || node.name() == "save") ;
     //Fill generic request
     else if(&node != &genReqs && genReqs.attr("fillMode") == "1") { genReqs.childAdd()->operator=(node); return -1; }

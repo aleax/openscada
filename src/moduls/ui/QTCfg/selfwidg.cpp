@@ -531,11 +531,9 @@ bool TextEdit::hasFocus( ) const	{ return edFld->hasFocus(); }
 void TextEdit::setText( const QString &text )
 {
     isInit = true;
-    if(text != edFld->toPlainText()) {
-	edFld->blockSignals(true);	//!!!!: Block for prevent the status bar update and crash here sometime
-	edFld->setPlainText(text);
-	edFld->blockSignals(false);
-    }
+    edFld->blockSignals(true);	//!!!!: Block to prevent the status bar update and crash here sometime
+    edFld->setPlainText(text);
+    edFld->blockSignals(false);
     edFld->document()->setModified(false);
     isInit = false;
     changed();
@@ -543,10 +541,8 @@ void TextEdit::setText( const QString &text )
 
 void TextEdit::setSnthHgl( XMLNode nd )
 {
-    int scrollPos = edFld->verticalScrollBar()->value();
     if(!sntHgl)	sntHgl = new SyntxHighl(edFld->document());
     sntHgl->setSnthHgl(nd);
-    edFld->verticalScrollBar()->setValue(scrollPos);
 }
 
 void TextEdit::setRowsCols( int w, int h )
@@ -879,6 +875,14 @@ void ReqIdNameDlg::setTargets( const vector<string> &tgs )
     bool tpView = !(itTp->count()==1 && itTp->itemText(0).isEmpty());
     itTpLab->setVisible(tpView); itTp->setVisible(tpView);
     itTp->setEnabled(itTp->count()>1);
+}
+
+void ReqIdNameDlg::setPassive( )
+{
+    itTp->setEnabled(false);
+    if(mId)	mId->setEnabled(false);
+    if(mName)	mName->setEnabled(false);
+    if(mName && name().size())	mName->setVisible(false);
 }
 
 void ReqIdNameDlg::selectItTp( int it )

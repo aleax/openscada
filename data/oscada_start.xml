@@ -18,6 +18,10 @@
 	    <prm id="SYSStPref">0</prm>
 	    <tbl id="DB">
 		<fld ID="GenDB" TYPE="SQLite" NAME="Main DB" ADDR="St.db" CODEPAGE="UTF-8"/>
+		<fld ID="OscadaLibs" TYPE="SQLite" ADDR="LibsDB/OscadaLibs.db" CODEPAGE="UTF-8" EN="0" />
+		<fld ID="vcaBase" TYPE="SQLite" ADDR="LibsDB/vcaBase.db" CODEPAGE="UTF-8" EN="0" />
+		<fld ID="vcaElectroEls" TYPE="SQLite" ADDR="LibsDB/vcaElectroEls.db" CODEPAGE="UTF-8" EN="0" />
+		<fld ID="vcaTest" TYPE="SQLite" ADDR="LibsDB/vcaTest.db" CODEPAGE="UTF-8" EN="0" />
 	    </tbl>
 	</node>
 

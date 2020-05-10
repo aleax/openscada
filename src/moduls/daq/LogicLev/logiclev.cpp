@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Logical level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.2.0"
+#define MOD_VER		"2.2.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the pure logical level of the DAQ parameters.")
 #define LICENSE		"GPL2"
@@ -167,6 +167,8 @@ void TMdContr::load_( )
     if(!SYS->chkSelDB(DB())) throw TError();
 
     //TController::load_();
+
+    if(SYS->cfgCtx() && !enableStat())	enable();
 }
 
 void TMdContr::start_( )
@@ -467,6 +469,7 @@ void TMdPrm::load_( )
 {
     //TParamContr::load_();
 
+    if(SYS->cfgCtx() && !enableStat())	enable();
     if(enableStat()) loadIO();
 }
 

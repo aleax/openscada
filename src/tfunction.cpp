@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tfunction.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -349,7 +349,10 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRW__,"root",grp,SEC_RD))	opt->setText(mTVal?"1":"0");
 	if(ctrChkNode(opt,"set",RWRW__,"root",grp,SEC_WR)) {
 	    bool to_en_exec = s2i(opt->text());
-	    if(to_en_exec && !mTVal)	mTVal = new TValFunc(id()+"_exec",this);
+	    if(to_en_exec && !mTVal) {
+		if(!startStat()) setStart(true);
+		mTVal = new TValFunc(id()+"_exec",this);
+	    }
 	    if(!to_en_exec && mTVal)	{ delete mTVal; mTVal = NULL; }
 	}
     }

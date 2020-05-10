@@ -11766,24 +11766,17 @@ INSERT INTO wlb_doc_io VALUES('docRepMonth','perm','438',32,'','','doc','','',''
 INSERT INTO wlb_doc_io VALUES('docRep2WorkSh','perm','438',32,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docUsersSet','style','TABLE.data { border-collapse: collapse; }
 TABLE.data TH { background-color: #e6e6e6; border: 1px solid black; }
-TABLE.data TD { white-space: nowrap; border: 1px solid black;}',32,'','','doc','TH { background-color: #e6e6e6; }
-TD { white-space: nowrap; }','','TH { background-color: #e6e6e6; }
-TD { white-space: nowrap; }','','','');
+TABLE.data TD { white-space: nowrap; border: 1px solid black;}
+TABLE.data TD:nth-child(5) { white-space: normal;}',32,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepInstVals','style','TABLE.data { border-collapse: collapse; }
 TABLE.data TH { background-color: #e6e6e6; border: 1px solid black; }
-TABLE.data TD { white-space: nowrap; border: 1px solid black;}',32,'','','doc','TH { background-color: #e6e6e6; }
-TD { white-space: nowrap; }','','TH { background-color: #e6e6e6; }
-TD { white-space: nowrap; }','','','');
+TABLE.data TD { white-space: nowrap; border: 1px solid black;}',32,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepDay','style','TABLE.data { border-collapse: collapse; }
 TABLE.data TH { background-color: #e6e6e6; border: 1px solid black; }
-TABLE.data TD { white-space: nowrap; border: 1px solid black;}',32,'','','doc','TH { background-color: #e6e6e6; }
-TD { white-space: nowrap; }','','TH { background-color: #e6e6e6; }
-TD { white-space: nowrap; }','','','');
+TABLE.data TD { white-space: nowrap; border: 1px solid black;}',32,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepMonth','style','TABLE.data { border-collapse: collapse; }
 TABLE.data TH { background-color: #e6e6e6; border: 1px solid black; }
-TABLE.data TD { white-space: nowrap; border: 1px solid black;}',32,'','','doc','TH { background-color: #e6e6e6; }
-TD { white-space: nowrap; }','','TH { background-color: #e6e6e6; }
-TD { white-space: nowrap; }','','','');
+TABLE.data TD { white-space: nowrap; border: 1px solid black;}',32,'','','doc','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRep2WorkSh','style','TABLE.data { border-collapse: collapse; }
 TABLE.data TH { background-color: #e6e6e6; border: 1px solid black; }
 TABLE.data TD { white-space: nowrap; border: 1px solid black;}',32,'','','doc','','','','','','');

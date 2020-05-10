@@ -48,9 +48,12 @@
 <dl><dd> - expand the view "Table" of the primitive "FormEl" for user sorting by the selected column;</dd>
 <dd> * expand the status-bar, with the functions:
 <dl><dd> - export and print;</dd>
-<dd> - call of the project documents.</dd></dl></dd>
+<dd> - call of the project documents;</dd>
+<dd> - alarming-notification by sound and speech.</dd></dl></dd>
 <dd> - ElFigure,Diagram: enable or make the anti aliasing, for the library GD;</dd>
-<dd> - implement the primitives "Diagram", "ElFigure" in the tag "SVG".</dd></dl>
+<dd> - implement the primitives "Diagram", "ElFigure" in the tag "SVG";</dd>
+<dd> - expand the variant "Animation" of the primitive "Media" in using the raw image files, like to PNG;</dd>
+<dd> - implement the variant "Full video" of the primitive "Media".</dd></dl>
 </td></tr></table>
 <p>The module provides in OpenSCADA a mechanism of the final visualization of the visual control area (VCA). The module is based on WEB technologies (XHTML, JavaScript, CSS, AJAX). In its work, the module uses the data from the VCA engine — module <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>.
 </p><p>Visual control area (VCA) is an integral part of the SCADA system. It applies to the client stations with a view to providing accessible information about the control object and to for the the issuance of the control actions to the object. In various practical situations and conditions the VCA, based on different principles of visualization, may by applied. For example, this may be the library of widgets Qt, GTK+, WxWidgets or hypertext mechanisms based on the technologies HTML, XHTML, XML, CSS and JavaScript, or third-party applications of visualization, realized in various programming languages Java, Python, etc. Any of these principles has its advantages and disadvantages, the combination of which could become an insurmountable obstacle to the use of VCA in a practical case. For example, technologies like the Qt library can create highly-productive VCA, which will undoubtedly important for the operator station for control the technological processes (TP). However, the need for installation of that client software in some cases may make using of it impossible. On the other hand, Web-technology does not require installation on client systems and is extremely multi-platform (it is enough to create a link to the Web-server at any Web-browser) that is most important for various engineering and administrative stations, but the productivity and reliability of such interfaces is lower, that actually eliminates the using of them at the operator stations of TP.
@@ -239,7 +242,7 @@
 </p>
 <ul><li> "*" — call for a selecting dialog of the user; </li>
 <li> "$" — change the user to the default one;</li>
-<li> "{user}" — direct change to <i>user</i>, if available.</li></ul>
+<li> "{user}" — direct change to <i>user</i>, if available and its permission is lesser or equal.</li></ul>
 </td></tr>
 <tr>
 <td> vs_goHttpUrl (view "Button" of the primitive "FormEl") </td>
@@ -701,5 +704,5 @@ GROUNDS: At working with the board <a class="external" href="http://oscada.org/w
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebVision/en">Modules/WebVision/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2675</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebVision/en">Modules/WebVision/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2678</td></tr></table></body>
 </html>

@@ -306,7 +306,7 @@
 <h2><span class="mw-headline" id=".D0.9E.D0.B1.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D1.8F"><span class="mw-headline-number">7</span> Обновления</span></h2>
 <h3><span class="mw-headline" id=".5B8.04.2020.5D_.D0.9F.D0.95.D0.A0.D0.92.D0.9E.D0.95_.D0.BE.D0.B1.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D0.B5"><span class="mw-headline-number">7.1</span> [8.04.2020] ПЕРВОЕ обновление</span></h3>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
-<ul><li> <b>Состояние:</b> Стадия 3 — финал и после-релизовые задания</li></ul>
+<ul><li> <b>Состояние:</b> Стадия 3 — финал и после-релизовые задания: Реализовать сервисные обновления при первом исправлении ошибок.</li></ul>
 <p>Общий процесс выпуска, пользователям для оценки ваших ожиданий и разработчикам для напоминания задач:<br />
 <b><u>1. Неделя подготовки и сборки:</u></b><br />
 </p>
@@ -337,7 +337,7 @@
 <li> Ожидание <a class="external text" href="http://www.trinitydesktop.org/" rel="nofollow noreferrer noopener" target="_blank">релиза TDE 14.0.8</a>, после чего собрать собственные исправленные пакеты и пересобрать ISO-образы <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Linux Автоматизации</a> обновления.</li>
 <li> Реализовать сервисные обновления при первом исправлении ошибок.</li></ul>
 </div>
-<p>Обновление осуществлено после 1.5 года от <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">релиза 0.9 LTS</a>, соответственно оно стоит 10 обновлений, поскольку им исправлено более 250 ошибок и добавлено множество усовершенствований, которые целиком вы можете почитать в <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2674" rel="nofollow noreferrer noopener" target="_blank">протоколе изменений обновления</a>.
+<p>Обновление осуществлено после 1.5 года от <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">релиза 0.9 LTS</a>, соответственно оно стоит 10 обновлений, поскольку им исправлено более 250 ошибок и добавлено множество усовершенствований, которые целиком вы можете почитать в <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2677" rel="nofollow noreferrer noopener" target="_blank">протоколе изменений обновления</a>.
 </p><p>Ключевыми свойствами обновления является:
 </p>
 <ul><li> значительное расширение и стабилизация Web-интерфейса в течении практической эксплуатации в большом распределённом решении, построенном на основе модуля <a href="#WebVision">UI.WebVision</a>; также расширение и стабилизация горячей разработки в течении множественного исполнения разрабатываемого проекта;</li>
@@ -452,6 +452,7 @@
 <ul><li> Расширено полем общего контроля попыток в функции attempts().</li>
 <li> Унифицировано контролем времени последнего запроса в функции lstReqTm().</li>
 <li> Добавлена функция outAddrHelp() для получения общей помощи по адресу модулей выходных транспортов.</li></ul></li></ul></li>
+<li> Protocol.HTTP: Расширено функцией пользовательского API setUser() для изменения автентифицированного пользователя.</li>
 <li> DAQ: TController::alarmSet() расширено аргументом "force" для принуждения установки нарушений на объектах контроллеров в резервировании.
 <ul><li> DAQ-параметры дополнены функцией пользовательского API alarmSet() и функцией vlSetRednt() унифицированной записи значений в резервировании.</li>
 <li> TDAQS::rdRestDtTm() расширено возвратом double вместо float.</li>
@@ -643,6 +644,8 @@
 <ul><li> FIX: JS функция servSet() записи на сервер переключена в синхронный режим для предотвращения потерь.</li>
 <li> Унифицирована основная проверка фоновых объектов относительно поддержки опциональных фоновых объектов, для уменьшения общего количества фоновых объектов, где обязательными сейчас являются: "ElFigure", "Диаграмма", "Документ", "FormEl"; и опциональный только "Текст".</li>
 <li> Границу вертикального расширения основного окна установлено в 10% от общего размера и в 50% для уменьшения, для предотвращения миганию на FireFox от примечаний про блокирование внешних окон. Установлено использование-включение встроенного режима масштабирования согласно к window.devicePixelRatio равного 1 на уровне Web-бравзера.</li>
+<li> Значительно улучшено обнаружение потерь подключения для перегрузки основной страницы, в случаях возврата к уже закрытым сеансам в Web-браузере.</li>
+<li> Дополнено реализацией специфического к визуализатору атрибута "userSetVis".</li>
 <li> FIX: Восстановлена перегрузка целого дерева виджетов для восстановления функции удаления отсутствующих виджетов в визуализаторе при их удалении в СВУ-движке.</li>
 <li> FIX: Предотвращены лишние и отдельные запросы содержимого вложенных страниц при запуске.</li>
 <li> FIX: Улучшено поведение контроля фокуса и предотвращены сообщения мыши вне страниц.</li></ul></li>
@@ -685,5 +688,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Release_0.9/ru">Documents/Release_0.9/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2675</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Release_0.9/ru">Documents/Release_0.9/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2678</td></tr></table></body>
 </html>

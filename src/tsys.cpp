@@ -59,11 +59,13 @@ pthread_key_t TSYS::sTaskKey;
 TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char **)argb), envp((const char **)env),
     mUser("root"), mConfFile(sysconfdir_full "/oscada.xml"), mId("InitSt"),
     mModDir(oscd_moddir_full), mIcoDir("icons;" oscd_datadir_full "/icons"), mDocDir("docs;" oscd_datadir_full "/docs"),
-    mWorkDB(DB_CFG), mTaskInvPhs(10), mSaveAtExit(false), mSavePeriod(0), mModifCalc(false), isLoaded(false),
-    rootModifCnt(0), sysModifFlgs(0), mStopSignal(0), mN_CPU(1),
-    mainPthr(0), mSysTm(0), mClockRT(false), mPrjCustMode(true), mPrjNm(dataRes()),
+    mWorkDB(dataRes()), mSelDB(dataRes()), mMainCPUs(dataRes()), mTaskInvPhs(10), mSaveAtExit(false), mSavePeriod(0),
+    mModifCalc(false), isLoaded(false), rootModifCnt(0), sysModifFlgs(0), mStopSignal(0), mN_CPU(1),
+    mainPthr(0), mSysTm(0), mClockRT(false), mPrjCustMode(true), mPrjNm(dataRes()), mCfgCtx(NULL),
     mRdStLevel(0), mRdRestConnTm(10), mRdTaskPer(1), mRdPrimCmdTr(false)
 {
+    mWorkDB = DB_CFG;
+
     Mess = new TMess();
 
     mName = _("Initial Station");
@@ -1047,6 +1049,7 @@ void TSYS::cfgFileScan( bool first, bool up )
     rootFlTm = f_stat.st_mtime;
 
     if(up && !first) {
+	MtxAlloc res(SYS->cfgLoadSaveM(), true);
 	modifG();
 	setSelDB(DB_CFG);
 	load();
@@ -1180,6 +1183,33 @@ string TSYS::pathLev( const string &path, int level, bool decode, int *off )
 	an_dir = t_dir;
 	t_lev++;
 	while(an_dir < (int)path.size() && path[an_dir]=='/') an_dir++;
+    }
+}
+
+string TSYS::pathLevEnd( const string &path, int level, bool decode, int *off )
+{
+    int an_dir = (off && *off >= 0) ? *off : path.size()-1;
+    int t_lev = 0;
+    size_t t_dir;
+
+    //Last separators pass
+    while(an_dir >= 0 && path[an_dir] == '/') an_dir--;
+    if(an_dir < 0) return "";
+
+    //Path level process
+    while(true) {
+	t_dir = path.rfind("/", an_dir);
+	if(t_dir == string::npos) {
+	    if(off) *off = -1;
+	    return (t_lev == level) ? (decode ? TSYS::strDecode(path.substr(0,an_dir),TSYS::PathEl) : path.substr(0,an_dir)) : "";
+	}
+	else if(t_lev == level) {
+	    if(off) *off = t_dir;
+	    return decode ? TSYS::strDecode(path.substr(t_dir+1,an_dir-t_dir),TSYS::PathEl) : path.substr(t_dir+1,an_dir-t_dir);
+	}
+	an_dir = t_dir;
+	t_lev++;
+	while(an_dir >= 0 && path[an_dir] == '/') an_dir--;
     }
 }
 

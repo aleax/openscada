@@ -40,7 +40,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.4.0"
+#define MOD_VER		"1.5.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the WEB-based configurator of OpenSCADA. The technologies are used: XHTML, CSS and JavaScript.")
 #define LICENSE		"GPL2"
@@ -364,15 +364,50 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
     //Full request to control interface
     else if(wp_com == "req") {
 	XMLNode req(""); req.load(ses.content);
-	mod->cntrIfCmd(req,ses.user);
+	mod->cntrIfCmd(req, ses.user);
 	page = pgCreator(iprt, req.save(XMLNode::XMLHeader), "200 OK", "Content-Type: text/xml;charset=UTF-8");
     }
     else if(wp_com == "img") {
 	if((cntEl=ses.cnt.find("name")) != ses.cnt.end() && !ses.files[cntEl->second].empty()) {
 	    XMLNode req("set"); req.setAttr("path",ses.url)->setText(TSYS::strEncode(ses.files[cntEl->second],TSYS::base64));
-	    mod->cntrIfCmd(req,ses.user);
+	    mod->cntrIfCmd(req, ses.user);
 	}
 	page = pgCreator(iprt, string("<div class='error'>")+_("No content.")+"</div>\n", "204 No Content");
+    }
+    else if(wp_com == "copy") {
+	XMLNode req("");
+	req.load(ses.content); req.setAttr("path", ses.url);
+	string	statNmSrc = TSYS::pathLev(req.attr("statNmSrc"), 0, true),
+		statNm = TSYS::pathLev(req.attr("statNm"), 0, true);
+
+	if(req.attr("statNm") == req.attr("statNmSrc")) {
+	    mod->cntrIfCmd(req, ses.user);
+	    page = pgCreator(iprt, req.save(XMLNode::XMLHeader), "200 OK", "Content-Type: text/xml;charset=UTF-8");
+	}
+	else {
+	    req.setAttr("rez", "0");
+	    XMLNode reqExt("add");
+	    //Create the destination node
+	    int off = -1;
+	    string  newNodeId = TSYS::pathLevEnd(req.attr("dst"),0,true,&off), newNodeTarg, newNodeParent;
+	    if(off >= 0) newNodeParent = req.attr("dst").substr(0, off);
+	    off = newNodeId.find("_");
+	    if(off != string::npos) { newNodeTarg = newNodeId.substr(0, off+1); newNodeId = newNodeId.substr(off+1); }
+	    reqExt.setAttr("path", "/"+req.attr("statNm")+newNodeParent+"/%2fbr%2f"+newNodeTarg);
+	    reqExt.setAttr("id", newNodeId)->setText(newNodeId);
+	    if(mod->cntrIfCmd(reqExt,ses.user)) req.setAttr("rez", reqExt.attr("rez"))->setText(reqExt.text());
+	    else {
+		//Get context of the source node
+		reqExt.clear()->setName("save")->setAttr("path", "/"+req.attr("statNmSrc")+req.attr("src")+"/%2fobj")->setAttr("ctx", "1");
+		if(mod->cntrIfCmd(reqExt,ses.user)) req.setAttr("rez", reqExt.attr("rez"))->setText(reqExt.text());
+		else {
+		    //Load context of the source node to the destination one
+		    reqExt.setName("load")->setAttr("path", "/"+req.attr("statNm")+req.attr("dst")+"/%2fobj");
+		    if(mod->cntrIfCmd(reqExt,ses.user)) req.setAttr("rez", reqExt.attr("rez"))->setText(reqExt.text());
+		}
+	    }
+	    page = pgCreator(iprt, req.save(XMLNode::XMLHeader), "200 OK", "Content-Type: text/xml;charset=UTF-8");
+	}
     }
 }
 

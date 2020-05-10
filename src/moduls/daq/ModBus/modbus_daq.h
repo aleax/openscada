@@ -43,7 +43,7 @@ using namespace OSCADA;
 #define DAQ_NAME	"ModBus"
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"2.8.0"
+#define DAQ_MVER	"2.8.1"
 #define DAQ_AUTHORS	_("Roman Savochenko")
 #define DAQ_DESCR	_("Provides implementation of the client ModBus service. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported.")
 #define DAQ_LICENSE	"GPL2"
@@ -174,6 +174,7 @@ class TMdContr: public TController
 	//Methods
 	void postDisable( int flag );		//Delete all DB if flag 1
 	void disable_( );
+	void load_( );
 	void start_( );
 	void stop_( );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process

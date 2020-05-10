@@ -111,13 +111,13 @@ class SyntxHighl : public QSyntaxHighlighter
     Q_OBJECT
 
     public:
-	SyntxHighl(QTextDocument *parent = 0);
+	SyntxHighl( QTextDocument *parent = 0 );
 
-	void setSnthHgl(XMLNode nd);
+	void setSnthHgl( XMLNode nd );
 
     protected:
-	void highlightBlock(const QString &text);
-	void rule(XMLNode *irl, const QString &text, int off = 0, char lev = 0);
+	void highlightBlock( const QString &text );
+	void rule( XMLNode *irl, const QString &text, int off = 0, char lev = 0 );
 
 	XMLNode rules;
 };
@@ -288,6 +288,7 @@ class ReqIdNameDlg : public InputDlg
 	string target( );
 
 	void setTargets( const vector<string> &tgs );
+	void setPassive( );
 
     protected:
 	//Attributes

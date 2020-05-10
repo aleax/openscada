@@ -169,6 +169,11 @@ void TMdContr::disable_( )
     reqRes.resRelease();
 }
 
+void TMdContr::load_( )
+{
+    if(SYS->cfgCtx() && !enableStat())	enable();
+}
+
 void TMdContr::start_( )
 {
     if(prcSt) return;
@@ -1196,6 +1201,7 @@ void TMdPrm::disable( )
 void TMdPrm::load_( )
 {
     //TParamContr::load_();
+    if(SYS->cfgCtx() && !enableStat())	enable();
     loadIO();
 }
 

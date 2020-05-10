@@ -1,3 +1,33 @@
+2020-05-10 Roman (stable)
+- LibsDB.vcaBase: doc.docUsersSet: The styles appended for a specific rule of the "Description" collumn -
+    "TABLE.data TD:nth-child(5) { white-space: normal;}"
+- FIX: data/openscada-proj.in: The command "list" some improved to show the preinstalled and user projects.
+- data/{oscada_start,oscada_server,oscada_plc}.xml: Appended for the disabled DB-entries of the standard OpenSCADA libraries.
+- !!:FIX:SYS: The function TCntrNode::isModify() processing for the childs allowed only for nodes in the state "Enabled".
+    FIX:TFunction: Set in started at the direct execution enabling.
+    FIX:XMLNode: The function text() in the text taking mode from special parts "<*>" appended in reading the original
+	text content at the childs missing.
+    FIX:Transports: The IO log order inverted to the last in the end for the message parts visual concatenation.
+	The "Request" tab appended in concatenation the response data at the request missing.
+    FIX: The dynamic system properties mWorkDB, mSelDB and mMainCPUs moved under the data lock.
+    Appended for the function pathLevEnd() of the paths processing from the end.
+- FIX:SYS,UI.{QTCfg,WebCfgD}: The control node attribute "acs" appended for the maximum level permition
+    in the high octet what used in the configurators.
+- !!:SYS: The loading and saving configuration appended for own lock TSYS->cfgLoadSaveM().
+- !!!!:SYS,DB,DAQ.{LogicLev,ModBus,Siemens},UI.{QTCfg,WebCfgD}: Appended for the interstation copying mechanism of the control interface nodes:
+    - appended for the global configuration context accessing functions cfgCtx() and setCfgCtx();
+    - the redundancy processing expanded in the command "save" redundancy only at missing the attribute "ctx";
+    - DB: dataSeek(),dataGet(),dataSet(): Expanded for the local configuration context argument "localCfgCtx" and
+	the configuration context processing together the global one SYS->cfgCtx();
+    - DAQ.{LogicLev,ModBus,Siemens}: Some adapted for IOs copy.
+    - UI.{QTCfg,WebCfgD}: Expanded and allowed for the interstation copy.
+- FIX:DB.SQLite: Fixed for some warning messages in the building.
+- !!:UI.QTCfg: Appended in tracing the page changing for indication in the navigation tree.
+    FIX: Fixed for the text field processing - updating with the previous syntax highlight rules,
+	what causes the content visual corruption, and in the position restoring.
+- FIX:UI.WebCfgD: Fixed for the default target-group obtaining in itPaste(). Fixed for wrong call document.dlgWin.close().
+
+
 2020-04-26 Roman (stable)
 - !:FIX:LibsDB.vcaBase: Main.userManager: Expanded by generation the operator action messages.
     FIX:Main.anShow1: Fixed for f_start processing, replacing for EVAL checking.
@@ -15,7 +45,7 @@
     The templates implementation fixed in processing the links reconnections and
 	the functions lnkInit() and initLnks() appended the forced relinking flag instead "checkNoLink".
 - !!:Protocol.HTTP: Appended for the user API function setUser() to change the authenticated user.
-- !!!!:FIX: Fixed for the POST requests correct result code 204.
+- !!!!:FIX:WebVision: Fixed for the POST requests correct result code 204.
     !!!!: Appended for implementation the visualizer specific attribute "userSetVis".
 - UI.VCAEngine: The user last action time is initiated at the project session creation and connection.
 

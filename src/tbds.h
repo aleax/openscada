@@ -258,9 +258,9 @@ class TBDS : public TSubSYS, public TElem
 	void close( const string &bdn, bool del = false );
 
 	// Get Data from DB or config file. If <tbl> cleaned then load from config-file
-	bool dataSeek( const string &bdn, const string &path, int lev, TConfig &cfg, bool forceCfg = false, vector< vector<string> > *full = NULL );
-	bool dataGet( const string &bdn, const string &path, TConfig &cfg, bool forceCfg = false, bool noEx = false );
-	bool dataSet( const string &bdn, const string &path, TConfig &cfg, bool forceCfg = false, bool noEx = false );
+	bool dataSeek( const string &bdn, const string &path, int lev, TConfig &cfg, bool forceCfg = false, vector< vector<string> > *full = NULL, XMLNode *localCfgCtx = NULL );
+	bool dataGet( const string &bdn, const string &path, TConfig &cfg, bool forceCfg = false, bool noEx = false, XMLNode *localCfgCtx = NULL );
+	bool dataSet( const string &bdn, const string &path, TConfig &cfg, bool forceCfg = false, bool noEx = false, XMLNode *localCfgCtx = NULL );
 	bool dataDel( const string &bdn, const string &path, TConfig &cfg, bool useKeyAll = false, bool forceCfg = false, bool noEx = false );	//Next test for noEx=false
 
 	// Generic DB table

@@ -267,8 +267,8 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SSEC_ID,SEC_RD)) {
 	    vector<string> list;
 	    usrList(list);
-	    for(unsigned i_a=0; i_a < list.size(); i_a++)
-		opt->childAdd("el")->setText(list[i_a]);
+	    for(unsigned iA = 0; iA < list.size(); iA++)
+		opt->childAdd("el")->setText(list[iA]);
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SSEC_ID,SEC_WR))	opt->setText(usrAdd(opt->text()));
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SSEC_ID,SEC_WR))	usrDel(opt->text(), true);
@@ -277,8 +277,8 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SSEC_ID,SEC_RD)) {
 	    vector<string> list;
 	    grpList(list);
-	    for(unsigned i_a = 0; i_a < list.size(); i_a++)
-		opt->childAdd("el")->setText(list[i_a]);
+	    for(unsigned iA = 0; iA < list.size(); iA++)
+		opt->childAdd("el")->setText(list[iA]);
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SSEC_ID,SEC_WR))	opt->setText(grpAdd(opt->text()));
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SSEC_ID,SEC_WR))	grpDel(opt->text(), true);

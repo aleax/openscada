@@ -951,7 +951,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/log/log") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD)) {
 	    MtxAlloc res(mLogRes, true);
-	    for(unsigned iL = 0; iL < mLog.size(); iL++) {
+	    for(int iL = mLog.size()-1; iL >= 0; iL--) {
 		int off = 0;
 		int64_t itTm   = s2ll(TSYS::strLine(mLog[iL],0,&off));
 		string  itDscr = TSYS::strLine(mLog[iL], 0, &off);
@@ -1274,7 +1274,8 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	    MtxAlloc resN(reqRes(), true);
 	    int resp_len = messIO(req.data(), req.size(), buf, inBufSz);
 	    if(inBufSz) {
-		answ.assign(buf, resp_len);
+		if(req.size()) answ.assign(buf, resp_len);
+		else answ.append(buf, resp_len);
 
 		bool ToTmOut = (bool)s2i(TBDS::genDBGet(owner().nodePath()+"ToTmOut","0",opt->attr("user")));
 		while(ToTmOut && resp_len > 0 && ((TSYS::curTime()-stm)/1000000) < STD_INTERF_TM) {
@@ -1297,7 +1298,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/log/log") {
 	if(ctrChkNode(opt,"get",R_R___,"root",STR_ID,SEC_RD)) {
 	    MtxAlloc res(mLogRes, true);
-	    for(unsigned iL = 0; iL < mLog.size(); iL++) {
+	    for(int iL = mLog.size()-1; iL >= 0; iL--) {
 		int off = 0;
 		int64_t itTm   = s2ll(TSYS::strLine(mLog[iL],0,&off));
 		string  itDscr = TSYS::strLine(mLog[iL], 0, &off);
