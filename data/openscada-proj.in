@@ -29,7 +29,7 @@ if test "x$dData" = "x"; then dData=@datadir_full@; fi
 
 case "$1" in
   list)
-    if test ! -w $dPrj; then
+    if test -d $dPrjUser; then
 	echo "=== User projects ==="
 	for fit in `ls $dPrjUser`; do
 	    if test -d $dPrjUser/$fit && test -f $dPrjUser/$fit/oscada.xml; then echo "$fit"; fi

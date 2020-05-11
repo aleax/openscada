@@ -424,7 +424,7 @@ class TSYS : public TCntrNode
 		mDocDir,	// Icons directory
 		prjLockFile;	// Lock file of the project OpenSCADA
 
-	string	mWorkDB, mSelDB,// Work and selected DB
+	MtxString mWorkDB, mSelDB,// Work and selected DB
 		mMainCPUs;	// Main used processors set
 	int	mTaskInvPhs;	// Number of phases of the task invoking
 	bool	mSaveAtExit;	// Save at exit

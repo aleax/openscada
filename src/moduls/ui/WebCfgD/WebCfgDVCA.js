@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebCfgD file: VCA.js
 /***************************************************************************
- *   Copyright (C) 2008-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2008-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -178,7 +178,7 @@ function getXmlHttp( )
  * crDoc - Create new XML document object for      *
  *  various browsers.                              *
  ***************************************************/
-function crDoc()
+function crDoc( )
 {
     var doc;
     if(document.implementation && document.implementation.createDocument)
@@ -527,8 +527,9 @@ function pageDisplay( path )
  ***************************************************/
 function editToolUpdate( )
 {
-    actEnable('actCut', (selPath.length && parseInt(root.getAttribute('acs'))&SEC_WR));
-    actEnable('actCopy', selPath.length);
+    rootAccess = root.getAttribute('acs') ? parseInt(root.getAttribute('acs')) : 0;
+    actEnable('actCut', (selPath.length && (rootAccess&SEC_WR)));
+    actEnable('actCopy', (rootAccess>>3)?((rootAccess>>3)&SEC_WR):selPath.length);
     actEnable('actPaste', false);
 
     //Src and destination elements calc
@@ -544,7 +545,7 @@ function editToolUpdate( )
 		{ actEnable('actPaste',true); break; }
 	    break;
 	}
-    if(parseInt(root.getAttribute('acs'))&SEC_WR) actEnable('actPaste',true);
+    if(rootAccess&SEC_WR) actEnable('actPaste',true);
 }
 
 /***************************************************
@@ -2124,12 +2125,13 @@ function itPaste( )
 	if(rootW.childNodes[iCh].nodeName.toLowerCase() == 'branches' && rootW.childNodes[iCh].getAttribute('id') == 'br')
 	    branchS = rootW.childNodes[iCh];
     if(branchS)
-	for(var iB = 0; iB < branchS.childNodes.length; iB++, itCnt++)
+	for(var iB = 0; iB < branchS.childNodes.length; iB++)
 	    if(parseInt(branchS.childNodes[iB].getAttribute('acs'))&SEC_WR) {
 		var gbrId = branchS.childNodes[iB].getAttribute('id');
 		typeCfg += "<option idSz='" + branchS.childNodes[iB].getAttribute('idSz') + "' gid='" + gbrId + "'>" +
 				branchS.childNodes[iB].getAttribute('dscr') + "</option>";
 		if(sEl.substr(0,gbrId.length) == gbrId) { defIt = itCnt; bGrp = gbrId; }
+		itCnt++;
 	    }
 
     //Make a request dialog
@@ -2177,7 +2179,7 @@ function itPaste( )
 	}
 	// Copy visual item
 	var rez = servSet('/'+statNm+'/%2fobj','com=com',"<copy src='"+srcNm+"' dst='"+dstNm+"'/>", true);
-	if(!rez || parseInt(rez.getAttribute('rez')) != 0 ) { if(rez) alert(nodeText(rez)); document.dlgWin.close(); return false; }
+	if(!rez || parseInt(rez.getAttribute('rez')) != 0 ) { if(rez) alert(nodeText(rez)); document.body.dlgWin.close(); return false; }
 
 	// Remove source widget
 	if(copyBuf.charAt(0) == '1') {

@@ -355,7 +355,7 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     QMenu *mn_edit = menuBar()->addMenu(_("&Edit"));
     mn_edit->addAction(actItAdd);
     mn_edit->addAction(actItDel);
-    mn_edit->addSeparator( );
+    mn_edit->addSeparator();
     mn_edit->addAction(actItCopy);
     mn_edit->addAction(actItCut);
     mn_edit->addAction(actItPaste);
@@ -364,7 +364,7 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     mn_view->addAction(actUp);
     mn_view->addAction(actPrev);
     mn_view->addAction(actNext);
-    mn_view->addSeparator( );
+    mn_view->addSeparator();
     mn_view->addAction(actUpdate);
     mn_view->addAction(actStartUpd);
     mn_view->addAction(actStopUpd);
@@ -658,7 +658,7 @@ void ConfApp::itAdd( )
 
     //Check for already present node
     XMLNode req("get");
-    req.setAttr("path",selPath+"/%2fbr%2f"+TSYS::strSepParse(dlg.target( ),2,'\n'));
+    req.setAttr("path",selPath+"/%2fbr%2f"+TSYS::strSepParse(dlg.target(),2,'\n'));
     if(!cntrIfCmd(req))
 	for(unsigned i_lel = 0; i_lel < req.childSize(); i_lel++)
 	    if((req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->attr("id") == dlg.id().toStdString()) ||
@@ -671,7 +671,7 @@ void ConfApp::itAdd( )
     //Send create request
     req.clear()->
 	setName("add")->
-	setAttr("path",selPath+"/%2fbr%2f"+TSYS::strSepParse(dlg.target( ),2,'\n'));
+	setAttr("path",selPath+"/%2fbr%2f"+TSYS::strSepParse(dlg.target(),2,'\n'));
     if(s2i(TSYS::strSepParse(dlg.target(),1,'\n')))
 	req.setAttr("id",dlg.id().toStdString())->setText(dlg.name().toStdString());
     else req.setText(dlg.id().toStdString());
@@ -849,8 +849,9 @@ void ConfApp::itPaste( )
 
 void ConfApp::editToolUpdate( )
 {
-    actItCut->setEnabled(selPath.size() && root && s2i(root->attr("acs"))&SEC_WR);
-    actItCopy->setEnabled(selPath.size());
+    int rootAccess = root ? s2i(root->attr("acs")) : 0;
+    actItCut->setEnabled(selPath.size() && (rootAccess&SEC_WR));
+    actItCopy->setEnabled((rootAccess>>3)?((rootAccess>>3)&SEC_WR):selPath.size());
     actItPaste->setEnabled(false);
 
     if(TSYS::strParse(copyBuf,1,"\n").empty()) {
@@ -861,10 +862,10 @@ void ConfApp::editToolUpdate( )
 	for(int off = 0; !(tEl=TSYS::pathLev(copyBuf.substr(1),0,true,&off)).empty(); )
 	{ sElp += ("/"+sEl); sEl = tEl; }
 
-	if(s2i(root->attr("acs"))&SEC_WR) actItPaste->setEnabled(true);
+	if(rootAccess&SEC_WR) actItPaste->setEnabled(true);
     }
 
-    XMLNode *branch = root->childGet("id","br",true);
+    XMLNode *branch = root ? root->childGet("id", "br", true) : NULL;
     if(branch)
 	for(unsigned iB = 0; iB < branch->childSize(); iB++)
 	    if(s2i(branch->childGet(iB)->attr("acs"))&SEC_WR)
@@ -875,7 +876,7 @@ void ConfApp::treeUpdate( )
 {
     for(int i_t = 0; i_t < CtrTree->topLevelItemCount(); i_t++)
 	if(CtrTree->topLevelItem(i_t)->isExpanded())
-	    viewChildRecArea(CtrTree->topLevelItem(i_t),true);
+	    viewChildRecArea(CtrTree->topLevelItem(i_t), true);
 }
 
 void ConfApp::userSel( )
@@ -1713,17 +1714,20 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 
 	    // Fill Edit
 	    if(lab)	lab->setText((t_s.attr("dscr")+":").c_str());
-	    if(edit && !edit->isChanged() && rezReq >= 0) {
+	    string tVl;
+	    if(edit && !edit->isChanged() && rezReq >= 0 && ((tVl=getPrintVal(data_req.text())) != edit->text().toStdString() || !edit->text().size())) {
+		int scrollPos = edit->edit()->verticalScrollBar()->value();
 		//Requesting the syntax higlihgt
 		if(s2i(t_s.attr("SnthHgl"))) {
 		    XMLNode hgl_req("SnthHgl");
-		    hgl_req.setAttr("path",br_path);
+		    hgl_req.setAttr("path", br_path);
 		    if(!cntrIfCmd(hgl_req)) edit->setSnthHgl(hgl_req);
 		}
 
 		mod->setHelp(t_s.attr("help"), selPath+"/"+br_path, edit);
 
-		edit->setText(getPrintVal(data_req.text()).c_str());
+		edit->setText(tVl.c_str());
+		edit->edit()->verticalScrollBar()->setValue(scrollPos);
 	    }
 	}
 	//View Data-Time fields
@@ -2221,7 +2225,7 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 	    // Next node for update
 	    if(upTree && it->isExpanded()) viewChildRecArea(it,upTree);
 	}
-	//Delete no present
+	//Deleting not presented
 	for(int iIt = 0, iG = 0; upTree && iIt < i->childCount(); iIt++) {
 	    for(iG = 0; iG < grps.size(); iG++)
 		if(i->child(iIt)->text(2) == ("*"+TSYS::strSepParse(grps[iG].toStdString(),1,'\n')).c_str())

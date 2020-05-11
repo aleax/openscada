@@ -531,11 +531,9 @@ bool TextEdit::hasFocus( ) const	{ return edFld->hasFocus(); }
 void TextEdit::setText( const QString &text )
 {
     isInit = true;
-    if(text != edFld->toPlainText()) {
-	edFld->blockSignals(true);	//!!!!: Block for prevent the status bar update and crash here sometime
-	edFld->setPlainText(text);
-	edFld->blockSignals(false);
-    }
+    edFld->blockSignals(true);	//!!!!: Block to prevent the status bar update and crash here sometime
+    edFld->setPlainText(text);
+    edFld->blockSignals(false);
     edFld->document()->setModified(false);
     isInit = false;
     changed();
@@ -543,10 +541,8 @@ void TextEdit::setText( const QString &text )
 
 void TextEdit::setSnthHgl( XMLNode nd )
 {
-    int scrollPos = edFld->verticalScrollBar()->value();
     if(!sntHgl)	sntHgl = new SyntxHighl(edFld->document());
     sntHgl->setSnthHgl(nd);
-    edFld->verticalScrollBar()->setValue(scrollPos);
 }
 
 void TextEdit::setRowsCols( int w, int h )
