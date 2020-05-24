@@ -154,12 +154,11 @@ void Func::loadIO( )
 {
     if(startStat()) return;
     TConfig cfg(&mod->elFncIO());
-    vector<vector<string> > full;
 
     vector<string> u_pos;
     cfg.cfg("F_ID").setS(id(), TCfg::ForceUse);
     cfg.cfg("DEF").setExtVal(true);
-    for(int fldCnt = 0; SYS->db().at().dataSeek(owner().fullDB()+"_io",mod->nodePath()+owner().tbl()+"_io",fldCnt,cfg,false,&full); fldCnt++) {
+    for(int fldCnt = 0; SYS->db().at().dataSeek(owner().fullDB()+"_io",mod->nodePath()+owner().tbl()+"_io",fldCnt,cfg,false,true); fldCnt++) {
 	string sid = cfg.cfg("ID").getS();
 
 	//Position storing
@@ -225,12 +224,11 @@ void Func::saveIO( )
     }
 
     //Clear IO
-    vector<vector<string> > full;
     cfg.cfgViewAll(false);
-    for(int fldCnt = 0; SYS->db().at().dataSeek(io_bd,io_cfgpath,fldCnt++,cfg,false,&full); )
+    for(int fldCnt = 0; SYS->db().at().dataSeek(io_bd,io_cfgpath,fldCnt++,cfg); )
 	if(ioId(cfg.cfg("ID").getS()) < 0) {
 	    if(!SYS->db().at().dataDel(io_bd,io_cfgpath,cfg,true,false,true))	break;
-	    if(full.empty()) fldCnt--;
+	    fldCnt--;
 	}
 }
 

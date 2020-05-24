@@ -186,14 +186,12 @@ void Project::load_( TConfig *icfg )
     if(icfg) *(TConfig*)this = *icfg;
     else SYS->db().at().dataGet(DB()+"."+mod->prjTable(), mod->nodePath()+"PRJ/", *this);
 
-    vector<vector<string> > full;
-
     //Create new pages
     map<string, bool> itReg;
     TConfig cEl(&mod->elPage());
     //cEl.cfgViewAll(false);
     cEl.cfg("OWNER").setS("/"+id(), true);
-    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl()+"/",fldCnt++,cEl,false,&full); ) {
+    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl()+"/",fldCnt++,cEl,false,true); ) {
 	string fId = cEl.cfg("ID").getS();
 	if(!present(fId)) add(fId, "", "");
 	at(fId).at().load(&cEl);
@@ -216,7 +214,7 @@ void Project::load_( TConfig *icfg )
     TConfig cStl(&mod->elPrjStl());
     string svl;
     vector<string> vlst;
-    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB()+"_stl",nodePath()+tbl()+"_stl",fldCnt++,cStl,false,&full); ) {
+    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB()+"_stl",nodePath()+tbl()+"_stl",fldCnt++,cStl,false,true); ) {
 	vlst.clear();
 	for(int iS = 0; iS < 10; iS++) {
 	    svl = cStl.cfg(TSYS::strMess("V_%d",iS)).getS();
@@ -244,10 +242,9 @@ void Project::save_( )
 	    mimeDataSet(pls[iM], mimeType, mimeData, DB());
 	}
 	// Session's data copy
-	vector<vector<string> > full;
 	string wtbl = tbl()+"_ses";
 	TConfig cEl(&mod->elPrjSes());
-	for(int fldCnt = 0; SYS->db().at().dataSeek(mOldDB+"."+wtbl,"",fldCnt,cEl,false,&full); fldCnt++)
+	for(int fldCnt = 0; SYS->db().at().dataSeek(mOldDB+"."+wtbl,"",fldCnt,cEl,false,true); fldCnt++)
 	    SYS->db().at().dataSet(DB()+"."+wtbl,"",cEl);
     }
 
@@ -264,13 +261,12 @@ void Project::save_( )
     }
 
     // Checking for the removed properties
-    vector<vector<string> > full;
     res.request(true);
     cStl.cfgViewAll(false);
-    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB()+"_stl",nodePath()+tbl()+"_stl",fldCnt++,cStl,false,&full); ) {
+    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB()+"_stl",nodePath()+tbl()+"_stl",fldCnt++,cStl); ) {
 	if(mStProp.find(cStl.cfg("ID").getS()) == mStProp.end()) {
 	    if(!SYS->db().at().dataDel(fullDB()+"_stl",nodePath()+tbl()+"_stl",cStl,true,false,true))	break;
-	    if(full.empty()) fldCnt--;
+	    fldCnt--;
 	}
     }
 }
@@ -321,8 +317,7 @@ void Project::mimeDataList( vector<string> &list, const string &idb ) const
     cEl.cfgViewAll(false);
 
     list.clear();
-    vector<vector<string> > full;
-    for(int fldCnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,mod->nodePath()+wtbl,fldCnt,cEl,false,&full); fldCnt++)
+    for(int fldCnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,mod->nodePath()+wtbl,fldCnt,cEl,false,true); fldCnt++)
 	list.push_back(cEl.cfg("ID").getS());
 }
 
@@ -1128,11 +1123,10 @@ void Page::load_( TConfig *icfg )
 
     //Creating for new pages
     map<string, bool>	itReg;
-    vector<vector<string> > full;
     TConfig cEl(&mod->elPage());
     //cEl.cfgViewAll(false);
     cEl.cfg("OWNER").setS(ownerFullId()+"/"+id(), true);
-    for(int fldCnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fldCnt++,cEl,false,&full); ) {
+    for(int fldCnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fldCnt++,cEl,false,true); ) {
 	string fId = cEl.cfg("ID").getS();
 	if(!pagePresent(fId))
 	    try { pageAdd(fId, "", ""); }
@@ -1172,12 +1166,11 @@ void Page::loadIO( )
     //Load cotainer widgets
     if(!isContainer()) return;
     map<string, bool>   itReg;
-    vector<vector<string> > full;
     TConfig cEl(&mod->elInclWdg());
     string db  = ownerProj()->DB();
     string tbl = ownerProj()->tbl()+"_incl";
     cEl.cfg("IDW").setS(path(), true);
-    for(int fldCnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fldCnt++,cEl,false,&full); ) {
+    for(int fldCnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fldCnt++,cEl); ) {
 	string sid  = cEl.cfg("ID").getS();
 	string spar = cEl.cfg("PARENT").getS();
 
@@ -1190,13 +1183,13 @@ void Page::loadIO( )
 	else if(mod->nodeAt(spar,0,0,0,true).freeStat() && sid.size() < spar.size() && spar.compare(spar.size()-sid.size(),sid.size(),sid) == 0) {
 	    if(wdgPresent(sid)) wdgDel(sid);
 	    SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, cEl, true);
-	    if(full.empty()) fldCnt--;
+	    fldCnt--;
 	    continue;
 	}
 	// Record without any changes
 	else if(!cEl.cfg("ATTRS").getS().size()) {
 	    SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, cEl, true);
-	    if(full.empty()) fldCnt--;
+	    fldCnt--;
 	}
 	if(!wdgPresent(sid))
 	    try{ wdgAdd(sid, "", ""); }

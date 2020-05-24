@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.UserProtocol file: user_prt.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2010-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,7 +33,7 @@
 #define MOD_NAME	_("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.2.0"
+#define MOD_VER		"1.3.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user protocols on an internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -120,13 +120,12 @@ void TProt::load_( )
 	//gCfg.cfgViewAll(false);
 	vector<string> itLs;
 	map<string, bool> itReg;
-	vector<vector<string> > full;
 
 	//  Search into DB
 	SYS->db().at().dbList(itLs, true);
 	itLs.push_back(DB_CFG);
 	for(unsigned iDB = 0; iDB < itLs.size(); iDB++)
-	    for(unsigned fldCnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+modId()+"_uPrt",nodePath()+modId()+"_uPrt",fldCnt++,gCfg,false,&full); ) {
+	    for(unsigned fldCnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+modId()+"_uPrt",nodePath()+modId()+"_uPrt",fldCnt++,gCfg,false,true); ) {
 		string id = gCfg.cfg("ID").getS();
 		if(!uPrtPresent(id)) uPrtAdd(id,(itLs[iDB]==SYS->workDB())?"*.*":itLs[iDB]);
 		uPrtAt(id).at().load(&gCfg);
@@ -456,12 +455,11 @@ void UserPrt::loadIO( )
     ResAlloc res(inCfgRes, false);
     if(func() && DAQTmpl().size()) {
 	//Load IO
-	vector<vector<string> > full;
 	vector<string> u_pos;
 	TConfig cf(&owner().uPrtIOEl());
 	cf.cfg("UPRT_ID").setS(id(), TCfg::ForceUse);
 	cf.cfg("VALUE").setExtVal(true);
-	for(int ioCnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",ioCnt++,cf,false,&full); ) {
+	for(int ioCnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",ioCnt++,cf,false,true); ) {
 	    string sid = cf.cfg("ID").getS();
 	    int iid = func()->ioId(sid);
 	    if(iid < 0)	continue;
@@ -499,13 +497,12 @@ void UserPrt::saveIO( )
 	}
 
 	//Clear IO
-	vector<vector<string> > full;
 	cf.cfgViewAll(false);
-	for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",fldCnt++,cf,false,&full); ) {
+	for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",fldCnt++,cf); ) {
 	    string sio = cf.cfg("ID").getS();
 	    if(func()->ioId(sio) < 0) {
 		if(!SYS->db().at().dataDel(fullDB()+"_io",owner().nodePath()+tbl()+"_io",cf,true,false,true)) break;
-		if(full.empty()) fldCnt--;
+		fldCnt--;
 	    }
 	}
     }

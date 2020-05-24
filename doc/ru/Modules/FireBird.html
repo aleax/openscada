@@ -31,7 +31,7 @@
 <td> <a href="../Modules/FireBird.html" title="Special:MyLanguage/Modules/FireBird">FireBird</a> </td>
 <td> БД FireBird
 </td>
-<td> 2.3 </td>
+<td> 2.5 </td>
 <td> GPL2 </td>
 <td> bd_FireBird.so </td>
 <td> en,uk,ru,de </td>
@@ -41,6 +41,8 @@
 <td> Роман Савоченко </td>
 <td> Модуль БД. Предоставляет поддержку СУБД FireBird.
 </td></tr></table>
+<p>Модуль предоставляет в OpenSCADA поддержку СУБД FireBird, и InterBase, которая является небольшой и встраиваемой СУБД с функциями сетевой и поддержкой SQL-запросов. FireBird построена на основе коммерческой СУБД Interbase и она распространяется по свободной лицензии. Ознакомиться с СУБД можно на сайте <a class="external free" href="http://www.firebirdsql.org" rel="nofollow noreferrer noopener" target="_blank">http://www.firebirdsql.org</a>. Модуль основан на библиотеке API производителя СУБД на языке "С" и он позволяет выполнять действия над базами данных, таблицами и содержимым таблиц.
+</p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#.D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D0.B8.D0.B8_.D0.BD.D0.B0.D0.B4_.D0.91.D0.94"><span class="tocnumber">1</span> <span class="toctext">Операции над БД</span></a></li>
@@ -52,8 +54,6 @@
 </ul>
 </div>
 
-<p>Модуль предоставляет в OpenSCADA поддержку СУБД FireBird, и InterBase, которая является небольшой и встраиваемой СУБД с функциями сетевой и поддержкой SQL-запросов. FireBird построена на основе коммерческой СУБД Interbase и она распространяется по свободной лицензии. Ознакомиться с СУБД можно на сайте <a class="external free" href="http://www.firebirdsql.org" rel="nofollow noreferrer noopener" target="_blank">http://www.firebirdsql.org</a>. Модуль основан на библиотеке API производителя СУБД на языке "С" и он позволяет выполнять действия над базами данных, таблицами и содержимым таблиц.
-</p>
 <h2><span class="mw-headline" id=".D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D0.B8.D0.B8_.D0.BD.D0.B0.D0.B4_.D0.91.D0.94"><span class="mw-headline-number">1</span> Операции над БД</span></h2>
 <p>Поддерживаются операции открытия и закрытия БД, с возможностью создания новой БД при открытии и удаления существующей при закрытии. В терминах подсистемы "БД" OpenSCADA, открытием БД является её регистрация для последующего использования программой. Также, поддерживается операция запроса перечня таблиц в БД.
 </p><p>СУБД FireBird адресуется путём указания имени файла БД, пользователя и пароля. В общем адрес БД записывается таким образом: <b>{file};{user};{pass}[;{conTm}]</b>. Где:

@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB PostgreSQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.4.1"
+#define MOD_VER		"2.5.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2010-2011)")
 #define DESCRIPTION	_("DB module. Provides support of the DBMS PostgreSQL.")
 #define MOD_LICENSE	"GPL2"
@@ -531,11 +531,8 @@ void MTable::fieldStruct( TConfig &cfg )
     }
 }
 
-bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
+bool MTable::fieldSeek( int row, TConfig &cfg, const string &cacheKey )
 {
-    vector< vector<string> >	inTbl,
-				&tbl = full ? *full : inTbl;
-
     if(tblStrct.empty()) throw err_sys(_("Table is empty!"));
     mLstUse = SYS->sysTm();
 
@@ -580,27 +577,34 @@ bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
 	}
     }
 
+    vector< vector<string> >	inTbl, *tbl = &inTbl;
+    MtxAlloc res(owner().connRes);
+    if(cacheKey.size()) { res.lock(); tbl = &seekSess[cacheKey]; }
+
     //Request
-    if(!full || !full->size() || (row%SEEK_PRELOAD_LIM) == 0) {
+    if(!cacheKey.size() || !tbl->size() || (row%SEEK_PRELOAD_LIM) == 0) {
 	if(first_sel) return false;
 	string req = "SELECT "+req_sel+" FROM \""+TSYS::strEncode(name(),TSYS::SQL,"\"")+"\" "+(next?req_where:"")+" ORDER BY "+req_sel;
-	if(!full) req += " LIMIT 1 OFFSET " + i2s(row);
+	if(!cacheKey.size()) req += " LIMIT 1 OFFSET " + i2s(row);
 	else req += " LIMIT " + i2s(SEEK_PRELOAD_LIM) +" OFFSET "+i2s((row/SEEK_PRELOAD_LIM)*SEEK_PRELOAD_LIM);
 
-	tbl.clear();
-	owner().sqlReq(req, &tbl, false);
+	tbl->clear();
+	owner().sqlReq(req, tbl, false);
     }
 
-    row = full ? (row%SEEK_PRELOAD_LIM)+1 : 1;
-    if(tbl.size() < 2 || (full && row >= (int)tbl.size())) return false;
+    row = cacheKey.size() ? (row%SEEK_PRELOAD_LIM)+1 : 1;
+    if(tbl->size() < 2 || (cacheKey.size() && row >= (int)tbl->size())) {
+	if(cacheKey.size()) seekSess.erase(cacheKey);
+	return false;
+    }
 
     //Processing of the query
-    for(unsigned iFld = 0; iFld < tbl[0].size(); iFld++) {
-	sid = tbl[0][iFld];
+    for(unsigned iFld = 0; iFld < (*tbl)[0].size(); iFld++) {
+	sid = (*tbl)[0][iFld];
 	TCfg *u_cfg = cfg.at(sid, true);
-	if(u_cfg) setVal(*u_cfg, tbl[row][iFld]);
-	else if(trPresent && sid.compare(0,3,Mess->lang2Code()+"#") == 0 && tbl[row][iFld].size() && (u_cfg=cfg.at(sid.substr(3),true)))
-	    setVal(*u_cfg, tbl[row][iFld], true);
+	if(u_cfg) setVal(*u_cfg, (*tbl)[row][iFld]);
+	else if(trPresent && sid.compare(0,3,Mess->lang2Code()+"#") == 0 && (*tbl)[row][iFld].size() && (u_cfg=cfg.at(sid.substr(3),true)))
+	    setVal(*u_cfg, (*tbl)[row][iFld], true);
     }
 
     return true;
@@ -612,6 +616,7 @@ void MTable::fieldGet( TConfig &cfg )
 
     if(tblStrct.empty()) throw err_sys(_("Table is empty!"));
     mLstUse = SYS->sysTm();
+
     string sid;
     //Prepare request
     string req = "SELECT ";

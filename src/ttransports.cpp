@@ -103,7 +103,6 @@ void TTransportS::load_( )
     //Load DB
     string id, type;
     map<string, bool>	itReg;
-    vector<vector<string> > full;
     // Search and create new input transports
     try {
 	TConfig c_el(&elIn);
@@ -114,7 +113,7 @@ void TTransportS::load_( )
 	SYS->db().at().dbList(itLs, true);
 	itLs.push_back(DB_CFG);
 	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(itLs[iIt]+"."+subId()+"_in",nodePath()+subId()+"_in",fld_cnt++,c_el,false,&full); ) {
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek(itLs[iIt]+"."+subId()+"_in",nodePath()+subId()+"_in",fld_cnt++,c_el,false,true); ) {
 		id   = c_el.cfg("ID").getS();
 		type = c_el.cfg("MODULE").getS();
 		if(!modPresent(type))	continue;
@@ -151,7 +150,7 @@ void TTransportS::load_( )
 	SYS->db().at().dbList(itLs, true);
 	itLs.push_back(DB_CFG);
 	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(itLs[iIt]+"."+subId()+"_out",nodePath()+subId()+"_out",fld_cnt++,c_el,false,&full); ) {
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek(itLs[iIt]+"."+subId()+"_out",nodePath()+subId()+"_out",fld_cnt++,c_el,false,true); ) {
 		id = c_el.cfg("ID").getS();
 		type = c_el.cfg("MODULE").getS();
 		if(!modPresent(type))	continue;
@@ -180,7 +179,7 @@ void TTransportS::load_( )
     // Load external hosts
     try {
 	TConfig c_el(&elExt);
-	for(int fld_cnt = 0; SYS->db().at().dataSeek(extHostsDB(),nodePath()+"ExtTansp",fld_cnt++,c_el,true,&full); ) {
+	for(int fld_cnt = 0; SYS->db().at().dataSeek(extHostsDB(),nodePath()+"ExtTansp",fld_cnt++,c_el,true,true); ) {
 	    ExtHost host("", "");
 	    host.userOpen	= c_el.cfg("OP_USER").getS();
 	    host.id		= c_el.cfg("ID").getS();
@@ -692,7 +691,7 @@ void TTransportIn::preEnable( int flag )
 void TTransportIn::postDisable( int flag )
 {
     try { stop(); } catch(...){ }		//Stop at any disabling
-    if(flag) SYS->db().at().dataDel(fullDB(),SYS->transport().at().nodePath()+tbl(),*this,true);
+    if(flag) SYS->db().at().dataDel(fullDB(), SYS->transport().at().nodePath()+tbl(), *this, true);
 }
 
 bool TTransportIn::cfgChange( TCfg &co, const TVariant &pc )

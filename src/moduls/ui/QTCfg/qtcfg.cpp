@@ -2003,6 +2003,7 @@ void ConfApp::pageDisplay( const string path )
 	    CtrTree->blockSignals(true);
 	    CtrTree->setCurrentItem(tIt);
 	    CtrTree->blockSignals(false);
+	    CtrTree->scrollToItem(tIt);
 	}
 
 	// Stop the refreshing
@@ -2344,21 +2345,25 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 
 QTreeWidgetItem *ConfApp::getExpandTreeWIt( const string &path )
 {
-    string sit, pathAdd;
+    string sit, pathAdd, grp;
     QTreeWidgetItem *curIt = NULL;
-    for(int off = 0; (sit=TSYS::pathLev(path,0,true,&off)).size(); ) {
-	pathAdd += "/" + sit;
-	bool isOK = false;
+    for(int off = 0, lev = 0; (sit=TSYS::pathLev(path,0,true,&off)).size(); lev++) {
+	bool isOK = false, isGrpOK = false;
 	if(curIt && !curIt->isExpanded()) curIt->setExpanded(true);
 	for(int iIt = 0; iIt < (curIt?curIt->childCount():CtrTree->topLevelItemCount()); iIt++) {
-	    QTreeWidgetItem *tit = curIt ? curIt->child(iIt): CtrTree->topLevelItem(iIt);
-	    if(tit->text(2)[0] == '*' && sit.find(tit->text(2).toStdString().substr(1)) == 0) {
-		curIt = tit; iIt = -1;
+	    QTreeWidgetItem *tit = curIt ? curIt->child(iIt) : CtrTree->topLevelItem(iIt);
+	    if(tit->text(2)[0] == '*' && ((isGrpOK=sit.find(tit->text(2).toStdString().substr(1)) == 0) || (iIt+1) >= curIt->childCount())) {
+		curIt = isGrpOK ? tit : curIt->child(0); iIt = -1;
 		if(!curIt->isExpanded()) curIt->setExpanded(true);
 	    }
-	    else if(tit->text(2)[0] != '*' && pathAdd == tit->text(2).toStdString())
-	    { curIt = tit; isOK = true; break; }
+	    else if(tit->text(2)[0] != '*') {
+		if((pathAdd+"/"+sit) == tit->text(2).toStdString()) { curIt = tit; isOK = true; break; }
+		grp = TSYS::strParse(TSYS::pathLev(tit->text(2).toStdString(),lev,true), 0, "_");
+		if(sit.find(grp+"_") != 0 && (pathAdd+"/"+grp+"_"+sit) == tit->text(2).toStdString())
+		{ sit = grp+"_"+sit; curIt = tit; isOK = true; break; }
+	    }
 	}
+	pathAdd += "/" + sit;
 	if(!isOK) return NULL;
     }
 

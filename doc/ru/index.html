@@ -45,12 +45,13 @@
 <h3><span class="mw-headline" id=".D0.9F.D0.BE.D0.BB.D0.B8.D1.82.D0.B8.D0.BA.D0.B0_.28.D0.BD.D0.B0.D1.87.D0.B8.D0.BD.D0.B0.D1.8F_.D1.81_0.8.29"><span class="mw-headline-number">1.1</span> Политика (начиная с 0.8)</span></h3>
 <p>OpenSCADA версии формируются в двух ветвях:
 </p>
-<ul><li> <b>Рабочая</b>: разрабатываемая-рабочая версия с ночными сборками для некоторого списка Linux дистрибутивов, и прямо определённых подпиской на поддержку.</li></ul>
+<ul><li> <b>Рабочая</b>: разрабатываемая-рабочая версия с ночными сборками для некоторого списка Linux дистрибутивов, и прямо определённых подпиской на поддержку — <a class="external text" href="http://oscada.org/ru/uslugi/tekh-podderzhka/" rel="nofollow noreferrer noopener" target="_blank">актуальным пакетом технической поддержки</a>.</li></ul>
 <dl><dd><b>1+rNNNN</b>, где "NNNN" — <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/" rel="nofollow noreferrer noopener" target="_blank">SVN (SubVersion) номер ревизии</a>.</dd></dl>
-<ul><li> <b>LTS</b> (Продолжительная Поддержка): формальный и публичный выпуск последней "Рабочей" версии с поддержкой непосредственно до следующей итерации: "Рабочая" -&gt; "LTS" (нулевой уровень обновления), "Рабочая"++.</li></ul>
+<ul><li> <b>LTS</b> (Продолжительная Поддержка): формальный выпуск последней "Рабочей" версии с поддержкой непосредственно до следующей итерации: "Рабочая" -&gt; "LTS" (нулевой уровень обновления), "Рабочая"++.</li></ul>
 <dl><dd><b>0.9.U.S</b>, где:
-<dl><dd>"U" — номер регулярного обновления, 2-4 месяца. После периода регулярного обновления, из "Рабочей" версии в "LTS" будут перенесены все исправления и усовершенствования, также те, которые несколько ломают совместимость API, но не ломают совместимость по функциям и данным, и U++.</dd>
-<dd>"S" (<span style="color: red;">не реализовано ещё</span>) — номер сервисного обновления. Для любых горячих исправлений, автоматически или вручную (в специальных случаях), будет собрана версия сервисного обновления (S++) которая предназначена только пользователям, подписанным на официальную поддержку.</dd></dl></dd></dl>
+<dl><dd>"U" — номер регулярного обновления (2-4 месяца); с очередным регулярным обновлением из "Рабочей" версии в "LTS" переносятся все исправления и усовершенствования, также которые несколько нарушают совместимость API, но не нарушают совместимости по функциям и данным; и U++;</dd>
+<dd>"S" — номер сервисного обновления; для любых критических исправлений, автоматически или вручную (в специальных случаях), создаётся сервисное обновление (S++),
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> которое предназначено только пользователям, подписанным на официальную поддержку — <a class="external text" href="http://oscada.org/ru/uslugi/tekh-podderzhka/" rel="nofollow noreferrer noopener" target="_blank">приобретено актуальный пакет технической поддержки</a>.</dd></dl></dd></dl></dd></dl>
 <h2><span class="mw-headline" id=".D0.94.D0.BE.D0.BA.D1.83.D0.BC.D0.B5.D0.BD.D1.82.D1.8B_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8F"><span class="mw-headline-number">2</span> Документы пользователя</span></h2>
 <ul><li> <a href="About.html" title="Special:MyLanguage/About">Про OpenSCADA</a></li>
 <li> <a href="Terms.html" title="Special:MyLanguage/Documents/Terms">Термины и сокращения</a></li>
@@ -88,7 +89,7 @@
 <td> <a href="Modules/SQLite.html" title="Special:MyLanguage/Modules/SQLite">SQLite</a> </td>
 <td> БД SQLite
 </td>
-<td> 2.8 </td>
+<td> 3.0 </td>
 <td> GPL2 </td>
 <td> bd_SQLite.so </td>
 <td> en,uk,ru,de </td>
@@ -99,7 +100,7 @@
 <td> <a href="Modules/MySQL.html" title="Special:MyLanguage/Modules/MySQL">MySQL</a> </td>
 <td> БД MySQL
 </td>
-<td> 3.3 </td>
+<td> 3.5 </td>
 <td> GPL2 </td>
 <td> bd_MySQL.so </td>
 <td> en,uk,ru,de </td>
@@ -110,7 +111,7 @@
 <td> <a href="Modules/PostgreSQL.html" title="Special:MyLanguage/Modules/PostgreSQL">PostgreSQL</a> </td>
 <td> БД PostgreSQL
 </td>
-<td> 2.4 </td>
+<td> 2.5 </td>
 <td> GPL2 </td>
 <td> bd_PostgreSQL.so </td>
 <td> en,uk,ru,de </td>
@@ -121,7 +122,7 @@
 <td> <a href="Modules/FireBird.html" title="Special:MyLanguage/Modules/FireBird">FireBird</a> </td>
 <td> БД FireBird
 </td>
-<td> 2.3 </td>
+<td> 2.5 </td>
 <td> GPL2 </td>
 <td> bd_FireBird.so </td>
 <td> en,uk,ru,de </td>
@@ -132,7 +133,7 @@
 <td> <a href="Modules/DBF.html" title="Special:MyLanguage/Modules/DBF">DBF</a> </td>
 <td> БД DBF
 </td>
-<td> 2.2 </td>
+<td> 2.4 </td>
 <td> GPL2 </td>
 <td> bd_DBF.so </td>
 <td> en,uk,ru,de </td>
@@ -153,7 +154,7 @@
 <td> <a href="Modules/LDAP.html" title="Special:MyLanguage/Modules/LDAP">LDAP</a> </td>
 <td> Директория по LDAP
 </td>
-<td> 0.5 </td>
+<td> 0.6 </td>
 <td> GPL2 </td>
 <td> bd_LDAP.so </td>
 <td> en,uk,ru,de </td>
@@ -214,7 +215,7 @@
 <td> <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> </td>
 <td> ModBus
 </td>
-<td> 2.2 </td>
+<td> 2.3 </td>
 <td> GPL2 </td>
 <td> daq_ModBus.so </td>
 <td> en,uk,ru,de </td>
@@ -225,7 +226,7 @@
 <td> <a href="Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC_UA</a> </td>
 <td> Сервер OPC-UA
 </td>
-<td> 1.8 </td>
+<td> 1.9 </td>
 <td> GPL2 </td>
 <td> daq_OPC_UA.so </td>
 <td> en,uk,ru,de </td>
@@ -236,7 +237,7 @@
 <td> <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">UserProtocol</a> </td>
 <td> Пользовательский протокол
 </td>
-<td> 1.2 </td>
+<td> 1.3 </td>
 <td> GPL2 </td>
 <td> prot_UserProtocol.so </td>
 <td> en,uk,ru,de </td>
@@ -247,7 +248,7 @@
 <td> <a href="Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">HTTP</a> </td>
 <td> HTTP-реализация
 </td>
-<td> 3.4 </td>
+<td> 3.5 </td>
 <td> GPL2 </td>
 <td> prot_HTTP.so </td>
 <td> en,uk,ru,de </td>
@@ -261,7 +262,7 @@
 <td> <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a> </td>
 <td> Вычислитель на Java-подобном языке.
 </td>
-<td> 4.3 </td>
+<td> 4.4 </td>
 <td> GPL2 </td>
 <td> daq_JavaLikeCalc.so </td>
 <td> en,uk,ru,de </td>
@@ -272,7 +273,7 @@
 <td> <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">LogicLev</a> </td>
 <td> Логический уровень
 </td>
-<td> 2.2 </td>
+<td> 2.3 </td>
 <td> GPL2 </td>
 <td> daq_LogicLev.so </td>
 <td> en,uk,ru,de </td>
@@ -283,7 +284,7 @@
 <td> <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">BlockCalc</a> </td>
 <td> Блочный вычислитель
 </td>
-<td> 1.9 </td>
+<td> 1.10 </td>
 <td> GPL2 </td>
 <td> daq_BlockCalc.so </td>
 <td> en,uk,ru,de </td>
@@ -482,7 +483,7 @@
 <td> <a href="Modules/FSArch.html" title="Special:MyLanguage/Modules/FSArch">FSArch</a> </td>
 <td> Архиватор на файловую систему
 </td>
-<td> 3.4 </td>
+<td> 3.5 </td>
 <td> GPL2 </td>
 <td> arh_FSArch.so </td>
 <td> en,uk,ru,de </td>
@@ -493,7 +494,7 @@
 <td> <a href="Modules/DBArch.html" title="Special:MyLanguage/Modules/DBArch">DBArch</a> </td>
 <td> Архиватор на БД
 </td>
-<td> 2.8 </td>
+<td> 2.9 </td>
 <td> GPL2 </td>
 <td> arh_DBArch.so </td>
 <td> en,uk,ru,de </td>
@@ -507,7 +508,7 @@
 <td> <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
 <td> Движок Среды Визуализации и Управления
 </td>
-<td> 6.1 </td>
+<td> 6.2 </td>
 <td> GPL2 </td>
 <td> ui_VCAEngine.so </td>
 <td> en,uk,ru,de </td>
@@ -583,7 +584,7 @@
 <td> <a href="Modules/WebUser.html" title="Special:MyLanguage/Modules/WebUser">WebUser</a> </td>
 <td> WWW-страница пользователя
 </td>
-<td> 1.1 </td>
+<td> 1.2 </td>
 <td> GPL2 </td>
 <td> ui_WebUser.so </td>
 <td> en,uk,ru,de </td>
@@ -608,7 +609,7 @@
 <td> <a href="Modules/SystemTests.html" title="Special:MyLanguage/Modules/SystemTests">SystemTests</a> </td>
 <td> Тесты OpenSCADA и её модулей
 </td>
-<td> 1.7 </td>
+<td> 1.8 </td>
 <td> GPL2 </td>
 <td> spec_SystemTests.so </td>
 <td> en,uk,ru,de </td>

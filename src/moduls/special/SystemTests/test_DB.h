@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.SystemTests file: test_DB.h
 /***************************************************************************
- *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -176,9 +176,8 @@ class TestDB : public TFunction
 		//Seek in preload all records
 		mod->mess(id(), _("Seek records in preload."));
 		ctime = TSYS::curTime();
-		vector< vector<string> > full;
 		pos = 0;
-		while(tbl.at().fieldSeek(pos,bd_cfg,&full)) pos++;
+		while(tbl.at().fieldSeek(pos,bd_cfg,TSYS::addr2str(&bd_cfg))) pos++;
 		bd_cfg.cfg("name").setKeyUse(true);
 		mod->mess(id(), _("Sought %d records in preload for time %f sec."), pos, 1e-6*(TSYS::curTime()-ctime));
 

@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.FireBird file: firebird.h
 /***************************************************************************
- *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -49,7 +49,7 @@ class MTable : public TTable
 
 	// Field's operations
 	void fieldStruct( TConfig &cfg );
-	bool fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full = NULL );
+	bool fieldSeek( int row, TConfig &cfg, const string &cacheKey = "" );
 	void fieldGet( TConfig &cfg );
 	void fieldSet( TConfig &cfg );
 	void fieldDel( TConfig &cfg );
@@ -67,6 +67,7 @@ class MTable : public TTable
 
 	//Private attributes
 	vector< vector<string> > tblStrct;
+	map<string, vector< vector<string> > >	seekSess;
 };
 
 //************************************************

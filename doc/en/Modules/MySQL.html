@@ -31,7 +31,7 @@
 <td> <a href="../Modules/MySQL.html" title="Special:MyLanguage/Modules/MySQL">MySQL</a> </td>
 <td> DB MySQL
 </td>
-<td> 3.3 </td>
+<td> 3.5 </td>
 <td> GPL2 </td>
 <td> bd_MySQL.so </td>
 <td> en,uk,ru,de </td>
@@ -41,6 +41,8 @@
 <td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2009) — the page initial translation</i></font> </td>
 <td> DB module. Provides support of the DBMS MySQL.
 </td></tr></table>
+<p>The module gives to OpenSCADA support of the DBMS MySQL, which is a powerful multi-platform database management system available for a free license. Manufacturer of <a class="external text" href="http://www.mysql.com" rel="nofollow noreferrer noopener" target="_blank">DBMS MySQL</a> currently is <a class="external text" href="http://oracle.com" rel="nofollow noreferrer noopener" target="_blank">the Oracle corporation</a>. Fully free implementing of MySQL is the project <a class="external text" href="http://mariadb.org" rel="nofollow noreferrer noopener" target="_blank">MariaDB</a>. The module is based on the library with API of DBMS MySQL on the language "C". The module allows you to perform operations over databases, tables and contents of tables.
+</p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#Operations_over_the_database"><span class="tocnumber">1</span> <span class="toctext">Operations over the database</span></a></li>
@@ -51,8 +53,6 @@
 </ul>
 </div>
 
-<p>The module gives to OpenSCADA support of the DBMS MySQL, which is a powerful multi-platform database management system available for a free license. Manufacturer of <a class="external text" href="http://www.mysql.com" rel="nofollow noreferrer noopener" target="_blank">DBMS MySQL</a> currently is <a class="external text" href="http://oracle.com" rel="nofollow noreferrer noopener" target="_blank">the Oracle corporation</a>. Fully free implementing of MySQL is the project <a class="external text" href="http://mariadb.org" rel="nofollow noreferrer noopener" target="_blank">MariaDB</a>. The module is based on the library with API of DBMS MySQL on the language "C". The module allows you to perform operations over databases, tables and contents of tables.
-</p>
 <h2><span class="mw-headline" id="Operations_over_the_database"><span class="mw-headline-number">1</span> Operations over the database</span></h2>
 <p>The operations of opening and closing of the database is supported, with the possibility of creating a new database when you open and delete existing at the close. In terms of the subsystem "DB" of OpenSCADA, opening of DB is its registration for further using of the program. It also supports the operation of requesting the list of tables in the database.
 </p><p>DBMS MySQL addresses by a string of the following type: "<b>{host};{user};{pass};{db};{port}[;{u_sock}[;{charset-collation-engine}[;{tms}]]]</b>". Where:

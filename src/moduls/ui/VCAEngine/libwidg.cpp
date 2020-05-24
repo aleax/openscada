@@ -177,10 +177,9 @@ void WidgetLib::load_( TConfig *icfg )
 
     //Create new widgets
     map<string, bool>	itReg;
-    vector<vector<string> > full;
     TConfig cEl(&mod->elWdg());
     //cEl.cfgViewAll(false);
-    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl(),fldCnt++,cEl,false,&full); ) {
+    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl(),fldCnt++,cEl,false,true); ) {
 	string fId = cEl.cfg("ID").getS();
 	if(!present(fId)) { add(fId, "", ""); at(fId).at().setEnableByNeed(); }
 	at(fId).at().load(&cEl);
@@ -250,8 +249,7 @@ void WidgetLib::mimeDataList( vector<string> &list, const string &idb ) const
     cEl.cfgViewAll(false);
 
     list.clear();
-    vector<vector<string> > full;
-    for(int fldCnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,mod->nodePath()+wtbl,fldCnt,cEl,false,&full); fldCnt++)
+    for(int fldCnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,mod->nodePath()+wtbl,fldCnt,cEl,false,true); fldCnt++)
 	list.push_back(cEl.cfg("ID").getS());
 }
 
@@ -697,12 +695,11 @@ void LWidget::loadIO( )
     //Load cotainer widgets
     if(!isContainer()) return;
     map<string, bool>   itReg;
-    vector<vector<string> > full;
     TConfig cEl(&mod->elInclWdg());
     string db  = ownerLib().DB();
     string tbl = ownerLib().tbl()+"_incl";
     cEl.cfg("IDW").setS(id(),true);
-    for(int fldCnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fldCnt++,cEl,false,&full); ) {
+    for(int fldCnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fldCnt++,cEl,false,true); ) {
 	string sid  = cEl.cfg("ID").getS();
 	if(cEl.cfg("PARENT").getS() == "<deleted>") {
 	    if(wdgPresent(sid))	wdgDel(sid);

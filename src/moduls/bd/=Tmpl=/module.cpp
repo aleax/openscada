@@ -260,7 +260,7 @@ void MTable::fieldStruct( TConfig &cfg )
 }
 
 //!!! Processing virtual functions for seeking, getting, setting and deleting a field
-bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
+bool MTable::fieldSeek( int row, TConfig &cfg, const string &cacheKey )
 {
     //!!! Check the syntax of the request's, it may differ in your database
     vector< vector<string> > tbl;

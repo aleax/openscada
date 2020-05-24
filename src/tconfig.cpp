@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tconfig.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -293,7 +293,8 @@ bool TCfg::isKey( ) const	{ return owner().reqKeys() ? reqKey() : fld().flg()&TC
 
 void TCfg::setReqKey( bool vl )
 {
-    mReqKey = mKeyUse = vl;
+    mReqKey = vl;
+    if(vl) mKeyUse = vl;	//!!!! But do not clean up at FALSE
     mOwner.reqKeysUpdate();
 }
 

@@ -15,7 +15,7 @@
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Автор:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a><br />&nbsp;&nbsp;<font size="-2"><i>Максим Лысенко (2010-2012)</i></font></li>
 <li> <b>Видео-дополнения:</b>
-<ul><li> <a class="external text" href="http://ftp.oscada.org/OpenSCADA/0.8.0/doc/ru/QuickStart.mkv" rel="nofollow noreferrer noopener" target="_blank">Официальное дополнение OpenSCADA 0.8.0 LTS (застарелое)</a>, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>, 2012</li>
+<ul><li> <a class="external text" href="http://ftp.oscada.org/OpenSCADA/0.8.0/doc/ru/QuickStart.mkv" rel="nofollow noreferrer noopener" target="_blank">Официальное дополнение OpenSCADA 0.8.0 LTS (устарелое)</a>, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>, 2012</li>
 <li> <a class="external text" href="https://www.youtube.com/playlist?list=PLIE6cVnMQoAkVccU9mGMIPNYVVug-LVau" rel="nofollow noreferrer noopener" target="_blank">Видео "Как сделать" от Сергея Карпеша</a>, Сергей Карпеш, 2018</li></ul></li></ul>
 </div>
 <p>OpenSCADA является предельно модульной, гибкой и многофункциональной SCADA-системой. Как следствие, первое знакомство с OpenSCADA может быть достаточно сложным, по причине малых шансов совпадения предыдущего опыта пользователя, или полного его отсутствия, с подходами работы в OpenSCADA. Однако, в значительной степени, это только первое впечатление, поскольку вся мощь OpenSCADA оказывается в руках пользователя и от изобилия которой пользователь может растеряться, и ему могут понадобиться значительные усилия для отбора функций, нужных в решении его задачи.
@@ -361,44 +361,49 @@ $ openscada</pre>
 </p><p>Возможность удалённого подключения и разработки иногда является единственным способом осуществить разработку или корректировку не только для серверных конфигураций исключительно с WEB-интерфейсом, но и для конфигураций с локальною визуализацией, когда само окружение локальной визуализации непригодное или ограниченное для исполнения среды разработки модуля UI.Vision, например, таких как смартфоны, планшеты, и другие мобильные устройства с малым экраном, исключительно сенсорным вводом (<a class="external" href="http://oscada.org/wiki/Sub-projects/Adaption_to_Android" title="Sub-projects/Adaption to Android">Android</a>) или ограничениями, вроде невозможности открытия системной виртуальной клавиатуры (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Nokia_Linux" title="Special:MyLanguage/Using/Nokia Linux">Nokia N9</a>). И эту удалённую разработку в основном можно осуществлять в процессе исполнения проекта — горячая разработка, что особенно актуально для Web-интерфейсов и локальных интерфейсов, которые запускаются только в окне исполнения. Что качается удалённой конфигурации то на один локальный конфигуратор, как центр администрирования, можно собрать все удалённые станции в сети, включая станции в скрытых сетях станций первого уровня, поднять которые можно аргументом "Уровень поднятия" (Рис.3.3.1.1).
 </p>
 <h4><span class="mw-headline" id=".D0.9F.D0.BE.D0.B4.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D0.B8.D0.B5_.D1.81.D1.82.D0.B0.D0.BD.D0.B4.D0.B0.D1.80.D1.82.D0.BD.D1.8B.D1.85_.D0.B1.D0.B8.D0.B1.D0.BB.D0.B8.D0.BE.D1.82.D0.B5.D0.BA_OpenSCADA"><span class="mw-headline-number">3.3.2</span> Подключение стандартных библиотек OpenSCADA</span></h4>
-<p>Ново-созданный проект OpenSCADA не содержит никакой специфической конфигурации, по факту является пустым и предусматривает создание пользователем новой конфигурации в локальном файле БД SQLite "St.db", который располагается в собственном каталоге проекта с таким-же названием. Создавать сложный проект SCADA-системы проще с использованием <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs" title="Special:MyLanguage/Libs">библиотек функций API объектной модели OpenSCADA и библиотек графических элементов</a>, а также других библиотек OpenSCADA. Для использования библиотек OpenSCADA нужно файлы БД, где они хранятся: подключить — добавить в объекте модуля БД "SQLite" (Рис.3.3.2.1), установить-выбрать <b>адрес</b> и указать кодировку БД в <b>UTF-8</b> (Рис.3.3.2.2).
+<p>Ново-созданный проект OpenSCADA не содержит никакой специфической конфигурации, по факту является пустым и предусматривает создание пользователем новой конфигурации в локальном файле БД SQLite "St.db", который располагается в собственном каталоге проекта с таким-же названием. Создавать сложный проект SCADA-системы проще с использованием <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs" title="Special:MyLanguage/Libs">библиотек функций API объектной модели OpenSCADA и библиотек графических элементов</a>, а также других библиотек OpenSCADA. Для использования библиотек OpenSCADA нужно файлы БД, где они хранятся: подключить — добавить в объекте модуля БД "SQLite" (Рис.3.3.2.1), установить-выбрать <b>адрес</b> и указать кодировку БД в <b>UTF-8</b> (Рис.3.3.2.2). <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> После чего, и в случае наличия уже записей БД библиотек, необходимые из них нужно активировать, про что читайте далее.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1162px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_SQLite_add_ru.png"><img class="thumbimage" height="532" src="files/QuickStart_SQLite_add_ru.png" width="1160" /></a>  <div class="thumbcaption">Рис. 3.3.2.1. Добавление объекта БД "SQLite".</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:687px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_SQLite_obj_ru.png"><img class="thumbimage" height="600" src="files/QuickStart_SQLite_obj_ru.png" width="685" /></a>  <div class="thumbcaption">Рис. 3.3.2.2. Объект БД "SQLite" библиотеки OpenSCADA.</div></div></div></div>
-<p>Дистрибутивы OpenSCADA поставляются с рядом библиотек в виде файлов БД "SQLite" (таблица 3.3.2), которые, при запуске-создании пользовательского проекта, помещаются в каталоге "LibsDB/". Согласно этому перечню добавляем их все в объекте модуля БД "SQLite", устанавливаем им флаг "Включать" и сохраняем. Далее, для загрузки содержимого библиотек, можно включить БД и нажать кнопку "Загрузить программу с этой БД", однако, при загрузке ряд новых объектов не включится (команда <b>загрузки</b>), поэтому проще завершить новый проект и запустить его сначала, чем включать всё нужное вручную.
+<p>Дистрибутивы OpenSCADA поставляются с рядом библиотек в виде файлов БД "SQLite" (таблица 3.3.2), которые, при запуске-создании пользовательского проекта, помещаются в каталоге "LibsDB/". Согласно этому перечню, в объекте модуля БД "SQLite" добавляем, или используем готовые записи, нужных библиотек, устанавливаем им флаг "Включать" и сохраняем. Далее, для загрузки содержимого библиотек, можно включить БД и нажать кнопку "Загрузить программу с этой БД", однако, при загрузке ряд новых объектов не включится (команда <b>загрузки</b>), поэтому проще завершить новый проект и запустить его сначала, чем включать всё нужное вручную.
 </p><p><b>Таблица 3.3.2.</b> Библиотеки OpenSCADA в составе дистрибутива.
 </p>
 <table class="wikitable">
 
 <tr>
-<th> ID </th>
+<th> Идентификатор </th>
 <th> Имя </th>
 <th> Адрес </th>
-<th> Язык/кодировка
+<th> Язык/кодировка </th>
+<th> Описание
 </th></tr>
 <tr>
 <td> OscadaLibs </td>
-<td> Библиотеки функций </td>
+<td> Библиотеки OpenSCADA </td>
 <td> LibsDB/OscadaLibs.db </td>
-<td> EN,UK,RU/UTF-8
+<td> EN,UK,RU/UTF-8 </td>
+<td> Библиотеки источников данных, служб и обработки
 </td></tr>
 <tr>
 <td> vcaBase </td>
 <td> СВУ: Главные библиотеки </td>
 <td> LibsDB/vcaBase.db </td>
-<td> EN,UK,RU/UTF-8
+<td> EN,UK,RU/UTF-8 </td>
+<td> Библиотеки графических элементов OpenSCADA модуля <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">UI.VCAEngine</a>
 </td></tr>
 <tr>
 <td> vcaTest </td>
 <td> СВУ: Тесты </td>
 <td> LibsDB/vcaTest.db </td>
-<td> EN,UK,RU/UTF-8
+<td> EN,UK,RU/UTF-8 </td>
+<td> Библиотека тестов графических элементов.
 </td></tr>
 <tr>
 <td> vcaElectroEls </td>
 <td> СВУ: Библиотека электро-элементов мнемосхем пользовательского интерфейса </td>
 <td> LibsDB/vcaElectroEls.db </td>
-<td> EN,UK,RU/UTF-8
+<td> EN,UK,RU/UTF-8 </td>
+<td> Предоставляет библиотеку мнемонических элементов интерфейса пользователя электрических подстанций и станций генерации электрики.
 </td></tr></table>
 <p>В результате добавления библиотек OpenSCADA Вы получите окружение, готовое для добавления источников данных, определения их истории и формирования интерфейса собственного проекта SCADA-системы.
 </p>

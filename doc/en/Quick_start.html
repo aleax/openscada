@@ -351,44 +351,49 @@ $ openscada</pre>
 </p><p>The ability to remotely connect and develop is sometimes the only way to develop or correct not only server configurations with the WEB interface only, but also for configurations with the locale visualization, when the locale environment itself is not suitable or limited to execute the development environment of the UI.Vision module, such as smartphones, tablets, and other small screen mobile devices, exclusively with touch input (<a class="external" href="http://oscada.org/wiki/Sub-projects/Adaption_to_Android" title="Sub-projects/Adaption to Android">Android</a>) or restrictions such as the inability to open the system virtual keyboard (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Nokia_Linux" title="Special:MyLanguage/Using/Nokia Linux">Nokia N9</a>). But this remote development can mostly be done in the process of executing a project — the hot development, that is especially relevant for Web interfaces and local interfaces that run only in the execution window. As for remote configuration is one local configurator, as the administration center, can collect all the remote stations in the network, including the stations in the hidden networks of the first level stations, which can be raised by the "Level of lifting" argument (Fig.3.3.1.1).
 </p>
 <h4><span class="mw-headline" id="Connecting_the_standard_OpenSCADA_libraries"><span class="mw-headline-number">3.3.2</span> Connecting the standard OpenSCADA libraries</span></h4>
-<p>The newly created OpenSCADA project does not contain any specific configuration, in fact it is empty and provides for the user to create a new configuration in the local SQLite database file "St.db", which is located in its own directory of the project with the same name. It is easier to create a complex project of the SCADA system using <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs" title="Special:MyLanguage/Libs">libraries of functions of the API of the OpenSCADA object model and libraries of the graphical elements</a>, as well as other OpenSCADA libraries. To use the OpenSCADA libraries, you need database files where the libraries are stored: connect-add in the object of the database module "SQLite" (Fig.3.3.2.1), install-select <b>the address</b> and specify the database encoding in <b>UTF-8</b> (Fig.3.3.2.2).
+<p>The newly created OpenSCADA project does not contain any specific configuration, in fact it is empty and provides for the user to create a new configuration in the local SQLite database file "St.db", which is located in its own directory of the project with the same name. It is easier to create a complex project of the SCADA system using <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs" title="Special:MyLanguage/Libs">libraries of functions of the API of the OpenSCADA object model and libraries of the graphical elements</a>, as well as other OpenSCADA libraries. To use the OpenSCADA libraries, you need database files where the libraries are stored: connect-add in the object of the database module "SQLite" (Fig.3.3.2.1), install-select <b>the address</b> and specify the database encoding in <b>UTF-8</b> (Fig.3.3.2.2). <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> After what, and if there are already library database entries, you need to activate them, read on.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1117px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_SQLite_add.png"><img class="thumbimage" height="579" src="files/QuickStart_SQLite_add.png" width="1115" /></a>  <div class="thumbcaption">Fig. 3.3.2.1. Addition of an object of the DB "SQLite".</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:727px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_SQLite_obj.png"><img class="thumbimage" height="604" src="files/QuickStart_SQLite_obj.png" width="725" /></a>  <div class="thumbcaption">Fig. 3.3.2.2. The DB "SQLite" object of the OpenSCADA library.</div></div></div></div>
-<p>OpenSCADA distributions are supplied with a number of libraries in the form of database files "SQLite" (table 3.3.2), which, when started-created a custom project, are located in the "LibsDB/" directory. According to this list, we add them all to the object of the database module "SQLite", we set the sign "To enable" and save. Next, to download the contents of the libraries, you can enable the database and click on the button "Load the program from this DB", however, when downloaded, a number of new objects are not enabled (the <b>loading</b> command), so it's easier to complete the new project and run it again, than turning on everything you need manually.
+<p>OpenSCADA distributions are supplied with a number of libraries in the database files "SQLite" form (table 3.3.2), which, when started-created a custom project, are located in the "LibsDB/" directory. According to this list, in the object of the database module "SQLite" we add, or use the ready entries, of the needed libraries, we set the sign "To enable" and save. Next, to download the contents of the libraries, you can enable the database and click on the button "Load the program from this DB", however, when downloaded, a number of new objects are not enabled (the <b>loading</b> command), so it's easier to complete the new project and run it again, than turning on everything you need manually.
 </p><p><b>Table 3.3.2.</b> OpenSCADA libraries included in the distribution.
 </p>
 <table class="wikitable">
 
 <tr>
-<th> ID </th>
+<th> Identifier </th>
 <th> Name </th>
 <th> Address </th>
-<th> Languages/charset
+<th> Languages/charset </th>
+<th> Description
 </th></tr>
 <tr>
 <td> OscadaLibs </td>
-<td> Functions libraries </td>
+<td> OpenSCADA libraries </td>
 <td> LibsDB/OscadaLibs.db </td>
-<td> EN,UK,RU/UTF-8
+<td> EN,UK,RU/UTF-8 </td>
+<td> Libraries of the data sources, services and processing
 </td></tr>
 <tr>
 <td> vcaBase </td>
 <td> VCA: Main libraries </td>
 <td> LibsDB/vcaBase.db </td>
-<td> EN,UK,RU/UTF-8
+<td> EN,UK,RU/UTF-8 </td>
+<td> Graphical elements' libraries of the OpenSCADA module <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">UI.VCAEngine</a>
 </td></tr>
 <tr>
 <td> vcaTest </td>
 <td> VCA: Tests </td>
 <td> LibsDB/vcaTest.db </td>
-<td> EN,UK,RU/UTF-8
+<td> EN,UK,RU/UTF-8 </td>
+<td> Graphical elements' tests library
 </td></tr>
 <tr>
 <td> vcaElectroEls </td>
 <td> VCA: Electrical elements library of the user interface </td>
 <td> LibsDB/vcaElectroEls.db </td>
-<td> EN,UK,RU/UTF-8
+<td> EN,UK,RU/UTF-8 </td>
+<td> Provides the mnemonic elements library of the user interface of the electrical substations and the electricity generation station.
 </td></tr></table>
 <p>As a result of adding OpenSCADA libraries you will get an environment ready for adding data sources, defining their history and forming the interface of your own SCADA-system project.
 </p>

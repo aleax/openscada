@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Works/To do</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint nomobile" dir="ltr" lang="en">This page contains <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Works/To_do&amp;oldid=58848&amp;diff=59195" rel="nofollow noreferrer noopener" target="_blank">changes</a></span> which are not marked for translation.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint nomobile" dir="ltr" lang="en">This page contains <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Works/To_do&amp;oldid=58848&amp;diff=59387" rel="nofollow noreferrer noopener" target="_blank">changes</a></span> which are not marked for translation.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span></div></div>
 <p>On this page you can get a "To Do" list and a tasks pool of the project. The "To Do" list is not connected to the time ranks, but it is structured by subsystems. The "To Do" list and pool are provided to represent the general development picture, and to post notes for the developers' examination. The developers can append, apply and note the tasks for themselves.
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
@@ -118,15 +118,23 @@
 <tr>
 <td>
 <h3><span class="mw-headline" id="Subsystem_DB"><span class="mw-headline-number">6</span> Subsystem DB</span></h3>
-<ul><li> Create the DB module for ODBC:</li></ul>
+<ul><li> Create a gate module to DBs of other OpenSCADA stations.</li>
+<li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/ODBC" title="Special:MyLanguage/Modules/ODBC">DB by ODBC</a></li></ul>
 <dl><dd>+ main functions implementation for generic SQL requests, testing for: SQLite, MySQL, PostgreSQL, FireBird;</dd>
 <dd>- specific DBMS properties: quotes for names and values (there are generic and standard ones), ...&nbsp;;</dd>
 <dd>- OpenSCADA internal DB's layer function fieldStruct() implementation for generic SQL dialects and DBMS specific;</dd>
 <dd>- OpenSCADA internal DB's layer functions fieldSeek(), fieldGet(), fieldDel() implementation for generic SQL dialects and DBMS specific;</dd>
 <dd>- OpenSCADA internal DB's layer functions fieldDel() implementation for generic SQL dialects and DBMS specific;</dd>
-<dd>- Generic tests passing for: SQLite(there are some problems into allowed connectors), MySQL, PostgreSQL, FireBird;</dd>
-<dd>- Testing an ODBC connector for DBMS Oracle.</dd></dl>
-<ul><li> Create a gate module to DBs of other OpenSCADA stations.</li></ul>
+<dd>- generic tests passing for: SQLite(there are some problems in allowed connectors), MySQL, PostgreSQL, FireBird;</dd>
+<dd>- testing an ODBC connector for DBMS Oracle.</dd></dl>
+<ul><li> <a href="Modules/LDAP.html" title="Special:MyLanguage/Modules/LDAP">Directory by LDAP</a></li></ul>
+<dl><dd> - expand the authentication mechanism by the storage functions (the DB object), that is virtual functions to TBD:
+<dl><dd><ul><li> <i>auth()</i> — direct checking the user authentication, through "bind" or <i>ldap_whoami()</i>;</li>
+<li> <i>passHash()</i> — obtaining the password hash, to comparing, if <i>auth()</i> is missed, and changing the password by the function <i>ldap_passwd()</i> or see to the utility <b>slappasswd</b>.</li></ul></dd></dl></dd>
+<dd> - expand the "OSCADA-user" scheme:
+<dl><dd><ul><li> set the password field "PASS" as a synonym of "userPassword";</li>
+<li> make the own scheme dependent from "simpleSecurityObject";</li>
+<li> check of working with the field-type "userPassword".</li></ul></dd></dl></dd></dl>
 </td></tr>
 <tr>
 <td>

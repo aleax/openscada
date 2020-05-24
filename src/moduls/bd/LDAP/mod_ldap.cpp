@@ -33,7 +33,7 @@
 #define MOD_NAME	_("Directory by LDAP")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"0.5.2"
+#define MOD_VER		"0.6.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of directories by LDAP.")
 #define MOD_LICENSE	"GPL2"
@@ -240,20 +240,21 @@ void MTable::fieldStruct( TConfig &cfg )
     ldap_msgfree(result);
 }
 
-bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
+bool MTable::fieldSeek( int row, TConfig &cfg, const string &cacheKey )
 {
     MtxAlloc resource(owner().connRes, true);
     if(!owner().enableStat())	return false;
     mLstUse = SYS->sysTm();
 
-    vector< vector<string> >	inTbl,
-				&tbl = full ? *full : inTbl;
-
     cfg.cfgToDefault();	//reset the not key and viewed fields
 
+    vector< vector<string> >	inTbl, *tbl = &inTbl;
+    MtxAlloc res(owner().connRes);
+    if(cacheKey.size()) { res.lock(); tbl = &seekSess[cacheKey]; }
+
     //Request
-    if(!full || !full->size() || row == 0) {
-	tbl.clear();
+    if(!cacheKey.size() || !tbl->size() || row == 0) {
+	tbl->clear();
 	vector<string> row, cf_el;
 
 	// Request preparing
@@ -271,7 +272,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
 		attrs[iA++] = (char*)cf_el[iC].c_str();	attrs[iA] = NULL;
 	    }
 	}
-	tbl.push_back(row);
+	tbl->push_back(row);
 	if(fltrN > 1)	fltr = "&"+fltr;
 	if(fltr.empty())fltr = "(objectclass=*)";
 
@@ -307,20 +308,23 @@ bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
 		    TCfg &cf = cfg.cfg(cf_el[iC]);
 		    if(cf.isKey() && !cf.keyUse() && row[headers[cf_el[iC]]].empty())	entrMatch = false;
 		}
-		if(entrMatch) tbl.push_back(row);
+		if(entrMatch) tbl->push_back(row);
 	    }
 	}
 	ldap_msgfree(result);
     }
 
-    if(tbl.size() < 2 || (full && (row+1) >= tbl.size())) return false;
+    if(tbl->size() < 2 || (cacheKey.size() && (row+1) >= tbl->size())) {
+	if(cacheKey.size()) seekSess.erase(cacheKey);
+	return false;
+    }
 
     //Processing of the query
-    row = full ? row+1 : 1;
-    for(unsigned iFld = 0; iFld < tbl[0].size(); iFld++) {
-	string sid = tbl[0][iFld];
+    row = cacheKey.size() ? row+1 : 1;
+    for(unsigned iFld = 0; iFld < (*tbl)[0].size(); iFld++) {
+	string sid = (*tbl)[0][iFld];
 	TCfg *cf = cfg.at(sid, true);
-	if(cf) setVal(*cf, tbl[row][iFld]);
+	if(cf) setVal(*cf, (*tbl)[row][iFld]);
     }
 
     return true;

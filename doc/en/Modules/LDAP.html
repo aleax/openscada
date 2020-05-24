@@ -23,24 +23,36 @@
 <th> Languages </th>
 <th> Platforms </th>
 <th> Type </th>
-<th> Author </th>
-<th> Description
+<th> Author
 </th></tr>
 
 <tr>
 <td> <a href="../Modules/LDAP.html" title="Special:MyLanguage/Modules/LDAP">LDAP</a> </td>
 <td> Directory by LDAP
 </td>
-<td> 0.5 </td>
+<td> 0.6 </td>
 <td> GPL2 </td>
 <td> bd_LDAP.so </td>
 <td> en,uk,ru,de </td>
 <td> x86,x86_64,ARM
 </td>
 <td> DB </td>
-<td> Roman Savochenko </td>
-<td> BD module. Provides support of directories by LDAP.
-<ul><li> <b>Sponsored by</b>: Alexander Kolesov, 2017</li></ul>
+<td> Roman Savochenko
+</td></tr>
+<tr>
+<th colspan="9"> Description
+</th></tr>
+<tr>
+<td colspan="9"> BD module. Provides support of directories by LDAP.
+<ul><li> <b>Sponsored by</b>: Alexander Kolesov, 2017</li>
+<li> <b>To Do:</b></li></ul>
+<dl><dd> - expand the authentication mechanism by the storage functions (the DB object), that is virtual functions to TBD:
+<dl><dd><ul><li> <i>auth()</i> — direct checking the user authentication, through "bind" or <i>ldap_whoami()</i>;</li>
+<li> <i>passHash()</i> — obtaining the password hash, to comparing, if <i>auth()</i> is missed, and changing the password by the function <i>ldap_passwd()</i> or see to the utility <b>slappasswd</b>.</li></ul></dd></dl></dd>
+<dd> - expand the "OSCADA-user" scheme:
+<dl><dd><ul><li> set the password field "PASS" as a synonym of "userPassword";</li>
+<li> make the own scheme dependent from "simpleSecurityObject";</li>
+<li> check of working with the field-type "userPassword".</li></ul></dd></dl></dd></dl>
 </td></tr></table>
 <p>The module gives to OpenSCADA support of directories by Lightweight Directory Access Protocol (<a class="extiw" href="https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol" title="wikipedia:Lightweight Directory Access Protocol">LDAP</a>). The module is based on the <a class="external text" href="https://www.openldap.org/" rel="nofollow noreferrer noopener" target="_blank">OpenLDAP</a> library on the programming language "C". Due conceptual difference the directory service from data bases (DB) the module allows you to perform mostly reading and modification entries represented as tables' records in the DB conception.
 </p><p>Directory service or name service maps the names of network resources to their respective network addresses. It is a shared information infrastructure for locating, managing, administering and organizing everyday items and network resources, which can include volumes, folders, files, printers, users, groups, devices, telephone numbers and other objects. A common use of LDAP is to provide a central place to store usernames and passwords. This allows many different applications and services to connect to the LDAP server to validate users. The protocol provides an interface with directories that follow the 1993 edition of the X.500 model:

@@ -1,3 +1,24 @@
+2020-05-24 Roman (stable)
+- !!!!:FIX:SYS.*,DB: TBDS::dataSeek() and TTable::fieldSeek() switched to the seek cache implementing in the corresponded modules.
+    !!!!:SYS: Modules version of the subsystem BD rose to 22. Core library version rose to 4:4:0.
+    !!:DB: TBDS::{dataSet,dataSeek}() expanded for saving and restoring the TCfg structure in "localCfgCtx", mostly for the new module DB.DBGate.
+    FIX: TCfg::setReqKey() prevented from the flag "KeyUse" cleaning.
+    TFld: Appended for the combined string variant of the length field - lenS().
+- !!!!:FIX:DB: A new module "DBGate" created and appended.
+    !!:FIX: TBDS::dataSet() appended for changing-saving the defined entries in the config file
+	instead complete saving all their in the default DB.
+    !!:FIX: DB loading is prevented from double loading from the config file and from DB for the equal entries.
+    !!:FIX: The wrong started DB objects in the first fixed for try them next start tries.
+    !:FIX: TBDS::{open,close}() fixed for true functional locking by the lock "resTbls".
+    !!: The TBD object appended for the service control "call" requests support:
+	"/serv/SQL", "/serv/fieldStruct", "/serv/fieldSeek", "/serv/fieldGet", "/serv/fieldSet", "/serv/fieldDel".
+	What mostly designed and used in DB.DBArch!
+- FIX:DAQ.JavaLikeCalc: Moving the calculation context modification to the option "modifCalc".
+    FIX: The control interface command "/cntr/cfg/toFunc" some specified.
+- UI.QTCfg: Tracing the control items of the navigation tree appended for scrolling to the current item.
+    The getExpandTreeWIt() function appended for processing items without the group prefix - the default group.
+
+
 2020-05-10 Roman (stable)
 - FIX:UI.QTCfg: Fix the building.
 

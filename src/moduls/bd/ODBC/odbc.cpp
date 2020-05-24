@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.ODBC file: odbc.cpp
 /***************************************************************************
- *   Copyright (C) 2015-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2015-2016,2020 by Roman Savochenko, <roman@oscada.org>  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,7 +34,7 @@
 #define MOD_NAME	_("DB by ODBC")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"0.2.7"
+#define MOD_VER		"0.2.8"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of different databases by the ODBC connectors and drivers to the databases.")
 #define MOD_LICENSE	"GPL2"
@@ -484,7 +484,7 @@ void MTable::fieldStruct( TConfig &cfg )
     }
 }
 
-bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
+bool MTable::fieldSeek( int row, TConfig &cfg, const string &cacheKey )
 {
 
 }

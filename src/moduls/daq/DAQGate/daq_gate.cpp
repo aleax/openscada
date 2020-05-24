@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.2.2"
+#define MOD_VER		"2.2.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -711,7 +711,7 @@ int TMdContr::cntrIfCmd( XMLNode &node )
 		throw;
 	    }
 	}
-    if(!stPresent) node.setAttr("err", TSYS::strMess(_("11:Station missed '%s'."),reqStat.c_str()));
+    if(!stPresent) node.setAttr("err", i2s(TError::Tr_UnknownHost)+":"+TSYS::strMess(_("Station missed '%s'."),reqStat.c_str()));
 
     return s2i(node.attr("err"));
 }

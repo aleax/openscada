@@ -1793,7 +1793,7 @@ TVariant TVArchive::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 void TVArchive::cntrCmdProc( XMLNode *opt )
 {
     string a_path = opt->attr("path");
-    //Service commands process
+    //Service commands processing
     if(a_path == "/serv/val") {		//Values access
 	if(ctrChkNode(opt,"info",RWRWRW,"root","root",SEC_RD)) {	//Value's data information
 	    string arch = opt->attr("arch");

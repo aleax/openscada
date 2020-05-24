@@ -164,7 +164,6 @@ void TParamContr::LoadParmCfg( )
     if(mPrm < 0) return;
 
     map<string, bool>	itReg;
-    vector<vector<string> > full;
 
     //Search and create new parameters
     for(unsigned iTp = 0; iTp < owner().owner().tpPrmSize(); iTp++) {
@@ -176,7 +175,7 @@ void TParamContr::LoadParmCfg( )
 
 	    // Search new into DB and Config-file
 	    for(int fld_cnt = 0; SYS->db().at().dataSeek(owner().DB()+"."+owner().owner().tpPrmAt(iTp).DB(&owner()),
-		    owner().owner().nodePath()+owner().owner().tpPrmAt(iTp).DB(&owner()),fld_cnt++,cEl,false,&full); )
+		    owner().owner().nodePath()+owner().owner().tpPrmAt(iTp).DB(&owner()),fld_cnt++,cEl,false,true); )
 	    {
 		try {
 		    string shfr = cEl.cfg("SHIFR").getS();

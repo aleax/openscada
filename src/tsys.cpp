@@ -3403,9 +3403,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 			//  Get from config file or DB source
 			bool seekRez = false;
 			for(int inst = 0; true; inst++) {
-			    vector< vector<string> > full;
-			    seekRez = isCfg ? SYS->db().at().dataSeek("", trSrc.substr(4), inst, req, false, &full)
-					    : SYS->db().at().dataSeek(trSrc.substr(3), "", inst, req, false, &full);
+			    seekRez = isCfg ? SYS->db().at().dataSeek("", trSrc.substr(4), inst, req, false, true)
+					    : SYS->db().at().dataSeek(trSrc.substr(3), "", inst, req, false, true);
 			    if(!seekRez) break;
 			    for(unsigned i_n = 0; i_n < ns.size(); i_n++) {
 				if(!(i_n && i_n < (ns.size()-1))) continue;

@@ -6,7 +6,7 @@ AC_INIT(OpenSCADA, [1+r0000], roman@oscada.org)
 
 # Increase the major for next Work version.
 # Increase the minor after any significant changes into API of the Work/LTS version
-oscd_LIBREVISION="4:3:0"
+oscd_LIBREVISION="4:4:0"
 
 AC_PREFIX_DEFAULT(/usr)
 oscd_modulpref="oscd_"
@@ -202,6 +202,7 @@ AX_MOD_DB_EN(FireBird, [disable or enable[=incl] compilation module DB.FireBird]
     fi
 ])
 AX_MOD_DB_EN(DBF, [disable or enable[=incl] compilation module DB.DBF], disable, incl)
+AX_MOD_DB_EN(DBGate, [disable or enable[=incl] compilation module DB.DBF], disable, incl)
 AX_MOD_DB_EN(ODBC, [disable or enable[=incl] compilation module DB.ODBC], enable, incl, [
     AX_LIB_IODBC(1)
     if test "$found_iodbc" != "yes"; then

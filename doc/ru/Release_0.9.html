@@ -47,6 +47,7 @@
 <li class="toclevel-3"><a href="#.D0.A2.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D0.BD.D1.8B.D0.B5_.D0.9F.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.8B"><span class="tocnumber">7.1.8</span> <span class="toctext">Транспортные Протоколы</span></a></li>
 <li class="toclevel-3"><a href="#.D0.98.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81_.D0.9F.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8F"><span class="tocnumber">7.1.9</span> <span class="toctext">Интерфейс Пользователя</span></a></li>
 <li class="toclevel-3"><a href="#.D0.A1.D0.BF.D0.B5.D1.86.D0.B8.D0.B0.D0.BB.D1.8C.D0.BD.D1.8B.D0.B5"><span class="tocnumber">7.1.10</span> <span class="toctext">Специальные</span></a></li>
+<li class="toclevel-3"><a href="#.D0.A1.D0.B5.D1.80.D0.B2.D0.B8.D1.81.D0.BD.D1.8B.D0.B5_.D0.BE.D0.B1.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D1.8F"><span class="tocnumber">7.1.11</span> <span class="toctext">Сервисные обновления</span></a></li>
 </ul>
 </li>
 </ul>
@@ -306,7 +307,7 @@
 <h2><span class="mw-headline" id=".D0.9E.D0.B1.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D1.8F"><span class="mw-headline-number">7</span> Обновления</span></h2>
 <h3><span class="mw-headline" id=".5B8.04.2020.5D_.D0.9F.D0.95.D0.A0.D0.92.D0.9E.D0.95_.D0.BE.D0.B1.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D0.B5"><span class="mw-headline-number">7.1</span> [8.04.2020] ПЕРВОЕ обновление</span></h3>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
-<ul><li> <b>Состояние:</b> Стадия 3 — финал и после-релизовые задания: Реализовать сервисные обновления при первом исправлении ошибок.</li></ul>
+<ul><li> <b>Состояние:</b> Полностью Завершено</li></ul>
 <p>Общий процесс выпуска, пользователям для оценки ваших ожиданий и разработчикам для напоминания задач:<br />
 <b><u>1. Неделя подготовки и сборки:</u></b><br />
 </p>
@@ -335,7 +336,7 @@
 </p>
 <ul><li> Ожидание <a class="external text" href="https://www.omgubuntu.co.uk/2019/10/ubuntu-20-04-release-features" rel="nofollow noreferrer noopener" target="_blank">релиза Ubuntu 20.04</a> 23 Апреля, после чего обновить корневые файловые системы (chroots) и пересобрать пакеты.</li>
 <li> Ожидание <a class="external text" href="http://www.trinitydesktop.org/" rel="nofollow noreferrer noopener" target="_blank">релиза TDE 14.0.8</a>, после чего собрать собственные исправленные пакеты и пересобрать ISO-образы <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Linux Автоматизации</a> обновления.</li>
-<li> Реализовать сервисные обновления при первом исправлении ошибок.</li></ul>
+<li> Реализовать сервисные обновления в <a class="external" href="http://oscada.org/wiki/Sub-projects/Automatic_Builder_of_OpenSCADA" title="Sub-projects/Automatic Builder of OpenSCADA">Автоматическом Сборщике</a> при первом исправлении ошибок.</li></ul>
 </div>
 <p>Обновление осуществлено после 1.5 года от <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">релиза 0.9 LTS</a>, соответственно оно стоит 10 обновлений, поскольку им исправлено более 250 ошибок и добавлено множество усовершенствований, которые целиком вы можете почитать в <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2677" rel="nofollow noreferrer noopener" target="_blank">протоколе изменений обновления</a>.
 </p><p>Ключевыми свойствами обновления является:
@@ -678,6 +679,8 @@
 <ul><li> FIX:IO: write() исправлено относительно получения типового типа данных, получение ошибочных данных сделано безопасным.</li>
 <li> CRC: Завершено использованием нормальных полиномов, входных и выходных относительностей и XOR для выхода.</li>
 <li> VArchObj: Доступ к функции записи в архив ограничен только пользователями в группе "Архив".</li></ul></li></ul>
+<h4><span class="mw-headline" id=".D0.A1.D0.B5.D1.80.D0.B2.D0.B8.D1.81.D0.BD.D1.8B.D0.B5_.D0.BE.D0.B1.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D1.8F"><span class="mw-headline-number">7.1.11</span> Сервисные обновления</span></h4>
+<ul><li> <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2680" rel="nofollow noreferrer noopener" target="_blank">первое (1) от 11.05.2020</a>.</li></ul>
 <h2><span class="mw-headline" id=".D0.A1.D1.81.D1.8B.D0.BB.D0.BA.D0.B8"><span class="mw-headline-number">8</span> Ссылки</span></h2>
 <ul><li> <a class="external" href="http://oscada.org/wiki/Documents/Release_0.9/Tests" title="Documents/Release 0.9/Tests">Протокол тестирования</a> промышленного релиза 0.9 LTS.</li>
 <li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Release_0.9/Updating_0.8.0_LTS" title="Special:MyLanguage/Documents/Release 0.9/Updating 0.8.0 LTS">Руководство обновления 0.8.0 LTS</a>.</li>

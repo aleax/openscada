@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Logical level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.2.1"
+#define MOD_VER		"2.3.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the pure logical level of the DAQ parameters.")
 #define LICENSE		"GPL2"
@@ -485,8 +485,7 @@ void TMdPrm::loadIO( bool force )
 	string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
 
 	//IO values loading and links set, by seek
-	vector<vector<string> > full;
-	for(int fldCnt = 0; SYS->db().at().dataSeek(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",fldCnt++,cfg,false,&full); ) {
+	for(int fldCnt = 0; SYS->db().at().dataSeek(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",fldCnt++,cfg,false,true); ) {
 	    int iIO = tmpl->func()->ioId(cfg.cfg("ID").getS());
 	    if(iIO < 0) continue;
 	    if(tmpl->func()->io(iIO)->flg()&TPrmTempl::CfgLink)

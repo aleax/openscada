@@ -121,7 +121,6 @@ void TArchiveS::load_( )
     // Message archivers load
     string id,type;
     map<string, bool>	itReg;
-    vector<vector<string> > full;
     try {
 	TConfig cEl(&elMess);
 	//cEl.cfgViewAll(false);
@@ -131,7 +130,7 @@ void TArchiveS::load_( )
 	SYS->db().at().dbList(dbLs, true);
 	dbLs.push_back(DB_CFG);
 	for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
-	    for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iIt]+"."+subId()+"_mess_proc",nodePath()+subId()+"_mess_proc",fldCnt++,cEl,false,&full); ) {
+	    for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iIt]+"."+subId()+"_mess_proc",nodePath()+subId()+"_mess_proc",fldCnt++,cEl,false,true); ) {
 		id = cEl.cfg("ID").getS();
 		type = cEl.cfg("MODUL").getS();
 		if(!modPresent(type))	continue;
@@ -167,7 +166,7 @@ void TArchiveS::load_( )
 	SYS->db().at().dbList(dbLs, true);
 	dbLs.push_back(DB_CFG);
 	for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
-	    for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iIt]+"."+subId()+"_val_proc",nodePath()+subId()+"_val_proc",fldCnt++,cEl,false,&full); ) {
+	    for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iIt]+"."+subId()+"_val_proc",nodePath()+subId()+"_val_proc",fldCnt++,cEl,false,true); ) {
 		id = cEl.cfg("ID").getS();
 		type = cEl.cfg("MODUL").getS();
 		if(!modPresent(type))	continue;
@@ -203,7 +202,7 @@ void TArchiveS::load_( )
 	SYS->db().at().dbList(dbLs, true);
 	dbLs.push_back(DB_CFG);
 	for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
-	    for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iIt]+"."+subId()+"_val",nodePath()+subId()+"_val",fldCnt++,cEl,false,&full); ) {
+	    for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iIt]+"."+subId()+"_val",nodePath()+subId()+"_val",fldCnt++,cEl,false,true); ) {
 		id = cEl.cfg("ID").getS();
 		if(!valPresent(id)) valAdd(id,(dbLs[iIt]==SYS->workDB())?"*.*":dbLs[iIt]);
 		//   For force loading after creation from archiver storage

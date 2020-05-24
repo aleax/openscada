@@ -260,7 +260,6 @@ void TController::disable( )
 void TController::LoadParmCfg( )
 {
     map<string, bool>	itReg;
-    vector<vector<string> > full;
 
     //Search and create new parameters
     for(unsigned iTp = 0; iTp < owner().tpPrmSize(); iTp++) {
@@ -272,7 +271,7 @@ void TController::LoadParmCfg( )
 
 	    // Search new into DB and Config-file
 	    for(int fldCnt = 0; SYS->db().at().dataSeek(DB()+"."+owner().tpPrmAt(iTp).DB(this),
-					   owner().nodePath()+owner().tpPrmAt(iTp).DB(this),fldCnt++,cEl,false,&full); )
+					owner().nodePath()+owner().tpPrmAt(iTp).DB(this),fldCnt++,cEl,false,true); )
 	    {
 		try {
 		    string shfr = cEl.cfg("SHIFR").getS();

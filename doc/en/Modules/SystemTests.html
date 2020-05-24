@@ -31,32 +31,16 @@
 <td> <a href="../Modules/SystemTests.html" title="Special:MyLanguage/Modules/SystemTests">SystemTests</a> </td>
 <td> OpenSCADA and its modules' tests
 </td>
-<td> 1.7 </td>
+<td> 1.8 </td>
 <td> GPL2 </td>
 <td> spec_SystemTests.so </td>
 <td> en,uk,ru,de </td>
 <td> x86,x86_64,ARM
 </td>
 <td> Special </td>
-<td> Roman Savochenko<br />Maxim Lysenko (2010) — the page translation </td>
+<td> Roman Savochenko<br />Maxim Lysenko (2010) — the page initial translation </td>
 <td> Provides the group of tests to OpenSCADA and its modules.
 </td></tr></table>
-<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
-<ul>
-<li class="toclevel-1 tocsection-1"><a href="#Parameter_.28Param.29"><span class="tocnumber">1</span> <span class="toctext">Parameter (Param)</span></a></li>
-<li class="toclevel-1 tocsection-2"><a href="#XML_parsing_.28XML.29"><span class="tocnumber">2</span> <span class="toctext">XML parsing (XML)</span></a></li>
-<li class="toclevel-1 tocsection-3"><a href="#Messages_.28Mess.29"><span class="tocnumber">3</span> <span class="toctext">Messages (Mess)</span></a></li>
-<li class="toclevel-1 tocsection-4"><a href="#Attaching_SO_.28SOAttach.29"><span class="tocnumber">4</span> <span class="toctext">Attaching SO (SOAttach)</span></a></li>
-<li class="toclevel-1 tocsection-5"><a href="#Parameter_attribute_.28Val.29"><span class="tocnumber">5</span> <span class="toctext">Parameter attribute (Val)</span></a></li>
-<li class="toclevel-1 tocsection-6"><a href="#DB_test_.28DB.29"><span class="tocnumber">6</span> <span class="toctext">DB test (DB)</span></a></li>
-<li class="toclevel-1 tocsection-7"><a href="#Transport_.28TrOut.29"><span class="tocnumber">7</span> <span class="toctext">Transport (TrOut)</span></a></li>
-<li class="toclevel-1 tocsection-8"><a href="#Control_language_of_the_program_.28SysContrLang.29"><span class="tocnumber">8</span> <span class="toctext">Control language of the program (SysContrLang)</span></a></li>
-<li class="toclevel-1 tocsection-9"><a href="#Value_buffer_.28ValBuf.29"><span class="tocnumber">9</span> <span class="toctext">Value buffer (ValBuf)</span></a></li>
-<li class="toclevel-1 tocsection-10"><a href="#Value_archive_.28Archive.29"><span class="tocnumber">10</span> <span class="toctext">Value archive (Archive)</span></a></li>
-<li class="toclevel-1 tocsection-11"><a href="#Base64_encoding_.28Base64Code.29"><span class="tocnumber">11</span> <span class="toctext">Base64 encoding (Base64Code)</span></a></li>
-</ul>
-</div>
-
 <p>The module contains a set of tests designed to test various subsystems and components of OpenSCADA. The tests are performed as functions of the user API, so they can run as a single time, in the "Execute" tab of the page object function, and from the user procedures, passing the necessary arguments to them.
 </p><p>To address the functions of the library you can use the static call address <b>Special.FLibComplex1.{Func}()</b> or dynamic <b>SYS.Special.FLibComplex1["{Func}"].call()</b>, <b>SYS.Special.FLibComplex1.{Func}()</b>. Where <i>Func</i> — identifier of the function in the library.
 </p><p>In addition to the usual mechanisms of user API execution, an autonomous mechanism is provided. This mechanism is represented by a separate task, performed with the period of one second, and which calls the functions of tests accordingly to the settings in the configuration file.
@@ -98,6 +82,22 @@ Where:
   &lt;/station&gt;
 &lt;/OpenSCADA&gt;
 </pre>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Parameter_.28Param.29"><span class="tocnumber">1</span> <span class="toctext">Parameter (Param)</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#XML_parsing_.28XML.29"><span class="tocnumber">2</span> <span class="toctext">XML parsing (XML)</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Messages_.28Mess.29"><span class="tocnumber">3</span> <span class="toctext">Messages (Mess)</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Attaching_SO_.28SOAttach.29"><span class="tocnumber">4</span> <span class="toctext">Attaching SO (SOAttach)</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Parameter_attribute_.28Val.29"><span class="tocnumber">5</span> <span class="toctext">Parameter attribute (Val)</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#DB_test_.28DB.29"><span class="tocnumber">6</span> <span class="toctext">DB test (DB)</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Transport_.28TrOut.29"><span class="tocnumber">7</span> <span class="toctext">Transport (TrOut)</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Control_language_of_the_program_.28SysContrLang.29"><span class="tocnumber">8</span> <span class="toctext">Control language of the program (SysContrLang)</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#Value_buffer_.28ValBuf.29"><span class="tocnumber">9</span> <span class="toctext">Value buffer (ValBuf)</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#Value_archive_.28Archive.29"><span class="tocnumber">10</span> <span class="toctext">Value archive (Archive)</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#Base64_encoding_.28Base64Code.29"><span class="tocnumber">11</span> <span class="toctext">Base64 encoding (Base64Code)</span></a></li>
+</ul>
+</div>
+
 <h2><span class="mw-headline" id="Parameter_.28Param.29"><span class="mw-headline-number">1</span> Parameter (Param)</span></h2>
 <p><i>Description:</i> Test of the DAQ parameters. Reads the attributes and configuration fields of the parameter.<br />
 <i>Parameters:</i>

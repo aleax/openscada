@@ -1,7 +1,7 @@
 
-//OpenSCADA module BD.MySQL file: my_sql.h
+//OpenSCADA module BD.DBGate file: DBGate.h
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2020 by Roman Savochenko, <roman@oscada.org>            *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,10 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef MY_SQL_H
-#define MY_SQL_H
-
-#include <string>
+#ifndef DBGate_H
+#define DBGate_H
 
 #include <tmodule.h>
 #include <tbds.h>
@@ -29,24 +27,23 @@
 #undef _
 #define _(mess) mod->I18N(mess)
 
-using std::string;
 using namespace OSCADA;
 
-namespace BDMySQL
+namespace BD_DBGate
 {
 
 //************************************************
-//* MBDMySQL::Table				 *
+//* BD_DBGate::Table				 *
 //************************************************
 class MBD;
 class MTable : public TTable
 {
     public:
 	//Public methods
-	MTable( string name, MBD *iown, vector< vector<string> > *tblStrct = NULL );
+	MTable( string name, MBD *iown );
 	~MTable( );
 
-	//> Field's functions
+	// Field's functions
 	void fieldStruct( TConfig &cfg );
 	bool fieldSeek( int row, TConfig &cfg, const string &cacheKey = "" );
 	void fieldGet( TConfig &cfg );
@@ -58,23 +55,10 @@ class MTable : public TTable
     private:
 	//Private methods
 	void postDisable( int flag );
-	bool isEmpty( );
-	void fieldFix( TConfig &cfg, bool trPresent = false );
-	void fieldPrmSet( TCfg &cfg, const string &last, string &req, int keyCnt = 1 );
-
-	string getVal( TCfg &cfg, uint8_t RqFlg = 0 );
-	void   setVal( TCfg &cfg, const string &vl, bool tr = false );
-
-	string UTCtoSQL( time_t val );
-	time_t SQLtoUTC( const string &val );
-
-	//Private attributes
-	vector< vector<string> > tblStrct;
-	map<string, vector< vector<string> > >	seekSess;
 };
 
 //************************************************
-//* BDMySQL::MBD				 *
+//* BD_DBGate::MBD				 *
 //************************************************
 class BDMod;
 class MBD : public TBD
@@ -90,11 +74,12 @@ class MBD : public TBD
 	void disable( );
 
 	void allowList( vector<string> &list ) const;
+	void open( const string &table, bool create );
+	void close( const string &table, bool del = false, long tm = -1 );
 	void sqlReq( const string &req, vector< vector<string> > *tbl = NULL, char intoTrans = EVAL_BOOL );
 
-	void transOpen( );
-	void transCommit( );
-	void transCloseCheck( );
+	// Request to OpenSCADA control interface
+	int cntrIfCmd( XMLNode &node, bool ownNode = true );
 
     protected:
 	//Protected methods
@@ -103,20 +88,17 @@ class MBD : public TBD
     private:
 	//Private methods
 	void postDisable( int flag );
+
 	TTable *openTable( const string &name, bool create );
 
 	//Private attributes
-	string	host, user, pass, bd, u_sock, cd_pg;
-	int	port;
-
 	int	reqCnt;
-	int64_t	reqCntTm, trOpenTm;
-	MYSQL	connect;
+	time_t	reqCntTm, trOpenTm;
 	ResMtx	connRes;
 };
 
 //************************************************
-//* BDMySQL::BDMod                               *
+//* BD_DBGate::BDMod                             *
 //************************************************
 class BDMod: public TTypeBD
 {
@@ -132,6 +114,6 @@ class BDMod: public TTypeBD
 
 extern BDMod *mod;
 
-}
+}//End namespace BD_DBGate
 
-#endif // MY_SQL_H
+#endif // DBGate_H

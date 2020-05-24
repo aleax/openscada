@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.4.0"
+#define MOD_VER		"3.5.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -361,9 +361,8 @@ string TProt::sesCheck( int sid, const string &chUser )
 	// Loading all sessions into the table of the external authentication sessions
 	if(authSessTbl().size())
 	    try {
-		vector<vector<string> > full;
 		TConfig cEl(&elAuth);
-		for(int fldCnt = 0; SYS->db().at().dataSeek(authSessTbl(),mod->nodePath()+"AuthSessions/",fldCnt++,cEl,false,&full); ) {
+		for(int fldCnt = 0; SYS->db().at().dataSeek(authSessTbl(),mod->nodePath()+"AuthSessions/",fldCnt++,cEl); ) {
 		    authEl = mAuth.find(cEl.cfg("ID").getI());
 		    // Appending entries of the external authentication sessions
 		    if(authEl == mAuth.end() && SYS->security().at().usrPresent(cEl.cfg("USER").getS()))
@@ -371,7 +370,7 @@ string TProt::sesCheck( int sid, const string &chUser )
 		    // Removing for inconsistent duples for re-login
 		    else if(authEl != mAuth.end() && cEl.cfg("USER").getS() != authEl->second.name) {
 			if(!SYS->db().at().dataDel(authSessTbl(),mod->nodePath()+"AuthSessions/",cEl,true,false,true)) break;
-			if(full.empty()) fldCnt--;
+			fldCnt--;
 		    }
 		    // Updating for the authentication session time
 		    else if(authEl != mAuth.end() && cEl.cfg("TIME").getI() > authEl->second.tAuth)

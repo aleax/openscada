@@ -31,7 +31,7 @@
 <td> <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">HTTP</a> </td>
 <td> HTTP-реалізація
 </td>
-<td> 3.4 </td>
+<td> 3.5 </td>
 <td> GPL2 </td>
 <td> prot_HTTP.so </td>
 <td> en,uk,ru,de </td>
@@ -59,7 +59,16 @@
 </p>
 <ul><li> Контроль за активними сеансами автентифікації.</li>
 <li> Конфігурацію:
-<ul><li> Правила доступу для заборони та дозволу. Кожний рядок є окремим правилом та Ви можете використовувати шаблони, на кшталт "*/WebVision/*", або регулярні вирази, на кшталт "/[^/]+/WebVision/.+/".</li>
+<ul><li> Правила доступу для заборони та дозволу. Кожний рядок є окремим правилом та Ви можете використовувати шаблони, на кшталт "*/WebVision/*", або регулярні вирази, на кшталт "/[^/]+/WebVision/.+/". Корисні записи для:
+<ul><li> Заборонено:
+<ul><li> "*/WebCfgD/*" — <a href="../Modules/WebCfgD.html" title="Special:MyLanguage/Modules/WebCfgD">модуль WebCfgD</a> цілком;</li>
+<li> "*/WebVision/*tmplSO/*" — проект СВУ "tmplSO" <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">модуля WebVision</a>.</li></ul></li>
+<li> Дозволено:
+<ul><li> "*" — все, виключаючи заборонене;</li>
+<li> "/^[^/]+/[^/]*$/" — сторінки модуля з усіма їх ресурсами;</li>
+<li> "*/login/*" — сторінка авторизації-входу;</li>
+<li> "/^[^/]+/WebVision/[^/]*($|\?)/" — основна сторінка <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">модуля WebVision</a> без доступу до проектів СВУ;</li>
+<li> "/^[^/]+/WebVision/.+_aviariesOril\d*/.*/" — проект СВУ "aviariesOril" <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">модуля WebVision</a>.</li></ul></li></ul></li>
 <li> HTML-шаблон користувацького інтерфейсу та користувацької головної сторінки. У полях HTML-шаблону має вказуватися адреса до файлу HTML/XHTML, який буде використано у формуванні внутрішніх-сервісних інтерфейсів та головної сторінки. Внутрішні-сервісні інтерфейси, це наприклад: обрання модулів, сторінка авторизації та подібне у WEB-модулів. Від шаблону вимагається коректність XHTML, яка дозволяє розібрати файл XML-парсером, а також наявність мітки "#####CONTEXT#####" у місці розташування динамічного вмісту, що обов'язково для внутрішніх-сервісних інтерфейсів. Ресурсні файли шаблонів представлено зображеннями, CSS та JavaScript файлами, та які шукаються від теки у якій вказано розташування файлу шаблону та від поточної теки. Для іншого, до мови, файлу шаблону, Ви можете додати суфікс мови у кінець цього файлу "{Мій Шаблон}_{мова}.html", але обирати у конфігураційних полях основний-базовий файл шаблону "{Мій Шаблон}.html". У випадку виявлення помилок у шаблоні, буде використано стандартний вбудований інтерфейс. У якості прикладу шаблонів Ви можете подивитися такі найбільш вживані:
 <ul><li> <a class="external" href="http://oscada.org/wiki/File:HTTP_webopenscada.html.gz" title="File:HTTP webopenscada.html.gz">Шаблон внутрішнього-сервісного інтерфейсу та головної сторінки, включаючи індекс модулів</a>.</li>
 <li> <a class="external" href="http://oscada.org/wiki/File:HTTP_webopenscada_main.html.gz" title="File:HTTP webopenscada main.html.gz">Шаблон головної сторінки</a> із прямим посиланням на головний інтерфейс <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">АГЛКС</a> за допомогою модуля <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">UI.WebVision</a> та без індексу WEB-модулів.</li>

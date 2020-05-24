@@ -42,7 +42,7 @@
 #define MOD_NAME	_("Block based calculator")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.9.0"
+#define MOD_VER		"1.10.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a block based calculator.")
 #define LICENSE		"GPL2"
@@ -234,9 +234,8 @@ void Contr::load_( )
     //cEl.cfgViewAll(false);
     string bd = DB()+"."+cfg("BLOCK_SH").getS();
     map<string, bool>	itReg;
-    vector<vector<string> > full;
 
-    for(int fldCnt = 0; SYS->db().at().dataSeek(bd,mod->nodePath()+cfg("BLOCK_SH").getS(),fldCnt++,cEl,false,&full); ) {
+    for(int fldCnt = 0; SYS->db().at().dataSeek(bd,mod->nodePath()+cfg("BLOCK_SH").getS(),fldCnt++,cEl,false,true); ) {
 	string id = cEl.cfg("ID").getS();
 	if(!chldPresent(mBl,id)) {
 	    blkAdd(id);

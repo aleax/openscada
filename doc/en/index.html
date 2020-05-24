@@ -45,12 +45,13 @@
 <h3><span class="mw-headline" id="Policy_.28started_from_0.8.29"><span class="mw-headline-number">1.1</span> Policy (started from 0.8)</span></h3>
 <p>OpenSCADA versions form into the two branches:
 </p>
-<ul><li> <b>Work</b>: development-work version with the night builds for some number of Linux distributions and directly specified by the subscription for support.</li></ul>
+<ul><li> <b>Work</b>: development-work version with the night builds for some number of Linux distributions and directly specified by the subscription for support — by <a class="external text" href="http://oscada.org/en/services/technical-support/" rel="nofollow noreferrer noopener" target="_blank">an actual package of the technical support</a>.</li></ul>
 <dl><dd><b>1+rNNNN</b>, where "NNNN" — <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/" rel="nofollow noreferrer noopener" target="_blank">the SVN (SubVersion) revision number</a>.</dd></dl>
-<ul><li> <b>LTS</b> (Long Term Support): formal and public release of the last "Work" version with support up to the next iteration: "Work" -&gt; "LTS" (zero update number), "Work"++.</li></ul>
+<ul><li> <b>LTS</b> (Long Term Support): formal release of the last "Work" version with support up to the next iteration: "Work" -&gt; "LTS" (zero update number), "Work"++.</li></ul>
 <dl><dd><b>0.9.U.S</b>, where:
-<dl><dd>"U" — regular updating number, 2-4 month. After the regular updating period, all fixes and improvements from the "Work" version will be merged to "LTS", and also, those that break some API compatibility, but do not break the functionality and data compatibility; and U++.</dd>
-<dd>"S" (<span style="color: red;">doesn't implemented yet</span>) — service updating number. A service update (S++) version will be built, automatically or manually (for specific), for any hot fixes which allowed only for consumers subscribed to the official support.</dd></dl></dd></dl>
+<dl><dd>"U" — regular updating (2-4 month) number; at the regular updating, all fixes and improvements from the "Work" version merge to "LTS", and also those that break some API compatibility, but do not break the functionality and data compatibility; and U++;</dd>
+<dd>"S" — service updating number; for any critical fixes, automatically or manually (for specific), creates a service update (S++),
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> which allowed only for consumers subscribed to the official support — <a class="external text" href="http://oscada.org/en/services/technical-support/" rel="nofollow noreferrer noopener" target="_blank">purchased an actual package of the technical support</a>.</dd></dl></dd></dl></dd></dl>
 <h2><span class="mw-headline" id="User_documents"><span class="mw-headline-number">2</span> User documents</span></h2>
 <ul><li> <a href="About.html" title="Special:MyLanguage/About">About OpenSCADA</a></li>
 <li> <a href="Terms.html" title="Special:MyLanguage/Documents/Terms">Terms and abbreviation</a></li>
@@ -88,7 +89,7 @@
 <td> <a href="Modules/SQLite.html" title="Special:MyLanguage/Modules/SQLite">SQLite</a> </td>
 <td> DB SQLite
 </td>
-<td> 2.8 </td>
+<td> 3.0 </td>
 <td> GPL2 </td>
 <td> bd_SQLite.so </td>
 <td> en,uk,ru,de </td>
@@ -99,7 +100,7 @@
 <td> <a href="Modules/MySQL.html" title="Special:MyLanguage/Modules/MySQL">MySQL</a> </td>
 <td> DB MySQL
 </td>
-<td> 3.3 </td>
+<td> 3.5 </td>
 <td> GPL2 </td>
 <td> bd_MySQL.so </td>
 <td> en,uk,ru,de </td>
@@ -110,7 +111,7 @@
 <td> <a href="Modules/PostgreSQL.html" title="Special:MyLanguage/Modules/PostgreSQL">PostgreSQL</a> </td>
 <td> DB PostgreSQL
 </td>
-<td> 2.4 </td>
+<td> 2.5 </td>
 <td> GPL2 </td>
 <td> bd_PostgreSQL.so </td>
 <td> en,uk,ru,de </td>
@@ -121,7 +122,7 @@
 <td> <a href="Modules/FireBird.html" title="Special:MyLanguage/Modules/FireBird">FireBird</a> </td>
 <td> DB FireBird
 </td>
-<td> 2.3 </td>
+<td> 2.5 </td>
 <td> GPL2 </td>
 <td> bd_FireBird.so </td>
 <td> en,uk,ru,de </td>
@@ -132,7 +133,7 @@
 <td> <a href="Modules/DBF.html" title="Special:MyLanguage/Modules/DBF">DBF</a> </td>
 <td> DB DBF
 </td>
-<td> 2.2 </td>
+<td> 2.4 </td>
 <td> GPL2 </td>
 <td> bd_DBF.so </td>
 <td> en,uk,ru,de </td>
@@ -153,7 +154,7 @@
 <td> <a href="Modules/LDAP.html" title="Special:MyLanguage/Modules/LDAP">LDAP</a> </td>
 <td> Directory by LDAP
 </td>
-<td> 0.5 </td>
+<td> 0.6 </td>
 <td> GPL2 </td>
 <td> bd_LDAP.so </td>
 <td> en,uk,ru,de </td>
@@ -214,7 +215,7 @@
 <td> <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> </td>
 <td> ModBus
 </td>
-<td> 2.2 </td>
+<td> 2.3 </td>
 <td> GPL2 </td>
 <td> daq_ModBus.so </td>
 <td> en,uk,ru,de </td>
@@ -225,7 +226,7 @@
 <td> <a href="Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC_UA</a> </td>
 <td> Server OPC-UA
 </td>
-<td> 1.8 </td>
+<td> 1.9 </td>
 <td> GPL2 </td>
 <td> daq_OPC_UA.so </td>
 <td> en,uk,ru,de </td>
@@ -236,7 +237,7 @@
 <td> <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">UserProtocol</a> </td>
 <td> User protocol
 </td>
-<td> 1.2 </td>
+<td> 1.3 </td>
 <td> GPL2 </td>
 <td> prot_UserProtocol.so </td>
 <td> en,uk,ru,de </td>
@@ -247,7 +248,7 @@
 <td> <a href="Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">HTTP</a> </td>
 <td> HTTP-realization
 </td>
-<td> 3.4 </td>
+<td> 3.5 </td>
 <td> GPL2 </td>
 <td> prot_HTTP.so </td>
 <td> en,uk,ru,de </td>
@@ -261,7 +262,7 @@
 <td> <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a> </td>
 <td> Calculator on the Java-like language
 </td>
-<td> 4.3 </td>
+<td> 4.4 </td>
 <td> GPL2 </td>
 <td> daq_JavaLikeCalc.so </td>
 <td> en,uk,ru,de </td>
@@ -272,7 +273,7 @@
 <td> <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">LogicLev</a> </td>
 <td> Logical level
 </td>
-<td> 2.2 </td>
+<td> 2.3 </td>
 <td> GPL2 </td>
 <td> daq_LogicLev.so </td>
 <td> en,uk,ru,de </td>
@@ -283,7 +284,7 @@
 <td> <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">BlockCalc</a> </td>
 <td> Block calculator
 </td>
-<td> 1.9 </td>
+<td> 1.10 </td>
 <td> GPL2 </td>
 <td> daq_BlockCalc.so </td>
 <td> en,uk,ru,de </td>
@@ -482,7 +483,7 @@
 <td> <a href="Modules/FSArch.html" title="Special:MyLanguage/Modules/FSArch">FSArch</a> </td>
 <td> Archiver on the file system
 </td>
-<td> 3.4 </td>
+<td> 3.5 </td>
 <td> GPL2 </td>
 <td> arh_FSArch.so </td>
 <td> en,uk,ru,de </td>
@@ -493,7 +494,7 @@
 <td> <a href="Modules/DBArch.html" title="Special:MyLanguage/Modules/DBArch">DBArch</a> </td>
 <td> Arhivator on the DB
 </td>
-<td> 2.8 </td>
+<td> 2.9 </td>
 <td> GPL2 </td>
 <td> arh_DBArch.so </td>
 <td> en,uk,ru,de </td>
@@ -507,7 +508,7 @@
 <td> <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
 <td> Visual control area engine
 </td>
-<td> 6.1 </td>
+<td> 6.2 </td>
 <td> GPL2 </td>
 <td> ui_VCAEngine.so </td>
 <td> en,uk,ru,de </td>
@@ -583,7 +584,7 @@
 <td> <a href="Modules/WebUser.html" title="Special:MyLanguage/Modules/WebUser">WebUser</a> </td>
 <td> User WWW-page
 </td>
-<td> 1.1 </td>
+<td> 1.2 </td>
 <td> GPL2 </td>
 <td> ui_WebUser.so </td>
 <td> en,uk,ru,de </td>
@@ -608,7 +609,7 @@
 <td> <a href="Modules/SystemTests.html" title="Special:MyLanguage/Modules/SystemTests">SystemTests</a> </td>
 <td> OpenSCADA and its modules' tests
 </td>
-<td> 1.7 </td>
+<td> 1.8 </td>
 <td> GPL2 </td>
 <td> spec_SystemTests.so </td>
 <td> en,uk,ru,de </td>
@@ -731,7 +732,7 @@
 <td> en, uk, ru
 </td></tr>
 <tr>
-<td colspan="5"> <i>Graphic elements' libraries of OpenSCADA module <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">UI.VCAEngine</a></i>
+<td colspan="5"> <i>Graphical elements' libraries of the OpenSCADA module <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">UI.VCAEngine</a></i>
 </td></tr>
 
 <tr>

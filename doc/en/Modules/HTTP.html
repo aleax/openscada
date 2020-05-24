@@ -31,7 +31,7 @@
 <td> <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">HTTP</a> </td>
 <td> HTTP-realization
 </td>
-<td> 3.4 </td>
+<td> 3.5 </td>
 <td> GPL2 </td>
 <td> prot_HTTP.so </td>
 <td> en,uk,ru,de </td>
@@ -59,7 +59,16 @@
 </p>
 <ul><li> Control for the active authentication sessions.</li>
 <li> Configuring:
-<ul><li> Rules of accessing for deny and allow. Any line of the rules of accessing is a different rule and you can use here templates, like to "*/WebVision/*"), or regular expressions, like to "/[^/]+/WebVision/.+/".</li>
+<ul><li> Rules of accessing for deny and allow. Any line of the rules of accessing is a different rule and you can use here templates, like to "*/WebVision/*"), or regular expressions, like to "/[^/]+/WebVision/.+/". Useful entries for:
+<ul><li> Deny:
+<ul><li> "*/WebCfgD/*" — <a href="../Modules/WebCfgD.html" title="Special:MyLanguage/Modules/WebCfgD">the module WebCfgD</a> completely;</li>
+<li> "*/WebVision/*tmplSO/*" — the VCA project "tmplSO" of <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">the module WebVision</a>.</li></ul></li>
+<li> Allow:
+<ul><li> "*" — all, excluding the deny;</li>
+<li> "/^[^/]+/[^/]*$/" — pages of the module with all their resources;</li>
+<li> "*/login/*" — the login page;</li>
+<li> "/^[^/]+/WebVision/[^/]*($|\?)/" — <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">the WebVision module</a> main page without the VCA projects accessing;</li>
+<li> "/^[^/]+/WebVision/.+_aviariesOril\d*/.*/" — the VCA project "aviariesOril" of <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">the module WebVision</a>.</li></ul></li></ul></li>
 <li> HTML-template of the user interface and user main-page. In the HTML-template's fields you must specify an address of the file HTML/XHTML, which will be used for formation of the internal-service and main-page interfaces. Internal-service interfaces for example, it's the WEB-modules selection, the login page and like ones of the WEB-modules. From the template required correct XHTML, allowing parse the file by XML-parser, and the presence of the tag "#####CONTEXT#####" at the location of the dynamic content, for internal-service interfaces it's necessarily. Resource files of the templates represented by images, CSS and JavaScript files and their are searching from the directory in which located the specified template file and from the current directory. If errors are found in the template there will be use a standard builtin interface. For different, to the language, template file you can add the language suffix to the file end like "{My template}_{lang}.html" but select the generic-base template file "{My template}.html" into these configuration fields. For the templates example you can see to the most used templates:
 <ul><li> <a class="external" href="http://oscada.org/wiki/File:HTTP_webopenscada.html.gz" title="File:HTTP webopenscada.html.gz">Internal-service and main-page interfaces template, includes the modules index</a>.</li>
 <li> <a class="external" href="http://oscada.org/wiki/File:HTTP_webopenscada_main.html.gz" title="File:HTTP webopenscada main.html.gz">Main-page's template</a> with a direct link to the <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">AGLKS</a> main interface by <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">UI.WebVision</a> and without the WEB-modules index.</li>

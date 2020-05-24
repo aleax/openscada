@@ -45,12 +45,13 @@
 <h3><span class="mw-headline" id=".D0.9F.D0.BE.D0.BB.D1.96.D1.82.D0.B8.D0.BA.D0.B0_.28.D0.BF.D0.BE.D1.87.D0.B8.D0.BD.D0.B0.D1.8E.D1.87.D0.B8_.D1.96.D0.B7_0.8.29"><span class="mw-headline-number">1.1</span> Політика (починаючи із 0.8)</span></h3>
 <p>OpenSCADA версії формуються у двох гілках:
 </p>
-<ul><li> <b>Робоча</b>: розроблювана-робоча версія з нічними збірками для деякого переліку Linux дистрибутивів, та прямо визначених підпискою на підтримку.</li></ul>
+<ul><li> <b>Робоча</b>: розроблювана-робоча версія з нічними збірками для деякого переліку Linux дистрибутивів, та прямо визначених підпискою на підтримку — <a class="external text" href="http://oscada.org/ua/poslugi/tekh-pidtrimka/" rel="nofollow noreferrer noopener" target="_blank">актуальним пакетом технічної підтримки</a>.</li></ul>
 <dl><dd><b>1+rNNNN</b>, де "NNNN" — <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/" rel="nofollow noreferrer noopener" target="_blank">SVN (SubVersion) номер ревізії</a>.</dd></dl>
-<ul><li> <b>LTS</b> (Тривала Підтримка): формальний та публічний випуск останньої "Робочої" версії із підтримкою безпосередньо до наступної ітерації: "Робоча" -&gt; "LTS" (нульовий рівень оновлення), "Робоча"++.</li></ul>
+<ul><li> <b>LTS</b> (Тривала Підтримка): формальний випуск останньої "Робочої" версії із підтримкою безпосередньо до наступної ітерації: "Робоча" -&gt; "LTS" (нульовий рівень оновлення), "Робоча"++.</li></ul>
 <dl><dd><b>0.9.U.S</b>, де:
-<dl><dd>"U" — номер регулярного оновлення, 2-4 місяці. Після періоду регулярного оновлення, із "Робочої" версії до "LTS" будуть перенесені всі виправлення та вдосконалення, також ті, що дещо ламають сумісність API, але не ламають сумісність за функціями та даними, та U++.</dd>
-<dd>"S" (<span style="color: red;">не реалізовано ще</span>) — номер сервісного оновлення. Для будь-яких гарячих виправлень, автоматично або вручну (у спеціальних випадках), буде зібрано версію сервісного оновлення (S++) яку призначено тільки користувачам, підписаним на офіційну підтримку.</dd></dl></dd></dl>
+<dl><dd>"U" — номер регулярного оновлення (2-4 місяці); з черговим регулярним оновленням із "Робочої" версії до "LTS" переносяться всі виправлення та вдосконалення, також ті що дещо порушують сумісність API, але не порушують сумісності за функціями та даними; та U++;</dd>
+<dd>"S" — номер сервісного оновлення; для будь-яких критичних виправлень, автоматично або вручну (у спеціальних випадках), створюється сервісне оновлення (S++),
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> яке призначено лише користувачам, підписаним на офіційну підтримку — <a class="external text" href="http://oscada.org/ua/poslugi/tekh-pidtrimka/" rel="nofollow noreferrer noopener" target="_blank">придбано актуальний пакет технічної підтримки</a>.</dd></dl></dd></dl></dd></dl>
 <h2><span class="mw-headline" id=".D0.94.D0.BE.D0.BA.D1.83.D0.BC.D0.B5.D0.BD.D1.82.D0.B8_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.87.D0.B0"><span class="mw-headline-number">2</span> Документи користувача</span></h2>
 <ul><li> <a href="About.html" title="Special:MyLanguage/About">Про OpenSCADA</a></li>
 <li> <a href="Terms.html" title="Special:MyLanguage/Documents/Terms">Терміни та скорочення</a></li>
@@ -88,7 +89,7 @@
 <td> <a href="Modules/SQLite.html" title="Special:MyLanguage/Modules/SQLite">SQLite</a> </td>
 <td> БД SQLite
 </td>
-<td> 2.8 </td>
+<td> 3.0 </td>
 <td> GPL2 </td>
 <td> bd_SQLite.so </td>
 <td> en,uk,ru,de </td>
@@ -99,7 +100,7 @@
 <td> <a href="Modules/MySQL.html" title="Special:MyLanguage/Modules/MySQL">MySQL</a> </td>
 <td> БД MySQL
 </td>
-<td> 3.3 </td>
+<td> 3.5 </td>
 <td> GPL2 </td>
 <td> bd_MySQL.so </td>
 <td> en,uk,ru,de </td>
@@ -110,7 +111,7 @@
 <td> <a href="Modules/PostgreSQL.html" title="Special:MyLanguage/Modules/PostgreSQL">PostgreSQL</a> </td>
 <td> БД PostgreSQL
 </td>
-<td> 2.4 </td>
+<td> 2.5 </td>
 <td> GPL2 </td>
 <td> bd_PostgreSQL.so </td>
 <td> en,uk,ru,de </td>
@@ -121,7 +122,7 @@
 <td> <a href="Modules/FireBird.html" title="Special:MyLanguage/Modules/FireBird">FireBird</a> </td>
 <td> БД FireBird
 </td>
-<td> 2.3 </td>
+<td> 2.5 </td>
 <td> GPL2 </td>
 <td> bd_FireBird.so </td>
 <td> en,uk,ru,de </td>
@@ -132,7 +133,7 @@
 <td> <a href="Modules/DBF.html" title="Special:MyLanguage/Modules/DBF">DBF</a> </td>
 <td> БД DBF
 </td>
-<td> 2.2 </td>
+<td> 2.4 </td>
 <td> GPL2 </td>
 <td> bd_DBF.so </td>
 <td> en,uk,ru,de </td>
@@ -153,7 +154,7 @@
 <td> <a href="Modules/LDAP.html" title="Special:MyLanguage/Modules/LDAP">LDAP</a> </td>
 <td> Директорія за LDAP
 </td>
-<td> 0.5 </td>
+<td> 0.6 </td>
 <td> GPL2 </td>
 <td> bd_LDAP.so </td>
 <td> en,uk,ru,de </td>
@@ -214,7 +215,7 @@
 <td> <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> </td>
 <td> ModBus
 </td>
-<td> 2.2 </td>
+<td> 2.3 </td>
 <td> GPL2 </td>
 <td> daq_ModBus.so </td>
 <td> en,uk,ru,de </td>
@@ -225,7 +226,7 @@
 <td> <a href="Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC_UA</a> </td>
 <td> Сервер OPC-UA
 </td>
-<td> 1.8 </td>
+<td> 1.9 </td>
 <td> GPL2 </td>
 <td> daq_OPC_UA.so </td>
 <td> en,uk,ru,de </td>
@@ -236,7 +237,7 @@
 <td> <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">UserProtocol</a> </td>
 <td> Користувацький протокол
 </td>
-<td> 1.2 </td>
+<td> 1.3 </td>
 <td> GPL2 </td>
 <td> prot_UserProtocol.so </td>
 <td> en,uk,ru,de </td>
@@ -247,7 +248,7 @@
 <td> <a href="Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">HTTP</a> </td>
 <td> HTTP-реалізація
 </td>
-<td> 3.4 </td>
+<td> 3.5 </td>
 <td> GPL2 </td>
 <td> prot_HTTP.so </td>
 <td> en,uk,ru,de </td>
@@ -261,7 +262,7 @@
 <td> <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a> </td>
 <td> Обчислювач на мові подібній до Java
 </td>
-<td> 4.3 </td>
+<td> 4.4 </td>
 <td> GPL2 </td>
 <td> daq_JavaLikeCalc.so </td>
 <td> en,uk,ru,de </td>
@@ -272,7 +273,7 @@
 <td> <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">LogicLev</a> </td>
 <td> Логічний рівень
 </td>
-<td> 2.2 </td>
+<td> 2.3 </td>
 <td> GPL2 </td>
 <td> daq_LogicLev.so </td>
 <td> en,uk,ru,de </td>
@@ -283,7 +284,7 @@
 <td> <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">BlockCalc</a> </td>
 <td> Блоковий обчислювач
 </td>
-<td> 1.9 </td>
+<td> 1.10 </td>
 <td> GPL2 </td>
 <td> daq_BlockCalc.so </td>
 <td> en,uk,ru,de </td>
@@ -482,7 +483,7 @@
 <td> <a href="Modules/FSArch.html" title="Special:MyLanguage/Modules/FSArch">FSArch</a> </td>
 <td> Архіватор на файлову систему
 </td>
-<td> 3.4 </td>
+<td> 3.5 </td>
 <td> GPL2 </td>
 <td> arh_FSArch.so </td>
 <td> en,uk,ru,de </td>
@@ -493,7 +494,7 @@
 <td> <a href="Modules/DBArch.html" title="Special:MyLanguage/Modules/DBArch">DBArch</a> </td>
 <td> Архіватор до БД
 </td>
-<td> 2.8 </td>
+<td> 2.9 </td>
 <td> GPL2 </td>
 <td> arh_DBArch.so </td>
 <td> en,uk,ru,de </td>
@@ -507,7 +508,7 @@
 <td> <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
 <td> Рушій Середовища Візуалізації та Управління
 </td>
-<td> 6.1 </td>
+<td> 6.2 </td>
 <td> GPL2 </td>
 <td> ui_VCAEngine.so </td>
 <td> en,uk,ru,de </td>
@@ -583,7 +584,7 @@
 <td> <a href="Modules/WebUser.html" title="Special:MyLanguage/Modules/WebUser">WebUser</a> </td>
 <td> WWW-сторінка користувача
 </td>
-<td> 1.1 </td>
+<td> 1.2 </td>
 <td> GPL2 </td>
 <td> ui_WebUser.so </td>
 <td> en,uk,ru,de </td>
@@ -608,7 +609,7 @@
 <td> <a href="Modules/SystemTests.html" title="Special:MyLanguage/Modules/SystemTests">SystemTests</a> </td>
 <td> Тести OpenSCADA та її модулів
 </td>
-<td> 1.7 </td>
+<td> 1.8 </td>
 <td> GPL2 </td>
 <td> spec_SystemTests.so </td>
 <td> en,uk,ru,de </td>

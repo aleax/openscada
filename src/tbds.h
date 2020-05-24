@@ -21,7 +21,7 @@
 #ifndef TBDS_H
 #define TBDS_H
 
-#define SDB_VER		21		//BDS type modules version
+#define SDB_VER		22		//BDS type modules version
 #define SDB_ID		"BD"
 
 #include <stdio.h>
@@ -62,7 +62,7 @@ class TTable : public TCntrNode
 
 	virtual void fieldStruct( TConfig &cfg )
 	{ throw TError(nodePath().c_str(),_("Function '%s' is not supported!"),"fieldStruct"); }
-	virtual bool fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full = NULL )
+	virtual bool fieldSeek( int row, TConfig &cfg, const string &cacheKey = "" )
 	{ throw TError(nodePath().c_str(),_("Function '%s' is not supported!"),"fieldSeek"); }
 	virtual void fieldGet( TConfig &cfg )
 	{ throw TError(nodePath().c_str(),_("Function '%s' is not supported!"),"fieldGet"); }
@@ -133,8 +133,8 @@ class TBD : public TCntrNode, public TConfig
 	{ throw TError(nodePath().c_str(),_("Function '%s' is not supported!"),"allowList"); }
 	void list( vector<string> &list ) const		{ chldList(mTbl, list); }
 	bool openStat( const string &table ) const	{ return chldPresent(mTbl, table); }
-	void open( const string &table, bool create );
-	void close( const string &table, bool del = false, long tm = -1 )	{ chldDel(mTbl, table, tm, del); }
+	virtual void open( const string &table, bool create );
+	virtual void close( const string &table, bool del = false, long tm = -1 )	{ chldDel(mTbl, table, tm, del); }
 	AutoHD<TTable> at( const string &name ) const	{ return chldAt(mTbl, name); }
 
 	// SQL request interface
@@ -258,7 +258,7 @@ class TBDS : public TSubSYS, public TElem
 	void close( const string &bdn, bool del = false );
 
 	// Get Data from DB or config file. If <tbl> cleaned then load from config-file
-	bool dataSeek( const string &bdn, const string &path, int lev, TConfig &cfg, bool forceCfg = false, vector< vector<string> > *full = NULL, XMLNode *localCfgCtx = NULL );
+	bool dataSeek( const string &bdn, const string &path, int lev, TConfig &cfg, bool forceCfg = false, bool useCache = false, XMLNode *localCfgCtx = NULL );
 	bool dataGet( const string &bdn, const string &path, TConfig &cfg, bool forceCfg = false, bool noEx = false, XMLNode *localCfgCtx = NULL );
 	bool dataSet( const string &bdn, const string &path, TConfig &cfg, bool forceCfg = false, bool noEx = false, XMLNode *localCfgCtx = NULL );
 	bool dataDel( const string &bdn, const string &path, TConfig &cfg, bool useKeyAll = false, bool forceCfg = false, bool noEx = false );	//Next test for noEx=false

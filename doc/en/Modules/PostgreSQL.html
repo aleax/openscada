@@ -31,7 +31,7 @@
 <td> <a href="../Modules/PostgreSQL.html" title="Special:MyLanguage/Modules/PostgreSQL">PostgreSQL</a> </td>
 <td> DB PostgreSQL
 </td>
-<td> 2.4 </td>
+<td> 2.5 </td>
 <td> GPL2 </td>
 <td> bd_PostgreSQL.so </td>
 <td> en,uk,ru,de </td>
@@ -41,6 +41,8 @@
 <td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2010-2011)</i></font> </td>
 <td> DB module. Provides support of the DBMS PostgreSQL.
 </td></tr></table>
+<p>The module provides OpenSCADA with support the DBMS PostgreSQL, which is a powerful relational and multiplatform DBMS, available under a free license and developed by <a class="external text" href="http://www.postgresql.org/" rel="nofollow noreferrer noopener" target="_blank">the PostgreSQL community</a>. The module is based on the C language API library of the DBMS PostgreSQL developers and allows you to perform operations over databases, tables and contents of tables.
+</p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#Operations_over_the_database"><span class="tocnumber">1</span> <span class="toctext">Operations over the database</span></a></li>
@@ -51,8 +53,6 @@
 </ul>
 </div>
 
-<p>The module provides OpenSCADA with support the DBMS PostgreSQL, which is a powerful relational and multiplatform DBMS, available under a free license and developed by <a class="external text" href="http://www.postgresql.org/" rel="nofollow noreferrer noopener" target="_blank">the PostgreSQL community</a>. The module is based on the C language API library of the DBMS PostgreSQL developers and allows you to perform operations over databases, tables and contents of tables.
-</p>
 <h2><span class="mw-headline" id="Operations_over_the_database"><span class="mw-headline-number">1</span> Operations over the database</span></h2>
 <p>The operations of opening and closing of the database is supported, with the possibility of creating a new database when you open and delete existing at the close. In terms of the subsystem "DB" of OpenSCADA, opening of DB is its registration for further using of the program. It also supports the operation of requesting the list of tables in the database.
 </p><p>DBMS PostgreSQL addresses by a string of the following type: <b>{host};{hostaddr};{user};{pass};{db};{port}[;{connect_timeout}]</b>. Where:

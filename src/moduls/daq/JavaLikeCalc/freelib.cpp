@@ -111,9 +111,8 @@ void Lib::load_( TConfig *icfg )
     //Load functions
     map<string, bool>   itReg;
     TConfig cEl(&mod->elFnc());
-    vector<vector<string> > full;
     //cEl.cfgViewAll(false);
-    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl(),fldCnt++,cEl,false,&full); ) {
+    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl(),fldCnt++,cEl,false,true); ) {
 	string fId = cEl.cfg("ID").getS();
 	if(!present(fId)) add(fId);
 	at(fId).at().load(&cEl);

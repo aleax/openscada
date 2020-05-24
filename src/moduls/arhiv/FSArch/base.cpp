@@ -171,13 +171,12 @@ void ModArch::perSYSCall( unsigned int cnt )
 
 	//Check for not presented files of the archive
 	struct stat file_stat;
-	vector<vector<string> > full;
 	TConfig cEl(&mod->packFE());
 	cEl.cfgViewAll(false);
-	for(int fldCnt = 0; time(NULL) < end_tm && SYS->db().at().dataSeek(mod->filesDB(),mod->nodePath()+"Pack",fldCnt++,cEl,false,&full); )
+	for(int fldCnt = 0; time(NULL) < end_tm && SYS->db().at().dataSeek(mod->filesDB(),mod->nodePath()+"Pack",fldCnt++,cEl); )
 	    if(stat(cEl.cfg("FILE").getS().c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG) {
 		if(!SYS->db().at().dataDel(mod->filesDB(),mod->nodePath()+"Pack",cEl,true,false,true))	break;
-		if(full.empty()) fldCnt--;
+		fldCnt--;
 	    }
     } catch(TError &err) { mess_sys(TMess::Error, "%s", err.mess.c_str()); }
 }

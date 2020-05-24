@@ -31,7 +31,7 @@
 <td> <a href="../Modules/SystemTests.html" title="Special:MyLanguage/Modules/SystemTests">SystemTests</a> </td>
 <td> Тесты OpenSCADA и её модулей
 </td>
-<td> 1.7 </td>
+<td> 1.8 </td>
 <td> GPL2 </td>
 <td> spec_SystemTests.so </td>
 <td> en,uk,ru,de </td>
@@ -41,22 +41,6 @@
 <td> Роман Савоченко </td>
 <td> Предоставляет группу тестов для OpenSCADA и её модулей.
 </td></tr></table>
-<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
-<ul>
-<li class="toclevel-1 tocsection-1"><a href="#.D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80_.28Param.29"><span class="tocnumber">1</span> <span class="toctext">Параметр (Param)</span></a></li>
-<li class="toclevel-1 tocsection-2"><a href="#.D0.A0.D0.B0.D0.B7.D0.B1.D0.BE.D1.80_XML_.28XML.29"><span class="tocnumber">2</span> <span class="toctext">Разбор XML (XML)</span></a></li>
-<li class="toclevel-1 tocsection-3"><a href="#.D0.A1.D0.BE.D0.BE.D0.B1.D1.89.D0.B5.D0.BD.D0.B8.D1.8F_.28Mess.29"><span class="tocnumber">3</span> <span class="toctext">Сообщения (Mess)</span></a></li>
-<li class="toclevel-1 tocsection-4"><a href="#.D0.9F.D0.BE.D0.B4.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D0.B8.D0.B5_SO_.28SOAttach.29"><span class="tocnumber">4</span> <span class="toctext">Подключение SO (SOAttach)</span></a></li>
-<li class="toclevel-1 tocsection-5"><a href="#.D0.90.D1.82.D1.80.D0.B8.D0.B1.D1.83.D1.82_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B0_.28Val.29"><span class="tocnumber">5</span> <span class="toctext">Атрибут параметра (Val)</span></a></li>
-<li class="toclevel-1 tocsection-6"><a href="#.D0.A2.D0.B5.D1.81.D1.82_.D0.91.D0.94_.28DB.29"><span class="tocnumber">6</span> <span class="toctext">Тест БД (DB)</span></a></li>
-<li class="toclevel-1 tocsection-7"><a href="#.D0.A2.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82_.28TrOut.29"><span class="tocnumber">7</span> <span class="toctext">Транспорт (TrOut)</span></a></li>
-<li class="toclevel-1 tocsection-8"><a href="#.D0.AF.D0.B7.D1.8B.D0.BA_.D1.83.D0.BF.D1.80.D0.B0.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D1.8F_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.BE.D0.B9_.28SysContrLang.29"><span class="tocnumber">8</span> <span class="toctext">Язык управления программой (SysContrLang)</span></a></li>
-<li class="toclevel-1 tocsection-9"><a href="#.D0.91.D1.83.D1.84.D0.B5.D1.80_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_.28ValBuf.29"><span class="tocnumber">9</span> <span class="toctext">Буфер значений (ValBuf)</span></a></li>
-<li class="toclevel-1 tocsection-10"><a href="#.D0.90.D1.80.D1.85.D0.B8.D0.B2_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_.28Archive.29"><span class="tocnumber">10</span> <span class="toctext">Архив значений (Archive)</span></a></li>
-<li class="toclevel-1 tocsection-11"><a href="#Base64_.D0.BA.D0.BE.D0.B4.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B5_.28Base64Code.29"><span class="tocnumber">11</span> <span class="toctext">Base64 кодирование (Base64Code)</span></a></li>
-</ul>
-</div>
-
 <p>Модуль содержит набор тестов, предназначенных для тестирования различных подсистем и узлов OpenSCADA. Тесты выполнены в виде функций пользовательского API, следовательно их можно запускать как одноразово, во вкладке "Исполнить" страницы объекта функции, так и из пользовательских процедур, передавая в них нужные аргументы.
 </p><p>Для адресации к тестам можно использовать статический адрес вызова <b>Special.SystemTests.{Test}()</b> или динамический <b>SYS.Special.SystemTests["{Test}"].call()</b>, <b>SYS.Special.SystemTests.{Test}()</b>. Где <i>Test</i> — идентификатор функции в библиотеке.
 </p><p>Кроме механизмов обычного исполнения функций пользовательского API, предусмотрен автономный механизм. Этот механизм представлен отдельной задачей, исполняющейся с периодом в одну секунду, и в которой осуществляется вызов функций тестов согласно настроек в конфигурационном файле.
@@ -98,6 +82,22 @@
   &lt;/station&gt;
 &lt;/OpenSCADA&gt;
 </pre>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80_.28Param.29"><span class="tocnumber">1</span> <span class="toctext">Параметр (Param)</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.A0.D0.B0.D0.B7.D0.B1.D0.BE.D1.80_XML_.28XML.29"><span class="tocnumber">2</span> <span class="toctext">Разбор XML (XML)</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#.D0.A1.D0.BE.D0.BE.D0.B1.D1.89.D0.B5.D0.BD.D0.B8.D1.8F_.28Mess.29"><span class="tocnumber">3</span> <span class="toctext">Сообщения (Mess)</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#.D0.9F.D0.BE.D0.B4.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D0.B8.D0.B5_SO_.28SOAttach.29"><span class="tocnumber">4</span> <span class="toctext">Подключение SO (SOAttach)</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#.D0.90.D1.82.D1.80.D0.B8.D0.B1.D1.83.D1.82_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B0_.28Val.29"><span class="tocnumber">5</span> <span class="toctext">Атрибут параметра (Val)</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#.D0.A2.D0.B5.D1.81.D1.82_.D0.91.D0.94_.28DB.29"><span class="tocnumber">6</span> <span class="toctext">Тест БД (DB)</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#.D0.A2.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82_.28TrOut.29"><span class="tocnumber">7</span> <span class="toctext">Транспорт (TrOut)</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#.D0.AF.D0.B7.D1.8B.D0.BA_.D1.83.D0.BF.D1.80.D0.B0.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D1.8F_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.BE.D0.B9_.28SysContrLang.29"><span class="tocnumber">8</span> <span class="toctext">Язык управления программой (SysContrLang)</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#.D0.91.D1.83.D1.84.D0.B5.D1.80_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_.28ValBuf.29"><span class="tocnumber">9</span> <span class="toctext">Буфер значений (ValBuf)</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#.D0.90.D1.80.D1.85.D0.B8.D0.B2_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_.28Archive.29"><span class="tocnumber">10</span> <span class="toctext">Архив значений (Archive)</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#Base64_.D0.BA.D0.BE.D0.B4.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B5_.28Base64Code.29"><span class="tocnumber">11</span> <span class="toctext">Base64 кодирование (Base64Code)</span></a></li>
+</ul>
+</div>
+
 <h2><span class="mw-headline" id=".D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80_.28Param.29"><span class="mw-headline-number">1</span> Параметр (Param)</span></h2>
 <p><i>Описание:</i> "Тест DAQ параметров. Вычитывает атрибуты и конфигурационные поля параметра.<br />
 <i>Параметры:</i>

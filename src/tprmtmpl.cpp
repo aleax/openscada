@@ -160,10 +160,9 @@ void TPrmTempl::load_( TConfig *icfg )
 
     //Load IO
     vector<string> u_pos;
-    vector<vector<string> > full;
     TConfig ioCfg(&owner().owner().elTmplIO());
     ioCfg.cfg("TMPL_ID").setS(id(), true);
-    for(int ioCnt = 0; SYS->db().at().dataSeek(owner().fullDB()+"_io",owner().owner().nodePath()+owner().tbl()+"_io",ioCnt++,ioCfg,false,&full); ) {
+    for(int ioCnt = 0; SYS->db().at().dataSeek(owner().fullDB()+"_io",owner().owner().nodePath()+owner().tbl()+"_io",ioCnt++,ioCfg,false,true); ) {
 	string sid = ioCfg.cfg("ID").getS();
 
 	// Position storing
@@ -219,13 +218,12 @@ void TPrmTempl::save_( )
 	SYS->db().at().dataSet(w_db+"_io", w_cfgpath+"_io", cfg);
     }
     //Clear IO
-    vector<vector<string> > full;
     cfg.cfgViewAll(false);
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(w_db+"_io",w_cfgpath+"_io",fld_cnt++,cfg,false,&full); ) {
+    for(int fld_cnt = 0; SYS->db().at().dataSeek(w_db+"_io",w_cfgpath+"_io",fld_cnt++,cfg); ) {
 	string sio = cfg.cfg("ID").getS();
 	if(ioId(sio) < 0 || io(ioId(sio))->flg()&TPrmTempl::LockAttr) {
 	    if(!SYS->db().at().dataDel(w_db+"_io",w_cfgpath+"_io",cfg,true,false,true))	break;
-	    if(full.empty()) fld_cnt--;
+	    fld_cnt--;
 	}
     }
 }
@@ -841,10 +839,9 @@ void TPrmTmplLib::load_( TConfig *icfg )
 
     //Load templates
     map<string, bool>	itReg;
-    vector<vector<string> > full;
     TConfig cEl(&owner().elTmpl());
     //cEl.cfgViewAll(false);
-    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB(),owner().nodePath()+tbl(),fldCnt++,cEl,false,&full); ) {
+    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB(),owner().nodePath()+tbl(),fldCnt++,cEl,false,true); ) {
 	string fId = cEl.cfg("ID").getS();
 	if(!present(fId)) add(fId);
 	at(fId).at().load(&cEl);

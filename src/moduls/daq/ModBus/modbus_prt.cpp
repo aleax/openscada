@@ -95,13 +95,12 @@ void TProt::load_( )
 	//gCfg.cfgViewAll(false);
 	vector<string> itLs;
 	map<string, bool> itReg;
-	vector<vector<string> > full;
 
 	//  Search into DB
 	SYS->db().at().dbList(itLs, true);
 	itLs.push_back(DB_CFG);
 	for(unsigned iDB = 0; iDB < itLs.size(); iDB++)
-	    for(int fldCnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+modId()+"_node",nodePath()+modId()+"_node",fldCnt++,gCfg,false,&full); ) {
+	    for(int fldCnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+modId()+"_node",nodePath()+modId()+"_node",fldCnt++,gCfg,false,true); ) {
 		string id = gCfg.cfg("ID").getS();
 		if(!nPresent(id)) nAdd(id, (itLs[iDB]==SYS->workDB())?"*.*":itLs[iDB]);
 		nAt(id).at().load(&gCfg);
@@ -754,12 +753,11 @@ void Node::loadIO( )
 	TFunction *f = data && data->func() ? data->func() : this;
 
 	//Load IO
-	vector<vector<string> > full;
 	vector<string> u_pos;
 	TConfig cfg(&owner().nodeIOEl());
 	cfg.cfg("NODE_ID").setS(id(), TCfg::ForceUse);
 	cfg.cfg("VALUE").setExtVal(true);
-	for(int ioCnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",ioCnt++,cfg,false,&full); ) {
+	for(int ioCnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",ioCnt++,cfg,false,true); ) {
 	    string sid = cfg.cfg("ID").getS();
 	    int iid = f->ioId(sid);
 
@@ -837,13 +835,12 @@ void Node::saveIO( )
 	}
 
 	//Clear IO
-	vector<vector<string> > full;
 	cfg.cfgViewAll(false);
-	for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",fldCnt++,cfg,false,&full); ) {
+	for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",fldCnt++,cfg); ) {
 	    string sio = cfg.cfg("ID").getS();
 	    if(f->ioId(sio) < 0) {
 		if(!SYS->db().at().dataDel(fullDB()+"_io",owner().nodePath()+tbl()+"_io",cfg,true,false,true)) break;
-		if(full.empty()) fldCnt--;
+		fldCnt--;
 	    }
 	}
     }

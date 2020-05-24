@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2019.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-23 09:33+0300\n"
+"POT-Creation-Date: 2020-05-24 19:29+0300\n"
 "PO-Revision-Date: 2009-08-17 12:07+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -121,6 +121,7 @@ msgstr ""
 "Fehler beim Löschen des Parameters '%s', aber nicht in der Konfiguration "
 "oder der Gegenstelle."
 
+#, c-format
 msgid "Connection to the data source: %s."
 msgstr "Verbindung zur Datenquelle: %s."
 
@@ -133,12 +134,12 @@ msgstr "10:Keine Daten verfügbar."
 msgid "OK"
 msgstr "OK"
 
+#, c-format
 msgid "Connection to the data source '%s': %s."
 msgstr "Verbindung zur Datenquelle '%s': %s."
 
-#, c-format
-msgid "11:Station missed '%s'."
-msgstr "11:Station verpasst '%s'."
+msgid "Station missed '%s'."
+msgstr "Station verpasst '%s'."
 
 msgid "Zero to disable the access to the remote archive."
 msgstr "Null, um den Zugriff auf das Remote-Archiv zu deaktivieren."

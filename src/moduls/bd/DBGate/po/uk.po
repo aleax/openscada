@@ -1,0 +1,60 @@
+# OpenSCADA.DB.DBGate translate to Ukrainian.
+# This file is distributed under the same license as the OpenSCADA.DB.DBGate module.
+#
+# Roman Savochenko <roman@oscada.org>, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: uk\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-05-24 16:40+0300\n"
+"PO-Revision-Date: 2020-05-24 16:40+0300\n"
+"Last-Translator: Roman Savochenko <roman@oscada.org>\n"
+"Language-Team:  <uk@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+
+msgid "DB gate"
+msgstr "Шлюз БД"
+
+msgid "Roman Savochenko"
+msgstr "Роман Савоченко"
+
+msgid ""
+"BD module. Allows to locate databases of the remote OpenSCADA stations to "
+"local ones."
+msgstr ""
+"Модуль БД. Дозволяє виконувати шлюзування баз даних віддалених OpenSCADA "
+"станцій до локальних."
+
+#, c-format
+msgid "Error enabling the remote DB '%s': %s"
+msgstr "Помилка ввімкнення видаленої БД '%s': %s"
+
+#, c-format
+msgid "Error open table '%s'. DB is disabled."
+msgstr "Помилка відкриття таблиці '%s'. БД вимкнено."
+
+#, c-format
+msgid "Station missed '%s'."
+msgstr "Відсутня станція '%s'."
+
+msgid ""
+"DB gate address must be written-selected as: \"{RemoteStation}.{DBModule}."
+"{DB}\".\n"
+"Where:\n"
+"  RemoteStation - remote OpenSCADA station;\n"
+"  DBModule      - DB module identifier;\n"
+"  DB            - database identifier."
+msgstr ""
+"Адресу шлюзу БД має бути записано-обрано як: \"{ВіддаленаСтанція}.{МодульБД}."
+"{БД}\".\n"
+"Де:\n"
+"  ВіддаленаСтанція - віддалена станція OpenSCADA;\n"
+"  МодульБД      - ідентифікатор модуля БД;\n"
+"  БД            - ідентифікатор бази даних."
+
+msgid "Go to configuration of the remote stations list"
+msgstr "Перехід до конфігурації переліку віддалених станцій"

@@ -133,7 +133,6 @@ void TSecurity::load_( )
     //Load DB
     string	name;
     map<string, bool>	itReg;
-    vector<vector<string> > full;
 
     // Search and create new users
     try {
@@ -145,7 +144,7 @@ void TSecurity::load_( )
 	SYS->db().at().dbList(itLs, true);
 	itLs.push_back(DB_CFG);
 	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(itLs[iIt]+"."+subId()+"_user",nodePath()+subId()+"_user",fld_cnt++,g_cfg,false,&full); ) {
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek(itLs[iIt]+"."+subId()+"_user",nodePath()+subId()+"_user",fld_cnt++,g_cfg,false,true); ) {
 		name = g_cfg.cfg("NAME").getS();
 		if(!usrPresent(name))	usrAdd(name, (itLs[iIt]==SYS->workDB())?"*.*":itLs[iIt]);
 		usrAt(name).at().load(&g_cfg);
@@ -175,7 +174,7 @@ void TSecurity::load_( )
 	SYS->db().at().dbList(itLs, true);
 	itLs.push_back(DB_CFG);
 	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(itLs[iIt]+"."+subId()+"_grp",nodePath()+subId()+"_grp",fld_cnt++,g_cfg,false,&full); ) {
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek(itLs[iIt]+"."+subId()+"_grp",nodePath()+subId()+"_grp",fld_cnt++,g_cfg,false,true); ) {
 		name = g_cfg.cfg("NAME").getS();
 		if(!grpPresent(name))	grpAdd(name,(itLs[iIt]==SYS->workDB())?"*.*":itLs[iIt]);
 		grpAt(name).at().load(&g_cfg);

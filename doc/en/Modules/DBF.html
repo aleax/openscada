@@ -31,16 +31,18 @@
 <td> <a href="../Modules/DBF.html" title="Special:MyLanguage/Modules/DBF">DBF</a> </td>
 <td> DB DBF
 </td>
-<td> 2.2 </td>
+<td> 2.4 </td>
 <td> GPL2 </td>
 <td> bd_DBF.so </td>
 <td> en,uk,ru,de </td>
 <td> x86,x86_64,ARM
 </td>
 <td> DB </td>
-<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko, 2009 — the page translation</i></font> </td>
+<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko, 2009 — the page initial translation</i></font> </td>
 <td> DB module. Provides support of the DBF files version 3.0.
 </td></tr></table>
+<p>The module provides to OpenSCADA support DB files of the DBF type. The module is based on the library for working with DBF software files "Complex2" of the firm NIIP "DIYA". The module allows you to perform actions on databases, tables and table contents.
+</p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#Operations_over_the_database"><span class="tocnumber">1</span> <span class="toctext">Operations over the database</span></a></li>
@@ -50,8 +52,6 @@
 </ul>
 </div>
 
-<p>The module provides to OpenSCADA support DB files of the DBF type. The module is based on the library for working with DBF software files "Complex2" of the firm NIIP "DIYA". The module allows you to perform actions on databases, tables and table contents.
-</p>
 <h2><span class="mw-headline" id="Operations_over_the_database"><span class="mw-headline-number">1</span> Operations over the database</span></h2>
 <p>The operations of opening and closing of the database is supported, with the possibility of creating a new database when you open and delete existing at the close. In terms of the subsystem "DB" of OpenSCADA, opening of DB is its registration for further using of the program. It also supports the operation of requesting the list of tables in the database.
 </p><p>Under a DB, in the case of DBF files, is meant a directory containing DBF files. Therefore, database creation and removal operations create and delete folders where tables (DBF files) are stored. The role of the database address is the full name of the folder with DBF files. Access to the database is determined by the system permissions of the folder.

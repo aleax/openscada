@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.SQLite file: bd_sqlite.h
 /***************************************************************************
- *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016,2020 by Roman Savochenko, <roman@oscada.org>  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -45,11 +45,11 @@ class MTable : public TTable
     public:
 	//Public methods
 	MTable( string name, MBD *bd );
-	~MTable(  );
+	~MTable( );
 
 	// Field's operations
 	void fieldStruct( TConfig &cfg );
-	bool fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full = NULL );
+	bool fieldSeek( int row, TConfig &cfg, const string &cacheKey = "" );
 	void fieldGet( TConfig &cfg );
 	void fieldSet( TConfig &cfg );
 	void fieldDel( TConfig &cfg );
@@ -66,6 +66,7 @@ class MTable : public TTable
 
 	//Private attributes
 	vector< vector<string> > tblStrct;
+	map<string, vector< vector<string> > >	seekSess;
 };
 
 //************************************************
