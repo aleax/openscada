@@ -12,6 +12,7 @@ debian/tmp/usr/share/openscada/icons/*
 debian/tmp/usr/share/locale/*/LC_MESSAGES/openscada.mo
 debian/tmp/usr/share/locale/*/LC_MESSAGES/oscd_DBF.mo
 debian/tmp/usr/share/locale/*/LC_MESSAGES/oscd_SQLite.mo
+debian/tmp/usr/share/locale/*/LC_MESSAGES/oscd_DBGate.mo
 debian/tmp/usr/share/locale/*/LC_MESSAGES/oscd_JavaLikeCalc.mo
 debian/tmp/usr/share/locale/*/LC_MESSAGES/oscd_LogicLev.mo
 debian/tmp/usr/share/locale/*/LC_MESSAGES/oscd_Sockets.mo

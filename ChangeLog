@@ -1,3 +1,15 @@
+2020-05-25 Roman (stable)
+- data/openscada.spec: Appended for including modules to the OpenSCADA core library:
+	- DB.DBF, DB.SQLite, DB.DBGate, DAQ.JavaLikeCalc, DAQ.LogicLev,
+	- Transport.Sockets, Transport.Serial,
+	- Protocol.SelfSystem, Protocol.UserProtocol,
+	- Special.FLibComplex1, Special.FLibSYS
+    Appened for building: --enable-LDAP --enable-MMS --enable-DiamondBoards --enable-ICP_DAS
+- data/{debian,debian_mod}/control: Appended for a dependency to libldap2-dev for DB.LDAP,
+- data/debian_mod/control: Appended for the external module openscada-db-ldap and removed for the external module "openscada-daq-bfn".
+- data/{debian,debian_mod}/rules: Appended for including the new module DB.DBGate, building DB.LDAP and not building DAQ.BFN.
+
+
 2020-05-24 Roman (stable)
 - !!!!:FIX:SYS.*,DB: TBDS::dataSeek() and TTable::fieldSeek() switched to the seek cache implementing in the corresponded modules.
     !!!!:SYS: Modules version of the subsystem BD rose to 22. Core library version rose to 4:4:0.
