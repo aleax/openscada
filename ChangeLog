@@ -1,3 +1,12 @@
+2020-05-31 Roman (stable)
+- !!!!:LibsDB.OscadaLibs: The Devices Library appended for the protocol IEC-62056 initial implementation (DevLib.IEC62056).
+- SYS: The module BD.DBGate appended by the representative icon image.
+- FIX:SYS: The User API function TArrayObj::indexOf() fixed in -1 converting to unsigned.
+- FIX:DB: The function dataSeek() call fixed in the service control "call" of
+    "/serv/fieldStruct", "/serv/fieldSeek", "/serv/fieldGet", "/serv/fieldSet", "/serv/fieldDel"
+- !!:FIX:UI.Vision: The user manual changing prevented from checking for the lesser or even permition.
+
+
 2020-05-25 Roman (stable)
 - data/openscada.spec: Appended for including modules to the OpenSCADA core library:
 	- DB.DBF, DB.SQLite, DB.DBGate, DAQ.JavaLikeCalc, DAQ.LogicLev,

@@ -956,7 +956,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/serv/fieldSeek" && ctrChkNode(opt,"call",RWRWR_,"root",SDB_ID,SEC_WR)) {
 	TConfig cfg;
-	SYS->db().at().dataSeek("", "", 0, cfg, false, NULL, opt);
+	SYS->db().at().dataSeek("", "", 0, cfg, false, false, opt);
 	opt->setAttr("fRez", i2s(at(opt->attr("tbl")).at().fieldSeek(s2i(opt->attr("row")),cfg,opt->attr("cacheKey"))));
 	opt->childClear();
 	SYS->db().at().dataSet("", "", cfg, false, false, opt);
@@ -964,7 +964,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/serv/fieldGet" && ctrChkNode(opt,"call",RWRWR_,"root",SDB_ID,SEC_WR)) {
 	TConfig cfg;
-	SYS->db().at().dataSeek("", "", 0, cfg, false, NULL, opt);
+	SYS->db().at().dataSeek("", "", 0, cfg, false, false, opt);
 	at(opt->attr("tbl")).at().fieldGet(cfg);
 	opt->childClear();
 	SYS->db().at().dataSet("", "", cfg, false, false, opt);
@@ -972,13 +972,13 @@ void TBD::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/serv/fieldSet" && ctrChkNode(opt,"call",RWRWR_,"root",SDB_ID,SEC_WR)) {
 	TConfig cfg;
-	SYS->db().at().dataSeek("", "", 0, cfg, false, NULL, opt);
+	SYS->db().at().dataSeek("", "", 0, cfg, false, false, opt);
 	at(opt->attr("tbl")).at().fieldSet(cfg);
 	return;
     }
     else if(a_path == "/serv/fieldDel" && ctrChkNode(opt,"call",RWRWR_,"root",SDB_ID,SEC_WR)) {
 	TConfig cfg;
-	SYS->db().at().dataSeek("", "", 0, cfg, false, NULL, opt);
+	SYS->db().at().dataSeek("", "", 0, cfg, false, false, opt);
 	at(opt->attr("tbl")).at().fieldDel(cfg);
 	return;
     }
