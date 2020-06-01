@@ -724,7 +724,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	string sVl = prms[0].getS();
 	unsigned iE = sp;
 	while(iE < mEls.size() && mEls[iE].getS() != sVl) iE++;
-	int rez = (iE < mEls.size()) ? iE : -1;
+	int rez = (iE < mEls.size()) ? (int)iE : -1;
 	dataM.unlock();
 	return rez;
     }

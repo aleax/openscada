@@ -125,7 +125,7 @@ AutoHD<TTable> TBDS::open( const string &bdn, bool create )
 	if(bdN == "*") bdN = TSYS::strSepParse(SYS->workDB(),1,'.');
 	if(bdT == DB_CFG) return tbl;
 	AutoHD<TBD> obd = at(bdT).at().at(bdN);
-	MtxAlloc res(obd.at().resTbls);	//!!!! For prevent multiple entry and creation try
+	MtxAlloc res(obd.at().resTbls, true);	//!!!! For prevent multiple entry and creation try
 	if(obd.at().enableStat()) {
 	    if(!obd.at().openStat(bdTbl)) obd.at().open(bdTbl, create);
 	    tbl = obd.at().at(bdTbl);
@@ -147,7 +147,7 @@ void TBDS::close( const string &bdn, bool del )
 	if(bdN == "*") bdN = TSYS::strSepParse(SYS->workDB(),1,'.');
 	if(bdT == DB_CFG) return;
 	AutoHD<TBD> obd = at(bdT).at().at(bdN);
-	MtxAlloc res(obd.at().resTbls);	//!!!! For prevent multiple entry and closing try
+	MtxAlloc res(obd.at().resTbls, true);	//!!!! For prevent multiple entry and closing try
 	if(obd.at().enableStat() && obd.at().openStat(bdTbl) && obd.at().at(bdTbl).at().nodeUse() == 1)
 	    obd.at().close(bdTbl, del);
     } catch(TError &err) {
@@ -307,23 +307,10 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, bool f
 {
     string bdn = realDBName(ibdn);
 
-    //Save to DB
-    if(!forceCfg && bdn.size() && TSYS::strParse(bdn,0,".") != DB_CFG) {
-	AutoHD<TTable> tbl = open(bdn,true);
-	if(!tbl.freeStat()) {
-	    bool db_true = true;
-	    try { tbl.at().fieldSet(cfg); }
-	    catch(TError &err) {
-		//mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
-		db_true = false;
-		if(!noEx) throw;
-	    }
-	    return db_true;
-	}
-    }
+    bool toChangeExistsCfg = (!forceCfg && bdn.size() && TSYS::strParse(bdn,0,".") != DB_CFG);
 
     //Save to config
-    if(forceCfg || TSYS::strParse(bdn,0,".") == DB_CFG) {
+    if(path.size() && (forceCfg || toChangeExistsCfg || TSYS::strParse(bdn,0,".") == DB_CFG)) {
 	ResAlloc res(SYS->cfgRes(), false);
 	XMLNode *nd, *wel = NULL, *fnd;
 	vector<string> cf_el;
@@ -346,38 +333,55 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, bool f
 	    }
 
 	    bool isCreate = !wel;
-	    if(!wel) wel = nd->childAdd("fld");
-	    for(unsigned iEl = 0; iEl < cf_el.size(); iEl++) {
-		vnm = cf_el[iEl];
-		TCfg &cf = cfg.cfg(vnm);
-		bool isTransl = (cf.fld().flg()&TFld::TransltText && !cf.noTransl() &&
+	    if(!wel && !toChangeExistsCfg) wel = nd->childAdd("fld");
+	    if(wel) {
+		for(unsigned iEl = 0; iEl < cf_el.size(); iEl++) {
+		    vnm = cf_el[iEl];
+		    TCfg &cf = cfg.cfg(vnm);
+		    bool isTransl = (cf.fld().flg()&TFld::TransltText && !cf.noTransl() &&
 				Mess->lang2CodeBase().size() && Mess->lang2Code() != Mess->lang2CodeBase());
-		if(isCreate || !isTransl) {
-		    if(cf.getS().size() < 100) {
-			wel->setAttr(vnm, cf.getS());
-			if((fnd=wel->childGet(vnm,0,true))) wel->childDel(fnd);
+		    if(isCreate || !isTransl) {
+			if(cf.getS().size() < 100) {
+			    wel->setAttr(vnm, cf.getS());
+			    if((fnd=wel->childGet(vnm,0,true))) wel->childDel(fnd);
+			}
+			else {
+			    if(!(fnd=wel->childGet(vnm,0,true))) fnd = wel->childAdd(vnm);
+			    fnd->setText(cf.getS(), true);
+			    wel->setAttr(vnm, "");
+			}
 		    }
-		    else {
-			if(!(fnd=wel->childGet(vnm,0,true))) fnd = wel->childAdd(vnm);
-			fnd->setText(cf.getS(), true);
-			wel->setAttr(vnm, "");
+		    if(isTransl) {
+			vnm = cf_el[iEl]+"_"+Mess->lang2Code();
+			if(cf.getS().size() < 100) {
+			    wel->setAttr(vnm, (Mess->translDyn()?trL(cf.getS(),Mess->lang2Code()):cf.getS()));
+			    if((fnd=wel->childGet(vnm,0,true))) wel->childDel(fnd);
+			}
+			else {
+			    if(!(fnd=wel->childGet(vnm,0,true))) fnd = wel->childAdd(vnm);
+			    fnd->setText(cf.getS(), true);
+			    wel->setAttr(vnm, "");
+			}
 		    }
 		}
-		if(isTransl) {
-		    vnm = cf_el[iEl]+"_"+Mess->lang2Code();
-		    if(cf.getS().size() < 100) {
-			wel->setAttr(vnm, (Mess->translDyn()?trL(cf.getS(),Mess->lang2Code()):cf.getS()));
-			if((fnd=wel->childGet(vnm,0,true))) wel->childDel(fnd);
-		    }
-		    else {
-			if(!(fnd=wel->childGet(vnm,0,true))) fnd = wel->childAdd(vnm);
-			fnd->setText(cf.getS(), true);
-			wel->setAttr(vnm, "");
-		    }
-		}
+		SYS->modifCfg();
+		return true;
 	    }
-	    SYS->modifCfg();
-	    return true;
+	}
+    }
+
+    //Save to DB
+    if(!forceCfg && bdn.size() && TSYS::strParse(bdn,0,".") != DB_CFG) {
+	AutoHD<TTable> tbl = open(bdn,true);
+	if(!tbl.freeStat()) {
+	    bool db_true = true;
+	    try { tbl.at().fieldSet(cfg); }
+	    catch(TError &err) {
+		//mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
+		db_true = false;
+		if(!noEx) throw;
+	    }
+	    return db_true;
 	}
     }
 
@@ -552,6 +556,7 @@ void TBDS::load_( )
     // Open other DB stored into the table 'DB' and the config-file
     try {
 	string id, type;
+	map<string, bool> itReg;
 	//if(SYS->chkSelDB(fullDB())) {	//!!!! Must be forced one for config file rescan, release test
 	    TConfig c_el(&elDB);
 	    //c_el.cfgViewAll(false);
@@ -559,10 +564,11 @@ void TBDS::load_( )
 	    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB(),nodePath()+"DB/",fldCnt++,c_el,true,&full); ) {
 		id = c_el.cfg("ID").getS();
 		type = c_el.cfg("TYPE").getS();
-		if(!modPresent(type))	continue;
+		if(!modPresent(type) || itReg[type+"."+id])	continue;
 		if((type+"."+id) != SYS->workDB() && !at(type).at().openStat(id))
 		    at(type).at().open(id);
 		try{ at(type).at().at(id).at().load(&c_el); } catch(TError&) { }
+		itReg[type+"."+id] = true;
 	    }
 	//}
     } catch(TError &err) {
@@ -780,7 +786,8 @@ void TBD::load_( TConfig *icfg )
     if(icfg) *(TConfig*)this = *icfg;
     else SYS->db().at().dataGet(owner().owner().fullDB(), SYS->db().at().nodePath()+"DB/", *this, true);
 
-    if(!enableStat() && toEnable()) enable();
+    if(!enableStat() && toEnable())
+	try { enable(); } catch(TError&) { mDisByUser = false; }
 }
 
 void TBD::save_( )

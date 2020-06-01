@@ -1,3 +1,15 @@
+2020-06-01 Roman 0.9.1.2
+- FIX:SYS: The User API function TArrayObj::indexOf() fixed in -1 converting to unsigned.
+- !!:FIX:DB: TBDS::dataSet() appended for changing-saving the defined entries in the config file
+	instead complete saving all their in the default DB.
+    !!:FIX: DB loading is prevented from double loading from the config file and from DB for the equal entries.
+    !!:FIX: The wrong started DB objects in the first fixed for try them next start tries.
+    !:FIX: TBDS::{open,close}() fixed for true functional locking by the lock "resTbls".
+- FIX:DAQ.JavaLikeCalc: Moving the calculation context modification to the option "modifCalc".
+    FIX: The control interface command "/cntr/cfg/toFunc" some specified.
+- !!:FIX:UI.Vision: The user manual changing prevented from checking for the lesser or even permition.
+
+
 2020-05-11 Roman 0.9.1.1
 - FIX: data/openscada-proj.in: The command "list" some improved to show the preinstalled and user projects.
 - !!:FIX:SYS: The function TCntrNode::isModify() processing for the childs allowed only for nodes in the state "Enabled".

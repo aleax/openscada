@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"4.3.0"
+#define MOD_VER		"4.3.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")
@@ -655,7 +655,7 @@ void *Contr::Task( void *icntr )
 	TSYS::taskSleep(cntr.period(), cntr.period() ? "" : cntr.cron());
 	if(cntr.endrunReq) is_stop = true;
 	is_start = false;
-	cntr.modif();
+	if(SYS->modifCalc()) cntr.modif();
     }
 
     cntr.prcSt = false;
@@ -733,7 +733,9 @@ void Contr::cntrCmdProc( XMLNode *opt )
 
     //Process command to page
     if(a_path == "/cntr/cfg/toFunc" && enableStat() && ctrChkNode(opt,"get",R_R_R_,"root",SDAQ_ID,SEC_RD))
-	opt->setText(string("/DAQ/")+(isDAQTmpl?"tmplb_":MOD_ID "/lib_")+TSYS::strParse(fnc(),0,".")+"/"+TSYS::strParse(fnc(),1,"."));
+	opt->setText(string("/sub_DAQ/") +
+	    (isDAQTmpl?"tmplb_"+TSYS::strParse(fnc(),0,".")+"/tmpl_"+TSYS::strParse(fnc(),1,"."):
+		MOD_ID "/lib_"+TSYS::strParse(fnc(),0,".")+"/fnc_"+TSYS::strParse(fnc(),1,".")));
     else if(a_path == "/cntr/flst" && ctrChkNode(opt)) {
 	opt->childAdd("el")->setText("");
 	vector<string> lls, ls;
