@@ -298,6 +298,15 @@ void TCfg::setReqKey( bool vl )
     mOwner.reqKeysUpdate();
 }
 
+void TCfg::setExtVal( bool vw )
+{
+    if(!vw) {
+	string fVl = getS();
+	mExtVal = vw;
+	setS(fVl);
+    } else mExtVal = vw;
+}
+
 void TCfg::toDefault( bool notSetType )
 {
     if(!mFld)	return;

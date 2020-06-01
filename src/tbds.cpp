@@ -377,7 +377,7 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, bool f
     bool toChangeExistsCfg = (!isCfgCtx && !forceCfg && bdn.size() && TSYS::strParse(bdn,0,".") != DB_CFG);
 
     //Save to config
-    if(isCfgCtx || forceCfg || toChangeExistsCfg || TSYS::strParse(bdn,0,".") == DB_CFG) {
+    if(isCfgCtx || (path.size() && (forceCfg || toChangeExistsCfg || TSYS::strParse(bdn,0,".") == DB_CFG))) {
 	ResAlloc res(SYS->cfgRes());
 	XMLNode *nd = NULL, *wel = NULL, *fnd;
 	vector<string> cf_el;

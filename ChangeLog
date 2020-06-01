@@ -1,3 +1,9 @@
+2020-06-01 Roman (stable)
+- !!:FIX:DB: TBDS::dataSet() fixed in the last appending for changing-saving the defined entries in the config file
+    by call that only for not empty path, instead what we have some tags of the configuration file changing to "tbl".
+- SYS: TCfg::setExtVal() in FALSE appended for cleaning the string value from the extended parts.
+
+
 2020-05-31 Roman (stable)
 - !!!!:LibsDB.OscadaLibs: The Devices Library appended for the protocol IEC-62056 initial implementation (DevLib.IEC62056).
 - SYS: The module BD.DBGate appended by the representative icon image.

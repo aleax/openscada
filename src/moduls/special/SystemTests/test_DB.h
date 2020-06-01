@@ -91,14 +91,14 @@ class TestDB : public TFunction
 		//Test for create records
 		mod->mess(id(),_("Create records."));
 		int64_t ctime = TSYS::curTime();
-		for(int i_fld = 0; i_fld < experem; i_fld++) {
-		    bd_cfg.cfg("name").setS("Sh"+i2s(i_fld));
-		    bd_cfg.cfg("descr").setS("Shifr '"+i2s(i_fld)+"'");
-		    bd_cfg.cfg("val").setR(sqrt(i_fld));
-		    bd_cfg.cfg("id").setI(i_fld);
-		    bd_cfg.cfg("stat").setB((i_fld%2)==0?true:false);
-		    bd_cfg.cfg("reqKey").setS(i_fld<(experem/2)?"req0":"req1");
-		    bd_cfg.cfg("reqVal").setS(i_fld<(experem/2)?"Request 0 value":"Request 1 value");
+		for(int iFld = 0; iFld < experem; iFld++) {
+		    bd_cfg.cfg("name").setS("Sh"+i2s(iFld));
+		    bd_cfg.cfg("descr").setS("Shifr '"+i2s(iFld)+"'");
+		    bd_cfg.cfg("val").setR(sqrt(iFld));
+		    bd_cfg.cfg("id").setI(iFld);
+		    bd_cfg.cfg("stat").setB((iFld%2)==0?true:false);
+		    bd_cfg.cfg("reqKey").setS(iFld<(experem/2)?"req0":"req1");
+		    bd_cfg.cfg("reqVal").setS(iFld<(experem/2)?"Request 0 value":"Request 1 value");
 		    tbl.at().fieldSet(bd_cfg);
 		}
 		mod->mess(id(),_("Created %d records for time %f sec."),experem,1e-6*(TSYS::curTime()-ctime));
@@ -106,12 +106,12 @@ class TestDB : public TFunction
 		//Check for update fields
 		mod->mess(id(),_("Update records."));
 		ctime = TSYS::curTime();
-		for(int i_fld = 0; i_fld < experem; i_fld++) {
-		    bd_cfg.cfg("name").setS("Sh"+i2s(i_fld));
-		    bd_cfg.cfg("descr").setS("New shifr \""+i2s(i_fld)+"\"");
-		    bd_cfg.cfg("val").setR(2.*sqrt(i_fld));
-		    bd_cfg.cfg("id").setI(2*i_fld);
-		    bd_cfg.cfg("stat").setB((i_fld%2)==0?false:true);
+		for(int iFld = 0; iFld < experem; iFld++) {
+		    bd_cfg.cfg("name").setS("Sh"+i2s(iFld));
+		    bd_cfg.cfg("descr").setS("New shifr \""+i2s(iFld)+"\"");
+		    bd_cfg.cfg("val").setR(2.*sqrt(iFld));
+		    bd_cfg.cfg("id").setI(2*iFld);
+		    bd_cfg.cfg("stat").setB((iFld%2)==0?false:true);
 		    bd_cfg.cfg("reqKey").setView(false);
 		    bd_cfg.cfg("reqVal").setView(false);
 		    tbl.at().fieldSet(bd_cfg);
@@ -135,33 +135,33 @@ class TestDB : public TFunction
 		//Check for get fields
 		mod->mess(id(),_("Check records."));
 		ctime = TSYS::curTime();
-		for(int i_fld = 0; i_fld < experem; i_fld++) {
-		    bd_cfg.cfg("name").setS("Sh"+i2s(i_fld));
+		for(int iFld = 0; iFld < experem; iFld++) {
+		    bd_cfg.cfg("name").setS("Sh"+i2s(iFld));
 		    tbl.at().fieldGet(bd_cfg);
 
-		    if(experem > 155 && i_fld == 155)
+		    if(experem > 155 && iFld == 155)
 			mod->mess(id(),_("Record #155='%s'; Descr='%s'; Value=%f; Id=%d; Stat=%d."),//; reqKey='%s'; reqVal='%s'."),
 			    bd_cfg.cfg("name").getS().c_str(), bd_cfg.cfg("descr").getS().c_str(),
 			    bd_cfg.cfg("val").getR(), bd_cfg.cfg("id").getI(), bd_cfg.cfg("stat").getB());/*,
 			    bd_cfg.cfg("reqKey").getS().c_str(), bd_cfg.cfg("reqVal").getS().c_str());*/	//By some GLibC crashes
 
-		    if(bd_cfg.cfg("name").getS() != (string("Sh")+i2s(i_fld)))
+		    if(bd_cfg.cfg("name").getS() != (string("Sh")+i2s(iFld)))
 			throw TError(nodePath().c_str(),_("Field <Sh> '%s' != '%s' error."),
-			    bd_cfg.cfg("name").getS().c_str(),(string("Sh")+i2s(i_fld)).c_str());
-		    if(bd_cfg.cfg("descr").getS() != (string("New shifr \"")+i2s(i_fld)+"\""))
+			    bd_cfg.cfg("name").getS().c_str(),(string("Sh")+i2s(iFld)).c_str());
+		    if(bd_cfg.cfg("descr").getS() != (string("New shifr \"")+i2s(iFld)+"\""))
 			throw TError(nodePath().c_str(),_("Field <descr> '%s' != '%s' error."),
-			    bd_cfg.cfg("descr").getS().c_str(),(string("New shifr ")+i2s(i_fld)).c_str());
-		    //ceil(100.*bd_cfg.cfg("val").getR()) != ceil(2.*sqrt(i_fld)) ||
-		    if(bd_cfg.cfg("id").getI() != (2*i_fld))
-			throw TError(nodePath().c_str(),_("Field <id> %d != %d error."),bd_cfg.cfg("id").getI(), (2*i_fld) );
-		    if(bd_cfg.cfg("stat").getB() != ((i_fld%2)==0?false:true))
-			throw TError(nodePath().c_str(),_("Field <stat> %d != %d error."),bd_cfg.cfg("stat").getB(),((i_fld%2)==0?false:true));
-		    if(bd_cfg.cfg("reqKey").getS() != ((i_fld<(experem/2))?"reqNew0":"req1"))
+			    bd_cfg.cfg("descr").getS().c_str(),(string("New shifr ")+i2s(iFld)).c_str());
+		    //ceil(100.*bd_cfg.cfg("val").getR()) != ceil(2.*sqrt(iFld)) ||
+		    if(bd_cfg.cfg("id").getI() != (2*iFld))
+			throw TError(nodePath().c_str(),_("Field <id> %d != %d error."),bd_cfg.cfg("id").getI(), (2*iFld) );
+		    if(bd_cfg.cfg("stat").getB() != ((iFld%2)==0?false:true))
+			throw TError(nodePath().c_str(),_("Field <stat> %d != %d error."),bd_cfg.cfg("stat").getB(),((iFld%2)==0?false:true));
+		    if(bd_cfg.cfg("reqKey").getS() != ((iFld<(experem/2))?"reqNew0":"req1"))
 			throw TError(nodePath().c_str(), _("Field <reqKey> '%s' != '%s' error."),
-			    bd_cfg.cfg("reqKey").getS().c_str(), ((i_fld<(experem/2))?"reqNew0":"req1"));
-		    if(bd_cfg.cfg("reqVal").getS() != ((i_fld<(experem/2))?"Request new 0 value":"Request 1 value"))
+			    bd_cfg.cfg("reqKey").getS().c_str(), ((iFld<(experem/2))?"reqNew0":"req1"));
+		    if(bd_cfg.cfg("reqVal").getS() != ((iFld<(experem/2))?"Request new 0 value":"Request 1 value"))
 			throw TError(nodePath().c_str(), _("Field <reqVal> '%s' != '%s' error."),
-			    bd_cfg.cfg("reqVal").getS().c_str(), ((i_fld<(experem/2))?"Request new 0 value":"Request 1 value"));
+			    bd_cfg.cfg("reqVal").getS().c_str(), ((iFld<(experem/2))?"Request new 0 value":"Request 1 value"));
 		}
 		mod->mess(id(),_("Got %d records for time %f sec."),experem,1e-6*(TSYS::curTime()-ctime));
 
@@ -222,8 +222,8 @@ class TestDB : public TFunction
 
 		//Delete fields
 		ctime = TSYS::curTime();
-		for(int i_fld = 0; i_fld < experem; i_fld++) {
-		    bd_cfg.cfg("name").setS("Sh"+i2s(i_fld),true);
+		for(int iFld = 0; iFld < experem; iFld++) {
+		    bd_cfg.cfg("name").setS("Sh"+i2s(iFld),true);
 		    tbl.at().fieldDel(bd_cfg);
 		}
 		mod->mess(id(),_("Deleted %d records for time %f sec."),experem,1e-6*(TSYS::curTime()-ctime));
