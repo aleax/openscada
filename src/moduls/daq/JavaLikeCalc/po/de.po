@@ -3,15 +3,15 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009-2010.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2018.
+# Roman Savochenko <roman@oscada.org>, 2011-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-04 11:02+0200\n"
+"POT-Creation-Date: 2020-06-08 19:04+0300\n"
 "PO-Revision-Date: 2010-10-09 23:16+0400\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -112,12 +112,15 @@ msgstr "Berechnungszeit wurde überschritten %d > %d+%d"
 
 #, c-format
 msgid "Exception of creating %d items of the array."
-msgstr ""
+msgstr "Ausnahme beim Erstellen von %d Elementen des Arrays."
 
 #, c-format
 msgid "Type %d, which is not supported by the 'Add' operation."
 msgstr ""
 "Geben Sie %d ein, das von der Operation 'Hinzufügen' nicht unterstützt wird."
+
+msgid "You have too deep recursion of the internal function call."
+msgstr "Sie haben eine zu tiefe Rekursion des internen Funktionsaufrufs."
 
 #, c-format
 msgid "Error operation %c(%xh). Function '%s' stopped."
@@ -128,6 +131,9 @@ msgstr "Funktion: "
 
 msgid "Date of modification"
 msgstr "Änderungsdatum"
+
+msgid "Compilation state"
+msgstr "Kompilierungsstatus"
 
 msgid "Name"
 msgstr "Name"
@@ -168,6 +174,14 @@ msgstr "Versteckt"
 msgid "Default"
 msgstr "Standard"
 
+#, c-format
+msgid ""
+"Size source=%s, bytecode=%s; Registers totally=%d, shared=%g; Functions "
+"external=%d, internal=%g."
+msgstr ""
+"Größe Quelle=%s, Bytecode=%s; Register total=%d, geteilt=%g; Funktionen "
+"extern=%d, intern=%g."
+
 msgid "New IO"
 msgstr "Neu IO"
 
@@ -186,8 +200,8 @@ msgstr "Bibliothek"
 msgid "State"
 msgstr "Zustand"
 
-msgid "Accessing"
-msgstr "Zugriff"
+msgid "Accessible"
+msgstr "Zugänglich"
 
 msgid "Library DB"
 msgstr "Datenbank der Bibliothek"

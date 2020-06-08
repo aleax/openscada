@@ -171,7 +171,7 @@ void TMdContr::disable_( )
 
 void TMdContr::load_( )
 {
-    if(SYS->cfgCtx() && !enableStat())	enable();
+    if(SYS->cfgCtx() && toEnable() && !enableStat())	enable();
 }
 
 void TMdContr::start_( )
@@ -1200,8 +1200,7 @@ void TMdPrm::disable( )
 
 void TMdPrm::load_( )
 {
-    //TParamContr::load_();
-    if(SYS->cfgCtx() && !enableStat())	enable();
+    if(SYS->cfgCtx() && toEnable() && !enableStat())	enable();
     loadIO();
 }
 

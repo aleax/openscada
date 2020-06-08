@@ -459,8 +459,9 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	if(this.wdgs[i].attrs['root'] == 'Box' && this.wdgs[i].isVisible) {
 	    if(pgGrp == this.wdgs[i].attrs['pgGrp']) {
 		if(pgId != this.wdgs[i].attrs['pgOpenSrc']) {
-		    this.wdgs[i].attrs['pgOpenSrc'] = pgId;
-		    this.wdgs[i].makeEl(null, true);
+		    //this.wdgs[i].attrs['pgOpenSrc'] = pgId;
+		    //this.wdgs[i].makeEl(null, true);
+		    // Changing the pages only through 'pgOpenSrc' but the source page direct update may cause collisions on fast switching
 		    setWAttrs(this.wdgs[i].addr, 'pgOpenSrc', pgId);
 		}
 		return true;
@@ -478,11 +479,11 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	var winName = null;
 	var winWidth = 600;
 	var winHeight = 400;
-	for(var i_ch = 0; i_ch < attrBrVal.childNodes.length; i_ch++)
-	    if(attrBrVal.childNodes[i_ch].nodeName != 'el') continue;
-	    else if(attrBrVal.childNodes[i_ch].getAttribute('id') == 'name') winName = attrBrVal.childNodes[i_ch].textContent;
-	    else if(attrBrVal.childNodes[i_ch].getAttribute('id') == 'geomW') winWidth = parseInt(attrBrVal.childNodes[i_ch].textContent);
-	    else if(attrBrVal.childNodes[i_ch].getAttribute('id') == 'geomH') winHeight = parseInt(attrBrVal.childNodes[i_ch].textContent);
+	for(var iCh = 0; iCh < attrBrVal.childNodes.length; iCh++)
+	    if(attrBrVal.childNodes[iCh].nodeName != 'el') continue;
+	    else if(attrBrVal.childNodes[iCh].getAttribute('id') == 'name') winName = attrBrVal.childNodes[iCh].textContent;
+	    else if(attrBrVal.childNodes[iCh].getAttribute('id') == 'geomW') winWidth = parseInt(attrBrVal.childNodes[iCh].textContent);
+	    else if(attrBrVal.childNodes[iCh].getAttribute('id') == 'geomH') winHeight = parseInt(attrBrVal.childNodes[iCh].textContent);
 
 	//New external <div> window create
 	if(winWidth < parseInt(masterPage.attrs['geomW']) && winHeight < parseInt(masterPage.attrs['geomH'])) {
@@ -648,7 +649,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			}
 			stBar += "</select></td>";
 		    }
-		    stBar += "<td id='st_user' title='###Field for displaying and changing the current user.###'><a href='/login/"+MOD_ID+"/'>"+sesUser+"</a></td>";
+		    stBar += "<td id='st_user' title='###Field for displaying and changing the current user.###'><a href='/login"+window.location.pathname+"'>"+sesUser+"</a></td>";
 		    stBar += "</TR></table>";
 		    masterPage.status.innerHTML = stBar;
 		}
@@ -2163,10 +2164,10 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 			    // Check for dublicates
 			    var isDbl = false;
-			    for(var i_p = 0; !isDbl && i_p < this.messList.length; i_p++) {
-				if(mess[0] > this.messList[0][0] && i_p) break;
-				if(this.messList[i_p][1] == mess[1] && this.messList[i_p][2] == mess[2] &&
-				    this.messList[i_p][3] == mess[3] && this.messList[i_p][4] == mess[4]) isDbl = true;
+			    for(var iP = 0; !isDbl && iP < this.messList.length; iP++) {
+				if(mess[0] > this.messList[0][0] && iP) break;
+				if(this.messList[iP][1] == mess[1] && this.messList[iP][2] == mess[2] &&
+				    this.messList[iP][3] == mess[3] && this.messList[iP][4] == mess[4]) isDbl = true;
 			    }
 			    if(isDbl) continue;
 
@@ -2182,10 +2183,10 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 			    // Check for dublicates
 			    var isDbl = false;
-			    for(var i_p = this.messList.length-1; !isDbl && i_p >= 0; i_p--) {
-				if(mess[0] < this.messList[this.messList.length-1][0] && i_p < (this.messList.length-1)) break;
-				if(this.messList[i_p][1] == mess[1] && this.messList[i_p][2] == mess[2] &&
-				    this.messList[i_p][3] == mess[3] && this.messList[i_p][4] == mess[4]) isDbl = true;
+			    for(var iP = this.messList.length-1; !isDbl && iP >= 0; iP--) {
+				if(mess[0] < this.messList[this.messList.length-1][0] && iP < (this.messList.length-1)) break;
+				if(this.messList[iP][1] == mess[1] && this.messList[iP][2] == mess[2] &&
+				    this.messList[iP][3] == mess[3] && this.messList[iP][4] == mess[4]) isDbl = true;
 			    }
 			    if(isDbl) continue;
 
@@ -2595,12 +2596,12 @@ function makeUI( callBackRez )
 	cachePgSz   = parseInt(pgNode.getAttribute("cachePgSz"));
 	cachePgLife = parseFloat(pgNode.getAttribute("cachePgLife"));
 	// Check for delete pages
-	for(var i_p = 0; i_p < pgList.length; i_p++) {
-	    var opPg; var i_ch;
-	    for(i_ch = 0; i_ch < pgNode.childNodes.length; i_ch++)
-		if(pgNode.childNodes[i_ch].nodeName == 'pg' && pgNode.childNodes[i_ch].textContent == pgList[i_p])
+	for(var iP = 0; iP < pgList.length; iP++) {
+	    var opPg; var iCh;
+	    for(iCh = 0; iCh < pgNode.childNodes.length; iCh++)
+		if(pgNode.childNodes[iCh].nodeName == 'pg' && pgNode.childNodes[iCh].textContent == pgList[iP])
 		    break;
-	    if(i_ch < pgNode.childNodes.length || !(opPg=masterPage.findOpenPage(pgList[i_p]))) continue;
+	    if(iCh < pgNode.childNodes.length || !(opPg=masterPage.findOpenPage(pgList[iP]))) continue;
 	    if(opPg.window) {
 		if(opPg.windowExt) opPg.window.close();
 		else if(opPg != masterPage) document.getElementById('mainCntr').removeChild(opPg.window);
@@ -2608,9 +2609,9 @@ function makeUI( callBackRez )
 		    document.body.removeChild(opPg.window);
 		    masterPage = new pwDescr('', true)
 		}
-		if(opPg.parent)	delete opPg.parent.pages[pgList[i_p]];
+		if(opPg.parent)	delete opPg.parent.pages[pgList[iP]];
 	    }
-	    else if(opPg.parent && opPg.parent.inclOpen && opPg.parent.inclOpen == pgList[i_p])
+	    else if(opPg.parent && opPg.parent.inclOpen && opPg.parent.inclOpen == pgList[iP])
 	    { opPg.parent.attrs['pgOpenSrc'] = ''; opPg.parent.makeEl(null, true); }
 	}
 	// Process opened pages

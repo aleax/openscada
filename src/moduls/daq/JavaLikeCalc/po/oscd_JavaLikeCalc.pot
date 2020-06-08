@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-04 11:02+0200\n"
+"POT-Creation-Date: 2020-06-08 19:04+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -113,6 +113,9 @@ msgstr ""
 msgid "Type %d, which is not supported by the 'Add' operation."
 msgstr ""
 
+msgid "You have too deep recursion of the internal function call."
+msgstr ""
+
 #, c-format
 msgid "Error operation %c(%xh). Function '%s' stopped."
 msgstr ""
@@ -121,6 +124,9 @@ msgid "Function: "
 msgstr ""
 
 msgid "Date of modification"
+msgstr ""
+
+msgid "Compilation state"
 msgstr ""
 
 msgid "Name"
@@ -162,6 +168,10 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
+#, c-format
+msgid "Size source=%s, bytecode=%s; Registers totally=%d, shared=%g; Functions external=%d, internal=%g."
+msgstr ""
+
 msgid "New IO"
 msgstr ""
 
@@ -180,7 +190,7 @@ msgstr ""
 msgid "State"
 msgstr ""
 
-msgid "Accessing"
+msgid "Accessible"
 msgstr ""
 
 msgid "Library DB"

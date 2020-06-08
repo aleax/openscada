@@ -255,7 +255,9 @@ bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &c
 				cf.setS(vl_tr, TCfg::ExtValTwo);
 				cf.setS("cfg:"+path+"#"+cf_el[iEl], TCfg::ExtValThree);
 			    }
-			} else if(isPresent)	cf.setS(vl);
+			}
+			else if(isPresent)	cf.setS(vl);
+			else cf.toDefault(true);
 			// Extended context
 			if(localCfgCtx && cf.isKey() && cf.extVal())	cf.setS(el->attr(cf_el[iEl]+"_ext"), TCfg::ExtValTwo);
 		    }
@@ -352,7 +354,9 @@ bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg, bool f
 			    cf.setS(vl_tr, TCfg::ExtValTwo);
 			    cf.setS("cfg:"+path+"#"+cf_el[iEl], TCfg::ExtValThree);
 			}
-		    } else if(isPresent)	cf.setS(vl);
+		    }
+		    else if(isPresent)	cf.setS(vl);
+		    else cf.toDefault(true);
 		    //  Extended context
 		    if(localCfgCtx && cf.isKey() && cf.extVal())	cf.setS(el->attr(cf_el[iEl]+"_ext"), TCfg::ExtValTwo);
 		}

@@ -334,7 +334,7 @@ bool UserStBar::userSel( const string &hint )
     {
 	QString old_user = user().c_str(), old_pass = pass().c_str();
 	setUser(d_usr.user().toStdString());
-	setPass(d_usr.password().toStdString());
+	//???? setPass((d_usr.autoRes() == DlgUser::NoAuto) ? d_usr.password().toStdString() : SYS->security().at().usrAt(user()).at().cfg("PASS").getS());
 	emit userChanged(old_user, old_pass);
 	return true;
     }

@@ -245,7 +245,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter template: ")+name(),RWRWR_,"root",SDAQ_ID,1,"doc","User_API|Documents/User_API");
 	if(ctrMkNode("area",opt,-1,"/tmpl",_("Template"))) {
 	    if(ctrMkNode("area",opt,-1,"/tmpl/st",_("State"))) {
-		ctrMkNode("fld",opt,-1,"/tmpl/st/st",_("Accessing"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/tmpl/st/st",_("Accessible"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/tmpl/st/use",_("Used"),R_R_R_,"root",SDAQ_ID,1,"tp","dec");
 		ctrMkNode("fld",opt,-1,"/tmpl/st/timestamp",_("Date of modification"),R_R_R_,"root",SDAQ_ID,1,"tp","time");
 	    }
@@ -905,7 +905,7 @@ void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("grp",opt,-1,"/br/tmpl_",_("Template"),RWRWR_,"root",SDAQ_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
 	if(ctrMkNode("area",opt,-1,"/lib",_("Library"))) {
 	    if(ctrMkNode("area",opt,-1,"/lib/st",_("State"))) {
-		ctrMkNode("fld",opt,-1,"/lib/st/st",_("Accessing"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/lib/st/st",_("Accessible"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library DB"),RWRWR_,"root",SDAQ_ID,4,
 		    "tp","str","dest","sel_ed","select",("/db/tblList:tmplib_"+id()).c_str(),
 		    "help",_("DB address in format \"{DB module}.{DB name}.{Table name}\".\nSet '*.*.{Table name}' for use the main work DB."));

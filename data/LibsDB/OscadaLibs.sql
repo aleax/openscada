@@ -1502,19 +1502,18 @@ INSERT INTO tmplib_DevLib_io VALUES('DNP3','tmPoolAll','Poll all time, seconds',
 INSERT INTO tmplib_DevLib_io VALUES('DNP3','oAVals','Output values',4,1,'',10,'Выходные значения','','Вихідні значення','');
 INSERT INTO tmplib_DevLib_io VALUES('IEC60870','tmPoolAll','Poll all time, seconds',2,64,'60',3,'Время опроса всего, секунд','','Час опитування всього, секунд','');
 INSERT INTO tmplib_DevLib_io VALUES('IEC60870','oAVals','Output values',4,0,'',12,'Выходные значения','','Вихідні значення','');
-INSERT INTO tmplib_DevLib_io VALUES('IEC62056','transport','Transport',0,64,'Serial.out_IEC62056',0,'','','','');
-INSERT INTO tmplib_DevLib_io VALUES('IEC62056','dest','Destination "{UHDLC}:{LHDLC}", [0...16383]',0,64,'17:6168',1,'','','','');
-INSERT INTO tmplib_DevLib_io VALUES('IEC62056','src','Source [0...127]',1,64,'1',2,'','','','');
-INSERT INTO tmplib_DevLib_io VALUES('IEC62056','tmRetr','Retry connection time, seconds',2,64,'10',4,'','','','');
-INSERT INTO tmplib_DevLib_io VALUES('IEC62056','tmPoolEv','Poll events time, seconds',2,64,'1',5,'','','','');
-INSERT INTO tmplib_DevLib_io VALUES('IEC62056','tmPoolAll','Poll all time, seconds',2,64,'60',6,'','','','');
-INSERT INTO tmplib_DevLib_io VALUES('IEC62056','itemsSet','Items set by: "ai|ao|cnt|di|do:{pnt}[-{endPnt}][:a[:{NameBase}]]"',0,36,'',7,'','','','');
-INSERT INTO tmplib_DevLib_io VALUES('IEC62056','items','All items',4,33,'',8,'','','','');
-INSERT INTO tmplib_DevLib_io VALUES('IEC62056','tr','Output transport',4,0,'',9,'','','','');
-INSERT INTO tmplib_DevLib_io VALUES('IEC62056','ctx','IO context',4,0,'',10,'','','','');
-INSERT INTO tmplib_DevLib_io VALUES('IEC62056','oAVals','Output values',4,1,'',11,'','','','');
-INSERT INTO tmplib_DevLib_io VALUES('IEC62056','this','Object',4,0,'',12,'','','','');
-INSERT INTO tmplib_DevLib_io VALUES('IEC62056','pass','Password the device',0,64,'ABCDEFGH',3,'','','','');
+INSERT INTO tmplib_DevLib_io VALUES('IEC62056','transport','Transport',0,64,'Serial.out_IEC62056',0,'','','Transport','Serial.out_IEC62056');
+INSERT INTO tmplib_DevLib_io VALUES('IEC62056','dest','Destination "{UHDLC}:{LHDLC}", [0...16383]',0,64,'17:6168',1,'','','Destination "{UHDLC}:{LHDLC}", [0...16383]','17:6168');
+INSERT INTO tmplib_DevLib_io VALUES('IEC62056','src','Source [0...127]',1,64,'1',2,'','','Source [0...127]','');
+INSERT INTO tmplib_DevLib_io VALUES('IEC62056','tmRetr','Retry connection time, seconds',2,64,'10',4,'','','Retry connection time, seconds','');
+INSERT INTO tmplib_DevLib_io VALUES('IEC62056','itemsSet','Items set by: "{ClassId}-{OBIS}-{attr}"',0,36,'',6,'','','Items set by: "{OBIS}-{attr}"','');
+INSERT INTO tmplib_DevLib_io VALUES('IEC62056','items','All items',4,33,'',7,'','','All items','');
+INSERT INTO tmplib_DevLib_io VALUES('IEC62056','tr','Output transport',4,0,'',8,'','','Output transport','');
+INSERT INTO tmplib_DevLib_io VALUES('IEC62056','ctx','IO context',4,0,'',9,'','','IO context','');
+INSERT INTO tmplib_DevLib_io VALUES('IEC62056','oAVals','Output values',4,1,'',10,'','','Output values','');
+INSERT INTO tmplib_DevLib_io VALUES('IEC62056','this','Object',4,0,'',11,'','','Object','');
+INSERT INTO tmplib_DevLib_io VALUES('IEC62056','pass','Password the device',0,64,'ABCDEFGH',3,'','','Password the device','ABCDEFGH');
+INSERT INTO tmplib_DevLib_io VALUES('IEC62056','tmPollAll','Poll all time, seconds',2,64,'60',5,'','','Poll all time, seconds','');
 CREATE TABLE IF NOT EXISTS 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_PrescrTempl_io VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
 INSERT INTO tmplib_PrescrTempl_io VALUES('timer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
@@ -6202,23 +6201,64 @@ Version: 0.1.0
 License: GPLv2','','',10,0,'JavaLikeCalc.JavaScript
 function CRC( inSeq ) { return Special.FLibSYS.CRC(inSeq, 16, 0x1021, -1, true, true, 0xFFFF); }
 
-/*function inVal(aId, aVal, QLT, wr) {
-	if(!QLT.isEVal() && (!(QLT&0x01) || (QLT&0x1E)))	aVal = EVAL;
-	if(wr.isEVal())	wr = false;
-	if(items[aId].isEVal()) {
-		items[aId] = itW = new Object();
-		itW.descr = aId;
-		itW.wr = wr; itW.alarm = 0;
-	} else itW = items[aId];
-	itW.val = aVal;
-	if((aO=this[aId])) {
-		aO.set(aVal, 0, 0, true);
-		if(itW.wr) oAVals[aId] = aVal;
+function ASN1_Data( inSeq, offIn ) {
+	val = EVAL;
+	offIn += 1;
+	if((vTp=inSeq.charCodeAt(offIn-1)) == 0)	//NULL
+		val = 0;
+	else if(vTp == 1 || vTp == 2) {		//Array, Structure
+		itSz = inSeq.charCodeAt(offIn);
+		val = new Array(itSz);
+		offIn += 1;
+		for(itI = 0; itI < itSz; itI++)
+			val[itI] = ASN1_Data(inSeq, offIn);
 	}
-}*/
+	else if(vTp == 4 || vTp == 18) {		//BIT STRING, Unsigned16
+		val = inSeq.charCodeAt(offIn, "UTF-16BE");
+		offIn += 2;
+	}
+	else if(vTp == 5) {							//Integer32
+		val = inSeq.charCodeAt(offIn, "UTF-32BE");
+		if(val > 2147483647) val -= 4294967296;
+		offIn += 4;
+	}
+	else if(vTp == 6) {							//Unsigned32
+		val = inSeq.charCodeAt(offIn, "UTF-32BE");
+		offIn += 4;
+	}
+	else if(vTp == 9 || vTp == 10) {		//OCTET STRING, VisibleString
+		itSz = inSeq.charCodeAt(offIn);
+		val = inSeq.slice(offIn+1, offIn+1+itSz);
+		offIn += 1+itSz;
+	}
+	else if(vTp == 13 || vTp == 15) {		//Integer8
+		val = inSeq.charCodeAt(offIn);
+		if(val > 127) val -= 256;
+		offIn += 1;
+	}
+	else if(vTp == 16) {						//Integer16
+		val = inSeq.charCodeAt(offIn, "UTF-16BE");
+		if(val > 32767) val -= 65536;
+		offIn += 2;
+	}
+	else if(vTp == 17 || vTp == 22) {		//Unsigned8, ENUMERATED
+		val = inSeq.charCodeAt(offIn);
+		offIn += 1;
+	}
+	else if(vTp == 18) {						//Unsigned16
+		val = inSeq.charCodeAt(offIn, "UTF-16BE");
+		offIn += 2;
+	}
+	else {
+		SYS.messDebug("/IEC62056", tr("Unknown data type %1, termination").replace("%1",vTp.toString()));
+		offIn = inSeq.length;
+	}
+
+	return val;
+}
 
 //Forming of the message and placing it to the output buffer
-//  Commands: "I", "RR", "RNR", "SNRM", "DISC", "UI"
+//  Commands: "SNRM", "RR", "I", "DISC"
 function mess( com, data ) {
 	if(data.isEVal())	data = "";
 	mLen = 10 + (data.length ? data.length+2 : 0);
@@ -6255,47 +6295,49 @@ function processIn( ) {
 		//  Checking the destination address
 		if(((dst_=ctx.in.charCodeAt(4))&1) && (dst_>>1) == ctx.destUp && ctx.destLow == 0)
 			dst_sz = 1;
-		else if(!((dst_=ctx.in.charCodeAt(5))&1) && ((dst_2=ctx.in.charCodeAt(6))&1) && (dst_>>1) == ctx.destUp && (dst_2>>1) == ctx.destLow)
+		else if(!((dst_=ctx.in.charCodeAt(4))&1) && ((dst_2=ctx.in.charCodeAt(5))&1) && (dst_>>1) == ctx.destUp && (dst_2>>1) == ctx.destLow)
 			dst_sz = 2;
-		else if(!((dst_=ctx.in.charCodeAt(5))&1) && !(ctx.in.charCodeAt(6)&1) && !((dst_2=ctx.in.charCodeAt(7))&1) && (ctx.in.charCodeAt(8)&1) &&
-				(((dst_>>1)<<7)|(ctx.in.charCodeAt(6)>>1)) == ctx.destUp && (((dst_2>>1)<<7)|(ctx.in.charCodeAt(8)>>1)) == ctx.destLow)
+		else if(!((dst_=ctx.in.charCodeAt(4))&1) && !(ctx.in.charCodeAt(5)&1) && !((dst_2=ctx.in.charCodeAt(6))&1) && (ctx.in.charCodeAt(7)&1) &&
+				(((dst_>>1)<<7)|(ctx.in.charCodeAt(5)>>1)) == ctx.destUp && (((dst_2>>1)<<7)|(ctx.in.charCodeAt(7)>>1)) == ctx.destLow)
 			dst_sz = 4;
 		else { SYS.messDebug("/IEC62056",tr("Wrong destination address, rejected")+": "+SYS.strDecode(ctx.in,"Bin"," ")); ctx.in = ""; break; }
 		if(ctx.in.length < (7+dst_sz))	break;	//Short yet, waiting
 		//  Checking the header CRC
-		if(CRC(ctx.in.slice(1,4+dst_sz)) != ctx.in.charCodeAt(5+dst_sz,"UTF-16LE"))
+		if(CRC(ctx.in.slice(1,5+dst_sz)) != ctx.in.charCodeAt(5+dst_sz,"UTF-16LE"))
 		{ SYS.messDebug("/IEC62056",tr("CRC-error, rejected")+": "+SYS.strDecode(ctx.in,"Bin"," ")); ctx.in = ""; break; }
 		// Checking the frame entirety
 		if(ctx.in.length < (waitSz=2+dataSz))	break;	//Not full yet, waiting
-		if(ctx.in[2+waitSz-1] != "~")
+		if(ctx.in[waitSz-1] != "~")
 		{ SYS.messDebug("/IEC62056",tr("The end symbol is wrong")+": "+SYS.strDecode(ctx.in,"Bin"," ")); ctx.in = ""; break; }
 		//  Checking the frame CRC with the data
-		if(dataSz > (6+dst_sz) && CRC(ctx.in.slice(1,dataSz-2)) != ctx.in.charCodeAt(1+dataSz,"UTF-16LE"))
+		if(dataSz > (6+dst_sz) && CRC(ctx.in.slice(1,1+dataSz-2)) != ctx.in.charCodeAt(1+dataSz-2,"UTF-16LE"))
 		{ SYS.messDebug("/IEC62056",tr("CRC-error, rejected")+": "+SYS.strDecode(ctx.in,"Bin"," ")); ctx.in = ""; break; }
 
 		SYS.messDebug("/IEC62056",tr("Good input sequence")+": "+SYS.strDecode(ctx.in.slice(0,waitSz),"Bin"," "));
 
 		cntr = ctx.in.charCodeAt(4+dst_sz);
-		// ???? Checking the control byte, sequinces and the frame segments
-		if(cntr&0x7) {	//RR
+		// Checking the control byte, sequinces and the frame segments
+		if((cntr&0x7) == 1) {	//RR
+			SYS.messDebug("/IEC62056", "RR"+(cntr>>5)+((cntr&0x10)?"F":""));
 			if(ctx.reqToResp == "RR")	ctx.reqToResp = "";
 			continue;
 		}
 		else if(!(cntr&1)) {	//I
-			//ctx.sendSeq = sendSeq_;
-			if(cntr&0x10) mess("RR");		//F - final????
-			if(ctx.sendSeq != (sendSeq_=((cntr>>1)&0x7))) {
-				SYS.messDebug("/IEC62056",tr("Broken sequence, rejected"));
+			SYS.messDebug("/IEC62056", "I"+((cntr>>1)&0x7)+","+(cntr>>5)+((cntr&0x10)?"F":""));
+			if(ctx.sendSeq != (cntr>>5)) {
+				SYS.messDebug("/IEC62056", tr("Broken sequence %1, rejected").replace("%1",ctx.sendSeq.toString()));
 				continue;
 			}
 			if(ctx.readSeq >= 7) ctx.readSeq = 0; else ctx.readSeq++;
+			if(cntr&0x10) mess("RR");		//F - final
 		}
 
-		ctx.inAMess += ctx.in.slice(7+dst_sz, dataSz-(6+dst_sz));
+		ctx.inAMess += ctx.in.slice(7+dst_sz, 1+dataSz-2);
 		if(form&0x8)	continue;	//Waiting the next segment
 
-		// ???? Getting the data
+		// Getting the data
 		if(cntr == 0x73)	{	//UA
+			SYS.messDebug("/IEC62056", "UA");
 			if(ctx.toInit == 1 && ctx.reqToResp == "SNRM")	{
 				ctx.toInit++;
 				//!!!! Parsing the SNRM result
@@ -6303,10 +6345,21 @@ function processIn( ) {
 			ctx.reqToResp = "";
 		}
 		else if((cntr&0x11) == 0x10) {	//I,F
-			if(ctx.inAMess.charCodeAt(0) == 0x61) {	//APPLICATION 1, Initial parameter acquiring
+			if(ctx.inAMess.slice(0,4) == SYS.strFromCharCode(0xE6,0xE7,0x00,0x61)) {	//LPDU, APPLICATION 1, Initial parameter acquiring
 				if(ctx.inAMess.indexOf(SYS.strFromCharCode(0xA2,0x03,0x02,0x01,0x00)) >= 0) ctx.toInit = 0;
 				else { t_err += tr("Error the authentication")+"; "; tr.start(false); }
 				//!!!! Deep parsing the initial parameter acquiring
+			}
+			else if(ctx.inAMess.slice(0,5) == SYS.strFromCharCode(0xE6,0xE7,0x00,0xC4,0x01)) {	//LPDU, GET-Response-Normal
+				tVl = ctx.inAMess.charCodeAt(5);		//Invoke-Id-And-Priority
+				// Get-Data-Result
+				if((tVl=ctx.inAMess.charCodeAt(6)) == 0) {	// Data
+					val = ASN1_Data(ctx.inAMess, 7);
+					SYS.messDebug("/IEC62056", "Data value: "+typeof(val));
+					//???? Processing the result
+				}
+				else if(tVl == 1)										// Error
+					t_err += tr("Error the data %1").replace("%1",ctx.inAMess.charCodeAt(7).toString())+"; ";
 			}
 		}
 		ctx.inAMess = "";
@@ -6314,232 +6367,24 @@ function processIn( ) {
 	return "0"+(t_err.length?":"+t_err:"");
 }
 
-		/*if(ctx.in.charCodeAt(4,"UTF-16") != src || ctx.in.charCodeAt(6,"UTF-16") != dest) {
-			SYS.messDebug("/DNP3",tr("Foreign package, rejected")+": "+SYS.strDecode(ctx.in.slice(waitSz),"Bin"," "));
-			continue;
-		}
-
-		// Getting the data chunks
-		for(data = "", off = 10, iCh = 0; off < waitSz; off += 18, iCh++) {
-			chSz = min(waitSz, off+18) - 2;
-			if(CRC((tVl=ctx.in.slice(off,chSz))) != ctx.in.charCodeAt(chSz,"UTF-16"))	break;
-			data += tVl;
-		}
-		if(off < waitSz) {
-			SYS.messDebug("/DNP3",tr("CRC error in chunk %1, rejected").replace("%1",iCh.toString()));
-			continue;
-		}
-
-		// Control of the transport packages sequence
-		//  First
-		if((tc=data.charCodeAt(0))&0x40) {
-			ctx.inAMess = data;
-			if(!(tc&0x80)) {							//Not Final
-				if(ctx.firSeq >= 0 && (((wSeq=ctx.firSeq+1)>=64)?0:wSeq) != (tc&0x3F))	SYS.messDebug("/DNP3",tr("Broken sequence, rejected"));
-				ctx.firSeq = tc&0x3F;
-			}
-		}
-		//  Final or Pass
-		else if(ctx.firSeq < 0 || (((wSeq=ctx.firSeq+1)>=64)?0:wSeq) != (tc&0x3F)) {	//Broken sequence
-			SYS.messDebug("/DNP3",tr("Broken sequence, rejected"));
-			ctx.firSeq = -1;
-		}
-		else if(ctx.firSeq >= 0) {																		//Good sequence
-			ctx.inAMess += data.slice(1);
-			ctx.firSeq = (tc&0x80) ? -1 : (tc&0x3F);	//Not Final
-		}
-
-		// Process of the reassigned application message
-		if(ctx.inAMess.length && (tc&0x80)) {
-			am = ctx.inAMess.slice(1), ctx.inAMess = "";	//Get the application message
-			ac = am.charCodeAt(0);
-			SYS.messDebug("/DNP3", "Input application message: "+SYS.strDecode(am,"Bin"," "));
-
-			//  Checking and disabling the Spontaneous Messages
-			if(am.charCodeAt(1) == 0x82 && !ctx.spontEn)	mess(0x15, SYS.strFromCharCode(0x3C,0x02,0x06,0x3C,0x03,0x06,0x3C,0x04,0x06));
-			//  Confirmation
-			if(ac&0x20)	mess(0x00, "", 0x80|0x40|(ac&0x1F));
-			//  Processing the response package
-			if((am.charCodeAt(1) == 0x81 && ctx.reqToResp.length && ctx.reqToResp.toInt() == (ac&0x0F)) || am.charCodeAt(1) == 0x82) {
-				intInd = am.charCodeAt(2,"UTF-16BE");
-				if(intInd&0x8000) t_err += tr("Device Restart")+"; ";
-				if(intInd&0x4000) t_err += tr("Device Trouble")+"; ";
-				if(intInd&0x2000) t_err += tr("Digital Outputs in Local")+"; ";
-				if(intInd&0x1000) t_err += tr("Time Sync Required")+"; ";
-				if(intInd&0x0800) t_err += tr("Class 3 Data Available")+"; ";
-				if(intInd&0x0400) t_err += tr("Class 2 Data Available")+"; ";
-				if(intInd&0x0200) t_err += tr("Class 1 Data Available")+"; ";
-				if(intInd&0x0020) t_err += tr("Configuration Corrupt")+"; ";
-				if(intInd&0x0010) t_err += tr("Operation Already Executing")+"; ";
-				if(intInd&0x0008) t_err += tr("Event Buffer Overflow")+"; ";
-				if(intInd&0x0004) t_err += tr("Parameters Invalid or Out of Range")+"; ";
-				if(intInd&0x0002) t_err += tr("Requested Objects Unknown")+"; ";
-				if(intInd&0x0001) t_err += tr("Function Code not implemented")+"; ";
-				//respToF = ctx.reqToResp.parse(1,":").toInt();
-				ctx.reqToResp = "";	//The propper response came
-				if(intInd&0x8000)	mess(0x2, SYS.strFromCharCode(0x50,0x01,0x00,0x07,0x07,0x00));	//Restarting the server: Write 0x5001, 07, 0 (false)
-				//Process the function result
-				else //if(respToF == 0x01)	//Read
-					for(off = 4; off < am.length; ) {
-						if((off+3) >= am.length)	{ SYS.messDebug("/DNP3",tr("Not enough of the data in %1, the processing terminated").replace("%1",off.toString())); break; }
-						dtObj = am.charCodeAt(off), dtObjV = am.charCodeAt(off+1), dtQf = am.charCodeAt(off+2), off += 3;
-						dtRcode = (dtQf&0xF);	//Range code
-						pntStart = pntStop = 0;
-						if(dtRcode == 0)				//8-bit start and stop
-							pntStart = am.charCodeAt(off), pntStop = am.charCodeAt(off+1), off += 2;
-						else if(dtRcode == 1)		//16-bit start and stop
-							pntStart = am.charCodeAt(off, "UTF-16"), pntStop = am.charCodeAt(off+2, "UTF-16"), off += 4;
-						else if(dtRcode == 7)		//8-bit Single Field Quantity
-							pntStop = am.charCodeAt(off)-1, off += 1;
-						else if(dtRcode == 8)		//16-bit Single Field Quantity
-							pntStop = am.charCodeAt(off, "UTF-16")-1, off += 2;
-						else { SYS.messWarning("/DNP3",tr("Unsupported data range code %1 in %2, the processing terminated").replace("%1",dtRcode.toString()).replace("%2",off.toString())); break; }
-						if(pntStart > pntStop)	{ SYS.messDebug("/DNP3",tr("Wrong points range [%1...%2] in %3, the processing terminated").replace("%1",pntStart.toString()).replace("%2",pntStop.toString()).replace("%3",off.toString())); break; }
-						SYS.messDebug("/DNP3","pntStart="+pntStart+"; pntStop="+pntStop+"; off="+off);
-						
-						if(dtObj == 1) {					//Binary Input
-							if(dtObjV == 2) {			//.with status
-								if((off+(pntStop-pntStart+1)) > am.length)	{ SYS.messDebug("/DNP3",tr("Not enough of the data in %1, the processing terminated").replace("%1",off.toString())); break; }
-								for( ; pntStart <= pntStop; pntStart++, off++)
-									inVal("di"+pntStart, ((QLT=am.charCodeAt(off))&0x80)?true:false, QLT);
-							} else { SYS.messWarning("/DNP3",tr("Binary Input (1): unsupported variant ''%1'', the processing terminated").replace("%1",dtObjV.toString())); 	break; }
-						}
-						else if(dtObj == 2) {			//Binary Input Changed
-							if(dtObjV == 1) {			//.with status
-								if((off+3*(pntStop-pntStart+1)) > am.length)	{ SYS.messDebug("/DNP3",tr("Not enough of the data in %1, the processing terminated").replace("%1",off.toString())); break; }
-								for( ; pntStart <= pntStop; pntStart++, off += 3)
-									inVal("di"+am.charCodeAt(off,"UTF-16"), ((QLT=am.charCodeAt(off+2))&0x80)?true:false, QLT);
-							} else { SYS.messWarning("/DNP3",tr("Binary Input Changed (2): unsupported variant ''%1'', the processing terminated").replace("%1",dtObjV.toString())); 	break; }
-						}
-						else if(dtObj == 3) {			//Double-bit Input
-							if(dtObjV == 2) {			//.with status
-								if((off+(pntStop-pntStart+1)) > am.length)	{ SYS.messDebug("/DNP3",tr("Not enough of the data in %1, the processing terminated").replace("%1",off.toString())); break; }
-								for( ; pntStart <= pntStop; pntStart++, off++)
-									inVal("di"+pntStart, (((QLT=am.charCodeAt(off))&0xC0)==0xC0||(QLT&0xC0)==0)?EVAL:(QLT&0x40)?true:false, QLT);
-							} else { SYS.messWarning("/DNP3",tr("Double-bit Input (3): unsupported variant ''%1'', the processing terminated").replace("%1",dtObjV.toString())); 	break; }
-						}
-						else if(dtObj == 4) {			//Double-bit Input Changed
-							if(dtObjV == 1) {			//.with status
-								if((off+3*(pntStop-pntStart+1)) > am.length)	{ SYS.messDebug("/DNP3",tr("Not enough of the data in %1, the processing terminated").replace("%1",off.toString())); break; }
-								for( ; pntStart <= pntStop; pntStart++, off += 3)
-									inVal("di"+am.charCodeAt(off,"UTF-16"), (((QLT=am.charCodeAt(off+2))&0xC0)==0xC0||(QLT&0xC0)==0)?EVAL:(QLT&0x40)?true:false, QLT);
-							} else { SYS.messWarning("/DNP3",tr("Double-bit Input Changed (4): unsupported variant ''%1'', the processing terminated").replace("%1",dtObjV.toString())); 	break; }
-						}
-						else if(dtObj == 10) {			//Binary Output
-							if(dtObjV == 2) {			//.with status
-								if((off+(pntStop-pntStart+1)) > am.length)	{ SYS.messDebug("/DNP3",tr("Not enough of the data in %1, the processing terminated").replace("%1",off.toString())); break; }
-								for( ; pntStart <= pntStop; pntStart++, off++)
-									inVal("do"+pntStart, ((QLT=am.charCodeAt(off))&0x80)?true:false, QLT, true);
-							} else { SYS.messWarning("/DNP3",tr("Binary Output (10): unsupported variant ''%1'', the processing terminated").replace("%1",dtObjV.toString())); 	break; }
-						}
-						else if(dtObj == 20 || dtObj == 21) {	//Binary Counter and Frozen Binary Counter
-							if(dtObjV == 1) {							//.default
-								if((off+5*(pntStop-pntStart+1)) > am.length)	{ SYS.messDebug("/DNP3",tr("Not enough of the data in %1, the processing terminated").replace("%1",off.toString())); break; }
-								for( ; pntStart <= pntStop; pntStart++, off += 5)
-									inVal("cnt"+pntStart, am.charCodeAt(off+1,"UTF-32"), am.charCodeAt(off));
-							} else { SYS.messWarning("/DNP3",tr("Binary Counter (20) or Frozen Binary Counter (21): unsupported variant ''%1'', the processing terminated").replace("%1",dtObjV.toString())); 	break; }
-						}
-						else if(dtObj == 22 || dtObj == 23) {	//Binary Counter Changed and Frozen Binary Counter Changed
-							if(dtObjV == 1) {							//.default
-								if((off+7*(pntStop-pntStart+1)) > am.length)	{ SYS.messDebug("/DNP3",tr("Not enough of the data in %1, the processing terminated").replace("%1",off.toString())); break; }
-								for( ; pntStart <= pntStop; pntStart++, off += 7)
-									inVal("cnt"+am.charCodeAt(off,"UTF-16"), am.charCodeAt(off+3,"UTF-32"), am.charCodeAt(off+2));
-							} else { SYS.messWarning("/DNP3",tr("Binary Counter Changed (22) or Frozen Binary Counter Changed (23): unsupported variant ''%1'', the processing terminated").replace("%1",dtObjV.toString())); 	break; }
-						}
-						else if(dtObj == 30) {			//Analog Input
-							if(dtObjV == 1) {			//.32-bit integer value with flag
-								if((off+5*(pntStop-pntStart+1)) > am.length)	{ SYS.messDebug("/DNP3",tr("Not enough of the data in %1, the processing terminated").replace("%1",off.toString())); break; }
-								for( ; pntStart <= pntStop; pntStart++, off += 5)
-									inVal("ai"+pntStart, am.charCodeAt(off+1,"UTF-32"), am.charCodeAt(off));
-							} else if(dtObjV == 5) {	//.32-bit floating point value with flag
-								if((off+5*(pntStop-pntStart+1)) > am.length)	{ SYS.messDebug("/DNP3",tr("Not enough of the data in %1, the processing terminated").replace("%1",off.toString())); break; }
-								for( ; pntStart <= pntStop; pntStart++, off += 5)
-									inVal("ai"+pntStart, Special.FLibSYS.floatMergeWord(am.charCodeAt(off+1,"UTF-16"),am.charCodeAt(off+3,"UTF-16")), am.charCodeAt(off));
-							} else { SYS.messWarning("/DNP3",tr("Analog Input (30): unsupported variant ''%1'', the processing terminated").replace("%1",dtObjV.toString())); 	break; }
-						}
-						else if(dtObj == 32) {			//Analog Input Changed
-							if(dtObjV == 7) {			//.32-bit floating point value with flag and event time
-								if((off+13*(pntStop-pntStart+1)) > am.length)	{ SYS.messDebug("/DNP3",tr("Not enough of the data in %1, the processing terminated").replace("%1",off.toString())); break; }
-								for( ; pntStart <= pntStop; pntStart++, off += 13)
-									inVal("ai"+am.charCodeAt(off,"UTF-16"), Special.FLibSYS.floatMergeWord(am.charCodeAt(off+3,"UTF-16"),am.charCodeAt(off+5,"UTF-16")), am.charCodeAt(off+2));
-							} else { SYS.messWarning("/DNP3",tr("Analog Input Changed (32): unsupported variant ''%1'', the processing terminated").replace("%1",dtObjV.toString())); 	break; }
-						}
-						else if(dtObj == 40) {			//Analog Output
-							if(dtObjV == 1) {			//.32-bit integer value with flag
-								if((off+5*(pntStop-pntStart+1)) > am.length)	{ SYS.messDebug("/DNP3",tr("Not enough of the data in %1, the processing terminated").replace("%1",off.toString())); break; }
-								for( ; pntStart <= pntStop; pntStart++, off += 5)
-									inVal("ao"+pntStart, am.charCodeAt(off+1,"UTF-32"), am.charCodeAt(off), true);
-							} else { SYS.messWarning("/DNP3",tr("Analog Output (40): unsupported variant ''%1'', the processing terminated").replace("%1",dtObjV.toString())); 	break; }
-						}
-						else if(dtObj == 50) {			//Time and Date
-							if(dtObjV == 4) {			//.Indexed absolute time and long interval
-								if((off+5*(pntStop-pntStart+1)) > am.length)	{ SYS.messDebug("/DNP3",tr("Not enough of the data in %1, the processing terminated").replace("%1",off.toString())); break; }
-								for( ; pntStart <= pntStop; pntStart++, off += 11) ;
-									//inVal("ao"+pntStart, am.charCodeAt(off+1,"UTF-32"), am.charCodeAt(off));
-							} else { SYS.messWarning("/DNP3",tr("Time and Date (4): unsupported variant ''%1'', the processing terminated").replace("%1",dtObjV.toString())); 	break; }
-						}
-						else if(dtObj == 110) {			//Time and Date
-							if((off+dtObjV*(pntStop-pntStart+1)) > am.length)	{ SYS.messDebug("/DNP3",tr("Not enough of the data in %1, the processing terminated").replace("%1",off.toString())); break; }
-							for( ; pntStart <= pntStop; pntStart++, off += dtObjV) ;
-						}
-						else { SYS.messWarning("/DNP3",tr("Unsupported data object ''%1'', the processing terminated").replace("%1",dtObj.toString())); break; }
-					}
-			}
-		}
-	}
-	return "0"+(t_err.length?":"+t_err:"");
-}*/
-
 if(f_start) {
 	itemsSet_ = "";
 	items = new Object();
 	//oAVals = new Object();
 	transport_ = "", tr = false;
 	tmRetr_ = tmResp_ = tmRetr;
-	//tmPoolEv_ = 0;
-	//tmPoolAll_ = tmPoolAll;
+	tmPollAll_ = tmPollAll; offPoll = 0;
 	ctx = new Object();
 
 	return;
 }
 if(f_stop)	mess("DISC");
 
-
 //Items set changing process
-/*if(itemsSet != itemsSet_) {
-	for(off = 0; (iIt=itemsSet.parse(0,"\n",off)).length; ) {
-		iIt_tp = iIt.parse(0, ":");
-		iIt_IOA = iIt.parse(1, ":");
-		iIt_flgs = iIt.parse(2, ":");
-		iIt_nmBase = iIt.parse(3, ":");
-		iIt_sDscr = false;
-		if((iIt_EndIOA=iIt_IOA.indexOf("-")) >= 0) {
-			iIt_EndIOA = iIt_IOA.slice(iIt_EndIOA+1).toInt(0);
-			iIt_IOA = iIt_IOA.slice(0,iIt_EndIOA).toInt(0);
-		}
-		else { iIt_IOA = iIt_EndIOA = iIt_IOA.toInt(0); iIt_sDscr = iIt_nmBase.length; }
-		if(iIt_tp == "ai")			{ iIt_nmBase = iIt_nmBase.length ? iIt_nmBase : "AI"; iIt_vtp = "real,ro"; }
-		else if(iIt_tp == "ao")	{ iIt_nmBase = iIt_nmBase.length ? iIt_nmBase : "AO"; iIt_vtp = "real"; }
-		else if(iIt_tp == "cnt")	{ iIt_nmBase = iIt_nmBase.length ? iIt_nmBase : "CNTR"; iIt_vtp = "int,ro"; }
-		else if(iIt_tp == "di")	{ iIt_nmBase = iIt_nmBase.length ? iIt_nmBase : "DI"; iIt_vtp = "boolean,ro"; }
-		else if(iIt_tp == "do")	{ iIt_nmBase = iIt_nmBase.length ? iIt_nmBase : "DO"; iIt_vtp = "boolean"; }
-		//else if(iIt_tp == "s")		{ iIt_nmBase = iIt_nmBase.length ? iIt_nmBase : "STR"; iIt_vtp = "string,ro"; }
-		else continue;
-		while(iIt_IOA <= iIt_EndIOA) {
-			aId = iIt_tp+iIt_IOA; aDscr = iIt_nmBase+(iIt_sDscr?"":"["+iIt_IOA+"]"); aWr = (iIt_tp == "ao" || iIt_tp == "do");
-			if(items[aId].isEVal()) { items[aId] = itW = new Object(); itW.descr = aDscr; itW.wr = aWr; itW.alarm = 0; }
-			if(iIt_flgs.indexOf("a") >= 0) {
-				this.attrAdd(aId, aDscr, iIt_vtp);
-				if(aWr)	oAVals[aId] = EVAL_INT;
-				this[aId].set(EVAL_INT, 0, 0, true);
-			}
-			iIt_IOA++;
-		}
-	}
+if(itemsSet != itemsSet_) {
 	itemsSet_ = itemsSet;
-
-	tmPoolAll_ = tmPoolAll;	//and reread
-}*/
+	tmPollAll_ = tmPollAll; offPoll = 0;		//and reread
+}
 
 //Check for the transport change and connect
 t_err = "0";
@@ -6552,8 +6397,7 @@ if(!tr || transport != transport_)	{
 	transport_ = transport;
 	if(tr) tr.start(false);
 	tmRetr_ = tmResp_ = tmRetr;
-	//tmPoolEv_ = 0;
-	//tmPoolAll_ = tmPoolAll;
+	tmPollAll_ = tmPollAll; offPoll = 0;
 }
 if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
 else if(destUp < 0 || destUp > 16383)
@@ -6567,8 +6411,7 @@ else if(!tr.start()) {
 		tr.start(true);
 		itemsSet_ = "";
 		tmRetr_ = tmResp_ = 0;
-		tmPoolEv_ = 0;
-		tmPoolAll_ = tmPoolAll;
+		tmPollAll_ = tmPollAll; offPoll = 0;
 		ctx = new Object();
 		ctx.destUp = destUp; ctx.destLow = destLow;
 		pass_ = pass;
@@ -6583,8 +6426,6 @@ else {
 		ctx.sendSeq = ctx.readSeq = 0;
 		ctx.toInit = 1;
 		ctx.firSeq = -1;
-		//ctx.spontEn = false;		//Spontanous messages disabled
-		//ctx.readAll = false;		//All values readed, stage
 		ctx.reqToResp = "";
 	}
 
@@ -6613,6 +6454,9 @@ else {
 	// Initial parameter acquiring
 	else if(ctx.toInit == 2)
 		mess("I", SYS.strFromCharCode(
+			0xE6,								//Destination (remote) LSAP, fixed in COSEM
+			0xE6,								//Source (local) LSAP, fixed in COSEM E6 for command E7 for response
+			0x00,								//Quality, Control byte, Reserved and 00 always
 			0x60, 46+pass.length,		//APPLICATION 0, Length 54
 			0xA1, 0x09, 0x06, 0x07,	//Application-context-name [1] (9 byte), OBJECT IDENTIFIER (7 byte)
 				0x60, 0x85, 0x74, 0x05, 0x08, 0x01, 0x01,
@@ -6629,40 +6473,25 @@ else {
 				0x00, 0x00					// PDU maximum size
 			));
 	else {
-
-		//Writing
-		// By attributes
-		/*for(iIt in oAVals)
-			if((aO=this[iIt]) && !(aOval=aO.get()).isEVal() && aOval != oAVals[iIt]) {
-				if(iIt.slice(0,2) == "do")
-					mess(0x02, SYS.strFromCharCode(10,2,0,iIt.slice(2).toInt(),iIt.slice(2).toInt(),aOval?1:0));
-				else if(iIt.slice(0,2) == "ao")
-					mess(0x02, SYS.strFromCharCode(40,1,0,iIt.slice(2).toInt(),iIt.slice(2).toInt(),0)+SYS.strFromCharUTF("UTF-32",aOval));
-				oAVals[iIt] = aOval;
-			}
-		// By items object
-		for(iIt in items)
-			if((aO=items[iIt]) && !(aOval=aO.set).isEVal()) {
-				if(iIt.slice(0,2) == "do")
-					mess(0x02, SYS.strFromCharCode(10,2,0,iIt.slice(2).toInt(),iIt.slice(2).toInt(),aOval?1:0));
-				else if(iIt.slice(0,2) == "ao")
-					mess(0x02, SYS.strFromCharCode(40,1,0,iIt.slice(2).toInt(),iIt.slice(2).toInt(),0)+SYS.strFromCharUTF("UTF-32",aOval));
-				aO.set = EVAL_BOOL;
-			}
-
 		//Polling
-		// Read all classes
-		if(tmPoolAll_ > tmPoolAll)		{ mess(0x1, SYS.strFromCharCode(0x3C,0x02,0x06,0x3C,0x03,0x06,0x3C,0x04,0x06,0x3C,0x01,0x06));	tmPoolAll_ = 0; ctx.readAll = true; }
-		//Read periodically the class 1
-		else if(tmPoolEv_ > tmPoolEv) {
-			// Enable the spontanous messages
-			if(!ctx.spontEn)	{ mess(0x14, SYS.strFromCharCode(0x3C,0x02,0x06,0x3C,0x03,0x06,0x3C,0x04,0x06)); ctx.spontEn = true; }
-			else mess(0x1, SYS.strFromCharCode(0x3C,0x02,0x06));
-			tmPoolEv_ = 0;
-		}*/
+		// Read all items
+		if(tmPollAll_ > tmPollAll) {
+			while((iIt=itemsSet.parse(0,"\n",offPoll)).length) {
+				iIt_ClassId = iIt.parse(0, "-");
+				iIt_OBIS = iIt.parse(1, "-");
+				iIt_a = iIt.parse(2, "-");
+				mess("I", SYS.strFromCharCode(0xE6, 0xE6, 0x00,
+					0xC0, 0x01, 0x81,	//Get-Request-Normal, Invoke-Id-And-Priority
+					0x00, iIt_ClassId.toInt(),	//Cosem-Class-Id, ?
+					iIt_OBIS.parse(0,".").toInt(), iIt_OBIS.parse(1,".").toInt(), iIt_OBIS.parse(2,".").toInt(), iIt_OBIS.parse(3,".").toInt(), iIt_OBIS.parse(4,".").toInt(), iIt_OBIS.parse(5,".").toInt(),
+					iIt_a.toInt(),		//Cosem-Object-Attribute-Id
+					0x00						//Selective-Access-Descriptor, 0
+				));
+			}
+			if(offPoll >= itemsSet.length) { tmPollAll_ = 0; offPoll = 0; }
+		}
 
-		//if(ctx.readAll)	tmPoolEv_ += 1/f_frq;
-		//tmPoolAll_ += 1/f_frq;
+		tmPollAll_ += 1/f_frq;
 		tmResp_ = 0;
 	}
 }
@@ -6682,7 +6511,7 @@ if(t_err.toInt()) {
 }
 f_err = t_err;
 
-if(f_stop && tr) tr.start(false);','','',1590938639);
+if(f_stop && tr) tr.start(false);','','',1591629390);
 CREATE TABLE IF NOT EXISTS 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO tmplib_PrescrTempl VALUES('timer','Command — Timer','Команда — Таймер','Команда — Таймер','Template of a command of the prescription typical timer. The timer is only designed to hold time between other action steps and for example, so it only has one attribute, "Time" in seconds.
 
@@ -9136,7 +8965,7 @@ curMode = mode;
 INSERT INTO lib_Controllers VALUES('test','test','test','','Different tests of the JavaLikeCalc language for execution into the controller mode.
 
 Author: Roman Savochenko
-Version: 1.0.0
+Version: 1.1.0
 ','','',1,10,0,'using Special.FLibSYS;
 
 out+=10;
@@ -9144,6 +8973,109 @@ if(out>100) out=0;
 
 test = (10).toString(16,2,true);
 test = (-10.34).toFixed(4,8);
+
+
+//==================================================
+//Testing common operation of the internal functions
+//--------------------------------------------------
+/*function f1( ) {
+	aOut = 3.14;
+	a = 20*2;
+	b = 20*3;
+	c = a + b;
+	SYS.messInfo("InF","F1: a="+a+"; b="+b+"; c="+c+"; inFarg="+inFarg);
+	return c;
+}
+
+function f2( ) {
+	a = 30*2;
+	b = 30*3;
+	c = a + b + f1();
+	SYS.messInfo("InF","F2: a="+a+"; b="+b+"; c="+c);
+	return c;
+}
+
+a = 10*2;
+b = 10*3;
+res = c = a + b + f2();
+
+function fR( a1, a2 ) {
+	SYS.messInfo("InF","a2="+a2);
+	d = 10;
+	if(a1 < 5) fR(a1+1, a2);
+	d++; a2++;
+	SYS.messInfo("InF","d="+d+"; a1="+a1+"; a2="+a2);
+}
+
+//aOut = 0;
+fR(0, aOut=0);
+
+SYS.messInfo("InF","a="+a+"; b="+b+"; c="+c+"; f2="+f2()+"; aOut="+aOut);*/
+
+//===========================================
+//Testing recursion of the internal functions
+//-------------------------------------------
+/*function ASN1_Data( inSeq, offIn ) {
+	val = EVAL;
+	offIn += 1;
+	if((vTp=inSeq.charCodeAt(offIn-1)) == 0)	//NULL
+		val = 0;
+	else if(vTp == 1 || vTp == 2) {		//Array, Structure
+		itSz = inSeq.charCodeAt(offIn);
+		val = new Array(itSz);
+		offIn += 1;
+		for(itI = 0; itI < itSz; itI++)
+			val[itI] = ASN1_Data(inSeq, offIn);
+	}
+	else if(vTp == 4 || vTp == 18) {		//BIT STRING, Unsigned16
+		val = inSeq.charCodeAt(offIn, "UTF-16BE");
+		offIn += 2;
+	}
+	else if(vTp == 5) {							//Integer32
+		val = inSeq.charCodeAt(offIn, "UTF-32BE");
+		if(val > 2147483647) val -= 4294967296;
+		offIn += 4;
+	}
+	else if(vTp == 6) {							//Unsigned32
+		val = inSeq.charCodeAt(offIn, "UTF-32BE");
+		offIn += 4;
+	}
+	else if(vTp == 9 || vTp == 10) {		//OCTET STRING, VisibleString
+		itSz = inSeq.charCodeAt(offIn);
+		val = inSeq.slice(offIn+1, offIn+1+itSz);
+		offIn += 1+itSz;
+	}
+	else if(vTp == 13 || vTp == 15) {		//Integer8
+		val = inSeq.charCodeAt(offIn);
+		if(val > 127) val -= 256;
+		offIn += 1;
+	}
+	else if(vTp == 16) {						//Integer16
+		val = inSeq.charCodeAt(offIn, "UTF-16BE");
+		if(val > 32767) val -= 65536;
+		offIn += 2;
+	}
+	else if(vTp == 17 || vTp == 22) {		//Unsigned8, ENUMERATED
+		val = inSeq.charCodeAt(offIn);
+		offIn += 1;
+	}
+	else if(vTp == 18) {						//Unsigned16
+		val = inSeq.charCodeAt(offIn, "UTF-16BE");
+		offIn += 2;
+	}
+	else {
+		SYS.messInfo("/IEC62056", tr("Unknown data type %1, termination").replace("%1",vTp.toString()));
+		offIn = inSeq.length;
+	}
+	//SYS.messInfo("/IEC62056", tr("Unknown data type %1, termination").replace("%1",vTp.toString()));
+
+	return val;
+}
+
+inAMess = SYS.strFromCharCode(0x02, 0x02, 0x11, 0x07, 0x11, 0x1F);
+val = ASN1_Data(inAMess, 0);
+SYS.messInfo("/IEC62056", "Data value "+typeof(val)+": "+val);*/
+
 
 //Request prepare
 //req = SYS.XMLNode("#").setAttr("ProtIt","DCON").setAttr("addr",10);
@@ -9263,7 +9195,7 @@ for( var i_rw = 0; i_rw < DBTbl.length; i_rw++ )
   for( var i_fld = 0; i_fld < DBTbl[i_rw].length; i_fld++ )
     rec += DBTbl[i_rw][i_fld]+"\t";
   SYS.messDebug("TEST DB","Row "+i_rw+": "+rec);
-}*/','','',1560101779);
+}*/','','',1591629697);
 INSERT INTO lib_Controllers VALUES('test1','test1','','test1','Different tests of the JavaLikeCalc language for execution into the controller mode.
 
 Author: Roman Savochenko

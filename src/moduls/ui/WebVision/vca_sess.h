@@ -451,12 +451,16 @@ class VCASess : public TCntrNode
 	string id( )			{ return mId; }
 	string proj( )			{ return mProj; }
 	string user( )			{ return mUser; }
+	string userOrig( )		{ return mUserOrig; }
 	const string &sender( )		{ return mSender; }
 	time_t openTm( )		{ return open_ses; }
 	time_t lstReq( )		{ return lst_ses_req; }
 
 	void projSet( const string &val )	{ mProj = val; }
-	void userSet( const string &val )	{ mUser = val; }
+	void userSet( const string &val, bool initOrig = false ) {
+	    if(mUserOrig.empty()) mUserOrig = mUser;
+	    mUser = val;
+	}
 	void senderSet( const string &val )	{ mSender = val; }
 
 	void getReq( SSess &ses );

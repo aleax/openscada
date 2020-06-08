@@ -35,23 +35,18 @@
 	</node>
 
 	<node id="sub_Transport">
-	    <!--<tbl id="Transport_in">
-		<fld ID="WEB_1" MODULE="Sockets" NAME="Main WWW-interface" DESCRIPT="Main transport of the WEB interfaces."
-			DESCRIPT_uk="Основний транспорт WEB інтерфейсів." DESCRIPT_ru="Основной транспорт WEB интерфейсов."
-			ADDR="*:10002" PROT="HTTP" START="1">
-		    <A_PRMS>&lt;prms MaxQueue="10" MaxClients="100" MaxClientsPerHost="25" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" /&gt;</A_PRMS>
-		</fld>
-		<fld ID="WEB_2" MODULE="Sockets" NAME="Reserve WWW-interface" DESCRIPT="Reserve transport of the WEB interfaces."
-			DESCRIPT_uk="Резервний транспорт WEB інтерфейсів." DESCRIPT_ru="Резервный транспорт WEB интерфейсов."
-			ADDR="*:10004" PROT="HTTP" START="1">
+	    <tbl id="Transport_in">
+		<fld ID="WEB" MODULE="Sockets" NAME="WWW-interface" DESCRIPT="The WEB-interfaces transport."
+			DESCRIPT_uk="Транспорт WEB-інтерфейсів." DESCRIPT_ru="Транспорт WEB-интерфейсов."
+			ADDR="*:10002" PROT="HTTP" START="0">
 		    <A_PRMS>&lt;prms MaxQueue="10" MaxClients="100" MaxClientsPerHost="25" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" /&gt;</A_PRMS>
 		</fld>
 		<fld ID="CNTR" MODULE="Sockets" NAME="OpenSCADA control interface" DESCRIPT="Main control interface of OpenSCADA"
 			DESCRIPT_uk="Основний інтерфейс контролю OpenSCADA" DESCRIPT_ru="Основной интерфейс контроля OpenSCADA"
-			ADDR="*:10005" PROT="SelfSystem" START="1">
+			ADDR="*:10005" PROT="SelfSystem" START="0">
 		    <A_PRMS>&lt;prms MaxQueue="10" MaxClients="20" MaxClientsPerHost="5" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" /&gt;</A_PRMS>
 		</fld>
-	    </tbl>-->
+	    </tbl>
 	</node>
 
 	<node id="sub_DAQ">
@@ -62,6 +57,30 @@
 	    <prm id="MessPeriod">5</prm>
 	    <prm id="ValPeriod">1000</prm>
 	    <prm id="ValPriority">10</prm>
+
+	    <tbl id="Archive_mess_proc">
+		<fld ID="SYS" MODUL="FSArch" NAME="System" NAME_uk="Система" NAME_ru="Система" START="0" CATEG="/*" LEVEL="0" ADDR="ARCHIVES/MESS/SYS">
+		    <A_PRMS>&lt;XML="0" MSize="10240" NFiles="30" TmSize="30" PackTm="10" CheckTm="60" PackInfoFiles="1" PrevDbl="0" PrevDblTmCatLev="0" /&gt;</A_PRMS>
+		</fld>
+		<fld ID="alarms" MODUL="FSArch" NAME="Alarms" NAME_uk="Порушення" NAME_ru="Нарушения" START="0" CATEG="al*" LEVEL="1" ADDR="ARCHIVES/MESS/alarms">
+		    <A_PRMS>&lt;XML="0" MSize="10240" NFiles="30" TmSize="30" PackTm="10" CheckTm="60" PackInfoFiles="1" PrevDbl="1" PrevDblTmCatLev="1" /&gt;</A_PRMS>
+		</fld>
+		<fld ID="actions" MODUL="FSArch" NAME="User actions" NAME_uk="Дії користувача" NAME_ru="Действия пользователя" START="0" CATEG="OP:*" LEVEL="1" ADDR="ARCHIVES/MESS/actions">
+		    <A_PRMS>&lt;XML="0" MSize="10240" NFiles="30" TmSize="30" PackTm="10" CheckTm="60" PackInfoFiles="1" PrevDbl="0" PrevDblTmCatLev="0" /&gt;</A_PRMS>
+		</fld>
+	    </tbl>
+
+	    <tbl id="Archive_val_proc">
+		<fld ID="1s" MODUL="FSArch" NAME="1second" NAME_uk="1секунда" NAME_ru="1секунда" START="0" ADDR="ARCHIVES/VAL/1s" V_PER="1" A_PER="60">
+		    <A_PRMS>&lt;prms TmSize="720" NFiles="100" MaxCapacity="5000" Round="0.01" PackTm="10" CheckTm="60" PackInfoFiles="1" /&gt;</A_PRMS>
+		</fld>
+		<fld ID="1m" MODUL="FSArch" NAME="1minute" NAME_uk="1хвилина" NAME_ru="1минута" START="0" ADDR="ARCHIVES/VAL/1m" V_PER="60" A_PER="60">
+		    <A_PRMS>&lt;prms TmSize="8600" NFiles="100" MaxCapacity="1000" Round="0.01" PackTm="10" CheckTm="60" PackInfoFiles="1" /&gt;</A_PRMS>
+		</fld>
+		<fld ID="1h" MODUL="FSArch" NAME="1hour" NAME_uk="1година" NAME_ru="1час" START="0" ADDR="ARCHIVES/VAL/1h" V_PER="3600" A_PER="60">
+		    <A_PRMS>&lt;prms TmSize="8600" NFiles="100" MaxCapacity="1000" Round="0.01" PackTm="10" CheckTm="60" PackInfoFiles="1" /&gt;</A_PRMS>
+		</fld>
+	    </tbl>
 	</node>
 
 	<node id="sub_UI">

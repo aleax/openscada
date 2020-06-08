@@ -44,6 +44,7 @@
 #include <QStyleFactory>
 #include <QStyle>
 #include <QScrollBar>
+#include <QPainter>
 
 #include <tsys.h>
 #include <tmess.h>
@@ -56,7 +57,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"MainThr"
-#define MOD_VER		"4.7.7"
+#define MOD_VER		"4.8.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -285,16 +286,24 @@ void TUIMod::splashSet( SplashFlag flg )
 	QImage ico_t;
 	if(!ico_t.load(TUIS::icoGet(SYS->id()+((flg==SPLSH_STOP)?"_splash_exit":"_splash"),NULL,true).c_str())) ico_t.load(":/images/splash.png");
 	if(splash) splashSet(SPLSH_NULL);
-	splash = new QSplashScreen(QPixmap::fromImage(ico_t));
+	QPixmap pm = QPixmap::fromImage(ico_t);
+	QPainter pnt(&pm);
+	if(!SYS->cmdOptPresent("QtInNotMainThread"))
+	    pnt.fillRect(0, pm.height()-30, pm.width(), 25, QColor(255,255,255,127));
+
+	splash = new QSplashScreen(pm);
 	splash->show();
 	QFont wFnt = splash->font();
 	wFnt.setPixelSize(10);
 	splash->setFont(wFnt);
-	if(!SYS->cmdOptPresent("QtInNotMainThread"))
+	if(!SYS->cmdOptPresent("QtInNotMainThread")) {
+	    wFnt.setPixelSize(20); splash->setFont(wFnt);
+	    splash->showMessage(PACKAGE_VERSION, Qt::AlignBottom|Qt::AlignRight);
 	    for(int iTr = 0; iTr < 10; iTr++) {
-		QtApp->processEvents();
-		TSYS::sysSleep(0.1);
+		QtApp->processEvents();	//!!!! To show the message on Qt5
+		TSYS::sysSleep(0.1);	//!!!! To ensure the splash visibility at the exit on Qt5
 	    }
+	}
     }
 }
 
@@ -1144,7 +1153,7 @@ StartDialog::StartDialog( ) : prjsLs(NULL), prjsBt(NULL)
 	gFrame->setFrameShadow(QFrame::Plain);
 	wnd_lay->addWidget(gFrame, 0, 0);
 
-	QPushButton *prjAddUpdt = new QPushButton(QIcon(":/images/it_add.png"), _("Creating-updating a project"), this);
+	QPushButton *prjAddUpdt = new QPushButton(QIcon(":/images/it_add.png"), _("Create/update project"), this);
 	prjAddUpdt->setToolTip(_("New projects creating or updating of presented ones, like to desktop links"));
 	prjAddUpdt->setWhatsThis(_("The button for new projects creating or updating of presented ones, like to desktop links."));
 	QObject::connect(prjAddUpdt, SIGNAL(clicked(bool)), this, SLOT(projCreateUpdt()));

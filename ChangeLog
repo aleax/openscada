@@ -1,3 +1,30 @@
+2020-06-08 Roman (test)
+- SYS: data/oscada_server.xml, data/oscada_plc.xml: The input WWW-transports are unified, where "WEB_1" renamed to "WEB_1" and "WEB_2" removed.
+    data/oscada_start.xml: Appended for the disabled input transports "WEB" and "CNTR";
+	the value archivers FSArch.{SYS,alarms,actions} and message archivers FSArch.{1s,1m,1h}.
+- !!:LibsDB.OscadaLibs: JavaLikeCalc.Controller.text: The tests function appended for JavaLikeCalc internal functions' tests, including the recursion call.
+    !!:DevLib.IEC62056: Cleared, appended up to the OBIS reading what tested on SL7000. The implementing is continued...
+- FIX:LibsDB.vcaBase.Main.alarmsSt: Some fixed for the original messages and the "quietation" completly replaced by "confirmation".
+    FIX: Restored in preventing the duplicate entries for new alarms in that category.
+- !:FIX:DB: TBDS::dataGet() (and TBDS::dataSeek()) prevented from getting the previous value at loading from the config-file, by setting the default value.
+- SYS: The original message "Accessing" renamed to "Accessible".
+- !!!!:DAQ.JavaLikeCalc: The internal functions executing appended for storing the shared registers context for allowing the recursion primarily.
+    The storing also decreased the used registers number and the function appended by the compilation status information.
+    The feature is tested now!
+- DAQ.{LogicLev,ModBus,Siemens}: Controller and parameter objects, disabled in the source, prevented from enabling at the interstation copy.
+- !:UI.QTStarter: The start/stop splash image appended for the OpenSCADA version.
+    The message "Creating-updating a project" renamed to "Create/update project".
+- FIX: UI.VCAEngine: The field "Completely translate the procedure" on the project side set to directly obtained, independently from the procedure inheritance.
+    FIX: Opened pages processing of the session commands switched to from the end, due to the last opened pages place in the end.
+    FIX: The user action time update appended also at requesting the complete pages tree in the service request "openlist:/serv/pg",
+	what is a typical user action for WEB in reconnection to present session.
+- UI.Vision: Marked to implement the visualizer specific attribute "userSetVis" in work with the remoted visualizer server.
+- !!:FIX:UI.WebVision: The issue of clossing all pages of the main page container with frozing the last loss page at fast page switching catched and fixed at last.
+    !:FIX: The link to the user login page set to the session-project complete patch, to return back the session-project after the login.
+    !:FIX: The original user setting moved to the common function userSet() in way of fixing the reconnection to the same session
+	after changing-decreasing the user in "userSetVis".
+
+
 2020-06-01 Roman (stable)
 - !!:FIX:DB: TBDS::dataSet() fixed in the last appending for changing-saving the defined entries in the config file
     by call that only for not empty path, instead what we have some tags of the configuration file changing to "tbl".

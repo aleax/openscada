@@ -265,8 +265,7 @@ void VCASess::postReq( SSess &ses )
 	    if(SYS->security().at().usrAt(mUserOrig.size()?mUserOrig:mUser).at().permitCmpr(cntEl->second) <= 0 &&
 		    !mod->cntrIfCmd(req,SSess(cntEl->second))) {
 		// Changing the session user
-		if(mUserOrig.empty()) mUserOrig = mUser;
-		mUser = cntEl->second;
+		userSet(cntEl->second, true);
 		vector<TVariant> prms; prms.push_back(mUser);
 		ses.prt->objFuncCall("setUser", prms, "root");
 

@@ -1,15 +1,15 @@
 # OpenSCADA.DAQ.JavaLikeCalc translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.JavaLikeCalc package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2018.
+# Roman Savochenko <roman@oscada.org>, 2005-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-04 11:02+0200\n"
+"POT-Creation-Date: 2020-06-08 19:04+0300\n"
 "PO-Revision-Date: 2007-10-28 10:40+0200\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -107,11 +107,14 @@ msgstr "Исчерпано время вычисления функции %d > %
 
 #, c-format
 msgid "Exception of creating %d items of the array."
-msgstr ""
+msgstr "Исключение создания %d елементов массива."
 
 #, c-format
 msgid "Type %d, which is not supported by the 'Add' operation."
 msgstr "Не поддерживаемый тип %d для операции 'Add'."
+
+msgid "You have too deep recursion of the internal function call."
+msgstr "Имеете очень глубокий рекурсивный вызов внутренней функции."
 
 #, c-format
 msgid "Error operation %c(%xh). Function '%s' stopped."
@@ -122,6 +125,9 @@ msgstr "Функция: "
 
 msgid "Date of modification"
 msgstr "Дата модификации"
+
+msgid "Compilation state"
+msgstr "Состояние компиляции"
 
 msgid "Name"
 msgstr "Имя"
@@ -162,6 +168,14 @@ msgstr "Скрытый"
 msgid "Default"
 msgstr "Умолчание"
 
+#, c-format
+msgid ""
+"Size source=%s, bytecode=%s; Registers totally=%d, shared=%g; Functions "
+"external=%d, internal=%g."
+msgstr ""
+"Размер исходных=%s, байткода=%s; Регистров в целом=%d, совместных=%g; Функций "
+"внешних=%d, внутренних=%g."
+
 msgid "New IO"
 msgstr "Новый IO"
 
@@ -180,7 +194,7 @@ msgstr "Библиотека"
 msgid "State"
 msgstr "Состояние"
 
-msgid "Accessing"
+msgid "Accessible"
 msgstr "Доступен"
 
 msgid "Library DB"

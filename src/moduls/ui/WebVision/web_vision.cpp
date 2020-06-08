@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"4.8.1"
+#define MOD_VER		"4.8.4"
 #define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on the the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -482,7 +482,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		try { vs = vcaSesAt(sesnm); } catch(TError&) { }
 
 		map<string,string>::iterator cntEl;
-		if((cntEl=ses.prm.find("com"))!=ses.prm.end() && cntEl->second == "close") {
+		if((cntEl=ses.prm.find("com")) != ses.prm.end() && cntEl->second == "close") {
 		    if(ses.isRoot()) {
 			if(!vs.freeStat()) { vs.free(); vcaSesDel(sesnm); }
 			page = pgCreator(iprt, _("Going to the main page ..."),
@@ -493,7 +493,8 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 			    "401 Unauthorized", "", "", "", ses.lang);
 		}
 		// Checking for the internal session presence
-		else if(!vs.freeStat() && (user != vs.at().user() || sender != vs.at().sender()) && !SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_))
+		else if(!vs.freeStat() && (!(user == vs.at().user() || user == vs.at().userOrig()) ||
+			sender != vs.at().sender()) && !SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_))
 		    page = pgCreator(iprt, _("Going to the different session ..."),
 			"200 OK", "", "<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/" MOD_ID "/prj_"+vs.at().proj()+"'/>", "", ses.lang);
 		// The main requesting code
@@ -519,6 +520,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		    // Same request
 		    if(!vs.freeStat()) {
 			ResAlloc sesRes(mSesRes, false);
+			vs.at().userSet(user, true);
 			vs.at().getReq(ses);
 			page = ses.page;
 		    } else HTTP_GET("", page, vars, user, iprt);

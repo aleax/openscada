@@ -169,7 +169,7 @@ void Lib::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("grp",opt,-1,"/br/fnc_",_("Function"),RWRWR_,"root",SDAQ_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
 	if(ctrMkNode("area",opt,-1,"/lib",_("Library"))) {
 	    if(ctrMkNode("area",opt,-1,"/lib/st",_("State"))) {
-		ctrMkNode("fld",opt,-1,"/lib/st/st",_("Accessing"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/lib/st/st",_("Accessible"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		if(DB().size()) {
 		    ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library DB"),RWRWR_,"root",SDAQ_ID,4,
 			"tp","str","dest","sel_ed","select",("/db/tblList:flb_"+id()).c_str(),

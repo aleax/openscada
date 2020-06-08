@@ -320,9 +320,12 @@ fnc_in:	/*empty*/	{ $$ = pF->prg.size();
 			    pF->prg = pF->prg + (char)Reg::IFuncDef + "NN";
 			    pF->prg += (uint8_t)pF->fPrmst.size();
 			    uint16_t addr;
+			    int ckAddr;
 			    //Place the return
-			    addr = pF->regNew(true);
-			    pF->regAt(addr)->setName("<<IN-RET>>"); pF->regAt(addr)->setLock(true);
+			    if((ckAddr=pF->regGet("<<IN-RET>>")) < 0) {
+				addr = pF->regNew();
+				pF->regAt(addr)->setName("<<IN-RET>>"); pF->regAt(addr)->setLock(true); pF->regAt(addr)->setInFnc(false);
+			    } else addr = ckAddr;
 			    pF->prg.append((char*)&addr,sizeof(addr));
 			    //Place the arguments
 			    while(pF->fPrmst.size()) {
@@ -609,7 +612,7 @@ retry:
 
 	    // Check for object's functions and system object's function
 	    //string sel = TSYS::strSepParse(smb_nm,0,'.');
-	    if((yylval.reg=pF->regAt(pF->regGet(sel,true))) || (yylval.reg=pF->regAt(pF->ioGet(sel)))) {
+	    if((yylval.reg=pF->regAt(pF->regGet(sel/*,true*/))) || (yylval.reg=pF->regAt(pF->ioGet(sel)))) {
 		pos -= (smb_nm.size()-sel.size());
 		yylloc.last_column -= (smb_nm.size()-sel.size());
 		return VAR;
@@ -620,7 +623,7 @@ retry:
 	}
 
 	//Check allowed registers
-	if((yylval.reg=pF->regAt(pF->regGet(smb_nm,true)))) return VAR;
+	if((yylval.reg=pF->regAt(pF->regGet(smb_nm/*,true*/)))) return VAR;
 
 	//Check for register as dynamic linked external function, mostly for allow it check for connection
 	if((yylval.reg=pF->regAt(pF->regGet(EXT_F_AS_PREF+smb_nm)))) return VAR;
@@ -642,7 +645,7 @@ retry:
 
 	    // Check for object's parameters
 	    //string sel = TSYS::strSepParse(smb_nm,0,'.');
-	    if((yylval.reg=pF->regAt(pF->regGet(sel,true))) || (yylval.reg=pF->regAt(pF->ioGet(sel)))) {
+	    if((yylval.reg=pF->regAt(pF->regGet(sel/*,true*/))) || (yylval.reg=pF->regAt(pF->ioGet(sel)))) {
 		pos -= (smb_nm.size()-sel.size());
 		yylloc.last_column -= (smb_nm.size()-sel.size());
 		return VAR;
@@ -661,7 +664,7 @@ retry:
 	//Get new register
 	yylval.reg = pF->regAt(pF->regNew(true));
 	yylval.reg->setName(smb_nm);
-	if(pF->mInFnc.size()) yylval.reg->setName(pF->mInFnc+":"+yylval.reg->name());
+	if(pF->mInFnc.size()) yylval.reg->setName(/*pF->mInFnc+":"+*/yylval.reg->name());
 	yylval.reg->setLock(true);
 	return VAR;
     }
