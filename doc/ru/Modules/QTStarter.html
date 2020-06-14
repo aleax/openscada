@@ -29,8 +29,9 @@
 
 <tr>
 <td> <a href="../Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">QTStarter</a> </td>
-<td> Qt GUI пускатель </td>
-<td> 4.5 </td>
+<td> Qt GUI пускатель
+</td>
+<td> 4.8 </td>
 <td> GPL2 </td>
 <td> ui_QTStarter.so </td>
 <td> en,uk,ru,de </td>
@@ -53,8 +54,8 @@
 </ul>
 </div>
 
-<p>Модуль предоставляет в OpenSCADA пускатель GUI модулей, основанных на многоплатформенной библиотеке <a class="external text" href="http://qt.io" rel="nofollow noreferrer noopener" target="_blank">Qt</a> графического пользовательского интерфейса (GUI), изначально созданного фирмой <a class="external text" href="http://www.trolltech.com" rel="nofollow noreferrer noopener" target="_blank">TrollTech</a>. Также, модуль реализует элементы менеджера проектов OpenSCADA. Отдельный модуль для запуска Qt GUI модулей нужен ввиду необходимости организации однопотокового исполнения всех компонентов визуализации Qt и централизованной инициализации главного объекта Qt-библиотеки — QApplication.
-</p><p>Изначально этот модуль создаёт отдельный поток для основного потока Qt, где есть возможность формирования экрана динамической заставки, поскольку основные процессы OpenSCADA продолжают исполнение в основном потоке. Однако версия Qt5 стала чувствительной к исполнению в неглавном потоке, поэтому для неё в OpenSCADA добавлена такая возможность, однако исключительно со статическим экраном заставки. Для контроля этой возможности предусмотрен параметр запуска <i>--QtInNotMainThread</i>, который включает исполнение в неглавном потоке, для Qt4, соответственно, по умолчанию, осуществляется исполнение в главном, что типично для Qt5.
+<p>Модуль предоставляет в OpenSCADA пускатель GUI модулей, основанных на многоплатформенной библиотеке <a class="external text" href="http://qt.io" rel="nofollow noreferrer noopener" target="_blank">Qt</a> графического пользовательского интерфейса (GUI), изначально созданной фирмой <a class="external text" href="http://www.trolltech.com" rel="nofollow noreferrer noopener" target="_blank">TrollTech</a>. Также, модуль реализует элементы менеджера проектов OpenSCADA. Отдельный модуль для запуска Qt GUI модулей нужен ввиду необходимости организации однопотокового исполнения всех компонентов визуализации Qt и централизованной инициализации главного объекта Qt-библиотеки — QApplication.
+</p><p>Изначально этот модуль создаёт отдельный поток для основного потока Qt, где есть возможность формирования экрана динамической заставки, поскольку основные процессы OpenSCADA продолжают исполнение в основном потоке. Однако версия Qt5 стала чувствительной к исполнению в неглавном потоке, поэтому для неё в OpenSCADA добавлена такая возможность, однако исключительно со статическим экраном заставки, который содержит информацію про программу и проект OpenSCADA. Для контроля этой возможности предусмотрен параметр запуска <i>--QtInNotMainThread</i>, который включает исполнение в неглавном потоке, для Qt4, соответственно, по умолчанию, осуществляется исполнение в главном, что типично для Qt5.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:606px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_splash_ru.png"><img class="thumbimage" height="304" src="../files/QTStarter_splash_ru.png" width="604" /></a>  <div class="thumbcaption">Fig.1. Динамический экран заставки модуля.</div></div></div></div>
 <p>Диалоговое окно пускателя (Рис.2) в общем предоставляет:
@@ -118,5 +119,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/QTStarter/ru">Modules/QTStarter/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2678</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/QTStarter/ru">Modules/QTStarter/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2687</td></tr></table></body>
 </html>

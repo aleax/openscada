@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Libs/Devices</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/Libs_Devices.html" title="Библиотеки/Устройства (7% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--low" href="../uk/Libs_Devices.html" title="Бібліотеки/Пристрої (22% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/Libs_Devices.html" title="Библиотеки/Устройства (7% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--low" href="../uk/Libs_Devices.html" title="Бібліотеки/Пристрої (26% translated)">українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -81,7 +81,8 @@ To place a protocol implementation here you need to do and to follow for the sho
 <li class="toclevel-2"><a href="#DCON_Protocol_.2B_Input_DO_.28DCON_Prt_DO.29"><span class="tocnumber">1.5</span> <span class="toctext">DCON Protocol + Input DO (DCON_Prt_DO)</span></a></li>
 <li class="toclevel-2"><a href="#Distributed_Network_Protocol_3_.28DNP3.29"><span class="tocnumber">1.6</span> <span class="toctext">Distributed Network Protocol 3 (DNP3)</span></a></li>
 <li class="toclevel-2"><a href="#IEC-60870_.28IEC60870.29"><span class="tocnumber">1.7</span> <span class="toctext">IEC-60870 (IEC60870)</span></a></li>
-<li class="toclevel-2"><a href="#OWEN_.28OWEN.29"><span class="tocnumber">1.8</span> <span class="toctext">OWEN (OWEN)</span></a></li>
+<li class="toclevel-2"><a href="#IEC-62056_.28IEC62056.29"><span class="tocnumber">1.8</span> <span class="toctext">IEC-62056 (IEC62056)</span></a></li>
+<li class="toclevel-2"><a href="#OWEN_.28OWEN.29"><span class="tocnumber">1.9</span> <span class="toctext">OWEN (OWEN)</span></a></li>
 </ul>
 </li>
 <li class="toclevel-1 tocsection-2"><a href="#Industrial_automation_devices"><span class="tocnumber">2</span> <span class="toctext">Industrial automation devices</span></a>
@@ -124,7 +125,8 @@ To place a protocol implementation here you need to do and to follow for the sho
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsDevsModBusScanOp.png" title="Result and the operative setup."><img alt="Result and the operative setup." height="524" src="files/LibsDevsModBusScanOp.png" width="343" /></a></div>
 <p>ModBus scanner for Coils (1), Input Coils (2), Registers (3), Input Registers (4); in the range [0...65535]. The template useful to examine unknown ModBus devices, scanning their Coils' and Registers' map for detecting the available data addresses. The scanning performs per one item, whether it is a coil or a register, to prevent the data unavailability for strict data accessing devices. The protocol ModBus itself implemented by the OpenSCADA module <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">DAQ.ModBus</a>, together which the template designed to use.
 </p>
-<ul><li> <b>Sponsored by:</b> SVItoVYR Ltd</li></ul>
+<ul><li> <b>Total complexity:</b> 0.2 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
+<li> <b>Sponsored by:</b> SVItoVYR Ltd for whole complexity</li></ul>
 <p><b><u>Template IOs</u></b><br />
 </p>
 <table class="wikitable">
@@ -282,7 +284,11 @@ data = req.attr("err").toInt()&nbsp;? ""&nbsp;: req.text();
 </td></tr></table>
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsDevsDNP3Op.png" title="Result and the operative setup."><img alt="Result and the operative setup." height="906" src="files/LibsDevsDNP3Op.png" width="474" /></a></div>
 <p><a class="external text" href="https://en.wikipedia.org/wiki/DNP3" rel="nofollow noreferrer noopener" target="_blank">Distributed Network Protocol 3 (DNP3)</a> is a set of communications protocols used between components in process automation systems. Its main use is in utilities such as electric and water companies. Usage in other industries is not common. It was developed for communications between various types of data acquisition and control equipment. Competing standards include the older Modbus protocol and the newer IEC 61850 protocol and IEC 61870.
-</p><p>The template implements currently for the client, which uses the followed functions: Confirm (0x00), Read (0x01), Write (0x02), Enable (0x14) and Disable (0x15) Spontaneous Messages.
+</p>
+<ul><li> <b>Total complexity:</b> 2.0 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
+<li> <b>Sponsored by:</b> Hadi Ramezani and Hossein Malakooti for whole complexity</li></ul>
+<p><b><u>Details</u></b><br />
+The template implements currently for the client, which uses the followed functions: Confirm (0x00), Read (0x01), Write (0x02), Enable (0x14) and Disable (0x15) Spontaneous Messages.
 </p><p>And which implements and tested for the followed point-oriented objects (data types):
 </p>
 <ul><li> <b>1.[2]</b> — Binary Input [with status]</li>
@@ -320,7 +326,6 @@ data = req.attr("err").toInt()&nbsp;? ""&nbsp;: req.text();
 <li> <b>di:0-9:a</b> — discrete inputs in the points range [0...9] with forming the attributes;</li>
 <li> <b>do:0-9:a</b> — discrete outputs in the points range [0...9] with forming the attributes;</li>
 <li> <b>cnt:0-9:a</b> — counters in the points range [0...9] with forming the attributes.</li></ul>
-<ul><li> <b>Sponsored by:</b> Hadi Ramezani and Hossein Malakooti</li></ul>
 <p><b><u>Template IOs</u></b><br />
 </p>
 <table class="wikitable">
@@ -483,7 +488,7 @@ data = req.attr("err").toInt()&nbsp;? ""&nbsp;: req.text();
 </p>
 <dl><dd>1. Create an output transport of the type "<a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>", set its Identifier like to "DNP3", one for each the device-PLC.</dd>
 <dd>2. Set proper address with port <b>20000</b> and timeouts of the <a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a> device-PLC.</dd>
-<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties. The interaction period preferred to be about 0.1 second.</dd>
+<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties. The interaction period preferred to be about <b>0.1</b> second.</dd>
 <dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select this template for that, one for each the device-PLC. Enable the parameter.</dd>
 <dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
 <ul><li> <i>Transport</i> — to address of the transport into step 1. Tracing for the address changing is supported.</li>
@@ -509,7 +514,12 @@ data = req.attr("err").toInt()&nbsp;? ""&nbsp;: req.text();
 </td></tr></table>
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsDevsIEC60870Op.png" title="Result and the operative setup."><img alt="Result and the operative setup." height="723" src="files/LibsDevsIEC60870Op.png" width="426" /></a></div>
 <p><a class="external text" href="https://en.wikipedia.org/wiki/IEC_60870" rel="nofollow noreferrer noopener" target="_blank">IEC 60870</a> part 5 is one from the IEC 60870 set of standards which defines systems used for telecontrol (supervisory control and data acquisition) in electrical engineering and power system automation applications. Part 5 provides a communication profile for sending basic telecontrol messages between two systems, which uses permanent directly connected data circuits between the systems.
-</p><p>The template currently implements the part 104 (Ethernet transport) for the client and followed services: STARTDT, STOPDT, TESTFR, Ack, C_IC_NA_1 (100), C_CI_NA_1 (101), C_SC_NA_1 (45), M_SP_NA_1 (1), M_SP_TA_1 (2), M_DP_NA_1 (3), M_DP_TA_1 (4), M_ME_NB_1 (11), M_ME_NC_1 (13), M_ME_TF_1 (36), C_CS_NA_1 (103). For information ones, the sequential (SQ) mode enabling and disabling are supported.
+</p>
+<ul><li> <b>Total complexity:</b> 3.8 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
+<li> <b>Sponsored by:</b> Ustijancev Michael for 3.0 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>, SVItoVYR Ltd for 0.8 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
+<li> <a class="external text" href="http://oscada.org/en/development/tasks/posts/subsystem_daq/iec_60870_5_acquisition_protocol_implementation" rel="nofollow noreferrer noopener" target="_blank">Implementing task</a></li></ul>
+<p><b><u>Details</u></b><br />
+The template currently implements the part 104 (Ethernet transport) for the client and followed services: STARTDT, STOPDT, TESTFR, Ack, C_IC_NA_1 (100), C_CI_NA_1 (101), C_SC_NA_1 (45), M_SP_NA_1 (1), M_SP_TA_1 (2), M_DP_NA_1 (3), M_DP_TA_1 (4), M_ME_NB_1 (11), M_ME_NC_1 (13), M_ME_TF_1 (36), C_CS_NA_1 (103). For information ones, the sequential (SQ) mode enabling and disabling are supported.
 </p><p>Considering the purpose and the application area, the protocol does not provide the direct determination of the requested data and the device, that implements it, provides all available ones upon request by the C_IC_NA_1 command, after which only changes are sent.
 </p><p>All received and controlled data is accumulated in an object of the attribute "items" for further control as an object in a table of the widget "<a href="Libs_Main_graphical_elements.html#objProps" title="Special:MyLanguage/Libs/Main graphical elements">Main.objProps</a>", according to the <a href="Libs_Main.html#ComplexObject" title="Special:MyLanguage/Libs/Main">complex object</a> definition.
 </p><p>For standard control over parameter attributes, including archiving, it is possible to define the necessary data to create a separate representative attribute for them, which is described in the attribute "itemsSet", where they can be defined individually, with a semantic identifier and name, or in a range named by a template. The data in the attribute "itemsSet" is defined by records in the format <b>ai|di|do:{IOA}[-{EndIOA}][:a[:{NameBase}]]</b>, where:
@@ -529,10 +539,7 @@ data = req.attr("err").toInt()&nbsp;? ""&nbsp;: req.text();
 <li> <b>do:1-10:a</b> — discrete outputs in the address range [1...10] with forming the attributes.</li></ul>
 <p>The module provides integrated support for time synchronisation of PLC by sending the C_CS_NA_1 service command.
 </p><p>In the template for the first time used the not requesting mode of an output transport and the attributes creation in free while performing.
-</p>
-<ul><li> <b>Sponsored by:</b> Ustijancev Michael</li>
-<li> <a class="external text" href="http://oscada.org/en/development/tasks/posts/subsystem_daq/iec_60870_5_acquisition_protocol_implementation" rel="nofollow noreferrer noopener" target="_blank">Implementing task</a></li></ul>
-<p><b><u>Template IOs</u></b><br />
+</p><p><b><u>Template IOs</u></b><br />
 </p>
 <table class="wikitable">
 
@@ -730,7 +737,192 @@ data = req.attr("err").toInt()&nbsp;? ""&nbsp;: req.text();
 <table class="wikitable">
 
 <tr>
-<td> <span id="OWEN" title="#OWEN"><h3><span class="mw-headline" id="OWEN_.28OWEN.29"><span class="mw-headline-number">1.8</span> OWEN (<a href="Libs_Devices.html#OWEN" title="Special:MyLanguage/Libs/Devices">OWEN</a>)</span></h3></span> </td>
+<td> <span id="IEC62056" title="#IEC62056"><h3><span class="mw-headline" id="IEC-62056_.28IEC62056.29"><span class="mw-headline-number">1.8</span> IEC-62056 (<a href="Libs_Devices.html#IEC62056" title="Special:MyLanguage/Libs/Devices">IEC62056</a>)</span></h3></span>
+</td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsDevsIEC62056Op.png" title="Result and the operative setup."><img alt="Result and the operative setup." height="805" src="files/LibsDevsIEC62056Op.png" width="428" /></a></div>
+<p><a class="external text" href="https://en.wikipedia.org/wiki/IEC_62056" rel="nofollow noreferrer noopener" target="_blank">IEC 62056</a> part 46 is one from the IEC 62056 set of standards which defines systems used for telecontrol (supervisory control and data acquisition) in electrical engineering and power system automation applications. Part 46 defines Data link layer using HDLC protocol, which uses mostly on serial interfaces.
+</p>
+<ul><li> <b>State of the protocol implementing:</b> Client of the specification part 46, reading of the directly specified OBIS</li>
+<li> <b>Total complexity:</b> 3.2 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
+<li> <b>Sponsored by:</b> SVItoVYR Ltd for whole complexity</li></ul>
+<p><b><u>Details</u></b><br />
+...
+</p><p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> transport </td>
+<td> Transport </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> Serial.out_IEC62056
+</td></tr>
+<tr>
+<td> dest </td>
+<td> Destination "{UHDLC}[:{LHDLC}]", [0...16383] </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 17:6168
+</td></tr>
+<tr>
+<td> src </td>
+<td> Source [0...127] </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 1
+</td></tr>
+<tr>
+<td> pass </td>
+<td> Password the device </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> ABCDEFGH
+</td></tr>
+<tr>
+<td> tmRetr </td>
+<td> Retry connection time, seconds </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 10
+</td></tr>
+<tr>
+<td> tmPollAll </td>
+<td> Poll all time, seconds </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 60
+</td></tr>
+<tr>
+<td> itemsSet </td>
+<td> Items set by: "{ClassId}-{OBIS}-{attr}" </td>
+<td> Text </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> items </td>
+<td> All items </td>
+<td> Object </td>
+<td> Output </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> tr </td>
+<td> Output transport </td>
+<td> Object </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> ctx </td>
+<td> IO context </td>
+<td> Object </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> this </td>
+<td> Object </td>
+<td> Object </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Frequency of calculation of the function, Hz </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsDevsIEC62056Cfg.png" title="Configuration."><img alt="Configuration." height="322" src="files/LibsDevsIEC62056Cfg.png" width="431" /></a></div>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" directly or by the "<a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>" gate, and set its Identifier like to "IEC62056", one for each the devices' used serial bus.</dd>
+<dd>2. Set proper address and timeouts of the <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> device.</dd>
+<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties. The interaction period preferred to be about <b>0.1</b> second.</dd>
+<dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for that, one for each the device-PLC. Enable the parameter.</dd>
+<dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>Transport</i> — to address of the transport into step 1. Tracing for the address changing is supported.</li>
+<li> <i>Destination "{UHDLC}[:{LHDLC}]"</i> — remote station address in the two digits format each of which in the range [0...16383], this address can be pointed as one digit of the range [0...127].</li>
+<li> <i>Source</i> — the same station address (source) in the integer range [0...127].</li>
+<li> <i>Password the device</i> — the device access password.</li>
+<li> <i>Retry connection time</i> — retry connection time in seconds, at the connection missing and no response detection.</li>
+<li> <i>Poll all time</i> — time in seconds of the complete data requesting, pointed in the "itemsSet".</li></ul></dd>
+<dd>6. RESULT: The logical parameter object will perform interaction and placing of the gathered data to the object "items", creation/placing the gathered data to the proper value attributes.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="OWEN" title="#OWEN"><h3><span class="mw-headline" id="OWEN_.28OWEN.29"><span class="mw-headline-number">1.9</span> OWEN (<a href="Libs_Devices.html#OWEN" title="Special:MyLanguage/Libs/Devices">OWEN</a>)</span></h3></span> </td>
 <td> 0.8 </td>
 <td> GPLv2 </td>
 <td> * </td>
@@ -738,13 +930,16 @@ data = req.attr("err").toInt()&nbsp;? ""&nbsp;: req.text();
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>, Constantine (IrmIngeneer)
 </td></tr></table>
-<p>OWEN data sources implementation in the OWEN protocol. Implemented wholly in the template for the protocol requesting and for dynamic data model of the OWEN data sources' data with support of the writing and original names of the parameters.<br />
-The field "addr" of the items can be wrote positive, for  the 8 bit address [0...255], and negative, for the 11 bit address[-2047...0].<br />
-The protocol implementing is not finished due to missing for feedback from the developer to resolve this undocumented behavior:
+<p>OWEN data sources implementation in the OWEN protocol. Implemented wholly in the template for the protocol requesting and for dynamic data model of the OWEN data sources' data with support of the writing and original names of the parameters.
 </p>
+<ul><li> <b>State of the protocol implementing:</b> Client of the protocol for reading and writing the specified PLC properties.</li>
+<li> <b>Total complexity:</b> 0.5 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
+<li> <b>Actual issues:</b> The undocumented behaviour:
 <ul><li> МВ110-8А responds error 0x31 for reading "in-t": &gt;1003023331932DCB43 &lt;1010932D4791;</li>
-<li> and error 0x34 for it writing: &gt;1003023334932D2A42 &lt;1001932D0BEDBC<br /></li></ul>
-<p><b><u>Template IOs</u></b><br />
+<li> and error 0x34 for it writing: &gt;1003023334932D2A42 &lt;1001932D0BEDBC.</li></ul></li></ul>
+<p><b><u>Details</u></b><br />
+The field "addr" of the items can be wrote positive, for  the 8 bit address [0...255], and negative, for the 11 bit address[-2047...0].
+</p><p><b><u>Template IOs</u></b><br />
 </p>
 <table class="wikitable">
 
@@ -2272,9 +2467,6 @@ The protocol implementing is not finished due to missing for feedback from the d
 <ul><li> <i>Transport</i> — to address of the transport into step 1. Tracing for the address changing is supported.</li></ul></dd>
 <dd>6. RESULT: The logical parameter object will perform interaction and placing of gathered data to the parameter attributes. Also you are able to send some commands to the device through the writable attributes.</dd></dl>
 <p><br />
-</p><p><br />
-</p><p><br />
-</p><p><br />
 </p>
 <table class="wikitable">
 
@@ -4523,5 +4715,5 @@ The protocol implementing is not finished due to missing for feedback from the d
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Devices/en">Libs/Devices/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2678</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Devices/en">Libs/Devices/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2687</td></tr></table></body>
 </html>

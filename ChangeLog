@@ -1,5 +1,17 @@
+2020-06-14 Roman (stable)
+- !!!!:LibsDB.OscadaLibs.DevLib.IEC62056: Completed in the basic implementation.
+- LibsDB.vcaBase.Main.alarmsSt: Default value of the property alArch set to "FSArch.alarms".
+- data/icons_src/splash.xcf, src/moduls/ui/QTStarter/images/splash.png:
+    Some updated for the additional information placing about version the program and the OpenSCADA project.
+- !!!!:DAQ.JavaLikeCalc: Appended for the second variant of the internal function's variables treating in own namespace,
+    so limiting the concrete function's variables number for saving/restoring also only from the second entry.
+    The previous-first variant remained present and can be switched just uncomment the definition IN_F_SHARE_REGS.
+- !:FIX:UI.QTStarter: Fixed in applying the project specific splash at the project switch.
+    The standard-system splash updated and appended for information about the program and the OpenSCADA project, including the project icon.
+
+
 2020-06-08 Roman (test)
-- SYS: data/oscada_server.xml, data/oscada_plc.xml: The input WWW-transports are unified, where "WEB_1" renamed to "WEB_1" and "WEB_2" removed.
+- SYS: data/oscada_server.xml, data/oscada_plc.xml: The input WWW-transports are unified, where "WEB_1" renamed to "WEB" and "WEB_2" removed.
     data/oscada_start.xml: Appended for the disabled input transports "WEB" and "CNTR";
 	the value archivers FSArch.{SYS,alarms,actions} and message archivers FSArch.{1s,1m,1h}.
 - !!:LibsDB.OscadaLibs: JavaLikeCalc.Controller.text: The tests function appended for JavaLikeCalc internal functions' tests, including the recursion call.

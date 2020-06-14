@@ -30,6 +30,9 @@
 #include <tfunction.h>
 #include <tconfig.h>
 
+//#define OSC_DEBUG
+//#define IN_F_SHARE_REGS
+
 #define EXT_F_LIM	128
 #define EXT_F_AS_PREF	"stFunc:"
 #define IN_F_REC_LIM	100
@@ -156,9 +159,21 @@ class Reg
 	};
 
 	//Methods
-	Reg( ) : mPos(-1), mObjEl(false), mLock(false), mInFnc(false), mTp(Free)		{  }
-	Reg( int ipos ) : mPos(ipos), mObjEl(false), mLock(false), mInFnc(false), mTp(Free)	{  }
-	Reg( const Reg &src ) : mPos(-1), mObjEl(false), mLock(false), mInFnc(false), mTp(Free)	{ operator=(src); }
+	Reg( ) : mPos(-1), mObjEl(false), mLock(false), 
+#ifdef IN_F_SHARE_REGS
+	    mInFnc(false),
+#endif
+	    mTp(Free)	{  }
+	Reg( int ipos ) : mPos(ipos), mObjEl(false), mLock(false),
+#ifdef IN_F_SHARE_REGS
+	    mInFnc(false),
+#endif
+	    mTp(Free)	{  }
+	Reg( const Reg &src ) : mPos(-1), mObjEl(false), mLock(false),
+#ifdef IN_F_SHARE_REGS
+	    mInFnc(false),
+#endif
+	    mTp(Free)	{ operator=(src); }
 	~Reg( );
 
 	Reg &operator=( const Reg &irg );
@@ -171,7 +186,6 @@ class Reg
 	void operator=( AutoHD<TVarObj> ivar )	{ setType(Obj);	   *el.o = ivar; }
 
 	string name( ) const			{ return mNm; }
-	bool inFnc( ) const			{ return mInFnc; }
 	Type type( ) const			{ return mTp; }
 	Type vType( Func *fnc );
 	int pos( )				{ return mPos; }
@@ -179,12 +193,19 @@ class Reg
 	bool objEl( )				{ return mObjEl; }
 
 	void setName( const string &nm )	{ mNm = nm; }
-	void setInFnc( bool vl )		{ mInFnc = vl; }
 	void setType( Type tp );
 	void setLock( bool vl )			{ mLock = vl; }
 	void setObjEl( )			{ mObjEl = true; }
 	void setVar( int ivar )			{ setType(Var); el.io = ivar; }
 	void setPAttr( const AutoHD<TVal> &ivattr )	{ setType(PrmAttr); *el.pA = ivattr; }
+
+#ifdef IN_F_SHARE_REGS
+	bool inFnc( ) const			{ return mInFnc; }
+	void setInFnc( bool vl )		{ mInFnc = vl; }
+#else
+	string inFnc( ) const			{ return mInFnc; }
+	void setInFnc( const string &vl )	{ mInFnc = vl; }
+#endif
 
 	void free( );
 
@@ -194,10 +215,14 @@ class Reg
 	//Attributes
 	int	mPos;
 	string	mNm;
-		//mInFnc;		//In internal function context
-	unsigned mObjEl :1,		//Object's element
-		 mLock  :1,		//Locked register
-		 mInFnc :1;		//In internal function context
+	unsigned mObjEl :1,	//Object's element
+		 mLock  :1;	//Locked register
+#ifdef IN_F_SHARE_REGS
+	unsigned mInFnc :1;	//In internal function context
+#else
+	string	mInFnc;		//In internal function context
+#endif
+
 	Type	mTp;
 	El	el;
 };
@@ -298,8 +323,8 @@ class Func : public TConfig, public TFunction
 	void inFuncDef( const string &nm, int pos );
 
 	// Registers' list functions
-	int regNew( bool sep = false, int recom = -1 );
-	int regGet( const string &nm/*, bool inFncNS = false*/ );
+	int regNew( bool sep = false, int recom = -1, bool inFncNS = true );
+	int regGet( const string &nm, bool inFncNS = false );
 	int ioGet( const string &nm );
 	Reg *regAt( int id )	{ return (id>=0) ? mRegs.at(id) : NULL; }
 	void buildClear( );
@@ -368,7 +393,11 @@ class Func : public TConfig, public TFunction
 					//0x02 - break operator flag;
 					//0x04 - continue operator flag;
 					//0x08 - error flag
+#ifdef IN_F_SHARE_REGS
 	    vector< vector<RegW> > inFShareRegs;	//Shared registers stack of the internal functions
+#else
+	    map<int, vector< vector<RegW> > > inFRegs;	//Shared registers stack of the internal functions
+#endif
 	};
 
 	//Methods
@@ -404,9 +433,15 @@ class Func : public TConfig, public TFunction
 	vector<Reg*>	mRegs;		//Registers list in action
 	vector<Reg*>	mTmpRegs;	//Constant temporary list
 	deque<Reg*>	fPrmst;		//Function's parameters stack
+#ifdef IN_F_SHARE_REGS
 	vector<int>	mShareRegs;	//Shared registers to store the internal functions context
+#else
+	map<int, vector<int> >	mInFncRegs; //Input functions' personal registers list
+#endif
 	ResRW		&parseRes;
-	float		cntrInF, cntrInFRegs;
+	unsigned	cntrInF		: 8,
+			cntrCnst	: 16,
+			cntrInFRegs	: 16;
 };
 
 extern Func *pF;

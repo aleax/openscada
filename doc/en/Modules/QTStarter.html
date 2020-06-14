@@ -29,15 +29,16 @@
 
 <tr>
 <td> <a href="../Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">QTStarter</a> </td>
-<td> Qt GUI starter </td>
-<td> 4.7 </td>
+<td> Qt GUI starter
+</td>
+<td> 4.8 </td>
 <td> GPL2 </td>
 <td> ui_QTStarter.so </td>
 <td> en,uk,ru,de </td>
 <td> x86,x86_64,ARM
 </td>
 <td> UI </td>
-<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2009) — the page translation</i></font> </td>
+<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2009) — the page initial translation</i></font> </td>
 <td> Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.
 <ul><li> <b>To Do:</b></li></ul>
 <dl><dd> - implement for a manager of sub-projects of their starting into different processes but with the ones storing and managing into the single configuration file of the project, for high reliable configurations;</dd>
@@ -53,8 +54,8 @@
 </ul>
 </div>
 
-<p>The module provides OpenSCADA with the starter of the GUI modules on the multi-platform library <a class="external text" href="http://qt.io" rel="nofollow noreferrer noopener" target="_blank">Qt</a> of the graphical user interface (GUI) of initially created by the firm <a class="external text" href="http://www.trolltech.com" rel="nofollow noreferrer noopener" target="_blank">TrollTech</a>. Also, the module implements elements of the OpenSCADA project manager. A separate module of running the Qt GUI modules and elements of the OpenSCADA project manager is needed because of the need for single-flow execution of all visual components of Qt and centralized initialization of the main object of the Qt-library — QApplication.
-</p><p>From the beginning, this module creates a separate thread for the main Qt thread, where it is possible to create a dynamic splash screen (Fig.1), since the main OpenSCADA processes continue to run in the main thread. That version of Qt5 was sensitive to execution in a non-main thread, so for OpenSCADA it was added to this feature, but only with a static splash screen. To control this feature, the <i>--QtInNotMainThread</i> startup option, which enables thread execution in the non-main thread, is provided, for Qt4, so, by default, executing in the main thread is typical, for Qt5.
+<p>The module provides OpenSCADA with the starter of the GUI modules on the multi-platform library <a class="external text" href="http://qt.io" rel="nofollow noreferrer noopener" target="_blank">Qt</a> of the graphical user interface (GUI) of initially created by the firm <a class="external text" href="http://www.trolltech.com" rel="nofollow noreferrer noopener" target="_blank">TrollTech</a>. Also, the module implements elements of the OpenSCADA project manager. A separate module of running the Qt GUI modules and elements of the OpenSCADA project manager is needed because of the need for single-flow execution of all visual components of Qt and centralised initialisation of the main object of the Qt-library — QApplication.
+</p><p>From the beginning, this module creates a separate thread for the main Qt thread, where it is possible to create a dynamic splash screen (Fig.1), since the main OpenSCADA processes continue to run in the main thread. That version of Qt5 became sensitive to execution in a non-main thread, so for OpenSCADA it was added to this feature, but only with a static splash screen containing information about the program and the OpenSCADA project. To control this feature, the <i>--QtInNotMainThread</i> startup option, which enables thread execution in the non-main thread, is provided, for Qt4, so, by default, executing in the main thread is typical, for Qt5.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:606px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_splash.png"><img class="thumbimage" height="304" src="../files/QTStarter_splash.png" width="604" /></a>  <div class="thumbcaption">Fig.1. Dynamic splash screen of the module.</div></div></div></div>
 <p>The starter dialog window (Fig.2) in whole provides:
@@ -118,5 +119,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/QTStarter/en">Modules/QTStarter/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2678</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/QTStarter/en">Modules/QTStarter/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2687</td></tr></table></body>
 </html>

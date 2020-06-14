@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Бібліотеки/Пристрої</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FDevices&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Devices" title="Libs/Devices">Libs/Devices</a> and the translation is 22% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_Devices.html" title="Libs/Devices (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/Libs_Devices.html" title="Библиотеки/Устройства (7% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--low">українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FDevices&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Devices" title="Libs/Devices">Libs/Devices</a> and the translation is 26% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_Devices.html" title="Libs/Devices (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/Libs_Devices.html" title="Библиотеки/Устройства (7% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--low">українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -81,7 +81,8 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <li class="toclevel-2"><a href="#DCON_Protocol_.2B_Input_DO_.28DCON_Prt_DO.29"><span class="tocnumber">1.5</span> <span class="toctext">DCON Protocol + Input DO (DCON_Prt_DO)</span></a></li>
 <li class="toclevel-2"><a href="#Distributed_Network_Protocol_3_.28DNP3.29"><span class="tocnumber">1.6</span> <span class="toctext">Distributed Network Protocol 3 (DNP3)</span></a></li>
 <li class="toclevel-2"><a href="#IEC-60870_.28IEC60870.29"><span class="tocnumber">1.7</span> <span class="toctext">IEC-60870 (IEC60870)</span></a></li>
-<li class="toclevel-2"><a href="#OWEN_.28OWEN.29"><span class="tocnumber">1.8</span> <span class="toctext">OWEN (OWEN)</span></a></li>
+<li class="toclevel-2"><a href="#IEC-62056_.28IEC62056.29"><span class="tocnumber">1.8</span> <span class="toctext">IEC-62056 (IEC62056)</span></a></li>
+<li class="toclevel-2"><a href="#OWEN_.28OWEN.29"><span class="tocnumber">1.9</span> <span class="toctext">OWEN (OWEN)</span></a></li>
 </ul>
 </li>
 <li class="toclevel-1 tocsection-2"><a href="#Industrial_automation_devices"><span class="tocnumber">2</span> <span class="toctext">Industrial automation devices</span></a>
@@ -124,7 +125,8 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsDevsModBusScanOp_uk.png" title="Результат та оперативна конфігурація."><img alt="Результат та оперативна конфігурація." height="524" src="files/LibsDevsModBusScanOp_uk.png" width="341" /></a></div>
 <p>Сканер ModBus щодо Кілець (1), Вхідних Кілець (2), Регістрів (3), Вхідних Регістрів (4); у діапазоні [0...65535]. Шаблон корисний для вивчення невідомих пристроїв ModBus, скануванням їх мапи Кілець та Регістрів для виявлення наявних адрес даних. Сканування відбувається по одному елементу, чи то кільцю чи регістру, для попередження недоступності даних на пристроях суворого доступу даних. Сам протокол ModBus реалізовано модулем OpenSCADA <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">DAQ.ModBus</a>, разом з яким шаблон і передбачено до використання.
 </p>
-<ul><li> <b>Спонсорування:</b> ТОВ "СВІТоВИР"</li></ul>
+<ul><li> <b>Загальна працемісткість:</b> 0.2 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span></li>
+<li> <b>Спонсорування:</b> ТОВ "СВІТоВИР" на загальну працемісткість</li></ul>
 <p><b><u>ВВ шаблону</u></b><br />
 </p>
 <table class="wikitable">
@@ -282,7 +284,11 @@ data = req.attr("err").toInt()&nbsp;? ""&nbsp;: req.text();
 </td></tr></table>
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsDevsDNP3Op.png" title="Result and the operative setup."><img alt="Result and the operative setup." height="906" src="../en/files/LibsDevsDNP3Op.png" width="474" /></a></div>
 <p><a class="external text" href="https://en.wikipedia.org/wiki/DNP3" rel="nofollow noreferrer noopener" target="_blank">Distributed Network Protocol 3 (DNP3)</a> is a set of communications protocols used between components in process automation systems. Its main use is in utilities such as electric and water companies. Usage in other industries is not common. It was developed for communications between various types of data acquisition and control equipment. Competing standards include the older Modbus protocol and the newer IEC 61850 protocol and IEC 61870.
-</p><p>The template implements currently for the client, which uses the followed functions: Confirm (0x00), Read (0x01), Write (0x02), Enable (0x14) and Disable (0x15) Spontaneous Messages.
+</p>
+<ul><li> <b>Total complexity:</b> 2.0 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
+<li> <b>Sponsored by:</b> Hadi Ramezani and Hossein Malakooti for whole complexity</li></ul>
+<p><b><u>Details</u></b><br />
+The template implements currently for the client, which uses the followed functions: Confirm (0x00), Read (0x01), Write (0x02), Enable (0x14) and Disable (0x15) Spontaneous Messages.
 </p><p>And which implements and tested for the followed point-oriented objects (data types):
 </p>
 <ul><li> <b>1.[2]</b> — Binary Input [with status]</li>
@@ -320,7 +326,6 @@ data = req.attr("err").toInt()&nbsp;? ""&nbsp;: req.text();
 <li> <b>di:0-9:a</b> — discrete inputs in the points range [0...9] with forming the attributes;</li>
 <li> <b>do:0-9:a</b> — discrete outputs in the points range [0...9] with forming the attributes;</li>
 <li> <b>cnt:0-9:a</b> — counters in the points range [0...9] with forming the attributes.</li></ul>
-<ul><li> <b>Sponsored by:</b> Hadi Ramezani and Hossein Malakooti</li></ul>
 <p><b><u>Template IOs</u></b><br />
 </p>
 <table class="wikitable">
@@ -483,7 +488,7 @@ data = req.attr("err").toInt()&nbsp;? ""&nbsp;: req.text();
 </p>
 <dl><dd>1. Create an output transport of the type "<a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>", set its Identifier like to "DNP3", one for each the device-PLC.</dd>
 <dd>2. Set proper address with port <b>20000</b> and timeouts of the <a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a> device-PLC.</dd>
-<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties. The interaction period preferred to be about 0.1 second.</dd>
+<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties. The interaction period preferred to be about <b>0.1</b> second.</dd>
 <dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select this template for that, one for each the device-PLC. Enable the parameter.</dd>
 <dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
 <ul><li> <i>Transport</i> — to address of the transport into step 1. Tracing for the address changing is supported.</li>
@@ -509,7 +514,12 @@ data = req.attr("err").toInt()&nbsp;? ""&nbsp;: req.text();
 </td></tr></table>
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsDevsIEC60870Op_uk.png" title="Результат та оперативна конфігурація."><img alt="Результат та оперативна конфігурація." height="706" src="files/LibsDevsIEC60870Op_uk.png" width="485" /></a></div>
 <p><a class="external text" href="https://en.wikipedia.org/wiki/IEC_60870" rel="nofollow noreferrer noopener" target="_blank">IEC 60870</a> у частині 5 є одним з набору стандартів IEC 60870 який визначає системи, що використовуються у віддаленому контролі (телемеханіці — диспетчерському контролі та зборі даних) у інженерній електриці та у застосунках автоматизації енергетичних систем. Частина 5 надає комунікаційний профіль для надсилання базових повідомлень віддаленого контролю між двома системами, який використовує постійні прямі підключення даних між системами.
-</p><p>Шаблон наразі реалізує частину 104 (Ethernet транспорт) для клієнту та наступних сервісів: STARTDT, STOPDT, TESTFR, Ack, C_IC_NA_1 (100), C_CI_NA_1 (101), C_SC_NA_1 (45), M_SP_NA_1 (1), M_SP_TA_1 (2), M_DP_NA_1 (3), M_DP_TA_1 (4), M_ME_NB_1 (11), M_ME_NC_1 (13), M_ME_TF_1 (36), C_CS_NA_1 (103). Для інформаційних сервісів підтримується ввімкнення та вимкнення послідовного (SQ) режиму.
+</p>
+<ul><li> <b>Загальна працемісткість:</b> 3.8 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span></li>
+<li> <b>Спонсорування:</b> Устьянцев Михайло на 3.0 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span>, ТОВ "СВІТоВИР" на 0.8 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span></li>
+<li> <a class="external text" href="http://oscada.org/en/development/tasks/posts/subsystem_daq/iec_60870_5_acquisition_protocol_implementation" rel="nofollow noreferrer noopener" target="_blank">Завдання реалізації</a></li></ul>
+<p><b><u>Деталі</u></b><br />
+Шаблон наразі реалізує частину 104 (Ethernet транспорт) для клієнту та наступних сервісів: STARTDT, STOPDT, TESTFR, Ack, C_IC_NA_1 (100), C_CI_NA_1 (101), C_SC_NA_1 (45), M_SP_NA_1 (1), M_SP_TA_1 (2), M_DP_NA_1 (3), M_DP_TA_1 (4), M_ME_NB_1 (11), M_ME_NC_1 (13), M_ME_TF_1 (36), C_CS_NA_1 (103). Для інформаційних сервісів підтримується ввімкнення та вимкнення послідовного (SQ) режиму.
 </p><p>Враховуючи призначення та сферу застосування, протокол не передбачає прямого визначення запитуваних даних та пристроєм, що його реалізує, надаються всі наявні, за запитом командою C_IC_NA_1, після чого надсилаються лише зміни.
 </p><p>Всі отримані та контрольовані дані акумулюються у об'єкті атрибуту "items" задля подальшого контрою як об'єкт із представленням даних у таблиці віджету "<a href="Libs_Main_graphical_elements.html#objProps" title="Special:MyLanguage/Libs/Main graphical elements">Main.objProps</a>", згідно до визначення <a href="Libs_Main.html#ComplexObject" title="Special:MyLanguage/Libs/Main">комплексного об'єкту</a>.
 </p><p>Для стандартного контролю через атрибути параметру, включно з можливістю архівування, передбачено можливість визначити потрібні дані для створення для них окремого представницького атрибуту, що описується у атрибуті "itemsSet", де вони можуть визначатися як окремо, зі смисловим ідентифікатором та назвою, або за діапазоном із найменуванням по шаблону. Визначення даних у атрибуті "itemsSet" здійснюється записами у форматі <b>ai|di|do:{IOA}[-{EndIOA}][:a[:{NameBase}]]</b>, де:
@@ -529,10 +539,7 @@ data = req.attr("err").toInt()&nbsp;? ""&nbsp;: req.text();
 <li> <b>do:1-10:a</b> — дискретні виходи за діапазоном адрес [1...10] із формуванням атрибутів.</li></ul>
 <p>Модулем надається вбудована підтримка синхронізації часу ПЛК, надсиланням сервісної команди C_CS_NA_1.
 </p><p>У шаблоні вперше використано незапитувальний режим вихідного транспорту та вільне створення атрибутів під час виконання.
-</p>
-<ul><li> <b>Спонсорування:</b> Устьянцев Михайло</li>
-<li> <a class="external text" href="http://oscada.org/en/development/tasks/posts/subsystem_daq/iec_60870_5_acquisition_protocol_implementation" rel="nofollow noreferrer noopener" target="_blank">Завдання реалізації</a></li></ul>
-<p><b><u>ВВ шаблону</u></b><br />
+</p><p><b><u>ВВ шаблону</u></b><br />
 </p>
 <table class="wikitable">
 
@@ -730,7 +737,192 @@ data = req.attr("err").toInt()&nbsp;? ""&nbsp;: req.text();
 <table class="wikitable">
 
 <tr>
-<td> <span id="OWEN" title="#OWEN"><h3><span class="mw-headline" id="OWEN_.28OWEN.29"><span class="mw-headline-number">1.8</span> OWEN (<a href="Libs_Devices.html#OWEN" title="Special:MyLanguage/Libs/Devices">OWEN</a>)</span></h3></span> </td>
+<td> <span id="IEC62056" title="#IEC62056"><h3><span class="mw-headline" id="IEC-62056_.28IEC62056.29"><span class="mw-headline-number">1.8</span> IEC-62056 (<a href="Libs_Devices.html#IEC62056" title="Special:MyLanguage/Libs/Devices">IEC62056</a>)</span></h3></span>
+</td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk, ru
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsDevsIEC62056Op.png" title="Результат та оперативна конфігурація."><img alt="Результат та оперативна конфігурація." height="805" src="../en/files/LibsDevsIEC62056Op.png" width="428" /></a></div>
+<p><a class="external text" href="https://en.wikipedia.org/wiki/IEC_60870" rel="nofollow noreferrer noopener" target="_blank">IEC 62056</a> у частині 46 є одним з набору стандартів IEC 62056 який визначає системи, що використовуються у віддаленому контролі (телемеханіці — диспетчерському контролі та зборі даних) у інженерній електриці та у застосунках автоматизації енергетичних систем. Частина 46 надає шар підключення Даних з використанням протоколу HDLC, який переважно використовується на послідовних інтерфейсах.
+</p>
+<ul><li> <b>Стан реалізації протоколу:</b> Клієнт частини 46 специфікації, читання прямо визначених OBIS</li>
+<li> <b>Загальна працемісткість:</b> 3.2 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span></li>
+<li> <b>Спонсорування:</b> ТОВ "СВІТоВИР АВТоМАТИК" на загальну працемісткість</li></ul>
+<p><b><u>Деталі</u></b><br />
+...
+</p><p><b><u>ВВ шаблону</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Атрибут </th>
+<th> Конфігурація </th>
+<th> Значення
+</th></tr>
+<tr>
+<td> transport </td>
+<td> Транспорт </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> Serial.out_IEC62056
+</td></tr>
+<tr>
+<td> dest </td>
+<td> Призначення "{UHDLC}[:{LHDLC}]", [0...16383] </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> 17:6168
+</td></tr>
+<tr>
+<td> src </td>
+<td> Джерело [0...127] </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> 1
+</td></tr>
+<tr>
+<td> pass </td>
+<td> Пароль пристрою </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> ABCDEFGH
+</td></tr>
+<tr>
+<td> tmRetr </td>
+<td> Час відновлення підключення, секунд </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> 10
+</td></tr>
+<tr>
+<td> tmPollAll </td>
+<td> Час опитування всього, секунд </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> 60
+</td></tr>
+<tr>
+<td> itemsSet </td>
+<td> Набір елементів за: "{OBIS}-{attr}" </td>
+<td> Текст </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> items </td>
+<td> Всі елементи </td>
+<td> Об'єкт </td>
+<td> Вихід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> tr </td>
+<td> Вихідний транспорт </td>
+<td> Об'єкт </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> ctx </td>
+<td> Контекст ВВ </td>
+<td> Об'єкт </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> this </td>
+<td> Об'єкт </td>
+<td> Об'єкт </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Прапорець запуску функції </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення функції (Гц) </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Прапорець зупинки функції </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Помилка функції </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsDevsIEC60870Cfg_uk.png" title="Конфігурація."><img alt="Конфігурація." height="373" src="files/LibsDevsIEC60870Cfg_uk.png" width="450" /></a></div>
+<p><b><u>Конфігурація та використання</u></b><br />
+</p>
+<dl><dd>1. Безпосередньо створити вихідний транспорт типу "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Послідовний</a>", або за допомогою шлюзу "<a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Сокети</a>", та встановити його Ідентифікатор на кшталт "IEC62056", один на використану послідовну шину пристрою.</dd>
+<dd>2. Встановити відповідну адресу та таймаути <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Послідовного</a> пристрою.</dd>
+<dd>3. Створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати придатний з потрібними властивостями планування. Період виконання має бути біля <b>0.1 секунда</b>.</dd>
+<dd>4. Створити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного параметру</a> та обрати цей шаблон для нього, один на кожний пристрій-ПЛК. Увімкнути параметр.</dd>
+<dd>5. У вкладці "Конфігурація шаблону" об'єкту логічного параметру маєте встановити:
+<ul><li> <i>Транспорт</i> — адреса транспорту на кроці 1. Підтримується стеження за зміною адреси.</li>
+<li> <i>Призначення "{UHDLC}[:{LHDLC}]"</i> — адреса віддаленої станції у форматі двох цифр у діапазоні [0...16383], цю адресу може бути вказано як одна цифра діапазону [0...127].</li>
+<li> <i>Джерело</i> — адреса самої станції (джерела) у діапазоні цілого числа [0...127].</li>
+<li> <i>Пароль пристрою</i> — пароль доступу пристрою.</li>
+<li> <i>Час відновлення підключення</i> — час відновлення підключення у секундах, за відсутності підключення та відповіді.</li>
+<li> <i>Час опитування всього</i> — час запиту всіх даних у секундах, вказаних у "itemsSet".</li></ul></dd>
+<dd>6. РЕЗУЛЬТАТ: Об'єкт логічного параметру буде здійснювати взаємодію та розміщення зібраних даних у об'єкті "items", створення/розміщення зібраних даних у відповідних атрибутах значень.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="OWEN" title="#OWEN"><h3><span class="mw-headline" id="OWEN_.28OWEN.29"><span class="mw-headline-number">1.9</span> OWEN (<a href="Libs_Devices.html#OWEN" title="Special:MyLanguage/Libs/Devices">OWEN</a>)</span></h3></span> </td>
 <td> 0.8 </td>
 <td> GPLv2 </td>
 <td> * </td>
@@ -738,13 +930,16 @@ data = req.attr("err").toInt()&nbsp;? ""&nbsp;: req.text();
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>, Constantine (IrmIngeneer)
 </td></tr></table>
-<p>OWEN data sources implementation in the OWEN protocol. Implemented wholly in the template for the protocol requesting and for dynamic data model of the OWEN data sources' data with support of the writing and original names of the parameters.<br />
-The field "addr" of the items can be wrote positive, for  the 8 bit address [0...255], and negative, for the 11 bit address[-2047...0].<br />
-The protocol implementing is not finished due to missing for feedback from the developer to resolve this undocumented behavior:
+<p>OWEN data sources implementation in the OWEN protocol. Implemented wholly in the template for the protocol requesting and for dynamic data model of the OWEN data sources' data with support of the writing and original names of the parameters.
 </p>
+<ul><li> <b>State of the protocol implementing:</b> Client of the protocol for reading and writing the specified PLC properties.</li>
+<li> <b>Total complexity:</b> 0.5 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
+<li> <b>Actual issues:</b> The undocumented behaviour:
 <ul><li> МВ110-8А responds error 0x31 for reading "in-t": &gt;1003023331932DCB43 &lt;1010932D4791;</li>
-<li> and error 0x34 for it writing: &gt;1003023334932D2A42 &lt;1001932D0BEDBC<br /></li></ul>
-<p><b><u>Template IOs</u></b><br />
+<li> and error 0x34 for it writing: &gt;1003023334932D2A42 &lt;1001932D0BEDBC.</li></ul></li></ul>
+<p><b><u>Details</u></b><br />
+The field "addr" of the items can be wrote positive, for  the 8 bit address [0...255], and negative, for the 11 bit address[-2047...0].
+</p><p><b><u>Template IOs</u></b><br />
 </p>
 <table class="wikitable">
 
@@ -2272,9 +2467,6 @@ The protocol implementing is not finished due to missing for feedback from the d
 <ul><li> <i>Transport</i> — to address of the transport into step 1. Tracing for the address changing is supported.</li></ul></dd>
 <dd>6. RESULT: The logical parameter object will perform interaction and placing of gathered data to the parameter attributes. Also you are able to send some commands to the device through the writable attributes.</dd></dl>
 <p><br />
-</p><p><br />
-</p><p><br />
-</p><p><br />
 </p>
 <table class="wikitable">
 
@@ -4523,5 +4715,5 @@ The protocol implementing is not finished due to missing for feedback from the d
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Devices/uk">Libs/Devices/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2678</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Devices/uk">Libs/Devices/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2687</td></tr></table></body>
 </html>

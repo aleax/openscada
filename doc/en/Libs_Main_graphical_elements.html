@@ -1887,11 +1887,11 @@ In the runtime mode, you can see:
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
 </td></tr></table>
-<p>The element-frame in Figure 3.6 serves to display the violations history and to update their dynamically for the current time in a full-format tabular form, to highlight them in color and text and the possibility of multilevel filtering. The violations are obtained from <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">the buffer of current-active violations of OpenSCADA</a> and archive(s), specified in the configuration field <b>alArch</b>. In fact, the element implements the primitive "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#ImplProtocol" title="Special:MyLanguage/Sub-projects/VCA">Protocol</a>" functions for violations and extension opportunities.
+<p>The element-frame in Figure 3.6 serves to display the violations history and to update their dynamically for the current time in a full-format tabular form, to highlight them in color and text and the possibility of multilevel filtering. The violations are obtained from <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">the buffer of current-active violations of OpenSCADA</a> and archive(s), specified in the configuration field "<b>alArch</b>". In fact, the element implements the primitive "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#ImplProtocol" title="Special:MyLanguage/Sub-projects/VCA">Protocol</a>" functions for violations and extension opportunities.
 </p><p>The frame in general contains elements:
 </p>
 <ul><li> the messages table — the main area;</li>
-<li> a button of the mass quietance — the top left;</li>
+<li> a button of the mass confirmation — the top left;</li>
 <li> a combobox of selection of the data model level sort rule, it provides sorting by the selected column from the list defined in <b>colms</b> and by default this is time, as the second criterion (last on the top) — the next one top left;</li>
 <li> a navigation panel at the messages history-archive — the top centre and right, consisting of:
 <ul><li> the top-end time of the data;</li>
@@ -1905,7 +1905,7 @@ In the runtime mode, you can see:
 </p><p>The main user extension is the ability to define visible table fields from a list of options:
 </p>
 <ul><li> <i>atm</i> — time of the violation appearing;</li>
-<li> <i>qttm</i> — time of the violation confirmation (quietation), for quieted violations;</li>
+<li> <i>qttm</i> — time of the violation confirmation;</li>
 <li> <i>nrmtm</i> — time of coming-returning the violation to the state "NORM";</li>
 <li> <i>lev</i> — level of the violation;</li>
 <li> <i>cat</i> — category of the violation;</li>
@@ -1916,12 +1916,13 @@ In the runtime mode, you can see:
 <li> <i>alrm</i> — text of the violation;</li>
 <li> <i>cmnt</i> — commentary of the violation.</li></ul>
 <p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> This frame and its fields generally represent the structure of the violation message, which is described in detail in <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">the Program manual</a>.
-</p><p>As you can see from the list of possible table fields, this item supports confirmation (quietation), commenting, and user fields.
+</p><p>As you can see from the list of possible table fields, this item supports confirmation, commenting, and user fields.
 </p>
 <ul><li> <b>Sponsored by:</b> Ustijancev Michael</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_alarmsStD.png"><img class="thumbimage" height="550" src="files/LibMainEls_alarmsStD.png" width="900" /></a>  <div class="thumbcaption">Fig.3.6a. The frame "Alarms — state" in the development mode.</div></div></div></div>
 <p><b><u>Using — development</u></b><br />
 The widget is designed to perform the role of page, and should therefore be placed directly in the project's tree. After adding, the frame must be adjusted for the properties, such as the list and the order in which the table fields are displayed.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Because the frame displays the status and the history of the violations, the creation and use of <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">the message archiver</a> is mandatory. Therefore, create or use a template archiver "Alarms" of the startup project with duplicate exclusion options, and specify it (FSArch.alarms) in the frame property "<b>alArch</b>".
 </p><p>The combobox of selecting sorting rule is disabled by default for the sake of using the built-in column sort function of the table of the corresponding visualizer. If this feature is not provided by the visualizer then enable this combo box.
 </p><p>If you want to exclude the validation function then you have to exclude the validation time "qttm" from the list and make the table element inactive.
 </p><p>The report building at the table data is also disabled by default. To enable it, you have to place <a href="#alarmsStReport">the frame of alarms reporting</a> in the logical container of panels of the project tree and then enable the characteristic report generation button in the upper right corner of this frame.
@@ -1929,7 +1930,7 @@ The widget is designed to perform the role of page, and should therefore be plac
 In the runtime mode, a table is created from the active violations list, for the current time, and violations from the history by defined fields, with the activity control and marking and rules of the highlighting; the contents of which are updated periodically and dynamically for the current time.
 </p><p>The user can use the navigation bar to determine the time interval of the data in the table, specifying the top-end and depth of the required data. In the process of requesting too tight data spaces, only the number of messages specified in the property <b>messLim</b> will be readable, and the user can use the button in the navigation bar, what appears in that case, to move to the next piece.
 </p><p>The data obtained in the table can be filtered by the content of the column selected accordingly, which can be performed at up to five levels, the filter elements of which will appear after the last filter level is selected.
-</p><p>The user is given the opportunity to confirm the violation, by changing the value of the confirmation time field or by using the control panel that pops up after selecting the table element and the violation item. The user may also confirm all active violations by clicking the mass quietance button.
+</p><p>The user is given the opportunity to confirm the violation, by changing the value of the confirmation time field or by using the control panel that pops up after selecting the table element and the violation item. The user may also confirm all active violations by clicking the mass confirmation button.
 </p><p>If there is a column sort function in the visualizer, or enable sorting at the data model level, the user can select a column to sort the table rows at that content.
 </p><p>The user may also comment on the violation by correcting appropriate field of the table.
 </p><p>To generate a separate report, the user can click the characteristic button in the top right corner if this feature is enabled.
@@ -1999,7 +2000,7 @@ In the runtime mode, a table is created from the active violations list, for the
 <td> Text </td>
 <td> Highlight rules, where:
 <ul><li> <i>lev</i> — level of the message [0...7];</li>
-<li> <i>quitt</i> — sign of the message confirmation (quietation) [0|1];</li>
+<li> <i>quitt</i> — sign of the message confirmation [0|1];</li>
 <li> <i>act</i> — sign of the message activity [0|1];</li>
 <li> <i>color</i> — background color of the message row;</li>
 <li> <i>font</i> — text font of the message row;</li>
@@ -2915,5 +2916,5 @@ Calling the dialogue is made from the frame-initiator, and closing is made by pr
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/en">Libs/Main_graphical_elements/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2678</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/en">Libs/Main_graphical_elements/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2687</td></tr></table></body>
 </html>

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-08 19:04+0300\n"
+"POT-Creation-Date: 2020-06-14 20:45+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -169,7 +169,7 @@ msgid "Default"
 msgstr ""
 
 #, c-format
-msgid "Size source=%s, bytecode=%s; Registers totally=%d, shared=%g; Functions external=%d, internal=%g."
+msgid "Size source=%s, bytecode=%s; Registers totally=%d, constants=%d, internal functions'=%d; Functions external=%d, internal=%d."
 msgstr ""
 
 msgid "New IO"

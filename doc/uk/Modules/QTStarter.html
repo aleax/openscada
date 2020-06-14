@@ -29,8 +29,9 @@
 
 <tr>
 <td> <a href="../Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">QTStarter</a> </td>
-<td> Qt GUI пускач </td>
-<td> 4.5 </td>
+<td> Qt GUI пускач
+</td>
+<td> 4.8 </td>
 <td> GPL2 </td>
 <td> ui_QTStarter.so </td>
 <td> en,uk,ru,de </td>
@@ -53,8 +54,8 @@
 </ul>
 </div>
 
-<p>Модуль надає до OpenSCADA пускач GUI модулів, заснованих на багатоплатформеній бібліотеці <a class="external text" href="http://qt.io" rel="nofollow noreferrer noopener" target="_blank">Qt</a> графічного користувацького інтерфейсу (GUI), початково створеного фірмою <a class="external text" href="http://www.trolltech.com" rel="nofollow noreferrer noopener" target="_blank">TrollTech</a>. Також, модуль реалізує елементи менеджеру проектів OpenSCADA. Окремий модуль для запуску Qt GUI модулів потрібно через необхідність організації однопотокового виконання всіх компонентів візуалізації Qt та централізованої ініціалізації головного об'єкту Qt-бібліотеки — QApplication.
-</p><p>Від початку, цей модуль створює окремий поток для основного потоку Qt, де є можливість формування екрану динамічної заставки, оскільки основні процеси OpenSCADA продовжують виконання у основному потоці. Та версія Qt5 стала чутливою до виконання у неголовному потоці, тому для неї у OpenSCADA додано таку можливість, але виключно зі статичним екраном заставки. Для контролю цієї можливості передбачено параметр запуску <i>--QtInNotMainThread</i>, який вмикає виконання у неголовному потоці, для Qt4, відтак, по замовченню, здійснюється виконання у головному, що типово для Qt5.
+<p>Модуль надає до OpenSCADA пускач GUI модулів, заснованих на багатоплатформеній бібліотеці <a class="external text" href="http://qt.io" rel="nofollow noreferrer noopener" target="_blank">Qt</a> графічного користувацького інтерфейсу (GUI), початково створеній фірмою <a class="external text" href="http://www.trolltech.com" rel="nofollow noreferrer noopener" target="_blank">TrollTech</a>. Також, модуль реалізує елементи менеджеру проектів OpenSCADA. Окремий модуль для запуску Qt GUI модулів потрібно через необхідність організації однопотокового виконання всіх компонентів візуалізації Qt та централізованої ініціалізації головного об'єкту Qt-бібліотеки — QApplication.
+</p><p>Від початку цей модуль створює окремий потік для основного потоку Qt, де є можливість формування екрану динамічної заставки, оскільки основні процеси OpenSCADA продовжують виконання у основному потоці. Та версія Qt5 стала чутливою до виконання у неголовному потоці, тому для неї у OpenSCADA додано таку можливість, але виключно зі статичним екраном заставки, що містить інформацію про програму та проект OpenSCADA. Для контролю цієї можливості передбачено параметр запуску <i>--QtInNotMainThread</i>, який вмикає виконання у неголовному потоці, для Qt4, відтак, по замовченню, здійснюється виконання у головному, що типово для Qt5.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:606px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_splash_uk.png"><img class="thumbimage" height="304" src="../files/QTStarter_splash_uk.png" width="604" /></a>  <div class="thumbcaption">Рис.1. Динамічний екран заставки модуля.</div></div></div></div>
 <p>Діалогове вікно пускачу (Рис.2) загалом надає:
@@ -118,5 +119,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/QTStarter/uk">Modules/QTStarter/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2678</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/QTStarter/uk">Modules/QTStarter/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2687</td></tr></table></body>
 </html>

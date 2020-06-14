@@ -57,7 +57,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"MainThr"
-#define MOD_VER		"4.8.0"
+#define MOD_VER		"4.8.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -94,7 +94,7 @@ using namespace QTStarter;
 //* TUIMod                                        *
 //*************************************************
 TUIMod::TUIMod( string name ) : TUI(MOD_ID), mQtLookMdf(false), QtApp(NULL), hideMode(false), mEndRun(false), mStartCom(false), mCloseToTray(false),
-    mStartMod(dataRes()), mStyle(dataRes()), mFont(dataRes()), mPalette(dataRes()), mStyleSheets(dataRes()), qtArgC(0), qtArgEnd(0), splash(NULL)
+    mStartMod(dataRes()), mStyle(dataRes()), mFont(dataRes()), mPalette(dataRes()), mStyleSheets(dataRes()), qtArgC(0), qtArgEnd(0), splash(NULL), splashTp(SPLSH_NULL)
 {
     mod = this;
 
@@ -251,6 +251,8 @@ void TUIMod::modStart( )
 	if(runSt || hideMode)	return;
 	mess_debug(nodePath().c_str(), _("Starting the module."));
 
+	if(splash && splashTp != SPLSH_START) splashSet(SPLSH_START);
+
 	runSt = true;
 
 	//Start external modules
@@ -278,32 +280,74 @@ void TUIMod::modStop( )
 
 void TUIMod::splashSet( SplashFlag flg )
 {
+    splashTp = flg;
     if(flg == SPLSH_NULL) {
 	if(splash) delete splash;
 	splash = NULL;
     }
     else {
+	//Obtaining the splash image
 	QImage ico_t;
-	if(!ico_t.load(TUIS::icoGet(SYS->id()+((flg==SPLSH_STOP)?"_splash_exit":"_splash"),NULL,true).c_str())) ico_t.load(":/images/splash.png");
-	if(splash) splashSet(SPLSH_NULL);
+	bool sysSplash = false;
+	if(!ico_t.load(TUIS::icoGet(SYS->id()+((flg==SPLSH_STOP)?"_splash_exit":"_splash"),NULL,true).c_str())) {
+	    ico_t.load(":/images/splash.png");
+	    sysSplash = true;
+	}
+
+	//Creating the splash
+	if(splash) splashSet(SPLSH_NULL);	//!!!! Need to be freed for the splash size change at the project switch
+	splash = new QSplashScreen();
+
+	//Prepairing the splash image
 	QPixmap pm = QPixmap::fromImage(ico_t);
 	QPainter pnt(&pm);
-	if(!SYS->cmdOptPresent("QtInNotMainThread"))
-	    pnt.fillRect(0, pm.height()-30, pm.width(), 25, QColor(255,255,255,127));
+	QPen pen(Qt::DotLine); pen.setColor("gray"); pen.setWidth(1);
+	pnt.setPen(pen);
+	QColor barColor("ivory"); barColor.setAlpha(170);
 
-	splash = new QSplashScreen(pm);
+	// Appending the project ico
+	string icoImg = TUIS::icoGet(SYS->name(), NULL, true);
+	if(!icoImg.size()) icoImg = TUIS::icoGet(SYS->id(), NULL, true);
+	if(sysSplash && icoImg.size()) {
+	    QImage prjPm(icoImg.c_str());
+	    prjPm = prjPm.scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
+	    //  In plain rect
+	    //pnt.drawRect(pm.width()-prjPm.width(), 0, prjPm.width(), prjPm.height());
+	    //pnt.fillRect(pm.width()-prjPm.width(), 0, prjPm.width(), prjPm.height(), barColor);
+	    //pnt.drawImage(pm.width()-prjPm.width(), 0, prjPm);
+
+	    //  In gradient circle
+	    QRect icoArea(pm.width()-68, 0, 68, 68);
+	    QPainterPath path;
+	    QRadialGradient grd(icoArea.center(), icoArea.width()/2, icoArea.center()-QPoint(10,10));
+	    grd.setColorAt(0, "white"); grd.setColorAt(1, "gray");
+	    pnt.setBrush(grd);
+	    path.moveTo(pm.width()-icoArea.width()/2, icoArea.height()/2);
+	    path.arcTo(icoArea, 0, 360);
+	    pnt.drawPath(path);
+	    pnt.drawImage(icoArea.adjusted(10,10,-10,-10), prjPm);
+	}
+	// Appending the program and the project information
+	pnt.setBrush(barColor);
+	QRect infBar(0, pm.height()-20, pm.width(), 20);
+	pnt.fillRect(infBar, barColor);
+	pnt.drawRect(infBar);
+	QFont wFnt = splash->font(); wFnt.setPixelSize(15); pnt.setFont(wFnt);
+	pnt.drawText(infBar.adjusted(4,1,-4,-1), Qt::AlignRight, PACKAGE_STRING);
+	pnt.drawText(infBar.adjusted(4,1,-4,-1), SYS->prjNm().c_str());
+
+	//Starting the splash
+	splash->setPixmap(pm);
 	splash->show();
-	QFont wFnt = splash->font();
-	wFnt.setPixelSize(10);
+	wFnt = splash->font(); wFnt.setPixelSize(10);
 	splash->setFont(wFnt);
-	if(!SYS->cmdOptPresent("QtInNotMainThread")) {
-	    wFnt.setPixelSize(20); splash->setFont(wFnt);
-	    splash->showMessage(PACKAGE_VERSION, Qt::AlignBottom|Qt::AlignRight);
+	// Fixing the splash show
+	if(!SYS->cmdOptPresent("QtInNotMainThread"))
 	    for(int iTr = 0; iTr < 10; iTr++) {
 		QtApp->processEvents();	//!!!! To show the message on Qt5
 		TSYS::sysSleep(0.1);	//!!!! To ensure the splash visibility at the exit on Qt5
 	    }
-	}
     }
 }
 

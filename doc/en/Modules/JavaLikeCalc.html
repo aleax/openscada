@@ -31,7 +31,7 @@
 <td> <a href="../Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a> </td>
 <td> Calculator on the Java-like language
 </td>
-<td> 4.4 </td>
+<td> 5.0 </td>
 <td> GPL2 </td>
 <td> daq_JavaLikeCalc.so </td>
 <td> en,uk,ru,de </td>
@@ -235,9 +235,9 @@ Where:
 <h4><span class="mw-headline" id="Internal_functions"><span class="mw-headline-number">1.4.3</span> Internal functions</span></h4>
 <p>The language supports definition and call of internal functions. To determine the internal function, the keyword "function" is used and in general, the definition has a syntax: <b>function {fName} ({var1}, {var2}, ... {varN}) { {the function body} }</b>. Defining an internal function inside another is not allowed but it is allowed to call a previously defined one.
 </p><p>Calling an internal function is done in a typical way as a procedure <b>{fName}({var1}, {var2}, ... {varN});</b> or as a function <b>{vRez} = {fName}({var1}, {var2}, ... {varN});</b>. The call of internal functions is valid only after their declaration is higher!
-</p><p>All defined variables into the main body inaccessible into the internal function and can be pass in only as two way arguments of the internal function call. All defined variables into the internal function have itself namespace and inaccessible from the main body or any other internal function and can be pass out to the main body only as two way arguments or return of the internal function call. Since the definition of variables-registers in this language is static and takes place during compilation, they are in fact the same for each function call, and therefore their recursive calling does not make sense here!
+</p><p>All defined variables into the main body inaccessible into the internal function and can be pass in as two way arguments of the internal function call or as the main function arguments. All defined variables into the internal function have itself namespace and inaccessible from the main body or any other internal function and can be pass out to the main body as two way arguments, return of the internal function call or the main function arguments. The internal function variables are registered for saving/restoring their context after second and more entry to the function, so they completely support the recursive calls!
 </p><p>Operator "return" into the internal function makes controllable finishing of the function execution and places a pointed variable or an expression result as the internal function call result.
-</p><p>An example of the internal function declaration and using in typical way shown bottom:
+</p><p>An example of the internal function declaration and using in typical way shown next:
 </p>
 <pre style="white-space: pre-wrap;">
 function sum(a, b, c, d) { return a + ((b==EVAL)?0:b) + ((c==EVAL)?0:c) + ((d==EVAL)?0:d); }
@@ -571,5 +571,5 @@ To += (abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*fr
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/JavaLikeCalc/en">Modules/JavaLikeCalc/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2678</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/JavaLikeCalc/en">Modules/JavaLikeCalc/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2687</td></tr></table></body>
 </html>

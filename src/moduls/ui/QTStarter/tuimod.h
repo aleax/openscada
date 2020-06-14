@@ -234,6 +234,7 @@ private:
     char	*qtArgV[10];			//Argument's values
     char	qtArgBuf[1000];			//Arguments' strings buffer
 
+    SplashFlag	splashTp;
     QSplashScreen *splash;
 };
 

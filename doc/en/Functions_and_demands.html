@@ -176,7 +176,7 @@
 </td></tr>
 <tr>
 <td> Directories through LDAP </td>
-<td> Module БД <a href="Modules/LDAP.html" title="Special:MyLanguage/Modules/LDAP">LDAP</a>
+<td> Module <a href="Modules/LDAP.html" title="Special:MyLanguage/Modules/LDAP">LDAP</a>
 </td></tr>
 <tr>
 <td> Available on another OpenSCADA-based server </td>
@@ -373,7 +373,7 @@
 </td></tr>
 <tr>
 <td> Directories through LDAP </td>
-<td> Module БД <a href="Modules/LDAP.html" title="Special:MyLanguage/Modules/LDAP">LDAP</a>
+<td> Module <a href="Modules/LDAP.html" title="Special:MyLanguage/Modules/LDAP">LDAP</a>
 </td></tr>
 <tr>
 <td> Available on another OpenSCADA-based server </td>
@@ -552,7 +552,7 @@
 </td></tr>
 <tr>
 <td> Directories through LDAP </td>
-<td> Module БД <a href="Modules/LDAP.html" title="Special:MyLanguage/Modules/LDAP">LDAP</a>
+<td> Module <a href="Modules/LDAP.html" title="Special:MyLanguage/Modules/LDAP">LDAP</a>
 </td></tr>
 <tr>
 <td> Available on another OpenSCADA-based server </td>
@@ -831,8 +831,8 @@
 <td colspan="2"> <i>DB.MySQL module</i>
 </td></tr>
 <tr>
-<td> libMySQL </td>
-<td> Library for access to MySQL DBMS.
+<td> libMySQL or libMariaDB </td>
+<td> Library for access to MySQL related DBMS.
 </td></tr>
 <tr>
 <td colspan="2"> <i>DB.PostgreSQL module</i>
@@ -845,8 +845,8 @@
 <td colspan="2"> <i>DB.FireBird module</i>
 </td></tr>
 <tr>
-<td> FirebirdSS </td>
-<td> FireBird DBMS version 2. Often it is absent in distribution kits of Linux and demands individual loading from an official site (<a class="external free" href="http://www.firebirdsql.org" rel="nofollow noreferrer noopener" target="_blank">http://www.firebirdsql.org</a>)!
+<td> firebird </td>
+<td> FireBird DBMS version 2 or 3. Often it is absent in distribution kits of Linux and demands individual loading from an official site (<a class="external free" href="http://www.firebirdsql.org" rel="nofollow noreferrer noopener" target="_blank">http://www.firebirdsql.org</a>)!
 </td></tr>
 <tr>
 <td colspan="2"> <i>DB.ODBC module</i>
@@ -854,6 +854,13 @@
 <tr>
 <td> iodbc </td>
 <td> iODBC Driver Manager library.
+</td></tr>
+<tr>
+<td colspan="2"> <i>DB.LDAP module</i>
+</td></tr>
+<tr>
+<td> libldap </td>
+<td> OpenLDAP library.
 </td></tr>
 <tr>
 <td colspan="2"> <i>DAQ.System module</i>
@@ -1021,29 +1028,36 @@
 <td colspan="2"> <i>DB.MySQL module</i>
 </td></tr>
 <tr>
-<td> libMySQL (devel) </td>
-<td> Library for access to MySQL DBMS, a package for development on language C.
+<td> libMySQL or libMariaDB (devel) </td>
+<td> Library for access to MySQL related DBMS, a package for development on language C.
 </td></tr>
 <tr>
 <td colspan="2"> <i>DB.PostgreSQL module</i>
 </td></tr>
 <tr>
-<td> libpq </td>
+<td> libpq (devel) </td>
 <td> Library for access to PostgreSQL DBMS version more 8.3.0, a package for development.
 </td></tr>
 <tr>
 <td colspan="2"> <i>DB.FireBird module</i>
 </td></tr>
 <tr>
-<td> FirebirdSS </td>
-<td> FireBird DBMS version 2, a package for development. Often it is absent in distribution kits of Linux and demands individual loading from an official site (<a class="external free" href="http://www.firebirdsql.org" rel="nofollow noreferrer noopener" target="_blank">http://www.firebirdsql.org</a>)!
+<td> firebird (devel) </td>
+<td> FireBird DBMS version 2 or 3, a package for development. Often it is absent in distribution kits of Linux and demands individual loading from an official site (<a class="external free" href="http://www.firebirdsql.org" rel="nofollow noreferrer noopener" target="_blank">http://www.firebirdsql.org</a>)!
 </td></tr>
 <tr>
 <td colspan="2"> <i>DB.ODBC module</i>
 </td></tr>
 <tr>
-<td> iodbc </td>
+<td> iodbc (devel) </td>
 <td> iODBC Driver Manager library, a package for development.
+</td></tr>
+<tr>
+<td colspan="2"> <i>DB.LDAP module</i>
+</td></tr>
+<tr>
+<td> libldap (devel) </td>
+<td> OpenLDAP library, a package for development.
 </td></tr>
 <tr>
 <td colspan="2"> <i>DAQ.JavaLikeCalc module</i>
@@ -1243,5 +1257,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Functions_and_demands/en">Functions_and_demands/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2678</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Functions_and_demands/en">Functions_and_demands/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2687</td></tr></table></body>
 </html>
