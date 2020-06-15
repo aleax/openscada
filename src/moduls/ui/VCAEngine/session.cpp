@@ -321,7 +321,8 @@ void Session::uiCmd( const string &com, const string &prm, SessWdg *src )
     string oppg, pBase;		//Opened page according of pattern
 
     vector<string> opLs = openList();
-    for(unsigned iOp = 0; iOp < opLs.size(); iOp++) {
+    //for(unsigned iOp = 0; iOp < opLs.size(); iOp++) {
+    for(int iOp = opLs.size()-1; iOp >= 0; iOp--) {
 	string curPtEl, curEl;
 	for(int iEl = 0; (curPtEl=TSYS::pathLev(prm,iEl++)).size(); )
 	    if((curEl=TSYS::pathLev(opLs[iOp],iEl)).empty() || (curPtEl.compare(0,3,"pg_") == 0 && curPtEl != curEl)) break;
@@ -625,6 +626,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 
 	    // Main process
 	    unsigned tm = strtoul(opt->attr("tm").c_str(), NULL, 10);
+	    if(!tm) setUserActTm();
 	    unsigned ntm = calcClk();
 	    vector<string> lst = openList();
 	    for(unsigned iF = 0; iF < lst.size(); iF++) {

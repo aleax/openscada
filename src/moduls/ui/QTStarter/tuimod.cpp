@@ -56,7 +56,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"MainThr"
-#define MOD_VER		"4.7.7"
+#define MOD_VER		"4.7.8"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -93,7 +93,7 @@ using namespace QTStarter;
 //* TUIMod                                        *
 //*************************************************
 TUIMod::TUIMod( string name ) : TUI(MOD_ID), mQtLookMdf(false), QtApp(NULL), hideMode(false), mEndRun(false), mStartCom(false), mCloseToTray(false),
-    mStartMod(dataRes()), mStyle(dataRes()), mFont(dataRes()), mPalette(dataRes()), mStyleSheets(dataRes()), qtArgC(0), qtArgEnd(0), splash(NULL)
+    mStartMod(dataRes()), mStyle(dataRes()), mFont(dataRes()), mPalette(dataRes()), mStyleSheets(dataRes()), qtArgC(0), qtArgEnd(0), splash(NULL), splashTp(SPLSH_NULL)
 {
     mod = this;
 
@@ -250,6 +250,8 @@ void TUIMod::modStart( )
 	if(runSt || hideMode)	return;
 	mess_debug(nodePath().c_str(), _("Starting the module."));
 
+	if(splash && splashTp != SPLSH_START) splashSet(SPLSH_START);
+
 	runSt = true;
 
 	//Start external modules
@@ -277,6 +279,7 @@ void TUIMod::modStop( )
 
 void TUIMod::splashSet( SplashFlag flg )
 {
+    splashTp = flg;
     if(flg == SPLSH_NULL) {
 	if(splash) delete splash;
 	splash = NULL;

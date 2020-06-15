@@ -1047,7 +1047,7 @@ string Page::calcLang( ) const
     return iprg.substr(0,iprg.find("\n"));
 }
 
-bool Page::calcProgTr( )	{ return (!proc().size() && !parent().freeStat()) ? parent().at().calcProgTr() : cfg("PR_TR"); }
+bool Page::calcProgTr( )	{ return /*(!proc().size() && !parent().freeStat()) ? parent().at().calcProgTr() :*/ cfg("PR_TR"); }
 
 string Page::calcProg( ) const
 {
@@ -1075,8 +1075,8 @@ void Page::setCalcLang( const string &ilng )	{ cfg("PROC").setS(ilng.empty() ? "
 
 void Page::setCalcProgTr( bool vl )
 {
-    if(!proc().size() && !parent().freeStat())	parent().at().setCalcProgTr(vl);
-    else cfg("PR_TR") = vl;
+    /*if(!proc().size() && !parent().freeStat())	parent().at().setCalcProgTr(vl);
+    else*/ cfg("PR_TR") = vl;
 }
 
 void Page::setCalcProg( const string &iprg )	{ cfg("PROC").setS(calcLang()+"\n"+iprg); }

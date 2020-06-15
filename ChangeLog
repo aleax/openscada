@@ -1,3 +1,18 @@
+2020-06-15 Roman 0.9.1.3
+- FIX:LibsDB.vcaBase.Main.alarmsSt: Some fixed for the original messages and the "quietation" completly replaced by "confirmation".
+    FIX: Restored in preventing the duplicate entries for new alarms in that category.
+- !:FIX:DB: TBDS::dataGet() (and TBDS::dataSeek()) prevented from getting the previous value at loading from the config-file, by setting the default value.
+- FIX: UI.VCAEngine: The field "Completely translate the procedure" on the project side set to directly obtained, independently from the procedure inheritance.
+    FIX: Opened pages processing of the session commands switched to from the end, due to the last opened pages place in the end.
+    FIX: The user action time update appended also at requesting the complete pages tree in the service request "openlist:/serv/pg",
+	what is a typical user action for WEB in reconnection to present session.
+- !!:FIX:UI.WebVision: The issue of clossing all pages of the main page container with frozing the last loss page at fast page switching catched and fixed at last.
+    !:FIX: The link to the user login page set to the session-project complete patch, to return back the session-project after the login.
+    !:FIX: The original user setting moved to the common function userSet() in way of fixing the reconnection to the same session
+	after changing-decreasing the user in "userSetVis".
+- !:FIX:UI.QTStarter: Fixed in applying the project specific splash at the project switch.
+
+
 2020-06-01 Roman 0.9.1.2
 - FIX:SYS: The User API function TArrayObj::indexOf() fixed in -1 converting to unsigned.
 - !!:FIX:DB: TBDS::dataSet() appended for changing-saving the defined entries in the config file
