@@ -31,7 +31,7 @@
 <td> <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a> </td>
 <td> Sockets
 </td>
-<td> 3.4 </td>
+<td> 4.0 </td>
 <td> GPL2 </td>
 <td> tr_Sockets.so </td>
 <td> en,uk,ru,de </td>
@@ -41,6 +41,9 @@
 <td> Roman Savochenko, Maxim Kochetkov<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2009-2010) — this page initial translation</i></font> </td>
 <td> Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.
 </td></tr></table>
+<p>The module provides support for sockets based transports to the program. Input and output transports is supported, based on network sockets TCP, UDP, UNIX and RAWCAN.
+</p><p>You can add new input and output sockets through the configuration of <a href="../Program_manual.html#Transports" title="Special:MyLanguage/Documents/Program manual">the transport subsystem</a> in any OpenSCADA configurator.
+</p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#Input_transports"><span class="tocnumber">1</span> <span class="toctext"><span>Input transports</span></span></a></li>
@@ -48,9 +51,6 @@
 </ul>
 </div>
 
-<p>The module provides support for sockets based transports to the program. Input and output transports is supported, based on network sockets TCP, UDP, UNIX and RAWCAN.
-</p><p>You can add new input and output sockets through the configuration of <a href="../Program_manual.html#Transports" title="Special:MyLanguage/Documents/Program manual">the transport subsystem</a> in any OpenSCADA configurator.
-</p>
 <h2><span class="mw-headline" id="Input_transports"><span class="mw-headline-number">1</span> <span id="InTr" title="#InTr">Input transports</span></span></h2>
 <p>Configured and running input transport opens the server socket for the expectation of connection of the clients, besides the initiative connections. In the case of the UNIX socket, the UNIX socket file is created. TCP and UNIX sockets are multi-stream, i.e. when the client connects to a socket of these type, the client socket and the new thread are created in which the client is served. Server socket in this moment switches to the waiting for the request from the new client. Thus the parallel service of the clients is achieved. RAWCAN socket accepts CAN frames from the interface according to the configured filter.
 </p><p>Each input transport is associated with one of the available transport protocols, to which input messages are transmitted. Together with the transport protocol, the mechanism of combining fragmented pieces when sending requests is supported.

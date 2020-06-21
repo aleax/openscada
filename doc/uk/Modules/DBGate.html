@@ -1,0 +1,195 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Модулі/Шлюз баз даних - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../../en/files/doc.css" rel="stylesheet" /></head>
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../../en/files/Logo-big.png" /></a></div><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="uk">Модулі/Шлюз баз даних</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FDBGate&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/DBGate" title="Modules/DBGate">Modules/DBGate</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/DBGate.html" title="Modules/DBGate (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> Ім'я </th>
+<th> Версія </th>
+<th> Ліцензія </th>
+<th> Джерело </th>
+<th> Мови </th>
+<th> Платформи </th>
+<th> Тип </th>
+<th> Автор </th>
+<th> Опис
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/DBGate.html" title="Special:MyLanguage/Modules/DBGate">DBGate</a> </td>
+<td> Шлюз БД
+</td>
+<td> 1.0 </td>
+<td> GPL2 </td>
+<td> bd_DBGate.so </td>
+<td> en,uk </td>
+<td> x86,x86_64,ARM
+</td>
+<td> БД </td>
+<td> Роман Савоченко </td>
+<td> Модуль БД. Дозволяє виконувати шлюзування баз даних віддалених OpenSCADA станцій до локальних.
+<ul><li> <b>Зробити (To Do):</b></li></ul>
+<dl><dd>- доповнення функції fieldSeek() реалізацією локального кешу через глибоке сканування у XML-контекст на віддаленій частині.</dd></dl>
+</td></tr></table>
+<p>Основною функцією цього модуля є віддзеркалення даних <a href="../Program_manual.html#DB" title="Special:MyLanguage/Documents/Program manual">підсистеми "Бази даних"</a> віддалених OpenSCADA станцій на локальні. В своїй роботі модуль використовує <a href="../Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">Власний Протокол OpenSCADA</a> та сервісні функції підсистеми "Бази даних".
+Цей модуль може бути корисним:
+</p>
+<ul><li> у множинному-мережевому доступі до БД віддалених станцій, побудованих на основі локальних на кшталт <a href="../Modules/SQLite.html" title="Special:MyLanguage/Modules/SQLite">SQLite</a>, таким чином трансформуючи їх у мережеві;</li>
+<li> у проксі-доступі до БД віддалених станцій, побудованих на основі мережевих СУБД, через інтерфейс контролю OpenSCADA, який може також бути безпечним, використовуючи <a href="../Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">SSL</a>;</li>
+<li> у рознесені між мережевими станціями функцій складного користувацького простору із частинами Збору Даних та Графічного Інтерфейсу, пов'язаних на БД на кшталт <a href="../Libs_Prescriptions.html" title="Special:MyLanguage/Libs/Prescriptions">Рецептів</a>.</li></ul>
+<p>Модуль реалізує наступні функції:
+</p>
+<ul><li> Ввімкнення віддаленої БД при ввімкнені об'єкту локальної БД.</li>
+<li> Отримання переліку наявних таблиць віддаленої БД.</li>
+<li> Додання із створенням нових запитуваних таблиць на віддаленій БД.</li>
+<li> Цілковите видалення запитуваної таблиці на віддаленій БД.</li>
+<li> Передавання повних SQL-запитів до віддаленої БД.</li>
+<li> Передавання OpenSCADA запитів БД до віддаленої БД щодо: fieldStruct(), fieldSeek(), fieldGet(), fieldSet() та fieldDel().</li></ul>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D1.96.D1.97_.D0.BD.D0.B0.D0.B4_.D0.91.D0.94"><span class="tocnumber">1</span> <span class="toctext">Операції над БД</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D1.96.D1.97_.D0.BD.D0.B0.D0.B4_.D1.82.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D0.B5.D1.8E"><span class="tocnumber">2</span> <span class="toctext">Операції над таблицею</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#.D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D1.96.D1.97_.D0.BD.D0.B0.D0.B4_.D0.B2.D0.BC.D1.96.D1.81.D1.82.D0.BE.D0.BC_.D1.82.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D1.96"><span class="tocnumber">3</span> <span class="toctext">Операції над вмістом таблиці</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#.D0.9F.D1.80.D0.B0.D0.B2.D0.B0_.D0.B4.D0.BE.D1.81.D1.82.D1.83.D0.BF.D1.83"><span class="tocnumber">4</span> <span class="toctext">Права доступу</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#.D0.9F.D1.80.D0.BE.D0.B4.D1.83.D0.BA.D1.82.D0.B8.D0.B2.D0.BD.D1.96.D1.81.D1.82.D1.8C_.D0.91.D0.94"><span class="tocnumber">5</span> <span class="toctext"><span>Продуктивність БД</span></span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id=".D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D1.96.D1.97_.D0.BD.D0.B0.D0.B4_.D0.91.D0.94"><span class="mw-headline-number">1</span> Операції над БД</span></h2>
+<p>Підтримуються операції відкриття та закриття БД лише для об'єкту локальної БД та без можливості створення нової бази даних та видалення існуючої при закритті, на віддаленій станції. У термінах підсистеми "БД" OpenSCADA, відкриттям БД є її реєстрація-підключення для наступного використання програмою. Також, підтримується операція запиту переліку таблиць у віддаленій БД.
+</p><p>Сторінка конфігурації об'єкту БД також віддзеркалює більшість властивостей віддаленої БД, окрім:
+</p>
+<ul><li> "Стан &gt; Ввімкнено" — власний стан і команда динамічного включення об'єкта.</li>
+<li> "Конфігурація &gt; Ідентифікатор" — власний ідентифікатор об'єкту.</li>
+<li> "Конфігурація &gt; {Ім'я,Опис}" — власні значення для непорожнього або значення віддаленої БД.</li>
+<li> "Конфігурація &gt; Адреса" — власна адреса БД, далі про її формат.</li>
+<li> "Конфігурація &gt; Вмикати" — власний стан його ввімкнення при запуску програми.</li></ul>
+<p>БД DBGate адресується шляхом визначення-обрання ім'я БД у форматі "<b>{ВіддаленаСтанція}.{МодульБД}.{БД}</b>", де:
+</p>
+<ul><li> <i>ВіддаленаСтанція</i> — віддалена станція OpenSCADA, зареєстрована у <a href="../Program_manual.html#Transports" title="Special:MyLanguage/Documents/Program manual">таблиці станцій OpenSCADA</a>;</li>
+<li> <i>МодульБД</i> — ідентифікатор модуля БД віддаленої станції;</li>
+<li> <i>БД</i> — ідентифікатор бази даних віддаленої станції.</li></ul>
+<h2><span class="mw-headline" id=".D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D1.96.D1.97_.D0.BD.D0.B0.D0.B4_.D1.82.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D0.B5.D1.8E"><span class="mw-headline-number">2</span> Операції над таблицею</span></h2>
+<p>Підтримується передавання до віддаленої станції операцій відкриття, закриття таблиці, з можливістю створення нової таблиці при відкритті та видалення існуючої при закриті, а також запит структури таблиці.
+</p>
+<h2><span class="mw-headline" id=".D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D1.96.D1.97_.D0.BD.D0.B0.D0.B4_.D0.B2.D0.BC.D1.96.D1.81.D1.82.D0.BE.D0.BC_.D1.82.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D1.96"><span class="mw-headline-number">3</span> Операції над вмістом таблиці</span></h2>
+<p>Передавання до БД віддаленої станції операцій над таблицею:
+</p>
+<ul><li> сканування записів таблиці;</li>
+<li> запит значень визначених записів;</li>
+<li> встановлення значень визначених записів;</li>
+<li> видалення записів.</li></ul>
+<p>API підсистеми "БД" передбачає доступ до вмісту таблиці за значенням ключового(их) полів. Так, операція запиту запису передбачає попереднє встановлення ключових стовпчиків об'єкту TConfig, за яким буде здійснено запит. Створення нового запису(рядка) здійснюється операцією встановлення значень запису, який відсутній.
+</p><p>Динамічна зміна структури таблиці залежить лише від типу пов'язаної віддаленої БД.
+</p><p>Модуль реалізує механізм підтримки багатомовних текстових змінних непрямо функціями ядра роботи із <a href="../../en/API.html#TBDS" title="Special:MyLanguage/Documents/API">конфігураційним файлом</a>: <i>TBDS::dataSeek()</i>, <i>TBDS::dataGet()</i> та <i>TBDS::dataSet()</i>.
+</p>
+<h2><span class="mw-headline" id=".D0.9F.D1.80.D0.B0.D0.B2.D0.B0_.D0.B4.D0.BE.D1.81.D1.82.D1.83.D0.BF.D1.83"><span class="mw-headline-number">4</span> Права доступу</span></h2>
+<p>Права доступу до кінцевої БД визначаються правами, специфічними до типу віддаленої БД, та правами доступу користувача віддаленої станції до підсистеми БД загалом, за правами описаними у наступній таблиці:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Функція/операція/сервіс </th>
+<th> Права відносно до "root:BD:{інші}"
+</th></tr>
+<tr>
+<td> Ввімкнення БД </td>
+<td> W:W:-
+</td></tr>
+<tr>
+<td> Перелік наявних таблиць </td>
+<td> R:R:R
+</td></tr>
+<tr>
+<td> Створення таблиці </td>
+<td> W:W:-
+</td></tr>
+<tr>
+<td> Видалення таблиці </td>
+<td> W:W:-
+</td></tr>
+<tr>
+<td> Запит SQL (call:/serv/SQL) </td>
+<td> W:W:-
+</td></tr>
+<tr>
+<td> Структура запису (call:/serv/fieldStruct) </td>
+<td> R:R:R
+</td></tr>
+<tr>
+<td> Сканування запису (call:/serv/fieldSeek) </td>
+<td> R:R:R
+</td></tr>
+<tr>
+<td> Отримання запису (call:/serv/fieldGet) </td>
+<td> R:R:R
+</td></tr>
+<tr>
+<td> Встановлення запису (call:/serv/fieldSet) </td>
+<td> W:W:-
+</td></tr>
+<tr>
+<td> Видалення запису (call:/serv/fieldDel) </td>
+<td> W:W:-
+</td></tr></table>
+<h2><span class="mw-headline" id=".D0.9F.D1.80.D0.BE.D0.B4.D1.83.D0.BA.D1.82.D0.B8.D0.B2.D0.BD.D1.96.D1.81.D1.82.D1.8C_.D0.91.D0.94"><span class="mw-headline-number">5</span> <span id="Tests" title="#Tests">Продуктивність БД</span></span></h2>
+<p>Вимірювання продуктивності БД, точніше шлюзування, здійснюється тестом "БД" модуля "SystemTests", шляхом виконання операцій над записами структурою "<b>name char (20), descr char (50), val double (10.2), id int (7), stat bool, reqKey string, reqVal string</b>" двічі, спочатку для БД віддаленого оточення, а потім до цієї-ж БД, але через шлюз — цей модуль.
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Operations for 1000 records, seconds </th>
+<th> AMD A8-6500 &lt;Ethernet&gt; AMD Phenom II X4 [RAID1] &lt;&gt; SQLite </th>
+<th> AMD A8-6500 &lt;Ethernet&gt; AMD Phenom II X4 [RAID1] &lt;&gt; MySQL
+</th></tr>
+<tr>
+<td> <i>Creating:</i> </td>
+<td> 2.36 &gt; 0.35 </td>
+<td> 3.39 &gt; 1.35
+</td></tr>
+<tr>
+<td> <i>Updating:</i> </td>
+<td> 2.31 &gt; 0.31 </td>
+<td> 2.97 &gt; 0.94
+</td></tr>
+<tr>
+<td> <i>Getting:</i> </td>
+<td> 2.45 &gt; 0.2 </td>
+<td> 2.67 &gt; 0.49
+</td></tr>
+<tr>
+<td> <i>Seeking:</i> </td>
+<td> 2.22 &gt; 0.13 </td>
+<td> 3.59 &gt; 1.48
+</td></tr>
+<tr>
+<td> <i>Seeking in preload<sup>1</sup>:</i> </td>
+<td> 1.93 &gt; 0.02 </td>
+<td> 1.88 &gt; 0.04
+</td></tr>
+<tr>
+<td> <i>Deleting:</i> </td>
+<td> 1.85 &gt; 0.051 </td>
+<td> 2.14 &gt; 0.27
+</td></tr></table>
+<p><sup>1</sup> — this operation has no effect because preloading-caching is performed only on the remote station side.
+</p>
+
+
+
+
+
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/DBGate/uk">Modules/DBGate/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2687</td></tr></table></body>
+</html>

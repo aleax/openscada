@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Бібліотеки/Пристрої</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FDevices&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Devices" title="Libs/Devices">Libs/Devices</a> and the translation is 26% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_Devices.html" title="Libs/Devices (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/Libs_Devices.html" title="Библиотеки/Устройства (7% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--low">українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FDevices&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Devices" title="Libs/Devices">Libs/Devices</a> and the translation is 28% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_Devices.html" title="Libs/Devices (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/Libs_Devices.html" title="Библиотеки/Устройства (7% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--low">українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -27,7 +27,7 @@
 <tr>
 <td> <a href="Libs_Devices.html" title="Special:MyLanguage/Libs/Devices">Бібліотека промислових пристроїв</a>
 </td>
-<td> 2.3 </td>
+<td> 2.4 </td>
 <td> GPLv2 </td>
 <td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.tmplb_DevLib
 </td>
@@ -497,7 +497,10 @@ The template implements currently for the client, which uses the followed functi
 <li> <i>Retry connection time</i> — retry connection time in seconds, at the connection missing and no response detection.</li>
 <li> <i>Poll events time</i> — time in seconds of the events periodical polling (Class 1).</li>
 <li> <i>Poll all time</i> — time in seconds of the complete data requesting (Class 0,1,2,3).</li></ul></dd>
-<dd>6. RESULT: The logical parameter object will perform interaction and placing of the gathered data to the object "items", creation/placing and checking for commands of the proper attributes, created by the "itemsSet" instruction.</dd></dl>
+<dd>6. RESULT: The logical parameter object will perform interaction and placing of the gathered data to the object "items", creation/placing and checking for commands of the proper attributes, created by the "itemsSet" instruction.</dd>
+<dd>7. In the process of the working, through the tab "Attributes" of operational data, in addition to obtaining the result, it is possible to perform operative setup and control on:
+<ul><li> <i>Items set by</i> — for controlled items naming and definition as attributes and accessible for write.</li>
+<li> <i>All items</i>, {Item attributes} — direct writing for the writable items.</li></ul></dd></dl>
 <p><br />
 </p>
 <table class="wikitable">
@@ -515,12 +518,15 @@ The template implements currently for the client, which uses the followed functi
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsDevsIEC60870Op_uk.png" title="Результат та оперативна конфігурація."><img alt="Результат та оперативна конфігурація." height="706" src="files/LibsDevsIEC60870Op_uk.png" width="485" /></a></div>
 <p><a class="external text" href="https://en.wikipedia.org/wiki/IEC_60870" rel="nofollow noreferrer noopener" target="_blank">IEC 60870</a> у частині 5 є одним з набору стандартів IEC 60870 який визначає системи, що використовуються у віддаленому контролі (телемеханіці — диспетчерському контролі та зборі даних) у інженерній електриці та у застосунках автоматизації енергетичних систем. Частина 5 надає комунікаційний профіль для надсилання базових повідомлень віддаленого контролю між двома системами, який використовує постійні прямі підключення даних між системами.
 </p>
-<ul><li> <b>Загальна працемісткість:</b> 3.8 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span></li>
+<ul><li> <b>Стан реалізації протоколу:</b>
+<ul><li> КЛІЄНТ ЧАСТИНИ 104 (Ethernet транспорт) специфікації;</li>
+<li> Сервіси: STARTDT, STOPDT, TESTFR, Ack, C_IC_NA_1 (100), C_CI_NA_1 (101), C_SC_NA_1 (45), M_SP_NA_1 (1), M_SP_TA_1 (2), M_DP_NA_1 (3), M_DP_TA_1 (4), M_ME_NB_1 (11), M_ME_NC_1 (13), M_ME_TF_1 (36), C_CS_NA_1 (103);</li>
+<li> Для інформаційних сервісів підтримується ввімкнення та вимкнення послідовного (SQ) режиму.</li></ul></li>
+<li> <b>Загальна працемісткість:</b> 3.8 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span></li>
 <li> <b>Спонсорування:</b> Устьянцев Михайло на 3.0 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span>, ТОВ "СВІТоВИР" на 0.8 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span></li>
 <li> <a class="external text" href="http://oscada.org/en/development/tasks/posts/subsystem_daq/iec_60870_5_acquisition_protocol_implementation" rel="nofollow noreferrer noopener" target="_blank">Завдання реалізації</a></li></ul>
 <p><b><u>Деталі</u></b><br />
-Шаблон наразі реалізує частину 104 (Ethernet транспорт) для клієнту та наступних сервісів: STARTDT, STOPDT, TESTFR, Ack, C_IC_NA_1 (100), C_CI_NA_1 (101), C_SC_NA_1 (45), M_SP_NA_1 (1), M_SP_TA_1 (2), M_DP_NA_1 (3), M_DP_TA_1 (4), M_ME_NB_1 (11), M_ME_NC_1 (13), M_ME_TF_1 (36), C_CS_NA_1 (103). Для інформаційних сервісів підтримується ввімкнення та вимкнення послідовного (SQ) режиму.
-</p><p>Враховуючи призначення та сферу застосування, протокол не передбачає прямого визначення запитуваних даних та пристроєм, що його реалізує, надаються всі наявні, за запитом командою C_IC_NA_1, після чого надсилаються лише зміни.
+Враховуючи призначення та сферу застосування, протокол не передбачає прямого визначення запитуваних даних та пристроєм, що його реалізує, надаються всі наявні, за запитом командою C_IC_NA_1, після чого надсилаються лише зміни.
 </p><p>Всі отримані та контрольовані дані акумулюються у об'єкті атрибуту "items" задля подальшого контрою як об'єкт із представленням даних у таблиці віджету "<a href="Libs_Main_graphical_elements.html#objProps" title="Special:MyLanguage/Libs/Main graphical elements">Main.objProps</a>", згідно до визначення <a href="Libs_Main.html#ComplexObject" title="Special:MyLanguage/Libs/Main">комплексного об'єкту</a>.
 </p><p>Для стандартного контролю через атрибути параметру, включно з можливістю архівування, передбачено можливість визначити потрібні дані для створення для них окремого представницького атрибуту, що описується у атрибуті "itemsSet", де вони можуть визначатися як окремо, зі смисловим ідентифікатором та назвою, або за діапазоном із найменуванням по шаблону. Визначення даних у атрибуті "itemsSet" здійснюється записами у форматі <b>ai|di|do:{IOA}[-{EndIOA}][:a[:{NameBase}]]</b>, де:
 </p>
@@ -731,7 +737,10 @@ The template implements currently for the client, which uses the followed functi
 <li> <i>Таймаут перевірки</i>, у секундах.</li>
 <li> <i>Максимально непідтверджених</i> — не використовується у клієнті оскільки він не генерує таких потоків.</li>
 <li> <i>Максимальна відсутність "ack"</i> — максимум вхідних пакетів після яких клієнт надсилає "Ack".</li></ul></dd>
-<dd>6. РЕЗУЛЬТАТ: Об'єкт логічного параметру буде здійснювати взаємодію та розміщення зібраних даних у об'єкті "items", створення/розміщення та перевірку команд за відповідними атрибутами, створеними за інструкцією у "itemsSet".</dd></dl>
+<dd>6. РЕЗУЛЬТАТ: Об'єкт логічного параметру буде здійснювати взаємодію та розміщення зібраних даних у об'єкті "items", створення/розміщення та перевірку команд за відповідними атрибутами, створеними за інструкцією у "itemsSet".</dd>
+<dd>7. У процесі роботи, через вкладку оперативних даних "Атрибути", окрім отримання результату можна здійснювати оперативне налаштування та контроль щодо:
+<ul><li> <i>Набір елементів за</i> — для контрольованого найменування елементів та визначення як атрибути та доступні для запису.</li>
+<li> <i>Всі елементи</i>, {Атрибути елементів} — прямий запис елементів доступних для запису.</li></ul></dd></dl>
 <p><br />
 </p>
 <table class="wikitable">
@@ -747,14 +756,40 @@ The template implements currently for the client, which uses the followed functi
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
 </td></tr></table>
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsDevsIEC62056Op.png" title="Результат та оперативна конфігурація."><img alt="Результат та оперативна конфігурація." height="805" src="../en/files/LibsDevsIEC62056Op.png" width="428" /></a></div>
-<p><a class="external text" href="https://en.wikipedia.org/wiki/IEC_60870" rel="nofollow noreferrer noopener" target="_blank">IEC 62056</a> у частині 46 є одним з набору стандартів IEC 62056 який визначає системи, що використовуються у віддаленому контролі (телемеханіці — диспетчерському контролі та зборі даних) у інженерній електриці та у застосунках автоматизації енергетичних систем. Частина 46 надає шар підключення Даних з використанням протоколу HDLC, який переважно використовується на послідовних інтерфейсах.
+<p><a class="external text" href="https://en.wikipedia.org/wiki/IEC_60870" rel="nofollow noreferrer noopener" target="_blank">IEC 62056</a> є набором стандартів для вимірювання електрики та обміну даними. IEC 62056 стандарти є міжнародними версіями специфікації DLMS/COSEM.
 </p>
-<ul><li> <b>Стан реалізації протоколу:</b> Клієнт частини 46 специфікації, читання прямо визначених OBIS</li>
-<li> <b>Загальна працемісткість:</b> 3.2 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span></li>
+<ul><li> <b>Стан реалізації протоколу:</b>
+<ul><li> КЛІЄНТ ЧАСТИНИ 46 специфікації;</li>
+<li> читання прямо визначених OBIS.</li></ul></li>
+<li> <b>Загальна працемісткість:</b> 3.3 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span></li>
 <li> <b>Спонсорування:</b> ТОВ "СВІТоВИР АВТоМАТИК" на загальну працемісткість</li></ul>
 <p><b><u>Деталі</u></b><br />
-...
-</p><p><b><u>ВВ шаблону</u></b><br />
+DLMS або Специфікація Мов Повідомлень Пристроїв (початково Специфікація Повідомлень Розподілених Ліній) є набором стандартів розроблених та підтримуваних Асоціацією Користувачів DLMS (DLMS UA) та адаптованих IEC TC13 WG14 у серію стандартів IEC 62056.
+</p><p>COSEM або Супутня Специфікація для Вимірювання Енергії, включає набір специфікацій які визначають транспорт та прикладний шар DLMS протоколу. Асоціація Користувачів DLMS визначає протоколи у наборі чотирьох документів специфікації, а саме Зелена Книга, Жовта Книга, Синя Книга та Біла Книга. Синя Книга описує об'єктну модель вимірювача COSEM та ідентифікаційну систему об'єктів OBIS, Зелена Книга описує архітектуру та протоколи, Жовта Книга опікується всіма питаннями зосередженими на тестуванні сумісності, Біла Книга містить глосарій термінів.
+</p><p>При реалізації шаблону використано наступні стандарти:
+</p>
+<ul><li> "IEC 62056-46:2007" — Шар Комунікації Даними з використанням HDLC протоколу.</li>
+<li> "IEC 13239:2002" — Телекомунікації та обмін інформацією між системами — процедури Високо-Рівневого контролю комунікацій даними (HDLC).</li>
+<li> "IEC 62056-53:2006" — прикладний шар COSEM.</li>
+<li> "IEC 62056-61:2006" — система ідентифікації Об'єктів (OBIS).</li>
+<li> "IEC 62056-62:2006" — Інтерфейсні класи.</li></ul>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Цей протокол не визначає шляху запиту-опитування всіх доступних змінних, на кшталт протоколів <a href="#IEC60870">IEC-60870</a> та <a href="#DNP3">DNP3</a>, тож ми маємо вказати їх безпосередньо та попередньо отримати їх для конкретного пристрою.
+</p><p>Шаблон початково було реалізовано для роботи із лічильником електрики <b>Actaris SL7000</b>, для якого отримано наступні корисні OBIS коди запиту:
+</p>
+<dl><dd> <i>Одиночні елементи</i></dd></dl>
+<ul><li> "1-0.0.96.1.255.255-2" — серійний номер;</li>
+<li> "1-0.0.142.1.1.255-2" — версія програми;</li>
+<li> "8-0.0.1.0.0.255-2" — час лічильника;</li>
+<li> "3-1.1.14.7.0.255-0" — Миттєва Частота (основні частоти);</li></ul>
+<dl><dd> <i>Множинні-групові елементи</i></dd></dl>
+<ul><li> "7-255.255.98.133.2.255-2" — Загальні Регістри Енергії;</li>
+<li> "7-1.1.98.128.1.255-2" — кут фази;</li>
+<li> "7-1.1.98.128.2.255-2" — нейтраль;</li>
+<li> "7-1.1.98.128.3.255-2" — Потужність;</li>
+<li> "7-1.1.98.128.4.255-2" — RMS;</li>
+<li> "7-1.1.98.128.5.255-2" — фактор Потужності;</li>
+<li> "7-1.1.98.128.6.255-2" — зсув фази.</li></ul>
+<p><b><u>ВВ шаблону</u></b><br />
 </p>
 <table class="wikitable">
 
@@ -916,7 +951,9 @@ The template implements currently for the client, which uses the followed functi
 <li> <i>Пароль пристрою</i> — пароль доступу пристрою.</li>
 <li> <i>Час відновлення підключення</i> — час відновлення підключення у секундах, за відсутності підключення та відповіді.</li>
 <li> <i>Час опитування всього</i> — час запиту всіх даних у секундах, вказаних у "itemsSet".</li></ul></dd>
-<dd>6. РЕЗУЛЬТАТ: Об'єкт логічного параметру буде здійснювати взаємодію та розміщення зібраних даних у об'єкті "items", створення/розміщення зібраних даних у відповідних атрибутах значень.</dd></dl>
+<dd>6. РЕЗУЛЬТАТ: Об'єкт логічного параметру буде здійснювати взаємодію та розміщення зібраних даних у об'єкті "items", створення/розміщення зібраних даних у відповідних атрибутах значень.</dd>
+<dd>7. У процесі роботи, через вкладку оперативних даних "Атрибути", окрім отримання результату можна здійснювати оперативне налаштування та контроль щодо:
+<ul><li> <i>Набір елементів за</i> — стосовно доповнення OBIS пристрою для їх читання.</li></ul></dd></dl>
 <p><br />
 </p>
 <table class="wikitable">

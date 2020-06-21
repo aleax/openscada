@@ -31,16 +31,19 @@
 <td> <a href="../Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">SelfSystem</a> </td>
 <td> Own protocol of OpenSCADA
 </td>
-<td> 1.5 </td>
+<td> 1.7 </td>
 <td> GPL2 </td>
 <td> prot_SelfSystem.so </td>
 <td> en,uk,ru,de </td>
 <td> x86,x86_64,ARM
 </td>
 <td> Protocol </td>
-<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2012) — the page translation</i></font> </td>
+<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2012) — the page initial translation</i></font> </td>
 <td> Provides own OpenSCADA protocol based at XML and the control interface of OpenSCADA.
 </td></tr></table>
+<p>The module is intended to reflect the OpenSCADA control interface to the network, in order to allow external systems to interact with OpenSCADA, as well as to interact with each other stations built on the basis of OpenSCADA.
+</p><p>The first experience with using this module's functionality was to support remote configuration of one OpenSCADA station from another, through the network and via the configuration module <a href="../Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a>.
+</p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#The_syntax_of_the_protocol"><span class="tocnumber">1</span> <span class="toctext">The syntax of the protocol</span></a></li>
@@ -48,9 +51,6 @@
 </ul>
 </div>
 
-<p>The module is intended to reflect the OpenSCADA control interface to the network, in order to allow external systems to interact with OpenSCADA, as well as to interact with each other stations built on the basis of OpenSCADA.
-</p><p>The first experience with using this module's functionality was to support remote configuration of one OpenSCADA station from another, through the network and via the configuration module <a href="../Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a>.
-</p>
 <h2><span class="mw-headline" id="The_syntax_of_the_protocol"><span class="mw-headline-number">1</span> The syntax of the protocol</span></h2>
 <p>The protocol is based on the "Request-Answer" method. The queries and their structure are given in Table 1.
 </p><p><b>Table 1</b> Structure of the request.
@@ -109,6 +109,7 @@ Any invalid request.
 <dd><i>rqUser</i> — user;</dd>
 <dd><i>rqPass</i> — password;</dd>
 <dd><i>rqAuthForce</i> — force authentication update;</dd>
+<dd><i>rqSeq</i> — the request sequence;</dd>
 <dd><i>conTm</i> — force connection timeout.</dd></dl>
 <p>The result of the request is the XML tree of language of the OpenSCADA control interface.
 </p>

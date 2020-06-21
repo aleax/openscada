@@ -591,7 +591,11 @@
 </p>
 <ul><li> "*" — call for a selecting dialog of the user; </li>
 <li> "$" — change the user to the default one;</li>
-<li> "{user}" — direct change to <i>user</i>, if available and its permission is lesser or equal.</li></ul>
+<li> "{user}" — direct change to <i>user</i>, if available and its permission is lesser or equal; a useful example of changing to the "user" after 30 seconds inactivity:</li></ul>
+<pre style="white-space: pre-wrap;&nbsp;; margin-left: 20pt">
+if((SYS.time()-this.ownerSess().userActTm()) &lt; 30)userSetVis = "";
+else if(this.ownerSess().reqUser()&nbsp;!= "user") userSetVis = "user";
+</pre>
 </td></tr>
 <tr>
 <td> vs_background (the views "Line edit", "Text edit", "Combo box", "List", "Tree", "Table" of the primitive "FormEl") </td>

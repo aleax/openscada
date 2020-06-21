@@ -86,7 +86,7 @@
 
 <h2><span class="mw-headline" id="Purpose"><span class="mw-headline-number">1</span> Purpose</span></h2>
 <p>This module of the direct visualization of the VCA serves only for the execution of the VCA interfaces in the area of WEB-technologies!
-</p><p>The user interface forms in WEB-browser, by reference to the WEB-server and receiving from it XHTML-document over HTTP. In this case, the WEB-server — OpenSCADA, which supports standard communication mechanisms of the TCP-networks (module <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Transport.Sockets</a>), hypertext transfer protocol (module <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a>), as well as encryption of the traffic between the browser and the server (<a href="../Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">Transport.SSL</a>). Therefore, in order to access the user interface provided by this module, OpenSCADA must configure transport (Transport.Sockets or Transport.SSL) in conjunction with the HTTP protocol (Protocol.HTTP). OpenSCADA comes with configuration files that contain the Transport.Sockets configuration for ports 10002 and 10004. Consequently, the module interface, in the default, will be available at URL: "http://localhost:10002" and "http://localhost:10004".
+</p><p>The user interface forms in WEB-browser, by reference to the WEB-server and receiving from it XHTML-document over HTTP. In this case, the WEB-server — OpenSCADA, which supports standard communication mechanisms of the TCP-networks (module <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Transport.Sockets</a>), hypertext transfer protocol (module <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a>), as well as encryption of the traffic between the browser and the server (<a href="../Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">Transport.SSL</a>). Therefore, in order to access the user interface provided by this module, OpenSCADA must configure transport (Transport.Sockets or Transport.SSL) in conjunction with the HTTP protocol (Protocol.HTTP). OpenSCADA comes with configuration files that contain the Transport.Sockets configuration for port 10002. Consequently, the module interface, in the default, will be available at URL: "http://localhost:10002".
 </p><p>The final version of this VCA module, built on the basis of this module, will provide:
 </p>
 <ul><li> three levels of difficulty in the formation of the visualization interface, which allow organically to develop and apply the tools by the principle — from simple to complex:</li></ul>
@@ -242,7 +242,11 @@
 </p>
 <ul><li> "*" — call for a selecting dialog of the user; </li>
 <li> "$" — change the user to the default one;</li>
-<li> "{user}" — direct change to <i>user</i>, if available and its permission is lesser or equal.</li></ul>
+<li> "{user}" — direct change to <i>user</i>, if available and its permission is lesser or equal; a useful example of changing to the "user" after 30 seconds inactivity:</li></ul>
+<pre style="white-space: pre-wrap;&nbsp;; margin-left: 20pt">
+if((SYS.time()-this.ownerSess().userActTm()) &lt; 30)userSetVis = "";
+else if(this.ownerSess().reqUser()&nbsp;!= "user") userSetVis = "user";
+</pre>
 </td></tr>
 <tr>
 <td> vs_goHttpUrl (view "Button" of the primitive "FormEl") </td>

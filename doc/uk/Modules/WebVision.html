@@ -86,7 +86,7 @@
 
 <h2><span class="mw-headline" id=".D0.9F.D1.80.D0.B8.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">1</span> Призначення</span></h2>
 <p>Даний модуль безпосередньої візуалізації СВУ призначено тільки для виконання інтерфейсів СВУ у середовищі WEB-технологій!
-</p><p>Інтерфейс користувача формується у WEB-браузері шляхом звернення до WEB-серверу та отримання від нього XHTML-документу за протоколом HTTP. У цьому випадку, у ролі WEB-серверу виступає OpenSCADA, яка підтримує стандартні комунікаційні механізми TCP-мереж (модуль <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Transport.Sockets</a>), протокол передачі гіпертексту (модуль <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a>), а також шифрування трафіку між браузером та сервером (<a href="../Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">Transport.SSL</a>). Виходячи з цього, для отримання доступу до інтерфейсу користувача, який надається цим модулем, потрібно у OpenSCADA налаштувати транспорт (Transport.Sockets або Transport.SSL) у поєднані з протоколом HTTP (Protocol.HTTP). Разом з OpenSCADA постачаються конфігураційні файли, які містять налаштування Transport.Sockets для портів 10002 та 10004. Відповідно, інтерфейс модуля, по замовченню, буде доступний за URL: "http://localhost:10002" та "http://localhost:10004".
+</p><p>Інтерфейс користувача формується у WEB-браузері шляхом звернення до WEB-серверу та отримання від нього XHTML-документу за протоколом HTTP. У цьому випадку, у ролі WEB-серверу виступає OpenSCADA, яка підтримує стандартні комунікаційні механізми TCP-мереж (модуль <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Transport.Sockets</a>), протокол передачі гіпертексту (модуль <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a>), а також шифрування трафіку між браузером та сервером (<a href="../Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">Transport.SSL</a>). Виходячи з цього, для отримання доступу до інтерфейсу користувача, який надається цим модулем, потрібно у OpenSCADA налаштувати транспорт (Transport.Sockets або Transport.SSL) у поєднані з протоколом HTTP (Protocol.HTTP). Разом з OpenSCADA постачаються конфігураційні файли, які містять налаштування Transport.Sockets для порту 10002. Відповідно, інтерфейс модуля, по замовченню, буде доступний за URL: "http://localhost:10002".
 </p><p>Фінальна версія цього модуля СВУ, яка побудована на основі даного модуля, забезпечить:
 </p><p>Перелічимо можливості, які зможе та забезпечує СВУ, побудована на основі даного проекту:
 </p>
@@ -243,7 +243,11 @@
 </p>
 <ul><li> "*" — виклик діалогу обрання користувача;</li>
 <li> "$" — зміна користувача на типового;</li>
-<li> "{користувач}" — пряма зміна на <i>користувач</i>, якщо він доступний та його права менше або дорівнюють.</li></ul>
+<li> "{користувач}" — пряма зміна на <i>користувач</i>, якщо він доступний та його права менше або дорівнюють; корисний приклад зміни на користувача "user" після 30 секунд неактивності:</li></ul>
+<pre style="white-space: pre-wrap;&nbsp;; margin-left: 20pt">
+if((SYS.time()-this.ownerSess().userActTm()) &lt; 30)userSetVis = "";
+else if(this.ownerSess().reqUser()&nbsp;!= "user") userSetVis = "user";
+</pre>
 </td></tr>
 <tr>
 <td> vs_goHttpUrl (вигляд "Кнопка" примітиву "FormEl") </td>

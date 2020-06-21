@@ -2087,7 +2087,7 @@ Additional flags to <i>TFld</i> (enum — TCfg::AttrFlg):
 <li> <i>void setView( bool vw );</i> — Setting of the sign "The cell is visible" в <i>vw</i>.</li>
 <li> <i>void setKeyUse( bool vl );</i> — Setting of the sign "Use the key" in <i>vl</i>.</li>
 <li> <i>void setNoTransl( bool vl );</i> — Setting of the sign "No translation".</li>
-<li> <i>void setReqKey( bool vl );</i> — Setting of the sign "Requests key".</li>
+<li> <i>void setReqKey( bool vl, bool treatDep = true );</i> — Setting of the sign "Requests key", treating the dependencies by <i>treatDep</i>.</li>
 <li> <i>void setExtVal( bool vw );</i> — Setting of the sign "Extended value".</li>
 <li> <i>void toDefault( bool notSetType = false );</i> — Setting the field value to the default one, and without setting the field type at <i>notSetType</i>.</li>
 <li> <i>TFld &amp;fld( ) const;</i> —  Configuration of the cell.</li>

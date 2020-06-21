@@ -1,0 +1,194 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Modules/DBGate - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../../en/files/Logo-big.png" /></a></div><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Modules/DBGate</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/DBGate.html" title="Модулі/Шлюз баз даних (100% translated)">українська</a></div></div>
+<table class="wikitable">
+
+<tr>
+<th> Module </th>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Platforms </th>
+<th> Type </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/DBGate.html" title="Special:MyLanguage/Modules/DBGate">DBGate</a> </td>
+<td> DB gate
+</td>
+<td> 1.0 </td>
+<td> GPL2 </td>
+<td> bd_DBGate.so </td>
+<td> en,uk </td>
+<td> x86,x86_64,ARM
+</td>
+<td> DB </td>
+<td> Roman Savochenko </td>
+<td> BD module. Allows to locate databases of the remote OpenSCADA stations to local ones.
+<ul><li> <b>To Do:</b></li></ul>
+<dl><dd>- appending the function fieldSeek() for the local cache implementation by the deep seeking to the XML-context on the remote part.</dd></dl>
+</td></tr></table>
+<p>Main function of this module is the data reflection of <a href="../Program_manual.html#DB" title="Special:MyLanguage/Documents/Program manual">the subsystem "Databases"</a> of the remote OpenSCADA stations on the local ones. In its work, the module uses the <a href="../Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">OpenSCADA self protocol</a> and service functions of the subsystem "Databases". This module can be useful:
+</p>
+<ul><li> in multiple-network accessing to the remote station DB, built on the local ones' basis like to <a href="../Modules/SQLite.html" title="Special:MyLanguage/Modules/SQLite">SQLite</a>, such transforming their to the network ones;</li>
+<li> in proxy-access to the remote station DB, built on the network DBMS basis, through the OpenSCADA control interface, what can be also secured, using <a href="../Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">SSL</a>;</li>
+<li> in spreading between network stations the complex user area functions with DAQ and UI parts linked on DB, like to <a href="../Libs_Prescriptions.html" title="Special:MyLanguage/Libs/Prescriptions">Prescriptions</a>.</li></ul>
+<p>The module realizes following functions:
+</p>
+<ul><li> Enabling the remote DB at enabling the local DB object.</li>
+<li> Getting the available tables list of the remote DB.</li>
+<li> Adding with creating the new requested table on the remote DB.</li>
+<li> Complete removing the requested table on the remote DB.</li>
+<li> Transmitting the complete SQL-requests to the remote DB.</li>
+<li> Transmitting the OpenSCADA DB requests to the remote DB for: fieldStruct(), fieldSeek(), fieldGet(), fieldSet() and fieldDel().</li></ul>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Operations_over_the_database"><span class="tocnumber">1</span> <span class="toctext">Operations over the database</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Operations_over_the_table"><span class="tocnumber">2</span> <span class="toctext">Operations over the table</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Operations_over_the_table_content"><span class="tocnumber">3</span> <span class="toctext">Operations over the table content</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Permissions"><span class="tocnumber">4</span> <span class="toctext">Permissions</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Productivity_of_the_DB"><span class="tocnumber">5</span> <span class="toctext"><span>Productivity of the DB</span></span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Operations_over_the_database"><span class="mw-headline-number">1</span> Operations over the database</span></h2>
+<p>The operations of opening and closing of the database is supported only for the local DB object and without possibility of creating new database and deleting the existing ones at the close, on the remote station. In terms of the subsystem "DB" of OpenSCADA, opening of DB is its registration-connecting to the remote DB, for further using of the program. It also supports the operation of requesting the list of tables in the remote database.
+</p><p>The DB-object configuration page also reflects mostly properties of the remote DB, besides:
+</p>
+<ul><li> "State &gt; Enabled" — own state and command of dynamic enabling the object.</li>
+<li> "Configuration &gt; Identifier" — own object identifier.</li>
+<li> "Configuration &gt; {Name,Description}" — own values for not empty or the remote DB values.</li>
+<li> "Configuration &gt; Address" — own address of a DB, further about its format.</li>
+<li> "Configuration &gt; To Enable" — own state of it enabling at the program start.</li></ul>
+<p>The DBGate database is addressed by specifying-selecting the DB name in the format "<b>{RemoteStation}.{DBModule}.{DB}</b>", where:
+</p>
+<ul><li> <i>RemoteStation</i> — remote OpenSCADA station, registered in the <a href="../Program_manual.html#Transports" title="Special:MyLanguage/Documents/Program manual">table of the OpenSCADA stations</a>;</li>
+<li> <i>DBModule</i> — DB-module identifier of the remote station;</li>
+<li> <i>DB</i> — database identifier of the remote station.</li></ul>
+<h2><span class="mw-headline" id="Operations_over_the_table"><span class="mw-headline-number">2</span> Operations over the table</span></h2>
+<p>Supports transmitting to the remote station for operations of opening, closing tables, with the possibility of creating a new table when opening and removing an existing one when closed, as well as querying the structure of the table.
+</p>
+<h2><span class="mw-headline" id="Operations_over_the_table_content"><span class="mw-headline-number">3</span> Operations over the table content</span></h2>
+<p>Transmitting to DB of the remote station for the table operations:
+</p>
+<ul><li> scanning of the table records;</li>
+<li> requesting the values of specified records;</li>
+<li> setting the values of specified records;</li>
+<li> removing the records.</li></ul>
+<p>API of the subsystem "DB" suppose the access to the contents of the table on the value of key(s) fields. Thus, the operation of requesting of the record implies the preset of key columns of the object TConfig, which will do the request. Creating a new record (row) is performed by setting the record values that are missing.
+</p><p>The table dynamically structure change depends on the linked remote DB type only.
+</p><p>The module implements the mechanism of support the multilingual text variables indirectly in the core functions of working with <a href="../API.html#TBDS" title="Special:MyLanguage/Documents/API">the configuration file</a>: <i>TBDS::dataSeek()</i>, <i>TBDS::dataGet()</i> and <i>TBDS::dataSet()</i>.
+</p>
+<h2><span class="mw-headline" id="Permissions"><span class="mw-headline-number">4</span> Permissions</span></h2>
+<p>Access rights to the end side database are determined by the rights specific to the remote DB type and by the rights of the remote station user accessing the subsystem DB in whole, for the rights described in the follow table:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Function/operation/service </th>
+<th> Rights relatively to "root:BD:{other}"
+</th></tr>
+<tr>
+<td> Enabling DB </td>
+<td> W:W:-
+</td></tr>
+<tr>
+<td> Available tables list </td>
+<td> R:R:R
+</td></tr>
+<tr>
+<td> Creating table </td>
+<td> W:W:-
+</td></tr>
+<tr>
+<td> Deleting table </td>
+<td> W:W:-
+</td></tr>
+<tr>
+<td> SQL request (call:/serv/SQL) </td>
+<td> W:W:-
+</td></tr>
+<tr>
+<td> Field structure (call:/serv/fieldStruct) </td>
+<td> R:R:R
+</td></tr>
+<tr>
+<td> Field seek (call:/serv/fieldSeek) </td>
+<td> R:R:R
+</td></tr>
+<tr>
+<td> Field get (call:/serv/fieldGet) </td>
+<td> R:R:R
+</td></tr>
+<tr>
+<td> Field set (call:/serv/fieldSet) </td>
+<td> W:W:-
+</td></tr>
+<tr>
+<td> Field delete (call:/serv/fieldDel) </td>
+<td> W:W:-
+</td></tr></table>
+<h2><span class="mw-headline" id="Productivity_of_the_DB"><span class="mw-headline-number">5</span> <span id="Tests" title="#Tests">Productivity of the DB</span></span></h2>
+<p>Measurement of the performance of the database, more precisely the gate, is carried out by testing the "database" of the module "SystemTests", by performing operations on records by the structure "<b>name char (20), descr char (50), val double (10.2), id int (7), stat bool, reqKey string, reqVal string</b>" twice, first for the remote environment DB, and then to the same DB, but through the gateway — this module.
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Operations for 1000 records, seconds </th>
+<th> AMD A8-6500 &lt;Ethernet&gt; AMD Phenom II X4 [RAID1] &lt;&gt; SQLite </th>
+<th> AMD A8-6500 &lt;Ethernet&gt; AMD Phenom II X4 [RAID1] &lt;&gt; MySQL
+</th></tr>
+<tr>
+<td> <i>Creating:</i> </td>
+<td> 2.36 &gt; 0.35 </td>
+<td> 3.39 &gt; 1.35
+</td></tr>
+<tr>
+<td> <i>Updating:</i> </td>
+<td> 2.31 &gt; 0.31 </td>
+<td> 2.97 &gt; 0.94
+</td></tr>
+<tr>
+<td> <i>Getting:</i> </td>
+<td> 2.45 &gt; 0.2 </td>
+<td> 2.67 &gt; 0.49
+</td></tr>
+<tr>
+<td> <i>Seeking:</i> </td>
+<td> 2.22 &gt; 0.13 </td>
+<td> 3.59 &gt; 1.48
+</td></tr>
+<tr>
+<td> <i>Seeking in preload<sup>1</sup>:</i> </td>
+<td> 1.93 &gt; 0.02 </td>
+<td> 1.88 &gt; 0.04
+</td></tr>
+<tr>
+<td> <i>Deleting:</i> </td>
+<td> 1.85 &gt; 0.051 </td>
+<td> 2.14 &gt; 0.27
+</td></tr></table>
+<p><sup>1</sup> — this operation has no effect because preloading-caching is performed only on the remote station side.
+</p>
+
+
+
+
+
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/DBGate/en">Modules/DBGate/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2687</td></tr></table></body>
+</html>

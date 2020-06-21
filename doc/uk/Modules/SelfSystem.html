@@ -31,7 +31,7 @@
 <td> <a href="../Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">SelfSystem</a> </td>
 <td> Власний протокол OpenSCADA
 </td>
-<td> 1.5 </td>
+<td> 1.7 </td>
 <td> GPL2 </td>
 <td> prot_SelfSystem.so </td>
 <td> en,uk,ru,de </td>
@@ -41,6 +41,9 @@
 <td> Роман Савоченко </td>
 <td> Надає власний протокол OpenSCADA заснований на XML та інтерфейсі керування OpenSCADA.
 </td></tr></table>
+<p>Модуль призначено для віддзеркалення інтерфейсу управління OpenSCADA у мережу, з метою надання можливості зовнішнім системам взаємодіяти із OpenSCADA, а також для взаємодії між собою станцій, побудованих на основі OpenSCADA.
+</p><p>Першим досвідом використання функцій цього модуля стала підтримка можливості віддаленої конфігурації однієї OpenSCADA станції з іншою, через мережу та посередництвом модуля конфігурації <a href="../Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a>.
+</p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#.D0.A1.D0.B8.D0.BD.D1.82.D0.B0.D0.BA.D1.81.D0.B8.D1.81_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.83"><span class="tocnumber">1</span> <span class="toctext">Синтаксис протоколу</span></a></li>
@@ -48,9 +51,6 @@
 </ul>
 </div>
 
-<p>Модуль призначено для віддзеркалення інтерфейсу управління OpenSCADA у мережу, з метою надання можливості зовнішнім системам взаємодіяти із OpenSCADA, а також для взаємодії між собою станцій, побудованих на основі OpenSCADA.
-</p><p>Першим досвідом використання функцій цього модуля стала підтримка можливості віддаленої конфігурації однієї OpenSCADA станції з іншою, через мережу та посередництвом модуля конфігурації <a href="../Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a>.
-</p>
 <h2><span class="mw-headline" id=".D0.A1.D0.B8.D0.BD.D1.82.D0.B0.D0.BA.D1.81.D0.B8.D1.81_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.83"><span class="mw-headline-number">1</span> Синтаксис протоколу</span></h2>
 <p>Протокол побудовано за методом "Запит-Відповідь". Запити та їх структура наведені у таблиці 1.
 </p><p><b>Таблиця 1</b> Структура запиту.
@@ -109,6 +109,7 @@
 <dd><i>rqUser</i> — користувач;</dd>
 <dd><i>rqPass</i> — пароль;</dd>
 <dd><i>rqAuthForce</i> — примусово оновити аутентифікацію;</dd>
+<dd><i>rqSeq</i> — послідовність запиту;</dd>
 <dd><i>conTm</i> — примусовий таймаут підключення.</dd></dl>
 <p>Результатом запиту також є XML дерево мови інтерфейсу управління OpenSCADA.
 </p>

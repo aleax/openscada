@@ -50,7 +50,7 @@
 </ul>
 </div>
 
-<p>Main function of this module is the data reflection of <a href="../Program_manual.html#DAQ" title="Special:MyLanguage/Documents/Program manual">the subsystem "Data acquisition"</a> of the remote OpenSCADA stations on the local ones. In its work, the module uses the OpenSCADA self protocol (SelfSystem) and service functions of the subsystem "Data acquisition".
+<p>Main function of this module is the data reflection of <a href="../Program_manual.html#DAQ" title="Special:MyLanguage/Documents/Program manual">the subsystem "Data acquisition"</a> of the remote OpenSCADA stations on the local ones. In its work, the module uses the <a href="../Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">OpenSCADA self protocol</a> and service functions of the subsystem "Data acquisition".
 </p><p>The module realizes following functions:
 </p>
 <ul><li> Reflection of the parameters structure of the subsystem "Data acquisition" of the remote station. This structure can be periodically synchronized while working.</li>
@@ -80,7 +80,7 @@
 <li> Period of synchronization with the remote station, in seconds. Zero for disable the periodic synchronization.</li>
 <li> List of the reflected remote stations. Several stations in the list enable the vertical redundancy mechanism.</li>
 <li> List of the reflected controller objects and parameters. The list can be used as for controller objects for the reflection of all their parameters, and for individual parameters too.</li>
-<li> Command to go to configuration of the remote stations list.</li>
+<li> Command to go to configuration of the <a href="../Program_manual.html#Transports" title="Special:MyLanguage/Documents/Program manual">OpenSCADA remote stations list</a>.</li>
 <li> Allow the automatic removal of parameters and attributes to update to the actual state.</li>
 <li> Placing different controllers to the different virtual parameters.</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> In the production mode, it's better to turn this off!</dd></dl>

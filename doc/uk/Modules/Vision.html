@@ -593,7 +593,11 @@
 </p>
 <ul><li> "*" — виклик діалогу обрання користувача;</li>
 <li> "$" — зміна користувача на типового;</li>
-<li> "{користувач}" — пряма зміна на <i>користувач</i>, якщо він доступний та його права менше або дорівнюють.</li></ul>
+<li> "{користувач}" — пряма зміна на <i>користувач</i>, якщо він доступний та його права менше або дорівнюють; корисний приклад зміни на користувача "user" після 30 секунд неактивності:</li></ul>
+<pre style="white-space: pre-wrap;&nbsp;; margin-left: 20pt">
+if((SYS.time()-this.ownerSess().userActTm()) &lt; 30)userSetVis = "";
+else if(this.ownerSess().reqUser()&nbsp;!= "user") userSetVis = "user";
+</pre>
 </td></tr>
 <tr>
 <td> vs_background (види "Line edit", "Text edit", "Combo box", "List", "Tree", "Table" примітиву "FormEl") </td>

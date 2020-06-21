@@ -1,4 +1,8 @@
 2020-06-21 Roman (stable)
+- DOC: Updating the offline documentation.
+
+
+2020-06-21 Roman (stable)
 - DOC: Document of the module "DBGate" appended for downloading to offline.
 - data/ModelsDB/{AGLKS/oscada_AGLKS.xml,Boiler/oscada_Boiler.xml}: The input Sockets' transports unified in the names "WEB" and "CNTR".
 - data/ModelsDB/AGLKS/St.sql: The input SSL transports unified in the names "WEB" and "CNTR" and

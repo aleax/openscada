@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Libs/Devices</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/Libs_Devices.html" title="Библиотеки/Устройства (7% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--low" href="../uk/Libs_Devices.html" title="Бібліотеки/Пристрої (26% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/Libs_Devices.html" title="Библиотеки/Устройства (7% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--low" href="../uk/Libs_Devices.html" title="Бібліотеки/Пристрої (28% translated)">українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -27,7 +27,7 @@
 <tr>
 <td> <a href="Libs_Devices.html" title="Special:MyLanguage/Libs/Devices">Industrial devices library</a>
 </td>
-<td> 2.3 </td>
+<td> 2.4 </td>
 <td> GPLv2 </td>
 <td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.tmplb_DevLib
 </td>
@@ -497,7 +497,10 @@ The template implements currently for the client, which uses the followed functi
 <li> <i>Retry connection time</i> — retry connection time in seconds, at the connection missing and no response detection.</li>
 <li> <i>Poll events time</i> — time in seconds of the events periodical polling (Class 1).</li>
 <li> <i>Poll all time</i> — time in seconds of the complete data requesting (Class 0,1,2,3).</li></ul></dd>
-<dd>6. RESULT: The logical parameter object will perform interaction and placing of the gathered data to the object "items", creation/placing and checking for commands of the proper attributes, created by the "itemsSet" instruction.</dd></dl>
+<dd>6. RESULT: The logical parameter object will perform interaction and placing of the gathered data to the object "items", creation/placing and checking for commands of the proper attributes, created by the "itemsSet" instruction.</dd>
+<dd>7. In the process of the working, through the tab "Attributes" of operational data, in addition to obtaining the result, it is possible to perform operative setup and control on:
+<ul><li> <i>Items set by</i> — for controlled items naming and definition as attributes and accessible for write.</li>
+<li> <i>All items</i>, {Item attributes} — direct writing for the writable items.</li></ul></dd></dl>
 <p><br />
 </p>
 <table class="wikitable">
@@ -515,12 +518,15 @@ The template implements currently for the client, which uses the followed functi
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsDevsIEC60870Op.png" title="Result and the operative setup."><img alt="Result and the operative setup." height="723" src="files/LibsDevsIEC60870Op.png" width="426" /></a></div>
 <p><a class="external text" href="https://en.wikipedia.org/wiki/IEC_60870" rel="nofollow noreferrer noopener" target="_blank">IEC 60870</a> part 5 is one from the IEC 60870 set of standards which defines systems used for telecontrol (supervisory control and data acquisition) in electrical engineering and power system automation applications. Part 5 provides a communication profile for sending basic telecontrol messages between two systems, which uses permanent directly connected data circuits between the systems.
 </p>
-<ul><li> <b>Total complexity:</b> 3.8 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
+<ul><li> <b>State of the protocol implementing:</b>
+<ul><li> CLIENT of the specification PART 104 (Ethernet transport);</li>
+<li> Services: STARTDT, STOPDT, TESTFR, Ack, C_IC_NA_1 (100), C_CI_NA_1 (101), C_SC_NA_1 (45), M_SP_NA_1 (1), M_SP_TA_1 (2), M_DP_NA_1 (3), M_DP_TA_1 (4), M_ME_NB_1 (11), M_ME_NC_1 (13), M_ME_TF_1 (36), C_CS_NA_1 (103);</li>
+<li> For information ones, the sequential (SQ) mode enabling and disabling are supported.</li></ul></li>
+<li> <b>Total complexity:</b> 3.8 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
 <li> <b>Sponsored by:</b> Ustijancev Michael for 3.0 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>, SVItoVYR Ltd for 0.8 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
 <li> <a class="external text" href="http://oscada.org/en/development/tasks/posts/subsystem_daq/iec_60870_5_acquisition_protocol_implementation" rel="nofollow noreferrer noopener" target="_blank">Implementing task</a></li></ul>
 <p><b><u>Details</u></b><br />
-The template currently implements the part 104 (Ethernet transport) for the client and followed services: STARTDT, STOPDT, TESTFR, Ack, C_IC_NA_1 (100), C_CI_NA_1 (101), C_SC_NA_1 (45), M_SP_NA_1 (1), M_SP_TA_1 (2), M_DP_NA_1 (3), M_DP_TA_1 (4), M_ME_NB_1 (11), M_ME_NC_1 (13), M_ME_TF_1 (36), C_CS_NA_1 (103). For information ones, the sequential (SQ) mode enabling and disabling are supported.
-</p><p>Considering the purpose and the application area, the protocol does not provide the direct determination of the requested data and the device, that implements it, provides all available ones upon request by the C_IC_NA_1 command, after which only changes are sent.
+Considering the purpose and the application area, the protocol does not provide the direct determination of the requested data and the device, that implements it, provides all available ones upon request by the C_IC_NA_1 command, after which only changes are sent.
 </p><p>All received and controlled data is accumulated in an object of the attribute "items" for further control as an object in a table of the widget "<a href="Libs_Main_graphical_elements.html#objProps" title="Special:MyLanguage/Libs/Main graphical elements">Main.objProps</a>", according to the <a href="Libs_Main.html#ComplexObject" title="Special:MyLanguage/Libs/Main">complex object</a> definition.
 </p><p>For standard control over parameter attributes, including archiving, it is possible to define the necessary data to create a separate representative attribute for them, which is described in the attribute "itemsSet", where they can be defined individually, with a semantic identifier and name, or in a range named by a template. The data in the attribute "itemsSet" is defined by records in the format <b>ai|di|do:{IOA}[-{EndIOA}][:a[:{NameBase}]]</b>, where:
 </p>
@@ -731,7 +737,10 @@ The template currently implements the part 104 (Ethernet transport) for the clie
 <li> <i>Test timeout</i>, in seconds.</li>
 <li> <i>Maximum unconfirmed</i> — not used into the client since it is not generate such flows.</li>
 <li> <i>Maximum no ack</i> — maximum input packages after what the client will send "Ack".</li></ul></dd>
-<dd>6. RESULT: The logical parameter object will perform interaction and placing of the gathered data to the object "items", creation/placing and checking for commands of the proper attributes, created by the "itemsSet" instruction.</dd></dl>
+<dd>6. RESULT: The logical parameter object will perform interaction and placing of the gathered data to the object "items", creation/placing and checking for commands of the proper attributes, created by the "itemsSet" instruction.</dd>
+<dd>7. In the process of the working, through the tab "Attributes" of operational data, in addition to obtaining the result, it is possible to perform operative setup and control on:
+<ul><li> <i>Items set by</i> — for controlled items naming and definition as attributes and accessible for write.</li>
+<li> <i>All items</i>, {Item attributes} — direct writing for the writable items.</li></ul></dd></dl>
 <p><br />
 </p>
 <table class="wikitable">
@@ -747,14 +756,40 @@ The template currently implements the part 104 (Ethernet transport) for the clie
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
 </td></tr></table>
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsDevsIEC62056Op.png" title="Result and the operative setup."><img alt="Result and the operative setup." height="805" src="files/LibsDevsIEC62056Op.png" width="428" /></a></div>
-<p><a class="external text" href="https://en.wikipedia.org/wiki/IEC_62056" rel="nofollow noreferrer noopener" target="_blank">IEC 62056</a> part 46 is one from the IEC 62056 set of standards which defines systems used for telecontrol (supervisory control and data acquisition) in electrical engineering and power system automation applications. Part 46 defines Data link layer using HDLC protocol, which uses mostly on serial interfaces.
+<p><a class="external text" href="https://en.wikipedia.org/wiki/IEC_62056" rel="nofollow noreferrer noopener" target="_blank">IEC 62056</a> is a set of standards for electricity metering data exchange. The IEC 62056 standards are the international standard versions of the DLMS/COSEM specification.
 </p>
-<ul><li> <b>State of the protocol implementing:</b> Client of the specification part 46, reading of the directly specified OBIS</li>
-<li> <b>Total complexity:</b> 3.2 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
+<ul><li> <b>State of the protocol implementing:</b>
+<ul><li> CLIENT of the specification PART 46;</li>
+<li> reading of the directly specified OBISes.</li></ul></li>
+<li> <b>Total complexity:</b> 3.3 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
 <li> <b>Sponsored by:</b> SVItoVYR Ltd for whole complexity</li></ul>
 <p><b><u>Details</u></b><br />
-...
-</p><p><b><u>Template IOs</u></b><br />
+DLMS or Device Language Message Specification (originally Distribution Line Message Specification), is the suite of standards developed and maintained by the DLMS User Association (DLMS UA) and has been adopted by the IEC TC13 WG14 into the IEC 62056 series of standards.
+</p><p>COSEM or Companion Specification for Energy Metering, includes a set of specifications that defines the transport and application layers of the DLMS protocol. The DLMS User Association defines the protocols into a set of four specification documents namely Green Book, Yellow Book, Blue Book and White Book. The Blue Book describes the COSEM meter object model and the OBIS object identification system, the Green Book describes the architecture and protocols, the Yellow Book treats all the questions concerning conformance testing, the White Book contains the glossary of terms.
+</p><p>In the template implementation were used the follow standards:
+</p>
+<ul><li> "IEC 62056-46:2007" — Data link layer using HDLC protocol.</li>
+<li> "IEC 13239:2002" — Telecommunications and information exchange between systems — High-level data link control (HDLC) procedures.</li>
+<li> "IEC 62056-53:2006" — COSEM application layer.</li>
+<li> "IEC 62056-61:2006" — Object identification system (OBIS).</li>
+<li> "IEC 62056-62:2006" — Interface classes.</li></ul>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> This protocol doesn't specify a way of requesting-acquisition all available variables of the device, like to the protocols <a href="#IEC60870">IEC-60870</a> and <a href="#DNP3">DNP3</a>, so we need to point their directly and obtain their before that anywhere for the concrete device.
+</p><p>The template was initially implemented to work with the electricity counter <b>Actaris SL7000</b>, for which there were obtained follow useful requesting OBIS codes:
+</p>
+<dl><dd> <i>Single items</i></dd></dl>
+<ul><li> "1-0.0.96.1.255.255-2" — serial number;</li>
+<li> "1-0.0.142.1.1.255-2" — software version;</li>
+<li> "8-0.0.1.0.0.255-2" — counter time;</li>
+<li> "3-1.1.14.7.0.255-0" — Frequency Instantaneous (mains frequency);</li></ul>
+<dl><dd> <i>Multiple-group items</i></dd></dl>
+<ul><li> "7-255.255.98.133.2.255-2" — Total Energy Registers;</li>
+<li> "7-1.1.98.128.1.255-2" — phase angle;</li>
+<li> "7-1.1.98.128.2.255-2" — neutral;</li>
+<li> "7-1.1.98.128.3.255-2" — Power;</li>
+<li> "7-1.1.98.128.4.255-2" — RMS;</li>
+<li> "7-1.1.98.128.5.255-2" — Power factor;</li>
+<li> "7-1.1.98.128.6.255-2" — phase offset.</li></ul>
+<p><b><u>Template IOs</u></b><br />
 </p>
 <table class="wikitable">
 
@@ -916,7 +951,9 @@ The template currently implements the part 104 (Ethernet transport) for the clie
 <li> <i>Password the device</i> — the device access password.</li>
 <li> <i>Retry connection time</i> — retry connection time in seconds, at the connection missing and no response detection.</li>
 <li> <i>Poll all time</i> — time in seconds of the complete data requesting, pointed in the "itemsSet".</li></ul></dd>
-<dd>6. RESULT: The logical parameter object will perform interaction and placing of the gathered data to the object "items", creation/placing the gathered data to the proper value attributes.</dd></dl>
+<dd>6. RESULT: The logical parameter object will perform interaction and placing of the gathered data to the object "items", creation/placing the gathered data to the proper value attributes.</dd>
+<dd>7. In the process of the working, through the tab "Attributes" of operational data, in addition to obtaining the result, it is possible to perform operative setup and control on:
+<ul><li> <i>Items set by</i> — for appending the device's OBIS to their reading.</li></ul></dd></dl>
 <p><br />
 </p>
 <table class="wikitable">
