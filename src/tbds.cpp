@@ -222,7 +222,7 @@ bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &c
 			if(!cfg.cfgPresent(fId))
 			    cfg.elem().fldAdd(new TFld(fId.c_str(),fId.c_str(),tp,flg,len.c_str(),def.c_str()));
 			TCfg &cf = cfg.cfg(fId);
-			cf.setView(isView); cf.setKeyUse(isKeyUse); cf.setNoTransl(isNoTransl); cf.setReqKey(isReqKey); cf.setExtVal(isExtVal);
+			cf.setView(isView); cf.setKeyUse(isKeyUse); cf.setNoTransl(isNoTransl); cf.setReqKey(isReqKey, false); cf.setExtVal(isExtVal);
 		    }
 		}
 
@@ -421,6 +421,11 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, bool f
 		for(unsigned iEl = 0; iEl < cf_el.size(); iEl++) {
 		    vnm = cf_el[iEl];
 		    TCfg &cf = cfg.cfg(vnm);
+		    if(!cf.isKey() && !cf.view()) {
+			if(localCfgCtx && !fldCnt) wel->attrDel(vnm+"_str");
+			continue;
+		    }
+
 		    bool isTransl = (cf.fld().flg()&TFld::TransltText && !cf.noTransl() &&
 				Mess->lang2CodeBase().size() && Mess->lang2Code() != Mess->lang2CodeBase());
 		    if(isCreate || !isTransl) {
@@ -952,13 +957,13 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	    }
 	return;
     }
-    else if(a_path == "/serv/fieldStruct" && ctrChkNode(opt,"call",RWRWR_,"root",SDB_ID,SEC_WR)) {
+    else if(a_path == "/serv/fieldStruct" && ctrChkNode(opt,"call",RWRWR_,"root",SDB_ID,SEC_RD)) {
 	TConfig cfg;
 	at(opt->attr("tbl")).at().fieldStruct(cfg);
 	SYS->db().at().dataSet("", "", cfg, false, false, opt);
 	return;
     }
-    else if(a_path == "/serv/fieldSeek" && ctrChkNode(opt,"call",RWRWR_,"root",SDB_ID,SEC_WR)) {
+    else if(a_path == "/serv/fieldSeek" && ctrChkNode(opt,"call",RWRWR_,"root",SDB_ID,SEC_RD)) {
 	TConfig cfg;
 	SYS->db().at().dataSeek("", "", 0, cfg, false, false, opt);
 	opt->setAttr("fRez", i2s(at(opt->attr("tbl")).at().fieldSeek(s2i(opt->attr("row")),cfg,opt->attr("cacheKey"))));
@@ -966,7 +971,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	SYS->db().at().dataSet("", "", cfg, false, false, opt);
 	return;
     }
-    else if(a_path == "/serv/fieldGet" && ctrChkNode(opt,"call",RWRWR_,"root",SDB_ID,SEC_WR)) {
+    else if(a_path == "/serv/fieldGet" && ctrChkNode(opt,"call",RWRWR_,"root",SDB_ID,SEC_RD)) {
 	TConfig cfg;
 	SYS->db().at().dataSeek("", "", 0, cfg, false, false, opt);
 	at(opt->attr("tbl")).at().fieldGet(cfg);

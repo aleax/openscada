@@ -1,3 +1,32 @@
+2020-06-21 Roman (stable)
+- DOC: Document of the module "DBGate" appended for downloading to offline.
+- data/ModelsDB/{AGLKS/oscada_AGLKS.xml,Boiler/oscada_Boiler.xml}: The input Sockets' transports unified in the names "WEB" and "CNTR".
+- data/ModelsDB/AGLKS/St.sql: The input SSL transports unified in the names "WEB" and "CNTR" and
+    updated for the KeepAlive timeout setting in 60 and for the SSL-certificate.
+- !!!!:data/openscada-proj.in: Appended for the commands "backup", "backupRestore", "backupList" to implement the project backups.
+- LibsDB.vcaBase: Cleaned from the old procedure's state "Translate" setting for inherited pages in the projects.
+- TSYS: TCfg::setReqKey: Appended for an argument 
+- !!:FIX:DB: TBDS::dataSet() expanded for setting only keys and viewed elements, like to other DB.
+- TDB: The service requests "/serv/fieldStruct", "/serv/fieldSeek" and "/serv/fieldGet" access changed to SEC_RD.
+- !!:DB.DBGate: The module cleaned, some fixed and tested.
+- !!:FIX:DB.SQLite: there detected and corrected of data losses with concurrence access, when a minor error of the not started transaction
+    "cannot commit - no transaction is active (1)" is generated, which, however, interrupts the data recording.
+- !!:Protocol.SelfSystem: The output part expanded for checking correspondence of the responses to the requests
+	by the request tag name and sequences in "rqSeq".
+    Appended for encoding special symbols of the user and password, and the empty password encoding as "<EMPTY>".
+- !!!!:FIX:Transport.{Sockets,SSL}: To prevent the multiple execution of the high loading and long-time control requests
+    the output transports switched to:
+	- the default configuration for Tries=1, Timeouts="30:1";
+	- for the connection lost the tries number set to 2;
+	- for the error "Timeouted" the connection also set to reconnect, besides the SOCK_FORCE type.
+- FIX:UI.QTCfg: Sending requests to other selected items is performed only for the main request result TError::NoError.
+- UI.QTStarter: The OpenSCADA information on the splash moved to the right and the OpenSCADA project to the left.
+- UI.VCAEngine: The property "Translation" of the widget procedures completly moved to the direct access and set visible
+    only for the procdure presence, also as the procedure text area and the calculation periodicity visible only at any language selection.
+- FIX:UI.Vision: Fixed in the user change at the remote work, after the previous mark.
+    Prevented from try the user changing to no password one in the remote work, only the warning before the implementing.
+
+
 2020-06-14 Roman (stable)
 - !!!!:LibsDB.OscadaLibs.DevLib.IEC62056: Completed in the basic implementation.
 - LibsDB.vcaBase.Main.alarmsSt: Default value of the property alArch set to "FSArch.alarms".

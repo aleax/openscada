@@ -554,6 +554,7 @@ Modules/SQLite:en,uk,ru:Modules/SQLite.html
 Modules/MySQL:en,uk,ru:Modules/MySQL.html
 Modules/FireBird:en,uk,ru:Modules/FireBird.html
 Modules/PostgreSQL:en,uk,ru:Modules/PostgreSQL.html
+Modules/DBGate:en,uk:Modules/DBGate.html
 Modules/DBF:en,uk,ru:Modules/DBF.html
 Modules/LDAP:en,uk,ru:Modules/LDAP.html
 Modules/Sockets:en,uk,ru:Modules/Sockets.html

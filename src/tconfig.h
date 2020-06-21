@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tconfig.h
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -76,7 +76,7 @@ class TCfg : public TVariant
 	void	setView( bool vw )	{ mView = vw; }
 	void	setKeyUse( bool vl )	{ if(fld().flg()&Key) mKeyUse = vl; }
 	void	setNoTransl( bool vl )	{ mNoTransl = vl; }
-	void	setReqKey( bool vl );
+	void	setReqKey( bool vl, bool treatDep = true );
 	void	setExtVal( bool vw );
 	void	toDefault( bool notSetType = false );
 

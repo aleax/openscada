@@ -291,10 +291,10 @@ const string &TCfg::name( )	{ return mFld->name(); }
 
 bool TCfg::isKey( ) const	{ return owner().reqKeys() ? reqKey() : fld().flg()&TCfg::Key; }
 
-void TCfg::setReqKey( bool vl )
+void TCfg::setReqKey( bool vl, bool treatDep )
 {
     mReqKey = vl;
-    if(vl) mKeyUse = vl;	//!!!! But do not clean up at FALSE
+    if(treatDep) mKeyUse = vl;
     mOwner.reqKeysUpdate();
 }
 

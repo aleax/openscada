@@ -57,7 +57,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"MainThr"
-#define MOD_VER		"4.8.1"
+#define MOD_VER		"4.8.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -334,8 +334,8 @@ void TUIMod::splashSet( SplashFlag flg )
 	pnt.fillRect(infBar, barColor);
 	pnt.drawRect(infBar);
 	QFont wFnt = splash->font(); wFnt.setPixelSize(15); pnt.setFont(wFnt);
-	pnt.drawText(infBar.adjusted(4,1,-4,-1), Qt::AlignRight, PACKAGE_STRING);
-	pnt.drawText(infBar.adjusted(4,1,-4,-1), SYS->prjNm().c_str());
+	pnt.drawText(infBar.adjusted(4,1,-4,-1), Qt::AlignRight, SYS->prjNm().c_str()/*PACKAGE_STRING*/);
+	pnt.drawText(infBar.adjusted(4,1,-4,-1), sysSplash ? PACKAGE_VERSION : PACKAGE_STRING/*SYS->prjNm().c_str()*/);
 
 	//Starting the splash
 	splash->setPixmap(pm);

@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.5.1"
+#define MOD_VER		"3.0.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2 are supported.")
@@ -808,10 +808,10 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* TSocketOut                                   *
 //************************************************
-TSocketOut::TSocketOut( string name, const string &idb, TElem *el ) : TTransportOut(name, idb, el), mAttemts(2)
+TSocketOut::TSocketOut( string name, const string &idb, TElem *el ) : TTransportOut(name, idb, el), mAttemts(1)
 {
     setAddr("localhost:10045");
-    setTimings("5:1");
+    setTimings("30:2");
 }
 
 TSocketOut::~TSocketOut( )	{ }
@@ -1126,13 +1126,14 @@ int TSocketOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int ti
     bool notReq = (time < 0),
 	 writeReq = false;
     time = abs(time);
+    unsigned short wAttempts = attempts();
 
     MtxAlloc res(reqRes(), true);
 
     if(!runSt) throw TError(nodePath().c_str(), _("Transport is not started!"));
 
 repeate:
-    if(reqTry++ >= attempts())	{ mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(), _("Error requesting: %s"), err.c_str()); }
+    if(reqTry++ >= wAttempts)	{ mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(), _("Error requesting: %s"), err.c_str()); }
 
     int64_t stRespTm = 0;
 
@@ -1150,6 +1151,7 @@ repeate:
 	    if(logLen()) pushLogMess(TSYS::strMess(_("Error writing: %s"), err.c_str()));
 	    if(notReq) throw TError(nodePath().c_str(), _("Error writing: %s"), err.c_str());
 	    start();
+	    if(ret == 0 && wAttempts == 1) wAttempts = 2;	//!!!! To restore the loss connections
 	    goto repeate;
 	}
 
@@ -1175,6 +1177,7 @@ repeate:
 	    if(logLen()) pushLogMess(TSYS::strMess(_("Error reading: %s"), err.c_str()));
 	    if(!writeReq || notReq) throw TError(nodePath().c_str(),_("Error reading: %s"), err.c_str());
 	    start();
+	    if(!errno && wAttempts == 1) wAttempts = 2;		//!!!! To restore the loss connections
 	    goto repeate;
 	}
 	else if(ret < 0 && SSL_get_error(ssl,ret) != SSL_ERROR_WANT_READ && SSL_get_error(ssl,ret) != SSL_ERROR_WANT_WRITE) {
@@ -1197,9 +1200,9 @@ repeate:
 		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), err.c_str());
 		    if(logLen()) pushLogMess(err.c_str());
 		    if(writeReq) {
-			//stop();
-			if(reqTry >= attempts()) stop();
-			else goto repeate;
+			//!!!! Must reconnect to prevent the possibility of getting response of the previous request.
+			stop();
+			if(reqTry < wAttempts) { start(); goto repeate; }
 		    }
 		}
 		mLstReqTm = TSYS::curTime();

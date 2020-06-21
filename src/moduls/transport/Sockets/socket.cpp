@@ -61,7 +61,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"3.4.1"
+#define MOD_VER		"4.0.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -1048,10 +1048,10 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 //* TSocketOut                                   *
 //************************************************
 TSocketOut::TSocketOut( string name, const string &idb, TElem *el ) :
-    TTransportOut(name, idb, el), mAttemts(2), mMSS(0), sockFd(-1), type(SOCK_TCP)
+    TTransportOut(name, idb, el), mAttemts(1), mMSS(0), sockFd(-1), type(SOCK_TCP)
 {
     setAddr("localhost:10005");
-    setTimings("5:1");
+    setTimings("30:2");
 }
 
 TSocketOut::~TSocketOut( )	{ }
@@ -1357,6 +1357,7 @@ int TSocketOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int ti
     bool notReq = (time < 0),
 	 writeReq = false;
     time = abs(time);
+    unsigned short wAttempts = attempts();
 
     MtxAlloc res(reqRes(), true);
 
@@ -1367,7 +1368,7 @@ int TSocketOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int ti
 	if(!runSt) throw TError(nodePath().c_str(),_("Transport is not started!"));
 
 repeate:
-	if(reqTry++ >= attempts()) { mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(), _("Error requesting: %s"), err.c_str()); }
+	if(reqTry++ >= wAttempts) { mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(), _("Error requesting: %s"), err.c_str()); }
 	int64_t stRespTm = 0;
 
 	//Write request
@@ -1396,6 +1397,7 @@ repeate:
 		    if(logLen()) pushLogMess(TSYS::strMess(_("Error writing: %s"), err.c_str()));
 		    if(notReq) throw TError(nodePath().c_str(),_("Error writing: %s"), err.c_str());
 		    start();
+		    if(kz == 0 && wAttempts == 1) wAttempts = 2;	//!!!! To restore the loss connections
 		    goto repeate;
 		}
 		else {
@@ -1423,9 +1425,16 @@ repeate:
 		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), err.c_str());
 		    if(logLen()) pushLogMess(err.c_str());
 		    if(writeReq) {
-			//stop();
-			if(reqTry >= attempts()) stop();
-			else goto repeate;
+			//!!!! For the force socket, the initial input connection, we must keep the connection up to the last
+			if(type == SOCK_FORCE) {
+			    if(reqTry >= wAttempts) stop();
+			    else goto repeate;
+			}
+			//!!!! Must reconnect to prevent the possibility of getting response of the previous request.
+			else {
+			    stop();
+			    if(reqTry < wAttempts) { start(); goto repeate; }
+			}
 		    }
 		}
 		mLstReqTm = TSYS::curTime();
@@ -1473,6 +1482,7 @@ repeate:
 		    // * Pass to retry into the request mode and on the successful writing
 		    if(!writeReq || notReq) throw TError(nodePath().c_str(),_("Error reading: %s"), err.c_str());
 		    start();
+		    if(iB == 0 && wAttempts == 1) wAttempts = 2;	//!!!! To restore the loss connections
 		    goto repeate;
 		}
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read %s."), TSYS::cpct2str(vmax(0,iB)).c_str());

@@ -29,7 +29,7 @@
 #define MOD_NAME	_("DB gate")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"0.9.0"
+#define MOD_VER		"1.0.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Allows to locate databases of the remote OpenSCADA stations to local ones.")
 #define MOD_LICENSE	"GPL2"
@@ -64,7 +64,7 @@ using namespace BD_DBGate;
 //************************************************
 //* BD_DBGate::BDMod				 *
 //************************************************
-BDMod::BDMod(string name) : TTypeBD(MOD_ID)
+BDMod::BDMod( string name ) : TTypeBD(MOD_ID)
 {
     mod = this;
 
@@ -82,8 +82,7 @@ TBD *BDMod::openBD( const string &name )	{ return new MBD(name, &owner().openDB_
 //************************************************
 //* BD_DBGate::MBD				 *
 //************************************************
-MBD::MBD( string iid, TElem *cf_el ) :
-    TBD(iid, cf_el), reqCnt(0), reqCntTm(0), trOpenTm(0), connRes(true)
+MBD::MBD( string iid, TElem *cf_el ) : TBD(iid, cf_el)
 {
 
 }
@@ -97,14 +96,13 @@ void MBD::postDisable( int flag )
 {
     TBD::postDisable(flag);
 
-    if(flag && owner().fullDeleteDB()) {
-	MtxAlloc resource(connRes, true);
-    }
+    /*if(flag && owner().fullDeleteDB()) {
+
+    }*/
 }
 
 void MBD::enable( )
 {
-    //MtxAlloc resource(connRes, true);
     if(enableStat())	return;
 
     XMLNode req("set");
@@ -198,9 +196,9 @@ void MBD::cntrCmdProc( XMLNode *opt )
 	    "dest","select","select","/prm/cfg/dbRemList","help",
 		_("DB gate address must be written-selected as: \"{RemoteStation}.{DBModule}.{DB}\".\n"
 		  "Where:\n"
-		  "  RemoteStation - remote OpenSCADA station;\n"
-		  "  DBModule      - DB module identifier;\n"
-		  "  DB            - database identifier."));
+		  "  RemoteStation - remote OpenSCADA station, registered in the table of the OpenSCADA stations;\n"
+		  "  DBModule - DB-module identifier of the remote station;\n"
+		  "  DB       - database identifier of the remote station."));
 	ctrMkNode2("comm",opt,4,"/prm/cfg/host_lnk",_("Go to configuration of the remote stations list"),enableStat()?0:RWRW__,"root",SDB_ID,
 	    "tp","lnk", NULL);
 	return;
@@ -334,6 +332,7 @@ void MTable::fieldDel( TConfig &cfg )
 {
     XMLNode req("call");
     req.setAttr("path", "/%2fserv%2ffieldDel")->setAttr("tbl", name());
+    cfg.cfgViewAll(false);
     SYS->db().at().dataSet("", "", cfg, false, false, &req);
     owner().cntrIfCmd(req);
 }

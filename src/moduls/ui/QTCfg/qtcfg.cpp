@@ -2403,7 +2403,7 @@ int ConfApp::cntrIfCmd( XMLNode &node )
 	//int rez = SYS->transport().at().cntrIfCmd(node,"UIQtCfg",wUser->user().toStdString());
 
 	// Multiple requests to selected nodes into the tree
-	if((node.name() == "set" || node.name() == "load" || node.name() == "save") && CtrTree->selectedItems().size() >= 2) {
+	if(rez == TError::NoError && (node.name() == "set" || node.name() == "load" || node.name() == "save") && CtrTree->selectedItems().size() >= 2) {
 	    string reqPath = node.attr("path"), reqPathEl, selNds;
 	    size_t reqElPos = reqPath.rfind("/");
 	    if(reqElPos != string::npos) {
@@ -2441,7 +2441,9 @@ int ConfApp::cntrIfCmdHosts( XMLNode &node )
     //No the host present
     if(!iHost) {
 	node.childClear();
-	node.setAttr("mcat",mod->nodePath())->setAttr("rez",i2s(TError::Tr_UnknownHost))->setText(TSYS::strMess(_("Unknown host '%s'."),hostId.c_str()));
+	node.setAttr("mcat", mod->nodePath())->
+	     setAttr("rez", i2s(TError::Tr_UnknownHost))->
+	     setText(TSYS::strMess(_("Unknown host '%s'."),hostId.c_str()));
 	return s2i(node.attr("rez"));
     }
 

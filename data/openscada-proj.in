@@ -1,31 +1,41 @@
 #!/bin/sh
 
-if test $# -lt 1; then
+argHelp()
+{
     echo "Projects management script of OpenSCADA mostly designed to call from OpenSCADA but also can be used independently.
 The script is mostly software platform specific and relates now for Linux.
 openscada-proj list
-openscada-proj proc|create|remove {ProjName}
+openscada-proj proc|create|remove|update {ProjName}
+openscada-proj backup|backupRestore {ProjName} [{BackupName}]
+openscada-proj backupList {ProjName}
  Commands:
   list   - allowed projects list;
   proc   - proceed for copy RO projects to WR, create desktop links, process core dumps;
   create - create new projects or copy RO projects to WR, create desktop links;
-  remove - remove project.
-  update - update from 0.8.0 LTS.
+  remove - remove project;
+  update - update from 0.8.0 LTS;
+  backup - backup the selected project;
+  backupRestore - restore the selected project from the last backup;
+  backupList	- list the project backups.
  Arguments:
   ProjName - project name;
+  BackupName - the backup archive name, at missing there used the current date.
  Environments:
   dPrj     - directory of projects OpenSCADA, can be RO;
   dPrjUser - directory of projects OpenSCADA of the user, WR;
   dSysCfg  - directory of system configuration;
   dData    - directory of system data;
+  TAR_ComprPrg - TAR compression program, at missing there used gzip.
 ";
-    exit 0;
-fi
+}
+
+if test $# -lt 1; then argHelp; exit 0; fi
 
 dPrjUser=${dPrjUser=~/.openscada}
 if test "x$dPrj" = "x"; then dPrj=@oscd_datadir_full@; fi
 if test "x$dSysCfg" = "x"; then dSysCfg=@sysconfdir_full@; fi
 if test "x$dData" = "x"; then dData=@datadir_full@; fi
+
 
 case "$1" in
   list)
@@ -125,6 +135,40 @@ case "$1" in
     else exit 1;
     fi
     ;;
+  backup)
+    if test $# -lt 2; then echo "Not enough arguments!"; exit 1; fi
+    prjNm=$2
+    prjBackNm=${prjNm}_$(date +%F_%H.%M).backup
+    if test $# -ge 3; then prjBackNm=${prjNm}_$3.backup; fi
+    prjsDir=$dPrj
+    if test -n "$dPrjUser" -a -d $dPrjUser/$prjNm; then prjsDir=$dPrjUser; fi
+    cd $prjsDir
+    if test -d $prjNm; then
+	echo "Backuping the project \"$prjNm\" to $prjBackNm"
+	if test "x$TAR_ComprPrg" = "x"; then TAR_ComprPrg=gzip; fi
+	tar --exclude="lock" -I$TAR_ComprPrg -cvf $prjBackNm $prjNm > /dev/null
+	ln -f -s $prjBackNm ${prjNm}_last.backup
+    else echo "No the project \"$prjNm\" found!"; fi
+    ;;
+  backupRestore)
+    if test $# -lt 2; then echo "Not enough arguments!"; exit 1; fi
+    backNm=last
+    if test $# -ge 3; then backNm=$3; fi
+    prjNm=$2
+    prjsDir=$dPrj
+    if test -n "$dPrjUser" -a -d $dPrjUser/$prjNm; then prjsDir=$dPrjUser; fi
+    cd $prjsDir
+    prjBackNm=${prjNm}_$backNm.backup
+    if test -d $prjNm -a -f $prjBackNm; then
+	if test -f $prjNm/lock; then echo "Stop the project $prjNm before restoring from the backup $prjBackNm"; exit 1; fi
+	echo "Restoring the project \"$prjNm\" from the backup $prjBackNm"
+	rm -R $prjNm
+	tar xvf $prjBackNm > /dev/null
+    else echo "No the backup \"$prjBackNm\" found!"; fi
+    ;;
+  backupList)
+
+    ;;
   update)
     if test $# -lt 2; then echo "Not enough arguments!"; exit 1; fi
     prjNm=$2
@@ -156,6 +200,7 @@ case "$1" in
     ln -s ../LibsDB $dPrjUser/$prjNm/LibsDB
     ln -s ./ $dPrjUser/$prjNm/$prjNm
     ;;
+  *) argHelp ;;
 esac
 
 exit 0

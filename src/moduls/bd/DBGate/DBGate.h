@@ -90,11 +90,6 @@ class MBD : public TBD
 	void postDisable( int flag );
 
 	TTable *openTable( const string &name, bool create );
-
-	//Private attributes
-	int	reqCnt;
-	time_t	reqCntTm, trOpenTm;
-	ResMtx	connRes;
 };
 
 //************************************************

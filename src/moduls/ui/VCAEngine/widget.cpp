@@ -1459,9 +1459,12 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/proc/calc",_("Calculation"))) {
 		ctrMkNode("fld",opt,-1,"/proc/calc/progLng",_("Procedure language"),RWRWR_,"root",SUI_ID,4,"tp","str","dest","sel_ed","select","/plang/list",
 		    "help",_("Select the blank language to reset the widget procedure and language to the parent widget."));
-		ctrMkNode("fld",opt,-1,"/proc/calc/per",_("Period of the calculating, milliseconds"),RWRWR_,"root",SUI_ID,1,"tp","dec");
-		ctrMkNode("fld",opt,-1,"/proc/calc/prog_tr",_("Completely translate the procedure"),RWRWR_,"root",SUI_ID,1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/proc/calc/prog",_("Procedure"),RWRWR_,"root",SUI_ID,3,"tp","str","rows","10","SnthHgl","1");
+		if(calcLang().size())
+		    ctrMkNode("fld",opt,-1,"/proc/calc/per",_("Period of the calculating, milliseconds"),RWRWR_,"root",SUI_ID,1,"tp","dec");
+		if(!calcProg().size() || parent().freeStat() || !parent().at().calcProg().size())
+		    ctrMkNode("fld",opt,-1,"/proc/calc/prog_tr",_("Completely translate the procedure"),RWRWR_,"root",SUI_ID,1,"tp","bool");
+		if(calcLang().size())
+		    ctrMkNode("fld",opt,-1,"/proc/calc/prog",_("Procedure"),RWRWR_,"root",SUI_ID,3,"tp","str","rows","10","SnthHgl","1");
 	    }
 	}
 	return true;

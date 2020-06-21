@@ -981,8 +981,9 @@ void Page::postDisable( int flag )
 
 bool Page::cfgChange( TCfg &co, const TVariant &pc )
 {
+    if(co.getS() == pc.getS())	return true;
     if(co.name() == "PR_TR") cfg("PROC").setNoTransl(!calcProgTr());
-    else if(co.name() == "PROC" && co.getS() != pc.getS()) procChange();
+    else if(co.name() == "PROC" /*&& co.getS() != pc.getS()*/) procChange();
     modif();
     return true;
 }
@@ -1042,7 +1043,7 @@ string Page::calcLang( ) const
     return iprg.substr(0,iprg.find("\n"));
 }
 
-bool Page::calcProgTr( )	{ return /*(!proc().size() && !parent().freeStat()) ? parent().at().calcProgTr() :*/ cfg("PR_TR"); }
+bool Page::calcProgTr( )	{ return /*(!proc().size() && !parent().freeStat()) ? parent().at().calcProgTr() :*/ cfg("PR_TR").getB(); }
 
 string Page::calcProg( ) const
 {

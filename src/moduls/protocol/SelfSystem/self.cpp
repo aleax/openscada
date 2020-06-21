@@ -32,7 +32,7 @@
 #define MOD_NAME	_("Own protocol of OpenSCADA")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.5.0"
+#define MOD_VER		"1.7.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides own OpenSCADA protocol based at XML and the control interface of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -170,6 +170,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
     char buf[1000];
     string req, resp, header;
     int rez, resp_len, off, head_end;
+    string reqNm = io.name();
 
     MtxAlloc res(tro.reqRes(), true);
 
@@ -177,7 +178,12 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
     bool authForce = s2i(io.attr("rqAuthForce")); io.attrDel("rqAuthForce");
     int conTm = s2i(io.attr("conTm"));	io.attrDel("conTm");
     string user = io.attr("rqUser");	io.attrDel("rqUser");
+    user = TSYS::strEncode(user, TSYS::Custom, " \r\n\t%");
     string pass = io.attr("rqPass");	io.attrDel("rqPass");
+    if(!pass.size())	pass = EMPTY_PASS;
+    pass = TSYS::strEncode(pass, TSYS::Custom, " \r\n\t%");
+    tro.setPrm2((tro.prm2()<1000)?tro.prm2()+1:0);
+    io.setAttr("rqSeq", i2s(tro.prm2()));
     string data = io.save();
     io.clear();
 
@@ -234,7 +240,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("REQ first response %d"), resp.size());
 
-	    // Get head
+	    // Get the head
 	    head_end = header.size() + 1;
 	    off = 0;
 	    //header = TSYS::strLine(resp,0,&head_end);
@@ -250,7 +256,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		throw TError(nodePath().c_str(),_("Error the station '%s': %s."), tro.id().c_str(), buf+off);
 	    int resp_size = s2i(header.substr(off));
 
-	    // Wait tail
+	    // Wait the tail
 	    while((int)resp.size() < abs(resp_size)+head_end) {
 		resp_len = tro.messIO(NULL, 0, buf, sizeof(buf));
 		if(!resp_len) { errTr = _("Not full respond."); iTr++; continue; }
@@ -261,6 +267,11 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 	    if(resp_size < 0) io.load(TSYS::strUncompr(resp.substr(head_end)), XMLNode::LD_NoTxtSpcRemEnBeg);
 	    else io.load(resp.substr(head_end), XMLNode::LD_NoTxtSpcRemEnBeg);
+
+	    if(reqNm != io.name())
+	    { errTr = TSYS::strMess(_("The response '%s' is not suitable to the request '%s'."),io.name().c_str(),reqNm.c_str()); continue; }
+	    if(s2i(io.attr("rqSeq")) != tro.prm2())
+	    { errTr = TSYS::strMess(_("The response sequence %d is not suitable to the request one %d."),s2i(io.attr("rqSeq")),(int)tro.prm2()); continue; }
 
 	    return;
 	}
@@ -343,6 +354,7 @@ bool TProtIn::mess( const string &request, string &answer )
     int ses_id = -1;
     int req_sz = 0;
     char user[256] = "", pass[256] = "";
+    string user_, pass_;
 
     reqBuf += request;
 
@@ -354,7 +366,10 @@ bool TProtIn::mess( const string &request, string &answer )
 
     if(req.compare(0,8,"SES_OPEN") == 0) {
 	sscanf(req.c_str(), "SES_OPEN %255s %255s", user, pass);
-	if((ses_id=mod->sesOpen(user,pass,TSYS::strLine(srcAddr(),0))) < 0)
+	user_ = TSYS::strDecode(user, TSYS::Custom);
+	pass_ = TSYS::strDecode(pass, TSYS::Custom);
+	if(pass_ == EMPTY_PASS) pass_ = "";
+	if((ses_id=mod->sesOpen(user_,pass_,TSYS::strLine(srcAddr(),0))) < 0)
 	    answer = "REZ " ERR_AUTH " Error authentication: wrong the user or password.\x0A";
 	else answer = "REZ " ERR_NO " " + i2s(ses_id) + "\x0A";
     }
@@ -373,8 +388,11 @@ bool TProtIn::mess( const string &request, string &answer )
 	TProt::SAuth auth;
 	if(sscanf(req.c_str(),"REQ %d %d",&ses_id,&req_sz) == 2) auth = mod->sesGet(ses_id);
 	else if(sscanf(req.c_str(),"REQDIR %255s %255s %d",user,pass,&req_sz) == 3) {
-	    if(SYS->security().at().usrPresent(user) && SYS->security().at().usrAt(user).at().auth(pass,&auth.pHash))
-	    { auth.tAuth = 1; auth.name = user; }
+	    user_ = TSYS::strDecode(user, TSYS::Custom);
+	    pass_ = TSYS::strDecode(pass, TSYS::Custom);
+	    if(pass_ == EMPTY_PASS) pass_ = "";
+	    if(SYS->security().at().usrPresent(user_) && SYS->security().at().usrAt(user_).at().auth(pass_,&auth.pHash))
+	    { auth.tAuth = 1; auth.name = user_; }
 	}
 	else { answer = "REZ " ERR_CMD " Command format error.\x0A"; reqBuf.clear(); return false; }
 

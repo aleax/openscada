@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"3.0.0"
+#define MOD_VER		"3.0.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -235,21 +235,24 @@ void MBD::transOpen( )
     if(reqCnt > 1000) transCommit();
 
     MtxAlloc res(connRes, true);
-    bool begin = !reqCnt;
-    if(begin) trOpenTm = TSYS::curTime();
+    int reqCnt_ = reqCnt;
+    if(!reqCnt_) trOpenTm = TSYS::curTime();
     reqCnt++;
     reqCntTm = TSYS::curTime();
 
-    if(begin) sqlReq("BEGIN;");
+    if(!reqCnt_) sqlReq("BEGIN;");
 }
 
 void MBD::transCommit( )
 {
     MtxAlloc res(connRes, true);
-    bool commit = reqCnt;
-    reqCnt = reqCntTm = 0;
+    int reqCnt_ = reqCnt;
+    reqCnt = 0;
+    reqCntTm = 0;
 
-    if(commit) sqlReq("COMMIT;");
+    if(reqCnt_)
+	try { sqlReq("COMMIT;"); }
+	catch(TError&) { }	//!!!! Pass spare commit errors of the sort "cannot commit - no transaction is active(1)"
 }
 
 void MBD::transCloseCheck( )
@@ -711,7 +714,7 @@ void MTable::fieldFix( TConfig &cfg, bool trPresent )
     crtReq += ", PRIMARY KEY (" + pr_keys + "));";
     owner().sqlReq(crtReq, NULL, true);
 
-    //Restore data from temporary table
+    //Restore data from the temporary table
     if(all_flds.size()) {
 	req = "INSERT INTO '" + TSYS::strEncode(name(),TSYS::SQL,"'") + "'(" + all_flds + ") SELECT " + all_flds +
 	      " FROM 'temp_" + TSYS::strEncode(name(),TSYS::SQL,"'") + "';DROP TABLE 'temp_" + TSYS::strEncode(name(),TSYS::SQL,"'") + "';";

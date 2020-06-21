@@ -571,7 +571,7 @@ string LWidget::calcLang( ) const
     return iprg.substr(0,iprg.find("\n"));
 }
 
-bool LWidget::calcProgTr( )	{ return (!proc().size() && !parent().freeStat()) ? parent().at().calcProgTr() : cfg("PR_TR"); }
+bool LWidget::calcProgTr( )	{ return /*(!proc().size() && !parent().freeStat()) ? parent().at().calcProgTr() :*/ cfg("PR_TR").getB(); }
 
 string LWidget::calcProg( ) const
 {
@@ -599,8 +599,8 @@ void LWidget::setCalcLang( const string &ilng )	{ cfg("PROC").setS(ilng.empty() 
 
 void LWidget::setCalcProgTr( bool vl )
 {
-    if(!proc().size() && !parent().freeStat())	parent().at().setCalcProgTr(vl);
-    else cfg("PR_TR") = vl;
+    /*if(!proc().size() && !parent().freeStat())	parent().at().setCalcProgTr(vl);
+    else*/ cfg("PR_TR") = vl;
 }
 
 void LWidget::setCalcProg( const string &iprg )	{ cfg("PROC").setS(calcLang()+"\n"+iprg); }
@@ -842,8 +842,9 @@ void LWidget::inheritAttr( const string &attr )
 
 bool LWidget::cfgChange( TCfg &co, const TVariant &pc )
 {
+    if(co.getS() == pc.getS())	return true;
     if(co.name() == "PR_TR") cfg("PROC").setNoTransl(!calcProgTr());
-    else if(co.name() == "PROC" && co.getS() != pc.getS()) procChange();
+    else if(co.name() == "PROC" /*&& co.getS() != pc.getS()*/) procChange();
     modif();
     return true;
 }
