@@ -1691,9 +1691,9 @@ ChkPer     &lt;seconds&gt;    Period of the checking for new shared libraries(mo
 <li> opening of own dialog window of the starter (Fig.5a);</li>
 <li> starting-collapsing to the system tray (Fig.5b) — is actually a background run mode, but with the access from the graphical environment.</li></ul></li>
 <li> initiation startup mode (Fig.5c) — selecting a project to switch to the main mode of the project OpenSCADA execution.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:298px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_dialog.png"><img class="thumbimage" height="629" src="files/QTStarter_dialog.png" width="296" /></a>  <div class="thumbcaption">Fig.5a. Dialog window of the starter of the QTStarter module.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:490px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_dialog.png"><img class="thumbimage" height="674" src="files/QTStarter_dialog.png" width="488" /></a>  <div class="thumbcaption">Fig.5a. Dialog window of the starter of the QTStarter module.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:348px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_systray.png"><img class="thumbimage" height="174" src="files/QTStarter_systray.png" width="346" /></a>  <div class="thumbcaption">Fig.5b. Project "AGLKS", started or collapsed to the system tray.</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:298px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_selectProj.png"><img class="thumbimage" height="524" src="files/QTStarter_selectProj.png" width="296" /></a>  <div class="thumbcaption">Fig.5c. Dialog window of the starter of the QTStarter module in the initiation mode — a project selection.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:298px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_selectProj.png"><img class="thumbimage" height="514" src="files/QTStarter_selectProj.png" width="296" /></a>  <div class="thumbcaption">Fig.5c. Dialog window of the starter of the QTStarter module in the initiation mode — a project selection.</div></div></div></div>
 <p>The simple startup is little useful, inconvenient and involves the use and operation of only one configuration, which is <a href="#Config">configuration file</a> <i>{sysconfdir}/oscada.xml</i> as the primary configuration storage. To enable configuration choices, the <a href="#CfgFilePrm">command line parameter <i>--config</i></a> is provided at startup of the program and changing of the program working directory before launching or by <a href="#CfgFilePrm">parameter "WorkDir" this configuration file</a>, which can be used and used exclusively by OpenSCADA to version 0.9 through the creation of a separate command line script (Shell) for a separate configuration. The OpenSCADA 0.9 version adds the concept of the "OpenSCADA Project", which was originally implemented by a separate command line script <b>openscada_start</b>, and then integrated into the OpenSCADA core and the startup module of the local graphical interface.
 </p>
 <h3><span class="mw-headline" id="OpenSCADA_projects"><span class="mw-headline-number">5.1</span> <span id="Projects" title="#Projects">OpenSCADA projects</span></span></h3>
@@ -1731,12 +1731,53 @@ ChkPer     &lt;seconds&gt;    Period of the checking for new shared libraries(mo
 <li> by a symbolic link name — <b>openscada_{NameProject}</b> to <b>openscada</b>.</li>
 <li> by selection of a presented project from the list of the local graphical interface <a href="Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">UI.QTStarter</a>, which is provided by the simple call of the original binary file <b>openscada</b> — the initiation mode (Fig.5c), and if the graphical Qt modules are not specified for the automatic startup — the mode of execution of the OpenSCADA project (Fig.5a).</li></ul>
 <p>You can create a new project from the <a href="Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">UI.QTStarter</a> local graphical interface (Fig.5c) and through the command line script for the project manager <b>openscada-proj</b>, which is actually called from local graphical interface.
-</p><p>In general, the command line script for the project manager <b>openscada-proj</b> includes functions and commands:
+</p><p>Result of the command <b>$ openscada-proj --help</b> execution:
+</p>
+<pre style="white-space: pre-wrap;">
+Projects management script of OpenSCADA mostly designed to call from OpenSCADA but also can be used independently.
+The script is mostly software platform specific and relates now for Linux.
+openscada-proj list
+openscada-proj proc|create|remove|update {ProjName}
+ Commands:
+  list   - allowed projects list;
+  proc   - proceed for copy RO projects to WR, create desktop links, process core dumps;
+  create - create new projects or copy RO projects to WR, create desktop links;
+  remove - remove project;
+  update - update from 0.8.0 LTS;
+ Arguments:
+  ProjName - project name;
+ Environments:
+  dPrj     - directory of projects OpenSCADA, can be RO;
+  dPrjUser - directory of projects OpenSCADA of the user, WR;
+  dSysCfg  - directory of system configuration;
+  dData    - directory of system data;
+
+openscada-proj backup|backupRestore {ProjName} [{BackupName}]
+openscada-proj backupList {ProjName}
+ Commands:
+  backup - backup the selected project &lt;ProjName&gt; to the name &lt;BackupName&gt;, or to the current date at missing;
+  backupRestore - restore the selected project &lt;ProjName&gt; from the pointed backup name &lt;BackupName&gt;, or from the last one at missing;
+  backupList    - list the project &lt;ProjName&gt; backups.
+ Arguments:
+  ProjName   - project name;
+  BackupName - the backup archive name.
+ Environments:
+  OSCADA_TAR_ComprPrg - TAR compression program, at missing there used gzip.
+  OSCADA_BackLim      - Backups limit, 10 by default
+</pre>
+<p>In general, the command line script for the project manager <b>openscada-proj</b> includes such project functions and commands:
 </p>
 <ul><li> <i>list</i> — list of available projects;</li>
 <li> <i>proc</i> — to process on the subject: copying the RO project in RW, creating a shortcut-icon on the desktop, generating a fall report and more;</li>
 <li> <i>create</i> — create a new project, in addition to all <i>proc</i> functions;</li>
 <li> <i>remove</i> — delete an existing project.</li></ul>
+<p>Additionally, the command line script contains the project backups manager commands:
+</p>
+<ul><li> <i>backup</i> — backup the selected project <i>ProjName</i> to the name <i>BackupName</i>, or to the current date at missing;</li>
+<li> <i>backupRestore</i> — restore the selected project <i>ProjName</i> from the pointed backup name <i>BackupName</i>, or from the last one at missing;</li>
+<li> <i>backupList</i> — list the project <i>ProjName</i> backups.</li></ul>
+<p>Backup is generally done in the OpenSCADA working folder, along with the folders of the projects themselves, for which packed folder files are created with the name <b>{ProjName}_{BackupName}.backup</b>, for example — "Boiler_2020-06-24_20.09.backup". By default, project folders are compressed with "gzip", which can be changed by setting the environment variable "OSCADA_TAR_ComprPrg". Accordingly, the backup can be done from the outside, for example, according to the established schedule with CRON, in addition to doing it manually from the graphical interface of the project manager (Fig.5a).
+</p>
 <h2><span class="mw-headline" id="Links"><span class="mw-headline-number">6</span> Links</span></h2>
 <ul><li> <a class="external" href="http://oscada.org/wiki/File:Oscada_struct.odg" title="File:Oscada struct.odg">Diagram: Block scheme of OpenSCADA.</a></li>
 <li> <a class="external" href="http://oscada.org/wiki/File:Oscada_subsys_daq_str.odg" title="File:Oscada subsys daq str.odg">Diagram: Hierarchical structure of the subsystem "DAQ".</a></li>

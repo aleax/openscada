@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-04 14:25+0300\n"
+"POT-Creation-Date: 2020-06-28 16:01+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -623,12 +623,6 @@ msgstr ""
 msgid "The list for call and switch to allowed projects of OpenSCADA."
 msgstr ""
 
-msgid "current"
-msgstr ""
-
-msgid "running"
-msgstr ""
-
 msgid "Switch to the selected project"
 msgstr ""
 
@@ -651,6 +645,16 @@ msgid "The button for new projects creating or updating of presented ones, like 
 msgstr ""
 
 msgid "The button for exit the program."
+msgstr ""
+
+msgid "current"
+msgstr ""
+
+msgid "running"
+msgstr ""
+
+#, c-format
+msgid "%d backups"
 msgstr ""
 
 #, c-format
@@ -698,6 +702,12 @@ msgid "Project \"%1\" seems running now! You still want to call the project?"
 msgstr ""
 
 msgid "Project \"%1\" seems wrong or broken!"
+msgstr ""
+
+msgid "BackUp"
+msgstr ""
+
+msgid "Restore from \"%1\""
 msgstr ""
 
 #, c-format

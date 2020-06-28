@@ -31,7 +31,7 @@
 <td> <a href="../Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">QTStarter</a> </td>
 <td> Qt GUI пускач
 </td>
-<td> 4.8 </td>
+<td> 5.0 </td>
 <td> GPL2 </td>
 <td> ui_QTStarter.so </td>
 <td> en,uk,ru,de </td>
@@ -44,34 +44,37 @@
 <dl><dd> - реалізувати менеджер підпроектів для їх запуску у окремих процесах, але із їх зберіганням та керуванням у одному конфігураційному файлі проекту, для високо-надійних конфігурацій;</dd>
 <dd> - реалізувати менеджер фонового виконання процесів.</dd></dl>
 </td></tr></table>
+<p>Модуль надає до OpenSCADA пускач GUI модулів, заснованих на багатоплатформеній бібліотеці <a class="external text" href="http://qt.io" rel="nofollow noreferrer noopener" target="_blank">Qt</a> графічного користувацького інтерфейсу (GUI), початково створеній фірмою <a class="external text" href="http://www.trolltech.com" rel="nofollow noreferrer noopener" target="_blank">TrollTech</a>. Також, модуль реалізує елементи менеджеру проектів OpenSCADA. Окремий модуль для запуску Qt GUI модулів потрібно через необхідність організації однопотокового виконання всіх компонентів візуалізації Qt та централізованої ініціалізації головного об'єкту Qt-бібліотеки — QApplication.
+</p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
-<li class="toclevel-1 tocsection-1"><a href="#Qt_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.96_OpenSCADA"><span class="tocnumber">1</span> <span class="toctext">Qt модулі OpenSCADA</span></a></li>
-<li class="toclevel-1 tocsection-2"><a href="#.D0.9F.D1.80.D0.BE.D0.B5.D0.BA.D1.82.D0.B8_OpenSCADA"><span class="tocnumber">2</span> <span class="toctext">Проекти OpenSCADA</span></a></li>
-<li class="toclevel-1 tocsection-3"><a href="#.D0.92.D0.B8.D0.B3.D0.BB.D1.8F.D0.B4_.D1.82.D0.B0_.D0.B2.D1.96.D0.B4.D1.87.D1.83.D1.82.D1.82.D1.8F"><span class="tocnumber">3</span> <span class="toctext">Вигляд та відчуття</span></a></li>
-<li class="toclevel-1 tocsection-4"><a href="#.D0.9A.D0.BE.D0.BD.D1.84.D1.96.D0.B3.D1.83.D1.80.D0.B0.D1.86.D1.96.D1.8F"><span class="tocnumber">4</span> <span class="toctext"><span>Конфігурація</span></span></a></li>
-<li class="toclevel-1 tocsection-5"><a href="#API_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.87.D0.B0"><span class="tocnumber">5</span> <span class="toctext">API програмування користувача</span></a></li>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.92.D1.81.D1.82.D1.83.D0.BF"><span class="tocnumber">1</span> <span class="toctext">Вступ</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Qt_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.96_OpenSCADA"><span class="tocnumber">2</span> <span class="toctext">Qt модулі OpenSCADA</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#.D0.9F.D1.80.D0.BE.D0.B5.D0.BA.D1.82.D0.B8_OpenSCADA"><span class="tocnumber">3</span> <span class="toctext">Проекти OpenSCADA</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#.D0.92.D0.B8.D0.B3.D0.BB.D1.8F.D0.B4_.D1.82.D0.B0_.D0.B2.D1.96.D0.B4.D1.87.D1.83.D1.82.D1.82.D1.8F"><span class="tocnumber">4</span> <span class="toctext">Вигляд та відчуття</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#.D0.9A.D0.BE.D0.BD.D1.84.D1.96.D0.B3.D1.83.D1.80.D0.B0.D1.86.D1.96.D1.8F"><span class="tocnumber">5</span> <span class="toctext"><span>Конфігурація</span></span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#API_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.87.D0.B0"><span class="tocnumber">6</span> <span class="toctext">API програмування користувача</span></a></li>
 </ul>
 </div>
 
-<p>Модуль надає до OpenSCADA пускач GUI модулів, заснованих на багатоплатформеній бібліотеці <a class="external text" href="http://qt.io" rel="nofollow noreferrer noopener" target="_blank">Qt</a> графічного користувацького інтерфейсу (GUI), початково створеній фірмою <a class="external text" href="http://www.trolltech.com" rel="nofollow noreferrer noopener" target="_blank">TrollTech</a>. Також, модуль реалізує елементи менеджеру проектів OpenSCADA. Окремий модуль для запуску Qt GUI модулів потрібно через необхідність організації однопотокового виконання всіх компонентів візуалізації Qt та централізованої ініціалізації головного об'єкту Qt-бібліотеки — QApplication.
-</p><p>Від початку цей модуль створює окремий потік для основного потоку Qt, де є можливість формування екрану динамічної заставки, оскільки основні процеси OpenSCADA продовжують виконання у основному потоці. Та версія Qt5 стала чутливою до виконання у неголовному потоці, тому для неї у OpenSCADA додано таку можливість, але виключно зі статичним екраном заставки, що містить інформацію про програму та проект OpenSCADA. Для контролю цієї можливості передбачено параметр запуску <i>--QtInNotMainThread</i>, який вмикає виконання у неголовному потоці, для Qt4, відтак, по замовченню, здійснюється виконання у головному, що типово для Qt5.
+<h2><span class="mw-headline" id=".D0.92.D1.81.D1.82.D1.83.D0.BF"><span class="mw-headline-number">1</span> Вступ</span></h2>
+<p>Від початку цей модуль створює окремий потік для основного потоку Qt, де є можливість формування екрану динамічної заставки, оскільки основні процеси OpenSCADA продовжують виконання у основному потоці. Та версія Qt5 стала чутливою до виконання у неголовному потоці, тому для неї у OpenSCADA додано таку можливість, але виключно зі статичним екраном заставки, що містить інформацію про програму та проект OpenSCADA. Для контролю цієї можливості передбачено параметр запуску <i>--QtInNotMainThread</i>, який вмикає виконання у неголовному потоці, для Qt4, відтак, по замовченню, здійснюється виконання у головному, що типово для Qt5.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:606px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_splash_uk.png"><img class="thumbimage" height="304" src="../files/QTStarter_splash_uk.png" width="604" /></a>  <div class="thumbcaption">Рис.1. Динамічний екран заставки модуля.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:608px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_splash_uk.png"><img class="thumbimage" height="306" src="../files/QTStarter_splash_uk.png" width="606" /></a>  <div class="thumbcaption">Рис.1. Динамічний екран заставки модуля.</div></div></div></div>
 <p>Діалогове вікно пускачу (Рис.2) загалом надає:
 </p>
 <ul><li> вибір наявних Qt GUI модулів, може бути відсутнім у випадку первинного запуску для обрання лише проекту OpenSCADA;</li>
 <li> вибір наявних OpenSCADA проектів для їх обрання або перемикання;</li>
 <li> вихід з OpenSCADA;</li>
 <li> меню допомоги з пунктами: "Про", "Про Qt", "Посібник QTStarter" (F1), "Посібник OpenSCADA 0.9" та "Що це" (Shift+F1).</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:302px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_dialog_uk.png"><img class="thumbimage" height="629" src="../files/QTStarter_dialog_uk.png" width="300" /></a>  <div class="thumbcaption">Рис.2. Діалогове вікно пускачу цього модуля.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:485px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_dialog_uk.png"><img class="thumbimage" height="673" src="../files/QTStarter_dialog_uk.png" width="483" /></a>  <div class="thumbcaption">Рис.2. Діалогове вікно пускачу цього модуля.</div></div></div></div>
 <p>У разі відсутності діалогового вікна запуску та всіх вікно модулів Qt GUI, програма може бути запущена або згорнута у системний лоток (Рис.3), створений цим модулем.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:340px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_systray_uk.png"><img class="thumbimage" height="174" src="../files/QTStarter_systray_uk.png" width="338" /></a>  <div class="thumbcaption">Рис.3. Проект "АГЛКС", запущений або згорнутий до системного лотка.</div></div></div></div> 
 <p>Модулем здійснюється відключення функції збереження сеансу програми при примусовому закритті системою, для того щоб запобігти спробам відновлення цього сеансу при старті системи, оскільки OpenSCADA цього не потребує.
 </p><p>Модулем передбачено підтримку емуляції правої клавіші миші для оточень із сенсорним екраном, на кшталт Android, оскільки інтерфейс часто передбачає контроль виключно за допомогою контекстного меню. Емуляція вмикається встановленням параметру командного рядку <i>--simulRightMKeyTm=&lt;tm&gt;</i>, при старті програми, де вказується час утримання (типово дві секунди) натиску лівої клавіші миші (або на екрані) для генерації повідомлення правої клавіші миші та контекстної допомоги. Емуляція правої клавіші не вимикає-відкладає первинних повідомлень лівої клавіші, відтак її загальні дії мають працювати коректно, але можливі невідповідності у місцях де первинне повідомлення щось перемикає та емульоване повідомлення вже піде не за адресою!
 </p>
-<h2><span class="mw-headline" id="Qt_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.96_OpenSCADA"><span class="mw-headline-number">1</span> Qt модулі OpenSCADA</span></h2>
+<h2><span class="mw-headline" id="Qt_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.96_OpenSCADA"><span class="mw-headline-number">2</span> Qt модулі OpenSCADA</span></h2>
 <p>Для запуску Qt GUI модулів використовується розширений інтерфейс виклику функцій модулів. Цей інтерфейс передбачає експортування функцій зовнішніми модулями. У нашому випадку Qt GUI модулі повинні експортувати наступні функції:
 </p>
 <ul><li> <i>QIcon icon();</i> — передає об'єкт іконки модуля що викликається, для побудови переліку.</li>
@@ -81,19 +84,20 @@
 </p><p>Для встановлення Qt GUI модулів, які запускаються при старті, модуль стартеру містить конфігураційне поле "StartMod". У цьому полі записуються ідентифікатори модулів, що запускаються. Конфігураційне поле "StartMod" можна визначити у конфігураційному файлі, а також у системній таблиці БД ("SYS") через діалог <a href="#Cfg">конфігурації модуля</a> (рис.4).
 </p><p>У випадку закриття вікон всіх Qt GUI модулів або запуску без визначення модуля для запуску у полі "StartMod", "Пускач" створює власне діалогове вікно (рис.2). Якщо поле "CloseToTray" конфігураційного файлу або <a href="#Cfg">конфігурацією модуля</a> (рис.4) встановлено то у цьому випадку відбудеться згортання програми до системного лотку (рис.3).
 </p>
-<h2><span class="mw-headline" id=".D0.9F.D1.80.D0.BE.D0.B5.D0.BA.D1.82.D0.B8_OpenSCADA"><span class="mw-headline-number">2</span> Проекти OpenSCADA</span></h2>
+<h2><span class="mw-headline" id=".D0.9F.D1.80.D0.BE.D0.B5.D0.BA.D1.82.D0.B8_OpenSCADA"><span class="mw-headline-number">3</span> Проекти OpenSCADA</span></h2>
 <p>З інтеграцією до OpenSCADA елементів менеджеру проектів цей модуль отримав функцію обрання чинних та створення нових проектів OpenSCADA, у переліку проектів та команд проектів (рис.2). Наразі передбачено два режими діалогового вікна пускачу (рис.2), це — режим первинного-ініціюючого запуску та режим виконання обраного проекту.
 </p><p>Первинний-ініціюючий режим, по факту, є режимом запуску без визначеного проекту та передбачає саме обрання проекту для переключення у другий режим, та відповідно приховує перелік Qt GUI модулів, навіть якщо вони завантажені до ініціюючої конфігурації.
 </p><p>У режимі виконання проекту працюють всі типові механізми, а саме це виклик Qt GUI модулів та запуск-згортання у системний лоток, а діалогове вікно пускачу (рис.2) містить перелік наявних Qt GUI модулів та інформацію про запущений проект, у заголовку вікна.
-</p><p>Окрім безпосередньо назв проектів у переліку проектів, праворуч до назви, наведено їх стан — "поточний" та "виконується". Стан "поточний" означає, що здійснюється виконання саме цього проекту. Стан "виконується" вказує на наявність файлу блокування багаторазового запуску, а відтак і виконання проекту, та окремо від цього проекту якщо поряд не вказано стану "поточний". Обрати та спробувати перемкнутися на проект у стані "виконується" можна, прийнявши попередження, але якщо цей проект реально зараз виконується і наявність файлу блокування не є залишковим після аварійного завершення програми то програма, що перемикається, просто завершиться!
+</p><p>У переліку проектів користувачу (через контекстне меню) додатково надається можливість зарезервувати — створити резервну копію, та відновити проекти із обраної резервної копії.
+</p><p>Окрім безпосередньо назв проектів у переліку проектів, праворуч від назви, наведено їх стан — "поточний", "виконується" та "{N} рез.копій". Стан "поточний" означає, що здійснюється виконання саме цього проекту. Стан "виконується" вказує на наявність файлу блокування багаторазового запуску, а відтак і виконання проекту, та окремо від цього проекту якщо поряд не вказано стану "поточний". Обрати та спробувати перемкнутися на проект у стані "виконується" можна, прийнявши попередження, але якщо цей проект реально зараз виконується і наявність файлу блокування не є залишковим після аварійного завершення програми то програма, що перемикається, просто завершиться! Стан "{N} рез.копій" вказує на наявність визначеної кількості резервних копій проекту.
 </p>
-<h2><span class="mw-headline" id=".D0.92.D0.B8.D0.B3.D0.BB.D1.8F.D0.B4_.D1.82.D0.B0_.D0.B2.D1.96.D0.B4.D1.87.D1.83.D1.82.D1.82.D1.8F"><span class="mw-headline-number">3</span> Вигляд та відчуття</span></h2>
+<h2><span class="mw-headline" id=".D0.92.D0.B8.D0.B3.D0.BB.D1.8F.D0.B4_.D1.82.D0.B0_.D0.B2.D1.96.D0.B4.D1.87.D1.83.D1.82.D1.82.D1.8F"><span class="mw-headline-number">4</span> Вигляд та відчуття</span></h2>
 <p>У зв'язку із розширенням меж використання OpenSCADA на мобільні програмні платформи на кшталт Maemo, MeeGo, Android та частих випадків невідповідності вигляду програм на бібліотеках Qt4 та Qt5 до сучасних оточень робочого столу, цей модуль було розширено власним механізмом контролю вигляду та відчуттів кінцевого візуального інтерфейсу.
 </p><p>Загалом, модуль наразі передбачає контроль за загальним: стилем віджетів Qt, загальним шрифтом, палітрою інтерфейсу та таблицями каскадних стилів. Цей контроль здійснюється через параметри конфігураційного файлу "Style", "Font", "Palette", "StyleSheets" та <a href="#Cfg">конфігурацією модуля</a> (рис.4).
 </p><p>Також, модулем передбачено оформлення напрацювань окремих видів та відчуттів у бібліотеці композитного характеру, яка формується у таблиці конфігураційного файлу зі структурою: <b>LookFeel(<u>NAME</u>, FONT, STYLE, PALETTE, STL_SHTS)</b>.
 </p><p>Відтак, для мобільних пристроїв або заздалегідь відомих специфічних оточень робочого столу, потрібний вигляд та відчуття можна попередньо встановлювати у конфігураційному файлі пакунків програми, та для всіх можна швидко змінити після встановлення, обравши потрібний з бібліотеки.
 </p>
-<h2><span class="mw-headline" id=".D0.9A.D0.BE.D0.BD.D1.84.D1.96.D0.B3.D1.83.D1.80.D0.B0.D1.86.D1.96.D1.8F"><span class="mw-headline-number">4</span> <span id="Cfg" title="#Cfg">Конфігурація</span></span></h2>
+<h2><span class="mw-headline" id=".D0.9A.D0.BE.D0.BD.D1.84.D1.96.D0.B3.D1.83.D1.80.D0.B0.D1.86.D1.96.D1.8F"><span class="mw-headline-number">5</span> <span id="Cfg" title="#Cfg">Конфігурація</span></span></h2>
 <p>Для конфігурації функцій, що наведено вище, модулем надається можливість налаштування їх параметрів за посередництвом інтерфейсу управління OpenSCADA (Рис.4):
 </p>
 <ul><li> Секція "Опції модуля":
@@ -109,7 +113,7 @@
 <li> <i>Палітра</i> — поле профілю кольорів інтерфейсу у трьох групах за рядками: активна, вимкнена, неактивна. Та з двадцятьма кольорами у групі-рядку, поділені символом ',': WindowText(0), Button(1), Light(2), Midlight(3), Dark(4), Mid(5), Text(6), BrightText(7), ButtonText(8), Base(9), Window(10), Shadow(11), Highlight(12), HighlightedText(13), Link(14), LinkVisited(15), AlternateBase(16), NoRole(17), ToolTipBase(18), ToolTipText(19). Профіль допускає визначення тільки потрібних кольорів, залишаючи невизначені порожніми, та саме це визначає композитність палітри, а саме — заповнення порожнеч іншим профілем бібліотеки.</li>
 <li> <i>Сторінки стилів</i> — поле профілю каскадних таблиць стилів (CSS), композитність якого полягає у доданні CCS правил у кінець поточного профілю.</li></ul></li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:690px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_cfg_uk.png"><img class="thumbimage" height="692" src="../files/QTStarter_cfg_uk.png" width="688" /></a>  <div class="thumbcaption">Рис.4. Сторінка конфігурації модуля.</div></div></div></div>
-<h2><span class="mw-headline" id="API_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.87.D0.B0"><span class="mw-headline-number">5</span> API програмування користувача</span></h2>
+<h2><span class="mw-headline" id="API_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.87.D0.B0"><span class="mw-headline-number">6</span> API програмування користувача</span></h2>
 <p><b>Об'єкт модуля (SYS.UI.QTStarter)</b>
 </p>
 <ul><li> <i>Array sensors()</i> — отримати всі наявні сенсори від Qt mobility, повертає "false" якщо не доступно жодного сенсору.</li></ul>

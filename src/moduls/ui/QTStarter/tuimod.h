@@ -85,6 +85,8 @@ protected:
     void showEvent( QShowEvent* );
     void closeEvent( QCloseEvent* );
 
+    void updatePrjList( const string &stage = "" );
+
 private:
     //Attributes
     QListWidget	*prjsLs;
@@ -100,6 +102,8 @@ private slots:
     void projCreateUpdt( );
     void projSelect( );
     void projSwitch( const QString &prj = "" );
+
+    void prjsLsCtxMenuRequested( const QPoint &pos );
 };
 
 //*************************************************

@@ -6,26 +6,32 @@ argHelp()
 The script is mostly software platform specific and relates now for Linux.
 openscada-proj list
 openscada-proj proc|create|remove|update {ProjName}
-openscada-proj backup|backupRestore {ProjName} [{BackupName}]
-openscada-proj backupList {ProjName}
  Commands:
   list   - allowed projects list;
   proc   - proceed for copy RO projects to WR, create desktop links, process core dumps;
   create - create new projects or copy RO projects to WR, create desktop links;
   remove - remove project;
   update - update from 0.8.0 LTS;
-  backup - backup the selected project;
-  backupRestore - restore the selected project from the last backup;
-  backupList	- list the project backups.
  Arguments:
   ProjName - project name;
-  BackupName - the backup archive name, at missing there used the current date.
  Environments:
   dPrj     - directory of projects OpenSCADA, can be RO;
   dPrjUser - directory of projects OpenSCADA of the user, WR;
   dSysCfg  - directory of system configuration;
   dData    - directory of system data;
-  TAR_ComprPrg - TAR compression program, at missing there used gzip.
+
+openscada-proj backup|backupRestore {ProjName} [{BackupName}]
+openscada-proj backupList {ProjName}
+ Commands:
+  backup - backup the selected project <ProjName> to the name <BackupName>, or to the current date at missing;
+  backupRestore - restore the selected project <ProjName> from the pointed backup name <BackupName>, or from the last one at missing;
+  backupList	- list the project <ProjName> backups.
+ Arguments:
+  ProjName   - project name;
+  BackupName - the backup archive name.
+ Environments:
+  OSCADA_TAR_ComprPrg - TAR compression program, at missing there used gzip.
+  OSCADA_BackLim      - Backups limit, 10 by default
 ";
 }
 
@@ -145,9 +151,21 @@ case "$1" in
     cd $prjsDir
     if test -d $prjNm; then
 	echo "Backuping the project \"$prjNm\" to $prjBackNm"
-	if test "x$TAR_ComprPrg" = "x"; then TAR_ComprPrg=gzip; fi
-	tar --exclude="lock" -I$TAR_ComprPrg -cvf $prjBackNm $prjNm > /dev/null
+	if test "x$OSCD_TAR_ComprPrg" = "x"; then OSCD_TAR_ComprPrg=gzip; fi
+	tar --exclude="lock" -I$OSCD_TAR_ComprPrg -cvf $prjBackNm $prjNm > /dev/null
 	ln -f -s $prjBackNm ${prjNm}_last.backup
+
+	#Processing the backup limit
+	iBack=0
+	if test "x$OSCD_BackLim" = "x"; then OSCD_BackLim=10; fi
+	for iF in `ls -t ${prjNm}_*.backup 2> /dev/null`; do
+	    if test -h $iF; then continue; fi
+	    if test $iBack -ge $OSCD_BackLim; then
+		echo "Removing $iF by the limit $OSCD_BackLim"
+		rm $iF
+	    fi
+	    iBack=$(($iBack + 1))
+	done
     else echo "No the project \"$prjNm\" found!"; fi
     ;;
   backupRestore)
@@ -167,7 +185,15 @@ case "$1" in
     else echo "No the backup \"$prjBackNm\" found!"; fi
     ;;
   backupList)
-
+    if test $# -lt 1; then echo "Not enough arguments!"; exit 1; fi
+    prjNm=$2
+    prjsDir=$dPrj
+    if test -n "$dPrjUser" -a -d $dPrjUser/$prjNm; then prjsDir=$dPrjUser; fi
+    cd $prjsDir
+    for iF in `ls -t ${prjNm}_*.backup 2> /dev/null`; do
+	if test -h $iF; then continue; fi
+	echo $iF | sed -n "/^${prjNm}_\(.*\)\.backup/s//\1/p"
+    done
     ;;
   update)
     if test $# -lt 2; then echo "Not enough arguments!"; exit 1; fi

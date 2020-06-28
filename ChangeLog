@@ -1,3 +1,14 @@
+2020-06-28 Roman (stable)
+- data/Android/build.sh: Appended for built in the new module DB.DBGate.
+- !!!!:data/openscada-proj.in,UI.QTStarter:
+    Finished in implementation the backups support by implementing the command "backupList" and limits of the backups.
+    UI.QTStarter: Appended for the backup commands call from the project manager - list of the projects.
+- SYS: TSYS::objFuncCall() moved to public.
+- FIX:SYS: The OpenSCADA tasks priority fixed for SCHED_FIFO in it display as 0.
+- UI.VCAEngine: Completly cleared from calcProgTr() indirect accessing and
+    calcLang() and calcProg() set to use TSYS::strLine() directly instead the strange processing with spare marking the modification.
+
+
 2020-06-21 Roman (stable)
 - DOC: Updating the offline documentation.
 
@@ -26,7 +37,7 @@
 - FIX:UI.QTCfg: Sending requests to other selected items is performed only for the main request result TError::NoError.
 - UI.QTStarter: The OpenSCADA information on the splash moved to the right and the OpenSCADA project to the left.
 - UI.VCAEngine: The property "Translation" of the widget procedures completly moved to the direct access and set visible
-    only for the procdure presence, also as the procedure text area and the calculation periodicity visible only at any language selection.
+    only for the procedure presence, also as the procedure text area and the calculation periodicity visible only at any language selection.
 - FIX:UI.Vision: Fixed in the user change at the remote work, after the previous mark.
     Prevented from try the user changing to no password one in the remote work, only the warning before the implementing.
 

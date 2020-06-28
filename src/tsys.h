@@ -386,6 +386,8 @@ class TSYS : public TCntrNode
 
 	AutoHD<TModule>	mainThr;	//A module to call into the main thread
 
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+
     protected:
 	//Protected methods
 	void load_( );
@@ -403,8 +405,6 @@ class TSYS : public TCntrNode
 	void	cfgPrmLoad( );
 	void	cfgFileScan( bool first = false, bool up = false );
 	void	cntrCmdProc( XMLNode *opt );	// Control interface command process
-
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
 	static unsigned char getBase64Code( unsigned char asymb );
 

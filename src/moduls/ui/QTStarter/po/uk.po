@@ -1,15 +1,15 @@
 # OpenSCADA.UI.QTStarter translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.UI.QTStarter package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2018.
+# Roman Savochenko <roman@oscada.org>, 2005-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-04 14:25+0300\n"
+"POT-Creation-Date: 2020-06-28 16:01+0300\n"
 "PO-Revision-Date: 2007-10-29 22:03+0200\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -707,12 +707,6 @@ msgstr "Перелік проектів OpenSCADA доступних для ви
 msgid "The list for call and switch to allowed projects of OpenSCADA."
 msgstr "Перелік проектів OpenSCADA доступних для виклику та переключення."
 
-msgid "current"
-msgstr "поточний"
-
-msgid "running"
-msgstr "виконується"
-
 msgid "Switch to the selected project"
 msgstr "Переключитися на обраний проект"
 
@@ -743,6 +737,16 @@ msgstr ""
 
 msgid "The button for exit the program."
 msgstr "Кнопка для виходу з програми."
+
+msgid "current"
+msgstr "поточний"
+
+msgid "running"
+msgstr "виконується"
+
+#, c-format
+msgid "%d backups"
+msgstr "%d рез.копій"
 
 #, c-format
 msgid ""
@@ -800,6 +804,12 @@ msgstr "Проект \"%1\" схоже виконується! Ви ще баж�
 
 msgid "Project \"%1\" seems wrong or broken!"
 msgstr "Проект \"%1\" схоже помилковий або зламаний!"
+
+msgid "BackUp"
+msgstr "Зарезервувати"
+
+msgid "Restore from \"%1\""
+msgstr "Відновити із \"%1\""
 
 #, c-format
 msgid "Untranslated Qt message: '%s'"

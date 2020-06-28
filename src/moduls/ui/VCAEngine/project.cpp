@@ -983,7 +983,7 @@ bool Page::cfgChange( TCfg &co, const TVariant &pc )
 {
     if(co.getS() == pc.getS())	return true;
     if(co.name() == "PR_TR") cfg("PROC").setNoTransl(!calcProgTr());
-    else if(co.name() == "PROC" /*&& co.getS() != pc.getS()*/) procChange();
+    else if(co.name() == "PROC") procChange();
     modif();
     return true;
 }
@@ -1035,25 +1035,17 @@ string Page::calcLang( ) const
 {
     if(proc().empty() && !parent().freeStat()) return parent().at().calcLang();
 
-    string iprg = proc();
-    if(iprg.find("\n") == string::npos) {
-	iprg = iprg+"\n";
-	cfg("PROC").setS(iprg);
-    }
-    return iprg.substr(0,iprg.find("\n"));
+    return TSYS::strLine(proc(), 0);
 }
-
-bool Page::calcProgTr( )	{ return /*(!proc().size() && !parent().freeStat()) ? parent().at().calcProgTr() :*/ cfg("PR_TR").getB(); }
 
 string Page::calcProg( ) const
 {
     if(!proc().size() && !parent().freeStat()) return parent().at().calcProg();
 
     string iprg = proc();
-    size_t lng_end = iprg.find("\n");
-    if(lng_end == string::npos) lng_end = 0;
-    else lng_end++;
-    return iprg.substr(lng_end);
+    int off = 0;
+    TSYS::strLine(iprg, 0, &off);
+    return iprg.substr(off);
 }
 
 string Page::calcProgStors( const string &attr )
@@ -1068,12 +1060,6 @@ string Page::calcProgStors( const string &attr )
 int Page::calcPer( ) const	{ return (mProcPer < 0 && !parent().freeStat()) ? parent().at().calcPer() : mProcPer; }
 
 void Page::setCalcLang( const string &ilng )	{ cfg("PROC").setS(ilng.empty() ? "" : ilng+"\n"+calcProg()); }
-
-void Page::setCalcProgTr( bool vl )
-{
-    /*if(!proc().size() && !parent().freeStat())	parent().at().setCalcProgTr(vl);
-    else*/ cfg("PR_TR") = vl;
-}
 
 void Page::setCalcProg( const string &iprg )	{ cfg("PROC").setS(calcLang()+"\n"+iprg); }
 

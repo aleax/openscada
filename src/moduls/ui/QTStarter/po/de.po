@@ -3,15 +3,15 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009, 2011.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2014-2018.
+# Roman Savochenko <roman@oscada.org>, 2014-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-04 14:25+0300\n"
+"POT-Creation-Date: 2020-06-28 16:01+0300\n"
 "PO-Revision-Date: 2011-07-19 20:56+0400\n"
-"Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
+"Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -717,12 +717,6 @@ msgstr "Liste der erlaubten Aufrufe/Wechsel von Projekten von OpenSCADA"
 msgid "The list for call and switch to allowed projects of OpenSCADA."
 msgstr "Die Liste für Anruf und Wechsel zu erlaubten Projekten von OpenSCADA."
 
-msgid "current"
-msgstr "aktuell"
-
-msgid "running"
-msgstr "laufen"
-
 msgid "Switch to the selected project"
 msgstr "Wechseln Sie zum ausgewählten Projekt"
 
@@ -753,6 +747,16 @@ msgstr ""
 
 msgid "The button for exit the program."
 msgstr "Die Taste zum Verlassen des Programms."
+
+msgid "current"
+msgstr "aktuell"
+
+msgid "running"
+msgstr "laufen"
+
+#, c-format
+msgid "%d backups"
+msgstr "%d Backups"
 
 #, c-format
 msgid ""
@@ -815,6 +819,12 @@ msgstr ""
 
 msgid "Project \"%1\" seems wrong or broken!"
 msgstr "Project \"%1\" scheint falsch oder defekt!"
+
+msgid "BackUp"
+msgstr "BackUp"
+
+msgid "Restore from \"%1\""
+msgstr "Wiederherstellung von \"%1\""
 
 #, c-format
 msgid "Untranslated Qt message: '%s'"

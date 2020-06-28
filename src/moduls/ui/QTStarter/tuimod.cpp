@@ -57,7 +57,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"MainThr"
-#define MOD_VER		"4.8.2"
+#define MOD_VER		"5.0.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -1095,95 +1095,14 @@ StartDialog::StartDialog( ) : prjsLs(NULL), prjsBt(NULL)
 	// Prepare the list widget for projects selection.
 	prjsLs = new QListWidget(this);
 	prjsLs->setSortingEnabled(true);
+	prjsLs->setContextMenuPolicy(Qt::CustomContextMenu);
 	prjsLs->setToolTip(_("List of allowed to call/switch projects of OpenSCADA"));
 	prjsLs->setWhatsThis(_("The list for call and switch to allowed projects of OpenSCADA."));
-	string userDir = SYS->prjUserDir();
-	DIR *IdDir = userDir.size() ? opendir(userDir.c_str()) : NULL;
-	if(IdDir) {
-	    struct stat file_stat;
-	    dirent	*scan_rez = NULL,
-			*scan_dirent = (dirent*)malloc(offsetof(dirent,d_name) + NAME_MAX + 1);
-
-	    while(readdir_r(IdDir,scan_dirent,&scan_rez) == 0 && scan_rez) {
-		if(strcmp(scan_rez->d_name,"..") == 0 || strcmp(scan_rez->d_name,".") == 0) continue;
-		//  Presenting of the project's folder
-		if(stat((userDir+"/"+scan_rez->d_name).c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFDIR)
-		    continue;
-		//  Presenting of the project's config file
-		string itNm = userDir + "/" + scan_rez->d_name + "/oscada.xml";
-		if(stat(itNm.c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG) continue;
-		//  Item placing
-		string opt;
-		if(scan_rez->d_name == SYS->prjNm()) opt += string(opt.size()?", ":"") + _("current");
-		if(access((userDir+"/"+scan_rez->d_name+"/lock").c_str(),F_OK) == 0)
-		    opt += string(opt.size()?", ":"") + _("running");
-		QListWidgetItem *tit = new QListWidgetItem((string(scan_rez->d_name)+(opt.size()?" ("+opt+")":"")).c_str(), prjsLs);
-		prjsLs->addItem(tit);
-		tit->setData(Qt::UserRole, scan_rez->d_name);
-		QImage ico;
-		if(ico.load((string(oscd_datadir_full "/icons/")+scan_rez->d_name+".png").c_str()) ||
-			ico.load((userDir+"/"+scan_rez->d_name+"/icons/"+scan_rez->d_name+".png").c_str()))
-		    tit->setIcon(QPixmap::fromImage(ico));
-	    }
-
-	    free(scan_dirent);
-	    closedir(IdDir);
-	}
-
-	IdDir = opendir(oscd_datadir_full);
-	if(IdDir) {
-	    struct stat file_stat;
-	    dirent	*scan_rez = NULL,
-			*scan_dirent = (dirent*)malloc(offsetof(dirent,d_name) + NAME_MAX + 1);
-
-	    while(readdir_r(IdDir,scan_dirent,&scan_rez) == 0 && scan_rez) {
-		if(strcmp(scan_rez->d_name,"..") == 0 || strcmp(scan_rez->d_name,".") == 0) continue;
-		//  Presenting of the project's folder
-		if(stat((string(oscd_datadir_full)+"/"+scan_rez->d_name).c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFDIR)
-		    continue;
-		//  Presenting of the project's config file
-		string itNm = string(sysconfdir_full) + "/oscada_" + scan_rez->d_name + ".xml";
-		if(stat(itNm.c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG) {
-		    itNm = string(oscd_datadir_full) + "/" + scan_rez->d_name + "/oscada.xml";
-		    if(stat(itNm.c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG) continue;
-		}
-		//  Check for presenting already
-		QList<QListWidgetItem *> pLs = prjsLs->findItems(scan_rez->d_name, Qt::MatchStartsWith);
-		int iP = 0;
-		for( ; iP < pLs.size() && pLs[iP]->data(Qt::UserRole).toString() != scan_rez->d_name; iP++) ;
-		if(pLs.size() && iP < pLs.size()) continue;
-
-		//  Item placing
-		string opt;
-		if(scan_rez->d_name == SYS->prjNm())	opt += string(opt.size()?", ":"") + _("current");
-		if(access((string(oscd_datadir_full "/")+scan_rez->d_name+"/lock").c_str(),F_OK) == 0)
-		    opt += string(opt.size()?", ":"") + _("running");
-		QListWidgetItem *tit = new QListWidgetItem((string(scan_rez->d_name)+(opt.size()?" ("+opt+")":"")).c_str(), prjsLs);
-		prjsLs->addItem(tit);
-		tit->setData(Qt::UserRole, scan_rez->d_name);
-		QImage ico;
-		if(ico.load((string(oscd_datadir_full "/icons/")+scan_rez->d_name+".png").c_str()) ||
-			ico.load((string(oscd_datadir_full "/")+scan_rez->d_name+"/icons/"+scan_rez->d_name+".png").c_str()))
-		    tit->setIcon(QPixmap::fromImage(ico));
-	    }
-
-	    free(scan_dirent);
-	    closedir(IdDir);
-	}
-
-	// Mark current project's items in the list
-	if(SYS->prjNm().size()) {
-	    QList<QListWidgetItem *> sIt = prjsLs->findItems(SYS->prjNm().c_str(), Qt::MatchStartsWith);
-	    for(int iIt = 0; iIt < sIt.length(); iIt++) {
-		sIt[iIt]->setSelected(true);
-		prjsLs->scrollToItem(sIt[iIt]);
-	    }
-	}
-	// Connect
 	connect(prjsLs, SIGNAL(itemSelectionChanged()), this, SLOT(projSelect()));
 	connect(prjsLs, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(projSwitch()));
-
+	connect(prjsLs, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(prjsLsCtxMenuRequested(const QPoint&)));
 	wnd_lay->addWidget(prjsLs, 0, 0);
+	updatePrjList();
 
 	prjsBt = new QPushButton(QIcon(":/images/ok.png"), SYS->prjNm().size()?_("Switch to the selected project"):_("Call the selected project"), this);
 	prjsBt->setEnabled(false);
@@ -1231,6 +1150,94 @@ void StartDialog::closeEvent( QCloseEvent *ce )
 {
     if(!mod->QtApp->trayPresent() && mod->QtApp->topLevelWindows() <= 1) SYS->stop();
     ce->accept();
+}
+
+void StartDialog::updatePrjList( const string &stage )
+{
+    if(stage.empty()) {
+	int scrollPos = prjsLs->verticalScrollBar()->value();
+	prjsLs->blockSignals(true);
+	while(prjsLs->count())	delete prjsLs->takeItem(0);
+
+	updatePrjList("user");
+	updatePrjList("sys");
+	prjsLs->blockSignals(false);
+	prjsLs->verticalScrollBar()->setValue(scrollPos);
+
+	if(SYS->prjNm().size()) {
+	    QList<QListWidgetItem *> sIt = prjsLs->findItems(SYS->prjNm().c_str(), Qt::MatchStartsWith);
+	    for(int iIt = 0; iIt < sIt.length(); iIt++) {
+		sIt[iIt]->setSelected(true);
+		prjsLs->scrollToItem(sIt[iIt]);
+	    }
+	}
+    }
+    else {
+	string wDir = SYS->prjUserDir();
+	if(stage == "sys") wDir = oscd_datadir_full;
+
+	DIR *IdDir = wDir.size() ? opendir(wDir.c_str()) : NULL;
+	if(!IdDir) return;
+
+	struct stat file_stat;
+	dirent	*scan_rez = NULL,
+		*scan_dirent = (dirent*)malloc(offsetof(dirent,d_name) + NAME_MAX + 1);
+
+	while(readdir_r(IdDir,scan_dirent,&scan_rez) == 0 && scan_rez) {
+	    if(strcmp(scan_rez->d_name,"..") == 0 || strcmp(scan_rez->d_name,".") == 0) continue;
+	    //  Presenting of the project's folder
+	    if(stat((wDir+"/"+scan_rez->d_name).c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFDIR)
+		continue;
+	    //  Presenting of the project's config file
+	    if(stage == "user") {
+		string itNm = wDir + "/" + scan_rez->d_name + "/oscada.xml";
+		if(stat(itNm.c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG) continue;
+	    }
+	    else if(stage == "sys") {
+		string itNm = string(sysconfdir_full) + "/oscada_" + scan_rez->d_name + ".xml";
+		if(stat(itNm.c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG) {
+		    itNm = wDir + "/" + scan_rez->d_name + "/oscada.xml";
+		    if(stat(itNm.c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG) continue;
+		}
+	    }
+
+	    //  Check for presenting already
+	    QList<QListWidgetItem *> pLs = prjsLs->findItems(scan_rez->d_name, Qt::MatchStartsWith);
+	    int iP = 0;
+	    for( ; iP < pLs.size() && pLs[iP]->data(Qt::UserRole).toString() != scan_rez->d_name; iP++) ;
+	    if(pLs.size() && iP < pLs.size()) continue;
+
+	    //  Item placing
+	    string opt;
+	    if(scan_rez->d_name == SYS->prjNm()) opt += string(opt.size()?", ":"") + _("current");
+	    bool isRun = false;
+	    if(access((wDir+"/"+scan_rez->d_name+"/lock").c_str(),F_OK) == 0) {
+		opt += string(opt.size()?", ":"") + _("running");
+		isRun = true;
+	    }
+	    //  Get the backups list
+	    vector<TVariant> prms;
+	    prms.push_back(string(bindir_full "/openscada-proj backupList ") + scan_rez->d_name);
+	    string bLs = SYS->objFuncCall("system", prms, "root").getS();
+	    if(bLs.size()) {
+		int nBkps = 0;
+		for(int off = 0; TSYS::strLine(bLs,0,&off).size(); ) nBkps++;
+		opt += string(opt.size()?", ":"") + TSYS::strMess(_("%d backups"),nBkps);
+	    }
+
+	    QListWidgetItem *tit = new QListWidgetItem((string(scan_rez->d_name)+(opt.size()?" ("+opt+")":"")).c_str(), prjsLs);
+	    prjsLs->addItem(tit);
+	    tit->setData(Qt::UserRole, scan_rez->d_name);
+	    tit->setData(Qt::UserRole+1, isRun ? "" : bLs.c_str());
+	    QImage ico;
+	    if(ico.load((string(oscd_datadir_full "/icons/")+scan_rez->d_name+".png").c_str()) ||
+		    ico.load((wDir+"/"+scan_rez->d_name+"/icons/"+scan_rez->d_name+".png").c_str()))
+		tit->setIcon(QPixmap::fromImage(ico));
+	}
+
+	free(scan_dirent);
+	closedir(IdDir);
+    }
 }
 
 void StartDialog::about( )
@@ -1308,6 +1315,46 @@ void StartDialog::projSwitch( const QString& iprj )
 			QMessageBox::Yes|QMessageBox::No,QMessageBox::No) != QMessageBox::Yes)	return;
     if(!SYS->prjSwitch(prjNm.toStdString(),toCreate))
 	QMessageBox::warning(this, SYS->prjNm().size()?_("Switch project"):_("Call project"), QString(_("Project \"%1\" seems wrong or broken!")).arg(prjNm));
+}
+
+void StartDialog::prjsLsCtxMenuRequested( const QPoint &pos )
+{
+    QMenu *menu = new QMenu();	//prjsLs->createStandardContextMenu();
+
+    //The BackUp action
+    QAction *actBackUp = new QAction(_("BackUp"), this);
+    menu->addAction(actBackUp);
+
+    //The restoring actions
+    if(prjsLs->currentItem()->data(Qt::UserRole+1).toString().size()) {
+	menu->addSeparator();
+	QAction *actRest = NULL;
+	string backId, backs = prjsLs->currentItem()->data(Qt::UserRole+1).toString().toStdString();
+	for(int off = 0; (backId=TSYS::strLine(backs,0,&off)).size(); ) {
+	    actRest = new QAction(QString(_("Restore from \"%1\"")).arg(backId.c_str()), this);
+	    actRest->setObjectName(backId.c_str());
+	    menu->addAction(actRest);
+	}
+    }
+
+    QAction *rez = menu->exec(QCursor::pos());
+    if(rez == actBackUp && prjsLs->currentItem()) {
+	vector<TVariant> prms;
+	prms.push_back(string(bindir_full "/openscada-proj backup ") +
+	    prjsLs->currentItem()->data(Qt::UserRole).toString().toStdString() + " &");
+	prms.push_back(true);
+	SYS->objFuncCall("system", prms, "root").getS();
+	updatePrjList();
+    }
+    else if(rez) {
+	vector<TVariant> prms;
+	prms.push_back(string(bindir_full "/openscada-proj backupRestore ") +
+	    prjsLs->currentItem()->data(Qt::UserRole).toString().toStdString() + " " +
+	    rez->objectName().toStdString() + " &");
+	prms.push_back(true);
+	SYS->objFuncCall("system", prms, "root").getS();
+    }
+    menu->deleteLater();
 }
 
 //*************************************************

@@ -1694,9 +1694,9 @@ ChkPer     &lt;секунд&gt;     Период поиска новых раз�
 <li> открытием собственного диалогового окна пускателя (Рис.5a);</li>
 <li> запуском-свёртыванием в системный лоток (Рис.5b) — фактически является режимом фонового исполнения, но с доступом из графического окружения.</li></ul></li>
 <li> режим инициирующего запуска (Рис.5c) — выбор проекта для переключения в основной режим исполнения проекта OpenSCADA.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:347px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_dialog_ru.png"><img class="thumbimage" height="629" src="files/QTStarter_dialog_ru.png" width="345" /></a>  <div class="thumbcaption">Рис.5a. Диалоговое окно пускателя модуля QTStarter.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:527px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_dialog_ru.png"><img class="thumbimage" height="672" src="files/QTStarter_dialog_ru.png" width="525" /></a>  <div class="thumbcaption">Рис.5a. Диалоговое окно пускателя модуля QTStarter.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:386px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_systray_ru.png"><img class="thumbimage" height="181" src="files/QTStarter_systray_ru.png" width="384" /></a>  <div class="thumbcaption">Рис.5b. Проект "АГЛКС", запущенный или свёрнутый в системный лоток.</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:298px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_selectProj_ru.png"><img class="thumbimage" height="524" src="files/QTStarter_selectProj_ru.png" width="296" /></a>  <div class="thumbcaption">Рис.5c. Диалоговое окно пускателя модуля QTStarter в режиме инициирующего запуска — выбора проекта.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:298px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_selectProj_ru.png"><img class="thumbimage" height="514" src="files/QTStarter_selectProj_ru.png" width="296" /></a>  <div class="thumbcaption">Рис.5c. Диалоговое окно пускателя модуля QTStarter в режиме инициирующего запуска — выбора проекта.</div></div></div></div>
 <p>Простой запуск является малополезным, неудобным и предусматривает использование и работу только с одной конфигурацией, это — <a href="#Config">конфигурационный файл</a> <i>{sysconfdir}/oscada.xml</i>, как первичное хранилище конфигурации. Для предоставления возможности выбора конфигурации при запуске программы предусмотрен <a href="#CfgFilePrm">параметр командной строки <i>--config</i></a> и изменение рабочей папки программы перед запуском или <a href="#CfgFilePrm">параметром "WorkDir" этого конфигурационного файла</a>, что может быть использовано и исключительно использовалось OpenSCADA до версии 0.9, через создание отдельного сценария командной строки (Shell) для отдельной конфигурации. В версии OpenSCADA 0.9 добавлено понятие "Проекта OpenSCADA", которое сначала реализовывалось отдельным сценарием командной строки <b>openscada_start</b>, а затем было интегрировано в ядро OpenSCADA и модуль запуска локального графического интерфейса.
 </p>
 <h3><span class="mw-headline" id=".D0.9F.D1.80.D0.BE.D0.B5.D0.BA.D1.82.D1.8B_OpenSCADA"><span class="mw-headline-number">5.1</span> <span id="Projects" title="#Projects">Проекты OpenSCADA</span></span></h3>
@@ -1734,12 +1734,53 @@ ChkPer     &lt;секунд&gt;     Период поиска новых раз�
 <li> именем символьной ссылки — <b>openscada_{ИмяПроекта}</b> на <b>openscada</b>.</li>
 <li> выбором присутствующего проекта из перечня локального графического интерфейса <a href="Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">UI.QTStarter</a>, который предоставляется по простому вызову первичного бинарного файла <b>openscada</b> — инициирующий режим (Рис.5c), и если не указаны графические модули Qt автоматического запуска — режим исполнения проекта OpenSCADA (Рис.5a).</li></ul>
 <p>Создать новый проект можно из локального графического интерфейса <a href="Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">UI.QTStarter</a> (Рис.5c) и через сценарий командной строки менеджера проектов <b>openscada-proj</b>, который собственно и вызывается из локального графического интерфейса.
-</p><p>В целом сценарий командной строки менеджера проектов <b>openscada-proj</b> предусматривает функции и команды:
+</p><p>Результат исполнения команды <b>$ openscada-proj --help</b>:
+</p>
+<pre style="white-space: pre-wrap;">
+Projects management script of OpenSCADA mostly designed to call from OpenSCADA but also can be used independently.
+The script is mostly software platform specific and relates now for Linux.
+openscada-proj list
+openscada-proj proc|create|remove|update {ProjName}
+ Commands:
+  list   - allowed projects list;
+  proc   - proceed for copy RO projects to WR, create desktop links, process core dumps;
+  create - create new projects or copy RO projects to WR, create desktop links;
+  remove - remove project;
+  update - update from 0.8.0 LTS;
+ Arguments:
+  ProjName - project name;
+ Environments:
+  dPrj     - directory of projects OpenSCADA, can be RO;
+  dPrjUser - directory of projects OpenSCADA of the user, WR;
+  dSysCfg  - directory of system configuration;
+  dData    - directory of system data;
+
+openscada-proj backup|backupRestore {ProjName} [{BackupName}]
+openscada-proj backupList {ProjName}
+ Commands:
+  backup - backup the selected project &lt;ProjName&gt; to the name &lt;BackupName&gt;, or to the current date at missing;
+  backupRestore - restore the selected project &lt;ProjName&gt; from the pointed backup name &lt;BackupName&gt;, or from the last one at missing;
+  backupList    - list the project &lt;ProjName&gt; backups.
+ Arguments:
+  ProjName   - project name;
+  BackupName - the backup archive name.
+ Environments:
+  OSCADA_TAR_ComprPrg - TAR compression program, at missing there used gzip.
+  OSCADA_BackLim      - Backups limit, 10 by default
+</pre>
+<p>В целом, сценарий командной строки менеджера проектов <b>openscada-proj</b> предусматривает функции и команды над проектами:
 </p>
 <ul><li> <i>list</i> — перечень присутствующих проектов;</li>
 <li> <i>proc</i> — обработка на предмет: копирования RO проекта в RW, создания иконки-ярлыка на рабочем столе, генерации отчёта об аварийном завершении и т.д.;</li>
 <li> <i>create</i> — создание нового проекта, дополнительно ко всем функциям <i>proc</i>;</li>
 <li> <i>remove</i> — удаление существующего проекта.</li></ul>
+<p>Дополнительно, сценарий командной строки содержит команды менеджера резервного копирования проектов:
+</p>
+<ul><li> <i>backup</i> — резервное копирование выбранного проекта <i>ProjName</i> в <i>BackupName</i>, или на текущую дату при отсутствии;</li>
+<li> <i>backupRestore</i> — восстановление выбранного проекта <i>ProjName</i> из резервной копии с указанным названием <i>BackupName</i>, или из последнего при отсутствии;</li>
+<li> <i>backupList</i> — перечень резервных копий проекта <i>ProjName</i>.</li></ul>
+<p>Резервное копирование в целом осуществляется в рабочем каталоге OpenSCADA, рядом с каталогами самих проектов, для которых создаются файлы запакованных каталогов с названием <b>{ProjName}_{BackupName}.backup</b>, например — "Boiler_2020-06-24_20.09.backup". По умолчанию каталоги проектов сжимаются программой "gzip", которую можно заменить установкой переменной окружения "OSCADA_TAR_ComprPrg". Соответственно, резервирование можно осуществлять из вне, например, по указанному расписанию из CRON, кроме того, что осуществлять это вручную из графического интерфейса менеджера проектов (Рис.5a).
+</p>
 <h2><span class="mw-headline" id=".D0.A1.D1.81.D1.8B.D0.BB.D0.BA.D0.B8"><span class="mw-headline-number">6</span> Ссылки</span></h2>
 <ul><li> <a class="external" href="http://oscada.org/wiki/File:Oscada_struct_ru.odg" title="File:Oscada struct ru.odg">Диаграмма: Блочная схема OpenSCADA.</a></li>
 <li> <a class="external" href="http://oscada.org/wiki/File:Oscada_subsys_daq_str_ru.odg" title="File:Oscada subsys daq str ru.odg">Диаграмма: Иерархическая структура подсистемы "Сбор данных".</a></li>

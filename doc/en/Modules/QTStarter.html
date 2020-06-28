@@ -31,7 +31,7 @@
 <td> <a href="../Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">QTStarter</a> </td>
 <td> Qt GUI starter
 </td>
-<td> 4.8 </td>
+<td> 5.0 </td>
 <td> GPL2 </td>
 <td> ui_QTStarter.so </td>
 <td> en,uk,ru,de </td>
@@ -44,34 +44,37 @@
 <dl><dd> - implement for a manager of sub-projects of their starting into different processes but with the ones storing and managing into the single configuration file of the project, for high reliable configurations;</dd>
 <dd> - implement for a manager of the background-daemon processes.</dd></dl>
 </td></tr></table>
+<p>The module provides OpenSCADA with the starter of the GUI modules on the multi-platform library <a class="external text" href="http://qt.io" rel="nofollow noreferrer noopener" target="_blank">Qt</a> of the graphical user interface (GUI) of initially created by the firm <a class="external text" href="http://www.trolltech.com" rel="nofollow noreferrer noopener" target="_blank">TrollTech</a>. Also, the module implements elements of the OpenSCADA project manager. A separate module of running the Qt GUI modules and elements of the OpenSCADA project manager is needed because of the need for single-flow execution of all visual components of Qt and centralised initialisation of the main object of the Qt-library — QApplication.
+</p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
-<li class="toclevel-1 tocsection-1"><a href="#Qt_modules_of_OpenSCADA"><span class="tocnumber">1</span> <span class="toctext">Qt modules of OpenSCADA</span></a></li>
-<li class="toclevel-1 tocsection-2"><a href="#OpenSCADA_projects"><span class="tocnumber">2</span> <span class="toctext">OpenSCADA projects</span></a></li>
-<li class="toclevel-1 tocsection-3"><a href="#Look_and_feel"><span class="tocnumber">3</span> <span class="toctext">Look and feel</span></a></li>
-<li class="toclevel-1 tocsection-4"><a href="#Configuration"><span class="tocnumber">4</span> <span class="toctext"><span>Configuration</span></span></a></li>
-<li class="toclevel-1 tocsection-5"><a href="#User_programming_API"><span class="tocnumber">5</span> <span class="toctext">User programming API</span></a></li>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Qt_modules_of_OpenSCADA"><span class="tocnumber">2</span> <span class="toctext">Qt modules of OpenSCADA</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#OpenSCADA_projects"><span class="tocnumber">3</span> <span class="toctext">OpenSCADA projects</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Look_and_feel"><span class="tocnumber">4</span> <span class="toctext">Look and feel</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Configuration"><span class="tocnumber">5</span> <span class="toctext"><span>Configuration</span></span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#User_programming_API"><span class="tocnumber">6</span> <span class="toctext">User programming API</span></a></li>
 </ul>
 </div>
 
-<p>The module provides OpenSCADA with the starter of the GUI modules on the multi-platform library <a class="external text" href="http://qt.io" rel="nofollow noreferrer noopener" target="_blank">Qt</a> of the graphical user interface (GUI) of initially created by the firm <a class="external text" href="http://www.trolltech.com" rel="nofollow noreferrer noopener" target="_blank">TrollTech</a>. Also, the module implements elements of the OpenSCADA project manager. A separate module of running the Qt GUI modules and elements of the OpenSCADA project manager is needed because of the need for single-flow execution of all visual components of Qt and centralised initialisation of the main object of the Qt-library — QApplication.
-</p><p>From the beginning, this module creates a separate thread for the main Qt thread, where it is possible to create a dynamic splash screen (Fig.1), since the main OpenSCADA processes continue to run in the main thread. That version of Qt5 became sensitive to execution in a non-main thread, so for OpenSCADA it was added to this feature, but only with a static splash screen containing information about the program and the OpenSCADA project. To control this feature, the <i>--QtInNotMainThread</i> startup option, which enables thread execution in the non-main thread, is provided, for Qt4, so, by default, executing in the main thread is typical, for Qt5.
+<h2><span class="mw-headline" id="Introduction"><span class="mw-headline-number">1</span> Introduction</span></h2>
+<p>From the beginning, this module creates a separate thread for the main Qt thread, where it is possible to create a dynamic splash screen (Fig.1), since the main OpenSCADA processes continue to run in the main thread. That version of Qt5 became sensitive to execution in a non-main thread, so for OpenSCADA it was added to this feature, but only with a static splash screen containing information about the program and the OpenSCADA project. To control this feature, the <i>--QtInNotMainThread</i> startup option, which enables thread execution in the non-main thread, is provided, for Qt4, so, by default, executing in the main thread is typical, for Qt5.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:606px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_splash.png"><img class="thumbimage" height="304" src="../files/QTStarter_splash.png" width="604" /></a>  <div class="thumbcaption">Fig.1. Dynamic splash screen of the module.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:608px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_splash.png"><img class="thumbimage" height="306" src="../files/QTStarter_splash.png" width="606" /></a>  <div class="thumbcaption">Fig.1. Dynamic splash screen of the module.</div></div></div></div>
 <p>The starter dialog window (Fig.2) in whole provides:
 </p>
 <ul><li> a choice of the available Qt GUI modules, may not be available in the case of initial launch to select only the OpenSCADA project;</li>
 <li> a choice of the available OpenSCADA projects to their selection or switching;</li>
 <li> exiting of OpenSCADA;</li>
 <li> the help menu with items: "About", "About Qt", "QTStarter manual" (F1), "OpenSCADA 0.9 manual" and "What's This" (Shift+F1).</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:298px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_dialog.png"><img class="thumbimage" height="629" src="../files/QTStarter_dialog.png" width="296" /></a>  <div class="thumbcaption">Fig.2. Starter dialog window of the module.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:490px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_dialog.png"><img class="thumbimage" height="674" src="../files/QTStarter_dialog.png" width="488" /></a>  <div class="thumbcaption">Fig.2. Starter dialog window of the module.</div></div></div></div>
 <p>In the case of missing the starter dialog window and all windows of the Qt GUI modules, the program can be started up or collapsed to the system tray (Fig.3) created by this module.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:348px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_systray.png"><img class="thumbimage" height="174" src="../files/QTStarter_systray.png" width="346" /></a>  <div class="thumbcaption">Fig.3. Project "AGLKS" started up or collapsed to the system tray.</div></div></div></div> 
 <p>The module disables the function of saving the program session when the system is shut down, in order to prevent attempts to restore this session at the system startup, since OpenSCADA does not need it.
 </p><p>The module provides support for emulating a right mouse button for touchscreen-like environments, like to Android, since the interface often provides control solely through the context menu. The emulation is enabled by setting the command line parameter <i>--simulRightMKeyTm=&lt;tm&gt;</i> at the program start, which specifies the hold time (typically two seconds) of the left mouse button (or on the screen) to generate events of the right mouse button and context help. Emulation of the right button does not turn off-postpones the primary events of the left key, so its general actions should work correctly, but there possible discrepancies in places where the primary events trigers something and the emulated event will not go to the address!
 </p>
-<h2><span class="mw-headline" id="Qt_modules_of_OpenSCADA"><span class="mw-headline-number">1</span> Qt modules of OpenSCADA</span></h2>
+<h2><span class="mw-headline" id="Qt_modules_of_OpenSCADA"><span class="mw-headline-number">2</span> Qt modules of OpenSCADA</span></h2>
 <p>To run Qt GUI modules, an advanced interface for calling module functions is used. This interface involves exporting of functions by the external modules. In our case, Qt GUI modules must export the following functions:
 </p>
 <ul><li> <i>QIcon icon();</i> — sends an object of icon of the called module, for the list building.</li>
@@ -81,19 +84,20 @@
 </p><p>To specify Qt GUI modules that start at startup, the starter module contains the "StartMod" configuration field. This field specifies the identifiers of the modules that are started. The "StartMod" configuration field can be defined in the configuration file as well as in the system table of the database ("SYS") via a dialog of the <a href="#Cfg">module configuration</a> (Fig.4).
 </p><p>In the case of closing the windows of all Qt GUI modules or starting without defining the module to start in the "StartMod" field, "Starter" creates its own dialog (Fig.2). If the "CloseToTray" field of the configuration file or <a href="#Cfg">module configuration</a> (Fig.4) is installed then in this case, the program will be collapsed to the system tray (Fig.3).
 </p>
-<h2><span class="mw-headline" id="OpenSCADA_projects"><span class="mw-headline-number">2</span> OpenSCADA projects</span></h2>
+<h2><span class="mw-headline" id="OpenSCADA_projects"><span class="mw-headline-number">3</span> OpenSCADA projects</span></h2>
 <p>With the integration into OpenSCADA elements of the project manager, this module received the function of selecting existing and creating new OpenSCADA projects in the list of the projects and project commands (Fig.2). Currently, there are two modes of the starter dialog window (Fig.2), which is the mode of the initial start and the mode of execution of the selected project.
 </p><p>The initial mode is, in fact, a launch mode without a specific project, and it involves choosing a project for switching to the second mode, and accordingly hides the list of Qt GUI modules, even if they are loaded to the initiating configuration.
 </p><p>In the project execution mode, all common mechanisms work, that is a call to Qt GUI modules and a start-collapse in the system tray, and the startup dialog (Fig.2) contains a list of available Qt GUI modules and the information about the running project in the title of the window.
-</p><p>In addition to the names of the projects in the list of projects, to the right of the title, their status is "current" and "running". The state of "current" means that the execution of this particular project is carried out. The state "running" indicates a multiple-start blocking file presence, and thus the execution of the project, and separately from this project if the state "current" is not specified next. You can select and try to switch to a project in the "executable" state by accepting the warning, but if this project is actually executed now and the presence of the lock file is not residual after the program crash, then the switching program just ends!
+</p><p>In the list of projects, the user (via the context menu) is additionally given the opportunity to BackUp, and restore projects from the selected backup.
+</p><p>In addition to the names of the projects in the list of projects, to the right of the title, their status is provided — "current", "running"  and "{N} backups". The state "current" means that the execution of this particular project is carried out. The state "running" indicates a multiple-start blocking file presence, and thus the execution of the project, and separately from this project if the state "current" is not specified next. You can select and try to switch to a project in the "executable" state by accepting the warning, but if this project is actually executed now and the presence of the lock file is not residual after the program crash, then the switching program just ends! The state "{N} backups" indicates presence the specified backups number of the project.
 </p>
-<h2><span class="mw-headline" id="Look_and_feel"><span class="mw-headline-number">3</span> Look and feel</span></h2>
+<h2><span class="mw-headline" id="Look_and_feel"><span class="mw-headline-number">4</span> Look and feel</span></h2>
 <p>Due to the expansion of the use of OpenSCADA to mobile software platforms such as Maemo, MeeGo, Android, and frequent cases of QT4 and Qt5 libraries mismatches to modern desktop environments, this module has been expanded by its own mechanism for controlling the look and feels of the final visual interface.
 </p><p>In general, the module now controls overall: Qt widget style, common font, interface palette, and cascading style sheets. This control is performed through the parameters of the configuration file "Style", "Font", "Palette", "StyleSheets" and <a href="#Cfg">module configuration</a> (Fig.4).
 </p><p>Also, the module provides fixing of the outcomes of the individual looks and feelings in a library of the composite nature, which is formed in a configuration file table with the structure: <b>LookFeel(<u>NAME</u>, STYLE, FONT, PALETTE, STL_SHTS)</b>.
 </p><p>Therefore, for mobile devices or predefined specific desktop environments, the required look and feel can be pre-installed in the program package configuration file, but for everyone you can quickly change it after installation by selecting the one you want from the library.
 </p>
-<h2><span class="mw-headline" id="Configuration"><span class="mw-headline-number">4</span> <span id="Cfg" title="#Cfg">Configuration</span></span></h2>
+<h2><span class="mw-headline" id="Configuration"><span class="mw-headline-number">5</span> <span id="Cfg" title="#Cfg">Configuration</span></span></h2>
 <p>To configure the functions shown above, the module provides the ability to configure their parameters through the OpenSCADA control interface (Fig. 4):
 </p>
 <ul><li> Section "Module options":
@@ -109,7 +113,7 @@
 <li> <i>Palette</i> — the field of the color profile of the interface in three groups of rows: active, disabled, inactive. But with twenty colors in the group line, separated by the character ',': WindowText(0), Button(1), Light(2), Midlight(3), Dark(4), Mid(5), Text(6), BrightText(7), ButtonText(8), Base(9), Window(10), Shadow(11), Highlight(12), HighlightedText(13), Link(14), LinkVisited(15), AlternateBase(16), NoRole(17), ToolTipBase(18), ToolTipText(19). The profile allows you to define only the colors you want, leaving the indeterminate as the empty ones, which determines the composite palette, that is filling the voids with another library profile.</li>
 <li> <i>Style Sheets</i> — the field of Cascading Style Sheets Profile (CSS), the composite of which is to add CCS rules at the end of the current profile.</li></ul></li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:690px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_cfg.png"><img class="thumbimage" height="692" src="../files/QTStarter_cfg.png" width="688" /></a>  <div class="thumbcaption">Fig.4. Configuration page of the module.</div></div></div></div>
-<h2><span class="mw-headline" id="User_programming_API"><span class="mw-headline-number">5</span> User programming API</span></h2>
+<h2><span class="mw-headline" id="User_programming_API"><span class="mw-headline-number">6</span> User programming API</span></h2>
 <p><b>The module object (SYS.UI.QTStarter)</b>
 </p>
 <ul><li> <i>Array sensors()</i> — get all available sensors of the Qt mobility, returns "false" if no sensor is available.</li></ul>

@@ -41,7 +41,7 @@
 <td> Roman Savochenko </td>
 <td> BD module. Allows to locate databases of the remote OpenSCADA stations to local ones.
 <ul><li> <b>To Do:</b></li></ul>
-<dl><dd>- appending the function fieldSeek() for the local cache implementation by the deep seeking to the XML-context on the remote part.</dd></dl>
+<dl><dd>- implementation the local cache for the function fieldSeek() by the deep seeking to the XML-context on the remote part.</dd></dl>
 </td></tr></table>
 <p>Main function of this module is the data reflection of <a href="../Program_manual.html#DB" title="Special:MyLanguage/Documents/Program manual">the subsystem "Databases"</a> of the remote OpenSCADA stations on the local ones. In its work, the module uses the <a href="../Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">OpenSCADA self protocol</a> and service functions of the subsystem "Databases". This module can be useful:
 </p>
@@ -174,7 +174,7 @@
 <td> 3.59 &gt; 1.48
 </td></tr>
 <tr>
-<td> <i>Seeking in preload<sup>1</sup>:</i> </td>
+<td> <i>Seeking in preload<sup>*</sup>:</i> </td>
 <td> 1.93 &gt; 0.02 </td>
 <td> 1.88 &gt; 0.04
 </td></tr>
@@ -183,7 +183,7 @@
 <td> 1.85 &gt; 0.051 </td>
 <td> 2.14 &gt; 0.27
 </td></tr></table>
-<p><sup>1</sup> — this operation has no effect because preloading-caching is performed only on the remote station side.
+<p><sup>*</sup> — this operation has no effect because preloading-caching is performed only on the remote station side.
 </p>
 
 

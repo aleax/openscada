@@ -41,7 +41,7 @@
 <td> Роман Савоченко </td>
 <td> Модуль БД. Дозволяє виконувати шлюзування баз даних віддалених OpenSCADA станцій до локальних.
 <ul><li> <b>Зробити (To Do):</b></li></ul>
-<dl><dd>- доповнення функції fieldSeek() реалізацією локального кешу через глибоке сканування у XML-контекст на віддаленій частині.</dd></dl>
+<dl><dd>- реалізація локального кешу для функції fieldSeek() через глибоке сканування у XML-контекст на віддаленій частині.</dd></dl>
 </td></tr></table>
 <p>Основною функцією цього модуля є віддзеркалення даних <a href="../Program_manual.html#DB" title="Special:MyLanguage/Documents/Program manual">підсистеми "Бази даних"</a> віддалених OpenSCADA станцій на локальні. В своїй роботі модуль використовує <a href="../Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">Власний Протокол OpenSCADA</a> та сервісні функції підсистеми "Бази даних".
 Цей модуль може бути корисним:
@@ -175,7 +175,7 @@
 <td> 3.59 &gt; 1.48
 </td></tr>
 <tr>
-<td> <i>Seeking in preload<sup>1</sup>:</i> </td>
+<td> <i>Seeking in preload<sup>*</sup>:</i> </td>
 <td> 1.93 &gt; 0.02 </td>
 <td> 1.88 &gt; 0.04
 </td></tr>
@@ -184,7 +184,7 @@
 <td> 1.85 &gt; 0.051 </td>
 <td> 2.14 &gt; 0.27
 </td></tr></table>
-<p><sup>1</sup> — this operation has no effect because preloading-caching is performed only on the remote station side.
+<p><sup>*</sup> — this operation has no effect because preloading-caching is performed only on the remote station side.
 </p>
 
 

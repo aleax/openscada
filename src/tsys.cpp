@@ -2075,7 +2075,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 	    policy = SCHED_OTHER;
 	    pthread_attr_setschedpolicy(pthr_attr, policy);
 	    prior.sched_priority = 0;
-	    pthread_attr_setschedparam(pthr_attr,&prior);
+	    pthread_attr_setschedparam(pthr_attr, &prior);
 	    rez = pthread_create(&procPthr, pthr_attr, taskWrap, &htsk);
 	}
 	if(!pAttr) pthread_attr_destroy(pthr_attr);
@@ -2207,7 +2207,9 @@ void *TSYS::taskWrap( void *stas )
     tsk->tid = syscall(SYS_gettid);
 #endif
     // Set nice level without realtime if it no permitted
-    if(tsk->policy != SCHED_RR && tsk->prior > 0 && setpriority(PRIO_PROCESS,tsk->tid,-tsk->prior/5) != 0) tsk->prior = 0;
+    if(!(tsk->policy == SCHED_FIFO || tsk->policy == SCHED_RR) && tsk->prior > 0 &&
+	    setpriority(PRIO_PROCESS,tsk->tid,-tsk->prior/5) != 0)
+	tsk->prior = 0;
     tsk->thr = pthread_self();		//Task creation finish
 
     //Signal SIGUSR1 BLOCK for internal checking to endrun by taskEndRun()
