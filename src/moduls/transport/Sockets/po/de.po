@@ -2,15 +2,15 @@
 # This file is distributed under the same license as the OpenSCADA.Transport.Sockets package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2019.
+# Roman Savochenko <roman@oscada.org>, 2011-2020.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
+"Project-Id-Version: OpenSCADA.Transport.Sockets 4.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-31 09:57+0200\n"
+"POT-Creation-Date: 2020-07-05 19:52+0300\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -388,6 +388,9 @@ msgstr "An den Host '%s'. "
 #, c-format
 msgid "Response time %s[%s]. "
 msgstr "Reaktionszeit %s[%s]. "
+
+msgid "We are stopping!"
+msgstr "Wir hören auf!"
 
 msgid "The force socket is deactivated!"
 msgstr "Der Kraftsockel ist deaktiviert!"

@@ -119,6 +119,8 @@ TSYS::~TSYS( )
     int mLev = Mess->messLevel();
     finalKill = true;
 
+    mainThr.free();
+
     //Delete all nodes in the order
     if(present("BD")) {
 	del("ModSched");
@@ -764,6 +766,8 @@ void TSYS::load_( )
 	isLoaded = true;
     }
 
+    if(!mainThr.freeStat()) mainThr.at().perSYSCall(1);
+
     //Direct loading of subsystems and modules
     vector<string> lst;
     list(lst);
@@ -828,7 +832,7 @@ int TSYS::start( )
 
     mess_sys(TMess::Info, _("Starting."));
 
-    mainThr.free();
+    if(!mainThr.freeStat()) mainThr.at().perSYSCall(0);
     for(unsigned iA = 0; iA < lst.size(); iA++)
 	try { at(lst[iA]).at().subStart(); }
 	catch(TError &err) {
@@ -849,7 +853,7 @@ int TSYS::start( )
     mess_sys(TMess::Info, _("Running is completed!"));
 
     //Call in monopoly for main thread module or wait for a signal.
-    if(!mainThr.freeStat()) { mainThr.at().modStart(); mainThr.free(); }
+    if(!mainThr.freeStat()) mainThr.at().modStart();
     while(!mStopSignal) sysSleep(STD_WAIT_DELAY*1e-3);
 
     mess_sys(TMess::Info, _("Stopping."));

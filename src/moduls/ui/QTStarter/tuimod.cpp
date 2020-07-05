@@ -56,8 +56,7 @@
 #define MOD_NAME	_("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define SUB_TYPE	"MainThr"
-#define MOD_VER		"5.0.0"
+#define MOD_VER		"5.5.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -140,21 +139,6 @@ TUIMod::~TUIMod( )
     if(runSt) modStop();
 }
 
-string TUIMod::modInfo( const string &iname )
-{
-    string name = TSYS::strParse(iname, 0, ":");
-
-    if(name == "SubType" && !SYS->cmdOptPresent("QtInNotMainThread")) return SUB_TYPE;
-
-    return TModule::modInfo(name);
-}
-
-void TUIMod::modInfo( vector<string> &list )
-{
-    TModule::modInfo(list);
-    list.push_back("SubType");
-}
-
 string TUIMod::style( bool mant )	{ return mant ? mStyle.getVal() : (mStyle.getVal().size() ? mStyle.getVal() : SYS->cmdOpt("style")); }
 
 void TUIMod::postEnable( int flag )
@@ -183,6 +167,7 @@ void TUIMod::postEnable( int flag )
     }
 
     if(!SYS->cmdOptPresent("QtInNotMainThread")) {
+	if(SYS->mainThr.freeStat()) SYS->mainThr = this;
 	if(hideMode) return;
 
 	//Init locale setLocale
@@ -216,6 +201,13 @@ void TUIMod::postDisable( int flag )
 	if(QtApp) delete QtApp;
     }
     else if(runSt) SYS->taskDestroy(nodePath('.',true), &mEndRun, 10, true);
+}
+
+void TUIMod::perSYSCall( unsigned int cnt )
+{
+    if(hideMode || runSt || !splash || splashTp == SPLSH_NULL)	return;
+
+    splashSet((cnt==SPLSH_START||cnt==SPLSH_STOP)?(TUIMod::SplashFlag)cnt:splashTp);
 }
 
 void TUIMod::load_( )
@@ -280,75 +272,87 @@ void TUIMod::modStop( )
 
 void TUIMod::splashSet( SplashFlag flg )
 {
-    splashTp = flg;
     if(flg == SPLSH_NULL) {
 	if(splash) delete splash;
 	splash = NULL;
     }
     else {
+	QFont wFnt;
 	//Obtaining the splash image
 	QImage ico_t;
+	string ico_f;
 	bool sysSplash = false;
-	if(!ico_t.load(TUIS::icoGet(SYS->id()+((flg==SPLSH_STOP)?"_splash_exit":"_splash"),NULL,true).c_str())) {
+	if((ico_f=TUIS::icoGet(SYS->id()+((flg==SPLSH_STOP)?"_splash_exit":"_splash"),NULL,true)).empty() || !ico_t.load(ico_f.c_str())) {
 	    ico_t.load(":/images/splash.png");
 	    sysSplash = true;
 	}
 
 	//Creating the splash
-	if(splash) splashSet(SPLSH_NULL);	//!!!! Need to be freed for the splash size change at the project switch
-	splash = new QSplashScreen();
+	if(splash && (flg != splashTp || ico_t.size() != splash->pixmap().size())) splashSet(SPLSH_NULL);
+	if(!splash) {
+	    splash = new QSplashScreen();
 
-	//Prepairing the splash image
-	QPixmap pm = QPixmap::fromImage(ico_t);
-	QPainter pnt(&pm);
-	QPen pen(Qt::DotLine); pen.setColor("gray"); pen.setWidth(1);
-	pnt.setPen(pen);
-	QColor barColor("ivory"); barColor.setAlpha(170);
+	    //Prepairing the splash image
+	    QPixmap pm = QPixmap::fromImage(ico_t);
+	    QPainter pnt(&pm);
+	    QPen pen(Qt::DotLine); pen.setColor("gray"); pen.setWidth(1);
+	    pnt.setPen(pen);
+	    QColor barColor("ivory"); barColor.setAlpha(170);
 
-	// Appending the project ico
-	string icoImg = TUIS::icoGet(SYS->name(), NULL, true);
-	if(!icoImg.size()) icoImg = TUIS::icoGet(SYS->id(), NULL, true);
-	if(sysSplash && icoImg.size()) {
-	    QImage prjPm(icoImg.c_str());
-	    prjPm = prjPm.scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+	    // Appending the project ico
+	    string icoImg = TUIS::icoGet(SYS->name(), NULL, true);
+	    if(!icoImg.size()) icoImg = TUIS::icoGet(SYS->id(), NULL, true);
+	    if(sysSplash && icoImg.size()) {
+		QImage prjPm(icoImg.c_str());
+		prjPm = prjPm.scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
-	    //  In plain rect
-	    //pnt.drawRect(pm.width()-prjPm.width(), 0, prjPm.width(), prjPm.height());
-	    //pnt.fillRect(pm.width()-prjPm.width(), 0, prjPm.width(), prjPm.height(), barColor);
-	    //pnt.drawImage(pm.width()-prjPm.width(), 0, prjPm);
+		//  In plain rect
+		//pnt.drawRect(pm.width()-prjPm.width(), 0, prjPm.width(), prjPm.height());
+		//pnt.fillRect(pm.width()-prjPm.width(), 0, prjPm.width(), prjPm.height(), barColor);
+		//pnt.drawImage(pm.width()-prjPm.width(), 0, prjPm);
 
-	    //  In gradient circle
-	    QRect icoArea(pm.width()-68, 0, 68, 68);
-	    QPainterPath path;
-	    QRadialGradient grd(icoArea.center(), icoArea.width()/2, icoArea.center()-QPoint(10,10));
-	    grd.setColorAt(0, "white"); grd.setColorAt(1, "gray");
-	    pnt.setBrush(grd);
-	    path.moveTo(pm.width()-icoArea.width()/2, icoArea.height()/2);
-	    path.arcTo(icoArea, 0, 360);
-	    pnt.drawPath(path);
-	    pnt.drawImage(icoArea.adjusted(10,10,-10,-10), prjPm);
+		//  In gradient circle
+		QRect icoArea(pm.width()-68, 0, 68, 68);
+		QPainterPath path;
+		QRadialGradient grd(icoArea.center(), icoArea.width()/2, icoArea.center()-QPoint(10,10));
+		grd.setColorAt(0, "white"); grd.setColorAt(1, "gray");
+		pnt.setBrush(grd);
+		path.moveTo(pm.width()-icoArea.width()/2, icoArea.height()/2);
+		path.arcTo(icoArea, 0, 360);
+		pnt.drawPath(path);
+		pnt.drawImage(icoArea.adjusted(10,10,-10,-10), prjPm);
+	    }
+	    // Appending the program and the project information
+	    pnt.setBrush(barColor);
+	    QRect infBar(0, pm.height()-18, pm.width(), 18);
+	    pnt.fillRect(infBar, barColor);
+	    pnt.drawRect(infBar);
+	    wFnt = splash->font(); wFnt.setPixelSize(15); pnt.setFont(wFnt);
+	    pnt.drawText(infBar.adjusted(4,1,-4,-1), Qt::AlignRight, SYS->prjNm().c_str());
+	    pnt.drawText(infBar.adjusted(4,1,-4,-1), sysSplash ? PACKAGE_VERSION : PACKAGE_STRING);
+
+	    //Starting the splash
+	    splash->setPixmap(pm);
+	    splash->show();
 	}
-	// Appending the program and the project information
-	pnt.setBrush(barColor);
-	QRect infBar(0, pm.height()-20, pm.width(), 20);
-	pnt.fillRect(infBar, barColor);
-	pnt.drawRect(infBar);
-	QFont wFnt = splash->font(); wFnt.setPixelSize(15); pnt.setFont(wFnt);
-	pnt.drawText(infBar.adjusted(4,1,-4,-1), Qt::AlignRight, SYS->prjNm().c_str()/*PACKAGE_STRING*/);
-	pnt.drawText(infBar.adjusted(4,1,-4,-1), sysSplash ? PACKAGE_VERSION : PACKAGE_STRING/*SYS->prjNm().c_str()*/);
-
-	//Starting the splash
-	splash->setPixmap(pm);
-	splash->show();
 	wFnt = splash->font(); wFnt.setPixelSize(10);
 	splash->setFont(wFnt);
-	// Fixing the splash show
-	if(!SYS->cmdOptPresent("QtInNotMainThread"))
-	    for(int iTr = 0; iTr < 10; iTr++) {
-		QtApp->processEvents();	//!!!! To show the message on Qt5
-		TSYS::sysSleep(0.1);	//!!!! To ensure the splash visibility at the exit on Qt5
-	    }
+
+	//Updating messages
+	vector<TMess::SRec> recs;
+	SYS->archive().at().messGet(time(NULL)-120, time(NULL), recs, "", TMess::Debug, BUF_ARCH_NM);
+	QString mess;
+	for(int iM = recs.size()-1; iM >= 0 && iM > ((int)recs.size()-10); iM--)
+	    mess += QString("%1\n").arg(recs[iM].mess.c_str());
+	recs.clear();
+	splash->showMessage(mess, Qt::AlignBottom|Qt::AlignLeft);
+
+	for(int iTr = 0; iTr < 10; iTr++) {
+	    QtApp->processEvents();	//!!!! To show the message on Qt5
+	    //TSYS::sysSleep(0.1);	//!!!! To ensure the splash visibility at the exit on Qt5
+	}
     }
+    splashTp = flg;
 }
 
 string TUIMod::optDescr( )
@@ -405,11 +409,6 @@ void TUIMod::toQtArg( const char *nm, const char *arg )
 
 void *TUIMod::Task( void * )
 {
-    vector<string> list;
-    QImage ico_t;
-    time_t st_time = time(NULL);
-    vector<TMess::SRec> recs;
-
     //Init locale setLocale
     QLocale::setDefault(QLocale(Mess->lang().c_str()));
 
@@ -418,33 +417,21 @@ void *TUIMod::Task( void * )
     mod->runSt = true;
 
     ret:
-    mod->splashSet(SPLSH_START);
+    string stProj = SYS->prjNm(), stProj_;
     while(!mod->startCom() && !mod->endRun()) {
-	SYS->archive().at().messGet(st_time, time(NULL), recs, "", TMess::Debug, BUF_ARCH_NM);
-	QString mess;
-	for(int i_m = recs.size()-1; i_m >= 0 && i_m > ((int)recs.size()-10); i_m--)
-	    mess += QString("\n%1").arg(recs[i_m].mess.c_str());
-	recs.clear();
-	mod->splash->showMessage(mess, Qt::AlignBottom|Qt::AlignLeft);
-	mod->QtApp->processEvents();
-	TSYS::sysSleep(0.5);
+	stProj_ = SYS->prjNm();
+	mod->splashSet((stProj == stProj_) ? SPLSH_START : SPLSH_NULL);
+	stProj = stProj_;
+	TSYS::sysSleep(0.1);
     }
 
     mod->QtApp->stExec();
 
     if(SYS->stopSignal() == SIGUSR2) { mod->mStartCom = false; goto ret; }
 
-    mod->splashSet(SPLSH_STOP);
-    st_time = time(NULL);
     while(!mod->endRun()) {
-	SYS->archive().at().messGet(st_time, time(NULL), recs, "", TMess::Debug, BUF_ARCH_NM);
-	QString mess;
-	for(int i_m = recs.size()-1; i_m >= 0 && i_m > ((int)recs.size()-10); i_m--)
-	    mess += QString("\n%1").arg(recs[i_m].mess.c_str());
-	recs.clear();
-	mod->splash->showMessage(mess,Qt::AlignBottom|Qt::AlignLeft);
-	mod->QtApp->processEvents();
-	TSYS::sysSleep(0.5);
+	mod->splashSet(SPLSH_STOP);
+	TSYS::sysSleep(0.1);
     }
     mod->splashSet(SPLSH_NULL);
 
@@ -462,7 +449,7 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TUI::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Module options"))) {
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/st_mod",_("Qt modules for startup, separated by ';'"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/prm/cfg/lsQtMod");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/st_mod",_("Qt modules for startup"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","select","select","/prm/cfg/lsQtMod");
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/closeToTray",_("Collapse and startup to the system tray"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 	    if(ctrMkNode("area",opt,-1,"/prm/LF",_("Look and feel"))) {
 		ctrMkNode("fld",opt,-1,"/prm/LF/prfl",_("Known profiles"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","select","select","/prm/LF/prflLs");
@@ -482,12 +469,21 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setStartMod(opt->text());
     }
     else if(a_path == "/prm/cfg/lsQtMod" && ctrChkNode(opt)) {
+	string stMod = startMod();
 	vector<string> list;
 	mod->owner().modList(list);
-	for(unsigned iL = 0; iL < list.size(); iL++)
+	// Single-item directly
+	for(unsigned iL = 0; stMod.size() && iL < list.size(); iL++)
 	    if(mod->owner().modAt(list[iL]).at().modInfo("SubType") == "Qt" &&
 		    mod->owner().modAt(list[iL]).at().modFuncPresent("QMainWindow *openWindow();"))
 		opt->childAdd("el")->setText(list[iL]);
+	// Item combination
+	for(unsigned iL = 0; iL < list.size(); iL++)
+	    if(mod->owner().modAt(list[iL]).at().modInfo("SubType") == "Qt" &&
+		    mod->owner().modAt(list[iL]).at().modFuncPresent("QMainWindow *openWindow();") &&
+		    !TRegExp("(^|;)"+list[iL]+"(;|$)","m").test(stMod))
+		opt->childAdd("el")->setText((stMod.size()?stMod+";":"")+list[iL]);
+	opt->childAdd("el")->setText("");
     }
     else if(a_path == "/prm/cfg/closeToTray") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(closeToTray()));
@@ -1341,18 +1337,22 @@ void StartDialog::prjsLsCtxMenuRequested( const QPoint &pos )
     if(rez == actBackUp && prjsLs->currentItem()) {
 	vector<TVariant> prms;
 	prms.push_back(string(bindir_full "/openscada-proj backup ") +
-	    prjsLs->currentItem()->data(Qt::UserRole).toString().toStdString() + " &");
+	    prjsLs->currentItem()->data(Qt::UserRole).toString().toStdString());
 	prms.push_back(true);
+	QApplication::setOverrideCursor(Qt::WaitCursor);
 	SYS->objFuncCall("system", prms, "root").getS();
+	QApplication::restoreOverrideCursor();
 	updatePrjList();
     }
     else if(rez) {
 	vector<TVariant> prms;
 	prms.push_back(string(bindir_full "/openscada-proj backupRestore ") +
 	    prjsLs->currentItem()->data(Qt::UserRole).toString().toStdString() + " " +
-	    rez->objectName().toStdString() + " &");
+	    rez->objectName().toStdString());
 	prms.push_back(true);
+	QApplication::setOverrideCursor(Qt::WaitCursor);
 	SYS->objFuncCall("system", prms, "root").getS();
+	QApplication::restoreOverrideCursor();
     }
     menu->deleteLater();
 }

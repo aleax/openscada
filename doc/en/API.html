@@ -1606,7 +1606,6 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>virtual unsigned short attempts( );</i> Connection attempts.</li>
 <li> <i>int prm1( );</i> — First backup parameter.</li>
 <li> <i>int prm2( );</i> — Second backup parameter.</li>
-<li> <i>bool toStart( );</i> — Sign "To start".</li>
 <li> <i>bool startStat( );</i> — Status "Running".</li>
 <li> <i>time_t startTm( );</i> — Status "Time of starting/connection".</li>
 <li> <i>int64_t lstReqTm( );</i> — Status "Last request time".</li>
@@ -1621,7 +1620,6 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>virtual void setAttempts( unsigned short vl );</i> — Setting the connection attempts.</li>
 <li> <i>void setPrm1( int vl );</i> — Setting of the first backup parameter.</li>
 <li> <i>void setPrm2( int vl );</i> — Setting of the second backup parameter.</li>
-<li> <i>void setToStart( bool val );</i> — Setting of the sign "To start".</li>
 <li> <i>void setDB( const string &amp;vl );</i> — Setting of the transport's DB address.</li>
 <li> <i>virtual void start( int time = 0 );</i> — Start of the transport with connection time <i>time</i>.</li>
 <li> <i>virtual void stop( );</i> — Stop of the transport.</li>
@@ -3355,7 +3353,6 @@ Error codes (enum — TError::Codes):
 <th> Name &lt;NAME&gt; </th>
 <th> Description &lt;DESCRIPT&gt; </th>
 <th> Address &lt;ADDR&gt; </th>
-<th> To start &lt;START&gt; </th>
 <th> Individual fields of the transports' types
 </th></tr>
 <tr>
@@ -3364,7 +3361,6 @@ Error codes (enum — TError::Codes):
 <td>TCP Out 1</td>
 <td>Output TCP transport 1</td>
 <td>TCP::10001</td>
-<td>1</td>
 <td>...
 </td></tr></table>
 <p>For the centralized description of the list of external OpenSCADA stations it is used the table of external hosts (CfgExtHosts). The structure of this table is shown in Table 16.
@@ -4128,5 +4124,5 @@ extern "C"
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2687</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2692</td></tr></table></body>
 </html>

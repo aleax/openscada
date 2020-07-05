@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"3.0.0"
+#define MOD_VER		"3.1.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2 are supported.")
@@ -881,6 +881,7 @@ void TSocketOut::start( int tmCon )
 
     MtxAlloc resReq(reqRes(), true);
     if(runSt) return;
+    if(SYS->stopSignal()) throw TError(nodePath().c_str(), _("We are stopping!"));
 
     ctx = NULL;
     ssl = NULL;

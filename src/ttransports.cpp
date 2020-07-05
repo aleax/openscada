@@ -48,7 +48,6 @@ TTransportS::TTransportS( ) : TSubSYS(STR_ID, _("Transports"), true), extHostLoa
     elOut.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
     elOut.fldAdd(new TFld("DESCRIPT",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"500"));
     elOut.fldAdd(new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"100"));
-    elOut.fldAdd(new TFld("START",_("To start"),TFld::Boolean,TFld::NoFlag,"1"));
 
     //External hosts' connection DB struct
     elExt.fldAdd(new TFld("OP_USER",_("User that opens"),TFld::String,TCfg::Key,OBJ_ID_SZ));
@@ -247,17 +246,6 @@ void TTransportS::subStart( )
 	    } catch(TError &err) {
 		mess_err(err.cat.c_str(), "%s", err.mess.c_str());
 		mess_sys(TMess::Error, _("Error starting the input transport '%s'."), oLst[iO].c_str());
-	    }
-
-	oLst.clear();
-	mod.at().outList(oLst);
-	for(unsigned iO = 0; iO < oLst.size(); iO++)
-	    try {
-		AutoHD<TTransportOut> out = mod.at().outAt(oLst[iO]);
-		if(!out.at().startStat() && out.at().toStart()) out.at().start();
-	    } catch(TError &err) {
-	        mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		mess_sys(TMess::Error, _("Error starting the output transport '%s'."), oLst[iO].c_str());
 	    }
     }
 
@@ -972,7 +960,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 //* TTransportOut                                *
 //************************************************
 TTransportOut::TTransportOut( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), runSt(false), mLstReqTm(0), mId(cfg("ID")), mStart(cfg("START").getBd()),
+    TConfig(el), runSt(false), mLstReqTm(0), mId(cfg("ID")),
     mDB(idb), mStartTm(0), mPrm1(0), mPrm2(0), mReqRes(true), mLogLen(0)
 {
     mId = iid;

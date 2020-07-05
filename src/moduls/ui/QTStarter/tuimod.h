@@ -180,9 +180,7 @@ public:
     TUIMod( string name );
     ~TUIMod( );
 
-    // Module's info attributes
-    string modInfo( const string &name );
-    void   modInfo( vector<string> &list );
+    void perSYSCall( unsigned int cnt );
 
     bool endRun( )	{ return mEndRun; }
     bool startCom( )	{ return mStartCom; }

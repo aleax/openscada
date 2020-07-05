@@ -1,15 +1,15 @@
 # OpenSCADA.DAQ.ModBus translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.ModBus module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2007-2019.
+# Roman Savochenko <rom_as@oscada.org>, 2007-2020.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.ModBus 1.2.0\n"
+"Project-Id-Version: OpenSCADA.ModBus 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-04 11:03+0200\n"
+"POT-Creation-Date: 2020-07-05 19:39+0300\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -79,7 +79,7 @@ msgid "Value"
 msgstr "Значення"
 
 msgid "Task terminated! "
-msgstr "Завдання перервано!"
+msgstr "Завдання перервано! "
 
 #, c-format
 msgid "Error of connection. Restoring in %.6g s."
@@ -317,6 +317,12 @@ msgstr "Помилка пошуку та створення нового вуз�
 
 msgid "13:Error of the server response"
 msgstr "13:Помилка відповіді сервера"
+
+#, c-format
+msgid ""
+"13:The response Transaction ID %d is not suitable to the request one %d."
+msgstr ""
+"13:ID транзакції відповіді %d не відповідає запиту %d."
 
 msgid "Not full response"
 msgstr "Неповна відповідь"

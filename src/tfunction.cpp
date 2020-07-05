@@ -376,7 +376,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/exec/calc" && mTVal && ctrChkNode(opt,"set",RWRW__,"root",grp,SEC_WR)) {
 	int n_tcalc = s2i(TBDS::genDBGet(nodePath()+"ntCalc","1",opt->attr("user")));
 	string wuser = opt->attr("user");
-	time_t tm_lim = SYS->sysTm()+STD_WAIT_TM;
+	time_t tm_lim = SYS->sysTm()+STD_WAIT_TM+1;
 	int64_t t_cnt = TSYS::curTime();
 	for(int iC = 0; iC < n_tcalc && SYS->sysTm() < tm_lim; iC++)
 	    mTVal->calc(wuser);

@@ -1,15 +1,15 @@
 # OpenSCADA.DAQ.ModBus translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.ModBus package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2007-2019.
+# Roman Savochenko <rom_as@oscada.org>, 2007-2020.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.ModBus 1.2.0\n"
+"Project-Id-Version: OpenSCADA.ModBus 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-04 11:03+0200\n"
+"POT-Creation-Date: 2020-07-05 19:39+0300\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -317,6 +317,12 @@ msgstr "Ошибка поиска и создания нового узла."
 
 msgid "13:Error of the server response"
 msgstr "13:Ошибка ответа сервера"
+
+#, c-format
+msgid ""
+"13:The response Transaction ID %d is not suitable to the request one %d."
+msgstr ""
+"13:ID транзакции ответа %d не соответствует запросу %d."
 
 msgid "Not full response"
 msgstr "Неполный ответ"

@@ -1,3 +1,20 @@
+2020-07-05 Roman (stable)
+- DOC: The document "AGREEMENT ON TECHNICAL SUPPORT OF THE "OpenSCADA" SOFTWARE" version 2 finished and appended to the offline documentation.
+- !!!!:SYS,UI.QTStarter: OpenSCADA starting with a module as the GUI in the main thread significantly refactored for:
+    - early registration the GUI module in the main thread directly by that module itself and in postEnable() function;
+    - adaption the function perSYSCall() to use for update the GUI module in the main thread, its splash mostly,
+	after a module starting and stopping, the configuration loading (for switch to the starting splash), before the modules starting;
+    - enabling the messages dynamic display for the main thread execution mode;
+    - unification of the splash display for the both modes.
+- FIX:SYS.Functions: Time limit of the functions manual execution some approximation to STD_WAIT_TM (5 second) to make it not lesser.
+- FIX:DAQ: System messages of enabling, stopping, disabling controller objects are fixed.
+- !!!!:Transports: The configuration option "START" was removed for the output transports as spare one and to prevent long starting.
+- !!:Protocol.ModBus: The output requests of the TCP-variant appended for checking Transaction ID of the response packages.
+- Transport.{Sockets,SSL}: The output transports appended for discard connections at the program stopping.
+- UI.QTStarter: The backuping is made busy the main interface before the operation finish.
+    The starting UI Qt-modules configuration was made selectable.
+
+
 2020-06-28 Roman (stable)
 - data/Android/build.sh: Appended for built in the new module DB.DBGate.
 - !!!!:data/openscada-proj.in,UI.QTStarter:

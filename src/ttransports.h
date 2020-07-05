@@ -143,7 +143,6 @@ class TTransportOut : public TCntrNode, public TConfig
 	virtual	unsigned short attempts( ) { return 2; }
 	int64_t	prm1( )			{ return mPrm1; }
 	int64_t	prm2( )			{ return mPrm2; }
-	bool	toStart( )		{ return mStart; }
 	bool	startStat( ) const	{ return runSt; }
 	time_t	startTm( )		{ return mStartTm; }
 	int64_t	lstReqTm( )		{ return mLstReqTm; }
@@ -160,7 +159,6 @@ class TTransportOut : public TCntrNode, public TConfig
 	virtual void setAttempts( unsigned short vl )	{ }
 	void setPrm1( int64_t vl )			{ mPrm1 = vl; }
 	void setPrm2( int64_t vl )			{ mPrm2 = vl; }
-	void setToStart( bool vl )			{ mStart = vl; modif(); }
 
 	void setDB( const string &vl )			{ mDB = vl; modifG(); }
 
@@ -206,7 +204,6 @@ class TTransportOut : public TCntrNode, public TConfig
 
 	//Attributes
 	TCfg	&mId;
-	char	&mStart;
 	string	mDB;
 
 	// Reserve parameters

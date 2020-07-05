@@ -5,11 +5,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA 0.9\n"
+"Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-06 19:10+0300\n"
+"POT-Creation-Date: 2020-07-05 19:05+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -922,17 +922,14 @@ msgstr "Ошибка добавления контроллера '%s'."
 msgid "Error starting the templates library '%s'."
 msgstr "Ошибка запуска библиотеки шаблонов '%s'."
 
-#, c-format
-msgid "Error enabling the templates library '%s'."
-msgstr "Ошибка включения библиотеки шаблонов '%s'."
+msgid "Error enabling the controller object '%s'."
+msgstr "Ошибка включения объекта контроллера %s."
 
-#, c-format
-msgid "Error stopping the templates library '%s'."
-msgstr "Ошибка остановки библиотеки шаблонов '%s'."
+msgid "Error stopping the controller object '%s'."
+msgstr "Ошибка останова объекта контроллера %s."
 
-#, c-format
-msgid "Error disabling the templates library '%s'."
-msgstr "Ошибка отключения библиотеки шаблонов '%s'."
+msgid "Error disabling the controller object '%s'."
+msgstr "Ошибка отключения объекта контроллера %s."
 
 #, c-format
 msgid "Missing the DAQ node '%s'."
@@ -2330,10 +2327,6 @@ msgstr "Ошибка поиска и загрузки БД внешних хос
 #, c-format
 msgid "Error starting the input transport '%s'."
 msgstr "Ошибка запуска входного транспорта '%s'."
-
-#, c-format
-msgid "Error starting the output transport '%s'."
-msgstr "Ошибка запуска выходного транспорта '%s'."
 
 #, c-format
 msgid "Error stopping the input transport '%s'."

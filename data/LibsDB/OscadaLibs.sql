@@ -530,6 +530,7 @@ INSERT INTO lib_servProc_io VALUES('wacko2media','rez','Result',0,6,'',0,2,'',''
 INSERT INTO lib_servProc_io VALUES('docOffLine','resDir','Results directory',0,0,'/home/roman/ext/work/Projects/OpenSCADA/doc/',0,3,'','','','');
 INSERT INTO lib_servProc_io VALUES('docOffLine','pages','Pages list of "{wiki}:{langs}:{dest}"',0,4,'Documents:en,uk,ru:index.html
 Documents/Release_0.9:en,uk,ru:Release_0.9.html
+Works/Technical_Support/Agreement:en,uk,ru:Technical_Support_Agreement.html
 About:en,uk,ru:About.html
 Documents/Terms:en,uk,ru:Terms.html
 Functions_and_demands:en,uk,ru:Functions_and_demands.html

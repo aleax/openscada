@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tsubsys.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -68,6 +68,7 @@ void TSubSYS::modAdd( TModule *modul )
     if(chldPresent(mMod,modul->modId())) return;
     mess_sys(TMess::Info, _("Module '%s' connecting."), modul->modId().c_str());
     chldAdd(mMod, modul, s2i(modul->modInfo("HighPriority"))?0:-1);
+
     if(mess_lev() == TMess::Debug) {
 	vector<string> list;
 	modul->modInfo(list);
@@ -119,8 +120,8 @@ void TSubSYS::subStart( )
     for(unsigned iM = 0; iM < list.size(); iM++)
 	try {
 	    mO = modAt(list[iM]);
-	    if(mO.at().modInfo("SubType") != "MainThr") mO.at().modStart();
-	    else if(SYS->mainThr.freeStat()) SYS->mainThr = mO;
+	    if(SYS->mainThr.freeStat() || &SYS->mainThr.at() != &mO.at()) mO.at().modStart();
+	    if(!SYS->mainThr.freeStat()) SYS->mainThr.at().perSYSCall(0);
 	}
 	catch(TError &err) {
 	    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
@@ -141,7 +142,8 @@ void TSubSYS::subStop( )
     for(unsigned iM = 0; iM < list.size(); iM++)
 	try {
 	    mO = modAt(list[iM]);
-	    if(mO.at().modInfo("SubType") != "MainThr") mO.at().modStop();
+	    if(SYS->mainThr.freeStat() || &SYS->mainThr.at() != &mO.at()) mO.at().modStop();
+	    if(!SYS->mainThr.freeStat()) SYS->mainThr.at().perSYSCall(0);
 	}
 	catch(TError &err) {
 	    mess_err(err.cat.c_str(), "%s", err.mess.c_str());

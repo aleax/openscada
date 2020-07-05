@@ -61,7 +61,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.0.0"
+#define MOD_VER		"4.1.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -1142,6 +1142,7 @@ void TSocketOut::start( int itmCon )
     MtxAlloc res(reqRes(), true);
 
     if(runSt) return;
+    if(SYS->stopSignal()) throw TError(nodePath().c_str(), _("We are stopping!"));
 
     //Status clear
     trIn = trOut = respTm = respTmMax = 0;
@@ -1365,7 +1366,7 @@ int TSocketOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int ti
     if(time) { prevTmOut = tmCon(); setTmCon(time); }
 
     try {
-	if(!runSt) throw TError(nodePath().c_str(),_("Transport is not started!"));
+	if(!runSt) throw TError(nodePath().c_str(), _("Transport is not started!"));
 
 repeate:
 	if(reqTry++ >= wAttempts) { mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(), _("Error requesting: %s"), err.c_str()); }

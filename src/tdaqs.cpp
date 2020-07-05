@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tdaqs.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -94,7 +94,7 @@ void TDAQS::rdActCntrList( vector<string> &ls, bool isRun )
 
 void TDAQS::ctrListPrmAttr( XMLNode *opt, const string &l_prm, bool toPrm, char sep, const string &pref )
 {
-    int c_lv = 0;
+    int cLv = 0;
     string c_path = "", c_el;
     vector<string> ls;
     opt->childAdd("el")->setText(pref+c_path);
@@ -102,15 +102,15 @@ void TDAQS::ctrListPrmAttr( XMLNode *opt, const string &l_prm, bool toPrm, char 
     AutoHD<TCntrNode> DAQnd = this;
     const char *c_grp = "mod_";
     for(int c_off = 0; (sep && (c_el=TSYS::strSepParse(l_prm,0,sep,&c_off)).size()) ||
-		   (!sep && (c_el=TSYS::pathLev(l_prm,0,true,&c_off)).size()); ++c_lv)
+		   (!sep && (c_el=TSYS::pathLev(l_prm,0,true,&c_off)).size()); ++cLv)
     {
-	c_path += sep ? (c_lv?sep+c_el:c_el) : "/"+c_el;
+	c_path += sep ? (cLv?sep+c_el:c_el) : "/"+c_el;
 	DAQnd = DAQnd.at().nodeAt(c_grp+c_el, 0, sep, 0, true);
 	if(DAQnd.freeStat()) break;
 	opt->childAdd("el")->setText(pref+c_path);
-	c_grp = (c_lv == 0) ? "cntr_" : "prm_";
+	c_grp = (cLv == 0) ? "cntr_" : "prm_";
     }
-    if(sep && c_lv) c_path += sep;
+    if(sep && cLv) c_path += sep;
     if(!DAQnd.freeStat()) {
 	DAQnd.at().chldList(DAQnd.at().grpId(c_grp), ls, true);
 	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
@@ -339,7 +339,7 @@ void TDAQS::unload( )
 
 void TDAQS::subStart( )
 {
-    vector<string> m_l, tmpl_lst;
+    vector<string> mL, tmpl_lst;
 
     bool reply   = false;
     int  try_cnt = 0;
@@ -358,18 +358,18 @@ void TDAQS::subStart( )
 	    }
 
 	//Enable controllers
-	modList(m_l);
-	for(unsigned iM = 0; iM < m_l.size(); iM++) {
-	    vector<string> c_l;
-	    at(m_l[iM]).at().list(c_l);
-	    for(unsigned iC = 0; iC < c_l.size(); iC++) {
-		AutoHD<TController> cntr = at(m_l[iM]).at().at(c_l[iC]);
+	modList(mL);
+	for(unsigned iM = 0; iM < mL.size(); iM++) {
+	    vector<string> cL;
+	    at(mL[iM]).at().list(cL);
+	    for(unsigned iC = 0; iC < cL.size(); iC++) {
+		AutoHD<TController> cntr = at(mL[iM]).at().at(cL[iC]);
 		if(/*!cntr.at().enableStat() &&*/ cntr.at().toEnable())
 		    try{ cntr.at().enable(); }
 		    catch(TError &err) {
 			if(try_cnt) {
 			    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-			    mess_sys(TMess::Error, _("Error enabling the templates library '%s'."), (m_l[iM]+"."+c_l[iC]).c_str());
+			    mess_sys(TMess::Error, _("Error enabling the controller object '%s'."), (mL[iM]+"."+cL[iC]).c_str());
 			}
 			reply = true;
 		    }
@@ -387,42 +387,42 @@ void TDAQS::subStart( )
 
 void TDAQS::subStop( )
 {
-    vector<string> m_l;
+    vector<string> mL;
 
     //Stop
-    modList(m_l);
-    for(unsigned iM = 0; iM < m_l.size(); iM++) {
-	vector<string> c_l;
-	at(m_l[iM]).at().list(c_l);
-	for(unsigned iC = 0; iC < c_l.size(); iC++) {
-	    AutoHD<TController> cntr = at(m_l[iM]).at().at(c_l[iC]);
+    modList(mL);
+    for(unsigned iM = 0; iM < mL.size(); iM++) {
+	vector<string> cL;
+	at(mL[iM]).at().list(cL);
+	for(unsigned iC = 0; iC < cL.size(); iC++) {
+	    AutoHD<TController> cntr = at(mL[iM]).at().at(cL[iC]);
 	    if(cntr.at().startStat())
 		try{ cntr.at().stop(); }
 		catch(TError &err) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		    mess_sys(TMess::Error, _("Error stopping the templates library '%s'."), (m_l[iM]+"."+c_l[iC]).c_str());
+		    mess_sys(TMess::Error, _("Error stopping the controller object '%s'."), (mL[iM]+"."+cL[iC]).c_str());
 		}
 	}
     }
     //Disable
-    for(unsigned iM = 0; iM < m_l.size(); iM++) {
-	vector<string> c_l;
-	at(m_l[iM]).at().list(c_l);
-	for(unsigned iC = 0; iC < c_l.size(); iC++) {
-	    AutoHD<TController> cntr = at(m_l[iM]).at().at(c_l[iC]);
+    for(unsigned iM = 0; iM < mL.size(); iM++) {
+	vector<string> cL;
+	at(mL[iM]).at().list(cL);
+	for(unsigned iC = 0; iC < cL.size(); iC++) {
+	    AutoHD<TController> cntr = at(mL[iM]).at().at(cL[iC]);
 	    if(cntr.at().enableStat())
 		try{ cntr.at().disable(); }
 		catch(TError &err) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		    mess_sys(TMess::Error, _("Error disabling the templates library '%s'."), (m_l[iM]+"."+c_l[iC]).c_str());
+		    mess_sys(TMess::Error, _("Error disabling the controller object '%s'."), (mL[iM]+"."+cL[iC]).c_str());
 		}
 	}
     }
 
     //Stop template's libraries
-    tmplLibList(m_l);
-    for(unsigned iLb = 0; iLb < m_l.size(); iLb++)
-	tmplLibAt(m_l[iLb]).at().start(false);
+    tmplLibList(mL);
+    for(unsigned iLb = 0; iLb < mL.size(); iLb++)
+	tmplLibAt(mL[iLb]).at().start(false);
 
     TSubSYS::subStop();
 }
@@ -432,17 +432,17 @@ AutoHD<TCntrNode> TDAQS::daqAt( const string &path, char sep, bool noex, bool wa
     string cEl;
     AutoHD<TCntrNode> DAQnd = const_cast<TDAQS*>(this);
     const char *c_grp = "mod_";
-    for(int c_off = 0, c_lv = 0; (sep && (cEl=TSYS::strSepParse(path,0,sep,&c_off)).size()) ||
-		   (!sep && (cEl=TSYS::pathLev(path,0,true,&c_off)).size()); ++c_lv)
+    for(int c_off = 0, cLv = 0; (sep && (cEl=TSYS::strSepParse(path,0,sep,&c_off)).size()) ||
+		   (!sep && (cEl=TSYS::pathLev(path,0,true,&c_off)).size()); ++cLv)
     {
-	bool lastEl = (c_lv > 2 && c_off >= (int)path.size());
+	bool lastEl = (cLv > 2 && c_off >= (int)path.size());
 	if(waitForAttr && lastEl) c_grp = "a_";
 	AutoHD<TCntrNode> tNd = DAQnd.at().nodeAt(c_grp+cEl, 0, sep, 0, true);
 	if(tNd.freeStat() && !(strcmp(c_grp,"a_") != 0 && lastEl && !(tNd=DAQnd.at().nodeAt("a_"+cEl,0,sep,0,true)).freeStat())) {
 	    if(noex) return AutoHD<TValue>();
 	    else throw err_sys(_("Missing the DAQ node '%s'."), path.c_str());
 	}
-	c_grp = (c_lv == 0) ? "cntr_" : "prm_";
+	c_grp = (cLv == 0) ? "cntr_" : "prm_";
 	DAQnd = tNd;
     }
 

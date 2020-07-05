@@ -261,10 +261,10 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	if(!tro.startStat()) tro.start();
 	if(prt == "TCP") {		// Modbus/TCP protocol process
 	    //Encode MBAP (Modbus Application Protocol)
-	    int tid = rand();
+	    uint16_t tid = rand()%65536;
 	    mbap.reserve(pdu.size()+7);
-	    mbap.append((char*)&tid,2);		//Transaction ID
-	    mbap.append(2,(char)0);		//Protocol ID
+	    mbap.append((char*)&tid, 2);	//Transaction ID
+	    mbap.append(2, (char)0);		//Protocol ID
 	    mbap += (char)((pdu.size()+1)>>8);	//PDU size MSB
 	    mbap += (char)(pdu.size()+1);	//PDU size LSB
 	    mbap += (char)node;			//Unit identifier
@@ -274,6 +274,8 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    int resp_len = tro.messIO(mbap.data(), mbap.size(), buf, sizeof(buf), reqTm);
 	    rez.assign(buf,resp_len);
 	    if(rez.size() < 7)	err = _("13:Error of the server response");
+	    else if(TSYS::getUnalign16(rez.data()) != tid)
+		err = TSYS::strMess(_("13:The response Transaction ID %d is not suitable to the request one %d."), TSYS::getUnalign16(rez.data()), (int)tid);
 	    else {
 		unsigned resp_sz = (unsigned short)(rez[4]<<8) | (unsigned char)rez[5];
 
