@@ -56,7 +56,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"MainThr"
-#define MOD_VER		"4.7.8"
+#define MOD_VER		"4.7.9"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -465,7 +465,7 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 		    mQtLookMdf = false;
 		}
 	    }
-	    else {
+	    else if(opt->text() != _("<Select a profile to combine>")) {
 		TConfig cEl(&elLF);
 		cEl.cfg("NAME").setS(opt->text());
 		if(SYS->db().at().dataGet("",nodePath()+"LookFeel",cEl,true,true)) {

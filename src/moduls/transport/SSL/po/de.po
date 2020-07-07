@@ -2,15 +2,15 @@
 # This file is distributed under the same license as the OpenSCADA.Transport.SSL package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2010.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2019.
+# Roman Savochenko <roman@oscada.org>, 2011-2020.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Transport.SSL 1.0.0\n"
+"Project-Id-Version: OpenSCADA.Transport.SSL 3.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-31 09:57+0200\n"
+"POT-Creation-Date: 2020-07-05 19:53+0300\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -269,6 +269,9 @@ msgstr "Eingangstraffik %s, Ausgangs %s."
 #, c-format
 msgid "Response time %s[%s]. "
 msgstr "Reaktionszeit %s[%s]. "
+
+msgid "We are stopping!"
+msgstr "Wir hören auf!"
 
 #, c-format
 msgid "Error the address '%s': '%s (%d)'"

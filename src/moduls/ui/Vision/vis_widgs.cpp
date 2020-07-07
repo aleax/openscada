@@ -328,6 +328,13 @@ bool UserStBar::userSel( const string &hint )
     string lang = dynamic_cast<VisRun*>(window()) ? ((VisRun*)window())->lang() : "";
 
     DlgUser d_usr(user().c_str(), pass().c_str(), VCAStation().c_str(), parentWidget(), hint, lang);
+
+    //???? Need to implement the user's privileges remote reducing
+    if(d_usr.autoRes() != DlgUser::NoAuto && VCAStation() != ".") {
+	mess_err(mod->nodePath().c_str(), _("There impossible now to change-reduce the user remotely."));
+	return false;
+    }
+
     int rez = (d_usr.autoRes() == DlgUser::NoAuto) ? d_usr.exec() : d_usr.autoRes();
     if(rez == DlgUser::SelOK && d_usr.user().toStdString() != user() &&
 	    (hint == "$" || hint == "*" || d_usr.autoRes() == DlgUser::NoAuto || SYS->security().at().usrAt(user()).at().permitCmpr(d_usr.user().toStdString()) <= 0))

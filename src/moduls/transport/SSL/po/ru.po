@@ -1,15 +1,15 @@
 # OpenSCADA.Transport.SSL translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.Transport.SSL package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2008-2019.
+# Roman Savochenko <roman@oscada.org>, 2008-2020.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Transport.SSL 1.0.0\n"
+"Project-Id-Version: OpenSCADA.Transport.SSL 3.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-31 09:57+0200\n"
+"POT-Creation-Date: 2020-07-05 19:53+0300\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -266,6 +266,9 @@ msgstr "Трафик входной %s, выходной %s."
 #, c-format
 msgid "Response time %s[%s]. "
 msgstr "Время ответа %s[%s]. "
+
+msgid "We are stopping!"
+msgstr "Мы останавливаемся!"
 
 #, c-format
 msgid "Error the address '%s': '%s (%d)'"

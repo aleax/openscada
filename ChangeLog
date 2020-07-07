@@ -1,3 +1,16 @@
+2020-07-07 Roman 0.9.1.4
+- !!:FIX:DB.SQLite: there detected and corrected of data losses with concurrence access, when a minor error of the not started transaction
+    "cannot commit - no transaction is active (1)" is generated, which, however, interrupts the data recording.
+- FIX:UI.Vision: Prevented from try the user changing to no password one in the remote work, only the warning before the implementing.
+- FIX:SYS: The OpenSCADA tasks priority fixed for SCHED_FIFO in it display as 0.
+- FIX:DAQ: System messages of enabling, stopping, disabling controller objects are fixed.
+- FIX:SYS.Functions: Time limit of the functions manual execution some approximation to STD_WAIT_TM (5 second) to make it not lesser.
+- FIX:UI.QTStarter: Prevented from the information item "<Select a profile to combine>" processing of the profile combobox.
+- FIX:UI.QTCfg: Appended for oppressing messages about missed items of the combobox items.
+- !!:FIX:Protocol.ModBus: The output requests of the TCP-variant appended for checking Transaction ID of the response packages.
+- FIX:Transport.{Sockets,SSL}: The output transports appended for discard connections at the program stopping.
+
+
 2020-06-15 Roman 0.9.1.3
 - FIX:LibsDB.vcaBase.Main.alarmsSt: Some fixed for the original messages and the "quietation" completly replaced by "confirmation".
     FIX: Restored in preventing the duplicate entries for new alarms in that category.
