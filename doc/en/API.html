@@ -514,6 +514,7 @@ Types (levels) of messages (enum — TMess::Type):
 <li> <i>void put_( const char *categ, int8_t level, const char *fmt, ... ); void putArg( const char *categ, int8_t level, const char *fmt, va_list ap );</i> — The message forming for the current time (selected level and debug categories are ignored) with the category <i>categ</i>, the <i>level</i>, the formatted message <i>fmt</i> and the followed arguments.</li>
 <li> <i>void get( time_t b_tm, time_t e_tm, vector&lt;TMess::SRec&gt; &amp;recs, const string &amp;category = "", int8_t level = Debug );</i> — Get the message from the archive for the period of time <i>b_tm</i> — <i>e_tm</i> under the category template <i>category</i> and minimum level <i>level</i>. </li>
 <li> <i>string lang2CodeBase( );</i> — The language of basic variables of the  text messages in bi-symbolic  codepage(en). </li>
+<li> <i>bool translCfg( );</i> — The configuration translation sign, combined as "<b>lang2CodeBase().size() &amp;&amp; lang2Code()&nbsp;!= lang2CodeBase()</b>".</li>
 <li> <i>bool translDyn( bool plan = false );</i> — Mode "Dynamic translation" or the <i>plan</i> to next start.</li>
 <li> <i>bool translEnMan( );</i> — The sign "Enabled translations manager", for activation of the built translation messages index and the translation manager.</li>
 <li> <i>string translLangs( );</i> — List of translation languages, into the manager.</li>

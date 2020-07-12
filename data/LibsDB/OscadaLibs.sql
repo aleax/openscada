@@ -195,7 +195,7 @@ The element''s names and their parameters are available in languages: English, U
 
 Founded: January 2008
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.0.2
+Version: 2.0.3
 License: GPLv2
 DOC: Libs_Documents|Libs/Documents','flb_doc','Бібліотека звітів та документів','Надає комбіновану бібліотеку звітів, документів та пов''язаних функцій загальної та промислової автоматизації.
 
@@ -207,7 +207,7 @@ DOC: Libs_Documents|Libs/Documents','flb_doc','Бібліотека звітів
 
 Засновано: січень 2008р
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.0.2
+Версія: 2.0.3
 Ліцензія: GPLv2
 DOC: Libs_Documents|Libs/Documents','Библиотека отчётов и документов','Предоставляет комбинированную библиотеку отчётов, документов и связанных функций общей и промышленной автоматизации.
 
@@ -219,7 +219,7 @@ DOC: Libs_Documents|Libs/Documents','Библиотека отчётов и до
 
 Основано: январь 2008г
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 2.0.2
+Версия: 2.0.3
 Лицензия: GPLv2
 DOC: Libs_Documents|Libs/Documents',1);
 INSERT INTO UserFuncLibs VALUES('regEl','Regulation elements','Regulation elements library of block-schemes of the module DAQ.BlockCalc.
@@ -1515,7 +1515,7 @@ INSERT INTO tmplib_DevLib_io VALUES('IEC62056','tr','Output transport',4,0,'',8,
 INSERT INTO tmplib_DevLib_io VALUES('IEC62056','ctx','IO context',4,0,'',9,'Контекст ВВ','','Контекст ВВ','');
 INSERT INTO tmplib_DevLib_io VALUES('IEC62056','this','Object',4,0,'',10,'Объект','','Об''єкт','');
 INSERT INTO tmplib_DevLib_io VALUES('IEC62056','pass','Password the device',0,64,'ABCDEFGH',3,'Пароль устройства','','Пароль пристрою','');
-INSERT INTO tmplib_DevLib_io VALUES('IEC62056','tmPollAll','Poll all time, seconds',2,64,'60',5,'Время опроса всего, секунд','','Час опитування всього, секунд','');
+INSERT INTO tmplib_DevLib_io VALUES('IEC62056','tmPollAll','Poll all time, seconds',2,64,'10',5,'Время опроса всего, секунд','','Час опитування всього, секунд','');
 CREATE TABLE IF NOT EXISTS 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_PrescrTempl_io VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
 INSERT INTO tmplib_PrescrTempl_io VALUES('timer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
@@ -6219,14 +6219,14 @@ Author: Roman Savochenko <roman@oscada.org>
 State of the protocol implementing: Client of the specification part 46, reading of the directly specified OBIS
 Total complexity: 3.2 HD
 Sponsored by: SVItoVYR Ltd for whole complexity
-Version: 1.0.0
+Version: 1.0.1
 License: GPLv2','IEC 62056 у частині 46 є одним з набору стандартів IEC 62056 який визначає системи, що використовуються у віддаленому контролі (телемеханіці — диспетчерському контролі та зборі даних) у інженерній електриці та у застосунках автоматизації енергетичних систем. Частина 46 надає шар підключення Даних з використанням протоколу HDLC, який переважно використовується на послідовних інтерфейсах.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Стан реалізації протоколу: Клієнт частини 46 специфікації, читання прямо визначених OBIS
 Загальна працемісткість: 3.2 ЛД
 Спонсорування: ТОВ "СВІТоВИР АВТоМАТИК" на загальну працемісткість
-Версія: 1.0.0
+Версія: 1.0.1
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 function CRC( inSeq ) { return Special.FLibSYS.CRC(inSeq, 16, 0x1021, -1, true, true, 0xFFFF); }
 
@@ -10918,7 +10918,7 @@ Currently, only value archives can be used as a data source, either directly to 
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Magomed, SAVTECH
-Version: 1.3.1
+Version: 1.4.0
 License: GPLv2','Побудова діаграми трендів у SVG, яка може надалі вбудовуватися у XHTML-документу, для даних за вказаний період часу [(end-size)...end] та із джерел srcs.
 
 Код формування діаграми засновано на коді примітиву "Діаграма" візуалізаторів, та який було доволі просто перенесено із мови C++ на вбудовану мову JavaLikeCalc. Наразі перенесено-реалізовано лише тренди!
@@ -10939,7 +10939,7 @@ License: GPLv2','Побудова діаграми трендів у SVG, яка
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсоровано: Магомед, SAVTECH
-Версія: 1.3.1
+Версія: 1.4.0
 Ліцензія: GPLv2','Построение диаграммы трендов в SVG, которая может далее встраиваться в XHTML-документ, для данных за указанный период времени [(end-size)...end] и из источников srcs.
 
 Код формирования диаграммы основан на коде примитива "Диаграмма" визуализаторов, и который был довольно просто перенесен с языка C++ на встроенный язык JavaLikeCalc. Сейчас перенесено-реализовано только тренды!
@@ -10960,7 +10960,7 @@ License: GPLv2','Побудова діаграми трендів у SVG, яка
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсировано: Магомед, SAVTECH
-Версия: 1.3.1
+Версия: 1.4.0
 Лицензия: GPLv2',1,10,0,'function strChars(inS) {
 	for(inSz = 0, off = 0; off < inS.length; inSz++)
 		inS.charAt(off, "UTF-8");
@@ -11056,9 +11056,24 @@ for(iP = 0, mainPerc = false; iP < trends.length; iP++) {
 	cP = trends[iP];
 	if(!cP.val.length || !cP.color.length) continue;
 	cP.adjU = -3e300, cP.adjL = 3e300;
-	if(cP.max > cP.min)	{ cP.adjL = cP.min; cP.adjU = cP.max; }
-	else for(iDt = 0; iDt < cP.val.length; iDt++)
-		if(!cP.val[iDt].isEVal()) { cP.adjL = min(cP.adjL, cP.val[iDt]); cP.adjU = max(cP.adjU, cP.val[iDt]); }
+	if(cP.max > cP.min)	cP.adjL = cP.min, cP.adjU = cP.max;
+	else {
+		for(iDt = 0; iDt < cP.val.length; iDt++)
+			if(!cP.val[iDt].isEVal()) { cP.adjL = min(cP.adjL, cP.val[iDt]); cP.adjU = max(cP.adjU, cP.val[iDt]); }
+		// Value range expanding
+		//  No value
+		if(cP.adjU == -3e300)	cP.adjU = 1, cP.adjL = 0;
+		// Range and absolute value are very small
+		else if((cP.adjU-cP.adjL) < 1e-30 && abs(cP.adjU) < 1e-30)	cP.adjU += 0.5, cP.adjL -= 0.5;
+		// Only range is very small
+		else if((cP.adjU-cP.adjL) < 1e-30)
+			cP.adjL -= (iP/trends.length)*abs(cP.adjU), cP.adjU += (1-iP/trends.length)*abs(cP.adjU);
+		// Range smaller relatively to absolute value
+		else if((cP.adjU-cP.adjL) / abs(cP.adjL+(cP.adjU-cP.adjL)/2) < 0.001) {
+			wnt_dp = 0.001*abs(cP.adjL+(cP.adjU-cP.adjL)/2)-(cP.adjU-cP.adjL);
+			cP.adjL -= (iP/trends.length)*wnt_dp, cP.adjU += (1-iP/trends.length)*wnt_dp;
+		}
+	}
 
 	cP.wScale = cP.scale&(sclVer|FD_LOG);
 	if(cP.wScale&(FD_MARKS|FD_GRD))	continue;
@@ -11330,8 +11345,8 @@ for(iTr = 0; iTr < trends.length; iTr++) {
 	// Prepare border for percent trend
 	bordL = cP.min;
 	bordU = cP.max;
-	if(vsPercT && bordL >= bordU) {
-		bordU = -3e300, bordL = 3e300;
+	if(vsPercT && bordL >= bordU) { bordL = cP.adjL; bordU = cP.adjU; }
+		/*bordU = -3e300, bordL = 3e300;
 		for(iDt = 0; iDt < cP.val.length; iDt++) {
 			c_val = cP.val[iDt];
 			if(!c_val.isEVal()) { bordL = min(bordL, c_val); bordU = max(bordU, c_val); }
@@ -11339,7 +11354,7 @@ for(iTr = 0; iTr < trends.length; iTr++) {
 		if((vMarg=(bordU-bordL)/10) == 0) vMarg = 0.5;
 		bordL -= vMarg;
 		bordU += vMarg;
-	}
+	}*/
 
 	trPath = 0; prev_vl = EVAL; prev_pos = 0;
 	for(iDt = 0; iDt < cP.val.length; iDt++) {

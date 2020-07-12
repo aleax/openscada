@@ -100,8 +100,9 @@ case "$1" in
 	if test -n "$(which gdb 2> /dev/null)"; then
 	    cd $dPrjRez
 	    for fit in `ls core* 2> /dev/null`; do
-		echo "Core dump process for back trace purchase to file ${prjNm}_${fit}_$(date +%F_%H.%M).crash"
+		echo "Core dump process for back trace purchase to the file ${prjNm}_${fit}_$(date +%F_%H.%M).crash"
 		gdb @bindir_full@/openscada --core ${fit} --batch --quiet -ex "thread apply all bt full" -ex "quit" > ${prjNm}_${fit}_$(date +%F_%H.%M).crash
+		gzip ${prjNm}_${fit}_$(date +%F_%H.%M).crash
 		rm -f ${fit}
 	    done
 	fi

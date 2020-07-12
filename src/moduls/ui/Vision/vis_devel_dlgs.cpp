@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel_dlgs.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1597,8 +1597,10 @@ void VisItProp::isModify( QObject *snd )
     }
     else if(oname == obj_name->objectName() || oname == proc_per->objectName())
 	req.setText(((LineEdit*)snd)->value().toStdString());
-    else if(oname == obj_descr->objectName() || oname == proc_text->objectName())
+    else if(oname == obj_descr->objectName() || oname == proc_text->objectName()) {
 	req.setText(((TextEdit*)snd)->text().toStdString());
+	update = true;
+    }
     else if(oname == pg_tp->objectName()) {
 	req.setText(((QComboBox*)snd)->itemData(((QComboBox*)snd)->currentIndex()).toString().toStdString());
 	update = true;

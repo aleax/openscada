@@ -426,8 +426,7 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, bool f
 			continue;
 		    }
 
-		    bool isTransl = (cf.fld().flg()&TFld::TransltText && !cf.noTransl() &&
-				Mess->lang2CodeBase().size() && Mess->lang2Code() != Mess->lang2CodeBase());
+		    bool isTransl = (cf.fld().flg()&TFld::TransltText && !cf.noTransl() && Mess->translCfg());
 		    if(isCreate || !isTransl) {
 			if(localCfgCtx && cf.isKey() && cf.extVal())	wel->setAttr(vnm+"_ext", cf.getS(TCfg::ExtValTwo));
 			if(cf.getS().size() < 100) {

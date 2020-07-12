@@ -128,7 +128,11 @@ public:
     void updLookFeel( );
 
     bool notify( QObject *receiver, QEvent *event );
+#if QT_VERSION < 0x050000
     void saveState( QSessionManager &manager );
+#else
+    void saveStateRequest( QSessionManager &sessionManager );
+#endif
 
     int stExec( );
     void stClear( bool inDestr = false );
@@ -236,8 +240,10 @@ private:
     char	*qtArgV[10];			//Argument's values
     char	qtArgBuf[1000];			//Arguments' strings buffer
 
+    ResMtx	splashRes;
     SplashFlag	splashTp;
     QSplashScreen *splash;
+    time_t	splashTm;
 };
 
 extern TUIMod *mod;

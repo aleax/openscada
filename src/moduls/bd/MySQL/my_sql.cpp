@@ -34,7 +34,7 @@
 #define MOD_NAME	_("DB MySQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"3.5.0"
+#define MOD_VER		"3.5.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DBMS MySQL.")
 #define MOD_LICENSE	"GPL2"
@@ -555,16 +555,15 @@ void MTable::fieldSet( TConfig &cfg )
     mLstUse = SYS->sysTm();
 
     string sid, sval;
-    bool isVarTextTransl = (!Mess->lang2CodeBase().empty() && Mess->lang2Code() != Mess->lang2CodeBase());
 
     //Get config fields list
     vector<string> cf_el;
     cfg.cfgList(cf_el);
 
     //Check for translation present
-    bool trPresent = isVarTextTransl, trDblDef = false;
+    bool trPresent = Mess->translCfg(), trDblDef = false;
     for(unsigned iFld = 1; iFld < tblStrct.size(); iFld++) {
-	if(trPresent && (!isVarTextTransl || trDblDef)) break;
+	if(trPresent && (!Mess->translCfg() || trDblDef)) break;
 	sid = tblStrct[iFld][0];
 	if(sid.size() > 3) {
 	    if(!trPresent && !Mess->translDyn() && sid.compare(0,3,Mess->lang2Code()+"#") == 0) trPresent = true;
@@ -687,7 +686,7 @@ void MTable::fieldFix( TConfig &cfg, bool trPresent )
     if(tblStrct.empty()) throw err_sys(_("Table is empty!"));
 
     bool appMode = cfg.reqKeys() || (cfg.incomplTblStruct() && !isEmpty()),	//Only for append no present fields
-	 isVarTextTransl = trPresent || (!Mess->lang2CodeBase().empty() && Mess->lang2Code() != Mess->lang2CodeBase());
+	 isVarTextTransl = trPresent || Mess->translCfg();
     //Get config fields list
     vector<string> cf_el;
     cfg.cfgList(cf_el);

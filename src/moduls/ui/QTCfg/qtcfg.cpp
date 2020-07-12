@@ -2675,7 +2675,7 @@ void ConfApp::combBoxActivate( const QString& ival )
 			find_ok = true;
 		    }
 	    }
-	    if(!find_ok) { mod->postMess(mod->nodePath().c_str(),_("Value is missing: ")+val,TUIMod::Info,this); return; }
+	    if(!find_ok) { /*mod->postMess(mod->nodePath().c_str(),_("Value is missing: ")+val,TUIMod::Info,this);*/ return; }
 	}
 
 	//Checking the block element. Command box!

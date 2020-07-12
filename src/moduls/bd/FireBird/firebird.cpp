@@ -31,7 +31,7 @@
 #define MOD_NAME	_("DB FireBird")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.5.0"
+#define MOD_VER		"2.5.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DBMS FireBird.")
 #define LICENSE		"GPL2"
@@ -661,16 +661,15 @@ void MTable::fieldSet( TConfig &cfg )
     if(tblStrct.empty()) fieldFix(cfg);
 
     string sid, sval;
-    bool isVarTextTransl = (!Mess->lang2CodeBase().empty() && Mess->lang2Code() != Mess->lang2CodeBase());
 
     //Get config fields list
     vector<string> cf_el;
     cfg.cfgList(cf_el);
 
     //Check for translation present
-    bool trPresent = isVarTextTransl, trDblDef = false;
+    bool trPresent = Mess->translCfg(), trDblDef = false;
     for(unsigned iFld = 1; iFld < tblStrct.size(); iFld++) {
-	if(trPresent && (!isVarTextTransl || trDblDef)) break;
+	if(trPresent && (!Mess->translCfg() || trDblDef)) break;
 	sid = tblStrct[iFld][0];
 	if(sid.size() > 3) {
 	    if(!trPresent && !Mess->translDyn() && sid.compare(0,3,Mess->lang2Code()+"#") == 0) trPresent = true;
@@ -780,8 +779,7 @@ void MTable::fieldFix( TConfig &cfg, bool trPresent )
     vector<string> cf_el;
     cfg.cfgList(cf_el);
 
-    bool appMode = cfg.reqKeys() || (cfg.incomplTblStruct() && !isEmpty()),	//Only for append no present fields
-	 isVarTextTransl = (!Mess->lang2CodeBase().empty() && Mess->lang2Code() != Mess->lang2CodeBase());
+    bool appMode = cfg.reqKeys() || (cfg.incomplTblStruct() && !isEmpty());	//Only for append no present fields
 
     //Prepare request for fix structure
     string req = "ALTER TABLE \"" + mod->sqlReqCode(name(),'"') + "\" ";
@@ -864,7 +862,7 @@ void MTable::fieldFix( TConfig &cfg, bool trPresent )
 		if(tblStrct[iC][0].size() > 3 && tblStrct[iC][0].substr(2) == ("#"+cf_el[iCf]) &&
 		    tblStrct[iC][0].compare(0,2,Mess->lang2CodeBase()) != 0 &&
 		    tblStrct[iC][0].compare(0,2,Mess->lang2Code()) == 0) break;
-	    if(iC >= tblStrct.size() && isVarTextTransl) {
+	    if(iC >= tblStrct.size() && Mess->translCfg()) {
 		req += (next?",ADD \"":"ADD \"") + mod->sqlReqCode(Mess->lang2Code()+"#"+cf_el[iCf],'"') + "\" "+f_tp;
 		next = true;
 	    }

@@ -435,7 +435,7 @@ class TSYS : public TCntrNode
 	int	mSavePeriod;	// Save period (s) for periodic system saving to DB
 	bool	mModifCalc;	// Set modification for the calculated objects
 
-	bool	isLoaded;
+	bool	isLoaded, isRunning, isServPrc;
 
 	XMLNode rootN;		// Root of the config-file tree
 	string	rootCfgFl;	// Root node's config-file name

@@ -25287,55 +25287,7 @@ if(f_start) {
 	this.doc.attrSet("params", params);
 
 	doc_doc = ""; doc_time = SYS.time(); doc_bTime = doc_time-120;
-}','JavaLikeCalc.JavaScript
-if(f_start) {
-	//Init the avialable parameters
-	colors = new Array("#ae77c3", "orange", "blue", "#199696", "#3264C8", "tomato", "magenta", "#B6B600", "#69695C", "darkcyan");
-	params = new Array();
-	dtPeriod = 1;
-	for(iP = 1; iP <= 10; iP++) {
-		pO = new Object();
-		pO.name = this.doc.attr("p"+iP+"name");
-		pO.var = this.doc.attr("p"+iP+"var");
-		pO.ed = this.doc.attr("p"+iP+"ed");
-		if(pO.ed.isEVal())	pO.ed = "";
-		pO.prec = this.doc.attr("p"+iP+"prec");
-		pO.color = colors[iP-1];
-		if(pO.prec.isEVal())	pO.prec = 0;
-		if(!pO.name.isEVal() && pO.name.length && !pO.var.isEVal() && (aO=SYS.nodeAt(pO.var).arch())) {
-			params.push(pO);
-			dtPeriod = max(dtPeriod, ceil(1e-6*aO.period()));
-		}
-	}
-	doc_tmpl = doc_tmpl.replace("@@valPer@@", dtPeriod.toString());
-	this.doc.attrSet("params", params);
-
-	doc_doc = ""; doc_time = SYS.time(); doc_bTime = doc_time-120;
-}','JavaLikeCalc.JavaScript
-if(f_start) {
-	//Init the avialable parameters
-	colors = new Array("#ae77c3", "orange", "blue", "#199696", "#3264C8", "tomato", "magenta", "#B6B600", "#69695C", "darkcyan");
-	params = new Array();
-	dtPeriod = 1;
-	for(iP = 1; iP <= 10; iP++) {
-		pO = new Object();
-		pO.name = this.doc.attr("p"+iP+"name");
-		pO.var = this.doc.attr("p"+iP+"var");
-		pO.ed = this.doc.attr("p"+iP+"ed");
-		if(pO.ed.isEVal())	pO.ed = "";
-		pO.prec = this.doc.attr("p"+iP+"prec");
-		pO.color = colors[iP-1];
-		if(pO.prec.isEVal())	pO.prec = 0;
-		if(!pO.name.isEVal() && pO.name.length && !pO.var.isEVal() && (aO=SYS.nodeAt(pO.var).arch())) {
-			params.push(pO);
-			dtPeriod = max(dtPeriod, ceil(1e-6*aO.period()));
-		}
-	}
-	doc_tmpl = doc_tmpl.replace("@@valPer@@", dtPeriod.toString());
-	this.doc.attrSet("params", params);
-
-	doc_doc = ""; doc_time = SYS.time(); doc_bTime = doc_time-120;
-}',-1,'name;dscr;',1582472916);
+}','','',-1,'name;dscr;',1582472916);
 INSERT INTO wlb_doc VALUES('docDin','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAG
 f0lEQVRYhe1XS28TPRe2PddkZjKZJG1J2tKGQAlpERSWrCq27Fmx4d/wb5BAQgLBigVCLFg0CSml
 jXpLmtsMnfvF9rewFCJKCx+b8Ep5FlF8fC7z+Bz72PDly5fXrl0D/03U63W+XC7funULAJAkCYQQ

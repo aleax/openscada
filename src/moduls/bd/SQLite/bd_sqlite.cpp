@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"3.0.1"
+#define MOD_VER		"3.0.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -195,7 +195,7 @@ void MBD::sqlReq( const string &req, vector< vector<string> > *tbl, char intoTra
     int repCnt = 0;
 rep:
     //Put the request
-    if(mess_lev() == TMess::Debug) mess_debug((nodePath()+"tracing/").c_str(), _("Request: \"%s\""), req.c_str());
+    if(mess_lev() == TMess::Debug) mess_debug((owner().nodePath()+id()+"_tracing/").c_str(), _("Request: \"%s\""), req.c_str());
     rc = sqlite3_get_table(m_db, Mess->codeConvOut(cd_pg.c_str(),req).c_str(), &result, &nrow, &ncol, &zErrMsg);
     if(rc != SQLITE_OK) {
 	string err = _("Unknown error");
@@ -474,16 +474,15 @@ void MTable::fieldSet( TConfig &cfg )
     mLstUse = SYS->sysTm();
 
     string sid, sval;
-    bool isVarTextTransl = (!Mess->lang2CodeBase().empty() && Mess->lang2Code() != Mess->lang2CodeBase());
 
     //Get config fields list
     vector<string> cf_el;
     cfg.cfgList(cf_el);
 
     //Check for translation present
-    bool trPresent = isVarTextTransl, trDblDef = false;
+    bool trPresent = Mess->translCfg(), trDblDef = false;
     for(unsigned iFld = 1; iFld < tblStrct.size(); iFld++) {
-	if(trPresent && (!isVarTextTransl || trDblDef)) break;
+	if(trPresent && (!Mess->translCfg() || trDblDef)) break;
 	sid = tblStrct[iFld][1];
 	if(sid.size() > 3) {
 	    if(!trPresent && !Mess->translDyn() && sid.compare(0,3,Mess->lang2Code()+"#") == 0) trPresent = true;
@@ -602,7 +601,7 @@ void MTable::fieldFix( TConfig &cfg, bool trPresent )
 {
     bool toUpdate = false,
 	 appMode = cfg.reqKeys() || (cfg.incomplTblStruct() && !tblStrct.empty()),	//Only for append no present fields
-	 isVarTextTransl = trPresent || (!Mess->lang2CodeBase().empty() && Mess->lang2Code() != Mess->lang2CodeBase());
+	 isVarTextTransl = trPresent || Mess->translCfg();
 
     //Get config fields list
     vector<string> cf_el;

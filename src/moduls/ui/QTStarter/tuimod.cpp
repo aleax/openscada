@@ -56,7 +56,7 @@
 #define MOD_NAME	_("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"5.5.0"
+#define MOD_VER		"5.6.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -93,7 +93,7 @@ using namespace QTStarter;
 //* TUIMod                                        *
 //*************************************************
 TUIMod::TUIMod( string name ) : TUI(MOD_ID), mQtLookMdf(false), QtApp(NULL), hideMode(false), mEndRun(false), mStartCom(false), mCloseToTray(false),
-    mStartMod(dataRes()), mStyle(dataRes()), mFont(dataRes()), mPalette(dataRes()), mStyleSheets(dataRes()), qtArgC(0), qtArgEnd(0), splash(NULL), splashTp(SPLSH_NULL)
+    mStartMod(dataRes()), mStyle(dataRes()), mFont(dataRes()), mPalette(dataRes()), mStyleSheets(dataRes()), qtArgC(0), qtArgEnd(0), splashTp(SPLSH_NULL), splash(NULL), splashTm(0)
 {
     mod = this;
 
@@ -272,6 +272,8 @@ void TUIMod::modStop( )
 
 void TUIMod::splashSet( SplashFlag flg )
 {
+    MtxAlloc	res(splashRes, true);
+
     if(flg == SPLSH_NULL) {
 	if(splash) delete splash;
 	splash = NULL;
@@ -288,9 +290,11 @@ void TUIMod::splashSet( SplashFlag flg )
 	}
 
 	//Creating the splash
-	if(splash && (flg != splashTp || ico_t.size() != splash->pixmap().size())) splashSet(SPLSH_NULL);
+	if(splash && flg != splashTp)	splashSet(SPLSH_NULL);
 	if(!splash) {
 	    splash = new QSplashScreen();
+
+	    splashTm = time(NULL);
 
 	    //Prepairing the splash image
 	    QPixmap pm = QPixmap::fromImage(ico_t);
@@ -340,16 +344,16 @@ void TUIMod::splashSet( SplashFlag flg )
 
 	//Updating messages
 	vector<TMess::SRec> recs;
-	SYS->archive().at().messGet(time(NULL)-120, time(NULL), recs, "", TMess::Debug, BUF_ARCH_NM);
+	SYS->archive().at().messGet(splashTm/*time(NULL)-120*/, time(NULL), recs, "", TMess::Debug, BUF_ARCH_NM);
 	QString mess;
 	for(int iM = recs.size()-1; iM >= 0 && iM > ((int)recs.size()-10); iM--)
 	    mess += QString("%1\n").arg(recs[iM].mess.c_str());
 	recs.clear();
 	splash->showMessage(mess, Qt::AlignBottom|Qt::AlignLeft);
 
-	for(int iTr = 0; iTr < 10; iTr++) {
+	for(int iTr = 0; iTr < 3; iTr++) {
 	    QtApp->processEvents();	//!!!! To show the message on Qt5
-	    //TSYS::sysSleep(0.1);	//!!!! To ensure the splash visibility at the exit on Qt5
+	    TSYS::sysSleep(0.01);	//!!!! To ensure the splash visibility at the exit on Qt5
 	}
     }
     splashTp = flg;
@@ -511,7 +515,7 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 		    mQtLookMdf = false;
 		}
 	    }
-	    else {
+	    else if(opt->text() != _("<Select a profile to combine>")) {
 		TConfig cEl(&elLF);
 		cEl.cfg("NAME").setS(opt->text());
 		if(SYS->db().at().dataGet("",nodePath()+"LookFeel",cEl,true,true)) {
@@ -641,7 +645,11 @@ bool StApp::notify( QObject *receiver, QEvent *event )
     return QApplication::notify(receiver, event);
 }
 
+#if QT_VERSION < 0x050000
 void StApp::saveState( QSessionManager &manager )
+#else
+void StApp::saveStateRequest( QSessionManager &manager )
+#endif
 {
     manager.setRestartHint(QSessionManager::RestartNever);
 }

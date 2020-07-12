@@ -1,3 +1,31 @@
+2020-07-12 Roman (stable)
+- data/openscada-proj.in: Crash report files appended for GZIPing.
+- LibsDB.OscadaLibs.DevLib.IEC62056: Default value of the property "tmPollAll" set to 10.
+- !!:FIX: LibsDB.OscadaLibs.doc.diagram,UI.{Vision,WebVision}:
+    Prevented from the value scale double adjustement for the percent scale and appended for the value range expanding.
+- LibsDB.vcaBase: The procedure translation was removed for doc.docRepInstVals.
+- !!!!:SYS,UI.QTStarter: Splash updating of the main pthreaded GUI module moved to the service task,
+    before switching to performing the main function, for what there appended two new signs "isRunning" and "isServPrc"
+    and the service task starting moved to the TSYS constructor and the stopping moved to the the TSYS destructor.
+- SYS,DB,DB.{SQLite,MySQL,PostgreSQL,FireBird}:
+    TMess appended for a function of detection the configuration translation translCfg(), which used in all DB modules and in dataSet().
+- DB.SQLite: The debugging key for tracing the SQL-requests renamed to "{ModId}_tracing".
+- FIX:UI.QTCfg: Appended for oppressing messages about missed items of the combobox items.
+- FIX:UI.QTStarter: Prevented from the information item "<Select a profile to combine>" processing of the profile combobox.
+    FIX: Fixed in processing the Qt function QGuiApplication::saveState() renaming to QGuiApplication::saveStateRequest() in the Qt5.
+    FIX: The splash image recreation condition (ico_t.size() != splash->pixmap().size()) was removed but it doesn't work on Qt4 and spare one mostly.
+    The splash building moved under a lock the resources.
+    Begin of the splash messages time moved to the memorized one at the splash type change.
+    Splash updating appended for the short waiting in 0.01 seconds and the tries set to 3,
+	what is the enough condition for the splash visibility on Qt5 and Qt4.
+- !!:FIX:UI.VCAEngine: Prevented from crashing on big configurations with long closing the runtime sessions
+	in accessing the widget heritors (mHerit) by appending the ResRW lock "mHeritRes".
+    !!:FIX: Fixed in setting the widget procedure field translation "PROC" at the start, when by default it wrong allowed for translation.
+- !:FIX:UI.{VCAEngine,Vision}: The field of procedures translation fixed in the visibility processing and updating.
+- UI.{WebCfgD,WebVision}: Makefile.am: The procedure of building of the source code for JS and HTML files was some unified
+    in the files complete processing by SED.
+
+
 2020-07-05 Roman (stable)
 - DOC: The document "AGREEMENT ON TECHNICAL SUPPORT OF THE "OpenSCADA" SOFTWARE" version 2 finished and appended to the offline documentation.
 - !!!!:SYS,UI.QTStarter: OpenSCADA starting with a module as the GUI in the main thread significantly refactored for:
@@ -9,8 +37,8 @@
 - FIX:SYS.Functions: Time limit of the functions manual execution some approximation to STD_WAIT_TM (5 second) to make it not lesser.
 - FIX:DAQ: System messages of enabling, stopping, disabling controller objects are fixed.
 - !!!!:Transports: The configuration option "START" was removed for the output transports as spare one and to prevent long starting.
-- !!:Protocol.ModBus: The output requests of the TCP-variant appended for checking Transaction ID of the response packages.
-- Transport.{Sockets,SSL}: The output transports appended for discard connections at the program stopping.
+- !!:FIX:Protocol.ModBus: The output requests of the TCP-variant appended for checking Transaction ID of the response packages.
+- FIX:Transport.{Sockets,SSL}: The output transports appended for discard connections at the program stopping.
 - UI.QTStarter: The backuping is made busy the main interface before the operation finish.
     The starting UI Qt-modules configuration was made selectable.
 

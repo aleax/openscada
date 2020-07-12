@@ -121,7 +121,6 @@ void TSubSYS::subStart( )
 	try {
 	    mO = modAt(list[iM]);
 	    if(SYS->mainThr.freeStat() || &SYS->mainThr.at() != &mO.at()) mO.at().modStart();
-	    if(!SYS->mainThr.freeStat()) SYS->mainThr.at().perSYSCall(0);
 	}
 	catch(TError &err) {
 	    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
@@ -143,7 +142,6 @@ void TSubSYS::subStop( )
 	try {
 	    mO = modAt(list[iM]);
 	    if(SYS->mainThr.freeStat() || &SYS->mainThr.at() != &mO.at()) mO.at().modStop();
-	    if(!SYS->mainThr.freeStat()) SYS->mainThr.at().perSYSCall(0);
 	}
 	catch(TError &err) {
 	    mess_err(err.cat.c_str(), "%s", err.mess.c_str());

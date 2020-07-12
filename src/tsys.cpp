@@ -60,7 +60,7 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
     mUser("root"), mConfFile(sysconfdir_full "/oscada.xml"), mId("InitSt"),
     mModDir(oscd_moddir_full), mIcoDir("icons;" oscd_datadir_full "/icons"), mDocDir("docs;" oscd_datadir_full "/docs"),
     mWorkDB(dataRes()), mSelDB(dataRes()), mMainCPUs(dataRes()), mTaskInvPhs(10), mSaveAtExit(false), mSavePeriod(0),
-    mModifCalc(false), isLoaded(false), rootModifCnt(0), sysModifFlgs(0), mStopSignal(0), mN_CPU(1),
+    mModifCalc(false), isLoaded(false), isRunning(false), isServPrc(false), rootModifCnt(0), sysModifFlgs(0), mStopSignal(0), mN_CPU(1),
     mainPthr(0), mSysTm(0), mClockRT(false), mPrjCustMode(true), mPrjNm(dataRes()), mCfgCtx(NULL),
     mRdStLevel(0), mRdRestConnTm(10), mRdTaskPer(1), mRdPrimCmdTr(false)
 {
@@ -112,10 +112,16 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
     for(int argPos = 0; (argCom=getCmdOpt(argPos,&argVl)).size(); )
 	mCmdOpts[strEncode(argCom,ToLower)] = argVl;
     mCmdOpts[""] = argv[0];
+
+    //Early starting the service task
+    taskCreate("SYS_Service", 0, TSYS::ServTask, NULL, 10);
 }
 
 TSYS::~TSYS( )
 {
+    //Stop for ordinal service task
+    taskDestroy("SYS_Service");
+
     int mLev = Mess->messLevel();
     finalKill = true;
 
@@ -766,6 +772,7 @@ void TSYS::load_( )
 	isLoaded = true;
     }
 
+    //Force the main threaded module START update
     if(!mainThr.freeStat()) mainThr.at().perSYSCall(1);
 
     //Direct loading of subsystems and modules
@@ -832,7 +839,6 @@ int TSYS::start( )
 
     mess_sys(TMess::Info, _("Starting."));
 
-    if(!mainThr.freeStat()) mainThr.at().perSYSCall(0);
     for(unsigned iA = 0; iA < lst.size(); iA++)
 	try { at(lst[iA]).at().subStart(); }
 	catch(TError &err) {
@@ -846,20 +852,16 @@ int TSYS::start( )
     Mess->translReg("", "uapi:" DB_CFG);
 
     mStopSignal = 0;
-
-    //Start for ordinal service task
-    taskCreate("SYS_Service", 0, TSYS::ServTask, NULL, 10);
-
     mess_sys(TMess::Info, _("Running is completed!"));
 
     //Call in monopoly for main thread module or wait for a signal.
+    isRunning = true;
     if(!mainThr.freeStat()) mainThr.at().modStart();
     while(!mStopSignal) sysSleep(STD_WAIT_DELAY*1e-3);
+    isRunning = false;
+    TSYS::eventWait(isServPrc, false, string("SYS_Service: ")+_(" waiting the processing finish ..."));
 
     mess_sys(TMess::Info, _("Stopping."));
-
-    //Stop for ordinal service task
-    taskDestroy("SYS_Service");
 
     if(saveAtExit() || savePeriod()) save();
     cfgFileSave();
@@ -2247,29 +2249,38 @@ void *TSYS::ServTask( void * )
     SYS->list(lst);
 
     for(unsigned int iCnt = 1; !TSYS::taskEndRun(); iCnt++) {
-	//Lock file update
-	if(SYS->prjNm().size() && SYS->prjLockUpdPer() && !(iCnt%SYS->prjLockUpdPer())) SYS->prjLock("update");
+	SYS->isServPrc = true;
 
-	//CPU frequency calculation (per ten seconds)
-	if(!(iCnt%10))	SYS->clkCalc();
+	if(SYS->isRunning) {
+	    try {
+		//Lock file update
+		if(SYS->prjNm().size() && SYS->prjLockUpdPer() && !(iCnt%SYS->prjLockUpdPer())) SYS->prjLock("update");
 
-	//Config-file checking for changes (per ten seconds)
-	if(!(iCnt%10))	SYS->cfgFileScan();
+		//CPU frequency calculation (per ten seconds)
+		if(!(iCnt%10))	SYS->clkCalc();
 
-	//Checking for shared libraries
-	if(SYS->modSchedul().at().chkPer() && !(iCnt%SYS->modSchedul().at().chkPer()))
-	    SYS->modSchedul().at().libLoad(SYS->modDir(), true);
+		//Config-file checking for changes (per ten seconds)
+		if(!(iCnt%10))	SYS->cfgFileScan();
 
-	//Changes saving
-	if(SYS->savePeriod() && !(iCnt%SYS->savePeriod())) SYS->save();
+		//Checking for shared libraries
+		if(SYS->modSchedul().at().chkPer() && !(iCnt%SYS->modSchedul().at().chkPer()))
+		    SYS->modSchedul().at().libLoad(SYS->modDir(), true);
 
-	//Config-file checking for need to save
-	if(!(iCnt%10))	SYS->cfgFileSave();
+		//Changes saving
+		if(SYS->savePeriod() && !(iCnt%SYS->savePeriod())) SYS->save();
 
-	//Subsystems calling (per 10s)
-	for(unsigned iA = 0; !(iCnt%SERV_TASK_PER) && iA < lst.size(); iA++)
-	    try { SYS->at(lst[iA]).at().perSYSCall(iCnt); }
-	    catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+		//Config-file checking for need to save
+		if(!(iCnt%10))	SYS->cfgFileSave();
+
+		//Subsystems calling (per 10s)
+		for(unsigned iA = 0; !(iCnt%SERV_TASK_PER) && iA < lst.size(); iA++)
+		    try { SYS->at(lst[iA]).at().perSYSCall(iCnt); }
+		    catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+	    } catch(TError&) { }
+	}
+	else if(!SYS->mainThr.freeStat()) SYS->mainThr.at().perSYSCall(0);
+
+	SYS->isServPrc = false;
 
 	TSYS::taskSleep(1000000000);
     }
