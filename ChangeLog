@@ -1,3 +1,7 @@
+2020-07-13 Roman (stable)
+- FIX:SYS: The service task fixed in updating list of the processing subsystems.
+
+
 2020-07-12 Roman (stable)
 - data/openscada-proj.in: Crash report files appended for GZIPing.
 - LibsDB.OscadaLibs.DevLib.IEC62056: Default value of the property "tmPollAll" set to 10.
