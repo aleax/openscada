@@ -396,7 +396,7 @@ class Func : public TConfig, public TFunction
 #ifdef IN_F_SHARE_REGS
 	    vector< vector<RegW> > inFShareRegs;	//Shared registers stack of the internal functions
 #else
-	    map<int, vector< vector<RegW> > > inFRegs;	//Shared registers stack of the internal functions
+	    map<int, vector< vector<RegW> > > inFRegs;	//Shared registers stack of the internal functions per function
 #endif
 	};
 

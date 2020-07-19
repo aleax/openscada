@@ -281,10 +281,12 @@ Information variables of the program:
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>TSYS( int argi, char **argb, char **env );</i> — The initializing constructor.</li>
+<li> <i>bool isRunning( );</i> — Sign of the station running state — executing the main threaded module or waiting the stop signal.</li>
+<li> <i>bool isFinalKill( );</i> — Sign "The final killing of". It is used for forced disconnection of blocked objects on the the final stage of shutdown.</li>
+<li> <i>int stopSignal( );</i> — The return code in the case of system shutdown. Can be used as a sign of "System shutdown" of the various subsystems. </li>
 <li> <i>void unload( );</i> — Unload subsystems.</li>
 <li> <i>int start(  );</i> — Start of the system. The function is finished only with the finishing of the system. The return code is returned.</li>
 <li> <i>void stop( int sig = SIGUSR1 );</i> — Stop program by the signal <i>sig</i>, by default it is SIGUSR1 and SIGUSR2 reserved for projects manager.</li>
-<li> <i>int stopSignal( );</i> — The return code in the case of system shutdown. Can be used as a sign of "System shutdown" of the various subsystems. </li>
 <li> <i>string id( );</i> — station ID.</li>
 <li> <i>string name( );</i> — Localized name of the station.</li>
 <li> <i>string user( );</i> — The system user on behalf of which the system is running .</li>
@@ -421,7 +423,7 @@ Information variables of the program:
 <li> <i>static void ctrListFS( XMLNode *nd, const string &amp;fsBase, const string &amp;fileExt = "" );</i> — Browsing list for file system's items from base <i>fsBase</i>, for the files with extensions <i>fileExt</i> in list "png;jpeg;gif;".</li></ul>
 <p><b>Public attributes:</b>
 </p>
-<ul><li> <i>static bool finalKill;</i> — Sign "The final killing of". It is used for forced disconnection of blocked objects on the the final stage of shutdown.</li></ul>
+<ul><li> <i>AutoHD&lt;TModule&gt; mainThr;</i> — Connection to a module executing in the main thread.</li></ul>
 <p><b>Short calls for global functions into "OSCADA" namespace:</b>
 </p>
 <ul><li> <i>template &lt;class fVal&gt; fVal fmin( fVal a, fVal b ); template &lt;class fVal&gt; fVal fmax( fVal a, fVal b );</i> — functional templates for obtain of two values minimum and maximum.</li>

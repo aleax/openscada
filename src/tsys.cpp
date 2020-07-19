@@ -53,14 +53,14 @@ using namespace OSCADA;
 //Continuously access variable
 TMess	*OSCADA::Mess = NULL;
 TSYS	*OSCADA::SYS = NULL;
-bool TSYS::finalKill = false;
 pthread_key_t TSYS::sTaskKey;
 
 TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char **)argb), envp((const char **)env),
+    isLoaded(false), mRunning(false), isServPrc(false), mFinalKill(false),
     mUser("root"), mConfFile(sysconfdir_full "/oscada.xml"), mId("InitSt"),
     mModDir(oscd_moddir_full), mIcoDir("icons;" oscd_datadir_full "/icons"), mDocDir("docs;" oscd_datadir_full "/docs"),
     mWorkDB(dataRes()), mSelDB(dataRes()), mMainCPUs(dataRes()), mTaskInvPhs(10), mSaveAtExit(false), mSavePeriod(0),
-    mModifCalc(false), isLoaded(false), isRunning(false), isServPrc(false), rootModifCnt(0), sysModifFlgs(0), mStopSignal(0), mN_CPU(1),
+    mModifCalc(false), rootModifCnt(0), sysModifFlgs(0), mStopSignal(0), mN_CPU(1),
     mainPthr(0), mSysTm(0), mClockRT(false), mPrjCustMode(true), mPrjNm(dataRes()), mCfgCtx(NULL),
     mRdStLevel(0), mRdRestConnTm(10), mRdTaskPer(1), mRdPrimCmdTr(false)
 {
@@ -70,7 +70,7 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
 
     mName = _("Initial Station");
 
-    finalKill = false;
+    mFinalKill = false;
     SYS = this;		//Init global access value
     mSubst = grpAdd("sub_", true);
     nodeEn();
@@ -123,7 +123,7 @@ TSYS::~TSYS( )
     taskDestroy("SYS_Service");
 
     int mLev = Mess->messLevel();
-    finalKill = true;
+    mFinalKill = true;
 
     mainThr.free();
 
@@ -855,10 +855,10 @@ int TSYS::start( )
     mess_sys(TMess::Info, _("Running is completed!"));
 
     //Call in monopoly for main thread module or wait for a signal.
-    isRunning = true;
+    mRunning = true;
     if(!mainThr.freeStat()) mainThr.at().modStart();
     while(!mStopSignal) sysSleep(STD_WAIT_DELAY*1e-3);
-    isRunning = false;
+    mRunning = false;
     TSYS::eventWait(isServPrc, false, string("SYS_Service: ")+_(" waiting the processing finish ..."));
 
     mess_sys(TMess::Info, _("Stopping."));
@@ -2248,7 +2248,7 @@ void *TSYS::ServTask( void * )
     for(unsigned int iCnt = 1; !TSYS::taskEndRun(); iCnt++) {
 	SYS->isServPrc = true;
 
-	if(SYS->isRunning) {
+	if(SYS->isRunning()) {
 	    try {
 		//Lock file update
 		if(SYS->prjNm().size() && SYS->prjLockUpdPer() && !(iCnt%SYS->prjLockUpdPer())) SYS->prjLock("update");

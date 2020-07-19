@@ -118,10 +118,7 @@ void TSubSYS::subStart( )
     modList(list);
     AutoHD<TModule> mO;
     for(unsigned iM = 0; iM < list.size(); iM++)
-	try {
-	    mO = modAt(list[iM]);
-	    if(SYS->mainThr.freeStat() || &SYS->mainThr.at() != &mO.at()) mO.at().modStart();
-	}
+	try { modAt(list[iM]).at().modStart(); }
 	catch(TError &err) {
 	    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
 	    mess_sys(TMess::Error, _("Error starting the module '%s'."), list[iM].c_str());
@@ -139,10 +136,7 @@ void TSubSYS::subStop( )
     modList(list);
     AutoHD<TModule> mO;
     for(unsigned iM = 0; iM < list.size(); iM++)
-	try {
-	    mO = modAt(list[iM]);
-	    if(SYS->mainThr.freeStat() || &SYS->mainThr.at() != &mO.at()) mO.at().modStop();
-	}
+	try { modAt(list[iM]).at().modStop(); }
 	catch(TError &err) {
 	    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
 	    mess_sys(TMess::Error, _("Error stopping the module '%s'."), list[iM].c_str());

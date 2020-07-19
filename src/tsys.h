@@ -140,12 +140,15 @@ class TSYS : public TCntrNode
 	TSYS( int argi, char **argb, char **env );
 	~TSYS( );
 
+	// Station statuses
+	bool	isRunning( )	{ return mRunning; }
+	bool	isFinalKill( )	{ return mFinalKill; }
+	int	stopSignal( )	{ return mStopSignal; }
+
 	void	unload( );
 
 	int	start( );
 	void	stop( int sig = SIGUSR1 );	// SIGUSR2 used for reloading from other project
-
-	int	stopSignal( )	{ return mStopSignal; }
 
 	// Program options
 	string	id( )		{ return mId.c_str(); }
@@ -368,22 +371,20 @@ class TSYS : public TCntrNode
 	// Reentrant commandline processing
 	string	optDescr( );	//get comand line options
 
-	string getCmdOpt( int &curPos, string *argVal = NULL );
+	string	getCmdOpt( int &curPos, string *argVal = NULL );
 	static string getCmdOpt_( int &curPos, string *argVal, int argc, char **argv );
 
-	bool   cmdOptPresent( const string &opt );
-	string cmdOpt( const string &opt, const string &setVl = "" );
+	bool	cmdOptPresent( const string &opt );
+	string	cmdOpt( const string &opt, const string &setVl = "" );
 
 	int permCrtFiles( bool exec = false );
 
-	ResMtx *commonLock( const string &nm );
+	ResMtx	*commonLock( const string &nm );
 
 	// Control interface functions
 	static void ctrListFS( XMLNode *nd, const string &fsBase, const string &fileExt = "" );	//Inline file system browsing
 
 	//Public attributes
-	static bool finalKill;		//Final object's kill flag. For dead requsted resources
-
 	AutoHD<TModule>	mainThr;	//A module to call into the main thread
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
@@ -419,6 +420,11 @@ class TSYS : public TCntrNode
 	const char **argv;	// Comand line seting buffer.
 	const char **envp;	// System environment.
 
+	// Station statuses
+	bool	isLoaded, mRunning, isServPrc,
+	    mFinalKill;		// Final object's kill flag. For dead requsted resources
+
+	// Station properties
 	string	mUser,		// An owner user name!
 	 	mConfFile,	// Config-file name
 		mId,		// Station id
@@ -434,8 +440,6 @@ class TSYS : public TCntrNode
 	bool	mSaveAtExit;	// Save at exit
 	int	mSavePeriod;	// Save period (s) for periodic system saving to DB
 	bool	mModifCalc;	// Set modification for the calculated objects
-
-	bool	isLoaded, isRunning, isServPrc;
 
 	XMLNode rootN;		// Root of the config-file tree
 	string	rootCfgFl;	// Root node's config-file name

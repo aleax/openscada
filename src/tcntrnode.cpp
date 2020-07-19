@@ -297,7 +297,7 @@ void TCntrNode::nodeDis( long tm, int flag )
 	while(mUse > 1) {
 	    // Check timeout
 	    if(/*tm &&*/ time(NULL) >= (t_cur+tm)) {
-		if(!TSYS::finalKill)
+		if(!SYS->isFinalKill())
 		    throw err_sys(_("Waiting time exceeded. The object is used by %d users. Release the object first!"), mUse-1);
 		mess_sys(TMess::Error, _("Error blocking node.\n"
 		    "The node forced to disable which can cause to crash.\n"

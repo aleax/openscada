@@ -56,7 +56,7 @@
 #define MOD_NAME	_("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"5.6.0"
+#define MOD_VER		"5.6.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -240,7 +240,7 @@ void TUIMod::save_( )
 void TUIMod::modStart( )
 {
     if(!SYS->cmdOptPresent("QtInNotMainThread")) {
-	if(runSt || hideMode)	return;
+	if(!SYS->isRunning() || runSt || hideMode)	return;
 	mess_debug(nodePath().c_str(), _("Starting the module."));
 
 	if(splash && splashTp != SPLSH_START) splashSet(SPLSH_START);
