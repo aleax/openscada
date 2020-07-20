@@ -56,7 +56,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"MainThr"
-#define MOD_VER		"4.7.9"
+#define MOD_VER		"4.7.10"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -595,7 +595,11 @@ bool StApp::notify( QObject *receiver, QEvent *event )
     return QApplication::notify(receiver, event);
 }
 
+#if QT_VERSION < 0x050000
 void StApp::saveState( QSessionManager &manager )
+#else
+void StApp::saveStateRequest( QSessionManager &manager )
+#endif
 {
     manager.setRestartHint(QSessionManager::RestartNever);
 }

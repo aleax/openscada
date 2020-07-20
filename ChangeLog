@@ -1,3 +1,15 @@
+2020-07-20 Roman 0.9.1.5
+- !!:FIX:LibsDB.OscadaLibs.doc.diagram,UI.{Vision,WebVision}:
+    Prevented from the value scale double adjustement for the percent scale and appended for the value range expanding.
+- FIX:LibsDB.vcaBase: The procedure translation was removed for doc.docRepInstVals.
+- FIX:DB.SQLite: The debugging key for tracing the SQL-requests renamed to "{ModId}_tracing".
+- FIX:UI.QTStarter: Fixed in processing the Qt function QGuiApplication::saveState() renaming to QGuiApplication::saveStateRequest() in the Qt5.
+- !!:FIX:UI.VCAEngine: Prevented from crashing on big configurations with long closing the runtime sessions
+    in accessing the widget heritors (mHerit) by appending the ResRW lock "mHeritRes".
+- !!:FIX:SYS: The object TRegExp appended by the function getPattern() and
+    the patterns processing fixed appending the end symbol treating, so preventing TController::alarmSet() collisions in the objects strict detection.
+
+
 2020-07-07 Roman 0.9.1.4
 - !!:FIX:DB.SQLite: there detected and corrected of data losses with concurrence access, when a minor error of the not started transaction
     "cannot commit - no transaction is active (1)" is generated, which, however, interrupts the data recording.

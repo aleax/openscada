@@ -792,9 +792,11 @@ void LWidget::wdgAdd( const string &wid, const string &name, const string &path,
     }
 
     //Call heritors include widgets update
+    ResAlloc res(mHeritRes);
     for(unsigned iH = 0; iH < mHerit.size(); iH++)
 	if(mHerit[iH].at().enable())
 	    mHerit[iH].at().inheritIncl(wid);
+    res.unlock();
 
     if(toRestoreInher)
 	throw TError(TError::Core_CntrWarning, nodePath().c_str(), _("Restoring '%s' from the base container!"), wid.c_str());
@@ -831,6 +833,7 @@ void LWidget::procChange( bool src )
     if(!src && proc().size()) return;
 
     //Update heritors' procedures
+    ResAlloc res(mHeritRes);
     for(unsigned iH = 0; iH < mHerit.size(); iH++)
 	if(mHerit[iH].at().enable())
 	    mHerit[iH].at().procChange(false);
@@ -873,6 +876,7 @@ void LWidget::cntrCmdProc( XMLNode *opt )
 TVariant LWidget::stlReq( Attr &a, const TVariant &vl, bool wr )
 {
     //To register the property on the project side
+    ResAlloc res(mHeritRes);
     for(unsigned iH = 0; !wr && iH < mHerit.size(); iH++)
 	if(mHerit[iH].at().enable())
 	    mHerit[iH].at().stlReq(a, vl, wr);
@@ -1066,6 +1070,7 @@ string CWidget::resourceGet( const string &id, string *mime )
 void CWidget::procChange( bool src )
 {
     //Update heritors' procedures
+    ResAlloc res(mHeritRes);
     for(unsigned iH = 0; iH < mHerit.size(); iH++)
 	if(mHerit[iH].at().enable())
 	    mHerit[iH].at().procChange(false);

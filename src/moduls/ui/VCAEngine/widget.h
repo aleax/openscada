@@ -285,9 +285,10 @@ class Widget : public TCntrNode
 
 	string		mParentNm;		//Parent widget name
 	AutoHD<Widget>	mParent;		//Parent widget
+	ResRW		mHeritRes;		//Heritators lock
 	vector< AutoHD<Widget> > mHerit;	//Heritators
 	map<string, Attr* >	mAttrs;
-	ResMtx	mtxAttrM;
+	ResMtx		mtxAttrM;
 };
 
 }

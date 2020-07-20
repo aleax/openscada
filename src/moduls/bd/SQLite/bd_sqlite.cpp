@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.8.2"
+#define MOD_VER		"2.8.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -195,7 +195,7 @@ void MBD::sqlReq( const string &req, vector< vector<string> > *tbl, char intoTra
     int repCnt = 0;
 rep:
     //Put the request
-    if(mess_lev() == TMess::Debug) mess_debug((nodePath()+"tracing/").c_str(), _("Request: \"%s\""), req.c_str());
+    if(mess_lev() == TMess::Debug) mess_debug((owner().nodePath()+id()+"_tracing/").c_str(), _("Request: \"%s\""), req.c_str());
     rc = sqlite3_get_table(m_db, Mess->codeConvOut(cd_pg.c_str(),req).c_str(), &result, &nrow, &ncol, &zErrMsg);
     if(rc != SQLITE_OK) {
 	string err = _("Unknown error");

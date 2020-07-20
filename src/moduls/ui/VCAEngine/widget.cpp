@@ -361,6 +361,7 @@ AutoHD<Widget> Widget::parentNoLink( )	{ return parent().at().isLink() ? parent(
 void Widget::heritReg( Widget *wdg )
 {
     //Search for already registered widget-heritator
+    ResAlloc res(mHeritRes, true);
     for(unsigned iH = 0; iH < mHerit.size(); iH++)
 	if(&mHerit[iH].at() == wdg)	return;
     mHerit.push_back(AutoHD<Widget>(wdg));
@@ -369,6 +370,7 @@ void Widget::heritReg( Widget *wdg )
 void Widget::heritUnreg( Widget *wdg )
 {
     //Search the widget-heritator
+    ResAlloc res(mHeritRes, true);
     for(unsigned iH = 0; iH < mHerit.size(); iH++)
 	if(&mHerit[iH].at() == wdg) {
 	    mHerit.erase(mHerit.begin()+iH);
@@ -620,6 +622,7 @@ void Widget::attrAdd( TFld *attr, int pos, bool inher, bool forceMdf, bool allIn
     mtxAttr().unlock();
 
     //Update heritors' attributes
+    ResAlloc res(mHeritRes);
     for(unsigned iH = 0; allInher && iH < mHerit.size(); iH++)
 	if(mHerit[iH].at().enable())
 	    mHerit[iH].at().inheritAttr(anm);
@@ -630,10 +633,12 @@ void Widget::attrDel( const string &attr, bool allInher  )
     if(!attrPresent(attr)) return;
 
     //Delete from inheritant wigets
-    if(!(attrAt(attr).at().flgGlob()&Attr::Mutable) || allInher)
+    if(!(attrAt(attr).at().flgGlob()&Attr::Mutable) || allInher) {
+	ResAlloc res(mHeritRes);
 	for(unsigned iH = 0; iH < mHerit.size(); iH++)
 	    if(mHerit[iH].at().enable())
 		mHerit[iH].at().attrDel(attr);
+    }
 
     //Self delete
     try {
@@ -711,6 +716,7 @@ bool Widget::attrChange( Attr &cfg, TVariant prev )
     if(cfg.owner() != this) return false;
 
     //Update heritors attributes
+    ResAlloc res(mHeritRes);
     for(unsigned iH = 0; iH < mHerit.size(); iH++)
 	if(mHerit[iH].at().enable())
 	    mHerit[iH].at().inheritAttr(cfg.id());
@@ -735,6 +741,7 @@ void Widget::wdgAdd( const string &wid, const string &name, const string &path, 
     wdgAt(wid).at().setName(name);
 
     //Call heritors include widgets update
+    ResAlloc res(mHeritRes);
     for(unsigned iH = 0; iH < mHerit.size(); iH++)
 	if(mHerit[iH].at().enable())
 	    mHerit[iH].at().inheritIncl(wid);

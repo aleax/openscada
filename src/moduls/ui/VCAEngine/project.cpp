@@ -515,7 +515,6 @@ void Project::pageEnable( const string &pg, bool vl )
 
     //Call the connected sessions for add-remove a page
     MtxAlloc res(mHeritRes, true);
-
     for(unsigned iH = 0; iH < mHerit.size(); iH++)
 	if(pL > 1) {
 	    AutoHD<SessPage> sP = mHerit[iH].at().nodeAt(pPath, 0, 0, 0, true);
@@ -1329,9 +1328,11 @@ void Page::wdgAdd( const string &wid, const string &name, const string &ipath, b
     }
 
     //Call heritors include widgets update
-    for(unsigned i_h = 0; i_h < mHerit.size(); i_h++)
-	if(mHerit[i_h].at().enable())
-	    mHerit[i_h].at().inheritIncl(wid);
+    ResAlloc res(mHeritRes);
+    for(unsigned iH = 0; iH < mHerit.size(); iH++)
+	if(mHerit[iH].at().enable())
+	    mHerit[iH].at().inheritIncl(wid);
+    res.unlock();
 
     if(toRestoreInher)
 	throw TError(TError::Core_CntrWarning, nodePath().c_str(), _("Restoring '%s' from the base container!"), wid.c_str());
@@ -1413,6 +1414,7 @@ void Page::procChange( bool src )
     if(!src && proc().size()) return;
 
     //Update heritors' procedures
+    ResAlloc res(mHeritRes);
     for(unsigned iH = 0; iH < mHerit.size(); iH++)
 	if(mHerit[iH].at().enable())
 	    mHerit[iH].at().procChange(false);
@@ -1767,9 +1769,9 @@ void PageWdg::setEnable( bool val, bool force )
 
     //Disable heritors widgets
     if(val)
-	for(unsigned i_h = 0; i_h < ownerPage().herit().size(); i_h++)
-	    if(ownerPage().herit()[i_h].at().wdgPresent(id()) && !ownerPage().herit()[i_h].at().wdgAt(id()).at().enable())
-		try { ownerPage().herit()[i_h].at().wdgAt(id()).at().setEnable(true); }
+	for(unsigned iH = 0; iH < ownerPage().herit().size(); iH++)
+	    if(ownerPage().herit()[iH].at().wdgPresent(id()) && !ownerPage().herit()[iH].at().wdgAt(id()).at().enable())
+		try { ownerPage().herit()[iH].at().wdgAt(id()).at().setEnable(true); }
 		catch(...) { mess_err(nodePath().c_str(),_("Error enabling the inheriting widget '%s'."),id().c_str()); }
 }
 
@@ -1888,6 +1890,7 @@ string PageWdg::resourceGet( const string &id, string *mime )
 void PageWdg::procChange( bool src )
 {
     //Update heritors' procedures
+    ResAlloc res(mHeritRes);
     for(unsigned iH = 0; iH < mHerit.size(); iH++)
 	if(mHerit[iH].at().enable())
 	    mHerit[iH].at().procChange(false);

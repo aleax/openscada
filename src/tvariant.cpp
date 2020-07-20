@@ -822,6 +822,7 @@ void TRegExp::setPattern( const string &rule, const string &flg )
     if(flg.find('p') != string::npos) {
 	isSimplePat = !(rule.size() > 2 && rule[0] == '/' && rule[rule.size()-1] == '/');
 	if(!isSimplePat) pattern = rule.substr(1,rule.size()-2);
+	else if(pattern.empty()) pattern = "*";
     }
 
     //Check for free
@@ -892,24 +893,25 @@ bool TRegExp::test( const string &vl )
 {
     //Check by simple pattern
     if(isSimplePat) {
-	bool mult_s = false;
-	int v_cnt = 0, p_cnt = 0;
-	int v_bck = -1, p_bck = -1;
+	bool multS = false;
+	int vCnt = 0, pCnt = 0;
+	int vBck = -1, pBck = -1;
 
 	while(true) {
-	    if(p_cnt >= (int)pattern.size() ) return true;
-	    if(pattern[p_cnt] == '?')	{ v_cnt++; p_cnt++; mult_s = false; continue; }
-	    if(pattern[p_cnt] == '*')	{ p_cnt++; mult_s = true; v_bck = -1; continue; }
-	    if(pattern[p_cnt] == '\\')	p_cnt++;
-	    if(v_cnt >= (int)vl.size())  break;
-	    if(pattern[p_cnt] == vl[v_cnt]) {
-		if(mult_s && v_bck < 0 )	{ v_bck = v_cnt+1; p_bck = p_cnt; }
-		v_cnt++; p_cnt++;
+	    if(pCnt > (int)pattern.size()) return true;	//!!!! Including the end-string symbol (0)
+	    if(vCnt > (int)vl.size()) break;		//!!!! Including the end-string symbol (0)
+	    const char pCh = pattern[pCnt];
+	    if(pCh == '?')	{ vCnt++; pCnt++; multS = false; continue; }
+	    if(pCh == '*')	{ pCnt++; multS = true; vBck = -1; continue; }
+	    if(pCh == '\\')	pCnt++;
+	    if(pCh == vl[vCnt]) {
+		if(multS && vBck < 0)	{ vBck = vCnt+1; pBck = pCnt; }
+		vCnt++; pCnt++;
 	    }
 	    else {
-		if(mult_s) {
-		    if(v_bck >= 0) { v_cnt = v_bck; p_cnt = p_bck; v_bck = -1; }
-		    else v_cnt++;
+		if(multS) {
+		    if(vBck >= 0) { vCnt = vBck; pCnt = pBck; vBck = -1; }
+		    else vCnt++;
 		}
 		else break;
 	    }

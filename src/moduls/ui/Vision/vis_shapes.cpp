@@ -2277,11 +2277,21 @@ void ShapeDiagram::makeXYPicture( WdgView *w )
 		}
 		ipos++;
 	    }
+	    // Value range expanding
+	    //  No value
 	    if(cP.adjU == -3e300)	{ cP.adjU = 1; cP.adjL = 0; }
+	    //  Range and absolute value are very small
 	    else if((cP.adjU-cP.adjL) < 1e-30 && fabs(cP.adjU) < 1e-30)	{ cP.adjU += 0.5; cP.adjL -= 0.5; }
+	    //  Only range is very small
+	    else if((cP.adjU-cP.adjL) < 1e-30) {
+		cP.adjL -= ((double)iP/(double)shD->prms.size())*fabs(cP.adjU);
+		cP.adjU += (1.0-(double)iP/(double)shD->prms.size())*fabs(cP.adjU);
+	    }
+	    //  Range smaller relatively to absolute value
 	    else if((cP.adjU-cP.adjL) / fabs(cP.adjL+(cP.adjU-cP.adjL)/2) < 0.001) {
 		double wnt_dp = 0.001*fabs(cP.adjL+(cP.adjU-cP.adjL)/2)-(cP.adjU-cP.adjL);
-		cP.adjL -= wnt_dp/2; cP.adjU += wnt_dp/2;
+		cP.adjL -= ((double)iP/(double)shD->prms.size())*wnt_dp;
+		cP.adjU += (1.0-(double)iP/(double)shD->prms.size())*wnt_dp;
 	    }
 	}
 	else if(cP.bordU() <= cP.bordL() && cP.valTp() == TFld::Boolean) { cP.adjU = 1.5; cP.adjL = -0.5; }
@@ -2454,11 +2464,21 @@ void ShapeDiagram::makeXYPicture( WdgView *w )
 		}
 		ipos++;
 	    }
+	    // Value range expanding
+	    //  No value
 	    if(cP.adjU == -3e300)	{ cP.adjU = 1; cP.adjL = 0; }
+	    //  Range and absolute value are very small
 	    else if((cP.adjU-cP.adjL) < 1e-30 && fabs(cP.adjU) < 1e-30)	{ cP.adjU += 0.5; cP.adjL -= 0.5; }
+	    //  Only range is very small
+	    else if((cP.adjU-cP.adjL) < 1e-30) {
+		cP.adjL -= ((double)iP/(double)shD->prms.size())*fabs(cP.adjU);
+		cP.adjU += (1.0-(double)iP/(double)shD->prms.size())*fabs(cP.adjU);
+	    }
+	    //  Range smaller relatively to absolute value
 	    else if((cP.adjU-cP.adjL) / fabs(cP.adjL+(cP.adjU-cP.adjL)/2) < 0.001) {
 		double wnt_dp = 0.001*fabs(cP.adjL+(cP.adjU-cP.adjL)/2)-(cP.adjU-cP.adjL);
-		cP.adjL -= wnt_dp/2; cP.adjU += wnt_dp/2;
+		cP.adjL -= ((double)iP/(double)shD->prms.size())*wnt_dp;
+		cP.adjU += (1.0-(double)iP/(double)shD->prms.size())*wnt_dp;
 	    }
 	}
 	else if(cP.bordU() <= cP.bordL() && cP.valTp() == TFld::Boolean) { cP.adjU = 1.5; cP.adjL = -0.5; }
@@ -2640,8 +2660,8 @@ void ShapeDiagram::makeXYPicture( WdgView *w )
 	// Y: Prepare border for percent trend, ONLY!
 	float bordL = cP.bordL();
 	float bordU = cP.bordU();
-	if(vsPercT && bordL >= bordU) {
-	    bordU = -3e300, bordL = 3e300;
+	if(vsPercT && bordL >= bordU) { bordU = cP.adjU; bordL = cP.adjL; }
+	    /*bordU = -3e300, bordL = 3e300;
 	    bool end_vl = false;
 	    for(int ipos = aPosBeg; true; ipos++) {
 		if(ipos >= (int)cP.val().size() || end_vl)	break;
@@ -2655,7 +2675,7 @@ void ShapeDiagram::makeXYPicture( WdgView *w )
 	    if(vMarg == 0) vMarg = 0.5;
 	    bordL -= vMarg;
 	    bordU += vMarg;
-	}
+	}*/
 
 	// X: Prepare XY data buffer and prepare border for percent trend, ONLY!
 	float xBordL = cPX.bordL();
@@ -3128,15 +3148,25 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		if(cP.val()[ipos].tm >= aVend) end_vl = true;
 		if(cP.val()[ipos].val != EVAL_REAL) {
 		    curVl = cP.val()[ipos].val;
-		    cP.adjL = vmin(cP.adjL,curVl); cP.adjU = vmax(cP.adjU,curVl);
+		    cP.adjL = vmin(cP.adjL, curVl); cP.adjU = vmax(cP.adjU, curVl);
 		}
 		ipos++;
 	    }
+	    // Value range expanding
+	    //  No value
 	    if(cP.adjU == -3e300)	{ cP.adjU = 1.0; cP.adjL = 0.0; }
+	    //  Range and absolute value are very small
 	    else if((cP.adjU-cP.adjL) < 1e-30 && fabs(cP.adjU) < 1e-30)	{ cP.adjU += 0.5; cP.adjL -= 0.5; }
+	    //  Only range is very small
+	    else if((cP.adjU-cP.adjL) < 1e-30) {
+		cP.adjL -= ((double)iP/(double)shD->prms.size())*fabs(cP.adjU);
+		cP.adjU += (1.0-(double)iP/(double)shD->prms.size())*fabs(cP.adjU);
+	    }
+	    //  Range smaller relatively to absolute value
 	    else if((cP.adjU-cP.adjL) / fabs(cP.adjL+(cP.adjU-cP.adjL)/2) < 0.001) {
 		double wnt_dp = 0.001*fabs(cP.adjL+(cP.adjU-cP.adjL)/2)-(cP.adjU-cP.adjL);
-		cP.adjL -= wnt_dp/2; cP.adjU += wnt_dp/2;
+		cP.adjL -= ((double)iP/(double)shD->prms.size())*wnt_dp;
+		cP.adjU += (1.0-(double)iP/(double)shD->prms.size())*wnt_dp;
 	    }
 	}
 	else if(cP.bordU() <= cP.bordL() && cP.valTp() == 0)	{ cP.adjU = 1.5; cP.adjL = -0.5; }
@@ -3452,8 +3482,8 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	// Prepare border for percent trend, ONLY!
 	float bordL = cP.bordL();
 	float bordU = cP.bordU();
-	if(vsPercT && bordL >= bordU) {
-	    bordU = -3e300, bordL = 3e300;
+	if(vsPercT && bordL >= bordU) { bordU = cP.adjU; bordL = cP.adjL; }
+	    /*bordU = -3e300, bordL = 3e300;
 	    bool end_vl = false;
 	    int ipos = aPosBeg;
 	    while(true) {
@@ -3468,7 +3498,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    float vMarg = (bordU-bordL)/10;
 	    bordL -= vMarg;
 	    bordU += vMarg;
-	}
+	}*/
 
 	// Draw trend
 	bool end_vl = false;
