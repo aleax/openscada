@@ -1480,26 +1480,50 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    this.place.isMenu = (parseInt(this.attrs['mode']) == 2);
 		    this.place.isLoad = (parseInt(this.attrs['mode']) == 3);
 		    this.place.isSave = (parseInt(this.attrs['mode']) == 4);
-		    var custBut = (iconImg || this.place.checkable);
+		    var custBut = iconImg;
 		    if(custBut != this.place.custBut || this.attrsMdf['mode'])
 			while(this.place.childNodes.length) this.place.removeChild(this.place.childNodes[0]);
 		    this.place.custBut = custBut;
 		    var toInit = !this.place.childNodes.length;
-		    if(custBut && !this.place.isLoad) {
-			formObj =  toInit ? this.place.ownerDocument.createElement('div') : this.place.childNodes[0];
-			// Container widget style
-			elStyle += 'border-style: '+((this.place.checkable && parseInt(this.attrs['value']))?'inset; ':'outset; ')+
-						    (elWr?'cursor: pointer; ':'')+'border-width: 2px; ';
-			if(this.attrs['colorText'])
-			    elStyle += 'color: '+(elWr ? getColor(this.attrs['colorText']) : 'silver')+'; ';
-			if(elWr && this.attrs['color']) elStyle += 'background-color: '+getColor(this.attrs['color'])+'; ';
-			else elStyle += 'background-color: snow; ';
+		    formObj = toInit ? this.place.ownerDocument.createElement('button') : this.place.childNodes[0];
+		    if(toInit || this.attrsMdf['geomZ'])	formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
+		    if(toInit || this.attrsMdf['font'])		formObj.style.font = this.place.fontCfg;
+		    if(toInit || this.attrsMdf['color'])	formObj.style.backgroundColor = getColor(this.attrs['color']);
+		    if(toInit || this.attrsMdf['colorText'])	formObj.style.color = getColor(this.attrs['colorText']);
+		    this.mouseup[this.mouseup.length] = function(e,el) {
+			if(el.checkable) return;
+			el.childNodes[0].classList.remove("pressed");
+			if(el.wdgLnk.attrs["vs_goHttpUrl"]) window.location = el.wdgLnk.attrs["vs_goHttpUrl"];
+			setWAttrs(el.wdgLnk.addr,'event','ws_BtRelease');
+		    }
+		    this.mousedown[this.mousedown.length] = function(e,el) {
+			if(el.checkable) {
+			    var attrs = new Object();
+			    if(!el.childNodes[0].classList.contains("pressed"))
+			    { attrs.value = '1'; el.childNodes[0].classList.add("pressed"); setWAttrs(el.wdgLnk.addr,'event','ws_BtPress'); }
+			    else { attrs.value = '0'; el.childNodes[0].classList.remove("pressed"); setWAttrs(el.wdgLnk.addr,'event','ws_BtRelease'); }
+			    setWAttrs(el.wdgLnk.addr,'event','ws_BtToggleChange');
+			    setWAttrs(el.wdgLnk.addr,'value',attrs.value);
+			    return;
+			}
+			el.childNodes[0].classList.add("pressed");
+			setWAttrs(el.wdgLnk.addr,'event','ws_BtPress');
+		    };
+		    if(toInit) {
+			formObj.style.cursor = elWr ? 'pointer' : '';
+			formObj.disabled = !elWr;
+			formObj.wdgLnk = this;
+			formObj.style.width = geomW+'px'; formObj.style.height = geomH+'px';
+			formObj.style.padding = "0";
+			this.place.appendChild(formObj);
+		    }
 
-			if(toInit || this.attrsMdf['font']) formObj.style.font = this.place.fontCfg;
+		    if(custBut && !this.place.isLoad) {
+			var stdBordWidth = 2;
 			var imgObj = formObj.childNodes.length ? formObj.childNodes[0] : this.place.ownerDocument.createElement('img');
 			var spanObj = formObj.childNodes.length ? formObj.childNodes[1] : this.place.ownerDocument.createElement('span');
 
-			spanObj.style.cssText = "display: table-cell; height: "+geomH+"px; line-height: 1; text-align: center; white-space: pre-line; word-break: break-word; width: "+geomW+"px; ";
+			spanObj.style.cssText = "display: table-cell; height: "+(geomH-2*stdBordWidth)+"px; line-height: 1; text-align: center; white-space: pre-line; word-break: break-word; width: "+(geomW-2*stdBordWidth)+"px; ";
 			if(toInit || this.attrsMdf['name']) {
 			    spanObj.disabled = !this.attrs['name'].length;
 			    spanObj.innerText = this.attrs['name'].replace('\\n','\n') + (this.place.isMenu?" ▾":"");
@@ -1508,79 +1532,26 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    imgObj.hidden = !this.attrs['img'].length;
 			    if(!imgObj.hidden) {
 				imgObj.className = elWr ? 'active' : 'inactive';
-				imgObj.src = "/"+MOD_ID+this.addr+"?com=res&val="+this.attrs['img']+"&size="+Math.min(geomW,geomH);//+(!elWr?"&filtr=unact":"");
+				imgObj.src = "/"+MOD_ID+this.addr+"?com=res&val="+this.attrs['img']+"&size="+(Math.min(geomW,geomH)-2*stdBordWidth);//+(!elWr?"&filtr=unact":"");
 				//imgObj.width = Math.min(geomW, geomH);
-				imgObj.height = Math.min(geomW, geomH);
+				imgObj.height = Math.min(geomW, geomH)-2*stdBordWidth;
 				imgObj.style.float = spanObj.disabled ? null : 'left';
 				imgObj.style.marginRight = this.attrs['name'].length ? "2px" : "0px";
 			    }
-			}
-			geomW -= 4; geomH -= 4;
-
-			if(elWr) {
-			    this.mouseup[this.mouseup.length] = function(e,el) {
-				if(el.checkable) return;
-				el.style.borderStyle = 'outset'; setWAttrs(el.wdgLnk.addr,'event','ws_BtRelease');
-			    };
-			    this.mousedown[this.mousedown.length] = function(e,el) {
-				if(el.checkable) return;
-				if(el.wdgLnk.attrs["vs_goHttpUrl"]) window.location = el.wdgLnk.attrs["vs_goHttpUrl"];
-				el.style.borderStyle = "inset"; setWAttrs(el.wdgLnk.addr,'event','ws_BtPress');
-			    };
 			}
 
 			if(toInit) {
 			    formObj.className = 'vertalign';
 			    //Disable drag mostly for FireFox
 			    imgObj.onmousedown = function(e) { e = e?e:window.event; if(e.preventDefault) e.preventDefault(); }
-			    if(elWr) {
-				this.place.onmouseout = function( ) {
-				    if(this.checkable || this.style.borderStyle == 'outset') return false;
-				    this.style.borderStyle = 'outset'; setWAttrs(this.wdgLnk.addr,'event','ws_BtRelease');
-				    return false;
-				};
-				this.place.onclick = function( ) {
-				    if(!this.checkable) return false;
-				    var attrs = new Object();
-				    if(this.style.borderLeftStyle == 'outset')
-				    { attrs.value = '1'; this.style.borderStyle = 'inset'; setWAttrs(this.wdgLnk.addr,'event','ws_BtPress'); }
-				    else { attrs.value = '0'; this.style.borderStyle = 'outset'; setWAttrs(this.wdgLnk.addr,'event','ws_BtRelease'); }
-				    setWAttrs(this.wdgLnk.addr,'event','ws_BtToggleChange');
-				    setWAttrs(this.wdgLnk.addr,'value',attrs.value);
-				    return false;
-				};
-				this.place.wdgLnk = this;
-			    }
 			    formObj.appendChild(imgObj);
 			    formObj.appendChild(spanObj);
-
-			    formObj.style.position = "absolute";
-			    formObj.style.top = "-2px"; formObj.style.left = "-2px";
-			    formObj.style.width = (geomW+4)+'px'; formObj.style.height = (geomH+4)+'px';
-			    formObj.style.overflow = "hidden";
-			    this.place.appendChild(formObj);
 			}
 		    }
-		    else {
-			formObj = toInit ? this.place.ownerDocument.createElement('button') : this.place.childNodes[0];
-			if(toInit || this.attrsMdf['geomZ'])	formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
-			if(toInit || this.attrsMdf['font'])	formObj.style.font = this.place.fontCfg;
-			if(toInit || this.attrsMdf['name'])	formObj.innerText = this.attrs['name'].replace('\\n','\n') + (this.place.isMenu?" ▾":"");
-			if(toInit || this.attrsMdf['color'])	formObj.style.backgroundColor = getColor(this.attrs['color']);
-			if(toInit || this.attrsMdf['colorText'])formObj.style.color = getColor(this.attrs['colorText']);
-			this.mouseup[this.mouseup.length] = function(e,el) {
-			    if(el.wdgLnk.attrs["vs_goHttpUrl"]) window.location = el.wdgLnk.attrs["vs_goHttpUrl"];
-			    setWAttrs(el.wdgLnk.addr,'event','ws_BtRelease');
-			}
-			this.mousedown[this.mousedown.length] = function(e,el)	{ setWAttrs(el.wdgLnk.addr,'event','ws_BtPress'); };
-			if(toInit) {
-			    formObj.style.cursor = elWr ? 'pointer' : '';
-			    formObj.disabled = !elWr;
-			    formObj.wdgLnk = this;
-			    formObj.style.width = geomW+'px'; formObj.style.height = geomH+'px';
-			    formObj.style.padding = "0";
-			    this.place.appendChild(formObj);
-			}
+		    else if(toInit || this.attrsMdf['name'])	formObj.innerText = this.attrs['name'].replace('\\n','\n') + (this.place.isMenu?" ▾":"");
+
+		    if(this.place.checkable) {
+			if(parseInt(this.attrs['value'])) formObj.classList.add("pressed"); else formObj.classList.remove("pressed");
 		    }
 
 		    if(this.place.isMenu)
@@ -2064,7 +2035,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    //if(this.isActive) setFocus(this.wdgLnk.addr);
 		    return false;
 		}
-		this.place.firstChild.className='prot';
+		this.place.firstChild.className = 'prot';
 		this.loadData = function( ) {
 		    if(!this.tmPrev) this.tmPrev = 0;
 		    if(!this.tmGrndPrev) this.tmGrndPrev = 0;

@@ -294,7 +294,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    mbap.reserve(pdu.size()+3);
 	    mbap += (uint8_t)node;		//Unit identifier
 	    mbap += pdu;
-	    uint16_t crc = CRC16( mbap );
+	    uint16_t crc = CRC16(mbap);
 	    mbap += (crc>>8);
 	    mbap += crc;
 

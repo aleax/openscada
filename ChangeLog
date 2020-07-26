@@ -1,3 +1,9 @@
+2020-07-26 Roman (stable)
+- data/icons_src/oscada.xcf: Appended for OpenSCADA backups icon.
+- !!!:UI.WebVision: Unified in the primitive "Button" implementation: by moving the custom buttons under <button></button>
+    and appending the proper CSS-styles for the default and pressed state with the border and transparent image difference.
+
+
 2020-07-19 Roman (stable)
 - !!!!:SYS,UI.QTStarter: Processing the UI main thread is complete unified by removing the module specific in modStart() and modStop().
 - !!:SYS: The station statuses unified in the function isRunning(), isFinalKill() and stopSignal().
@@ -13,7 +19,7 @@
 - data/openscada-proj.in: Crash report files appended for GZIPing.
 - LibsDB.OscadaLibs.DevLib.IEC62056: Default value of the property "tmPollAll" set to 10.
 - !!:FIX:LibsDB.OscadaLibs.doc.diagram,UI.{Vision,WebVision}:
-    Prevented from the value scale double adjustement for the percent scale and appended for the value range expanding.
+    Prevented from the value scale double adjustment for the percent scale and appended for the value range expanding.
 - FIX:LibsDB.vcaBase: The procedure translation was removed for doc.docRepInstVals.
 - !!!!:SYS,UI.QTStarter: Splash updating of the main pthreaded GUI module moved to the service task,
     before switching to performing the main function, for what there appended two new signs "isRunning" and "isServPrc"
@@ -8220,7 +8226,7 @@
 - SYS: RPM-build spec files is updated for: noarch packages enable to all distribution, SuSE and Mandriva adaptation by default.
 - FIX:SYS: Model's RPM-packages dependency to main package is fixed for modules spec-file.
 - FIX:DB: Model's AGLKS DB is fixed for start message about QTCfg wrong start page.
-- UI.QTCfg, UI.Vision: Size adjustement is added for all dialogs, after its show.
+- UI.QTCfg, UI.Vision: Size adjustment is added for all dialogs, after its show.
 
 
 2011-04-15 Roman
