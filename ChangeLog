@@ -1,3 +1,8 @@
+2020-08-02 Roman (stable)
+- data/openscada-proj.in: The "remove" command of the projects appended for removing backups of the project.
+- !!:UI.QTStarter: Context menu of the project list appended for an item of removing not running projects.
+
+
 2020-07-26 Roman (stable)
 - data/icons_src/oscada.xcf: Appended for OpenSCADA backups icon.
 - !!!:UI.WebVision: Unified in the primitive "Button" implementation: by moving the custom buttons under <button></button>

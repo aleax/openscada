@@ -56,7 +56,7 @@
 #define MOD_NAME	_("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"5.6.1"
+#define MOD_VER		"5.7.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -1233,6 +1233,7 @@ void StartDialog::updatePrjList( const string &stage )
 	    prjsLs->addItem(tit);
 	    tit->setData(Qt::UserRole, scan_rez->d_name);
 	    tit->setData(Qt::UserRole+1, isRun ? "" : bLs.c_str());
+	    tit->setData(Qt::UserRole+2, isRun);
 	    QImage ico;
 	    if(ico.load((string(oscd_datadir_full "/icons/")+scan_rez->d_name+".png").c_str()) ||
 		    ico.load((wDir+"/"+scan_rez->d_name+"/icons/"+scan_rez->d_name+".png").c_str()))
@@ -1325,6 +1326,14 @@ void StartDialog::prjsLsCtxMenuRequested( const QPoint &pos )
 {
     QMenu *menu = new QMenu();	//prjsLs->createStandardContextMenu();
 
+    //Extra project actions
+    QAction *actRemove = NULL;
+    if(!prjsLs->currentItem()->data(Qt::UserRole+2).toBool()) {
+	actRemove = new QAction(_("Remove"), this);
+	menu->addAction(actRemove);
+	menu->addSeparator();
+    }
+
     //The BackUp action
     QAction *actBackUp = new QAction(_("BackUp"), this);
     menu->addAction(actBackUp);
@@ -1342,7 +1351,16 @@ void StartDialog::prjsLsCtxMenuRequested( const QPoint &pos )
     }
 
     QAction *rez = menu->exec(QCursor::pos());
-    if(rez == actBackUp && prjsLs->currentItem()) {
+    if(actRemove && rez == actRemove && QMessageBox::warning(this,_("Remove project"),
+		    QString(_("Do you really want to remove the project \"%1\"?")).arg(prjsLs->currentItem()->data(Qt::UserRole).toString()),
+			QMessageBox::Yes|QMessageBox::No,QMessageBox::No) == QMessageBox::Yes) {
+	vector<TVariant> prms;
+	prms.push_back(string(bindir_full "/openscada-proj remove ") +
+	    prjsLs->currentItem()->data(Qt::UserRole).toString().toStdString());
+	SYS->objFuncCall("system", prms, "root").getS();
+	updatePrjList();
+    }
+    else if(rez == actBackUp && prjsLs->currentItem()) {
 	vector<TVariant> prms;
 	prms.push_back(string(bindir_full "/openscada-proj backup ") +
 	    prjsLs->currentItem()->data(Qt::UserRole).toString().toStdString());
@@ -1352,7 +1370,7 @@ void StartDialog::prjsLsCtxMenuRequested( const QPoint &pos )
 	QApplication::restoreOverrideCursor();
 	updatePrjList();
     }
-    else if(rez) {
+    else if(rez && rez->objectName().size()) {
 	vector<TVariant> prms;
 	prms.push_back(string(bindir_full "/openscada-proj backupRestore ") +
 	    prjsLs->currentItem()->data(Qt::UserRole).toString().toStdString() + " " +

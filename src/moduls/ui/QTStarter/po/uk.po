@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-03 12:09+0300\n"
+"POT-Creation-Date: 2020-07-31 08:47+0300\n"
 "PO-Revision-Date: 2007-10-29 22:03+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -125,7 +125,7 @@ msgid "&Rename"
 msgstr "Перейменувати"
 
 msgid "Remove"
-msgstr "Пересунути"
+msgstr "Видалити"
 
 msgid "&Undo"
 msgstr "Відмінити"
@@ -810,6 +810,12 @@ msgstr "Зарезервувати"
 
 msgid "Restore from \"%1\""
 msgstr "Відновити із \"%1\""
+
+msgid "Remove project"
+msgstr "Видалити проект"
+
+msgid "Do you really want to remove the project \"%1\"?"
+msgstr "Ви дійсно бажаєте видалити проект \"%1\"?"
 
 #, c-format
 msgid "Untranslated Qt message: '%s'"

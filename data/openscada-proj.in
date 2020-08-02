@@ -130,6 +130,11 @@ case "$1" in
     fi
 
     if test "x$prjDir" != "x"; then
+	# Removing the backups
+	cd $prjDir/..
+	for iF in `ls -t ${prjNm}_*.backup 2> /dev/null`; do rm $iF; done
+
+	# Removing the project folder
 	rm -r $prjDir
 
 	# Remove the desktop link
