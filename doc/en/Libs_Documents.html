@@ -1178,7 +1178,10 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
 </td></tr></table>
 <p>Building trends diagram to SVG, which may be builtin next to the XHTML-document, for specified period of the time [(<i>end</i>-<i>size</i>)...<i>end</i>] and from the sources <i>srcs</i>.
-</p><p>The diagram forming code is based on code of the primitive "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">Diagram</a>" of the visualisers, and which was quite simply migrated from C++ to <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">the JavaLikeCalc embedded language</a>. Currently, only trends have been moved-implemented!
+</p>
+<ul><li> <b>Total complexity:</b> 1.3 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
+<li> <b>Sponsored by, for initial implementation on 1.0 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>:</b> Magomed, <a class="external text" href="https://www.savtech.ru" rel="nofollow noreferrer noopener" target="_blank">SAVTECH</a></li></ul>
+<p>The diagram forming code is based on code of the primitive "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">Diagram</a>" of the visualisers, and which was quite simply migrated from C++ to <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">the JavaLikeCalc embedded language</a>. Currently, only trends have been moved-implemented!
 </p><p>The appearance of the diagram is determined by its dimensions <i>hsz</i>*<i>vsz</i> and the source SVG-template <i>tmpl</i>, a number attributes of the root tag of which has special meaning and corresponding to the primitive "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">Diagram</a>":
 </p>
 <ul><li> Scale: Markers: font (sclMarkFont), by default "Arial 10".</li>
@@ -1195,7 +1198,6 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <li> <b>color</b> — colour of the trend curve;</li>
 <li> <b>scale</b> — separate definition of the trend scale, by default "Global (0)" and generally provided: "Global (0)", "Markers (2)", "Grid and markers (3)", "Markers (log) (6)", "Grid and markers (log) (7)".</li>
 <li> <b>width</b> — width of the trend curve, by default 2.</li></ul>
-<ul><li> <b>Sponsored by:</b> Magomed, <a class="external text" href="https://www.savtech.ru" rel="nofollow noreferrer noopener" target="_blank">SAVTECH</a></li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibDocuments_docRepInstVals.png"><img class="thumbimage" height="580" src="files/LibDocuments_docRepInstVals.png" width="900" /></a>  <div class="thumbcaption">Fig.2.4. The function "Diagram" default result in a XHTML-document.</div></div></div></div>
 <p><b><u>Parameters</u></b><br />
 </p>
@@ -1299,5 +1301,5 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Documents/en">Libs/Documents/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2692</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Documents/en">Libs/Documents/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2700</td></tr></table></body>
 </html>

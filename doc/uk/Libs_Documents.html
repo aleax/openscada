@@ -1178,7 +1178,10 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
 </td></tr></table>
 <p>Побудова діаграми трендів у SVG, яка може надалі вбудовуватися у XHTML-документу, для даних за вказаний період часу [(<i>end</i>-<i>size</i>)...<i>end</i>] та із джерел <i>srcs</i>.
-</p><p>Код формування діаграми засновано на коді примітиву "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">Діаграма</a>" візуалізаторів, та який було доволі просто перенесено із мови C++ на <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">вбудовану мову JavaLikeCalc</a>. Наразі перенесено-реалізовано лише тренди!
+</p>
+<ul><li> <b>Загальна працемісткість:</b> 1.3 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span></li>
+<li> <b>Спонсоровано, початкової імплементації на 1.0 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span>:</b> Магомед, <a class="external text" href="https://www.savtech.ru" rel="nofollow noreferrer noopener" target="_blank">SAVTECH</a></li></ul>
+<p>Код формування діаграми засновано на коді примітиву "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">Діаграма</a>" візуалізаторів, та який було доволі просто перенесено із мови C++ на <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">вбудовану мову JavaLikeCalc</a>. Наразі перенесено-реалізовано лише тренди!
 </p><p>Вигляд діаграми визначається її розмірами <i>hsz</i>*<i>vsz</i> та початковим SVG-шаблоном <i>tmpl</i>, низка атрибутів кореневого тегу якого мають особливе значення та які відповідають примітиву "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">Діаграма</a>":
 </p>
 <ul><li> Шкала: Маркери: шрифт (sclMarkFont), по замовченню "Arial 10".</li>
@@ -1195,7 +1198,6 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <li> <b>color</b> — колір кривої тренду;</li>
 <li> <b>scale</b> — окреме визначення шкали тренду, по замовченню "Глобально (0)" та загалом передбачено: "Глобально (0)", "Маркери (2)", "Ґратка та маркери (3)", "Маркери (лог) (6)", "Ґратка та маркери (лог) (7)".</li>
 <li> <b>width</b> — ширина кривої тренду, по замовченню 2.</li></ul>
-<ul><li> <b>Спонсоровано:</b> Магомед, <a class="external text" href="https://www.savtech.ru" rel="nofollow noreferrer noopener" target="_blank">SAVTECH</a></li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibDocuments_docRepInstVals_uk.png"><img class="thumbimage" height="580" src="files/LibDocuments_docRepInstVals_uk.png" width="900" /></a>  <div class="thumbcaption">Рис.2.4. Типовий результат функції "Діаграма" у XHTML-документі.</div></div></div></div>
 <p><b><u>Параметри</u></b><br />
 </p>
@@ -1299,5 +1301,5 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Documents/uk">Libs/Documents/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2692</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Documents/uk">Libs/Documents/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2700</td></tr></table></body>
 </html>

@@ -1179,7 +1179,10 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
 </td></tr></table>
 <p>Построение диаграммы трендов в SVG, которая может далее встраиваться в XHTML-документ, для данных за указанный период времени [(<i>end</i>-<i>size</i>)...<i>end</i>] и из источников <i>srcs</i>.
-</p><p>Код формирования диаграммы основан на коде примитива "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">Диаграмма</a>" визуализаторов, и который был довольно просто перенесен с языка C++ на <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">встроенный язык JavaLikeCalc</a>. Сейчас перенесено-реализовано только тренды!
+</p>
+<ul><li> <b>Общая трудоёмкость:</b> 1.3 <span title="человеко-дней, 1ЧД — 10 часов">ЧД<sup style="color: blue">[!]</sup></span></li>
+<li> <b>Спонсировано, начальной имплементации на 1.0 <span title="человеко-дней, 1ЧД — 10 часов">ЧД<sup style="color: blue">[!]</sup></span>:</b> Магомед, <a class="external text" href="https://www.savtech.ru" rel="nofollow noreferrer noopener" target="_blank">SAVTECH</a></li></ul>
+<p>Код формирования диаграммы основан на коде примитива "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">Диаграмма</a>" визуализаторов, и который был довольно просто перенесен с языка C++ на <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">встроенный язык JavaLikeCalc</a>. Сейчас перенесено-реализовано только тренды!
 </p><p>Вид диаграммы определяется её размерами <i>hsz</i>*<i>vsz</i> и исходным SVG-шаблоном <i>tmpl</i>, ряд атрибутов кореневого тега которого имеют особое значение и которые соответствуют примитиву "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">Диаграмма</a>":
 </p>
 <ul><li> Шкала: Маркеры: шрифт (sclMarkFont), по умолчанию "Arial 10".</li>
@@ -1196,7 +1199,6 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <li> <b>color</b> — цвет кривой тренда;</li>
 <li> <b>scale</b> — отдельное определение шкалы тренда, по умолчанию "Глобально (0)" и в целом предусмотрено: "Глобально (0)", "Маркеры (2)", "Решетка и маркеры (3)", "Маркеры (лог) (6)", "Решетка и маркеры (лог) (7)".</li>
 <li> <b>width</b> — ширина кривой тренда, по умолчанию 2.</li></ul>
-<ul><li> <b>Спонсировано:</b> Магомед, <a class="external text" href="https://www.savtech.ru" rel="nofollow noreferrer noopener" target="_blank">SAVTECH</a></li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibDocuments_docRepInstVals.png"><img class="thumbimage" height="580" src="../en/files/LibDocuments_docRepInstVals.png" width="900" /></a>  <div class="thumbcaption">Рис.2.4. Типичный результат функции "Диаграмма" в XHTML-документе.</div></div></div></div>
 <p><b><u>Параметры</u></b><br />
 </p>
@@ -1300,5 +1302,5 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Documents/ru">Libs/Documents/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2692</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Documents/ru">Libs/Documents/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2700</td></tr></table></body>
 </html>

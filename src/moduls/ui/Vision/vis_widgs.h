@@ -172,7 +172,7 @@ namespace VISION
 	    bool event( QEvent *event );
 
 	private:
-	    string	userTxt, userPass, VCAStat;
+	    string	userTxt, userPass, userTxtOrig, userPassOrig, VCAStat;
     };
 
     //*********************************************************************************************

@@ -30,7 +30,7 @@
 <td> <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a> </td>
 <td> Operation user interface (WEB)
 </td>
-<td> 4.9 </td>
+<td> 4.11 </td>
 <td> GPL2 </td>
 <td> ui_WebVision.so </td>
 <td> en,uk,ru,de </td>
@@ -44,7 +44,9 @@
 </th></tr>
 <tr>
 <td colspan="9"> Visual operation user interface, based on the the WEB — front-end to the VCA engine.
-<ul><li> <b>To Do:</b></li></ul>
+<ul><li> <b>Total complexity:</b> &gt; 30 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
+<li> <b>Sponsored by, for finishing the mirroring of the primitive ElFigure on 0.5 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>:</b> SVItoVYR Ltd</li>
+<li> <b>To Do:</b></li></ul>
 <dl><dd> - expand the view "Table" of the primitive "FormEl" for user sorting by the selected column;</dd>
 <dd> * expand the status-bar, with the functions:
 <dl><dd> - export and print;</dd>
@@ -139,7 +141,7 @@
 <li> Generic language of the OpenSCADA process.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:619px;"><a class="image" href="http://oscada.org/wiki/File:HTTP_auth.png"><img class="thumbimage" height="302" src="../files/HTTP_auth.png" width="617" /></a>  <div class="thumbcaption">Fig.1. Authentication page.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:620px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_connect.png"><img class="thumbimage" height="458" src="../files/WebVision_wvis_connect.png" width="618" /></a>  <div class="thumbcaption">Fig.2. Connection or creation of a new session of the execution project of the VCA.</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1041px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run.png"><img class="thumbimage" height="782" src="../files/WebVision_wvis_run.png" width="1039" /></a>  <div class="thumbcaption">Fig.3. Main execution window.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1039px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run.png"><img class="thumbimage" height="787" src="../files/WebVision_wvis_run.png" width="1037" /></a>  <div class="thumbcaption">Fig.3. Main execution window.</div></div></div></div>
 <h2><span class="mw-headline" id="Presentation_of_the_basic_elements_.28primitives.29"><span class="mw-headline-number">3</span> <span id="Primitives" title="#Primitives">Presentation of the basic elements (primitives)</span></span></h2>
 <p>This version of the module does not implement all the shapes of the primitives laid by the project. In general, the project provides the following primitives:
 </p>
@@ -242,9 +244,9 @@
 </p>
 <ul><li> "*" — call for a selecting dialog of the user; </li>
 <li> "$" — change the user to the default one;</li>
-<li> "{user}" — direct change to <i>user</i>, if available and its permission is lesser or equal; a useful example of changing to the "user" after 30 seconds inactivity:</li></ul>
+<li> "{user}[:{password}]" — direct change to <i>user</i> with <i>password</i>; for empty password, the user is changed only if its permission is lesser or equal; a useful example of changing to the "user" after one minute inactivity:</li></ul>
 <pre style="white-space: pre-wrap;&nbsp;; margin-left: 20pt">
-if((SYS.time()-this.ownerSess().userActTm()) &lt; 30)userSetVis = "";
+if((SYS.time()-this.ownerSess().userActTm()) &lt; 60)userSetVis = "";
 else if(this.ownerSess().reqUser()&nbsp;!= "user") userSetVis = "user";
 </pre>
 </td></tr>
@@ -326,7 +328,7 @@ else if(this.ownerSess().reqUser()&nbsp;!= "user") userSetVis = "user";
 <li> <i>Media</i> — not empty source image.</li></ul>
 <p>Figure represents a part of the screen with the frame containing the above-listed elements of the form.
 </p>
-<div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run_formel.png"><img alt="WebVision wvis run formel.png" height="259" src="../files/WebVision_wvis_run_formel.png" width="597" /></a></div></div>
+<div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run_formel.png"><img alt="WebVision wvis run formel.png" height="255" src="../files/WebVision_wvis_run_formel.png" width="454" /></a></div></div>
 <p><br />
 </p>
 <h3><span class="mw-headline" id="Primitive_of_the_displaying_the_media-materials_.28Media.29"><span class="mw-headline-number">3.4</span> Primitive of the displaying the media-materials (Media)</span></h3>
@@ -708,5 +710,5 @@ GROUNDS: At working with the board <a class="external" href="http://oscada.org/w
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebVision/en">Modules/WebVision/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2692</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebVision/en">Modules/WebVision/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2700</td></tr></table></body>
 </html>

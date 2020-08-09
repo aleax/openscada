@@ -240,7 +240,9 @@ bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos, b
 	    else if(attr == "stBarNoShow")	mainWin()->statusBar()->setVisible(!s2i(val));
 	    else if(attr == "winPosCntrSave")	mainWin()->setWinPosCntrSave(s2i(val));
 	    else if(attr == "userSetVis") {
-		if(val.size() && val != mainWin()->user() && val != property("userSetVis").toString().toStdString()) {
+		if(val.size() && mainWin()->user() != TSYS::strDecode(TSYS::strParse(val,0,":"),TSYS::Custom) &&
+		    val != property("userSetVis").toString().toStdString())
+		{
 		    setProperty("userSetVis", QString(val.c_str()));
 		    mainWin()->userSel(val);
 		} else setProperty("userSetVis", QString(val.c_str()));

@@ -126,7 +126,7 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <p>ModBus scanner for Coils (1), Input Coils (2), Registers (3), Input Registers (4); in the range [0...65535]. The template useful to examine unknown ModBus devices, scanning their Coils' and Registers' map for detecting the available data addresses. The scanning performs per one item, whether it is a coil or a register, to prevent the data unavailability for strict data accessing devices. The protocol ModBus itself implemented by the OpenSCADA module <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">DAQ.ModBus</a>, together which the template designed to use.
 </p>
 <ul><li> <b>Total complexity:</b> 0.2 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
-<li> <b>Sponsored by:</b> SVItoVYR Ltd for whole complexity</li></ul>
+<li> <b>Sponsored by, for whole complexity:</b> SVItoVYR Ltd</li></ul>
 <p><b><u>Template IOs</u></b><br />
 </p>
 <table class="wikitable">
@@ -286,7 +286,7 @@ data = req.attr("err").toInt()&nbsp;? ""&nbsp;: req.text();
 <p><a class="external text" href="https://en.wikipedia.org/wiki/DNP3" rel="nofollow noreferrer noopener" target="_blank">Distributed Network Protocol 3 (DNP3)</a> is a set of communications protocols used between components in process automation systems. Its main use is in utilities such as electric and water companies. Usage in other industries is not common. It was developed for communications between various types of data acquisition and control equipment. Competing standards include the older Modbus protocol and the newer IEC 61850 protocol and IEC 61870.
 </p>
 <ul><li> <b>Total complexity:</b> 2.0 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
-<li> <b>Sponsored by:</b> Hadi Ramezani and Hossein Malakooti for whole complexity</li></ul>
+<li> <b>Sponsored by, for whole complexity:</b> Hadi Ramezani and Hossein Malakooti</li></ul>
 <p><b><u>Details</u></b><br />
 The template implements currently for the client, which uses the followed functions: Confirm (0x00), Read (0x01), Write (0x02), Enable (0x14) and Disable (0x15) Spontaneous Messages.
 </p><p>And which implements and tested for the followed point-oriented objects (data types):
@@ -523,7 +523,8 @@ The template implements currently for the client, which uses the followed functi
 <li> Services: STARTDT, STOPDT, TESTFR, Ack, C_IC_NA_1 (100), C_CI_NA_1 (101), C_SC_NA_1 (45), M_SP_NA_1 (1), M_SP_TA_1 (2), M_DP_NA_1 (3), M_DP_TA_1 (4), M_ME_NB_1 (11), M_ME_NC_1 (13), M_ME_TF_1 (36), C_CS_NA_1 (103);</li>
 <li> For information ones, the sequential (SQ) mode enabling and disabling are supported.</li></ul></li>
 <li> <b>Total complexity:</b> 3.8 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
-<li> <b>Sponsored by:</b> Ustijancev Michael for 3.0 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>, SVItoVYR Ltd for 0.8 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
+<li> <b>Sponsored by, for initial implementation on 3.0 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>:</b> Ustijancev Michael</li>
+<li> <b>Sponsored by, for extending on 0.8 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>:</b> SVItoVYR Ltd</li>
 <li> <a class="external text" href="http://oscada.org/en/development/tasks/posts/subsystem_daq/iec_60870_5_acquisition_protocol_implementation" rel="nofollow noreferrer noopener" target="_blank">Implementing task</a></li></ul>
 <p><b><u>Details</u></b><br />
 Considering the purpose and the application area, the protocol does not provide the direct determination of the requested data and the device, that implements it, provides all available ones upon request by the C_IC_NA_1 command, after which only changes are sent.
@@ -762,7 +763,7 @@ Considering the purpose and the application area, the protocol does not provide 
 <ul><li> CLIENT of the specification PART 46;</li>
 <li> reading of the directly specified OBISes.</li></ul></li>
 <li> <b>Total complexity:</b> 3.3 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
-<li> <b>Sponsored by:</b> SVItoVYR Ltd for whole complexity</li></ul>
+<li> <b>Sponsored by, for whole complexity:</b> SVItoVYR Ltd</li></ul>
 <p><b><u>Details</u></b><br />
 DLMS or Device Language Message Specification (originally Distribution Line Message Specification), is the suite of standards developed and maintained by the DLMS User Association (DLMS UA) and has been adopted by the IEC TC13 WG14 into the IEC 62056 series of standards.
 </p><p>COSEM or Companion Specification for Energy Metering, includes a set of specifications that defines the transport and application layers of the DLMS protocol. The DLMS User Association defines the protocols into a set of four specification documents namely Green Book, Yellow Book, Blue Book and White Book. The Blue Book describes the COSEM meter object model and the OBIS object identification system, the Green Book describes the architecture and protocols, the Yellow Book treats all the questions concerning conformance testing, the White Book contains the glossary of terms.
@@ -2518,7 +2519,8 @@ The field "addr" of the items can be wrote positive, for  the 8 bit address [0..
 </td></tr></table>
 <p>Shark Slave Communication Protocol from EnergoCentrum PLUS, s.r.o.
 </p>
-<ul><li> <b>Sponsored by:</b> <a class="external text" href="http://faster.cz" rel="nofollow noreferrer noopener" target="_blank">Costumer Faster CZ</a></li></ul>
+<ul><li> <b>Total complexity:</b> 1.35 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
+<li> <b>Sponsored by, for whole complexity:</b> <a class="external text" href="http://faster.cz" rel="nofollow noreferrer noopener" target="_blank">Costumer Faster CZ</a></li></ul>
 <p><b><u>Template IOs</u></b><br />
 </p>
 <table class="wikitable">
@@ -2711,8 +2713,6 @@ The field "addr" of the items can be wrote positive, for  the 8 bit address [0..
 <ul><li> <i>Transport</i> — to address of the transport into step 1. Tracing for the address changing is supported.</li>
 <li> <i>Address</i> — to logical address of the device on the bus under the transport in step 1. Tracing for the address changing is supported.</li></ul></dd>
 <dd>6. RESULT: The logical parameter object will: dynamically create needed attributes accordingly to the attribute "Channels number" value and perform interaction and placing of gathered data to the parameter attributes. Also you are able to change some writable attributes.</dd></dl>
-<p><br />
-</p>
 <h2><span class="mw-headline" id="Counters_of_the_resources"><span class="mw-headline-number">3</span> Counters of the resources</span></h2>
 <table class="wikitable">
 
@@ -2727,7 +2727,8 @@ The field "addr" of the items can be wrote positive, for  the 8 bit address [0..
 </td></tr></table>
 <p>Firm "Teplocom" (<a class="external free" href="http://www.teplocom.spb.ru" rel="nofollow noreferrer noopener" target="_blank">http://www.teplocom.spb.ru</a>) computer "VKT-7" for complex heat measurement and counting. The device complex enough to provide more parameters, more history and accessed by a nonlinear Serial-based protocol at low speed. The template implements acquisition for all significant parameters, gets for their history by hours, days and result months. Also you can to append easily enough for processing of the remained parameters.<br />
 </p>
-<ul><li> <b>Sponsored by:</b> Vladislav Chubuk</li></ul>
+<ul><li> <b>Total complexity:</b> 4.9 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
+<li> <b>Sponsored by, for initial implementation on 4.0 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>:</b> Vladislav Chubuk, Teplocom LTD</li></ul>
 <p><b><u>Output user protocol's XML request structure</u></b><br />
 <b>&lt;mess addr="1" err="1:Error"&gt;{req}&lt;/mess&gt;</b>
 </p>
@@ -4752,5 +4753,5 @@ The field "addr" of the items can be wrote positive, for  the 8 bit address [0..
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Devices/ru">Libs/Devices/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2692</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Devices/ru">Libs/Devices/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2700</td></tr></table></body>
 </html>

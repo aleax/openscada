@@ -23,24 +23,30 @@
 <th> Языки </th>
 <th> Платформы </th>
 <th> Тип </th>
-<th> Автор </th>
-<th> Описание
+<th> Автор
 </th></tr>
 
 <tr>
 <td> <a href="../Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">QTStarter</a> </td>
 <td> Qt GUI пускатель
 </td>
-<td> 5.6 </td>
+<td> 5.7 </td>
 <td> GPL2 </td>
 <td> ui_QTStarter.so </td>
 <td> en,uk,ru,de </td>
 <td> x86,x86_64,ARM
 </td>
 <td> Пользовательские интерфейсы </td>
-<td> Роман Савоченко </td>
-<td> Предоставляет Qt GUI пускатель. Qt-пускатель является единственным и обязательным компонентом для всех GUI модулей, основанных на библиотеке Qt.
-<ul><li> <b>Сделать (To Do):</b></li></ul>
+<td> Роман Савоченко
+</td></tr>
+<tr>
+<th colspan="9"> Описание
+</th></tr>
+<tr>
+<td colspan="9"> Предоставляет Qt GUI пускатель. Qt-пускатель является единственным и обязательным компонентом для всех GUI модулей, основанных на библиотеке Qt.
+<ul><li> <b>Общая трудоёмкость:</b> &gt; 10 <span title="человеко-дней, 1ЧД — 10 часов">ЧД<sup style="color: blue">[!]</sup></span></li>
+<li> <b>Спонсировано, реализации резервирования на 0.5 <span title="человеко-дней, 1ЧД — 10 часов">ЧД<sup style="color: blue">[!]</sup></span>:</b> Хайди Рамезани</li>
+<li> <b>Сделать (To Do):</b></li></ul>
 <dl><dd> - реализовать менеджер подпроектов для их запуска в отдельных процессах, но с их хранением и управлением в одном конфигурационном файле проекта, для высоко-надёжных конфигураций;</dd>
 <dd> - реализовать менеджер фонового исполнения процессов.</dd></dl>
 </td></tr></table>
@@ -67,7 +73,7 @@
 <li> выбор присутствующих OpenSCADA проектов для их выбора или переключения;</li>
 <li> выход из OpenSCADA;</li>
 <li> меню помощи с пунктами: "Про", "Про Qt", "Руководство QTStarter" (F1), "Руководство OpenSCADA 0.9" и "Что это" (Shift+F1).</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:527px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_dialog_ru.png"><img class="thumbimage" height="672" src="../files/QTStarter_dialog_ru.png" width="525" /></a>  <div class="thumbcaption">Рис.2. Диалоговое окно пускателя этого модуля.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:472px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_dialog_ru.png"><img class="thumbimage" height="673" src="../files/QTStarter_dialog_ru.png" width="470" /></a>  <div class="thumbcaption">Рис.2. Диалоговое окно пускателя этого модуля.</div></div></div></div>
 <p>В случае отсутствия диалогового окна запуска и всех окон модулей Qt GUI, программа может быть запущена или свёрнута в системный лоток (Рис.3), созданный этим модулем.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:386px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_systray_ru.png"><img class="thumbimage" height="181" src="../files/QTStarter_systray_ru.png" width="384" /></a>  <div class="thumbcaption">Рис.3. Проект "АГЛКС", запущенный или свёрнутый в системный лоток.</div></div></div></div> 
@@ -88,7 +94,7 @@
 <p>С интеграцией в OpenSCADA элементов менеджера проектов этот модуль получил функцию выбора существующих и создания новых проектов OpenSCADA, в списке проектов и команд проектов (рис.2). На данный момент предусмотрено два режима диалогового окна пускателя (рис.2), это — режим первичного-инициирующего запуска и режим исполнения выбранного проекта.
 </p><p>Первичный-инициирующий режим, по факту, является режимом запуска без определённого проекта и предусматривает именно выбор проекта для переключения в другой режим, и соответственно прячет список Qt GUI модулей, даже если они загружены в инициирующую конфигурацию.
 </p><p>В режиме исполнения проекта работают все типовые механизмы, а именно это вызов Qt GUI модулей и запуск-сворачивание в системный лоток, а диалоговое окно пускателя (рис.2) содержит перечень присутствующих Qt GUI модулей и информацию про запущенный проект, в заголовке окна.
-</p><p>В перечне проектов пользователю (через контекстное меню) дополнительно предоставляется возможность зарезервировать — создать резервную копию, и восстановить проекты из выбранной резервной копии.
+</p><p>В перечне проектов пользователю (через контекстное меню) дополнительно предоставляется возможность удалить неисполняемые проекты, зарезервировать — создать резервную копию, и восстановить проекты из выбранной резервной копии.
 </p><p>Кроме непосредственно названий проектов в перечне проектов, справа от названия, приведено их состояние — "текущий", "выполняется" и "{N} рез.копий". Состояние "текущий" означает, что осуществляется исполнение именно этого проекта. Состояние "исполняется" указывает на наличие файла блокирования множественного запуска, а соответственно и исполнения проекта, и отдельно от этого проекта если рядом не указано состояние "текущий". Выбрать и попробовать переключиться на проект в состоянии "исполняется" можно, приняв предупреждение, но если этот проект реально сейчас исполняется и наличие файла блокировки не является остаточным после аварийного завершения программы то программа, которая переключается, просто завершится! Состояние "{N} рез.копий" указывает на наличие указанного количества резервных копий проекта.
 </p>
 <h2><span class="mw-headline" id=".D0.92.D0.B8.D0.B4_.D0.B8_.D0.BE.D1.89.D1.83.D1.89.D0.B5.D0.BD.D0.B8.D0.B5"><span class="mw-headline-number">4</span> Вид и ощущение</span></h2>
@@ -123,5 +129,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/QTStarter/ru">Modules/QTStarter/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2692</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/QTStarter/ru">Modules/QTStarter/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2700</td></tr></table></body>
 </html>

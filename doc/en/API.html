@@ -1607,8 +1607,7 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>string addr( ) const;</i> — Transport address.</li>
 <li> <i>virtual string timings( );</i> — Transport timeouts.</li>
 <li> <i>virtual unsigned short attempts( );</i> Connection attempts.</li>
-<li> <i>int prm1( );</i> — First backup parameter.</li>
-<li> <i>int prm2( );</i> — Second backup parameter.</li>
+<li> <i>TVariant conPrm( const string &amp;nm );</i> — Getting the connection parameter <i>nm</i> value.</li>
 <li> <i>bool startStat( );</i> — Status "Running".</li>
 <li> <i>time_t startTm( );</i> — Status "Time of starting/connection".</li>
 <li> <i>int64_t lstReqTm( );</i> — Status "Last request time".</li>
@@ -1621,8 +1620,8 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>void setAddr( const string &amp;addr );</i> — Setting the address of transport.</li>
 <li> <i>virtual void setTimings( const string &amp;vl );</i> — Setting the transport timeouts.</li>
 <li> <i>virtual void setAttempts( unsigned short vl );</i> — Setting the connection attempts.</li>
-<li> <i>void setPrm1( int vl );</i> — Setting of the first backup parameter.</li>
-<li> <i>void setPrm2( int vl );</i> — Setting of the second backup parameter.</li>
+<li> <i>void setConPrm( const string &amp;nm, const TVariant &amp;vl );</i> — Setting the connection parameter <i>nm</i> to value <i>vl</i>.</li>
+<li> <i>void clearConPrm( );</i> — Clearing the connection parameters.</li>
 <li> <i>void setDB( const string &amp;vl );</i> — Setting of the transport's DB address.</li>
 <li> <i>virtual void start( int time = 0 );</i> — Start of the transport with connection time <i>time</i>.</li>
 <li> <i>virtual void stop( );</i> — Stop of the transport.</li>
@@ -4127,5 +4126,5 @@ extern "C"
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2692</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2700</td></tr></table></body>
 </html>

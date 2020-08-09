@@ -31,7 +31,7 @@
 <td> <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> </td>
 <td> Operation user interface (Qt)
 </td>
-<td> 7.1 </td>
+<td> 7.2 </td>
 <td> GPL2 </td>
 <td> ui_Vision.so </td>
 <td> en,uk,ru,de </td>
@@ -40,6 +40,8 @@
 <td> UI </td>
 <td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2007-2012), Ksenia Yashina (2007-2008)</i></font> </td>
 <td> Visual operation user interface, based on the Qt library — front-end to the VCA engine.
+<ul><li> <b>Total complexity:</b> &gt; 50 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
+<li> <b>Sponsored by, for finishing the mirroring of the primitive ElFigure on 0.3 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>:</b> SVItoVYR Ltd</li></ul>
 </td></tr></table>
 <p>The module provides to OpenSCADA a mechanism of the final visualization of the visualization and control area (VCA). The module is based on the multi-platform library <a class="external text" href="http://qt.io" rel="nofollow noreferrer noopener" target="_blank">Qt</a> of the graphical user interface (GUI) of initially created by the firm <a class="external text" href="http://www.trolltech.com" rel="nofollow noreferrer noopener" target="_blank">TrollTech</a>. In its work, the module uses the data of the VCA engine — module <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>).
 </p><p>Visual control area (VCA) is an integral part of the SCADA system. It applies to the client stations with a view to providing accessible information about the control object and to for the the issuance of the control actions to the object. In various practical situations and conditions the VCA, based on different principles of visualization, may by applied. For example, this may be the library of widgets Qt, GTK+, WxWidgets or hypertext mechanisms based on the technologies HTML, XHTML, XML, CSS and JavaScript, or third-party applications of visualization, realized in various programming languages Java, Python, etc. Any of these principles has its advantages and disadvantages, the combination of which could become an insurmountable obstacle to the use of VCA in a practical case. For example, technologies like the Qt library can create highly-productive VCA, which will undoubtedly important for the operator station for control the technological processes (TP). However, the need for installation of that client software in some cases may make using of it impossible. On the other hand, Web-technology does not require installation on client systems and is extremely multi-platform (it is enough to create a link to the Web-server at any Web-browser) that is most important for various engineering and administrative stations, but the productivity and reliability of such interfaces is lower, that actually eliminates the using of them at the operator stations of TP.
@@ -289,7 +291,7 @@
 </p><p>User can create many themes, each of which will keep the color, font and other properties of the frame elements. Simple changing of the theme will allow you to change the interface of VC, and the possibility of appointing an individual theme in the user's profile allows to take into account his individual features.
 </p><p>To realize this opportunity, when creating a frame, it is necessary for the properties of color, font and others set the "Configuration" (of the table in the "Process" tab) in the value of "From style". And in the parameter "Configuration template" to specify the identifier of the style field. Next, this field will automatically appear in the style manager and can be modified there. The style manager is available on the project configuration page in the tab "Styles". In this tab, you can the styles create, delete and edit, delete their fields.
 </p>
-<div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:Vision_prj_stl.png"><img alt="Vision prj stl.png" height="334" src="../files/Vision_prj_stl.png" width="398" /></a></div></div>
+<div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:Vision_prj_stl.png"><img alt="Vision prj stl.png" height="460" src="../files/Vision_prj_stl.png" width="393" /></a></div></div>
 <p>In general, the styles are available from the project level. At the level of the widget libraries you can only define the style fields for the widgets. At the project level, at the choice of style, it is started the work with styles, which includes access to the fields of styles instead of direct attribute values. In fact, this means that when reading or writing a widget attribute these operations will be carried out with the corresponding field of the chosen style.
 </p><p>When starting a project, the project-style will be used. In the future, the user can choose a style from the list of available. The user-selected style will be saved and used the next time the project is launched.
 </p><p><br />
@@ -591,10 +593,10 @@
 </p>
 <ul><li> "*" — call for a selecting dialog of the user; </li>
 <li> "$" — change the user to the default one;</li>
-<li> "{user}" — direct change to <i>user</i>, if available and its permission is lesser or equal; a useful example of changing to the "user" after 30 seconds inactivity:</li></ul>
+<li> "{user}[:{password}]" — direct change to <i>user</i> with <i>password</i>; for empty password, the user is changed only if its permission is lesser or equal and that is the local visualisation; a useful example of changing to the "user" after one minute inactivity:</li></ul>
 <pre style="white-space: pre-wrap;&nbsp;; margin-left: 20pt">
-if((SYS.time()-this.ownerSess().userActTm()) &lt; 30)userSetVis = "";
-else if(this.ownerSess().reqUser()&nbsp;!= "user") userSetVis = "user";
+if((SYS.time()-this.ownerSess().userActTm()) &lt; 60)userSetVis = "";
+else if(this.ownerSess().reqUser()&nbsp;!= "user") userSetVis = "user:user";
 </pre>
 </td></tr>
 <tr>
@@ -933,5 +935,5 @@ An example of editing a frame based on this primitive is shown in Figure 2.a, an
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Vision/en">Modules/Vision/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2692</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Vision/en">Modules/Vision/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2700</td></tr></table></body>
 </html>

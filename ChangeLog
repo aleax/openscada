@@ -1,3 +1,16 @@
+2020-08-09 Roman (stable)
+- !!!!:Transports: The output transports unified by creation the connection parameters, by conPrm(), instead direct ones prm1() and prm2().
+- !!!!:SYS,Protocol.SelfSystem,DAQ.AMRDevs: Client accessing of the OpenSCADA control interface expanded by the multiple authentication,
+    what prevents of using direct requests of the OpenSCADA control interface with the authentication in each the requst, often for UI,Vision.
+- !:FIX:Protocol.SelfSystem: Fixed in tries treating at errors in the output actions.
+- UI.QTStarter: Appended for an icon of the item of removing projects. The removing projects item moved to the end of the project context menu.
+- !!:UI.{Vision,WebVision}: The visualizer specific property "userSetVis" appended for password implementation
+    after the direct user specifying and for applying all users.
+- !:FIX:UI.Vision: The visualizer specific property "userSetVis" (the command "$") improved for restoring to the original user,
+	mostly for remote connections, by storring the original user and password.
+    The authentication and user changing procedure in UserStBar::userSel() and the dialogue object "DlgUser" was significantly unified.
+
+
 2020-08-02 Roman (stable)
 - data/openscada-proj.in: The "remove" command of the projects appended for removing backups of the project.
 - !!:UI.QTStarter: Context menu of the project list appended for an item of removing not running projects.

@@ -32,7 +32,7 @@
 #define MOD_NAME	_("Own protocol of OpenSCADA")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.7.0"
+#define MOD_VER		"1.8.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides own OpenSCADA protocol based at XML and the control interface of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -182,8 +182,9 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
     string pass = io.attr("rqPass");	io.attrDel("rqPass");
     if(!pass.size())	pass = EMPTY_PASS;
     pass = TSYS::strEncode(pass, TSYS::Custom, " \r\n\t%");
-    tro.setPrm2((tro.prm2()<1000)?tro.prm2()+1:0);
-    io.setAttr("rqSeq", i2s(tro.prm2()));
+    int64_t seq = tro.conPrm("seq").getI();
+    seq = (seq != EVAL_INT && seq < 1000) ? seq+1 : 0;
+    tro.setConPrm("seq", seq); io.setAttr("rqSeq", i2s(seq));
     string data = io.save();
     io.clear();
 
@@ -191,8 +192,9 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	int reqTrs = tro.attempts(), iTr = 0;
 	string errTr;
 	for(iTr = 0; iTr < reqTrs; ) {
+	    int64_t authID = tro.conPrm("auth"+user);
 	    //Session open
-	    if(!isDir && (tro.prm1() < 0 || authForce)) {
+	    if(!isDir && (authID == EVAL_INT || authForce)) {
 		req = "SES_OPEN " + user + " " + pass + "\x0A";
 
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("SES_OPEN request: %d"), req.size());
@@ -215,7 +217,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			if(rez == atoi(ERR_AUTH)) { io.setAttr("rez",i2s(rez))->setText(header.substr(off)); break; }
 			throw TError(nodePath().c_str(), _("Error the station '%s': %s."), tro.id().c_str(), header.substr(off).c_str());
 		    }
-		    tro.setPrm1(s2i(header.substr(off)));
+		    tro.setConPrm("auth"+user, (authID=s2i(header.substr(off))));
 		} else throw TError(nodePath().c_str(), _("Error the station '%s': error the response format."), tro.id().c_str());
 	    }
 
@@ -225,7 +227,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    if(reqCompr) data = TSYS::strCompr(data, comprLev());
 
 	    if(isDir)	req = "REQDIR " + user + " " + pass + " " + i2s(data.size()*(reqCompr?-1:1)) + "\x0A" + data;
-	    else	req = "REQ " + i2s(tro.prm1()) + " " + i2s(data.size()*(reqCompr?-1:1)) + "\x0A" + data;
+	    else	req = "REQ " + i2s(authID) + " " + i2s(data.size()*(reqCompr?-1:1)) + "\x0A" + data;
 
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("REQ send: %d"), req.size());
 
@@ -248,10 +250,11 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		throw TError(nodePath().c_str(),_("Error the station '%s' response."),tro.id().c_str());
 	    rez = s2i(TSYS::strParse(header,0," ",&off));
 	    if(rez == atoi(ERR_AUTH)) {
-		tro.setPrm1(-1);
+		tro.setConPrm("auth"+user, (authID=EVAL_INT));
 		if(isDir) { io.setAttr("rez",i2s(rez))->setText(header.substr(off)); break; }
-		else continue;
+		else { iTr++; continue; }
 	    }
+
 	    if(rez > 0 || off >= (int)header.size())
 		throw TError(nodePath().c_str(),_("Error the station '%s': %s."), tro.id().c_str(), buf+off);
 	    int resp_size = s2i(header.substr(off));
@@ -269,9 +272,9 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    else io.load(resp.substr(head_end), XMLNode::LD_NoTxtSpcRemEnBeg);
 
 	    if(reqNm != io.name())
-	    { errTr = TSYS::strMess(_("The response '%s' is not suitable to the request '%s'."),io.name().c_str(),reqNm.c_str()); continue; }
-	    if(s2i(io.attr("rqSeq")) != tro.prm2())
-	    { errTr = TSYS::strMess(_("The response sequence %d is not suitable to the request one %d."),s2i(io.attr("rqSeq")),(int)tro.prm2()); continue; }
+	    { errTr = TSYS::strMess(_("The response '%s' is not suitable to the request '%s'."),io.name().c_str(),reqNm.c_str()); iTr++; continue; }
+	    if(s2i(io.attr("rqSeq")) != seq)
+	    { errTr = TSYS::strMess(_("The response sequence %d is not suitable to the request one %d."),s2i(io.attr("rqSeq")),(int)seq); iTr++; continue; }
 
 	    return;
 	}

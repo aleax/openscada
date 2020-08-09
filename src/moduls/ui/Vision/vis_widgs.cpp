@@ -224,23 +224,32 @@ DlgUser::DlgUser( const QString &iuser, const QString &ipass, const QString &iVC
 
     users->setEditText(mod->userStart().c_str());
 
-    if(hint == "$") { mAutoRes = (user() == iuser) ? SelCancel : SelOK; return; }
-
     mAutoRes = NoAuto;
     bool chckHintUser = hint.size() && hint != "*";
 
     //Fill users list
     XMLNode req("get");
     req.setAttr("path","/Security/%2fusgr%2fusers");
-    if(!mod->cntrIfCmd(req,iuser.toStdString(),ipass.toStdString(),iVCAstat.toStdString(),true))
+    if(!mod->cntrIfCmd(req,iuser.toStdString(),ipass.toStdString(),iVCAstat.toStdString(),true)) {
+	size_t	pasSep = hint.find(":");
+	string	h_user = (pasSep == string::npos) ? hint : TSYS::strDecode(hint.substr(0,pasSep),TSYS::Custom),
+		h_pass = (pasSep == string::npos) ? "" : TSYS::strDecode(hint.substr(pasSep+1),TSYS::Custom);
 	for(unsigned iU = 0; iU < req.childSize(); iU++) {
 	    users->addItem(req.childGet(iU)->text().c_str());
-	    if(chckHintUser && hint == req.childGet(iU)->text()) {
-		users->setEditText(hint.c_str());
-		mAutoRes = SelOK;
+	    if(chckHintUser && h_user == req.childGet(iU)->text()) {
+		users->setEditText(h_user.c_str());
+		if(pasSep == string::npos)
+		    mAutoRes = (VCAstat == "." && dynamic_cast<VisRun*>(parent->window()) && SYS->security().at().usrAt(((VisRun*)parent->window())->user()).at().permitCmpr(user().toStdString()) <= 0)
+				? SelOK : SelErr;
+		else {
+		    passwd->setText(h_pass.c_str());
+		    finish(SelOK);
+		    mAutoRes = (Results)result();
+		}
 		break;
 	    }
 	}
+    }
 }
 
 QString DlgUser::user( )	{ return users->currentText(); }
@@ -308,12 +317,15 @@ void UserStBar::setUser( const string &val )
     userTxt = val;
 
     if(window()) window()->setProperty("oscdUser", val.c_str());
+
+    if(userTxtOrig.empty()) userTxtOrig = val;
 }
 
 void UserStBar::setPass( const string &val )
 {
     mod->dataRes().lock();
     userPass = val;
+    if(userPassOrig.empty()) userPassOrig = val;
     mod->dataRes().unlock();
 }
 
@@ -323,29 +335,23 @@ bool UserStBar::event( QEvent *event )
     return QLabel::event(event);
 }
 
-bool UserStBar::userSel( const string &hint )
+bool UserStBar::userSel( const string &ihint )
 {
     string lang = dynamic_cast<VisRun*>(window()) ? ((VisRun*)window())->lang() : "";
+    string hint = (ihint == "$") ? userTxtOrig + ":" + userPassOrig : ihint;
 
     DlgUser d_usr(user().c_str(), pass().c_str(), VCAStation().c_str(), parentWidget(), hint, lang);
 
-    //???? Need to implement the user's privileges remote reducing
-    if(d_usr.autoRes() != DlgUser::NoAuto && VCAStation() != ".") {
-	mess_err(mod->nodePath().c_str(), _("There impossible now to change-reduce the user remotely."));
-	return false;
-    }
-
     int rez = (d_usr.autoRes() == DlgUser::NoAuto) ? d_usr.exec() : d_usr.autoRes();
-    if(rez == DlgUser::SelOK && d_usr.user().toStdString() != user() &&
-	    (hint == "$" || hint == "*" || d_usr.autoRes() == DlgUser::NoAuto || SYS->security().at().usrAt(user()).at().permitCmpr(d_usr.user().toStdString()) <= 0))
-    {
+
+    if(rez == DlgUser::SelOK && d_usr.user().toStdString() != user()) {
 	QString old_user = user().c_str(), old_pass = pass().c_str();
 	setUser(d_usr.user().toStdString());
 	setPass(d_usr.password().toStdString());
 	emit userChanged(old_user, old_pass);
 	return true;
     }
-    else if(rez == DlgUser::SelErr)
+    else if(rez == DlgUser::SelErr && d_usr.autoRes() == DlgUser::NoAuto)
 	mod->postMess(mod->nodePath().c_str(), QString(_("Error authenticating the user '%1'!!!")).arg(d_usr.user()), TVision::Warning, this);
 
     return false;

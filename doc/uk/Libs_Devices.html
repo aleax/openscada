@@ -126,7 +126,7 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <p>Сканер ModBus щодо Кілець (1), Вхідних Кілець (2), Регістрів (3), Вхідних Регістрів (4); у діапазоні [0...65535]. Шаблон корисний для вивчення невідомих пристроїв ModBus, скануванням їх мапи Кілець та Регістрів для виявлення наявних адрес даних. Сканування відбувається по одному елементу, чи то кільцю чи регістру, для попередження недоступності даних на пристроях суворого доступу даних. Сам протокол ModBus реалізовано модулем OpenSCADA <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">DAQ.ModBus</a>, разом з яким шаблон і передбачено до використання.
 </p>
 <ul><li> <b>Загальна працемісткість:</b> 0.2 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span></li>
-<li> <b>Спонсорування:</b> ТОВ "СВІТоВИР" на загальну працемісткість</li></ul>
+<li> <b>Спонсорування, загальну працемісткість:</b> ТОВ "СВІТоВИР"</li></ul>
 <p><b><u>ВВ шаблону</u></b><br />
 </p>
 <table class="wikitable">
@@ -286,7 +286,7 @@ data = req.attr("err").toInt()&nbsp;? ""&nbsp;: req.text();
 <p><a class="external text" href="https://en.wikipedia.org/wiki/DNP3" rel="nofollow noreferrer noopener" target="_blank">Distributed Network Protocol 3 (DNP3)</a> is a set of communications protocols used between components in process automation systems. Its main use is in utilities such as electric and water companies. Usage in other industries is not common. It was developed for communications between various types of data acquisition and control equipment. Competing standards include the older Modbus protocol and the newer IEC 61850 protocol and IEC 61870.
 </p>
 <ul><li> <b>Total complexity:</b> 2.0 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
-<li> <b>Sponsored by:</b> Hadi Ramezani and Hossein Malakooti for whole complexity</li></ul>
+<li> <b>Sponsored by, for whole complexity:</b> Hadi Ramezani and Hossein Malakooti</li></ul>
 <p><b><u>Details</u></b><br />
 The template implements currently for the client, which uses the followed functions: Confirm (0x00), Read (0x01), Write (0x02), Enable (0x14) and Disable (0x15) Spontaneous Messages.
 </p><p>And which implements and tested for the followed point-oriented objects (data types):
@@ -523,7 +523,8 @@ The template implements currently for the client, which uses the followed functi
 <li> Сервіси: STARTDT, STOPDT, TESTFR, Ack, C_IC_NA_1 (100), C_CI_NA_1 (101), C_SC_NA_1 (45), M_SP_NA_1 (1), M_SP_TA_1 (2), M_DP_NA_1 (3), M_DP_TA_1 (4), M_ME_NB_1 (11), M_ME_NC_1 (13), M_ME_TF_1 (36), C_CS_NA_1 (103);</li>
 <li> Для інформаційних сервісів підтримується ввімкнення та вимкнення послідовного (SQ) режиму.</li></ul></li>
 <li> <b>Загальна працемісткість:</b> 3.8 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span></li>
-<li> <b>Спонсорування:</b> Устьянцев Михайло на 3.0 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span>, ТОВ "СВІТоВИР" на 0.8 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span></li>
+<li> <b>Спонсорування, початкової імплементації на 3.0 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span>:</b> Устьянцев Михайло</li>
+<li> <b>Спонсорування, розширення на 0.8 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span>:</b> ТОВ "СВІТоВИР"</li>
 <li> <a class="external text" href="http://oscada.org/en/development/tasks/posts/subsystem_daq/iec_60870_5_acquisition_protocol_implementation" rel="nofollow noreferrer noopener" target="_blank">Завдання реалізації</a></li></ul>
 <p><b><u>Деталі</u></b><br />
 Враховуючи призначення та сферу застосування, протокол не передбачає прямого визначення запитуваних даних та пристроєм, що його реалізує, надаються всі наявні, за запитом командою C_IC_NA_1, після чого надсилаються лише зміни.
@@ -762,7 +763,7 @@ The template implements currently for the client, which uses the followed functi
 <ul><li> КЛІЄНТ ЧАСТИНИ 46 специфікації;</li>
 <li> читання прямо визначених OBIS.</li></ul></li>
 <li> <b>Загальна працемісткість:</b> 3.3 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span></li>
-<li> <b>Спонсорування:</b> ТОВ "СВІТоВИР АВТоМАТИК" на загальну працемісткість</li></ul>
+<li> <b>Спонсорування, загальну працемісткість:</b> ТОВ "СВІТоВИР АВТоМАТИК"</li></ul>
 <p><b><u>Деталі</u></b><br />
 DLMS або Специфікація Мов Повідомлень Пристроїв (початково Специфікація Повідомлень Розподілених Ліній) є набором стандартів розроблених та підтримуваних Асоціацією Користувачів DLMS (DLMS UA) та адаптованих IEC TC13 WG14 у серію стандартів IEC 62056.
 </p><p>COSEM або Супутня Специфікація для Вимірювання Енергії, включає набір специфікацій які визначають транспорт та прикладний шар DLMS протоколу. Асоціація Користувачів DLMS визначає протоколи у наборі чотирьох документів специфікації, а саме Зелена Книга, Жовта Книга, Синя Книга та Біла Книга. Синя Книга описує об'єктну модель вимірювача COSEM та ідентифікаційну систему об'єктів OBIS, Зелена Книга описує архітектуру та протоколи, Жовта Книга опікується всіма питаннями зосередженими на тестуванні сумісності, Біла Книга містить глосарій термінів.
@@ -2518,7 +2519,8 @@ The field "addr" of the items can be wrote positive, for  the 8 bit address [0..
 </td></tr></table>
 <p>Shark Slave Communication Protocol from EnergoCentrum PLUS, s.r.o.
 </p>
-<ul><li> <b>Sponsored by:</b> <a class="external text" href="http://faster.cz" rel="nofollow noreferrer noopener" target="_blank">Costumer Faster CZ</a></li></ul>
+<ul><li> <b>Total complexity:</b> 1.35 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
+<li> <b>Sponsored by, for whole complexity:</b> <a class="external text" href="http://faster.cz" rel="nofollow noreferrer noopener" target="_blank">Costumer Faster CZ</a></li></ul>
 <p><b><u>Template IOs</u></b><br />
 </p>
 <table class="wikitable">
@@ -2711,8 +2713,6 @@ The field "addr" of the items can be wrote positive, for  the 8 bit address [0..
 <ul><li> <i>Transport</i> — to address of the transport into step 1. Tracing for the address changing is supported.</li>
 <li> <i>Address</i> — to logical address of the device on the bus under the transport in step 1. Tracing for the address changing is supported.</li></ul></dd>
 <dd>6. RESULT: The logical parameter object will: dynamically create needed attributes accordingly to the attribute "Channels number" value and perform interaction and placing of gathered data to the parameter attributes. Also you are able to change some writable attributes.</dd></dl>
-<p><br />
-</p>
 <h2><span class="mw-headline" id="Counters_of_the_resources"><span class="mw-headline-number">3</span> Counters of the resources</span></h2>
 <table class="wikitable">
 
@@ -2727,7 +2727,8 @@ The field "addr" of the items can be wrote positive, for  the 8 bit address [0..
 </td></tr></table>
 <p>Firm "Teplocom" (<a class="external free" href="http://www.teplocom.spb.ru" rel="nofollow noreferrer noopener" target="_blank">http://www.teplocom.spb.ru</a>) computer "VKT-7" for complex heat measurement and counting. The device complex enough to provide more parameters, more history and accessed by a nonlinear Serial-based protocol at low speed. The template implements acquisition for all significant parameters, gets for their history by hours, days and result months. Also you can to append easily enough for processing of the remained parameters.<br />
 </p>
-<ul><li> <b>Sponsored by:</b> Vladislav Chubuk</li></ul>
+<ul><li> <b>Total complexity:</b> 4.9 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
+<li> <b>Sponsored by, for initial implementation on 4.0 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>:</b> Vladislav Chubuk, Teplocom LTD</li></ul>
 <p><b><u>Output user protocol's XML request structure</u></b><br />
 <b>&lt;mess addr="1" err="1:Error"&gt;{req}&lt;/mess&gt;</b>
 </p>
@@ -4752,5 +4753,5 @@ The field "addr" of the items can be wrote positive, for  the 8 bit address [0..
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Devices/uk">Libs/Devices/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2692</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Devices/uk">Libs/Devices/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2700</td></tr></table></body>
 </html>

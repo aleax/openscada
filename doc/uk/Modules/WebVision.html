@@ -30,7 +30,7 @@
 <td> <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a> </td>
 <td> Робочий користувацький інтерфейс (WEB)
 </td>
-<td> 4.9 </td>
+<td> 4.11 </td>
 <td> GPL2 </td>
 <td> ui_WebVision.so </td>
 <td> en,uk,ru,de </td>
@@ -44,7 +44,9 @@
 </th></tr>
 <tr>
 <td colspan="9"> Робочий інтерфейс користувача, заснований на WEB — зовнішній інтерфейс до рушія СВУ.
-<ul><li> <b>Зробити (To Do):</b></li></ul>
+<ul><li> <b>Загальна працемісткість:</b> &gt; 30 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span></li>
+<li> <b>Спонсорування, завершення відображення примітиву ElFigure на 0.5 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span>:</b> ТОВ "СВІТоВИР"</li>
+<li> <b>Зробити (To Do):</b></li></ul>
 <dl><dd> - розширити вид "Таблиця" примітиву "FormEl" користувацьким сортуванням за обраним стовпчиком;</dd>
 <dd> * доповнити панель статусу, функціями:
 <dl><dd> - експорт та друк;</dd>
@@ -140,7 +142,7 @@
 <li> Загальна мова процесу OpenSCADA.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:619px;"><a class="image" href="http://oscada.org/wiki/File:HTTP_auth_uk.png"><img class="thumbimage" height="286" src="../files/HTTP_auth_uk.png" width="617" /></a>  <div class="thumbcaption">Рис.1. Сторінка аутентифікації.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:606px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_connect_uk.png"><img class="thumbimage" height="458" src="../files/WebVision_wvis_connect_uk.png" width="604" /></a>  <div class="thumbcaption">Рис.2. Підключення або створення нового сеансу виконання проекту СВУ.</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1041px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run_uk.png"><img class="thumbimage" height="782" src="../files/WebVision_wvis_run_uk.png" width="1039" /></a>  <div class="thumbcaption">Рис.3. Головне вікно режиму виконання.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1039px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run_uk.png"><img class="thumbimage" height="787" src="../files/WebVision_wvis_run_uk.png" width="1037" /></a>  <div class="thumbcaption">Рис.3. Головне вікно режиму виконання.</div></div></div></div>
 <h2><span class="mw-headline" id=".D0.9F.D1.80.D0.B5.D0.B4.D1.81.D1.82.D0.B0.D0.B2.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F_.D0.B1.D0.B0.D0.B7.D0.BE.D0.B2.D0.B8.D1.85_.D0.B5.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.96.D0.B2_.28.D0.BF.D1.80.D0.B8.D0.BC.D1.96.D1.82.D0.B8.D0.B2.D1.96.D0.B2.29"><span class="mw-headline-number">3</span> <span id="Primitives" title="#Primitives">Представлення базових елементів (примітивів)</span></span></h2>
 <p>Даною версією модуля реалізовано не всі образи примітивів, закладені проектом. Загалом, проектом закладено примітиви:
 </p>
@@ -243,9 +245,9 @@
 </p>
 <ul><li> "*" — виклик діалогу обрання користувача;</li>
 <li> "$" — зміна користувача на типового;</li>
-<li> "{користувач}" — пряма зміна на <i>користувач</i>, якщо він доступний та його права менше або дорівнюють; корисний приклад зміни на користувача "user" після 30 секунд неактивності:</li></ul>
+<li> "{користувач}[:{пароль}]" — пряма зміна на <i>користувач</i> із <i>паролем</i>; для порожнього пароля користувач змінюється лише якщо його права менше або дорівнюють; корисний приклад зміни на користувача "user" після хвилини неактивності:</li></ul>
 <pre style="white-space: pre-wrap;&nbsp;; margin-left: 20pt">
-if((SYS.time()-this.ownerSess().userActTm()) &lt; 30)userSetVis = "";
+if((SYS.time()-this.ownerSess().userActTm()) &lt; 60)userSetVis = "";
 else if(this.ownerSess().reqUser()&nbsp;!= "user") userSetVis = "user";
 </pre>
 </td></tr>
@@ -327,7 +329,7 @@ else if(this.ownerSess().reqUser()&nbsp;!= "user") userSetVis = "user";
 <li> <i>Media</i> — не порожнє джерело зображення.</li></ul>
 <p>На рисунку представлено частину екрану з кадром, що містить вищеперелічені елементи форми.
 </p>
-<div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run_formel_uk.png"><img alt="WebVision wvis run formel uk.png" height="260" src="../files/WebVision_wvis_run_formel_uk.png" width="601" /></a></div></div>
+<div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run_formel_uk.png"><img alt="WebVision wvis run formel uk.png" height="257" src="../files/WebVision_wvis_run_formel_uk.png" width="454" /></a></div></div>
 <p><br />
 </p>
 <h3><span class="mw-headline" id=".D0.9F.D1.80.D0.B8.D0.BC.D1.96.D1.82.D0.B8.D0.B2_.D0.B2.D1.96.D0.B4.D0.BE.D0.B1.D1.80.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F_.D0.BC.D0.B5.D0.B4.D1.96.D0.B0-.D0.BC.D0.B0.D1.82.D0.B5.D1.80.D1.96.D0.B0.D0.BB.D1.96.D0.B2_.28Media.29"><span class="mw-headline-number">3.4</span> Примітив відображення медіа-матеріалів (Media)</span></h3>
@@ -709,5 +711,5 @@ GROUNDS: At working with the board <a class="external" href="http://oscada.org/w
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebVision/uk">Modules/WebVision/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2692</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebVision/uk">Modules/WebVision/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2700</td></tr></table></body>
 </html>

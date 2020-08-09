@@ -21,7 +21,7 @@
 #ifndef TTRANSPORTS_H
 #define TTRANSPORTS_H
 
-#define STR_VER		22		//TransportS type modules version
+#define STR_VER		23		//TransportS type modules version
 #define STR_ID		"Transport"
 
 #include <string>
@@ -141,8 +141,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	string	addr( ) const		{ return cfg("ADDR").getS(); }
 	virtual	string timings( )	{ return ""; }
 	virtual	unsigned short attempts( ) { return 2; }
-	int64_t	prm1( )			{ return mPrm1; }
-	int64_t	prm2( )			{ return mPrm2; }
+	TVariant conPrm( const string &nm );
 	bool	startStat( ) const	{ return runSt; }
 	time_t	startTm( )		{ return mStartTm; }
 	int64_t	lstReqTm( )		{ return mLstReqTm; }
@@ -157,8 +156,8 @@ class TTransportOut : public TCntrNode, public TConfig
 	void setAddr( const string &addr )		{ cfg("ADDR").setS(addr); }
 	virtual void setTimings( const string &vl )	{ }
 	virtual void setAttempts( unsigned short vl )	{ }
-	void setPrm1( int64_t vl )			{ mPrm1 = vl; }
-	void setPrm2( int64_t vl )			{ mPrm2 = vl; }
+	void setConPrm( const string &nm, const TVariant &vl );
+	void clearConPrm( );
 
 	void setDB( const string &vl )			{ mDB = vl; modifG(); }
 
@@ -208,7 +207,7 @@ class TTransportOut : public TCntrNode, public TConfig
 
 	// Reserve parameters
 	time_t	mStartTm;
-	int64_t	mPrm1, mPrm2;
+	map<string, TVariant>	mConPrms;
 	ResMtx	mReqRes, mLogRes;
 
 	// IO log

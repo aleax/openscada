@@ -56,7 +56,7 @@
 #define MOD_NAME	_("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"5.7.0"
+#define MOD_VER		"5.7.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -1326,14 +1326,6 @@ void StartDialog::prjsLsCtxMenuRequested( const QPoint &pos )
 {
     QMenu *menu = new QMenu();	//prjsLs->createStandardContextMenu();
 
-    //Extra project actions
-    QAction *actRemove = NULL;
-    if(!prjsLs->currentItem()->data(Qt::UserRole+2).toBool()) {
-	actRemove = new QAction(_("Remove"), this);
-	menu->addAction(actRemove);
-	menu->addSeparator();
-    }
-
     //The BackUp action
     QAction *actBackUp = new QAction(_("BackUp"), this);
     menu->addAction(actBackUp);
@@ -1348,6 +1340,14 @@ void StartDialog::prjsLsCtxMenuRequested( const QPoint &pos )
 	    actRest->setObjectName(backId.c_str());
 	    menu->addAction(actRest);
 	}
+    }
+
+    //Extra project actions
+    QAction *actRemove = NULL;
+    if(!prjsLs->currentItem()->data(Qt::UserRole+2).toBool()) {
+	actRemove = new QAction(QIcon(":/images/it_del.png"), _("Remove"), this);
+	menu->addSeparator();
+	menu->addAction(actRemove);
     }
 
     QAction *rez = menu->exec(QCursor::pos());
