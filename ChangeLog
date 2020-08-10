@@ -1,3 +1,7 @@
+2020-08-10 Roman (stable)
+- FIX:Protocol.SelfSystem: Fixed in the authentication retry after an error of "REQ" request, after reloading the server side mostly.
+
+
 2020-08-09 Roman (stable)
 - !!!!:Transports: The output transports unified by creation the connection parameters, by conPrm(), instead direct ones prm1() and prm2().
 - !!!!:SYS,Protocol.SelfSystem,DAQ.AMRDevs: Client accessing of the OpenSCADA control interface expanded by the multiple authentication,

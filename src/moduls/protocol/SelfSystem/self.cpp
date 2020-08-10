@@ -252,7 +252,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    if(rez == atoi(ERR_AUTH)) {
 		tro.setConPrm("auth"+user, (authID=EVAL_INT));
 		if(isDir) { io.setAttr("rez",i2s(rez))->setText(header.substr(off)); break; }
-		else { iTr++; continue; }
+		else continue;
 	    }
 
 	    if(rez > 0 || off >= (int)header.size())
