@@ -182,9 +182,9 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
     string pass = io.attr("rqPass");	io.attrDel("rqPass");
     if(!pass.size())	pass = EMPTY_PASS;
     pass = TSYS::strEncode(pass, TSYS::Custom, " \r\n\t%");
-    int64_t seq = tro.conPrm("seq").getI();
-    seq = (seq != EVAL_INT && seq < 1000) ? seq+1 : 0;
-    tro.setConPrm("seq", seq); io.setAttr("rqSeq", i2s(seq));
+    //int64_t seq = tro.conPrm("seq").getI();
+    //seq = (seq != EVAL_INT && seq < 1000) ? seq+1 : 0;
+    //tro.setConPrm("seq", seq); io.setAttr("rqSeq", i2s(seq));
     string data = io.save();
     io.clear();
 
@@ -273,8 +273,8 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 	    if(reqNm != io.name())
 	    { errTr = TSYS::strMess(_("The response '%s' is not suitable to the request '%s'."),io.name().c_str(),reqNm.c_str()); iTr++; continue; }
-	    if(s2i(io.attr("rqSeq")) != seq)
-	    { errTr = TSYS::strMess(_("The response sequence %d is not suitable to the request one %d."),s2i(io.attr("rqSeq")),(int)seq); iTr++; continue; }
+	    //if(s2i(io.attr("rqSeq")) != seq)
+	    //{ errTr = TSYS::strMess(_("The response sequence %d is not suitable to the request one %d."),s2i(io.attr("rqSeq")),(int)seq); iTr++; continue; }
 
 	    return;
 	}

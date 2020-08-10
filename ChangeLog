@@ -1,4 +1,6 @@
 2020-08-10 Roman (stable)
+- FIX:Protocol.SelfSystem: Commenting the sequences wrong implementation of the output requests in they work with the reforwarding
+    and transition to internal stations.
 - FIX:Protocol.SelfSystem: Fixed in the authentication retry after an error of "REQ" request, after reloading the server side mostly.
 
 
