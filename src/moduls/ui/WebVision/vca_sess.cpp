@@ -107,6 +107,9 @@ void VCASess::getReq( SSess &ses )
 	if((varPos=ses.page.find("##CHARSET##")) != string::npos)	ses.page.replace(varPos, 11, Mess->charset());
 	// Title replace
 	if((varPos=ses.page.find("##TITLE##")) != string::npos)	ses.page.replace(varPos, 9, prjNm);
+	// Custom CSS replace
+	if((varPos=ses.page.find("##CUST_CSS##")) != string::npos)	ses.page.replace(varPos, 12, mod->custCSS());
+
 	ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type:text/html;charset="+Mess->charset());
 
 	// Cache clear

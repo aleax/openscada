@@ -90,6 +90,7 @@ class TWEB: public TUI
 	double	cachePgLife( )				{ return mCachePgLife; }
 	int	cachePgSz( )				{ return mCachePgSz; }
 	bool	imgResize( )				{ return mImgResize; }
+	string	custCSS( )				{ return mCustCSS; }
 
 	void setSessTime( time_t vl )			{ mTSess = vmax(1,vmin(24*60,vl)); modif(); }
 	void setSessLimit( int vl )			{ mSessLimit = vmax(1,vmin(100,vl)); modif(); }
@@ -97,6 +98,7 @@ class TWEB: public TUI
 	void setCachePgSz( int vl )			{ mCachePgSz = vmax(0, vmin(100,vl)); modif(); }
 	void setPNGCompLev( int vl )			{ mPNGCompLev = vmax(-1,vmin(9,vl)); modif(); }
 	void setImgResize( bool vl )			{ mImgResize = vl; modif(); }
+	void setCustCSS( const string &vl )		{ mCustCSS = vl; modif(); }
 
 	// VCA sessions
 	void vcaSesList( vector<string> &list ) const	{ chldList(id_vcases,list); }
@@ -152,6 +154,7 @@ class TWEB: public TUI
 	bool		mImgResize;			//Resizing raster images on the server side
 	int		id_vcases;			//VCA session's container identifier
 	map<string,int> colors;				//Named colors
+	MtxString	mCustCSS;			//Custom CSS
 
 	ResRW		mSesRes;			//Sessions resource
 	ResMtx		mCacheRes;

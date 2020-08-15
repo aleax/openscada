@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"4.11.0"
+#define MOD_VER		"4.12.0"
 #define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on the the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -72,7 +72,7 @@ using namespace WebVision;
 //************************************************
 //* TWEB                                         *
 //************************************************
-TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5), mCachePgLife(1), mCachePgSz(10), mPNGCompLev(1), mImgResize(false)
+TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5), mCachePgLife(1), mCachePgSz(10), mPNGCompLev(1), mImgResize(false), mCustCSS(dataRes())
 {
     mod = this;
 
@@ -267,7 +267,8 @@ string TWEB::optDescr( )
 	"CachePgLife  <hours>    Lifetime of the pages in the cache (by default 1).\n"
 	"CachePgSz    <numb>     Maximum number of the pages in the cache (by default 10).\n"
 	"PNGCompLev   <lev>      Compression level [-1..9] of the creating PNG-images.\n"
-	"ImgResize    <0|1>      Resizing raster images on the server side.\n\n"),
+	"ImgResize    <0|1>      Resizing raster images on the server side.\n"
+	"CustCSS      <CSS>      Custom interface CSS rules.\n\n"),
 	MOD_TYPE, MOD_ID, nodePath().c_str());
 }
 
@@ -282,16 +283,18 @@ void TWEB::load_( )
     setCachePgSz(s2i(TBDS::genDBGet(nodePath()+"CachePgSz",i2s(cachePgSz()))));
     setPNGCompLev(s2i(TBDS::genDBGet(nodePath()+"PNGCompLev",i2s(PNGCompLev()))));
     setImgResize(s2i(TBDS::genDBGet(nodePath()+"ImgResize",i2s(imgResize()))));
+    setCustCSS(TBDS::genDBGet(nodePath()+"CustCSS",custCSS()));
 }
 
 void TWEB::save_( )
 {
-    TBDS::genDBSet(nodePath()+"SessTimeLife",i2s(sessTime()));
-    TBDS::genDBSet(nodePath()+"SessLimit",i2s(sessLimit()));
+    TBDS::genDBSet(nodePath()+"SessTimeLife", i2s(sessTime()));
+    TBDS::genDBSet(nodePath()+"SessLimit", i2s(sessLimit()));
     TBDS::genDBSet(nodePath()+"CachePgLife", r2s(cachePgLife()));
-    TBDS::genDBSet(nodePath()+"CachePgSz", i2s(cachePgSz()));
-    TBDS::genDBSet(nodePath()+"PNGCompLev",i2s(PNGCompLev()));
-    TBDS::genDBSet(nodePath()+"ImgResize",i2s(imgResize()));
+    TBDS::genDBSet(nodePath()+"CachePgSz",  i2s(cachePgSz()));
+    TBDS::genDBSet(nodePath()+"PNGCompLev", i2s(PNGCompLev()));
+    TBDS::genDBSet(nodePath()+"ImgResize", i2s(imgResize()));
+    TBDS::genDBSet(nodePath()+"CustCSS", custCSS());
 }
 
 void TWEB::modStart( )	{ runSt = true; }
@@ -623,6 +626,7 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 			    "  1-9 - direct level."));
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/imgResize",_("Resizing raster images on the server side"),RWRWR_,"root",SUI_ID,2,
 		"tp","bool","help",_("Mostly to decrease too big images size then decrease the traffic, what causes to rise the server load."));
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/custCSS",_("Custom interface CSS rules"),RWRWR_,"root",SUI_ID,3,"tp","str","rows","5","SnthHgl","1");
 	}
 	return;
     }
@@ -666,6 +670,17 @@ void TWEB::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/cfg/imgResize") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(imgResize()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setImgResize(s2i(opt->text()));
+    }
+    else if(a_path == "/prm/cfg/custCSS") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(custCSS());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setCustCSS(opt->text());
+	if(ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD)) {
+	    opt->setAttr("font", "Courier");
+	    opt->childAdd("blk")->setAttr("beg", "/\\*")->setAttr("end", "\\*/")->setAttr("color", "gray")->setAttr("font_italic", "1");
+	    opt->childAdd("blk")->setAttr("beg", "\\{")->setAttr("end", "\\}")->setAttr("color", "#666666")->
+		childAdd("rule")->setAttr("expr", ":[^;]+")->setAttr("color", "blue");
+	    opt->childAdd("rule")->setAttr("expr", "(\\.|#)\\w+\\s")->setAttr("color", "darkorange");
+	}
     }
     else TUI::cntrCmdProc(opt);
 }

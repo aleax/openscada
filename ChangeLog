@@ -1,3 +1,9 @@
+2020-08-15 Roman (stable)
+- !!!!:SYS: Modules version of the subsystem "Transport" rose to 24.
+- data/icons_src/splash.xcf, src/moduls/ui/QTStarter/images/splash.png: The splash image crop to remove the transparent shadow border.
+- !!:UI.WebVision: Appended for the custom interface CSS rules.
+
+
 2020-08-10 Roman (stable)
 - FIX:Protocol.SelfSystem: Commenting the sequences wrong implementation of the output requests in they work with the reforwarding
     and transition to internal stations.
@@ -7,14 +13,14 @@
 2020-08-09 Roman (stable)
 - !!!!:Transports: The output transports unified by creation the connection parameters, by conPrm(), instead direct ones prm1() and prm2().
 - !!!!:SYS,Protocol.SelfSystem,DAQ.AMRDevs: Client accessing of the OpenSCADA control interface expanded by the multiple authentication,
-    what prevents of using direct requests of the OpenSCADA control interface with the authentication in each the requst, often for UI,Vision.
+    what prevents of using direct requests of the OpenSCADA control interface with the authentication in each the request, often for UI.Vision.
 - !:FIX:Protocol.SelfSystem: Fixed in tries treating at errors in the output actions.
 - UI.QTStarter: Appended for an icon of the item of removing projects. The removing projects item moved to the end of the project context menu.
 - !!:UI.{Vision,WebVision}: The visualizer specific property "userSetVis" appended for password implementation
     after the direct user specifying and for applying all users.
 - !:FIX:UI.Vision: The visualizer specific property "userSetVis" (the command "$") improved for restoring to the original user,
 	mostly for remote connections, by storring the original user and password.
-    The authentication and user changing procedure in UserStBar::userSel() and the dialogue object "DlgUser" was significantly unified.
+    The authentication and user changing procedure in UserStBar::userSel() and the dialogue object "DlgUser" were significantly unified.
 
 
 2020-08-02 Roman (stable)
@@ -23,7 +29,7 @@
 
 
 2020-07-26 Roman (stable)
-- data/icons_src/oscada.xcf: Appended for OpenSCADA backups icon.
+- data/icons_src/oscada.xcf: Appended for OpenSCADA backuping icon.
 - !!!:UI.WebVision: Unified in the primitive "Button" implementation: by moving the custom buttons under <button></button>
     and appending the proper CSS-styles for the default and pressed state with the border and transparent image difference.
 
@@ -45,7 +51,7 @@
 - !!:FIX:LibsDB.OscadaLibs.doc.diagram,UI.{Vision,WebVision}:
     Prevented from the value scale double adjustment for the percent scale and appended for the value range expanding.
 - FIX:LibsDB.vcaBase: The procedure translation was removed for doc.docRepInstVals.
-- !!!!:SYS,UI.QTStarter: Splash updating of the main pthreaded GUI module moved to the service task,
+- !!!!:SYS,UI.QTStarter: Splash updating of the main threaded GUI module moved to the service task,
     before switching to performing the main function, for what there appended two new signs "isRunning" and "isServPrc"
     and the service task starting moved to the TSYS constructor and the stopping moved to the the TSYS destructor.
 - SYS,DB,DB.{SQLite,MySQL,PostgreSQL,FireBird}:
@@ -85,13 +91,13 @@
 
 
 2020-06-28 Roman (stable)
-- data/Android/build.sh: Appended for built in the new module DB.DBGate.
+- data/Android/build.sh: Appended for build in the new module DB.DBGate.
 - !!!!:data/openscada-proj.in,UI.QTStarter:
     Finished in implementation the backups support by implementing the command "backupList" and limits of the backups.
     UI.QTStarter: Appended for the backup commands call from the project manager - list of the projects.
 - SYS: TSYS::objFuncCall() moved to public.
 - FIX:SYS: The OpenSCADA tasks priority fixed for SCHED_FIFO in it display as 0.
-- UI.VCAEngine: Completly cleared from calcProgTr() indirect accessing and
+- UI.VCAEngine: completely cleared from calcProgTr() indirect accessing and
     calcLang() and calcProg() set to use TSYS::strLine() directly instead the strange processing with spare marking the modification.
 
 
@@ -110,7 +116,7 @@
 - !!:FIX:DB: TBDS::dataSet() expanded for setting only keys and viewed elements, like to other DB.
 - TDB: The service requests "/serv/fieldStruct", "/serv/fieldSeek" and "/serv/fieldGet" access changed to SEC_RD.
 - !!:DB.DBGate: The module cleaned, some fixed and tested.
-- !!:FIX:DB.SQLite: there detected and corrected of data losses with concurrence access, when a minor error of the not started transaction
+- !!:FIX:DB.SQLite: there detected and corrected of data losses with concurrence access, when a minor error of the not activated transaction
     "cannot commit - no transaction is active (1)" is generated, which, however, interrupts the data recording.
 - !!:Protocol.SelfSystem: The output part expanded for checking correspondence of the responses to the requests
 	by the request tag name and sequences in "rqSeq".
@@ -118,11 +124,11 @@
 - !!!!:FIX:Transport.{Sockets,SSL}: To prevent the multiple execution of the high loading and long-time control requests
     the output transports switched to:
 	- the default configuration for Tries=1, Timeouts="30:1";
-	- for the connection lost the tries number set to 2;
-	- for the error "Timeouted" the connection also set to reconnect, besides the SOCK_FORCE type.
+	- for the connection losses the tries number set to 2;
+	- for the error "Timeouted" the connections also set to reconnect, besides the SOCK_FORCE type.
 - FIX:UI.QTCfg: Sending requests to other selected items is performed only for the main request result TError::NoError.
 - UI.QTStarter: The OpenSCADA information on the splash moved to the right and the OpenSCADA project to the left.
-- UI.VCAEngine: The property "Translation" of the widget procedures completly moved to the direct access and set visible
+- UI.VCAEngine: The property "Translation" of the widget procedures completely moved to the direct access and set visible
     only for the procedure presence, also as the procedure text area and the calculation periodicity visible only at any language selection.
 - FIX:UI.Vision: Fixed in the user change at the remote work, after the previous mark.
     Prevented from try the user changing to no password one in the remote work, only the warning before the implementing.
@@ -146,7 +152,7 @@
 	the value archivers FSArch.{SYS,alarms,actions} and message archivers FSArch.{1s,1m,1h}.
 - !!:LibsDB.OscadaLibs: JavaLikeCalc.Controller.text: The tests function appended for JavaLikeCalc internal functions' tests, including the recursion call.
     !!:DevLib.IEC62056: Cleared, appended up to the OBIS reading what tested on SL7000. The implementing is continued...
-- FIX:LibsDB.vcaBase.Main.alarmsSt: Some fixed for the original messages and the "quietation" completly replaced by "confirmation".
+- FIX:LibsDB.vcaBase.Main.alarmsSt: Some fixed for the original messages and the "quietation" completely replaced by "confirmation".
     FIX: Restored in preventing the duplicate entries for new alarms in that category.
 - !:FIX:DB: TBDS::dataGet() (and TBDS::dataSeek()) prevented from getting the previous value at loading from the config-file, by setting the default value.
 - SYS: The original message "Accessing" renamed to "Accessible".
@@ -161,8 +167,8 @@
     FIX: The user action time update appended also at requesting the complete pages tree in the service request "openlist:/serv/pg",
 	what is a typical user action for WEB in reconnection to present session.
 - UI.Vision: Marked to implement the visualizer specific attribute "userSetVis" in work with the remoted visualizer server.
-- !!:FIX:UI.WebVision: The issue of clossing all pages of the main page container with frozing the last loss page at fast page switching catched and fixed at last.
-    !:FIX: The link to the user login page set to the session-project complete patch, to return back the session-project after the login.
+- !!:FIX:UI.WebVision: The issue of closing all pages of the main page container with frozing the last loss page at fast page switching caught and fixed at last.
+    !:FIX: The link to the user login page set to the session-project complete path, to return back the session-project after the login.
     !:FIX: The original user setting moved to the common function userSet() in way of fixing the reconnection to the same session
 	after changing-decreasing the user in "userSetVis".
 
@@ -188,8 +194,8 @@
 	- Transport.Sockets, Transport.Serial,
 	- Protocol.SelfSystem, Protocol.UserProtocol,
 	- Special.FLibComplex1, Special.FLibSYS
-    Appened for building: --enable-LDAP --enable-MMS --enable-DiamondBoards --enable-ICP_DAS
-- data/{debian,debian_mod}/control: Appended for a dependency to libldap2-dev for DB.LDAP,
+    Appended for building: --enable-LDAP --enable-MMS --enable-DiamondBoards --enable-ICP_DAS.
+- data/{debian,debian_mod}/control: Appended for a dependency to libldap2-dev for DB.LDAP.
 - data/debian_mod/control: Appended for the external module openscada-db-ldap and removed for the external module "openscada-daq-bfn".
 - data/{debian,debian_mod}/rules: Appended for including the new module DB.DBGate, building DB.LDAP and not building DAQ.BFN.
 
@@ -224,10 +230,10 @@
     "TABLE.data TD:nth-child(5) { white-space: normal;}"
 - FIX: data/openscada-proj.in: The command "list" some improved to show the preinstalled and user projects.
 - data/{oscada_start,oscada_server,oscada_plc}.xml: Appended for the disabled DB-entries of the standard OpenSCADA libraries.
-- !!:FIX:SYS: The function TCntrNode::isModify() processing for the childs allowed only for nodes in the state "Enabled".
+- !!:FIX:SYS: The function TCntrNode::isModify() processing for the children allowed only for nodes in the state "Enabled".
     FIX:TFunction: Set in started at the direct execution enabling.
     FIX:XMLNode: The function text() in the text taking mode from special parts "<*>" appended in reading the original
-	text content at the childs missing.
+	text content at the children missing.
     FIX:Transports: The IO log order inverted to the last in the end for the message parts visual concatenation.
 	The "Request" tab appended in concatenation the response data at the request missing.
     FIX: The dynamic system properties mWorkDB, mSelDB and mMainCPUs moved under the data lock.
@@ -1106,7 +1112,7 @@
 - !!!:SYS.Mess: Appended for the environment variable LC_ALL cleaning and setting "LANG" if empty, to prevent from overriding LC_NUMERIC=C at the last.
 - !!:SYS.Archives: The common option "Add the attribute identifier to names of the automatic created archives" changed to
     "Mode of forming ID of the automatic created archives" with selection from the modes: "Both parameter and attribute ID", "Only parameter ID", "Only attribute ID".
-- !:FIX:DB.MySQL: Fixed completly for the error "BLOB/TEXT can't have a default value (1)" on modern MySQL server versions, wholly removing the DEFAULT for TEXT.
+- !:FIX:DB.MySQL: Fixed completely for the error "BLOB/TEXT can't have a default value (1)" on modern MySQL server versions, wholly removing the DEFAULT for TEXT.
 - FIX:UI.{VCAEngine,Vision,WebVision}: Styles fixed in the the new items creating
     The styles moved under a scheme of disabling styles at their presence instead "No style".
 
@@ -7075,7 +7081,7 @@
 
 
 2012-02-09 Roman
-- !:UI.VCAEngine: Uncatched events up to upper page send support is added. That allow central process global key combination and other.
+- !:UI.VCAEngine: Uncaught events up to upper page send support is added. That allow central process global key combination and other.
 
 
 2012-02-08 Roman
