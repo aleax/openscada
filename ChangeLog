@@ -1,4 +1,8 @@
 2020-08-16 Roman 0.9.2
+- FIX:configure.ac: Got of the lost record of the new module DB.DBArch bilding.
+
+
+2020-08-16 Roman 0.9.2
 - OpenSCADA libraries and projects:
     !!!!:LibsDB.OscadaLibs: The Devices Library appended for the protocol IEC-62056 implementation (DevLib.IEC62056).
 	!!:docOffLine: The offline documentation appended for the document "AGREEMENT ON TECHNICAL SUPPORT OF THE "OpenSCADA" SOFTWARE" version 2

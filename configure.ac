@@ -202,6 +202,7 @@ AX_MOD_DB_EN(FireBird, [disable or enable[=incl] compilation module DB.FireBird]
     fi
 ])
 AX_MOD_DB_EN(DBF, [disable or enable[=incl] compilation module DB.DBF], disable, incl)
+AX_MOD_DB_EN(DBGate, [disable or enable[=incl] compilation module DB.DBF], disable, incl)
 AX_MOD_DB_EN(ODBC, [disable or enable[=incl] compilation module DB.ODBC], enable, incl, [
     AX_LIB_IODBC(1)
     if test "$found_iodbc" != "yes"; then
