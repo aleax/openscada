@@ -255,7 +255,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Function: ")+name(),R_R_R_,"root",grp);
 	if(ctrMkNode("area",opt,-1,"/func",_("Function"))) {
 	    if(ctrMkNode("area",opt,-1,"/func/st",_("State"))) {
-		ctrMkNode("fld",opt,-1,"/func/st/st",_("Accessing"),RWRWR_,"root",grp,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/func/st/st",_("Accessible"),RWRWR_,"root",grp,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/func/st/use",_("Used"),R_R_R_,"root",grp,1,"tp","dec");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/func/cfg",_("Configuration"))) {

@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.1.0"
+#define MOD_VER		"1.2.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -118,13 +118,12 @@ void TWEB::load_( )
 	//gCfg.cfgViewAll(false);
 	vector<string> itLs;
 	map<string, bool> itReg;
-	vector<vector<string> > full;
 
 	//  Search into DB
 	SYS->db().at().dbList(itLs, true);
 	itLs.push_back(DB_CFG);
 	for(unsigned iDB = 0; iDB < itLs.size(); iDB++)
-	    for(int fldCnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+modId()+"_uPg",nodePath()+modId()+"_uPg",fldCnt++,gCfg,false,&full); ) {
+	    for(int fldCnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+modId()+"_uPg",nodePath()+modId()+"_uPg",fldCnt++,gCfg,false,true); ) {
 		string id = gCfg.cfg("ID").getS();
 		if(!uPgPresent(id)) uPgAdd(id,(itLs[iDB]==SYS->workDB())?"*.*":itLs[iDB]);
 		uPgAt(id).at().load(&gCfg);
@@ -492,12 +491,11 @@ void UserPg::loadIO( )
     ResAlloc res(cfgRes, false);
     if(func() && isDAQTmpl) {
 	//Load IO
-	vector<vector<string> > full;
 	vector<string> u_pos;
 	TConfig cf(&owner().uPgIOEl());
 	cf.cfg("PG_ID").setS(id(), TCfg::ForceUse);
 	cf.cfg("VALUE").setExtVal(true);
-	for(int ioCnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",ioCnt++,cf,false,&full); ) {
+	for(int ioCnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",ioCnt++,cf,false,true); ) {
 	    string sid = cf.cfg("ID").getS();
 	    int iid = func()->ioId(sid);
 	    if(iid < 0)	continue;
@@ -536,13 +534,12 @@ void UserPg::saveIO( )
 	}
 
 	//Clear IO
-	vector<vector<string> > full;
 	cf.cfgViewAll(false);
-	for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",fldCnt++,cf,false,&full); ) {
+	for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",fldCnt++,cf); ) {
 	    string sio = cf.cfg("ID").getS();
 	    if(func()->ioId(sio) < 0) {
 		if(!SYS->db().at().dataDel(fullDB()+"_io",owner().nodePath()+tbl()+"_io",cf,true,false,true)) break;
-		if(full.empty()) fldCnt--;
+		fldCnt--;
 	    }
 	}
     }

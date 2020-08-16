@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.DAQGate translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.DAQGate package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2007-2019.
+# Roman Savochenko <rom_as@oscada.org>, 2007-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-23 09:33+0300\n"
+"POT-Creation-Date: 2020-05-24 19:29+0300\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -115,6 +115,7 @@ msgstr ""
 "Помилка видалення параметру '%s' оскільки він відсутній у конфігурації або "
 "на віддаленій станції."
 
+#, c-format
 msgid "Connection to the data source: %s."
 msgstr "Підключення до джерела даних: %s."
 
@@ -127,12 +128,12 @@ msgstr "10:Дані не доступні."
 msgid "OK"
 msgstr "НОРМА"
 
+#, c-format
 msgid "Connection to the data source '%s': %s."
 msgstr "Підключення до джерела даних '%s': %s."
 
-#, c-format
-msgid "11:Station missed '%s'."
-msgstr "11:Станція відсутня '%s'."
+msgid "Station missed '%s'."
+msgstr "Станція відсутня '%s'."
 
 msgid "Zero to disable the access to the remote archive."
 msgstr "Нуль для вимкнення доступу до віддаленого архіву."

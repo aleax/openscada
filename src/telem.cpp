@@ -415,6 +415,8 @@ TFld &TFld::operator=( const TFld &fld )
     return *this;
 }
 
+string TFld::lenS( ) const	{ return i2s(len())+"."+i2s(dec()); }
+
 string TFld::selVl2Nm( const string &val )
 {
     if(flg()&TFld::Selectable && type() == TFld::String) {

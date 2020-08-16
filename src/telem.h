@@ -1,7 +1,7 @@
 
 //OpenSCADA file: telem.h
 /***************************************************************************
- *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -86,6 +86,7 @@ class TFld
 	// Main
 	const string &name( ) const	{ return mName; }	//Name
 	const string &descr( ) const	{ return mDescr; }	//Description
+	string lenS( ) const;					//Length summary-string
 	int len( ) const		{ return mLen; }	//Length
 	int dec( ) const		{ return mDec; }	//Float dec
 	Type type( ) const		{ return (Type)mType; }	//Value type

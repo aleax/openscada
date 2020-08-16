@@ -49,7 +49,7 @@ class MTable : public TTable
 
 	// Field's functions
 	void fieldStruct( TConfig &cfg );
-	bool fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full = NULL );
+	bool fieldSeek( int row, TConfig &cfg, const string &cacheKey = "" );
 	void fieldGet( TConfig &cfg );
 	void fieldSet( TConfig &cfg );
 	void fieldDel( TConfig &cfg );
@@ -71,6 +71,7 @@ class MTable : public TTable
 
 	//Private attributes
 	vector< vector<string> > tblStrct;
+	map<string, vector< vector<string> > >	seekSess;
 };
 
 //************************************************

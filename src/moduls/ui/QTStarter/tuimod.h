@@ -85,6 +85,8 @@ protected:
     void showEvent( QShowEvent* );
     void closeEvent( QCloseEvent* );
 
+    void updatePrjList( const string &stage = "" );
+
 private:
     //Attributes
     QListWidget	*prjsLs;
@@ -100,6 +102,8 @@ private slots:
     void projCreateUpdt( );
     void projSelect( );
     void projSwitch( const QString &prj = "" );
+
+    void prjsLsCtxMenuRequested( const QPoint &pos );
 };
 
 //*************************************************
@@ -180,9 +184,7 @@ public:
     TUIMod( string name );
     ~TUIMod( );
 
-    // Module's info attributes
-    string modInfo( const string &name );
-    void   modInfo( vector<string> &list );
+    void perSYSCall( unsigned int cnt );
 
     bool endRun( )	{ return mEndRun; }
     bool startCom( )	{ return mStartCom; }
@@ -238,8 +240,10 @@ private:
     char	*qtArgV[10];			//Argument's values
     char	qtArgBuf[1000];			//Arguments' strings buffer
 
+    ResMtx	splashRes;
     SplashFlag	splashTp;
     QSplashScreen *splash;
+    time_t	splashTm;
 };
 
 extern TUIMod *mod;

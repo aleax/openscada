@@ -1034,7 +1034,7 @@ msgstr "Функция: "
 msgid "Function"
 msgstr "Функция"
 
-msgid "Accessing"
+msgid "Accessible"
 msgstr "Доступен"
 
 msgid "Used"

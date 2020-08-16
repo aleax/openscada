@@ -131,7 +131,6 @@ void TDAQS::load_( )
     //Load parameters from command line
 
     map<string, bool>	itReg;
-    vector<vector<string> > full;
 
     //Load templates libraries of parameter
     try {
@@ -144,7 +143,7 @@ void TDAQS::load_( )
 	SYS->db().at().dbList(dbLs, true);
 	dbLs.push_back(DB_CFG);
 	for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
-	    for(int libCnt = 0; SYS->db().at().dataSeek(dbLs[iIt]+"."+tmplLibTable(),nodePath()+"tmplib",libCnt++,cEl,false,&full); ) {
+	    for(int libCnt = 0; SYS->db().at().dataSeek(dbLs[iIt]+"."+tmplLibTable(),nodePath()+"tmplib",libCnt++,cEl,false,true); ) {
 		string l_id = cEl.cfg("ID").getS();
 		if(!tmplLibPresent(l_id)) tmplLibReg(new TPrmTmplLib(l_id.c_str(),"",(dbLs[iIt]==SYS->workDB())?"*.*":dbLs[iIt]));
 		tmplLibAt(l_id).at().load(&cEl);
@@ -179,7 +178,7 @@ void TDAQS::load_( )
 	    SYS->db().at().dbList(dbLs, true);
 	    dbLs.push_back(DB_CFG);
 	    for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
-		for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iIt]+"."+subId()+"_"+wmod.at().modId(),wmod.at().nodePath()+"DAQ",fldCnt++,gCfg,false,&full); ) {
+		for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iIt]+"."+subId()+"_"+wmod.at().modId(),wmod.at().nodePath()+"DAQ",fldCnt++,gCfg,false,true); ) {
 		    string mId = gCfg.cfg("ID").getS();
 		    try {
 			if(!wmod.at().present(mId)) wmod.at().add(mId,(dbLs[iIt]==SYS->workDB())?"*.*":dbLs[iIt]);

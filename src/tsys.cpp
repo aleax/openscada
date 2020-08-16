@@ -53,15 +53,15 @@ using namespace OSCADA;
 //Continuously access variable
 TMess	*OSCADA::Mess = NULL;
 TSYS	*OSCADA::SYS = NULL;
-bool TSYS::finalKill = false;
 pthread_key_t TSYS::sTaskKey;
 
 TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char **)argb), envp((const char **)env),
+    isLoaded(false), mRunning(false), isServPrc(false), mFinalKill(false),
     mUser("root"), mConfFile(sysconfdir_full "/oscada.xml"), mId("InitSt"),
     mModDir(oscd_moddir_full), mIcoDir("icons;" oscd_datadir_full "/icons"), mDocDir("docs;" oscd_datadir_full "/docs"),
     mWorkDB(dataRes()), mSelDB(dataRes()), mMainCPUs(dataRes()), mTaskInvPhs(10), mSaveAtExit(false), mSavePeriod(0),
-    mModifCalc(false), isLoaded(false), rootModifCnt(0), sysModifFlgs(0), mStopSignal(0), mN_CPU(1),
-    mainPthr(0), mSysTm(0), mClockRT(false), mPrjCustMode(true), mPrjNm(dataRes()),
+    mModifCalc(false), rootModifCnt(0), sysModifFlgs(0), mStopSignal(0), mN_CPU(1),
+    mainPthr(0), mSysTm(0), mClockRT(false), mPrjCustMode(true), mPrjNm(dataRes()), mCfgCtx(NULL),
     mRdStLevel(0), mRdRestConnTm(10), mRdTaskPer(1), mRdPrimCmdTr(false)
 {
     mWorkDB = DB_CFG;
@@ -70,7 +70,7 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
 
     mName = _("Initial Station");
 
-    finalKill = false;
+    mFinalKill = false;
     SYS = this;		//Init global access value
     mSubst = grpAdd("sub_", true);
     nodeEn();
@@ -112,12 +112,20 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
     for(int argPos = 0; (argCom=getCmdOpt(argPos,&argVl)).size(); )
 	mCmdOpts[strEncode(argCom,ToLower)] = argVl;
     mCmdOpts[""] = argv[0];
+
+    //Early starting the service task
+    taskCreate("SYS_Service", 0, TSYS::ServTask, NULL, 10);
 }
 
 TSYS::~TSYS( )
 {
+    //Stop for ordinal service task
+    taskDestroy("SYS_Service");
+
     int mLev = Mess->messLevel();
-    finalKill = true;
+    mFinalKill = true;
+
+    mainThr.free();
 
     //Delete all nodes in the order
     if(present("BD")) {
@@ -764,6 +772,9 @@ void TSYS::load_( )
 	isLoaded = true;
     }
 
+    //Force the main threaded module START update
+    if(!mainThr.freeStat()) mainThr.at().perSYSCall(1);
+
     //Direct loading of subsystems and modules
     vector<string> lst;
     list(lst);
@@ -828,7 +839,6 @@ int TSYS::start( )
 
     mess_sys(TMess::Info, _("Starting."));
 
-    mainThr.free();
     for(unsigned iA = 0; iA < lst.size(); iA++)
 	try { at(lst[iA]).at().subStart(); }
 	catch(TError &err) {
@@ -842,20 +852,16 @@ int TSYS::start( )
     Mess->translReg("", "uapi:" DB_CFG);
 
     mStopSignal = 0;
-
-    //Start for ordinal service task
-    taskCreate("SYS_Service", 0, TSYS::ServTask, NULL, 10);
-
     mess_sys(TMess::Info, _("Running is completed!"));
 
     //Call in monopoly for main thread module or wait for a signal.
-    if(!mainThr.freeStat()) { mainThr.at().modStart(); mainThr.free(); }
+    mRunning = true;
+    if(!mainThr.freeStat()) mainThr.at().modStart();
     while(!mStopSignal) sysSleep(STD_WAIT_DELAY*1e-3);
+    mRunning = false;
+    TSYS::eventWait(isServPrc, false, string("SYS_Service: ")+_(" waiting the processing finish ..."));
 
     mess_sys(TMess::Info, _("Stopping."));
-
-    //Stop for ordinal service task
-    taskDestroy("SYS_Service");
 
     if(saveAtExit() || savePeriod()) save();
     cfgFileSave();
@@ -1049,6 +1055,7 @@ void TSYS::cfgFileScan( bool first, bool up )
     rootFlTm = f_stat.st_mtime;
 
     if(up && !first) {
+	MtxAlloc res(SYS->cfgLoadSaveM(), true);
 	modifG();
 	setSelDB(DB_CFG);
 	load();
@@ -1182,6 +1189,33 @@ string TSYS::pathLev( const string &path, int level, bool decode, int *off )
 	an_dir = t_dir;
 	t_lev++;
 	while(an_dir < (int)path.size() && path[an_dir]=='/') an_dir++;
+    }
+}
+
+string TSYS::pathLevEnd( const string &path, int level, bool decode, int *off )
+{
+    int an_dir = (off && *off >= 0) ? *off : path.size()-1;
+    int t_lev = 0;
+    size_t t_dir;
+
+    //Last separators pass
+    while(an_dir >= 0 && path[an_dir] == '/') an_dir--;
+    if(an_dir < 0) return "";
+
+    //Path level process
+    while(true) {
+	t_dir = path.rfind("/", an_dir);
+	if(t_dir == string::npos) {
+	    if(off) *off = -1;
+	    return (t_lev == level) ? (decode ? TSYS::strDecode(path.substr(0,an_dir),TSYS::PathEl) : path.substr(0,an_dir)) : "";
+	}
+	else if(t_lev == level) {
+	    if(off) *off = t_dir;
+	    return decode ? TSYS::strDecode(path.substr(t_dir+1,an_dir-t_dir),TSYS::PathEl) : path.substr(t_dir+1,an_dir-t_dir);
+	}
+	an_dir = t_dir;
+	t_lev++;
+	while(an_dir >= 0 && path[an_dir] == '/') an_dir--;
     }
 }
 
@@ -2211,33 +2245,43 @@ void *TSYS::taskWrap( void *stas )
 
 void *TSYS::ServTask( void * )
 {
-    vector<string> lst;
-    SYS->list(lst);
-
     for(unsigned int iCnt = 1; !TSYS::taskEndRun(); iCnt++) {
-	//Lock file update
-	if(SYS->prjNm().size() && SYS->prjLockUpdPer() && !(iCnt%SYS->prjLockUpdPer())) SYS->prjLock("update");
+	SYS->isServPrc = true;
 
-	//CPU frequency calculation (per ten seconds)
-	if(!(iCnt%10))	SYS->clkCalc();
+	if(SYS->isRunning()) {
+	    try {
+		//Lock file update
+		if(SYS->prjNm().size() && SYS->prjLockUpdPer() && !(iCnt%SYS->prjLockUpdPer())) SYS->prjLock("update");
 
-	//Config-file checking for changes (per ten seconds)
-	if(!(iCnt%10))	SYS->cfgFileScan();
+		//CPU frequency calculation (per ten seconds)
+		if(!(iCnt%10))	SYS->clkCalc();
 
-	//Checking for shared libraries
-	if(SYS->modSchedul().at().chkPer() && !(iCnt%SYS->modSchedul().at().chkPer()))
-	    SYS->modSchedul().at().libLoad(SYS->modDir(), true);
+		//Config-file checking for changes (per ten seconds)
+		if(!(iCnt%10))	SYS->cfgFileScan();
 
-	//Changes saving
-	if(SYS->savePeriod() && !(iCnt%SYS->savePeriod())) SYS->save();
+		//Checking for shared libraries
+		if(SYS->modSchedul().at().chkPer() && !(iCnt%SYS->modSchedul().at().chkPer()))
+		    SYS->modSchedul().at().libLoad(SYS->modDir(), true);
 
-	//Config-file checking for need to save
-	if(!(iCnt%10))	SYS->cfgFileSave();
+		//Changes saving
+		if(SYS->savePeriod() && !(iCnt%SYS->savePeriod())) SYS->save();
 
-	//Subsystems calling (per 10s)
-	for(unsigned iA = 0; !(iCnt%SERV_TASK_PER) && iA < lst.size(); iA++)
-	    try { SYS->at(lst[iA]).at().perSYSCall(iCnt); }
-	    catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+		//Config-file checking for need to save
+		if(!(iCnt%10))	SYS->cfgFileSave();
+
+		//Subsystems calling (per 10s)
+		if(!(iCnt%SERV_TASK_PER)) {
+		    vector<string> lst;
+		    SYS->list(lst);
+		    for(unsigned iA = 0; iA < lst.size(); iA++)
+			try { SYS->at(lst[iA]).at().perSYSCall(iCnt); }
+			catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+		}
+	    } catch(TError&) { }
+	}
+	else if(!SYS->mainThr.freeStat()) SYS->mainThr.at().perSYSCall(0);
+
+	SYS->isServPrc = false;
 
 	TSYS::taskSleep(1000000000);
     }
@@ -3377,9 +3421,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 			//  Get from config file or DB source
 			bool seekRez = false;
 			for(int inst = 0; true; inst++) {
-			    vector< vector<string> > full;
-			    seekRez = isCfg ? SYS->db().at().dataSeek("", trSrc.substr(4), inst, req, false, &full)
-					    : SYS->db().at().dataSeek(trSrc.substr(3), "", inst, req, false, &full);
+			    seekRez = isCfg ? SYS->db().at().dataSeek("", trSrc.substr(4), inst, req, false, true)
+					    : SYS->db().at().dataSeek(trSrc.substr(3), "", inst, req, false, true);
 			    if(!seekRez) break;
 			    for(unsigned i_n = 0; i_n < ns.size(); i_n++) {
 				if(!(i_n && i_n < (ns.size()-1))) continue;

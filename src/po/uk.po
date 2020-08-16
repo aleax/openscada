@@ -1032,7 +1032,7 @@ msgstr "Функція: "
 msgid "Function"
 msgstr "Функція"
 
-msgid "Accessing"
+msgid "Accessible"
 msgstr "Доступний"
 
 msgid "Used"

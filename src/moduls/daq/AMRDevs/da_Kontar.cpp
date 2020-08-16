@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.AMRDevs file: da_Kontar.cpp
 /***************************************************************************
- *   Copyright (C) 2014,2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2014,2017,2020 by Roman Savochenko, <roman@oscada.org>  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -170,7 +170,7 @@ string Kontar::req( TMdPrm *p, string &pdu, bool passUpdate )
 	AutoHD<TTypeTransport> ttr = SYS->transport().at().at("Sockets");
 	AutoHD<TTransportOut> trO;
 	if(!(ePrm->prevTr.size() && ttr.at().outPresent(ePrm->prevTr) &&
-		(trO=ttr.at().outAt(ePrm->prevTr)).at().startStat() && trO.at().prm1() == cntrMN))
+		(trO=ttr.at().outAt(ePrm->prevTr)).at().startStat() && trO.at().conPrm("M_PLC").getI() == cntrMN))
 	{
 	    ePrm->prevTr = "";
 	    trO.free();
@@ -185,7 +185,7 @@ string Kontar::req( TMdPrm *p, string &pdu, bool passUpdate )
 	    {
 		if(!trsO[i_t].at().startStat())	continue;
 		// Serial number request
-		if(!trsO[i_t].at().prm1())
+		if(trsO[i_t].at().conPrm("M_PLC").isEVal())
 		    try
 		    {
 			int resp_len = 0;
@@ -196,7 +196,7 @@ string Kontar::req( TMdPrm *p, string &pdu, bool passUpdate )
 
 			if((resp_len=trsO[i_t].at().messIO(mbap.data(),mbap.size(),buf,sizeof(buf))) >= 4)
 			{
-			    trsO[i_t].at().setPrm1(TSYS::i32_BE(*(uint32_t*)buf));
+			    trsO[i_t].at().setConPrm("M_PLC", (int)TSYS::i32_BE(*(uint32_t*)buf));
 			    trsO[i_t].at().setDscr(TSYS::strMess(_("Connection from PLC Kontar %xh."),(int)TSYS::i32_BE(*(uint32_t*)buf)));
 			    if(resp_len >= 13 && (uint8_t)buf[4] == 0xC0)
 			    {
@@ -210,7 +210,7 @@ string Kontar::req( TMdPrm *p, string &pdu, bool passUpdate )
 			if(p->owner().messLev() == TMess::Debug)
 			    mess_debug_(p->nodePath().c_str(), _("Master PLC ID Response: '%s'"),TSYS::strDecode(string(buf,resp_len),TSYS::Bin," ").c_str());
 		    } catch(...) { }
-		if(trsO[i_t].at().prm1() == cntrMN) { trO = trsO[i_t]; ePrm->prevTr = trO.at().id(); }
+		if(trsO[i_t].at().conPrm("M_PLC").getI() == cntrMN) { trO = trsO[i_t]; ePrm->prevTr = trO.at().id(); }
 	    }
 	}
 	if(trO.freeStat()) throw TError(p->nodePath().c_str(), _("No a propper connection from PLC."));
@@ -513,7 +513,7 @@ bool Kontar::cntrCmdProc( TParamContr *ip, XMLNode *opt )
 	    vector<AutoHD<TTransportOut> > trsO = SYS->transport().at().at("Sockets").at().inAt(p->cfg("ADDR")).at().assTrs();
 	    for(unsigned i_t = 0; i_t < trsO.size(); i_t++)
 		if(trsO[i_t].at().startStat())
-		    opt->childAdd("el")->setText(u2s(trsO[i_t].at().prm1()));
+		    opt->childAdd("el")->setText(u2s(trsO[i_t].at().conPrm("M_PLC").getI()));
 	} catch(TError &err) { }
     else if(a_path == "/prm/cfg/fileList" && ip->ctrChkNode(opt,"get")) TSYS::ctrListFS(opt, ip->cfg("CNTR_NET_CFG"), "xml;");
     else if(a_path == "/prm/cfg/PLCList" && ip->ctrChkNode(opt,"get")) {

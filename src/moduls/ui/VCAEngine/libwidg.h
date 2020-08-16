@@ -122,7 +122,7 @@ class LWidget : public Widget, public TConfig
 	string	getStatus( );
 	string	calcId( );
 	string	calcLang( ) const;
-	bool	calcProgTr( );
+	bool	calcProgTr( )		{ return cfg("PR_TR").getB(); }
 	string	calcProg( ) const;
 	string	calcProgStors( const string &attr = "" );
 	int	calcPer( ) const;
@@ -131,12 +131,12 @@ class LWidget : public Widget, public TConfig
 	int64_t	timeStamp( )		{ return mTimeStamp; }
 
 	void setEnable( bool val, bool force = false );
-	void setIco( const string &iico )	{ cfg("ICO").setS(iico); }
-	void setCalcLang( const string &ilng );
-	void setCalcProgTr( bool vl );
-	void setCalcProg( const string &iprg );
+	void setIco( const string &ico )	{ cfg("ICO").setS(ico); }
+	void setCalcLang( const string &lng );
+	void setCalcProgTr( bool vl )		{ cfg("PR_TR") = vl; }
+	void setCalcProg( const string &prg );
 	void setCalcPer( int vl )		{ mProcPer = vl; modif(); }
-	void setParentNm( const string &isw );
+	void setParentNm( const string &nm );
 	void setEnableByNeed( )			{ enableByNeed = true; modifClr(); }
 
 	// Include widgets

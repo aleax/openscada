@@ -133,7 +133,6 @@ void TSecurity::load_( )
     //Load DB
     string	name;
     map<string, bool>	itReg;
-    vector<vector<string> > full;
 
     // Search and create new users
     try {
@@ -145,7 +144,7 @@ void TSecurity::load_( )
 	SYS->db().at().dbList(itLs, true);
 	itLs.push_back(DB_CFG);
 	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(itLs[iIt]+"."+subId()+"_user",nodePath()+subId()+"_user",fld_cnt++,g_cfg,false,&full); ) {
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek(itLs[iIt]+"."+subId()+"_user",nodePath()+subId()+"_user",fld_cnt++,g_cfg,false,true); ) {
 		name = g_cfg.cfg("NAME").getS();
 		if(!usrPresent(name))	usrAdd(name, (itLs[iIt]==SYS->workDB())?"*.*":itLs[iIt]);
 		usrAt(name).at().load(&g_cfg);
@@ -175,7 +174,7 @@ void TSecurity::load_( )
 	SYS->db().at().dbList(itLs, true);
 	itLs.push_back(DB_CFG);
 	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(itLs[iIt]+"."+subId()+"_grp",nodePath()+subId()+"_grp",fld_cnt++,g_cfg,false,&full); ) {
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek(itLs[iIt]+"."+subId()+"_grp",nodePath()+subId()+"_grp",fld_cnt++,g_cfg,false,true); ) {
 		name = g_cfg.cfg("NAME").getS();
 		if(!grpPresent(name))	grpAdd(name,(itLs[iIt]==SYS->workDB())?"*.*":itLs[iIt]);
 		grpAt(name).at().load(&g_cfg);
@@ -267,8 +266,8 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SSEC_ID,SEC_RD)) {
 	    vector<string> list;
 	    usrList(list);
-	    for(unsigned i_a=0; i_a < list.size(); i_a++)
-		opt->childAdd("el")->setText(list[i_a]);
+	    for(unsigned iA = 0; iA < list.size(); iA++)
+		opt->childAdd("el")->setText(list[iA]);
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SSEC_ID,SEC_WR))	opt->setText(usrAdd(opt->text()));
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SSEC_ID,SEC_WR))	usrDel(opt->text(), true);
@@ -277,8 +276,8 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SSEC_ID,SEC_RD)) {
 	    vector<string> list;
 	    grpList(list);
-	    for(unsigned i_a = 0; i_a < list.size(); i_a++)
-		opt->childAdd("el")->setText(list[i_a]);
+	    for(unsigned iA = 0; iA < list.size(); iA++)
+		opt->childAdd("el")->setText(list[iA]);
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SSEC_ID,SEC_WR))	opt->setText(grpAdd(opt->text()));
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SSEC_ID,SEC_WR))	grpDel(opt->text(), true);

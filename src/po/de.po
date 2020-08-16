@@ -1042,8 +1042,8 @@ msgstr "Funktion: "
 msgid "Function"
 msgstr "Funktion"
 
-msgid "Accessing"
-msgstr "Zugriff"
+msgid "Accessible"
+msgstr "Zugänglich"
 
 msgid "Used"
 msgstr "Verwendet"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-12 07:33+0300\n"
+"POT-Creation-Date: 2020-08-12 20:13+0300\n"
 "PO-Revision-Date: 2007-12-03 11:05+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -179,7 +179,6 @@ msgstr "Поле отображения и изменения используе
 msgid "Alarm level: %1"
 msgstr "Уровень нарушения: %1"
 
-#, c-format
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
 "---- Parameters of the module section '%s' of the configuration file ----\n"
@@ -192,6 +191,7 @@ msgid ""
 "PNGCompLev   <lev>      Compression level [-1..9] of the creating PNG-"
 "images.\n"
 "ImgResize    <0|1>      Resizing raster images on the server side.\n"
+"CustCSS      <CSS>      Custom interface CSS rules.\n"
 "\n"
 msgstr ""
 "======================== Опции модуля <%s:%s> ============================\n"
@@ -204,6 +204,7 @@ msgstr ""
 "PNGCompLev   <уров.>    Уровень сжатия [-1..9] создаваемых PNG-фафлов.\n"
 "ImgResize    <0|1>      Изменение размера растровых изображений на стороне "
 "сервера.\n"
+"CustCSS      <CSS>      Пользовательские CSS правила интерфейса.\n"
 "\n"
 
 #, c-format
@@ -319,6 +320,9 @@ msgid ""
 msgstr ""
 "В основном чтобы уменьшить размер очень больших изображений, а "
 "соответственно и трафика, что приводит к увеличению нагрузки на сервер."
+
+msgid "Custom interface CSS rules"
+msgstr "Пользовательские CSS правила интерфейса"
 
 #, c-format
 msgid ""

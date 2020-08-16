@@ -37,7 +37,7 @@ Func *JavaLikeCalc::pF;
 //* Func: Function                                *
 //*************************************************
 Func::Func( const string &iid, const string &name ) : TConfig(&mod->elFnc()), TFunction(iid, SDAQ_ID),
-    mMaxCalcTm(cfg("MAXCALCTM").getId()), mTimeStamp(cfg("TIMESTAMP").getId()), parseRes(mod->parseRes())
+    mMaxCalcTm(cfg("MAXCALCTM").getId()), mTimeStamp(cfg("TIMESTAMP").getId()), parseRes(mod->parseRes()), cntrInF(0), cntrCnst(0), cntrInFRegs(0)
 {
     cfg("ID").setS(id());
     cfg("NAME").setS(name.empty() ? id() : name);
@@ -154,12 +154,11 @@ void Func::loadIO( )
 {
     if(startStat()) return;
     TConfig cfg(&mod->elFncIO());
-    vector<vector<string> > full;
 
     vector<string> u_pos;
     cfg.cfg("F_ID").setS(id(), TCfg::ForceUse);
     cfg.cfg("DEF").setExtVal(true);
-    for(int fldCnt = 0; SYS->db().at().dataSeek(owner().fullDB()+"_io",mod->nodePath()+owner().tbl()+"_io",fldCnt,cfg,false,&full); fldCnt++) {
+    for(int fldCnt = 0; SYS->db().at().dataSeek(owner().fullDB()+"_io",mod->nodePath()+owner().tbl()+"_io",fldCnt,cfg,false,true); fldCnt++) {
 	string sid = cfg.cfg("ID").getS();
 
 	//Position storing
@@ -225,12 +224,11 @@ void Func::saveIO( )
     }
 
     //Clear IO
-    vector<vector<string> > full;
     cfg.cfgViewAll(false);
-    for(int fldCnt = 0; SYS->db().at().dataSeek(io_bd,io_cfgpath,fldCnt++,cfg,false,&full); )
+    for(int fldCnt = 0; SYS->db().at().dataSeek(io_bd,io_cfgpath,fldCnt++,cfg); )
 	if(ioId(cfg.cfg("ID").getS()) < 0) {
 	    if(!SYS->db().at().dataDel(io_bd,io_cfgpath,cfg,true,false,true))	break;
-	    if(full.empty()) fldCnt--;
+	    fldCnt--;
 	}
 }
 
@@ -350,8 +348,9 @@ void Func::progCompile( )
     buildClear();
     workClear();
 
-    pF     = this;	//Parse func
-    sprg   = cfg("FORMULA").getS();
+    pF   = this;	//Parse func
+    sprg = cfg("FORMULA").getS();
+    cntrCnst = cntrInFRegs = 0;
 
     if(yyparse()) {
 	string tErr = pErr;
@@ -360,6 +359,43 @@ void Func::progCompile( )
 	runSt = false;
 	throw TError(nodePath().c_str(), "%s", tErr.c_str());
     }
+    cntrInF = mInFncs.size();
+
+    //Prepairing the shared registers list of the internal functions context
+#ifdef IN_F_SHARE_REGS
+    for(unsigned iRg = 0; iRg < mRegs.size(); iRg++) {
+	Reg *tR = mRegs[iRg];
+	if(!tR->inFnc()) continue;
+	switch(tR->type()) {
+	    case Reg::Bool: case Reg::Int: case Reg::Real: case Reg::String:
+		cntrCnst++;
+		if(tR->lock() && tR->name().empty() && tR->inFnc())	tR->setInFnc(false);
+		break;
+	    default: break;
+	}
+	if(!tR->inFnc()) continue;
+	mShareRegs.push_back(iRg);
+	tR->setInFnc("");	//To clean up
+	cntrInFRegs++;
+    }
+#else
+    for(unsigned iRg = 0; iRg < mRegs.size(); iRg++) {
+	Reg *tR = mRegs[iRg];
+	if(!tR->inFnc().size()) continue;
+	switch(tR->type()) {
+	    case Reg::Bool: case Reg::Int: case Reg::Real: case Reg::String:
+		cntrCnst++;
+		if(tR->lock() && tR->name().empty() && tR->inFnc().size())	tR->setInFnc("");
+		break;
+	    default: break;
+	}
+	if(!tR->inFnc().size()) continue;
+	mInFncRegs[mInFncs[tR->inFnc()]].push_back(iRg);
+	tR->setInFnc("");	//To clean up
+	cntrInFRegs++;
+    }
+#endif
+
     buildClear();
 
     //Work registers update for the calculating contexts
@@ -398,20 +434,31 @@ void Func::inFuncDef( const string &nm, int pos )
     else mInFnc = "";
 }
 
-int Func::regNew( bool sep, int recom )
+int Func::regNew( bool sep, int recom, bool inFncNS )
 {
-    //Get new register
+    //Getting new register
     unsigned iRg = mRegs.size();
+#ifdef IN_F_SHARE_REGS
     if(!sep) {
-	if(recom >= 0 && recom < (int)mRegs.size() && !mRegs[recom]->lock() &&
-		mRegs[recom]->type() == Reg::Free && mRegs[recom]->inFnc() == mInFnc)
+	if(recom >= 0 && recom < (int)mRegs.size() && !mRegs[recom]->lock() && mRegs[recom]->type() == Reg::Free)
 	    iRg = recom;
 	else for(iRg = 0; iRg < mRegs.size(); iRg++)
-	    if(!mRegs[iRg]->lock() && mRegs[iRg]->type() == Reg::Free && mRegs[iRg]->inFnc() == mInFnc)
+	    if(!mRegs[iRg]->lock() && mRegs[iRg]->type() == Reg::Free)	break;
+    }
+    if(iRg >= mRegs.size()) mRegs.push_back(new Reg(iRg));
+    if(inFncNS && mInFnc.size() && !mRegs[iRg]->inFnc()) mRegs[iRg]->setInFnc(true);
+#else
+    if(!sep) {
+	if(recom >= 0 && recom < (int)mRegs.size() && !mRegs[recom]->lock() &&
+		mRegs[recom]->type() == Reg::Free && (!inFncNS || mRegs[recom]->inFnc() == mInFnc))
+	    iRg = recom;
+	else for(iRg = 0; iRg < mRegs.size(); iRg++)
+	    if(!mRegs[iRg]->lock() && mRegs[iRg]->type() == Reg::Free && (!inFncNS || mRegs[iRg]->inFnc() == mInFnc))
 		break;
     }
     if(iRg >= mRegs.size()) mRegs.push_back(new Reg(iRg));
-    mRegs[iRg]->setInFnc(mInFnc);
+    if(inFncNS) mRegs[iRg]->setInFnc(mInFnc);
+#endif
 
     return iRg;
 }
@@ -419,8 +466,10 @@ int Func::regNew( bool sep, int recom )
 int Func::regGet( const string &inm, bool inFncNS )
 {
     string nm = inm;
+#ifndef IN_F_SHARE_REGS
     if(inFncNS && mInFnc.size()) nm = mInFnc+":"+nm;
-    //Check allow registers
+#endif
+    //Checking for allowed registers
     for(int iRg = 0; iRg < (int)mRegs.size(); iRg++)
 	if(mRegs[iRg]->name() == nm)
 	    return iRg;
@@ -438,6 +487,11 @@ int Func::ioGet( const string &nm )
 	    rg->setName(nm);
 	    rg->setVar(i_io);
 	    rg->setLock(true);
+#ifdef IN_F_SHARE_REGS
+	    rg->setInFnc(false);
+#else
+	    rg->setInFnc("");
+#endif
 	    break;
 	}
     return rez;
@@ -462,6 +516,11 @@ void Func::workClear( )
 
 void Func::regClear( )
 {
+#ifdef IN_F_SHARE_REGS
+    mShareRegs.clear();
+#else
+    mInFncRegs.clear();
+#endif
     for(unsigned iRg = 0; iRg < mRegs.size(); iRg++)
 	delete mRegs[iRg];
     mRegs.clear();
@@ -2778,19 +2837,92 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		    mess_debug(nodePath().c_str(), "%ph: Call internal function/procedure %d = %d(%d).", cprg, ptr->rez, ptr->off, ptr->n);
 #endif
 
-		// Process parameters
-		for(int iF = 0; iF < ptrF->n; iF++)
-		    reg[TSYS::getUnalign16((const uint8_t*)ptrF+sizeof(SFCode)+iF*sizeof(uint16_t))] =
-			(iF >= ptr->n) ? TVariant() : getVal(val, reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iF*sizeof(uint16_t))]);
-		// Make calc
-		exec(val, (const uint8_t*)ptrF+sizeof(SFCode)+ptrF->n*sizeof(uint16_t), dt);
-		dt.flg = 0;	//Clean up all flags
-		// Process outputs
-		for(int iF = 0; iF < vmin(ptrF->n,ptr->n); iF++)
-		    setVal(val, reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iF*sizeof(uint16_t))],
-				getVal(val, reg[TSYS::getUnalign16((const uint8_t*)ptrF+sizeof(SFCode)+iF*sizeof(uint16_t))]));
-		// Return rezult
-		if(ptr->rez) reg[ptr->rez] = getVal(val, reg[ptrF->rez]);
+#ifdef IN_F_SHARE_REGS
+		if(dt.inFShareRegs.size() > IN_F_REC_LIM)
+		    mess_err(nodePath().c_str(), _("You have too deep recursion of the internal function call."));
+		else {
+		    // Saving the function registers
+		    dt.inFShareRegs.push_back(vector<RegW>());
+		    dt.inFShareRegs.back().reserve(mShareRegs.size());
+		    for(unsigned iIt = 0; iIt < mShareRegs.size(); iIt++) {
+			unsigned iRg = mShareRegs[iIt];
+			dt.inFShareRegs.back().push_back(reg[iRg]);
+			/* Initiating the automatic variables in EVAL
+			if(mRegs[iRg]->name().size()) {
+			    int iF = 0;
+			    for( ; iF < vmin(ptrF->n, ptr->n); iF++)
+				if(iRg == TSYS::getUnalign16((const uint8_t*)ptrF+sizeof(SFCode)+iF*sizeof(uint16_t)) ||
+					iRg == TSYS::getUnalign16(cprg+sizeof(SCode)+iF*sizeof(uint16_t)))
+				    break;
+			    if(iF >= vmin(ptrF->n,ptr->n)) reg[iRg] = RegW();
+			}*/
+		    }
+#else
+		vector<int> &inFRIds = mInFncRegs[ptr->off];
+		vector< vector<RegW> > &inFRegs = dt.inFRegs[ptr->off];
+
+		if(inFRegs.size() > IN_F_REC_LIM)
+		    mess_err(nodePath().c_str(), _("You have too deep recursion of the internal function call."));
+		else {
+		    // Saving the function registers
+		    inFRegs.push_back(vector<RegW>());
+		    if(inFRegs.size() > 1) {
+			inFRegs.back().reserve(inFRIds.size());
+			for(unsigned iIt = 0; iIt < inFRIds.size(); iIt++)
+			    inFRegs.back().push_back(reg[inFRIds[iIt]]);
+		    }
+#endif
+
+		    // Processing the parameters
+		    for(int iF = 0; iF < ptrF->n; iF++) {
+			uint16_t dP = TSYS::getUnalign16((const uint8_t*)ptrF+sizeof(SFCode)+iF*sizeof(uint16_t));
+			if(iF >= ptr->n) reg[dP] = TVariant();
+			else {
+			    uint16_t sP = TSYS::getUnalign16(cprg+sizeof(SCode)+iF*sizeof(uint16_t));
+			    //  Prevent the same registers processing
+			    if(sP != dP) reg[dP] = getVal(val, reg[sP]);
+			}
+		    }
+
+		    // Make calc
+		    exec(val, (const uint8_t*)ptrF+sizeof(SFCode)+ptrF->n*sizeof(uint16_t), dt);
+
+		    dt.flg = 0;	//Clean up all flags
+		    // Processing the outputs
+		    for(int iF = 0; iF < vmin(ptrF->n,ptr->n); iF++)
+			setVal(val, reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iF*sizeof(uint16_t))],
+				    getVal(val, reg[TSYS::getUnalign16((const uint8_t*)ptrF+sizeof(SFCode)+iF*sizeof(uint16_t))]));
+
+		    // Restoring the function registers
+#ifdef IN_F_SHARE_REGS
+		    for(unsigned iIt = 0; iIt < mShareRegs.size(); iIt++) {
+			unsigned iRg = mShareRegs[iIt];
+			//  Prevent restoring the function arguments
+			int iF = 0;
+			for( ; iF < ptr->n; iF++)
+			    if(iRg == TSYS::getUnalign16(cprg+sizeof(SCode)+iF*sizeof(uint16_t)))
+				break;
+			if(iF >= ptr->n) reg[iRg] = dt.inFShareRegs.back()[iIt];
+		    }
+		    dt.inFShareRegs.pop_back();
+#else
+		    if(inFRegs.size() > 1)
+			for(unsigned iIt = 0; iIt < inFRIds.size(); iIt++) {
+			    unsigned iRg = inFRIds[iIt];
+			    //  Prevent restoring the function arguments
+			    int iF = 0;
+			    for( ; iF < ptr->n; iF++)
+				if(iRg == TSYS::getUnalign16(cprg+sizeof(SCode)+iF*sizeof(uint16_t)))
+				    break;
+			    if(iF >= ptr->n) reg[iRg] = inFRegs.back()[iIt];
+			}
+		    inFRegs.pop_back();
+#endif
+
+		    // Return rezult
+		    if(ptr->rez) reg[ptr->rez] = getVal(val, reg[ptrF->rez]);
+		}
+
 		cprg += sizeof(SCode) + ptr->n*sizeof(uint16_t); continue;
 	    }
 	    default:
@@ -2809,6 +2941,8 @@ void Func::cntrCmdProc( XMLNode *opt )
 	    "doc","User_API|Documents/User_API");
 	if(owner().DB().size())
 	    ctrMkNode("fld",opt,-1,"/func/st/timestamp",_("Date of modification"),R_R_R_,"root",SDAQ_ID,1,"tp","time");
+	if(startStat())
+	    ctrMkNode("fld",opt,-1,"/func/st/compileSt",_("Compilation state"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 	ctrMkNode("fld",opt,-1,"/func/cfg/NAME",_("Name"),owner().DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"tp","str","len",OBJ_NM_SZ);
 	ctrMkNode("fld",opt,-1,"/func/cfg/DESCR",_("Description"),owner().DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
 	    "tp","str","cols","100","rows","5");
@@ -2838,6 +2972,9 @@ void Func::cntrCmdProc( XMLNode *opt )
     //Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/func/st/timestamp" && ctrChkNode(opt)) opt->setText(i2s(timeStamp()));
+    else if(a_path == "/func/st/compileSt" && ctrChkNode(opt))
+	opt->setText(TSYS::strMess(_("Size source=%s, bytecode=%s; Registers totally=%d, constants=%d, internal functions'=%d; Functions external=%d, internal=%d."),
+	    TSYS::cpct2str(prog().size()).c_str(),TSYS::cpct2str(prg.size()).c_str(),mRegs.size(),cntrCnst,cntrInFRegs,mFncs.size(),cntrInF));
     else if(a_path == "/func/cfg/NAME" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setName(opt->text());
     else if(a_path == "/func/cfg/DESCR" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDescr(opt->text());
     else if(a_path == "/func/cfg/START") {
@@ -2994,11 +3131,40 @@ RegW::RegW( ) : mTp(Reg::Free), mConst(false)
     if(mess_lev() == TMess::Debug) SYS->cntrIter("DAQ:JavaLikeCalc:RegW", 1);
 }
 
+RegW::RegW( const RegW &iRW ) : mTp(Reg::Free), mConst(false)
+{
+    if(mess_lev() == TMess::Debug) SYS->cntrIter("DAQ:JavaLikeCalc:RegW", 1);
+
+    operator=(iRW);
+}
+
 RegW::~RegW( )
 {
     setType(Reg::Free);
 
     if(mess_lev() == TMess::Debug) SYS->cntrIter("DAQ:JavaLikeCalc:RegW", -1);
+}
+
+RegW &RegW::operator=( const RegW &iRW )
+{
+    setType(iRW.type());
+
+    switch(iRW.type()) {
+	case Reg::Free: case Reg::Dynamic:	break;
+	case Reg::Bool:	el.b = iRW.el.b;	break;
+	case Reg::Int:	el.i = iRW.el.i;	break;
+	case Reg::Real:	el.r = iRW.el.r;	break;
+	case Reg::String: *el.s = *iRW.el.s;	break;
+	case Reg::Obj:	*el.o = *iRW.el.o;	break;
+	case Reg::Var:	el.io = iRW.el.io;	break;
+	case Reg::PrmAttr: *el.pA = *iRW.el.pA;	break;
+	case Reg::Function: *el.f = *iRW.el.f;	break;
+    }
+
+    mPrps = iRW.mPrps;
+    mConst = iRW.mConst;
+
+    return *this;
 }
 
 void RegW::operator=( const TVariant &ivar )

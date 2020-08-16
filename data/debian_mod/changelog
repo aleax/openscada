@@ -1,3 +1,9 @@
+openscada (0.9.2-1) experimental; urgency=low
+
+  * Update 2 of OpenSCADA 0.9 LTS.
+
+ -- Roman Savochenko <roman@oscada.org>  Mon, 12 Aug 2020 20:00:00 +0200
+
 openscada (0.9.1-1) experimental; urgency=low
 
   * Update 1 of OpenSCADA 0.9 LTS.

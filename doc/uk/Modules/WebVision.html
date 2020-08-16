@@ -30,7 +30,7 @@
 <td> <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a> </td>
 <td> Робочий користувацький інтерфейс (WEB)
 </td>
-<td> 4.8 </td>
+<td> 4.12 </td>
 <td> GPL2 </td>
 <td> ui_WebVision.so </td>
 <td> en,uk,ru,de </td>
@@ -44,7 +44,9 @@
 </th></tr>
 <tr>
 <td colspan="9"> Робочий інтерфейс користувача, заснований на WEB — зовнішній інтерфейс до рушія СВУ.
-<ul><li> <b>Зробити (To Do):</b></li></ul>
+<ul><li> <b>Загальна працемісткість:</b> &gt; 30 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span></li>
+<li> <b>Спонсорування, завершення відображення примітиву ElFigure на 0.5 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span>:</b> ТОВ "СВІТоВИР"</li>
+<li> <b>Зробити (To Do):</b></li></ul>
 <dl><dd> - розширити вид "Таблиця" примітиву "FormEl" користувацьким сортуванням за обраним стовпчиком;</dd>
 <dd> * доповнити панель статусу, функціями:
 <dl><dd> - експорт та друк;</dd>
@@ -86,7 +88,7 @@
 
 <h2><span class="mw-headline" id=".D0.9F.D1.80.D0.B8.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">1</span> Призначення</span></h2>
 <p>Даний модуль безпосередньої візуалізації СВУ призначено тільки для виконання інтерфейсів СВУ у середовищі WEB-технологій!
-</p><p>Інтерфейс користувача формується у WEB-браузері шляхом звернення до WEB-серверу та отримання від нього XHTML-документу за протоколом HTTP. У цьому випадку, у ролі WEB-серверу виступає OpenSCADA, яка підтримує стандартні комунікаційні механізми TCP-мереж (модуль <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Transport.Sockets</a>), протокол передачі гіпертексту (модуль <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a>), а також шифрування трафіку між браузером та сервером (<a href="../Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">Transport.SSL</a>). Виходячи з цього, для отримання доступу до інтерфейсу користувача, який надається цим модулем, потрібно у OpenSCADA налаштувати транспорт (Transport.Sockets або Transport.SSL) у поєднані з протоколом HTTP (Protocol.HTTP). Разом з OpenSCADA постачаються конфігураційні файли, які містять налаштування Transport.Sockets для портів 10002 та 10004. Відповідно, інтерфейс модуля, по замовченню, буде доступний за URL: "http://localhost:10002" та "http://localhost:10004".
+</p><p>Інтерфейс користувача формується у WEB-браузері шляхом звернення до WEB-серверу та отримання від нього XHTML-документу за протоколом HTTP. У цьому випадку, у ролі WEB-серверу виступає OpenSCADA, яка підтримує стандартні комунікаційні механізми TCP-мереж (модуль <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Transport.Sockets</a>), протокол передачі гіпертексту (модуль <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a>), а також шифрування трафіку між браузером та сервером (<a href="../Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">Transport.SSL</a>). Виходячи з цього, для отримання доступу до інтерфейсу користувача, який надається цим модулем, потрібно у OpenSCADA налаштувати транспорт (Transport.Sockets або Transport.SSL) у поєднані з протоколом HTTP (Protocol.HTTP). Разом з OpenSCADA постачаються конфігураційні файли, які містять налаштування Transport.Sockets для порту 10002. Відповідно, інтерфейс модуля, по замовченню, буде доступний за URL: "http://localhost:10002".
 </p><p>Фінальна версія цього модуля СВУ, яка побудована на основі даного модуля, забезпечить:
 </p><p>Перелічимо можливості, які зможе та забезпечує СВУ, побудована на основі даного проекту:
 </p>
@@ -140,7 +142,7 @@
 <li> Загальна мова процесу OpenSCADA.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:619px;"><a class="image" href="http://oscada.org/wiki/File:HTTP_auth_uk.png"><img class="thumbimage" height="286" src="../files/HTTP_auth_uk.png" width="617" /></a>  <div class="thumbcaption">Рис.1. Сторінка аутентифікації.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:606px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_connect_uk.png"><img class="thumbimage" height="458" src="../files/WebVision_wvis_connect_uk.png" width="604" /></a>  <div class="thumbcaption">Рис.2. Підключення або створення нового сеансу виконання проекту СВУ.</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1041px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run_uk.png"><img class="thumbimage" height="782" src="../files/WebVision_wvis_run_uk.png" width="1039" /></a>  <div class="thumbcaption">Рис.3. Головне вікно режиму виконання.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1039px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run_uk.png"><img class="thumbimage" height="787" src="../files/WebVision_wvis_run_uk.png" width="1037" /></a>  <div class="thumbcaption">Рис.3. Головне вікно режиму виконання.</div></div></div></div>
 <h2><span class="mw-headline" id=".D0.9F.D1.80.D0.B5.D0.B4.D1.81.D1.82.D0.B0.D0.B2.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F_.D0.B1.D0.B0.D0.B7.D0.BE.D0.B2.D0.B8.D1.85_.D0.B5.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.96.D0.B2_.28.D0.BF.D1.80.D0.B8.D0.BC.D1.96.D1.82.D0.B8.D0.B2.D1.96.D0.B2.29"><span class="mw-headline-number">3</span> <span id="Primitives" title="#Primitives">Представлення базових елементів (примітивів)</span></span></h2>
 <p>Даною версією модуля реалізовано не всі образи примітивів, закладені проектом. Загалом, проектом закладено примітиви:
 </p>
@@ -243,7 +245,11 @@
 </p>
 <ul><li> "*" — виклик діалогу обрання користувача;</li>
 <li> "$" — зміна користувача на типового;</li>
-<li> "{користувач}" — пряма зміна на <i>користувач</i>, якщо він доступний та його права менше або дорівнюють.</li></ul>
+<li> "{користувач}[:{пароль}]" — пряма зміна на <i>користувач</i> із <i>паролем</i>; для порожнього пароля користувач змінюється лише якщо його права менше або дорівнюють; корисний приклад зміни на користувача "user" після хвилини неактивності:</li></ul>
+<pre style="white-space: pre-wrap;&nbsp;; margin-left: 20pt">
+if((SYS.time()-this.ownerSess().userActTm()) &lt; 60)userSetVis = "";
+else if(this.ownerSess().reqUser()&nbsp;!= "user") userSetVis = "user";
+</pre>
 </td></tr>
 <tr>
 <td> vs_goHttpUrl (вигляд "Кнопка" примітиву "FormEl") </td>
@@ -323,7 +329,7 @@
 <li> <i>Media</i> — не порожнє джерело зображення.</li></ul>
 <p>На рисунку представлено частину екрану з кадром, що містить вищеперелічені елементи форми.
 </p>
-<div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run_formel_uk.png"><img alt="WebVision wvis run formel uk.png" height="260" src="../files/WebVision_wvis_run_formel_uk.png" width="601" /></a></div></div>
+<div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run_formel_uk.png"><img alt="WebVision wvis run formel uk.png" height="257" src="../files/WebVision_wvis_run_formel_uk.png" width="454" /></a></div></div>
 <p><br />
 </p>
 <h3><span class="mw-headline" id=".D0.9F.D1.80.D0.B8.D0.BC.D1.96.D1.82.D0.B8.D0.B2_.D0.B2.D1.96.D0.B4.D0.BE.D0.B1.D1.80.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F_.D0.BC.D0.B5.D0.B4.D1.96.D0.B0-.D0.BC.D0.B0.D1.82.D0.B5.D1.80.D1.96.D0.B0.D0.BB.D1.96.D0.B2_.28Media.29"><span class="mw-headline-number">3.4</span> Примітив відображення медіа-матеріалів (Media)</span></h3>
@@ -416,8 +422,9 @@
 <ul><li> Час життя, у хвилинах, та максимальна кількість сеансі.</li>
 <li> Час життя, у годинах, та максимальна кількість сторінок у кеші.</li>
 <li> Рівень компресії PNG-зображень. Більш оптимальним є мінімальний рівень 1, оскільки без стиснення виходять великі файли, а більші рівні стиснення створюють більш високе навантаження на процесор.</li>
-<li> Зміна розміру растрових зображень на боці серверу. Переважно щоб зменшити розмір занадто великий зображень відтак і трафіку, що призводить до збільшення навантаження на сервер.</li></ul></li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1006px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_cfg_uk.png"><img class="thumbimage" height="504" src="../files/WebVision_wvis_cfg_uk.png" width="1004" /></a>  <div class="thumbcaption">Рис.4. Сторінка конфігурації модуля.</div></div></div></div>
+<li> Зміна розміру растрових зображень на боці серверу. Переважно щоб зменшити розмір занадто великий зображень відтак і трафіку, що призводить до збільшення навантаження на сервер.</li>
+<li> Користувацькі CSS правила інтерфейсу. CSS правила перевизначення стандартних, що розташовуються за спеціальним знаком ##CUST_CSS## файлу WebVisionVCA.html.</li></ul></li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1097px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_cfg_uk.png"><img class="thumbimage" height="603" src="../files/WebVision_wvis_cfg_uk.png" width="1095" /></a>  <div class="thumbcaption">Рис.4. Сторінка конфігурації модуля.</div></div></div></div>
 <h2><span class="mw-headline" id=".D0.95.D1.84.D0.B5.D0.BA.D1.82.D0.B8.D0.B2.D0.BD.D1.96.D1.81.D1.82.D1.8C_.D1.82.D0.B0_.D0.BC.D0.B0.D1.81.D1.88.D1.82.D0.B0.D0.B1.D0.BE.D0.B2.D0.B0.D0.BD.D1.96.D1.81.D1.82.D1.8C"><span class="mw-headline-number">5</span> <span id="Efficiency" title="#Efficiency">Ефективність та масштабованість</span></span></h2>
 <p><b><u>31.07.2019</u></b><br />
 GROUNDS: The Web-sessions may create many objects servicing the VCA-session for generating images, processing documents and performing other background functions of the end user Web-interface. Moreover, in difference to <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a>, the VCA-sessions may be created, closed and recreated again multiple times for different users and remote hosts. In the time the memory heap is affected by the memory fragmentation, so the program consumes more memory than at the start. The table below represents the phenomenon for different environments and the first page of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">the DemoDB (AGLKS) project</a> reopening:
@@ -705,5 +712,5 @@ GROUNDS: At working with the board <a class="external" href="http://oscada.org/w
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebVision/uk">Modules/WebVision/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.1</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebVision/uk">Modules/WebVision/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2020</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.2</td></tr></table></body>
 </html>

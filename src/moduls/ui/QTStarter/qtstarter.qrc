@@ -9,5 +9,6 @@
     <file>images/logo.png</file>
     <file>images/ok.png</file>
     <file>images/it_add.png</file>
+    <file>images/it_del.png</file>
 </qresource>
 </RCC>

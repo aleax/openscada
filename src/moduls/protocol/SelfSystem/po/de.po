@@ -3,15 +3,15 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2018.
+# Roman Savochenko <roman@oscada.org>, 2010-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-02 12:18+0300\n"
+"POT-Creation-Date: 2020-06-21 22:55+0300\n"
 "PO-Revision-Date: 2009-08-19 09:06+0200\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: de <>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -78,6 +78,14 @@ msgstr "Partielles Ansprechen."
 #, c-format
 msgid "REQ full response %d"
 msgstr "REQ volle Antwort %d"
+
+#, c-format
+msgid "The response '%s' is not suitable to the request '%s'."
+msgstr "Die Antwort '%s' ist nicht für die Anfrage '%s' geeignet."
+
+#, c-format
+msgid "The response sequence %d is not suitable to the request one %d."
+msgstr "Die Antwortsequenz %d ist nicht für die Anforderung %d geeignet."
 
 #, c-format
 msgid "Error the request: %s"

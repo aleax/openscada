@@ -97,7 +97,7 @@ for iPatch in $(ls $AndroidPrjDir/patches/openscada_*.patch 2> /dev/null); do pa
 ./configure --host=arm-linux-androideabi \
     --prefix=/data/data/org.oscada --bindir=/data/data/org.oscada/bin --sysconfdir=/data/data/org.oscada --datarootdir=/data/data/org.oscada \
     CoreLibNmToDlOpen=liboscada.so --disable-CoreLibVersion --disable-AllModuls \
-    --enable-SQLite=incl --enable-DBF=incl \
+    --enable-SQLite=incl --enable-DBArch=incl --enable-DBF=incl \
     --enable-Sockets=incl --enable-Serial=incl --enable-SSL \
     --enable-SelfSystem=incl --enable-UserProtocol=incl --enable-HTTP=incl \
     --enable-JavaLikeCalc=incl --enable-LogicLev=incl --enable-BlockCalc=incl --enable-System --enable-OPC_UA --enable-DAQGate=incl --enable-ModBus=incl --enable-DCON=incl \

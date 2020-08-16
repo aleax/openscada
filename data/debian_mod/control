@@ -5,7 +5,7 @@ Standards-Version: 3.9.6
 Maintainer: Roman Savochenko <rom_as@oscada.org>
 Homepage: http://oscada.org
 Build-Depends: debhelper (>= 5), dh-autoreconf, sqlite3, g++, autotools-dev, pkg-config, gettext, libgd-dev | libgd2-xpm-dev | libgd2-noxpm-dev, libpcre3-dev,
- libmysqlclient-dev | libmariadb-dev, libsqlite3-dev, firebird-dev, libpq-dev,
+ libmysqlclient-dev | libmariadb-dev, libsqlite3-dev, firebird-dev, libpq-dev, libldap2-dev,
  libsensors4-dev, portaudio19-dev, bison, libsnmp-dev, libcomedi-dev,
  libssl-dev,
  libfftw3-dev, libqt4-dev | qtbase5-dev, libqtwebkit-dev | libqt5webkit5-dev, libphonon-dev | libphonon4qt5-dev
@@ -26,7 +26,7 @@ Package: openscada-core
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Open SCADA system core
- Includes the most used modules into the core: DB.DBF, DB.SQLite,
+ Includes the most used modules into the core: DB.DBF, DB.SQLite, DB.DBGate,
  DAQ.JavaLikeCalc, DAQ.LogicLev,
  Transport.Sockets, Transport.Serial,
  Protocol.SelfSystem, Protocol.UserProtocol,
@@ -169,6 +169,12 @@ Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends
 Description: DB PostgreSQL support
  The openscada-db-postgresql package - provides support of the DB PostgreSQL.
 
+Package: openscada-db-ldap
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: LDAP support
+ The openscada-db-ldap package - provides support of LDAP.
+
 #===== DAQ subsystem modules =====
 #Package: openscada-daq-javalikecalc
 #Architecture: any
@@ -279,12 +285,12 @@ Description: AMR devices
  The openscada-daq-amrdevs package - provides access to automatic meter reading
  devices. Supported devices: Kontar (http://www.mzta.ru).
 
-Package: openscada-daq-bfn
-Architecture: any
-Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
-Description: Big Farm Net
- The openscada-daq-bfn package - provides Big Farm Net (BFN) modules support for
- Viper CT/BAS and other from "Big Dutchman" (http://www.bigdutchman.com).
+#Package: openscada-daq-bfn
+#Architecture: any
+#Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+#Description: Big Farm Net
+# The openscada-daq-bfn package - provides Big Farm Net (BFN) modules support for
+# Viper CT/BAS and other from "Big Dutchman" (http://www.bigdutchman.com).
 
 #Package: openscada-daq-gpio
 #Architecture: any

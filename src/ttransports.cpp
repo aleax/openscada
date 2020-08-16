@@ -48,7 +48,6 @@ TTransportS::TTransportS( ) : TSubSYS(STR_ID, _("Transports"), true), extHostLoa
     elOut.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
     elOut.fldAdd(new TFld("DESCRIPT",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"500"));
     elOut.fldAdd(new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"100"));
-    elOut.fldAdd(new TFld("START",_("To start"),TFld::Boolean,TFld::NoFlag,"1"));
 
     //External hosts' connection DB struct
     elExt.fldAdd(new TFld("OP_USER",_("User that opens"),TFld::String,TCfg::Key,OBJ_ID_SZ));
@@ -103,7 +102,6 @@ void TTransportS::load_( )
     //Load DB
     string id, type;
     map<string, bool>	itReg;
-    vector<vector<string> > full;
     // Search and create new input transports
     try {
 	TConfig c_el(&elIn);
@@ -114,7 +112,7 @@ void TTransportS::load_( )
 	SYS->db().at().dbList(itLs, true);
 	itLs.push_back(DB_CFG);
 	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(itLs[iIt]+"."+subId()+"_in",nodePath()+subId()+"_in",fld_cnt++,c_el,false,&full); ) {
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek(itLs[iIt]+"."+subId()+"_in",nodePath()+subId()+"_in",fld_cnt++,c_el,false,true); ) {
 		id   = c_el.cfg("ID").getS();
 		type = c_el.cfg("MODULE").getS();
 		if(!modPresent(type))	continue;
@@ -151,7 +149,7 @@ void TTransportS::load_( )
 	SYS->db().at().dbList(itLs, true);
 	itLs.push_back(DB_CFG);
 	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(itLs[iIt]+"."+subId()+"_out",nodePath()+subId()+"_out",fld_cnt++,c_el,false,&full); ) {
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek(itLs[iIt]+"."+subId()+"_out",nodePath()+subId()+"_out",fld_cnt++,c_el,false,true); ) {
 		id = c_el.cfg("ID").getS();
 		type = c_el.cfg("MODULE").getS();
 		if(!modPresent(type))	continue;
@@ -180,7 +178,7 @@ void TTransportS::load_( )
     // Load external hosts
     try {
 	TConfig c_el(&elExt);
-	for(int fld_cnt = 0; SYS->db().at().dataSeek(extHostsDB(),nodePath()+"ExtTansp",fld_cnt++,c_el,true,&full); ) {
+	for(int fld_cnt = 0; SYS->db().at().dataSeek(extHostsDB(),nodePath()+"ExtTansp",fld_cnt++,c_el,true,true); ) {
 	    ExtHost host("", "");
 	    host.userOpen	= c_el.cfg("OP_USER").getS();
 	    host.id		= c_el.cfg("ID").getS();
@@ -248,17 +246,6 @@ void TTransportS::subStart( )
 	    } catch(TError &err) {
 		mess_err(err.cat.c_str(), "%s", err.mess.c_str());
 		mess_sys(TMess::Error, _("Error starting the input transport '%s'."), oLst[iO].c_str());
-	    }
-
-	oLst.clear();
-	mod.at().outList(oLst);
-	for(unsigned iO = 0; iO < oLst.size(); iO++)
-	    try {
-		AutoHD<TTransportOut> out = mod.at().outAt(oLst[iO]);
-		if(!out.at().startStat() && out.at().toStart()) out.at().start();
-	    } catch(TError &err) {
-	        mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		mess_sys(TMess::Error, _("Error starting the output transport '%s'."), oLst[iO].c_str());
 	    }
     }
 
@@ -446,12 +433,14 @@ int TTransportS::cntrIfCmd( XMLNode &node, const string &senderPref, const strin
     string user = TSYS::strLine(iuser, 0, &off), rqUser = TSYS::strLine(iuser, 0, &off), rqPass = TSYS::strLine(iuser, 0, &off);
     TTransportS::ExtHost host = extHostGet((user.empty()?"*":user), station);
     bool rqDir = (rqUser.size() && rqUser != host.user) || (rqUser == host.user && rqPass.size());
-    node.setAttr("rqDir", i2s(rqDir))->setAttr("rqUser", (rqDir?rqUser:host.user))->setAttr("rqPass", rqDir?rqPass:host.pass);
+    node./*setAttr("rqDir", i2s(rqDir))->*/setAttr("rqUser", (rqDir?rqUser:host.user))->setAttr("rqPass", rqDir?rqPass:host.pass);
     AutoHD<TTransportOut> tr = extHost(host, senderPref);
     if(tr.at().startStat() && host.mdf > tr.at().startTm()) { tr.at().stop(); node.setAttr("rqAuthForce","1"); }
     if(!tr.at().startStat()) tr.at().start(s2i(node.attr("conTm")));
     if(mess_lev() == TMess::Debug) mess_debug((tr.at().nodePath()+senderPref).c_str(), "REQ: %s", node.save().c_str());
+
     tr.at().messProtIO(node, "SelfSystem");
+
     if(mess_lev() == TMess::Debug) mess_debug((tr.at().nodePath()+senderPref).c_str(), "RESP: %s", node.save().c_str());
     node.setAttr("path", path);
     //Password's hash processing
@@ -692,7 +681,7 @@ void TTransportIn::preEnable( int flag )
 void TTransportIn::postDisable( int flag )
 {
     try { stop(); } catch(...){ }		//Stop at any disabling
-    if(flag) SYS->db().at().dataDel(fullDB(),SYS->transport().at().nodePath()+tbl(),*this,true);
+    if(flag) SYS->db().at().dataDel(fullDB(), SYS->transport().at().nodePath()+tbl(), *this, true);
 }
 
 bool TTransportIn::cfgChange( TCfg &co, const TVariant &pc )
@@ -842,8 +831,7 @@ string TTransportIn::assTrO( const string &addr )
     mAssTrO[trFor].at().setAddr(addr);
     mAssTrO[trFor].at().setName("");
     mAssTrO[trFor].at().setDscr("");
-    mAssTrO[trFor].at().setPrm1(0);
-    mAssTrO[trFor].at().setPrm2(0);
+    mAssTrO[trFor].at().clearConPrm();
     mAssTrO[trFor].at().modifGClr();
     try{ mAssTrO[trFor].at().start(); }
     catch(TError &er) { mess_sys(TMess::Error, _("Error deletion the node: %s"), er.mess.c_str()); }
@@ -973,8 +961,8 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 //* TTransportOut                                *
 //************************************************
 TTransportOut::TTransportOut( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), runSt(false), mLstReqTm(0), mId(cfg("ID")), mStart(cfg("START").getBd()),
-    mDB(idb), mStartTm(0), mPrm1(0), mPrm2(0), mReqRes(true), mLogLen(0)
+    TConfig(el), runSt(false), mLstReqTm(0), mId(cfg("ID")),
+    mDB(idb), mStartTm(0), mReqRes(true), mLogLen(0)
 {
     mId = iid;
 }
@@ -1008,6 +996,28 @@ string TTransportOut::name( )
 string TTransportOut::workId( )		{ return owner().modId()+"."+id(); }
 
 string TTransportOut::tbl( )		{ return owner().owner().subId()+"_out"; }
+
+TVariant TTransportOut::conPrm( const string &nm )
+{
+    MtxAlloc res(dataRes(), true);
+    map<string, TVariant>::iterator iprm = mConPrms.find(nm);
+    if(iprm == mConPrms.end())	return TVariant();
+    return iprm->second;
+}
+
+void TTransportOut::setConPrm( const string &nm, const TVariant &vl )
+{
+    dataRes().lock();
+    mConPrms[nm] = vl;
+    dataRes().unlock();
+}
+
+void TTransportOut::clearConPrm( )
+{
+    dataRes().lock();
+    mConPrms.clear();
+    dataRes().unlock();
+}
 
 void TTransportOut::start( int time )	{ mStartTm = SYS->sysTm(); }
 

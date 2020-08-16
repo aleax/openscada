@@ -377,14 +377,13 @@ void ModMArch::checkArchivator( bool now )
 
 	//Check for not presented files into the info table
 	if(infoTbl.size() && !now) {
-	    vector<vector<string> > full;
 	    TConfig cEl(&mod->packFE());
 	    cEl.cfgViewAll(false);
 
-	    for(int fldCnt = 0; SYS->db().at().dataSeek(infoTbl,mod->nodePath()+"Pack",fldCnt++,cEl,false,&full); )
+	    for(int fldCnt = 0; SYS->db().at().dataSeek(infoTbl,mod->nodePath()+"Pack",fldCnt++,cEl); )
 		if(stat(cEl.cfg("FILE").getS().c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG) {
 		    if(!SYS->db().at().dataDel(infoTbl,mod->nodePath()+"Pack",cEl,true,false,true))	break;
-		    if(full.empty()) fldCnt--;
+		    fldCnt--;
 	    }
 	}
 

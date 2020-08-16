@@ -213,7 +213,8 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 	    string aNm = opt->name();
 	    if(SYS->rdPrimCmdTr() && SYS->rdEnable() && SYS->rdActive() && !s2i(opt->attr("reforwardRedundReq")) && !s2i(opt->attr("reforwardRedundOff")) &&
 		    (s2i(opt->attr("primaryCmd")) ||
-			aNm == "set" || aNm == "add" || aNm == "ins" || aNm == "del" || aNm == "move" || aNm == "load" || aNm == "save" || aNm == "copy")) {
+			aNm == "set" || aNm == "add" || aNm == "ins" || aNm == "del" || aNm == "move" ||
+			aNm == "load" || (aNm == "save" && !s2i(opt->attr("ctx"))) || aNm == "copy")) {
 		string lstStat;
 		opt->setAttr("path", nodePath()+"/"+TSYS::strEncode(s_br,TSYS::PathEl))->setAttr("primaryCmd", "")->setAttr("reforwardRedundReq", "1");
 		try{ while((lstStat=SYS->rdStRequest(*opt,lstStat,true)).size()) ; }
@@ -296,7 +297,7 @@ void TCntrNode::nodeDis( long tm, int flag )
 	while(mUse > 1) {
 	    // Check timeout
 	    if(/*tm &&*/ time(NULL) >= (t_cur+tm)) {
-		if(!TSYS::finalKill)
+		if(!SYS->isFinalKill())
 		    throw err_sys(_("Waiting time exceeded. The object is used by %d users. Release the object first!"), mUse-1);
 		mess_sys(TMess::Error, _("Error blocking node.\n"
 		    "The node forced to disable which can cause to crash.\n"
@@ -702,6 +703,8 @@ void TCntrNode::modifGClr( )
 
 void TCntrNode::load( TConfig *cfg, string *errs )
 {
+    MtxAlloc res(SYS->cfgLoadSaveM(), true);
+
     bool loadOwn = false;
     //Self load
     if((isModify(Self)&Self))
@@ -742,12 +745,14 @@ void TCntrNode::load( TConfig *cfg, string *errs )
 
 void TCntrNode::save( unsigned lev, string *errs )
 {
+    MtxAlloc res(SYS->cfgLoadSaveM(), true);
+
     bool isError = false;
     int mdfFlg = isModify(All);
 
     //Self save
     try {
-	if(mdfFlg&Self || (mdfFlg&Child && mFlg&SelfSaveForceOnChild))	save_();
+	if(mdfFlg&Self || (mdfFlg&Child && mFlg&SelfSaveForceOnChild) || SYS->cfgCtx())	save_();
 	// Check for prev nodes flag SelfSaveForceOnChild
 	if(lev == 0) {
 	    TCntrNode *nd = this;
@@ -764,7 +769,7 @@ void TCntrNode::save( unsigned lev, string *errs )
     }
 
     //Childs save process
-    if(mdfFlg&Child) {
+    if(mdfFlg&Child || SYS->cfgCtx()) {
 	MtxAlloc res(mChM, true);
 	for(unsigned iG = 0; chGrp && iG < chGrp->size(); iG++) {
 	    vector<string> chLs;
@@ -773,14 +778,14 @@ void TCntrNode::save( unsigned lev, string *errs )
 	    for(unsigned iN = 0; iG < chGrp->size() && iN < chLs.size(); iN++) {
 		if((p=(*chGrp)[iG].elem.find(chLs[iN].c_str())) == (*chGrp)[iG].elem.end()) continue;
 		AutoHD<TCntrNode> ndO(p->second);
-		if(!ndO.at().isModify(Self|Child))	continue;
+		if(!ndO.at().isModify(Self|Child) && !SYS->cfgCtx())	continue;
 		res.unlock();
 		ndO.at().save(lev+1, errs);
 		res.lock();
 	    }
 	}
     }
-    if(!isError) modifClr();
+    if(!isError && !SYS->cfgCtx()) modifClr();
 }
 
 void TCntrNode::AHDConnect( )
@@ -984,26 +989,33 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 	// Do load node
 	else if(ctrChkNode(opt,"load",RWRWRW,"root","root",SEC_WR)) {
 	    string selDB;
+	    MtxAlloc res(SYS->cfgLoadSaveM());
 	    if((selDB=opt->attr("force")).size()) {
 		if(!isdigit(selDB[0]) || s2i(selDB)) modifG();
-		if(!isdigit(selDB[0]))	SYS->setSelDB(selDB);
+		if(!isdigit(selDB[0]))	{ res.lock(); SYS->setSelDB(selDB); }
 	    }
+	    else if(opt->childSize()) modifG();
+
+	    if(opt->childSize())	{ res.lock(); SYS->setCfgCtx(opt); }
 
 	    string errs;
 	    load(NULL, &errs);
-	    if(errs.size()) throw err_sys(_("Error loading:\n%s"), errs.c_str());
-
 	    if(selDB.size() && !isdigit(selDB[0]))	SYS->setSelDB("");
+	    if(SYS->cfgCtx())	{ SYS->setCfgCtx(NULL); modifG(); }
+	    if(errs.size()) throw err_sys(_("Error loading:\n%s"), errs.c_str());
 	}
-	// Do save node
+	// Save the node
 	else if(ctrChkNode(opt,"save",RWRWRW,"root","root",SEC_WR)) {
+	    MtxAlloc res(SYS->cfgLoadSaveM());
 	    if(s2i(opt->attr("force"))) modifG();
+	    if(s2i(opt->attr("ctx")))	{ res.lock(); SYS->setCfgCtx(opt); }
 
 	    string errs;
 	    save(0, &errs);
+	    if(SYS->cfgCtx())	SYS->setCfgCtx(NULL);
 	    if(errs.size()) throw err_sys(_("Error saving:\n%s"), errs.c_str());
 	}
-	// Do copy node
+	// Copy the node
 	else if(ctrChkNode(opt,"copy",RWRWRW,"root","root",SEC_WR))
 	    nodeCopy(opt->attr("src"), opt->attr("dst"), opt->attr("user"));
 	// Request node childs parameters

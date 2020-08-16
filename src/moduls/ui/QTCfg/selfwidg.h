@@ -288,6 +288,7 @@ class ReqIdNameDlg : public InputDlg
 	string target( );
 
 	void setTargets( const vector<string> &tgs );
+	void setPassive( );
 
     protected:
 	//Attributes

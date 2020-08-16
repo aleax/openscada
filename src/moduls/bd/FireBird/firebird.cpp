@@ -31,7 +31,7 @@
 #define MOD_NAME	_("DB FireBird")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.3.1"
+#define MOD_VER		"2.5.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DBMS FireBird.")
 #define LICENSE		"GPL2"
@@ -527,11 +527,8 @@ void MTable::fieldStruct( TConfig &cfg )
     }
 }
 
-bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
+bool MTable::fieldSeek( int row, TConfig &cfg, const string &cacheKey )
 {
-    vector< vector<string> >	inTbl,
-				&tbl = full ? *full : inTbl;
-
     if(tblStrct.empty()) throw err_sys(_("The table is empty."));
     mLstUse = SYS->sysTm();
 
@@ -553,7 +550,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
 
     //Make WHERE
     string req = "SELECT ", req_where = "WHERE ", sid;
-    if(!full) req += "FIRST 1 SKIP " + i2s(row) + " ";
+    if(!cacheKey.size()) req += "FIRST 1 SKIP " + i2s(row) + " ";
     else req += "FIRST " + i2s(SEEK_PRELOAD_LIM) + " SKIP " + i2s((row/SEEK_PRELOAD_LIM)*SEEK_PRELOAD_LIM) + " ";
     // Add use keys to list
     bool first_sel = true, next = false, trPresent = false;
@@ -577,25 +574,32 @@ bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
 	}
     }
 
+    vector< vector<string> >	inTbl, *tbl = &inTbl;
+    MtxAlloc res(owner().connRes);
+    if(cacheKey.size()) { res.lock(); tbl = &seekSess[cacheKey]; }
+
     //Request
-    if(!full || !full->size() || (row%SEEK_PRELOAD_LIM) == 0) {
+    if(!cacheKey.size() || !tbl->size() || (row%SEEK_PRELOAD_LIM) == 0) {
 	if(first_sel) return false;
 	req += " FROM \"" + mod->sqlReqCode(name(),'"') + "\" " + (next?req_where:"");
 
-	tbl.clear();
-	owner().sqlReq(req, &tbl, false);
+	tbl->clear();
+	owner().sqlReq(req, tbl, false);
     }
 
-    row = full ? (row%SEEK_PRELOAD_LIM)+1 : 1;
-    if(tbl.size() < 2 || (full && row >= (int)tbl.size())) return false;
+    row = cacheKey.size() ? (row%SEEK_PRELOAD_LIM)+1 : 1;
+    if(tbl->size() < 2 || (cacheKey.size() && row >= (int)tbl->size())) {
+	if(cacheKey.size()) seekSess.erase(cacheKey);
+	return false;
+    }
 
     //Processing of query
-    for(unsigned iFld = 0; iFld < tbl[0].size(); iFld++) {
-	sid = tbl[0][iFld];
+    for(unsigned iFld = 0; iFld < (*tbl)[0].size(); iFld++) {
+	sid = (*tbl)[0][iFld];
 	TCfg *u_cfg = cfg.at(sid, true);
-	if(u_cfg) setVal(*u_cfg, tbl[row][iFld]);
-	else if(trPresent && sid.compare(0,3,Mess->lang2Code()+"#") == 0 && tbl[row][iFld].size() && (u_cfg=cfg.at(sid.substr(3),true)))
-	    setVal(*u_cfg, tbl[row][iFld], true);
+	if(u_cfg) setVal(*u_cfg, (*tbl)[row][iFld]);
+	else if(trPresent && sid.compare(0,3,Mess->lang2Code()+"#") == 0 && (*tbl)[row][iFld].size() && (u_cfg=cfg.at(sid.substr(3),true)))
+	    setVal(*u_cfg, (*tbl)[row][iFld], true);
     }
 
     return true;
@@ -657,16 +661,15 @@ void MTable::fieldSet( TConfig &cfg )
     if(tblStrct.empty()) fieldFix(cfg);
 
     string sid, sval;
-    bool isVarTextTransl = (!Mess->lang2CodeBase().empty() && Mess->lang2Code() != Mess->lang2CodeBase());
 
     //Get config fields list
     vector<string> cf_el;
     cfg.cfgList(cf_el);
 
     //Check for translation present
-    bool trPresent = isVarTextTransl, trDblDef = false;
+    bool trPresent = Mess->translCfg(), trDblDef = false;
     for(unsigned iFld = 1; iFld < tblStrct.size(); iFld++) {
-	if(trPresent && (!isVarTextTransl || trDblDef)) break;
+	if(trPresent && (!Mess->translCfg() || trDblDef)) break;
 	sid = tblStrct[iFld][0];
 	if(sid.size() > 3) {
 	    if(!trPresent && !Mess->translDyn() && sid.compare(0,3,Mess->lang2Code()+"#") == 0) trPresent = true;
@@ -776,8 +779,7 @@ void MTable::fieldFix( TConfig &cfg, bool trPresent )
     vector<string> cf_el;
     cfg.cfgList(cf_el);
 
-    bool appMode = cfg.reqKeys() || (cfg.incomplTblStruct() && !isEmpty()),	//Only for append no present fields
-	 isVarTextTransl = (!Mess->lang2CodeBase().empty() && Mess->lang2Code() != Mess->lang2CodeBase());
+    bool appMode = cfg.reqKeys() || (cfg.incomplTblStruct() && !isEmpty());	//Only for append no present fields
 
     //Prepare request for fix structure
     string req = "ALTER TABLE \"" + mod->sqlReqCode(name(),'"') + "\" ";
@@ -860,7 +862,7 @@ void MTable::fieldFix( TConfig &cfg, bool trPresent )
 		if(tblStrct[iC][0].size() > 3 && tblStrct[iC][0].substr(2) == ("#"+cf_el[iCf]) &&
 		    tblStrct[iC][0].compare(0,2,Mess->lang2CodeBase()) != 0 &&
 		    tblStrct[iC][0].compare(0,2,Mess->lang2Code()) == 0) break;
-	    if(iC >= tblStrct.size() && isVarTextTransl) {
+	    if(iC >= tblStrct.size() && Mess->translCfg()) {
 		req += (next?",ADD \"":"ADD \"") + mod->sqlReqCode(Mess->lang2Code()+"#"+cf_el[iCf],'"') + "\" "+f_tp;
 		next = true;
 	    }

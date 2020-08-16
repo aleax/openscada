@@ -3,15 +3,15 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009, 2011.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2014-2018.
+# Roman Savochenko <roman@oscada.org>, 2014-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-08 12:35+0300\n"
+"POT-Creation-Date: 2020-07-31 08:47+0300\n"
 "PO-Revision-Date: 2011-07-19 20:56+0400\n"
-"Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
+"Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -604,8 +604,8 @@ msgstr ""
 msgid "Module options"
 msgstr "Optionen des Moduls"
 
-msgid "Qt modules for startup, separated by ';'"
-msgstr "Qt-Module für den Start, getrennt durch ';'"
+msgid "Qt modules for startup"
+msgstr "Qt-Module für den Start"
 
 msgid "Collapse and startup to the system tray"
 msgstr "Reduzieren und starten Sie in der Taskleiste"
@@ -717,12 +717,6 @@ msgstr "Liste der erlaubten Aufrufe/Wechsel von Projekten von OpenSCADA"
 msgid "The list for call and switch to allowed projects of OpenSCADA."
 msgstr "Die Liste für Anruf und Wechsel zu erlaubten Projekten von OpenSCADA."
 
-msgid "current"
-msgstr "aktuell"
-
-msgid "running"
-msgstr "laufen"
-
 msgid "Switch to the selected project"
 msgstr "Wechseln Sie zum ausgewählten Projekt"
 
@@ -735,8 +729,8 @@ msgstr "Die Schaltfläche zum Wechseln zum ausgewählten Projekt."
 msgid "The button for call the selected project."
 msgstr "Die Schaltfläche zum Aufrufen des ausgewählten Projekts."
 
-msgid "Creating-updating a project"
-msgstr "Erstellen-Aktualisieren eines Projekts"
+msgid "Create/update project"
+msgstr "Erstellen/aktualisieren Projekt"
 
 msgid ""
 "New projects creating or updating of presented ones, like to desktop links"
@@ -753,6 +747,16 @@ msgstr ""
 
 msgid "The button for exit the program."
 msgstr "Die Taste zum Verlassen des Programms."
+
+msgid "current"
+msgstr "aktuell"
+
+msgid "running"
+msgstr "laufen"
+
+#, c-format
+msgid "%d backups"
+msgstr "%d Backups"
 
 #, c-format
 msgid ""
@@ -815,6 +819,18 @@ msgstr ""
 
 msgid "Project \"%1\" seems wrong or broken!"
 msgstr "Project \"%1\" scheint falsch oder defekt!"
+
+msgid "BackUp"
+msgstr "BackUp"
+
+msgid "Restore from \"%1\""
+msgstr "Wiederherstellung von \"%1\""
+
+msgid "Remove project"
+msgstr "Projekt entfernen"
+
+msgid "Do you really want to remove the project \"%1\"?"
+msgstr "Möchten Sie das Projekt \"%1\" wirklich entfernen?"
 
 #, c-format
 msgid "Untranslated Qt message: '%s'"

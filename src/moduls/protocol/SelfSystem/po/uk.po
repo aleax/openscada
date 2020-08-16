@@ -1,15 +1,15 @@
 # OpenSCADA.Protocol.SelfSystem translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.Protocol.SelfSystem package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2007-2018.
+# Roman Savochenko <roman@oscada.org>, 2007-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-02 12:18+0300\n"
+"POT-Creation-Date: 2020-06-21 22:55+0300\n"
 "PO-Revision-Date: 2007-10-23 18:19+0300\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -73,6 +73,14 @@ msgstr "Неповна відповідь."
 #, c-format
 msgid "REQ full response %d"
 msgstr "REQ повна відповідь %d"
+
+#, c-format
+msgid "The response '%s' is not suitable to the request '%s'."
+msgstr "Відповідь '%s' не відповідає запиту '%s'."
+
+#, c-format
+msgid "The response sequence %d is not suitable to the request one %d."
+msgstr "Послідовність відповіді %d не відповідає запиту %d."
 
 #, c-format
 msgid "Error the request: %s"

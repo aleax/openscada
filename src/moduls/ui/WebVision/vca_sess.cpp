@@ -107,6 +107,9 @@ void VCASess::getReq( SSess &ses )
 	if((varPos=ses.page.find("##CHARSET##")) != string::npos)	ses.page.replace(varPos, 11, Mess->charset());
 	// Title replace
 	if((varPos=ses.page.find("##TITLE##")) != string::npos)	ses.page.replace(varPos, 9, prjNm);
+	// Custom CSS replace
+	if((varPos=ses.page.find("##CUST_CSS##")) != string::npos)	ses.page.replace(varPos, 12, mod->custCSS());
+
 	ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type:text/html;charset="+Mess->charset());
 
 	// Cache clear
@@ -256,21 +259,31 @@ void VCASess::postReq( SSess &ses )
 	    pgCacheProc(oAddr, ses.prm.find("cachePg") == ses.prm.end());
     }
     else if(wp_com == "setUser") {
-	if((cntEl=ses.prm.find("user")) != ses.prm.end() && cntEl->second != mUser) {
+	if((cntEl=ses.prm.find("user")) != ses.prm.end() && TSYS::strDecode(TSYS::strParse(cntEl->second,0,":"),TSYS::Custom) != mUser) {
 	    if(cntEl->second == "$" && mUserOrig.size()) cntEl->second = mUserOrig;
+	    else {
+		size_t	pasSep = cntEl->second.find(":");
+		string	h_user = (pasSep == string::npos) ? cntEl->second : TSYS::strDecode(cntEl->second.substr(0,pasSep),TSYS::Custom),
+			h_pass = (pasSep == string::npos) ? "" : TSYS::strDecode(cntEl->second.substr(pasSep+1),TSYS::Custom);
+		cntEl->second = h_user;
+		// Checking the user permition to the session project
+		if( (pasSep == string::npos && SYS->security().at().usrAt(mUserOrig.size()?mUserOrig:mUser).at().permitCmpr(cntEl->second) > 0) ||
+			(pasSep != string::npos && !SYS->security().at().usrAt(h_user).at().auth(h_pass)) )
+		    cntEl->second = "";
+	    }
 
-	    // Checking the user permition to the session project
-	    XMLNode req("connect");
-	    req.setAttr("path","/%2fserv%2fsess")->setAttr("sess", mId)->setAttr("userChange", "1")->setAttr("remoteSrcAddr", ses.sender);
-	    if(SYS->security().at().usrAt(mUserOrig.size()?mUserOrig:mUser).at().permitCmpr(cntEl->second) <= 0 &&
-		    !mod->cntrIfCmd(req,SSess(cntEl->second))) {
-		// Changing the session user
-		userSet(cntEl->second, true);
-		vector<TVariant> prms; prms.push_back(mUser);
-		ses.prt->objFuncCall("setUser", prms, "root");
+	    if(cntEl->second.size()) {
+		XMLNode req("connect");
+		req.setAttr("path","/%2fserv%2fsess")->setAttr("sess", mId)->setAttr("userChange", "1")->setAttr("remoteSrcAddr", ses.sender);
+		if(!mod->cntrIfCmd(req,SSess(cntEl->second))) {
+		    // Changing the session user
+		    userSet(cntEl->second, true);
+		    vector<TVariant> prms; prms.push_back(mUser);
+		    ses.prt->objFuncCall("setUser", prms, "root");
 
-		req.clear()->setName("disconnect")->setAttr("path", "/%2fserv%2fsess")->setAttr("sess", mId)->setAttr("remoteSrcAddr", ses.sender);
-		mod->cntrIfCmd(req, SSess(mUser));
+		    req.clear()->setName("disconnect")->setAttr("path", "/%2fserv%2fsess")->setAttr("sess", mId)->setAttr("remoteSrcAddr", ses.sender);
+		    mod->cntrIfCmd(req, SSess(mUser));
+		}
 	    }
 	}
     }

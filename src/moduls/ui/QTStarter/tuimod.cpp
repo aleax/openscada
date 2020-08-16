@@ -44,6 +44,7 @@
 #include <QStyleFactory>
 #include <QStyle>
 #include <QScrollBar>
+#include <QPainter>
 
 #include <tsys.h>
 #include <tmess.h>
@@ -55,8 +56,7 @@
 #define MOD_NAME	_("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define SUB_TYPE	"MainThr"
-#define MOD_VER		"4.7.10"
+#define MOD_VER		"5.7.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -93,7 +93,7 @@ using namespace QTStarter;
 //* TUIMod                                        *
 //*************************************************
 TUIMod::TUIMod( string name ) : TUI(MOD_ID), mQtLookMdf(false), QtApp(NULL), hideMode(false), mEndRun(false), mStartCom(false), mCloseToTray(false),
-    mStartMod(dataRes()), mStyle(dataRes()), mFont(dataRes()), mPalette(dataRes()), mStyleSheets(dataRes()), qtArgC(0), qtArgEnd(0), splash(NULL), splashTp(SPLSH_NULL)
+    mStartMod(dataRes()), mStyle(dataRes()), mFont(dataRes()), mPalette(dataRes()), mStyleSheets(dataRes()), qtArgC(0), qtArgEnd(0), splashTp(SPLSH_NULL), splash(NULL), splashTm(0)
 {
     mod = this;
 
@@ -139,21 +139,6 @@ TUIMod::~TUIMod( )
     if(runSt) modStop();
 }
 
-string TUIMod::modInfo( const string &iname )
-{
-    string name = TSYS::strParse(iname, 0, ":");
-
-    if(name == "SubType" && !SYS->cmdOptPresent("QtInNotMainThread")) return SUB_TYPE;
-
-    return TModule::modInfo(name);
-}
-
-void TUIMod::modInfo( vector<string> &list )
-{
-    TModule::modInfo(list);
-    list.push_back("SubType");
-}
-
 string TUIMod::style( bool mant )	{ return mant ? mStyle.getVal() : (mStyle.getVal().size() ? mStyle.getVal() : SYS->cmdOpt("style")); }
 
 void TUIMod::postEnable( int flag )
@@ -182,6 +167,7 @@ void TUIMod::postEnable( int flag )
     }
 
     if(!SYS->cmdOptPresent("QtInNotMainThread")) {
+	if(SYS->mainThr.freeStat()) SYS->mainThr = this;
 	if(hideMode) return;
 
 	//Init locale setLocale
@@ -217,6 +203,13 @@ void TUIMod::postDisable( int flag )
     else if(runSt) SYS->taskDestroy(nodePath('.',true), &mEndRun, 10, true);
 }
 
+void TUIMod::perSYSCall( unsigned int cnt )
+{
+    if(hideMode || runSt || !splash || splashTp == SPLSH_NULL)	return;
+
+    splashSet((cnt==SPLSH_START||cnt==SPLSH_STOP)?(TUIMod::SplashFlag)cnt:splashTp);
+}
+
 void TUIMod::load_( )
 {
     mess_debug(nodePath().c_str(),_("Loading the module."));
@@ -247,7 +240,7 @@ void TUIMod::save_( )
 void TUIMod::modStart( )
 {
     if(!SYS->cmdOptPresent("QtInNotMainThread")) {
-	if(runSt || hideMode)	return;
+	if(!SYS->isRunning() || runSt || hideMode)	return;
 	mess_debug(nodePath().c_str(), _("Starting the module."));
 
 	if(splash && splashTp != SPLSH_START) splashSet(SPLSH_START);
@@ -279,26 +272,91 @@ void TUIMod::modStop( )
 
 void TUIMod::splashSet( SplashFlag flg )
 {
-    splashTp = flg;
+    MtxAlloc	res(splashRes, true);
+
     if(flg == SPLSH_NULL) {
 	if(splash) delete splash;
 	splash = NULL;
     }
     else {
+	QFont wFnt;
+	//Obtaining the splash image
 	QImage ico_t;
-	if(!ico_t.load(TUIS::icoGet(SYS->id()+((flg==SPLSH_STOP)?"_splash_exit":"_splash"),NULL,true).c_str())) ico_t.load(":/images/splash.png");
-	if(splash) splashSet(SPLSH_NULL);
-	splash = new QSplashScreen(QPixmap::fromImage(ico_t));
-	splash->show();
-	QFont wFnt = splash->font();
-	wFnt.setPixelSize(10);
-	splash->setFont(wFnt);
-	if(!SYS->cmdOptPresent("QtInNotMainThread"))
-	    for(int iTr = 0; iTr < 10; iTr++) {
-		QtApp->processEvents();
-		TSYS::sysSleep(0.1);
+	string ico_f;
+	bool sysSplash = false;
+	if((ico_f=TUIS::icoGet(SYS->id()+((flg==SPLSH_STOP)?"_splash_exit":"_splash"),NULL,true)).empty() || !ico_t.load(ico_f.c_str())) {
+	    ico_t.load(":/images/splash.png");
+	    sysSplash = true;
+	}
+
+	//Creating the splash
+	if(splash && flg != splashTp)	splashSet(SPLSH_NULL);
+	if(!splash) {
+	    splash = new QSplashScreen();
+
+	    splashTm = time(NULL);
+
+	    //Prepairing the splash image
+	    QPixmap pm = QPixmap::fromImage(ico_t);
+	    QPainter pnt(&pm);
+	    QPen pen(Qt::DotLine); pen.setColor("gray"); pen.setWidth(1);
+	    pnt.setPen(pen);
+	    QColor barColor("ivory"); barColor.setAlpha(170);
+
+	    // Appending the project ico
+	    string icoImg = TUIS::icoGet(SYS->name(), NULL, true);
+	    if(!icoImg.size()) icoImg = TUIS::icoGet(SYS->id(), NULL, true);
+	    if(sysSplash && icoImg.size()) {
+		QImage prjPm(icoImg.c_str());
+		prjPm = prjPm.scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
+		//  In plain rect
+		//pnt.drawRect(pm.width()-prjPm.width(), 0, prjPm.width(), prjPm.height());
+		//pnt.fillRect(pm.width()-prjPm.width(), 0, prjPm.width(), prjPm.height(), barColor);
+		//pnt.drawImage(pm.width()-prjPm.width(), 0, prjPm);
+
+		//  In gradient circle
+		QRect icoArea(pm.width()-68, 0, 68, 68);
+		QPainterPath path;
+		QRadialGradient grd(icoArea.center(), icoArea.width()/2, icoArea.center()-QPoint(10,10));
+		grd.setColorAt(0, "white"); grd.setColorAt(1, "gray");
+		pnt.setBrush(grd);
+		path.moveTo(pm.width()-icoArea.width()/2, icoArea.height()/2);
+		path.arcTo(icoArea, 0, 360);
+		pnt.drawPath(path);
+		pnt.drawImage(icoArea.adjusted(10,10,-10,-10), prjPm);
 	    }
+	    // Appending the program and the project information
+	    pnt.setBrush(barColor);
+	    QRect infBar(0, pm.height()-18, pm.width(), 18);
+	    pnt.fillRect(infBar, barColor);
+	    pnt.drawRect(infBar);
+	    wFnt = splash->font(); wFnt.setPixelSize(15); pnt.setFont(wFnt);
+	    pnt.drawText(infBar.adjusted(4,1,-4,-1), Qt::AlignRight, SYS->prjNm().c_str());
+	    pnt.drawText(infBar.adjusted(4,1,-4,-1), sysSplash ? PACKAGE_VERSION : PACKAGE_STRING);
+
+	    //Starting the splash
+	    splash->setPixmap(pm);
+	    splash->show();
+	}
+	wFnt = splash->font(); wFnt.setPixelSize(10);
+	splash->setFont(wFnt);
+
+	//Updating messages
+	vector<TMess::SRec> recs;
+	SYS->archive().at().messGet(splashTm/*time(NULL)-120*/, time(NULL), recs, "", TMess::Debug, BUF_ARCH_NM);
+	QString mess;
+	for(int iM = recs.size()-1; iM >= 0 && iM > ((int)recs.size()-10); iM--)
+	    mess += QString("%1\n").arg(recs[iM].mess.c_str());
+	recs.clear();
+	splash->showMessage(mess, Qt::AlignBottom|Qt::AlignLeft);
+
+	for(int iTr = 0; iTr < 3; iTr++) {
+	    QtApp->processEvents();	//!!!! To show the message on Qt5
+	    TSYS::sysSleep(0.01);	//!!!! To ensure the splash visibility at the exit on Qt5
+	}
     }
+    splashTp = flg;
 }
 
 string TUIMod::optDescr( )
@@ -355,11 +413,6 @@ void TUIMod::toQtArg( const char *nm, const char *arg )
 
 void *TUIMod::Task( void * )
 {
-    vector<string> list;
-    QImage ico_t;
-    time_t st_time = time(NULL);
-    vector<TMess::SRec> recs;
-
     //Init locale setLocale
     QLocale::setDefault(QLocale(Mess->lang().c_str()));
 
@@ -368,33 +421,21 @@ void *TUIMod::Task( void * )
     mod->runSt = true;
 
     ret:
-    mod->splashSet(SPLSH_START);
+    string stProj = SYS->prjNm(), stProj_;
     while(!mod->startCom() && !mod->endRun()) {
-	SYS->archive().at().messGet(st_time, time(NULL), recs, "", TMess::Debug, BUF_ARCH_NM);
-	QString mess;
-	for(int i_m = recs.size()-1; i_m >= 0 && i_m > ((int)recs.size()-10); i_m--)
-	    mess += QString("\n%1").arg(recs[i_m].mess.c_str());
-	recs.clear();
-	mod->splash->showMessage(mess, Qt::AlignBottom|Qt::AlignLeft);
-	mod->QtApp->processEvents();
-	TSYS::sysSleep(0.5);
+	stProj_ = SYS->prjNm();
+	mod->splashSet((stProj == stProj_) ? SPLSH_START : SPLSH_NULL);
+	stProj = stProj_;
+	TSYS::sysSleep(0.1);
     }
 
     mod->QtApp->stExec();
 
     if(SYS->stopSignal() == SIGUSR2) { mod->mStartCom = false; goto ret; }
 
-    mod->splashSet(SPLSH_STOP);
-    st_time = time(NULL);
     while(!mod->endRun()) {
-	SYS->archive().at().messGet(st_time, time(NULL), recs, "", TMess::Debug, BUF_ARCH_NM);
-	QString mess;
-	for(int i_m = recs.size()-1; i_m >= 0 && i_m > ((int)recs.size()-10); i_m--)
-	    mess += QString("\n%1").arg(recs[i_m].mess.c_str());
-	recs.clear();
-	mod->splash->showMessage(mess,Qt::AlignBottom|Qt::AlignLeft);
-	mod->QtApp->processEvents();
-	TSYS::sysSleep(0.5);
+	mod->splashSet(SPLSH_STOP);
+	TSYS::sysSleep(0.1);
     }
     mod->splashSet(SPLSH_NULL);
 
@@ -412,7 +453,7 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TUI::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Module options"))) {
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/st_mod",_("Qt modules for startup, separated by ';'"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/prm/cfg/lsQtMod");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/st_mod",_("Qt modules for startup"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","select","select","/prm/cfg/lsQtMod");
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/closeToTray",_("Collapse and startup to the system tray"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 	    if(ctrMkNode("area",opt,-1,"/prm/LF",_("Look and feel"))) {
 		ctrMkNode("fld",opt,-1,"/prm/LF/prfl",_("Known profiles"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","select","select","/prm/LF/prflLs");
@@ -432,12 +473,21 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setStartMod(opt->text());
     }
     else if(a_path == "/prm/cfg/lsQtMod" && ctrChkNode(opt)) {
+	string stMod = startMod();
 	vector<string> list;
 	mod->owner().modList(list);
-	for(unsigned iL = 0; iL < list.size(); iL++)
+	// Single-item directly
+	for(unsigned iL = 0; stMod.size() && iL < list.size(); iL++)
 	    if(mod->owner().modAt(list[iL]).at().modInfo("SubType") == "Qt" &&
 		    mod->owner().modAt(list[iL]).at().modFuncPresent("QMainWindow *openWindow();"))
 		opt->childAdd("el")->setText(list[iL]);
+	// Item combination
+	for(unsigned iL = 0; iL < list.size(); iL++)
+	    if(mod->owner().modAt(list[iL]).at().modInfo("SubType") == "Qt" &&
+		    mod->owner().modAt(list[iL]).at().modFuncPresent("QMainWindow *openWindow();") &&
+		    !TRegExp("(^|;)"+list[iL]+"(;|$)","m").test(stMod))
+		opt->childAdd("el")->setText((stMod.size()?stMod+";":"")+list[iL]);
+	opt->childAdd("el")->setText("");
     }
     else if(a_path == "/prm/cfg/closeToTray") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(closeToTray()));
@@ -1049,95 +1099,14 @@ StartDialog::StartDialog( ) : prjsLs(NULL), prjsBt(NULL)
 	// Prepare the list widget for projects selection.
 	prjsLs = new QListWidget(this);
 	prjsLs->setSortingEnabled(true);
+	prjsLs->setContextMenuPolicy(Qt::CustomContextMenu);
 	prjsLs->setToolTip(_("List of allowed to call/switch projects of OpenSCADA"));
 	prjsLs->setWhatsThis(_("The list for call and switch to allowed projects of OpenSCADA."));
-	string userDir = SYS->prjUserDir();
-	DIR *IdDir = userDir.size() ? opendir(userDir.c_str()) : NULL;
-	if(IdDir) {
-	    struct stat file_stat;
-	    dirent	*scan_rez = NULL,
-			*scan_dirent = (dirent*)malloc(offsetof(dirent,d_name) + NAME_MAX + 1);
-
-	    while(readdir_r(IdDir,scan_dirent,&scan_rez) == 0 && scan_rez) {
-		if(strcmp(scan_rez->d_name,"..") == 0 || strcmp(scan_rez->d_name,".") == 0) continue;
-		//  Presenting of the project's folder
-		if(stat((userDir+"/"+scan_rez->d_name).c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFDIR)
-		    continue;
-		//  Presenting of the project's config file
-		string itNm = userDir + "/" + scan_rez->d_name + "/oscada.xml";
-		if(stat(itNm.c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG) continue;
-		//  Item placing
-		string opt;
-		if(scan_rez->d_name == SYS->prjNm()) opt += string(opt.size()?", ":"") + _("current");
-		if(access((userDir+"/"+scan_rez->d_name+"/lock").c_str(),F_OK) == 0)
-		    opt += string(opt.size()?", ":"") + _("running");
-		QListWidgetItem *tit = new QListWidgetItem((string(scan_rez->d_name)+(opt.size()?" ("+opt+")":"")).c_str(), prjsLs);
-		prjsLs->addItem(tit);
-		tit->setData(Qt::UserRole, scan_rez->d_name);
-		QImage ico;
-		if(ico.load((string(oscd_datadir_full "/icons/")+scan_rez->d_name+".png").c_str()) ||
-			ico.load((userDir+"/"+scan_rez->d_name+"/icons/"+scan_rez->d_name+".png").c_str()))
-		    tit->setIcon(QPixmap::fromImage(ico));
-	    }
-
-	    free(scan_dirent);
-	    closedir(IdDir);
-	}
-
-	IdDir = opendir(oscd_datadir_full);
-	if(IdDir) {
-	    struct stat file_stat;
-	    dirent	*scan_rez = NULL,
-			*scan_dirent = (dirent*)malloc(offsetof(dirent,d_name) + NAME_MAX + 1);
-
-	    while(readdir_r(IdDir,scan_dirent,&scan_rez) == 0 && scan_rez) {
-		if(strcmp(scan_rez->d_name,"..") == 0 || strcmp(scan_rez->d_name,".") == 0) continue;
-		//  Presenting of the project's folder
-		if(stat((string(oscd_datadir_full)+"/"+scan_rez->d_name).c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFDIR)
-		    continue;
-		//  Presenting of the project's config file
-		string itNm = string(sysconfdir_full) + "/oscada_" + scan_rez->d_name + ".xml";
-		if(stat(itNm.c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG) {
-		    itNm = string(oscd_datadir_full) + "/" + scan_rez->d_name + "/oscada.xml";
-		    if(stat(itNm.c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG) continue;
-		}
-		//  Check for presenting already
-		QList<QListWidgetItem *> pLs = prjsLs->findItems(scan_rez->d_name, Qt::MatchStartsWith);
-		int iP = 0;
-		for( ; iP < pLs.size() && pLs[iP]->data(Qt::UserRole).toString() != scan_rez->d_name; iP++) ;
-		if(pLs.size() && iP < pLs.size()) continue;
-
-		//  Item placing
-		string opt;
-		if(scan_rez->d_name == SYS->prjNm())	opt += string(opt.size()?", ":"") + _("current");
-		if(access((string(oscd_datadir_full "/")+scan_rez->d_name+"/lock").c_str(),F_OK) == 0)
-		    opt += string(opt.size()?", ":"") + _("running");
-		QListWidgetItem *tit = new QListWidgetItem((string(scan_rez->d_name)+(opt.size()?" ("+opt+")":"")).c_str(), prjsLs);
-		prjsLs->addItem(tit);
-		tit->setData(Qt::UserRole, scan_rez->d_name);
-		QImage ico;
-		if(ico.load((string(oscd_datadir_full "/icons/")+scan_rez->d_name+".png").c_str()) ||
-			ico.load((string(oscd_datadir_full "/")+scan_rez->d_name+"/icons/"+scan_rez->d_name+".png").c_str()))
-		    tit->setIcon(QPixmap::fromImage(ico));
-	    }
-
-	    free(scan_dirent);
-	    closedir(IdDir);
-	}
-
-	// Mark current project's items in the list
-	if(SYS->prjNm().size()) {
-	    QList<QListWidgetItem *> sIt = prjsLs->findItems(SYS->prjNm().c_str(), Qt::MatchStartsWith);
-	    for(int iIt = 0; iIt < sIt.length(); iIt++) {
-		sIt[iIt]->setSelected(true);
-		prjsLs->scrollToItem(sIt[iIt]);
-	    }
-	}
-	// Connect
 	connect(prjsLs, SIGNAL(itemSelectionChanged()), this, SLOT(projSelect()));
 	connect(prjsLs, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(projSwitch()));
-
+	connect(prjsLs, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(prjsLsCtxMenuRequested(const QPoint&)));
 	wnd_lay->addWidget(prjsLs, 0, 0);
+	updatePrjList();
 
 	prjsBt = new QPushButton(QIcon(":/images/ok.png"), SYS->prjNm().size()?_("Switch to the selected project"):_("Call the selected project"), this);
 	prjsBt->setEnabled(false);
@@ -1151,7 +1120,7 @@ StartDialog::StartDialog( ) : prjsLs(NULL), prjsBt(NULL)
 	gFrame->setFrameShadow(QFrame::Plain);
 	wnd_lay->addWidget(gFrame, 0, 0);
 
-	QPushButton *prjAddUpdt = new QPushButton(QIcon(":/images/it_add.png"), _("Creating-updating a project"), this);
+	QPushButton *prjAddUpdt = new QPushButton(QIcon(":/images/it_add.png"), _("Create/update project"), this);
 	prjAddUpdt->setToolTip(_("New projects creating or updating of presented ones, like to desktop links"));
 	prjAddUpdt->setWhatsThis(_("The button for new projects creating or updating of presented ones, like to desktop links."));
 	QObject::connect(prjAddUpdt, SIGNAL(clicked(bool)), this, SLOT(projCreateUpdt()));
@@ -1185,6 +1154,95 @@ void StartDialog::closeEvent( QCloseEvent *ce )
 {
     if(!mod->QtApp->trayPresent() && mod->QtApp->topLevelWindows() <= 1) SYS->stop();
     ce->accept();
+}
+
+void StartDialog::updatePrjList( const string &stage )
+{
+    if(stage.empty()) {
+	int scrollPos = prjsLs->verticalScrollBar()->value();
+	prjsLs->blockSignals(true);
+	while(prjsLs->count())	delete prjsLs->takeItem(0);
+
+	updatePrjList("user");
+	updatePrjList("sys");
+	prjsLs->blockSignals(false);
+	prjsLs->verticalScrollBar()->setValue(scrollPos);
+
+	if(SYS->prjNm().size()) {
+	    QList<QListWidgetItem *> sIt = prjsLs->findItems(SYS->prjNm().c_str(), Qt::MatchStartsWith);
+	    for(int iIt = 0; iIt < sIt.length(); iIt++) {
+		sIt[iIt]->setSelected(true);
+		prjsLs->scrollToItem(sIt[iIt]);
+	    }
+	}
+    }
+    else {
+	string wDir = SYS->prjUserDir();
+	if(stage == "sys") wDir = oscd_datadir_full;
+
+	DIR *IdDir = wDir.size() ? opendir(wDir.c_str()) : NULL;
+	if(!IdDir) return;
+
+	struct stat file_stat;
+	dirent	*scan_rez = NULL,
+		*scan_dirent = (dirent*)malloc(offsetof(dirent,d_name) + NAME_MAX + 1);
+
+	while(readdir_r(IdDir,scan_dirent,&scan_rez) == 0 && scan_rez) {
+	    if(strcmp(scan_rez->d_name,"..") == 0 || strcmp(scan_rez->d_name,".") == 0) continue;
+	    //  Presenting of the project's folder
+	    if(stat((wDir+"/"+scan_rez->d_name).c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFDIR)
+		continue;
+	    //  Presenting of the project's config file
+	    if(stage == "user") {
+		string itNm = wDir + "/" + scan_rez->d_name + "/oscada.xml";
+		if(stat(itNm.c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG) continue;
+	    }
+	    else if(stage == "sys") {
+		string itNm = string(sysconfdir_full) + "/oscada_" + scan_rez->d_name + ".xml";
+		if(stat(itNm.c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG) {
+		    itNm = wDir + "/" + scan_rez->d_name + "/oscada.xml";
+		    if(stat(itNm.c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG) continue;
+		}
+	    }
+
+	    //  Check for presenting already
+	    QList<QListWidgetItem *> pLs = prjsLs->findItems(scan_rez->d_name, Qt::MatchStartsWith);
+	    int iP = 0;
+	    for( ; iP < pLs.size() && pLs[iP]->data(Qt::UserRole).toString() != scan_rez->d_name; iP++) ;
+	    if(pLs.size() && iP < pLs.size()) continue;
+
+	    //  Item placing
+	    string opt;
+	    if(scan_rez->d_name == SYS->prjNm()) opt += string(opt.size()?", ":"") + _("current");
+	    bool isRun = false;
+	    if(access((wDir+"/"+scan_rez->d_name+"/lock").c_str(),F_OK) == 0) {
+		opt += string(opt.size()?", ":"") + _("running");
+		isRun = true;
+	    }
+	    //  Get the backups list
+	    vector<TVariant> prms;
+	    prms.push_back(string(bindir_full "/openscada-proj backupList ") + scan_rez->d_name);
+	    string bLs = SYS->objFuncCall("system", prms, "root").getS();
+	    if(bLs.size()) {
+		int nBkps = 0;
+		for(int off = 0; TSYS::strLine(bLs,0,&off).size(); ) nBkps++;
+		opt += string(opt.size()?", ":"") + TSYS::strMess(_("%d backups"),nBkps);
+	    }
+
+	    QListWidgetItem *tit = new QListWidgetItem((string(scan_rez->d_name)+(opt.size()?" ("+opt+")":"")).c_str(), prjsLs);
+	    prjsLs->addItem(tit);
+	    tit->setData(Qt::UserRole, scan_rez->d_name);
+	    tit->setData(Qt::UserRole+1, isRun ? "" : bLs.c_str());
+	    tit->setData(Qt::UserRole+2, isRun);
+	    QImage ico;
+	    if(ico.load((string(oscd_datadir_full "/icons/")+scan_rez->d_name+".png").c_str()) ||
+		    ico.load((wDir+"/"+scan_rez->d_name+"/icons/"+scan_rez->d_name+".png").c_str()))
+		tit->setIcon(QPixmap::fromImage(ico));
+	}
+
+	free(scan_dirent);
+	closedir(IdDir);
+    }
 }
 
 void StartDialog::about( )
@@ -1262,6 +1320,67 @@ void StartDialog::projSwitch( const QString& iprj )
 			QMessageBox::Yes|QMessageBox::No,QMessageBox::No) != QMessageBox::Yes)	return;
     if(!SYS->prjSwitch(prjNm.toStdString(),toCreate))
 	QMessageBox::warning(this, SYS->prjNm().size()?_("Switch project"):_("Call project"), QString(_("Project \"%1\" seems wrong or broken!")).arg(prjNm));
+}
+
+void StartDialog::prjsLsCtxMenuRequested( const QPoint &pos )
+{
+    QMenu *menu = new QMenu();	//prjsLs->createStandardContextMenu();
+
+    //The BackUp action
+    QAction *actBackUp = new QAction(_("BackUp"), this);
+    menu->addAction(actBackUp);
+
+    //The restoring actions
+    if(prjsLs->currentItem()->data(Qt::UserRole+1).toString().size()) {
+	menu->addSeparator();
+	QAction *actRest = NULL;
+	string backId, backs = prjsLs->currentItem()->data(Qt::UserRole+1).toString().toStdString();
+	for(int off = 0; (backId=TSYS::strLine(backs,0,&off)).size(); ) {
+	    actRest = new QAction(QString(_("Restore from \"%1\"")).arg(backId.c_str()), this);
+	    actRest->setObjectName(backId.c_str());
+	    menu->addAction(actRest);
+	}
+    }
+
+    //Extra project actions
+    QAction *actRemove = NULL;
+    if(!prjsLs->currentItem()->data(Qt::UserRole+2).toBool()) {
+	actRemove = new QAction(QIcon(":/images/it_del.png"), _("Remove"), this);
+	menu->addSeparator();
+	menu->addAction(actRemove);
+    }
+
+    QAction *rez = menu->exec(QCursor::pos());
+    if(actRemove && rez == actRemove && QMessageBox::warning(this,_("Remove project"),
+		    QString(_("Do you really want to remove the project \"%1\"?")).arg(prjsLs->currentItem()->data(Qt::UserRole).toString()),
+			QMessageBox::Yes|QMessageBox::No,QMessageBox::No) == QMessageBox::Yes) {
+	vector<TVariant> prms;
+	prms.push_back(string(bindir_full "/openscada-proj remove ") +
+	    prjsLs->currentItem()->data(Qt::UserRole).toString().toStdString());
+	SYS->objFuncCall("system", prms, "root").getS();
+	updatePrjList();
+    }
+    else if(rez == actBackUp && prjsLs->currentItem()) {
+	vector<TVariant> prms;
+	prms.push_back(string(bindir_full "/openscada-proj backup ") +
+	    prjsLs->currentItem()->data(Qt::UserRole).toString().toStdString());
+	prms.push_back(true);
+	QApplication::setOverrideCursor(Qt::WaitCursor);
+	SYS->objFuncCall("system", prms, "root").getS();
+	QApplication::restoreOverrideCursor();
+	updatePrjList();
+    }
+    else if(rez && rez->objectName().size()) {
+	vector<TVariant> prms;
+	prms.push_back(string(bindir_full "/openscada-proj backupRestore ") +
+	    prjsLs->currentItem()->data(Qt::UserRole).toString().toStdString() + " " +
+	    rez->objectName().toStdString());
+	prms.push_back(true);
+	QApplication::setOverrideCursor(Qt::WaitCursor);
+	SYS->objFuncCall("system", prms, "root").getS();
+	QApplication::restoreOverrideCursor();
+    }
+    menu->deleteLater();
 }
 
 //*************************************************

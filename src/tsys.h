@@ -140,12 +140,15 @@ class TSYS : public TCntrNode
 	TSYS( int argi, char **argb, char **env );
 	~TSYS( );
 
+	// Station statuses
+	bool	isRunning( )	{ return mRunning; }
+	bool	isFinalKill( )	{ return mFinalKill; }
+	int	stopSignal( )	{ return mStopSignal; }
+
 	void	unload( );
 
 	int	start( );
 	void	stop( int sig = SIGUSR1 );	// SIGUSR2 used for reloading from other project
-
-	int	stopSignal( )	{ return mStopSignal; }
 
 	// Program options
 	string	id( )		{ return mId.c_str(); }
@@ -184,9 +187,9 @@ class TSYS : public TCntrNode
 	XMLNode	&cfgRoot( )	{ return rootN; }
 	XMLNode	*cfgNode( const string &path, bool create = false );
 	void	modifCfg( bool chkPossibleWR = false );
+	ResRW	&cfgRes( )	{ return mCfgRes; }
 
 	string	workDB( )	{ return mWorkDB; }
-	string	selDB( )	{ return mSelDB; }
 	string	mainCPUs( )	{ return mMainCPUs; }
 	bool	clockRT( )	{ return mClockRT; }
 	int	taskInvPhs( )	{ return mTaskInvPhs; }
@@ -195,7 +198,6 @@ class TSYS : public TCntrNode
 	bool	modifCalc( )	{ return mModifCalc; }
 
 	void	setWorkDB( const string &wdb )	{ mWorkDB = wdb; modifG(); }
-	void	setSelDB( const string &vl )	{ mSelDB = vl; }
 	void	setMainCPUs( const string &vl );
 	void	setClockRT( bool vl )		{ mClockRT = vl; modif(); }
 	void	setTaskInvPhs( int vl );
@@ -203,7 +205,13 @@ class TSYS : public TCntrNode
 	void	setSavePeriod( int vl )		{ mSavePeriod = vmax(0,vl); modif(); }
 	void	setModifCalc( bool vl )		{ mModifCalc = vl; modif(); }
 
+	//  Configuration loading
+	string	selDB( )	{ return mSelDB; }
+	void	setSelDB( const string &vl )	{ mSelDB = vl; }
 	bool	chkSelDB( const string& wDB, bool isStrong = false );
+	XMLNode *cfgCtx( )	{ return mCfgCtx; }
+	void	setCfgCtx( XMLNode *vl )	{ mCfgCtx = vl; }
+	ResMtx &cfgLoadSaveM( )	{ return mCfgLoadSaveM; }
 
 	static void sighandler( int signal, siginfo_t *siginfo, void *context );
 
@@ -301,6 +309,7 @@ class TSYS : public TCntrNode
 	static string strParse( const string &str, int level, const string &sep, int *off = NULL, bool mergeSepSymb = false );
 	static string strLine( const string &str, int level, int *off = NULL );
 	static string pathLev( const string &path, int level, bool decode = true, int *off = NULL );
+	static string pathLevEnd( const string &path, int level, bool decode = true, int *off = NULL );
 	static string path2sepstr( const string &path, char sep = '.' );
 	static string sepstr2path( const string &str, char sep = '.' );
 	static string strEncode( const string &in, Code tp, const string &opt1 = "" );
@@ -362,25 +371,23 @@ class TSYS : public TCntrNode
 	// Reentrant commandline processing
 	string	optDescr( );	//get comand line options
 
-	string getCmdOpt( int &curPos, string *argVal = NULL );
+	string	getCmdOpt( int &curPos, string *argVal = NULL );
 	static string getCmdOpt_( int &curPos, string *argVal, int argc, char **argv );
 
-	bool   cmdOptPresent( const string &opt );
-	string cmdOpt( const string &opt, const string &setVl = "" );
+	bool	cmdOptPresent( const string &opt );
+	string	cmdOpt( const string &opt, const string &setVl = "" );
 
 	int permCrtFiles( bool exec = false );
 
-	ResMtx *commonLock( const string &nm );
+	ResMtx	*commonLock( const string &nm );
 
 	// Control interface functions
 	static void ctrListFS( XMLNode *nd, const string &fsBase, const string &fileExt = "" );	//Inline file system browsing
 
-	ResRW &cfgRes( )	{ return mCfgRes; }
-
 	//Public attributes
-	static bool finalKill;		//Final object's kill flag. For dead requsted resources
-
 	AutoHD<TModule>	mainThr;	//A module to call into the main thread
+
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
     protected:
 	//Protected methods
@@ -400,8 +407,6 @@ class TSYS : public TCntrNode
 	void	cfgFileScan( bool first = false, bool up = false );
 	void	cntrCmdProc( XMLNode *opt );	// Control interface command process
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
-
 	static unsigned char getBase64Code( unsigned char asymb );
 
 	static void *taskWrap( void *stas );
@@ -415,7 +420,12 @@ class TSYS : public TCntrNode
 	const char **argv;	// Comand line seting buffer.
 	const char **envp;	// System environment.
 
-	string	mUser,		// A owner user name!
+	// Station statuses
+	bool	isLoaded, mRunning, isServPrc,
+	    mFinalKill;		// Final object's kill flag. For dead requsted resources
+
+	// Station properties
+	string	mUser,		// An owner user name!
 	 	mConfFile,	// Config-file name
 		mId,		// Station id
 		mName,		// Station name
@@ -431,8 +441,6 @@ class TSYS : public TCntrNode
 	int	mSavePeriod;	// Save period (s) for periodic system saving to DB
 	bool	mModifCalc;	// Set modification for the calculated objects
 
-	bool	isLoaded;
-
 	XMLNode rootN;		// Root of the config-file tree
 	string	rootCfgFl;	// Root node's config-file name
 	time_t	rootFlTm;	// Root node's config-file's modify time
@@ -445,7 +453,7 @@ class TSYS : public TCntrNode
 	map<string, STask>	mTasks;
 	static pthread_key_t	sTaskKey;
 
-	ResRW	taskRes, mCfgRes, mRdRes;;
+	ResRW	taskRes, mCfgRes, mRdRes;
 
 	int		mN_CPU;
 	pthread_t	mainPthr;
@@ -459,6 +467,9 @@ class TSYS : public TCntrNode
 	map<string, string>	mCmdOpts;	//Commandline options
 	map<string, double>	mCntrs;		//Counters
 	map<string, SStat>	mSt;		//Remote stations
+
+	ResMtx	mCfgLoadSaveM;
+	XMLNode	*mCfgCtx;
 
 	unsigned char	mRdStLevel,	//Current station level
 			mRdRestConnTm;	//Redundant restore connection to reserve stations timeout in seconds

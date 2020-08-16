@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Logical level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.2.0"
+#define MOD_VER		"2.3.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the pure logical level of the DAQ parameters.")
 #define LICENSE		"GPL2"
@@ -166,7 +166,7 @@ void TMdContr::load_( )
 {
     if(!SYS->chkSelDB(DB())) throw TError();
 
-    //TController::load_();
+    if(SYS->cfgCtx() && toEnable() && !enableStat())	enable();
 }
 
 void TMdContr::start_( )
@@ -465,8 +465,7 @@ void TMdPrm::disable( )
 
 void TMdPrm::load_( )
 {
-    //TParamContr::load_();
-
+    if(SYS->cfgCtx() && toEnable() && !enableStat())	enable();
     if(enableStat()) loadIO();
 }
 
@@ -482,8 +481,7 @@ void TMdPrm::loadIO( bool force )
 	string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
 
 	//IO values loading and links set, by seek
-	vector<vector<string> > full;
-	for(int fldCnt = 0; SYS->db().at().dataSeek(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",fldCnt++,cfg,false,&full); ) {
+	for(int fldCnt = 0; SYS->db().at().dataSeek(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",fldCnt++,cfg,false,true); ) {
 	    int iIO = tmpl->func()->ioId(cfg.cfg("ID").getS());
 	    if(iIO < 0) continue;
 	    if(tmpl->func()->io(iIO)->flg()&TPrmTempl::CfgLink)

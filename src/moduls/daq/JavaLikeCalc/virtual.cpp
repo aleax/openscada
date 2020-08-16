@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"4.3.1"
+#define MOD_VER		"5.0.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")
@@ -289,13 +289,12 @@ void TpContr::load_( )
 	//cEl.cfgViewAll(false);
 	vector<string> itLs;
 	map<string, bool> itReg;
-	vector<vector<string> > full;
 
 	// Search into DB
 	SYS->db().at().dbList(itLs, true);
 	itLs.push_back(DB_CFG);
 	for(unsigned iDB = 0; iDB < itLs.size(); iDB++)
-	    for(int libCnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+libTable(),nodePath()+"lib",libCnt++,cEl,false,&full); ) {
+	    for(int libCnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+libTable(),nodePath()+"lib",libCnt++,cEl,false,true); ) {
 		string l_id = cEl.cfg("ID").getS();
 		if(!lbPresent(l_id)) {
 		    lbReg(new Lib(l_id.c_str(),"",(itLs[iDB]==SYS->workDB())?"*.*":itLs[iDB]));
@@ -530,9 +529,8 @@ void Contr::loadFunc( bool onlyVl )
 	TConfig cfg(&mod->elVal());
 	string bd_tbl = id()+"_val";
 	string bd = DB()+"."+bd_tbl;
-	vector<vector<string> > full;
 
-	for(int fldCnt = 0; SYS->db().at().dataSeek(bd,mod->nodePath()+bd_tbl,fldCnt++,cfg,false,&full); ) {
+	for(int fldCnt = 0; SYS->db().at().dataSeek(bd,mod->nodePath()+bd_tbl,fldCnt++,cfg,false,true); ) {
 	    int ioId = func()->ioId(cfg.cfg("ID").getS());
 	    if(ioId < 0 || (!isDAQTmpl && (func()->io(ioId)->flg()&Func::SysAttr))) continue;
 	    if(!isDAQTmpl) setS(ioId, cfg.cfg("VAL").getS());
@@ -578,12 +576,11 @@ void Contr::save_( )
 	}
 
 	//Clear VAL
-	vector<vector<string> > full;
 	cfg.cfgViewAll(false);
-	for(int fldCnt = 0; SYS->db().at().dataSeek(val_bd,mod->nodePath()+bd_tbl,fldCnt++,cfg,false,&full); )
+	for(int fldCnt = 0; SYS->db().at().dataSeek(val_bd,mod->nodePath()+bd_tbl,fldCnt++,cfg); )
 	    if(ioId(cfg.cfg("ID").getS()) < 0) {
 		if(!SYS->db().at().dataDel(val_bd,mod->nodePath()+bd_tbl,cfg,true,false,true))	break;
-		if(full.empty()) fldCnt--;
+		fldCnt--;
 	    }
     }
 }

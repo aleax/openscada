@@ -1,6 +1,191 @@
+2020-08-16 Roman 0.9.2
+- OpenSCADA libraries and projects:
+    !!!!:LibsDB.OscadaLibs: The Devices Library appended for the protocol IEC-62056 implementation (DevLib.IEC62056).
+	!!:docOffLine: The offline documentation appended for the document "AGREEMENT ON TECHNICAL SUPPORT OF THE "OpenSCADA" SOFTWARE" version 2
+	    and the new module DB.DBGate.
+	JavaLikeCalc.Controller.text: The tests function appended for JavaLikeCalc internal functions' tests, including the recursion call.
+	Some updated and fixed for versions, sponsority, status of the implementation.
+    !!:FIX:LibsDB.vcaBase:
+	!!:FIX:Main.alarmsSt: Some fixed for the original messages and the "quietation" completely replaced by "confirmation".
+	    !!:FIX: Restored in preventing the duplicate entries for new alarms in that category.
+	    Default value of the property alArch set to "FSArch.alarms".
+	FIX:doc.docRepInstVals: The procedure translation was removed.
+	doc.docUsersSet: The styles appended for a specific rule of the "Description" collumn - "TABLE.data TD:nth-child(5) { white-space: normal;}"
+	Cleaned from the old procedure's state "Translate" setting for inherited pages in the projects.
+
+- API:
+    !!!!:Changes:
+	SYS: The station statuses unified in the function isRunning(), isFinalKill() and stopSignal().
+	    TCfg::setReqKey() appended by a new argument "treatDep".
+	DB: dataSeek(),dataGet(),dataSet(): Expanded for the local configuration context argument "localCfgCtx";
+	*,DB: TBDS::dataSeek() and TTable::fieldSeek() switched to the seek cache implementing in the corresponded modules.
+    Appends:
+	TMess,DB,DB.{SQLite,MySQL,PostgreSQL,FireBird}:
+	    TMess appended for a function of detection the configuration translation translCfg(), which used in all DB modules and in dataSet().
+	SYS: Appended for the global configuration context accessing functions cfgCtx() and setCfgCtx().
+	    The loading and saving configuration appended for own lock TSYS->cfgLoadSaveM().
+	    Appended for the function pathLevEnd() of the paths processing from the end.
+	    TRegExp: Appended by the function getPattern().
+	    TFld: Appended for the combined string variant of the length field - lenS().
+
+- SYS:
+    !!!!:FIX: Building:
+	!!!!:FIX:configure.ac: Core library version rose to 3:8:0 and the program version rose to 0.9.2.
+	!!!!: Modules version of the subsystem "BD" rose to 14, of the subsystem "Transport" rose to 16.
+	!!: data/ModelsDB/{AGLKS/oscada_AGLKS.xml,Boiler/oscada_Boiler.xml}: The input Sockets' transports unified in the names "WEB" and "CNTR".
+	!!: data/ModelsDB/AGLKS/St.sql: The input SSL transports unified in the names "WEB" and "CNTR" and
+	    updated for the KeepAlive timeout setting in 60 and for the SSL-certificate.
+	!!: data/{oscada_start,oscada_server,oscada_plc}.xml: The input WWW-transports are unified, where "WEB_1" renamed to "WEB" and "WEB_2" removed.
+	    !!: Appended for the disabled DB-entries of the standard OpenSCADA libraries.
+	    !!: /oscada_start.xml: Appended for the disabled input transports "WEB" and "CNTR".
+		Appended for the value archivers FSArch.{SYS,alarms,actions} and message archivers FSArch.{1s,1m,1h}.
+	data/Android/build.sh: Appended for build in the new module DB.DBGate.
+	data/icons_src/splash.xcf, src/moduls/ui/QTStarter/images/splash.png:
+	    Some updated for the additional information placing about version the program and the OpenSCADA project.
+	    The splash image crop to remove the transparent shadow border.
+	data/{debian,debian_mod}:
+	    /control: Appended for a dependency to libldap2-dev for DB.LDAP.
+	    /rules: Appended for including the new module DB.DBGate, building DB.LDAP and not building DAQ.BFN.
+	    /debian_mod/control: Appended for the external module openscada-db-ldap and removed for the external module "openscada-daq-bfn".
+	data/openscada.spec: Appended for including modules to the OpenSCADA core library:
+		- DB.DBF, DB.SQLite, DB.DBGate, DAQ.JavaLikeCalc, DAQ.LogicLev,
+		- Transport.Sockets, Transport.Serial,
+		- Protocol.SelfSystem, Protocol.UserProtocol,
+		- Special.FLibComplex1, Special.FLibSYS
+	    Appended for building: --enable-LDAP --enable-MMS --enable-DiamondBoards --enable-ICP_DAS.
+    !!!!:FIX:data/openscada-proj.in,UI.QTStarter: Implementation the builtin backuping.
+	!!!!:FIX:data/openscada-proj.in: Appended for the commands "backup", "backupRestore", "backupList" to implement the project backups.
+	    FIX: The command "list" some improved to show the preinstalled and user projects.
+	    The "remove" command of the projects appended for removing backups of the project.
+	    Crash report files appended for GZIPing.
+	!!!!:UI.QTStarter: Appended for the backup commands call from the project manager - list of the projects.
+    !!!!:.,DB,DAQ.{LogicLev,ModBus,Siemens},UI.{QTCfg,WebCfgD}: Implementation the interstation copying mechanism of the control interface nodes:
+	- appended for the global configuration context accessing functions cfgCtx() and setCfgCtx();
+	- the redundancy processing expanded in the command "save" redundancy only at missing the attribute "ctx";
+	- DB: dataSeek(),dataGet(),dataSet(): expanded for the local configuration context argument "localCfgCtx" in:
+	    - the configuration context processing together the global one SYS->cfgCtx();
+	    - saving and restoring the TCfg structure.
+	- DAQ.{LogicLev,ModBus,Siemens}: Some adapted for IOs copy.
+	- UI.{QTCfg,WebCfgD}: Expanded and allowed for the interstation copy.
+    !!!!:.,UI.QTStarter: OpenSCADA starting with a module as the GUI in the main thread significantly refactored for:
+	- early registration the GUI module in the main thread directly by that module itself and in postEnable() function;
+	- adaption the function perSYSCall() to use for update the GUI module in the main thread, its splash mostly,
+	    during the program starting and stopping (from the service task) and at the configuration loading (for switch to the starting splash);
+	- enabling the messages dynamic display for the main thread execution mode;
+	- unification of the splash display for the both modes;
+	- removing the module specific in modStart() and modStop().
+    !!!!:.,Protocol.SelfSystem,DAQ.AMRDevs: Client accessing of the OpenSCADA control interface expanded by the multiple authentication,
+	what prevents of using direct requests of the OpenSCADA control interface with the authentication in each the request, often for UI.Vision.
+    !!:FIX:TRegExp: The patterns processing fixed appending the end symbol treating,
+	so preventing TController::alarmSet() collisions in the objects strict detection.
+    !!:FIX:LibsDB.OscadaLibs.doc.diagram,UI.{Vision,WebVision}:
+	Prevented from the value scale double adjustment for the percent scale and appended for the value range expanding.
+    !!:FIX: The function TCntrNode::isModify() processing for the children allowed only for nodes in the state "Enabled".
+    FIX: The service task fixed in updating list of the processing subsystems.
+    FIX:TFunction: Time limit of the functions manual execution some approximation to STD_WAIT_TM (5 second) to make it not lesser.
+	FIX: Set in started at the direct execution enabling.
+    FIX: The OpenSCADA tasks priority fixed for SCHED_FIFO in it display as 0.
+    FIX: The User API function TArrayObj::indexOf() fixed in -1 converting to unsigned.
+    FIX: TCfg::setReqKey() prevented from the flag "KeyUse" cleaning by a new argument "treatDep".
+    FIX:.,UI.{QTCfg,WebCfgD}: The control node attribute "acs" appended for the maximum level permition
+	in the high octet what used in the configurators.
+    FIX:XMLNode: The function text() in the text taking mode from special parts "<*>" appended in reading the original
+	text content at the children missing.
+    FIX: The dynamic system properties mWorkDB, mSelDB and mMainCPUs moved under the data lock.
+    data/icons_src/oscada.xcf: Appended for OpenSCADA backuping icon.
+    TSYS::objFuncCall() moved to public.
+    The original message "Accessing" renamed to "Accessible".
+    TCfg::setExtVal() in FALSE appended for cleaning the string value from the extended parts.
+
+- DB:
+    !!!!: A new module "DBGate" created.
+    !!:FIX: TBDS::dataSet() expanded for setting only keys and viewed elements, like to other DB.
+	!!:FIX: Appended for changing-saving the defined entries in the config file instead complete saving all their in the default DB.
+    !!:FIX: The wrong started DB objects in the first fixed for try them next start tries.
+    !!:FIX: DB loading is prevented from double loading from the config file and from DB for the equal entries.
+    !!: The TBD object appended for the service control "call" requests support:
+	"/serv/SQL", "/serv/fieldStruct", "/serv/fieldSeek", "/serv/fieldGet", "/serv/fieldSet", "/serv/fieldDel".
+	What mostly designed and used in DB.DBArch!
+    !:FIX: TBDS::dataGet() (and TBDS::dataSeek()) prevented from getting the previous value at loading from the config-file, by setting the default value.
+    !:FIX: TBDS::{open,close}() fixed for true functional locking by the lock "resTbls".
+    !!:FIX:SQLite: Detected and corrected of data losses with concurrence access, when a minor error of the not activated transaction
+	    "cannot commit - no transaction is active (1)" is generated, which, however, interrupts the data recording.
+	FIX: The debugging key for tracing the SQL-requests renamed to "{ModId}_tracing".
+	FIX: Fixed for some warning messages in the building.
+
+- DAQ:
+    FIX: System messages of enabling, stopping, disabling controller objects are fixed.
+    !!!!:FIX: JavaLikeCalc: The internal functions executing appended for storing the shared-own registers context, in two variants,
+	    for allowing the recursion primarily.
+	FIX: Moving the calculation context modification to the option "modifCalc".
+	FIX: The control interface command "/cntr/cfg/toFunc" some specified.
+
+- Transports:
+    !!!!: The output transports unified by creation the connection parameters, by conPrm(), instead direct ones prm1() and prm2().
+    !!!!: The configuration option "START" was removed for the output transports as spare one and to prevent long starting.
+    FIX: The IO log order inverted to the last in the end for the message parts visual concatenation.
+	The "Request" tab appended in concatenation the response data at the request missing.
+    !!!!:FIX:Sockets,SSL: To prevent the multiple execution of the high loading and long-time control requests the output transports switched to:
+	    - the default configuration for Tries=1, Timeouts="30:2";
+	    - for the connection losses the tries number set to 2;
+	    - for the error "Timeouted" the connections also set to reconnect, besides the SOCK_FORCE type.
+	FIX: The output transports appended for discard connections at the program stopping.
+
+- Protocols:
+    !!:FIX:ModBus: The output requests of the TCP-variant appended for checking Transaction ID of the response packages.
+    !!:FIX:SelfSystem: The output part expanded for checking correspondence of the responses to the requests by the request tag name.
+	Appended for encoding special symbols of the user and password, and the empty password encoding as "<EMPTY>".
+
+- UI:
+    !!!:Vision,WebVision: The visualizer specific property "userSetVis" appended for password implementation
+	after the direct user specifying and for applying all users.
+    !:FIX:VCAEngine,Vision: The field of procedures translation fixed in the visibility processing and updating.
+    WebCfgD,WebVision: Makefile.am: The procedure of building of the source code for JS and HTML files was some unified
+	in the files complete processing by SED.
+    !!!:FIX:QTStarter: The standard-system start/stop splash updated and appended for information
+	    about the program (the custom splashes also) and the OpenSCADA project, including the project icon.
+	!!: Context menu of the project list appended for an item of removing not running projects.
+	!:FIX: Fixed in applying the project specific splash at the project switch.
+	FIX: Prevented from the information item "<Select a profile to combine>" processing of the profile combobox.
+	FIX: Fixed in processing the Qt function QGuiApplication::saveState() renaming to QGuiApplication::saveStateRequest() in the Qt5.
+	The splash building moved under a lock the resources.
+	Begin of the splash messages time moved to the memorized one at the splash type change.
+	Splash updating appended for the short waiting in 0.01 seconds and the tries set to 3,
+	    what is the enough condition for the splash visibility on Qt5 and Qt4.
+	The starting UI Qt-modules configuration was made selectable.
+	The message "Creating-updating a project" renamed to "Create/update project".
+    !!:FIX:QTCfg: Appended in tracing the page changing for indication in the navigation tree with scrolling to the current item.
+	    The getExpandTreeWIt() function appended for processing items without the group prefix - the default group.
+	FIX: Appended for oppressing messages about missed items of the combobox items.
+	FIX: Sending requests to other selected items is performed only for the main request result TError::NoError.
+	FIX: Fixed for the text field processing - updating with the previous syntax highlight rules,
+	    what causes the content visual corruption, and in the position restoring.
+    FIX:WebCfgD: Fixed for the default target-group obtaining in itPaste(). Fixed for wrong call document.dlgWin.close().
+    !!:FIX:VCAEngine: Prevented from crashing on big configurations with long closing the runtime sessions
+	    in accessing the widget heritors (mHerit) by appending the ResRW lock "mHeritRes".
+	!!: The property "Translation" of the widget procedures completely moved to the direct access and set visible
+	    only for the procedure presence, also as the procedure text area and the calculation periodicity visible only at any language selection.
+	    completely cleared from calcProgTr() indirect accessing and calcLang() and calcProg() set to use TSYS::strLine() directly
+	    instead the strange processing with spare marking the modification.
+	FIX: Opened pages processing of the session commands switched to from the end, due to the last opened pages place in the end.
+	FIX: The user action time update appended also at requesting the complete pages tree in the service request "openlist:/serv/pg",
+	    what is a typical user action for WEB in reconnection to present session.
+    !!:FIX:Vision: The authentication and user changing procedure in UserStBar::userSel() and the dialogue object "DlgUser" were significantly unified.
+	!:FIX: The visualizer specific property "userSetVis" (the command "$") improved for restoring to the original user,
+	    mostly for remote connections, by storring the original user and password.
+    !!!:FIX:WebVision:
+	!!!: Unified in the primitive "Button" implementation: by moving the custom buttons under <button></button>
+	    and appending the proper CSS-styles for the default and pressed state with the border and transparent image difference.
+	!!:FIX: The issue of closing all pages of the main page container with frozing the last loss page at fast page switching caught and fixed at last.
+	!!: Appended for the custom interface CSS rules.
+	!:FIX: The link to the user login page set to the session-project complete path, to return back the session-project after the login.
+	!:FIX: The original user setting moved to the common function userSet() in way of fixing the reconnection to the same session
+	    after changing-decreasing the user in "userSetVis".
+
+
 2020-07-20 Roman 0.9.1.5
 - !!:FIX:LibsDB.OscadaLibs.doc.diagram,UI.{Vision,WebVision}:
-    Prevented from the value scale double adjustement for the percent scale and appended for the value range expanding.
+    Prevented from the value scale double adjustment for the percent scale and appended for the value range expanding.
 - FIX:LibsDB.vcaBase: The procedure translation was removed for doc.docRepInstVals.
 - FIX:DB.SQLite: The debugging key for tracing the SQL-requests renamed to "{ModId}_tracing".
 - FIX:UI.QTStarter: Fixed in processing the Qt function QGuiApplication::saveState() renaming to QGuiApplication::saveStateRequest() in the Qt5.
@@ -11,7 +196,7 @@
 
 
 2020-07-07 Roman 0.9.1.4
-- !!:FIX:DB.SQLite: there detected and corrected of data losses with concurrence access, when a minor error of the not started transaction
+- !!:FIX:DB.SQLite: there detected and corrected of data losses with concurrence access, when a minor error of the not activated transaction
     "cannot commit - no transaction is active (1)" is generated, which, however, interrupts the data recording.
 - FIX:UI.Vision: Prevented from try the user changing to no password one in the remote work, only the warning before the implementing.
 - FIX:SYS: The OpenSCADA tasks priority fixed for SCHED_FIFO in it display as 0.
@@ -24,14 +209,14 @@
 
 
 2020-06-15 Roman 0.9.1.3
-- FIX:LibsDB.vcaBase.Main.alarmsSt: Some fixed for the original messages and the "quietation" completly replaced by "confirmation".
+- FIX:LibsDB.vcaBase.Main.alarmsSt: Some fixed for the original messages and the "quietation" completely replaced by "confirmation".
     FIX: Restored in preventing the duplicate entries for new alarms in that category.
 - !:FIX:DB: TBDS::dataGet() (and TBDS::dataSeek()) prevented from getting the previous value at loading from the config-file, by setting the default value.
 - FIX: UI.VCAEngine: The field "Completely translate the procedure" on the project side set to directly obtained, independently from the procedure inheritance.
     FIX: Opened pages processing of the session commands switched to from the end, due to the last opened pages place in the end.
     FIX: The user action time update appended also at requesting the complete pages tree in the service request "openlist:/serv/pg",
 	what is a typical user action for WEB in reconnection to present session.
-- !!:FIX:UI.WebVision: The issue of clossing all pages of the main page container with frozing the last loss page at fast page switching catched and fixed at last.
+- !!:FIX:UI.WebVision: The issue of closing all pages of the main page container with frozing the last loss page at fast page switching caught and fixed at last.
     !:FIX: The link to the user login page set to the session-project complete patch, to return back the session-project after the login.
     !:FIX: The original user setting moved to the common function userSet() in way of fixing the reconnection to the same session
 	after changing-decreasing the user in "userSetVis".
@@ -52,10 +237,10 @@
 
 2020-05-11 Roman 0.9.1.1
 - FIX: data/openscada-proj.in: The command "list" some improved to show the preinstalled and user projects.
-- !!:FIX:SYS: The function TCntrNode::isModify() processing for the childs allowed only for nodes in the state "Enabled".
+- !!:FIX:SYS: The function TCntrNode::isModify() processing for the children allowed only for nodes in the state "Enabled".
     FIX:TFunction: Set in started at the direct execution enabling.
     FIX:XMLNode: The function text() in the text taking mode from special parts "<*>" appended in reading the original
-	text content at the childs missing.
+	text content at the children missing.
     FIX:Transports: The IO log order inverted to the last in the end for the message parts visual concatenation.
 	The "Request" tab appended in concatenation the response data at the request missing.
     FIX: The dynamic system properties mWorkDB, mSelDB and mMainCPUs moved under the data lock.
@@ -6363,7 +6548,7 @@
 
 
 2012-02-09 Roman
-- !:UI.VCAEngine: Uncatched events up to upper page send support is added. That allow central process global key combination and other.
+- !:UI.VCAEngine: Uncaught events up to upper page send support is added. That allow central process global key combination and other.
 
 
 2012-02-08 Roman
@@ -7538,7 +7723,7 @@
 - SYS: RPM-build spec files is updated for: noarch packages enable to all distribution, SuSE and Mandriva adaptation by default.
 - FIX:SYS: Model's RPM-packages dependency to main package is fixed for modules spec-file.
 - FIX:DB: Model's AGLKS DB is fixed for start message about QTCfg wrong start page.
-- UI.QTCfg, UI.Vision: Size adjustement is added for all dialogs, after its show.
+- UI.QTCfg, UI.Vision: Size adjustment is added for all dialogs, after its show.
 
 
 2011-04-15 Roman

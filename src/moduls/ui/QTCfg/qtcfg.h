@@ -201,6 +201,7 @@ private:
 
     // View ListItem with recursive processing of the ControllArea
     void viewChildRecArea( QTreeWidgetItem *i, bool upTree = false );
+    QTreeWidgetItem *getExpandTreeWIt( const string &path );
 
     // Update structure and put service labels
     bool upStruct( XMLNode &w_nd, const XMLNode &n_nd );

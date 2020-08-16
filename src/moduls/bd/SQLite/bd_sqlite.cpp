@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.8.3"
+#define MOD_VER		"3.0.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -332,11 +332,8 @@ void MTable::fieldStruct( TConfig &cfg )
     }
 }
 
-bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
+bool MTable::fieldSeek( int row, TConfig &cfg, const string &cacheKey )
 {
-    vector< vector<string> >	inTbl,
-				&tbl = full ? *full : inTbl;
-
     if(tblStrct.empty()) throw err_sys(_("Table is empty."));
     mLstUse = SYS->sysTm();
 
@@ -382,28 +379,35 @@ bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
 	}
     }
 
+    vector< vector<string> >	inTbl, *tbl = &inTbl;
+    MtxAlloc res(owner().connRes);
+    if(cacheKey.size()) { res.lock(); tbl = &seekSess[cacheKey]; }
+
     //Request
-    if(!full || !full->size() || (row%SEEK_PRELOAD_LIM) == 0) {
+    if(!cacheKey.size() || !tbl->size() || (row%SEEK_PRELOAD_LIM) == 0) {
 	if(first_sel) return false;
 	req += " FROM '" + TSYS::strEncode(name(),TSYS::SQL,"'") + "' " + ((next)?req_where:"");
-	if(!full) req += " LIMIT " +  i2s(row) + ",1";
+	if(!cacheKey.size()) req += " LIMIT " +  i2s(row) + ",1";
 	else req += " LIMIT " + i2s((row/SEEK_PRELOAD_LIM)*SEEK_PRELOAD_LIM) + "," + i2s(SEEK_PRELOAD_LIM);
 	req += ";";
 
-	tbl.clear();
-	owner().sqlReq(req, &tbl/*, false*/);	// For seek to deletion into save context do not set to "false"
+	tbl->clear();
+	owner().sqlReq(req, tbl/*, false*/);	// For seek to deletion into save context do not set to "false"
     }
 
-    row = full ? (row%SEEK_PRELOAD_LIM)+1 : 1;
-    if(tbl.size() < 2 || (full && row >= (int)tbl.size())) return false;
+    row = cacheKey.size() ? (row%SEEK_PRELOAD_LIM)+1 : 1;
+    if(tbl->size() < 2 || (cacheKey.size() && row >= (int)tbl->size())) {
+	if(cacheKey.size()) seekSess.erase(cacheKey);
+	return false;
+    }
 
     //Processing of the query
-    for(unsigned iFld = 0; iFld < tbl[0].size(); iFld++) {
-	sid = tbl[0][iFld];
+    for(unsigned iFld = 0; iFld < (*tbl)[0].size(); iFld++) {
+	sid = (*tbl)[0][iFld];
 	TCfg *u_cfg = cfg.at(sid, true);
-	if(u_cfg) setVal(*u_cfg, tbl[row][iFld]);
-	else if(trPresent && sid.compare(0,3,Mess->lang2Code()+"#") == 0 && tbl[row][iFld].size() && (u_cfg=cfg.at(sid.substr(3),true)))
-	    setVal(*u_cfg, tbl[row][iFld], true);
+	if(u_cfg) setVal(*u_cfg, (*tbl)[row][iFld]);
+	else if(trPresent && sid.compare(0,3,Mess->lang2Code()+"#") == 0 && (*tbl)[row][iFld].size() && (u_cfg=cfg.at(sid.substr(3),true)))
+	    setVal(*u_cfg, (*tbl)[row][iFld], true);
     }
 
     return true;
@@ -424,7 +428,7 @@ void MTable::fieldGet( TConfig &cfg )
     bool first_sel = true, next_wr = false, trPresent = false;
     for(unsigned iFld = 1; iFld < tblStrct.size(); iFld++) {
 	sid = tblStrct[iFld][1];
-	TCfg *u_cfg = cfg.at(sid,true);
+	TCfg *u_cfg = cfg.at(sid, true);
 	if(!u_cfg && !Mess->translDyn() && sid.compare(0,3,Mess->lang2Code()+"#") == 0) {
 	    u_cfg = cfg.at(sid.substr(3), true);
 	    if(u_cfg && !(u_cfg->fld().flg()&TFld::TransltText)) continue;
@@ -470,16 +474,15 @@ void MTable::fieldSet( TConfig &cfg )
     mLstUse = SYS->sysTm();
 
     string sid, sval;
-    bool isVarTextTransl = (!Mess->lang2CodeBase().empty() && Mess->lang2Code() != Mess->lang2CodeBase());
 
     //Get config fields list
     vector<string> cf_el;
     cfg.cfgList(cf_el);
 
     //Check for translation present
-    bool trPresent = isVarTextTransl, trDblDef = false;
+    bool trPresent = Mess->translCfg(), trDblDef = false;
     for(unsigned iFld = 1; iFld < tblStrct.size(); iFld++) {
-	if(trPresent && (!isVarTextTransl || trDblDef)) break;
+	if(trPresent && (!Mess->translCfg() || trDblDef)) break;
 	sid = tblStrct[iFld][1];
 	if(sid.size() > 3) {
 	    if(!trPresent && !Mess->translDyn() && sid.compare(0,3,Mess->lang2Code()+"#") == 0) trPresent = true;
@@ -598,7 +601,7 @@ void MTable::fieldFix( TConfig &cfg, bool trPresent )
 {
     bool toUpdate = false,
 	 appMode = cfg.reqKeys() || (cfg.incomplTblStruct() && !tblStrct.empty()),	//Only for append no present fields
-	 isVarTextTransl = trPresent || (!Mess->lang2CodeBase().empty() && Mess->lang2Code() != Mess->lang2CodeBase());
+	 isVarTextTransl = trPresent || Mess->translCfg();
 
     //Get config fields list
     vector<string> cf_el;

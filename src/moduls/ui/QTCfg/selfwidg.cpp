@@ -877,6 +877,14 @@ void ReqIdNameDlg::setTargets( const vector<string> &tgs )
     itTp->setEnabled(itTp->count()>1);
 }
 
+void ReqIdNameDlg::setPassive( )
+{
+    itTp->setEnabled(false);
+    if(mId)	mId->setEnabled(false);
+    if(mName)	mName->setEnabled(false);
+    if(mName && name().size())	mName->setVisible(false);
+}
+
 void ReqIdNameDlg::selectItTp( int it )
 {
     if(it < 0) return;

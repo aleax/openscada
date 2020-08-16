@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tmess.h
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -134,6 +134,7 @@ class TMess
 
 	// Internal messages translations
 	string lang2CodeBase( )			{ return mLang2CodeBase; }
+	bool translCfg( )			{ return lang2CodeBase().size() && lang2Code() != lang2CodeBase(); }
 	bool translDyn( bool plan = false )	{ return plan ? mTranslDynPlan : mTranslDyn; }
 	bool translEnMan( )			{ return mTranslEnMan; }
 	string translLangs( )			{ return mTranslLangs; }

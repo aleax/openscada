@@ -160,10 +160,9 @@ void TPrmTempl::load_( TConfig *icfg )
 
     //Load IO
     vector<string> u_pos;
-    vector<vector<string> > full;
     TConfig ioCfg(&owner().owner().elTmplIO());
-    ioCfg.cfg("TMPL_ID").setS(id(),true);
-    for(int ioCnt = 0; SYS->db().at().dataSeek(owner().fullDB()+"_io",owner().owner().nodePath()+owner().tbl()+"_io",ioCnt++,ioCfg,false,&full); ) {
+    ioCfg.cfg("TMPL_ID").setS(id(), true);
+    for(int ioCnt = 0; SYS->db().at().dataSeek(owner().fullDB()+"_io",owner().owner().nodePath()+owner().tbl()+"_io",ioCnt++,ioCfg,false,true); ) {
 	string sid = ioCfg.cfg("ID").getS();
 
 	// Position storing
@@ -216,16 +215,15 @@ void TPrmTempl::save_( )
 	cfg.cfg("VALUE").setNoTransl(!(io(iIO)->type()==IO::String || io(iIO)->flg()&(TPrmTempl::CfgLink|IO::Selectable)));
 	cfg.cfg("VALUE").setS(io(iIO)->def());
 	cfg.cfg("POS").setI(iIO);
-	SYS->db().at().dataSet(w_db+"_io",w_cfgpath+"_io",cfg);
+	SYS->db().at().dataSet(w_db+"_io", w_cfgpath+"_io", cfg);
     }
     //Clear IO
-    vector<vector<string> > full;
     cfg.cfgViewAll(false);
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(w_db+"_io",w_cfgpath+"_io",fld_cnt++,cfg,false,&full); ) {
+    for(int fld_cnt = 0; SYS->db().at().dataSeek(w_db+"_io",w_cfgpath+"_io",fld_cnt++,cfg); ) {
 	string sio = cfg.cfg("ID").getS();
 	if(ioId(sio) < 0 || io(ioId(sio))->flg()&TPrmTempl::LockAttr) {
 	    if(!SYS->db().at().dataDel(w_db+"_io",w_cfgpath+"_io",cfg,true,false,true))	break;
-	    if(full.empty()) fld_cnt--;
+	    fld_cnt--;
 	}
     }
 }
@@ -247,7 +245,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter template: ")+name(),RWRWR_,"root",SDAQ_ID,1,"doc","User_API|Documents/User_API");
 	if(ctrMkNode("area",opt,-1,"/tmpl",_("Template"))) {
 	    if(ctrMkNode("area",opt,-1,"/tmpl/st",_("State"))) {
-		ctrMkNode("fld",opt,-1,"/tmpl/st/st",_("Accessing"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/tmpl/st/st",_("Accessible"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/tmpl/st/use",_("Used"),R_R_R_,"root",SDAQ_ID,1,"tp","dec");
 		ctrMkNode("fld",opt,-1,"/tmpl/st/timestamp",_("Date of modification"),R_R_R_,"root",SDAQ_ID,1,"tp","time");
 	    }
@@ -841,14 +839,13 @@ void TPrmTmplLib::load_( TConfig *icfg )
 
     //Load templates
     map<string, bool>	itReg;
-    vector<vector<string> > full;
     TConfig cEl(&owner().elTmpl());
     //cEl.cfgViewAll(false);
-    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB(),owner().nodePath()+tbl(), fldCnt++,cEl,false,&full); ) {
-	string f_id = cEl.cfg("ID").getS();
-	if(!present(f_id)) add(f_id);
-	at(f_id).at().load(&cEl);
-	itReg[f_id] = true;
+    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB(),owner().nodePath()+tbl(),fldCnt++,cEl,false,true); ) {
+	string fId = cEl.cfg("ID").getS();
+	if(!present(fId)) add(fId);
+	at(fId).at().load(&cEl);
+	itReg[fId] = true;
     }
 
     //Check for remove items removed from DB
@@ -862,7 +859,7 @@ void TPrmTmplLib::load_( TConfig *icfg )
 
 void TPrmTmplLib::save_( )
 {
-    SYS->db().at().dataSet(DB()+"."+owner().tmplLibTable(),owner().nodePath()+"tmplib",*this);
+    SYS->db().at().dataSet(DB()+"."+owner().tmplLibTable(), owner().nodePath()+"tmplib", *this);
 }
 
 void TPrmTmplLib::start( bool val )
@@ -908,7 +905,7 @@ void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("grp",opt,-1,"/br/tmpl_",_("Template"),RWRWR_,"root",SDAQ_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
 	if(ctrMkNode("area",opt,-1,"/lib",_("Library"))) {
 	    if(ctrMkNode("area",opt,-1,"/lib/st",_("State"))) {
-		ctrMkNode("fld",opt,-1,"/lib/st/st",_("Accessing"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/lib/st/st",_("Accessible"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library DB"),RWRWR_,"root",SDAQ_ID,4,
 		    "tp","str","dest","sel_ed","select",("/db/tblList:tmplib_"+id()).c_str(),
 		    "help",_("DB address in format \"{DB module}.{DB name}.{Table name}\".\nSet '*.*.{Table name}' for use the main work DB."));

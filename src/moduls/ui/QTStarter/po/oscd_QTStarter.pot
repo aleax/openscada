@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-14 23:38+0300\n"
+"POT-Creation-Date: 2020-07-31 08:47+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -520,7 +520,7 @@ msgstr ""
 msgid "Module options"
 msgstr ""
 
-msgid "Qt modules for startup, separated by ';'"
+msgid "Qt modules for startup"
 msgstr ""
 
 msgid "Collapse and startup to the system tray"
@@ -623,12 +623,6 @@ msgstr ""
 msgid "The list for call and switch to allowed projects of OpenSCADA."
 msgstr ""
 
-msgid "current"
-msgstr ""
-
-msgid "running"
-msgstr ""
-
 msgid "Switch to the selected project"
 msgstr ""
 
@@ -641,7 +635,7 @@ msgstr ""
 msgid "The button for call the selected project."
 msgstr ""
 
-msgid "Creating-updating a project"
+msgid "Create/update project"
 msgstr ""
 
 msgid "New projects creating or updating of presented ones, like to desktop links"
@@ -651,6 +645,16 @@ msgid "The button for new projects creating or updating of presented ones, like 
 msgstr ""
 
 msgid "The button for exit the program."
+msgstr ""
+
+msgid "current"
+msgstr ""
+
+msgid "running"
+msgstr ""
+
+#, c-format
+msgid "%d backups"
 msgstr ""
 
 #, c-format
@@ -698,6 +702,18 @@ msgid "Project \"%1\" seems running now! You still want to call the project?"
 msgstr ""
 
 msgid "Project \"%1\" seems wrong or broken!"
+msgstr ""
+
+msgid "BackUp"
+msgstr ""
+
+msgid "Restore from \"%1\""
+msgstr ""
+
+msgid "Remove project"
+msgstr ""
+
+msgid "Do you really want to remove the project \"%1\"?"
 msgstr ""
 
 #, c-format

@@ -260,7 +260,7 @@ void MTable::fieldStruct( TConfig &cfg )
 }
 
 //!!! Processing virtual functions for seeking, getting, setting and deleting a field
-bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
+bool MTable::fieldSeek( int row, TConfig &cfg, const string &cacheKey )
 {
     //!!! Check the syntax of the request's, it may differ in your database
     vector< vector<string> > tbl;
@@ -390,16 +390,15 @@ void MTable::fieldSet( TConfig &cfg )
     mLstUse = SYS->sysTm();
 
     string sid, sval;
-    bool isVarTextTransl = (!Mess->lang2CodeBase().empty() && Mess->lang2Code() != Mess->lang2CodeBase());
 
     //Get config fields list
     vector<string> cf_el;
     cfg.cfgList(cf_el);
 
     //Check for translation present
-    bool trPresent = isVarTextTransl, trDblDef = false;
+    bool trPresent = Mess->translCfg(), trDblDef = false;
     for(unsigned i_fld = 1; i_fld < tblStrct.size(); i_fld++) {
-	if(trPresent && (!isVarTextTransl || trDblDef)) break;
+	if(trPresent && (!Mess->translCfg() || trDblDef)) break;
 	sid = tblStrct[i_fld][0];
 	if(sid.size() > 3) {
 	    if(!trPresent && !Mess->translDyn() && sid.compare(0,3,Mess->lang2Code()+"#") == 0) trPresent = true;

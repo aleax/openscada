@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-12 07:33+0300\n"
+"POT-Creation-Date: 2020-08-12 20:13+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -183,6 +183,7 @@ msgid ""
 "CachePgSz    <numb>     Maximum number of the pages in the cache (by default 10).\n"
 "PNGCompLev   <lev>      Compression level [-1..9] of the creating PNG-images.\n"
 "ImgResize    <0|1>      Resizing raster images on the server side.\n"
+"CustCSS      <CSS>      Custom interface CSS rules.\n"
 "\n"
 msgstr ""
 
@@ -280,6 +281,9 @@ msgid "Resizing raster images on the server side"
 msgstr ""
 
 msgid "Mostly to decrease too big images size then decrease the traffic, what causes to rise the server load."
+msgstr ""
+
+msgid "Custom interface CSS rules"
 msgstr ""
 
 #, c-format

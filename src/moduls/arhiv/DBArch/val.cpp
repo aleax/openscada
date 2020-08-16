@@ -60,9 +60,8 @@ void ModVArch::postDisable( int flag )
 
     if(flag) {
 	//Removing the grouping mode tables and records
-	vector<vector<string> > full;
 	TConfig cfg(&mod->archEl());
-	for(int aCnt = 0; SYS->db().at().dataSeek(addr()+"."+mod->mainTbl(),"",aCnt++,cfg,false,&full); ) {
+	for(int aCnt = 0; SYS->db().at().dataSeek(addr()+"."+mod->mainTbl(),"",aCnt++,cfg); ) {
 	    string vTbl = cfg.cfg("TBL").getS(), aNm;
 	    if(vTbl.find(archTbl()+"_") == string::npos) continue;
 
@@ -71,7 +70,7 @@ void ModVArch::postDisable( int flag )
 	    SYS->db().at().close(addr()+"."+vTbl, true);
 
 	    if(!SYS->db().at().dataDel(addr()+"."+mod->mainTbl(),"",cfg,true,false,true)) break;
-	    if(full.empty()) aCnt--;
+	    aCnt--;
 	}
     }
 }
@@ -144,9 +143,8 @@ void ModVArch::checkArchivator( unsigned int cnt )
     if(groupPrms()) accm.clear();
 
     //Loading and processing the main table with the meta-information.
-    vector<vector<string> > full;
     TConfig cfg(&mod->archEl());
-    for(int aCnt = 0; SYS->db().at().dataSeek(addr()+"."+mod->mainTbl(),"",aCnt++,cfg,false,&full); ) {
+    for(int aCnt = 0; SYS->db().at().dataSeek(addr()+"."+mod->mainTbl(),"",aCnt++,cfg,false,true); ) {
 	string vTbl = cfg.cfg("TBL").getS(), aNm;
 	if(vTbl.find(archTbl()+"_") == string::npos) continue;
 	//Table per parameter mode
@@ -568,8 +566,7 @@ void ModVArchEl::getValsProc( TValBuf &ibuf, int64_t ibegIn, int64_t iendIn )
 	tC = (tC/(10*period()))*(10*period());
 	cfg.cfg("MARK").setI(tC/(10*period()), true);
 	int eC = 0;
-	vector< vector<string> > full;
-	for( ; SYS->db().at().dataSeek(tblAddr,"",eC++,cfg,false,&full); ) {
+	for( ; SYS->db().at().dataSeek(tblAddr,"",eC++,cfg,false,true); ) {
 	    cTm = 1000000ll * cfg.cfg("TM").getI();
 	    if(cTm < ibeg || cTm > iend) continue;
 	    switch(archive().valType()) {

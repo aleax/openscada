@@ -320,9 +320,12 @@ fnc_in:	/*empty*/	{ $$ = pF->prg.size();
 			    pF->prg = pF->prg + (char)Reg::IFuncDef + "NN";
 			    pF->prg += (uint8_t)pF->fPrmst.size();
 			    uint16_t addr;
+			    int ckAddr;
 			    //Place the return
-			    addr = pF->regNew(true);
-			    pF->regAt(addr)->setName("<<IN-RET>>"); pF->regAt(addr)->setLock(true);
+			    if((ckAddr=pF->regGet("<<IN-RET>>")) < 0) {
+				addr = pF->regNew(false, -1, false);
+				pF->regAt(addr)->setName("<<IN-RET>>"); pF->regAt(addr)->setLock(true); //pF->regAt(addr)->setInFnc(false);
+			    } else addr = ckAddr;
 			    pF->prg.append((char*)&addr,sizeof(addr));
 			    //Place the arguments
 			    while(pF->fPrmst.size()) {
@@ -661,7 +664,11 @@ retry:
 	//Get new register
 	yylval.reg = pF->regAt(pF->regNew(true));
 	yylval.reg->setName(smb_nm);
+#ifdef IN_F_SHARE_REGS
+	if(pF->mInFnc.size()) yylval.reg->setName(yylval.reg->name());
+#else
 	if(pF->mInFnc.size()) yylval.reg->setName(pF->mInFnc+":"+yylval.reg->name());
+#endif
 	yylval.reg->setLock(true);
 	return VAR;
     }

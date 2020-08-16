@@ -177,10 +177,9 @@ void WidgetLib::load_( TConfig *icfg )
 
     //Create new widgets
     map<string, bool>	itReg;
-    vector<vector<string> > full;
     TConfig cEl(&mod->elWdg());
     //cEl.cfgViewAll(false);
-    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl(),fldCnt++,cEl,false,&full); ) {
+    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl(),fldCnt++,cEl,false,true); ) {
 	string fId = cEl.cfg("ID").getS();
 	if(!present(fId)) { add(fId, "", ""); at(fId).at().setEnableByNeed(); }
 	at(fId).at().load(&cEl);
@@ -250,8 +249,7 @@ void WidgetLib::mimeDataList( vector<string> &list, const string &idb ) const
     cEl.cfgViewAll(false);
 
     list.clear();
-    vector<vector<string> > full;
-    for(int fldCnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,mod->nodePath()+wtbl,fldCnt,cEl,false,&full); fldCnt++)
+    for(int fldCnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,mod->nodePath()+wtbl,fldCnt,cEl,false,true); fldCnt++)
 	list.push_back(cEl.cfg("ID").getS());
 }
 
@@ -565,25 +563,17 @@ string LWidget::calcLang( ) const
 {
     if(!proc().size() && !parent().freeStat()) return parent().at().calcLang();
 
-    string iprg = proc();
-    if(iprg.find("\n") == string::npos) {
-	iprg = iprg+"\n";
-	cfg("PROC").setS(iprg);
-    }
-    return iprg.substr(0,iprg.find("\n"));
+    return TSYS::strLine(proc(), 0);
 }
-
-bool LWidget::calcProgTr( )	{ return (!proc().size() && !parent().freeStat()) ? parent().at().calcProgTr() : cfg("PR_TR"); }
 
 string LWidget::calcProg( ) const
 {
     if(!proc().size() && !parent().freeStat()) return parent().at().calcProg();
 
     string iprg = proc();
-    size_t lng_end = iprg.find("\n");
-    if(lng_end == string::npos) lng_end = 0;
-    else lng_end++;
-    return iprg.substr(lng_end);
+    int off = 0;
+    TSYS::strLine(iprg, 0, &off);
+    return iprg.substr(off);
 }
 
 string LWidget::calcProgStors( const string &attr )
@@ -598,12 +588,6 @@ string LWidget::calcProgStors( const string &attr )
 int LWidget::calcPer( ) const	{ return (mProcPer < 0 && !parent().freeStat()) ? parent().at().calcPer() : mProcPer; }
 
 void LWidget::setCalcLang( const string &ilng )	{ cfg("PROC").setS(ilng.empty() ? "" : ilng+"\n"+calcProg()); }
-
-void LWidget::setCalcProgTr( bool vl )
-{
-    if(!proc().size() && !parent().freeStat())	parent().at().setCalcProgTr(vl);
-    else cfg("PR_TR") = vl;
-}
 
 void LWidget::setCalcProg( const string &iprg )	{ cfg("PROC").setS(calcLang()+"\n"+iprg); }
 
@@ -697,12 +681,11 @@ void LWidget::loadIO( )
     //Load cotainer widgets
     if(!isContainer()) return;
     map<string, bool>   itReg;
-    vector<vector<string> > full;
     TConfig cEl(&mod->elInclWdg());
     string db  = ownerLib().DB();
     string tbl = ownerLib().tbl()+"_incl";
     cEl.cfg("IDW").setS(id(),true);
-    for(int fldCnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fldCnt++,cEl,false,&full); ) {
+    for(int fldCnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fldCnt++,cEl,false,true); ) {
 	string sid  = cEl.cfg("ID").getS();
 	if(cEl.cfg("PARENT").getS() == "<deleted>") {
 	    if(wdgPresent(sid))	wdgDel(sid);
@@ -849,7 +832,9 @@ void LWidget::inheritAttr( const string &attr )
 bool LWidget::cfgChange( TCfg &co, const TVariant &pc )
 {
     if(co.name() == "PR_TR") cfg("PROC").setNoTransl(!calcProgTr());
-    else if(co.name() == "PROC" && co.getS() != pc.getS()) procChange();
+
+    if(co.getS() == pc.getS()) return true;
+    if(co.name() == "PROC") procChange();
     modif();
     return true;
 }

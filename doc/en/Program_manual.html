@@ -452,7 +452,7 @@
 <li> Configuration module based on the dynamic WEB-technologies (DHTML) — <a href="Modules/WebCfgD.html" title="Special:MyLanguage/Modules/WebCfgD">UI.WebCfgD</a>. Provides an advanced configuration interface, allowing to operate as local server's stations, and remote stations in local and global networks, including work on the secure connection. Client connection is provided through the usual Web-browser.</li>
 <li> Configuration module based on the static WEB-technologies (XHTML) — <a href="Modules/WebCfg.html" title="Special:MyLanguage/Modules/WebCfg">UI.WebCfg</a>. Provides an adequate configuration interface that allows to manage local server's stations via the usual Web-browser.</li></ul>
 <p>Configuration values, changed in the configurators, as well as most of data are stored in databases (DB). Given the modularity of the subsystems "DB", them can be different databases. Moreover, there is a possibility of storing different OpenSCADA parts in different databases of the same type and in databases of different types as well.
-</p><p>In addition to the database configuration information may be contained in the OpenSCADA configuration file, and passed through the command line parameter's when you call OpenSCADA. Saving configuration in the configuration file is the same as the database. Standard name of the OpenSCADA configuration file is <b>{sysconfdir}/oscada.xml</b> (where <i>sysconfdir</i> typically is "/etc"), for configurations besides of the OpenSCADA projects, and <b>{Proj}/oscada.xml</b> for the project "Proj". Format of the configuration file and command line parameters we'll examine in <a href="#CfgFilePrm">the separate section</a>.
+</p><p>In addition to the database configuration, the information may be contained in the OpenSCADA configuration file, and passed through the command line parameter's when you call OpenSCADA. Saving configuration in the configuration file is the same as the database. Standard name of the OpenSCADA configuration file is <b>{sysconfdir}/oscada.xml</b> (where <i>sysconfdir</i> typically is "/etc"), for configurations besides of the OpenSCADA projects, and <b>{Proj}/oscada.xml</b> for the project "Proj". Format of the configuration file and command line parameters we'll examine in <a href="#CfgFilePrm">the separate section</a>.
 </p><p>Changing of some node's configuration will set the modification flag for the node, and also will set to active for buttons "Load from DB", for loading the initial configuration, and "Save to DB" for the changes saving. The modification flag also rises to parent node, which allows to restore-save from the root node, but really into the operations with DB will participate only modified nodes. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> A node removing causes to removing it from the storage-DB and the modification mechanism does not work for this operation.
 </p><p>Many of settings and configurations of the objects OpenSCADA, which are executed or already enabled, are not applied immediately as for changes, because the configuration is read/apply usually only when turn on or start. Therefore to apply the changes, in such cases, it is enough to enable/disable the enabled object or to restart the running one — start/stop. At this time, most settings that do not provide direct application are simply not allowed to be edited.
 </p><p>Further examining of configuration of OpenSCADA will be based on the interface of the configurator <a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">UI.QTCfg</a>, but the principles of work will be fully consistent with the rest of the configurators owing to the generality in the used control interface of OpenSCADA.
@@ -649,9 +649,8 @@
 <ul><li> <i>Identifier</i> — information on the transport's identifier.</li>
 <li> <i>Name</i> — specifies the transport's name.</li>
 <li> <i>Description</i> — brief description of the transport and its appointment.</li>
-<li> <i>Address</i> — transport address in a specific type of transport (module) format. Description of the format of the address of the transport, as a rule, is available in the tooltip for this field.</li>
-<li> <i>To start</i> — indicates the state "Running", in which to transfer the transport at startup.</li></ul></li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:750px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_tr_mod_tr_otr.png"><img class="thumbimage" height="610" src="files/QTCfg_subsys_tr_mod_tr_otr.png" width="748" /></a>  <div class="thumbcaption">Fig. 4.3d. The tab "Transport" of the page of an output transport of the module of the subsystem "Transports".</div></div></div></div>
+<li> <i>Address</i> — transport address in a specific type of transport (module) format. Description of the format of the address of the transport, as a rule, is available in the tooltip for this field.</li></ul></li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:811px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_tr_mod_tr_otr.png"><img class="thumbimage" height="622" src="files/QTCfg_subsys_tr_mod_tr_otr.png" width="809" /></a>  <div class="thumbcaption">Fig. 4.3d. The tab "Transport" of the page of an output transport of the module of the subsystem "Transports".</div></div></div></div>
 <p>Output transport, in addition, provides a tab of forming user requests via this transport (Fig.4.3e). The tab is provided for debugging of communications and communication protocols, and includes:
 </p>
 <ul><li> <i>Time</i> — information about the time spent on the request and the response.</li>
@@ -1691,9 +1690,9 @@ ChkPer     &lt;seconds&gt;    Period of the checking for new shared libraries(mo
 <li> opening of own dialog window of the starter (Fig.5a);</li>
 <li> starting-collapsing to the system tray (Fig.5b) — is actually a background run mode, but with the access from the graphical environment.</li></ul></li>
 <li> initiation startup mode (Fig.5c) — selecting a project to switch to the main mode of the project OpenSCADA execution.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:298px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_dialog.png"><img class="thumbimage" height="629" src="files/QTStarter_dialog.png" width="296" /></a>  <div class="thumbcaption">Fig.5a. Dialog window of the starter of the QTStarter module.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:428px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_dialog.png"><img class="thumbimage" height="673" src="files/QTStarter_dialog.png" width="426" /></a>  <div class="thumbcaption">Fig.5a. Dialog window of the starter of the QTStarter module.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:348px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_systray.png"><img class="thumbimage" height="174" src="files/QTStarter_systray.png" width="346" /></a>  <div class="thumbcaption">Fig.5b. Project "AGLKS", started or collapsed to the system tray.</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:298px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_selectProj.png"><img class="thumbimage" height="524" src="files/QTStarter_selectProj.png" width="296" /></a>  <div class="thumbcaption">Fig.5c. Dialog window of the starter of the QTStarter module in the initiation mode — a project selection.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:298px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_selectProj.png"><img class="thumbimage" height="514" src="files/QTStarter_selectProj.png" width="296" /></a>  <div class="thumbcaption">Fig.5c. Dialog window of the starter of the QTStarter module in the initiation mode — a project selection.</div></div></div></div>
 <p>The simple startup is little useful, inconvenient and involves the use and operation of only one configuration, which is <a href="#Config">configuration file</a> <i>{sysconfdir}/oscada.xml</i> as the primary configuration storage. To enable configuration choices, the <a href="#CfgFilePrm">command line parameter <i>--config</i></a> is provided at startup of the program and changing of the program working directory before launching or by <a href="#CfgFilePrm">parameter "WorkDir" this configuration file</a>, which can be used and used exclusively by OpenSCADA to version 0.9 through the creation of a separate command line script (Shell) for a separate configuration. The OpenSCADA 0.9 version adds the concept of the "OpenSCADA Project", which was originally implemented by a separate command line script <b>openscada_start</b>, and then integrated into the OpenSCADA core and the startup module of the local graphical interface.
 </p>
 <h3><span class="mw-headline" id="OpenSCADA_projects"><span class="mw-headline-number">5.1</span> <span id="Projects" title="#Projects">OpenSCADA projects</span></span></h3>
@@ -1731,12 +1730,53 @@ ChkPer     &lt;seconds&gt;    Period of the checking for new shared libraries(mo
 <li> by a symbolic link name — <b>openscada_{NameProject}</b> to <b>openscada</b>.</li>
 <li> by selection of a presented project from the list of the local graphical interface <a href="Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">UI.QTStarter</a>, which is provided by the simple call of the original binary file <b>openscada</b> — the initiation mode (Fig.5c), and if the graphical Qt modules are not specified for the automatic startup — the mode of execution of the OpenSCADA project (Fig.5a).</li></ul>
 <p>You can create a new project from the <a href="Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">UI.QTStarter</a> local graphical interface (Fig.5c) and through the command line script for the project manager <b>openscada-proj</b>, which is actually called from local graphical interface.
-</p><p>In general, the command line script for the project manager <b>openscada-proj</b> includes functions and commands:
+</p><p>Result of the command <b>$ openscada-proj --help</b> execution:
+</p>
+<pre style="white-space: pre-wrap;">
+Projects management script of OpenSCADA mostly designed to call from OpenSCADA but also can be used independently.
+The script is mostly software platform specific and relates now for Linux.
+openscada-proj list
+openscada-proj proc|create|remove|update {ProjName}
+ Commands:
+  list   - allowed projects list;
+  proc   - proceed for copy RO projects to WR, create desktop links, process core dumps;
+  create - create new projects or copy RO projects to WR, create desktop links;
+  remove - remove project;
+  update - update from 0.8.0 LTS;
+ Arguments:
+  ProjName - project name;
+ Environments:
+  dPrj     - directory of projects OpenSCADA, can be RO;
+  dPrjUser - directory of projects OpenSCADA of the user, WR;
+  dSysCfg  - directory of system configuration;
+  dData    - directory of system data;
+
+openscada-proj backup|backupRestore {ProjName} [{BackupName}]
+openscada-proj backupList {ProjName}
+ Commands:
+  backup - backup the selected project &lt;ProjName&gt; to the name &lt;BackupName&gt;, or to the current date at missing;
+  backupRestore - restore the selected project &lt;ProjName&gt; from the pointed backup name &lt;BackupName&gt;, or from the last one at missing;
+  backupList    - list the project &lt;ProjName&gt; backups.
+ Arguments:
+  ProjName   - project name;
+  BackupName - the backup archive name.
+ Environments:
+  OSCADA_TAR_ComprPrg - TAR compression program, at missing there used gzip.
+  OSCADA_BackLim      - Backups limit, 10 by default
+</pre>
+<p>In general, the command line script for the project manager <b>openscada-proj</b> includes such project functions and commands:
 </p>
 <ul><li> <i>list</i> — list of available projects;</li>
 <li> <i>proc</i> — to process on the subject: copying the RO project in RW, creating a shortcut-icon on the desktop, generating a fall report and more;</li>
 <li> <i>create</i> — create a new project, in addition to all <i>proc</i> functions;</li>
 <li> <i>remove</i> — delete an existing project.</li></ul>
+<p>Additionally, the command line script contains the project backups manager commands:
+</p>
+<ul><li> <i>backup</i> — backup the selected project <i>ProjName</i> to the name <i>BackupName</i>, or to the current date at missing;</li>
+<li> <i>backupRestore</i> — restore the selected project <i>ProjName</i> from the pointed backup name <i>BackupName</i>, or from the last one at missing;</li>
+<li> <i>backupList</i> — list the project <i>ProjName</i> backups.</li></ul>
+<p>Backup is generally done in the OpenSCADA working folder, along with the folders of the projects themselves, for which packed folder files are created with the name <b>{ProjName}_{BackupName}.backup</b>, for example — "Boiler_2020-06-24_20.09.backup". By default, project folders are compressed with "gzip", which can be changed by setting the environment variable "OSCADA_TAR_ComprPrg". Accordingly, the backup can be done from the outside, for example, according to the established schedule with CRON, in addition to doing it manually from the graphical interface of the project manager (Fig.5a).
+</p>
 <h2><span class="mw-headline" id="Links"><span class="mw-headline-number">6</span> Links</span></h2>
 <ul><li> <a class="external" href="http://oscada.org/wiki/File:Oscada_struct.odg" title="File:Oscada struct.odg">Diagram: Block scheme of OpenSCADA.</a></li>
 <li> <a class="external" href="http://oscada.org/wiki/File:Oscada_subsys_daq_str.odg" title="File:Oscada subsys daq str.odg">Diagram: Hierarchical structure of the subsystem "DAQ".</a></li>
@@ -1751,5 +1791,5 @@ ChkPer     &lt;seconds&gt;    Period of the checking for new shared libraries(mo
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/en">Documents/Program_manual/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2020</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.1</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/en">Documents/Program_manual/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2020</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.2</td></tr></table></body>
 </html>

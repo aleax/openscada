@@ -4,7 +4,7 @@ Summary(uk_UA.UTF8): Відкрита SCADA система
 Summary(ru_RU.UTF8): Открытая SCADA система
 Summary(de_DE.UTF8): Open SCADA-System
 Name: openscada
-Version: 0.9.1
+Version: 0.9.2
 Release: 1
 Source: openscada-%version.tar.xz
 Source1: openscada-res-%version.tar.xz
@@ -32,12 +32,32 @@ BuildRoot: %_tmppath/%name-%version-root
 
 %description
 Open SCADA system.
+Includes the most used modules into the OpenSCADA core library:
+  DB.DBF, DB.SQLite, DB.DBGate, DAQ.JavaLikeCalc, DAQ.LogicLev,
+  Transport.Sockets, Transport.Serial,
+  Protocol.SelfSystem, Protocol.UserProtocol,
+  Special.FLibComplex1, Special.FLibSYS.
 %description -l uk_UA.UTF8
 Відкрита SCADA система.
+Включає найбільш використовувані модулі до ядра OpenSCADA:
+  DB.DBF, DB.SQLite, DB.DBGate, DAQ.JavaLikeCalc, DAQ.LogicLev,
+  Transport.Sockets, Transport.Serial,
+  Protocol.SelfSystem, Protocol.UserProtocol,
+  Special.FLibComplex1, Special.FLibSYS.
 %description -l ru_RU.UTF8
 Открытая SCADA система.
+Включает наиболее используемые модули в ядро OpenSCADA:
+  DB.DBF, DB.SQLite, DB.DBGate, DAQ.JavaLikeCalc, DAQ.LogicLev,
+  Transport.Sockets, Transport.Serial,
+  Protocol.SelfSystem, Protocol.UserProtocol,
+  Special.FLibComplex1, Special.FLibSYS.
 %description -l de_DE.UTF8
 Das offene SCADA System.
+Schließt die am häufigsten verwendeten Module in die OpenSCADA-Kernbibliothek ein:
+  DB.DBF, DB.SQLite, DB.DBGate, DAQ.JavaLikeCalc, DAQ.LogicLev,
+  Transport.Sockets, Transport.Serial,
+  Protocol.SelfSystem, Protocol.UserProtocol,
+  Special.FLibComplex1, Special.FLibSYS.
 
 %package plc
 Summary: Open SCADA PLC - daemon mode
@@ -240,7 +260,11 @@ Fuers Starten wird Kommando <openscada_Boiler> benutzt.
 autoreconf -ivf
 %endif
 
-%configure
+%configure --enable-DBF=incl --enable-SQLite=incl --enable-DBGate=incl \
+	   --enable-JavaLikeCalc=incl --enable-LogicLev=incl \
+	   --enable-Sockets=incl --enable-Serial=incl --enable-SelfSystem=incl --enable-UserProtocol=incl \
+	   --enable-FLibComplex1=incl --enable-FLibSYS=incl \
+	   --enable-LDAP --enable-MMS --enable-DiamondBoards --enable-ICP_DAS
 
 %if %_vendor == "redhat" || %_vendor == "suse"
 %__make
@@ -373,6 +397,9 @@ ln -s %_defaultdocdir/%name-docUK-%version %buildroot/%_datadir/openscada/docs/u
 %_datadir/openscada/Boiler/*.db
 
 %changelog
+* Mon Aug 17 2020 Roman Savochenko <roman@oscada.org>
+- Update 2 of OpenSCADA 0.9 LTS.
+
 * Wed Apr 08 2020 Roman Savochenko <roman@oscada.org>
 - Update 1 of OpenSCADA 0.9 LTS.
 
