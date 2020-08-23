@@ -308,7 +308,7 @@
 <h2><span class="mw-headline" id="Updates"><span class="mw-headline-number">7</span> Updates</span></h2>
 <h3><span class="mw-headline" id=".5B17.08.2020.5D_The_SECOND_update"><span class="mw-headline-number">7.1</span> [17.08.2020] The SECOND update</span></h3>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
-<ul><li> <b>State:</b> <span style="color: red">Translation</span></li></ul>
+<ul><li> <b>State:</b> Completed</li></ul>
 <p>The common releasing process, for the users to estimate your expectations and for the developers to remind the tasks:<br />
 <b><u>1. The preparing and building week:</u></b><br />
 </p>
@@ -334,8 +334,13 @@
 <li> Generating the actual offline documentation using the service procedure "<a href="Libs_Service_procedures.html#docOffLine" title="Special:MyLanguage/Libs/Service procedures">EXT: Off-line documentation</a>".</li>
 <li> Committing the release fixes to the repository and building that for the second-final build.</li></ul>
 </div>
-<p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 60 bugs and appends some improvements, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2704" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
-</p><p><b><u>OpenSCADA libraries and projects</u></b><br />
+<p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 60 bugs and appends some improvements, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2706" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
+</p><p><b><u><a class="external" href="http://oscada.org/wiki/Sub-projects/Automation_Linux_distributive" title="Sub-projects/Automation Linux distributive">Automation Linux distributive of the project OpenSCADA</a></u></b><br />
+</p>
+<ul><li> KMix was completed in improving the work with PulseAudio by making dynamic in the patch "<a class="external text" href="https://bugs.pearsoncomputing.net/show_bug.cgi?id=2782" rel="nofollow noreferrer noopener" target="_blank">kmix-UpdMixersForChangeAndChMaster.patch</a>".</li>
+<li> KRfb (VNC-server) was fixed for crashed and completed in implementation typing the additional keys to the main keyboard layout, Cyrillic mostly but allowed for additional UTF symbols also.</li>
+<li> Complete translation updating of the <a class="external text" href="http://www.trinitydesktop.org/" rel="nofollow noreferrer noopener" target="_blank">Trinity Desktop Environment project</a> to Ukrainian for the parts: tdelibs, tdebase, tdenetwork, tdemultimedia, tdepim (mostly), krusader, yakuake.</li></ul>
+<p><b><u>OpenSCADA libraries and projects</u></b><br />
 </p>
 <ul><li> LibsDB.OscadaLibs: The Devices Library appended for the protocol IEC-62056 implementation (DevLib.IEC62056). The offline documentation appended for the document "AGREEMENT ON TECHNICAL SUPPORT OF THE "OpenSCADA" SOFTWARE" version 2 and the new module DB.DBGate.</li>
 <li> FIX:LibsDB.vcaBase.Main.alarmsSt: Some fixed for the original messages and the "quietation" completely replaced by "confirmation". Restored in preventing the duplicate entries for new alarms in that category.</li></ul>
