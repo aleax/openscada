@@ -266,7 +266,7 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TMArchivator::cntrCmdProc(opt);
 	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
-	ctrMkNode("fld",opt,-1,"/prm/st/tarch",_("Archiving time, milliseconds"),R_R_R_,"root",SARH_ID,1,"tp","real");
+	ctrMkNode("fld",opt,-1,"/prm/st/tarch",_("Archiving time"),R_R_R_,"root",SARH_ID,1,"tp","str");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SARH_ID,3,
 	    "dest","select","select","/db/list","help",TMess::labDB());
 	if(ctrMkNode("area",opt,-1,"/prm/add",_("Additional options"),R_R_R_,"root",SARH_ID)) {
