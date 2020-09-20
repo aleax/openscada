@@ -40,7 +40,7 @@ TTransportS::TTransportS( ) : TSubSYS(STR_ID, _("Transports"), true), extHostLoa
     elIn.fldAdd(new TFld("DESCRIPT",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"500"));
     elIn.fldAdd(new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"100"));
     elIn.fldAdd(new TFld("PROT",_("Transport protocol"),TFld::String,TFld::NoFlag,i2s(s2i(OBJ_ID_SZ)*10).c_str()));
-    elIn.fldAdd(new TFld("START",_("To start"),TFld::Boolean,TFld::NoFlag,"1"));
+    elIn.fldAdd(new TFld("START",_("To connect"),TFld::Boolean,TFld::NoFlag,"1"));
 
     //Output transport BD structure
     elOut.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(s2i(OBJ_ID_SZ)*2).c_str()));
@@ -717,7 +717,7 @@ string TTransportIn::workId( )		{ return owner().modId()+"."+id(); }
 
 string TTransportIn::tbl( )		{ return owner().owner().subId()+"_in"; }
 
-string TTransportIn::getStatus( )	{ return startStat() ? _("Started. ") : _("Stoped. "); }
+string TTransportIn::getStatus( )	{ return startStat() ? _("Receiving data. ") : _("Disconnected. "); }
 
 void TTransportIn::load_( TConfig *icfg )
 {
@@ -880,7 +880,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,-1,"/prm",_("Transport"))) {
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/prm/st/status",_("Status"),R_R_R_,"root",STR_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Running"),RWRWR_,"root",STR_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Connect"),RWRWR_,"root",STR_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Transport DB"),RWRWR_,"root",STR_ID,4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
 	    }
@@ -1036,7 +1036,7 @@ bool TTransportOut::cfgChange( TCfg &co, const TVariant &pc )
 
 string TTransportOut::getStatus( )
 {
-    return (startStat()?_("Started. "):_("Stoped. ")) +
+    return (startStat()?_("Connected. "):_("Disconnected. ")) +
 	TSYS::strMess(_("Established: %s. Last: %s. "), atm2s(startTm(),"%d-%m-%Y %H:%M:%S").c_str(), atm2s(1e-6*lstReqTm(),"%d-%m-%Y %H:%M:%S").c_str());
 }
 
@@ -1168,7 +1168,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,-1,"/prm",_("Transport"))) {
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/prm/st/status",_("Status"),R_R_R_,"root",STR_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Running"),RWRWR_,"root",STR_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Connect"),RWRWR_,"root",STR_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Transport DB"),RWRWR_,"root",STR_ID,4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
 	    }

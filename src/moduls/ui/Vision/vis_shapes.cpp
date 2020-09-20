@@ -1593,7 +1593,7 @@ void ShapeMedia::clear( WdgView *w )
 	    lab->clear();
 	}
 #ifdef HAVE_PHONON
-	if(shD->mediaType == FM_FULL_VIDEO) { lab->deleteLater(); shD->addrWdg = NULL; }
+	if(shD->mediaType == FM_VIDEO || shD->mediaType == FM_AUDIO) { lab->deleteLater(); shD->addrWdg = NULL; }
 #endif
     }
 
@@ -1700,7 +1700,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 	case A_MediaSpeedPlay:
 	    switch(shD->mediaType) {
 		case FM_IMG: case FM_ANIM: shD->mediaSpeed = s2i(val);	break;
-		case FM_FULL_VIDEO: shD->videoPlay = (bool)s2i(val);	break;
+		case FM_VIDEO: case FM_AUDIO: shD->videoPlay = (bool)s2i(val);	break;
 	    }
 	    if((lab=dynamic_cast<QLabel*>(shD->addrWdg))) {
 		if(!lab->movie()) break;
@@ -1811,11 +1811,11 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 			QImage img = lab->movie()->currentImage();
 			lab->movie()->setScaledSize(QSize((int)((float)img.width()*w->xScale(true)),(int)((float)img.height()*w->yScale(true))));
 		    }
-		}else lab->setText("");
+		} else lab->setText("");
 		break;
 	    }
 #ifdef HAVE_PHONON
-	    case FM_FULL_VIDEO: {
+	    case FM_VIDEO: case FM_AUDIO: {
 		//Clear previous movie data
 		clear(w);
 		//Create player widget
@@ -1846,7 +1846,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 			    if(write(tfid, sdata.data(), sdata.size()) != (ssize_t)sdata.size())
 				mod->postMess(mod->nodePath().c_str(), QString(_("Error writing to the file '%1'.")).arg(tfile.c_str()), TVision::Error);
 			    close(tfid);
-			    mSrc = MediaSource(QUrl(("file:"+tfile).c_str()));
+			    mSrc = MediaSource(QUrl(("file:"+SYS->workDir()+"/"+tfile).c_str()));
 			    //mSrc = MediaSource(QString(tfile.c_str()));
 			}
 		    }
@@ -1867,6 +1867,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 #endif
 	}
 	if(mk_new) {
+	    if(shD->mediaType == FM_AUDIO) shD->addrWdg->setVisible(false);
 	    w->setMouseTracking(qobject_cast<DevelWdgView*>(w) || (shD->active && ((RunWdgView*)w)->permCntr()));
 	    shD->addrWdg->setMouseTracking(qobject_cast<DevelWdgView*>(w) || (shD->active && ((RunWdgView*)w)->permCntr()));
 	    shD->addrWdg->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
@@ -1874,7 +1875,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 	}
     }
 
-    if(up && !w->allAttrLoad( ) && uiPrmPos != -1) w->update();
+    if(up && !w->allAttrLoad() && uiPrmPos != -1) w->update();
 
     return up;
 }

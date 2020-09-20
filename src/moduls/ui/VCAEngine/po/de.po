@@ -3,17 +3,17 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009-2013.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2019.
+# Roman Savochenko <roman@oscada.org>, 2011-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-20 17:23+0200\n"
+"POT-Creation-Date: 2020-09-19 09:13+0300\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: irina\n"
-"Language-Team: German <kde-russian@lists.kde.ru>\n"
-"Language: ru\n"
+"Language-Team: German <de@li.org>\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -738,7 +738,8 @@ msgstr "Quelle"
 msgid "Type"
 msgstr "Typ"
 
-msgid "Image;Animation;Full video"
+#, fuzzy
+msgid "Image;Animation;Video;Audio"
 msgstr "Bild;Animation;Full Video"
 
 msgid "Map areas"
@@ -1799,12 +1800,6 @@ msgstr "Kontextmenu"
 msgid "Events processing"
 msgstr "Ereignisverarbeitung"
 
-msgid "Parent item is empty or equal to itself!"
-msgstr "Das übergeordnete Element ist leer oder entspricht sich selbst!"
-
-msgid "Parent is identical to the owner for the link!"
-msgstr "Das Elternteil ist identisch mit dem Besitzer des Links!"
-
 #, c-format
 msgid "Error enabling the widget: %s"
 msgstr "Fehler beim Aktivieren des Widgets: %s"
@@ -1819,6 +1814,12 @@ msgstr "Fehler beim Deaktivieren des erbenden Widgets '%s'."
 #, c-format
 msgid "Error enabling/disabling the child widget '%s'."
 msgstr "Fehler beim Aktivieren/Deaktivieren des untergeordneten Widgets '%s'."
+
+msgid "Parent item is empty or equal to itself!"
+msgstr "Das übergeordnete Element ist leer oder entspricht sich selbst!"
+
+msgid "Parent is identical to the owner for the link!"
+msgstr "Das Elternteil ist identisch mit dem Besitzer des Links!"
 
 #, c-format
 msgid ""
@@ -1836,6 +1837,7 @@ msgstr "Hinzufügen eines neuen Attributs '%s' überschreitet die Anzahl %d!"
 msgid "Attribute '%s' is not present."
 msgstr "Attribut '%s' ist nicht vorhanden."
 
+#, c-format
 msgid "Deleting attribute '%s' has not been released."
 msgstr "Entfernt Attribut '%s' wird nicht veröffentlicht."
 

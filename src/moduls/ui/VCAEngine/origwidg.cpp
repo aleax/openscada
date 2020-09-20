@@ -772,9 +772,9 @@ bool OrigText::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		    }
 		}
 	    }
-	    for(int i_arg = 0; i_arg < src->attrAt("numbArg").at().getI(); i_arg++) {
-		if(!(el=ctrId(root,"/arg"+i2s(i_arg)+"cfg",true))) continue;
-		switch(src->attrAt("arg"+i2s(i_arg)+"tp").at().getI()) {
+	    for(int iArg = 0; iArg < src->attrAt("numbArg").at().getI(); iArg++) {
+		if(!(el=ctrId(root,"/arg"+i2s(iArg)+"cfg",true))) continue;
+		switch(src->attrAt("arg"+i2s(iArg)+"tp").at().getI()) {
 		    case A_TextArsVal:	el->setAttr("help",_("Integer value configuration in the form \"{len}\"."));break;
 		    case A_TextArsTp:	el->setAttr("help",_("Real value configuration in the form: \"{width};{form};{prec}\".\n"
 							     "Where \"form\" is 'g', 'e' or 'f'."));		break;
@@ -829,7 +829,7 @@ void OrigMedia::postEnable( int flag )
 	    _("None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"),i2s(A_BordStyle).c_str()));
 	attrAdd(new TFld("src",_("Source"),TFld::String,0,"50","","","",i2s(A_MediaSrc).c_str()));
 	attrAdd(new TFld("type",_("Type"),TFld::Integer,TFld::Selectable|Attr::Active,"1","0",
-	    TSYS::strMess("%d;%d;%d",FM_IMG,FM_ANIM,FM_FULL_VIDEO).c_str(),_("Image;Animation;Full video"),i2s(A_MediaType).c_str()));
+	    TSYS::strMess("%d;%d;%d;%d",FM_IMG,FM_ANIM,FM_VIDEO,FM_AUDIO).c_str(),_("Image;Animation;Video;Audio"),i2s(A_MediaType).c_str()));
 	attrAdd(new TFld("areas",_("Map areas"),TFld::Integer,Attr::Active,"2","0","0;100","",i2s(A_MediaAreas).c_str()));
     }
 }
@@ -847,7 +847,7 @@ bool OrigMedia::attrChange( Attr &cfg, TVariant prev )
 		    cfg.owner()->attrDel("fit");
 		    cfg.owner()->attrDel("speed");
 		    break;
-		case FM_FULL_VIDEO:
+		case FM_VIDEO: case FM_AUDIO:
 		    cfg.owner()->attrDel("play");
 		    cfg.owner()->attrDel("roll");
 		    cfg.owner()->attrDel("pause");
@@ -866,7 +866,7 @@ bool OrigMedia::attrChange( Attr &cfg, TVariant prev )
 		    cfg.owner()->attrAdd(new TFld("fit",_("Fit to the widget size"),TFld::Boolean,Attr::Mutable,"","","","",i2s(A_MediaFit).c_str()));
 		    cfg.owner()->attrAdd(new TFld("speed",_("Play speed"),TFld::Integer,Attr::Mutable,"","100","1;900","",i2s(A_MediaSpeedPlay).c_str()));
 		    break;
-		case FM_FULL_VIDEO:
+		case FM_VIDEO: case FM_AUDIO:
 		    cfg.owner()->attrAdd(new TFld("play",_("Play"),TFld::Boolean,Attr::Mutable,"","0","","",i2s(A_MediaSpeedPlay).c_str()));
 		    cfg.owner()->attrAdd(new TFld("roll",_("Roll play"),TFld::Boolean,Attr::Mutable,"","0","","",i2s(A_MediaRoll).c_str()));
 		    cfg.owner()->attrAdd(new TFld("pause",_("Pause"),TFld::Boolean,Attr::Mutable,"","0","","",i2s(A_MediaPause).c_str()));
@@ -942,10 +942,10 @@ bool OrigMedia::cntrCmdAttributes( XMLNode *opt, Widget *src )
 			break;
 		}
 	    }
-	    for(int i_a = 0; i_a < src->attrAt("areas").at().getI(); i_a++) {
-		el = ctrId(root,TSYS::strMess("/area%dcoord",i_a),true);
+	    for(int iA = 0; iA < src->attrAt("areas").at().getI(); iA++) {
+		el = ctrId(root,TSYS::strMess("/area%dcoord",iA),true);
 		if(!el) continue;
-		switch(src->attrAt(TSYS::strMess("area%dshp",i_a)).at().getI()) {
+		switch(src->attrAt(TSYS::strMess("area%dshp",iA)).at().getI()) {
 		    case FM_RECT: el->setAttr("help",_("Rectangle area in the form \"x1,y1,x2,y2\"."));	break;
 		    case FM_POLY: el->setAttr("help",_("Polygon area in the form \"x1,y1,x2,y2,xN,yN\".")); break;
 		    case FM_CIRCLE: el->setAttr("help",_("Circle area in the form \"x,y,r\"."));	break;
@@ -1570,10 +1570,10 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
 
     // Add user io
     wdg->attrList(als);
-    for(unsigned i_a = 0; i_a < als.size(); i_a++) {
-	AutoHD<Attr> cattr = wdg->attrAt(als[i_a]);
+    for(unsigned iA = 0; iA < als.size(); iA++) {
+	AutoHD<Attr> cattr = wdg->attrAt(als[iA]);
 	if(!(cattr.at().flgGlob()&Attr::IsUser)) continue;
-	funcIO.ioAdd(new IO(als[i_a].c_str(),cattr.at().name().c_str(),cattr.at().fld().typeIO(),IO::Output));
+	funcIO.ioAdd(new IO(als[iA].c_str(),cattr.at().name().c_str(),cattr.at().fld().typeIO(),IO::Output));
     }
     try {
 	// Compile empty function for binding to object
@@ -1585,8 +1585,8 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
 	funcV.setI(A_DocCalcPrmBTime, wdg->attrAt("bTime").at().getI());
 	funcV.setI(A_DocCalcPrmLTime, lstTime);
 	// Load values of user IO
-	for(int i_a = 12; i_a < funcV.ioSize( ); i_a++)
-	    funcV.set(i_a,wdg->attrAt(funcV.func()->io(i_a)->id()).at().get());
+	for(int iA = 12; iA < funcV.ioSize(); iA++)
+	    funcV.set(iA,wdg->attrAt(funcV.func()->io(iA)->id()).at().get());
     } catch(TError &err) {
 	mess_err(wdg->nodePath().c_str(),_("Error compiling function for the document: %s"),err.mess.c_str());
 	return "";

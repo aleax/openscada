@@ -1,3 +1,32 @@
+2020-09-20 Roman (stable)
+- !:FIX:LibsDB.OscadaLibs: DevLib.{DNP3,IEC62056} fixed in processing the output transport object placed as an attribute,
+    but that allows to set only for Object, so EVAL was used here.
+    base.initConsAssignTrs Appended for limiting the remote initiator ID in 20 symbols - OpenSCADA objects ID limit.
+- !:FIX:LibsDB.vcaBase: Main.RootPgSo fixed in the second row of the signal objects processing
+    and the rate of font height to width set to 0.75 from 0.8.
+- data/ModelsDB/{oscada_start.xml,AGLKS/oscada_AGLKS.xml,Boiler/oscada_Boiler.xml}:
+    The style "Blue Darkness" appended for a color of the table throughrows.
+- Archive: {TMArchivator,TVArchivator,TVArchive}::DB() set to the constant qualifier.
+- Transport: The transport commands renamed from "Running" to "Connect"
+    and the statuses renamed from "Started. " to "Receiving data. " and "Connected. ", from "Stoped. " to "Disconnected. ".
+- !:FIX:UI: TUIS::mimeGet() fixed in processing audio and video mimes.
+- Archive.DBArch: Archiver objects copying improved for the address field copying.
+    The DB field "CATEG" size of the messages expanded to 200, for long categories and UTF.
+- FIX:Archive.FSArch: File time size of the value archivers limited in the top border at 366 days.
+- !!:FIX:DAQ.LogicLev: Removed for the calculation lock "calcRes", what used only in locking the writing
+    to the parameter attributes during the calculation and what can be long.
+- !!!!:{DAQ,Protocol}.ModBus:
+    The type extending "_b" - bit type, expanded by moving the bit number to the register number field like to "R_b:123.12".
+    Added by the flag "~" for inversion registers order of the complex subtypes in multiple registers, like to "_f".
+    The flag "rw" separated to "r" and "w".
+- !!!!:UI.{VCAEngine,WebVision,Vision}: The primitive "Media" appended by the type "Audio" and the type "Full video" renamed to "Video",
+    which also implemented in UI.WebVision and UI.Vision.
+- !!:FIX:UI.Vision: Call saveState() moved from the developing window destructor to the closing event,
+	but a problem of empty context saving was observed after playing some media.
+    !:FIX: Fixed in media playing from the resource by VLC from Phonon.
+- !!:FIX:UI.WebVision: Fixed in the page cache spare cleaning for widgets from pages with common name to the remove page.
+
+
 2020-08-30 Roman (stable)
 - FIX:Archive.DBArch: Fixed for the message "Archiving time, milliseconds" removing the part ", milliseconds".
 

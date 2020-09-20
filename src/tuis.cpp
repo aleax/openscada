@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tuis.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -180,17 +180,17 @@ string TUIS::mimeGet( const string &inm, const string &fDt, const string &orig )
     else if(strcasecmp(tvl,"svg") == 0 || strcasecmp(tvl,"svg+xml") == 0) prc = "image/svg+xml";
 		//string("image/") + ((fDt.find("<?xml ") == string::npos) ? "svg" : "svg+xml");
     // Audio
-    else if(strcasecmp(tvl,"wav"))	prc = "audio/wav";
-    else if(strcasecmp(tvl,"ogg"))	prc = "audio/ogg";
-    else if(strcasecmp(tvl,"mp2"))	prc = "audio/mp2";
-    else if(strcasecmp(tvl,"mp3"))	prc = "audio/mp3";
+    else if(strcasecmp(tvl,"wav") == 0)	prc = "audio/wav";
+    else if(strcasecmp(tvl,"ogg") == 0)	prc = "audio/ogg";
+    else if(strcasecmp(tvl,"mp2") == 0)	prc = "audio/mp2";
+    else if(strcasecmp(tvl,"mp3") == 0)	prc = "audio/mp3";
     // Video
-    else if(strcasecmp(tvl,"mng"))	prc = "video/mng";
-    else if(strcasecmp(tvl,"ogm"))	prc = "video/ogm";
-    else if(strcasecmp(tvl,"avi"))	prc = "video/avi";
-    else if(strcasecmp(tvl,"mp4"))	prc = "video/mp4";
-    else if(strcasecmp(tvl,"mpeg"))	prc = "video/mpeg";
-    else if(strcasecmp(tvl,"mkv"))	prc = "video/matroska";
+    else if(strcasecmp(tvl,"mng") == 0)	prc = "video/mng";
+    else if(strcasecmp(tvl,"ogm") == 0)	prc = "video/ogm";
+    else if(strcasecmp(tvl,"avi") == 0)	prc = "video/avi";
+    else if(strcasecmp(tvl,"mp4") == 0)	prc = "video/mp4";
+    else if(strcasecmp(tvl,"mpeg") == 0)prc = "video/mpeg";
+    else if(strcasecmp(tvl,"mkv") == 0)	prc = "video/matroska";
 
     return prc + ((stvl=TSYS::strParse(orig,1,";")).size()?";"+stvl:"");
 }

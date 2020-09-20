@@ -5810,7 +5810,7 @@ Examples of the parameters definition, rows of the attribute "itemsSet":
 Author: Roman Savochenko <roman@oscada.org>
 Total complexity: 2.0 HD
 Sponsored by: Hadi Ramezani and Hossein Malakooti for whole complexity
-Version: 0.8.0
+Version: 0.8.1
 License: GPLv2','','',10,0,'JavaLikeCalc.JavaScript
 function CRC( inSeq ) { return Special.FLibSYS.CRC(inSeq, 16, 0x3D65, 0, true, true, -1); }
 
@@ -6058,7 +6058,7 @@ if(f_start) {
 	itemsSet_ = "";
 	items = new Object();
 	oAVals = new Object();
-	transport_ = "", tr = false;
+	transport_ = "", tr = EVAL;
 	tmRetr_ = tmResp_ = tmRetr;
 	tmPoolEv_ = 0;
 	tmPoolAll_ = tmPoolAll;
@@ -6067,7 +6067,7 @@ if(f_start) {
 	return;
 }
 if(f_stop) {
-	if(tr) tr.start(false);
+	if(!tr.isEVal()) tr.start(false);
 	return;
 }
 
@@ -6109,18 +6109,18 @@ if(itemsSet != itemsSet_) {
 
 //Check for the transport change and connect
 t_err = "0";
-if(!tr || transport != transport_)	{
+if(tr.isEVal() || transport != transport_) {
 	itemsSet_ = "";
 	items = new Object();
 	oAVals = new Object();
-	tr = SYS.Transport.nodeAt(transport, ".");
+	tr = (tr_=SYS.Transport.nodeAt(transport, ".")) ? tr_ : EVAL;
 	transport_ = transport;
-	if(tr) tr.start(false);
+	if(!tr.isEVal()) tr.start(false);
 	tmRetr_ = tmResp_ = tmRetr;
 	tmPoolEv_ = 0;
 	tmPoolAll_ = tmPoolAll;
 }
-if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+if(tr.isEVal())	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
 else if(dest < 0 || dest > 65520)
 	t_err = "2:"+tr("Destination address ''%1'' out of range [0...65520].").replace("%1",dest.toString());
 else if(src < 0 || src > 65520)
@@ -6200,7 +6200,7 @@ else {
 
 //Error set
 if(t_err.toInt()) {
-	if(tr && tr.start()) tr.start(false);
+	if(!tr.isEVal() && tr.start()) tr.start(false);
 	if(f_err != t_err) {
 		items = new Object();
 		oAVals = new Object();
@@ -6219,14 +6219,14 @@ Author: Roman Savochenko <roman@oscada.org>
 State of the protocol implementing: Client of the specification part 46, reading of the directly specified OBIS
 Total complexity: 3.2 HD
 Sponsored by: SVItoVYR Ltd for whole complexity
-Version: 1.0.1
+Version: 1.0.2
 License: GPLv2','IEC 62056 у частині 46 є одним з набору стандартів IEC 62056 який визначає системи, що використовуються у віддаленому контролі (телемеханіці — диспетчерському контролі та зборі даних) у інженерній електриці та у застосунках автоматизації енергетичних систем. Частина 46 надає шар підключення Даних з використанням протоколу HDLC, який переважно використовується на послідовних інтерфейсах.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Стан реалізації протоколу: Клієнт частини 46 специфікації, читання прямо визначених OBIS
 Загальна працемісткість: 3.2 ЛД
 Спонсорування: ТОВ "СВІТоВИР АВТоМАТИК" на загальну працемісткість
-Версія: 1.0.1
+Версія: 1.0.2
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 function CRC( inSeq ) { return Special.FLibSYS.CRC(inSeq, 16, 0x1021, -1, true, true, 0xFFFF); }
 
@@ -6434,7 +6434,7 @@ if(f_start) {
 	itemsSet_ = "";
 	items = new Object();
 	//oAVals = new Object();
-	transport_ = "", tr = false;
+	transport_ = "", tr = EVAL;
 	tmRetr_ = tmResp_ = tmRetr;
 	tmPollAll_ = tmPollAll; offPoll = 0;
 	ctx = new Object();
@@ -6452,17 +6452,17 @@ if(itemsSet != itemsSet_) {
 //Check for the transport change and connect
 t_err = "0";
 destUp = dest.parse(0,":").toInt(); destLow = dest.parse(1,":").toInt();
-if(!tr || transport != transport_)	{
+if(tr.isEVal() || transport != transport_)	{
 	itemsSet_ = "";
 	items = new Object();
 	//oAVals = new Object();
 	tr = SYS.Transport.nodeAt(transport, ".");
 	transport_ = transport;
-	if(tr) tr.start(false);
+	if(!tr.isEVal()) tr.start(false);
 	tmRetr_ = tmResp_ = tmRetr;
 	tmPollAll_ = tmPollAll; offPoll = 0;
 }
-if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+if(tr.isEVal())	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
 else if(destUp < 0 || destUp > 16383)
 	t_err = "2:"+tr("Upper HDLC destination address ''%1'' out of range [0...16383].").replace("%1",destUp.toString());
 else if(destLow < 0 || destLow > 16383)
@@ -6524,7 +6524,7 @@ else {
 			0xA1, 0x09, 0x06, 0x07,	//Application-context-name [1] (9 byte), OBJECT IDENTIFIER (7 byte)
 				0x60, 0x85, 0x74, 0x05, 0x08, 0x01, 0x01,
 			0x8A, 0x02, 0x07, 0x80,	//ACSE-requirements [10], BIT STRING (7) = 0x80
-  			0x8B, 0x07,						//Security Mechanism-name [11]
+			0x8B, 0x07,						//Security Mechanism-name [11]
 				0x60, 0x85, 0x74, 0x05, 0x08, 0x02, 0x01,
 			0xAC, pass.length+2, 0x80, pass.length) + //Authentication-value [12], GraphicString (0x80), Key value
 				pass + SYS.strFromCharCode(
@@ -6562,7 +6562,7 @@ else {
 
 //Error set
 if(t_err.toInt()) {
-	if(tr && tr.start()) tr.start(false);
+	if(!tr.isEVal() && tr.start()) tr.start(false);
 	if(f_err != t_err) {
 		for(var iIt in items)
 			this[iIt].set(EVAL_REAL, 0, 0, true);
@@ -6572,7 +6572,7 @@ if(t_err.toInt()) {
 }
 f_err = t_err;
 
-if(f_stop && tr) tr.start(false);','','',1592158749);
+if(f_stop && !tr.isEVal()) tr.start(false);','','',1592158749);
 CREATE TABLE IF NOT EXISTS 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO tmplib_PrescrTempl VALUES('timer','Command — Timer','Команда — Таймер','Команда — Таймер','Template of a command of the prescription typical timer. The timer is only designed to hold time between other action steps and for example, so it only has one attribute, "Time" in seconds.
 
@@ -8606,7 +8606,7 @@ The template can control the containers of data source objects, constructed both
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Elyor Turaboev, BLUE STAR GROUP Ltd
-Version: 1.1.0
+Version: 1.1.1
 License: GPLv2','Шаблон служби опрацювання вхідних ініціативних підключень створено для надання останньої ланки реалізації та підтримки концепції збору даних у пасивному режимі та ініціативного підключення, а саме — контролю асоціативних транспортів, створюваних вхідним транспортом за кожним підключенням.
 
 Функцію створення вихідних асоціативних транспортів за підключенням на вхідний наразі підтримує лише модуль транспортів "Сокети" та для TCP-сокетів.
@@ -8624,7 +8624,7 @@ License: GPLv2','Шаблон служби опрацювання вхідних
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Еліор Турабоєв, ТОВ BLUE STAR GROUP
-Версія: 1.1.0
+Версія: 1.1.1
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	inTransport_ = "", inTr = EVAL;
@@ -8655,6 +8655,7 @@ else {
 			if(prcTr[oTrNm].isEVal()) {
 				//   reading the source identifier
 				idSeq = oTrO.messIO("").parse(0, ":");
+				if(idSeq.length > 20)	idSeq = idSeq.slice(0, 20);
 				//   stop for empty-missed identification or missed PLC object
 				if(!idSeq.length || (PLC_O=CNTR_O[(isLogPrm?"prm_":"")+idSeq]).isEVal())	{
 					oTrO.start(false);

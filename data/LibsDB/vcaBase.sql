@@ -2189,7 +2189,7 @@ Container of the control panels — container area to include control panels of 
 Under the control panels container placed a button to start the demo mode — mode in which performed periodic switching for representative frames, changing regimes and other operations by a scenario.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.2.0
+Version: 2.2.1
 License: GPLv2',32,'','','','Елемент-кадр слугує базою для створення користувацьких інтерфейсів, пачатково для управління технологічними процесами, заснованими на об''єктах сигналізації (СО).
 
 Коренева сторінка містить чотири області:
@@ -2217,7 +2217,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує базою д�
 Під контейнером панелей управління розташовується кнопка запуску демонстраційного режиму — режиму за яким здійснюється періодичне перемикання показних кадрів, зміна режимів та інших операцій згідно сценарію.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.2.0
+Версія: 2.2.1
 Ліцензія: GPLv2','','Элемент-кадр служит базой для создания пользовательских интерфейсов, начально для управления технологическими процессами, основанными на объектах сигнализации (СО).
 
 Корневая страница содержит четыре области:
@@ -2247,7 +2247,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує базою д�
 Корневая страница интерфейса визуализации ТП, построенного на основе объектов сигнализации.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 2.2.0
+Версия: 2.2.1
 Лицензия: GPLv2','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomW','1024',40,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomH','670',32,'','','','','','','','','');
@@ -20073,7 +20073,7 @@ if(f_start) {
 	soInterSpecX = logoR ? this.so1.attr("geomX") : (this.logo.attr("en")?this.so1.attr("geomX")-this.logo.attr("geomX")-this.logo.attr("geomW"):2);
 	soX = logoR ? soInterSpecX : this.so1.attr("geomX");
 	soWdth =	logoR ?	((this.logo.attr("en")?this.logo.attr("geomX"):this.attr("geomW"))-soX) : (this.attr("geomW") - soX);
-	soSymbSz = this.so1.attr("font").parse(1," ").toReal()*0.8;
+	soSymbSz = this.so1.attr("font").parse(1," ").toReal()*0.75;
 
 	soInterSpecY = this.so1.attr("geomY");
 	soY = this.so1.attr("geomY");
@@ -20083,8 +20083,8 @@ if(f_start) {
 	for(var iSO in soLstS) {
 		if(!(curSO=iSO.toInt()))	continue;
 		soNmSz = soLstS[iSO].nmSz*soSymbSz + soInterSpecX;
-		if((row1w+soNmSz) < soWdth)			row1w += soNmSz, row1++;
-		else if((row2w+soNmSz) < soWdth)	row2w += soNmSz, row1++;
+		if(!row2 && (row1w+soNmSz) < soWdth)		row1w += soNmSz, row1++;
+		else if((row2w+soNmSz) < soWdth)			row2w += soNmSz, row2++;
 		else continue;	//Too more and long SO
 		if(curSO != 1)	this.wdgAdd("so"+curSO, soLstS[iSO].nm, this.attr("parent")+"/wdg_so1");
 
@@ -20135,7 +20135,8 @@ if(f_start) {
 		soNmSz = soLstS[iSO].nmSz*soSymbSz + soInterSpecX;
 		soOffY = soY2;
 		if(i < row1)	soNmSz += soWdthAdd, soOffY = soY;
-		soW.attrSet("geomX",soOff)..attrSet("geomY",soOffY).attrSet("geomW",soNmSz-soInterSpecX);
+		else if(i == row1)	soOff = soX;
+		soW.attrSet("geomX",soOff).attrSet("geomY",soOffY).attrSet("geomW",soNmSz-soInterSpecX);
 		soOff += soNmSz;
 		i++;
 	}

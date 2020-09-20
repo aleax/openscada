@@ -900,48 +900,63 @@ void Node::setEnable( bool vl )
 		    for(off = 0; off < (int)ioId.size() && !isdigit(ioId[off]); off++) ;
 		    atp = ioId.substr(0,off);
 		    ai  = ioId.substr(off);
-		    if(tolower(ioId[ioId.size()-1])=='w') mode = "w";
+		    for(off = (int)ioId.size()-1; off >= 0 && !isdigit(ioId[off]); off--)
+			if(tolower(ioId[off]) == 'w') mode += "w";
+			else if(tolower(ioId[off]) == '~') mode += "~";
 		}
 	    }
 	    else continue;
 
 	    atpM	= TSYS::strParse(atp, 0, "_"),
 	    atpSub	= TSYS::strParse(atp, 1, "_");
+	    bool isWr = (mode.find("w") != string::npos);
+	    bool isBackSeq = (mode.find("~") != string::npos);
 
 	    int reg = strtol(ai.c_str(), NULL, 0);
 	    if(atpM[0] == 'R') {
-		regCR(reg, SIO(iIO,atpSub[0],0), atpM);
-		if(mode == "w") regCR(reg, SIO(iIO,atpSub[0],0), atpM, true);
 		if(atpSub == "i" || atpSub == "i4" || atpSub == "f") {
 		    int reg2 = (sTmp=TSYS::strParse(ai,1,",")).empty() ? (reg+1) : strtol(sTmp.c_str(),NULL,0);
-		    regCR(reg2, SIO(iIO,atpSub[0],1), atpM);
-		    if(mode == "w") regCR(reg2, SIO(iIO,atpSub[0],1), atpM, true);
+
+		    regCR(reg, SIO(iIO,atpSub[0],isBackSeq?1:0), atpM);
+		    regCR(reg2, SIO(iIO,atpSub[0],isBackSeq?0:1), atpM);
+		    if(isWr) {
+			regCR(reg, SIO(iIO,atpSub[0],isBackSeq?1:0), atpM, true);
+			regCR(reg2, SIO(iIO,atpSub[0],isBackSeq?0:1), atpM, true);
+		    }
 		}
 		else if(atpSub == "i8" || atpSub == "d") {
 		    int reg2 = (sTmp=TSYS::strParse(ai,1,",")).empty() ? (reg+1) : strtol(sTmp.c_str(),NULL,0),
 			reg3 = (sTmp=TSYS::strParse(ai,2,",")).empty() ? (reg2+1) : strtol(sTmp.c_str(),NULL,0),
 			reg4 = (sTmp=TSYS::strParse(ai,3,",")).empty() ? (reg3+1) : strtol(sTmp.c_str(),NULL,0);
-		    regCR(reg2, SIO(iIO,atpSub[0],1), atpM);
-		    regCR(reg3, SIO(iIO,atpSub[0],2), atpM);
-		    regCR(reg4, SIO(iIO,atpSub[0],3), atpM);
-		    if(mode == "w") {
-			regCR(reg2, SIO(iIO,atpSub[0],1), atpM, true);
-			regCR(reg3, SIO(iIO,atpSub[0],2), atpM, true);
-			regCR(reg4, SIO(iIO,atpSub[0],3), atpM, true);
+
+		    regCR(reg, SIO(iIO,atpSub[0],isBackSeq?3:0), atpM);
+		    regCR(reg2, SIO(iIO,atpSub[0],isBackSeq?2:1), atpM);
+		    regCR(reg3, SIO(iIO,atpSub[0],isBackSeq?1:2), atpM);
+		    regCR(reg4, SIO(iIO,atpSub[0],isBackSeq?0:3), atpM);
+		    if(isWr) {
+			regCR(reg, SIO(iIO,atpSub[0],isBackSeq?3:0), atpM, true);
+			regCR(reg2, SIO(iIO,atpSub[0],isBackSeq?2:1), atpM, true);
+			regCR(reg3, SIO(iIO,atpSub[0],isBackSeq?1:2), atpM, true);
+			regCR(reg4, SIO(iIO,atpSub[0],isBackSeq?0:3), atpM, true);
 		    }
 		}
-		else if(atpSub == "s") {
-		    int N = (sTmp=TSYS::strParse(ai,1,",")).empty() ? 0 : vmin(100,strtol(sTmp.c_str(),NULL,0));
-		    if(!N) N = 10;	//Default length 10 registers and maximum 100
-		    for(int iR = reg+1; iR < (reg+N); iR++) {
-			regCR(iR, SIO(iIO,atpSub[0],iR-reg), atpM);
-			if(mode == "w") regCR(iR, SIO(iIO,atpSub[0],iR-reg), atpM, true);
+		else {
+		    regCR(reg, SIO(iIO,atpSub[0],0), atpM);
+		    if(isWr) regCR(reg, SIO(iIO,atpSub[0],0), atpM, true);
+
+		    if(atpSub == "s") {
+			int N = (sTmp=TSYS::strParse(ai,1,",")).empty() ? 0 : vmin(100,strtol(sTmp.c_str(),NULL,0));
+			if(!N) N = 10;	//Default length 10 registers and maximum 100
+			for(int iR = reg+1; iR < (reg+N); iR++) {
+			    regCR(iR, SIO(iIO,atpSub[0],iR-reg), atpM);
+			    if(isWr) regCR(iR, SIO(iIO,atpSub[0],iR-reg), atpM, true);
+			}
 		    }
 		}
 	    }
 	    if(atpM[0] == 'C') {
 		regCR(reg, iIO, atpM);
-		if(mode == "w") regCR(reg, iIO, atpM, true);
+		if(isWr) regCR(reg, iIO, atpM, true);
 	    }
 	}
 
@@ -1365,18 +1380,18 @@ void Node::cntrCmdProc( XMLNode *opt )
 	    if((isDirFunc || enableStat()) && ctrMkNode("table",opt,-1,"/dt/io",_("IO"),RWRWR_,"root",SPRT_ID,2,"s_com","add,del,ins,move","rows","15")) {
 		ctrMkNode("list",opt,-1,"/dt/io/id",_("Identifier"),(enableStat()?R_R_R_:RWRWR_),"root",SPRT_ID,2, "tp","str",
 		    "help",_("For the \"Id\" field, a specific ModBus data record form is provided:\n"
-			 "  \"R{N}[w]\", \"RI{N}[w]\" - specific register (and input) form, can be expanded by the suffixes:\n"
+			 "  \"R{N}[w~]\", \"RI{N}[w~]\" - specific register (and input) form, can be expanded by the suffixes:\n"
 			 "                \"i\"-Int32, \"f\"-Float, \"d\"-Double, \"s\"-String;\n"
-			 "  \"R:{N}[:w]\", \"RI:{N}[:w]\" - classic register (and input) form, can be expanded by the suffixes:\n"
+			 "  \"R:{N}[:w~]\", \"RI:{N}[:w~]\" - classic register (and input) form, can be expanded by the suffixes:\n"
 			 "                \"i4\"-Int32, \"i8\"-Int64, \"f\"-Float, \"d\"-Double, \"s\"-String;\n"
 			 "  \"C{N}[w]\", \"CI{N}[w]\", \"C:{N}[:w]\", \"CI:{N}[:w]\" - coil (and input).\n"
 			 "Where:\n"
 			 "  {N} - ModBus data address of the device (dec, hex or octal) [0...65535];\n"
-			 "  w   - optional character to indicate the writing capability.\n"
+			 "  w~  - flags: write mode 'w', registers order inversion '~'.\n"
 			 "Examples:\n"
 			 "  \"R0x300w\" - register access;\n"
 			 "  \"C100w\" - coil access, allowed to write;\n"
-			 "  \"R_f200\" - get float from the registers 200 and 201;\n"
+			 "  \"R_f200\", \"R_f200~\" - get float from the registers 200 and 201, 201 and 200;\n"
 			 "  \"R_i400,300\" - get int32 from the registers 300 and 400;\n"
 			 "  \"R_s15,20\" - get string (registers block) from the register 15 and size 20;\n"
 			 "  \"R_i8:0x10:w\" - get and set int64 into the registers [0x10-0x13];\n"

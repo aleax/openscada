@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.LogicLev file: logiclev.h
 /***************************************************************************
- *   Copyright (C) 2006-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -98,7 +98,7 @@ class TMdPrm : public TParamContr
 	TElem	pEl;				//Work atribute elements
 
 	bool	chkLnkNeed;			//Check lnk need flag
-	ResRW	calcRes;			//Resource
+	//ResRW	calcRes;			//Resource
 	int	idFreq, idStart, idStop,
 		idErr, idSh, idNm, idDscr;	//Fixed system attributes identifiers
 };

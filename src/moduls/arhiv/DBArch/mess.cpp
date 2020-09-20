@@ -1,7 +1,7 @@
 
 //OpenSCADA module Archive.DBArch file: mess.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -44,7 +44,15 @@ ModMArch::~ModMArch( )
 
 TCntrNode &ModMArch::operator=( const TCntrNode &node )
 {
-    TMArchivator::operator=(node);
+    const TMArchivator *src_n = dynamic_cast<const TMArchivator*>(&node);
+    if(!src_n) return *this;
+
+    //Configuration copy
+    exclCopy(*src_n, "ID;START;");
+    cfg("MODUL").setS(owner().modId());
+    setDB(src_n->DB());
+
+    //TMArchivator::operator=(node);
     load_();
 
     return *this;
@@ -101,7 +109,7 @@ void ModMArch::start( )
 	reqEl.fldAdd(new TFld("MIN",_("In minutes"),TFld::Integer,TCfg::Key,"15"));	//Mostly for fast reading next, by minutes
 	reqEl.fldAdd(new TFld("TM",_("Time, seconds"),TFld::Integer,TCfg::Key|(tmAsStr()?TFld::DateTimeDec:0),"20"));
 	reqEl.fldAdd(new TFld("TMU",_("Time, microseconds"),TFld::Integer,TCfg::Key,"6","0"));
-	reqEl.fldAdd(new TFld("CATEG",_("Category"),TFld::String,TCfg::Key,"100"));
+	reqEl.fldAdd(new TFld("CATEG",_("Category"),TFld::String,TCfg::Key,"200"));
 	reqEl.fldAdd(new TFld("MESS",_("Message"),TFld::String,TFld::NoFlag/*TCfg::Key*/,"100000"));
 	reqEl.fldAdd(new TFld("LEV",_("Level"),TFld::Integer,TFld::NoFlag,"2"));
     }

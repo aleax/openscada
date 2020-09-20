@@ -1,15 +1,15 @@
 # OpenSCADA.Transport.Serial translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.Transport.Serial package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2009-2018.
+# Roman Savochenko <roman@oscada.org>, 2009-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-23 16:12+0200\n"
+"POT-Creation-Date: 2020-09-20 16:38+0300\n"
 "PO-Revision-Date: 2009-03-31 18:28+0300\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -391,8 +391,8 @@ msgstr ""
 "    rtsDelay2 - задержка между окончанием передачи и отключением передатчика "
 "сигналом RTS, в миллисекундах."
 
-msgid "Not stop on proceed"
-msgstr "Не останавливать при обработке"
+msgid "Do not disconnect at processing"
+msgstr "Не отключать при обработке"
 
 msgid ""
 "Sometime opened device closing can be breakage, on ICP-DAS LP PLC for "

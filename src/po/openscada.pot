@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-05 19:05+0300\n"
+"POT-Creation-Date: 2020-09-20 09:53+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1582,6 +1582,9 @@ msgstr ""
 msgid "Running is completed!"
 msgstr ""
 
+msgid " waiting the processing finish ..."
+msgstr ""
+
 msgid "Stopping."
 msgstr ""
 
@@ -1949,6 +1952,9 @@ msgstr ""
 msgid "Transport protocol"
 msgstr ""
 
+msgid "To connect"
+msgstr ""
+
 msgid "User that opens"
 msgstr ""
 
@@ -2033,10 +2039,10 @@ msgstr ""
 msgid "Time of inactivity in the output transport for it closing/disconnection. Set to 0 to disable the transports closing!"
 msgstr ""
 
-msgid "Started. "
+msgid "Receiving data. "
 msgstr ""
 
-msgid "Stoped. "
+msgid "Disconnected. "
 msgstr ""
 
 #, c-format
@@ -2044,6 +2050,9 @@ msgid "Error deletion the node: %s"
 msgstr ""
 
 msgid "Input transport: "
+msgstr ""
+
+msgid "Connect"
 msgstr ""
 
 msgid "Transport DB"
@@ -2059,6 +2068,9 @@ msgid "Use zero for the log disabling."
 msgstr ""
 
 msgid "Log"
+msgstr ""
+
+msgid "Connected. "
 msgstr ""
 
 #, c-format

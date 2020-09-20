@@ -1214,7 +1214,7 @@ The data acquisition mode/source (struct — TVArchive::SrcMode):
 <li> <i>string srcData( );</i> — Parameters of the data source, in the case of access mode to the parameter this is the address of the parameter.</li>
 <li> <i>bool toStart( );</i> — Sign: "Start the archive when starting the system".</li>
 <li> <i>bool startStat( );</i> — Status: "Archive started".</li>
-<li> <i>string DB( );</i> — DB address of the values' archive.</li>
+<li> <i>string DB( ) const;</i> — DB address of the values' archive.</li>
 <li> <i>string tbl( );</i> — DB table of the values' archive.</li>
 <li> <i>string fullDB( );</i> — Full name of the DB table of the values' archive.</li>
 <li> <i>int64_t end( const string &amp;arch = BUF_ARCH_NM );</i> — End of the archive time at whole (arch="") or the specified archiver, buffer (arch="&lt;bufer&gt;").</li>
@@ -1345,7 +1345,7 @@ The data acquisition mode/source (struct — TVArchive::SrcMode):
 <li> <i>string &amp;addr( ) const;</i> — Address of the archiver's storage.</li>
 <li> <i>int &amp;level( );</i> — The level of messages, serviced by the archiver.</li>
 <li> <i>void categ( vector&lt;string&gt; &amp;list );</i> — Categories (templates) of messages, serviced by the archiver.</li>
-<li> <i>string DB( );</i> — DB address of the archiver.</li>
+<li> <i>string DB( ) const;</i> — DB address of the archiver.</li>
 <li> <i>string tbl( );</i> — Table address of the archiver's DB.</li>
 <li> <i>string fullDB( );</i> — The full table address of the archiver's DB.</li>
 <li> <i>void setName( const string &amp;vl );</i> — Setting the archiver's name.</li>
@@ -1400,7 +1400,7 @@ The data acquisition mode/source (struct — TVArchive::SrcMode):
 <li> <i>int selPrior( );</i> — Selection priority for mode "All" archivers.</li>
 <li> <i>bool toStart( );</i> — The sign "To start the archiver".</li>
 <li> <i>bool startStat( );</i> — Archivers' status "Run".</li>
-<li> <i>string DB( );</i> — DB address of the archiver.</li>
+<li> <i>string DB( ) const;</i> — DB address of the archiver.</li>
 <li> <i>string tbl( );</i> — Table address of the archiver's DB.</li>
 <li> <i>string fullDB( );</i> — The full table address of the archiver's DB.</li>
 <li> <i>void setName( const string &amp;inm );</i> — Setting the archiver's name.</li>
@@ -4126,5 +4126,5 @@ extern "C"
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2700</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2708</td></tr></table></body>
 </html>

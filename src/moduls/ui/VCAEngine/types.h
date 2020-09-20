@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: types.h
 /***************************************************************************
- *   Copyright (C) 2013-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2013-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -213,7 +213,7 @@ namespace VCA
 			  FT_CNTR_LEFT, FT_CNTR_RIGHT, FT_CNTR, FT_CNTR_JUST };
 
     //Media preset indexes
-    enum Media_Types	{ FM_IMG = 0, FM_ANIM, FM_FULL_VIDEO };
+    enum Media_Types	{ FM_IMG = 0, FM_ANIM, FM_VIDEO, FM_AUDIO };
     enum Media_ArShapes	{ FM_RECT = 0, FM_POLY, FM_CIRCLE };
 
     //Diagram preset indexes

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-05 19:05+0300\n"
+"POT-Creation-Date: 2020-09-20 09:53+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -929,12 +929,15 @@ msgstr "Fehler beim Hinzufügen des Controllers '%s'."
 msgid "Error starting the templates library '%s'."
 msgstr "Fehler beim Starten der Vorlagenbibliothek '%s'."
 
+#, c-format
 msgid "Error enabling the controller object '%s'."
 msgstr "Fehler beim Aktivieren des Controller-Objekts '%s'."
 
+#, c-format
 msgid "Error stopping the controller object '%s'."
 msgstr "Fehler beim Stoppen des Controller-Objekts '%s'."
 
+#, c-format
 msgid "Error disabling the controller object '%s'."
 msgstr "Fehler beim Deaktivieren des Controller-Objekts '%s'."
 
@@ -1897,6 +1900,9 @@ msgstr "Fehler beim Starten des Subsystems '%s'."
 msgid "Running is completed!"
 msgstr "Laufen ist komplett!"
 
+msgid " waiting the processing finish ..."
+msgstr ""
+
 msgid "Stopping."
 msgstr "Stoppen."
 
@@ -2310,6 +2316,9 @@ msgstr "Übertragungstypen"
 msgid "Transport protocol"
 msgstr "Übertragungsprotokoll"
 
+msgid "To connect"
+msgstr "Zum Verbinden"
+
 msgid "User that opens"
 msgstr "Benutzer, der geöffnet wird"
 
@@ -2407,11 +2416,11 @@ msgstr ""
 "Zeitpunkt der Inaktivität im Ausgangstransport zum Schließen/Trennen. Auf 0 "
 "setzen, um das Schließen der Transporte zu deaktivieren!"
 
-msgid "Started. "
-msgstr "Gestartet. "
+msgid "Receiving data. "
+msgstr "Daten empfangen. "
 
-msgid "Stoped. "
-msgstr "Angehalten. "
+msgid "Disconnected. "
+msgstr "Getrennt. "
 
 #, c-format
 msgid "Error deletion the node: %s"
@@ -2419,6 +2428,9 @@ msgstr "Fehler beim Löschen des Knotens: %s"
 
 msgid "Input transport: "
 msgstr "Eingangsübertragung: "
+
+msgid "Connect"
+msgstr "Verbinden"
 
 msgid "Transport DB"
 msgstr "Datenbank der Übertragung"
@@ -2434,6 +2446,9 @@ msgstr "Verwenden Sie für die Protokollsperre Null."
 
 msgid "Log"
 msgstr "Log"
+
+msgid "Connected. "
+msgstr "Verbunden. "
 
 #, c-format
 msgid "Established: %s. Last: %s. "
@@ -2712,3 +2727,9 @@ msgstr "Stellen Sie den Namen des Projekts an:"
 
 msgid "already started."
 msgstr "begonnen."
+
+#~ msgid "Started. "
+#~ msgstr "Gestartet. "
+
+#~ msgid "Stoped. "
+#~ msgstr "Angehalten. "

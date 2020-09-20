@@ -1281,7 +1281,7 @@ void TTypeArchivator::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* TMArchivator                                 *
 //************************************************
-TMArchivator::TMArchivator(const string &iid, const string &idb, TElem *cf_el) :
+TMArchivator::TMArchivator( const string &iid, const string &idb, TElem *cf_el ) :
     TConfig(cf_el), runSt(false), messHead(-1), mId(cfg("ID")), mLevel(cfg("LEVEL")), mStart(cfg("START").getBd()),
     mDB(idb), mRdUse(true), mRdFirst(true), mRdTm(0), mRdEqTm(0)
 {

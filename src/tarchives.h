@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tarchives.h
 /***************************************************************************
- *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -65,9 +65,9 @@ class TMArchivator : public TCntrNode, public TConfig
 	int	level( )		{ return mLevel; }
 	void	categ( vector<string> &list );
 
-	string	DB( )		{ return mDB; }
+	string	DB( ) const		{ return mDB; }
 	string	tbl( );
-	string	fullDB( )	{ return DB()+'.'+tbl(); }
+	string	fullDB( )		{ return DB()+'.'+tbl(); }
 
 	void setName( const string &vl )	{ cfg("NAME").setS(vl); }
 	void setDscr( const string &vl )	{ cfg("DESCR").setS(vl); }

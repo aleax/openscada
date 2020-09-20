@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-05 19:05+0300\n"
+"POT-Creation-Date: 2020-09-20 09:53+0300\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -920,12 +920,15 @@ msgstr "Помилка додавання контролеру '%s'."
 msgid "Error starting the templates library '%s'."
 msgstr "Помилка запуску бібліотеки шаблону '%s'."
 
+#, c-format
 msgid "Error enabling the controller object '%s'."
 msgstr "Помилка увімкнення об'єкту контролеру '%s'."
 
+#, c-format
 msgid "Error stopping the controller object '%s'."
 msgstr "Помилка зупинки об'єкту контролеру '%s'."
 
+#, c-format
 msgid "Error disabling the controller object '%s'."
 msgstr "Помилка вимкнення об'єкту контролеру '%s'."
 
@@ -1879,6 +1882,9 @@ msgstr "Помилка старту підсистеми '%s'."
 msgid "Running is completed!"
 msgstr "Запуск завершено!"
 
+msgid " waiting the processing finish ..."
+msgstr ""
+
 msgid "Stopping."
 msgstr "Зупинка."
 
@@ -2291,6 +2297,9 @@ msgstr "Тип транспорту"
 msgid "Transport protocol"
 msgstr "Транспортний протокол"
 
+msgid "To connect"
+msgstr "Підключатися"
+
 msgid "User that opens"
 msgstr "Користувач що відкриває"
 
@@ -2387,11 +2396,11 @@ msgstr ""
 "Час бездіяльності у вихідному транспорті для його закриття/відключення. "
 "Встановіть 0, щоб відключити закриття транспорту!"
 
-msgid "Started. "
-msgstr "Запущено. "
+msgid "Receiving data. "
+msgstr "Отримання даних. "
 
-msgid "Stoped. "
-msgstr "Зупинено. "
+msgid "Disconnected. "
+msgstr "Відключено. "
 
 #, c-format
 msgid "Error deletion the node: %s"
@@ -2399,6 +2408,9 @@ msgstr "Помилка видалення вузла: %s"
 
 msgid "Input transport: "
 msgstr "Вхідний транспорт: "
+
+msgid "Connect"
+msgstr "Підключення"
 
 msgid "Transport DB"
 msgstr "БД транспорту"
@@ -2414,6 +2426,9 @@ msgstr "Використовуйте нуль для вимкнення логу
 
 msgid "Log"
 msgstr "Лог"
+
+msgid "Connected. "
+msgstr "Підключено. "
 
 #, c-format
 msgid "Established: %s. Last: %s. "
@@ -2690,3 +2705,9 @@ msgstr "Встановлено назву проекту у:"
 
 msgid "already started."
 msgstr "вже запущено."
+
+#~ msgid "Started. "
+#~ msgstr "Запущено. "
+
+#~ msgid "Stoped. "
+#~ msgstr "Зупинено. "

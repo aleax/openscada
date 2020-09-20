@@ -371,7 +371,8 @@ void VCASess::pgCacheProc( const string &addr, bool fClose )
 	    // Removing page's objects - same the cached data
 	    objList(oLs);
 	    for(unsigned iO = 0; iO < oLs.size(); iO++)
-		if(oLs[iO].find(tAddr) == 0)
+		//!!!! Means removing the page strictly and representative of the included widgets - ".wdg_"
+		if(oLs[iO] == tAddr || oLs[iO].find(tAddr+".wdg_") == 0)
 		    objDel(oLs[iO]);
 
 	    res.lock();

@@ -627,8 +627,8 @@
 <p>Each transport contains its own configuration page with the tab "Transport". This tab contains basic transport settings. <span id="TransportIn" title="#TransportIn">Input transport</span> (Fig.4.3c) contains:
 </p>
 <ul><li> Section "State" — contains the settings that characterize the state of the transport:
-<ul><li> <i>Status</i> — information on the current transport's status and statistics of its work. Most modules provide advanced diagnostics in this field when enabled with <a href="#Config">the debuging mode</a>.</li>
-<li> <i>Running</i> — state of the transport — "Running".</li>
+<ul><li> <i>Status</i> — information on the current transport's status and statistics of its work. Most modules provide advanced diagnostics in this field when enabled with <a href="#Config">the debugging mode</a>.</li>
+<li> <i>Connect</i> — operative state/command of the transport.</li>
 <li> <i>Transport DB</i> — DB address to store the transport's data.</li>
 <li> <i>Active connections</i> — active and actual connections list of the input transport.</li></ul></li>
 <li> Section "Configuration" — directly contains the configuration fields:
@@ -637,20 +637,20 @@
 <li> <i>Description</i> — brief description of the transport and its appointment.</li>
 <li> <i>Address</i> — transport address in a specific type of transport (module) format. Description of the format of the address of the transport, as a rule, is available in the tooltip for this field.</li>
 <li> <i>Transport protocol</i> — indicates the transport protocol modules (the subsystem "Transport protocols") those should work in conjunction with the input transport. That is, received unstructured data this module will sent to the structuring and processing to the specified modules of the transport protocol.</li>
-<li> <i>To start</i> — indicates the state "Running", in which to transfer the transport at startup.</li></ul></li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:949px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_tr_mod_tr_itr.png"><img class="thumbimage" height="806" src="files/QTCfg_subsys_tr_mod_tr_itr.png" width="947" /></a>  <div class="thumbcaption">Fig. 4.3c. The tab "Transport" of the page of an input transport of the module of the subsystem "Transports".</div></div></div></div>
+<li> <i>To connect</i> — indicates the state/command "Connect", in which to transfer the transport at startup.</li></ul></li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:926px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_in.png"><img class="thumbimage" height="824" src="files/Sockets_in.png" width="924" /></a>  <div class="thumbcaption">Fig. 4.3c. The tab "Transport" of the page of an input transport of the module of the subsystem "Transports".</div></div></div></div>
 <p><span id="TransportOut" title="#TransportOut">Output transport</span> (Fig.4.3d) contains:
 </p>
 <ul><li> Section "State" — contains the settings that characterize the state of the transport:
 <ul><li> <i>Status</i> — information on the current transport's status and statistics of its work. Most modules provide advanced diagnostics in this field when enabled with <a href="#Config">the debuging mode</a>.</li>
-<li> <i>Running</i> — state of the transport "Running". Given the network nature of the transports, this state often involves connecting to a remote network node and accordingly reflecting the fact that the connection is present. For output transports, there is no need for the user to be obliged to set this state because it is used by an external entity of the communication protocols, often by the data sources, that try to start the transport beforehand, so by establishing a connection for further exchange, moreover, the transport may be stopped by that entity.</li>
+<li> <i>Connect</i> — operative state/command of the transport. Given the network nature of the transports, this state often involves connecting to a remote network node and accordingly reflecting the fact that the connection is present. For output transports, there is no need for the user to be obliged to set this state because it is used by an external entity of the communication protocols, often by the data sources, that try to connect the transport beforehand, so by establishing a connection for further exchange, moreover, the transport may be disconnected by that entity.</li>
 <li> <i>Transport DB</i> — DB address to store the transport's data.</li></ul></li>
 <li> Section "Configuration" — directly contains the configuration fields:
 <ul><li> <i>Identifier</i> — information on the transport's identifier.</li>
 <li> <i>Name</i> — specifies the transport's name.</li>
 <li> <i>Description</i> — brief description of the transport and its appointment.</li>
 <li> <i>Address</i> — transport address in a specific type of transport (module) format. Description of the format of the address of the transport, as a rule, is available in the tooltip for this field.</li></ul></li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:811px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_tr_mod_tr_otr.png"><img class="thumbimage" height="622" src="files/QTCfg_subsys_tr_mod_tr_otr.png" width="809" /></a>  <div class="thumbcaption">Fig. 4.3d. The tab "Transport" of the page of an output transport of the module of the subsystem "Transports".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:779px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_out.png"><img class="thumbimage" height="621" src="files/Sockets_out.png" width="777" /></a>  <div class="thumbcaption">Fig. 4.3d. The tab "Transport" of the page of an output transport of the module of the subsystem "Transports".</div></div></div></div>
 <p>Output transport, in addition, provides a tab of forming user requests via this transport (Fig.4.3e). The tab is provided for debugging of communications and communication protocols, and includes:
 </p>
 <ul><li> <i>Time</i> — information about the time spent on the request and the response.</li>
@@ -1791,5 +1791,5 @@ openscada-proj backupList {ProjName}
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/en">Documents/Program_manual/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2700</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/en">Documents/Program_manual/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2708</td></tr></table></body>
 </html>

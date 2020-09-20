@@ -1,7 +1,7 @@
 
 //OpenSCADA module Archive.DBArch file: val.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -48,7 +48,14 @@ ModVArch::~ModVArch( )
 
 TCntrNode &ModVArch::operator=( const TCntrNode &node )
 {
-    TVArchivator::operator=(node);
+    const TVArchivator *src_n = dynamic_cast<const TVArchivator*>(&node);
+    if(!src_n) return *this;
+
+    //Configuration copy
+    exclCopy(*src_n, "ID;START;");
+    setDB(src_n->DB());
+
+    //TVArchivator::operator=(node);
     load_();
 
     return *this;

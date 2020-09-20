@@ -65,10 +65,10 @@
 <p>The configured and running input transport opens a serial port to wait for user requests. Each input interface is necessarily associated with one of the available transport protocols to which incoming messages are transmitted.
 </p><p>Configuration dialog of the input serial interface is shown in Figure 1.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:658px;"><a class="image" href="http://oscada.org/wiki/File:Serial_in.png"><img class="thumbimage" height="594" src="../files/Serial_in.png" width="656" /></a>  <div class="thumbcaption">Fig.1. Configuration dialog of an input serial interface.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:680px;"><a class="image" href="http://oscada.org/wiki/File:Serial_in.png"><img class="thumbimage" height="620" src="../files/Serial_in.png" width="678" /></a>  <div class="thumbcaption">Fig.1. Configuration dialog of an input serial interface.</div></div></div></div>
 <p>Using this dialog you can set:
 </p>
-<ul><li> State of transport, that is: "Status", "Running" and name of the database, containing the configuration.</li>
+<ul><li> State of transport, that is: status, "Connect" and name of the database, containing the configuration.</li>
 <li> Identifier, name and description of the transport.</li>
 <li> Address of the transport in the format "<b>{dev}:{spd}:{format}[:{opts}[:{mdm}]]</b>", where:
 <ul><li> <i>dev</i> — address of the serial device (/dev/ttyS0);</li>
@@ -84,7 +84,7 @@
 <li> "[-]RS485" — using RS-485 mode, through TIOCSRS485.</li></ul></li>
 <li> <i>mdm</i> — modem mode, listen for "RING".</li></ul></li>
 <li> Choice of transport protocols.</li>
-<li> The state "Running", in which the transport must be translated at boot. </li>
+<li> The state "Connect", in which the transport must be translated at boot. </li>
 <li> Time intervals of the interface in the format of string "<b>{symbol}:{frm}[::{rtsDelay1}:{rtsDelay2}]</b>", where:
 <ul><li> <i>symbol</i> — character time in milliseconds, used to control of the frame end;</li>
 <li> <i>frm</i> — maximum time of the frame in milliseconds, used to limit the package maximum size of the request — the frame;</li>
@@ -110,10 +110,10 @@
 <p>Configured and running output transport opens port of the serial interface to send the requests through it.
 </p><p>Main tab of the configuration page of the output serial interface is shown in Figure 3.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:651px;"><a class="image" href="http://oscada.org/wiki/File:Serial_out.png"><img class="thumbimage" height="559" src="../files/Serial_out.png" width="649" /></a>  <div class="thumbcaption">Fig.3. Main tab of the configuration page of an output serial interface.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:680px;"><a class="image" href="http://oscada.org/wiki/File:Serial_out.png"><img class="thumbimage" height="579" src="../files/Serial_out.png" width="678" /></a>  <div class="thumbcaption">Fig.3. Main tab of the configuration page of an output serial interface.</div></div></div></div>
 <p>Using this dialog you can set:
 </p>
-<ul><li> The state of transport, that is: "Status", "Running" and name of the database, containing the configuration.</li>
+<ul><li> The state of transport, that is: status, "Connect" and name of the database, containing the configuration.</li>
 <li> Identifier, name and description of the transport.</li>
 <li> Address of the transport in the format "<b>{dev}:{spd}:{format}[:{opts}[:{modTel}]]</b>", where:
 <ul><li> <i>dev</i> — address of the serial device (/dev/ttyS0);</li>
@@ -128,7 +128,6 @@
 <li> "rts1ne" — using of the RTS signal for transferring(true) and without checking for echo, for raw RS-485;</li>
 <li> "[-]RS485" — using RS-485 mode, through TIOCSRS485.</li></ul></li>
 <li> <i>modTel</i> — modem phone, presence of this field switches transport to work in the modem mode.</li></ul></li>
-<li> The state "Running", in which the transport must be translated at boot.</li>
 <li> Time intervals of the interface in format of the string "<b>{conn}:{symbol}[-{NextReqMult}][:{KeepAliveTm}[:{rtsDelay1}:{rtsDelay2}]]</b>", where:
 <ul><li> <i>conn</i> — maximum time of waiting the connecting response, in milliseconds;</li>
 <li> <i>symbol</i> — maximum time of one symbol, used for the frame end detection, in milliseconds;</li>
@@ -136,7 +135,7 @@
 <li> <i>KeepAliveTm</i> — keep alive timeout to restart the transport, in seconds; use the value &lt; 0 for stopping the transport after missing response at each request;</li>
 <li> <i>rtsDelay1</i> — delay between the transmitter activation with RTS signal and start up of the transmission, in milliseconds;</li>
 <li> <i>rtsDelay2</i> — delay between the transmitting and disconnecting the transmitter with RTS signal, in milliseconds.</li></ul></li>
-<li> Do not stop at processing. Sometimes the closing of an open device can be destructive, for example, on an ICP-DAS LP PLC, and you can prevent it with this option.</li></ul>
+<li> Do not disconnect at processing. Sometimes the closing of an open device can be destructive, for example, on an ICP-DAS LP PLC, and you can prevent it with this option.</li></ul>
 <p>The transport supports the ability to work in the modem mode. This mode is enabled by the fifth parameter presence of the address and it involves making a call on the phone specified by this parameter at the start time of the transport. After establishing a connection to the remote modem, all transmission requests are sent to the remote modem station. Disconnection of a communication session, with the transport stopping, is carried out according to the activity timeout.
 </p><p>To configure the modem of the output transport the special tab "Modem" is provided (Fig. 4).
 </p>
@@ -221,5 +220,5 @@ $ socat -d -d pty,raw,echo=0,perm=0666 tcp:192.168.2.4:5555,mss=1400
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Serial/en">Modules/Serial/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2700</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Serial/en">Modules/Serial/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2708</td></tr></table></body>
 </html>

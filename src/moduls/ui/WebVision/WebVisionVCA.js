@@ -866,7 +866,18 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		while(this.place.children.length) this.place.removeChild(this.place.children[0]);
 
 	    var toInit = !this.place.children.length;
-	    var medObj = toInit ? this.place.ownerDocument.createElement('img') : this.place.children[0];
+	    if(this.attrs['type'] == 2)		medObjTp = 'video';
+	    else if(this.attrs['type'] == 3)	medObjTp = 'audio';
+	    else medObjTp = 'img';
+	    var medObj = toInit ? this.place.ownerDocument.createElement(medObjTp) : this.place.children[0];
+	    if(this.attrs['roll'] && (toInit || this.attrsMdf["roll"])) medObj.loop = parseInt(this.attrs['roll']);
+	    if(this.attrs['pause'] && (toInit || this.attrsMdf["pause"])) medObj.pause();
+	    if(this.attrs['seek'] && (toInit || this.attrsMdf["seek"])) medObj.currentTime = parseFloat(this.attrs['seek']);
+	    if(this.attrs['volume'] && (toInit || this.attrsMdf["volume"])) medObj.volume = parseFloat(this.attrs['volume'])/100;
+	    if(this.attrs['play'] && (toInit || this.attrsMdf["play"]) && parseInt(this.attrs['play'])) {
+		if(toInit) medObj.autoplay = true;
+		else medObj.play();
+	    }
 	    if(toInit || this.attrsMdf["src"] || this.attrsMdf["fit"] || !pgBr) {
 		medObj.src = this.attrs['src'].length ? "/"+MOD_ID+this.addr+"?com=res&val="+this.attrs['src'] : "";
 		medObj.hidden = !this.attrs['src'].length;
@@ -908,6 +919,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    }
 	    if(toInit) {
 		medObj.wdgLnk = this;
+		if(this.attrs['play'])
+		    medObj.onloadeddata = function() { setWAttrs(this.wdgLnk.addr,'size',this.duration.toFixed(1)); return false; }
 		//Disable drag mostly for FireFox
 		medObj.onmousedown = function(e) { e = e?e:window.event; if(e.preventDefault) e.preventDefault(); }
 		medObj.border = 0;

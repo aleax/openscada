@@ -104,7 +104,7 @@ void ModVArch::save_( )
 
 bool ModVArch::cfgChange( TCfg &co, const TVariant &pc )
 {
-    if(co.name() == "V_PER") time_size = vmax(0.2, 1e3*valPeriod());
+    if(co.name() == "V_PER") setFileTimeSize(1e3*valPeriod());
     else if(co.name() == "ADDR" && startStat())	return false;
 
     return TVArchivator::cfgChange(co, pc);

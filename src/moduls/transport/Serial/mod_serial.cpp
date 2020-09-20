@@ -1414,7 +1414,7 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
 	    "                  use the value < 0 for stopping the transport after missing response at each request;\n"
 	    "    rtsDelay1 - delay between the transmitter activation with RTS signal and start up of the transmission, in milliseconds;\n"
 	    "    rtsDelay2 - delay between the transmitting and disconnecting the transmitter with RTS signal, in milliseconds."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/notStopOnProceed",_("Not stop on proceed"),RWRWR_,"root",STR_ID,2,"tp","bool", "help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/notStopOnProceed",_("Do not disconnect at processing"),RWRWR_,"root",STR_ID,2,"tp","bool", "help",
 	    _("Sometime opened device closing can be breakage, on ICP-DAS LP PLC for example, then you are alowed to prevent it by this option."));
 	if(TSYS::strParse(addr(),4,":").size() && ctrMkNode("area",opt,-1,"/mod",_("Modem"),R_R_R_,"root",STR_ID)) {
 	    ctrMkNode("fld",opt,-1,"/mod/tm",_("Timeout, seconds"),RWRWR_,"root",STR_ID,1,"tp","dec");

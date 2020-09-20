@@ -3,15 +3,15 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009-2011.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2018.
+# Roman Savochenko <roman@oscada.org>, 2011-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-23 16:12+0200\n"
+"POT-Creation-Date: 2020-09-20 16:38+0300\n"
 "PO-Revision-Date: 2011-07-19 20:53+0400\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -397,8 +397,8 @@ msgstr ""
 "    rtsDelay2 - Verzögerung zwischen Senden und Trennen des Senders mit RTS-"
 "Signal, in Millisekunden."
 
-msgid "Not stop on proceed"
-msgstr "Kein Stop auf fortzufahren"
+msgid "Do not disconnect at processing"
+msgstr "Trennen Sie nicht bei Verarbeitung"
 
 msgid ""
 "Sometime opened device closing can be breakage, on ICP-DAS LP PLC for "

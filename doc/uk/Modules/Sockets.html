@@ -56,17 +56,17 @@
 </p><p>Кожний вхідний транспорт пов'язується з одним з доступних транспортних протоколів, якому передаються вхідні повідомлення. Разом з транспортним протоколом підтримується механізм об'єднання шматків розрізнених при передачі запитів.
 </p><p>Діалог конфігурації вхідного сокету зображено на рисунку 1.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:812px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_in_uk.png"><img class="thumbimage" height="787" src="../files/Sockets_in_uk.png" width="810" /></a>  <div class="thumbcaption">Рис.1. Діалог конфігурації вхідного сокету.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:831px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_in_uk.png"><img class="thumbimage" height="837" src="../files/Sockets_in_uk.png" width="829" /></a>  <div class="thumbcaption">Рис.1. Діалог конфігурації вхідного сокету.</div></div></div></div>
 <p>За допомогою цього діалогу можна встановити:
 </p>
-<ul><li> Стан транспорту, а саме: статус, "Виконується", ім'я БД (яка містить конфігурацію) та інформація про поточні підключення.</li>
+<ul><li> Стан транспорту, а саме: статус, "Підключення", ім'я БД (яка містить конфігурацію) та інформація про поточні підключення.</li>
 <li> Ідентифікатор, ім'я та опис транспорту.</li>
 <li> Адреса транспорту. Формат адреси описано у таблиці нижче.</li>
 <li> Обрання транспортних протоколів.</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Порожнє значення обрання протоколу перемикає транспорт у режим створення асоційованого вихідного транспорту для кожного підключення на цей вхідний.</dd>
 <dd>Режим асоційованих вихідних транспортів для вхідного передбачає наявність деякої зовнішньої до транспорту процедури, яка виконує роль протоколу, та яка має "обходити" всі асоційовані вихідні транспорти, та виконувати запит на читання або запис-читання.</dd>
 <dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Відсутність такої процедури неминуче призведе до росту асоційованих вихідних транспортів через відсутність сутності, яка зупиняє транспорти із закритими підключеннями та можливістю наступного видалення зупинених вихідних транспортів цим вхідним.</dd></dl>
-<ul><li> Стан "Виконується", у який переводити транспорт при запуску.</li>
+<ul><li> Стан "Підключення", у який переводити транспорт при запуску.</li>
 <li> Пріоритет задач транспорту.</li>
 <li> Максимальний розмір сегмента (MSS), для обмеження розміру пакетів що відсилаються (сегментів TCP) на поганих каналах зв'язку. Встановити в 0 для зняття користувацького обмеження розміру.</li>
 <li> Розмір вхідного буферу, Довжина черги сокетів, Максимальна кількість клієнтів та Максимальна кількість клієнтів за хостами (для TCP).</li>
@@ -139,13 +139,12 @@
 </p><p>Транспорт підтримує пряме визначення декількох адрес серверу та опрацювання всіх IP-адрес у які резолвиться символьна адреса, що дозволяє будувати <a href="../DAQ.html#Redundancy" title="Special:MyLanguage/Documents/DAQ">вертикальне резервування</a> безпосередньо транспортом, який буде автоматично підключатися до першого доступного серверу.
 </p><p>Головну вкладка сторінки конфігурації вихідного сокету зображено на рисунку 2.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:655px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_out_uk.png"><img class="thumbimage" height="604" src="../files/Sockets_out_uk.png" width="653" /></a>  <div class="thumbcaption">Рис.2. Головна вкладка сторінки конфігурації вихідного сокету.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:725px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_out_uk.png"><img class="thumbimage" height="638" src="../files/Sockets_out_uk.png" width="723" /></a>  <div class="thumbcaption">Рис.2. Головна вкладка сторінки конфігурації вихідного сокету.</div></div></div></div>
 <p>За допомогою цього діалогу можна встановити:
 </p>
-<ul><li> Стан транспорту, а саме: статус, "Виконується" та ім'я БД, яка містить конфігурацію.</li>
+<ul><li> Стан транспорту, а саме: статус, "Підключення" та ім'я БД, яка містить конфігурацію.</li>
 <li> Ідентифікатор, ім'я та опис транспорту.</li>
 <li> Адреса транспорту. Формат адреси описано у таблиці нижче.</li>
-<li> Стан "Виконується", у який переводити транспорт при запуску.</li>
 <li> Максимальний розмір сегменту (MSS) для обмеження розміру пакетів що відправляються (сегментів TCP) на поганих каналах зв'язку. Встановити у 0 для зняття користувацького обмеження розміру.</li>
 <li> Інтервали часу підключення у форматі "<b>{conn}:{next}[:{rep}]</b>", де:
 <ul><li> <i>conn</i> — максимальний час очікування відповіді підключення, у секундах;</li>
@@ -207,5 +206,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Sockets/uk">Modules/Sockets/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2700</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Sockets/uk">Modules/Sockets/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2708</td></tr></table></body>
 </html>

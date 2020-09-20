@@ -1,15 +1,15 @@
 # OpenSCADA.UI.VCAEngine translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.UI.VCAEngine package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2006-2019.
+# Roman Savochenko <roman@oscada.org>, 2006-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-20 17:23+0200\n"
+"POT-Creation-Date: 2020-09-19 09:13+0300\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -470,8 +470,8 @@ msgid ""
 "will be cleared itself."
 msgstr ""
 "Режим роботи кнопки:\n"
-"  \"Стандарт\" - звичайна кнопка з можливістю повтору подій при "
-"утримані (параметри у \"value\");\n"
+"  \"Стандарт\" - звичайна кнопка з можливістю повтору подій при утримані "
+"(параметри у \"value\");\n"
 "  \"Перемикач\" - кнопка з фіксацією (значення у \"value\");\n"
 "  \"Меню\" - відкриття меню за натиском (перелік елементів у \"value\");\n"
 "  \"Завантаження\" - надання користувацького завантаження невеликих файлів "
@@ -732,8 +732,8 @@ msgstr "Джерело"
 msgid "Type"
 msgstr "Тип"
 
-msgid "Image;Animation;Full video"
-msgstr "Зображення;Анімація;Повне відео"
+msgid "Image;Animation;Video;Audio"
+msgstr "Зображення;Анімація;Відео;Аудіо"
 
 msgid "Map areas"
 msgstr "Області карти"
@@ -1789,12 +1789,6 @@ msgstr "Контекстне меню"
 msgid "Events processing"
 msgstr "Обробка подій"
 
-msgid "Parent item is empty or equal to itself!"
-msgstr "Батьківський елемент порожній або дорівнює собі!"
-
-msgid "Parent is identical to the owner for the link!"
-msgstr "Батько ідентичний до власника для посилання!"
-
 #, c-format
 msgid "Error enabling the widget: %s"
 msgstr "Помилка включення віджета: %s"
@@ -1809,6 +1803,12 @@ msgstr "Помилка вимкнення наслідувального від�
 #, c-format
 msgid "Error enabling/disabling the child widget '%s'."
 msgstr "Помилка увімкнення/вимкнення дочірнього віджету '%s'."
+
+msgid "Parent item is empty or equal to itself!"
+msgstr "Батьківський елемент порожній або дорівнює собі!"
+
+msgid "Parent is identical to the owner for the link!"
+msgstr "Батько ідентичний до власника для посилання!"
 
 #, c-format
 msgid ""
@@ -1825,6 +1825,7 @@ msgstr "Додання нового атрибуту '%s' превищує кі�
 msgid "Attribute '%s' is not present."
 msgstr "Атрибут '%s' відсутній!"
 
+#, c-format
 msgid "Deleting attribute '%s' has not been released."
 msgstr "Видаляємий атрибут '%s' не було звільнено."
 
