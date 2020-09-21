@@ -706,10 +706,6 @@ VisDevelop::~VisDevelop( )
 {
     winClose = true;
 
-    //Save main window state
-    QByteArray st = saveState();
-    mod->uiPropSet("devWinState", TSYS::strEncode(string(st.data(),st.size()),TSYS::base64,"")+":"+i2s(width())+":"+i2s(height()), user());
-
     //Timers stop
     endRunTimer->stop();
     work_wdgTimer->stop();
@@ -771,6 +767,10 @@ void VisDevelop::closeEvent( QCloseEvent* ce )
 	winClose = false;
 	return;
     }
+
+    //Save main window state
+    QByteArray st = saveState();
+    mod->uiPropSet("devWinState", TSYS::strEncode(string(st.data(),st.size()),TSYS::base64,"")+":"+i2s(width())+":"+i2s(height()), user());
 
     work_space->closeAllSubWindows();
     ce->accept();

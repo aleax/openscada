@@ -1,7 +1,7 @@
 
 //OpenSCADA module Archive.FSArch file: val.h
 /***************************************************************************
- *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -200,7 +200,7 @@ class ModVArch: public TVArchivator
 	int	packTm( )	{ return mPackTm; }
 	bool	packInfoFiles( ){ return mPackInfoFiles; }
 
-	void setFileTimeSize( double vl )	{ time_size = vmax(100*valPeriod()/3600,vl); modif(); }
+	void setFileTimeSize( double vl )	{ time_size = vmax(100*valPeriod()/3600,vmin(366*24,vl)); modif(); }
 	void setNumbFiles( unsigned vl )	{ mNumbFiles = vl; modif(); }
 	void setMaxCapacity( double vl )	{ mMaxCapacity = vmax(0,vl); modif(); }
 	void setRoundProc( double vl )		{ round_proc = vmax(0,vmin(50,vl)); modif(); }

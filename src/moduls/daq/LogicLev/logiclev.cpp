@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Logical level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.3.1"
+#define MOD_VER		"2.3.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the pure logical level of the DAQ parameters.")
 #define LICENSE		"GPL2"
@@ -566,7 +566,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 	else if(isStd() && tmpl->func()) {
 	    int id_lnk = tmpl->lnkId(vo.name());
 	    if(id_lnk >= 0 && !tmpl->lnkActive(id_lnk)) id_lnk = -1;
-	    ResAlloc cres(calcRes, true);
+	    //ResAlloc cres(calcRes, true);	//!!!! But locks the writing during the long execution templates and why?
 	    if(id_lnk < 0) tmpl->set(tmpl->ioId(vo.name()), vl);
 	    else tmpl->lnkOutput(id_lnk, vl);
 	}
@@ -646,7 +646,7 @@ void TMdPrm::calc( bool first, bool last, double frq )
 
     if(!isStd() || !tmpl->func()) return;
     try {
-	ResAlloc cres(calcRes, true);
+	//ResAlloc cres(calcRes, true);
 	if(chkLnkNeed) chkLnkNeed = tmpl->initLnks();
 
 	//Set fixed system attributes

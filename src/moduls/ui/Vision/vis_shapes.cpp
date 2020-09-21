@@ -1846,7 +1846,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 			    if(write(tfid, sdata.data(), sdata.size()) != (ssize_t)sdata.size())
 				mod->postMess(mod->nodePath().c_str(), QString(_("Error writing to the file '%1'.")).arg(tfile.c_str()), TVision::Error);
 			    close(tfid);
-			    mSrc = MediaSource(QUrl(("file:"+tfile).c_str()));
+			    mSrc = MediaSource(QUrl(("file:"+SYS->workDir()+"/"+tfile).c_str()));
 			    //mSrc = MediaSource(QString(tfile.c_str()));
 			}
 		    }
