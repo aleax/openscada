@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-20 09:53+0300\n"
+"POT-Creation-Date: 2020-09-27 11:38+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1887,8 +1887,8 @@ msgstr "Ошибка запуска подсистемы '%s'."
 msgid "Running is completed!"
 msgstr "Запуск завершён!"
 
-msgid " waiting the processing finish ..."
-msgstr ""
+msgid "waiting the processing finish ..."
+msgstr "ожидание завершения обработки ..."
 
 msgid "Stopping."
 msgstr "Останов."
@@ -2411,6 +2411,13 @@ msgstr "Отключено. "
 #, c-format
 msgid "Error deletion the node: %s"
 msgstr "Ошибка удаления узла: %s."
+
+#, c-format
+msgid "Error removing the assigned node/connection: %s"
+msgstr "Ошибка удаления назначенного узла/подключения: %s"
+
+msgid "Error connection the new assigned node: %s"
+msgstr "Ошибка подключения нового назначенного узла: %s"
 
 msgid "Input transport: "
 msgstr "Входной транспорт: "

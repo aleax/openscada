@@ -859,7 +859,7 @@ int TSYS::start( )
     if(!mainThr.freeStat()) mainThr.at().modStart();
     while(!mStopSignal) sysSleep(STD_WAIT_DELAY*1e-3);
     mRunning = false;
-    TSYS::eventWait(isServPrc, false, string("SYS_Service: ")+_(" waiting the processing finish ..."));
+    TSYS::eventWait(isServPrc, false, string("SYS_Service: ")+_("waiting the processing finish ..."));
 
     mess_sys(TMess::Info, _("Stopping."));
 

@@ -284,7 +284,7 @@ class SessWdg : public Widget, public TValFunc
 	virtual void alarmQuietance( uint8_t quit_tmpl, bool isSet = false, bool ret = false );
 
 	// Access to mime resource
-	string resourceGet( const string &id, string *mime = NULL );
+	string resourceGet( const string &id, string *mime = NULL, int off = -1, int *size = NULL );
 	void resourceSet( const string &id, const string &data, const string &mime = "" );
 
 	SessWdg  *ownerSessWdg( bool base = false ) const;

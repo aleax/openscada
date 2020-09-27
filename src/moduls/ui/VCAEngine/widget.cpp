@@ -948,8 +948,9 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
     string a_path = opt->attr("path"), u = opt->attr("user"), l = opt->attr("lang");
     if(a_path == "/wdg/res" && ctrChkNode(opt)) {	//Service command for resources request
 	string mime;
-	opt->setText(resourceGet(opt->attr("id"),&mime));
-	opt->setAttr("mime",mime);
+	int size = s2i(opt->attr("size"));
+	opt->setText(resourceGet(opt->attr("id"),&mime,s2i(opt->attr("off")),&size));
+	opt->setAttr("mime", mime)->setAttr("size", i2s(size));
     }
     else if(a_path == "/wdg/st/status" && ctrChkNode(opt))	opt->setText(getStatus());
     else if(a_path == "/wdg/st/en") {
@@ -1172,7 +1173,7 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		opt->childAdd("el")->setText("res:"+ls[i_t]);
 	}
 	else if(a_val.compare(0,5,"file:") == 0) {
-	    TSYS::ctrListFS(opt, a_val.substr(5), "png;jpeg;jpg;gif;pcx;mng;svg;avi;mov;mpg4");
+	    TSYS::ctrListFS(opt, a_val.substr(5), "png;jpeg;jpg;gif;pcx;mng;svg;mp3;ogg;wav;avi;mov;mpg4;ogv;mp4");
 	    for(unsigned i_t = 0; i_t < opt->childSize(); i_t++)
 		opt->childGet(i_t)->setText("file:"+opt->childGet(i_t)->text());
 	}

@@ -1574,8 +1574,13 @@ void ShapeMedia::init( WdgView *w )
 
 void ShapeMedia::destroy( WdgView *w )
 {
+    ShpDt *shD = (ShpDt*)w->shpData;
+
+    if(shD->tfile.size()) remove(shD->tfile.c_str());
+
     clear(w);
-    delete (ShpDt*)w->shpData;
+
+    delete shD;
 }
 
 void ShapeMedia::clear( WdgView *w )
@@ -1831,8 +1836,8 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 		MediaSource mSrc;
 		if(player->isPlaying()) { player->stop(); player->seek(0); }
 		//Try play local file
-		if(shD->mediaSrc.compare(0,5,"file:") == 0) mSrc = MediaSource(QUrl(shD->mediaSrc.c_str()));
-		    //mSrc = MediaSource(QString(shD->mediaSrc.substr(5).c_str()));
+		if(shD->mediaSrc.compare(0,5,"file:") == 0)
+		    mSrc = MediaSource(QUrl(shD->mediaSrc.substr(5).c_str()));
 		//Try play Stream by URL
 		else if(shD->mediaSrc.compare(0,7,"stream:") == 0)
 		    mSrc = MediaSource(QUrl(shD->mediaSrc.substr(7).c_str()));
@@ -1840,14 +1845,13 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 		if(shD->mediaSrc.size() && (mSrc.type() == MediaSource::Invalid || mSrc.type() == MediaSource::Empty)) {
 		    string sdata = w->resGet(shD->mediaSrc);
 		    if(sdata.size()) {
-			string tfile = TSYS::path2sepstr(w->id(),'_');
-			int tfid = open(tfile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, SYS->permCrtFiles());
+			shD->tfile = TSYS::path2sepstr(w->id(),'_');
+			int tfid = open(shD->tfile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, SYS->permCrtFiles());
 			if(tfid >= 0) {
-			    if(write(tfid, sdata.data(), sdata.size()) != (ssize_t)sdata.size())
-				mod->postMess(mod->nodePath().c_str(), QString(_("Error writing to the file '%1'.")).arg(tfile.c_str()), TVision::Error);
+			    if(write(tfid,sdata.data(),sdata.size()) != (ssize_t)sdata.size())
+				mod->postMess(mod->nodePath().c_str(), QString(_("Error writing to the file '%1'.")).arg(shD->tfile.c_str()), TVision::Error);
 			    close(tfid);
-			    mSrc = MediaSource(QUrl(("file:"+SYS->workDir()+"/"+tfile).c_str()));
-			    //mSrc = MediaSource(QString(tfile.c_str()));
+			    mSrc = MediaSource(QUrl(shD->tfile.c_str()));
 			}
 		    }
 		}

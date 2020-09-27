@@ -597,7 +597,7 @@ void *TSocketIn::Task( void *sock_in )
 		    close(sockFdCL);
 		    continue;
 		}
-		//Create presenting the client connection output transport
+		//Creating output transport representing to the client connection
 		if(sock->protocols().empty() && sock->assTrs(true).size() <= sock->maxFork()) {
 		    string outTrId = sock->assTrO("SOCK:"+i2s(sockFdCL));
 		    ((AutoHD<TSocketOut>)sock->owner().outAt(outTrId)).at().connAddr = sender;

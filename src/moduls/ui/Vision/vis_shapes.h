@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_shapes.h
 /***************************************************************************
- *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -308,7 +308,7 @@ class ShapeMedia : public WdgShape
 		QBrush	backGrnd;
 		QWidget *addrWdg;
 		QPen	border;
-		string	mediaSrc;
+		string	mediaSrc, tfile;
 		vector<MapArea>	maps;
 	};
 };

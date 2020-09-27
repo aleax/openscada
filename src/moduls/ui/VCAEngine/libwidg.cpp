@@ -253,7 +253,7 @@ void WidgetLib::mimeDataList( vector<string> &list, const string &idb ) const
 	list.push_back(cEl.cfg("ID").getS());
 }
 
-bool WidgetLib::mimeDataGet( const string &iid, string &mimeType, string *mimeData, const string &idb ) const
+bool WidgetLib::mimeDataGet( const string &iid, string &mimeType, string *mimeData, const string &idb, int off, int *size ) const
 {
     bool is_file = (iid.compare(0,5,"file:")==0);
     bool is_res  = (iid.compare(0,4,"res:")==0);
@@ -265,7 +265,7 @@ bool WidgetLib::mimeDataGet( const string &iid, string &mimeType, string *mimeDa
 	string wdb  = idb.empty() ? DB() : idb;
 	TConfig cEl(&mod->elWdgData());
 	if(!mimeData) cEl.cfg("DATA").setView(false);
-	cEl.cfg("ID").setS( dbid );
+	cEl.cfg("ID").setS(dbid);
 	if(SYS->db().at().dataGet(wdb+"."+wtbl,mod->nodePath()+wtbl,cEl,false,true)) {
 	    mimeType = cEl.cfg("MIME").getS();
 	    if(mimeData) *mimeData = cEl.cfg("DATA").getS();
@@ -273,21 +273,33 @@ bool WidgetLib::mimeDataGet( const string &iid, string &mimeType, string *mimeDa
 	}
     }
     if(!is_res) {
-	//Get resource file from file system
+	//Get resource file from the file system
 	string filepath = is_file ? iid.substr(5) : iid;
 	char buf[STR_BUF_LEN];
-	string rez;
+
+	mimeType = TUIS::mimeGet(filepath, "");
+	if(!mimeData)	return true;
+	*mimeData = "";
+
 	int hd = open(filepath.c_str(), O_RDONLY);
 	if(hd == -1)	return false;
 
-	//Check for size limit
-	if(lseek(hd,0,SEEK_END) > 100*1024*1024) { close(hd); return false; }
-	lseek(hd, 0, SEEK_SET);
-	for(int len; (len=read(hd,buf,sizeof(buf))) > 0; ) rez.append(buf, len);
+	int f_size = lseek(hd, 0, SEEK_END);
+	int partSz = f_size;
+
+	if(off >= 0) {	//Partially reading
+	    off = vmin(f_size, off);
+	    partSz = vmin(USER_FILE_LIMIT, vmin(f_size, off + ((size && *size)?*size:f_size)));
+	    if(size) *size = f_size;
+	    lseek(hd, off, SEEK_SET);
+	} else lseek(hd, 0, SEEK_SET);
+
+	for(int len = 0; (len=read(hd,buf,vmin(sizeof(buf),partSz-mimeData->size()))) > 0; )
+	    mimeData->append(buf, len);
+
 	close(hd);
 
-	mimeType = TUIS::mimeGet(filepath, rez);
-	if(mimeData) *mimeData = TSYS::strEncode(rez,TSYS::base64);
+	*mimeData = TSYS::strEncode(*mimeData, TSYS::base64);
 
 	return true;
     }
@@ -800,12 +812,12 @@ void LWidget::resourceList( vector<string> &ls )
     if(!parent().freeStat()) parent().at().resourceList(ls);
 }
 
-string LWidget::resourceGet( const string &id, string *mime )
+string LWidget::resourceGet( const string &id, string *mime, int off, int *size )
 {
     string mimeType, mimeData;
 
-    if(!ownerLib().mimeDataGet(id,mimeType,&mimeData) && !parent().freeStat())
-	mimeData = parent().at().resourceGet(id, &mimeType);
+    if(!ownerLib().mimeDataGet(id,mimeType,&mimeData,"",off,size) && !parent().freeStat())
+	mimeData = parent().at().resourceGet(id, &mimeType, off, size);
     if(mime) *mime = mimeType;
 
     return mimeData;
@@ -1041,12 +1053,12 @@ void CWidget::resourceList( vector<string> &ls )
     if(!parent().freeStat()) parent().at().resourceList(ls);
 }
 
-string CWidget::resourceGet( const string &id, string *mime )
+string CWidget::resourceGet( const string &id, string *mime, int off, int *size )
 {
     string mimeType, mimeData;
 
-    if((mimeData=ownerLWdg().resourceGet(id,&mimeType)).empty() && !parent().freeStat())
-	mimeData = parent().at().resourceGet(id, &mimeType);
+    if((mimeData=ownerLWdg().resourceGet(id,&mimeType,off,size)).empty() && !parent().freeStat())
+	mimeData = parent().at().resourceGet(id, &mimeType, off, size);
     if(mime) *mime = mimeType;
 
     return mimeData;

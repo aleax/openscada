@@ -1,7 +1,7 @@
 
 //OpenSCADA module Archive.DBArch file: val.h
 /***************************************************************************
- *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -137,7 +137,7 @@ class ModVArch: public TVArchivator
 	//Attributes
 	double	mMaxSize;			//Maximum archive size (days)
 	bool	mTmAsStr;			//Store time as pure integer
-	int	mGroupPrms;			//Grouping parameters into single table, 0 - table per parameter
+	int	mGroupPrms;			//Grouping parameters into single table, 0 - one table per parameter
 
 	vector<SGrp>	accm;
 };

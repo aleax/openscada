@@ -1,3 +1,27 @@
+2020-09-27 Roman (stable)
+- FIX:LibsDB.OscadaLibs: The DAQ-template base.initConsAssignTrs some improved in detection duple connections.
+- FIX:data/openscada-proj.in: Fixed in packing big crashreports.
+- FIX:DAQ: DAQ parameters appended in checking the parameter type on interstation copying for single parameters.
+- !!!:FIX:Transport: The function TTransportIn::assTrO() of processing input initiative connections complete revised
+	to make new connection necessarily created as a new output transport,
+	then preventing true finishing the present closed but not freed output transports.
+    FIX: The service "/log/log" limited in it processing for time STD_WAIT_TM (5 seconds) for very many and big requests.
+- FIX:Archive.DBArch: The parameter "Grouping parameters into single table" was set by default.
+- FIX:UI.QTCfg: Set to update the current page content after errors in some commands.
+- !!:FIX:UI.VCAEngine:
+    !!: The resource requesting service "get:/wdg/res", Widget::resourceGet() and {WidgetLib,Project}::mimeDataGet()
+	appended for requesting the resource parts, for big media files mostly.
+    FIX: Source files listing of the primitive Media appended for "mp3;ogg;wav;ogv;mp4".
+- FIX:UI.Vision: Fixed in local filesystem URLs processing for MediaSource of Phonon.
+    FIX: Temporary files of loaded from the mime table data of the types "Video" and "Audio" of the primitive "Media"
+	are set to remove.
+- !!!!:UI.WebVision: Implementation of the resources uploading in parts, for big media, by the HTTP parameter "Range: bytes=".
+    The types "Video" and "Audio" of the primitive "Media" improved in
+	- the control "play", "pause", "seek" periodic back reading the current position and control threshold;
+	- external URLs processing;
+	- playing video in whole widget frame.
+
+
 2020-09-20 Roman (stable)
 - !:FIX:LibsDB.OscadaLibs: DevLib.{DNP3,IEC62056} fixed in processing the output transport object placed as an attribute,
     but that allows to set only for Object, so EVAL was used here.

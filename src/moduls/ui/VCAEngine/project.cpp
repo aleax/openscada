@@ -321,7 +321,7 @@ void Project::mimeDataList( vector<string> &list, const string &idb ) const
 	list.push_back(cEl.cfg("ID").getS());
 }
 
-bool Project::mimeDataGet( const string &iid, string &mimeType, string *mimeData, const string &idb ) const
+bool Project::mimeDataGet( const string &iid, string &mimeType, string *mimeData, const string &idb, int off, int *size ) const
 {
     bool is_file = (iid.compare(0,5,"file:")==0);
     bool is_res  = (iid.compare(0,4,"res:")==0);
@@ -343,19 +343,32 @@ bool Project::mimeDataGet( const string &iid, string &mimeType, string *mimeData
     if(!is_res) {
 	//Get resource file from file system
 	string filepath = is_file ? iid.substr(5) : iid;
-	int len;
 	char buf[STR_BUF_LEN];
-	string rez;
-	int hd = open(filepath.c_str(),O_RDONLY);
-	if(hd == -1)  return false;
-	if(lseek(hd,0,SEEK_END) > 100*1024*1024) { close(hd); return false; }
-	lseek(hd,0,SEEK_SET);
 
-	while((len=read(hd,buf,sizeof(buf))) > 0) rez.append(buf,len);
+	mimeType = TUIS::mimeGet(filepath, "");
+	if(!mimeData)	return true;
+	*mimeData = "";
+
+	int hd = open(filepath.c_str(), O_RDONLY);
+	if(hd == -1)	return false;
+
+	int f_size = lseek(hd, 0, SEEK_END);
+	int partSz = f_size;
+
+	if(off >= 0) {	//Partially reading
+	    off = vmin(f_size, off);
+	    partSz = vmin(USER_FILE_LIMIT, vmin(f_size, off + ((size && *size)?*size:f_size)));
+	    if(size) *size = f_size;
+	    lseek(hd, off, SEEK_SET);
+	} else lseek(hd, 0, SEEK_SET);
+
+	for(int len = 0; (len=read(hd,buf,vmin(sizeof(buf),partSz-mimeData->size()))) > 0; )
+	    mimeData->append(buf, len);
+
 	close(hd);
 
-	mimeType = TUIS::mimeGet(filepath, rez);
-	if(mimeData) *mimeData = TSYS::strEncode(rez,TSYS::base64);
+	*mimeData = TSYS::strEncode(*mimeData, TSYS::base64);
+
 	return true;
     }
 
@@ -1379,12 +1392,12 @@ void Page::resourceList( vector<string> &ls )
     if(!parent().freeStat()) parent().at().resourceList(ls);
 }
 
-string Page::resourceGet( const string &id, string *mime )
+string Page::resourceGet( const string &id, string *mime, int off, int *size )
 {
     string mimeType, mimeData;
 
-    if(!ownerProj()->mimeDataGet(id,mimeType,&mimeData) && !parent().freeStat())
-	mimeData = parent().at().resourceGet(id, &mimeType);
+    if(!ownerProj()->mimeDataGet(id,mimeType,&mimeData,"",off,size) && !parent().freeStat())
+	mimeData = parent().at().resourceGet(id, &mimeType, off, size);
     if(mime) *mime = mimeType;
 
     return mimeData;
@@ -1857,12 +1870,12 @@ void PageWdg::resourceList( vector<string> &ls )
     if(!parent().freeStat()) parent().at().resourceList(ls);
 }
 
-string PageWdg::resourceGet( const string &id, string *mime )
+string PageWdg::resourceGet( const string &id, string *mime, int off, int *size )
 {
     string mimeType, mimeData;
 
-    if((mimeData=ownerPage().resourceGet(id,&mimeType)).empty() && !parent().freeStat())
-	mimeData = parent().at().resourceGet(id, &mimeType);
+    if((mimeData=ownerPage().resourceGet(id,&mimeType,off,size)).empty() && !parent().freeStat())
+	mimeData = parent().at().resourceGet(id, &mimeType, off, size);
     if(mime) *mime = mimeType;
 
     return mimeData;

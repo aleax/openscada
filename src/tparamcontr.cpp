@@ -254,6 +254,14 @@ void TParamContr::load_( TConfig *icfg )
 
     if(icfg) *(TConfig*)this = *icfg;
     else {
+	//Checking for need to change the parameter type at loading from the configuration context
+	if(SYS->cfgCtx() && !SYS->cfgCtx()->childGet("id",owner().owner().nodePath()+owner().cfg(type().mDB).getS(),true))
+	    for(int iTp = 0; iTp < owner().owner().tpPrmSize(); iTp++)
+		if(SYS->cfgCtx()->childGet("id",owner().owner().nodePath()+owner().cfg(owner().owner().tpPrmAt(iTp).mDB).getS(),true)) {
+		    setType(owner().owner().tpPrmAt(iTp).name);
+		    break;
+		}
+
 	//cfgViewAll(true);
 	cfg("OWNER") = ownerPath();
 	SYS->db().at().dataGet(owner().DB()+"."+type().DB(&owner()), owner().owner().nodePath()+type().DB(&owner()), *this);

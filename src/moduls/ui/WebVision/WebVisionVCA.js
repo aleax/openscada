@@ -871,16 +871,26 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    else medObjTp = 'img';
 	    var medObj = toInit ? this.place.ownerDocument.createElement(medObjTp) : this.place.children[0];
 	    if(this.attrs['roll'] && (toInit || this.attrsMdf["roll"])) medObj.loop = parseInt(this.attrs['roll']);
-	    if(this.attrs['pause'] && (toInit || this.attrsMdf["pause"])) medObj.pause();
-	    if(this.attrs['seek'] && (toInit || this.attrsMdf["seek"])) medObj.currentTime = parseFloat(this.attrs['seek']);
-	    if(this.attrs['volume'] && (toInit || this.attrsMdf["volume"])) medObj.volume = parseFloat(this.attrs['volume'])/100;
-	    if(this.attrs['play'] && (toInit || this.attrsMdf["play"]) && parseInt(this.attrs['play'])) {
-		if(toInit) medObj.autoplay = true;
+	    if(this.attrs['pause'] && (toInit || this.attrsMdf["pause"]) && parseInt(this.attrs['play'])) {
+		if(parseInt(this.attrs['pause'])) medObj.pause();
 		else medObj.play();
 	    }
-	    if(toInit || this.attrsMdf["src"] || this.attrsMdf["fit"] || !pgBr) {
-		medObj.src = this.attrs['src'].length ? "/"+MOD_ID+this.addr+"?com=res&val="+this.attrs['src'] : "";
+	    if(this.attrs['seek'] && (toInit || this.attrsMdf["seek"]) && Math.abs(parseFloat(this.attrs['seek'])-medObj.currentTime) > 10)
+		medObj.currentTime = parseFloat(this.attrs['seek']);
+	    if(this.attrs['volume'] && (toInit || this.attrsMdf["volume"])) medObj.volume = parseFloat(this.attrs['volume'])/100;
+	    if(toInit || this.attrsMdf["src"] || this.attrsMdf["fit"] || this.attrsMdf["play"] || !pgBr) {
+		if(!this.attrs['src'].length || (this.attrs['play'] && !parseInt(this.attrs['play'])))	medObj.src = "";
+		else if(this.attrs['src'].indexOf("http://") == 0 || this.attrs['src'].indexOf("https://") == 0)
+		    medObj.src = this.attrs['src'];
+		else medObj.src = "/"+MOD_ID+this.addr+"?com=res&val="+this.attrs['src'];
 		medObj.hidden = !this.attrs['src'].length;
+	    }
+	    if(this.attrs['play'] && (toInit || this.attrsMdf["play"])) {
+		if(parseInt(this.attrs['play'])) {
+		    if(toInit) medObj.autoplay = true;
+		    else medObj.play();
+		}
+		this.perUpdtEn(parseInt(this.attrs['play']));
 	    }
 	    if(toInit || this.attrsMdf["fit"] || !pgBr) {
 		if(this.attrs['fit'] == 1) {
@@ -919,8 +929,10 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    }
 	    if(toInit) {
 		medObj.wdgLnk = this;
-		if(this.attrs['play'])
+		if(this.attrs['play']) {
 		    medObj.onloadeddata = function() { setWAttrs(this.wdgLnk.addr,'size',this.duration.toFixed(1)); return false; }
+		    if(this.attrs['type'] == 2)	medObj.setAttribute('style','height: inherit; width: inherit; ');
+		}
 		//Disable drag mostly for FireFox
 		medObj.onmousedown = function(e) { e = e?e:window.event; if(e.preventDefault) e.preventDefault(); }
 		medObj.border = 0;
@@ -2446,7 +2458,7 @@ function perUpdtEn( en )
 	if(en && this.isEnabled() && !perUpdtWdgs[this.addr] && parseInt(this.attrs['trcPer']))	perUpdtWdgs[this.addr] = this;
 	if(!en && perUpdtWdgs[this.addr]) delete perUpdtWdgs[this.addr];
     }
-    else if(this.attrs['root'] == 'Document' || this.attrs['root'] == 'FormEl') {
+    else if(this.attrs['root'] == 'Document' || this.attrs['root'] == 'FormEl' || this.attrs['root'] == 'Media') {
 	if(en) perUpdtWdgs[this.addr] = this;
 	else delete perUpdtWdgs[this.addr];
     }
@@ -2467,6 +2479,12 @@ function perUpdt( )
 	    dgrObj.src = '/'+MOD_ID+this.addr+'?com=obj&tm='+tmCnt+'&xSc='+this.xScale(true).toFixed(3)+'&ySc='+this.yScale(true).toFixed(3);
 	    dgrObj.stLoadTm = (new Date()).getTime();
 	}
+    }
+    else if(this.attrs['root'] == 'Media' && (this.updCntr-=prcTm) <= 0) {
+	this.updCntr = 10;
+	var videoObj = this.place.childNodes[0];
+
+	if(videoObj.currentTime) setWAttrs(this.addr,'seek',videoObj.currentTime.toFixed(1));
     }
     else if(this.attrs['root'] == 'Protocol' && (this.updCntr-=prcTm) <= 0) {
 	this.updCntr = parseInt(this.attrs['trcPer']);

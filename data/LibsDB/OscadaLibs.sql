@@ -8606,7 +8606,7 @@ The template can control the containers of data source objects, constructed both
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Elyor Turaboev, BLUE STAR GROUP Ltd
-Version: 1.1.1
+Version: 1.1.2
 License: GPLv2','Шаблон служби опрацювання вхідних ініціативних підключень створено для надання останньої ланки реалізації та підтримки концепції збору даних у пасивному режимі та ініціативного підключення, а саме — контролю асоціативних транспортів, створюваних вхідним транспортом за кожним підключенням.
 
 Функцію створення вихідних асоціативних транспортів за підключенням на вхідний наразі підтримує лише модуль транспортів "Сокети" та для TCP-сокетів.
@@ -8624,7 +8624,7 @@ License: GPLv2','Шаблон служби опрацювання вхідних
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Еліор Турабоєв, ТОВ BLUE STAR GROUP
-Версія: 1.1.1
+Версія: 1.1.2
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	inTransport_ = "", inTr = EVAL;
@@ -8664,10 +8664,13 @@ else {
 					continue;
 				}
 
+				//   A duple connection is detected - stopping that
 				req = SYS.XMLNode("get").setAttr("path",PLC_O.nodePath()+"/"+CntrFldPath);
 				SYS.cntrReq(req);
-				//   stop for not empty and not equal value and register already the transports
-				if(((tVl=req.text()).length && tVl != oTrNm && !outTrs[tVl].isEVal()))	{ oTrO.start(false); continue; }
+				if((tVl=req.text()).length && tVl != oTrNm && !outTrs[tVl].isEVal() && SYS.Transport.Sockets["out_"+tVl].start()) {
+				    if(prcTr[tVl] == idSeq) { oTrO.start(false); continue; }
+				    else if(prcTr[tVl].isEVal())	SYS.Transport.Sockets["out_"+tVl].start(false);
+				}
 
 				//   connect the transport to a PLC object
 				if(outTrTm.length)	oTrO.timings(outTrTm);

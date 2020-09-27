@@ -57,16 +57,16 @@ TCntrNode &TController::operator=( const TCntrNode &node )
 
     //Individual DB names store
     vector<string> dbNms;
-    for(unsigned i_tp = 0; i_tp < owner().tpPrmSize(); i_tp++)
-	dbNms.push_back(owner().tpPrmAt(i_tp).DB(this));
+    for(unsigned iTp = 0; iTp < owner().tpPrmSize(); iTp++)
+	dbNms.push_back(owner().tpPrmAt(iTp).DB(this));
 
     //Configuration copy
     exclCopy(*src_n, "ID;");
     setDB(src_n->mDB);
 
     //Individual DB names restore
-    for(unsigned i_tp = 0; i_tp < owner().tpPrmSize() && i_tp < dbNms.size(); i_tp++)
-	owner().tpPrmAt(i_tp).setDB(this, dbNms[i_tp]);
+    for(unsigned iTp = 0; iTp < owner().tpPrmSize() && iTp < dbNms.size(); iTp++)
+	owner().tpPrmAt(iTp).setDB(this, dbNms[iTp]);
 
     //Parameters copy
     if(src_n->enableStat()) {
@@ -97,8 +97,8 @@ void TController::postDisable( int flag )
 	SYS->db().at().dataDel(fullDB(), owner().nodePath()+"DAQ", *this, true);
 
 	//Delete parameter's tables
-	for(unsigned i_tp = 0; i_tp < owner().tpPrmSize(); i_tp++) {
-	    string tbl = DB()+"."+owner().tpPrmAt(i_tp).DB(this);
+	for(unsigned iTp = 0; iTp < owner().tpPrmSize(); iTp++) {
+	    string tbl = DB()+"."+owner().tpPrmAt(iTp).DB(this);
 	    SYS->db().at().open(tbl);
 	    SYS->db().at().close(tbl,true);
 	}
@@ -548,8 +548,8 @@ void TController::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/nmb" && ctrChkNode(opt)) {
 	list(c_list);
 	unsigned e_c = 0;
-	for(unsigned i_a = 0; i_a < c_list.size(); i_a++)
-	    if(at(c_list[i_a]).at().enableStat()) e_c++;
+	for(unsigned iA = 0; iA < c_list.size(); iA++)
+	    if(at(c_list[iA]).at().enableStat()) e_c++;
 	opt->setText(TSYS::strMess(_("All: %d; Enabled: %d"),c_list.size(),e_c));
     }
     else if(a_path == "/prm/t_prm" && owner().tpPrmSize()) {
@@ -561,11 +561,11 @@ void TController::cntrCmdProc( XMLNode *opt )
     else if((a_path == "/br/prm_" || a_path == "/prm/prm") && owner().tpPrmSize()) {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    list(c_list);
-	    for(unsigned i_a = 0; i_a < c_list.size(); i_a++) {
-		XMLNode *cN = opt->childAdd("el")->setAttr("id",c_list[i_a])->setText(at(c_list[i_a]).at().name());
+	    for(unsigned iA = 0; iA < c_list.size(); iA++) {
+		XMLNode *cN = opt->childAdd("el")->setAttr("id",c_list[iA])->setText(at(c_list[iA]).at().name());
 		if(!s2i(opt->attr("recurs"))) continue;
 		cN->setName(opt->name())->setAttr("path",TSYS::strEncode(opt->attr("path"),TSYS::PathEl))->setAttr("recurs","1");
-		at(c_list[i_a]).at().cntrCmd(cN);
+		at(c_list[iA]).at().cntrCmd(cN);
 		cN->setName("el")->setAttr("path","")->setAttr("rez","")->setAttr("recurs","")->setText("");
 	    }
 	}
@@ -576,8 +576,8 @@ void TController::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	del(opt->attr("id"), true);
     }
     else if(a_path == "/prm/t_lst" && owner().tpPrmSize() && ctrChkNode(opt,"get",R_R_R_)) {
-	for(unsigned i_a=0; i_a < owner().tpPrmSize(); i_a++)
-	    opt->childAdd("el")->setAttr("id",owner().tpPrmAt(i_a).name)->setText(owner().tpPrmAt(i_a).descr);
+	for(unsigned iA = 0; iA < owner().tpPrmSize(); iA++)
+	    opt->childAdd("el")->setAttr("id",owner().tpPrmAt(iA).name)->setText(owner().tpPrmAt(iA).descr);
     }
     else if(a_path == "/cntr/st/db") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(DB());
@@ -594,8 +594,8 @@ void TController::cntrCmdProc( XMLNode *opt )
     else if(a_path.substr(0,9) == "/cntr/cfg") {
 	TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SDAQ_ID, RWRWR_);
 	if(ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR))
-	    for(unsigned i_t = 0; i_t < owner().tpPrmSize(); i_t++)
-		if(owner().tpPrmAt(i_t).mDB == TSYS::pathLev(a_path,2))
+	    for(unsigned iT = 0; iT < owner().tpPrmSize(); iT++)
+		if(owner().tpPrmAt(iT).mDB == TSYS::pathLev(a_path,2))
 		{ modifG(); break; }
     }
     else if(a_path == "/mess/tm") {

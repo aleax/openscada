@@ -478,7 +478,7 @@ class VCASess : public TCntrNode
 	void pgCacheGet( const string &addr );
 	void pgCacheProc( const string &addr = "", bool fClose = false );	//Empty <addr> to check for the time limit
 
-	string resGet( const string &res, const string &path, const SSess &ses, string *mime = NULL );
+	string resGet( const string &res, const string &path, const SSess &ses, string *mime = NULL, int off = -1, int *size = NULL );
 
 	string cacheResGet( const string &res, string *mime = NULL );
 	void cacheResSet( const string &res, const string &val, const string &mime );

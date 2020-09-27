@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-20 09:53+0300\n"
+"POT-Creation-Date: 2020-09-27 11:38+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1900,8 +1900,8 @@ msgstr "Fehler beim Starten des Subsystems '%s'."
 msgid "Running is completed!"
 msgstr "Laufen ist komplett!"
 
-msgid " waiting the processing finish ..."
-msgstr ""
+msgid "waiting the processing finish ..."
+msgstr "Warten auf die Verarbeitung beendet ..."
 
 msgid "Stopping."
 msgstr "Stoppen."
@@ -2425,6 +2425,13 @@ msgstr "Getrennt. "
 #, c-format
 msgid "Error deletion the node: %s"
 msgstr "Fehler beim Löschen des Knotens: %s"
+
+#, c-format
+msgid "Error removing the assigned node/connection: %s"
+msgstr "Fehler beim Entfernen des zugewiesenen Knotens/Verbindung: %s"
+
+msgid "Error connection the new assigned node: %s"
+msgstr "Fehler beim Verbinden des neu zugewiesenen Knotens: %s"
 
 msgid "Input transport: "
 msgstr "Eingangsübertragung: "

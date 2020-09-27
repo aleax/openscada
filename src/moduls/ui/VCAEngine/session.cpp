@@ -1755,7 +1755,7 @@ int SessWdg::calcPer( ) const
     return vRez;
 }
 
-string SessWdg::resourceGet( const string &iid, string *mime )
+string SessWdg::resourceGet( const string &iid, string *mime, int off, int *size )
 {
     string  id = TSYS::strParse(iid, 0, "?"),
 	    mimeType,
@@ -1768,7 +1768,7 @@ string SessWdg::resourceGet( const string &iid, string *mime )
     }
 
     //Load original
-    mimeData = parent().at().resourceGet(id, &mimeType);
+    mimeData = parent().at().resourceGet(id, &mimeType, off, size);
     if(mime) *mime = mimeType;
 
     return mimeData;
