@@ -42,13 +42,13 @@ The template''s names and their parameters are available in languages: English, 
 
 Author: Roman Savochenko <roman@oscada.org>, Constantine (IrmIngeneer) (2018), Arsen Zakojan (2017), Ruslan Yarmoliuk (2017)
 Founded: January 2010
-Version: 2.4.0
+Version: 2.6.0
 License: GPLv2
 DOC: Libs_Devices|Libs/Devices','Бібліотеку пристроїв користувацьких протоколів створено для надання доступу до даних промислових пристроїв через мережу із доволі простим протоколом, на кшталт пристроїв загальної промислової автоматики та лічильників різних ресурсів, із протоколом достатньо простим до реалізації у модулі користувацького протоколу, з використанням наявних комплексних протоколів (ModBus, OPC_UA, HTTP) або безпосередньо на внутрішній мові подібній до Java.
 
 Автор: Роман Савоченко <roman@oscada.org>, Константин (IrmIngeneer) (2018), Арсен Закоян (2017), Руслан Ярмолюк (2017)
 Засновано: Січень 2010
-Версія: 2.4.0
+Версія: 2.6.0
 Ліцензія: GPLv2
 DOC: Libs_Devices|Libs/Devices','tmplib_DevLib','Промышленные устройства','');
 INSERT INTO ParamTemplLibs VALUES('PrescrTempl','Prescriptions','Рецепти','The library is created to provide an environment of execution of scenarios of the technological operations — prescriptions, and frames of the user interface about them, including the frame of creation/edition the prescriptions and two frames of the execution control and reporting — "Prescription — run" and "Prescription — run, simple". The library is built on the basis primitives of the widgets and the internal programming language JavaLikeCalc, including templates and commands.
@@ -1516,6 +1516,20 @@ INSERT INTO tmplib_DevLib_io VALUES('IEC62056','ctx','IO context',4,0,'',9,'Ко
 INSERT INTO tmplib_DevLib_io VALUES('IEC62056','this','Object',4,0,'',10,'Объект','','Об''єкт','');
 INSERT INTO tmplib_DevLib_io VALUES('IEC62056','pass','Password the device',0,64,'ABCDEFGH',3,'Пароль устройства','','Пароль пристрою','');
 INSERT INTO tmplib_DevLib_io VALUES('IEC62056','tmPollAll','Poll all time, seconds',2,64,'10',5,'Время опроса всего, секунд','','Час опитування всього, секунд','');
+INSERT INTO tmplib_DevLib_io VALUES('MTP4D','transport','Transport',0,64,'Serial.MTP',0,'Транспорт','','Транспорт','');
+INSERT INTO tmplib_DevLib_io VALUES('MTP4D','addr','Device address, [1...999]',1,64,'1',1,'Адрес устройства, [1...999]','','Адреса пристрою, [1...999]','');
+INSERT INTO tmplib_DevLib_io VALUES('MTP4D','type','Device type',0,16,'',2,'Тип устройства','','Тип пристрою','');
+INSERT INTO tmplib_DevLib_io VALUES('MTP4D','P','Pressure',2,16,'',3,'Давление','','Тиск','');
+INSERT INTO tmplib_DevLib_io VALUES('MTP4D','tr','Output transport',4,0,'',4,'Выходной транспорт','','Вихідний транспорт','');
+INSERT INTO tmplib_DevLib_io VALUES('MTP4D','this','Object',4,0,'',5,'Объект','','Об''єкт','');
+INSERT INTO tmplib_DevLib_io VALUES('mbBase','transport','Transport',0,64,'Sockets.mbbase',0,'Транспорт','','Транспорт','');
+INSERT INTO tmplib_DevLib_io VALUES('mbBase','addr','Device address, [0...247]',1,64,'1',1,'Адрес устройства, [0...247]','','Адреса пристрою, [0...247]','');
+INSERT INTO tmplib_DevLib_io VALUES('mbBase','mbType','ModBus type, [RTU|ASCII|TCP]',0,64,'RTU',2,'Тип ModBus, [RTU|ASCII|TCP]','','Тип ModBus, [RTU|ASCII|TCP]','');
+INSERT INTO tmplib_DevLib_io VALUES('mbBase','maxBlkSz','ModBus maximum block size, [10...200]',1,64,'200',3,'Максимальный размер блока ModBus, [10...200]','','Максимальний розмір блоку ModBus, [10...200]','');
+INSERT INTO tmplib_DevLib_io VALUES('mbBase','fragMerge','ModBus blocks merging',3,64,'1',4,'Объединение блоков ModBus','','Поєднання блоків ModBus','');
+INSERT INTO tmplib_DevLib_io VALUES('mbBase','items','Items set "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}:{nm}"',0,36,'',5,'Набор элементов "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}:{nm}"','','Набір елементів "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}:{nm}"','');
+INSERT INTO tmplib_DevLib_io VALUES('mbBase','tr','Output transport',4,0,'',6,'Выходной транспорт','','Вихідний транспорт','');
+INSERT INTO tmplib_DevLib_io VALUES('mbBase','this','Object',4,0,'',7,'Объект','','Об''єкт','');
 CREATE TABLE IF NOT EXISTS 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_PrescrTempl_io VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
 INSERT INTO tmplib_PrescrTempl_io VALUES('timer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
@@ -2465,6 +2479,10 @@ INSERT INTO Trs VALUES('Error the data %1','Помилка даних %1','Ош�
 INSERT INTO Trs VALUES('Upper HDLC destination address ''%1'' out of range [0...16383].','Верхня адреса призначення HDLC ''%1'' поза діапазоном [0...16383].','Верхний адрес назначения HDLC ''%1'' за диапазоном [0...16383].');
 INSERT INTO Trs VALUES('Lower HDLC destination address ''%1'' out of range [0...16383].','Нижня адреса призначення HDLC ''%1'' поза діапазоном [0...16383].','Нижний адрес назначения HDLC ''%1'' за диапазоном [0...16383].');
 INSERT INTO Trs VALUES('Source address ''%1'' out of range [0...127].','Адреса джерела ''%1'' поза діапазоном [0...127].','Адрес источника ''%1'' за диапазоном [0...127].');
+INSERT INTO Trs VALUES('Address ''%1'' out of range [1...999].','Адреса ''%1'' поза межою [1...999].','Адрес ''%1'' за границей [1...999].');
+INSERT INTO Trs VALUES('Output transport is empty and the controller object is not ModBus.','','');
+INSERT INTO Trs VALUES('Address ''%1'' out of range [0...247].','','');
+INSERT INTO Trs VALUES('Inconsistent respond''s length.','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_DevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO tmplib_DevLib VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data acquisition by SCU750 Cotrol Unit protocol.
 
@@ -6573,6 +6591,254 @@ if(t_err.toInt()) {
 f_err = t_err;
 
 if(f_stop && !tr.isEVal()) tr.start(false);','','',1592158749);
+INSERT INTO tmplib_DevLib VALUES('MTP4D','MTP 4D','MTP 4D','','The connection template of a simple vaccuumeter MTP 4D of the firm "Erstevak Ltd (http://www.erstvak.com/)".
+
+Author: Roman Savochenko <roman@oscada.org>
+Total complexity: 0.2 HD
+Sponsored by, for whole complexity: Magomed, SAVTECH
+Version: 1.0.0
+License: GPLv2','','',10,0,'JavaLikeCalc.JavaScript
+//Same request to the device
+function req(data) {
+	data = addr.toString(10,3) + data;
+
+	//CRC calculation
+	for(CRC = 0, iS = 0; iS < data.length; iS++) CRC += data.charCodeAt(iS);
+	data += SYS.strFromCharCode((CRC%64)+64, 0x0D);
+
+	for(resp = tr.messIO(data); resp[resp.length-1] != "\r" && (respTail=tr.messIO("")).length; )
+		resp += respTail;
+
+	if(resp.length < 6 || resp[resp.length-1] != "\r" || resp.slice(0,4) != data.slice(0,4))
+		return "10:"+tr("Wrong or no response.");
+	resp = resp.slice(0,-1);
+	for(CRC = 0, iS = 0; iS < resp.length-1; iS++) CRC += resp.charCodeAt(iS);
+	if(((CRC%64)+64) != resp.charCodeAt(resp.length-1))
+		return "11:"+tr("Error CRC.");
+
+	data = resp.slice(3,-1);
+
+	return "0";
+}
+
+if(f_start) {
+	f_err = "0";
+	transport_ = transport;
+	type = P = EVAL;
+	tr = EVAL;
+}
+
+if(f_start || f_stop) return;
+
+t_err = "";
+
+//Check for the transport change and connect
+if(tr.isEVal() || transport != transport_)	{
+	tr = SYS.Transport[transport.parse(0)]["out_"+transport.parse(1)];
+	transport_ = transport;
+}
+if(tr.isEVal())	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+else if(addr < 1 || addr > 999)
+	t_err = "2:"+tr("Address ''%1'' out of range [1...999].").replace("%1",addr.toString());
+else {
+	data = "T";
+	if(!t_err.toInt() && !(t_err=req(data)).toInt())	type = data.slice(1);
+	else type = EVAL;
+
+	data = "M";
+	if(!t_err.toInt() && !(t_err=req(data)).toInt())
+		P = data.slice(1,5).toReal()*1e-3*pow(10,data.slice(5,7).toReal()-20);
+	else P = EVAL;
+}
+
+if(t_err.toInt()) { f_err = t_err; type = P = EVAL; }
+else f_err = "0";','','',1601823606);
+INSERT INTO tmplib_DevLib VALUES('mbBase','ModBus base','','','ModBus base template of the protocol implementing on the Logical Level. Designed mostly to use in the base of creation specific ModBus-based protocols for the standard-part registers'' access (function 3 for reading and function 16 for writing) and appending the new protocol specific part. The template was designed to work both under control of the controller objects of the module ModBus and LogicLev and can be managed from the template of the initiative connections processing for assigned output transports.
+
+Author: Roman Savochenko <roman@oscada.org>
+Total complexity: 0.5 HD
+Sponsored by, for whole complexity: Elyor Turaboev, BLUE STAR GROUP Ltd
+Version: 1.0.0
+License: GPLv2','','',30,0,'JavaLikeCalc.JavaScript
+//Same request to the device
+function req(PDU) {
+	// For placing into the module ModBus
+	if(!transport.length)	return this.cntr().messIO(PDU);
+
+	// For other logical level
+	reqO = SYS.XMLNode(mbType).setAttr("id","Goboy").setAttr("node",addr).setText(PDU);
+	if((rez=tr.messIO(reqO,"ModBus")).length)	return "10:"+rez;
+	PDU = reqO.text();
+
+	return reqO.attr("err");
+}
+
+if(f_start) {
+	transport_ = transport;
+	tr = EVAL;
+	dt = new Object();
+	items_ = "";
+}
+
+//Parse the items set and create user attributes
+if(items != items_) {
+	items_ = items;
+	// Mark for check to deletion needs
+	for(var iDt in dt)
+		if(iDt != "10000") dt[iDt].mark = false;
+	// Append/Update present ones
+	for(off = 0; (sIt=items.parseLine(0,off)).length; ) {
+		if(sIt[0] == "#")	continue;
+		off1 = 0;
+		itO = new Object();
+		itO.tp = sIt.parse(0, ":", off1);
+		tmpAddr = sIt.parse(0, ":", off1);
+		itO.addr = tmpAddr.toInt();
+		itO.md = sIt.parse(0, ":", off1);
+		itO.id = sIt.parse(0, ":", off1);
+		itO.nm = sIt.slice(off1);
+		dt[itO.addr.toString(16,5)] = itO;
+		if(itO.tp == "u" || itO.tp == "i" || itO.tp == "u2" || itO.tp == "i2")	{ wTp = "integer"; itO.sz = 2; }
+		else if(itO.tp == "u4" || itO.tp == "i4")	{ wTp = "integer"; itO.sz = 4; }
+		else if(itO.tp == "s")	{ wTp = "string"; itO.sz = 16; }
+		else { wTp = "real"; itO.sz = 4; }
+		itO.rd = (itO.md.indexOf("r") >= 0);
+		itO.wr = (itO.md.indexOf("w") >= 0);
+		itO.rev = (itO.md.indexOf("~") >= 0);
+		if(!itO.wr)	wTp += "|ro";
+		if(itO.rd || itO.wr) {
+			this.attrAdd(itO.id, itO.nm, wTp);
+			if(itO.wr)	itO.val = this[itO.id].get();
+			itO.mark = true;
+			//SYS.messInfo("/ED","itO="+itO.id+"; tmpAddr="+tmpAddr+"; addr="+itO.addr);
+		}
+	}
+	dt["10000"] = EVAL;
+	// Check, remove item and set to EVAL the attribute
+	for(var iDt in dt) {
+		if(iDt == "10000" || dt[iDt].mark)	continue;
+		this[dt[iDt].id].set(EVAL, 0, 0, true);
+		delete dt[iDt];
+	}
+}
+
+if(f_start || f_stop) return;
+
+tErr = "";
+
+//Checking for the transport change and connect
+if(tr.isEVal() || transport != transport_)	{
+	if(!transport.length) {
+		if(!((tVl=this.cntr().cfg("PROT")) == "RTU" || tVl == "ASCII" || tVl == "TCP")) {
+			tr = EVAL;
+			tErr = "1:"+tr("Output transport is empty and the controller object is not ModBus.");
+		}
+		else {
+			tr = new Object();
+			maxBlkSz = this.cntr().cfg("MAX_BLKSZ");
+			if(maxBlkSz.isEVal())	maxBlkSz = 12;
+			fragMerge = this.cntr().cfg("FRAG_MERGE");
+			if(fragMerge.isEVal())	fragMerge = false;
+		}
+	} else tr = SYS.Transport[transport.parse(0)]["out_"+transport.parse(1)];
+	maxBlkSz = max(10, min(200,maxBlkSz));
+	transport_ = transport;
+}
+if(tErr.toInt()) ;
+else if(tr.isEVal())
+	tErr = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+else if(addr < 0 || addr > 247)
+	tErr = "2:"+tr("Address ''%1'' out of range [0...247].").replace("%1",addr.toString());
+else {
+	//Check for changed attributes and perform writing
+	for(var iDt in dt) {
+		isEOL = (iDt == "10000");
+		itO = dt[iDt];
+		tVl = this[itO.id].get();
+		if(isEOL || !itO.wr || tVl.isEVal() || itO.val == tVl)	continue;
+		PDU = Special.FLibSYS.IO("", "", "b");
+		PDU.wr(16,"uint8").wr(itO.addr,"uint16").wr(floor(itO.sz/2),"uint16").wr(itO.sz,"uint8");
+		if(itO.tp == "u" || itO.tp == "u2")			PDU.wr(tVl,"uint16");
+		else if(itO.tp == "i" || itO.tp == "i2")	PDU.wr(tVl,"int16");
+		else if(itO.tp == "u4")	{
+			if(itO.rev)	PDU.wr(tVl>>16, "uint16").wr(tVl&0xFFFF, "uint16");
+			else	PDU.wr(tVl&0xFFFF, "uint16").wr(tVl>>16, "uint16");
+		}
+		else if(itO.tp == "i4") {
+			if(itO.rev)	PDU.wr(tVl>>16, "int16").wr(tVl&0xFFFF, "uint16");
+			else	PDU.wr(tVl&0xFFFF, "uint16").wr(tVl>>16, "int16");
+		}
+		else if(itO.tp == "s")		PDU.wr(tVl.slice(0,16),"char").wr(" ","char",16-min(16,tVl.length));
+		else {
+			w1 = w2 = 0;
+			if(itO.rev)	Special.FLibSYS.floatSplitWord(tVl, w2, w1);
+			else	Special.FLibSYS.floatSplitWord(tVl, w1, w2);
+			PDU.wr(w1, "uint16").wr(w2, "uint16");
+		}
+		//SYS.messInfo("/ED","reqPDU="+SYS.strDecode(PDU.string,"Bin"," "));
+		if(!req(PDU.string).toInt())	itO.val = tVl;
+		//SYS.messInfo("/ED","respPDU="+SYS.strDecode(PDU.string,"Bin"," "));
+	}
+
+	//Same requests for the data
+	blk = new Array();
+	for(var iDt in dt) {
+		isEOL = (iDt == "10000");
+		itO = dt[iDt];
+		//SYS.messInfo("/ED","iDt="+iDt+"; isEOL="+isEOL);
+		if(!isEOL && (!blk.length || (
+				(itO.addr-blk[0].addr+1+floor((itO.sz-2)/2)) <= floor(maxBlkSz/2) && (fragMerge || (itO.addr-blk[blk.length-1].addr-floor((blk[blk.length-1].sz-2)/2)) <= 1) ))) {
+			if(itO.rd) blk.push(itO);
+			continue;
+		}
+		//Send request for this block
+		if(blk.length) {
+			regN = (blk[blk.length-1].addr - blk[0].addr) + 1 + floor((blk[blk.length-1].sz-2)/2);
+			PDU = SYS.strFromCharCode(3, (blk[0].addr>>8)&0xFF, blk[0].addr&0xFF, 0, regN);
+			//SYS.messInfo("/ED","reqPDU="+SYS.strDecode(PDU,"Bin"," "));
+			if((tErr=req(PDU)).toInt()) break;
+			//SYS.messInfo("/ED","respPDU="+SYS.strDecode(PDU,"Bin"," "));
+			io = Special.FLibSYS.IO(PDU, "", "b");
+			rF = io.read("uint8", 1); rN = io.read("uint8", 1);
+			if(rF != 3 || (io.length-2) != rN) { tErr = "10:"+tr("Inconsistent respond''s length."); break; }
+			for(iB = 0; iB < blk.length; iB++) {
+				itO1 = blk[iB];
+				io.pos = 2 + (itO1.addr-blk[0].addr)*2;
+				if(itO1.tp == "u" || itO1.tp == "u2")			tVl = io.read("uint16", 1);
+				else if(itO1.tp == "i" || itO1.tp == "i2")	tVl = io.read("int16", 1);
+				else if(itO1.tp == "u4")
+					tVl = itO1.rev ? io.read("uint16", 1)*65536 + io.read("uint16", 1) :
+											io.read("uint16", 1) + io.read("uint16", 1)*65536;
+				else if(itO1.tp == "i4")
+					tVl = itO1.rev ? io.read("int16", 1)*65536 + io.read("uint16", 1) :
+											io.read("uint16", 1) + io.read("int16", 1)*65536;
+				else if(itO1.tp == "s")	tVl = io.read("char", blk[0].sz);
+				else {
+					w1 = io.read("uint16", 1); w2 = io.read("uint16", 1);
+					tVl = itO1.rev ? Special.FLibSYS.floatMergeWord(w2, w1) :
+											Special.FLibSYS.floatMergeWord(w1, w2);
+					//tVl = io.read("float", 1, "l");
+				}
+				if(itO1.wr && itO1.val != this[itO1.id].get())	{ itO1.val = tVl; continue; }
+				this[itO1.id].set(tVl, 0, 0, true);
+				itO1.val = tVl;
+			}
+			blk = new Array(); blk.push(itO);
+		}
+	}
+}
+
+if(!tErr.length)	tErr = "0";
+if(tErr.toInt()) {
+	if(!tr.isEVal() && tr.start()) tr.start(false);
+	if(f_err != tErr)
+		for(var iDt in dt) {
+			itO = dt[iDt];
+			if(iDt == "10000")	continue;
+			this[itO.id].set(EVAL, 0, 0, true);
+		}
+}
+f_err = tErr;','','',1601827422);
 CREATE TABLE IF NOT EXISTS 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO tmplib_PrescrTempl VALUES('timer','Command — Timer','Команда — Таймер','Команда — Таймер','Template of a command of the prescription typical timer. The timer is only designed to hold time between other action steps and for example, so it only has one attribute, "Time" in seconds.
 

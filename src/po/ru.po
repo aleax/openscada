@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-27 11:38+0300\n"
+"POT-Creation-Date: 2020-10-04 16:39+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -726,7 +726,7 @@ msgid "Node root or not connected!"
 msgstr "Узел корневой или не подключен!"
 
 #, c-format
-msgid "Element '%s' is missing!"
+msgid "Element '%s' is not present!"
 msgstr "Элемент '%s' отсутствует!"
 
 #, c-format
@@ -980,10 +980,6 @@ msgstr "Ошибка идентификатора!"
 
 msgid "Container element already connected!"
 msgstr "Элемент контейнера уже подключен!"
-
-#, c-format
-msgid "Element '%s' is not present!"
-msgstr "Элемент '%s' отсутствует!"
 
 msgid "Field is not String."
 msgstr "Поле не строка."
@@ -2416,6 +2412,7 @@ msgstr "Ошибка удаления узла: %s."
 msgid "Error removing the assigned node/connection: %s"
 msgstr "Ошибка удаления назначенного узла/подключения: %s"
 
+#, c-format
 msgid "Error connection the new assigned node: %s"
 msgstr "Ошибка подключения нового назначенного узла: %s"
 
@@ -2718,9 +2715,3 @@ msgstr "Имя проекта установлено в:"
 
 msgid "already started."
 msgstr "уже запущен."
-
-#~ msgid "Started. "
-#~ msgstr "Запущен. "
-
-#~ msgid "Stoped. "
-#~ msgstr "Остановлен. "

@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Бібліотеки/Пристрої</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FDevices&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Devices" title="Libs/Devices">Libs/Devices</a> and the translation is 28% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_Devices.html" title="Libs/Devices (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/Libs_Devices.html" title="Библиотеки/Устройства (7% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--low">українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FDevices&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Devices" title="Libs/Devices">Libs/Devices</a> and the translation is 26% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_Devices.html" title="Libs/Devices (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/Libs_Devices.html" title="Библиотеки/Устройства (6% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--low">українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -27,7 +27,7 @@
 <tr>
 <td> <a href="Libs_Devices.html" title="Special:MyLanguage/Libs/Devices">Бібліотека промислових пристроїв</a>
 </td>
-<td> 2.4 </td>
+<td> 2.5 </td>
 <td> GPLv2 </td>
 <td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.tmplb_DevLib
 </td>
@@ -75,14 +75,15 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <li class="toclevel-1 tocsection-1"><a href="#.D0.97.D0.B0.D0.B3.D0.B0.D0.BB.D1.8C.D0.BD.D1.96_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D0.B8"><span class="tocnumber">1</span> <span class="toctext">Загальні протоколи</span></a>
 <ul>
 <li class="toclevel-2"><a href="#.D0.A1.D0.BA.D0.B0.D0.BD.D0.B5.D1.80_ModBus_.28ModBusScan.29"><span class="tocnumber">1.1</span> <span class="toctext">Сканер ModBus (ModBusScan)</span></a></li>
-<li class="toclevel-2"><a href="#DCON_Protocol_.2B_Input_AI_.28DCON_Prt.29"><span class="tocnumber">1.2</span> <span class="toctext">DCON Protocol + Input AI (DCON_Prt)</span></a></li>
-<li class="toclevel-2"><a href="#DCON_Protocol_.2B_Input_AO_.28DCON_Prt_AO.29"><span class="tocnumber">1.3</span> <span class="toctext">DCON Protocol + Input AO (DCON_Prt_AO)</span></a></li>
-<li class="toclevel-2"><a href="#DCON_Protocol_.2B_Input_DI_.28DCON_Prt_DI.29"><span class="tocnumber">1.4</span> <span class="toctext">DCON Protocol + Input DI (DCON_Prt_DI)</span></a></li>
-<li class="toclevel-2"><a href="#DCON_Protocol_.2B_Input_DO_.28DCON_Prt_DO.29"><span class="tocnumber">1.5</span> <span class="toctext">DCON Protocol + Input DO (DCON_Prt_DO)</span></a></li>
-<li class="toclevel-2"><a href="#Distributed_Network_Protocol_3_.28DNP3.29"><span class="tocnumber">1.6</span> <span class="toctext">Distributed Network Protocol 3 (DNP3)</span></a></li>
-<li class="toclevel-2"><a href="#IEC-60870_.28IEC60870.29"><span class="tocnumber">1.7</span> <span class="toctext">IEC-60870 (IEC60870)</span></a></li>
-<li class="toclevel-2"><a href="#IEC-62056_.28IEC62056.29"><span class="tocnumber">1.8</span> <span class="toctext">IEC-62056 (IEC62056)</span></a></li>
-<li class="toclevel-2"><a href="#OWEN_.28OWEN.29"><span class="tocnumber">1.9</span> <span class="toctext">OWEN (OWEN)</span></a></li>
+<li class="toclevel-2"><a href="#ModBus_base_.28mbBase.29"><span class="tocnumber">1.2</span> <span class="toctext">ModBus base (mbBase)</span></a></li>
+<li class="toclevel-2"><a href="#DCON_Protocol_.2B_Input_AI_.28DCON_Prt.29"><span class="tocnumber">1.3</span> <span class="toctext">DCON Protocol + Input AI (DCON_Prt)</span></a></li>
+<li class="toclevel-2"><a href="#DCON_Protocol_.2B_Input_AO_.28DCON_Prt_AO.29"><span class="tocnumber">1.4</span> <span class="toctext">DCON Protocol + Input AO (DCON_Prt_AO)</span></a></li>
+<li class="toclevel-2"><a href="#DCON_Protocol_.2B_Input_DI_.28DCON_Prt_DI.29"><span class="tocnumber">1.5</span> <span class="toctext">DCON Protocol + Input DI (DCON_Prt_DI)</span></a></li>
+<li class="toclevel-2"><a href="#DCON_Protocol_.2B_Input_DO_.28DCON_Prt_DO.29"><span class="tocnumber">1.6</span> <span class="toctext">DCON Protocol + Input DO (DCON_Prt_DO)</span></a></li>
+<li class="toclevel-2"><a href="#Distributed_Network_Protocol_3_.28DNP3.29"><span class="tocnumber">1.7</span> <span class="toctext">Distributed Network Protocol 3 (DNP3)</span></a></li>
+<li class="toclevel-2"><a href="#IEC-60870_.28IEC60870.29"><span class="tocnumber">1.8</span> <span class="toctext">IEC-60870 (IEC60870)</span></a></li>
+<li class="toclevel-2"><a href="#IEC-62056_.28IEC62056.29"><span class="tocnumber">1.9</span> <span class="toctext">IEC-62056 (IEC62056)</span></a></li>
+<li class="toclevel-2"><a href="#OWEN_.28OWEN.29"><span class="tocnumber">1.10</span> <span class="toctext">OWEN (OWEN)</span></a></li>
 </ul>
 </li>
 <li class="toclevel-1 tocsection-2"><a href="#Industrial_automation_devices"><span class="tocnumber">2</span> <span class="toctext">Industrial automation devices</span></a>
@@ -97,6 +98,7 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <li class="toclevel-2"><a href="#CTR_100.2C_101_.28CTR.29"><span class="tocnumber">2.8</span> <span class="toctext">CTR 100, 101 (CTR)</span></a></li>
 <li class="toclevel-2"><a href="#Shark_Slave_Communication_Protocol_.28SSCP.29"><span class="tocnumber">2.9</span> <span class="toctext">Shark Slave Communication Protocol (SSCP)</span></a></li>
 <li class="toclevel-2"><a href="#Pulsar-M_.28pulsarM.29"><span class="tocnumber">2.10</span> <span class="toctext">Pulsar-M (pulsarM)</span></a></li>
+<li class="toclevel-2"><a href="#MTP_4D_.28MTP4D.29"><span class="tocnumber">2.11</span> <span class="toctext">MTP 4D (MTP4D)</span></a></li>
 </ul>
 </li>
 <li class="toclevel-1 tocsection-3"><a href="#Counters_of_the_resources"><span class="tocnumber">3</span> <span class="toctext">Counters of the resources</span></a>
@@ -210,28 +212,179 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <table class="wikitable">
 
 <tr>
-<td> <span id="DCON_Prt" title="#DCON_Prt"><h3><span class="mw-headline" id="DCON_Protocol_.2B_Input_AI_.28DCON_Prt.29"><span class="mw-headline-number">1.2</span> DCON Protocol + Input AI (<a href="Libs_Devices.html#DCON_Prt" title="Special:MyLanguage/Libs/Devices">DCON_Prt</a>)</span></h3></span> </td>
+<td> <span id="mbBase" title="#mbBase"><h3><span class="mw-headline" id="ModBus_base_.28mbBase.29"><span class="mw-headline-number">1.2</span> ModBus base (<a href="Libs_Devices.html#mbBase" title="Special:MyLanguage/Libs/Devices">mbBase</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en,uk,ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>ModBus base template of the protocol implementing on the Logical Level. Designed mostly to use in the base of creation specific ModBus-based protocols for the standard-part registers' access (function 3 for reading and function 16 for writing) and appending the new protocol specific part. The template was designed to work both under control of the controller objects of the module <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> and <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">LogicLev</a> and can be managed from the template of <a href="Libs_Main.html#initConsAssignTrs" title="Special:MyLanguage/Libs/Main">the initiative connections processing for assigned output transports</a>.
+</p>
+<ul><li> <b>Total complexity:</b> 0.5 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
+<li> <b>Sponsored by, for whole complexity:</b> Elyor Turaboev, BLUE STAR GROUP Ltd</li></ul>
+<p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> transport </td>
+<td> Transport </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> Sockets.mbbase
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Device address, [0...247] </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 1
+</td></tr>
+<tr>
+<td> mbType </td>
+<td>ASCII|TCP] </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> RTU
+</td></tr>
+<tr>
+<td> maxBlkSz </td>
+<td> ModBus maximum block size, [10...200] </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 200
+</td></tr>
+<tr>
+<td> fragMerge </td>
+<td> ModBus blocks merging </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 1
+</td></tr>
+<tr>
+<td> items </td>
+<td>i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}:{nm}" </td>
+<td> Text </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> tr </td>
+<td> Output transport </td>
+<td> Object </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> this </td>
+<td> Object </td>
+<td> Object </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Frequency of calculation of the function, Hz </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" or "<a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>", and set its Identifier like to "mbbase", one for each the devices' used serial bus.</dd>
+<dd>2. Set proper address and timeouts of the device.</dd>
+<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">a ModBus controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>4. Create a logical parameter object and select the template for that, one for the devices on one bus. Enable the parameter.</dd>
+<dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>Transport</i> — to address of the transport into step 1. Leave the field empty for <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">the ModBus controller object</a>. Tracing for the address changing is supported.</li>
+<li> <i>Device address</i> (for <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">the logical controller object</a>) — to logical address of the device on the bus under the transport in step 1. Tracing for the address changing is supported.</li>
+<li> <i>ModBus type</i> (for <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">the logical controller object</a>) — to the ModBus protocol type/variant from the list: RTU, ASCII, TCP.</li>
+<li> <i>ModBus maximum block size</i> (for <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">the logical controller object</a>) — to the ModBus protocol package data maximum size in the range [10...200].</li>
+<li> <i>ModBus blocks merging</i> (for <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">the logical controller object</a>) — for allowance of merging the ModBus protocol fragmented blocks of the registers.</li></ul></dd>
+<dd>6. RESULT: The logical parameter object will: dynamically create needed attributes accordingly to the attribute "Items set" value and perform interaction and placing of gathered data to the parameter attributes. Also you are able to change for writable attributes.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="DCON_Prt" title="#DCON_Prt"><h3><span class="mw-headline" id="DCON_Protocol_.2B_Input_AI_.28DCON_Prt.29"><span class="mw-headline-number">1.3</span> DCON Protocol + Input AI (<a href="Libs_Devices.html#DCON_Prt" title="Special:MyLanguage/Libs/Devices">DCON_Prt</a>)</span></h3></span> </td>
 <td> 1.0 </td>
 <td> GPLv2 </td>
 <td> * =&gt; <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">UserProtocol</a> </td>
 <td> en
 </td></tr>
 <tr>
-<td> <span id="DCON_Prt_AO" title="#DCON_Prt_AO"><h3><span class="mw-headline" id="DCON_Protocol_.2B_Input_AO_.28DCON_Prt_AO.29"><span class="mw-headline-number">1.3</span> DCON Protocol + Input AO (<a href="Libs_Devices.html#DCON_Prt_AO" title="Special:MyLanguage/Libs/Devices">DCON_Prt_AO</a>)</span></h3></span> </td>
+<td> <span id="DCON_Prt_AO" title="#DCON_Prt_AO"><h3><span class="mw-headline" id="DCON_Protocol_.2B_Input_AO_.28DCON_Prt_AO.29"><span class="mw-headline-number">1.4</span> DCON Protocol + Input AO (<a href="Libs_Devices.html#DCON_Prt_AO" title="Special:MyLanguage/Libs/Devices">DCON_Prt_AO</a>)</span></h3></span> </td>
 <td> 1.0 </td>
 <td> GPLv2 </td>
 <td> * =&gt; <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">UserProtocol</a> </td>
 <td> en
 </td></tr>
 <tr>
-<td> <span id="DCON_Prt_DI" title="#DCON_Prt_DI"><h3><span class="mw-headline" id="DCON_Protocol_.2B_Input_DI_.28DCON_Prt_DI.29"><span class="mw-headline-number">1.4</span> DCON Protocol + Input DI (<a href="Libs_Devices.html#DCON_Prt_DI" title="Special:MyLanguage/Libs/Devices">DCON_Prt_DI</a>)</span></h3></span> </td>
+<td> <span id="DCON_Prt_DI" title="#DCON_Prt_DI"><h3><span class="mw-headline" id="DCON_Protocol_.2B_Input_DI_.28DCON_Prt_DI.29"><span class="mw-headline-number">1.5</span> DCON Protocol + Input DI (<a href="Libs_Devices.html#DCON_Prt_DI" title="Special:MyLanguage/Libs/Devices">DCON_Prt_DI</a>)</span></h3></span> </td>
 <td> 1.0 </td>
 <td> GPLv2 </td>
 <td> * =&gt; <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">UserProtocol</a> </td>
 <td> en
 </td></tr>
 <tr>
-<td> <span id="DCON_Prt_DO" title="#DCON_Prt_DO"><h3><span class="mw-headline" id="DCON_Protocol_.2B_Input_DO_.28DCON_Prt_DO.29"><span class="mw-headline-number">1.5</span> DCON Protocol + Input DO (<a href="Libs_Devices.html#DCON_Prt_DO" title="Special:MyLanguage/Libs/Devices">DCON_Prt_DO</a>)</span></h3></span> </td>
+<td> <span id="DCON_Prt_DO" title="#DCON_Prt_DO"><h3><span class="mw-headline" id="DCON_Protocol_.2B_Input_DO_.28DCON_Prt_DO.29"><span class="mw-headline-number">1.6</span> DCON Protocol + Input DO (<a href="Libs_Devices.html#DCON_Prt_DO" title="Special:MyLanguage/Libs/Devices">DCON_Prt_DO</a>)</span></h3></span> </td>
 <td> 1.0 </td>
 <td> GPLv2 </td>
 <td> * =&gt; <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">UserProtocol</a> </td>
@@ -273,7 +426,7 @@ data = req.attr("err").toInt()&nbsp;? ""&nbsp;: req.text();
 <table class="wikitable">
 
 <tr>
-<td> <span id="DNP3" title="#DNP3"><h3><span class="mw-headline" id="Distributed_Network_Protocol_3_.28DNP3.29"><span class="mw-headline-number">1.6</span> Distributed Network Protocol 3 (<a href="Libs_Devices.html#DNP3" title="Special:MyLanguage/Libs/Devices">DNP3</a>)</span></h3></span>
+<td> <span id="DNP3" title="#DNP3"><h3><span class="mw-headline" id="Distributed_Network_Protocol_3_.28DNP3.29"><span class="mw-headline-number">1.7</span> Distributed Network Protocol 3 (<a href="Libs_Devices.html#DNP3" title="Special:MyLanguage/Libs/Devices">DNP3</a>)</span></h3></span>
 </td>
 <td> 0.8 </td>
 <td> GPLv2 </td>
@@ -506,7 +659,7 @@ The template implements currently for the client, which uses the followed functi
 <table class="wikitable">
 
 <tr>
-<td> <span id="IEC60870" title="#IEC60870"><h3><span class="mw-headline" id="IEC-60870_.28IEC60870.29"><span class="mw-headline-number">1.7</span> IEC-60870 (<a href="Libs_Devices.html#IEC60870" title="Special:MyLanguage/Libs/Devices">IEC60870</a>)</span></h3></span>
+<td> <span id="IEC60870" title="#IEC60870"><h3><span class="mw-headline" id="IEC-60870_.28IEC60870.29"><span class="mw-headline-number">1.8</span> IEC-60870 (<a href="Libs_Devices.html#IEC60870" title="Special:MyLanguage/Libs/Devices">IEC60870</a>)</span></h3></span>
 </td>
 <td> 1.4 </td>
 <td> GPLv2 </td>
@@ -747,7 +900,7 @@ The template implements currently for the client, which uses the followed functi
 <table class="wikitable">
 
 <tr>
-<td> <span id="IEC62056" title="#IEC62056"><h3><span class="mw-headline" id="IEC-62056_.28IEC62056.29"><span class="mw-headline-number">1.8</span> IEC-62056 (<a href="Libs_Devices.html#IEC62056" title="Special:MyLanguage/Libs/Devices">IEC62056</a>)</span></h3></span>
+<td> <span id="IEC62056" title="#IEC62056"><h3><span class="mw-headline" id="IEC-62056_.28IEC62056.29"><span class="mw-headline-number">1.9</span> IEC-62056 (<a href="Libs_Devices.html#IEC62056" title="Special:MyLanguage/Libs/Devices">IEC62056</a>)</span></h3></span>
 </td>
 <td> 1.0 </td>
 <td> GPLv2 </td>
@@ -960,7 +1113,7 @@ DLMS або Специфікація Мов Повідомлень Пристр�
 <table class="wikitable">
 
 <tr>
-<td> <span id="OWEN" title="#OWEN"><h3><span class="mw-headline" id="OWEN_.28OWEN.29"><span class="mw-headline-number">1.9</span> OWEN (<a href="Libs_Devices.html#OWEN" title="Special:MyLanguage/Libs/Devices">OWEN</a>)</span></h3></span> </td>
+<td> <span id="OWEN" title="#OWEN"><h3><span class="mw-headline" id="OWEN_.28OWEN.29"><span class="mw-headline-number">1.10</span> OWEN (<a href="Libs_Devices.html#OWEN" title="Special:MyLanguage/Libs/Devices">OWEN</a>)</span></h3></span> </td>
 <td> 0.8 </td>
 <td> GPLv2 </td>
 <td> * </td>
@@ -1019,7 +1172,7 @@ The field "addr" of the items can be wrote positive, for  the 8 bit address [0..
 </td></tr></table>
 <p><b><u>Configuring and using</u></b><br />
 </p>
-<dl><dd>1. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" directly or by the "<a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>" gate, and set its Identifier like to "Serial.out_owen", one for each the devices' used serial bus.</dd>
+<dl><dd>1. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" directly or by the "<a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>" gate, and set its Identifier like to "owen", one for each the devices' used serial bus.</dd>
 <dd>2. Set proper address and timeouts of the <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> device.</dd>
 <dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
 <dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for that, one for the devices on one bus. Enable the parameter.</dd>
@@ -2713,6 +2866,138 @@ The field "addr" of the items can be wrote positive, for  the 8 bit address [0..
 <ul><li> <i>Transport</i> — to address of the transport into step 1. Tracing for the address changing is supported.</li>
 <li> <i>Address</i> — to logical address of the device on the bus under the transport in step 1. Tracing for the address changing is supported.</li></ul></dd>
 <dd>6. RESULT: The logical parameter object will: dynamically create needed attributes accordingly to the attribute "Channels number" value and perform interaction and placing of gathered data to the parameter attributes. Also you are able to change some writable attributes.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="MTP4D" title="#MTP4D"><h3><span class="mw-headline" id="MTP_4D_.28MTP4D.29"><span class="mw-headline-number">2.11</span> MTP 4D (<a href="Libs_Devices.html#MTP4D" title="Special:MyLanguage/Libs/Devices">MTP4D</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en,uk,ru 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The connection template of a simple vaccuumeter MTP 4D of the firm "<a class="external text" href="http://www.erstvak.com" rel="nofollow noreferrer noopener" target="_blank">Erstevak Ltd</a>".
+</p>
+<ul><li> <b>Total complexity:</b> 0.2 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
+<li> <b>Sponsored by, for whole complexity:</b> Magomed, <a class="external text" href="https://www.savtech.ru" rel="nofollow noreferrer noopener" target="_blank">SAVTECH</a></li></ul>
+<p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> transport </td>
+<td> Transport </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> Serial.MTP
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Device address, [1...999] </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 1
+</td></tr>
+<tr>
+<td> type </td>
+<td> Device type </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> P </td>
+<td> Pressure </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> tr </td>
+<td> Output transport </td>
+<td> Object </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> this </td>
+<td> Object </td>
+<td> Object </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Frequency of calculation of the function, Hz </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" directly or by the "<a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>" gate, and set its Identifier like to "MTP", one for each the devices' used serial bus.</dd>
+<dd>2. Set proper address and timeouts of the <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> device.</dd>
+<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for that, one for the devices on one bus. Enable the parameter.</dd>
+<dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>Transport</i> — to address of the transport into step 1. Tracing for the address changing is supported.</li>
+<li> <i>Device address</i> — to logical address of the device on the bus under the transport in step 1. Tracing for the address changing is supported.</li></ul></dd>
+<dd>6. RESULT: The logical parameter object will perform interaction and placing of gathered data to the parameter attributes.</dd></dl>
+<p><br />
+</p>
 <h2><span class="mw-headline" id="Counters_of_the_resources"><span class="mw-headline-number">3</span> Counters of the resources</span></h2>
 <table class="wikitable">
 
@@ -4753,5 +5038,5 @@ The field "addr" of the items can be wrote positive, for  the 8 bit address [0..
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Devices/uk">Libs/Devices/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2708</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Devices/uk">Libs/Devices/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2711</td></tr></table></body>
 </html>

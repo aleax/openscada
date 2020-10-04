@@ -52,6 +52,17 @@
 #include "vis_run_widgs.h"
 #include "vis_shapes.h"
 
+#ifdef HAVE_PHONON
+#ifdef HAVE_PHONON_VIDEOPLAYER
+#include <phonon/VideoPlayer>
+#include <phonon/VideoWidget>
+#else
+#include <Phonon/VideoPlayer>
+#include <Phonon/VideoWidget>
+#endif
+using namespace Phonon;
+#endif
+
 #undef _
 #define _(mess) mod->I18N(mess, lang().c_str())
 
@@ -1470,7 +1481,7 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
 	}
     }
 
-    //Place all needs atrributes to one request
+    //Placing all needed atrributes to one request
     XMLNode req("CntrReqs"), *chN; req.setAttr("path", pg_it);
     req.childAdd("get")->setAttr("path", "/%2fattr%2fpgGrp");
     req.childAdd("get")->setAttr("path", "/%2fattr%2fpgOpenSrc");
@@ -1853,7 +1864,7 @@ void VisRun::updatePage( )
 //************************************************
 VisRun::Notify::Notify( uint8_t itp, const string &ipgProps, VisRun *iown ) : pgProps(ipgProps),
     tp(itp), alSt(0xFFFFFFFF), repDelay(-1), comIsExtScript(false), f_notify(false), f_resource(false), f_queue(false), f_quietanceRet(false),
-    toDo(false), alEn(false), mQueueCurTm(0), dataM(true), mOwner(iown), actAlrm(NULL)
+    toDo(false), alEn(false), mQueueCurTm(0), dataM(true), mOwner(iown), actAlrm(NULL), ntfPlay(NULL)
 {
     //Parse properties
     string iLn, iOpt, ico, name, iProps = props();
@@ -1865,6 +1876,10 @@ VisRun::Notify::Notify( uint8_t itp, const string &ipgProps, VisRun *iown ) : pg
 		if(iOpt.compare(0,6,"notify") == 0) {
 		    f_notify = true;
 		    repDelay = (iOpt.size() > 6) ? vmax(0,vmin(100,atoi(iOpt.c_str()+6))) : -1;
+#ifdef HAVE_PHONON
+		    ntfPlay = new VideoPlayer(Phonon::MusicCategory);
+		    //((VideoPlayer*)ntfPlay)->setVolume(50);
+#endif
 		}
 		else if(iOpt == "resource")	f_resource = true;
 		else if(iOpt == "queue")	{ f_queue = true; if(repDelay < 0) repDelay = 0; }
@@ -1949,8 +1964,11 @@ VisRun::Notify::Notify( uint8_t itp, const string &ipgProps, VisRun *iown ) : pg
 VisRun::Notify::~Notify( )
 {
     if(f_notify) {
-	SYS->taskDestroy(mod->nodePath('.',true)+".sesRun_"+owner()->workSess()+".ntf"+i2s(tp), NULL, 10, false, &callCV);
+	SYS->taskDestroy(mod->nodePath('.',true)+".sesRun_"+owner()->workSess()+".ntf"+i2s(tp), NULL, 60, false, &callCV);
 	pthread_cond_destroy(&callCV);
+#ifdef HAVE_PHONON
+	if(ntfPlay) { delete ntfPlay; ntfPlay = NULL; }
+#endif
     }
 
     //The command procedure remove
@@ -2029,15 +2047,30 @@ void VisRun::Notify::commCall( string &res, const string &mess, const string &la
     string wcomProc = comProc;
     pthread_mutex_unlock(&dataM.mtx());
 
-    if(comIsExtScript) {
-	string resFile = "sesRun_"+owner()->workSess()+"_res"+i2s(tp);
+    //Loading the resource
+    string resFile;
+    if(ntfPlay || comIsExtScript) {
+	resFile = "sesRun_"+owner()->workSess()+"_res"+i2s(tp);
 	int hdRes = res.size() ? open(resFile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, SYS->permCrtFiles()) : -1;
 	if(hdRes >= 0) { write(hdRes, res.data(), res.size()); ::close(hdRes); }
+	else resFile = "";
+    }
+
+    //Playing by an internal mechanism (Phonon)
+#ifdef HAVE_PHONON
+    if(ntfPlay && resFile.size()) {
+	((VideoPlayer*)ntfPlay)->load(MediaSource(QUrl(resFile.c_str())));
+	((VideoPlayer*)ntfPlay)->play();
+	do SYS->sysSleep(1); while(((VideoPlayer*)ntfPlay)->isPlaying());
+    }
+    else
+#endif
+
+    //Call external procedures
+    if(comIsExtScript)
 	// Prepare environment and execute the external script
 	system(("en="+i2s(alEn)+" doNtf=1 doRes=0 res="+resFile+
 	    " mess=\""+TSYS::strEncode(mess,TSYS::SQL)+"\" lang=\""+TSYS::strEncode(lang,TSYS::SQL)+"\" ./"+wcomProc).c_str());
-	if(hdRes >= 0) remove(resFile.c_str());
-    }
     else {
 	// Prepare and execute internal procedure
 	TValFunc funcV;
@@ -2054,6 +2087,7 @@ void VisRun::Notify::commCall( string &res, const string &mess, const string &la
 	//  Call to processing
 	funcV.calc();
     }
+    if(resFile.size()) remove(resFile.c_str());
 }
 
 void *VisRun::Notify::Task( void *intf )

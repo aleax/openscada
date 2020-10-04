@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-27 11:38+0300\n"
+"POT-Creation-Date: 2020-10-04 16:39+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -642,7 +642,7 @@ msgid "Node root or not connected!"
 msgstr ""
 
 #, c-format
-msgid "Element '%s' is missing!"
+msgid "Element '%s' is not present!"
 msgstr ""
 
 #, c-format
@@ -878,10 +878,6 @@ msgid "Error ID!"
 msgstr ""
 
 msgid "Container element already connected!"
-msgstr ""
-
-#, c-format
-msgid "Element '%s' is not present!"
 msgstr ""
 
 msgid "Field is not String."

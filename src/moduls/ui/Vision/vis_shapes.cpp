@@ -1825,7 +1825,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 		clear(w);
 		//Create player widget
 		if(!shD->addrWdg) {
-		    shD->addrWdg = new VideoPlayer(Phonon::VideoCategory, w);
+		    shD->addrWdg = new VideoPlayer((shD->mediaType==FM_AUDIO)?Phonon::MusicCategory:Phonon::VideoCategory, w);
 		    connect(shD->addrWdg, SIGNAL(finished()), this, SLOT(mediaFinished()));
 		    ((VideoPlayer*)shD->addrWdg)->videoWidget()->installEventFilter(w);
 		    mk_new = true;

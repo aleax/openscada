@@ -1,3 +1,9 @@
+2020-10-04 Roman (stable)
+- !!:LibsDB.OscadaLibs: The library DevLib appended by the template "MTP 4D (MTP4D)" "and ModBus base (mbBase)".
+- !!:UI.Vision: Appended of playing the notifications by the internal player at Phonon.
+- UI.WebVision: Styles of the popupmenu some improved.
+
+
 2020-09-27 Roman (stable)
 - FIX:LibsDB.OscadaLibs: The DAQ-template base.initConsAssignTrs some improved in detection duple connections.
 - FIX:data/openscada-proj.in: Fixed in packing big crashreports.

@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_run.h
 /***************************************************************************
- *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -81,7 +81,6 @@ class UserStBar;
 class StylesStBar;
 class RunPageView;
 class RunWdgView;
-class SndPlay;
 
 class VisRun : public QMainWindow
 {
@@ -146,6 +145,7 @@ class VisRun : public QMainWindow
 		pthread_cond_t	callCV;
 		VisRun	*mOwner;
 		QAction	*actAlrm;
+		QWidget	*ntfPlay;
 	};
 
 	//Public methods

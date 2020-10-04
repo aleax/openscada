@@ -129,7 +129,7 @@ TElem &TValue::vlElem( const string &name )
     for(unsigned iE = 0; iE < elem.size(); iE++)
 	if(elem[iE]->elName() == name)
 	    return *elem[iE];
-    throw err_sys(_("Element '%s' is missing!"), name.c_str());
+    throw err_sys(_("Element '%s' is not present!"), name.c_str());
 }
 
 string TValue::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
