@@ -1,4 +1,8 @@
 2020-10-18 Roman (stable)
+- FIX:UI.Vision: Fixed in building with Qt4.
+
+
+2020-10-18 Roman (stable)
 - LibsDB.OscadaLibs: The template DevLib.MTP4D expanded for the properties "Set zero (zeroP)" and "Set atmosphere (zeroAP)".
 - !!:LibsDB.vcaBase: The frame Main.RootPgSo unified for the notifiers in the generic attributes only
     for the VCA-server and notifiers Vision, WebVision: notify0, notify1 and notify2.

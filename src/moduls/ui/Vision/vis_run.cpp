@@ -2014,7 +2014,7 @@ void VisRun::Notify::ntf( int ialSt )
 #ifdef HAVE_PHONON
     if(ntfPlay) {
 	State mSt = ((VideoPlayer*)ntfPlay)->mediaObject()->state();
-	bool plSt = (mSt == State::LoadingState || mSt == State::BufferingState || mSt == State::PlayingState);
+	bool plSt = (mSt == LoadingState || mSt == BufferingState || mSt == PlayingState);
 	if(!alEn && ((VideoPlayer*)ntfPlay)->mediaObject()->currentSource().type() != MediaSource::Empty)
 	    ((VideoPlayer*)ntfPlay)->load(MediaSource());
 	else if(alEn && (((VideoPlayer*)ntfPlay)->mediaObject()->currentSource().type() == MediaSource::Empty ||
