@@ -2872,7 +2872,7 @@ The field "addr" of the items can be wrote positive, for  the 8 bit address [0..
 
 <tr>
 <td> <span id="MTP4D" title="#MTP4D"><h3><span class="mw-headline" id="MTP_4D_.28MTP4D.29"><span class="mw-headline-number">2.11</span> MTP 4D (<a href="Libs_Devices.html#MTP4D" title="Special:MyLanguage/Libs/Devices">MTP4D</a>)</span></h3></span> </td>
-<td> 1.0 </td>
+<td> 1.1 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en,uk,ru 
@@ -2881,7 +2881,7 @@ The field "addr" of the items can be wrote positive, for  the 8 bit address [0..
 </td></tr></table>
 <p>The connection template of a simple vaccuumeter MTP 4D of the firm "<a class="external text" href="http://www.erstvak.com" rel="nofollow noreferrer noopener" target="_blank">Erstevak Ltd</a>".
 </p>
-<ul><li> <b>Total complexity:</b> 0.2 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
+<ul><li> <b>Total complexity:</b> 0.3 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
 <li> <b>Sponsored by, for whole complexity:</b> Magomed, <a class="external text" href="https://www.savtech.ru" rel="nofollow noreferrer noopener" target="_blank">SAVTECH</a></li></ul>
 <p><b><u>Template IOs</u></b><br />
 </p>
@@ -2929,6 +2929,24 @@ The field "addr" of the items can be wrote positive, for  the 8 bit address [0..
 <td> Real </td>
 <td> Input </td>
 <td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> zeroP </td>
+<td> Set zero </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> zeroAP </td>
+<td> Set atmosphere </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
 <td> Variable </td>
 <td>
 </td></tr>
@@ -2995,7 +3013,7 @@ The field "addr" of the items can be wrote positive, for  the 8 bit address [0..
 <dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
 <ul><li> <i>Transport</i> — to address of the transport into step 1. Tracing for the address changing is supported.</li>
 <li> <i>Device address</i> — to logical address of the device on the bus under the transport in step 1. Tracing for the address changing is supported.</li></ul></dd>
-<dd>6. RESULT: The logical parameter object will perform interaction and placing of gathered data to the parameter attributes.</dd></dl>
+<dd>6. RESULT: The logical parameter object will perform interaction and placing of gathered data to the parameter attributes. Also you are able to change some writable attributes.</dd></dl>
 <p><br />
 </p>
 <h2><span class="mw-headline" id="Counters_of_the_resources"><span class="mw-headline-number">3</span> Counters of the resources</span></h2>

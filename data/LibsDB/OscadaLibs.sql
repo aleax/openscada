@@ -42,13 +42,13 @@ The template''s names and their parameters are available in languages: English, 
 
 Author: Roman Savochenko <roman@oscada.org>, Constantine (IrmIngeneer) (2018), Arsen Zakojan (2017), Ruslan Yarmoliuk (2017)
 Founded: January 2010
-Version: 2.6.0
+Version: 2.6.1
 License: GPLv2
 DOC: Libs_Devices|Libs/Devices','Бібліотеку пристроїв користувацьких протоколів створено для надання доступу до даних промислових пристроїв через мережу із доволі простим протоколом, на кшталт пристроїв загальної промислової автоматики та лічильників різних ресурсів, із протоколом достатньо простим до реалізації у модулі користувацького протоколу, з використанням наявних комплексних протоколів (ModBus, OPC_UA, HTTP) або безпосередньо на внутрішній мові подібній до Java.
 
 Автор: Роман Савоченко <roman@oscada.org>, Константин (IrmIngeneer) (2018), Арсен Закоян (2017), Руслан Ярмолюк (2017)
 Засновано: Січень 2010
-Версія: 2.6.0
+Версія: 2.6.1
 Ліцензія: GPLv2
 DOC: Libs_Devices|Libs/Devices','tmplib_DevLib','Промышленные устройства','');
 INSERT INTO ParamTemplLibs VALUES('PrescrTempl','Prescriptions','Рецепти','The library is created to provide an environment of execution of scenarios of the technological operations — prescriptions, and frames of the user interface about them, including the frame of creation/edition the prescriptions and two frames of the execution control and reporting — "Prescription — run" and "Prescription — run, simple". The library is built on the basis primitives of the widgets and the internal programming language JavaLikeCalc, including templates and commands.
@@ -1520,8 +1520,8 @@ INSERT INTO tmplib_DevLib_io VALUES('MTP4D','transport','Transport',0,64,'Serial
 INSERT INTO tmplib_DevLib_io VALUES('MTP4D','addr','Device address, [1...999]',1,64,'1',1,'Адрес устройства, [1...999]','','Адреса пристрою, [1...999]','');
 INSERT INTO tmplib_DevLib_io VALUES('MTP4D','type','Device type',0,16,'',2,'Тип устройства','','Тип пристрою','');
 INSERT INTO tmplib_DevLib_io VALUES('MTP4D','P','Pressure',2,16,'',3,'Давление','','Тиск','');
-INSERT INTO tmplib_DevLib_io VALUES('MTP4D','tr','Output transport',4,0,'',4,'Выходной транспорт','','Вихідний транспорт','');
-INSERT INTO tmplib_DevLib_io VALUES('MTP4D','this','Object',4,0,'',5,'Объект','','Об''єкт','');
+INSERT INTO tmplib_DevLib_io VALUES('MTP4D','tr','Output transport',4,0,'',6,'Выходной транспорт','','Вихідний транспорт','');
+INSERT INTO tmplib_DevLib_io VALUES('MTP4D','this','Object',4,0,'',7,'Объект','','Об''єкт','');
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','transport','Transport',0,64,'Sockets.mbbase',0,'Транспорт','','Транспорт','');
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','addr','Device address, [0...247]',1,64,'1',1,'Адрес устройства, [0...247]','','Адреса пристрою, [0...247]','');
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','mbType','ModBus type, [RTU|ASCII|TCP]',0,64,'RTU',2,'Тип ModBus, [RTU|ASCII|TCP]','','Тип ModBus, [RTU|ASCII|TCP]','');
@@ -1530,6 +1530,8 @@ INSERT INTO tmplib_DevLib_io VALUES('mbBase','fragMerge','ModBus blocks merging'
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','items','Items set "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}:{nm}"',0,36,'',5,'Набор элементов "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}:{nm}"','','Набір елементів "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}:{nm}"','');
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','tr','Output transport',4,0,'',6,'Выходной транспорт','','Вихідний транспорт','');
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','this','Object',4,0,'',7,'Объект','','Об''єкт','');
+INSERT INTO tmplib_DevLib_io VALUES('MTP4D','zeroP','Set zero',3,32,'',4,'Установить ноль','','Встановити нуль','');
+INSERT INTO tmplib_DevLib_io VALUES('MTP4D','zeroAP','Set atmosphere',3,32,'',5,'Установить атмосферу','','Встановити атмосферу','');
 CREATE TABLE IF NOT EXISTS 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_PrescrTempl_io VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
 INSERT INTO tmplib_PrescrTempl_io VALUES('timer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
@@ -6594,9 +6596,9 @@ if(f_stop && !tr.isEVal()) tr.start(false);','','',1592158749);
 INSERT INTO tmplib_DevLib VALUES('MTP4D','MTP 4D','MTP 4D','','The connection template of a simple vaccuumeter MTP 4D of the firm "Erstevak Ltd (http://www.erstvak.com/)".
 
 Author: Roman Savochenko <roman@oscada.org>
-Total complexity: 0.2 HD
+Total complexity: 0.3 HD
 Sponsored by, for whole complexity: Magomed, SAVTECH
-Version: 1.0.0
+Version: 1.1.0
 License: GPLv2','','',10,0,'JavaLikeCalc.JavaScript
 //Same request to the device
 function req(data) {
@@ -6625,6 +6627,7 @@ if(f_start) {
 	f_err = "0";
 	transport_ = transport;
 	type = P = EVAL;
+	zeroP = zeroAP = false;
 	tr = EVAL;
 }
 
@@ -6641,6 +6644,23 @@ if(tr.isEVal())	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",t
 else if(addr < 1 || addr > 999)
 	t_err = "2:"+tr("Address ''%1'' out of range [1...999].").replace("%1",addr.toString());
 else {
+	//Setting
+	if(zeroAP && !t_err.toInt()) {
+		data = "j1";
+		if(!(t_err=req(data)).toInt()) {
+			data = "j100023";
+			if(!(t_err=req(data)).toInt())	zeroAP = false;
+		}
+	}
+	if(zeroP && !t_err.toInt()) {
+		data = "j0";
+		if(!(t_err=req(data)).toInt()) {
+			data = "j000000";
+			if(!(t_err=req(data)).toInt())	zeroP = false;
+		}
+	}
+
+	//Reading
 	data = "T";
 	if(!t_err.toInt() && !(t_err=req(data)).toInt())	type = data.slice(1);
 	else type = EVAL;
@@ -6652,7 +6672,7 @@ else {
 }
 
 if(t_err.toInt()) { f_err = t_err; type = P = EVAL; }
-else f_err = "0";','','',1601823606);
+else f_err = "0";','','',1603038629);
 INSERT INTO tmplib_DevLib VALUES('mbBase','ModBus base','','','ModBus base template of the protocol implementing on the Logical Level. Designed mostly to use in the base of creation specific ModBus-based protocols for the standard-part registers'' access (function 3 for reading and function 16 for writing) and appending the new protocol specific part. The template was designed to work both under control of the controller objects of the module ModBus and LogicLev and can be managed from the template of the initiative connections processing for assigned output transports.
 
 Author: Roman Savochenko <roman@oscada.org>

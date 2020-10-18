@@ -30,7 +30,7 @@
 <td> <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
 <td> Visual control area engine
 </td>
-<td> 6.5 </td>
+<td> 6.8 </td>
 <td> GPL2 </td>
 <td> ui_VCAEngine.so </td>
 <td> en,uk,ru,de </td>
@@ -598,13 +598,13 @@ event = ev_rez;
 <p><br />
 </p>
 <h3><span class="mw-headline" id="Signaling_.28Alarms.29"><span class="mw-headline-number">3.6</span> <span id="Alarms" title="#Alarms">Signaling (Alarms)</span></span></h3>
-<p>An important element of any visualization interface is the user notification about the violation — signaling. To simplify the perception, but also in mind the close connectivity of visualization and notification (as a rule, the notification complements the visualization) it is decided to integrate the interface of the notification in the visualization interface. To do this, all the widget provides two additional attributes of the session level: "alarm" and "alarmSt". The attribute "alarm" is used to form the signal by the widget, according to his logic, and the attribute "alarmSt" is used to control the signaling fact of the branch of the session tree.
+<p>An important element of any visualisation interface is the user notification about the violation — signalling. To simplify the perception, but also in mind the close connectivity of visualisation and notification (as a rule, the notification complements the visualisation) it is decided to integrate the interface of the notification in the visualisation interface. To do this, all the widget provides two additional attributes of the session level: "alarm" and "alarmSt". The attribute "alarm" is used to form the signal by the widget, according to his logic, and the attribute "alarmSt" is used to control the signalling fact of the branch of the session tree.
 </p><p>The "alarm" attribute is a string that has the following format: "<b>{lev}|{categ}|{message}|{type}|{tp_arg}</b>"<br />
 Where:
 </p>
-<ul><li> <i>lev</i> — signaling (alarm) level; number from 0 to 255;</li>
+<ul><li> <i>lev</i> — signalling (alarm) level; number from 0 to 255;</li>
 <li> <i>categ</i> — alarm category; parameter of the acquisition subsystem, object, path, or their combination;</li>
-<li> <i>message</i> — signaling (alarm) message;</li>
+<li> <i>message</i> — signalling (alarm) message;</li>
 <li> <i>type</i> — type of the notification, is formed as an integer number (0...7), which contains the flags of notification methods; typical notification methods:
 <ul><li> <i>1</i> — visual;</li>
 <li> <i>2</i> — beep tone, is frequently made through the PC-speaker;</li>
@@ -612,19 +612,19 @@ Where:
 <li> <i>tp_arg</i> — argument of the type; often used to directly indicate the resource of a sound signal — a file of sound format, when the sound signal is made.</li></ul>
 <p>Attribute "alarmSt" is an integer number that represents the maximum alarm level and the fact of the quietance of the branch of the tree of the session. Format of the number is as follows:
 </p>
-<ul><li> first byte (0...255) characterizes the level of the alarm of the branch;</li>
+<ul><li> first byte (0...255) characterises the level of the alarm of the branch;</li>
 <li> the second byte indicates the type of notification, as well as in the attribute "alarm";</li>
 <li> the third byte indicates the type of notification without quietance, as well as in the attribute "alarm";</li>
 <li> the fourth byte has a special appointment, which is defined by separate bits:
 <ul><li> bit 0 — indicates, by sets, to the quietance fact of the notification into first byte;</li>
 <li> bit 1 — indicates, by sets it and the bit 0, to the quietance return — enable back the quietance.</li></ul></li></ul>
-<p><b>Alarm forming and receiving of it by the visualizer.</b><br />
-The alarm forming is performed by the widget itself, by setting its own attribute "alarm" in appropriate way and, in accordance with it, the attribute "alarmSt" of the current and the parent widget. Visualizers receive signal notifications using the standard mechanism of notification about changes of the widget attributes.
-</p><p>Taking into account that the processing of the signaling conditions is made in the widgets, the pages containing the objects of signaling should be executed in the background, regardless of their openness to the moment. This is done by setting a flag of the background execution of the page.
-</p><p>Although the mechanism of signaling is built in the visualization area, the possibility of forming non-visual elements of signaling remains, for example, by creating a page that will never open.
+<p><b>Alarm forming and receiving of it by the visualiser.</b><br />
+The alarm forming is performed by the widget itself, by setting its own attribute "alarm" in appropriate way and, in accordance with it, the attribute "alarmSt" of the current and the parent widget. Visualisers receive signal notifications using the standard mechanism of notification about changes of the widget attributes.
+</p><p>Taking into account that the processing of the signalling conditions is made in the widgets, the pages containing the objects of signalling should be executed in the background, regardless of their openness to the moment. This is done by setting a flag of the background execution of the page.
+</p><p>Although the mechanism of signalling is built in the visualisation area, the possibility of forming non-visual elements of signalling remains, for example, by creating a page that will never open.
 </p><p><b>Quietance</b><br />
 Quietance — approving process is a fact of the operative personal take its attention to the violation into the TP work. The process mostly means of take actions for the violation eliminating and pressing to the button of the alarm quieting.
-</p><p>Quietance performs by specifying the root of the branch of the widgets and the types of notification, which allows to make quietance on the side of the visualizer, as in groups, for example, on the signaling object, and individually by the object of the source. It is possible to independently quietance different types of alarms. Setting of the quietance is made by the simple modification of the attribute "alarmSt".
+</p><p>Quietance performs by specifying the root of the branch of the widgets and the types of notification, which allows to make quietance on the side of the visualiser, as in groups, for example, on the signalling object, and individually by the object of the source. It is possible to independently quietance different types of alarms. Setting of the quietance is made by the simple modification of the attribute "alarmSt".
 </p><p>Example of the script to work with the signals gives below:
 </p>
 <pre style="white-space: pre-wrap;">
@@ -643,68 +643,72 @@ event = ev_rez;
 </pre>
 <p><b>External notification methods</b><br />
 The first and the typical method of notifications is screen's light notification by alarm colors and its dynamic about proper visual elements, which always presents and does not require of specific configuration. But often we need for an external type notification, for example: external lamp, PC buzzer or "howler", arbitrary sound, synthesised speech and etc.
-</p><p>In order to realize this possibility, the external methods of the notification and the corresponding notification types, are freely described for the visualization server and the visualizer itself. On the side of the visualization server, the formation/receipt of the notification resource and the notification itself is described. On the side of the visualizer, the notification is described according to the resources of the visualization server.
-</p><p>Description of the rules and scenarios of the notifications performs with user attributes of the text type for pages of the visualization project, which applies at the page open. That is, potentially, for each open page, you can describe your own rules of the notification, though, it's usually enough and describes the general rules of the notification on the project's main page — a page that opens one-off and does not close at work:
+</p><p>In order to realize this possibility, the external methods of the notification and the corresponding notification types, are freely described for the visualisation server and the visualiser itself. On the side of the visualisation server, the formation/receipt of the notification resource and the notification itself is described. On the side of the visualiser, the notification is described according to the resources of the visualisation server.
+</p><p>Description of the rules and scenarios of the notifications performs with user attributes of the text type for pages of the visualisation project, which applies at the page open. That is, potentially, for each open page, you can describe your own rules of the notification, though, it's usually enough and describes the general rules of the notification on the project's main page — a page that opens one-off and does not close at work:
 </p>
-<ul><li> For the visualization server/engine, by the attribute "notify{N}" into the format:</li></ul>
+<ul><li> For the visualisation server/engine, by the attribute "notify{N}" into the format:</li></ul>
 <pre style="white-space: pre-wrap; margin-left: 15px">
-//flags=notify[{DL}][|resource[|queue[|qMergeMess]]];
+//flags=notifyServ[{DL}][|resource[|queue[|qMergeMess]]]
+//resStatic={MimeFileResource}
 if(doRes) { The command text to form the resource. }
 if(doNtf) { The command text to notify. }
 </pre>
-<ul><li> For a visualizer by the attribute "notifyVis[Vision|WebVision]{N}" into the format:</li></ul>
+<ul><li> For a visualiser by the attribute "notifyVis[Vision|WebVision]{N}" into the format:</li></ul>
 <pre style="white-space: pre-wrap; margin-left: 15px">
-//flags=notify[{DL}][|resource[|queue[|quietanceRet]]];
+//flags=notify[{DL}][|resource[|queue[|quietanceRet]]]
 //name={The notifier name}
 //ico={The icon name}
-{ The notification command text to any or concrete visualizer. }
+{ The notification command text to any or concrete visualiser. }
 </pre>
 <p>Flags:
 </p>
-<ul><li> <i>notify[{DL}]</i> — enables notification with the repeating by the time <i>DL</i>, if the set; for <i>DL</i> = 0 the repeat carried out immediately.</li>
-<li> <i>resource</i> — request-form (force) the notification resource from the visualization server, can be an audio file, a text or other data for the notification produce.</li>
-<li> <i>queue</i> — the notification resources are determined not only by the global sign of alarming and quietance, but also according to the priority sources queue of the notification-resources. The queue is formed on the side of the visualization server, and for the visualizers it is indicated the need to work with it when requesting resources.</li>
+<ul><li> <i>notify[{DL}]</i>, <i>notifyServ[{DL}]</i> — enables the notification with the repeating by the time <i>DL</i>, if the set; for <i>DL</i> = 0 the repeat carried out immediately.</li>
+<li> <i>resource</i> — request-form (force) the notification resource from the visualisation server, can be an audio file, a text or other data for the notification produce; but currently the notifiers mostly expect audio.</li>
+<li> <i>queue</i> — the notification resources are determined not only by the global sign of alarming and quietance, but also according to the priority sources queue of the notification-resources. The queue is formed on the side of the visualisation server, and for the visualisers it is indicated the need to work with it when requesting resources.</li>
 <li> <i>qMergeMess</i> — merging the notifications into the queue by equality their messages.</li>
-<li> <i>quietanceRet</i> — possibility of the visualizer for the quietance recall-return i.e. in fact — the notification enable back.</li></ul>
-<p>The exchanging variables:
+<li> <i>quietanceRet</i> — possibility of the visualiser for the quietance recall-return i.e. in fact — the notification enable back.</li></ul>
+<p>Presence of the field "resStatic" enables the resource obtaining directly from the mime table or a file, pointed in the way like to <a href="#Media">the "Media" primitive</a>.
+</p><p>The exchanging variables:
 </p>
 <ul><li> <i>en</i>[0,1] — the notification enable (1) or disable (0);</li>
 <li> <i>doNtf</i>[0,1] — call the script of the notification;</li>
 <li> <i>doRes</i>[0,1] — call the script of the resource forming;</li>
 <li> <i>res</i> — content or content's file name of the resource, for the external scripts;</li>
-<li> <i>mess</i> — message-parameters of the forming the resource and the notification.</li>
-<li> <i>lang</i> — language of the current user or system.</li></ul>
+<li> <i>resTp</i> — resource type, like to "audio/ogg"; is return and placed to stdout (for Shell) for <i>doRes</i>;</li>
+<li> <i>mess</i> — message-parameters of the forming the resource and the notification;</li>
+<li> <i>lang</i> — language of the current user or system;</li>
+<li> <i>prcID</i> — the procedure unique ID (like to "ses_AGLKS_ntf2"), mostly for temporary files safe creation.</li></ul>
 <p>The examples and comments to work of the typical notification methods:
 </p>
-<ul><li> Beep (buzzer) on the visualizer or the visualization server side:</li></ul>
+<ul><li> Beep (buzzer) on the visualiser or the visualisation server side:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm||0x02"</li>
 <li> notifyVisVision1 | notify1 = </li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify
+//flags=notify|notifyServ
 if(en) SYS.system("beep -f 1000 -l 1000000 &amp;", true);
 else if((beepPID=SYS.system("pidof beep")).toInt()) SYS.system("kill "+beepPID); </pre>
 <dl><dd><ul><li> notifyVisVision1 | notify1 = </li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30px">
 #!/bin/sh
-#flags=notify
+#flags=notify|notifyServ
 if test $en = 1; then
 	beep -f 1000 -l 1000000 &amp;
 else
 	beepPID=$(pidof beep)
 	if test "x$beepPID"&nbsp;!= "x"; then kill $beepPID; fi
 fi </pre>
-<ul><li> Repeating play for ready audio file, one common, on the visualizer or the visualization server side:</li></ul>
+<ul><li> Repeating play for ready audio file, one common, on the visualiser or the visualisation server side:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm||0x04"</li>
 <li> notify2 | notifyVisVision2 =</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify2
+//flags=notify2|notifyServ2
 if(en) SYS.system("play -q alarm.ogg");</pre>
 <dl><dd><ul><li> notify2 | notifyVisVision2 =</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30px">
 #!/bin/sh
-#flags=notify2
+#flags=notify2|notifyServ2
 if test $en = 1; then play -q alarm.ogg; fi</pre>
-<ul><li> Play an individual audio file for the source, on the visualization server side:</li></ul>
+<ul><li> Play an individual audio file for the source, on the visualisation server side:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm||0x04|res:al_prm1"</li>
 <li> notify2 =</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30px">
@@ -723,7 +727,7 @@ if(doNtf &amp;&amp; en &amp;&amp; res.length) {
 #flags=notify2|queue
 if test $doNtf = 1 -a $en = 1 -a -s $res; then play -q $res; fi
 </pre>
-<ul><li> Speech synth for an individual message for the source, on the visualizer side:</li></ul>
+<ul><li> Speech synth for an individual message for the source, on the visualiser side:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm|Text message of the speech synth|0x04"</li>
 <li> notify2 =</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30px">
@@ -747,11 +751,11 @@ if test $doNtf = 1 -a $en = 1 -a "x"&nbsp;!= "x$mess"; then
   rm tmpForSpeech
 fi
 </pre>
-<ul><li> Preparing a sound file, one common, and playing it on the side of the visualizer or the visualization server:</li></ul>
+<ul><li> Preparing a sound file, one common, and playing it on the side of the visualiser or the visualisation server:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm||0x04"</li>
 <li> notify2 = </li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify2|resource
+//flags=notify2|notifyServ2|resource
 if(doRes) res = SYS.fileRead("alarm.ogg");  //Insert here a different method of the generation
 if(doNtf &amp;&amp; en &amp;&amp; res.length) {
   SYS.fileWrite("tmpPlay", res);
@@ -761,7 +765,7 @@ if(doNtf &amp;&amp; en &amp;&amp; res.length) {
 <dl><dd><ul><li> notify2 = </li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30px">
 #!/bin/sh
-#flags=notify2|resource
+#flags=notify2|notifyServ2|resource
 if test $doRes = 1; then cp -f alarm.ogg $res; fi  #Insert here a different method of the generation
 if test $doNtf = 1 -a $en = 1 -a -s $res; then play -q $res; fi
 </pre>
@@ -779,11 +783,11 @@ if(en &amp;&amp; res.length) {
 #flags=notify2|resource
 if test $en = 1 -a -s $res; then play -q $res; fi
 </pre>
-<ul><li> Prepare an individual audio file for the source of notification through the speech synth, on side of the visualizer or the visualization server:</li></ul>
+<ul><li> Prepare an individual audio file for the source of notification through the speech synth, on side of the visualiser or the visualisation server:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm|Text message of the speech synth|0x04"</li>
 <li> notify2 =</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify2|queue
+//flags=notify2|notifyServ2|queue
 if(doRes &amp;&amp; mess.length) {
  SYS.fileWrite("tmpText", mess);
  SYS.system("text2wave tmpText -o tmpWAV");
@@ -798,7 +802,7 @@ if(doNtf &amp;&amp; en &amp;&amp; res.length) {
 <dl><dd><ul><li> notify2 =</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30px">
 #!/bin/sh
-#flags=notify2|queue
+#flags=notify2|notifyServ2|queue
 if test $doRes = 1 -a "x"&nbsp;!= "x$mess"; then
  echo $mess &gt; tmpText
  text2wave tmpText -o $res

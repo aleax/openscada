@@ -30,7 +30,7 @@
 <td> <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a> </td>
 <td> Робочий користувацький інтерфейс (WEB)
 </td>
-<td> 5.1 </td>
+<td> 5.6 </td>
 <td> GPL2 </td>
 <td> ui_WebVision.so </td>
 <td> en,uk,ru,de </td>
@@ -132,7 +132,7 @@
 <ul><li> Праворуч:
 <ul><li> поточний користувач, від ім'я якого виконується інтерфейс СВУ — кліком можна змінити цього користувача, ввівши нове ім'я та пароль;</li>
 <li> поточний стиль інтерфейсу, який можна змінити обравши з комбобоксу потрібний;</li>
-<li> поточний статус порушення у лампі кольором, що відповідає рівню порушення; блимає при появі та зміні порушення; натиснувши на лампу Ви можете сквітувати (стишити) це порушення.</li></ul></li>
+<li> поточний статус порушення у лампі кольором, який відповідає рівню порушення, та іконки активних сповіщувачів; блимає при появі та зміні порушення; натиснувши на лампу Ви можете сквітувати (стишити) ці порушення цілком або бажаний тип сповіщення, натиснувши іконку відповідного сповіщувача поряд.</li></ul></li>
 <li> У головному полі рядка статусу виводяться різні інформаційні повідомлення та повідомлення допомоги.</li></ul>
 <p>Модуль підтримує багатомовність, яка вмикається <a href="../Program_manual.html#ConfigTr" title="Special:MyLanguage/Documents/Program manual">динамічним перекладом повідомлень OpenSCADA</a>. Отримана мова передається модулем <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a> та визначається шляхом та у послідовності:
 </p>
@@ -142,7 +142,7 @@
 <li> Загальна мова процесу OpenSCADA.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:619px;"><a class="image" href="http://oscada.org/wiki/File:HTTP_auth_uk.png"><img class="thumbimage" height="286" src="../files/HTTP_auth_uk.png" width="617" /></a>  <div class="thumbcaption">Рис.1. Сторінка аутентифікації.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:606px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_connect_uk.png"><img class="thumbimage" height="458" src="../files/WebVision_wvis_connect_uk.png" width="604" /></a>  <div class="thumbcaption">Рис.2. Підключення або створення нового сеансу виконання проекту СВУ.</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1039px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run_uk.png"><img class="thumbimage" height="787" src="../files/WebVision_wvis_run_uk.png" width="1037" /></a>  <div class="thumbcaption">Рис.3. Головне вікно режиму виконання.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1039px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run_uk.png"><img class="thumbimage" height="785" src="../files/WebVision_wvis_run_uk.png" width="1037" /></a>  <div class="thumbcaption">Рис.3. Головне вікно режиму виконання.</div></div></div></div>
 <h2><span class="mw-headline" id=".D0.9F.D1.80.D0.B5.D0.B4.D1.81.D1.82.D0.B0.D0.B2.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F_.D0.B1.D0.B0.D0.B7.D0.BE.D0.B2.D0.B8.D1.85_.D0.B5.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.96.D0.B2_.28.D0.BF.D1.80.D0.B8.D0.BC.D1.96.D1.82.D0.B8.D0.B2.D1.96.D0.B2.29"><span class="mw-headline-number">3</span> <span id="Primitives" title="#Primitives">Представлення базових елементів (примітивів)</span></span></h2>
 <p>Даною версією модуля реалізовано не всі образи примітивів, закладені проектом. Загалом, проектом закладено примітиви:
 </p>
@@ -227,6 +227,11 @@
 <th> Ім'я </th>
 <th> Призначення
 </th></tr>
+<tr>
+<td> notify{N}, notifyVisWebVision{N} (сторінка) </td>
+<td> Сповіщувач: тип {N} </td>
+<td> Визначає сповіщувач та процедуру отримання ресурсу сповіщення згідно до <a href="../Modules/VCAEngine.html#Alarms" title="Special:MyLanguage/Modules/VCAEngine">концепції "Сигналізації (Аларми)"</a>.
+</td></tr>
 <tr>
 <td> keepAspectRatio (головна сторінка) </td>
 <td> Зберігати пропорцію при масштабуванні </td>

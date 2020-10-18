@@ -34,6 +34,7 @@
 #define vrng(val,min,max) ((val) >= (min) && (val) <= (max))
 
 #define POS_PREC_DIG	3
+#define TM_ALRM_UPD	0.5
 
 using namespace OSCADA;
 using namespace VCA;

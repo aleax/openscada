@@ -1,3 +1,30 @@
+2020-10-18 Roman (stable)
+- LibsDB.OscadaLibs: The template DevLib.MTP4D expanded for the properties "Set zero (zeroP)" and "Set atmosphere (zeroAP)".
+- !!:LibsDB.vcaBase: The frame Main.RootPgSo unified for the notifiers in the generic attributes only
+    for the VCA-server and notifiers Vision, WebVision: notify0, notify1 and notify2.
+- !!!!:UI.WebVision: Implementing of the notifications support.
+    Unified in the time constants specifying for: tmClearEdit, tmFullUpd, tmAlrmUpd.
+    Information requests of the opening page moved under the common request "CntrReqs" together the notifier attributes activation.
+- !!!!:UI.{VCAEngine.Vision}: Expanding the notifications implementation in way their implementation on UI.WebVision, for:
+    - using the standard way of the notifications obtaining through the corresponding attributes activation;
+    - {VCAEngine.Vision}::ntfReg() expanding for the negative type using in all types processing, freeing mostly,
+	and some unification of the code;
+    - expanding for the resource type obtaining in:
+	- the service request "<get mode='resource' path='%2fserv%2falarm' />" of the OpenSCADA control interface;
+	- an argument of the functions {ntfRes,commCall}();
+	- an argument of the notification procedures "resTp" what is return and placed to stdout (for Shell) for "doRes".
+    - appending the notifiers by the flag "notifyServ" of the notification enabling on the VCA-server side;
+    - VCA-server side appended for the field "resStatic" of the direct resource specifying (non dynamic);
+    - appending the notification procedures' context for the two variables "resTp" and "prcID".
+- FIX:UI.VCAEngine: The operations of the quietance by the service request "<quietance path='%2fserv%2falarm' />"
+    allowed for all by setting the reading permition.
+- !!:FIX:UI.Vision: Notification by playing in Phonon moved from the separate notification task and fixed in detection
+	the playing process in a way like to UI.WebVision and using MediaObject.
+    FIX: Alarms processing period some improved to be more predicted.
+    FIX: Priority of registering the notifiers some fixed.
+- Transport.{Sockets,SSL}: The default timeouts returned to "10:1".
+
+
 2020-10-04 Roman (stable)
 - !!:LibsDB.OscadaLibs: The library DevLib appended by the template "MTP 4D (MTP4D)" "and ModBus base (mbBase)".
 - !!:UI.Vision: Appended of playing the notifications by the internal player at Phonon.

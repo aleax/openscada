@@ -1,15 +1,15 @@
 # OpenSCADA.UI.Vision translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.UI.Vision package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2019.
+# Roman Savochenko <roman@oscada.org>, 2005-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-21 20:34+0200\n"
+"POT-Creation-Date: 2020-10-18 14:40+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -1783,6 +1783,12 @@ msgstr "Повідомлення сповіщення"
 
 msgid "Language of the notification message"
 msgstr "Мова повідомлення сповіщення"
+
+msgid "Resource stream type"
+msgstr "Тип потоку ресурса"
+
+msgid "Procedure ID"
+msgstr "ID процедури"
 
 #, c-format
 msgid "Notificator %d"

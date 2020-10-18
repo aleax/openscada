@@ -61,7 +61,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.1.0"
+#define MOD_VER		"4.1.1"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -1051,7 +1051,7 @@ TSocketOut::TSocketOut( string name, const string &idb, TElem *el ) :
     TTransportOut(name, idb, el), mAttemts(1), mMSS(0), sockFd(-1), type(SOCK_TCP)
 {
     setAddr("localhost:10005");
-    setTimings("30:2");
+    setTimings("10:1");
 }
 
 TSocketOut::~TSocketOut( )	{ }

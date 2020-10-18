@@ -30,7 +30,7 @@
 <td> <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
 <td> Рушій Середовища Візуалізації та Управління
 </td>
-<td> 6.5 </td>
+<td> 6.8 </td>
 <td> GPL2 </td>
 <td> ui_VCAEngine.so </td>
 <td> en,uk,ru,de </td>
@@ -646,7 +646,7 @@ event = ev_rez;
 </p>
 <ul><li> Для серверу/рушія візуалізації, атрибутом "notify{N}" у форматі:</li></ul>
 <pre style="white-space: pre-wrap; margin-left: 15px">
-//flags=notify[{DL}][|resource[|queue[|qMergeMess]]];
+//flags=notifyServ[{DL}][|resource[|queue[|qMergeMess]]];
 if(doRes) { Текст команди формування ресурсу. }
 if(doNtf) { Текст команди сповіщення. }
 </pre>
@@ -659,32 +659,35 @@ if(doNtf) { Текст команди сповіщення. }
 </pre>
 <p>Прапорці:
 </p>
-<ul><li> <i>notify[{DL}]</i> — включає сповіщення з повтором через час <i>DL</i>, якщо вказано; для <i>DL</i> = 0 повтор здійснюється одразу.</li>
-<li> <i>resource</i> — запитувати-формувати (примусово) ресурс сповіщення у сервера візуалізації, може бути звуковим файлом, текстом або іншими даними формування сповіщення.</li>
+<ul><li> <i>notify[{DL}]</i>, <i>notifyServ[{DL}]</i> — включає сповіщення з повтором через час <i>DL</i>, якщо вказано; для <i>DL</i> = 0 повтор здійснюється одразу.</li>
+<li> <i>resource</i> — запитувати-формувати (примусово) ресурс сповіщення у сервера візуалізації, може бути звуковим файлом, текстом або іншими даними формування сповіщення; але наразі сповіщувачі переважно очікують аудіо.</li>
 <li> <i>queue</i> — ресурси сповіщення визначаються не лише за глобальною ознакою порушення та квітації, а й згідно до пріоритетної черги джерел сповіщення-ресурсів. Черга формується на боці серверу візуалізації, а для візуалізаторів вказується необхідність роботи з нею при запиті ресурсів.</li>
 <li> <i>qMergeMess</i> — поєднувати сповіщення у черзі за рівністю сповіщення.</li>
 <li> <i>quietanceRet</i> — можливість відкликання-повернення квітації візуалізатору, тобто, по факту — зворотнього включення сповіщення.</li></ul>
-<p>Змінні обміну:
+<p>Наявність поля "resStatic" вмикає отримання ресурсу безпосередньо із mime-таблиці або файлу, вказується у спосіб подібний до <a href="#Media">примітиву "Медіа"</a>.
+</p><p>Змінні обміну:
 </p>
 <ul><li> <i>en</i>[0,1] — сповіщення ввімкнути (1) або вимкнути (0);</li>
 <li> <i>doNtf</i>[0,1] — виклик сценарію сповіщення;</li>
 <li> <i>doRes</i>[0,1] — виклик сценарію формування ресурсу;</li>
 <li> <i>res</i> — вміст або ім'я файлу з вмістом ресурсу, для зовнішніх сценаріїв;</li>
-<li> <i>mess</i> — повідомлення-параметри формування ресурсу або сповіщення.</li>
-<li> <i>lang</i> — мова поточного користувача або системи.</li></ul>
+<li> <i>resTp</i> — тип ресурсу, на кшталт "audio/ogg"; є поверненням та поміщається до стандартного виходу (для Shell) для <i>doRes</i>;</li>
+<li> <i>mess</i> — повідомлення-параметри формування ресурсу або сповіщення;</li>
+<li> <i>lang</i> — мова поточного користувача або системи;</li>
+<li> <i>prcID</i> — унікальний ідентифікатор процедури (на кшталт "ses_AGLKS_ntf2"), переважно для безпечного створення тимчасових файлів.</li></ul>
 <p>Приклади та коментарі до роботи типових способів сповіщення:
 </p>
 <ul><li> Бузер на боці візуалізатору або серверу візуалізації:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm||0x02"</li>
 <li> notifyVisVision1 | notify1 = </li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify
+//flags=notify|notifyServ
 if(en) SYS.system("beep -f 1000 -l 1000000 &amp;", true);
 else if((beepPID=SYS.system("pidof beep")).toInt()) SYS.system("kill "+beepPID); </pre>
 <dl><dd><ul><li> notifyVisVision1 | notify1 = </li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30px">
 #!/bin/sh
-#flags=notify
+#flags=notify|notifyServ
 if test $en = 1; then
 	beep -f 1000 -l 1000000 &amp;
 else
@@ -695,12 +698,12 @@ fi </pre>
 <dl><dd><ul><li> alarm = "10|Prm||0x04"</li>
 <li> notify2 | notifyVisVision2 =</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify2
+//flags=notify2|notifyServ2
 if(en) SYS.system("play -q alarm.ogg");</pre>
 <dl><dd><ul><li> notify2 | notifyVisVision2 =</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30px">
 #!/bin/sh
-#flags=notify2
+#flags=notify2|notifyServ2
 if test $en = 1; then play -q alarm.ogg; fi</pre>
 <ul><li> Програвання індивідуального, для джерела, звукового файлу, на боці візуалізатору:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm||0x04|res:al_prm1"</li>
@@ -749,7 +752,7 @@ fi
 <dl><dd><ul><li> alarm = "10|Prm||0x04"</li>
 <li> notify2 = </li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify2|resource
+//flags=notify2|notifyServ2|resource
 if(doRes) res = SYS.fileRead("alarm.ogg");  //Вставити сюди інший метод генерації
 if(doNtf &amp;&amp; en &amp;&amp; res.length) {
   SYS.fileWrite("tmpPlay", res);
@@ -759,7 +762,7 @@ if(doNtf &amp;&amp; en &amp;&amp; res.length) {
 <dl><dd><ul><li> notify2 = </li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30px">
 #!/bin/sh
-#flags=notify2|resource
+#flags=notify2|notifyServ2|resource
 if test $doRes = 1; then cp -f alarm.ogg $res; fi  #Вставити сюди інший метод генерації
 if test $doNtf = 1 -a $en = 1 -a -s $res; then play -q $res; fi
 </pre>
@@ -781,7 +784,7 @@ if test $en = 1 -a -s $res; then play -q $res; fi
 <dl><dd><ul><li> alarm = "10|Prm|Текстове повідомлення синтезу мови|0x04"</li>
 <li> notify2 =</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify2|queue
+//flags=notify2|notifyServ2|queue
 if(doRes &amp;&amp; mess.length) {
  SYS.fileWrite("tmpText", mess);
  SYS.system("text2wave tmpText -o tmpWAV");
@@ -796,7 +799,7 @@ if(doNtf &amp;&amp; en &amp;&amp; res.length) {
 <dl><dd><ul><li> notify2 =</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30px">
 #!/bin/sh
-#flags=notify2|queue
+#flags=notify2|notifyServ2|queue
 if test $doRes = 1 -a "x"&nbsp;!= "x$mess"; then
  echo $mess &gt; tmpText
  text2wave tmpText -o $res

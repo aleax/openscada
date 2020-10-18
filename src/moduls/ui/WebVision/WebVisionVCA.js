@@ -25,6 +25,9 @@ var isOpera = navigator.appName.indexOf('Opera') != -1;
 var isKonq = navigator.userAgent.indexOf('Konqueror') != -1;
 var mainTmId = 0;
 var gPrms = window.location.search || '';
+var tmClearEdit = 10;			//Clear time of line edit fields, seconds
+var tmFullUpd = 5;			//Full tree updating time,seconds
+var tmAlrmUpd = 0.5;			//Alarms updating time, seconds
 
 /***************************************************
  * pathLev - Path parsing function.                *
@@ -226,7 +229,6 @@ function servGet( adr, prm, callBack, callBackPrm )
 	req.send(null);
 	return null;
     }
-    //else console.log("TEST 00: Sync GET="+adr+'?'+prm);
     req.send(null);
     if(req.status != 200) window.location.reload();
     else if(req.responseXML.childNodes.length)	return req.responseXML.childNodes[0];
@@ -249,7 +251,6 @@ function servSet( adr, prm, body, noWaitRez )
 	    return req.responseXML.childNodes[0];
 	//if(mainTmId) clearTimeout(mainTmId);
 	//mainTmId = setTimeout(makeUI, 1000);
-	//console.log("TEST 01: SET="+body);
     } catch(e) { window.location.reload(); /*window.location = '/'+MOD_ID;*/ }
 
     return null;
@@ -417,20 +418,33 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	var opPg = this.findOpenPage(pgId);
 	if(opPg) {
 	    if(updWdg) {
-		fullUpdCnt = (fullUpdCnt > 5) ? 0 : fullUpdCnt + planePer;
+		fullUpdCnt = (fullUpdCnt > tmFullUpd) ? 0 : fullUpdCnt + planePer;
 		servGet(pgId, 'com=attrsBr&FullTree='+((fullUpdCnt==0)?1:0)+'&tm='+tmCnt, makeEl, opPg);
 	    }
 	    return true;
 	}
     }
 
+    //Checking a page before opening
+    if(!pgGrp || !pgOpenSrc) {
+	reqPgGen = "<CntrReqs>"+
+	    "<get path='/%2fattr%2fpgGrp'/>"+
+	    "<get path='/%2fattr%2fpgOpenSrc'/>";
+	// For per-page notification
+	for(iNtf = 0; iNtf < 7; iNtf++)
+	    reqPgGen += "<activate path='/%2fserv%2fattr%2fnotify"+iNtf+"'/>"+
+			"<activate path='/%2fserv%2fattr%2fnotifyVis"+MOD_ID+iNtf+"'/>";
+	reqPgGen += "</CntrReqs>";
+	reqPgGen = servSet("/UI/VCAEngine"+pgId, 'com=com', reqPgGen, false);
+	pgGrp = reqPgGen.childNodes[0].textContent;
+	pgOpenSrc = reqPgGen.childNodes[1].textContent;
+    }
+
     //Create or replace the main page
-    if(!pgGrp) pgGrp = getWAttr(pgId,'pgGrp');
-    if(!pgOpenSrc) pgOpenSrc = getWAttr(pgId,'pgOpenSrc');
     if(this == masterPage && (!this.addr.length || pgGrp == 'main' || pgGrp == this.attrs['pgGrp'])) {
 	if(this.addr.length) {
 	    servSet(this.addr, 'com=pgClose&cacheCntr', '');
-	    this.pwClean();
+	    this.pwClean(true);
 	    document.body.removeChild(this.window);
 	}
 	this.addr  = pgId;
@@ -502,7 +516,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 		" <td title='"+winName+"' style='padding-left: 5px; overflow: hidden; white-space: nowrap;'>"+winName+"</td>"+
 		" <td style='color: red; cursor: pointer; text-align: right; width: 1px;' "+
 		"  onclick='servSet(this.offsetParent.iPg.addr,\"com=pgClose&cacheCntr\",\"\"); "+
-		"   //this.offsetParent.iPg.pwClean(); "+
+		"   this.offsetParent.iPg.pwClean(); "+
 		"   delete this.offsetParent.iPg.parent.pages[this.offsetParent.iPg.addr]; "+
 		"   document.getElementById(\"mainCntr\").removeChild(this.offsetParent.iPg.window);'>X</td></tr>\n"+
 		"<tr><td colspan='2'><div/></td></tr>";
@@ -558,7 +572,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 {
     //Callback processing
     if(pgBr) {
-	if(pgBr == -1) { window.location.reload(true); return; }	//???? Try to restore the connection
+	if(pgBr == -1) { window.location.reload(true); return; }	//Try to restore the connection
 	if(pgBr.getAttribute('FullTree')) FullTree = parseInt(pgBr.getAttribute('FullTree'));
 	if(pgBr.callBackPrm) {
 	    elO = pgBr.callBackPrm; pgBr.callBackPrm = null;
@@ -637,7 +651,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 		if(toCrtStBar) {
 		    stBar = "<table width='100%'><TR><td id='StatusBar' width='100%'/>";
-		    stBar += "<td id='st_alarm' title1='###Alarm level: %1###'><img onclick='alarmQuiet()' height='"+(masterPage.status.height-2)+"px' src='/"+MOD_ID+"/img_alarmLev'/></td>";
+		    stBar += "<td id='st_alarm' title1='###Alarm level: %1###' style='display: flex;'>"+
+			    "<img id='alarmLev' onclick='alarmQuiet(this.id, 255)' height='"+(masterPage.status.height-2)+"px' src='/"+MOD_ID+"/img_alarmLev'/></td>";
 		    if(modelStyles && parseInt(modelStyles.getAttribute('curStlId')) >= 0 && modelStyles.childNodes.length > 1) {
 			stBar += "<td id='st_style' title='###Field for displaying and changing the used interface style.###'>";
 			stBar += "<select onchange='styleSet(this.selectedOptions[0].getAttribute(\"itId\"))'>";
@@ -756,6 +771,11 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		if(tVl == '*') window.location = '/login'+window.location.pathname;
 		else { servSet(this.addr, 'com=setUser&user='+tVl, ''); window.location.reload(); }
 	    }
+	    for(iNtf = 0; iNtf < 7; iNtf++)
+		if((tVl=this.attrs["notifyVis"+MOD_ID+iNtf]) && this.attrsMdf["notifyVis"+MOD_ID+iNtf])
+		    ntfReg(iNtf, tVl, this.addr, true);
+		else if((tVl=this.attrs["notify"+iNtf]) && this.attrsMdf["notify"+iNtf])
+		    ntfReg(iNtf, tVl, this.addr, false);
 
 	    if(!this.pg && ((this.inclOpen && this.attrs['pgOpenSrc'] != this.inclOpen) ||
 		    (!this.inclOpen && this.attrs['pgOpenSrc'].length)))
@@ -1190,7 +1210,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			formObj.modify = function( )
 			{ return (this.parentNode.children[this.parentNode.children.length-1].style.visibility == 'visible'); }
 			formObj.setModify = function(on) {
-			    if(on && this.clearTm) this.clearTm = clearTm;
+			    if(on && this.tmClearEdit) this.tmClearEdit = tmClearEdit;
 			    if(this.modify() == on) return;
 			    var posOkImg = this.parentNode.children.length-1;
 			    var okImg = this.parentNode.children[posOkImg];
@@ -1199,14 +1219,14 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				if(posOkImg == 2)
 				    this.parentNode.children[1].style.left = (parseInt(this.parentNode.children[1].style.left)-applySz)+'px';
 				okImg.style.visibility = 'visible';
-				this.wdgLnk.perUpdtEn(true); this.clearTm = clearTm;
+				this.wdgLnk.perUpdtEn(true); this.tmClearEdit = tmClearEdit;
 			    }
 			    else {
 				this.style.width = (parseInt(this.style.width)+applySz)+'px';
 				if(posOkImg == 2)
 				    this.parentNode.children[1].style.left = (parseInt(this.parentNode.children[1].style.left)+applySz)+'px';
 				okImg.style.visibility = 'hidden';
-				this.wdgLnk.perUpdtEn(false); this.clearTm = 0;
+				this.wdgLnk.perUpdtEn(false); this.tmClearEdit = 0;
 				if(this.cldrDlg) this.onclick();
 			    }
 			    this.parentNode.isModify = on;
@@ -1595,7 +1615,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					if(!ipath.length) return;
 					attrs = new Object();
 					attrs.event = 'ws_BtMenu='+ipath;
-					//console.log("Event="+attrs.event);
 					setWAttrs(this.parentNode.formObj.wdgLnk.addr, attrs);
 					this.parentNode.close();
 				    }
@@ -2440,16 +2459,18 @@ function makeEl( pgBr, inclPg, full, FullTree )
     }
 }
 
-function pwClean( )
+function pwClean( complete )
 {
-    //Periodic update disable
-    this.perUpdtEn(false);
-    //Pages recursively clean
-    for(var i in this.pages) this.pages[i].pwClean();
-    this.pages = new Object();
-    //Widgets recursively clean
-    for(var i in this.wdgs) this.wdgs[i].pwClean();
-    this.wdgs = new Object();
+    if(this.pg)	ntfReg(-1, '', this.addr);
+
+    for(var i in this.pages) this.pages[i].pwClean(complete);
+    for(var i in this.wdgs) this.wdgs[i].pwClean(complete);
+
+    if(complete) {
+	this.perUpdtEn(false);		//Periodic update disable
+	this.pages = new Object()	//Pages recursively clean;
+	this.wdgs = new Object();	//Widgets recursively clean
+    }
 }
 
 function perUpdtEn( en )
@@ -2467,8 +2488,8 @@ function perUpdtEn( en )
 
 function perUpdt( )
 {
-    if(this.attrs['root'] == 'FormEl' && this.place.childNodes.length && this.place.childNodes[0].clearTm &&
-	    (this.place.childNodes[0].clearTm-=prcTm) <= 0)
+    if(this.attrs['root'] == 'FormEl' && this.place.childNodes.length && this.place.childNodes[0].tmClearEdit &&
+	    (this.place.childNodes[0].tmClearEdit-=prcTm) <= 0)
 	this.place.childNodes[0].chEscape();
     else if(this.attrs['root'] == 'Diagram' && (this.updCntr-=prcTm) <= 0) {
 	this.updCntr = parseInt(this.attrs['trcPer']);
@@ -2593,8 +2614,7 @@ function makeUI( callBackRez )
 	if(tmCnt == 0)	modelStyles = servGet('/'+sessId,'com=style');
 
 	modelPer = parseInt(pgNode.getAttribute("per"));
-	if(alrmUpdCnt > 0.5) { alarmSet(parseInt(pgNode.getAttribute("alarmSt"))); alrmUpdCnt = 0; }
-	else alrmUpdCnt += planePer;
+	if((alrmUpdCnt+=planePer) > tmAlrmUpd) { alarmSet(parseInt(pgNode.getAttribute("alarmSt"))); alrmUpdCnt = 0; }
 	cachePgSz   = parseInt(pgNode.getAttribute("cachePgSz"));
 	cachePgLife = parseFloat(pgNode.getAttribute("cachePgLife"));
 	// Check for delete pages
@@ -2625,13 +2645,13 @@ function makeUI( callBackRez )
 		var opPg = masterPage.findOpenPage(prPath);
 		if(opPg && opPg.window && opPg.windowExt && opPg.window.closed) {
 		    servSet(prPath, 'com=pgClose&cacheCntr', '');
-		    opPg.pwClean();
+		    opPg.pwClean(true);
 		    delete opPg.parent.pages[prPath];
 		    continue;
 		}
 		//  Call page
 		pgList.push(prPath);
-		masterPage.callPage(prPath,parseInt(pgNode.childNodes[i].getAttribute('updWdg')));
+		masterPage.callPage(prPath, parseInt(pgNode.childNodes[i].getAttribute('updWdg')));
 	    }
 	tmCnt = parseInt(pgNode.getAttribute('tm'));
     }
@@ -2783,28 +2803,156 @@ var SEC_WR = 0x02;	//Write access
 var SEC_RD = 0x04;	//Read access
 
 //Alarms processing
-function alarmSet(alarm) {
+function alarmSet( alarm ) {
     ch_tp = alarm^mAlrmSt;
 
-    st_alarm = document.getElementById("st_alarm");
-    if(!st_alarm) return;
-    st_alarm_img = st_alarm.childNodes[0];
+    alarmSt = document.getElementById("st_alarm");
+    if(!alarmSt) return;
+    alarmSt_img = alarmSt.childNodes[0];
 
-    if(ch_tp&0xFF || (alarm>>16)&0xFF || !st_alarm_img.style.backgroundColor.length) {
-	alarmLev = alarm&0xFF;
-	st_alarm_img.style.cursor = alarmLev ? 'pointer' : '';
-	st_alarm_img.style.backgroundColor = st_alarm_img.style.backgroundColor.length ? '' :
-	    '#'+(alarmLev?'ff':'00')+(alarmLev?((alarmLev>245)?'0':'')+(255-alarmLev).toString(16):'FF')+'00';
-	st_alarm.title = st_alarm.getAttribute("title1").replace('%1',alarmLev);
+    //Set notify to the alarm
+    for(iNtf = 0; iNtf < 7; iNtf++) {
+	if(notifiers[iNtf] == null) continue;
+
+	if(((newSt=(alarm>>8)&(1<<iNtf)) && notifiers[iNtf].stTag.style.display.length) || (!newSt && !notifiers[iNtf].stTag.style.display.length))
+	    notifiers[iNtf].stTag.style.display = newSt ? "" : "none";
+	if(((newSt=(alarm>>16)&(1<<iNtf)) && notifiers[iNtf].stTag.className == 'inactive') || (!newSt && notifiers[iNtf].stTag.className != 'inactive')) {
+	    notifiers[iNtf].stTag.className = newSt ? '' : 'inactive';
+	    notifiers[iNtf].stTag.style.cursor = newSt ? 'pointer' : '';
+	}
+
+	// Checking and updating the audio tags
+	if(notifiers[iNtf].aTag) {
+	    toPlay = (alarm>>16) & (1<<iNtf);
+	    if(!toPlay && notifiers[iNtf].aTag.getAttribute("src").length) notifiers[iNtf].aTag.src = '';	//disabling the playback by clearing the source
+	    else if(toPlay && (!notifiers[iNtf].aTag.getAttribute("src").length ||
+		    !notifiers[iNtf].aTag.currentTime || (notifiers[iNtf].repDelay >= 0 && notifiers[iNtf].aTag.ended && (notifiers[iNtf].aTag.delay-=Math.max(planePer,tmAlrmUpd)) <= 0))) {
+		//  Requesting the resource data
+		reqRes = "<get mode='resource' tp='"+iNtf+"' tm='"+notifiers[iNtf].queueCurTm+"' wdg='"+notifiers[iNtf].queueCurPath+"'/>";
+		reqRes = servSet("/UI/VCAEngine/"+sessId+"/%2fserv%2falarm", 'com=com', reqRes, false);
+		notifiers[iNtf].queueCurTm = parseInt(reqRes.getAttribute("tm"));
+		notifiers[iNtf].queueCurPath = reqRes.getAttribute("wdg");
+		//mess = reqRes.getAttribute("mess");
+		//lang = reqRes.getAttribute("lang");
+		if(reqRes.textContent.length) {
+		    resTp = reqRes.getAttribute("resTp");
+		    notifiers[iNtf].aTag.src = "data:"+(resTp.length?resTp:"audio/ogg")+";base64,"+reqRes.textContent;
+		    notifiers[iNtf].aTag.play();
+		    notifiers[iNtf].aTag.delay = notifiers[iNtf].repDelay;
+		}
+	    }
+	}
     }
+
+    //Alarm state indicators update
+    // Alarm level icon update
+    if(ch_tp&0xFF || (alarm>>16)&notifiers.ntfSet || !alarmSt_img.style.backgroundColor.length) {
+	alarmLev = alarm&0xFF;
+	alarmSt_img.style.cursor = alarmLev ? 'pointer' : '';
+	alarmSt_img.style.backgroundColor = alarmSt_img.style.backgroundColor.length ? '' :
+	    '#'+(alarmLev?'ff':'00')+(alarmLev?((alarmLev>245)?'0':'')+(255-alarmLev).toString(16):'FF')+'00';
+	alarmSt_img.title = alarmSt.getAttribute("title1").replace('%1',alarmLev);
+    }
+
     mAlrmSt = alarm;
 }
 
-function alarmQuiet() {
-    servSet("/UI/VCAEngine/"+sessId+"/%2fserv%2falarm", "com=com", "<quietance tmpl='255'/>");
+function alarmQuiet( ev, tmpl ) {
+    servSet("/UI/VCAEngine/"+sessId+"/%2fserv%2falarm", "com=com", "<quietance tmpl='"+tmpl+"'/>");
 
     var attrs = new Object();
-    attrs.event = 'ws_alarmLev'; setWAttrs(masterPage.addr, attrs);
+    attrs.event = "ws_"+ev; setWAttrs(masterPage.addr, attrs);
+}
+
+function ntfReg( tp, props, pgCrtor, prior ) {
+    if(tp < 0) {
+	for(iNtf = 0; iNtf < 7; iNtf++)
+	    ntfReg(iNtf, props, pgCrtor, prior);
+	return;
+    }
+
+    if(prior == null)	prior = true;
+    pgPropsQ = new Array();
+
+    //Search for presented notification type
+    if(notifiers[tp] != null) {
+	if(pgCrtor == notifiers[tp].pgCrtor && (props == notifiers[tp].props || !prior)) return;
+	pgPropsQ = notifiers[tp].pgPropsQ;
+	if(pgCrtor != notifiers[tp].pgCrtor) {
+	    // Check the queue for the page already here
+	    for(iQ = 0; iQ != pgPropsQ.length; ++iQ)
+		if(pgPropsQ[iQ].slice(0,pgCrtor.length+1) == (pgCrtor+"\n")) {
+		    if(!props.length) notifiers[tp].pgPropsQ.splice(iQ, 1);
+		    else notifiers[tp].pgPropsQ[iQ] = pgCrtor + "\n" + props;
+		    return;
+		}
+	    if(!props.length) return;
+	    pgPropsQ.push(notifiers[tp].pgProps);
+	}
+	// Removing the notifier for external things
+	if(notifiers[tp].aTag) notifiers[tp].aTag.parentNode.removeChild(notifiers[tp].aTag);
+	if(notifiers[tp].stTag) notifiers[tp].stTag.parentNode.removeChild(notifiers[tp].stTag);
+
+	delete notifiers[tp];
+	notifiers.ntfSet &= ~(1<<tp);
+    }
+
+    //Creation new or replacing present one
+    pgProps = pgCrtor + "\n" + props;
+    if(props.length) ;
+    //Take and place a notificator from the queue
+    else if(pgPropsQ.length) pgProps = pgPropsQ.pop();
+    else return;
+
+    //Initiating the notifier for external things
+    notifiers.ntfSet |= (1<<tp);
+    notifiers[tp] = new Object();
+    notifiers[tp].pgProps = pgProps;
+    notifiers[tp].pgPropsQ = pgPropsQ;
+    notifiers[tp].f_notify = false;
+    notifiers[tp].f_queue = false;
+    notifiers[tp].f_resource = false;
+    notifiers[tp].f_quietanceRet = false;
+    notifiers[tp].repDelay = -1;
+    notifiers[tp].aTag = null;
+    notifiers[tp].stTag = null;
+    notifiers[tp].queueCurTm = 0;
+
+    //Parsing the properties
+    prpLns = pgProps.split('\n');
+    for(iLn = 1, hasFlags = false, ico = name = ""; (!hasFlags || !ico.length || !name.length) && iLn < prpLns.length; iLn++)
+	if(!hasFlags && (fPos=prpLns[iLn].indexOf("flags=")) >= 0) {
+	    if((oPos=prpLns[iLn].indexOf("notify",fPos+6)) >= 0) {
+		notifiers[tp].f_notify = true;
+		notifiers[tp].repDelay = ((ntfChr=prpLns[iLn].charCodeAt(oPos+6)) >= 0x30 && ntfChr <= 0x39) ? Math.max(0,Math.min(100,parseInt(prpLns[iLn].slice(oPos+6)))) : -1;
+	    }
+	    if(prpLns[iLn].indexOf("resource",fPos+6) >= 0)	notifiers[tp].f_resource = true;
+	    if(prpLns[iLn].indexOf("queue",fPos+6) >= 0)	{ notifiers[tp].f_queue = true; if(notifiers[tp].repDelay < 0) notifiers[tp].repDelay = 0; }
+	    if(prpLns[iLn].indexOf("quietanceRet",fPos+6) >= 0)	notifiers[tp].f_quietanceRet = true;
+	}
+	else if(!ico.length && (fPos=prpLns[iLn].indexOf("ico=")) >= 0)   ico = prpLns[iLn].slice(fPos+4);
+	else if(!name.length && (fPos=prpLns[iLn].indexOf("name=")) >= 0) name = prpLns[iLn].slice(fPos+5);
+
+    //Creation the audio tag
+    if(notifiers[tp].f_notify && (notifiers[tp].f_queue || notifiers[tp].f_resource)) {
+	notifiers[tp].aTag = document.createElement("audio");
+	notifiers[tp].aTag.autoplay = true;
+	notifiers[tp].aTag.src = '';
+	//notifiers[tp].aTag.id = "notifierAudioTag"+tp;
+	document.body.appendChild(notifiers[tp].aTag);
+    }
+
+    //Creation the statusbar icons
+    if(masterPage.status) {
+	notifiers[tp].stTag = document.createElement("img");
+	notifiers[tp].stTag.id = "alarmNtf"+tp;
+	notifiers[tp].stTag.title = name.length ? name : "###Notificator %1###".replace("%1",tp);
+	notifiers[tp].stTag.height = (masterPage.status.height-2);
+	notifiers[tp].stTag.src = "/"+MOD_ID+(ico.length?pgCrtor+"?com=res&val="+ico+"&size="+(masterPage.status.height-2):"/img_alarmAlarm");
+	notifiers[tp].stTag.style.display = 'none';
+	notifiers[tp].stTag.onclick = function( ) { alarmQuiet(this.id, (1<<parseInt(this.id.slice(8)))); }
+	masterPage.status.children[0].rows[0].children.st_alarm.appendChild(notifiers[tp].stTag);
+    }
 }
 
 //Call session identifier
@@ -2813,7 +2961,7 @@ for(var i_el = sessId.length-1; i_el >= 0; i_el--)
     if(sessId[i_el].length)
     { sessId = sessId[i_el]; break; }
 
-function styleSet(sid) {
+function styleSet( sid ) {
     servSet("/UI/VCAEngine/"+sessId+"/%2fobj%2fcfg%2fstyle", "com=com", "<set>"+sid+"</set>");
     stTmReload = setTimeout('window.location.reload()', 1000);
 }
@@ -2838,8 +2986,8 @@ window.onresize = function( ) {
 	stTmReload = setTimeout('window.location.reload()', 1000);
 }
 
-var fullUpdCnt = 0;			//Full tree updating counter, for 5 seconds
-var alrmUpdCnt = 0;			//Alarms updating counter, for 0.5 seconds
+var fullUpdCnt = 0;			//Full tree updating counter
+var alrmUpdCnt = 0;			//Alarms updating counter
 var mAlrmSt = -1;			//Current allarm state
 var modelPer = 0;			//Model proc period
 var modelStyles = null;			//Model styles
@@ -2852,13 +3000,14 @@ var cachePgLife = 0;			//Life time of the pages into the cache
 var cachePgSz = 0;			//Maximum number of the pages cache
 var pgCache = new Array();		//Cached pages' data
 var perUpdtWdgs = new Object();		//Periodic updated widgets register
+var notifiers = new Object();		//Notifiers object
+notifiers.ntfSet = 0;
 var masterPage = new pwDescr('', true);	//Master page create
 var stTmID = null;			//Status line timer identifier
 var stTmMain = null;			//Main cycle start time
 var stTmReload = null;			//Main reload timeout at the main window resize
 var wx_scale = 1;			//Main window scale for fit, X axis
 var wy_scale = 1;			//Main window scale for fit, Y axis
-var clearTm = 10;			//Clear time of line edit fields, seconds
 var sesUser = '';			//Session user
 
 mainTmId = setTimeout(makeUI, 100);	//First call init

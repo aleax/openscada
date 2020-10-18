@@ -104,7 +104,7 @@ class Session : public TCntrNode
 	int  alarmStat( );						//Alarm status
 	void alarmQuietance( const string &wpath, uint8_t quit_tmpl, bool ret = false );	//Alarm quietance send
 	//  Notification type <tp> register for no empty <props> else unregister, from the page-creator <pgCrtor>
-	void ntfReg( uint8_t tp, const string &props, const string &pgCrtor );
+	void ntfReg( int8_t tp, const string &props, const string &pgCrtor );
 
 	// Style
 	string stlPropGet( const string &pid, const string &def = "" );
@@ -133,7 +133,7 @@ class Session : public TCntrNode
 	class Notify {
 	    public:
 		//Data
-		enum IntFuncAttrIdxs { IFA_en = 0, IFA_doNtf, IFA_doRes, IFA_res, IFA_mess, IFA_lang };
+		enum IntFuncAttrIdxs { IFA_en = 0, IFA_doNtf, IFA_doRes, IFA_res, IFA_mess, IFA_lang, IFA_resTp, IFA_prcID };
 
 		class QueueIt {
 		    public:
@@ -163,7 +163,7 @@ class Session : public TCntrNode
 		string	props( );
 
 		void ntf( int alrmSt );	//Same notify for the alarm status
-		string ntfRes( unsigned &tm, string &wpath, string &mess, string &lang );	//The notification resource request
+		string ntfRes( unsigned &tm, string &wpath, string &resTp, string &mess, string &lang );	//The notification resource request
 
 		void queueSet( const string &wpath, const string &alrm );
 		void queueQuietance( const string &wpath, uint8_t quitTmpl, bool ret = false );	//Notification quietance send
@@ -174,7 +174,7 @@ class Session : public TCntrNode
 
 	    private:
 		//Methods
-		void commCall( bool doNtf, bool doRes, string &res, const string &mess = "", const string &lang = "" );
+		void commCall( bool doNtf, bool doRes, string &res, string &resTp, const string &mess = "", const string &lang = "" );
 
 		Session *owner( ) const	{ return mOwner; }
 
@@ -193,7 +193,8 @@ class Session : public TCntrNode
 
 		unsigned toDo		:1;	//Need to do some notification doings
 		unsigned alEn		:1;	//Alarm enabled
-		string	comProc;		//Command procedure name
+		string	comProc,		//Command procedure name
+			resStatic;		//Static resource
 
 		vector<QueueIt>	mQueue;
 		int	mQueueCurNtf;

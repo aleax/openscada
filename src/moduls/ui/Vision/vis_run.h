@@ -93,11 +93,11 @@ class VisRun : public QMainWindow
 	class Notify {
 	    public:
 		//Data
-		enum IntFuncAttrIdxs { IFA_en = 0, IFA_doNtf, IFA_doRes, IFA_res, IFA_mess, IFA_lang };
+		enum IntFuncAttrIdxs { IFA_en = 0, IFA_doNtf, IFA_doRes, IFA_res, IFA_mess, IFA_lang, IFA_resTp, IFA_prcID };
 
 		//Methods
 		explicit Notify( ) : tp(-1), comIsExtScript(false),
-		    f_notify(false), f_resource(false), f_queue(false), f_quietanceRet(false), mOwner(NULL), actAlrm(NULL)	{ }
+		    f_notify(false), f_resource(false), f_queue(false), f_quietanceRet(false), delay(0), mOwner(NULL), actAlrm(NULL)	{ }
 		Notify( uint8_t tp, const string &pgProps, VisRun *own );
 		~Notify( );
 
@@ -109,15 +109,15 @@ class VisRun : public QMainWindow
 		string curQueueWdg( );
 
 		void ntf( int alrmSt );	//Same notify for the alarm status
-		string ntfRes( string &mess, string &lang );	//The notification resource request
+		string ntfRes( string &resTp, string &mess, string &lang );	//The notification resource request
 
 		//Attributes
 		string	pgProps;			//Page-creator and its properties
-		vector<string> pgPropsQ;		//Page-creators queue
+		vector<string> pgPropsQ;		//Page-creators queue, for notificators per page
 
 	    private:
 		//Methods
-		void commCall( string &res, const string &mess = "", const string &lang = "" );
+		void commCall( string &res, string &resTp, const string &mess = "", const string &lang = "" );
 
 		VisRun *owner( ) const	{ return mOwner; }
 
@@ -138,8 +138,11 @@ class VisRun : public QMainWindow
 		unsigned alEn		:1;	//Alarm enabled
 		string	comProc;		//Command procedure name
 
-		unsigned mQueueCurTm;
-		string	mQueueCurPath;
+		float	delay;
+		string	resFile;
+
+		unsigned queueCurTm;
+		string	queueCurPath;
 
 		ResMtx	dataM;
 		pthread_cond_t	callCV;
@@ -222,7 +225,7 @@ class VisRun : public QMainWindow
 	int  alarmLev( )					{ return mAlrmSt & 0xFF; }
 	void alarmSet( unsigned alarm );
 	//  Notification type <tp> register for no empty <props> else unregister, from the page-creator <pgCrtor>
-	void ntfReg( uint8_t tp, const string &props, const string &pgCrtor );
+	void ntfReg( int8_t tp, const string &props, const string &pgCrtor, bool prior = true );
 
 	//Public attributes
 	bool winClose;					//Closing window flag
@@ -339,6 +342,7 @@ class VisRun : public QMainWindow
 	bool		alrLevSet;		//For no quietance lamp blinking
 	unsigned	ntfSet;			//Allowed notificators set mask
 	map<uint8_t, Notify*>	mNotify;	//Notificators
+	float		alrmUpdCnt;
 
 	vector<string>	pgList;			//Pages list
 

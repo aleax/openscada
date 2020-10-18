@@ -247,6 +247,9 @@ bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos, b
 		    mainWin()->userSel(val);
 		} else setProperty("userSetVis", QString(val.c_str()));
 	    }
+	    else if(attr.find("notifyVis"+mod->modId()) == 0)
+		mainWin()->ntfReg(s2i(attr.substr(9+mod->modId().size())), val, id(), true);
+	    else if(attr.find("notify") == 0)	mainWin()->ntfReg(s2i(attr.substr(6)), val, id(), false);
 	    else break;
 	    return true;
 	case A_PG_NAME:	setWindowTitle(val.c_str());	break;
@@ -568,6 +571,8 @@ bool RunWdgView::event( QEvent *event )
 RunPageView::RunPageView( const string &iwid, VisRun *mainWind, QWidget* parent, Qt::WindowFlags f ) :
     RunWdgView(iwid, 0, mainWind, parent, f), wx_scale(1), wy_scale(1)
 {
+    if(!mainWind->master_pg) mainWind->master_pg = this;
+
     //resize(50, 50);
     load("");
 
@@ -700,14 +705,14 @@ void RunPageView::closeEvent( QCloseEvent *event )
 	    mainWin()->cntrIfCmd(req);
 	}*/
 
-    //Notificators configuration of the page free
-    for(unsigned iNtf = 0; iNtf < 7; iNtf++) mainWin()->ntfReg(iNtf, "", id());
+    //Freeing the notificators configuration for the page
+    mainWin()->ntfReg(-1, "", id());
 }
 
 void RunPageView::toPgCache( )
 {
-    //Notificators configuration of the page free
-    for(unsigned iNtf = 0; iNtf < 7; iNtf++) mainWin()->ntfReg(iNtf, "", id());
+    //Freeing the notificators configuration for the page
+    mainWin()->ntfReg(-1, "", id());
 }
 
 //*********************************************

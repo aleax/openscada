@@ -30,7 +30,7 @@
 <td> <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
 <td> Движок Среды Визуализации и Управления
 </td>
-<td> 6.5 </td>
+<td> 6.8 </td>
 <td> GPL2 </td>
 <td> ui_VCAEngine.so </td>
 <td> en,uk,ru,de </td>
@@ -646,7 +646,7 @@ event = ev_rez;
 </p>
 <ul><li> Для сервера/движка визуализации, атрибутом "notify{N}" в формате:</li></ul>
 <pre style="white-space: pre-wrap; margin-left: 15px">
-//flags=notify[{DL}][|resource[|queue[|qMergeMess]]];
+//flags=notifyServ[{DL}][|resource[|queue[|qMergeMess]]];
 if(doRes) { Текст команды формирования ресурса. }
 if(doNtf) { Текст команды уведомления. }
 </pre>
@@ -659,32 +659,35 @@ if(doNtf) { Текст команды уведомления. }
 </pre>
 <p>Флаги:
 </p>
-<ul><li> <i>notify[{DL}]</i> — включает уведомление c повтором через время <i>DL</i>, если указано; для <i>DL</i> = 0 повтор производится сразу.</li>
-<li> <i>resource</i> — запрашивать-формировать (принудительно) ресурс уведомления у сервера визуализации, может быть звуковым файлом, текстом или другими данными формирования уведомления.</li>
+<ul><li> <i>notify[{DL}]</i>, <i>notifyServ[{DL}]</i> — включает уведомление c повтором через время <i>DL</i>, если указано; для <i>DL</i> = 0 повтор производится сразу.</li>
+<li> <i>resource</i> — запрашивать-формировать (принудительно) ресурс уведомления у сервера визуализации, может быть звуковым файлом, текстом или другими данными формирования уведомления; но на данное время уведомители в основном ожидают аудио.</li>
 <li> <i>queue</i> — ресурсы уведомления определяются не только по глобальному признаку нарушения и квитации, а и согласно приоритетной очереди источников уведомления-ресурсов. Очередь формируется на стороне сервера визуализации, а для визуализаторов указывается необходимость работы с ней при запросе ресурсов.</li>
 <li> <i>qMergeMess</i> — объединять уведомления в очереди по равенству сообщения.</li>
 <li> <i>quietanceRet</i> — возможность отзыва-возврата квитации визуализатора, т.е. по сути — обратного включения уведомления.</li></ul>
-<p>Переменные обмена:
+<p>Наличие поля "resStatic" включает получение ресурса непосредственно из mime-таблицы или файла, указывается в способ подобный <a href="#Media">примитиву "Медиа"</a>.
+</p><p>Переменные обмена:
 </p>
 <ul><li> <i>en</i>[0,1] — уведомление включить (1) или выключить (0);</li>
 <li> <i>doNtf</i>[0,1] — вызов сценария уведомления;</li>
 <li> <i>doRes</i>[0,1] — вызов сценария формирования ресурса;</li>
 <li> <i>res</i> — содержимое или имя файла с содержимым ресурса, для внешних сценариев;</li>
-<li> <i>mess</i> — сообщение-параметры формирования ресурса и уведомления.</li>
-<li> <i>lang</i> — язык текущего пользователя или системы.</li></ul>
+<li> <i>resTp</i> — тип ресурса, вроде "audio/ogg"; является возвратом и помещается в стандартный выход (для Shell) для <i>doRes</i>;</li>
+<li> <i>mess</i> — сообщение-параметры формирования ресурса и уведомления;</li>
+<li> <i>lang</i> — язык текущего пользователя или системы;</li>
+<li> <i>prcID</i> — уникальный идентификатор процедуры (вроде "ses_AGLKS_ntf2"), в основном для безопасного создания временных файлов.</li></ul>
 <p>Примеры и комментарии к работе типовых способов уведомлений:
 </p>
 <ul><li> Бузер на стороне визуализатора или сервера визуализации:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm||0x02"</li>
 <li> notifyVisVision1 | notify1 = </li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify
+//flags=notify|notifyServ|notifyServ
 if(en) SYS.system("beep -f 1000 -l 1000000 &amp;", true);
 else if((beepPID=SYS.system("pidof beep")).toInt()) SYS.system("kill "+beepPID); </pre>
 <dl><dd><ul><li> notifyVisVision1 | notify1 = </li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30px">
 #!/bin/sh
-#flags=notify
+#flags=notify|notifyServ
 if test $en = 1; then
 	beep -f 1000 -l 1000000 &amp;
 else
@@ -695,12 +698,12 @@ fi </pre>
 <dl><dd><ul><li> alarm = "10|Prm||0x04"</li>
 <li> notify2 | notifyVisVision2 =</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify2
+//flags=notify2|notifyServ2
 if(en) SYS.system("play -q alarm.ogg");</pre>
 <dl><dd><ul><li> notify2 | notifyVisVision2 =</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30px">
 #!/bin/sh
-#flags=notify2
+#flags=notify2|notifyServ2
 if test $en = 1; then play -q alarm.ogg; fi</pre>
 <ul><li> Проигрывание индивидуального, для источника, звукового файла, на стороне визуализатора:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm||0x04|res:al_prm1"</li>
@@ -749,7 +752,7 @@ fi
 <dl><dd><ul><li> alarm = "10|Prm||0x04"</li>
 <li> notify2 = </li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify2|resource
+//flags=notify2|notifyServ2|resource
 if(doRes) res = SYS.fileRead("alarm.ogg");  //Вставить сюда другой метод генерации
 if(doNtf &amp;&amp; en &amp;&amp; res.length) {
   SYS.fileWrite("tmpPlay", res);
@@ -759,7 +762,7 @@ if(doNtf &amp;&amp; en &amp;&amp; res.length) {
 <dl><dd><ul><li> notify2 = </li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30px">
 #!/bin/sh
-#flags=notify2|resource
+#flags=notify2|notifyServ2|resource
 if test $doRes = 1; then cp -f alarm.ogg $res; fi  #Вставить сюда другой метод генерации
 if test $doNtf = 1 -a $en = 1 -a -s $res; then play -q $res; fi
 </pre>
@@ -781,7 +784,7 @@ if test $en = 1 -a -s $res; then play -q $res; fi
 <dl><dd><ul><li> alarm = "10|Prm|Текстовое сообщение синтеза речи|0x04"</li>
 <li> notify2 =</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify2|queue
+//flags=notify2|notifyServ2|queue
 if(doRes &amp;&amp; mess.length) {
  SYS.fileWrite("tmpText", mess);
  SYS.system("text2wave tmpText -o tmpWAV");
@@ -796,7 +799,7 @@ if(doNtf &amp;&amp; en &amp;&amp; res.length) {
 <dl><dd><ul><li> notify2 =</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30px">
 #!/bin/sh
-#flags=notify2|queue
+#flags=notify2|notifyServ2|queue
 if test $doRes = 1 -a "x"&nbsp;!= "x$mess"; then
  echo $mess &gt; tmpText
  text2wave tmpText -o $res

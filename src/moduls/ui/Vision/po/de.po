@@ -4,15 +4,15 @@
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009, 2011.
 # Joan Zimmermann <j.zimmermann@fetron.de>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2019.
+# Roman Savochenko <roman@oscada.org>, 2010-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-21 20:34+0200\n"
+"POT-Creation-Date: 2020-10-18 14:40+0300\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -1807,6 +1807,12 @@ msgstr "Benachrichtigung"
 
 msgid "Language of the notification message"
 msgstr "Sprache der Benachrichtigung"
+
+msgid "Resource stream type"
+msgstr "Ressourcenstromtyp"
+
+msgid "Procedure ID"
+msgstr "Prozedur-ID"
 
 #, c-format
 msgid "Notificator %d"

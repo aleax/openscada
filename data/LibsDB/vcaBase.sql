@@ -58,7 +58,7 @@ The element''s names and their parameters are available in languages: English, U
 
 Author: Roman Savochenko <roman@oscada.org>
 Founded: September 2007
-Version: 2.0.5
+Version: 2.0.6
 License: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','wlb_Main','','Основні елементи','Бібліотека створюється для надання основних елементів користувацького інтерфейсу та містить графічні елементи, які часто затребувано при формуванні користувацького інтерфейсу автоматизації технологічних та загальних процесів. Будується бібліотека на основі примітивів віджетів та мови внутрішнього програмування JavaLikeCalc.
 
@@ -66,7 +66,7 @@ DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','wlb_Main','','�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Засновано: Вересень 2007
-Версія: 2.0.5
+Версія: 2.0.6
 Ліцензія: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','Основные элементы','Библиотека создаётся для предоставления основных элементов пользовательского интерфейса и содержит графические элементы, которые часто востребованы при формировании пользовательского интерфейса автоматизации технологических и общих процессом. Строится библиотека на основе примитивов виджетов и языка внутреннего программирования JavaLikeCalc.
 
@@ -74,7 +74,7 @@ DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','Основны�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Основано: Сентябрь 2007
-Версия: 2.0.5
+Версия: 2.0.6
 Лицензия: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements');
 INSERT INTO VCALibs VALUES('mnEls','Mnemo elements','Provides the mnemonic elements library of the user interface of the industrial automation.
@@ -2189,7 +2189,7 @@ Container of the control panels — container area to include control panels of 
 Under the control panels container placed a button to start the demo mode — mode in which performed periodic switching for representative frames, changing regimes and other operations by a scenario.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.2.1
+Version: 2.3.0
 License: GPLv2',32,'','','','Елемент-кадр слугує базою для створення користувацьких інтерфейсів, пачатково для управління технологічними процесами, заснованими на об''єктах сигналізації (СО).
 
 Коренева сторінка містить чотири області:
@@ -2217,7 +2217,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує базою д�
 Під контейнером панелей управління розташовується кнопка запуску демонстраційного режиму — режиму за яким здійснюється періодичне перемикання показних кадрів, зміна режимів та інших операцій згідно сценарію.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.2.1
+Версія: 2.3.0
 Ліцензія: GPLv2','','Элемент-кадр служит базой для создания пользовательских интерфейсов, начально для управления технологическими процессами, основанными на объектах сигнализации (СО).
 
 Корневая страница содержит четыре области:
@@ -2247,7 +2247,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує базою д�
 Корневая страница интерфейса визуализации ТП, построенного на основе объектов сигнализации.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 2.2.1
+Версия: 2.3.0
 Лицензия: GPLv2','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomW','1024',40,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomH','670',32,'','','','','','','','','');
@@ -11138,100 +11138,53 @@ INSERT INTO wlb_Main_uio VALUES('TextLab','com_text','Parameter: command text (f
 INSERT INTO wlb_Main_uio VALUES('ElCadr','prmStText','Parameter: status text',131077,'',10,'<page>|st_text','','','Параметр: текст статусу','','','Параметр: текст статуса','','','','');
 INSERT INTO wlb_Main_uio VALUES('ElCadr','prmComText','Parameter: text of command',131077,'',14,'<page>|com_text','','','Параметр: текст команди','','','Параметр: текст команды','','','','');
 INSERT INTO wlb_Main_uio VALUES('RootPgSo','notify2','Notification: type 2 (TextSpeech)',131205,'#!/bin/sh
-#flags=queue|qMergeMess
-if test $doRes = 1 -a "x" != "x$mess"; then
- #Specific TTS
- case $lang in
-  ru_*)
-   iconv=$(which iconv)
-   ru_tts=$(which ru_tts)
-   sox=$(which sox)
-   if test "x$ru_tts" != "x" -a "x$iconv" != "x" -a "x$sox" != "x"; then
-    echo "$mess" | $iconv -f $(echo $lang | sed -n "/^[^.]*\.\(.*\)/s//\1/p") -t KOI8-R | $ru_tts -p 0.05 -r 0.4 -s /usr/share/ru_tts/lexicon | $sox -t raw -e signed-integer -b 8 -r 10k -c 1 -v 0.8 - -t wav $res.wav
-   fi
-   ;;
-  *) > $res.wav; ;;
- esac
-
- #Generic TTS for mostly all
- if test ! -s $res.wav; then
-  espeak=$(which espeak)
-  text2wave=$(which text2wave)
-  if test "x$espeak" != "x"; then
-   echo "$mess" | $espeak --stdin -s 130 -v $(echo $lang | sed -n "/\(^[^_]*\).*/s//\1/p") -w $res.wav
-  elif test "x$text2wave" != "x"; then
-   case $lang in
-    uk_*) langFull="ukrainian"; ;;
-    ru_*) langFull="russian"; ;;
-    en_*) langFull="english"; ;;
-    #!!!! Append here needs
-   esac
-   echo $mess > $res.text; text2wave $res.text -o $res.wav -eval "(language_$langFull)"
-  fi
- fi
-
- #Encode before for that less to transfer
- if test -s $res.wav; then
-  oggenc=$(which oggenc)
-  if test "x$oggenc" != "x"; then oggenc -Q $res.wav -o $res;
-  else mv -f $res.wav $res; fi
-  rm -f $res.wav $res.text
- fi
-fi',0,'','','','Повідомлення: тип 2 (Мова)','','','Уведомление: тип 2 (Речь)','','','','');
-INSERT INTO wlb_Main_uio VALUES('RootPgSo','notifyVisVision0','Notification: Vision type 0 (Light)',131205,'//name=Light
-//ico=aLight',0,'','','','Повідомлення: Vision тип 0 (Світло)','','','Уведомление: Vision тип 0 (Свет)','','','','');
-INSERT INTO wlb_Main_uio VALUES('RootPgSo','notifyVisVision1','Notification: Vision type 1 (Buzzer)',131205,'//flags=notify
-//name=Buzzer
-//ico=aAlarm
-if(en) {
-	if((beep=SYS.system("which beep")).length)
-		SYS.system(beep.parse(0,"\n")+" -f 1000 -l 100000 &\necho $! > aAlarm.pid", true);
-	else if((play=SYS.system("which play")).length)
-		SYS.system(play.parse(0,"\n")+" -q -n synth 1000000 sin 1000 gain -20 &\necho $! > aAlarm.pid", true);
-}
-else SYS.system("if test -s aAlarm.pid; then kill $(cat aAlarm.pid); rm aAlarm.pid; fi");',0,'','','','Повідомлення: Vision тип 1 (Бузер)','','','Уведомление: Vision тип 1 (Бузер)','','','','');
-INSERT INTO wlb_Main_uio VALUES('RootPgSo','notifyVisVision2','Notification: Vision type 2 (TextSpeech)',131205,'#!/bin/sh
-#flags=notify2|queue
+#flags=notify2|queue|qMergeMess
 #name=Text speech
 #ico=aSound
-play=$(which play)
-if test $en = 1 -a "x$play" != "x"; then
- #Try the resource create here by no that provide by VCAEngine
- if test ! -s $res -a "x$mess" != "x" -a "x$lang" != "x"; then
-  #Specific TTS
-  case $lang in
-   ru_*)
-    iconv=$(which iconv)
-    ru_tts=$(which ru_tts)
-    sox=$(which sox)
-    if test "x$ru_tts" != "x" -a "x$iconv" != "x" -a "x$sox" != "x"; then
-     echo "$mess" | $iconv -f UTF-8 -t $(echo $lang | sed -n "/^[^.]*\.\(.*\)/s//\1/p") | $ru_tts -p 0.05 -r 0.4 -s /usr/share/ru_tts/lexicon | $sox -t raw -e signed-integer -b 8 -r 10k -c 1 -v 0.8 - -t wav $res
-    fi
-    ;;
-  esac
 
-  #Generic TTS for mostly all
-  if test ! -s $res; then
-   espeak=$(which espeak)
-   text2wave=$(which text2wave)
-   if test "x$espeak" != "x"; then
-    echo "$mess" | $espeak --stdin -s 130 -v $(echo $lang | sed -n "/\(^[^_]*\).*/s//\1/p") -w $res
-   elif test "x$text2wave" != "x"; then
-    case $lang in
-     uk_*) langFull="ukrainian"; ;;
-     ru_*) langFull="russian"; ;;
-     en_*) langFull="english"; ;;
-     #!!!! Append here needs
-    esac
-    echo $mess > $res.text; text2wave $res.text -o $res -eval "(language_$langFull)"
-   fi
-  fi
- fi
+if test $doNtf = 1 -a $en = 1 -a -s $res; then
+	play=$(which play)
+	if test "x$play" != "x"; then play -q $res; fi
 
- #Same play for the allowed resource
- if test -s $res; then play -q $res; fi
- rm -f $res
-fi',0,'','','','Повідомлення: Vision тип 2 (Мова)','','','Уведомление: Vision тип 2 (Речь)','','','','');
+elif test $doRes = 1 -a "x" != "x$mess"; then
+	#Specific TTS
+	case $lang in
+		ru_*)
+			iconv=$(which iconv)
+			ru_tts=$(which ru_tts)
+			sox=$(which sox)
+			if test "x$ru_tts" != "x" -a "x$iconv" != "x" -a "x$sox" != "x"; then
+				echo "$mess" | $iconv -f $(echo $lang | sed -n "/^[^.]*\.\(.*\)/s//\1/p") -t KOI8-R | $ru_tts -p 0.05 -r 0.4 -s /usr/share/ru_tts/lexicon | $sox -t raw -e signed-integer -b 8 -r 10k -c 1 -v 0.8 - -t wav $res.wav
+			fi
+		;;
+		*) > $res.wav; ;;
+	esac
+
+	#Generic TTS for mostly all
+	if test ! -s $res.wav; then
+		espeak=$(which espeak)
+		text2wave=$(which text2wave)
+		if test "x$espeak" != "x"; then
+			echo "$mess" | $espeak --stdin -s 130 -v $(echo $lang | sed -n "/\(^[^_]*\).*/s//\1/p") -w $res.wav
+		elif test "x$text2wave" != "x"; then
+			case $lang in
+				uk_*) langFull="ukrainian"; ;;
+				ru_*) langFull="russian"; ;;
+				en_*) langFull="english"; ;;
+				#!!!! Append here need languages
+			esac
+			echo $mess > $res.text; text2wave $res.text -o $res.wav -eval "(language_$langFull)"
+		fi
+	fi
+
+	#Encode before for that less to transfer
+	if test -s $res.wav; then
+		oggenc=$(which oggenc)
+		if test "x$oggenc" != "x"; then oggenc -Q $res.wav -o $res; echo "audio/ogg";
+		else mv -f $res.wav $res; echo "audio/wav"; fi
+		rm -f $res.wav $res.text
+	fi
+fi',0,'','','','Повідомлення: тип 2 (Мова)','','','Уведомление: тип 2 (Речь)','','','','');
 INSERT INTO wlb_Main_uio VALUES('ElViewGraph','enForce','Force enabling',131072,'0',8,'','','','Примусове включення','','','Принудительное включение','','','','');
 INSERT INTO wlb_Main_uio VALUES('grpGraph','sclWin','Scale: by window',131072,'0',0,'','','trnd1','Масштаб: вікном','','','Масштаб: окном','','','','');
 INSERT INTO wlb_Main_uio VALUES('grph_panel','sclWin','Scale by window',131072,'0',14,'<page>|sclWin','','','Масштаб вікном','','','Масштаб окном','','','','');
@@ -11341,6 +11294,35 @@ INSERT INTO wlb_Main_uio VALUES('alarmsStReport','doc','Document',131205,'',2,'<
 INSERT INTO wlb_Main_uio VALUES('calendar','selTime','Selected time',131073,'0|',8,'','','','Обраний час','','','Выбранное время','','','','');
 INSERT INTO wlb_Main_uio VALUES('anShow','pDscr','Parameter: description',131077,'',10,'Parameter|DESCR','','','','','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('anShow1','pDscr','Parameter: description',131077,'',10,'Parameter|DESCR','','','','','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('RootPgSo','notify0','Notification: type 0 (Light)',131205,'//name=Light
+//ico=aLight',0,'','','','Повідомлення: тип 0 (Світло)','','','Уведомление: тип 0 (Свет)','','','','');
+INSERT INTO wlb_Main_uio VALUES('RootPgSo','notify1','Notification: type 1 (Buzzer)',131205,'//flags=notify|resource
+//name=Buzzer
+//ico=aAlarm
+//resStatic=ntf1
+if(doNtf) {
+	if(en) {
+		if(res.length) {
+			if((play=SYS.system("which play")).length) {
+				SYS.fileWrite(prcID+".res", res);
+				SYS.system(play.parseLine(0)+" -q "+prcID+".res &\necho $! > "+prcID+".pid", true);
+			}
+		}
+		else {
+			if((beep=SYS.system("which beep")).length)
+				SYS.system(beep.parse(0,"\n")+" -f 1000 -l 100000 &\necho $! > "+prcID+".pid", true);
+			else if((play=SYS.system("which play")).length)
+				SYS.system(play.parse(0,"\n")+" -q -n synth 1000000 sin 1000 gain -20 &\necho $! > "+prcID+".pid", true);
+		}
+	} else SYS.system("if test -s "+prcID+".pid; then kill $(cat "+prcID+".pid); rm "+prcID+".pid "+prcID+".res; fi");
+
+}
+else if(doRes && (sox=SYS.system("which sox")).length) {
+	SYS.system(sox.parseLine(0)+" -n -r 8000 "+prcID+".ogg synth 60 sin 1000");
+	res = SYS.fileRead(prcID+".ogg");
+	SYS.system("rm "+prcID+".ogg");
+	return "audio/ogg";
+}',0,'','','','Повідомлення: тип 1 (Бузер)','','','Уведомление: тип 1 (Бузер)','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_doc_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO wlb_doc_incl VALUES('docRepDay','doc','/wlb_doc/wdg_doc/wdg_doc','perm;geomZ;tmpl;doc;bTime;time;process;n;vCur;aCur;aSize;',2);
 INSERT INTO wlb_doc_incl VALUES('docRepMonth','doc','/wlb_doc/wdg_doc/wdg_doc','perm;geomZ;tmpl;doc;bTime;time;process;n;vCur;aCur;aSize;',2);
@@ -20270,7 +20252,7 @@ if(play_value) {
 		stepTm = args.stepTm;
 		stepCur = args.stepCur;
 	}
-}','','',200,'path;name;dscr;active;geomW;geomH;evProc;backColor;',1565888623);
+}','','',200,'path;name;dscr;active;geomW;geomH;evProc;backColor;',1603039326);
 INSERT INTO wlb_Main VALUES('ElViewCadr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAAx1AAAMdQEteJR1AAAC
 xUlEQVRoge2W0Y4URRSG///06eqZRQYkqCuBSQDNSEJcHsBrXsInID6P4Y32QhZ3DKLZENZ1iRPR
 XZmNLHZXV53yYokX63IBw1Crqe+yulPn/6r6dBU3Nu5vbk7x32Q0Oqubm9O7d78ej8e5w7w2u7u7

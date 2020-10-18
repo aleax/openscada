@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-19 09:13+0300\n"
+"POT-Creation-Date: 2020-10-18 14:22+0300\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
-"Last-Translator: irina\n"
+"Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -738,9 +738,8 @@ msgstr "Quelle"
 msgid "Type"
 msgstr "Typ"
 
-#, fuzzy
 msgid "Image;Animation;Video;Audio"
-msgstr "Bild;Animation;Full Video"
+msgstr "Bild;Animation;Video;Audio"
 
 msgid "Map areas"
 msgstr "Kartenbereiche"
@@ -1535,6 +1534,12 @@ msgstr "Benachrichtigung"
 
 msgid "Language of the notification message"
 msgstr "Sprache der Benachrichtigung"
+
+msgid "Resource stream type"
+msgstr "Ressourcenstromtyp"
+
+msgid "Procedure ID"
+msgstr "Prozedur-ID"
 
 msgid "Opened. "
 msgstr "Geöffnet. "

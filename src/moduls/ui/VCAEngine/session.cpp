@@ -307,8 +307,8 @@ bool Session::openUnreg( const string &iid )
 
     mess_debug(nodePath().c_str(), _("Unregistering/closing the page '%s'."), iid.c_str());
 
-    //Check for notifiers unregister of the page
-    for(unsigned iNtf = 0; iNtf < 7; iNtf++) ntfReg(iNtf, "", iid);
+    //Freeing the notificators configuration for the page
+    ntfReg(-1, "", iid);
 
     return rez;
 }
@@ -457,8 +457,14 @@ void Session::alarmQuietance( const string &wpath, uint8_t quit_tmpl, bool ret )
 	iN->second->queueQuietance(wpath, quit_tmpl, ret);
 }
 
-void Session::ntfReg( uint8_t tp, const string &props, const string &pgCrtor )
+void Session::ntfReg( int8_t tp, const string &props, const string &pgCrtor )
 {
+    if(tp < 0) {
+	for(unsigned iNtf = 0; iNtf < 7; iNtf++)
+	    ntfReg(iNtf, props, pgCrtor);
+	return;
+    }
+
     vector<string> pgPropsQ;
 
     MtxAlloc res(mAlrmRes, true);
@@ -473,7 +479,7 @@ void Session::ntfReg( uint8_t tp, const string &props, const string &pgCrtor )
 	    for(vector<string>::iterator iQ = iN->second->pgPropsQ.begin(); iQ != iN->second->pgPropsQ.end(); ++iQ)
 		if(TSYS::strLine(*iQ,0) == pgCrtor) {
 		    if(props.empty()) iN->second->pgPropsQ.erase(iQ);
-		    else *iQ = pgCrtor+"\n"+props;
+		    else *iQ = pgCrtor + "\n" + props;
 		    return;
 	    }
 	    if(props.empty()) return;
@@ -484,15 +490,12 @@ void Session::ntfReg( uint8_t tp, const string &props, const string &pgCrtor )
     }
 
     //New or replaced creation
-    if(props.size()) {
-	mNotify[tp] = new Notify(tp, pgCrtor+"\n"+props, this);
-	mNotify[tp]->pgPropsQ = pgPropsQ;
-    }
+    if(props.size())		mNotify[tp] = new Notify(tp, pgCrtor+"\n"+props, this);
     //Take and place a notificator from the queue
-    else if(pgPropsQ.size()) {
-	mNotify[tp] = new Notify(tp, pgPropsQ.back(), this); pgPropsQ.pop_back();
-	mNotify[tp]->pgPropsQ = pgPropsQ;
-    }
+    else if(pgPropsQ.size())	{ mNotify[tp] = new Notify(tp, pgPropsQ.back(), this); pgPropsQ.pop_back(); }
+    else return;
+
+    mNotify[tp]->pgPropsQ = pgPropsQ;
 }
 
 void *Session::Task( void *icontr )
@@ -671,13 +674,13 @@ void Session::cntrCmdProc( XMLNode *opt )
 		MtxAlloc resAl(mAlrmRes, true);
 		map<uint8_t,Notify*>::iterator iN = mNotify.find(s2i(opt->attr("tp")));
 		unsigned tm = strtoul(opt->attr("tm").c_str(), NULL, 10);
-		string res, mess, lang, wdg = opt->attr("wdg");
-		if(iN != mNotify.end()) res = TSYS::strEncode(iN->second->ntfRes(tm,wdg,mess,lang), TSYS::base64);
-		opt->setAttr("tm", u2s(tm))->setAttr("wdg", wdg)->setAttr("mess", mess)->setAttr("lang", lang)->setText(res);
+		string res, resTp, mess, lang, wdg = opt->attr("wdg");
+		if(iN != mNotify.end()) res = TSYS::strEncode(iN->second->ntfRes(tm,wdg,resTp,mess,lang), TSYS::base64);
+		opt->setAttr("tm", u2s(tm))->setAttr("wdg", wdg)->setAttr("resTp", resTp)->setAttr("mess", mess)->setAttr("lang", lang)->setText(res);
 	    }
 	}
-	else if(ctrChkNode(opt,"quietance",permit(),owner().c_str(),grp().c_str(),SEC_WR) ||
-		ctrChkNode(opt,"quittance",permit(),owner().c_str(),grp().c_str(),SEC_WR))
+	else if(ctrChkNode(opt,"quietance",permit(),owner().c_str(),grp().c_str(),SEC_RD) ||
+		ctrChkNode(opt,"quittance",permit(),owner().c_str(),grp().c_str(),SEC_RD))
 	    alarmQuietance(opt->attr("wdg"), ~s2i(opt->attr("tmpl")), s2i(opt->attr("ret")));
 	return;
     }
@@ -805,15 +808,17 @@ Session::Notify::Notify( uint8_t itp, const string &ipgProps, Session *iown ) : 
 	if(!hasLang && !lCnt && iLn.find("#!") == 0) { hasLang = comIsExtScript = true; continue; }
 	else if(!hasFlags && (size_t)(fPos=iLn.find("flags=")) != string::npos) {
 	    for(fPos += 6; (iOpt=TSYS::strParse(iLn,0,"|",&fPos)).size(); )
-		if(iOpt.compare(0,6,"notify") == 0) {
+		if(iOpt.compare(0,10,"notifyServ") == 0) {
 		    f_notify = true;
-		    repDelay = (iOpt.size() > 6) ? vmax(0,vmin(100,atoi(iOpt.c_str()+6))) : -1;
+		    repDelay = (iOpt.size() > 10) ? vmax(0,vmin(100,atoi(iOpt.c_str()+10))) : -1;
 		}
 		else if(iOpt == "resource")	f_resource = true;
 		else if(iOpt == "queue")	{ f_queue = true; if(repDelay < 0) repDelay = 0; }
 		else if(iOpt == "qMergeMess")	f_qMergeMess = true;
 	    hasFlags = true;
 	}
+	else if(resStatic.empty() && (size_t)(fPos=iLn.find("resStatic=")) != string::npos)
+	    resStatic = iLn.substr(fPos+10);
 
     //The command procedure prepare
     if(comIsExtScript) {
@@ -840,6 +845,8 @@ Session::Notify::Notify( uint8_t itp, const string &ipgProps, Session *iown ) : 
 	funcIO.ioIns(new IO("res",_("Resource stream"),IO::String,IO::Output), IFA_res);
 	funcIO.ioIns(new IO("mess",_("Notification message"),IO::String,IO::Default), IFA_mess);
 	funcIO.ioIns(new IO("lang",_("Language of the notification message"),IO::String,IO::Default), IFA_lang);
+	funcIO.ioIns(new IO("resTp",_("Resource stream type"),IO::String,IO::Return), IFA_resTp);
+	funcIO.ioIns(new IO("prcID",_("Procedure ID"),IO::String,IO::Default), IFA_prcID);
 	try { comProc = SYS->daq().at().at("JavaLikeCalc").at().compileFunc("JavaScript", funcIO, props()); }
 	catch(TError &er) {
 	    mess_err(owner()->nodePath().c_str(), _("Error function '%s' of the notificator: %s"), funcIO.id().c_str(), er.mess.c_str());
@@ -889,15 +896,22 @@ void Session::Notify::ntf( int ialSt )
     alSt = ialSt;
 }
 
-string Session::Notify::ntfRes( unsigned &itm, string &wpath, string &mess, string &lang )
+string Session::Notify::ntfRes( unsigned &itm, string &wpath, string &resTp, string &mess, string &lang )
 {
     string rez;
 
     if((lang=SYS->security().at().usrAt(owner()->user()).at().lang()).empty()) lang = Mess->lang();
 
-    // Just the resource doing request
-    if(!f_queue && f_resource) commCall(false, true, rez, "", lang);
+    if(resStatic.size())
+	try {
+	    if((rez=TSYS::strDecode(((AutoHD<SessWdg>)owner()->nodeAt(TSYS::strLine(pgProps,0),1)).at().resourceGet(resStatic,&resTp),TSYS::base64)).size())
+		return rez;
+	} catch(TError) { }
 
+    // Just the resource doing request
+    if(!f_queue && f_resource) commCall(false, true, rez, resTp, "", lang);
+
+    // Queue processing
     if(f_queue) {
 	unsigned tm = itm;
 	itm = owner()->calcClk();
@@ -915,12 +929,12 @@ string Session::Notify::ntfRes( unsigned &itm, string &wpath, string &mess, stri
 	if(iQ >= 0) {
 	    wpath = mQueue[iQ].path;
 	    mess = mQueue[iQ].mess;
-	    //  Get the resource direct
+	    //  Get the resource directly
 	    if(!mQueue[iQ].tpArg.empty())
 		rez = TSYS::strDecode(((AutoHD<SessWdg>)mod->nodeAt(TSYS::strParse(mQueue[iQ].path,0,";"))).at().
-				resourceGet(mQueue[iQ].tpArg), TSYS::base64);
+				resourceGet(mQueue[iQ].tpArg,&resTp), TSYS::base64);
 	    //  Call the resource producing procedure
-	    else commCall(false, true, rez, mQueue[iQ].mess, lang);
+	    else commCall(false, true, rez, resTp, mQueue[iQ].mess, lang);
 	    mQueueCurNtf = iQ;
 	} else { mQueueCurNtf = -1; wpath = mess = ""; }
     }
@@ -1001,7 +1015,7 @@ void Session::Notify::queueQuietance( const string &wpath, uint8_t quitTmpl, boo
     pthread_mutex_unlock(&dataM.mtx());
 }
 
-void Session::Notify::commCall( bool doNtf, bool doRes, string &res, const string &mess, const string &lang )
+void Session::Notify::commCall( bool doNtf, bool doRes, string &res, string &resTp, const string &mess, const string &lang )
 {
     if(comProc.empty()) return;
 
@@ -1015,9 +1029,19 @@ void Session::Notify::commCall( bool doNtf, bool doRes, string &res, const strin
 	int hdRes = res.size() ? open(resFile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, SYS->permCrtFiles()) : -1;
 	if(hdRes >= 0) { write(hdRes, res.data(), res.size()); close(hdRes); }
 	// Prepare environment and execute the external script
-	system(("en="+i2s(alEn)+" doNtf="+i2s(doNtf)+" doRes="+i2s(doRes)+" res="+resFile+
-		" mess=\""+TSYS::strEncode(mess,TSYS::SQL)+"\" lang=\""+TSYS::strEncode(lang,TSYS::SQL)+"\" ./"+wcomProc).c_str());
-	if(doRes) {
+	string cmdSeq = "prcID=ses_"+owner()->id()+"_ntf"+i2s(tp)+" en="+i2s(alEn)+" doNtf="+i2s(doNtf)+" doRes="+i2s(doRes)+" res="+resFile+" resTp="+resTp+
+		" mess=\""+TSYS::strEncode(mess,TSYS::SQL)+"\" lang=\""+TSYS::strEncode(lang,TSYS::SQL)+"\" ./"+wcomProc;
+	if(!doRes) system(cmdSeq.c_str());
+	else {
+	    FILE *fp = popen(cmdSeq.c_str(), "r");
+	    if(fp) {
+		char buf[STR_BUF_LEN];
+		for(int r_cnt = 0; (r_cnt=fread(buf,1,sizeof(buf),fp)) || !feof(fp); )
+		    resTp.append(buf, r_cnt);
+		pclose(fp);
+		resTp = TSYS::strLine(resTp, 0);
+	    }
+
 	    hdRes = open(resFile.c_str(), O_RDONLY);
 	    if(hdRes >= 0) {
 		char buf[STR_BUF_LEN];
@@ -1043,12 +1067,17 @@ void Session::Notify::commCall( bool doNtf, bool doRes, string &res, const strin
 	funcV.setS(IFA_res, res);
 	funcV.setS(IFA_mess, mess);
 	funcV.setS(IFA_lang, lang);
+	funcV.setS(IFA_resTp, resTp);
+	funcV.setS(IFA_prcID, "ses_"+owner()->id()+"_ntf"+i2s(tp));
 
 	//  Call to processing
 	funcV.calc();
 
 	//  Get outputs
-	if(doRes) res = funcV.getS(IFA_res);
+	if(doRes) {
+	    res = funcV.getS(IFA_res);
+	    resTp = funcV.getS(IFA_resTp);
+	}
     }
 }
 
@@ -1063,17 +1092,17 @@ void *Session::Notify::Task( void *intf )
 	ntf.toDo = false;
 	pthread_mutex_unlock(&ntf.dataM.mtx());
 
-	string ntfRes, ntfMess, ntfLang;
+	string ntfRes, ntfResTp, ntfMess, ntfLang;
 	unsigned delayCnt = 0;
 	do {
 	    if(delayCnt) { TSYS::sysSleep(1); delayCnt--; continue; }
 
 	    //  Get the resources for the notification
 	    if((ntf.f_queue || ntf.f_resource) && ntf.alEn)
-		ntfRes = ntf.ntfRes(ntf.mQueueCurTm, ntf.mQueueCurPath, ntfMess, ntfLang);
+		ntfRes = ntf.ntfRes(ntf.mQueueCurTm, ntf.mQueueCurPath, ntfResTp, ntfMess, ntfLang);
 
 	    //  Same notification
-	    ntf.commCall(true, false, ntfRes, ntfMess, ntfLang);
+	    ntf.commCall(true, false, ntfRes, ntfResTp, ntfMess, ntfLang);
 
 	    delayCnt = ntf.repDelay;
 	} while((ntf.repDelay >= 0 || ntf.f_queue) && ntf.alEn && !TSYS::taskEndRun());

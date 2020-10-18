@@ -30,7 +30,7 @@
 <td> <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a> </td>
 <td> Operation user interface (WEB)
 </td>
-<td> 5.1 </td>
+<td> 5.6 </td>
 <td> GPL2 </td>
 <td> ui_WebVision.so </td>
 <td> en,uk,ru,de </td>
@@ -131,7 +131,7 @@
 <ul><li> On the right side:
 <ul><li> the current user, on whose behalf the VCA interface is executed — by a clicking this user can be changed, typing of the new username and password;</li>
 <li> the current interface style, which can be changed selecting need one in the combobox;</li>
-<li> the current alarm status by a lamp with color related to the alarm level; blinks at the alarm appearing or changing; pressing on the lamp you may quiet the alarm.</li></ul></li>
+<li> the current alarm status by a lamp with color related to the alarm level and the active notifiers' icons; blinks at the alarm appearing or changing; pressing on the lamp you may quiet the alarm in whole or the desired type of the notification, pressing the correspond notifier icon near.</li></ul></li>
 <li> In the main field of the status line various messages and assistance messages are displayed.</li></ul>
 <p>The module supports multi-language which one enabled by the <a href="../Program_manual.html#ConfigTr" title="Special:MyLanguage/Documents/Program manual">dynamic messages translation of OpenSCADA</a>. The gotten language passes by the module <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a> and detects in way and by the order:
 </p>
@@ -141,7 +141,7 @@
 <li> Generic language of the OpenSCADA process.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:619px;"><a class="image" href="http://oscada.org/wiki/File:HTTP_auth.png"><img class="thumbimage" height="302" src="../files/HTTP_auth.png" width="617" /></a>  <div class="thumbcaption">Fig.1. Authentication page.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:620px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_connect.png"><img class="thumbimage" height="458" src="../files/WebVision_wvis_connect.png" width="618" /></a>  <div class="thumbcaption">Fig.2. Connection or creation of a new session of the execution project of the VCA.</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1039px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run.png"><img class="thumbimage" height="787" src="../files/WebVision_wvis_run.png" width="1037" /></a>  <div class="thumbcaption">Fig.3. Main execution window.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1039px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run.png"><img class="thumbimage" height="785" src="../files/WebVision_wvis_run.png" width="1037" /></a>  <div class="thumbcaption">Fig.3. Main execution window.</div></div></div></div>
 <h2><span class="mw-headline" id="Presentation_of_the_basic_elements_.28primitives.29"><span class="mw-headline-number">3</span> <span id="Primitives" title="#Primitives">Presentation of the basic elements (primitives)</span></span></h2>
 <p>This version of the module does not implement all the shapes of the primitives laid by the project. In general, the project provides the following primitives:
 </p>
@@ -226,6 +226,11 @@
 <th> Name </th>
 <th> Appointment
 </th></tr>
+<tr>
+<td> notify{N}, notifyVisWebVision{N} (page) </td>
+<td> Notification: type {N} </td>
+<td> Specifies a notifier and a procedure of the notification resource obtaining according to the <a href="../Modules/VCAEngine.html#Alarms" title="Special:MyLanguage/Modules/VCAEngine">"Signalling (Alarms)" conception</a>.
+</td></tr>
 <tr>
 <td> keepAspectRatio (main page) </td>
 <td> Keep aspect ratio on scale </td>
