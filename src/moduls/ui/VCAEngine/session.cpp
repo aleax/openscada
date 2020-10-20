@@ -676,8 +676,8 @@ void Session::cntrCmdProc( XMLNode *opt )
 		opt->setAttr("tm", u2s(tm))->setAttr("wdg", wdg)->setAttr("mess", mess)->setAttr("lang", lang)->setText(res);
 	    }
 	}
-	else if(ctrChkNode(opt,"quietance",permit(),owner().c_str(),grp().c_str(),SEC_WR) ||
-		ctrChkNode(opt,"quittance",permit(),owner().c_str(),grp().c_str(),SEC_WR))
+	else if(ctrChkNode(opt,"quietance",permit(),owner().c_str(),grp().c_str(),SEC_RD) ||
+		ctrChkNode(opt,"quittance",permit(),owner().c_str(),grp().c_str(),SEC_RD))
 	    alarmQuietance(opt->attr("wdg"), ~s2i(opt->attr("tmpl")), s2i(opt->attr("ret")));
 	return;
     }

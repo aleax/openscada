@@ -974,10 +974,10 @@ void ConfApp::stHistCall( )
     QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     sizePolicy.setVerticalStretch(10);
     tb->setSizePolicy(sizePolicy);
-    tb->setMinimumSize(600,300);
+    tb->setMinimumSize(600, 300);
     dlg.edLay->addWidget(tb, 0, 0);
     string textv;
-    for(int i_e = stMess.size()-1; i_e >=0; i_e--) textv += stMess[i_e]+"\n";
+    for(int iE = stMess.size()-1; iE >= 0; iE--) textv += stMess[iE]+"\n";
     tb->setPlainText(textv.c_str());
     dlg.exec();
 }
@@ -2284,8 +2284,8 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 	    return;
 	}
 	//Add and update present
-	for(unsigned i_e = 0; i_e < req.childSize(); i_e++) {
-	    XMLNode *chEl = req.childGet(i_e);
+	for(unsigned iE = 0; iE < req.childSize(); iE++) {
+	    XMLNode *chEl = req.childGet(iE);
 	    // Prepare branch patch
 	    string br_path = grpId;
 	    if(chEl->attr("id").size()) br_path.append(chEl->attr("id")); else br_path.append(chEl->text());
@@ -2323,16 +2323,16 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 	//Delete no present
 	if(upTree) {
 	    //CtrTree->blockSignals(true);
-	    for(unsigned iIt = 0, i_e; iIt < (unsigned)i->childCount(); ) {
-		for(i_e = 0; i_e < req.childSize(); i_e++) {
+	    for(unsigned iIt = 0, iE; iIt < (unsigned)i->childCount(); ) {
+		for(iE = 0; iE < req.childSize(); iE++) {
 		    // Prepare branch patch
 		    string br_path = grpId;
-		    if(req.childGet(i_e)->attr("id").size()) br_path.append(req.childGet(i_e)->attr("id"));
-		    else br_path.append(req.childGet(i_e)->text());
+		    if(req.childGet(iE)->attr("id").size()) br_path.append(req.childGet(iE)->attr("id"));
+		    else br_path.append(req.childGet(iE)->text());
 		    br_path = TSYS::strEncode(br_path,TSYS::PathEl);
 		    if(i->child(iIt)->text(2) == (path+"/"+br_path).c_str())	break;
 		}
-		if(i_e >= req.childSize()) { delete i->takeChild(iIt); continue; }
+		if(iE >= req.childSize()) { delete i->takeChild(iIt); continue; }
 		iIt++;
 	    }
 	    //CtrTree->blockSignals(false);
@@ -2601,7 +2601,7 @@ void ConfApp::checkBoxStChange( int stat )
 	    req.setName("set")->setText(val);
 	    if(cntrIfCmd(req))	mod->postMess(req.attr("mcat"), req.text(), TUIMod::Error, this);
 	}
-    } catch(TError &err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
+    } catch(TError &err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
 
     //Redraw
     pageRefresh(CH_REFR_TM);
@@ -2631,9 +2631,9 @@ void ConfApp::buttonClicked( )
 
 	    mess_info(mod->nodePath().c_str(), _("%s| Pressed down '%s'!"),
 		wUser->user().toStdString().c_str(), (selPath+"/"+button->objectName().toStdString()).c_str());
-	    if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this); return; }
+	    if(cntrIfCmd(req)) mod->postMess(req.attr("mcat"), req.text(), TUIMod::Error, this);
 	}
-    } catch(TError &err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
+    } catch(TError &err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
 
     //Redraw
     pageRefresh(CH_REFR_TM);
@@ -2689,9 +2689,9 @@ void ConfApp::combBoxActivate( const QString& ival )
 		    wUser->user().toStdString().c_str(), (selPath+"/"+path).c_str(), req.text().c_str(), val.c_str());
 
 	    req.setName("set")->setText(val);
-	    if(cntrIfCmd(req)) mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this);// return; }
+	    if(cntrIfCmd(req)) mod->postMess(req.attr("mcat"), req.text(), TUIMod::Error, this);
 	}
-    } catch(TError &err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
+    } catch(TError &err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
 
     //Redraw
     pageRefresh(CH_REFR_TM);
@@ -3169,8 +3169,8 @@ void ConfApp::applyButton( )
 
 	XMLNode n_el("set");
 	n_el.setAttr("path", selPath+"/"+path)->setText(sval);
-	if(cntrIfCmd(n_el)) { mod->postMess(n_el.attr("mcat"),n_el.text(),TUIMod::Error,this); return; }
-    } catch(TError &err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
+	if(cntrIfCmd(n_el)) mod->postMess(n_el.attr("mcat"), n_el.text(), TUIMod::Error, this);
+    } catch(TError &err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
 
     //Redraw only for changing into same this widget
     pageRefresh(CH_REFR_TM);

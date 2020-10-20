@@ -1,3 +1,20 @@
+2020-10-20 Roman 0.9.2.2
+- FIX:LibsDB.OscadaLibs: The DAQ-template base.initConsAssignTrs some improved in detection duple connections.
+- FIX:data/openscada-proj.in: Fixed in packing big crashreports.
+- FIX:DAQ: DAQ parameters appended in checking the parameter type on interstation copying for single parameters.
+- !!!:FIX:Transport: The function TTransportIn::assTrO() of processing input initiative connections complete revised
+	to make new connection necessarily created as a new output transport,
+	then preventing true finishing the present closed but not freed output transports.
+    FIX: The service "/log/log" limited in it processing for time STD_WAIT_TM (5 seconds) for very many and big requests.
+    FIX:Sockets,SSL: The default timeouts returned to "10:1".
+- FIX:Archive.DBArch: The parameter "Grouping parameters into single table" was set by default.
+- FIX:UI.VCAEngine: Source files listing of the primitive Media appended for "mp3;ogg;wav;ogv;mp4".
+    FIX: The operations of the quietance by the service request "<quietance path='%2fserv%2falarm' />"
+	allowed for all by setting the reading permition.
+- FIX:UI.Vision: Fixed in local filesystem URLs processing for MediaSource of Phonon.
+    FIX: Temporary files of loaded from the mime table data of the types "Fill Video" of the primitive "Media" are set to remove.
+
+
 2020-09-21 Roman 0.9.2.1
 - !:FIX:LibsDB.OscadaLibs: DevLib.{DNP3,IEC62056} fixed in processing the output transport object placed as an attribute,
     but that allows to set only for Object, so EVAL was used here.

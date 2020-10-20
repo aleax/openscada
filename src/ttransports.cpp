@@ -800,43 +800,37 @@ void TTransportIn::pushLogMess( const string &vl )
 string TTransportIn::assTrO( const string &addr )
 {
     MtxAlloc resN(assTrRes, true);
-    int trFor = -1;
-    //Find proper for replace and clean up stopped transports
+    //Removing already freed connections
     for(int iAss = 0; iAss < (int)mAssTrO.size(); iAss++) {
-	bool isFree = mAssTrO[iAss].freeStat();
-	if(!isFree && mAssTrO[iAss].at().startStat()) continue;
-	if(!isFree && trFor < 0) { trFor = iAss; continue; }
-	if(!isFree) {
-	    string oTrId = mAssTrO[iAss].at().id();
-	    mAssTrO[iAss].free();
-	    try { owner().outDel(oTrId); }
-	    catch(TError &er) {
-		mAssTrO[iAss] = owner().outAt(oTrId);
-		mess_sys(TMess::Error, _("Error deletion the node: %s"), er.mess.c_str());
-		continue;
-	    }
+	if(mAssTrO[iAss].at().startStat()) continue;
+	// Try to disconnect and remove
+	string oTrId = mAssTrO[iAss].at().id();
+	mAssTrO[iAss].free();
+	try {
+	    owner().outDel(oTrId);
+	    mAssTrO.erase(mAssTrO.begin()+iAss);
+	    iAss--;
+	} catch(TError &er) {
+	    mAssTrO[iAss] = owner().outAt(oTrId);
+	    mess_sys(TMess::Error, _("Error removing the assigned node/connection: %s"), er.mess.c_str());
 	}
-	mAssTrO.erase(mAssTrO.begin()+iAss);
-	iAss--;
     }
 
     //Create new assigned transport
-    if(trFor < 0) {
-	string assTrNm = "inAss"+id()+"_0";
-	while(owner().outPresent(assTrNm)) assTrNm = TSYS::strLabEnum(assTrNm);
-	owner().outAdd(assTrNm);
-	mAssTrO.push_back(owner().outAt(assTrNm));
-	trFor = mAssTrO.size()-1;
-    }
-    mAssTrO[trFor].at().setAddr(addr);
-    mAssTrO[trFor].at().setName("");
-    mAssTrO[trFor].at().setDscr("");
-    mAssTrO[trFor].at().clearConPrm();
-    mAssTrO[trFor].at().modifGClr();
-    try{ mAssTrO[trFor].at().start(); }
-    catch(TError &er) { mess_sys(TMess::Error, _("Error deletion the node: %s"), er.mess.c_str()); }
+    string assTrID = "inAss"+id()+"_0";
+    while(owner().outPresent(assTrID)) assTrID = TSYS::strLabEnum(assTrID);
+    owner().outAdd(assTrID);
+    mAssTrO.push_back(owner().outAt(assTrID));
 
-    return mAssTrO[trFor].at().id();
+    mAssTrO.back().at().setAddr(addr);
+    mAssTrO.back().at().setName("");
+    mAssTrO.back().at().setDscr("");
+    mAssTrO.back().at().clearConPrm();
+    mAssTrO.back().at().modifGClr();
+    try{ mAssTrO.back().at().start(); }
+    catch(TError &er) { mess_sys(TMess::Error, _("Error connection the new assigned node: %s"), er.mess.c_str()); }
+
+    return mAssTrO.back().at().id();
 }
 
 TVariant TTransportIn::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
@@ -939,10 +933,12 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/log/log") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD)) {
 	    MtxAlloc res(mLogRes, true);
-	    for(int iL = mLog.size()-1; iL >= 0; iL--) {
+	    time_t stTm = time(NULL);
+	    for(int iL = mLog.size()-1; iL >= 0 && (time(NULL)-stTm) <= STD_WAIT_TM; iL--) {
 		int off = 0;
 		int64_t itTm   = s2ll(TSYS::strLine(mLog[iL],0,&off));
 		string  itDscr = TSYS::strLine(mLog[iL], 0, &off);
+		//!!!! Can be long for big data
 		opt->setText(opt->text() + "[" + atm2s(itTm/1000000,"%Y-%m-%dT%H:%M:%S")+"."+i2s(itTm%1000000)+"] " +
 		    itDscr + ((off<(int)mLog[iL].size())?"\n"+TSYS::strDecode(mLog[iL].substr(off),TSYS::Bin,"<text>"):"") + "\n\n");
 	    }
@@ -1308,10 +1304,12 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/log/log") {
 	if(ctrChkNode(opt,"get",R_R___,"root",STR_ID,SEC_RD)) {
 	    MtxAlloc res(mLogRes, true);
-	    for(int iL = mLog.size()-1; iL >= 0; iL--) {
+	    time_t stTm = time(NULL);
+	    for(int iL = mLog.size()-1; iL >= 0 && (time(NULL)-stTm) <= STD_WAIT_TM; iL--) {
 		int off = 0;
 		int64_t itTm   = s2ll(TSYS::strLine(mLog[iL],0,&off));
 		string  itDscr = TSYS::strLine(mLog[iL], 0, &off);
+		//!!!! Can be long for big data
 		opt->setText(opt->text() + "[" + atm2s(itTm/1000000,"%Y-%m-%dT%H:%M:%S")+"."+i2s(itTm%1000000)+"] " +
 		    itDscr + ((off<(int)mLog[iL].size())?"\n"+TSYS::strDecode(mLog[iL].substr(off),TSYS::Bin,"<text>"):"") + "\n\n");
 	    }
