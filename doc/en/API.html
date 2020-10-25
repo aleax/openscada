@@ -263,14 +263,14 @@ Information variables of the program:
 <li> <i>int64_t tm_beg, tm_end, tm_per, tm_pnt, cycleLost, lagMax, consMax;</i> — statistic variables of the task execution.</li></ul>
 <p><b>Templates/definitions:</b>
 </p>
-<ul><li> <i>USER_FILE_LIMIT</i> — The limit to files size for user's loading (1 MB).</li>
-<li> <i>USER_ITS_LIMIT</i> — Creating user items limit, like to array items (1000000).</li>
-<li> <i>STR_BUF_LEN</i> — Standard length of string buffers (10000).</li>
-<li> <i>NSTR_BUF_LEN</i> — Standard length of string buffers, for numbers (100). </li>
-<li> <i>STD_WAIT_DELAY</i> — Standard quantum of the waiting time cycles (100 milliseconds).</li>
-<li> <i>STD_CACHE_LIM</i> — Standard cache limit (100).</li>
-<li> <i>STD_WAIT_TM</i> — Standard interval of the event waiting (10 milliseconds).</li>
-<li> <i>STD_INTERF_TM</i> — Timeout, maximum time, waiting for the interface reaction (5 seconds).</li>
+<ul><li> <i>USER_FILE_LIMIT</i> — Loading and processing files limit into the userspace (1048576 bytes).</li>
+<li> <i>USER_ITS_LIMIT</i> — Creating user items limit, like to array items (1000000 items).</li>
+<li> <i>STR_BUF_LEN</i> — Length of string buffers (10000 symbols).</li>
+<li> <i>NSTR_BUF_LEN</i> — Length of string buffers for numbers (100 symbols). </li>
+<li> <i>STD_CACHE_LIM</i> — Standard caches limit (100 items).</li>
+<li> <i>OSCD_WAIT_DELAY</i> — Standard quantum of the waiting time cycles (0.1 seconds).</li>
+<li> <i>STD_WAIT_TM</i> — Standard timeouts length (5 seconds).</li>
+<li> <i>STD_INTERF_TM</i> — Maximum time of waiting for the interface reaction (7 seconds).</li>
 <li> <i>SERV_TASK_PER</i> — Service task period (10 seconds)</li>
 <li> <i>BUF_ARCH_NM</i> — The archive buffer name ("&lt;buffer&gt;").</li>
 <li> <i>ALRM_ARCH_NM</i> — The alarms table name ("&lt;alarms&gt;").</li>
@@ -280,7 +280,7 @@ Information variables of the program:
 <li> <i>vmax (a,b)</i> — Definition of the maximum value.</li></ul>
 <p><b>Public methods:</b>
 </p>
-<ul><li> <i>TSYS( int argi, char **argb, char **env );</i> — The initializing constructor.</li>
+<ul><li> <i>TSYS( int argi, char **argb, char **env );</i> — The initialisation constructor.</li>
 <li> <i>bool isRunning( );</i> — Sign of the station running state — executing the main threaded module or waiting the stop signal.</li>
 <li> <i>bool isFinalKill( );</i> — Sign "The final killing of". It is used for forced disconnection of blocked objects on the the final stage of shutdown.</li>
 <li> <i>int stopSignal( );</i> — The return code in the case of system shutdown. Can be used as a sign of "System shutdown" of the various subsystems. </li>
@@ -345,6 +345,7 @@ Information variables of the program:
 <li> <i>static long HZ( );</i> — Time of the system teak  of the CPU.</li>
 <li> <i>void taskCreate( const string &amp;path, int priority, void *(*start_routine)(void *), void *arg, int wtm = 5, pthread_attr_t *pAttr = NULL, bool *startSt = NULL );</i> — Create task (thread) with id <i>path</i>, <i>priority</i> (-1...99), task's function <i>start_routine</i> and it argument <i>arg</i>, and also wait for user's code start by flag <i>startSt</i>.</li>
 <li> <i>void taskDestroy( const string &amp;path, bool *endrunCntr = NULL, int wtm = 5, bool noSignal = false );</i> — Destroy task with id <i>path</i>, start control flag <i>startCntr</i>. Use <i>noSignal</i> for exclude signal <i>SIGALRM</i> send to the task.</li>
+<li> <i>void taskSendSIGALRM( const string &amp;path );</i> — Sending the termination signal "ALARM" to a task with id <i>path</i>.</li>
 <li> <i>double taskUtilizTm( const string &amp;path, bool max = false );</i> — Utilization of CPU time, in seconds, for task <i>path</i> or it's maximum <i>max</i>.</li>
 <li> <i>static bool taskEndRun( );</i> — Check for the task endrun by signal <i>SIGUSR1</i>.</li>
 <li> <i>static const STask&amp; taskDescr( );</i> — Get reference to the task's descriptor.</li>
@@ -1149,7 +1150,8 @@ Structure of template links (class — TPrmTempl::Impl::SLnk):
 </p>
 <ul><li> <i>BothPrmAttrId</i> — combining the parameter and the attribute ID.</li>
 <li> <i>OnlyPrmId</i> — only the parameter ID.</li>
-<li> <i>OnlyAttrId</i> — only the attribute ID.</li></ul>
+<li> <i>OnlyAttrId</i> — only the attribute ID.</li>
+<li> <i>AllCntrPrmAttrId</i> — all controller, parameter and attribute ID.</li></ul>
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>int subVer( );</i> — Subsystem's version.</li>
@@ -1600,6 +1602,7 @@ External hosts mode (enum — ExtHost::Mode):
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>TTransportOut( const string &amp;id, const string &amp;db, TElem *el );</i> — Initializing constructor.</li>
+<li> <i>virtual bool isNetwork( );</i> — The sign — "The transport is network one", what is specified by the timeouts in seconds.</li>
 <li> <i>string id( );</i> — Transport's Id.</li>
 <li> <i>string workId( );</i> — Full ID including the ID of the module.</li>
 <li> <i>string name( );</i> — Transport name.</li>
@@ -1618,7 +1621,7 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>void setName( const string &amp;inm );</i> — Setting the name of transport.</li>
 <li> <i>void setDscr( const string &amp;idscr );</i> — Setting the description of transport.</li>
 <li> <i>void setAddr( const string &amp;addr );</i> — Setting the address of transport.</li>
-<li> <i>virtual void setTimings( const string &amp;vl );</i> — Setting the transport timeouts.</li>
+<li> <i>virtual void setTimings( const string &amp;vl, bool isDef = false );</i> — Setting the transport timeouts, as default one for <i>isDef</i>.</li>
 <li> <i>virtual void setAttempts( unsigned short vl );</i> — Setting the connection attempts.</li>
 <li> <i>void setConPrm( const string &amp;nm, const TVariant &amp;vl );</i> — Setting the connection parameter <i>nm</i> to value <i>vl</i>.</li>
 <li> <i>void clearConPrm( );</i> — Clearing the connection parameters.</li>
@@ -1972,6 +1975,7 @@ Parameter's type (enum — IO::Type):
 <li> <i>bool blk( );</i> — The sign — "Blocking of the parameters' changes of the function".</li>
 <li> <i>bool mdfChk( );</i> — The sign — "To check attributes to modify".</li>
 <li> <i>bool isChangedProg( bool clear = false );</i> — The sign — "The program changing" with it clearing by <i>clear</i>.</li>
+<li> <i>bool isCalc( );</i> — The sign — "The function calculation".</li>
 <li> <i>string user( );</i> — User on whose behalf the function is executed.</li>
 <li> <i>string lang( );</i> — Language on whose the function is executed.</li>
 <li> <i>const string &amp;vfName( );</i> — Name of the values' object.</li>

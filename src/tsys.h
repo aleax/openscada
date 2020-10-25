@@ -28,19 +28,20 @@
 #define PACKAGE_SITE	"http://oscada.org"
 
 //Other global constants
-#define OBJ_ID_SZ	"20"	// Typical object's ID size. Warning, the size can cause key limit on MySQL like DB.
-#define OBJ_NM_SZ	"100"	// Typical object's NAME size.
-#define ARCH_ID_SZ	"20"	// Size of the archive identifier,
-				// !!!! Must be related to Archive.FSArch identifier size of the archive to store in the files
 #define USER_FILE_LIMIT	1048576	// Loading and processing files limit into the userspace
 #define USER_ITS_LIMIT	1000000	// Creating user items limit, like to array items
 #define STR_BUF_LEN	10000	// Length of string buffers (no string class)
-#define NSTR_BUF_LEN	100	// Length of string buffers for number
-#define STD_WAIT_DELAY	100	// Standard wait dalay (ms)
+#define NSTR_BUF_LEN	100	// Length of string buffers for numbers
 #define STD_CACHE_LIM	100	// Standard caches limit
-#define STD_WAIT_TM	5	// Standard timeouts length (s), and interface wait for long
-#define STD_INTERF_TM	7	// Interface wait for long (s)
-#define SERV_TASK_PER	10	// Service task period
+#define OSCD_WAIT_DELAY	0.1	// Standard quantum of the waiting time cycles, seconds
+#define STD_WAIT_TM	5	// Standard timeouts length, seconds
+#define STD_INTERF_TM	7	// Maximum time of waiting for the interface reaction, seconds
+#define SERV_TASK_PER	10	// Service task period, seconds
+
+#define OBJ_ID_SZ	"20"	//!!!!(to v1.0) Left for the compatibility
+#define OBJ_NM_SZ	"100"	//!!!!(to v1.0) Left for the compatibility
+#define ARCH_ID_SZ	"70"	//!!!!(to v1.0) Left for the compatibility
+#define STD_WAIT_DELAY	100	//!!!!(to v1.0) Left for the compatibility
 
 #define BUF_ARCH_NM	"<buffer>"
 #define ALRM_ARCH_NM	"<alarms>"
@@ -80,6 +81,13 @@ using std::vector;
 
 namespace OSCADA
 {
+
+//Global configurable Limits
+extern uint8_t	limObjID_SZ;	//[20..50] ID size of the OpenSCADA objects.
+extern uint8_t	limObjNm_SZ;	//[100...200] NAME size of the OpenSCADA objects.
+extern uint8_t	limArchID_SZ;	//[50...90] ID size of the value archive objects, limObjID_SZ + 1.5*limObjID_SZ.
+
+
 //*************************************************
 //* TSYS					  *
 //*************************************************
@@ -248,6 +256,7 @@ class TSYS : public TCntrNode
 	// Tasks control
 	void taskCreate( const string &path, int priority, void *(*start_routine)(void *), void *arg, int wtm = 5, pthread_attr_t *pAttr = NULL, bool *startSt = NULL );
 	void taskDestroy( const string &path, bool *endrunCntr = NULL, int wtm = 5, bool noSignal = false, pthread_cond_t *cv = NULL );
+	void taskSendSIGALRM( const string &path );
 	double taskUtilizTm( const string &path, bool max = false );
 	static bool taskEndRun( );		// Check for the task endrun by signal SIGUSR1
 	static const STask& taskDescr( );	// Get the current task control structure
@@ -384,10 +393,11 @@ class TSYS : public TCntrNode
 	// Control interface functions
 	static void ctrListFS( XMLNode *nd, const string &fsBase, const string &fileExt = "" );	//Inline file system browsing
 
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+
 	//Public attributes
 	AutoHD<TModule>	mainThr;	//A module to call into the main thread
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
     protected:
 	//Protected methods

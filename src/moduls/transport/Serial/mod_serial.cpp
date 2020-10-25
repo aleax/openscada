@@ -55,7 +55,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.4.3"
+#define MOD_VER		"2.5.1"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov (2016)")
 #define DESCRIPTION	_("Provides transport based on the serial interfaces.\
  It is used for data exchanging via the serial interfaces of the type RS232, RS485, GSM and similar.")
@@ -475,7 +475,7 @@ void TTrIn::start( )
 
     TTransportIn::start();
 
-    if(logLen()) pushLogMess(_("Started-connected"));
+    if(logLen()) pushLogMess(_("Connected"));
 }
 
 void TTrIn::stop( )
@@ -497,7 +497,7 @@ void TTrIn::stop( )
 
     TTransportIn::stop();
 
-    if(logLen()) pushLogMess(_("Stopped-disconnected"));
+    if(logLen()) pushLogMess(_("Disconnected"));
 }
 
 void *TTrIn::Task( void *tr_in )
@@ -800,7 +800,7 @@ TTrOut::TTrOut(string name, const string &idb, TElem *el) :
     mMdmMode(false), mMdmDataMode(false), mRTSfc(false), mRTSlvl(false), mRTSEcho(false), mI2C(false), mSPI(false)
 {
     setAddr("/dev/ttyS0:19200:8E2");
-    setTimings("640:6");
+    setTimings("640:6", true);
 }
 
 TTrOut::~TTrOut( )	{ }
@@ -876,19 +876,22 @@ bool TTrOut::cfgChange( TCfg &co, const TVariant &pc )
     if(co.name() == "ADDR") {
 	//Times adjust
 	int speed = s2i(TSYS::strParse(co.getS(),1,":"));
-	if(TSYS::strParse(addr(),4,":").size()) setTimings("5000:1000");
+	if(TSYS::strParse(addr(),4,":").size()) setTimings("5000:1000", true);
 	else if(speed) {
 	    float symbMlt = TRegExp("^.+\\/ttyS\\d+$").test(TSYS::strParse(co.getS(),0,":")) ? 1 : 3;
 	    setTimings(i2s((1024*11*1000)/speed)+":"+r2s(symbMlt*11e4/(float)speed,2,'f')+
-			":"+TSYS::strParse(timings(),2,":")+":"+TSYS::strParse(timings(),3,":")+":"+TSYS::strParse(timings(),4,":"));
+			":"+TSYS::strParse(timings(),2,":")+":"+TSYS::strParse(timings(),3,":")+":"+TSYS::strParse(timings(),4,":"), true);
 	}
     }
 
     return TTransportOut::cfgChange(co, pc);
 }
 
-void TTrOut::setTimings( const string &vl )
+void TTrOut::setTimings( const string &vl, bool isDef )
 {
+    if((isDef && !mDefTimeouts) || vl == mTimings) return;
+    else if(!isDef) mDefTimeouts = false;
+
     int wReqTm = vmax(1, vmin(10000,s2i(TSYS::strParse(vl,0,":"))));
     string charTm = TSYS::strParse(vl, 1, ":");
     float wCharTm = vmax(0.01, vmin(1e4,s2r(charTm)));
@@ -904,7 +907,7 @@ void TTrOut::setTimings( const string &vl )
 
     respSymbTmMax = 0;
 
-    modif();
+    if(isDef) modif();
 }
 
 void TTrOut::start( int tmCon )
@@ -923,7 +926,7 @@ void TTrOut::start( int tmCon )
 	// Lock device for all serial transports
 	if(!(isLock=mod->devLock(mDevPort))) throw TError(nodePath().c_str(),_("The device '%s' is using now."),mDevPort.c_str());
 
-	mess_debug(nodePath().c_str(), _("Starting."));
+	mess_debug(nodePath().c_str(), _("Connecting."));
 
 	// Serial port open
 	//  O_NONBLOCK is used for prevent function open() hang on several USB->RS485 converters
@@ -1114,7 +1117,7 @@ void TTrOut::start( int tmCon )
 
     TTransportOut::start();
 
-    if(logLen()) pushLogMess(_("Started-connected"));
+    if(logLen()) pushLogMess(_("Connected"));
 }
 
 void TTrOut::stop( )
@@ -1122,7 +1125,7 @@ void TTrOut::stop( )
     MtxAlloc res(reqRes(), true);
     if(!runSt) return;
 
-    mess_debug(nodePath().c_str(), _("Stopping."));
+    mess_debug(nodePath().c_str(), _("Disconnecting."));
 
     if(mMdmDataMode) {
 	TTr::writeLine(fd, mdmExit(), true);
@@ -1146,7 +1149,7 @@ void TTrOut::stop( )
 
     TTransportOut::stop();
 
-    if(logLen()) pushLogMess(_("Stopped-disconnected"));
+    if(logLen()) pushLogMess(_("Disconnected"));
 }
 
 void TTrOut::check( )
@@ -1169,7 +1172,7 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
 
     MtxAlloc res(reqRes(), true);
 
-    if(!runSt) throw TError(nodePath().c_str(),_("Transport is not started!"));
+    if(!runSt) throw TError(nodePath().c_str(),_("Transport is not connected!"));
 
     int wReqTm = s2i(TSYS::strParse(timings(),0,":",&off));
     wReqTm = time ? time : wReqTm;
@@ -1186,7 +1189,7 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
     float wRtsDelay2 = 1e-3*s2r(TSYS::strParse(timings(),0,":",&off));
 
     if(wKeepAliveTm > 0 && !notStopOnProceed() && (TSYS::curTime()-mKeepAliveLstTm) > wKeepAliveTm*1000000) {
-	mess_debug(nodePath().c_str(), _("Restart by KeepAliveTm %gs."), wKeepAliveTm);
+	mess_debug(nodePath().c_str(), _("Reconnect by KeepAliveTm %gs."), wKeepAliveTm);
 	stop();
 	start();
 	mKeepAliveLstTm = TSYS::curTime();
@@ -1410,8 +1413,8 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
 	    "    conn - maximum time of waiting the connecting response, in milliseconds;\n"
 	    "    symbol - maximum time of one symbol, used for the frame end detection, in milliseconds;\n"
 	    "    NextReqMult - next request's multiplicator to the <symbol> time, 4 by default;\n"
-	    "    KeepAliveTm - keep alive timeout to restart the transport, in seconds;\n"
-	    "                  use the value < 0 for stopping the transport after missing response at each request;\n"
+	    "    KeepAliveTm - keep alive timeout to reconnect the transport, in seconds;\n"
+	    "                  use the value < 0 for disconnecting the transport after missing response at each request;\n"
 	    "    rtsDelay1 - delay between the transmitter activation with RTS signal and start up of the transmission, in milliseconds;\n"
 	    "    rtsDelay2 - delay between the transmitting and disconnecting the transmitter with RTS signal, in milliseconds."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/notStopOnProceed",_("Do not disconnect at processing"),RWRWR_,"root",STR_ID,2,"tp","bool", "help",

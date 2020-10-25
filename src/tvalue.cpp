@@ -469,21 +469,31 @@ string TVal::setArch( const string &nm )
     string rez_nm = nm, n_nm, a_nm;
     //Make archive name
     if(rez_nm.empty()) {
-	if(SYS->archive().at().autoIdMode() == TArchiveS::OnlyPrmId) rez_nm = owner().nodeName();
-	else if(SYS->archive().at().autoIdMode() == TArchiveS::OnlyAttrId) rez_nm = name();
+	if(SYS->archive().at().autoIdMode() == TArchiveS::OnlyPrmId) 		rez_nm = owner().nodeName();
+	else if(SYS->archive().at().autoIdMode() == TArchiveS::OnlyAttrId)	rez_nm = name();
+	else if(SYS->archive().at().autoIdMode() == TArchiveS::BothPrmAttrId)	rez_nm = string(owner().nodeName())+"_"+name();
 	else {
+	    rez_nm = name();
+	    for(TCntrNode *cNd = nodePrev(true); cNd && (rez_nm.size()+string(cNd->nodeName()).size()+1) <= limArchID_SZ; cNd = cNd->nodePrev(true)) {
+		rez_nm = string(cNd->nodeName()) + "_" + rez_nm;
+		if(dynamic_cast<TController*>(cNd)) break;
+	    }
+	}
+	if(rez_nm.size() > limArchID_SZ) rez_nm = rez_nm.substr(rez_nm.size()-limArchID_SZ);
+	/*{
 	    n_nm = owner().nodeName();
 	    a_nm = n_nm+"_"+name();
 	    if(a_nm.size() > 20) a_nm = (n_nm.substr(0,n_nm.size()-n_nm.size()*(a_nm.size()-19)/21)+"_"+name()).substr(0,20);
 	    rez_nm = a_nm;
-	}
+	}*/
     }
     a_nm = rez_nm;
     for(int p_cnt = 2; SYS->archive().at().valPresent(rez_nm); p_cnt++) {
 	AutoHD<TVal> dattr = SYS->archive().at().valAt(rez_nm).at().srcPAttr();
 	if(!dattr.freeStat() && dattr.at().DAQPath() == DAQPath()) break;
 	rez_nm = a_nm + i2s(p_cnt);
-	if((int)rez_nm.size() > s2i(ARCH_ID_SZ)) rez_nm = a_nm.substr(0,a_nm.size()-(rez_nm.size()-s2i(ARCH_ID_SZ)))+i2s(p_cnt);
+	if((int)rez_nm.size() > limArchID_SZ)
+	    rez_nm = a_nm.substr(0,a_nm.size()-(rez_nm.size()-limArchID_SZ)) + i2s(p_cnt);
     }
     //Create new archive
     rez_nm = SYS->archive().at().valAdd(rez_nm);

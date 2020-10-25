@@ -82,7 +82,7 @@ class VFileArch
 	    unsigned char	hgrid :1;	//Hard griding flag (reserved)
 	    unsigned char	hres  :1;	//High resolution value time (reserved)
 	    unsigned char	vtpExt:3;	//Value type extension (int16, int32, int64, float(4), double(8))
-	    char		reserve[14];	//Reserved
+	    char		archive_add[14];//Value archive name addition
 	    char		term;		//Header terminator (0x55)
 	};
 
@@ -217,13 +217,13 @@ class ModVArch: public TVArchivator
 	bool filePrmGet( const string &anm, string *archive, TFld::Type *vtp, int64_t *abeg, int64_t *aend, int64_t *aper );
 
 	// Export archive data
-	void expArch(const string &arch_nm, time_t beg, time_t end, const string &file_tp, const string &file_nm);
+	void expArch( const string &arch_nm, time_t beg, time_t end, const string &file_tp, const string &file_nm );
 
     public:
 	//Methods
 	bool	chkANow;
 
-	MtxString	infoTbl;
+	MtxString infoTbl;
 
     protected:
 	//Methods
@@ -234,6 +234,7 @@ class ModVArch: public TVArchivator
     private:
 	//Methods
 	TVArchEl *getArchEl( TVArchive &arch );
+	string getArchiveID( const VFileArch::FHead &head, const string &fNm );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes

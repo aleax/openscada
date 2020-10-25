@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"3.1.1"
+#define MOD_VER		"3.2.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2 are supported.")
@@ -208,7 +208,7 @@ string TSocketIn::getStatus( )
 {
     string rez = TTransportIn::getStatus();
 
-    if(!startStat() && !stErr.empty())	rez += _("Error starting: ") + stErr;
+    if(!startStat() && !stErr.empty())	rez += _("Error connecting: ") + stErr;
     else if(startStat()) {
 	rez += TSYS::strMess(_("Connections %d, opened %d, last %s, closed by the limit %d. Traffic in %s, out %s. "),
 	    connNumb, clId.size(), atm2s(lastConn()).c_str(), clsConnByLim, TSYS::cpct2str(trIn).c_str(), TSYS::cpct2str(trOut).c_str());
@@ -269,7 +269,7 @@ void TSocketIn::start( )
 
     TTransportIn::start();
 
-    if(logLen()) pushLogMess(_("Started-connected"));
+    if(logLen()) pushLogMess(_("Connected"));
 }
 
 void TSocketIn::stop( )
@@ -286,7 +286,7 @@ void TSocketIn::stop( )
 
     TTransportIn::stop();
 
-    if(logLen()) pushLogMess(_("Stopped-disconnected"));
+    if(logLen()) pushLogMess(_("Disconnected"));
 }
 
 unsigned TSocketIn::forksPerHost( const string &sender )
@@ -425,7 +425,7 @@ void *TSocketIn::Task( void *sock_in )
 	struct  timeval tv;
 	fd_set  rd_fd;
 	while(!s.endrun) {
-	    tv.tv_sec  = 0; tv.tv_usec = STD_WAIT_DELAY*1000;
+	    tv.tv_sec  = 0; tv.tv_usec = OSCD_WAIT_DELAY*1000000;
 	    FD_ZERO(&rd_fd); FD_SET(BIO_get_fd(abio,NULL), &rd_fd);
 
 	    int kz = select(BIO_get_fd(abio,NULL)+1,&rd_fd,NULL,NULL,&tv);
@@ -511,7 +511,7 @@ void *TSocketIn::ClTask( void *s_inf )
     if(BIO_do_handshake(s.bio) <= 0) {
 	if(BIO_should_retry(s.bio))
 	    while(BIO_should_retry(s.bio) && !s.s->endrunCl)
-	    { BIO_do_handshake(s.bio); TSYS::sysSleep(STD_WAIT_DELAY*1e-3); }
+	    { BIO_do_handshake(s.bio); TSYS::sysSleep(OSCD_WAIT_DELAY); }
 	else {
 	    if(ERR_peek_last_error()) {
 		ERR_error_string_n(ERR_peek_last_error(), err, sizeof(err));
@@ -542,7 +542,7 @@ void *TSocketIn::ClTask( void *s_inf )
 	do {
 	    int kz = 1;
 	    if(!SSL_pending(ssl)) {
-		tv.tv_sec  = 0; tv.tv_usec = STD_WAIT_DELAY*1000;
+		tv.tv_sec  = 0; tv.tv_usec = OSCD_WAIT_DELAY*1000000;
 
 		unsigned poolPrt = 0;
 		if((actPrts=s.s->prtInit(prot_in,s.sock,s.sender)))
@@ -811,7 +811,7 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 TSocketOut::TSocketOut( string name, const string &idb, TElem *el ) : TTransportOut(name, idb, el), mAttemts(1)
 {
     setAddr("localhost:10045");
-    setTimings("10:1");
+    setTimings("10:1", true);
 }
 
 TSocketOut::~TSocketOut( )	{ }
@@ -830,13 +830,16 @@ string TSocketOut::getStatus( )
     return rez;
 }
 
-void TSocketOut::setTimings( const string &vl )
+void TSocketOut::setTimings( const string &vl, bool isDef )
 {
-    if(vl == mTimings)	return;
+    if((isDef && !mDefTimeouts) || vl == mTimings) return;
+    else if(!isDef) mDefTimeouts = false;
+
     mTmCon = vmax(1, vmin(60000,(int)(s2r(TSYS::strParse(vl,0,":"))*1e3)));
     mTmNext = vmax(1, vmin(60000,(int)(s2r(TSYS::strParse(vl,1,":"))*1e3)));
     mTimings = TSYS::strMess("%g:%g", (1e-3*mTmCon), (1e-3*mTmNext));
-    modif();
+
+    if(!isDef) modif();
 }
 
 void TSocketOut::setAttempts( unsigned short vl )
@@ -1078,7 +1081,7 @@ void TSocketOut::start( int tmCon )
     if(sockFd < 0) throw TError(nodePath().c_str(), "%s", aErr.c_str());
 
     } catch(TError &err) {
-	if(logLen()) pushLogMess(TSYS::strMess(_("Error starting: %s"),err.mess.c_str()));
+	if(logLen()) pushLogMess(TSYS::strMess(_("Error connecting: %s"),err.mess.c_str()));
 	throw;
     }
 
@@ -1088,7 +1091,7 @@ void TSocketOut::start( int tmCon )
 
     TTransportOut::start();
 
-    if(logLen()) pushLogMess(_("Started-connected"));
+    if(logLen()) pushLogMess(_("Connected"));
 }
 
 void TSocketOut::stop( )
@@ -1116,7 +1119,7 @@ void TSocketOut::stop( )
 
     TTransportOut::stop();
 
-    if(logLen()) pushLogMess(_("Stopped-disconnected"));
+    if(logLen()) pushLogMess(_("Disconnected"));
 }
 
 int TSocketOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
@@ -1131,7 +1134,7 @@ int TSocketOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int ti
 
     MtxAlloc res(reqRes(), true);
 
-    if(!runSt) throw TError(nodePath().c_str(), _("Transport is not started!"));
+    if(!runSt) throw TError(nodePath().c_str(), _("Transport is not connected!"));
 
 repeate:
     if(reqTry++ >= wAttempts)	{ mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(), _("Error requesting: %s"), err.c_str()); }

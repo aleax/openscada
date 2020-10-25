@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.5.0"
+#define MOD_VER		"3.5.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -83,7 +83,7 @@ TProt::TProt( string name ) : TProtocol(MOD_ID),
 
     //Structure of a table of the external authentication sessions
     elAuth.fldAdd(new TFld("ID","Identificator",TFld::Integer,TCfg::Key));
-    elAuth.fldAdd(new TFld("USER","User name",TFld::String,TFld::NoFlag,OBJ_ID_SZ));
+    elAuth.fldAdd(new TFld("USER","User name",TFld::String,TFld::NoFlag,i2s(limObjID_SZ).c_str()));
     elAuth.fldAdd(new TFld("TIME","Time of the authentication and updating",TFld::Integer,TFld::NoFlag));
     elAuth.fldAdd(new TFld("ADDR","User address",TFld::String,TFld::NoFlag,"256"));
     elAuth.fldAdd(new TFld("AGENT","User agent",TFld::String,TFld::NoFlag,"1000"));

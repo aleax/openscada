@@ -43,7 +43,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"7.6.5"
+#define MOD_VER		"7.6.6"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
 #define DESCRIPTION	_("Visual operation user interface, based on the Qt library - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -290,10 +290,10 @@ void TVision::modStop( )
     for(unsigned iW = 0; iW < mnWinds.size(); iW++)
 	while(mnWinds[iW]) {
 	    res.unlock();
-	    TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
+	    TSYS::sysSleep(OSCD_WAIT_DELAY);
 	    res.lock();
 	}
-    TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
+    TSYS::sysSleep(OSCD_WAIT_DELAY);
 
     runSt = false;
 }

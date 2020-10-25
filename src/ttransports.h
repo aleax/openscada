@@ -132,6 +132,8 @@ class TTransportOut : public TCntrNode, public TConfig
 	TTransportOut( const string &id, const string &db, TElem *el );
 	virtual ~TTransportOut( );
 
+	virtual bool isNetwork( )	{ return true; }
+
 	TCntrNode &operator=( const TCntrNode &node );
 
 	string	id( )			{ return mId; }
@@ -154,7 +156,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	void setName( const string &inm )		{ cfg("NAME").setS(inm); }
 	void setDscr( const string &idscr )		{ cfg("DESCRIPT").setS(idscr); }
 	void setAddr( const string &addr )		{ cfg("ADDR").setS(addr); }
-	virtual void setTimings( const string &vl )	{ }
+	virtual void setTimings( const string &vl, bool isDef = false )	{ }
 	virtual void setAttempts( unsigned short vl )	{ }
 	void setConPrm( const string &nm, const TVariant &vl );
 	void clearConPrm( );
@@ -193,7 +195,8 @@ class TTransportOut : public TCntrNode, public TConfig
 	void save_( );
 
 	//Attributes
-	bool	runSt;
+	bool	runSt,
+		mDefTimeouts;
 
 	int64_t	mLstReqTm;
 
@@ -205,7 +208,6 @@ class TTransportOut : public TCntrNode, public TConfig
 	TCfg	&mId;
 	string	mDB;
 
-	// Reserve parameters
 	time_t	mStartTm;
 	map<string, TVariant>	mConPrms;
 	ResMtx	mReqRes, mLogRes;

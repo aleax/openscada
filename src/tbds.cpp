@@ -33,14 +33,14 @@ using namespace OSCADA;
 TBDS::TBDS( ) : TSubSYS(SDB_ID,_("Data Bases"),true), mSYSStPref(true), mTblLifeTime(600)
 {
     //Generic system DB
-    fldAdd(new TFld("user","User",TFld::String,TCfg::Key,OBJ_ID_SZ));
+    fldAdd(new TFld("user","User",TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
     fldAdd(new TFld("id",_("Value ID"),TFld::String,TCfg::Key,"100"));
     fldAdd(new TFld("val","Value"  ,TFld::String,TFld::TransltText,"1000"));
 
     //Open data bases DB structure
-    elDB.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
-    elDB.fldAdd(new TFld("TYPE",_("DB type (module)"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
-    elDB.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
+    elDB.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    elDB.fldAdd(new TFld("TYPE",_("DB type (module)"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    elDB.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
     elDB.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"2000"));
     elDB.fldAdd(new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"1000"));
     elDB.fldAdd(new TFld("CODEPAGE",_("Code page"),TFld::String,TFld::NoFlag,"20"));
@@ -723,12 +723,12 @@ void TTypeBD::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TModule::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/db_",_("DB"),RWRWR_,"root",SDB_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
+	ctrMkNode("grp",opt,-1,"/br/db_",_("DB"),RWRWR_,"root",SDB_ID,2,"idm",i2s(limObjNm_SZ).c_str(),"idSz",i2s(limObjID_SZ).c_str());
 	if(ctrMkNode("area",opt,0,"/db",_("DB"),R_R_R_)) {
 	    ctrMkNode("fld",opt,-1,"/db/ful_db_del",_("Complete DB removal"),RWRW__,"root",SDB_ID,2,
 		"tp","bool","help",_("Select to completely remove the database when closing, otherwise the DB will simply be closed."));
 	    ctrMkNode("list",opt,-1,"/db/odb",_("DB"),RWRWR_,"root",SDB_ID,5,
-		"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","db_","idSz",OBJ_ID_SZ);
+		"tp","br","idm",i2s(limObjNm_SZ).c_str(),"s_com","add,del","br_pref","db_","idSz",i2s(limObjID_SZ).c_str());
 	}
 	return;
     }

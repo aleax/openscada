@@ -34,28 +34,28 @@ using namespace OSCADA;
 TTransportS::TTransportS( ) : TSubSYS(STR_ID, _("Transports"), true), extHostLoad(0)
 {
     //Input transport BD structure
-    elIn.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
-    elIn.fldAdd(new TFld("MODULE",_("Transport type"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
-    elIn.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
+    elIn.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    elIn.fldAdd(new TFld("MODULE",_("Transport type"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    elIn.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
     elIn.fldAdd(new TFld("DESCRIPT",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"500"));
     elIn.fldAdd(new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"100"));
-    elIn.fldAdd(new TFld("PROT",_("Transport protocol"),TFld::String,TFld::NoFlag,i2s(s2i(OBJ_ID_SZ)*10).c_str()));
+    elIn.fldAdd(new TFld("PROT",_("Transport protocol"),TFld::String,TFld::NoFlag,i2s(limObjID_SZ*10).c_str()));
     elIn.fldAdd(new TFld("START",_("To connect"),TFld::Boolean,TFld::NoFlag,"1"));
 
     //Output transport BD structure
-    elOut.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(s2i(OBJ_ID_SZ)*2).c_str()));
-    elOut.fldAdd(new TFld("MODULE",_("Transport type"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
-    elOut.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
+    elOut.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ*2).c_str()));
+    elOut.fldAdd(new TFld("MODULE",_("Transport type"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    elOut.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
     elOut.fldAdd(new TFld("DESCRIPT",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"500"));
     elOut.fldAdd(new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"100"));
 
     //External hosts' connection DB struct
-    elExt.fldAdd(new TFld("OP_USER",_("User that opens"),TFld::String,TCfg::Key,OBJ_ID_SZ));
-    elExt.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,OBJ_ID_SZ));
-    elExt.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
-    elExt.fldAdd(new TFld("TRANSP",_("Transport"),TFld::String,0,OBJ_ID_SZ));
+    elExt.fldAdd(new TFld("OP_USER",_("User that opens"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    elExt.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    elExt.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    elExt.fldAdd(new TFld("TRANSP",_("Transport"),TFld::String,0,i2s(limObjID_SZ).c_str()));
     elExt.fldAdd(new TFld("ADDR",_("Transport address"),TFld::String,0,"50"));
-    elExt.fldAdd(new TFld("USER",_("User of the requests"),TFld::String,0,OBJ_ID_SZ));
+    elExt.fldAdd(new TFld("USER",_("User of the requests"),TFld::String,0,i2s(limObjID_SZ).c_str()));
     elExt.fldAdd(new TFld("PASS",_("Password of the requests"),TFld::String,0,"30"));
     elExt.fldAdd(new TFld("UpRiseLev",_("Level of lifting"),TFld::Integer,0,"1"));
 }
@@ -590,14 +590,14 @@ void TTypeTransport::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TModule::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/in_",_("Input transport"),RWRWR_,"root",STR_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
-	ctrMkNode("grp",opt,-1,"/br/out_",_("Output transport"),RWRWR_,"root",STR_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
+	ctrMkNode("grp",opt,-1,"/br/in_",_("Input transport"),RWRWR_,"root",STR_ID,2,"idm",i2s(limObjNm_SZ).c_str(),"idSz",i2s(limObjID_SZ).c_str());
+	ctrMkNode("grp",opt,-1,"/br/out_",_("Output transport"),RWRWR_,"root",STR_ID,2,"idm",i2s(limObjNm_SZ).c_str(),"idSz",i2s(limObjID_SZ).c_str());
 	if(ctrMkNode("area",opt,0,"/tr",_("Transports"))) {
 	    ctrMkNode("list",opt,-1,"/tr/in",_("Input"),RWRWR_,"root",STR_ID,5,
-		"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","in_","idSz",OBJ_ID_SZ);
+		"tp","br","idm",i2s(limObjNm_SZ).c_str(),"s_com","add,del","br_pref","in_","idSz",i2s(limObjID_SZ).c_str());
 	    if(ctrMkNode("area",opt,-1,"/tr/out",_("Output"))) {
 		ctrMkNode("list",opt,-1,"/tr/out/list",_("List"),RWRWR_,"root",STR_ID,5,
-		    "tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","out_","idSz",OBJ_ID_SZ);
+		    "tp","br","idm",i2s(limObjNm_SZ).c_str(),"s_com","add,del","br_pref","out_","idSz",i2s(limObjID_SZ).c_str());
 		ctrMkNode("fld",opt,-1,"/tr/out/keepAlive",_("Lifetime, seconds"),RWRWR_,"root",STR_ID,4,"tp","dec","min","0","max","3600",
 		    "help",_("Time of inactivity in the output transport for it closing/disconnection. Set to 0 to disable the transports closing!"));
 	    }
@@ -957,7 +957,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 //* TTransportOut                                *
 //************************************************
 TTransportOut::TTransportOut( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), runSt(false), mLstReqTm(0), mId(cfg("ID")),
+    TConfig(el), runSt(false), mDefTimeouts(true), mLstReqTm(0), mId(cfg("ID")),
     mDB(idb), mStartTm(0), mReqRes(true), mLogLen(0)
 {
     mId = iid;
@@ -1115,6 +1115,8 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, 
 	} catch(TError &err) { return err.mess; }
 	return "";
     }
+    // bool isNetwork( ) - the transport network type
+    if(iid == "isNetwork") return isNetwork();
     // string status( ) - the transport status
     if(iid == "status")	return getStatus();
     // bool start( bool vl = <EVAL>, int tm = 0 ) - the transport start status return, start/stop it by <vl> (if it is not <EVAL>).
@@ -1135,10 +1137,11 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, 
 	    try{ setAddr(prms[0].getS()); } catch(TError&) { }
 	return addr();
     }
-    // string timings( string vl = "" ) - the transport timings return, set it to not empty <vl>
+    // string timings( string vl = "", isDef = true ) - the transport timings return, set it to not empty <vl>
     if(iid == "timings") {
 	if(prms.size() && prms[0].getS().size())
-	    try{ setTimings(prms[0].getS()); } catch(TError&) { }
+	    try{ setTimings(prms[0].getS(), (prms.size()>=2)?prms[1].getB():true); }
+	    catch(TError&) { }
 	return timings();
     }
     // int attempts( int vl = EVAL ) - the transport requesting attempts return, set it to not EVAL <vl>

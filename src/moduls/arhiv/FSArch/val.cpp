@@ -192,7 +192,7 @@ void ModVArch::stop( bool full_del )
 
 bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, int64_t *abeg, int64_t *aend, int64_t *aper )
 {
-    int bufSz = 20;
+    int bufSz = limArchID_SZ;
     char buf[bufSz+1]; buf[bufSz] = 0;
     bool unpck = false;
     string a_fnm = anm;
@@ -209,7 +209,7 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
 		ibuf[rsz] = 0;
 		int64_t tBeg, tEnd, tPer;
 		int tVTp;
-		if(sscanf(ibuf,"%llx %llx %20s %llx %d",&tBeg,&tEnd,buf,&tPer,&tVTp) == 5) {
+		if(sscanf(ibuf,("%llx %llx %"+i2s(limArchID_SZ)+"s %llx %d").c_str(),&tBeg,&tEnd,buf,&tPer,&tVTp) == 5) {
 		    if(abeg)	*abeg = tBeg;
 		    if(aend)	*aend = tEnd;
 		    if(archive)	*archive = buf;
@@ -228,7 +228,7 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
 	    if(SYS->db().at().dataGet((infoTbl.size()?infoTbl:mod->filesDB()),mod->nodePath()+"Pack/",cEl,false,true)) {
 		if(abeg)	*abeg = strtoll(cEl.cfg("BEGIN").getS().c_str(),NULL,16);
 		if(aend)	*aend = strtoll(cEl.cfg("END").getS().c_str(),NULL,16);
-		if(archive)	*archive = cEl.cfg("PRM1").getS();
+		if(archive)	*archive = cEl.cfg("PRM1").getS().substr(0, limArchID_SZ);
 		if(aper)	*aper = strtoll(cEl.cfg("PRM2").getS().c_str(),NULL,16);
 		if(vtp)		*vtp  = (TFld::Type)s2i(cEl.cfg("PRM3").getS());
 		infoOK = true;
@@ -252,7 +252,7 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
     close(hd);
     if(r_len < (int)sizeof(VFileArch::FHead) || VFileArch::afl_id != head.f_tp || head.term != 0x55) return false;
     // Check to archive present
-    if(archive)	{ strncpy(buf,head.archive,20); *archive = buf; }
+    if(archive)	*archive = getArchiveID(head, TSYS::pathLevEnd(a_fnm,0));
     if(abeg)	*abeg = head.beg;
     if(aend)	*aend = head.end;
     if(aper)	*aper = head.period;
@@ -268,15 +268,14 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
 	    cEl.cfg("FILE").setS(anm);
 	    cEl.cfg("BEGIN").setS(ll2s(head.beg,TSYS::Hex));
 	    cEl.cfg("END").setS(ll2s(head.end,TSYS::Hex));
-	    strncpy(buf, head.archive, 20);
-	    cEl.cfg("PRM1").setS(buf);
+	    cEl.cfg("PRM1").setS(*archive);
 	    cEl.cfg("PRM2").setS(ll2s(head.period,TSYS::Hex));
 	    cEl.cfg("PRM3").setS(i2s(head.vtp|(head.vtpExt<<4)));
 	    SYS->db().at().dataSet((infoTbl.size()?infoTbl:mod->filesDB()), mod->nodePath()+"Pack/", cEl, false, true);
 	}
 	else if((hd=open((anm+".info").c_str(),O_WRONLY|O_CREAT|O_TRUNC,SYS->permCrtFiles())) > 0) {
 	    // Write info to info file
-	    string si = TSYS::strMess("%llx %llx %s %llx %d", head.beg, head.end, buf, head.period, head.vtp|(head.vtpExt<<4));
+	    string si = TSYS::strMess("%llx %llx %s %llx %d", head.beg, head.end, archive->c_str(), head.period, head.vtp|(head.vtpExt<<4));
 	    bool fOK = (write(hd,si.data(),si.size()) == (int)si.size());
 	    close(hd);
 	    if(!fOK) return false;
@@ -509,6 +508,23 @@ TVArchEl *ModVArch::getArchEl( TVArchive &arch )
     if(!owner().owner().subStarting) v_el->checkArchivator(true);
 
     return v_el;
+}
+
+string ModVArch::getArchiveID( const VFileArch::FHead &head, const string &fNm )
+{
+    string resID = string(head.archive, sizeof(head.archive)).c_str();
+    if(head.archive_add[0])
+	resID += string(head.archive_add, sizeof(head.archive_add)).c_str();
+    //Getting the complete id from file name
+    if(head.archive_add[sizeof(head.archive_add)-1]) {
+	TArrayObj *tArr;
+	if((tArr=TRegExp("^(.+) [0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}\\.[0-9]{2}\\.[0-9]{2}\\.val").match(fNm))) {
+	    if(tArr->size() >= 2 && tArr->arGet(1).getS().find(resID) == 0 && tArr->arGet(1).getS().size() > resID.size())
+		resID = tArr->arGet(1).getS();
+	    delete tArr;
+	}
+    }
+    return resID;
 }
 
 void ModVArch::cntrCmdProc( XMLNode *opt )
@@ -905,13 +921,7 @@ int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end, bool to
 		n_beg = vmax(b_prev, n_end-f_sz);
 
 		//  Create file name
-		char c_buf[30];
-		time_t tm = n_beg/1000000;
-		struct tm tm_tm;
-		localtime_r(&tm, &tm_tm);
-		strftime(c_buf, sizeof(c_buf), " %F %H.%M.%S.val", &tm_tm);
-		string AName = archivator().addr()+"/"+archive().id()+c_buf;
-
+		string AName = archivator().addr() + "/" + archive().id() + atm2s(n_beg/1000000," %F %H.%M.%S.val");
 		files.insert(files.begin()+iA, new VFileArch(AName,n_beg,n_end,v_per,archive().valType(true),this));
 		//Remove new error created file mostly by store space lack
 		if(files[iA]->err()) {
@@ -936,14 +946,9 @@ int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end, bool to
     //Create new file for new data
     while(end >= beg) {
 	if(!mChecked)	return 0;	//Wait for checking
-	char c_buf[30];
-	time_t tm = beg/1000000;
-	struct tm tm_tm;
-	localtime_r(&tm, &tm_tm);
-	strftime(c_buf, sizeof(c_buf), " %F %H.%M.%S.val", &tm_tm);
-	string AName = archivator().addr() + "/" + archive().id() + c_buf;
 
 	int64_t n_end = beg + f_sz;
+	string AName = archivator().addr() + "/" + archive().id() + atm2s(beg/1000000," %F %H.%M.%S.val");
 	files.push_back(new VFileArch(AName,beg,n_end,v_per,archive().valType(true),this));
 	//Remove new error created file mostly by store space lack
 	if(files.back()->err()) {
@@ -1000,6 +1005,8 @@ VFileArch::VFileArch( const string &iname, int64_t ibeg, int64_t iend, int64_t i
     memset(&head, 0, sizeof(FHead));
     strncpy(head.f_tp, afl_id.c_str(), sizeof(head.f_tp));
     strncpy(head.archive, owner().archive().id().c_str(), sizeof(head.archive));
+    if(owner().archive().id().size() > sizeof(head.archive))
+	strncpy(head.archive_add, owner().archive().id().c_str()+sizeof(head.archive), sizeof(head.archive_add));
     head.beg = begin();
     head.end = end();
     head.period = period();

@@ -32,7 +32,7 @@
 #define MOD_NAME	_("Own protocol of OpenSCADA")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.8.0"
+#define MOD_VER		"1.9.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides own OpenSCADA protocol based at XML and the control interface of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -173,6 +173,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
     string reqNm = io.name();
 
     MtxAlloc res(tro.reqRes(), true);
+    if(tro.isNetwork())	tro.setTimings("20:2", true);
 
     bool isDir = s2i(io.attr("rqDir"));	io.attrDel("rqDir");
     bool authForce = s2i(io.attr("rqAuthForce")); io.attrDel("rqAuthForce");

@@ -80,8 +80,8 @@ class TestDB : public TFunction
 
 		mod->mess(id(),_("Create a DB configuration."));
 		TConfig bd_cfg;
-		bd_cfg.elem().fldAdd(new TFld("name",_("Name"),TFld::String,TCfg::Key,OBJ_ID_SZ));
-		bd_cfg.elem().fldAdd(new TFld("descr",_("Description"),TFld::String,0,OBJ_NM_SZ));
+		bd_cfg.elem().fldAdd(new TFld("name",_("Name"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+		bd_cfg.elem().fldAdd(new TFld("descr",_("Description"),TFld::String,0,i2s(limObjNm_SZ).c_str()));
 		bd_cfg.elem().fldAdd(new TFld("val",_("Value"),TFld::Real,0,"10.2","5"));
 		bd_cfg.elem().fldAdd(new TFld("id",_("Identifier"),TFld::Integer,0,"7","34"));
 		bd_cfg.elem().fldAdd(new TFld("stat",_("State"),TFld::Boolean,0,"1","1"));

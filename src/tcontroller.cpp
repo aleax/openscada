@@ -514,12 +514,14 @@ void TController::cntrCmdProc( XMLNode *opt )
 	    }
 	}
 	if(owner().tpPrmSize()) {
-	    ctrMkNode("grp",opt,-1,"/br/prm_",_("Parameter"),RWRWR_,"root",SDAQ_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
+	    ctrMkNode("grp",opt,-1,"/br/prm_",_("Parameter"),RWRWR_,"root",SDAQ_ID,2,"idm",i2s(limObjNm_SZ).c_str(),"idSz",i2s(limObjID_SZ).c_str());
 	    if(ctrMkNode("area",opt,-1,"/prm",_("Parameters"))) {
 		if(owner().tpPrmSize() > 1)
-		    ctrMkNode("fld",opt,-1,"/prm/t_prm",_("Add parameters to the type"),RWRW__,"root",SDAQ_ID,3,"tp","str","dest","select","select","/prm/t_lst");
+		    ctrMkNode("fld",opt,-1,"/prm/t_prm",_("Add parameters to the type"),RWRW__,"root",SDAQ_ID,3,
+			"tp","str","dest","select","select","/prm/t_lst");
 		ctrMkNode("fld",opt,-1,"/prm/nmb",_("Number"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
-		ctrMkNode("list",opt,-1,"/prm/prm",_("Parameters"),RWRWR_,"root",SDAQ_ID,5,"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","prm_","idSz",OBJ_ID_SZ);
+		ctrMkNode("list",opt,-1,"/prm/prm",_("Parameters"),RWRWR_,"root",SDAQ_ID,5,
+		    "tp","br","idm",i2s(limObjNm_SZ).c_str(),"s_com","add,del","br_pref","prm_","idSz",i2s(limObjID_SZ).c_str());
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/mess",_("Diagnostics"))) {

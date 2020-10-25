@@ -464,7 +464,7 @@ void IO::setRez( const string &val )
 //* TValFunc                                      *
 //*************************************************
 TValFunc::TValFunc( const string &iname, TFunction *ifunc, bool iblk, const string &iuser ) :
-    exCtx(NULL), mName(iname), mUser(iuser), mBlk(iblk), mMdfChk(false), mPrgCh(false), mFunc(NULL)
+    exCtx(NULL), mName(iname), mUser(iuser), mBlk(iblk), mMdfChk(false), mPrgCh(false), mCalc(false), mFunc(NULL)
 {
     setFunc(ifunc);
 }
@@ -730,7 +730,9 @@ void TValFunc::calc( const string &user )
 {
     if(!mFunc) return;
     if(!user.empty()) mUser = user;
-    mFunc->calc(this);
+    mCalc = true;
+    try { mFunc->calc(this); } catch(TError&) { }
+    mCalc = false;
 }
 
 void TValFunc::preIOCfgChange( )	{ setFunc(NULL, false); }

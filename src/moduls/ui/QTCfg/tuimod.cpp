@@ -37,7 +37,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"5.0.4"
+#define MOD_VER		"5.0.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt-based configurator of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -197,8 +197,8 @@ void TUIMod::modStop( )
     mEndRun = true;
 
     for(unsigned iW = 0; iW < cfapp.size(); iW++)
-	while(cfapp[iW]) TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
-    TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
+	while(cfapp[iW]) TSYS::sysSleep(OSCD_WAIT_DELAY);
+    TSYS::sysSleep(OSCD_WAIT_DELAY);
 
     runSt = false;
 }

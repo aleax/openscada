@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"5.0.1"
+#define MOD_VER		"5.1.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")
@@ -114,7 +114,7 @@ void TpContr::postEnable( int flag )
     fldAdd(new TFld("ITER",_("Number of iterations in single calculation"),TFld::Integer,TFld::NoFlag,"2","1","1;99"));
 
     //Controller value db structure
-    val_el.fldAdd(new TFld("ID",_("IO ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    val_el.fldAdd(new TFld("ID",_("IO ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
     val_el.fldAdd(new TFld("VAL",_("IO value"),TFld::String,TFld::NoFlag,"10000"));
 
     //Add parameter types
@@ -122,14 +122,14 @@ void TpContr::postEnable( int flag )
     tpPrmAt(t_prm).fldAdd(new TFld("FLD",_("Data fields"),TFld::String,TFld::FullText|TCfg::NoVal,"300"));
 
     //Lib's db structure
-    lb_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,OBJ_ID_SZ));
-    lb_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
+    lb_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    lb_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
     lb_el.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::TransltText,"300"));
     lb_el.fldAdd(new TFld("DB",_("Database"),TFld::String,TFld::NoFlag,"30"));
 
     //Function's structure
-    fnc_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,OBJ_ID_SZ));
-    fnc_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
+    fnc_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    fnc_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
     fnc_el.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::TransltText,"300"));
     fnc_el.fldAdd(new TFld("START",_("To start"),TFld::Boolean,TFld::NoFlag,"1","1"));
     fnc_el.fldAdd(new TFld("MAXCALCTM",_("Maximum calculate time, seconds"),TFld::Integer,TFld::NoFlag,"4","10","0;3600"));
@@ -138,9 +138,9 @@ void TpContr::postEnable( int flag )
     fnc_el.fldAdd(new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec));
 
     //Function's IO structure
-    fncio_el.fldAdd(new TFld("F_ID",_("Function ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
-    fncio_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,OBJ_ID_SZ));
-    fncio_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
+    fncio_el.fldAdd(new TFld("F_ID",_("Function ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    fncio_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    fncio_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
     fncio_el.fldAdd(new TFld("TYPE",_("Type"),TFld::Integer,TFld::NoFlag,"1"));
     fncio_el.fldAdd(new TFld("MODE",_("Mode"),TFld::Integer,TFld::NoFlag,"1"));
     fncio_el.fldAdd(new TFld("DEF",_("Default value"),TFld::String,TFld::TransltText,"20"));
@@ -356,12 +356,12 @@ void TpContr::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TTypeDAQ::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/lib_",_("Library"),RWRWR_,"root",SDAQ_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
+	ctrMkNode("grp",opt,-1,"/br/lib_",_("Library"),RWRWR_,"root",SDAQ_ID,2,"idm",i2s(limObjNm_SZ).c_str(),"idSz",i2s(limObjID_SZ).c_str());
 	if(ctrMkNode("area",opt,0,"/prm",MOD_ID))
 	    ctrMkNode("fld",opt,-1,"/prm/safeTm",_("Safety timeout, seconds"),RWRWR_,"root",SDAQ_ID,3,"tp","dec","min","0","max","3600");
 	if(ctrMkNode("area",opt,1,"/libs",_("Functions libraries")))
 	    ctrMkNode("list",opt,-1,"/libs/lb",_("Libraries"),RWRWR_,"root",SDAQ_ID,5,
-		"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","lib_","idSz",OBJ_ID_SZ);
+		"tp","br","idm",i2s(limObjNm_SZ).c_str(),"s_com","add,del","br_pref","lib_","idSz",i2s(limObjID_SZ).c_str());
 	return;
     }
 

@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Siemens DAQ and Beckhoff")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"3.3.2"
+#define MOD_VER		"3.5.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol)\
  and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the\
@@ -104,8 +104,8 @@ void TTpContr::postEnable( int flag )
     int t_prm = tpParmAdd("logic","PRM_BD",_("Logical"));
     tpPrmAt(t_prm).fldAdd( new TFld("TMPL",_("Parameter template"),TFld::String,TCfg::NoVal,"50","") );
     // Parameter template IO DB structure
-    elPrmIO.fldAdd(new TFld("PRM_ID",_("Parameter ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
-    elPrmIO.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(s2i(OBJ_ID_SZ)*1.5).c_str()));
+    elPrmIO.fldAdd(new TFld("PRM_ID",_("Parameter ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    elPrmIO.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ*1.5).c_str()));
     elPrmIO.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TFld::NoFlag,"200"));
 
     //CIF devices DB structure
@@ -1746,6 +1746,11 @@ void TMdPrm::enable( )
 void TMdPrm::disable( )
 {
     if(!enableStat()) return;
+
+    //Waiting the ordinal calculation finish
+    for(int iTm = 0; isCalc() && iTm < STD_WAIT_TM/OSCD_WAIT_DELAY; iTm++) SYS->sysSleep(OSCD_WAIT_DELAY);
+    //Termination the calculation
+    while(isCalc()) { SYS->taskSendSIGALRM(owner().nodePath('.',true)); SYS->sysSleep(OSCD_WAIT_DELAY); }
 
     //Unregister parameter
     owner().prmEn(id(), false);

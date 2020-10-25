@@ -37,8 +37,9 @@
 
 <tr>
 <td> <a href="../Modules/ICP_DAS.html" title="Special:MyLanguage/Modules/ICP DAS">ICP_DAS</a> </td>
-<td> Обладнання ICP_DAS </td>
-<td> 1.8 </td>
+<td> Обладнання ICP_DAS
+</td>
+<td> 1.9 </td>
 <td> GPL2 </td>
 <td> daq_ICP_DAS.so </td>
 <td> en,uk,ru,de </td>
@@ -48,6 +49,11 @@
 <td> Роман Савоченко </td>
 <td> Надає реалізацію підтримки обладнання "ICP DAS". Включає підтримку основних I-87xxx DCON модулів, I-8xxx швидких модулів та плат на шині ISA.
 </td></tr></table>
+<p>Модуль надає до <i>OpenSCADA</i> підтримку різного обладнання фірми "ICP DAS" (<a class="external free" href="http://www.icpdas.com" rel="nofollow noreferrer noopener" target="_blank">http://www.icpdas.com</a>, <a class="external free" href="http://ipc2u.ru" rel="nofollow noreferrer noopener" target="_blank">http://ipc2u.ru</a>) за посередництвом бібліотеки API <i>libi8k.a</i> від фірми, для модулів <i>I-87xxx</i> та <i>I-8xxx</i>, та прямих <i>ioctl</i> викликів до модулів ядра, для плат на шині <i>ISA</i>.
+</p><p>Більшість обладнання фірми "ICP DAS" працює за посередництвом послідовних інтерфейсів та протоколу <i>DCON</i>, однак частина нового обладнання, наприклад, серія <i>I-8xxx</i> працює на паралельній шині, а інша частина, встановлюється до слотів паралельної шини (<i>I-87xxx</i>), доступні за послідовним інтерфейсом та протоколом <i>DCON</i>, однак не адресуються прямо, а потребують виклику спеціалізованої команди вибору слоту. Доступ до обладнання, яке використовує прямі запити за протоколом <i>DCON</i>, може здійснюватися модулем <a href="../Modules/DCON.html" title="Special:MyLanguage/Modules/DCON">DAQ.DCON</a>. Підтримка іншого обладнання не додавалася до модуля <a href="../Modules/DCON.html" title="Special:MyLanguage/Modules/DCON">DAQ.DCON</a>, а реалізовувалася у цьому модулі з причини наявності бібліотеки API фірми "ICP DAS" тільки для платформ <i>x86_32</i> та <i>ARM(OABI, HardFloatFPA)</i>, що вносить обмеження на доступ до обладнання фірми "ICP DAS" та іншого обладнанню за протоколом <i>DCON</i> на інших апаратних платформах.
+</p><p>Причиною створення цього модуля стали роботи з контролером фірми "ICP DAS" <i>LP-8781</i> серії "LinPAC" з метою реалізації середовища виконання ПЛК на основі системи <i>OpenSCADA</i>.
+</p><p>Бібліотека API фірми "ICP DAS" для платформ <i>x86_32 -&gt; libi8k.a</i> та <i>ARM(OABI, HardFloatFPA) -&gt; libi8k_arm.a</i> розташовані разом із вихідними текстами даного модуля і не потребують окремого встановлення.
+</p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#.D0.9A.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80_.D0.B4.D0.B0.D0.BD.D0.B8.D1.85"><span class="tocnumber">1</span> <span class="toctext">Контролер даних</span></a></li>
@@ -74,11 +80,6 @@
 </ul>
 </div>
 
-<p>Модуль надає до <i>OpenSCADA</i> підтримку різного обладнання фірми "ICP DAS" (<a class="external free" href="http://www.icpdas.com" rel="nofollow noreferrer noopener" target="_blank">http://www.icpdas.com</a>, <a class="external free" href="http://ipc2u.ru" rel="nofollow noreferrer noopener" target="_blank">http://ipc2u.ru</a>) за посередництвом бібліотеки API <i>libi8k.a</i> від фірми, для модулів <i>I-87xxx</i> та <i>I-8xxx</i>, та прямих <i>ioctl</i> викликів до модулів ядра, для плат на шині <i>ISA</i>.
-</p><p>Більшість обладнання фірми "ICP DAS" працює за посередництвом послідовних інтерфейсів та протоколу <i>DCON</i>, однак частина нового обладнання, наприклад, серія <i>I-8xxx</i> працює на паралельній шині, а інша частина, встановлюється до слотів паралельної шини (<i>I-87xxx</i>), доступні за послідовним інтерфейсом та протоколом <i>DCON</i>, однак не адресуються прямо, а потребують виклику спеціалізованої команди вибору слоту. Доступ до обладнання, яке використовує прямі запити за протоколом <i>DCON</i>, може здійснюватися модулем <a href="../Modules/DCON.html" title="Special:MyLanguage/Modules/DCON">DAQ.DCON</a>. Підтримка іншого обладнання не додавалася до модуля <a href="../Modules/DCON.html" title="Special:MyLanguage/Modules/DCON">DAQ.DCON</a>, а реалізовувалася у цьому модулі з причини наявності бібліотеки API фірми "ICP DAS" тільки для платформ <i>x86_32</i> та <i>ARM(OABI, HardFloatFPA)</i>, що вносить обмеження на доступ до обладнання фірми "ICP DAS" та іншого обладнанню за протоколом <i>DCON</i> на інших апаратних платформах.
-</p><p>Причиною створення цього модуля стали роботи з контролером фірми "ICP DAS" <i>LP-8781</i> серії "LinPAC" з метою реалізації середовища виконання ПЛК на основі системи <i>OpenSCADA</i>.
-</p><p>Бібліотека API фірми "ICP DAS" для платформ <i>x86_32 -&gt; libi8k.a</i> та <i>ARM(OABI, HardFloatFPA) -&gt; libi8k_arm.a</i> розташовані разом із вихідними текстами даного модуля і не потребують окремого встановлення.
-</p>
 <h2><span class="mw-headline" id=".D0.9A.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80_.D0.B4.D0.B0.D0.BD.D0.B8.D1.85"><span class="mw-headline-number">1</span> Контролер даних</span></h2>
 <p>Для додання джерела даних "ICP DAS" створюється та конфігурується контролер у системі <i>OpenSCADA</i>. Приклад вкладки конфігурації контролеру даного типу зображено на рис.1.
 </p>

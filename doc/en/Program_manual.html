@@ -1509,6 +1509,15 @@ RdTaskPer  &lt;seconds&gt;    Call period of the redundancy task.
 RdRestConnTm &lt;seconds&gt;  Time to restore connection to "dead" reserve station.
 RdStList   &lt;list&gt;       Redundant stations list, separated symbol ';' (st1;st2).
 RdPrimCmdTr &lt;0|1&gt;       Enables the transmission of primary commands to the reserve stations.
+    Program limits:
+limObjID_SZ &lt;size&gt;      [*20..50] ID size of the OpenSCADA objects.
+                        WARNING! Big size can cause the key limit error on MySQL like DB!
+                                 Change that once before use on DBs with the fixed type "char({N})"!
+limObjNm_SZ &lt;size&gt;      [*100...200] NAME size of the OpenSCADA objects.
+                        WARNING! Change that once before use on DBs with the fixed type "char({N})"!
+limArchID_SZ &lt;size&gt;     [*50...90] ID size of the value archive objects.
+                        WARNING! Increase it only, else you can get problems on Archive.FSArch!
+                                 Change that once before use on DBs with the fixed type "char({N})"!
 
 ========================= Subsystem "DB" options ========================
 ------ Parameters of the section '/sub_BD/' of the configuration file ------

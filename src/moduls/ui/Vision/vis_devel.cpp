@@ -663,7 +663,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     endRunTimer   = new QTimer(this);
     endRunTimer->setSingleShot(false);
     connect(endRunTimer, SIGNAL(timeout()), this, SLOT(endRunChk()));
-    endRunTimer->start(STD_WAIT_DELAY);
+    endRunTimer->start(1e3*OSCD_WAIT_DELAY);
     // Wait cursor clean up timer
     waitCursorClear = new QTimer(this);
     waitCursorClear->setSingleShot(true);

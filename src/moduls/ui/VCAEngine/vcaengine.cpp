@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"6.8.2"
+#define MOD_VER		"6.9.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -111,7 +111,7 @@ void Engine::postEnable( int flag )
 
     //Make lib's DB structure: Libs(__ID__, NAME, DSCR, DB_TBL, ICO)
     lbwdg_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,"30"));
-    lbwdg_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
+    lbwdg_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
     lbwdg_el.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
     lbwdg_el.fldAdd(new TFld("DB_TBL",_("DB table"),TFld::String,TFld::NoFlag,"30"));
     lbwdg_el.fldAdd(new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"100000"));
@@ -159,12 +159,12 @@ void Engine::postEnable( int flag )
 
     //Make project's DB structure: Projs(__ID__, NAME, DSCR, DB_TBL, ICO, USER, GRP, PERMIT, PER, FLGS, STYLE)
     prj_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,"30"));
-    prj_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
+    prj_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
     prj_el.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
     prj_el.fldAdd(new TFld("DB_TBL",_("DB table"),TFld::String,TFld::NoFlag,"30"));
     prj_el.fldAdd(new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"100000"));
-    prj_el.fldAdd(new TFld("USER",_("User"),TFld::String,TFld::NoFlag,OBJ_ID_SZ,"root"));
-    prj_el.fldAdd(new TFld("GRP",_("Group"),TFld::String,TFld::NoFlag,OBJ_ID_SZ,"UI"));
+    prj_el.fldAdd(new TFld("USER",_("User"),TFld::String,TFld::NoFlag,i2s(limObjID_SZ).c_str(),"root"));
+    prj_el.fldAdd(new TFld("GRP",_("Group"),TFld::String,TFld::NoFlag,i2s(limObjID_SZ).c_str(),"UI"));
     prj_el.fldAdd(new TFld("PERMIT",_("Permission"),TFld::Integer,TFld::OctDec,"3","436"));
     prj_el.fldAdd(new TFld("PER",_("Period of calculating, milliseconds"),TFld::Integer,TFld::NoFlag,"4","100"));
     prj_el.fldAdd(new TFld("STYLE",_("Work style"),TFld::Integer,TFld::NoFlag,"2","-1"));

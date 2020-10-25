@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.2.3"
+#define MOD_VER		"2.2.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -461,7 +461,7 @@ void *TMdContr::Task( void *icntr )
 		}
 		TSYS::taskSleep(SYS->rdTaskPer()*1e9);
 	    }
-	    else TSYS::taskSleep(STD_WAIT_DELAY*1e6);
+	    else TSYS::taskSleep(OSCD_WAIT_DELAY*1e9);
 	    continue;
 	}
 

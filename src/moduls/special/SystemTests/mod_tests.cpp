@@ -49,7 +49,7 @@
 #define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"TEST"
-#define MOD_VER		"1.8.2"
+#define MOD_VER		"1.8.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the group of tests to OpenSCADA and its modules.")
 #define LICENSE		"GPL2"
@@ -203,7 +203,7 @@ void *TTest::Task( void *CfgM )
     while(!tst->endrun)
     {
 	//1 sec
-	if(++i_cnt > 1000/STD_WAIT_DELAY)  // 1 sec
+	if(++i_cnt > 1/OSCD_WAIT_DELAY)  // 1 sec
 	{
 	    i_cnt = 0;
 	    if(++count == 1000000) count = 0;
@@ -226,7 +226,7 @@ void *TTest::Task( void *CfgM )
 		    catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 		}
 	}
-	TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
+	TSYS::sysSleep(OSCD_WAIT_DELAY);
     }
     tst->runSt = false;
 
@@ -261,12 +261,12 @@ void TTest::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TSpecial::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/test_",_("Test"),R_R_R_,"root",SSPC_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
+	ctrMkNode("grp",opt,-1,"/br/test_",_("Test"),R_R_R_,"root",SSPC_ID,2,"idm",i2s(limObjNm_SZ).c_str(),"idSz",i2s(limObjID_SZ).c_str());
 	if(ctrMkNode("area",opt,1,"/tests",_("Tests")))
 	{
 	    ctrMkNode("fld",opt,-1,"/tests/nmb",_("Number"),R_R_R_,"root",SSPC_ID,1,"tp","str");
 	    ctrMkNode("list",opt,-1,"/tests/tests",_("Tests"),R_R_R_,"root",SSPC_ID,4,
-		"tp","br","idm",OBJ_NM_SZ,"br_pref","test_","idSz",OBJ_ID_SZ);
+		"tp","br","idm",i2s(limObjNm_SZ).c_str(),"br_pref","test_","idSz",i2s(limObjID_SZ).c_str());
 	}
 	return;
     }

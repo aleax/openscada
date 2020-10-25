@@ -80,8 +80,8 @@ void TTpContr::postEnable( int flag )
     t_prm = tpParmAdd("logic", "PRM_BD_L", _("Logical"));
     tpPrmAt(t_prm).fldAdd(new TFld("TMPL",_("Parameter template"),TFld::String,TCfg::NoVal,"50",""));
     //  Parameter template IO DB structure
-    elPrmIO.fldAdd(new TFld("PRM_ID",_("Parameter ID"),TFld::String,TCfg::Key,i2s(atoi(OBJ_ID_SZ)*6).c_str()));
-    elPrmIO.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(s2i(OBJ_ID_SZ)*1.5).c_str()));
+    elPrmIO.fldAdd(new TFld("PRM_ID",_("Parameter ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ*6).c_str()));
+    elPrmIO.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ*1.5).c_str()));
     elPrmIO.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TFld::NoFlag,"1000000"));
 }
 
@@ -1188,6 +1188,13 @@ void TMdPrm::enable( )
 void TMdPrm::disable( )
 {
     if(!enableStat())  return;
+
+    if(lCtx && lCtx->func()) {
+	//Waiting the ordinal calculation finish
+	for(int iTm = 0; lCtx->isCalc() && iTm < STD_WAIT_TM/OSCD_WAIT_DELAY; iTm++) SYS->sysSleep(OSCD_WAIT_DELAY);
+	//Termination the calculation
+	while(lCtx->isCalc()) { SYS->taskSendSIGALRM(owner().nodePath('.',true)); SYS->sysSleep(OSCD_WAIT_DELAY); }
+    }
 
     owner().prmEn(this, false);	//Remove from process
     if(lCtx && lCtx->func() && owner().startStat() && !owner().redntUse()) upValLog(false, true, 0);

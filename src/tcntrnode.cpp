@@ -305,7 +305,7 @@ void TCntrNode::nodeDis( long tm, int flag )
 		break;
 	    }
 	    res1.unlock();
-	    TSYS::sysSleep(1/*STD_WAIT_DELAY*1e-3*/);
+	    TSYS::sysSleep(1/*OSCD_WAIT_DELAY*/);
 	    res1.lock();
 	    if(mUse > 1) mess_sys(TMess::Warning, _("Expecting release %d users!"), mUse-1);
 	}

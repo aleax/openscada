@@ -193,7 +193,7 @@ class TArchiveS : public TSubSYS
 {
     public:
 	//Public data
-	enum AutoIdMode { BothPrmAttrId = 0, OnlyPrmId, OnlyAttrId };
+	enum AutoIdMode { BothPrmAttrId = 0, OnlyPrmId, OnlyAttrId, AllCntrPrmAttrId };
 
 	//Public methods
 	TArchiveS( );

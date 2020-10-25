@@ -162,7 +162,7 @@ class TSocketOut: public TTransportOut
 
 	void setCertKey( const string &val )	{ mCertKey = val; modif(); }
 	void setPKeyPass( const string &val )	{ mKeyPass = val; modif(); }
-	void setTimings( const string &vl );
+	void setTimings( const string &vl, bool isDef = false );
 	void setAttempts( unsigned short vl );
 
 	void start( int time = 0 );

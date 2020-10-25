@@ -10595,7 +10595,7 @@ return obuf;','','',1560098890);
 INSERT INTO lib_servProc VALUES('docOffLine','EXT: Off-line documentation','','','Procedure of forming the offline documentation of OpenSCADA from Wiki by reading and processing the specified Wiki pages on different languages, currently it is: English, Ukrainian, Russian.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.0','','',1,300,0,'trNm = "offLine";
+Version: 1.2.0','','',1,360,0,'trNm = "offLine";
 docHost = "oscada.org:80";
 docHost_ = "http://" + docHost.parse(0,":");
 defLang = "en";

@@ -1,3 +1,25 @@
+2020-10-25 Roman (stable)
+- data/ModelsDB/AGLKS/St.db: The value archiver DBArch.1s switched to the group mode setting "GroupPrms" to 100.
+- !!!!:SYS,*: The system wide limits started in moving to the user configuration area (the configuration file) for some allowed range,
+	for the generic limits currently: limObjID_SZ, limObjNm_SZ, limArchID_SZ.
+    STD_WAIT_DELAY renamed to OSCD_WAIT_DELAY and changed to 0.1 seconds.
+    TSYS appeded for the function taskSendSIGALRM() of sending the termination signal "ALARM" to OpenSCADA tasks.
+    TValFunc: Appended for a state of the function execution by the function isCalc().
+- !!:Archive: The value archive configuration field "Mode of forming ID of the automatic created archives" expanded
+    by the selection item "All controller, parameter and attribute ID" during expanding the value archives limit to 50 symbols.
+- !!!!:Transports.{.,*}: The timeouts setting function setTimings() of the output transports expanded in
+	the default timeouts difference for different protocols, by the argument "isDef".
+    The output transports expanded for a mark of the transport as Network one, by the function isNetwork(), in the User API also.
+- !!!!:Archive.FSArch: Adaption to the ID size of the value archive more than 20 symbols,
+    when its 14 extra symbols are stored in the reserve part (renamed to "archive_add") of the header and extra more in the filename.
+- !!:DAQ.{LogicLev,ModBus,Siemens}: Appended for termination long time executed templates at the parameter disable,
+    using new functions TValFunc::isCalc() and TSYS::taskSendSIGALRM().
+- !!:Protocol.ModBus: Output transport specific timeouts are set to "5:0.1" for Network transports - isNetwork()
+    and the protocol variant "RTU".
+- !!:Protocol.SelfSystem: Output transport specific timeouts are set to "20:2".
+- !:Transport.*: Complete replacing for words "start" on "connect" and "stop" on "disconnect" in all messages.
+
+
 2020-10-18 Roman (stable)
 - FIX:UI.Vision: Fixed in building with Qt4.
 
@@ -26,7 +48,7 @@
 	the playing process in a way like to UI.WebVision and using MediaObject.
     FIX: Alarms processing period some improved to be more predicted.
     FIX: Priority of registering the notifiers some fixed.
-- Transport.{Sockets,SSL}: The default timeouts returned to "10:1".
+- FIX:Transport.{Sockets,SSL}: The default timeouts returned to "10:1".
 
 
 2020-10-04 Roman (stable)

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-20 16:38+0300\n"
+"POT-Creation-Date: 2020-10-22 16:43+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -104,10 +104,10 @@ msgstr ""
 msgid "No response to the initial request '%s'."
 msgstr ""
 
-msgid "Started-connected"
+msgid "Connected"
 msgstr ""
 
-msgid "Stopped-disconnected"
+msgid "Disconnected"
 msgstr ""
 
 #, c-format
@@ -210,7 +210,7 @@ msgstr ""
 msgid "The device '%s' is using now."
 msgstr ""
 
-msgid "Starting."
+msgid "Connecting."
 msgstr ""
 
 msgid "Modem busy"
@@ -225,17 +225,17 @@ msgstr ""
 msgid "Modem no connected"
 msgstr ""
 
-msgid "Stopping."
+msgid "Disconnecting."
 msgstr ""
 
 msgid "Unknown error"
 msgstr ""
 
-msgid "Transport is not started!"
+msgid "Transport is not connected!"
 msgstr ""
 
 #, c-format
-msgid "Restart by KeepAliveTm %gs."
+msgid "Reconnect by KeepAliveTm %gs."
 msgstr ""
 
 msgid "No wrote data"
@@ -285,8 +285,8 @@ msgid ""
 "    conn - maximum time of waiting the connecting response, in milliseconds;\n"
 "    symbol - maximum time of one symbol, used for the frame end detection, in milliseconds;\n"
 "    NextReqMult - next request's multiplicator to the <symbol> time, 4 by default;\n"
-"    KeepAliveTm - keep alive timeout to restart the transport, in seconds;\n"
-"                  use the value < 0 for stopping the transport after missing response at each request;\n"
+"    KeepAliveTm - keep alive timeout to reconnect the transport, in seconds;\n"
+"                  use the value < 0 for disconnecting the transport after missing response at each request;\n"
 "    rtsDelay1 - delay between the transmitter activation with RTS signal and start up of the transmission, in milliseconds;\n"
 "    rtsDelay2 - delay between the transmitting and disconnecting the transmitter with RTS signal, in milliseconds."
 msgstr ""

@@ -37,17 +37,23 @@
 
 <tr>
 <td> <a href="../Modules/ICP_DAS.html" title="Special:MyLanguage/Modules/ICP DAS">ICP_DAS</a> </td>
-<td> ICP DAS hardware </td>
-<td> 1.8 </td>
+<td> ICP DAS hardware
+</td>
+<td> 1.9 </td>
 <td> GPL2 </td>
 <td> daq_ICP_DAS.so </td>
 <td> en,uk,ru,de </td>
 <td> x86,ARM
 </td>
 <td> DAQ </td>
-<td> Roman Savochenko<br />Maxim Lysenko (2009) — the page translation </td>
+<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2009) — the page translation</i></font> </td>
 <td> Provides implementation for "ICP DAS" hardware support. Includes main I-87xxx DCON modules, I-8xxx fast modules and boards on ISA bus.
 </td></tr></table>
+<p>The module provides the OpenSCADA system with the support of various equipment of "ICP DAS" company (<a class="external free" href="http://www.icpdas.com" rel="nofollow noreferrer noopener" target="_blank">http://www.icpdas.com</a>) through the API library <i>libi8k.a</i> from the company, for modules <i>I-87xxx</i> and <i>I-8xxx</i>, and direct <i>ioctl</i> calls to Linux kernel modules for boards on bus <i>ISA</i>.
+</p><p>Most of the equipment of the "ICP DAS" company is working under the <i>DCON</i> protocol, but some new equipment such as <i>I-8xxx</i> Series operates on a parallel bus, while another part is set into the parallel bus slots (<i>I-87xxx</i>) which are available under the serial interface and <i>DCON</i> protocol, they are not addressed directly and require call of the specialized command of the slot selection. Access to equipment that uses direct requests under the <i>DCON</i> protocol, can be implemented by the module <a href="../Modules/DCON.html" title="Special:MyLanguage/Modules/DCON">DAQ.DCON</a>. Support for the rest of the equipment is not added to the module <a href="../Modules/DCON.html" title="Special:MyLanguage/Modules/DCON">DAQ.DCON</a>, but it was implemented in this module due to the availability of API library of the "ICP DAS" company only for the <i>x86_32</i> and <i>ARM(OABI, HardFloatFPA)</i> platform, which brings restrictions on access to the equipment of the ICP DAS company and other equipment under the <i>DCON</i> protocol on the other hardware platforms.
+</p><p>The reason for creating this module was the works with the controller <i>LP-8781</i> of "LinPAC" series of "ICP DAS" company with the purpose to implement runtime PLC based on the OpenSCADA system.
+</p><p>API library of the "ICP DAS" company for platform <i>x86_32 -&gt; libi8k.a</i> and <i>ARM(OABI, HardFloatFPA) -&gt; libi8k_arm.a</i> is available with source code of the module and does not require separate installation.
+</p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#Data_controller"><span class="tocnumber">1</span> <span class="toctext">Data controller</span></a></li>
@@ -74,11 +80,6 @@
 </ul>
 </div>
 
-<p>The module provides the OpenSCADA system with the support of various equipment of "ICP DAS" company (<a class="external free" href="http://www.icpdas.com" rel="nofollow noreferrer noopener" target="_blank">http://www.icpdas.com</a>) through the API library <i>libi8k.a</i> from the company, for modules <i>I-87xxx</i> and <i>I-8xxx</i>, and direct <i>ioctl</i> calls to Linux kernel modules for boards on bus <i>ISA</i>.
-</p><p>Most of the equipment of the "ICP DAS" company is working under the <i>DCON</i> protocol, but some new equipment such as <i>I-8xxx</i> Series operates on a parallel bus, while another part is set into the parallel bus slots (<i>I-87xxx</i>) which are available under the serial interface and <i>DCON</i> protocol, they are not addressed directly and require call of the specialized command of the slot selection. Access to equipment that uses direct requests under the <i>DCON</i> protocol, can be implemented by the module <a href="../Modules/DCON.html" title="Special:MyLanguage/Modules/DCON">DAQ.DCON</a>. Support for the rest of the equipment is not added to the module <a href="../Modules/DCON.html" title="Special:MyLanguage/Modules/DCON">DAQ.DCON</a>, but it was implemented in this module due to the availability of API library of the "ICP DAS" company only for the <i>x86_32</i> and <i>ARM(OABI, HardFloatFPA)</i> platform, which brings restrictions on access to the equipment of the ICP DAS company and other equipment under the <i>DCON</i> protocol on the other hardware platforms.
-</p><p>The reason for creating this module was the works with the controller <i>LP-8781</i> of "LinPAC" series of "ICP DAS" company with the purpose to implement runtime PLC based on the OpenSCADA system.
-</p><p>API library of the "ICP DAS" company for platform <i>x86_32 -&gt; libi8k.a</i> and <i>ARM(OABI, HardFloatFPA) -&gt; libi8k_arm.a</i> is available with source code of the module and does not require separate installation.
-</p>
 <h2><span class="mw-headline" id="Data_controller"><span class="mw-headline-number">1</span> Data controller</span></h2>
 <p>To add the "ICP DAS" data source the controller is created and configured in the <i>OpenSCADA</i> system. Example of the configuration tab of the controller of this type is shown in Figure 1.
 </p>

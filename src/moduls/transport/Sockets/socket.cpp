@@ -61,7 +61,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.1.1"
+#define MOD_VER		"4.2.1"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -128,7 +128,7 @@ void TTransSock::perSYSCall( unsigned int cnt )
 {
     TTypeTransport::perSYSCall(cnt);
 
-    //Iniciative input protocols check for restart/reconnect need.
+    //Iniciative input protocols checking for the reconnect need.
     vector<string> trls;
     inList(trls);
     for(unsigned iTr = 0; !SYS->stopSignal() && iTr < trls.size(); iTr++)
@@ -417,7 +417,7 @@ void TSocketIn::start( )
 
     TTransportIn::start();
 
-    if(logLen()) pushLogMess(_("Started-connected"));
+    if(logLen()) pushLogMess(_("Connected"));
 }
 
 void TSocketIn::stop( )
@@ -438,7 +438,7 @@ void TSocketIn::stop( )
 
     TTransportIn::stop();
 
-    if(logLen()) pushLogMess(_("Stopped-disconnected"));
+    if(logLen()) pushLogMess(_("Disconnected"));
 }
 
 void TSocketIn::check( )
@@ -446,7 +446,7 @@ void TSocketIn::check( )
     try {
 	//Check for activity for initiative mode
 	if(mode() == 2 && (toStart() || startStat()) && (!startStat() || time(NULL) > (lastConn()+keepAliveTm()))) {
-	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Restart due to lack of input activity to '%s'."), addr().c_str());
+	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Reconnect due to lack of input activity to '%s'."), addr().c_str());
 	    if(startStat()) stop();
 	    start();
 	}
@@ -569,7 +569,7 @@ void *TSocketIn::Task( void *sock_in )
     if(sock->type == SOCK_UDP) buf = new char[sock->bufLen()*1024 + 1];
 
     while(!sock->endrun) {
-	tv.tv_sec  = 0; tv.tv_usec = STD_WAIT_DELAY*1000;
+	tv.tv_sec  = 0; tv.tv_usec = OSCD_WAIT_DELAY*1000000;
 	FD_ZERO(&rd_fd); FD_SET(sock->sockFd,&rd_fd);
 
 	int kz = select(sock->sockFd+1, &rd_fd, NULL, NULL, &tv);
@@ -743,7 +743,7 @@ void *TSocketIn::ClTask( void *s_inf )
 
     try {
 	do {
-	    tv.tv_sec  = 0; tv.tv_usec = STD_WAIT_DELAY*1000;
+	    tv.tv_sec  = 0; tv.tv_usec = OSCD_WAIT_DELAY*1000000;
 
 	    unsigned poolPrt = 0;
 	    if((actPrts=s.s->prtInit(prot_in,s.sock,s.sender)))
@@ -1051,7 +1051,7 @@ TSocketOut::TSocketOut( string name, const string &idb, TElem *el ) :
     TTransportOut(name, idb, el), mAttemts(1), mMSS(0), sockFd(-1), type(SOCK_TCP)
 {
     setAddr("localhost:10005");
-    setTimings("10:1");
+    setTimings("10:1", true);
 }
 
 TSocketOut::~TSocketOut( )	{ }
@@ -1078,15 +1078,17 @@ string TSocketOut::getStatus( )
     return rez;
 }
 
-void TSocketOut::setTimings( const string &vl )
+void TSocketOut::setTimings( const string &vl, bool isDef )
 {
-    if(vl == mTimings)	return;
+    if((isDef && !mDefTimeouts) || vl == mTimings) return;
+    else if(!isDef) mDefTimeouts = false;
+
     mTmCon = vmax(1, vmin(60000,(int)(s2r(TSYS::strParse(vl,0,":"))*1e3)));
     mTmNext = vmax(1, vmin(60000,(int)(s2r(TSYS::strParse(vl,1,":"))*1e3)));
     mTmRep = vmax(0, vmin(10000,(int)(s2r(TSYS::strParse(vl,2,":"))*1e3)));
     mTimings = mTmRep ? TSYS::strMess("%g:%g:%g",(1e-3*mTmCon),(1e-3*mTmNext),(1e-3*mTmRep)) :
 			TSYS::strMess("%g:%g",(1e-3*mTmCon),(1e-3*mTmNext));
-    modif();
+    if(!isDef) modif();
 }
 
 void TSocketOut::setAttempts( unsigned short vl )
@@ -1310,7 +1312,7 @@ void TSocketOut::start( int itmCon )
 #endif
 
     } catch(TError &err) {
-	if(logLen()) pushLogMess(TSYS::strMess(_("Error starting: %s"),err.mess.c_str()));
+	if(logLen()) pushLogMess(TSYS::strMess(_("Error connecting: %s"),err.mess.c_str()));
 	throw;
     }
 
@@ -1320,7 +1322,7 @@ void TSocketOut::start( int itmCon )
 
     TTransportOut::start();
 
-    if(logLen()) pushLogMess(_("Started-connected"));
+    if(logLen()) pushLogMess(_("Connected"));
 }
 
 void TSocketOut::stop( )
@@ -1344,7 +1346,7 @@ void TSocketOut::stop( )
 
     TTransportOut::stop();
 
-    if(logLen()) pushLogMess(_("Stopped-disconnected"));
+    if(logLen()) pushLogMess(_("Disconnected"));
 }
 
 int TSocketOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
@@ -1366,7 +1368,7 @@ int TSocketOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int ti
     if(time) { prevTmOut = tmCon(); setTmCon(time); }
 
     try {
-	if(!runSt) throw TError(nodePath().c_str(), _("Transport is not started!"));
+	if(!runSt) throw TError(nodePath().c_str(), _("Transport is not connected!"));
 
 repeate:
 	if(reqTry++ >= wAttempts) { mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(), _("Error requesting: %s"), err.c_str()); }

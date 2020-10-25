@@ -50,6 +50,11 @@
 
 using namespace OSCADA;
 
+//Default values of the global limits
+uint8_t	OSCADA::limObjID_SZ = 20;
+uint8_t	OSCADA::limObjNm_SZ = 100;
+uint8_t	OSCADA::limArchID_SZ = 50;
+
 //Continuously access variable
 TMess	*OSCADA::Mess = NULL;
 TSYS	*OSCADA::SYS = NULL;
@@ -516,7 +521,16 @@ string TSYS::optDescr( )
 	"RdTaskPer  <seconds>	Call period of the redundancy task.\n"
 	"RdRestConnTm <seconds>	Time to restore connection to \"dead\" reserve station.\n"
 	"RdStList   <list>	Redundant stations list, separated symbol ';' (st1;st2).\n"
-	"RdPrimCmdTr <0|1>	Enables the transmission of primary commands to the reserve stations.\n\n"),
+	"RdPrimCmdTr <0|1>	Enables the transmission of primary commands to the reserve stations.\n"
+	"    Program limits:\n"
+	"limObjID_SZ <size>	[*20..50] ID size of the OpenSCADA objects.\n"
+	"			WARNING! Big size can cause the key limit error on MySQL like DB!\n"
+	"				 Change that once before use on DBs with the fixed type \"char({N})\"!\n"
+	"limObjNm_SZ <size>	[*100...200] NAME size of the OpenSCADA objects.\n"
+	"			WARNING! Change that once before use on DBs with the fixed type \"char({N})\"!\n"
+	"limArchID_SZ <size>	[*50...90] ID size of the value archive objects.\n"
+	"			WARNING! Increase it only, else you can get problems on Archive.FSArch!\n"
+	"				 Change that once before use on DBs with the fixed type \"char({N})\"!\n\n"),
 	PACKAGE_NAME, VERSION, buf.sysname, buf.release, name().c_str(), id().c_str());
 
     vector<string> ls;
@@ -602,7 +616,7 @@ ResMtx *TSYS::commonLock( const string &nm )
 
 void TSYS::cfgFileLoad( )
 {
-    //================ Load parameters from commandline =========================
+    //================ Load parameters from the commandline =========================
     string tVl;
     if((tVl=cmdOpt("config")).size())	mConfFile = tVl;
     if((tVl=cmdOpt("station")).size())	mId = tVl;
@@ -671,6 +685,11 @@ void TSYS::cfgFileSave( )
 
 void TSYS::cfgPrmLoad( )
 {
+    //Limits
+    limObjID_SZ = vmax(20, vmin(50,s2i(TBDS::genDBGet(nodePath()+"limObjID_SZ",i2s(limObjID_SZ),"root",TBDS::OnlyCfg))));
+    limObjNm_SZ = vmax(100, vmin(200,s2i(TBDS::genDBGet(nodePath()+"limObjNm_SZ",i2s(limObjNm_SZ),"root",TBDS::OnlyCfg))));
+    limArchID_SZ = vmax(50, vmin(90,s2i(TBDS::genDBGet(nodePath()+"limArchID_SZ",i2s(limArchID_SZ),"root",TBDS::OnlyCfg))));
+
     //System parameters
     setClockRT(s2i(TBDS::genDBGet(nodePath()+"ClockRT",i2s(clockRT()),"root",TBDS::OnlyCfg)));
     mName = TBDS::genDBGet(nodePath()+"StName",name(),"root",TBDS::UseTranslate);
@@ -857,7 +876,7 @@ int TSYS::start( )
     //Call in monopoly for main thread module or wait for a signal.
     mRunning = true;
     if(!mainThr.freeStat()) mainThr.at().modStart();
-    while(!mStopSignal) sysSleep(STD_WAIT_DELAY*1e-3);
+    while(!mStopSignal) sysSleep(OSCD_WAIT_DELAY);
     mRunning = false;
     TSYS::eventWait(isServPrc, false, string("SYS_Service: ")+_("waiting the processing finish ..."));
 
@@ -1087,7 +1106,7 @@ bool TSYS::eventWait( bool &m_mess_r_stat, bool exempl, const string &loc, time_
 	    t_tm = c_tm;
 	    SYS->mess_sys(TMess::Crit, _("Waiting for event ..."));
 	}
-	sysSleep(STD_WAIT_DELAY*1e-3);
+	sysSleep(OSCD_WAIT_DELAY);
     }
     return false;
 }
@@ -2093,7 +2112,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 	//Wait for start status
 	for(time_t c_tm = time(NULL); !(htsk.flgs&STask::Detached) && startSt && !(*startSt); ) {
 	    if(time(NULL) >= (c_tm+wtm)) throw err_sys(_("Timeout of starting the task '%s'!"), path.c_str());
-	    sysSleep(STD_WAIT_DELAY*1e-3);
+	    sysSleep(OSCD_WAIT_DELAY);
 	}
     } catch(TError &err) {
 	if(err.cod) {		//Remove info for pthread_create() but left for other by possible start later
@@ -2120,7 +2139,7 @@ void TSYS::taskDestroy( const string &path, bool *endrunCntr, int wtm, bool noSi
     bool first = true;
     res.request(true);
     while((it=mTasks.find(path)) != mTasks.end() && !(it->second.flgs&STask::FinishTask)) {
-	if(first) pthread_kill(it->second.thr, SIGUSR1);	//User's termination signal, check for it by function taskEndRun()
+	if(first) pthread_kill(it->second.thr, SIGUSR1);	//User's termination signal, is checked by function taskEndRun()
 	if(!noSignal) pthread_kill(it->second.thr, SIGALRM);	//Sleep, select and other system calls termination
 	if(cv) pthread_cond_signal(cv);
 	res.release();
@@ -2136,7 +2155,7 @@ void TSYS::taskDestroy( const string &path, bool *endrunCntr, int wtm, bool noSi
 	    t_tm = c_tm;
 	    mess_sys(TMess::Info, _("Waiting for an event of the task '%s' ..."), path.c_str());
 	}
-	sysSleep(STD_WAIT_DELAY*1e-3);
+	sysSleep(OSCD_WAIT_DELAY);
 	first = false;
 	res.request(true);
     }
@@ -2144,6 +2163,14 @@ void TSYS::taskDestroy( const string &path, bool *endrunCntr, int wtm, bool noSi
 	if(!(it->second.flgs&STask::Detached)) pthread_join(it->second.thr, NULL);
 	mTasks.erase(it);
     }
+}
+
+void TSYS::taskSendSIGALRM( const string &path )
+{
+    ResAlloc res(taskRes, false);
+    map<string,STask>::iterator it = mTasks.find(path);
+    if(it != mTasks.end())
+	pthread_kill(it->second.thr, SIGALRM);	//Sleep, select and other system calls termination
 }
 
 double TSYS::taskUtilizTm( const string &path, bool max )

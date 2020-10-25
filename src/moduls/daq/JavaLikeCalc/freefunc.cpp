@@ -2943,7 +2943,7 @@ void Func::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/func/st/timestamp",_("Date of modification"),R_R_R_,"root",SDAQ_ID,1,"tp","time");
 	if(startStat())
 	    ctrMkNode("fld",opt,-1,"/func/st/compileSt",_("Compilation state"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/func/cfg/NAME",_("Name"),owner().DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"tp","str","len",OBJ_NM_SZ);
+	ctrMkNode("fld",opt,-1,"/func/cfg/NAME",_("Name"),owner().DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"tp","str","len",i2s(limObjNm_SZ).c_str());
 	ctrMkNode("fld",opt,-1,"/func/cfg/DESCR",_("Description"),owner().DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
 	    "tp","str","cols","100","rows","5");
 	ctrMkNode("fld",opt,-1,"/func/cfg/START",_("To start"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");

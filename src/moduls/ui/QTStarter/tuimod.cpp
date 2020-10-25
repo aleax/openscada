@@ -56,7 +56,7 @@
 #define MOD_NAME	_("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"5.7.2"
+#define MOD_VER		"5.7.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -127,7 +127,7 @@ TUIMod::TUIMod( string name ) : TUI(MOD_ID), mQtLookMdf(false), QtApp(NULL), hid
 #endif
 
     //Look and feel DB structure
-    elLF.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::Key,OBJ_NM_SZ));
+    elLF.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::Key,i2s(limObjNm_SZ).c_str()));
     elLF.fldAdd(new TFld("STYLE",_("Style"),TFld::String,0,"20"));
     elLF.fldAdd(new TFld("FONT",_("Font"),TFld::String,0,"30"));
     elLF.fldAdd(new TFld("PALETTE",_("Palette"),TFld::String,0,"1000"));
@@ -610,7 +610,7 @@ StApp::StApp( int &argv, char **args ) : QApplication(argv, args), origStl(mod->
     setApplicationName(PACKAGE_STRING);
     setQuitOnLastWindowClosed(false);
 
-    startTimer(STD_WAIT_DELAY);
+    startTimer(1e3*OSCD_WAIT_DELAY);
 }
 
 StApp::~StApp( )

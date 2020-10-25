@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 4.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-05 19:52+0300\n"
+"POT-Creation-Date: 2020-10-22 16:35+0300\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -139,15 +139,14 @@ msgstr "Fehler beim Binden des Sockets %s: '%s (%d)'!"
 msgid "RAWCAN socket binded to '%s'!"
 msgstr "RAWCAN Socket ist verbunden mit '%s'!"
 
-msgid "Started-connected"
-msgstr "Gestartet-verbunden"
+msgid "Connected"
+msgstr "Verbunden"
 
-msgid "Stopped-disconnected"
-msgstr "Gestoppt-getrennt"
+msgid "Disconnected"
+msgstr "Getrennt"
 
-#, c-format
-msgid "Restart due to lack of input activity to '%s'."
-msgstr "Neustart wegen fehlender Eingabeaktivität für '%s'."
+msgid "Reconnect due to lack of input activity to '%s'."
+msgstr "Reconnect wegen fehlender Eingabeaktivität für '%s'."
 
 #, c-format
 msgid "Write: wrote %s."
@@ -427,15 +426,14 @@ msgstr "Fehler beim Erstellen des %s-Sockets!"
 msgid "RAWCAN socket doesn't bind to '%s'!"
 msgstr "RAWCAN Socket ist nicht verbunden mit '%s'!"
 
-#, c-format
-msgid "Error starting: %s"
-msgstr "Fehler beim Starten: %s"
+msgid "Error connecting: %s"
+msgstr "Verbindungsfehler: %s"
 
 msgid "Unknown error"
 msgstr "Unbekannter Fehler"
 
-msgid "Transport is not started!"
-msgstr "Transport ist nicht gestartet!"
+msgid "Transport is not connected!"
+msgstr "Transport ist nicht verbunden!"
 
 #, c-format
 msgid "Error requesting: %s"

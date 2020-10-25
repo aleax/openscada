@@ -46,8 +46,8 @@ TProt::TProt( string name ) : TProtocol(PRT_ID)
     mEndPnt = grpAdd("ep_");
 
     //Node DB structure
-    mEndPntEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
-    mEndPntEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
+    mEndPntEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    mEndPntEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
     mEndPntEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
     mEndPntEl.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0"));
     mEndPntEl.fldAdd(new TFld("SerialzType",_("Serializer type"),TFld::Integer,TFld::Selectable,"1","0","0",_("Binary")));
@@ -226,10 +226,10 @@ void TProt::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TProtocol::cntrCmdProc(opt);
-	ctrMkNode("grp", opt, -1, "/br/ep_", _("End point"), RWRWR_, "root", SPRT_ID, 2, "idm",OBJ_NM_SZ, "idSz",OBJ_ID_SZ);
+	ctrMkNode("grp", opt, -1, "/br/ep_", _("End point"), RWRWR_, "root", SPRT_ID, 2, "idm",i2s(limObjNm_SZ).c_str(), "idSz",i2s(limObjID_SZ).c_str());
 	if(ctrMkNode("area",opt,0,"/ep",_("End points")))
 	    ctrMkNode("list", opt, -1, "/ep/ep", _("End points"), RWRWR_, "root", SPRT_ID, 5,
-		"tp","br", "idm",OBJ_NM_SZ, "s_com","add,del", "br_pref","ep_", "idSz",OBJ_ID_SZ);
+		"tp","br", "idm",i2s(limObjNm_SZ).c_str(), "s_com","add,del", "br_pref","ep_", "idSz",i2s(limObjID_SZ).c_str());
 	return;
     }
 

@@ -47,9 +47,9 @@ TArchiveS::TArchiveS( ) :
     mAval = grpAdd("va_");
 
     //Message archiver DB structure
-    elMess.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
-    elMess.fldAdd(new TFld("MODUL",_("Module(plugin) name"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
-    elMess.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
+    elMess.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    elMess.fldAdd(new TFld("MODUL",_("Module(plugin) name"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    elMess.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
     elMess.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"200"));
     elMess.fldAdd(new TFld("START",_("To start"),TFld::Boolean,0,"1"));
     elMess.fldAdd(new TFld("CATEG",_("Messages categories"),TFld::String,0,"100"));
@@ -60,9 +60,9 @@ TArchiveS::TArchiveS( ) :
     elMess.fldAdd(new TFld("REDNT_RUN",_("Preferable run"),TFld::String,0,"20","<high>"));
 
     //Value archiver DB structure
-    elVal.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
-    elVal.fldAdd(new TFld("MODUL",_("Module(plugin) name"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
-    elVal.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
+    elVal.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    elVal.fldAdd(new TFld("MODUL",_("Module(plugin) name"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    elVal.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
     elVal.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"200"));
     elVal.fldAdd(new TFld("START",_("To start"),TFld::Boolean,0,"1","0"));
     elVal.fldAdd(new TFld("ADDR",_("Address"),TFld::String,0,"100"));
@@ -71,8 +71,8 @@ TArchiveS::TArchiveS( ) :
     elVal.fldAdd(new TFld("SEL_PR",_("Selection priority"),TFld::Integer,0,"4","10","0;1000"));
 
     //Value archive DB structure
-    elAval.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,ARCH_ID_SZ));
-    elAval.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
+    elAval.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limArchID_SZ).c_str()));
+    elAval.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
     elAval.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"200"));
     elAval.fldAdd(new TFld("START",_("To start"),TFld::Boolean,0,"1","0"));
     elAval.fldAdd(new TFld("SrcMode",_("Source"),TFld::Integer,TFld::Selectable,"1","0",
@@ -986,7 +986,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TSubSYS::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/va_",_("Value archive"),RWRWR_,"root",SARH_ID,2,"idm",OBJ_NM_SZ,"idSz",ARCH_ID_SZ);
+	ctrMkNode("grp",opt,-1,"/br/va_",_("Value archive"),RWRWR_,"root",SARH_ID,2,"idm",i2s(limObjNm_SZ).c_str(),"idSz",i2s(limArchID_SZ).c_str());
 	if(SYS->rdEnable() && ctrMkNode("area",opt,0,"/redund",_("Redundancy"))) {
 	    ctrMkNode("fld",opt,-1,"/redund/restDtOverTm",_("Overtime of the reserve history reload at start, days"),RWRWR_,"root",SARH_ID,1, "tp","real");
 	    if(ctrMkNode("table",opt,-1,"/redund/mArch",_("Message archivers"),RWRWR_,"root",SARH_ID,1,"key","id")) {
@@ -1033,10 +1033,11 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/v_arch/prior",_("Level of priority of the data receiving task"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",TMess::labTaskPrior());
 	    ctrMkNode("fld",opt,-1,"/v_arch/fCurTm",_("Forced to set timestampes in the current time"),RWRWR_,"root",SARH_ID,1,"tp","bool");
 	    ctrMkNode("fld",opt,-1,"/v_arch/appAttrIdMode",_("Mode of forming ID of the automatic created archives"),RWRWR_,"root",SARH_ID,4,"tp","dec", "dest","select",
-		"sel_id",TSYS::strMess("%d;%d;%d",BothPrmAttrId,OnlyPrmId,OnlyAttrId).c_str(),
-		"sel_list",_("Both parameter and attribute ID;Only parameter ID;Only attribute ID"));
+		"sel_id",TSYS::strMess("%d;%d;%d;%d",BothPrmAttrId,OnlyPrmId,OnlyAttrId,AllCntrPrmAttrId).c_str(),
+		"sel_list",_("Both parameter and attribute ID;Only parameter ID;Only attribute ID;All controller, parameter and attribute ID"));
 	    ctrMkNode("fld",opt,-1,"/v_arch/nmb",_("Number"),R_R_R_,"root",SARH_ID,1,"tp","str");
-	    ctrMkNode("list",opt,-1,"/v_arch/archs",_("Value archives"),RWRWR_,"root",SARH_ID,5,"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","va_","idSz",ARCH_ID_SZ);
+	    ctrMkNode("list",opt,-1,"/v_arch/archs",_("Value archives"),RWRWR_,"root",SARH_ID,5,
+		"tp","br","idm",i2s(limObjNm_SZ).c_str(),"s_com","add,del","br_pref","va_","idSz",i2s(limArchID_SZ).c_str());
 	}
 	return;
     }
@@ -1240,12 +1241,12 @@ void TTypeArchivator::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TModule::cntrCmdProc(opt);
 	ctrMkNode("area",opt,0,"/arch",_("Archivers"));
-	ctrMkNode("grp",opt,-1,"/br/mess_",_("Message archiver"),RWRWR_,"root",SARH_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
-	ctrMkNode("grp",opt,-1,"/br/val_",_("Value archiver"),RWRWR_,"root",SARH_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
+	ctrMkNode("grp",opt,-1,"/br/mess_",_("Message archiver"),RWRWR_,"root",SARH_ID,2,"idm",i2s(limObjNm_SZ).c_str(),"idSz",i2s(limObjID_SZ).c_str());
+	ctrMkNode("grp",opt,-1,"/br/val_",_("Value archiver"),RWRWR_,"root",SARH_ID,2,"idm",i2s(limObjNm_SZ).c_str(),"idSz",i2s(limObjID_SZ).c_str());
 	ctrMkNode("list",opt,-1,"/arch/mess",_("Message archivers"),RWRWR_,"root",SARH_ID,5,
-	    "tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","mess_","idSz",OBJ_ID_SZ);
+	    "tp","br","idm",i2s(limObjNm_SZ).c_str(),"s_com","add,del","br_pref","mess_","idSz",i2s(limObjID_SZ).c_str());
 	ctrMkNode("list",opt,-1,"/arch/val",_("Value archivers"),RWRWR_,"root",SARH_ID,5,
-	    "tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","val_","idSz",OBJ_ID_SZ);
+	    "tp","br","idm",i2s(limObjNm_SZ).c_str(),"s_com","add,del","br_pref","val_","idSz",i2s(limObjID_SZ).c_str());
 	return;
     }
 

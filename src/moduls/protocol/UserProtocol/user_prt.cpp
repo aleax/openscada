@@ -33,7 +33,7 @@
 #define MOD_NAME	_("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.3.1"
+#define MOD_VER		"1.4.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user protocols on an internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -78,8 +78,8 @@ TProt::TProt( string name ) : TProtocol(MOD_ID)
     mPrtU = grpAdd("up_");
 
     // User protocol DB structure
-    mUPrtEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
-    mUPrtEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
+    mUPrtEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    mUPrtEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
     mUPrtEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
     mUPrtEl.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0"));
     mUPrtEl.fldAdd(new TFld("DAQTmpl",_("Representative DAQ template"),TFld::String,TFld::NoFlag,"50"));
@@ -90,8 +90,8 @@ TProt::TProt( string name ) : TProtocol(MOD_ID)
     mUPrtEl.fldAdd(new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec));
 
     //User protocol data IO DB structure
-    mUPrtIOEl.fldAdd(new TFld("UPRT_ID",_("User protocol ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
-    mUPrtIOEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    mUPrtIOEl.fldAdd(new TFld("UPRT_ID",_("User protocol ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    mUPrtIOEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
     mUPrtIOEl.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TFld::TransltText,"100"));
 }
 
@@ -185,10 +185,11 @@ void TProt::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TProtocol::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/up_",_("User protocol"),RWRWR_,"root",SPRT_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
+	ctrMkNode("grp",opt,-1,"/br/up_",_("User protocol"),RWRWR_,"root",SPRT_ID,2,
+	    "idm",i2s(limObjNm_SZ).c_str(),"idSz",i2s(limObjID_SZ).c_str());
 	if(ctrMkNode("area",opt,0,"/up",_("User protocols")))
 	    ctrMkNode("list",opt,-1,"/up/up",_("Protocols"),RWRWR_,"root",SPRT_ID,5,
-		"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","up_","idSz",OBJ_ID_SZ);
+		"tp","br","idm",i2s(limObjNm_SZ).c_str(),"s_com","add,del","br_pref","up_","idSz",i2s(limObjID_SZ).c_str());
 	return;
     }
 
