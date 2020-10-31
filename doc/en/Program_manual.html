@@ -1509,15 +1509,25 @@ RdTaskPer  &lt;seconds&gt;    Call period of the redundancy task.
 RdRestConnTm &lt;seconds&gt;  Time to restore connection to "dead" reserve station.
 RdStList   &lt;list&gt;       Redundant stations list, separated symbol ';' (st1;st2).
 RdPrimCmdTr &lt;0|1&gt;       Enables the transmission of primary commands to the reserve stations.
-    Program limits:
-limObjID_SZ &lt;size&gt;      [*20..50] ID size of the OpenSCADA objects.
-                        WARNING! Big size can cause the key limit error on MySQL like DB!
-                                 Change that once before use on DBs with the fixed type "char({N})"!
-limObjNm_SZ &lt;size&gt;      [*100...200] NAME size of the OpenSCADA objects.
-                        WARNING! Change that once before use on DBs with the fixed type "char({N})"!
-limArchID_SZ &lt;size&gt;     [*50...90] ID size of the value archive objects.
-                        WARNING! Increase it only, else you can get problems on Archive.FSArch!
-                                 Change that once before use on DBs with the fixed type "char({N})"!
+    Global configurable limits:
+limObjID_SZ     [*20..50] ID size of the OpenSCADA objects.
+                WARNING! Big size can cause the key limit error on MySQL like DB!
+                         Change that once before use on DBs with the fixed type "char({N})"!
+limObjNm_SZ     [*100...200] NAME size of the OpenSCADA objects.
+                WARNING! Change that once before use on DBs with the fixed type "char({N})"!
+limArchID_SZ    [*50...90] ID size of the value archive objects.
+                WARNING! Increase it only, else you can get problems on Archive.FSArch!
+                         Change that once before use on DBs with the fixed type "char({N})"!
+limUserFile_SZ  [1MB...*10MB...1000MB] The files size limit at loading and processing in the userspace
+                and the part size of the big files transferring.
+limUserIts_N    [1000...*1000000...1000000000] The limit on count of creating user items, like to array items.
+limCacheIts_N   [*100...100000] The limit on count of the caching items.
+    Global configurable parameters:
+prmStrBuf_SZ    [1000...*10000...1000000] Length of string buffers, no string class.
+prmWait_DL      [0.001...*0.1...1] Quantum of the waiting time cycles, seconds.
+prmWait_TM      [*5...10] Standard waiting timeout length, seconds.
+prmInterf_TM    [*7...15] Time of waiting for the interface reaction, seconds.
+prmServTask_PER [1...*10...120] Service task period, seconds.
 
 ========================= Subsystem "DB" options ========================
 ------ Parameters of the section '/sub_BD/' of the configuration file ------

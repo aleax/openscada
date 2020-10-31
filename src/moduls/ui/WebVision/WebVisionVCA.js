@@ -431,7 +431,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	    "<get path='/%2fattr%2fpgGrp'/>"+
 	    "<get path='/%2fattr%2fpgOpenSrc'/>";
 	// For per-page notification
-	for(iNtf = 0; iNtf < 7; iNtf++)
+	for(iNtf = 0; iNtf < 8; iNtf++)
 	    reqPgGen += "<activate path='/%2fserv%2fattr%2fnotify"+iNtf+"'/>"+
 			"<activate path='/%2fserv%2fattr%2fnotifyVis"+MOD_ID+iNtf+"'/>";
 	reqPgGen += "</CntrReqs>";
@@ -652,7 +652,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		if(toCrtStBar) {
 		    stBar = "<table width='100%'><TR><td id='StatusBar' width='100%'/>";
 		    stBar += "<td id='st_alarm' title1='###Alarm level: %1###' style='display: flex;'>"+
-			    "<img id='alarmLev' onclick='alarmQuiet(this.id, 255)' height='"+(masterPage.status.height-2)+"px' src='/"+MOD_ID+"/img_alarmLev'/></td>";
+			    "<img id='alarmLev' onclick='alarmQuiet(this.id)' height='"+(masterPage.status.height-2)+"px' src='/"+MOD_ID+"/img_alarmLev'/></td>";
 		    if(modelStyles && parseInt(modelStyles.getAttribute('curStlId')) >= 0 && modelStyles.childNodes.length > 1) {
 			stBar += "<td id='st_style' title='###Field for displaying and changing the used interface style.###'>";
 			stBar += "<select onchange='styleSet(this.selectedOptions[0].getAttribute(\"itId\"))'>";
@@ -771,7 +771,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		if(tVl == '*') window.location = '/login'+window.location.pathname;
 		else { servSet(this.addr, 'com=setUser&user='+tVl, ''); window.location.reload(); }
 	    }
-	    for(iNtf = 0; iNtf < 7; iNtf++)
+	    for(iNtf = 0; iNtf < 8; iNtf++)
 		if((tVl=this.attrs["notifyVis"+MOD_ID+iNtf]) && this.attrsMdf["notifyVis"+MOD_ID+iNtf])
 		    ntfReg(iNtf, tVl, this.addr, true);
 		else if((tVl=this.attrs["notify"+iNtf]) && this.attrsMdf["notify"+iNtf])
@@ -782,6 +782,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    {
 		if(this.inclOpen) {
 		    servSet(this.inclOpen, 'com=pgClose&cacheCntr&cachePg', '');
+		    this.pages[this.inclOpen].pwClean();
 
 		    this.pages[this.inclOpen].reqTm = tmCnt;
 		    pgCacheProc(this.pages[this.inclOpen]);
@@ -2461,7 +2462,12 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 function pwClean( complete )
 {
-    if(this.pg)	ntfReg(-1, '', this.addr);
+    if(this.pg)	{
+	ntfReg(-1, '', this.addr);
+	for(iNtf = 0; iNtf < 8; iNtf++)
+	    if(this.attrs["notifyVis"+MOD_ID+iNtf]) delete this.attrs["notifyVis"+MOD_ID+iNtf];
+	    else if(this.attrs["notify"+iNtf]) delete this.attrs["notify"+iNtf];
+    }
 
     for(var i in this.pages) this.pages[i].pwClean(complete);
     for(var i in this.wdgs) this.wdgs[i].pwClean(complete);
@@ -2811,14 +2817,14 @@ function alarmSet( alarm ) {
     alarmSt_img = alarmSt.childNodes[0];
 
     //Set notify to the alarm
-    for(iNtf = 0; iNtf < 7; iNtf++) {
+    for(iNtf = 0; iNtf < 8; iNtf++) {
 	if(notifiers[iNtf] == null) continue;
 
 	if(((newSt=(alarm>>8)&(1<<iNtf)) && notifiers[iNtf].stTag.style.display.length) || (!newSt && !notifiers[iNtf].stTag.style.display.length))
 	    notifiers[iNtf].stTag.style.display = newSt ? "" : "none";
 	if(((newSt=(alarm>>16)&(1<<iNtf)) && notifiers[iNtf].stTag.className == 'inactive') || (!newSt && notifiers[iNtf].stTag.className != 'inactive')) {
 	    notifiers[iNtf].stTag.className = newSt ? '' : 'inactive';
-	    notifiers[iNtf].stTag.style.cursor = newSt ? 'pointer' : '';
+	    notifiers[iNtf].stTag.style.cursor = (newSt || notifiers[iNtf].f_quietanceRet) ? 'pointer' : '';
 	}
 
 	// Checking and updating the audio tags
@@ -2857,8 +2863,10 @@ function alarmSet( alarm ) {
     mAlrmSt = alarm;
 }
 
-function alarmQuiet( ev, tmpl ) {
-    servSet("/UI/VCAEngine/"+sessId+"/%2fserv%2falarm", "com=com", "<quietance tmpl='"+tmpl+"'/>");
+function alarmQuiet( ev, iNtf, ret ) {
+    tmpl = (iNtf && iNtf >= 0) ? (1<<iNtf) : 255;
+
+    servSet("/UI/VCAEngine/"+sessId+"/%2fserv%2falarm", "com=com", "<quietance tmpl='"+tmpl+"' ret='"+(ret?1:0)+"' wdg='"+(notifiers[iNtf]?notifiers[iNtf].curQueueWdg:'')+"'/>");
 
     var attrs = new Object();
     attrs.event = "ws_"+ev; setWAttrs(masterPage.addr, attrs);
@@ -2866,7 +2874,7 @@ function alarmQuiet( ev, tmpl ) {
 
 function ntfReg( tp, props, pgCrtor, prior ) {
     if(tp < 0) {
-	for(iNtf = 0; iNtf < 7; iNtf++)
+	for(iNtf = 0; iNtf < 8; iNtf++)
 	    ntfReg(iNtf, props, pgCrtor, prior);
 	return;
     }
@@ -2876,9 +2884,9 @@ function ntfReg( tp, props, pgCrtor, prior ) {
 
     //Search for presented notification type
     if(notifiers[tp] != null) {
-	if(pgCrtor == notifiers[tp].pgCrtor && (props == notifiers[tp].props || !prior)) return;
+	if(notifiers[tp].pgProps.indexOf(pgCrtor+"\n") == 0 && (props == notifiers[tp].props || !prior)) return;
 	pgPropsQ = notifiers[tp].pgPropsQ;
-	if(pgCrtor != notifiers[tp].pgCrtor) {
+	if(notifiers[tp].pgProps.indexOf(pgCrtor+"\n") != 0) {
 	    // Check the queue for the page already here
 	    for(iQ = 0; iQ != pgPropsQ.length; ++iQ)
 		if(pgPropsQ[iQ].slice(0,pgCrtor.length+1) == (pgCrtor+"\n")) {
@@ -2917,6 +2925,7 @@ function ntfReg( tp, props, pgCrtor, prior ) {
     notifiers[tp].aTag = null;
     notifiers[tp].stTag = null;
     notifiers[tp].queueCurTm = 0;
+    notifiers[tp].curQueueWdg = '';
 
     //Parsing the properties
     prpLns = pgProps.split('\n');
@@ -2950,7 +2959,8 @@ function ntfReg( tp, props, pgCrtor, prior ) {
 	notifiers[tp].stTag.height = (masterPage.status.height-2);
 	notifiers[tp].stTag.src = "/"+MOD_ID+(ico.length?pgCrtor+"?com=res&val="+ico+"&size="+(masterPage.status.height-2):"/img_alarmAlarm");
 	notifiers[tp].stTag.style.display = 'none';
-	notifiers[tp].stTag.onclick = function( ) { alarmQuiet(this.id, (1<<parseInt(this.id.slice(8)))); }
+	notifiers[tp].stTag.quietanceRet = notifiers[tp].f_quietanceRet;
+	notifiers[tp].stTag.onclick = function( ) { alarmQuiet(this.id, parseInt(this.id.slice(8)), (this.quietanceRet && this.className == 'inactive')); }
 	masterPage.status.children[0].rows[0].children.st_alarm.appendChild(notifiers[tp].stTag);
     }
 }

@@ -298,7 +298,7 @@ bool Kontar::cfgChange( TParamContr *ip, TCfg &cfg )
 	int cf_sz = 0;
 	char *buf = NULL;
 	int hd = open(cfg.getS().c_str(), O_RDONLY);
-	if(hd >= 0 && (cf_sz=lseek(hd,0,SEEK_END)) > 0 && cf_sz < USER_FILE_LIMIT) {
+	if(hd >= 0 && (cf_sz=lseek(hd,0,SEEK_END)) > 0 && cf_sz < limUserFile_SZ) {
 	    lseek(hd, 0, SEEK_SET);
 	    buf = (char*)malloc(cf_sz+1);
 	    if(read(hd,buf,cf_sz) != cf_sz) cf_sz = 0;

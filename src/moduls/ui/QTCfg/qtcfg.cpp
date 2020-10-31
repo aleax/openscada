@@ -456,7 +456,7 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     endRunTimer  = new QTimer(this);
     endRunTimer->setSingleShot(false);
     connect(endRunTimer, SIGNAL(timeout()), this, SLOT(endRunChk()));
-    endRunTimer->start(1000/*1e3*OSCD_WAIT_DELAY*/);
+    endRunTimer->start(1000/*1e3*prmWait_DL*/);
     // Create Request progress closing timer
     reqPrgrsTimer = new QTimer(this);
     reqPrgrsTimer->setSingleShot(true);
@@ -984,7 +984,7 @@ void ConfApp::stHistCall( )
 
 void ConfApp::about( )
 {
-    char buf[STR_BUF_LEN];
+    char buf[prmStrBuf_SZ];
 
     snprintf(buf, sizeof(buf), _(
 	"%s v%s.\n%s\nAuthor: %s\nLicense: %s\n\n"
@@ -2992,7 +2992,7 @@ void ConfApp::imgPopup( const QPoint &pos )
 		QString fileName = QFileDialog::getOpenFileName(this,_("Loading the picture"),"",_("Images (*.png *.jpg)"));
 		if(fileName.isNull()) return;
 		int len;
-		char buf[STR_BUF_LEN];
+		char buf[prmStrBuf_SZ];
 		string rez;
 
 		//Load image file

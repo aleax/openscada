@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Siemens DAQ and Beckhoff")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"3.5.0"
+#define MOD_VER		"3.5.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol)\
  and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the\
@@ -1748,9 +1748,9 @@ void TMdPrm::disable( )
     if(!enableStat()) return;
 
     //Waiting the ordinal calculation finish
-    for(int iTm = 0; isCalc() && iTm < STD_WAIT_TM/OSCD_WAIT_DELAY; iTm++) SYS->sysSleep(OSCD_WAIT_DELAY);
+    for(int iTm = 0; isCalc() && iTm < prmWait_TM/prmWait_DL; iTm++) SYS->sysSleep(prmWait_DL);
     //Termination the calculation
-    while(isCalc()) { SYS->taskSendSIGALRM(owner().nodePath('.',true)); SYS->sysSleep(OSCD_WAIT_DELAY); }
+    while(isCalc()) { SYS->taskSendSIGALRM(owner().nodePath('.',true)); SYS->sysSleep(prmWait_DL); }
 
     //Unregister parameter
     owner().prmEn(id(), false);

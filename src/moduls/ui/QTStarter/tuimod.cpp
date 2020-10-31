@@ -56,7 +56,7 @@
 #define MOD_NAME	_("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"5.7.3"
+#define MOD_VER		"5.7.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -610,7 +610,7 @@ StApp::StApp( int &argv, char **args ) : QApplication(argv, args), origStl(mod->
     setApplicationName(PACKAGE_STRING);
     setQuitOnLastWindowClosed(false);
 
-    startTimer(1e3*OSCD_WAIT_DELAY);
+    startTimer(1e3*prmWait_DL);
 }
 
 StApp::~StApp( )
@@ -1247,7 +1247,7 @@ void StartDialog::updatePrjList( const string &stage )
 
 void StartDialog::about( )
 {
-    char buf[STR_BUF_LEN];
+    char buf[prmStrBuf_SZ];
 
     snprintf(buf, sizeof(buf), _(
 	"%s v%s.\n%s\nAuthor: %s\nLicense: %s\n\n"

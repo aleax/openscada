@@ -934,7 +934,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD)) {
 	    MtxAlloc res(mLogRes, true);
 	    time_t stTm = time(NULL);
-	    for(int iL = mLog.size()-1; iL >= 0 && (time(NULL)-stTm) <= STD_WAIT_TM; iL--) {
+	    for(int iL = mLog.size()-1; iL >= 0 && (time(NULL)-stTm) <= prmWait_TM; iL--) {
 		int off = 0;
 		int64_t itTm   = s2ll(TSYS::strLine(mLog[iL],0,&off));
 		string  itDscr = TSYS::strLine(mLog[iL], 0, &off);
@@ -1088,10 +1088,10 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, 
     //    sending the message <mess> through the transport with the waiting timeout <timeOut> and reading for <inBufLen> bytes.
     //  mess - message text for send
     //  timeOut - connection timeout, in seconds. Set to "< -1e-3" for the no request mode
-    //  inBufLen - input buffer length, < 0 - STR_BUF_LEN(10000), 0 - no read but only write, > 0 - read pointed bytes
+    //  inBufLen - input buffer length, < 0 - prmStrBuf_SZ(10000), 0 - no read but only write, > 0 - read pointed bytes
     if(iid == "messIO" && prms.size() >= 1 && prms[0].type() != TVariant::Object) {
 	string rez;
-	int inBufLen = (prms.size() < 3 || prms[2].getI() < 0) ? STR_BUF_LEN : vmin(STR_BUF_LEN,prms[2].getI());
+	int inBufLen = (prms.size() < 3 || prms[2].getI() < 0) ? prmStrBuf_SZ : vmin(prmStrBuf_SZ,prms[2].getI());
 	char buf[inBufLen];
 	try {
 	    if(!startStat()) start();
@@ -1185,7 +1185,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 		  "Many systems, when responding to different protocols (such as HTTP), can send response data in several parts.\n"
 		  "Without this, only the first part will be received and displayed.\n"
 		  "When this flag is set, all parts of the response will be waiting up to missing data during the transport timeout."));
-	    ctrMkNode("fld",opt,-1,"/req/inBufSz",_("Input buffer size, bytes"),RWRW__,"root",STR_ID,4,"tp","dec","min","0","max",i2s(STR_BUF_LEN).c_str(),
+	    ctrMkNode("fld",opt,-1,"/req/inBufSz",_("Input buffer size, bytes"),RWRW__,"root",STR_ID,4,"tp","dec","min","0","max",i2s(prmStrBuf_SZ).c_str(),
 		"help",_("Direct set the input buffer size. Use 0 to disable waiting and reading for a data - only to write."));
 	    ctrMkNode("comm",opt,-1,"/req/send",_("Send"),RWRW__,"root",STR_ID);
 	    ctrMkNode("fld",opt,-1,"/req/req",_("Request"),RWRW__,"root",STR_ID,4,"tp","str","cols","90","rows","5","SnthHgl","1");
@@ -1222,9 +1222,9 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/req/inBufSz") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))
-	    opt->setText(TBDS::genDBGet(owner().nodePath()+"InBufSz",i2s(STR_BUF_LEN),opt->attr("user")));
+	    opt->setText(TBDS::genDBGet(owner().nodePath()+"InBufSz",i2s(prmStrBuf_SZ),opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))
-	    TBDS::genDBSet(owner().nodePath()+"InBufSz", i2s(vmax(0,vmin(STR_BUF_LEN,s2i(opt->text())))), opt->attr("user"));
+	    TBDS::genDBSet(owner().nodePath()+"InBufSz", i2s(vmax(0,vmin(prmStrBuf_SZ,s2i(opt->text())))), opt->attr("user"));
     }
     else if(a_path == "/req/req") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TBDS::genDBGet(owner().nodePath()+"ReqReq","",opt->attr("user")));
@@ -1277,7 +1277,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 
 	int64_t stm = TSYS::curTime();
 	try {
-	    int inBufSz = s2i(TBDS::genDBGet(owner().nodePath()+"InBufSz",i2s(STR_BUF_LEN),opt->attr("user")));
+	    int inBufSz = s2i(TBDS::genDBGet(owner().nodePath()+"InBufSz",i2s(prmStrBuf_SZ),opt->attr("user")));
 	    char buf[inBufSz];
 	    if(!startStat()) start();
 	    MtxAlloc resN(reqRes(), true);
@@ -1287,7 +1287,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 		else answ.append(buf, resp_len);
 
 		bool ToTmOut = (bool)s2i(TBDS::genDBGet(owner().nodePath()+"ToTmOut","0",opt->attr("user")));
-		while(ToTmOut && resp_len > 0 && ((TSYS::curTime()-stm)/1000000) < STD_INTERF_TM) {
+		while(ToTmOut && resp_len > 0 && ((TSYS::curTime()-stm)/1000000) < prmInterf_TM) {
 		    try { resp_len = messIO(NULL, 0, buf, inBufSz); } catch(TError &err) { break; }
 		    answ.append(buf, resp_len);
 		}
@@ -1308,7 +1308,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",R_R___,"root",STR_ID,SEC_RD)) {
 	    MtxAlloc res(mLogRes, true);
 	    time_t stTm = time(NULL);
-	    for(int iL = mLog.size()-1; iL >= 0 && (time(NULL)-stTm) <= STD_WAIT_TM; iL--) {
+	    for(int iL = mLog.size()-1; iL >= 0 && (time(NULL)-stTm) <= prmWait_TM; iL--) {
 		int off = 0;
 		int64_t itTm   = s2ll(TSYS::strLine(mLog[iL],0,&off));
 		string  itDscr = TSYS::strLine(mLog[iL], 0, &off);

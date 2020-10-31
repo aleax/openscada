@@ -1035,7 +1035,7 @@ void Session::Notify::commCall( bool doNtf, bool doRes, string &res, string &res
 	else {
 	    FILE *fp = popen(cmdSeq.c_str(), "r");
 	    if(fp) {
-		char buf[STR_BUF_LEN];
+		char buf[prmStrBuf_SZ];
 		for(int r_cnt = 0; (r_cnt=fread(buf,1,sizeof(buf),fp)) || !feof(fp); )
 		    resTp.append(buf, r_cnt);
 		pclose(fp);
@@ -1044,7 +1044,7 @@ void Session::Notify::commCall( bool doNtf, bool doRes, string &res, string &res
 
 	    hdRes = open(resFile.c_str(), O_RDONLY);
 	    if(hdRes >= 0) {
-		char buf[STR_BUF_LEN];
+		char buf[prmStrBuf_SZ];
 		res.clear();
 		if(lseek(hdRes,0,SEEK_END) < 100*1024*1024) {
 		    lseek(hdRes, 0, SEEK_SET);

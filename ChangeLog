@@ -1,3 +1,17 @@
+2020-10-31 Roman (stable)
+- data/ModelsDB/{oscada_start.xml,AGLKS/oscada_AGLKS.xml,Boiler/oscada_Boiler.xml}, data/Android/patches/openscada_oscada.xml.patch:
+    The style "Typical TDE" appended for a color of the table throughrows.
+- !!!!:SYS,*: The global configurable limits appended for limUserFile_SZ, limUserIts_N, limCacheIts_N,
+    and parameters appended for prmStrBuf_SZ, prmWait_DL, prmWait_TM, prmInterf_TM, prmServTask_PER.
+- !!!!:FIX:UI.{QTCfg,Vision}: Appended by a function of adjustion text colors to the background color - colorAdjToBack(),
+	which used in correction the syntax highlighting and other dynamic colors to the palette changing.
+    The custom color of the work space of the development window was disabled.
+- FIX:UI.{Vision,WebVision}: The notifiers were fixed in processing all 8 ones.
+- !!!:UI.WebVision: Appended for the "quietanceRet" support.
+    Appended for cleaning old notifiers at closing pages them registering.
+    The "curQueueWdg" appended in the quittance request.
+
+
 2020-10-25 Roman (stable)
 - data/ModelsDB/AGLKS/St.db: The value archiver DBArch.1s switched to the group mode setting "GroupPrms" to 100.
 - !!!!:SYS,*: The system wide limits started in moving to the user configuration area (the configuration file) for some allowed range,

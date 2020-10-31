@@ -1150,7 +1150,7 @@ void ShapeFormEl::buttonReleased( )
 		mod->postMess(mod->nodePath().c_str(), QString(_("Error opening the file '%1': %2")).arg(fn).arg(file.errorString()), TVision::Error);
 		break;
 	    }
-	    if(file.size() >= USER_FILE_LIMIT) {
+	    if(file.size() >= limUserFile_SZ) {
 		mod->postMess(mod->nodePath().c_str(), QString(_("The download file '%1' is very large.")).arg(fn), TVision::Error);
 		break;
 	    }

@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tmess.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -146,7 +146,7 @@ void TMess::put_( const char *categ, int8_t level, const char *fmt,  ... )
 
 void TMess::putArg( const char *categ, int8_t level, const char *fmt, va_list ap )
 {
-    char mess[STR_BUF_LEN];
+    char mess[prmStrBuf_SZ];
     vsnprintf(mess, sizeof(mess), fmt, ap);
 
     level = vmin(Emerg, vmax(-Emerg,level));
@@ -318,12 +318,12 @@ string TMess::translGet( const string &base, const string &lang, const string &s
 	}
 
 	//Cache data and limit update
-	if(trMessCache.size() > 10*(STD_CACHE_LIM+STD_CACHE_LIM/10)) {
+	if(trMessCache.size() > 10*(limCacheIts_N+limCacheIts_N/10)) {
 	    vector< pair<time_t,string> > sortQueue;
 	    for(map<string,CacheEl>::iterator itr = trMessCache.begin(); itr != trMessCache.end(); ++itr)
 		sortQueue.push_back(pair<time_t,string>(itr->second.tm,itr->first));
 	    sort(sortQueue.begin(), sortQueue.end());
-	    for(unsigned i_del = 0; i_del < 10*(STD_CACHE_LIM/10); ++i_del) trMessCache.erase(sortQueue[i_del].second);
+	    for(unsigned i_del = 0; i_del < 10*(limCacheIts_N/10); ++i_del) trMessCache.erase(sortQueue[i_del].second);
 	}
     }
 

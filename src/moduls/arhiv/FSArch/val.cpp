@@ -1901,7 +1901,7 @@ void VFileArch::setValue( int hd, int voff, const string &val )
 void VFileArch::moveTail( int hd, int old_st, int new_st )
 {
     bool fOK = true;
-    char buf[STR_BUF_LEN];
+    char buf[prmStrBuf_SZ];
 
     if(old_st == new_st) return;
     if(new_st > old_st && fOK) {

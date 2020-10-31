@@ -54,6 +54,15 @@ using namespace OSCADA;
 uint8_t	OSCADA::limObjID_SZ = 20;
 uint8_t	OSCADA::limObjNm_SZ = 100;
 uint8_t	OSCADA::limArchID_SZ = 50;
+int	OSCADA::limUserFile_SZ = 10048576;
+int	OSCADA::limUserIts_N = 1000000;
+int	OSCADA::limCacheIts_N = 100;
+
+int	OSCADA::prmStrBuf_SZ = 10000;
+float	OSCADA::prmWait_DL = 0.1;
+uint8_t	OSCADA::prmWait_TM = 5;
+uint8_t	OSCADA::prmInterf_TM = 7;
+uint8_t	OSCADA::prmServTask_PER = 10;
 
 //Continuously access variable
 TMess	*OSCADA::Mess = NULL;
@@ -183,7 +192,7 @@ string TSYS::host( )
 
 string TSYS::workDir( )
 {
-    char buf[STR_BUF_LEN];
+    char buf[prmStrBuf_SZ];
     return getcwd(buf, sizeof(buf));
 }
 
@@ -433,7 +442,7 @@ string TSYS::strTrim( const string &val, const string &cfg )
 
 string TSYS::strMess( const char *fmt, ... )
 {
-    char str[STR_BUF_LEN];
+    char str[prmStrBuf_SZ];
     va_list argptr;
 
     va_start(argptr, fmt);
@@ -522,15 +531,25 @@ string TSYS::optDescr( )
 	"RdRestConnTm <seconds>	Time to restore connection to \"dead\" reserve station.\n"
 	"RdStList   <list>	Redundant stations list, separated symbol ';' (st1;st2).\n"
 	"RdPrimCmdTr <0|1>	Enables the transmission of primary commands to the reserve stations.\n"
-	"    Program limits:\n"
-	"limObjID_SZ <size>	[*20..50] ID size of the OpenSCADA objects.\n"
-	"			WARNING! Big size can cause the key limit error on MySQL like DB!\n"
-	"				 Change that once before use on DBs with the fixed type \"char({N})\"!\n"
-	"limObjNm_SZ <size>	[*100...200] NAME size of the OpenSCADA objects.\n"
-	"			WARNING! Change that once before use on DBs with the fixed type \"char({N})\"!\n"
-	"limArchID_SZ <size>	[*50...90] ID size of the value archive objects.\n"
-	"			WARNING! Increase it only, else you can get problems on Archive.FSArch!\n"
-	"				 Change that once before use on DBs with the fixed type \"char({N})\"!\n\n"),
+	"    Global configurable limits:\n"
+	"limObjID_SZ	[*20..50] ID size of the OpenSCADA objects.\n"
+	"		WARNING! Big size can cause the key limit error on MySQL like DB!\n"
+	"			 Change that once before use on DBs with the fixed type \"char({N})\"!\n"
+	"limObjNm_SZ	[*100...200] NAME size of the OpenSCADA objects.\n"
+	"		WARNING! Change that once before use on DBs with the fixed type \"char({N})\"!\n"
+	"limArchID_SZ	[*50...90] ID size of the value archive objects.\n"
+	"		WARNING! Increase it only, else you can get problems on Archive.FSArch!\n"
+	"			 Change that once before use on DBs with the fixed type \"char({N})\"!\n"
+	"limUserFile_SZ	[1MB...*10MB...1000MB] The files size limit at loading and processing in the userspace\n"
+	"		and the part size of the big files transferring.\n"
+	"limUserIts_N	[1000...*1000000...1000000000] The limit on count of creating user items, like to array items.\n"
+	"limCacheIts_N	[*100...100000] The limit on count of the caching items.\n"
+	"    Global configurable parameters:\n"
+	"prmStrBuf_SZ	[1000...*10000...1000000] Length of string buffers, no string class.\n"
+	"prmWait_DL	[0.001...*0.1...1] Quantum of the waiting time cycles, seconds.\n"
+	"prmWait_TM	[*5...10] Standard waiting timeout length, seconds.\n"
+	"prmInterf_TM	[*7...15] Time of waiting for the interface reaction, seconds.\n"
+	"prmServTask_PER [1...*10...120] Service task period, seconds.\n\n"),
 	PACKAGE_NAME, VERSION, buf.sysname, buf.release, name().c_str(), id().c_str());
 
     vector<string> ls;
@@ -635,7 +654,7 @@ void TSYS::cfgFileLoad( )
 	int cf_sz = lseek(hd, 0, SEEK_END);
 	if(cf_sz > 0) {
 	    lseek(hd, 0, SEEK_SET);
-	    char buf[STR_BUF_LEN];
+	    char buf[prmStrBuf_SZ];
 	    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) s_buf.append(buf, len);
 	    fOK = s_buf.size();
 	}
@@ -685,10 +704,20 @@ void TSYS::cfgFileSave( )
 
 void TSYS::cfgPrmLoad( )
 {
-    //Limits
+    //Global limits
     limObjID_SZ = vmax(20, vmin(50,s2i(TBDS::genDBGet(nodePath()+"limObjID_SZ",i2s(limObjID_SZ),"root",TBDS::OnlyCfg))));
     limObjNm_SZ = vmax(100, vmin(200,s2i(TBDS::genDBGet(nodePath()+"limObjNm_SZ",i2s(limObjNm_SZ),"root",TBDS::OnlyCfg))));
     limArchID_SZ = vmax(50, vmin(90,s2i(TBDS::genDBGet(nodePath()+"limArchID_SZ",i2s(limArchID_SZ),"root",TBDS::OnlyCfg))));
+    limUserFile_SZ = vmax(1048576, vmin(100048576,s2i(TBDS::genDBGet(nodePath()+"limUserFile_SZ",i2s(limUserFile_SZ),"root",TBDS::OnlyCfg))));
+    limUserIts_N = vmax(1000, vmin(1000000000,s2i(TBDS::genDBGet(nodePath()+"limUserIts_N",i2s(limUserIts_N),"root",TBDS::OnlyCfg))));
+    limCacheIts_N = vmax(100, vmin(100000,s2i(TBDS::genDBGet(nodePath()+"limCacheIts_N",i2s(limCacheIts_N),"root",TBDS::OnlyCfg))));
+
+    //Global parameters
+    prmStrBuf_SZ = vmax(1000, vmin(1000000,s2i(TBDS::genDBGet(nodePath()+"prmStrBuf_SZ",i2s(prmStrBuf_SZ),"root",TBDS::OnlyCfg))));
+    prmWait_DL = vmax(0.001, vmin(1,s2r(TBDS::genDBGet(nodePath()+"prmWait_DL",r2s(prmWait_DL),"root",TBDS::OnlyCfg))));
+    prmWait_TM = vmax(5, vmin(10,s2i(TBDS::genDBGet(nodePath()+"prmWait_TM",i2s(prmWait_TM),"root",TBDS::OnlyCfg))));
+    prmInterf_TM = vmax(7, vmin(15,s2i(TBDS::genDBGet(nodePath()+"prmInterf_TM",i2s(prmInterf_TM),"root",TBDS::OnlyCfg))));
+    prmServTask_PER = vmax(1, vmin(120,s2i(TBDS::genDBGet(nodePath()+"prmServTask_PER",i2s(prmServTask_PER),"root",TBDS::OnlyCfg))));
 
     //System parameters
     setClockRT(s2i(TBDS::genDBGet(nodePath()+"ClockRT",i2s(clockRT()),"root",TBDS::OnlyCfg)));
@@ -876,7 +905,7 @@ int TSYS::start( )
     //Call in monopoly for main thread module or wait for a signal.
     mRunning = true;
     if(!mainThr.freeStat()) mainThr.at().modStart();
-    while(!mStopSignal) sysSleep(OSCD_WAIT_DELAY);
+    while(!mStopSignal) sysSleep(prmWait_DL);
     mRunning = false;
     TSYS::eventWait(isServPrc, false, string("SYS_Service: ")+_("waiting the processing finish ..."));
 
@@ -1106,7 +1135,7 @@ bool TSYS::eventWait( bool &m_mess_r_stat, bool exempl, const string &loc, time_
 	    t_tm = c_tm;
 	    SYS->mess_sys(TMess::Crit, _("Waiting for event ..."));
 	}
-	sysSleep(OSCD_WAIT_DELAY);
+	sysSleep(prmWait_DL);
     }
     return false;
 }
@@ -1542,7 +1571,7 @@ string TSYS::strCompr( const string &in, int lev )
     strm.next_in = (Bytef*)in.data();
     strm.avail_in = (uInt)in.size();
 
-    unsigned char out[vmax(100,vmin((in.size()/10)*10,STR_BUF_LEN))];
+    unsigned char out[vmax(100,vmin((in.size()/10)*10,prmStrBuf_SZ))];
 
     do {
 	strm.next_out = (Bytef*)out;
@@ -1571,7 +1600,7 @@ string TSYS::strUncompr( const string &in )
 
     if(in.empty() || inflateInit(&strm) != Z_OK) return "";
 
-    unsigned char out[fmax(100,fmin((((int)in.size()*2)/10)*10,STR_BUF_LEN))];
+    unsigned char out[fmax(100,fmin((((int)in.size()*2)/10)*10,prmStrBuf_SZ))];
 
     strm.avail_in = in.size();
     strm.next_in = (Bytef*)in.data();
@@ -2112,7 +2141,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 	//Wait for start status
 	for(time_t c_tm = time(NULL); !(htsk.flgs&STask::Detached) && startSt && !(*startSt); ) {
 	    if(time(NULL) >= (c_tm+wtm)) throw err_sys(_("Timeout of starting the task '%s'!"), path.c_str());
-	    sysSleep(OSCD_WAIT_DELAY);
+	    sysSleep(prmWait_DL);
 	}
     } catch(TError &err) {
 	if(err.cod) {		//Remove info for pthread_create() but left for other by possible start later
@@ -2155,7 +2184,7 @@ void TSYS::taskDestroy( const string &path, bool *endrunCntr, int wtm, bool noSi
 	    t_tm = c_tm;
 	    mess_sys(TMess::Info, _("Waiting for an event of the task '%s' ..."), path.c_str());
 	}
-	sysSleep(OSCD_WAIT_DELAY);
+	sysSleep(prmWait_DL);
 	first = false;
 	res.request(true);
     }
@@ -2297,7 +2326,7 @@ void *TSYS::ServTask( void * )
 		if(!(iCnt%10))	SYS->cfgFileSave();
 
 		//Subsystems calling (per 10s)
-		if(!(iCnt%SERV_TASK_PER)) {
+		if(!(iCnt%prmServTask_PER)) {
 		    vector<string> lst;
 		    SYS->list(lst);
 		    for(unsigned iA = 0; iA < lst.size(); iA++)
@@ -2617,7 +2646,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	FILE *fp = popen(prms[0].getS().c_str(), "r");
 	if(!fp) return string("");
 
-	char buf[STR_BUF_LEN];
+	char buf[prmStrBuf_SZ];
 	string rez;
 	for(int r_cnt = 0; (r_cnt=fread(buf,1,sizeof(buf),fp)) || !feof(fp); )
 	    rez.append(buf,r_cnt);
@@ -2637,7 +2666,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     }
     // string fileRead( string file, int off = 0, int sz = -1 ) - Return the <file> content from offset <off> and for the block size <sz>.
     if(iid == "fileRead" && prms.size() >= 1) {
-	char buf[STR_BUF_LEN];
+	char buf[prmStrBuf_SZ];
 	string rez;
 	int hd = open(prms[0].getS().c_str(), O_RDONLY);
 	if(hd >= 0) {
@@ -2694,14 +2723,14 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	return "0";
     }
     // int sleep(real tm, int ntm = 0) - call for task sleep to <tm> seconds and <ntm> nanoseconds.
-    //  tm - wait time in seconds (precised up to nanoseconds), up to STD_INTERF_TM(5 seconds)
+    //  tm - wait time in seconds (precised up to nanoseconds), up to prmInterf_TM(7 seconds)
     //  ntm - wait time part in nanoseconds
     if(iid == "sleep" && prms.size() >= 1) {
-	return sysSleep(fmin(prms[0].getR()+1e-9*((prms.size()>=2)?prms[1].getI():0),(double)STD_INTERF_TM));
+	return sysSleep(fmin(prms[0].getR()+1e-9*((prms.size()>=2)?prms[1].getI():0),(double)prmInterf_TM));
 	/*struct timespec spTm;
 	spTm.tv_sec = prms[0].getI();
 	spTm.tv_nsec = 1000000000l*(prms[0].getR()-spTm.tv_sec) + ((prms.size()>=2)?prms[1].getI():0);
-	spTm.tv_sec = vmin(STD_INTERF_TM, spTm.tv_sec);
+	spTm.tv_sec = vmin(prmInterf_TM, spTm.tv_sec);
 	clockid_t clkId = SYS->clockRT() ? CLOCK_REALTIME : CLOCK_MONOTONIC;
 	return clock_nanosleep(clkId, 0, &spTm, NULL);*/
 	//return nanosleep(&spTm, NULL);
@@ -2955,7 +2984,7 @@ void TSYS::ctrListFS( XMLNode *nd, const string &fsBaseIn, const string &fileExt
 
 void TSYS::cntrCmdProc( XMLNode *opt )
 {
-    char buf[STR_BUF_LEN];
+    char buf[prmStrBuf_SZ];
     string u = opt->attr("user"), l = opt->attr("lang");
     string a_path = opt->attr("path");
 

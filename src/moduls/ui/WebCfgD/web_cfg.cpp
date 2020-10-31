@@ -40,7 +40,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.5.1"
+#define MOD_VER		"1.5.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the WEB-based configurator of OpenSCADA. The technologies are used: XHTML, CSS and JavaScript.")
 #define LICENSE		"GPL2"
@@ -245,7 +245,7 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 
 	    if(wp_com.empty() && zero_lev == "script.js") {
 		if((hd=open("WebCfgDVCA.js",O_RDONLY)) >= 0) {
-		    char buf[STR_BUF_LEN];
+		    char buf[prmStrBuf_SZ];
 		    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) page.append(buf, len);
 		    close(hd);
 		    page = trMessReplace(page);
@@ -256,7 +256,7 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 	    //Main work page create.
 	    else if(wp_com.empty()) {
 		if((hd=open("WebCfgDVCA.html",O_RDONLY)) >= 0) {
-		    char buf[STR_BUF_LEN];
+		    char buf[prmStrBuf_SZ];
 		    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) page.append(buf, len);
 		    close(hd);
 		    page = trMessReplace(page);

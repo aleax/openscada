@@ -313,7 +313,7 @@ string UserStBar::pass( )
 void UserStBar::setUser( const string &val )
 {
     MtxAlloc res(mod->dataRes(), true);
-    setText(QString("<font color='%1'>%2</font>").arg((val=="root")?"red":"green").arg(val.size()?val.c_str():"*"));
+    setText(QString("<font color='%1'>%2</font>").arg(mod->colorAdjToBack((val=="root")?"red":"green",qApp->palette().color(QPalette::Window)).name()).arg(val.size()?val.c_str():"*"));
     userTxt = val;
 
     if(window()) window()->setProperty("oscdUser", val.c_str());
@@ -332,6 +332,8 @@ void UserStBar::setPass( const string &val )
 bool UserStBar::event( QEvent *event )
 {
     if(event->type() == QEvent::MouseButtonDblClick)	userSel();
+    else if(event->type() == QEvent::PaletteChange) setUser(user());
+
     return QLabel::event(event);
 }
 
@@ -831,7 +833,7 @@ void SyntxHighl::rule( XMLNode *irl, const QString &text, int off, char lev )
 
 	//Process minimal rule
 	rl = irl->childGet(minRule);
-	kForm.setForeground(QColor(rl->attr("color").c_str()));
+	kForm.setForeground(mod->colorAdjToBack(rl->attr("color").c_str(),qApp->palette().color(QPalette::Base)));
 	kForm.setFontWeight(s2i(rl->attr("font_weight")) ? QFont::Bold : QFont::Normal);
 	kForm.setFontItalic(s2i(rl->attr("font_italic")));
 

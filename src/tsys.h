@@ -28,20 +28,20 @@
 #define PACKAGE_SITE	"http://oscada.org"
 
 //Other global constants
-#define USER_FILE_LIMIT	1048576	// Loading and processing files limit into the userspace
-#define USER_ITS_LIMIT	1000000	// Creating user items limit, like to array items
-#define STR_BUF_LEN	10000	// Length of string buffers (no string class)
-#define NSTR_BUF_LEN	100	// Length of string buffers for numbers
-#define STD_CACHE_LIM	100	// Standard caches limit
-#define OSCD_WAIT_DELAY	0.1	// Standard quantum of the waiting time cycles, seconds
-#define STD_WAIT_TM	5	// Standard timeouts length, seconds
-#define STD_INTERF_TM	7	// Maximum time of waiting for the interface reaction, seconds
-#define SERV_TASK_PER	10	// Service task period, seconds
+#define NSTR_BUF_LEN	50	// Length of string buffers for numbers
 
-#define OBJ_ID_SZ	"20"	//!!!!(to v1.0) Left for the compatibility
-#define OBJ_NM_SZ	"100"	//!!!!(to v1.0) Left for the compatibility
-#define ARCH_ID_SZ	"70"	//!!!!(to v1.0) Left for the compatibility
-#define STD_WAIT_DELAY	100	//!!!!(to v1.0) Left for the compatibility
+// !!!!(to v1.0) Left for the compatibility
+#define OBJ_ID_SZ	"20"
+#define OBJ_NM_SZ	"100"
+#define ARCH_ID_SZ	"70"
+#define STD_WAIT_DELAY	100
+#define USER_FILE_LIMIT	1048576
+#define USER_ITS_LIMIT	1000000
+#define STD_CACHE_LIM	100
+#define STR_BUF_LEN	10000
+#define STD_WAIT_TM	5
+#define STD_INTERF_TM	7
+#define SERV_TASK_PER	10
 
 #define BUF_ARCH_NM	"<buffer>"
 #define ALRM_ARCH_NM	"<alarms>"
@@ -86,7 +86,17 @@ namespace OSCADA
 extern uint8_t	limObjID_SZ;	//[20..50] ID size of the OpenSCADA objects.
 extern uint8_t	limObjNm_SZ;	//[100...200] NAME size of the OpenSCADA objects.
 extern uint8_t	limArchID_SZ;	//[50...90] ID size of the value archive objects, limObjID_SZ + 1.5*limObjID_SZ.
+extern int	limUserFile_SZ;	//[1MB...*10MB...1000MB] The files size limit at loading and processing in the userspace
+				//	and the part size of the big files transferring.
+extern int	limUserIts_N;	//[1000...*1000000...1000000000] The limit on count of creating user items, like to array items.
+extern int	limCacheIts_N;	//[*100...100000] The limit on count of the caching items.
 
+//Global configurable parameters
+extern int	prmStrBuf_SZ;	//[1000...*10000...1000000] Length of string buffers, no string class
+extern float	prmWait_DL;	//[0.001...*0.1...1] Quantum of the waiting time cycles, seconds
+extern uint8_t	prmWait_TM;	//[*5...10] Standard waiting timeout length, seconds
+extern uint8_t	prmInterf_TM;	//[*7...15] Time of waiting for the interface reaction, seconds
+extern uint8_t	prmServTask_PER;//[1...*10...120] Service task period, seconds
 
 //*************************************************
 //* TSYS					  *

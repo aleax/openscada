@@ -147,7 +147,7 @@ void ModArch::perSYSCall( unsigned int cnt )
 	if(cnt%60) return;
 
 	vector<string> a_list;
-	time_t end_tm = time(NULL)+STD_WAIT_TM;
+	time_t end_tm = time(NULL)+prmWait_TM;
 
 	//Check message archivators
 	messList(a_list);

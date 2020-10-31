@@ -297,7 +297,7 @@ void TVariant::setS( const string &ivl )
 	    }
 	    //!!!! Direct memory allocation mostly used now for constant strings like to key TCfg for prevent its "const char *" pointer changing.
 	    //     Maybe further there has a sense to use STL string also but check it to equal for the assign and then the pointer changing omit.
-	    else if(mStdStringOmit) {		//For middle blocks up to STR_BUF_LEN
+	    else if(mStdStringOmit) {		//For middle blocks up to prmStrBuf_SZ
 		if(ivl.size() > 30000000)	throw TError("TVariant", _("Very large string for non STL string (> 30 MB)!"));
 		if(mStdString) { delete val.s; mStdString = false; }
 		if(mSize < sizeof(val.sMini))	val.sPtr = (char*)malloc(ivl.size()+1);
@@ -1216,7 +1216,7 @@ TVariant XMLNodeObj::funcCall( const string &id, vector<TVariant> &prms )
 	    int cf_sz = lseek(hd, 0, SEEK_END);
 	    if(cf_sz > 0) {
 		lseek(hd, 0, SEEK_SET);
-		char buf[STR_BUF_LEN];
+		char buf[prmStrBuf_SZ];
 		for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) s_buf.append(buf, len);
 		fOK = s_buf.size();
 	    }

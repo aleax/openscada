@@ -1191,9 +1191,9 @@ void TMdPrm::disable( )
 
     if(lCtx && lCtx->func()) {
 	//Waiting the ordinal calculation finish
-	for(int iTm = 0; lCtx->isCalc() && iTm < STD_WAIT_TM/OSCD_WAIT_DELAY; iTm++) SYS->sysSleep(OSCD_WAIT_DELAY);
+	for(int iTm = 0; lCtx->isCalc() && iTm < prmWait_TM/prmWait_DL; iTm++) SYS->sysSleep(prmWait_DL);
 	//Termination the calculation
-	while(lCtx->isCalc()) { SYS->taskSendSIGALRM(owner().nodePath('.',true)); SYS->sysSleep(OSCD_WAIT_DELAY); }
+	while(lCtx->isCalc()) { SYS->taskSendSIGALRM(owner().nodePath('.',true)); SYS->sysSleep(prmWait_DL); }
     }
 
     owner().prmEn(this, false);	//Remove from process

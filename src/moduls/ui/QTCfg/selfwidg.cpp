@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTCfg file: selfwidg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2004-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -411,7 +411,7 @@ void SyntxHighl::rule( XMLNode *irl, const QString &text, int off, char lev )
 
 	//Process minimal rule
 	rl = irl->childGet(minRule);
-	kForm.setForeground(QColor(rl->attr("color").c_str()));
+	kForm.setForeground(mod->colorAdjToBack(rl->attr("color").c_str(),qApp->palette().color(QPalette::Base)));
 	kForm.setFontWeight(s2i(rl->attr("font_weight")) ? QFont::Bold : QFont::Normal);
 	kForm.setFontItalic(s2i(rl->attr("font_italic")));
 
@@ -991,13 +991,15 @@ QString UserStBar::user( )	{ return userTxt; }
 
 void UserStBar::setUser( const QString &val )
 {
-    setText(QString("<font color='%1'>%2</font>").arg((val=="root")?"red":"green").arg(val));
+    setText(QString("<font color='%1'>%2</font>").arg(mod->colorAdjToBack((val=="root")?"red":"green",qApp->palette().color(QPalette::Window)).name()).arg(val));
     userTxt = val;
 }
 
 bool UserStBar::event( QEvent *event )
 {
     if(event->type() == QEvent::MouseButtonDblClick) userSel();
+    else if(event->type() == QEvent::PaletteChange) setUser(user());
+
     return QLabel::event(event);
 }
 

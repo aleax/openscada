@@ -842,7 +842,7 @@ void LibProjProp::loadMimeData( )
 	mod->postMess(mod->nodePath().c_str(), QString(_("Error opening the file '%1': %2")).arg(fileName).arg(file.errorString()), TVision::Error, this);
 	return;
     }
-    if(file.size() >= USER_FILE_LIMIT) {
+    if(file.size() >= limUserFile_SZ) {
 	mod->postMess(mod->nodePath().c_str(), QString(_("The download file '%1' is very large.")).arg(fileName), TVision::Error, this);
 	return;
     }

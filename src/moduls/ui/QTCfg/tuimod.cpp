@@ -37,7 +37,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"5.0.5"
+#define MOD_VER		"5.1.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt-based configurator of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -197,8 +197,8 @@ void TUIMod::modStop( )
     mEndRun = true;
 
     for(unsigned iW = 0; iW < cfapp.size(); iW++)
-	while(cfapp[iW]) TSYS::sysSleep(OSCD_WAIT_DELAY);
-    TSYS::sysSleep(OSCD_WAIT_DELAY);
+	while(cfapp[iW]) TSYS::sysSleep(prmWait_DL);
+    TSYS::sysSleep(prmWait_DL);
 
     runSt = false;
 }
@@ -303,4 +303,23 @@ string TUIMod::setHelp( const string &help, const string &addr, QWidget *w )
 	else w->setToolTip(help.c_str());
     }
     return "";
+}
+
+QColor TUIMod::colorAdjToBack( const QColor &clr, const QColor &backClr )
+{
+    int wV = vmax(60, 120-abs(clr.saturation()-backClr.saturation()));
+
+    int wS = abs(clr.hue()-backClr.hue());
+    if(wS > 360/2) wS = 360 - wS;
+    wS = vmax(0, 120-wS);
+
+    if(wV > abs(clr.value()-backClr.value()))
+	wV = backClr.value() + wV*(((backClr.value()+wV)<256)?1:-1);
+    else wV = clr.value();
+
+    if(wS > abs(clr.saturation()-backClr.saturation()))
+	wS = backClr.saturation() + wS*(((backClr.saturation()+wV)<256)?1:-1);
+    else wS = clr.saturation();
+
+    return QColor::fromHsv(clr.hue(), wS, wV, clr.alpha());
 }

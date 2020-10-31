@@ -69,7 +69,7 @@ string TUIS::icoGet( const string &inm, string *tp, bool retPath )
 	if(tp) *tp = types[iT];
 	if(retPath) rez = pathi+"/"+inm+"."+types[iT];
 	else {
-	    char buf[STR_BUF_LEN];
+	    char buf[prmStrBuf_SZ];
 	    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) rez.append(buf,len);
 	}
 	close(hd);
@@ -99,7 +99,7 @@ string TUIS::docGet( const string &inm, string *tp, unsigned opt )
 	if(tp) *tp = types[iT];
 	if(opt&GetPathURL) rez = pathi+"/"+transl[iTr]+"/"+nm+"."+types[iT];
 	else if(opt&GetContent) {
-	    char buf[STR_BUF_LEN];
+	    char buf[prmStrBuf_SZ];
 	    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) rez.append(buf,len);
 	} else rez = "xdg-open "+pathi+"/"+transl[iTr]+"/"+nm+"."+types[iT]+" &";
 	close(hd);

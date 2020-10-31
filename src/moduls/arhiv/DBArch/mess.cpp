@@ -199,7 +199,7 @@ time_t ModMArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const s
 {
     if(!runSt) throw TError(nodePath().c_str(), _("The archive is not started!"));
     if(needMeta && (needMeta=!readMeta())) return eTm;
-    if(!upTo) upTo = SYS->sysTm() + STD_INTERF_TM;
+    if(!upTo) upTo = SYS->sysTm() + prmInterf_TM;
 
     bTm = vmax(bTm, begin());
     eTm = vmin(eTm, end());

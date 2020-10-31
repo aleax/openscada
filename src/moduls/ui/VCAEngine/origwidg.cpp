@@ -1299,7 +1299,7 @@ void OrigDocument::postEnable( int flag )
 void OrigDocument::disable( Widget *base )
 {
     if(dynamic_cast<SessWdg*>(base))
-	SYS->taskDestroy(base->nodePath('.',true)+".doc", NULL, 3*STD_INTERF_TM);
+	SYS->taskDestroy(base->nodePath('.',true)+".doc", NULL, 3*prmInterf_TM);
 }
 
 bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
@@ -1602,7 +1602,7 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
 	"  <P>The building progress:\n"
 	"    <ul id='progress' />\n"
 	"  </P>\n"
-	"</BODY>"),STD_INTERF_TM), false, Mess->charset());
+	"</BODY>"),prmInterf_TM), false, Mess->charset());
 
     //Node proocess
     OrigDocument::nodeProcess(wdg, &xdoc, funcV, funcIO, iLang);
@@ -1620,7 +1620,7 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
     //Progress warning node
     XMLNode *progrNode = NULL;
 
-    if(!upTo) upTo = time(NULL)+STD_INTERF_TM;
+    if(!upTo) upTo = time(NULL)+prmInterf_TM;
 
     //Process instructions
     if(xcur->childGet("<?dp",0,true)) {
@@ -1684,7 +1684,7 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 	    while(rTime < wTime && !TSYS::taskEndRun()) {
 		//Drop current changes and continue
 		if(time(NULL) >= upTo) {
-		    upTo = time(NULL) + STD_INTERF_TM;
+		    upTo = time(NULL) + prmInterf_TM;
 		    if(!wdg->attrAt("n").at().getI() || wdg->attrAt("aCur").at().getI() == wdg->attrAt("vCur").at().getI()) {
 			progrNode->childGet(progrNode->childSize()-1)->
 			    setText(TSYS::strMess(_("Data block %d: %0.2f%% loaded."),progrNode->childSize(),100*(float)(rTime-bTime)/(float)(wTime-bTime)));
@@ -1740,7 +1740,7 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 	    for(unsigned iR = 0; iR < mess.size() && !TSYS::taskEndRun(); iR++) {
 		// Drop current changes and continue
 		if(time(NULL) >= upTo) {
-		    upTo = time(NULL)+STD_INTERF_TM;
+		    upTo = time(NULL)+prmInterf_TM;
 		    if(!wdg->attrAt("n").at().getI() || wdg->attrAt("aCur").at().getI() == wdg->attrAt("vCur").at().getI()) {
 			progrNode->childGet(progrNode->childSize()-1)->
 			    setText(TSYS::strMess(_("Messages block %d: %0.2f%% loaded."),progrNode->childSize(),100*(float)iR/(float)mess.size()));

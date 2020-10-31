@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel_widgs.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2020 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -398,7 +398,7 @@ QVariant ModInspAttr::data( const QModelIndex &index, int role ) const
 	    switch(role) {
 		case Qt::DisplayRole:	val = it->name().c_str();	break;
 		case Qt::ForegroundRole:
-		    if(it->modify())	val = QBrush(Qt::blue);
+		    if(it->modify())	val = QBrush(mod->colorAdjToBack("blue",qApp->palette().color(QPalette::Base)));
 		    break;
 	    }
 	if(index.column() == 1)
@@ -2691,7 +2691,7 @@ string DevelWdgView::cacheResGet( const string &res )
 
 void DevelWdgView::cacheResSet( const string &res, const string &val )
 {
-    if(val.size() > USER_FILE_LIMIT) return;
+    if(val.size() > limUserFile_SZ) return;
     mCacheRes[res] = val;
 }
 

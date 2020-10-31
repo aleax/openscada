@@ -49,7 +49,7 @@
 #define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"TEST"
-#define MOD_VER		"1.8.3"
+#define MOD_VER		"1.8.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the group of tests to OpenSCADA and its modules.")
 #define LICENSE		"GPL2"
@@ -121,7 +121,7 @@ string TTest::cat( )	{ return "TEST:" MOD_ID ":"; }
 
 void TTest::mess( const string &testNm, const char *fmt,  ... )
 {
-    char mess[STR_BUF_LEN];
+    char mess[prmStrBuf_SZ];
     va_list argptr;
 
     va_start(argptr, fmt);
@@ -203,7 +203,7 @@ void *TTest::Task( void *CfgM )
     while(!tst->endrun)
     {
 	//1 sec
-	if(++i_cnt > 1/OSCD_WAIT_DELAY)  // 1 sec
+	if(++i_cnt > 1/prmWait_DL)  // 1 sec
 	{
 	    i_cnt = 0;
 	    if(++count == 1000000) count = 0;
@@ -226,7 +226,7 @@ void *TTest::Task( void *CfgM )
 		    catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 		}
 	}
-	TSYS::sysSleep(OSCD_WAIT_DELAY);
+	TSYS::sysSleep(prmWait_DL);
     }
     tst->runSt = false;
 

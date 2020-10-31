@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Segnetics SMH2Gi and SMH4")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.1.3"
+#define MOD_VER		"1.1.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Data acquisition and control by Segnetics SMH2Gi and SMH4 hardware interfaces and modules.")
 #define LICENSE		"GPL2"
@@ -1201,7 +1201,7 @@ bool DevMRCFeature::load( const string &iniFile )
     vars.clear();
 
     //Parse file
-    char buf[STR_BUF_LEN];
+    char buf[prmStrBuf_SZ];
     TRegExp re("^\\s*\\[([^\\]]+)|^\\s*([^\\s;]+)\\s*=\\s*([^\\r\\n]+)" /* "\\[([^\\]]+)\\]|(\\S+)\\s*=\\s*([^\n\r]+)" */);
     FILE *fp = fopen(iniFile.c_str(), "r");
     if(fp == NULL) return false;

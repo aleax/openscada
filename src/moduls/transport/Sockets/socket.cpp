@@ -61,7 +61,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.2.1"
+#define MOD_VER		"4.2.2"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -569,7 +569,7 @@ void *TSocketIn::Task( void *sock_in )
     if(sock->type == SOCK_UDP) buf = new char[sock->bufLen()*1024 + 1];
 
     while(!sock->endrun) {
-	tv.tv_sec  = 0; tv.tv_usec = OSCD_WAIT_DELAY*1000000;
+	tv.tv_sec  = 0; tv.tv_usec = prmWait_DL*1000000;
 	FD_ZERO(&rd_fd); FD_SET(sock->sockFd,&rd_fd);
 
 	int kz = select(sock->sockFd+1, &rd_fd, NULL, NULL, &tv);
@@ -743,7 +743,7 @@ void *TSocketIn::ClTask( void *s_inf )
 
     try {
 	do {
-	    tv.tv_sec  = 0; tv.tv_usec = OSCD_WAIT_DELAY*1000000;
+	    tv.tv_sec  = 0; tv.tv_usec = prmWait_DL*1000000;
 
 	    unsigned poolPrt = 0;
 	    if((actPrts=s.s->prtInit(prot_in,s.sock,s.sender)))

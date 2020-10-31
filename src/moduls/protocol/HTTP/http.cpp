@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.5.1"
+#define MOD_VER		"3.5.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -217,7 +217,7 @@ TVariant TProtIn::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 	    if(hd < 0 && cTmpl.size() && lang.size())	hd = ::open((cTmpl+"_"+lang+cTmplExt).c_str(), O_RDONLY);
 	    if(hd < 0 && cTmpl.size())			hd = ::open((cTmpl+cTmplExt).c_str(), O_RDONLY);
 	    if(hd >= 0) {
-		char buf[STR_BUF_LEN];
+		char buf[prmStrBuf_SZ];
 		for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) answer.append(buf, len);
 		::close(hd);
 		if(answer.find("#####CONTEXT#####") == string::npos && !forceTmpl.size()) answer.clear();
@@ -886,7 +886,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 		if((tmplDirPos != string::npos && (hd=open((mod->tmpl().substr(0,tmplDirPos)+uris).c_str(),O_RDONLY)) >= 0) ||
 			(hd=open(("./"+uris).c_str(),O_RDONLY)) >= 0) {	//From current folder
 		    answer.clear();
-		    char buf[STR_BUF_LEN];
+		    char buf[prmStrBuf_SZ];
 		    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) answer.append(buf,len);
 		    close(hd);
 		    //Extension process

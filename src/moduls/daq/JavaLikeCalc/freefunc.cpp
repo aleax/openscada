@@ -1972,7 +1972,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		TArrayObj *ar = new TArrayObj();
 		//  Fill array by empty elements number
 		if(ptr->numb == 1) {
-		    int itN = fmin(USER_ITS_LIMIT,getValI(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode))]));
+		    int itN = fmin(limUserIts_N,getValI(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode))]));
 		    try { for(int iP = 0; iP < itN; iP++) ar->arSet(iP, EVAL_REAL); }
 		    catch(...) {	//Remove the problematic array and create an empty one, for very big arrays mostly
 			delete ar; ar = new TArrayObj();

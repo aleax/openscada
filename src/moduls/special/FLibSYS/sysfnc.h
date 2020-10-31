@@ -58,7 +58,7 @@ class sysCall : public TFunction
 	    FILE *fp = popen(val->getS(1).c_str(), "r");
 	    if(!fp) return;
 
-	    char buf[STR_BUF_LEN];
+	    char buf[prmStrBuf_SZ];
 	    string rez;
 	    for(int r_cnt = 0; (r_cnt=fread(buf,1,sizeof(buf),fp)); )
 		rez.append(buf,r_cnt);

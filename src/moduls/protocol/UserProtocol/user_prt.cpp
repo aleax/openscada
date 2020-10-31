@@ -33,7 +33,7 @@
 #define MOD_NAME	_("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.4.0"
+#define MOD_VER		"1.4.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user protocols on an internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -389,9 +389,9 @@ bool UserPrt::inMess( const string &reqst, string &answer, TProtIn *prt )
 	bool rez = getB(ioRez);
 
 	prt->req = getS(ioReq);
-	if(prt->req.size() > USER_FILE_LIMIT) {
+	if(prt->req.size() > limUserFile_SZ) {
 	    mess_sys(TMess::Warning, _("Size of the accumulated request exceeded for %s, but the user protocol must tend for removing processed data itself. Fix this!"),
-		TSYS::cpct2str(USER_FILE_LIMIT).c_str());
+		TSYS::cpct2str(limUserFile_SZ).c_str());
 	    prt->req = "";
 	}
 	answer = getS(ioAnsw);

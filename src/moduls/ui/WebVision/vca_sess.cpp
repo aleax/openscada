@@ -94,7 +94,7 @@ void VCASess::getReq( SSess &ses )
 
 	//Check for the main work page
 	if((hd=open("WebVisionVCA.html",O_RDONLY)) >= 0) {
-	    char buf[STR_BUF_LEN];
+	    char buf[prmStrBuf_SZ];
 	    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) ses.page.append(buf, len);
 	    close(hd);
 	} else ses.page = WebVisionVCA_html;
@@ -429,15 +429,15 @@ string VCASess::cacheResGet( const string &res, string *mime )
 
 void VCASess::cacheResSet( const string &res, const string &val, const string &mime )
 {
-    if(val.size() > USER_FILE_LIMIT) return;
+    if(val.size() > limUserFile_SZ) return;
     ResAlloc resAlc(nodeRes(), true);
     mCacheRes[res] = CacheEl(time(NULL), val, mime);
-    if(mCacheRes.size() > (STD_CACHE_LIM+STD_CACHE_LIM/10)) {
+    if(mCacheRes.size() > (limCacheIts_N+limCacheIts_N/10)) {
 	vector< pair<time_t,string> > sortQueue;
 	for(map<string,CacheEl>::iterator itr = mCacheRes.begin(); itr != mCacheRes.end(); ++itr)
 	    sortQueue.push_back(pair<time_t,string>(itr->second.tm,itr->first));
 	sort(sortQueue.begin(), sortQueue.end());
-	for(unsigned iDel = 0; iDel < (STD_CACHE_LIM/10); ++iDel)
+	for(unsigned iDel = 0; iDel < (limCacheIts_N/10); ++iDel)
 	    mCacheRes.erase(sortQueue[iDel].second);
     }
 }

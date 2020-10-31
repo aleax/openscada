@@ -495,7 +495,7 @@ time_t TArchiveS::messGet( time_t bTm, time_t eTm, vector<TMess::SRec> &recs,
     string tVl;
     for(int off = 0; (tVl=TSYS::strParse(arch,0,";",&off)).size(); ) archMap[tVl] = true;
 
-    if(!upTo) upTo = SYS->sysTm() + STD_INTERF_TM;
+    if(!upTo) upTo = SYS->sysTm() + prmInterf_TM;
     TRegExp re(category, "p");
 
     //Get records from buffer
@@ -892,13 +892,13 @@ TVariant TArchiveS::objFuncCall( const string &iid, vector<TVariant> &prms, cons
     //  cat - messages' category
     //  lev - messages level
     //  arch - message archivers by list items separated ';'
-    //  upTm - sets the operation continuance limit to time; a negative value used as relative time; less to STD_INTERF_TM (5).
+    //  upTm - sets the operation continuance limit to time; a negative value used as relative time; less to prmInterf_TM (7).
     if(iid == "messGet" && prms.size() >= 2) {
 	vector<TMess::SRec> recs;
 	int upTm = (prms.size() >= 6) ? prms[5].getI() : 0;
 	time_t result = messGet(prms[0].getI(), prms[1].getI(), recs, ((prms.size()>=3) ? prms[2].getS() : string("")),
 				((prms.size()>=4) ? prms[3].getI() : 0), ((prms.size()>=5) ? prms[4].getS() : string("")),
-				vmin((upTm<0)?SYS->sysTm()+abs(upTm):upTm,SYS->sysTm()+STD_INTERF_TM));
+				vmin((upTm<0)?SYS->sysTm()+abs(upTm):upTm,SYS->sysTm()+prmInterf_TM));
 	TArrayObj *rez = new TArrayObj();
 	rez->propSet("tm", (int64_t)result);
 	for(unsigned iM = 0; iM < recs.size(); iM++) {

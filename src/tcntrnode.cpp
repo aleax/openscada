@@ -74,7 +74,7 @@ void TCntrNode::mess_sys( int8_t level, const char *fmt,  ... )
 {
     if(level < TMess::Debug || level > TMess::Emerg || !Mess || level < Mess->messLevel()) return;
 
-    char str[STR_BUF_LEN];
+    char str[prmStrBuf_SZ];
     va_list argptr;
 
     va_start(argptr, fmt);
@@ -94,7 +94,7 @@ void TCntrNode::mess_sys( int8_t level, const char *fmt,  ... )
 
 TError TCntrNode::err_sys( const char *fmt,  ... ) const
 {
-    char str[STR_BUF_LEN];
+    char str[prmStrBuf_SZ];
     va_list argptr;
 
     va_start(argptr, fmt);
@@ -114,7 +114,7 @@ TError TCntrNode::err_sys( const char *fmt,  ... ) const
 
 TError TCntrNode::err_sys( int cod, const char *fmt,  ... ) const
 {
-    char str[STR_BUF_LEN];
+    char str[prmStrBuf_SZ];
     va_list argptr;
 
     va_start(argptr, fmt);
@@ -305,7 +305,7 @@ void TCntrNode::nodeDis( long tm, int flag )
 		break;
 	    }
 	    res1.unlock();
-	    TSYS::sysSleep(1/*OSCD_WAIT_DELAY*/);
+	    TSYS::sysSleep(1/*prmWait_DL*/);
 	    res1.lock();
 	    if(mUse > 1) mess_sys(TMess::Warning, _("Expecting release %d users!"), mUse-1);
 	}
@@ -554,8 +554,8 @@ void TCntrNode::chldDel( int8_t igr, const string &name, long tm, int flag )
     if(nodeMode() == DoDisable)	return;
     if(nodeMode() == DoEnable) throw err_sys(_("Node is being processed now for enable!"));
 
-    if(SYS->stopSignal())	tm = STD_WAIT_TM*5;
-    else if(tm < 0)		tm = 0;	//STD_WAIT_TM;	//Do not wait anything by default
+    if(SYS->stopSignal())	tm = prmWait_TM*5;
+    else if(tm < 0)		tm = 0;	//prmWait_TM;	//Do not wait anything by default
 
     AutoHD<TCntrNode> chN = chldAt(igr, name);
     if(chN.at().nodeMode() == Enabled) chN.at().nodeDis(tm, (flag<<8));

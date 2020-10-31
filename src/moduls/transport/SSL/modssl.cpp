@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"3.2.1"
+#define MOD_VER		"3.2.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2 are supported.")
@@ -425,7 +425,7 @@ void *TSocketIn::Task( void *sock_in )
 	struct  timeval tv;
 	fd_set  rd_fd;
 	while(!s.endrun) {
-	    tv.tv_sec  = 0; tv.tv_usec = OSCD_WAIT_DELAY*1000000;
+	    tv.tv_sec  = 0; tv.tv_usec = prmWait_DL*1000000;
 	    FD_ZERO(&rd_fd); FD_SET(BIO_get_fd(abio,NULL), &rd_fd);
 
 	    int kz = select(BIO_get_fd(abio,NULL)+1,&rd_fd,NULL,NULL,&tv);
@@ -511,7 +511,7 @@ void *TSocketIn::ClTask( void *s_inf )
     if(BIO_do_handshake(s.bio) <= 0) {
 	if(BIO_should_retry(s.bio))
 	    while(BIO_should_retry(s.bio) && !s.s->endrunCl)
-	    { BIO_do_handshake(s.bio); TSYS::sysSleep(OSCD_WAIT_DELAY); }
+	    { BIO_do_handshake(s.bio); TSYS::sysSleep(prmWait_DL); }
 	else {
 	    if(ERR_peek_last_error()) {
 		ERR_error_string_n(ERR_peek_last_error(), err, sizeof(err));
@@ -542,7 +542,7 @@ void *TSocketIn::ClTask( void *s_inf )
 	do {
 	    int kz = 1;
 	    if(!SSL_pending(ssl)) {
-		tv.tv_sec  = 0; tv.tv_usec = OSCD_WAIT_DELAY*1000000;
+		tv.tv_sec  = 0; tv.tv_usec = prmWait_DL*1000000;
 
 		unsigned poolPrt = 0;
 		if((actPrts=s.s->prtInit(prot_in,s.sock,s.sender)))

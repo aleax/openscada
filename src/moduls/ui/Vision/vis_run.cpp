@@ -222,7 +222,7 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     endRunTimer   = new QTimer(this);
     endRunTimer->setSingleShot(false);
     connect(endRunTimer, SIGNAL(timeout()), this, SLOT(endRunChk()));
-    endRunTimer->start(1e3*OSCD_WAIT_DELAY);
+    endRunTimer->start(1e3*prmWait_DL);
     // Update timer
     updateTimer = new QTimer(this);
     updateTimer->setSingleShot(false);
@@ -1488,7 +1488,7 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
     req.childAdd("get")->setAttr("path", "/%2fattr%2fpgGrp");
     req.childAdd("get")->setAttr("path", "/%2fattr%2fpgOpenSrc");
     // For per-page notification
-    for(unsigned iNtf = 0; iNtf < 7; iNtf++) {
+    for(unsigned iNtf = 0; iNtf < 8; iNtf++) {
 	req.childAdd("activate")->setAttr("path", "/%2fserv%2fattr%2fnotifyVis"+mod->modId()+i2s(iNtf));
 	req.childAdd("activate")->setAttr("path", "/%2fserv%2fattr%2fnotify"+i2s(iNtf));
     }
@@ -1685,7 +1685,7 @@ void VisRun::alarmSet( unsigned alarm )
 void VisRun::ntfReg( int8_t tp, const string &props, const string &pgCrtor, bool prior )
 {
     if(tp < 0) {
-	for(unsigned iNtf = 0; iNtf < 7; iNtf++)
+	for(unsigned iNtf = 0; iNtf < 8; iNtf++)
 	    ntfReg(iNtf, props, pgCrtor, prior);
 	return;
     }
@@ -1732,14 +1732,14 @@ string VisRun::cacheResGet( const string &res )
 
 void VisRun::cacheResSet( const string &res, const string &val )
 {
-    if(val.size() > USER_FILE_LIMIT) return;
+    if(val.size() > limUserFile_SZ) return;
     mCacheRes[res] = CacheEl(SYS->sysTm(), val);
-    if(mCacheRes.size() > (STD_CACHE_LIM+STD_CACHE_LIM/10)) {
+    if(mCacheRes.size() > (limCacheIts_N+limCacheIts_N/10)) {
 	vector< pair<time_t,string> > sortQueue;
 	for(map<string,CacheEl>::iterator itr = mCacheRes.begin(); itr != mCacheRes.end(); ++itr)
 	    sortQueue.push_back(pair<time_t,string>(itr->second.tm,itr->first));
 	sort(sortQueue.begin(), sortQueue.end());
-	for(unsigned i_del = 0; i_del < (STD_CACHE_LIM/10); ++i_del) mCacheRes.erase(sortQueue[i_del].second);
+	for(unsigned i_del = 0; i_del < (limCacheIts_N/10); ++i_del) mCacheRes.erase(sortQueue[i_del].second);
     }
 }
 

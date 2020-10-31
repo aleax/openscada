@@ -343,7 +343,7 @@ bool Project::mimeDataGet( const string &iid, string &mimeType, string *mimeData
     if(!is_res) {
 	//Get resource file from file system
 	string filepath = is_file ? iid.substr(5) : iid;
-	char buf[STR_BUF_LEN];
+	char buf[prmStrBuf_SZ];
 
 	mimeType = TUIS::mimeGet(filepath, "");
 	if(!mimeData)	return true;
@@ -357,7 +357,7 @@ bool Project::mimeDataGet( const string &iid, string &mimeType, string *mimeData
 
 	if(off >= 0) {	//Partially reading
 	    off = vmin(f_size, off);
-	    partSz = vmin(USER_FILE_LIMIT, vmin(f_size, off + ((size && *size)?*size:f_size)));
+	    partSz = vmin(limUserFile_SZ, vmin(f_size, off + ((size && *size)?*size:f_size)));
 	    if(size) *size = f_size;
 	    lseek(hd, off, SEEK_SET);
 	} else lseek(hd, 0, SEEK_SET);

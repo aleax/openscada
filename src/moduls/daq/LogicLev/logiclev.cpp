@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Logical level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.5.0"
+#define MOD_VER		"2.5.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the pure logical level of the DAQ parameters.")
 #define LICENSE		"GPL2"
@@ -452,9 +452,9 @@ void TMdPrm::disable( )
 
     if(isStd() && tmpl) {
 	//Waiting the ordinal calculation finish
-	for(int iTm = 0; tmpl->isCalc() && iTm < STD_WAIT_TM/OSCD_WAIT_DELAY; iTm++) SYS->sysSleep(OSCD_WAIT_DELAY);
+	for(int iTm = 0; tmpl->isCalc() && iTm < prmWait_TM/prmWait_DL; iTm++) SYS->sysSleep(prmWait_DL);
 	//Termination the calculation
-	while(tmpl->isCalc()) { SYS->taskSendSIGALRM(owner().nodePath('.',true)); SYS->sysSleep(OSCD_WAIT_DELAY); }
+	while(tmpl->isCalc()) { SYS->taskSendSIGALRM(owner().nodePath('.',true)); SYS->sysSleep(prmWait_DL); }
     }
 
     owner().prmEn(this, false);
