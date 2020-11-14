@@ -1595,7 +1595,7 @@ bool Page::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 
 	// Link interface process
 	int c_lv = 0;
-	string obj_tp = TSYS::strSepParse(m_prm,0,':')+":";
+	string obj_tp = (m_prm.size() >= 4) ? m_prm.substr(0,4) : "";  //  TSYS::strSepParse(m_prm,0,':')+":";
 	if(obj_tp.empty() || !(obj_tp == "val:" || obj_tp == "prm:" || obj_tp == "wdg:" || obj_tp == "arh:")) {
 	    if(!is_pl) opt->childAdd("el")->setText(_("val:Constant value"));
 	    opt->childAdd("el")->setText("prm:");

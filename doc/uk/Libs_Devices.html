@@ -220,6 +220,7 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
 </td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsDevsMbBaseOp.png" title="Result and the operative setup."><img alt="Result and the operative setup." height="468" src="../en/files/LibsDevsMbBaseOp.png" width="415" /></a></div>
 <p>ModBus base template of the protocol implementing on the Logical Level. Designed mostly to use in the base of creation specific ModBus-based protocols for the standard-part registers' access (function 3 for reading and function 16 for writing) and appending the new protocol specific part. The template was designed to work both under control of the controller objects of the module <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> and <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">LogicLev</a> and can be managed from the template of <a href="Libs_Main.html#initConsAssignTrs" title="Special:MyLanguage/Libs/Main">the initiative connections processing for assigned output transports</a>.
 </p>
 <ul><li> <b>Total complexity:</b> 0.5 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
@@ -345,6 +346,7 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <td> Variable </td>
 <td> 0
 </td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsDevsMbBaseCfg.png" title="Configuration."><img alt="Configuration." height="283" src="../en/files/LibsDevsMbBaseCfg.png" width="379" /></a></div>
 <p><b><u>Configuring and using</u></b><br />
 </p>
 <dl><dd>1. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" or "<a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>", and set its Identifier like to "mbbase", one for each the devices' used serial bus.</dd>
@@ -5056,5 +5058,5 @@ The field "addr" of the items can be wrote positive, for  the 8 bit address [0..
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Devices/uk">Libs/Devices/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2711</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Devices/uk">Libs/Devices/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">November 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2717</td></tr></table></body>
 </html>

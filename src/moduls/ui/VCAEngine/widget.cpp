@@ -1283,7 +1283,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD)) {
 	    string cfg_val = srcwdg.at().attrAt(nattr).at().cfgVal();
-	    string obj_tp  = TSYS::strSepParse(cfg_val,0,':')+":";
+	    string obj_tp  = (cfg_val.size() >= 4) ? cfg_val.substr(0,4) : ""; //TSYS::strSepParse(cfg_val,0,':')+":";
 	    string rez     = _("Custom");
 
 	    bool custom = false, lnkOK = false;
@@ -1305,7 +1305,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 		    if(!custom && sel.size() && sel.find(cfg_val) != 0) custom = true;
 		    rez += sel+", ";
 		}
-	    if(cfg_val.empty())	rez = "";
+	    if(cfg_val.size() < 4)	rez = cfg_val; // "";
 	    else if(!custom) {
 		rez = cfg_val;
 		if(lnkOK) rez += " (+)";
@@ -1316,7 +1316,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    string no_set;
 	    string cfg_val = TSYS::strParse(opt->text(), 0, " ");
-	    string obj_tp  = TSYS::strSepParse(cfg_val,0,':')+":";
+	    string obj_tp  = (cfg_val.size() >= 4) ? cfg_val.substr(0,4) : ""; //TSYS::strSepParse(cfg_val,0,':')+":";
 	    string cfg_addr = (obj_tp.size()<cfg_val.size()) ? cfg_val.substr(obj_tp.size()) : "";
 
 	    AutoHD<TValue> prm;
@@ -1365,7 +1365,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 
 	// Link interface process
 	int c_lv = 0;
-	string obj_tp = TSYS::strSepParse(m_prm,0,':')+":";
+	string obj_tp = (m_prm.size() >= 4) ? m_prm.substr(0,4) : ""; //TSYS::strSepParse(m_prm,0,':')+":";
 	if(obj_tp.empty() || !(obj_tp == "val:" || obj_tp == "prm:" || obj_tp == "wdg:" || obj_tp == "arh:")) {
 	    if(!is_pl) opt->childAdd("el")->setText(_("val:Constant value"));
 	    opt->childAdd("el")->setText("prm:");
