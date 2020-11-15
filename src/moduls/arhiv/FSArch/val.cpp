@@ -228,7 +228,7 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
 	    if(SYS->db().at().dataGet((infoTbl.size()?infoTbl:mod->filesDB()),mod->nodePath()+"Pack/",cEl,false,true)) {
 		if(abeg)	*abeg = strtoll(cEl.cfg("BEGIN").getS().c_str(),NULL,16);
 		if(aend)	*aend = strtoll(cEl.cfg("END").getS().c_str(),NULL,16);
-		if(archive)	*archive = cEl.cfg("PRM1").getS();
+		if(archive)	*archive = cEl.cfg("PRM1").getS().substr(0, s2i(ARCH_ID_SZ));
 		if(aper)	*aper = strtoll(cEl.cfg("PRM2").getS().c_str(),NULL,16);
 		if(vtp)		*vtp  = (TFld::Type)s2i(cEl.cfg("PRM3").getS());
 		infoOK = true;

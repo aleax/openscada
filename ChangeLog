@@ -1,3 +1,9 @@
+2020-11-15 Roman 0.9.2.3
+- data/{oscada_plc.xml,oscada_server.xml,oscada_start.xml}: The disabled DBs appended for the description.
+- !!:FIX:UI.VCAEngine: Fixed in crash at a widget link setting to "prm".
+- FIX:Archive.FSArch: Forced to the value archive ID size in ARCH_ID_SZ, prepairing to such extending in the Work branch.
+
+
 2020-10-20 Roman 0.9.2.2
 - FIX:LibsDB.OscadaLibs: The DAQ-template base.initConsAssignTrs some improved in detection duple connections.
 - FIX:data/openscada-proj.in: Fixed in packing big crashreports.
