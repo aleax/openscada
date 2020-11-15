@@ -1,3 +1,7 @@
+2020-11-15 Roman (stable)
+- data/{oscada_plc.xml,oscada_server.xml,oscada_start.xml}: Rename the DB field "DESCRIPT" to "DESCR".
+
+
 2020-11-14 Roman (stable)
 - data/{oscada_plc.xml,oscada_server.xml,oscada_start.xml}: The disabled DBs appended for the description.
 - !!:FIX:UI.VCAEngine: Fixed in crash at a widget link setting to "prm".

@@ -19,21 +19,21 @@
 	    <tbl id="DB">
 		<fld ID="GenDB" TYPE="SQLite" NAME="Main DB" ADDR="St.db" CODEPAGE="UTF-8"/>
 		<fld ID="OscadaLibs" TYPE="SQLite" ADDR="LibsDB/OscadaLibs.db" CODEPAGE="UTF-8" EN="0"
-		    DESCRIPT="Libraries of the data sources, services and processing."
-		    DESCRIPT_uk="Бібліотеки джерел даних, служб та обробки."
-		    DESCRIPT_ru="Библиотеки источников данных, служб и обработки." />
+		    DESCR="Libraries of the data sources, services and processing."
+		    DESCR_uk="Бібліотеки джерел даних, служб та обробки."
+		    DESCR_ru="Библиотеки источников данных, служб и обработки." />
 		<fld ID="vcaBase" TYPE="SQLite" ADDR="LibsDB/vcaBase.db" CODEPAGE="UTF-8" EN="0"
-		    DESCRIPT="Graphical elements' libraries of the OpenSCADA module UI.VCAEngine."
-		    DESCRIPT_uk="Бібліотеки графічних елементів OpenSCADA модуля UI.VCAEngine."
-		    DESCRIPT_ru="Библиотеки графических элементов OpenSCADA модуля UI.VCAEngine." />
+		    DESCR="Graphical elements' libraries of the OpenSCADA module UI.VCAEngine."
+		    DESCR_uk="Бібліотеки графічних елементів OpenSCADA модуля UI.VCAEngine."
+		    DESCR_ru="Библиотеки графических элементов OpenSCADA модуля UI.VCAEngine." />
 		<fld ID="vcaElectroEls" TYPE="SQLite" ADDR="LibsDB/vcaElectroEls.db" CODEPAGE="UTF-8" EN="0"
-		    DESCRIPT="Provides the mnemonic elements library of the user interface of the electrical substations and the electricity generation station."
-		    DESCRIPT_uk="Надає бібліотеку мнемонічних елементів інтерфейсу користувача електричних підстанцій та станцій генерації електрики."
-		    DESCRIPT_ru="Предоставляет библиотеку мнемонических элементов интерфейса пользователя электрических подстанций и станций генерации электрики." />
+		    DESCR="Provides the mnemonic elements library of the user interface of the electrical substations and the electricity generation station."
+		    DESCR_uk="Надає бібліотеку мнемонічних елементів інтерфейсу користувача електричних підстанцій та станцій генерації електрики."
+		    DESCR_ru="Предоставляет библиотеку мнемонических элементов интерфейса пользователя электрических подстанций и станций генерации электрики." />
 		<fld ID="vcaTest" TYPE="SQLite" ADDR="LibsDB/vcaTest.db" CODEPAGE="UTF-8" EN="0"
-		    DESCRIPT="Graphical elements' tests library."
-		    DESCRIPT_uk="Бібліотека тестів графічних елементів."
-		    DESCRIPT_ru="Библиотека тестов графических элементов." />
+		    DESCR="Graphical elements' tests library."
+		    DESCR_uk="Бібліотека тестів графічних елементів."
+		    DESCR_ru="Библиотека тестов графических элементов." />
 	    </tbl>
 	</node>
 
