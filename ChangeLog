@@ -1,3 +1,19 @@
+2020-11-22 Roman (stable)
+- !!:LibsDB.vcaBase: The template project (tmplSO) cleaned from spare mnemos of the prescription management
+    and the main page appended of the actual alarms-violations table.
+- SYS: Appended at the rand() activation by srand() execution for the current time microsecond part.
+- !!!!:Protocol.HTTP: Appended for the dynamic cookie name and the User ID space,
+	where the cookie name is "oscd_UID" and is used the User ID space in work with the common authentication sessions table,
+	and the cookie name is "oscd_UID_{PrjNm}" in the work without that.
+    The User ID generation improved in generation different IDs for the different processes, limited in 1e6,
+	and appended by the random and configurable User ID space [0...99] * 1e6,
+	used in the work with the common authentication sessions table.
+- UI.QTCfg: Some appended in way of an improvement try of the station icons updating.
+- !!:UI.QTStarter: Appended for the start dialog periodic updating.
+- FIX:UI.WebVision: Fixed in the sessTime() specifying as time_t instead int.
+    FIX: Prevented from potential cycling between "prj_" and "ses_" URLs at the UID inconsistence.
+
+
 2020-11-15 Roman (stable)
 - data/{oscada_plc.xml,oscada_server.xml,oscada_start.xml}: Rename the DB field "DESCRIPT" to "DESCR".
 

@@ -78,6 +78,7 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
     mainPthr(0), mSysTm(0), mClockRT(false), mPrjCustMode(true), mPrjNm(dataRes()), mCfgCtx(NULL),
     mRdStLevel(0), mRdRestConnTm(10), mRdTaskPer(1), mRdPrimCmdTr(false)
 {
+    srand(TSYS::curTime()%1000000);
     mWorkDB = DB_CFG;
 
     Mess = new TMess();

@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTCfg file: qtcfg.h
 /***************************************************************************
- *   Copyright (C) 2004-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2004-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -60,7 +60,7 @@ namespace QTCFG
 
 //***********************************************
 // SCADAHost - Host thread's control object     *
-class SCADAHost : public QThread
+class SCADAHost: public QThread
 {
     Q_OBJECT
 
@@ -68,6 +68,8 @@ public:
     //Methods
     SCADAHost( const QString &id, const QString &user, bool iIsRemote, QObject *parent = 0 );
     ~SCADAHost( );
+
+    void terminate( );
 
     void userSet( const QString &user );
     void sendSIGALRM( );
@@ -79,6 +81,7 @@ public:
     bool reqBusy( );
 
     //Attributes
+    bool	isRemote;
     time_t	reqTmMax;
 
 signals:
@@ -96,7 +99,7 @@ private:
     CondVar	cond;
 
     QString	id, user;
-    bool	isRemote, lnkOK, endRun, reqDone;
+    bool	lnkOK, endRun, reqDone;
     time_t	tm;
 
     XMLNode	*req;

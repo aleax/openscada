@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.5.2"
+#define MOD_VER		"3.6.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -71,14 +71,15 @@ using namespace PrHTTP;
 //*************************************************
 //* TProt                                         *
 //*************************************************
-TProt::TProt( string name ) : TProtocol(MOD_ID),
+TProt::TProt( string name ) : TProtocol(MOD_ID), cookieLab(dataRes()),
     mDeny(dataRes()), mAllow(dataRes()), mTmpl(dataRes()), mTmplMainPage(dataRes()), mAllowUsersAuth(dataRes()), mAuthSessDB(dataRes()),
-    mTAuth(10), lstSesChk(0)
+    mTAuth(10), mSpaceUID(0), lstSesChk(0)
 {
     mod = this;
 
     modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 
+    cookieLab = "oscd_UID";
     mAllow = "*";
 
     //Structure of a table of the external authentication sessions
@@ -113,6 +114,7 @@ void TProt::load_( )
     setTmpl(TBDS::genDBGet(nodePath()+"Tmpl",tmpl()));
     setTmplMainPage(TBDS::genDBGet(nodePath()+"TmplMainPage",tmplMainPage()));
     setAuthSessDB(TBDS::genDBGet(nodePath()+"AuthSessDB",authSessDB()));
+    setSpaceUID(s2i(TBDS::genDBGet(nodePath()+"SpaceUID",i2s(spaceUID()))));
     setAllowUsersAuth(TBDS::genDBGet(nodePath()+"AllowUsersAuth",allowUsersAuth()));
     setAuthTime(s2i(TBDS::genDBGet(nodePath()+"AuthTime",i2s(authTime()))));
     // Load auto-login config
@@ -135,6 +137,7 @@ void TProt::save_( )
     TBDS::genDBSet(nodePath()+"Tmpl", tmpl());
     TBDS::genDBSet(nodePath()+"TmplMainPage", tmplMainPage());
     TBDS::genDBSet(nodePath()+"AuthSessDB", authSessDB());
+    TBDS::genDBSet(nodePath()+"SpaceUID", i2s(spaceUID()));
     TBDS::genDBSet(nodePath()+"AllowUsersAuth",allowUsersAuth());
     TBDS::genDBSet(nodePath()+"AuthTime", i2s(authTime()));
 
@@ -311,7 +314,7 @@ int TProt::sesOpen( const string &name, const string &srcAddr, const string &use
     MtxAlloc res(authM, true);
 
     //Get free identifier
-    do{ sess_id = rand(); }
+    do{ sess_id = 1e6*((authSessTbl().size()?spaceUID():0) + (float)rand()/RAND_MAX); }
     while(sess_id == 0 || mAuth.find(sess_id) != mAuth.end());
 
     //Add new session authentification
@@ -388,7 +391,8 @@ string TProt::sesCheck( int sid, const string &chUser )
 			SYS->db().at().dataDel(authSessTbl(), mod->nodePath()+"AuthSessions/", cEl, true, false, true);
 		    } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
-		mess_info(nodePath().c_str(),_("The authentication session for the user '%s' is expired."),authEl->second.name.c_str());
+		mess_info(nodePath().c_str(), _("The authentication session for the user '%s' is expired. Host: %s."),
+		    authEl->second.name.c_str(), authEl->second.addr.c_str());
 		mAuth.erase(authEl++);
 	    } else authEl++;
 	lstSesChk = cur_tm;
@@ -426,6 +430,16 @@ string TProt::autoLogGet( const string &sender )
 	    if(TRegExp(addr, "p").test(sender)) return mALog[iA].user;
 
     return "";
+}
+
+void TProt::setAuthSessDB( const string &vl )
+{
+    mAuthSessDB = vl;
+    modif();
+
+    cookieLab = "oscd_UID";
+    if(authSessTbl().empty()) cookieLab = cookieLab.getVal() + "_" + SYS->prjNm();
+    else if(mSpaceUID == 0) mSpaceUID = 100*(float)rand()/RAND_MAX;
 }
 
 void TProt::outMess( XMLNode &io, TTransportOut &tro )
@@ -569,6 +583,8 @@ void TProt::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/cfg/authSesDB",_("DB of the active authentication sessions"),RWRWR_,"root",SPRT_ID,4,
 		    "tp","str", "dest","select", "select","/db/list",
 		    "help",(string(TMess::labDB())+"\n"+_("Set to empty to disable using the external table of the active authentication sessions.")).c_str());
+		if(authSessTbl().size())
+		    ctrMkNode("fld",opt,-1,"/prm/cfg/spaceUID",_("Authentication UID generation space"),RWRWR_,"root",SPRT_ID,3,"tp","dec", "min","0", "max","100");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of the authentication, minutes"),RWRWR_,"root",SPRT_ID,1,"tp","dec");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/aUsers",_("List of users allowed for authentication, separated by ';'"),RWRWR_,"root",SPRT_ID,1,"tp","str");
 		if(ctrMkNode("table",opt,-1,"/prm/cfg/alog",_("Auto login"),RWRWR_,"root",SPRT_ID,3, "s_com","add,del,ins", "rows","3",
@@ -611,6 +627,10 @@ void TProt::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/cfg/authSesDB") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(authSessDB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setAuthSessDB(opt->text());
+    }
+    else if(a_path == "/prm/cfg/spaceUID") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(i2s(spaceUID()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setSpaceUID(s2i(opt->text()));
     }
     else if(a_path == "/db/list" && ctrChkNode(opt)) {
 	TProtocol::cntrCmdProc(opt);
@@ -743,8 +763,8 @@ bool TProtIn::mess( const string &reqst, string &answer )
 		    { KeepAlive = true; break; }
 	    }
 	    else if(strcasecmp(var.c_str(),"cookie") == 0) {
-		size_t vpos = val.find("oscd_u_id=", 0);
-		if(vpos != string::npos) user = mod->sesCheck((sesId=s2i(val.substr(vpos+10))));
+		size_t vpos = val.find(mod->cookieLab.getVal()+"=", 0);
+		if(vpos != string::npos) user = mod->sesCheck((sesId=s2i(val.substr(vpos+mod->cookieLab.size()+1))));
 	    }
 	    else if(strcasecmp(var.c_str(),"accept-language") == 0)
 		brLang = TSYS::strTrim(TSYS::strParse(val,0,","));
@@ -801,7 +821,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 			mess_info(owner().nodePath().c_str(), _("Successful authentication for the user '%s'. Host: %s. User agent: %s."),
 			    user.c_str(), sender.c_str(), userAgent.c_str());
 			answer = pgCreator("<h2 class='title'>"+TSYS::strMess(_("Going to the page: <b>%s</b>"),(uri+prms).c_str())+"</h2>\n", "200 OK",
-				"Set-Cookie: oscd_u_id="+i2s(mod->sesOpen(user,sender,userAgent))+"; path=/;",
+				"Set-Cookie: "+mod->cookieLab.getVal()+"="+i2s(mod->sesOpen(user,sender,userAgent))+"; path=/;",
 				"<META HTTP-EQUIV='Refresh' CONTENT='0; URL="+uri+prms+"'/>");
 			return mNotFull || KeepAlive;
 		    }
@@ -817,7 +837,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 	else if(name_mod == "logout" && method == "GET") {
 	    if(sesId) mod->sesClose(sesId);
 	    answer = pgCreator("<h2 class='title'>"+TSYS::strMess(_("Going to the page: <b>%s</b>"),"/")+"</h2>\n", "200 OK",
-		"Set-Cookie: oscd_u_id=0; path=/;", "<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/'/>");
+		"Set-Cookie: "+mod->cookieLab.getVal()+"=0; path=/;", "<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/'/>");
 	    return mNotFull || KeepAlive;
 	}
 	// robots.txt
@@ -837,7 +857,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 		    mess_info(owner().nodePath().c_str(), _("Successful automatic authentication for the user '%s'. Host: %s. User agent: %s."),
 			user.c_str(), sender.c_str(), userAgent.c_str());
 		    answer = pgCreator("<h2 class='title'>"+TSYS::strMess(_("Going to the page: <b>%s</b>"),(uri+prms).c_str())+"</h2>\n", "200 OK",
-			"Set-Cookie: oscd_u_id="+i2s(mod->sesOpen(user,sender,userAgent))+"; path=/;",
+			"Set-Cookie: "+mod->cookieLab.getVal()+"="+i2s(mod->sesOpen(user,sender,userAgent))+"; path=/;",
 			"<META HTTP-EQUIV='Refresh' CONTENT='0; URL="+uris+prms+"'/>");
 		}
 		else answer = pgCreator("<h2 class='title'>"+TSYS::strMess(_("Going to the page: <b>%s</b>"),("/login/"+name_mod+uri+prms).c_str())+"</h2>\n",

@@ -3,15 +3,15 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2019.
+# Roman Savochenko <roman@oscada.org>, 2010-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.HTTP 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-23 15:41+0200\n"
+"POT-Creation-Date: 2020-11-19 15:29+0200\n"
 "PO-Revision-Date: 2009-08-19 09:03+0200\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: de <>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -57,8 +57,9 @@ msgid "Exiting the authentication for the user '%s'."
 msgstr "Beenden der Authentifizierung für den Benutzer '%s'."
 
 #, c-format
-msgid "The authentication session for the user '%s' is expired."
-msgstr "Die Authentifizierungssitzung für den Benutzer '%s' ist abgelaufen."
+msgid "The authentication session for the user '%s' is expired. Host: %s."
+msgstr ""
+"Die Authentifizierungssitzung für den Benutzer '%s' ist abgelaufen. Host: %s."
 
 #, c-format
 msgid "Error or not supported the HTTP method '%s'."
@@ -100,7 +101,12 @@ msgstr "DB der aktiven Authentifizierungssitzungen"
 msgid ""
 "Set to empty to disable using the external table of the active "
 "authentication sessions."
-msgstr "Auf leer setzen, um die Verwendung der externen Tabelle der aktiven Authentifizierungssitzungen zu deaktivieren."
+msgstr ""
+"Auf leer setzen, um die Verwendung der externen Tabelle der aktiven "
+"Authentifizierungssitzungen zu deaktivieren."
+
+msgid "Authentication UID generation space"
+msgstr "Authentifizierungs-UID Erzeugungsraum"
 
 msgid "Life time of the authentication, minutes"
 msgstr "Lebenszeit der Authentifizierung, Minuten"

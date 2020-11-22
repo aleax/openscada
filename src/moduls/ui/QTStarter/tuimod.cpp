@@ -56,7 +56,7 @@
 #define MOD_NAME	_("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"5.7.4"
+#define MOD_VER		"5.8.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -1141,6 +1141,8 @@ StartDialog::StartDialog( ) : prjsLs(NULL), prjsBt(NULL)
     butt->setWhatsThis(_("The button for exit the program."));
     QObject::connect(butt, SIGNAL(clicked(bool)), mod->QtApp, SLOT(callQtModule()));
     wnd_lay->addWidget(butt, 0, 0);
+
+    startTimer(1e3*prmWait_TM);
 }
 
 void StartDialog::showEvent( QShowEvent* )
@@ -1160,6 +1162,8 @@ void StartDialog::updatePrjList( const string &stage )
 {
     if(stage.empty()) {
 	int scrollPos = prjsLs->verticalScrollBar()->value();
+	string curIt;
+	if(prjsLs->selectedItems().size()) curIt = prjsLs->selectedItems()[0]->data(Qt::UserRole).toString().toStdString();
 	prjsLs->blockSignals(true);
 	while(prjsLs->count())	delete prjsLs->takeItem(0);
 
@@ -1168,11 +1172,12 @@ void StartDialog::updatePrjList( const string &stage )
 	prjsLs->blockSignals(false);
 	prjsLs->verticalScrollBar()->setValue(scrollPos);
 
-	if(SYS->prjNm().size()) {
-	    QList<QListWidgetItem *> sIt = prjsLs->findItems(SYS->prjNm().c_str(), Qt::MatchStartsWith);
+	if(curIt.size() || SYS->prjNm().size()) {
+	    QList<QListWidgetItem *> sIt = prjsLs->findItems((curIt.size()?curIt:SYS->prjNm()).c_str(), Qt::MatchStartsWith);
 	    for(int iIt = 0; iIt < sIt.length(); iIt++) {
 		sIt[iIt]->setSelected(true);
-		prjsLs->scrollToItem(sIt[iIt]);
+		//prjsLs->setCurrentItem(sIt[iIt]);
+		if(curIt.empty()) prjsLs->scrollToItem(sIt[iIt]);
 	    }
 	}
     }
@@ -1243,6 +1248,11 @@ void StartDialog::updatePrjList( const string &stage )
 	free(scan_dirent);
 	closedir(IdDir);
     }
+}
+
+void StartDialog::timerEvent( QTimerEvent *event )
+{
+    updatePrjList();
 }
 
 void StartDialog::about( )

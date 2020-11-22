@@ -903,9 +903,9 @@ void ConfApp::editToolUpdate( )
 
 void ConfApp::treeUpdate( )
 {
-    for(int i_t = 0; i_t < CtrTree->topLevelItemCount(); i_t++)
-	if(CtrTree->topLevelItem(i_t)->isExpanded())
-	    viewChildRecArea(CtrTree->topLevelItem(i_t), true);
+    for(int iT = 0; iT < CtrTree->topLevelItemCount(); iT++)
+	if(CtrTree->topLevelItem(iT)->isExpanded())
+	    viewChildRecArea(CtrTree->topLevelItem(iT), true);
 }
 
 void ConfApp::userSel( )
@@ -1098,16 +1098,16 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 
 	// Delete tabs of deleted areas
 	bool actRemoved = false;
-	for(int i_tbs = 0; i_tbs < tabs->count(); i_tbs++) {
+	for(int iTbs = 0; iTbs < tabs->count(); iTbs++) {
 	    unsigned iCf;
 	    for(iCf = 0; iCf < node.childSize(); iCf++)
-		if(node.childGet(iCf)->name() == "area" && tabs->tabText(i_tbs) == node.childGet(iCf)->attr("dscr").c_str())
+		if(node.childGet(iCf)->name() == "area" && tabs->tabText(iTbs) == node.childGet(iCf)->attr("dscr").c_str())
 		    break;
 	    if(iCf >= node.childSize()) {
-		if(tabs->currentIndex() == i_tbs) actRemoved = true;
-		tabs->widget(i_tbs)->deleteLater();
-		tabs->removeTab(i_tbs);
-		i_tbs--;
+		if(tabs->currentIndex() == iTbs) actRemoved = true;
+		tabs->widget(iTbs)->deleteLater();
+		tabs->removeTab(iTbs);
+		iTbs--;
 	    }
 	}
 	// Add new tabs
@@ -1115,11 +1115,11 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	    XMLNode &t_s = *node.childGet(iCf);
 	    if(t_s.name() != "area")	continue;
 
-	    int i_tbs;
-	    for(i_tbs = 0; i_tbs < tabs->count(); i_tbs++)
-		if(tabs->tabText(i_tbs) == t_s.attr("dscr").c_str())
+	    int iTbs;
+	    for(iTbs = 0; iTbs < tabs->count(); iTbs++)
+		if(tabs->tabText(iTbs) == t_s.attr("dscr").c_str())
 		    break;
-	    if(i_tbs >= tabs->count()) {
+	    if(iTbs >= tabs->count()) {
 		QScrollArea *scrl = new QScrollArea();
 		tabs->insertTab(i_area, scrl, t_s.attr("dscr").c_str());
 		t_s.setAttr("qview", "0");
@@ -3189,15 +3189,22 @@ void ConfApp::cancelButton( )
 //***********************************************
 // SHost - Host thread's control object         *
 SCADAHost::SCADAHost( const QString &iid, const QString &iuser, bool iIsRemote, QObject *p ) :
-    QThread(p), reqTmMax(0), id(iid), user(iuser), isRemote(iIsRemote), lnkOK(false), endRun(false), reqDone(false), tm(0), req(NULL), done(NULL), pid(0)
+    QThread(p), isRemote(iIsRemote), reqTmMax(0), id(iid), user(iuser), lnkOK(false), endRun(false), reqDone(false), tm(0), req(NULL), done(NULL), pid(0)
 {
 
 }
 
 SCADAHost::~SCADAHost( )
 {
-    endRun = true;
-    while(!wait(100)) sendSIGALRM();
+    terminate();
+}
+
+void SCADAHost::terminate( )
+{
+    if(isRunning()) {
+	endRun = true;
+	while(!wait(100)) sendSIGALRM();
+    }
 }
 
 void SCADAHost::userSet( const QString &iuser )
@@ -3259,6 +3266,7 @@ void SCADAHost::run( )
     QImage imgConnEst, imgDisConnect, imgRemConnected, img;
 
     pid = pthread_self();
+    endRun = false;
 
     //Images for statuses init
     stmp = TUIS::icoGet("connecting"); imgConnEst.loadFromData((const uchar*)stmp.c_str(), stmp.size());

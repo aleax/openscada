@@ -94,6 +94,8 @@ private:
 
 private slots:
     //Methods
+    void timerEvent( QTimerEvent *event );
+
     void about( );
     void aboutQt( );
     void enterWhatsThis( );

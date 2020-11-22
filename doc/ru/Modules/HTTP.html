@@ -31,7 +31,7 @@
 <td> <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">HTTP</a> </td>
 <td> HTTP-реализация
 </td>
-<td> 3.5 </td>
+<td> 3.6 </td>
 <td> GPL2 </td>
 <td> prot_HTTP.so </td>
 <td> en,uk,ru,de </td>
@@ -74,8 +74,9 @@
 <li> <a class="external" href="http://oscada.org/wiki/File:HTTP_webopenscada_main.html.gz" title="File:HTTP webopenscada main.html.gz">Шаблон главной страницы</a> с прямой ссылкой на главный интерфейс <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">АГЛКС</a> с помощью модуля <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">UI.WebVision</a> и без индекса WEB-модулей.</li>
 <li> <a class="external" href="http://oscada.org/wiki/File:HTTP_webopenscada_goto.html.gz" title="File:HTTP webopenscada goto.html.gz">Шаблон главной страницы</a> с прямым перенаправлением на главный интерфейс <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">АГЛКС</a> с помощью модуля <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">UI.WebVision</a>.</li></ul></li>
 <li> БД активных сеансов аутентификации предусматривает внешнюю таблицу активных сеансов аутентификации — "HTTP_AuthSessions", которая включается для непустого значения и предоставляет возможность совместного использования аутентификации между разными станциями OpenSCADA и её короткого сохранения на время выключения станции.</li>
+<li> Пространство генерации UID аутентификации, доступное с совместной таблицей сеансов аутентификации для гарантирования отличия "печенья" (cookie) для различных процессов OpenSCADA.</li>
 <li> Время жизни, перечень пользователей разрешённых к аутентификации и установка автоматического входа. </li></ul></li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:933px;"><a class="image" href="http://oscada.org/wiki/File:HTTP_mod_ru.png"><img class="thumbimage" height="723" src="../files/HTTP_mod_ru.png" width="931" /></a>  <div class="thumbcaption">Рис.3. Страница настройки модуля.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:917px;"><a class="image" href="http://oscada.org/wiki/File:HTTP_mod_ru.png"><img class="thumbimage" height="775" src="../files/HTTP_mod_ru.png" width="915" /></a>  <div class="thumbcaption">Рис.3. Страница настройки модуля.</div></div></div></div>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#.D0.90.D1.83.D1.82.D0.B5.D0.BD.D1.82.D0.B8.D1.84.D0.B8.D0.BA.D0.B0.D1.86.D0.B8.D1.8F"><span class="tocnumber">1</span> <span class="toctext">Аутентификация</span></a></li>
@@ -89,7 +90,8 @@
 <p>Модулем поддерживается аутентификация в OpenSCADA при предоставлении доступа к модулям WEB-интерфейсов (рис.2).
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:624px;"><a class="image" href="http://oscada.org/wiki/File:HTTP_auth_ru.png"><img class="thumbimage" height="278" src="../files/HTTP_auth_ru.png" width="622" /></a>  <div class="thumbcaption">Рис.2. Диалог авторизации в OpenSCADA.</div></div></div></div>
-<p>Для облегчения работы с Web-интерфейсами модуль предусматривает возможность автоматического входа от имени указанного пользователя. Конфигурация автоматического входа осуществляется на странице настройки модуля (рис.3). Автоматический вход осуществляется по совпадению адреса, указанного в колонке "Адреса", и от имени пользователя, указанного в колонке "Пользователь".
+<p>Аутентификация этим модулем осуществляется "печеньем" (cookies) с динамическим названием и пространством ИД пользователя, где название "печенья" (cookie) "oscd_UID" и используется пространство ИД пользователя в работе с совместной таблицей сеансов аутентификации, и название "oscd_UID_{PrjNm}" в роботі без неё.
+</p><p>Для облегчения работы с Web-интерфейсами модуль предусматривает возможность автоматического входа от имени указанного пользователя. Конфигурация автоматического входа осуществляется на странице настройки модуля (рис.3). Автоматический вход осуществляется по совпадению адреса, указанного в колонке "Адреса", и от имени пользователя, указанного в колонке "Пользователь".
 </p><p>Для большей безопасности Вы можете определить только Web-пользователей, в перечне пользователей разрешённых к аутентификации.
 </p>
 <h2><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D0.B8_WEB-.D0.B8.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D0.B0"><span class="mw-headline-number">2</span> <span id="ModsHTTP" title="#ModsHTTP">Модули WEB-интерфейса</span></span></h2>
@@ -202,5 +204,5 @@ SYS.Transport.Sockets.out_testHTTP.messIO(req,"HTTP");
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/HTTP/ru">Modules/HTTP/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">November 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2717</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/HTTP/ru">Modules/HTTP/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">November 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2719</td></tr></table></body>
 </html>

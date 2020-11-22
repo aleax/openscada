@@ -84,7 +84,7 @@ class TWEB: public TUI
 	TWEB( string name );
 	~TWEB( );
 
-	time_t	sessTime( )				{ return mTSess; }
+	int	sessTime( )				{ return mTSess; }
 	int	sessLimit( )				{ return mSessLimit; }
 	int	PNGCompLev( )				{ return mPNGCompLev; }
 	double	cachePgLife( )				{ return mCachePgLife; }
@@ -92,7 +92,7 @@ class TWEB: public TUI
 	bool	imgResize( )				{ return mImgResize; }
 	string	custCSS( )				{ return mCustCSS; }
 
-	void setSessTime( time_t vl )			{ mTSess = vmax(1,vmin(24*60,vl)); modif(); }
+	void setSessTime( int vl )			{ mTSess = vmax(1,vmin(24*60,vl)); modif(); }
 	void setSessLimit( int vl )			{ mSessLimit = vmax(1,vmin(100,vl)); modif(); }
 	void setCachePgLife( double vl )		{ mCachePgLife = vmax(0, vmin(1000,vl)); modif(); }
 	void setCachePgSz( int vl )			{ mCachePgSz = vmax(0, vmin(100,vl)); modif(); }

@@ -31,7 +31,7 @@
 <td> <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">HTTP</a> </td>
 <td> HTTP-realization
 </td>
-<td> 3.5 </td>
+<td> 3.6 </td>
 <td> GPL2 </td>
 <td> prot_HTTP.so </td>
 <td> en,uk,ru,de </td>
@@ -74,8 +74,9 @@
 <li> <a class="external" href="http://oscada.org/wiki/File:HTTP_webopenscada_main.html.gz" title="File:HTTP webopenscada main.html.gz">Main-page's template</a> with a direct link to the <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">AGLKS</a> main interface by <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">UI.WebVision</a> and without the WEB-modules index.</li>
 <li> <a class="external" href="http://oscada.org/wiki/File:HTTP_webopenscada_goto.html.gz" title="File:HTTP webopenscada goto.html.gz">Main-page's template</a> with a strong redirection to the <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">AGLKS</a> main interface by <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">UI.WebVision</a>.</li></ul></li>
 <li> DB of the active authentication sessions provides an external table of the active authentication sessions — "HTTP_AuthSessions", which is enabled for not empty value and provides a possibility of sharing the authentication between different OpenSCADA stations and its short storing at the station shut down time.</li>
+<li> Authentication UID generation space, accessible with the common authentication sessions table to guaranty the cookie difference for different OpenSCADA processes.</li>
 <li> Lifetime of the authentication, list of the users allowed for authentication and set up of the automatic login. </li></ul></li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:846px;"><a class="image" href="http://oscada.org/wiki/File:HTTP_mod.png"><img class="thumbimage" height="723" src="../files/HTTP_mod.png" width="844" /></a>  <div class="thumbcaption">Fig.3. The module configuring page.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:784px;"><a class="image" href="http://oscada.org/wiki/File:HTTP_mod.png"><img class="thumbimage" height="774" src="../files/HTTP_mod.png" width="782" /></a>  <div class="thumbcaption">Fig.3. The module configuring page.</div></div></div></div>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#Authentication"><span class="tocnumber">1</span> <span class="toctext">Authentication</span></a></li>
@@ -89,7 +90,8 @@
 <p>The module supports authentication in OpenSCADA while providing access to the WEB-interface modules (Fig.2).
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:619px;"><a class="image" href="http://oscada.org/wiki/File:HTTP_auth.png"><img class="thumbimage" height="302" src="../files/HTTP_auth.png" width="617" /></a>  <div class="thumbcaption">Fig.2. Authentication dialogue in OpenSCADA.</div></div></div></div>
-<p>To facilitate with Web-based interfaces, the module provides for automatic login from the specified user's name. Configuring for the automatic login makes by the module settings page (Fig.3). Automatic login performs by matching the address indicated in the column "Address", and on behalf of the user specified in the column "User".
+<p>The authentication by the module is provided by the cookies with the dynamic name and the User ID space, where the cookie name is "oscd_UID" and is used the User ID space in work with the common authentication sessions table, and the cookie name is "oscd_UID_{PrjNm}" in the work without that.
+</p><p>To facilitate with Web-based interfaces, the module provides for automatic login from the specified user's name. Configuring for the automatic login makes by the module settings page (Fig.3). Automatic login performs by matching the address indicated in the column "Address", and on behalf of the user specified in the column "User".
 </p><p>For greater security, you can only identify Web users in the list of users allowed to authenticate.
 </p>
 <h2><span class="mw-headline" id="Modules_of_the_WEB-interface"><span class="mw-headline-number">2</span> <span id="ModsHTTP" title="#ModsHTTP">Modules of the WEB-interface</span></span></h2>
@@ -202,5 +204,5 @@ SYS.Transport.Sockets.out_testHTTP.messIO(req,"HTTP");
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/HTTP/en">Modules/HTTP/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">November 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2717</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/HTTP/en">Modules/HTTP/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">November 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2719</td></tr></table></body>
 </html>
