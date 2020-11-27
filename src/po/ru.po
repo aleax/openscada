@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-31 18:15+0200\n"
+"POT-Creation-Date: 2020-11-27 19:47+0200\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1006,6 +1006,13 @@ msgstr "Пусто"
 #, c-format
 msgid "Error selecting! Value: '%s'."
 msgstr "Ошибка выбора! Значение: '%s'."
+
+msgid ""
+"A duple IO '%s' is detected in position %d after %d. If you do not see the "
+"duple IO then you created a special IO, remove or rename it!"
+msgstr ""
+"Обнаружен дублирующий ВВ \"%s\" в позиции %d после %d. Если вы не видите "
+"дублирующего ВВ, то вы создали специальный ВВ, удалите или переименуйте его!"
 
 #, c-format
 msgid "Function used: %s"

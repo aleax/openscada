@@ -183,6 +183,22 @@ cntText += "  09.03.10 16   Polnyj     188.81    350.0   4.000  40.0\r\n";
 cntText += "\r\n";
 cntNode.setText(cntText);
 SYS.Transport.Sockets.out_testHTTP.messIO(req,"HTTP");
+
+//POST request with single content
+req = SYS.XMLNode("POST");
+req.setAttr("URI","/WebUser/FlowTec.txt");
+req.childAdd("prm").setAttr("id","Content-Type").setText("text/plain");
+cntText = "Object2-k001\r\n";
+cntText += "\r\n";
+cntText += "v002\r\n";
+cntText += " n1\r\n";
+cntText += "  09.03.10 16   Polnyj    7155.25    216.0  32.000  17.5\r\n";
+cntText += "v005\r\n";
+cntText += " n1\r\n";
+cntText += "  09.03.10 16   Polnyj     188.81    350.0   4.000  40.0\r\n";
+cntText += "\r\n";
+req.setText(cntText);
+SYS.Transport.Sockets.out_testHTTP.messIO(req,"HTTP");
 </pre>
 <h2><span class="mw-headline" id="User_programming_API"><span class="mw-headline-number">4</span> User programming API</span></h2>
 <p><b>Input part of the module object (SYS.Protocol.HTTP.{In})</b>

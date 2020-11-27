@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.3.0"
+#define MOD_VER		"1.4.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -259,7 +259,6 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
     SSess ses(TSYS::strDecode(url,TSYS::HttpURL), sender, user, vars, page);
 
     try {
-	TValFunc funcV;
 	//Find user protocol for using
 	vector<string> upLs;
 	uPgList(upLs);
@@ -413,7 +412,7 @@ void UserPg::HTTP( const string &req, SSess &s, TProtocolIn *iprt )
 	inputLinks();
 	setS(ioHTTPreq, req);
 	setS(ioUrl, s.url);
-	setS(ioPage, s.page);
+	setS(ioPage, s.content/*page*/);
 	if(ioSender >= 0) setS(ioSender, s.sender);
 	if(ioUser >= 0) setS(ioUser, s.user);
 	setO(ioHTTPvars, new TVarObj());
@@ -455,7 +454,7 @@ void UserPg::HTTP( const string &req, SSess &s, TProtocolIn *iprt )
 	for(unsigned iL = 0; iL < sls.size(); iL++) {
 	    tstr = hVars.at().propGet(sls[iL]).getS();
 	    if(sls[iL] == "Date" || sls[iL] == "Server" || sls[iL] == "Accept-Ranges" || sls[iL] == "Content-Length" ||
-		((prmEl=s.vars.find(sls[iL])) != s.vars.end() && prmEl->second == tstr)) continue;
+		(sls[iL] != "Content-Type" && (prmEl=s.vars.find(sls[iL])) != s.vars.end() && prmEl->second == tstr)) continue;
 	    if(sls[iL] == "Content-Type") cTp = true;
 	    httpIt += sls[iL] + ": " + tstr + "\x0D\x0A";
 	}
@@ -756,7 +755,7 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
     //URL parameters parse
     size_t prmSep = iurl.find("?");
     if(prmSep != string::npos) {
-	url = iurl.substr(0,prmSep);
+	url = iurl.substr(0, prmSep);
 	string prms = iurl.substr(prmSep+1);
 	string sprm;
 	for(int iprm = 0; (sprm=TSYS::strSepParse(prms,0,'&',&iprm)).size(); ) {
@@ -786,7 +785,7 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
     if(boundary.empty()) return;
 
     for(pos = 0; true; ) {
-	pos = content.find(boundary,pos);
+	pos = content.find(boundary, pos);
 	if(pos == string::npos || content.compare(pos+boundary.size(),2,c_end) == 0) break;
 	pos += boundary.size()+strlen(c_term);
 

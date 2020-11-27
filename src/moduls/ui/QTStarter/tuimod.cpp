@@ -45,6 +45,7 @@
 #include <QStyle>
 #include <QScrollBar>
 #include <QPainter>
+#include <QPainterPath>
 
 #include <tsys.h>
 #include <tmess.h>
@@ -56,7 +57,7 @@
 #define MOD_NAME	_("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"5.8.0"
+#define MOD_VER		"5.8.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -1161,24 +1162,27 @@ void StartDialog::closeEvent( QCloseEvent *ce )
 void StartDialog::updatePrjList( const string &stage )
 {
     if(stage.empty()) {
-	int scrollPos = prjsLs->verticalScrollBar()->value();
-	string curIt;
-	if(prjsLs->selectedItems().size()) curIt = prjsLs->selectedItems()[0]->data(Qt::UserRole).toString().toStdString();
 	prjsLs->blockSignals(true);
-	while(prjsLs->count())	delete prjsLs->takeItem(0);
+	for(int iIt = 0; iIt < prjsLs->count(); iIt++)
+	    prjsLs->item(iIt)->setData(Qt::UserRole+3, 0);
 
 	updatePrjList("user");
 	updatePrjList("sys");
-	prjsLs->blockSignals(false);
-	prjsLs->verticalScrollBar()->setValue(scrollPos);
 
-	if(curIt.size() || SYS->prjNm().size()) {
-	    QList<QListWidgetItem *> sIt = prjsLs->findItems((curIt.size()?curIt:SYS->prjNm()).c_str(), Qt::MatchStartsWith);
-	    for(int iIt = 0; iIt < sIt.length(); iIt++) {
-		sIt[iIt]->setSelected(true);
-		//prjsLs->setCurrentItem(sIt[iIt]);
-		if(curIt.empty()) prjsLs->scrollToItem(sIt[iIt]);
-	    }
+	for(int iIt = 0; iIt < prjsLs->count(); iIt++)
+	    if(!prjsLs->item(iIt)->data(Qt::UserRole+3).toInt())
+		delete prjsLs->takeItem(iIt--);
+
+	prjsLs->blockSignals(false);
+
+	//Selecting the current project
+	if(!prjsLs->selectedItems().size() && SYS->prjNm().size()) {
+	    QList<QListWidgetItem *> sIt = prjsLs->findItems(SYS->prjNm().c_str(), Qt::MatchStartsWith);
+	    for(int iIt = 0; iIt < sIt.length(); iIt++)
+		if(sIt[iIt]->data(Qt::UserRole).toString().toStdString() == SYS->prjNm()) {
+		    sIt[iIt]->setSelected(true);
+		    prjsLs->setCurrentItem(sIt[iIt]);
+		}
 	}
     }
     else {
@@ -1211,10 +1215,14 @@ void StartDialog::updatePrjList( const string &stage )
 	    }
 
 	    //  Check for presenting already
+	    QListWidgetItem *tit = NULL;
 	    QList<QListWidgetItem *> pLs = prjsLs->findItems(scan_rez->d_name, Qt::MatchStartsWith);
 	    int iP = 0;
 	    for( ; iP < pLs.size() && pLs[iP]->data(Qt::UserRole).toString() != scan_rez->d_name; iP++) ;
-	    if(pLs.size() && iP < pLs.size()) continue;
+	    if(pLs.size() && iP < pLs.size()) {
+		tit = pLs[iP];
+		if(tit->data(Qt::UserRole+3).toInt()) continue;
+	    } else prjsLs->addItem((tit=new QListWidgetItem("", prjsLs)));
 
 	    //  Item placing
 	    string opt;
@@ -1234,11 +1242,11 @@ void StartDialog::updatePrjList( const string &stage )
 		opt += string(opt.size()?", ":"") + TSYS::strMess(_("%d backups"),nBkps);
 	    }
 
-	    QListWidgetItem *tit = new QListWidgetItem((string(scan_rez->d_name)+(opt.size()?" ("+opt+")":"")).c_str(), prjsLs);
-	    prjsLs->addItem(tit);
+	    tit->setText((string(scan_rez->d_name)+(opt.size()?" ("+opt+")":"")).c_str());
 	    tit->setData(Qt::UserRole, scan_rez->d_name);
 	    tit->setData(Qt::UserRole+1, isRun ? "" : bLs.c_str());
 	    tit->setData(Qt::UserRole+2, isRun);
+	    tit->setData(Qt::UserRole+3, (int)SYS->sysTm());
 	    QImage ico;
 	    if(ico.load((string(oscd_datadir_full "/icons/")+scan_rez->d_name+".png").c_str()) ||
 		    ico.load((wDir+"/"+scan_rez->d_name+"/icons/"+scan_rez->d_name+".png").c_str()))

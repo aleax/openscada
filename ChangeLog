@@ -1,3 +1,13 @@
+2020-11-27 Roman (stable)
+- FIX:SYS.Function: Appended for detection the duple IOs at the IO context copy.
+- !!:FIX:Protocol.HTTP: Multipart POST of the output function outMess() prevented in the end boundary placing
+    and improved in the "Content-Disposition" form.
+- !!:FIX:UI.QTStarter: The project tree updating code rewrote for soft update, without the current item selection lost.
+    FIX: Fixed in building with Qt 5.15.
+- FIX:UI.Vision: Fixed in the user color adjustement in the project execution mode.
+- !!:UI.WebUser: Adapted to the work with POST and the content in the body.
+
+
 2020-11-22 Roman (stable)
 - !!:LibsDB.vcaBase: The template project (tmplSO) cleaned from spare mnemos of the prescription management
     and the main page appended of the actual alarms-violations table.

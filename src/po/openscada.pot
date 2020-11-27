@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-31 18:15+0200\n"
+"POT-Creation-Date: 2020-11-27 19:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -900,6 +900,10 @@ msgstr ""
 
 #, c-format
 msgid "Error selecting! Value: '%s'."
+msgstr ""
+
+#, c-format
+msgid "A duple IO '%s' is detected in position %d after %d. If you do not see the duple IO then you created a special IO, remove or rename it!"
 msgstr ""
 
 #, c-format

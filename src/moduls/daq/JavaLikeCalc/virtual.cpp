@@ -791,7 +791,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	    modif();
 	}
 	if(ctrChkNode(opt,"move",isDAQTmpl?R_R_R_:RWRWR_,"root",SDAQ_ID,SEC_WR))
-	{ ((Func *)func())->ioMove( s2i(opt->attr("row")), s2i(opt->attr("to")) ); modif(); }
+	{ ((Func*)func())->ioMove(s2i(opt->attr("row")), s2i(opt->attr("to"))); modif(); }
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
 	    int row = s2i(opt->attr("row"));
 	    int col = s2i(opt->attr("col"));

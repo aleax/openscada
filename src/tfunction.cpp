@@ -58,12 +58,17 @@ TFunction &TFunction::operator=( const TFunction &func )
 	else iIO++;
     // Update present and create new IO
     for(int iIO = 0; iIO < func.ioSize(); iIO++) {
-	int dst_io = ioId(func.io(iIO)->id());
+	int dst_io = ioId(func.io(iIO)->id()), first_io = -1;
 	if(dst_io < 0)
 	    dst_io = ioIns(new IO(func.io(iIO)->id().c_str(),func.io(iIO)->name().c_str(),func.io(iIO)->type(),func.io(iIO)->flg(),
 		func.io(iIO)->def().c_str(),func.io(iIO)->hide(),func.io(iIO)->rez().c_str()), iIO);
 	else *io(dst_io) = *func.io(iIO);
-	if(dst_io != iIO && !use()) ioMove(dst_io, iIO);
+	if(dst_io != iIO) {
+	    if(iIO != (first_io=func.ioId(func.io(iIO)->id())))
+		throw err_sys(_("A duple IO '%s' is detected in position %d after %d. If you do not see the duple IO then you created a special IO, remove or rename it!"),
+		    func.io(iIO)->id().c_str(), iIO, first_io);
+	    else if(!use()) ioMove(dst_io, iIO);
+	}
     }
 
     if(mId.empty()) mId = func.id();

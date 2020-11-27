@@ -313,7 +313,7 @@ string UserStBar::pass( )
 void UserStBar::setUser( const string &val )
 {
     MtxAlloc res(mod->dataRes(), true);
-    setText(QString("<font color='%1'>%2</font>").arg(mod->colorAdjToBack((val=="root")?"red":"green",qApp->palette().color(QPalette::Window)).name()).arg(val.size()?val.c_str():"*"));
+    setText(QString("<font color='%1'>%2</font>").arg(mod->colorAdjToBack((val=="root")?"red":"green",palette().color(QPalette::Window)).name()).arg(val.size()?val.c_str():"*"));
     userTxt = val;
 
     if(window()) window()->setProperty("oscdUser", val.c_str());
