@@ -274,9 +274,9 @@ function setWAttrs( wId, attrs, val )
 {
     var body = '<set>';
     if(typeof(attrs) == 'string')
-	body += '<el id=\''+attrs+'\'>'+((typeof(val)=='string')?val.replace(new RegExp('<','g'),'&lt;').replace(new RegExp('>','g'),'&gt;'):val)+'</el>';
+	body += '<el id=\''+attrs+'\'>'+((typeof(val)=='string')?val.replace(new RegExp('&','g'),'&amp;').replace(new RegExp('<','g'),'&lt;').replace(new RegExp('>','g'),'&gt;'):val)+'</el>';
     else for(var i in attrs)
-	body += '<el id=\''+i+'\'>'+((typeof(attrs[i])=='string')?attrs[i].replace(new RegExp('<','g'),'&lt;').replace(new RegExp('>','g'),'&gt;'):attrs[i])+'</el>';
+	body += '<el id=\''+i+'\'>'+((typeof(attrs[i])=='string')?attrs[i].replace(new RegExp('&','g'),'&amp;').replace(new RegExp('<','g'),'&lt;').replace(new RegExp('>','g'),'&gt;'):attrs[i])+'</el>';
     body += '</set>';
 
     servSet(wId, 'com=attrs', body);
@@ -1420,7 +1420,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			this.valSet(val);
 			this.setModify(false);
 			var attrs = new Object(); attrs.value = val; attrs.event = 'ws_LnAccept';
-			setWAttrs(this.wdgLnk.addr,attrs);
+			setWAttrs(this.wdgLnk.addr, attrs);
 		    }
 		    formObj.chEscape = function( ) {
 			this.value = this.saveVal;

@@ -55,7 +55,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.5.1"
+#define MOD_VER		"2.5.2"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov (2016)")
 #define DESCRIPTION	_("Provides transport based on the serial interfaces.\
  It is used for data exchanging via the serial interfaces of the type RS232, RS485, GSM and similar.")
@@ -907,7 +907,7 @@ void TTrOut::setTimings( const string &vl, bool isDef )
 
     respSymbTmMax = 0;
 
-    if(isDef) modif();
+    if(!isDef) modif();
 }
 
 void TTrOut::start( int tmCon )

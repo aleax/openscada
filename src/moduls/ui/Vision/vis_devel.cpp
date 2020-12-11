@@ -1326,7 +1326,7 @@ void VisDevelop::visualItEdit( )
 	    if(ws_wdg.at(iW)->windowTitle() == w_title) {
 		mod->postMess(mod->nodePath().c_str(),
 		    QString(_("The widget '%1' editing window is already open.")).
-			    arg(ed_wdg.c_str()), TVision::Info, this );
+			    arg(ed_wdg.c_str()), TVision::Info, this);
 		work_space->setActiveSubWindow(ws_wdg.at(iW));
 		break;
 	    }

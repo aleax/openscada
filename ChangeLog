@@ -1,3 +1,10 @@
+2020-12-11 Roman (stable)
+- SYS.Function: the duple IOs detection made optimal.
+- FIX: The field "PASS" of the table "CfgExtHosts" expanded in its size up to 100.
+- FIX:Transport.Serial: Fixed in the modification sign setting at the timeouts of the output transport configuration.
+- FIX:UI.WebVision: The function setWAttrs() expanded in encoding the symbol '&' to the entity "&amp;" of the string values.
+
+
 2020-11-27 Roman (stable)
 - FIX:SYS.Function: Appended for detection the duple IOs at the IO context copy.
 - !!:FIX:Protocol.HTTP: Multipart POST of the output function outMess() prevented in the end boundary placing

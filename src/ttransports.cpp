@@ -56,7 +56,7 @@ TTransportS::TTransportS( ) : TSubSYS(STR_ID, _("Transports"), true), extHostLoa
     elExt.fldAdd(new TFld("TRANSP",_("Transport"),TFld::String,0,i2s(limObjID_SZ).c_str()));
     elExt.fldAdd(new TFld("ADDR",_("Transport address"),TFld::String,0,"50"));
     elExt.fldAdd(new TFld("USER",_("User of the requests"),TFld::String,0,i2s(limObjID_SZ).c_str()));
-    elExt.fldAdd(new TFld("PASS",_("Password of the requests"),TFld::String,0,"30"));
+    elExt.fldAdd(new TFld("PASS",_("Password of the requests"),TFld::String,0,"100"));
     elExt.fldAdd(new TFld("UpRiseLev",_("Level of lifting"),TFld::Integer,0,"1"));
 }
 

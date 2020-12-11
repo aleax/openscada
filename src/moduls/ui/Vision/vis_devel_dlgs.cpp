@@ -1215,7 +1215,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
     XMLNode req("get");
 
     XMLNode info_req("info");
-    info_req.setAttr("path",ed_it);
+    info_req.setAttr("path", ed_it);
     if(owner()->cntrIfCmd(info_req)) {
 	mod->postMess(mod->nodePath().c_str(), QString(_("Error getting the node '%1' information.")).arg(ed_it.c_str()), TVision::Error, this);
 	return;
@@ -1224,13 +1224,13 @@ void VisItProp::showDlg( const string &iit, bool reload )
     XMLNode *root, *gnd;
     root = info_req.childGet(0);
 
-    setWindowTitle( root->attr("dscr").c_str() );
+    setWindowTitle(root->attr("dscr").c_str());
 
     //Generic dialog's page
-    gnd = TCntrNode::ctrId(root,"/wdg",true);
-    wdg_tabs->setTabEnabled(0,gnd);
+    gnd = TCntrNode::ctrId(root, "/wdg", true);
+    wdg_tabs->setTabEnabled(0, gnd);
     if(gnd) {
-	wdg_tabs->setTabText(0,gnd->attr("dscr").c_str());
+	wdg_tabs->setTabText(0, gnd->attr("dscr").c_str());
 
 	// Status
 	gnd = TCntrNode::ctrId(root, obj_st->objectName().toStdString(), true);
