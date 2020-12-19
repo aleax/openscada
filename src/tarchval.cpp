@@ -1251,10 +1251,10 @@ void TVArchive::getActiveData( const int64_t &tm )
 
     int64_t stm = 0;
     switch(valType()) {
-	case TFld::Boolean: { char vl = pattrSrc.at().getB(&stm); setB(vl, (tm?tm:stm)); break; }
-	case TFld::Integer: { int64_t vl = pattrSrc.at().getI(&stm); setI(vl, (tm?tm:stm)); break; }
-	case TFld::Real:    { double vl = pattrSrc.at().getR(&stm); setR(vl, (tm?tm:stm)); break; }
-	case TFld::String:  { string vl = pattrSrc.at().getS(&stm); setS(vl, (tm?tm:stm)); break; }
+	case TFld::Boolean: { char vl = pattrSrc.at().getB(&stm); setB(vl, tm /*(tm?tm:stm)*/); break; }
+	case TFld::Integer: { int64_t vl = pattrSrc.at().getI(&stm); setI(vl, tm /*(tm?tm:stm)*/); break; }
+	case TFld::Real:    { double vl = pattrSrc.at().getR(&stm); setR(vl, tm /*(tm?tm:stm)*/); break; }
+	case TFld::String:  { string vl = pattrSrc.at().getS(&stm); setS(vl, tm /*(tm?tm:stm)*/); break; }
 	default: break;
     }
 }

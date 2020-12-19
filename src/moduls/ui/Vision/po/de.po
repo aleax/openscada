@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-18 14:40+0300\n"
+"POT-Creation-Date: 2020-12-19 17:52+0200\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -956,9 +956,6 @@ msgstr "Sind Sie sicher, dass die visuellen Elemente zu löschen: '%1'?"
 
 msgid "Deleting the visual items"
 msgstr "Löschen der visuellen Elemente"
-
-msgid "Widget: %1"
-msgstr "Widget: %1"
 
 msgid "The widget '%1' editing window is already open."
 msgstr "Das Widget '%1' Bearbeitungsfenster ist bereits geöffnet."

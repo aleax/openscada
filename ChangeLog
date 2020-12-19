@@ -1,3 +1,15 @@
+2020-12-19 Roman (stable)
+- SYS: data/openscada.ebuild: Updated for the last state.
+- LibsDB.vcaBase: The library "Main" appended by the notification 1 (one) static sample "ntf1".
+- !!:FIX:Archive: Current values obtaining in the active archiving mode forced to the current time,
+    what is significant for the dynamic attributes archiving.
+- SYS:TFunction: Removed for the spare variable "first_io".
+- DAQ.SMH2Gi: Some unified in the error messages of the communication.
+- FIX:Transport.Serial: Fixed in the output tranports timeouts setting as default at their generation after changing the address.
+- UI.Vision: The visual editing window title appended for the widget-page name.
+- UI.WebVision: The LineEdit type of the primitive "FormEl" appended for switching it to the modification mode at selection.
+
+
 2020-12-11 Roman (stable)
 - SYS.Function: the duple IOs detection made optimal.
 - FIX: The field "PASS" of the table "CfgExtHosts" expanded in its size up to 100.
@@ -59,7 +71,7 @@
 - !!!!:SYS,*: The system wide limits started in moving to the user configuration area (the configuration file) for some allowed range,
 	for the generic limits currently: limObjID_SZ, limObjNm_SZ, limArchID_SZ.
     STD_WAIT_DELAY renamed to OSCD_WAIT_DELAY and changed to 0.1 seconds.
-    TSYS appeded for the function taskSendSIGALRM() of sending the termination signal "ALARM" to OpenSCADA tasks.
+    TSYS appended for the function taskSendSIGALRM() of sending the termination signal "ALARM" to OpenSCADA tasks.
     TValFunc: Appended for a state of the function execution by the function isCalc().
 - !!:Archive: The value archive configuration field "Mode of forming ID of the automatic created archives" expanded
     by the selection item "All controller, parameter and attribute ID" during expanding the value archives limit to 50 symbols.
@@ -87,7 +99,7 @@
 - !!!!:UI.WebVision: Implementing of the notifications support.
     Unified in the time constants specifying for: tmClearEdit, tmFullUpd, tmAlrmUpd.
     Information requests of the opening page moved under the common request "CntrReqs" together the notifier attributes activation.
-- !!!!:UI.{VCAEngine.Vision}: Expanding the notifications implementation in way their implementation on UI.WebVision, for:
+- !!!!:UI.{VCAEngine,Vision}: Expanding the notifications implementation in way their implementation on UI.WebVision, for:
     - using the standard way of the notifications obtaining through the corresponding attributes activation;
     - {VCAEngine.Vision}::ntfReg() expanding for the negative type using in all types processing, freeing mostly,
 	and some unification of the code;
@@ -160,7 +172,7 @@
     The flag "rw" separated to "r" and "w".
 - !!!!:UI.{VCAEngine,WebVision,Vision}: The primitive "Media" appended by the type "Audio" and the type "Full video" renamed to "Video",
     which also implemented in UI.WebVision and UI.Vision.
-- !!:FIX:UI.Vision: Call saveState() moved from the developing window destructor to the closing event,
+- !!:FIX:UI.Vision: The call saveState() moved from the developing window destructor to the closing event,
 	but a problem of empty context saving was observed after playing some media.
     !:FIX: Fixed in media playing from the resource by VLC from Phonon.
 - !!:FIX:UI.WebVision: Fixed in the page cache spare cleaning for widgets from pages with common name to the remove page.

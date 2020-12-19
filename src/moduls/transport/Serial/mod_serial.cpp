@@ -55,7 +55,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.5.2"
+#define MOD_VER		"2.5.3"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov (2016)")
 #define DESCRIPTION	_("Provides transport based on the serial interfaces.\
  It is used for data exchanging via the serial interfaces of the type RS232, RS485, GSM and similar.")
@@ -876,9 +876,10 @@ bool TTrOut::cfgChange( TCfg &co, const TVariant &pc )
     if(co.name() == "ADDR") {
 	//Times adjust
 	int speed = s2i(TSYS::strParse(co.getS(),1,":"));
-	if(TSYS::strParse(addr(),4,":").size()) setTimings("5000:1000", true);
+	if(TSYS::strParse(addr(),4,":").size()) { mDefTimeouts = true; setTimings("5000:1000", true); }
 	else if(speed) {
 	    float symbMlt = TRegExp("^.+\\/ttyS\\d+$").test(TSYS::strParse(co.getS(),0,":")) ? 1 : 3;
+	    mDefTimeouts = true;
 	    setTimings(i2s((1024*11*1000)/speed)+":"+r2s(symbMlt*11e4/(float)speed,2,'f')+
 			":"+TSYS::strParse(timings(),2,":")+":"+TSYS::strParse(timings(),3,":")+":"+TSYS::strParse(timings(),4,":"), true);
 	}

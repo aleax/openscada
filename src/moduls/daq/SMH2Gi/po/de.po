@@ -1,16 +1,15 @@
 # OpenSCADA.DAQ.SMH2Gi translate to German.
-# Copyright (C) 2012 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.DAQ.SMH2Gi package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2012, 2018.
+# Roman Savochenko <roman@oscada.org>, 2012, 2018-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.SMH2Gi 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-27 20:19+0300\n"
+"POT-Creation-Date: 2020-12-16 10:06+0200\n"
 "PO-Revision-Date: 2012-10-31 10:58+0200\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -92,19 +91,18 @@ msgstr "Automatische Erstellung Verkehr Segnetics SMH2Gi für Bus '%s'"
 msgid "ModBUS REQ -> '%s': %s"
 msgstr "ModBUS Anfrage -> '%s': %s"
 
-msgid "13:Error respond: Too short."
-msgstr "13:Fehler in der Antwort: Zu kurz."
+msgid "13:Error respond: Too short: %s."
+msgstr "13:Fehler in der Antwort: Zu kurz: %s."
 
-msgid "13:Error respond: CRC check error."
-msgstr "13:Fehler in der Antwort: Fehler der CRC-Prüfung."
+msgid "13:Error respond: CRC error: %s."
+msgstr "13:Fehler in der Antwort: Fehler der CRC: %s."
 
 #, c-format
 msgid "ModBUS RESP -> '%s': %s"
 msgstr "ModBUS Antwort -> '%s': %s"
 
-#, c-format
-msgid "ModBUS ERR -> %s: %s"
-msgstr "ModBUS Fehler -> %s: %s"
+msgid "ModBUS ERR -> '%s': %s"
+msgstr "ModBUS Fehler -> '%s': %s"
 
 msgid "Set <0 for disable the reset."
 msgstr "Setzen Sie <0, um den Reset zu deaktivieren."
@@ -158,8 +156,7 @@ msgstr "Thun Anfrage Fehler beim Senden: %s."
 msgid "20:PDU short."
 msgstr "20:PDU kurz."
 
-msgid ""
-"21:Position lost. Need reload MR/MC bus - re-enable the controller object."
+msgid "21:Position lost. Need reload MR/MC bus - re-enable the controller object."
 msgstr ""
 "21:Position verloren. Brauchen nachladen MR/MC-Bus - reaktivieren das "
 "Controller-Objekt."
@@ -197,11 +194,12 @@ msgstr "Inversion von Digitalsignalen"
 
 #, c-format
 msgid "DI %d"
-msgstr ""
+msgstr "DI %d"
 
 #, c-format
 msgid "DO %d"
-msgstr ""
+msgstr "DO %d"
 
 msgid "<No select>"
 msgstr "<Nicht ausgewählt>"
+

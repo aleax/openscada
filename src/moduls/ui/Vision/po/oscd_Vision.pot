@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-18 14:40+0300\n"
+"POT-Creation-Date: 2020-12-19 17:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -845,9 +845,6 @@ msgid "Are you sure of deleting the visual items: '%1'?"
 msgstr ""
 
 msgid "Deleting the visual items"
-msgstr ""
-
-msgid "Widget: %1"
 msgstr ""
 
 msgid "The widget '%1' editing window is already open."

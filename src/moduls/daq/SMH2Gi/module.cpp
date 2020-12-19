@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Segnetics SMH2Gi and SMH4")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.1.4"
+#define MOD_VER		"1.1.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Data acquisition and control by Segnetics SMH2Gi and SMH4 hardware interfaces and modules.")
 #define LICENSE		"GPL2"
@@ -288,9 +288,10 @@ string TMdContr::modBusReq( string &pdu, bool MC, bool broadCast )
     char buf[1024];
     string mbap, rez, err;
 
+    AutoHD<TTransportOut> tro = SYS->transport().at().nodeAt(MC?"Serial.out_SMH2Gi_MC":"Serial.out_SMH2Gi_MR", 0, '.', 0, true);
+
     try {
 	//Transport creation for MC and MR busses and connect
-	AutoHD<TTransportOut> tro = SYS->transport().at().nodeAt(MC?"Serial.out_SMH2Gi_MC":"Serial.out_SMH2Gi_MR", 0, '.', 0, true);
 	if(tro.freeStat()) {
 	    SYS->transport().at().at("Serial").at().outAdd(MC?"SMH2Gi_MC":"SMH2Gi_MR");
 	    tro = SYS->transport().at().nodeAt(MC?"Serial.out_SMH2Gi_MC":"Serial.out_SMH2Gi_MR", 0, '.', 0, true);
@@ -324,9 +325,9 @@ string TMdContr::modBusReq( string &pdu, bool MC, bool broadCast )
 		rez.append(buf, resp_len);
 	    }
 
-	    if(rez.size() < 2) { err = _("13:Error respond: Too short."); continue; }
+	    if(rez.size() < 2) { err = TSYS::strMess(_("13:Error respond: Too short: %s."), TSYS::strDecode(rez,TSYS::Bin," ").c_str()); continue; }
 	    if(CRC16(rez.substr(0,rez.size()-2)) != (uint16_t)((rez[rez.size()-2]<<8)+(uint8_t)rez[rez.size()-1]))
-	    { err = _("13:Error respond: CRC check error."); continue; }
+	    { err = TSYS::strMess(_("13:Error respond: CRC error: %s."), TSYS::strDecode(rez,TSYS::Bin," ").c_str()); continue; }
 	    if(messLev() == TMess::Debug)
 		mess_debug_(nodePath().c_str(), _("ModBUS RESP -> '%s': %s"), tro.at().id().c_str(), TSYS::strDecode(rez,TSYS::Bin," ").c_str());
 	    pdu = rez.substr(0, rez.size()-2);
@@ -337,7 +338,7 @@ string TMdContr::modBusReq( string &pdu, bool MC, bool broadCast )
 
     if(messLev() >= TMess::Error && err.size()) mess_err(nodePath().c_str(), "%s", err.c_str());
     if(messLev() == TMess::Debug && err.size())
-	mess_debug_(nodePath().c_str(), _("ModBUS ERR -> %s: %s"), TSYS::strDecode(mbap,TSYS::Bin," ").c_str(), err.c_str());
+	mess_debug_(nodePath().c_str(), _("ModBUS ERR -> '%s': %s"), (tro.freeStat()?"<ERR>":tro.at().id().c_str()), err.c_str());
 
     return err;
 }

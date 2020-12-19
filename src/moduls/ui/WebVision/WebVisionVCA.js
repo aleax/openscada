@@ -1202,6 +1202,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				formObj.type = "password";
 				break;
 			}
+			formObj.onmousedown = function(e) { this.setModify(true); }
 			formObj.onkeyup = function(e) {
 			    if(!e) e = window.event;
 			    if(this.modify() && e.keyCode == 13) this.chApply();

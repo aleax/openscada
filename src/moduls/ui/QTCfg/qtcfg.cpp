@@ -135,7 +135,7 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     gFrameLayout->addWidget(titleIco, 0, 0);
 
     titleLab = new QLabel(gFrame);
-    //titleLab->setSizePolicy( QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred) );
+    //titleLab->setSizePolicy(QSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred));
     QFont tFnt(titleLab->font());
     if(tFnt.pointSizeF() > 0)	tFnt.setPointSizeF(tFnt.pointSizeF()*1.4);
     else if(tFnt.pixelSize() > 0) tFnt.setPixelSize(tFnt.pixelSize()*1.4);

@@ -58,7 +58,7 @@ TFunction &TFunction::operator=( const TFunction &func )
 	else iIO++;
     // Update present and create new IO
     for(int iIO = 0; iIO < func.ioSize(); iIO++) {
-	int dst_io = ioId(func.io(iIO)->id()), first_io = -1;
+	int dst_io = ioId(func.io(iIO)->id());
 	if(dst_io < 0)
 	    dst_io = ioIns(new IO(func.io(iIO)->id().c_str(),func.io(iIO)->name().c_str(),func.io(iIO)->type(),func.io(iIO)->flg(),
 		func.io(iIO)->def().c_str(),func.io(iIO)->hide(),func.io(iIO)->rez().c_str()), iIO);

@@ -2651,6 +2651,9 @@ bool DevelWdgView::attrSet( const string &attr, const string &val, int uiPrmPos,
 
     bool geomUp = true;
     switch(uiPrmPos) {
+	case 0:
+	    if(wLevel() == 0 && attr == "name") setProperty("name", val.c_str());
+	    break;
 	case A_COM_LOAD:					break;
 	case A_GEOM_X: chGeomCtx.setAttr("_x", val);		break;
 	case A_GEOM_Y: chGeomCtx.setAttr("_y", val);		break;

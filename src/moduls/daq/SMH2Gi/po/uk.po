@@ -1,16 +1,15 @@
 # OpenSCADA.DAQ.SMH2Gi translate to Ukrainian.
-# Copyright (C) 2012 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.DAQ.SMH2Gi module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2012-2013, 2018.
+# Roman Savochenko <roman@oscada.org>, 2012-2013, 2018-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.SMH2Gi 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-27 20:19+0300\n"
+"POT-Creation-Date: 2020-12-16 10:06+0200\n"
 "PO-Revision-Date: 2012-10-31 10:58+0200\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -26,7 +25,8 @@ msgid ""
 "Data acquisition and control by Segnetics SMH2Gi and SMH4 hardware "
 "interfaces and modules."
 msgstr ""
-"Збір даних і управління апаратними інтерфейсами та модулями Segnetics SMH2Gi та SMH4."
+"Збір даних і управління апаратними інтерфейсами та модулями Segnetics SMH2Gi "
+"та SMH4."
 
 msgid "Shared memory parameters"
 msgstr "Параметри поділяємої пам'яті"
@@ -38,7 +38,7 @@ msgid "Acquisition schedule"
 msgstr "Планування збору"
 
 msgid "Priority of the acquisition task"
-msgstr "Пріорітет задачі збору даних"
+msgstr "Пріоритет задачі збору даних"
 
 msgid "Shared memory variables file"
 msgstr "Файл змінних у поділюваній пам'яті"
@@ -76,6 +76,7 @@ msgstr "Наступний збір за cron '%s'. "
 msgid "Spent time: %s."
 msgstr "Витрачено часу: %s."
 
+#, c-format
 msgid "Error opening GPIO %s for MC reset."
 msgstr "Помилка відкриття GPIO %s для скидання MC."
 
@@ -90,19 +91,18 @@ msgstr "Автоматично створений транспорт Segnetics S
 msgid "ModBUS REQ -> '%s': %s"
 msgstr "ModBUS Запит -> '%s': %s"
 
-msgid "13:Error respond: Too short."
-msgstr "13:Помилка відповіді: Дуже коротка."
+msgid "13:Error respond: Too short: %s."
+msgstr "13:Помилка відповіді: Дуже коротка: %s."
 
-msgid "13:Error respond: CRC check error."
-msgstr "13:Помилка відповіді: Помилка перевірки CRC."
+msgid "13:Error respond: CRC error: %s."
+msgstr "13:Помилка відповіді: Помилка CRC: %s."
 
 #, c-format
 msgid "ModBUS RESP -> '%s': %s"
 msgstr "ModBUS Відпов. -> '%s': %s"
 
-#, c-format
-msgid "ModBUS ERR -> %s: %s"
-msgstr "ModBUS Помилка -> %s: %s"
+msgid "ModBUS ERR -> '%s': %s"
+msgstr "ModBUS Помилка -> '%s': %s"
 
 msgid "Set <0 for disable the reset."
 msgstr "Встановити <0 для вимкнення скидання."
@@ -156,10 +156,9 @@ msgstr "Помилка відправлення тюн-запиту: %s."
 msgid "20:PDU short."
 msgstr "20:PDU короткий"
 
-msgid ""
-"21:Position lost. Need reload MR/MC bus - re-enable the controller object."
+msgid "21:Position lost. Need reload MR/MC bus - re-enable the controller object."
 msgstr ""
-"21:Втрата позиції. Потрібне перевантаження MR/MC шини - переподключення "
+"21:Втрата позиції. Потрібне перевантаження MR/MC шини - перепідключення "
 "об'єкта контролеру."
 
 msgid "Analog output overload; "
@@ -195,11 +194,12 @@ msgstr "Інверсія дискретних сигналів"
 
 #, c-format
 msgid "DI %d"
-msgstr ""
+msgstr "DI %d"
 
 #, c-format
 msgid "DO %d"
-msgstr ""
+msgstr "DO %d"
 
 msgid "<No select>"
 msgstr "<Не обрано>"
+

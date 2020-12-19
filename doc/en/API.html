@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/API</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint nomobile" dir="ltr" lang="en">This page contains <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Documents/API&amp;oldid=62887&amp;diff=63126" rel="nofollow noreferrer noopener" target="_blank">changes</a></span> which are not marked for translation.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span></div></div>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2012) — the page initial translation</i></font></li>
 <li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a> </li></ul>
@@ -125,7 +125,7 @@ The document is intended for programmers wishing to understand the architecture 
 <li class="toclevel-2 tocsection-63"><a href="#User_object_.28TVarObj.29"><span class="tocnumber">13.7</span> <span class="toctext"><span>User object (TVarObj)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-64"><a href="#The_control_interface_of_the_system_and_the_dynamic_tree_of_the_system_objects_.28TCntrNode.29"><span class="tocnumber">14</span> <span class="toctext"><span>The control interface of the system and the dynamic tree of the system objects (TCntrNode)</span></span></a>
+<li class="toclevel-1 tocsection-64"><a href="#The_control_interface_of_OpenSCADA_and_the_dynamic_tree_of_the_control_nodes_.28TCntrNode.29"><span class="tocnumber">14</span> <span class="toctext"><span>The control interface of OpenSCADA and the dynamic tree of the control nodes (TCntrNode)</span></span></a>
 <ul>
 <li class="toclevel-2 tocsection-65"><a href="#The_syntax_of_the_request_and_response_of_the_control_interface"><span class="tocnumber">14.1</span> <span class="toctext">The syntax of the request and response of the control interface</span></a></li>
 <li class="toclevel-2 tocsection-66"><a href="#Tag_of_the_information_structure_for_describing_the_groups_of_child_branches_of_the_page"><span class="tocnumber">14.2</span> <span class="toctext">Tag of the information structure for describing the groups of child branches of the page</span></a></li>
@@ -2273,7 +2273,7 @@ Error values for the different data types (define):
 <li> <i>virtual string getStrXML( const string &amp;oid = "" );</i> — Conversion of the contents of the object in the XML flow.</li>
 <li> <i>static AutoHD&lt;TVarObj&gt; parseStrXML( const string &amp;str, XMLNode *nd = NULL, AutoHD&lt;TVarObj&gt; prev = NULL );</i> — Backward serialization for XML-stream to object.</li>
 <li> <i>virtual TVariant funcCall( const string &amp;id, vector&lt;TVariant&gt; &amp;prms );</i> — Call of the object function with the ID <i>id</i> and with the parameters <i>prms</i>.</li></ul>
-<h2><span class="mw-headline" id="The_control_interface_of_the_system_and_the_dynamic_tree_of_the_system_objects_.28TCntrNode.29"><span class="mw-headline-number">14</span> <span id="CntrNode" title="#CntrNode">The control interface of the system and the dynamic tree of the system objects (TCntrNode)</span></span></h2>
+<h2><span class="mw-headline" id="The_control_interface_of_OpenSCADA_and_the_dynamic_tree_of_the_control_nodes_.28TCntrNode.29"><span class="mw-headline-number">14</span> <span id="CntrNode" title="#CntrNode">The control interface of OpenSCADA and the dynamic tree of the control nodes (TCntrNode)</span></span></h2>
 <p>For complete coverage of the key components of the system by the network of the same structure objects the object of the dynamic tree node TCntrNode is provided. This objects provides the following functions:
 </p>
 <ul><li> providing of the uniform access to system components, including the blocks of the dynamic access;</li>
@@ -4122,5 +4122,5 @@ extern "C"
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">November 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2719</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">December 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2723</td></tr></table></body>
 </html>

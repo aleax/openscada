@@ -54,7 +54,7 @@
 <li> <i>XML</i> — расширяемый язык разметки.</li></ul>
 <p>Интерфейс конфигуратора формируется в WEB-браузере путём обращения к WEB-серверу и получения от него XHTML-документа по протоколу HTTP. В данном случае, в роли WEB-сервера выступает OpenSCADA, которая поддерживает стандартные коммуникационные механизмы TCP-сетей (модуль <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Transport.Sockets</a>), протокол передачи гипертекста (модуль <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a>), а также шифрование трафика между браузером и сервером (<a href="../Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">Transport.SSL</a>). Исходя из этого, для получения доступа к интерфейсу пользователя, предоставляемого этим модулем, необходимо в OpenSCADA настроить транспорт (Transport.Sockets или Transport.SSL) в связке с протоколом HTTP (Protocol.HTTP). Вместе с OpenSCADA идут конфигурационные файлы, содержащие настройки Transport.Sockets для порта 10002. Следовательно, интерфейс модуля, по умолчанию, будет доступен по URL: "http://localhost:10002".
 </p><p>После получения XHTML-документа браузером запускается программа на языке JavaScript, для формирования динамического интерфейса конфигуратора.
-</p><p>В основе модуля лежит язык интерфейса управления OpenSCADA, а значит предоставляется единый интерфейс конфигурации. Обновление модуля может потребоваться только в случае обновления спецификации языка интерфейса управления. Для запроса контекста страницы используется групповой запрос интерфейса управления, что позволяет оптимизировать время удалённого доступа по высоколатентным и медленным каналам связи.
+</p><p>В основе модуля лежит <a href="../../en/API.html" title="Special:MyLanguage/Documents/API">интерфейс управления OpenSCADA</a>, а значит предоставляется единый интерфейс конфигурации. Обновление модуля может потребоваться только в случае обновления спецификации языка интерфейса управления. Для запроса контекста страницы используется групповой запрос интерфейса управления, что позволяет оптимизировать время удалённого доступа по высоколатентным и медленным каналам связи.
 </p><p>Модуль реализовался и тестировался на четырёх WEB-браузерах — представителях трёх типов WEB-движков, а именно:
 </p>
 <ul><li> Chromium 55</li>
@@ -70,7 +70,8 @@
 </p>
 <dl><dd>1 <i>Панель инструментов</i> — содержит кнопки управления.</dd>
 <dd>2 <i>Адрес открытого узла</i> — отображает адрес выбранного узла.</dd>
-<dd>3 <i>Навигатор</i> — предназначен для прямой навигации по дереву управления.</dd>
+<dd>3 <i>Навигатор</i> — предназначен для прямой навигации по дереву управления.
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Изображение иконки <a href="../Program_manual.html#Projects" title="Special:MyLanguage/Documents/Program manual">проекта OpenSCADA</a> сначала получается из файла "<b>{StationName}.[png|gif|jpg|jpeg]</b>", а затем, при отсутствии первого, из файла "<b>{StationID}.[png|gif|jpg|jpeg]</b>", в <a href="../Program_manual.html#Config" title="Special:MyLanguage/Documents/Program manual">каталоге иконок</a>.</dd></dl></dd>
 <dd>4 <i>Рабочее поле</i> — поделено на части:
 <dl><dd>4.1 <i>Имя узла</i> — содержит имя текущего узла.</dd>
 <dd>4.2 <i>Табулятор рабочих областей</i> — в табулятор помещаются корневые страницы (области управления) узла. Области управления следующих уровней помещаются в основном пространстве контроля.</dd></dl></dd>
@@ -220,5 +221,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebCfgD/ru">Modules/WebCfgD/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">November 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2719</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebCfgD/ru">Modules/WebCfgD/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">December 2020</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2723</td></tr></table></body>
 </html>
