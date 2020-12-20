@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tarchval.h
 /***************************************************************************
- *   Copyright (C) 2006-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -194,9 +194,9 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	bool	toStart( )  		{ return mStart; }
 	bool	startStat( ) const	{ return runSt; }
 
-	string	DB( )		{ return mDB; }
+	string	DB( ) const		{ return mDB; }
 	string	tbl( );
-	string	fullDB( )	{ return DB()+'.'+tbl(); }
+	string	fullDB( )		{ return DB()+'.'+tbl(); }
 
 	int64_t	end( const string &arch = BUF_ARCH_NM );
 	int64_t	begin( const string &arch = BUF_ARCH_NM );
@@ -316,7 +316,7 @@ class TVArchivator : public TCntrNode, public TConfig
 	bool toStart( )		{ return mStart; }
 	bool startStat( ) const	{ return runSt; }
 
-	string DB( )		{ return mDB; }
+	string DB( ) const	{ return mDB; }
 	string tbl( );
 	string fullDB( )	{ return DB()+'.'+tbl(); }
 

@@ -456,10 +456,11 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 	type().cntrCmdProc(this, opt);
 
 	if(mPrm >= 0) {
-	    ctrMkNode("grp",opt,-1,"/br/prm_",_("Parameter"),RWRWR_,"root",SDAQ_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
+	    ctrMkNode("grp",opt,-1,"/br/prm_",_("Parameter"),RWRWR_,"root",SDAQ_ID,2,"idm",i2s(limObjNm_SZ).c_str(),"idSz",i2s(limObjID_SZ).c_str());
 	    if(ctrMkNode("area",opt,-1,"/iPrms",_("Inclusion"))) {
 		ctrMkNode("fld",opt,-1,"/iPrms/nmb",_("Number"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
-		ctrMkNode("list",opt,-1,"/iPrms/prm",_("Parameters"),RWRWR_,"root",SDAQ_ID,5,"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","prm_","idSz",OBJ_ID_SZ);
+		ctrMkNode("list",opt,-1,"/iPrms/prm",_("Parameters"),RWRWR_,"root",SDAQ_ID,5,
+		    "tp","br","idm",i2s(limObjNm_SZ).c_str(),"s_com","add,del","br_pref","prm_","idSz",i2s(limObjID_SZ).c_str());
 	    }
 	}
 

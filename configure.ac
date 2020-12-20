@@ -2,11 +2,11 @@ AC_PREREQ(2.50)
 
 # After any LTS release append there the third stabilisation level/number to the version
 #  Don't change the version string but it uses in whole to replace by a real one into the automatic builder.
-AC_INIT(OpenSCADA, [0.9.2.3], roman@oscada.org)
+AC_INIT(OpenSCADA, [0.9.3], roman@oscada.org)
 
 # Increase the major for next Work version.
 # Increase the minor after any significant changes into API of the Work/LTS version
-oscd_LIBREVISION="3:8:0"
+oscd_LIBREVISION="3:9:0"
 
 AC_PREFIX_DEFAULT(/usr)
 oscd_modulpref="oscd_"

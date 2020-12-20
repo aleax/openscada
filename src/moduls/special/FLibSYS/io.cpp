@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.FLibSYS file: io.cpp
 /***************************************************************************
- *   Copyright (C) 2013-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2013-2014,2020 by Roman Savochenko, <roman@oscada.org>  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -117,8 +117,8 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		pos = vmin(str.size(), pos+cnt);
 	    }
 	    else {
-		char buf[STR_BUF_LEN];
-		if(cnt < 0) cnt = USER_FILE_LIMIT;
+		char buf[prmStrBuf_SZ];
+		if(cnt < 0) cnt = limUserFile_SZ;
 		for(int r_cnt = 0; (r_cnt=fread(buf,1,vmin(sizeof(buf),cnt-rez.size()),fhd)); )
 		    rez.append(buf, r_cnt);
 	    }
@@ -173,9 +173,9 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		return (int64_t)EVAL_INT;
 	    }
 	    // From file
-	    char buf[STR_BUF_LEN];
+	    char buf[prmStrBuf_SZ];
 	    if(cnt != 1) ao = new TArrayObj();
-	    if(cnt < 0) cnt = USER_FILE_LIMIT/tpD.szBt;
+	    if(cnt < 0) cnt = limUserFile_SZ/tpD.szBt;
 	    for(long r_cnt = 0, r_full = 0, i_cnt = 0; (r_cnt=fread(buf,1,vmin((long)sizeof(buf),cnt*tpD.szBt-r_full),fhd)) > 0; r_full += r_cnt)
 		for(unsigned iPos = 0; (iPos+tpD.szBt) <= r_cnt; iPos += tpD.szBt, i_cnt++) {
 		    switch(tpD.szBt) {
@@ -255,9 +255,9 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		return EVAL_REAL;
 	    }
 	    // From file
-	    char buf[STR_BUF_LEN];
+	    char buf[prmStrBuf_SZ];
 	    if(cnt != 1) ao = new TArrayObj();
-	    if(cnt < 0) cnt = USER_FILE_LIMIT/tpD.szBt;
+	    if(cnt < 0) cnt = limUserFile_SZ/tpD.szBt;
 	    for(int r_cnt = 0, r_full = 0, i_cnt = 0; (r_cnt=fread(buf,1,vmin((long)sizeof(buf),cnt*tpD.szBt-r_full),fhd)); r_full += r_cnt)
 	    {
 		for(unsigned iPos = 0; (int)iPos <= (r_cnt-tpD.szBt); iPos += tpD.szBt, i_cnt++) {

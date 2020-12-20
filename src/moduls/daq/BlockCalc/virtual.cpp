@@ -42,7 +42,7 @@
 #define MOD_NAME	_("Block based calculator")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.10.0"
+#define MOD_VER		"1.11.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a block based calculator.")
 #define LICENSE		"GPL2"
@@ -113,8 +113,8 @@ void TpContr::postEnable( int flag )
     tpPrmAt(t_prm).fldAdd(new TFld("IO",_("Blocks' IOs"),TFld::String,TFld::FullText|TFld::TransltText|TCfg::NoVal,"1000"));
 
     //Blok's db structure
-    blkEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
-    blkEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
+    blkEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    blkEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
     blkEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
     blkEl.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,TFld::NoFlag,"1","0"));
     blkEl.fldAdd(new TFld("PROC",_("To process"),TFld::Boolean,TFld::NoFlag,"1","0"));
@@ -123,8 +123,8 @@ void TpContr::postEnable( int flag )
     blkEl.fldAdd(new TFld("FUNC",_("Function"),TFld::String,TFld::NoFlag,"75"));
 
     //IO blok's db structure
-    blkioEl.fldAdd(new TFld("BLK_ID",_("Block's ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
-    blkioEl.fldAdd(new TFld("ID",_("IO ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    blkioEl.fldAdd(new TFld("BLK_ID",_("Block's ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    blkioEl.fldAdd(new TFld("ID",_("IO ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
     blkioEl.fldAdd(new TFld("TLNK",_("Link's type"),TFld::Integer,TFld::NoFlag,"2"));
     blkioEl.fldAdd(new TFld("LNK",_("Link"),TFld::String,TFld::NoFlag,"100"));
     blkioEl.fldAdd(new TFld("VAL",_("Link's value"),TFld::String,TFld::NoFlag,"10000"));
@@ -446,7 +446,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TController::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/blk_",_("Block"),RWRWR_,"root",SDAQ_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
+	ctrMkNode("grp",opt,-1,"/br/blk_",_("Block"),RWRWR_,"root",SDAQ_ID,2,"idm",i2s(limObjNm_SZ).c_str(),"idSz",i2s(limObjID_SZ).c_str());
 	ctrRemoveNode(opt,"/cntr/cfg/PERIOD");
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,
 	    "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
@@ -454,7 +454,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,-1,"/scheme",_("Blocks scheme"))) {
 	    ctrMkNode("fld",opt,-1,"/scheme/nmb",_("Number"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 	    ctrMkNode("list",opt,-1,"/scheme/sch",_("Blocks"),RWRWR_,"root",SDAQ_ID,5,
-		"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","blk_","idSz",OBJ_ID_SZ);
+		"tp","br","idm",i2s(limObjNm_SZ).c_str(),"s_com","add,del","br_pref","blk_","idSz",i2s(limObjID_SZ).c_str());
 	}
 	return;
     }

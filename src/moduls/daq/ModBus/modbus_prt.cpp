@@ -45,12 +45,12 @@ TProt::TProt( string name ) : TProtocol(PRT_ID), mPrtLen(0)
     mNode = grpAdd("n_");
 
     //Node DB structure
-    mNodeEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
-    mNodeEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
+    mNodeEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    mNodeEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
     mNodeEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
     mNodeEl.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0"));
     mNodeEl.fldAdd(new TFld("ADDR",_("Address"),TFld::Integer,0,"3","1","1;247"));
-    mNodeEl.fldAdd(new TFld("InTR",_("Input transport"),TFld::String,0,OBJ_ID_SZ,"*"));
+    mNodeEl.fldAdd(new TFld("InTR",_("Input transport"),TFld::String,0,i2s(limObjID_SZ).c_str(),"*"));
     mNodeEl.fldAdd(new TFld("PRT",_("Protocol"),TFld::String,TFld::Selectable,"5","*","RTU;ASCII;TCP;*",_("RTU;ASCII;TCP/IP;All")));
     mNodeEl.fldAdd(new TFld("MODE",_("Mode"),TFld::Integer,TFld::Selectable,"1","0",
 	TSYS::strMess("%d;%d;%d",Node::MD_DATA,Node::MD_GT_ND,Node::MD_GT_NET).c_str(),_("Data;Gateway node;Gateway net")));
@@ -60,14 +60,14 @@ TProt::TProt( string name ) : TProtocol(PRT_ID), mPrtLen(0)
     mNodeEl.fldAdd(new TFld("DT_PR_TR",_("Completely translate the procedure"),TFld::Boolean,TFld::NoFlag,"1","0"));
     mNodeEl.fldAdd(new TFld("DT_PROG",_("Procedure"),TFld::String,TFld::TransltText,"1000000"));
     // For "Gateway" mode
-    mNodeEl.fldAdd(new TFld("TO_TR",_("To output transport"),TFld::String,0,OBJ_ID_SZ));
+    mNodeEl.fldAdd(new TFld("TO_TR",_("To output transport"),TFld::String,0,i2s(limObjID_SZ).c_str()));
     mNodeEl.fldAdd(new TFld("TO_PRT",_("To protocol"),TFld::String,TFld::Selectable,"5","RTU","RTU;ASCII;TCP","RTU;ASCII;TCP/IP"));
     mNodeEl.fldAdd(new TFld("TO_ADDR",_("To address"),TFld::Integer,0,"3","1","1;247"));
 
     //Node data IO DB structure
-    mNodeIOEl.fldAdd(new TFld("NODE_ID",_("Node ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
-    mNodeIOEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,OBJ_ID_SZ));
-    mNodeIOEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
+    mNodeIOEl.fldAdd(new TFld("NODE_ID",_("Node ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    mNodeIOEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    mNodeIOEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
     mNodeIOEl.fldAdd(new TFld("TYPE",_("Value type"),TFld::Integer,TFld::NoFlag,"1"));
     mNodeIOEl.fldAdd(new TFld("FLAGS",_("Flags"),TFld::Integer,TFld::NoFlag,"4"));
     mNodeIOEl.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TFld::TransltText,"100"));
@@ -291,6 +291,8 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    }
 	}
 	else if(prt == "RTU") {		// Modbus/RTU protocol process
+	    if(tro.isNetwork())	tro.setTimings("5:0.1", true);
+
 	    mbap.reserve(pdu.size()+3);
 	    mbap += (uint8_t)node;		//Unit identifier
 	    mbap += pdu;
@@ -423,10 +425,10 @@ void TProt::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TProtocol::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/n_",_("Node"),RWRWR_,"root",SPRT_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
+	ctrMkNode("grp",opt,-1,"/br/n_",_("Node"),RWRWR_,"root",SPRT_ID,2,"idm",i2s(limObjNm_SZ).c_str(),"idSz",i2s(limObjID_SZ).c_str());
 	if(ctrMkNode("area",opt,0,"/node",_("Nodes")))
 	    ctrMkNode("list",opt,-1,"/node/node",_("Nodes"),RWRWR_,"root",SPRT_ID,5,
-		"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","n_","idSz",OBJ_ID_SZ);
+		"tp","br","idm",i2s(limObjNm_SZ).c_str(),"s_com","add,del","br_pref","n_","idSz",i2s(limObjID_SZ).c_str());
 	if(ctrMkNode("area",opt,1,"/rep",_("Report"))) {
 	    ctrMkNode("fld",opt,-1,"/rep/repLen",_("Report length"),RWRWR_,"root",SPRT_ID,4,"tp","dec","min","0","max","10000",
 		"help",_("Use zero for the report disabling"));
@@ -900,48 +902,63 @@ void Node::setEnable( bool vl )
 		    for(off = 0; off < (int)ioId.size() && !isdigit(ioId[off]); off++) ;
 		    atp = ioId.substr(0,off);
 		    ai  = ioId.substr(off);
-		    if(tolower(ioId[ioId.size()-1])=='w') mode = "w";
+		    for(off = (int)ioId.size()-1; off >= 0 && !isdigit(ioId[off]); off--)
+			if(tolower(ioId[off]) == 'w') mode += "w";
+			else if(tolower(ioId[off]) == '~') mode += "~";
 		}
 	    }
 	    else continue;
 
 	    atpM	= TSYS::strParse(atp, 0, "_"),
 	    atpSub	= TSYS::strParse(atp, 1, "_");
+	    bool isWr = (mode.find("w") != string::npos);
+	    bool isBackSeq = (mode.find("~") != string::npos);
 
 	    int reg = strtol(ai.c_str(), NULL, 0);
 	    if(atpM[0] == 'R') {
-		regCR(reg, SIO(iIO,atpSub[0],0), atpM);
-		if(mode == "w") regCR(reg, SIO(iIO,atpSub[0],0), atpM, true);
 		if(atpSub == "i" || atpSub == "i4" || atpSub == "f") {
 		    int reg2 = (sTmp=TSYS::strParse(ai,1,",")).empty() ? (reg+1) : strtol(sTmp.c_str(),NULL,0);
-		    regCR(reg2, SIO(iIO,atpSub[0],1), atpM);
-		    if(mode == "w") regCR(reg2, SIO(iIO,atpSub[0],1), atpM, true);
+
+		    regCR(reg, SIO(iIO,atpSub[0],isBackSeq?1:0), atpM);
+		    regCR(reg2, SIO(iIO,atpSub[0],isBackSeq?0:1), atpM);
+		    if(isWr) {
+			regCR(reg, SIO(iIO,atpSub[0],isBackSeq?1:0), atpM, true);
+			regCR(reg2, SIO(iIO,atpSub[0],isBackSeq?0:1), atpM, true);
+		    }
 		}
 		else if(atpSub == "i8" || atpSub == "d") {
 		    int reg2 = (sTmp=TSYS::strParse(ai,1,",")).empty() ? (reg+1) : strtol(sTmp.c_str(),NULL,0),
 			reg3 = (sTmp=TSYS::strParse(ai,2,",")).empty() ? (reg2+1) : strtol(sTmp.c_str(),NULL,0),
 			reg4 = (sTmp=TSYS::strParse(ai,3,",")).empty() ? (reg3+1) : strtol(sTmp.c_str(),NULL,0);
-		    regCR(reg2, SIO(iIO,atpSub[0],1), atpM);
-		    regCR(reg3, SIO(iIO,atpSub[0],2), atpM);
-		    regCR(reg4, SIO(iIO,atpSub[0],3), atpM);
-		    if(mode == "w") {
-			regCR(reg2, SIO(iIO,atpSub[0],1), atpM, true);
-			regCR(reg3, SIO(iIO,atpSub[0],2), atpM, true);
-			regCR(reg4, SIO(iIO,atpSub[0],3), atpM, true);
+
+		    regCR(reg, SIO(iIO,atpSub[0],isBackSeq?3:0), atpM);
+		    regCR(reg2, SIO(iIO,atpSub[0],isBackSeq?2:1), atpM);
+		    regCR(reg3, SIO(iIO,atpSub[0],isBackSeq?1:2), atpM);
+		    regCR(reg4, SIO(iIO,atpSub[0],isBackSeq?0:3), atpM);
+		    if(isWr) {
+			regCR(reg, SIO(iIO,atpSub[0],isBackSeq?3:0), atpM, true);
+			regCR(reg2, SIO(iIO,atpSub[0],isBackSeq?2:1), atpM, true);
+			regCR(reg3, SIO(iIO,atpSub[0],isBackSeq?1:2), atpM, true);
+			regCR(reg4, SIO(iIO,atpSub[0],isBackSeq?0:3), atpM, true);
 		    }
 		}
-		else if(atpSub == "s") {
-		    int N = (sTmp=TSYS::strParse(ai,1,",")).empty() ? 0 : vmin(100,strtol(sTmp.c_str(),NULL,0));
-		    if(!N) N = 10;	//Default length 10 registers and maximum 100
-		    for(int iR = reg+1; iR < (reg+N); iR++) {
-			regCR(iR, SIO(iIO,atpSub[0],iR-reg), atpM);
-			if(mode == "w") regCR(iR, SIO(iIO,atpSub[0],iR-reg), atpM, true);
+		else {
+		    regCR(reg, SIO(iIO,atpSub[0],0), atpM);
+		    if(isWr) regCR(reg, SIO(iIO,atpSub[0],0), atpM, true);
+
+		    if(atpSub == "s") {
+			int N = (sTmp=TSYS::strParse(ai,1,",")).empty() ? 0 : vmin(100,strtol(sTmp.c_str(),NULL,0));
+			if(!N) N = 10;	//Default length 10 registers and maximum 100
+			for(int iR = reg+1; iR < (reg+N); iR++) {
+			    regCR(iR, SIO(iIO,atpSub[0],iR-reg), atpM);
+			    if(isWr) regCR(iR, SIO(iIO,atpSub[0],iR-reg), atpM, true);
+			}
 		    }
 		}
 	    }
 	    if(atpM[0] == 'C') {
 		regCR(reg, iIO, atpM);
-		if(mode == "w") regCR(reg, iIO, atpM, true);
+		if(isWr) regCR(reg, iIO, atpM, true);
 	    }
 	}
 
@@ -1365,18 +1382,18 @@ void Node::cntrCmdProc( XMLNode *opt )
 	    if((isDirFunc || enableStat()) && ctrMkNode("table",opt,-1,"/dt/io",_("IO"),RWRWR_,"root",SPRT_ID,2,"s_com","add,del,ins,move","rows","15")) {
 		ctrMkNode("list",opt,-1,"/dt/io/id",_("Identifier"),(enableStat()?R_R_R_:RWRWR_),"root",SPRT_ID,2, "tp","str",
 		    "help",_("For the \"Id\" field, a specific ModBus data record form is provided:\n"
-			 "  \"R{N}[w]\", \"RI{N}[w]\" - specific register (and input) form, can be expanded by the suffixes:\n"
+			 "  \"R{N}[w~]\", \"RI{N}[w~]\" - specific register (and input) form, can be expanded by the suffixes:\n"
 			 "                \"i\"-Int32, \"f\"-Float, \"d\"-Double, \"s\"-String;\n"
-			 "  \"R:{N}[:w]\", \"RI:{N}[:w]\" - classic register (and input) form, can be expanded by the suffixes:\n"
+			 "  \"R:{N}[:w~]\", \"RI:{N}[:w~]\" - classic register (and input) form, can be expanded by the suffixes:\n"
 			 "                \"i4\"-Int32, \"i8\"-Int64, \"f\"-Float, \"d\"-Double, \"s\"-String;\n"
 			 "  \"C{N}[w]\", \"CI{N}[w]\", \"C:{N}[:w]\", \"CI:{N}[:w]\" - coil (and input).\n"
 			 "Where:\n"
 			 "  {N} - ModBus data address of the device (dec, hex or octal) [0...65535];\n"
-			 "  w   - optional character to indicate the writing capability.\n"
+			 "  w~  - flags: write mode 'w', registers order inversion '~'.\n"
 			 "Examples:\n"
 			 "  \"R0x300w\" - register access;\n"
 			 "  \"C100w\" - coil access, allowed to write;\n"
-			 "  \"R_f200\" - get float from the registers 200 and 201;\n"
+			 "  \"R_f200\", \"R_f200~\" - get float from the registers 200 and 201, 201 and 200;\n"
 			 "  \"R_i400,300\" - get int32 from the registers 300 and 400;\n"
 			 "  \"R_s15,20\" - get string (registers block) from the register 15 and size 20;\n"
 			 "  \"R_i8:0x10:w\" - get and set int64 into the registers [0x10-0x13];\n"

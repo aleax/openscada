@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-23 15:41+0200\n"
+"POT-Creation-Date: 2020-11-19 15:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,7 +47,7 @@ msgid "Exiting the authentication for the user '%s'."
 msgstr ""
 
 #, c-format
-msgid "The authentication session for the user '%s' is expired."
+msgid "The authentication session for the user '%s' is expired. Host: %s."
 msgstr ""
 
 #, c-format
@@ -88,6 +88,9 @@ msgid "DB of the active authentication sessions"
 msgstr ""
 
 msgid "Set to empty to disable using the external table of the active authentication sessions."
+msgstr ""
+
+msgid "Authentication UID generation space"
 msgstr ""
 
 msgid "Life time of the authentication, minutes"

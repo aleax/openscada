@@ -948,8 +948,9 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
     string a_path = opt->attr("path"), u = opt->attr("user"), l = opt->attr("lang");
     if(a_path == "/wdg/res" && ctrChkNode(opt)) {	//Service command for resources request
 	string mime;
-	opt->setText(resourceGet(opt->attr("id"),&mime));
-	opt->setAttr("mime",mime);
+	int size = s2i(opt->attr("size"));
+	opt->setText(resourceGet(opt->attr("id"),&mime,s2i(opt->attr("off")),&size));
+	opt->setAttr("mime", mime)->setAttr("size", i2s(size));
     }
     else if(a_path == "/wdg/st/status" && ctrChkNode(opt))	opt->setText(getStatus());
     else if(a_path == "/wdg/st/en") {

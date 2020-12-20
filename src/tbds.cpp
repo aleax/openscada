@@ -33,20 +33,20 @@ using namespace OSCADA;
 TBDS::TBDS( ) : TSubSYS(SDB_ID,_("Data Bases"),true), mSYSStPref(true), mTblLifeTime(600)
 {
     //Generic system DB
-    fldAdd(new TFld("user","User",TFld::String,TCfg::Key,OBJ_ID_SZ));
+    fldAdd(new TFld("user","User",TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
     fldAdd(new TFld("id",_("Value ID"),TFld::String,TCfg::Key,"100"));
     fldAdd(new TFld("val","Value"  ,TFld::String,TFld::TransltText,"1000"));
 
     //Open data bases DB structure
-    elDB.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
-    elDB.fldAdd(new TFld("TYPE",_("DB type (module)"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
-    elDB.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
+    elDB.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    elDB.fldAdd(new TFld("TYPE",_("DB type (module)"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    elDB.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
     elDB.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"2000"));
     elDB.fldAdd(new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"1000"));
     elDB.fldAdd(new TFld("CODEPAGE",_("Code page"),TFld::String,TFld::NoFlag,"20"));
     elDB.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,TFld::NoFlag,"1","1"));
-    elDB.fldAdd(new TFld("TRTM_CLS_ON_OPEN",_("Transaction closing: after opening, seconds"),TFld::Real,TFld::NoFlag,"4.1",i2s(3*SERV_TASK_PER).c_str()));
-    elDB.fldAdd(new TFld("TRTM_CLS_ON_REQ",_("Transaction closing: after request, seconds"),TFld::Real,TFld::NoFlag,"4.1",i2s(SERV_TASK_PER).c_str()));
+    elDB.fldAdd(new TFld("TRTM_CLS_ON_OPEN",_("Transaction closing: after opening, seconds"),TFld::Real,TFld::NoFlag,"4.1",i2s(3*prmServTask_PER).c_str()));
+    elDB.fldAdd(new TFld("TRTM_CLS_ON_REQ",_("Transaction closing: after request, seconds"),TFld::Real,TFld::NoFlag,"4.1",i2s(prmServTask_PER).c_str()));
     elDB.fldAdd(new TFld("TRPR_CLS_TASK",_("Transaction closing: separate task priority"),TFld::Integer,TFld::NoFlag,"3","0"));
 }
 
@@ -103,7 +103,7 @@ void TBDS::perSYSCall( unsigned int cnt )
 			}
 		    }
 		    //Checking for transaction close
-		    if(db.at().trTm_ClsOnReq() >= SERV_TASK_PER) db.at().transCloseCheck();
+		    if(db.at().trTm_ClsOnReq() >= prmServTask_PER) db.at().transCloseCheck();
 		}
 		else { if(db.at().toEnable() && !db.at().disabledByUser() && !SYS->stopSignal()) db.at().enable(); }
 	    }
@@ -723,12 +723,12 @@ void TTypeBD::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TModule::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/db_",_("DB"),RWRWR_,"root",SDB_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
+	ctrMkNode("grp",opt,-1,"/br/db_",_("DB"),RWRWR_,"root",SDB_ID,2,"idm",i2s(limObjNm_SZ).c_str(),"idSz",i2s(limObjID_SZ).c_str());
 	if(ctrMkNode("area",opt,0,"/db",_("DB"),R_R_R_)) {
 	    ctrMkNode("fld",opt,-1,"/db/ful_db_del",_("Complete DB removal"),RWRW__,"root",SDB_ID,2,
 		"tp","bool","help",_("Select to completely remove the database when closing, otherwise the DB will simply be closed."));
 	    ctrMkNode("list",opt,-1,"/db/odb",_("DB"),RWRWR_,"root",SDB_ID,5,
-		"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","db_","idSz",OBJ_ID_SZ);
+		"tp","br","idm",i2s(limObjNm_SZ).c_str(),"s_com","add,del","br_pref","db_","idSz",i2s(limObjID_SZ).c_str());
 	}
 	return;
     }
@@ -841,7 +841,7 @@ void TBD::enable( )
 
     Mess->translReg("", "uapi:"+fullDBName());
 
-    if(trTm_ClsOnReq() < SERV_TASK_PER)
+    if(trTm_ClsOnReq() < prmServTask_PER)
 	try { SYS->taskCreate(nodePath('.',true), trPr_ClsTask(), Task, this, 0); }
 	catch(TError&) { }	//Can be for retry to enable the DB
 }
@@ -1012,7 +1012,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
 		ctrMkNode2("fld",opt,-1,"/prm/cfg/CODEPAGE",EVAL_STR,enableStat()?R_R_R_:RWRWR_,"root",SDB_ID,
 		    "dest","sel_ed","sel_list",(Mess->charset()+";UTF-8;KOI8-R;KOI8-U;CP1251;CP866").c_str(),
 		    "help",_("Codepage of data into the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."),NULL);
-		if(mTrTm_ClsOnReq < SERV_TASK_PER)
+		if(mTrTm_ClsOnReq < prmServTask_PER)
 		    ctrMkNode("fld",opt,-1,"/prm/cfg/TRPR_CLS_TASK",EVAL_STR,RWRWR_,"root",SDB_ID,1,"help",TMess::labTaskPrior());
 		else ctrRemoveNode(opt,"/prm/cfg/TRPR_CLS_TASK");
 	    }
@@ -1250,7 +1250,7 @@ void TTable::cntrCmdProc( XMLNode *opt )
 	string eid;
 	fieldStruct(req);
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDB_ID,SEC_RD)) {
-	    time_t upTo = time(NULL)+STD_INTERF_TM;
+	    time_t upTo = time(NULL)+prmInterf_TM;
 	    bool firstRow = true;
 	    for(unsigned iR = vmax(0,tblOff); (iR-tblOff) < (unsigned)tblSz && time(NULL) < upTo && fieldSeek(iR,req,TSYS::addr2str(&req)); iR++, firstRow = false)
 		for(unsigned iF = 0; iF < req.elem().fldSize(); iF++) {

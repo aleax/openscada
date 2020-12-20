@@ -31,7 +31,7 @@
 <td> <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> </td>
 <td> Робочий інтерфейс користувача (Qt)
 </td>
-<td> 7.2 </td>
+<td> 7.7 </td>
 <td> GPL2 </td>
 <td> ui_Vision.so </td>
 <td> en,uk,ru,de </td>
@@ -459,7 +459,7 @@
 <ul><li> "Сторінка" — сторінку користувацького інтерфейсу, у зображення;</li>
 <li> "Діаграма" — діаграму на користувацькому інтерфейсі, у зображення та CSV;</li>
 <li> "Документ" — документ на користувацькому інтерфейсі, у HTML та CSV для експортних таблиць.</li></ul></li>
-<li> підручнику на проект СВУ — кліком викликає підручник на проект візуалізації — файл з ім'ям ідентифікатору проекту СВУ.</li></ul></li>
+<li> підручнику на проект СВУ — кліком викликає підручник на проект візуалізації щодо файлу "<b>{ProjVCA_ID}.[pdf|html|odt]</b>" у <a href="../Program_manual.html#Config" title="Special:MyLanguage/Documents/Program manual">теці документів</a>.</li></ul></li>
 <li> панель користувацьких дій, якщо визначено у <a href="#SpecAttrs">атрибуті "statLine"</a> — кліком лівою, правою та подвійним кліком формує подію до головної сторінки інтерфейсу.</li></ul></li>
 <li> У головному полі рядка статусу виводяться різні інформаційні повідомлення та повідомлення допомоги.</li></ul>
 <p>Режим виконання (Runtime) значним чином підтримує багатомовність, яка залежить від мови обраного користувача або вікна виконання, тобто, якщо Ви зміните користувача то отримаєте інтерфейс виконання на іншій мові цього користувач. Ця функція включається <a href="../Program_manual.html#ConfigTr" title="Special:MyLanguage/Documents/Program manual">динамічним перекладом повідомлень OpenSCADA</a>.
@@ -550,6 +550,11 @@
 <th> Ім'я </th>
 <th> Призначення
 </th></tr>
+<tr>
+<td> notify{N}, notifyVisVision{N} (сторінка) </td>
+<td> Сповіщувач: тип {N} </td>
+<td> Визначає сповіщувач та процедуру отримання ресурсу сповіщення і самого сповіщення, використовуване за відсутності Phonon, згідно до <a href="../Modules/VCAEngine.html#Alarms" title="Special:MyLanguage/Modules/VCAEngine">концепції "Сигналізації (Аларми)"</a>.
+</td></tr>
 <tr>
 <td> statLine (головна сторінка) </td>
 <td> Елементи рядку статусу </td>
@@ -938,5 +943,5 @@ else if(this.ownerSess().reqUser()&nbsp;!= "user") userSetVis = "user:user";
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Vision/uk">Modules/Vision/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2020</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.2</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Vision/uk">Modules/Vision/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">December 2020</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.3</td></tr></table></body>
 </html>

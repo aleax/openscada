@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.SSL file: modssl.h
 /***************************************************************************
- *   Copyright (C) 2008-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2008-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -162,7 +162,7 @@ class TSocketOut: public TTransportOut
 
 	void setCertKey( const string &val )	{ mCertKey = val; modif(); }
 	void setPKeyPass( const string &val )	{ mKeyPass = val; modif(); }
-	void setTimings( const string &vl );
+	void setTimings( const string &vl, bool isDef = false );
 	void setAttempts( unsigned short vl );
 
 	void start( int time = 0 );

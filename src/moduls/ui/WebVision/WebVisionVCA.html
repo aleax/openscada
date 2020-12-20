@@ -31,7 +31,8 @@
     #gen-pnl-status { position: absolute; left: 0px; overflow: hidden; border-top: 1px solid darkblue; }
     #gen-pnl-status table { border-spacing: 0px; }
     #gen-pnl-status td { padding-left: 5px; padding-right: 5px; text-align: left; }
-    #st_user, #st_style, #st_alarm { border-left: 1px solid black; padding-left: 2px; white-space: nowrap; }
+    #st_user, #st_style, #st_alarm { border-left: 1px solid black; white-space: nowrap; }
+    #st_alarm * { margin-left: 2px; }
     #st_style select { width: auto; padding: 0; border: 1px solid gray; }
     #popupmenu { position: absolute; border: 1px solid gray; width: 150px; height: 150px; overflow: auto; z-index: 1000; background-color: #E6E6E6; }
     #popupmenu select { border: 0; background-color: #E6E6E6; padding: 1px; width: auto; overflow-y: hidden; overflow-x: hidden; }
@@ -52,7 +53,7 @@
     .FormEl select { position: absolute; left: 0px; border: 1px solid gray; padding: 0; line-height: 1; }
     .FormEl input[type=range], .FormEl input[type=file] { position: absolute; top: 0; bottom: 0; left: 0; right: 0; margin: auto; }
     .FormEl input[type=range][orient=vertical] { writing-mode: bt-lr; -webkit-appearance: slider-vertical; }
-    .FormEl img.inactive { filter: grayscale(100%) opacity(30%); }
+    img.inactive { filter: grayscale(100%) opacity(30%); }
     div.FormEl.Table, div.FormEl.ItemsTree { overflow: auto; text-align: left; border: 1px solid gray; background-color: white; }
     div.FormEl.Table table { border-collapse: collapse; }
     div.FormEl.Table table th { text-align: center; background-color: #e6e6e6; border: 1px solid black; white-space: pre-line; }

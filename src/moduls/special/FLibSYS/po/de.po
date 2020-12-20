@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.FLibSYS 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-10 17:55+0200\n"
+"POT-Creation-Date: 2020-10-31 19:40+0200\n"
 "PO-Revision-Date: 2011-07-19 20:52+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: German <de@li.org>\n"
@@ -60,7 +60,7 @@ msgid "From file"
 msgstr "Aus Datei"
 
 msgid "LibGD2"
-msgstr ""
+msgstr "LibGD2"
 
 msgid "Graphical library GD2 images processing."
 msgstr "Grafikbibliothek GD2 Bilder Verarbeitung."
@@ -228,22 +228,19 @@ msgid "String: Encode string to HTML"
 msgstr "String: Kodierung der Zeile in HTML"
 
 msgid "Encoding the string to use into the HTML source."
-msgstr ""
-"Codierung der Zeichenfolge, die in der HTML-Quelle verwendet werden soll."
+msgstr "Codierung der Zeichenfolge, die in der HTML-Quelle verwendet werden soll."
 
 msgid "String: Encode text to binary"
 msgstr "String: Text in Binärcode codieren"
 
 msgid "Encoding the text to the binary, for the text format <00 A0 FA DE>."
-msgstr ""
-"Codierung des Textes in die Binärdatei, für das Textformat <00 A0 FA DE>."
+msgstr "Codierung des Textes in die Binärdatei, für das Textformat <00 A0 FA DE>."
 
 msgid "String: Decode text from binary"
 msgstr "String: Text aus Binärcode decodieren"
 
 msgid "Decoding the text from the binary, for the text format <00 A0 FA DE>."
-msgstr ""
-"Decodierung des Textes aus der Binärdatei, für das Textformat <00 A0 FA DE>."
+msgstr "Decodierung des Textes aus der Binärdatei, für das Textformat <00 A0 FA DE>."
 
 msgid "Value"
 msgstr "Wert"
@@ -348,7 +345,8 @@ msgstr ""
 "Einheitliche und vollständige Implementierung des zyklischen Redundanzcodes "
 "für die Breite in 1-64 Bit mit normalem Polynom, dem anfänglichen CRC, der "
 "Eingabe- und Ausgabereferenz, und dem XOR für die Ausgabe.\n"
-"Die vorherige Notation der Funktion wird auch unterstützt, wenn das umgekehrte Polynom gestellt wird an die Stelle <width>!"
+"Die vorherige Notation der Funktion wird auch unterstützt, wenn das "
+"umgekehrte Polynom gestellt wird an die Stelle <width>!"
 
 msgid "Message Digest 5 (MD5)"
 msgstr "Message Digest 5 (MD5)"
@@ -442,7 +440,7 @@ msgid "Result, seconds"
 msgstr "Ergebnis, Sekunden"
 
 msgid "CRON"
-msgstr ""
+msgstr "CRON"
 
 msgid "Base time, seconds"
 msgstr "Anfangszeit Sekunden"
@@ -463,8 +461,8 @@ msgstr "Zeit, Sekunden"
 msgid "Time: sleep"
 msgstr "Zeit: Schlaf"
 
-msgid "Short sleeping from nanoseconds and up to STD_INTERF_TM (5 seconds)."
-msgstr "Kurzes Schlafen von Nanosekunden bis zu STD_INTERF_TM (5 Sekunden)."
+msgid "Short sleeping from nanoseconds and up to prmInterf_TM (7 seconds)."
+msgstr "Kurzes Schlafen von Nanosekunden bis zu prmInterf_TM (7 Sekunden)."
 
 msgid "Val: Archive"
 msgstr "Wert: Archiv speichern."
@@ -518,3 +516,4 @@ msgstr "XML: Kontrollanfrage"
 
 msgid "Requesting for control the program, by XML."
 msgstr "Aufforderung, das Programm per XML zu steuern."
+

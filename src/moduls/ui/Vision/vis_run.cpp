@@ -52,6 +52,19 @@
 #include "vis_run_widgs.h"
 #include "vis_shapes.h"
 
+#ifdef HAVE_PHONON
+#ifdef HAVE_PHONON_VIDEOPLAYER
+#include <phonon/VideoPlayer>
+#include <phonon/VideoWidget>
+#include <phonon/MediaObject>
+#else
+#include <Phonon/VideoPlayer>
+#include <Phonon/VideoWidget>
+#include <Phonon/MediaObject>
+#endif
+using namespace Phonon;
+#endif
+
 #undef _
 #define _(mess) mod->I18N(mess, lang().c_str())
 
@@ -66,7 +79,7 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     fileDlg(NULL),
     conErr(NULL), crSessForce(icrSessForce), mKeepAspectRatio(true), mWinPosCntrSave(false), prjSes_it(iprjSes_it),
     master_pg(NULL), mPeriod(1000), mConId(0), mScreen(iScr), wPrcCnt(0), reqtm(1), expDiagCnt(1), expDocCnt(1), x_scale(1), y_scale(1),
-    mAlrmSt(0xFFFFFF), alrLevSet(false), ntfSet(0), updPage(false), host(NULL)
+    mAlrmSt(0xFFFFFF), alrLevSet(false), ntfSet(0), alrmUpdCnt(0), updPage(false), host(NULL)
 {
     QImage ico_t;
 
@@ -209,7 +222,7 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     endRunTimer   = new QTimer(this);
     endRunTimer->setSingleShot(false);
     connect(endRunTimer, SIGNAL(timeout()), this, SLOT(endRunChk()));
-    endRunTimer->start(STD_WAIT_DELAY);
+    endRunTimer->start(1e3*prmWait_DL);
     // Update timer
     updateTimer = new QTimer(this);
     updateTimer->setSingleShot(false);
@@ -1470,13 +1483,14 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
 	}
     }
 
-    //Place all needs atrributes to one request
+    //Placing all needed atrributes to one request
     XMLNode req("CntrReqs"), *chN; req.setAttr("path", pg_it);
     req.childAdd("get")->setAttr("path", "/%2fattr%2fpgGrp");
     req.childAdd("get")->setAttr("path", "/%2fattr%2fpgOpenSrc");
-    for(unsigned iNtf = 0; iNtf < 7; iNtf++) {
-	req.childAdd("get")->setAttr("path", "/%2fattr%2fnotifyVis"+mod->modId()+i2s(iNtf));
-	req.childAdd("get")->setAttr("path", "/%2fattr%2fnotify"+i2s(iNtf));
+    // For per-page notification
+    for(unsigned iNtf = 0; iNtf < 8; iNtf++) {
+	req.childAdd("activate")->setAttr("path", "/%2fserv%2fattr%2fnotifyVis"+mod->modId()+i2s(iNtf));
+	req.childAdd("activate")->setAttr("path", "/%2fserv%2fattr%2fnotify"+i2s(iNtf));
     }
     cntrIfCmd(req);
 
@@ -1534,12 +1548,6 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
     }
     //Put to check for include
     else master_pg->callPage(pg_it, pgGrp, pgSrc);
-
-    //Get the notificators configuration and register its
-    for(unsigned iNtf = 0; iNtf < 7; iNtf++)
-	if(((chN=req.getElementBy("path","/%2fattr%2fnotifyVis"+mod->modId()+i2s(iNtf))) && !s2i(chN->attr("rez"))) ||
-		((chN=req.getElementBy("path","/%2fattr%2fnotify"+i2s(iNtf))) && !s2i(chN->attr("rez"))))
-	    ntfReg(iNtf, chN->text(), pg_it);
 }
 
 void VisRun::pgCacheClear( )
@@ -1658,10 +1666,11 @@ void VisRun::alarmSet( unsigned alarm )
 	painter.fillRect(levImage.rect(),Qt::transparent);
 	painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
 
-	if(!((alarm>>16)&ntfSet && /*(alarm>>16)&(TVision::Light|TVision::Alarm|TVision::Sound) &&*/ alrLevSet)) {
-	    for(int i_x = 0; i_x < lens.size().width(); i_x++)
-		for(int i_y = 0; i_y < lens.size().height(); i_y++)
-		    if(lens.pixel(i_x,i_y)&0xFF000000)	levImage.setPixel(i_x,i_y,lclr.rgba());
+	if(!((alarm>>16)&ntfSet && alrLevSet)) {
+	    for(int iX = 0; iX < lens.size().width(); iX++)
+		for(int iY = 0; iY < lens.size().height(); iY++)
+		    if(lens.pixel(iX,iY)&0xFF000000)
+			levImage.setPixel(iX, iY, lclr.rgba());
 	    alrLevSet = true;
 	} else alrLevSet = false;
 
@@ -1673,21 +1682,27 @@ void VisRun::alarmSet( unsigned alarm )
     mAlrmSt = alarm;
 }
 
-void VisRun::ntfReg( uint8_t tp, const string &props, const string &pgCrtor )
+void VisRun::ntfReg( int8_t tp, const string &props, const string &pgCrtor, bool prior )
 {
+    if(tp < 0) {
+	for(unsigned iNtf = 0; iNtf < 8; iNtf++)
+	    ntfReg(iNtf, props, pgCrtor, prior);
+	return;
+    }
+
     vector<string> pgPropsQ;
 
-    //Find for presented notification type
+    //Search for presented notification type
     map<uint8_t,Notify*>::iterator iN = mNotify.find(tp);
     if(iN != mNotify.end()) {
-	if(pgCrtor == iN->second->pgCrtor() && props == iN->second->props()) return;
+	if(pgCrtor == iN->second->pgCrtor() && (props == iN->second->props() || !prior)) return;
 	pgPropsQ = iN->second->pgPropsQ;
 	if(pgCrtor != iN->second->pgCrtor()) {
 	    // Check the queue for the page already here
 	    for(vector<string>::iterator iQ = iN->second->pgPropsQ.begin(); iQ != iN->second->pgPropsQ.end(); ++iQ)
 		if(TSYS::strLine(*iQ,0) == pgCrtor) {
 		    if(props.empty()) iN->second->pgPropsQ.erase(iQ);
-		    else *iQ = pgCrtor+"\n"+props;
+		    else *iQ = pgCrtor + "\n" + props;
 		    return;
 		}
 	    if(props.empty()) return;
@@ -1697,18 +1712,14 @@ void VisRun::ntfReg( uint8_t tp, const string &props, const string &pgCrtor )
 	mNotify.erase(iN);
 	ntfSet &= ~(1<<tp);
     }
-    //New or replaced creation
-    if(props.size()) {
-	mNotify[tp] = new Notify(tp, pgCrtor+"\n"+props, this);
-	mNotify[tp]->pgPropsQ = pgPropsQ;
-	ntfSet |= (1<<tp);
-    }
+    //Creation new or replacing present one
+    if(props.size())		mNotify[tp] = new Notify(tp, pgCrtor+"\n"+props, this);
     //Take and place a notificator from the queue
-    else if(pgPropsQ.size()) {
-	mNotify[tp] = new Notify(tp, pgPropsQ.back(), this); pgPropsQ.pop_back();
-	mNotify[tp]->pgPropsQ = pgPropsQ;
-	ntfSet |= (1<<tp);
-    }
+    else if(pgPropsQ.size())	{ mNotify[tp] = new Notify(tp, pgPropsQ.back(), this); pgPropsQ.pop_back(); }
+    else return;
+
+    mNotify[tp]->pgPropsQ = pgPropsQ;
+    ntfSet |= (1<<tp);
 }
 
 string VisRun::cacheResGet( const string &res )
@@ -1721,14 +1732,14 @@ string VisRun::cacheResGet( const string &res )
 
 void VisRun::cacheResSet( const string &res, const string &val )
 {
-    if(val.size() > USER_FILE_LIMIT) return;
+    if(val.size() > limUserFile_SZ) return;
     mCacheRes[res] = CacheEl(SYS->sysTm(), val);
-    if(mCacheRes.size() > (STD_CACHE_LIM+STD_CACHE_LIM/10)) {
+    if(mCacheRes.size() > (limCacheIts_N+limCacheIts_N/10)) {
 	vector< pair<time_t,string> > sortQueue;
 	for(map<string,CacheEl>::iterator itr = mCacheRes.begin(); itr != mCacheRes.end(); ++itr)
 	    sortQueue.push_back(pair<time_t,string>(itr->second.tm,itr->first));
 	sort(sortQueue.begin(), sortQueue.end());
-	for(unsigned i_del = 0; i_del < (STD_CACHE_LIM/10); ++i_del) mCacheRes.erase(sortQueue[i_del].second);
+	for(unsigned i_del = 0; i_del < (limCacheIts_N/10); ++i_del) mCacheRes.erase(sortQueue[i_del].second);
     }
 }
 
@@ -1789,8 +1800,9 @@ void VisRun::updatePage( )
     reqtm = strtoul(req.attr("tm").c_str(),NULL,10);
 
     //Alarms update (0.5 second update)
-    if((wPrcCnt%(500/vmin(500,period()))) == 0) {
-	// Get alarm status
+    if((alrmUpdCnt+=1e-3*planePer) > TM_ALRM_UPD) {
+	alrmUpdCnt = 0;
+	// Get the alarm status
 	unsigned wAlrmSt = alarmSt();
 	req.clear()->
 	    setName("get")->
@@ -1798,7 +1810,7 @@ void VisRun::updatePage( )
 	    setAttr("path", "/ses_"+work_sess+"/%2fserv%2falarm");
 	if(!cntrIfCmd(req,false,true)) wAlrmSt = s2i(req.attr("alarmSt"));
 
-	// Set alarm
+	// Set the alarm
 	alarmSet(wAlrmSt);
     }
 
@@ -1853,9 +1865,9 @@ void VisRun::updatePage( )
 //************************************************
 VisRun::Notify::Notify( uint8_t itp, const string &ipgProps, VisRun *iown ) : pgProps(ipgProps),
     tp(itp), alSt(0xFFFFFFFF), repDelay(-1), comIsExtScript(false), f_notify(false), f_resource(false), f_queue(false), f_quietanceRet(false),
-    toDo(false), alEn(false), mQueueCurTm(0), dataM(true), mOwner(iown), actAlrm(NULL)
+    toDo(false), alEn(false), delay(0), queueCurTm(0), dataM(true), mOwner(iown), actAlrm(NULL), ntfPlay(NULL)
 {
-    //Parse properties
+    //Parsing the properties
     string iLn, iOpt, ico, name, iProps = props();
     bool hasLang  = false, hasFlags = false;
     for(int off = 0, lCnt = 0, fPos; (!hasLang || !hasFlags || ico.empty() || name.empty()) && (iLn=TSYS::strLine(iProps,0,&off)).size(); lCnt++)
@@ -1873,6 +1885,11 @@ VisRun::Notify::Notify( uint8_t itp, const string &ipgProps, VisRun *iown ) : pg
 	}
 	else if(ico.empty() && (size_t)(fPos=iLn.find("ico=")) != string::npos)	  ico = iLn.substr(fPos+4);
 	else if(name.empty() && (size_t)(fPos=iLn.find("name=")) != string::npos) name = iLn.substr(fPos+5);
+
+#ifdef HAVE_PHONON
+    if(f_notify && (f_queue || f_resource))
+	ntfPlay = new VideoPlayer(Phonon::MusicCategory);
+#endif
 
     //The command procedure prepare
     if(comIsExtScript) {
@@ -1899,6 +1916,8 @@ VisRun::Notify::Notify( uint8_t itp, const string &ipgProps, VisRun *iown ) : pg
 	funcIO.ioIns(new IO("res",_("Resource stream"),IO::String,IO::Output), IFA_res);
 	funcIO.ioIns(new IO("mess",_("Notification message"),IO::String,IO::Default), IFA_mess);
 	funcIO.ioIns(new IO("lang",_("Language of the notification message"),IO::String,IO::Default), IFA_lang);
+	funcIO.ioIns(new IO("resTp",_("Resource stream type"),IO::String,IO::Return), IFA_resTp);
+	funcIO.ioIns(new IO("prcID",_("Procedure ID"),IO::String,IO::Default), IFA_prcID);
 	try { comProc = SYS->daq().at().at("JavaLikeCalc").at().compileFunc("JavaScript", funcIO, props()); }
 	catch(TError &er) {
 	    mess_err((mod->nodePath()+"/sesRun_"+owner()->workSess()).c_str(), _("Error function of the notificator '%s': %s"),
@@ -1906,7 +1925,7 @@ VisRun::Notify::Notify( uint8_t itp, const string &ipgProps, VisRun *iown ) : pg
 	}
     }
 
-    if(f_notify) {
+    if(f_notify && !ntfPlay) {
 	//Call conditional variable init
 	pthread_cond_init(&callCV, NULL);
 
@@ -1948,10 +1967,16 @@ VisRun::Notify::Notify( uint8_t itp, const string &ipgProps, VisRun *iown ) : pg
 
 VisRun::Notify::~Notify( )
 {
-    if(f_notify) {
-	SYS->taskDestroy(mod->nodePath('.',true)+".sesRun_"+owner()->workSess()+".ntf"+i2s(tp), NULL, 10, false, &callCV);
+    if(f_notify && !ntfPlay) {
+	SYS->taskDestroy(mod->nodePath('.',true)+".sesRun_"+owner()->workSess()+".ntf"+i2s(tp), NULL, 60, false, &callCV);
 	pthread_cond_destroy(&callCV);
     }
+#ifdef HAVE_PHONON
+    if(ntfPlay) { delete ntfPlay; ntfPlay = NULL; }
+#endif
+
+    //The resource file remove
+    if(resFile.size()) remove(resFile.c_str());
 
     //The command procedure remove
     if(comIsExtScript && comProc.size()) remove(comProc.c_str());
@@ -1976,7 +2001,7 @@ string VisRun::Notify::curQueueWdg( )
 {
     if(!hasQueue()) return "";
     pthread_mutex_lock(&dataM.mtx());
-    string rez = mQueueCurPath;
+    string rez = queueCurPath;
     pthread_mutex_unlock(&dataM.mtx());
 
     return rez;
@@ -1984,43 +2009,61 @@ string VisRun::Notify::curQueueWdg( )
 
 void VisRun::Notify::ntf( int ialSt )
 {
-    //Check for the alarm state change
-    if(!f_notify || !(((ialSt^alSt)>>16)&(1<<tp)))	return;
-
     alEn = (bool)((ialSt>>16)&(1<<tp));
-    pthread_mutex_lock(&dataM.mtx());
-    toDo = true;
-    pthread_cond_signal(&callCV);
-    pthread_mutex_unlock(&dataM.mtx());
 
-    alSt = ialSt;
+#ifdef HAVE_PHONON
+    if(ntfPlay) {
+	State mSt = ((VideoPlayer*)ntfPlay)->mediaObject()->state();
+	bool plSt = (mSt == LoadingState || mSt == BufferingState || mSt == PlayingState);
+	if(!alEn && ((VideoPlayer*)ntfPlay)->mediaObject()->currentSource().type() != MediaSource::Empty)
+	    ((VideoPlayer*)ntfPlay)->load(MediaSource());
+	else if(alEn && (((VideoPlayer*)ntfPlay)->mediaObject()->currentSource().type() == MediaSource::Empty ||
+			    (repDelay >= 0 && !plSt && (delay-=vmax(TM_ALRM_UPD,1e-3*owner()->planePer)) <= 0))) {
+	    string nRes, nResTp, nMess, nLang;
+	    nRes = ntfRes(nResTp, nMess, nLang);
+	    commCall(nRes, nResTp, nMess, nLang);
+	    delay = repDelay;
+	}
+	return;
+    } else
+#endif
+    //Check for the alarm state change
+    if(f_notify && (((ialSt^alSt)>>16)&(1<<tp))) {
+	pthread_mutex_lock(&dataM.mtx());
+	toDo = true;
+	pthread_cond_signal(&callCV);
+	pthread_mutex_unlock(&dataM.mtx());
+
+	alSt = ialSt;
+    }
 }
 
-string VisRun::Notify::ntfRes( string &mess, string &lang )
+string VisRun::Notify::ntfRes( string &resTp, string &mess, string &lang )
 {
     string rez;
-    mess = lang = "";
+    mess = lang = resTp = "";
 
     //Call same request to the VCA server for resources
     XMLNode req("get");
     req.setAttr("path", "/ses_"+owner()->workSess()+"/%2fserv%2falarm")->
 	setAttr("mode", "resource")->
 	setAttr("tp", i2s(tp))->
-	setAttr("tm", u2s(mQueueCurTm))->
-	setAttr("wdg", mQueueCurPath);
+	setAttr("tm", u2s(queueCurTm))->
+	setAttr("wdg", queueCurPath);
     //if(!owner()->cntrIfCmd(req)) {
     if(!mod->cntrIfCmd(req,owner()->user(),owner()->password(),owner()->VCAStation())) {
-	mQueueCurTm = strtoul(req.attr("tm").c_str(), NULL, 10);
-	mQueueCurPath = req.attr("wdg");
+	queueCurTm = strtoul(req.attr("tm").c_str(), NULL, 10);
+	queueCurPath = req.attr("wdg");
 	rez = TSYS::strDecode(req.text(), TSYS::base64);
 	mess = req.attr("mess");
 	lang = req.attr("lang");
+	resTp = req.attr("resTp");
     }
 
     return rez;
 }
 
-void VisRun::Notify::commCall( string &res, const string &mess, const string &lang )
+void VisRun::Notify::commCall( string &res, string &resTp, const string &mess, const string &lang )
 {
     if(comProc.empty()) return;
 
@@ -2029,15 +2072,24 @@ void VisRun::Notify::commCall( string &res, const string &mess, const string &la
     string wcomProc = comProc;
     pthread_mutex_unlock(&dataM.mtx());
 
-    if(comIsExtScript) {
-	string resFile = "sesRun_"+owner()->workSess()+"_res"+i2s(tp);
+    //Loading the resource
+    if(ntfPlay || comIsExtScript) {
+	resFile = "sesRun_"+owner()->workSess()+"_res"+i2s(tp);
 	int hdRes = res.size() ? open(resFile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, SYS->permCrtFiles()) : -1;
 	if(hdRes >= 0) { write(hdRes, res.data(), res.size()); ::close(hdRes); }
-	// Prepare environment and execute the external script
-	system(("en="+i2s(alEn)+" doNtf=1 doRes=0 res="+resFile+
-	    " mess=\""+TSYS::strEncode(mess,TSYS::SQL)+"\" lang=\""+TSYS::strEncode(lang,TSYS::SQL)+"\" ./"+wcomProc).c_str());
-	if(hdRes >= 0) remove(resFile.c_str());
+	else resFile = "";
     }
+
+    //Playing by an internal mechanism (Phonon)
+#ifdef HAVE_PHONON
+    if(ntfPlay)	((VideoPlayer*)ntfPlay)->play(MediaSource(QUrl(resFile.c_str())));
+    else
+#endif
+    //Call external procedures
+    if(comIsExtScript)
+	// Prepare environment and execute the external script
+	system(("prcID=sesRun_"+owner()->workSess()+"_ntf"+i2s(tp)+" en="+i2s(alEn)+" doNtf=1 doRes=0 res="+resFile+" resTp="+resTp+
+	    " mess=\""+TSYS::strEncode(mess,TSYS::SQL)+"\" lang=\""+TSYS::strEncode(lang,TSYS::SQL)+"\" ./"+wcomProc).c_str());
     else {
 	// Prepare and execute internal procedure
 	TValFunc funcV;
@@ -2050,6 +2102,8 @@ void VisRun::Notify::commCall( string &res, const string &mess, const string &la
 	funcV.setS(IFA_res, res);
 	funcV.setS(IFA_mess, mess);
 	funcV.setS(IFA_lang, lang);
+	funcV.setS(IFA_resTp, resTp);
+	funcV.setS(IFA_prcID, "sesRun_"+owner()->workSess()+"_ntf"+i2s(tp));
 
 	//  Call to processing
 	funcV.calc();
@@ -2067,16 +2121,16 @@ void *VisRun::Notify::Task( void *intf )
 	ntf.toDo = false;
 	pthread_mutex_unlock(&ntf.dataM.mtx());
 
-	string ntfRes, ntfMess, ntfLang;
+	string ntfRes, ntfResTp, ntfMess, ntfLang;
 	unsigned delayCnt = 0;
 	do {
 	    if(delayCnt) { TSYS::sysSleep(1); delayCnt--; continue; }
 
 	    //  Get the resources for the notification
-	    if((ntf.f_queue || ntf.f_resource) && ntf.alEn) ntfRes = ntf.ntfRes(ntfMess, ntfLang);
+	    if((ntf.f_queue || ntf.f_resource) && ntf.alEn) ntfRes = ntf.ntfRes(ntfResTp, ntfMess, ntfLang);
 
 	    //  Same notification
-	    ntf.commCall(ntfRes, ntfMess, ntfLang);
+	    ntf.commCall(ntfRes, ntfResTp, ntfMess, ntfLang);
 
 	    delayCnt = ntf.repDelay;
 	} while((ntf.repDelay >= 0 || ntf.f_queue) && ntf.alEn && !TSYS::taskEndRun());

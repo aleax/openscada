@@ -34,29 +34,29 @@ using namespace OSCADA;
 TTransportS::TTransportS( ) : TSubSYS(STR_ID, _("Transports"), true), extHostLoad(0)
 {
     //Input transport BD structure
-    elIn.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
-    elIn.fldAdd(new TFld("MODULE",_("Transport type"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
-    elIn.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
+    elIn.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    elIn.fldAdd(new TFld("MODULE",_("Transport type"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    elIn.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
     elIn.fldAdd(new TFld("DESCRIPT",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"500"));
     elIn.fldAdd(new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"100"));
-    elIn.fldAdd(new TFld("PROT",_("Transport protocol"),TFld::String,TFld::NoFlag,i2s(s2i(OBJ_ID_SZ)*10).c_str()));
-    elIn.fldAdd(new TFld("START",_("To start"),TFld::Boolean,TFld::NoFlag,"1"));
+    elIn.fldAdd(new TFld("PROT",_("Transport protocol"),TFld::String,TFld::NoFlag,i2s(limObjID_SZ*10).c_str()));
+    elIn.fldAdd(new TFld("START",_("To connect"),TFld::Boolean,TFld::NoFlag,"1"));
 
     //Output transport BD structure
-    elOut.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(s2i(OBJ_ID_SZ)*2).c_str()));
-    elOut.fldAdd(new TFld("MODULE",_("Transport type"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
-    elOut.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
+    elOut.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ*2).c_str()));
+    elOut.fldAdd(new TFld("MODULE",_("Transport type"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    elOut.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
     elOut.fldAdd(new TFld("DESCRIPT",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"500"));
     elOut.fldAdd(new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"100"));
 
     //External hosts' connection DB struct
-    elExt.fldAdd(new TFld("OP_USER",_("User that opens"),TFld::String,TCfg::Key,OBJ_ID_SZ));
-    elExt.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,OBJ_ID_SZ));
-    elExt.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
-    elExt.fldAdd(new TFld("TRANSP",_("Transport"),TFld::String,0,OBJ_ID_SZ));
+    elExt.fldAdd(new TFld("OP_USER",_("User that opens"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    elExt.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    elExt.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    elExt.fldAdd(new TFld("TRANSP",_("Transport"),TFld::String,0,i2s(limObjID_SZ).c_str()));
     elExt.fldAdd(new TFld("ADDR",_("Transport address"),TFld::String,0,"50"));
-    elExt.fldAdd(new TFld("USER",_("User of the requests"),TFld::String,0,OBJ_ID_SZ));
-    elExt.fldAdd(new TFld("PASS",_("Password of the requests"),TFld::String,0,"30"));
+    elExt.fldAdd(new TFld("USER",_("User of the requests"),TFld::String,0,i2s(limObjID_SZ).c_str()));
+    elExt.fldAdd(new TFld("PASS",_("Password of the requests"),TFld::String,0,"100"));
     elExt.fldAdd(new TFld("UpRiseLev",_("Level of lifting"),TFld::Integer,0,"1"));
 }
 
@@ -590,14 +590,14 @@ void TTypeTransport::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TModule::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/in_",_("Input transport"),RWRWR_,"root",STR_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
-	ctrMkNode("grp",opt,-1,"/br/out_",_("Output transport"),RWRWR_,"root",STR_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
+	ctrMkNode("grp",opt,-1,"/br/in_",_("Input transport"),RWRWR_,"root",STR_ID,2,"idm",i2s(limObjNm_SZ).c_str(),"idSz",i2s(limObjID_SZ).c_str());
+	ctrMkNode("grp",opt,-1,"/br/out_",_("Output transport"),RWRWR_,"root",STR_ID,2,"idm",i2s(limObjNm_SZ).c_str(),"idSz",i2s(limObjID_SZ).c_str());
 	if(ctrMkNode("area",opt,0,"/tr",_("Transports"))) {
 	    ctrMkNode("list",opt,-1,"/tr/in",_("Input"),RWRWR_,"root",STR_ID,5,
-		"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","in_","idSz",OBJ_ID_SZ);
+		"tp","br","idm",i2s(limObjNm_SZ).c_str(),"s_com","add,del","br_pref","in_","idSz",i2s(limObjID_SZ).c_str());
 	    if(ctrMkNode("area",opt,-1,"/tr/out",_("Output"))) {
 		ctrMkNode("list",opt,-1,"/tr/out/list",_("List"),RWRWR_,"root",STR_ID,5,
-		    "tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","out_","idSz",OBJ_ID_SZ);
+		    "tp","br","idm",i2s(limObjNm_SZ).c_str(),"s_com","add,del","br_pref","out_","idSz",i2s(limObjID_SZ).c_str());
 		ctrMkNode("fld",opt,-1,"/tr/out/keepAlive",_("Lifetime, seconds"),RWRWR_,"root",STR_ID,4,"tp","dec","min","0","max","3600",
 		    "help",_("Time of inactivity in the output transport for it closing/disconnection. Set to 0 to disable the transports closing!"));
 	    }
@@ -717,7 +717,7 @@ string TTransportIn::workId( )		{ return owner().modId()+"."+id(); }
 
 string TTransportIn::tbl( )		{ return owner().owner().subId()+"_in"; }
 
-string TTransportIn::getStatus( )	{ return startStat() ? _("Started. ") : _("Stoped. "); }
+string TTransportIn::getStatus( )	{ return startStat() ? _("Receiving data. ") : _("Disconnected. "); }
 
 void TTransportIn::load_( TConfig *icfg )
 {
@@ -874,7 +874,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,-1,"/prm",_("Transport"))) {
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/prm/st/status",_("Status"),R_R_R_,"root",STR_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Running"),RWRWR_,"root",STR_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Connect"),RWRWR_,"root",STR_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Transport DB"),RWRWR_,"root",STR_ID,4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
 	    }
@@ -934,7 +934,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD)) {
 	    MtxAlloc res(mLogRes, true);
 	    time_t stTm = time(NULL);
-	    for(int iL = mLog.size()-1; iL >= 0 && (time(NULL)-stTm) <= STD_WAIT_TM; iL--) {
+	    for(int iL = mLog.size()-1; iL >= 0 && (time(NULL)-stTm) <= prmWait_TM; iL--) {
 		int off = 0;
 		int64_t itTm   = s2ll(TSYS::strLine(mLog[iL],0,&off));
 		string  itDscr = TSYS::strLine(mLog[iL], 0, &off);
@@ -957,7 +957,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 //* TTransportOut                                *
 //************************************************
 TTransportOut::TTransportOut( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), runSt(false), mLstReqTm(0), mId(cfg("ID")),
+    TConfig(el), runSt(false), mDefTimeouts(true), mLstReqTm(0), mId(cfg("ID")),
     mDB(idb), mStartTm(0), mReqRes(true), mLogLen(0)
 {
     mId = iid;
@@ -1032,7 +1032,7 @@ bool TTransportOut::cfgChange( TCfg &co, const TVariant &pc )
 
 string TTransportOut::getStatus( )
 {
-    return (startStat()?_("Started. "):_("Stoped. ")) +
+    return (startStat()?_("Connected. "):_("Disconnected. ")) +
 	TSYS::strMess(_("Established: %s. Last: %s. "), atm2s(startTm(),"%d-%m-%Y %H:%M:%S").c_str(), atm2s(1e-6*lstReqTm(),"%d-%m-%Y %H:%M:%S").c_str());
 }
 
@@ -1088,10 +1088,10 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, 
     //    sending the message <mess> through the transport with the waiting timeout <timeOut> and reading for <inBufLen> bytes.
     //  mess - message text for send
     //  timeOut - connection timeout, in seconds. Set to "< -1e-3" for the no request mode
-    //  inBufLen - input buffer length, < 0 - STR_BUF_LEN(10000), 0 - no read but only write, > 0 - read pointed bytes
+    //  inBufLen - input buffer length, < 0 - prmStrBuf_SZ(10000), 0 - no read but only write, > 0 - read pointed bytes
     if(iid == "messIO" && prms.size() >= 1 && prms[0].type() != TVariant::Object) {
 	string rez;
-	int inBufLen = (prms.size() < 3 || prms[2].getI() < 0) ? STR_BUF_LEN : vmin(STR_BUF_LEN,prms[2].getI());
+	int inBufLen = (prms.size() < 3 || prms[2].getI() < 0) ? prmStrBuf_SZ : vmin(prmStrBuf_SZ,prms[2].getI());
 	char buf[inBufLen];
 	try {
 	    if(!startStat()) start();
@@ -1115,6 +1115,8 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, 
 	} catch(TError &err) { return err.mess; }
 	return "";
     }
+    // bool isNetwork( ) - the transport network type
+    if(iid == "isNetwork") return isNetwork();
     // string status( ) - the transport status
     if(iid == "status")	return getStatus();
     // bool start( bool vl = <EVAL>, int tm = 0 ) - the transport start status return, start/stop it by <vl> (if it is not <EVAL>).
@@ -1135,10 +1137,11 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, 
 	    try{ setAddr(prms[0].getS()); } catch(TError&) { }
 	return addr();
     }
-    // string timings( string vl = "" ) - the transport timings return, set it to not empty <vl>
+    // string timings( string vl = "", isDef = true ) - the transport timings return, set it to not empty <vl>
     if(iid == "timings") {
 	if(prms.size() && prms[0].getS().size())
-	    try{ setTimings(prms[0].getS()); } catch(TError&) { }
+	    try{ setTimings(prms[0].getS(), (prms.size()>=2)?prms[1].getB():true); }
+	    catch(TError&) { }
 	return timings();
     }
     // int attempts( int vl = EVAL ) - the transport requesting attempts return, set it to not EVAL <vl>
@@ -1164,7 +1167,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,-1,"/prm",_("Transport"))) {
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/prm/st/status",_("Status"),R_R_R_,"root",STR_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Running"),RWRWR_,"root",STR_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Connect"),RWRWR_,"root",STR_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Transport DB"),RWRWR_,"root",STR_ID,4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
 	    }
@@ -1182,7 +1185,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 		  "Many systems, when responding to different protocols (such as HTTP), can send response data in several parts.\n"
 		  "Without this, only the first part will be received and displayed.\n"
 		  "When this flag is set, all parts of the response will be waiting up to missing data during the transport timeout."));
-	    ctrMkNode("fld",opt,-1,"/req/inBufSz",_("Input buffer size, bytes"),RWRW__,"root",STR_ID,4,"tp","dec","min","0","max",i2s(STR_BUF_LEN).c_str(),
+	    ctrMkNode("fld",opt,-1,"/req/inBufSz",_("Input buffer size, bytes"),RWRW__,"root",STR_ID,4,"tp","dec","min","0","max",i2s(prmStrBuf_SZ).c_str(),
 		"help",_("Direct set the input buffer size. Use 0 to disable waiting and reading for a data - only to write."));
 	    ctrMkNode("comm",opt,-1,"/req/send",_("Send"),RWRW__,"root",STR_ID);
 	    ctrMkNode("fld",opt,-1,"/req/req",_("Request"),RWRW__,"root",STR_ID,4,"tp","str","cols","90","rows","5","SnthHgl","1");
@@ -1219,9 +1222,9 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/req/inBufSz") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))
-	    opt->setText(TBDS::genDBGet(owner().nodePath()+"InBufSz",i2s(STR_BUF_LEN),opt->attr("user")));
+	    opt->setText(TBDS::genDBGet(owner().nodePath()+"InBufSz",i2s(prmStrBuf_SZ),opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))
-	    TBDS::genDBSet(owner().nodePath()+"InBufSz", i2s(vmax(0,vmin(STR_BUF_LEN,s2i(opt->text())))), opt->attr("user"));
+	    TBDS::genDBSet(owner().nodePath()+"InBufSz", i2s(vmax(0,vmin(prmStrBuf_SZ,s2i(opt->text())))), opt->attr("user"));
     }
     else if(a_path == "/req/req") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TBDS::genDBGet(owner().nodePath()+"ReqReq","",opt->attr("user")));
@@ -1274,7 +1277,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 
 	int64_t stm = TSYS::curTime();
 	try {
-	    int inBufSz = s2i(TBDS::genDBGet(owner().nodePath()+"InBufSz",i2s(STR_BUF_LEN),opt->attr("user")));
+	    int inBufSz = s2i(TBDS::genDBGet(owner().nodePath()+"InBufSz",i2s(prmStrBuf_SZ),opt->attr("user")));
 	    char buf[inBufSz];
 	    if(!startStat()) start();
 	    MtxAlloc resN(reqRes(), true);
@@ -1284,7 +1287,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 		else answ.append(buf, resp_len);
 
 		bool ToTmOut = (bool)s2i(TBDS::genDBGet(owner().nodePath()+"ToTmOut","0",opt->attr("user")));
-		while(ToTmOut && resp_len > 0 && ((TSYS::curTime()-stm)/1000000) < STD_INTERF_TM) {
+		while(ToTmOut && resp_len > 0 && ((TSYS::curTime()-stm)/1000000) < prmInterf_TM) {
 		    try { resp_len = messIO(NULL, 0, buf, inBufSz); } catch(TError &err) { break; }
 		    answ.append(buf, resp_len);
 		}
@@ -1305,7 +1308,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",R_R___,"root",STR_ID,SEC_RD)) {
 	    MtxAlloc res(mLogRes, true);
 	    time_t stTm = time(NULL);
-	    for(int iL = mLog.size()-1; iL >= 0 && (time(NULL)-stTm) <= STD_WAIT_TM; iL--) {
+	    for(int iL = mLog.size()-1; iL >= 0 && (time(NULL)-stTm) <= prmWait_TM; iL--) {
 		int off = 0;
 		int64_t itTm   = s2ll(TSYS::strLine(mLog[iL],0,&off));
 		string  itDscr = TSYS::strLine(mLog[iL], 0, &off);

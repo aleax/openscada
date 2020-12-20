@@ -39,7 +39,7 @@
 #define MOD_NAME	_("DB DBF")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.4.0"
+#define MOD_VER		"2.4.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DBF files version 3.0.")
 #define LICENSE		"GPL2"
@@ -106,7 +106,7 @@ void MBD::postDisable( int flag )
 
 void MBD::enable( )
 {
-    char buf[STR_BUF_LEN];
+    char buf[prmStrBuf_SZ];
 
     char *rez = getcwd(buf, sizeof(buf));
     if(chdir(addr().c_str()) != 0 && mkdir(addr().c_str(),S_IRWXU|S_IRGRP|S_IROTH) != 0)

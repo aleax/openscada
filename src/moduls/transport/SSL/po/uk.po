@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 3.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-05 19:53+0300\n"
+"POT-Creation-Date: 2020-10-22 16:43+0300\n"
 "PO-Revision-Date: 2008-10-13 19:06+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -75,8 +75,8 @@ msgstr ""
 "Може бути пріоритетно визначено третім глобальним аргументом поля адреси, на "
 "кшталт \"localhost:123||5:1||3\"."
 
-msgid "Error starting: "
-msgstr "Помилка запуску: "
+msgid "Error connecting: "
+msgstr "Помилка під'єднання: "
 
 #, c-format
 msgid ""
@@ -90,11 +90,11 @@ msgstr ""
 msgid "Processing time %s[%s]. "
 msgstr "Час обробки %s[%s]. "
 
-msgid "Started-connected"
-msgstr "Запущено-під'єднано"
+msgid "Connected"
+msgstr "Під'єднано"
 
-msgid "Stopped-disconnected"
-msgstr "Зупинено-від'єднано"
+msgid "Disconnected"
+msgstr "Від'єднано"
 
 #, c-format
 msgid "Error opening the temporary file '%s': '%s'"
@@ -296,14 +296,14 @@ msgid "SSL_CTX_use_PrivateKey_file: %s"
 msgstr ""
 
 #, c-format
-msgid "Error starting: %s"
-msgstr "Помилка запуску: %s"
+msgid "Error connecting: %s"
+msgstr "Помилка під'єднання: %s"
 
 msgid "Unknown error"
 msgstr "Невідома помилка"
 
-msgid "Transport is not started!"
-msgstr "Транспорт не запущено!"
+msgid "Transport is not connected!"
+msgstr "Транспорт не під'єднано!"
 
 #, c-format
 msgid "Error requesting: %s"

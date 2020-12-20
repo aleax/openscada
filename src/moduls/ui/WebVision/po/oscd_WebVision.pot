@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-12 20:13+0300\n"
+"POT-Creation-Date: 2020-10-18 14:52+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -171,6 +171,9 @@ msgid "Field for displaying and changing the used interface style."
 msgstr ""
 
 msgid "Alarm level: %1"
+msgstr ""
+
+msgid "Notificator %1"
 msgstr ""
 
 #, c-format

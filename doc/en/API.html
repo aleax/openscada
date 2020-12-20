@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/API</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint nomobile" dir="ltr" lang="en">This page contains <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Documents/API&amp;oldid=62887&amp;diff=63126" rel="nofollow noreferrer noopener" target="_blank">changes</a></span> which are not marked for translation.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span></div></div>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2012) — the page initial translation</i></font></li>
 <li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a> </li></ul>
@@ -125,7 +125,7 @@ The document is intended for programmers wishing to understand the architecture 
 <li class="toclevel-2 tocsection-63"><a href="#User_object_.28TVarObj.29"><span class="tocnumber">13.7</span> <span class="toctext"><span>User object (TVarObj)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-64"><a href="#The_control_interface_of_the_system_and_the_dynamic_tree_of_the_system_objects_.28TCntrNode.29"><span class="tocnumber">14</span> <span class="toctext"><span>The control interface of the system and the dynamic tree of the system objects (TCntrNode)</span></span></a>
+<li class="toclevel-1 tocsection-64"><a href="#The_control_interface_of_OpenSCADA_and_the_dynamic_tree_of_the_control_nodes_.28TCntrNode.29"><span class="tocnumber">14</span> <span class="toctext"><span>The control interface of OpenSCADA and the dynamic tree of the control nodes (TCntrNode)</span></span></a>
 <ul>
 <li class="toclevel-2 tocsection-65"><a href="#The_syntax_of_the_request_and_response_of_the_control_interface"><span class="tocnumber">14.1</span> <span class="toctext">The syntax of the request and response of the control interface</span></a></li>
 <li class="toclevel-2 tocsection-66"><a href="#Tag_of_the_information_structure_for_describing_the_groups_of_child_branches_of_the_page"><span class="tocnumber">14.2</span> <span class="toctext">Tag of the information structure for describing the groups of child branches of the page</span></a></li>
@@ -263,15 +263,7 @@ Information variables of the program:
 <li> <i>int64_t tm_beg, tm_end, tm_per, tm_pnt, cycleLost, lagMax, consMax;</i> — statistic variables of the task execution.</li></ul>
 <p><b>Templates/definitions:</b>
 </p>
-<ul><li> <i>USER_FILE_LIMIT</i> — The limit to files size for user's loading (1 MB).</li>
-<li> <i>USER_ITS_LIMIT</i> — Creating user items limit, like to array items (1000000).</li>
-<li> <i>STR_BUF_LEN</i> — Standard length of string buffers (10000).</li>
-<li> <i>NSTR_BUF_LEN</i> — Standard length of string buffers, for numbers (100). </li>
-<li> <i>STD_WAIT_DELAY</i> — Standard quantum of the waiting time cycles (100 milliseconds).</li>
-<li> <i>STD_CACHE_LIM</i> — Standard cache limit (100).</li>
-<li> <i>STD_WAIT_TM</i> — Standard interval of the event waiting (10 milliseconds).</li>
-<li> <i>STD_INTERF_TM</i> — Timeout, maximum time, waiting for the interface reaction (5 seconds).</li>
-<li> <i>SERV_TASK_PER</i> — Service task period (10 seconds)</li>
+<ul><li> <i>NSTR_BUF_LEN</i> — Length of string buffers for numbers (50 symbols).</li>
 <li> <i>BUF_ARCH_NM</i> — The archive buffer name ("&lt;buffer&gt;").</li>
 <li> <i>ALRM_ARCH_NM</i> — The alarms table name ("&lt;alarms&gt;").</li>
 <li> <i>ALRM_ARCH_CH_NM</i> — The alarms table name ("&lt;alarmsChange&gt;") just for changing.</li>
@@ -280,7 +272,7 @@ Information variables of the program:
 <li> <i>vmax (a,b)</i> — Definition of the maximum value.</li></ul>
 <p><b>Public methods:</b>
 </p>
-<ul><li> <i>TSYS( int argi, char **argb, char **env );</i> — The initializing constructor.</li>
+<ul><li> <i>TSYS( int argi, char **argb, char **env );</i> — The initialisation constructor.</li>
 <li> <i>bool isRunning( );</i> — Sign of the station running state — executing the main threaded module or waiting the stop signal.</li>
 <li> <i>bool isFinalKill( );</i> — Sign "The final killing of". It is used for forced disconnection of blocked objects on the the final stage of shutdown.</li>
 <li> <i>int stopSignal( );</i> — The return code in the case of system shutdown. Can be used as a sign of "System shutdown" of the various subsystems. </li>
@@ -345,6 +337,7 @@ Information variables of the program:
 <li> <i>static long HZ( );</i> — Time of the system teak  of the CPU.</li>
 <li> <i>void taskCreate( const string &amp;path, int priority, void *(*start_routine)(void *), void *arg, int wtm = 5, pthread_attr_t *pAttr = NULL, bool *startSt = NULL );</i> — Create task (thread) with id <i>path</i>, <i>priority</i> (-1...99), task's function <i>start_routine</i> and it argument <i>arg</i>, and also wait for user's code start by flag <i>startSt</i>.</li>
 <li> <i>void taskDestroy( const string &amp;path, bool *endrunCntr = NULL, int wtm = 5, bool noSignal = false );</i> — Destroy task with id <i>path</i>, start control flag <i>startCntr</i>. Use <i>noSignal</i> for exclude signal <i>SIGALRM</i> send to the task.</li>
+<li> <i>void taskSendSIGALRM( const string &amp;path );</i> — Sending the termination signal "ALARM" to a task with id <i>path</i>.</li>
 <li> <i>double taskUtilizTm( const string &amp;path, bool max = false );</i> — Utilization of CPU time, in seconds, for task <i>path</i> or it's maximum <i>max</i>.</li>
 <li> <i>static bool taskEndRun( );</i> — Check for the task endrun by signal <i>SIGUSR1</i>.</li>
 <li> <i>static const STask&amp; taskDescr( );</i> — Get reference to the task's descriptor.</li>
@@ -1149,7 +1142,8 @@ Structure of template links (class — TPrmTempl::Impl::SLnk):
 </p>
 <ul><li> <i>BothPrmAttrId</i> — combining the parameter and the attribute ID.</li>
 <li> <i>OnlyPrmId</i> — only the parameter ID.</li>
-<li> <i>OnlyAttrId</i> — only the attribute ID.</li></ul>
+<li> <i>OnlyAttrId</i> — only the attribute ID.</li>
+<li> <i>AllCntrPrmAttrId</i> — all controller, parameter and attribute ID.</li></ul>
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>int subVer( );</i> — Subsystem's version.</li>
@@ -1214,7 +1208,7 @@ The data acquisition mode/source (struct — TVArchive::SrcMode):
 <li> <i>string srcData( );</i> — Parameters of the data source, in the case of access mode to the parameter this is the address of the parameter.</li>
 <li> <i>bool toStart( );</i> — Sign: "Start the archive when starting the system".</li>
 <li> <i>bool startStat( );</i> — Status: "Archive started".</li>
-<li> <i>string DB( );</i> — DB address of the values' archive.</li>
+<li> <i>string DB( ) const;</i> — DB address of the values' archive.</li>
 <li> <i>string tbl( );</i> — DB table of the values' archive.</li>
 <li> <i>string fullDB( );</i> — Full name of the DB table of the values' archive.</li>
 <li> <i>int64_t end( const string &amp;arch = BUF_ARCH_NM );</i> — End of the archive time at whole (arch="") or the specified archiver, buffer (arch="&lt;bufer&gt;").</li>
@@ -1345,7 +1339,7 @@ The data acquisition mode/source (struct — TVArchive::SrcMode):
 <li> <i>string &amp;addr( ) const;</i> — Address of the archiver's storage.</li>
 <li> <i>int &amp;level( );</i> — The level of messages, serviced by the archiver.</li>
 <li> <i>void categ( vector&lt;string&gt; &amp;list );</i> — Categories (templates) of messages, serviced by the archiver.</li>
-<li> <i>string DB( );</i> — DB address of the archiver.</li>
+<li> <i>string DB( ) const;</i> — DB address of the archiver.</li>
 <li> <i>string tbl( );</i> — Table address of the archiver's DB.</li>
 <li> <i>string fullDB( );</i> — The full table address of the archiver's DB.</li>
 <li> <i>void setName( const string &amp;vl );</i> — Setting the archiver's name.</li>
@@ -1400,7 +1394,7 @@ The data acquisition mode/source (struct — TVArchive::SrcMode):
 <li> <i>int selPrior( );</i> — Selection priority for mode "All" archivers.</li>
 <li> <i>bool toStart( );</i> — The sign "To start the archiver".</li>
 <li> <i>bool startStat( );</i> — Archivers' status "Run".</li>
-<li> <i>string DB( );</i> — DB address of the archiver.</li>
+<li> <i>string DB( ) const;</i> — DB address of the archiver.</li>
 <li> <i>string tbl( );</i> — Table address of the archiver's DB.</li>
 <li> <i>string fullDB( );</i> — The full table address of the archiver's DB.</li>
 <li> <i>void setName( const string &amp;inm );</i> — Setting the archiver's name.</li>
@@ -1600,6 +1594,7 @@ External hosts mode (enum — ExtHost::Mode):
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>TTransportOut( const string &amp;id, const string &amp;db, TElem *el );</i> — Initializing constructor.</li>
+<li> <i>virtual bool isNetwork( );</i> — The sign — "The transport is network one", what is specified by the timeouts in seconds.</li>
 <li> <i>string id( );</i> — Transport's Id.</li>
 <li> <i>string workId( );</i> — Full ID including the ID of the module.</li>
 <li> <i>string name( );</i> — Transport name.</li>
@@ -1618,7 +1613,7 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>void setName( const string &amp;inm );</i> — Setting the name of transport.</li>
 <li> <i>void setDscr( const string &amp;idscr );</i> — Setting the description of transport.</li>
 <li> <i>void setAddr( const string &amp;addr );</i> — Setting the address of transport.</li>
-<li> <i>virtual void setTimings( const string &amp;vl );</i> — Setting the transport timeouts.</li>
+<li> <i>virtual void setTimings( const string &amp;vl, bool isDef = false );</i> — Setting the transport timeouts, as default one for <i>isDef</i>.</li>
 <li> <i>virtual void setAttempts( unsigned short vl );</i> — Setting the connection attempts.</li>
 <li> <i>void setConPrm( const string &amp;nm, const TVariant &amp;vl );</i> — Setting the connection parameter <i>nm</i> to value <i>vl</i>.</li>
 <li> <i>void clearConPrm( );</i> — Clearing the connection parameters.</li>
@@ -1972,6 +1967,7 @@ Parameter's type (enum — IO::Type):
 <li> <i>bool blk( );</i> — The sign — "Blocking of the parameters' changes of the function".</li>
 <li> <i>bool mdfChk( );</i> — The sign — "To check attributes to modify".</li>
 <li> <i>bool isChangedProg( bool clear = false );</i> — The sign — "The program changing" with it clearing by <i>clear</i>.</li>
+<li> <i>bool isCalc( );</i> — The sign — "The function calculation".</li>
 <li> <i>string user( );</i> — User on whose behalf the function is executed.</li>
 <li> <i>string lang( );</i> — Language on whose the function is executed.</li>
 <li> <i>const string &amp;vfName( );</i> — Name of the values' object.</li>
@@ -2277,7 +2273,7 @@ Error values for the different data types (define):
 <li> <i>virtual string getStrXML( const string &amp;oid = "" );</i> — Conversion of the contents of the object in the XML flow.</li>
 <li> <i>static AutoHD&lt;TVarObj&gt; parseStrXML( const string &amp;str, XMLNode *nd = NULL, AutoHD&lt;TVarObj&gt; prev = NULL );</i> — Backward serialization for XML-stream to object.</li>
 <li> <i>virtual TVariant funcCall( const string &amp;id, vector&lt;TVariant&gt; &amp;prms );</i> — Call of the object function with the ID <i>id</i> and with the parameters <i>prms</i>.</li></ul>
-<h2><span class="mw-headline" id="The_control_interface_of_the_system_and_the_dynamic_tree_of_the_system_objects_.28TCntrNode.29"><span class="mw-headline-number">14</span> <span id="CntrNode" title="#CntrNode">The control interface of the system and the dynamic tree of the system objects (TCntrNode)</span></span></h2>
+<h2><span class="mw-headline" id="The_control_interface_of_OpenSCADA_and_the_dynamic_tree_of_the_control_nodes_.28TCntrNode.29"><span class="mw-headline-number">14</span> <span id="CntrNode" title="#CntrNode">The control interface of OpenSCADA and the dynamic tree of the control nodes (TCntrNode)</span></span></h2>
 <p>For complete coverage of the key components of the system by the network of the same structure objects the object of the dynamic tree node TCntrNode is provided. This objects provides the following functions:
 </p>
 <ul><li> providing of the uniform access to system components, including the blocks of the dynamic access;</li>
@@ -4126,5 +4122,5 @@ extern "C"
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2020</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.2</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">December 2020</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.3</td></tr></table></body>
 </html>

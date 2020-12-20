@@ -251,7 +251,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	    }
 	    if(ctrMkNode("area",opt,-1,"/tmpl/cfg",_("Configuration"))) {
 		ctrMkNode("fld",opt,-1,"/tmpl/cfg/ID",_("Identifier"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/tmpl/cfg/NAME",_("Name"),RWRWR_,"root",SDAQ_ID,2,"tp","str","len",OBJ_NM_SZ);
+		ctrMkNode("fld",opt,-1,"/tmpl/cfg/NAME",_("Name"),RWRWR_,"root",SDAQ_ID,2,"tp","str","len",i2s(limObjNm_SZ).c_str());
 		ctrMkNode("fld",opt,-1,"/tmpl/cfg/DESCR",_("Description"),RWRWR_,"root",SDAQ_ID,3,"tp","str","cols","100","rows","4");
 		ctrMkNode("fld",opt,-1,"/tmpl/cfg/MAXCALCTM",_("Maximum calculate time, seconds"),(startStat()?R_R_R_:RWRWR_),"root",SDAQ_ID,3,"tp","dec","min","0","max","3600");
 	    }
@@ -902,7 +902,7 @@ void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
 	XMLNode *nd = ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter templates library: ")+id(),RWRWR_,"root",SDAQ_ID);
 	if(nd)	nd->setAttr("doc", TUIS::docKeyGet(descr()));
 	if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
-	    ctrMkNode("grp",opt,-1,"/br/tmpl_",_("Template"),RWRWR_,"root",SDAQ_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
+	    ctrMkNode("grp",opt,-1,"/br/tmpl_",_("Template"),RWRWR_,"root",SDAQ_ID,2,"idm",i2s(limObjNm_SZ).c_str(),"idSz",i2s(limObjID_SZ).c_str());
 	if(ctrMkNode("area",opt,-1,"/lib",_("Library"))) {
 	    if(ctrMkNode("area",opt,-1,"/lib/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/lib/st/st",_("Accessible"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
@@ -913,13 +913,13 @@ void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
 	    }
 	    if(ctrMkNode("area",opt,-1,"/lib/cfg",_("Configuration"))) {
 		ctrMkNode("fld",opt,-1,"/lib/cfg/ID",_("Identifier"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/lib/cfg/NAME",_("Name"),RWRWR_,"root",SDAQ_ID,2,"tp","str","len",OBJ_NM_SZ);
+		ctrMkNode("fld",opt,-1,"/lib/cfg/NAME",_("Name"),RWRWR_,"root",SDAQ_ID,2,"tp","str","len",i2s(limObjNm_SZ).c_str());
 		ctrMkNode("fld",opt,-1,"/lib/cfg/DESCR",_("Description"),RWRWR_,"root",SDAQ_ID,3,"tp","str","cols","100","rows","3");
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/tmpl",_("Parameter templates")))
 	    ctrMkNode("list",opt,-1,"/tmpl/tmpl",_("Templates"),RWRWR_,"root",SDAQ_ID,5,
-		"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","tmpl_","idSz",OBJ_ID_SZ);
+		"tp","br","idm",i2s(limObjNm_SZ).c_str(),"s_com","add,del","br_pref","tmpl_","idSz",i2s(limObjID_SZ).c_str());
 	return;
     }
 

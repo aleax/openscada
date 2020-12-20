@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-05 19:53+0300\n"
+"POT-Creation-Date: 2020-10-22 16:43+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,7 +48,7 @@ msgid ""
 "Can be prioritatile specified into the address field as the third global argument, as such \"localhost:123||5:1||3\"."
 msgstr ""
 
-msgid "Error starting: "
+msgid "Error connecting: "
 msgstr ""
 
 #, c-format
@@ -59,10 +59,10 @@ msgstr ""
 msgid "Processing time %s[%s]. "
 msgstr ""
 
-msgid "Started-connected"
+msgid "Connected"
 msgstr ""
 
-msgid "Stopped-disconnected"
+msgid "Disconnected"
 msgstr ""
 
 #, c-format
@@ -241,13 +241,13 @@ msgid "SSL_CTX_use_PrivateKey_file: %s"
 msgstr ""
 
 #, c-format
-msgid "Error starting: %s"
+msgid "Error connecting: %s"
 msgstr ""
 
 msgid "Unknown error"
 msgstr ""
 
-msgid "Transport is not started!"
+msgid "Transport is not connected!"
 msgstr ""
 
 #, c-format

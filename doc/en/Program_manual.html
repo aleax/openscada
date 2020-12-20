@@ -242,12 +242,12 @@
 <p>Since OpenSCADA is highly scalable, communication support should be sufficiently flexible, for which it is implemented in the "Transports" and "Transport protocols" subsystems (Fig.1.6), which are modular ones.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:293px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_subsys_tr_str.png"><img class="thumbimage" height="296" src="files/Oscada_subsys_tr_str.png" width="291" /></a>  <div class="thumbcaption">Fig. 1.6. Hierarchical structure of the subsystem "Transports" and "Protocols".</div></div></div></div>
-<p>The "Transport" subsystem is intended to provide for the exchange of unstructured data between OpenSCADA and external systems, in the role of which remote stations OpenSCADA may also serve. Under unstructured data means the stream of characters of a certain length. Modular object contained in the "Transport" subsystem is a type of transport that determines the mechanism for the transmission of unstructured data. For example, their may be and are:
+<p>The "Transports" subsystem is intended to provide for the exchange of unstructured data between OpenSCADA and external systems, in the role of which remote stations OpenSCADA may also serve. Under unstructured data means the stream of characters of a certain length. Modular object contained in the "Transports" subsystem is a type of transport that determines the mechanism for the transmission of unstructured data. For example, their may be and are:
 </p>
 <ul><li> <a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">sockets (TCP/UDP/UNIX)</a>;</li>
 <li> <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">serial interfaces</a>;</li>
 <li> <a href="Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">encrypted channels</a>.</li></ul>
-<p>The subsystem "Transport" includes support for input and output transports. Input transports are designed to serve external requests and send replies. Output transports, by contrast, are designed to send messages and wait for a responses. Therefore, input transports contain configuration of local station, as a listening server, and output transports contain configuration of a remote server to connect. That sort of specialization is typical for the "request-response" mechanism, however, currently input and output transports support the independent transmission and reception of data. Modules of the subsystem "Transports" implement support for both input and output transports.
+<p>The subsystem "Transports" includes support for input and output transports. Input transports are designed to serve external requests and send replies. Output transports, by contrast, are designed to send messages and wait for a responses. Therefore, input transports contain configuration of local station, as a listening server, and output transports contain configuration of a remote server to connect. That sort of specialization is typical for the "request-response" mechanism, however, currently input and output transports support the independent transmission and reception of data. Modules of the subsystem "Transports" implement support for both input and output transports.
 </p><p>The "Transport protocols" subsystem is designed to structure data received from the "Transports" subsystem, why has the name, is a continuation of the subsystem "Transports" and performs functions of checking structure and integrity of received data. In global notation, this subsystem contains and implements <b>COMMUNICATION</b> protocols! A special configuration field is provided to determine protocol with which transport must operate. Modular object contained in the "Protocols" subsystem is protocol itself. For example, transport protocols can be and are:
 </p>
 <ul><li> <a href="Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">self OpenSCADA protocol</a>;</li>
@@ -610,7 +610,7 @@
 </p>
 <ul><li> <i>Identifier</i> — identifier of the external station.</li>
 <li> <i>Name</i> — name of the external host.</li>
-<li> <i>Transport</i> — selection of a module of the "Transport" subsystem from the list to use it for access to an external station.</li>
+<li> <i>Transport</i> — selection of a module of the "Transports" subsystem from the list to use it for access to an external station.</li>
 <li> <i>Address</i> — address of the external station in format, specific to the module of the subsystem "Transports" selected in the previous field.</li>
 <li> <i>User</i> — name/identifier of the user of the external station on behalf of whom to perform the connection.</li>
 <li> <i>Password</i> — password of the user of the external station.</li>
@@ -627,8 +627,8 @@
 <p>Each transport contains its own configuration page with the tab "Transport". This tab contains basic transport settings. <span id="TransportIn" title="#TransportIn">Input transport</span> (Fig.4.3c) contains:
 </p>
 <ul><li> Section "State" — contains the settings that characterize the state of the transport:
-<ul><li> <i>Status</i> — information on the current transport's status and statistics of its work. Most modules provide advanced diagnostics in this field when enabled with <a href="#Config">the debuging mode</a>.</li>
-<li> <i>Running</i> — state of the transport — "Running".</li>
+<ul><li> <i>Status</i> — information on the current transport's status and statistics of its work. Most modules provide advanced diagnostics in this field when enabled with <a href="#Config">the debugging mode</a>.</li>
+<li> <i>Connect</i> — operative state/command of the transport.</li>
 <li> <i>Transport DB</i> — DB address to store the transport's data.</li>
 <li> <i>Active connections</i> — active and actual connections list of the input transport.</li></ul></li>
 <li> Section "Configuration" — directly contains the configuration fields:
@@ -637,20 +637,20 @@
 <li> <i>Description</i> — brief description of the transport and its appointment.</li>
 <li> <i>Address</i> — transport address in a specific type of transport (module) format. Description of the format of the address of the transport, as a rule, is available in the tooltip for this field.</li>
 <li> <i>Transport protocol</i> — indicates the transport protocol modules (the subsystem "Transport protocols") those should work in conjunction with the input transport. That is, received unstructured data this module will sent to the structuring and processing to the specified modules of the transport protocol.</li>
-<li> <i>To start</i> — indicates the state "Running", in which to transfer the transport at startup.</li></ul></li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:949px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_tr_mod_tr_itr.png"><img class="thumbimage" height="806" src="files/QTCfg_subsys_tr_mod_tr_itr.png" width="947" /></a>  <div class="thumbcaption">Fig. 4.3c. The tab "Transport" of the page of an input transport of the module of the subsystem "Transports".</div></div></div></div>
+<li> <i>To connect</i> — indicates the state/command "Connect", in which to transfer the transport at startup.</li></ul></li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:926px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_in.png"><img class="thumbimage" height="824" src="files/Sockets_in.png" width="924" /></a>  <div class="thumbcaption">Fig. 4.3c. The tab "Transport" of the page of an input transport of the module of the subsystem "Transports".</div></div></div></div>
 <p><span id="TransportOut" title="#TransportOut">Output transport</span> (Fig.4.3d) contains:
 </p>
 <ul><li> Section "State" — contains the settings that characterize the state of the transport:
 <ul><li> <i>Status</i> — information on the current transport's status and statistics of its work. Most modules provide advanced diagnostics in this field when enabled with <a href="#Config">the debuging mode</a>.</li>
-<li> <i>Running</i> — state of the transport "Running". Given the network nature of the transports, this state often involves connecting to a remote network node and accordingly reflecting the fact that the connection is present. For output transports, there is no need for the user to be obliged to set this state because it is used by an external entity of the communication protocols, often by the data sources, that try to start the transport beforehand, so by establishing a connection for further exchange, moreover, the transport may be stopped by that entity.</li>
+<li> <i>Connect</i> — operative state/command of the transport. Given the network nature of the transports, this state often involves connecting to a remote network node and accordingly reflecting the fact that the connection is present. For output transports, there is no need for the user to be obliged to set this state because it is used by an external entity of the communication protocols, often by the data sources, that try to connect the transport beforehand, so by establishing a connection for further exchange, moreover, the transport may be disconnected by that entity.</li>
 <li> <i>Transport DB</i> — DB address to store the transport's data.</li></ul></li>
 <li> Section "Configuration" — directly contains the configuration fields:
 <ul><li> <i>Identifier</i> — information on the transport's identifier.</li>
 <li> <i>Name</i> — specifies the transport's name.</li>
 <li> <i>Description</i> — brief description of the transport and its appointment.</li>
 <li> <i>Address</i> — transport address in a specific type of transport (module) format. Description of the format of the address of the transport, as a rule, is available in the tooltip for this field.</li></ul></li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:811px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_tr_mod_tr_otr.png"><img class="thumbimage" height="622" src="files/QTCfg_subsys_tr_mod_tr_otr.png" width="809" /></a>  <div class="thumbcaption">Fig. 4.3d. The tab "Transport" of the page of an output transport of the module of the subsystem "Transports".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:779px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_out.png"><img class="thumbimage" height="621" src="files/Sockets_out.png" width="777" /></a>  <div class="thumbcaption">Fig. 4.3d. The tab "Transport" of the page of an output transport of the module of the subsystem "Transports".</div></div></div></div>
 <p>Output transport, in addition, provides a tab of forming user requests via this transport (Fig.4.3e). The tab is provided for debugging of communications and communication protocols, and includes:
 </p>
 <ul><li> <i>Time</i> — information about the time spent on the request and the response.</li>
@@ -1509,6 +1509,25 @@ RdTaskPer  &lt;seconds&gt;    Call period of the redundancy task.
 RdRestConnTm &lt;seconds&gt;  Time to restore connection to "dead" reserve station.
 RdStList   &lt;list&gt;       Redundant stations list, separated symbol ';' (st1;st2).
 RdPrimCmdTr &lt;0|1&gt;       Enables the transmission of primary commands to the reserve stations.
+    Global configurable limits:
+limObjID_SZ     [*20..50] ID size of the OpenSCADA objects.
+                WARNING! Big size can cause the key limit error on MySQL like DB!
+                         Change that once before use on DBs with the fixed type "char({N})"!
+limObjNm_SZ     [*100...200] NAME size of the OpenSCADA objects.
+                WARNING! Change that once before use on DBs with the fixed type "char({N})"!
+limArchID_SZ    [*50...90] ID size of the value archive objects.
+                WARNING! Increase it only, else you can get problems on Archive.FSArch!
+                         Change that once before use on DBs with the fixed type "char({N})"!
+limUserFile_SZ  [1MB...*10MB...1000MB] The files size limit at loading and processing in the userspace
+                and the part size of the big files transferring.
+limUserIts_N    [1000...*1000000...1000000000] The limit on count of creating user items, like to array items.
+limCacheIts_N   [*100...100000] The limit on count of the caching items.
+    Global configurable parameters:
+prmStrBuf_SZ    [1000...*10000...1000000] Length of string buffers, no string class.
+prmWait_DL      [0.001...*0.1...1] Quantum of the waiting time cycles, seconds.
+prmWait_TM      [*5...10] Standard waiting timeout length, seconds.
+prmInterf_TM    [*7...15] Time of waiting for the interface reaction, seconds.
+prmServTask_PER [1...*10...120] Service task period, seconds.
 
 ========================= Subsystem "DB" options ========================
 ------ Parameters of the section '/sub_BD/' of the configuration file ------
@@ -1791,5 +1810,5 @@ openscada-proj backupList {ProjName}
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/en">Documents/Program_manual/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2020</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.2</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/en">Documents/Program_manual/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">December 2020</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.3</td></tr></table></body>
 </html>

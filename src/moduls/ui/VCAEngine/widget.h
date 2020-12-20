@@ -239,7 +239,7 @@ class Widget : public TCntrNode
 
 	// Data access
 	virtual void resourceList( vector<string> &ls )	{ }
-	virtual string resourceGet( const string &id, string *mime = NULL )	{ return ""; }
+	virtual string resourceGet( const string &id, string *mime = NULL, int off = -1, int *size = NULL )	{ return ""; }
 
 	// Context helps
 	static string helpImg( );

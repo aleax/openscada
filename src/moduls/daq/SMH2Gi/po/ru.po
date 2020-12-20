@@ -1,16 +1,15 @@
 # OpenSCADA.DAQ.SMH2Gi translate to Russian.
-# Copyright (C) 2012 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.DAQ.SMH2Gi package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2012-2013, 2018.
+# Roman Savochenko <roman@oscada.org>, 2012-2013, 2018-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.SMH2Gi 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-27 20:19+0300\n"
+"POT-Creation-Date: 2020-12-16 10:06+0200\n"
 "PO-Revision-Date: 2012-10-31 10:21+0200\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -26,7 +25,8 @@ msgid ""
 "Data acquisition and control by Segnetics SMH2Gi and SMH4 hardware "
 "interfaces and modules."
 msgstr ""
-"Сбор данных и управление аппаратными интерфейсами и модулями Segnetics и SMH4."
+"Сбор данных и управление аппаратными интерфейсами и модулями Segnetics и "
+"SMH4."
 
 msgid "Shared memory parameters"
 msgstr "Параметры разделяемой памяти"
@@ -76,6 +76,7 @@ msgstr "Следующий сбор по cron '%s'. "
 msgid "Spent time: %s."
 msgstr "Затрачено времени: %s."
 
+#, c-format
 msgid "Error opening GPIO %s for MC reset."
 msgstr "Ошибка открытия GPIO %s для сброса MC."
 
@@ -90,19 +91,18 @@ msgstr "Автоматически созданный транспорт Segneti
 msgid "ModBUS REQ -> '%s': %s"
 msgstr "ModBUS Запрос -> '%s': %s"
 
-msgid "13:Error respond: Too short."
-msgstr "13:Ошибка ответа: Очень короткий."
+msgid "13:Error respond: Too short: %s."
+msgstr "13:Ошибка ответа: Очень короткий: %s."
 
-msgid "13:Error respond: CRC check error."
-msgstr "13:Ошибка ответа: Ошибка проверки CRC."
+msgid "13:Error respond: CRC error: %s."
+msgstr "13:Ошибка ответа: Ошибка CRC: %s."
 
 #, c-format
 msgid "ModBUS RESP -> '%s': %s"
 msgstr "ModBUS Ответ -> '%s': %s"
 
-#, c-format
-msgid "ModBUS ERR -> %s: %s"
-msgstr "ModBUS Ошибка -> %s: %s"
+msgid "ModBUS ERR -> '%s': %s"
+msgstr "ModBUS Ошибка -> '%s': %s"
 
 msgid "Set <0 for disable the reset."
 msgstr "Установить <0 для отключения сброса."
@@ -156,8 +156,7 @@ msgstr "Ошибка отправки тюн-запроса: %s."
 msgid "20:PDU short."
 msgstr "20:PDU короткий."
 
-msgid ""
-"21:Position lost. Need reload MR/MC bus - re-enable the controller object."
+msgid "21:Position lost. Need reload MR/MC bus - re-enable the controller object."
 msgstr ""
 "21:Потеря позиции. Необходима перегрузка MR/MC шины - переподключение "
 "объекта контроллера."
@@ -195,11 +194,12 @@ msgstr "Инверсия дискретных сигналов"
 
 #, c-format
 msgid "DI %d"
-msgstr ""
+msgstr "DI %d"
 
 #, c-format
 msgid "DO %d"
-msgstr ""
+msgstr "DO %d"
 
 msgid "<No select>"
 msgstr "<Не выбрано>"
+

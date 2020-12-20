@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.2.0"
+#define MOD_VER		"1.4.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -86,16 +86,16 @@ TWEB::TWEB( string name ) : TUI(MOD_ID), mDefPg("*")
     mPgU = grpAdd("up_");
 
     //User page DB structure
-    mUPgEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
-    mUPgEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
+    mUPgEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    mUPgEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
     mUPgEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
     mUPgEl.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0") );
     mUPgEl.fldAdd(new TFld("PROG",_("Procedure"),TFld::String,TFld::FullText|TFld::TransltText,"1000000"));
     mUPgEl.fldAdd(new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec));
 
     //User page data IO DB structure
-    mUPgIOEl.fldAdd(new TFld("PG_ID",_("User page ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
-    mUPgIOEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    mUPgIOEl.fldAdd(new TFld("PG_ID",_("User page ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    mUPgIOEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
     mUPgIOEl.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TFld::TransltText,"100"));
 }
 
@@ -259,7 +259,6 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
     SSess ses(TSYS::strDecode(url,TSYS::HttpURL), sender, user, vars, page);
 
     try {
-	TValFunc funcV;
 	//Find user protocol for using
 	vector<string> upLs;
 	uPgList(upLs);
@@ -293,11 +292,11 @@ void TWEB::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TUI::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/up_",_("User WWW-page"),RWRWR_,"root",SUI_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
+	ctrMkNode("grp",opt,-1,"/br/up_",_("User WWW-page"),RWRWR_,"root",SUI_ID,2,"idm",i2s(limObjNm_SZ).c_str(),"idSz",i2s(limObjID_SZ).c_str());
 	if(ctrMkNode("area",opt,-1,"/prm/up",_("User WWW-pages"))) {
 	    ctrMkNode("fld",opt,-1,"/prm/up/dfPg",_("Default WWW-page"),RWRWR_,"root",SUI_ID,4,"tp","str","idm","1","dest","select","select","/prm/up/cup");
 	    ctrMkNode("list",opt,-1,"/prm/up/up",_("WWW-pages"),RWRWR_,"root",SUI_ID,5,
-		"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","up_","idSz",OBJ_ID_SZ);
+		"tp","br","idm",i2s(limObjNm_SZ).c_str(),"s_com","add,del","br_pref","up_","idSz",i2s(limObjID_SZ).c_str());
 	}
 	return;
     }
@@ -413,7 +412,7 @@ void UserPg::HTTP( const string &req, SSess &s, TProtocolIn *iprt )
 	inputLinks();
 	setS(ioHTTPreq, req);
 	setS(ioUrl, s.url);
-	setS(ioPage, s.page);
+	setS(ioPage, s.content/*page*/);
 	if(ioSender >= 0) setS(ioSender, s.sender);
 	if(ioUser >= 0) setS(ioUser, s.user);
 	setO(ioHTTPvars, new TVarObj());
@@ -455,7 +454,7 @@ void UserPg::HTTP( const string &req, SSess &s, TProtocolIn *iprt )
 	for(unsigned iL = 0; iL < sls.size(); iL++) {
 	    tstr = hVars.at().propGet(sls[iL]).getS();
 	    if(sls[iL] == "Date" || sls[iL] == "Server" || sls[iL] == "Accept-Ranges" || sls[iL] == "Content-Length" ||
-		((prmEl=s.vars.find(sls[iL])) != s.vars.end() && prmEl->second == tstr)) continue;
+		(sls[iL] != "Content-Type" && (prmEl=s.vars.find(sls[iL])) != s.vars.end() && prmEl->second == tstr)) continue;
 	    if(sls[iL] == "Content-Type") cTp = true;
 	    httpIt += sls[iL] + ": " + tstr + "\x0D\x0A";
 	}
@@ -756,7 +755,7 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
     //URL parameters parse
     size_t prmSep = iurl.find("?");
     if(prmSep != string::npos) {
-	url = iurl.substr(0,prmSep);
+	url = iurl.substr(0, prmSep);
 	string prms = iurl.substr(prmSep+1);
 	string sprm;
 	for(int iprm = 0; (sprm=TSYS::strSepParse(prms,0,'&',&iprm)).size(); ) {
@@ -786,7 +785,7 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
     if(boundary.empty()) return;
 
     for(pos = 0; true; ) {
-	pos = content.find(boundary,pos);
+	pos = content.find(boundary, pos);
 	if(pos == string::npos || content.compare(pos+boundary.size(),2,c_end) == 0) break;
 	pos += boundary.size()+strlen(c_term);
 

@@ -31,7 +31,7 @@
 #define MOD_NAME	_("DB FireBird")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.5.1"
+#define MOD_VER		"2.5.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DBMS FireBird.")
 #define LICENSE		"GPL2"
@@ -377,7 +377,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 			    ISC_QUAD blob_id = *((ISC_QUAD*)var.sqldata);
 			    ISC_STATUS blob_stat;
 			    isc_blob_handle blob_handle = 0;
-			    char blob_segment[STR_BUF_LEN];
+			    char blob_segment[prmStrBuf_SZ];
 			    unsigned short actual_seg_len;
 			    string bval;
 			    isc_open_blob2(status, &hdb, &trans, &blob_handle, &blob_id, 0, NULL);

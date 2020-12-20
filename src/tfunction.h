@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tfunction.h
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -172,6 +172,7 @@ class TValFunc
 	bool blk( )				{ return mBlk; }
 	bool mdfChk( )				{ return mMdfChk; }
 	bool isChangedProg( bool clear = false ) { bool mPrgCh_ = mPrgCh; if(clear) mPrgCh = false; return mPrgCh_; }
+	bool isCalc( )				{ return mCalc; }
 
 	string user( )				{ return mUser; }
 	string lang( )				{ return mLang; }
@@ -267,6 +268,7 @@ class TValFunc
 	unsigned short	mBlk	:1;	//Blocked values screen
 	unsigned short	mMdfChk	:1;	//Checking for the IO modification
 	unsigned short	mPrgCh	:1;	//Changing the program text
+	unsigned short	mCalc	:1;	//Calculating
 
 	TFunction	*mFunc;
 	map<int, TValFunc* >	vctx;

@@ -1150,7 +1150,7 @@ void ShapeFormEl::buttonReleased( )
 		mod->postMess(mod->nodePath().c_str(), QString(_("Error opening the file '%1': %2")).arg(fn).arg(file.errorString()), TVision::Error);
 		break;
 	    }
-	    if(file.size() >= USER_FILE_LIMIT) {
+	    if(file.size() >= limUserFile_SZ) {
 		mod->postMess(mod->nodePath().c_str(), QString(_("The download file '%1' is very large.")).arg(fn), TVision::Error);
 		break;
 	    }
@@ -1598,7 +1598,7 @@ void ShapeMedia::clear( WdgView *w )
 	    lab->clear();
 	}
 #ifdef HAVE_PHONON
-	if(shD->mediaType == FM_FULL_VIDEO) { lab->deleteLater(); shD->addrWdg = NULL; }
+	if(shD->mediaType == FM_VIDEO || shD->mediaType == FM_AUDIO) { lab->deleteLater(); shD->addrWdg = NULL; }
 #endif
     }
 
@@ -1705,7 +1705,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 	case A_MediaSpeedPlay:
 	    switch(shD->mediaType) {
 		case FM_IMG: case FM_ANIM: shD->mediaSpeed = s2i(val);	break;
-		case FM_FULL_VIDEO: shD->videoPlay = (bool)s2i(val);	break;
+		case FM_VIDEO: case FM_AUDIO: shD->videoPlay = (bool)s2i(val);	break;
 	    }
 	    if((lab=dynamic_cast<QLabel*>(shD->addrWdg))) {
 		if(!lab->movie()) break;
@@ -1816,16 +1816,16 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 			QImage img = lab->movie()->currentImage();
 			lab->movie()->setScaledSize(QSize((int)((float)img.width()*w->xScale(true)),(int)((float)img.height()*w->yScale(true))));
 		    }
-		}else lab->setText("");
+		} else lab->setText("");
 		break;
 	    }
 #ifdef HAVE_PHONON
-	    case FM_FULL_VIDEO: {
+	    case FM_VIDEO: case FM_AUDIO: {
 		//Clear previous movie data
 		clear(w);
 		//Create player widget
 		if(!shD->addrWdg) {
-		    shD->addrWdg = new VideoPlayer(Phonon::VideoCategory, w);
+		    shD->addrWdg = new VideoPlayer((shD->mediaType==FM_AUDIO)?Phonon::MusicCategory:Phonon::VideoCategory, w);
 		    connect(shD->addrWdg, SIGNAL(finished()), this, SLOT(mediaFinished()));
 		    ((VideoPlayer*)shD->addrWdg)->videoWidget()->installEventFilter(w);
 		    mk_new = true;
@@ -1871,6 +1871,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 #endif
 	}
 	if(mk_new) {
+	    if(shD->mediaType == FM_AUDIO) shD->addrWdg->setVisible(false);
 	    w->setMouseTracking(qobject_cast<DevelWdgView*>(w) || (shD->active && ((RunWdgView*)w)->permCntr()));
 	    shD->addrWdg->setMouseTracking(qobject_cast<DevelWdgView*>(w) || (shD->active && ((RunWdgView*)w)->permCntr()));
 	    shD->addrWdg->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
@@ -1878,7 +1879,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 	}
     }
 
-    if(up && !w->allAttrLoad( ) && uiPrmPos != -1) w->update();
+    if(up && !w->allAttrLoad() && uiPrmPos != -1) w->update();
 
     return up;
 }

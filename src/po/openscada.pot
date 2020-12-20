@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-27 11:52+0300\n"
+"POT-Creation-Date: 2020-11-27 19:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -255,7 +255,7 @@ msgstr ""
 msgid "Mode of forming ID of the automatic created archives"
 msgstr ""
 
-msgid "Both parameter and attribute ID;Only parameter ID;Only attribute ID"
+msgid "Both parameter and attribute ID;Only parameter ID;Only attribute ID;All controller, parameter and attribute ID"
 msgstr ""
 
 msgid "Number"
@@ -642,7 +642,7 @@ msgid "Node root or not connected!"
 msgstr ""
 
 #, c-format
-msgid "Element '%s' is missing!"
+msgid "Element '%s' is not present!"
 msgstr ""
 
 #, c-format
@@ -880,10 +880,6 @@ msgstr ""
 msgid "Container element already connected!"
 msgstr ""
 
-#, c-format
-msgid "Element '%s' is not present!"
-msgstr ""
-
 msgid "Field is not String."
 msgstr ""
 
@@ -904,6 +900,10 @@ msgstr ""
 
 #, c-format
 msgid "Error selecting! Value: '%s'."
+msgstr ""
+
+#, c-format
+msgid "A duple IO '%s' is detected in position %d after %d. If you do not see the duple IO then you created a special IO, remove or rename it!"
 msgstr ""
 
 #, c-format
@@ -1532,6 +1532,25 @@ msgid ""
 "RdRestConnTm <seconds>\tTime to restore connection to \"dead\" reserve station.\n"
 "RdStList   <list>\tRedundant stations list, separated symbol ';' (st1;st2).\n"
 "RdPrimCmdTr <0|1>\tEnables the transmission of primary commands to the reserve stations.\n"
+"    Global configurable limits:\n"
+"limObjID_SZ\t[*20..50] ID size of the OpenSCADA objects.\n"
+"\t\tWARNING! Big size can cause the key limit error on MySQL like DB!\n"
+"\t\t\t Change that once before use on DBs with the fixed type \"char({N})\"!\n"
+"limObjNm_SZ\t[*100...200] NAME size of the OpenSCADA objects.\n"
+"\t\tWARNING! Change that once before use on DBs with the fixed type \"char({N})\"!\n"
+"limArchID_SZ\t[*50...90] ID size of the value archive objects.\n"
+"\t\tWARNING! Increase it only, else you can get problems on Archive.FSArch!\n"
+"\t\t\t Change that once before use on DBs with the fixed type \"char({N})\"!\n"
+"limUserFile_SZ\t[1MB...*10MB...1000MB] The files size limit at loading and processing in the userspace\n"
+"\t\tand the part size of the big files transferring.\n"
+"limUserIts_N\t[1000...*1000000...1000000000] The limit on count of creating user items, like to array items.\n"
+"limCacheIts_N\t[*100...100000] The limit on count of the caching items.\n"
+"    Global configurable parameters:\n"
+"prmStrBuf_SZ\t[1000...*10000...1000000] Length of string buffers, no string class.\n"
+"prmWait_DL\t[0.001...*0.1...1] Quantum of the waiting time cycles, seconds.\n"
+"prmWait_TM\t[*5...10] Standard waiting timeout length, seconds.\n"
+"prmInterf_TM\t[*7...15] Time of waiting for the interface reaction, seconds.\n"
+"prmServTask_PER [1...*10...120] Service task period, seconds.\n"
 "\n"
 msgstr ""
 
@@ -1952,6 +1971,9 @@ msgstr ""
 msgid "Transport protocol"
 msgstr ""
 
+msgid "To connect"
+msgstr ""
+
 msgid "User that opens"
 msgstr ""
 
@@ -2036,10 +2058,10 @@ msgstr ""
 msgid "Time of inactivity in the output transport for it closing/disconnection. Set to 0 to disable the transports closing!"
 msgstr ""
 
-msgid "Started. "
+msgid "Receiving data. "
 msgstr ""
 
-msgid "Stoped. "
+msgid "Disconnected. "
 msgstr ""
 
 #, c-format
@@ -2057,6 +2079,9 @@ msgstr ""
 msgid "Input transport: "
 msgstr ""
 
+msgid "Connect"
+msgstr ""
+
 msgid "Transport DB"
 msgstr ""
 
@@ -2070,6 +2095,9 @@ msgid "Use zero for the log disabling."
 msgstr ""
 
 msgid "Log"
+msgstr ""
+
+msgid "Connected. "
 msgstr ""
 
 #, c-format

@@ -1,15 +1,15 @@
 # OpenSCADA.UI.Vision translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.UI.Vision package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2019.
+# Roman Savochenko <roman@oscada.org>, 2005-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-21 20:34+0200\n"
+"POT-Creation-Date: 2020-12-19 17:52+0200\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -62,8 +62,8 @@ msgstr ""
 "DropCommonWdgStls <0|1> Скидати стилі віджетів до загального для деяких "
 "специфічних віджетів у режимі виконання, на кшталт кнопок (по замовченню "
 "1).\n"
-"CachePgLife <години>    Час життя сторінок у кешу (по замовченю 1).\n"
-"CachePgSz  <кільк.>     Максимальна кількість сторінок у кешу (по замовченю "
+"CachePgLife <години>    Час життя сторінок у кешу (по замовченню 1).\n"
+"CachePgSz  <кільк.>     Максимальна кількість сторінок у кешу (по замовченню "
 "10).\n"
 "VCAstation <id>         Станція з рушієм СВУ ('.' - локальна).\n"
 "RestoreTime <секунди>   Час відновлення підключення.\n"
@@ -941,9 +941,6 @@ msgstr "Ви дійсно бажаєте видалити візуальні е�
 msgid "Deleting the visual items"
 msgstr "Видалення візуальних елементів"
 
-msgid "Widget: %1"
-msgstr "Віджет: %1"
-
 msgid "The widget '%1' editing window is already open."
 msgstr "Вікно редагування віджету '%1' вже відкрито."
 
@@ -1783,6 +1780,12 @@ msgstr "Повідомлення сповіщення"
 
 msgid "Language of the notification message"
 msgstr "Мова повідомлення сповіщення"
+
+msgid "Resource stream type"
+msgstr "Тип потоку ресурса"
+
+msgid "Procedure ID"
+msgstr "ID процедури"
 
 #, c-format
 msgid "Notificator %d"

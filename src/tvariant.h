@@ -123,7 +123,7 @@ class TVariant
 	    double	r;
 	    // String variants
 	    string	*s;		//Standard string for too big
-	    char	*sPtr;		//Middle blocks up to STR_BUF_LEN
+	    char	*sPtr;		//Middle blocks up to prmStrBuf_SZ
 	    char	sMini[8];	//Minimum fixed area
 	    AutoHD<TVarObj>	*o;
 	} val;

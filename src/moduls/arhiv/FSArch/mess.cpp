@@ -272,7 +272,7 @@ time_t ModMArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const s
     eTm = vmin(eTm, end());
     if(eTm < bTm) return eTm;
     if(!runSt) throw err_sys(_("Archive is not started!"));
-    if(!upTo) upTo = SYS->sysTm() + STD_INTERF_TM;
+    if(!upTo) upTo = SYS->sysTm() + prmInterf_TM;
 
     time_t result = bTm;
     for(int iF = files.size()-1; iF >= 0 && SYS->sysTm() < upTo; iF--) {
@@ -574,7 +574,7 @@ MFileArch::MFileArch( const string &iname, time_t ibeg, ModMArch *iowner, const 
     }
     else {
 	//Prepare plain text file
-	int bufSz = STR_BUF_LEN;
+	int bufSz = prmStrBuf_SZ;
 	char buf[bufSz+1]; buf[bufSz] = 0;
 	snprintf(buf, bufSz, "%s %s %s %8x %8x\n", MOD_ID, MOD_VER, mChars.c_str(), (unsigned int)mBeg, (unsigned int)mEnd);
 	fOK = (write(hd,buf,strlen(buf)) == (int)strlen(buf));
@@ -606,7 +606,7 @@ void MFileArch::delFile( )
 void MFileArch::attach( const string &iname, bool full )
 {
     FILE *f = NULL;
-    int bufSz = STR_BUF_LEN;
+    int bufSz = prmStrBuf_SZ;
     char buf[bufSz+1]; buf[bufSz] = 0;
     ResAlloc res(mRes, true);
 
@@ -816,7 +816,7 @@ bool MFileArch::put( TMess::SRec mess )
     else {
 	unsigned int tTm, tTmU;
 	long mv_beg = 0, mv_off = 0;
-	int bufSz = STR_BUF_LEN;
+	int bufSz = prmStrBuf_SZ;
 	char buf[bufSz+1]; buf[bufSz] = 0;
 	//Check to empty category and message
 	if(!mess.categ.size())	mess.categ = " ";
@@ -936,7 +936,7 @@ time_t MFileArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const 
     if(mErr) throw owner().err_sys(_("Messages getting from an error archive file!"));
 
     ResAlloc res(mRes, false);
-    if(!upTo) upTo = time(NULL) + STD_INTERF_TM;
+    if(!upTo) upTo = time(NULL) + prmInterf_TM;
 
     if(mPack) {
 	res.request(true);

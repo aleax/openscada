@@ -1751,7 +1751,7 @@ INSERT INTO Archive_val_proc VALUES('1m','FSArch','','','','Minute''s archive','
 ');
 INSERT INTO Archive_val_proc VALUES('1s','FSArch','','','','Second''s archive','Секундний архів','Секундный архив',1,'ARCHIVES/VAL/1s',1.0,60,10,'<prms TmSize="720" NFiles="100" MaxCapacity="5000" Round="0.01" PackTm="10" CheckTm="60" PackInfoFiles="1" />
 ');
-INSERT INTO Archive_val_proc VALUES('1s','DBArch','','','','','','',1,'SQLite.arch',1.0,60,10,'<prms Size="25" TmAsStr="0" GroupPrms="0" />
+INSERT INTO Archive_val_proc VALUES('1s','DBArch','','','','','','',1,'SQLite.arch',1.0,60,10,'<prms Size="25" TmAsStr="0" GroupPrms="100" />
 ');
 INSERT INTO Archive_val_proc VALUES('1h','FSArch','','','','Hour''s archive','Годинковий архів.','Часовой архив.',1,'ARCHIVES/VAL/1h',3599.9999999999999999,60,10,'<prms TmSize="8600" NFiles="100" MaxCapacity="1000" Round="0.01" PackTm="10" CheckTm="60" PackInfoFiles="0" />
 ');

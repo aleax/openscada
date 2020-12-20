@@ -42,16 +42,16 @@ TSecurity::TSecurity( ) : TSubSYS(SSEC_ID,_("Security"), false)
     mGrp = TCntrNode::grpAdd("grp_");
 
     //User BD structure
-    userEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
-    userEl.fldAdd(new TFld("DESCR",_("Full name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
+    userEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    userEl.fldAdd(new TFld("DESCR",_("Full name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
     userEl.fldAdd(new TFld("LONGDESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"1000"));
     userEl.fldAdd(new TFld("PASS",_("Password"),TFld::String,0,"100"));
     userEl.fldAdd(new TFld("LANG",_("Language"),TFld::String,0,"50"));
     userEl.fldAdd(new TFld("PICTURE",_("User picture"),TFld::String,0,"100000"));
 
     //Group BD structure
-    grpEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
-    grpEl.fldAdd(new TFld("DESCR",_("Full name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
+    grpEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    grpEl.fldAdd(new TFld("DESCR",_("Full name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
     grpEl.fldAdd(new TFld("LONGDESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"1000"));
     grpEl.fldAdd(new TFld("USERS",_("Users"),TFld::String,0,"1000000"));
 }
@@ -251,11 +251,13 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TSubSYS::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/usr_",_("User"),RWRWR_,"root",SSEC_ID,1,"idSz",OBJ_ID_SZ);
-	ctrMkNode("grp",opt,-1,"/br/grp_",_("Group"),RWRWR_,"root",SSEC_ID,1,"idSz",OBJ_ID_SZ);
+	ctrMkNode("grp",opt,-1,"/br/usr_",_("User"),RWRWR_,"root",SSEC_ID,1,"idSz",i2s(limObjID_SZ).c_str());
+	ctrMkNode("grp",opt,-1,"/br/grp_",_("Group"),RWRWR_,"root",SSEC_ID,1,"idSz",i2s(limObjID_SZ).c_str());
 	if(ctrMkNode("area",opt,1,"/usgr",_("Users and groups"))) {
-	    ctrMkNode("list",opt,-1,"/usgr/users",_("Users"),RWRWR_,"root",SSEC_ID,4,"tp","br", "s_com","add,del", "br_pref","usr_", "idSz",OBJ_ID_SZ);
-	    ctrMkNode("list",opt,-1,"/usgr/grps",_("Groups"),RWRWR_,"root",SSEC_ID,4,"tp","br", "s_com","add,del", "br_pref","grp_", "idSz",OBJ_ID_SZ);
+	    ctrMkNode("list",opt,-1,"/usgr/users",_("Users"),RWRWR_,"root",SSEC_ID,4,
+		"tp","br", "s_com","add,del", "br_pref","usr_", "idSz",i2s(limObjID_SZ).c_str());
+	    ctrMkNode("list",opt,-1,"/usgr/grps",_("Groups"),RWRWR_,"root",SSEC_ID,4,
+		"tp","br", "s_com","add,del", "br_pref","grp_", "idSz",i2s(limObjID_SZ).c_str());
 	}
 	return;
     }

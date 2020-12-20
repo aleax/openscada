@@ -166,7 +166,7 @@ void Lib::cntrCmdProc( XMLNode *opt )
 	XMLNode *nd = ctrMkNode("oscada_cntr",opt,-1,"/",_("Library of the functions: ")+id(),RWRWR_,"root",SDAQ_ID);
 	if(nd)	nd->setAttr("doc", TUIS::docKeyGet(descr()));
 	if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
-	    ctrMkNode("grp",opt,-1,"/br/fnc_",_("Function"),RWRWR_,"root",SDAQ_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
+	    ctrMkNode("grp",opt,-1,"/br/fnc_",_("Function"),RWRWR_,"root",SDAQ_ID,2,"idm",i2s(limObjNm_SZ).c_str(),"idSz",i2s(limObjID_SZ).c_str());
 	if(ctrMkNode("area",opt,-1,"/lib",_("Library"))) {
 	    if(ctrMkNode("area",opt,-1,"/lib/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/lib/st/st",_("Accessible"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
@@ -179,13 +179,13 @@ void Lib::cntrCmdProc( XMLNode *opt )
 	    }
 	    if(ctrMkNode("area",opt,-1,"/lib/cfg",_("Configuration"))) {
 		ctrMkNode("fld",opt,-1,"/lib/cfg/ID",_("Identifier"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/lib/cfg/NAME",_("Name"),DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"tp","str","len",OBJ_NM_SZ);
+		ctrMkNode("fld",opt,-1,"/lib/cfg/NAME",_("Name"),DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"tp","str","len",i2s(limObjNm_SZ).c_str());
 		ctrMkNode("fld",opt,-1,"/lib/cfg/DESCR",_("Description"),DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"tp","str","cols","100","rows","5");
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/func",_("Functions")))
 	    ctrMkNode("list",opt,-1,"/func/func",_("Functions"),RWRWR_,"root",SDAQ_ID,5,
-		"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","fnc_","idSz",OBJ_ID_SZ);
+		"tp","br","idm",i2s(limObjNm_SZ).c_str(),"s_com","add,del","br_pref","fnc_","idSz",i2s(limObjID_SZ).c_str());
 	return;
     }
 

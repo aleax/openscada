@@ -63,7 +63,12 @@ TFunction &TFunction::operator=( const TFunction &func )
 	    dst_io = ioIns(new IO(func.io(iIO)->id().c_str(),func.io(iIO)->name().c_str(),func.io(iIO)->type(),func.io(iIO)->flg(),
 		func.io(iIO)->def().c_str(),func.io(iIO)->hide(),func.io(iIO)->rez().c_str()), iIO);
 	else *io(dst_io) = *func.io(iIO);
-	if(dst_io != iIO && !use()) ioMove(dst_io, iIO);
+	if(dst_io != iIO && !use()) {
+	    if(iIO >= ioSize())
+		throw err_sys(_("A duple IO '%s' is detected in position %d after %d. If you do not see the duple IO then you created a special IO, remove or rename it!"),
+		    func.io(dst_io)->id().c_str(), iIO, dst_io);
+	    else ioMove(dst_io, iIO);
+	}
     }
 
     if(mId.empty()) mId = func.id();
@@ -376,7 +381,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/exec/calc" && mTVal && ctrChkNode(opt,"set",RWRW__,"root",grp,SEC_WR)) {
 	int n_tcalc = s2i(TBDS::genDBGet(nodePath()+"ntCalc","1",opt->attr("user")));
 	string wuser = opt->attr("user");
-	time_t tm_lim = SYS->sysTm()+STD_WAIT_TM+1;
+	time_t tm_lim = SYS->sysTm()+prmWait_TM+1;
 	int64_t t_cnt = TSYS::curTime();
 	for(int iC = 0; iC < n_tcalc && SYS->sysTm() < tm_lim; iC++)
 	    mTVal->calc(wuser);
@@ -464,7 +469,7 @@ void IO::setRez( const string &val )
 //* TValFunc                                      *
 //*************************************************
 TValFunc::TValFunc( const string &iname, TFunction *ifunc, bool iblk, const string &iuser ) :
-    exCtx(NULL), mName(iname), mUser(iuser), mBlk(iblk), mMdfChk(false), mPrgCh(false), mFunc(NULL)
+    exCtx(NULL), mName(iname), mUser(iuser), mBlk(iblk), mMdfChk(false), mPrgCh(false), mCalc(false), mFunc(NULL)
 {
     setFunc(ifunc);
 }
@@ -730,7 +735,9 @@ void TValFunc::calc( const string &user )
 {
     if(!mFunc) return;
     if(!user.empty()) mUser = user;
-    mFunc->calc(this);
+    mCalc = true;
+    try { mFunc->calc(this); } catch(TError&) { }
+    mCalc = false;
 }
 
 void TValFunc::preIOCfgChange( )	{ setFunc(NULL, false); }

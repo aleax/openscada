@@ -58,7 +58,7 @@ The element''s names and their parameters are available in languages: English, U
 
 Author: Roman Savochenko <roman@oscada.org>
 Founded: September 2007
-Version: 2.0.5
+Version: 2.0.6
 License: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','wlb_Main','','Основні елементи','Бібліотека створюється для надання основних елементів користувацького інтерфейсу та містить графічні елементи, які часто затребувано при формуванні користувацького інтерфейсу автоматизації технологічних та загальних процесів. Будується бібліотека на основі примітивів віджетів та мови внутрішнього програмування JavaLikeCalc.
 
@@ -66,7 +66,7 @@ DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','wlb_Main','','�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Засновано: Вересень 2007
-Версія: 2.0.5
+Версія: 2.0.6
 Ліцензія: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','Основные элементы','Библиотека создаётся для предоставления основных элементов пользовательского интерфейса и содержит графические элементы, которые часто востребованы при формировании пользовательского интерфейса автоматизации технологических и общих процессом. Строится библиотека на основе примитивов виджетов и языка внутреннего программирования JavaLikeCalc.
 
@@ -74,7 +74,7 @@ DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','Основны�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Основано: Сентябрь 2007
-Версия: 2.0.5
+Версия: 2.0.6
 Лицензия: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements');
 INSERT INTO VCALibs VALUES('mnEls','Mnemo elements','Provides the mnemonic elements library of the user interface of the industrial automation.
@@ -366,7 +366,7 @@ INSERT INTO prj_archBrowser_io VALUES('/prj_archBrowser/pg_so/pg_1/pg_doc/pg_mes
 INSERT INTO prj_archBrowser_io VALUES('/prj_archBrowser/pg_so/pg_1/pg_doc/pg_messRep','messCat','','1:*',40,'','','','','','','','');
 INSERT INTO prj_archBrowser_io VALUES('/prj_archBrowser/pg_control/pg_graphCalc','owner','','root:op',32,'','','','','','','','');
 CREATE TABLE IF NOT EXISTS 'prj_tmplSO_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so','pgCont','/wlb_Main/wdg_RootPgSo/wdg_pgCont','pgGrp;',2);
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so','pgCont','/wlb_Main/wdg_RootPgSo/wdg_pgCont','geomH;pgGrp;',2);
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so','infoW','/wlb_Main/wdg_RootPgSo/wdg_infoW','pgGrp;',2);
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_doc_panel','date','/wlb_Main/wdg_doc_panel/wdg_date','value;',2);
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_doc_panel','size','/wlb_Main/wdg_doc_panel/wdg_size','value;',2);
@@ -410,57 +410,6 @@ INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','diagT
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','media','/wlb_test/wdg_mn_gen/wdg_media','owner;perm;','');
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','prescrRunSimple','/wlb_test/wdg_mn_gen/wdg_prescrRunSimple','owner;perm;dbDB;dbProgs;prExtCurCom;prExtMode;prExtProg;prExtStartTm;prExtWork;','');
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','prt','/wlb_test/wdg_mn_gen/wdg_prt','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','btPass','/wlb_prescr/wdg_prescrRun/wdg_btPass','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','btStart','/wlb_prescr/wdg_prescrRun/wdg_btStart','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','btStop','/wlb_prescr/wdg_prescrRun/wdg_btStop','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','labProg','/wlb_prescr/wdg_prescrRun/wdg_labProg','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','lib','/wlb_prescr/wdg_prescrRun/wdg_lib','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','prog','/wlb_prescr/wdg_prescrRun/wdg_prog','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','progBox','/wlb_prescr/wdg_prescrRun/wdg_progBox','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','title','/wlb_prescr/wdg_prescrRun/wdg_title','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','wPanel','/wlb_prescr/wdg_prescrRun/wdg_wPanel','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','arg1','/wlb_prescr/wdg_prescrEdit/wdg_arg1','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','arg2','/wlb_prescr/wdg_prescrEdit/wdg_arg2','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','arg3','/wlb_prescr/wdg_prescrEdit/wdg_arg3','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','arg4','/wlb_prescr/wdg_prescrEdit/wdg_arg4','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','arg5','/wlb_prescr/wdg_prescrEdit/wdg_arg5','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','backgrnd','/wlb_prescr/wdg_prescrEdit/wdg_backgrnd','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','comAdd','/wlb_prescr/wdg_prescrEdit/wdg_comAdd','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','comArgsBox','/wlb_prescr/wdg_prescrEdit/wdg_comArgsBox','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','comBox','/wlb_prescr/wdg_prescrEdit/wdg_comBox','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','comDel','/wlb_prescr/wdg_prescrEdit/wdg_comDel','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','comDwn','/wlb_prescr/wdg_prescrEdit/wdg_comDwn','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','comInAdd','/wlb_prescr/wdg_prescrEdit/wdg_comInAdd','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','comIns','/wlb_prescr/wdg_prescrEdit/wdg_comIns','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','comUp','/wlb_prescr/wdg_prescrEdit/wdg_comUp','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','descr','/wlb_prescr/wdg_prescrEdit/wdg_descr','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labArg1','/wlb_prescr/wdg_prescrEdit/wdg_labArg1','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labArg2','/wlb_prescr/wdg_prescrEdit/wdg_labArg2','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labArg3','/wlb_prescr/wdg_prescrEdit/wdg_labArg3','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labArg4','/wlb_prescr/wdg_prescrEdit/wdg_labArg4','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labArg5','/wlb_prescr/wdg_prescrEdit/wdg_labArg5','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labArgs','/wlb_prescr/wdg_prescrEdit/wdg_labArgs','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labBackgrnd','/wlb_prescr/wdg_prescrEdit/wdg_labBackgrnd','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labCom','/wlb_prescr/wdg_prescrEdit/wdg_labCom','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labDescr','/wlb_prescr/wdg_prescrEdit/wdg_labDescr','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labName','/wlb_prescr/wdg_prescrEdit/wdg_labName','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labProg','/wlb_prescr/wdg_prescrEdit/wdg_labProg','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','labType','/wlb_prescr/wdg_prescrEdit/wdg_labType','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','lib','/wlb_prescr/wdg_prescrEdit/wdg_lib','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','name','/wlb_prescr/wdg_prescrEdit/wdg_name','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','prog','/wlb_prescr/wdg_prescrEdit/wdg_prog','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','progAdd','/wlb_prescr/wdg_prescrEdit/wdg_progAdd','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','progBox','/wlb_prescr/wdg_prescrEdit/wdg_progBox','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','progCopy','/wlb_prescr/wdg_prescrEdit/wdg_progCopy','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','progDel','/wlb_prescr/wdg_prescrEdit/wdg_progDel','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','progExport','/wlb_prescr/wdg_prescrEdit/wdg_progExport','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','progImport','/wlb_prescr/wdg_prescrEdit/wdg_progImport','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','progNm','/wlb_prescr/wdg_prescrEdit/wdg_progNm','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','progRename','/wlb_prescr/wdg_prescrEdit/wdg_progRename','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','save','/wlb_prescr/wdg_prescrEdit/wdg_save','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','title','/wlb_prescr/wdg_prescrEdit/wdg_title','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','type','/wlb_prescr/wdg_prescrEdit/wdg_type','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','wPanel','/wlb_prescr/wdg_prescrEdit/wdg_wPanel','owner;perm;','');
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','ElFigure1','/wlb_Main/wdg_grpGraph/wdg_ElFigure1','owner;perm;','');
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','arh','/wlb_Main/wdg_grpGraph/wdg_arh','owner;','');
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','el1','/wlb_Main/wdg_grpGraph/wdg_el1','owner;','');
@@ -617,6 +566,7 @@ INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e8','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e8','owner;','');
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e9','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e9','owner;','');
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','name','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_name','owner;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so','alarms','/wlb_originals/wdg_Protocol','owner;geomX;geomY;geomW;geomH;geomZ;headVis;tSize;trcPer;lev;viewOrd;col;itProp;it0lev;it0color;it1lev;it1color;it2color;','');
 CREATE TABLE IF NOT EXISTS 'prj_tmplSO_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','evProc','ws_BtPress:/prev:prev:/pg_so/*/*/$
 ws_BtPress:/next:next:/pg_so/*/*/$
@@ -812,119 +762,6 @@ INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','prExtSt
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','prExtWork','',34,'Controller|work','prm:/LogicLev/prescription/manager/work','prescrRunSimple','','','','','','');
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','owner','root:op',32,'','','prt','','','','','','');
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','perm','944',32,'','','prt','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','owner','root:op',32,'','','','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','perm','944',32,'','','','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','pgNoOpenProc','1',0,'','','','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','prExtCurCom','',42,'Controller|curCom','prm:/LogicLev/prescription/manager/curCom','','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','prExtMode','',46,'Controller|mode','prm:/LogicLev/prescription/manager/mode','','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','prExtProg','',46,'Controller|prog','prm:/LogicLev/prescription/manager/prog','','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','prExtStartTm','',42,'Controller|startTm','prm:/LogicLev/prescription/manager/startTm','','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','prExtWork','',42,'Controller|work','prm:/LogicLev/prescription/manager/work','','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','owner','root:op',32,'','','btPass','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','perm','944',32,'','','btPass','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','owner','root:op',32,'','','btStart','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','perm','944',32,'','','btStart','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','owner','root:op',32,'','','btStop','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','perm','944',32,'','','btStop','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','owner','root:op',32,'','','labProg','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','perm','944',32,'','','labProg','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','owner','root:op',32,'','','lib','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','perm','944',32,'','','lib','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','owner','root:op',32,'','','prog','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','perm','944',32,'','','prog','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','owner','root:op',32,'','','progBox','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','perm','944',32,'','','progBox','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','owner','root:op',32,'','','title','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','perm','944',32,'','','title','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','owner','root:op',32,'','','wPanel','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','perm','944',32,'','','wPanel','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','prExtComLs','',42,'Controller|comLs','prm:/LogicLev/prescription/manager/comLs','','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','arg1','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','arg1','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','arg2','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','arg2','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','arg3','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','arg3','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','arg4','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','arg4','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','arg5','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','arg5','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','backgrnd','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','backgrnd','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','comAdd','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','comAdd','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','comArgsBox','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','comArgsBox','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','comBox','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','comBox','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','comDel','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','comDel','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','comDwn','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','comDwn','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','comInAdd','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','comInAdd','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','comIns','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','comIns','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','comUp','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','comUp','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','descr','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','descr','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','labArg1','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','labArg1','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','labArg2','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','labArg2','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','labArg3','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','labArg3','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','labArg4','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','labArg4','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','labArg5','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','labArg5','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','labArgs','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','labArgs','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','labBackgrnd','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','labBackgrnd','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','labCom','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','labCom','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','labDescr','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','labDescr','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','labName','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','labName','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','labProg','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','labProg','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','labType','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','labType','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','lib','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','lib','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','name','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','name','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','prog','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','prog','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','progAdd','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','progAdd','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','progBox','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','progBox','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','progCopy','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','progCopy','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','progDel','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','progDel','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','progExport','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','progExport','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','progImport','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','progImport','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','progNm','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','progNm','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','progRename','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','progRename','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','save','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','save','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','title','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','title','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','type','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','type','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','owner','root:op',32,'','','wPanel','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','perm','944',32,'','','wPanel','','','','','','');
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','owner','root:op',32,'','','','','','','','','');
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','perm','944',32,'','','','','','','','','');
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','geomZ','5',32,'','','','','','','','','');
@@ -1528,10 +1365,25 @@ INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','sclWin'
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_control/pg_graphCalc','owner','root:op',32,'','','','','','','','','');
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','dbDB','',34,'Controller|dbDB','prm:/LogicLev/prescription/manager/dbDB','prescrRunSimple','','','','','','');
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','dbProgs','',34,'Controller|dbProgs','prm:/LogicLev/prescription/manager/dbProgs','prescrRunSimple','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','dbDB','',42,'Controller|dbDB','prm:/LogicLev/prescription/manager/dbDB','','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_10','dbProgs','',42,'Controller|dbProgs','prm:/LogicLev/prescription/manager/dbProgs','','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','dbDB','',42,'Controller|dbDB','prm:/LogicLev/prescription/manager/dbDB','','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_11','dbProgs','',42,'Controller|dbProgs','prm:/LogicLev/prescription/manager/dbProgs','','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','owner','root:op',32,'','','alarms','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','geomX','4',32,'','','alarms','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','geomY','605',32,'','','alarms','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','geomW','900',32,'','','alarms','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','geomH','65',32,'','','alarms','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','geomZ','39',32,'','','alarms','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','headVis','0',32,'','','alarms','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','tSize','0',32,'','','alarms','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','trcPer','1',32,'','','alarms','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','lev','-1',32,'','','alarms','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','viewOrd','5',32,'','','alarms','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','col','tm;cat;mess',32,'','','alarms','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','itProp','3',32,'','','alarms','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','it0lev','5',0,'','','alarms','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','it0color','gray',0,'','','alarms','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','it1lev','4',0,'','','alarms','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','it1color','red',0,'','','alarms','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','it2color','yellow',0,'','','alarms','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','geomH','551',32,'','','pgCont','','','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_Main_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO wlb_Main_incl VALUES('ElCadr','lev_sp','/wlb_originals/wdg_ElFigure','name;en;geomX;geomY;geomW;geomH;geomZ;fillColor;elLst;p1x;p1y;',2);
 INSERT INTO wlb_Main_incl VALUES('ElCadr','com_open','/wlb_originals/wdg_FormEl','name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;value;color;font;',2);
@@ -2189,7 +2041,7 @@ Container of the control panels — container area to include control panels of 
 Under the control panels container placed a button to start the demo mode — mode in which performed periodic switching for representative frames, changing regimes and other operations by a scenario.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.2.1
+Version: 2.3.0
 License: GPLv2',32,'','','','Елемент-кадр слугує базою для створення користувацьких інтерфейсів, пачатково для управління технологічними процесами, заснованими на об''єктах сигналізації (СО).
 
 Коренева сторінка містить чотири області:
@@ -2217,7 +2069,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує базою д�
 Під контейнером панелей управління розташовується кнопка запуску демонстраційного режиму — режиму за яким здійснюється періодичне перемикання показних кадрів, зміна режимів та інших операцій згідно сценарію.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.2.1
+Версія: 2.3.0
 Ліцензія: GPLv2','','Элемент-кадр служит базой для создания пользовательских интерфейсов, начально для управления технологическими процессами, основанными на объектах сигнализации (СО).
 
 Корневая страница содержит четыре области:
@@ -2247,7 +2099,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує базою д�
 Корневая страница интерфейса визуализации ТП, построенного на основе объектов сигнализации.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 2.2.1
+Версия: 2.3.0
 Лицензия: GPLv2','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomW','1024',40,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomH','670',32,'','','','','','','','','');
@@ -10870,6 +10722,982 @@ lK1arRKNRoVqd3u4b6VY7mSouxqpWCxSKBQ4d+6cqLQIBALMzs7u+P65uTnx7wMHDgD/SXXk8/k7
 xbFjx3bMoFp1tRbbPzAwIM5YmqYRj8eFS7bZbFSrVfF7/3baWzqdDo1GQ7TlabVaFAoF4vE4AwMD
 uFwuLly4gKIot93/+r/CdJdH4v0p6KOPPvroo48++uijjz766KOPPvroo48++uijjz766ONu+B9O
 SzxIVioTXwAAAABJRU5ErkJggg==');
+INSERT INTO wlb_Main_mime VALUES('ntf1','audio/ogg;73.3428','T2dnUwACAAAAAAAAAABl2mpGAAAAAET/nUcBHgF2b3JiaXMAAAAAAUAfAAAAAAAAgFcAAAAAAACZ
+AU9nZ1MAAAAAAAAAAAAAZdpqRgEAAABoNEGeC2H///////////+1A3ZvcmJpczUAAABYaXBoLk9y
+ZyBsaWJWb3JiaXMgSSAyMDE4MDMxNiAoTm93IDEwMCUgZmV3ZXIgc2hlbGxzKQEAAAAYAAAAQ29t
+bWVudD1Qcm9jZXNzZWQgYnkgU29YAQV2b3JiaXMSQkNWAQAAAQAMUhQhJRlTSmMIlVJSKQUdY1Bb
+Rx1j1DlGIWQQU4hJGaV7TyqVWErIEVJYKUUdU0xTSZVSlilFHWMUU0ghU9YxZaFzFEuGSQklbE2u
+dBZL6JljljFGHWPOWkqdY9YxRR1jUlJJoXMYOmYlZBQ6RsXoYnwwOpWiQii+x95S6S2FiluKvdca
+U+sthBhLacEIYXPttdXcSmrFGGOMMcbF4lMogtCQVQAAAQAAQAQBQkNWAQAKAADCUAxFUYDQkFUA
+QAYAgAAURXEUx3EcR5IkywJCQ1YBAEAAAAIAACiO4SiSI0mSZFmWZVmWpnmWqLmqL/uuLuuu7eq6
+DoSGrAQAyAAAGIYhh95JzJBTkEkmKVXMOQih9Q455RRk0lLGmGKMUc6QUwwxBTGG0CmFENROOaUM
+IghDSJ1kziBLPejgYuc4EBqyIgCIAgAAjEGMIcaQcwxKBiFyjknIIETOOSmdlExKKK20lkkJLZXW
+IueclE5KJqW0FlLLpJTWQisFAAAEOAAABFgIhYasCACiAAAQg5BSSCnElGJOMYeUUo4px5BSzDnF
+mHKMMeggVMwxyByESCnFGHNOOeYgZAwq5hyEDDIBAAABDgAAARZCoSErAoA4AQCDJGmapWmiaGma
+KHqmqKqiKKqq5Xmm6ZmmqnqiqaqmqrquqaqubHmeaXqmqKqeKaqqqaqua6qq64qqasumq9q26aq2
+7MqybruyrNueqsq2qbqybqqubbuybOuuLNu65Hmq6pmm63qm6bqq69qy6rqy7Zmm64qqK9um68qy
+68q2rcqyrmum6bqiq9quqbqy7cqubbuyrPum6+q26sq6rsqy7tu2rvuyrQu76Lq2rsqurquyrOuy
+Leu2bNtCyfNU1TNN1/VM03VV17Vt1XVtWzNN1zVdV5ZF1XVl1ZV1XXVlW/dM03VNV5Vl01VlWZVl
+3XZlV5dF17VtVZZ9XXVlX5dt3fdlWdd903V1W5Vl21dlWfdlXfeFWbd93VNVWzddV9dN19V9W9d9
+YbZt3xddV9dV2daFVZZ139Z9ZZh1nTC6rq6rtuzrqizrvq7rxjDrujCsum38rq0Lw6vrxrHrvq7c
+vo9q277w6rYxvLpuHLuwG7/t+8axqaptm66r66Yr67ps675v67pxjK6r66os+7rqyr5v67rw674v
+DKPr6roqy7qw2rKvy7ouDLuuG8Nq28Lu2rpwzLIuDLfvK8evC0PVtoXh1XWjq9vGbwvD0jd2vgAA
+gAEHAIAAE8pAoSErAoA4AQAGIQgVYxAqxiCEEFIKIaRUMQYhYw5KxhyUEEpJIZTSKsYgZI5JyByT
+EEpoqZTQSiilpVBKS6GU1lJqLabUWgyhtBRKaa2U0lpqKbbUUmwVYxAy56RkjkkopbRWSmkpc0xK
+xqCkDkIqpaTSSkmtZc5JyaCj0jlIqaTSUkmptVBKa6GU1kpKsaXSSm2txRpKaS2k0lpJqbXUUm2t
+tVojxiBkjEHJnJNSSkmplNJa5pyUDjoqmYOSSimplZJSrJiT0kEoJYOMSkmltZJKK6GU1kpKsYVS
+Wmut1ZhSSzWUklpJqcVQSmuttRpTKzWFUFILpbQWSmmttVZrai22UEJroaQWSyoxtRZjba3FGEpp
+raQSWympxRZbja21WFNLNZaSYmyt1dhKLTnWWmtKLdbSUoyttZhbTLnFWGsNJbQWSmmtlNJaSq3F
+1lqtoZTWSiqxlZJabK3V2FqMNZTSYikptZBKbK21WFtsNaaWYmyx1VhSizHGWHNLtdWUWouttVhL
+KzXGGGtuNeVSAADAgAMAQIAJZaDQkJUAQBQAAGAMY4xBaBRyzDkpjVLOOSclcw5CCCllzkEIIaXO
+OQiltNQ5B6GUlEIpKaUUWyglpdZaLAAAoMABACDABk2JxQEKDVkJAEQBACDGKMUYhMYgpRiD0Bij
+FGMQKqUYcw5CpRRjzkHIGHPOQSkZY85BJyWEEEIppYQQQiillAIAAAocAAACbNCUWByg0JAVAUAU
+AABgDGIMMYYgdFI6KRGETEonpZESWgspZZZKiiXGzFqJrcTYSAmthdYyayXG0mJGrcRYYioAAOzA
+AQDswEIoNGQlAJAHAEAYoxRjzjlnEGLMOQghNAgx5hyEECrGnHMOQggVY845ByGEzjnnIIQQQuec
+cxBCCKGDEEIIpZTSQQghhFJK6SCEEEIppXQQQgihlFIKAAAqcAAACLBRZHOCkaBCQ1YCAHkAAIAx
+SjknJaVGKcYgpBRboxRjEFJqrWIMQkqtxVgxBiGl1mLsIKTUWoy1dhBSai3GWkNKrcVYa84hpdZi
+rDXX1FqMtebce2otxlpzzrkAANwFBwCwAxtFNicYCSo0ZCUAkAcAQCCkFGOMOYeUYowx55xDSjHG
+mHPOKcYYc8455xRjjDnnnHOMMeecc845xphzzjnnnHPOOeegg5A555xz0EHonHPOOQghdM455xyE
+EAoAACpwAAAIsFFkc4KRoEJDVgIA4QAAgDGUUkoppZRSSqijlFJKKaWUUgIhpZRSSimllFJKKaWU
+UkoppZRSSimllFJKKaWUUkoppZRSSimllFJKKaWUUkoppZRSSimllFJKKaWUUkoppZRSSimllFJK
+KaWUUkoppZRSSimllFJKKaWUUkoppZRSSimllFJKKaWUUkoplVJKKaWUUkoppZRSSimlACDfCgcA
+/wcbZ1hJOiscDS40ZCUAEA4AABjDGISMOSclpYYxCKV0TkpJJTWMQSilcxJSSimD0FpqpaTSUkoZ
+hJRiCyGVlFoKpbRWaymptZRSKCnFGktKqaXWMuckpJJaS622mDkHpaTWWmqtxRBCSrG11lJrsXVS
+UkmttdZabS2klFprLcbWYmwlpZZaa6nF1lpMqbUWW0stxtZiS63F2GKLMcYaCwDgbnAAgEiwcYaV
+pLPC0eBCQ1YCACEBAAQySjnnnIMQQgghUoox56CDEEIIIURKMeacgxBCCCGEjDHnIIQQQgihlJAx
+5hyEEEIIIYRSOucghFBKCaWUUkrnHIQQQgillFJKCSGEEEIopZRSSikhhBBKKaWUUkopJYQQQiil
+lFJKKaWEEEIopZRSSimllBBCKKWUUkoppZQSQgihlFJKKaWUUkIIpZRSSimllFJKKCGEUkoppZRS
+SgkllFJKKaWUUkopIZRSSimllFJKKaUAAIADBwCAACPoJKPKImw04cIDEAAAAAIAAkwAgQGCglEI
+AoQRCAAAAAAACAD4AABICoCIiGjmDA4QEhQWGBocHiAiJAAAAAAAAAAAAAAAAARPZ2dTAAAAlgAA
+AAAAAGXaakYCAAAA+A8CDpdBGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsb
+GxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsb
+GxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbquJS
+P38sBwC4AACAAAD8jm+HKqQAAAAArtxy4b27Tyw+EQgGgoGgH4qCKIiCKIjEQoUKFYmdtqbLWpt0
+grmw8BOy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABw
+h9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy
+41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nf
+fygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygH
+ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
+AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
+gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3X
+lh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8A
+AAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAA
+AABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABw
+h9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy
+41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nf
+fygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygH
+ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
+AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
+gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3X
+lh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8A
+AAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAA
+AABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABw
+h9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy
+41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nf
+fygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygH
+ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
+AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
+gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3X
+lh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8A
+AAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAA
+AABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABw
+h9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy
+41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nf
+fygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygH
+ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
+AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
+gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3X
+lh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8A
+AAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAA
+AABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABw
+h9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy
+41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nf
+fygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygH
+ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
+AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
+gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3X
+lh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8A
+AAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAA
+AABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABw
+h9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy
+41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nf
+fygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygH
+ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
+AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
+gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3X
+lh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8A
+AAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAA
+AABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABw
+h9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy
+41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nf
+fygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygH
+ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
+AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
+gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3X
+lh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8A
+AAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAA
+AABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABw
+h9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy
+41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nf
+fygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygH
+ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
+AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
+gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3X
+lh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8A
+AAAAAABwh9NPZ2dTAAAALgEAAAAAAGXaakYDAAAAoq5s9JgbGxsbGxsbGxsbGxsbGxsbGxsbGxsb
+GxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsb
+GxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsb
+GxsbGxsbGxsbGxsbGxsbG7LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA
+/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deW
+HwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAA
+AAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAA
+AHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH
+07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07Lj
+Wd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/
+KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcA
+GAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEA
+AACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA
+/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deW
+HwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAA
+AAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAA
+AHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH
+07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07Lj
+Wd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/
+KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcA
+GAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEA
+AACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA
+/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deW
+HwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAA
+AAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAA
+AHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH
+07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07Lj
+Wd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/
+KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcA
+GAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEA
+AACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA
+/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deW
+HwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAA
+AAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAA
+AHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH
+07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07Lj
+Wd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/
+KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcA
+GAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEA
+AACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA
+/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deW
+HwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAA
+AAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAA
+AHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH
+07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07Lj
+Wd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/
+KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcA
+GAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEA
+AACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA
+/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deW
+HwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAA
+AAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAA
+AHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH
+07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07Lj
+Wd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/
+KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcA
+GAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEA
+AACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA
+/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deW
+HwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAA
+AAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAA
+AHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH
+07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07Lj
+Wd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/
+KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcA
+GAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEA
+AACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA
+/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deW
+HwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAA
+AAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAA
+AHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH
+07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07Lj
+Wd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/
+KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcA
+GAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEA
+AACA/deWHwAAAAAAAHCH009nZ1MAAADGAQAAAAAAZdpqRgQAAADWXdE+mBsbGxsbGxsbGxsbGxsb
+GxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsb
+GxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsb
+GxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338o
+BwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAY
+AQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAA
+AID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID9
+15YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915Yf
+AAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAA
+AAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAA
+cIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfT
+suNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ
+338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338o
+BwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAY
+AQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAA
+AID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID9
+15YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915Yf
+AAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAA
+AAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAA
+cIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfT
+suNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ
+338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338o
+BwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAY
+AQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAA
+AID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID9
+15YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915Yf
+AAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAA
+AAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAA
+cIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfT
+suNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ
+338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338o
+BwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAY
+AQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAA
+AID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID9
+15YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915Yf
+AAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAA
+AAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAA
+cIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfT
+suNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ
+338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338o
+BwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAY
+AQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAA
+AID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID9
+15YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915Yf
+AAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAA
+AAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAA
+cIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfT
+suNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ
+338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338o
+BwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAY
+AQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAA
+AID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID9
+15YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915Yf
+AAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAA
+AAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAA
+cIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfT
+suNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ
+338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338o
+BwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAY
+AQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAA
+AID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID9
+15YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915Yf
+AAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAA
+AAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAA
+cIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfT
+suNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ
+338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338o
+BwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAY
+AQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAA
+AID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID9
+15YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915Yf
+AAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAA
+AAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAA
+cIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfT
+suNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ
+338oBwAYAQAAAID915YfAAAAAAAAcIfTT2dnUwAAAF4CAAAAAABl2mpGBQAAACmO0UGYGxsbGxsb
+GxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsb
+GxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsb
+GxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxuy41nffygHABgBAAAAgP3Xlh8AAAAAAABw
+h9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy
+41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nf
+fygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygH
+ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
+AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
+gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3X
+lh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8A
+AAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAA
+AABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABw
+h9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy
+41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nf
+fygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygH
+ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
+AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
+gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3X
+lh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8A
+AAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAA
+AABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABw
+h9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy
+41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nf
+fygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygH
+ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
+AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
+gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3X
+lh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8A
+AAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAA
+AABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABw
+h9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy
+41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nf
+fygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygH
+ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
+AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
+gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3X
+lh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8A
+AAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAA
+AABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABw
+h9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy
+41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nf
+fygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygH
+ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
+AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
+gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3X
+lh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8A
+AAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAA
+AABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABw
+h9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy
+41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nf
+fygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygH
+ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
+AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
+gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3X
+lh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8A
+AAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAA
+AABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABw
+h9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy
+41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nf
+fygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygH
+ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
+AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
+gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3X
+lh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8A
+AAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAA
+AABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABw
+h9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy
+41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nf
+fygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygH
+ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
+AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
+gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3X
+lh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8A
+AAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAA
+AABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9NPZ2dTAAAA9gIAAAAAAGXaakYGAAAALMHt
+9ZgbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsb
+GxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsb
+GxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbG7LjWd9/KAcAGAEAAACA/deW
+HwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAA
+AAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAA
+AHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH
+07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07Lj
+Wd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/
+KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcA
+GAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEA
+AACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA
+/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deW
+HwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAA
+AAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAA
+AHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH
+07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07Lj
+Wd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/
+KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcA
+GAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEA
+AACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA
+/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deW
+HwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAA
+AAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAA
+AHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH
+07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07Lj
+Wd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/
+KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcA
+GAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEA
+AACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA
+/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deW
+HwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAA
+AAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAA
+AHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH
+07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07Lj
+Wd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/
+KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcA
+GAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEA
+AACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA
+/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deW
+HwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAA
+AAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAA
+AHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH
+07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07Lj
+Wd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/
+KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcA
+GAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEA
+AACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA
+/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deW
+HwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAA
+AAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAA
+AHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH
+07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07Lj
+Wd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/
+KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcA
+GAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEA
+AACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA
+/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deW
+HwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAA
+AAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAA
+AHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH
+07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07Lj
+Wd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/
+KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcA
+GAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEA
+AACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA
+/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deW
+HwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAA
+AAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAA
+AHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH
+07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07Lj
+Wd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/
+KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcA
+GAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEA
+AACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA
+/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH009nZ1MAAACOAwAAAAAAZdpq
+RgcAAACkTkzgmBsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsb
+GxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsb
+GxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbsuNZ338oBwAY
+AQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAA
+AID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID9
+15YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915Yf
+AAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAA
+AAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAA
+cIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfT
+suNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ
+338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338o
+BwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAY
+AQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAA
+AID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID9
+15YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915Yf
+AAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAA
+AAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAA
+cIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfT
+suNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ
+338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338o
+BwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAY
+AQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAA
+AID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID9
+15YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915Yf
+AAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAA
+AAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAA
+cIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfT
+suNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ
+338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338o
+BwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAY
+AQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAA
+AID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID9
+15YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915Yf
+AAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAA
+AAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAA
+cIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfT
+suNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ
+338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338o
+BwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAY
+AQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAA
+AID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID9
+15YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915Yf
+AAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAA
+AAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAA
+cIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfT
+suNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ
+338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338o
+BwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAY
+AQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAA
+AID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID9
+15YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915Yf
+AAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAA
+AAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAA
+cIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfT
+suNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ
+338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338o
+BwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAY
+AQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAA
+AID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID9
+15YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915Yf
+AAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAA
+AAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAA
+cIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfT
+suNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ
+338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338o
+BwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAY
+AQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAA
+AID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID9
+15YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915Yf
+AAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAA
+AAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAA
+cIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfT
+suNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ
+338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338o
+BwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTT2dnUwAAACYE
+AAAAAABl2mpGCAAAABI8N3OYGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsb
+GxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsb
+GxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxuy
+41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nf
+fygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygH
+ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
+AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
+gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3X
+lh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8A
+AAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAA
+AABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABw
+h9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy
+41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nf
+fygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygH
+ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
+AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
+gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3X
+lh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8A
+AAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAA
+AABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABw
+h9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy
+41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nf
+fygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygH
+ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
+AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
+gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3X
+lh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8A
+AAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAA
+AABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABw
+h9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy
+41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nf
+fygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygH
+ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
+AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
+gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3X
+lh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8A
+AAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAA
+AABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABw
+h9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy
+41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nf
+fygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygH
+ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
+AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
+gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3X
+lh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8A
+AAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAA
+AABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABw
+h9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy
+41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nf
+fygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygH
+ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
+AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
+gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3X
+lh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8A
+AAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAA
+AABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABw
+h9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy
+41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nf
+fygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygH
+ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
+AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
+gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3X
+lh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8A
+AAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAA
+AABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABw
+h9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy
+41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nf
+fygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygH
+ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
+AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
+gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3X
+lh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8A
+AAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAA
+AABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABw
+h9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9NP
+Z2dTAAAAvgQAAAAAAGXaakYJAAAAiNJqLpgbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsb
+GxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsb
+GxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsb
+GxsbGxsbG7LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAA
+AHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH
+07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07Lj
+Wd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/
+KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcA
+GAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEA
+AACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA
+/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deW
+HwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAA
+AAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAA
+AHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH
+07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07Lj
+Wd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/
+KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcA
+GAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEA
+AACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA
+/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deW
+HwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAA
+AAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAA
+AHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH
+07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07Lj
+Wd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/
+KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcA
+GAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEA
+AACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA
+/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deW
+HwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAA
+AAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAA
+AHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH
+07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07Lj
+Wd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/
+KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcA
+GAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEA
+AACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA
+/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deW
+HwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAA
+AAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAA
+AHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH
+07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07Lj
+Wd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/
+KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcA
+GAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEA
+AACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA
+/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deW
+HwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAA
+AAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAA
+AHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH
+07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07Lj
+Wd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/
+KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcA
+GAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEA
+AACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA
+/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deW
+HwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAA
+AAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAA
+AHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH
+07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07Lj
+Wd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/
+KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcA
+GAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEA
+AACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA
+/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deW
+HwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAA
+AAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAA
+AHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH
+07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07Lj
+Wd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/
+KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcA
+GAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEA
+AACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA
+/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deW
+HwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAA
+AAAAAHCH009nZ1MAAABWBQAAAAAAZdpqRgoAAADprqTRmBsbGxsbGxsbGxsbGxsbGxsbGxsbGxsb
+GxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsb
+GxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsb
+GxsbGxsbGxsbGxsbGxsbsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID9
+15YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915Yf
+AAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAA
+AAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAA
+cIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfT
+suNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ
+338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338o
+BwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAY
+AQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAA
+AID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID9
+15YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915Yf
+AAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAA
+AAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAA
+cIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfT
+suNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ
+338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338o
+BwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAY
+AQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAA
+AID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID9
+15YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915Yf
+AAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAA
+AAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAA
+cIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfT
+suNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ
+338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338o
+BwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAY
+AQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAA
+AID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID9
+15YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915Yf
+AAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAA
+AAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAA
+cIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfT
+suNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ
+338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338o
+BwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAY
+AQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAA
+AID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID9
+15YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915Yf
+AAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAA
+AAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAA
+cIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfT
+suNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ
+338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338o
+BwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAY
+AQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAA
+AID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID9
+15YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915Yf
+AAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAA
+AAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAA
+cIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfT
+suNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ
+338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338o
+BwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAY
+AQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAA
+AID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID9
+15YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915Yf
+AAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAA
+AAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAA
+cIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfT
+suNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ
+338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338o
+BwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAY
+AQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAA
+AID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID9
+15YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915Yf
+AAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAA
+AAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAA
+cIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfT
+suNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ
+338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338o
+BwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAY
+AQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAA
+AID915YfAAAAAAAAcIfTT2dnUwAAAO4FAAAAAABl2mpGCwAAAIuieiSYGxsbGxsbGxsbGxsbGxsb
+GxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsb
+GxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsb
+GxsbGxsbGxsbGxsbGxsbGxsbGxsbGxuy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygH
+ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
+AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
+gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3X
+lh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8A
+AAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAA
+AABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABw
+h9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy
+41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nf
+fygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygH
+ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
+AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
+gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3X
+lh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8A
+AAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAA
+AABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABw
+h9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy
+41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nf
+fygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygH
+ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
+AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
+gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3X
+lh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8A
+AAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAA
+AABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABw
+h9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy
+41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nf
+fygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygH
+ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
+AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
+gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3X
+lh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8A
+AAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAA
+AABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABw
+h9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy
+41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nf
+fygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygH
+ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
+AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
+gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3X
+lh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8A
+AAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAA
+AABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABw
+h9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy
+41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nf
+fygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygH
+ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
+AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
+gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3X
+lh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8A
+AAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAA
+AABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABw
+h9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy
+41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nf
+fygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygH
+ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
+AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
+gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3X
+lh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8A
+AAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAA
+AABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABw
+h9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy
+41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nf
+fygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygH
+ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
+AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
+gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3X
+lh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8A
+AAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAA
+AABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABw
+h9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy
+41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nf
+fygHABgBAAAAgP3Xlh8AAAAAAABwh9NPZ2dTAAAAhgYAAAAAAGXaakYMAAAAFNwXZ5gbGxsbGxsb
+GxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsb
+GxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsb
+GxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbG7LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH
+07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07Lj
+Wd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/
+KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcA
+GAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEA
+AACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA
+/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deW
+HwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAA
+AAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAA
+AHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH
+07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07Lj
+Wd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/
+KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcA
+GAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEA
+AACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA
+/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deW
+HwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAA
+AAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAA
+AHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH
+07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07Lj
+Wd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/
+KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcA
+GAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEA
+AACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA
+/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deW
+HwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAA
+AAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAA
+AHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH
+07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07Lj
+Wd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/
+KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcA
+GAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEA
+AACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA
+/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deW
+HwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAA
+AAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAA
+AHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH
+07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07Lj
+Wd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/
+KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcA
+GAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEA
+AACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA
+/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deW
+HwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAA
+AAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAA
+AHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH
+07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07Lj
+Wd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/
+KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcA
+GAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEA
+AACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA
+/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deW
+HwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAA
+AAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAA
+AHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH
+07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07Lj
+Wd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/
+KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcA
+GAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEA
+AACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA
+/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deW
+HwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAA
+AAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAA
+AHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH
+07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07Lj
+Wd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/
+KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcA
+GAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEA
+AACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA
+/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deW
+HwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAA
+AAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAA
+AHCH07LjWd9/KAcAGAEAAACA/deWHwAAAAAAAHCH009nZ1MAAAAeBwAAAAAAZdpqRg0AAACt2X4k
+mBsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsb
+GxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsb
+GxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbsuNZ338oBwAYAQAAAID915Yf
+AAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAA
+AAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAA
+cIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfT
+suNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ
+338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338o
+BwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAY
+AQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAA
+AID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID9
+15YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915Yf
+AAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAA
+AAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAA
+cIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfT
+suNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ
+338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338o
+BwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAY
+AQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAA
+AID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID9
+15YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915Yf
+AAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAA
+AAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAA
+cIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfT
+suNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ
+338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338o
+BwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAY
+AQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAA
+AID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID9
+15YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915Yf
+AAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAA
+AAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAA
+cIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfT
+suNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ
+338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338o
+BwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAY
+AQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAA
+AID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID9
+15YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915Yf
+AAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAA
+AAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAA
+cIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfT
+suNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ
+338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338o
+BwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAY
+AQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAA
+AID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID9
+15YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915Yf
+AAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAA
+AAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAA
+cIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfT
+suNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ
+338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338o
+BwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAY
+AQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAA
+AID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID9
+15YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915Yf
+AAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAA
+AAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAA
+cIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfT
+suNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ
+338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338o
+BwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAY
+AQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAA
+AID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID9
+15YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915Yf
+AAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAA
+AAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAA
+cIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfT
+suNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ
+338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338o
+BwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAY
+AQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAA
+AID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID9
+15YfAAAAAAAAcIfTsuNZ338oBwAYAQAAAID915YfAAAAAAAAcIfTT2dnUwAEAFMHAAAAAABl2mpG
+DgAAAL7DpnI1GxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsb
+GxsbGyOy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABw
+h9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy
+41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nf
+fygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygH
+ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
+AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
+gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3X
+lh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8A
+AAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAA
+AABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABw
+h9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy
+41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nf
+fygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygH
+ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
+AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
+gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3X
+lh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8A
+AAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAA
+AABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABw
+h9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy
+41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nf
+fygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygH
+ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
+AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
+gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oq4qk+O+hyAICqAQAAAQD4
+1fbCDAAAAIANAADg6gwAjo+PAQ==');
 CREATE TABLE IF NOT EXISTS 'wlb_Main_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO wlb_Main_uio VALUES('ElCadr','max','Parameter: maximum',131076,'100|',10,'<page>|max','','','Параметр: максимум','','','Параметр: максимум','','','','');
 INSERT INTO wlb_Main_uio VALUES('ElCadr','min','Parameter: minimum',131076,'0|',10,'<page>|min','','','Параметр: мінімум','','','Параметр: минимум','','','','');
@@ -11138,100 +11966,53 @@ INSERT INTO wlb_Main_uio VALUES('TextLab','com_text','Parameter: command text (f
 INSERT INTO wlb_Main_uio VALUES('ElCadr','prmStText','Parameter: status text',131077,'',10,'<page>|st_text','','','Параметр: текст статусу','','','Параметр: текст статуса','','','','');
 INSERT INTO wlb_Main_uio VALUES('ElCadr','prmComText','Parameter: text of command',131077,'',14,'<page>|com_text','','','Параметр: текст команди','','','Параметр: текст команды','','','','');
 INSERT INTO wlb_Main_uio VALUES('RootPgSo','notify2','Notification: type 2 (TextSpeech)',131205,'#!/bin/sh
-#flags=queue|qMergeMess
-if test $doRes = 1 -a "x" != "x$mess"; then
- #Specific TTS
- case $lang in
-  ru_*)
-   iconv=$(which iconv)
-   ru_tts=$(which ru_tts)
-   sox=$(which sox)
-   if test "x$ru_tts" != "x" -a "x$iconv" != "x" -a "x$sox" != "x"; then
-    echo "$mess" | $iconv -f $(echo $lang | sed -n "/^[^.]*\.\(.*\)/s//\1/p") -t KOI8-R | $ru_tts -p 0.05 -r 0.4 -s /usr/share/ru_tts/lexicon | $sox -t raw -e signed-integer -b 8 -r 10k -c 1 -v 0.8 - -t wav $res.wav
-   fi
-   ;;
-  *) > $res.wav; ;;
- esac
-
- #Generic TTS for mostly all
- if test ! -s $res.wav; then
-  espeak=$(which espeak)
-  text2wave=$(which text2wave)
-  if test "x$espeak" != "x"; then
-   echo "$mess" | $espeak --stdin -s 130 -v $(echo $lang | sed -n "/\(^[^_]*\).*/s//\1/p") -w $res.wav
-  elif test "x$text2wave" != "x"; then
-   case $lang in
-    uk_*) langFull="ukrainian"; ;;
-    ru_*) langFull="russian"; ;;
-    en_*) langFull="english"; ;;
-    #!!!! Append here needs
-   esac
-   echo $mess > $res.text; text2wave $res.text -o $res.wav -eval "(language_$langFull)"
-  fi
- fi
-
- #Encode before for that less to transfer
- if test -s $res.wav; then
-  oggenc=$(which oggenc)
-  if test "x$oggenc" != "x"; then oggenc -Q $res.wav -o $res;
-  else mv -f $res.wav $res; fi
-  rm -f $res.wav $res.text
- fi
-fi',0,'','','','Повідомлення: тип 2 (Мова)','','','Уведомление: тип 2 (Речь)','','','','');
-INSERT INTO wlb_Main_uio VALUES('RootPgSo','notifyVisVision0','Notification: Vision type 0 (Light)',131205,'//name=Light
-//ico=aLight',0,'','','','Повідомлення: Vision тип 0 (Світло)','','','Уведомление: Vision тип 0 (Свет)','','','','');
-INSERT INTO wlb_Main_uio VALUES('RootPgSo','notifyVisVision1','Notification: Vision type 1 (Buzzer)',131205,'//flags=notify
-//name=Buzzer
-//ico=aAlarm
-if(en) {
-	if((beep=SYS.system("which beep")).length)
-		SYS.system(beep.parse(0,"\n")+" -f 1000 -l 100000 &\necho $! > aAlarm.pid", true);
-	else if((play=SYS.system("which play")).length)
-		SYS.system(play.parse(0,"\n")+" -q -n synth 1000000 sin 1000 gain -20 &\necho $! > aAlarm.pid", true);
-}
-else SYS.system("if test -s aAlarm.pid; then kill $(cat aAlarm.pid); rm aAlarm.pid; fi");',0,'','','','Повідомлення: Vision тип 1 (Бузер)','','','Уведомление: Vision тип 1 (Бузер)','','','','');
-INSERT INTO wlb_Main_uio VALUES('RootPgSo','notifyVisVision2','Notification: Vision type 2 (TextSpeech)',131205,'#!/bin/sh
-#flags=notify2|queue
+#flags=notify2|queue|qMergeMess
 #name=Text speech
 #ico=aSound
-play=$(which play)
-if test $en = 1 -a "x$play" != "x"; then
- #Try the resource create here by no that provide by VCAEngine
- if test ! -s $res -a "x$mess" != "x" -a "x$lang" != "x"; then
-  #Specific TTS
-  case $lang in
-   ru_*)
-    iconv=$(which iconv)
-    ru_tts=$(which ru_tts)
-    sox=$(which sox)
-    if test "x$ru_tts" != "x" -a "x$iconv" != "x" -a "x$sox" != "x"; then
-     echo "$mess" | $iconv -f UTF-8 -t $(echo $lang | sed -n "/^[^.]*\.\(.*\)/s//\1/p") | $ru_tts -p 0.05 -r 0.4 -s /usr/share/ru_tts/lexicon | $sox -t raw -e signed-integer -b 8 -r 10k -c 1 -v 0.8 - -t wav $res
-    fi
-    ;;
-  esac
 
-  #Generic TTS for mostly all
-  if test ! -s $res; then
-   espeak=$(which espeak)
-   text2wave=$(which text2wave)
-   if test "x$espeak" != "x"; then
-    echo "$mess" | $espeak --stdin -s 130 -v $(echo $lang | sed -n "/\(^[^_]*\).*/s//\1/p") -w $res
-   elif test "x$text2wave" != "x"; then
-    case $lang in
-     uk_*) langFull="ukrainian"; ;;
-     ru_*) langFull="russian"; ;;
-     en_*) langFull="english"; ;;
-     #!!!! Append here needs
-    esac
-    echo $mess > $res.text; text2wave $res.text -o $res -eval "(language_$langFull)"
-   fi
-  fi
- fi
+if test $doNtf = 1 -a $en = 1 -a -s $res; then
+	play=$(which play)
+	if test "x$play" != "x"; then play -q $res; fi
 
- #Same play for the allowed resource
- if test -s $res; then play -q $res; fi
- rm -f $res
-fi',0,'','','','Повідомлення: Vision тип 2 (Мова)','','','Уведомление: Vision тип 2 (Речь)','','','','');
+elif test $doRes = 1 -a "x" != "x$mess"; then
+	#Specific TTS
+	case $lang in
+		ru_*)
+			iconv=$(which iconv)
+			ru_tts=$(which ru_tts)
+			sox=$(which sox)
+			if test "x$ru_tts" != "x" -a "x$iconv" != "x" -a "x$sox" != "x"; then
+				echo "$mess" | $iconv -f $(echo $lang | sed -n "/^[^.]*\.\(.*\)/s//\1/p") -t KOI8-R | $ru_tts -p 0.05 -r 0.4 -s /usr/share/ru_tts/lexicon | $sox -t raw -e signed-integer -b 8 -r 10k -c 1 -v 0.8 - -t wav $res.wav
+			fi
+		;;
+		*) > $res.wav; ;;
+	esac
+
+	#Generic TTS for mostly all
+	if test ! -s $res.wav; then
+		espeak=$(which espeak)
+		text2wave=$(which text2wave)
+		if test "x$espeak" != "x"; then
+			echo "$mess" | $espeak --stdin -s 130 -v $(echo $lang | sed -n "/\(^[^_]*\).*/s//\1/p") -w $res.wav
+		elif test "x$text2wave" != "x"; then
+			case $lang in
+				uk_*) langFull="ukrainian"; ;;
+				ru_*) langFull="russian"; ;;
+				en_*) langFull="english"; ;;
+				#!!!! Append here need languages
+			esac
+			echo $mess > $res.text; text2wave $res.text -o $res.wav -eval "(language_$langFull)"
+		fi
+	fi
+
+	#Encode before for that less to transfer
+	if test -s $res.wav; then
+		oggenc=$(which oggenc)
+		if test "x$oggenc" != "x"; then oggenc -Q $res.wav -o $res; echo "audio/ogg";
+		else mv -f $res.wav $res; echo "audio/wav"; fi
+		rm -f $res.wav $res.text
+	fi
+fi',0,'','','','Повідомлення: тип 2 (Мова)','','','Уведомление: тип 2 (Речь)','','','','');
 INSERT INTO wlb_Main_uio VALUES('ElViewGraph','enForce','Force enabling',131072,'0',8,'','','','Примусове включення','','','Принудительное включение','','','','');
 INSERT INTO wlb_Main_uio VALUES('grpGraph','sclWin','Scale: by window',131072,'0',0,'','','trnd1','Масштаб: вікном','','','Масштаб: окном','','','','');
 INSERT INTO wlb_Main_uio VALUES('grph_panel','sclWin','Scale by window',131072,'0',14,'<page>|sclWin','','','Масштаб вікном','','','Масштаб окном','','','','');
@@ -11341,6 +12122,35 @@ INSERT INTO wlb_Main_uio VALUES('alarmsStReport','doc','Document',131205,'',2,'<
 INSERT INTO wlb_Main_uio VALUES('calendar','selTime','Selected time',131073,'0|',8,'','','','Обраний час','','','Выбранное время','','','','');
 INSERT INTO wlb_Main_uio VALUES('anShow','pDscr','Parameter: description',131077,'',10,'Parameter|DESCR','','','','','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('anShow1','pDscr','Parameter: description',131077,'',10,'Parameter|DESCR','','','','','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('RootPgSo','notify0','Notification: type 0 (Light)',131205,'//name=Light
+//ico=aLight',0,'','','','Повідомлення: тип 0 (Світло)','','','Уведомление: тип 0 (Свет)','','','','');
+INSERT INTO wlb_Main_uio VALUES('RootPgSo','notify1','Notification: type 1 (Buzzer)',131205,'//flags=notify|resource
+//name=Buzzer
+//ico=aAlarm
+//resStatic=ntf1
+if(doNtf) {
+	if(en) {
+		if(res.length) {
+			if((play=SYS.system("which play")).length) {
+				SYS.fileWrite(prcID+".res", res);
+				SYS.system(play.parseLine(0)+" -q "+prcID+".res &\necho $! > "+prcID+".pid", true);
+			}
+		}
+		else {
+			if((beep=SYS.system("which beep")).length)
+				SYS.system(beep.parse(0,"\n")+" -f 1000 -l 100000 &\necho $! > "+prcID+".pid", true);
+			else if((play=SYS.system("which play")).length)
+				SYS.system(play.parse(0,"\n")+" -q -n synth 1000000 sin 1000 gain -20 &\necho $! > "+prcID+".pid", true);
+		}
+	} else SYS.system("if test -s "+prcID+".pid; then kill $(cat "+prcID+".pid); rm "+prcID+".pid "+prcID+".res; fi");
+
+}
+else if(doRes && (sox=SYS.system("which sox")).length) {
+	SYS.system(sox.parseLine(0)+" -n -r 8000 "+prcID+".ogg synth 60 sin 1000");
+	res = SYS.fileRead(prcID+".ogg");
+	SYS.system("rm "+prcID+".ogg");
+	return "audio/ogg";
+}',0,'','','','Повідомлення: тип 1 (Бузер)','','','Уведомление: тип 1 (Бузер)','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_doc_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO wlb_doc_incl VALUES('docRepDay','doc','/wlb_doc/wdg_doc/wdg_doc','perm;geomZ;tmpl;doc;bTime;time;process;n;vCur;aCur;aSize;',2);
 INSERT INTO wlb_doc_incl VALUES('docRepMonth','doc','/wlb_doc/wdg_doc/wdg_doc','perm;geomZ;tmpl;doc;bTime;time;process;n;vCur;aCur;aSize;',2);
@@ -20270,7 +21080,7 @@ if(play_value) {
 		stepTm = args.stepTm;
 		stepCur = args.stepCur;
 	}
-}','','',200,'path;name;dscr;active;geomW;geomH;evProc;backColor;',1565888623);
+}','','',200,'path;name;dscr;active;geomW;geomH;evProc;backColor;',1603039326);
 INSERT INTO wlb_Main VALUES('ElViewCadr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAAx1AAAMdQEteJR1AAAC
 xUlEQVRoge2W0Y4URRSG///06eqZRQYkqCuBSQDNSEJcHsBrXsInID6P4Y32QhZ3DKLZENZ1iRPR
 XZmNLHZXV53yYokX63IBw1Crqe+yulPn/6r6dBU3Nu5vbk7x32Q0Oqubm9O7d78ej8e5w7w2u7u7
@@ -24972,7 +25782,7 @@ INSERT INTO prj_archBrowser VALUES('/archBrowser/so/1','doc','','root',0,'
 INSERT INTO prj_archBrowser VALUES('/archBrowser/so/1/doc','messRep','','/wlb_doc/wdg_docMessRep',0,'','','',-1,0,'owner;geomYsc;archLs;messCat;',1495719828);
 INSERT INTO prj_archBrowser VALUES('/archBrowser/control','graphCalc','','/wlb_Main/wdg_graphCalc',0,'','','',-1,0,'owner;',1563002360);
 CREATE TABLE IF NOT EXISTS 'prj_tmplSO' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
-INSERT INTO prj_tmplSO VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo',0,'','','',-1,1,'pgOpen;',1592753399);
+INSERT INTO prj_tmplSO VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo',0,'','','',-1,1,'pgOpen;',1606050538);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so','1','','root',1,'
 ','
 ','
@@ -24997,8 +25807,6 @@ INSERT INTO prj_tmplSO VALUES('/tmplSO/control','cntrPaspOld','','/wlb_Main/wdg_
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1','view1','','root',0,'
 ','','',-1,5,'owner;perm;name;dscr;geomZ;',1584730664);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1/view1','1','','/wlb_test/wdg_mn_gen',0,'','','',-1,0,'owner;perm;name;pgOpen;pgNoOpenProc;pgGrp;',1584730664);
-INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1/view1','10','','/wlb_prescr/wdg_prescrRun',0,'','','',-1,0,'owner;perm;dbDB;dbProgs;prExtCurCom;prExtMode;prExtProg;prExtStartTm;prExtWork;',1584730664);
-INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1/view1','11','','/wlb_prescr/wdg_prescrEdit',0,'','','',-1,0,'owner;perm;dbDB;dbProgs;prExtComLs;',1584730664);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1','view2','','/wlb_Main/wdg_grpGraph',0,'','','',-1,2,'owner;perm;geomZ;pgGrp;',1546704070);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1/view2','1','','..',0,'','','',-1,0,'owner;',1546704070);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1','view3','','/wlb_Main/wdg_grpCadr',0,'','','',-1,2,'owner;perm;geomZ;pgGrp;',1546703892);

@@ -690,12 +690,13 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <p>Функции объекта исходящего транспорта (SYS.Transport["Modul"]["out_Transp"]):
 </p>
 <ul>
+<li><i>bool isNetwork()</i> — признак — "Транспорт сетевой", что определяет таймауты в секундах.</li>
 <li><i>ElTp cfg(string nm)</i> — получает значение конфигурационного поля <i>nm</i> объекта.</li>
 <li><i>bool cfgSet(string nm, ElTp val)</i> [<span style="color:red">доступ к соответствующей подсистеме</span>] — устанавливает конфигурационное поле <i>nm</i> объекта в значение <i>val</i>.</li>
 <li><i>string status()</i> — строка статуса транспорта.</li>
 <li><i>bool start( bool vl = EVAL, int tm = 0 )</i> — возвращает статус исполнения, запускает/останавливает по <i>vl</i> (если не &lt;EVAL&gt;). Для запуска можно указывать особый таймаут <i>tm</i>.</li>
 <li><i>string addr( string vl = "" )</i> — адрес транспорта, устанавливает в непустое значение <i>vl</i>.</li>
-<li><i>string timings( string vl = "" )</i> — тайминги транспорта, устанавливает в непустое значение <i>vl</i>.</li>
+<li><i>string timings( string vl = "", isDef = true )</i> — тайминги транспорта, устанавливает в непустое значение <i>vl</i> и по умолчанию для <i>isDef</i>.</li>
 <li><i>int attempts( int vl = EVAL )</i> — попыток подключения транспорта, устанавливает в не-EVAL значение <i>vl</i>.</li>
 <li><i>string messIO( string mess, real timeOut = 0, int inBufLen = -1 );</i> — отправляет сообщения <i>mess</i> через транспорт с таймаутом ожидания ответа <i>timeOut</i> (в секундах) и читает ответ (буфер) размером <i>inBufLen</i> байт. В случае нулевого таймаута это время берётся из настроек исходящего транспорта. Отрицательное время <i>timeOut</i> (&lt; -1e-3) отключает работу транспорта в режиме запрос/ответ и позволяет независимо читать/писать в буфер ВВ, с таймаутом чтения <i>timeOut</i>, в абсолютном значении. Для отрицательного <i>inBufLen</i> размер буфера устанавливается в STR_BUF_LEN(10000), а "0" выключает чтение вообще.<br />
 <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Если Ваш транспорт в ответ на запрос подразумевает получение данных частями тогда используйте эту функцию в одном потоке для нескольких устройств на одной шине-транспорте поскольку здесь не существует способа блокирования транспорта из пользовательского API. Один поток это объект контроллера подсистемы "Сбор данных", а <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">модуль "Протокол пользователя"</a> блокирует транспорт внутри перед выполнением своих пользовательских процедур.
@@ -826,7 +827,7 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 <tr>
 <td> <a href="Libs_Devices.html" title="Special:MyLanguage/Libs/Devices">Библиотека промышленных устройств</a>
 </td>
-<td> 2.4 </td>
+<td> 2.5 </td>
 <td> GPLv2 </td>
 <td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.tmplb_DevLib
 </td>
@@ -943,5 +944,5 @@ vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/ru">Documents/User_API/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2020</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.2</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/ru">Documents/User_API/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">December 2020</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.3</td></tr></table></body>
 </html>

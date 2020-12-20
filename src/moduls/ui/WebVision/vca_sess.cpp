@@ -94,7 +94,7 @@ void VCASess::getReq( SSess &ses )
 
 	//Check for the main work page
 	if((hd=open("WebVisionVCA.html",O_RDONLY)) >= 0) {
-	    char buf[STR_BUF_LEN];
+	    char buf[prmStrBuf_SZ];
 	    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) ses.page.append(buf, len);
 	    close(hd);
 	} else ses.page = WebVisionVCA_html;
@@ -209,10 +209,26 @@ void VCASess::getReq( SSess &ses )
     else if(wp_com == "res") {
 	prmEl = ses.prm.find("val");
 	if(prmEl != ses.prm.end()) {
+	    // Getting the "Range"
+	    int start = -1, size = 0;
+	    string range;
+	    for(size_t iVr = 0; iVr < ses.vars.size(); iVr++)
+		if(TSYS::strParse(ses.vars[iVr],0,":") == "Range") {
+		    range = sTrm(TSYS::strParse(ses.vars[iVr],1,"Range: bytes="));
+		    start = vmax(0, s2i(TSYS::strParse(range,0,"-")));
+		    if((size=s2i(TSYS::strParse(range,1,"-"))))	size = size - start + 1;
+		    break;
+		}
+
 	    string mime;
-	    ses.page = resGet(prmEl->second, ses.url, ses, &mime);
-	    mod->imgConvert(ses, mime);
-	    ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type: "+TSYS::strParse(mime,0,";"));
+	    ses.page = resGet(prmEl->second, ses.url, ses, &mime, start, &size);
+	    if(range.size() && size)
+		ses.page = mod->pgCreator(ses.prt, ses.page, "206 Partial Content",
+		    "Content-Type: "+TSYS::strParse(mime,0,";")+"\x0D\x0A"+"Content-Range: bytes "+i2s(start)+"-"+i2s(start+ses.page.size()-1)+"/"+i2s(size));
+	    else {
+		mod->imgConvert(ses, mime);
+		ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type: "+TSYS::strParse(mime,0,";"));
+	    }
 	} else ses.page = mod->pgCreator(ses.prt, "<div class='error'>"+string(_("Resource not found"))+"</div>\n", "404 Not Found");
     }
     //Request to the primitive object. Used for data caching
@@ -379,19 +395,21 @@ void VCASess::pgCacheProc( const string &addr, bool fClose )
 	} else break;	//Due to this king of the order
 }
 
-string VCASess::resGet( const string &res, const string &path, const SSess &ses, string *mime )
+string VCASess::resGet( const string &res, const string &path, const SSess &ses, string *mime, int off, int *size )
 {
     if(res.empty()) return "";
 
     string ret = cacheResGet(res, mime);
     if(ret.empty()) {
 	XMLNode req("get");
-	req.setAttr("path", path+"/%2fwdg%2fres")->setAttr("id", res);
+	req.setAttr("path", path+"/%2fwdg%2fres")->setAttr("id", res)->
+	    setAttr("off", (off>=0)?i2s(off).c_str():"")->setAttr("size", (off>=0 && size)?i2s(*size).c_str():"");
 	mod->cntrIfCmd(req, ses);
 	ret = TSYS::strDecode(req.text(), TSYS::base64);
-	if(!ret.empty()) {
+	if(ret.size()) {
 	    if(mime) *mime = TUIS::mimeGet(res, ret, req.attr("mime"));
-	    cacheResSet(res, ret, req.attr("mime"));
+	    if(!s2i(req.attr("size"))) cacheResSet(res, ret, req.attr("mime"));
+	    else if(size) *size = s2i(req.attr("size"));
 	}
     }
 
@@ -411,15 +429,15 @@ string VCASess::cacheResGet( const string &res, string *mime )
 
 void VCASess::cacheResSet( const string &res, const string &val, const string &mime )
 {
-    if(val.size() > USER_FILE_LIMIT) return;
+    if(val.size() > limUserFile_SZ) return;
     ResAlloc resAlc(nodeRes(), true);
     mCacheRes[res] = CacheEl(time(NULL), val, mime);
-    if(mCacheRes.size() > (STD_CACHE_LIM+STD_CACHE_LIM/10)) {
+    if(mCacheRes.size() > (limCacheIts_N+limCacheIts_N/10)) {
 	vector< pair<time_t,string> > sortQueue;
 	for(map<string,CacheEl>::iterator itr = mCacheRes.begin(); itr != mCacheRes.end(); ++itr)
 	    sortQueue.push_back(pair<time_t,string>(itr->second.tm,itr->first));
 	sort(sortQueue.begin(), sortQueue.end());
-	for(unsigned iDel = 0; iDel < (STD_CACHE_LIM/10); ++iDel)
+	for(unsigned iDel = 0; iDel < (limCacheIts_N/10); ++iDel)
 	    mCacheRes.erase(sortQueue[iDel].second);
     }
 }

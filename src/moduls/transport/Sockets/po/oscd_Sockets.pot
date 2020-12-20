@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-05 19:53+0300\n"
+"POT-Creation-Date: 2020-10-22 16:35+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -97,14 +97,14 @@ msgstr ""
 msgid "RAWCAN socket binded to '%s'!"
 msgstr ""
 
-msgid "Started-connected"
+msgid "Connected"
 msgstr ""
 
-msgid "Stopped-disconnected"
+msgid "Disconnected"
 msgstr ""
 
 #, c-format
-msgid "Restart due to lack of input activity to '%s'."
+msgid "Reconnect due to lack of input activity to '%s'."
 msgstr ""
 
 #, c-format
@@ -335,13 +335,13 @@ msgid "RAWCAN socket doesn't bind to '%s'!"
 msgstr ""
 
 #, c-format
-msgid "Error starting: %s"
+msgid "Error connecting: %s"
 msgstr ""
 
 msgid "Unknown error"
 msgstr ""
 
-msgid "Transport is not started!"
+msgid "Transport is not connected!"
 msgstr ""
 
 #, c-format

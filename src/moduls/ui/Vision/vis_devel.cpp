@@ -60,7 +60,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     //Init workspace
     work_space = new QMdiArea(this);
     //work_space->setScrollBarsEnabled(true);
-    work_space->setBackground(QBrush(QColor(156,179,196)/*,Qt::Dense2Pattern*/));
+    //work_space->setBackground(QBrush(QColor(156,179,196)/*,Qt::Dense2Pattern*/));
     setCentralWidget(work_space);
 
     //Create actions
@@ -663,7 +663,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     endRunTimer   = new QTimer(this);
     endRunTimer->setSingleShot(false);
     connect(endRunTimer, SIGNAL(timeout()), this, SLOT(endRunChk()));
-    endRunTimer->start(STD_WAIT_DELAY);
+    endRunTimer->start(1e3*prmWait_DL);
     // Wait cursor clean up timer
     waitCursorClear = new QTimer(this);
     waitCursorClear->setSingleShot(true);
@@ -1317,16 +1317,14 @@ void VisDevelop::visualItEdit( )
 {
     string ed_wdg;
     for(int w_off = 0; (ed_wdg=TSYS::strSepParse(work_wdg,0,';',&w_off)).size(); ) {
-	QString w_title(QString(_("Widget: %1")).arg(ed_wdg.c_str()));
-
 	//Check to already opened widget window
 	QList<QMdiSubWindow *> ws_wdg = work_space->subWindowList();
 	int iW;
 	for(iW = 0; iW < ws_wdg.size(); iW++)
-	    if(ws_wdg.at(iW)->windowTitle() == w_title) {
+	    if(ws_wdg.at(iW)->windowTitle().toStdString().find("("+work_wdg+")") != string::npos) {
 		mod->postMess(mod->nodePath().c_str(),
 		    QString(_("The widget '%1' editing window is already open.")).
-			    arg(ed_wdg.c_str()), TVision::Info, this );
+			    arg(ed_wdg.c_str()), TVision::Info, this);
 		work_space->setActiveSubWindow(ws_wdg.at(iW));
 		break;
 	    }
@@ -1341,11 +1339,13 @@ void VisDevelop::visualItEdit( )
 	scrl->setPalette(plt);
 	//scrl->setBackgroundRole(QPalette::Dark);
 	scrl->setAttribute(Qt::WA_DeleteOnClose);
-	scrl->setWindowTitle(w_title);
 
 	//Make and place widget's view
 	DevelWdgView *vw = new DevelWdgView(ed_wdg, 0, this, 0, scrl);
 	vw->load("");
+
+	scrl->setWindowTitle(vw->property("name").toString() + " ("+ed_wdg.c_str()+")");
+
 	connect(vw, SIGNAL(selected(const string&)), this, SLOT(selectItem(const string&)));
 	connect(vw, SIGNAL(apply(const string&)), this, SIGNAL(modifiedItem(const string&)));
 	connect(this, SIGNAL(modifiedItem(const string&)), vw, SLOT(load(const string&)));

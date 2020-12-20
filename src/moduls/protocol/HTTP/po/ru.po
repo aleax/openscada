@@ -1,15 +1,15 @@
 # OpenSCADA.Protocol.HTTP translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.Protocol.HTTP package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2003-2019.
+# Roman Savochenko <roman@oscada.org>, 2003-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.HTTP 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-23 15:41+0200\n"
+"POT-Creation-Date: 2020-11-19 15:29+0200\n"
 "PO-Revision-Date: 2007-10-23 18:02+0300\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -52,8 +52,8 @@ msgid "Exiting the authentication for the user '%s'."
 msgstr "Выход аутентификации пользователя '%s'."
 
 #, c-format
-msgid "The authentication session for the user '%s' is expired."
-msgstr "Сеанс аутентификации для пользователя '%s' устарел."
+msgid "The authentication session for the user '%s' is expired. Host: %s."
+msgstr "Сеанс аутентификации для пользователя '%s' устарел. Узел: %s."
 
 #, c-format
 msgid "Error or not supported the HTTP method '%s'."
@@ -95,7 +95,12 @@ msgstr "БД активных сеансов аутентификации"
 msgid ""
 "Set to empty to disable using the external table of the active "
 "authentication sessions."
-msgstr "Установить в пустое для отключения внешней таблицы активных сеансов аутентификации."
+msgstr ""
+"Установить в пустое для отключения внешней таблицы активных сеансов "
+"аутентификации."
+
+msgid "Authentication UID generation space"
+msgstr "Пространство генерации UID аутентификации"
 
 msgid "Life time of the authentication, minutes"
 msgstr "Время жизни аутентификации, минут"
@@ -216,6 +221,3 @@ msgstr "Принять"
 
 msgid "Clean"
 msgstr "Очистить"
-
-#~ msgid "Set to empty to disable."
-#~ msgstr "Установить в пустое для отключения."

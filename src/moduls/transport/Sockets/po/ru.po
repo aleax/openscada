@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 4.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-05 19:52+0300\n"
+"POT-Creation-Date: 2020-10-22 16:35+0300\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -134,15 +134,14 @@ msgstr "Ошибка связывания с %s сокетом: '%s (%d)'!"
 msgid "RAWCAN socket binded to '%s'!"
 msgstr "RAWCAN сокет подключен к '%s'!"
 
-msgid "Started-connected"
-msgstr "Запущен-подсоединён"
+msgid "Connected"
+msgstr "Подключено"
 
-msgid "Stopped-disconnected"
-msgstr "Остановлен-отсоединён"
+msgid "Disconnected"
+msgstr "Отключено"
 
-#, c-format
-msgid "Restart due to lack of input activity to '%s'."
-msgstr "Перезапуск из-за отсутствия входной активности на '%s'."
+msgid "Reconnect due to lack of input activity to '%s'."
+msgstr "Переподключение из-за отсутствия входной активности на '%s'."
 
 #, c-format
 msgid "Write: wrote %s."
@@ -421,15 +420,14 @@ msgstr "Ошибка создания сокета '%s'!"
 msgid "RAWCAN socket doesn't bind to '%s'!"
 msgstr "RAWCAN сокет не подключился к '%s'!"
 
-#, c-format
-msgid "Error starting: %s"
-msgstr "Ошибка запуска: %s"
+msgid "Error connecting: %s"
+msgstr "Ошибка подключения: %s"
 
 msgid "Unknown error"
 msgstr "Неизвестная ошибка"
 
-msgid "Transport is not started!"
-msgstr "Транспорт не запущен!"
+msgid "Transport is not connected!"
+msgstr "Транспорт не подключен!"
 
 #, c-format
 msgid "Error requesting: %s"

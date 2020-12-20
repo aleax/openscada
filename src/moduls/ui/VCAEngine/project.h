@@ -93,7 +93,7 @@ class Project : public TCntrNode, public TConfig
 
 	// Mime data access
 	void mimeDataList( vector<string> &list, const string &idb = "" ) const;
-	bool mimeDataGet( const string &id, string &mimeType, string *mimeData = NULL, const string &idb = "" ) const;
+	bool mimeDataGet( const string &id, string &mimeType, string *mimeData = NULL, const string &idb = "", int off = -1, int *size = NULL ) const;
 	void mimeDataSet( const string &id, const string &mimeType, const string &mimeData, const string &idb = "" );
 	void mimeDataDel( const string &id, const string &idb = "" );
 
@@ -221,7 +221,7 @@ class Page : public Widget, public TConfig
 
 	// Data access
 	void resourceList( vector<string> &ls );
-	string resourceGet( const string &id, string *mime = NULL );
+	string resourceGet( const string &id, string *mime = NULL, int off = -1, int *size = NULL );
 
 	void procChange( bool src = true );
 
@@ -295,7 +295,7 @@ class PageWdg : public Widget, public TConfig
 
 	// Data access
 	void resourceList( vector<string> &ls );
-	string resourceGet( const string &id, string *mime = NULL );
+	string resourceGet( const string &id, string *mime = NULL, int off = -1, int *size = NULL );
 
 	void procChange( bool src = true );
 

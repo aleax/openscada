@@ -116,12 +116,14 @@ class TTrOut: public TTransportOut
 	TTrOut( string name, const string &idb, TElem *el );
 	~TTrOut( );
 
+	bool isNetwork( )			{ return false; }
+
 	string getStatus( );
 
 	string timings( )			{ return mTimings; }
 	bool notStopOnProceed( )		{ return mNotStopOnProceed; }
 
-	void setTimings( const string &vl );
+	void setTimings( const string &vl, bool isDef = false );
 	void setNotStopOnProceed( bool vl )	{ mNotStopOnProceed = vl; modif(); }
 
 	// Modem functions

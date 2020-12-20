@@ -30,7 +30,7 @@
 <td> <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a> </td>
 <td> Рабочий пользовательский интерфейс (WEB)
 </td>
-<td> 4.12 </td>
+<td> 5.7 </td>
 <td> GPL2 </td>
 <td> ui_WebVision.so </td>
 <td> en,uk,ru,de </td>
@@ -44,18 +44,20 @@
 </th></tr>
 <tr>
 <td colspan="9"> Рабочий пользовательский интерфейс, основанный на WEB - внешний интерфейс к движку СВУ.
-<ul><li> <b>Общая трудоёмкость:</b> &gt; 30 <span title="человеко-дней, 1ЧД — 10 часов">ЧД<sup style="color: blue">[!]</sup></span></li>
+<ul><li> <b>Общая трудоёмкость:</b> &gt; 50 <span title="человеко-дней, 1ЧД — 10 часов">ЧД<sup style="color: blue">[!]</sup></span></li>
+<li> <b>Спонсировано, примитив "Медиа" и Уведомления на 1.35 <span title="человеко-дней, 1ЧД — 10 часов">ЧД<sup style="color: blue">[!]</sup></span>:</b> Хайди Рамезани</li>
+<li> <b>Спонсировано, Уведомления на 0.85 <span title="человеко-дней, 1ЧД — 10 часов">ЧД<sup style="color: blue">[!]</sup></span>:</b> Винницкая Птицефабрика</li>
 <li> <b>Спонсировано, завершение отражения примитива ElFigure на 0.5 <span title="человеко-дней, 1ЧД — 10 часов">ЧД<sup style="color: blue">[!]</sup></span>:</b> ООО "СВІТоВИР"</li>
 <li> <b>Сделать (To Do):</b></li></ul>
 <dl><dd> - расширить вид "Таблица" примитива "FormEl" пользовательской сортировкой по выбранной колонке;</dd>
 <dd> * дополнить панель статуса, функциями:
 <dl><dd> - экспорт и печать;</dd>
 <dd> - вызов документации проекта;</dd>
-<dd> - сигнализация-уведомление звуком и речью.</dd></dl></dd>
+<dd> + сигнализация-уведомление звуком и речью.</dd></dl></dd>
 <dd> - ElFigure,Diagram: включить или реализовать сглаживание, для библиотеки GD;</dd>
 <dd> - реализовать примитив "Диаграмма", "ElFigure" тегом "SVG";</dd>
 <dd> - расширить вариант "Анимация" примитива "Медиа" использованием RAW файлов изображений, вроде PNG;</dd>
-<dd> - реализовать вариант "Полное видео" примитива "Медиа".</dd></dl>
+<dd> + реализовать вариант "Полное видео" примитива "Медиа".</dd></dl>
 </td></tr></table>
 <p>Модуль предоставляет в OpenSCADA механизм конечной визуализации среды визуализации и управления (СВУ). Модуль основан на WEB технологиях (XHTML, JavaScript, CSS, AJAX). В своей работе модуль использует данные движка СВУ — модуль <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>.
 </p><p>Середовище візуалізації та управління (СВУ) є невід'ємною складовою SCADA системи. Воно застосовується на клієнтських станціях з метою доступного представлення інформації про об'єкт управління та видачі керуючого впливу на об'єкт. У різних практичних ситуаціях та умовах можуть застосовуватися СВУ, побудовані на різних принципах візуалізації. Наприклад, це можуть бути бібліотеки віджетів Qt, GTK+, wxWidgets або гіпертекстові механізми на основі технологій HTML, XHTML, XML, CSS та JavaScript або сторонні додатки візуалізації, реалізовані на різних мовах програмування Java, Python та інше. Будь-який з цих принципів має свої переваги та недоліки, комбінація яких може стати непереборною перепоною у можливості використання СВУ у тому або іншому практичному випадку. Наприклад, технології на кшталт бібліотеки Qt дозволяють створювати високопродуктивні СВУ, що безсумнівно важливо для станцій оператору управління технологічним процесом (ТП). Однак, необхідність інсталяції даного клієнтського ПЗ може зробити його використання неможливим у окремих випадках. З іншого боку, Web-технології не потребують інсталяції на клієнтські системи та є гранично багатоплатформними (достатньо вказати посилання на Web-сервер у будь-якому Web-браузері), що найбільш важливо для різних інженерних та адміністративних станцій. З іншого боку, продуктивність та надійність таких інтерфейсів нижче, що практично виключає їх використання на станціях оператору ТП.
@@ -132,7 +134,7 @@
 <ul><li> С правой стороны:
 <ul><li> текущий пользователь, от имени которого исполняется интерфейс СВУ — кликом можно сменить этого пользователя, введя новое имя и пароль;</li>
 <li> текущий стиль интерфейса, который можно сменить выбрав из комбобокса нужный;</li>
-<li> текущий статус нарушения в лампе цветом, который отвечает уровню нарушения; мигает при появлении и смене нарушения; нажав на лампу Вы можете сквитировать это нарушение.</li></ul></li>
+<li> текущий статус нарушения в лампе цветом, который отвечает уровню нарушения, и иконки активных уведомителей; мигает при появлении и смене нарушения; нажав на лампу вы можете сквитировать (утихомирить) эти нарушения в целом или желаемый тип уведомления, нажав иконку соответствующего уведомителя рядом.</li></ul></li>
 <li> В главном поле строки статуса выводятся различные информационные сообщения и сообщения помощи.</li></ul>
 <p>Модулем поддерживается многоязычность, которая включается <a href="../Program_manual.html#ConfigTr" title="Special:MyLanguage/Documents/Program manual">динамическим переводом сообщений OpenSCADA</a>. Полученный язык передаётся модулем <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a> и определяется путём и в последовательности:
 </p>
@@ -142,7 +144,7 @@
 <li> Общий язык процесса OpenSCADA.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:624px;"><a class="image" href="http://oscada.org/wiki/File:HTTP_auth_ru.png"><img class="thumbimage" height="278" src="../files/HTTP_auth_ru.png" width="622" /></a>  <div class="thumbcaption">Рис.1. Страница аутентификации.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:604px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_connect_ru.png"><img class="thumbimage" height="443" src="../files/WebVision_wvis_connect_ru.png" width="602" /></a>  <div class="thumbcaption">Рис.2. Подключение или создание нового сеанса исполнения проекта СВУ.</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1039px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run_ru.png"><img class="thumbimage" height="787" src="../files/WebVision_wvis_run_ru.png" width="1037" /></a>  <div class="thumbcaption">Рис.3. Главное окно режима исполнения.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1039px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run_ru.png"><img class="thumbimage" height="785" src="../files/WebVision_wvis_run_ru.png" width="1037" /></a>  <div class="thumbcaption">Рис.3. Главное окно режима исполнения.</div></div></div></div>
 <h2><span class="mw-headline" id=".D0.9F.D1.80.D0.B5.D0.B4.D1.81.D1.82.D0.B0.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D0.B5_.D0.B1.D0.B0.D0.B7.D0.BE.D0.B2.D1.8B.D1.85_.D1.8D.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D0.BE.D0.B2_.28.D0.BF.D1.80.D0.B8.D0.BC.D0.B8.D1.82.D0.B8.D0.B2.D0.BE.D0.B2.29"><span class="mw-headline-number">3</span> <span id="Primitives" title="#Primitives">Представление базовых элементов (примитивов)</span></span></h2>
 <p>Данной версией модуля реализованы не все образы примитивов, заложенные проектом. В целом, проектом заложены примитивы:
 </p>
@@ -227,6 +229,11 @@
 <th> Имя </th>
 <th> Назначение
 </th></tr>
+<tr>
+<td> notify{N}, notifyVisWebVision{N} (страница) </td>
+<td> Уведомитель: тип {N} </td>
+<td> Определяет уведомитель и процедуру получения ресурса уведомления согласно <a href="../Modules/VCAEngine.html#Alarms" title="Special:MyLanguage/Modules/VCAEngine">концепции "Сигнализации (Алармы)"</a>.
+</td></tr>
 <tr>
 <td> keepAspectRatio (главная страница) </td>
 <td> Сохранять пропорцию при масштабировании </td>
@@ -338,7 +345,7 @@ else if(this.ownerSess().reqUser()&nbsp;!= "user") userSetVis = "user";
 <ul><li> Указание источника медиа данных: изображения или видео-материала.</li>
 <li> Просмотр изображений большинства известных форматов с возможностью их вписывания в размер виджета.</li>
 <li> Проигрывание простых анимированных форматов изображений и видео с возможностью управления скоростью проигрывания (<font color="red">недоступно</font>).</li>
-<li> Проигрывание полноформатного видео и аудио (<font color="red">недоступно</font>).</li>
+<li> Проигрывание полноформатного видео и аудио с помощью HTML5.</li>
 <li> Отображение фона в виде цвета и изображения.</li>
 <li> Отображение бордюра по периметру виджета, с указанным цветом, шириной и стилем.</li>
 <li> Формирования активных областей и генерация событий при их активации.</li></ul>
@@ -712,5 +719,5 @@ GROUNDS: At working with the board <a class="external" href="http://oscada.org/w
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebVision/ru">Modules/WebVision/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2020</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.2</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebVision/ru">Modules/WebVision/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">December 2020</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.3</td></tr></table></body>
 </html>
