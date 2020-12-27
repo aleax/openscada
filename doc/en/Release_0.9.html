@@ -312,34 +312,7 @@
 <li> Adaptation to work in the environment of the operating systems QNX and MS Windows.</li></ul>
 <h2><span class="mw-headline" id="Updates"><span class="mw-headline-number">7</span> Updates</span></h2>
 <h3><span class="mw-headline" id=".5B20.12.2020.5D_The_THIRD_update"><span class="mw-headline-number">7.1</span> [20.12.2020] The THIRD update</span></h3>
-<div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
-<ul><li> <b>State:</b> <span style="color:red">Testing ...</span></li></ul>
-<p>The common releasing process, for the users to estimate your expectations and for the developers to remind the tasks:<br />
-<b><u>1. The preparing and building week:</u></b><br />
-</p>
-<ul><li> Building the last Work SVN-revision for all environments of the irregular building to provide early and wide testing the coming LTS release.</li>
-<li> Announcing the releasing process start:
-<ul><li> creating a new <a href="index.html" title="Special:MyLanguage/Documents">release page</a> or <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">update page</a> on Wiki;</li>
-<li> creating a new news-page on <a class="external text" href="http://oscada.org/en/main/%7Cthe" rel="nofollow noreferrer noopener" target="_blank">official OpenSCADA site</a>;</li>
-<li> creating a new post-link to the news-page on <a class="external text" href="https://www.facebook.com/Roman.Savochenko" rel="nofollow noreferrer noopener" target="_blank">FaceBook</a> and <a class="external text" href="https://www.linkedin.com/in/roman-savochenko-71b50272/" rel="nofollow noreferrer noopener" target="_blank">LinkedIn</a>;</li></ul></li>
-<li> Merging the Work branch changes or copying the whole Work branch tree to the LTS branch-tree.</li>
-<li> Making some LTS specific changes about the version rise:
-<ul><li> updating <b>configure.ac</b> for version of the release-update and core library;</li>
-<li> updating <b>data/*.spec</b> and <b>data/{debian,debian_mod}/changelog</b> for the new version number and appending the files' changelog for new release-update entry.</li></ul></li>
-<li> Forming-appending the LTS ChangeLog by the changes from the Work ChangeLog, grouping the changes by the location and sorting them by the fixing status and the level, with combination new features under one item and without removing any different changes.</li>
-<li> Copying the significant changes from the formed LTS ChangeLog to the related page of the release-update, taking the changes in the level more or even than "!!".</li>
-<li> Translating the release-update pages, updating the <a href="To_do.html" title="Special:MyLanguage/Works/To do">ToDo</a> and <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Works/Road_map" title="Special:MyLanguage/Works/Road map">RoadMap</a>.</li>
-<li> Generating the actual offline documentation using the service procedure "<a href="Libs_Service_procedures.html#docOffLine" title="Special:MyLanguage/Libs/Service procedures">EXT: Off-line documentation</a>".</li>
-<li> Committing the LTS tree changes to the repository and building that.</li>
-<li> Announcing the release-update.</li></ul>
-<p><b><u>2. The testing and post building week:</u></b><br />
-</p>
-<ul><li> Hot testing the release build.</li>
-<li> Finishing and fixing the ChangeLog translating and the documentation.</li>
-<li> Generating the actual offline documentation using the service procedure "<a href="Libs_Service_procedures.html#docOffLine" title="Special:MyLanguage/Libs/Service procedures">EXT: Off-line documentation</a>".</li>
-<li> Committing the release fixes to the repository and building that for the second-final build.</li></ul>
-</div>
-<p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 40 bugs and appends some improvements, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2724" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
+<p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 40 bugs and appends some improvements, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2725" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
 </p><p><b><u><a class="external text" href="http://oscada.org/en/news/single-page/article/trinity-desktop-environment-tde-release-1409/" rel="nofollow noreferrer noopener" target="_blank">Automation Linux distributive of the project OpenSCADA</a></u></b><br />
 </p>
 <ul><li> the packages "tdelibs" and "tdebase" were removed due to this fixes were applied in the master and stable branches of TDE;</li>
@@ -380,6 +353,7 @@
 </p>
 <ul><li> FIX: Obtained current values, in the active archiving mode, forced to the current time, what is significant for the dynamic attributes archiving.</li>
 <li> The value archive configuration field "Mode of forming ID of the automatic created archives" expanded by the selection item "All controller, parameter and attribute ID", during the process of expanding the limit of the value archive ID to 50 symbols.</li>
+<li> FIX:DBArch: Fixed for only direct the values archiving in the group mode and when the values type may drop to the Integer type as the default one. The value archiving in the group mode appended for removing the according table column at the archive removing, for the table column hot removing just after appending some new archive, than preventing the table early growing to the DB limit.</li>
 <li> FSArch: Adaption to the ID size of the value archive more than 20 symbols, when its 14 extra symbols are stored in the reserve part (renamed to "archive_add") of the header and extra more in the filename.</li></ul>
 <p><b><u>Transports</u></b><br />
 </p>

@@ -1,3 +1,11 @@
+2020-12-27 Roman 0.9.3
+- !!:FIX:Archive.DBArch: Fixed for only direct the values archiving in the group mode and
+	when the values type may drop to the Integer type as the default one.
+    !!:FIX: The value archiving in the group mode appended for removing the according table column at the archive removing,
+	for the table column hot removing just after appending some new archive,
+	than preventing the table early growing to the DB limit.
+
+
 2020-12-20 Roman 0.9.3
 - OpenSCADA libraries and projects:
     !!:FIX:LibsDB.OscadaLibs: The library DevLib appended by the template "MTP 4D (MTP4D)" and "ModBus base (mbBase)".
