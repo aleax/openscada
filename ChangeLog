@@ -1,3 +1,12 @@
+2020-12-28 Roman 0.9.3
+- DB.{MySQL,PostgreSQL,FireBird}: Disabled for the direct string field size limiting since the CHAR(N) of the key fields is limited
+    in the field itself and that performs the behaviour difference with SQLite.
+- data/ModelsDB/AGLKS/oscada_AGLKS.xml: The plain text paswords of the "ExtTansp" table of the subsystem Transports
+    replaced by the hashed passwords.
+- !!:FIX:Security: Prevented from authentication in user interfaces by the ready password hash.
+- !!:FIX:UI: TUIS::docKeyGet() fixed from the user array objects leaking.
+
+
 2020-12-27 Roman 0.9.3
 - !!:FIX:Archive.DBArch: Fixed for only direct the values archiving in the group mode and
 	when the values type may drop to the Integer type as the default one.

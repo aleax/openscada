@@ -312,7 +312,7 @@
 <li> Adaptation to work in the environment of the operating systems QNX and MS Windows.</li></ul>
 <h2><span class="mw-headline" id="Updates"><span class="mw-headline-number">7</span> Updates</span></h2>
 <h3><span class="mw-headline" id=".5B20.12.2020.5D_The_THIRD_update"><span class="mw-headline-number">7.1</span> [20.12.2020] The THIRD update</span></h3>
-<p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 40 bugs and appends some improvements, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2725" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
+<p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 40 bugs and appends some improvements, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2726" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
 </p><p><b><u><a class="external text" href="http://oscada.org/en/news/single-page/article/trinity-desktop-environment-tde-release-1409/" rel="nofollow noreferrer noopener" target="_blank">Automation Linux distributive of the project OpenSCADA</a></u></b><br />
 </p>
 <ul><li> the packages "tdelibs" and "tdebase" were removed due to this fixes were applied in the master and stable branches of TDE;</li>
@@ -344,7 +344,8 @@
 <ul><li> the subtype "_b" — bit type, expanded by moving the bit number to the register number field like to "R_b:123.12";</li>
 <li> added by the flag "~" for inversion registers order of the complex subtypes in multiple registers, like to "_f";</li>
 <li> the flag "rw" separated to "r" and "w".</li></ul></li>
-<li> The module version of the subsystem "Transports" rose to 17.</li></ul>
+<li> The module version of the subsystem "Transports" rose to 17.</li>
+<li> FIX: Prevented from authentication in user interfaces by the ready password hash.</li></ul>
 <p><b><u>DAQ</u></b><br />
 </p>
 <ul><li> LogicLev,ModBus,Siemens: Appended for termination long time executed templates at the parameter disable, using new functions TValFunc::isCalc() and TSYS::taskSendSIGALRM().</li>
@@ -370,7 +371,8 @@
 <li> ModBus: Output transport specific timeouts are set to "5:0.1" for Network transports — isNetwork() and the protocol variant "RTU".</li></ul>
 <p><b><u>User Interface</u></b><br />
 </p>
-<ul><li> VCAEngine,WebVision,Vision: The primitive "Media" appended by the type "Audio" and the type "Full video" renamed to "Video", which also implemented in WebVision and Vision.</li>
+<ul><li> FIX: TUIS::docKeyGet() fixed from the user array objects leaking.</li>
+<li> VCAEngine,WebVision,Vision: The primitive "Media" appended by the type "Audio" and the type "Full video" renamed to "Video", which also implemented in WebVision and Vision.</li>
 <li> QTCfg,Vision: Appended by a function of adjustion text colors to the background color — colorAdjToBack(), which used in correction the syntax highlighting and other dynamic colors to the palette changing.</li>
 <li> VCAEngine,Vision: Expanding the notifications implementation in way their implementation on WebVision, for:
 <ul><li> using the standard way of the notifications obtaining through the corresponding attributes activation;</li>

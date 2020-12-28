@@ -344,7 +344,7 @@ bool TUser::auth( const string &ipass, string *hash )
 #if defined(HAVE_CRYPT_H)
     string pass = cfg("PASS").getS();
     string salt = (pass.compare(0,3,"$1$") == 0) ? "$1$"+name() : name();	//Check for MD5 or the old method
-    if(ipass.compare(0,TSecurity::pHashMagic.size(),TSecurity::pHashMagic) == 0)
+    if(hash && ipass.compare(0,TSecurity::pHashMagic.size(),TSecurity::pHashMagic) == 0)
 	return (ipass.compare(TSecurity::pHashMagic.size(),pass.size(),pass) == 0);
 # if defined(__USE_GNU) && !defined(__UCLIBC__)
     crypt_data data;

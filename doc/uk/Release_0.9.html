@@ -312,7 +312,7 @@
 <li> Адаптацію до роботи в оточені операційних систем QNX та MS Windows.</li></ul>
 <h2><span class="mw-headline" id=".D0.9E.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">7</span> Оновлення</span></h2>
 <h3><span class="mw-headline" id=".5B20.12.2020.5D_.D0.A2.D0.A0.D0.95.D0.A2.D0.95_.D0.BE.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">7.1</span> [20.12.2020] ТРЕТЕ оновлення</span></h3>
-<p>Це оновлення <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">релізу 0.9 LTS</a> виправляє біля 40 помилок та додає деякі удосконалення, які цілком ви можете почитати у <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2725" rel="nofollow noreferrer noopener" target="_blank">протоколі змін оновлення</a>.
+<p>Це оновлення <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">релізу 0.9 LTS</a> виправляє біля 40 помилок та додає деякі удосконалення, які цілком ви можете почитати у <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2726" rel="nofollow noreferrer noopener" target="_blank">протоколі змін оновлення</a>.
 </p><p><b><u><a class="external text" href="http://oscada.org/ua/novini/odinochna-storinka/article/trinity-desktop-environment-tde-release-1409/" rel="nofollow noreferrer noopener" target="_blank">Linux Дистрибутив Автоматизації проекту OpenSCADA</a></u></b><br />
 </p>
 <ul><li> пакети "tdelibs" та "tdebase" було видалено через застосування цих виправлень до головної та стабільної гілки TDE;</li>
@@ -344,7 +344,8 @@
 <ul><li> підтип "_b" — бітовий тип, доповнено переміщенням номеру біту до поля номеру регістру на кшталт "R_b:123.12";</li>
 <li> доповнено прапорцем "~" для інверсії порядку регістрів комплексних підтипів у декількох регістрах, як то "_f";</li>
 <li> прапорець "rw" виокремлено у "r" та "w".</li></ul></li>
-<li> Модульну версію підсистеми "Транспорти" збільшено до 17.</li></ul>
+<li> Модульну версію підсистеми "Транспорти" збільшено до 17.</li>
+<li> FIX: Попереджено від автентифікації у інтерфейсі користувача готовим хешем паролю.</li></ul>
 <p><b><u>Збір Даних</u></b><br />
 </p>
 <ul><li> LogicLev,ModBus,Siemens: Доповнено перериванням тривалого виконання шаблонів при вимкнені параметру, з використанням нових функцій TValFunc::isCalc() та TSYS::taskSendSIGALRM().</li>
@@ -370,7 +371,8 @@
 <li> ModBus: Специфічні таймаути вихідного транспорту встановлено у "5:0.1" для Мережевих транспортів — isNetwork() та варіанту протоколу "RTU".</li></ul>
 <p><b><u>Інтерфейс Користувача</u></b><br />
 </p>
-<ul><li> VCAEngine,WebVision,Vision: Примітив "Media" доповнений типом "Audio" та тип "Повне відео" перейменовано у "Відео", який також імплементовано у WebVision та Vision.</li>
+<ul><li> FIX: TUIS::docKeyGet() виправлено щодо витоку користувацьких об'єктів масивів.</li>
+<li> VCAEngine,WebVision,Vision: Примітив "Media" доповнений типом "Audio" та тип "Повне відео" перейменовано у "Відео", який також імплементовано у WebVision та Vision.</li>
 <li> QTCfg,Vision: Доповнено функцією підлаштування кольорів тексту до фонового кольору — colorAdjToBack(), яку використано у корекції кольорів підсвітлення синтаксису, та інших динамічних кольорів, до зміни палітри.</li>
 <li> VCAEngine,Vision: Розширено реалізацію сповіщень у процесі їх впровадження у WebVision, щодо:
 <ul><li> використання стандартного шляху отримання сповіщень через активацію відповідних атрибутів;</li>

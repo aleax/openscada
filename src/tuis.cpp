@@ -134,12 +134,14 @@ string TUIS::docGet( const string &inm, string *tp, unsigned opt )
 
 string TUIS::docKeyGet( const string &itxt )
 {
+    string rezKey;
     TArrayObj *rez;
+
     if((rez=TRegExp("DOC:\\s*(.+)$").match(itxt))) {
-	if(rez->size() >= 2) return rez->arGet(1).getS();
+	if(rez->size() >= 2) rezKey = rez->arGet(1).getS();
 	delete rez;
     }
-    return "";
+    return rezKey;
 }
 
 string TUIS::mimeGet( const string &inm, const string &fDt, const string &orig )
