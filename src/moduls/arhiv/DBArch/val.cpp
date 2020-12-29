@@ -283,6 +283,7 @@ TValBuf &ModVArch::accmGetReg( const string &aNm, SGrp **grp, TFld::Type tp, int
     }
 
     if(grp) *grp = &gO;
+    gO.els[aNm] = TValBuf(tp, 100, 0);	//Mostly to init the value type for direct archiving only
     return gO.els[aNm];
 }
 
@@ -295,7 +296,10 @@ void ModVArch::accmUnreg( const string &aNm )
 	SGrp &oG = accm[iG];
 	map<string,TValBuf>::iterator iP = oG.els.find(aNm);
 	if(iP == oG.els.end())	continue;
+
 	oG.els.erase(iP);
+
+	oG.tblEl.fldDel(oG.tblEl.fldId(aNm,true));
 
 	string	pLs;
 	for(iP = oG.els.begin(); iP != oG.els.end(); ++iP)

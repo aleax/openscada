@@ -312,109 +312,83 @@
 <li> Адаптацію до роботи в оточені операційних систем QNX та MS Windows.</li></ul>
 <h2><span class="mw-headline" id=".D0.9E.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">7</span> Оновлення</span></h2>
 <h3><span class="mw-headline" id=".5B20.12.2020.5D_.D0.A2.D0.A0.D0.95.D0.A2.D0.95_.D0.BE.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">7.1</span> [20.12.2020] ТРЕТЕ оновлення</span></h3>
-<div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
-<ul><li> <b>Стан:</b> <span style="color: red">Приготування ...</span></li></ul>
-<p>Загальний процес випуску, користувачам для оцінки ваших очікувань та розробникам для нагадування завдань:<br />
-<b><u>1. Тиждень приготування та складання:</u></b><br />
+<p>Це оновлення <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">релізу 0.9 LTS</a> виправляє біля 40 помилок та додає деякі удосконалення, які цілком ви можете почитати у <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2726" rel="nofollow noreferrer noopener" target="_blank">протоколі змін оновлення</a>.
+</p><p><b><u><a class="external text" href="http://oscada.org/ua/novini/odinochna-storinka/article/trinity-desktop-environment-tde-release-1409/" rel="nofollow noreferrer noopener" target="_blank">Linux Дистрибутив Автоматизації проекту OpenSCADA</a></u></b><br />
 </p>
-<ul><li> Складання останньої Робочої (Work) SVN-ревізії для всіх оточень нерегулярного складання щоб забезпечити ранне та широке тестування прийдешнього LTS релізу.</li>
-<li> Анонсування початку процесу випуску:
-<ul><li> створення нової <a href="index.html" title="Special:MyLanguage/Documents">сторінки релізу</a> або <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">сторінки оновлення</a> на Wiki;</li>
-<li> створення нової новини-сторінки на <a class="external text" href="http://oscada.org/en/main/%7Cофіційному" rel="nofollow noreferrer noopener" target="_blank">сайті OpenSCADA</a>;</li>
-<li> створення нового повідомлення-посилання на новину-сторінку на <a class="external text" href="https://www.facebook.com/Roman.Savochenko" rel="nofollow noreferrer noopener" target="_blank">FaceBook</a> та <a class="external text" href="https://www.linkedin.com/in/roman-savochenko-71b50272/" rel="nofollow noreferrer noopener" target="_blank">LinkedIn</a>;</li></ul></li>
-<li> Злиття змін Робочої (Work) версії, або копіювання цілком дерева Робочої гілки, до LTS гілки-дерева.</li>
-<li> Внесення деяких змін, специфічних до LTS, стосовно підняття версії:
-<ul><li> оновлення <b>configure.ac</b> щодо версії випуску-оновлення та бібліотеки ядра;</li>
-<li> оновлення <b>data/*.spec</b> та <b>data/{debian,debian_mod}/changelog</b> стосовно нового номеру версії та доповнення протоколу змін файлів новими записами випуску-оновлення.</li></ul></li>
-<li> Формування-доповнення ПротоколуЗмін LTS змінами з ПротоколуЗмін Work, групуючи зміни за розташуванням та сортуючи їх за станом виправлення та рівнем, із комбінування нових можливостей у одному елементі та без видалення будь-яких відмінних змін.</li>
-<li> Копіювання значних змін із сформованого ПротоколуЗмін LTS до відповідної сторінки релізу-оновлення, беручи зміни за рівнем більш або рівні "!!".</li>
-<li> Переклад сторінок релізу-оновлення, оновлення "<a href="../en/To_do.html" title="Special:MyLanguage/Works/To do">Зробити (ToDo)</a>" та "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Works/Road_map" title="Special:MyLanguage/Works/Road map">Дорожньої карти (RoadMap)</a>".</li>
-<li> Генерація актуальної позамережевої документації використовуючи сервісну процедуру "<a href="Libs_Service_procedures.html#docOffLine" title="Special:MyLanguage/Libs/Service procedures">EXT: Off-line documentation</a>".</li>
-<li> Застосування-вивантаження змін LTS дерева до репозиторію та складання цього.</li>
-<li> Анонсування релізу-оновлення.</li></ul>
-<p><b><u>2. Тиждень тестування та після-складання:</u></b><br />
+<ul><li> пакети "tdelibs" та "tdebase" було видалено через застосування цих виправлень до головної та стабільної гілки TDE;</li>
+<li> виправлені пакети "tdemultimedia-trinity", "tdenetwork-trinity" та "tdeutils-trinity" було перескладено;</li>
+<li> складено новий виправлений пакет "tde-i18n-uk-trinity";</li>
+<li> перед складанням пакетів було змінено схему формування версій пакетів цього дистрибутиву із "{+1}:14.0.9-0" на "4:14.0.9-{+1}" з метою запобігання заморожуванню цих пакетів на наступних версіях TDE; та головний репозиторій пакетів TDE <a href="How_to_Live_disk.html" title="Special:MyLanguage/Documents/How to/Live disk">Живих Дисків</a> переключено на гілку "r14.0.x" замість попередньої стабільної, яка також наявна, але закоментована;</li>
+<li> перед цим релізом, у <a class="external text" href="https://mirror.git.trinitydesktop.org/weblate/" rel="nofollow noreferrer noopener" target="_blank">TDE Weblate</a> завершено переклад Українською частин-пакетів TDE: tdelibs, tdebase, tdegraphics, tdenetwork, tdemultimedia, tdepim, tdeadmin, tdeaccessibility, tdeutils, krusader, yakuake, basket; та створено виправлений пакет "tde-i18n-uk-trinity" для перекладу відмінностей гілки "r14.0.x" від головної;</li>
+<li> латку до "tdeutils" доповнено комбінацією клавіш із утриманням Ctrl для повільної зміни яскравості дисплею до KMilo.</li></ul>
+<p><b><u>OpenSCADA бібліотеки та проекти</u></b><br />
 </p>
-<ul><li> Гаряче тестування збірок релізу.</li>
-<li> Завершення та виправлення перекладу ПротоколуЗмін та документації.</li>
-<li> Генерація актуальної позамережевої документації використовуючи сервісну процедуру "<a href="Libs_Service_procedures.html#docOffLine" title="Special:MyLanguage/Libs/Service procedures">EXT: Off-line documentation</a>".</li>
-<li> Застосування-вивантаження виправлень релізу до репозиторію та складання цього щодо другої-кінцевої збірки.</li></ul>
-</div>
-<p>Це оновлення <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">релізу 0.9 LTS</a> виправляє біля 40 помилок та додає деякі удосконалення, які цілком ви можете почитати у <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2724" rel="nofollow noreferrer noopener" target="_blank">протоколі змін оновлення</a>.
-</p><p><b><u><a class="external text" href="http://oscada.org/en/news/single-page/article/trinity-desktop-environment-tde-release-1409/" rel="nofollow noreferrer noopener" target="_blank">Automation Linux distributive of the project OpenSCADA</a></u></b><br />
-</p>
-<ul><li> the packages "tdelibs" and "tdebase" were removed due to this fixes were applied in the master and stable branches of TDE;</li>
-<li> the patched packages "tdemultimedia-trinity", "tdenetwork-trinity" and "tdeutils-trinity" were rebuilt;</li>
-<li> the new patched package "tde-i18n-uk-trinity" was built;</li>
-<li> before the packages building there was changed the scheme of the package version forming of this distributive from "{+1}:14.0.9-0" to "4:14.0.9-{+1}" to prevent these packages freeze on next TDE versions; and the TDE main package repository of the <a href="How_to_Live_disk.html" title="Special:MyLanguage/Documents/How to/Live disk">Live Disks</a> was switched to the branch "r14.0.x" instead the preliminary stable, what also present but commented;</li>
-<li> before the release there, in <a class="external text" href="https://mirror.git.trinitydesktop.org/weblate/%7CTDE" rel="nofollow noreferrer noopener" target="_blank">Weblate</a>, have finished the translation to Ukrainian for the parts-packages of TDE: tdelibs, tdebase, tdegraphics, tdenetwork, tdemultimedia, tdepim, tdeadmin, tdeaccessibility, tdeutils, krusader, yakuake, basket; and the patched package "tde-i18n-uk-trinity" was created for translating the branch "r14.0.x" difference from the master branch;</li>
-<li> the patch in "tdeutils" was appended for the key combination with holding Ctrl of slow changing the display brightness for KMilo.</li></ul>
-<p><b><u>OpenSCADA libraries and projects</u></b><br />
-</p>
-<ul><li> FIX:LibsDB.OscadaLibs: The library DevLib appended by the template "MTP 4D (MTP4D)" "and ModBus base (mbBase)".</li>
-<li> FIX:LibsDB.vcaBase: The template project (tmplSO) cleaned from spare mnemos of the prescription management and the main page appended of the actual alarms-violations table. The frame Main.RootPgSo unified for the notifiers in the generic attributes only for the VCA-server and notifiers Vision, WebVision: notify0, notify1 and notify2.</li></ul>
+<ul><li> FIX:LibsDB.OscadaLibs: Бібліотеку DevLib доповнено шаблонами "MTP 4D (MTP4D)" та "ModBus база (mbBase)".</li>
+<li> FIX:LibsDB.vcaBase: Шаблонний проект (tmplSO) очищено від зайвих мнемосхем керування рецептами та головну сторінку доповнено таблицею актуальних сигналів-порушень. Кадр Main.RootPgSo уніфіковано сповіщувачами лише у загальних атрибутах для СВУ-серверу та сповіщувачів Vision, WebVision: notify0, notify1 та notify2.</li></ul>
 <p><b><u>API</u></b><br />
-<i>!!!!:Changes</i>:
+<i>!!!!:Зміни</i>:
 </p>
-<ul><li> Archives-History: {TMArchivator,TVArchivator,TVArchive}::DB() set to the constant qualifier.</li>
-<li> Transports.{.,*}: The timeouts setting function setTimings() of the output transports expanded in the default timeouts difference for different protocols, by the argument "isDef".</li></ul>
-<p><i>Appends</i>:
+<ul><li> Архіви-Історія: {TMArchivator,TVArchivator,TVArchive}::DB() встановлено у кваліфікатор постійної.</li>
+<li> Транспорти.{.,*}: Функцію встановлення таймаутів setTimings() вихідних транспортів розширено розрізненням типових таймаутів для різних протоколів, за допомогою аргументу "isDef".</li></ul>
+<p><i>Доповнення</i>:
 </p>
 <ul><li> SYS.,*:
-<ul><li> The system wide limits and parameters moved to the user configuration area (the configuration file) for some allowed range.</li>
-<li> STD_WAIT_DELAY moved to prmWait_DL and changed to 0.1 seconds.</li>
-<li> The previous system wide limits' and parameters' definitions left for the external modules compatibility!</li>
-<li> TSYS appended for the function taskSendSIGALRM() of sending the termination signal "ALARM" to OpenSCADA tasks.</li>
-<li> TValFunc: Appended for a state of the function execution by the function isCalc().</li></ul></li>
-<li> Transports: The output transports expanded for a mark of the transport as Network one, by the function isNetwork(), in the User API also.</li></ul>
-<p><b><u>SYS</u></b><br />
+<ul><li> Обмеження та параметри простору системи перенесено до простору конфігурації користувача (конфігураційний файл) для деякого дозволеного діапазону. STD_WAIT_DELAY перенесено до prmWait_DL та змінено у 0.1 секунд. Попередні визначення обмежень та параметрів простору системи залишено для сумісності зовнішніх модулів!</li>
+<li> TSYS доповнено функцією taskSendSIGALRM() надсилання сигналу переривання "ALARM" до завдань OpenSCADA.</li>
+<li> TValFunc: Доповнено станом виконання функції через функцію isCalc().</li></ul></li>
+<li> Транспорти: Вихідні транспорти розширено позначенням Мережевих транспортів, функцією isNetwork(), також у користувацькому API.</li></ul>
+<p><b><u>Система</u></b><br />
 </p>
-<ul><li> FIX:Building:configure.ac: Core library version rose to 3:9:0 and the program version rose to 0.9.3.</li>
-<li> {DAQ,Protocol}.ModBus:
-<ul><li> the type extending "_b" — bit type, expanded by moving the bit number to the register number field like to "R_b:123.12";</li>
-<li> added by the flag "~" for inversion registers order of the complex subtypes in multiple registers, like to "_f";</li>
-<li> the flag "rw" separated to "r" and "w".</li></ul></li>
-<li> The module version of the subsystem "Transports" rose to 17.</li></ul>
-<p><b><u>DAQ</u></b><br />
+<ul><li> FIX:Складання:configure.ac: Версію бібліотеки ядра збільшено до 3:9:0 та версію програми збільшено до 0.9.3.</li>
+<li> {DAQ,Протокол}.ModBus:
+<ul><li> підтип "_b" — бітовий тип, доповнено переміщенням номеру біту до поля номеру регістру на кшталт "R_b:123.12";</li>
+<li> доповнено прапорцем "~" для інверсії порядку регістрів комплексних підтипів у декількох регістрах, як то "_f";</li>
+<li> прапорець "rw" виокремлено у "r" та "w".</li></ul></li>
+<li> Модульну версію підсистеми "Транспорти" збільшено до 17.</li>
+<li> FIX: Попереджено від автентифікації у інтерфейсі користувача готовим хешем паролю.</li></ul>
+<p><b><u>Збір Даних</u></b><br />
 </p>
-<ul><li> LogicLev,ModBus,Siemens: Appended for termination long time executed templates at the parameter disable, using new functions TValFunc::isCalc() and TSYS::taskSendSIGALRM().</li>
-<li> FIX:LogicLev: Removed for the calculation lock "calcRes", what used only in locking the writing to the parameter attributes during the calculation and what can be long.</li></ul>
-<p><b><u>Archives-History</u></b><br />
+<ul><li> LogicLev,ModBus,Siemens: Доповнено перериванням тривалого виконання шаблонів при вимкнені параметру, з використанням нових функцій TValFunc::isCalc() та TSYS::taskSendSIGALRM().</li>
+<li> FIX:LogicLev: Видалено блокування виконання "calcRes", яке використано лише у блокуванні запису до параметру протягом обчислення та що може бути тривалим.</li></ul>
+<p><b><u>Архіви-Історія</u></b><br />
 </p>
-<ul><li> FIX: Current values obtaining in the active archiving mode forced to the current time, what is significant for the dynamic attributes archiving.</li>
-<li> The value archive configuration field "Mode of forming ID of the automatic created archives" expanded by the selection item "All controller, parameter and attribute ID" during expanding the value archives limit to 50 symbols.</li>
-<li> FIX:FSArch: Adaption to the ID size of the value archive more than 20 symbols, when its 14 extra symbols are stored in the reserve part (renamed to "archive_add") of the header and extra more in the filename.</li></ul>
-<p><b><u>Transports</u></b><br />
+<ul><li> FIX: Отримані поточні значення, у активному режимі архівування, примусово встановлено у поточний час, що важливо для архівування динамічних атрибутів.</li>
+<li> Конфігураційне поле архіву значень "Режим формування ID атрибуту автоматично створюваних архівів" розширено елементом обрання "Всі ID контролеру, параметру та атрибуту", у процесі розширення обмеження на розмір ІД архіву значень до 50 символів.</li>
+<li> FIX:DBArch: Виправлено лише пряме архівування значень у груповому режимі та коли тип значень може скидатися у Цілий тип, як типовий. Архівування значень у груповому режимі доповнено видаленням відповідного стовпчика таблиці при видалені архіву, для гарячого видалення стовпчиків одразу після додання нового архіву, чим запобігаючи ранньому розростанню таблиці до обмежень БД.</li>
+<li> FIX:FSArch: Адаптація до розміру ІД архіву значень більш за 20 символів, коли додаткові 14 символів зберігаються у резервній частині (перейменованій у "archive_add") заголовку та решта у назві фалу.</li></ul>
+<p><b><u>Транспорти</u></b><br />
 </p>
-<ul><li> FIX: The function TTransportIn::assTrO() of processing input initiative connections complete revised to make new connection necessarily created as a new output transport, then preventing true finishing the present closed but not freed output transports.</li>
-<li> The transport commands renamed from "Running" to "Connect" and the statuses renamed from "Started. " to "Receiving data. " and "Connected. ", from "Stoped. " to "Disconnected. ".</li>
-<li> FIX:{Sockets,SSL}: The default timeouts returned to "10:1".</li></ul>
-<p><b><u>Transport Protocols</u></b><br />
+<ul><li> FIX: Функція TTransportIn::assTrO() опрацювання вхідних ініціативних підключень цілковито відревізовано задля забезпечити обов'язковим створення нових підключень у вигляді нового вихідного транспорту, відтак запобігаючи правильному завершенню наявних закритих але не звільнених вихідних транспортів.</li>
+<li> Команди транспортів перейменовано із "Виконання" у "Підключення" та статуси перейменовано із "Запущено. " у "Отримання даних. " та "Підключено. ", із "Зупинено. " у "Відключено. ".</li>
+<li> FIX:{Sockets,SSL}: Типові таймаути повернено у "10:1".</li></ul>
+<p><b><u>Транспортні Протоколи</u></b><br />
 </p>
 <ul><li> HTTP:
-<ul><li> Appended for the dynamic cookie name and the User ID space, where the cookie name is "oscd_UID" and is used the User ID space in work with the common authentication sessions table, and the cookie name is "oscd_UID_{PrjNm}" in the work without that.</li>
-<li> FIX: Multipart POST of the output function outMess() prevented in the end boundary placing and improved in the "Content-Disposition" form.</li>
-<li> The User ID generation improved in generation different IDs for the different processes, limited in 1e6, and appended by the random and configurable User ID space [0...99] * 1e6, used in the work with the common authentication sessions table.</li></ul></li>
-<li> SelfSystem: Output transport specific timeouts are set to "20:2".</li>
-<li> ModBus: Output transport specific timeouts are set to "5:0.1" for Network transports — isNetwork() and the protocol variant "RTU".</li></ul>
-<p><b><u>User Interface</u></b><br />
+<ul><li> Доповнено динамічною назвою печива (cookies) та Користувацьким простором ІД, де назва печива "oscd_UID" і використано Користувацький простір ІД при роботі із загальною таблицею сеансів автентифікації, та назва печива "oscd_UID_{PrjNm}" при роботі без цього.</li>
+<li> FIX: POST вихідної функції outMess() з багатьох частин попереджено від розміщення кінцевого розмежувача та покращено у формуванні "Content-Disposition".</li>
+<li> Покращено генерацію ІД користувача генерацією різних ІД для різних процесів, обмежене у 1e6, та доповнено випадковим та конфігурованим Користувацьким простором ІД [0...99] * 1e6, використаним у роботі із таблицею загальних сеансів автентифікації.</li></ul></li>
+<li> SelfSystem: Специфічні таймаути вихідного транспорту встановлено у "20:2".</li>
+<li> ModBus: Специфічні таймаути вихідного транспорту встановлено у "5:0.1" для Мережевих транспортів — isNetwork() та варіанту протоколу "RTU".</li></ul>
+<p><b><u>Інтерфейс Користувача</u></b><br />
 </p>
-<ul><li> VCAEngine,WebVision,Vision: The primitive "Media" appended by the type "Audio" and the type "Full video" renamed to "Video", which also implemented in WebVision and Vision.</li>
-<li> FIX:QTCfg,Vision: Appended by a function of adjustion text colors to the background color — colorAdjToBack(), which used in correction the syntax highlighting and other dynamic colors to the palette changing.</li>
-<li> VCAEngine,Vision: Expanding the notifications implementation in way their implementation on WebVision, for:
-<ul><li> using the standard way of the notifications obtaining through the corresponding attributes activation;</li>
-<li> ntfReg() expanding for the negative type using in all types processing, freeing mostly, and some unification of the code;</li>
-<li> expanding for the resource type obtaining in;</li>
-<li> appending the notifiers by the flag "notifyServ" of the notification enabling on the VCA-server side;</li>
-<li> VCA-server side appended for the field "resStatic" of the direct resource specifying (non dynamic);</li>
-<li> appending the notification procedures' context for the two variables "resTp" and "prcID".</li></ul></li>
-<li> FIX:UI.QTStarter: Appended for the start dialog periodic updating in the project tree.</li>
-<li> FIX:VCAEngine: Fixed in crash at a widget link setting to "prm". The resource requesting service "get:/wdg/res", Widget::resourceGet() and {WidgetLib,Project}::mimeDataGet() appended for requesting the resource parts, for big media files mostly.</li>
-<li> FIX:Vision: The call saveState() moved from the developing window destructor to the closing event, but a problem of empty context saving was observed after playing some media. Appended of playing the notifications by the internal player at Phonon and not in the separate notification task.</li>
+<ul><li> FIX: TUIS::docKeyGet() виправлено щодо витоку користувацьких об'єктів масивів.</li>
+<li> VCAEngine,WebVision,Vision: Примітив "Media" доповнений типом "Audio" та тип "Повне відео" перейменовано у "Відео", який також імплементовано у WebVision та Vision.</li>
+<li> QTCfg,Vision: Доповнено функцією підлаштування кольорів тексту до фонового кольору — colorAdjToBack(), яку використано у корекції кольорів підсвітлення синтаксису, та інших динамічних кольорів, до зміни палітри.</li>
+<li> VCAEngine,Vision: Розширено реалізацію сповіщень у процесі їх впровадження у WebVision, щодо:
+<ul><li> використання стандартного шляху отримання сповіщень через активацію відповідних атрибутів;</li>
+<li> розширення ntfReg() використанням негативного типу для опрацювання всіх типів, переважно очищення, та деякої уніфікації коду;</li>
+<li> розширення отриманням типу ресурсу;</li>
+<li> доповнення сповіщувачів прапорцем "notifyServ" ввімкнення сповіщення на боці СВУ-серверу;</li>
+<li> доповнено, на боці СВУ-серверу, полем "resStatic" прямого визначення ресурсу (не динамічне);</li>
+<li> доповнення контексту процедури сповіщення двома змінними "resTp" та "prcID".</li></ul></li>
+<li> FIX:UI.QTStarter: Доповнено періодичним оновленням діалогу запуску у переліку проектів.</li>
+<li> FIX:VCAEngine: Виправлено падіння при встановленні посилання віджету у "prm". Сервіс запиту ресурсу "get:/wdg/res", Widget::resourceGet() та {WidgetLib,Project}::mimeDataGet() доповнено запитом частин ресурсу, переважно для великих медіа файлів.</li>
+<li> FIX:Vision: Доповнено програванням сповіщень внутрішнім програвачем на Phonon та не у окремому завдані сповіщувача. Виклик saveState() переміщено із деструктору вікна розробки до події закриття, оскільки було помічено проблему збереження порожнього контексту після програвання деякого медіа.</li>
 <li> FIX:WebVision:
-<ul><li> Implementing of the notifications support.</li>
-<li> Implementation of the resources uploading in parts, for big media, by the HTTP parameter "Range: bytes=".</li>
-<li> FIX: Fixed in the page cache spare cleaning for widgets from pages with common name to the remove page.</li></ul></li>
-<li> WebUser: Adapted to the work with POST and the content in the body.</li></ul>
+<ul><li> Імплементація підтримки сповіщень.</li>
+<li> Імплементація завантаження частин ресурсів, для великих медіа, HTTP параметром "Range: bytes=".</li>
+<li> FIX: Виправлено зайве очищення кешу сторінки щодо віджетів із сторінок із спільною назвою до сторінки що видаляється.</li></ul></li>
+<li> WebUser: Адаптовано до роботи із POST та вмістом у тілі.</li></ul>
 <h3><span class="mw-headline" id=".5B17.08.2020.5D_.D0.94.D0.A0.D0.A3.D0.93.D0.95_.D0.BE.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">7.2</span> [17.08.2020] ДРУГЕ оновлення</span></h3>
 <p>Це оновлення <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">релізу 0.9 LTS</a> виправляє біля 60 помилок та додає деякі удосконалення, які цілком ви можете почитати у <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2706" rel="nofollow noreferrer noopener" target="_blank">протоколі змін оновлення</a>.
 </p><p><b><u><a class="external" href="http://oscada.org/wiki/Sub-projects/Automation_Linux_distributive" title="Sub-projects/Automation Linux distributive">Linux Дистрибутив Автоматизації проекту OpenSCADA</a></u></b><br />

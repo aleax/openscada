@@ -63,10 +63,10 @@
 
 	<node id="sub_Transport">
 	    <tbl id="ExtTansp">
-		<fld OP_USER="roman" ID="loop" NAME="Loop" NAME_uk="Петля" NAME_ru="Петля" TRANSP="Sockets" ADDR="localhost:10005" USER="root" PASS="openscada" />
-		<fld OP_USER="*" ID="loop" NAME="Loop" NAME_uk="Петля" NAME_ru="Петля" TRANSP="Sockets" ADDR="localhost:10005" USER="root" PASS="openscada" />
-		<fld OP_USER="roman" ID="loopSSL" NAME="Loop SSL" NAME_uk="Петля SSL" NAME_ru="Петля SSL" TRANSP="SSL" ADDR="localhost:10045" USER="roman" PASS="roman" />
-		<fld OP_USER="*" ID="loopSSL" NAME="Loop SSL" NAME_uk="Петля SSL" NAME_ru="Петля SSL" TRANSP="SSL" ADDR="localhost:10045" USER="roman" PASS="roman" />
+		<fld OP_USER="roman" ID="loop" NAME="Loop" NAME_uk="Петля" NAME_ru="Петля" TRANSP="Sockets" ADDR="localhost:10005" USER="root" PASS="phash://$1$root$lCn57dP9yzkCIAyrwJ24r1" />
+		<fld OP_USER="*" ID="loop" NAME="Loop" NAME_uk="Петля" NAME_ru="Петля" TRANSP="Sockets" ADDR="localhost:10005" USER="root" PASS="phash://$1$root$lCn57dP9yzkCIAyrwJ24r1" />
+		<fld OP_USER="roman" ID="loopSSL" NAME="Loop SSL" NAME_uk="Петля SSL" NAME_ru="Петля SSL" TRANSP="SSL" ADDR="localhost:10045" USER="roman" PASS="phash://$1$roman$wleNCf/uyA84cGpBn5QuG." />
+		<fld OP_USER="*" ID="loopSSL" NAME="Loop SSL" NAME_uk="Петля SSL" NAME_ru="Петля SSL" TRANSP="SSL" ADDR="localhost:10045" USER="roman" PASS="phash://$1$roman$wleNCf/uyA84cGpBn5QuG." />
 	    </tbl>
 	    <tbl id="Transport_in">
 		<fld ID="WEB" MODULE="Sockets" NAME="WWW-interface" DESCRIPT="The WEB-interfaces transport."

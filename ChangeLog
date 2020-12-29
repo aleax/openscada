@@ -1,7 +1,21 @@
+2020-12-29 Roman (stable)
+- data/ModelsDB/AGLKS/oscada_AGLKS.xml: The plain text paswords of the "ExtTansp" table of the subsystem Transports
+    replaced by the hashed passwords.
+- !!:FIX:Security: Prevented from authentication in user interfaces by the ready password hash.
+- DB.{MySQL,PostgreSQL,FireBird}: Disabled for the direct string field size limiting since the CHAR(N) of the key fields is limited
+    in the field itself and that performs the behaviour difference with SQLite.
+- !!:FIX:Archive.DBArch: Fixed for only direct the values archiving in the group mode and
+	when the values type may drop to the Integer type as the default one.
+    !!:FIX: The value archiving in the group mode appended for removing the according table column at the archive removing,
+	for the table column hot removing just after appending some new archive,
+	than preventing the table early growing to the DB limit.
+- !!:FIX:UI: TUIS::docKeyGet() fixed from the user array objects leaking.
+
+
 2020-12-19 Roman (stable)
 - SYS: data/openscada.ebuild: Updated for the last state.
 - LibsDB.vcaBase: The library "Main" appended by the notification 1 (one) static sample "ntf1".
-- !!:FIX:Archive: Current values obtaining in the active archiving mode forced to the current time,
+- !!:FIX:Archive: Obtained current values, in the active archiving mode, forced to the current time,
     what is significant for the dynamic attributes archiving.
 - SYS:TFunction: Removed for the spare variable "first_io".
 - DAQ.SMH2Gi: Some unified in the error messages of the communication.
@@ -21,7 +35,7 @@
 - FIX:SYS.Function: Appended for detection the duple IOs at the IO context copy.
 - !!:FIX:Protocol.HTTP: Multipart POST of the output function outMess() prevented in the end boundary placing
     and improved in the "Content-Disposition" form.
-- !!:FIX:UI.QTStarter: The project tree updating code rewrote for soft update, without the current item selection lost.
+- !!:FIX:UI.QTStarter: The project list updating code rewrote for soft update, without the current item selection lost.
     FIX: Fixed in building with Qt 5.15.
 - FIX:UI.Vision: Fixed in the user color adjustement in the project execution mode.
 - !!:UI.WebUser: Adapted to the work with POST and the content in the body.
@@ -73,8 +87,8 @@
     STD_WAIT_DELAY renamed to OSCD_WAIT_DELAY and changed to 0.1 seconds.
     TSYS appended for the function taskSendSIGALRM() of sending the termination signal "ALARM" to OpenSCADA tasks.
     TValFunc: Appended for a state of the function execution by the function isCalc().
-- !!:Archive: The value archive configuration field "Mode of forming ID of the automatic created archives" expanded
-    by the selection item "All controller, parameter and attribute ID" during expanding the value archives limit to 50 symbols.
+- !!:Archive: The value archive configuration field "Mode of forming ID of the automatic created archives" expanded by the selection item
+    "All controller, parameter and attribute ID", during the process of expanding the limit of the value archive ID to 50 symbols.
 - !!!!:Transports.{.,*}: The timeouts setting function setTimings() of the output transports expanded in
 	the default timeouts difference for different protocols, by the argument "isDef".
     The output transports expanded for a mark of the transport as Network one, by the function isNetwork(), in the User API also.
@@ -103,7 +117,7 @@
     - using the standard way of the notifications obtaining through the corresponding attributes activation;
     - {VCAEngine.Vision}::ntfReg() expanding for the negative type using in all types processing, freeing mostly,
 	and some unification of the code;
-    - expanding for the resource type obtaining in:
+    - expanding by the resource type obtaining in:
 	- the service request "<get mode='resource' path='%2fserv%2falarm' />" of the OpenSCADA control interface;
 	- an argument of the functions {ntfRes,commCall}();
 	- an argument of the notification procedures "resTp" what is return and placed to stdout (for Shell) for "doRes".
@@ -120,7 +134,7 @@
 
 
 2020-10-04 Roman (stable)
-- !!:LibsDB.OscadaLibs: The library DevLib appended by the template "MTP 4D (MTP4D)" "and ModBus base (mbBase)".
+- !!:LibsDB.OscadaLibs: The library DevLib appended by the template "MTP 4D (MTP4D)" and "ModBus base (mbBase)".
 - !!:UI.Vision: Appended of playing the notifications by the internal player at Phonon.
 - UI.WebVision: Styles of the popupmenu some improved.
 
@@ -167,7 +181,7 @@
 - !!:FIX:DAQ.LogicLev: Removed for the calculation lock "calcRes", what used only in locking the writing
     to the parameter attributes during the calculation and what can be long.
 - !!!!:{DAQ,Protocol}.ModBus:
-    The type extending "_b" - bit type, expanded by moving the bit number to the register number field like to "R_b:123.12".
+    The subtype "_b" - bit type, expanded by moving the bit number to the register number field like to "R_b:123.12".
     Added by the flag "~" for inversion registers order of the complex subtypes in multiple registers, like to "_f".
     The flag "rw" separated to "r" and "w".
 - !!!!:UI.{VCAEngine,WebVision,Vision}: The primitive "Media" appended by the type "Audio" and the type "Full video" renamed to "Video",
