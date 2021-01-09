@@ -3,7 +3,7 @@
 #
 # OpenSCADA system author and main developer:
 # Roman Savochenko
-# Email: rom_as@oscada.org
+# Email: roman@oscada.org
 #
 # Home page: http://oscada.org"
 

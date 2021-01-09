@@ -2,7 +2,7 @@
 //OpenSCADA module DAQ.Comedi file: module.cpp
 /***************************************************************************
  *   Copyright (C) 2012-2019 by Roman Savochenko                           *
- *   rom_as@oscada.org                                                     *
+ *   roman@oscada.org                                                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,7 +37,7 @@
 #define MOD_NAME	_("DAQ boards by Comedi")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.0.14"
+#define MOD_VER		"1.0.15"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("ISA, PCI, PCMCIA, USB DAQ boards collection by Comedi(http://www.comedi.org).")
 #define LICENSE		"GPL2"

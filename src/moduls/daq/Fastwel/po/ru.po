@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the OpenSCADA.DAQ.Fastwel package module.
 #
 # Maxim Kochetkov <fido_max@inbox.ru> 2015.
-# Roman Savochenko <rom_as@oscada.org>, 2018.
+# Roman Savochenko <roman@oscada.org>, 2018.
 #
 msgid ""
 msgstr ""

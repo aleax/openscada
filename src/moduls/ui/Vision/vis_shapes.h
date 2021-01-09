@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_shapes.h
 /***************************************************************************
- *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -180,6 +180,8 @@ class ShapeFormEl : public WdgShape
 		string	cfg;
 		string	color, colorText;
 	};
+
+	QStyle	*forceStl;
 
 	//Methods
 	// Recursively widgets process for disable focusable and events filter set

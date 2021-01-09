@@ -1,3 +1,14 @@
+2021-01-09 Roman (stable)
+- data/Android/patches/openscada_oscada.xml.patch:
+    The Android patch appended for the plain passwords restoring in the table ExtTansp.
+- !!!!:SYS: rom_as@oscada.org replaced by roman@oscada.org in everywhere.
+- FIX:UI.Vision: Processing the force widgets style switching to the system one QCommonStyle() or QPlastiqueStyle()
+    of the buttons of the primitive FormEl is unified in reusing the system style objects
+    and that disabled in the CSS styles using here due to color alpha lost.
+- FIX:UI.WebVision: The servSet() function appended in the error 404 processing, emerged at the sessions accessing
+    after they clossing on the server side.
+
+
 2020-12-29 Roman (stable)
 - data/ModelsDB/AGLKS/oscada_AGLKS.xml: The plain text paswords of the "ExtTansp" table of the subsystem Transports
     replaced by the hashed passwords.

@@ -2,7 +2,7 @@
 //OpenSCADA module DAQ.Comedi file: module.h
 /***************************************************************************
  *   Copyright (C) 2012-2014,2019 by Roman Savochenko                      *
- *   rom_as@oscada.org                                                     *
+ *   roman@oscada.org                                                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *

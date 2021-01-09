@@ -249,6 +249,7 @@ function servSet( adr, prm, body, noWaitRez )
 	req.send(body);
 	if(!noWaitRez && req.status == 200 && req.responseXML.childNodes.length)
 	    return req.responseXML.childNodes[0];
+	else if(req.status == 404) window.location.reload();
 	//if(mainTmId) clearTimeout(mainTmId);
 	//mainTmId = setTimeout(makeUI, 1000);
     } catch(e) { window.location.reload(); /*window.location = '/'+MOD_ID;*/ }

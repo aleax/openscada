@@ -1185,7 +1185,7 @@ AC_DEFUN([AX_LIB_POSTGRESQL],
 #
 # LICENSE
 #
-#   Copyright (c) 2015 Roman Savochenko <rom_as@oscada.org>
+#   Copyright (c) 2015 Roman Savochenko <roman@oscada.org>
 #
 #   Copying and distribution of this file, with or without modification, are
 #   permitted in any medium without royalty provided the copyright notice
@@ -1280,7 +1280,7 @@ AC_DEFUN([AX_LIB_IODBC],
 #
 # LICENSE
 #
-#   Copyright (c) 2011 Roman Savochenko <rom_as@oscada.org>
+#   Copyright (c) 2011 Roman Savochenko <roman@oscada.org>
 #
 #   Copying and distribution of this file, with or without modification, are
 #   permitted in any medium without royalty provided the copyright notice
@@ -1322,7 +1322,7 @@ AC_DEFUN([AX_LIB_SENSORS],
 #
 # LICENSE
 #
-#   Copyright (c) 2011 Roman Savochenko <rom_as@oscada.org>
+#   Copyright (c) 2011 Roman Savochenko <roman@oscada.org>
 #
 #   Copying and distribution of this file, with or without modification, are
 #   permitted in any medium without royalty provided the copyright notice
@@ -1365,7 +1365,7 @@ AC_DEFUN([AX_LIB_GD], [
 #
 # LICENSE
 #
-#   Copyright (c) 2011 Roman Savochenko <rom_as@oscada.org>
+#   Copyright (c) 2011 Roman Savochenko <roman@oscada.org>
 #
 #   Copying and distribution of this file, with or without modification, are
 #   permitted in any medium without royalty provided the copyright notice
@@ -1420,7 +1420,7 @@ AC_DEFUN([AX_LIB_OpenSSL_opt], [
 #
 # LICENSE
 #
-#   Copyright (c) 2011 Roman Savochenko <rom_as@oscada.org>
+#   Copyright (c) 2011 Roman Savochenko <roman@oscada.org>
 #
 #   Copying and distribution of this file, with or without modification, are
 #   permitted in any medium without royalty provided the copyright notice
@@ -1465,7 +1465,7 @@ AC_DEFUN([AX_LIB_FFTW3], [
 #
 # LICENSE
 #
-#   Copyright (c) 2011-2017 Roman Savochenko <rom_as@oscada.org>
+#   Copyright (c) 2011-2017 Roman Savochenko <roman@oscada.org>
 #
 #   Copying and distribution of this file, with or without modification, are
 #   permitted in any medium without royalty provided the copyright notice
@@ -1530,7 +1530,7 @@ AC_DEFUN([AX_LIB_Qt],
 #
 # LICENSE
 #
-#   Copyright (c) 2011 Roman Savochenko <rom_as@oscada.org>
+#   Copyright (c) 2011 Roman Savochenko <roman@oscada.org>
 #
 #   Copying and distribution of this file, with or without modification, are
 #   permitted in any medium without royalty provided the copyright notice
