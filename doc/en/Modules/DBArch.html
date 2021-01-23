@@ -31,7 +31,7 @@
 <td> <a href="../Modules/DBArch.html" title="Special:MyLanguage/Modules/DBArch">DBArch</a> </td>
 <td> Arhivator on the DB
 </td>
-<td> 2.10 </td>
+<td> 3.0 </td>
 <td> GPL2 </td>
 <td> arh_DBArch.so </td>
 <td> en,uk,ru,de </td>
@@ -66,11 +66,12 @@
 <ul><li> <i>ArchID</i> — identifier of the message archiver.</li></ul>
 <p>The module provides additional settings for the archiving process, Figure 1.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:677px;"><a class="image" href="http://oscada.org/wiki/File:DBArch_mess_a_prm.png"><img class="thumbimage" height="687" src="../files/DBArch_mess_a_prm.png" width="675" /></a>  <div class="thumbcaption">Fig.1. Additional settings of the message archiving process.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:722px;"><a class="image" href="http://oscada.org/wiki/File:DBArch_mess_a_prm.png"><img class="thumbimage" height="706" src="../files/DBArch_mess_a_prm.png" width="720" /></a>  <div class="thumbcaption">Fig.1. Additional settings of the message archiving process.</div></div></div></div>
 <p>These additional parameters:
 </p>
 <ul><li> <i>Archive size, days</i> — determines the size of the archive over time. After exceeding the limit the old records will be deleted! Set to 0 to disable this limit and to rise some the performance.</li>
-<li> <i>To form time as a string</i> — store messages time in the readable form. Only for databases that support such by means of specific data types like "datetime" in MySQL. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> This option is incompatible, that is, if you change it, you will lose your current archives.</li></ul>
+<li> <i>To form time as a string</i> — store messages time in the readable form. Only for databases that support such by means of specific data types like "datetime" in MySQL. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> This option is incompatible, that is, if you change it, you will lose your current archives.</li>
+<li> <i>Unique and non duple messages for time and category only</i> — in the primary key there are used the fields <b>MIN</b>, <b>TM</b>, <b>TMU</b> and <b>CATEG</b>; otherwise the field <b>MESS</b> is included also to the primary key and is limited in 255 symbols.</li></ul>
 <p>The database table for the message archiver has a structure <b>{<u>MIN</u>, <u>TM</u>, <u>TMU</u>, <u>CATEG</u>, MESS, LEV}</b>, where:
 </p>
 <ul><li> <i>MIN</i> — UTC time, in minutes, uses to accelerate while reading in minutes.</li>

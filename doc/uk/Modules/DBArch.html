@@ -31,7 +31,7 @@
 <td> <a href="../Modules/DBArch.html" title="Special:MyLanguage/Modules/DBArch">DBArch</a> </td>
 <td> Архіватор до БД
 </td>
-<td> 2.10 </td>
+<td> 3.0 </td>
 <td> GPL2 </td>
 <td> arh_DBArch.so </td>
 <td> en,uk,ru,de </td>
@@ -66,11 +66,12 @@
 <ul><li> <i>ArchID</i> — ідентифікатор архіватору повідомлень.</li></ul>
 <p>Модулем надаються додаткові параметри налаштування процесу архівування, рисунок 1.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:681px;"><a class="image" href="http://oscada.org/wiki/File:DBArch_mess_a_prm_uk.png"><img class="thumbimage" height="687" src="../files/DBArch_mess_a_prm_uk.png" width="679" /></a>  <div class="thumbcaption">Рис.1. Додаткові параметри налаштування процесу архівування повідомлень.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:799px;"><a class="image" href="http://oscada.org/wiki/File:DBArch_mess_a_prm_uk.png"><img class="thumbimage" height="709" src="../files/DBArch_mess_a_prm_uk.png" width="797" /></a>  <div class="thumbcaption">Рис.1. Додаткові параметри налаштування процесу архівування повідомлень.</div></div></div></div>
 <p>До числа додаткових параметрів входять:
 </p>
 <ul><li> <i>Розмір архіву, днів</i> — визначає розмір архіву за часом. Після перевищення ліміту старі записи почнуть видалятися! Встановити у 0 для вимкнення обмеження та деякого підвищення продуктивності.</li>
-<li> <i>Формувати час як рядок</i> — зберігати час повідомлення у читабельному вигляді. Тільки для БД які підтримують таке за посередництвом специфічних типів даних на кшталт "datetime" у MySQL. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Ця опція несумісна, тобто при її зміні Ви втратите чинні архіви.</li></ul>
+<li> <i>Формувати час як рядок</i> — зберігати час повідомлення у читабельному вигляді. Тільки для БД які підтримують таке за посередництвом специфічних типів даних на кшталт "datetime" у MySQL. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Ця опція несумісна, тобто при її зміні Ви втратите чинні архіви.</li>
+<li> <i>Унікальні та недублюючі повідомлення лише за часом та категорією</i> — у первинному ключі використовуються поля <b>MIN</b>, <b>TM</b>, <b>TMU</b> та <b>CATEG</b>; інакше поле повідомлення включається до первинного ключа та його обмежено 255 символами.</li></ul>
 <p>Таблиця БД архіватору повідомлень має структуру <b>{<u>MIN</u>, <u>TM</u>, <u>TMU</u>, <u>CATEG</u>, MESS, LEV}</b>, де:
 </p>
 <ul><li> <i>MIN</i> — UTC час, у хвилинах, використовується для прискорення при читанні хвилинами.</li>

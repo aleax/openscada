@@ -206,7 +206,7 @@ void Widget::setOwner( const string &iown )
     if(SYS->security().at().grpAt("UI").at().user(iown)) setGrp("UI");
     else {
 	vector<string> gls;
-	SYS->security().at().usrGrpList(owner(),gls);
+	SYS->security().at().usrGrpList(owner(), gls);
 	setGrp(gls.size()?gls[0]:Widget::grp());
     }
 }
@@ -290,15 +290,8 @@ void Widget::setEnable( bool val, bool force )
     if(!val) {
 	mess_sys(TMess::Debug, _("Disabling the widget."));
 
-	disable(this);
-
-	//Free no base attributes and restore base
-	vector<string> ls;
-	attrList(ls);
-	for(unsigned iL = 0; iL < ls.size(); iL++)
-	    if(!(attrAt(ls[iL]).at().flgGlob()&Attr::Generic)) attrDel(ls[iL], true);
-
-	//Disable heritors widgets
+	//Disable heritors widgets.
+	//!!!! Before all but else the heritors lost some attributes
 	for(unsigned iH = 0; iH < herit().size(); )
 	    if(herit()[iH].at().enable())
 		try { herit()[iH].at().setEnable(false); }
@@ -308,6 +301,14 @@ void Widget::setEnable( bool val, bool force )
 		    iH++;
 		}
 	    else iH++;
+
+	disable(this);
+
+	//Free no base attributes and restore base
+	vector<string> ls;
+	attrList(ls);
+	for(unsigned iL = 0; iL < ls.size(); iL++)
+	    if(!(attrAt(ls[iL]).at().flgGlob()&Attr::Generic)) attrDel(ls[iL], true);
 
 	if(!mParent.freeStat()) {
 	    //Unregister heritater

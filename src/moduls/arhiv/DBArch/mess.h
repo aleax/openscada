@@ -1,7 +1,7 @@
 
 //OpenSCADA module Archive.DBArch file: mess.h
 /***************************************************************************
- *   Copyright (C) 2007-2019 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -44,9 +44,11 @@ class ModMArch: public TMArchivator
 	string archTbl( )		{ return "DBAMsg_"+id(); }
 	double maxSize( )		{ return mMaxSize; }	//In days
 	bool tmAsStr( )			{ return mTmAsStr; }
+	bool keyTmCat( )		{ return mKeyTmCat; }
 
 	void setMaxSize( double vl )	{ mMaxSize = (vl<0.1) ? 0 : vl; modif(); }
 	void setTmAsStr( bool vl )	{ mTmAsStr = vl; modif(); }
+	void setKeyTmCat( bool vl )	{ mKeyTmCat = vl; modif(); }
 
 	time_t begin( );
 	time_t end( );
@@ -73,6 +75,7 @@ class ModMArch: public TMArchivator
 	time_t	mBeg, mEnd;
 	double	mMaxSize;			//Maximum archive size (hours)
 	bool	mTmAsStr,			//Store time as pure integer
+		mKeyTmCat,			//Unique and non duple messages for time and category only
 		needMeta;
 
 	TElem	reqEl;				//Requests structure

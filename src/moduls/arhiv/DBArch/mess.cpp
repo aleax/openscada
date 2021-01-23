@@ -1,7 +1,7 @@
 
 //OpenSCADA module Archive.DBArch file: mess.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,7 +32,8 @@ using namespace DBArch;
 //* DBArch::ModMArch - Messages archivator       *
 //************************************************
 ModMArch::ModMArch( const string &iid, const string &idb, TElem *cf_el ) :
-    TMArchivator(iid, idb, cf_el), tmProc(0), tmProcMax(0), mBeg(0), mEnd(0), mMaxSize(0), mTmAsStr(false), needMeta(true)
+    TMArchivator(iid, idb, cf_el), tmProc(0), tmProcMax(0), mBeg(0), mEnd(0), mMaxSize(0),
+    mTmAsStr(false), mKeyTmCat(true), needMeta(true)
 {
     setAddr("*.*");
 }
@@ -87,6 +88,7 @@ void ModMArch::load_( )
 	prmNd.load(cfg("A_PRMS").getS());
 	if(!(vl=prmNd.attr("Size")).empty())	setMaxSize(s2r(vl));
 	if(!(vl=prmNd.attr("TmAsStr")).empty())	setTmAsStr(s2i(vl));
+	if(!(vl=prmNd.attr("KeyTmCat")).empty()) setKeyTmCat(s2i(vl));
     } catch(...) { }
 
     needMeta = !readMeta();
@@ -97,6 +99,7 @@ void ModMArch::save_( )
     XMLNode prmNd("prms");
     prmNd.setAttr("Size", r2s(maxSize()));
     prmNd.setAttr("TmAsStr", i2s(tmAsStr()));
+    prmNd.setAttr("KeyTmCat", i2s(keyTmCat()));
     cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 
     TMArchivator::save_();
@@ -106,11 +109,11 @@ void ModMArch::start( )
 {
     if(!runSt) {
 	reqEl.fldClear();
-	reqEl.fldAdd(new TFld("MIN",_("In minutes"),TFld::Integer,TCfg::Key,"15"));	//Mostly for fast reading next, by minutes
-	reqEl.fldAdd(new TFld("TM",_("Time, seconds"),TFld::Integer,TCfg::Key|(tmAsStr()?TFld::DateTimeDec:0),"20"));
+	reqEl.fldAdd(new TFld("MIN",_("In minutes"),TFld::Integer,TCfg::Key,"8"));	//Mostly for fast reading next, by minutes
+	reqEl.fldAdd(new TFld("TM",_("Time, seconds"),TFld::Integer,TCfg::Key|(tmAsStr()?TFld::DateTimeDec:0),(tmAsStr()?"20":"10")));
 	reqEl.fldAdd(new TFld("TMU",_("Time, microseconds"),TFld::Integer,TCfg::Key,"6","0"));
 	reqEl.fldAdd(new TFld("CATEG",_("Category"),TFld::String,TCfg::Key,"200"));
-	reqEl.fldAdd(new TFld("MESS",_("Message"),TFld::String,TFld::NoFlag/*TCfg::Key*/,"100000"));
+	reqEl.fldAdd(new TFld("MESS",_("Message"),TFld::String,(keyTmCat()?TFld::NoFlag:TCfg::Key),(keyTmCat()?"100000":"255")));
 	reqEl.fldAdd(new TFld("LEV",_("Level"),TFld::Integer,TFld::NoFlag,"2"));
     }
 
@@ -282,6 +285,8 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
 		"tp","real", "help",_("Set to 0 to disable this limit and to rise some the performance."));
 	    ctrMkNode("fld",opt,-1,"/prm/add/tmAsStr",_("To form time as a string"),startStat()?R_R_R_:RWRWR_,"root",SARH_ID,2,
 		"tp","bool", "help",_("Only for databases that support such by means of specific data types like \"datetime\" in MySQL."));
+	    ctrMkNode("fld",opt,-1,"/prm/add/keyTmCat",_("Unique and non duple messages for time and category only"),startStat()?R_R_R_:RWRWR_,"root",SARH_ID,2,
+		"tp","bool", "help",_("Otherwise the message field is included to the primary key and is limited in 255 symbols."));
 	}
 	return;
     }
@@ -296,6 +301,10 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/add/tmAsStr") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(i2s(tmAsStr()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setTmAsStr(s2i(opt->text()));
+    }
+    else if(a_path == "/prm/add/keyTmCat") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(i2s(keyTmCat()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setKeyTmCat(s2i(opt->text()));
     }
     else TMArchivator::cntrCmdProc(opt);
 }

@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2010.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <roman@oscada.org>, 2016-2020.
+# Roman Savochenko <roman@oscada.org>, 2016-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.DBArch 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-23 08:51+0300\n"
+"POT-Creation-Date: 2021-01-20 22:14+0200\n"
 "PO-Revision-Date: 2009-08-17 10:37+0200\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: de <>\n"
@@ -85,6 +85,16 @@ msgid ""
 msgstr ""
 "Nur für Datenbanken, die dies durch bestimmte Datentypen wie \"datetime\" in "
 "MySQL unterstützen."
+
+msgid "Unique and non duple messages for time and category only"
+msgstr "Eindeutige und nicht doppelte Nachrichten nur für Zeit und Kategorie"
+
+msgid ""
+"Otherwise the message field is included to the primary key and is limited in "
+"255 symbols."
+msgstr ""
+"Andernfalls ist das Nachrichtenfeld im Primärschlüssel enthalten und auf 255 "
+"Symbole begrenzt."
 
 msgid "Mark, time/(10*per)"
 msgstr "Kennzeichen, time/(10*per)"

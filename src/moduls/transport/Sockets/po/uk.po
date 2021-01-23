@@ -1,13 +1,13 @@
 # OpenSCADA.Transport.Sockets translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.Transport.Sockets package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2003-2020.
+# Roman Savochenko <roman@oscada.org>, 2003-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 4.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-22 16:35+0300\n"
+"POT-Creation-Date: 2021-01-20 22:23+0200\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -95,7 +95,7 @@ msgstr ""
 
 #, c-format
 msgid "Connections %d, opened %d, last %s, closed by the limit %d. "
-msgstr "Підключень %d, відкрито %d, останне %s, закрито за лімітом %d. "
+msgstr "Підключень %d, відкрито %d, останнє %s, закрито за лімітом %d. "
 
 #, c-format
 msgid "%s traffic in %s, out %s. "
@@ -138,6 +138,7 @@ msgstr "Приєднано"
 msgid "Disconnected"
 msgstr "Від'єднано"
 
+#, c-format
 msgid "Reconnect due to lack of input activity to '%s'."
 msgstr "Перепід'єднання через відсутність вхідної активності на '%s'."
 
@@ -146,7 +147,7 @@ msgid "Write: wrote %s."
 msgstr "Запис: записано %s."
 
 msgid "Write: the answer is zero byte."
-msgstr "Запис: відповідь ноль байт."
+msgstr "Запис: відповідь нуль байт."
 
 #, c-format
 msgid "Write: error '%s (%d)'!"
@@ -180,8 +181,7 @@ msgid "%d:Transmitted to '%s'\n"
 msgstr "%d:Передано до '%s'\n"
 
 #, c-format
-msgid ""
-"Received CAN frame id:%08X; dlc:%d; data:%02X%02X%02X%02X%02X%02X%02X%02X!"
+msgid "Received CAN frame id:%08X; dlc:%d; data:%02X%02X%02X%02X%02X%02X%02X%02X!"
 msgstr ""
 "Отримано CAN повідомлення id:%08X; dlc:%d; data:%02X%02X%02X%02X%02X%02X%02X"
 "%02X!"
@@ -212,6 +212,9 @@ msgstr "Прочитано повідомлення %s від '%s'."
 #, c-format
 msgid "Wrote message %s to '%s'."
 msgstr "Записано повідомлення %s до '%s'."
+
+msgid "Write: error '%s (%d)'."
+msgstr "Запис: помилка '%s (%d)'."
 
 #, c-format
 msgid "Error transmitting: %s"
@@ -315,7 +318,7 @@ msgid ""
 "of creation associated output transports for each connection to this "
 "transport."
 msgstr ""
-"Порожне значення вибору протоколу перемикає транспорт у режим створення\n"
+"Порожнє значення вибору протоколу перемикає транспорт у режим створення\n"
 "асоційованого вихідного транспорту для кожного підключення на цей вхідний."
 
 msgid "Priority"
@@ -416,6 +419,7 @@ msgstr "Помилка створення %s сокету!"
 msgid "RAWCAN socket doesn't bind to '%s'!"
 msgstr "RAWCAN сокет не під'єднався до '%s'!"
 
+#, c-format
 msgid "Error connecting: %s"
 msgstr "Помилка під'єднання: %s"
 
@@ -428,6 +432,9 @@ msgstr "Транспорт не під'єднано!"
 #, c-format
 msgid "Error requesting: %s"
 msgstr "Помилка запиту: %s"
+
+msgid "Error writing '%s (%d)'"
+msgstr "Помилка запису '%s (%d)'"
 
 msgid "No data wrote"
 msgstr "Не записано даних"
@@ -450,6 +457,9 @@ msgstr "Перевищено час читання."
 msgid "Error reading (select): %s"
 msgstr "Помилка читання (select): %s"
 
+msgid "Error reading '%s (%d)'"
+msgstr "Помилка читання '%s (%d)'"
+
 msgid "No data, the connection seems closed"
 msgstr "Немає даних, з'єднання схоже закрите"
 
@@ -469,3 +479,4 @@ msgstr "Інтервали часу"
 
 msgid "Attempts"
 msgstr "Спроб"
+

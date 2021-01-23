@@ -31,7 +31,7 @@
 <td> <a href="../Modules/DBArch.html" title="Special:MyLanguage/Modules/DBArch">DBArch</a> </td>
 <td> Архиватор на БД
 </td>
-<td> 2.10 </td>
+<td> 3.0 </td>
 <td> GPL2 </td>
 <td> arh_DBArch.so </td>
 <td> en,uk,ru,de </td>
@@ -66,11 +66,12 @@
 <ul><li> <i>ArchID</i> — идентификатор архиватора сообщений.</li></ul>
 <p>Модулем предоставляются дополнительные параметры настройки процесса архивирования, рисунок 1.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:681px;"><a class="image" href="http://oscada.org/wiki/File:DBArch_mess_a_prm_ru.png"><img class="thumbimage" height="687" src="../files/DBArch_mess_a_prm_ru.png" width="679" /></a>  <div class="thumbcaption">Рис.1. Дополнительные параметры настройки процесса архивирования сообщений.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:848px;"><a class="image" href="http://oscada.org/wiki/File:DBArch_mess_a_prm_ru.png"><img class="thumbimage" height="710" src="../files/DBArch_mess_a_prm_ru.png" width="846" /></a>  <div class="thumbcaption">Рис.1. Дополнительные параметры настройки процесса архивирования сообщений.</div></div></div></div>
 <p>В число дополнительных параметров входят:
 </p>
 <ul><li> <i>Размер архива, дней</i> — определяет размер архива по времени. После превышения лимита старые записи начнут удаляться! Установить в 0 для отключения данного лимита и некоторого повышения производительности.</li>
-<li> <i>Формировать время как строка</i> — сохранять время сообщения в читабельном виде. Только для БД поддерживающих такое посредством специфических типов данных вроде "datetime" в MySQL. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Данная опция несовместима, т.е. при её изменении Вы потеряете существующие архивы.</li></ul>
+<li> <i>Формировать время как строка</i> — сохранять время сообщения в читабельном виде. Только для БД поддерживающих такое посредством специфических типов данных вроде "datetime" в MySQL. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Данная опция несовместима, т.е. при её изменении Вы потеряете существующие архивы.</li>
+<li> <i>Уникальные и недублирующие сообщения только за временем и категорией</i> — в первичном ключе используются поля <b>MIN</b>, <b>TM</b>, <b>TMU</b> и <b>CATEG</b>; иначе поле сообщения включается к первичному ключу и его ограничено 255 символами.</li></ul>
 <p>Таблица БД архиватора сообщений имеет структуру <b>{<u>MIN</u>, <u>TM</u>, <u>TMU</u>, <u>CATEG</u>, MESS, LEV}</b>, где:
 </p>
 <ul><li> <i>MIN</i> — UTC время, в минутах, используется для ускорения при чтении минутами.</li>

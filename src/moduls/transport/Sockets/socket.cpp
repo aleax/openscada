@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.Sockets file: socket.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -61,7 +61,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.2.2"
+#define MOD_VER		"4.2.3"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -802,7 +802,7 @@ void *TSocketIn::ClTask( void *s_inf )
 			    if(kz > 0 && FD_ISSET(s.sock,&rw_fd)) { wL = 0; continue; }
 			    //!!!! May be some flush !!!!
 			}
-			string err = TSYS::strMess(_("Write: error '%s (%d)'!"), strerror(errno), errno);
+			string err = TSYS::strMess(_("Write: error '%s (%d)'."), strerror(errno), errno);
 			if(s.s->logLen()) s.s->pushLogMess(TSYS::strMess(_("Error transmitting: %s"),err.c_str()));
 			mess_err(s.s->nodePath().c_str(), "%s", err.c_str());
 			s.s->dataRes().lock();
@@ -1394,12 +1394,13 @@ repeate:
 			kz = select(sockFd+1, NULL, &rw_fd, NULL, &tv);
 			if(kz > 0 && FD_ISSET(sockFd,&rw_fd)) { kz = 0; continue; }
 		    }
-		    err = (kz < 0) ? TSYS::strMess("%s (%d)",strerror(errno),errno) : _("No data wrote");
+		    err = (kz < 0) ? TSYS::strMess(_("Error writing '%s (%d)'"),strerror(errno),errno) : _("No data wrote");
 		    stop();
 		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Error writing: %s"), err.c_str());
 		    if(logLen()) pushLogMess(TSYS::strMess(_("Error writing: %s"), err.c_str()));
 		    if(notReq) throw TError(nodePath().c_str(),_("Error writing: %s"), err.c_str());
 		    start();
+		    //???? Why only (kz == 0)? Testing for the error "Broken channel (32)"
 		    if(kz == 0 && wAttempts == 1) wAttempts = 2;	//!!!! To restore the loss connections
 		    goto repeate;
 		}
@@ -1478,13 +1479,14 @@ repeate:
 		// * !!: Zero can be also after disconection by peer and possible undetected here for the not request mode,
 		//	what can be easily tested on stopping the ModBus input service
 		if(iB < 0 || (iB == 0 && writeReq && !notReq)) {
-		    err = (iB < 0) ? TSYS::strMess("%s (%d)",strerror(errno),errno) : TSYS::strMess(_("No data, the connection seems closed"));
+		    err = (iB < 0) ? TSYS::strMess(_("Error reading '%s (%d)'"),strerror(errno),errno) : TSYS::strMess(_("No data, the connection seems closed"));
 		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Error reading: %s"), err.c_str());
 		    if(logLen()) pushLogMess(TSYS::strMess(_("Error reading: %s"), err.c_str()));
 		    stop();
 		    // * Pass to retry into the request mode and on the successful writing
 		    if(!writeReq || notReq) throw TError(nodePath().c_str(),_("Error reading: %s"), err.c_str());
 		    start();
+		    //???? Why only (kz == 0)? Testing for the error "Broken channel (32)"
 		    if(iB == 0 && wAttempts == 1) wAttempts = 2;	//!!!! To restore the loss connections
 		    goto repeate;
 		}

@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tprmtmpl.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -326,15 +326,21 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
 	    IO *ioPrev = ioSize() ? io(ioSize()-1) : NULL;
-	    if(ioPrev) ioAdd(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~LockAttr)));
-	    else ioAdd(new IO("new",_("New IO"),IO::Real,IO::Default));
+	    if(ioPrev) {
+		string ioID = TSYS::strLabEnum(ioPrev->id());
+		while(ioId(ioID) >= 0) ioID = TSYS::strLabEnum(ioID);
+		ioAdd(new IO(ioID.c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~LockAttr),ioPrev->def().c_str()));
+	    } else ioAdd(new IO("new",_("New IO"),IO::Real,IO::Default));
 	    modif();
 	}
 	if(ctrChkNode(opt,"ins",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
 	    int row = s2i(opt->attr("row"));
 	    IO *ioPrev = row ? io(row-1) : NULL;
-	    if(ioPrev) ioIns(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~LockAttr)), row);
-	    else ioIns(new IO("new",_("New IO"),IO::Real,IO::Default), row);
+	    if(ioPrev) {
+		string ioID = TSYS::strLabEnum(ioPrev->id());
+		while(ioId(ioID) >= 0) ioID = TSYS::strLabEnum(ioID);
+		ioIns(new IO(ioID.c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~LockAttr),ioPrev->def().c_str()), row);
+	    } else ioIns(new IO("new",_("New IO"),IO::Real,IO::Default), row);
 	    modif();
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR)) {

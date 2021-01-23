@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: session.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1164,6 +1164,9 @@ void SessPage::setEnable( bool val, bool force )
     //Page enable
     if(val) {
 	mess_sys(TMess::Debug, _("Enabling the page."));
+
+	linkToParent();
+
 	mToEn = true;
 	// Check for full enable need
 	bool pgOpen = (!(parent().at().prjFlags()&Page::Empty) && parent().at().attrAt("pgOpen").at().getB());
@@ -1602,13 +1605,13 @@ void SessWdg::postEnable( int flag )
 {
     Widget::postEnable(flag);
 
-    if(flag&TCntrNode::NodeConnect) {
+    /*if(flag&TCntrNode::NodeConnect) {
 	mToEn = true;
 	attrAdd(new TFld("event","Events",TFld::String,TFld::FullText));
 	attrAdd(new TFld("alarmSt","Alarm status",TFld::Integer,TFld::HexDec,"5","0"));
 	attrAdd(new TFld("alarm","Alarm",TFld::String,TFld::NoFlag,"200"));
 	mToEn = false;
-    }
+    }*/
 }
 
 SessWdg *SessWdg::ownerSessWdg( bool base ) const
@@ -1644,6 +1647,8 @@ string SessWdg::ownerFullId( bool contr ) const
 
 void SessWdg::setEnable( bool val, bool force )
 {
+    if(!val) setProcess(false);
+
     try { Widget::setEnable(val); } catch(...) { return; }
 
     if(!val) {
@@ -1652,6 +1657,13 @@ void SessWdg::setEnable( bool val, bool force )
 	wdgList(ls);
 	for(unsigned iL = 0; iL < ls.size(); iL++)
 	    wdgDel(ls[iL]);
+    }
+    else {
+	mToEn = true;
+	attrAdd(new TFld("event","Events",TFld::String,TFld::FullText));
+	attrAdd(new TFld("alarmSt","Alarm status",TFld::Integer,TFld::HexDec,"5","0"));
+	attrAdd(new TFld("alarm","Alarm",TFld::String,TFld::NoFlag,"200"));
+	mToEn = false;
     }
 
     SessWdg *sw;

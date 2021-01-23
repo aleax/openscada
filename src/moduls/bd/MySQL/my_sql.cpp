@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.MySQL file: my_sql.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,7 +34,7 @@
 #define MOD_NAME	_("DB MySQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"3.5.3"
+#define MOD_VER		"3.5.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DBMS MySQL.")
 #define MOD_LICENSE	"GPL2"
@@ -716,7 +716,7 @@ void MTable::fieldFix( TConfig &cfg, bool trPresent )
 	    switch(u_cfg.fld().type()) {
 		case TFld::String:
 		    if(u_cfg.fld().len() < 256 || u_cfg.fld().flg()&TCfg::Key)
-			f_tp = "varchar(" + i2s(vmax(1,vmin((u_cfg.fld().flg()&TCfg::Key)?(333/(2*keyCnt)):255,u_cfg.fld().len()))) + ")";
+			f_tp = "varchar(" + i2s(vmax(1,vmin(/*(u_cfg.fld().flg()&TCfg::Key)?(333/(2*keyCnt)):*/255,u_cfg.fld().len()))) + ")";
 		    else if(u_cfg.fld().len() < 65536) f_tp = "text";
 		    else f_tp = "mediumtext";
 		    break;
@@ -796,7 +796,7 @@ void MTable::fieldPrmSet( TCfg &cfg, const string &last, string &req, int keyCnt
     switch(cfg.fld().type()) {
 	case TFld::String:
 	    if((cfg.fld().len() && cfg.fld().len() < 256) || cfg.fld().flg()&TCfg::Key)
-		req += "varchar(" + i2s(vmax(1,vmin((cfg.fld().flg()&TCfg::Key)?(333/(2*keyCnt)):255,cfg.fld().len()))) + ") " + ((cfg.fld().flg()&TCfg::Key)?"BINARY ":" ") +
+		req += "varchar(" + i2s(vmax(1,vmin(/*(cfg.fld().flg()&TCfg::Key)?(333/(2*keyCnt)):*/255,cfg.fld().len()))) + ") " + ((cfg.fld().flg()&TCfg::Key)?"BINARY ":" ") +
 			((cfg.fld().def() == EVAL_STR) ? "DEFAULT NULL " : "NOT NULL DEFAULT '"+TSYS::strEncode(cfg.fld().def(),TSYS::SQL)+"' ");
 	    // Due to "BLOB/TEXT can't have a default value (1)"
 	    else if(cfg.fld().len() < 65536)

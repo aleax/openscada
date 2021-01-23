@@ -1,3 +1,18 @@
+2021-01-23 Roman (stable)
+- LibsDB.vcaBase: The widget "ElViewGraph" of the library "Main" switched for the value display in the exponential form
+    for the logarithmic scale.
+- FIX:SYS: TCfg::setS() in the extended variant switched in writing to the TVariant container directly, for the extended values,
+    than omitting the field wrong limits.
+- FIX:DAQ: Insertion or creation new DAQ template items fixed in the ID indexing-enumerating for checking the items presence,
+	the new inserted or added items appended for the default value (configuration value) copying.
+- !!:Archive.DBArch: The message archivers appended for the configuration field "Unique and non duple messages for time and category only"
+    The field "MIN" size decreased to 8 symbols and the field "TM" for no string type to 10 symbols.
+- FIX:DB.MySQL: Disabled for the key size limiting depending they quantity.
+- Transport.Sockets: The messages "%s (%d)" some detailed to discern the reading and writing parts,
+    in the way of detection the error "Broken channel (32)" appearance.
+- !!!:UI.VCAEngine: The projects runtime improved in changing parents of the processing pages on the fly.
+
+
 2021-01-09 Roman (stable)
 - data/Android/patches/openscada_oscada.xml.patch:
     The Android patch appended for the plain passwords restoring in the table ExtTansp.
