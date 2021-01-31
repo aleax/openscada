@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTCfg file: selfwidg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2004-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -47,11 +47,11 @@
 
 #include "qtcfg.h"
 #include "tuimod.h"
+#include "../QTStarter/lib_qtgen.h"
 #include "selfwidg.h"
 
+using namespace OSCADA_QT;
 using namespace QTCFG;
-
-int QTCFG::icoSize( float mult )	{ return (int)(mult * QFontMetrics(qApp->font()).height()); }
 
 //************************************************
 //* ListView: List view widget                   *
@@ -411,7 +411,7 @@ void SyntxHighl::rule( XMLNode *irl, const QString &text, int off, char lev )
 
 	//Process minimal rule
 	rl = irl->childGet(minRule);
-	kForm.setForeground(mod->colorAdjToBack(rl->attr("color").c_str(),qApp->palette().color(QPalette::Base)));
+	kForm.setForeground(colorAdjToBack(rl->attr("color").c_str(),qApp->palette().color(QPalette::Base)));
 	kForm.setFontWeight(s2i(rl->attr("font_weight")) ? QFont::Bold : QFont::Normal);
 	kForm.setFontItalic(s2i(rl->attr("font_italic")));
 
@@ -991,7 +991,7 @@ QString UserStBar::user( )	{ return userTxt; }
 
 void UserStBar::setUser( const QString &val )
 {
-    setText(QString("<font color='%1'>%2</font>").arg(mod->colorAdjToBack((val=="root")?"red":"green",qApp->palette().color(QPalette::Window)).name()).arg(val));
+    setText(QString("<font color='%1'>%2</font>").arg(colorAdjToBack((val=="root")?"red":"green",qApp->palette().color(QPalette::Window)).name()).arg(val));
     userTxt = val;
 }
 
@@ -1016,146 +1016,4 @@ bool UserStBar::userSel( )
 	mod->postMess(mod->nodePath().c_str(),_("Error authentication!!!"),TUIMod::Warning,this);
 
     return false;
-}
-
-//*************************************************
-//* TableDelegate: Combobox table delegate.       *
-//*************************************************
-TableDelegate::TableDelegate( QObject *parent ) : QItemDelegate(parent)
-{
-
-}
-
-/*QSize TableDelegate::sizeHint( const QStyleOptionViewItem &option, const QModelIndex &index ) const
-{
-    QSize rez = QItemDelegate::sizeHint(option, index);
-    QWidget *w = dynamic_cast<QWidget*>(parent());
-    return w ? QSize(rez.width(),vmin(rez.height(),w->height()*0.9)) : rez;
-}*/
-
-void TableDelegate::paint( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const
-{
-    drawFocus(painter,option,option.rect.adjusted(+1,+1,-1,-1));
-
-    QVariant value = index.data(Qt::DisplayRole);
-    switch(value.type()) {
-	case QVariant::Bool:
-	    //painter->save();
-	    if(value.toBool()) {
-		QImage img = QImage(":/images/button_ok.png").scaled(icoSize(), icoSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-		painter->drawImage(option.rect.center().x()-img.width()/2, option.rect.center().y()-img.height()/2, img);
-	    }
-	    //painter->restore();
-	    break;
-	case QVariant::String:
-	    //!!!! Append correct eliding
-	    painter->drawText(option.rect, Qt::AlignLeft|Qt::AlignVCenter|Qt::TextWordWrap, value.toString());
-	    break;
-	default:
-	    drawDisplay(painter,option,option.rect,value.toString());
-	    break;
-    }
-}
-
-QWidget *TableDelegate::createEditor( QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index ) const
-{
-    QWidget *w_del;
-    if(!index.isValid()) return 0;
-
-    QVariant value = index.data(Qt::DisplayRole);
-    QVariant val_user = index.data(Qt::UserRole);
-
-    if(val_user.isValid()) w_del = new QComboBox(parent);
-    else if(value.type() == QVariant::String) {
-	w_del = new QTextEdit(parent);
-	((QTextEdit*)w_del)->setTabStopWidth(40);
-	((QTextEdit*)w_del)->setLineWrapMode(QTextEdit::NoWrap);
-	((QTextEdit*)w_del)->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	((QTextEdit*)w_del)->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	//((QTextEdit*)w_del)->resize(50,50);
-    }
-    else {
-	QItemEditorFactory factory;
-	w_del = factory.createEditor(value.type(), parent);
-    }
-    w_del->installEventFilter(const_cast<TableDelegate*>(this));
-
-    return w_del;
-}
-
-void TableDelegate::setEditorData( QWidget *editor, const QModelIndex &index ) const
-{
-    QVariant value = index.data(Qt::DisplayRole);
-    QVariant val_user = index.data(Qt::UserRole);
-
-    if(dynamic_cast<QComboBox*>(editor)) {
-	QComboBox *comb = dynamic_cast<QComboBox*>(editor);
-	if(value.type() == QVariant::Bool) comb->setCurrentIndex(value.toBool());
-	else if(val_user.isValid()) {
-	    comb->clear();
-	    comb->addItems(val_user.toStringList());
-	    comb->setCurrentIndex(comb->findText(value.toString()));
-	}
-    }
-    else if(dynamic_cast<QTextEdit*>(editor))	((QTextEdit*)editor)->setPlainText(value.toString());
-    else if(dynamic_cast<QLineEdit*>(editor))	((QLineEdit*)editor)->setText(value.toString());
-    else QItemDelegate::setEditorData(editor, index);
-}
-
-void TableDelegate::setModelData( QWidget *editor, QAbstractItemModel *model, const QModelIndex &index ) const
-{
-    if(dynamic_cast<QComboBox*>(editor)) {
-	QComboBox *comb = dynamic_cast<QComboBox*>(editor);
-	QVariant val_user = index.data(Qt::UserRole);
-	if(!val_user.isValid())
-	    model->setData(index, (bool)comb->currentIndex(), Qt::EditRole);
-	else model->setData(index, comb->currentText(), Qt::EditRole);
-    }
-    else if(dynamic_cast<QTextEdit*>(editor))	model->setData(index, ((QTextEdit*)editor)->toPlainText(), Qt::EditRole);
-    else if(dynamic_cast<QLineEdit*>(editor))	model->setData(index, ((QLineEdit*)editor)->text(), Qt::EditRole);
-    else QItemDelegate::setModelData(editor, model, index);
-}
-
-void TableDelegate::updateEditorGeometry( QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex & ) const
-{
-    editor->setGeometry(option.rect);
-}
-
-bool TableDelegate::eventFilter( QObject *object, QEvent *event )
-{
-    if(dynamic_cast<QComboBox*>(object)) {
-	QComboBox *comb = dynamic_cast<QComboBox*>(object);
-	if(event->type() == QEvent::KeyRelease)
-	    switch(static_cast<QKeyEvent *>(event)->key()) {
-		case Qt::Key_Enter:
-		case Qt::Key_Return:
-		    emit commitData(comb);
-		    emit closeEditor(comb, QAbstractItemDelegate::SubmitModelCache);
-		    return true;
-		case Qt::Key_Escape:
-		    emit closeEditor(comb, QAbstractItemDelegate::RevertModelCache);
-		    return true;
-		default:
-		    return false;
-	    }
-    }
-    else if(dynamic_cast<QTextEdit*>(object)) {
-	QTextEdit *ted = dynamic_cast<QTextEdit*>(object);
-	if(event->type() == QEvent::KeyPress)
-	    switch(static_cast<QKeyEvent *>(event)->key()) {
-		case Qt::Key_Enter:
-		case Qt::Key_Return:
-		    if(QApplication::keyboardModifiers()&Qt::ControlModifier) {
-			emit commitData(ted);
-			emit closeEditor(ted, QAbstractItemDelegate::SubmitModelCache);
-			return true;
-		    }
-		    else return false;
-		case Qt::Key_Escape:
-		    emit closeEditor(ted, QAbstractItemDelegate::RevertModelCache);
-		    return true;
-	    }
-    }
-
-    return QItemDelegate::eventFilter(object,event);
 }

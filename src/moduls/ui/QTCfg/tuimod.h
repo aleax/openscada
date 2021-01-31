@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTCfg file: tuimod.h
 /***************************************************************************
- *   Copyright (C) 2004-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2004-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -77,7 +77,6 @@ class TUIMod: public TUI
 	// Common
 	void postMess( const string &cat, const string &mess, MessLev type = Info, QWidget *parent = 0 );
 	string setHelp( const string &help, const string &addr = "", QWidget *w = NULL );
-	static QColor colorAdjToBack( const QColor &clr, const QColor &backClr );
 
     protected:
 	//Methods

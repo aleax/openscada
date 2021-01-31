@@ -1,3 +1,26 @@
+2021-01-31 Roman (stable)
+- !!!:LibsDB.vcaBase: The library "Main" appended for the new page "StoreHouse (storeHouse)" initial implementation.
+- SYS: The user API functions appended by the function lang() of the system language fast obtaining.
+- FIX:Archive.DBArch: Fixed in the default value of the field "Grouping limit of the parameters" setting to 100.
+- FIX:DB.PostgreSQL: The data type "timestamp with time zone" of the integer variant TFld::DateTimeDec replaced by "timestamp".
+- !!!!:UI.{QTStarter,QTCfg,Vision}:
+    The common Qt-code of the OpenSCADA Qt-modules started in their moving to the new library files lib_qtgen.*
+    what placed in the module QTStarter folder and linked in all Qt-modules,
+    and that done for: external icoSize() and colorAdjToBack() and TableDelegate.
+- FIX:UI.VCAEngine: Some improved in the links processing only for constants.
+- !!!!:UI.Vision: The view "Table" of the primitive "FormEl" significantly improved in:
+	- connection the common table delegate with the feature of multiline edition;
+	- columns show at the table updation;
+	- more precision columns width alignment;
+	- rows height limition in 70% from the whole table size;
+	- allowing collumns width manual edition before it updation.
+    !!: The property dialogues of the "Widgets" and "Projects" / "Widget libraries" appended
+	for own statusbar and a button of builtin manual invoking. The TextEdit widgets switched
+	to own statusbar of the property dialogues for the cursor position and what disabled in ToolTip.
+    !!: The text code edition widget of the "Widgets" property dialogue appended in restoring the cursor position after apply or cancel.
+    !!: The text edition widget appended in the syntax highlight rules cleaning at the reloading.
+
+
 2021-01-23 Roman (stable)
 - LibsDB.vcaBase: The widget "ElViewGraph" of the library "Main" switched for the value display in the exponential form
     for the logarithmic scale.

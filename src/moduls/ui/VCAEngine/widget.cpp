@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: widget.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1285,7 +1285,6 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD)) {
 	    string cfg_val = srcwdg.at().attrAt(nattr).at().cfgVal();
 	    string obj_tp  = (cfg_val.size() >= 4) ? cfg_val.substr(0,4) : ""; //TSYS::strSepParse(cfg_val,0,':')+":";
-	    string rez     = _("Custom");
 
 	    bool custom = false, lnkOK = false;
 	    if(obj_tp == "prm:" || obj_tp == "wdg:") {
@@ -1295,22 +1294,22 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 		{ cfg_val.resize(cfg_val.rfind("/")); lnkOK = true; }
 	    } else custom = true;
 
-	    string sel;
+	    string sel, rez;
 	    srcwdg.at().attrList(a_ls);
-	    rez += ": ";
 	    for(unsigned iA = 0; iA < a_ls.size(); iA++)
-		if(p_nm == TSYS::strSepParse(srcwdg.at().attrAt(a_ls[iA]).at().cfgTempl(),0,'|') &&
-		    !(srcwdg.at().attrAt(a_ls[iA]).at().flgSelf()&Attr::CfgConst))
+		if(srcwdg.at().attrAt(a_ls[iA]).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut) &&
+		    p_nm == TSYS::strSepParse(srcwdg.at().attrAt(a_ls[iA]).at().cfgTempl(),0,'|'))
 		{
 		    sel = srcwdg.at().attrAt(a_ls[iA]).at().cfgVal();
 		    if(!custom && sel.size() && sel.find(cfg_val) != 0) custom = true;
-		    rez += sel+", ";
+		    rez += (rez.size()?", ":"")+sel;
 		}
-	    if(cfg_val.size() < 4)	rez = cfg_val; // "";
-	    else if(!custom) {
+	    if(!custom) {
 		rez = cfg_val;
 		if(lnkOK) rez += " (+)";
 	    }
+	    else if(rez.size())
+		rez = (cfg_val.size() < 4) ? cfg_val : string(_("Custom"))+": "+rez;
 
 	    opt->setText(rez);
 	}

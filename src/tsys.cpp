@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tsys.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -2722,6 +2722,12 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	} catch(TError &err) { return TSYS::strMess(_("10:Error remote request: %s"), err.mess.c_str()); }
 	xnd.at().fromXMLNode(req);
 	return "0";
+    }
+    // string lang(string full) - returns the system language in two symbols and the full language in <full>
+    //  full - microseconds of time
+    if(iid == "lang") {
+	if(prms.size() >= 1) { prms[0].setS(Mess->lang()); prms[0].setModify(); }
+	return Mess->lang2Code();
     }
     // int sleep(real tm, int ntm = 0) - call for task sleep to <tm> seconds and <ntm> nanoseconds.
     //  tm - wait time in seconds (precised up to nanoseconds), up to prmInterf_TM(7 seconds)

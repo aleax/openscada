@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTCfg file: selfwidg.h
 /***************************************************************************
- *   Copyright (C) 2004-2019 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2004-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -51,8 +51,6 @@ class QGridLayout;
 
 namespace QTCFG
 {
-
-extern int icoSize( float mult = 1 );
 
 //*********************************************************************************************
 //* Universal edit line widget. Contain support of: QLineEdit, QSpinBox, QDoubleSpinBox,      *
@@ -357,33 +355,6 @@ class UserStBar : public QLabel
     private:
 	//Attributes
 	QString	userTxt;
-};
-
-//*************************************************
-//* TableDelegate: Combobox table delegate        *
-//*************************************************
-class TableDelegate : public QItemDelegate
-{
-    Q_OBJECT
-
-    public:
-	//Public attributes
-	TableDelegate( QObject *parent = 0 );
-
-	//QSize sizeHint( const QStyleOptionViewItem &option, const QModelIndex &index ) const;
-
-	void paint( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
-
-	QWidget *createEditor( QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
-
-	void setEditorData( QWidget *editor, const QModelIndex &index ) const;
-	void setModelData( QWidget *editor, QAbstractItemModel *model, const QModelIndex &index ) const;
-
-	void updateEditorGeometry( QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
-
-    private:
-	//Private attributes
-	bool eventFilter( QObject *object, QEvent *event );
 };
 
 }

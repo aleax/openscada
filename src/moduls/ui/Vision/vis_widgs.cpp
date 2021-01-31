@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_widgs.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -44,17 +44,17 @@
 #include <QCompleter>
 #include <QDesktopWidget>
 
+#include "../QTStarter/lib_qtgen.h"
 #include "vis_run.h"
 #include "vis_shapes.h"
 #include "vis_widgs.h"
 #include "vis_run_widgs.h"
 
+using namespace OSCADA_QT;
 using namespace VISION;
 
 #undef _
 #define _(mess) mod->I18N(mess, lang.c_str())
-
-int VISION::icoSize( float mult )	{ return (int)(mult * QFontMetrics(qApp->font()).height()); }
 
 //*************************************************
 //* Id and name input dialog                      *
@@ -313,7 +313,7 @@ string UserStBar::pass( )
 void UserStBar::setUser( const string &val )
 {
     MtxAlloc res(mod->dataRes(), true);
-    setText(QString("<font color='%1'>%2</font>").arg(mod->colorAdjToBack((val=="root")?"red":"green",palette().color(QPalette::Window)).name()).arg(val.size()?val.c_str():"*"));
+    setText(QString("<font color='%1'>%2</font>").arg(colorAdjToBack((val=="root")?"red":"green",palette().color(QPalette::Window)).name()).arg(val.size()?val.c_str():"*"));
     userTxt = val;
 
     if(window()) window()->setProperty("oscdUser", val.c_str());
@@ -833,7 +833,7 @@ void SyntxHighl::rule( XMLNode *irl, const QString &text, int off, char lev )
 
 	//Process minimal rule
 	rl = irl->childGet(minRule);
-	kForm.setForeground(mod->colorAdjToBack(rl->attr("color").c_str(),qApp->palette().color(QPalette::Base)));
+	kForm.setForeground(colorAdjToBack(rl->attr("color").c_str(),qApp->palette().color(QPalette::Base)));
 	kForm.setFontWeight(s2i(rl->attr("font_weight")) ? QFont::Bold : QFont::Normal);
 	kForm.setFontItalic(s2i(rl->attr("font_italic")));
 
@@ -948,7 +948,6 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
     connect(bt_tm, SIGNAL(timeout()), this, SLOT(applySlot()));
 }
 
-
 bool TextEdit::isEdited( )	{ return (but_box && but_box->isEnabled()); }	//isVisible() sometime wrong but it can be hidden commonly
 
 QString TextEdit::text( )	{ return ed_fld->toPlainText(); }
@@ -961,6 +960,7 @@ void TextEdit::setText( const QString &itext )
 	but_box->setVisible(false);
 	but_box->setEnabled(false);
     }
+    if(!itext.size() && snt_hgl) { delete snt_hgl; snt_hgl = NULL; }
     isInit = false;
 
     m_text = itext;
@@ -1004,35 +1004,35 @@ void TextEdit::applySlot( )
 
 void TextEdit::cancelSlot( )
 {
+    int edPosSave = text().size() ? workWdg()->textCursor().position() : -1;
     setText(m_text);
+    if(edPosSave >= 0 && text().size()) {
+	QTextCursor tCur = workWdg()->textCursor(); tCur.setPosition(edPosSave);
+	workWdg()->setTextCursor(tCur); workWdg()->ensureCursorVisible();
+    }
 
     emit cancel();
 }
 
 void TextEdit::curPosChange( )
 {
-    if(!stWin) return;
-    stWin->statusBar()->showMessage(QString(_("Cursor = (%1:%2)")).arg(ed_fld->textCursor().blockNumber()+1).arg(ed_fld->textCursor().columnNumber()+1),10000);
+    QStatusBar *stBar = window()->findChild<QStatusBar*>();
+    if(!stBar && stWin) stBar = stWin->statusBar();
+    if(stBar) stBar->showMessage(QString(_("Cursor = (%1:%2)")).arg(ed_fld->textCursor().blockNumber()+1).arg(ed_fld->textCursor().columnNumber()+1), 10000);
 }
 
 bool TextEdit::event( QEvent * e )
 {
     if(but_box && e->type() == QEvent::KeyRelease) {
 	QKeyEvent *keyEvent = (QKeyEvent *)e;
-	if((keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) && QApplication::keyboardModifiers()&Qt::ControlModifier)
-	{
-	    but_box->button(QDialogButtonBox::Apply)->animateClick( );
+	if((keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) && QApplication::keyboardModifiers()&Qt::ControlModifier) {
+	    but_box->button(QDialogButtonBox::Apply)->animateClick();
 	    return true;
 	}
 	else if(keyEvent->key() == Qt::Key_Escape) {
-	    but_box->button(QDialogButtonBox::Cancel)->animateClick( );
+	    but_box->button(QDialogButtonBox::Cancel)->animateClick();
 	    return true;
 	}
-    }
-    if(!dynamic_cast<VisRun*>(window()) && e->type() == QEvent::ToolTip && hasFocus() && toolTip().isEmpty()) {
-	QToolTip::showText(((QHelpEvent *)e)->globalPos(),QString(_("Cursor = (%1:%2)")).
-	    arg(ed_fld->textCursor().blockNumber()+1).arg(ed_fld->textCursor().columnNumber()+1));
-	return true;
     }
 
     return QWidget::event(e);

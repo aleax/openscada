@@ -1,7 +1,7 @@
 // 
 //OpenSCADA module BD.PostgreSQL file: postgre.cpp
 /***************************************************************************
- *   Copyright (C) 2013-2020 by Roman Savochenko, roman@oscada.org         *
+ *   Copyright (C) 2013-2021 by Roman Savochenko, roman@oscada.org         *
  *                 2010-2011 by Maxim Lysenko, mlisenko@oscada.org         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB PostgreSQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.5.3"
+#define MOD_VER		"2.5.4"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2010-2011)")
 #define DESCRIPTION	_("DB module. Provides support of the DBMS PostgreSQL.")
 #define MOD_LICENSE	"GPL2"
@@ -526,7 +526,7 @@ void MTable::fieldStruct( TConfig &cfg )
 	    cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::Integer,flg));
 	else if(rowTp == "real" || rowTp == "double precision")
 	    cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::Real,flg));
-	else if(rowTp == "timestamp with time zone")
+	else if(rowTp.find("timestamp") == 0)
 	    cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::Integer,flg|TFld::DateTimeDec,"10"));
     }
 }
@@ -821,7 +821,7 @@ void MTable::fieldFix( TConfig &cfg, bool trPresent, bool recurse )
 			break;
 		    }
 		    case TFld::Integer:
-			if(cf.fld().flg()&TFld::DateTimeDec)	isEqual = (rwTp=="timestamp with time zone");
+			if(cf.fld().flg()&TFld::DateTimeDec)	isEqual = (rwTp.find("timestamp") == 0);
 			else if(rwTp == "bigint") isEqual = true;
 			break;
 		    case TFld::Real:	if(rwTp == "double precision") isEqual = true;	break;
@@ -862,7 +862,7 @@ void MTable::fieldFix( TConfig &cfg, bool trPresent, bool recurse )
 		break;
 	    case TFld::Integer:
 		if(cf.fld().flg()&TFld::DateTimeDec)
-		    f_tp = "TIMESTAMP WITH TIME ZONE DEFAULT " + ((s2ll(cf.fld().def())==EVAL_INT)?"NULL ":"'"+UTCtoSQL(s2i(cf.fld().def()))+"' ");
+		    f_tp = "TIMESTAMP DEFAULT " + ((s2ll(cf.fld().def())==EVAL_INT)?"NULL ":"'"+UTCtoSQL(s2i(cf.fld().def()))+"' ");
 		else f_tp = "BIGINT DEFAULT " + ((s2ll(cf.fld().def())==EVAL_INT)?"NULL ":"'"+ll2s(s2ll(cf.fld().def()))+"' ");
 		break;
 	    case TFld::Real:

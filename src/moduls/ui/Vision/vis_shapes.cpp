@@ -60,6 +60,7 @@
 #include "vis_devel.h"
 #include "vis_run_widgs.h"
 #include "vis_devel_widgs.h"
+#include "../QTStarter/lib_qtgen.h"
 #include "vis_shapes.h"
 
 #ifdef HAVE_PHONON
@@ -72,7 +73,7 @@
 #endif
 #endif
 
-
+using namespace OSCADA_QT;
 using namespace VISION;
 
 //*************************************************
@@ -529,6 +530,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		if(!wdg || !qobject_cast<QTableWidget*>(wdg)) {
 		    if(wdg) wdg->deleteLater();
 		    shD->addrWdg = wdg = new QTableWidget(w);
+		    wdg->setItemDelegate(new TableDelegate);
 		    wdg->setAlternatingRowColors(true);
 		    wdg->setSelectionMode(QAbstractItemView::SingleSelection);
 		    wdg->setSelectionBehavior(QAbstractItemView::SelectItems);
@@ -580,14 +582,13 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 				hit->setText(tC?tC->text().c_str():"");
 				hit->setData(Qt::FontRole, elFnt);
 				if(tC) {
+				    hit->setData(Qt::UserRole, QVariant()); wdg->showColumn(iC);	//!!!! Need for updating the columns width
 				    if((wVl=tC->attr("width")).size()) {
 					int wdthCel = fmax(0, s2i(wVl));
-					if(wdthCel) {
-					    wdg->showColumn(iC);
-					    hit->setData(Qt::UserRole,
+					if(!wdthCel)	wdg->hideColumn(iC);
+					else hit->setData(Qt::UserRole,
 						(wVl.find("%") == wVl.size()-1) ? -wdthCel : wdthCel*w->xScale(true));
-					} else wdg->hideColumn(iC);
-				    } //else hit->setData(Qt::UserRole, QVariant());
+				    }
 				    hit->setData(Qt::UserRole+1, (bool)s2i(tC->attr("edit")));
 				    hit->setData(Qt::UserRole+2, ((wVl=tC->attr("color")).size()) ? QString::fromStdString(wVl) : QVariant());
 				    hit->setData(Qt::UserRole+3, ((wVl=tC->attr("colorText")).size()) ? QString::fromStdString(wVl) : QVariant());
@@ -970,6 +971,7 @@ void ShapeFormEl::tableFit( WdgView *w )
 		    //vmax(w->sizeF().width(),wdg->maximumViewportSize().width()); - (wdg->verticalScrollBar()?wdg->verticalScrollBar()->size().width():0);
 	int averWdth = tblWdth/wdg->columnCount();
 	int fullColsWdth = 0, niceForceColsWdth = 0, busyCols = 0, tVl;
+
 	//Count width params
 	for(int iC = 0; iC < wdg->columnCount(); iC++) {
 	    fullColsWdth += wdg->columnWidth(iC);
@@ -982,6 +984,17 @@ void ShapeFormEl::tableFit( WdgView *w )
 	    else busyCols++;
 	}
 
+	for(int iIt = 0; busyCols && iIt < 10; iIt++) {
+	    int busyColsWdth = (tblWdth-niceForceColsWdth)/busyCols;
+	    int busyCols_ = 0, niceForceColsWdth_ = 0;
+	    for(int iC = 0; iC < wdg->columnCount(); iC++)
+		if((wdg->horizontalHeaderItem(iC) && (tVl=wdg->horizontalHeaderItem(iC)->data(Qt::UserRole).toInt())) || wdg->columnWidth(iC) < busyColsWdth)
+		    niceForceColsWdth_ += wdg->columnWidth(iC);
+		else busyCols_++;
+	    if(busyCols_ == busyCols)	break;
+	    busyCols = busyCols_; niceForceColsWdth = niceForceColsWdth_;
+	}
+
 	//Set busyCols
 	if(fullColsWdth > tblWdth && busyCols) {
 	    int busyColsWdth = (tblWdth-niceForceColsWdth)/busyCols;
@@ -991,6 +1004,8 @@ void ShapeFormEl::tableFit( WdgView *w )
 		    wdg->setColumnWidth(iC, busyColsWdth);
 	}
 	wdg->resizeRowsToContents();
+	for(int iRW = 0; iRW < wdg->rowCount(); iRW++)
+	    wdg->setRowHeight(iRW, vmin(wdg->rowHeight(iRW), wdg->size().height()/1.3));
     }
     wdg->horizontalHeader()->setStretchLastSection(wdg->property("colsWdthFit").toBool());
 }
@@ -1035,7 +1050,7 @@ bool ShapeFormEl::eventFilter( WdgView *w, QObject *object, QEvent *event )
     else {
 	AttrValS attrs;
 	switch(event->type()) {
-	    case QEvent::Resize: case QEvent::Show: tableFit(w);	break;
+	    //case QEvent::Resize: case QEvent::Show: tableFit(w);	break;	//!!!! Commented due to the busy tables manual resizing need
 	    case QEvent::FocusIn: qobject_cast<RunWdgView*>(w)->mainWin()->setFocus(w->id());	break;
 		/*if(!w->hasFocus()) break;
 		attrs.push_back(std::make_pair("focus","1"));

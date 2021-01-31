@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel_dlgs.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -19,6 +19,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <QStatusBar>
 #include <QTreeWidget>
 #include <QItemEditorFactory>
 #include <QPushButton>
@@ -38,10 +39,12 @@
 #include <QApplication>
 #include <QDesktopWidget>
 
+#include "../QTStarter/lib_qtgen.h"
 #include "vis_widgs.h"
 #include "vis_devel.h"
 #include "vis_devel_dlgs.h"
 
+using namespace OSCADA_QT;
 using namespace VISION;
 
 //****************************************
@@ -63,6 +66,15 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     wdg_tabs = new QTabWidget(this);
     tab_lay->addWidget(wdg_tabs);
     connect(wdg_tabs, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
+
+    //Manual invoking button
+    if(!ico_t.load(TUIS::icoGet("manual",NULL,true).c_str())) ico_t.load(":/images/manual.png");
+    QPushButton *menuPushBt = new QPushButton(QPixmap::fromImage(ico_t), "");
+    menuPushBt->setToolTip(_("Manual on ..."));
+    menuPushBt->setWhatsThis(_("The button for getting the item manual"));
+    connect(menuPushBt, SIGNAL(released()), parent, SLOT(enterManual()));
+    menuPushBt->setEnabled(false);
+    wdg_tabs->setCornerWidget(menuPushBt);
 
     //Add tab 'Widget'
     //------------------
@@ -308,14 +320,13 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     messTable->setHorizontalHeaderLabels(QStringList() << _("Time") << _("mcsec") << _("Category") << _("Level") << _("Message"));
     dlg_lay->addWidget(messTable, 2, 0, 1, 3);
 
-    //Add button box
-    //----------------
-    butbox = new QDialogButtonBox(QDialogButtonBox::Close, Qt::Horizontal, this);
-    // Init close button
-    butbox->button(QDialogButtonBox::Close)->setText(_("Close"));
-    connect(butbox->button(QDialogButtonBox::Close), SIGNAL(clicked()), this, SLOT(close()));
+    QStatusBar *status = new QStatusBar(this);
+    tab_lay->addWidget(status);
 
-    tab_lay->addWidget(butbox);
+    //Add button box
+    QDialogButtonBox *butbox = new QDialogButtonBox(QDialogButtonBox::Close, Qt::Horizontal, this);
+    connect(butbox->button(QDialogButtonBox::Close), SIGNAL(clicked()), this, SLOT(close()));
+    status->insertPermanentWidget(0, butbox);
 
     //resize(800, 600);
 
@@ -359,6 +370,9 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    *gnd;
 
     setWindowTitle(root->attr("dscr").c_str());
+
+    wdg_tabs->cornerWidget()->setEnabled(root->attr("doc").size());
+    wdg_tabs->cornerWidget()->setProperty("doc", root->attr("doc").c_str());
 
     //Generic dialog's page
     gnd = TCntrNode::ctrId(root, "/obj", true);
@@ -952,6 +966,15 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     tab_lay->addWidget(wdg_tabs);
     connect(wdg_tabs, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
 
+    //Manual invoking button
+    if(!ico_t.load(TUIS::icoGet("manual",NULL,true).c_str())) ico_t.load(":/images/manual.png");
+    QPushButton *menuPushBt = new QPushButton(QPixmap::fromImage(ico_t), "");
+    menuPushBt->setToolTip(_("Manual on ..."));
+    menuPushBt->setWhatsThis(_("The button for getting the item manual"));
+    connect(menuPushBt, SIGNAL(released()), parent, SLOT(enterManual()));
+    menuPushBt->setEnabled(false);
+    wdg_tabs->setCornerWidget(menuPushBt);
+
     //Add tab 'Widget'
     QScrollArea *scrl = new QScrollArea();
     wdg_tabs->addTab(scrl, _("Widget"));
@@ -1173,11 +1196,13 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     //connect(obj_attr, SIGNAL(modified(const string&)), this, SIGNAL(apply(const string&)));
     dlg_lay->addWidget(obj_lnk,0,0);
 
-    //Add button box
-    butbox = new QDialogButtonBox(QDialogButtonBox::Close, Qt::Horizontal, this);
-    connect(butbox->button(QDialogButtonBox::Close), SIGNAL(clicked()), this, SLOT(close()));
+    QStatusBar *status = new QStatusBar(this);
+    tab_lay->addWidget(status);
 
-    tab_lay->addWidget(butbox);
+    //Add button box
+    QDialogButtonBox *butbox = new QDialogButtonBox(QDialogButtonBox::Close, Qt::Horizontal, this);
+    connect(butbox->button(QDialogButtonBox::Close), SIGNAL(clicked()), this, SLOT(close()));
+    status->insertPermanentWidget(0, butbox);
 
     //End resize
     //resize(800,600);
@@ -1225,6 +1250,9 @@ void VisItProp::showDlg( const string &iit, bool reload )
     root = info_req.childGet(0);
 
     setWindowTitle(root->attr("dscr").c_str());
+
+    wdg_tabs->cornerWidget()->setEnabled(root->attr("doc").size());
+    wdg_tabs->cornerWidget()->setProperty("doc", root->attr("doc").c_str());
 
     //Generic dialog's page
     gnd = TCntrNode::ctrId(root, "/wdg", true);
@@ -1345,9 +1373,6 @@ void VisItProp::showDlg( const string &iit, bool reload )
     wdg_tabs->setTabEnabled(2, gnd);
     if(gnd) wdg_tabs->setTabText(2, gnd->attr("dscr").c_str());
 
-    proc_per->setValue("");
-    proc_text->setText("");
-
     is_modif = false;
 
     //Show dialog
@@ -1456,6 +1481,7 @@ void VisItProp::tabChanged( int itb )
 	    if(obj_attr_cfg->topLevelItemCount()) obj_attr_cfg->topLevelItem(0)->setData(0,Qt::UserRole+1,atypes);
 
 	    //  Calculate period
+	    proc_per->setValue("");
 	    if(!proc_per->isEdited()) {
 		gnd = TCntrNode::ctrId(root,proc_per->objectName().toStdString(),true);
 		proc_per->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
@@ -1489,8 +1515,10 @@ void VisItProp::tabChanged( int itb )
 		if(!owner()->cntrIfCmd(req)) proc_text_tr->setChecked(s2i(req.text()));
 	    }
 	    //  Calc procedure
+	    int edPosSave = (proc_text->text().size()) ? proc_text->workWdg()->textCursor().position() : -1;
+	    proc_text->setText("");
 	    if(!proc_text->isEdited()) {
-		gnd = TCntrNode::ctrId(root,proc_text->objectName().toStdString(),true);
+		gnd = TCntrNode::ctrId(root, proc_text->objectName().toStdString(), true);
 		proc_text->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
 		if(gnd) {
 		    req.clear()->setName("CntrReqs")->setAttr("path",ed_it);
@@ -1503,6 +1531,10 @@ void VisItProp::tabChanged( int itb )
 			proc_text->setProperty("inherited", (bool)s2i(req.childGet(0)->attr("inherited")));
 			proc_text->setProperty("redefined", (bool)s2i(req.childGet(0)->attr("redefined")));
 			proc_text->setProperty("redefAccept", false);
+			if(edPosSave >= 0 && proc_text->text().size()) {
+			    QTextCursor tCur = proc_text->workWdg()->textCursor(); tCur.setPosition(edPosSave);
+			    proc_text->workWdg()->setTextCursor(tCur); proc_text->workWdg()->ensureCursorVisible();
+			}
 			proc_text->blockSignals(false);
 		    }
 		}

@@ -1,13 +1,13 @@
 # OpenSCADA.UI.Vision translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.UI.Vision package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2005-2020.
+# Roman Savochenko <roman@oscada.org>, 2005-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-19 17:52+0200\n"
+"POT-Creation-Date: 2021-01-27 11:56+0200\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -1012,6 +1012,9 @@ msgstr "Спроба копіювання/переміщення у самого
 msgid "Properties of the widgets library"
 msgstr "Властивості бібліотеки віджетів"
 
+msgid "The button for getting the item manual"
+msgstr "Кнопка отримання підручника елементу"
+
 msgid "Widgets library"
 msgstr "Бібліотека віджетів"
 
@@ -1113,9 +1116,6 @@ msgstr "Рівень"
 
 msgid "Message"
 msgstr "Повідомлення"
-
-msgid "Close"
-msgstr "Закрити"
 
 msgid "Error getting the node '%1' information."
 msgstr "Помилка запиту інформації вузла '%1'."

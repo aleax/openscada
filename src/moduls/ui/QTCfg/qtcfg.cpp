@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTCfg file: qtcfg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2020 by Roman Savochenko, <roman@oscada.org>      *
+ *   Copyright (C) 2004-2021 by Roman Savochenko, <roman@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -58,10 +58,12 @@
 
 #include "qtcfg.h"
 #include "selfwidg.h"
+#include "../QTStarter/lib_qtgen.h"
 #include "tuimod.h"
 
 #define CH_REFR_TM	100
 
+using namespace OSCADA_QT;
 using namespace QTCFG;
 
 //*************************************************

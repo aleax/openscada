@@ -4,13 +4,13 @@
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009, 2011.
 # Joan Zimmermann <j.zimmermann@fetron.de>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <roman@oscada.org>, 2010-2020.
+# Roman Savochenko <roman@oscada.org>, 2010-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-19 17:52+0200\n"
+"POT-Creation-Date: 2021-01-27 11:56+0200\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1029,6 +1029,9 @@ msgstr "Versuch, dich selbst zu kopieren/zu bewegen \"%1/%1\"!"
 msgid "Properties of the widgets library"
 msgstr "Eigenschaften der Widgetbibliothek"
 
+msgid "The button for getting the item manual"
+msgstr "Schaltfläche zum Abrufen des Artikelhandbuchs"
+
 msgid "Widgets library"
 msgstr "Widgetsbibliothek"
 
@@ -1130,9 +1133,6 @@ msgstr "Stufe"
 
 msgid "Message"
 msgstr "Nachricht"
-
-msgid "Close"
-msgstr "Schliessen"
 
 msgid "Error getting the node '%1' information."
 msgstr "Fehler beim Abrufen des Knoten '%1' Informationen."

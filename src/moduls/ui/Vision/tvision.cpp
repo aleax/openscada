@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VISION file: tvision.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2020 by Roman Savochenko (roman@oscada.org)
+ *   Copyright (C) 2006-2021 by Roman Savochenko (roman@oscada.org)
  *                 2005-2006 by Evgen Zaichuk
  *
  *   This program is free software; you can redistribute it and/or modify
@@ -43,7 +43,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"7.7.6"
+#define MOD_VER		"7.9.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
 #define DESCRIPTION	_("Visual operation user interface, based on the Qt library - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -496,25 +496,6 @@ QWidget *TVision::getFocusedWdg( QWidget *wcntr )
     while(wcntr->focusProxy()) wcntr = wcntr->focusProxy();
 
     return wcntr;
-}
-
-QColor TVision::colorAdjToBack( const QColor &clr, const QColor &backClr )
-{
-    int wV = vmax(60, 120-abs(clr.saturation()-backClr.saturation()));
-
-    int wS = abs(clr.hue()-backClr.hue());
-    if(wS > 360/2) wS = 360 - wS;
-    wS = vmax(0, 120-wS);
-
-    if(wV > abs(clr.value()-backClr.value()))
-	wV = backClr.value() + wV*(((backClr.value()+wV)<256)?1:-1);
-    else wV = clr.value();
-
-    if(wS > abs(clr.saturation()-backClr.saturation()))
-	wS = backClr.saturation() + wS*(((backClr.saturation()+wV)<256)?1:-1);
-    else wS = clr.saturation();
-
-    return QColor::fromHsv(clr.hue(), wS, wV, clr.alpha());
 }
 
 #undef _

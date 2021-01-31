@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,6 +36,7 @@
 #include <QCheckBox>
 #include <QMdiSubWindow>
 
+#include "../QTStarter/lib_qtgen.h"
 #include "vis_run.h"
 #include "vis_widgs.h"
 #include "vis_shapes.h"
@@ -43,6 +44,7 @@
 #include "vis_devel.h"
 #include "vis_shape_elfig.h"
 
+using namespace OSCADA_QT;
 using namespace VISION;
 
 VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const string &VCAstat ) :
@@ -602,7 +604,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     mWUser->setWhatsThis(_("This label displays the current user."));
     mWUser->setToolTip(_("Field for displaying the current user."));
     mWUser->setStatusTip(_("Double click to change the user."));
-    statusBar()->insertPermanentWidget(0,mWUser);
+    statusBar()->insertPermanentWidget(0, mWUser);
     mWStat = new QLabel(VCAStation().c_str(), this);
     mWStat->setWhatsThis(_("This label displays the used VCA engine station."));
     mWStat->setToolTip(_("Field for displaying the used VCA engine station."));
@@ -611,17 +613,17 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     w_scale->setWhatsThis(_("This label displays the widgets scaling mode."));
     w_scale->setToolTip(_("Field for displaying the widgets scaling mode."));
     w_scale->setStatusTip(_("Click to change the widgets scaling mode."));
-    statusBar()->insertPermanentWidget(0,w_scale);
+    statusBar()->insertPermanentWidget(0, w_scale);
     mStModify = new WMdfStBar(this);
     connect(mStModify, SIGNAL(press()), this, SLOT(itDBSave()));
     mStModify->setWhatsThis(_("This label indicates the fact of making changes."));
     mStModify->setToolTip(_("Field for indicating the fact of making changes."));
     mStModify->setStatusTip(_("Click to save all the made changes."));
-    statusBar()->insertPermanentWidget(0,mStModify);
+    statusBar()->insertPermanentWidget(0, mStModify);
     mWVisScale = new QLabel("100%", this);
     mWVisScale->setWhatsThis(_("This label displays the current widget scale."));
     mWVisScale->setToolTip(_("Field for displaying the current widget scale."));
-    statusBar()->insertPermanentWidget(0,mWVisScale);
+    statusBar()->insertPermanentWidget(0, mWVisScale);
 
     //Init dock windows
     prjTree = new ProjTree(this);
@@ -728,7 +730,7 @@ int VisDevelop::cntrIfCmd( XMLNode &node, bool glob )
     return rez;
 }
 
-QString VisDevelop::getFileName(const QString &caption, const QString &dir, const QString &filter, QFileDialog::AcceptMode mode)
+QString VisDevelop::getFileName( const QString &caption, const QString &dir, const QString &filter, QFileDialog::AcceptMode mode )
 {
     if(!fileDlg) fileDlg = new QFileDialog(this);
     fileDlg->setFileMode(QFileDialog::AnyFile);

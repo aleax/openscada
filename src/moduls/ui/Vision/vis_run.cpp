@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_run.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -48,6 +48,7 @@
 #include <QDateTime>
 #include <QTextStream>
 
+#include "../QTStarter/lib_qtgen.h"
 #include "vis_run.h"
 #include "vis_run_widgs.h"
 #include "vis_shapes.h"
@@ -68,6 +69,7 @@ using namespace Phonon;
 #undef _
 #define _(mess) mod->I18N(mess, lang().c_str())
 
+using namespace OSCADA_QT;
 using namespace VISION;
 
 VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string &user_pass, const string &VCAstat,
