@@ -1,3 +1,19 @@
+2021-02-01 Roman 0.9.3.1
+- FIX:SYS: TCfg::setS() in the extended variant switched in writing to the TVariant container directly, for the extended values,
+    than omitting the field wrong limits.
+- FIX:DAQ: Insertion or creation new DAQ template items fixed in the ID indexing-enumerating for checking the items presence,
+    the new inserted or added items appended for the default value (configuration value) copying.
+- FIX:DB.MySQL: Disabled for the key size limiting depending they quantity.
+- FIX:DB.PostgreSQL: The data type "timestamp with time zone" of the integer variant TFld::DateTimeDec replaced by "timestamp".
+- FIX:Archive.DBArch: Fixed in the default value of the field "Grouping limit of the parameters" setting to 100.
+- FIX:UI.VCAEngine: Some improved in the links processing only for constants.
+- FIX:UI.Vision: Processing the force widgets style switching to the system one QCommonStyle() or QPlastiqueStyle()
+    of the buttons of the primitive FormEl is unified in reusing the system style objects
+    and that disabled in the CSS styles using here due to color alpha lost.
+- FIX:UI.WebVision: The servSet() function appended in the error 404 processing, emerged at the sessions accessing
+    after they clossing on the server side.
+
+
 2020-12-28 Roman 0.9.3
 - DB.{MySQL,PostgreSQL,FireBird}: Disabled for the direct string field size limiting since the CHAR(N) of the key fields is limited
     in the field itself and that performs the behaviour difference with SQLite.

@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_shapes.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -207,7 +207,7 @@ QColor WdgShape::getColor( const string &val )
 //*************************************************
 //* Form element shape widget                     *
 //*************************************************
-ShapeFormEl::ShapeFormEl( ) : WdgShape("FormEl")
+ShapeFormEl::ShapeFormEl( ) : WdgShape("FormEl"), forceStl(NULL)
 {
 
 }
@@ -378,18 +378,16 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		    }
 		    mk_new = true;
 		}
+
+		bool toStlSYS = false;
+
 		wdg->setText(shD->name.c_str());	//Name
 		//Img
 		QImage img;
 		string backimg = w->resGet(shD->img);
 		wdg->setStyle(NULL);
 		if(!backimg.empty() && img.loadFromData((const uchar*)backimg.data(),backimg.size())) {
-		    if(mod->dropCommonWdgStls())
-#if QT_VERSION < 0x050000
-			wdg->setStyle(new QPlastiqueStyle());
-#else
-			wdg->setStyle(new QCommonStyle());
-#endif
+		    if(mod->dropCommonWdgStls()) toStlSYS = true;
 		    int icSzW = w->width() - w->layout()->margin();
 		    int icSzH = w->height() - w->layout()->margin();
 		    img = img.scaled(w->width()-w->layout()->margin(), w->height()-w->layout()->margin(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -401,20 +399,28 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		QPalette plt;
 		QColor clr = getColor(shD->color);
 		if(clr.isValid()) {
-		    if(mod->dropCommonWdgStls())
-#if QT_VERSION < 0x050000
-			wdg->setStyle(new QPlastiqueStyle());
-#else
-			wdg->setStyle(new QCommonStyle());
-#endif
 		    plt.setColor(QPalette::Button, clr);
-		    wdg->setStyleSheet(QString("background: %1").arg(shD->color.c_str()));
-		} else wdg->setStyleSheet(QString("background: %1").arg(plt.color(QPalette::Button).name()));
+		    if(mod->dropCommonWdgStls()) toStlSYS = true;
+		    //!!!! Early set CSS styles cannot be removed more
+		    //else wdg->setStyleSheet(QString("background: %1").arg(plt.color(QPalette::Button).name()/*shD->color.c_str()*/));	//But the alpha doesn't work here
+		}
+		//else if(!mod->dropCommonWdgStls()) wdg->setStyleSheet(QString("background: %1").arg(plt.color(QPalette::Button).name()));
 		clr = getColor(shD->colorText);
 		if(clr.isValid())	plt.setColor(QPalette::ButtonText, clr);
 		wdg->setPalette(plt);
 		wdg->setFont(elFnt);				//Font
 		setValue(w, shD->value, true);			//Value
+
+		//Force style processing
+		if(toStlSYS) {
+		    if(!forceStl)
+#if QT_VERSION < 0x050000
+			forceStl = new QPlastiqueStyle();
+#else
+			forceStl = new QCommonStyle();
+#endif
+		    wdg->setStyle(forceStl);
+		} else if(wdg->style() != qApp->style()) wdg->setStyle(qApp->style());
 		break;
 	    }
 	    case F_COMBO: {

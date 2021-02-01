@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tconfig.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -532,7 +532,7 @@ void TCfg::setS( const string &ival, uint8_t RqFlg )
 {
     if(!extVal() && (RqFlg&(ExtValTwo|ExtValOne|ExtValThree))) { mExtVal = true; setType(TVariant::String); }
     if(!extVal()) setS(ival);
-    else setS(((RqFlg&ExtValOne || !(RqFlg&(ExtValTwo|ExtValThree)))?ival:getS(ExtValOne))+string(1,0)+
+    else TVariant::setS(((RqFlg&ExtValOne || !(RqFlg&(ExtValTwo|ExtValThree)))?ival:getS(ExtValOne))+string(1,0)+
 		((RqFlg&ExtValTwo)?ival:getS(ExtValTwo))+string(1,0)+
 		((RqFlg&ExtValThree)?ival:getS(ExtValThree)));
     if(RqFlg&TCfg::ForceUse)	{ setView(true); setKeyUse(true); }
